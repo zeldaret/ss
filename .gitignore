@@ -9,3 +9,5 @@ tools/mwcc_compiler/*
 .ninja_log
 objdiff.json
 /tools/objdiff.exe
+.vscode/c_cpp_properties.json
+tools/dtk

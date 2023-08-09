@@ -7,7 +7,8 @@ LIBS = [
         "host": False,
         "objects": [
             ["Runtime/__init_cpp_exceptions.cpp", False],
-            ["unk_flag_stuff.cpp", True]
+            ["unk_flag_stuff.cpp", True],
+            ["d/d_base.cpp", False]
         ],
     },
 ]
