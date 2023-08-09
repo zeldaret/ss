@@ -1,0 +1,4 @@
+object: orig/SOUE01/main.dol
+splits: config/SOUE01/splits.txt
+symbols: config/SOUE01/symbols.txt
+auto_force_files: false

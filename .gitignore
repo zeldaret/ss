@@ -1,0 +1,11 @@
+__pycache__
+build
+build.ninja
+orig/*/*
+!orig/*/.gitkeep
+tools/mwcc_compiler/*
+!tools/mwcc_compiler/.gitkeep
+.ninja_deps
+.ninja_log
+objdiff.json
+/tools/objdiff.exe
