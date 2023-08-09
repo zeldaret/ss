@@ -67,15 +67,17 @@ u16* SaveFile::getUnkFlags1() {
 // 0x80009AB0   getPlayerName__8SaveFileFv
 s16* SaveFile::getPlayerName() {
     return player_name;
-} // using Shift JIS i assume
-// 0x80009AC0   setAreaT1__8SaveFileFv
-void SaveFile::setAreaT1() {}
+}
+// 0x80009AC0   setAreaT1__8SaveFileFPc
+void SaveFile::setAreaT1(char* name) {
+
+}
 // 0x80009BE0   getAreaT1__8SaveFileFv
 s8* SaveFile::getAreaT1() {
     return area_t1;
 }
-// 0x80009BF0   setAreaT2__8SaveFileFv
-void SaveFile::setAreaT2() {
+// 0x80009BF0   setAreaT2__8SaveFileFPc
+void SaveFile::setAreaT2(char* name) {
     
 }
 // 0x80009D10   getAreaT2__8SaveFileFv

@@ -1,3 +1,19 @@
+toBeSorted/save_file.cpp:
+	.text       start:0x800099B0 end:0x80009D30
+
+toBeSorted/file_manager.cpp:
+	.text       start:0x80009D30 end:0x80011730
+	.ctors      start:0x804DB648 end:0x804DB64C
+
+toBeSorted/save_manager.cpp:
+	.text       start:0x80011730 end:0x80015310
+
+d/a/d_a_base.cpp:
+	.text       start:0x8002C3A0 end:0x8002DE40
+	.data       start:0x80501544 end:0x805015B8
+	.sdata      start:0x80571920 end:0x80571930
+	.sbss       start:0x80575080 end:0x80575098
+
 d/d_base.cpp:
 	.text       start:0x80050800 end:0x80050A14
 	.data       start:0x80503380 end:0x805033CC

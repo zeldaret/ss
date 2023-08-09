@@ -120,11 +120,11 @@ public:
     // 0x80009AB0
     s16* getPlayerName(); // using Shift JIS i assume
     // 0x80009AC0
-    void setAreaT1();
+    void setAreaT1(char* name);
     // 0x80009BE0
     s8* getAreaT1();
     // 0x80009BF0
-    void setAreaT2();
+    void setAreaT2(char* name);
     // lbl_80009D10
     s8* getAreaT2();
     // lbl_80009D20
