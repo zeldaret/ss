@@ -2,7 +2,7 @@
 LIBS = [
     {
         "lib": "SS",
-        "mw_version": "1.7",
+        "mw_version": "Wii/1.7",
         "cflags": "-proc gekko -Cpp_exceptions off -RTTI off -O4,p -fp hard, -inline noauto, -enum int, -str reuse -I- -i include",
         "host": False,
         "objects": [
@@ -140,7 +140,7 @@ if args.map:
 if args.debug:
     ldflags += " -g"
 n.variable("ldflags", ldflags)
-mw_link_version = "1.7"
+mw_link_version = "GC/3.0"
 n.variable("mw_version", mw_link_version)
 if os.name == "nt":
     exe = ".exe"
