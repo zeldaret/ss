@@ -8,9 +8,9 @@ LIBS = [
         "objects": [
             ["Runtime/__init_cpp_exceptions.cpp", False],
             ["unk_flag_stuff.cpp", True],
-            ["d/d_base.cpp", True],
-            ["d/a/d_a_base.cpp", True],
-            ["toBeSorted/save_file.cpp", True],
+            ["d/d_base.cpp", False],
+            ["d/a/d_a_base.cpp", False],
+            ["toBeSorted/save_file.cpp", False],
             ["toBeSorted/file_manager.cpp", False],
             ["toBeSorted/save_manager.cpp", False],
         ],
