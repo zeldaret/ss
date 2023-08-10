@@ -1,9 +1,11 @@
 #include <d/d_base.h>
 
 extern "C" fProfile::fBaseProfile_c** DAT_ACTOR_ALLOCATION_FUNCTIONS;
-extern "C" /* 805750c0 */ u32 ACTOR_SHOULD_UPDATE_FLAGS;
-extern "C" /* 805750c4 */ u32 ACTOR_SHOULD_DRAW_FLAGS;
-extern "C" /* 805750c0 */ u32 ACTOR_SHOULD_UNK_FLAGS;
+
+// .sbss
+/* 805750c0 */ u32 dBase_c::s_ExecuteControlFlags;
+/* 805750c0 */ u32 dBase_c::s_DrawControlFlags;
+/* 805750c0 */ u32 dBase_c::s_NextExecuteControlFlags;
 
 dBase_c::dBase_c() : fBase_c() {
     baseProperties = DAT_ACTOR_ALLOCATION_FUNCTIONS[mProfName]->mBaseProperties;
@@ -22,7 +24,7 @@ int dBase_c::preExecute() {
     if (fBase_c::preExecute() == 0) {
         return NOT_READY;
     }
-    if (ACTOR_SHOULD_UPDATE_FLAGS && !isProcControlFlag(ACTOR_SHOULD_UPDATE_FLAGS)) {
+    if (s_ExecuteControlFlags && !isProcControlFlag(s_ExecuteControlFlags)) {
         return NOT_READY;
     }
     return SUCCEEDED;
@@ -41,16 +43,16 @@ int dBase_c::preDraw() {
     if (fBase_c::preDraw() == NOT_READY) {
         return NOT_READY;
     }
-    if (ACTOR_SHOULD_DRAW_FLAGS && !isProcControlFlag(ACTOR_SHOULD_DRAW_FLAGS)) {
+    if (s_DrawControlFlags && !isProcControlFlag(s_DrawControlFlags)) {
         return NOT_READY;
     }
     return SUCCEEDED;
 }
 
 void dBase_c::resetFlags() {
-    ACTOR_SHOULD_UPDATE_FLAGS = 0;
-    ACTOR_SHOULD_DRAW_FLAGS = 0;
-    ACTOR_SHOULD_UNK_FLAGS = 0;
+    s_ExecuteControlFlags = 0;
+    s_DrawControlFlags = 0;
+    s_NextExecuteControlFlags = 0;
 }
 
 bool dBase_c::isActorPlayer(dBase_c& base) {

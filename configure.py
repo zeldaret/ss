@@ -9,7 +9,7 @@ LIBS = [
             ["Runtime/__init_cpp_exceptions.cpp", False],
             ["toBeSorted/unk_flag_stuff.cpp", True],
             ["toBeSorted/bitwise_flag_helper.cpp", True],
-            ["d/d_base.cpp", False],
+            ["d/d_base.cpp", True],
             ["d/a/d_a_base.cpp", False],
             ["d/a/obj/d_a_obj_base.cpp", False],
             ["toBeSorted/save_file.cpp", False],

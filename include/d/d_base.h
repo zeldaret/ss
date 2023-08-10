@@ -32,9 +32,9 @@ private:
 inline bool isProcControlFlag(u32 flag) const { return (baseProperties & flag) != 0; }
 
 public:
-    // /* 805750c0 */ static u32 ACTOR_SHOULD_UPDATE_FLAGS;
-    // /* 805750c0 */ static u32 ACTOR_SHOULD_DRAW_FLAGS;
-    // /* 805750c0 */ static u32 ACTOR_SHOULD_UNK_FLAGS;
+    /* 805750c0 */ static u32 s_ExecuteControlFlags;
+    /* 805750c0 */ static u32 s_DrawControlFlags;
+    /* 805750c0 */ static u32 s_NextExecuteControlFlags;
     // /* 80575bc0 */ static fProfile::fBaseProfile_c** DAT_ACTOR_ALLOCATION_FUNCTIONS;
 
     friend class fBase_c;
