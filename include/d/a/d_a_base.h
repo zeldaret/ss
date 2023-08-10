@@ -2,14 +2,14 @@
 
 #include <d/d_base.h>
 #include <d/d_heap.h>
-#include <m/mAllocator.h>
+#include <m/m_allocator.h>
 #include <UnknownTypeBelongings.h>
 // Ghidra: ActorBase
 //   size: 0xFC
 // non-official name
 class dAcBase_c : public dBase_c {
 public:
-    /* 0x68 */ mHeapAllocator mHeapAllocator; // mHeapAlloctor
+    /* 0x68 */ mHeapAllocator_c mHeapAllocator; // mHeapAlloctor
     /* 0x84 */ ObjInfoPtr* objInfo; //
     /* 0x88 */ int field_0x88;
     /* 0x8C */ int field_0x8C;

@@ -5,6 +5,6 @@
 // Ghidra: AcItem
 //   Size: 0xd68
 // official name
-class dAcItem_c : public dAcOBase_c {
+class dAcItem_c : public dAcObjBase_c {
 
 };
