@@ -14,6 +14,10 @@ d/a/d_a_base.cpp:
 	.sdata      start:0x80571920 end:0x80571930
 	.sbss       start:0x80575080 end:0x80575098
 
+d/a/obj/d_a_obj_base.cpp:
+	.text       start:0x8002DE40 end:0x8002F300
+	.data       start:0x805015B8 end:0x80501638
+
 d/d_base.cpp:
 	.text       start:0x80050800 end:0x80050A14
 	.data       start:0x80503380 end:0x805033CC
