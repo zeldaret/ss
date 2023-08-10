@@ -23,6 +23,14 @@ d/d_base.cpp:
 	.data       start:0x80503380 end:0x805033CC
 	.sbss       start:0x805750C0 end:0x805750CC
 
+toBeSorted/sceneflag_manager.cpp:
+	.text       start:0x800BD8C0 end:0x800BE7A8
+	.sbss       start:0x805753E0 end:0x805753F0
+
+toBeSorted/flag_space.cpp:
+	.text       start:0x800BEE00 end:0x800BEF90
+	.data       start:0x80510D04 end:0x80510D10
+
 toBeSorted/unk_flag_stuff.cpp:
 	.text       start:0x800BEF90 end:0x800BF200
 
