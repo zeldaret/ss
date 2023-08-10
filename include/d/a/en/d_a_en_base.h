@@ -5,6 +5,6 @@
 // Ghidra: ActorEnemyBase
 //   size: 
 // non-official name
-class dAcEnBase_c : public dAcOBase_c {
+class dAcEnBase_c : public dAcObjBase_c {
 
 };

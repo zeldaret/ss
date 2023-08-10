@@ -7,6 +7,6 @@
 // Ghidra: ActorNpcBase
 //   size: 0x6e4
 // official name
-class dAcNpc_c : public dAcOBase_c {
+class dAcNpc_c : public dAcObjBase_c {
     
 };

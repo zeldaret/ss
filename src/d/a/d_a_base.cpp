@@ -56,7 +56,7 @@ int dAcBase_c::initAllocatorWork1Heap(int size, char* name, int align) {
     initAllocator(size, name, dHeap::work1Heap, align);
 }
 
-extern "C" int fn_802EE510(mAllocator*, int size, EGG::Heap* heap, char* name, int align, int unk);
+extern "C" int fn_802EE510(mAllocator_c*, int size, EGG::Heap* heap, char* name, int align, int unk);
 
 /* 8002c720 */
 int dAcBase_c::initAllocator(int size, char* name, EGG::Heap* heap, int align) {
