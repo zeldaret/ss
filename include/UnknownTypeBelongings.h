@@ -28,12 +28,12 @@ struct ObjInfoPtr {
     /* 0x0B */ u8  subtype;
 };
 
-class fBase_c;
-struct ActorReference {
-    ActorReference* prev;
-    ActorReference* next;
-    fBase_c* link;
-};
+// is now fLiNdBa_c
+// struct ActorReference {
+//     ActorReference* prev;
+//     ActorReference* next;
+//     fBase_c* link;
+// };
 
 class UnkCollider {
 

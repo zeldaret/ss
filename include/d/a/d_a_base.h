@@ -4,6 +4,9 @@
 #include <d/d_heap.h>
 #include <m/m_allocator.h>
 #include <UnknownTypeBelongings.h>
+#include <m/types_m.h>
+#include <m/m_angle.h>
+
 // Ghidra: ActorBase
 //   size: 0xFC
 // non-official name
@@ -17,115 +20,114 @@ public:
     /* 0x94 */ void* soundRelated;
 protected:
     /* 80501544 */ // vtable
-    /* 0x08 */ virtual int create();
-    /* 0x10 */ virtual void postCreate(MAIN_STATE_e state);
-    /* 0x18 */ virtual int preDelete();
-    /* 0x20 */ virtual int execute(); // calls either actorExecute/executeInEvent
-    /* 0x24 */ virtual int preExecute(); // looks at some actor properties
-    /* 0x28 */ virtual void postExecute(MAIN_STATE_e state); // not fully understood
-    /* 0x44 */ virtual bool createHeap(); 
-    /* 0x48 */ virtual ~dAcBase_c();
-    /* 0x4C */ virtual int actorCreate(); // name is assumed
-    /* 0x50 */ virtual int actorReCreate(); // name is assumed
-    /* 0x54 */ virtual int actorExecute(); // name is assumed
-    /* 0x58 */ virtual int actorExecuteInEvent(); // name is assumed
-    /* 0x5C */ virtual void unkVirtFunc_0x5C();
-    /* 0x60 */ virtual void unkVirtFunc_0x60();
-    /* 0x64 */ virtual bool restorePosRotFromCopy();
-    /* 0x68 */ virtual void* getCurrentEventActor();
-    /* 0x6C */ virtual void unkVirtFunc_0x6C();
-    /* 0x70 */ virtual void doInteraction(s32);
+    /* 0x08 | 8002c880 */ virtual int create();
+    /* 0x10 | 8002c8f0 */ virtual void postCreate(MAIN_STATE_e state);
+    /* 0x18 | 8002c940 */ virtual int preDelete();
+    /* 0x20 | 8002cc10 */ virtual int execute(); // calls either actorExecute/executeInEvent
+    /* 0x24 | 8002cb10 */ virtual int preExecute(); // looks at some actor properties
+    /* 0x28 | 8002ccc0 */ virtual void postExecute(MAIN_STATE_e state); // not fully understood
+    /* 0x44 | 8002c3a0 */ virtual bool createHeap(); 
+    /* 0x48 | 8002c590 */ virtual ~dAcBase_c();
+    /* 0x4C | 8002c860 */ virtual int actorCreate(); // name is assumed
+    /* 0x50 | 8002c870 */ virtual int actorReCreate(); // name is assumed
+    /* 0x54 | 8002cca0 */ virtual int actorExecute(); // name is assumed
+    /* 0x58 | 8002ccb0 */ virtual int actorExecuteInEvent(); // name is assumed
+    /* 0x5C | 8002ce90 */ virtual void unkVirtFunc_0x5C();
+    /* 0x60 | 8002cea0 */ virtual void unkVirtFunc_0x60();
+    /* 0x64 | 8002ceb0 */ virtual bool restorePosRotFromCopy();
+    /* 0x68 | 8002db80 */ virtual void* getCurrentEventActor();
+    /* 0x6C | 8002db90 */ virtual void unkVirtFunc_0x6C();
+    /* 0x70 | 8002dba0 */ virtual void doInteraction(s32);
 
 public:
-    dAcBase_c();
+    /* 8002c3b0 */ dAcBase_c();
 
 public:
     // funcs found in TU 
-    static void setTempCreateParams( \
+    /* 8002c650 */ static void setTempCreateParams( \
         Vec3f* pos, Vec3s* rot, Vec3f* scale, \
         s32 roomId, u32 params2, dAcBase_c* parent, \
         u8 subtype, s16 unkFlag, u8 viewClipIdx,\
         ObjInfoPtr* objInfo );
     
-    void* FUN_8002c690();
-    int initAllocatorWork1Heap(int size, char* name, int align);
-    int initAllocator(int size, char* name, EGG::Heap* heap, int align);
-    bool addActorToRoom(s32 roomId);
-    void setBit_field_0xE8(s32);
-    u32 itemDroppingAndGivingRelated(Vec3f* spawnPos, int subtype);
-    void fillUpperParams2Byte();
-    u32 getParams2_ignoreLower();
-    void setParams2Upper_ignoreLower(u32 val);
-    u8 getParams2UpperByte();
-    void setParams2UpperByte(u32 val);
-    static u32 buildParams2(u32 lower, u8 upper);
-    u32 getParams2Lower();
-    static dAcBase_c* findActor(char* objName, dAcBase_c* parent);
-    static dAcBase_c* searchActor(dAcBase_c& optionalParent);
-    // Kinda performs the code of the first param on every actor (second param is optional parent)
-    static void forEachActor(void*, dAcBase_c&);
-    // Not really static, but we currently dont have a type for the return (not just simply a s16)
-    static void getXZAngleToPlayer(s16&, dAcBase_c&);
-    // returns true if under the distThresh, False if not. the actual distance is returned in outDist
-    bool getDistanceToActor(dAcBase_c& actor, f32 distThresh, f32* outDist);
-    // same concept as above
-    bool getDistanceAndAngleToActor(dAcBase_c& actor, f32 distThresh, s16 yAngle, s16 xAngle, f32* outDist, s16* outDiffAngleY, s16* outDiffAngleX);
-    bool isWithinPlayerRadius(f32 radius);
-    bool getDistanceAndAngleToPlayer(f32 distThresh, s16 yAngle, s16 xAngle, f32* outDist, s16* outDiffAngleY, s16* outDiffAngleX);
-    f32 getDistToPlayer();
-    f32 getSquareDistToPlayer();
-    void updateRoomId(f32 yOffs);
-    bool isRoomFlags_0x6_Set();
-    // Begin Sound Effect Related
-    void FUN_8002d590();
-    void FUN_8002d5b0();
-    void playSound();
-    void FUN_8002d600();
-    void FUN_8002d630();
-    void FUN_8002d6d0();
-    void playSoundEffect1();
-    void FUN_8002d740();
-    void FUN_8002d770();
-    void FUN_8002d7a0();
-    void FUN_8002d7d0();
-    void FUN_8002d7f0();
-    void FUN_8002d810();
-    void FUN_8002d830();
-    void FUN_8002d860();
-    void FUN_8002d880();
+    /* 8002c690 */ void* FUN_8002c690();
+    /* 8002c710 */ int initAllocatorWork1Heap(int size, char* name, int align);
+    /* 8002c720 */ int initAllocator(int size, char* name, EGG::Heap* heap, int align);
+    /* 8002c7b0 */ bool addActorToRoom(s32 roomId);
+    /* 8002c840 */ void setBit_field_0xE8(s32);
+    /* 8002cf10 */ u32 itemDroppingAndGivingRelated(Vec3f* spawnPos, int subtype);
+    /* 8002cf90 */ void fillUpperParams2Byte();
+    /* 8002cfa0 */ u32 getParams2_ignoreLower();
+    /* 8002cfb0 */ void setParams2Upper_ignoreLower(u32 val);
+    /* 8002cfc0 */ u8 getParams2UpperByte();
+    /* 8002cfd0 */ void setParams2UpperByte(u32 val);
+    /* 8002cff0 */ static u32 buildParams2(u32 lower, u8 upper);
+    /* 8002d010 */ u32 getParams2Lower();
+    /* 8002d020 */ static dAcBase_c* findActor(char* objName, dAcBase_c* parent);
+    /* 8002d0a0 */ static dAcBase_c* searchActor(dAcBase_c& optionalParent);
+        // Kinda performs the code of the first param on every actor (second param is optional parent)
+    /* 8002d130 */static void forEachActor(void*, dAcBase_c&);
+        // Not really static, but we currently dont have a type for the return (not just simply a s16)
+    /* 8002d190 */ mAng getXZAngleToPlayer();
+        // returns true if under the distThresh, False if not. the actual distance is returned in outDist
+    /* 8002d1d0 */ bool getDistanceToActor(dAcBase_c& actor, f32 distThresh, f32* outDist);
+        // same concept as above
+    /* 8002d290 */ bool getDistanceAndAngleToActor(dAcBase_c& actor, f32 distThresh, s16 yAngle, s16 xAngle, f32* outDist, s16* outDiffAngleY, s16* outDiffAngleX);
+    /* 8002d3e0 */ bool isWithinPlayerRadius(f32 radius);
+    /* 8002d440 */ bool getDistanceAndAngleToPlayer(f32 distThresh, s16 yAngle, s16 xAngle, f32* outDist, s16* outDiffAngleY, s16* outDiffAngleX);
+    /* 8002d470 */ f32 getDistToPlayer();
+    /* 8002d4a0 */ f32 getSquareDistToPlayer();
+    /* 8002d4b0 */ void updateRoomId(f32 yOffs);
+    /* 8002d540 */ bool isRoomFlags_0x6_Set();
+        // Begin Sound Effect Related
+    /* 8002d590 */ void FUN_8002d590();
+    /* 8002d5b0 */ void FUN_8002d5b0();
+    /* 8002d5d0 */ void playSound();
+    /* 8002d600 */ void FUN_8002d600();
+    /* 8002d630 */ void FUN_8002d630();
+    /* 8002d6d0 */ void FUN_8002d6d0();
+    /* 8002d710 */ void playSoundEffect1();
+    /* 8002d740 */ void FUN_8002d740();
+    /* 8002d770 */ void FUN_8002d770();
+    /* 8002d7a0 */ void FUN_8002d7a0();
+    /* 8002d7d0 */ void FUN_8002d7d0();
+    /* 8002d7f0 */ void FUN_8002d7f0();
+    /* 8002d810 */ void FUN_8002d810();
+    /* 8002d830 */ void FUN_8002d830();
+    /* 8002d860 */ void FUN_8002d860();
+    /* 8002d880 */ void FUN_8002d880();
     // End Sound Effect Related
-    void FUN_8002d890();
-    void setActorRef(dBase_c&);
+    /* 8002d890 */ void FUN_8002d890();
+    /* 8002d920 */ void setActorRef(dBase_c&);
     // next three funcs are related
-    void setUnkFlag();
-    void FUN_8002d940();
-    void FUN_8002d960();
+    /* 8002d930 */ void setUnkFlag();
+    /* 8002d940 */ void FUN_8002d940();
+    /* 8002d960 */ void FUN_8002d960();
 
-    static dAcBase_c createActor(ProfileName actorId, u32 params1, Vec3f* pos, Vec3s* rot, \
+    /* 8002d980 */ static dAcBase_c createActor(ProfileName actorId, u32 params1, Vec3f* pos, Vec3s* rot, \
         Vec3f* scale, u32 params2, s32 roomId, dBase_c* ref);
 
-    static dAcBase_c createActorUnkGroup3(ProfileName actorId, u32 params1, Vec3f* pos, Vec3s* rot, \
+    /* 8002da80 */ static dAcBase_c createActorUnkGroup3(ProfileName actorId, u32 params1, Vec3f* pos, Vec3s* rot, \
         Vec3f* scale, u32 params2, s32 roomId, dBase_c* ref);
 
-    void FUN_8002dc20(s16*, s16*);
-    void incrementKillCounter();
-    void FUN_8002dcd0();
-    void FUN_8002dd10();
-    void FUN_8002dd50();
-    void FUN_8002dd90();
-    void FUN_8002ddd0();
-    void FUN_8002de30();
+    /* 8002dc20 */ void FUN_8002dc20(s16*, s16*);
+    /* 8002dc50 */ void incrementKillCounter();
+    /* 8002dcd0 */ void FUN_8002dcd0();
+    /* 8002dd10 */ void FUN_8002dd10();
+    /* 8002dd50 */ void FUN_8002dd50();
+    /* 8002dd90 */ void FUN_8002dd90();
+    /* 8002ddd0 */ void FUN_8002ddd0();
+    /* 8002de30 */ void FUN_8002de30();
 
 public:
-    // static vars
-    static u32 s_Create_RoomId;
-    static u32 s_Create_Params2;
-    static u16 s_Create_UnkFlags;
-    static u8  s_Create_ViewClipIdx;
-    static Vec3f* s_Create_Position;
-    static Vec3s* s_Create_Rotation;
-    static Vec3f* s_Create_Scale;
-    static dAcBase_c* s_Create_Parent;
-    static ObjInfoPtr* s_Create_ObjInfo;
-    static u8 s_Create_Subtype;
+    /* 80571920 */ static u32 s_Create_RoomId;
+    /* 80571924 */ static u32 s_Create_Params2;
+    /* 80571928 */ static u16 s_Create_UnkFlags;
+    /* 8057192A */ static u8  s_Create_ViewClipIdx;
+    /* 80575080 */ static Vec3f* s_Create_Position;
+    /* 80575084 */ static Vec3s* s_Create_Rotation;
+    /* 80575088 */ static Vec3f* s_Create_Scale;
+    /* 8057508C */ static dAcBase_c* s_Create_Parent;
+    /* 80575090 */ static ObjInfoPtr* s_Create_ObjInfo;
+    /* 80575094 */ static u8 s_Create_Subtype;
 };

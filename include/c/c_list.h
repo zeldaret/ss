@@ -21,20 +21,11 @@ protected:
     friend class cListMg_c;
 };
 
-/// @brief A doubly-linked list container. See cListNd_c.
-/// @note Unofficial name.
 class cListMg_c {
 public:
-    /// @brief Constructs a new list container.
-    cListMg_c() : mpFirst(nullptr), mpLast(nullptr) {}
-
-    /**
-     * @brief Inserts a node after the given previous node.
-     *
-     * @param node The node to insert.
-     * @param prevNode The node to insert it after, or @p nullptr to insert it at the beginning.
-     * @return If the operation was successful.
-     */
+    /* 802e2be0 */ cListMg_c() : mpFirst(nullptr), mpLast(nullptr) {}
+    // /* 802e2880 */ ~cListMg_c(); 
+    
     bool insertAfter(cListNd_c *node, cListNd_c *prevNode);
 
     /**

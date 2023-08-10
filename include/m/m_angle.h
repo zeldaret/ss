@@ -7,5 +7,5 @@ struct mAng {
 };
 
 class mAng3_c {
-
+    s16 x,y,z;
 };

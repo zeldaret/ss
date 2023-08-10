@@ -8,7 +8,7 @@ extern "C" fProfile::fBaseProfile_c** DAT_ACTOR_ALLOCATION_FUNCTIONS;
 /* 805750c0 */ u32 dBase_c::s_NextExecuteControlFlags;
 
 dBase_c::dBase_c() : fBase_c() {
-    baseProperties = DAT_ACTOR_ALLOCATION_FUNCTIONS[mProfName]->mBaseProperties;
+    baseProperties = DAT_ACTOR_ALLOCATION_FUNCTIONS[profile_name]->mBaseProperties;
 }
 
 void dBase_c::postDraw(fBase_c::MAIN_STATE_e status) {
@@ -56,7 +56,7 @@ void dBase_c::resetFlags() {
 }
 
 bool dBase_c::isActorPlayer(dBase_c& base) {
-    return base.mProfName == fProfile::PLAYER;
+    return base.profile_name == fProfile::PLAYER;
 }
 
 int dBase_c::loadAsyncCallback() {

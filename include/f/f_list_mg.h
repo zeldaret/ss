@@ -21,13 +21,10 @@ public:
      */
     int countNodeByProfName(ProfileName profName) const;
 
-    /**
-     * @brief Finds a node in this list with the given ID.
-     *
-     * @param id The ID to search for.
-     * @return The found node, or @p nullptr if none were found.
-     */
-    const fLiNdBa_c *searchNodeByID(fBaseID_e id) const;
+    /* 802e2760 */ const fLiNdBa_c *searchNodeByID(fBaseID_e id) const;
+    /* 802e2790 */ const fLiNdBa_c *searchNodeByID(fBaseID_e id, fLiMgBa_c* start) const;
+    /* 802e27d0 */ void link(fLiNdBa_c&, fBase_c*);
+    /* 802e2830 */ void unlink(fLiNdBa_c&);
 
     inline fLiNdBa_c *getFirst() const {
         return (fLiNdBa_c *) cListMg_c::getFirst();

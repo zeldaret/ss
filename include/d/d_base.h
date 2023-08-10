@@ -6,7 +6,9 @@
 // Ghidra: dBase_c
 //   size: 0x68
 // non-official but likely name
-class dBase_c : public fBase_c{
+class dBase_c : public fBase_c {
+public:
+    /* 0x64 */ u32 baseProperties; // field from profile init
 public:
     /* 80050800 */ dBase_c();
     /* 80050890 */ virtual int preExecute();
@@ -15,8 +17,6 @@ public:
     /* 80050860 */ virtual void postDraw(MAIN_STATE_e state);
     /* 8002c530 */ virtual ~dBase_c();
 
-public:
-    u32 baseProperties; // field from profile init
 
 public:
     /* 80050980 */ static void resetFlags();

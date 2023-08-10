@@ -19,7 +19,7 @@ int (*fBase_c::sLoadAsyncCallback)();
 void (*fBase_c::sUnloadCallback)();
 
 /* 802e12f0 */
-fBase_c::fBase_c() : mMng(this) {}
+fBase_c::fBase_c() : manager(this) {}
 
 /* 802e1480 */
 fBase_c::~fBase_c() {}

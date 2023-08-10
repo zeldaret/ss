@@ -36,23 +36,23 @@ public:
 public:
     /* 8002e630 */ static dAcObjBase_c create( \
                         fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, \
-                        Vec3f* pos, Vec3s* rot, Vec3f* scale, u32 params2 );
+                        mVec3_c* pos, mAng3_c* rot, mVec3_c* scale, u32 params2 );
     /* 8002e6d0 */ static dAcObjBase_c create( \
                         char* name, u32 roomId, u32 params1, \
-                        Vec3f* pos, Vec3s* rot, Vec3f* scale, \
+                        mVec3_c* pos, mAng3_c* rot, mVec3_c* scale, \
                         u32 params2, u16 id, u8 viewclipId);
     /* 8002e770 */ static dAcObjBase_c* findObject(fProfile::PROFILE_NAME_e actorId,\
-                        ActorReference* refList, dAcObjBase_c* parent);
-    /* 8002e7f0 */ static dAcObjBase_c* getNextObject(ActorReference* ref, dAcObjBase_c* parent);
+                        fLiNdBa_c* refList, dAcObjBase_c* parent);
+    /* 8002e7f0 */ static dAcObjBase_c* getNextObject(fLiNdBa_c* ref, dAcObjBase_c* parent);
     /* 8002e850 */ bool isPlayer();
-    /* 8002e870 */ void calcVelocity(Vec3f& pos, f32 speed);
+    /* 8002e870 */ void calcVelocity(mVec3_c& pos, f32 speed);
     /* 8002e8e0 */ void calcVelocity();
     /* 8002e9a0 */ void updateMatrix();
     /* 8002ea00 */ void setDefaultCullDistance();
     /* 8002ea30 */ void fn_8002EA30(f32,f32,f32,f32,f32, void*);
     /* 8002ea60 */ void fn_8002EA60(void*);
     /* 8002eb30 */ void fn_8002EB30(void*);
-    /* 8002eb90 */ void putInODesert(f32 depth, Vec3f* position);
+    /* 8002eb90 */ void putInODesert(f32 depth, mVec3_c* position);
         // Disabling makes Items and Link Disappear
     /* 8002ec70 */ void drawModelType1();
         // Disabling make Lava and other objects Disappear
@@ -62,26 +62,25 @@ public:
     /* 8002ee40 */ void drawShadow();
     /* 8002ef40 */ void createChildAttached( \
                         fProfile::PROFILE_NAME_e actorId, u32 params1, \
-                        Vec3f* pos, Vec3s* rot, Vec3f* scale, u32 params2, \
+                        mVec3_c* pos, mAng3_c* rot, mVec3_c* scale, u32 params2, \
                         u32 roomId );
     /* 8002ef40 */ void createChildNonAttached( \
                         fProfile::PROFILE_NAME_e actorId, u32 params1, \
-                        Vec3f* pos, Vec3s* rot, Vec3f* scale, u32 params2, \
+                        mVec3_c* pos, mAng3_c* rot, mVec3_c* scale, u32 params2, \
                         u32 roomId );
     /* 8002efa0 */ void fn_8002efa0();
     /* 8002eff0 */ bool fn_8002eff0(f32*, s16*, UnkCollider*, f32*, f32*);
     /* 8002f190 */ void createChildAttached2( \
                         fProfile::PROFILE_NAME_e actorId, u32 params1, \
-                        Vec3f* pos, Vec3s* rot, Vec3f* scale, u32 params2, \
+                        mVec3_c* pos, mAng3_c* rot, mVec3_c* scale, u32 params2, \
                         u32 roomId );
         // These may not belong here
     /* 8002f1c0 */ static dAcBase_c createActorUnkGroup3( \
                         fProfile::PROFILE_NAME_e actorId, u32 roomId, \
-                        u32 params1, Vec3f* pos, Vec3s* rot, Vec3f* scale, \
+                        u32 params1, mVec3_c* pos, mAng3_c* rot, mVec3_c* scale, \
                         u32 params2);
     /* 8002f260 */ static dAcBase_c createActorUnkGroup3( \
                         char* name, u32 roomId, u32 params1, \
-                        Vec3f* pos, Vec3s* rot, Vec3f* scale, \
+                        mVec3_c* pos, mAng3_c* rot, mVec3_c* scale, \
                         u32 params2, u16 id, u8 viewclipId);
-
 };

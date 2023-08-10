@@ -8,12 +8,9 @@
 
 class fBase_c;
 
-/// @brief A tree node with an owner reference.
 class fTrNdBa_c : public cTreeNd_c {
 public:
-    /// @brief Constructs a new tree node.
-    /// @param owner The node's owner.
-    fTrNdBa_c(fBase_c *owner) : mpOwner(owner) {}
+    fTrNdBa_c(fBase_c *owner) : p_owner(owner) {}
 
     fTrNdBa_c *getTreeNext() const {
         return (fTrNdBa_c *) cTreeNd_c::getTreeNext();
@@ -39,5 +36,5 @@ public:
         return (fTrNdBa_c *) cTreeNd_c::getBrNext();
     }
 
-    fBase_c *mpOwner; ///< The owner of this node.
+    fBase_c *p_owner;
 };

@@ -15,16 +15,13 @@
 
 class fBase_c;
 
-/// @brief A class that manages the execution of the bases.
 class fManager_c {
 public:
 
-    /// @brief The processes for fManager_c.
     enum LOOP_PROC_e {
         NOTHING, CONNECT, CREATE, EXECUTE, DELETE, DRAW
     };
 
-    /// @brief Flags for different processes, induced from ::LOOP_PROC_e.
     enum PROC_FLAGS {
         PROC_FLAG_CONNECT = GET_PROC_FLAG(CONNECT),
         PROC_FLAG_CREATE = GET_PROC_FLAG(CREATE),
@@ -33,48 +30,34 @@ public:
         PROC_FLAG_DRAW = GET_PROC_FLAG(DRAW)
     };
 
-    /// @brief Constructs a new manager.
-    /// @param owner The manager's owner.
     fManager_c(fBase_c *owner) :
-        mConnectNode(owner),
-        mExecuteNode(owner),
-        mDrawNode(owner),
-        mSearchNode(owner) {}
+        connect_node(owner),
+        execute_node(owner),
+        draw_node(owner),
+        search_node(owner) {}
 
-    /// @brief Gets the index of the search list corresponding to the owner of the manager. See ::m_searchManage.
-    int getSearchTableNum();
-
-    /// @brief Executes the currently enabled processes on all the bases in the respective lists.
-    static void mainLoop();
-
-    /// @brief Searches for a base with the given ID.
-    static fBase_c *searchBaseByID(fBaseID_e id);
-
-    /// @brief Searches for a base with a given profile name, optionally under a given parent.
-    static fBase_c *searchBaseByProfName(ProfileName profID, const fBase_c *parent);
-
-    /// @brief Searches for a base with a given group type, optionally under a given parent.
-    static fBase_c *searchBaseByGroupType(unsigned char groupType, const fBase_c *parent);
+    /* 802e28c0 */ int getSearchTableNum();
+    /* 802e28d0 */ static fBase_c *searchBaseByID(fBaseID_e id);
+    /* 802e2920 */ static fBase_c *searchBaseByProfName(ProfileName profID, const fBase_c *parent);
+    /* 802e2980 */ static fBase_c *searchBaseByGroupType(unsigned char groupType, const fBase_c *parent);
+    /* 802e29e0 */ static void mainLoop();
 
 private:
-    fTrNdBa_c mConnectNode; ///< The node in ::m_connectManage.
-    fLiNdPrio_c mExecuteNode; ///< The node in ::m_executeManage.
-    fLiNdPrio_c mDrawNode; ///< The node in ::m_drawManage.
-    fLiNdBa_c mSearchNode; ///< The node in ::m_searchManage.
+    fTrNdBa_c connect_node; ///< The node in ::m_connectManage.
+    fLiNdPrio_c execute_node; ///< The node in ::m_executeManage.
+    fLiNdPrio_c draw_node; ///< The node in ::m_drawManage.
+    fLiNdBa_c search_node; ///< The node in ::m_searchManage.
 
-    static fTrMgPTMF_c m_connectManage; ///< A tree that connects all loaded bases.
-    static fLiMgPTMF_c m_createManage; ///< A list of all the bases scheduled for creation.
-    static fLiMgPTMF_c m_executeManage; ///< A list of all the bases scheduled for execution.
-    static fLiMgPTMF_c m_deleteManage; ///< A list of all the bases scheduled for deletion.
-    static fLiMgPTMF_c m_drawManage; ///< A list of all the bases scheduled for drawing.
+    /* 805b84d8 */ static fTrMgPTMF_c m_connectManage; ///< A tree that connects all loaded bases.
+    /* 805b84e8 */ static fLiMgPTMF_c m_createManage; ///< A list of all the bases scheduled for creation.
+    /* 805b84fc */ static fLiMgPTMF_c m_executeManage; ///< A list of all the bases scheduled for execution.
+    /* 805b8510 */ static fLiMgPTMF_c m_drawManage; ///< A list of all the bases scheduled for drawing.
+    /* 805b8524 */ static fLiMgPTMF_c m_deleteManage; ///< A list of all the bases scheduled for deletion.
 
-    /// @brief An array of lists that is used to search for bases.
-    /// @details Bases are distributed evenly between each entry in the array.
-    /// This allows for more efficient base lookups.
-    static fLiMgBa_c m_searchManage[8];
+    /* 805b8548 */ static fLiMgBa_c m_searchManage[8];
 
-    static u32 m_StopProcInf; ///< Which processes should be executed this frame.
-    static LOOP_PROC_e m_nowLoopProc; ///< The process ::mainLoop is currently in.
+    /* 80575bb8 */ static u32 m_StopProcInf; ///< Which processes should be executed this frame.
+    /* 80573fc0 */ static LOOP_PROC_e m_nowLoopProc; ///< The process ::mainLoop is currently in.
 
     friend class fBase_c;
 };

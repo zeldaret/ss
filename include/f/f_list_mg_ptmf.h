@@ -13,21 +13,9 @@ class fBase_c;
 /// @note Unofficial name.
 class fLiMgPTMF_c : public fLiMgBa_c {
 public:
-    /// @brief Constructs a new list node.
-    /// @param procFunc The process function.
     fLiMgPTMF_c(int (fBase_c::*procFunc)()) : mpProcFunc(procFunc) {}
-
-    /**
-     * @brief Inserts a node in the correct place according to its priority.
-     *
-     * @param node The node to insert.
-     * @return If the operation was successful.
-     */
-    bool addNode(fLiNdPrio_c *node);
-
-    /// @brief Calls the process function ::mpProcFunc on the owner of each node in the list.
-    /// @return If the operation was successful.
-    bool walkPack();
+    /* 802e2680 */ bool addNode(fLiNdPrio_c *node);
+    /* 802e26e0 */ bool walkPack();
 
     fLiNdPrio_c *getFirst() const {
         return (fLiNdPrio_c *) fLiMgBa_c::getFirst();
