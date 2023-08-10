@@ -26,6 +26,7 @@ d/d_base.cpp:
 toBeSorted/sceneflag_manager.cpp:
 	.text       start:0x800BD8C0 end:0x800BE7A8
 	.sbss       start:0x805753E0 end:0x805753F0
+	.bss        start:0x805A78D0 end:0x805A7AD8
 
 toBeSorted/flag_space.cpp:
 	.text       start:0x800BEE00 end:0x800BEF90

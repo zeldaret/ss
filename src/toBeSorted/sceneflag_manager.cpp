@@ -63,6 +63,8 @@ class SceneflagManager {
 
 SceneflagManager *SceneflagManager::sInstance = nullptr;
 u16 SceneflagManager::sTempFlags[] = {};
+u16 SceneflagManager::sSceneFlags[8] = {};
+u16 SceneflagManager::sZoneFlags[0xFC] = {};
 
 void SceneflagManager::doNothing() {}
 void SceneflagManager::setShouldCommit(u16 flag) {
