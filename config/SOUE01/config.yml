@@ -1,4 +1,5 @@
 object: orig/SOUE01/main.dol
+hash: 450a6806f46d59dcf8278db08e06f94865a4b18a
 splits: config/SOUE01/splits.txt
 symbols: config/SOUE01/symbols.txt
-auto_force_files: false
+quick_analysis: true
