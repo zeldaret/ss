@@ -118,7 +118,7 @@ public:
     // 0x80009AA0
     u16* getUnkFlags1();
     // 0x80009AB0
-    s16* getPlayerName(); // using Shift JIS i assume
+    s16* getPlayerName(); // UTF16-BE
     // 0x80009AC0
     void setAreaT1(char* name);
     // 0x80009BE0

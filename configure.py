@@ -9,6 +9,8 @@ LIBS = [
             ["Runtime/__init_cpp_exceptions.cpp", False],
             ["toBeSorted/unk_flag_stuff.cpp", True],
             ["toBeSorted/bitwise_flag_helper.cpp", True],
+            ["toBeSorted/sceneflag_manager.cpp", True],
+            ["toBeSorted/flag_space.cpp", False],
             ["d/d_base.cpp", False],
             ["d/a/d_a_base.cpp", False],
             ["toBeSorted/save_file.cpp", False],
