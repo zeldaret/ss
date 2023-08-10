@@ -21,6 +21,9 @@ d/d_base.cpp:
 toBeSorted/unk_flag_stuff.cpp:
 	.text       start:0x800BEF90 end:0x800BF200
 
+toBeSorted/bitwise_flag_helper.cpp:
+	.text       start:0x800BF200 end:0x800BF264
+
 Runtime/__init_cpp_exceptions.cpp:
 	.text       start:0x804C71A8 end:0x804C7218
 	.ctors      start:0x804DB640 end:0x804DB644 rename:.ctors$10
