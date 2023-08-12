@@ -4,11 +4,11 @@
 extern "C" {
 #endif
 
-#include <lib/rvl/DVD/dvd.h>
-#include <lib/rvl/DVD/dvd_broadway.h>
-#include <lib/rvl/DVD/dvdfatal.h>
-#include <lib/rvl/DVD/dvdfs.h>
-#include <lib/rvl/DVD/dvdidutils.h>
+#include <rvl/DVD/dvd.h>
+#include <rvl/DVD/dvd_broadway.h>
+#include <rvl/DVD/dvdfatal.h>
+#include <rvl/DVD/dvdfs.h>
+#include <rvl/DVD/dvdidutils.h>
 
 #ifdef __cplusplus
 }

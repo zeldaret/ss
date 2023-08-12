@@ -4,7 +4,7 @@
 // and the Skyward Sword Ghidra database. Comments and docs can be seen above. stripped in this file for easier looking
 
 #include <types.h>
-#include <lib/egg/core/eggFrmHeap.h>
+#include <egg/core/eggFrmHeap.h>
 #include <f/f_profile.h>
 #include <f/f_base_id.h>
 #include <f/f_helper_unk.h>

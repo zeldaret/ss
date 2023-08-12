@@ -3,7 +3,7 @@ LIBS = [
     {
         "lib": "SS",
         "mw_version": "Wii/1.7",
-        "cflags": "-proc gekko -Cpp_exceptions off -RTTI off -O4,p -fp hard, -inline noauto, -enum int, -str reuse -I- -i include",
+        "cflags": "-proc gekko -Cpp_exceptions off -RTTI off -O4,p -fp hard, -inline noauto, -enum int, -str reuse -I- -i include -i include/lib",
         "host": False,
         "objects": [
             ["Runtime/__init_cpp_exceptions.cpp", False],
@@ -19,6 +19,32 @@ LIBS = [
             ["toBeSorted/save_manager.cpp", False],
         ],
     },
+    {
+        "lib": "RVL",
+        "mw_version": "Wii/1.7", # FIXME: Change Compiler+flags Probably
+        "cflags": "-proc gekko -Cpp_exceptions off -RTTI off -O4,p -fp hard, -inline noauto, -enum int, -str reuse -I- -i include -i include/lib",
+        "host": False,
+        "objects": [
+            ["lib/rvl/CX/cx.c", False],
+        ],
+    },
+    {
+        "lib": "nw4r",
+        "mw_version": "Wii/1.7", # FIXME: Change Compiler+flags Probably
+        "cflags": "-proc gekko -Cpp_exceptions off -RTTI off -O4,p -fp hard, -inline noauto, -enum int, -str reuse -I- -i include -i include/lib",
+        "host": False,
+        "objects": [
+        ],
+    },
+    {
+        "lib": "egg",
+        "mw_version": "Wii/1.7", # FIXME: Change Compiler+flags Probably
+        "cflags": "-proc gekko -Cpp_exceptions off -RTTI off -O4,p -fp hard, -inline noauto, -enum int, -str reuse -I- -i include -i include/lib",
+        "host": False,
+        "objects": [
+            ["lib/egg/core/eggStream.cpp", False], 
+        ],
+    }
 ]
 VERSIONS = [
     "SOUE01",  # 0

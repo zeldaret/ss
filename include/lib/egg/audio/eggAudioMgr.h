@@ -1,7 +1,7 @@
 #pragma once
 
-#include <lib/egg/egg_types.h>
-#include <lib/egg/core/eggHeap.h>
+#include <egg/egg_types.h>
+#include <egg/core/eggHeap.h>
 
 namespace EGG {
     class IAudioMgr {

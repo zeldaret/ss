@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include <lib/rvl/BASE/PPCArch.h>
+#include <rvl/BASE/PPCArch.h>
 
 #ifdef __cplusplus
 }

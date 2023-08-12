@@ -1,9 +1,9 @@
 #ifndef RVL_SDK_SC_SCSYSTEM_H
 #define RVL_SDK_SC_SCSYSTEM_H
-#include <lib/rvl/FS.h>
-#include <lib/rvl/NAND.h>
-#include <lib/rvl/OS.h>
-#include <lib/rvl/types.h>
+#include <rvl/FS.h>
+#include <rvl/NAND.h>
+#include <rvl/OS.h>
+#include <rvl/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

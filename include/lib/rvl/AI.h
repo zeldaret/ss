@@ -4,8 +4,8 @@
 extern "C" {
 #endif
 
-#include <lib/rvl/AI/ai.h>
-#include <lib/rvl/AI/ai_hardware.h>
+#include <rvl/AI/ai.h>
+#include <rvl/AI/ai_hardware.h>
 
 #ifdef __cplusplus
 }

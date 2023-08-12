@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_MEM_HEAP_COMMON_H
 #define RVL_SDK_MEM_HEAP_COMMON_H
-#include <lib/rvl/MEM/mem_list.h>
-#include <lib/rvl/OS.h>
-#include <lib/rvl/types.h>
+#include <rvl/MEM/mem_list.h>
+#include <rvl/OS.h>
+#include <rvl/types.h>
 // #include <string.h>
 #ifdef __cplusplus
 extern "C" {

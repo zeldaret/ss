@@ -4,10 +4,10 @@
 extern "C" {
 #endif
 
-#include <lib/rvl/EXI/EXIBios.h>
-#include <lib/rvl/EXI/EXICommon.h>
-#include <lib/rvl/EXI/EXIHardware.h>
-#include <lib/rvl/EXI/EXIUart.h>
+#include <rvl/EXI/EXIBios.h>
+#include <rvl/EXI/EXICommon.h>
+#include <rvl/EXI/EXIHardware.h>
+#include <rvl/EXI/EXIUart.h>
 
 #ifdef __cplusplus
 }

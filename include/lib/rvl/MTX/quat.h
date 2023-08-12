@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_MTX_QUAT_H
 #define RVL_SDK_MTX_QUAT_H
-#include <lib/rvl/MTX/mtx.h>
-#include <lib/rvl/types.h>
+#include <rvl/MTX/mtx.h>
+#include <rvl/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

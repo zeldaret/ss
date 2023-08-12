@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_OS_HARDWARE_H
 #define RVL_SDK_OS_HARDWARE_H
-#include <lib/rvl/OS/OSAddress.h>
-#include <lib/rvl/OS/OSThread.h>
-#include <lib/rvl/types.h>
+#include <rvl/OS/OSAddress.h>
+#include <rvl/OS/OSThread.h>
+#include <rvl/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

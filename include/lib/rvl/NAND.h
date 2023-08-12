@@ -4,10 +4,10 @@
 extern "C" {
 #endif
 
-#include <lib/rvl/NAND/NANDCheck.h>
-#include <lib/rvl/NAND/NANDCore.h>
-#include <lib/rvl/NAND/NANDOpenClose.h>
-#include <lib/rvl/NAND/nand.h>
+#include <rvl/NAND/NANDCheck.h>
+#include <rvl/NAND/NANDCore.h>
+#include <rvl/NAND/NANDOpenClose.h>
+#include <rvl/NAND/nand.h>
 
 #ifdef __cplusplus
 }

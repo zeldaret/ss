@@ -4,7 +4,7 @@
 
 #include <types.h>
 #include <m/m_angle.h>
-#include <lib/nw4r/nw4r_types.h>
+#include <nw4r/nw4r_types.h>
 
 class mMtx_c
 {

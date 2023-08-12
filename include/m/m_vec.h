@@ -1,8 +1,8 @@
 #pragma once
 
 #include <types.h>
-#include <lib/rvl/MTX.h>
-#include <lib/nw4r/math/vec.h>
+#include <rvl/MTX.h>
+#include <nw4r/math/vec.h>
 
 class mVec3_c {
     public:

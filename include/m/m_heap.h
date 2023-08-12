@@ -1,9 +1,9 @@
 #pragma once
 
-#include <lib/egg/core/eggHeap.h>
-#include <lib/egg/core/eggFrmHeap.h>
-// #include <lib/egg/core/eggExpHeap.h>
-// #include <lib/egg/core/eggAssertHeap.h>
+#include <egg/core/eggHeap.h>
+#include <egg/core/eggFrmHeap.h>
+// #include <egg/core/eggExpHeap.h>
+// #include <egg/core/eggAssertHeap.h>
 
 namespace EGG {
     class ExpHeap;

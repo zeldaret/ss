@@ -3,12 +3,12 @@
 // This file is ported from https://github.com/riidefi/mkw/blob/master/source/egg/core/eggHeap.hpp
 
 #include <types.h>
-#include <lib/rvl/MEM.h>
-#include <lib/rvl/OS.h>
-#include <lib/egg/core/eggAllocator.h>
-#include <lib/egg/core/eggDisposer.h>
-#include <lib/nw4r/ut/utList.h>
-#include <lib/egg/core/eggThread.h>
+#include <rvl/MEM.h>
+#include <rvl/OS.h>
+#include <egg/core/eggAllocator.h>
+#include <egg/core/eggDisposer.h>
+#include <nw4r/ut/utList.h>
+#include <egg/core/eggThread.h>
 
 #ifndef HEAP_PRIVATE
 #define HEAP_PRIVATE protected

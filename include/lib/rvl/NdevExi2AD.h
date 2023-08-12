@@ -4,9 +4,9 @@
 extern "C" {
 #endif
 
-#include <lib/rvl/NdevExi2AD/DebuggerDriver.h>
-#include <lib/rvl/NdevExi2AD/ODEMU.h>
-#include <lib/rvl/NdevExi2AD/exi2.h>
+#include <rvl/NdevExi2AD/DebuggerDriver.h>
+#include <rvl/NdevExi2AD/ODEMU.h>
+#include <rvl/NdevExi2AD/exi2.h>
 
 #ifdef __cplusplus
 }

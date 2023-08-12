@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_ESP_H
 #define RVL_SDK_ESP_H
-#include <lib/rvl/ARC.h>
-#include <lib/rvl/IPC.h>
-#include <lib/rvl/types.h>
+#include <rvl/ARC.h>
+#include <rvl/IPC.h>
+#include <rvl/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

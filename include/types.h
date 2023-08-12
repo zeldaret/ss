@@ -1,7 +1,7 @@
 #pragma once
 #define TYPES_H
 
-#include <lib/rvl/macros.h>
+#include <rvl/macros.h>
 
 typedef signed char s8;
 typedef signed short s16;

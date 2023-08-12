@@ -2,7 +2,7 @@
 
 // This file was adapted from https://github.com/riidefi/mkw/blob/master/source/egg/core/eggDisposer.hpp 
 
-#include <lib/nw4r/ut/utList.h>
+#include <nw4r/ut/utList.h>
 #include <types.h>
 
 namespace EGG {

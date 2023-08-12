@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_OS_FONT_H
 #define RVL_SDK_OS_FONT_H
-#include <lib/rvl/types.h>
+#include <rvl/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

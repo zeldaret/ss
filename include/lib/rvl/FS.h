@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include <lib/rvl/FS/fs.h>
+#include <rvl/FS/fs.h>
 
 #ifdef __cplusplus
 }

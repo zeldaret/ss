@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_NDEV_EXI2_AD_ODEMU_H
 #define RVL_SDK_NDEV_EXI2_AD_ODEMU_H
-#include <lib/rvl/types.h>
+#include <rvl/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

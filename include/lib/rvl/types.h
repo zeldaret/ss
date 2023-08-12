@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lib/rvl/macros.h>
+#include <rvl/macros.h>
 typedef int BOOL;
 enum { FALSE, TRUE };
 typedef int UNKWORD;

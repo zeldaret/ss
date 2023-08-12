@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lib/egg/core/eggHeap.h>
+#include <egg/core/eggHeap.h>
 
 class dHeap {
     public:

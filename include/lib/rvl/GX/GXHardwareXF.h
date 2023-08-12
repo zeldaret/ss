@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_GX_HARDWARE_XF_H
 #define RVL_SDK_GX_HARDWARE_XF_H
-#include <lib/rvl/GX/GXTypes.h>
-#include <lib/rvl/types.h>
+#include <rvl/GX/GXTypes.h>
+#include <rvl/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

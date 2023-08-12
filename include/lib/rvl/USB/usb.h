@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_USB_H
 #define RVL_SDK_USB_H
-#include <lib/rvl/IPC.h>
-#include <lib/rvl/types.h>
+#include <rvl/IPC.h>
+#include <rvl/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

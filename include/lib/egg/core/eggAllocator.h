@@ -1,17 +1,16 @@
 #pragma once
 
-// this file was ported from https://github.com/riidefi/mkw/blob/master/source/egg/core/eggAllocator.hpp
+#include <rvl/MEM.h>
+#include <egg/core/eggHeap.h>
 
-#include <lib/rvl/MEM.h>
-#include <lib/egg/core/eggHeap.h>
+// Ghidra: Allocator
+//   size: 0x1C
+//   .text: [0x804952d0, 0x804953f0]
+//   .data: [0x8056e8d0, 0x8056e8e8] # Allocator vtable
+//  sdata2: [0x8057f2f0, 0x8057f2f8] # MEMAllocator func table
 
 namespace EGG {
     class Heap;
-    // Ghidra: Allocator
-    //   size: 0x1C
-    //   .text: [0x804952d0, 0x804953f0]
-    //   .data: [0x8056e8d0, 0x8056e8e8] # Allocator vtable
-    //  sdata2: [0x8057f2f0, 0x8057f2f8] # MEMAllocator func table
     class Allocator : public MEMAllocator {
     public:
         Allocator(Heap* heap, s32 align);

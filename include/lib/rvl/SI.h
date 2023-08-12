@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include <lib/rvl/SI/SIBios.h>
+#include <rvl/SI/SIBios.h>
 
 #ifdef __cplusplus
 }

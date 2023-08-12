@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_GX_FIFO_H
 #define RVL_SDK_GX_FIFO_H
-#include <lib/rvl/GX/GXInternal.h>
-#include <lib/rvl/types.h>
+#include <rvl/GX/GXInternal.h>
+#include <rvl/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

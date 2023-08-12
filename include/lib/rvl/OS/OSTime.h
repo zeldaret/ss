@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_OS_TIME_H
 #define RVL_SDK_OS_TIME_H
-#include <lib/rvl/OS/OSHardware.h>
-#include <lib/rvl/types.h>
+#include <rvl/OS/OSHardware.h>
+#include <rvl/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

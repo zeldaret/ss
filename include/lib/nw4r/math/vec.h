@@ -1,6 +1,6 @@
 #pragma once
 
-#include <lib/nw4r/nw4r_types.h>
+#include <nw4r/nw4r_types.h>
 
 namespace nw4r
 {

@@ -4,9 +4,9 @@
 extern "C" {
 #endif
 
-#include <lib/rvl/VI/vi.h>
-#include <lib/rvl/VI/vi3in1.h>
-#include <lib/rvl/VI/vihardware.h>
+#include <rvl/VI/vi.h>
+#include <rvl/VI/vi3in1.h>
+#include <rvl/VI/vihardware.h>
 
 #ifdef __cplusplus
 }

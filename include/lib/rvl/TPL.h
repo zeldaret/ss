@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include <lib/rvl/TPL/TPL.h>
+#include <rvl/TPL/TPL.h>
 
 #ifdef __cplusplus
 }

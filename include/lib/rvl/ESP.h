@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include <lib/rvl/ESP/esp.h>
+#include <rvl/ESP/esp.h>
 
 #ifdef __cplusplus
 }

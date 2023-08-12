@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_EXI_HARDWARE_H
 #define RVL_SDK_EXI_HARDWARE_H
-#include <lib/rvl/EXI/EXICommon.h>
-#include <lib/rvl/types.h>
+#include <rvl/EXI/EXICommon.h>
+#include <rvl/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

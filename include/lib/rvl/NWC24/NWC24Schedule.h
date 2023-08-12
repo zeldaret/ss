@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_NWC24_SCHEDULE_H
 #define RVL_SDK_NWC24_SCHEDULE_H
-#include <lib/rvl/types.h>
+#include <rvl/types.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
