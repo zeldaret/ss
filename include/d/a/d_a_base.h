@@ -4,20 +4,50 @@
 #include <d/d_heap.h>
 #include <m/m_allocator.h>
 #include <UnknownTypeBelongings.h>
-#include <m/types_m.h>
+// #include <m/types_m.h>
 #include <m/m_angle.h>
+#include <m/m_vec.h>
+#include <toBeSorted/room_manager.h>
 
+
+class dAcBase_c;
+struct SoundInfo {
+    dAcBase_c* actor;
+    void* obj_sound;
+    mVec3_c* obj_pos;
+    SoundInfo* next;
+    SoundInfo* prev;
+};
 // Ghidra: ActorBase
 //   size: 0xFC
 // non-official name
 class dAcBase_c : public dBase_c {
 public:
-    /* 0x68 */ mHeapAllocator_c mHeapAllocator; // mHeapAlloctor
-    /* 0x84 */ ObjInfoPtr* objInfo; //
-    /* 0x88 */ int field_0x88;
-    /* 0x8C */ int field_0x8C;
-    /* 0x90 */ int field_0x90;
-    /* 0x94 */ void* soundRelated;
+    /* 0x68 */ mHeapAllocator_c heap_allocator;
+    /* 0x84 */ ObjInfo*         obj_info;
+    /* 0x88 */ void*            sound_info_tail;
+    /* 0x8c */ SoundInfo*       sound_info_next;
+    /* 0x90 */ int              count;
+    /* 0x94 */ void*            obj_sound;
+    /* 0x9C */ mVec3_c*         obj_pos;
+    /* 0x9c */ mVec3_c          pos_copy;
+    /* 0xa8 */ u32              params2;
+    /* 0xAC */ mAng3_c          rot_copy;
+    /* 0xB2 */ u16              obj_id; // enemydefeat flag / id on obj-map
+    /* 0xB4 */ u8               room_id_copy;
+    /* 0xB5 */ u8               viewclip_index;
+    /* 0xB6 */ u8               subtype;
+    /* 0xB8 */ mAng3_c          rotation;
+    /* 0xC0 */ mVec3_c          position;
+    /* 0xCC */ mVec3_c          scale;
+    /* 0xD8 */ u32              actor_properties;
+    /* 0xDC */ fLiNdBa_c        actor_node;
+    /* 0xE8 */ u32              field_0xe8;
+    /* 0xEC */ u8               roomid;
+    /* 0xED */ u8               actor_subtype;
+    /* 0xF0 */ u32              field_0xF0;
+    /* 0xF4 */ char             someStr[4];
+    /* 0xF8 */ char             field_0xf8[0xfc - 0xf8];
 protected:
     /* 80501544 */ // vtable
     /* 0x08 | 8002c880 */ virtual int create();
@@ -29,7 +59,7 @@ protected:
     /* 0x44 | 8002c3a0 */ virtual bool createHeap(); 
     /* 0x48 | 8002c590 */ virtual ~dAcBase_c();
     /* 0x4C | 8002c860 */ virtual int actorCreate(); // name is assumed
-    /* 0x50 | 8002c870 */ virtual int actorReCreate(); // name is assumed
+    /* 0x50 | 8002c870 */ virtual int actorPostCreate(); // name is assumed
     /* 0x54 | 8002cca0 */ virtual int actorExecute(); // name is assumed
     /* 0x58 | 8002ccb0 */ virtual int actorExecuteInEvent(); // name is assumed
     /* 0x5C | 8002ce90 */ virtual void unkVirtFunc_0x5C();
@@ -42,13 +72,32 @@ protected:
 public:
     /* 8002c3b0 */ dAcBase_c();
 
+    void setPostion(mVec3_c* r) {
+        position.set(r->x, r->y, r->z);
+    }
+    void setScale(f32 x, f32 y, f32 z) {
+        scale.set(x, y, z);
+    }
+    void setScale(mVec3_c* r) {
+        scale.set(r->x, r->y, r->z);
+    }
+    void setRotation(mAng3_c* r) {
+        rotation = *r;
+    }
+
+    void copyPosition() {
+        pos_copy = position;
+    }
+    void copyRotation() {
+        rot_copy = rotation;
+    }
 public:
     // funcs found in TU 
     /* 8002c650 */ static void setTempCreateParams( \
-        Vec3f* pos, Vec3s* rot, Vec3f* scale, \
+        mVec3_c* pos, mAng3_c* rot, mVec3_c* scale, \
         s32 roomId, u32 params2, dAcBase_c* parent, \
         u8 subtype, s16 unkFlag, u8 viewClipIdx,\
-        ObjInfoPtr* objInfo );
+        ObjInfo* objInfo );
     
     /* 8002c690 */ void* FUN_8002c690();
     /* 8002c710 */ int initAllocatorWork1Heap(int size, char* name, int align);
@@ -98,7 +147,7 @@ public:
     /* 8002d880 */ void FUN_8002d880();
     // End Sound Effect Related
     /* 8002d890 */ void FUN_8002d890();
-    /* 8002d920 */ void setActorRef(dBase_c&);
+    /* 8002d920 */ void setActorRef(dBase_c*);
     // next three funcs are related
     /* 8002d930 */ void setUnkFlag();
     /* 8002d940 */ void FUN_8002d940();
@@ -124,10 +173,10 @@ public:
     /* 80571924 */ static u32 s_Create_Params2;
     /* 80571928 */ static u16 s_Create_UnkFlags;
     /* 8057192A */ static u8  s_Create_ViewClipIdx;
-    /* 80575080 */ static Vec3f* s_Create_Position;
-    /* 80575084 */ static Vec3s* s_Create_Rotation;
-    /* 80575088 */ static Vec3f* s_Create_Scale;
+    /* 80575080 */ static mVec3_c* s_Create_Position;
+    /* 80575084 */ static mAng3_c* s_Create_Rotation;
+    /* 80575088 */ static mVec3_c* s_Create_Scale;
     /* 8057508C */ static dAcBase_c* s_Create_Parent;
-    /* 80575090 */ static ObjInfoPtr* s_Create_ObjInfo;
+    /* 80575090 */ static ObjInfo* s_Create_ObjInfo;
     /* 80575094 */ static u8 s_Create_Subtype;
 };

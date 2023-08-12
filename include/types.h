@@ -1,5 +1,8 @@
 #pragma once
 #define TYPES_H
+
+#include <lib/rvl/macros.h>
+
 typedef signed char s8;
 typedef signed short s16;
 typedef signed int s32;
@@ -32,7 +35,17 @@ typedef double f64;
 typedef volatile f32 vf32;
 typedef volatile f64 vf64;
 
-#define nullptr 0
+// Necesary for CW
+#if __cplusplus < 201103L && !defined(_WIN32)
+#define override
+#define noexcept
+#define nullptr NULL
+#endif
+
+#ifndef NULL
+#define NULL 0
+#endif
+#define nullptr NULL
 
 // taken from mkw
 #ifdef __cplusplus

@@ -43,12 +43,12 @@ namespace nw4r
 	
 	namespace math
 	{
-		struct VEC2;
-		struct VEC3;
-		struct MTX33;
-		struct MTX34;
-		struct AABB;
-		struct FRUSTUM;
+		class VEC2;
+		class VEC3;
+		class MTX33;
+		class MTX34;
+		class AABB;
+		class FRUSTUM;
 	}
 	
 	namespace snd

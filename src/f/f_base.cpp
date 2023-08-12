@@ -28,7 +28,9 @@ fBase_c::~fBase_c() {}
 int fBase_c::commonPack(int (fBase_c::*doFunc)(), int (fBase_c::*preFunc)(), void (fBase_c::*postFunc)(MAIN_STATE_e)) {}
 
 /* 802e15c0 */
-int fBase_c::create() {}
+int fBase_c::create() {
+    return SUCCEEDED;
+}
 
 /* 802e15d0 */
 int fBase_c::preCreate() {}
@@ -106,7 +108,7 @@ fBase_c* fBase_c::getConnectBrNext() const {}
 // FUN_802e1ff0
 
 /* 802e2090 */
-// addActorToRoom
+bool fBase_c::setConnectChild(fBase_c* child) {}
 
 /* 802e20e0 */
 bool fBase_c::entryFrmHeap(unsigned long size, EGG::Heap *parentHeap) {}

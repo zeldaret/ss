@@ -1,14 +1,12 @@
 #include <d/d_base.h>
 
-extern "C" fProfile::fBaseProfile_c** DAT_ACTOR_ALLOCATION_FUNCTIONS;
-
 // .sbss
 /* 805750c0 */ u32 dBase_c::s_ExecuteControlFlags;
 /* 805750c0 */ u32 dBase_c::s_DrawControlFlags;
 /* 805750c0 */ u32 dBase_c::s_NextExecuteControlFlags;
 
 dBase_c::dBase_c() : fBase_c() {
-    baseProperties = DAT_ACTOR_ALLOCATION_FUNCTIONS[profile_name]->mBaseProperties;
+    baseProperties = (*fProfile::sProfileList)[profile_name]->mBaseProperties;
 }
 
 void dBase_c::postDraw(fBase_c::MAIN_STATE_e status) {

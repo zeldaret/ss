@@ -82,6 +82,7 @@ public:
     /* 802e1f90 */ fBase_c *getConnectParent() const;
     /* 802e1fb0 */ fBase_c *getConnectChild() const;
     /* 802e1fd0 */ fBase_c *getConnectBrNext() const;
+    /* 802e2090 */ bool setConnectChild(fBase_c* child);
     /* 802e2420 */ void runCreate();
     /* 802e24a0 */ fBase_c *getChildProcessCreateState() const;
     /* 802e2510 */ bool checkChildProcessCreateState() const;

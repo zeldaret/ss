@@ -19,7 +19,7 @@ struct Vec3s
     s16 x, y, z;
 };
 
-struct ObjInfoPtr {
+struct ObjInfo {
     /* 0x00 */ char* name;
     /* 0x04 */ u16 obj_id;
     /* 0x06 */ u16 obj_id2;

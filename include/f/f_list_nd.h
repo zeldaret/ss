@@ -7,10 +7,10 @@
 
 class fBase_c;
 
-// Ghidra: Used to be ActorReference
 class fLiNdBa_c : public cListNd_c {
 public:
 
+    fLiNdBa_c() : p_owner(nullptr) {}
     fLiNdBa_c(fBase_c *owner) : p_owner(owner) {}
 
     inline fLiNdBa_c *getPrev() const {

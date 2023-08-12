@@ -85,49 +85,27 @@ public:
 //        it could also potentially be a static function
 // ----------------------------------------------------------
 public:
-    // 0x800099b0 
-    u16* getStoryFlags0();
-    // 0x800099c0
-    u16* getStoryFlags1();
-    // 0x800099d0
-    u16* getItemFlags0();
-    // 0x800099e0
-    u16* getItemFlags1();
-    // 0x800099F0
-    u16* getDungeonFlags0();
-    // 0x80009A00
-    u16* getDungeonFlags1();
-    // 0x80009A10
-    u16* getSceneFlags0();
-    // 0x80009A20
-    u16* getSceneFlags1();
-    // 0x80009A30
-    u16* getTboxFlags0(); 
-    // 0x80009A40
-    u16* getTboxFlags1();
-    // 0x80009A50
-    u16* getTempFlags0();
-    // 0x80009A60
-    u16* getTempFlags1();
-    // 0x80009A70
-    u16* getZoneFlags0();
-    // 0x80009A80
-    u16* getZoneFlags1();
-    // 0x80009A90
-    u16* getUnkFlags0();
-    // 0x80009AA0
-    u16* getUnkFlags1();
-    // 0x80009AB0
-    s16* getPlayerName(); // UTF16-BE
-    // 0x80009AC0
-    void setAreaT1(char* name);
-    // 0x80009BE0
-    s8* getAreaT1();
-    // 0x80009BF0
-    void setAreaT2(char* name);
-    // lbl_80009D10
-    s8* getAreaT2();
-    // lbl_80009D20
-    s8* getAreaT3();
+    /* 800099b0 */ u16* getStoryFlags0();
+    /* 800099c0 */ u16* getStoryFlags1();
+    /* 800099d0 */ u16* getItemFlags0();
+    /* 800099e0 */ u16* getItemFlags1();
+    /* 800099F0 */ u16* getDungeonFlags0();
+    /* 80009A00 */ u16* getDungeonFlags1();
+    /* 80009A10 */ u16* getSceneFlags0();
+    /* 80009A20 */ u16* getSceneFlags1();
+    /* 80009A30 */ u16* getTboxFlags0(); 
+    /* 80009A40 */ u16* getTboxFlags1();
+    /* 80009A50 */ u16* getTempFlags0();
+    /* 80009A60 */ u16* getTempFlags1();
+    /* 80009A70 */ u16* getZoneFlags0();
+    /* 80009A80 */ u16* getZoneFlags1();
+    /* 80009A90 */ u16* getUnkFlags0();
+    /* 80009AA0 */ u16* getUnkFlags1();
+    /* 80009AB0 */ s16* getPlayerName(); // UTF16-BE
+    /* 80009AC0 */ void setAreaT1(char* name);
+    /* 80009BE0 */ s8* getAreaT1();
+    /* 80009BF0 */ void setAreaT2(char* name);
+    /* 80009D10 */ s8* getAreaT2();
+    /* 80009D20 */ s8* getAreaT3();
 
 };
