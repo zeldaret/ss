@@ -47,10 +47,11 @@ void __GXCalculateVLim(void);
 void __GXSetVAT(void);
 
 static void GXSetTexCoordGen(GXTexCoordID id, GXTexGenType type,
-                             GXTexGenSrc src, u32 texMtxIdx) {
-    // TODO: What matrix index is this???
-    GXSetTexCoordGen2(id, type, src, texMtxIdx, FALSE, 125);
-}
+                             GXTexGenSrc src, u32 texMtxIdx) ;
+//     // TODO: What matrix index is this???
+//     GXSetTexCoordGen2(id, type, src, texMtxIdx, FALSE, 125);
+// }
+
 
 #ifdef __cplusplus
 }

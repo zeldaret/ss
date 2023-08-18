@@ -26,7 +26,7 @@ public:
     /* 0x68 */ mHeapAllocator_c heap_allocator;
     /* 0x84 */ ObjInfo*         obj_info;
     /* 0x88 */ void*            sound_info_tail;
-    /* 0x8c */ SoundInfo*       sound_info_next;
+    /* 0x8c */ void*       sound_info_next;
     /* 0x90 */ int              count;
     /* 0x94 */ void*            obj_sound;
     /* 0x9C */ mVec3_c*         obj_pos;
@@ -45,7 +45,7 @@ public:
     /* 0xE8 */ u32              field_0xe8;
     /* 0xEC */ u8               roomid;
     /* 0xED */ u8               actor_subtype;
-    /* 0xF0 */ u32              field_0xF0;
+    /* 0xF0 */ u32              JStudio_actor;
     /* 0xF4 */ char             someStr[4];
     /* 0xF8 */ char             field_0xf8[0xfc - 0xf8];
 protected:

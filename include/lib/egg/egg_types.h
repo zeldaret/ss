@@ -72,8 +72,8 @@ namespace EGG
     class DvdRipper;
     class ExpHeap;
     class Fader;
-    class FrmHeap;
     class Heap;
+    class FrmHeap;
     class Scene;
     class SceneManager;
     class Thread;

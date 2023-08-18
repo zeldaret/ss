@@ -1,3 +1,4 @@
+#pragma once
 #ifndef RVL_SDK_ARC_H
 #define RVL_SDK_ARC_H
 #include <rvl/types.h>
@@ -72,12 +73,13 @@ typedef struct ARCEntry {
     const char* name;  // at 0xC
 } ARCEntry;
 
-typedef struct ARCDir {
+typedef struct ARCDirEntry {
     ARCHandle* handle; // at 0x0
     u32 path_begin;    // at 0x4
     u32 path_it;       // at 0x8
     u32 path_end;      // at 0xC
-} ARCDir;
+} ARCDirEntry;
+
 
 BOOL ARCGetCurrentDir(ARCHandle* handle, char* string, u32 maxlen);
 BOOL ARCInitHandle(void* bin, ARCHandle* handle);
@@ -89,9 +91,9 @@ s32 ARCGetStartOffset(ARCFileInfo* info);
 u32 ARCGetLength(ARCFileInfo* info);
 BOOL ARCClose(ARCFileInfo* info);
 BOOL ARCChangeDir(ARCHandle* info, const char* path);
-BOOL ARCOpenDir(ARCHandle* info, const char* path, ARCDir* dir);
-BOOL ARCReadDir(ARCDir* dir, ARCEntry* entry);
-BOOL ARCCloseDir(ARCDir* dir);
+BOOL ARCOpenDir(ARCHandle* info, const char* path, ARCDirEntry* dir);
+BOOL ARCReadDir(ARCDirEntry* dir, ARCEntry* entry);
+BOOL ARCCloseDir(ARCDirEntry* dir);
 
 #ifdef __cplusplus
 }

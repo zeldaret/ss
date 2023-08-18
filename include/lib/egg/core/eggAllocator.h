@@ -1,26 +1,23 @@
 #pragma once
 
+#include <types.h>
 #include <rvl/MEM.h>
 #include <egg/core/eggHeap.h>
 
-// Ghidra: Allocator
-//   size: 0x1C
-//   .text: [0x804952d0, 0x804953f0]
-//   .data: [0x8056e8d0, 0x8056e8e8] # Allocator vtable
-//  sdata2: [0x8057f2f0, 0x8057f2f8] # MEMAllocator func table
-
+// /* 80495310 */ MEMInitAllocatorFor_Heap(MEMAllocator* alloc, s32 align, void* heap);
+// /* 804952f0 */ MEM_AllocFor_Heap(MEMAllocator* alloc, void* block);
+// /* 804952d0 */ MEM_AllocFor_Heap(MEMAllocator* alloc, u32 size, s32 align);
 namespace EGG {
     class Heap;
     class Allocator : public MEMAllocator {
     public:
-        Allocator(Heap* heap, s32 align);
-        // vtable at 0x10
-        /* 0x08 */ virtual ~Allocator();
-        /* 0x0C */ virtual void* alloc(u32 size);
-        /* 0x10 */ virtual void free(void* block);
+        /* 80495330 */ Allocator(Heap* heap, s32 align);
+    public:
+        /* vt 0x08 | 80495380 */ virtual ~Allocator();
+        /* vt 0x0C | 804953c0 */ virtual void* alloc(u32 size);
+        /* vt 0x10 | 804953e0 */ virtual void free(void* block);
 
         inline MEMAllocator* getHandle() { return static_cast<MEMAllocator*>(this); }
-    private:
         /* 0x14 */ Heap* mHeap;
         /* 0x18 */ s32 align;
     };

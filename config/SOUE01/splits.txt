@@ -39,6 +39,112 @@ toBeSorted/unk_flag_stuff.cpp:
 toBeSorted/bitwise_flag_helper.cpp:
 	.text       start:0x800BF200 end:0x800BF264
 
+lib/rvl/CX/cx.c:
+	.text       start:0x803CEE90 end:0x803D0B20
+
+lib/egg/core/eggArchive.cpp:
+	.text       start:0x80493510 end:0x80494254
+	.data       start:0x8056E820 end:0x8056E82C
+	.sbss       start:0x80576728 end:0x80576730
+	.bss        start:0x80673AC8 end:0x80673AD8
+
+lib/egg/core/eggDvdFile.cpp:
+	.text       start:0x80494260 end:0x80494678
+	.data       start:0x8056E830 end:0x8056E858
+	.sbss       start:0x80576730 end:0x80576738
+	.bss        start:0x80673AD8 end:0x80673AE8
+
+lib/egg/core/eggDvdRipper.cpp:
+	.text       start:0x80494680 end:0x80494C80
+	.sdata      start:0x80574ED0 end:0x80574ED8
+	.sbss       start:0x80576738 end:0x80576740
+
+lib/egg/core/eggStream.cpp:
+	.text       start:0x80494C80 end:0x804952B8
+	.data       start:0x8056E858 end:0x8056E8D0
+
+lib/egg/core/eggAllocator.cpp:
+	.text       start:0x804952D0 end:0x804953F0
+	.data       start:0x8056E8D0 end:0x8056E8E4
+
+lib/egg/core/eggHeap.cpp:
+	.text       start:0x804953F0 end:0x80495AB0
+	.data       start:0x8056E8E8 end:0x8056E980
+	.sbss       start:0x80576740 end:0x80576770
+	.bss        start:0x80673AE8 end:0x80673B10
+
+lib/egg/core/eggExpHeap.cpp:
+	.text       start:0x80495AB0 end:0x80495F98
+	.data       start:0x8056E980 end:0x8056E9D0
+
+lib/egg/core/eggFrmHeap.cpp:
+	.text       start:0x80495FA0 end:0x80496398
+	.data       start:0x8056E9D0 end:0x8056EA00
+
+lib/egg/core/eggAssertHeap.cpp:
+	.text       start:0x804963A0 end:0x80496828
+	.data       start:0x8056EA00 end:0x8056EA30
+
+lib/egg/core/eggDisposer.cpp:
+	.text       start:0x80496830 end:0x80496904
+	.data       start:0x8056EA30 end:0x8056EA3C
+
+lib/egg/core/eggThread.cpp:
+	.text       start:0x80496910 end:0x80496DD8
+	.data       start:0x8056EA40 end:0x8056EA58
+	.sbss       start:0x80576770 end:0x80576778
+	.bss        start:0x80673B10 end:0x80673B20
+
+lib/egg/core/eggUnk.cpp:
+	.text       start:0x80496DE0 end:0x8049716C
+	.sbss       start:0x80576778 end:0x80576780
+
+lib/egg/core/eggSystem.cpp:
+	.text       start:0x80497170 end:0x8049752C
+	.data       start:0x8056EA58 end:0x8056EAC8
+	.sbss       start:0x80576780 end:0x80576788
+
+lib/egg/core/eggDisplay.cpp:
+	.text       start:0x80497530 end:0x8049792C
+	.ctors      start:0x804DB988 end:0x804DB98C
+	.data       start:0x8056EAC8 end:0x8056EAE8
+	.sbss       start:0x80576788 end:0x8057678C
+	.sdata2     start:0x8057F2F8 end:0x8057F308
+
+lib/egg/core/eggColorFader.cpp:
+	.text       start:0x80497930 end:0x80497E3C
+	.data       start:0x8056EAE8 end:0x8056EB0C
+	.sdata2     start:0x8057F308 end:0x8057F310 rename:.sdata
+
+lib/egg/core/eggAsyncDisplay.cpp:
+	.text       start:0x80497E40 end:0x80498688
+	.data       start:0x8056EB60 end:0x8056EB80
+	.sbss       start:0x80576790 end:0x80576798
+	.sdata2     start:0x8057F310 end:0x8057F328 rename:.sdata
+
+lib/egg/core/eggVideo.cpp:
+	.text       start:0x80498690 end:0x804989D8
+	.rodata     start:0x804FB7A0 end:0x804FBA20
+	.sdata2     start:0x8057F328 end:0x8057F338 rename:.sdata
+
+lib/egg/core/eggXfb.cpp:
+	.text       start:0x804989E0 end:0x80498AE4
+
+lib/egg/core/eggXfbManager.cpp:
+	.text       start:0x80498AF0 end:0x80498E20
+
+lib/egg/core/eggGraphicsFifo.cpp:
+	.text       start:0x80498E20 end:0x80498F90
+	.sbss       start:0x80576798 end:0x805767A8
+
+lib/egg/core/eggController.cpp:
+	.text       start:0x80498F90 end:0x8049AB58
+	.ctors      start:0x804DB98C end:0x804DB990
+	.rodata     start:0x804FBA20 end:0x804FBA30
+	.data       start:0x8056EB90 end:0x8056EC88
+	.sdata2     start:0x8057F338 end:0x8057F360 rename:.sdata
+	.bss        start:0x80673B40 end:0x80674C00
+
 Runtime/__init_cpp_exceptions.cpp:
 	.text       start:0x804C71A8 end:0x804C7218
 	.ctors      start:0x804DB640 end:0x804DB644 rename:.ctors$10

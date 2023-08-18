@@ -7,16 +7,13 @@
 #include <rvl/OS.h>
 #include <egg/core/eggAllocator.h>
 #include <egg/core/eggDisposer.h>
-#include <nw4r/ut/utList.h>
 #include <egg/core/eggThread.h>
-
-#ifndef HEAP_PRIVATE
-#define HEAP_PRIVATE protected
-#endif
+#include <nw4r/ut/List.h>
+#include <egg/prim/eggBitFlag.h>
 
 namespace EGG {
 
-class ExpHeap;
+// class ExpHeap;
 class Allocator;
 
 struct HeapAllocArg {
@@ -35,14 +32,19 @@ struct HeapErrorArg {
 
   inline HeapErrorArg() {}
 };
-
 typedef void (*ErrorCallback)(void*);
 
-// Ghidra: Heap
-//   size: 0x34
-//  .text: [0x804953f0, 0x80495ab0]
+struct HeapFreeArg {
+  u32 arg1; // Idk the args
+  u32 arg2;
+};
+typedef void (*HeapFreeCallback)(void*);
+
+typedef void (*HeapCreateCallback)(void*);
+typedef void (*HeapDestroyCallback)(void*);
+
 class Heap : public Disposer {
-public:
+public:      
   enum eHeapKind {
     HEAP_KIND_NONE = 0,
     HEAP_KIND_EXPANDED,
@@ -50,73 +52,60 @@ public:
     HEAP_KIND_UNIT,
     HEAP_KIND_ASSERT,
   };
+  // vtable at 0x0 | 8056e950
+  /* vt 0x08 | 804954c0 */ virtual ~Heap();
+  /* vt 0x0C | 00000000 */ virtual eHeapKind getHeapKind() const = 0;
+  /* vt 0x10 | 80495a40 */ virtual void initAllocator(Allocator* allocator, s32 align) = 0; 
+  /* vt 0x14 | 00000000 */ virtual void* alloc(u32 size, s32 align) = 0;                    
+  /* vt 0x18 | 00000000 */ virtual void free(void* block) = 0;                              
+  /* vt 0x1C | 00000000 */ virtual void destroy() = 0;                                      
+  /* vt 0x20 | 00000000 */ virtual u32 resizeForMBlock(void* block, u32 size) = 0; 
+  /* vt 0x24 | 00000000 */ virtual u32 getTotalFreeSize() = 0;        
+  /* vt 0x24 | 00000000 */ virtual u32 getAllocatableSize(s32 align) = 0;                   
+  /* vt 0x28 | 00000000 */ virtual u32 adjust() = 0;
 
+public:
   inline bool isExpHeap() { return getHeapKind() == HEAP_KIND_EXPANDED; }
 //   inline Heap* getParentHeap() { return mParentHeap; } // not part of ss
   inline void* getStartAddress() { return this; }
-
-  // vtable at 0x0
-  /* 0x08 */ virtual ~Heap();
-  /* 0x0C */ virtual eHeapKind getHeapKind() const = 0;
-  /* 0x10 */ virtual void initAllocator(Allocator* allocator, s32 align) = 0; 
-  /* 0x14 */ virtual void* alloc(u32 size, s32 align) = 0;                    
-  /* 0x18 */ virtual void free(void* block) = 0;                              
-  /* 0x1C */ virtual void destroy() = 0;                                      
-  /* 0x20 */ virtual u32 resizeForMBlock(void* block, u32 size) = 0;          
-  /* 0x24 */ virtual u32 getAllocatableSize(s32 align) = 0;                   
-  /* 0x28 */ virtual u32 adjust() = 0;                                        
-
-  HEAP_PRIVATE :
-      static nw4r::ut::List sHeapList;
-  static OSMutex sRootMutex;
-  static Heap* sCurrentHeap;
-  static int sIsHeapListInitialized;
-
-  static Heap* sAllocatableHeap;
-  static ErrorCallback sErrorCallback;
-  static HeapAllocCallback sAllocCallback;
-  static void* sErrorCallbackArg;
-  static void* sAllocCallbackArg;
-  static class Thread* sAllocatableThread;
+                                  
 public:
   // members
   /* 0x10 */ MEMiHeapHead* mHeapHandle;
   /* 0x14 */ void* mParentBlock;
-//   Heap* mParentHeap; // does not exist in ss
+  /* 0x18 */ TBitFlag<u16> mFlag;
+  /* 0x1C */ nw4r::ut::Node mNode;
+  /* 0x24 */ nw4r::ut::List mChildren;
+  /* 0x30 */ const char* mName; // set to "NoName" in ctor
+
   enum HeapFlag {
     // tstDisableAllocation, enableAllocation, disableAllocation
     // setBit__Q23EGG12TBitFlag<Us>FUc
     HEAP_FLAG_LOCKED = (1 << 0)
   };
-  /* 0x18 */ u16 mFlag;
-  /* 0x1C */ nw4r::ut::Node mNode;
-  /* 0x24 */ nw4r::ut::List mChildren;
-  /* 0x30 */ const char* mName; // set to "NoName" in ctor
 
 public:
-  static void initialize();
-  Heap(MEMiHeapHead* heapHandle);
-
-private:
-  inline Heap(const Heap&) {}
-
+  /* 804953f0 */ static void initialize();
+  /* 80495430 */ Heap(MEMiHeapHead* heapHandle);
+  /* 80495690 */ static Heap* findHeap(MEMiHeapHead* heapHandle);
+  /* 80495730 */ Heap* findParentHeap();
+  /* 80495780 */ static Heap* findContainHeap(const void* memBlock);
+  /* 80495560 */ static void* alloc(u32 size, int align, Heap* heap);
+  /* 804957c0 */ static void free(void* memBlock, Heap* heap);
+  /* 80495830 */ void dispose();
+  /* 804958a0 */ void dump();
+  /* 804958b0 */ void dumpAll();
+  /* 804959a0 */ Heap* becomeCurrentHeap();
+  /* 80495a00 */ Heap* _becomeCurrentHeapWithoutLock();
+  
 public:
-  static void* alloc(u32 size, int align, Heap* heap);
-
   template <typename T> static T* alloc(u32 count, Heap* heap, int align = 4) {
     return reinterpret_cast<T*>(alloc(count * sizeof(T), align, heap));
   }
   template <typename T> static T* alloc(Heap* heap, int align = 4) {
     return reinterpret_cast<T*>(alloc(sizeof(T), align, heap));
   }
-
-  Heap* findParentHeap();
-  static Heap* findContainHeap(const void* memBlock);
-  static void free(void* memBlock, Heap* heap);
-  void dispose();
-  static void dumpAll();
-  Heap* becomeCurrentHeap();
-
+  
 public:
   static void* addOffset(void* begin, u32 size) {
     return reinterpret_cast<char*>(begin) + size;
@@ -136,24 +125,25 @@ public:
   inline int getArenaEnd() {
     return (int)mHeapHandle->end;
   }
+  /* 80673ae8 */ static nw4r::ut::List sHeapList;
+  /* 80673af8 */ static OSMutex sRootMutex;
+  /* 80576740 */ static Heap* sCurrentHeap;
+  /* 80576744 */ static int sIsHeapListInitialized;
+  /* 80576748 */ static Heap* sAllocatableHeap;
+  /* 8057674c */ static ErrorCallback sErrorCallback;
+  /* 80576750 */ static HeapAllocCallback sAllocCallback;
+  /* 80576754 */ static HeapFreeCallback sFreeCallback;
+  /* 80576758 */ static void* sErrorCallbackArg;
+  /* 8057675c */ static void* sAllocCallbackArg;
+  /* 80576760 */ static void* sFreeCallbackArg;
+  /* 80576764 */ static HeapCreateCallback sCreateCallback;
+  /* 80576764 */ static HeapDestroyCallback sDestroyCallback;
 };
 
 } // namespace EGG
 
-void* operator new(size_t size);
-// __nwa(ulong, ulong)
-void* operator new[](size_t size, u32 align);
-// __nw(ulong, EGG::Heap *, int)
-void* operator new(size_t size, EGG::Heap* heap, int align);
-// __nwa(ulong)
-void* operator new[](size_t size);
-// __nwa(ulong, int)
-void* operator new[](size_t size, int align);
-// __nwa(ulong, EGG::Heap *, int)
-void* operator new[](size_t size, EGG::Heap* heap, int align);
-// __dl(void *)
-void operator delete(void* p);
-// __dla(void *)
-void operator delete[](void*);
-
-#undef HEAP_PRIVATE
+/* 80495a60 */ void* operator new(size_t, void* p);
+/* 80495a70 */ void* operator new(size_t size, EGG::Heap* heap, u32 align);
+/* 80495a80 */ void* operator new(size_t size, EGG::Allocator* alloc);
+/* 80495a90 */ void* operator new[](size_t size, u32 align);
+/* 80495aa0 */ void* operator new[](size_t size, EGG::Heap* heap, int align);

@@ -7,7 +7,7 @@ extern "C" {
 
 void GXDrawCylinder(u8 sides);
 void GXDrawSphere(u32 stacks, u32 sectors);
-
+/* 803bcdb0 */ void GXDrawDone(); 
 #ifdef __cplusplus
 }
 #endif

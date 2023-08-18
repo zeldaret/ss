@@ -19,30 +19,50 @@ LIBS = [
             ["toBeSorted/save_manager.cpp", False],
         ],
     },
+    # {
+    #     "lib": "RVL",
+    #     "mw_version": "Wii/1.7", # FIXME: Change Compiler+flags Probably
+    #     "cflags": "-proc gekko -Cpp_exceptions off -RTTI off -O4,p -fp hard, -inline noauto, -enum int, -str reuse -I- -i include -i include/lib",
+    #     "host": False,
+    #     "objects": [
+    #         ["lib/rvl/CX/cx.c", False],
+    #     ],
+    # },
+    # {
+    #     "lib": "NW4R",
+    #     "mw_version": "Wii/1.7", # FIXME: Change Compiler+flags Probably
+    #     "cflags": "-proc gekko -Cpp_exceptions off -RTTI off -O4,p -fp hard, -inline noauto, -enum int, -str reuse -I- -i include -i include/lib",
+    #     "host": False,
+    #     "objects": [
+    #     ],
+    # },
     {
-        "lib": "RVL",
+        "lib": "EGG",
         "mw_version": "Wii/1.7", # FIXME: Change Compiler+flags Probably
         "cflags": "-proc gekko -Cpp_exceptions off -RTTI off -O4,p -fp hard, -inline noauto, -enum int, -str reuse -I- -i include -i include/lib",
         "host": False,
         "objects": [
-            ["lib/rvl/CX/cx.c", False],
-        ],
-    },
-    {
-        "lib": "nw4r",
-        "mw_version": "Wii/1.7", # FIXME: Change Compiler+flags Probably
-        "cflags": "-proc gekko -Cpp_exceptions off -RTTI off -O4,p -fp hard, -inline noauto, -enum int, -str reuse -I- -i include -i include/lib",
-        "host": False,
-        "objects": [
-        ],
-    },
-    {
-        "lib": "egg",
-        "mw_version": "Wii/1.7", # FIXME: Change Compiler+flags Probably
-        "cflags": "-proc gekko -Cpp_exceptions off -RTTI off -O4,p -fp hard, -inline noauto, -enum int, -str reuse -I- -i include -i include/lib",
-        "host": False,
-        "objects": [
+            ["lib/egg/core/eggArchive.cpp", False], 
+            ["lib/egg/core/eggDvdFile.cpp", False], 
+            ["lib/egg/core/eggDvdRipper.cpp", False], 
             ["lib/egg/core/eggStream.cpp", False], 
+            ["lib/egg/core/eggAllocator.cpp", False], 
+            ["lib/egg/core/eggHeap.cpp", False], 
+            ["lib/egg/core/eggExpHeap.cpp", False], 
+            ["lib/egg/core/eggFrmHeap.cpp", False], 
+            ["lib/egg/core/eggAssertHeap.cpp", False], 
+            ["lib/egg/core/eggDisposer.cpp", False], 
+            ["lib/egg/core/eggThread.cpp", False], 
+            ["lib/egg/core/eggUnk.cpp", False], 
+            ["lib/egg/core/eggSystem.cpp", False], 
+            ["lib/egg/core/eggDisplay.cpp", True], 
+            ["lib/egg/core/eggColorFader.cpp", False], 
+            ["lib/egg/core/eggAsyncDisplay.cpp", False], 
+            ["lib/egg/core/eggVideo.cpp", False], 
+            ["lib/egg/core/eggXfb.cpp", False], 
+            ["lib/egg/core/eggXfbManager.cpp", False], 
+            ["lib/egg/core/eggGraphicsFifo.cpp", False], 
+            ["lib/egg/core/eggController.cpp", False], 
         ],
     }
 ]

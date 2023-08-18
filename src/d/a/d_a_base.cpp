@@ -27,30 +27,20 @@ bool dAcBase_c::createHeap() {
 // Doesnt Match Yet
 dAcBase_c::dAcBase_c() :
     heap_allocator() ,
-    obj_info(s_Create_ObjInfo)
-    // sound_list(&heap_allocator.mHeap, &heap_allocator.mHeap)
-    // obj_sound(0),
-    // obj_pos(&position), 
-    // params2(s_Create_Params2),
-    // obj_id(s_Create_UnkFlags), 
-    // viewclip_index(s_Create_ViewClipIdx),
-    // actor_node(0), 
-    // roomid(s_Create_RoomId)
+    obj_info(s_Create_ObjInfo),
+    sound_info_tail(&heap_allocator.mHeap),
+    sound_info_next(&heap_allocator.mHeap),
+    count(0),
+    obj_sound(nullptr),
+    obj_pos(&position),
+    params2(s_Create_Params2),
+    obj_id(s_Create_UnkFlags),
+    viewclip_index(s_Create_ViewClipIdx),
+    actor_node(),
+    roomid(s_Create_RoomId),
+    actor_subtype(s_Create_Subtype)
 {
-
-        // obj_info = s_Create_ObjInfo; 
-    sound_info_tail = nullptr;
-    sound_info_next = nullptr;
-    obj_sound = nullptr;
-    obj_pos = &position;
-    params2 = (s_Create_Params2);
-    obj_id = (s_Create_UnkFlags);
-    viewclip_index = (s_Create_ViewClipIdx);
-    actor_node = (0);
-    roomid  =(s_Create_RoomId);
-    
-    actor_subtype = s_Create_Subtype;
-    field_0xF0 = 0;
+    JStudio_actor = 0;
     someStr[0] = 0;
     if (s_Create_Position != nullptr) {
         // void set(f32 fx, f32 fy, f32 fz) { x = fx; y = fy; z = fz; }

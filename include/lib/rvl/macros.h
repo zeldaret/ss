@@ -1,6 +1,4 @@
-#ifndef MACROS_H
-#define MACROS_H
-
+#pragma once
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
 #define MIN(x, y) ((x) < (y) ? (x) : (y))
 
@@ -46,6 +44,4 @@
 #define asm
 #define __attribute__(x)
 #define __declspec(x)
-#endif
-
 #endif

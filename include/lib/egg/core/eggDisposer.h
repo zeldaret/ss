@@ -2,32 +2,33 @@
 
 // This file was adapted from https://github.com/riidefi/mkw/blob/master/source/egg/core/eggDisposer.hpp 
 
-#include <nw4r/ut/utList.h>
+#include <nw4r/ut/List.h>
 #include <types.h>
 
 namespace EGG {
 
-    class Heap;
-
-    // Ghidra: EggBase
-    //   size: 0x8
-    //  .text: [0x80496830, 0x80496910]
-    class Disposer : private NonCopyable {
-        friend class Heap;
-    protected:
-        virtual ~Disposer();
-        Disposer();
-    public:
-      enum eLifetime {
-            LIFETIME_UNMANAGED,
-            LIFETIME_HEAP_GC
-        };
-        inline eLifetime getLifetime() const {
-            return mContainHeap != nullptr ? LIFETIME_HEAP_GC : LIFETIME_UNMANAGED;
-        }
-
-    private:
-        Heap* mContainHeap;
-        nw4r::ut::Node mList;
+class Heap;
+class Disposer : private NonCopyable {
+    friend class Heap;
+protected:
+    /* vt 0x08 | 80496890 */ virtual ~Disposer();
+    /* 80496830 */ Disposer();
+public:
+    enum eLifetime {
+        LIFETIME_UNMANAGED,
+        LIFETIME_HEAP_GC
     };
+    inline eLifetime getLifetime() const {
+        return mContainHeap != nullptr ? LIFETIME_HEAP_GC : LIFETIME_UNMANAGED;
+    }
+
+private:
+    /* 0x04 */ Heap* mContainHeap;
+    /* 0x08 */ nw4r::ut::Node mList;
+};
+
+// TODO: Add singleton define for the T__Disposer stuff. 
+// see https://github.com/open-ead/sead/blob/master/include/heap/seadDisposer.h 
+// for reference
+
 };

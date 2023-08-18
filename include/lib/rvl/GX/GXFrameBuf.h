@@ -21,6 +21,10 @@ typedef struct _GXRenderModeObj {
     u8 vfilter[7];            // at 0x32
 } GXRenderModeObj;
 
+void GXSetCopyFilter(u8, const u8[12][2], u8, const u8[7]);
+void GXSetCopyClear(GXColor, u32 zClear);
+void GXSetDispCopySrc(u16 left, u16 top, u16 width, u16 height);
+
 #ifdef __cplusplus
 }
 #endif

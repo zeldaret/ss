@@ -18,7 +18,6 @@ void GXSetIndTexOrder(GXIndTexStageID stage, GXTexCoordID coord,
                       GXTexMapID map);
 void GXSetNumIndStages(u8 num);
 void GXSetTevDirect(GXTevStageID stage);
-
 void __GXUpdateBPMask(void);
 void __GXSetIndirectMask(u32 mask);
 void __GXFlushTextureState(void);
