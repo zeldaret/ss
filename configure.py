@@ -62,7 +62,12 @@ LIBS = [
             ["lib/egg/core/eggXfb.cpp", False], 
             ["lib/egg/core/eggXfbManager.cpp", False], 
             ["lib/egg/core/eggGraphicsFifo.cpp", False], 
-            ["lib/egg/core/eggController.cpp", False], 
+            ["lib/egg/core/eggController.cpp", False],
+            ["lib/egg/math/eggMath.cpp", False],
+            ["lib/egg/math/eggMatrix.cpp", False],
+            ["lib/egg/math/eggQuat.cpp", False],
+            ["lib/egg/math/eggVector.cpp", False],
+            ["lib/egg/prim/eggAssert.cpp", False],
         ],
     }
 ]

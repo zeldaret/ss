@@ -145,6 +145,32 @@ lib/egg/core/eggController.cpp:
 	.sdata2     start:0x8057F338 end:0x8057F360 rename:.sdata
 	.bss        start:0x80673B40 end:0x80674C00
 
+lib/egg/math/eggMath.cpp:
+	.text       start:0x8049AB60 end:0x8049AC64
+	.sdata2     start:0x8057F360 end:0x8057F368
+
+lib/egg/math/eggMatrix.cpp:
+	.text       start:0x8049AC70 end:0x8049B388
+	.ctors      start:0x804DB990 end:0x804DB994
+	.sdata2     start:0x8057F368 end:0x8057F380
+	.bss        start:0x80674C00 end:0x80674C30
+
+lib/egg/math/eggQuat.cpp:
+	.text       start:0x8049B390 end:0x8049BCB4
+	.sdata2     start:0x8057F380 end:0x8057F3A8
+
+lib/egg/math/eggVector.cpp:
+	.text       start:0x8049BCC0 end:0x8049BF90
+	.ctors      start:0x804DB994 end:0x804DB998
+	.sbss       start:0x805767C0 end:0x805767F8
+	.sdata2     start:0x8057F3A8 end:0x8057F3B8
+	.bss        start:0x80674C30 end:0x80674C60
+
+lib/egg/prim/eggAssert.cpp:
+	.text       start:0x8049BF90 end:0x8049C5BC
+	.data       start:0x8056EC88 end:0x8056ED00
+	.sbss       start:0x805767F8 end:0x80576808
+
 Runtime/__init_cpp_exceptions.cpp:
 	.text       start:0x804C71A8 end:0x804C7218
 	.ctors      start:0x804DB640 end:0x804DB644 rename:.ctors$10
