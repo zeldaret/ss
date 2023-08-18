@@ -114,18 +114,18 @@ lib/egg/core/eggDisplay.cpp:
 lib/egg/core/eggColorFader.cpp:
 	.text       start:0x80497930 end:0x80497E3C
 	.data       start:0x8056EAE8 end:0x8056EB0C
-	.sdata2     start:0x8057F308 end:0x8057F310 rename:.sdata
+	.sdata2     start:0x8057F308 end:0x8057F310
 
 lib/egg/core/eggAsyncDisplay.cpp:
 	.text       start:0x80497E40 end:0x80498688
 	.data       start:0x8056EB60 end:0x8056EB80
 	.sbss       start:0x80576790 end:0x80576798
-	.sdata2     start:0x8057F310 end:0x8057F328 rename:.sdata
+	.sdata2     start:0x8057F310 end:0x8057F328
 
 lib/egg/core/eggVideo.cpp:
 	.text       start:0x80498690 end:0x804989D8
 	.rodata     start:0x804FB7A0 end:0x804FBA20
-	.sdata2     start:0x8057F328 end:0x8057F338 rename:.sdata
+	.sdata2     start:0x8057F328 end:0x8057F338
 
 lib/egg/core/eggXfb.cpp:
 	.text       start:0x804989E0 end:0x80498AE4
@@ -142,7 +142,7 @@ lib/egg/core/eggController.cpp:
 	.ctors      start:0x804DB98C end:0x804DB990
 	.rodata     start:0x804FBA20 end:0x804FBA30
 	.data       start:0x8056EB90 end:0x8056EC88
-	.sdata2     start:0x8057F338 end:0x8057F360 rename:.sdata
+	.sdata2     start:0x8057F338 end:0x8057F360
 	.bss        start:0x80673B40 end:0x80674C00
 
 lib/egg/math/eggMath.cpp:
