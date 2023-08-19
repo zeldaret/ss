@@ -10,8 +10,8 @@ namespace Assert
 {
 
 /* 8049bf90 */ void wait(u32 time);
-/* 8049c010 */ void assert_printf();
-/* 8049c010 */ void report();
+/* 8049c010 */ void system_print();
+/* 8049c010 */ void system_report();
 /* 8049c0a0 */ s32 getPeriodPos(char*);
 /* 8049c100 */ char* getMapSymbol();
 /* 8049c150 */ bool isOutsideMEM1(u32 addr);

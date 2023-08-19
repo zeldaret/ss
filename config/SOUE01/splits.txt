@@ -171,6 +171,9 @@ lib/egg/prim/eggAssert.cpp:
 	.data       start:0x8056EC88 end:0x8056ED00
 	.sbss       start:0x805767F8 end:0x80576808
 
+lib/egg/gfx/eggCamera.cpp:
+	.text       start:0x8049C5C0 end:0x8049CAC8
+
 Runtime/__init_cpp_exceptions.cpp:
 	.text       start:0x804C71A8 end:0x804C7218
 	.ctors      start:0x804DB640 end:0x804DB644 rename:.ctors$10
