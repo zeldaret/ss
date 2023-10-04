@@ -1,3 +1,18 @@
+Sections:
+	.init       type:code
+	extab       type:rodata
+	extabindex  type:rodata
+	.text       type:code
+	.ctors      type:rodata
+	.dtors      type:rodata
+	.rodata     type:rodata
+	.data       type:data
+	.sdata      type:data
+	.sbss       type:bss
+	.sdata2     type:rodata
+	.sbss2      type:bss
+	.bss        type:bss
+
 toBeSorted/save_file.cpp:
 	.text       start:0x800099B0 end:0x80009D30
 
@@ -21,7 +36,7 @@ d/a/obj/d_a_obj_base.cpp:
 
 d/d_base.cpp:
 	.text       start:0x80050800 end:0x80050A14
-	.data       start:0x80503380 end:0x805033CC
+	.data       start:0x80503380 end:0x805033D0
 	.sbss       start:0x805750C0 end:0x805750CC
 
 toBeSorted/sceneflag_manager.cpp:
@@ -44,7 +59,7 @@ lib/rvl/CX/cx.c:
 
 lib/egg/core/eggArchive.cpp:
 	.text       start:0x80493510 end:0x80494254
-	.data       start:0x8056E820 end:0x8056E82C
+	.data       start:0x8056E820 end:0x8056E830
 	.sbss       start:0x80576728 end:0x80576730
 	.bss        start:0x80673AC8 end:0x80673AD8
 
@@ -65,7 +80,7 @@ lib/egg/core/eggStream.cpp:
 
 lib/egg/core/eggAllocator.cpp:
 	.text       start:0x804952D0 end:0x804953F0
-	.data       start:0x8056E8D0 end:0x8056E8E4
+	.data       start:0x8056E8D0 end:0x8056E8E8
 
 lib/egg/core/eggHeap.cpp:
 	.text       start:0x804953F0 end:0x80495AB0
@@ -87,7 +102,7 @@ lib/egg/core/eggAssertHeap.cpp:
 
 lib/egg/core/eggDisposer.cpp:
 	.text       start:0x80496830 end:0x80496904
-	.data       start:0x8056EA30 end:0x8056EA3C
+	.data       start:0x8056EA30 end:0x8056EA40
 
 lib/egg/core/eggThread.cpp:
 	.text       start:0x80496910 end:0x80496DD8
@@ -113,7 +128,7 @@ lib/egg/core/eggDisplay.cpp:
 
 lib/egg/core/eggColorFader.cpp:
 	.text       start:0x80497930 end:0x80497E3C
-	.data       start:0x8056EAE8 end:0x8056EB0C
+	.data       start:0x8056EAE8 end:0x8056EB20
 	.sdata2     start:0x8057F308 end:0x8057F310
 
 lib/egg/core/eggAsyncDisplay.cpp:
