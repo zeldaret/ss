@@ -151,9 +151,7 @@ cflags_base = [
     "-fp_contract on",
     "-str reuse",
     # "-multibyte",
-    # "-I-",
     "-i include",
-    "-i include/lib",
     f"-DVERSION={version_num}",
 ]
 if config.debug:
@@ -263,10 +261,6 @@ config.libs = [
 
         ],
     },
-    # DolphinLib(
-    #     "base",
-    #     [ ],
-    # ),
     # DolphinLib(
     #     "name",
     #     [ ],

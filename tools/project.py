@@ -99,7 +99,7 @@ class Object:
             "add_to_all": True,
             "cflags": None,
             "mw_version": None,
-            "shiftjis": True,
+            "shiftjis": False, # NOTE: This was defaulted to True -> caused it to not build in wsl?
             "source": name,
         }
         self.options.update(options)
