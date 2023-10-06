@@ -1,4 +1,5 @@
 #include <toBeSorted/save_file.h>
+#include <MSL_C/string.h>
 
 // 0x800099b0   getStoryFlags0__8SaveFileFv
 u16* SaveFile::getStoryFlags0() { 
@@ -68,17 +69,34 @@ u16* SaveFile::getUnkFlags1() {
 s16* SaveFile::getPlayerName() {
     return player_name;
 }
+
 // 0x80009AC0   setAreaT1__8SaveFileFPc
 void SaveFile::setAreaT1(char* name) {
-
+    char nameCopy [32];
+    memset(nameCopy,0, 32);
+    
+    for (int i = 0; i < sizeof(nameCopy)-1; i++) {
+        nameCopy[i] = name[i];
+    }
+    for (int i = 0; i < sizeof(nameCopy); i++) {
+        area_t1[i & 0x1F] = nameCopy[i];
+    }
 }
 // 0x80009BE0   getAreaT1__8SaveFileFv
-s8* SaveFile::getAreaT1() {
+char* SaveFile::getAreaT1() {
     return area_t1;
 }
 // 0x80009BF0   setAreaT2__8SaveFileFPc
 void SaveFile::setAreaT2(char* name) {
+    char nameCopy [32];
+    memset(nameCopy,0, 32);
     
+    for (int i = 0; i < sizeof(nameCopy)-1; i++) {
+        nameCopy[i] = name[i];
+    }
+    for (int i = 0; i < sizeof(nameCopy); i++) {
+        area_t2[i & 0x1F] = nameCopy[i];
+    }
 }
 // 0x80009D10   getAreaT2__8SaveFileFv
 s8* SaveFile::getAreaT2() {

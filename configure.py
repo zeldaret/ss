@@ -253,7 +253,7 @@ config.libs = [
             Object(Matching, "d/d_base.cpp"),
             Object(NonMatching, "d/a/d_a_base.cpp"),
             Object(NonMatching,"d/a/obj/d_a_obj_base.cpp"),
-            Object(NonMatching,"toBeSorted/save_file.cpp"),
+            Object(Matching,"toBeSorted/save_file.cpp"),
             Object(NonMatching,"toBeSorted/file_manager.cpp"),
             Object(NonMatching,"toBeSorted/save_manager.cpp"),
 

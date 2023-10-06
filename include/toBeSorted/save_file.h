@@ -55,7 +55,7 @@ public:
     /* 0x 5316 */ u16   field_0x5316;
     /* 0x 5318 */ s16   scene_flag_index;
     /* 0x 531a */ u16   field_0x531A;
-    /* 0x 531c */ s8    area_t1[32];
+    /* 0x 531c */ char  area_t1[32];
     /* 0x 533c */ s8    area_t2[32];
     /* 0x 535c */ s8    area_t3[32];
     /* 0x 537c */ u8    placed_beacon_flags[32];
@@ -103,7 +103,7 @@ public:
     /* 80009AA0 */ u16* getUnkFlags1();
     /* 80009AB0 */ s16* getPlayerName(); // UTF16-BE
     /* 80009AC0 */ void setAreaT1(char* name);
-    /* 80009BE0 */ s8* getAreaT1();
+    /* 80009BE0 */ char* getAreaT1();
     /* 80009BF0 */ void setAreaT2(char* name);
     /* 80009D10 */ s8* getAreaT2();
     /* 80009D20 */ s8* getAreaT3();

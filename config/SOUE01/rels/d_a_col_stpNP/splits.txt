@@ -1,0 +1,7 @@
+Sections:
+	.text       type:code align:16
+	.section2   type:data align:16
+	.section3   type:data align:8
+	.section4   type:data align:16
+	.section5   type:data align:16
+	.bss        type:bss align:8

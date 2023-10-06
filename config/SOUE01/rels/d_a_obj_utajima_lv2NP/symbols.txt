@@ -1,0 +1,16 @@
+_prolog = .text:0x00000000; // type:function scope:global
+_epilog = .text:0x00000030; // type:function scope:global
+_unresolved = .text:0x00000060; // type:function scope:global
+lbl_403_text_70 = .text:0x00000070; // type:label
+lbl_403_text_E0 = .text:0x000000E0; // type:label
+lbl_403_text_200 = .text:0x00000200; // type:label
+lbl_403_text_2E0 = .text:0x000002E0; // type:label
+lbl_403_text_320 = .text:0x00000320; // type:label
+lbl_403_text_330 = .text:0x00000330; // type:label
+lbl_403_text_360 = .text:0x00000360; // type:label
+lbl_403_section2_0 = .section2:0x00000000; // type:object size:0x4
+lbl_403_section3_0 = .section3:0x00000000; // type:object size:0x4
+lbl_403_section4_0 = .section4:0x00000000; // type:object size:0x20
+lbl_403_section5_0 = .section5:0x00000000; // type:object size:0x38
+lbl_403_section5_38 = .section5:0x00000038; // type:object size:0x20
+lbl_403_section5_58 = .section5:0x00000058; // type:object size:0x80

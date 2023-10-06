@@ -14,7 +14,7 @@ Sections:
 	.bss        type:bss
 
 toBeSorted/save_file.cpp:
-	.text       start:0x800099B0 end:0x80009D30
+	.text       start:0x800099B0 end:0x80009D28
 
 toBeSorted/file_manager.cpp:
 	.text       start:0x80009D30 end:0x80011730

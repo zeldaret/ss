@@ -1,8 +1,9 @@
 #pragma once
+
+#include "lib/rvl/macros.h"
+
+#ifndef TYPES_H
 #define TYPES_H
-
-#include <rvl/macros.h>
-
 typedef signed char s8;
 typedef signed short s16;
 typedef signed int s32;
@@ -12,6 +13,10 @@ typedef unsigned char u8;
 typedef unsigned short u16;
 typedef unsigned int u32;
 typedef unsigned long long u64;
+typedef float f32;
+typedef double f64;
+
+#endif
 
 #ifdef __CWCC__
     typedef unsigned long size_t;
@@ -30,8 +35,6 @@ typedef volatile s16 vs16;
 typedef volatile s32 vs32;
 typedef volatile s64 vs64;
 
-typedef float f32;
-typedef double f64;
 typedef volatile f32 vf32;
 typedef volatile f64 vf64;
 

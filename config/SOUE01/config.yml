@@ -3,3 +3,2546 @@ hash: 450a6806f46d59dcf8278db08e06f94865a4b18a
 splits: config/SOUE01/splits.txt
 symbols: config/SOUE01/symbols.txt
 quick_analysis: true
+
+modules:
+- object: orig/SOUE01/rels/d_a_asura_bulletNP.rel
+  splits: config/SOUE01/rels/d_a_asura_bulletNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_asura_bulletNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_avater_bulletNP.rel
+  splits: config/SOUE01/rels/d_a_avater_bulletNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_avater_bulletNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_avater_race_mngNP.rel
+  splits: config/SOUE01/rels/d_a_avater_race_mngNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_avater_race_mngNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_asura_armNP.rel
+  splits: config/SOUE01/rels/d_a_b_asura_armNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_asura_armNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_asura_footNP.rel
+  splits: config/SOUE01/rels/d_a_b_asura_footNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_asura_footNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_asuraNP.rel
+  splits: config/SOUE01/rels/d_a_b_asuraNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_asuraNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_bbshockwaveNP.rel
+  splits: config/SOUE01/rels/d_a_b_bbshockwaveNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_bbshockwaveNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_bigboss2NP.rel
+  splits: config/SOUE01/rels/d_a_b_bigboss2NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_bigboss2NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_bigboss3NP.rel
+  splits: config/SOUE01/rels/d_a_b_bigboss3NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_bigboss3NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_bigbossbaseNP.rel
+  splits: config/SOUE01/rels/d_a_b_bigbossbaseNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_bigbossbaseNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_bigbossNP.rel
+  splits: config/SOUE01/rels/d_a_b_bigbossNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_bigbossNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_girahimu_baseNP.rel
+  splits: config/SOUE01/rels/d_a_b_girahimu_baseNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_girahimu_baseNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_girahimu2NP.rel
+  splits: config/SOUE01/rels/d_a_b_girahimu2NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_girahimu2NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_girahimu3_baseNP.rel
+  splits: config/SOUE01/rels/d_a_b_girahimu3_baseNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_girahimu3_baseNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_girahimu3_firstNP.rel
+  splits: config/SOUE01/rels/d_a_b_girahimu3_firstNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_girahimu3_firstNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_girahimu3_secondNP.rel
+  splits: config/SOUE01/rels/d_a_b_girahimu3_secondNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_girahimu3_secondNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_girahimu3_thirdNP.rel
+  splits: config/SOUE01/rels/d_a_b_girahimu3_thirdNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_girahimu3_thirdNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_girahimuNP.rel
+  splits: config/SOUE01/rels/d_a_b_girahimuNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_girahimuNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_kr_armNP.rel
+  splits: config/SOUE01/rels/d_a_b_kr_armNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_kr_armNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_kr_hairNP.rel
+  splits: config/SOUE01/rels/d_a_b_kr_hairNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_kr_hairNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_krNP.rel
+  splits: config/SOUE01/rels/d_a_b_krNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_krNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_lastbossNP.rel
+  splits: config/SOUE01/rels/d_a_b_lastbossNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_lastbossNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_mgNP.rel
+  splits: config/SOUE01/rels/d_a_b_mgNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_mgNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_nusi_bulletNP.rel
+  splits: config/SOUE01/rels/d_a_b_nusi_bulletNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_nusi_bulletNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_nusi_tentakleNP.rel
+  splits: config/SOUE01/rels/d_a_b_nusi_tentakleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_nusi_tentakleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_nusiNP.rel
+  splits: config/SOUE01/rels/d_a_b_nusiNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_nusiNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_b_vdNP.rel
+  splits: config/SOUE01/rels/d_a_b_vdNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_b_vdNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_bird_kobunANP.rel
+  splits: config/SOUE01/rels/d_a_bird_kobunANP/splits.txt
+  symbols: config/SOUE01/rels/d_a_bird_kobunANP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_bird_kobunBNP.rel
+  splits: config/SOUE01/rels/d_a_bird_kobunBNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_bird_kobunBNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_bird_mobNP.rel
+  splits: config/SOUE01/rels/d_a_bird_mobNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_bird_mobNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_bird_npcNP.rel
+  splits: config/SOUE01/rels/d_a_bird_npcNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_bird_npcNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_bird_rivalNP.rel
+  splits: config/SOUE01/rels/d_a_bird_rivalNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_bird_rivalNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_bird_targetNP.rel
+  splits: config/SOUE01/rels/d_a_bird_targetNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_bird_targetNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_bird_zelda_trainingNP.rel
+  splits: config/SOUE01/rels/d_a_bird_zelda_trainingNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_bird_zelda_trainingNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_birdNP.rel
+  splits: config/SOUE01/rels/d_a_birdNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_birdNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_bombfNP.rel
+  splits: config/SOUE01/rels/d_a_bombfNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_bombfNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_bullet_gueNP.rel
+  splits: config/SOUE01/rels/d_a_bullet_gueNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_bullet_gueNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_bullet_maguppoNP.rel
+  splits: config/SOUE01/rels/d_a_bullet_maguppoNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_bullet_maguppoNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_co_testNP.rel
+  splits: config/SOUE01/rels/d_a_co_testNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_co_testNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_col_stpNP.rel
+  splits: config/SOUE01/rels/d_a_col_stpNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_col_stpNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_controlNP.rel
+  splits: config/SOUE01/rels/d_a_controlNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_controlNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_demo_npc_birdNP.rel
+  splits: config/SOUE01/rels/d_a_demo_npc_birdNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_demo_npc_birdNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_amNP.rel
+  splits: config/SOUE01/rels/d_a_e_amNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_amNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_battleshipfishNP.rel
+  splits: config/SOUE01/rels/d_a_e_battleshipfishNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_battleshipfishNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_bc_arrowNP.rel
+  splits: config/SOUE01/rels/d_a_e_bc_arrowNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_bc_arrowNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_bcal_arrowNP.rel
+  splits: config/SOUE01/rels/d_a_e_bcal_arrowNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_bcal_arrowNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_bcalNP.rel
+  splits: config/SOUE01/rels/d_a_e_bcalNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_bcalNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_bceNP.rel
+  splits: config/SOUE01/rels/d_a_e_bceNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_bceNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_bcNP.rel
+  splits: config/SOUE01/rels/d_a_e_bcNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_bcNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_bczNP.rel
+  splits: config/SOUE01/rels/d_a_e_bczNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_bczNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_beamosNP.rel
+  splits: config/SOUE01/rels/d_a_e_beamosNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_beamosNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_bsNP.rel
+  splits: config/SOUE01/rels/d_a_e_bsNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_bsNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_cactusNP.rel
+  splits: config/SOUE01/rels/d_a_e_cactusNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_cactusNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_captainNP.rel
+  splits: config/SOUE01/rels/d_a_e_captainNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_captainNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_chaser_bNP.rel
+  splits: config/SOUE01/rels/d_a_e_chaser_bNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_chaser_bNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_eyeNP.rel
+  splits: config/SOUE01/rels/d_a_e_eyeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_eyeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_gekoNP.rel
+  splits: config/SOUE01/rels/d_a_e_gekoNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_gekoNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_geNP.rel
+  splits: config/SOUE01/rels/d_a_e_geNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_geNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_gerockNP.rel
+  splits: config/SOUE01/rels/d_a_e_gerockNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_gerockNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_gueNP.rel
+  splits: config/SOUE01/rels/d_a_e_gueNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_gueNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_gumarmNP.rel
+  splits: config/SOUE01/rels/d_a_e_gumarmNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_gumarmNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_gunhobNP.rel
+  splits: config/SOUE01/rels/d_a_e_gunhobNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_gunhobNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_gunhoNP.rel
+  splits: config/SOUE01/rels/d_a_e_gunhoNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_gunhoNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_hb_leafNP.rel
+  splits: config/SOUE01/rels/d_a_e_hb_leafNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_hb_leafNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_hbNP.rel
+  splits: config/SOUE01/rels/d_a_e_hbNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_hbNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_hidokariNP.rel
+  splits: config/SOUE01/rels/d_a_e_hidokariNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_hidokariNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_hidokarisNP.rel
+  splits: config/SOUE01/rels/d_a_e_hidokarisNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_hidokarisNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_hidoryNP.rel
+  splits: config/SOUE01/rels/d_a_e_hidoryNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_hidoryNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_hocNP.rel
+  splits: config/SOUE01/rels/d_a_e_hocNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_hocNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_hpNP.rel
+  splits: config/SOUE01/rels/d_a_e_hpNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_hpNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_hydraNP.rel
+  splits: config/SOUE01/rels/d_a_e_hydraNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_hydraNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_kgNP.rel
+  splits: config/SOUE01/rels/d_a_e_kgNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_kgNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_ksNP.rel
+  splits: config/SOUE01/rels/d_a_e_ksNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_ksNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_kumite_giraNP.rel
+  splits: config/SOUE01/rels/d_a_e_kumite_giraNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_kumite_giraNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_liza_tailNP.rel
+  splits: config/SOUE01/rels/d_a_e_liza_tailNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_liza_tailNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_lizarufosNP.rel
+  splits: config/SOUE01/rels/d_a_e_lizarufosNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_lizarufosNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_magmaNP.rel
+  splits: config/SOUE01/rels/d_a_e_magmaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_magmaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_maguppoNP.rel
+  splits: config/SOUE01/rels/d_a_e_maguppoNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_maguppoNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_mr_shieldNP.rel
+  splits: config/SOUE01/rels/d_a_e_mr_shieldNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_mr_shieldNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_mrNP.rel
+  splits: config/SOUE01/rels/d_a_e_mrNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_mrNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_ocNP.rel
+  splits: config/SOUE01/rels/d_a_e_ocNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_ocNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_or_cannonNP.rel
+  splits: config/SOUE01/rels/d_a_e_or_cannonNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_or_cannonNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_orNP.rel
+  splits: config/SOUE01/rels/d_a_e_orNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_orNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_phNP.rel
+  splits: config/SOUE01/rels/d_a_e_phNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_phNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_poNP.rel
+  splits: config/SOUE01/rels/d_a_e_poNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_poNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_remlyNP.rel
+  splits: config/SOUE01/rels/d_a_e_remlyNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_remlyNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_rupee_gueNP.rel
+  splits: config/SOUE01/rels/d_a_e_rupee_gueNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_rupee_gueNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_sf4NP.rel
+  splits: config/SOUE01/rels/d_a_e_sf4NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_sf4NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_sfNP.rel
+  splits: config/SOUE01/rels/d_a_e_sfNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_sfNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_sirenNP.rel
+  splits: config/SOUE01/rels/d_a_e_sirenNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_sirenNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_skytailNP.rel
+  splits: config/SOUE01/rels/d_a_e_skytailNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_skytailNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_smNP.rel
+  splits: config/SOUE01/rels/d_a_e_smNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_smNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_sparkNP.rel
+  splits: config/SOUE01/rels/d_a_e_sparkNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_sparkNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_st_wireNP.rel
+  splits: config/SOUE01/rels/d_a_e_st_wireNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_st_wireNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_stNP.rel
+  splits: config/SOUE01/rels/d_a_e_stNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_stNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_syakomaitoNP.rel
+  splits: config/SOUE01/rels/d_a_e_syakomaitoNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_syakomaitoNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_tn2NP.rel
+  splits: config/SOUE01/rels/d_a_e_tn2NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_tn2NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_e_wsNP.rel
+  splits: config/SOUE01/rels/d_a_e_wsNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_e_wsNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_eelNP.rel
+  splits: config/SOUE01/rels/d_a_eelNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_eelNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_fish_mgrNP.rel
+  splits: config/SOUE01/rels/d_a_fish_mgrNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_fish_mgrNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_fishNP.rel
+  splits: config/SOUE01/rels/d_a_fishNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_fishNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_fly_slbNP.rel
+  splits: config/SOUE01/rels/d_a_fly_slbNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_fly_slbNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_girahimu_sword_beamNP.rel
+  splits: config/SOUE01/rels/d_a_girahimu_sword_beamNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_girahimu_sword_beamNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_heartfNP.rel
+  splits: config/SOUE01/rels/d_a_heartfNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_heartfNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_hidory_fireNP.rel
+  splits: config/SOUE01/rels/d_a_hidory_fireNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_hidory_fireNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_insect_antNP.rel
+  splits: config/SOUE01/rels/d_a_insect_antNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_insect_antNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_insect_beetleNP.rel
+  splits: config/SOUE01/rels/d_a_insect_beetleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_insect_beetleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_insect_butterflyNP.rel
+  splits: config/SOUE01/rels/d_a_insect_butterflyNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_insect_butterflyNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_insect_cicadaNP.rel
+  splits: config/SOUE01/rels/d_a_insect_cicadaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_insect_cicadaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_insect_dragonflyNP.rel
+  splits: config/SOUE01/rels/d_a_insect_dragonflyNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_insect_dragonflyNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_insect_fireflyNP.rel
+  splits: config/SOUE01/rels/d_a_insect_fireflyNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_insect_fireflyNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_insect_grasshopperNP.rel
+  splits: config/SOUE01/rels/d_a_insect_grasshopperNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_insect_grasshopperNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_insect_ladybugNP.rel
+  splits: config/SOUE01/rels/d_a_insect_ladybugNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_insect_ladybugNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_insect_scarabNP.rel
+  splits: config/SOUE01/rels/d_a_insect_scarabNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_insect_scarabNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_invisibleNP.rel
+  splits: config/SOUE01/rels/d_a_invisibleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_invisibleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_kanbanNP.rel
+  splits: config/SOUE01/rels/d_a_kanbanNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_kanbanNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_knight_leader_birdNP.rel
+  splits: config/SOUE01/rels/d_a_knight_leader_birdNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_knight_leader_birdNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_little_bird_mgrNP.rel
+  splits: config/SOUE01/rels/d_a_little_bird_mgrNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_little_bird_mgrNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_little_birdNP.rel
+  splits: config/SOUE01/rels/d_a_little_birdNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_little_birdNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_messageNP.rel
+  splits: config/SOUE01/rels/d_a_messageNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_messageNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_morita_testNP.rel
+  splits: config/SOUE01/rels/d_a_morita_testNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_morita_testNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_aku_humanNP.rel
+  splits: config/SOUE01/rels/d_a_npc_aku_humanNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_aku_humanNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_akumakunNP.rel
+  splits: config/SOUE01/rels/d_a_npc_akumakunNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_akumakunNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_aqua_dragonNP.rel
+  splits: config/SOUE01/rels/d_a_npc_aqua_dragonNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_aqua_dragonNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_azukariya_fatherNP.rel
+  splits: config/SOUE01/rels/d_a_npc_azukariya_fatherNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_azukariya_fatherNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_azukariya_nightNP.rel
+  splits: config/SOUE01/rels/d_a_npc_azukariya_nightNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_azukariya_nightNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_bamboo_goronNP.rel
+  splits: config/SOUE01/rels/d_a_npc_bamboo_goronNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_bamboo_goronNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_bbrvlNP.rel
+  splits: config/SOUE01/rels/d_a_npc_bbrvlNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_bbrvlNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_beeNP.rel
+  splits: config/SOUE01/rels/d_a_npc_beeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_beeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_bird_sowomanNP.rel
+  splits: config/SOUE01/rels/d_a_npc_bird_sowomanNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_bird_sowomanNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_bird_zeldaNP.rel
+  splits: config/SOUE01/rels/d_a_npc_bird_zeldaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_bird_zeldaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_birdNP.rel
+  splits: config/SOUE01/rels/d_a_npc_birdNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_birdNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_ce_friendNP.rel
+  splits: config/SOUE01/rels/d_a_npc_ce_friendNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_ce_friendNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_ce_ladyNP.rel
+  splits: config/SOUE01/rels/d_a_npc_ce_ladyNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_ce_ladyNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_chefNP.rel
+  splits: config/SOUE01/rels/d_a_npc_chefNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_chefNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_daishinkan_nNP.rel
+  splits: config/SOUE01/rels/d_a_npc_daishinkan_nNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_daishinkan_nNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_daishinkanNP.rel
+  splits: config/SOUE01/rels/d_a_npc_daishinkanNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_daishinkanNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_desertrobot_captainNP.rel
+  splits: config/SOUE01/rels/d_a_npc_desertrobot_captainNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_desertrobot_captainNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_desertrobotNP.rel
+  splits: config/SOUE01/rels/d_a_npc_desertrobotNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_desertrobotNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_dive_game_judgeNP.rel
+  splits: config/SOUE01/rels/d_a_npc_dive_game_judgeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_dive_game_judgeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_douguya_mother_lodNP.rel
+  splits: config/SOUE01/rels/d_a_npc_douguya_mother_lodNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_douguya_mother_lodNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_douguya_motherNP.rel
+  splits: config/SOUE01/rels/d_a_npc_douguya_motherNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_douguya_motherNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_douguyanightNP.rel
+  splits: config/SOUE01/rels/d_a_npc_douguyanightNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_douguyanightNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_fire_dragonNP.rel
+  splits: config/SOUE01/rels/d_a_npc_fire_dragonNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_fire_dragonNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_girahimNP.rel
+  splits: config/SOUE01/rels/d_a_npc_girahimNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_girahimNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_goddess_zeldaNP.rel
+  splits: config/SOUE01/rels/d_a_npc_goddess_zeldaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_goddess_zeldaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_graNP.rel
+  splits: config/SOUE01/rels/d_a_npc_graNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_graNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_grcNP.rel
+  splits: config/SOUE01/rels/d_a_npc_grcNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_grcNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_grdNP.rel
+  splits: config/SOUE01/rels/d_a_npc_grdNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_grdNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_honeycombNP.rel
+  splits: config/SOUE01/rels/d_a_npc_honeycombNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_honeycombNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_insect_capture_game_kobunNP.rel
+  splits: config/SOUE01/rels/d_a_npc_insect_capture_game_kobunNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_insect_capture_game_kobunNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_junk_mother_lodNP.rel
+  splits: config/SOUE01/rels/d_a_npc_junk_mother_lodNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_junk_mother_lodNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_junk_motherNP.rel
+  splits: config/SOUE01/rels/d_a_npc_junk_motherNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_junk_motherNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_junk_nightNP.rel
+  splits: config/SOUE01/rels/d_a_npc_junk_nightNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_junk_nightNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_kenseiNP.rel
+  splits: config/SOUE01/rels/d_a_npc_kenseiNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_kenseiNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_knight_leaderNP.rel
+  splits: config/SOUE01/rels/d_a_npc_knight_leaderNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_knight_leaderNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_kobun_b_nightNP.rel
+  splits: config/SOUE01/rels/d_a_npc_kobun_b_nightNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_kobun_b_nightNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_kobun2NP.rel
+  splits: config/SOUE01/rels/d_a_npc_kobun2NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_kobun2NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_kobunNP.rel
+  splits: config/SOUE01/rels/d_a_npc_kobunNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_kobunNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_kyui_elderNP.rel
+  splits: config/SOUE01/rels/d_a_npc_kyui_elderNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_kyui_elderNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_kyui_firstNP.rel
+  splits: config/SOUE01/rels/d_a_npc_kyui_firstNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_kyui_firstNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_kyui_thirdNP.rel
+  splits: config/SOUE01/rels/d_a_npc_kyui_thirdNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_kyui_thirdNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_kyui_wizardNP.rel
+  splits: config/SOUE01/rels/d_a_npc_kyui_wizardNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_kyui_wizardNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_kyui4NP.rel
+  splits: config/SOUE01/rels/d_a_npc_kyui4NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_kyui4NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_medicine_husband_nightNP.rel
+  splits: config/SOUE01/rels/d_a_npc_medicine_husband_nightNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_medicine_husband_nightNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_medicinewifenightNP.rel
+  splits: config/SOUE01/rels/d_a_npc_medicinewifenightNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_medicinewifenightNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_mole_elderNP.rel
+  splits: config/SOUE01/rels/d_a_npc_mole_elderNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_mole_elderNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_mole_es_nmlNP.rel
+  splits: config/SOUE01/rels/d_a_npc_mole_es_nmlNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_mole_es_nmlNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_mole_mgNP.rel
+  splits: config/SOUE01/rels/d_a_npc_mole_mgNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_mole_mgNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_mole_normal2NP.rel
+  splits: config/SOUE01/rels/d_a_npc_mole_normal2NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_mole_normal2NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_mole_normalNP.rel
+  splits: config/SOUE01/rels/d_a_npc_mole_normalNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_mole_normalNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_mole_salNP.rel
+  splits: config/SOUE01/rels/d_a_npc_mole_salNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_mole_salNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_mole_tackle2NP.rel
+  splits: config/SOUE01/rels/d_a_npc_mole_tackle2NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_mole_tackle2NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_mole_tackleNP.rel
+  splits: config/SOUE01/rels/d_a_npc_mole_tackleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_mole_tackleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_moleNP.rel
+  splits: config/SOUE01/rels/d_a_npc_moleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_moleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_old_impaNP.rel
+  splits: config/SOUE01/rels/d_a_npc_old_impaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_old_impaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_ord_kyuiNP.rel
+  splits: config/SOUE01/rels/d_a_npc_ord_kyuiNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_ord_kyuiNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_pumpkin_clay_shootingNP.rel
+  splits: config/SOUE01/rels/d_a_npc_pumpkin_clay_shootingNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_pumpkin_clay_shootingNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_pumpkin_daughterNP.rel
+  splits: config/SOUE01/rels/d_a_npc_pumpkin_daughterNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_pumpkin_daughterNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_pumpkin_masterNP.rel
+  splits: config/SOUE01/rels/d_a_npc_pumpkin_masterNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_pumpkin_masterNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_regret_rivalNP.rel
+  splits: config/SOUE01/rels/d_a_npc_regret_rivalNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_regret_rivalNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_rescueNP.rel
+  splits: config/SOUE01/rels/d_a_npc_rescueNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_rescueNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_rival_lodNP.rel
+  splits: config/SOUE01/rels/d_a_npc_rival_lodNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_rival_lodNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_rivalNP.rel
+  splits: config/SOUE01/rels/d_a_npc_rivalNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_rivalNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_salbage_morryNP.rel
+  splits: config/SOUE01/rels/d_a_npc_salbage_morryNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_salbage_morryNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_salbage_robot_fly_baseNP.rel
+  splits: config/SOUE01/rels/d_a_npc_salbage_robot_fly_baseNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_salbage_robot_fly_baseNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_salbage_robot_flyNP.rel
+  splits: config/SOUE01/rels/d_a_npc_salbage_robot_flyNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_salbage_robot_flyNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_salbage_robot_repairNP.rel
+  splits: config/SOUE01/rels/d_a_npc_salbage_robot_repairNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_salbage_robot_repairNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_salbage_robotNP.rel
+  splits: config/SOUE01/rels/d_a_npc_salbage_robotNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_salbage_robotNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_salesman_sNP.rel
+  splits: config/SOUE01/rels/d_a_npc_salesman_sNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_salesman_sNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_saltalkNP.rel
+  splits: config/SOUE01/rels/d_a_npc_saltalkNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_saltalkNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_senpai_bNP.rel
+  splits: config/SOUE01/rels/d_a_npc_senpai_bNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_senpai_bNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_senpaia_mother_lodNP.rel
+  splits: config/SOUE01/rels/d_a_npc_senpaia_mother_lodNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_senpaia_mother_lodNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_senpaia_motherNP.rel
+  splits: config/SOUE01/rels/d_a_npc_senpaia_motherNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_senpaia_motherNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_senpaiNP.rel
+  splits: config/SOUE01/rels/d_a_npc_senpaiNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_senpaiNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_shinkan2NP.rel
+  splits: config/SOUE01/rels/d_a_npc_shinkan2NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_shinkan2NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_shinkanNP.rel
+  splits: config/SOUE01/rels/d_a_npc_shinkanNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_shinkanNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_sorajima_boyNP.rel
+  splits: config/SOUE01/rels/d_a_npc_sorajima_boyNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_sorajima_boyNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_sorajima_fatherNP.rel
+  splits: config/SOUE01/rels/d_a_npc_sorajima_fatherNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_sorajima_fatherNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_sorajima_femaleNP.rel
+  splits: config/SOUE01/rels/d_a_npc_sorajima_femaleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_sorajima_femaleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_sorajima_girlNP.rel
+  splits: config/SOUE01/rels/d_a_npc_sorajima_girlNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_sorajima_girlNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_sorajima_male2NP.rel
+  splits: config/SOUE01/rels/d_a_npc_sorajima_male2NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_sorajima_male2NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_sorajima_male3NP.rel
+  splits: config/SOUE01/rels/d_a_npc_sorajima_male3NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_sorajima_male3NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_sorajima_maleNP.rel
+  splits: config/SOUE01/rels/d_a_npc_sorajima_maleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_sorajima_maleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_sorajima_man_dNP.rel
+  splits: config/SOUE01/rels/d_a_npc_sorajima_man_dNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_sorajima_man_dNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_sorajima_man_eNP.rel
+  splits: config/SOUE01/rels/d_a_npc_sorajima_man_eNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_sorajima_man_eNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_sorajima_motherNP.rel
+  splits: config/SOUE01/rels/d_a_npc_sorajima_motherNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_sorajima_motherNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_suisei_normalNP.rel
+  splits: config/SOUE01/rels/d_a_npc_suisei_normalNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_suisei_normalNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_suisei_subNP.rel
+  splits: config/SOUE01/rels/d_a_npc_suisei_subNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_suisei_subNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_suiseiNP.rel
+  splits: config/SOUE01/rels/d_a_npc_suiseiNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_suiseiNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_terryNP.rel
+  splits: config/SOUE01/rels/d_a_npc_terryNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_terryNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_testmanNP.rel
+  splits: config/SOUE01/rels/d_a_npc_testmanNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_testmanNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_thunder_dragon_boneNP.rel
+  splits: config/SOUE01/rels/d_a_npc_thunder_dragon_boneNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_thunder_dragon_boneNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_thunder_dragon_skullNP.rel
+  splits: config/SOUE01/rels/d_a_npc_thunder_dragon_skullNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_thunder_dragon_skullNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_thunder_dragonNP.rel
+  splits: config/SOUE01/rels/d_a_npc_thunder_dragonNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_thunder_dragonNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_toilet_ghostNP.rel
+  splits: config/SOUE01/rels/d_a_npc_toilet_ghostNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_toilet_ghostNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_uranaiyaNP.rel
+  splits: config/SOUE01/rels/d_a_npc_uranaiyaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_uranaiyaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_volcano_f2_salboNP.rel
+  splits: config/SOUE01/rels/d_a_npc_volcano_f2_salboNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_volcano_f2_salboNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_young_impaNP.rel
+  splits: config/SOUE01/rels/d_a_npc_young_impaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_young_impaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_npc_zeldaNP.rel
+  splits: config/SOUE01/rels/d_a_npc_zeldaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_npc_zeldaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_nusi_baseNP.rel
+  splits: config/SOUE01/rels/d_a_nusi_baseNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_nusi_baseNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_nusi_npcNP.rel
+  splits: config/SOUE01/rels/d_a_nusi_npcNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_nusi_npcNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_amberNP.rel
+  splits: config/SOUE01/rels/d_a_obj_amberNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_amberNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_ancient_jewelsNP.rel
+  splits: config/SOUE01/rels/d_a_obj_ancient_jewelsNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_ancient_jewelsNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_appear_bridgeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_appear_bridgeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_appear_bridgeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_arrow_switchNP.rel
+  splits: config/SOUE01/rels/d_a_obj_arrow_switchNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_arrow_switchNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_asura_pillarNP.rel
+  splits: config/SOUE01/rels/d_a_obj_asura_pillarNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_asura_pillarNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_asura_swordNP.rel
+  splits: config/SOUE01/rels/d_a_obj_asura_swordNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_asura_swordNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_B300_sandNP.rel
+  splits: config/SOUE01/rels/d_a_obj_B300_sandNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_B300_sandNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_ballista_f3NP.rel
+  splits: config/SOUE01/rels/d_a_obj_ballista_f3NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_ballista_f3NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_ballista_handleNP.rel
+  splits: config/SOUE01/rels/d_a_obj_ballista_handleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_ballista_handleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_ballistaNP.rel
+  splits: config/SOUE01/rels/d_a_obj_ballistaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_ballistaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bamboo_islandNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bamboo_islandNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bamboo_islandNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bambooNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bambooNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bambooNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_barrelNP.rel
+  splits: config/SOUE01/rels/d_a_obj_barrelNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_barrelNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bb_bridgeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bb_bridgeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bb_bridgeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bb_broken_partsNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bb_broken_partsNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bb_broken_partsNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bb_objectsNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bb_objectsNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bb_objectsNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bblargebombNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bblargebombNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bblargebombNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bbstoneNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bbstoneNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bbstoneNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bellNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bellNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bellNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_belt_cvrNP.rel
+  splits: config/SOUE01/rels/d_a_obj_belt_cvrNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_belt_cvrNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_belt_obstacleNP.rel
+  splits: config/SOUE01/rels/d_a_obj_belt_obstacleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_belt_obstacleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bgNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bgNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bgNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bigbomb_flowerNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bigbomb_flowerNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bigbomb_flowerNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bird_spNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bird_spNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bird_spNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bird_statueNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bird_statueNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bird_statueNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bladeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bladeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bladeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_blast_rockNP.rel
+  splits: config/SOUE01/rels/d_a_obj_blast_rockNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_blast_rockNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_block_ropeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_block_ropeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_block_ropeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_block_undergroundNP.rel
+  splits: config/SOUE01/rels/d_a_obj_block_undergroundNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_block_undergroundNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_blow_coalNP.rel
+  splits: config/SOUE01/rels/d_a_obj_blow_coalNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_blow_coalNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_boatNP.rel
+  splits: config/SOUE01/rels/d_a_obj_boatNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_boatNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_boxcage_F300NP.rel
+  splits: config/SOUE01/rels/d_a_obj_boxcage_F300NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_boxcage_F300NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bridge_boneNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bridge_boneNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bridge_boneNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bridge_buildingNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bridge_buildingNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bridge_buildingNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bridge_fallNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bridge_fallNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bridge_fallNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bridge_stepNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bridge_stepNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bridge_stepNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bridge_stretchNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bridge_stretchNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bridge_stretchNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bridge_timeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bridge_timeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bridge_timeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bstoneNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bstoneNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bstoneNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bubbleNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bubbleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bubbleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_buildingNP.rel
+  splits: config/SOUE01/rels/d_a_obj_buildingNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_buildingNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_bulb_switchNP.rel
+  splits: config/SOUE01/rels/d_a_obj_bulb_switchNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_bulb_switchNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_cannon_coverNP.rel
+  splits: config/SOUE01/rels/d_a_obj_cannon_coverNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_cannon_coverNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_cannonNP.rel
+  splits: config/SOUE01/rels/d_a_obj_cannonNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_cannonNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_carry_stoneNP.rel
+  splits: config/SOUE01/rels/d_a_obj_carry_stoneNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_carry_stoneNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_chairNP.rel
+  splits: config/SOUE01/rels/d_a_obj_chairNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_chairNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_chandelierNP.rel
+  splits: config/SOUE01/rels/d_a_obj_chandelierNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_chandelierNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_chestNP.rel
+  splits: config/SOUE01/rels/d_a_obj_chestNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_chestNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_city_waterNP.rel
+  splits: config/SOUE01/rels/d_a_obj_city_waterNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_city_waterNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_cityNP.rel
+  splits: config/SOUE01/rels/d_a_obj_cityNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_cityNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_claw_shot_tgNP.rel
+  splits: config/SOUE01/rels/d_a_obj_claw_shot_tgNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_claw_shot_tgNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_clearness_wallNP.rel
+  splits: config/SOUE01/rels/d_a_obj_clearness_wallNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_clearness_wallNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_clefNP.rel
+  splits: config/SOUE01/rels/d_a_obj_clefNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_clefNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_cloud_diveNP.rel
+  splits: config/SOUE01/rels/d_a_obj_cloud_diveNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_cloud_diveNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_colNP.rel
+  splits: config/SOUE01/rels/d_a_obj_colNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_colNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_control_panelNP.rel
+  splits: config/SOUE01/rels/d_a_obj_control_panelNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_control_panelNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_cumul_cloudNP.rel
+  splits: config/SOUE01/rels/d_a_obj_cumul_cloudNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_cumul_cloudNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_D3_dummyNP.rel
+  splits: config/SOUE01/rels/d_a_obj_D3_dummyNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_D3_dummyNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_D300NP.rel
+  splits: config/SOUE01/rels/d_a_obj_D300NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_D300NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_daynightNP.rel
+  splits: config/SOUE01/rels/d_a_obj_daynightNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_daynightNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_decoANP.rel
+  splits: config/SOUE01/rels/d_a_obj_decoANP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_decoANP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_decoBNP.rel
+  splits: config/SOUE01/rels/d_a_obj_decoBNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_decoBNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_desert_agoNP.rel
+  splits: config/SOUE01/rels/d_a_obj_desert_agoNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_desert_agoNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_desert_debrisNP.rel
+  splits: config/SOUE01/rels/d_a_obj_desert_debrisNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_desert_debrisNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_desert_meterNP.rel
+  splits: config/SOUE01/rels/d_a_obj_desert_meterNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_desert_meterNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_desertNP.rel
+  splits: config/SOUE01/rels/d_a_obj_desertNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_desertNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_display_only_nbsNP.rel
+  splits: config/SOUE01/rels/d_a_obj_display_only_nbsNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_display_only_nbsNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_distant_shipNP.rel
+  splits: config/SOUE01/rels/d_a_obj_distant_shipNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_distant_shipNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_diviner_crystalNP.rel
+  splits: config/SOUE01/rels/d_a_obj_diviner_crystalNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_diviner_crystalNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_door_bossD101NP.rel
+  splits: config/SOUE01/rels/d_a_obj_door_bossD101NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_door_bossD101NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_door_bossNP.rel
+  splits: config/SOUE01/rels/d_a_obj_door_bossNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_door_bossNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_door_dungeonD200NP.rel
+  splits: config/SOUE01/rels/d_a_obj_door_dungeonD200NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_door_dungeonD200NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_door_dungeonNP.rel
+  splits: config/SOUE01/rels/d_a_obj_door_dungeonNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_door_dungeonNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_doorNP.rel
+  splits: config/SOUE01/rels/d_a_obj_doorNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_doorNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_dormitory_gateNP.rel
+  splits: config/SOUE01/rels/d_a_obj_dormitory_gateNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_dormitory_gateNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_down_lavaNP.rel
+  splits: config/SOUE01/rels/d_a_obj_down_lavaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_down_lavaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_drumNP.rel
+  splits: config/SOUE01/rels/d_a_obj_drumNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_drumNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_dungeon_shipNP.rel
+  splits: config/SOUE01/rels/d_a_obj_dungeon_shipNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_dungeon_shipNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_electric_lightNP.rel
+  splits: config/SOUE01/rels/d_a_obj_electric_lightNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_electric_lightNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_evil_fieldNP.rel
+  splits: config/SOUE01/rels/d_a_obj_evil_fieldNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_evil_fieldNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_F302_lightNP.rel
+  splits: config/SOUE01/rels/d_a_obj_F302_lightNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_F302_lightNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_F400_gate_leafNP.rel
+  splits: config/SOUE01/rels/d_a_obj_F400_gate_leafNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_F400_gate_leafNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_F400_gate_sealNP.rel
+  splits: config/SOUE01/rels/d_a_obj_F400_gate_sealNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_F400_gate_sealNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_farmlandNP.rel
+  splits: config/SOUE01/rels/d_a_obj_farmlandNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_farmlandNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_fence_boko2NP.rel
+  splits: config/SOUE01/rels/d_a_obj_fence_boko2NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_fence_boko2NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_fence_bokoNP.rel
+  splits: config/SOUE01/rels/d_a_obj_fence_bokoNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_fence_bokoNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_fence_ironNP.rel
+  splits: config/SOUE01/rels/d_a_obj_fence_ironNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_fence_ironNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_fence_konsaiNP.rel
+  splits: config/SOUE01/rels/d_a_obj_fence_konsaiNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_fence_konsaiNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_fenceNP.rel
+  splits: config/SOUE01/rels/d_a_obj_fenceNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_fenceNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_fire_obstacleNP.rel
+  splits: config/SOUE01/rels/d_a_obj_fire_obstacleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_fire_obstacleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_fire_pillarNP.rel
+  splits: config/SOUE01/rels/d_a_obj_fire_pillarNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_fire_pillarNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_fireNP.rel
+  splits: config/SOUE01/rels/d_a_obj_fireNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_fireNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_firewallNP.rel
+  splits: config/SOUE01/rels/d_a_obj_firewallNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_firewallNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_flagNP.rel
+  splits: config/SOUE01/rels/d_a_obj_flagNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_flagNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_flower_ancientNP.rel
+  splits: config/SOUE01/rels/d_a_obj_flower_ancientNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_flower_ancientNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_flying_clawshot_targetNP.rel
+  splits: config/SOUE01/rels/d_a_obj_flying_clawshot_targetNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_flying_clawshot_targetNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_fortune_ringNP.rel
+  splits: config/SOUE01/rels/d_a_obj_fortune_ringNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_fortune_ringNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_fruit_guts_leafNP.rel
+  splits: config/SOUE01/rels/d_a_obj_fruit_guts_leafNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_fruit_guts_leafNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_fruit_treeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_fruit_treeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_fruit_treeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_fruitBNP.rel
+  splits: config/SOUE01/rels/d_a_obj_fruitBNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_fruitBNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_fruitNP.rel
+  splits: config/SOUE01/rels/d_a_obj_fruitNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_fruitNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_gearNP.rel
+  splits: config/SOUE01/rels/d_a_obj_gearNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_gearNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_girahim_footNP.rel
+  splits: config/SOUE01/rels/d_a_obj_girahim_footNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_girahim_footNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_girahimu_floorNP.rel
+  splits: config/SOUE01/rels/d_a_obj_girahimu_floorNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_girahimu_floorNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_girahimu_knifeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_girahimu_knifeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_girahimu_knifeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_girahimu_sword_linkNP.rel
+  splits: config/SOUE01/rels/d_a_obj_girahimu_sword_linkNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_girahimu_sword_linkNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_god_markNP.rel
+  splits: config/SOUE01/rels/d_a_obj_god_markNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_god_markNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_goddess_cubeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_goddess_cubeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_goddess_cubeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_goddess_statueNP.rel
+  splits: config/SOUE01/rels/d_a_obj_goddess_statueNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_goddess_statueNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_grass_coilNP.rel
+  splits: config/SOUE01/rels/d_a_obj_grass_coilNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_grass_coilNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_graveNP.rel
+  splits: config/SOUE01/rels/d_a_obj_graveNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_graveNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_ground_coverNP.rel
+  splits: config/SOUE01/rels/d_a_obj_ground_coverNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_ground_coverNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_guard_logNP.rel
+  splits: config/SOUE01/rels/d_a_obj_guard_logNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_guard_logNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_harp_hintNP.rel
+  splits: config/SOUE01/rels/d_a_obj_harp_hintNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_harp_hintNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_himoNP.rel
+  splits: config/SOUE01/rels/d_a_obj_himoNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_himoNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_hit_lever_swNP.rel
+  splits: config/SOUE01/rels/d_a_obj_hit_lever_swNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_hit_lever_swNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_hole_minigameNP.rel
+  splits: config/SOUE01/rels/d_a_obj_hole_minigameNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_hole_minigameNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_holeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_holeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_holeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_impa_doorNP.rel
+  splits: config/SOUE01/rels/d_a_obj_impa_doorNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_impa_doorNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_insect_islandNP.rel
+  splits: config/SOUE01/rels/d_a_obj_insect_islandNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_insect_islandNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_into_holeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_into_holeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_into_holeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_iron_stageNP.rel
+  splits: config/SOUE01/rels/d_a_obj_iron_stageNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_iron_stageNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_island_LODNP.rel
+  splits: config/SOUE01/rels/d_a_obj_island_LODNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_island_LODNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_island_nusiNP.rel
+  splits: config/SOUE01/rels/d_a_obj_island_nusiNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_island_nusiNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_item_heart_containerNP.rel
+  splits: config/SOUE01/rels/d_a_obj_item_heart_containerNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_item_heart_containerNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_ivy_ropeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_ivy_ropeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_ivy_ropeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_junk_repairingNP.rel
+  splits: config/SOUE01/rels/d_a_obj_junk_repairingNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_junk_repairingNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_kanban_stoneNP.rel
+  splits: config/SOUE01/rels/d_a_obj_kanban_stoneNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_kanban_stoneNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_kibakoNP.rel
+  splits: config/SOUE01/rels/d_a_obj_kibakoNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_kibakoNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_kumite_wallNP.rel
+  splits: config/SOUE01/rels/d_a_obj_kumite_wallNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_kumite_wallNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_lampNP.rel
+  splits: config/SOUE01/rels/d_a_obj_lampNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_lampNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_lava_d201NP.rel
+  splits: config/SOUE01/rels/d_a_obj_lava_d201NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_lava_d201NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_lava_F200NP.rel
+  splits: config/SOUE01/rels/d_a_obj_lava_F200NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_lava_F200NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_lava_plateNP.rel
+  splits: config/SOUE01/rels/d_a_obj_lava_plateNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_lava_plateNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_leaf_swingNP.rel
+  splits: config/SOUE01/rels/d_a_obj_leaf_swingNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_leaf_swingNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_light_lineNP.rel
+  splits: config/SOUE01/rels/d_a_obj_light_lineNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_light_lineNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_light_shaft_smallNP.rel
+  splits: config/SOUE01/rels/d_a_obj_light_shaft_smallNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_light_shaft_smallNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_lighthouse_harpNP.rel
+  splits: config/SOUE01/rels/d_a_obj_lighthouse_harpNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_lighthouse_harpNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_lighthouse_lightNP.rel
+  splits: config/SOUE01/rels/d_a_obj_lighthouse_lightNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_lighthouse_lightNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_lockNP.rel
+  splits: config/SOUE01/rels/d_a_obj_lockNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_lockNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_log_waterNP.rel
+  splits: config/SOUE01/rels/d_a_obj_log_waterNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_log_waterNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_logNP.rel
+  splits: config/SOUE01/rels/d_a_obj_logNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_logNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_lotus_flowerNP.rel
+  splits: config/SOUE01/rels/d_a_obj_lotus_flowerNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_lotus_flowerNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_lotus_seedNP.rel
+  splits: config/SOUE01/rels/d_a_obj_lotus_seedNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_lotus_seedNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_lotusNP.rel
+  splits: config/SOUE01/rels/d_a_obj_lotusNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_lotusNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_mappartsNP.rel
+  splits: config/SOUE01/rels/d_a_obj_mappartsNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_mappartsNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_megami_islandNP.rel
+  splits: config/SOUE01/rels/d_a_obj_megami_islandNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_megami_islandNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_mg_pumpkinNP.rel
+  splits: config/SOUE01/rels/d_a_obj_mg_pumpkinNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_mg_pumpkinNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_mole_coverNP.rel
+  splits: config/SOUE01/rels/d_a_obj_mole_coverNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_mole_coverNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_mole_soilNP.rel
+  splits: config/SOUE01/rels/d_a_obj_mole_soilNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_mole_soilNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_move_elecNP.rel
+  splits: config/SOUE01/rels/d_a_obj_move_elecNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_move_elecNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_move_lift_volNP.rel
+  splits: config/SOUE01/rels/d_a_obj_move_lift_volNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_move_lift_volNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_musasabiNP.rel
+  splits: config/SOUE01/rels/d_a_obj_musasabiNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_musasabiNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_mushroomNP.rel
+  splits: config/SOUE01/rels/d_a_obj_mushroomNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_mushroomNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_needle_desertNP.rel
+  splits: config/SOUE01/rels/d_a_obj_needle_desertNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_needle_desertNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_needle_undergroundNP.rel
+  splits: config/SOUE01/rels/d_a_obj_needle_undergroundNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_needle_undergroundNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_oct_grass_leafNP.rel
+  splits: config/SOUE01/rels/d_a_obj_oct_grass_leafNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_oct_grass_leafNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_oct_grassNP.rel
+  splits: config/SOUE01/rels/d_a_obj_oct_grassNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_oct_grassNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_paintNP.rel
+  splits: config/SOUE01/rels/d_a_obj_paintNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_paintNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_pinwheelNP.rel
+  splits: config/SOUE01/rels/d_a_obj_pinwheelNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_pinwheelNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_pipeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_pipeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_pipeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_pistonNP.rel
+  splits: config/SOUE01/rels/d_a_obj_pistonNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_pistonNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_pole_stonyNP.rel
+  splits: config/SOUE01/rels/d_a_obj_pole_stonyNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_pole_stonyNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_pool_cockNP.rel
+  splits: config/SOUE01/rels/d_a_obj_pool_cockNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_pool_cockNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_pot_salNP.rel
+  splits: config/SOUE01/rels/d_a_obj_pot_salNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_pot_salNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_propeller_liftNP.rel
+  splits: config/SOUE01/rels/d_a_obj_propeller_liftNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_propeller_liftNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_properaNP.rel
+  splits: config/SOUE01/rels/d_a_obj_properaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_properaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_pumpkin_barNP.rel
+  splits: config/SOUE01/rels/d_a_obj_pumpkin_barNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_pumpkin_barNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_pumpkin_leafNP.rel
+  splits: config/SOUE01/rels/d_a_obj_pumpkin_leafNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_pumpkin_leafNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_push_blockNP.rel
+  splits: config/SOUE01/rels/d_a_obj_push_blockNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_push_blockNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_puzzle_islandNP.rel
+  splits: config/SOUE01/rels/d_a_obj_puzzle_islandNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_puzzle_islandNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_rail_endNP.rel
+  splits: config/SOUE01/rels/d_a_obj_rail_endNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_rail_endNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_rail_postNP.rel
+  splits: config/SOUE01/rels/d_a_obj_rail_postNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_rail_postNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_ride_rockNP.rel
+  splits: config/SOUE01/rels/d_a_obj_ride_rockNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_ride_rockNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_ringNP.rel
+  splits: config/SOUE01/rels/d_a_obj_ringNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_ringNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_ro_at_targetNP.rel
+  splits: config/SOUE01/rels/d_a_obj_ro_at_targetNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_ro_at_targetNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_rock_boatNP.rel
+  splits: config/SOUE01/rels/d_a_obj_rock_boatNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_rock_boatNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_rock_dragonNP.rel
+  splits: config/SOUE01/rels/d_a_obj_rock_dragonNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_rock_dragonNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_rock_skyNP.rel
+  splits: config/SOUE01/rels/d_a_obj_rock_skyNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_rock_skyNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_roll_pillarNP.rel
+  splits: config/SOUE01/rels/d_a_obj_roll_pillarNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_roll_pillarNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_roll_rockNP.rel
+  splits: config/SOUE01/rels/d_a_obj_roll_rockNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_roll_rockNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_rope_baseNP.rel
+  splits: config/SOUE01/rels/d_a_obj_rope_baseNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_rope_baseNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_rope_igaigaNP.rel
+  splits: config/SOUE01/rels/d_a_obj_rope_igaigaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_rope_igaigaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_rotation_lightNP.rel
+  splits: config/SOUE01/rels/d_a_obj_rotation_lightNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_rotation_lightNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_roulette_island_cNP.rel
+  splits: config/SOUE01/rels/d_a_obj_roulette_island_cNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_roulette_island_cNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_roulette_island_rNP.rel
+  splits: config/SOUE01/rels/d_a_obj_roulette_island_rNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_roulette_island_rNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_rouletteNP.rel
+  splits: config/SOUE01/rels/d_a_obj_rouletteNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_rouletteNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_ruined_saveNP.rel
+  splits: config/SOUE01/rels/d_a_obj_ruined_saveNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_ruined_saveNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sailNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sailNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sailNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sand_D301NP.rel
+  splits: config/SOUE01/rels/d_a_obj_sand_D301NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sand_D301NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sand_floorNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sand_floorNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sand_floorNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sandbagNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sandbagNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sandbagNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_saveNP.rel
+  splits: config/SOUE01/rels/d_a_obj_saveNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_saveNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_scattersandNP.rel
+  splits: config/SOUE01/rels/d_a_obj_scattersandNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_scattersandNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sea_F301NP.rel
+  splits: config/SOUE01/rels/d_a_obj_sea_F301NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sea_F301NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sealed_doorNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sealed_doorNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sealed_doorNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_seat_swordNP.rel
+  splits: config/SOUE01/rels/d_a_obj_seat_swordNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_seat_swordNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_shedNP.rel
+  splits: config/SOUE01/rels/d_a_obj_shedNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_shedNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_ship_windowNP.rel
+  splits: config/SOUE01/rels/d_a_obj_ship_windowNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_ship_windowNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_shrine_afterNP.rel
+  splits: config/SOUE01/rels/d_a_obj_shrine_afterNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_shrine_afterNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_shrine_bef_insideNP.rel
+  splits: config/SOUE01/rels/d_a_obj_shrine_bef_insideNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_shrine_bef_insideNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_shrine_beforeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_shrine_beforeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_shrine_beforeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_shutter_change_sceneNP.rel
+  splits: config/SOUE01/rels/d_a_obj_shutter_change_sceneNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_shutter_change_sceneNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_shutter_fenceNP.rel
+  splits: config/SOUE01/rels/d_a_obj_shutter_fenceNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_shutter_fenceNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_shutter_waterD101NP.rel
+  splits: config/SOUE01/rels/d_a_obj_shutter_waterD101NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_shutter_waterD101NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_shutterNP.rel
+  splits: config/SOUE01/rels/d_a_obj_shutterNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_shutterNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_side_shutterNP.rel
+  splits: config/SOUE01/rels/d_a_obj_side_shutterNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_side_shutterNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sink_floor_fNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sink_floor_fNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sink_floor_fNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_siren_2dmapNP.rel
+  splits: config/SOUE01/rels/d_a_obj_siren_2dmapNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_siren_2dmapNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_siren_barrierNP.rel
+  splits: config/SOUE01/rels/d_a_obj_siren_barrierNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_siren_barrierNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_skullNP.rel
+  splits: config/SOUE01/rels/d_a_obj_skullNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_skullNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_slice_log_partsNP.rel
+  splits: config/SOUE01/rels/d_a_obj_slice_log_partsNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_slice_log_partsNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_slice_logNP.rel
+  splits: config/SOUE01/rels/d_a_obj_slice_logNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_slice_logNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_smokeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_smokeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_smokeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_soilNP.rel
+  splits: config/SOUE01/rels/d_a_obj_soilNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_soilNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_spider_lineNP.rel
+  splits: config/SOUE01/rels/d_a_obj_spider_lineNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_spider_lineNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_spikeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_spikeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_spikeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_stage_coverNP.rel
+  splits: config/SOUE01/rels/d_a_obj_stage_coverNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_stage_coverNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_stage_crackNP.rel
+  splits: config/SOUE01/rels/d_a_obj_stage_crackNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_stage_crackNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_stage_debrisNP.rel
+  splits: config/SOUE01/rels/d_a_obj_stage_debrisNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_stage_debrisNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_stage_kraken_partsNP.rel
+  splits: config/SOUE01/rels/d_a_obj_stage_kraken_partsNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_stage_kraken_partsNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_stage_krakenNP.rel
+  splits: config/SOUE01/rels/d_a_obj_stage_krakenNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_stage_krakenNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_stage_sinkNP.rel
+  splits: config/SOUE01/rels/d_a_obj_stage_sinkNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_stage_sinkNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_stage_waterNP.rel
+  splits: config/SOUE01/rels/d_a_obj_stage_waterNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_stage_waterNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_step_gumarmNP.rel
+  splits: config/SOUE01/rels/d_a_obj_step_gumarmNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_step_gumarmNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_step_statueNP.rel
+  splits: config/SOUE01/rels/d_a_obj_step_statueNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_step_statueNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_step_time_slipNP.rel
+  splits: config/SOUE01/rels/d_a_obj_step_time_slipNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_step_time_slipNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_stone_standNP.rel
+  splits: config/SOUE01/rels/d_a_obj_stone_standNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_stone_standNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_stopper_rockNP.rel
+  splits: config/SOUE01/rels/d_a_obj_stopper_rockNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_stopper_rockNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_stopping_ropeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_stopping_ropeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_stopping_ropeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_stream_lavaNP.rel
+  splits: config/SOUE01/rels/d_a_obj_stream_lavaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_stream_lavaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sun_lightNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sun_lightNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sun_lightNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sw_bank_smallNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sw_bank_smallNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sw_bank_smallNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sw_bankNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sw_bankNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sw_bankNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sw_dir_doorNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sw_dir_doorNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sw_dir_doorNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sw_dirNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sw_dirNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sw_dirNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sw_harpNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sw_harpNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sw_harpNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sw_sword_beamNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sw_sword_beamNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sw_sword_beamNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sw_syakoNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sw_syakoNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sw_syakoNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sw_whipleverNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sw_whipleverNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sw_whipleverNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_swhitNP.rel
+  splits: config/SOUE01/rels/d_a_obj_swhitNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_swhitNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_switch_shutterNP.rel
+  splits: config/SOUE01/rels/d_a_obj_switch_shutterNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_switch_shutterNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_switch_wallNP.rel
+  splits: config/SOUE01/rels/d_a_obj_switch_wallNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_switch_wallNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sword_candleNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sword_candleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sword_candleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_sword_stabNP.rel
+  splits: config/SOUE01/rels/d_a_obj_sword_stabNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_sword_stabNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_swrd_prjNP.rel
+  splits: config/SOUE01/rels/d_a_obj_swrd_prjNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_swrd_prjNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_syako_shutterNP.rel
+  splits: config/SOUE01/rels/d_a_obj_syako_shutterNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_syako_shutterNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_tablewareNP.rel
+  splits: config/SOUE01/rels/d_a_obj_tablewareNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_tablewareNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_tackleNP.rel
+  splits: config/SOUE01/rels/d_a_obj_tackleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_tackleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_tarzan_poleNP.rel
+  splits: config/SOUE01/rels/d_a_obj_tarzan_poleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_tarzan_poleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_teni_rail_postNP.rel
+  splits: config/SOUE01/rels/d_a_obj_teni_rail_postNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_teni_rail_postNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_teni_railNP.rel
+  splits: config/SOUE01/rels/d_a_obj_teni_railNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_teni_railNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_tenijimaNP.rel
+  splits: config/SOUE01/rels/d_a_obj_tenijimaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_tenijimaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_terry_bicycleNP.rel
+  splits: config/SOUE01/rels/d_a_obj_terry_bicycleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_terry_bicycleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_terry_gimmickNP.rel
+  splits: config/SOUE01/rels/d_a_obj_terry_gimmickNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_terry_gimmickNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_terry_holeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_terry_holeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_terry_holeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_terry_islandNP.rel
+  splits: config/SOUE01/rels/d_a_obj_terry_islandNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_terry_islandNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_terry_shopNP.rel
+  splits: config/SOUE01/rels/d_a_obj_terry_shopNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_terry_shopNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_terry_switchNP.rel
+  splits: config/SOUE01/rels/d_a_obj_terry_switchNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_terry_switchNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_time_baseNP.rel
+  splits: config/SOUE01/rels/d_a_obj_time_baseNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_time_baseNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_time_blockNP.rel
+  splits: config/SOUE01/rels/d_a_obj_time_blockNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_time_blockNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_time_boat_bulletNP.rel
+  splits: config/SOUE01/rels/d_a_obj_time_boat_bulletNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_time_boat_bulletNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_time_boatNP.rel
+  splits: config/SOUE01/rels/d_a_obj_time_boatNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_time_boatNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_time_door_beforeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_time_door_beforeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_time_door_beforeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_time_doorNP.rel
+  splits: config/SOUE01/rels/d_a_obj_time_doorNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_time_doorNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_time_stage_bgNP.rel
+  splits: config/SOUE01/rels/d_a_obj_time_stage_bgNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_time_stage_bgNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_time_stoneNP.rel
+  splits: config/SOUE01/rels/d_a_obj_time_stoneNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_time_stoneNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_toD3_stone_figureNP.rel
+  splits: config/SOUE01/rels/d_a_obj_toD3_stone_figureNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_toD3_stone_figureNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_toge_trapNP.rel
+  splits: config/SOUE01/rels/d_a_obj_toge_trapNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_toge_trapNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_tornadoNP.rel
+  splits: config/SOUE01/rels/d_a_obj_tornadoNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_tornadoNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_tower_bombNP.rel
+  splits: config/SOUE01/rels/d_a_obj_tower_bombNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_tower_bombNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_tower_D101NP.rel
+  splits: config/SOUE01/rels/d_a_obj_tower_D101NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_tower_D101NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_tower_gearD101NP.rel
+  splits: config/SOUE01/rels/d_a_obj_tower_gearD101NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_tower_gearD101NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_tower_hand_D101NP.rel
+  splits: config/SOUE01/rels/d_a_obj_tower_hand_D101NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_tower_hand_D101NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_tr_shutter_csNP.rel
+  splits: config/SOUE01/rels/d_a_obj_tr_shutter_csNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_tr_shutter_csNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_trap_bird_woodNP.rel
+  splits: config/SOUE01/rels/d_a_obj_trap_bird_woodNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_trap_bird_woodNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_trap_rock_1NP.rel
+  splits: config/SOUE01/rels/d_a_obj_trap_rock_1NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_trap_rock_1NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_treasure_island_bNP.rel
+  splits: config/SOUE01/rels/d_a_obj_treasure_island_bNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_treasure_island_bNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_treasure_islandNP.rel
+  splits: config/SOUE01/rels/d_a_obj_treasure_islandNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_treasure_islandNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_triforceNP.rel
+  splits: config/SOUE01/rels/d_a_obj_triforceNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_triforceNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_trolley_shutterNP.rel
+  splits: config/SOUE01/rels/d_a_obj_trolley_shutterNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_trolley_shutterNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_trolleyNP.rel
+  splits: config/SOUE01/rels/d_a_obj_trolleyNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_trolleyNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_truck_rail_colNP.rel
+  splits: config/SOUE01/rels/d_a_obj_truck_rail_colNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_truck_rail_colNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_truck_stopperNP.rel
+  splits: config/SOUE01/rels/d_a_obj_truck_stopperNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_truck_stopperNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_truckNP.rel
+  splits: config/SOUE01/rels/d_a_obj_truckNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_truckNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_tubo_bigNP.rel
+  splits: config/SOUE01/rels/d_a_obj_tubo_bigNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_tubo_bigNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_tuboNP.rel
+  splits: config/SOUE01/rels/d_a_obj_tuboNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_tuboNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_tumble_weedNP.rel
+  splits: config/SOUE01/rels/d_a_obj_tumble_weedNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_tumble_weedNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_under_cloudNP.rel
+  splits: config/SOUE01/rels/d_a_obj_under_cloudNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_under_cloudNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_underground_switchNP.rel
+  splits: config/SOUE01/rels/d_a_obj_underground_switchNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_underground_switchNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_undergroundNP.rel
+  splits: config/SOUE01/rels/d_a_obj_undergroundNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_undergroundNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_updown_lavaNP.rel
+  splits: config/SOUE01/rels/d_a_obj_updown_lavaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_updown_lavaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_uta_demo_pedestNP.rel
+  splits: config/SOUE01/rels/d_a_obj_uta_demo_pedestNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_uta_demo_pedestNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_utajima_islandNP.rel
+  splits: config/SOUE01/rels/d_a_obj_utajima_islandNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_utajima_islandNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_utajima_lv2NP.rel
+  splits: config/SOUE01/rels/d_a_obj_utajima_lv2NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_utajima_lv2NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_utajima_main_mechaNP.rel
+  splits: config/SOUE01/rels/d_a_obj_utajima_main_mechaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_utajima_main_mechaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_utajima_pedestalNP.rel
+  splits: config/SOUE01/rels/d_a_obj_utajima_pedestalNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_utajima_pedestalNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_utajima_stopperNP.rel
+  splits: config/SOUE01/rels/d_a_obj_utajima_stopperNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_utajima_stopperNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_utajimaNP.rel
+  splits: config/SOUE01/rels/d_a_obj_utajimaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_utajimaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_vacu_dust_partsNP.rel
+  splits: config/SOUE01/rels/d_a_obj_vacu_dust_partsNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_vacu_dust_partsNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_vacu_dustNP.rel
+  splits: config/SOUE01/rels/d_a_obj_vacu_dustNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_vacu_dustNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_vd_bulletNP.rel
+  splits: config/SOUE01/rels/d_a_obj_vd_bulletNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_vd_bulletNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_vent_fanNP.rel
+  splits: config/SOUE01/rels/d_a_obj_vent_fanNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_vent_fanNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_vortexNP.rel
+  splits: config/SOUE01/rels/d_a_obj_vortexNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_vortexNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_warp_holeNP.rel
+  splits: config/SOUE01/rels/d_a_obj_warp_holeNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_warp_holeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_warpNP.rel
+  splits: config/SOUE01/rels/d_a_obj_warpNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_warpNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_water_F100NP.rel
+  splits: config/SOUE01/rels/d_a_obj_water_F100NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_water_F100NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_water_igaigaNP.rel
+  splits: config/SOUE01/rels/d_a_obj_water_igaigaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_water_igaigaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_water_jarNP.rel
+  splits: config/SOUE01/rels/d_a_obj_water_jarNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_water_jarNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_water_nut_leafNP.rel
+  splits: config/SOUE01/rels/d_a_obj_water_nut_leafNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_water_nut_leafNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_water_nutNP.rel
+  splits: config/SOUE01/rels/d_a_obj_water_nutNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_water_nutNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_water_shieldNP.rel
+  splits: config/SOUE01/rels/d_a_obj_water_shieldNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_water_shieldNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_water_surfaceNP.rel
+  splits: config/SOUE01/rels/d_a_obj_water_surfaceNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_water_surfaceNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_water_switchNP.rel
+  splits: config/SOUE01/rels/d_a_obj_water_switchNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_water_switchNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_waterfall_D100NP.rel
+  splits: config/SOUE01/rels/d_a_obj_waterfall_D100NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_waterfall_D100NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_waterfall_D101NP.rel
+  splits: config/SOUE01/rels/d_a_obj_waterfall_D101NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_waterfall_D101NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_waterfall_F102NP.rel
+  splits: config/SOUE01/rels/d_a_obj_waterfall_F102NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_waterfall_F102NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_wind02NP.rel
+  splits: config/SOUE01/rels/d_a_obj_wind02NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_wind02NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_wind03NP.rel
+  splits: config/SOUE01/rels/d_a_obj_wind03NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_wind03NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_wind04NP.rel
+  splits: config/SOUE01/rels/d_a_obj_wind04NP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_wind04NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_windmill_desertNP.rel
+  splits: config/SOUE01/rels/d_a_obj_windmill_desertNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_windmill_desertNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_windmillNP.rel
+  splits: config/SOUE01/rels/d_a_obj_windmillNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_windmillNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_windNP.rel
+  splits: config/SOUE01/rels/d_a_obj_windNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_windNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_obj_wood_boardNP.rel
+  splits: config/SOUE01/rels/d_a_obj_wood_boardNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_obj_wood_boardNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_or_cannon_bulletNP.rel
+  splits: config/SOUE01/rels/d_a_or_cannon_bulletNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_or_cannon_bulletNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_pumpkinNP.rel
+  splits: config/SOUE01/rels/d_a_pumpkinNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_pumpkinNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_shop_sampleNP.rel
+  splits: config/SOUE01/rels/d_a_shop_sampleNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_shop_sampleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_a_t_wood_areaNP.rel
+  splits: config/SOUE01/rels/d_a_t_wood_areaNP/splits.txt
+  symbols: config/SOUE01/rels/d_a_t_wood_areaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_lyt_file_selectNP.rel
+  splits: config/SOUE01/rels/d_lyt_file_selectNP/splits.txt
+  symbols: config/SOUE01/rels/d_lyt_file_selectNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_lyt_seeker_stoneNP.rel
+  splits: config/SOUE01/rels/d_lyt_seeker_stoneNP/splits.txt
+  symbols: config/SOUE01/rels/d_lyt_seeker_stoneNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_lyt_title_BGNP.rel
+  splits: config/SOUE01/rels/d_lyt_title_BGNP/splits.txt
+  symbols: config/SOUE01/rels/d_lyt_title_BGNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_profileNP.rel
+  splits: config/SOUE01/rels/d_profileNP/splits.txt
+  symbols: config/SOUE01/rels/d_profileNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_s_bootNP.rel
+  splits: config/SOUE01/rels/d_s_bootNP/splits.txt
+  symbols: config/SOUE01/rels/d_s_bootNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_SoftwareKeyboardNP.rel
+  splits: config/SOUE01/rels/d_SoftwareKeyboardNP/splits.txt
+  symbols: config/SOUE01/rels/d_SoftwareKeyboardNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_actionNP.rel
+  splits: config/SOUE01/rels/d_t_actionNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_actionNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_at0NP.rel
+  splits: config/SOUE01/rels/d_t_at0NP/splits.txt
+  symbols: config/SOUE01/rels/d_t_at0NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_auto_messageNP.rel
+  splits: config/SOUE01/rels/d_t_auto_messageNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_auto_messageNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_barrel_posNP.rel
+  splits: config/SOUE01/rels/d_t_barrel_posNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_barrel_posNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_barrelNP.rel
+  splits: config/SOUE01/rels/d_t_barrelNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_barrelNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_bb_quakeNP.rel
+  splits: config/SOUE01/rels/d_t_bb_quakeNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_bb_quakeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_bcal_tagNP.rel
+  splits: config/SOUE01/rels/d_t_bcal_tagNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_bcal_tagNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_bczNP.rel
+  splits: config/SOUE01/rels/d_t_bczNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_bczNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_beetleNP.rel
+  splits: config/SOUE01/rels/d_t_beetleNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_beetleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_belt_obstacleNP.rel
+  splits: config/SOUE01/rels/d_t_belt_obstacleNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_belt_obstacleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_clef_gameNP.rel
+  splits: config/SOUE01/rels/d_t_clef_gameNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_clef_gameNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_clef_managerNP.rel
+  splits: config/SOUE01/rels/d_t_clef_managerNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_clef_managerNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_col_bomb_shieldNP.rel
+  splits: config/SOUE01/rels/d_t_col_bomb_shieldNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_col_bomb_shieldNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_D3_scene_changeNP.rel
+  splits: config/SOUE01/rels/d_t_D3_scene_changeNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_D3_scene_changeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_defeat_bossNP.rel
+  splits: config/SOUE01/rels/d_t_defeat_bossNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_defeat_bossNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_dowsingNP.rel
+  splits: config/SOUE01/rels/d_t_dowsingNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_dowsingNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_drumNP.rel
+  splits: config/SOUE01/rels/d_t_drumNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_drumNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_dungeon_startNP.rel
+  splits: config/SOUE01/rels/d_t_dungeon_startNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_dungeon_startNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_effect_genNP.rel
+  splits: config/SOUE01/rels/d_t_effect_genNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_effect_genNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_fairytagNP.rel
+  splits: config/SOUE01/rels/d_t_fairytagNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_fairytagNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_fence_synchronizerNP.rel
+  splits: config/SOUE01/rels/d_t_fence_synchronizerNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_fence_synchronizerNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_gate_to_groundNP.rel
+  splits: config/SOUE01/rels/d_t_gate_to_groundNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_gate_to_groundNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_gekotagNP.rel
+  splits: config/SOUE01/rels/d_t_gekotagNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_gekotagNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_genki_dws_tgtNP.rel
+  splits: config/SOUE01/rels/d_t_genki_dws_tgtNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_genki_dws_tgtNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_group_summonNP.rel
+  splits: config/SOUE01/rels/d_t_group_summonNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_group_summonNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_group_testNP.rel
+  splits: config/SOUE01/rels/d_t_group_testNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_group_testNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_harpNP.rel
+  splits: config/SOUE01/rels/d_t_harpNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_harpNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_heat_resistNP.rel
+  splits: config/SOUE01/rels/d_t_heat_resistNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_heat_resistNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_holy_waterNP.rel
+  splits: config/SOUE01/rels/d_t_holy_waterNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_holy_waterNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_insectNP.rel
+  splits: config/SOUE01/rels/d_t_insectNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_insectNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_ksNP.rel
+  splits: config/SOUE01/rels/d_t_ksNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_ksNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_kytagNP.rel
+  splits: config/SOUE01/rels/d_t_kytagNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_kytagNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_lb_thunderNP.rel
+  splits: config/SOUE01/rels/d_t_lb_thunderNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_lb_thunderNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_light_shaft_effNP.rel
+  splits: config/SOUE01/rels/d_t_light_shaft_effNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_light_shaft_effNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_map_instNP.rel
+  splits: config/SOUE01/rels/d_t_map_instNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_map_instNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_map_markNP.rel
+  splits: config/SOUE01/rels/d_t_map_markNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_map_markNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_megami_divingNP.rel
+  splits: config/SOUE01/rels/d_t_megami_divingNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_megami_divingNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_miechanNP.rel
+  splits: config/SOUE01/rels/d_t_miechanNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_miechanNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_minigame_insect_captureNP.rel
+  splits: config/SOUE01/rels/d_t_minigame_insect_captureNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_minigame_insect_captureNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_mistNP.rel
+  splits: config/SOUE01/rels/d_t_mistNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_mistNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_mole_mgrNP.rel
+  splits: config/SOUE01/rels/d_t_mole_mgrNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_mole_mgrNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_mole_prohibitNP.rel
+  splits: config/SOUE01/rels/d_t_mole_prohibitNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_mole_prohibitNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_musasabiNP.rel
+  splits: config/SOUE01/rels/d_t_musasabiNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_musasabiNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_musouNP.rel
+  splits: config/SOUE01/rels/d_t_musouNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_musouNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_noeffect_areaNP.rel
+  splits: config/SOUE01/rels/d_t_noeffect_areaNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_noeffect_areaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_player_restartNP.rel
+  splits: config/SOUE01/rels/d_t_player_restartNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_player_restartNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_plightNP.rel
+  splits: config/SOUE01/rels/d_t_plightNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_plightNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_pltchgNP.rel
+  splits: config/SOUE01/rels/d_t_pltchgNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_pltchgNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_pumpkin_clayNP.rel
+  splits: config/SOUE01/rels/d_t_pumpkin_clayNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_pumpkin_clayNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_reactionNP.rel
+  splits: config/SOUE01/rels/d_t_reactionNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_reactionNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_restart_time_stoneNP.rel
+  splits: config/SOUE01/rels/d_t_restart_time_stoneNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_restart_time_stoneNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_ride_rock_setNP.rel
+  splits: config/SOUE01/rels/d_t_ride_rock_setNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_ride_rock_setNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_ro_at_target_managerNP.rel
+  splits: config/SOUE01/rels/d_t_ro_at_target_managerNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_ro_at_target_managerNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_rock_boatNP.rel
+  splits: config/SOUE01/rels/d_t_rock_boatNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_rock_boatNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_roll_attack_logNP.rel
+  splits: config/SOUE01/rels/d_t_roll_attack_logNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_roll_attack_logNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_scene_changeNP.rel
+  splits: config/SOUE01/rels/d_t_scene_changeNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_scene_changeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_ship_floodNP.rel
+  splits: config/SOUE01/rels/d_t_ship_floodNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_ship_floodNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_ship_slopeNP.rel
+  splits: config/SOUE01/rels/d_t_ship_slopeNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_ship_slopeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_ship_windowNP.rel
+  splits: config/SOUE01/rels/d_t_ship_windowNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_ship_windowNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_shutter_fence_forbiddanceNP.rel
+  splits: config/SOUE01/rels/d_t_shutter_fence_forbiddanceNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_shutter_fence_forbiddanceNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_shutter_fence_permissionNP.rel
+  splits: config/SOUE01/rels/d_t_shutter_fence_permissionNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_shutter_fence_permissionNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_siren_time_attackNP.rel
+  splits: config/SOUE01/rels/d_t_siren_time_attackNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_siren_time_attackNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_skyEnemyNP.rel
+  splits: config/SOUE01/rels/d_t_skyEnemyNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_skyEnemyNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_sound_area_mgrNP.rel
+  splits: config/SOUE01/rels/d_t_sound_area_mgrNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_sound_area_mgrNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_sound_areaNP.rel
+  splits: config/SOUE01/rels/d_t_sound_areaNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_sound_areaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_soundNP.rel
+  splits: config/SOUE01/rels/d_t_soundNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_soundNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_sparks2NP.rel
+  splits: config/SOUE01/rels/d_t_sparks2NP/splits.txt
+  symbols: config/SOUE01/rels/d_t_sparks2NP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_sparksNP.rel
+  splits: config/SOUE01/rels/d_t_sparksNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_sparksNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_sporeNP.rel
+  splits: config/SOUE01/rels/d_t_sporeNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_sporeNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_streamNP.rel
+  splits: config/SOUE01/rels/d_t_streamNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_streamNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_sw_areaNP.rel
+  splits: config/SOUE01/rels/d_t_sw_areaNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_sw_areaNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_sword_battle_gameNP.rel
+  splits: config/SOUE01/rels/d_t_sword_battle_gameNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_sword_battle_gameNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_tackleNP.rel
+  splits: config/SOUE01/rels/d_t_tackleNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_tackleNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_telopNP.rel
+  splits: config/SOUE01/rels/d_t_telopNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_telopNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_time_area_checkNP.rel
+  splits: config/SOUE01/rels/d_t_time_area_checkNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_time_area_checkNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_time_door_beamNP.rel
+  splits: config/SOUE01/rels/d_t_time_door_beamNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_time_door_beamNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_timerNP.rel
+  splits: config/SOUE01/rels/d_t_timerNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_timerNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_touchNP.rel
+  splits: config/SOUE01/rels/d_t_touchNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_touchNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_t_tumble_weedNP.rel
+  splits: config/SOUE01/rels/d_t_tumble_weedNP/splits.txt
+  symbols: config/SOUE01/rels/d_t_tumble_weedNP/symbols.txt
+
+- object: orig/SOUE01/rels/d_title_managerNP.rel
