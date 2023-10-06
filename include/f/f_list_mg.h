@@ -2,11 +2,11 @@
 
 // This file was ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_list_mg.hpp 
 
-#include <types.h>
-#include <f/f_profile.h>
-#include <c/c_list.h>
-#include <f/f_base_id.h>
-#include <f/f_list_nd.h>
+#include "types.h"
+#include "f/f_profile.h"
+#include "c/c_list.h"
+#include "f/f_base_id.h"
+#include "f/f_list_nd.h"
 
 class fBase_c;
 

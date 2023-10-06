@@ -2,14 +2,14 @@
 
 // this file was ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_manager.hpp
 
-#include <f/f_base_id.h>
-#include <f/f_list_mg_ptmf.h>
-#include <f/f_list_mg.h>
-#include <f/f_list_nd.h>
-#include <f/f_list_nd_prio.h>
-#include <f/f_tree_mg_ptmf.h>
-#include <f/f_tree_nd.h>
-#include <f/f_profile.h>
+#include "f/f_base_id.h"
+#include "f/f_list_mg_ptmf.h"
+#include "f/f_list_mg.h"
+#include "f/f_list_nd.h"
+#include "f/f_list_nd_prio.h"
+#include "f/f_tree_mg_ptmf.h"
+#include "f/f_tree_nd.h"
+#include "f/f_profile.h"
 
 #define GET_PROC_FLAG(proc) (1 << (proc - 1))
 

@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include <d/a/npc/d_a_npc.h>
+#include "d/a/npc/d_a_npc.h"
 
 // Ghidra: AcOrdinaryNpc
 //   size:

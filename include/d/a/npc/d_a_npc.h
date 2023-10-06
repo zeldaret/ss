@@ -1,6 +1,6 @@
 #pragma once
 
-#include <d/a/obj/d_a_obj_base.h>
+#include "d/a/obj/d_a_obj_base.h"
 
 // This is the NPC base. Most npcs actually use dAcOrdinaryNpc, but this just is a simpler one?
 

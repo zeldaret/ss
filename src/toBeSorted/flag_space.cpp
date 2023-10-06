@@ -1,7 +1,7 @@
-#include <libc.h>
-#include <types.h>
-#include <toBeSorted/file_manager.h>
-#include <toBeSorted/flag_space.h>
+#include "libc.h"
+#include "types.h"
+#include "toBeSorted/file_manager.h"
+#include "toBeSorted/flag_space.h"
 
 u16* FlagSpace::getFlagPtrChecked() {
     filemanagerCheck();

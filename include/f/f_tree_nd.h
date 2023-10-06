@@ -2,9 +2,9 @@
 
 // This file was ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_tree_nd.hpp
 
-#include <types.h>
-#include <c/c_tree.h>
-#include <f/f_profile.h>
+#include "types.h"
+#include "c/c_tree.h"
+#include "f/f_profile.h"
 
 class fBase_c;
 

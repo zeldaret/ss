@@ -2,7 +2,7 @@
 
 // This file was ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/cLib/c_list.hpp
 
-#include <types.h>
+#include "types.h"
 
 /// @brief A doubly-linked list node. See cListMg_c.
 /// @note Unofficial name.

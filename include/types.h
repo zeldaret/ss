@@ -1,6 +1,6 @@
 #pragma once
 
-#include "lib/rvl/macros.h"
+#include "rvl/macros.h"
 
 #ifndef TYPES_H
 #define TYPES_H

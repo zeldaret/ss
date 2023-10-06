@@ -1,7 +1,7 @@
 #pragma once
 
-#include <types.h>
-#include <UnknownTypeBelongings.h>
+#include "types.h"
+#include "UnknownTypeBelongings.h"
 
 
 // Ghidra: SaveFile

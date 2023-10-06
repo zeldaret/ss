@@ -2,7 +2,7 @@
 
 // This file was ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/cLib/c_tree.hpp
 
-#include <types.h>
+#include "types.h"
 
 /// @brief A tree node. See cTreeMg_c.
 /// @details The tree is represented as a doubly-linked LCRS tree.

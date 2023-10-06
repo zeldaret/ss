@@ -2,8 +2,8 @@
 
 // This file was ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_list_nd.hpp
 
-#include <types.h>
-#include <c/c_list.h>
+#include "types.h"
+#include "c/c_list.h"
 
 class fBase_c;
 

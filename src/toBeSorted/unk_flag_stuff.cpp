@@ -1,6 +1,6 @@
 #pragma once
 
-#include <toBeSorted/unk_flag_stuff.h>
+#include "toBeSorted/unk_flag_stuff.h"
 
 u16 UnkFlagStuff::calculateMask(s32 shift) {
     return (2 << (shift & 0xF)) - 1;

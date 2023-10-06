@@ -1,7 +1,7 @@
 #pragma once
 
-#include <d/a/d_a_base.h>
-#include <m/types_m.h>
+#include "d/a/d_a_base.h"
+#include "m/types_m.h"
 
 // Ghidra: ActorObjectBase
 //   size: 0x330

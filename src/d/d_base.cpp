@@ -1,4 +1,4 @@
-#include <d/d_base.h>
+#include "d/d_base.h"
 
 // .sbss
 /* 805750c0 */ u32 dBase_c::s_ExecuteControlFlags;

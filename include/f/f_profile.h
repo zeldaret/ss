@@ -2,7 +2,7 @@
 
 // Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_profile.hpp
 
-#include <f/f_profile_name.h>
+#include "f/f_profile_name.h"
 
 
 /// @brief Creates a profile of a base with given values for execute and draw order.

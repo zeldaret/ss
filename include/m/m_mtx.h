@@ -2,9 +2,9 @@
 
 // NOTE:: Comments about functions pulled from NSMBW
 
-#include <types.h>
-#include <m/m_angle.h>
-#include <nw4r/nw4r_types.h>
+#include "types.h"
+#include "m/m_angle.h"
+#include "nw4r/nw4r_types.h"
 
 class mMtx_c
 {
