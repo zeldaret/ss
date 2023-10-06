@@ -122,7 +122,7 @@ if not is_windows():
 config.compilers_tag = "1"
 config.dtk_tag = "v0.5.5"
 config.sjiswrap_tag = "v1.1.1"
-config.wibo_tag = "0.5.1"
+config.wibo_tag = "0.6.3"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
@@ -248,6 +248,7 @@ config.libs = [
             Object(Matching, "toBeSorted/bitwise_flag_helper.cpp"),
             Object(Matching, "toBeSorted/sceneflag_manager.cpp"),
             Object(NonMatching, "toBeSorted/flag_space.cpp"), 
+            Object(NonMatching, "toBeSorted/misc_flag_managers.cpp"), 
             Object(Matching, "d/d_base.cpp"),
             Object(NonMatching, "d/a/d_a_base.cpp"),
             Object(NonMatching,"d/a/obj/d_a_obj_base.cpp"),

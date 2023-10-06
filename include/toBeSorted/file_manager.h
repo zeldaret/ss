@@ -11,9 +11,11 @@ struct FileManager {
     u16* getSceneflags2();
     u16* getTempflags2();
     u16* getZoneflags2();
+    u16* getTBoxFlags2();
     void setTempflags(u16*, u16, u16);
     void setZoneflags(u16*, u16, u16);
     void setSceneflags(u16*, u32, u16);
+    void setTBoxFlags(u16*, u32, u16);
     static FileManager* getInstance() {
         return sInstance;
     }
