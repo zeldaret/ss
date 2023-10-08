@@ -27,7 +27,7 @@ void FlagSpace::copyFromSaveFile(u16 *pSaved, u16 offset, u16 flagCount) {
 
 }
 void FlagSpace::filemanagerCheck() {
-    if (FileManager::sInstance->isFileUnk1[0]) {
+    if (FileManager::sInstance->mIsFileUnk1[0]) {
         return;
     }
     while (true) {}

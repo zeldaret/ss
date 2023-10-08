@@ -13,7 +13,7 @@ public:
     Vector3f(const Vector3f& other) {x = other.x, y = other.y, z = other.z;}
     // may need change
     f32 squaredLength() { return x*x + y*y + z*z; }
-    f32 length() { return Math<f32>::frsqrt(squaredLength()); }
+    f32 length() { return Math<f32>::sqrt(squaredLength()); }
     /* 8049bcc0 */ void normalise();
     /* 8049bd50 */ void setLength(Vector3f& src, f32 length);
     /* 8049be10 */ void setLength(f32 length);

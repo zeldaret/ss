@@ -32,7 +32,7 @@ class TBoxFlagManager: public CommittableFlagManager {
     // bool mNeedsCommit;
     // u32 pad;
     FlagSpace mFlagSpace;
-    u16 mSceneIndex;
+    s16 mSceneIndex;
     BitwiseFlagHelper mFlagHelper;
 
     static u16* sFlags;
@@ -67,13 +67,13 @@ void TBoxFlagManager::init() {}
 
 void TBoxFlagManager::copyFromSave(u16 sceneIndex) {
     mSceneIndex = sceneIndex;
-    u16* flags = FileManager::getInstance()->getTBoxFlags2();
-    mFlagSpace.copyFromSaveFile2(flags + sceneIndex * 2, 0, 2);
+    u16* flags = FileManager::getInstance()->getTBoxFlagsConst();
+    mFlagSpace.copyFromSaveFile2(flags + (sceneIndex * 2), 0, 2);
 }
 
 bool TBoxFlagManager::checkFlag(u16 sceneIndex, u16 flag) {
     s32 actualFlag = sceneIndex * 0x20 + flag;
-    return mFlagHelper.checkFlag(actualFlag % 16, actualFlag / 16, FileManager::getInstance()->getTBoxFlags2(), getFlagCount());
+    return mFlagHelper.checkFlag(actualFlag % 16, actualFlag / 16, FileManager::getInstance()->getTBoxFlagsConst(), getFlagCount());
 }
 
 s32 TBoxFlagManager::getFlagCount() const {

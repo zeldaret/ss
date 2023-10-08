@@ -3,6 +3,7 @@
 #include "types.h"
 
 #include "egg/math/eggMatrix.h"
+#include "egg/math/eggMath.h"
 #include "egg/math/eggVector.h"
 #include "egg/prim/eggBitFlag.h"
 #include "egg/prim/eggBuffer.h"

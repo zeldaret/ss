@@ -106,7 +106,7 @@ s32 SceneflagManager::isZoneFlag(u32 flag) {
 void SceneflagManager::updateFlagindex(u16 sceneIdx) {
     if (sceneIdx != mSceneIdx) {
         mSceneIdx = sceneIdx;
-        mSceneflags.copyFromSaveFile2(FileManager::sInstance->getSceneflags() + sceneIdx * 8, 0, 8);
+        mSceneflags.copyFromSaveFile2(FileManager::sInstance->getSceneFlagsConst() + sceneIdx * 8, 0, 8);
         unsetZoneAndTempflags();
     }
 }
@@ -115,25 +115,25 @@ void SceneflagManager::copyFromSave(u32 sceneIdx) {
     u16 sceneIdx2 = sceneIdx;
     // missing clrlwi, more inlines?
     mSceneIdx = sceneIdx2;
-    mSceneflags.copyFromSaveFile2(FileManager::getInstance()->getSceneflags() + sceneIdx2 * 8, 0, 8);
-    mTempflags.copyFromSaveFile(FileManager::getInstance()->getTempflags(), 0, mTempflags.mCount);
-    mZoneflags.copyFromSaveFile(FileManager::getInstance()->getZoneflags(), 0, mZoneflags.mCount);
+    mSceneflags.copyFromSaveFile2(FileManager::getInstance()->getSceneFlagsConst() + sceneIdx2 * 8, 0, 8);
+    mTempflags.copyFromSaveFile(FileManager::getInstance()->getTempFlagsConst(), 0, mTempflags.mCount);
+    mZoneflags.copyFromSaveFile(FileManager::getInstance()->getZoneFlagsConst(), 0, mZoneflags.mCount);
 }
 void SceneflagManager::unsetAllTempflags() {
     u16 flags[4];
     memset(flags, 0, sizeof(flags));
-    FileManager::sInstance->setTempflags(flags, 0, 4);
+    FileManager::sInstance->setTempFlags(flags, 0, 4);
 }
 void SceneflagManager::zoneflagsResetAll() {
     u16 flags[0xFC];
     memset(flags, 0, sizeof(flags));
-    FileManager::sInstance->setZoneflags(flags, 0, 0xFC);
+    FileManager::sInstance->setZoneFlags(flags, 0, 0xFC);
 }
 void SceneflagManager::zoneflagsResetForRoom(u16 roomId) {
     u16 flags[4];
     memset(flags, 0, sizeof(flags));
     // ? weird mask
-    FileManager::sInstance->setZoneflags(flags, (roomId & 0x3FF) * 4, 4);
+    FileManager::sInstance->setZoneFlags(flags, (roomId & 0x3FF) * 4, 4);
 }
 void SceneflagManager::unsetZoneAndTempflags() {
     unsetAllTempflags();
@@ -166,7 +166,7 @@ bool SceneflagManager::checkZoneFlag(u16 roomId, u16 flag) {
         return false;
     } else {
         u16 zoneflag = flag - 0xC0;
-        u16* pData = FileManager::sInstance->getZoneflags();
+        u16* pData = FileManager::sInstance->getZoneFlagsConst();
         u16 slot = getZoneflagSlot(roomId, zoneflag);
         return mFlagHelper.checkFlag(slot, zoneflag % 16, pData, 0xFC);
     }
@@ -211,13 +211,13 @@ bool SceneflagManager::checkFlag(u16 roomId, u16 flag) {
     }
 }
 bool SceneflagManager::checkSceneflagGlobal(u16 sceneIdx, u16 flag) {
-    u16* pData = FileManager::sInstance->getSceneflags();
+    u16* pData = FileManager::sInstance->getSceneFlagsConst();
     return mFlagHelper.checkFlag(getSceneflagSlotGlobal(sceneIdx, flag), flag % 16, pData, 0x800);
 }
 bool SceneflagManager::checkTempOrSceneflag(u16 flag) {
     if (flag >= 0x80) {
         u16 tempflag = flag - 0x80;
-        const u16* pData = FileManager::sInstance->getTempflags();
+        const u16* pData = FileManager::sInstance->getTempFlagsConst();
         u16 slot = getTempflagSlot(tempflag);
         return mFlagHelper.checkFlag(slot, tempflag % 16, pData, 4);
     } else {
@@ -250,10 +250,10 @@ void SceneflagManager::setFlag(u16 roomId, u16 flag) {
 }
 void SceneflagManager::setSceneflagGlobal(u16 sceneIdx, u16 flag) {
     u16 slot = getSceneflagSlotGlobal(sceneIdx, flag);
-    u16* pData = FileManager::sInstance->getSceneflags();
+    u16* pData = FileManager::sInstance->getSceneFlagsConst();
     u16 pCurData = pData[slot];
     mFlagHelper.setFlag(0, flag % 16, &pCurData, 2);
-    FileManager::sInstance->setSceneflags(&pCurData, slot, 1);
+    FileManager::sInstance->setSceneFlags(&pCurData, slot, 1);
     if (sceneIdx == mSceneIdx) {
         u16* pData2 = mSceneflags.getFlagPtrChecked();
         mFlagHelper.setFlag(getSceneflagSlot(flag), flag % 16, pData2, mSceneflags.mCount);
@@ -293,10 +293,10 @@ void SceneflagManager::unsetFlag(u16 roomId, u16 flag) {
 }
 void SceneflagManager::unsetSceneflagGlobal(u16 sceneIdx, u16 flag) {
     u16 slot = getSceneflagSlotGlobal(sceneIdx, flag);
-    u16* pData = FileManager::sInstance->getSceneflags();
+    u16* pData = FileManager::sInstance->getSceneFlagsConst();
     u16 pCurData = pData[slot];
     mFlagHelper.unsetFlag(0, flag % 16, &pCurData, 2);
-    FileManager::sInstance->setSceneflags(&pCurData, slot, 1);
+    FileManager::sInstance->setSceneFlags(&pCurData, slot, 1);
     if (sceneIdx == mSceneIdx) {
         u16* pData2 = mSceneflags.getFlagPtrChecked();
         mFlagHelper.unsetFlag(getSceneflagSlot(flag), flag % 16, pData2, mSceneflags.mCount);
@@ -321,9 +321,9 @@ s32 SceneflagManager::doCommit() {
     if (mSceneIdx == 0xFFFF) {
         return 0;
     } else if (mShouldCommit) {
-        FileManager::getInstance()->setSceneflags(mSceneflags.getFlagPtrUnchecked(), mSceneIdx * 8, 8);
-        FileManager::getInstance()->setTempflags(mTempflags.getFlagPtrUnchecked(), 0, mTempflags.mCount);
-        FileManager::getInstance()->setZoneflags(mZoneflags.getFlagPtrUnchecked(), 0, mZoneflags.mCount);
+        FileManager::getInstance()->setSceneFlags(mSceneflags.getFlagPtrUnchecked(), mSceneIdx * 8, 8);
+        FileManager::getInstance()->setTempFlags(mTempflags.getFlagPtrUnchecked(), 0, mTempflags.mCount);
+        FileManager::getInstance()->setZoneFlags(mZoneflags.getFlagPtrUnchecked(), 0, mZoneflags.mCount);
         mShouldCommit = false;
         return 1;
     } 
