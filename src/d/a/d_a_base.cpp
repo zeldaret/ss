@@ -158,15 +158,29 @@ int dAcBase_c::create() {
 
 void dAcBase_c::postCreate(fBase_c::MAIN_STATE_e state) {
     if (state == SUCCESS) {
-        pos_copy = position; 
-        copyRotation(); 
+        pos_copy = position;
+        rot_copy = rotation; 
         room_id_copy = roomid;
     }
     dBase_c::postCreate(state);
 }
 
-int dAcBase_c::preDelete() {}
-int dAcBase_c::preExecute() {}
+int dAcBase_c::preDelete() {
+
+}
+
+int dAcBase_c::preExecute() {
+    if (dBase_c::preExecute() == NOT_READY) {
+        return NOT_READY;
+    }
+    if (actor_properties & 0x10000000) {
+        if (actor_properties & 0x40000000) {
+            return NOT_READY;
+        }
+        // TODO: Add event control
+    }
+    return SUCCEEDED;
+}
 int dAcBase_c::execute() {}
 int dAcBase_c::actorExecute() {}
 int dAcBase_c::actorExecuteInEvent() {}

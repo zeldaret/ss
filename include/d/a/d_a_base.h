@@ -86,7 +86,9 @@ public:
     }
 
     void copyPosition() {
-        pos_copy = position;
+        pos_copy.x = position.x;
+        pos_copy.y = position.y;
+        pos_copy.z = position.z;
     }
     void copyRotation() {
         rot_copy = rotation;

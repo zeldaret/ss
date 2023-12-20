@@ -2,26 +2,24 @@
 
 #include "types.h"
 #include "rvl/MTX.h"
-#include "nw4r/math/vec.h"
+#include "egg/math/eggVector.h"
 
-class mVec3_c {
+class mVec3_c : public EGG::Vector3f {
     public:
-    f32 x;
-    f32 y;
-    f32 z;
 
     /// @brief Constructs an empty vector.
     mVec3_c() {}
 
     /// @brief Constructs a vector from a float array.
     mVec3_c(const f32 *p) { x = p[0]; y = p[1]; z = p[2]; }
-
+    mVec3_c(const mVec3_c& other) {x = other.x; y = other.y; z = other.z;}
 
     /// @brief Constructs a vector from three floating point values.
     mVec3_c(f32 fx, f32 fy, f32 fz) { x = fx; y = fy; z = fz; }
     
     void set(f32 fx, f32 fy, f32 fz) { x = fx; y = fy; z = fz; }
-    mVec3_c& operator=(mVec3_c& r) { x = r.x; y = r.y; z = r.z; return *this;}
+    mVec3_c& operator=(const mVec3_c& r) { x = r.x; y =  r.y; z = r.z; return *this;}
+
 
     /// @brief Constructs a new vector from an existing vector from the MTX library.
     mVec3_c(const Vec &v) { x = v.x; y = v.y; z = v.z; }
