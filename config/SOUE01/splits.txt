@@ -34,6 +34,10 @@ d/a/obj/d_a_obj_base.cpp:
 	.text       start:0x8002DE40 end:0x8002F300
 	.data       start:0x805015B8 end:0x80501638
 
+d/a/e/d_a_e_base.cpp:
+	.text       start:0x8002F300 end:0x80030CB0
+	.ctors      start:0x804DB664 end:0x804DB668
+
 d/d_base.cpp:
 	.text       start:0x80050800 end:0x80050A14
 	.data       start:0x80503380 end:0x805033D0
@@ -59,6 +63,11 @@ toBeSorted/bitwise_flag_helper.cpp:
 
 rvl/CX/cx.c:
 	.text       start:0x803CEE90 end:0x803D0B20
+
+nw4r/db/db_directPrint.cpp:
+	.text       start:0x804342A0 end:0x80434EA0
+	.sbss       start:0x805765E8 end:0x805765F0
+	.bss        start:0x80636B80 end:0x80636BA4
 
 egg/core/eggArchive.cpp:
 	.text       start:0x80493510 end:0x80494254
