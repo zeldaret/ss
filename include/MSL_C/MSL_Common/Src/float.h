@@ -1,7 +1,7 @@
 #ifndef MSL_COMMON_SRC_FLOAT_H
 #define MSL_COMMON_SRC_FLOAT_H
 
-#include "fdlibm.h"
+#include "MSL_C/MSL_Common/Src/fdlibm.h"
 
 #define FP_SNAN 0
 #define FP_QNAN 1
