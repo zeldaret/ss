@@ -120,9 +120,9 @@ if not is_windows():
 
 # Tool versions
 config.compilers_tag = "1"
-config.dtk_tag = "v0.5.6"
+config.dtk_tag = "v0.6.2"
 config.sjiswrap_tag = "v1.1.1"
-config.wibo_tag = "0.6.3"
+config.wibo_tag = "0.6.9"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
@@ -181,6 +181,19 @@ cflags_framework = [
     "-inline noauto",
 ]
 
+# EGG flags
+cflags_egg = [
+    *cflags_base,
+    "-inline noauto",
+    "-fp_contract off",
+]
+
+# nw4r flags
+cflags_nw4r = [
+    *cflags_base,
+    "-inline auto",
+]
+
 # REL flags
 cflags_rel = [
     *cflags_framework,
@@ -195,7 +208,7 @@ def Rel(status, rel_name, cpp_name, extra_cflags=[]):
         "lib": rel_name,
         "mw_version": "Wii/1.7",
         "cflags": cflags_rel + extra_cflags,
-        "host": True,
+        "host": False,
         "objects": [
             Object(status, cpp_name),
         ],
@@ -207,7 +220,7 @@ def DolphinLib(lib_name, objects):
     return {
         "lib": lib_name,
         "mw_version": "GC/1.2.5n",
-        "cflags": cflags_dolphin, # TODO check
+        "cflags": cflags_dolphin,
         "host": False,
         "objects": objects,
     }
@@ -216,7 +229,7 @@ def EGGLib(lib_name, objects):
     return {
         "lib": lib_name,
         "mw_version": "Wii/1.7",
-        "cflags": cflags_base, # TODO check
+        "cflags": cflags_egg,
         "host": False,
         "objects": objects,
     }
@@ -225,7 +238,7 @@ def nw4rLib(lib_name, objects):
     return {
         "lib": lib_name,
         "mw_version": "Wii/1.7",
-        "cflags": cflags_base, # TODO check
+        "cflags": cflags_nw4r,
         "host": False,
         "objects": objects,
     }
@@ -273,7 +286,16 @@ config.libs = [
     #     "host": False,
     #     "objects": [ ],
     # },
-    ## EGG
+
+    #NW4R
+    nw4rLib(
+        "db",
+        [
+            Object(NonMatching, "nw4r/db/db_directPrint.cpp"),
+        ]
+    ),
+
+    # EGG
     EGGLib(
         "core",
         [
@@ -306,8 +328,7 @@ config.libs = [
             Object(NonMatching, "egg/math/eggMath.cpp"),
             Object(NonMatching, "egg/math/eggMatrix.cpp"),
             Object(NonMatching, "egg/math/eggQuat.cpp"),
-            Object(NonMatching, "egg/math/eggVector.cpp"),
-            Object(NonMatching, "egg/prim/eggAssert.cpp"),
+            Object(   Matching, "egg/math/eggVector.cpp"),
         ]
     ),
     EGGLib(
