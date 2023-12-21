@@ -11,3 +11,4 @@ objdiff.json
 /tools/objdiff.exe
 .vscode/c_cpp_properties.json
 tools/dtk
+ctx.c

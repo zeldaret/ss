@@ -191,7 +191,7 @@ cflags_egg = [
 # nw4r flags
 cflags_nw4r = [
     *cflags_base,
-    "-inline auto",
+    "-inline deferred",
 ]
 
 # REL flags
