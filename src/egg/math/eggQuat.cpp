@@ -212,23 +212,19 @@ void Quatf::limitSlerpTo(const Quatf &q2, f32 t, f32 t2, Quatf &out) const {
 
 /* 8049bbb0 */
 void Quatf::makeVectorRotation(Vector3f &from, Vector3f &to) {
-    // f32 dot = from.dot(to);
-
     Vector3f cross = from.cross(to);
+    f32 t0 = (from.dot(to) + 1) * 2.0f;
 
-    f32 t0 = (from.dot(to) + 1.0f) * 2.0f;
-
-    f32 v = t0;
-    if (v <= 0.0f) {
-        v = 0.0f;
+    if (t0 < 0.0f) {
+        t0 = 0.0f;
     }
-    t0 = Math<f32>::sqrt(v);
+    const f32 s = Math<f32>::sqrt(t0);
 
-    if (t0 <= Math<f32>::epsilon()) {
+    if (s <= Math<f32>::epsilon()) {
         setUnit();
     } else {
-        f32 inv = Math<f32>::inv(t0);
-        set(t0 * 0.5f, cross.x * inv, cross.y * inv, cross.z * inv);
+        const f32 inv = 1.0f / s;
+        set(s * 0.5f, cross.x * inv, cross.y * inv, cross.z * inv);
     }
 }
 

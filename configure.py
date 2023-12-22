@@ -120,7 +120,7 @@ if not is_windows():
 
 # Tool versions
 config.compilers_tag = "1"
-config.dtk_tag = "v0.6.2"
+config.dtk_tag = "v0.6.5"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.9"
 
@@ -143,7 +143,7 @@ cflags_base = [
     "-enum int",
     "-fp hardware",
     "-Cpp_exceptions off",
-    # "-W all",
+    "-W all",
     "-inline auto",
     "-maxerrors 1",
     "-nosyspath",

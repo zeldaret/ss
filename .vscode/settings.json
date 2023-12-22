@@ -1,6 +1,31 @@
 {
-    "clangd.fallbackFlags": [
-        "-I${workspaceFolder}/include",
-        "-I${workspaceFolder}/include/lib",
-    ]
+    "[c]": {
+        "files.encoding": "utf8",
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "[cpp]": {
+        "files.encoding": "utf8",
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "search.useIgnoreFiles": false,
+    "search.exclude": {
+        "build/*/config.json": true,
+        "build/**/*.MAP": true,
+        "build.ninja": true,
+        ".ninja_*": true,
+        "objdiff.json": true
+    },
+    "files.associations": {
+        "*.inc": "cpp",
+        "xutility": "cpp",
+        "type_traits": "cpp",
+        "xtr1common": "cpp",
+        "limits": "cpp",
+        "utility": "cpp"
+    }
 }

@@ -9,8 +9,7 @@ namespace EGG {
 struct Matrix34f {
     Matrix34f() {}
     /* 8049acd0 */
-    Matrix34f(f32 xx, f32 xy, f32 xz, f32 xw, f32 yx, f32 yy, f32 yz, f32 yw, f32 zx, f32 zy,
-            f32 zz, f32 zw);
+    Matrix34f(f32 xx, f32 xy, f32 xz, f32 xw, f32 yx, f32 yy, f32 yz, f32 yw, f32 zx, f32 zy, f32 zz, f32 zw);
 
     //////////////////////////////////////////////////////////////////////////////
     f32 operator()(int i, int j) const {
@@ -26,6 +25,8 @@ struct Matrix34f {
         return arr[i];
     }
 
+    /*          */ void rotateBaseX(Vector3f &, Matrix34f &);
+    /*          */ void rotateVectorChange(Vector3f &, Vector3f &, Matrix34f &);
     /* 8049ac70 */ void inverseTo(Matrix34f &to) const;
     /* 8049ac80 */ void inverseTransposeTo(Matrix34f &to) const;
     /* 8049ac90 */ void makeIdentity();
@@ -41,7 +42,7 @@ struct Matrix34f {
     /*          */ void makeT(const Vector3f &t);
     /* 8049ae90 */ void fromQuat(const Quatf &q);
     /* 8049af40 */ void toQuat(Quatf &q) const;
-    /* 8049b250 */ void slerpTo(const Matrix34f &, Matrix34f &, f32) const;
+    /* 8049b250 */ void slerpTo(const Matrix34f &, Matrix34f &, f32);
     /*          */ void copyTo16(f32 *pf) const;
     /* 8049b2d0 */ void setAxisRotation(const Vector3f &, f32);
     /*          */ Vector3f multVector(const Vector3f &vec) const;

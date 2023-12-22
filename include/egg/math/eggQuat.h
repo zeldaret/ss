@@ -9,7 +9,7 @@ struct Quatf : Vector3f {
     Quatf() {}
     Quatf(f32 f, Vector3f v) : w(f), Vector3f(v) {}
 
-    // ~Quatf() {}
+    ~Quatf() {}
 
     friend Quatf operator*(const Quatf &q, const Vector3f &vec) {
         Vector3f crossed = q.cross(vec);
@@ -46,13 +46,10 @@ struct Quatf : Vector3f {
     /* 8049bbb0 */ void makeVectorRotation(Vector3f &, Vector3f &);
 
     f32 dot(const Quatf &q) const {
-        return q.Vector3f::dot(q) + w * q.w;
-    }
-    f32 squaredLength() const {
-        return w * w + x * x + y * y + z * z;
+        return w * w + q.x * q.x + q.y * q.y + q.z * q.z;
     }
     f32 length() const {
-        return Math<f32>::sqrt(squaredLength());
+        return Math<f32>::sqrt(dot(*this));
     }
     void multScalar(f32 s) {
         w *= s;

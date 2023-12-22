@@ -24,7 +24,7 @@ BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: False
 BreakStringLiterals: True
-ColumnLimit: 100
+ColumnLimit: 120
 ContinuationIndentWidth: 8
 IncludeBlocks: Preserve
 IndentAccessModifiers: False

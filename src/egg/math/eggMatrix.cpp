@@ -1,5 +1,3 @@
-#pragma once
-
 #include <egg/math/eggMatrix.h>
 #include <rvl/GX.h>
 #include <rvl/MTX.h>
@@ -21,8 +19,7 @@ void Matrix34f::makeIdentity() {
     m[0][0] = 1.0f;
 } // namespace EGG
 
-Matrix34f::Matrix34f(f32 xx, f32 xy, f32 xz, f32 xw, f32 yx, f32 yy, f32 yz, f32 yw, f32 zx, f32 zy,
-        f32 zz, f32 zw) {
+Matrix34f::Matrix34f(f32 xx, f32 xy, f32 xz, f32 xw, f32 yx, f32 yy, f32 yz, f32 yw, f32 zx, f32 zy, f32 zz, f32 zw) {
     m[0][0] = xx;
     m[0][1] = xy;
     m[0][2] = xz;
@@ -242,17 +239,17 @@ void Matrix34f::makeT(const Vector3f &t) {
 }
 
 void Matrix34f::fromQuat(const Quatf &q) {
-    m[0][0] = (1.0f - 2.0f * q.y * q.y - 2.0f * q.z * q.z);
+    m[0][0] = 1.0f - (2.0f * q.y * q.y) - (2.0f * q.z * q.z);
     m[0][1] = (2.0f * q.x * q.y) - (2.0f * q.w * q.z);
     m[0][2] = (2.0f * q.x * q.z) + (2.0f * q.w * q.y);
 
     m[1][0] = (2.0f * q.x * q.y) + (2.0f * q.w * q.z);
-    m[1][1] = (1.0f - 2.0f * q.x * q.x) - (2.0f * q.z * q.z);
+    m[1][1] = 1.0f - (2.0f * q.x * q.x) - (2.0f * q.z * q.z);
     m[1][2] = (2.0f * q.y * q.z) - (2.0f * q.w * q.x);
 
     m[2][0] = (2.0f * q.x * q.z) - (2.0f * q.w * q.y);
     m[2][1] = (2.0f * q.y * q.z) + (2.0f * q.w * q.x);
-    m[2][2] = (1.0f - 2.0f * q.x * q.x) - (2.0f * q.y * q.y);
+    m[2][2] = 1.0f - (2.0f * q.x * q.x) - (2.0f * q.y * q.y);
 
     m[2][3] = 0.0f;
     m[1][3] = 0.0f;
@@ -335,7 +332,7 @@ void Matrix34f::toQuat(Quatf &q) const {
     q.multScalar(Math<f32>::inv(q.length()));
 }
 
-void Matrix34f::slerpTo(const Matrix34f &m2, Matrix34f &out, f32 t) const {
+void Matrix34f::slerpTo(const Matrix34f &m2, Matrix34f &out, f32 t) {
     Quatf q1, q2, q3;
     m2.toQuat(q1);
     toQuat(q2);
@@ -365,7 +362,6 @@ void Matrix34f::multiplyTo(const Matrix34f &m2, Matrix34f &to) const {
 
 void Matrix34f::dump() {}
 
-const Matrix34f Matrix34f::ident(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
-        0.0f);
+const Matrix34f Matrix34f::ident(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
 } // namespace EGG

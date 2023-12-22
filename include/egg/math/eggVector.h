@@ -83,12 +83,11 @@ struct Vector3f : public nw4r::math::VEC3 {
         return x * v.x + y * v.y + z * v.z;
     }
     Vector3f cross(const Vector3f &b) const { // cross__Q23EGG8Vector3fCFRCQ23EGG8Vector3f
-        Vector3f v;
+
         f32 _x = (y * b.z) - (z * b.y);
         f32 _y = (z * b.x) - (x * b.z);
         f32 _z = (x * b.y) - (y * b.x);
-        v.set(_x, _y, _z);
-        return v;
+        return Vector3f(_x, _y, _z);
     }
     f32 squaredLength() const {
         return (x * x + y * y + z * z);
