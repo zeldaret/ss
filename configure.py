@@ -131,27 +131,31 @@ config.linker_version = "Wii/1.7"
 config.ldflags = [
     "-fp hardware",
     "-nodefaults",
+    # "-listclosure", # Uncomment for Wii linkers
 ]
 
 # Base flags, common to most GC/Wii games.
 # Generally leave untouched, with overrides added below.
 cflags_base = [
-    "-O4,p",
     "-nodefaults",
     "-proc gekko",
     "-align powerpc",
     "-enum int",
     "-fp hardware",
     "-Cpp_exceptions off",
-    "-W all",
+    # "-W all",
+    "-O4,p",
     "-inline auto",
+    '-pragma "cats off"',
+    '-pragma "warn_notinlined off"',
     "-maxerrors 1",
     "-nosyspath",
     "-RTTI off",
     "-fp_contract on",
     "-str reuse",
-    # "-multibyte",
+    "-enc SJIS",
     "-i include",
+    f"-i build/{config.version}/include",
     f"-DVERSION={version_num}",
 ]
 if config.debug:
@@ -164,7 +168,9 @@ cflags_runtime = [
     *cflags_base,
     "-use_lmw_stmw on",
     "-str reuse,pool,readonly",
-    "-inline deferred,auto",
+    "-gccinc",
+    "-common off",
+	"-inline auto",
 ]
 
 # Dolphin library flags
