@@ -48,9 +48,9 @@ namespace detail {
 /* inlined  */ void DirectPrint_DrawStringToXfb(int posh, int posv, const char *format, __va_list_struct *args,
         bool turnover, bool backErase);
 
-/*          */ void WaitVIRetrace_();
+/* local    */ void WaitVIRetrace_();
 
-/*          */ void *CreateFB_(const _GXRenderModeObj *rmode);
+/* local    */ void *CreateFB_(const _GXRenderModeObj *rmode);
 /* 80434cb0 */ void *DirectPrint_SetupFB(const _GXRenderModeObj *rmode);
 
 } // namespace detail

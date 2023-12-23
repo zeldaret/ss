@@ -3,6 +3,20 @@
 #include <MSL_C/string.h>
 #include <nw4r/db/db_directPrint.h>
 #include <rvl/OS.h>
+#include <rvl/VI.h>
+
+/*
+
+NOTE: This file does not match fully yet, Inlining + function ordering needs to still be addressed
+
+Nonmatching functions:
+DrawStringLineToXfb_ https://decomp.me/scratch/uqeZ6
+
+This worked for SS: as seen in egg stuff ive worked on, not sure if it works for others ¯\_(ツ)_/¯
+- Especially with inlines. DWARF provides info of local vars and maps provide calls to functions,
+  but outside of that I made some guesses.
+
+*/
 
 namespace nw4r {
 namespace db {
@@ -29,7 +43,7 @@ static const u32 sFontData[64] = {
     0xF2EF8808, 0x82288888, 0x82288888, 0x81C89C70, 0x8A08A270, 0x920DA288, 0xA20AB288, 0xC20AAA88,
     0xA208A688, 0x9208A288, 0x8BE8A270, 0xF1CF1CF8, 0x8A28A220, 0x8A28A020, 0xF22F1C20, 0x82AA0220,
     0x82492220, 0x81A89C20, 0x8A28A288, 0x8A28A288, 0x8A289488, 0x8A2A8850, 0x894A9420, 0x894AA220,
-    0x70852220, 0xF8011000, 0x08020800, 0x10840400, 0x20040470, 0x40840400, 0x80020800, 0xF8011000,
+    0x70852220, 0xF8011000, 0x08020800, 0x10840400, 0x20040470, 0x40840400, 0x00000000, 0xF8011000,
     0x70800000, 0x88822200, 0x08820400, 0x108F8800, 0x20821000, 0x00022200, 0x20800020, 0x00000000,
 };
 
@@ -41,7 +55,7 @@ static const u32 sFontData2[77] = {
     0x100FBE1C, 0x10089008, 0x60070808, 0x00000000, 0x02000200, 0x7A078270, 0x8BC81E88, 0x8A2822F8,
     0x9A282280, 0x6BC79E78, 0x30000000, 0x48080810, 0x41E80000, 0x422F1830, 0xFBE88810, 0x40288890,
     0x43C89C60, 0x81000000, 0x81000000, 0x990F3C70, 0xA10AA288, 0xE10AA288, 0xA10AA288, 0x98CAA270,
-    0x00000000, 0x00000020, 0xF1EF1E20, 0x8A28A0F8, 0x8A281C20, 0xF1E80220, 0x80283C38, 0x00000000,
+    0x00000000, 0x00000020, 0xF1EF1E20, 0x8A28A0F8, 0x8A281C20, 0xF1E80220, 0x00000000, 0x00000000,
     0x00000000, 0x8A28B688, 0x8A2A8888, 0x8A2A8878, 0x894A8808, 0x788536F0, 0x00000000, 0x00000000,
     0xF8000000, 0x10000000, 0x20000000, 0x40000000, 0xF8000000,
 };
@@ -79,8 +93,9 @@ void DirectPrint_EraseXfb(int posh, int posv, int sizeh, int sizev) {
         sizeh *= 2;
     }
     int endPosH = posh + sizeh;
-    posh = MAX(posh, 0);
-    endPosH = MIN(endPosH, sFrameBufferInfo.frameWidth);
+    // The MIN/MAX Defines do not work due to the need for the = sign.
+    posh = posh >= 0 ? posh : 0;
+    endPosH = (endPosH <= sFrameBufferInfo.frameWidth ? endPosH : sFrameBufferInfo.frameWidth);
     sizeh = endPosH - posh;
 
     if (GetDotHeight_() == 2) {
@@ -88,8 +103,8 @@ void DirectPrint_EraseXfb(int posh, int posv, int sizeh, int sizev) {
         sizev *= 2;
     }
     int endPosV = posv + sizev;
-    posv = MAX(posv, 0);
-    endPosV = MIN(endPosV, sFrameBufferInfo.frameHeight);
+    posv = posv >= 0 ? posv : 0;
+    endPosV = (endPosV <= sFrameBufferInfo.frameHeight ? endPosV : sFrameBufferInfo.frameHeight);
     sizev = endPosV - posv;
 
     u16 *pixel = ((u16 *)sFrameBufferInfo.frameMemory) + sFrameBufferInfo.frameRow * posv + posh;
@@ -237,15 +252,19 @@ void DrawCharToXfb_(int posh, int posv, int code) {
 }
 
 const char *DrawStringLineToXfb_(int posh, int posv, const char *str, int width) {
-    // char c, int code, int cnt, int tab_sizes
+    // Vars from DWARF info
     char c;
-    for (int cnt = 0; *str != '\0'; c = *++str) {
+    int code, cnt, tab_size;
+
+    cnt = 0;
+    while (*str != '\0') {
+        c = *str;
         if (c == '\n' || c == '\0') {
             return str;
         }
-        int code = sAsciiTable[c & 0x7f];
+        code = sAsciiTable[c & 0x7f];
         if (code == 0xfd) {
-            int tab_size = 4 - (cnt & 3);
+            tab_size = 4 - (cnt & 3);
             cnt += tab_size;
             posh += tab_size * 6;
         } else {
@@ -255,12 +274,11 @@ const char *DrawStringLineToXfb_(int posh, int posv, const char *str, int width)
             posh += 6;
             cnt++;
         }
-        if (cnt < width) {
-            break;
+        if (cnt >= width && str[1] == '\n') {
+            str++;
+            return str;
         }
-        if (str[1] == '\n') {
-            return str++;
-        }
+        str++;
     }
     return str;
 }
@@ -309,12 +327,62 @@ void detail::DirectPrint_DrawStringToXfb(int posh, int posv, const char *format,
     }
 }
 
-void detail::WaitVIRetrace_() {}
+void detail::WaitVIRetrace_() {
+    // Vars from dwarf info
+    int enabled = OSEnableInterrupts();
+    u32 preCnt = VIGetRetraceCount();
+    do {
+    } while (preCnt == VIGetRetraceCount());
+    OSRestoreInterrupts(enabled);
+}
 
-void *detail::CreateFB_(const _GXRenderModeObj *rmode) {}
+void *detail::CreateFB_(const _GXRenderModeObj *rmode) {
+    // Vars from dwarf info
+    u32 arenaHi, memSize, frameBuf;
+    arenaHi = (u32)OSGetArenaHi();
+    memSize = (rmode->fbWidth + 15 & 0xFFF0) * rmode->xfbHeight * 2;
+    frameBuf = (arenaHi - memSize) & 0xFFFFFFE0;
+    VIConfigure(rmode);
+    return (void *)frameBuf;
+}
 
 void *detail::DirectPrint_SetupFB(const _GXRenderModeObj *rmode) {
+    // Vars from dwarf info
+    void *frameMemory;
+
     DirectPrint_Init();
+    frameMemory = VIGetCurrentFrameBuffer();
+    if (!frameMemory) {
+        if (!rmode) {
+            switch ((u32)VIGetTvFormat()) {
+            case 0:
+                rmode = &GXNtsc480IntDf;
+                break;
+            case 1:
+                rmode = &GXPal528IntDf;
+                break;
+            case 5:
+                rmode = &GXEurgb60Hz480IntDf;
+                break;
+            case 2:
+                rmode = &GXMpal480IntDf;
+                break;
+            default:
+                break;
+            }
+        }
+        frameMemory = CreateFB_(rmode);
+        VISetNextFrameBuffer((void *)frameMemory);
+    }
+    VISetBlack(FALSE);
+    VIFlush();
+    WaitVIRetrace_();
+    if (rmode) {
+        DirectPrint_ChangeXfb(frameMemory, rmode->fbWidth, rmode->xfbHeight);
+    } else {
+        DirectPrint_ChangeXfb(frameMemory);
+    }
+    return frameMemory;
 }
 
 } // namespace db

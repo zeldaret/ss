@@ -1,6 +1,6 @@
 #pragma once
-#define MAX(x, y) ((x) >= (y) ? (x) : (y))
-#define MIN(x, y) ((x) <= (y) ? (x) : (y))
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
+#define MIN(x, y) ((x) < (y) ? (x) : (y))
 
 #define CLAMP(low, high, x) ((x) > (high) ? (high) : ((x) < (low) ? (low) : (x)))
 

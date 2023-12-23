@@ -25,6 +25,11 @@ void GXSetCopyFilter(u8, const u8[12][2], u8, const u8[7]);
 void GXSetCopyClear(GXColor, u32 zClear);
 void GXSetDispCopySrc(u16 left, u16 top, u16 width, u16 height);
 
+extern GXRenderModeObj GXNtsc480IntDf;
+extern GXRenderModeObj GXMpal480IntDf;
+extern GXRenderModeObj GXPal528IntDf;
+extern GXRenderModeObj GXEurgb60Hz480IntDf;
+
 #ifdef __cplusplus
 }
 #endif
