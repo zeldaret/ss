@@ -1,11 +1,10 @@
 #pragma once
 
 #include "egg/core/eggFile.h"
-#include "nw4r/ut/List.h"
+#include "nw4r/ut.h"
 #include "rvl/DVD.h"
 #include "rvl/OS.h"
 #include <common.h>
-
 
 namespace EGG {
 

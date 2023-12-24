@@ -2,9 +2,8 @@
 
 #include "egg/core/eggFader.h"
 #include "egg/prim/eggBitFlag.h"
-#include "nw4r/ut/Color.h"
+#include "nw4r/ut.h"
 #include <common.h>
-
 
 namespace EGG {
 

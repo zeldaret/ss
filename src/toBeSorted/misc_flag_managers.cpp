@@ -1,11 +1,12 @@
-#include <types.h>
-#include <toBeSorted/flag_space.h>
-#include <toBeSorted/file_manager.h>
-#include <toBeSorted/bitwise_flag_helper.h>
+#include <common.h>
 #include <libc.h>
+#include <toBeSorted/bitwise_flag_helper.h>
+#include <toBeSorted/file_manager.h>
+#include <toBeSorted/flag_space.h>
+
 
 class CommittableFlagManager {
-    public:
+public:
     bool mNeedsCommit;
 
     virtual void doCommit() = 0;
@@ -31,16 +32,17 @@ bool CommittableFlagManager::commitIfNecessary() {
     }
 }
 
-class TBoxFlagManager: public CommittableFlagManager {
-// class TBoxFlagManager {
+class TBoxFlagManager : public CommittableFlagManager {
+    // class TBoxFlagManager {
     // bool mNeedsCommit;
     // u32 pad;
     FlagSpace mFlagSpace;
     u16 mSceneIndex;
     BitwiseFlagHelper mFlagHelper;
 
-    static u16* sFlags;
-    public:
+    static u16 *sFlags;
+
+public:
     virtual void doCommit() override;
     bool checkUncommittedFlag(u16 flag);
     TBoxFlagManager();
@@ -66,7 +68,7 @@ bool TBoxFlagManager::checkUncommittedFlag(u16 flag) {
     return mFlagHelper.checkFlag(flag / 16, flag % 16, mFlagSpace.getFlagPtrUnchecked(), mFlagSpace.mCount);
 }
 
-TBoxFlagManager::TBoxFlagManager(): CommittableFlagManager(false), mFlagSpace(sFlags, 2) {
+TBoxFlagManager::TBoxFlagManager() : CommittableFlagManager(false), mFlagSpace(sFlags, 2) {
     mSceneIndex = 0xFFFF;
 }
 
@@ -75,13 +77,14 @@ void TBoxFlagManager::init() {}
 void TBoxFlagManager::copyFromSave(u16 sceneIndex) {
     // mr should be a clrlwi
     mSceneIndex = sceneIndex;
-    u16* flags = FileManager::getInstance()->getTBoxFlagsConst();
+    u16 *flags = FileManager::getInstance()->getTBoxFlagsConst();
     mFlagSpace.copyFromSaveFile2(flags + (sceneIndex * 2), 0, 2);
 }
 
 bool TBoxFlagManager::checkFlag(u16 sceneIndex, u16 flag) {
     s32 actualFlag = (flag + sceneIndex * 0x20);
-    return mFlagHelper.checkFlag(actualFlag / 16, flag % 16, FileManager::getInstance()->getTBoxFlagsConst(), getFlagCount());
+    return mFlagHelper.checkFlag(actualFlag / 16, flag % 16, FileManager::getInstance()->getTBoxFlagsConst(),
+            getFlagCount());
 }
 
 u16 TBoxFlagManager::getFlagCount() const {
@@ -101,7 +104,7 @@ public:
     BitwiseFlagHelper mFlagHelper;
     u16 mSceneIndex;
 
-    static u16* sFlags;
+    static u16 *sFlags;
 
     void clearSavedFlags();
     bool checkUncommittedFlag(u16 flag);
@@ -128,16 +131,13 @@ void EnemyDefeatManager::clearSavedFlags() {
 
 bool EnemyDefeatManager::checkUncommittedFlag(u16 flag) {
     if (checkIsValidFlag(flag)) {
-
-    return mFlagHelper.checkFlag(flag / 16, flag % 16, mFlagSpace.getFlagPtrUnchecked(), mFlagSpace.mCount);
+        return mFlagHelper.checkFlag(flag / 16, flag % 16, mFlagSpace.getFlagPtrUnchecked(), mFlagSpace.mCount);
     } else {
         return false;
     }
 }
 
-EnemyDefeatManager::EnemyDefeatManager(): CommittableFlagManager(false), mFlagSpace(sFlags, 12 /* later */) {
-
-}
+EnemyDefeatManager::EnemyDefeatManager() : CommittableFlagManager(false), mFlagSpace(sFlags, 12 /* later */) {}
 
 void EnemyDefeatManager::init() {
     mSceneIndex = 0;
@@ -147,7 +147,7 @@ void EnemyDefeatManager::init() {
 void EnemyDefeatManager::copyFromSave(u16 sceneIndex) {
     mSceneIndex = sceneIndex;
     u16 count = mFlagSpace.mCount;
-    u16* flags = FileManager::getInstance()->getEnemyDefeatFlagsConst();
+    u16 *flags = FileManager::getInstance()->getEnemyDefeatFlagsConst();
     mFlagSpace.copyFromSaveFile(flags, 0, count);
 }
 
@@ -172,7 +172,7 @@ bool EnemyDefeatManager::checkFlag(u16 flag) {
     if (!checkIsValidFlag(flag)) {
         return false;
     } else {
-        u16* pData = FileManager::getInstance()->getEnemyDefeatFlagsConst();
+        u16 *pData = FileManager::getInstance()->getEnemyDefeatFlagsConst();
         return mFlagHelper.checkFlag(flag / 16, flag % 16, pData, getFlagCount());
     }
 }

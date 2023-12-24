@@ -3,8 +3,8 @@
 
 #include "MSL_C/MSL_Common/Src/float.h"
 
-#define NAN (*(float*)__float_nan)
-#define HUGE_VALF (*(float*)__float_huge)
+#define NAN (*(float *)__float_nan)
+#define HUGE_VALF (*(float *)__float_huge)
 
 #define M_PI 3.14159265358979323846f
 
@@ -25,6 +25,21 @@ double copysign(double, double);
 double cos(double);
 float cosf(float);
 double exp(double);
+double ceil(double);
+float ceilf(float);
+double frexp(double, int *);
+double ldexp(double, int);
+double modf(double, double *);
+double pow(double, double);
+double sin(double);
+float sinf(float);
+double tan(double);
+float tanf(float);
+double floor(double);
+float floorf(float);
+double fmod(double, double);
+float fmodf(float, float);
+float fmodff(float, float *);
 
 extern float __fabsf(float);
 inline double fabs(double f) {
@@ -37,21 +52,19 @@ inline float fabsf(float f) {
     return fabsf2(f);
 }
 
-double floor(double);
-double fmod(double, double);
 inline float fmodf(float f1, float f2) {
     return fmod(f1, f2);
 }
 
-double frexp(double, int*);
-double ldexp(double, int);
-double modf(double, double*);
-double pow(double, double);
-double sin(double);
-float sinf(float);
-double tan(double);
-float tanf(float);
+inline float modff(float x, float *iptr) {
+    float frac;
+    double intg;
 
+    frac = modf((double)x, &intg);
+    *iptr = intg;
+
+    return frac;
+}
 inline double sqrt_step(double tmpd, float mag) {
     return tmpd * 0.5 * (3.0 - mag * (tmpd * tmpd));
 }
@@ -61,10 +74,10 @@ extern inline float sqrtf(float x) {
     const double _three = 3.0;
     volatile float y;
     if (x > 0.0f) {
-        double guess = __frsqrte((double)x);                   // returns an approximation to
-        guess = _half * guess * (_three - guess * guess * x);  // now have 12 sig bits
-        guess = _half * guess * (_three - guess * guess * x);  // now have 24 sig bits
-        guess = _half * guess * (_three - guess * guess * x);  // now have 32 sig bits
+        double guess = __frsqrte((double)x);                  // returns an approximation to
+        guess = _half * guess * (_three - guess * guess * x); // now have 12 sig bits
+        guess = _half * guess * (_three - guess * guess * x); // now have 24 sig bits
+        guess = _half * guess * (_three - guess * guess * x); // now have 32 sig bits
         y = (float)(x * guess);
         return y;
     }
@@ -72,19 +85,18 @@ extern inline float sqrtf(float x) {
 }
 
 extern inline double sqrt(double x) {
-    if(x > 0.0)
-    {
-        double guess = __frsqrte(x);                   /* returns an approximation to    */
-        guess = .5*guess*(3.0 - guess*guess*x);      /* now have 8 sig bits            */
-        guess = .5*guess*(3.0 - guess*guess*x);      /* now have 16 sig bits            */
-        guess = .5*guess*(3.0 - guess*guess*x);      /* now have 32 sig bits            */
-        guess = .5*guess*(3.0 - guess*guess*x);      /* now have > 53 sig bits        */
-        return x*guess ;
-    }
-    else if ( x == 0 )
+    if (x > 0.0) {
+        double guess = __frsqrte(x);                    /* returns an approximation to    */
+        guess = .5 * guess * (3.0 - guess * guess * x); /* now have 8 sig bits            */
+        guess = .5 * guess * (3.0 - guess * guess * x); /* now have 16 sig bits            */
+        guess = .5 * guess * (3.0 - guess * guess * x); /* now have 32 sig bits            */
+        guess = .5 * guess * (3.0 - guess * guess * x); /* now have > 53 sig bits        */
+        return x * guess;
+    } else if (x == 0) {
         return 0;
-    else if ( x )
+    } else if (x) {
         return NAN;
+    }
 
     return HUGE_VALF;
 }

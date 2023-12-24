@@ -1,23 +1,36 @@
-#pragma once
-
-#include "nw4r/nw4r_types.h"
+#ifndef NW4R_SND_SOUND_SYSTEM_H
+#define NW4R_SND_SOUND_SYSTEM_H
+#include "types_nw4r.h"
+#include "snd_AxManager.h"
 
 namespace nw4r
 {
-namespace snd
-{
-        
-class SoundSystem  {
-public:
-    struct SoundSystemParam {
-        int soundThreadPriority;
-        int soundThreadStackSize;
-        int dvdThreadPriority;
-        int dvdThreadStackSize;
-    };
-};
+	namespace snd
+	{
+        struct SoundSystem
+        {
+            struct SoundSystemParam
+            {
 
-} // namespace snd
-    
-} // namespace nw4r
+            };
 
+            static inline f32 GetMasterVolume()
+            {
+                return detail::AxManager::GetInstance().GetMasterVolume();
+            }
+
+            static inline void PrepareReset()
+            {
+                detail::AxManager::GetInstance().PrepareReset();
+            }
+
+            void InitSoundSystem(s32, s32);
+            void InitSoundSystem(const SoundSystemParam&, void *, u32);
+            static void ShutdownSoundSystem();
+            static void WaitForResetReady();
+            UNKWORD GetRequiredMemSize(const SoundSystemParam &);
+        };
+	}
+}
+
+#endif

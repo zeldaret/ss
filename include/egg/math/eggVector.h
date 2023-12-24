@@ -2,8 +2,9 @@
 
 #include "MSL_C/float.h"
 #include "egg/math/eggMath.h"
-#include "nw4r/math/vec.h"
 #include <common.h>
+#include <nw4r/math.h>
+
 
 namespace EGG {
 

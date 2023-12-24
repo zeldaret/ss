@@ -1,6 +1,6 @@
 #include <c/c_math.h>
 #include <m/m_math.h>
-#include <nw4r/math/arithmetic.h>
+#include <nw4r/math.h>
 
 void mMtx_c::toRot(mAng3_c &out) const {
     f32 t1 = 0.0f;

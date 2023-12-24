@@ -6,11 +6,10 @@
 #include "egg/core/eggDisposer.h"
 #include "egg/core/eggThread.h"
 #include "egg/prim/eggBitFlag.h"
-#include "nw4r/ut/List.h"
+#include "nw4r/ut.h"
 #include "rvl/MEM.h"
 #include "rvl/OS.h"
 #include <common.h>
-
 
 namespace EGG {
 

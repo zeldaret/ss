@@ -3,7 +3,7 @@
 #include "egg/core/eggSystem.h" // for BaseSystem config
 #include "egg/core/eggVideo.h"
 #include "egg/prim/eggBitFlag.h"
-#include "nw4r/ut/Color.h"
+#include "nw4r/ut.h"
 #include "rvl/VI.h"
 #include <common.h>
 

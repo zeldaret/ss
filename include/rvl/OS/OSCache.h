@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#define OS_CACHE_BASE 0xE0000000
 // Forward declarations
 typedef struct OSContext;
 

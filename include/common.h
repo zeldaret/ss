@@ -42,6 +42,8 @@
 #define CW_FORCE_STRINGS(module, ...)
 #endif
 
+#include <decomp.h>
+
 // For VSCode
 #ifdef __INTELLISENSE__
 #define asm
