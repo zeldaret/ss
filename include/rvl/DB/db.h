@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_DB_H
 #define RVL_SDK_DB_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -12,7 +12,7 @@ void DBInit(void);
 void __DBExceptionDestinationAux(void);
 void __DBExceptionDestination(void);
 BOOL __DBIsExceptionMarked(u8 exc);
-void DBPrintf(const char* msg, ...);
+void DBPrintf(const char *msg, ...);
 
 #ifdef __cplusplus
 }

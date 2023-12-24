@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_OS_RTC_H
 #define RVL_SDK_OS_RTC_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -31,15 +31,15 @@ typedef struct OSSramEx {
 } OSSramEx;
 
 void __OSInitSram(void);
-OSSramEx* __OSLockSramEx(void);
+OSSramEx *__OSLockSramEx(void);
 BOOL __OSUnlockSramEx(BOOL save);
 BOOL __OSSyncSram(void);
-BOOL __OSReadROM(void* dst, s32 size, const void* src);
+BOOL __OSReadROM(void *dst, s32 size, const void *src);
 u16 OSGetWirelessID(s32 pad);
 void OSSetWirelessID(s32 pad, u16 id);
 u16 OSGetGbsMode(void);
 void OSSetGbsMode(u16 gbs);
-BOOL __OSGetRTCFlags(u32* out);
+BOOL __OSGetRTCFlags(u32 *out);
 BOOL __OSClearRTCFlags(void);
 
 #ifdef __cplusplus

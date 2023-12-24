@@ -1,12 +1,12 @@
 #ifndef RVL_SDK_OS_IPC_H
 #define RVL_SDK_OS_IPC_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void* __OSGetIPCBufferHi(void);
-void* __OSGetIPCBufferLo(void);
+void *__OSGetIPCBufferHi(void);
+void *__OSGetIPCBufferLo(void);
 void __OSInitIPCBuffer(void);
 
 #ifdef __cplusplus

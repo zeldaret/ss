@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_DVD_H
 #define RVL_SDK_DVD_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -21,16 +21,16 @@ typedef struct DVDDriveInfo {
     char padding[32 - 0x8];
 } DVDDriveInfo;
 
-typedef void (*DVDInquiryCallback)(s32, DVDDriveBlock*);
+typedef void (*DVDInquiryCallback)(s32, DVDDriveBlock *);
 
 void DVDInit(void);
 
-BOOL DVDInquiryAsync(DVDDriveBlock*, DVDDriveInfo*, DVDInquiryCallback);
+BOOL DVDInquiryAsync(DVDDriveBlock *, DVDDriveInfo *, DVDInquiryCallback);
 
 u32 __DVDGetCoverStatus(void);
 
 void __DVDPrepareReset(void);
-BOOL __DVDTestAlarm(struct OSAlarm*);
+BOOL __DVDTestAlarm(struct OSAlarm *);
 
 #ifdef __cplusplus
 }

@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_EXI_HARDWARE_H
 #define RVL_SDK_EXI_HARDWARE_H
 #include "rvl/EXI/EXICommon.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -12,7 +12,7 @@ extern "C" {
  */
 typedef struct ExiChannelControl {
     u32 csr;       // at 0x0
-    void* dmaAddr; // at 0x4
+    void *dmaAddr; // at 0x4
     u32 dmaLen;    // at 0x8
     u32 cr;        // at 0xC
     u32 imm;       // at 0x10

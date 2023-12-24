@@ -1,13 +1,14 @@
-#include "libc.h"
-#include "types.h"
-#include "toBeSorted/file_manager.h"
 #include "toBeSorted/flag_space.h"
+#include "libc.h"
+#include "toBeSorted/file_manager.h"
+#include <common.h>
 
-u16* FlagSpace::getFlagPtrChecked() {
+
+u16 *FlagSpace::getFlagPtrChecked() {
     filemanagerCheck();
     return mpFlags;
 }
-u16* FlagSpace::getFlagPtrUnchecked() {
+u16 *FlagSpace::getFlagPtrUnchecked() {
     return mpFlags;
 }
 void FlagSpace::unsetAll() {
@@ -24,7 +25,6 @@ void FlagSpace::copyFromSaveFile2(u16 *pSaved, u16 offset, u16 flagCount) {
 
 void FlagSpace::copyFromSaveFile(u16 *pSaved, u16 offset, u16 flagCount) {
     checkedMemcpy(mpFlags + offset, mCount * 2, pSaved, flagCount * 2);
-
 }
 void FlagSpace::filemanagerCheck() {
     if (FileManager::sInstance->mIsFileUnk1[0]) {

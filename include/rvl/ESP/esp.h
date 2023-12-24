@@ -2,7 +2,7 @@
 #define RVL_SDK_ESP_H
 #include "rvl/ARC.h"
 #include "rvl/IPC.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -25,7 +25,7 @@ typedef struct ESPTmd {
     char padding[0x4A00 - 0x49E4];
 } ESPTmd;
 
-s32 ESP_ReadContentFile(UNKWORD, void*, u32);
+s32 ESP_ReadContentFile(UNKWORD, void *, u32);
 s32 ESP_SeekContentFile(UNKWORD, s32, UNKWORD);
 
 #ifdef __cplusplus

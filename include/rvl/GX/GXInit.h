@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_GX_INIT_H
 #define RVL_SDK_GX_INIT_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -75,7 +75,7 @@ typedef struct _GXData {
     u32 gxDirtyFlags; // at 0x5FC
 } GXData;
 
-extern GXData* const __GXData;
+extern GXData *const __GXData;
 
 // I hate typing this name out
 #define gxdt __GXData

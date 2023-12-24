@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_GX_HARDWARE_XF_H
 #define RVL_SDK_GX_HARDWARE_XF_H
 #include "rvl/GX/GXTypes.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -326,7 +326,6 @@ typedef enum {
 #define GX_XF_DUALTEX_NORMALIZE_MASK (((1 << 1) - 1) << 31 - 23)
 #define GX_XF_GET_DUALTEX_NORMALIZE(reg) GX_BITGET(reg, 23, 1)
 #define GX_XF_SET_DUALTEX_NORMALIZE(reg, x) ((reg) = GX_BITSET(reg, 23, 1, x))
-
 
 #ifdef __cplusplus
 }

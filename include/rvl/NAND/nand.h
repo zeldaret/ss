@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_NAND_H
 #define RVL_SDK_NAND_H
 #include "rvl/FS.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -42,12 +42,7 @@ typedef enum {
     NAND_SEEK_END,
 } NANDSeekMode;
 
-typedef enum {
-    NAND_ACCESS_NONE,
-    NAND_ACCESS_READ,
-    NAND_ACCESS_WRITE,
-    NAND_ACCESS_RW
-} NANDAccessType;
+typedef enum { NAND_ACCESS_NONE, NAND_ACCESS_READ, NAND_ACCESS_WRITE, NAND_ACCESS_RW } NANDAccessType;
 
 typedef enum {
     NAND_FILE_TYPE_NONE,
@@ -71,7 +66,7 @@ typedef enum {
     NAND_PERM_RWALL = NAND_PERM_RALL | NAND_PERM_WALL
 } NANDPermission;
 
-typedef void (*NANDAsyncCallback)(s32 result, struct NANDCommandBlock* block);
+typedef void (*NANDAsyncCallback)(s32 result, struct NANDCommandBlock *block);
 
 typedef struct NANDStatus {
     u32 ownerId; // at 0x0
@@ -91,12 +86,12 @@ typedef struct NANDFileInfo {
 } NANDFileInfo;
 
 typedef struct NANDCommandBlock {
-    void* userData;             // at 0x0
+    void *userData;             // at 0x0
     NANDAsyncCallback callback; // at 0x4
-    NANDFileInfo* info;         // at 0x8
-    void* bytes;                // at 0xC
-    void* inodes;               // at 0x10
-    NANDStatus* status;         // at 0x14
+    NANDFileInfo *info;         // at 0x8
+    void *bytes;                // at 0xC
+    void *inodes;               // at 0x10
+    NANDStatus *status;         // at 0x14
     u32 ownerId;                // at 0x18
     u16 groupId;                // at 0x1C
     u8 nextStage;               // at 0x1E
@@ -106,23 +101,23 @@ typedef struct NANDCommandBlock {
     u32 otherPerm;              // at 0x2C
     u32 dirFileCount;           // at 0x30
     char path[FS_MAX_PATH];     // at 0x34
-    u32* length;                // at 0x74
-    u32* position;              // at 0x78
+    u32 *length;                // at 0x74
+    u32 *position;              // at 0x78
     s32 state;                  // at 0x7C
-    void* buffer;               // at 0x80
+    void *buffer;               // at 0x80
     u32 bufferSize;             // at 0x84
-    u8* type;                   // at 0x88
+    u8 *type;                   // at 0x88
     u32 uniqueNo;               // at 0x8C
     u32 reqBlocks;              // at 0x90
     u32 reqInodes;              // at 0x94
-    u32* answer;                // at 0x98
+    u32 *answer;                // at 0x98
     u32 homeBlocks;             // at 0x9C
     u32 homeInodes;             // at 0xA0
     u32 userBlocks;             // at 0xA4
     u32 userInodes;             // at 0xA8
     u32 workBlocks;             // at 0xAC
     u32 workInodes;             // at 0xB0
-    const char** dir;           // at 0xB4
+    const char **dir;           // at 0xB4
 } NANDCommandBlock;
 
 typedef struct NANDBanner {
@@ -136,48 +131,41 @@ typedef struct NANDBanner {
     u8 iconTexture[0x1200][NAND_BANNER_ICON_MAX_FRAME]; // at 0x60A0
 } NANDBanner;
 
-NANDResult NANDCreate(const char* path, u8 perm, u8 attr);
-NANDResult NANDPrivateCreate(const char* path, u8 perm, u8 attr);
-NANDResult NANDPrivateCreateAsync(const char* path, u8 perm, u8 attr,
-                                  NANDAsyncCallback callback,
-                                  NANDCommandBlock* block);
+NANDResult NANDCreate(const char *path, u8 perm, u8 attr);
+NANDResult NANDPrivateCreate(const char *path, u8 perm, u8 attr);
+NANDResult NANDPrivateCreateAsync(const char *path, u8 perm, u8 attr, NANDAsyncCallback callback,
+        NANDCommandBlock *block);
 
-NANDResult NANDDelete(const char* path);
-NANDResult NANDPrivateDelete(const char* path);
-NANDResult NANDPrivateDeleteAsync(const char* path, NANDAsyncCallback callback,
-                                  NANDCommandBlock* block);
+NANDResult NANDDelete(const char *path);
+NANDResult NANDPrivateDelete(const char *path);
+NANDResult NANDPrivateDeleteAsync(const char *path, NANDAsyncCallback callback, NANDCommandBlock *block);
 
-NANDResult NANDRead(NANDFileInfo* info, void* buf, u32 len);
-NANDResult NANDReadAsync(NANDFileInfo* info, void* buf, u32 len,
-                         NANDAsyncCallback callback, NANDCommandBlock* block);
+NANDResult NANDRead(NANDFileInfo *info, void *buf, u32 len);
+NANDResult NANDReadAsync(NANDFileInfo *info, void *buf, u32 len, NANDAsyncCallback callback, NANDCommandBlock *block);
 
-NANDResult NANDWrite(NANDFileInfo* info, const void* buf, u32 len);
-NANDResult NANDWriteAsync(NANDFileInfo* info, const void* buf, u32 len,
-                          NANDAsyncCallback callback, NANDCommandBlock* block);
+NANDResult NANDWrite(NANDFileInfo *info, const void *buf, u32 len);
+NANDResult NANDWriteAsync(NANDFileInfo *info, const void *buf, u32 len, NANDAsyncCallback callback,
+        NANDCommandBlock *block);
 
-NANDResult NANDSeek(NANDFileInfo* info, s32 offset, NANDSeekMode whence);
-NANDResult NANDSeekAsync(NANDFileInfo* info, s32 offset, NANDSeekMode whence,
-                         NANDAsyncCallback callback, NANDCommandBlock* block);
+NANDResult NANDSeek(NANDFileInfo *info, s32 offset, NANDSeekMode whence);
+NANDResult NANDSeekAsync(NANDFileInfo *info, s32 offset, NANDSeekMode whence, NANDAsyncCallback callback,
+        NANDCommandBlock *block);
 
-NANDResult NANDPrivateCreateDir(const char* path, u8 perm, u8 attr);
-NANDResult NANDPrivateCreateDirAsync(const char* path, u8 perm, u8 attr,
-                                     NANDAsyncCallback callback,
-                                     NANDCommandBlock* block);
+NANDResult NANDPrivateCreateDir(const char *path, u8 perm, u8 attr);
+NANDResult NANDPrivateCreateDirAsync(const char *path, u8 perm, u8 attr, NANDAsyncCallback callback,
+        NANDCommandBlock *block);
 
-NANDResult NANDMove(const char* from, const char* to);
+NANDResult NANDMove(const char *from, const char *to);
 
-NANDResult NANDGetLength(NANDFileInfo* info, u32* length);
-NANDResult NANDGetLengthAsync(NANDFileInfo* info, u32* lengthOut,
-                              NANDAsyncCallback callback,
-                              NANDCommandBlock* block);
+NANDResult NANDGetLength(NANDFileInfo *info, u32 *length);
+NANDResult NANDGetLengthAsync(NANDFileInfo *info, u32 *lengthOut, NANDAsyncCallback callback, NANDCommandBlock *block);
 
-NANDResult NANDGetStatus(const char* path, NANDStatus* status);
-NANDResult NANDPrivateGetStatusAsync(const char* path, NANDStatus* status,
-                                     NANDAsyncCallback callback,
-                                     NANDCommandBlock* block);
+NANDResult NANDGetStatus(const char *path, NANDStatus *status);
+NANDResult NANDPrivateGetStatusAsync(const char *path, NANDStatus *status, NANDAsyncCallback callback,
+        NANDCommandBlock *block);
 
-void NANDSetUserData(NANDCommandBlock* block, void* data);
-void* NANDGetUserData(NANDCommandBlock* block);
+void NANDSetUserData(NANDCommandBlock *block, void *data);
+void *NANDGetUserData(NANDCommandBlock *block);
 
 #ifdef __cplusplus
 }

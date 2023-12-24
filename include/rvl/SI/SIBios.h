@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_SI_SIBIOS_H
 #define RVL_SDK_SI_SIBIOS_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -61,6 +61,10 @@ toBeSorted/unk_flag_stuff.cpp:
 toBeSorted/bitwise_flag_helper.cpp:
 	.text       start:0x800BF200 end:0x800BF264
 
+m/m_mtx.cpp:
+	.text       start:0x802F1660 end:0x802F1F20
+	.ctors      start:0x804DB8D4 end:0x804DB8D8
+
 rvl/CX/cx.c:
 	.text       start:0x803CEE90 end:0x803D0B20
 

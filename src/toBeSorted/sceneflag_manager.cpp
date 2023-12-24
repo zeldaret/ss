@@ -1,13 +1,12 @@
-#include "types.h"
 #include "libc.h"
+#include <common.h>
 
-#include "rvl/macros.h"
-#include "toBeSorted/flag_space.h"
-#include "toBeSorted/file_manager.h"
 #include "toBeSorted/bitwise_flag_helper.h"
+#include "toBeSorted/file_manager.h"
+#include "toBeSorted/flag_space.h"
 
 class SceneflagManager {
-    public:
+public:
     FlagSpace mSceneflags;
     FlagSpace mTempflags;
     FlagSpace mZoneflags;
@@ -18,8 +17,8 @@ class SceneflagManager {
     static u16 sTempFlags[4];
     static u16 sSceneFlags[8];
     static u16 sZoneFlags[0xFC];
-// public:
-    static SceneflagManager* sInstance;
+    // public:
+    static SceneflagManager *sInstance;
     void doNothing();
     void setShouldCommit(u16 flag);
     SceneflagManager();
@@ -70,14 +69,12 @@ void SceneflagManager::doNothing() {}
 void SceneflagManager::setShouldCommit(u16 flag) {
     mShouldCommit = 1;
 }
-SceneflagManager::SceneflagManager():
-    mSceneflags(sSceneFlags, ARRAY_LENGTH(sSceneFlags)),
-    mTempflags(sTempFlags, ARRAY_LENGTH(sTempFlags)),
-    mZoneflags(sZoneFlags, ARRAY_LENGTH(sZoneFlags))
-    {
-        mSceneIdx = 0xFFFF;
-        mShouldCommit = 0; 
-    }
+SceneflagManager::SceneflagManager()
+    : mSceneflags(sSceneFlags, ARRAY_LENGTH(sSceneFlags)), mTempflags(sTempFlags, ARRAY_LENGTH(sTempFlags)),
+      mZoneflags(sZoneFlags, ARRAY_LENGTH(sZoneFlags)) {
+    mSceneIdx = 0xFFFF;
+    mShouldCommit = 0;
+}
 // SceneflagManager::SceneflagManager()
 //     {
 //         mSceneflags.init(sSceneFlags, ARRAY_LENGTH(sSceneFlags));
@@ -166,7 +163,7 @@ bool SceneflagManager::checkZoneFlag(u16 roomId, u16 flag) {
         return false;
     } else {
         u16 zoneflag = flag - 0xC0;
-        u16* pData = FileManager::sInstance->getZoneFlagsConst();
+        u16 *pData = FileManager::sInstance->getZoneFlagsConst();
         u16 slot = getZoneflagSlot(roomId, zoneflag);
         return mFlagHelper.checkFlag(slot, zoneflag % 16, pData, 0xFC);
     }
@@ -175,22 +172,22 @@ bool SceneflagManager::checkUncommittedZoneflag(u16 roomId, u16 flag) {
     if (flag == 0xFF) {
         return false;
     } else {
-        u16* pData;
+        u16 *pData;
         u16 zoneflag = flag - 0xC0;
         pData = mZoneflags.getFlagPtrUnchecked();
         u16 slot = getZoneflagSlot(roomId, zoneflag);
         return mFlagHelper.checkFlag(slot, zoneflag % 16, pData, mZoneflags.mCount);
     }
 }
-inline bool checkSceneflag(SceneflagManager* mgr, u16 flag) {
-        u16* pData;
-        pData = mgr->mSceneflags.getFlagPtrUnchecked();
-        // u16 slot = getSceneflagSlot2(flag);
-        return mgr->mFlagHelper.checkFlag(mgr->getSceneflagSlot(flag), flag % 16, pData, mgr->mSceneflags.mCount);
+inline bool checkSceneflag(SceneflagManager *mgr, u16 flag) {
+    u16 *pData;
+    pData = mgr->mSceneflags.getFlagPtrUnchecked();
+    // u16 slot = getSceneflagSlot2(flag);
+    return mgr->mFlagHelper.checkFlag(mgr->getSceneflagSlot(flag), flag % 16, pData, mgr->mSceneflags.mCount);
 }
 bool SceneflagManager::checkUncommittedTempOrSceneflag(u16 flag) {
     if (flag >= 0x80) {
-        u16* pData;
+        u16 *pData;
         u16 tempflag = flag - 0x80;
         pData = mTempflags.getFlagPtrUnchecked();
         u16 slot = getTempflagSlot(tempflag);
@@ -211,13 +208,13 @@ bool SceneflagManager::checkFlag(u16 roomId, u16 flag) {
     }
 }
 bool SceneflagManager::checkSceneflagGlobal(u16 sceneIdx, u16 flag) {
-    u16* pData = FileManager::sInstance->getSceneFlagsConst();
+    u16 *pData = FileManager::sInstance->getSceneFlagsConst();
     return mFlagHelper.checkFlag(getSceneflagSlotGlobal(sceneIdx, flag), flag % 16, pData, 0x800);
 }
 bool SceneflagManager::checkTempOrSceneflag(u16 flag) {
     if (flag >= 0x80) {
         u16 tempflag = flag - 0x80;
-        const u16* pData = FileManager::sInstance->getTempFlagsConst();
+        const u16 *pData = FileManager::sInstance->getTempFlagsConst();
         u16 slot = getTempflagSlot(tempflag);
         return mFlagHelper.checkFlag(slot, tempflag % 16, pData, 4);
     } else {
@@ -233,7 +230,7 @@ bool SceneflagManager::checkUncommittedFlag(u16 roomId, u16 flag) {
 }
 void SceneflagManager::setZoneflag(u16 roomId, u16 flag) {
     if (checkUncommittedZoneflag2(roomId, flag) != 1 && flag != 0xFF) {
-        u16* pData;
+        u16 *pData;
         u16 zoneflag = flag - 0xC0;
         pData = mZoneflags.getFlagPtrChecked();
         u16 slot = getZoneflagSlot(roomId, zoneflag);
@@ -250,19 +247,19 @@ void SceneflagManager::setFlag(u16 roomId, u16 flag) {
 }
 void SceneflagManager::setSceneflagGlobal(u16 sceneIdx, u16 flag) {
     u16 slot = getSceneflagSlotGlobal(sceneIdx, flag);
-    u16* pData = FileManager::sInstance->getSceneFlagsConst();
+    u16 *pData = FileManager::sInstance->getSceneFlagsConst();
     u16 pCurData = pData[slot];
     mFlagHelper.setFlag(0, flag % 16, &pCurData, 2);
     FileManager::sInstance->setSceneFlags(&pCurData, slot, 1);
     if (sceneIdx == mSceneIdx) {
-        u16* pData2 = mSceneflags.getFlagPtrChecked();
+        u16 *pData2 = mSceneflags.getFlagPtrChecked();
         mFlagHelper.setFlag(getSceneflagSlot(flag), flag % 16, pData2, mSceneflags.mCount);
     }
     setShouldCommit(flag);
 }
 void SceneflagManager::setTempOrSceneflag(u16 flag) {
     if (checkUncommittedTempOrSceneflag2(flag) != 1) {
-        u16* pData;
+        u16 *pData;
         if (flag >= 0x80) {
             u16 tempflag = flag - 0x80;
             pData = mTempflags.getFlagPtrChecked();
@@ -276,7 +273,7 @@ void SceneflagManager::setTempOrSceneflag(u16 flag) {
 }
 void SceneflagManager::unsetZoneflag(u16 roomId, u16 flag) {
     if (checkUncommittedZoneflag2(roomId, flag) != 0 && flag != 0xFF) {
-        u16* pData;
+        u16 *pData;
         u16 zoneflag = flag - 0xC0;
         pData = mZoneflags.getFlagPtrChecked();
         u16 slot = getZoneflagSlot(roomId, zoneflag);
@@ -293,19 +290,19 @@ void SceneflagManager::unsetFlag(u16 roomId, u16 flag) {
 }
 void SceneflagManager::unsetSceneflagGlobal(u16 sceneIdx, u16 flag) {
     u16 slot = getSceneflagSlotGlobal(sceneIdx, flag);
-    u16* pData = FileManager::sInstance->getSceneFlagsConst();
+    u16 *pData = FileManager::sInstance->getSceneFlagsConst();
     u16 pCurData = pData[slot];
     mFlagHelper.unsetFlag(0, flag % 16, &pCurData, 2);
     FileManager::sInstance->setSceneFlags(&pCurData, slot, 1);
     if (sceneIdx == mSceneIdx) {
-        u16* pData2 = mSceneflags.getFlagPtrChecked();
+        u16 *pData2 = mSceneflags.getFlagPtrChecked();
         mFlagHelper.unsetFlag(getSceneflagSlot(flag), flag % 16, pData2, mSceneflags.mCount);
     }
     setShouldCommit(flag);
 }
 void SceneflagManager::unsetTempOrSceneflag(u16 flag) {
     if (checkUncommittedTempOrSceneflag2(flag) != 0) {
-        u16* pData;
+        u16 *pData;
         if (flag >= 0x80) {
             u16 tempflag = flag - 0x80;
             pData = mTempflags.getFlagPtrChecked();
@@ -326,6 +323,6 @@ s32 SceneflagManager::doCommit() {
         FileManager::getInstance()->setZoneFlags(mZoneflags.getFlagPtrUnchecked(), 0, mZoneflags.mCount);
         mShouldCommit = false;
         return 1;
-    } 
+    }
     return 0;
 }

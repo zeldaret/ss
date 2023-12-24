@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_OS_INTERRUPT_H
 #define RVL_SDK_OS_INTERRUPT_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -48,7 +48,7 @@ typedef enum {
     OS_INTR_MAX
 } OSInterruptType;
 
-typedef void (*OSInterruptHandler)(s16 intr, struct OSContext* ctx);
+typedef void (*OSInterruptHandler)(s16 intr, struct OSContext *ctx);
 
 extern u32 __OSLastInterruptSrr0;
 extern s16 __OSLastInterrupt;
@@ -58,15 +58,14 @@ BOOL OSDisableInterrupts(void);
 BOOL OSEnableInterrupts(void);
 BOOL OSRestoreInterrupts(BOOL status);
 
-OSInterruptHandler __OSSetInterruptHandler(OSInterruptType type,
-                                           OSInterruptHandler handler);
+OSInterruptHandler __OSSetInterruptHandler(OSInterruptType type, OSInterruptHandler handler);
 OSInterruptHandler __OSGetInterruptHandler(OSInterruptType type);
 
 void __OSInterruptInit(void);
 
 u32 __OSMaskInterrupts(u32 userMask);
 u32 __OSUnmaskInterrupts(u32 userMask);
-void __OSDispatchInterrupt(u8 intr, struct OSContext* ctx);
+void __OSDispatchInterrupt(u8 intr, struct OSContext *ctx);
 
 void __RAS_OSDisableInterrupts_begin(void);
 void __RAS_OSDisableInterrupts_end(void);

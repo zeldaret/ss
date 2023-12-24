@@ -1,86 +1,89 @@
-#include "types.h"
 #include "egg/core/eggHeap.h"
-#include "m/m_vec.h"
 #include "m/m_angle.h"
+#include "m/m_vec.h"
 #include "toBeSorted/save_file.h"
+#include <common.h>
+
 
 enum ITEM_ID {};
 enum SAVE_ITEM_ID {};
 
 class FileManager {
 public:
-    /* 0x0000 */ void*      mpSavedSaveFiles;
-    /* 0x0004 */ void*      mpSkipData; // skip data Arrary (3 entries )
-    /* 0x0008 */ SaveFile   mFileA;
-    /* 0x53C8 */ SaveFile   mFileB;
-    /* 0xA788 */ u16        mSkipFlags[16];
-    /* 0xA7A8 */ u32        mSkipFlagsCRC;
-    /* 0xA7AC */ wchar_t    mHeroNames[3][9]; // each name is 9 wchars
-    /* 0xA7E2 */ wchar_t    mHeroName[9]; // The current Hero Name
-    /* 0xA7F4 */ char       mCurrentArea[32];
-    /* 0xA814 */ u32        m_0xA814;
-    /* 0xA818 */ s64        mPlayTime[3]; 
-    /* 0xA830 */ s16        mCurrentHealth[3];
-    /* 0xA836 */ s16        mCurrentHealthCapacity[3];
-    /* 0xA83C */ u8         mSelectedFile;
-    /* 0xA83D */ u8         mIsFileEmpty[3];
-    /* 0xA840 */ u8         mIsFileUnk1[3];
-    /* 0xA843 */ u8         mIsFileInvalid[3];
-    /* 0xA846 */ u8         mIsFileDataDirty[3];
-    /* 0xA849 */ u8         mIsFileSkipDataDirty[3];
-    /* 0xA84C */ u8         m_0xA84C;
-    /* 0xA84D */ u8         m_0xA84D;
-    /* 0xA84E */ u8         mAntiCommitFlag;
-    /* 0xA84F */ u8         m_0xA84F;
+    /* 0x0000 */ void *mpSavedSaveFiles;
+    /* 0x0004 */ void *mpSkipData; // skip data Arrary (3 entries )
+    /* 0x0008 */ SaveFile mFileA;
+    /* 0x53C8 */ SaveFile mFileB;
+    /* 0xA788 */ u16 mSkipFlags[16];
+    /* 0xA7A8 */ u32 mSkipFlagsCRC;
+    /* 0xA7AC */ wchar_t mHeroNames[3][9]; // each name is 9 wchars
+    /* 0xA7E2 */ wchar_t mHeroName[9];     // The current Hero Name
+    /* 0xA7F4 */ char mCurrentArea[32];
+    /* 0xA814 */ u32 m_0xA814;
+    /* 0xA818 */ s64 mPlayTime[3];
+    /* 0xA830 */ s16 mCurrentHealth[3];
+    /* 0xA836 */ s16 mCurrentHealthCapacity[3];
+    /* 0xA83C */ u8 mSelectedFile;
+    /* 0xA83D */ u8 mIsFileEmpty[3];
+    /* 0xA840 */ u8 mIsFileUnk1[3];
+    /* 0xA843 */ u8 mIsFileInvalid[3];
+    /* 0xA846 */ u8 mIsFileDataDirty[3];
+    /* 0xA849 */ u8 mIsFileSkipDataDirty[3];
+    /* 0xA84C */ u8 m_0xA84C;
+    /* 0xA84D */ u8 m_0xA84D;
+    /* 0xA84E */ u8 mAntiCommitFlag;
+    /* 0xA84F */ u8 m_0xA84F;
+
 public:
     // the following arent part of FileManager i dont think
     // /* 80009D30 */ void fn_80009D30(); // some ctor
     // /* 80009D40 */ void fn_80009D40(); // some dtor
     // /* 80009D80 */ void fn_80009D80(); // return
     // /* 80009D90 */ void fn_80009D90(); // return
-    // /* 80009DA0 */ void fn_80009DA0(); // memset(param_1, 0, 0x20) a 0x24 structure is implied here (0x20 data) a crc is at 0x24
+    // /* 80009DA0 */ void fn_80009DA0(); // memset(param_1, 0, 0x20) a 0x24 structure is implied here (0x20 data) a crc
+    // is at 0x24
 
     /* 80009DB0 */ FileManager(); //
-    /* 80009EE0 */ // mVec3();
+    /* 80009EE0 */                // mVec3();
 
-    /* 80009EF0 */ static FileManager create(EGG::Heap*);
-    /* 80009F30 */ bool loadSaveData(void* out, char* name, bool isSkipData);
-    /* 80009F70 */ void saveSaveData(void* unk, bool isSkipData);
+    /* 80009EF0 */ static FileManager create(EGG::Heap *);
+    /* 80009F30 */ bool loadSaveData(void *out, char *name, bool isSkipData);
+    /* 80009F70 */ void saveSaveData(void *unk, bool isSkipData);
     /* 8000A000 */ void refreshSaveFileData();
-    /* 8000A260 */ wchar_t* getFileHeroname(int fileNum);
+    /* 8000A260 */ wchar_t *getFileHeroname(int fileNum);
     /* 8000A280 */ s64 getFileSaveTime(int fileNum);
     /* 8000A2A0 */ s16 getFileCurrentHealth(int fileNum);
     /* 8000A2C0 */ s16 getFileHealthCapacity(int fileNum);
     /* 8000A2E0 */ void fn_8000A2E0(); // idk something blank save files
 
-    /* 8000A330 */ u16* getStoryFlagsMut();
-    /* 8000A360 */ u16* getStoryFlagsConst();
-    /* 8000A3B0 */ u16* getItemFlagsMut();
-    /* 8000A3E0 */ u16* getItemFlagsConst();
-    /* 8000A430 */ u16* getDungeonFlagsMut();
-    /* 8000A460 */ u16* getDungeonFlagsConst();
-    /* 8000A4B0 */ u16* getSceneFlagsMut();
-    /* 8000A4E0 */ u16* getSceneFlagsConst();
-    /* 8000A530 */ u16* getTBoxFlagsMut();
-    /* 8000A560 */ u16* getTBoxFlagsConst();
-    /* 8000A5B0 */ u16* getTempFlagsMut();
-    /* 8000A5E0 */ u16* getTempFlagsConst();
-    /* 8000A630 */ u16* getZoneFlagsMut();
-    /* 8000A660 */ u16* getZoneFlagsConst();
-    /* 8000A6B0 */ u16* getEnemyDefeatFlagsMut();
-    /* 8000A6E0 */ u16* getEnemyDefeatFlagsConst();
+    /* 8000A330 */ u16 *getStoryFlagsMut();
+    /* 8000A360 */ u16 *getStoryFlagsConst();
+    /* 8000A3B0 */ u16 *getItemFlagsMut();
+    /* 8000A3E0 */ u16 *getItemFlagsConst();
+    /* 8000A430 */ u16 *getDungeonFlagsMut();
+    /* 8000A460 */ u16 *getDungeonFlagsConst();
+    /* 8000A4B0 */ u16 *getSceneFlagsMut();
+    /* 8000A4E0 */ u16 *getSceneFlagsConst();
+    /* 8000A530 */ u16 *getTBoxFlagsMut();
+    /* 8000A560 */ u16 *getTBoxFlagsConst();
+    /* 8000A5B0 */ u16 *getTempFlagsMut();
+    /* 8000A5E0 */ u16 *getTempFlagsConst();
+    /* 8000A630 */ u16 *getZoneFlagsMut();
+    /* 8000A660 */ u16 *getZoneFlagsConst();
+    /* 8000A6B0 */ u16 *getEnemyDefeatFlagsMut();
+    /* 8000A6E0 */ u16 *getEnemyDefeatFlagsConst();
 
-    /* 8000A730 */ void setStoryFlags(u16* flags, u32 offset, u16 count);
-    /* 8000A790 */ void setItemFlags(u16* flags, u32 offset, u16 count);
-    /* 8000A7F0 */ void setDungeonFlags(u16* flags, u32 offset, u16 count);
-    /* 8000A850 */ void setSceneFlags(u16* flags, u32 offset, u16 count);
-    /* 8000A8B0 */ void setTBoxFlags(u16* flags, u32 offset, u16 count);
-    /* 8000A910 */ void setTempFlags(u16* flags, u32 offset, u16 count);
-    /* 8000A970 */ void setZoneFlags(u16* flags, u32 offset, u16 count);
-    /* 8000A9D0 */ void setEnemyDefeatFlags(u16* flags, u32 offset, u16 count);
+    /* 8000A730 */ void setStoryFlags(u16 *flags, u32 offset, u16 count);
+    /* 8000A790 */ void setItemFlags(u16 *flags, u32 offset, u16 count);
+    /* 8000A7F0 */ void setDungeonFlags(u16 *flags, u32 offset, u16 count);
+    /* 8000A850 */ void setSceneFlags(u16 *flags, u32 offset, u16 count);
+    /* 8000A8B0 */ void setTBoxFlags(u16 *flags, u32 offset, u16 count);
+    /* 8000A910 */ void setTempFlags(u16 *flags, u32 offset, u16 count);
+    /* 8000A970 */ void setZoneFlags(u16 *flags, u32 offset, u16 count);
+    /* 8000A9D0 */ void setEnemyDefeatFlags(u16 *flags, u32 offset, u16 count);
 
-    /* 8000AA30 */ u16* getSkipFlags();
-    /* 8000AA40 */ void setSkipFlagsChecked(u16* flags, u32 offset, u16 count);
+    /* 8000AA30 */ u16 *getSkipFlags();
+    /* 8000AA40 */ void setSkipFlagsChecked(u16 *flags, u32 offset, u16 count);
 
     /* 8000AAA0 */ void initFile(int fileNum);
 
@@ -89,22 +92,22 @@ public:
     /* 8000AC50 */ void setCurrentHealth(s16 health);
     /* 8000AC80 */ s16 getCurrentHealth();
 
-    /* 8000ACD0 */ u16  getLoadRoomT1();
-    /* 8000AD20 */ u16  getLoadRoomT2();
+    /* 8000ACD0 */ u16 getLoadRoomT1();
+    /* 8000AD20 */ u16 getLoadRoomT2();
     /* 8000AD70 */ void setLoadRoomT3(s16 room);
-    /* 8000ADA0 */ u16  getLoadRoomT3();
+    /* 8000ADA0 */ u16 getLoadRoomT3();
 
-    /* 8000ADF0 */ mVec3_c* getPosT1();
-    /* 8000AE40 */ void     setPosT2(mVec3_c* pos);
-    /* 8000AE90 */ mVec3_c* getPosT2();
-    /* 8000AEE0 */ void     setPosT3(mVec3_c* pos);
-    /* 8000AF30 */ mVec3_c* getPosT3();
+    /* 8000ADF0 */ mVec3_c *getPosT1();
+    /* 8000AE40 */ void setPosT2(mVec3_c *pos);
+    /* 8000AE90 */ mVec3_c *getPosT2();
+    /* 8000AEE0 */ void setPosT3(mVec3_c *pos);
+    /* 8000AF30 */ mVec3_c *getPosT3();
 
-    /* 8000AF80 */ s16  getAngleT1();
+    /* 8000AF80 */ s16 getAngleT1();
     /* 8000AFD0 */ void setAngleT2(s16 angle);
-    /* 8000B000 */ s16  getAngleT2();
+    /* 8000B000 */ s16 getAngleT2();
     /* 8000B050 */ void setAngleT3(s16 angle);
-    /* 8000B080 */ s16  getAngleT3();
+    /* 8000B080 */ s16 getAngleT3();
 
     /* 8000B0D0 */ void setPouchData(s32 slot, u32 slotData);
     /* 8000B130 */ u32 getPouchData(s32 slot);
@@ -119,7 +122,7 @@ public:
     /* 8000B480 */ ITEM_ID getItemCheckItem(u32 idx);
     /* 8000B4B0 */ void setItemCheckUpperData(u32 idx, u32 itemData);
     /* 8000B540 */ u32 getItemCheckUpperData();
-    
+
     /* 8000B570 */ void setEquippedItem(u8 bWheelItem);
     /* 8000B5A0 */ u8 getEquippedItem();
     /* 8000B5F0 */ void setSelectedPouchSlot(u8 slot);
@@ -143,8 +146,8 @@ public:
     /* 8000B9F0 */ void setDowsingSlotIdx(u8 idx);
     /* 8000BA20 */ u8 getDowsingSlotIdx();
 
-    /* 8000BA70 */ void setBeaconPos(u32 beaconArea, u32 beaconNum, mVec3_c* pos);
-    /* 8000BB80 */ mVec3_c* getBeaconPos(u32 beaconArea, u32 beaconNum);
+    /* 8000BA70 */ void setBeaconPos(u32 beaconArea, u32 beaconNum, mVec3_c *pos);
+    /* 8000BB80 */ mVec3_c *getBeaconPos(u32 beaconArea, u32 beaconNum);
     /* 8000BC70 */ void setEnemyKillCount(u32 enemy, u16 killCount);
     /* 8000BCE0 */ u16 getEnemyKillCount(u32 enemy);
     /* 8000BD60 */ void setHitCountFromEnemy(u32 enemy, u16 hitCount);
@@ -153,9 +156,9 @@ public:
     /* 8000BE50 */ void setLoadRoomT1_FileB(s16 roomId);
     /* 8000BE80 */ s16 getLoadRoomT1_FileB();
     /* 8000BE90 */ void setEntranceT1_FileB(u8 entrance);
-    /* 8000BEC0 */ u8  getEntranceT1_FileB();
-    /* 8000BED0 */ void setAreaT1_FileB(const char* name);
-    /* 8000BF80 */ char* getAreaT1_FileB();
+    /* 8000BEC0 */ u8 getEntranceT1_FileB();
+    /* 8000BED0 */ void setAreaT1_FileB(const char *name);
+    /* 8000BF80 */ char *getAreaT1_FileB();
     /* 8000C080 */ void setNightT1_FileB(bool night);
     /* 8000C0B0 */ bool getNightT1_FileB();
     /* 8000C0C0 */ void setEntranceT1LoadFlag_FileB(u8 flag);
@@ -163,13 +166,13 @@ public:
     /* 8000C120 */ void getForcedLayerT1_FileB();
     /* 8000C130 */ void setCurrentHealth_FileB(s16 health);
 
-    /* 8000C160 */ void setHeroname(const wchar_t* name);
-    /* 8000C230 */ wchar_t* getHeroname();
+    /* 8000C160 */ void setHeroname(const wchar_t *name);
+    /* 8000C230 */ wchar_t *getHeroname();
 
-    /* 8000C360 */ char* getAreaT1();
-    /* 8000C470 */ char* getAreaT2();
-    /* 8000C580 */ void setAreaT3(const char* name);
-    /* 8000C630 */ char* getAreaT3();
+    /* 8000C360 */ char *getAreaT1();
+    /* 8000C470 */ char *getAreaT2();
+    /* 8000C580 */ void setAreaT3(const char *name);
+    /* 8000C630 */ char *getAreaT3();
 
     /* 8000C740 */ u8 getForcedLayerT1();
     /* 8000C790 */ u8 getForcedLayerT2();
@@ -199,7 +202,7 @@ public:
     /* 8000CC50 */ void setFileTimes();
     /* 8000CCB0 */ void setPlayTime(s64 time);
 
-    /* 8000CCF0 */ s64 getSavedTime(); 
+    /* 8000CCF0 */ s64 getSavedTime();
     /* 8000CD40 */ void setSavedTime(s64 time);
 
     /* 8000CD80 */ void setBeedleShopPathSegment(u32 path);
@@ -239,11 +242,11 @@ public:
     /* 80010350 */ void copyFileSkipData(int fileNum);
     /* 80010440 */ void clearTempFileData();
     /* 800104A0 */ void saveAfterCredits();
-    /* 80011210 */ SaveFile* getCurrentFile();
-    /* 80011250 */ u16* getSkipFlags2();
-    /* 80011260 */ SaveFile* getFileA();
-    /* 80011270 */ SaveFile* getFileB();
-    /* 80011280 */ void calcFileCRC(const SaveFile* file, u32 length);
+    /* 80011210 */ SaveFile *getCurrentFile();
+    /* 80011250 */ u16 *getSkipFlags2();
+    /* 80011260 */ SaveFile *getFileA();
+    /* 80011270 */ SaveFile *getFileB();
+    /* 80011280 */ void calcFileCRC(const SaveFile *file, u32 length);
     /* 80011290 */ void updateEmptyFiles();
     /* 800112D0 */ void updateEmptyFileFlags();
     /* 80011370 */ bool isFileEmpty(int fileNum);
@@ -253,13 +256,12 @@ public:
     /* 80011440 */ bool checkFileCRC(int fileNum);
     /* 80011490 */ bool isFileInactive();
     /* 80011500 */ void setPlayerInfoFileA();
-    /* 800115E0 */ void setT3Info(mVec3_c* pos, mAng3_c* rot);
-    /* 800116C0 */ static void getRegionVersion(char* out);
+    /* 800115E0 */ void setT3Info(mVec3_c *pos, mAng3_c *rot);
+    /* 800116C0 */ static void getRegionVersion(char *out);
     // /* 800116F0 */ void sinit();
 
-    static FileManager* getInstance() {
+    static FileManager *getInstance() {
         return sInstance;
     }
     static FileManager *sInstance;
 };
-

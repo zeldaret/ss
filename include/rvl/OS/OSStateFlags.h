@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_OS_STATE_FLAGS_H
 #define RVL_SDK_OS_STATE_FLAGS_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -19,8 +19,8 @@ typedef struct OSStateFlags {
     u32 WORD_0x1C;
 } OSStateFlags;
 
-BOOL __OSWriteStateFlags(const OSStateFlags* state);
-BOOL __OSReadStateFlags(OSStateFlags* state);
+BOOL __OSWriteStateFlags(const OSStateFlags *state);
+BOOL __OSReadStateFlags(OSStateFlags *state);
 
 #ifdef __cplusplus
 }

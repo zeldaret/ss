@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_EXI_BIOS_H
 #define RVL_SDK_EXI_BIOS_H
 #include "rvl/EXI/EXICommon.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -26,7 +26,7 @@ typedef struct EXIData {
     EXICallback extCallback; // at 0x8
     volatile s32 state;      // at 0xC
     s32 bytesRead;           // at 0x10
-    void* buffer;            // at 0x14
+    void *buffer;            // at 0x14
     u32 dev;                 // at 0x18
     u32 id;                  // at 0x1C
     UNKWORD WORD_0x20;
@@ -34,11 +34,9 @@ typedef struct EXIData {
     EXIItem items[3]; // at 0x28
 } EXIData;
 
-BOOL EXIImm(EXIChannel chan, void* buf, s32 len, u32 type,
-            EXICallback callback);
-BOOL EXIImmEx(EXIChannel chan, void* buf, s32 len, u32 type);
-BOOL EXIDma(EXIChannel chan, void* buf, s32 len, u32 type,
-            EXICallback callback);
+BOOL EXIImm(EXIChannel chan, void *buf, s32 len, u32 type, EXICallback callback);
+BOOL EXIImmEx(EXIChannel chan, void *buf, s32 len, u32 type);
+BOOL EXIDma(EXIChannel chan, void *buf, s32 len, u32 type, EXICallback callback);
 BOOL EXISync(EXIChannel chan);
 void EXIClearInterrupts(EXIChannel chan, BOOL exi, BOOL tc, BOOL ext);
 EXICallback EXISetExiCallback(EXIChannel chan, EXICallback callback);
@@ -51,7 +49,7 @@ BOOL EXIDeselect(EXIChannel chan);
 void EXIInit(void);
 BOOL EXILock(EXIChannel chan, u32 dev, EXICallback callback);
 BOOL EXIUnlock(EXIChannel chan);
-s32 EXIGetID(EXIChannel chan, u32 dev, u32* out);
+s32 EXIGetID(EXIChannel chan, u32 dev, u32 *out);
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_OS_CONTEXT_H
 #define RVL_SDK_OS_CONTEXT_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -27,17 +27,17 @@ typedef struct OSContext {
     f64 psfs[32];  // at 0x1C8
 } OSContext;
 
-void OSSaveFPUContext(OSContext* ctx);
-void OSSetCurrentContext(OSContext* ctx);
-OSContext* OSGetCurrentContext(void);
-BOOL OSSaveContext(OSContext* ctx);
-void OSLoadContext(OSContext* ctx);
-void* OSGetStackPointer(void);
-void OSSwitchFiber(void* func, void* stack);
-void OSSwitchFiberEx(u32 r3, u32 r4, u32 r5, u32 r6, void* func, void* stack);
-void OSClearContext(OSContext* ctx);
-void OSInitContext(OSContext* ctx, void* _srr0, void* stack);
-void OSDumpContext(const OSContext* ctx);
+void OSSaveFPUContext(OSContext *ctx);
+void OSSetCurrentContext(OSContext *ctx);
+OSContext *OSGetCurrentContext(void);
+BOOL OSSaveContext(OSContext *ctx);
+void OSLoadContext(OSContext *ctx);
+void *OSGetStackPointer(void);
+void OSSwitchFiber(void *func, void *stack);
+void OSSwitchFiberEx(u32 r3, u32 r4, u32 r5, u32 r6, void *func, void *stack);
+void OSClearContext(OSContext *ctx);
+void OSInitContext(OSContext *ctx, void *_srr0, void *stack);
+void OSDumpContext(const OSContext *ctx);
 void __OSContextInit(void);
 
 #ifdef __cplusplus

@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_GX_HARDWARE_H
 #define RVL_SDK_GX_HARDWARE_H
 #include "rvl/GX/GXTypes.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -40,7 +40,7 @@ extern volatile union {
     // 4-byte
     int i;
     unsigned int ui;
-    void* p;
+    void *p;
     float f;
 } WGPIPE : 0xCC008000;
 
@@ -67,27 +67,23 @@ typedef enum {
 #define __GX_FIFO_SET_LOAD_INDX_NELEM(reg, x) ((reg) = GX_BITSET(reg, 16, 4, x))
 #define __GX_FIFO_SET_LOAD_INDX_INDEX(reg, x) ((reg) = GX_BITSET(reg, 0, 16, x))
 
-#define __GX_FIFO_LOAD_INDX(reg, dst, nelem, index)                            \
-    {                                                                          \
-        u32 cmd = 0;                                                           \
-        __GX_FIFO_SET_LOAD_INDX_DST(cmd, dst);                                 \
-        __GX_FIFO_SET_LOAD_INDX_NELEM(cmd, nelem);                             \
-        __GX_FIFO_SET_LOAD_INDX_INDEX(cmd, index);                             \
-        WGPIPE.c = reg;                                                        \
-        WGPIPE.i = cmd;                                                        \
+#define __GX_FIFO_LOAD_INDX(reg, dst, nelem, index) \
+    { \
+        u32 cmd = 0; \
+        __GX_FIFO_SET_LOAD_INDX_DST(cmd, dst); \
+        __GX_FIFO_SET_LOAD_INDX_NELEM(cmd, nelem); \
+        __GX_FIFO_SET_LOAD_INDX_INDEX(cmd, index); \
+        WGPIPE.c = reg; \
+        WGPIPE.i = cmd; \
     }
 
-#define GX_FIFO_LOAD_INDX_A(dst, nelem, index)                                 \
-    __GX_FIFO_LOAD_INDX(GX_FIFO_CMD_LOAD_INDX_A, dst, nelem, index)
+#define GX_FIFO_LOAD_INDX_A(dst, nelem, index) __GX_FIFO_LOAD_INDX(GX_FIFO_CMD_LOAD_INDX_A, dst, nelem, index)
 
-#define GX_FIFO_LOAD_INDX_B(dst, nelem, index)                                 \
-    __GX_FIFO_LOAD_INDX(GX_FIFO_CMD_LOAD_INDX_B, dst, nelem, index)
+#define GX_FIFO_LOAD_INDX_B(dst, nelem, index) __GX_FIFO_LOAD_INDX(GX_FIFO_CMD_LOAD_INDX_B, dst, nelem, index)
 
-#define GX_FIFO_LOAD_INDX_C(dst, nelem, index)                                 \
-    __GX_FIFO_LOAD_INDX(GX_FIFO_CMD_LOAD_INDX_C, dst, nelem, index)
+#define GX_FIFO_LOAD_INDX_C(dst, nelem, index) __GX_FIFO_LOAD_INDX(GX_FIFO_CMD_LOAD_INDX_C, dst, nelem, index)
 
-#define GX_FIFO_LOAD_INDX_D(dst, nelem, index)                                 \
-    __GX_FIFO_LOAD_INDX(GX_FIFO_CMD_LOAD_INDX_D, dst, nelem, index)
+#define GX_FIFO_LOAD_INDX_D(dst, nelem, index) __GX_FIFO_LOAD_INDX(GX_FIFO_CMD_LOAD_INDX_D, dst, nelem, index)
 
 /************************************************************
  *
@@ -100,8 +96,8 @@ typedef enum {
 /**
  * Load immediate value into BP register
  */
-#define GX_BP_LOAD_REG(data)                                                   \
-    WGPIPE.c = GX_FIFO_CMD_LOAD_BP_REG;                                        \
+#define GX_BP_LOAD_REG(data) \
+    WGPIPE.c = GX_FIFO_CMD_LOAD_BP_REG; \
     WGPIPE.i = (data);
 
 /**
@@ -120,9 +116,9 @@ typedef enum {
 /**
  * Load immediate value into CP register
  */
-#define GX_CP_LOAD_REG(addr, data)                                             \
-    WGPIPE.c = GX_FIFO_CMD_LOAD_CP_REG;                                        \
-    WGPIPE.c = (addr);                                                         \
+#define GX_CP_LOAD_REG(addr, data) \
+    WGPIPE.c = GX_FIFO_CMD_LOAD_CP_REG; \
+    WGPIPE.c = (addr); \
     WGPIPE.i = (data);
 
 /************************************************************
@@ -146,26 +142,26 @@ typedef enum {
 /**
  * Header for an XF register load
  */
-#define GX_XF_LOAD_REG_HDR(addr)                                               \
-    WGPIPE.c = GX_FIFO_CMD_LOAD_XF_REG;                                        \
+#define GX_XF_LOAD_REG_HDR(addr) \
+    WGPIPE.c = GX_FIFO_CMD_LOAD_XF_REG; \
     WGPIPE.i = (addr);
 
 /**
  * Load immediate value into XF register
  */
-#define GX_XF_LOAD_REG(addr, data)                                             \
-    GX_XF_LOAD_REG_HDR(addr);                                                  \
+#define GX_XF_LOAD_REG(addr, data) \
+    GX_XF_LOAD_REG_HDR(addr); \
     WGPIPE.i = (data);
 
 /**
  * Load immediate values into multiple XF registers
  */
-#define GX_XF_LOAD_REGS(size, addr)                                            \
-    {                                                                          \
-        u32 cmd = 0;                                                           \
-        cmd |= (addr);                                                         \
-        cmd |= (size) << 16;                                                   \
-        GX_XF_LOAD_REG_HDR(cmd);                                               \
+#define GX_XF_LOAD_REGS(size, addr) \
+    { \
+        u32 cmd = 0; \
+        cmd |= (addr); \
+        cmd |= (size) << 16; \
+        GX_XF_LOAD_REG_HDR(cmd); \
     }
 
 /**
@@ -184,10 +180,10 @@ typedef enum {
 typedef enum {
     GX_XF_TG_REGULAR, //! Regular transformation (transform incoming data)
     GX_XF_TG_BUMP,    //! Texgen bump mapping
-    GX_XF_TG_CLR0, //! Color texgen: (s,t)=(r,g:b) (g and b are concatenated),
-                   //! color0
-    GX_XF_TG_CLR1  //! Color texgen: (s,t)=(r,g:b) (g and b are concatenated),
-                   //! color 1
+    GX_XF_TG_CLR0,    //! Color texgen: (s,t)=(r,g:b) (g and b are concatenated),
+                      //! color0
+    GX_XF_TG_CLR1     //! Color texgen: (s,t)=(r,g:b) (g and b are concatenated),
+                      //! color 1
 } GXXfTexGen;
 
 #ifdef __cplusplus

@@ -1,8 +1,9 @@
 #pragma once
 
-// This file was ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_list_mg_ptmf.hpp
+// This file was ported from
+// https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_list_mg_ptmf.hpp
 
-#include "types.h"
+#include <common.h>
 
 #include "f/f_list_mg.h"
 #include "f/f_list_nd_prio.h"
@@ -18,11 +19,11 @@ public:
     /* 802e26e0 */ bool walkPack();
 
     fLiNdPrio_c *getFirst() const {
-        return (fLiNdPrio_c *) fLiMgBa_c::getFirst();
+        return (fLiNdPrio_c *)fLiMgBa_c::getFirst();
     }
 
     fLiNdPrio_c *getLast() const {
-        return (fLiNdPrio_c *) fLiMgBa_c::getLast();
+        return (fLiNdPrio_c *)fLiMgBa_c::getLast();
     }
 
 private:

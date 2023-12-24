@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_PPC_ARCH_H
 #define RVL_SDK_PPC_ARCH_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -225,7 +225,7 @@ void PPCMthid4(u32 val);
 #define FPSCR_VE (1 << (31 - 24))
 // IEEE floating-point overflow exception enable
 #define FPSCR_OE (1 << (31 - 25))
-//  IEEE floating-point underflow exception enable
+// IEEE floating-point underflow exception enable
 #define FPSCR_UE (1 << (31 - 26))
 // IEEE floating-point zero divide exception enable
 #define FPSCR_ZE (1 << (31 - 27))
@@ -247,8 +247,7 @@ void PPCMthid4(u32 val);
 // Locked cache enable
 #define HID2_LCE (1 << (31 - 3))
 // DMA queue length (read only)
-#define HID2_DMAQL                                                             \
-    ((1 << (31 - 4)) | (1 << (31 - 5)) | (1 << (31 - 6)) | (1 << (31 - 7)))
+#define HID2_DMAQL ((1 << (31 - 4)) | (1 << (31 - 5)) | (1 << (31 - 6)) | (1 << (31 - 7)))
 // dcbz_l cache hit error
 #define HID2_DCHERR (1 << (31 - 8))
 // DMA access to normal cache error

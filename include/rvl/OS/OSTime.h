@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_OS_TIME_H
 #define RVL_SDK_OS_TIME_H
 #include "rvl/OS/OSHardware.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -12,8 +12,8 @@ extern "C" {
 // OS time -> Real time
 #define OS_TICKS_TO_SEC(x) ((x) / (OS_TIME_SPEED))
 #define OS_TICKS_TO_MSEC(x) ((x) / (OS_TIME_SPEED / 1000))
-#define OS_TICKS_TO_USEC(x) (((x)*8) / (OS_TIME_SPEED / 125000))
-#define OS_TICKS_TO_NSEC(x) (((x)*8000) / (OS_TIME_SPEED / 125000))
+#define OS_TICKS_TO_USEC(x) (((x) * 8) / (OS_TIME_SPEED / 125000))
+#define OS_TICKS_TO_NSEC(x) (((x) * 8000) / (OS_TIME_SPEED / 125000))
 
 // Real time -> OS time
 #define OS_SEC_TO_TICKS(x) ((x) * (OS_TIME_SPEED))
@@ -40,8 +40,8 @@ s32 OSGetTick(void);
 s64 __OSGetSystemTime(void);
 s64 __OSTimeToSystemTime(s64 time);
 
-void OSTicksToCalendarTime(s64 time, OSCalendarTime* cal);
-s64 OSCalendarTimeToTicks(const OSCalendarTime* cal);
+void OSTicksToCalendarTime(s64 time, OSCalendarTime *cal);
+s64 OSCalendarTimeToTicks(const OSCalendarTime *cal);
 
 #ifdef __cplusplus
 }

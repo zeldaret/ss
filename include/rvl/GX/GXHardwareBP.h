@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_GX_HARDWARE_BP_H
 #define RVL_SDK_GX_HARDWARE_BP_H
 #include "rvl/GX/GXTypes.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -969,7 +969,6 @@ typedef enum {
 #define GX_BP_FOGCOLOR_RGB_MASK (((1 << 24) - 1) << 31 - 31)
 #define GX_BP_GET_FOGCOLOR_RGB(reg) GX_BITGET(reg, 8, 24)
 #define GX_BP_SET_FOGCOLOR_RGB(reg, x) ((reg) = GX_BITSET(reg, 8, 24, x))
-
 
 #ifdef __cplusplus
 }

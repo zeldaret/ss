@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_DSP_H
 #define RVL_SDK_DSP_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -9,7 +9,7 @@ extern "C" {
 typedef struct DSPTask;
 
 // General-purpose typedef
-typedef void* DSPMail;
+typedef void *DSPMail;
 
 BOOL DSPCheckMailToDSP(void);
 BOOL DSPCheckMailFromDSP(void);
@@ -18,8 +18,8 @@ void DSPSendMailToDSP(DSPMail mail);
 void DSPAssertInt(void);
 void DSPInit(void);
 BOOL DSPCheckInit(void);
-struct DSPTask* DSPAddTask(struct DSPTask* task);
-struct DSPTask* DSPAssertTask(struct DSPTask* task);
+struct DSPTask *DSPAddTask(struct DSPTask *task);
+struct DSPTask *DSPAssertTask(struct DSPTask *task);
 
 #ifdef __cplusplus
 }

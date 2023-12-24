@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_VF_PF_VOLUME_H
 #define RVL_SDK_VF_PF_VOLUME_H
 #include "rvl/VF/pf_code.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -14,7 +14,7 @@ typedef struct PF_VOLUME {
 typedef struct PF_CUR_VOLUME {
     u32 stat;         // at 0x0
     s32 context_id;   // at 0x4
-    PF_VOLUME* p_vol; // at 0x8
+    PF_VOLUME *p_vol; // at 0x8
 } PF_CUR_VOLUME;
 
 typedef struct PF_CONTEXT {
@@ -27,7 +27,7 @@ typedef struct PF_VOLUME_SET {
     s32 num_attached_drives;      // at 0xC
     s32 num_mounted_volumes;      // at 0x10
     u32 config;                   // at 0x14
-    void* param;                  // at 0x18
+    void *param;                  // at 0x18
     s32 last_error;               // at 0x1C
     s32 last_driver_error;        // at 0x20
     PF_CHARCODE codeset;          // at 0x24

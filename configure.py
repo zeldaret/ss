@@ -131,7 +131,7 @@ config.linker_version = "Wii/1.7"
 config.ldflags = [
     "-fp hardware",
     "-nodefaults",
-    # "-listclosure", # Uncomment for Wii linkers
+    "-listclosure",  # Uncomment for Wii linkers
 ]
 
 # Base flags, common to most GC/Wii games.
@@ -170,7 +170,7 @@ cflags_runtime = [
     "-str reuse,pool,readonly",
     "-gccinc",
     "-common off",
-	"-inline auto",
+    "-inline auto",
 ]
 
 # Dolphin library flags
@@ -220,8 +220,9 @@ def Rel(status, rel_name, cpp_name, extra_cflags=[]):
         ],
     }
 
+
 # From tww. IDK if it needs changing for Wii (probably)
-# Helper function for Dolphin libraries 
+# Helper function for Dolphin libraries
 def DolphinLib(lib_name, objects):
     return {
         "lib": lib_name,
@@ -230,6 +231,7 @@ def DolphinLib(lib_name, objects):
         "host": False,
         "objects": objects,
     }
+
 
 def EGGLib(lib_name, objects):
     return {
@@ -240,6 +242,7 @@ def EGGLib(lib_name, objects):
         "objects": objects,
     }
 
+
 def nw4rLib(lib_name, objects):
     return {
         "lib": lib_name,
@@ -249,36 +252,35 @@ def nw4rLib(lib_name, objects):
         "objects": objects,
     }
 
+
 Matching = True
 NonMatching = False
 
 config.warn_missing_config = False
-config.warn_missing_source = False # TODO
+config.warn_missing_source = False  # TODO
 config.libs = [
     {
         "lib": "framework",
         "mw_version": "Wii/1.7",
         "cflags": cflags_framework,
         "host": False,
-        "objects": [ 
+        "objects": [
             # machine (m_name
             Object(NonMatching, "Runtime/__init_cpp_exceptions.cpp"),
             Object(Matching, "toBeSorted/unk_flag_stuff.cpp"),
             Object(Matching, "toBeSorted/bitwise_flag_helper.cpp"),
             Object(Matching, "toBeSorted/sceneflag_manager.cpp"),
-            Object(NonMatching, "toBeSorted/flag_space.cpp"), 
-            Object(NonMatching, "toBeSorted/misc_flag_managers.cpp"), 
+            Object(NonMatching, "toBeSorted/flag_space.cpp"),
+            Object(NonMatching, "toBeSorted/misc_flag_managers.cpp"),
             Object(Matching, "d/d_base.cpp"),
             Object(NonMatching, "d/a/d_a_base.cpp"),
-            Object(NonMatching,"d/a/obj/d_a_obj_base.cpp"),
-            Object(Matching,"toBeSorted/save_file.cpp"),
-            Object(NonMatching,"toBeSorted/file_manager.cpp"),
-            Object(NonMatching,"toBeSorted/save_manager.cpp"),
-
+            Object(NonMatching, "d/a/obj/d_a_obj_base.cpp"),
+            Object(Matching, "toBeSorted/save_file.cpp"),
+            Object(NonMatching, "toBeSorted/file_manager.cpp"),
+            Object(NonMatching, "toBeSorted/save_manager.cpp"),
+            Object(NonMatching, "m/m_mtx.cpp"),
             # framework (f_name)
-
             # d stuff (d_name)
-
         ],
     },
     # DolphinLib(
@@ -292,15 +294,13 @@ config.libs = [
     #     "host": False,
     #     "objects": [ ],
     # },
-
-    #NW4R
+    # NW4R
     nw4rLib(
         "db",
         [
             Object(NonMatching, "nw4r/db/db_directPrint.cpp"),
-        ]
+        ],
     ),
-
     # EGG
     EGGLib(
         "core",
@@ -318,15 +318,15 @@ config.libs = [
             Object(NonMatching, "egg/core/eggThread.cpp"),
             Object(NonMatching, "egg/core/eggUnk.cpp"),
             Object(NonMatching, "egg/core/eggSystem.cpp"),
-            Object(   Matching, "egg/core/eggDisplay.cpp"),
+            Object(Matching, "egg/core/eggDisplay.cpp"),
             Object(NonMatching, "egg/core/eggColorFader.cpp"),
-            Object(NonMatching, "egg/core/eggAsyncDisplay.cpp"), 
+            Object(NonMatching, "egg/core/eggAsyncDisplay.cpp"),
             Object(NonMatching, "egg/core/eggVideo.cpp"),
             Object(NonMatching, "egg/core/eggXfb.cpp"),
             Object(NonMatching, "egg/core/eggXfbManager.cpp"),
-            Object(NonMatching, "egg/core/eggGraphicsFifo.cpp"), 
+            Object(NonMatching, "egg/core/eggGraphicsFifo.cpp"),
             Object(NonMatching, "egg/core/eggController.cpp"),
-        ]
+        ],
     ),
     EGGLib(
         "math",
@@ -334,14 +334,14 @@ config.libs = [
             Object(NonMatching, "egg/math/eggMath.cpp"),
             Object(NonMatching, "egg/math/eggMatrix.cpp"),
             Object(NonMatching, "egg/math/eggQuat.cpp"),
-            Object(   Matching, "egg/math/eggVector.cpp"),
-        ]
+            Object(Matching, "egg/math/eggVector.cpp"),
+        ],
     ),
     EGGLib(
         "prim",
         [
             Object(NonMatching, "egg/prim/eggAssert.cpp"),
-        ]
+        ],
     ),
     # {
     #     "lib": "MSL_C",
@@ -359,7 +359,6 @@ config.libs = [
     #     "objects": [
     #     ],
     # },
-
     # Begin RELs
     # {
     #     "lib": "REL",

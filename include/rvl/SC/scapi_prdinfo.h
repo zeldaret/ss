@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_SC_SCAPI_PRDINFO_H
 #define RVL_SDK_SC_SCAPI_PRDINFO_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -26,8 +26,8 @@ typedef struct SCRegion {
     char name[4]; // at 0x1
 } SCRegion;
 
-BOOL __SCF1(const char* type, char* buf, u32 sz);
-BOOL SCGetProductAreaString(char* buf, u32 sz);
+BOOL __SCF1(const char *type, char *buf, u32 sz);
+BOOL SCGetProductAreaString(char *buf, u32 sz);
 s8 SCGetProductArea(void);
 
 #ifdef __cplusplus

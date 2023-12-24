@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_OS_RESET_H
 #define RVL_SDK_OS_RESET_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -19,19 +19,19 @@ typedef enum {
 typedef struct OSShutdownFunctionInfo {
     OSShutdownFunction func;             // at 0x0
     u32 prio;                            // at 0x4
-    struct OSShutdownFunctionInfo* next; // at 0x8
-    struct OSShutdownFunctionInfo* prev; // at 0xC
+    struct OSShutdownFunctionInfo *next; // at 0x8
+    struct OSShutdownFunctionInfo *prev; // at 0xC
 } OSShutdownFunctionInfo;
 
 typedef struct OSShutdownFunctionQueue {
-    OSShutdownFunctionInfo* head; // at 0x0
-    OSShutdownFunctionInfo* tail; // at 0x4
+    OSShutdownFunctionInfo *head; // at 0x0
+    OSShutdownFunctionInfo *tail; // at 0x4
 } OSShutdownFunctionQueue;
 
-void OSRegisterShutdownFunction(OSShutdownFunctionInfo* info);
+void OSRegisterShutdownFunction(OSShutdownFunctionInfo *info);
 BOOL __OSCallShutdownFunctions(u32 pass, u32 event);
 void __OSShutdownDevices(u32 event);
-void __OSGetDiscState(u8* out);
+void __OSGetDiscState(u8 *out);
 void OSShutdownSystem(void);
 void OSReturnToMenu(void);
 u32 OSGetResetCode(void);

@@ -1,57 +1,69 @@
 #pragma once
 
-// This file is adapted from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_base.hpp 
-// and the Skyward Sword Ghidra database. Comments and docs can be seen above. stripped in this file for easier looking
+// This file is adapted from
+// https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_base.hpp and the Skyward Sword
+// Ghidra database. Comments and docs can be seen above. stripped in this file for easier looking
 
-#include "types.h"
 #include "egg/core/eggFrmHeap.h"
-#include "f/f_profile.h"
 #include "f/f_base_id.h"
 #include "f/f_helper_unk.h"
-#include "f/f_manager.h"
 #include "f/f_list_mg.h"
+#include "f/f_manager.h"
+#include "f/f_profile.h"
+#include <common.h>
+
 
 // Ghidra: fBase
 //   size: 0x64
 // official name
 class fBase_c {
 public:
-    /* 0x00 */ fBaseID_e        unique_ID;
-    /* 0x04 */ u32              params1;    // params1
-    /* 0x08 */ ProfileName      profile_name; // Actor Id
-    /* 0x0A */ u8               lifecycle_state;
-    /* 0x0B */ bool             delete_request;
-    /* 0x0C */ bool             update_request;
-    /* 0x0D */ bool             retry_create;
-    /* 0x0E */ u8               group_type;
-    /* 0x0F */ u8               proc_control;
-    /* 0x10 */ fManager_c       manager;
-    /* 0x50 */ fBaHelper_c*     p_unused_helper;
-    /* 0x54 */ fLiMgBa_c        unused_list;
-    /* 0x5C */ EGG::FrmHeap*    p_heap;
+    /* 0x00 */ fBaseID_e unique_ID;
+    /* 0x04 */ u32 params1;              // params1
+    /* 0x08 */ ProfileName profile_name; // Actor Id
+    /* 0x0A */ u8 lifecycle_state;
+    /* 0x0B */ bool delete_request;
+    /* 0x0C */ bool update_request;
+    /* 0x0D */ bool retry_create;
+    /* 0x0E */ u8 group_type;
+    /* 0x0F */ u8 proc_control;
+    /* 0x10 */ fManager_c manager;
+    /* 0x50 */ fBaHelper_c *p_unused_helper;
+    /* 0x54 */ fLiMgBa_c unused_list;
+    /* 0x5C */ EGG::FrmHeap *p_heap;
     /* 0x60 */ // vtable
 public:
     enum LIFECYCLE_e { WAITING_FOR_CREATE, ACTIVE, TO_BE_DELETED };
-    enum GROUP_TYPE_e { OTHER, SCENE, ACTOR, STAGE, };
-    enum MAIN_STATE_e { CANCELED, ERROR, SUCCESS, WAITING };
-    enum PACK_RESULT_e { NOT_READY, SUCCEEDED, FAILED, };
-    enum PROC_DISABLE_e {
-        ROOT_DISABLE_EXECUTE = 1, 
-        DISABLE_EXECUTE = 2, 
-        ROOT_DISABLE_DRAW = 4, 
-        DISABLE_DRAW = 8 
+    enum GROUP_TYPE_e {
+        OTHER,
+        SCENE,
+        ACTOR,
+        STAGE,
     };
+    enum MAIN_STATE_e { CANCELED, ERROR, SUCCESS, WAITING };
+    enum PACK_RESULT_e {
+        NOT_READY,
+        SUCCEEDED,
+        FAILED,
+    };
+    enum PROC_DISABLE_e { ROOT_DISABLE_EXECUTE = 1, DISABLE_EXECUTE = 2, ROOT_DISABLE_DRAW = 4, DISABLE_DRAW = 8 };
 
-// Inlines
-    bool isProcControlFlag(u8 flag) const { return (proc_control & flag) != 0; }
-    void setProcControlFlag(u8 flag) { proc_control |= flag; }
-    void clearProcControlFlag(u8 flag) { proc_control &= ~flag; }
+    // Inlines
+    bool isProcControlFlag(u8 flag) const {
+        return (proc_control & flag) != 0;
+    }
+    void setProcControlFlag(u8 flag) {
+        proc_control |= flag;
+    }
+    void clearProcControlFlag(u8 flag) {
+        proc_control &= ~flag;
+    }
 
 public:
     /* 802e12f0 */ fBase_c();
     /* 802e23b0 */ static void *operator new(size_t);
     /* 802e2410 */ static void operator delete(void *);
-    
+
 public: // vtable 0x60
     /* 0x08 | 802E15C0 */ virtual int create();
     /* 0x0C | 802E15D0 */ virtual int preCreate();
@@ -68,11 +80,12 @@ public: // vtable 0x60
     /* 0x38 | 802E1B90 */ virtual void deleteReady();
     /* 0x3C | 802E20E0 */ virtual bool entryFrmHeap(unsigned long size, EGG::Heap *parentHeap);
     /* 0x40 | 802E22E0 */ virtual bool entryFrmHeapNonAdjust(unsigned long size, EGG::Heap *parentHeap);
-    /* 0x44 | 802E23A0 */ virtual bool createHeap(); 
+    /* 0x44 | 802E23A0 */ virtual bool createHeap();
     /* 0x48 | 802E1480 */ virtual ~fBase_c();
 
 public:
-    /* 802e1500 */ int commonPack(int (fBase_c::*doFunc)(), int (fBase_c::*preFunc)(), void (fBase_c::*postFunc)(MAIN_STATE_e));
+    /* 802e1500 */ int commonPack(int (fBase_c::*doFunc)(), int (fBase_c::*preFunc)(),
+            void (fBase_c::*postFunc)(MAIN_STATE_e));
     /* 802e1680 */ int createPack();
     /* 802e1860 */ int deletePack();
     /* 802e1960 */ int executePack();
@@ -82,16 +95,19 @@ public:
     /* 802e1f90 */ fBase_c *getConnectParent() const;
     /* 802e1fb0 */ fBase_c *getConnectChild() const;
     /* 802e1fd0 */ fBase_c *getConnectBrNext() const;
-    /* 802e2090 */ bool setConnectChild(fBase_c* child);
+    /* 802e2090 */ bool setConnectChild(fBase_c *child);
     /* 802e2420 */ void runCreate();
     /* 802e24a0 */ fBase_c *getChildProcessCreateState() const;
     /* 802e2510 */ bool checkChildProcessCreateState() const;
 
 public:
-    /* 802e2540 */ static void setTmpCtData(ProfileName profName, fTrNdBa_c *connectParent, unsigned long param, u8 groupType);
-    /* 802e2560 */ static fBase_c *fBase_make(ProfileName profName, fTrNdBa_c *connectParent, unsigned long param, u8 groupType);
+    /* 802e2540 */ static void setTmpCtData(ProfileName profName, fTrNdBa_c *connectParent, unsigned long param,
+            u8 groupType);
+    /* 802e2560 */ static fBase_c *fBase_make(ProfileName profName, fTrNdBa_c *connectParent, unsigned long param,
+            u8 groupType);
     /* 802e2640 */ static fBase_c *createRoot(ProfileName profName, unsigned long param, u8 groupType);
-    /* 802e2600 */ static fBase_c *createChild(ProfileName profName, fBase_c *parent, unsigned long param, u8 groupType);
+    /* 802e2600 */ static fBase_c *createChild(ProfileName profName, fBase_c *parent, unsigned long param,
+            u8 groupType);
 
 public:
     /* 80575ba8 */ static fLiMgBa_c m_additional_actors;

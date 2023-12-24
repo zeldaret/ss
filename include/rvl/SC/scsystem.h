@@ -3,7 +3,7 @@
 #include "rvl/FS.h"
 #include "rvl/NAND.h"
 #include "rvl/OS.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -84,8 +84,8 @@ typedef struct SCItem {
     u8 arrayType;     // at 0x9
     u32 nameLen;      // at 0xC
     u32 dataLen;      // at 0x10
-    const char* name; // at 0x14
-    u8* data;         // at 0x18
+    const char *name; // at 0x14
+    u8 *data;         // at 0x18
     u32 itemLen;      // at 0x1C
 } SCItem;
 
@@ -100,8 +100,8 @@ typedef struct SCControl {
     u8 BYTE_0x157;
     SCAsyncCallback asyncCallback;           // at 0x158
     NANDResult asyncResult;                  // at 0x15C
-    const char* filePaths[SC_CONF_FILE_MAX]; // at 0x160
-    u8* fileBuffers[SC_CONF_FILE_MAX];       // at 0x168
+    const char *filePaths[SC_CONF_FILE_MAX]; // at 0x160
+    u8 *fileBuffers[SC_CONF_FILE_MAX];       // at 0x168
     u32 bufferSizes[SC_CONF_FILE_MAX];       // at 0x170
     u32 fileSizes[SC_CONF_FILE_MAX];         // at 0x178
     SCFlushCallback flushCallback;           // at 0x180
@@ -112,12 +112,12 @@ typedef struct SCControl {
 void SCInit(void);
 u32 SCCheckStatus(void);
 
-BOOL SCFindByteArrayItem(void* dst, u32 len, SCItemID id);
-BOOL SCReplaceByteArrayItem(const void* src, u32 len, SCItemID id);
+BOOL SCFindByteArrayItem(void *dst, u32 len, SCItemID id);
+BOOL SCReplaceByteArrayItem(const void *src, u32 len, SCItemID id);
 
-BOOL SCFindU8Item(u8* dst, SCItemID id);
-BOOL SCFindS8Item(s8* dst, SCItemID id);
-BOOL SCFindU32Item(u32* dst, SCItemID id);
+BOOL SCFindU8Item(u8 *dst, SCItemID id);
+BOOL SCFindS8Item(s8 *dst, SCItemID id);
+BOOL SCFindU32Item(u32 *dst, SCItemID id);
 
 BOOL SCReplaceU8Item(u8 data, SCItemID id);
 
@@ -127,7 +127,7 @@ BOOL __SCIsDirty(void);
 void __SCSetDirtyFlag(void);
 void __SCClearDirtyFlag(void);
 
-u8* __SCGetConfBuf(void);
+u8 *__SCGetConfBuf(void);
 u32 __SCGetConfBufSize(void);
 
 #ifdef __cplusplus

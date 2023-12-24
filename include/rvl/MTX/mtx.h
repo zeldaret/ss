@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_MTX_MTX_H
 #define RVL_SDK_MTX_MTX_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -25,14 +25,14 @@ void PSMTXInverse(const Mtx, Mtx);
 void PSMTXInvXpose(const Mtx, Mtx);
 void PSMTXRotRad(Mtx, f32, char);
 void PSMTXRotTrig(Mtx, f32, f32, char);
-void PSMTXRotAxisRad(Mtx, const Vec*, f32);
+void PSMTXRotAxisRad(Mtx, const Vec *, f32);
 void PSMTXTrans(Mtx, f32, f32, f32);
 void PSMTXTransApply(const Mtx, Mtx, f32, f32, f32);
 void PSMTXScale(Mtx, f32, f32, f32);
 void PSMTXScaleApply(const Mtx, Mtx, f32, f32, f32);
-void PSMTXQuat(Mtx, const Quaternion*);
+void PSMTXQuat(Mtx, const Quaternion *);
 
-void C_MTXLookAt(Mtx, const Vec*, const Vec*, const Vec*);
+void C_MTXLookAt(Mtx, const Vec *, const Vec *, const Vec *);
 void C_MTXLightFrustum(Mtx, f32, f32, f32, f32, f32, f32, f32, f32, f32);
 void C_MTXLightPerspective(Mtx, f32, f32, f32, f32, f32, f32);
 void C_MTXLightOrtho(Mtx, f32, f32, f32, f32, f32, f32, f32, f32);

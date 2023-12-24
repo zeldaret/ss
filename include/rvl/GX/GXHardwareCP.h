@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_GX_HARDWARE_CP_H
 #define RVL_SDK_GX_HARDWARE_CP_H
 #include "rvl/GX/GXTypes.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -349,7 +349,8 @@ typedef enum {
 #define GX_CP_VAT_GROUP0_BYTEDEQUANT_MASK (((1 << 1) - 1) << 31 - 1)
 #define GX_CP_GET_VAT_GROUP0_BYTEDEQUANT(reg) GX_BITGET(reg, 1, 1)
 #define GX_CP_SET_VAT_GROUP0_BYTEDEQUANT(reg, x) ((reg) = GX_BITSET(reg, 1, 1, x))
-// NORMALINDEX3 [0:0] (1) - Input will be treated as three staggered indices (one per triple biased by component size) into normal table
+// NORMALINDEX3 [0:0] (1) - Input will be treated as three staggered indices (one per triple biased by component size)
+// into normal table
 #define GX_CP_VAT_GROUP0_NORMALINDEX3_ST 0
 #define GX_CP_VAT_GROUP0_NORMALINDEX3_END 0
 #define GX_CP_VAT_GROUP0_NORMALINDEX3_SZ 1
@@ -533,7 +534,6 @@ typedef enum {
 #define GX_CP_ARRAYSTRIDE_STRIDE_MASK (((1 << 8) - 1) << 31 - 31)
 #define GX_CP_GET_ARRAYSTRIDE_STRIDE(reg) GX_BITGET(reg, 24, 8)
 #define GX_CP_SET_ARRAYSTRIDE_STRIDE(reg, x) ((reg) = GX_BITSET(reg, 24, 8, x))
-
 
 #ifdef __cplusplus
 }

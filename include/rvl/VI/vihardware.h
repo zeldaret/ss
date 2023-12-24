@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_VI_HARDWARE_H
 #define RVL_SDK_VI_HARDWARE_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

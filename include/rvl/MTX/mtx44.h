@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_MTX_MTX44_H
 #define RVL_SDK_MTX_MTX44_H
 #include "rvl/MTX/mtx.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif

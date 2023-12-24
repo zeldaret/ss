@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_TPL_H
 #define RVL_SDK_TPL_H
 #include "rvl/GX.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -17,7 +17,7 @@ typedef struct TPLHeader {
     u16 height;          // at 0x0
     u16 width;           // at 0x2
     u32 format;          // at 0x4
-    char* data;          // at 0x8
+    char *data;          // at 0x8
     GXTexWrapMode wrapS; // at 0xC
     GXTexWrapMode wrapT; // at 0x10
     GXTexFilter minFilt; // at 0x14
@@ -34,22 +34,22 @@ typedef struct TPLClutHeader {
     u8 unpacked;      // at 0x1
     u8 padding;       // at 0x2
     GXTlutFmt format; // at 0x4
-    char* data;       // at 0x8
+    char *data;       // at 0x8
 } TPLClutHeader;
 
 typedef struct TPLDescriptor {
-    TPLHeader* texHeader;      // at 0x0
-    TPLClutHeader* clutHeader; // at 0x4
+    TPLHeader *texHeader;      // at 0x0
+    TPLClutHeader *clutHeader; // at 0x4
 } TPLDescriptor;
 
 typedef struct TPLPalette {
     u32 version;                // at 0x0
     u32 numImages;              // at 0x4
-    TPLDescriptor* descriptors; // at 0x8
+    TPLDescriptor *descriptors; // at 0x8
 } TPLPalette;
 
-void TPLBind(TPLPalette* pal);
-TPLDescriptor* TPLGet(TPLPalette* pal, u32 id);
+void TPLBind(TPLPalette *pal);
+TPLDescriptor *TPLGet(TPLPalette *pal, u32 id);
 
 #ifdef __cplusplus
 }

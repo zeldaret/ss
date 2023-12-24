@@ -2,7 +2,7 @@
 #define RVL_SDK_GX_PIXEL_H
 #include "rvl/GX/GXTypes.h"
 #include "rvl/MTX.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -11,12 +11,10 @@ typedef struct _GXFogAdjTable {
     u16 r[10]; // at 0x0
 } GXFogAdjTable;
 
-void GXSetFog(GXFogType type, GXColor color, f32 start, f32 end, f32 near,
-              f32 far);
-void GXInitFogAdjTable(GXFogAdjTable* table, u16 width, const Mtx44 proj);
-void GXSetFogRangeAdj(GXBool enable, u16 center, const GXFogAdjTable* table);
-void GXSetBlendMode(GXBlendMode mode, GXBlendFactor src, GXBlendFactor dst,
-                    GXLogicOp op);
+void GXSetFog(GXFogType type, GXColor color, f32 start, f32 end, f32 near, f32 far);
+void GXInitFogAdjTable(GXFogAdjTable *table, u16 width, const Mtx44 proj);
+void GXSetFogRangeAdj(GXBool enable, u16 center, const GXFogAdjTable *table);
+void GXSetBlendMode(GXBlendMode mode, GXBlendFactor src, GXBlendFactor dst, GXLogicOp op);
 void GXSetColorUpdate(GXBool enable);
 void GXSetAlphaUpdate(GXBool enable);
 void GXSetZMode(GXBool enableTest, GXCompare func, GXBool enableUpdate);

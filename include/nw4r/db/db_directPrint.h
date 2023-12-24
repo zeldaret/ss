@@ -1,7 +1,7 @@
 #pragma once
 
-#include "types.h"
-#include <Runtime/__va_arg.h>
+#include <Runtime.PPCEABI.H/__va_arg.h>
+#include <common.h>
 #include <rvl/GX.h>
 
 namespace nw4r {

@@ -16,10 +16,10 @@
 #define signbit(x) ((sizeof(x) == sizeof(float)) ? __signbitf(x) : __signbitd(x))
 #define isfinite(x) ((fpclassify(x) > 2))
 
-#define __signbitf(x) ((*(unsigned char*)&(x)) & 0x80)
+#define __signbitf(x) ((*(unsigned char *)&(x)) & 0x80)
 
 // TODO: OK?
-#define __signbitd(x) ((*(unsigned char*)&(x)) & 0x80)
+#define __signbitd(x) ((*(unsigned char *)&(x)) & 0x80)
 
 extern unsigned long __float_nan[];
 extern unsigned long __float_huge[];
@@ -27,7 +27,7 @@ extern unsigned long __float_max[];
 extern unsigned long __float_epsilon[];
 
 inline int __fpclassifyf(float __value) {
-    unsigned long integer = *(unsigned long*)&__value;
+    unsigned long integer = *(unsigned long *)&__value;
 
     switch (integer & 0x7f800000) {
     case 0x7f800000:
@@ -49,17 +49,19 @@ inline int __fpclassifyf(float __value) {
 inline int __fpclassifyd(double __value) {
     switch (__HI(__value) & 0x7ff00000) {
     case 0x7ff00000: {
-        if ((__HI(__value) & 0x000fffff) || (__LO(__value) & 0xffffffff))
+        if ((__HI(__value) & 0x000fffff) || (__LO(__value) & 0xffffffff)) {
             return FP_QNAN;
-        else
+        } else {
             return FP_INFINITE;
+        }
         break;
     }
     case 0: {
-        if ((__HI(__value) & 0x000fffff) || (__LO(__value) & 0xffffffff))
+        if ((__HI(__value) & 0x000fffff) || (__LO(__value) & 0xffffffff)) {
             return FP_SUBNORMAL;
-        else
+        } else {
             return FP_ZERO;
+        }
         break;
     }
     }

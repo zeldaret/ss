@@ -1,7 +1,5 @@
 #pragma once
 
-#include "types.h"
+#include <common.h>
 
-class mFrustum_c {
-
-};
+class mFrustum_c {};

@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_DVD_BROADWAY_H
 #define RVL_SDK_DVD_BROADWAY_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -30,21 +30,19 @@ typedef enum {
 typedef void (*DVDLowCallback)(u32 intType);
 
 BOOL DVDLowInit(void);
-BOOL DVDLowReadDiskID(struct DVDDiskID* out, DVDLowCallback callback);
-BOOL DVDLowOpenPartition(u32 offset, const struct ESPTicket* ticket,
-                         u32 certsSize, const void* certs, struct ESPTmd* tmd,
-                         DVDLowCallback callback);
+BOOL DVDLowReadDiskID(struct DVDDiskID *out, DVDLowCallback callback);
+BOOL DVDLowOpenPartition(u32 offset, const struct ESPTicket *ticket, u32 certsSize, const void *certs,
+        struct ESPTmd *tmd, DVDLowCallback callback);
 BOOL DVDLowClosePartition(DVDLowCallback callback);
-BOOL DVDLowUnencryptedRead(void* dst, u32 size, u32 offset,
-                           DVDLowCallback callback);
+BOOL DVDLowUnencryptedRead(void *dst, u32 size, u32 offset, DVDLowCallback callback);
 BOOL DVDLowStopMotor(BOOL eject, BOOL kill, DVDLowCallback callback);
-BOOL DVDLowInquiry(struct DVDDriveInfo* out, DVDLowCallback callback);
+BOOL DVDLowInquiry(struct DVDDriveInfo *out, DVDLowCallback callback);
 BOOL DVDLowRequestError(DVDLowCallback callback);
 BOOL DVDLowSetSpinupFlag(BOOL enable);
 BOOL DVDLowReset(DVDLowCallback callback);
 BOOL DVDLowAudioBufferConfig(BOOL enable, u32 size, DVDLowCallback callback);
 BOOL DVDLowSetMaximumRotation(u32 speed, DVDLowCallback callback);
-BOOL DVDLowRead(void* dst, u32 size, u32 offset, DVDLowCallback callback);
+BOOL DVDLowRead(void *dst, u32 size, u32 offset, DVDLowCallback callback);
 BOOL DVDLowSeek(u32 offset, DVDLowCallback callback);
 u32 DVDLowGetCoverRegister(void);
 BOOL DVDLowPrepareCoverRegister(DVDLowCallback callback);
@@ -52,7 +50,7 @@ u32 DVDLowGetImmBufferReg(void);
 BOOL DVDLowUnmaskStatusInterrupts(void);
 BOOL DVDLowMaskCoverInterrupt(void);
 BOOL DVDLowClearCoverInterrupt(DVDLowCallback callback);
-BOOL __DVDLowTestAlarm(const struct OSAlarm* alarm);
+BOOL __DVDLowTestAlarm(const struct OSAlarm *alarm);
 
 #ifdef __cplusplus
 }

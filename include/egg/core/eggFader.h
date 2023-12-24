@@ -1,9 +1,8 @@
 #pragma once
 
-#include "types.h"
+#include <common.h>
 
-namespace EGG
-{
+namespace EGG {
 
 class Fader {
 public:
@@ -13,6 +12,7 @@ public:
         STATUS_FADE_IN,
         STATUS_FADE_OUT,
     };
+
 public:
     // vtable at 0x00
     /* vt 0x08 | 00000000 */ virtual void setStatus(EStatus) = 0;

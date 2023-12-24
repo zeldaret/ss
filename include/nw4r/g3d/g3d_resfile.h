@@ -1,18 +1,15 @@
 #pragma once
 
-#include "types.h"
+#include <common.h>
 
 namespace nw4r {
-    namespace g3d {
+namespace g3d {
 
-        struct ResFileData {
+struct ResFileData {};
 
-        };
-
-        struct ResFile
-        {
-            /* data */
-        };
-        
-    };
+struct ResFile {
+    /* data */
 };
+
+}; // namespace g3d
+}; // namespace nw4r

@@ -2,7 +2,7 @@
 #define RVL_SDK_OS_HARDWARE_H
 #include "rvl/OS/OSAddress.h"
 #include "rvl/OS/OSThread.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -18,28 +18,28 @@ typedef struct OSExecParams;
  */
 
 // Derive offsets for use with OSAddress functions
-#define __DEF_ADDR_OFFSETS(name, addr)                                         \
-    static const u32 OS_PHYS_##name = (addr)-0x80000000;                       \
-    static const u32 OS_CACHED_##name = (addr);                                \
+#define __DEF_ADDR_OFFSETS(name, addr) \
+    static const u32 OS_PHYS_##name = (addr)-0x80000000; \
+    static const u32 OS_CACHED_##name = (addr); \
     static const u32 OS_UNCACHED_##name = (addr) + (0xC0000000 - 0x80000000);
 
 // Define a global variable in *CACHED* MEM1.
 // Can be accessed directly or with OSAddress functions.
-#define OS_DEF_GLOBAL_VAR(type, name, addr)                                    \
-    /* Memory-mapped value for direct access */                                \
-    type OS_##name : (addr);                                                   \
+#define OS_DEF_GLOBAL_VAR(type, name, addr) \
+    /* Memory-mapped value for direct access */ \
+    type OS_##name : (addr); \
     __DEF_ADDR_OFFSETS(name, addr)
 
 // Define a global array in *CACHED* MEM1.
 // Can be accessed directly or with OSAddress functions.
-#define OS_DEF_GLOBAL_ARR(type, name, arr, addr)                               \
-    /* Memory-mapped value for direct access */                                \
-    type OS_##name arr : (addr);                                               \
+#define OS_DEF_GLOBAL_ARR(type, name, arr, addr) \
+    /* Memory-mapped value for direct access */ \
+    type OS_##name arr : (addr); \
     __DEF_ADDR_OFFSETS(name, addr)
 
 // Define an global variable in the hardware-register range.
-#define OS_DEF_HW_REG(type, name, addr)                                        \
-    /* Memory-mapped value for direct access */                                \
+#define OS_DEF_HW_REG(type, name, addr) \
+    /* Memory-mapped value for direct access */ \
     type OS_##name : (addr);
 
 typedef struct OSBootInfo {
@@ -56,17 +56,17 @@ typedef struct OSBootInfo {
     u32 aplVersion;   // at 0x24
     u32 physMemSize;  // at 0x28
     u32 consoleType;  // at 0x2C
-    void* arenaLo;    // at 0x30
-    void* arenaHi;    // at 0x34
-    void* fstStart;   // at 0x38
+    void *arenaLo;    // at 0x30
+    void *arenaHi;    // at 0x34
+    void *fstStart;   // at 0x38
     u32 fstSize;      // at 0x3C
 } OSBootInfo;
 
 typedef struct OSDebugInterface {
     BOOL usingDebugger;    // at 0x0
     u32 exceptionMask;     // at 0x4
-    void* exceptionHook;   // at 0x8
-    void* exceptionHookLR; // at 0xC
+    void *exceptionHook;   // at 0x8
+    void *exceptionHookLR; // at 0xC
 } OSDebugInterface;
 
 typedef struct OSBI2 {

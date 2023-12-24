@@ -2,7 +2,7 @@
 
 // This file was ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/cLib/c_list.hpp
 
-#include "types.h"
+#include <common.h>
 
 /// @brief A doubly-linked list node. See cListMg_c.
 /// @note Unofficial name.
@@ -11,8 +11,12 @@ public:
     /// @brief Constructs a new list node.
     cListNd_c() : mpPrev(nullptr), mpNext(nullptr) {}
 
-    cListNd_c *getPrev() const { return mpPrev; }
-    cListNd_c *getNext() const { return mpNext; }
+    cListNd_c *getPrev() const {
+        return mpPrev;
+    }
+    cListNd_c *getNext() const {
+        return mpNext;
+    }
 
 protected:
     cListNd_c *mpPrev; ///< The previous node.
@@ -24,8 +28,8 @@ protected:
 class cListMg_c {
 public:
     /* 802e2be0 */ cListMg_c() : mpFirst(nullptr), mpLast(nullptr) {}
-    // /* 802e2880 */ ~cListMg_c(); 
-    
+    // /* 802e2880 */ ~cListMg_c();
+
     bool insertAfter(cListNd_c *node, cListNd_c *prevNode);
 
     /**
@@ -52,10 +56,14 @@ public:
      */
     bool prepend(cListNd_c *node);
 
-    cListNd_c *getFirst() const { return mpFirst; }
-    cListNd_c *getLast() const { return mpLast; }
+    cListNd_c *getFirst() const {
+        return mpFirst;
+    }
+    cListNd_c *getLast() const {
+        return mpLast;
+    }
 
 protected:
     cListNd_c *mpFirst; ///< The first node in the list.
-    cListNd_c *mpLast; ///< The last node in the list.
+    cListNd_c *mpLast;  ///< The last node in the list.
 };

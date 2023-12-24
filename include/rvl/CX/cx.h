@@ -1,6 +1,6 @@
 #pragma once
 
-#include "types.h"
+#include <common.h>
 
 // .text: [0x803cee90, 0x803d0b20]
 
@@ -19,20 +19,20 @@ typedef struct CXUncompContextRL {
 typedef struct CXUncompContextLH {
     // u8 _[0x8a8];
     // taken from xenoblade
-	u8* destp;
-	s32 destCount;
-	s32 forceDestCount;
-	u16 huffTable9[1 << (9 + 1)];
-	u16 huffTable12[1 << (5 + 1)];
-	u16* nodep;
-	s32 tableSize9;
-	s32 tableSize12;
-	u32 tableIdx;
-	u32 stream;
-	u32 stream_len;
-	u16 length;
-	s8 offset_bits;
-	u8 headerSize;
+    u8 *destp;
+    s32 destCount;
+    s32 forceDestCount;
+    u16 huffTable9[1 << (9 + 1)];
+    u16 huffTable12[1 << (5 + 1)];
+    u16 *nodep;
+    s32 tableSize9;
+    s32 tableSize12;
+    u32 tableIdx;
+    u32 stream;
+    u32 stream_len;
+    u16 length;
+    s8 offset_bits;
+    u8 headerSize;
 } CXUncompContextLH;
 
 typedef struct CXUncompContextLRC {
@@ -54,7 +54,6 @@ typedef struct CXUncompContextLRC {
 /* 803d0790 */ void CXGetUncompressedSize();
 /* 803d07d0 */ void CXUncompressLZ();
 /* 803d0920 */ void CXiLHVerifyTable();
-
 
 #ifdef __cplusplus
 }

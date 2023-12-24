@@ -2,7 +2,7 @@
 
 // This file was ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/cLib/c_tree.hpp
 
-#include "types.h"
+#include <common.h>
 
 /// @brief A tree node. See cTreeMg_c.
 /// @details The tree is represented as a doubly-linked LCRS tree.
@@ -17,19 +17,27 @@ public:
     /// @brief Gets the next node in preorder traversal order, excluding the node's children.
     cTreeNd_c *getTreeNextNotChild() const;
 
-    cTreeNd_c *getParent() const { return mpParent; }
-    cTreeNd_c *getChild() const { return mpChild; }
-    cTreeNd_c *getBrPrev() const { return mpPrev; }
-    cTreeNd_c *getBrNext() const { return mpNext; }
+    cTreeNd_c *getParent() const {
+        return mpParent;
+    }
+    cTreeNd_c *getChild() const {
+        return mpChild;
+    }
+    cTreeNd_c *getBrPrev() const {
+        return mpPrev;
+    }
+    cTreeNd_c *getBrNext() const {
+        return mpNext;
+    }
 
 protected:
     /// @brief Clears all fields.
     void forcedClear();
 
     cTreeNd_c *mpParent; ///< The parent node.
-    cTreeNd_c *mpChild; ///< The child node.
-    cTreeNd_c *mpPrev; ///< The previous sibling node.
-    cTreeNd_c *mpNext; ///< The next sibling node.
+    cTreeNd_c *mpChild;  ///< The child node.
+    cTreeNd_c *mpPrev;   ///< The previous sibling node.
+    cTreeNd_c *mpNext;   ///< The next sibling node.
 
     friend class cTreeMg_c;
 };

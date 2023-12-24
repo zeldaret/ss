@@ -3,7 +3,7 @@
 #include "MSL_C/float.h"
 #include "egg/math/eggMath.h"
 #include "nw4r/math/vec.h"
-#include "types.h"
+#include <common.h>
 
 namespace EGG {
 

@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_GX_INTERNAL_H
 #define RVL_SDK_GX_INTERNAL_H
 #include "rvl/GX/GXTypes.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -21,19 +21,19 @@ extern "C" {
  * (Implementation size is included to require that such a structure already
  * exists.)
  */
-#define GX_DECL_PUBLIC_STRUCT(name, size)                                      \
-    typedef struct _##name {                                                   \
-        u8 dummy[(size) - sizeof(name##Impl) + sizeof(name##Impl)];            \
+#define GX_DECL_PUBLIC_STRUCT(name, size) \
+    typedef struct _##name { \
+        u8 dummy[(size) - sizeof(name##Impl) + sizeof(name##Impl)]; \
     } name;
 
 typedef struct _GXFifoObjImpl {
-    void* base;        // at 0x0
-    void* end;         // at 0x4
+    void *base;        // at 0x0
+    void *end;         // at 0x4
     u32 size;          // at 0x8
-    void* hiWatermark; // at 0xC
-    void* loWatermark; // at 0x10
-    void* readPtr;     // at 0x14
-    void* writePtr;    // at 0x18
+    void *hiWatermark; // at 0xC
+    void *loWatermark; // at 0x10
+    void *readPtr;     // at 0x14
+    void *writePtr;    // at 0x18
     u32 count;         // at 0x1C
     u8 wrap;           // at 0x20
 } GXFifoObjImpl;

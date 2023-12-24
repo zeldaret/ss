@@ -2,7 +2,7 @@
 #define RVL_SDK_OS_H
 #include "rvl/OS/OSContext.h"
 #include "rvl/OS/OSExec.h"
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -61,7 +61,7 @@ typedef struct OSIOSRev {
     u16 buildYear; // at 0x6
 } OSIOSRev;
 
-typedef void (*OSExceptionHandler)(u8 type, OSContext* ctx);
+typedef void (*OSExceptionHandler)(u8 type, OSContext *ctx);
 
 extern BOOL __OSInIPL;
 extern BOOL __OSInNandBoot;
@@ -71,16 +71,16 @@ extern OSExecParams __OSRebootParams;
 
 void __OSFPRInit(void);
 u32 __OSGetHollywoodRev(void);
-void __OSGetIOSRev(OSIOSRev* rev);
+void __OSGetIOSRev(OSIOSRev *rev);
 u32 OSGetConsoleType(void);
 void OSInit(void);
 OSExceptionHandler __OSSetExceptionHandler(u8 type, OSExceptionHandler handler);
 OSExceptionHandler __OSGetExceptionHandler(u8 type);
-void OSDefaultExceptionHandler(u8 type, OSContext* ctx);
+void OSDefaultExceptionHandler(u8 type, OSContext *ctx);
 void __OSPSInit(void);
 u32 __OSGetDIConfig(void);
-void OSRegisterVersion(const char* ver);
-const char* OSGetAppGamename(void);
+void OSRegisterVersion(const char *ver);
+const char *OSGetAppGamename(void);
 u8 OSGetAppType(void);
 
 #ifdef __cplusplus

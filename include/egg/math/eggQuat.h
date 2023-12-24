@@ -1,7 +1,7 @@
 #pragma once
 
 #include "egg/math/eggVector.h"
-#include "types.h"
+#include <common.h>
 
 namespace EGG {
 

@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_GX_TYPES_H
 #define RVL_SDK_GX_TYPES_H
-#include "rvl/types.h"
+#include <common.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -10,32 +10,28 @@ extern "C" {
  * Value is shifted to the specified bit position.
  * (Bit indices are LSB)
  */
-#define GX_BITSET(field, pos, size, value)                                     \
-    __rlwimi((field), (value), 31 - (pos) - (size) + 1, (pos), (pos) + (size)-1)
+#define GX_BITSET(field, pos, size, value) __rlwimi((field), (value), 31 - (pos) - (size) + 1, (pos), (pos) + (size)-1)
 
 /**
  * Compose value from bitfield.
  * Value is shifted after masking.
  * (Bit indices are LSB)
  */
-#define GX_BITGET(field, pos, size)                                            \
-    ((field) >> (31 - (pos) - (size) + 1) & ((1 << (size)) - 1))
+#define GX_BITGET(field, pos, size) ((field) >> (31 - (pos) - (size) + 1) & ((1 << (size)) - 1))
 
 /**
  * Pack value into bitfield.
  * Value is not shifted, only masked.
  * (Bit indices are LSB)
  */
-#define GX_BITSET_TRUNC(field, pos, size, value)                               \
-    __rlwimi((field), (value), 0, (pos), (pos) + (size)-1)
+#define GX_BITSET_TRUNC(field, pos, size, value) __rlwimi((field), (value), 0, (pos), (pos) + (size)-1)
 
 /**
  * Compose value from bitfield.
  * Value is not shifted, only masked.
  * (Bit indices are LSB)
  */
-#define GX_BITGET_TRUNC(field, pos, size)                                      \
-    ((field) & (((1 << (size)) - 1) << (32 - (pos) - (size))))
+#define GX_BITGET_TRUNC(field, pos, size) ((field) & (((1 << (size)) - 1) << (32 - (pos) - (size))))
 
 /**
  * Common types used throughout many GX files.
@@ -212,12 +208,7 @@ typedef enum _GXCompType {
     GX_RGBA8
 } GXCompType;
 
-typedef enum _GXCullMode {
-    GX_CULL_NONE,
-    GX_CULL_FRONT,
-    GX_CULL_BACK,
-    GX_CULL_ALL
-} GXCullMode;
+typedef enum _GXCullMode { GX_CULL_NONE, GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL } GXCullMode;
 
 typedef enum _GXDiffuseFn { GX_DF_NONE, GX_DF_SIGN, GX_DF_CLAMP } GXDiffuseFn;
 
@@ -250,22 +241,15 @@ typedef enum _GXDirtyFlag {
     GX_DIRTY_PROJECTION = (1 << 27),
     GX_DIRTY_VIEWPORT = (1 << 28),
 
-    GX_AMB_MAT_MASK = GX_DIRTY_AMB_COLOR0 | GX_DIRTY_AMB_COLOR1 |
-                      GX_DIRTY_MAT_COLOR0 | GX_DIRTY_MAT_COLOR1,
+    GX_AMB_MAT_MASK = GX_DIRTY_AMB_COLOR0 | GX_DIRTY_AMB_COLOR1 | GX_DIRTY_MAT_COLOR0 | GX_DIRTY_MAT_COLOR1,
 
-    GX_LIGHT_CHAN_MASK = GX_DIRTY_CHAN_COLOR0 | GX_DIRTY_CHAN_COLOR1 |
-                         GX_DIRTY_CHAN_ALPHA0 | GX_DIRTY_CHAN_ALPHA1 |
-                         GX_DIRTY_NUM_COLORS,
+    GX_LIGHT_CHAN_MASK = GX_DIRTY_CHAN_COLOR0 | GX_DIRTY_CHAN_COLOR1 | GX_DIRTY_CHAN_ALPHA0 | GX_DIRTY_CHAN_ALPHA1 |
+            GX_DIRTY_NUM_COLORS,
 
     GX_TEX_GEN_MASK = 0x2FF0000,
 } GXDirtyFlag;
 
-typedef enum _GXDistAttnFn {
-    GX_DA_OFF,
-    GX_DA_GENTLE,
-    GX_DA_MEDIUM,
-    GX_DA_STEEP
-} GXDistAttnFn;
+typedef enum _GXDistAttnFn { GX_DA_OFF, GX_DA_GENTLE, GX_DA_MEDIUM, GX_DA_STEEP } GXDistAttnFn;
 
 typedef enum _GXFogType {
     GX_FOG_NONE,
@@ -286,7 +270,7 @@ typedef enum _GXFogType {
 
 // Access components of the fog type
 #define GX_FOG_GET_PROJ(x) ((x) >> 3 & 1)
-#define GX_FOG_GET_FSEL(x) ((x)&7)
+#define GX_FOG_GET_FSEL(x) ((x) & 7)
 
 typedef enum _GXIndTexAlphaSel {
     GX_ITBA_OFF,
@@ -450,15 +434,7 @@ typedef enum _GXPrimitive {
 
 typedef enum _GXProjMtxType { GX_PERSPECTIVE, GX_ORTHOGRAPHIC } GXProjMtxType;
 
-typedef enum _GXSpotFn {
-    GX_SP_OFF,
-    GX_SP_FLAT,
-    GX_SP_COS,
-    GX_SP_COS2,
-    GX_SP_SHARP,
-    GX_SP_RING1,
-    GX_SP_RING2
-} GXSpotFn;
+typedef enum _GXSpotFn { GX_SP_OFF, GX_SP_FLAT, GX_SP_COS, GX_SP_COS2, GX_SP_SHARP, GX_SP_RING1, GX_SP_RING2 } GXSpotFn;
 
 typedef enum _GXTevAlphaArg {
     GX_CA_APREV,
@@ -504,12 +480,7 @@ typedef enum _GXTevColorArg {
     GX_CC_QUARTER = GX_CC_KONST
 } GXTevColorArg;
 
-typedef enum _GXTevColorChan {
-    GX_CH_RED,
-    GX_CH_GREEN,
-    GX_CH_BLUE,
-    GX_CH_ALPHA
-} GXTevColorChan;
+typedef enum _GXTevColorChan { GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA } GXTevColorChan;
 
 typedef enum _GXTevOp {
     GX_TEV_ADD,
