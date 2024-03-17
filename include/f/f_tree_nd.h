@@ -7,7 +7,6 @@
 #include "f/f_profile.h"
 #include <common.h>
 
-
 class fBase_c;
 
 class fTrNdBa_c : public cTreeNd_c {

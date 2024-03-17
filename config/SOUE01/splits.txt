@@ -38,10 +38,68 @@ d/a/e/d_a_e_base.cpp:
 	.text       start:0x8002F300 end:0x80030CB0
 	.ctors      start:0x804DB664 end:0x804DB668
 
+d/d_ac_npc_kyui.cpp:
+	.text       start:0x8004D810 end:0x80050800
+	.ctors      start:0x804DB670 end:0x804DB674
+
 d/d_base.cpp:
 	.text       start:0x80050800 end:0x80050A14
 	.data       start:0x80503380 end:0x805033D0
 	.sbss       start:0x805750C0 end:0x805750CC
+
+d/d_cc.cpp:
+	.text       start:0x80050A20 end:0x800520F0
+
+d/d_dvd.cpp:
+	.text       start:0x800520F0 end:0x80052E00
+
+d/d_dylink.cpp:
+	.text       start:0x80052E00 end:0x80053A30
+	.ctors      start:0x804DB674 end:0x804DB678
+
+d/d_fader.cpp:
+	.text       start:0x80053A30 end:0x80053E70
+	.ctors      start:0x804DB678 end:0x804DB67C
+
+d/d_font_manager.cpp:
+	.text       start:0x80053E70 end:0x800541D0
+	.ctors      start:0x804DB67C end:0x804DB680
+
+d/d_gfx.cpp:
+	.text       start:0x800541F0 end:0x80054B00
+
+d/d_heap.cpp:
+	.text       start:0x80054B00 end:0x80054F30
+	.ctors      start:0x804DB680 end:0x804DB684
+	.rodata     start:0x804DE008 end:0x804DE188
+	.sbss       start:0x805751A8 end:0x805751D0
+
+d/d_main.cpp:
+	.text       start:0x80054F30 end:0x80055170
+
+d/d_pad.cpp:
+	.text       start:0x80055170 end:0x80059CE0
+	.ctors      start:0x804DB684 end:0x804DB688
+
+d/d_pad_player.cpp:
+	.text       start:0x80059CE0 end:0x8005B6E0
+
+d/d_player.cpp:
+	.text       start:0x8005B6E0 end:0x80061B10
+	.ctors      start:0x804DB688 end:0x804DB690
+
+d/d_rawarchive.cpp:
+	.text       start:0x80061B10 end:0x800629D0
+
+d/d_scene.cpp:
+	.text       start:0x800629D0 end:0x80062E40
+	.ctors      start:0x804DB690 end:0x804DB694
+
+d/d_stage.cpp:
+	.text       start:0x80062E40 end:0x80064250
+
+d/d_sys.cpp:
+	.text       start:0x80064250 end:0x80064920
 
 toBeSorted/sceneflag_manager.cpp:
 	.text       start:0x800BD8C0 end:0x800BE7A8
@@ -60,6 +118,33 @@ toBeSorted/unk_flag_stuff.cpp:
 
 toBeSorted/bitwise_flag_helper.cpp:
 	.text       start:0x800BF200 end:0x800BF264
+
+f/f_base.cpp:
+	.text       start:0x802E12F0 end:0x802E2680
+	.ctors      start:0x804DB8C0 end:0x804DB8C4
+	.data       start:0x80542278 end:0x805423A8
+	.sdata      start:0x80573FB8 end:0x80573FBC
+	.sbss       start:0x80575BA8 end:0x80575BB8
+	.bss        start:0x805B84C8 end:0x805B84D8
+
+f/f_list.cpp:
+	.text       start:0x802E2680 end:0x802E28C0
+
+f/f_manager.cpp:
+	.text       start:0x802E28C0 end:0x802E2C0C
+	.ctors      start:0x804DB8C4 end:0x804DB8C8
+	.data       start:0x805423A8 end:0x805423E8
+	.sdata      start:0x80573FC0 end:0x80573FC8
+	.sbss       start:0x80575BB8 end:0x80575BC0
+	.bss        start:0x805B84D8 end:0x805B8588
+
+m/m_heap.cpp:
+	.text       start:0x802F0F00 end:0x802F1660
+	.rodata     start:0x804F0570 end:0x804F0580
+	.data       start:0x80542990 end:0x80542AA8
+	.sdata      start:0x80573FF8 end:0x80574000
+	.sbss       start:0x80575C38 end:0x80575C50
+	.bss        start:0x805CB078 end:0x805CB088
 
 m/m_mtx.cpp:
 	.text       start:0x802F1660 end:0x802F1F20

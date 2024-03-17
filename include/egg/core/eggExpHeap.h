@@ -3,7 +3,6 @@
 #include "egg/core/eggHeap.h"
 #include <common.h>
 
-
 namespace EGG {
 
 class ExpHeap : public Heap {
@@ -22,7 +21,7 @@ public:
 public:
     /* 80495ab0 */ ExpHeap(MEMiHeapHead *heapHead);
     /* 80495b70 */ static ExpHeap *create(void *block, u32 size, u16 attr);
-    /* 80495c30 */ static ExpHeap *create(u32 size, Heap *heap, u16 attr);
+    /* 80495c30 */ static ExpHeap *create(size_t size, Heap *heap, u16 attr);
     /* 80495d00 */ void setGroupID(u16 groupId);
     /* 80495f80 */ u32 getSizeForMBlock(const void *block);
 };

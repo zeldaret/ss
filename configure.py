@@ -120,7 +120,7 @@ if not is_windows():
 
 # Tool versions
 config.compilers_tag = "20231018"
-config.dtk_tag = "v0.6.5"
+config.dtk_tag = "v0.7.5"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.9"
 
@@ -185,6 +185,8 @@ cflags_dolphin = [
 cflags_framework = [
     *cflags_base,
     "-inline noauto",
+    "-str reuse",
+    
 ]
 
 # EGG flags
@@ -273,11 +275,18 @@ config.libs = [
             Object(NonMatching, "toBeSorted/flag_space.cpp"),
             Object(NonMatching, "toBeSorted/misc_flag_managers.cpp"),
             Object(Matching, "d/d_base.cpp"),
+            Object(NonMatching, "d/d_heap.cpp"),
+            Object(NonMatching, "d/d_stage.cpp"),
+            Object(NonMatching, "d/d_sys.cpp"),
             Object(NonMatching, "d/a/d_a_base.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_base.cpp"),
             Object(Matching, "toBeSorted/save_file.cpp"),
             Object(NonMatching, "toBeSorted/file_manager.cpp"),
             Object(NonMatching, "toBeSorted/save_manager.cpp"),
+            Object(NonMatching, "f/f_base.cpp"),
+            Object(NonMatching, "f/f_list.cpp"),
+            Object(NonMatching, "f/f_manager.cpp"),
+            Object(NonMatching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
             # framework (f_name)
             # d stuff (d_name)

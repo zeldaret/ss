@@ -9,7 +9,6 @@
 #include "f/f_profile.h"
 #include <common.h>
 
-
 class fBase_c;
 
 /// @brief A list of fLiNdBa_c nodes.
@@ -24,9 +23,7 @@ public:
     int countNodeByProfName(ProfileName profName) const;
 
     /* 802e2760 */ const fLiNdBa_c *searchNodeByID(fBaseID_e id) const;
-    /* 802e2790 */ const fLiNdBa_c *searchNodeByID(fBaseID_e id, fLiMgBa_c *start) const;
-    /* 802e27d0 */ void link(fLiNdBa_c &, fBase_c *);
-    /* 802e2830 */ void unlink(fLiNdBa_c &);
+    /* 802e2790 */ const fLiNdBa_c *searchNodeByProfName(ProfileName name, fLiNdBa_c *start) const;
 
     inline fLiNdBa_c *getFirst() const {
         return (fLiNdBa_c *)cListMg_c::getFirst();

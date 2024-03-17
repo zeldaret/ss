@@ -7,14 +7,19 @@
 #include "f/f_profile.h"
 #include <common.h>
 
-
 /// @brief A list node with priority fields for an order in a list.
 /// @note Unofficial name.
 class fLiNdPrio_c : public fLiNdBa_c {
 public:
     /// @brief Constructs a new list node.
     /// @param owner The node's owner.
-    fLiNdPrio_c(fBase_c *owner) : fLiNdBa_c(owner), mOrder(0), mNewOrder(0) {}
+    fLiNdPrio_c(fBase_c *owner) : fLiNdBa_c(owner), m_order(0), m_new_order(0) {}
+
+    void Initialize(fBase_c *owner) {
+        p_owner = owner;
+        m_order = 0;
+        m_new_order = 0;
+    }
 
     fLiNdPrio_c *getPrev() const {
         return (fLiNdPrio_c *)fLiNdBa_c::getPrev();
@@ -25,13 +30,26 @@ public:
     }
 
     u16 getOrder() const {
-        return mOrder;
+        return m_order;
     }
 
     u16 getNewOrder() const {
-        return mNewOrder;
+        return m_new_order;
     }
 
-    u16 mOrder;    ///< The priority of this node.
-    u16 mNewOrder; ///< The priority the node should change to if it differs from ::mOrder.
+    bool isPriorityChange() {
+        return m_new_order != m_order;
+    }
+
+    void updatePriority() {
+        m_order = m_new_order;
+    }
+
+    void setOrder(u16 order) {
+        m_order = order;
+        m_new_order = order;
+    }
+
+    u16 m_order;     ///< The priority of this node.
+    u16 m_new_order; ///< The priority the node should change to if it differs from ::mOrder.
 };

@@ -65,6 +65,9 @@ public:
     /* vt 0x28 | 00000000 */ virtual u32 adjust() = 0;
 
 public:
+    void setName(const char *name) {
+        mName = name;
+    }
     inline bool isExpHeap() {
         return getHeapKind() == HEAP_KIND_EXPANDED;
     }
@@ -94,7 +97,7 @@ public:
     /* 80495690 */ static Heap *findHeap(MEMiHeapHead *heapHandle);
     /* 80495730 */ Heap *findParentHeap();
     /* 80495780 */ static Heap *findContainHeap(const void *memBlock);
-    /* 80495560 */ static void *alloc(u32 size, int align, Heap *heap);
+    /* 80495560 */ static void *alloc(size_t size, int align, Heap *heap);
     /* 804957c0 */ static void free(void *memBlock, Heap *heap);
     /* 80495830 */ void dispose();
     /* 804958a0 */ void dump();

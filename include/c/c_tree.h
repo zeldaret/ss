@@ -65,6 +65,10 @@ public:
      */
     bool removeTreeNode(cTreeNd_c *node);
 
+    const cTreeNd_c *getRoot() const {
+        return mpRootNode;
+    }
+
 protected:
     cTreeNd_c *mpRootNode; ///< The root node of the tree.
 };

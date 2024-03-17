@@ -7,7 +7,6 @@
 #include "f/f_profile.h"
 #include <common.h>
 
-
 class fTrNdBa_c;
 
 /// @brief A container for a tree of fTrNdBa_c nodes.
@@ -29,4 +28,8 @@ public:
      * @return The found node, or @p nullptr if none was found.
      */
     const fTrNdBa_c *searchNodeByGroupType(u8 groupType, const fTrNdBa_c *parent) const;
+
+    const fTrNdBa_c *getRoot() const {
+        return (fTrNdBa_c *)cTreeMg_c::getRoot();
+    }
 };

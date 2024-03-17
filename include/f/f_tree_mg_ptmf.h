@@ -7,7 +7,6 @@
 #include "f/f_tree_mg.h"
 #include <common.h>
 
-
 class fBase_c;
 
 /// @brief A container for a tree of fTrNdBa_c nodes with a reference to a process function.

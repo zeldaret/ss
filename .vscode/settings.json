@@ -7,9 +7,9 @@
         "files.encoding": "utf8",
         "editor.defaultFormatter": "xaver.clang-format"
     },
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter"
-    },
+    // "[python]": {
+    //     "editor.defaultFormatter": "ms-python.black-formatter"
+    // },
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "search.useIgnoreFiles": false,
