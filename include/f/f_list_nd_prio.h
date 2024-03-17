@@ -1,4 +1,5 @@
-#pragma once
+#ifndef F_LIST_NODE_PRIORITY_H
+#define F_LIST_NODE_PRIORITY_H
 
 // This file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_list_nd_prio.hpp
@@ -47,3 +48,5 @@ public:
     u16 m_order;     ///< The priority of this node.
     u16 m_new_order; ///< The priority the node should change to if it differs from ::mOrder.
 };
+
+#endif

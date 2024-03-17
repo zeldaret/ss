@@ -1,4 +1,5 @@
-#pragma once
+#ifndef C_TREE_H
+#define C_TREE_H
 
 // This file was ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/cLib/c_tree.hpp
 
@@ -56,6 +57,7 @@ public:
      * @return If the operation was successful.
      */
     bool addTreeNode(cTreeNd_c *node, cTreeNd_c *parent);
+    bool insertTreeNode(cTreeNd_c *node, cTreeNd_c *parent);
 
     /**
      * @brief Removes a node from the tree.
@@ -72,3 +74,5 @@ public:
 protected:
     cTreeNd_c *mpRootNode; ///< The root node of the tree.
 };
+
+#endif

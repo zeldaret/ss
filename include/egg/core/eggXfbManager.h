@@ -1,8 +1,8 @@
-#pragma once
+#ifndef EGG_XFB_MANAGER_H
+#define EGG_XFB_MANAGER_H
 
 #include "egg/core/eggXfb.h"
 #include <common.h>
-
 
 namespace EGG {
 
@@ -21,3 +21,5 @@ public:
 };
 
 } // namespace EGG
+
+#endif

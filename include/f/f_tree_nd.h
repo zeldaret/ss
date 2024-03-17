@@ -1,4 +1,5 @@
-#pragma once
+#ifndef C_TREE_NODE_H
+#define C_TREE_NODE_H
 
 // This file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_tree_nd.hpp
@@ -39,3 +40,5 @@ public:
 
     fBase_c *p_owner;
 };
+
+#endif

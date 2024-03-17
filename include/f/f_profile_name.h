@@ -1,4 +1,5 @@
-#pragma once
+#ifndef F_PROFILE_NAME
+#define F_PROFILE_NAME
 
 #include <common.h>
 
@@ -712,3 +713,5 @@ enum PROFILE_NAME_e {
     INVALID,
 };
 };
+
+#endif

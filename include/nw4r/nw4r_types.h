@@ -1,4 +1,6 @@
-#pragma once
+#ifndef NW4R_TYPES_H
+#define NW4R_TYPES_H
+
 namespace nw4r {
 namespace ut {
 template <typename T>
@@ -183,3 +185,5 @@ struct ResBlockSet;
 struct TexMap;
 } // namespace lyt
 } // namespace nw4r
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef D_BASE_H
+#define D_BASE_H
 
 #include "f/f_base.h"
 // #include "c/c_owner_set.h"
@@ -17,19 +18,20 @@ public:
     /* 80050860 */ virtual void postDraw(MAIN_STATE_e state);
     /* 8002c530 */ virtual ~dBase_c();
 
-
 public:
     /* 80050980 */ static void resetFlags();
-    /* 800509a0 */ static bool isActorPlayer(dBase_c&);
+    /* 800509a0 */ static bool isActorPlayer(dBase_c &);
     /* 800509e0 */ static void initLoader();
-    /* 80050a00 */ static dBase_c* createBase(ProfileName, dBase_c*, unsigned long, u8);
-    /* 80050a10 */ static dBase_c* createRoot(ProfileName, unsigned long, u8);
+    /* 80050a00 */ static dBase_c *createBase(ProfileName, dBase_c *, unsigned long, u8);
+    /* 80050a10 */ static dBase_c *createRoot(ProfileName, unsigned long, u8);
 
 private:
     /* 800509c0 */ static int loadAsyncCallback();
     /* 800509d0 */ static void unloadCallback();
 
-inline bool isProcControlFlag(u32 flag) const { return (baseProperties & flag) != 0; }
+    inline bool isProcControlFlag(u32 flag) const {
+        return (baseProperties & flag) != 0;
+    }
 
 public:
     /* 805750c0 */ static u32 s_ExecuteControlFlags;
@@ -39,3 +41,5 @@ public:
 
     friend class fBase_c;
 };
+
+#endif

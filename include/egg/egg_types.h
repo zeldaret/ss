@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_TYPES_H
+#define EGG_TYPES_H
 
 #include <common.h>
 
@@ -93,3 +94,5 @@ class SoundHeapMgr;
 class Exception;
 class MsgRes;
 } // namespace EGG
+
+#endif

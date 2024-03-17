@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_QUAT_H
+#define EGG_QUAT_H
 
 #include "egg/math/eggVector.h"
 #include <common.h>
@@ -70,3 +71,5 @@ struct Quatf : Vector3f {
 };
 
 } // namespace EGG
+
+#endif

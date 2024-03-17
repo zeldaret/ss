@@ -1,4 +1,5 @@
-#pragma once
+#ifndef M_ANGLE_H
+#define M_ANGLE_H
 
 #include <common.h>
 
@@ -17,3 +18,5 @@ public:
         z = fz;
     }
 };
+
+#endif

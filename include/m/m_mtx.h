@@ -1,4 +1,5 @@
-#pragma once
+#ifndef M_MTX_H
+#define M_MTX_H
 
 // NOTE:: Comments about functions pulled from NSMBW
 
@@ -6,7 +7,6 @@
 #include "m/m_angle.h"
 #include "nw4r/nw4r_types.h"
 #include <common.h>
-
 
 class mMtx_c {
     mMtx_c(){};
@@ -51,3 +51,5 @@ public:
 public:
     static mMtx_c Identity;
 };
+
+#endif

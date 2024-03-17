@@ -1,4 +1,5 @@
-#pragma once
+#ifndef F_LIST_MANAGER_FUNC_H
+#define F_LIST_MANAGER_FUNC_H
 
 // This file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_list_mg_ptmf.hpp
@@ -29,3 +30,5 @@ public:
 private:
     int (fBase_c::*mpProcFunc)(); ///< The process function for the list.
 };
+
+#endif

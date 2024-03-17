@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_BIT_FLAG_H
+#define EGG_BIT_FLAG_H
 
 // Pulled from ogws
 
@@ -63,3 +64,5 @@ public:
 };
 
 } // namespace EGG
+
+#endif

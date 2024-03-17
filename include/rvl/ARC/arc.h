@@ -1,4 +1,3 @@
-#pragma once
 #ifndef RVL_SDK_ARC_H
 #define RVL_SDK_ARC_H
 #include <common.h>

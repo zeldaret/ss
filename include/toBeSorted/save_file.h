@@ -1,4 +1,5 @@
-#pragma once
+#ifndef SAVE_FILE_H
+#define SAVE_FILE_H
 
 #include "UnknownTypeBelongings.h"
 #include <common.h>
@@ -107,3 +108,5 @@ public:
     /* 80009D10 */ s8 *getAreaT2();
     /* 80009D20 */ s8 *getAreaT3();
 };
+
+#endif

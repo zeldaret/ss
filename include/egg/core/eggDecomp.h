@@ -1,8 +1,8 @@
-#pragma once
+#ifndef EGG_STREAM_DECOMP_H
+#define EGG_STREAM_DECOMP_H
 
 #include "rvl/CX/cx.h"
 #include <common.h>
-
 
 // NOTE: I put StreamDecomp stuff here. im unsure of the correct place
 
@@ -81,3 +81,5 @@ public:
     /* 0x0C */ SZSCompContext context;
 };
 } // namespace EGG
+
+#endif

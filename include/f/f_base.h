@@ -1,4 +1,5 @@
-#pragma once
+#ifndef F_BASE_H
+#define F_BASE_H
 
 // This file is adapted from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_base.hpp and the Skyward Sword
@@ -154,3 +155,5 @@ private:
     friend class fLiNdBa_c;
     friend class fTrMgBa_c;
 };
+
+#endif

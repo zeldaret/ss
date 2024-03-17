@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DECOMP_UNKNOWN_TYPES_H
+#define DECOMP_UNKNOWN_TYPES_H
 
 #include <common.h>
 
@@ -32,3 +33,5 @@ struct ObjInfo {
 // };
 
 class UnkCollider {};
+
+#endif

@@ -1,8 +1,8 @@
-#pragma once
+#ifndef EGG_FRM_HEAP_H
+#define EGG_FRM_HEAP_H
 
 #include "egg/core/eggHeap.h"
 #include <common.h>
-
 
 namespace EGG {
 
@@ -28,3 +28,5 @@ public:
 };
 
 } // namespace EGG
+
+#endif

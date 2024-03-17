@@ -1,4 +1,5 @@
-#pragma once
+#ifndef C_OWNER_SET_H
+#define C_OWNER_SET_H
 
 // This file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/cLib/c_owner_set.hpp
@@ -59,3 +60,5 @@ private:
 
     cOwnerSetNd_c *mpRoot; ///< The first element of the set.
 };
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BITWISE_FLAG_HELPERS_H
+#define BITWISE_FLAG_HELPERS_H
 
 #include <common.h>
 
@@ -11,3 +12,5 @@ public:
     void setFlag(u16 slot, u16 shift, u16 *pData, u16 flagCount);
     void unsetFlag(u16 slot, u16 shift, u16 *pData, u16 flagCount);
 };
+
+#endif

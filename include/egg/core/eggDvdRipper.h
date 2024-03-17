@@ -1,10 +1,10 @@
-#pragma once
+#ifndef EGG_DVD_RIPPER_H
+#define EGG_DVD_RIPPER_H
 
 #include "egg/core/eggDecomp.h"
 #include "egg/core/eggDvdFile.h"
 #include "egg/core/eggHeap.h"
 #include <common.h>
-
 
 namespace EGG {
 
@@ -28,3 +28,5 @@ public:
 };
 
 } // namespace EGG
+
+#endif

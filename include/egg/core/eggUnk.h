@@ -1,8 +1,8 @@
-#pragma once
+#ifndef EGG_UNK_H
+#define EGG_UNK_H
 
 #include "rvl/OS.h"
 #include <common.h>
-
 
 // This is seen in Animal Crossing: City Folk also. Idk where it belongs
 
@@ -20,3 +20,5 @@ public:
     /* 804970e0 */ void fn_804970e0(OSThread *, u8 *);
 };
 } // namespace EGG
+
+#endif

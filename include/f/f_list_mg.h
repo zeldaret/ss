@@ -1,4 +1,5 @@
-#pragma once
+#ifndef F_LIST_MANAGER_H
+#define F_LIST_MANAGER_H
 
 // This file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_list_mg.hpp
@@ -33,3 +34,5 @@ public:
         return (fLiNdBa_c *)cListMg_c::getLast();
     }
 };
+
+#endif

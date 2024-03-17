@@ -427,7 +427,7 @@ bool fBase_c::setConnectChild(fBase_c *child) {
         return false;
     }
 
-    return fManager_c::m_connectManage.addTreeNode(&manager.connect_node, &child->manager.connect_node);
+    return fManager_c::m_connectManage.insertTreeNode(&manager.connect_node, &child->manager.connect_node);
 }
 
 /* 802e20e0 */

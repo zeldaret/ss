@@ -1,4 +1,5 @@
-#pragma once
+#ifndef M_TYPES_H
+#define M_TYPES_H
 
 #include <common.h>
 
@@ -65,3 +66,5 @@ template <typename T> // types are from EGG::StreamDecomp[LH/LRC/RL/LZ]
 class TUncompressedInfo_c;
 
 } // namespace mDvd
+
+#endif

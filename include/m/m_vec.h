@@ -1,9 +1,9 @@
-#pragma once
+#ifndef M_VEC_H
+#define M_VEC_H
 
 #include "egg/math/eggVector.h"
 #include "rvl/MTX.h"
 #include <common.h>
-
 
 class mVec3_c : public EGG::Vector3f {
 public:
@@ -155,3 +155,5 @@ public:
         return x != v.x || y != v.y || z != v.z;
     }
 };
+
+#endif

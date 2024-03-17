@@ -1,4 +1,5 @@
-#pragma once
+#ifndef F_HELPER_UNK_H
+#define F_HELPER_UNK_H
 
 // This file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_helper_unk.hpp
@@ -24,3 +25,5 @@ public:
     int Load(int);      ///< @todo Document this method.
     bool LoadOnlyOne(); ///< @todo Document this method.
 };
+
+#endif

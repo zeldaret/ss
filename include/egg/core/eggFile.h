@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_FILE_H
+#define EGG_FILE_H
 
 #include <common.h>
 
@@ -23,3 +24,5 @@ private:
 };
 
 } // namespace EGG
+
+#endif

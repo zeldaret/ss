@@ -1,22 +1,23 @@
-#pragma once
+#ifndef D_A_BASE_H
+#define D_A_BASE_H
 
+#include "UnknownTypeBelongings.h"
 #include "d/d_base.h"
 #include "d/d_heap.h"
 #include "m/m_allocator.h"
-#include "UnknownTypeBelongings.h"
+
 // #include "m/types_m.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "toBeSorted/room_manager.h"
 
-
 class dAcBase_c;
 struct SoundInfo {
-    dAcBase_c* actor;
-    void* obj_sound;
-    mVec3_c* obj_pos;
-    SoundInfo* next;
-    SoundInfo* prev;
+    dAcBase_c *actor;
+    void *obj_sound;
+    mVec3_c *obj_pos;
+    SoundInfo *next;
+    SoundInfo *prev;
 };
 // Ghidra: ActorBase
 //   size: 0xFC
@@ -24,64 +25,65 @@ struct SoundInfo {
 class dAcBase_c : public dBase_c {
 public:
     /* 0x68 */ mHeapAllocator_c heap_allocator;
-    /* 0x84 */ ObjInfo*         obj_info;
-    /* 0x88 */ void*            sound_info_tail;
-    /* 0x8c */ void*       sound_info_next;
-    /* 0x90 */ int              count;
-    /* 0x94 */ void*            obj_sound;
-    /* 0x9C */ mVec3_c*         obj_pos;
-    /* 0x9c */ mVec3_c          pos_copy;
-    /* 0xa8 */ u32              params2;
-    /* 0xAC */ mAng3_c          rot_copy;
-    /* 0xB2 */ u16              obj_id; // enemydefeat flag / id on obj-map
-    /* 0xB4 */ u8               room_id_copy;
-    /* 0xB5 */ u8               viewclip_index;
-    /* 0xB6 */ u8               subtype;
-    /* 0xB8 */ mAng3_c          rotation;
-    /* 0xC0 */ mVec3_c          position;
-    /* 0xCC */ mVec3_c          scale;
-    /* 0xD8 */ u32              actor_properties;
-    /* 0xDC */ fLiNdBa_c        actor_node;
-    /* 0xE8 */ u32              field_0xe8;
-    /* 0xEC */ u8               roomid;
-    /* 0xED */ u8               actor_subtype;
-    /* 0xF0 */ u32              JStudio_actor;
-    /* 0xF4 */ char             someStr[4];
-    /* 0xF8 */ char             field_0xf8[0xfc - 0xf8];
+    /* 0x84 */ ObjInfo *obj_info;
+    /* 0x88 */ void *sound_info_tail;
+    /* 0x8c */ void *sound_info_next;
+    /* 0x90 */ int count;
+    /* 0x94 */ void *obj_sound;
+    /* 0x9C */ mVec3_c *obj_pos;
+    /* 0x9c */ mVec3_c pos_copy;
+    /* 0xa8 */ u32 params2;
+    /* 0xAC */ mAng3_c rot_copy;
+    /* 0xB2 */ u16 obj_id; // enemydefeat flag / id on obj-map
+    /* 0xB4 */ u8 room_id_copy;
+    /* 0xB5 */ u8 viewclip_index;
+    /* 0xB6 */ u8 subtype;
+    /* 0xB8 */ mAng3_c rotation;
+    /* 0xC0 */ mVec3_c position;
+    /* 0xCC */ mVec3_c scale;
+    /* 0xD8 */ u32 actor_properties;
+    /* 0xDC */ fLiNdBa_c actor_node;
+    /* 0xE8 */ u32 field_0xe8;
+    /* 0xEC */ u8 roomid;
+    /* 0xED */ u8 actor_subtype;
+    /* 0xF0 */ u32 JStudio_actor;
+    /* 0xF4 */ char someStr[4];
+    /* 0xF8 */ char field_0xf8[0xfc - 0xf8];
+
 protected:
     /* 80501544 */ // vtable
     /* 0x08 | 8002c880 */ virtual int create();
     /* 0x10 | 8002c8f0 */ virtual void postCreate(MAIN_STATE_e state);
     /* 0x18 | 8002c940 */ virtual int preDelete();
-    /* 0x20 | 8002cc10 */ virtual int execute(); // calls either actorExecute/executeInEvent
-    /* 0x24 | 8002cb10 */ virtual int preExecute(); // looks at some actor properties
+    /* 0x20 | 8002cc10 */ virtual int execute();                        // calls either actorExecute/executeInEvent
+    /* 0x24 | 8002cb10 */ virtual int preExecute();                     // looks at some actor properties
     /* 0x28 | 8002ccc0 */ virtual void postExecute(MAIN_STATE_e state); // not fully understood
-    /* 0x44 | 8002c3a0 */ virtual bool createHeap(); 
+    /* 0x44 | 8002c3a0 */ virtual bool createHeap();
     /* 0x48 | 8002c590 */ virtual ~dAcBase_c();
-    /* 0x4C | 8002c860 */ virtual int actorCreate(); // name is assumed
-    /* 0x50 | 8002c870 */ virtual int actorPostCreate(); // name is assumed
-    /* 0x54 | 8002cca0 */ virtual int actorExecute(); // name is assumed
+    /* 0x4C | 8002c860 */ virtual int actorCreate();         // name is assumed
+    /* 0x50 | 8002c870 */ virtual int actorPostCreate();     // name is assumed
+    /* 0x54 | 8002cca0 */ virtual int actorExecute();        // name is assumed
     /* 0x58 | 8002ccb0 */ virtual int actorExecuteInEvent(); // name is assumed
     /* 0x5C | 8002ce90 */ virtual void unkVirtFunc_0x5C();
     /* 0x60 | 8002cea0 */ virtual void unkVirtFunc_0x60();
     /* 0x64 | 8002ceb0 */ virtual bool restorePosRotFromCopy();
-    /* 0x68 | 8002db80 */ virtual void* getCurrentEventActor();
+    /* 0x68 | 8002db80 */ virtual void *getCurrentEventActor();
     /* 0x6C | 8002db90 */ virtual void unkVirtFunc_0x6C();
     /* 0x70 | 8002dba0 */ virtual void doInteraction(s32);
 
 public:
     /* 8002c3b0 */ dAcBase_c();
 
-    void setPostion(mVec3_c* r) {
+    void setPostion(mVec3_c *r) {
         position.set(r->x, r->y, r->z);
     }
     void setScale(f32 x, f32 y, f32 z) {
         scale.set(x, y, z);
     }
-    void setScale(mVec3_c* r) {
+    void setScale(mVec3_c *r) {
         scale.set(r->x, r->y, r->z);
     }
-    void setRotation(mAng3_c* r) {
+    void setRotation(mAng3_c *r) {
         rotation = *r;
     }
 
@@ -93,20 +95,18 @@ public:
     void copyRotation() {
         rot_copy = rotation;
     }
+
 public:
-    // funcs found in TU 
-    /* 8002c650 */ static void setTempCreateParams( \
-        mVec3_c* pos, mAng3_c* rot, mVec3_c* scale, \
-        s32 roomId, u32 params2, dAcBase_c* parent, \
-        u8 subtype, s16 unkFlag, u8 viewClipIdx,\
-        ObjInfo* objInfo );
-    
-    /* 8002c690 */ void* FUN_8002c690();
-    /* 8002c710 */ int initAllocatorWork1Heap(int size, char* name, int align);
-    /* 8002c720 */ int initAllocator(int size, char* name, EGG::Heap* heap, int align);
+    // funcs found in TU
+    /* 8002c650 */ static void setTempCreateParams(mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2,
+            dAcBase_c *parent, u8 subtype, s16 unkFlag, u8 viewClipIdx, ObjInfo *objInfo);
+
+    /* 8002c690 */ void *FUN_8002c690();
+    /* 8002c710 */ int initAllocatorWork1Heap(int size, char *name, int align);
+    /* 8002c720 */ int initAllocator(int size, char *name, EGG::Heap *heap, int align);
     /* 8002c7b0 */ bool addActorToRoom(s32 roomId);
     /* 8002c840 */ void setBit_field_0xE8(s32);
-    /* 8002cf10 */ u32 itemDroppingAndGivingRelated(Vec3f* spawnPos, int subtype);
+    /* 8002cf10 */ u32 itemDroppingAndGivingRelated(Vec3f *spawnPos, int subtype);
     /* 8002cf90 */ void fillUpperParams2Byte();
     /* 8002cfa0 */ u32 getParams2_ignoreLower();
     /* 8002cfb0 */ void setParams2Upper_ignoreLower(u32 val);
@@ -114,23 +114,25 @@ public:
     /* 8002cfd0 */ void setParams2UpperByte(u32 val);
     /* 8002cff0 */ static u32 buildParams2(u32 lower, u8 upper);
     /* 8002d010 */ u32 getParams2Lower();
-    /* 8002d020 */ static dAcBase_c* findActor(char* objName, dAcBase_c* parent);
-    /* 8002d0a0 */ static dAcBase_c* searchActor(dAcBase_c& optionalParent);
-        // Kinda performs the code of the first param on every actor (second param is optional parent)
-    /* 8002d130 */static void forEachActor(void*, dAcBase_c&);
-        // Not really static, but we currently dont have a type for the return (not just simply a s16)
+    /* 8002d020 */ static dAcBase_c *findActor(char *objName, dAcBase_c *parent);
+    /* 8002d0a0 */ static dAcBase_c *searchActor(dAcBase_c &optionalParent);
+    // Kinda performs the code of the first param on every actor (second param is optional parent)
+    /* 8002d130 */ static void forEachActor(void *, dAcBase_c &);
+    // Not really static, but we currently dont have a type for the return (not just simply a s16)
     /* 8002d190 */ mAng getXZAngleToPlayer();
-        // returns true if under the distThresh, False if not. the actual distance is returned in outDist
-    /* 8002d1d0 */ bool getDistanceToActor(dAcBase_c& actor, f32 distThresh, f32* outDist);
-        // same concept as above
-    /* 8002d290 */ bool getDistanceAndAngleToActor(dAcBase_c& actor, f32 distThresh, s16 yAngle, s16 xAngle, f32* outDist, s16* outDiffAngleY, s16* outDiffAngleX);
+    // returns true if under the distThresh, False if not. the actual distance is returned in outDist
+    /* 8002d1d0 */ bool getDistanceToActor(dAcBase_c &actor, f32 distThresh, f32 *outDist);
+    // same concept as above
+    /* 8002d290 */ bool getDistanceAndAngleToActor(dAcBase_c &actor, f32 distThresh, s16 yAngle, s16 xAngle,
+            f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX);
     /* 8002d3e0 */ bool isWithinPlayerRadius(f32 radius);
-    /* 8002d440 */ bool getDistanceAndAngleToPlayer(f32 distThresh, s16 yAngle, s16 xAngle, f32* outDist, s16* outDiffAngleY, s16* outDiffAngleX);
+    /* 8002d440 */ bool getDistanceAndAngleToPlayer(f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist,
+            s16 *outDiffAngleY, s16 *outDiffAngleX);
     /* 8002d470 */ f32 getDistToPlayer();
     /* 8002d4a0 */ f32 getSquareDistToPlayer();
     /* 8002d4b0 */ void updateRoomId(f32 yOffs);
     /* 8002d540 */ bool isRoomFlags_0x6_Set();
-        // Begin Sound Effect Related
+    // Begin Sound Effect Related
     /* 8002d590 */ void FUN_8002d590();
     /* 8002d5b0 */ void FUN_8002d5b0();
     /* 8002d5d0 */ void playSound();
@@ -149,19 +151,19 @@ public:
     /* 8002d880 */ void FUN_8002d880();
     // End Sound Effect Related
     /* 8002d890 */ void FUN_8002d890();
-    /* 8002d920 */ void setActorRef(dBase_c*);
+    /* 8002d920 */ void setActorRef(dBase_c *);
     // next three funcs are related
     /* 8002d930 */ void setUnkFlag();
     /* 8002d940 */ void FUN_8002d940();
     /* 8002d960 */ void FUN_8002d960();
 
-    /* 8002d980 */ static dAcBase_c createActor(ProfileName actorId, u32 params1, Vec3f* pos, Vec3s* rot, \
-        Vec3f* scale, u32 params2, s32 roomId, dBase_c* ref);
+    /* 8002d980 */ static dAcBase_c createActor(ProfileName actorId, u32 params1, Vec3f *pos, Vec3s *rot, Vec3f *scale,
+            u32 params2, s32 roomId, dBase_c *ref);
 
-    /* 8002da80 */ static dAcBase_c createActorUnkGroup3(ProfileName actorId, u32 params1, Vec3f* pos, Vec3s* rot, \
-        Vec3f* scale, u32 params2, s32 roomId, dBase_c* ref);
+    /* 8002da80 */ static dAcBase_c createActorUnkGroup3(ProfileName actorId, u32 params1, Vec3f *pos, Vec3s *rot,
+            Vec3f *scale, u32 params2, s32 roomId, dBase_c *ref);
 
-    /* 8002dc20 */ void FUN_8002dc20(s16*, s16*);
+    /* 8002dc20 */ void FUN_8002dc20(s16 *, s16 *);
     /* 8002dc50 */ void incrementKillCounter();
     /* 8002dcd0 */ void FUN_8002dcd0();
     /* 8002dd10 */ void FUN_8002dd10();
@@ -174,11 +176,13 @@ public:
     /* 80571920 */ static u32 s_Create_RoomId;
     /* 80571924 */ static u32 s_Create_Params2;
     /* 80571928 */ static u16 s_Create_UnkFlags;
-    /* 8057192A */ static u8  s_Create_ViewClipIdx;
-    /* 80575080 */ static mVec3_c* s_Create_Position;
-    /* 80575084 */ static mAng3_c* s_Create_Rotation;
-    /* 80575088 */ static mVec3_c* s_Create_Scale;
-    /* 8057508C */ static dAcBase_c* s_Create_Parent;
-    /* 80575090 */ static ObjInfo* s_Create_ObjInfo;
+    /* 8057192A */ static u8 s_Create_ViewClipIdx;
+    /* 80575080 */ static mVec3_c *s_Create_Position;
+    /* 80575084 */ static mAng3_c *s_Create_Rotation;
+    /* 80575088 */ static mVec3_c *s_Create_Scale;
+    /* 8057508C */ static dAcBase_c *s_Create_Parent;
+    /* 80575090 */ static ObjInfo *s_Create_ObjInfo;
     /* 80575094 */ static u8 s_Create_Subtype;
 };
+
+#endif

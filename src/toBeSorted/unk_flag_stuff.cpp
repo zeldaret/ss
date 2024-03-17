@@ -1,5 +1,3 @@
-#pragma once
-
 #include "toBeSorted/unk_flag_stuff.h"
 
 u16 UnkFlagStuff::calculateMask(s32 shift) {
@@ -8,12 +6,12 @@ u16 UnkFlagStuff::calculateMask(s32 shift) {
 
 void UnkFlagStuff::doNothing(u32 unused) {}
 
-UnkFlagStuff::UnkFlagStuff(u16 count, UnkFlagDefinition* definitions) {
+UnkFlagStuff::UnkFlagStuff(u16 count, UnkFlagDefinition *definitions) {
     this->mDefinitionsCount = count;
     this->mpDefinitions = definitions;
 }
 
-void UnkFlagStuff::prepareIndexShiftMask(u16 counterIdx, u32 unused, u16* indexPtr, u8* shiftPtr, u16* maskPtr) {
+void UnkFlagStuff::prepareIndexShiftMask(u16 counterIdx, u32 unused, u16 *indexPtr, u8 *shiftPtr, u16 *maskPtr) {
     doNothing(counterIdx);
     *indexPtr = mpDefinitions[counterIdx].mIndex;
     *shiftPtr = mpDefinitions[counterIdx].mShiftMask >> 4;
@@ -26,7 +24,7 @@ u16 UnkFlagStuff::maskForIdx(u16 index) {
     return calculateMask(mpDefinitions[index].mShiftMask);
 }
 
-u32 UnkFlagStuff::getCounterOrFlag(u16 counterIdx, u16* dataPtr, u32 param4) {
+u32 UnkFlagStuff::getCounterOrFlag(u16 counterIdx, u16 *dataPtr, u32 param4) {
     u16 index = 0;
     u8 shift = 0;
     u16 mask = 0;
@@ -34,7 +32,7 @@ u32 UnkFlagStuff::getCounterOrFlag(u16 counterIdx, u16* dataPtr, u32 param4) {
     return mask & (dataPtr[index] >> shift);
 }
 
-void UnkFlagStuff::setCounterOrFlag(u16 counterIdx, u16* dataPtr, u32 flagCount, u32 value) {
+void UnkFlagStuff::setCounterOrFlag(u16 counterIdx, u16 *dataPtr, u32 flagCount, u32 value) {
     u16 index = 0;
     u8 shift = 0;
     u16 mask = 0;

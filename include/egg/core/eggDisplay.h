@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_DISPLAY_H
+#define EGG_DISPLAY_H
 
 #include "egg/core/eggSystem.h" // for BaseSystem config
 #include "egg/core/eggVideo.h"
@@ -49,3 +50,5 @@ public:
 };
 
 } // namespace EGG
+
+#endif

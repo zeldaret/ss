@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_DISPOSER_H
+#define EGG_DISPOSER_H
 
 // This file was adapted from https://github.com/riidefi/mkw/blob/master/source/egg/core/eggDisposer.hpp
 
@@ -31,3 +32,5 @@ private:
 // for reference
 
 }; // namespace EGG
+
+#endif

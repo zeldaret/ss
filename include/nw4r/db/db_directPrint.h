@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DB_DIRECT_PRINT_H
+#define DB_DIRECT_PRINT_H
 
 #include <Runtime.PPCEABI.H/__va_arg.h>
 #include <common.h>
@@ -58,3 +59,4 @@ namespace detail {
 } // namespace db
 
 } // namespace nw4r
+#endif

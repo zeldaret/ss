@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_THREAD_H
+#define EGG_THREAD_H
 
 #include "egg/core/eggHeap.h"
 #include "nw4r/ut.h"
@@ -42,3 +43,5 @@ public:
 };
 
 } // namespace EGG
+
+#endif

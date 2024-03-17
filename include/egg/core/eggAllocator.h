@@ -1,9 +1,7 @@
-#pragma once
-
-#include "egg/core/eggHeap.h"
+#ifndef EGG_ALLOCATOR_H
+#define EGG_ALLOCATOR_H
 #include "rvl/MEM.h"
 #include <common.h>
-
 
 // /* 80495310 */ MEMInitAllocatorFor_Heap(MEMAllocator* alloc, s32 align, void* heap);
 // /* 804952f0 */ MEM_AllocFor_Heap(MEMAllocator* alloc, void* block);
@@ -26,3 +24,5 @@ public:
     /* 0x18 */ s32 align;
 };
 }; // namespace EGG
+
+#endif

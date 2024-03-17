@@ -1,10 +1,10 @@
-#pragma once
+#ifndef EGG_VIDEO_H
+#define EGG_VIDEO_H
 
 #include "egg/prim/eggBitFlag.h"
 #include "rvl/GX.h"
 #include "rvl/VI.h"
 #include <common.h>
-
 
 namespace EGG {
 
@@ -35,3 +35,5 @@ public:
 };
 
 } // namespace EGG
+
+#endif

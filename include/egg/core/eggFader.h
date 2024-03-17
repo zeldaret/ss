@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_FADER_H
+#define EGG_FADER_H
 
 #include <common.h>
 
@@ -24,3 +25,5 @@ public:
 };
 
 } // namespace EGG
+
+#endif

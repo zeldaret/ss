@@ -1,4 +1,5 @@
-#pragma once
+#ifndef F_TREE_MANAGER_H
+#define F_TREE_MANAGER_H
 
 // This file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_tree_mg.hpp
@@ -33,3 +34,5 @@ public:
         return (fTrNdBa_c *)cTreeMg_c::getRoot();
     }
 };
+
+#endif

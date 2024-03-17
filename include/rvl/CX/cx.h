@@ -1,4 +1,5 @@
-#pragma once
+#ifndef RVL_CX_H
+#define RVL_CX_H
 
 #include <common.h>
 
@@ -57,4 +58,6 @@ typedef struct CXUncompContextLRC {
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif

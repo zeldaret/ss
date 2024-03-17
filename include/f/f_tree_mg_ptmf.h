@@ -1,4 +1,5 @@
-#pragma once
+#ifndef F_TREE_MANAGER_FUNC_H
+#define F_TREE_MANAGER_FUNC_H
 
 // This file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_tree_mg_ptmf.hpp
@@ -24,3 +25,5 @@ public:
 private:
     int (fBase_c::*mpProcFunc)(); ///< The process function for the tree.
 };
+
+#endif

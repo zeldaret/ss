@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_MATH_H
+#define EGG_MATH_H
 
 #include <common.h>
 
@@ -60,3 +61,5 @@ public:
 // /* 8049ac40 */ Math<f32>::atan2(f32, f32);
 
 } // namespace EGG
+
+#endif

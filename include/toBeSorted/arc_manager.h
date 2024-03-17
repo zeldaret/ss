@@ -1,4 +1,5 @@
-#pragma once
+#ifndef ARC_MANAGER_H
+#define ARC_MANAGER_H
 
 #include <common.h>
 
@@ -32,3 +33,5 @@ public:
 };
 
 OarcManager g_OarcManager;
+
+#endif;

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UNK_FLAG_STUFF_H
+#define UNK_FLAG_STUFF_H
 
 #include <common.h>
 
@@ -21,3 +22,5 @@ public:
     void setCounterOrFlag(u16 counterIdx, u16 *pData, u32 flagCount, u32 value);
     u32 checkFlagValid(u16 counterIdx, u32 flagCount);
 };
+
+#endif

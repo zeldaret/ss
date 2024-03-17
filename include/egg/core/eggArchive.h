@@ -1,10 +1,10 @@
-#pragma once
+#ifndef EGG_ARCHIVE_H
+#define EGG_ARCHIVE_H
 
 #include "egg/core/eggDisposer.h"
 #include "rvl/ARC.h"
 #include "rvl/NAND.h"
 #include <common.h>
-
 
 typedef void (*FileCallbackFunc)(void *, void *, const ARCDirEntry *, const char *);
 
@@ -60,3 +60,5 @@ public:
 /* 80493f10 */ void countFileCallbackFunc(void *, void *, const ARCDirEntry *, const char *);
 /* 80493f70 */ void searchInsideWithPath(Archive *arc, ARCHandle *handle, FileCallbackFunc, void *, char *outPath, u32);
 } // namespace EGG
+
+#endif

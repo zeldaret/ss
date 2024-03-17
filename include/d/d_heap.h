@@ -1,4 +1,5 @@
-#pragma once
+#ifndef D_HEAP_H
+#define D_HEAP_H
 
 #include "egg/core/eggExpHeap.h"
 
@@ -29,3 +30,5 @@ public:
     static void createFontHeap(size_t size, EGG::Heap *parent);
     static void createHBMHeap(size_t size, EGG::Heap *parent);
 };
+
+#endif

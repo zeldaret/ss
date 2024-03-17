@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FLAG_SPACE_H
+#define FLAG_SPACE_H
 
 #include <common.h>
 
@@ -23,3 +24,5 @@ public:
     void copyFromSaveFile(u16 *pSaved, u16 offset, u16 flagCount);
     virtual void filemanagerCheck();
 };
+
+#endif

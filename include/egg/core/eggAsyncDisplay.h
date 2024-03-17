@@ -1,8 +1,8 @@
-#pragma once
+#ifndef EGG_ASYNC_DISPLAY_H
+#define EGG_ASYNC_DISPLAY_H
 
 #include "egg/core/eggDisplay.h"
 #include <common.h>
-
 
 namespace EGG {
 
@@ -47,4 +47,6 @@ extern "C" {
 /* 80576790 */ static EGG::AsyncDisplay *spSelector;
 #ifdef __cplusplus
 }
+#endif
+
 #endif

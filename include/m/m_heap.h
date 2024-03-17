@@ -1,10 +1,13 @@
-#pragma once
+#ifndef M_HEAP_H
+#define M_HEAP_H
 
 #include "egg/core/eggFrmHeap.h"
 #include "egg/core/eggHeap.h"
 
 // #include "egg/core/eggExpHeap.h"
 // #include "egg/core/eggAssertHeap.h"
+
+// TODO: REWRITE THIS
 
 namespace EGG {
 class ExpHeap;
@@ -43,3 +46,5 @@ extern EGG::ExpHeap *g_commandHeap;
 extern EGG::ExpHeap *g_dylinkHeap;
 extern EGG::AssertHeap *g_assertHeap;
 }; // namespace mHeap
+
+#endif

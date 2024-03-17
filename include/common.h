@@ -1,4 +1,5 @@
-#pragma once
+#ifndef DECOMP_COMMON_TYPES_H
+#define DECOMP_COMMON_TYPES_H
 
 #define MAX(x, y) ((x) > (y) ? (x) : (y))
 #define MIN(x, y) ((x) < (y) ? (x) : (y))
@@ -112,4 +113,6 @@ public:
 private:
     inline NonCopyable(const NonCopyable &) {}
 };
+#endif
+
 #endif

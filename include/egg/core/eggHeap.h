@@ -1,8 +1,8 @@
-#pragma once
+#ifndef EGG_HEAP_H
+#define EGG_HEAP_H
 
 // This file is ported from https://github.com/riidefi/mkw/blob/master/source/egg/core/eggHeap.hpp
 
-#include "egg/core/eggAllocator.h"
 #include "egg/core/eggDisposer.h"
 #include "egg/core/eggThread.h"
 #include "egg/prim/eggBitFlag.h"
@@ -160,3 +160,5 @@ public:
 /* 80495a80 */ void *operator new(size_t size, EGG::Allocator *alloc);
 /* 80495a90 */ void *operator new[](size_t size, u32 align);
 /* 80495aa0 */ void *operator new[](size_t size, EGG::Heap *heap, int align);
+
+#endif

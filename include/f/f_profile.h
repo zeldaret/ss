@@ -1,4 +1,5 @@
-#pragma once
+#ifndef F_PROFILE_H
+#define F_PROFILE_H
 
 // Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_profile.hpp
 
@@ -75,3 +76,5 @@ struct fActorProfile_c : fBaseProfile_c {
 extern fBaseProfile_c *(*sProfileList)[NUMBER_OF_ACTORS]; ///< A list of all profiles.
 
 } // namespace fProfile
+
+#endif

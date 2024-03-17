@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_COLOR_FADER_H
+#define EGG_COLOR_FADER_H
 
 #include "egg/core/eggFader.h"
 #include "egg/prim/eggBitFlag.h"
@@ -37,3 +38,5 @@ public:
 };
 
 } // namespace EGG
+
+#endif

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_ASSERT_H
+#define EGG_ASSERT_H
 
 #include <common.h>
 
@@ -19,3 +20,5 @@ namespace Assert {
 } // namespace Assert
 
 } // namespace EGG
+
+#endif

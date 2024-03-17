@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_DVD_FILE_H
+#define EGG_DVD_FILE_H
 
 #include "egg/core/eggFile.h"
 #include "nw4r/ut.h"
@@ -48,3 +49,5 @@ public:
 };
 
 } // namespace EGG
+
+#endif

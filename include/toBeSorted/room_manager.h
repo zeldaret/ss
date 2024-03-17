@@ -1,8 +1,8 @@
-#pragma once
+#ifndef ROOM_MANAGER_H
+#define ROOM_MANAGER_H
 
 #include "d/d_base.h"
 #include <common.h>
-
 
 #define MAX_ROOM_NUMBER 64
 
@@ -32,3 +32,5 @@ public:
 public:
     /* 801b42b0 */ static dBase_c *getRoom(int roomid);
 };
+
+#endif

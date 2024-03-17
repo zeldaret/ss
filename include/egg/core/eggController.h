@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_CONTROLLER_H
+#define EGG_CONTROLLER_H
 
 #include <common.h>
 
@@ -8,7 +9,6 @@
 #include "egg/prim/eggBitFlag.h"
 #include "egg/prim/eggBuffer.h"
 #include "rvl/PAD.h"
-
 
 namespace EGG {
 
@@ -174,3 +174,5 @@ public:
 };
 
 } // namespace EGG
+
+#endif

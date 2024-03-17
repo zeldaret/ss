@@ -1,4 +1,5 @@
-#pragma once
+#ifndef C_LIST_H
+#define C_LIST_H
 
 // This file was ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/cLib/c_list.hpp
 
@@ -67,3 +68,5 @@ protected:
     cListNd_c *mpFirst; ///< The first node in the list.
     cListNd_c *mpLast;  ///< The last node in the list.
 };
+
+#endif

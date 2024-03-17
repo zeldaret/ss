@@ -1,4 +1,5 @@
-#pragma once
+#ifndef F_LIST_NODE_H
+#define F_LIST_NODE_H
 
 // This file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_list_nd.hpp
@@ -25,3 +26,5 @@ public:
 
     fBase_c *p_owner;
 };
+
+#endif

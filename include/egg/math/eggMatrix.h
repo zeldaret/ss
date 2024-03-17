@@ -1,4 +1,5 @@
-#pragma once
+#ifndef EGG_MATRIX_H
+#define EGG_MATRIX_H
 
 #include "egg/math/eggQuat.h"
 #include "egg/math/eggVector.h"
@@ -93,3 +94,5 @@ public:
 };
 
 } // namespace EGG
+
+#endif

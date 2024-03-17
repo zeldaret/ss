@@ -1,4 +1,5 @@
-#pragma once
+#ifndef F_MANAGER_H
+#define F_MANAGER_H
 
 // this file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_manager.hpp
@@ -53,3 +54,5 @@ private:
 
     friend class fBase_c;
 };
+
+#endif
