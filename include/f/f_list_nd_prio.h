@@ -15,12 +15,6 @@ public:
     /// @param owner The node's owner.
     fLiNdPrio_c(fBase_c *owner) : fLiNdBa_c(owner), m_order(0), m_new_order(0) {}
 
-    void Initialize(fBase_c *owner) {
-        p_owner = owner;
-        m_order = 0;
-        m_new_order = 0;
-    }
-
     fLiNdPrio_c *getPrev() const {
         return (fLiNdPrio_c *)fLiNdBa_c::getPrev();
     }
