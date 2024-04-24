@@ -1,14 +1,22 @@
 __pycache__
+.vscode/c_cpp_properties.json
+
+# game files
+orig/*/*
+!orig/SOUE01/README.md
+!orig/*/.gitkeep
+
+# ninja stuff
 build
 build.ninja
-orig/*/*
-!orig/*/.gitkeep
-tools/mwcc_compiler/*
-!tools/mwcc_compiler/.gitkeep
 .ninja_deps
 .ninja_log
-objdiff.json
-/tools/objdiff.exe
-.vscode/c_cpp_properties.json
+
+# tools
 tools/dtk
+tools/mwcc_compiler/*
+!tools/mwcc_compiler/.gitkeep
+/tools/objdiff.exe
+
+objdiff.json
 ctx.c
