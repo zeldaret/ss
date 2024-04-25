@@ -153,6 +153,9 @@ m/m_mtx.cpp:
 rvl/CX/cx.c:
 	.text       start:0x803CEE90 end:0x803D0B20
 
+nw4r/ut/ut_list.cpp:
+	.text       start:0x8042A530 end:0x8042A850
+
 nw4r/db/db_directPrint.cpp:
 	.text       start:0x804342A0 end:0x80434EA0
 	.rodata     start:0x804F5D28 end:0x804F5FE0
