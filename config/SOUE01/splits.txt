@@ -122,6 +122,9 @@ toBeSorted/bitwise_flag_helper.cpp:
 c/c_list.cpp:
 	.text       start:0x802E08C0 end:0x802E0A10
 
+c/c_tree.cpp:
+	.text       start:0x802E0E70 end:0x802E1140
+
 f/f_base.cpp:
 	.text       start:0x802E12F0 end:0x802E2680
 	.ctors      start:0x804DB8C0 end:0x804DB8C4

@@ -275,6 +275,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/flag_space.cpp"),
             Object(NonMatching, "toBeSorted/misc_flag_managers.cpp"),
             Object(Matching, "c/c_list.cpp"),
+            Object(Matching, "c/c_tree.cpp"),
             Object(Matching, "d/d_base.cpp"),
             Object(NonMatching, "d/d_heap.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
