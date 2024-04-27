@@ -200,14 +200,15 @@ void AsyncDisplay::clearEFB(u16 fbWidth, u16 fbHeight, u16 x, u16 y, u16 width, 
     GXSetCullMode(GX_CULL_BACK);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
-    // The regs are wrong here
     GXPosition2u16(x, y);
     GXPosition2u8(0, 0);
-    GXPosition2u16(x + width, y);
+    u16 tmp = x + width;
+    GXPosition2u16(tmp, y);
     GXPosition2u8(1, 0);
-    GXPosition2u16(x + width, y + height);
+    u16 tmp2 = y + height;
+    GXPosition2u16(tmp, tmp2);
     GXPosition2u8(1, 1);
-    GXPosition2u16(width, y + height);
+    GXPosition2u16(x, tmp2);
     GXPosition2u8(0, 1);
 
     // GXEnd();
