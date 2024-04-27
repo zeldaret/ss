@@ -122,6 +122,11 @@ toBeSorted/unk_flag_stuff.cpp:
 toBeSorted/bitwise_flag_helper.cpp:
 	.text       start:0x800BF200 end:0x800BF264
 
+toBeSorted/skipflag_manager.cpp:
+	.text       start:0x800BFBA0 end:0x800BFE00
+	.sbss       start:0x80575408 end:0x80575410
+	.bss        start:0x805A9C68 end:0x805A9C88
+
 f/f_base.cpp:
 	.text       start:0x802E12F0 end:0x802E2680
 	.ctors      start:0x804DB8C0 end:0x804DB8C4
