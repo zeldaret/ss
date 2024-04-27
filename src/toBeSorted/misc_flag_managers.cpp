@@ -4,7 +4,6 @@
 #include <toBeSorted/file_manager.h>
 #include <toBeSorted/flag_space.h>
 
-
 class CommittableFlagManager {
 public:
     bool mNeedsCommit;
@@ -47,7 +46,7 @@ public:
     TBoxFlagManager();
     virtual ~TBoxFlagManager() {}
     void init();
-    void copyFromSave(u16 sceneIndex);
+    void copyFromSave(s16 sceneIndex);
     bool checkFlag(u16 sceneIndex, u16 flag);
     virtual u16 getFlagCount() const;
     void setFlag(u16 flag);
@@ -76,11 +75,11 @@ TBoxFlagManager::TBoxFlagManager() : CommittableFlagManager(false), mFlagSpace(s
 
 void TBoxFlagManager::init() {}
 
-void TBoxFlagManager::copyFromSave(u16 sceneIndex) {
-    // mr should be a clrlwi
-    mSceneIndex = sceneIndex;
+void TBoxFlagManager::copyFromSave(s16 sceneIndex) {
+    u16 idx = sceneIndex;
+    mSceneIndex = idx;
     u16 *flags = FileManager::getInstance()->getTBoxFlagsConst();
-    mFlagSpace.copyFromSaveFile2(flags + (sceneIndex * 2), 0, 2);
+    mFlagSpace.copyFromSaveFile2(flags + (idx * 2), 0, 2);
 }
 
 bool TBoxFlagManager::checkFlag(u16 sceneIndex, u16 flag) {
@@ -144,9 +143,8 @@ bool EnemyDefeatManager::checkUncommittedFlag(u16 flag) {
     }
 }
 
-EnemyDefeatManager::EnemyDefeatManager() : CommittableFlagManager(false), mFlagSpace(sEnemyDefeatFlags, ARRAY_LENGTH(sEnemyDefeatFlags)) {
-
-}
+EnemyDefeatManager::EnemyDefeatManager()
+    : CommittableFlagManager(false), mFlagSpace(sEnemyDefeatFlags, ARRAY_LENGTH(sEnemyDefeatFlags)) {}
 
 void EnemyDefeatManager::init() {
     mSceneIndex = 0;
