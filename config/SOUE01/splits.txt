@@ -108,6 +108,9 @@ toBeSorted/sceneflag_manager.cpp:
 
 toBeSorted/misc_flag_managers.cpp:
 	.text       start:0x800BE7B0 end:0x800BEE00
+	.data       start:0x80510CDC end:0x80510D04
+	.sbss       start:0x805753F0 end:0x805753FC
+	.bss        start:0x805A7AD8 end:0x805A9AD8
 
 toBeSorted/flag_space.cpp:
 	.text       start:0x800BEE00 end:0x800BEF90
@@ -118,6 +121,11 @@ toBeSorted/unk_flag_stuff.cpp:
 
 toBeSorted/bitwise_flag_helper.cpp:
 	.text       start:0x800BF200 end:0x800BF264
+
+toBeSorted/skipflag_manager.cpp:
+	.text       start:0x800BFBA0 end:0x800BFE00
+	.sbss       start:0x80575408 end:0x8057540C
+	.bss        start:0x805A9C68 end:0x805A9C88
 
 c/c_list.cpp:
 	.text       start:0x802E08C0 end:0x802E0A10

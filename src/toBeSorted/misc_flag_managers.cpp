@@ -4,7 +4,6 @@
 #include <toBeSorted/file_manager.h>
 #include <toBeSorted/flag_space.h>
 
-
 class CommittableFlagManager {
 public:
     bool mNeedsCommit;
@@ -22,6 +21,7 @@ public:
     }
 };
 
+/* 0x800BE7B0 */
 bool CommittableFlagManager::commitIfNecessary() {
     if (mNeedsCommit) {
         doCommit();
@@ -33,22 +33,21 @@ bool CommittableFlagManager::commitIfNecessary() {
 }
 
 class TBoxFlagManager : public CommittableFlagManager {
-    // class TBoxFlagManager {
-    // bool mNeedsCommit;
-    // u32 pad;
+public:
     FlagSpace mFlagSpace;
     u16 mSceneIndex;
     BitwiseFlagHelper mFlagHelper;
 
-    static u16 *sFlags;
+    static u16 sTBoxFlags[2];
 
-public:
+    static TBoxFlagManager *sInstance;
+
     virtual void doCommit() override;
     bool checkUncommittedFlag(u16 flag);
     TBoxFlagManager();
     virtual ~TBoxFlagManager() {}
     void init();
-    void copyFromSave(u16 sceneIndex);
+    void copyFromSave(s16 sceneIndex);
     bool checkFlag(u16 sceneIndex, u16 flag);
     virtual u16 getFlagCount() const;
     void setFlag(u16 flag);
@@ -58,39 +57,50 @@ public:
     }
 };
 
+TBoxFlagManager *TBoxFlagManager::sInstance = nullptr;
+u16 TBoxFlagManager::sTBoxFlags[2] = {};
+
+/* 0x800BE810 */
 void TBoxFlagManager::doCommit() {
     if (mSceneIndex != 0xFFFF) {
         FileManager::getInstance()->setTBoxFlags(mFlagSpace.getFlagPtrUnchecked(), mSceneIndex * 2, 2);
     }
 }
 
+/* 0x800BE870 */
 bool TBoxFlagManager::checkUncommittedFlag(u16 flag) {
     return mFlagHelper.checkFlag(flag / 16, flag % 16, mFlagSpace.getFlagPtrUnchecked(), mFlagSpace.mCount);
 }
 
-TBoxFlagManager::TBoxFlagManager() : CommittableFlagManager(false), mFlagSpace(sFlags, 2) {
+/* 0x800BE8E0 */
+TBoxFlagManager::TBoxFlagManager() : CommittableFlagManager(false), mFlagSpace(sTBoxFlags, ARRAY_LENGTH(sTBoxFlags)) {
     mSceneIndex = 0xFFFF;
 }
 
+/* 0x800BE920 */
 void TBoxFlagManager::init() {}
 
-void TBoxFlagManager::copyFromSave(u16 sceneIndex) {
-    // mr should be a clrlwi
-    mSceneIndex = sceneIndex;
+/* 0x800BE930 */
+void TBoxFlagManager::copyFromSave(s16 sceneIndex) {
+    u16 idx = sceneIndex;
+    mSceneIndex = idx;
     u16 *flags = FileManager::getInstance()->getTBoxFlagsConst();
-    mFlagSpace.copyFromSaveFile2(flags + (sceneIndex * 2), 0, 2);
+    mFlagSpace.copyFromSaveFile2(flags + (idx * 2), 0, 2);
 }
 
+/* 0x800BE990 */
 bool TBoxFlagManager::checkFlag(u16 sceneIndex, u16 flag) {
     s32 actualFlag = (flag + sceneIndex * 0x20);
     return mFlagHelper.checkFlag(actualFlag / 16, flag % 16, FileManager::getInstance()->getTBoxFlagsConst(),
             getFlagCount());
 }
 
+/* 0x800BEA30 */
 u16 TBoxFlagManager::getFlagCount() const {
     return 0x200;
 }
 
+/* 0x800BEA40 */
 void TBoxFlagManager::setFlag(u16 flag) {
     if (checkUncommittedFlag2(flag) != 1) {
         mFlagHelper.setFlag(flag / 16, flag % 16, mFlagSpace.getFlagPtrChecked(), mFlagSpace.mCount);
@@ -98,13 +108,17 @@ void TBoxFlagManager::setFlag(u16 flag) {
     }
 }
 
+// NOTE: Not actually Enemy Defeat.
+// This is a little more than that, it keeps track of live objects based on their id as a whole
 class EnemyDefeatManager : public CommittableFlagManager {
 public:
     FlagSpace mFlagSpace;
     BitwiseFlagHelper mFlagHelper;
     u16 mSceneIndex;
 
-    static u16 *sFlags;
+    static u16 sEnemyDefeatFlags[4096];
+
+    static EnemyDefeatManager *sInstance;
 
     void clearSavedFlags();
     bool checkUncommittedFlag(u16 flag);
@@ -123,12 +137,17 @@ public:
     void setFlag(u16 flag);
 };
 
+EnemyDefeatManager *EnemyDefeatManager::sInstance = nullptr;
+u16 EnemyDefeatManager::sEnemyDefeatFlags[4096] = {};
+
+/* 0x800BEAC0 */
 void EnemyDefeatManager::clearSavedFlags() {
     u16 empty[0x1000];
     memset(empty, 0, 0x2000);
     FileManager::getInstance()->setEnemyDefeatFlags(empty, 0, 0x1000);
 }
 
+/* 0x800BEB00 */
 bool EnemyDefeatManager::checkUncommittedFlag(u16 flag) {
     if (checkIsValidFlag(flag)) {
         return mFlagHelper.checkFlag(flag / 16, flag % 16, mFlagSpace.getFlagPtrUnchecked(), mFlagSpace.mCount);
@@ -137,13 +156,17 @@ bool EnemyDefeatManager::checkUncommittedFlag(u16 flag) {
     }
 }
 
-EnemyDefeatManager::EnemyDefeatManager() : CommittableFlagManager(false), mFlagSpace(sFlags, 12 /* later */) {}
+/* 0x800BEB80 */
+EnemyDefeatManager::EnemyDefeatManager()
+    : CommittableFlagManager(false), mFlagSpace(sEnemyDefeatFlags, ARRAY_LENGTH(sEnemyDefeatFlags)) {}
 
+/* 0x800BEBC0 */
 void EnemyDefeatManager::init() {
     mSceneIndex = 0;
     clearAll();
 }
 
+/* 0x800BEBD0 */
 void EnemyDefeatManager::copyFromSave(u16 sceneIndex) {
     mSceneIndex = sceneIndex;
     u16 count = mFlagSpace.mCount;
@@ -151,6 +174,7 @@ void EnemyDefeatManager::copyFromSave(u16 sceneIndex) {
     mFlagSpace.copyFromSaveFile(flags, 0, count);
 }
 
+/* 0x800BEC30 */
 void EnemyDefeatManager::updateFlagIndex(u16 sceneIndex) {
     if (mSceneIndex == sceneIndex) {
         return;
@@ -159,15 +183,18 @@ void EnemyDefeatManager::updateFlagIndex(u16 sceneIndex) {
     clearAll();
 }
 
+/* 0x800BEC50 */
 void EnemyDefeatManager::clearAll() {
     clearSavedFlags();
     mFlagSpace.unsetAll();
 }
 
+/* 0x800BEC90 */
 bool EnemyDefeatManager::checkIsValidFlag(u16 flag) {
     return flag < 0xFFFF;
 }
 
+/* 0x800BECB0 */
 bool EnemyDefeatManager::checkFlag(u16 flag) {
     if (!checkIsValidFlag(flag)) {
         return false;
@@ -177,10 +204,12 @@ bool EnemyDefeatManager::checkFlag(u16 flag) {
     }
 }
 
+/* 0x800BED50 */
 u16 EnemyDefeatManager::getFlagCount() const {
     return 0x1000;
 }
 
+/* 0x800BED60 */
 void EnemyDefeatManager::setFlag(u16 flag) {
     if (checkUncommittedFlag2(flag) != 1 && checkIsValidFlag(flag)) {
         mFlagHelper.setFlag(flag / 16, flag % 16, mFlagSpace.getFlagPtrChecked(), mFlagSpace.mCount);
