@@ -275,6 +275,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/flag_space.cpp"),
             Object(NonMatching, "toBeSorted/misc_flag_managers.cpp"),
             Object(NonMatching, "toBeSorted/skipflag_manager.cpp"),
+            Object(Matching, "c/c_list.cpp"),
             Object(Matching, "d/d_base.cpp"),
             Object(NonMatching, "d/d_heap.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
@@ -309,6 +310,12 @@ config.libs = [
         "db",
         [
             Object(NonMatching, "nw4r/db/db_directPrint.cpp"),
+        ],
+    ),
+    nw4rLib(
+        "ut",
+        [
+            Object(Matching, "nw4r/ut/ut_list.cpp"),
         ],
     ),
     # EGG
