@@ -11,8 +11,8 @@ static EGG::AsyncDisplay *lbl_80576790[2];
 namespace EGG {
 
 AsyncDisplay::AsyncDisplay(u8 maxRetrace): Display(maxRetrace) {
-    this->field_0x98 = 0.0;
-    this->field_0x9C = 0.0;
+    this->field_0x98 = 0;
+    this->field_0x9C = 0.0f;
     this->field_0xA4 = 0;
     this->field_0xA8 = 0;
     this->field_0xAC = 0;
@@ -166,9 +166,9 @@ void AsyncDisplay::clearEFB(u16 fbWidth, u16 fbHeight, u16 x, u16 y, u16 width, 
     GXInitTexObj(&lbl_80673B20, &lbl_8056EB20, 4, 4, GX_TF_Z24X8, GX_REPEAT, GX_REPEAT, 0);
     GXInitTexObjLOD(&lbl_80673B20, GX_NEAR, GX_NEAR, 0.0, 0.0, 0.0, 0, 0, GX_ANISO_1);
     Mtx44 mat;
-    C_MTXOrtho(mat, 0.0, (float)fbHeight, 0.0, (float)fbWidth, 0.0, 1.0f);
+    C_MTXOrtho(mat, 0.0, fbHeight, 0.0, fbWidth, 0.0, 1.0f);
     GXSetProjection(mat, GX_ORTHOGRAPHIC);
-    GXSetViewport(0.0, 0.0, (float)fbWidth, (float)fbHeight, 0.0, 1.0f);
+    GXSetViewport(0.0, 0.0, fbWidth, fbHeight, 0.0, 1.0f);
     GXSetScissor(0, 0, fbWidth, fbHeight);
     lbl_80674C00.loadPosMtx(0);
     GXSetCurrentMtx(0);
@@ -201,22 +201,16 @@ void AsyncDisplay::clearEFB(u16 fbWidth, u16 fbHeight, u16 x, u16 y, u16 width, 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
     // The regs are wrong here
-    WGPIPE.us = x;
-    WGPIPE.us = y;
-    WGPIPE.c = 0;
-    WGPIPE.c = 0;
-    WGPIPE.us = x + width;
-    WGPIPE.us = y;
-    WGPIPE.c = 1;
-    WGPIPE.c = 0;
-    WGPIPE.us = x + width;
-    WGPIPE.us = y + height;
-    WGPIPE.c = 1;
-    WGPIPE.c = 1;
-    WGPIPE.us = width;
-    WGPIPE.us = y + height;
-    WGPIPE.c = 0;
-    WGPIPE.c = 1;
+    GXPosition2u16(x, y);
+    GXPosition2u8(0, 0);
+    GXPosition2u16(x + width, y);
+    GXPosition2u8(1, 0);
+    GXPosition2u16(x + width, y + height);
+    GXPosition2u8(1, 1);
+    GXPosition2u16(width, y + height);
+    GXPosition2u8(0, 1);
+
+    // GXEnd();
 
     GXSetZTexture(0, GX_TF_Z24X8, 0);
     GXSetZCompLoc(true);
