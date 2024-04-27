@@ -9,9 +9,6 @@
 
 NOTE: This file does not match fully yet, Inlining + function ordering needs to still be addressed
 
-Nonmatching functions:
-DrawStringLineToXfb_ https://decomp.me/scratch/uqeZ6
-
 This worked for SS: as seen in egg stuff ive worked on, not sure if it works for others ¯\_(ツ)_/¯
 - Especially with inlines. DWARF provides info of local vars and maps provide calls to functions,
   but outside of that I made some guesses.
@@ -256,9 +253,7 @@ const char *DrawStringLineToXfb_(int posh, int posv, const char *str, int width)
     char c;
     int code, cnt, tab_size;
 
-    cnt = 0;
-    while (*str != '\0') {
-        c = *str;
+    for (cnt = 0; (c = *str) != '\0'; str++) {
         if (c == '\n' || c == '\0') {
             return str;
         }
@@ -274,11 +269,12 @@ const char *DrawStringLineToXfb_(int posh, int posv, const char *str, int width)
             posh += 6;
             cnt++;
         }
-        if (cnt >= width && str[1] == '\n') {
-            str++;
+        if (cnt >= width) {
+            if (str[1] == '\n') {
+                str++;
+            }
             return str;
         }
-        str++;
     }
     return str;
 }
