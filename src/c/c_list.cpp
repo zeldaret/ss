@@ -1,6 +1,6 @@
 #include <c/c_list.h>
 
-
+/* 0x802E08C0 */
 void cListMg_c::insertAfter(cListNd_c *node, cListNd_c *prevNode) {
     if (prevNode == nullptr) {
         return this->prepend(node);
@@ -18,6 +18,7 @@ void cListMg_c::insertAfter(cListNd_c *node, cListNd_c *prevNode) {
     }
 }
 
+/* 0x802E0900 */
 void cListMg_c::remove(cListNd_c *node) {
     if (node == nullptr) {
         return;
@@ -46,6 +47,7 @@ void cListMg_c::remove(cListNd_c *node) {
     }
 }
 
+/* 0x802E09B0 */
 void cListMg_c::append(cListNd_c *node) {
     if (node == nullptr) {
         return;
@@ -59,6 +61,7 @@ void cListMg_c::append(cListNd_c *node) {
     this->mpLast = node;
 }
 
+/* 0x802E09E0 */
 void cListMg_c::prepend(cListNd_c *node) {
     if (node == nullptr) {
         return;

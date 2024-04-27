@@ -1,16 +1,19 @@
 #include <c/c_tree.h>
 
+/* 0x802E0E70 */
 cTreeNd_c::cTreeNd_c() {
     this->forcedClear();
 }
 
+/* 0x802E0EA0 */
 void cTreeNd_c::forcedClear() {
     this->mpParent = nullptr;
-    this->mpChild = nullptr;   
+    this->mpChild = nullptr;
     this->mpPrev = nullptr;
     this->mpNext = nullptr;
 }
 
+/* 0x802E0EC0 */
 bool cTreeMg_c::addTreeNode(cTreeNd_c *node, cTreeNd_c *parent) {
     if (node != nullptr) {
         if (parent != nullptr) {
@@ -39,13 +42,14 @@ bool cTreeMg_c::addTreeNode(cTreeNd_c *node, cTreeNd_c *parent) {
     return true;
 }
 
+/* 0x802E0F60*/
 bool cTreeMg_c::removeTreeNode(cTreeNd_c *node) {
     if (node != nullptr) {
         if (node->mpChild != nullptr) {
             return false;
         }
         if (node->mpPrev != nullptr) {
-            node->mpPrev->mpNext = node->mpNext; 
+            node->mpPrev->mpNext = node->mpNext;
         } else if (node->mpParent != nullptr) {
             node->mpParent->mpChild = node->mpNext;
         } else if (node == this->mpRootNode) {
@@ -65,6 +69,7 @@ bool cTreeMg_c::removeTreeNode(cTreeNd_c *node) {
     return true;
 }
 
+/* 0x802E1000 */
 bool cTreeMg_c::insertTreeNode(cTreeNd_c *node, cTreeNd_c *parent) {
     cTreeNd_c *cursor;
 
@@ -89,6 +94,7 @@ bool cTreeMg_c::insertTreeNode(cTreeNd_c *node, cTreeNd_c *parent) {
     return false;
 }
 
+/* 0x802E10C0 */
 cTreeNd_c *cTreeNd_c::getTreeNext() const {
     cTreeNd_c *child = this->mpChild;
     if (child != nullptr) {
@@ -98,17 +104,18 @@ cTreeNd_c *cTreeNd_c::getTreeNext() const {
     }
 }
 
+/* 0x802E1100 */
 cTreeNd_c *cTreeNd_c::getTreeNextNotChild() const {
     if (this->mpNext != nullptr) {
         return this->mpNext;
     }
 
     cTreeNd_c *parent;
-    
+
     for (parent = this->mpParent; parent != nullptr; parent = parent->mpParent) {
         if (parent->mpNext != nullptr) {
             return parent->mpNext;
-        }   
+        }
     }
     return nullptr;
 }
