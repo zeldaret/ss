@@ -36,16 +36,14 @@ AsyncDisplay::AsyncDisplay(u8 maxRetrace): Display(maxRetrace) {
 f32 AsyncDisplay::calcS() {
     f32 tmp = this->field_0x9C + this->field_0xA0;
     this->field_0x9C = tmp;
-    if (!(tmp > 1.0f)) {
-        return tmp;
-    }
-
-    if (this->mScreenStateFlag.onBit(4)) {
-        this->field_0x9C = tmp - 1.0f;
-        this->mScreenStateFlag.resetBit(4);
-    } else {
-        this->field_0x9C = tmp - this->field_0xA0;
-        this->mScreenStateFlag.setBit(4);
+    if (tmp > 1.0f) {
+        if (this->mScreenStateFlag.onBit(4)) {
+            this->field_0x9C = tmp - 1.0f;
+            this->mScreenStateFlag.resetBit(4);
+        } else {
+            this->field_0x9C = tmp - this->field_0xA0;
+            this->mScreenStateFlag.setBit(4);
+        }
     }
     return tmp;
 }
