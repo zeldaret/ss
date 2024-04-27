@@ -31,7 +31,7 @@ public:
     /* 802e2be0 */ cListMg_c() : mpFirst(nullptr), mpLast(nullptr) {}
     // /* 802e2880 */ ~cListMg_c();
 
-    bool insertAfter(cListNd_c *node, cListNd_c *prevNode);
+    void insertAfter(cListNd_c *node, cListNd_c *prevNode);
 
     /**
      * @brief Removes a node from the list.
@@ -39,7 +39,7 @@ public:
      * @param node The node to remove.
      * @return If the operation was successful.
      */
-    bool remove(cListNd_c *node);
+    void remove(cListNd_c *node);
 
     /**
      * @brief Adds a node to the end of the list.
@@ -47,7 +47,7 @@ public:
      * @param node The node to append.
      * @return If the operation was successful.
      */
-    bool append(cListNd_c *node);
+    void append(cListNd_c *node);
 
     /**
      * @brief Adds a node to the beginning of the list.
@@ -55,7 +55,7 @@ public:
      * @param node The node to prepend.
      * @return If the operation was successful.
      */
-    bool prepend(cListNd_c *node);
+    void prepend(cListNd_c *node);
 
     cListNd_c *getFirst() const {
         return mpFirst;
