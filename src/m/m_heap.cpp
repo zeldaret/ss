@@ -6,12 +6,6 @@
 namespace mHeap {
 
 u8 g_DefaultGameHeapId = 1;
-static const char *s_GameHeapNames[4] = {
-        0,
-        "ゲーム用汎用ヒープ1(mHeap::gameHeaps[1])",
-        "ゲーム用汎用ヒープ2(mHeap::gameHeaps[2])",
-        0,
-};
 
 #define MIN_ALIGN 0x20
 
@@ -24,7 +18,7 @@ EGG::AssertHeap *g_assertHeap;
 
 u16 copyAttribute(u32 arg) {
     u16 result = 0;
-    
+
     if ((arg & 1) != 0) {
         result = 1;
     }
@@ -40,7 +34,8 @@ u16 copyAttribute(u32 arg) {
 EGG::Heap *setCurrentHeap(EGG::Heap *heap) {
     return heap->becomeCurrentHeap();
 }
-EGG::ExpHeap *createExpHeap(size_t size, EGG::Heap *parent, const char *name, unsigned long align, unsigned long attrs) {
+EGG::ExpHeap *createExpHeap(size_t size, EGG::Heap *parent, const char *name, unsigned long align,
+        unsigned long attrs) {
     if (parent == nullptr) {
         parent = EGG::Heap::sCurrentHeap;
     }
@@ -72,10 +67,10 @@ size_t adjustExpHeap(EGG::ExpHeap *heap) {
     int ret = 0;
     if (heap != nullptr) {
         size_t ad = heap->adjust();
-        size_t cost = mHeap::frmHeapCost(0, 4);
+        size_t cost = mHeap::expHeapCost(0, 4);
         if (ad >= cost) {
             ret = ad - cost;
-        } 
+        }
     }
     return ret;
 }
@@ -85,7 +80,7 @@ size_t expHeapCost(size_t size, size_t align) {
     return size + (~r5 & (r5 + 0x84));
 }
 
-EGG::FrmHeap *createFrmHeap(size_t size, EGG::Heap *parent, const char *name, unsigned long align, unsigned long attrs) {
+EGG::FrmHeap *createFrmHeap(size_t size, EGG::Heap *parent, const char *name, size_t align, size_t attrs) {
     if (parent == nullptr) {
         parent = EGG::Heap::sCurrentHeap;
     }
@@ -95,7 +90,7 @@ EGG::FrmHeap *createFrmHeap(size_t size, EGG::Heap *parent, const char *name, un
     }
 
     if (size != 0xFFFFFFFF) {
-        size = expHeapCost(size, align);
+        size = frmHeapCost(size, align);
     } else {
         size = parent->getAllocatableSize(align);
     }
@@ -125,7 +120,7 @@ size_t adjustFrmHeap(EGG::FrmHeap *heap) {
         size_t cost = mHeap::frmHeapCost(0, 4);
         if (ad >= cost) {
             ret = ad - cost;
-        } 
+        }
     }
     return ret;
 }
@@ -163,18 +158,18 @@ EGG::ExpHeap *createHeap(size_t size, EGG::Heap *block, const char *name) {
     return heap;
 }
 void saveCurrentHeap() {
-    s_SavedCurrentHeap = (EGG::ExpHeap*) EGG::Heap::sCurrentHeap;
+    s_SavedCurrentHeap = (EGG::ExpHeap *)EGG::Heap::sCurrentHeap;
 }
 void restoreCurrentHeap() {
     s_SavedCurrentHeap->becomeCurrentHeap();
-    EGG::Heap::sCurrentHeap = nullptr;
+    s_SavedCurrentHeap = nullptr;
 }
 
 EGG::FrmHeap *makeFrmHeapAndUpdate(size_t size, EGG::Heap *parentHeap, const char *name, s32 align, u32 unk) {
     EGG::FrmHeap *heap = createFrmHeap(size, parentHeap, name, align, unk);
     if (heap != nullptr) {
         EGG::Heap *heap2 = setCurrentHeap(heap);
-        s_SavedCurrentHeap = (EGG::ExpHeap*)heap2;
+        s_SavedCurrentHeap = (EGG::ExpHeap *)heap2;
     }
     return heap;
 }
@@ -188,6 +183,12 @@ inline bool isValidHeapId(u32 id) {
 }
 
 EGG::ExpHeap *createGameHeap(int heapId, size_t size, EGG::Heap *parent) {
+    const char *s_GameHeapNames[4] = {
+            0,
+            "ゲーム用汎用ヒープ1(mHeap::gameHeaps[1])",
+            "ゲーム用汎用ヒープ2(mHeap::gameHeaps[2])",
+            0,
+    };
     if (!isValidHeapId(heapId)) {
         return nullptr;
     }
