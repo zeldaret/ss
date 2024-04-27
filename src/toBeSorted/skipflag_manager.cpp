@@ -13,7 +13,7 @@ public:
     static SkipflagManager *sInstance;
 
     void copyFromSave();
-    void setCommitFlag();
+    void setCommitFlag(u16 flag);
     SkipflagManager();
     void unsetCommitFlag();
     void thunk_copyFromSave();
@@ -22,7 +22,9 @@ public:
     bool commitFlags();
 };
 
+// 0x80575408
 SkipflagManager *SkipflagManager::sInstance = nullptr;
+// 0x805A9C68
 u16 SkipflagManager::sSkipFlags[16] = {};
 
 // 800bfba0
@@ -32,13 +34,12 @@ void SkipflagManager::copyFromSave() {
 }
 
 // 800bfbf0
-void SkipflagManager::setCommitFlag() {
+void SkipflagManager::setCommitFlag(u16 flag) {
     mShouldCommit = true;
 }
 
 // 800bfc00
-SkipflagManager::SkipflagManager() : mFlagSpace(sSkipFlags, ARRAY_LENGTH(sSkipFlags)) {
-    mShouldCommit = false;
+SkipflagManager::SkipflagManager() : mFlagSpace(sSkipFlags, ARRAY_LENGTH(sSkipFlags)), mShouldCommit(false) {
 }
 
 // 800bfc30
@@ -55,12 +56,12 @@ void SkipflagManager::thunk_copyFromSave() {
 void SkipflagManager::setFlag(u16 flag) {
     mFlagHelper.setFlag(flag / 16, flag % 16, mFlagSpace.getFlagPtrChecked(), mFlagSpace.mCount);
 
-    u16* savedSkipflags;
+    u16 savedSkipflags[0x10];
     checkedMemcpy(savedSkipflags, 0x20, FileManager::sInstance->getSkipFlags(), 0x20);
 
     mFlagHelper.setFlag(flag / 16, flag % 16, savedSkipflags, 0x10);
     FileManager::sInstance->setSkipFlagsChecked(savedSkipflags, 0, 0x10);
-    setCommitFlag();
+    setCommitFlag(flag);
 }
 
 // 800bfd20
@@ -72,7 +73,8 @@ bool SkipflagManager::checkFlag(u16 flag) {
 // 800bfd90
 bool SkipflagManager::commitFlags() {
     if (mShouldCommit) {
-        FileManager::sInstance->setSkipFlagsChecked(mFlagSpace.getFlagPtrUnchecked(), 0, 0x10);
+        FileManager *instance = FileManager::sInstance;
+        instance->setSkipFlagsChecked(mFlagSpace.getFlagPtrUnchecked(), 0, 0x10);
         mShouldCommit = false;
         return true;
     }

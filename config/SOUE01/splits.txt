@@ -124,7 +124,7 @@ toBeSorted/bitwise_flag_helper.cpp:
 
 toBeSorted/skipflag_manager.cpp:
 	.text       start:0x800BFBA0 end:0x800BFE00
-	.sbss       start:0x80575408 end:0x80575410
+	.sbss       start:0x80575408 end:0x8057540C
 	.bss        start:0x805A9C68 end:0x805A9C88
 
 c/c_list.cpp:

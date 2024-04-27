@@ -274,7 +274,7 @@ config.libs = [
             Object(Matching, "toBeSorted/sceneflag_manager.cpp"),
             Object(NonMatching, "toBeSorted/flag_space.cpp"),
             Object(NonMatching, "toBeSorted/misc_flag_managers.cpp"),
-            Object(NonMatching, "toBeSorted/skipflag_manager.cpp"),
+            Object(Matching, "toBeSorted/skipflag_manager.cpp"),
             Object(Matching, "c/c_list.cpp"),
             Object(Matching, "d/d_base.cpp"),
             Object(NonMatching, "d/d_heap.cpp"),
