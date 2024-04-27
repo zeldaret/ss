@@ -33,16 +33,15 @@ bool CommittableFlagManager::commitIfNecessary() {
 }
 
 class TBoxFlagManager : public CommittableFlagManager {
-    // class TBoxFlagManager {
-    // bool mNeedsCommit;
-    // u32 pad;
+public:
     FlagSpace mFlagSpace;
     u16 mSceneIndex;
     BitwiseFlagHelper mFlagHelper;
 
-    static u16 *sFlags;
+    static u16 sTBoxFlags[2];
 
-public:
+    static TBoxFlagManager *sInstance;
+
     virtual void doCommit() override;
     bool checkUncommittedFlag(u16 flag);
     TBoxFlagManager();
@@ -58,6 +57,9 @@ public:
     }
 };
 
+TBoxFlagManager *TBoxFlagManager::sInstance = nullptr;
+u16 TBoxFlagManager::sTBoxFlags[2] = {};
+
 void TBoxFlagManager::doCommit() {
     if (mSceneIndex != 0xFFFF) {
         FileManager::getInstance()->setTBoxFlags(mFlagSpace.getFlagPtrUnchecked(), mSceneIndex * 2, 2);
@@ -68,7 +70,7 @@ bool TBoxFlagManager::checkUncommittedFlag(u16 flag) {
     return mFlagHelper.checkFlag(flag / 16, flag % 16, mFlagSpace.getFlagPtrUnchecked(), mFlagSpace.mCount);
 }
 
-TBoxFlagManager::TBoxFlagManager() : CommittableFlagManager(false), mFlagSpace(sFlags, 2) {
+TBoxFlagManager::TBoxFlagManager() : CommittableFlagManager(false), mFlagSpace(sTBoxFlags, ARRAY_LENGTH(sTBoxFlags)) {
     mSceneIndex = 0xFFFF;
 }
 
@@ -104,7 +106,9 @@ public:
     BitwiseFlagHelper mFlagHelper;
     u16 mSceneIndex;
 
-    static u16 *sFlags;
+    static u16 sEnemyDefeatFlags[4096];
+
+    static EnemyDefeatManager *sInstance;
 
     void clearSavedFlags();
     bool checkUncommittedFlag(u16 flag);
@@ -123,6 +127,9 @@ public:
     void setFlag(u16 flag);
 };
 
+EnemyDefeatManager *EnemyDefeatManager::sInstance = nullptr;
+u16 EnemyDefeatManager::sEnemyDefeatFlags[4096] = {};
+
 void EnemyDefeatManager::clearSavedFlags() {
     u16 empty[0x1000];
     memset(empty, 0, 0x2000);
@@ -137,7 +144,9 @@ bool EnemyDefeatManager::checkUncommittedFlag(u16 flag) {
     }
 }
 
-EnemyDefeatManager::EnemyDefeatManager() : CommittableFlagManager(false), mFlagSpace(sFlags, 12 /* later */) {}
+EnemyDefeatManager::EnemyDefeatManager() : CommittableFlagManager(false), mFlagSpace(sEnemyDefeatFlags, ARRAY_LENGTH(sEnemyDefeatFlags)) {
+
+}
 
 void EnemyDefeatManager::init() {
     mSceneIndex = 0;
