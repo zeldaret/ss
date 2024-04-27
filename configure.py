@@ -310,6 +310,12 @@ config.libs = [
             Object(NonMatching, "nw4r/db/db_directPrint.cpp"),
         ],
     ),
+    nw4rLib(
+        "ut",
+        [
+            Object(Matching, "nw4r/ut/ut_list.cpp"),
+        ],
+    ),
     # EGG
     EGGLib(
         "core",
