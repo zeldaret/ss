@@ -4,15 +4,26 @@
 #include <rvl/GX/GXTexture.h>
 #include <rvl/GX/GXHardware.h>
 
-// This file still has incorrect sdata2
-
 static EGG::AsyncDisplay *lbl_80576790[2];
+
+// Hacks for float ordering
+static f32 one() {
+    return 1.0f;
+}
+
+static f64 cast() {
+    return 4503599627370496.0;
+}
+
+static f32 zero() {
+    return 0.0f;
+}
 
 namespace EGG {
 
 AsyncDisplay::AsyncDisplay(u8 maxRetrace): Display(maxRetrace) {
     this->field_0x98 = 0;
-    this->field_0x9C = 0.0f;
+    this->field_0x9C = 1.0f;
     this->field_0xA4 = 0;
     this->field_0xA8 = 0;
     this->field_0xAC = 0;
