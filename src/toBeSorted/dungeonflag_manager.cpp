@@ -7,10 +7,16 @@
 // TODO move
 extern "C" UnkFlagDefinition lbl_80511AF0[];
 
+// TODO what's preventing this from actually matching
+// is that we pretend this TU contains the instance,
+// which breaks .sbss section alignment.
+// It's much more likely that a separate TU contains
+// all instance pointers
+
 class DungeonflagManager {
 public:
     bool mShouldCommit;
-    u16 mFlagIndex;
+    u16 mStageIndex;
     UnkFlagStuff *mFlagStuff;
     FlagSpace mFlagSpace;
 
@@ -26,6 +32,12 @@ public:
     void setFlag(u16 flag);
     u32 getDungeonFlag(u16 flag);
     bool doCommit();
+
+    /** inline shenanigans to get copyFromSave to match */
+    static inline u16 *saveFilePtr(u16 flagIndex) {
+        u32 offset = (flagIndex & 0x1fff) * 8;
+        return FileManager::sInstance->getDungeonFlagsConst() + offset;
+    }
 };
 
 /** 80575404 */
@@ -35,8 +47,7 @@ u16 DungeonflagManager::sDungeonFlags[8] = {};
 
 /** 800bf8d0 */
 void DungeonflagManager::copyFromSave(u16 flagIndex) {
-    u16 *ptr = FileManager::sInstance->getDungeonFlagsConst();
-    mFlagSpace.copyFromSaveFile(ptr + (flagIndex & 0x1fff) * 8, 0, 0x8);
+    mFlagSpace.copyFromSaveFile(saveFilePtr(flagIndex), 0, 0x8);
 }
 
 /** 800bf930 */
@@ -46,7 +57,7 @@ void DungeonflagManager::setCommitFlag(u16 flag) {
 
 /** 0x800bf940 */
 DungeonflagManager::DungeonflagManager()
-    : mShouldCommit(false), mFlagIndex(-1), mFlagStuff(nullptr),
+    : mShouldCommit(false), mStageIndex(-1), mFlagStuff(nullptr),
       mFlagSpace(sDungeonFlags, ARRAY_LENGTH(sDungeonFlags)) {}
 
 /** 800bf980 */
@@ -57,7 +68,7 @@ void DungeonflagManager::setupFlagStuff() {
 
 /** 800bf9e0 */
 void DungeonflagManager::copyFromSave(s16 flag) {
-    mFlagIndex = flag;
+    mStageIndex = flag;
     copyFromSave((u16)flag);
 }
 
@@ -84,7 +95,7 @@ u32 DungeonflagManager::getDungeonFlag(u16 flag) {
 /** 800fbb10 */
 bool DungeonflagManager::doCommit() {
     FileManager *instance;
-    u16 idx = mFlagIndex;
+    u16 idx = mStageIndex;
     if (idx == 0xFFFF) {
         return false;
     } else if (mShouldCommit) {
