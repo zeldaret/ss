@@ -33,7 +33,7 @@ DungeonflagManager *DungeonflagManager::sInstance = nullptr;
 /** 805a9c58 */
 u16 DungeonflagManager::sDungeonFlags[8] = {};
 
-/** 800bf9e0 */
+/** 800bf8d0 */
 void DungeonflagManager::copyFromSave(u16 flagIndex) {
     u16 *ptr = FileManager::sInstance->getDungeonFlagsConst();
     mFlagSpace.copyFromSaveFile(ptr + (flagIndex & 0x1fff) * 8, 0, 0x8);
