@@ -289,7 +289,7 @@ config.libs = [
             Object(NonMatching, "f/f_base.cpp"),
             Object(NonMatching, "f/f_list.cpp"),
             Object(NonMatching, "f/f_manager.cpp"),
-            Object(NonMatching, "m/m_heap.cpp"),
+            Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
             # framework (f_name)
             # d stuff (d_name)

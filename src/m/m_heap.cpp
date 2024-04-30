@@ -5,7 +5,8 @@
 
 namespace mHeap {
 
-u8 g_DefaultGameHeapId = 1;
+// Workaround because dtk won't cooperate with this file
+u8 g_DefaultGameHeapId[8] = {1};
 
 #define MIN_ALIGN 0x20
 
@@ -74,10 +75,11 @@ size_t adjustExpHeap(EGG::ExpHeap *heap) {
     }
     return ret;
 }
-size_t expHeapCost(size_t size, size_t align) {
-    // TODO this generates an andc where it should be a nor + and
-    size_t r5 = align - 1;
-    return size + (~r5 & (r5 + 0x84));
+size_t expHeapCost(size_t size, s32 align) {
+    int a = align - 1;
+    long b = (0x84 + a);
+    
+    return size + (~(a) & b);
 }
 
 EGG::FrmHeap *createFrmHeap(size_t size, EGG::Heap *parent, const char *name, size_t align, size_t attrs) {
@@ -125,9 +127,11 @@ size_t adjustFrmHeap(EGG::FrmHeap *heap) {
     return ret;
 }
 
-size_t frmHeapCost(size_t size, size_t align) {
-    size_t r5 = align - 1;
-    return size + (~r5 & (r5 + 0x7d));
+size_t frmHeapCost(size_t size, s32 align) {
+    int a = align - 1;
+    long b = (0x7C + a);
+    
+    return size + (~(a) & b);
 }
 
 EGG::Heap **setTempHeap(EGG::Heap **prevHeap, EGG::Heap *tempNewHeap) {
@@ -175,26 +179,27 @@ EGG::FrmHeap *makeFrmHeapAndUpdate(size_t size, EGG::Heap *parentHeap, const cha
 }
 
 int getDefaultGameHeapId() {
-    return g_DefaultGameHeapId;
+    return g_DefaultGameHeapId[0];
 }
 
 inline bool isValidHeapId(u32 id) {
     return id >= 1 && id <= 2;
 }
 
+const char *const s_GameHeapNames[4] = {
+        0,
+        "ゲーム用汎用ヒープ1(mHeap::gameHeaps[1])",
+        "ゲーム用汎用ヒープ2(mHeap::gameHeaps[2])",
+        0,
+};
+
 EGG::ExpHeap *createGameHeap(int heapId, size_t size, EGG::Heap *parent) {
-    const char *s_GameHeapNames[4] = {
-            0,
-            "ゲーム用汎用ヒープ1(mHeap::gameHeaps[1])",
-            "ゲーム用汎用ヒープ2(mHeap::gameHeaps[2])",
-            0,
-    };
     if (!isValidHeapId(heapId)) {
         return nullptr;
     }
 
     g_gameHeaps[heapId] = createHeap(size, parent, s_GameHeapNames[heapId]);
-    if (heapId == g_DefaultGameHeapId) {
+    if (heapId == g_DefaultGameHeapId[0]) {
         g_gameHeaps[0] = g_gameHeaps[heapId];
     }
     return g_gameHeaps[heapId];
@@ -215,7 +220,8 @@ EGG::ExpHeap *createDylinkHeap(size_t size, EGG::Heap *parent) {
     return g_dylinkHeap;
 }
 EGG::AssertHeap *createAssertHeap(EGG::Heap *parent) {
-    const char *name = "アサートヒープ(mHeap::assertHeap)";
+    // Help how do I tell dtk about string length?
+    const char *name = "アサートヒープ(mHeap::assertHeap)\0\0\0\0\0\0";
     g_assertHeap = EGG::AssertHeap::create(EGG::AssertHeap::getSize(), parent);
     g_assertHeap->mName = name;
     return g_assertHeap;

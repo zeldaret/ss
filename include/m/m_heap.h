@@ -19,11 +19,11 @@ namespace mHeap {
 /* 802f0f40 */ EGG::Heap *setCurrentHeap(EGG::Heap *);
 /* 802f0f50 */ EGG::ExpHeap *createExpHeap(size_t size, EGG::Heap *parentHeap, char *name, s32 align, u32 unk);
 /* 802f1060 */ size_t adjustExpHeap(EGG::Heap *heap);
-/* 802f10d0 */ size_t expHeapCost(size_t start, size_t size);
+/* 802f10d0 */ size_t expHeapCost(size_t start, s32 size);
 /* 802f10f0 */ EGG::FrmHeap *createFrmHeap(size_t size, EGG::Heap *parentHeap, char *name, size_t align, size_t attrs);
 /* 802f1200 */ void destroyFrmHeap(EGG::FrmHeap *heap);
 /* 802f1220 */ size_t adjustFrmHeap(EGG::FrmHeap *heap);
-/* 802f1290 */ size_t frmHeapCost(size_t start, size_t size);
+/* 802f1290 */ size_t frmHeapCost(size_t start, s32 size);
 /* 802f12b0 */ EGG::Heap **setTempHeap(EGG::Heap **prevHeap, EGG::Heap *tempNewHeap);
 /* 802f12f0 */ EGG::Heap **restoreTempHeap(EGG::Heap **prevHeap, s32 size);
 /* 802f1350 */ EGG::ExpHeap *createHeap(size_t size, EGG::Heap *, char *name);
