@@ -46,7 +46,7 @@ public:
     /* 80009DB0 */ FileManager(); //
     /* 80009EE0 */                // mVec3();
 
-    /* 80009EF0 */ static FileManager create(EGG::Heap *);
+    /* 80009EF0 */ static FileManager *create(EGG::Heap *);
     /* 80009F30 */ bool loadSaveData(void *out, char *name, bool isSkipData);
     /* 80009F70 */ void saveSaveData(void *unk, bool isSkipData);
     /* 8000A000 */ void refreshSaveFileData();
@@ -57,7 +57,7 @@ public:
     /* 8000A2E0 */ void fn_8000A2E0(); // idk something blank save files
 
     /* 8000A330 */ u16 *getStoryFlagsMut();
-    /* 8000A360 */ u16 *getStoryFlagsConst();
+    /* 8000A360 */ const u16 *getStoryFlagsConst() const;
     /* 8000A3B0 */ u16 *getItemFlagsMut();
     /* 8000A3E0 */ u16 *getItemFlagsConst();
     /* 8000A430 */ u16 *getDungeonFlagsMut();
@@ -243,6 +243,7 @@ public:
     /* 80010440 */ void clearTempFileData();
     /* 800104A0 */ void saveAfterCredits();
     /* 80011210 */ SaveFile *getCurrentFile();
+                   inline const SaveFile *getCurrentFile() const { return isFileInactive() ? &mFileB : &mFileA; }
     /* 80011250 */ u16 *getSkipFlags2();
     /* 80011260 */ SaveFile *getFileA();
     /* 80011270 */ SaveFile *getFileB();
@@ -254,7 +255,7 @@ public:
     /* 800113B0 */ u8 get_0xA84C();
     /* 800113C0 */ bool checkRegionCode();
     /* 80011440 */ bool checkFileCRC(int fileNum);
-    /* 80011490 */ bool isFileInactive();
+    /* 80011490 */ bool isFileInactive() const;
     /* 80011500 */ void setPlayerInfoFileA();
     /* 800115E0 */ void setT3Info(mVec3_c *pos, mAng3_c *rot);
     /* 800116C0 */ static void getRegionVersion(char *out);

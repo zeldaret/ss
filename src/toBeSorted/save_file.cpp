@@ -6,7 +6,7 @@ u16* SaveFile::getStoryFlags0() {
     return story_flags; 
 }
 // 0x800099c0   getStoryFlags1__8SaveFileFv
-u16* SaveFile::getStoryFlags1() { 
+const u16* SaveFile::getStoryFlags1() const { 
     return story_flags; 
 }
 // 0x800099d0   getItemFlags0__8SaveFileFv

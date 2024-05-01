@@ -1,20 +1,20 @@
 #ifndef SAVE_FILE_H
 #define SAVE_FILE_H
 
-#include "UnknownTypeBelongings.h"
+#include "m/m_vec.h"
 #include <common.h>
 
 // Ghidra: SaveFile
 //   Size: 0x53c0
 // non-offical name
-class SaveFile {
+struct SaveFile {
 public:
     /* 0x 0000 */ char field_0x0000[0x8 - 0x0];
     /* 0x 0008 */ s64 savedTime;
-    /* 0x 0010 */ Vec3f pos_t1;
-    /* 0x 001c */ Vec3f pos_t2;
-    /* 0x 0028 */ Vec3f pos_t3;
-    /* 0x 0034 */ Vec3f beacon_pos[32][5];
+    /* 0x 0010 */ mVec3_c pos_t1;
+    /* 0x 001c */ mVec3_c pos_t2;
+    /* 0x 0028 */ mVec3_c pos_t3;
+    /* 0x 0034 */ mVec3_c beacon_pos[32][5];
     /* 0x 07b4 */ s32 beedleShopPathSegment;
     /* 0x 07b8 */ f32 beedlShopPathSegFrac;
     /* 0x 07bc */ char field_0x07BC[0x7c0 - 0x7bc];
@@ -86,7 +86,7 @@ public:
     // ----------------------------------------------------------
 public:
     /* 800099b0 */ u16 *getStoryFlags0();
-    /* 800099c0 */ u16 *getStoryFlags1();
+    /* 800099c0 */ const u16 *getStoryFlags1() const;
     /* 800099d0 */ u16 *getItemFlags0();
     /* 800099e0 */ u16 *getItemFlags1();
     /* 800099F0 */ u16 *getDungeonFlags0();

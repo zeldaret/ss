@@ -1,18 +1,53 @@
 #include "toBeSorted/file_manager.h"
 #include "f/f_base.h"
+#include <m/m_heap.h>
+#include "libc.h"
+
+// This class here makes no sense and the name might
+// be a total misnomer, but this gets the sinit section correct
+class UnkClass {
+public:
+    UnkClass();
+    virtual ~UnkClass();
+
+    static UnkClass sInstance;
+};
+// This seems really pointless since the class only has a virtual destructor
+// and no members but /shrug
+UnkClass UnkClass::sInstance;
+
+UnkClass::UnkClass() {}
+UnkClass::~UnkClass() {}
+
+FileManager *FileManager::sInstance;
 
 extern "C" {
-    /* 80009D30 */ void fn_80009D30() {} // some ctor
-    /* 80009D40 */ void fn_80009D40() {} // some dtor
     /* 80009D80 */ void fn_80009D80() {} // return
     /* 80009D90 */ void fn_80009D90() {} // return
-    /* 80009DA0 */ void fn_80009DA0() {} // memset(param_1, 0, 0x20) a 0x24 structure is implied here (0x20 data) a crc is at 0x24
+    /* 80009DA0 */ void fn_80009DA0(void *ptr) {
+        memset(ptr, 0, 0x20);
+    } // memset(param_1, 0, 0x20) a 0x24 structure is implied here (0x20 data) a crc is at 0x24
 }
 
-/* 80009DB0 */ FileManager::FileManager() {}
+/* 80009DB0 */ FileManager::FileManager() {
+    // TODO the assembly code looks really wild
+    u32 numSaves = (u32)(mHeroName - mHeroNames[0]) / 0x12;
+    for (int i = 0; i < numSaves; i++) {
+        mHeroNames[i][0] = '\0';
+    }
+
+    mHeroName[0] = '\0';
+    mCurrentArea[0] = '\0';
+    sInstance = this;
+    mpSavedSaveFiles = mHeap::g_gameHeaps[0]->alloc(0xfbe0, 0x20);
+    mpSkipData = mHeap::g_gameHeaps[0]->alloc(0x80, 0x20);
+    fn_8000A2E0();
+}
 /* 80009EE0 */ // mVec3();
 
-/* 80009EF0 */ FileManager FileManager::create(EGG::Heap*){}
+/* 80009EF0 */ FileManager *FileManager::create(EGG::Heap* heap) {
+    return new(heap, 0x04) FileManager();
+}
 /* 80009F30 */ bool FileManager::loadSaveData(void* out, char* name, bool isSkipData){}
 /* 80009F70 */ void FileManager::saveSaveData(void* unk, bool isSkipData){}
 /* 8000A000 */ void FileManager::refreshSaveFileData(){}
@@ -20,14 +55,20 @@ extern "C" {
 /* 8000A280 */ s64 FileManager::getFileSaveTime(int fileNum){}
 /* 8000A2A0 */ s16 FileManager::getFileCurrentHealth(int fileNum){}
 /* 8000A2C0 */ s16 FileManager::getFileHealthCapacity(int fileNum){}
-/* 8000A2E0 */ void FileManager::fn_8000A2E0(){}
+/* 8000A2E0 */ void FileManager::fn_8000A2E0(){
+    // maybe call this function "reset"
+    mIsFileUnk1[0] = true;
+    initBlankSaveFiles();
+    m_0xA84D = 0;
+    mSelectedFile = 1;
+}
 
 /* 8000A330 */ 
 u16* FileManager::getStoryFlagsMut() {
     return getCurrentFile()->getStoryFlags0();
 }
-/* 8000A360 */ u16* FileManager::getStoryFlagsConst() {
-    return  (isFileInactive() ? mFileB : mFileA).getStoryFlags1();
+/* 8000A360 */ const u16* FileManager::getStoryFlagsConst() const {
+    return getCurrentFile()->getStoryFlags1();
 }
 /* 8000A3B0 */ u16* FileManager::getItemFlagsMut() {}
 /* 8000A3E0 */ u16* FileManager::getItemFlagsConst() {}
@@ -213,10 +254,16 @@ u16* FileManager::getStoryFlagsMut() {
 /* 80010440 */ void FileManager::clearTempFileData() {}
 /* 800104A0 */ void FileManager::saveAfterCredits() {}
 
-/* 80011210 */ SaveFile* FileManager::getCurrentFile() {}
+/* 80011210 */ SaveFile* FileManager::getCurrentFile() {
+    return isFileInactive() ? &mFileB : &mFileA;
+}
 /* 80011250 */ u16* FileManager::getSkipFlags2() {}
-/* 80011260 */ SaveFile* FileManager::getFileA() {}
-/* 80011270 */ SaveFile* FileManager::getFileB() {}
+/* 80011260 */ SaveFile* FileManager::getFileA() {
+    return &mFileA;
+}
+/* 80011270 */ SaveFile* FileManager::getFileB() {
+    return &mFileB;
+}
 /* 80011280 */ void FileManager::calcFileCRC(const SaveFile* file, u32 length) {}
 /* 80011290 */ void FileManager::updateEmptyFiles() {}
 /* 800112D0 */ void FileManager::updateEmptyFileFlags() {}
@@ -226,7 +273,7 @@ u16* FileManager::getStoryFlagsMut() {
 /* 800113C0 */ bool FileManager::checkRegionCode() {}
 /* 80011440 */ bool FileManager::checkFileCRC(int fileNum) {}
 /* 80011490 */
-bool FileManager::isFileInactive() {
+bool FileManager::isFileInactive() const {
     fBase_c* actor = fManager_c::searchBaseByGroupType(1, nullptr);
     if (actor) {
         if (actor->profile_name == fProfile::TITLE && !mAntiCommitFlag)
@@ -238,4 +285,3 @@ bool FileManager::isFileInactive() {
 /* 80011500 */ void FileManager::setPlayerInfoFileA() {}
 /* 800115E0 */ void FileManager::setT3Info(mVec3_c* pos, mAng3_c* rot) {}
 /* 800116C0 */ void FileManager::getRegionVersion(char* out) {}
-
