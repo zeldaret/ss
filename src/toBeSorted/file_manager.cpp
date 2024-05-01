@@ -315,13 +315,13 @@ inline void strncat(char *dest, const char *src, size_t count) {
 /* 8000D1D0 */ bool FileManager::checkSkipDataCRCs() {
     SkipData *data;
     bool dirty = false;
-    int i;
+    u8 i;
     for (data = &mpSkipData[0], i = 0; i < 3; i++, data++) {
         u32 crc = calcFileCRC(data->data, sizeof(data->data));
         if (crc == data->crc) {
-            mIsFileSkipDataDirty[i & 0xff] = 0;
+            mIsFileSkipDataDirty[i] = 0;
         } else {
-            mIsFileSkipDataDirty[i & 0xff] = 1;
+            mIsFileSkipDataDirty[i] = 1;
             dirty = true;
         }
     }
