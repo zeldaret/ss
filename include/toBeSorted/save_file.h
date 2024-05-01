@@ -9,7 +9,7 @@
 // non-offical name
 struct SaveFile {
 public:
-    /* 0x 0000 */ char field_0x0000[0x8 - 0x0];
+    /* 0x 0000 */ s64 playTime;
     /* 0x 0008 */ s64 savedTime;
     /* 0x 0010 */ mVec3_c pos_t1;
     /* 0x 001c */ mVec3_c pos_t2;
@@ -17,11 +17,11 @@ public:
     /* 0x 0034 */ mVec3_c beacon_pos[32][5];
     /* 0x 07b4 */ s32 beedleShopPathSegment;
     /* 0x 07b8 */ f32 beedlShopPathSegFrac;
-    /* 0x 07bc */ char field_0x07BC[0x7c0 - 0x7bc];
+    /* 0x 07bc */ u32 field_0x07BC;
     /* 0x 07c0 */ s32 pouch_items[8];
     /* 0x 07e0 */ s32 item_check_items[60];
     /* 0x 08d0 */ int file_area_index;
-    /* 0x 08d4 */ s16 player_name[8];
+    /* 0x 08d4 */ wchar_t player_name[8];
     /* 0x 08e4 */ u16 story_flags[128];
     /* 0x 09e4 */ u16 item_flags[64];
     /* 0x 0a64 */ u16 dungeon_flags[8][22];
@@ -34,15 +34,15 @@ public:
     /* 0x 302c */ u16 hitByEnemyCounts[100];
     /* 0x 30f4 */ u16 temp_flags[4];
     /* 0x 30fc */ u16 zone_flags[252];
-    /* 0x 32f4 */ u16 unk_flags[4096]; // size guessed? (saw memset)
-    /* 0x 52f4 */ s16 air_potion_timer;
-    /* 0x 52f6 */ s16 air_potion_plus_timer;
-    /* 0x 52f8 */ s16 stamina_potion_timer;
-    /* 0x 52fa */ s16 stamina_potion_plus_timer;
-    /* 0x 52fc */ s16 gaurdian_potion_timer;
-    /* 0x 52fe */ s16 gaurdian_potion_plus_timer;
-    /* 0x 5300 */ s16 field_0x5300;
-    /* 0x 5302 */ s16 health_capacity;
+    /* 0x 32f4 */ u16 enemy_flags[4096];
+    /* 0x 52f4 */ u16 air_potion_timer;
+    /* 0x 52f6 */ u16 air_potion_plus_timer;
+    /* 0x 52f8 */ u16 stamina_potion_timer;
+    /* 0x 52fa */ u16 stamina_potion_plus_timer;
+    /* 0x 52fc */ u16 gaurdian_potion_timer;
+    /* 0x 52fe */ u16 gaurdian_potion_plus_timer;
+    /* 0x 5300 */ u16 field_0x5300;
+    /* 0x 5302 */ u16 health_capacity;
     /* 0x 5304 */ u16 unused_heart_related;
     /* 0x 5306 */ u16 current_health;
     /* 0x 5308 */ u16 room_id_t1;
@@ -88,20 +88,20 @@ public:
     /* 800099b0 */ u16 *getStoryFlags0();
     /* 800099c0 */ const u16 *getStoryFlags1() const;
     /* 800099d0 */ u16 *getItemFlags0();
-    /* 800099e0 */ u16 *getItemFlags1();
+    /* 800099e0 */ const u16 *getItemFlags1() const;
     /* 800099F0 */ u16 *getDungeonFlags0();
-    /* 80009A00 */ u16 *getDungeonFlags1();
+    /* 80009A00 */ const u16 *getDungeonFlags1() const;
     /* 80009A10 */ u16 *getSceneFlags0();
-    /* 80009A20 */ u16 *getSceneFlags1();
+    /* 80009A20 */ const u16 *getSceneFlags1() const;
     /* 80009A30 */ u16 *getTboxFlags0();
-    /* 80009A40 */ u16 *getTboxFlags1();
+    /* 80009A40 */ const u16 *getTboxFlags1() const;
     /* 80009A50 */ u16 *getTempFlags0();
-    /* 80009A60 */ u16 *getTempFlags1();
+    /* 80009A60 */ const u16 *getTempFlags1() const;
     /* 80009A70 */ u16 *getZoneFlags0();
-    /* 80009A80 */ u16 *getZoneFlags1();
-    /* 80009A90 */ u16 *getUnkFlags0();
-    /* 80009AA0 */ u16 *getUnkFlags1();
-    /* 80009AB0 */ s16 *getPlayerName(); // UTF16-BE
+    /* 80009A80 */ const u16 *getZoneFlags1() const;
+    /* 80009A90 */ u16 *getEnemyFlags0();
+    /* 80009AA0 */ const u16 *getEnemyFlags1() const;
+    /* 80009AB0 */ wchar_t *getPlayerName(); // UTF16-BE
     /* 80009AC0 */ void setAreaT1(char *name);
     /* 80009BE0 */ char *getAreaT1();
     /* 80009BF0 */ void setAreaT2(char *name);

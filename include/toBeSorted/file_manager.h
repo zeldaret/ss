@@ -8,14 +8,29 @@
 enum ITEM_ID {};
 enum SAVE_ITEM_ID {};
 
+class SkipData {
+public:
+    /** 0x00 */ u16 data[16];
+    /** 0x20 */ u32 crc;
+};
+
+class SavedSaveFiles {
+public:
+    /** 0x00 */   char regionCode[4];
+    /** 0x04 */   u8 unk1[0x1C - 0x04];
+    /** 0x1C */   u32 m_0x1C;
+    /** 0x20 */   SaveFile saveFiles[3];
+    /** 0xfb60 */ SkipData skipData[3];
+    /** 0xfbcc */ u8 unk2[0xfbe0 - 0xfb60];
+};
+
 class FileManager {
 public:
-    /* 0x0000 */ void *mpSavedSaveFiles;
-    /* 0x0004 */ void *mpSkipData; // skip data Arrary (3 entries )
+    /* 0x0000 */ SavedSaveFiles *mpSavedSaveFiles;
+    /* 0x0004 */ SkipData *mpSkipData; // skip data Arrary (3 entries )
     /* 0x0008 */ SaveFile mFileA;
     /* 0x53C8 */ SaveFile mFileB;
-    /* 0xA788 */ u16 mSkipFlags[16];
-    /* 0xA7A8 */ u32 mSkipFlagsCRC;
+    /* 0xA788 */ SkipData mSkipData;
     /* 0xA7AC */ wchar_t mHeroNames[3][9]; // each name is 9 wchars
     /* 0xA7E2 */ wchar_t mHeroName[9];     // The current Hero Name
     /* 0xA7F4 */ char mCurrentArea[32];
@@ -219,7 +234,7 @@ public:
     /* 8000D040 */ u8 getSkykeepPuzzleTile(u32 spot);
 
     /* 8000D0B0 */ void checkFileStatus();
-    /* 8000D1D0 */ void checkSkipDataCRCs();
+    /* 8000D1D0 */ bool checkSkipDataCRCs();
     /* 8000D270 */ void saveOrClearSelectedFileToFileA();
     /* 8000D280 */ void saveOrClearToFileA(int fileNum);
     /* 8000D9C0 */ void copyFileBToCurrentFile();
@@ -230,7 +245,7 @@ public:
     /* 8000EF90 */ void saveFileAToFile(int fileNum);
     /* 8000F730 */ void copyCurrentToFileB();
     /* 8000FDF0 */ void copySelectedFileSkipData();
-    /* 8000FE00 */ void copySkipData(int fileNum);
+    /* 8000FE00 */ void copySkipData(u8 fileNum);
     /* 8000FEB0 */ void setInfo_FileB();
     /* 8000FF60 */ void clearFileA();
 
@@ -247,14 +262,14 @@ public:
     /* 80011250 */ u16 *getSkipFlags2();
     /* 80011260 */ SaveFile *getFileA();
     /* 80011270 */ SaveFile *getFileB();
-    /* 80011280 */ void calcFileCRC(const SaveFile *file, u32 length);
+    /* 80011280 */ u32 calcFileCRC(const void *data, u32 length);
     /* 80011290 */ void updateEmptyFiles();
     /* 800112D0 */ void updateEmptyFileFlags();
     /* 80011370 */ bool isFileEmpty(int fileNum);
-    /* 80011390 */ bool isFileUnk3(int fileNum);
+    /* 80011390 */ bool isFileDirty(int fileNum);
     /* 800113B0 */ u8 get_0xA84C();
     /* 800113C0 */ bool checkRegionCode();
-    /* 80011440 */ bool checkFileCRC(int fileNum);
+    /* 80011440 */ bool checkFileCRC(u8 fileNum);
     /* 80011490 */ bool isFileInactive() const;
     /* 80011500 */ void setPlayerInfoFileA();
     /* 800115E0 */ void setT3Info(mVec3_c *pos, mAng3_c *rot);

@@ -33,7 +33,7 @@ namespace mHeap {
         u32 unk);
 /* 802f1450 */ int getGameHeapNum();
 /* 802f1460 */ EGG::ExpHeap *createGameHeap(s32 heapNum, size_t size, EGG::Heap *parentHeap);
-/* 802f1510 */ EGG::Heap *createGameHeap1(s32 size, EGG::Heap *parentHeap);
+/* 802f1510 */ EGG::ExpHeap *createGameHeap1(s32 size, EGG::Heap *parentHeap);
 /* 802f1560 */ EGG::ExpHeap *createArchiveHeap(size_t size, EGG::Heap *parentHeap);
 /* 802f1590 */ EGG::ExpHeap *createCommandHeap(size_t size, EGG::Heap *parentHeap);
 /* 802f15c0 */ EGG::ExpHeap *createDylinkHeap(size_t size, EGG::Heap *parentHeap);
