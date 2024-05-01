@@ -5,8 +5,7 @@
 
 namespace mHeap {
 
-// Workaround because dtk won't cooperate with this file
-u8 g_DefaultGameHeapId[8] = {1};
+u8 g_DefaultGameHeapId = 1;
 
 #define MIN_ALIGN 0x20
 
@@ -179,7 +178,7 @@ EGG::FrmHeap *makeFrmHeapAndUpdate(size_t size, EGG::Heap *parentHeap, const cha
 }
 
 int getDefaultGameHeapId() {
-    return g_DefaultGameHeapId[0];
+    return g_DefaultGameHeapId;
 }
 
 inline bool isValidHeapId(u32 id) {
@@ -199,7 +198,7 @@ EGG::ExpHeap *createGameHeap(int heapId, size_t size, EGG::Heap *parent) {
     }
 
     g_gameHeaps[heapId] = createHeap(size, parent, s_GameHeapNames[heapId]);
-    if (heapId == g_DefaultGameHeapId[0]) {
+    if (heapId == g_DefaultGameHeapId) {
         g_gameHeaps[0] = g_gameHeaps[heapId];
     }
     return g_gameHeaps[heapId];
@@ -220,8 +219,7 @@ EGG::ExpHeap *createDylinkHeap(size_t size, EGG::Heap *parent) {
     return g_dylinkHeap;
 }
 EGG::AssertHeap *createAssertHeap(EGG::Heap *parent) {
-    // Help how do I tell dtk about string length?
-    const char *name = "アサートヒープ(mHeap::assertHeap)\0\0\0\0\0\0";
+    const char *name = "アサートヒープ(mHeap::assertHeap)";
     g_assertHeap = EGG::AssertHeap::create(EGG::AssertHeap::getSize(), parent);
     g_assertHeap->mName = name;
     return g_assertHeap;
