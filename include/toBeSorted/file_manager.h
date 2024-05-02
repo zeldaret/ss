@@ -4,7 +4,6 @@
 #include "toBeSorted/save_file.h"
 #include <common.h>
 
-
 enum ITEM_ID {};
 enum SAVE_ITEM_ID {};
 
@@ -16,12 +15,12 @@ public:
 
 class SavedSaveFiles {
 public:
-    /** 0x00 */   char regionCode[4];
-    /** 0x04 */   u8 unk1[0x1C - 0x04];
-    /** 0x1C */   u32 m_0x1C;
-    /** 0x20 */   SaveFile saveFiles[3];
-    /** 0xfb60 */ SkipData skipData[3];
-    /** 0xfbcc */ u8 unk2[0xfbe0 - 0xfb60];
+    /* 0x0000 */ char regionCode[4];
+    /* 0x0004 */ u8 unk1[0x1C - 0x04];
+    /* 0x001C */ u32 m_0x1C;
+    /* 0x0020 */ SaveFile saveFiles[3];
+    /* 0xfb60 */ SkipData skipData[3];
+    /* 0xfbcc */ u8 unk2[0xfbe0 - 0xfbcc];
 };
 
 class FileManager {
@@ -258,7 +257,9 @@ public:
     /* 80010440 */ void clearTempFileData();
     /* 800104A0 */ void saveAfterCredits();
     /* 80011210 */ SaveFile *getCurrentFile();
-                   inline const SaveFile *getCurrentFile() const { return isFileInactive() ? &mFileB : &mFileA; }
+    inline const SaveFile *getCurrentFile() const {
+        return isFileInactive() ? &mFileB : &mFileA;
+    }
     /* 80011250 */ u16 *getSkipFlags2();
     /* 80011260 */ SaveFile *getFileA();
     /* 80011270 */ SaveFile *getFileB();
