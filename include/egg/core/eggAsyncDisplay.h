@@ -15,12 +15,14 @@ public:
     /* vt 0x18 | 804982d0 */ virtual u32 getTickPerFrame();
     /* vt 0x1C | 80498100 */ virtual void preVRetrace();
 
+private:
+    inline void waitForMsg(bool);
+
 public:
     /* 0x2C */ char field_0x2C[0x60 - 0x2C];
     /* 0x60 */ OSThreadQueue mThreadQueue;
     /* 0x68 */ OSMessageQueue mMesgQueue;
-    /* 0x88 */ OSMessage mMesg;
-    /* 0x8C */ char field_0x8C[0x98 - 0x8C];
+    /* 0x88 */ OSMessage mMesgBuf[4];
     /* 0x98 */ s32 field_0x98;
     /* 0x9C */ f32 field_0x9C;
     /* 0xA0 */ f32 field_0xA0;
@@ -34,19 +36,11 @@ public:
 
 public:
     /* 80497e40 */ AsyncDisplay(u8 maxRetrace);
-    /* 80497ec0 */ void calcS();
+    /* 80497ec0 */ f32 calcS();
     /* 80498260 */ void clearEFB();
     /* 804982f0 */ void clearEFB(u16, u16, u16, u16, u16, u16, nw4r::ut::Color);
 };
 
 } // namespace EGG
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-/* 80576790 */ static EGG::AsyncDisplay *spSelector;
-#ifdef __cplusplus
-}
-#endif
 
 #endif

@@ -90,7 +90,7 @@ public:
 
     //////////////////////////////////////////////////////////////////////////////
 public:
-    /* 80674c00 */ static const Matrix34f ident;
+    /* 80674c00 */ static Matrix34f ident;
 };
 
 } // namespace EGG

@@ -21,7 +21,7 @@ void GXSetTevSwapMode(GXTevStageID, GXTevSwapSel, GXTevSwapSel);
 void GXSetTevSwapModeTable(GXTevSwapSel, GXTevColorChan, GXTevColorChan, GXTevColorChan, GXTevColorChan);
 
 void GXSetAlphaCompare(GXCompare, u8, GXAlphaOp, GXCompare, u8);
-void GXSetZTexture(UNKWORD, UNKWORD, UNKWORD);
+void GXSetZTexture(UNKWORD, GXTexFmt, u32);
 void GXSetTevOrder(GXTevStageID, GXTexCoordID, GXTexMapID, GXChannelID);
 void GXSetNumTevStages(u8);
 
