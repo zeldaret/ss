@@ -127,6 +127,49 @@ toBeSorted/skipflag_manager.cpp:
 	.sbss       start:0x80575408 end:0x8057540C
 	.bss        start:0x805A9C68 end:0x805A9C88
 
+toBeSorted/counters/rupee_counter.cpp:
+	.text       start:0x8016DE10 end:0x8016DF98
+	.ctors      start:0x804DB7BC end:0x804DB7C0
+	.rodata     start:0x804E91B0 end:0x804E91D0
+	.data       start:0x80527FF0 end:0x80528010
+	.sbss       start:0x80575610 end:0x80575618
+
+toBeSorted/counters/arrow_counter.cpp:
+	.text       start:0x8016DFA0 end:0x8016E018
+	.ctors      start:0x804DB7C0 end:0x804DB7C4
+	.data       start:0x80528010 end:0x80528030
+	.sbss       start:0x80575618 end:0x80575620
+
+toBeSorted/counters/bomb_counter.cpp:
+	.text       start:0x8016E020 end:0x8016E098
+	.ctors      start:0x804DB7C4 end:0x804DB7C8
+	.data       start:0x80528030 end:0x80528050
+	.sbss       start:0x80575620 end:0x80575628
+
+toBeSorted/counters/tear_counter.cpp:
+	.text       start:0x8016E0A0 end:0x8016E118
+	.ctors      start:0x804DB7C8 end:0x804DB7CC
+	.data       start:0x80528050 end:0x80528070
+	.sbss       start:0x80575628 end:0x80575630
+
+toBeSorted/counters/slingshot_seed_counter.cpp:
+	.text       start:0x8016E120 end:0x8016E198
+	.ctors      start:0x804DB7CC end:0x804DB7D0
+	.data       start:0x80528070 end:0x80528090
+	.sbss       start:0x80575630 end:0x80575638
+
+toBeSorted/counters/key_piece_counter.cpp:
+	.text       start:0x8016E1A0 end:0x8016E218
+	.ctors      start:0x804DB7D0 end:0x804DB7D4
+	.data       start:0x80528090 end:0x805280B0
+	.sbss       start:0x80575638 end:0x80575640
+
+toBeSorted/counters/extra_wallet_counter.cpp:
+	.text       start:0x8016E220 end:0x8016E298
+	.ctors      start:0x804DB7D4 end:0x804DB7D8
+	.data       start:0x805280B0 end:0x805280D0
+	.sbss       start:0x80575640 end:0x80575648
+
 c/c_list.cpp:
 	.text       start:0x802E08C0 end:0x802E0A10
 
