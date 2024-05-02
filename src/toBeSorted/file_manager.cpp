@@ -101,15 +101,26 @@ u16 *FileManager::getStoryFlagsMut() {
 /* 8000AA30 */ u16 *FileManager::getSkipFlags() {}
 /* 8000AA40 */ void FileManager::setSkipFlagsChecked(u16 *flags, u32 offset, u16 count) {}
 
-inline void strncat(char *dest, const char *src, size_t count) {
-    if (dest != src) {
+// This does strncat things - append src to dest
+inline void strncat(char *dest, const char *src, size_t max_len) {
+    if (src != nullptr) {
+        size_t len = strlen(dest);
+        size_t count = strlen(src);
+        count = len + count + 1 >= max_len ? max_len - len - 1 : count;
+        strncpy(dest + len, src, count);
+        // one instshuffle here - this should be (len + count),
+        // but then regalloc blows up and uses one more register in initFile
+        dest[count + len] = '\0';
+    }
+}
+
+// A function like this is inlined into in a bunch of area-related code
+// It doesn't make a whole lot of sense to use strncat on a string just
+// clipped to zero length...
+inline void strnsth(char *dest, const char *src, size_t max_len) {
+    if (src != dest) {
         dest[0] = '\0';
-        if (src != nullptr) {
-            size_t len = strlen(dest);
-            size_t count = strlen(src);
-            count = len + count + 1 >= 0x20 ? 0x1f - len : count;
-            strncpy(dest + len, src, count)[count] = '\0';
-        }
+        strncat(dest, src, max_len);
     }
 }
 
@@ -132,22 +143,7 @@ inline void strncat(char *dest, const char *src, size_t count) {
     file->lastUsedPouchItemSlot = 0x8;
 
     buf[0] = '\0';
-    strncat(buf, "F405", 0x20);
-    /*
-    buf[0] = '\0';
-    // TODO looks like an inlined strncat,
-    // hence the needless comparison to a .data string
-    // Not sure how we can do this?
-    // strncat(buf, etc, 0x20);
-    if (etc != buf) {
-        buf[0] = '\0';
-        if (etc != nullptr) {
-            size_t len = strlen(buf);
-            size_t count = strlen(etc);
-            count = len + count + 1 >= 0x20 ? 0x1f - len : count;
-            strncpy(buf + len, etc, count)[count] = '\0';
-        }
-    }*/
+    strnsth(buf, "F405", 0x20);
     file->setAreaT1(buf);
     file->room_id_t1 = 0;
     file->forced_layer_t1 = 0;
@@ -318,7 +314,7 @@ inline void strncat(char *dest, const char *src, size_t count) {
     SkipData *data;
     bool dirty = false;
     u8 i;
-    for (data = &mpSkipData[0], i = 0; i < 3; i++, data++) {
+    for (data = &mpSkipData[0], i = 0; (s32)i < 3; i++, data++) {
         u32 crc = calcFileCRC(data->data, sizeof(data->data));
         if (crc == data->crc) {
             mIsFileSkipDataDirty[i] = 0;
