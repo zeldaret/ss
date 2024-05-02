@@ -108,6 +108,9 @@ toBeSorted/sceneflag_manager.cpp:
 
 toBeSorted/misc_flag_managers.cpp:
 	.text       start:0x800BE7B0 end:0x800BEE00
+	.data       start:0x80510CDC end:0x80510D04
+	.sbss       start:0x805753F0 end:0x805753FC
+	.bss        start:0x805A7AD8 end:0x805A9AD8
 
 toBeSorted/flag_space.cpp:
 	.text       start:0x800BEE00 end:0x800BEF90
@@ -119,8 +122,16 @@ toBeSorted/unk_flag_stuff.cpp:
 toBeSorted/bitwise_flag_helper.cpp:
 	.text       start:0x800BF200 end:0x800BF264
 
+toBeSorted/skipflag_manager.cpp:
+	.text       start:0x800BFBA0 end:0x800BFE00
+	.sbss       start:0x80575408 end:0x8057540C
+	.bss        start:0x805A9C68 end:0x805A9C88
+
 c/c_list.cpp:
 	.text       start:0x802E08C0 end:0x802E0A10
+
+c/c_tree.cpp:
+	.text       start:0x802E0E70 end:0x802E1140
 
 f/f_base.cpp:
 	.text       start:0x802E12F0 end:0x802E2680
@@ -146,7 +157,7 @@ m/m_heap.cpp:
 	.rodata     start:0x804F0570 end:0x804F0580
 	.data       start:0x80542990 end:0x80542AA8
 	.sdata      start:0x80573FF8 end:0x80574000
-	.sbss       start:0x80575C38 end:0x80575C50
+	.sbss       start:0x80575C38 end:0x80575C4C
 	.bss        start:0x805CB078 end:0x805CB088
 
 m/m_mtx.cpp:
@@ -237,12 +248,12 @@ egg/core/eggDisplay.cpp:
 
 egg/core/eggColorFader.cpp:
 	.text       start:0x80497930 end:0x80497E3C
-	.data       start:0x8056EAE8 end:0x8056EB20
+	.data       start:0x8056EAE8 end:0x8056EB10
 	.sdata2     start:0x8057F308 end:0x8057F310
 
 egg/core/eggAsyncDisplay.cpp:
 	.text       start:0x80497E40 end:0x80498688
-	.data       start:0x8056EB60 end:0x8056EB80
+	.data       start:0x8056EB10 end:0x8056EB80
 	.sbss       start:0x80576790 end:0x80576798
 	.sdata2     start:0x8057F310 end:0x8057F324
 

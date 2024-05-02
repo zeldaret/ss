@@ -21,7 +21,7 @@ public:
 
 public:
     /* 80495fa0 */ FrmHeap(MEMiHeapHead *heapHead);
-    /* 80496060 */ static FrmHeap *create(void *block, u32 size, u16 attr);
+    /* 80496060 */ static FrmHeap *create(void *block, size_t size, u16 attr);
     /* 804962a0 */ void free(u32 flags);
     /* 80496370 */ void recordState(u32 id); // non official for now
     /* 80496380 */ void freeState(u32 id);   // non official for now

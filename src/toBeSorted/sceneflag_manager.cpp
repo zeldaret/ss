@@ -17,7 +17,7 @@ public:
     static u16 sTempFlags[4];
     static u16 sSceneFlags[8];
     static u16 sZoneFlags[0xFC];
-    // public:
+
     static SceneflagManager *sInstance;
     void doNothing();
     void setShouldCommit(u16 flag);

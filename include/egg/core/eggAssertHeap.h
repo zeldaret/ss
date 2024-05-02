@@ -21,9 +21,9 @@ public:
 
 public:
     /* 804963a0 */ AssertHeap(MEMiHeapHead *heapHead);
-    /* 80496460 */ static AssertHeap *create(void *block, u32 size, u16 attr);
-    /* 80496530 */ static AssertHeap *create(u32 size, Heap *heap);
-    /* 80496810 */ static u32 getSize(); // returns 0x7C
+    /* 80496460 */ static AssertHeap *create(void *block, size_t size, u16 attr);
+    /* 80496530 */ static AssertHeap *create(size_t size, Heap *heap);
+    /* 80496810 */ static size_t getSize(); // returns 0x7C
 };
 
 } // namespace EGG

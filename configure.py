@@ -274,7 +274,9 @@ config.libs = [
             Object(Matching, "toBeSorted/sceneflag_manager.cpp"),
             Object(NonMatching, "toBeSorted/flag_space.cpp"),
             Object(NonMatching, "toBeSorted/misc_flag_managers.cpp"),
+            Object(Matching, "toBeSorted/skipflag_manager.cpp"),
             Object(Matching, "c/c_list.cpp"),
+            Object(Matching, "c/c_tree.cpp"),
             Object(Matching, "d/d_base.cpp"),
             Object(NonMatching, "d/d_heap.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
@@ -287,7 +289,7 @@ config.libs = [
             Object(NonMatching, "f/f_base.cpp"),
             Object(NonMatching, "f/f_list.cpp"),
             Object(NonMatching, "f/f_manager.cpp"),
-            Object(NonMatching, "m/m_heap.cpp"),
+            Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
             # framework (f_name)
             # d stuff (d_name)
@@ -335,7 +337,7 @@ config.libs = [
             Object(NonMatching, "egg/core/eggUnk.cpp"),
             Object(NonMatching, "egg/core/eggSystem.cpp"),
             Object(Matching, "egg/core/eggDisplay.cpp"),
-            Object(NonMatching, "egg/core/eggColorFader.cpp"),
+            Object(Matching, "egg/core/eggColorFader.cpp"),
             Object(Matching, "egg/core/eggAsyncDisplay.cpp"),
             Object(NonMatching, "egg/core/eggVideo.cpp"),
             Object(NonMatching, "egg/core/eggXfb.cpp"),
