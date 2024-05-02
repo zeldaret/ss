@@ -256,6 +256,7 @@ egg/core/eggAsyncDisplay.cpp:
 	.data       start:0x8056EB10 end:0x8056EB80
 	.sbss       start:0x80576790 end:0x80576798
 	.sdata2     start:0x8057F310 end:0x8057F324
+	.bss        start:0x80673B20 end:0x80673B40
 
 egg/core/eggVideo.cpp:
 	.text       start:0x80498690 end:0x804989D8

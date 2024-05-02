@@ -1,10 +1,23 @@
 #include <egg/core/eggAsyncDisplay.h>
-#include <egg/math/eggMatrix.h>
 #include <egg/core/eggXfbManager.h>
-#include <rvl/GX/GXTexture.h>
+#include <egg/math/eggMatrix.h>
 #include <rvl/GX/GXHardware.h>
+#include <rvl/GX/GXTexture.h>
 
-static EGG::AsyncDisplay *lbl_80576790[2];
+// TODO: Find the proper place for this symbol? - Ghidra has it literally unused
+extern "C" static EGG::Display *spSelector;
+
+namespace {
+static GXTexObj clear_z_tobj;
+// clang-format off
+u8 clear_z_TX[64] ALIGN(32) = {
+    0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
+    0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+};
+// clang-format on
+} // namespace
 
 // Hacks for float ordering
 static f32 one() {
@@ -21,14 +34,14 @@ static f32 zero() {
 
 namespace EGG {
 
-AsyncDisplay::AsyncDisplay(u8 maxRetrace): Display(maxRetrace) {
+AsyncDisplay::AsyncDisplay(u8 maxRetrace) : Display(maxRetrace) {
     this->field_0x98 = 0;
     this->field_0x9C = 1.0f;
     this->field_0xA4 = 0;
     this->field_0xA8 = 0;
     this->field_0xAC = 0;
     this->field_0xB8 = 0;
-    lbl_80576790[0] = this;
+    spSelector = this;
     OSInitThreadQueue(&this->mThreadQueue);
     OSInitMessageQueue(&this->mMesgQueue, this->mMesgBuf, 4);
 }
@@ -52,8 +65,8 @@ inline void AsyncDisplay::waitForMsg(bool b) {
     // This is really ugly but I couldn't find a different way
     // to make the compiler use the registers
     XfbManager *xfb;
-    while (!((xfb = BaseSystem::mConfigData->getXfbMgr(), 1 < xfb->mNumXfbs - this->field_0xAC) && (BaseSystem::mConfigData->getXfbMgr()->mToCopyXfb != nullptr || b))) {
-
+    while (!((xfb = BaseSystem::mConfigData->getXfbMgr(), 1 < xfb->mNumXfbs - this->field_0xAC) &&
+            (BaseSystem::mConfigData->getXfbMgr()->mToCopyXfb != nullptr || b))) {
         OSReceiveMessage(&this->mMesgQueue, this->mMesgBuf, 1);
 
         while (OSReceiveMessage(&this->mMesgQueue, this->mMesgBuf, 0)) {}
@@ -153,7 +166,8 @@ void AsyncDisplay::preVRetrace() {
 void AsyncDisplay::clearEFB() {
     Video *video = BaseSystem::mConfigData->getVideo();
     GXRenderModeObj const *renderMode = video->pRenderMode;
-    this->clearEFB(renderMode->fbWidth, renderMode->efbHeight, 0, 0, renderMode->fbWidth, renderMode->efbHeight, this->mClearColor);
+    this->clearEFB(renderMode->fbWidth, renderMode->efbHeight, 0, 0, renderMode->fbWidth, renderMode->efbHeight,
+            this->mClearColor);
 }
 
 u32 AsyncDisplay::getTickPerFrame() {
@@ -164,22 +178,15 @@ u32 AsyncDisplay::getTickPerFrame() {
     }
 }
 
-// TODO move
-extern "C" {
-    extern GXTexObj lbl_80673B20, lbl_8056EB20;
-    extern Matrix34f lbl_80674C00;
-}
-
 void AsyncDisplay::clearEFB(u16 fbWidth, u16 fbHeight, u16 x, u16 y, u16 width, u16 height, nw4r::ut::Color color) {
-
-    GXInitTexObj(&lbl_80673B20, &lbl_8056EB20, 4, 4, GX_TF_Z24X8, GX_REPEAT, GX_REPEAT, 0);
-    GXInitTexObjLOD(&lbl_80673B20, GX_NEAR, GX_NEAR, 0.0, 0.0, 0.0, 0, 0, GX_ANISO_1);
+    GXInitTexObj(&clear_z_tobj, &clear_z_TX, 4, 4, GX_TF_Z24X8, GX_REPEAT, GX_REPEAT, 0);
+    GXInitTexObjLOD(&clear_z_tobj, GX_NEAR, GX_NEAR, 0.0, 0.0, 0.0, 0, 0, GX_ANISO_1);
     Mtx44 mat;
     C_MTXOrtho(mat, 0.0, fbHeight, 0.0, fbWidth, 0.0, 1.0f);
     GXSetProjection(mat, GX_ORTHOGRAPHIC);
     GXSetViewport(0.0, 0.0, fbWidth, fbHeight, 0.0, 1.0f);
     GXSetScissor(0, 0, fbWidth, fbHeight);
-    lbl_80674C00.loadPosMtx(0);
+    Matrix34f::ident.loadPosMtx(0);
     GXSetCurrentMtx(0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
@@ -191,7 +198,7 @@ void AsyncDisplay::clearEFB(u16 fbWidth, u16 fbHeight, u16 x, u16 y, u16 width, 
     GXSetChanCtrl(GX_COLOR1A1, false, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
     GXSetNumTexGens(1);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3c, false, 0x7d);
-    GXLoadTexObj(&lbl_80673B20, GX_TEXMAP0);
+    GXLoadTexObj(&clear_z_tobj, GX_TEXMAP0);
     GXSetNumTevStages(1);
     GXSetTevColor(GX_TEVREG0, color);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
