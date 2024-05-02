@@ -21,7 +21,7 @@ public:
     /* vt 0x10 | 00000000 */ virtual bool fadeIn() = 0;
     /* vt 0x14 | 00000000 */ virtual bool fadeOut() = 0;
     /* vt 0x18 | 00000000 */ virtual bool calc() = 0;
-    /* vt 0x1C | 00000000 */ virtual bool draw() = 0;
+    /* vt 0x1C | 00000000 */ virtual void draw() = 0;
 };
 
 } // namespace EGG
