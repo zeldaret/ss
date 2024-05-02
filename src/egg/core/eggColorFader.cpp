@@ -1,13 +1,12 @@
 #include <egg/core/eggColorFader.h>
-#include <rvl/GX/GXTexture.h>
 #include <rvl/GX/GXHardware.h>
+#include <rvl/GX/GXTexture.h>
 
-// This file basically matches, but it pulls in some weak symbols that
-// we still need to identify later.
 
-/** 80497930 */
-EGG::ColorFader::ColorFader(float startX, float startY, float lengthX, float lengthY, nw4r::ut::Color color, Fader::EStatus initialStatus)
-    : mStartX(startX), mStartY(startY), mEndX(startX+lengthX), mEndY(startY+lengthY), mFrame(0x14), mFadeTimer(0) {
+/* 80497930 */
+EGG::ColorFader::ColorFader(float startX, float startY, float lengthX, float lengthY, nw4r::ut::Color color,
+        Fader::EStatus initialStatus)
+    : mStartX(startX), mStartY(startY), mEndX(startX + lengthX), mEndY(startY + lengthY), mFrame(0x14), mFadeTimer(0) {
     setColor(color);
     setStatus(initialStatus);
     mFlags.setBit(1);
