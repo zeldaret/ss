@@ -102,7 +102,7 @@ u16 *FileManager::getStoryFlagsMut() {
 /* 8000AA40 */ void FileManager::setSkipFlagsChecked(u16 *flags, u32 offset, u16 count) {}
 
 // This does strncat things - append src to dest
-inline void strncat(char *dest, const char *src, size_t max_len) {
+inline void fake_strncat(char *dest, const char *src, size_t max_len) {
     if (src != nullptr) {
         size_t len = strlen(dest);
         size_t count = strlen(src);
@@ -120,16 +120,14 @@ inline void strncat(char *dest, const char *src, size_t max_len) {
 inline void strnsth(char *dest, const char *src, size_t max_len) {
     if (src != dest) {
         dest[0] = '\0';
-        strncat(dest, src, max_len);
+        fake_strncat(dest, src, max_len);
     }
 }
 
 /* 8000AAA0 */ void FileManager::initFile(int fileNum) {
-    SaveFile *file;
-    char buf[0x20];
 
     mIsFileInvalid[1] = 1;
-    file = getFileA();
+    SaveFile *file = getFileA();
     if (fileNum != 0) {
         file = &mFileB;
     }
@@ -142,6 +140,7 @@ inline void strnsth(char *dest, const char *src, size_t max_len) {
     file->selectedDowsingSlot = 0x8;
     file->lastUsedPouchItemSlot = 0x8;
 
+    char buf[0x20];
     buf[0] = '\0';
     strnsth(buf, "F405", 0x20);
     file->setAreaT1(buf);
@@ -314,7 +313,7 @@ inline void strnsth(char *dest, const char *src, size_t max_len) {
     SkipData *data;
     bool dirty = false;
     u8 i;
-    for (data = &mpSkipData[0], i = 0; (s32)i < 3; i++, data++) {
+    for (data = mpSkipData, i = 0; (s32)i < 3; i++, data++) {
         u32 crc = calcFileCRC(data->data, sizeof(data->data));
         if (crc == data->crc) {
             mIsFileSkipDataDirty[i] = 0;
@@ -390,7 +389,7 @@ inline void strnsth(char *dest, const char *src, size_t max_len) {
     getRegionVersion(saved->regionCode);
     saved->m_0x1C = 0x1d;
 
-    file = &saved->saveFiles[0];
+    file = saved->saveFiles;
     for (int num = 0; num < 3; num++, file++) {
         file->new_file = 1;
         u32 crc = calcFileCRC(file, sizeof(SaveFile) - sizeof(u32));
@@ -419,7 +418,7 @@ inline void strnsth(char *dest, const char *src, size_t max_len) {
     memset(mpSkipData, 0, 0x80);
     SkipData *data;
     int i;
-    for (i = 0, data = &mpSkipData[0]; i < 3; i++, data++) {
+    for (i = 0, data = mpSkipData; i < 3; i++, data++) {
         u32 crc = calcFileCRC(data->data, sizeof(data->data));
         data->crc = crc;
     }
@@ -455,7 +454,16 @@ extern "C" void fn_800C01F0(); // todo flag managers
     updateEmptyFileFlags();
     refreshSaveFileData();
 }
-/* 800112D0 */ void FileManager::updateEmptyFileFlags() {}
+/* 800112D0 */ void FileManager::updateEmptyFileFlags() {
+    SaveFile *saves = mpSavedSaveFiles->saveFiles;
+    for (int i = 0; i < 3; i++) {
+        if (saves[i].new_file == 1) {
+            mIsFileEmpty[i] = 1;
+        } else {
+            mIsFileEmpty[i] = 0;
+        }
+    }
+}
 /* 80011370 */ bool FileManager::isFileEmpty(int fileNum) {}
 /* 80011390 */ bool FileManager::isFileDirty(int fileNum) {}
 /* 800113B0 */ u8 FileManager::get_0xA84C() {}
