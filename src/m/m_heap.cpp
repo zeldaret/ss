@@ -74,10 +74,11 @@ size_t adjustExpHeap(EGG::ExpHeap *heap) {
     }
     return ret;
 }
-size_t expHeapCost(size_t size, size_t align) {
-    // TODO this generates an andc where it should be a nor + and
-    size_t r5 = align - 1;
-    return size + (~r5 & (r5 + 0x84));
+size_t expHeapCost(size_t size, s32 align) {
+    int a = align - 1;
+    long b = (0x84 + a);
+    
+    return size + (~(a) & b);
 }
 
 EGG::FrmHeap *createFrmHeap(size_t size, EGG::Heap *parent, const char *name, size_t align, size_t attrs) {
@@ -125,9 +126,11 @@ size_t adjustFrmHeap(EGG::FrmHeap *heap) {
     return ret;
 }
 
-size_t frmHeapCost(size_t size, size_t align) {
-    size_t r5 = align - 1;
-    return size + (~r5 & (r5 + 0x7d));
+size_t frmHeapCost(size_t size, s32 align) {
+    int a = align - 1;
+    long b = (0x7C + a);
+    
+    return size + (~(a) & b);
 }
 
 EGG::Heap **setTempHeap(EGG::Heap **prevHeap, EGG::Heap *tempNewHeap) {
@@ -182,13 +185,14 @@ inline bool isValidHeapId(u32 id) {
     return id >= 1 && id <= 2;
 }
 
+const char *const s_GameHeapNames[4] = {
+        0,
+        "ゲーム用汎用ヒープ1(mHeap::gameHeaps[1])",
+        "ゲーム用汎用ヒープ2(mHeap::gameHeaps[2])",
+        0,
+};
+
 EGG::ExpHeap *createGameHeap(int heapId, size_t size, EGG::Heap *parent) {
-    const char *s_GameHeapNames[4] = {
-            0,
-            "ゲーム用汎用ヒープ1(mHeap::gameHeaps[1])",
-            "ゲーム用汎用ヒープ2(mHeap::gameHeaps[2])",
-            0,
-    };
     if (!isValidHeapId(heapId)) {
         return nullptr;
     }
