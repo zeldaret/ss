@@ -127,6 +127,9 @@ toBeSorted/skipflag_manager.cpp:
 	.sbss       start:0x80575408 end:0x8057540C
 	.bss        start:0x805A9C68 end:0x805A9C88
 
+toBeSorted/counters/counter.cpp:
+	.text       start:0x8016CC40 end:0x8016CD94
+
 toBeSorted/counters/rupee_counter.cpp:
 	.text       start:0x8016DE10 end:0x8016DF98
 	.ctors      start:0x804DB7BC end:0x804DB7C0

@@ -285,6 +285,7 @@ config.libs = [
             Object(NonMatching, "d/a/d_a_base.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_base.cpp"),
             Object(Matching, "toBeSorted/save_file.cpp"),
+            Object(Matching, "toBeSorted/counters/counter.cpp"),
             Object(Matching, "toBeSorted/counters/rupee_counter.cpp"),
             Object(Matching, "toBeSorted/counters/arrow_counter.cpp"),
             Object(Matching, "toBeSorted/counters/bomb_counter.cpp"),
