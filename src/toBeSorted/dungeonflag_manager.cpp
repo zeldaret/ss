@@ -7,12 +7,6 @@
 // TODO move
 extern "C" UnkFlagDefinition lbl_80511AF0[];
 
-// TODO what's preventing this from actually matching
-// is that we pretend this TU contains the instance,
-// which breaks .sbss section alignment.
-// It's much more likely that a separate TU contains
-// all instance pointers
-
 class DungeonflagManager {
 public:
     bool mShouldCommit;
