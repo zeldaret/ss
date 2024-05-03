@@ -124,7 +124,6 @@ toBeSorted/bitwise_flag_helper.cpp:
 
 toBeSorted/dungeonflag_manager.cpp:
 	.text       start:0x800BF8D0 end:0x800BFB9C
-	.sbss       start:0x80575404 end:0x80575408
 	.bss        start:0x805A9C58 end:0x805A9C68
 
 toBeSorted/skipflag_manager.cpp:

@@ -21,7 +21,7 @@ public:
     FlagSpace mFlagSpace;
 
     static u16 sDungeonFlags[8];
-    static DungeonflagManager *sInstance;
+    // static DungeonflagManager *sInstance;
 
     void copyFromSave(s16 flag);
     void copyFromSave(u16 flagIndex);
@@ -41,7 +41,8 @@ public:
 };
 
 /** 80575404 */
-DungeonflagManager *DungeonflagManager::sInstance = nullptr;
+// DungeonflagManager *DungeonflagManager::sInstance = nullptr;
+
 /** 805a9c58 */
 u16 DungeonflagManager::sDungeonFlags[8] = {};
 
