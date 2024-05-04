@@ -199,7 +199,7 @@ cflags_egg = [
 # nw4r flags
 cflags_nw4r = [
     *cflags_base,
-    "-inline deferred",
+    "-ipa file",
 ]
 
 # REL flags
@@ -310,7 +310,7 @@ config.libs = [
     nw4rLib(
         "db",
         [
-            Object(Matching, "nw4r/db/db_directPrint.cpp", extra_cflags=["-inline smart, -ipa file"]),
+            Object(Matching, "nw4r/db/db_directPrint.cpp"),
         ],
     ),
     nw4rLib(
