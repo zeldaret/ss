@@ -4,7 +4,9 @@ splits: config/SOUE01/splits.txt
 symbols: config/SOUE01/symbols.txt
 mw_comment_version: 8
 quick_analysis: true
-
+force_active: [
+  "searchBaseByID__10fManager_cF9fBaseID_e",
+]
 # modules:
 # - object: orig/SOUE01/rels/d_a_asura_bulletNP.rel
 #   splits: config/SOUE01/rels/d_a_asura_bulletNP/splits.txt

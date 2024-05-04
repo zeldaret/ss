@@ -15,6 +15,7 @@ class fBase_c;
 /// @brief A list of fLiNdBa_c nodes.
 class fLiMgBa_c : public cListMg_c {
 public:
+    ~fLiMgBa_c() {}
     /**
      * @brief Counts the number of nodes of a given profile in this list.
      *

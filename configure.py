@@ -127,7 +127,7 @@ config.wibo_tag = "0.6.11"
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
 config.check_sha_path = Path("orig") / f"{config.version}.sha1"
-config.linker_version = "Wii/1.7"
+config.linker_version = "Wii/1.6"
 config.ldflags = [
     "-fp hardware",
     "-nodefaults",
@@ -186,7 +186,7 @@ cflags_framework = [
     *cflags_base,
     "-inline noauto",
     "-str reuse",
-    
+    "-ipa file",
 ]
 
 # EGG flags
@@ -215,7 +215,7 @@ cflags_rel = [
 def Rel(status, rel_name, cpp_name, extra_cflags=[]):
     return {
         "lib": rel_name,
-        "mw_version": "Wii/1.7",
+        "mw_version": "Wii/1.6",
         "cflags": cflags_rel + extra_cflags,
         "host": False,
         "objects": [
@@ -239,7 +239,7 @@ def DolphinLib(lib_name, objects):
 def EGGLib(lib_name, objects):
     return {
         "lib": lib_name,
-        "mw_version": "Wii/1.7",
+        "mw_version": "Wii/1.6",
         "cflags": cflags_egg,
         "host": False,
         "objects": objects,
@@ -249,7 +249,7 @@ def EGGLib(lib_name, objects):
 def nw4rLib(lib_name, objects):
     return {
         "lib": lib_name,
-        "mw_version": "Wii/1.7",
+        "mw_version": "Wii/1.6",
         "cflags": cflags_nw4r,
         "host": False,
         "objects": objects,
@@ -264,7 +264,7 @@ config.warn_missing_source = False  # TODO
 config.libs = [
     {
         "lib": "framework",
-        "mw_version": "Wii/1.7",
+        "mw_version": "Wii/1.6",
         "cflags": cflags_framework,
         "host": False,
         "objects": [
@@ -288,8 +288,8 @@ config.libs = [
             Object(NonMatching, "toBeSorted/file_manager.cpp"),
             Object(NonMatching, "toBeSorted/save_manager.cpp"),
             Object(NonMatching, "f/f_base.cpp"),
-            Object(NonMatching, "f/f_list.cpp"),
-            Object(NonMatching, "f/f_manager.cpp"),
+            Object(Matching, "f/f_list.cpp"),
+            Object(Matching, "f/f_manager.cpp"),
             Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
             # framework (f_name)
