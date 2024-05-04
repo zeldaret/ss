@@ -13,7 +13,7 @@ dHeap dHeap::HBMHeap;
 dHeapAllocator dHeapAllocator::sAllocator;
 
 extern u8 lbl_80571C58;
-extern "C" void fn_802de710();
+extern "C" void fn_802DE710();
 
 // TODO TU splits?
 
@@ -24,7 +24,7 @@ void dHeapAllocator::onAlloc(EGG::HeapAllocArg *arg) {
     if (lbl_80571C58 == 0) {
         return;
     }
-    fn_802de710();
+    fn_802DE710();
 }
 
 EGG::ExpHeap *dHeap::init(const char *name, size_t size, EGG::Heap *parent) {
