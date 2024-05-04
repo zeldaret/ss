@@ -1,10 +1,15 @@
 #include <toBeSorted/counters/counter.h>
 
+static u16 getBaseCapacity();
+static u16 getExtraWalletCapacity();
+
 class RupeeCounter : public Counter {
 public:
     RupeeCounter();
     /* 8016DEF0 */ ~RupeeCounter() {}
-    virtual u16 getMax() override;
+    /* 8016DF50 */ virtual u16 getMax() override {
+        return (getBaseCapacity() + getExtraWalletCapacity());
+    }
 };
 
 struct WalletStruct {
@@ -16,7 +21,7 @@ struct WalletStruct {
 extern "C" void *lbl_80575400;
 extern "C" u16 fn_800BF5E0(void *data, u16 flag);
 
-/* 8016DE10 */ u16 getBaseCapacity() {
+/* 8016DE10 */ static u16 getBaseCapacity() {
     int i = 0;
     /* 804E91B0 */ WalletStruct wallet_definitions[4] = {
             {0x6c, 500},
@@ -36,14 +41,10 @@ extern "C" u16 fn_800BF5E0(void *data, u16 flag);
 // TODO main counters class
 extern "C" u16 fn_8016D730(u16);
 
-/* 8016DEC0 */ u16 getExtraWalletCapacity() {
+/* 8016DEC0 */ static u16 getExtraWalletCapacity() {
     return 300 * fn_8016D730(0x27);
 }
 
 /* 80575610 */ RupeeCounter lbl_80575610;
 
 /* 8016DF30 */ RupeeCounter::RupeeCounter() : Counter(0x1f5) {}
-
-/* 8016DF50 */ u16 RupeeCounter::getMax() {
-    return (getBaseCapacity() + getExtraWalletCapacity());
-}
