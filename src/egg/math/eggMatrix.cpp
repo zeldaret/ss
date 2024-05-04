@@ -362,6 +362,6 @@ void Matrix34f::multiplyTo(const Matrix34f &m2, Matrix34f &to) const {
 
 void Matrix34f::dump() {}
 
-const Matrix34f Matrix34f::ident(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+Matrix34f Matrix34f::ident(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
 } // namespace EGG

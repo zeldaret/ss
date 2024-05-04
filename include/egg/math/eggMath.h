@@ -11,7 +11,7 @@ public:
     static T maxNumber() {
         // TODO: Generalize to other classes
         // This is low priority since it will always be a float
-        return FLT_MAX;
+        return 3.402823466e+38f;
     }
 
     static T pi() {
