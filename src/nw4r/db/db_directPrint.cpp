@@ -40,7 +40,7 @@ static const u32 sFontData[64] = {
     0xF2EF8808, 0x82288888, 0x82288888, 0x81C89C70, 0x8A08A270, 0x920DA288, 0xA20AB288, 0xC20AAA88,
     0xA208A688, 0x9208A288, 0x8BE8A270, 0xF1CF1CF8, 0x8A28A220, 0x8A28A020, 0xF22F1C20, 0x82AA0220,
     0x82492220, 0x81A89C20, 0x8A28A288, 0x8A28A288, 0x8A289488, 0x8A2A8850, 0x894A9420, 0x894AA220,
-    0x70852220, 0xF8011000, 0x08020800, 0x10840400, 0x20040470, 0x40840400, 0x00000000, 0xF8011000,
+    0x70852220, 0xF8011000, 0x08020800, 0x10840400, 0x20040470, 0x40840400, 0x80020800, 0xF8011000,
     0x70800000, 0x88822200, 0x08820400, 0x108F8800, 0x20821000, 0x00022200, 0x20800020, 0x00000000,
 };
 
@@ -52,7 +52,7 @@ static const u32 sFontData2[77] = {
     0x100FBE1C, 0x10089008, 0x60070808, 0x00000000, 0x02000200, 0x7A078270, 0x8BC81E88, 0x8A2822F8,
     0x9A282280, 0x6BC79E78, 0x30000000, 0x48080810, 0x41E80000, 0x422F1830, 0xFBE88810, 0x40288890,
     0x43C89C60, 0x81000000, 0x81000000, 0x990F3C70, 0xA10AA288, 0xE10AA288, 0xA10AA288, 0x98CAA270,
-    0x00000000, 0x00000020, 0xF1EF1E20, 0x8A28A0F8, 0x8A281C20, 0xF1E80220, 0x00000000, 0x00000000,
+    0x00000000, 0x00000020, 0xF1EF1E20, 0x8A28A0F8, 0x8A281C20, 0xF1E80220, 0x80283C38, 0x00000000,
     0x00000000, 0x8A28B688, 0x8A2A8888, 0x8A2A8878, 0x894A8808, 0x788536F0, 0x00000000, 0x00000000,
     0xF8000000, 0x10000000, 0x20000000, 0x40000000, 0xF8000000,
 };
@@ -177,7 +177,7 @@ void DirectPrint_DrawString(int posh, int posv, bool turnOver, const char *forma
     va_end(list);
 }
 
-int StrLineWidth_(const char *str) {
+static int StrLineWidth_(const char *str) {
     int len = 0;
     do {
         int c = *str++;
@@ -195,7 +195,75 @@ int StrLineWidth_(const char *str) {
     return len;
 }
 
-void DrawCharToXfb_(int posh, int posv, int code) {
+static void DrawCharToXfb_(int posh, int posv, int code);
+static void DrawStringToXfb_(int posh, int posv, const char *str, bool turnOver, bool backErase);
+static const char *DrawStringLineToXfb_(int posh, int posv, const char *str, int width);
+
+static void DrawStringToXfb_(int posh, int posv, const char *str, bool turnOver, bool backErase) {
+    int basePosH = posh;
+    int frameWidth = sFrameBufferInfo.frameWidth;
+    int width = frameWidth / GetDotWidth_();
+
+    while (*str != '\0') {
+        if (backErase) {
+            int len = StrLineWidth_(str);
+            DirectPrint_EraseXfb(posh - 6, posv - 3, (len + 2) * 6, 13);
+        }
+        str = DrawStringLineToXfb_(posh, posv, str, (width - posh) / 6);
+        posv += 10;
+
+        if (*str == '\n') {
+            str++;
+            posh = basePosH;
+        } else if (*str != '\0') {
+            str++;
+            if (!turnOver) {
+                str = strchr(str, '\n');
+                if (str == NULL) {
+                    break;
+                }
+                str++;
+                posh = basePosH;
+            } else {
+                posh = 0;
+            }
+        }
+    }
+}
+
+
+static const char *DrawStringLineToXfb_(int posh, int posv, const char *str, int width) {
+    // Vars from DWARF info
+    char c;
+    int code, cnt, tab_size;
+
+    for (cnt = 0; (c = *str) != '\0'; str++) {
+        if (c == '\n' || c == '\0') {
+            return str;
+        }
+        code = sAsciiTable[c & 0x7f];
+        if (code == 0xfd) {
+            tab_size = 4 - (cnt & 3);
+            cnt += tab_size;
+            posh += tab_size * 6;
+        } else {
+            if (code != 0xFF) {
+                DrawCharToXfb_(posh, posv, code);
+            }
+            posh += 6;
+            cnt++;
+        }
+        if (cnt >= width) {
+            if (str[1] == '\n') {
+                str++;
+            }
+            return str;
+        }
+    }
+    return str;
+}
+
+static void DrawCharToXfb_(int posh, int posv, int code) {
     int ncode = (100 <= code) ? code - 100 : code;
     int fontv = (ncode % 5) * 6;
     int fonth = (ncode / 5) * 7;
@@ -245,69 +313,6 @@ void DrawCharToXfb_(int posh, int posv, int code) {
             pixel += 2;
         }
         pixel += sFrameBufferInfo.frameRow * wV - 6 * wH;
-    }
-}
-
-const char *DrawStringLineToXfb_(int posh, int posv, const char *str, int width) {
-    // Vars from DWARF info
-    char c;
-    int code, cnt, tab_size;
-
-    for (cnt = 0; (c = *str) != '\0'; str++) {
-        if (c == '\n' || c == '\0') {
-            return str;
-        }
-        code = sAsciiTable[c & 0x7f];
-        if (code == 0xfd) {
-            tab_size = 4 - (cnt & 3);
-            cnt += tab_size;
-            posh += tab_size * 6;
-        } else {
-            if (code != 0xFF) {
-                DrawCharToXfb_(posh, posv, code);
-            }
-            posh += 6;
-            cnt++;
-        }
-        if (cnt >= width) {
-            if (str[1] == '\n') {
-                str++;
-            }
-            return str;
-        }
-    }
-    return str;
-}
-
-void DrawStringToXfb_(int posh, int posv, const char *str, bool turnOver, bool backErase) {
-    int basePosH = posh;
-    int frameWidth = sFrameBufferInfo.frameWidth;
-    int width = frameWidth / GetDotWidth_();
-
-    while (*str != '\0') {
-        if (backErase) {
-            int len = StrLineWidth_(str);
-            DirectPrint_EraseXfb(posh - 6, posv - 3, (len + 2) * 6, 13);
-        }
-        str = DrawStringLineToXfb_(posh, posv, str, (width - posh) / 6);
-        posv += 10;
-
-        if (*str == '\n') {
-            str++;
-            posh = basePosH;
-        } else if (*str != '\0') {
-            str++;
-            if (!turnOver) {
-                str = strchr(str, '\n');
-                if (str == NULL) {
-                    break;
-                }
-                str++;
-                posh = basePosH;
-            } else {
-                posh = 0;
-            }
-        }
     }
 }
 

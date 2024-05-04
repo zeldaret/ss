@@ -310,7 +310,7 @@ config.libs = [
     nw4rLib(
         "db",
         [
-            Object(NonMatching, "nw4r/db/db_directPrint.cpp"),
+            Object(Matching, "nw4r/db/db_directPrint.cpp", extra_cflags=["-inline smart, -ipa file"]),
         ],
     ),
     nw4rLib(

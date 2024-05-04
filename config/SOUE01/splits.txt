@@ -171,10 +171,10 @@ nw4r/ut/ut_list.cpp:
 	.text       start:0x8042A530 end:0x8042A850
 
 nw4r/db/db_directPrint.cpp:
-	.text       start:0x804342A0 end:0x80434EA0
-	.rodata     start:0x804F5D28 end:0x804F5FE0
+	.text       start:0x804342A0 end:0x80434E9C
+	.rodata     start:0x804F5D28 end:0x804F5FDC
 	.data       start:0x8056C000 end:0x8056C010
-	.sbss       start:0x805765E8 end:0x805765F0
+	.sbss       start:0x805765E8 end:0x805765EC
 	.bss        start:0x80636B80 end:0x80636BA4
 
 egg/core/eggArchive.cpp:
