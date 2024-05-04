@@ -2,13 +2,7 @@
 #include "MSL_C/string.h"
 #include "rvl/VI.h"
 
-extern EGG::CoreControllerMgr *lbl_805767AC;
-
 EGG::NullController null_controller;
-
-// TODO vtable order in this TU is still messed up
-// TODO NullController implementation
-
 namespace EGG {
 
 CoreControllerMgr *CoreControllerMgr::sInstance;
@@ -165,14 +159,14 @@ extern "C" void fn_803DB1E0(s32 channel, bool arg);
     if (CoreControllerMgr::sInstance == nullptr) {
         CoreControllerMgr *mgr = new CoreControllerMgr();
         CoreControllerMgr::sInstance = mgr;
-        lbl_805767AC = mgr;
+        CoreControllerMgr::T__Disposer::sStaticDisposer = &mgr->mDisposer;
     }
     return CoreControllerMgr::sInstance;
 }
 
 /* 0x80499BD0 */ void CoreControllerMgr::deleteInstance() {
     CoreControllerMgr::sInstance = nullptr;
-    lbl_805767AC = nullptr;
+    CoreControllerMgr::T__Disposer::sStaticDisposer = nullptr;
 }
 
 /* 0x80499BE0 */ EGG::CoreController *CoreControllerMgr::getNthController(s32 n) {
@@ -196,6 +190,8 @@ extern "C" void fn_803DB1E0(s32 channel, bool arg);
 /* 0x80499D10 */ CoreControllerMgr::CoreControllerMgr() {
     const int idxes[] = {0, 1, 2, 3};
     if (sUseBuiltinWpadAllocator == false) {
+        // TODO I just want the string in .data already
+        TODO_Allocator = (void*)"EGG::CoreControllerMgr";
         // TODO create heap, register allocator thunks
     }
     // init KPAD

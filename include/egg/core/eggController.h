@@ -41,16 +41,21 @@ public:
 class CoreController {
 public:
     // vtable 0x000 | 8056ec50
-    /* vt 0x08 | 80064920 */ virtual void setPosParam(f32, f32);
+    // TODO all of these have inline implementations and are scattered
+    // across the binary
+    /* vt 0x08 | 80064920 */ virtual void setPosParam(f32, f32) {}
     /* vt 0x0C | 8049a940 */ virtual void setHoriParam(f32, f32) {}
     /* vt 0x10 | 8049a930 */ virtual void setDistParam(f32, f32) {}
     /* vt 0x14 | 8049a920 */ virtual void setAccParam(f32, f32) {}
-    /* vt 0x18 | 80059820 */ virtual bool isPressed(u32 mask);
-    /* vt 0x1C | 80059a60 */ virtual bool isAnyPressed(u32 mask);
-    /* vt 0x20 | 80014e30 */ virtual bool isTriggered(u32 mask);
-    /* vt 0x24 | 800599e0 */ virtual bool isReleased();
-    /* vt 0x28 | 80059840 */ virtual bool isAllPressed();
-    /* vt 0x2C | 80059a80 */ virtual bool isNotPressed();
+    /* vt 0x18 | 80059820 */ virtual bool isPressed(u32 mask) {}
+    /* vt 0x1C | 80059a60 */ virtual bool isAnyPressed(u32 mask) {}
+    /* vt 0x20 | 80014e30 */ virtual bool isTriggered(u32 mask) {}
+    /* vt 0x24 | 800599e0 */ virtual bool isReleased() {}
+    /* vt 0x28 | 80059840 */ virtual bool isAllPressed() {}
+    /* vt 0x2C | 80059a80 */ virtual bool isNotPressed() {}
+    // We know the above are inline because if a class has any non-inline virtual functions,
+    // then the TU that contains an implementation of said function gets the vtable,
+    // and we know that eggController.cpp contains the vtable and the functions below
     /* vt 0x30 | 80499660 */ virtual void beginFrame(void *padStatus); // Really needs to be PADStatus
     /* vt 0x34 | 80499a60 */ virtual void endFrame();
 
@@ -96,6 +101,44 @@ public:
     /* 80499270 */ void calc_posture_matrix(Matrix34f &mat, bool);
     /* 80499ac0 */ f32 getFreeStickX() const;
     /* 80499ae0 */ f32 getFreeStickY() const;
+};
+
+class CoreControllerMgr {
+public:
+    struct T__Disposer : Disposer {
+        /* vt 0x08 | 80499b00 */ virtual ~T__Disposer();
+        /* 805767ac */ static T__Disposer *sStaticDisposer;
+    };
+    // Disposer Vtable: 8056ec40
+    /* 0x0000 */ T__Disposer mDisposer; // for the static T__Disposer
+public:
+    // 0x0010 vtable | 8056ebf8
+    /* vt 0x08 | 8049a130 */ virtual void beginFrame();
+    /* vt 0x0C | 8049a1e0 */ virtual void endFrame();
+
+public:
+    /* 0x0014 */ TBuffer<CoreController *> mControllers;
+    /* 0x0020 */ u8 field_0x20[0x10a4 - 0x0020];
+    /* 0x10A4 */ TBuffer<eCoreDevType> mDevTypes;
+    /* 0x10b0 */ u8 field_0x10B0[0x10e0 - 0x10b0];
+
+public:
+    /* 80499b80 */ static CoreControllerMgr *createInstance();
+    /* 80499bd0 */ static void deleteInstance();
+    /* 80499be0 */ CoreController *getNthController(s32);
+
+    static void *allocThunk(size_t size);
+    static void deleteThunk(void *ptr);
+
+    /* 80499cd0 */ static void connectCallback(s32, s32);
+    /* 80499d10 */ CoreControllerMgr();
+
+public:
+    /* 805767a8 */ static CoreControllerMgr *sInstance;
+    /* 805767b0 */ static CoreController *(*sCoreControllerFactory)();
+    /* 805767b4 */ static ConnectCallback sConnectCallback;
+    /* 805767b8 */ static bool sUseBuiltinWpadAllocator;
+    // /* 805767bc */ static sAllocator; // defined in cpp file
 };
 
 class NullController : public CoreController {
@@ -146,52 +189,7 @@ public:
     /* 8049a7a0 */ void startPattern(const char *pattern, int, bool);
     /* 8049a7f0 */ ControllerRumbleUnit *getUnitFromList(bool bGrabActive);
 };
-class CoreControllerMgr {
-public:
-    struct T__Disposer : Disposer {
-        /* vt 0x08 | 80499b00 */ virtual ~T__Disposer();
-        /* 805767ac */ static T__Disposer *sStaticDisposer;
-    };
-    // Disposer Vtable: 8056ec40
-    /* 0x0000 */ T__Disposer mDisposer; // for the static T__Disposer
-public:
-    // 0x0010 vtable | 8056ebf8
-    /* vt 0x08 | 8049a130 */ virtual void beginFrame();
-    /* vt 0x0C | 8049a1e0 */ virtual void endFrame();
 
-public:
-    /* 0x0014 */ TBuffer<CoreController *> mControllers;
-    /* 0x0020 */ u8 field_0x20[0x10a4 - 0x0020];
-    /* 0x10A4 */ TBuffer<eCoreDevType> mDevTypes;
-    /* 0x10b0 */ u8 field_0x10B0[0x10e0 - 0x10b0];
-
-public:
-    /* 80499b80 */ static CoreControllerMgr *createInstance();
-    /* 80499bd0 */ static void deleteInstance();
-    /* 80499be0 */ CoreController *getNthController(s32);
-
-    static void *allocThunk(size_t size);
-    static void deleteThunk(void *ptr);
-
-    /* 80499cd0 */ static void connectCallback(s32, s32);
-    /* 80499d10 */ CoreControllerMgr();
-
-public:
-    /* 805767a8 */ static CoreControllerMgr *sInstance;
-    /* 805767b0 */ static CoreController *(*sCoreControllerFactory)();
-    /* 805767b4 */ static ConnectCallback sConnectCallback;
-    /* 805767b8 */ static bool sUseBuiltinWpadAllocator;
-    // /* 805767bc */ static sAllocator; // defined in cpp file
-
-    // Other Stuff thats autogen (buffers/sinit/etc)
-    // /* 8049a950 */ void TBuffer<eCoreDevType>::allocate(int, int);
-    // /* 8049a9a0 */ void TBuffer<eCoreDevType>::allocate(int, Heap*, int);
-    // /* 8049aa20 */ void TBuffer<eCoreDevType>::onAllocate(Heap*);
-    // /* 8049aa30 */ void TBuffer<CoreController*>::allocate(int, int);
-    // /* 8049aa80 */ void TBuffer<CoreController*>::allocate(int, Heap*, int);
-    // /* 8049ab00 */ void TBuffer<CoreController*>::onAllocate(Heap*);
-    // /* 8049ab10 */ void sinit(); // NULL CONTROLLER
-};
 
 } // namespace EGG
 
