@@ -18,6 +18,8 @@ public:
             EGG::HeapAllocCallback oldAllocCallback = EGG::Heap::sAllocCallback;
             EGG::HeapFreeCallback oldFreeCallback = EGG::Heap::sFreeCallback;
 
+            // first mention free, then alloc so that the
+            //inline thunks are emitted in the right order
             EGG::HeapFreeCallback freeThunk = &freeCallback;
             EGG::HeapAllocCallback allocThunk = &allocCallback;
 
