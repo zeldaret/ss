@@ -19,7 +19,17 @@ enum eCoreDevType {};
 
 class CoreStatus {
 public:
-    /* 0x00 */ u8 field_0x00[0xF0];
+    /* 0x00 */ u8 field_0x00[0x0C];
+    /* 0x0C */ f32 accel[3];
+    /* 0x18 */ u8 field_0x01[0x08];
+    /* 0x20 */ f32 dpdRawX;
+    /* 0x24 */ f32 dpdRawY;
+    /* 0x28 */ u8 field_0x02[0x36];
+    /* 0x58 */ s8 dpdDistance;
+    /* 0x5C */ s8 unknown;
+    /* 0x60 */ f32 fsStickButton;
+    /* 0x60 */ f32 fsStickButton2;
+    /* 0x64 */ u8 field_0x03[0x88];
 
 public:
     /* 80498f90 */ void init();
@@ -73,21 +83,25 @@ public:
 public:
     /* 80499050 */ CoreController();
     /* 804990b0 */ void sceneReset();
-    /* 80499170 */ Vector2f getDpdRawPos();
-    /* 80499190 */ s32 getDpdDistance();
+    /* 80499170 */ Vector2f getDpdRawPos() const;
+    /* 80499190 */ s32 getDpdDistance() const;
     /* 804991a0 */ void startMotor();
     /* 804991b0 */ void stopMotor();
-    /* 804991c0 */ void createRumberMgr(u8);
+    /* 804991c0 */ void createRumbleMgr(u8);
     /* 80499220 */ void startPatternRumble(const char *, int, bool);
     /* 80499240 */ void stopRumbleMgr();
     /* 80499260 */ CoreStatus *getCoreStatus(s32 idx);
-    /* 8056ebf8 */ void calc_posture_matrix(Matrix34f &mat, bool);
-    /* 80499ac0 */ f32 getFreeStickX();
-    /* 80499ae0 */ f32 getFreeStickY();
+    /* 80499270 */ void calc_posture_matrix(Matrix34f &mat, bool);
+    /* 80499ac0 */ f32 getFreeStickX() const;
+    /* 80499ae0 */ f32 getFreeStickY() const;
 };
 
 class NullController : public CoreController {
 public:
+    NullController() {
+        // This could also be in CoreController
+        unk[92] = 0xfe;
+    }
     // idk this has NO effect on anything
     u8 unk[0x80674c00 - 0x80674b10];
 };
@@ -95,14 +109,15 @@ public:
 class ControllerRumbleUnit {
 public:
     // 0x00 vtable | 8056ebb4
+    inline ControllerRumbleUnit() { init(); }
     /* vt 0x08 | 8049a8e0 */ virtual ~ControllerRumbleUnit();
 
 public:
-    /* 0x04 */ char *mPattern;
-    /* 0x08 */ char *mPatternPos;
+    /* 0x04 */ const char *mPattern;
+    /* 0x08 */ const char *mPatternPos;
     /* 0x0C */ s32 mTimer;    // guess
     /* 0x10 */ f32 mRampUp;   // guess
-    /* 0x14 */ f32 mIntesity; // guess
+    /* 0x14 */ f32 mIntensity; // guess
     /* 0x18 */ TBitFlag<u8> mFlag;
     /* 0x1C */ nw4r::ut::Node mNode;
     /* 0x24 */ u32 field_0x24; // could just be part of the node (List)
@@ -134,7 +149,7 @@ class CoreControllerMgr {
 public:
     struct T__Disposer {
         Disposer mDisposer;
-        /* vt 0x08 | 80499b00 */ virtual ~T__Disposer();
+        /* vt 0x08 | 80499b00 */ virtual ~T__Disposer() {}
         /* 805767ac */ static T__Disposer *sStaticDisposer;
     };
     // Disposer Vtable: 8056ec40
@@ -151,8 +166,9 @@ public:
     /* 0x10b0 */ u8 field_0x10B0[0x10e0 - 0x10b0];
 
 public:
-    /* 80499b80 */ static void createInstance();
+    /* 80499b80 */ static CoreControllerMgr *createInstance();
     /* 80499bd0 */ static void deleteInstance();
+    /* 80499be0 */ CoreController *getNthController(s32);
     /* 80499cd0 */ void connectCallback(s32, s32);
     /* 80499d10 */ CoreControllerMgr();
 

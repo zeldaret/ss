@@ -24,7 +24,7 @@ public:
         if (heap == nullptr) {
             heap = Heap::sCurrentHeap;
         }
-        mBuffer = new (heap, 4) T[n];
+        mBuffer = new (heap, 4) T[mSize];
         onAllocate(heap);
     }
     /* vt 0x14 */ virtual void onAllocate(Heap *) {

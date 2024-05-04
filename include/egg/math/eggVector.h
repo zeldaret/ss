@@ -109,7 +109,9 @@ struct Vector3f : public nw4r::math::VEC3 {
 };
 
 struct Vector2f : nw4r::math::VEC2 {
+    inline Vector2f() {}
     Vector2f(f32 fx, f32 fy) : VEC2(fx, fy) {}
+    inline  ~Vector2f() {}
 
 public:
     /* 805767c0 */ static const Vector2f zero;

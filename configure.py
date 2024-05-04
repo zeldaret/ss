@@ -362,6 +362,7 @@ config.libs = [
             Object(Matching, "egg/core/eggThread.cpp"),
             Object(NonMatching, "egg/core/eggUnk.cpp"),
             Object(NonMatching, "egg/core/eggSystem.cpp"),
+            Object(Matching, "egg/core/eggDisposer.cpp"),
             Object(Matching, "egg/core/eggDisplay.cpp"),
             Object(Matching, "egg/core/eggColorFader.cpp"),
             Object(Matching, "egg/core/eggAsyncDisplay.cpp"),

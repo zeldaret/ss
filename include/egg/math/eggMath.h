@@ -2,6 +2,7 @@
 #define EGG_MATH_H
 
 #include <common.h>
+#include <MSL_C/float.h>
 
 namespace EGG {
 

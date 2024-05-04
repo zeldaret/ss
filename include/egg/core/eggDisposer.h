@@ -10,9 +10,8 @@ namespace EGG {
 
 class Heap;
 class Disposer : private NonCopyable {
-    friend class Heap;
 
-protected:
+public:
     /* vt 0x08 | 80496890 */ virtual ~Disposer();
     /* 80496830 */ Disposer();
 
