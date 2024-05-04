@@ -128,7 +128,7 @@ public:
     /* 80499be0 */ CoreController *getNthController(s32);
 
     static void *allocThunk(size_t size);
-    static void deleteThunk(void *ptr);
+    static int deleteThunk(void *ptr);
 
     /* 80499cd0 */ static void connectCallback(s32, s32);
     /* 80499d10 */ CoreControllerMgr();

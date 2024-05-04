@@ -1,4 +1,5 @@
 #include "egg/core/eggController.h"
+#include "egg/core/eggAllocator.h"
 #include "MSL_C/string.h"
 #include "rvl/VI.h"
 
@@ -11,7 +12,7 @@ void *CoreControllerFactory; // TODO
 ConnectCallback CoreControllerMgr::sConnectCallback;
 // This controls whether EggController registers an allocator within the WPAD driver
 bool CoreControllerMgr::sUseBuiltinWpadAllocator;
-void *TODO_Allocator; // TODO
+static Allocator *sWPADAllocator;
 
 /* 0x80498F90 */ void CoreStatus::init() {
     memset(this, 0, sizeof(CoreStatus));
@@ -174,10 +175,12 @@ extern "C" void fn_803DB1E0(s32 channel, bool arg);
 }
 
 /* 0x80499C70 */ void *CoreControllerMgr::allocThunk(size_t size) {
-    return nullptr; // TODO
+    return sWPADAllocator->alloc(size);
 }
-/* 0x80499C90 */ void CoreControllerMgr::deleteThunk(void *ptr) {
-    // TODO
+
+/* 0x80499C90 */ int CoreControllerMgr::deleteThunk(void *ptr) {
+    sWPADAllocator->free(ptr);
+    return 1;
 }
 
 /* 0x80499CD0 */ void CoreControllerMgr::connectCallback(int a1, int a2) {
@@ -191,7 +194,7 @@ extern "C" void fn_803DB1E0(s32 channel, bool arg);
     const int idxes[] = {0, 1, 2, 3};
     if (sUseBuiltinWpadAllocator == false) {
         // TODO I just want the string in .data already
-        TODO_Allocator = (void*)"EGG::CoreControllerMgr";
+        // TODO_Allocator = (void*)"EGG::CoreControllerMgr";
         // TODO create heap, register allocator thunks
     }
     // init KPAD
