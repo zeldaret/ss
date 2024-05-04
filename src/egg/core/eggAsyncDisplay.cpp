@@ -19,19 +19,6 @@ u8 clear_z_TX[64] ALIGN(32) = {
 // clang-format on
 } // namespace
 
-// Hacks for float ordering
-static f32 one() {
-    return 1.0f;
-}
-
-static f64 cast() {
-    return 4503599627370496.0;
-}
-
-static f32 zero() {
-    return 0.0f;
-}
-
 namespace EGG {
 
 AsyncDisplay::AsyncDisplay(u8 maxRetrace) : Display(maxRetrace) {
@@ -44,6 +31,12 @@ AsyncDisplay::AsyncDisplay(u8 maxRetrace) : Display(maxRetrace) {
     spSelector = this;
     OSInitThreadQueue(&this->mThreadQueue);
     OSInitMessageQueue(&this->mMesgQueue, this->mMesgBuf, 4);
+}
+
+// Random function that pretends to do an int to float
+// cast here, for float ordering issues
+f64 cast() {
+    return 4503599627370496.0;
 }
 
 f32 AsyncDisplay::calcS() {

@@ -194,6 +194,7 @@ cflags_egg = [
     *cflags_base,
     "-inline noauto",
     "-fp_contract off",
+    "-ipa file",
 ]
 
 # nw4r flags
