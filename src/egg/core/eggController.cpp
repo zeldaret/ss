@@ -1,5 +1,7 @@
 #include "egg/core/eggController.h"
 #include "egg/core/eggAllocator.h"
+#include "egg/core/eggExpHeap.h"
+#include "egg/core/eggSystem.h"
 #include "MSL_C/string.h"
 #include "rvl/VI.h"
 
@@ -8,7 +10,7 @@ namespace EGG {
 
 CoreControllerMgr *CoreControllerMgr::sInstance;
 CoreControllerMgr::T__Disposer *CoreControllerMgr::T__Disposer::sStaticDisposer;
-void *CoreControllerFactory; // TODO
+ControllerFactory CoreControllerMgr::sCoreControllerFactory;
 ConnectCallback CoreControllerMgr::sConnectCallback;
 // This controls whether EggController registers an allocator within the WPAD driver
 bool CoreControllerMgr::sUseBuiltinWpadAllocator;
@@ -190,22 +192,46 @@ extern "C" void fn_803DB1E0(s32 channel, bool arg);
     }
 }
 
+extern "C" long lbl_80574EE8;
+// TODO headers
+extern "C" void fn_803D9400(void *a, void *b);
+extern "C" void fn_803F2040(void *a, int b);
+extern "C" void fn_803F26B0(int a, void *b);
+
 /* 0x80499D10 */ CoreControllerMgr::CoreControllerMgr() {
     const int idxes[] = {0, 1, 2, 3};
     if (sUseBuiltinWpadAllocator == false) {
-        // TODO I just want the string in .data already
-        // TODO_Allocator = (void*)"EGG::CoreControllerMgr";
-        // TODO create heap, register allocator thunks
+        Heap *heap = ExpHeap::create(lbl_80574EE8, BaseSystem::mConfigData->mRootHeapMem2, 0);
+        heap->mName = "EGG::CoreControllerMgr";
+        sWPADAllocator = new Allocator(heap, 0x20);
+        fn_803D9400(allocThunk, deleteThunk);
     }
-    // init KPAD
+    fn_803F2040(field_0x20, 0x40);
     beginFrame();
     endFrame();
     VIWaitForRetrace();
 
-    // TODO there's likely an allocate call here but it shifts the
-    // inline buffer methods up in the TU :(
-    // mControllers.allocate(4, 0);
-    // TODO moar
+    for (int i = 0; i < 4; i++) {
+        fn_803F26B0(idxes[i], connectCallback);
+    }
+
+    // TODO these allocate calls cause the relevant inline buffer functions to be moved
+    // from the bottom of the TU to after this ctor. How to fix?
+    mControllers.allocate(4, 0);
+    for (int i = 0; i < 4; i++) {
+        if (sCoreControllerFactory != nullptr) {
+            mControllers(i) = (sCoreControllerFactory)();
+        } else {
+            mControllers(i) = new CoreController();
+        }
+    }
+
+    mDevTypes.allocate(4, 0);
+    for (int i = 0; i < 4; i++) {
+        mControllers(i)->mChannelID = idxes[i];
+        mDevTypes(i) = (eCoreDevType)0xfd;
+    }
+    field_0x10A0 = 0;
 }
 
 /* 0x8049A130 */ void CoreControllerMgr::beginFrame() {

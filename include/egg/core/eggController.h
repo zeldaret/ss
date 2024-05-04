@@ -13,11 +13,13 @@
 namespace EGG {
 
 class ControllerRumbleMgr;
+class CoreController;
 
 // To Be Filled out
 enum eCoreDevType {};
 
 typedef void (*ConnectCallback)(int args[]);
+typedef class CoreController* (*ControllerFactory)();
 
 class CoreStatus {
 public:
@@ -118,7 +120,8 @@ public:
 
 public:
     /* 0x0014 */ TBuffer<CoreController *> mControllers;
-    /* 0x0020 */ u8 field_0x20[0x10a4 - 0x0020];
+    /* 0x0020 */ u8 field_0x20[0x10a0 - 0x0020];
+    /* 0x10A0 */ u32 field_0x10A0;
     /* 0x10A4 */ TBuffer<eCoreDevType> mDevTypes;
     /* 0x10b0 */ u8 field_0x10B0[0x10e0 - 0x10b0];
 
