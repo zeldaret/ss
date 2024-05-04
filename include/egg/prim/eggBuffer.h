@@ -11,8 +11,10 @@ class TBuffer {
 public:
     // vtable 0x00
     /* vt 0x08 */ virtual ~TBuffer() {
-        delete[] mBuffer;
-        mBuffer = nullptr;
+        if (mBuffer != nullptr) {
+            delete[] mBuffer;
+            mBuffer = nullptr;
+        }
     }
     /* vt 0x0C */ virtual void allocate(int n, int) {
         mSize = n;

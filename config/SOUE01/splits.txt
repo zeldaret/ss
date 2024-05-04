@@ -336,7 +336,7 @@ egg/core/eggAssertHeap.cpp:
 
 egg/core/eggDisposer.cpp:
 	.text       start:0x80496830 end:0x80496904
-	.data       start:0x8056EA30 end:0x8056EA40
+	.data       start:0x8056EA30 end:0x8056EA3C
 
 egg/core/eggThread.cpp:
 	.text       start:0x80496910 end:0x80496DD8
@@ -392,6 +392,7 @@ egg/core/eggController.cpp:
 	.ctors      start:0x804DB98C end:0x804DB990
 	.rodata     start:0x804FBA20 end:0x804FBA30
 	.data       start:0x8056EB90 end:0x8056EC88
+	.sbss       start:0x805767A8 end:0x805767C0
 	.sdata2     start:0x8057F338 end:0x8057F360
 	.bss        start:0x80673B40 end:0x80674C00
 
