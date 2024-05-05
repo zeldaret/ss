@@ -192,6 +192,7 @@ nw4r/ut/ut_IOStream.cpp:
 nw4r/ut/ut_FileStream.cpp:
 	.text       start:0x8042B560 end:0x8042B6EC
 	.ctors      start:0x804DB93C end:0x804DB940
+	.sbss       start:0x80576598 end:0x805765A0
 
 nw4r/ut/ut_DvdFileStream.cpp:
 	.text       start:0x8042B6F0 end:0x8042BDAC
