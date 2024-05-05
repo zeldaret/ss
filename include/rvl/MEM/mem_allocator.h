@@ -19,7 +19,7 @@ typedef struct MEMAllocatorFuncs {
 
 typedef struct MEMAllocator {
     const MEMAllocatorFuncs *funcs; // at 0x0
-    struct MEMiHeapHead *heap;      // at 0x4
+    void *heap;                     // at 0x4
     u32 heapParam1;                 // at 0x8
     u32 heapParam2;                 // at 0xC
 } MEMAllocator;
