@@ -1,6 +1,7 @@
 #ifndef RVL_SDK_OS_ERROR_H
 #define RVL_SDK_OS_ERROR_H
 #include <common.h>
+#include <Runtime.PPCEABI.H/__va_arg.h>
 #ifdef __cplusplus
 extern "C" {
 #endif
