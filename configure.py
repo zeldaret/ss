@@ -385,7 +385,7 @@ config.libs = [
     EGGLib(
         "prim",
         [
-            Object(NonMatching, "egg/prim/eggAssert.cpp"),
+            Object(Matching, "egg/prim/eggAssert.cpp"),
         ],
     ),
     # {

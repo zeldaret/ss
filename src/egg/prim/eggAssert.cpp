@@ -67,14 +67,11 @@ bool sAssertOccurred;
 }
 
 /* 8049c150 */ bool isOutsideMEM1(u32 addr) {
-    // TODO
-    if (0x80000000 <= addr) {
-        if (addr <= 0x83000000 - 1) {
-            return false;
-        }
+    if (!(0x80000000 <= addr) || !(addr <= 0x83000000 - 1)) {
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 /* 8049c180 */ AssertCallback setAssertCallback(AssertCallback cb) {
