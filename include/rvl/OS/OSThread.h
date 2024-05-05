@@ -47,8 +47,8 @@ typedef struct OSThread {
     OSMutexQueue mutexQueue;     // at 0x2F4
     struct OSThread *nextActive; // at 0x2FC
     struct OSThread *prevActive; // at 0x300
-    u32 *stackBegin;             // at 0x304
-    u32 *stackEnd;               // at 0x308
+    void *stackBegin;             // at 0x304
+    void *stackEnd;               // at 0x308
     s32 error;                   // at 0x30C
     void *specific[2];           // at 0x310
 } OSThread;
