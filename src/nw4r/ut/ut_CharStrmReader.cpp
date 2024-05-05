@@ -5,7 +5,6 @@ namespace ut {
 namespace {
 
 bool IsSJISLeadByte(u8 c) {
-    // Idk how to force the comparison correctly
     return ((c >= 0x81) && (c < 0xA0)) || c >= 0xe0;
 }
 
