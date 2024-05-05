@@ -185,6 +185,7 @@ nw4r/ut/ut_TagProcessorBase.cpp:
 nw4r/ut/ut_IOStream.cpp:
 	.text       start:0x8042B4E0 end:0x8042B55C
 	.ctors      start:0x804DB938 end:0x804DB93C
+	.sbss       start:0x80576590 end:0x80576598
 
 nw4r/ut/ut_FileStream.cpp:
 	.text       start:0x8042B560 end:0x8042B6EC
