@@ -2,27 +2,26 @@
 
 namespace EGG {
 
-/* 80495ab0 */ ExpHeap::ExpHeap(MEMiHeapHead *heapHandle): Heap(heapHandle) {}
+/* 80495ab0 */ ExpHeap::ExpHeap(MEMiHeapHead *heapHandle) : Heap(heapHandle) {}
 
 /* 80495af0 */ ExpHeap::~ExpHeap() {
     dispose();
     MEMDestroyExpHeap(mHeapHandle);
 }
 
-/* 80495b70 */ ExpHeap* ExpHeap::create(void *heapStart, size_t size, u16 attr) {
+/* 80495b70 */ ExpHeap *ExpHeap::create(void *heapStart, size_t size, u16 attr) {
     ExpHeap *heap = nullptr;
     void *startAddr = heapStart;
-    void *heapEnd = ROUND_DOWN_PTR((u8*)heapStart + size, 0x04);
+    void *heapEnd = ROUND_DOWN_PTR((u8 *)heapStart + size, 0x04);
     heapStart = ROUND_UP_PTR(heapStart, 0x04);
 
-
-    if (heapStart > heapEnd || ((u8*)heapEnd - (u8*)heapStart) < 0x38u) {
+    if (heapStart > heapEnd || ((u8 *)heapEnd - (u8 *)heapStart) < 0x38u) {
         return nullptr;
     }
 
-    MEMiHeapHead *head = MEMCreateExpHeapEx(((ExpHeap*)heapStart) + 1, ((u8*)heapEnd - (u8*)heapStart) - 0x34, attr);
+    MEMiHeapHead *head = MEMCreateExpHeapEx(((ExpHeap *)heapStart) + 1, ((u8 *)heapEnd - (u8 *)heapStart) - 0x34, attr);
     if (head != nullptr) {
-        heap = new(heapStart) ExpHeap(head);
+        heap = new (heapStart) ExpHeap(head);
         heap->mParentBlock = startAddr;
         if (sCreateCallback != nullptr) {
             (sCreateCallback)(heap);
@@ -32,12 +31,12 @@ namespace EGG {
     return heap;
 }
 
-/* 80495c30 */ ExpHeap* ExpHeap::create(size_t size, Heap *heap, u16 attr) {
+/* 80495c30 */ ExpHeap *ExpHeap::create(size_t size, Heap *heap, u16 attr) {
     ExpHeap *newHeap = nullptr;
     if (heap == nullptr) {
         heap = sCurrentHeap;
     }
-    
+
     if (size == -1) {
         size = heap->getAllocatableSize(0x04);
     }
@@ -67,7 +66,7 @@ namespace EGG {
 
 /* 80495d90 */ void *ExpHeap::alloc(u32 size, s32 align) {
     if (mFlag.onBit(0)) {
-        #line 182
+#line 182
         OSError("DAME DAME\n");
     }
 
@@ -119,22 +118,18 @@ namespace EGG {
         Heap *parent = findParentHeap();
         if (parent != nullptr) {
             parent->resizeForMBlock(mParentBlock, totalSize);
-            return totalSize;   
+            return totalSize;
         }
     }
     return 0;
 }
 
-// TODO marked as "idk" in Ghidra
-extern "C" u32 fn_803CD4B0(const void *block);
-
 /* 80495f80 */ u32 ExpHeap::getSizeForMBlock(const void *block) {
-    return fn_803CD4B0(block);
+    return MEMGetSizeForMBlockExpHeap(block);
 }
 
 /* 80495f90 */ Heap::eHeapKind ExpHeap::getHeapKind() const {
     return HEAP_KIND_EXPANDED;
 }
-
 
 } // namespace EGG
