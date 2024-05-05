@@ -6,6 +6,10 @@ mw_comment_version: 8
 quick_analysis: true
 force_active: [
   "searchBaseByID__10fManager_cF9fBaseID_e",
+  "ProcessLinefeed__Q34nw4r2ut19TagProcessorBase<c>FPQ34nw4r2ut15PrintContext<c>",
+  "ProcessTab__Q34nw4r2ut19TagProcessorBase<c>FPQ34nw4r2ut15PrintContext<c>",
+  "ProcessLinefeed__Q34nw4r2ut19TagProcessorBase<w>FPQ34nw4r2ut15PrintContext<w>",
+  "ProcessTab__Q34nw4r2ut19TagProcessorBase<w>FPQ34nw4r2ut15PrintContext<w>",
 ]
 # modules:
 # - object: orig/SOUE01/rels/d_a_asura_bulletNP.rel

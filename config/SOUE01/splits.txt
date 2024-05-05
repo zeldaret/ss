@@ -181,6 +181,8 @@ nw4r/ut/ut_CharStrmReader.cpp:
 
 nw4r/ut/ut_TagProcessorBase.cpp:
 	.text       start:0x8042AB80 end:0x8042B4D4
+	.data       start:0x8056BD50 end:0x8056BD78
+	.sdata2     start:0x8057EB68 end:0x8057EB70
 
 nw4r/ut/ut_IOStream.cpp:
 	.text       start:0x8042B4E0 end:0x8042B55C
