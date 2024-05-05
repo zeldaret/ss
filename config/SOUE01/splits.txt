@@ -419,6 +419,7 @@ egg/math/eggVector.cpp:
 egg/prim/eggAssert.cpp:
 	.text       start:0x8049BF90 end:0x8049C5BC
 	.data       start:0x8056EC88 end:0x8056ED00
+	.sdata      start:0x80574EF0 end:0x80574F18
 	.sbss       start:0x805767F8 end:0x80576808
 	.bss        start:0x80674C60 end:0x80674D68
 

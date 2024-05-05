@@ -115,9 +115,9 @@ bool sAssertOccurred;
         }
         const char *sym = getMapSymbol((void *)stack[1]);
         if (sym != nullptr) {
-            system_report("%d: %s", num, sym);
+            system_report("%d: %s\n", num, sym);
         } else {
-            system_report("%d: %p", num, stack[1]);
+            system_report("%d: %p\n", num, stack[1]);
         }
         stack = (u32*)stack[0];
         if (isOutsideMEM1((u32)stack)) {
