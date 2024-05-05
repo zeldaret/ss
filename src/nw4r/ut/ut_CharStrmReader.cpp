@@ -40,13 +40,7 @@ u16 CharStrmReader::ReadNextCharCP1252() {
 u16 CharStrmReader::ReadNextCharSJIS() {
     u16 code = GetChar<u8>(0);
 
-    bool isLead = false;
-
-    if ((((u8)GetChar<u8>(0) >= 0x81) && ((u8)GetChar<u8>(0) <= 0xA0)) || (u8)GetChar<u8>(0) >= 0xe0) {
-        isLead = true;
-    }
-
-    if (isLead) {
+    if (IsSJISLeadByte((u8)code)) {
         code = GetChar<u8>(1) | (GetChar<u8>(0) << 8);
         StepStrm<u8>(2);
     } else {
