@@ -170,6 +170,9 @@ rvl/CX/cx.c:
 nw4r/ut/ut_list.cpp:
 	.text       start:0x8042A530 end:0x8042A850
 
+nw4r/ut/ut_binaryFileFormat.cpp:
+	.text       start:0x8042A9E0 end:0x8042AA54
+
 nw4r/db/db_directPrint.cpp:
 	.text       start:0x804342A0 end:0x80434E9C
 	.rodata     start:0x804F5D28 end:0x804F5FDC
