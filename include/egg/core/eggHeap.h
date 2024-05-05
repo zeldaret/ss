@@ -18,12 +18,12 @@ class Allocator;
 
 struct HeapAllocArg {
     void *userArg; // 00
-    u32 size;      // 04
-    int align;     // 08
-    Heap *heap;    // 0C heap to allocate in
-    int another;   // 10
+    u32 size;    // 04
+    int align;   // 08
+    void *ptr;   // 0C the allocated ptr
+    Heap *heap;  // 10 heap to allocate in
 
-    inline HeapAllocArg() : userArg(0), size(0), align(0), heap(nullptr) {}
+    inline HeapAllocArg() : userArg(0), size(0), align(0), heap(nullptr), ptr(nullptr) {}
 };
 typedef void (*HeapAllocCallback)(HeapAllocArg *arg);
 
@@ -37,8 +37,8 @@ typedef void (*ErrorCallback)(HeapErrorArg *);
 
 struct HeapFreeArg {
     void *userArg;
-    int arg1;
-    int arg2;
+    void *ptr;
+    Heap *heap;
 };
 typedef void (*HeapFreeCallback)(HeapFreeArg *);
 
@@ -57,14 +57,14 @@ public:
     // vtable at 0x0 | 8056e950
     /* vt 0x08 | 804954c0 */ virtual ~Heap();
     /* vt 0x0C | 00000000 */ virtual eHeapKind getHeapKind() const = 0;
-    /* vt 0x10 | 80495a40 */ virtual void initAllocator(Allocator *allocator, s32 align) = 0;
+    /* vt 0x10 | 80495a40 */ virtual void initAllocator(Allocator *allocator, s32 align);
     /* vt 0x14 | 00000000 */ virtual void *alloc(u32 size, s32 align) = 0;
     /* vt 0x18 | 00000000 */ virtual void free(void *block) = 0;
     /* vt 0x1C | 00000000 */ virtual void destroy() = 0;
     /* vt 0x20 | 00000000 */ virtual u32 resizeForMBlock(void *block, u32 size) = 0;
     /* vt 0x24 | 00000000 */ virtual u32 getTotalFreeSize() = 0;
-    /* vt 0x24 | 00000000 */ virtual u32 getAllocatableSize(s32 align) = 0;
-    /* vt 0x28 | 00000000 */ virtual u32 adjust() = 0;
+    /* vt 0x28 | 00000000 */ virtual u32 getAllocatableSize(s32 align) = 0;
+    /* vt 0x2C | 00000000 */ virtual u32 adjust() = 0;
 
 public:
     void setName(const char *name) {
