@@ -317,7 +317,8 @@ egg/core/eggAllocator.cpp:
 egg/core/eggHeap.cpp:
 	.text       start:0x804953F0 end:0x80495AB0
 	.data       start:0x8056E8E8 end:0x8056E980
-	.sbss       start:0x80576740 end:0x80576770
+	.sdata      start:0x80574ED8 end:0x80574EE8
+	.sbss       start:0x80576740 end:0x8057676C
 	.bss        start:0x80673AE8 end:0x80673B10
 
 egg/core/eggExpHeap.cpp:
