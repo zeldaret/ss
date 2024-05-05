@@ -76,7 +76,9 @@ d/d_heap.cpp:
 	.text       start:0x80054B00 end:0x80054F30
 	.ctors      start:0x804DB680 end:0x804DB684
 	.rodata     start:0x804DE008 end:0x804DE188
-	.sbss       start:0x805751A8 end:0x805751D0
+	.data       start:0x8050D440 end:0x8050D458
+	.sbss       start:0x805751A8 end:0x805751CC
+	.bss        start:0x80597740 end:0x80597758
 
 d/d_main.cpp:
 	.text       start:0x80054F30 end:0x80055170
