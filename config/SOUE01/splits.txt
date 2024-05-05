@@ -313,6 +313,7 @@ egg/core/eggStream.cpp:
 egg/core/eggAllocator.cpp:
 	.text       start:0x804952D0 end:0x804953F0
 	.data       start:0x8056E8D0 end:0x8056E8E8
+	.sdata2     start:0x8057F2F0 end:0x8057F2F8
 
 egg/core/eggHeap.cpp:
 	.text       start:0x804953F0 end:0x80495AB0

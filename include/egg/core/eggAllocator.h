@@ -3,9 +3,8 @@
 #include "rvl/MEM.h"
 #include <common.h>
 
-// /* 80495310 */ MEMInitAllocatorFor_Heap(MEMAllocator* alloc, s32 align, void* heap);
-// /* 804952f0 */ MEM_AllocFor_Heap(MEMAllocator* alloc, void* block);
-// /* 804952d0 */ MEM_AllocFor_Heap(MEMAllocator* alloc, u32 size, s32 align);
+/* 80495310 */ void MEMInitAllocatorFor_Heap(MEMAllocator* alloc, s32 align, void* heap);
+
 namespace EGG {
 class Heap;
 class Allocator : public MEMAllocator {
