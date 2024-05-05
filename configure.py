@@ -365,7 +365,7 @@ config.libs = [
             Object(Matching, "egg/core/eggDisplay.cpp"),
             Object(Matching, "egg/core/eggColorFader.cpp"),
             Object(Matching, "egg/core/eggAsyncDisplay.cpp"),
-            Object(NonMatching, "egg/core/eggVideo.cpp"),
+            Object(Matching, "egg/core/eggVideo.cpp"),
             Object(NonMatching, "egg/core/eggXfb.cpp"),
             Object(NonMatching, "egg/core/eggXfbManager.cpp"),
             Object(NonMatching, "egg/core/eggGraphicsFifo.cpp"),
