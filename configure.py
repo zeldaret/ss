@@ -333,7 +333,6 @@ config.libs = [
             Object(NonMatching, "nw4r/ut/ut_ResFont.cpp"),
             Object(NonMatching, "nw4r/ut/ut_CharWriter.cpp"),
             Object(NonMatching, "nw4r/ut/ut_TextWriterBase.cpp"),
-            Object(Matching, "nw4r/ut/ut_binaryFileFormat.cpp"),
         ],
     ),
     # EGG
