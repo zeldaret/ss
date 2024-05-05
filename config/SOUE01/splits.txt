@@ -173,6 +173,55 @@ nw4r/ut/ut_list.cpp:
 nw4r/ut/ut_LinkList.cpp:
 	.text       start:0x8042A850 end:0x8042A9E0
 
+nw4r/ut/ut_binaryFileFormat.cpp:
+	.text       start:0x8042A9E0 end:0x8042AA54
+
+nw4r/ut/ut_CharStrmReader.cpp:
+	.text       start:0x8042AA60 end:0x8042AB80
+
+nw4r/ut/ut_TagProcessorBase.cpp:
+	.text       start:0x8042AB80 end:0x8042B4D4
+
+nw4r/ut/ut_IOStream.cpp:
+	.text       start:0x8042B4E0 end:0x8042B55C
+	.ctors      start:0x804DB938 end:0x804DB93C
+
+nw4r/ut/ut_FileStream.cpp:
+	.text       start:0x8042B560 end:0x8042B6EC
+	.ctors      start:0x804DB93C end:0x804DB940
+
+nw4r/ut/ut_DvdFileStream.cpp:
+	.text       start:0x8042B6F0 end:0x8042BDAC
+	.ctors      start:0x804DB940 end:0x804DB944
+
+nw4r/ut/ut_DvdLockedFileStream.cpp:
+	.text       start:0x8042BDB0 end:0x8042C1DC
+	.ctors      start:0x804DB944 end:0x804DB948
+
+nw4r/ut/ut_NandFileStream.cpp:
+	.text       start:0x8042C1E0 end:0x8042CA4C
+	.ctors      start:0x804DB948 end:0x804DB94C
+
+nw4r/ut/ut_LockedCache.cpp:
+	.text       start:0x8042CA50 end:0x8042CC28
+	.ctors      start:0x804DB94C end:0x804DB950
+
+nw4r/ut/ut_Font.cpp:
+	.text       start:0x8042CC30 end:0x8042CD20
+
+nw4r/ut/ut_ResFontBase.cpp:
+	.text       start:0x8042CD20 end:0x8042D4B8
+
+nw4r/ut/ut_ResFont.cpp:
+	.text       start:0x8042D4C0 end:0x8042D7CC
+
+nw4r/ut/ut_CharWriter.cpp:
+	.text       start:0x8042D7D0 end:0x8042EF1C
+
+nw4r/ut/ut_TextWriterBase.cpp:
+	.text       start:0x8042EF20 end:0x80434294
+	.ctors      start:0x804DB950 end:0x804DB954
+
 nw4r/db/db_directPrint.cpp:
 	.text       start:0x804342A0 end:0x80434E9C
 	.rodata     start:0x804F5D28 end:0x804F5FDC
