@@ -17,14 +17,15 @@ namespace EGG {
 class Allocator;
 
 struct HeapAllocArg {
-    int userArg; // 00
-    u32 size;    // 04
-    int align;   // 08
-    Heap *heap;  // 0C heap to allocate in
+    void *userArg; // 00
+    u32 size;      // 04
+    int align;     // 08
+    Heap *heap;    // 0C heap to allocate in
+    int another;   // 10
 
     inline HeapAllocArg() : userArg(0), size(0), align(0), heap(nullptr) {}
 };
-typedef void (*HeapAllocCallback)(HeapAllocArg &arg);
+typedef void (*HeapAllocCallback)(HeapAllocArg *arg);
 
 struct HeapErrorArg {
     const char *msg;
@@ -32,13 +33,14 @@ struct HeapErrorArg {
 
     inline HeapErrorArg() {}
 };
-typedef void (*ErrorCallback)(void *);
+typedef void (*ErrorCallback)(HeapErrorArg *);
 
 struct HeapFreeArg {
-    u32 arg1; // Idk the args
-    u32 arg2;
+    void *userArg;
+    int arg1;
+    int arg2;
 };
-typedef void (*HeapFreeCallback)(void *);
+typedef void (*HeapFreeCallback)(HeapFreeArg *);
 
 typedef void (*HeapCreateCallback)(void *);
 typedef void (*HeapDestroyCallback)(void *);
@@ -101,7 +103,7 @@ public:
     /* 804957c0 */ static void free(void *memBlock, Heap *heap);
     /* 80495830 */ void dispose();
     /* 804958a0 */ void dump();
-    /* 804958b0 */ void dumpAll();
+    /* 804958b0 */ static void dumpAll();
     /* 804959a0 */ Heap *becomeCurrentHeap();
     /* 80495a00 */ Heap *_becomeCurrentHeapWithoutLock();
 
@@ -138,6 +140,11 @@ public:
     inline int getArenaEnd() {
         return (int)mHeapHandle->end;
     }
+
+    inline const char *getName() {
+        return mName;
+    }
+
     /* 80673ae8 */ static nw4r::ut::List sHeapList;
     /* 80673af8 */ static OSMutex sRootMutex;
     /* 80576740 */ static Heap *sCurrentHeap;
@@ -152,13 +159,12 @@ public:
     /* 80576764 */ static HeapCreateCallback sCreateCallback;
     /* 80576764 */ static HeapDestroyCallback sDestroyCallback;
 };
-
 } // namespace EGG
 
 /* 80495a60 */ void *operator new(size_t, void *p);
-/* 80495a70 */ void *operator new(size_t size, EGG::Heap *heap, u32 align);
+/* 80495a70 */ void *operator new(size_t size, EGG::Heap *heap, int align);
 /* 80495a80 */ void *operator new(size_t size, EGG::Allocator *alloc);
-/* 80495a90 */ void *operator new[](size_t size, u32 align);
-/* 80495aa0 */ void *operator new[](size_t size, EGG::Heap *heap, u32 align);
+/* 80495a90 */ void *operator new[](size_t size, int align);
+/* 80495aa0 */ void *operator new[](size_t size, EGG::Heap *heap, int align);
 
 #endif

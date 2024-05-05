@@ -76,7 +76,9 @@ d/d_heap.cpp:
 	.text       start:0x80054B00 end:0x80054F30
 	.ctors      start:0x804DB680 end:0x804DB684
 	.rodata     start:0x804DE008 end:0x804DE188
-	.sbss       start:0x805751A8 end:0x805751D0
+	.data       start:0x8050D440 end:0x8050D458
+	.sbss       start:0x805751A8 end:0x805751CC
+	.bss        start:0x80597740 end:0x80597758
 
 d/d_main.cpp:
 	.text       start:0x80054F30 end:0x80055170
@@ -311,11 +313,13 @@ egg/core/eggStream.cpp:
 egg/core/eggAllocator.cpp:
 	.text       start:0x804952D0 end:0x804953F0
 	.data       start:0x8056E8D0 end:0x8056E8E8
+	.sdata2     start:0x8057F2F0 end:0x8057F2F8
 
 egg/core/eggHeap.cpp:
 	.text       start:0x804953F0 end:0x80495AB0
 	.data       start:0x8056E8E8 end:0x8056E980
-	.sbss       start:0x80576740 end:0x80576770
+	.sdata      start:0x80574ED8 end:0x80574EE8
+	.sbss       start:0x80576740 end:0x8057676C
 	.bss        start:0x80673AE8 end:0x80673B10
 
 egg/core/eggExpHeap.cpp:

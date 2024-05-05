@@ -16,13 +16,13 @@ u32 Display::sTickPeriod = ((OS_BUS_CLOCK_SPEED >> 2)/125000)*300 >> 3;
 /* 80497570 */ 
 Display::Display(u8 maxRetrace) :
     mMaxRetraces(maxRetrace), 
-    mScreenStateFlag(), 
+    mScreenStateFlag(0), 
     mRetraceCount(0),
     mFrameCount(0),
     mClearColor(0x808080ff),
     mClearZ(0xFFFFFF),
     mBeginTick(0),
-    mFlag()
+    mFlag(0)
 {
     mFlag.setBit(mFlag_SetClear);
     mFlag.setBit(mFlag_WaitForRetrace);
