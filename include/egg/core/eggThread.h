@@ -11,9 +11,9 @@ namespace EGG {
 class Thread {
 public: // vtable: 0x00 | 8056ea40
     /* 0x08 | 80496a60 */ virtual ~Thread();
-    /* 0x0C | 80496dd0 */ virtual void *run();
-    /* 0x10 | 800bd600 */ virtual void onEnter();
-    /* 0x14 | 800bd5f0 */ virtual void onExit();
+    /* 0x0C | 80496dd0 */ virtual void *run() { return nullptr; }
+    /* 0x10 | 800bd600 */ virtual void onEnter() {}
+    /* 0x14 | 800bd5f0 */ virtual void onExit() {}
 
 public:
     /* 0x04 */ Heap *mContainingHeap;
@@ -24,6 +24,8 @@ public:
     /* 0x34 */ void *mStackMemory;
     /* 0x38 */ u32 mStackSize;
     /* 0x3C */ Heap *mAllocatableHeap;
+    // TODO from the usage in eggThread this really looks like
+    // it's stashed thread that's restored when switching threads
     /* 0x40 */ Heap *mCurrentHeap;
     /* 0x44 */ nw4r::ut::Node mLink;
 
