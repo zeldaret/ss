@@ -318,6 +318,7 @@ config.libs = [
         "ut",
         [
             Object(Matching, "nw4r/ut/ut_list.cpp"),
+            Object(Matching, "nw4r/ut/ut_LinkList.cpp"),
             Object(Matching, "nw4r/ut/ut_binaryFileFormat.cpp"),
         ],
     ),

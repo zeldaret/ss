@@ -170,6 +170,9 @@ rvl/CX/cx.c:
 nw4r/ut/ut_list.cpp:
 	.text       start:0x8042A530 end:0x8042A850
 
+nw4r/ut/ut_LinkList.cpp:
+	.text       start:0x8042A850 end:0x8042A9E0
+
 nw4r/ut/ut_binaryFileFormat.cpp:
 	.text       start:0x8042A9E0 end:0x8042AA54
 
