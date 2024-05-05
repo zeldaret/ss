@@ -156,11 +156,11 @@ bool sAssertOccurred;
             nw4r::db::DirectPrint_printfsub(2, 0xe, msg, args);
             nw4r::db::DirectPrint_StoreCache();
 
-            // TODO instshuffle
-            s32 line = 0x1a;
+            s32 line;
             u32 *stack = stackp;
+            s32 counter;
 
-            for (s32 counter = 0; counter < 0x10; counter++) {
+            for (counter = 0, line = 0x1a; counter < 0x10; counter++) {
                 if (isOutsideMEM1((u32)stack)) {
                     break;
                 }
