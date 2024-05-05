@@ -24,6 +24,10 @@ typedef struct _GXRenderModeObj {
 void GXSetCopyFilter(u8, const u8[12][2], u8, const u8[7]);
 void GXSetCopyClear(GXColor, u32 zClear);
 void GXSetDispCopySrc(u16 left, u16 top, u16 width, u16 height);
+f32 GXGetYScaleFactor(u16 height, u16 width);
+u16 GXGetNumXfbLines(u16 height, f32 scale);
+void GXSetDispCopyDst(u16 width, u16 height);
+u32 GXSetDispCopyYScale(f32 scale);
 
 extern GXRenderModeObj GXNtsc480IntDf;
 extern GXRenderModeObj GXMpal480IntDf;

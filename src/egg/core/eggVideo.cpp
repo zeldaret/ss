@@ -306,11 +306,6 @@ const EGG::Video::RenderModeObjSet renderModes = {{&renderMode0, &renderMode1, &
     configure(obj, set);
 }
 
-extern "C" f32 GXGetYScaleFactor(u16 height, u16 width);
-extern "C" u16 GXGetNumXfbLines(u16 height, f32 scale);
-extern "C" void GXSetDispCopyDst(u16 width, u16 height);
-extern "C" u32 GXSetDispCopyYScale(f32 scale);
-
 /* 804986f0 */ GXRenderModeObj *Video::configure(GXRenderModeObj *obj, const RenderModeObjSet *set) {
     GXRenderModeObj *oldMode = pRenderMode;
     if (set == nullptr) {
