@@ -50,8 +50,8 @@ public:
     }
 
     virtual ~dHeapAllocatorBase() {}
-    virtual void onAlloc(EGG::HeapAllocArg *arg) {};
-    virtual void onFree(EGG::HeapFreeArg *arg) {};
+    virtual void onAlloc(EGG::HeapAllocArg *arg){};
+    virtual void onFree(EGG::HeapFreeArg *arg){};
 
     /* 0x04 */ bool mCallbacksInitialized;
     /* 0x08 */ EGG::HeapAllocCallback mPreviousAllocCallback;
