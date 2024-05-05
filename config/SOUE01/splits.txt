@@ -19,6 +19,10 @@ toBeSorted/save_file.cpp:
 toBeSorted/file_manager.cpp:
 	.text       start:0x80009D30 end:0x80011730
 	.ctors      start:0x804DB648 end:0x804DB64C
+	.data       start:0x80500400 end:0x80500410
+	.sdata      start:0x80571848 end:0x80571850
+	.sbss       start:0x80574FF8 end:0x80575000
+	.bss        start:0x80580070 end:0x80580080
 
 toBeSorted/save_manager.cpp:
 	.text       start:0x80011730 end:0x80015310

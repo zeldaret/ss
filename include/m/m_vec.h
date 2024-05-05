@@ -8,7 +8,8 @@
 class mVec3_c : public EGG::Vector3f {
 public:
     /// @brief Constructs an empty vector.
-    mVec3_c() {}
+    /* 80009ee0 */ mVec3_c() {}
+    /* 80007460 */ ~mVec3_c() {}
 
     /// @brief Constructs a vector from a float array.
     mVec3_c(const f32 *p) {
