@@ -19,6 +19,10 @@ toBeSorted/save_file.cpp:
 toBeSorted/file_manager.cpp:
 	.text       start:0x80009D30 end:0x80011730
 	.ctors      start:0x804DB648 end:0x804DB64C
+	.data       start:0x80500400 end:0x80500410
+	.sdata      start:0x80571848 end:0x80571850
+	.sbss       start:0x80574FF8 end:0x80575000
+	.bss        start:0x80580070 end:0x80580080
 
 toBeSorted/save_manager.cpp:
 	.text       start:0x80011730 end:0x80015310
@@ -124,10 +128,60 @@ toBeSorted/unk_flag_stuff.cpp:
 toBeSorted/bitwise_flag_helper.cpp:
 	.text       start:0x800BF200 end:0x800BF264
 
+toBeSorted/dungeonflag_manager.cpp:
+	.text       start:0x800BF8D0 end:0x800BFB9C
+	.bss        start:0x805A9C58 end:0x805A9C68
+
 toBeSorted/skipflag_manager.cpp:
 	.text       start:0x800BFBA0 end:0x800BFE00
 	.sbss       start:0x80575408 end:0x8057540C
 	.bss        start:0x805A9C68 end:0x805A9C88
+
+toBeSorted/counters/counter.cpp:
+	.text       start:0x8016CC40 end:0x8016CD94
+
+toBeSorted/counters/rupee_counter.cpp:
+	.text       start:0x8016DE10 end:0x8016DF98
+	.ctors      start:0x804DB7BC end:0x804DB7C0
+	.rodata     start:0x804E91B0 end:0x804E91D0
+	.data       start:0x80527FF0 end:0x80528010
+	.sbss       start:0x80575610 end:0x80575618
+
+toBeSorted/counters/arrow_counter.cpp:
+	.text       start:0x8016DFA0 end:0x8016E018
+	.ctors      start:0x804DB7C0 end:0x804DB7C4
+	.data       start:0x80528010 end:0x80528030
+	.sbss       start:0x80575618 end:0x80575620
+
+toBeSorted/counters/bomb_counter.cpp:
+	.text       start:0x8016E020 end:0x8016E098
+	.ctors      start:0x804DB7C4 end:0x804DB7C8
+	.data       start:0x80528030 end:0x80528050
+	.sbss       start:0x80575620 end:0x80575628
+
+toBeSorted/counters/tear_counter.cpp:
+	.text       start:0x8016E0A0 end:0x8016E118
+	.ctors      start:0x804DB7C8 end:0x804DB7CC
+	.data       start:0x80528050 end:0x80528070
+	.sbss       start:0x80575628 end:0x80575630
+
+toBeSorted/counters/slingshot_seed_counter.cpp:
+	.text       start:0x8016E120 end:0x8016E198
+	.ctors      start:0x804DB7CC end:0x804DB7D0
+	.data       start:0x80528070 end:0x80528090
+	.sbss       start:0x80575630 end:0x80575638
+
+toBeSorted/counters/key_piece_counter.cpp:
+	.text       start:0x8016E1A0 end:0x8016E218
+	.ctors      start:0x804DB7D0 end:0x804DB7D4
+	.data       start:0x80528090 end:0x805280B0
+	.sbss       start:0x80575638 end:0x80575640
+
+toBeSorted/counters/extra_wallet_counter.cpp:
+	.text       start:0x8016E220 end:0x8016E298
+	.ctors      start:0x804DB7D4 end:0x804DB7D8
+	.data       start:0x805280B0 end:0x805280D0
+	.sbss       start:0x80575640 end:0x80575648
 
 c/c_list.cpp:
 	.text       start:0x802E08C0 end:0x802E0A10
@@ -171,6 +225,62 @@ rvl/CX/cx.c:
 
 nw4r/ut/ut_list.cpp:
 	.text       start:0x8042A530 end:0x8042A850
+
+nw4r/ut/ut_LinkList.cpp:
+	.text       start:0x8042A850 end:0x8042A9E0
+
+nw4r/ut/ut_binaryFileFormat.cpp:
+	.text       start:0x8042A9E0 end:0x8042AA54
+
+nw4r/ut/ut_CharStrmReader.cpp:
+	.text       start:0x8042AA60 end:0x8042AB80
+
+nw4r/ut/ut_TagProcessorBase.cpp:
+	.text       start:0x8042AB80 end:0x8042B4D4
+	.data       start:0x8056BD50 end:0x8056BD78
+	.sdata2     start:0x8057EB68 end:0x8057EB70
+
+nw4r/ut/ut_IOStream.cpp:
+	.text       start:0x8042B4E0 end:0x8042B55C
+	.ctors      start:0x804DB938 end:0x804DB93C
+	.sbss       start:0x80576590 end:0x80576598
+
+nw4r/ut/ut_FileStream.cpp:
+	.text       start:0x8042B560 end:0x8042B6EC
+	.ctors      start:0x804DB93C end:0x804DB940
+	.sbss       start:0x80576598 end:0x805765A0
+
+nw4r/ut/ut_DvdFileStream.cpp:
+	.text       start:0x8042B6F0 end:0x8042BDAC
+	.ctors      start:0x804DB940 end:0x804DB944
+
+nw4r/ut/ut_DvdLockedFileStream.cpp:
+	.text       start:0x8042BDB0 end:0x8042C1DC
+	.ctors      start:0x804DB944 end:0x804DB948
+
+nw4r/ut/ut_NandFileStream.cpp:
+	.text       start:0x8042C1E0 end:0x8042CA4C
+	.ctors      start:0x804DB948 end:0x804DB94C
+
+nw4r/ut/ut_LockedCache.cpp:
+	.text       start:0x8042CA50 end:0x8042CC28
+	.ctors      start:0x804DB94C end:0x804DB950
+
+nw4r/ut/ut_Font.cpp:
+	.text       start:0x8042CC30 end:0x8042CD20
+
+nw4r/ut/ut_ResFontBase.cpp:
+	.text       start:0x8042CD20 end:0x8042D4B8
+
+nw4r/ut/ut_ResFont.cpp:
+	.text       start:0x8042D4C0 end:0x8042D7CC
+
+nw4r/ut/ut_CharWriter.cpp:
+	.text       start:0x8042D7D0 end:0x8042EF1C
+
+nw4r/ut/ut_TextWriterBase.cpp:
+	.text       start:0x8042EF20 end:0x80434294
+	.ctors      start:0x804DB950 end:0x804DB954
 
 nw4r/db/db_directPrint.cpp:
 	.text       start:0x804342A0 end:0x80434E9C

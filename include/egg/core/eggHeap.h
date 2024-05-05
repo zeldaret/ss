@@ -18,10 +18,10 @@ class Allocator;
 
 struct HeapAllocArg {
     void *userArg; // 00
-    u32 size;    // 04
-    int align;   // 08
-    Heap *heap;  // 0C heap to allocate in
-    int another; // 10
+    u32 size;      // 04
+    int align;     // 08
+    Heap *heap;    // 0C heap to allocate in
+    int another;   // 10
 
     inline HeapAllocArg() : userArg(0), size(0), align(0), heap(nullptr) {}
 };
@@ -158,9 +158,6 @@ public:
     /* 80495a70 */ void *operator new(size_t size, EGG::Heap *heap, u32 align);
     /* 80495a80 */ void *operator new(size_t size, EGG::Allocator *alloc);
     /* 80495a90 */ void *operator new[](size_t size, u32 align);
-    /* 80495aa0 */ void *operator new[](size_t size, EGG::Heap *heap, int align);
-};
-
-} // namespace EGG
+    /* 80495aa0 */ void *operator new[](size_t size, EGG::Heap *heap, u32 align);
 
 #endif
