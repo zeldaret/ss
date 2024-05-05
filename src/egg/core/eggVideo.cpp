@@ -3,11 +3,9 @@
 #include <rvl/OS/OSTime.h>
 #include <rvl/SC/scapi.h>
 
-namespace EGG {
+namespace {
 
-// TODO give these proper names
-
-const GXRenderModeObj renderMode0 = {
+const GXRenderModeObj gRMO_Pal60_640x456Prog_16x9 = {
         0,   // tvInfo
         640, // fbWidth
         456, // efbHeight
@@ -36,7 +34,7 @@ const GXRenderModeObj renderMode0 = {
         {7, 7, 12, 12, 12, 7, 7} // vFilter
 };
 
-const GXRenderModeObj renderMode1 = {
+const GXRenderModeObj gRMO_Pal60_640x456IntDf_16x9 = {
         2,   // tvInfo
         640, // fbWidth
         456, // efbHeight
@@ -65,7 +63,7 @@ const GXRenderModeObj renderMode1 = {
         {0, 0, 21, 22, 21, 0, 0} // vFilter
 };
 
-const GXRenderModeObj renderMode2 = {
+const GXRenderModeObj gRMO_Pal50_640x456IntDf_16x9 = {
         4,   // tvInfo
         640, // fbWidth
         456, // efbHeight
@@ -94,7 +92,7 @@ const GXRenderModeObj renderMode2 = {
         {7, 7, 12, 12, 12, 7, 7} // vFilter
 };
 
-const GXRenderModeObj renderMode3 = {
+const GXRenderModeObj gRMO_Ntsc_640x456Prog_16x9 = {
         20,  // tvInfo
         640, // fbWidth
         456, // efbHeight
@@ -123,7 +121,7 @@ const GXRenderModeObj renderMode3 = {
         {7, 7, 12, 12, 12, 7, 7} // vFilter
 };
 
-const GXRenderModeObj renderMode4 = {
+const GXRenderModeObj gRMO_Ntsc_640x456IntDf_16x9 = {
         22,  // tvInfo
         640, // fbWidth
         456, // efbHeight
@@ -152,7 +150,7 @@ const GXRenderModeObj renderMode4 = {
         {0, 0, 21, 22, 21, 0, 0} // vFilter
 };
 
-const GXRenderModeObj renderMode5 = {
+const GXRenderModeObj gRMO_Pal60_640x456Prog_4x3 = {
         0,   // tvInfo
         640, // fbWidth
         456, // efbHeight
@@ -181,7 +179,7 @@ const GXRenderModeObj renderMode5 = {
         {7, 7, 12, 12, 12, 7, 7} // vFilter
 };
 
-const GXRenderModeObj renderMode6 = {
+const GXRenderModeObj gRMO_Pal60_640x456IntDf_4x3 = {
         2,   // tvInfo
         640, // fbWidth
         456, // efbHeight
@@ -210,7 +208,7 @@ const GXRenderModeObj renderMode6 = {
         {0, 0, 21, 22, 21, 0, 0} // vFilter
 };
 
-const GXRenderModeObj renderMode7 = {
+const GXRenderModeObj gRMO_Pal50_640x456IntDf_4x3 = {
         4,   // tvInfo
         640, // fbWidth
         456, // efbHeight
@@ -239,7 +237,7 @@ const GXRenderModeObj renderMode7 = {
         {7, 7, 12, 12, 12, 7, 7} // vFilter
 };
 
-const GXRenderModeObj renderMode8 = {
+const GXRenderModeObj gRMO_Ntsc_640x456Prog_4x3 = {
         20,  // tvInfo
         640, // fbWidth
         456, // efbHeight
@@ -268,7 +266,7 @@ const GXRenderModeObj renderMode8 = {
         {7, 7, 12, 12, 12, 7, 7} // vFilter
 };
 
-const GXRenderModeObj renderMode9 = {
+const GXRenderModeObj gRMO_Ntsc_640x456IntDf_4x3 = {
         22,  // tvInfo
         640, // fbWidth
         456, // efbHeight
@@ -297,9 +295,14 @@ const GXRenderModeObj renderMode9 = {
         {0, 0, 21, 22, 21, 0, 0} // vFilter
 };
 
-const EGG::Video::RenderModeObjSet renderModes = {{&renderMode0, &renderMode1, &renderMode2, &renderMode3,
-        &renderMode4, &renderMode5, &renderMode6, &renderMode7, &renderMode8, &renderMode9}};
+} // namespace
 
+namespace EGG {
+
+const EGG::Video::RenderModeObjSet renderModes = {{&gRMO_Pal60_640x456Prog_16x9, &gRMO_Pal60_640x456IntDf_16x9,
+        &gRMO_Pal50_640x456IntDf_16x9, &gRMO_Ntsc_640x456Prog_16x9, &gRMO_Ntsc_640x456IntDf_16x9,
+        &gRMO_Pal60_640x456Prog_4x3, &gRMO_Pal60_640x456IntDf_4x3, &gRMO_Pal50_640x456IntDf_4x3,
+        &gRMO_Ntsc_640x456Prog_4x3, &gRMO_Ntsc_640x456IntDf_4x3}};
 
 /* 80498690 */ void Video::initialize(GXRenderModeObj *obj, const RenderModeObjSet *set) {
     VIInit();
@@ -356,18 +359,18 @@ f32 itof(u32 n) {
     bool aspect = SCGetAspectRatio() == 0;
     bool dtvstatus = VIGetDTVStatus() == 1;
     u32 tvFormat = VIGetTvFormat();
-    
+
     bool isNtscLike;
     switch (tvFormat) {
-        case VI_TV_FMT_NTSC:
-            isNtscLike = true;
-            break;
-        case VI_TV_FMT_PAL:
-        case VI_TV_FMT_EURGB60:
-            isNtscLike = false;
-            break;
-        default:
-            isNtscLike = true;
+    case VI_TV_FMT_NTSC:
+        isNtscLike = true;
+        break;
+    case VI_TV_FMT_PAL:
+    case VI_TV_FMT_EURGB60:
+        isNtscLike = false;
+        break;
+    default:
+        isNtscLike = true;
     }
 
     if (dtvstatus && pmode) {
