@@ -140,8 +140,8 @@ bool sAssertOccurred;
             OSError("Program Halt");
         }
 
-        // TODO this isn't optimized out?
-        void *buf = (void *)0x43300000;
+        // Random float conversion here for no reason
+        f32 wid = fb->mWidth;
         nw4r::db::DirectPrint_EraseXfb(0, 0, fb->mWidth, fb->mHeight);
         nw4r::db::DirectPrint_StoreCache();
         OSDisableInterrupts();
