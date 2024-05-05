@@ -161,9 +161,9 @@ public:
 } // namespace EGG
 
 /* 80495a60 */ void *operator new(size_t, void *p);
-/* 80495a70 */ void *operator new(size_t size, EGG::Heap *heap, u32 align);
+/* 80495a70 */ void *operator new(size_t size, EGG::Heap *heap, int align);
 /* 80495a80 */ void *operator new(size_t size, EGG::Allocator *alloc);
-/* 80495a90 */ void *operator new[](size_t size, u32 align);
-/* 80495aa0 */ void *operator new[](size_t size, EGG::Heap *heap, u32 align);
+/* 80495a90 */ void *operator new[](size_t size, int align);
+/* 80495aa0 */ void *operator new[](size_t size, EGG::Heap *heap, int align);
 
 #endif

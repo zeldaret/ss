@@ -54,8 +54,7 @@ namespace EGG {
             // TODO small instshuffle here, related to regshuffle problems
             OSReport("cannot allocate from heap %x(%s) : allocatable heap is %x(%s)\n", heap, heap->getName(),
                     sAllocatableHeap, sAllocatableHeap->getName());
-            OSReport("\tthread heap=%x(%s)\n", threadHeap,
-                    threadHeap != nullptr ? threadHeap->getName() : "none");
+            OSReport("\tthread heap=%x(%s)\n", threadHeap, threadHeap != nullptr ? threadHeap->getName() : "none");
             if (sErrorCallback != nullptr) {
                 HeapErrorArg arg;
                 arg.msg = "disable_but";
@@ -192,14 +191,14 @@ extern "C" void MEMInitAllocatorForHeap(Allocator *alloc, s32 align, Heap *heap)
 /* 80495a60 */ void *operator new(size_t, void *p) {
     return p;
 }
-/* 80495a70 */ void *operator new(size_t size, EGG::Heap *heap, u32 align) {
+/* 80495a70 */ void *operator new(size_t size, EGG::Heap *heap, int align) {
     return EGG::Heap::alloc(size, align, heap);
 }
 
 /* 80495a80 */ void *operator new(size_t size, EGG::Allocator *alloc) {
     return MEMAllocFromAllocator(alloc->getHandle(), size);
 }
-/* 80495a90 */ void *operator new[](size_t size, u32 align) {
+/* 80495a90 */ void *operator new[](size_t size, int align) {
     return EGG::Heap::alloc(size, align, nullptr);
 }
 /* 80495aa0 */ void *operator new[](size_t size, EGG::Heap *heap, int align) {
