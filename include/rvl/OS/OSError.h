@@ -41,6 +41,7 @@ extern OSErrorHandler __OSErrorTable[OS_ERR_MAX];
 extern u32 __OSFpscrEnableBits;
 
 DECL_WEAK void OSReport(const char *msg, ...);
+DECL_WEAK void OSVReport(const char *msg, va_list args);
 DECL_WEAK void OSPanic(const char *file, int line, const char *msg, ...);
 
 OSErrorHandler OSSetErrorHandler(u16 error, OSErrorHandler handler);
