@@ -101,7 +101,7 @@ public:
     /* 804957c0 */ static void free(void *memBlock, Heap *heap);
     /* 80495830 */ void dispose();
     /* 804958a0 */ void dump();
-    /* 804958b0 */ void dumpAll();
+    /* 804958b0 */ static void dumpAll();
     /* 804959a0 */ Heap *becomeCurrentHeap();
     /* 80495a00 */ Heap *_becomeCurrentHeapWithoutLock();
 
@@ -138,6 +138,11 @@ public:
     inline int getArenaEnd() {
         return (int)mHeapHandle->end;
     }
+
+    inline const char *getName() {
+        return mName;
+    }
+
     /* 80673ae8 */ static nw4r::ut::List sHeapList;
     /* 80673af8 */ static OSMutex sRootMutex;
     /* 80576740 */ static Heap *sCurrentHeap;

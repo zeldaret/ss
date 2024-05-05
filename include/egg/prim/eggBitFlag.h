@@ -14,9 +14,8 @@ public:
     inline void makeAllZero() {
         value = T();
     }
-    inline TBitFlag() {
-        makeAllZero();
-    }
+    inline TBitFlag() {}
+    inline TBitFlag(T value): value(value) {}
     inline T makeMask(u8 bit) const {
         return 1 << bit;
     }
