@@ -446,15 +446,13 @@ f32 TextWriterBase<T>::AdjustCursor(f32 *x1, f32 *y1, const T *str, int len) {
     f32 textWidth = 0.0f;
     f32 textHeight = 0.0f;
 
-    if (!IsDrawFlagSet(0x333, 0x300) && !IsDrawFlagSet(0x333, 0)) {
-        Rect rect;
-        CalcStringRect(&rect, str, len);
+    if (!IsDrawFlagSet(0x333, 0x300)) {
+        if (!IsDrawFlagSet(0x333, 0)) {
+            Rect rect;
+            CalcStringRect(&rect, str, len);
 
-        textWidth = rect.left + rect.right;
-        textHeight = rect.top + rect.bottom;
-
-        if (textWidth > mWidthLimit) {
-            textWidth = mWidthLimit;
+            textWidth = rect.left + rect.right;
+            textHeight = rect.top + rect.bottom;
         }
     }
 
