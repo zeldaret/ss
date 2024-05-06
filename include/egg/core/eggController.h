@@ -156,7 +156,7 @@ public:
 class ControllerRumbleUnit {
 public:
     // 0x00 vtable | 8056ebb4
-    inline ControllerRumbleUnit() { init(); }
+    inline ControllerRumbleUnit(): mFlag(0) { init(); }
     /* vt 0x08 | 8049a8e0 */ virtual ~ControllerRumbleUnit() {}
 
 public:

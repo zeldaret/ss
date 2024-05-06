@@ -49,7 +49,7 @@ static Allocator *sWPADAllocator;
     return result;
 }
 
-/* 0x80499050 */ CoreController::CoreController() : mDpdPos(), mAccel(), mAccelFlags(nullptr) {
+/* 0x80499050 */ CoreController::CoreController() : mDpdPos(), mAccel(), mAccelFlags(), mFlag(0) {
     this->mRumbleMgr = nullptr;
     this->mButtonHeld = 0;
     this->mButtonTriggered = 0;
