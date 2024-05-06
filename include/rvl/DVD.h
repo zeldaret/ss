@@ -6,9 +6,12 @@ extern "C" {
 
 #include "rvl/DVD/dvd.h"
 #include "rvl/DVD/dvd_broadway.h"
+#include "rvl/DVD/dvderror.h"
 #include "rvl/DVD/dvdfatal.h"
 #include "rvl/DVD/dvdfs.h"
 #include "rvl/DVD/dvdidutils.h"
+#include "rvl/DVD/dvdqueue.h"
+
 
 #ifdef __cplusplus
 }

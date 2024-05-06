@@ -24,7 +24,7 @@ public:
     };
 
 public:
-    DvdFileStream(s32 entrynum);
+    DvdFileStream(long entrynum);
     DvdFileStream(const DVDFileInfo *info, bool close);
     virtual ~DvdFileStream(); // at 0xC
 
@@ -67,15 +67,15 @@ public:
 
     virtual void Close(); // at 0x10
 
-    virtual s32 Read(void *dst, u32 size); // at 0x14
-    virtual bool ReadAsync(void *dst, u32 size, AsyncCallback callback,
+    virtual long Read(void *dst, unsigned long size); // at 0x14
+    virtual bool ReadAsync(void *dst, unsigned long size, AsyncCallback callback,
             void *arg); // at 0x18
 
-    virtual s32 Peek(void *dst, u32 size); // at 0x5C
-    virtual bool PeekAsync(void *dst, u32 size, AsyncCallback callback,
+    virtual long Peek(void *dst, unsigned long size); // at 0x5C
+    virtual bool PeekAsync(void *dst, unsigned long size, AsyncCallback callback,
             void *arg); // at 0x60
 
-    virtual void Seek(s32 offset, u32 origin); // at 0x44
+    virtual void Seek(long offset, unsigned long origin); // at 0x44
 
     virtual void Cancel();                                       // at 0x48
     virtual bool CancelAsync(AsyncCallback callback, void *arg); // at 0x4C
@@ -88,11 +88,11 @@ public:
     bool Open(const DVDFileInfo *info, bool close);
 
 private:
-    static void DvdAsyncCallback_(s32 result, DVDFileInfo *info);
-    static void DvdCBAsyncCallback_(s32 result, DVDCommandBlock *block);
+    static void DvdAsyncCallback_(long result, DVDFileInfo *info);
+    static void DvdCBAsyncCallback_(long result, DVDCommandBlock *block);
 
     void Initialize_();
-    u32 AdjustReadLength_(u32 len);
+    unsigned long AdjustReadLength_(unsigned long len);
 
 private:
     FilePosition mFilePosition;    // at 0x14

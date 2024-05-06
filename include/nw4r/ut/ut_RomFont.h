@@ -30,7 +30,8 @@ public:
     virtual int GetCharWidth(u16 c) const;                       // at 0x48
     virtual CharWidths GetCharWidths(u16 c) const;               // at 0x4C
     virtual void GetGlyph(Glyph *out, u16 c) const;              // at 0x50
-    virtual FontEncoding GetEncoding() const;                    // at 0x54
+    virtual bool HasGlyph(u16 c) const;                          // at 0x54
+    virtual FontEncoding GetEncoding() const;                    // at 0x58
 
     bool Load(void *buffer);
     u32 GetRequireBufferSize();

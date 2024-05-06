@@ -1,36 +1,24 @@
 #ifndef RVL_SDK_DVD_FS_H
 #define RVL_SDK_DVD_FS_H
+#include <RVL/DVD/dvd.h>
+#include <RVL/OS.h>
 #include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+extern OSThreadQueue __DVDThreadQueue;
 extern BOOL __DVDLongFileNameFlag;
 
-typedef void (*DVDCommandCallback)(s32, struct DVDCommandBlock *);
-typedef void (*DVDFileCallback)(s32, struct DVDFileInfo *);
-
-typedef struct DVDCommandBlock {
-    /* 0x00 */ struct DVDCommandBlock *next;
-    /* 0x04 */ struct DVDCommandBlock *prev;
-    /* 0x08 */ u32 command;
-    /* 0x0c */ s32 state;
-    /* 0x10 */ u32 offset;
-    /* 0x14 */ u32 length;
-    /* 0x18 */ void *addr;
-    /* 0x1c */ u32 currTransferSize;
-    /* 0x20 */ u32 transferredSize;
-    /* 0x24 */ DVDDiskID *id;
-    /* 0x28 */ DVDCommandCallback callback;
-    /* 0x2c */ void *userData;
-} DVDCommandBlock;
-
-typedef struct DVDFileInfo {
-    /* 0x00 */ DVDCommandBlock cb;
-    /* 0x30 */ u32 startAddr;
-    /* 0x34 */ u32 length;
-    /* 0x38 */ DVDFileCallback *callback;
-} DVDFileInfo;
+void __DVDFSInit(void);
+s32 DVDConvertPathToEntrynum(const char *path);
+BOOL DVDFastOpen(s32 entrynum, DVDFileInfo *info);
+BOOL DVDOpen(const char *path, DVDFileInfo *info);
+BOOL DVDClose(DVDFileInfo *info);
+BOOL DVDGetCurrentDir(char *buffer, u32 maxlen);
+BOOL DVDReadAsyncPrio(DVDFileInfo *info, void *dst, s32 size, s32 offset, DVDAsyncCallback callback, s32 prio);
+s32 DVDReadPrio(DVDFileInfo *info, void *dst, s32 size, s32 offset, s32 prio);
 
 #ifdef __cplusplus
 }

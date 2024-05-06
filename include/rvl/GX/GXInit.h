@@ -1,5 +1,6 @@
 #ifndef RVL_SDK_GX_INIT_H
 #define RVL_SDK_GX_INIT_H
+#include <RVL/GX/GXFifo.h>
 #include <common.h>
 #ifdef __cplusplus
 extern "C" {
@@ -49,11 +50,11 @@ typedef struct _GXData {
     char UNK_0x230[0x254 - 0x230];
     u32 genMode; // at 0x254
     char UNK_0x258[0x520 - 0x258];
-    GXAttrType normalType;  // at 0x520
-    GXBool normal;          // at 0x524
-    GXBool binormal;        // at 0x525
-    GXProjMtxType projType; // at 0x528
-    f32 proj[6];            // at 0x52C
+    GXAttrType normalType;     // at 0x520
+    GXBool normal;             // at 0x524
+    GXBool binormal;           // at 0x525
+    GXProjectionType projType; // at 0x528
+    f32 proj[6];               // at 0x52C
     union {
         struct {
             f32 vpOx;   // at 0x544
@@ -79,6 +80,8 @@ extern GXData *const __GXData;
 
 // I hate typing this name out
 #define gxdt __GXData
+
+GXFifoObj *GXInit(void *, u32);
 
 #ifdef __cplusplus
 }

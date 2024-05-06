@@ -9,7 +9,7 @@ bool IOStream::ReadAsync(void *dst, unsigned long size, AsyncCallback callback, 
     return false;
 }
 
-bool IOStream::Write(const void *src, unsigned long size) {
+long IOStream::Write(const void *src, unsigned long size) {
     return false;
 }
 

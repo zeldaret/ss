@@ -17,10 +17,10 @@ typedef unsigned long fpos_t;
 typedef unsigned short wchar_t;
 #endif
 
-#define set_error(file)                                                                            \
-    do {                                                                                           \
-        (file)->file_state.error = 1;                                                              \
-        (file)->buffer_length = 0;                                                                 \
+#define set_error(file) \
+    do { \
+        (file)->file_state.error = 1; \
+        (file)->buffer_length = 0; \
     } while (0)
 
 enum __file_kinds {
@@ -73,9 +73,8 @@ typedef struct _file_states {
 } file_states;
 
 typedef void (*__idle_proc)(void);
-typedef int (*__pos_proc)(__file_handle file, fpos_t* position, int mode, __idle_proc idle_proc);
-typedef int (*__io_proc)(__file_handle file, unsigned char* buff, size_t* count,
-                         __idle_proc idle_proc);
+typedef int (*__pos_proc)(__file_handle file, fpos_t *position, int mode, __idle_proc idle_proc);
+typedef int (*__io_proc)(__file_handle file, unsigned char *buff, size_t *count, __idle_proc idle_proc);
 typedef int (*__close_proc)(__file_handle file);
 
 typedef struct _FILE {
@@ -88,9 +87,9 @@ typedef struct _FILE {
     /* 0x0F */ char ungetc_buffer[2];
     /* 0x12 */ wchar_t ungetc_wide_buffer[2];
     /* 0x18 */ unsigned long position;
-    /* 0x1C */ unsigned char* buffer;
+    /* 0x1C */ unsigned char *buffer;
     /* 0x20 */ unsigned long buffer_size;
-    /* 0x24 */ unsigned char* buffer_ptr;
+    /* 0x24 */ unsigned char *buffer_ptr;
     /* 0x28 */ unsigned long buffer_length;
     /* 0x2C */ unsigned long buffer_alignment;
     /* 0x30 */ unsigned long save_buffer_length;
@@ -100,7 +99,7 @@ typedef struct _FILE {
     /* 0x40 */ __io_proc write_fn;
     /* 0x44 */ __close_proc close_fn;
     /* 0x48 */ __idle_proc idle_fn;
-    /* 0x4C */ struct _FILE* next_file;
+    /* 0x4C */ struct _FILE *next_file;
 } FILE;
 
 typedef struct _files {
@@ -116,10 +115,8 @@ typedef struct _files {
 
 extern files __files;
 extern int __close_console(__file_handle file);
-extern int __write_console(__file_handle file, unsigned char* buf, size_t* count,
-                           __idle_proc idle_fn);
-extern int __read_console(__file_handle file, unsigned char* buf, size_t* count,
-                          __idle_proc idle_fn);
+extern int __write_console(__file_handle file, unsigned char *buf, size_t *count, __idle_proc idle_fn);
+extern int __read_console(__file_handle file, unsigned char *buf, size_t *count, __idle_proc idle_fn);
 
 unsigned int __flush_all(void);
 void __close_all(void);
