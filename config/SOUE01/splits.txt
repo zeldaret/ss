@@ -390,7 +390,8 @@ egg/core/eggXfbManager.cpp:
 
 egg/core/eggGraphicsFifo.cpp:
 	.text       start:0x80498E20 end:0x80498F90
-	.sbss       start:0x80576798 end:0x805767A8
+	.data       start:0x8056EB80 end:0x8056EB90
+	.sbss       start:0x80576798 end:0x805767A4
 
 egg/core/eggController.cpp:
 	.text       start:0x80498F90 end:0x8049AB58
