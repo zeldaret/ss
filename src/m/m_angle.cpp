@@ -1,7 +1,7 @@
 #include <m/m_angle.h>
 
 /** 80575c08 */
-mAng3_c mAng3_c::ZERO = mAng3_c::mAng3_c(0, 0, 0);
+mAng3_c mAng3_c::Zero = mAng3_c::mAng3_c(0, 0, 0);
 
 /** 802ee5f0 */
 s32 mAng::step(s16 target, s32 steps, s16 max, s16 min) {

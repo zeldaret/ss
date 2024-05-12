@@ -15,7 +15,7 @@ struct mAng {
 class mAng3_c {
 public:
     s16 x, y, z;
-    mAng3_c(s16 fx, s16 fy, s16 fz): x(fx), y(fy), z(fz) {}
+    mAng3_c(s16 fx, s16 fy, s16 fz) : x(fx), y(fy), z(fz) {}
 
     void set(s16 fx, s16 fy, s16 fz) {
         x = fx;
@@ -23,7 +23,7 @@ public:
         z = fz;
     }
 
-    static mAng3_c ZERO;
+    static mAng3_c Zero;
 };
 
 #endif
