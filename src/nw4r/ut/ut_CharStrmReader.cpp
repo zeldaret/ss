@@ -1,3 +1,5 @@
+// ported from https://github.com/kiwi515/ogws/blob/master/src/nw4r/ut/ut_CharStrmReader.cpp
+
 #include <nw4r/ut/ut_CharStrmReader.h>
 
 namespace nw4r {
