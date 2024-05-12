@@ -5,18 +5,25 @@
 
 struct mAng {
     mAng() {}
-    mAng(s16 s) : val(s) {}
-    s16 val;
+    mAng(s16 s) : mVal(s) {}
+
+    s32 step(s16 target, s32 steps, s16 max, s16 min);
+
+    s16 mVal;
 };
 
 class mAng3_c {
 public:
     s16 x, y, z;
+    mAng3_c(s16 fx, s16 fy, s16 fz): x(fx), y(fy), z(fz) {}
+
     void set(s16 fx, s16 fy, s16 fz) {
         x = fx;
         y = fy;
         z = fz;
     }
+
+    static mAng3_c ZERO;
 };
 
 #endif
