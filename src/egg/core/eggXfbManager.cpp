@@ -6,13 +6,13 @@
 
 namespace EGG {
 
-/* 80498af0 */ bool XfbManager::isRegisterd(Xfb *xfb) const {
+/* 80498af0 */ bool XfbManager::isRegisterd(Xfb &xfb) const {
     Xfb *x = mNextXfb;
     Xfb *iter = x;
 
     if (mNextXfb != nullptr) {
         do {
-            if (iter == xfb) {
+            if (iter == &xfb) {
                 return true;
             }
             iter = iter->mNext;
@@ -25,7 +25,7 @@ namespace EGG {
     int interrupts = OSDisableInterrupts();
     bool u3 = 0;
 
-    if (xfb != nullptr && !isRegisterd(xfb)) {
+    if (xfb != nullptr && !isRegisterd(*xfb)) {
         xfb->mState = Xfb::XFB_UNPROCESSED;
         if (mNextXfb == nullptr) {
             mNextXfb = xfb;
