@@ -15,7 +15,7 @@ bool FileStream::CancelAsync(AsyncCallback callback, void *arg) {
     return true;
 }
 
-u32 FileStream::FilePosition::Skip(long offset) {
+u32 FileStream::FilePosition::Skip(s32 offset) {
     if (offset != 0) {
         s64 newOffset = mFileOffset + offset;
         mFileOffset = Clamp<s64>(newOffset, 0, mFileSize);
@@ -24,7 +24,7 @@ u32 FileStream::FilePosition::Skip(long offset) {
     return mFileOffset;
 }
 
-u32 FileStream::FilePosition::Append(long offset) {
+u32 FileStream::FilePosition::Append(s32 offset) {
     s64 newOffset = mFileOffset + offset;
 
     if (newOffset < 0) {
@@ -37,7 +37,7 @@ u32 FileStream::FilePosition::Append(long offset) {
     return mFileOffset;
 }
 
-void FileStream::FilePosition::Seek(long offset, unsigned long origin) {
+void FileStream::FilePosition::Seek(s32 offset, u32 origin) {
     switch (origin) {
     case SEEK_BEG:
         mFileOffset = 0;

@@ -25,8 +25,8 @@ public:
     };
 
 public:
-    NandFileStream(const char *path, unsigned long access);
-    NandFileStream(const NANDFileInfo *info, unsigned long access, bool close);
+    NandFileStream(const char *path, u32 access);
+    NandFileStream(const NANDFileInfo *info, u32 access, bool close);
     virtual ~NandFileStream(); // at 0xC
 
     virtual bool IsBusy() const {
@@ -68,21 +68,21 @@ public:
 
     virtual void Close(); // at 0x10
 
-    virtual long Read(void *dst, unsigned long size); // at 0x14
-    virtual bool ReadAsync(void *dst, unsigned long size, AsyncCallback callback,
+    virtual s32 Read(void *dst, u32 size); // at 0x14
+    virtual bool ReadAsync(void *dst, u32 size, AsyncCallback callback,
             void *arg); // at 0x18
 
-    virtual long Write(const void *src, unsigned long size); // at 0x1C
-    virtual bool WriteAsync(const void *src, unsigned long size, AsyncCallback callback,
+    virtual s32 Write(const void *src, u32 size); // at 0x1C
+    virtual bool WriteAsync(const void *src, u32 size, AsyncCallback callback,
             void *arg); // at 0x20
 
-    virtual void Seek(long offset, unsigned long origin); // at 0x44
+    virtual void Seek(s32 offset, u32 origin); // at 0x44
 
-    bool Open(const char *path, unsigned long access);
-    bool Open(const NANDFileInfo *info, unsigned long access, bool close) DECOMP_DONT_INLINE;
+    bool Open(const char *path, u32 access);
+    bool Open(const NANDFileInfo *info, u32 access, bool close) DECOMP_DONT_INLINE;
 
 private:
-    static void NandAsyncCallback_(long result, NANDCommandBlock *block);
+    static void NandAsyncCallback_(s32 result, NANDCommandBlock *block);
 
     void Initialize_();
 

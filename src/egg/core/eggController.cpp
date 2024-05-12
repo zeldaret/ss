@@ -1,9 +1,10 @@
 #include "egg/core/eggController.h"
+#include "MSL_C/string.h"
 #include "egg/core/eggAllocator.h"
 #include "egg/core/eggExpHeap.h"
 #include "egg/core/eggSystem.h"
-#include "MSL_C/string.h"
 #include "rvl/VI.h"
+
 
 EGG::NullController null_controller;
 namespace EGG {
@@ -192,7 +193,7 @@ extern "C" void fn_803DB1E0(s32 channel, bool arg);
     }
 }
 
-extern "C" long lbl_80574EE8;
+extern "C" s32 lbl_80574EE8;
 // TODO headers
 extern "C" void fn_803D9400(void *a, void *b);
 extern "C" void fn_803F2040(void *a, int b);

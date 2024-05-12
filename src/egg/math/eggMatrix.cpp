@@ -332,7 +332,7 @@ void Matrix34f::toQuat(Quatf &q) const {
     q.multScalar(Math<f32>::inv(q.length()));
 }
 
-void Matrix34f::slerpTo(const Matrix34f &m2, Matrix34f &out, f32 t) {
+void Matrix34f::slerpTo(const Matrix34f &m2, Matrix34f &out, f32 t) const {
     Quatf q1, q2, q3;
     m2.toQuat(q1);
     toQuat(q2);

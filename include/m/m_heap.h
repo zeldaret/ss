@@ -14,37 +14,54 @@ class ExpHeap;
 class AssertHeap;
 } // namespace EGG
 // TODO: Doc symbols and func locations
-namespace mHeap {
-/* 802f0f00 */ u16 copyAttribute(u32);
-/* 802f0f40 */ EGG::Heap *setCurrentHeap(EGG::Heap *);
-/* 802f0f50 */ EGG::ExpHeap *createExpHeap(size_t size, EGG::Heap *parentHeap, char *name, s32 align, u32 unk);
-/* 802f1060 */ size_t adjustExpHeap(EGG::Heap *heap);
-/* 802f10d0 */ size_t expHeapCost(size_t start, s32 size);
-/* 802f10f0 */ EGG::FrmHeap *createFrmHeap(size_t size, EGG::Heap *parentHeap, char *name, size_t align, size_t attrs);
-/* 802f1200 */ void destroyFrmHeap(EGG::FrmHeap *heap);
-/* 802f1220 */ size_t adjustFrmHeap(EGG::FrmHeap *heap);
-/* 802f1290 */ size_t frmHeapCost(size_t start, s32 size);
-/* 802f12b0 */ EGG::Heap **setTempHeap(EGG::Heap **prevHeap, EGG::Heap *tempNewHeap);
-/* 802f12f0 */ EGG::Heap **restoreTempHeap(EGG::Heap **prevHeap, s32 size);
-/* 802f1350 */ EGG::ExpHeap *createHeap(size_t size, EGG::Heap *, char *name);
-/* 802f13d0 */ void saveCurrentHeap();
-/* 802f13e0 */ void restoreCurrentHeap();
-/* 802f1410 */ EGG::FrmHeap *makeFrmHeapAndUpdate(size_t size, EGG::Heap *parentHeap, const char *name, s32 align,
-        u32 unk);
-/* 802f1450 */ int getGameHeapNum();
-/* 802f1460 */ EGG::ExpHeap *createGameHeap(s32 heapNum, size_t size, EGG::Heap *parentHeap);
-/* 802f1510 */ EGG::ExpHeap *createGameHeap1(s32 size, EGG::Heap *parentHeap);
-/* 802f1560 */ EGG::ExpHeap *createArchiveHeap(size_t size, EGG::Heap *parentHeap);
-/* 802f1590 */ EGG::ExpHeap *createCommandHeap(size_t size, EGG::Heap *parentHeap);
-/* 802f15c0 */ EGG::ExpHeap *createDylinkHeap(size_t size, EGG::Heap *parentHeap);
-/* 802f15f0 */ EGG::AssertHeap *createAssertHeap(EGG::Heap *parentHeap);
-/* 802f1640 */ EGG::Heap *makeHeapOnCurrentGameHeap(size_t size, char *name, s32 align, u32 unk);
-extern EGG::ExpHeap *g_gameHeaps[4];
-extern EGG::ExpHeap *s_SavedCurrentHeap;
-extern EGG::ExpHeap *g_archiveHeap;
-extern EGG::ExpHeap *g_commandHeap;
-extern EGG::ExpHeap *g_dylinkHeap;
-extern EGG::AssertHeap *g_assertHeap;
+class mHeap {
+public:
+    /* 802f0f00 */ static u16 copyAttribute(u32);
+    /* 802f0f40 */ static EGG::Heap *setCurrentHeap(EGG::Heap *);
+    /* 802f0f50 */ static EGG::Heap *createExpHeap(size_t size, EGG::Heap *parentHeap, const char *name, u32 align,
+            u32 attrs);
+    /* 802f1060 */ static size_t adjustExpHeap(EGG::ExpHeap *heap);
+    /* 802f10d0 */ static size_t expHeapCost(size_t start, u32 size);
+    /* 802f10f0 */ static EGG::FrmHeap *createFrmHeap(size_t size, EGG::Heap *parentHeap, const char *name,
+            size_t align, size_t attrs);
+    /* 802f1200 */ static void destroyFrmHeap(EGG::FrmHeap *heap);
+    /* 802f1220 */ static size_t adjustFrmHeap(EGG::FrmHeap *heap);
+    /* 802f1290 */ static size_t frmHeapCost(size_t start, u32 size);
+    mHeap() {
+        heap = nullptr;
+    }
+    /* 802f12b0 */ mHeap(EGG::Heap *heap);
+    /* 802f12f0 */ ~mHeap();
+    /* 802f1350 */ static EGG::Heap *createHeap(size_t size, EGG::Heap *, const char *name);
+    /* 802f13d0 */ static void saveCurrentHeap();
+    /* 802f13e0 */ static void restoreCurrentHeap();
+    /* 802f1410 */ static EGG::FrmHeap *makeFrmHeapAndUpdate(size_t size, EGG::Heap *parentHeap, const char *name,
+            u32 align, u32 attrs);
+    /* 802f1450 */ static int getGameHeapNum();
+    /* 802f1460 */ static EGG::Heap *createGameHeap(int heapNum, size_t size, EGG::Heap *parentHeap);
+    /* 802f1510 */ static void createGameHeap1(size_t size, EGG::Heap *parentHeap);
+    /* 802f1560 */ static void createArchiveHeap(size_t size, EGG::Heap *parentHeap);
+    /* 802f1590 */ static void createCommandHeap(size_t size, EGG::Heap *parentHeap);
+    /* 802f15c0 */ static void createDylinkHeap(size_t size, EGG::Heap *parentHeap);
+    /* 802f15f0 */ static EGG::AssertHeap *createAssertHeap(EGG::Heap *parentHeap);
+    /* 802f1640 */ static EGG::Heap *makeHeapOnCurrentGameHeap(size_t size, const char *name, u32 align, u32 flags);
+
+    static int getDefaultGameHeapId();
+
+    static bool isValidHeapId(u32 id) {
+        return id >= 1 && id <= 2;
+    }
+
+    static EGG::Heap *g_gameHeaps[4];
+    static EGG::Heap *s_SavedCurrentHeap;
+    static EGG::Heap *g_archiveHeap;
+    static EGG::Heap *g_commandHeap;
+    static EGG::Heap *g_dylinkHeap;
+    static EGG::AssertHeap *g_assertHeap;
+    static u8 g_DefaultGameHeapId;
+    static const char *const s_GameHeapNames[4];
+
+    EGG::Heap *heap;
 }; // namespace mHeap
 
 #endif

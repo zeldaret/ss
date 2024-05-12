@@ -11,19 +11,19 @@ class DvdLockedFileStream : public DvdFileStream {
 public:
     NW4R_UT_RTTI_DECL(DvdLockedFileStream);
 
-    DvdLockedFileStream(long entrynum);
+    DvdLockedFileStream(s32 entrynum);
     DvdLockedFileStream(const DVDFileInfo *info, bool close);
     virtual ~DvdLockedFileStream(); // at 0xC
 
     virtual void Close(); // at 0x10
 
-    virtual long Read(void *dst, unsigned long size); // at 0x14
-    virtual bool ReadAsync(void *dst, unsigned long size, AsyncCallback callback, void *arg) {
+    virtual s32 Read(void *dst, u32 size); // at 0x14
+    virtual bool ReadAsync(void *dst, u32 size, AsyncCallback callback, void *arg) {
         return false;
     } // at 0x18
 
-    virtual long Peek(void *dst, unsigned long size); // at 0x5C
-    virtual bool PeekAsync(void *dst, unsigned long size, AsyncCallback callback, void *arg) {
+    virtual s32 Peek(void *dst, u32 size); // at 0x5C
+    virtual bool PeekAsync(void *dst, u32 size, AsyncCallback callback, void *arg) {
         return false;
     } // at 0x60
 

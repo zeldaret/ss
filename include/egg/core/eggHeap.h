@@ -18,10 +18,10 @@ class Allocator;
 
 struct HeapAllocArg {
     void *userArg; // 00
-    u32 size;    // 04
-    int align;   // 08
-    void *ptr;   // 0C the allocated ptr
-    Heap *heap;  // 10 heap to allocate in
+    u32 size;      // 04
+    int align;     // 08
+    void *ptr;     // 0C the allocated ptr
+    Heap *heap;    // 10 heap to allocate in
 
     inline HeapAllocArg() : userArg(0), size(0), align(0), heap(nullptr), ptr(nullptr) {}
 };

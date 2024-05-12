@@ -38,13 +38,16 @@ namespace EGG {
     OSUnlockMutex(&sRootMutex);
 }
 
-/* 80495560 */ void *Heap::alloc(size_t size, s32 align, Heap *heap) {
+/* 80495560 */ void *Heap::alloc(size_t size, int align, Heap *heap) {
     Heap *currentHeap = sCurrentHeap;
     Thread *thread = Thread::findThread(OSGetCurrentThread());
     Heap *threadHeap = nullptr;
 
-    if (thread != nullptr && (threadHeap = thread->mAllocatableHeap, threadHeap != nullptr)) {
-        heap = threadHeap;
+    if (thread != nullptr) {
+        threadHeap = thread->mAllocatableHeap;
+        if (threadHeap != nullptr) {
+            heap = threadHeap;
+        }
     }
     if (sAllocatableHeap != nullptr) {
         if (heap == nullptr) {

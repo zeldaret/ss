@@ -66,7 +66,7 @@ typedef enum {
     NAND_PERM_RWALL = NAND_PERM_RALL | NAND_PERM_WALL
 } NANDPermission;
 
-typedef void (*NANDAsyncCallback)(long result, struct NANDCommandBlock *block);
+typedef void (*NANDAsyncCallback)(s32 result, struct NANDCommandBlock *block);
 
 typedef struct NANDStatus {
     u32 ownerId; // at 0x0
@@ -76,8 +76,8 @@ typedef struct NANDStatus {
 } NANDStatus;
 
 typedef struct NANDFileInfo {
-    long fd;                    // at 0x0
-    long tempFd;                // at 0x4
+    s32 fd;                     // at 0x0
+    s32 tempFd;                 // at 0x4
     char openPath[FS_MAX_PATH]; // at 0x8
     char tempPath[FS_MAX_PATH]; // at 0x48
     u8 access;                  // at 0x88
@@ -158,7 +158,7 @@ NANDResult NANDPrivateCreateDirAsync(const char *path, u8 perm, u8 attr, NANDAsy
 
 NANDResult NANDMove(const char *from, const char *to);
 
-NANDResult NANDGetLength(NANDFileInfo *info, unsigned long *length);
+NANDResult NANDGetLength(NANDFileInfo *info, u32 *length);
 NANDResult NANDGetLengthAsync(NANDFileInfo *info, u32 *lengthOut, NANDAsyncCallback callback, NANDCommandBlock *block);
 
 NANDResult NANDGetStatus(const char *path, NANDStatus *status);

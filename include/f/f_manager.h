@@ -32,7 +32,7 @@ public:
     /* 802e28c0 */ int getSearchTableNum();
     /* 802e28d0 */ static fBase_c *searchBaseByID(fBaseID_e id);
     /* 802e2920 */ static fBase_c *searchBaseByProfName(ProfileName profID, const fBase_c *parent);
-    /* 802e2980 */ static fBase_c *searchBaseByGroupType(unsigned char groupType, const fBase_c *parent);
+    /* 802e2980 */ static fBase_c *searchBaseByGroupType(u8 groupType, const fBase_c *parent);
     /* 802e29e0 */ static void mainLoop();
 
 private:

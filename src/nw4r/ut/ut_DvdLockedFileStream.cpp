@@ -24,7 +24,7 @@ void DvdLockedFileStream::InitMutex_() {
     OSRestoreInterrupts(enabled);
 }
 
-DvdLockedFileStream::DvdLockedFileStream(long entrynum) : DvdFileStream(entrynum) {
+DvdLockedFileStream::DvdLockedFileStream(s32 entrynum) : DvdFileStream(entrynum) {
     mCancelFlag = false;
     InitMutex_();
 }
@@ -41,20 +41,20 @@ void DvdLockedFileStream::Close() {
     mCancelFlag = false;
 }
 
-long DvdLockedFileStream::Read(void *dst, unsigned long size) {
+s32 DvdLockedFileStream::Read(void *dst, u32 size) {
     if (!LockMutex()) {
         return DVD_RESULT_CANCELED;
     }
-    long ret = DvdFileStream::Read(dst, size);
+    s32 ret = DvdFileStream::Read(dst, size);
     UnlockMutex();
     return ret;
 }
 
-long DvdLockedFileStream::Peek(void *dst, unsigned long size) {
+s32 DvdLockedFileStream::Peek(void *dst, u32 size) {
     if (!LockMutex()) {
         return DVD_RESULT_CANCELED;
     }
-    long ret = DvdFileStream::Peek(dst, size);
+    s32 ret = DvdFileStream::Peek(dst, size);
     UnlockMutex();
     return ret;
 }

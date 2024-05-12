@@ -581,7 +581,7 @@ bool fBase_c::checkChildProcessCreateState() const {
 }
 
 /* 802e2540 */
-void fBase_c::setTmpCtData(ProfileName profile_name, fTrNdBa_c *connect_parent, unsigned long param, u8 group_type) {
+void fBase_c::setTmpCtData(ProfileName profile_name, fTrNdBa_c *connect_parent, u32 param, u8 group_type) {
     m_tmpCtData.prof_name = profile_name;
     m_tmpCtData.connect_parent = connect_parent;
     m_tmpCtData.params = param;
@@ -589,7 +589,7 @@ void fBase_c::setTmpCtData(ProfileName profile_name, fTrNdBa_c *connect_parent, 
 }
 
 /* 802e2560 */
-fBase_c *fBase_c::fBase_make(ProfileName profile_name, fTrNdBa_c *connect_parent, unsigned long param, u8 group_type) {
+fBase_c *fBase_c::fBase_make(ProfileName profile_name, fTrNdBa_c *connect_parent, u32 param, u8 group_type) {
     if ((*fProfile::sProfileList)[profile_name] == nullptr) {
         return nullptr;
     }
@@ -608,7 +608,7 @@ fBase_c *fBase_c::fBase_make(ProfileName profile_name, fTrNdBa_c *connect_parent
 }
 
 /* 802e2600 */
-fBase_c *fBase_c::createChild(ProfileName profile_name, fBase_c *parent, unsigned long param, u8 group_type) {
+fBase_c *fBase_c::createChild(ProfileName profile_name, fBase_c *parent, u32 param, u8 group_type) {
     if (parent == nullptr) {
         return nullptr;
     }
@@ -621,6 +621,6 @@ fBase_c *fBase_c::createChild(ProfileName profile_name, fBase_c *parent, unsigne
 }
 
 /* 802e2640 */
-fBase_c *fBase_c::createRoot(ProfileName profile_name, unsigned long param, u8 group_type) {
+fBase_c *fBase_c::createRoot(ProfileName profile_name, u32 param, u8 group_type) {
     return fBase_make(profile_name, nullptr, param, group_type);
 }

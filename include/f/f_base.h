@@ -126,13 +126,10 @@ public:
     /* 802e2510 */ bool checkChildProcessCreateState() const;
 
 public:
-    /* 802e2540 */ static void setTmpCtData(ProfileName profName, fTrNdBa_c *connectParent, unsigned long param,
-            u8 groupType);
-    /* 802e2560 */ static fBase_c *fBase_make(ProfileName profName, fTrNdBa_c *connectParent, unsigned long param,
-            u8 groupType);
-    /* 802e2640 */ static fBase_c *createRoot(ProfileName profName, unsigned long param, u8 groupType);
-    /* 802e2600 */ static fBase_c *createChild(ProfileName profName, fBase_c *parent, unsigned long param,
-            u8 groupType);
+    /* 802e2540 */ static void setTmpCtData(ProfileName profName, fTrNdBa_c *connectParent, u32 param, u8 groupType);
+    /* 802e2560 */ static fBase_c *fBase_make(ProfileName profName, fTrNdBa_c *connectParent, u32 param, u8 groupType);
+    /* 802e2640 */ static fBase_c *createRoot(ProfileName profName, u32 param, u8 groupType);
+    /* 802e2600 */ static fBase_c *createChild(ProfileName profName, fBase_c *parent, u32 param, u8 groupType);
 
 public:
     /* 80575ba8 */ static fLiMgBa_c m_forceExecuteList;

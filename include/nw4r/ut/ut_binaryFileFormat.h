@@ -19,7 +19,7 @@ struct BinaryFileHeader {
     u16 numBlocks;  // at 0xE
 };
 
-bool IsValidBinaryFile(const BinaryFileHeader *header, unsigned long magic, u16 version, u16 numBlocks);
+bool IsValidBinaryFile(const BinaryFileHeader *header, u32 magic, u16 version, u16 numBlocks);
 
 } // namespace ut
 } // namespace nw4r

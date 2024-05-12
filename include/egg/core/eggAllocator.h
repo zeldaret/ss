@@ -3,7 +3,7 @@
 #include "rvl/MEM.h"
 #include <common.h>
 
-/* 80495310 */ void MEMInitAllocatorFor_Heap(MEMAllocator* alloc, s32 align, void* heap);
+/* 80495310 */ void MEMInitAllocatorFor_Heap(MEMAllocator *alloc, s32 align, void *heap);
 
 namespace EGG {
 class Heap;

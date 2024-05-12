@@ -7,15 +7,15 @@ namespace ut {
 
 NW4R_UT_RTTI_DEF_BASE(IOStream);
 
-bool IOStream::ReadAsync(void *dst, unsigned long size, AsyncCallback callback, void *arg) {
+bool IOStream::ReadAsync(void *dst, u32 size, AsyncCallback callback, void *arg) {
     return false;
 }
 
-long IOStream::Write(const void *src, unsigned long size) {
+s32 IOStream::Write(const void *src, u32 size) {
     return false;
 }
 
-bool IOStream::WriteAsync(const void *src, unsigned long size, AsyncCallback callback, void *arg) {
+bool IOStream::WriteAsync(const void *src, u32 size, AsyncCallback callback, void *arg) {
     return false;
 }
 

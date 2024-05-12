@@ -11,7 +11,7 @@ dBase_c::dBase_c() : fBase_c() {
 
 void dBase_c::postDraw(fBase_c::MAIN_STATE_e status) {
     if (status != CANCELED) {
-        baseProperties |=  0x100;
+        baseProperties |= 0x100;
     } else {
         baseProperties &= ~0x100;
     }
@@ -30,7 +30,7 @@ int dBase_c::preExecute() {
 
 void dBase_c::postExecute(fBase_c::MAIN_STATE_e status) {
     if (status != CANCELED) {
-        baseProperties |=  0x4;
+        baseProperties |= 0x4;
     } else {
         baseProperties &= ~0x4;
     }
@@ -53,7 +53,7 @@ void dBase_c::resetFlags() {
     s_NextExecuteControlFlags = 0;
 }
 
-bool dBase_c::isActorPlayer(dBase_c& base) {
+bool dBase_c::isActorPlayer(dBase_c &base) {
     return base.profile_name == fProfile::PLAYER;
 }
 
@@ -70,12 +70,12 @@ void dBase_c::initLoader() {
     fBase_c::sUnloadCallback = unloadCallback;
 }
 
-dBase_c* dBase_c::createBase(ProfileName profName, dBase_c* parent, unsigned long param, u8 grouptype) {
-    return static_cast<dBase_c*>(fBase_c::createChild(profName, parent, param, grouptype));
+dBase_c *dBase_c::createBase(ProfileName profName, dBase_c *parent, u32 param, u8 grouptype) {
+    return static_cast<dBase_c *>(fBase_c::createChild(profName, parent, param, grouptype));
 }
 
-dBase_c* dBase_c::createRoot(ProfileName profName, unsigned long param, u8 groupType) {
-    return static_cast<dBase_c*>(fBase_c::createRoot(profName, param, groupType));
+dBase_c *dBase_c::createRoot(ProfileName profName, u32 param, u8 groupType) {
+    return static_cast<dBase_c *>(fBase_c::createRoot(profName, param, groupType));
 }
 
 // dBase_c::~dBase_c() {}

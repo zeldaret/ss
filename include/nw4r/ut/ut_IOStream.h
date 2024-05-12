@@ -10,17 +10,17 @@ class IOStream {
 public:
     NW4R_UT_RTTI_DECL(IOStream);
 
-    typedef void (*AsyncCallback)(long result, IOStream *stream, void *arg);
+    typedef void (*AsyncCallback)(s32 result, IOStream *stream, void *arg);
 
     IOStream() : mIsOpen(false), mCallback(NULL), mCallbackArg(NULL) {}
     virtual ~IOStream() {} // at 0xC
 
-    virtual void Close() = 0;                             // at 0x10
-    virtual long Read(void *dst, unsigned long size) = 0; // at 0x14
-    virtual bool ReadAsync(void *dst, unsigned long size, AsyncCallback callback,
-            void *arg);                                      // at 0x18
-    virtual long Write(const void *src, unsigned long size); // at 0x1C
-    virtual bool WriteAsync(const void *src, unsigned long size, AsyncCallback callback,
+    virtual void Close() = 0;                  // at 0x10
+    virtual s32 Read(void *dst, u32 size) = 0; // at 0x14
+    virtual bool ReadAsync(void *dst, u32 size, AsyncCallback callback,
+            void *arg);                           // at 0x18
+    virtual s32 Write(const void *src, u32 size); // at 0x1C
+    virtual bool WriteAsync(const void *src, u32 size, AsyncCallback callback,
             void *arg);                // at 0x20
     virtual bool IsBusy() const;       // at 0x24
     virtual bool CanAsync() const = 0; // at 0x28

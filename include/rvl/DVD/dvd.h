@@ -45,8 +45,8 @@ typedef enum {
     DVD_COVER_CLOSED,
 } DVDCoverState;
 
-typedef void (*DVDAsyncCallback)(long result, struct DVDFileInfo *info);
-typedef void (*DVDCommandCallback)(long result, struct DVDCommandBlock *block);
+typedef void (*DVDAsyncCallback)(s32 result, struct DVDFileInfo *info);
+typedef void (*DVDCommandCallback)(s32 result, struct DVDCommandBlock *block);
 
 typedef struct DVDDiskID {
     char game[4];    // at 0x0

@@ -94,13 +94,13 @@ public:
     f32 VPrintfMutable(const T *format, va_list args);
     f32 PrintMutable(const T *str, int n);
 
-    // static int VSNPrintf(T *buffer, unsigned long count, const T *fmt, va_list args);
+    // static int VSNPrintf(T *buffer, u32 count, const T *fmt, va_list args);
 
-    static int VSNPrintf(char *buffer, unsigned long count, const char *fmt, va_list args) {
+    static int VSNPrintf(char *buffer, u32 count, const char *fmt, va_list args) {
         return vsnprintf(buffer, count, fmt, args);
     }
 
-    static int VSNPrintf(wchar_t *buffer, unsigned long count, const wchar_t *fmt, va_list args) {
+    static int VSNPrintf(wchar_t *buffer, u32 count, const wchar_t *fmt, va_list args) {
         return vswprintf(buffer, count, fmt, args);
     }
 
@@ -110,7 +110,7 @@ public:
     f32 PrintImpl(const T *str, int len, bool m);
     f32 AdjustCursor(f32 *x1, f32 *y1, const T *str, int len);
 
-    bool IsDrawFlagSet(unsigned long mask, unsigned long flag) const {
+    bool IsDrawFlagSet(u32 mask, u32 flag) const {
         return (mDrawFlag & mask) == flag;
     }
 
@@ -126,16 +126,6 @@ private:
     static int mFormatBufferSize;
     static TagProcessorBase<T> mDefaultTagProcessor;
 };
-
-// template <>
-// int TextWriterBase<char>::VSNPrintf(char *buffer, unsigned long count, const char *fmt, va_list args) {
-//     return vsnprintf(buffer, count, fmt, args);
-// }
-
-// template <>
-// int TextWriterBase<wchar_t>::VSNPrintf(wchar_t *buffer, unsigned long count, const wchar_t *fmt, va_list args) {
-//     return vswprintf(buffer, count, fmt, args);
-// }
 
 } // namespace ut
 } // namespace nw4r

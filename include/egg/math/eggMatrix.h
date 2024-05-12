@@ -43,7 +43,7 @@ struct Matrix34f {
     /*          */ void makeT(const Vector3f &t);
     /* 8049ae90 */ void fromQuat(const Quatf &q);
     /* 8049af40 */ void toQuat(Quatf &q) const;
-    /* 8049b250 */ void slerpTo(const Matrix34f &, Matrix34f &, f32);
+    /* 8049b250 */ void slerpTo(const Matrix34f &, Matrix34f &, f32) const;
     /*          */ void copyTo16(f32 *pf) const;
     /* 8049b2d0 */ void setAxisRotation(const Vector3f &, f32);
     /*          */ Vector3f multVector(const Vector3f &vec) const;
