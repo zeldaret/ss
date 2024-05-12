@@ -300,6 +300,7 @@ config.libs = [
             Object(NonMatching, "f/f_base.cpp"),
             Object(Matching, "f/f_list.cpp"),
             Object(Matching, "f/f_manager.cpp"),
+            Object(Matching, "m/m_angle.cpp"),
             Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
             # framework (f_name)

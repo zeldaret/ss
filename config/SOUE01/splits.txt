@@ -208,6 +208,11 @@ f/f_manager.cpp:
 	.sbss       start:0x80575BB8 end:0x80575BC0
 	.bss        start:0x805B84D8 end:0x805B8588
 
+m/m_angle.cpp:
+	.text       start:0x802EE5F0 end:0x802EE6B8
+	.ctors      start:0x804DB8CC end:0x804DB8D0
+	.sbss       start:0x80575C08 end:0x80575C10
+
 m/m_heap.cpp:
 	.text       start:0x802F0F00 end:0x802F1660
 	.rodata     start:0x804F0570 end:0x804F0580
