@@ -359,7 +359,7 @@ config.libs = [
             Object(Matching, "egg/core/eggExpHeap.cpp"),
             Object(NonMatching, "egg/core/eggFrmHeap.cpp"),
             Object(NonMatching, "egg/core/eggAssertHeap.cpp"),
-            Object(NonMatching, "egg/core/eggDisposer.cpp"),
+            Object(Matching, "egg/core/eggDisposer.cpp"),
             Object(Matching, "egg/core/eggThread.cpp"),
             Object(NonMatching, "egg/core/eggUnk.cpp"),
             Object(NonMatching, "egg/core/eggSystem.cpp"),

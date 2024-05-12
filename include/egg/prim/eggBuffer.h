@@ -11,8 +11,10 @@ class TBuffer {
 public:
     // vtable 0x00
     /* vt 0x08 */ virtual ~TBuffer() {
-        delete[] mBuffer;
-        mBuffer = nullptr;
+        if (mBuffer != nullptr) {
+            delete[] mBuffer;
+            mBuffer = nullptr;
+        }
     }
     /* vt 0x0C */ virtual void allocate(int n, int) {
         mSize = n;
@@ -24,7 +26,7 @@ public:
         if (heap == nullptr) {
             heap = Heap::sCurrentHeap;
         }
-        mBuffer = new (heap, 4) T[n];
+        mBuffer = new (heap, 4) T[mSize];
         onAllocate(heap);
     }
     /* vt 0x14 */ virtual void onAllocate(Heap *) {
