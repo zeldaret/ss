@@ -28,6 +28,7 @@ f32 GXGetYScaleFactor(u16 height, u16 width);
 u16 GXGetNumXfbLines(u16 height, f32 scale);
 void GXSetDispCopyDst(u16 width, u16 height);
 u32 GXSetDispCopyYScale(f32 scale);
+void GXCopyDisp(void *data, GXBool bUpdate);
 
 extern GXRenderModeObj GXNtsc480IntDf;
 extern GXRenderModeObj GXMpal480IntDf;

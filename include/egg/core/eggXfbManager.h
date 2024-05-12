@@ -14,7 +14,7 @@ public:
     /* 0xC */ u8 mNumXfbs;      // Total number of Xfbs ever attached
     /* 0xD */ u8 mNumXfbs_Copy; // Unsure of purpose yet, but showing wont proceed until its under 3
 public:
-    /* 80498af0 */ bool isRegisterd(Xfb *xfb) const; // yes. this is correct spelling
+    /* 80498af0 */ bool isRegisterd(Xfb &xfb) const; // yes. this is correct spelling
     /* 80498b30 */ bool attach(Xfb *xfb);
     /* 80498c10 */ void copyEFB(bool);
     /* 80498d00 */ void setNextFrameBuffer();
