@@ -52,13 +52,12 @@ public:
     virtual int GetCharWidth(u16 c) const = 0;                       // at 0x48
     virtual CharWidths GetCharWidths(u16 c) const = 0;               // at 0x4C
     virtual void GetGlyph(Glyph *out, u16 c) const = 0;              // at 0x50
+    virtual bool HasGlyph(u16 c) const = 0;                          // at 0x50
     virtual FontEncoding GetEncoding() const = 0;                    // at 0x54
 
     void InitReaderFunc(FontEncoding encode);
 
-    CharStrmReader GetCharStrmReader() const {
-        return CharStrmReader(mReadFunc);
-    }
+    CharStrmReader GetCharStrmReader() const;
 
 private:
     CharStrmReader::ReadFunc mReadFunc; // at 0x4

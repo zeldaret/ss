@@ -230,7 +230,7 @@ def Rel(status, rel_name, cpp_name, extra_cflags=[]):
 def DolphinLib(lib_name, objects):
     return {
         "lib": lib_name,
-        "mw_version": "GC/1.2.5n",
+        "mw_version": "Wii/1.0", # from version strings
         "cflags": cflags_dolphin,
         "host": False,
         "objects": objects,
@@ -250,7 +250,7 @@ def EGGLib(lib_name, objects):
 def nw4rLib(lib_name, objects):
     return {
         "lib": lib_name,
-        "mw_version": "Wii/1.6",
+        "mw_version": "Wii/1.1", # most seem to be around 1.2, snd is 1.6
         "cflags": cflags_nw4r,
         "host": False,
         "objects": objects,
@@ -335,15 +335,16 @@ config.libs = [
             Object(Matching, "nw4r/ut/ut_IOStream.cpp"),
             Object(Matching, "nw4r/ut/ut_TagProcessorBase.cpp"),
             Object(Matching, "nw4r/ut/ut_FileStream.cpp"),
-            Object(NonMatching, "nw4r/ut/ut_DvdFileStream.cpp"),
-            Object(NonMatching, "nw4r/ut/ut_DvdLockedFileStream.cpp"),
-            Object(NonMatching, "nw4r/ut/ut_NandFileStream.cpp"),
-            Object(NonMatching, "nw4r/ut/ut_LockedCache.cpp"),
-            Object(NonMatching, "nw4r/ut/ut_Font.cpp"),
-            Object(NonMatching, "nw4r/ut/ut_ResFontBase.cpp"),
-            Object(NonMatching, "nw4r/ut/ut_ResFont.cpp"),
-            Object(NonMatching, "nw4r/ut/ut_CharWriter.cpp"),
-            Object(NonMatching, "nw4r/ut/ut_TextWriterBase.cpp"),
+            Object(Matching, "nw4r/ut/ut_DvdFileStream.cpp"),
+            Object(Matching, "nw4r/ut/ut_DvdLockedFileStream.cpp"),
+            Object(Matching, "nw4r/ut/ut_NandFileStream.cpp"),
+            Object(Matching, "nw4r/ut/ut_LockedCache.cpp"),
+            Object(Matching, "nw4r/ut/ut_Font.cpp"),
+            Object(Matching, "nw4r/ut/ut_RomFont.cpp"),
+            Object(Matching, "nw4r/ut/ut_ResFontBase.cpp"),
+            Object(Matching, "nw4r/ut/ut_ResFont.cpp"),
+            Object(Matching, "nw4r/ut/ut_CharWriter.cpp"),
+            Object(Matching, "nw4r/ut/ut_TextWriterBase.cpp"),
         ],
     ),
     # EGG

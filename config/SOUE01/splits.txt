@@ -258,34 +258,56 @@ nw4r/ut/ut_FileStream.cpp:
 nw4r/ut/ut_DvdFileStream.cpp:
 	.text       start:0x8042B6F0 end:0x8042BDAC
 	.ctors      start:0x804DB940 end:0x804DB944
+	.data       start:0x8056BD78 end:0x8056BDE0
+	.sbss       start:0x805765A0 end:0x805765A8
 
 nw4r/ut/ut_DvdLockedFileStream.cpp:
 	.text       start:0x8042BDB0 end:0x8042C1DC
 	.ctors      start:0x804DB944 end:0x804DB948
+	.data       start:0x8056BDE0 end:0x8056BE48
+	.sbss       start:0x805765A8 end:0x805765C0
+	.bss        start:0x80636B20 end:0x80636B38
 
 nw4r/ut/ut_NandFileStream.cpp:
 	.text       start:0x8042C1E0 end:0x8042CA4C
 	.ctors      start:0x804DB948 end:0x804DB94C
+	.data       start:0x8056BE48 end:0x8056BEA8
+	.sbss       start:0x805765C0 end:0x805765C8
 
 nw4r/ut/ut_LockedCache.cpp:
 	.text       start:0x8042CA50 end:0x8042CC28
 	.ctors      start:0x804DB94C end:0x804DB950
+	.bss        start:0x80636B38 end:0x80636B58
 
 nw4r/ut/ut_Font.cpp:
-	.text       start:0x8042CC30 end:0x8042CD20
+	.text       start:0x8042CC30 end:0x8042CCD4
+	.data       start:0x8056BEA8 end:0x8056BED8
+
+nw4r/ut/ut_RomFont.cpp:
+	.text       start:0x8042CCE0 end:0x8042CD20
+	.data       start:0x8056BED8 end:0x8056BF38
 
 nw4r/ut/ut_ResFontBase.cpp:
 	.text       start:0x8042CD20 end:0x8042D4B8
+	.data       start:0x8056BF38 end:0x8056BFA0
 
 nw4r/ut/ut_ResFont.cpp:
 	.text       start:0x8042D4C0 end:0x8042D7CC
+	.data       start:0x8056BFA0 end:0x8056C000
 
 nw4r/ut/ut_CharWriter.cpp:
 	.text       start:0x8042D7D0 end:0x8042EF1C
+	.sbss       start:0x805765C8 end:0x805765D0
+	.sdata2     start:0x8057EB70 end:0x8057EB90
+	.bss        start:0x80636B58 end:0x80636B68
 
 nw4r/ut/ut_TextWriterBase.cpp:
 	.text       start:0x8042EF20 end:0x80434294
 	.ctors      start:0x804DB950 end:0x804DB954
+	.sdata      start:0x80574DC0 end:0x80574DC8
+	.sbss       start:0x805765D0 end:0x805765E8
+	.sdata2     start:0x8057EB90 end:0x8057EBA8
+	.bss        start:0x80636B68 end:0x80636B80
 
 nw4r/db/db_directPrint.cpp:
 	.text       start:0x804342A0 end:0x80434E9C

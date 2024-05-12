@@ -19,7 +19,7 @@ void GXSetColorUpdate(GXBool enable);
 void GXSetAlphaUpdate(GXBool enable);
 void GXSetZMode(GXBool enableTest, GXCompare func, GXBool enableUpdate);
 void GXSetZCompLoc(GXBool beforeTex);
-void GXSetPixelFmt(GXPixelFmt pixelFmt, GXZFmt zFmt);
+void GXSetPixelFmt(GXPixelFmt pixelFmt, GXZFmt16 zFmt);
 void GXSetDither(GXBool enable);
 void GXSetDstAlpha(GXBool enable, u8 alpha);
 void GXSetFieldMask(GXBool enableEven, GXBool enableOdd);

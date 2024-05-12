@@ -15,11 +15,11 @@ public:
     IOStream() : mIsOpen(false), mCallback(NULL), mCallbackArg(NULL) {}
     virtual ~IOStream() {} // at 0xC
 
-    virtual void Close() = 0;                  // at 0x10
-    virtual s32 Read(void *dst, u32 size) = 0; // at 0x14
+    virtual void Close() = 0;                             // at 0x10
+    virtual long Read(void *dst, unsigned long size) = 0; // at 0x14
     virtual bool ReadAsync(void *dst, unsigned long size, AsyncCallback callback,
             void *arg);                                      // at 0x18
-    virtual bool Write(const void *src, unsigned long size); // at 0x1C
+    virtual long Write(const void *src, unsigned long size); // at 0x1C
     virtual bool WriteAsync(const void *src, unsigned long size, AsyncCallback callback,
             void *arg);                // at 0x20
     virtual bool IsBusy() const;       // at 0x24

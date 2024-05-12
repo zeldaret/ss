@@ -158,7 +158,17 @@ typedef enum _GXChannelID {
     GX_COLOR_NULL = 255
 } GXChannelID;
 
-// TODO: Fabricated names from patent
+typedef enum _GXCITexFmt {
+    GX_TF_C4 = 8,
+    GX_TF_C8,
+    GX_TF_C14X2,
+} GXCITexFmt;
+
+typedef enum _GXClearZ {
+    GX_CLEAR_Z_MIN = 0,
+    GX_CLEAR_Z_MAX = (1 << 24) - 1,
+} GXClearZ;
+
 typedef enum _GXClipMode {
     // "ClipDisable" in XF mem, so 0 = enable
     GX_CLIP_ENABLE,
@@ -207,6 +217,13 @@ typedef enum _GXCompType {
     GX_RGBA6,
     GX_RGBA8
 } GXCompType;
+
+typedef enum _GXCopyClamp {
+    GX_CLAMP_NONE,
+    GX_CLAMP_TOP,
+    GX_CLAMP_BOTTOM,
+    GX_CLAMP_ALL,
+} GXCopyClamp;
 
 typedef enum _GXCullMode { GX_CULL_NONE, GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL } GXCullMode;
 
@@ -354,16 +371,16 @@ typedef enum _GXIndTexWrap {
 } GXIndTexWrap;
 
 typedef enum _GXLightID {
-    GX_LIGHT0 = 1,
-    GX_LIGHT1 = 2,
-    GX_LIGHT2 = 4,
-    GX_LIGHT3 = 8,
-    GX_LIGHT4 = 16,
-    GX_LIGHT5 = 32,
-    GX_LIGHT6 = 64,
-    GX_LIGHT7 = 128,
+    GX_LIGHT0 = (1 << 0),
+    GX_LIGHT1 = (1 << 1),
+    GX_LIGHT2 = (1 << 2),
+    GX_LIGHT3 = (1 << 3),
+    GX_LIGHT4 = (1 << 4),
+    GX_LIGHT5 = (1 << 5),
+    GX_LIGHT6 = (1 << 6),
+    GX_LIGHT7 = (1 << 7),
 
-    GX_MAX_LIGHT = 256,
+    GX_MAX_LIGHT = (1 << 8),
     GX_LIGHT_NULL = 0
 } GXLightID;
 
@@ -386,7 +403,6 @@ typedef enum _GXLogicOp {
     GX_LO_SET
 } GXLogicOp;
 
-// TODO: Fabricated name
 typedef enum _GXMtxType {
     GX_MTX_3x4,
     GX_MTX_2x4,
@@ -432,7 +448,7 @@ typedef enum _GXPrimitive {
     GX_QUADS = 0x80,
 } GXPrimitive;
 
-typedef enum _GXProjMtxType { GX_PERSPECTIVE, GX_ORTHOGRAPHIC } GXProjMtxType;
+typedef enum _GXProjectionType { GX_PERSPECTIVE, GX_ORTHOGRAPHIC } GXProjectionType;
 
 typedef enum _GXSpotFn { GX_SP_OFF, GX_SP_FLAT, GX_SP_COS, GX_SP_COS2, GX_SP_SHARP, GX_SP_RING1, GX_SP_RING2 } GXSpotFn;
 
@@ -509,10 +525,12 @@ typedef enum _GXTevRegID {
 } GXTevRegID;
 
 typedef enum _GXTevScale {
-    GX_TEV_SCALE_0,
-    GX_TEV_SCALE_1,
-    GX_TEV_SCALE_2,
-    GX_TEV_SCALE_3,
+    GX_CS_SCALE_1,
+    GX_CS_SCALE_2,
+    GX_CS_SCALE_4,
+    GX_CS_DIVIDE_2,
+
+    GX_MAX_TEVSCALE
 } GXTevScale;
 
 typedef enum _GXTevStageID {
@@ -624,6 +642,8 @@ typedef enum _GXTevKColorSel {
     GX_TEV_KCSEL_K3_A
 } GXTevKColorSel;
 
+typedef enum _GXTevMode { GX_MODULATE, GX_DECAL, GX_REPLACE, GX_PASSCLR, GX_BLEND } GXTevMode;
+
 typedef enum _GXTexCoordID {
     GX_TEXCOORD0,
     GX_TEXCOORD1,
@@ -733,9 +753,9 @@ typedef enum _GXTexMapID {
     GX_TEX_DISABLE
 } GXTexMapID;
 
-// TODO: Fabricated names
 typedef enum _GXTexMtx {
     // Any dimension (in standard XF matrix memory)
+    // Enum represents base row of matrix
     GX_TEXMTX0 = 30,
     GX_TEXMTX1 = 33,
     GX_TEXMTX2 = 36,
@@ -746,18 +766,31 @@ typedef enum _GXTexMtx {
     GX_TEXMTX7 = 51,
     GX_TEXMTX8 = 54,
     GX_TEXMTX9 = 57,
+    GX_TEXMTX_IDENT = 60,
 
     // 3x4 matrices (in dual-tex XF matrix memory)
-    GX_DTEXMTX0 = 64,
-    GX_DTEXMTX1 = 67,
-    GX_DTEXMTX2 = 70,
-    GX_DTEXMTX3 = 73,
-    GX_DTEXMTX4 = 76,
-    GX_DTEXMTX5 = 79,
-    GX_DTEXMTX6 = 82,
-    GX_DTEXMTX7 = 85,
-    GX_DTEXMTX8 = 88,
-    GX_DTEXMTX9 = 91,
+    // Enum represents base row of matrix
+    GX_DUALMTX0 = 64,
+    GX_DUALMTX1 = 67,
+    GX_DUALMTX2 = 70,
+    GX_DUALMTX3 = 73,
+    GX_DUALMTX4 = 76,
+    GX_DUALMTX5 = 79,
+    GX_DUALMTX6 = 82,
+    GX_DUALMTX7 = 85,
+    GX_DUALMTX8 = 88,
+    GX_DUALMTX9 = 91,
+    GX_DUALMTX10 = 94,
+    GX_DUALMTX11 = 97,
+    GX_DUALMTX12 = 100,
+    GX_DUALMTX13 = 103,
+    GX_DUALMTX14 = 106,
+    GX_DUALMTX15 = 109,
+    GX_DUALMTX16 = 112,
+    GX_DUALMTX17 = 115,
+    GX_DUALMTX18 = 118,
+    GX_DUALMTX19 = 121,
+    GX_DUALMTX_IDENT = 125,
 } GXTexMtx;
 
 typedef enum _GXTexWrapMode {
@@ -776,9 +809,8 @@ typedef enum _GXTlutFmt {
     GX_MAX_TLUTFMT
 } GXTlutFmt;
 
-// TODO: Fabricated name
 typedef enum _GXVtxFmt {
-    GX_VTXFMT0, // from patent
+    GX_VTXFMT0,
     GX_VTXFMT1,
     GX_VTXFMT2,
     GX_VTXFMT3,
@@ -787,15 +819,24 @@ typedef enum _GXVtxFmt {
     GX_VTXFMT6,
     GX_VTXFMT7,
 
-    GX_MAX_VTXFMT,
+    GX_MAX_VTXFMT
 } GXVtxFmt;
 
-typedef enum _GXZFmt {
-    GX_ZC_LINEAR, // from patent
-    GX_ZC_NEAR,   // from Dolphin
-    GX_ZC_MID,    // from Dolphin
-    GX_ZC_FAR,    // from Dolphin
-} GXZFmt;
+typedef enum _GXZFmt16 {
+    GX_ZC_LINEAR,
+    GX_ZC_NEAR,
+    GX_ZC_MID,
+    GX_ZC_FAR,
+} GXZFmt16;
+
+// From patent
+typedef enum _GXZTexOp {
+    GX_ZT_DISABLE,
+    GX_ZT_ADD,
+    GZ_ZT_REPLACE,
+
+    GX_MAX_ZTEXOP
+} GXZTexOp;
 
 #ifdef __cplusplus
 }

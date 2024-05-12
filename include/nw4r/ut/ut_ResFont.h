@@ -8,12 +8,13 @@ namespace ut {
 
 class ResFont : public detail::ResFontBase {
 public:
-    static FontInformation* Rebuild(BinaryFileHeader* header);
+    static FontInformation *Rebuild(BinaryFileHeader *header);
 
     ResFont();
     ~ResFont();
 
-    bool SetResource(void* buffer);
+    bool SetResource(void *buffer);
+    void *RemoveResource();
 };
 
 } // namespace ut

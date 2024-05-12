@@ -1,3 +1,5 @@
+// Ported From https://github.com/kiwi515/ogws/blob/master/src/nw4r/ut/ut_list.cpp
+
 #include <nw4r/ut/ut_list.h>
 
 namespace nw4r {
