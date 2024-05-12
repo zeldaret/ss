@@ -208,6 +208,11 @@ f/f_manager.cpp:
 	.sbss       start:0x80575BB8 end:0x80575BC0
 	.bss        start:0x805B84D8 end:0x805B8588
 
+m/m_angle.cpp:
+	.text       start:0x802EE5F0 end:0x802EE6B8
+	.ctors      start:0x804DB8CC end:0x804DB8D0
+	.sbss       start:0x80575C08 end:0x80575C10
+
 m/m_heap.cpp:
 	.text       start:0x802F0F00 end:0x802F1660
 	.rodata     start:0x804F0570 end:0x804F0580
@@ -385,7 +390,8 @@ egg/core/eggXfbManager.cpp:
 
 egg/core/eggGraphicsFifo.cpp:
 	.text       start:0x80498E20 end:0x80498F90
-	.sbss       start:0x80576798 end:0x805767A8
+	.data       start:0x8056EB80 end:0x8056EB90
+	.sbss       start:0x80576798 end:0x805767A4
 
 egg/core/eggController.cpp:
 	.text       start:0x80498F90 end:0x8049AB58
@@ -419,7 +425,9 @@ egg/math/eggVector.cpp:
 egg/prim/eggAssert.cpp:
 	.text       start:0x8049BF90 end:0x8049C5BC
 	.data       start:0x8056EC88 end:0x8056ED00
+	.sdata      start:0x80574EF0 end:0x80574F18
 	.sbss       start:0x805767F8 end:0x80576808
+	.bss        start:0x80674C60 end:0x80674D68
 
 egg/gfx/eggCamera.cpp:
 	.text       start:0x8049C5C0 end:0x8049CAC8

@@ -24,7 +24,12 @@ public:
     /* 80495b70 */ static ExpHeap *create(void *block, size_t size, u16 attr);
     /* 80495c30 */ static ExpHeap *create(size_t size, Heap *heap, u16 attr);
     /* 80495d00 */ void setGroupID(u16 groupId);
-    /* 80495f80 */ u32 getSizeForMBlock(const void *block);
+    /* 80495f80 */ static u32 getSizeForMBlock(const void *block);
+
+    // Placement new for ::create
+    inline void *operator new(size_t size, void *ptr) {
+        return ptr;
+    }
 };
 
 } // namespace EGG

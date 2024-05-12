@@ -36,5 +36,6 @@ void *__va_arg(_va_list_struct *, int);
 #define __va_end(list) ((void)0)
 
 #define __va_copy(a, b) (*(a) = *(b))
+#define va_copy __va_copy
 
 #endif /* __VA_ARG_H */
