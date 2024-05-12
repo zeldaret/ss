@@ -64,9 +64,6 @@ public:
     void SetDrawFlag(u32 flag) {
         mDrawFlag = flag;
     }
-    bool IsDrawFlagSet(unsigned long mask, u32 flag) const {
-        return (mDrawFlag & mask) == flag;
-    }
 
     TagProcessorBase<T> *GetTagProcessor() const {
         return mTagProcessor;
@@ -108,10 +105,14 @@ public:
     }
 
     f32 CalcLineWidth(const T *format, int len);
-    bool CalcLineRectImpl(Rect *rect, const T **str, int len);
+    int CalcLineRectImpl(Rect *rect, const T **str, int len);
     void CalcStringRectImpl(Rect *rect, const T *str, int len);
     f32 PrintImpl(const T *str, int len, bool m);
     f32 AdjustCursor(f32 *x1, f32 *y1, const T *str, int len);
+
+    bool IsDrawFlagSet(unsigned long mask, unsigned long flag) const {
+        return (mDrawFlag & mask) == flag;
+    }
 
 private:
     f32 mWidthLimit;                    // at 0x4C
