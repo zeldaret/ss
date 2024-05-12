@@ -1,13 +1,10 @@
-#include <rvl/GX.h>
 #include <egg/core/eggGraphicsFifo.h>
 #include <egg/core/eggHeap.h>
+#include <rvl/GX.h>
 
-
-extern "C" void *GXInit(void *buf, u32 bufSize);
 extern "C" void GXGetGPStatus(GXBool *overhi, GXBool *underlow, GXBool *readIdle, GXBool *cmdIdle, GXBool *brkpt);
 
 namespace EGG {
-
 
 GraphicsFifo *GraphicsFifo::sGraphicsFifo;
 u8 GraphicsFifo::sGpStatus[];
@@ -16,7 +13,7 @@ void GraphicsFifo::create(u32 size, Heap *heap) {
     if (heap == nullptr) {
         heap = Heap::sCurrentHeap;
     }
-    sGraphicsFifo = new(heap, 0x04) GraphicsFifo(size, heap);
+    sGraphicsFifo = new (heap, 0x04) GraphicsFifo(size, heap);
 }
 
 GraphicsFifo::~GraphicsFifo() {
