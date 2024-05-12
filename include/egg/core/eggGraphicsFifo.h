@@ -22,7 +22,7 @@ public:
 
 public:
     /* 80576798 */ static GraphicsFifo *sGraphicsFifo;
-    /* 8057679c */ static bool sGpStatus[4];
+    /* 8057679c */ static u8 sGpStatus[5];
 };
 
 } // namespace EGG

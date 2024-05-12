@@ -300,6 +300,7 @@ config.libs = [
             Object(NonMatching, "f/f_base.cpp"),
             Object(Matching, "f/f_list.cpp"),
             Object(Matching, "f/f_manager.cpp"),
+            Object(Matching, "m/m_angle.cpp"),
             Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
             # framework (f_name)
@@ -368,8 +369,8 @@ config.libs = [
             Object(Matching, "egg/core/eggXfb.cpp"),
             Object(Matching, "egg/core/eggVideo.cpp"),
             Object(Matching, "egg/core/eggXfb.cpp"),
-            Object(NonMatching, "egg/core/eggXfbManager.cpp"),
-            Object(NonMatching, "egg/core/eggGraphicsFifo.cpp"),
+            Object(Matching, "egg/core/eggXfbManager.cpp"),
+            Object(Matching, "egg/core/eggGraphicsFifo.cpp"),
             Object(NonMatching, "egg/core/eggController.cpp"),
         ],
     ),
@@ -385,7 +386,7 @@ config.libs = [
     EGGLib(
         "prim",
         [
-            Object(NonMatching, "egg/prim/eggAssert.cpp"),
+            Object(Matching, "egg/prim/eggAssert.cpp"),
         ],
     ),
     # {
