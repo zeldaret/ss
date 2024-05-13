@@ -1,9 +1,8 @@
 #ifndef NW4R_LYT_MATERIAL_H
 #define NW4R_LYT_MATERIAL_H
-#include "lyt_animation.h"
-#include "ut_LinkList.h"
+#include "nw4r/lyt/lyt_animation.h"
+#include "nw4r/ut/ut_LinkList.h"
 #include <rvl/GX.h>
-
 
 namespace nw4r {
 namespace lyt {

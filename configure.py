@@ -155,6 +155,7 @@ cflags_base = [
     "-str reuse",
     "-enc SJIS",
     "-i include",
+    "-i include/MSL_C",
     f"-i build/{config.version}/include",
     f"-DVERSION={version_num}",
 ]
@@ -345,6 +346,12 @@ config.libs = [
             Object(Matching, "nw4r/ut/ut_ResFont.cpp"),
             Object(Matching, "nw4r/ut/ut_CharWriter.cpp"),
             Object(Matching, "nw4r/ut/ut_TextWriterBase.cpp"),
+        ],
+    ),
+    nw4rLib(
+        "lyt",
+        [
+            Object(Matching, "nw4r/lyt/lyt_common.cpp"),
         ],
     ),
     # EGG

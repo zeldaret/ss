@@ -1,39 +1,42 @@
 #ifndef NW4R_SND_SOUND_HANDLE_H
 #define NW4R_SND_SOUND_HANDLE_H
-#include "types_nw4r.h"
+#include "common.h"
 #include "snd_BasicSound.h"
 
-namespace nw4r
-{
-	namespace snd
-	{
-		struct SoundHandle
-		{
-			detail::BasicSound * mSound; // at 0x0
-			
-			void detail_AttachSound(detail::BasicSound *);
-			void detail_AttachSoundAsTempHandle(detail::BasicSound *);
-			void DetachSound();
-			
-			inline SoundHandle() : mSound(NULL) {}
-			
-			inline ~SoundHandle()
-			{
-				DetachSound();
-			}
+namespace nw4r {
+namespace snd {
+struct SoundHandle {
+    detail::BasicSound *mSound; // at 0x0
 
-			inline detail::BasicSound * detail_GetAttachedSound() { return mSound; }
+    void detail_AttachSound(detail::BasicSound *);
+    void detail_AttachSoundAsTempHandle(detail::BasicSound *);
+    void DetachSound();
 
-			inline bool IsAttachedSound() const { return mSound != NULL; }
+    inline SoundHandle() : mSound(NULL) {}
 
-			inline void StartPrepared() 
-			{
-				if (IsAttachedSound()) mSound->StartPrepared();
-			}
+    inline ~SoundHandle() {
+        DetachSound();
+    }
 
-			inline u32 GetId() const { return IsAttachedSound() ? mSound->GetId() : -1; }
-		};
-	}
-}
+    inline detail::BasicSound *detail_GetAttachedSound() {
+        return mSound;
+    }
+
+    inline bool IsAttachedSound() const {
+        return mSound != NULL;
+    }
+
+    inline void StartPrepared() {
+        if (IsAttachedSound()) {
+            mSound->StartPrepared();
+        }
+    }
+
+    inline u32 GetId() const {
+        return IsAttachedSound() ? mSound->GetId() : -1;
+    }
+};
+} // namespace snd
+} // namespace nw4r
 
 #endif

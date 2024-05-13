@@ -1,12 +1,11 @@
 #ifndef NW4R_LYT_ARC_RESOURCE_ACCESSOR_H
 #define NW4R_LYT_ARC_RESOURCE_ACCESSOR_H
+#include "common.h"
 #include "lyt_resourceAccessor.h"
-#include "types_nw4r.h"
-#include "ut_Font.h"
-#include "ut_LinkList.h"
+#include "nw4r/ut/ut_Font.h"
+#include "nw4r/ut/ut_LinkList.h"
 #include <rvl/ARC/arc.h>
 #include <string.h>
-
 
 #define FONTNAMEBUF_MAX 127
 

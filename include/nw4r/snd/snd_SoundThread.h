@@ -1,7 +1,7 @@
 #ifndef NW4R_SND_SOUND_THREAD_H
 #define NW4R_SND_SOUND_THREAD_H
+#include "common.h"
 #include "snd_AxManager.h"
-#include "types_nw4r.h"
 #include "ut_LinkList.h"
 #include <rvl/OS/OSMessage.h>
 #include <rvl/OS/OSMutex.h>

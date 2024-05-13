@@ -59,6 +59,13 @@ typedef struct ARCHandle {
     s32 entrynum;        // at 0x18
 } ARCHandle;
 
+typedef struct ARCDir {
+    ARCHeader *handle; // at 0x0
+    u32 entryNum;      // at 0x4
+    u32 location;      // at 0x8
+    u32 next;          // at 0xC
+} ARCDir;
+
 typedef struct ARCFileInfo {
     ARCHandle *handle; // at 0x0
     u32 offset;        // at 0x4

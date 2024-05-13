@@ -1,6 +1,6 @@
 #ifndef NW4R_G3D_ANMFOG_H
 #define NW4R_G3D_ANMFOG_H
-#include "types_nw4r.h"
+#include "common.h"
 #include "ut_Color.h"
 #include <rvl/GX.h>
 

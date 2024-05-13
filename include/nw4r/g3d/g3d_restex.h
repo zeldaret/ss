@@ -1,7 +1,7 @@
 #ifndef NW4R_G3D_RESTEX_H
 #define NW4R_G3D_RESTEX_H
+#include "common.h"
 #include "g3d_rescommon.h"
-#include "types_nw4r.h"
 #include <rvl/GX.h>
 
 

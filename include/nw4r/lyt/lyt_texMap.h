@@ -1,6 +1,6 @@
 #ifndef NW4R_LYT_TEXMAP_H
 #define NW4R_LYT_TEXMAP_H
-#include "types_nw4r.h"
+#include "common.h"
 #include <rvl/GX.h>
 #include <rvl/TPL/TPL.h>
 

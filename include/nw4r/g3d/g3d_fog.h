@@ -1,8 +1,8 @@
 #ifndef NW4R_G3D_FOG_H
 #define NW4R_G3D_FOG_H
+#include "common.h"
 #include "g3d_rescommon.h"
 #include "math_types.h"
-#include "types_nw4r.h"
 #include "ut_Color.h"
 #include <rvl/GX.h>
 

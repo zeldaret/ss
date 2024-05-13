@@ -7,6 +7,7 @@ extern "C" {
 #endif
 
 GX_DECL_PUBLIC_STRUCT(GXTexObj, 32);
+GX_DECL_PUBLIC_STRUCT(GXTlutObj, 12);
 
 void __GXSetSUTexRegs(void);
 

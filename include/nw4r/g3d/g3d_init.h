@@ -1,6 +1,6 @@
 #ifndef NW4R_G3D_INIT_H
 #define NW4R_G3D_INIT_H
-#include "types_nw4r.h"
+#include "common.h"
 #include <rvl/OS.h>
 
 namespace nw4r {

@@ -56,8 +56,12 @@ typedef struct _GXLightObjImpl {
 } GXLightObjImpl;
 
 typedef struct _GXTexObjImpl {
-    u8 todo;
+    u8 todo[0x20];
 } GXTexObjImpl;
+
+typedef struct _GXTlutObjImpl {
+    u8 todo[0xC];
+} GXTlutObjImpl;
 
 #ifdef __cplusplus
 }

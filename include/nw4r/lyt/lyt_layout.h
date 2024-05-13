@@ -1,7 +1,7 @@
 #ifndef NW4R_LYT_LAYOUT_H
 #define NW4R_LYT_LAYOUT_H
-#include "types_nw4r.h"
-#include <new>
+#include "common.h"
+#include <new.h>
 #include <rvl/MEM/mem_allocator.h>
 
 namespace nw4r {
@@ -19,11 +19,13 @@ struct Layout {
 
     template <typename T>
     static void DeleteArray(T *p, size_t n) {
-        for (size_t i = 0; i < n; i++) {
-            p[i].~T();
-        }
+        if (p) {
+            for (size_t i = 0; i < n; i++) {
+                p[i].~T();
+            }
 
-        FreeMemory(p);
+            FreeMemory(p);
+        }
     }
 
     template <typename T>

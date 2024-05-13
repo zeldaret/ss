@@ -27,6 +27,7 @@
         "xtr1common": "cpp",
         "limits": "cpp",
         "utility": "cpp",
-        "initializer_list": "cpp"
+        "initializer_list": "cpp",
+        "new": "cpp"
     }
 }
