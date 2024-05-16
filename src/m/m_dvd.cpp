@@ -150,7 +150,7 @@ mDvd_param_c *mDvd_param_c::mInstance;
 
 /** 802ef0d0 */
 mDvd_command_c::~mDvd_command_c() {
-    waitDone();
+    waitUntilDone();
 }
 
 /** 802ef130 */
@@ -287,10 +287,10 @@ extern "C" void fn_802EF480(mDvd_command_c *cmd) {
 
 /** 802ef4a0 */
 void mDvd_command_c::destroy(mDvd_command_c **cmd) {
-    if (cmd != nullptr && *cmd != nullptr) {
+    // TODO fake match, this looks like an inlined dtor
+    if (cmd != nullptr && cmd != nullptr && *cmd != nullptr) {
         (*cmd)->doClear();
-        // TODO
-        delete *cmd;
+        fn_802EF480(*cmd);
         *cmd = nullptr;
     }
 }
