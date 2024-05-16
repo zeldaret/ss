@@ -38,8 +38,6 @@ public:
     virtual void Destruct() const {}
 };
 
-class MyThread_c;
-
 TUncompressInfo_Base_c *findUncompressInfo(u8 type);
 
 void create(int priority, EGG::Heap *commandHeap, EGG::Heap *archiveHeap, EGG::Heap *threadHeap);
