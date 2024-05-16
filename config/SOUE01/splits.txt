@@ -213,6 +213,14 @@ m/m_angle.cpp:
 	.ctors      start:0x804DB8CC end:0x804DB8D0
 	.sbss       start:0x80575C08 end:0x80575C10
 
+m/m_dvd.cpp:
+	.text       start:0x802EEBA0 end:0x802F0494
+	.ctors      start:0x804DB8D0 end:0x804DB8D4
+	.data       start:0x80542870 end:0x80542968
+	.sdata      start:0x80573FD0 end:0x80573FF8
+	.sbss       start:0x80575C10 end:0x80575C38
+	.bss        start:0x805B85C0 end:0x805CB078
+
 m/m_heap.cpp:
 	.text       start:0x802F0F00 end:0x802F1660
 	.rodata     start:0x804F0570 end:0x804F0580
