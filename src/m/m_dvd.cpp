@@ -13,11 +13,11 @@
 
 namespace mDvd {
 
-TUncompressInfo_c<EGG::StreamDecompSZS> DECOMP_SZS(3, ".szs");
-TUncompressInfo_c<EGG::StreamDecompLZ> DECOMP_LZ(5, ".LZ");
-TUncompressInfo_c<EGG::StreamDecompLH> DECOMP_LH(7, ".LH");
-TUncompressInfo_c<EGG::StreamDecompLRC> DECOMP_LRC(8, ".LRC");
-TUncompressInfo_c<EGG::StreamDecompRL> DECOMP_RL(4, ".RL");
+TUncompressInfo_c<EGG::StreamDecompSZS> s_UncompressInfoSZS(3, ".szs");
+TUncompressInfo_c<EGG::StreamDecompLZ> s_UncompressInfoLZ(5, ".LZ");
+TUncompressInfo_c<EGG::StreamDecompLH> s_UncompressInfoLH(7, ".LH");
+TUncompressInfo_c<EGG::StreamDecompLRC> s_UncompressInfoLRC(8, ".LRC");
+TUncompressInfo_c<EGG::StreamDecompRL> s_UncompressInfoRL(4, ".RL");
 
 // TODO This the space within which the actual decompressors
 // are allocated.
@@ -28,7 +28,7 @@ char decompressor_alloc_space[0x9930];
 mDvd_param_c DVD_MANAGER;
 
 TUncompressInfo_Base_c *decompressorPtrs[1] = {
-        &DECOMP_LZ,
+        &s_UncompressInfoLZ,
 };
 
 u8 g_mountDirection = 1;
@@ -38,11 +38,11 @@ void *somePtr;
 u32 someNumber;
 TUncompressInfo_Base_c **compressors_ptr;
 TUncompressInfo_Base_c **compressors_last;
-OSThread *sOsThread;
-mDvd::MyThread_c *sThread;
-EGG::Heap *sCommandHeap;
-EGG::Heap *sArchiveHeap;
-bool isAutoStreamDecomp;
+OSThread *l_OSThread;
+mDvd::MyThread_c *l_MyThread;
+EGG::Heap *l_CommandHeap;
+EGG::Heap *l_ArchiveHeap;
+bool l_IsAutoStreamDecomp;
 
 /** 802eece0 */
 extern "C" void fn_802EECE0(TUncompressInfo_Base_c **ptr, TUncompressInfo_Base_c **last) {
@@ -88,11 +88,11 @@ void deleteUncompressObj(u8 type) {
 }
 
 OSThread *getOSThread() {
-    return sOsThread;
+    return l_OSThread;
 }
 
 EGG::Heap *getArchiveHeap() {
-    return sArchiveHeap;
+    return l_ArchiveHeap;
 }
 
 /** 802eee10 */
@@ -111,15 +111,15 @@ void *MyThread_c::run() {
 
 /** 802eeea0 */
 void create(int priority, EGG::Heap *commandHeap, EGG::Heap *archiveHeap, EGG::Heap *threadHeap) {
-    sCommandHeap = commandHeap;
-    sArchiveHeap = archiveHeap;
+    l_CommandHeap = commandHeap;
+    l_ArchiveHeap = archiveHeap;
     mDvd::MyThread_c *thread = new (threadHeap, 0x04) mDvd::MyThread_c(priority, threadHeap);
-    sThread = thread;
-    sOsThread = thread->getMyOsThread();
+    l_MyThread = thread;
+    l_OSThread = thread->getMyOsThread();
     if (mHeap::g_assertHeap != nullptr) {
         thread->setThreadHeap((EGG::Heap *)mHeap::g_assertHeap);
     }
-    OSResumeThread(sThread->getMyOsThread());
+    OSResumeThread(l_MyThread->getMyOsThread());
 }
 
 /** 802eef30 */
@@ -180,11 +180,11 @@ mDvd_command_c::~mDvd_command_c() {
 
 /** 802ef130 */
 void *mDvd_command_c::operator new(size_t size) {
-    return EGG::Heap::alloc(size, -4, mDvd::sCommandHeap);
+    return EGG::Heap::alloc(size, -4, mDvd::l_CommandHeap);
 }
 
 void mDvd_command_c::operator delete(void *ptr) {
-    EGG::Heap::free(ptr, mDvd::sCommandHeap);
+    EGG::Heap::free(ptr, mDvd::l_CommandHeap);
 }
 
 /** 802ef150 */
@@ -394,8 +394,8 @@ int findPathWithCompressedExtension(const char *name, u8 *outType) {
                 goto end;
             }
         }
-        // No compressed version found
         *end = '\0';
+        // No compressed version found
         end = strrchr(buf, '/');
         if (end == nullptr) {
             end = buf;
@@ -424,12 +424,12 @@ end:
 
 /** 802ef930 */
 void setAutoStreamDecomp(bool arg) {
-    mDvd::isAutoStreamDecomp = arg;
+    mDvd::l_IsAutoStreamDecomp = arg;
 }
 
 /** 802ef940 */
 bool getAutoStreamDecomp() {
-    return mDvd::isAutoStreamDecomp;
+    return mDvd::l_IsAutoStreamDecomp;
 }
 
 /** 802ef950 */
@@ -476,7 +476,7 @@ u32 mDvd_mountMemArchive_c::execute() {
     void *data;
     EGG::Heap *heap;
 
-    heap = mHeap != nullptr ? mHeap : mDvd::sArchiveHeap;
+    heap = mHeap != nullptr ? mHeap : mDvd::l_ArchiveHeap;
     archive = nullptr;
 
     allocDirection = mMountDirection == 1 ? EGG::DvdRipper::ALLOC_DIR_TOP : EGG::DvdRipper::ALLOC_DIR_BOTTOM;
@@ -573,7 +573,7 @@ extern "C" mDvd_toMainRam_arc_c *fn_802EFE90(EGG::Archive *arc, const char *path
 
 /** 802efec0 */
 u32 mDvd_toMainRam_arc_c::execute() {
-    EGG::Heap *heap = mHeap != nullptr ? mHeap : mDvd::sArchiveHeap;
+    EGG::Heap *heap = mHeap != nullptr ? mHeap : mDvd::l_ArchiveHeap;
     mDataPtr = mArcPtr->getFileFast(mEntryNum, heap, mMountDirection == 1 ? 0x20 : -0x20);
     waitDone();
     return (bool)mDataPtr;
@@ -627,7 +627,7 @@ u32 mDvd_toMainRam_normal_c::execute() {
     // TODO
     u32 p6;
     u32 p7;
-    EGG::Heap *heap = mHeap != nullptr ? mHeap : mDvd::sArchiveHeap;
+    EGG::Heap *heap = mHeap != nullptr ? mHeap : mDvd::l_ArchiveHeap;
     EGG::DvdRipper::EAllocDirection allocDirection =
             mMountDirection == 1 ? EGG::DvdRipper::ALLOC_DIR_TOP : EGG::DvdRipper::ALLOC_DIR_BOTTOM;
     mDataPtr = mDvd::loadToMainRAM(mEntryNum, 0, heap, allocDirection, 0, &p6, &p7, mCompressionType2);
