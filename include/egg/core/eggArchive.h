@@ -40,7 +40,7 @@ public:
     /* 80493760 */ static Archive *findArchive(NANDFileInfo *file);
     /* 804937f0 */ static void appendList(Archive *); // prob private
     /* 80493850 */ static void removeList(Archive *);
-    /* 80493860 */ static Archive *mount(void *data, Heap *heap, s32 align);
+    /* 80493860 */ static Archive *mount(void *data, Heap *heap, int align);
     /* 80493950 */ static Archive *mountFST(void *data, Heap *heap, s32 align);
     /* 80493a40 */ static Archive *mountNandFile(NANDFileInfo *, Heap *heap, s32 align);
     /* 80493ac0 */ static Archive *loadFST(const char *fileName, Heap *heap, s32 align);
