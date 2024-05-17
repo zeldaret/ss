@@ -59,7 +59,6 @@ public:
     virtual void onComplete();
 
     void doClear();
-    void done();
     void waitDone();
     void waitUntilDone();
     static void destroy(mDvd_command_c **cmd);

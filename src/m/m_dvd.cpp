@@ -193,7 +193,7 @@ void mDvd_command_c::doClear() {
 }
 
 /** 802ef170 */
-void mDvd_command_c::done() {}
+void mDvd_command_c::onComplete() {}
 
 void mDvd_command_c::waitDone() {
     mStatus = 1;
