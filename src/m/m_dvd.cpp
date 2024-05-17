@@ -25,8 +25,9 @@ char likely_align[0x7A04];
 char more_empty_space[0x1638];
 char decompressor_alloc_space[0x9930];
 
-mDvd_param_c DVD_MANAGER;
+mDvd_param_c l_param;
 
+// unofficial
 TUncompressInfo_Base_c *decompressorPtrs[1] = {
         &s_UncompressInfoLZ,
 };
@@ -38,6 +39,7 @@ void *somePtr;
 u32 someNumber;
 TUncompressInfo_Base_c **compressors_ptr;
 TUncompressInfo_Base_c **compressors_last;
+// official
 OSThread *l_OSThread;
 mDvd::MyThread_c *l_MyThread;
 EGG::Heap *l_CommandHeap;
