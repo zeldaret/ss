@@ -445,8 +445,7 @@ int ConvertPathToEntrynum(const char *path, u8 *outType) {
     return num;
 }
 
-// TODO This thunk needs to not be inlined!
-/** 802ef950 */
+/** 802ef9d0 */
 int ConvertPathToEntrynum_Thunk(const char *path, u8 *outType) {
     return ConvertPathToEntrynum(path, outType);
 }
@@ -588,7 +587,7 @@ mDvd_toMainRam_normal_c::mDvd_toMainRam_normal_c(int mountDirection) : mDvd_toMa
 /** 802eff90 */
 mDvd_toMainRam_normal_c *mDvd_toMainRam_normal_c::create(const char *path, int mountDirection, EGG::Heap *heap) {
     u8 type;
-    int entryNum = ConvertPathToEntrynum(path, &type);
+    int entryNum = ConvertPathToEntrynum_Thunk(path, &type);
     mDvd_toMainRam_normal_c *cmd;
     if (entryNum == -1) {
         cmd = nullptr;
