@@ -126,7 +126,7 @@ void create(int priority, EGG::Heap *commandHeap, EGG::Heap *archiveHeap, EGG::H
 
 /** 802eef30 */
 void *loadToMainRAM(int entryNum, char *dst, EGG::Heap *heap, EGG::DvdRipper::EAllocDirection allocDir, s32 offset,
-        u32 *p6, u32 *p7, u32 decompressorType) {
+        u32 *outAmountRead, u32 *outFileSize, u32 decompressorType) {
     void *result;
     u32 amountRead = 0;
     u32 fileSize = 0;
@@ -152,11 +152,11 @@ void *loadToMainRAM(int entryNum, char *dst, EGG::Heap *heap, EGG::DvdRipper::EA
         result = EGG::DvdRipper::loadToMainRAM(entryNum, (u8 *)dst, heap, allocDir, offset, &amountRead, &fileSize);
     }
 
-    if (p6 != nullptr) {
-        *p6 = amountRead;
+    if (outAmountRead != nullptr) {
+        *outAmountRead = amountRead;
     }
-    if (p7 != nullptr) {
-        *p7 = fileSize;
+    if (outFileSize != nullptr) {
+        *outFileSize = fileSize;
     }
     return result;
 }
@@ -167,8 +167,7 @@ int ConvertPathToEntrynum(const char *path) {
 
 u32 IsExistPath(const char *path) {
     u32 entry = ConvertPathToEntrynum(path);
-    // TODO fake match
-    return (((-entry - 1) | (entry + 1)) >> 0x1f);
+    return entry != -1;
 }
 
 } // namespace mDvd
@@ -374,9 +373,9 @@ mDvd_mountMemArchive_c::mDvd_mountMemArchive_c(int mountDirection) {
 
 /** 802ef7c0 */
 int findPathWithCompressedExtension(const char *name, u8 *outType) {
-    // TODO regswap
-    int num;
+    // TODO regshuffle
     u8 type;
+    int num;
     char buf[256];
     mDvd::TUncompressInfo_Base_c **ptr;
 
@@ -393,7 +392,7 @@ int findPathWithCompressedExtension(const char *name, u8 *outType) {
             num = DVDConvertPathToEntrynum(buf);
             if (num != -1) {
                 type = (*ptr)->mType;
-                goto end;
+                goto out;
             }
         }
         *end = '\0';
@@ -410,14 +409,14 @@ int findPathWithCompressedExtension(const char *name, u8 *outType) {
                 num = DVDConvertPathToEntrynum(buf);
                 if (num != -1) {
                     type = (*ptr)->mType;
-                    goto end;
+                    goto out;
                 }
             }
             *end = '\0';
         }
     }
 
-end:
+out:
     if (num != -1 && outType != nullptr) {
         *outType = type;
     }
@@ -526,8 +525,8 @@ mDvd_toMainRam_base_c::mDvd_toMainRam_base_c(int mountDirection) {
     }
     mMountDirection = mountDirection;
     mDataPtr = nullptr;
-    field_0x10 = 0;
-    field_0x14 = 0;
+    mAmountRead = 0;
+    mFileSize = 0;
     mHeap = nullptr;
 }
 
@@ -625,16 +624,15 @@ mDvd_toMainRam_normal_c::~mDvd_toMainRam_normal_c() {}
 
 /** 802f0110 */
 u32 mDvd_toMainRam_normal_c::execute() {
-    // TODO
-    u32 p6;
-    u32 p7;
+    u32 amountRead;
+    u32 fileSize;
     EGG::Heap *heap = mHeap != nullptr ? mHeap : mDvd::l_ArchiveHeap;
     EGG::DvdRipper::EAllocDirection allocDirection =
             mMountDirection == 1 ? EGG::DvdRipper::ALLOC_DIR_TOP : EGG::DvdRipper::ALLOC_DIR_BOTTOM;
-    mDataPtr = mDvd::loadToMainRAM(mEntryNum, 0, heap, allocDirection, 0, &p6, &p7, mCompressionType2);
+    mDataPtr = mDvd::loadToMainRAM(mEntryNum, 0, heap, allocDirection, 0, &amountRead, &fileSize, mCompressionType2);
     if (mDataPtr != nullptr) {
-        field_0x10 = p6;
-        field_0x14 = p7;
+        mAmountRead = amountRead;
+        mFileSize = fileSize;
     }
     waitDone();
     return (bool)mDataPtr;

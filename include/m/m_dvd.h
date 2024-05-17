@@ -110,8 +110,8 @@ public:
     virtual u32 execute() = 0;
 
     void *mDataPtr;
-    int field_0x10;
-    u32 field_0x14;
+    int mAmountRead;
+    u32 mFileSize;
     EGG::Heap *mHeap;
 };
 
