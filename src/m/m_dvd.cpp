@@ -368,7 +368,7 @@ mDvd_mountMemArchive_c::mDvd_mountMemArchive_c(int mountDirection) {
     mEntryNum = -1;
     mDataPtr = nullptr;
     mHeap = nullptr;
-    field_0x18 = 0;
+    mAmountRead = 0;
 }
 
 /** 802ef7c0 */
@@ -480,7 +480,7 @@ u32 mDvd_mountMemArchive_c::execute() {
     archive = nullptr;
 
     allocDirection = mMountDirection == 1 ? EGG::DvdRipper::ALLOC_DIR_TOP : EGG::DvdRipper::ALLOC_DIR_BOTTOM;
-    data = mDvd::loadToMainRAM(mEntryNum, nullptr, heap, allocDirection, 0, &field_0x18, 0, mCompressionType);
+    data = mDvd::loadToMainRAM(mEntryNum, nullptr, heap, allocDirection, 0, &mAmountRead, 0, mCompressionType);
     if (data != nullptr) {
         archive = EGG::Archive::mount(data, heap, mMountDirection == 1 ? 4 : -4);
     }
@@ -491,7 +491,7 @@ u32 mDvd_mountMemArchive_c::execute() {
         if (data != nullptr) {
             delete data;
         }
-        field_0x18 = 0;
+        mAmountRead = 0;
     }
     waitDone();
     return (bool)mDataPtr;

@@ -100,7 +100,7 @@ public:
     int mEntryNum;
     EGG::Archive *mDataPtr;
     EGG::Heap *mHeap;
-    u32 field_0x18;
+    u32 mAmountRead;
 };
 
 class mDvd_toMainRam_base_c : public mDvd_command_c {
