@@ -5,7 +5,7 @@
 #include <egg/core/eggThread.h>
 #include <m/m_heap.h>
 
-// TODO onComplete -> doClear?
+void unk_initDecompressors();
 
 namespace mDvd {
 
@@ -35,6 +35,8 @@ public:
 };
 
 void create(int priority, EGG::Heap *commandHeap, EGG::Heap *archiveHeap, EGG::Heap *threadHeap);
+int ConvertPathToEntrynum(const char *path);
+u32 IsExistPath(const char *path);
 
 OSThread *getOSThread();
 EGG::Heap *getArchiveHeap();

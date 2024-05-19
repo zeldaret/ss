@@ -49,14 +49,14 @@ EGG::Heap *l_ArchiveHeap;
 bool l_IsAutoStreamDecomp;
 
 /** 802eece0 */
-extern "C" void fn_802EECE0(TUncompressInfo_Base_c **ptr, TUncompressInfo_Base_c **last) {
+static void unk_setDecompressorPtrs(TUncompressInfo_Base_c **ptr, TUncompressInfo_Base_c **last) {
     compressors_ptr = ptr;
     compressors_last = last;
 }
 
 /** 802eecf0 */
-extern "C" void fn_802EECF0() {
-    fn_802EECE0(decompressorPtrs, &decompressorPtrs[1]);
+void unk_initDecompressors() {
+    unk_setDecompressorPtrs(decompressorPtrs, &decompressorPtrs[1]);
     somePtr = decompressor_alloc_space;
     someNumber = 0x24;
 }
@@ -163,11 +163,11 @@ static void *loadToMainRAM(int entryNum, char *dst, EGG::Heap *heap, EGG::DvdRip
     return result;
 }
 
-static int ConvertPathToEntrynum(const char *path) {
+int ConvertPathToEntrynum(const char *path) {
     return ::ConvertPathToEntrynum(path, nullptr);
 }
 
-static u32 IsExistPath(const char *path) {
+u32 IsExistPath(const char *path) {
     u32 entry = ConvertPathToEntrynum(path);
     return entry != -1;
 }
