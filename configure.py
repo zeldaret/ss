@@ -352,6 +352,7 @@ config.libs = [
     nw4rLib(
         "lyt",
         [
+            Object(Matching, "nw4r/lyt/lyt_resourceAccessor.cpp"),
             Object(Matching, "nw4r/lyt/lyt_arcResourceAccessor.cpp"),
             Object(Matching, "nw4r/lyt/lyt_common.cpp"),
         ], [""]
