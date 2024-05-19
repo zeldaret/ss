@@ -5,10 +5,6 @@
 #include <egg/core/eggThread.h>
 #include <m/m_heap.h>
 
-// TODO these are scattered
-int findPathWithCompressedExtension(const char *name, u8 *outType);
-int ConvertPathToEntrynum(const char *path, u8 *outType);
-
 // TODO onComplete -> doClear?
 
 namespace mDvd {
@@ -38,13 +34,7 @@ public:
     virtual void Destruct() const {}
 };
 
-TUncompressInfo_Base_c *findUncompressInfo(u8 type);
-
 void create(int priority, EGG::Heap *commandHeap, EGG::Heap *archiveHeap, EGG::Heap *threadHeap);
-void *loadToMainRAM(u32 entryNum, char *dst, EGG::Heap *heap, EGG::DvdRipper::EAllocDirection allocDir, u32 offset, u32 *p6, u32 *p7,
-        u32 decompressorType);
-
-u32 IsExistPath(const char *path);
 
 OSThread *getOSThread();
 EGG::Heap *getArchiveHeap();
@@ -56,9 +46,9 @@ public:
     virtual ~mDvd_command_c();
 
     virtual u32 execute() = 0;
-    virtual void onComplete();
+    virtual void doClear();
 
-    void doClear();
+    void done();
     void waitDone();
     void waitUntilDone();
     static void destroy(mDvd_command_c **cmd);
@@ -92,7 +82,7 @@ public:
     mDvd_mountMemArchive_c(int mountDirection);
     virtual ~mDvd_mountMemArchive_c();
     virtual u32 execute();
-    virtual void onComplete();
+    virtual void doClear();
 
     static mDvd_mountMemArchive_c *create(const char *path, u8 mountDirection, EGG::Heap *heap);
     void *getArcBinary();
@@ -133,7 +123,7 @@ public:
     mDvd_toMainRam_normal_c(int mountDirection);
     ~mDvd_toMainRam_normal_c();
     virtual u32 execute();
-    virtual void onComplete();
+    virtual void doClear();
 
     static mDvd_toMainRam_normal_c *create(const char *path, int mountDirection, EGG::Heap *heap);
     static void create2(mDvd_toMainRam_normal_c **cmd, const char *path, int mountDirection, EGG::Heap *heap);

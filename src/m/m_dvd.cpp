@@ -11,6 +11,8 @@
 #include <MSL_C/string.h>
 // clang-format on
 
+static int ConvertPathToEntrynum(const char *path, u8 *outType);
+
 namespace mDvd {
 
 TUncompressInfo_c<EGG::StreamDecompSZS> s_UncompressInfoSZS(3, ".szs");
@@ -60,7 +62,7 @@ extern "C" void fn_802EECF0() {
 }
 
 /** 802eed30 */
-TUncompressInfo_Base_c *findUncompressInfo(u8 type) {
+static TUncompressInfo_Base_c *findUncompressInfo(u8 type) {
     TUncompressInfo_Base_c **ptr = compressors_ptr;
     while (ptr != compressors_last) {
         if ((*ptr)->mType == type) {
@@ -72,7 +74,7 @@ TUncompressInfo_Base_c *findUncompressInfo(u8 type) {
 }
 
 /** 802eed70 */
-EGG::StreamDecomp *newUncompressObj(u8 type) {
+static EGG::StreamDecomp *newUncompressObj(u8 type) {
     TUncompressInfo_Base_c *factory = findUncompressInfo(type);
     if (factory != nullptr) {
         return factory->Construct();
@@ -82,7 +84,7 @@ EGG::StreamDecomp *newUncompressObj(u8 type) {
 }
 
 /** 802eedb0 */
-void deleteUncompressObj(u8 type) {
+static void deleteUncompressObj(u8 type) {
     TUncompressInfo_Base_c *factory = findUncompressInfo(type);
     if (factory != nullptr) {
         factory->Destruct();
@@ -125,7 +127,7 @@ void create(int priority, EGG::Heap *commandHeap, EGG::Heap *archiveHeap, EGG::H
 }
 
 /** 802eef30 */
-void *loadToMainRAM(int entryNum, char *dst, EGG::Heap *heap, EGG::DvdRipper::EAllocDirection allocDir, s32 offset,
+static void *loadToMainRAM(int entryNum, char *dst, EGG::Heap *heap, EGG::DvdRipper::EAllocDirection allocDir, s32 offset,
         u32 *outAmountRead, u32 *outFileSize, u32 decompressorType) {
     void *result;
     u32 amountRead = 0;
@@ -161,11 +163,11 @@ void *loadToMainRAM(int entryNum, char *dst, EGG::Heap *heap, EGG::DvdRipper::EA
     return result;
 }
 
-int ConvertPathToEntrynum(const char *path) {
+static int ConvertPathToEntrynum(const char *path) {
     return ::ConvertPathToEntrynum(path, nullptr);
 }
 
-u32 IsExistPath(const char *path) {
+static u32 IsExistPath(const char *path) {
     u32 entry = ConvertPathToEntrynum(path);
     return entry != -1;
 }
@@ -189,12 +191,12 @@ void mDvd_command_c::operator delete(void *ptr) {
 }
 
 /** 802ef150 */
-void mDvd_command_c::doClear() {
-    onComplete();
+void mDvd_command_c::done() {
+    doClear();
 }
 
 /** 802ef170 */
-void mDvd_command_c::onComplete() {}
+void mDvd_command_c::doClear() {}
 
 void mDvd_command_c::waitDone() {
     mStatus = 1;
@@ -315,7 +317,7 @@ extern "C" void fn_802EF480(mDvd_command_c *cmd) {
 void mDvd_command_c::destroy(mDvd_command_c **cmd) {
     // TODO fake match, this looks like an inlined dtor
     if (cmd != nullptr && cmd != nullptr && *cmd != nullptr) {
-        (*cmd)->doClear();
+        (*cmd)->done();
         fn_802EF480(*cmd);
         *cmd = nullptr;
     }
@@ -434,7 +436,7 @@ bool getAutoStreamDecomp() {
 }
 
 /** 802ef950 */
-int ConvertPathToEntrynum(const char *path, u8 *outType) {
+static int ConvertPathToEntrynum(const char *path, u8 *outType) {
     int num = DVDConvertPathToEntrynum(path);
     if (num != -1) {
         if (outType != nullptr) {
@@ -447,7 +449,7 @@ int ConvertPathToEntrynum(const char *path, u8 *outType) {
 }
 
 /** 802ef9d0 */
-int ConvertPathToEntrynum_Thunk(const char *path, u8 *outType) {
+static int ConvertPathToEntrynum_Thunk(const char *path, u8 *outType) {
     return ConvertPathToEntrynum(path, outType);
 }
 
@@ -507,7 +509,7 @@ void *mDvd_mountMemArchive_c::getArcBinary() {
 }
 
 /** 802efba0 */
-void mDvd_mountMemArchive_c::onComplete() {
+void mDvd_mountMemArchive_c::doClear() {
     if (mDataPtr != nullptr) {
         void *data = mDataPtr->mHandle.header;
         mDataPtr->unmount();
@@ -639,7 +641,7 @@ u32 mDvd_toMainRam_normal_c::execute() {
 }
 
 /** 802f01b0 */
-void mDvd_toMainRam_normal_c::onComplete() {
+void mDvd_toMainRam_normal_c::doClear() {
     if (mDataPtr == nullptr) {
         return;
     }
