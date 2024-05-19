@@ -10,8 +10,15 @@ force_active: [
   "ProcessTab__Q34nw4r2ut19TagProcessorBase<c>FPQ34nw4r2ut15PrintContext<c>",
   "ProcessLinefeed__Q34nw4r2ut19TagProcessorBase<w>FPQ34nw4r2ut15PrintContext<w>",
   "ProcessTab__Q34nw4r2ut19TagProcessorBase<w>FPQ34nw4r2ut15PrintContext<w>",
-  # "RemoveResourceBuffer__Q44nw4r2ut6detail11ResFontBaseFv",
   "RemoveResource__Q34nw4r2ut7ResFontFv",
+  "Set__Q34nw4r3lyt15ArcResourceLinkFPvPCc",
+  "__ct__Q34nw4r3lyt24MultiArcResourceAccessorFv",
+  "__dt__Q34nw4r3lyt24MultiArcResourceAccessorFv",
+  "Attach__Q34nw4r3lyt24MultiArcResourceAccessorFPQ34nw4r3lyt15ArcResourceLink",
+  "GetResource__Q34nw4r3lyt24MultiArcResourceAccessorFUlPCcPUl",
+  "RegistFont__Q34nw4r3lyt24MultiArcResourceAccessorFPQ34nw4r3lyt11FontRefLink",
+  "GetFont__Q34nw4r3lyt24MultiArcResourceAccessorFPCc",
+
 ]
 # modules:
 # - object: orig/SOUE01/rels/d_a_asura_bulletNP.rel

@@ -81,9 +81,9 @@ typedef struct ARCEntry {
 
 typedef struct ARCDirEntry {
     ARCHandle *handle; // at 0x0
-    u32 path_begin;    // at 0x4
-    u32 path_it;       // at 0x8
-    u32 path_end;      // at 0xC
+    u32 entryNum;      // at 0x4
+    BOOL isDir;        // at 0x8
+    const char *name;  // at 0xC
 } ARCDirEntry;
 
 BOOL ARCGetCurrentDir(ARCHandle *handle, char *string, u32 maxlen);
@@ -96,9 +96,9 @@ s32 ARCGetStartOffset(ARCFileInfo *info);
 u32 ARCGetLength(ARCFileInfo *info);
 BOOL ARCClose(ARCFileInfo *info);
 BOOL ARCChangeDir(ARCHandle *info, const char *path);
-BOOL ARCOpenDir(ARCHandle *info, const char *path, ARCDirEntry *dir);
-BOOL ARCReadDir(ARCDirEntry *dir, ARCEntry *entry);
-BOOL ARCCloseDir(ARCDirEntry *dir);
+BOOL ARCOpenDir(ARCHandle *info, const char *path, ARCDir *dir);
+BOOL ARCReadDir(ARCDir *dir, ARCDirEntry *entry);
+BOOL ARCCloseDir(ARCDir *dir);
 
 #ifdef __cplusplus
 }

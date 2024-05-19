@@ -203,6 +203,7 @@ cflags_nw4r = [
     *cflags_base,
     "-ipa file",
     "-fp_contract off",
+    
 ]
 
 # REL flags
@@ -248,11 +249,11 @@ def EGGLib(lib_name, objects):
     }
 
 
-def nw4rLib(lib_name, objects):
+def nw4rLib(lib_name, objects, extra_cflags=[]):
     return {
         "lib": lib_name,
         "mw_version": "Wii/1.1", # most seem to be around 1.2, snd is 1.6
-        "cflags": cflags_nw4r,
+        "cflags": cflags_nw4r + extra_cflags,
         "host": False,
         "objects": objects,
     }
@@ -351,8 +352,9 @@ config.libs = [
     nw4rLib(
         "lyt",
         [
+            Object(Matching, "nw4r/lyt/lyt_arcResourceAccessor.cpp"),
             Object(Matching, "nw4r/lyt/lyt_common.cpp"),
-        ],
+        ], [""]
     ),
     # EGG
     EGGLib(
