@@ -80,8 +80,6 @@ struct DynamicModuleControl : DynamicModuleControlBase {
     UNKWORD unk2;
     UNKWORD unk3;
     UNKWORD unk4;
-    UNKWORD unk5;
-    UNKWORD unk6;
 
     static u32 sAllocBytes;
     static mDvd_toMainRam_base_c *sDvdFile;

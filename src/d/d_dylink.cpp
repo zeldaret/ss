@@ -1,4 +1,5 @@
 #include <common.h>
+#include <DynamicLink.h>
 #include <d/d_dylink.h>
 #include <m/m_dvd.h>
 #include <m/m_heap.h>
@@ -9,44 +10,6 @@
 struct RelNamePtr {
     u16 relId;
     const char *name;
-};
-
-struct DynamicModuleControl {
-    u16 loadCount;
-
-    DynamicModuleControl *mpPrev;
-    DynamicModuleControl *mpNext;
-
-    DynamicModuleControl(const char *name, EGG::Heap *heap);
-    virtual ~DynamicModuleControl();
-    virtual const char *getModuleName();
-    virtual UNKWORD getModuleSize();
-    virtual const char *getModuleTypeString();
-    virtual void dump();
-    virtual bool do_load();
-    virtual bool do_load_async();
-    virtual bool do_unload();
-    virtual bool do_link();
-    virtual bool do_unlink();
-
-    bool link();
-    bool unlink();
-    bool load_async();
-
-    void *rel;
-    void *bss;
-    bool dataFromProlog;
-    const char *name;
-    bool includesType;
-    mDvd_callback_c *dvdCallbackRequest;
-    EGG::Heap *heap;
-    bool relMapFile;
-    UNKWORD unk1;
-    UNKWORD unk2;
-    UNKWORD unk3;
-    UNKWORD unk4;
-    UNKWORD unk5;
-    UNKWORD unk6;
 };
 
 static RelNamePtr *pDynamicNameTable;
@@ -98,7 +61,7 @@ extern "C" int fn_80052E00(int maxRelId, RelNamePtr *dynNameTable, int dynNameTa
 
 // isLoaded?
 extern "C" bool fn_80052FA0(u16 relId) {
-    return pDMC[relId] != nullptr ? (bool)pDMC[relId]->loadCount : true;
+    return pDMC[relId] != nullptr ? pDMC[relId]->isLinked() : true;
 }
 
 bool dDyl::Unlink(u16 relId) {
@@ -118,6 +81,7 @@ extern "C" int fn_80052FF0(u16 relId) {
     DynamicModuleControl *dmc = pDMC[relId];
     if (dmc != nullptr) {
         if (dmc->load_async()) {
+            // what is going on here?
             return (bool)dmc->link() + 2;
         } else {
             return 0;
