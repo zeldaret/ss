@@ -222,7 +222,7 @@ BOOL DynamicModuleControl::do_link() {
 
     if (mModule != nullptr) {
         int alignedFixSize = ROUND_UP(mModule->fixSize, 0x20);
-        int alignedFixPtr = (int)&mModule->info + alignedFixSize;
+        int alignedFixPtr = (int)mModule + alignedFixSize;
         int totalSize = EGG::ExpHeap::getSizeForMBlock(mModule);
         BOOL result;
         if (totalSize == 0) {
