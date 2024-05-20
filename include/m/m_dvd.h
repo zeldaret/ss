@@ -1,6 +1,8 @@
 #ifndef M_DVD_H
 #define M_DVD_H
 
+#include <egg/core/eggArchive.h>
+#include <egg/core/eggDecomp.h>
 #include <egg/core/eggHeap.h>
 #include <egg/core/eggThread.h>
 #include <m/m_heap.h>
@@ -64,19 +66,19 @@ public:
     u8 mCompressionType;
 };
 
-typedef void *(*dvdReadCallback)(void *);
+typedef bool (*dvdReadCallback)(void *);
 
-class mDvdCommandReadCallback_c : public mDvd_command_c {
+class mDvd_callback_c : public mDvd_command_c {
 public:
-    mDvdCommandReadCallback_c(dvdReadCallback cb, void *cbData);
-    virtual ~mDvdCommandReadCallback_c();
+    mDvd_callback_c(dvdReadCallback cb, void *cbData);
+    virtual ~mDvd_callback_c();
     virtual u32 execute() override;
 
-    static mDvdCommandReadCallback_c *create(dvdReadCallback cb, void *cbData);
+    static mDvd_callback_c *create(dvdReadCallback cb, void *cbData);
 
     dvdReadCallback mCallback;
     void *mCallbackData;
-    void *mDataPtr;
+    BOOL mSuccess;
 };
 
 class mDvd_mountMemArchive_c : public mDvd_command_c {
@@ -175,5 +177,9 @@ public:
     static void *run(mDvd_param_c *dvd);
 };
 } // namespace mDvd
+
+extern "C" void fn_802EF480(mDvd_command_c *cmd);
+extern "C" mDvd_toMainRam_normal_c *fn_802F0030(const char *path, int mountDirection, EGG::Heap *heap);
+extern "C" mDvd_toMainRam_arc_c *fn_802EFE90(EGG::Archive *arc, const char *path, int mountDirection, EGG::Heap *heap);
 
 #endif

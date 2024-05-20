@@ -324,19 +324,18 @@ void mDvd_command_c::destroy(mDvd_command_c **cmd) {
 }
 
 /** 802ef500 */
-mDvdCommandReadCallback_c::~mDvdCommandReadCallback_c() {}
+mDvd_callback_c::~mDvd_callback_c() {}
 
 /** 802ef560 */
-mDvdCommandReadCallback_c::mDvdCommandReadCallback_c(dvdReadCallback cb, void *cbData) {
+mDvd_callback_c::mDvd_callback_c(dvdReadCallback cb, void *cbData) {
     mCallback = cb;
     mCallbackData = cbData;
-    mDataPtr = nullptr;
+    mSuccess = false;
 }
 
 /* 802ef5d0 */
-mDvdCommandReadCallback_c *mDvdCommandReadCallback_c::create(dvdReadCallback cb, void *cbData) {
-    // TODO instshuffle
-    mDvdCommandReadCallback_c *cmd = new mDvdCommandReadCallback_c(cb, cbData);
+mDvd_callback_c *mDvd_callback_c::create(dvdReadCallback cb, void *cbData) {
+    mDvd_callback_c *cmd = new mDvd_callback_c(cb, cbData);
     if (cmd != nullptr) {
         mDvd_param_c::mInstance->addCommand(cmd);
     }
@@ -344,17 +343,17 @@ mDvdCommandReadCallback_c *mDvdCommandReadCallback_c::create(dvdReadCallback cb,
 }
 
 /** 802ef650 */
-extern "C" mDvdCommandReadCallback_c *fn_802EF650(dvdReadCallback cb, void *cbData) {
-    mDvdCommandReadCallback_c *cmd = mDvdCommandReadCallback_c::create(cb, cbData);
+extern "C" mDvd_callback_c *fn_802EF650(dvdReadCallback cb, void *cbData) {
+    mDvd_callback_c *cmd = mDvd_callback_c::create(cb, cbData);
     while (!cmd) {}
     return cmd;
 }
 
 /** 802ef680 */
-u32 mDvdCommandReadCallback_c::execute() {
-    mDataPtr = (mCallback)(mCallbackData);
+u32 mDvd_callback_c::execute() {
+    mSuccess = (mCallback)(mCallbackData);
     waitDone();
-    return (bool)mDataPtr;
+    return (bool)mSuccess;
 }
 
 /** 802ef6e0 */
