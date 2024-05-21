@@ -374,11 +374,11 @@ mDvd_mountMemArchive_c::mDvd_mountMemArchive_c(int mountDirection) {
 
 /** 802ef7c0 */
 int findPathWithCompressedExtension(const char *name, u8 *outType) {
-    // TODO regshuffle
     u8 type;
-    int num;
     char buf[256];
-    mDvd::TUncompressInfo_Base_c **ptr;
+    int num;
+    char *end;
+    int size;
 
     type = 0;
     buf[255] = '\0';
@@ -386,10 +386,11 @@ int findPathWithCompressedExtension(const char *name, u8 *outType) {
 
     strncpy(buf, name, sizeof(buf));
     if (buf[255] == '\0') {
-        char *end = buf + strlen(buf);
+        end = buf + strlen(buf);
+        size = sizeof(buf) - (end - buf);
         // Append the compressor extension and try to find a compressed version
-        for (ptr = mDvd::compressors_ptr; ptr != mDvd::compressors_last; ptr++) {
-            strncpy(end, (*ptr)->mExtension, sizeof(buf) - (end - buf));
+        for (mDvd::TUncompressInfo_Base_c **ptr = mDvd::compressors_ptr; ptr != mDvd::compressors_last; ptr++) {
+            strncpy(end, (*ptr)->mExtension, size);
             num = DVDConvertPathToEntrynum(buf);
             if (num != -1) {
                 type = (*ptr)->mType;
@@ -404,9 +405,10 @@ int findPathWithCompressedExtension(const char *name, u8 *outType) {
         }
         end = strrchr(end, '.');
         if (end != nullptr) {
+            size = sizeof(buf) - (end - buf);
             // Append the compressor extension and try to find a compressed version
-            for (ptr = mDvd::compressors_ptr; ptr != mDvd::compressors_last; ptr++) {
-                strncpy(end, (*ptr)->mExtension, sizeof(buf) - (end - buf));
+            for (mDvd::TUncompressInfo_Base_c **ptr = mDvd::compressors_ptr; ptr != mDvd::compressors_last; ptr++) {
+                strncpy(end, (*ptr)->mExtension, size);
                 num = DVDConvertPathToEntrynum(buf);
                 if (num != -1) {
                     type = (*ptr)->mType;
