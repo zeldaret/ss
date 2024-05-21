@@ -311,10 +311,10 @@ int DynamicModuleControl::getModuleSize() const {
 
 const char *DynamicModuleControl::getModuleTypeString() const {
     static const char *REL_LOAD_TYPES[4] = {
-        "????",
-        "MEM",
-        "ARAM",
-        "DVD",
+            "????",
+            "MEM",
+            "ARAM",
+            "DVD",
     };
     return REL_LOAD_TYPES[mResourceType & 3];
 }
@@ -351,23 +351,24 @@ void DbMapFile::Unregister() {
         unk_0 = 0;
     }
 }
-/*
-// probably part of a different file
-extern "C" void ModuleProlog() {}
+extern "C" {
 
-extern "C" void ModuleEpilog() {}
+void ModuleProlog() {}
 
-extern "C" void ModuleUnresolved() {}
+void ModuleEpilog() {}
 
-extern "C" void ModuleConstructorsX(void (**ptrs)()) {
+void ModuleUnresolved() {}
+
+void ModuleConstructorsX(void (**ptrs)()) {
     for (; *ptrs != nullptr; ptrs++) {
         (*ptrs)();
     }
 }
 
-extern "C" void ModuleDestructorsX(void (**ptrs)()) {
+void ModuleDestructorsX(void (**ptrs)()) {
     for (; *ptrs != nullptr; ptrs++) {
         (*ptrs)();
     }
 }
-*/
+
+}
