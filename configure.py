@@ -281,6 +281,9 @@ config.libs = [
             Object(Matching, "c/c_list.cpp"),
             Object(Matching, "c/c_tree.cpp"),
             Object(Matching, "d/d_base.cpp"),
+            Object(Matching, "d/d_dvd.cpp"),
+            Object(NonMatching, "d/d_dvd_unk.cpp"),
+            Object(NonMatching, "d/d_dylink.cpp"),
             Object(NonMatching, "d/d_heap.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
             Object(NonMatching, "d/d_sys.cpp"),
@@ -301,8 +304,10 @@ config.libs = [
             Object(Matching, "f/f_list.cpp"),
             Object(Matching, "f/f_manager.cpp"),
             Object(Matching, "m/m_angle.cpp"),
+            Object(Matching, "m/m_dvd.cpp"),
             Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
+            Object(Matching, "DynamicLink.cpp"),
             # framework (f_name)
             # d stuff (d_name)
         ],

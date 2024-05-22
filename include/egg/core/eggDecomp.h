@@ -70,7 +70,7 @@ public:
 private:
     // NON-OFFICIAL
     struct SZSCompContext {
-        u8 _[0x18];
+        u8 _[0x14];
         /* 80494e00 */ static u32 getUncompressedSize(const void *src);
         /* 80494e30 */ void init(u32 maxCompSize);
         /* 80494e60 */ static int readSzsHeader(/* unk params*/);

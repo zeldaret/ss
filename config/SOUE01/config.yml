@@ -12,6 +12,11 @@ force_active: [
   "ProcessTab__Q34nw4r2ut19TagProcessorBase<w>FPQ34nw4r2ut15PrintContext<w>",
   # "RemoveResourceBuffer__Q44nw4r2ut6detail11ResFontBaseFv",
   "RemoveResource__Q34nw4r2ut7ResFontFv",
+  "ModuleProlog", 
+  "ModuleEpilog",
+  "ModuleUnresolved",
+  "ModuleConstructorsX",
+  "ModuleDestructorsX",
 ]
 # modules:
 # - object: orig/SOUE01/rels/d_a_asura_bulletNP.rel

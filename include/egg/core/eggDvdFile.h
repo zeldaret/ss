@@ -32,8 +32,8 @@ public:
     /* vt 0x0C | 80494450 */ virtual bool open(const char *path);
     /* vt 0x10 | 804944b0 */ virtual void close();
     /* vt 0x14 | 80494510 */ virtual s32 readData(void *buffer, s32 length, s32 offset);
-    /* vt 0x18 | 804945e0 */ virtual s32 writeData(void *buffer, s32 length, s32 offset);
-    /* vt 0x1C | 80494670 */ virtual u32 getFileSize();
+    /* vt 0x18 | 804945e0 */ virtual s32 writeData(const void *buffer, s32 length, s32 offset);
+    /* vt 0x1C | 80494670 */ virtual u32 getFileSize() const;
     /* vt 0x20 | 804943d0 */ virtual bool open(s32 entryNum);
     /* vt 0x24 | 804944a0 */ virtual bool open(const char *path, void *);
 
