@@ -309,8 +309,8 @@ mDvd_command_c::mDvd_command_c() {
 }
 
 /** 802ef480 */
-extern "C" void fn_802EF480(mDvd_command_c *cmd) {
-    delete cmd;
+void mDvd_command_c::do_delete() {
+    delete this;
 }
 
 /** 802ef4a0 */
@@ -318,7 +318,7 @@ void mDvd_command_c::destroy(mDvd_command_c **cmd) {
     // TODO fake match, this looks like an inlined dtor
     if (cmd != nullptr && cmd != nullptr && *cmd != nullptr) {
         (*cmd)->done();
-        fn_802EF480(*cmd);
+        (*cmd)->do_delete();
         *cmd = nullptr;
     }
 }
@@ -568,7 +568,7 @@ mDvd_toMainRam_arc_c *mDvd_toMainRam_arc_c::create(EGG::Archive *arc, const char
 }
 
 /** 802efe90 */
-extern "C" mDvd_toMainRam_arc_c *fn_802EFE90(EGG::Archive *arc, const char *path, int mountDirection, EGG::Heap *heap) {
+mDvd_toMainRam_arc_c *mDvd_toMainRam_arc_c::createOrFail(EGG::Archive *arc, const char *path, int mountDirection, EGG::Heap *heap) {
     mDvd_toMainRam_arc_c *cmd = mDvd_toMainRam_arc_c::create(arc, path, mountDirection, heap);
     while (!cmd) {}
     return cmd;
@@ -608,7 +608,7 @@ mDvd_toMainRam_normal_c *mDvd_toMainRam_normal_c::create(const char *path, int m
 }
 
 /** 802f0030 */
-extern "C" mDvd_toMainRam_normal_c *fn_802F0030(const char *path, int mountDirection, EGG::Heap *heap) {
+mDvd_toMainRam_normal_c *mDvd_toMainRam_normal_c::createOrFail(const char *path, int mountDirection, EGG::Heap *heap) {
     mDvd_toMainRam_normal_c *cmd = mDvd_toMainRam_normal_c::create(path, mountDirection, heap);
     while (!cmd) {}
     return cmd;

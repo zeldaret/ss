@@ -43,7 +43,7 @@ void *loader_c::request(const char *path, u8 mountDirection, EGG::Heap *heap) {
         mpBuffer = mpCommand->mDataPtr;
         mSize = mpCommand->mAmountRead;
         mpCommand->mDataPtr = nullptr;
-        fn_802EF480(mpCommand);
+        mpCommand->do_delete();
         mpCommand = nullptr;
         return mpBuffer;
     } else {

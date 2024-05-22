@@ -7,6 +7,8 @@
 #include <egg/core/eggThread.h>
 #include <m/m_heap.h>
 
+// Note: names are taken from NSMBW where available but a lot are made up
+
 void unk_initDecompressors();
 
 namespace mDvd {
@@ -56,6 +58,7 @@ public:
     void waitDone();
     void waitUntilDone();
     static void destroy(mDvd_command_c **cmd);
+    void do_delete();
 
     void *operator new(size_t size);
     void operator delete(void *ptr);
@@ -117,6 +120,7 @@ public:
 
     static mDvd_toMainRam_arc_c *makeRequest(EGG::Archive *arc, int entryNum, int mountDirection, EGG::Heap *heap);
     static mDvd_toMainRam_arc_c *create(EGG::Archive *arc, const char *path, int mountDirection, EGG::Heap *heap);
+    static mDvd_toMainRam_arc_c *createOrFail(EGG::Archive *arc, const char *path, int mountDirection, EGG::Heap *heap);
 
     EGG::Archive *mArcPtr;
     int mEntryNum;
@@ -130,6 +134,7 @@ public:
     virtual void doClear();
 
     static mDvd_toMainRam_normal_c *create(const char *path, int mountDirection, EGG::Heap *heap);
+    static mDvd_toMainRam_normal_c *createOrFail(const char *path, int mountDirection, EGG::Heap *heap);
     static void create2(mDvd_toMainRam_normal_c **cmd, const char *path, int mountDirection, EGG::Heap *heap);
 
     u8 mCompressionType2;
@@ -177,9 +182,5 @@ public:
     static void *run(mDvd_param_c *dvd);
 };
 } // namespace mDvd
-
-extern "C" void fn_802EF480(mDvd_command_c *cmd);
-extern "C" mDvd_toMainRam_normal_c *fn_802F0030(const char *path, int mountDirection, EGG::Heap *heap);
-extern "C" mDvd_toMainRam_arc_c *fn_802EFE90(EGG::Archive *arc, const char *path, int mountDirection, EGG::Heap *heap);
 
 #endif

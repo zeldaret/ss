@@ -25,17 +25,6 @@ private:
     void* mpBuffer;
 };
 
-class unkstruct_c {
-public:
-    static unkstruct_c *create(EGG::Heap *heap);
-    void init();
-    char getUnk();
-
-private:
-    UNKWORD field_0x0;
-    char field_0x4;
-};
-
 } // dDvd
 
 #endif

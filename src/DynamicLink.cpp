@@ -159,9 +159,9 @@ bool DynamicModuleControl::do_load() {
     snprintf(buf, sizeof(buf), "%s/%sNP.rel", sRelsDir, mName);
     if (mModule == nullptr) {
         if (sArchive != nullptr) {
-            sDvdFile = fn_802EFE90(sArchive, buf, 1, mHeap);
+            sDvdFile = mDvd_toMainRam_arc_c::createOrFail(sArchive, buf, 1, mHeap);
         } else {
-            sDvdFile = fn_802F0030(buf, 1, mHeap);
+            sDvdFile = mDvd_toMainRam_normal_c::createOrFail(buf, 1, mHeap);
         }
 
         if (sDvdFile != nullptr) {
@@ -170,7 +170,7 @@ bool DynamicModuleControl::do_load() {
             void *ptr = sDvdFile->mDataPtr;
             sDvdFile->mDataPtr = nullptr;
             mModule = static_cast<OSModuleHeader *>(ptr);
-            fn_802EF480(sDvdFile);
+            sDvdFile->do_delete();
             sDvdFile = nullptr;
             if (mModule != nullptr) {
                 unk_40 = 0;
@@ -198,7 +198,7 @@ BOOL DynamicModuleControl::do_load_async() {
     }
 
     if (mDvdCallbackRequest != nullptr && mDvdCallbackRequest->mStatus != 0) {
-        fn_802EF480(mDvdCallbackRequest);
+        mDvdCallbackRequest->do_delete();
         mDvdCallbackRequest = nullptr;
         return true;
     } else {
@@ -351,6 +351,7 @@ void DbMapFile::Unregister() {
         unk_0 = 0;
     }
 }
+
 extern "C" {
 
 void ModuleProlog() {}
@@ -370,5 +371,4 @@ void ModuleDestructorsX(void (**ptrs)()) {
         (*ptrs)();
     }
 }
-
 }

@@ -1,6 +1,7 @@
 #ifndef OSLINK_H
 #define OSLINK_H
 
+#include <common.h>
 
 #ifdef __cplusplus
 extern "C" {
