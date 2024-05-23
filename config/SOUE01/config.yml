@@ -58,6 +58,8 @@ modules:
   splits: config/SOUE01/rels/d_a_b_bigboss2NP/splits.txt
   symbols: config/SOUE01/rels/d_a_b_bigboss2NP/symbols.txt
   hash: 34de081c967d3fa3e87335c48b093b9bc487052c
+  block_relocations:
+    - source: .text:0x99C4
 
 - object: orig/SOUE01/rels/d_a_b_bigboss3NP.rel
   splits: config/SOUE01/rels/d_a_b_bigboss3NP/splits.txt

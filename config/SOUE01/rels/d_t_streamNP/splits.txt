@@ -1,0 +1,7 @@
+Sections:
+	.text       type:code align:16
+	.ctors      type:rodata align:4
+	.dtors      type:rodata align:16
+	.rodata     type:rodata align:8
+	.data       type:data align:16
+	.bss        type:bss align:8
