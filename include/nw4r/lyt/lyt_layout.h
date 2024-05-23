@@ -50,7 +50,11 @@ struct Layout {
     template <typename T>
     static T *NewObj() {
         T *obj = (T *)AllocMemory(sizeof(T));
-        return new (obj) T();
+        if (obj) {
+            return new (obj) T();
+        } else {
+            return nullptr;
+        }
     }
 
     static MEMAllocator *mspAllocator;

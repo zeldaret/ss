@@ -9,37 +9,39 @@ namespace nw4r {
 namespace lyt {
 namespace res {
 struct Group {
-    char UNK_0x0[0x8];
-    char mName[NW4R_RES_NAME_SIZE]; // at 0x8
-    u16 SHORT_0x18;
+    DataBlockHeader blockHeader;    // at 0x00 "grp1"
+    char mName[NW4R_RES_NAME_SIZE]; // at 0x08
+    u16 paneNum;                    // at 0x18
+    u16 padding;                    // at 0x1A
 };
 } // namespace res
 
 namespace detail {
 struct PaneLink {
-    ut::LinkListNode mNode; // at 0x0
-    Pane *PANE_0x8;
+    ut::LinkListNode mLink; // at 0x0
+    Pane *mTarget;          // at 0x08
 };
 } // namespace detail
 
 struct Group {
-    Group(const res::Group *, Pane *);
+    Group(const res::Group *pResGroup, Pane *pRootPane);
     virtual ~Group();
-    void AppendPane(Pane *);
+    void AppendPane(Pane *pPane);
     void Init();
 
-    ut::LinkListNode mNode;                      // at 0x4
-    ut::LinkList<detail::PaneLink, 0> mPaneList; // at 0xC
-    char mName[NW4R_RES_NAME_SIZE];              // at 0x18
-    bool mIsUserAllocated;                       // at 0x29
+    ut::LinkListNode mLink;                          // at 0x04
+    ut::LinkList<detail::PaneLink, 0> mPaneListLink; // at 0x0C
+    char mName[NW4R_RES_NAME_SIZE + 1];              // at 0x18
+    bool mbUserAllocated;                            // at 0x29
+    u8 mPadding[2];                                  // at 0x2A
 };
 
 struct GroupContainer {
     ~GroupContainer();
-    void AppendGroup(Group *);
-    Group *FindGroupByName(const char *);
+    void AppendGroup(Group *pGroup);
+    Group *FindGroupByName(const char *findName);
 
-    ut::LinkList<Group, 4> mGroups; // at 0x4
+    ut::LinkList<Group, 4> mGroupList; // at 0x4
 };
 } // namespace lyt
 } // namespace nw4r

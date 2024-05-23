@@ -28,13 +28,13 @@ PaneBase::~PaneBase() {}
 
 NW4R_UT_RTTI_DEF_BASE(Pane);
 
-// 80486a70
 // __ct__Q34nw4r3lyt4PaneFv
 
 // __dt__Q34nw4r2ut38LinkList<Q34nw4r3lyt13AnimationLink,0>Fv
 
 // __dt__Q34nw4r2ut28LinkList<Q34nw4r3lyt4Pane,4>Fv
 
+// 80486a70
 // __ct__Q34nw4r3lyt4PaneFPCQ44nw4r3lyt3res4Pane
 Pane::Pane(const res::Pane *pBlock) : mChildList(), mAnimList(), mSize() {
     this->mpParent = nullptr;
@@ -205,6 +205,8 @@ Material *Pane::FindMaterialByName(const char *findName, bool bRecursive) {
 }
 
 // CalculateMtx__Q34nw4r3lyt4PaneFRCQ34nw4r3lyt8DrawInfo
+// Matches for SS, applying the rotation and scale seems to be different accross versions.
+// Also look out for the Bottom CalculateMtxChild section. In other version this is actually seperated differently
 void Pane::CalculateMtx(const DrawInfo &drawInfo) {
     if (!IsVisible() && !drawInfo.IsInvisiblePaneCalculateMtx()) {
         return;

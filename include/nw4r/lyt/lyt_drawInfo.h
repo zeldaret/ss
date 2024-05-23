@@ -12,6 +12,7 @@ struct DrawInfo {
 
     bool isYAxisUp() const {
         // NYI
+        return false;
     }
     // field accessors
     const math::VEC2 &GetLocationAdjustScale() const {

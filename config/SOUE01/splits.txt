@@ -328,6 +328,10 @@ nw4r/lyt/lyt_pane.cpp:
 	.sbss       start:0x805766F0 end:0x805766F8
 	.sdata2     start:0x8057F220 end:0x8057F240
 
+nw4r/lyt/lyt_group.cpp:
+	.text       start:0x80487EB0 end:0x8048820C
+	.data       start:0x8056E4A8 end:0x8056E4B4
+
 nw4r/lyt/lyt_resourceAccessor.cpp:
 	.text       start:0x80492000 end:0x80492058
 	.data       start:0x8056E7E0 end:0x8056E7F8
