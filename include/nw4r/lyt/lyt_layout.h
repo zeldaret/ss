@@ -41,8 +41,10 @@ struct Layout {
 
     template <typename T>
     static void DeleteObj(T *t) {
-        t->~T();
-        FreeMemory(t);
+        if (t) {
+            t->~T();
+            FreeMemory(t);
+        }
     }
 
     template <typename T>

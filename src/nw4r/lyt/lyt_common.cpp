@@ -146,7 +146,7 @@ void detail::DrawQuad(const math::VEC2 &basePt, const Size &size, u8 texCoordNum
         GXTexCoord2f32(texCoords[i][0].x, texCoords[i][0].y);
     }
 
-    GXPosition2f32(basePt.x + size.x, basePt.y);
+    GXPosition2f32(basePt.x + size.width, basePt.y);
     if (vtxColors != NULL) {
         GXColor1u32(vtxColors[1]);
     }
@@ -154,7 +154,7 @@ void detail::DrawQuad(const math::VEC2 &basePt, const Size &size, u8 texCoordNum
         GXTexCoord2f32(texCoords[i][1].x, texCoords[i][1].y);
     }
 
-    GXPosition2f32(basePt.x + size.x, basePt.y - size.y);
+    GXPosition2f32(basePt.x + size.width, basePt.y - size.height);
     if (vtxColors != NULL) {
         GXColor1u32(vtxColors[3]);
     }
@@ -162,7 +162,7 @@ void detail::DrawQuad(const math::VEC2 &basePt, const Size &size, u8 texCoordNum
         GXTexCoord2f32(texCoords[i][3].x, texCoords[i][3].y);
     }
 
-    GXPosition2f32(basePt.x, basePt.y - size.y);
+    GXPosition2f32(basePt.x, basePt.y - size.height);
     if (vtxColors != NULL) {
         GXColor1u32(vtxColors[2]);
     }

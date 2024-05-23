@@ -239,7 +239,7 @@ void Matrix34f::makeT(const Vector3f &t) {
 }
 
 void Matrix34f::fromQuat(const Quatf &q) {
-    m[0][0] = 1.0f - (2.0f * q.y * q.y) - (2.0f * q.z * q.z);
+    m[0][0] = 1.0f - (2 * q.y * q.y) - (2.0f * q.z * q.z);
     m[0][1] = (2.0f * q.x * q.y) - (2.0f * q.w * q.z);
     m[0][2] = (2.0f * q.x * q.z) + (2.0f * q.w * q.y);
 

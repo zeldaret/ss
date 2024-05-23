@@ -18,6 +18,7 @@ force_active: [
   "GetResource__Q34nw4r3lyt24MultiArcResourceAccessorFUlPCcPUl",
   "RegistFont__Q34nw4r3lyt24MultiArcResourceAccessorFPQ34nw4r3lyt11FontRefLink",
   "GetFont__Q34nw4r3lyt24MultiArcResourceAccessorFPCc",
+  "GetPaneRect__Q34nw4r3lyt4PaneCFRCQ34nw4r3lyt8DrawInfo",
 
 ]
 # modules:

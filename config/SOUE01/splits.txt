@@ -316,6 +316,18 @@ nw4r/db/db_directPrint.cpp:
 	.sbss       start:0x805765E8 end:0x805765EC
 	.bss        start:0x80636B80 end:0x80636BA4
 
+nw4r/lyt/lyt_init.cpp:
+	.text       start:0x80486A70 end:0x80486AC4
+	.data       start:0x8056E3E8 end:0x8056E430
+	.sdata      start:0x80574EB0 end:0x80574EB8
+
+nw4r/lyt/lyt_pane.cpp:
+	.text       start:0x80486AD0 end:0x80487EAC
+	.ctors      start:0x804DB974 end:0x804DB978
+	.data       start:0x8056E430 end:0x8056E4A8
+	.sbss       start:0x805766F0 end:0x805766F8
+	.sdata2     start:0x8057F220 end:0x8057F240
+
 nw4r/lyt/lyt_resourceAccessor.cpp:
 	.text       start:0x80492000 end:0x80492058
 	.data       start:0x8056E7E0 end:0x8056E7F8
