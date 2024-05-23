@@ -8,3 +8,6 @@ Sections:
 
 REL/executor.c:
 	.text       start:0x00000000 end:0x00000064
+
+REL/d/a/obj/d_a_obj_bird_sp.cpp:
+	.text       start:0x00000070 end:0x00000458

@@ -8,3 +8,7 @@ Sections:
 
 REL/executor.c:
 	.text       start:0x00000000 end:0x00000064
+
+REL/d/a/d_a_col_stp.cpp:
+	.text       start:0x00000070 end:0x00001390
+	.ctors      start:0x00000000 end:0x00000004

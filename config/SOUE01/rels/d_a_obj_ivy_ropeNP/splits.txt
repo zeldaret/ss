@@ -13,3 +13,7 @@ REL/global_destructor_chain.c:
 	.text       start:0x00000070 end:0x000000E4
 	.dtors      start:0x00000000 end:0x00000004
 	.bss        start:0x00000000 end:0x00000008
+
+REL/d/a/obj/d_a_obj_ivy_rope.cpp:
+	.text       start:0x000000F0 end:0x0000F2E8
+	.ctors      start:0x00000000 end:0x00000004

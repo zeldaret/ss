@@ -8,3 +8,7 @@ Sections:
 
 REL/executor.c:
 	.text       start:0x00000000 end:0x00000064
+
+REL/d/t/d_t_effect_gen.cpp:
+	.text       start:0x00000070 end:0x00000700
+	.ctors      start:0x00000000 end:0x00000004
