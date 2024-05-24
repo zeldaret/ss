@@ -1,0 +1,17 @@
+_prolog = .text:0x00000000; // type:function size:0x2C scope:global
+_epilog = .text:0x00000030; // type:function size:0x2C scope:global
+_unresolved = .text:0x00000060; // type:function size:0x4 scope:global
+fn_571_70 = .text:0x00000070; // type:function size:0xFC
+fn_571_170 = .text:0x00000170; // type:function size:0x1C
+fn_571_190 = .text:0x00000190; // type:function size:0x4
+fn_571_1A0 = .text:0x000001A0; // type:function size:0xCC
+fn_571_270 = .text:0x00000270; // type:function size:0xF8
+fn_571_370 = .text:0x00000370; // type:function size:0x1C
+fn_571_390 = .text:0x00000390; // type:function size:0xC8
+fn_571_460 = .text:0x00000460; // type:function size:0x48
+fn_571_4B0 = .text:0x000004B0; // type:function size:0x88
+_ctors = .ctors:0x00000000; // type:label scope:global
+_dtors = .dtors:0x00000000; // type:label scope:global
+lbl_571_section4_0 = .rodata:0x00000000; // type:object size:0x10
+lbl_571_section4_10 = .rodata:0x00000010; // type:object size:0x4 data:string
+lbl_571_section4_14 = .rodata:0x00000014; // type:object size:0x74

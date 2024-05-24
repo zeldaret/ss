@@ -1,17 +1,17 @@
 Sections:
-	.init       type:code
-	extab       type:rodata
-	extabindex  type:rodata
-	.text       type:code
-	.ctors      type:rodata
-	.dtors      type:rodata
-	.rodata     type:rodata
-	.data       type:data
-	.sdata      type:data
-	.sbss       type:bss
-	.sdata2     type:rodata
-	.sbss2      type:bss
-	.bss        type:bss
+	.init       type:code align:4
+	extab       type:rodata align:8
+	extabindex  type:rodata align:4
+	.text       type:code align:32
+	.ctors      type:rodata align:16
+	.dtors      type:rodata align:32
+	.rodata     type:rodata align:32
+	.data       type:data align:32
+	.sdata      type:data align:32
+	.sbss       type:bss align:16
+	.sdata2     type:rodata align:8
+	.sbss2      type:bss align:16
+	.bss        type:bss align:64
 
 toBeSorted/save_file.cpp:
 	.text       start:0x800099B0 end:0x80009D28
@@ -477,8 +477,13 @@ egg/prim/eggAssert.cpp:
 egg/gfx/eggCamera.cpp:
 	.text       start:0x8049C5C0 end:0x8049CAC8
 
-Runtime/__init_cpp_exceptions.cpp:
+Runtime.PPCEABI.H/global_destructor_chain.c:
+	.text       start:0x804C65C0 end:0x804C6620
+	.sbss       start:0x80576930 end:0x80576938
+
+Runtime.PPCEABI.H/__init_cpp_exceptions.cpp:
 	.text       start:0x804C71A8 end:0x804C7218
 	.ctors      start:0x804DB640 end:0x804DB644 rename:.ctors$10
 	.dtors      start:0x804DB9E0 end:0x804DB9E4 rename:.dtors$10
 	.dtors      start:0x804DB9E4 end:0x804DB9E8 rename:.dtors$15
+	.sdata      start:0x80574F78 end:0x80574F7C
