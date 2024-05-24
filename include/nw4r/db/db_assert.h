@@ -1,16 +1,12 @@
-#ifndef DB_ASSERT_H
-#define DB_ASSERT_H
+#ifndef NW4R_DB_ASSERT_H
+#define NW4R_DB_ASSERT_H
+
+#include <nw4r/db/db_console.h>
 
 namespace nw4r {
 namespace db {
 
-namespace detail {
-    struct ConsoleHead {
-
-    };
-}
-
-typedef detail::ConsoleHead* ConsoleHandle;
+typedef detail::ConsoleHead *ConsoleHandle;
 
 ConsoleHandle Assertion_SetConsole(ConsoleHandle handle);
 

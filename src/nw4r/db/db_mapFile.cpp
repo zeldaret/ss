@@ -13,9 +13,9 @@ static u8 (*GetCharPtr_)(const u8 *) = nullptr;
 static u8 dvdReadBuf[512] ALIGN(32);
 static DVDFileInfo sFileInfo;
 
-s32 unk_80574e10 = 0x200;
-u8 *dvdReadPtr = dvdReadBuf;
-s32 unk_80574e18 = -1;
+static s32 sMapBufMaxSize = 0x200;
+static u8 *sMapBuf = dvdReadBuf;
+static s32 sMapBufOffset = -1;
 
 static void MapFile_Append(MapFile *file) {
     if (sMapFileList == nullptr) {
@@ -71,30 +71,30 @@ static u8 GetCharOnMem_(const u8 *arg) {
 }
 
 /** 80436b50 */
-static u8 GetCharOnDvd_(const u8 *arg) {
-    s32 cleared = (s32)arg & 0x7fffffff;
-    s32 unoffset = cleared - unk_80574e18;
-    if (cleared >= sFileLength) {
+static u8 GetCharOnDvd_(const u8 *buf) {
+    s32 address = (u32)buf & 0x7fffffff;
+    s32 offset = address - sMapBufOffset;
+    if (address >= sFileLength) {
         return 0;
     }
 
-    if (unk_80574e18 < 0 || unoffset < 0 || unoffset >= unk_80574e10) {
-        unk_80574e18 = ROUND_DOWN(cleared, 32);
-        unoffset = cleared - unk_80574e18;
-        cleared = unk_80574e10;
-        if (unk_80574e18 + unk_80574e10 >= sFileLength) {
-            cleared = ROUND_UP(sFileLength - unk_80574e18, 32);
+    if (sMapBufOffset < 0 || offset < 0 || offset >= sMapBufMaxSize) {
+        sMapBufOffset = ROUND_DOWN(address, 32);
+        offset = address - sMapBufOffset;
+        address = sMapBufMaxSize;
+        if (sMapBufOffset + sMapBufMaxSize >= sFileLength) {
+            address = ROUND_UP(sFileLength - sMapBufOffset, 32);
         }
-        BOOL interrupts = OSEnableInterrupts();
-        BOOL read = DVDReadAsyncPrio(&sFileInfo, dvdReadPtr, cleared, unk_80574e18, nullptr, 2);
+        BOOL enabled = OSEnableInterrupts();
+        BOOL read = DVDReadAsyncPrio(&sFileInfo, sMapBuf, address, sMapBufOffset, nullptr, 2);
         while (DVDGetCommandBlockStatus(&sFileInfo.block)) {}
 
-        OSRestoreInterrupts(interrupts);
+        OSRestoreInterrupts(enabled);
         if (read <= 0) {
             return 0;
         }
     }
-    return *(dvdReadPtr + unoffset);
+    return *(sMapBuf + offset);
 }
 
 static u8 *SearchNextLine_(u8 *buf, s32 lines) {
@@ -148,7 +148,7 @@ static u8 *SearchParam_(u8 *lineTop, u32 argNum, u8 splitter) {
             }
             inArg = true;
         }
-        buf += 1;
+        buf++;
     }
 }
 
@@ -297,7 +297,7 @@ bool QuerySymbolToSingleMapFile_(MapFileHandle pMapFile, u32 address, u8 *strBuf
         if (!DVDFastOpen(pMapFile->fileEntry, &sFileInfo)) {
             goto err;
         }
-        unk_80574e18 = -1;
+        sMapBufOffset = -1;
         sFileLength = sFileInfo.size;
         GetCharPtr_ = GetCharOnDvd_;
         ret = QuerySymbolToMapFile_(buf, pMapFile->moduleInfo, address, strBuf, strBufSize);
@@ -313,7 +313,6 @@ err:
 }
 
 bool MapFile_QuerySymbol(u32 address, u8 *strBuf, u32 strBufSize) {
-    MapFile *pMap = sMapFileList;
     if (sMapFileList == nullptr) {
         if (address < (u32)_stack_end) {
             snprintf((char *)strBuf, strBufSize, "[%p]", address);
@@ -329,7 +328,7 @@ bool MapFile_QuerySymbol(u32 address, u8 *strBuf, u32 strBufSize) {
             return false;
         }
     } else {
-        for (; pMap != nullptr; pMap = pMap->next) {
+        for (MapFile *pMap = sMapFileList; pMap != nullptr; pMap = pMap->next) {
             if (QuerySymbolToSingleMapFile_(pMap, address, strBuf, strBufSize)) {
                 return true;
             }

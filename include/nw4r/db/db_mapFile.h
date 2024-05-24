@@ -1,5 +1,5 @@
-#ifndef DB_MAPFILE_H
-#define DB_MAPFILE_H
+#ifndef NW4R_DB_MAPFILE_H
+#define NW4R_DB_MAPFILE_H
 
 #include <rvl/OS.h>
 
@@ -13,9 +13,9 @@ typedef struct MapFile {
     MapFile *next;
 } MapFile;
 
-typedef MapFile* MapFileHandle;
+typedef MapFile *MapFileHandle;
 
-MapFileHandle MapFile_RegistOnDvd(void*, const char*, const OSModuleInfo*);
+MapFileHandle MapFile_RegistOnDvd(void *, const char *, const OSModuleInfo *);
 void MapFile_Unregist(MapFileHandle);
 void MapFile_UnregistAll();
 bool MapFile_QuerySymbol(u32 address, u8 *strBuf, u32 strBufSize);
