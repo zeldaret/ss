@@ -2,13 +2,45 @@
 #define NW4R_LYT_LAYOUT_H
 #include "common.h"
 #include <new.h>
+#include <nw4r/lyt/lyt_animation.h>
+#include <nw4r/lyt/lyt_types.h>
 #include <rvl/MEM/mem_allocator.h>
 
 namespace nw4r {
 namespace lyt {
-struct Layout {
-    // TO-DO: Class members
 
+namespace res {
+struct Layout {
+    DataBlockHeader blockheader; // at 0x00
+    u8 originType;               // at 0x08
+    u8 padding[3];               // at 0x09
+    Size layoutSize;             // at 0x0C
+};
+
+} // namespace res
+
+class Layout {
+public:
+    ut::Rect GetLayoutRect() const;
+    static Pane *BuildPaneObj(s32 kind, const void *dataPtr, const ResBlockSet &ResBlockSet);
+
+    Layout();
+    virtual ~Layout();                                                                                   // at 0x08
+    virtual bool Build(const void *lytResBuf, ResourceAccessor *pResAcsr);                               // at 0x0C
+    virtual AnimTransform *CreateAnimTransform();                                                        // at 0x10
+    virtual AnimTransform *CreateAnimTransform(const void *animResBuf, ResourceAccessor *pResAcsr);      // at 0x14
+    virtual AnimTransform *CreateAnimTransform(const AnimResource &animRes, ResourceAccessor *pResAcsr); // at 0x18
+    virtual void BindAnimation(AnimTransform *pAnimTrans);                                               // at 0x1C
+    virtual void UnbindAnimation(AnimTransform *pAnimTrans);                                             // at 0x20
+    virtual void UnbindAllAnimation();                                                                   // at 0x24
+    virtual bool BindAnimationAuto(const AnimResource &animRes, ResourceAccessor *pResAcsr);             // at 0x28
+    virtual void SetAnimationEnable(AnimTransform *pAnimTrans, bool bEnable);                            // at 0x2C
+    virtual void CalculateMtx(const DrawInfo &drawInfo);                                                 // at 0x30
+    virtual void Draw(const DrawInfo &drawInfo);                                                         // at 0x34
+    virtual void Animate(u32 option);                                                                    // at 0x38
+    virtual void SetTagProcessor(ut::TagProcessorBase<wchar_t> *pTagProcessor);                          // at 0x3C
+
+    // STATICS
     static void FreeMemory(void *p) {
         MEMFreeToAllocator(mspAllocator, p);
     }
@@ -56,6 +88,32 @@ struct Layout {
             return nullptr;
         }
     }
+
+    template <typename T, typename T2>
+    static T *NewObj(T2 p2) {
+        T *obj = (T *)AllocMemory(sizeof(T));
+        if (obj) {
+            return new (obj) T(p2);
+        } else {
+            return nullptr;
+        }
+    }
+
+    template <typename T, typename T2, typename T3>
+    static T *NewObj(T2 p2, T3 p3) {
+        T *obj = (T *)AllocMemory(sizeof(T));
+        if (obj) {
+            return new (obj) T(p2, p3);
+        } else {
+            return nullptr;
+        }
+    }
+
+private:
+    ut::LinkList<AnimTransform, 4> mAnimTransList; // at 0x04
+    Pane *mpRootPane;                              // at 0x10
+    GroupContainer *mpGroupContainer;              // at 0x14
+    Size mLayoutSize;                              // at 0x18
 
     static MEMAllocator *mspAllocator;
 };

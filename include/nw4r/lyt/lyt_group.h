@@ -23,12 +23,25 @@ struct PaneLink {
 };
 } // namespace detail
 
-struct Group {
+class Group {
+public:
     Group(const res::Group *pResGroup, Pane *pRootPane);
+
     virtual ~Group();
     void AppendPane(Pane *pPane);
     void Init();
 
+    ut::LinkList<detail::PaneLink, 0> *GetPaneList() {
+        return &mPaneListLink;
+    }
+    bool IsUserAllocated() const {
+        return mbUserAllocated;
+    }
+    const char *GetName() const {
+        return mName;
+    }
+
+private:
     ut::LinkListNode mLink;                          // at 0x04
     ut::LinkList<detail::PaneLink, 0> mPaneListLink; // at 0x0C
     char mName[NW4R_RES_NAME_SIZE + 1];              // at 0x18

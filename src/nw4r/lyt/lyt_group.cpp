@@ -10,7 +10,8 @@ Group::Group(const res::Group *pResGroup, Pane *pRootPane) : mLink(), mPaneListL
     Init();
     strncpy(this->mName, pResGroup->mName, NW4R_RES_NAME_SIZE);
     this->mName[NW4R_RES_NAME_SIZE] = '\0';
-    const char *paneNameBase = (char *)(&pResGroup[1]);
+    const char *paneNameBase = detail::ConvertOffsetToPtr<char>(pResGroup, sizeof(res::Group));
+
     for (int i = 0; i < pResGroup->paneNum; i++) {
         Pane *pFindPane = pRootPane->FindPaneByName(paneNameBase + i * NW4R_RES_NAME_SIZE, true);
         if (pFindPane) {
@@ -49,7 +50,7 @@ GroupContainer::~GroupContainer() {
     while (it != this->mGroupList.GetEndIter()) {
         ut::LinkList<Group, 4>::Iterator currIt = it++;
         this->mGroupList.Erase(currIt);
-        if (!currIt->mbUserAllocated) {
+        if (!currIt->IsUserAllocated()) {
             Layout::DeleteObj<Group>(&*currIt);
         }
     }
@@ -64,7 +65,7 @@ void GroupContainer::AppendGroup(Group *pGroup) {
 Group *GroupContainer::FindGroupByName(const char *findName) {
     for (ut::LinkList<Group, 4>::Iterator it = this->mGroupList.GetBeginIter(); it != this->mGroupList.GetEndIter();
             it++) {
-        if (detail::EqualsResName(it->mName, findName)) {
+        if (detail::EqualsResName(it->GetName(), findName)) {
             return &*it;
         }
     }

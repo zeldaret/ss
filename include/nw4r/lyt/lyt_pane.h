@@ -16,19 +16,6 @@
 
 namespace nw4r {
 namespace lyt {
-
-struct Size {
-    inline Size() : width(), height() {}
-
-    inline Size &operator=(const Size &rhs) {
-        width = rhs.width;
-        height = rhs.height;
-        return *this;
-    }
-
-    f32 width, height;
-};
-
 namespace detail {
 struct PaneBase {
     PaneBase();
@@ -38,14 +25,17 @@ struct PaneBase {
 
 } // namespace detail
 
+namespace res {
+
 // TODO: Find proper place?
 // GUESS: In the FindExtUserDataByName function it iterates through ExtUserData
 struct ExtUserData {
-    u32 stringOffs;
-    u32 UNK_0x04;
-    u32 UNK_0x08;
+    u32 nameOffs;   // at 0x00
+    u32 datOffs;    // at 0x04
+    u16 numEntries; // at 0x08
+    u8 type;        // at 0x0A
+    u8 padding;     // at 0x0B
 };
-namespace res {
 
 struct ExtUserDataList {
     DataBlockHeader blockHeader; // at 0x00
@@ -67,12 +57,16 @@ struct Pane {
 };
 } // namespace res
 
-struct Pane : detail::PaneBase {
+class Pane : detail::PaneBase {
+public:
     // For use with TestBit<Uc>
     enum PaneBits { VISIBLE, INFLUENCED_ALPHA, LOCATION_ADJUST };
 
     bool IsVisible() const {
         return detail::TestBit<u8>(mFlag, VISIBLE);
+    }
+    void SetVisible(bool bVisible) {
+        detail::SetBit(&mFlag, VISIBLE, bVisible);
     }
     bool IsInfluencedAlpha() const {
         return detail::TestBit<u8>(mFlag, INFLUENCED_ALPHA);
@@ -80,7 +74,53 @@ struct Pane : detail::PaneBase {
     bool IsLocationAdjust() const {
         return detail::TestBit<u8>(mFlag, LOCATION_ADJUST);
     }
+    bool IsUserAllocated() const {
+        return mbUserAllocated;
+    }
 
+    ut::LinkList<Pane, 4> *GetChildList() {
+        return &mChildList;
+    }
+    ut::LinkList<AnimationLink, 0> *GetAnimationList() {
+        return &mAnimList;
+    }
+
+    const math::MTX34 *GetGlobalMtx() const {
+        return &mGlbMtx;
+    }
+    Pane *GetParent() const {
+        return mpParent;
+    }
+
+    const math::VEC2 *GetScale() const {
+        return &mScale;
+    }
+    void SetScale(const math::VEC2 &value) {
+        mScale = value;
+    }
+
+    u8 GetAlpha() const {
+        return mAlpha;
+    }
+    void SetAlpha(u8 value) {
+        mAlpha = value;
+    }
+
+    const Size *GetSize() const {
+        return &mSize;
+    }
+    void SetSize(const Size &value) {
+        mSize = value;
+    }
+
+    const res::ExtUserDataList *GetExtUserDataList() const {
+        return mpExtUserDataList;
+    }
+    void SetExtUserDataList(const res::ExtUserDataList *pBlock) {
+        mpExtUserDataList = pBlock;
+    }
+
+    Pane();
     Pane(const res::Pane *pBlock);
     void Init();
     void SetName(const char *pName);
@@ -96,11 +136,11 @@ struct Pane : detail::PaneBase {
     math::VEC2 GetVtxPos() const;
     void CalculateMtxChild(const DrawInfo &drawInfo);
     u16 GetExtUserDataNum() const;
-    ExtUserData *GetExtUserData() const;
-    ExtUserData *FindExtUserDataByName(const char *name);
+    res::ExtUserData *GetExtUserData() const;
+    res::ExtUserData *FindExtUserDataByName(const char *name);
 
     virtual ~Pane();                                                                             // at 0x8
-    virtual const ut::detail::RuntimeTypeInfo *GetRuntimeTypeInfo() const;                       // at 0xC
+    NW4R_UT_RTTI_DECL(Pane);                                                                     // at 0x0C
     virtual void CalculateMtx(const DrawInfo &drawInfo);                                         // at 0x10
     virtual void Draw(const DrawInfo &);                                                         // at 0x14
     virtual void DrawSelf(const DrawInfo &);                                                     // at 0x18
@@ -127,27 +167,26 @@ struct Pane : detail::PaneBase {
     virtual Material *GetMaterial(u32 idx) const;                                                // at 0x6C
     virtual void LoadMtx(const DrawInfo &drawInfo);                                              // at 0x70
 
-    Pane *mpParent;                           // at 0x0C
-    ut::LinkList<Pane, 4> mChildList;         // at 0x10
-    ut::LinkList<AnimationLink, 0> mAnimList; // at 0x1C;
-    Material *mpMaterial;                     // at 0x28
-    math::VEC3 mTranslate;                    // at 0x2C
-    math::VEC3 mRotate;                       // at 0x38
-    math::VEC2 mScale;                        // at 0x44
-    Size mSize;                               // at 0x4C
-    math::MTX34 mMtx;                         // at 0x54
-    math::MTX34 mGlbMtx;                      // at 0x84
-    res::ExtUserDataList *mpExtUserDataList;  // at 0xB4
-    u8 mAlpha;                                // at 0xB8
-    u8 mGlbAlpha;                             // at 0xB9
-    u8 mBasePosition;                         // at 0xBA
-    u8 mFlag;                                 // at 0xBB
-    char mName[PANE_NAME_SIZE + 1];           // at 0xBC
-    char mUserData[PANE_USERDATA_SIZE + 1];   // at 0xCD
-    bool mbUserAllocated;                     // at 0xD6
-    u8 mPadding;                              // at 0xD7
-
-    static ut::detail::RuntimeTypeInfo typeInfo;
+private:
+    Pane *mpParent;                                // at 0x0C
+    ut::LinkList<Pane, 4> mChildList;              // at 0x10
+    ut::LinkList<AnimationLink, 0> mAnimList;      // at 0x1C;
+    Material *mpMaterial;                          // at 0x28
+    math::VEC3 mTranslate;                         // at 0x2C
+    math::VEC3 mRotate;                            // at 0x38
+    math::VEC2 mScale;                             // at 0x44
+    Size mSize;                                    // at 0x4C
+    math::MTX34 mMtx;                              // at 0x54
+    math::MTX34 mGlbMtx;                           // at 0x84
+    const res::ExtUserDataList *mpExtUserDataList; // at 0xB4
+    u8 mAlpha;                                     // at 0xB8
+    u8 mGlbAlpha;                                  // at 0xB9
+    u8 mBasePosition;                              // at 0xBA
+    u8 mFlag;                                      // at 0xBB
+    char mName[PANE_NAME_SIZE + 1];                // at 0xBC
+    char mUserData[PANE_USERDATA_SIZE + 1];        // at 0xCD
+    bool mbUserAllocated;                          // at 0xD6
+    u8 mPadding;                                   // at 0xD7
 };
 } // namespace lyt
 } // namespace nw4r

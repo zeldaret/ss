@@ -8,12 +8,6 @@
 #include <nw4r/ut/ut_list.h>
 
 // ReverseYAxis__22@unnamed@lyt_pane_cpp@FPQ34nw4r4math5MTX34
-
-void float_order() {
-    0.0f;
-    1.0f;
-}
-
 namespace nw4r {
 
 namespace lyt {
@@ -29,6 +23,23 @@ PaneBase::~PaneBase() {}
 NW4R_UT_RTTI_DEF_BASE(Pane);
 
 // __ct__Q34nw4r3lyt4PaneFv
+// Guess pulled from BBA/slight modified
+Pane::Pane() : mChildList(), mAnimList(), mSize() {
+    this->mpParent = nullptr;
+    this->mpMaterial = nullptr;
+    this->mbUserAllocated = false;
+    this->mpExtUserDataList = nullptr;
+    this->mBasePosition = 4;
+    memset(this->mName, 0, PANE_NAME_SIZE + 1);
+    memset(this->mUserData, 0, PANE_USERDATA_SIZE + 1);
+    this->mTranslate = math::VEC3(0.0f, 0.0f, 0.0f);
+    this->mRotate = math::VEC3(0.0f, 0.0f, 0.0f);
+    this->mScale = math::VEC2(1.0f, 1.0f);
+    this->mSize = Size();
+    this->mAlpha = 0xFF;
+    this->mGlbAlpha = 0xFF;
+    SetVisible(true);
+}
 
 // __dt__Q34nw4r2ut38LinkList<Q34nw4r3lyt13AnimationLink,0>Fv
 
@@ -69,12 +80,12 @@ Pane::~Pane() {
         ut::LinkList<Pane, 4>::Iterator currIt = it++;
         mChildList.Erase(currIt);
         if (!currIt->mbUserAllocated) {
-            Layout::DeleteObj<Pane>(&*currIt);
+            Layout::DeleteObj(&*currIt);
         }
     }
     this->UnbindAnimationSelf(nullptr);
-    if (this->mpMaterial && !this->mpMaterial->mbUserAllocated) {
-        Layout::DeleteObj<Material>(this->mpMaterial);
+    if (this->mpMaterial && !this->mpMaterial->IsUserAllocated()) {
+        Layout::DeleteObj(this->mpMaterial);
     }
 }
 
@@ -189,7 +200,7 @@ Pane *Pane::FindPaneByName(const char *findName, bool bRecursive) {
 
 // FindMaterialByName__Q34nw4r3lyt4PaneFPCcb
 Material *Pane::FindMaterialByName(const char *findName, bool bRecursive) {
-    if (this->mpMaterial && detail::EqualsMaterialName(this->mpMaterial->mName, findName)) {
+    if (this->mpMaterial && detail::EqualsMaterialName(this->mpMaterial->GetName(), findName)) {
         return this->mpMaterial;
     }
     if (bRecursive) {
@@ -501,34 +512,32 @@ u16 Pane::GetExtUserDataNum() const {
     }
     return 0;
 }
-ExtUserData *Pane::GetExtUserData() const {
+res::ExtUserData *Pane::GetExtUserData() const {
     if (this->mpExtUserDataList) {
-        return (ExtUserData *)(this->mpExtUserDataList + 1);
+        return detail::ConvertOffsetToPtr<res::ExtUserData>(this->mpExtUserDataList, sizeof(res::ExtUserDataList));
     }
     return nullptr;
 }
 
-ExtUserData *Pane::FindExtUserDataByName(const char *name) {
-    ExtUserData *pUserData = GetExtUserData();
+res::ExtUserData *Pane::FindExtUserDataByName(const char *name) {
+    res::ExtUserData *pUserData = GetExtUserData();
 
     if (!pUserData) {
         return nullptr;
     }
     int i = 0;
-    for (int i = 0; i < this->mpExtUserDataList->num;) {
-        u32 offset = pUserData->stringOffs;
+    for (int i = 0; i < this->mpExtUserDataList->num; i++, pUserData++) {
+        u32 offset = pUserData->nameOffs;
         const char *str = 0;
         if (offset != 0) {
-            str = (const char *)(pUserData) + offset;
+            str = detail::ConvertOffsetToPtr<char>(pUserData, offset);
         } else {
-            str = 0;
+            str = nullptr;
         }
 
         if (strcmp(name, str) == 0) {
             return pUserData;
         };
-        i++;
-        pUserData++;
     }
     return nullptr;
 }

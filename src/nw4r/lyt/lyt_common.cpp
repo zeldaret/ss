@@ -12,7 +12,6 @@ using namespace ut;
 // EqualsResName__Q34nw4r3lyt6detailFPCcPCc
 bool detail::EqualsResName(const char *name1, const char *name2) {
     return strncmp(name1, name2, NW4R_RES_NAME_SIZE) == 0;
-    ;
 }
 
 // EqualsMaterialName__Q34nw4r3lyt6detailFPCcPCc
@@ -22,7 +21,7 @@ bool detail::EqualsMaterialName(const char *name1, const char *name2) {
 
 // TestFileHeader__Q34nw4r3lyt6detailFRCQ44nw4r3lyt3res16BinaryFileHeaderUl
 bool detail::TestFileHeader(const res::BinaryFileHeader &fileHeader, u32 testSig) {
-    return ((testSig == fileHeader.magic) && (fileHeader.byteOrder == NW4R_BYTEORDER_BIG));
+    return ((testSig == detail::GetSignatureInt(fileHeader.signature)) && (fileHeader.byteOrder == NW4R_BYTEORDER_BIG));
 }
 
 namespace detail {

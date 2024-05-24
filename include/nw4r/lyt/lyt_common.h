@@ -12,7 +12,14 @@
 namespace nw4r {
 namespace lyt {
 namespace res {
-struct BinaryFileHeader : ut::BinaryFileHeader {};
+struct BinaryFileHeader {
+    char signature[4]; // at 0x00
+    u16 byteOrder;     // at 0x04;
+    u16 version;       // at 0x06
+    u32 fileSize;      // at 0x08
+    u16 headerSize;    // at 0x0C
+    u16 dataBlocks;    // at 0x0E
+};
 
 struct DataBlockHeader {
     u32 kind; // at 0x0
@@ -46,6 +53,17 @@ void SetVertexFormat(bool, u8);
 void DrawQuad(const math::VEC2 &, const Size &, u8, const TexCoordData *, const ut::Color *);
 void DrawQuad(const math::VEC2 &, const Size &, u8, const TexCoordData *, const ut::Color *, u8);
 void DrawLine(const math::VEC2 &pos, const Size &size, ut::Color color);
+
+s32 GetSignatureInt(const char *sig) {
+    return *((s32 *)sig);
+}
+bool TestFileVersion(const res::BinaryFileHeader &fileHeader) {
+    u32 majorVer = (fileHeader.version >> 8) & 0xFF;
+    u32 minorVer = fileHeader.version & 0xFF;
+    bool ret = majorVer == 0 && (minorVer > 7 && minorVer <= 10);
+    return ret;
+}
+
 } // namespace detail
 } // namespace lyt
 } // namespace nw4r

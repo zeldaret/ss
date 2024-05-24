@@ -10,6 +10,15 @@
 namespace nw4r {
 namespace lyt {
 
+namespace res {
+struct MaterialList {
+    DataBlockHeader blockHeader; // at 0x00
+    u16 materialNum;             // at 0x08
+    u8 padding[2];               // at 0x0A
+};
+
+} // namespace res
+
 struct BitGXNums {
     union {
         u32 texSRT;
@@ -26,15 +35,26 @@ struct BitGXNums {
 };
 
 struct Material {
-    // SetupGX__Q34nw4r3lyt8MaterialFbUc
-    // BindAnimation__Q34nw4r3lyt8MaterialFPQ34nw4r3lyt13AnimTransform
-    // UnbindAnimation__Q34nw4r3lyt8MaterialFPQ34nw4r3lyt13AnimTransform
-    // UnbindAllAnimation__Q34nw4r3lyt8MaterialFv
-    // Animate__Q34nw4r3lyt8MaterialFv
-    // FindAnimationLink__Q34nw4r3lyt8MaterialFPQ34nw4r3lyt13AnimTransform
-    // FindAnimationLink__Q34nw4r3lyt8MaterialFRCQ34nw4r3lyt12AnimResource
-    // SetAnimationEnable__Q34nw4r3lyt8MaterialFPQ34nw4r3lyt13AnimTransformb
-    // SetAnimationEnable__Q34nw4r3lyt8MaterialFRCQ34nw4r3lyt12AnimResourceb
+    // IsBlendModeCap__Q34nw4r3lyt8MaterialCFv
+    // IsAlphaCompareCap__Q34nw4r3lyt8MaterialCFv
+    // IsTevSwapCap__Q34nw4r3lyt8MaterialCFv
+    // IsMatColorCap__Q34nw4r3lyt8MaterialCFv
+    // IsChanCtrlCap__Q34nw4r3lyt8MaterialCFv
+    // SetTexSRTElement__Q34nw4r3lyt8MaterialFUlUlf
+    // GetTexturePtr__Q34nw4r3lyt8MaterialFUc
+    // GetTexSRTCap__Q34nw4r3lyt8MaterialCFv
+    // GetIndTexSRTCap__Q34nw4r3lyt8MaterialCFv
+    // SetIndTexSRTElement__Q34nw4r3lyt8MaterialFUlUlf
+
+    ut::LinkList<AnimationLink, 0> *GetAnimationList() {
+        return &mAnimList;
+    }
+    bool IsUserAllocated() const {
+        return mbUserAllocated;
+    }
+    const char *GetName() const {
+        return mName;
+    }
 
     virtual ~Material();                                                        // at 0x08
     virtual bool SetupGX(bool bModVtxCok, u8 alpha);                            // at 0x0C
@@ -47,6 +67,7 @@ struct Material {
     virtual void SetAnimationEnable(AnimTransform *pAnimTrans, bool bEnable);   // at 0x28
     virtual void SetAnimationEnable(const AnimResource &animRes, bool bEnable); // at 0x2C
 
+private:
     ut::LinkList<AnimationLink, 0> mAnimList; // at 0x4
     GXColorS10 mTevCols[3];                   // at 0x10
     ut::Color mTevKCols[4];                   // at 0x28
