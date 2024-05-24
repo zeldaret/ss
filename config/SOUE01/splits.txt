@@ -145,6 +145,10 @@ toBeSorted/skipflag_manager.cpp:
 	.sbss       start:0x80575408 end:0x8057540C
 	.bss        start:0x805A9C68 end:0x805A9C88
 
+toBeSorted/special_item_drop_mgr.cpp:
+	.text       start:0x800C7B60 end:0x800C82B0
+	.sbss       start:0x80575438 end:0x80575440
+
 toBeSorted/counters/counter.cpp:
 	.text       start:0x8016CC40 end:0x8016CD94
 

@@ -21,7 +21,7 @@ struct ObjInfo {
     /* 0x04 */ u16 obj_id;
     /* 0x06 */ u16 obj_id2;
     /* 0x08 */ u16 fiTextEntryId;
-    /* 0x0A */ u8 unk_0xA;
+    /* 0x0A */ s8 unk_0xA;
     /* 0x0B */ u8 subtype;
 };
 

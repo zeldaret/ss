@@ -11,6 +11,20 @@
 class dAcObjBase_c : public dAcBase_c {
 public:
     // Data Members
+    f32 yoffset;
+    char _0[4];
+    f32 unkfloat;
+    char _1[12];
+    s16 targetFiTextId;
+    u8 unkByteTargetFiRelated;
+    mVec3_c poscopy1;
+    mVec3_c poscopy2;
+    mVec3_c poscopy3;
+    mAng3_c rotcopy1;
+    f32 forwardSpeed;
+    f32 forwardAccel;
+    f32 forwardMaxSpeed;
+    // TODO: add the rest
 
 public:
     // could be their own thing?
@@ -72,4 +86,5 @@ public:
     /* 8002f260 */ static dAcBase_c createActorUnkGroup3(char *name, u32 roomId, u32 params1, mVec3_c *pos,
             mAng3_c *rot, mVec3_c *scale, u32 params2, u16 id, u8 viewclipId);
 };
+
 #endif
