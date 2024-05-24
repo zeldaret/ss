@@ -338,6 +338,10 @@ nw4r/db/db_directPrint.cpp:
 	.sbss       start:0x805765E8 end:0x805765EC
 	.bss        start:0x80636B80 end:0x80636BA4
 
+nw4r/db/db_assert.cpp:
+	.text       start:0x804373C0 end:0x804373D0
+	.sbss       start:0x80576610 end:0x80576618
+
 egg/core/eggArchive.cpp:
 	.text       start:0x80493510 end:0x80494254
 	.data       start:0x8056E820 end:0x8056E830
