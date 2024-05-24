@@ -234,7 +234,7 @@ dAcBase_c dAcBase_c::createActorUnkGroup3(ProfileName actorId, u32 params1, Vec3
 
 void *dAcBase_c::getCurrentEventActor() {}
 void dAcBase_c::unkVirtFunc_0x6C() {}
-void dAcBase_c::doInteraction(s32) {}
+void dAcBase_c::doInteraction(int) {}
 void dAcBase_c::FUN_8002dc20(s16 *, s16 *) {}
 void dAcBase_c::incrementKillCounter() {}
 void dAcBase_c::FUN_8002dcd0() {}

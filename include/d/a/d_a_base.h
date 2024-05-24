@@ -12,6 +12,19 @@
 #include "toBeSorted/room_manager.h"
 
 class dAcBase_c;
+
+/**
+ * Actors are always created through a lookup table
+ * of these objects.
+ */
+struct dActorInit {
+    dAcBase_c *(*create)();
+    u16 executeOrder;
+    u16 drawOrder;
+    u32 baseProperties;
+    u32 defaultFlags;
+};
+
 struct SoundInfo {
     dAcBase_c *actor;
     void *obj_sound;
@@ -69,7 +82,7 @@ protected:
     /* 0x64 | 8002ceb0 */ virtual bool restorePosRotFromCopy();
     /* 0x68 | 8002db80 */ virtual void *getCurrentEventActor();
     /* 0x6C | 8002db90 */ virtual void unkVirtFunc_0x6C();
-    /* 0x70 | 8002dba0 */ virtual void doInteraction(s32);
+    /* 0x70 | 8002dba0 */ virtual void doInteraction(int);
 
 public:
     /* 8002c3b0 */ dAcBase_c();
