@@ -329,6 +329,7 @@ config.libs = [
         [
             Object(Matching, "nw4r/db/db_assert.cpp"),
             Object(Matching, "nw4r/db/db_directPrint.cpp"),
+            Object(Matching, "nw4r/db/db_mapFile.cpp"),
         ],
     ),
     nw4rLib(

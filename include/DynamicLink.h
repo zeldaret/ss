@@ -3,17 +3,19 @@
 
 #include <common.h>
 #include <m/m_dvd.h>
+#include <nw4r/db/db_mapFile.h>
 #include <rvl/OS.h>
 
 class DbMapFile {
 public:
-    DbMapFile(): unk_0(0) {}
+    DbMapFile(): mMapFileHandle(nullptr) {}
     ~DbMapFile();
 
     void RegisterOnDvd(const char *, const OSModuleInfo *);
     void Unregister();
 private:
-    UNKWORD unk_0;
+    nw4r::db::MapFileHandle mMapFileHandle;
+    nw4r::db::MapFile mMapFile;
 };
 
 // https://github.com/zeldaret/tp/blob/main/include/DynamicLink.h
@@ -75,11 +77,6 @@ struct DynamicModuleControl : DynamicModuleControlBase {
     /* 0x2C */ mDvd_callback_c *mDvdCallbackRequest;
     /* 0x30 */ EGG::ExpHeap *mHeap;
     /* 0x34 */ DbMapFile mpRelMapFile;
-    // Some of these might be members of DbMapFile
-    UNKWORD unk1;
-    UNKWORD unk2;
-    UNKWORD unk3;
-    UNKWORD unk4;
 
     static u32 sAllocBytes;
     static mDvd_toMainRam_base_c *sDvdFile;

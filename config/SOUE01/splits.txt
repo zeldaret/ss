@@ -338,6 +338,13 @@ nw4r/db/db_directPrint.cpp:
 	.sbss       start:0x805765E8 end:0x805765EC
 	.bss        start:0x80636B80 end:0x80636BA4
 
+nw4r/db/db_mapFile.cpp:
+	.text       start:0x80436A50 end:0x804373B4
+	.data       start:0x8056C5F0 end:0x8056C600
+	.sdata      start:0x80574E10 end:0x80574E24
+	.sbss       start:0x80576600 end:0x8057660C
+	.bss        start:0x8063B320 end:0x8063B560
+
 nw4r/db/db_assert.cpp:
 	.text       start:0x804373C0 end:0x804373D0
 	.sbss       start:0x80576610 end:0x80576618

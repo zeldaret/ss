@@ -320,35 +320,25 @@ const char *DynamicModuleControl::getModuleTypeString() const {
 }
 
 DbMapFile::~DbMapFile() {
-    if (unk_0) {
+    if (mMapFileHandle != nullptr) {
         Unregister();
     }
 }
 
-namespace nw4r {
-namespace db {
-// TODO
-typedef struct MapFile {
-} MapFile;
-extern MapFile *MapFile_RegistOnDvd(void *arg, const char *buf, const OSModuleInfo *info);
-extern void *MapFile_Unregist(MapFile *);
-} // namespace db
-} // namespace nw4r
-
 void DbMapFile::RegisterOnDvd(const char *path, const OSModuleInfo *info) {
     if (mDvd::IsExistPath(path)) {
-        unk_0 = (UNKWORD)nw4r::db::MapFile_RegistOnDvd(((int *)this) + 1, path, info);
+        mMapFileHandle = nw4r::db::MapFile_RegistOnDvd(&mMapFile, path, info);
     } else {
-        unk_0 = 0xffffffff;
+        mMapFileHandle = (nw4r::db::MapFileHandle)0xffffffff;
     }
 }
 
 void DbMapFile::Unregister() {
-    if (unk_0 != 0) {
-        if (unk_0 != 0xffffffff) {
-            nw4r::db::MapFile_Unregist((nw4r::db::MapFile *)unk_0);
+    if (mMapFileHandle != nullptr) {
+        if ((u32)mMapFileHandle != 0xffffffff) {
+            nw4r::db::MapFile_Unregist(mMapFileHandle);
         }
-        unk_0 = 0;
+        mMapFileHandle = nullptr;
     }
 }
 
