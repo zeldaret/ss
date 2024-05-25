@@ -367,7 +367,6 @@ int dRawArcTable_c::ensureAllEntriesLoaded() {
 
 extern "C" bool strequals(const char *, const char *);
 
-// TODO the load from self can happen earlier
 dRawArcEntry_c *dRawArcTable_c::findEntry(const char *name) const {
     dRawArcEntry_c *entry = mpEntries;
     for (int i = 0; i < mCount; i++) {
