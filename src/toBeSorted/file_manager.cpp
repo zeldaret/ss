@@ -100,29 +100,6 @@ u16 *FileManager::getStoryFlagsMut() {
 /* 8000AA30 */ u16 *FileManager::getSkipFlags() {}
 /* 8000AA40 */ void FileManager::setSkipFlagsChecked(u16 *flags, u32 offset, u16 count) {}
 
-// This does strncat things - append src to dest
-inline void fake_strncat(char *dest, const char *src, size_t max_len) {
-    if (src != nullptr) {
-        size_t len = strlen(dest);
-        size_t count = strlen(src);
-        count = len + count + 1 >= max_len ? max_len - len - 1 : count;
-        strncpy(dest + len, src, count);
-        // one instshuffle here - this should be (len + count),
-        // but then regalloc blows up and uses one more register in initFile
-        dest[count + len] = '\0';
-    }
-}
-
-// A function like this is inlined into in a bunch of area-related code
-// It doesn't make a whole lot of sense to use strncat on a string just
-// clipped to zero length...
-inline void strnsth(char *dest, const char *src, size_t max_len) {
-    if (src != dest) {
-        dest[0] = '\0';
-        fake_strncat(dest, src, max_len);
-    }
-}
-
 /* 8000AAA0 */ void FileManager::initFile(int fileNum) {
 
     mIsFileInvalid[1] = 1;
