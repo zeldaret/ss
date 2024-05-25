@@ -162,10 +162,10 @@ public:
 
     /* 8000BA70 */ void setBeaconPos(u32 beaconArea, u32 beaconNum, mVec3_c *pos);
     /* 8000BB80 */ mVec3_c *getBeaconPos(u32 beaconArea, u32 beaconNum);
-    /* 8000BC70 */ void setEnemyKillCount(u32 enemy, u16 killCount);
-    /* 8000BCE0 */ s16 getEnemyKillCount(u32 enemy);
-    /* 8000BD60 */ void setHitCountFromEnemy(u32 enemy, u16 hitCount);
-    /* 8000BDD0 */ u16 getHitCountFromEnemy(u32 enemy);
+    /* 8000BC70 */ void setEnemyKillCount(u8 enemy, u16 killCount);
+    /* 8000BCE0 */ u16 getEnemyKillCount(u8 enemy);
+    /* 8000BD60 */ void setHitCountFromEnemy(u8 enemy, u16 hitCount);
+    /* 8000BDD0 */ u16 getHitCountFromEnemy(u8 enemy);
 
     /* 8000BE50 */ void setLoadRoomT1_FileB(s16 roomId);
     /* 8000BE80 */ s16 getLoadRoomT1_FileB();

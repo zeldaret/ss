@@ -501,10 +501,7 @@ dAcBase_c *dAcBase_c::createActor(ProfileName actorId, u32 actorParams1, mVec3_c
         actorRoomid = roomid;
     }
 
-    u32 newParams2 = -1;
-    if (actorParams2 != 0) {
-        newParams2 = getParams2_ignoreLower();
-    }
+    u32 newParams2 = actorParams2 != 0 ? getParams2_ignoreLower() : -1;
 
     setTempCreateParams(actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1,
             0xFF, nullptr);
@@ -532,10 +529,7 @@ dAcBase_c *dAcBase_c::createActorStage(ProfileName actorId, u32 actorParams1, mV
         actorRoomid = roomid;
     }
 
-    u32 newParams2 = -1;
-    if (actorParams2 != 0) {
-        newParams2 = getParams2_ignoreLower();
-    }
+    u32 newParams2 = actorParams2 != 0 ? getParams2_ignoreLower() : -1;
 
     setTempCreateParams(actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1,
             0xFF, nullptr);
@@ -561,19 +555,17 @@ void dAcBase_c::doInteraction(s32 param) {
 // 8002dc20
 void dAcBase_c::FUN_8002dc20(s16 *, s16 *) {}
 
-// This whole function gets compiled to just a `blr`
-// Not sure how to make this work as expected
 // 8002dc50
 void dAcBase_c::incrementKillCounter() {
     dAcObjBase_c *object = (dAcObjBase_c *)this; // Probably wrong
 
-    FileManager *fileMgr = FileManager::sInstance;
 
     if (group_type == ACTOR && object->unkByteTargetFiRelated == 1) {
-        s16 killCounterId = object->targetFiTextId;
+        int killCounterId = object->targetFiTextId;
 
-        if (killCounterId < 91 && killCounterId & 0x300 == 0) {
-            s16 killCount = fileMgr->getEnemyKillCount(killCounterId & 0xFF);
+        if (killCounterId < 91 && (killCounterId & 0x300) == 0) {
+        FileManager *fileMgr = FileManager::sInstance;
+            u16 killCount = fileMgr->getEnemyKillCount(killCounterId) + 1;
             fileMgr->setEnemyKillCount(killCounterId, killCount);
         }
     }

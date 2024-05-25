@@ -15,7 +15,7 @@ public:
     char _0[4];
     f32 unkfloat;
     char _1[12];
-    s16 targetFiTextId;
+    u16 targetFiTextId;
     u8 unkByteTargetFiRelated;
     mVec3_c poscopy1;
     mVec3_c poscopy2;

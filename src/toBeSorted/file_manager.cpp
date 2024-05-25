@@ -210,10 +210,10 @@ inline void strnsth(char *dest, const char *src, size_t max_len) {
 
 /* 8000BA70 */ void FileManager::setBeaconPos(u32 beaconArea, u32 beaconNum, mVec3_c *pos) {}
 /* 8000BB80 */ mVec3_c *FileManager::getBeaconPos(u32 beaconArea, u32 beaconNum) {}
-/* 8000BC70 */ void FileManager::setEnemyKillCount(u32 enemy, u16 killCount) {}
-/* 8000BCE0 */ s16 FileManager::getEnemyKillCount(u32 enemy) {}
-/* 8000BD60 */ void FileManager::setHitCountFromEnemy(u32 enemy, u16 hitCount) {}
-/* 8000BDD0 */ u16 FileManager::getHitCountFromEnemy(u32 enemy) {}
+/* 8000BC70 */ void FileManager::setEnemyKillCount(u8 enemy, u16 killCount) {}
+/* 8000BCE0 */ u16 FileManager::getEnemyKillCount(u8 enemy) {}
+/* 8000BD60 */ void FileManager::setHitCountFromEnemy(u8 enemy, u16 hitCount) {}
+/* 8000BDD0 */ u16 FileManager::getHitCountFromEnemy(u8 enemy) {}
 
 /* 8000BE50 */ void FileManager::setLoadRoomT1_FileB(s16 roomId) {}
 /* 8000BE80 */ s16 FileManager::getLoadRoomT1_FileB() {}
