@@ -45,18 +45,18 @@ dAcBase_c::dAcBase_c()
     JStudio_actor = 0;
     someStr[0] = 0;
 
-    if (s_Create_Position != nullptr) {
-        position.set(s_Create_Position->x, s_Create_Position->y, s_Create_Position->z);
+    if (s_Create_Position) {
+        setPostion(*s_Create_Position);
     }
 
-    if (s_Create_Rotation != nullptr) {
-        rotation = *(s_Create_Rotation);
+    if (s_Create_Rotation) {
+        SetRotation(*s_Create_Rotation);
     }
 
-    if (s_Create_Scale != nullptr) {
-        setScale(s_Create_Scale->x, s_Create_Scale->y, s_Create_Scale->z);
+    if (s_Create_Scale) {
+        SetScale(*s_Create_Scale);
     } else {
-        setScale(1.0, 1.0, 1.0);
+        scale.set(1.0f, 1.0f, 1.0f);
     }
 
     if (s_Create_Parent != nullptr) {
@@ -74,11 +74,7 @@ dAcBase_c::dAcBase_c()
 // 8002c530
 dBase_c::~dBase_c() {}
 
-dAcBase_c::~dAcBase_c() {
-    if (sound_source != nullptr) {
-        // call obj_sound dtor once defined
-    }
-}
+dAcBase_c::~dAcBase_c() {}
 
 void dAcBase_c::setTempCreateParams(mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2,
         dAcBase_c *parent, u8 subtype, s16 unkFlag, u8 viewClipIdx, ObjInfo *objInfo) {
@@ -392,8 +388,7 @@ bool dAcBase_c::getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16
 
 // 8002d3e0
 bool dAcBase_c::isWithinPlayerRadius(f32 radius) {
-    mVec3_c dist_diff = position - dPlayer::LINK->position;
-
+    mVec3_c dist_diff = GetPostionDifference(dPlayer::LINK);
     return dist_diff.x * dist_diff.x + dist_diff.z * dist_diff.z < radius * radius;
 }
 
@@ -559,12 +554,11 @@ void dAcBase_c::FUN_8002dc20(s16 *, s16 *) {}
 void dAcBase_c::incrementKillCounter() {
     dAcObjBase_c *object = (dAcObjBase_c *)this; // Probably wrong
 
-
     if (group_type == ACTOR && object->unkByteTargetFiRelated == 1) {
         int killCounterId = object->targetFiTextId;
 
         if (killCounterId < 91 && (killCounterId & 0x300) == 0) {
-        FileManager *fileMgr = FileManager::sInstance;
+            FileManager *fileMgr = FileManager::sInstance;
             u16 killCount = fileMgr->getEnemyKillCount(killCounterId) + 1;
             fileMgr->setEnemyKillCount(killCounterId, killCount);
         }

@@ -9,7 +9,7 @@ class mVec3_c : public EGG::Vector3f {
 public:
     /// @brief Constructs an empty vector.
     /* 80009ee0 */ mVec3_c() {}
-    /* 80007460 */ ~mVec3_c() {}
+    // /* 80007460 */ ~mVec3_c() {}
 
     /// @brief Constructs a vector from a float array.
     mVec3_c(const f32 *p) {
@@ -17,6 +17,7 @@ public:
         y = p[1];
         z = p[2];
     }
+
     mVec3_c(const mVec3_c &other) {
         x = other.x;
         y = other.y;
@@ -30,15 +31,8 @@ public:
         z = fz;
     }
 
-    void set(f32 fx, f32 fy, f32 fz) {
-        x = fx;
-        y = fy;
-        z = fz;
-    }
     mVec3_c &operator=(const mVec3_c &r) {
-        x = r.x;
-        y = r.y;
-        z = r.z;
+        set(r.x, r.y, r.z);
         return *this;
     }
 
@@ -84,14 +78,6 @@ public:
     /// @brief Const nw4r::math::VEC3 cast operator.
     operator const nw4r::math::VEC3 *() const {
         return (const nw4r::math::VEC3 *)&x;
-    }
-
-    /// @brief Augmented addition operator.
-    mVec3_c &operator+=(const mVec3_c &v) {
-        x += v.x;
-        y += v.y;
-        z += v.z;
-        return *this;
     }
 
     /// @brief Augmented subtraction operator.

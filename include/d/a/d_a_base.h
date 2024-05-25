@@ -93,26 +93,28 @@ protected:
 public:
     /* 8002c3b0 */ dAcBase_c();
 
-    void setPostion(mVec3_c *r) {
-        position.set(r->x, r->y, r->z);
+    void setPostion(mVec3_c &r) {
+        position = r;
     }
-    void setScale(f32 x, f32 y, f32 z) {
-        scale.set(x, y, z);
+    void SetScale(mVec3_c &r) {
+        scale = r;
     }
-    void setScale(mVec3_c *r) {
-        scale.set(r->x, r->y, r->z);
-    }
-    void setRotation(mAng3_c *r) {
-        rotation = *r;
+    void SetRotation(mAng3_c &r) {
+        rotation = r;
     }
 
     void copyPosition() {
-        pos_copy.x = position.x;
-        pos_copy.y = position.y;
-        pos_copy.z = position.z;
+        pos_copy = position;
+    }
+
+    const mVec3_c &GetPostion() const {
+        return position;
     }
     void copyRotation() {
         rot_copy = rotation;
+    }
+    mVec3_c GetPostionDifference(const dAcBase_c *other) {
+        return position - other->position;
     }
 
 public:
