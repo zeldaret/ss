@@ -186,6 +186,7 @@ cflags_framework = [
     *cflags_base,
     "-inline noauto",
     "-str reuse",
+    "-fp_contract off",
     "-ipa file",
 ]
 

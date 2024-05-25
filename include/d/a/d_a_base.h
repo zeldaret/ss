@@ -24,6 +24,22 @@ struct SoundInfo {
     SoundInfo *next;
     SoundInfo *prev;
 };
+
+template <typename T, int offset>
+struct TList {
+    T *GetOffset() {
+        return (T *)((u8 *)this - offset);
+    }
+    TList() {
+        sound_info_next = GetOffset();
+        sound_info_tail = GetOffset();
+        count = 0;
+    }
+    T *sound_info_tail;
+    T *sound_info_next;
+    s32 count;
+};
+
 // Ghidra: ActorBase
 //   size: 0xFC
 // non-official name
@@ -31,9 +47,7 @@ class dAcBase_c : public dBase_c {
 public:
     /* 0x68 */ mHeapAllocator_c heap_allocator;
     /* 0x84 */ ObjInfo *obj_info;
-    /* 0x88 */ void *sound_info_tail;
-    /* 0x8c */ void *sound_info_next;
-    /* 0x90 */ int count;
+    /* 0x88 */ TList<SoundInfo, 0xC> sound_list;
     /* 0x94 */ SoundSource *sound_source;
     /* 0x9C */ mVec3_c *obj_pos;
     /* 0x9c */ mVec3_c pos_copy;
@@ -124,7 +138,7 @@ public:
     // Kinda performs the code of the first param on every actor (second param is optional parent)
     /* 8002d130 */ static void forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *parent);
     // Not really static, but we currently dont have a type for the return (not just simply a s16)
-    /* 8002d190 */ void getXZAngleToPlayer(s16 *angle);
+    /* 8002d190 */ mAng getXZAngleToPlayer(s16 *angle);
     // returns true if under the distThresh, False if not. the actual distance is returned in outDist
     /* 8002d1d0 */ bool getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDist);
     // same concept as above
@@ -164,9 +178,11 @@ public:
     /* 8002d940 */ void changeLoadedEntitiesWithSet();
     /* 8002d960 */ void changeLoadedEntitiesNoSet();
 
-    /* 8002d980 */ dAcBase_c *createActor(ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, s32 roomId, dBase_c *ref);
+    /* 8002d980 */ dAcBase_c *createActor(ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale,
+            u32 params2, s32 roomId, dBase_c *ref);
 
-    /* 8002da80 */ dAcBase_c *createActorStage(ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, s32 roomId, dBase_c *ref);
+    /* 8002da80 */ dAcBase_c *createActorStage(ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot,
+            mVec3_c *scale, u32 params2, s32 roomId, dBase_c *ref);
 
     /* 8002dc20 */ void FUN_8002dc20(s16 *, s16 *);
     /* 8002dc50 */ void incrementKillCounter();

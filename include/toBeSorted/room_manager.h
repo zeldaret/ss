@@ -2,9 +2,9 @@
 #define ROOM_MANAGER_H
 
 #include "d/d_base.h"
-#include <common.h>
 #include "m/m_allocator.h"
 #include "m/types_m.h"
+#include <common.h>
 
 #define MAX_ROOM_NUMBER 64
 
@@ -94,6 +94,7 @@ public:
     /* 80575760 */ static RoomManager *m_Instance;
 
 public:
+    dRoom *GetRoomByIndex(int roomid);
     /* 801b42b0 */ static dBase_c *getRoom(int roomid);
     /* 801b42d0 */ static void bindStageResToFile(nw4r::g3d::ResFile *);
     /* 801b4320 */ static void bindSkyCmnToResFile(nw4r::g3d::ResFile *);

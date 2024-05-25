@@ -1,13 +1,12 @@
 #include "d/a/d_a_base.h"
-#include "m/m_vec.h"
 #include "d/d_player.h"
 #include "f/f_list_nd.h"
-#include "toBeSorted/misc_flag_managers.h"
-#include "toBeSorted/special_item_drop_mgr.h"
-#include "toBeSorted/scgame.h"
+#include "m/m_vec.h"
 #include "toBeSorted/event.h"
 #include "toBeSorted/file_manager.h"
-
+#include "toBeSorted/misc_flag_managers.h"
+#include "toBeSorted/scgame.h"
+#include "toBeSorted/special_item_drop_mgr.h"
 
 // .sdata
 u32 dAcBase_c::s_Create_RoomId = -1;
@@ -27,12 +26,12 @@ extern "C" ObjInfo *getObjByActorIdAndSubtype_unkNamespace(ProfileName, u8);
 extern "C" ObjInfo *getObjByActorName_unkNamespace(char *name);
 extern "C" char *getObjectName_8006a730(ObjInfo *);
 extern "C" SoundSource *soundForActorInitRelated_803889c0(s8, fBase_c *, char *, u8);
-extern "C" short targetAngleY(mVec3_c *, mVec3_c *);
-extern "C" short targetAngleX(mVec3_c *, mVec3_c *);
+extern "C" s16 targetAngleY(mVec3_c *, mVec3_c *);
+extern "C" s16 targetAngleX(mVec3_c *, mVec3_c *);
 extern "C" bool checkCollision(mVec3_c *pos);
 extern "C" s8 collisionCheckGetRoom();
 extern "C" dRoom *getRoomByIndex(RoomManager *mgr, s8 roomid);
-extern "C" bool alsoSetAsCurrentEvent(dAcBase_c*, Event*, void *);
+extern "C" bool alsoSetAsCurrentEvent(dAcBase_c *, Event *, void *);
 
 bool dAcBase_c::createHeap() {
     return true;
@@ -40,8 +39,7 @@ bool dAcBase_c::createHeap() {
 
 // Doesnt Match Yet
 dAcBase_c::dAcBase_c()
-    : heap_allocator(), obj_info(s_Create_ObjInfo), sound_info_tail(&heap_allocator.mHeap),
-      sound_info_next(&heap_allocator.mHeap), count(0), sound_source(nullptr), obj_pos(&position),
+    : heap_allocator(), obj_info(s_Create_ObjInfo), sound_source(nullptr), sound_list(), obj_pos(&position),
       params2(s_Create_Params2), obj_id(s_Create_UnkFlags), viewclip_index(s_Create_ViewClipIdx), actor_node(nullptr),
       roomid(s_Create_RoomId), actor_subtype(s_Create_Subtype) {
     JStudio_actor = 0;
@@ -241,11 +239,12 @@ u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
         spawnPos = &position;
     }
 
-    u32 param2Copy = params2; 
+    u32 param2Copy = params2;
     params2 = param2Copy | 0xFF000000;
     // mAng3_c rot = {};
     s16 rot = 0;
-    return SpecialItemDropMgr::giveSpecialDropItem(SpecialItemDropMgr::sInstance, param2Copy >> 0x18, roomid, spawnPos, subtype, &rot, -1);
+    return SpecialItemDropMgr::giveSpecialDropItem(SpecialItemDropMgr::sInstance, param2Copy >> 0x18, roomid, spawnPos,
+            subtype, &rot, -1);
 }
 
 // 8002cf90
@@ -301,21 +300,24 @@ dAcBase_c *dAcBase_c::findActor(char *objName, dAcBase_c *parent) {
 
 // searches for actor based on groupType
 // 8002d0a0
-dAcBase_c *dAcBase_c::searchActor(dAcBase_c *parent) {
-    dAcBase_c *foundActor = nullptr;
-
-    if (parent == nullptr) {
-        foundActor = (dAcBase_c *)fManager_c::searchBaseByGroupType(ACTOR, nullptr);
-    } else if (parent->group_type == 2) {
-        foundActor = (dAcBase_c *)fManager_c::searchBaseByGroupType(ACTOR, parent);
-        parent = foundActor;
+DECOMP_INLINE dAcBase_c *findActor(dAcBase_c *parent) {
+    if (!parent) {
+        return (dAcBase_c *)fManager_c::searchBaseByGroupType(2, nullptr);
     }
+    if (parent->group_type == 2) {
+        return (dAcBase_c *)fManager_c::searchBaseByGroupType(2, parent);
+    }
+    return nullptr;
+}
 
-    if (foundActor == nullptr) {
+dAcBase_c *dAcBase_c::searchActor(dAcBase_c *parent) {
+    dAcBase_c *foundActor = ::findActor(parent);
+
+    if (foundActor) {
+        return foundActor;
+    } else {
         return (dAcBase_c *)fManager_c::searchBaseByGroupType(STAGE, parent);
     }
-
-    return foundActor;
 }
 
 // 8002d130
@@ -329,12 +331,10 @@ void dAcBase_c::forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *p
 }
 
 // 8002d190
-void dAcBase_c::getXZAngleToPlayer(s16 *angle) {
-    *angle = targetAngleY(&this->position, &dPlayer::LINK->position);
+mAng dAcBase_c::getXZAngleToPlayer(s16 *angle) {
+    return targetAngleY(&this->position, &dPlayer::LINK->position);
 }
 
-// The "distSquared > dist" bit is misbehaving.
-// Trying different operators doesn't work so I'm leaving it as the most simple wrong choice.
 // 8002d1d0
 bool dAcBase_c::getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDist) {
     f32 distSquared = 3.402823e+38;
@@ -343,26 +343,23 @@ bool dAcBase_c::getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDis
     if (actor != nullptr) {
         distSquared = PSVECSquareDistance(position, actor->position);
 
-        if (distSquared <= distThresh*distThresh) {
+        if (distSquared <= distThresh * distThresh) {
             isWithinThreshhold = true;
         }
     }
 
     if (outDist != nullptr) {
-        f32 dist = 0.0;
-        // TODO: make this not sad :(
-        if (distSquared <= dist) {
-            dist = nw4r::math::FrSqrt(distSquared) * distSquared;
-        }
-        *outDist = dist;
+        *outDist = distSquared <= 0.0f ? 0.0f : nw4r::math::FrSqrt(distSquared) * distSquared;
     }
+
     return isWithinThreshhold;
 }
 
 // Similar weirdness as the above function. Also, r29->31 are initted in the wrong order?
 // 8002d290
-bool dAcBase_c::getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX) {
-    f32 distSquared = 3.402823e+38;
+bool dAcBase_c::getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist,
+        s16 *outDiffAngleY, s16 *outDiffAngleX) {
+    f32 distSquared = 3.402823e+38f;
     s16 angleToActorY = 0;
     s16 angleToActorX = 0;
     bool isWithinRange = false;
@@ -372,21 +369,14 @@ bool dAcBase_c::getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16
         angleToActorY = targetAngleY(&position, &actor->position);
         angleToActorX = targetAngleX(&position, &actor->position);
 
-        if ((distSquared <= distThresh*distThresh)
-            && (labs(rotation.y - angleToActorY) <= yAngle)
-            && (labs(rotation.x - angleToActorX) <= xAngle)
-        ) {
+        if ((distSquared <= distThresh * distThresh) && (labs(rotation.y - angleToActorY) <= yAngle) &&
+                (labs(rotation.x - angleToActorX) <= xAngle)) {
             isWithinRange = true;
         }
     }
 
     if (outDist != nullptr) {
-        f32 dist = 0.0;
-        if (distSquared <= dist) {
-            dist = nw4r::math::FrSqrt(distSquared);
-            dist *= distSquared;
-        }
-        *outDist = dist;
+        *outDist = distSquared <= 0.0f ? 0.0f : nw4r::math::FrSqrt(distSquared) * distSquared;
     }
 
     if (outDiffAngleY != nullptr) {
@@ -400,16 +390,16 @@ bool dAcBase_c::getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16
     return isWithinRange;
 }
 
-// Very notmatching
 // 8002d3e0
 bool dAcBase_c::isWithinPlayerRadius(f32 radius) {
-    f32 zDist = position.z - dPlayer::LINK->position.z;
-    f32 xDist = position.x - dPlayer::LINK->position.x;
-    return (xDist*xDist + zDist*zDist) < radius*radius;
+    mVec3_c dist_diff = position - dPlayer::LINK->position;
+
+    return dist_diff.x * dist_diff.x + dist_diff.z * dist_diff.z < radius * radius;
 }
 
 // 8002d440
-bool dAcBase_c::getDistanceAndAngleToPlayer(f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX) {
+bool dAcBase_c::getDistanceAndAngleToPlayer(f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY,
+        s16 *outDiffAngleX) {
     return getDistanceAndAngleToActor(dPlayer::LINK, distThresh, yAngle, xAngle, outDist, outDiffAngleY, outDiffAngleX);
 }
 
@@ -427,10 +417,7 @@ f32 dAcBase_c::getSquareDistToPlayer() {
 // 8002d4b0
 void dAcBase_c::updateRoomId(f32 yOffset) {
     if (getConnectParent()->profile_name != 701 /* fProfile::PROFILE_NAME_e::ROOM */) {
-        mVec3_c actorPos;
-        actorPos.x = position.x;
-        actorPos.y = position.y + yOffset;
-        actorPos.z = position.z;
+        mVec3_c actorPos(position.x, position.y + yOffset, position.z);
 
         if (checkCollision(&actorPos)) {
             roomid = collisionCheckGetRoom();
@@ -442,8 +429,8 @@ void dAcBase_c::updateRoomId(f32 yOffset) {
 
 // 8002d540
 bool dAcBase_c::isRoomFlags_0x6_Set() {
-    dRoom *room = getRoomByIndex(RoomManager::m_Instance, roomid);
-    return (room->flags & 6) != 0;
+    dRoom *room = RoomManager::m_Instance->GetRoomByIndex(roomid);
+    return (room->flags & 6);
 }
 
 // Start of SoundSource stuff
@@ -496,7 +483,8 @@ void dAcBase_c::changeLoadedEntitiesNoSet() {
 
 // spawns GroupType2 (ACTOR)
 // 8002d980
-dAcBase_c *dAcBase_c::createActor(ProfileName actorId, u32 actorParams1, mVec3_c *actorPosition, mAng3_c *actorRotation, mVec3_c *actorScale, u32 actorParams2, s32 actorRoomid, dBase_c *actorRef) {
+dAcBase_c *dAcBase_c::createActor(ProfileName actorId, u32 actorParams1, mVec3_c *actorPosition, mAng3_c *actorRotation,
+        mVec3_c *actorScale, u32 actorParams2, s32 actorRoomid, dBase_c *actorRef) {
     if (actorPosition == nullptr) {
         actorPosition = &position;
     }
@@ -518,14 +506,16 @@ dAcBase_c *dAcBase_c::createActor(ProfileName actorId, u32 actorParams1, mVec3_c
         newParams2 = getParams2_ignoreLower();
     }
 
-    setTempCreateParams(actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1, 0xFF, nullptr);
+    setTempCreateParams(actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1,
+            0xFF, nullptr);
     dBase_c *room = RoomManager::getRoom(roomid);
     return (dAcBase_c *)dBase_c::createBase(actorId, room, actorParams1, ACTOR);
 }
 
 // spawns GroupType2 (STAGE)
 // 8002da80
-dAcBase_c *dAcBase_c::createActorStage(ProfileName actorId, u32 actorParams1, mVec3_c *actorPosition, mAng3_c *actorRotation, mVec3_c *actorScale, u32 actorParams2, s32 actorRoomid, dBase_c *actorRef) {
+dAcBase_c *dAcBase_c::createActorStage(ProfileName actorId, u32 actorParams1, mVec3_c *actorPosition,
+        mAng3_c *actorRotation, mVec3_c *actorScale, u32 actorParams2, s32 actorRoomid, dBase_c *actorRef) {
     if (actorPosition == nullptr) {
         actorPosition = &position;
     }
@@ -547,7 +537,8 @@ dAcBase_c *dAcBase_c::createActorStage(ProfileName actorId, u32 actorParams1, mV
         newParams2 = getParams2_ignoreLower();
     }
 
-    setTempCreateParams(actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1, 0xFF, nullptr);
+    setTempCreateParams(actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1,
+            0xFF, nullptr);
     dBase_c *room = RoomManager::getRoom(roomid);
     return (dAcBase_c *)dBase_c::createBase(actorId, room, actorParams1, STAGE);
 }
@@ -569,9 +560,7 @@ void dAcBase_c::doInteraction(s32 param) {
 
 // Only called by dPlayer::dig and that function fails to decomp in ghidra?
 // 8002dc20
-void dAcBase_c::FUN_8002dc20(s16 *, s16 *) {
-    
-}
+void dAcBase_c::FUN_8002dc20(s16 *, s16 *) {}
 
 // This whole function gets compiled to just a `blr`
 // Not sure how to make this work as expected
@@ -620,9 +609,7 @@ void dAcBase_c::FUN_8002dd90() {
 
 // Some collision related thing
 // 8002ddd0
-void dAcBase_c::FUN_8002ddd0() {
-
-}
+void dAcBase_c::FUN_8002ddd0() {}
 
 // 8002de30
 void dAcBase_c::FUN_8002de30() {
