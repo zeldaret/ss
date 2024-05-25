@@ -4,7 +4,6 @@
 #include <MSL_C/string.h>
 // clang-format on
 
-
 class UnkManager {
 public:
     /* vtable at 8050df50 */
@@ -17,7 +16,7 @@ public:
 };
 
 extern "C" int fn_80061B10(void *d, u32 len) {
-    u32 *data = (u32*)d;
+    u32 *data = (u32 *)d;
     u32 result = 0;
     // Compiler will unroll this loop
     for (u32 len_words = len / 4; len_words != 0; len_words--) {
@@ -35,7 +34,7 @@ extern "C" void fn_80061BE0(UnkManager *mgr, const char *name, size_t len) {
     // Sets stage to all spaces
     mgr->stage = 0x20202020;
     // copies the stage name?
-    memcpy((char*)&mgr->stage, name, len);
+    memcpy((char *)&mgr->stage, name, len);
 }
 
 dRawArcEntry_c::dRawArcEntry_c() {
@@ -58,7 +57,6 @@ dRawArcEntry_c::~dRawArcEntry_c() {
     }
     destroy(nullptr);
 }
-
 
 void dRawArcEntry_c::searchCallback(void *arg, void *data, const ARCDirEntry *entry, const char *path, bool ctrl) {
     UnkManager *mgr = (UnkManager *)arg;
@@ -85,7 +83,6 @@ void dRawArcEntry_c::searchCallback1(void *a, void *b, const ARCDirEntry *c, con
 void dRawArcEntry_c::searchCallback2(void *a, void *b, const ARCDirEntry *c, const char *d) {
     searchCallback(a, b, c, d, false);
 }
-
 
 bool dRawArcEntry_c::destroy(void *arg) {
     if (mpDvdReq != nullptr) {
@@ -186,8 +183,7 @@ bool dRawArcEntry_c::checkArcExistsOnDiskInner(char *outBuf, const char *fileNam
 
 int dRawArcEntry_c::mount(const char *name, void *data, void *callbackArg, u8 mountDirection, EGG::Heap *heap) {
     inline_strncpy(mArcName, name, sizeof(mArcName));
-    // TODO this conditional uses a few more instructions in the original binary
-    mpArc = EGG::Archive::mount(data, heap, mountDirection != 1 ? 4 : -4);
+    mpArc = EGG::Archive::mount(data, heap, (mountDirection == 0 || mountDirection == 1) ? 4 : -4);
     if (mpArc == nullptr) {
         return -1;
     } else {
@@ -237,7 +233,7 @@ int dRawArcEntry_c::ensureLoadedMaybe(void *callbackArg) {
         if (result == -1) {
             return result;
         }
-        DCStoreRange(mpFrmHeap, mpFrmHeap->mHeapHandle->end - (u8*)mpFrmHeap);
+        DCStoreRange(mpFrmHeap, mpFrmHeap->mHeapHandle->end - (u8 *)mpFrmHeap);
     }
 
     return 0;
@@ -250,7 +246,6 @@ int dRawArcEntry_c::onMount(void *callbackArg) {
     }
     return 0;
 }
-
 
 dRawArcTable_c::dRawArcTable_c() {
     mpEntries = nullptr;
@@ -391,8 +386,7 @@ int dRawArcTable_c::ensureAllEntriesLoaded() {
     return 0;
 }
 
-
-extern "C" bool strequals(const char *, const char*);
+extern "C" bool strequals(const char *, const char *);
 
 // TODO the load from self can happen earlier
 dRawArcEntry_c *dRawArcTable_c::findEntry(const char *name) const {
