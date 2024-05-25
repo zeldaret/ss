@@ -287,7 +287,7 @@ config.libs = [
             Object(NonMatching, "d/d_dvd_unk.cpp"),
             Object(NonMatching, "d/d_dylink.cpp"),
             Object(NonMatching, "d/d_heap.cpp"),
-            Object(NonMatching, "d/d_rawarchive.cpp"),
+            Object(Matching, "d/d_rawarchive.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
             Object(NonMatching, "d/d_sys.cpp"),
             Object(NonMatching, "d/a/d_a_base.cpp"),

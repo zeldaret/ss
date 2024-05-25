@@ -137,10 +137,17 @@ bool dRawArcEntry_c::loadArcFromDiskChecked(const char *fileName, const char *di
 inline void inline_strncat(char *dest, const char *src, size_t destSize) {
     if (src != nullptr) {
         size_t destLen = strlen(dest);
-        size_t srcLen = strlen(src);
-        size_t count = destLen + srcLen + 1 >= destSize ? destSize - destLen - 1 : srcLen;
-        strncpy(dest + destLen, src, count);
-        size_t offset = destLen + count;
+        size_t copyLen = strlen(src);
+
+        // Make sure copy length isnt more than destination length
+        if (destLen + copyLen + 1 >= destSize) {
+            copyLen = destSize - destLen - 1;
+        }
+
+        strncpy(dest + destLen, src, copyLen);
+
+        // make sure string is null terminated
+        size_t offset = destLen + copyLen;
         dest[offset] = '\0';
     }
 }
