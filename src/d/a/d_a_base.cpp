@@ -552,9 +552,8 @@ void dAcBase_c::unkVirtFunc_0x6C() {}
 // 8002dba0
 void dAcBase_c::doInteraction(s32 param) {
     if (param == 4 || param == 5 || param == 12) {
-        Event *event = &Event("DefaultTalk", 400, 0x100001, nullptr, nullptr);
-        alsoSetAsCurrentEvent(this, event, nullptr);
-        event->~Event();
+        Event event = Event("DefaultTalk", 400, 0x100001, nullptr, nullptr);
+        alsoSetAsCurrentEvent(this, &event, nullptr);
     }
 }
 

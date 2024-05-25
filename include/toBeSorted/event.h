@@ -15,7 +15,9 @@ public:
     void *callback2;
 
 public:
+    /** 0x800A0C40 */
     Event(char *eventName, u32 unk, u32 eventFlags, void *callback1, void *callback2);
+    /** 0x800A1240 */
     virtual ~Event();
 };
 

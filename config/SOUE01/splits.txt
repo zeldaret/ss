@@ -29,7 +29,7 @@ toBeSorted/save_manager.cpp:
 
 d/a/d_a_base.cpp:
 	.text       start:0x8002C3A0 end:0x8002DE40
-	.data       start:0x80501544 end:0x805015B8
+	.data       start:0x80501538 end:0x805015B8
 	.sdata      start:0x80571920 end:0x80571930
 	.sbss       start:0x80575080 end:0x80575098
 	.sdata2     start:0x80576C88 end:0x80576C8C
