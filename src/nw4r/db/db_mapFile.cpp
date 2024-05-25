@@ -17,7 +17,7 @@ static s32 sMapBufMaxSize = 0x200;
 static u8 *sMapBuf = dvdReadBuf;
 static s32 sMapBufOffset = -1;
 
-static void MapFile_Append(MapFile *file) {
+static void MapFile_Append_(MapFile *file) {
     if (sMapFileList == nullptr) {
         sMapFileList = file;
         return;
@@ -40,7 +40,7 @@ MapFileHandle MapFile_RegistOnDvd(void *buf, const char *path, const OSModuleInf
     file->fileEntry = DVDConvertPathToEntrynum(path);
     file->next = nullptr;
 
-    MapFile_Append(file);
+    MapFile_Append_(file);
     return file;
 }
 
