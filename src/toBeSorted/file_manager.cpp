@@ -1,8 +1,7 @@
 #include "toBeSorted/file_manager.h"
 #include "f/f_base.h"
 #include <m/m_heap.h>
-// #include "libc.h"
-#include <MSL_C/string.h>
+#include <inline_string.h>
 
 // This class here makes no sense and the name might
 // be a total misnomer, but this gets the sinit section correct
@@ -142,7 +141,7 @@ inline void strnsth(char *dest, const char *src, size_t max_len) {
 
     char buf[0x20];
     buf[0] = '\0';
-    strnsth(buf, "F405", 0x20);
+    inline_strncpy(buf, "F405", sizeof(buf));
     file->setAreaT1(buf);
     file->room_id_t1 = 0;
     file->forced_layer_t1 = 0;
