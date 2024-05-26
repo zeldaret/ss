@@ -351,22 +351,27 @@ bool dAcBase_c::getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDis
     return isWithinThreshhold;
 }
 
+s32 doAbs(s16 val) {
+    return labs(val);
+}
 // Similar weirdness as the above function. Also, r29->31 are initted in the wrong order?
 // 8002d290
 bool dAcBase_c::getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist,
         s16 *outDiffAngleY, s16 *outDiffAngleX) {
     f32 distSquared = 3.402823e+38f;
-    s16 angleToActorY = 0;
-    s16 angleToActorX = 0;
+    s16 angleToActorY, angleToActorX;
     bool isWithinRange = false;
+
+    angleToActorY = 0;
+    angleToActorX = 0;
 
     if (actor != nullptr) {
         distSquared = PSVECSquareDistance(position, actor->position);
         angleToActorY = targetAngleY(&position, &actor->position);
         angleToActorX = targetAngleX(&position, &actor->position);
 
-        if ((distSquared <= distThresh * distThresh) && (labs(rotation.y - angleToActorY) <= yAngle) &&
-                (labs(rotation.x - angleToActorX) <= xAngle)) {
+        if ((distSquared <= distThresh * distThresh) && (doAbs(s32(rotation.y - angleToActorY)) <= yAngle) &&
+                (doAbs(s32(rotation.x - angleToActorX)) <= xAngle)) {
             isWithinRange = true;
         }
     }
