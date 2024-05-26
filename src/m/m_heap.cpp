@@ -11,7 +11,7 @@ EGG::Heap *mHeap::g_gameHeaps[4];
 EGG::Heap *mHeap::s_SavedCurrentHeap;
 EGG::Heap *mHeap::g_archiveHeap;
 EGG::Heap *mHeap::g_commandHeap;
-EGG::Heap *mHeap::g_dylinkHeap;
+EGG::ExpHeap *mHeap::g_dylinkHeap;
 EGG::AssertHeap *mHeap::g_assertHeap;
 const char *const mHeap::s_GameHeapNames[4] = {
         0,
@@ -144,7 +144,7 @@ mHeap::~mHeap() {
     heap->becomeCurrentHeap();
 }
 
-EGG::Heap *mHeap::createHeap(size_t size, EGG::Heap *block, const char *name) {
+EGG::ExpHeap *mHeap::createHeap(size_t size, EGG::Heap *block, const char *name) {
     EGG::ExpHeap *heap = EGG::ExpHeap::create(size, block, 4);
     if (heap != nullptr) {
         heap->setGroupID(0);

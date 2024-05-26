@@ -61,7 +61,7 @@ struct DynamicModuleControl : DynamicModuleControlBase {
     /* 802dfa60 */ virtual bool do_unlink();
     /* 802df3d0 */ DynamicModuleControl(char const*, EGG::ExpHeap *);
     /* 802df4d0 */ static void initialize(EGG::ExpHeap *heap);
-    /* 802df530 */ static bool callback(void*);
+    /* 802df530 */ static u32 callback(void*);
     void checkHeapStatus();
 
     /* 0x10 */ UNKWORD unk_16;

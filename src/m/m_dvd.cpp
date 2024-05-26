@@ -330,7 +330,7 @@ mDvd_callback_c::~mDvd_callback_c() {}
 mDvd_callback_c::mDvd_callback_c(dvdReadCallback cb, void *cbData) {
     mCallback = cb;
     mCallbackData = cbData;
-    mSuccess = false;
+    mCallbackResult = 0;
 }
 
 /* 802ef5d0 */
@@ -343,7 +343,7 @@ mDvd_callback_c *mDvd_callback_c::create(dvdReadCallback cb, void *cbData) {
 }
 
 /** 802ef650 */
-extern "C" mDvd_callback_c *fn_802EF650(dvdReadCallback cb, void *cbData) {
+mDvd_callback_c *mDvd_callback_c::createOrFail(dvdReadCallback cb, void *cbData) {
     mDvd_callback_c *cmd = mDvd_callback_c::create(cb, cbData);
     while (!cmd) {}
     return cmd;
@@ -351,9 +351,9 @@ extern "C" mDvd_callback_c *fn_802EF650(dvdReadCallback cb, void *cbData) {
 
 /** 802ef680 */
 u32 mDvd_callback_c::execute() {
-    mSuccess = (mCallback)(mCallbackData);
+    mCallbackResult = (mCallback)(mCallbackData);
     waitDone();
-    return (bool)mSuccess;
+    return (bool)mCallbackResult;
 }
 
 /** 802ef6e0 */

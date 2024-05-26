@@ -3,10 +3,18 @@
 
 #include <common.h>
 
-namespace dDyl {
+class dDynamicModuleControl {
+public:
+    dDynamicModuleControl() {}
+    virtual ~dDynamicModuleControl();
 
-bool Unlink(u16 relId);
+    void set(u16 *ptr, int count);
+    BOOL do_link() const;
+    BOOL do_unlink();
 
-} // dDyl
+private:
+    u16 *mPtr;
+    int mCount;
+};
 
 #endif
