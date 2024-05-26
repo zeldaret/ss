@@ -347,12 +347,12 @@ void Pane::Animate(u32 option) {
 void Pane::AnimateSelf(u32 option) {
     for (ut::LinkList<AnimationLink, 0>::Iterator it = this->mAnimList.GetBeginIter();
             it != this->mAnimList.GetEndIter(); it++) {
-        if (!it->mbDisable) {
-            AnimTransform *animTrans = it->mAnimTrans;
-            animTrans->Animate(it->mIdx, this);
+        if (it->IsEnable()) {
+            AnimTransform *animTrans = it->GetAnimTransform();
+            animTrans->Animate(it->GetIndex(), this);
         }
     }
-    if (IsVisible() || !(option & 1)) {
+    if (IsVisible() || !detail::TestBit(option, 0)) {
         if (this->mpMaterial) {
             mpMaterial->Animate();
         }
@@ -407,7 +407,7 @@ AnimationLink *Pane::FindAnimationLinkSelf(const AnimResource &animRes) {
 void Pane::SetAnimationEnable(AnimTransform *pAnimTrans, bool bEnable, bool bRecursive) {
     AnimationLink *pAnimLink = FindAnimationLinkSelf(pAnimTrans);
     if (pAnimLink) {
-        pAnimLink->mbDisable = !bEnable;
+        pAnimLink->SetEnable(bEnable);
     }
 
     u8 materialNum = GetMaterialNum();
@@ -426,7 +426,7 @@ void Pane::SetAnimationEnable(AnimTransform *pAnimTrans, bool bEnable, bool bRec
 void Pane::SetAnimationEnable(const AnimResource &animRes, bool bEnable, bool bRecursive) {
     AnimationLink *pAnimLink = FindAnimationLinkSelf(animRes);
     if (pAnimLink) {
-        pAnimLink->mbDisable = !bEnable;
+        pAnimLink->SetEnable(bEnable);
     }
 
     u8 materialNum = GetMaterialNum();

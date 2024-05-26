@@ -7,14 +7,6 @@
 
 namespace nw4r {
 namespace lyt {
-namespace res {
-struct Group {
-    DataBlockHeader blockHeader;    // at 0x00 "grp1"
-    char mName[NW4R_RES_NAME_SIZE]; // at 0x08
-    u16 paneNum;                    // at 0x18
-    u16 padding;                    // at 0x1A
-};
-} // namespace res
 
 namespace detail {
 struct PaneLink {

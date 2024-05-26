@@ -7,13 +7,15 @@
 namespace nw4r {
 namespace lyt {
 namespace detail {
-bool IsCITexelFormat(GXTexFmt fmt) {
+inline bool IsCITexelFormat(GXTexFmt fmt) {
     return (fmt == GX_TF_C4 || fmt == GX_TF_C8 || fmt == GX_TF_C14X2);
 }
 } // namespace detail
 
 class TexMap {
 public:
+    TexMap() {}
+
     void Get(GXTexObj *) const;
     void Get(GXTlutObj *) const;
 
@@ -27,17 +29,17 @@ public:
     void SetNoWrap(const TPLDescriptor *);
 
     void *GetImage() const {
-        return mImage;
+        return mpImage;
     }
     void SetImage(void *img) {
-        mImage = img;
+        mpImage = img;
     }
 
     void *GetPalette() const {
-        return mPalette;
+        return mpPalette;
     }
     void SetPalette(void *pal) {
-        mPalette = pal;
+        mpPalette = pal;
     }
 
     u16 GetWidth() const {
@@ -77,90 +79,91 @@ public:
     }
 
     GXTexFmt GetTexelFormat() const {
-        return (GXTexFmt)mTexelFormat;
+        return (GXTexFmt)mBits.mTexelFormat;
     }
     void SetTexelFormat(GXTexFmt fmt) {
-        mTexelFormat = fmt;
+        mBits.mTexelFormat = fmt;
     }
 
     bool IsMipMap() const {
-        return mIsMipMap;
+        return mBits.mIsMipMap;
     }
     void SetMipMap(bool b) {
-        mIsMipMap = b;
+        mBits.mIsMipMap = b;
     }
 
     GXTexWrapMode GetWrapModeS() const {
-        return (GXTexWrapMode)mWrapModeS;
+        return (GXTexWrapMode)mBits.mWrapModeS;
     }
     GXTexWrapMode GetWrapModeT() const {
-        return (GXTexWrapMode)mWrapModeT;
+        return (GXTexWrapMode)mBits.mWrapModeT;
     }
     void SetWrapMode(GXTexWrapMode wrapS, GXTexWrapMode wrapT) {
-        mWrapModeS = wrapS;
-        mWrapModeT = wrapT;
+        mBits.mWrapModeS = wrapS;
+        mBits.mWrapModeT = wrapT;
     }
 
     GXTexFilter GetMinFilter() const {
-        return (GXTexFilter)mMinFilter;
+        return (GXTexFilter)mBits.mMinFilter;
     }
     GXTexFilter GetMagFilter() const {
-        return (GXTexFilter)mMagFilter;
+        return (GXTexFilter)mBits.mMagFilter;
     }
     void SetFilter(GXTexFilter minFlt, GXTexFilter magFlt) {
-        mMinFilter = minFlt;
-        mMagFilter = magFlt;
+        mBits.mMinFilter = minFlt;
+        mBits.mMagFilter = magFlt;
     }
 
     bool IsBiasClampEnable() const {
-        return mIsBiasClampEnable;
+        return mBits.mIsBiasClampEnable;
     }
     void SetBiasClampEnable(bool b) {
-        mIsBiasClampEnable = b;
+        mBits.mIsBiasClampEnable = b;
     }
 
     bool IsEdgeLODEnable() const {
-        return mIsEdgeLODEnable;
+        return mBits.mIsEdgeLODEnable;
     }
     void SetEdgeLODEnable(bool b) {
-        mIsEdgeLODEnable = b;
+        mBits.mIsEdgeLODEnable = b;
     }
 
     GXAnisotropy GetAnisotropy() const {
-        return (GXAnisotropy)mAnisotropy;
+        return (GXAnisotropy)mBits.mAnisotropy;
     }
     void SetAnisotropy(GXAnisotropy a) {
-        mAnisotropy = a;
+        mBits.mAnisotropy = a;
     }
 
     GXTlutFmt GetPaletteFormat() const {
-        return (GXTlutFmt)mPaletteFormat;
+        return (GXTlutFmt)mBits.mPaletteFormat;
     }
     void SetPaletteFormat(GXTlutFmt fmt) {
-        mPaletteFormat = fmt;
+        mBits.mPaletteFormat = fmt;
     }
 
 private:
-    void *mImage;         // at 0x0
-    void *mPalette;       // at 0x4
-    u16 mWidth;           // at 0x8
-    u16 mHeight;          // at 0xA
-    f32 mMinLOD;          // at 0xC
+    void *mpImage;        // at 0x00
+    void *mpPalette;      // at 0x04
+    u16 mWidth;           // at 0x08
+    u16 mHeight;          // at 0x0A
+    f32 mMinLOD;          // at 0x0C
     f32 mMaxLOD;          // at 0x10
     u16 mLODBias;         // at 0x14
     u16 mPaletteEntryNum; // at 0x16
+    struct {
+        u32 mTexelFormat : 4;       // GXTexFmt
+        u32 mIsMipMap : 1;          // bool
+        u32 mWrapModeS : 2;         // GXTexWrapMode
+        u32 mWrapModeT : 2;         // GXTexWrapMode
+        u32 mMinFilter : 3;         // GXTexFilter
+        u32 mMagFilter : 3;         // GXTexFilter
+        u32 mIsBiasClampEnable : 1; // bool
+        u32 mIsEdgeLODEnable : 1;   // bool
+        u32 mAnisotropy : 2;        // GXAnisotropy
+        u32 mPaletteFormat : 2;     // GXTlutFmt
 
-    // at 0x18
-    u32 mTexelFormat : 4;       // GXTexFmt
-    u32 mIsMipMap : 1;          // bool
-    u32 mWrapModeS : 2;         // GXTexWrapMode
-    u32 mWrapModeT : 2;         // GXTexWrapMode
-    u32 mMinFilter : 3;         // GXTexFilter
-    u32 mMagFilter : 3;         // GXTexFilter
-    u32 mIsBiasClampEnable : 1; // bool
-    u32 mIsEdgeLODEnable : 1;   // bool
-    u32 mAnisotropy : 2;        // GXAnisotropy
-    u32 mPaletteFormat : 2;     // GXTlutFmt
+    } mBits; // at 0x18
 };
 } // namespace lyt
 } // namespace nw4r

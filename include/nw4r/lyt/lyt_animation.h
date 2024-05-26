@@ -8,58 +8,6 @@
 
 namespace nw4r {
 namespace lyt {
-namespace res {
-struct AnimationBlock {
-    DataBlockHeader blockHeader; // at 0x00
-    u16 frameSize;               // at 0x08
-    bool loop;                   // at 0x0A
-    u8 padding1;                 // at 0x0B
-    u16 fileNum;                 // at 0x0C
-    u16 animContNum;             // at 0x0E
-    u32 animContOffsetsOffset;   // at 0x10
-};
-
-struct AnimationTagBlock {
-    DataBlockHeader blockHeader; // at 0x00
-    u16 tagOrder;                // at 0x08
-    u16 groupNum;                // at 0x0A
-    u32 nameOffset;              // at 0x0C
-    u32 groupsOffset;            // at 0x10
-    u16 startFrame;              // at 0x14
-    u16 endFrame;                // at 0x16
-    u8 flag;                     // at 0x18
-    u8 padding[3];               // at 0x19
-};
-
-struct AnimationShareBlock {
-    DataBlockHeader blockHeader; // at 0x00
-    u32 animShareInfoOffset;     // at 0x04
-    u16 shareNum;                // at 0x0C
-    u8 padding[2];               // at 0x0E
-};
-} // namespace res
-
-struct AnimationShareInfo {
-    const char *GetTargetGroupName() const {
-        return targetGroupName;
-    }
-    const char *GetSrcPaneName() const {
-        return srcPaneName;
-    }
-
-    char srcPaneName[17];     // at 0x00
-    char targetGroupName[17]; // at 0x11
-    u8 padding[2];            // at 0x12
-};
-struct AnimationGroupRef {
-    const char *GetName() const {
-        return name;
-    }
-
-    char name[17]; // at 0x00
-    u8 flag;       // at 0x11
-    u8 padding[2]; // at 0x12
-};
 
 class AnimResource {
 public:
@@ -121,44 +69,7 @@ private:
 };
 
 } // namespace detail
-struct AnimTransform {
-    inline AnimTransform() : mLink(), mpRes(NULL), mFrame(0.0f) {}
 
-    u16 GetFrameSize() const;
-    bool IsLoopData() const;
-    virtual ~AnimTransform() = 0;
-    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor) = 0;
-    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor, u16 animNum) = 0;
-    virtual void Bind(Pane *pPane, bool bRecursive) = 0;
-    virtual void Bind(Material *pMaterial, bool bDisable) = 0;
-    virtual void Animate(u32 idx, Pane *pPane) = 0;
-    virtual void Animate(u32 idx, Material *pMaterial) = 0;
-
-    ut::LinkListNode mLink;     // at 0x4
-    res::AnimationBlock *mpRes; // at 0xC
-    f32 mFrame;                 // at 0x10
-};
-
-struct AnimationLink {
-    inline AnimationLink() : mLink() {
-        Reset();
-    }
-
-    inline void Reset() {
-        Set(NULL, 0, false);
-    }
-
-    inline void Set(AnimTransform *pTransform, u16 us, bool b) {
-        mAnimTrans = pTransform;
-        mIdx = us;
-        mbDisable = b;
-    }
-
-    ut::LinkListNode mLink;    // at 0x0
-    AnimTransform *mAnimTrans; // at 0x8
-    u16 mIdx;                  // at 0xC
-    bool mbDisable;            // at 0xE
-};
 class AnimTransformBasic : public AnimTransform {
 public:
     AnimTransformBasic();

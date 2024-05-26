@@ -2,48 +2,54 @@
 #define NW4R_LYT_MATERIAL_H
 #include "nw4r/lyt/lyt_animation.h"
 #include "nw4r/ut/ut_LinkList.h"
+#include <nw4r/lyt/lyt_resources.h>
+#include <nw4r/lyt/lyt_texMap.h>
 #include <nw4r/ut/ut_Color.h>
 #include <rvl/GX.h>
-
-#define MATERIAL_NAME_SIZE 20
 
 namespace nw4r {
 namespace lyt {
 
-namespace res {
-struct MaterialList {
-    DataBlockHeader blockHeader; // at 0x00
-    u16 materialNum;             // at 0x08
-    u8 padding[2];               // at 0x0A
-};
-
-} // namespace res
-
-struct BitGXNums {
-    union {
-        u32 texSRT;
-        u32 texCoordGen;
-        u32 indSRT;
-        u32 indStage;
-        u32 tevSwap;
-        u32 tevStage;
-        u32 chanCtrl;
-        u32 matCol;
-        u32 alpComp;
-        u32 blendMode;
-    };
-};
-
-struct Material {
+class Material {
+public:
+    Material(const res::Material *pResMat, const ResBlockSet &ResBlockSet);
     // IsBlendModeCap__Q34nw4r3lyt8MaterialCFv
+    bool IsBlendModeCap() const {
+        return mGXMemCap.blendMode;
+    }
+
     // IsAlphaCompareCap__Q34nw4r3lyt8MaterialCFv
+    bool IsAlphaCompareCap() const {
+        return mGXMemCap.alpComp;
+    }
+
     // IsTevSwapCap__Q34nw4r3lyt8MaterialCFv
+    bool IsTevSwapCap() const {
+        return mGXMemCap.tevSwap;
+    }
+
     // IsMatColorCap__Q34nw4r3lyt8MaterialCFv
+    bool IsMatColorCap() const {
+        return mGXMemCap.matCol;
+    }
+
     // IsChanCtrlCap__Q34nw4r3lyt8MaterialCFv
+    bool IsChanCtrlCap() const {
+        return mGXMemCap.chanCtrl;
+    }
+
     // SetTexSRTElement__Q34nw4r3lyt8MaterialFUlUlf
     // GetTexturePtr__Q34nw4r3lyt8MaterialFUc
+
     // GetTexSRTCap__Q34nw4r3lyt8MaterialCFv
+    u8 GetTexSRTCap() const {
+        return mGXMemCap.texSRT;
+    }
+
     // GetIndTexSRTCap__Q34nw4r3lyt8MaterialCFv
+    u8 GetIndTexSRTCap() const {
+        return mGXMemCap.indSRT;
+    }
     // SetIndTexSRTElement__Q34nw4r3lyt8MaterialFUlUlf
 
     ut::LinkList<AnimationLink, 0> *GetAnimationList() {
@@ -56,8 +62,35 @@ struct Material {
         return mName;
     }
 
+    u8 GetTexCoordGenCap() const {
+        return mGXMemCap.texCoordGen;
+    }
+    u8 GetTexCoordGenNum() const {
+        return mGXMemNum.texCoordGen;
+    }
+    u8 GetTextureCap() const {
+        return mGXMemCap.texMap;
+    }
+
+    u8 GetTextureNum() const {
+        return mGXMemNum.texMap;
+    }
+    void SetTextureNum(u8 val);
+    void SetTexCoordGenNum(u8 val);
+    TexMap *GetTexMapAry() const;
+    TexMap *GetTexMapAry();
+    TexCoordGen *GetTexCoordGenAry();
+
+    void SetTexture(u32 texMapIdx, const TexMap &texMap) {
+        GetTexMapAry()[texMapIdx] = texMap;
+    }
+
+    void SetTexCoordGen(u32 idx, TexCoordGen value) {
+        GetTexCoordGenAry()[idx] = value;
+    }
+
     virtual ~Material();                                                        // at 0x08
-    virtual bool SetupGX(bool bModVtxCok, u8 alpha);                            // at 0x0C
+    virtual bool SetupGX(bool bModVtxCol, u8 alpha);                            // at 0x0C
     virtual void BindAnimation(AnimTransform *pAnimTrans);                      // at 0x10
     virtual void UnbindAnimation(AnimTransform *pAnimTrans);                    // at 0x14
     virtual void UnbindAllAnimation();                                          // at 0x18
@@ -78,6 +111,13 @@ private:
     bool mbUserAllocated;                     // at 0x59
     u8 mPadding[2];                           // at 0x5A
 };
+
+namespace detail {
+
+Size GetTextureSize(Material *pMaterial, u8 texMapIdx);
+
+} // namespace detail
+
 } // namespace lyt
 } // namespace nw4r
 

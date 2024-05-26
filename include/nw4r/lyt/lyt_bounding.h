@@ -7,9 +7,6 @@
 
 namespace nw4r {
 namespace lyt {
-namespace res {
-struct Bounding : Pane {};
-} // namespace res
 
 struct ResBlockSet {
     const res::TextureList *pTextureList;   // at 0x00

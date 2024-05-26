@@ -35,7 +35,7 @@ void SetTagProcessorImpl(Pane *pPane, ut::TagProcessorBase<wchar_t> *pTagProcess
 bool IsIncludeAnimationGroupRef(GroupContainer *pGroupContainer, const AnimationGroupRef *groupRefs, u16 bindGroupNum,
         bool bDescendingBind, Pane *pTargetPane) {
     for (u16 grpIdx = 0; grpIdx < bindGroupNum; grpIdx++) {
-        Group *pGroup = pGroupContainer->FindGroupByName(groupRefs[grpIdx].name);
+        Group *pGroup = pGroupContainer->FindGroupByName(groupRefs[grpIdx].GetName());
         for (ut::LinkList<detail::PaneLink, 0>::Iterator paneList = pGroup->GetPaneList()->GetBeginIter();
                 paneList != pGroup->GetPaneList()->GetEndIter(); paneList++) {
             const Pane *t = paneList->mTarget;
@@ -95,9 +95,10 @@ bool Layout::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
         const res::DataBlockHeader *pDataBlockHead = (const res::DataBlockHeader *)dataPtr;
         switch (pDataBlockHead->kind) {
         case 'lyt1': // Main Layout
+        {
             const res::Layout *pResLyt = ((const res::Layout *)dataPtr);
             mLayoutSize = pResLyt->layoutSize;
-            break;
+        } break;
         case 'txl1': // Texture List
             resBlockSet.pTextureList = (const res::TextureList *)dataPtr;
             break;
@@ -112,6 +113,7 @@ bool Layout::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
         case 'pic1': // Picture
         case 'txt1': // Text Box
         case 'bnd1': // Boundary Pane
+        {
             Pane *pPane = BuildPaneObj(pDataBlockHead->kind, dataPtr, resBlockSet);
             if (pPane) {
                 if (mpRootPane == nullptr) {
@@ -122,7 +124,7 @@ bool Layout::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
                 }
                 pLastPane = pPane;
             }
-            break;
+        } break;
         case 'usd1': // User Data
             pLastPane->SetExtUserDataList((const res::ExtUserDataList *)dataPtr);
             break;

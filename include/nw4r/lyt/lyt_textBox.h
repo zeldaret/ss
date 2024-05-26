@@ -6,24 +6,6 @@
 namespace nw4r {
 
 namespace lyt {
-namespace res {
-
-struct TextBox : public Pane {
-    u16 textBufBytes;  // at 0x4C
-    u16 materialIdx;   // at 0x50
-    u16 fontIdx;       // at 0x52
-    u8 textPosition;   // at 0x54
-    u8 textAlignment;  // at 0x55
-    u8 padding[2];     // at 0x56
-    u32 textStrOffset; // at 0x58
-    u32 textCols[2];   // at 0x5C
-    Size fontSize;     // at 0x64
-    f32 charSpace;     // at 0x6C
-    f32 lineSpace;     // at 0x70
-};
-
-} // namespace res
-
 class TextBox : public Pane {
 public:
     void SetTagProcessor(ut::TagProcessorBase<wchar_t> *pTagProcessor) {

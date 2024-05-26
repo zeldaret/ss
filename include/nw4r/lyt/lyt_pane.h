@@ -7,12 +7,9 @@
 #include "nw4r/ut/ut_LinkList.h"
 #include "nw4r/ut/ut_RuntimeTypeInfo.h"
 #include "nw4r/ut/ut_algorithm.h"
+#include <nw4r/lyt/lyt_resources.h>
 #include <nw4r/lyt/lyt_types.h>
 #include <string.h>
-
-#define PANE_NAME_SIZE 16
-#define PANE_USERDATA_SIZE 8
-#define ANIMTARGET_PANE_MAX 10
 
 namespace nw4r {
 namespace lyt {
@@ -24,38 +21,6 @@ struct PaneBase {
 };
 
 } // namespace detail
-
-namespace res {
-
-// TODO: Find proper place?
-// GUESS: In the FindExtUserDataByName function it iterates through ExtUserData
-struct ExtUserData {
-    u32 nameOffs;   // at 0x00
-    u32 datOffs;    // at 0x04
-    u16 numEntries; // at 0x08
-    u8 type;        // at 0x0A
-    u8 padding;     // at 0x0B
-};
-
-struct ExtUserDataList {
-    DataBlockHeader blockHeader; // at 0x00
-    u16 num;                     // at 0x08
-    u16 padding;                 // at 0x0A
-};
-struct Pane {
-    DataBlockHeader blockHeader;        // at 0x00 "pan1"
-    u8 flag;                            // at 0x08
-    u8 basePosition;                    // at 0x09
-    u8 alpha;                           // at 0x0A
-    u8 padding;                         //
-    char name[PANE_NAME_SIZE];          // at 0x0C
-    char mUserData[PANE_USERDATA_SIZE]; // at 0x1C
-    math::VEC3 translate;               // at 0x24
-    math::VEC3 rotate;                  // at 0x30
-    math::VEC2 scale;                   // at 0x3C
-    Size size;                          // at 0x44
-};
-} // namespace res
 
 class Pane : detail::PaneBase {
 public:
@@ -146,7 +111,7 @@ public:
     virtual void DrawSelf(const DrawInfo &);                                                     // at 0x18
     virtual void Animate(u32);                                                                   // at 0x1C
     virtual void AnimateSelf(u32);                                                               // at 0x20
-    virtual ut::Color GetVtxColor(u32) const;                                                    // at 0x24
+    virtual ut::Color GetVtxColor(u32 idx) const;                                                // at 0x24
     virtual void SetVtxColor(u32, ut::Color);                                                    // at 0x28
     virtual u8 GetColorElement(u32 idx) const;                                                   // at 0x2C
     virtual void SetColorElement(u32 idx, u8 value);                                             // at 0x30
@@ -167,7 +132,7 @@ public:
     virtual Material *GetMaterial(u32 idx) const;                                                // at 0x6C
     virtual void LoadMtx(const DrawInfo &drawInfo);                                              // at 0x70
 
-private:
+protected:
     Pane *mpParent;                                // at 0x0C
     ut::LinkList<Pane, 4> mChildList;              // at 0x10
     ut::LinkList<AnimationLink, 0> mAnimList;      // at 0x1C;

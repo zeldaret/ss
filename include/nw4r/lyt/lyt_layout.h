@@ -88,29 +88,29 @@ public:
 
     template <typename T>
     static T *NewObj() {
-        T *obj = (T *)AllocMemory(sizeof(T));
-        if (obj) {
-            return new (obj) T();
+        T *pMem = (T *)AllocMemory(sizeof(T));
+        if (pMem) {
+            return new (pMem) T();
         } else {
             return nullptr;
         }
     }
 
-    template <typename T, typename T2>
-    static T *NewObj(T2 p2) {
-        T *obj = (T *)AllocMemory(sizeof(T));
-        if (obj) {
-            return new (obj) T(p2);
+    template <typename T, typename P1>
+    static T *NewObj(P1 param1) {
+        T *pMem = (T *)AllocMemory(sizeof(T));
+        if (pMem) {
+            return new (pMem) T(param1);
         } else {
             return nullptr;
         }
     }
 
-    template <typename T, typename T2, typename T3>
-    static T *NewObj(T2 p2, T3 p3) {
-        T *obj = (T *)AllocMemory(sizeof(T));
-        if (obj) {
-            return new (obj) T(p2, p3);
+    template <typename T, typename P1, typename P2>
+    static T *NewObj(P1 param1, P2 param2) {
+        T *pMem = (T *)AllocMemory(sizeof(T));
+        if (pMem) {
+            return new (pMem) T(param1, param2);
         } else {
             return nullptr;
         }

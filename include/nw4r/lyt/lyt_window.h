@@ -10,28 +10,6 @@ namespace nw4r {
 
 namespace lyt {
 
-namespace res {
-
-// TODO: Idk where this is stored
-struct InflationLRTB {
-    f32 l; // at 0x00
-    f32 r; // at 0x04
-    f32 t; // at 0x08
-    f32 b; // at 0x0C
-};
-
-struct Window : res::Pane {
-    InflationLRTB inflation;    // at 0x4C
-    u8 frameNum;                // at 0x5C
-    u8 padding1;                // at 0x5D
-    u8 padding2;                // at 0x5E
-    u8 padding3;                // at 0x5F
-    u32 contentOffset;          // at 0x60
-    u32 frameOffsetTableOffset; // at 0x64
-};
-
-} // namespace res
-
 struct Content {
     ut::Color vtxColors[4];          // at 0x00
     detail::TexCoordAry texCoordAry; // at 0x10
