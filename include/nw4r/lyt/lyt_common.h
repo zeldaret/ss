@@ -54,10 +54,10 @@ void DrawQuad(const math::VEC2 &, const Size &, u8, const TexCoordData *, const 
 void DrawQuad(const math::VEC2 &, const Size &, u8, const TexCoordData *, const ut::Color *, u8);
 void DrawLine(const math::VEC2 &pos, const Size &size, ut::Color color);
 
-s32 GetSignatureInt(const char *sig) {
+inline s32 GetSignatureInt(const char *sig) {
     return *((s32 *)sig);
 }
-bool TestFileVersion(const res::BinaryFileHeader &fileHeader) {
+inline bool TestFileVersion(const res::BinaryFileHeader &fileHeader) {
     u32 majorVer = (fileHeader.version >> 8) & 0xFF;
     u32 minorVer = fileHeader.version & 0xFF;
     bool ret = majorVer == 0 && (minorVer > 7 && minorVer <= 10);

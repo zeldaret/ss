@@ -40,6 +40,13 @@ public:
     virtual void Animate(u32 option);                                                                    // at 0x38
     virtual void SetTagProcessor(ut::TagProcessorBase<wchar_t> *pTagProcessor);                          // at 0x3C
 
+private:
+    ut::LinkList<AnimTransform, 4> mAnimTransList; // at 0x04
+    Pane *mpRootPane;                              // at 0x10
+    GroupContainer *mpGroupContainer;              // at 0x14
+    Size mLayoutSize;                              // at 0x18
+
+public:
     // STATICS
     static void FreeMemory(void *p) {
         MEMFreeToAllocator(mspAllocator, p);
@@ -108,12 +115,6 @@ public:
             return nullptr;
         }
     }
-
-private:
-    ut::LinkList<AnimTransform, 4> mAnimTransList; // at 0x04
-    Pane *mpRootPane;                              // at 0x10
-    GroupContainer *mpGroupContainer;              // at 0x14
-    Size mLayoutSize;                              // at 0x18
 
     static MEMAllocator *mspAllocator;
 };

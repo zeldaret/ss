@@ -4,6 +4,7 @@
 #include <nw4r/lyt/lyt_layout.h>
 #include <nw4r/lyt/lyt_picture.h>
 #include <nw4r/lyt/lyt_textBox.h>
+#include <nw4r/lyt/lyt_utils.h>
 #include <nw4r/lyt/lyt_window.h>
 #include <nw4r/ut/ut_RuntimeTypeInfo.h>
 #include <nw4r/ut/ut_TagProcessorBase.h>
@@ -161,47 +162,148 @@ bool Layout::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
 
 // CreateAnimTransform__Q34nw4r3lyt6LayoutFv
 AnimTransform *Layout::CreateAnimTransform() {
-    return nullptr;
+    AnimTransform *pAnimTrans = NewObj<AnimTransformBasic>();
+    if (pAnimTrans) {
+        mAnimTransList.PushBack(pAnimTrans);
+    }
+    return pAnimTrans;
 }
 
 // CreateAnimTransform__Q34nw4r3lyt6LayoutFPCvPQ34nw4r3lyt16ResourceAccessor
 AnimTransform *Layout::CreateAnimTransform(const void *animResBuf, ResourceAccessor *pResAcsr) {
-    return nullptr;
+    return CreateAnimTransform(AnimResource(animResBuf), pResAcsr);
 }
 
 // CreateAnimTransform__Q34nw4r3lyt6LayoutFRCQ34nw4r3lyt12AnimResourcePQ34nw4r3lyt16ResourceAccessor
 AnimTransform *Layout::CreateAnimTransform(const AnimResource &animRes, ResourceAccessor *pResAcsr) {
-    return nullptr;
+    const res::AnimationBlock *pAnimBlock = animRes.GetResourceBlock();
+    if (!pAnimBlock) {
+        return nullptr;
+    }
+
+    AnimTransform *pAnimTrans = CreateAnimTransform();
+    if (pAnimTrans) {
+        pAnimTrans->SetResource(pAnimBlock, pResAcsr);
+    }
+
+    return pAnimTrans;
 }
 
 // BindAnimation__Q34nw4r3lyt6LayoutFPQ34nw4r3lyt13AnimTransform
-void Layout::BindAnimation(AnimTransform *pAnimTrans) {}
+void Layout::BindAnimation(AnimTransform *pAnimTrans) {
+    if (!mpRootPane) {
+        return;
+    }
+    mpRootPane->BindAnimation(pAnimTrans, true, false);
+}
 
 // UnbindAnimation__Q34nw4r3lyt6LayoutFPQ34nw4r3lyt13AnimTransform
-void Layout::UnbindAnimation(AnimTransform *pAnimTrans) {}
+void Layout::UnbindAnimation(AnimTransform *pAnimTrans) {
+    if (!mpRootPane) {
+        return;
+    }
+    mpRootPane->UnbindAnimation(pAnimTrans, true);
+}
 
 // UnbindAllAnimation__Q34nw4r3lyt6LayoutFv
-void Layout::UnbindAllAnimation() {}
+void Layout::UnbindAllAnimation() {
+    UnbindAnimation(nullptr);
+}
 
 // BindAnimationAuto__Q34nw4r3lyt6LayoutFRCQ34nw4r3lyt12AnimResourcePQ34nw4r3lyt16ResourceAccessor
 bool Layout::BindAnimationAuto(const AnimResource &animRes, ResourceAccessor *pResAcsr) {
-    return IsIncludeAnimationGroupRef(nullptr, nullptr, 0, 0, nullptr);
+    // Ensure Root pane and Resource Block Exists
+    if (!mpRootPane) {
+        return false;
+    }
+    if (!animRes.GetResourceBlock()) {
+        return false;
+    }
+
+    AnimTransform *pAnimTrans = CreateAnimTransform();
+    u16 bindGroupNum = animRes.GetGroupNum();
+    u16 animNum = 0;
+    if (bindGroupNum == 0) {
+        // No Groups to bind with, only bind to root pane
+        pAnimTrans->SetResource(animRes.GetResourceBlock(), pResAcsr, animRes.GetResourceBlock()->animContNum);
+        mpRootPane->BindAnimation(pAnimTrans, true, true);
+    } else {
+        // Bind to all Groups
+        const AnimationGroupRef *groupRefs = animRes.GetGroupArray();
+        for (int grpIdx = 0; grpIdx < bindGroupNum; grpIdx++) {
+            Group *pGroup = mpGroupContainer->FindGroupByName(groupRefs[grpIdx].GetName());
+            animNum += animRes.CalcAnimationNum(pGroup, animRes.IsDescendingBind());
+        }
+        pAnimTrans->SetResource(animRes.GetResourceBlock(), pResAcsr, animNum);
+        for (int grpIdx = 0; grpIdx < bindGroupNum; grpIdx++) {
+            Group *pGroup = mpGroupContainer->FindGroupByName(groupRefs[grpIdx].GetName());
+            lyt::BindAnimation(pGroup, pAnimTrans, animRes.IsDescendingBind(), true);
+        }
+    }
+    u16 animSharInfoNum = animRes.GetAnimationShareInfoNum();
+    if (animSharInfoNum != 0) {
+        const AnimationShareInfo *animSharInfoAry = animRes.GetAnimationShareInfoArray();
+        for (int i = 0; i < animSharInfoNum; i++) {
+            Pane *pSrcPane = mpRootPane->FindPaneByName(animSharInfoAry[i].GetSrcPaneName(), true);
+            detail::AnimPaneTree animPaneTree = detail::AnimPaneTree(pSrcPane, animRes);
+            if (animPaneTree.GetLinkNum()) {
+                Group *pGroup = mpGroupContainer->FindGroupByName(animSharInfoAry[i].GetTargetGroupName());
+                ut::LinkList<detail::PaneLink, 0> *paneList = pGroup->GetPaneList();
+                for (ut::LinkList<detail::PaneLink, 0>::Iterator it = paneList->GetBeginIter();
+                        it != paneList->GetEndIter(); it++) {
+                    if (it->mTarget != pSrcPane) {
+                        if (bindGroupNum != 0) {
+                            bool bInclude = IsIncludeAnimationGroupRef(mpGroupContainer, animRes.GetGroupArray(),
+                                    bindGroupNum, animRes.IsDescendingBind(), it->mTarget);
+                            if (!bInclude) {
+                                continue;
+                            }
+                        }
+                        animPaneTree.Bind(this, it->mTarget, pResAcsr);
+                    }
+                }
+            }
+        }
+    }
+    return true;
 }
 
 // SetAnimationEnable__Q34nw4r3lyt6LayoutFPQ34nw4r3lyt13AnimTransformb
-void Layout::SetAnimationEnable(AnimTransform *pAnimTrans, bool bEnable) {}
+void Layout::SetAnimationEnable(AnimTransform *pAnimTrans, bool bEnable) {
+    if (!mpRootPane) {
+        return;
+    }
+    mpRootPane->SetAnimationEnable(pAnimTrans, bEnable, true);
+}
 
 // CalculateMtx__Q34nw4r3lyt6LayoutFRCQ34nw4r3lyt8DrawInfo
-void Layout::CalculateMtx(const DrawInfo &drawInfo) {}
+void Layout::CalculateMtx(const DrawInfo &drawInfo) {
+    if (!mpRootPane) {
+        return;
+    }
+    mpRootPane->CalculateMtx(drawInfo);
+}
 
 // Draw__Q34nw4r3lyt6LayoutFRCQ34nw4r3lyt8DrawInfo
-void Layout::Draw(const DrawInfo &drawInfo) {}
+void Layout::Draw(const DrawInfo &drawInfo) {
+    if (!mpRootPane) {
+        return;
+    }
+    mpRootPane->Draw(drawInfo);
+}
 
 // Animate__Q34nw4r3lyt6LayoutFUl
-void Layout::Animate(u32 option) {}
+void Layout::Animate(u32 option) {
+    if (!mpRootPane) {
+        return;
+    }
+    mpRootPane->Animate(option);
+}
 
 // GetLayoutRect__Q34nw4r3lyt6LayoutCFv
-ut::Rect Layout::GetLayoutRect() const {}
+ut::Rect Layout::GetLayoutRect() const {
+    return ut::Rect(-mLayoutSize.width / 2, mLayoutSize.height / 2, mLayoutSize.width / 2, -mLayoutSize.height / 2);
+}
 
 // SetTagProcessor__Q34nw4r3lyt6LayoutFPQ34nw4r2ut19TagProcessorBase<w>
 void Layout::SetTagProcessor(ut::TagProcessorBase<wchar_t> *pTagProcessor) {

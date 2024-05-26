@@ -50,15 +50,6 @@ struct StepKey {};
 
 } // namespace res
 
-struct AnimationShareInfo {
-    const char *GetSrcPaneName() const {
-        return srcPaneName;
-    }
-
-    char srcPaneName[17];     // at 0x00
-    char targetGroupName[17]; // at 0x11
-    u8 padding[2];            // at 0x12
-};
 namespace detail {
 template <typename T>
 inline bool TestBit(T bits, int index) {
@@ -66,7 +57,7 @@ inline bool TestBit(T bits, int index) {
     return bits & mask;
 }
 template <typename T>
-inline bool SetBit(T *bits, int pos, bool val) {
+inline void SetBit(T *bits, int pos, bool val) {
     T mask = T(1 << pos);
     *bits = T((*bits & ~mask)) | (val << pos);
 }
