@@ -5,4 +5,4 @@ ModuleProlog = .text:0x00000070; // type:function size:0x14
 ModuleEpilog = .text:0x00000090; // type:function size:0x10
 _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
-lbl_1_section4_0 = .rodata:0x00000000; // type:object size:0xAFC
+profileList = .data:0x00000000; // type:object size:0xAFC

@@ -1,13 +1,5 @@
-#include <d/tg/d_tg.h>
+#include <d/tg/d_t_light_shaft_eff.h>
 
-class dTgLightShaftEff_c : public dTg_c {
-public:
-    dTgLightShaftEff_c() {}
-    virtual ~dTgLightShaftEff_c() {}
+SPECIAL_ACTOR_PROFILE(TAG_LIGHT_SHAFT_EFF, dTgLightShaftEff_c, fProfile::TAG_LIGHT_SHAFT_EFF, 0x025E, 0, 0);
 
-    static dAcBase_c *construct() {
-        return new dTgLightShaftEff_c();
-    }
-};
-
-dActorInit init_dTgLightShaftEff_c = { dTgLightShaftEff_c::construct, 0x00bd, 0x025e, 0, 0 };
+// clang-format on

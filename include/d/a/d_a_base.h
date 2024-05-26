@@ -13,18 +13,6 @@
 
 class dAcBase_c;
 
-/**
- * Actors are always created through a lookup table
- * of these objects.
- */
-struct dActorInit {
-    dAcBase_c *(*create)();
-    u16 executeOrder;
-    u16 drawOrder;
-    u32 baseProperties;
-    u32 defaultFlags;
-};
-
 struct SoundInfo {
     dAcBase_c *actor;
     void *obj_sound;

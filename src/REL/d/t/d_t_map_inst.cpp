@@ -1,23 +1,8 @@
-#include <d/tg/d_tg.h>
+#include <d/tg/d_t_map_inst.h>
 
-class dTgMapInst_c : public dTg_c {
-public:
-    dTgMapInst_c() { }
-    virtual ~dTgMapInst_c() {}
-
-    virtual int create() override;
-    static dAcBase_c *construct();
-
-    u8 field_0xfc;
-};
-
-dAcBase_c *dTgMapInst_c::construct() {
-    return new dTgMapInst_c();
-}
+SPECIAL_ACTOR_PROFILE(TAG_MAP_INST, dTgMapInst_c, fProfile::TAG_MAP_INST, 0x021d, 0, 0);
 
 int dTgMapInst_c::create() {
     field_0xfc = params & 0xff;
     return 1;
 }
-
-dActorInit init_dTgMapInst_c = { dTgMapInst_c::construct, 0x025d, 0x021d, 0, 0 };

@@ -1,8 +1,6 @@
 #ifndef F_PROFILE_NAME
 #define F_PROFILE_NAME
 
-#include <common.h>
-
 namespace fProfile {
 
 enum PROFILE_NAME_e {
@@ -712,6 +710,7 @@ enum PROFILE_NAME_e {
     /* 703         */ NUMBER_OF_ACTORS,
     INVALID,
 };
-};
+
+}
 
 #endif

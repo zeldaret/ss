@@ -1,7 +1,7 @@
 _prolog = .text:0x00000000; // type:function size:0x2C scope:global
 _epilog = .text:0x00000030; // type:function size:0x2C scope:global
 _unresolved = .text:0x00000060; // type:function size:0x4 scope:global
-construct__18dTgLightShaftEff_cFv = .text:0x00000070; // type:function size:0x4C
+dTgLightShaftEff_c_classInit__Fv = .text:0x00000070; // type:function size:0x4C
 create__5dTg_cFv = .text:0x000000C0; // type:function size:0x8
 doDelete__5dTg_cFv = .text:0x000000D0; // type:function size:0x8
 actorExecute__5dTg_cFv = .text:0x000000E0; // type:function size:0x8
@@ -9,5 +9,5 @@ draw__5dTg_cFv = .text:0x000000F0; // type:function size:0x8
 __dt__18dTgLightShaftEff_cFv = .text:0x00000100; // type:function size:0x5C
 _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
-init_dTgLightShaftEff_c = .data:0x00000000; // type:object size:0x10
+g_profile_TAG_LIGHT_SHAFT_EFF = .data:0x00000000; // type:object size:0x10
 __vt__18dTgLightShaftEff_c = .data:0x00000010; // type:object size:0x74
