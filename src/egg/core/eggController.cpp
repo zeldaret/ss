@@ -173,7 +173,7 @@ extern "C" void fn_803DB1E0(s32 channel, bool arg);
     CoreControllerMgr::T__Disposer::sStaticDisposer = nullptr;
 }
 
-/* 0x80499BE0 */ EGG::CoreController *CoreControllerMgr::getNthController(s32 n) {
+/* 0x80499BE0 */ EGG::CoreController *CoreControllerMgr::getNthController(int n) {
     return this->mControllers(n);
 }
 
@@ -186,7 +186,7 @@ extern "C" void fn_803DB1E0(s32 channel, bool arg);
     return 1;
 }
 
-/* 0x80499CD0 */ void CoreControllerMgr::connectCallback(int a1, int a2) {
+/* 0x80499CD0 */ void CoreControllerMgr::connectCallback(s32 a1, s32 a2) {
     int args[] = {a1, a2};
     if (sConnectCallback != nullptr) {
         (sConnectCallback)(args);

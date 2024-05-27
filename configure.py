@@ -307,6 +307,7 @@ config.libs = [
             Object(Matching, "m/m_dvd.cpp"),
             Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
+            Object(NonMatching, "m/m_pad.cpp"),
             Object(Matching, "DynamicLink.cpp"),
             # framework (f_name)
             # d stuff (d_name)

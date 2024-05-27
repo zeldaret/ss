@@ -25,12 +25,15 @@ class CoreStatus {
 public:
     /* 0x00 */ u8 field_0x00[0x0C];
     /* 0x0C */ f32 accel[3];
-    /* 0x18 */ u8 field_0x01[0x08];
+    /* 0x18 */ u8 field_0x01[0x20 - 0x18];
     /* 0x20 */ f32 dpdRawX;
     /* 0x24 */ f32 dpdRawY;
-    /* 0x28 */ u8 field_0x02[0x36];
-    /* 0x58 */ s8 dpdDistance;
-    /* 0x5C */ s8 unknown;
+    /* 0x28 */ u8 field_0x02[0x54 - 0x28];
+    /* 0x54 */ f32 float_0x54;
+    /* 0x58 */ f32 float_0x58;
+    /* 0x5C */ u8 field_0x5C[0x5E - 0x5C];
+    /* 0x5E */ s8 dpdDistance;
+    /* 0x5F */ s8 unknown;
     /* 0x60 */ f32 fsStickButton;
     /* 0x60 */ f32 fsStickButton2;
     /* 0x64 */ u8 field_0x03[0x88];
@@ -38,6 +41,10 @@ public:
 public:
     /* 80498f90 */ void init();
     /* 80498fa0 */ u32 getFSStickButton() const;
+
+    inline Vector2f getUnk() {
+        return Vector2f(float_0x54, float_0x58);
+    }
 };
 
 class CoreController {
@@ -128,7 +135,7 @@ public:
 public:
     /* 80499b80 */ static CoreControllerMgr *createInstance();
     /* 80499bd0 */ static void deleteInstance();
-    /* 80499be0 */ CoreController *getNthController(s32);
+    /* 80499be0 */ CoreController *getNthController(int);
 
     static void *allocThunk(size_t size);
     static int deleteThunk(void *ptr);

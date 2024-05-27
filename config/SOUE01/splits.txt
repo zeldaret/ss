@@ -247,6 +247,13 @@ m/m_mtx.cpp:
 	.text       start:0x802F1660 end:0x802F1F20
 	.ctors      start:0x804DB8D4 end:0x804DB8D8
 
+m/m_pad.cpp:
+	.text       start:0x802F1F20 end:0x802F2330
+	.ctors      start:0x804DB8D8 end:0x804DB8DC
+	.sbss       start:0x80575C50 end:0x80575C70
+	.sdata2     start:0x8057CDF8 end:0x8057CE00
+	.bss        start:0x805CB0B8 end:0x805CB1F8
+
 rvl/CX/cx.c:
 	.text       start:0x803CEE90 end:0x803D0B20
 
