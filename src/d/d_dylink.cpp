@@ -127,6 +127,10 @@ struct UnkNandStruct {
         NANDSetUserData(&nandBlock, this);
     }
 
+    ~UnkNandStruct() {
+        waitForFinalization();
+    }
+
     void waitForFinalization() {
         if (!isFinalized()) {
             BOOL enabled = OSDisableInterrupts();
@@ -179,7 +183,7 @@ void dvdCallback(s32 result, DVDFileInfo *dvdInfo) {
 bool startDvdRead(UnkNandStruct *s, void *dst, s32 size, s32 offset) {
     s->waitForFinalization();
 
-    if ((s->status & 8) != 0) {
+    if (s->isError()) {
         return false;
     }
 
@@ -201,73 +205,63 @@ extern "C" bool fn_80053240(char *relPath, char *tmpRelPath, EGG::Heap *heap) {
     }
 
     u32 sizeRead = 0;
-
     u32 fileSize = ROUND_UP(dvdFileInfo.size, 0x20);
     NANDResult deleteResult = NANDDelete(tmpRelPath);
     if (deleteResult != NAND_RESULT_OK && deleteResult != NAND_RESULT_NOEXISTS) {
         goto end;
     }
 
-    if (NANDCreate(tmpRelPath, NAND_PERM_RUSR | NAND_PERM_WUSR, 0) || NANDOpen(tmpRelPath, &nandFileInfo, 2)) {
+    if (NANDCreate(tmpRelPath, NAND_PERM_RUSR | NAND_PERM_WUSR, 0) != NAND_RESULT_OK ||
+            NANDOpen(tmpRelPath, &nandFileInfo, 2) != NAND_RESULT_OK) {
         goto end;
     }
 
     fn_802DEFE0("BufferSize %u KB\n", 0x200);
 
     void *buf = heap->alloc(0x80000, 0x20);
-    if (buf == nullptr) {
-        goto end;
-    }
+    if (buf != nullptr) {
+        // Weird part start (everything above this is regshuffles)
 
-    // Weird part start (everything above this is regshuffles)
+        // TODO the initialization of this value is a bit
+        // weird because it essentially computes the signed
+        // division 0x80000 / 2
+        //   (which adds +1 to the dividend if the result is negative to
+        //   ensure rounding to 0 behavior)
+        // and the optimizer fails to constant propagate these through
+        // to realize that 0x80000 is actually always positive
+        int totalBufSize = 0x80000;
+        int chunkSize = 0x80000 / 2;
 
-    // TODO the initialization of this value is a bit
-    // weird because it essentially computes the signed
-    // division 0x80000 / 2
-    //   (which adds +1 to the dividend if the result is negative to
-    //   ensure rounding to 0 behavior)
-    // and the optimizer fails to constant propagate these through
-    // to realize that 0x80000 is actually always positive
-    int totalBufSize = 0x80000;
-    int chunkSize = 0x80000 / 2;
+        // TODO this initalization happens slightly differently
+        UnkNandStruct nandStructs[2];
 
-    // TODO this initalization happens slightly differently
-    UnkNandStruct nandStructs[2];
+        // Weird part end (most below this is regshuffles)
 
-    // Weird part end (most below this is regshuffles)
+        nandStructs[0].open(entryNum, &nandFileInfo);
+        nandStructs[1].open(entryNum, &nandFileInfo);
 
-    nandStructs[0].open(entryNum, &nandFileInfo);
-    nandStructs[1].open(entryNum, &nandFileInfo);
+        // dispatch multiple requests to load parts of the profile REL in parallel
+        int whichThread = 0;
+        for (; sizeRead < fileSize; sizeRead += chunkSize) {
+            if (chunkSize > fileSize - sizeRead) {
+                chunkSize = fileSize - sizeRead;
+            }
+            // NB the whichThread * totalBufSize / 2 match relies on whichThread * totalBufSize being able to overflow
+            if (!startDvdRead(&nandStructs[whichThread], ((u8 *)buf) + whichThread * totalBufSize / 2, chunkSize,
+                        /* offset */ sizeRead)) {
+                break;
+            }
 
-    // dispatch multiple requests to load parts of the profile REL in parallel
-    int whichThread = 0;
-    for (; sizeRead < fileSize; sizeRead += chunkSize) {
-        if (chunkSize > fileSize - sizeRead) {
-            chunkSize = fileSize - sizeRead;
+            whichThread ^= 1;
         }
-        // NB the whichThread * totalBufSize / 2 match relies on whichThread * totalBufSize being able to overflow
-        if (!startDvdRead(&nandStructs[whichThread], ((u8 *)buf) + whichThread * totalBufSize / 2, chunkSize,
-                    /* offset */ sizeRead)) {
-            break;
-        }
 
-        whichThread ^= 1;
-    }
-
-    nandStructs[0].waitForFinalization();
-    nandStructs[1].waitForFinalization();
-
-    if (nandStructs[0].isError() || nandStructs[1].isError()) {
-        sizeRead = 0;
-    }
-
-    // Yes this condition is extremely weird but in the binary
-    // this literally checks if a stack address isn't zero
-    // There's also a bit of a weird addressing going on here
-    if ((u32)&nandStructs[1]) {
+        nandStructs[0].waitForFinalization();
         nandStructs[1].waitForFinalization();
+
+        if (nandStructs[0].isError() || nandStructs[1].isError()) {
+            sizeRead = 0;
+        }
     }
-    nandStructs[0].waitForFinalization();
 
     heap->free(buf);
     if (NANDClose(&nandFileInfo) != NAND_RESULT_OK) {
