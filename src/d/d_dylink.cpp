@@ -261,6 +261,10 @@ extern "C" bool fn_80053240(char *relPath, char *tmpRelPath, EGG::Heap *heap) {
         if (nandStructs[0].isError() || nandStructs[1].isError()) {
             sizeRead = 0;
         }
+
+        // TODO here are the inline dtors that mostly match, but their addressing is weird
+        // and there's a check that &nandStructs[1] != nullptr before destructing it,
+        // which is a bit weird for an inline dtor for a stack local
     }
 
     heap->free(buf);
