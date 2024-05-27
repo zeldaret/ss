@@ -155,6 +155,19 @@ struct Window : Pane {
     u32 frameOffsetTableOffset; // at 0x64
 };
 
+struct WindowFrame {
+    u16 materialIdx; // at 0x0
+    u8 textureFlip;  // at 0x2
+    u8 padding1;     // at 0x3
+};
+
+struct WindowContent {
+    u32 vtxCols[4];  // at 0x00
+    u16 materialIdx; // at 0x10
+    u8 texCoordNum;  // at 0x12
+    u8 padding[1];   // at 0x13
+};
+
 struct AnimationBlock {
     DataBlockHeader blockHeader; // at 0x00
     u16 frameSize;               // at 0x08

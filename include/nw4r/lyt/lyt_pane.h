@@ -107,8 +107,8 @@ public:
     virtual ~Pane();                                                                             // at 0x8
     NW4R_UT_RTTI_DECL(Pane);                                                                     // at 0x0C
     virtual void CalculateMtx(const DrawInfo &drawInfo);                                         // at 0x10
-    virtual void Draw(const DrawInfo &);                                                         // at 0x14
-    virtual void DrawSelf(const DrawInfo &);                                                     // at 0x18
+    virtual void Draw(const DrawInfo &drawInfo);                                                 // at 0x14
+    virtual void DrawSelf(const DrawInfo &drawInfo);                                             // at 0x18
     virtual void Animate(u32);                                                                   // at 0x1C
     virtual void AnimateSelf(u32);                                                               // at 0x20
     virtual ut::Color GetVtxColor(u32 idx) const;                                                // at 0x24

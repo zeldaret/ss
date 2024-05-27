@@ -353,6 +353,13 @@ nw4r/lyt/lyt_textBox.cpp:
 	.sbss       start:0x80576708 end:0x8057670C
 	.sdata2     start:0x8057F250 end:0x8057F268
 
+nw4r/lyt/lyt_window.cpp:
+	.text       start:0x8048B170 end:0x8048D6FC
+	.ctors      start:0x804DB980 end:0x804DB984
+	.data       start:0x8056E5F8 end:0x8056E6C0
+	.sbss       start:0x80576710 end:0x80576714
+	.sdata2     start:0x8057F268 end:0x8057F280
+
 nw4r/lyt/lyt_resourceAccessor.cpp:
 	.text       start:0x80492000 end:0x80492058
 	.data       start:0x8056E7E0 end:0x8056E7F8
