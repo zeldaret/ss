@@ -110,6 +110,12 @@ struct FontList {
     u8 padding[2];               // at 0x0A
 };
 
+struct Font {
+    u32 nameStrOffset; // at 0x0
+    u8 type;           // at 0x4
+    u8 padding[3];     // at 0x5
+};
+
 struct TextureList {
     DataBlockHeader blockHeader; // at 0x00
     u16 texNum;                  // at 0x08
@@ -117,6 +123,7 @@ struct TextureList {
 };
 struct TextBox : public Pane {
     u16 textBufBytes;  // at 0x4C
+    u16 textStrBytes;  // at 0x4E
     u16 materialIdx;   // at 0x50
     u16 fontIdx;       // at 0x52
     u8 textPosition;   // at 0x54

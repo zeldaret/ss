@@ -30,9 +30,9 @@ Picture::Picture(const res::Picture *pResPic, const ResBlockSet &resBlockSet)
     if (texCoordNum != 0 && !mTexCoordAry.IsEmpty()) {
         mTexCoordAry.Copy((void *)&pResPic[1], texCoordNum);
     }
-    const u32 *matOffsTbl = detail::ConvertOffsetToPtr<u32>(resBlockSet.pMaterialList, sizeof(res::MaterialList));
+    const u32 *matOffsTbl = detail::ConvertOffsToPtr<u32>(resBlockSet.pMaterialList, sizeof(res::MaterialList));
     const res::Material *pResMaterial =
-            detail::ConvertOffsetToPtr<res::Material>(resBlockSet.pMaterialList, matOffsTbl[pResPic->materialIdx]);
+            detail::ConvertOffsToPtr<res::Material>(resBlockSet.pMaterialList, matOffsTbl[pResPic->materialIdx]);
     mpMaterial = Layout::NewObj<Material>(pResMaterial, resBlockSet);
 }
 

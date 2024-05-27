@@ -20,7 +20,7 @@ inline void SetBit(T *bits, int pos, bool val) {
 }
 
 template <typename T>
-T *ConvertOffsetToPtr(const void *baseAddress, unsigned int offset) {
+T *ConvertOffsToPtr(const void *baseAddress, unsigned int offset) {
     return (T *)((u32)baseAddress + offset);
 }
 } // namespace detail

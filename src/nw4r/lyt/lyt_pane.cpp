@@ -514,7 +514,7 @@ u16 Pane::GetExtUserDataNum() const {
 }
 res::ExtUserData *Pane::GetExtUserData() const {
     if (this->mpExtUserDataList) {
-        return detail::ConvertOffsetToPtr<res::ExtUserData>(this->mpExtUserDataList, sizeof(res::ExtUserDataList));
+        return detail::ConvertOffsToPtr<res::ExtUserData>(this->mpExtUserDataList, sizeof(res::ExtUserDataList));
     }
     return nullptr;
 }
@@ -530,7 +530,7 @@ res::ExtUserData *Pane::FindExtUserDataByName(const char *name) {
         u32 offset = pUserData->nameOffs;
         const char *str = 0;
         if (offset != 0) {
-            str = detail::ConvertOffsetToPtr<char>(pUserData, offset);
+            str = detail::ConvertOffsToPtr<char>(pUserData, offset);
         } else {
             str = nullptr;
         }

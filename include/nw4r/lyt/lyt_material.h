@@ -81,6 +81,14 @@ public:
     TexMap *GetTexMapAry();
     TexCoordGen *GetTexCoordGenAry();
 
+    GXColorS10 GetTevColor(u32 idx) const {
+        return mTevCols[idx];
+    }
+
+    ut::Color GetTevKColor(u32 idx) const {
+        return mTevKCols[idx];
+    }
+
     void SetTexture(u32 texMapIdx, const TexMap &texMap) {
         GetTexMapAry()[texMapIdx] = texMap;
     }

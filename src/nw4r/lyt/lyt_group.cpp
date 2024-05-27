@@ -10,7 +10,7 @@ Group::Group(const res::Group *pResGroup, Pane *pRootPane) : mLink(), mPaneListL
     Init();
     strncpy(this->mName, pResGroup->mName, NW4R_RES_NAME_SIZE);
     this->mName[NW4R_RES_NAME_SIZE] = '\0';
-    const char *paneNameBase = detail::ConvertOffsetToPtr<char>(pResGroup, sizeof(res::Group));
+    const char *paneNameBase = detail::ConvertOffsToPtr<char>(pResGroup, sizeof(res::Group));
 
     for (int i = 0; i < pResGroup->paneNum; i++) {
         Pane *pFindPane = pRootPane->FindPaneByName(paneNameBase + i * NW4R_RES_NAME_SIZE, true);

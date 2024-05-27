@@ -28,6 +28,19 @@ inline void SetVtxColElement(ut::Color *cols, u32 idx, u8 value) {
     ((u8 *)cols)[(idx & ~3) + (idx & 3)] = value;
 }
 
+inline u8 GetHorizontalPosition(u8 var) {
+    return var % 3;
+}
+inline u8 GetVerticalPosition(u8 var) {
+    return var / 3;
+}
+inline void SetHorizontalPosition(u8 *pVar, u8 newVal) {
+    *pVar = newVal + GetVerticalPosition(*pVar) * 3;
+}
+inline void SetVerticalPosition(u8 *pVar, u8 newVal) {
+    *pVar = newVal * 3 + GetHorizontalPosition(*pVar);
+}
+
 typedef math::VEC2 TexCoordData[TEXCOORD_VTX_COUNT];
 
 class TexCoordAry {

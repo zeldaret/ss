@@ -4,6 +4,7 @@
 #include <new.h>
 #include <nw4r/lyt/lyt_animation.h>
 #include <nw4r/lyt/lyt_types.h>
+#include <nw4r/ut/ut_ResFont.h>
 #include <rvl/MEM/mem_allocator.h>
 
 namespace nw4r {
@@ -70,6 +71,9 @@ public:
     template <typename T>
     static T *NewArray(size_t n) {
         T *array = (T *)AllocMemory(n * sizeof(T));
+        if (!array) {
+            return nullptr;
+        }
 
         for (size_t i = 0; i < n; i++) {
             new (&array[i]) T();
@@ -83,6 +87,13 @@ public:
         if (t) {
             t->~T();
             FreeMemory(t);
+        }
+    }
+
+    template <typename T>
+    static void DeletePrimArray(T *objAry) {
+        if (objAry) {
+            FreeMemory(objAry);
         }
     }
 

@@ -42,8 +42,8 @@ void TexCoordAry::Free() {
 void TexCoordAry::Reserve(u8 num) {
     if (mCap < num) {
         Free();
-        const TexCoordData *pData = (TexCoordData *)Layout::NewArray<VEC2>(num * TEXCOORD_VTX_COUNT);
-        this->mpData = pData ? const_cast<TexCoordData *>(pData) : nullptr;
+        TexCoordData *pData = (TexCoordData *)Layout::NewArray<VEC2>(num * TEXCOORD_VTX_COUNT);
+        this->mpData = pData;
         if (mpData != NULL) {
             mCap = num;
         }

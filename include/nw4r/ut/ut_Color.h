@@ -17,6 +17,9 @@ public:
     Color(int red, int green, int blue, int alpha) {
         Set(red, green, blue, alpha);
     }
+    Color(const GXColor &clr) {
+        *this = *(u32 *)&clr;
+    }
     ~Color() {}
 
     void Set(int red, int green, int blue, int alpha) {

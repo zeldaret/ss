@@ -345,6 +345,14 @@ nw4r/lyt/lyt_picture.cpp:
 	.sbss       start:0x80576700 end:0x80576704
 	.sdata2     start:0x8057F248 end:0x8057F250
 
+nw4r/lyt/lyt_textBox.cpp:
+	.text       start:0x80489800 end:0x8048B16C
+	.ctors      start:0x804DB97C end:0x804DB980
+	.data       start:0x8056E570 end:0x8056E5F4
+	.sdata      start:0x80574EB8 end:0x80574EBC
+	.sbss       start:0x80576708 end:0x8057670C
+	.sdata2     start:0x8057F250 end:0x8057F268
+
 nw4r/lyt/lyt_resourceAccessor.cpp:
 	.text       start:0x80492000 end:0x80492058
 	.data       start:0x8056E7E0 end:0x8056E7F8
