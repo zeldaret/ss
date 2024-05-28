@@ -119,6 +119,14 @@ d/d_stage.cpp:
 d/d_sys.cpp:
 	.text       start:0x80064250 end:0x80064920
 
+toBeSorted/arc_managers/current_stage_arc_manager.cpp:
+	.text       start:0x80068FD0 end:0x80069910
+	.ctors      start:0x804DB6A8 end:0x804DB6AC
+	.data       start:0x8050DFE0 end:0x8050E010
+	.sdata      start:0x80571D30 end:0x80571D40
+	.sbss       start:0x80575278 end:0x80575280
+	.bss        start:0x805A0868 end:0x805A08C8
+
 toBeSorted/sceneflag_manager.cpp:
 	.text       start:0x800BD8C0 end:0x800BE7A8
 	.sbss       start:0x805753E0 end:0x805753F0

@@ -81,12 +81,12 @@ public:
     ~dRawArcTable_c();
 
     bool init(u16 count, void *callbackArg, EGG::Heap *heap);
-    bool getArcOrLoadFromDisk(const char *name, const char *dirName, u8 mountDirection, EGG::Heap *heap);
+    u32 getArcOrLoadFromDisk(const char *name, const char *dirName, u8 mountDirection, EGG::Heap *heap);
     bool addEntryFromSuperArc(const char *name, void *data, u8 mountDirection, EGG::Heap *heap);
     int ensureLoadedMaybe2(const char *name);
     int ensureLoadedMaybe(const char *name);
     bool hasEntry(const char *name);
-    bool decreaseRefCount(const char *name);
+    u32 decreaseRefCount(const char *name);
     void *getDataFromOarc(const char *name, const char *path);
     void *getSubEntryData(const char *name, const char *path);
     void *getLoadedArcData(const char *name);

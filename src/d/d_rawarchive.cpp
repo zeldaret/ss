@@ -251,7 +251,7 @@ bool dRawArcTable_c::init(u16 count, void *callbackArg, EGG::Heap *heap) {
     return true;
 }
 
-bool dRawArcTable_c::getArcOrLoadFromDisk(const char *name, const char *dirName, u8 mountDirection, EGG::Heap *heap) {
+u32 dRawArcTable_c::getArcOrLoadFromDisk(const char *name, const char *dirName, u8 mountDirection, EGG::Heap *heap) {
     dRawArcEntry_c *entry = findEntry(name);
     if (entry == nullptr) {
         entry = findEmptySlot();
@@ -305,7 +305,7 @@ bool dRawArcTable_c::hasEntry(const char *name) {
     return findEntry(name) != nullptr;
 }
 
-bool dRawArcTable_c::decreaseRefCount(const char *name) {
+u32 dRawArcTable_c::decreaseRefCount(const char *name) {
     dRawArcEntry_c *entry = findEntry(name);
     if (entry == nullptr) {
         return false;
