@@ -248,7 +248,7 @@ m/m_mtx.cpp:
 	.ctors      start:0x804DB8D4 end:0x804DB8D8
 
 m/m_pad.cpp:
-	.text       start:0x802F1F20 end:0x802F2330
+	.text       start:0x802F1F20 end:0x802F232C
 	.ctors      start:0x804DB8D8 end:0x804DB8DC
 	.sbss       start:0x80575C50 end:0x80575C70
 	.sdata2     start:0x8057CDF8 end:0x8057CE00
