@@ -2,53 +2,8 @@
 #include <d/d_rawarchive.h>
 #include <egg/core/eggHeap.h>
 // clang-format off
-#include <MSL_C/string.h>
+#include <sized_string.h>
 // clang-format on
-
-template <size_t Size>
-struct SizedString {
-    SizedString() {
-        mChars[0] = '\0';
-    }
-
-    char mChars[Size];
-
-    char *operator&() {
-        return mChars;
-    }
-
-    const char *operator&() const {
-        return mChars;
-    }
-
-    inline void set(const char *src) {
-        if (src != mChars) {
-            mChars[0] = '\0';
-            append(src);
-        }
-    }
-
-    inline void append(const char *src) {
-        if (src != nullptr) {
-            size_t destLen = strlen(mChars);
-            size_t copyLen = strlen(src);
-
-            // Make sure copy length isnt more than destination length
-            if (destLen + copyLen + 1 >= Size) {
-                size_t tmpLen = Size - destLen;
-                copyLen = tmpLen - 1;
-            }
-
-            strncpy(mChars + destLen, src, copyLen);
-
-            // make sure string is null terminated
-            size_t offset = destLen + copyLen;
-            mChars[offset] = '\0';
-        }
-    }
-
-    void sprintf(const char *fmt, ...);
-};
 
 class CurrentStageArcManager {
     CurrentStageArcManager();
@@ -103,7 +58,7 @@ void CurrentStageArcManager::init(EGG::Heap *heap) {
 extern "C" void fn_8001F820(char *str, const char *src, ...);
 
 bool CurrentStageArcManager::setStage(const char *newStage) {
-    mStageName.set(newStage);
+    mStageName = newStage;
 
     mCurrentLoadingStageArcName.sprintf("%s_stg_l0", mStageName);
     if (dRawArcEntry_c::checkArcExistsOnDisk(&mCurrentLoadingStageArcName, getCurrentStageDirectory())) {
@@ -181,8 +136,8 @@ EGG::ExpHeap *getHeap() {
 
 const char *CurrentStageArcManager::getCurrentStageDirectory() {
     static SizedString<64> sStageDirTmp;
-    sStageDirTmp.set("Stage/");
-    sStageDirTmp.append(&mStageName);
+    sStageDirTmp = "Stage/";
+    sStageDirTmp += &mStageName;
 
     return &sStageDirTmp;
 }

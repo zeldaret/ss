@@ -1,7 +1,9 @@
 #include "toBeSorted/file_manager.h"
 #include "f/f_base.h"
 #include <m/m_heap.h>
-#include <inline_string.h>
+// clang-format off
+#include <sized_string.h>
+// clang-format on
 
 // This class here makes no sense and the name might
 // be a total misnomer, but this gets the sinit section correct
@@ -116,10 +118,9 @@ u16 *FileManager::getStoryFlagsMut() {
     file->selectedDowsingSlot = 0x8;
     file->lastUsedPouchItemSlot = 0x8;
 
-    char buf[0x20];
-    buf[0] = '\0';
-    inline_strncpy(buf, "F405", sizeof(buf));
-    file->setAreaT1(buf);
+    SizedString<32> buf;
+    buf = "F405";
+    file->setAreaT1(&buf);
     file->room_id_t1 = 0;
     file->forced_layer_t1 = 0;
     file->entrance_t1_load_flag = 1;

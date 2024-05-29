@@ -3,6 +3,9 @@
 
 #include <common.h>
 #include <m/m_dvd.h>
+// clang-format off
+#include <sized_string.h>
+// clang-format on
 
 // TODO: loading status could be an enum (-2/-1/0/+1)
 
@@ -28,8 +31,8 @@ public:
         return mRefCount != 0;
     }
 
-    inline const char *name() {
-        return mArcName;
+    inline const char *name() const {
+        return &mArcName;
     }
 
     inline bool isNotLoaded() {
@@ -62,7 +65,7 @@ private:
     static void searchCallback2(void *, void *, const ARCDirEntry *, const char *);
 
 private:
-    /* 0x00 */ char mArcName[0x20];
+    /* 0x00 */ SizedString<32> mArcName;
     /* 0x20 */ u16 mRefCount;
     /* 0x24 */ mDvd_mountMemArchive_c *mpDvdReq;
     /* 0x28 */ EGG::Archive *mpArc;

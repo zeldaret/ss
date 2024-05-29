@@ -1,5 +1,4 @@
 #include <d/d_rawarchive.h>
-#include <inline_string.h>
 #include <rvl/VI.h>
 
 class UnkManager {
@@ -36,7 +35,6 @@ extern "C" void fn_80061BE0(UnkManager *mgr, const char *name, size_t len) {
 }
 
 dRawArcEntry_c::dRawArcEntry_c() {
-    mArcName[0] = '\0';
     mRefCount = 0;
     mpDvdReq = nullptr;
     mpArc = nullptr;
@@ -136,7 +134,7 @@ bool dRawArcEntry_c::loadArcFromDisk(const char *arcName, const char *arcPath, u
     if (mpDvdReq == nullptr) {
         return false;
     }
-    inline_strncpy(mArcName, arcName, sizeof(mArcName));
+    mArcName = arcName;
     return true;
 }
 
@@ -161,7 +159,7 @@ bool dRawArcEntry_c::checkArcExistsOnDiskInner(char *outBuf, const char *fileNam
 }
 
 int dRawArcEntry_c::mount(const char *name, void *data, void *callbackArg, u8 mountDirection, EGG::Heap *heap) {
-    inline_strncpy(mArcName, name, sizeof(mArcName));
+    mArcName = name;
     mpArc = EGG::Archive::mount(data, heap, (mountDirection == 0 || mountDirection == 1) ? 4 : -4);
     if (mpArc == nullptr) {
         return -1;
@@ -201,7 +199,7 @@ int dRawArcEntry_c::ensureLoadedMaybe(void *callbackArg) {
         if (mpArc == nullptr) {
             return -1;
         }
-        mpFrmHeap = mHeap::makeHeapOnCurrentGameHeap(-1, this->mArcName, 0x20, 0);
+        mpFrmHeap = mHeap::makeHeapOnCurrentGameHeap(-1, name(), 0x20, 0);
         if (mpFrmHeap == nullptr) {
             return -1;
         }
