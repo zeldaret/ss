@@ -294,6 +294,7 @@ config.libs = [
             Object(NonMatching, "d/a/obj/d_a_obj_base.cpp"),
             Object(Matching, "toBeSorted/arc_managers/current_stage_arc_manager.cpp"),
             Object(Matching, "toBeSorted/arc_managers/oarc_manager.cpp"),
+            Object(Matching, "toBeSorted/arc_managers/layout_arc_manager.cpp"),
             Object(Matching, "toBeSorted/save_file.cpp"),
             Object(Matching, "toBeSorted/counters/counter.cpp"),
             Object(Matching, "toBeSorted/counters/rupee_counter.cpp"),
