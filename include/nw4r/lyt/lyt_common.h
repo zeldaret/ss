@@ -75,10 +75,19 @@ void MultipleAlpha(ut::Color *, const ut::Color *, u8); // Inlined
 ut::Color MultipleAlpha(ut::Color, u8);
 void SetVertexFormat(bool, u8);
 void DrawQuad(const math::VEC2 &, const Size &, u8, const TexCoordData *, const ut::Color *);
-void DrawQuad(const math::VEC2 &, const Size &, u8, const TexCoordData *, const ut::Color *, u8);
+void DrawQuad(const math::VEC2 &basePt, const Size &size, u8 texCoordNum, const TexCoordData *texCoords,
+        const ut::Color *vtxColors, u8 alpha);
 void DrawLine(const math::VEC2 &pos, const Size &size, ut::Color color);
 
 } // namespace detail
+
+struct ResBlockSet {
+    const res::TextureList *pTextureList;   // at 0x00
+    const res::FontList *pFontList;         // at 0x04
+    const res::MaterialList *pMaterialList; // at 0x08
+    ResourceAccessor *pResAccessor;         // at 0x0C
+};
+
 } // namespace lyt
 } // namespace nw4r
 

@@ -203,6 +203,7 @@ cflags_nw4r = [
     *cflags_base,
     "-ipa file",
     "-fp_contract off",
+    ""
 ]
 
 # REL flags
@@ -357,7 +358,7 @@ config.libs = [
             Object(Matching, "nw4r/lyt/lyt_layout.cpp"),
             Object(Matching, "nw4r/lyt/lyt_picture.cpp"),
             Object(Matching, "nw4r/lyt/lyt_textBox.cpp"),
-            Object(NonMatching, "nw4r/lyt/lyt_window.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_window.cpp"),
             Object(Matching, "nw4r/lyt/lyt_resourceAccessor.cpp"),
             Object(Matching, "nw4r/lyt/lyt_arcResourceAccessor.cpp"),
             Object(Matching, "nw4r/lyt/lyt_common.cpp"),

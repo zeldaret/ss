@@ -8,13 +8,6 @@
 namespace nw4r {
 namespace lyt {
 
-struct ResBlockSet {
-    const res::TextureList *pTextureList;   // at 0x00
-    const res::FontList *pFontList;         // at 0x04
-    const res::MaterialList *pMaterialList; // at 0x08
-    ResourceAccessor *pResAccessor;         // at 0x0C
-};
-
 class Bounding : public Pane {
 public:
     Bounding(const res::Bounding *, const ResBlockSet &);

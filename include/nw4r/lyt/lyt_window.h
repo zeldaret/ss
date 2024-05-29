@@ -3,12 +3,26 @@
 
 #include <common.h>
 #include <nw4r/lyt/lyt_common.h>
+#include <nw4r/lyt/lyt_layout.h>
 #include <nw4r/lyt/lyt_pane.h>
 #include <nw4r/lyt/lyt_types.h>
 
 namespace nw4r {
 
 namespace lyt {
+
+// NOT OFFICAL
+// Pulled from https://wiki.tockdom.com/wiki/BRLYT_(File_Format)#Window_Frames
+enum TextureFlip {
+    TEXFLIP_NONE,
+    TEXFLIP_HORIZONTAL,
+    TEXFLIP_VERTICAL,
+    TEXFLIP_ROTATE_90,
+    TEXFLIP_ROTATE_180,
+    TEXFLIP_ROTATE_270,
+};
+
+enum TextureCoord { TopL, TopR, BotL, BotR };
 
 struct WindowFrameSize {
     f32 l; // at 0x00
@@ -20,13 +34,17 @@ struct WindowFrameSize {
 class Window : public Pane {
 public:
     struct Content {
-        Content() {}
+        Content() : vtxColors(), texCoordAry() {}
 
         ut::Color vtxColors[4];          // at 0x00
         detail::TexCoordAry texCoordAry; // at 0x10
     };
     struct Frame {
-        bool textureFlip;    // at 0x00
+        Frame() : textureFlip(false), pMaterial(nullptr) {}
+        ~Frame() {
+            Layout::DeleteObj(pMaterial);
+        }
+        u8 textureFlip;      // at 0x00
         Material *pMaterial; // at 0x04
     };
 
@@ -35,12 +53,8 @@ public:
     void InitContent(u8 texNum);
     void InitFrame(u8 frameNum);
     void ReserveTexCoord(u8 num);
-    AnimationLink *FindAnimationLink(AnimTransform *pAnimTrans);
-    void SetAnimationEnable(AnimTransform *pAnimTrans, bool, bool);
 
     static WindowFrameSize GetFrameSize(u8 frameNum, const Frame *frames);
-    Material *GetFrameMaterial(u32 frameIdx) const;
-    Material *GetContentMaterial() const;
 
     virtual ~Window();                                                                                      // at 0x08
     NW4R_UT_RTTI_DECL(Window);                                                                              // at 0x0C
@@ -54,18 +68,20 @@ public:
     virtual void UnbindAnimationSelf(AnimTransform *pAnimTrans);                                            // at 0x50
     virtual u8 GetMaterialNum() const;                                                                      // at 0x64
     virtual Material *GetMaterial(u32 idx) const;                                                           // at 0x6C
-    virtual void DrawContent(const math::VEC2 &basePt, const WindowFrameSize &frameSize, u8 alpha);         // at 0x74
+    virtual Material *GetContentMaterial() const;                                                           // at 0x74
+    virtual Material *GetFrameMaterial(u32 frameIdx) const;                                                 // at 0x78
+    virtual void DrawContent(const math::VEC2 &basePt, const WindowFrameSize &frameSize, u8 alpha);         // at 0x7C
     virtual void DrawFrame(const math::VEC2 &basePt, const Frame &frame, const WindowFrameSize &frameSize,  //
-            u8 alpha);                                                                                      // at 0x78
-    virtual void DrawFrame4(const math::VEC2 &basePt, const Frame *frame, const WindowFrameSize &frameSize, //
-            u8 alpha);                                                                                      // at 0x7C
-    virtual void DrawFrame8(const math::VEC2 &basePt, const Frame *frame, const WindowFrameSize &frameSize, //
             u8 alpha);                                                                                      // at 0x80
+    virtual void DrawFrame4(const math::VEC2 &basePt, const Frame *frame, const WindowFrameSize &frameSize, //
+            u8 alpha);                                                                                      // at 0x84
+    virtual void DrawFrame8(const math::VEC2 &basePt, const Frame *frame, const WindowFrameSize &frameSize, //
+            u8 alpha);                                                                                      // at 0x88
 
 private:
     res::InflationLRTB mContentInflation; // at 0x0D8
     Content mContent;                     // at 0x0E8
-    Frame *mFrams;                        // at 0x100
+    Frame *mFrames;                       // at 0x100
     u8 mFrameNum;                         // 0x104
 };
 
