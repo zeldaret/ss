@@ -17,6 +17,10 @@ struct SizedString {
         mChars[0] = '\0';
     }
 
+    SizedString(const char *src) {
+        operator=(src);
+    }
+
     char mChars[Size];
 
     char *operator&() {

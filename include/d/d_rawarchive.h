@@ -19,8 +19,8 @@ public:
     bool destroy(void *arg);
     bool loadArcFromDiskChecked(const char *fileName, const char *dirName, u8 mountDirection, EGG::Heap *heap);
     bool loadArcFromDisk(const char *fileName, const char *dirName, u8 mountDirection, EGG::Heap *heap);
-    static bool checkArcExistsOnDisk(const char *fileName, const char *dirName);
-    static bool checkArcExistsOnDiskInner(char *outBuf, const char *fileName, const char *dirName);
+    static BOOL checkArcExistsOnDisk(const char *fileName, const char *dirName);
+    static BOOL checkArcExistsOnDiskInner(SizedString<128> &path, const char *fileName, const char *dirName);
 
     int mount(const char *name, void *data, void *callbackArg, u8 mountDirection, EGG::Heap *heap);
     int onMount(void *callbackArg);
@@ -84,12 +84,12 @@ public:
     ~dRawArcTable_c();
 
     bool init(u16 count, void *callbackArg, EGG::Heap *heap);
-    u32 getArcOrLoadFromDisk(const char *name, const char *dirName, u8 mountDirection, EGG::Heap *heap);
-    bool addEntryFromSuperArc(const char *name, void *data, u8 mountDirection, EGG::Heap *heap);
+    BOOL getArcOrLoadFromDisk(const char *name, const char *dirName, u8 mountDirection, EGG::Heap *heap);
+    BOOL addEntryFromSuperArc(const char *name, void *data, u8 mountDirection, EGG::Heap *heap);
     int ensureLoadedMaybe2(const char *name);
     int ensureLoadedMaybe(const char *name);
     bool hasEntry(const char *name);
-    u32 decreaseRefCount(const char *name);
+    BOOL decreaseRefCount(const char *name);
     void *getDataFromOarc(const char *name, const char *path);
     void *getSubEntryData(const char *name, const char *path);
     void *getLoadedArcData(const char *name);

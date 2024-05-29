@@ -54,8 +54,6 @@ void CurrentStageArcManager::init(EGG::Heap *heap) {
     mArcTable.init(18, &lbl_80575250, heap);
 }
 
-// sprintf
-extern "C" void fn_8001F820(char *str, const char *src, ...);
 
 bool CurrentStageArcManager::setStage(const char *newStage) {
     mStageName = newStage;

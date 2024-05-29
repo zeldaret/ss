@@ -120,11 +120,10 @@ bool dRawArcEntry_c::destroy(void *arg) {
 
 bool dRawArcEntry_c::loadArcFromDiskChecked(const char *fileName, const char *dirName, u8 mountDirection,
         EGG::Heap *heap) {
-    char arcPath[128];
-    arcPath[0] = '\0';
+    SizedString<128> path;
 
-    if (checkArcExistsOnDiskInner(arcPath, fileName, dirName)) {
-        return loadArcFromDisk(fileName, arcPath, mountDirection, heap);
+    if (checkArcExistsOnDiskInner(path, fileName, dirName)) {
+        return loadArcFromDisk(fileName, &path, mountDirection, heap);
     }
     return false;
 }
@@ -138,20 +137,19 @@ bool dRawArcEntry_c::loadArcFromDisk(const char *arcName, const char *arcPath, u
     return true;
 }
 
-bool dRawArcEntry_c::checkArcExistsOnDisk(const char *fileName, const char *dirName) {
-    char path[128];
-    path[0] = '\0';
+BOOL dRawArcEntry_c::checkArcExistsOnDisk(const char *fileName, const char *dirName) {
+    SizedString<128> path;
     return checkArcExistsOnDiskInner(path, fileName, dirName);
 }
 
 // sprintf2
 extern "C" void fn_8003D650(char *out, const char *fmt, ...);
 
-bool dRawArcEntry_c::checkArcExistsOnDiskInner(char *outBuf, const char *fileName, const char *dirName) {
-    fn_8003D650(outBuf, "/US/%s/%s.arc", dirName, fileName);
-    if (!mDvd::IsExistPath(outBuf)) {
-        fn_8003D650(outBuf, "/%s/%s.arc", dirName, fileName);
-        if (!mDvd::IsExistPath(outBuf)) {
+BOOL dRawArcEntry_c::checkArcExistsOnDiskInner(SizedString<128> &path, const char *fileName, const char *dirName) {
+    path.sprintf("/US/%s/%s.arc", dirName, fileName);
+    if (!mDvd::IsExistPath(&path)) {
+        path.sprintf("/%s/%s.arc", dirName, fileName);
+        if (!mDvd::IsExistPath(&path)) {
             return false;
         }
     }
@@ -249,7 +247,7 @@ bool dRawArcTable_c::init(u16 count, void *callbackArg, EGG::Heap *heap) {
     return true;
 }
 
-u32 dRawArcTable_c::getArcOrLoadFromDisk(const char *name, const char *dirName, u8 mountDirection, EGG::Heap *heap) {
+BOOL dRawArcTable_c::getArcOrLoadFromDisk(const char *name, const char *dirName, u8 mountDirection, EGG::Heap *heap) {
     dRawArcEntry_c *entry = findEntry(name);
     if (entry == nullptr) {
         entry = findEmptySlot();
@@ -266,7 +264,7 @@ u32 dRawArcTable_c::getArcOrLoadFromDisk(const char *name, const char *dirName, 
     return true;
 }
 
-bool dRawArcTable_c::addEntryFromSuperArc(const char *name, void *data, u8 mountDirection, EGG::Heap *heap) {
+BOOL dRawArcTable_c::addEntryFromSuperArc(const char *name, void *data, u8 mountDirection, EGG::Heap *heap) {
     dRawArcEntry_c *entry = findEntry(name);
     if (entry == nullptr) {
         entry = findEmptySlot();
@@ -303,7 +301,7 @@ bool dRawArcTable_c::hasEntry(const char *name) {
     return findEntry(name) != nullptr;
 }
 
-u32 dRawArcTable_c::decreaseRefCount(const char *name) {
+BOOL dRawArcTable_c::decreaseRefCount(const char *name) {
     dRawArcEntry_c *entry = findEntry(name);
     if (entry == nullptr) {
         return false;
