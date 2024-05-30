@@ -148,7 +148,8 @@ extern "C" MEMiHeapHead *fn_803CC670(const void *memBlock);
     u32 mem[2] = {0, 0};
 
     OSLockMutex(&sRootMutex);
-    for (Heap *heap = nullptr; heap != nullptr; heap = (Heap *)nw4r::ut::List_GetNext(&sHeapList, &heap)) {
+    Heap *heap = nullptr;
+    while ((heap = (Heap *)nw4r::ut::List_GetNext(&sHeapList, &heap)) != nullptr) {
         Heap *childHeap = nullptr;
         Heap *parentHeap = heap->findParentHeap();
         if ((u32)heap < 0x90000000) {
