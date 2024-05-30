@@ -84,7 +84,7 @@ s32 mHeapAllocator_c::adjustExpHeap() {
     return mHeap::adjustExpHeap(static_cast<EGG::ExpHeap *>(getHeapOfKind(heap, EGG::Heap::HEAP_KIND_EXPANDED)));
 }
 
-s32 mHeapAllocator_c::createNewTempFrmHeap(s32 size, EGG::Heap *newHeap, char *heapName, s32 align, u32 attrs) {
+bool mHeapAllocator_c::createNewTempFrmHeap(s32 size, EGG::Heap *newHeap, char *heapName, s32 align, u32 attrs) {
     if (!replaceWithNewFrmHeap(size, newHeap, heapName, align, attrs)) {
         return false;
     }
