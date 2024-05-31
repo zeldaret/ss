@@ -12,6 +12,7 @@ class fBase_c;
 class fLiNdBa_c : public cListNd_c {
 public:
     fLiNdBa_c(fBase_c *owner) : p_owner(owner) {}
+    ~fLiNdBa_c() { unlink(); }
 
     inline fLiNdBa_c *getPrev() const {
         return (fLiNdBa_c *)cListNd_c::getPrev();
