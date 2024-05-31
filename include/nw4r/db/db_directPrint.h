@@ -1,5 +1,5 @@
-#ifndef DB_DIRECT_PRINT_H
-#define DB_DIRECT_PRINT_H
+#ifndef NW4R_DB_DIRECT_PRINT_H
+#define NW4R_DB_DIRECT_PRINT_H
 
 #include <Runtime.PPCEABI.H/__va_arg.h>
 #include <common.h>

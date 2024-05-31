@@ -29,7 +29,7 @@ toBeSorted/save_manager.cpp:
 
 d/a/d_a_base.cpp:
 	.text       start:0x8002C3A0 end:0x8002DE40
-	.data       start:0x80501544 end:0x805015B8
+	.data       start:0x80501538 end:0x805015B8
 	.sdata      start:0x80571920 end:0x80571930
 	.sbss       start:0x80575080 end:0x80575098
 	.sdata2     start:0x80576C88 end:0x80576C8C
@@ -144,6 +144,10 @@ toBeSorted/skipflag_manager.cpp:
 	.text       start:0x800BFBA0 end:0x800BFE00
 	.sbss       start:0x80575408 end:0x8057540C
 	.bss        start:0x805A9C68 end:0x805A9C88
+
+toBeSorted/special_item_drop_mgr.cpp:
+	.text       start:0x800C7B60 end:0x800C82B0
+	.sbss       start:0x80575438 end:0x80575440
 
 toBeSorted/counters/counter.cpp:
 	.text       start:0x8016CC40 end:0x8016CD94
@@ -337,6 +341,32 @@ nw4r/db/db_directPrint.cpp:
 	.data       start:0x8056C000 end:0x8056C010
 	.sbss       start:0x805765E8 end:0x805765EC
 	.bss        start:0x80636B80 end:0x80636BA4
+
+nw4r/db/db_console.cpp:
+	.text       start:0x80434EA0 end:0x8043598C
+	.data       start:0x8056C010 end:0x8056C038
+	.sdata      start:0x80574DC8 end:0x80574DD0
+	.sbss       start:0x805765F0 end:0x805765F8
+	.bss        start:0x80636BA8 end:0x80636FC0
+
+nw4r/db/db_exception.cpp:
+	.text       start:0x80435990 end:0x80436A48
+	.data       start:0x8056C038 end:0x8056C5F0
+	.sdata      start:0x80574DD0 end:0x80574E10
+	.sbss       start:0x805765F8 end:0x80576600
+	.sdata2     start:0x8057EBA8 end:0x8057EBAC
+	.bss        start:0x80636FC0 end:0x8063B320
+
+nw4r/db/db_mapFile.cpp:
+	.text       start:0x80436A50 end:0x804373B4
+	.data       start:0x8056C5F0 end:0x8056C600
+	.sdata      start:0x80574E10 end:0x80574E24
+	.sbss       start:0x80576600 end:0x8057660C
+	.bss        start:0x8063B320 end:0x8063B560
+
+nw4r/db/db_assert.cpp:
+	.text       start:0x804373C0 end:0x804373D0
+	.sbss       start:0x80576610 end:0x80576618
 
 egg/core/eggArchive.cpp:
 	.text       start:0x80493510 end:0x80494254
