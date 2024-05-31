@@ -338,6 +338,32 @@ nw4r/db/db_directPrint.cpp:
 	.sbss       start:0x805765E8 end:0x805765EC
 	.bss        start:0x80636B80 end:0x80636BA4
 
+nw4r/db/db_console.cpp:
+	.text       start:0x80434EA0 end:0x8043598C
+	.data       start:0x8056C010 end:0x8056C038
+	.sdata      start:0x80574DC8 end:0x80574DD0
+	.sbss       start:0x805765F0 end:0x805765F8
+	.bss        start:0x80636BA8 end:0x80636FC0
+
+nw4r/db/db_exception.cpp:
+	.text       start:0x80435990 end:0x80436A48
+	.data       start:0x8056C038 end:0x8056C5F0
+	.sdata      start:0x80574DD0 end:0x80574E10
+	.sbss       start:0x805765F8 end:0x80576600
+	.sdata2     start:0x8057EBA8 end:0x8057EBAC
+	.bss        start:0x80636FC0 end:0x8063B320
+
+nw4r/db/db_mapFile.cpp:
+	.text       start:0x80436A50 end:0x804373B4
+	.data       start:0x8056C5F0 end:0x8056C600
+	.sdata      start:0x80574E10 end:0x80574E24
+	.sbss       start:0x80576600 end:0x8057660C
+	.bss        start:0x8063B320 end:0x8063B560
+
+nw4r/db/db_assert.cpp:
+	.text       start:0x804373C0 end:0x804373D0
+	.sbss       start:0x80576610 end:0x80576618
+
 egg/core/eggArchive.cpp:
 	.text       start:0x80493510 end:0x80494254
 	.data       start:0x8056E820 end:0x8056E830

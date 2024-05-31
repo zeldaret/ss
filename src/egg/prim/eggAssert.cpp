@@ -3,17 +3,10 @@
 #include <egg/core/eggXfbManager.h>
 #include <egg/prim/eggAssert.h>
 #include <nw4r/db/db_directPrint.h>
+#include <nw4r/db/db_mapFile.h>
 #include <rvl/OS.h>
 #include <rvl/VI.h>
 #include <MSL_C/string.h>
-
-
-namespace nw4r {
-namespace db {
-// TODO
-extern s32 MapFile_QuerySymbol(void *arg, char *buf, u32 buf_size);
-} // namespace db
-} // namespace nw4r
 
 namespace EGG {
 
@@ -62,7 +55,7 @@ bool sAssertOccurred;
 /* 80674c60 */ char buf[260];
 
 /* 8049c100 */ const char *getMapSymbol(void *arg) {
-    u32 success = nw4r::db::MapFile_QuerySymbol(arg, buf, sizeof(buf));
+    bool success = nw4r::db::MapFile_QuerySymbol((u32)arg, (u8*)buf, sizeof(buf));
     return success ? buf : nullptr;
 }
 

@@ -36,7 +36,7 @@ typedef enum {
     OS_ERR_MAX
 } OSErrorType;
 
-typedef void (*OSErrorHandler)(u8 error, OSContext *ctx, u32 dsisr, u32 dar, ...);
+typedef void (*OSErrorHandler)(u16 error, OSContext *ctx, u32 dsisr, u32 dar);
 
 extern OSErrorHandler __OSErrorTable[OS_ERR_MAX];
 extern u32 __OSFpscrEnableBits;

@@ -105,6 +105,7 @@ BOOL OSLinkFixed(OSModuleInfo* newModule, void* bss);
 BOOL OSUnlink(OSModuleInfo* module);
 void OSSetStringTable(void* string_table);
 void __OSModuleInit(void);
+OSModuleInfo* OSSearchModule(void* ptr, u32* section, u32* offset);
 
 #ifdef __cplusplus
 };
