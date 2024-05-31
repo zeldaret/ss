@@ -9,7 +9,7 @@ namespace db {
 
 static ConsoleHandle sConsoleList;
 static OSMutex sMutex;
-static u8 buf[0x400];
+static u8 sStrBuf[0x400];
 bool sInited;
 
 static ConsoleHandle FindInsertionPosition_(u16 priority) {
@@ -128,7 +128,6 @@ ConsoleHandle Console_Destroy(ConsoleHandle console) {
     return console;
 }
 
-
 static u8 *GetTextPtr_(ConsoleHandle console, u16 line, u16 xPos) {
     return &console->textBuf[(console->width + 1) * line + xPos];
 }
@@ -152,14 +151,12 @@ static u16 GetActiveLines_(ConsoleHandle console) {
 
 static void DoDrawString_(ConsoleHandle console, u32 printLine, const u8 *str, nw4r::ut::TextWriterBase<char> *writer) {
     if (writer != nullptr) {
-            writer->Printf("%s\n", str);
-        } else {
-            s32 height = console->viewPosY + printLine * 10;
-            db::DirectPrint_DrawString(console->viewPosX, height, false, "%s\n",
-                    str);
-        }
+        writer->Printf("%s\n", str);
+    } else {
+        s32 height = console->viewPosY + printLine * 10;
+        db::DirectPrint_DrawString(console->viewPosX, height, false, "%s\n", str);
+    }
 }
-
 
 static void DoDrawConsole_(ConsoleHandle console, nw4r::ut::TextWriterBase<char> *writer) {
     // I guess we don't care if locking the mutex fails??
@@ -177,8 +174,7 @@ static void DoDrawConsole_(ConsoleHandle console, nw4r::ut::TextWriterBase<char>
     }
 
     line = console->ringTop + viewOffset;
-    if ( line >= console->height )
-    {
+    if (line >= console->height) {
         line -= console->height;
     }
 
@@ -214,7 +210,6 @@ void Console_DrawDirect(ConsoleHandle console) {
         DirectPrint_StoreCache();
     }
 }
-
 
 static void TerminateLine_(ConsoleHandle console) {
     *GetTextPtr_(console, console->printTop, console->printXPos) = '\0';
@@ -346,8 +341,8 @@ static void Console_PrintString_(ConsoleOutputType type, ConsoleHandle console, 
 
 void Console_VFPrintf(ConsoleOutputType type, ConsoleHandle console, const char *format, va_list vlist) {
     if (TryLockMutex_(&sMutex)) {
-        vsnprintf((char *)buf, sizeof(buf), format, vlist);
-        Console_PrintString_(type, console, buf);
+        vsnprintf((char *)sStrBuf, sizeof(sStrBuf), format, vlist);
+        Console_PrintString_(type, console, sStrBuf);
 
         UnlockMutex_(&sMutex);
     }
@@ -357,9 +352,9 @@ void Console_Printf(ConsoleHandle console, const char *format, ...) {
     va_start(args, format);
 
     if (TryLockMutex_(&sMutex)) {
-        vsnprintf((char *)buf, sizeof(buf), format, args);
-        OSReport("%s", buf);
-        PrintToBuffer_(console, buf);
+        vsnprintf((char *)sStrBuf, sizeof(sStrBuf), format, args);
+        OSReport("%s", sStrBuf);
+        PrintToBuffer_(console, sStrBuf);
 
         UnlockMutex_(&sMutex);
     }

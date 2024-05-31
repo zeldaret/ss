@@ -10,11 +10,11 @@ static u32 sFileLength;
 static MapFile *sMapFileList = nullptr;
 static u8 (*GetCharPtr_)(const u8 *) = nullptr;
 
-static u8 dvdReadBuf[512] ALIGN(32);
+static u8 sMapBuf[512] ALIGN(32);
 static DVDFileInfo sFileInfo;
 
 static s32 sMapBufMaxSize = 0x200;
-static u8 *sMapBuf = dvdReadBuf;
+static u8 *sDvdBuf = sMapBuf;
 static s32 sMapBufOffset = -1;
 
 static void MapFile_Append_(MapFile *file) {
@@ -86,7 +86,7 @@ static u8 GetCharOnDvd_(const u8 *buf) {
             address = ROUND_UP(sFileLength - sMapBufOffset, 32);
         }
         BOOL enabled = OSEnableInterrupts();
-        BOOL read = DVDReadAsyncPrio(&sFileInfo, sMapBuf, address, sMapBufOffset, nullptr, 2);
+        BOOL read = DVDReadAsyncPrio(&sFileInfo, sDvdBuf, address, sMapBufOffset, nullptr, 2);
         while (DVDGetCommandBlockStatus(&sFileInfo.block)) {}
 
         OSRestoreInterrupts(enabled);
@@ -94,7 +94,7 @@ static u8 GetCharOnDvd_(const u8 *buf) {
             return 0;
         }
     }
-    return *(sMapBuf + offset);
+    return *(sDvdBuf + offset);
 }
 
 static u8 *SearchNextLine_(u8 *buf, s32 lines) {

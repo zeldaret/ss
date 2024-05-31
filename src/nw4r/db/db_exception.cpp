@@ -49,8 +49,6 @@ const char *CPU_EXP_NAME[] = {
         "FLOATING POINT",
 };
 
-
-
 void *RunThread_(void *);
 // TODO u8 vs u16
 void ErrorHandler_(u16, OSContext *, u32, u32);
@@ -145,8 +143,6 @@ static void DrawConsoleEndless_(ConsoleHandle console) {
         lineCnt++;
     }
 }
-
-
 
 static void DumpException_(const ExceptionCallbackParam *param) {
     u16 error = param->error;
@@ -462,13 +458,11 @@ void Exception_SetUserCallback(bool (*callback)(detail::ConsoleHead *, void *), 
     sException.exceptionCallbackArgs = args;
 }
 
-
 u16 Exception_SetDisplayInfo(u16 newInfo) {
     u16 old = sException.exceptionDisplayInfo;
     sException.exceptionDisplayInfo = newInfo;
     return old;
 }
-
 
 static void WaitTime_(s32 time) {
     s64 t1 = OSGetTime();
