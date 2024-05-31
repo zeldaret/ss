@@ -187,6 +187,7 @@ cflags_framework = [
     *cflags_base,
     "-inline noauto",
     "-str reuse",
+    "-fp_contract off",
     "-ipa file",
 ]
 
@@ -278,6 +279,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/misc_flag_managers.cpp"),
             Object(Matching, "toBeSorted/dungeonflag_manager.cpp"),
             Object(Matching, "toBeSorted/skipflag_manager.cpp"),
+            Object(NonMatching, "toBeSorted/special_item_drop_mgr.cpp"),
             Object(Matching, "c/c_list.cpp"),
             Object(Matching, "c/c_tree.cpp"),
             Object(Matching, "d/d_base.cpp"),
