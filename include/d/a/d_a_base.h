@@ -88,7 +88,7 @@ protected:
     /* 0x64 | 8002ceb0 */ virtual bool restorePosRotFromCopy();
     /* 0x68 | 8002db80 */ virtual void *getCurrentEventActor();
     /* 0x6C | 8002db90 */ virtual void unkVirtFunc_0x6C();
-    /* 0x70 | 8002dba0 */ virtual void doInteraction(int);
+    /* 0x70 | 8002dba0 */ virtual void doInteraction(s32);
 
 public:
     /* 8002c3b0 */ dAcBase_c();
