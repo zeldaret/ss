@@ -2,6 +2,9 @@
 #include <s/s_StateID.hpp>
 #include <MSL_C/string.h>
 
+// Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
+// See include/s/README.txt for changes made
+
 /// @brief An implementation of a state ID for a given class.
 /// @details It adds the ability to call the three state methods on a state owner class.
 /// @tparam T The class that this state belongs to.

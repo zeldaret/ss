@@ -3,6 +3,9 @@
 #include <s/s_FState.hpp>
 #include <s/s_StateID.hpp>
 
+// Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
+// See include/s/README.txt for changes made
+
 /// @brief A state factory for a given class.
 /// @tparam T The class that this state belongs to.
 /// @ingroup state

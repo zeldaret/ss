@@ -1,6 +1,9 @@
 #pragma once
 #include <s/s_StateInterfaces.hpp>
 
+// Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
+// See include/s/README.txt for changes made
+
 /// @brief A class that handles state execution and transition.
 /// @details [Presumably, sStateMethod_c actually means "methods for state interaction", or something like that].
 /// @ingroup state

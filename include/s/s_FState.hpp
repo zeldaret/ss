@@ -2,6 +2,9 @@
 #include <s/s_StateInterfaces.hpp>
 #include <s/s_FStateID.hpp>
 
+// Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
+// See include/s/README.txt for changes made
+
 /// @brief A state holder for a given class.
 /// @tparam T The class that this state belongs to.
 /// @ingroup state

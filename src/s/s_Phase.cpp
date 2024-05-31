@@ -1,5 +1,8 @@
 #include <s/s_Phase.hpp>
 
+// Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
+// See include/s/README.txt for changes made
+
 sPhase_c::sPhase_c(phaseMethod **methodList, int count) {
     mpMethodList = methodList;
     mPhaseLength = count;

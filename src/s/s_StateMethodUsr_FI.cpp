@@ -1,6 +1,9 @@
 #include <common.h>
 #include <s/s_StateMethodUsr_FI.hpp>
 
+// Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
+// See include/s/README.txt for changes made
+
 sStateMethodUsr_FI_c::sStateMethodUsr_FI_c(sStateIDChkIf_c &check, sStateFctIf_c &factory, const sStateIDIf_c &state) :
     sStateMethod_c(check, factory, state) {
 }

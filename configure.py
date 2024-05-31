@@ -314,6 +314,7 @@ config.libs = [
             Object(Matching, "s/s_StateId.cpp"),
             Object(Matching, "s/s_StateMethod.cpp"),
             Object(Matching, "s/s_StateMethodUsr_FI.cpp"),
+            Object(Matching, "s/s_Phase.cpp"),
             Object(Matching, "DynamicLink.cpp"),
             # framework (f_name)
             # d stuff (d_name)

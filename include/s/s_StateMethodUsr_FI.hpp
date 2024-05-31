@@ -1,6 +1,9 @@
 #pragma once
 #include <s/s_StateMethod.hpp>
 
+// Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
+// See include/s/README.txt for changes made
+
 /// @brief An extension to sStateMethod_c that implements the remaining abstract methods.
 /// @details [Name might mean "Functionality implementation"].
 /// @ingroup state

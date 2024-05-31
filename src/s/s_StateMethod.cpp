@@ -3,6 +3,9 @@
 #include <s/s_StateMethod.hpp>
 #include <s/s_StateID.hpp>
 
+// Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
+// See include/s/README.txt for changes made
+
 sStateMethod_c::sStateMethod_c(sStateIDChkIf_c &checker, sStateFctIf_c &factory, const sStateIDIf_c &initialState) :
     mpStateChk(checker),
     mpStateFct(factory),
@@ -37,6 +40,7 @@ void sStateMethod_c::initializeStateMethod() {
 
 void sStateMethod_c::executeStateMethod() {
     if (!mExecutionLock) {
+        // Skyward Sword change: Prevent runaway state changes?
         int i = 2;
         do {
             if (mRefreshStateMethod) {

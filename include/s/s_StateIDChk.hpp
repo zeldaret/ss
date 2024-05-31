@@ -1,6 +1,9 @@
 #pragma once
 #include <s/s_StateInterfaces.hpp>
 
+// Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
+// See include/s/README.txt for changes made
+
 /// @brief A default implementation of a state ID checker.
 /// @details ::isNormalID always returns true.
 class sStateIDChk_c : public sStateIDChkIf_c {

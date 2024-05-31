@@ -24,7 +24,6 @@ void (*fBase_c::sUnloadCallback)();
 fBase_c::fBase_c()
     : unique_ID(m_rootUniqueID), params(m_tmpCtData.params), profile_name(m_tmpCtData.prof_name),
       group_type(m_tmpCtData.group_type), manager(this) {
-    fManager_c *mgr = &manager;
 
     m_rootUniqueID = (fBaseID_e)(m_rootUniqueID + 1);
     if (m_rootUniqueID == INVALID) {
@@ -33,8 +32,8 @@ fBase_c::fBase_c()
         }
     }
 
-    fManager_c::m_connectManage.addTreeNode(&mgr->connect_node, m_tmpCtData.connect_parent);
-    int searchTableIdx = mgr->getSearchTableNum();
+    fManager_c::m_connectManage.addTreeNode(&manager.connect_node, m_tmpCtData.connect_parent);
+    int searchTableIdx = manager.getSearchTableNum();
     fManager_c::m_searchManage[searchTableIdx].prepend(&manager.search_node);
 
     const fProfile::fBaseProfile_c *profile = (*fProfile::sProfileList)[profile_name];

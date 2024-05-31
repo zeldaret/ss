@@ -6,9 +6,9 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class fLiNdTumbleweed_c : public fLiNdBa_c {
+class fLiNdTumbleweed_c : public fLiNdBaAutoUnlink_c {
 public:
-    fLiNdTumbleweed_c(fBase_c *owner) : fLiNdBa_c(owner) {}
+    fLiNdTumbleweed_c(fBase_c *owner) : fLiNdBaAutoUnlink_c(owner) {}
     u16 someField;
 };
 
