@@ -305,6 +305,7 @@ config.libs = [
             Object(NonMatching, "f/f_base.cpp"),
             Object(Matching, "f/f_list.cpp"),
             Object(Matching, "f/f_manager.cpp"),
+            Object(Matching, "m/m_allocator.cpp"),
             Object(Matching, "m/m_angle.cpp"),
             Object(Matching, "m/m_dvd.cpp"),
             Object(Matching, "m/m_heap.cpp"),
