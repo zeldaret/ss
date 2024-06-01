@@ -69,7 +69,7 @@ public:
     u8 mCompressionType;
 };
 
-typedef bool (*dvdReadCallback)(void *);
+typedef u32 (*dvdReadCallback)(void *);
 
 class mDvd_callback_c : public mDvd_command_c {
 public:
@@ -78,10 +78,11 @@ public:
     virtual u32 execute() override;
 
     static mDvd_callback_c *create(dvdReadCallback cb, void *cbData);
+    static mDvd_callback_c *createOrFail(dvdReadCallback cb, void *cbData);
 
     dvdReadCallback mCallback;
     void *mCallbackData;
-    BOOL mSuccess;
+    u32 mCallbackResult;
 };
 
 class mDvd_mountMemArchive_c : public mDvd_command_c {

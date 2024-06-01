@@ -129,7 +129,7 @@ void DynamicModuleControl::initialize(EGG::ExpHeap *heap) {
     sTotalFreeSize = heap->getTotalFreeSize();
 }
 
-bool DynamicModuleControl::callback(void *arg) {
+u32 DynamicModuleControl::callback(void *arg) {
     return static_cast<DynamicModuleControl *>(arg)->do_load();
 }
 
