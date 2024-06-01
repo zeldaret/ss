@@ -1,4 +1,6 @@
-#pragma once
+#ifndef S_FSTATEFCT_H
+#define S_FSTATEFCT_H
+
 #include <s/s_StateInterfaces.hpp>
 #include <s/s_FState.hpp>
 #include <s/s_StateID.hpp>
@@ -27,3 +29,5 @@ public:
 private:
     sFState_c<T> mState;
 };
+
+#endif

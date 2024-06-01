@@ -1,4 +1,6 @@
-#pragma once
+#ifndef S_STATEID_H
+#define S_STATEID_H
+
 #include <s/s_StateInterfaces.hpp>
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
@@ -44,3 +46,5 @@ namespace sStateID {
     /// @ingroup state
     extern sStateID_c null; ///< A null state instance.
 }
+
+#endif

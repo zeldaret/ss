@@ -1,4 +1,6 @@
-#pragma once
+#ifndef S_FSTATEMGR_H
+#define S_FSTATEMGR_H
+
 #include <s/s_FStateID.hpp>
 #include <s/s_StateMgr.hpp>
 #include <s/s_FState.hpp>
@@ -18,3 +20,5 @@ public:
     sFStateMgr_c(T &owner, const sStateIDIf_c &initializeState) :
         sStateMgr_c<T, Method, sFStateFct_c, sStateIDChk_c>(owner, initializeState) {}
 };
+
+#endif

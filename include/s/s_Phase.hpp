@@ -1,4 +1,5 @@
-#pragma once
+#ifndef S_PHASE_H
+#define S_PHASE_H
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
 // See include/s/README.txt for changes made
@@ -35,3 +36,5 @@ public:
     unsigned short mPhaseLength; ///< The length of the method list.
     unsigned short mCurrMethod; ///< The index of the method to execute.
 };
+
+#endif

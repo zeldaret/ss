@@ -1,4 +1,6 @@
-#pragma once
+#ifndef S_FSTATEID_H
+#define S_FSTATEID_H
+
 #include <s/s_StateID.hpp>
 #include <MSL_C/string.h>
 
@@ -59,3 +61,5 @@ private:
     stateFunc mpExecute; ///< The execute method for this state ID.
     stateFunc mpFinalize; ///< The finalize method for this state ID.
 };
+
+#endif

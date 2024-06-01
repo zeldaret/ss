@@ -1,4 +1,6 @@
-#pragma once
+#ifndef S_FSTATE_H
+#define S_FSTATE_H
+
 #include <s/s_StateInterfaces.hpp>
 #include <s/s_FStateID.hpp>
 
@@ -42,3 +44,5 @@ private:
     T &mpOwner; ///< The owner of this state.
     const sFStateID_c<T> *mpID; ///< The state ID that runs the state methods.
 };
+
+#endif

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef S_STATE_H
+#define S_STATE_H
+
 #include <s/s_FStateMgr.hpp>
 #include <s/s_StateMethodUsr_FI.hpp>
 
@@ -15,3 +17,5 @@
     &class::initializeState_##name, \
     &class::executeState_##name, \
     &class::finalizeState_##name)
+
+#endif

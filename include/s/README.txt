@@ -5,7 +5,8 @@ with differences/modifications outlined below:
 
 The NSMBW code uses inlined destructors. In SS, these destructors are all part of the s_StateID.cpp(?) TU,
 and pretty much every generic instantiation of the state manager (which for a large part are in RELs)
-will call back into those destructors in the main DOL.
+will call back into those destructors in the main DOL. As a result, the destructors were made not inline
+and explicitly instantiated in s_StateID.cpp
 
 ## s_StateIDChk.hpp
 

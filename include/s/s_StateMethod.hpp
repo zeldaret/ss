@@ -1,4 +1,6 @@
-#pragma once
+#ifndef S_STATEMETHOD_H
+#define S_STATEMETHOD_H
+
 #include <s/s_StateInterfaces.hpp>
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
@@ -50,3 +52,5 @@ protected:
 
     sStateIf_c *mpState; ///< The current state holder.
 };
+
+#endif

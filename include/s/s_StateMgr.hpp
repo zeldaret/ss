@@ -1,4 +1,6 @@
-#pragma once
+#ifndef S_STATEMGR_H
+#define S_STATEMGR_H
+
 #include <s/s_StateInterfaces.hpp>
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
@@ -38,3 +40,5 @@ private:
     Factory<T> mFactory;
     Method mMethod;
 };
+
+#endif
