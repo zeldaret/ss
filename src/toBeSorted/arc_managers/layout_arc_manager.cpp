@@ -1,30 +1,5 @@
 #include <d/d_heap.h>
-#include <d/d_rawarchive.h>
-#include <egg/core/eggHeap.h>
-// clang-format off
-#include <sized_string.h>
-// clang-format on
-
-class LayoutArcManager {
-    LayoutArcManager();
-    virtual ~LayoutArcManager();
-
-    dRawArcTable_c mArcTable;
-
-    static LayoutArcManager *sInstance;
-
-    static bool create(EGG::Heap *heap);
-
-    void init(EGG::Heap *heap);
-
-    bool loadLayoutArcFromDisk(const char *object, EGG::Heap *heap);
-    void ensureLoaded1(const char *object);
-    void ensureLoaded2(const char *object);
-    bool hasEntry(const char *object);
-    bool decrement(const char *path);
-    void *getData(const char *oarcName, const char *fileName);
-    void *getLoadedData(const char *path);
-};
+#include <toBeSorted/arc_managers/layout_arc_manager.h>
 
 LayoutArcManager *LayoutArcManager::sInstance;
 

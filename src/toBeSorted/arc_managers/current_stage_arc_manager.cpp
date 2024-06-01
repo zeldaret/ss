@@ -1,42 +1,5 @@
 #include <d/d_heap.h>
-#include <d/d_rawarchive.h>
-#include <egg/core/eggHeap.h>
-// clang-format off
-#include <sized_string.h>
-// clang-format on
-
-class CurrentStageArcManager {
-    CurrentStageArcManager();
-    virtual ~CurrentStageArcManager();
-
-    SizedString<32> mStageName;
-    SizedString<32> mCurrentLoadingStageArcName;
-    SizedString<32> mStageExtraLayerArcName;
-
-    dRawArcTable_c mArcTable;
-
-    static CurrentStageArcManager *sInstance;
-
-    static bool create(EGG::Heap *heap);
-
-    void init(EGG::Heap *heap);
-    bool setStage(const char *stage);
-    bool decrement();
-    void *getData(const char *fileName);
-    void *getFileFromCurrentLay0Arc(const char *fileName);
-    bool loadFileFromExtraLayerArc(int layer);
-    bool unloadExtraLayerArc();
-    bool loadRoomArc(int room);
-    bool addEntryFromSuperArc(const char *name, void *data);
-    bool unloadRoomArc(int room);
-    bool decrement(const char *path);
-    void *loadFromRoomArc(int roomId, const char *fileName);
-    void *getDataFromRoomArc(int roomId, const char *fileName);
-    const char *getCurrentStageDirectory();
-    const char *getRoomArcDirectory(int room) const;
-
-    static EGG::ExpHeap *getHeap();
-};
+#include <toBeSorted/arc_managers/current_stage_arc_manager.h>
 
 CurrentStageArcManager *CurrentStageArcManager::sInstance;
 
@@ -53,7 +16,6 @@ extern char lbl_80575250;
 void CurrentStageArcManager::init(EGG::Heap *heap) {
     mArcTable.init(18, &lbl_80575250, heap);
 }
-
 
 bool CurrentStageArcManager::setStage(const char *newStage) {
     mStageName = newStage;
@@ -103,7 +65,8 @@ bool CurrentStageArcManager::unloadExtraLayerArc() {
 }
 
 bool CurrentStageArcManager::loadRoomArc(int room) {
-    return (bool)mArcTable.getArcOrLoadFromDisk(getRoomArcDirectory(room), getCurrentStageDirectory(), 0, dHeap::work2Heap.heap);
+    return (bool)mArcTable.getArcOrLoadFromDisk(getRoomArcDirectory(room), getCurrentStageDirectory(), 0,
+            dHeap::work2Heap.heap);
 }
 
 bool CurrentStageArcManager::addEntryFromSuperArc(const char *path, void *data) {
