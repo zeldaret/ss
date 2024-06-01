@@ -12,7 +12,35 @@ namespace lyt {
 
 class Material {
 public:
-    Material(const res::Material *pResMat, const ResBlockSet &ResBlockSet);
+    Material(const res::Material *pRes, const ResBlockSet &resBlockSet);
+
+    void Init();
+    static void InitBitGXNums(detail::BitGXNums *ptr);
+    void ReserveGXMem(u8 texMapNum, u8 texSRTNum, u8 texCoordGenNum, u8 tevStageNum, bool allocTevSwap, u8 indStageNum,
+            u8 indSRTNum, bool allocChanCtrl, bool allocMatCol, bool allocAlpComp, bool allocBlendMode);
+
+    TexMap *GetTexMapAry() const;
+    TexMap *GetTexMapAry();
+    TexSRT *GetTexSRTAry() const;
+    TexSRT *GetTexSRTAry();
+    TexCoordGen *GetTexCoordGenAry() const;
+    TexCoordGen *GetTexCoordGenAry();
+    ChanCtrl *GetChanCtrlAry();
+    ut::Color *GetMatColAry();
+    TevSwapMode *GetTevSwapAry();
+    AlphaCompare *GetAlphaComparePtr();
+    BlendMode *GetBlendModePtr();
+    IndirectStage *GetIndirectStageAry();
+    TexSRT *GetIndTexSRTAry();
+    TevStage *GetTevStageAry();
+    void SetName(const char *name);
+    void SetTextureNum(u8 val);
+    void SetTexCoordGenNum(u8 val);
+    void SetTevStageNum(u8 val);
+    void SetIndStageNum(u8 val);
+    void SetColorElement(u32 colorType, s16 value);
+    void AddAnimationLink(AnimationLink *pAnimationLink);
+
     // IsBlendModeCap__Q34nw4r3lyt8MaterialCFv
     bool IsBlendModeCap() const {
         return mGXMemCap.blendMode;
@@ -75,11 +103,6 @@ public:
     u8 GetTextureNum() const {
         return mGXMemNum.texMap;
     }
-    void SetTextureNum(u8 val);
-    void SetTexCoordGenNum(u8 val);
-    TexMap *GetTexMapAry() const;
-    TexMap *GetTexMapAry();
-    TexCoordGen *GetTexCoordGenAry();
 
     GXColorS10 GetTevColor(u32 idx) const {
         return mTevCols[idx];
@@ -112,8 +135,8 @@ private:
     ut::LinkList<AnimationLink, 0> mAnimList; // at 0x4
     GXColorS10 mTevCols[3];                   // at 0x10
     ut::Color mTevKCols[4];                   // at 0x28
-    BitGXNums mGXMemCap;                      // at 0x38
-    BitGXNums mGXMemNum;                      // at 0x3C
+    detail::BitGXNums mGXMemCap;              // at 0x38
+    detail::BitGXNums mGXMemNum;              // at 0x3C
     void *mpGXMem;                            // at 0x40
     char mName[MATERIAL_NAME_SIZE + 1];       // at 0x44
     bool mbUserAllocated;                     // at 0x59

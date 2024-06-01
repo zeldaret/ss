@@ -33,35 +33,107 @@ struct DataBlockHeader {
     u32 size; // at 0x4
 };
 
-struct TexMap {
-    // GetWarpModeS__Q44nw4r3lyt3res6TexMapCFv
-    // GetWarpModeT__Q44nw4r3lyt3res6TexMapCFv
-    // GetMinFilter__Q44nw4r3lyt3res6TexMapCFv
-    // GetMagFilter__Q44nw4r3lyt3res6TexMapCFv
-    u8 texIdx;   // at 0x0
-    u8 wrapSflt; // at 0x1
-    u8 wrapTflt; // at 0x2
+struct TexSRT {
+    math::VEC2 translate; // at 0x00
+    f32 rotate;           // at 0x08
+    math::VEC2 scale;     // at 0x0C
 };
 
-struct Material {};
+struct TexMap {
+    // GetWarpModeS__Q44nw4r3lyt3res6TexMapCFv
+    GXTexWrapMode GetWarpModeS() const {
+        return (GXTexWrapMode)wrapSflt; // TODO
+    }
+
+    // GetWarpModeT__Q44nw4r3lyt3res6TexMapCFv
+    GXTexWrapMode GetWarpModeT() const {
+        return (GXTexWrapMode)wrapTflt; // TODO
+    }
+
+    // GetMinFilter__Q44nw4r3lyt3res6TexMapCFv
+    GXTexFilter GetMinFilter() const {
+        u8 bitData;
+        return (GXTexFilter)bitData; // TODO
+    }
+
+    // GetMagFilter__Q44nw4r3lyt3res6TexMapCFv
+    GXTexFilter GetMagFilter() const {
+        u8 bitData;
+        return (GXTexFilter)bitData; // TODO
+    }
+    u16 texIdx;  // at 0x0
+    u8 wrapSflt; // at 0x2
+    u8 wrapTflt; // at 0x3
+};
+
+struct MaterialResourceNum {
+    // GetTevStageNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
+    u8 GetTevStageNum() const {
+        return (bits >> 18) & 0x1F;
+    }
+
+    // GetIndTexStageNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
+    u8 GetIndTexStageNum() const {
+        return (bits >> 15) & 0x7;
+    }
+    // GetIndTexSRTNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
+    u8 GetIndTexSRTNum() const {
+        return (bits >> 4) & 0xF;
+    }
+
+    // HasBlendMode__Q44nw4r3lyt3res19MaterialResourceNumCFv
+    bool HasBlendMode() const {
+        return (bits >> 24) & 1;
+    }
+
+    // HasAlphaCompare__Q44nw4r3lyt3res19MaterialResourceNumCFv
+    bool HasAlphaCompare() const {
+        return (bits >> 23) & 1;
+    }
+
+    // HasTevSwapTable__Q44nw4r3lyt3res19MaterialResourceNumCFv
+    bool HasTevSwapTable() const {
+        return (bits >> 12) & 1;
+    }
+
+    // GetMatColNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
+    u8 GetMatColNum() const {
+        return (bits >> 27) & 1;
+    }
+
+    // GetChanCtrlNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
+    u8 GetChanControlNum() const {
+        return (bits >> 25) & 1;
+    }
+
+    // GetTexCoordGenNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
+    u8 GetTexCoordGenNum() const {
+        return (bits >> 8) & 0xF;
+    }
+
+    // GetTexSRTNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
+    u8 GetTexSRTNum() const {
+        return (bits >> 13) & 0x3;
+    }
+
+    // GetTexMapNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
+    u8 GetTexMapNum() const {
+        return (bits >> 0) & 0xF;
+    }
+
+    u32 bits;
+};
+struct Material {
+    char name[20];              // at 0x00
+    GXColorS10 tevCols[3];      // at 0x14
+    GXColorS10 tevKCols[3];     // at 0x2C
+    MaterialResourceNum resNum; // at 0x3C
+};
+
 struct MaterialList {
     DataBlockHeader blockHeader; // at 0x00
     u16 materialNum;             // at 0x08
     u8 padding[2];               // at 0x0A
-};
-struct MaterialResourceNum {
-    // GetTevStageNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
-    // GetIndTexStageNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
-    // GetIndTexSRTNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
-    // HasBlendMode__Q44nw4r3lyt3res19MaterialResourceNumCFv
-    // HasAlphaCompare__Q44nw4r3lyt3res19MaterialResourceNumCFv
-    // HasTevSwapTable__Q44nw4r3lyt3res19MaterialResourceNumCFv
-    // GetMatColNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
-    // GetChanCtrlNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
-    // GetTexCoordGenNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
-    // GetTexSRTNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
-    // GetTexMapNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
-    u32 bits;
 };
 
 struct Group {
@@ -111,6 +183,12 @@ struct FontList {
 };
 
 struct Font {
+    u32 nameStrOffset; // at 0x0
+    u8 type;           // at 0x4
+    u8 padding[3];     // at 0x5
+};
+
+struct Texture {
     u32 nameStrOffset; // at 0x0
     u8 type;           // at 0x4
     u8 padding[3];     // at 0x5
