@@ -117,6 +117,10 @@ public:
     /* 805767c0 */ static const Vector2f zero;
     /* 805767c8 */ static const Vector2f ex;
     /* 805767d0 */ static const Vector2f ey;
+
+    Vector2f operator-(const Vector2f &v) {
+        return Vector2f(x - v.x, y - v.y);
+    }
 };
 
 struct Vector3s {
