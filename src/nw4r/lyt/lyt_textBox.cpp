@@ -280,7 +280,8 @@ void TextBox::SetVtxColorElement(u32 idx, u8 value) {
 // 1] IDK which one is accurate, both symbols exist
 // GetTextDrawRect__Q34nw4r3lyt7TextBoxCFv
 ut::Rect TextBox::GetTextDrawRect() const {
-    return GetTextDrawRect(&ut::TextWriterBase<wchar_t>());
+    ut::TextWriterBase<wchar_t> temp;
+    return GetTextDrawRect(&temp);
 }
 
 // 2] IDK which one is accurate, both symbols exist

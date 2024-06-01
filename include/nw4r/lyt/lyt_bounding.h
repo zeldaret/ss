@@ -10,10 +10,10 @@ namespace lyt {
 
 class Bounding : public Pane {
 public:
-    Bounding(const res::Bounding *, const ResBlockSet &);
+    Bounding(const res::Bounding *pBlock, const ResBlockSet &);
     virtual ~Bounding();
     NW4R_UT_RTTI_DECL(Bounding);
-    virtual void DrawSelf(const DrawInfo &);
+    virtual void DrawSelf(const DrawInfo &drawInfo);
 };
 } // namespace lyt
 } // namespace nw4r

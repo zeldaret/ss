@@ -360,6 +360,12 @@ nw4r/lyt/lyt_window.cpp:
 	.sbss       start:0x80576710 end:0x80576714
 	.sdata2     start:0x8057F268 end:0x8057F280
 
+nw4r/lyt/lyt_bounding.cpp:
+	.text       start:0x8048D700 end:0x8048D7CC
+	.ctors      start:0x804DB984 end:0x804DB988
+	.data       start:0x8056E6C0 end:0x8056E734
+	.sbss       start:0x80576718 end:0x8057671C
+
 nw4r/lyt/lyt_resourceAccessor.cpp:
 	.text       start:0x80492000 end:0x80492058
 	.data       start:0x8056E7E0 end:0x8056E7F8

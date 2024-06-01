@@ -359,6 +359,7 @@ config.libs = [
             Object(Matching, "nw4r/lyt/lyt_picture.cpp"),
             Object(Matching, "nw4r/lyt/lyt_textBox.cpp"),
             Object(Matching, "nw4r/lyt/lyt_window.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_bounding.cpp"),
             Object(Matching, "nw4r/lyt/lyt_resourceAccessor.cpp"),
             Object(Matching, "nw4r/lyt/lyt_arcResourceAccessor.cpp"),
             Object(Matching, "nw4r/lyt/lyt_common.cpp"),
