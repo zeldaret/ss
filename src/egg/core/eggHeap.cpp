@@ -18,13 +18,15 @@ namespace EGG {
 /* 80576764 */ HeapCreateCallback Heap::sCreateCallback;
 /* 80576764 */ HeapDestroyCallback Heap::sDestroyCallback;
 
-/* 804953f0 */ void Heap::initialize() {
+/* 804953f0 */
+void Heap::initialize() {
     nw4r::ut::List_Init(&sHeapList, 0x1c /* todo offsetof() */);
     OSInitMutex(&sRootMutex);
     sIsHeapListInitialized = true;
 }
 
-/* 80495430 */ Heap::Heap(MEMiHeapHead *head) : mHeapHandle(head), mParentBlock(nullptr), mName("NoName"), mFlag() {
+/* 80495430 */
+Heap::Heap(MEMiHeapHead *head) : mHeapHandle(head), mParentBlock(nullptr), mName("NoName"), mFlag() {
     mFlag.value = 0;
     nw4r::ut::List_Init(&mChildren, 0x8 /* todo offsetof() */);
     OSLockMutex(&sRootMutex);
@@ -32,13 +34,15 @@ namespace EGG {
     OSUnlockMutex(&sRootMutex);
 }
 
-/* 804954c0 */ Heap::~Heap() {
+/* 804954c0 */
+Heap::~Heap() {
     OSLockMutex(&sRootMutex);
     nw4r::ut::List_Remove(&sHeapList, this);
     OSUnlockMutex(&sRootMutex);
 }
 
-/* 80495560 */ void *Heap::alloc(size_t size, int align, Heap *heap) {
+/* 80495560 */
+void *Heap::alloc(size_t size, int align, Heap *heap) {
     Heap *currentHeap = sCurrentHeap;
     Thread *thread = Thread::findThread(OSGetCurrentThread());
     Heap *threadHeap = nullptr;
@@ -79,7 +83,8 @@ namespace EGG {
     return ptr;
 }
 
-/* 80495690 */ Heap *Heap::findHeap(MEMiHeapHead *head) {
+/* 80495690 */
+Heap *Heap::findHeap(MEMiHeapHead *head) {
     Heap *heap = nullptr;
     OSLockMutex(&sRootMutex);
     if (sIsHeapListInitialized) {
@@ -95,7 +100,8 @@ namespace EGG {
     return heap;
 }
 
-/* 80495730 */ Heap *Heap::findParentHeap() {
+/* 80495730 */
+Heap *Heap::findParentHeap() {
     Heap *retHeap = nullptr;
     MEMiHeapHead *heap = MEMFindContainHeap(mHeapHandle);
     if (heap) {
@@ -107,7 +113,8 @@ namespace EGG {
 
 extern "C" MEMiHeapHead *fn_803CC670(const void *memBlock);
 
-/* 80495780 */ Heap *Heap::findContainHeap(const void *memBlock) {
+/* 80495780 */
+Heap *Heap::findContainHeap(const void *memBlock) {
     Heap *retHeap = nullptr;
     MEMiHeapHead *heap = fn_803CC670(memBlock);
     if (heap) {
@@ -117,7 +124,8 @@ extern "C" MEMiHeapHead *fn_803CC670(const void *memBlock);
     return retHeap;
 }
 
-/* 804957c0 */ void Heap::free(void *ptr, Heap *heap) {
+/* 804957c0 */
+void Heap::free(void *ptr, Heap *heap) {
     if (heap == nullptr) {
         MEMiHeapHead *iheap = fn_803CC670(ptr);
         if (iheap == nullptr) {
@@ -132,7 +140,8 @@ extern "C" MEMiHeapHead *fn_803CC670(const void *memBlock);
     heap->free(ptr);
 }
 
-/* 80495830 */ void Heap::dispose() {
+/* 80495830 */
+void Heap::dispose() {
     mFlag.setBit(1);
     Heap *heap;
     while ((heap = (Heap *)nw4r::ut::List_GetFirst(&mChildren)) != nullptr) {
@@ -141,10 +150,12 @@ extern "C" MEMiHeapHead *fn_803CC670(const void *memBlock);
     mFlag.resetBit(1);
 }
 
-/* 804958a0 */ void Heap::dump() {}
+/* 804958a0 */
+void Heap::dump() {}
 
 // TODO: This debugging function with stripped out error reports doesn't match yet
-/* 804958b0 */ void Heap::dumpAll() {
+/* 804958b0 */
+void Heap::dumpAll() {
     u32 mem[2] = {0, 0};
 
     OSLockMutex(&sRootMutex);
@@ -167,7 +178,8 @@ extern "C" MEMiHeapHead *fn_803CC670(const void *memBlock);
     OSUnlockMutex(&sRootMutex);
 }
 
-/* 804959a0 */ Heap *Heap::becomeCurrentHeap() {
+/* 804959a0 */
+Heap *Heap::becomeCurrentHeap() {
     OSLockMutex(&sRootMutex);
     Heap *h = sCurrentHeap;
     sCurrentHeap = this;
@@ -175,7 +187,8 @@ extern "C" MEMiHeapHead *fn_803CC670(const void *memBlock);
     return h;
 }
 
-/* 80495a00 */ Heap *Heap::_becomeCurrentHeapWithoutLock() {
+/* 80495a00 */
+Heap *Heap::_becomeCurrentHeapWithoutLock() {
     Heap *h = sCurrentHeap;
     sCurrentHeap = this;
     DCStoreRange(&sCurrentHeap, sizeof(sCurrentHeap));
@@ -186,25 +199,31 @@ extern "C" MEMiHeapHead *fn_803CC670(const void *memBlock);
 extern "C" void MEMInitAllocatorForHeap(Allocator *alloc, s32 align, Heap *heap);
 
 // TODO this could be an inline virtual function
-/* 80495a40 */ void Heap::initAllocator(Allocator *alloc, s32 align) {
+/* 80495a40 */
+void Heap::initAllocator(Allocator *alloc, s32 align) {
     MEMInitAllocatorForHeap(alloc, align, this);
 }
 
 } // namespace EGG
 
-/* 80495a60 */ void *operator new(size_t, void *p) {
+/* 80495a60 */
+void *operator new(size_t, void *p) {
     return p;
 }
-/* 80495a70 */ void *operator new(size_t size, EGG::Heap *heap, int align) {
+/* 80495a70 */
+void *operator new(size_t size, EGG::Heap *heap, int align) {
     return EGG::Heap::alloc(size, align, heap);
 }
 
-/* 80495a80 */ void *operator new(size_t size, EGG::Allocator *alloc) {
+/* 80495a80 */
+void *operator new(size_t size, EGG::Allocator *alloc) {
     return MEMAllocFromAllocator(alloc->getHandle(), size);
 }
-/* 80495a90 */ void *operator new[](size_t size, int align) {
+/* 80495a90 */
+void *operator new[](size_t size, int align) {
     return EGG::Heap::alloc(size, align, nullptr);
 }
-/* 80495aa0 */ void *operator new[](size_t size, EGG::Heap *heap, int align) {
+/* 80495aa0 */
+void *operator new[](size_t size, EGG::Heap *heap, int align) {
     return EGG::Heap::alloc(size, align, heap);
 }
