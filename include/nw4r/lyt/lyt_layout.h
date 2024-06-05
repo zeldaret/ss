@@ -1,5 +1,6 @@
 #ifndef NW4R_LYT_LAYOUT_H
 #define NW4R_LYT_LAYOUT_H
+
 #include "common.h"
 #include <new.h>
 #include <nw4r/lyt/lyt_animation.h>
@@ -7,6 +8,7 @@
 #include <nw4r/lyt/lyt_types.h>
 #include <nw4r/ut/ut_ResFont.h>
 #include <rvl/MEM/mem_allocator.h>
+
 
 namespace nw4r {
 namespace lyt {

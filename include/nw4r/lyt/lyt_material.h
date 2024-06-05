@@ -12,6 +12,7 @@ namespace lyt {
 
 class Material {
 public:
+    Material();
     Material(const res::Material *pRes, const ResBlockSet &resBlockSet);
 
     void Init();
@@ -19,25 +20,35 @@ public:
     void ReserveGXMem(u8 texMapNum, u8 texSRTNum, u8 texCoordGenNum, u8 tevStageNum, bool allocTevSwap, u8 indStageNum,
             u8 indSRTNum, bool allocChanCtrl, bool allocMatCol, bool allocAlpComp, bool allocBlendMode);
 
-    TexMap *GetTexMapAry() const;
+    const TexMap *GetTexMapAry() const;
     TexMap *GetTexMapAry();
-    TexSRT *GetTexSRTAry() const;
+    const TexSRT *GetTexSRTAry() const;
     TexSRT *GetTexSRTAry();
-    TexCoordGen *GetTexCoordGenAry() const;
+    const TexCoordGen *GetTexCoordGenAry() const;
     TexCoordGen *GetTexCoordGenAry();
+    const ChanCtrl *GetChanCtrlAry() const;
     ChanCtrl *GetChanCtrlAry();
+    const ut::Color *GetMatColAry() const;
     ut::Color *GetMatColAry();
+    const TevSwapMode *GetTevSwapAry() const;
     TevSwapMode *GetTevSwapAry();
+    const AlphaCompare *GetAlphaComparePtr() const;
     AlphaCompare *GetAlphaComparePtr();
+    const BlendMode *GetBlendModePtr() const;
     BlendMode *GetBlendModePtr();
+    const IndirectStage *GetIndirectStageAry() const;
     IndirectStage *GetIndirectStageAry();
+    const TexSRT *GetIndTexSRTAry() const;
     TexSRT *GetIndTexSRTAry();
+    const TevStage *GetTevStageAry() const;
     TevStage *GetTevStageAry();
+
     void SetName(const char *name);
     void SetTextureNum(u8 val);
     void SetTexCoordGenNum(u8 val);
     void SetTevStageNum(u8 val);
     void SetIndStageNum(u8 val);
+    s16 GetColorElement(u32 colorType);
     void SetColorElement(u32 colorType, s16 value);
     void AddAnimationLink(AnimationLink *pAnimationLink);
 
@@ -67,6 +78,7 @@ public:
     }
 
     // SetTexSRTElement__Q34nw4r3lyt8MaterialFUlUlf
+
     // GetTexturePtr__Q34nw4r3lyt8MaterialFUc
 
     // GetTexSRTCap__Q34nw4r3lyt8MaterialCFv

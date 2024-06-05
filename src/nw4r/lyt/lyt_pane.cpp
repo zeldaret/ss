@@ -512,15 +512,15 @@ u16 Pane::GetExtUserDataNum() const {
     }
     return 0;
 }
-res::ExtUserData *Pane::GetExtUserData() const {
+const res::ExtUserData *Pane::GetExtUserData() const {
     if (this->mpExtUserDataList) {
         return detail::ConvertOffsToPtr<res::ExtUserData>(this->mpExtUserDataList, sizeof(res::ExtUserDataList));
     }
     return nullptr;
 }
 
-res::ExtUserData *Pane::FindExtUserDataByName(const char *name) {
-    res::ExtUserData *pUserData = GetExtUserData();
+const res::ExtUserData *Pane::FindExtUserDataByName(const char *name) {
+    const res::ExtUserData *pUserData = GetExtUserData();
 
     if (!pUserData) {
         return nullptr;

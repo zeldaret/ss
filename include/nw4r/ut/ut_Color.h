@@ -34,6 +34,10 @@ public:
         return *this;
     }
 
+    Color &operator=(const GXColor &c) {
+        *(u32 *)this = *(u32 *)&c; // TODO -> This Seems Maybe Wrong
+    }
+
     Color operator|(u32 color) {
         return Color(ToU32() | color);
     }

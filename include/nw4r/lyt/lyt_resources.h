@@ -4,6 +4,7 @@
 #include <common.h>
 #include <nw4r/lyt/lyt_common.h>
 #include <nw4r/lyt/lyt_types.h>
+#include <nw4r/ut/ut_Color.h>
 
 #define PANE_NAME_SIZE 16
 #define PANE_USERDATA_SIZE 8
@@ -42,24 +43,24 @@ struct TexSRT {
 struct TexMap {
     // GetWarpModeS__Q44nw4r3lyt3res6TexMapCFv
     GXTexWrapMode GetWarpModeS() const {
-        return (GXTexWrapMode)wrapSflt; // TODO
+        return (GXTexWrapMode)(wrapSflt & 3);
     }
 
     // GetWarpModeT__Q44nw4r3lyt3res6TexMapCFv
     GXTexWrapMode GetWarpModeT() const {
-        return (GXTexWrapMode)wrapTflt; // TODO
+        return (GXTexWrapMode)(wrapTflt & 3);
     }
 
     // GetMinFilter__Q44nw4r3lyt3res6TexMapCFv
     GXTexFilter GetMinFilter() const {
-        u8 bitData;
-        return (GXTexFilter)bitData; // TODO
+        u8 bitData = (wrapSflt >> 2) & 7;
+        return (GXTexFilter)((bitData + 1) & 7);
     }
 
     // GetMagFilter__Q44nw4r3lyt3res6TexMapCFv
     GXTexFilter GetMagFilter() const {
-        u8 bitData;
-        return (GXTexFilter)bitData; // TODO
+        u8 bitData = (wrapTflt >> 2) & 1;
+        return (GXTexFilter)((bitData + 1) & 1);
     }
     u16 texIdx;  // at 0x0
     u8 wrapSflt; // at 0x2
@@ -78,7 +79,7 @@ struct MaterialResourceNum {
     }
     // GetIndTexSRTNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
     u8 GetIndTexSRTNum() const {
-        return (bits >> 4) & 0xF;
+        return (bits >> 13) & 0x3;
     }
 
     // HasBlendMode__Q44nw4r3lyt3res19MaterialResourceNumCFv
@@ -102,7 +103,7 @@ struct MaterialResourceNum {
     }
 
     // GetChanCtrlNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
-    u8 GetChanControlNum() const {
+    u8 GetChanCtrlNum() const {
         return (bits >> 25) & 1;
     }
 
@@ -113,7 +114,7 @@ struct MaterialResourceNum {
 
     // GetTexSRTNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
     u8 GetTexSRTNum() const {
-        return (bits >> 13) & 0x3;
+        return (bits >> 4) & 0xF;
     }
 
     // GetTexMapNum__Q44nw4r3lyt3res19MaterialResourceNumCFv
@@ -126,7 +127,7 @@ struct MaterialResourceNum {
 struct Material {
     char name[20];              // at 0x00
     GXColorS10 tevCols[3];      // at 0x14
-    GXColorS10 tevKCols[3];     // at 0x2C
+    GXColor tevKCols[4];        // at 0x2C
     MaterialResourceNum resNum; // at 0x3C
 };
 

@@ -28,6 +28,7 @@
         "limits": "cpp",
         "utility": "cpp",
         "initializer_list": "cpp",
-        "new": "cpp"
+        "new": "cpp",
+        "cstdlib": "cpp"
     }
 }

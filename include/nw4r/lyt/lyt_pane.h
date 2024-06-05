@@ -101,8 +101,8 @@ public:
     math::VEC2 GetVtxPos() const;
     void CalculateMtxChild(const DrawInfo &drawInfo);
     u16 GetExtUserDataNum() const;
-    res::ExtUserData *GetExtUserData() const;
-    res::ExtUserData *FindExtUserDataByName(const char *name);
+    const res::ExtUserData *GetExtUserData() const;
+    const res::ExtUserData *FindExtUserDataByName(const char *name);
 
     virtual ~Pane();                                                                             // at 0x8
     NW4R_UT_RTTI_DECL(Pane);                                                                     // at 0x0C

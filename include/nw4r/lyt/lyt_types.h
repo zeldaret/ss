@@ -9,17 +9,17 @@ namespace lyt {
 
 namespace detail {
 struct BitGXNums {
-    u32 texMap : 4;
-    u32 texSRT : 4;
-    u32 texCoordGen : 4;
-    u32 indSRT : 2;
-    u32 indStage : 3;
-    u32 tevSwap : 1;
-    u32 tevStage : 5;
-    u32 chanCtrl : 1;
-    u32 matCol : 1;
-    u32 alpComp : 1;
-    u32 blendMode : 1;
+    u32 texMap : 4;      // ( >> 28 ) &  F
+    u32 texSRT : 4;      // ( >> 24 ) &  F
+    u32 texCoordGen : 4; // ( >> 20 ) &  F
+    u32 indSRT : 2;      // ( >> 18 ) &  3
+    u32 indStage : 3;    // ( >> 15 ) &  7
+    u32 tevSwap : 1;     // ( >> 14 ) &  1
+    u32 tevStage : 5;    // ( >>  9 ) & 1F
+    u32 chanCtrl : 1;    // ( >>  8 ) &  1
+    u32 matCol : 1;      // ( >>  7 ) &  1
+    u32 alpComp : 1;     // ( >>  6 ) &  1
+    u32 blendMode : 1;   // ( >>  5 ) &  1
 };
 
 template <typename T>
@@ -40,8 +40,13 @@ T GetBits(T bits, int pos, int len) {
 }
 
 template <typename T>
-T *ConvertOffsToPtr(const void *baseAddress, unsigned int offset) {
+T *ConvertOffsToPtr(void *baseAddress, unsigned int offset) {
     return (T *)((u32)baseAddress + offset);
+}
+
+template <typename T>
+const T *ConvertOffsToPtr(const void *baseAddress, unsigned int offset) {
+    return (const T *)((u32)baseAddress + offset);
 }
 
 } // namespace detail
@@ -66,13 +71,14 @@ struct AnimTransform {
 
     u16 GetFrameSize() const;
     bool IsLoopData() const;
-    virtual ~AnimTransform() = 0;
-    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor) = 0;
-    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor, u16 animNum) = 0;
-    virtual void Bind(Pane *pPane, bool bRecursive) = 0;
-    virtual void Bind(Material *pMaterial, bool bDisable) = 0;
-    virtual void Animate(u32 idx, Pane *pPane) = 0;
-    virtual void Animate(u32 idx, Material *pMaterial) = 0;
+    virtual ~AnimTransform() = 0;                                                                  // at 0x08
+    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor) = 0; // at 0x0C
+    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor,      //
+            u16 animNum) = 0;                                                                      // at 0x10
+    virtual void Bind(Pane *pPane, bool bRecursive) = 0;                                           // at 0x14
+    virtual void Bind(Material *pMaterial, bool bDisable) = 0;                                     // at 0x18
+    virtual void Animate(u32 idx, Pane *pPane) = 0;                                                // at 0x1C
+    virtual void Animate(u32 idx, Material *pMaterial) = 0;                                        // at 0x20
 
     ut::LinkListNode mLink;     // at 0x4
     res::AnimationBlock *mpRes; // at 0xC
@@ -177,7 +183,9 @@ struct TexCoordGen {
 };
 struct ChanCtrl { // 17552
     // __ct__Q34nw4r3lyt8ChanCtrlFv
-    ChanCtrl() {}
+    ChanCtrl() : reserve1(0), reserve2(0) {
+        Set(GX_SRC_VTX, GX_SRC_VTX);
+    }
 
     // Set__Q34nw4r3lyt8ChanCtrlF11_GXColorSrc11_GXColorSrc
     void Set(GXColorSrc colSrc, GXColorSrc alpSrc) {
@@ -201,15 +209,62 @@ struct ChanCtrl { // 17552
     u8 reserve2;  // at 0x3
 };
 
+struct AlphaCompare { // 17457
+    // __ct__Q34nw4r3lyt12AlphaCompareFv
+    AlphaCompare() {
+        Set(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+    }
+
+    // Set__Q34nw4r3lyt12AlphaCompareF10_GXCompareUc10_GXAlphaOp10_GXCompareUc
+    void Set(GXCompare aComp0, u8 aRef0, GXAlphaOp aOp, GXCompare aComp1, u8 aRef1) {
+        comp = (aComp0 & 0x7) | ((aComp1 & 0x7) << 4);
+        op = aOp;
+        ref0 = aRef0;
+        ref1 = aRef1;
+    }
+
+    // GetComp0__Q34nw4r3lyt12AlphaCompareCFv
+    GXCompare GetComp0() const {
+        return (GXCompare)((comp >> 0) & 0xF);
+    }
+
+    // GetRef0__Q34nw4r3lyt12AlphaCompareCFv
+    u8 GetRef0() const {
+        return ref0;
+    }
+
+    // GetOp__Q34nw4r3lyt12AlphaCompareCFv
+    GXAlphaOp GetOp() const {
+        return (GXAlphaOp)op;
+    }
+
+    // GetComp1__Q34nw4r3lyt12AlphaCompareCFv
+    GXCompare GetComp1() const {
+        return (GXCompare)((comp >> 4) & 0xF);
+    }
+
+    // GetRef1__Q34nw4r3lyt12AlphaCompareCFv
+    u8 GetRef1() const {
+        return ref1;
+    }
+
+    u8 comp; // at 0x0
+    u8 op;   // at 0x1
+    u8 ref0; // at 0x2
+    u8 ref1; // at 0x3
+};
+
 struct BlendMode { // 10c41
     // __ct__Q34nw4r3lyt9BlendModeFv
-    BlendMode() {}
+    BlendMode() {
+        Set(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_SET);
+    }
 
     // Set__Q34nw4r3lyt9BlendModeF12_GXBlendMode14_GXBlendFactor14_GXBlendFactor10_GXLogicOp
-    void Set(GXBlendMode aType, GXBlendFactor srcFactor, GXBlendFactor destFactor, GXLogicOp aOp) {
+    void Set(GXBlendMode aType, GXBlendFactor aSrcFactor, GXBlendFactor aDestFactor, GXLogicOp aOp) {
         type = aType;
-        srcFactor = srcFactor;
-        dstFactor = destFactor;
+        srcFactor = aSrcFactor;
+        dstFactor = aDestFactor;
         op = aOp;
     }
 
@@ -239,46 +294,11 @@ struct BlendMode { // 10c41
     u8 op;        // at 0x3
 };
 
-struct AlphaCompare { // 17457
-    // __ct__Q34nw4r3lyt12AlphaCompareFv
-    AlphaCompare() {}
-
-    // Set__Q34nw4r3lyt12AlphaCompareF10_GXCompareUc10_GXAlphaOp10_GXCompareUc
-    void Set(GXCompare aComp0, u8 aRef0, GXAlphaOp aOp, GXCompare aComp1, u8 aRef1) {}
-
-    // GetComp0__Q34nw4r3lyt12AlphaCompareCFv
-    GXCompare GetComp0() const {
-        // return (GXCompare)
-    }
-
-    // GetRef0__Q34nw4r3lyt12AlphaCompareCFv
-    u8 GetRef0() const {
-        return ref0;
-    }
-
-    // GetOp__Q34nw4r3lyt12AlphaCompareCFv
-    GXAlphaOp GetOp() const {
-        return (GXAlphaOp)op;
-    }
-
-    // GetComp1__Q34nw4r3lyt12AlphaCompareCFv
-    GXCompare GetComp1() const {
-        // return (GXCompare)
-    }
-
-    // GetRef1__Q34nw4r3lyt12AlphaCompareCFv
-    u8 GetRef1() const {
-        return ref1;
-    }
-
-    u8 comp; // at 0x0
-    u8 op;   // at 0x1
-    u8 ref0; // at 0x2
-    u8 ref1; // at 0x3
-};
 struct IndirectStage { // 172da
     // __ct__Q34nw4r3lyt13IndirectStageFv
-    IndirectStage() {}
+    IndirectStage() {
+        Set(GX_TEXCOORD0, GX_TEXMAP0, GX_ITS_1, GX_ITS_1);
+    }
 
     // Set__Q34nw4r3lyt13IndirectStageF13_GXTexCoordID11_GXTexMapID14_GXIndTexScale14_GXIndTexScale
     void Set(GXTexCoordID aTexCoordGen, GXTexMapID aTexMap, GXIndTexScale aScaleS, GXIndTexScale aScaleT) {
@@ -324,59 +344,65 @@ struct TexSRT { // 17243
 struct TevStageInOp { // 16fe7
     // GetA__Q34nw4r3lyt12TevStageInOpCFv
     u8 GetA() const {
-        return ab; // TODO
+        return (ab >> 0) & 0xF;
     }
 
     // GetB__Q34nw4r3lyt12TevStageInOpCFv
     u8 GetB() const {
-        return ab; // TODO
+        return (ab >> 4) & 0xF;
     }
 
     // GetC__Q34nw4r3lyt12TevStageInOpCFv
     u8 GetC() const {
-        return cd; // TODO
+        return (cd >> 0) & 0xF;
     }
 
     // GetD__Q34nw4r3lyt12TevStageInOpCFv
     u8 GetD() const {
-        return cd; // TODO
+        return (cd >> 4) & 0xF;
     }
 
     // GetOp__Q34nw4r3lyt12TevStageInOpCFv
     u8 GetOp() const {
-        return op; // TODO
+        return (op >> 0) & 0xF;
     }
 
     // GetBias__Q34nw4r3lyt12TevStageInOpCFv
     u8 GetBias() const {
-        return op; // TODO
+        return (op >> 4) & 0x3;
     }
 
     // GetScale__Q34nw4r3lyt12TevStageInOpCFv
     u8 GetScale() const {
-        return op; // TODO
+        return (op >> 6) & 0x3;
     }
 
     // IsClamp__Q34nw4r3lyt12TevStageInOpCFv
     bool IsClamp() const {
-        return cl; // TODO
+        return (cl >> 0) & 1;
     }
 
     // GetOutReg__Q34nw4r3lyt12TevStageInOpCFv
     u8 GetOutReg() const {
-        return op; // TODO
+        return (cl >> 1) & 0x3;
     }
 
     // GetKSel__Q34nw4r3lyt12TevStageInOpCFv
     u8 GetKSel() const {
-        return cl; // TODO
+        return (cl >> 3) & 0x1F;
     }
 
     // SetIn__Q34nw4r3lyt12TevStageInOpFUcUcUcUc
-    void SetIn(u8 a, u8 b, u8 c, u8 d) {}
+    void SetIn(u8 a, u8 b, u8 c, u8 d) {
+        ab = (a & 0xF) | ((b & 0xF) << 4);
+        cd = (c & 0xF) | ((d & 0xF) << 4);
+    }
 
     // SetOp__Q34nw4r3lyt12TevStageInOpFUcUcUcbUcUc
-    void SetOp(u8 aOp, u8 bias, u8 scale, bool clamp, u8 outReg, u8 kSel) {}
+    void SetOp(u8 aOp, u8 bias, u8 scale, bool clamp, u8 outReg, u8 kSel) {
+        op = (aOp & 0xF) | ((bias & 3) << 4) | ((scale & 0x3) << 6);
+        cl = (clamp & 1) | ((outReg & 0x3) << 1) | ((kSel & 0x1F) << 3);
+    }
 
     u8 ab; // at 0x0
     u8 cd; // at 0x1
@@ -386,7 +412,15 @@ struct TevStageInOp { // 16fe7
 
 struct TevStage { // 17094
     // __ct__Q34nw4r3lyt8TevStageFv
-    TevStage() {}
+    TevStage() {
+        SetOrder(GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0, GX_TEV_SWAP0, GX_TEV_SWAP0);
+        SetColorIn(GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_RASC);
+        SetAlphaIn(GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
+        SetColorOp(GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV, GX_TEV_KCSEL_K0);
+        SetAlphaOp(GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV, GX_TEV_KASEL_K0_R);
+        SetIndirect(GX_INDTEXSTAGE0, GX_ITF_8, GX_ITB_NONE, GX_ITM_OFF, GX_ITW_OFF, GX_ITW_OFF, false, false,
+                GX_ITBA_OFF);
+    }
 
     // GetTexCoordGen__Q34nw4r3lyt8TevStageCFv
     GXTexCoordID GetTexCoordGen() const {
@@ -395,7 +429,7 @@ struct TevStage { // 17094
 
     // GetTexMap__Q34nw4r3lyt8TevStageCFv
     GXTexMapID GetTexMap() const {
-        return (GXTexMapID)texMap;
+        return (GXTexMapID)(texMap | (swapSel & 1) << 8);
     }
 
     // GetColorChan__Q34nw4r3lyt8TevStageCFv
@@ -405,12 +439,12 @@ struct TevStage { // 17094
 
     // GetRasSwapSel__Q34nw4r3lyt8TevStageCFv
     GXTevSwapSel GetRasSwapSel() const {
-        return (GXTevSwapSel)swapSel; // TODO
+        return (GXTevSwapSel)((swapSel >> 1) & 3);
     }
 
     // GetTexSwapSel__Q34nw4r3lyt8TevStageCFv
     GXTevSwapSel GetTexSwapSel() const {
-        return (GXTevSwapSel)swapSel; // TODO
+        return (GXTevSwapSel)((swapSel >> 3) & 3);
     }
 
     // GetColorInA__Q34nw4r3lyt8TevStageCFv
@@ -515,7 +549,7 @@ struct TevStage { // 17094
 
     // GetIndMtxSel__Q34nw4r3lyt8TevStageCFv
     GXIndTexMtxID GetIndMtxSel() const {
-        return (GXIndTexMtxID)inBiMt; // TODO
+        return (GXIndTexMtxID)((inBiMt >> 3) & 0xF);
     }
 
     // GetIndStage__Q34nw4r3lyt8TevStageCFv
@@ -525,37 +559,37 @@ struct TevStage { // 17094
 
     // GetIndFormat__Q34nw4r3lyt8TevStageCFv
     GXIndTexFormat GetIndFormat() const {
-        return (GXIndTexFormat)indFoAdUtAl; // TODO
+        return (GXIndTexFormat)((indFoAdUtAl >> 0) & 0x3);
     }
 
     // GetIndBiasSel__Q34nw4r3lyt8TevStageCFv
     GXIndTexBiasSel GetIndBiasSel() const {
-        return (GXIndTexBiasSel)inBiMt; // TODO
+        return (GXIndTexBiasSel)((inBiMt >> 0) & 0x7);
     }
 
     // GetIndWrapS__Q34nw4r3lyt8TevStageCFv
     GXIndTexWrap GetIndWrapS() const {
-        return (GXIndTexWrap)indWrap; // TODO
+        return (GXIndTexWrap)((indWrap >> 0) & 0x7);
     }
 
     // GetIndWrapT__Q34nw4r3lyt8TevStageCFv
     GXIndTexWrap GetIndWrapT() const {
-        return (GXIndTexWrap)indWrap; // TODO
+        return (GXIndTexWrap)((indWrap >> 3) & 0x7);
     }
 
     // IsIndAddPrev__Q34nw4r3lyt8TevStageCFv
-    bool IsIndAddPrev() const {
-        return indFoAdUtAl; // TODO
+    u8 IsIndAddPrev() const {
+        return ((indFoAdUtAl >> 2) & 1);
     }
 
     // IsIndUtcLod__Q34nw4r3lyt8TevStageCFv
-    bool IsIndUtcLod() const {
-        return indFoAdUtAl; // TODO
+    u8 IsIndUtcLod() const {
+        return ((indFoAdUtAl >> 3) & 1);
     }
 
     // GetIndAlphaSel__Q34nw4r3lyt8TevStageCFv
     GXIndTexAlphaSel GetIndAlphaSel() const {
-        return (GXIndTexAlphaSel)indFoAdUtAl; // TODO
+        return (GXIndTexAlphaSel)((indFoAdUtAl >> 4) & 3);
     }
 
     // SetOrder__Q34nw4r3lyt8TevStageF13_GXTexCoordID11_GXTexMapID12_GXChannelID13_GXTevSwapSel13_GXTevSwapSel
@@ -564,8 +598,7 @@ struct TevStage { // 17094
         texCoordGen = aTexCoordGen;
         colChan = aColChan;
         texMap = aTexMap;
-        swapSel = rasSel; // TODO
-        swapSel = texSel; // TODO
+        swapSel = ((rasSel & 3) << 1) | ((texSel & 3) << 3);
     }
 
     // SetColorIn__Q34nw4r3lyt8TevStageF14_GXTevColorArg14_GXTevColorArg14_GXTevColorArg14_GXTevColorArg
@@ -592,14 +625,9 @@ struct TevStage { // 17094
     void SetIndirect(GXIndTexStageID stage, GXIndTexFormat format, GXIndTexBiasSel bias, GXIndTexMtxID mtxSel,
             GXIndTexWrap wrapS, GXIndTexWrap wrapT, bool addPrev, bool utcLod, GXIndTexAlphaSel alphaSel) {
         indStage = stage;
-        indFoAdUtAl = format;   // TODO
-        inBiMt = bias;          // TODO
-        inBiMt = mtxSel;        // TODO
-        indWrap = wrapS;        // TODO
-        indWrap = wrapT;        // TODO
-        indFoAdUtAl = addPrev;  // TODO
-        indFoAdUtAl = utcLod;   // TODO
-        indFoAdUtAl = alphaSel; // TODO
+        inBiMt = (bias & 0x7) | ((mtxSel & 0xF) << 4);
+        indWrap = (wrapS & 0x7) | ((wrapT & 0x7) << 3);
+        indFoAdUtAl = (format & 3) | (addPrev << 2) | (utcLod << 3) | ((alphaSel & 0x3) << 4);
     }
 
     u8 texCoordGen;     // at 0x0
@@ -618,30 +646,27 @@ struct TevSwapMode { // 1750a
 
     // GetR__Q34nw4r3lyt11TevSwapModeCFv
     GXTevColorChan GetR() const {
-        return (GXTevColorChan)swap; // TODO
+        return (GXTevColorChan)((swap >> 0) & 0x3);
     }
 
     // GetG__Q34nw4r3lyt11TevSwapModeCFv
     GXTevColorChan GetG() const {
-        return (GXTevColorChan)swap; // TODO
+        return (GXTevColorChan)((swap >> 2) & 0x3);
     }
 
     // GetB__Q34nw4r3lyt11TevSwapModeCFv
     GXTevColorChan GetB() const {
-        return (GXTevColorChan)swap; // TODO
+        return (GXTevColorChan)((swap >> 4) & 0x3);
     }
 
     // GetA__Q34nw4r3lyt11TevSwapModeCFv
     GXTevColorChan GetA() const {
-        return (GXTevColorChan)swap; // TODO
+        return (GXTevColorChan)((swap >> 6) & 0x3);
     }
 
     // Set__Q34nw4r3lyt11TevSwapModeF15_GXTevColorChan15_GXTevColorChan15_GXTevColorChan15_GXTevColorChan
     void Set(GXTevColorChan r, GXTevColorChan g, GXTevColorChan b, GXTevColorChan a) {
-        swap = r; // TODO
-        swap = g; // TODO
-        swap = b; // TODO
-        swap = a; // TODO
+        swap = (r << 0) | (g << 2) | (b << 4) | (a << 6);
     }
 
     u8 swap; // at 0x0
