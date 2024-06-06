@@ -20,6 +20,7 @@ force_active: [
   "GetFont__Q34nw4r3lyt24MultiArcResourceAccessorFPCc",
   "GetPaneRect__Q34nw4r3lyt4PaneCFRCQ34nw4r3lyt8DrawInfo",
   "SetFont__Q34nw4r3lyt7TextBoxFPCQ34nw4r2ut4Font",
+  "GetTexMapAry__Q34nw4r3lyt8MaterialCFv",
 
 ]
 # modules:

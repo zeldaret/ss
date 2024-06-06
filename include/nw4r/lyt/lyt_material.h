@@ -132,6 +132,44 @@ public:
         GetTexCoordGenAry()[idx] = value;
     }
 
+    // Begin Functions not found in DWARF, but assumed from BBA map and required for weak func ordering
+    void SetTevColor(u32 idx, const GXColorS10 &color) {
+        mTevCols[idx] = color;
+    }
+
+    void SetAlphaCompare(const AlphaCompare &alphaComp) {
+        *GetAlphaComparePtr() = alphaComp;
+    }
+
+    void SetChanControl(u32 idx, const ChanCtrl &chanCtrl) {
+        GetChanCtrlAry()[idx] = chanCtrl;
+    }
+
+    void SetTevKColor(u32 idx, const ut::Color &color) {
+        mTevKCols[idx] = color;
+    }
+
+    void SetTevSwapMode(u32 idx, const TevSwapMode &tevSwapMode) {
+        GetTevSwapAry()[idx] = tevSwapMode;
+    }
+
+    void SetTexSRT(u32 idx, const TexSRT &texSRT) {
+        GetTexSRTAry()[idx] = texSRT;
+    }
+
+    void SetIndirectStage(u32 idx, const IndirectStage &indStage) {
+        GetIndirectStageAry()[idx] = indStage;
+    }
+
+    void SetBlendMode(const BlendMode &blendMode) {
+        *GetBlendModePtr() = blendMode;
+    }
+
+    void SetTevStage(u32 idx, const TevStage &tevStage) {
+        GetTevStageAry()[idx] = tevStage;
+    }
+    // End Functions not found in DWARF, but assumed from BBA map and required for weak func ordering
+
     virtual ~Material();                                                        // at 0x08
     virtual bool SetupGX(bool bModVtxCol, u8 alpha);                            // at 0x0C
     virtual void BindAnimation(AnimTransform *pAnimTrans);                      // at 0x10

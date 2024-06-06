@@ -275,78 +275,78 @@ Material::Material(const res::Material *pRes, const ResBlockSet &resBlockSet) : 
             }
             SetTextureNum(di);
         }
-    }
-    TexSRT *texSRTs = GetTexSRTAry();
-    for (int i = 0; i < texSRTNum; i++) {
-        texSRTs[i].translate = pResTexSRTs[i].translate;
-        texSRTs[i].rotate = pResTexSRTs[i].rotate;
-        texSRTs[i].scale = pResTexSRTs[i].scale;
-    }
-
-    TexCoordGen *texCoordGens = GetTexCoordGenAry();
-    SetTexCoordGenNum(texCoordGenNum);
-    for (int i = 0; i < mGXMemNum.texCoordGen; i++) {
-        texCoordGens[i] = resTexCoordGen[i];
-    }
-
-    if (allocChanCtrl) {
-        const ChanCtrl *pResChanCtrl = detail::ConvertOffsToPtr<ChanCtrl>(pRes, resOffs);
-        GetChanCtrlAry()[0] = *pResChanCtrl;
-        resOffs += sizeof(ChanCtrl);
-    }
-
-    if (allocMatCol) {
-        const ut::Color *pResMatCol = detail::ConvertOffsToPtr<ut::Color>(pRes, resOffs);
-        GetMatColAry()[0] = *pResMatCol;
-        resOffs += sizeof(ut::Color);
-    }
-
-    if (allocTevSwap) {
-        const TevSwapMode *tevSwaps = detail::ConvertOffsToPtr<TevSwapMode>(pRes, resOffs);
-        TevSwapMode *pResTevSwap = GetTevSwapAry();
-        for (int i = 0; i < 4; i++) {
-            pResTevSwap[i] = tevSwaps[i];
+        TexSRT *texSRTs = GetTexSRTAry();
+        for (int i = 0; i < texSRTNum; i++) {
+            texSRTs[i].translate = pResTexSRTs[i].translate;
+            texSRTs[i].rotate = pResTexSRTs[i].rotate;
+            texSRTs[i].scale = pResTexSRTs[i].scale;
         }
-        resOffs += 4 * sizeof(TevSwapMode);
-    }
 
-    if (indTexSRTNum != 0) {
-        TexSRT *indTexSRTs = GetIndTexSRTAry();
-        const TexSRT *pResIndMtx = detail::ConvertOffsToPtr<TexSRT>(pRes, resOffs);
-        for (int i = 0; i < indTexSRTNum; i++) {
-            indTexSRTs[i] = pResIndMtx[i];
+        TexCoordGen *texCoordGens = GetTexCoordGenAry();
+        SetTexCoordGenNum(texCoordGenNum);
+        for (int i = 0; i < mGXMemNum.texCoordGen; i++) {
+            texCoordGens[i] = resTexCoordGen[i];
         }
-    }
-    resOffs += pRes->resNum.GetIndTexSRTNum() * sizeof(TexSRT);
 
-    if (indStageNum != 0) {
-        SetIndStageNum(indStageNum);
-        IndirectStage *indirectStages = GetIndirectStageAry();
-        const IndirectStage *pResIndStg = detail::ConvertOffsToPtr<IndirectStage>(pRes, resOffs);
-        for (int i = 0; i < indStageNum; i++) {
-            indirectStages[i] = pResIndStg[i];
+        if (allocChanCtrl) {
+            const ChanCtrl *pResChanCtrl = detail::ConvertOffsToPtr<ChanCtrl>(pRes, resOffs);
+            GetChanCtrlAry()[0] = *pResChanCtrl;
+            resOffs += sizeof(ChanCtrl);
         }
-    }
-    resOffs += pRes->resNum.GetIndTexStageNum() * sizeof(IndirectStage);
 
-    if (tevStageNum != 0) {
-        SetTevStageNum(tevStageNum);
-        TevStage *tevStages = GetTevStageAry();
-        const TevStage *pResTevStg = detail::ConvertOffsToPtr<TevStage>(pRes, resOffs);
-        for (int i = 0; i < tevStageNum; i++) {
-            tevStages[i] = pResTevStg[i];
+        if (allocMatCol) {
+            const ut::Color *pResMatCol = detail::ConvertOffsToPtr<ut::Color>(pRes, resOffs);
+            GetMatColAry()[0] = *pResMatCol;
+            resOffs += sizeof(ut::Color);
         }
-    }
-    resOffs += pRes->resNum.GetTevStageNum() * sizeof(TevStage);
 
-    if (allocAlpComp) {
-        const AlphaCompare *pResAlphaCompare = detail::ConvertOffsToPtr<AlphaCompare>(pRes, resOffs);
-        *GetAlphaComparePtr() = *pResAlphaCompare;
-        resOffs += sizeof(AlphaCompare);
-    }
-    if (allocBlendMode) {
-        const BlendMode *pResBlendMode = detail::ConvertOffsToPtr<BlendMode>(pRes, resOffs);
-        *GetBlendModePtr() = *pResBlendMode;
+        if (allocTevSwap) {
+            const TevSwapMode *tevSwaps = detail::ConvertOffsToPtr<TevSwapMode>(pRes, resOffs);
+            TevSwapMode *pResTevSwap = GetTevSwapAry();
+            for (int i = 0; i < 4; i++) {
+                pResTevSwap[i] = tevSwaps[i];
+            }
+            resOffs += 4 * sizeof(TevSwapMode);
+        }
+
+        if (indTexSRTNum != 0) {
+            TexSRT *indTexSRTs = GetIndTexSRTAry();
+            const TexSRT *pResIndMtx = detail::ConvertOffsToPtr<TexSRT>(pRes, resOffs);
+            for (int i = 0; i < indTexSRTNum; i++) {
+                indTexSRTs[i] = pResIndMtx[i];
+            }
+        }
+        resOffs += pRes->resNum.GetIndTexSRTNum() * sizeof(TexSRT);
+
+        if (indStageNum != 0) {
+            SetIndStageNum(indStageNum);
+            IndirectStage *indirectStages = GetIndirectStageAry();
+            const IndirectStage *pResIndStg = detail::ConvertOffsToPtr<IndirectStage>(pRes, resOffs);
+            for (int i = 0; i < indStageNum; i++) {
+                indirectStages[i] = pResIndStg[i];
+            }
+        }
+        resOffs += pRes->resNum.GetIndTexStageNum() * sizeof(IndirectStage);
+
+        if (tevStageNum != 0) {
+            SetTevStageNum(tevStageNum);
+            TevStage *tevStages = GetTevStageAry();
+            const TevStage *pResTevStg = detail::ConvertOffsToPtr<TevStage>(pRes, resOffs);
+            for (int i = 0; i < tevStageNum; i++) {
+                tevStages[i] = pResTevStg[i];
+            }
+        }
+        resOffs += pRes->resNum.GetTevStageNum() * sizeof(TevStage);
+
+        if (allocAlpComp) {
+            const AlphaCompare *pResAlphaCompare = detail::ConvertOffsToPtr<AlphaCompare>(pRes, resOffs);
+            *GetAlphaComparePtr() = *pResAlphaCompare;
+            resOffs += sizeof(AlphaCompare);
+        }
+        if (allocBlendMode) {
+            const BlendMode *pResBlendMode = detail::ConvertOffsToPtr<BlendMode>(pRes, resOffs);
+            *GetBlendModePtr() = *pResBlendMode;
+        }
     }
 }
 #pragma dont_inline reset
