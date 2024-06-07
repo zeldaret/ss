@@ -22,6 +22,7 @@ which DOL systems are good candidates for decomping.
 """
 
 import glob
+import json
 import os
 import pathlib
 
@@ -58,9 +59,15 @@ BLOCKING_SYMBOLS = [
 ]
 
 def main():
+    matched_names = set()
+    with open('./objdiff.json') as f:
+        objdiff = json.load(f)
+        for unit in objdiff["units"]:
+            if unit.get("complete", False):
+                matched_names.add(unit["name"].split('/')[-1])
     data = {}
     for folder in os.listdir('./build/SOUE01'):
-        if folder.startswith('d_'):
+        if folder.startswith('d_') and not folder[:-2] in matched_names:
             data[folder] = []
             s_files = glob.glob(f'./build/SOUE01/{folder}/asm/REL/d/**/*.s', recursive=True)
             # maybe won't be true at some point?
