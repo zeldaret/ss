@@ -83,7 +83,7 @@ def main():
     ], key=lambda x: -len(x[1]))
 
     for [rel, deps] in output:
-        print(rel + ':', ", ".join(deps) if len(deps) else "No unidentified dependencies! Go decomp this REL, or add a blocker to this script")
+        print(rel + ':', ", ".join(deps) if len(deps) else "No identified blockers! Go decomp this REL, or add a blocker to this script")
 
 
 if __name__ == "__main__":
