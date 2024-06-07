@@ -49,11 +49,27 @@ public:
     void Set(const TexMap &t) {
         *this = t;
     }
+
+    // IDK how many of these Sets/ReplaceImage/SetNoWrap actually exist due to version changes
+    void Set(const GXTexObj &);
+    void Set(const GXTlutObj &);
     void Set(TPLPalette *, u32);
     void Set(const TPLDescriptor *);
 
+    void ReplaceImage(const TexMap &);
+    // guess, between set and replace image which just does the same thing as Set by only Image, Width, Height, and
+    // format
+    void ReplaceImage(const GXTexObj &);
+    void ReplaceImage(TPLPalette *, u32);
+    void ReplaceImage(const TPLDescriptor *);
+
     void SetNoWrap(const TexMap &);
+    void SetNoWrap(const GXTexObj &);
+    void SetNoWrap(TPLPalette *, u32);
     void SetNoWrap(const TPLDescriptor *);
+
+    void SetTexParam(void *pImage, u16 width, u16 height, GXTexFmt format, GXTexWrapMode wrapS, GXTexWrapMode wrapT,
+            bool);
 
     void *GetImage() const {
         return mpImage;
@@ -168,11 +184,6 @@ public:
     void SetPaletteFormat(GXTlutFmt fmt) {
         mBits.paletteFormat = fmt;
     }
-
-    // ReplaceImage__Q34nw4r3lyt6TexMapFP10TPLPaletteUl
-    void ReplaceImage(TPLPalette *pal, u32 id);
-    // ReplaceImage__Q34nw4r3lyt6TexMapFPC13TPLDescriptor
-    void ReplaceImage(TPLDescriptor *pTPLDesc);
 
 private:
     void *mpImage;        // at 0x00

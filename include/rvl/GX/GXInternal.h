@@ -56,7 +56,27 @@ typedef struct _GXLightObjImpl {
 } GXLightObjImpl;
 
 typedef struct _GXTexObjImpl {
-    u8 todo[0x20];
+    u32 dummy0;   // at 0x00
+                  // -> 0x0x000003 | wrapS
+                  // -> 0x0x00000C | wrapT
+                  // -> 0x00000010 | magFilt
+                  // -> 0x000000E0 | minFilt
+                  // -> 0x00000100 | edgeLODEnable
+                  // -> 0x0001FE00 | lodBias * 32
+                  // -> 0x00180000 | anisotropy
+                  // -> 0x00200000 | biasClampEn
+    u32 dummy1;   // at 0x04
+                  // -> 0x000000FF | minLOD * 16
+                  // -> 0x0000FF00 | maxLOD * 16
+    u32 dummy2;   // at 0x08
+                  // -> 0x000003FF | width - 1
+                  // -> 0x000FFC00 | height - 1
+    u32 dummy3;   // at 0x0C (( & 0xFFFFFF) << 5 -> ObjData)
+    u32 userData; // at 0x10
+    u32 format;   // at 0x14
+    u32 tlutName; // at 0x18
+    u32 dummy7;   // at 0x1C
+                  // -> 0x01000000 | MipMap
 } GXTexObjImpl;
 
 typedef struct _GXTlutObjImpl {
