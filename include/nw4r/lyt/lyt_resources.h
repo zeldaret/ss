@@ -276,9 +276,40 @@ struct AnimationShareBlock {
     u8 padding[2];               // at 0x0E
 };
 
-// TODO
-struct HermiteKey {};
-struct StepKey {};
+struct HermiteKey {
+    f32 frame; // at 0x0
+    f32 value; // at 0x4
+    f32 slope; // at 0x8
+};
+
+struct StepKey {
+    f32 frame;   // at 0x0
+    u16 value;   // at 0x4
+    u16 padding; // at 0x6
+};
+
+struct AnimationInfo {
+    u32 kind;      // at 0x0
+    u8 num;        // at 0x4
+    u8 padding[3]; // at 0x5
+};
+
+struct AnimationTarget {
+    u8 id;           // at 0x0
+    u8 target;       // at 0x1
+    u8 curveType;    // at 0x2
+    u8 padding1;     // at 0x3
+    u16 keyNum;      // at 0x4
+    u16 padding2[2]; // at 0x6
+    u32 keyOffset;   // at 0x8
+};
+
+struct AnimationContent {
+    char name[20]; // at 0x00
+    u8 num;        // at 0x14
+    u8 type;       // at 0x15
+    u8 padding[2]; // at 0x17
+};
 
 } // namespace res
 } // namespace lyt

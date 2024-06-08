@@ -361,7 +361,7 @@ void Pane::AnimateSelf(u32 option) {
 
 // BindAnimation__Q34nw4r3lyt4PaneFPQ34nw4r3lyt13AnimTransformbb
 void Pane::BindAnimation(AnimTransform *pAnimTrans, bool bRecursive, bool bDisable) {
-    pAnimTrans->Bind(this, bRecursive);
+    pAnimTrans->Bind(this, bRecursive, bDisable);
 }
 
 // UnbindAnimation__Q34nw4r3lyt4PaneFPQ34nw4r3lyt13AnimTransformb

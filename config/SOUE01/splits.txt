@@ -381,6 +381,9 @@ nw4r/lyt/lyt_drawInfo.cpp:
 	.data       start:0x8056E7A8 end:0x8056E7B4
 	.sdata2     start:0x8057F2B8 end:0x8057F2C0
 
+nw4r/lyt/lyt_animation.cpp:
+	.text       start:0x80490A40 end:0x80491FF4
+
 nw4r/lyt/lyt_resourceAccessor.cpp:
 	.text       start:0x80492000 end:0x80492058
 	.data       start:0x8056E7E0 end:0x8056E7F8

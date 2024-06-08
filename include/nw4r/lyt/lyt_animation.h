@@ -2,12 +2,38 @@
 #define NW4R_LYT_ANIMATION_H
 #include "common.h"
 #include <nw4r/lyt/lyt_common.h>
+#include <nw4r/lyt/lyt_material.h>
+#include <nw4r/lyt/lyt_pane.h>
 #include <nw4r/lyt/lyt_resourceAccessor.h>
 #include <nw4r/lyt/lyt_types.h>
 #include <nw4r/ut/ut_LinkList.h>
 
 namespace nw4r {
 namespace lyt {
+class AnimTransform {
+public:
+    AnimTransform();
+
+    u16 GetFrameSize() const;
+    bool IsLoopData() const;
+    virtual ~AnimTransform() = 0;                                                                  // at 0x08
+    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor) = 0; // at 0x0C
+    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor,      //
+            u16 animNum) = 0;                                                                      // at 0x10
+    virtual void Bind(Pane *pPane, bool bRecursive, bool bDisable) = 0;                            // at 0x14
+    virtual void Bind(Material *pMaterial, bool bDisable) = 0;                                     // at 0x18
+    virtual void Animate(u32 idx, Pane *pPane) = 0;                                                // at 0x1C
+    virtual void Animate(u32 idx, Material *pMaterial) = 0;                                        // at 0x20
+
+    res::AnimationBlock *GetAnimResource() const {
+        return mpRes;
+    }
+
+    ut::LinkListNode mLink; // at 0x4
+protected:
+    res::AnimationBlock *mpRes; // at 0xC
+    f32 mFrame;                 // at 0x10
+};
 
 class AnimResource {
 public:
@@ -18,7 +44,7 @@ public:
     void Set(const void *anmResBuf);
     void Init();
     u16 GetGroupNum() const;
-    const AnimationGroupRef *GetGroupArray() const;
+    AnimationGroupRef *GetGroupArray() const;
     bool IsDescendingBind() const;
     u16 GetAnimationShareInfoNum() const;
     AnimationShareInfo *GetAnimationShareInfoArray() const;
@@ -40,6 +66,28 @@ private:
     const res::AnimationBlock *mpResBlock;        // at 0x04
     const res::AnimationTagBlock *mpTagBlock;     // at 0x08
     const res::AnimationShareBlock *mpShareBlock; // at 0x0C
+};
+
+class AnimTransformBasic : public AnimTransform {
+public:
+    AnimTransformBasic();
+    AnimationLink *FindUnbindLink(AnimationLink *pLink);
+
+    virtual ~AnimTransformBasic();                                                                          // at 0x08
+    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor);              // at 0x0C
+    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor, u16 animNum); // at 0x10
+    virtual void Bind(Pane *pPane, bool bRecursive, bool bDisable);                                         // at 0x14
+    virtual void Bind(Material *pMaterial, bool bDisable);                                                  // at 0x18
+    virtual void Animate(u32 idx, Pane *pPane);                                                             // at 0x1C
+    virtual void Animate(u32 idx, Material *pMaterial);                                                     // at 0x20
+
+    template <typename T>
+    AnimationLink *Bind(T *pTarget, AnimationLink *pAnimLink, u16 idx, bool bDisable);
+
+private:
+    void *mpFileResAry;          // at 0x14
+    AnimationLink *mAnimLinkAry; // at 0x18
+    u16 mAnimLinkNum;            // at 0x1C
 };
 
 namespace detail {
@@ -68,30 +116,11 @@ private:
     u8 mAnimMatCnt;        // at 0x26
 };
 
-} // namespace detail
+AnimationLink *FindAnimationLink(ut::LinkList<AnimationLink, 0> *pAnimList, AnimTransform *pAnimTrans);
+AnimationLink *FindAnimationLink(ut::LinkList<AnimationLink, 0> *pAnimList, const AnimResource &animRes);
+void UnbindAnimationLink(ut::LinkList<AnimationLink, 0> *pAnimList, AnimTransform *pAnimTrans);
+void UnbindAnimationLink(ut::LinkList<AnimationLink, 0> *pAnimList, const AnimResource &animRes);
 
-class AnimTransformBasic : public AnimTransform {
-public:
-    AnimTransformBasic();
-    virtual ~AnimTransformBasic();                                                                          // at 0x08
-    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor);              // at 0x0C
-    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor, u16 animNum); // at 0x10
-    virtual void Bind(Pane *pPane, bool bRecursive);                                                        // at 0x14
-    virtual void Bind(Material *pMaterial, bool bDisable);                                                  // at 0x18
-    virtual void Animate(u32 idx, Pane *pPane);                                                             // at 0x1C
-    virtual void Animate(u32 idx, Material *pMaterial);                                                     // at 0x20
-
-private:
-    void *mpFileResAry;          // at 0x14
-    AnimationLink *mAnimLinkAry; // at 0x18
-    u16 mAnimLinkNum;            // at 0x1C
-};
-
-namespace detail {
-void UnbindAnimationLink(ut::LinkList<AnimationLink, 0> *, AnimTransform *);
-AnimationLink *FindAnimationLink(ut::LinkList<AnimationLink, 0> *, AnimTransform *);
-AnimationLink *FindAnimationLink(ut::LinkList<AnimationLink, 0> *, const AnimResource &);
-void UnbindAnimationLink(ut::LinkList<AnimationLink, 0> *, AnimTransform *);
 } // namespace detail
 
 } // namespace lyt

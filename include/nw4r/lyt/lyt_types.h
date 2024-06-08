@@ -66,24 +66,6 @@ struct Size {
 inline bool operator==(const Size &a, const Size &b) {
     return (a.width == b.width && a.height == b.height);
 }
-struct AnimTransform {
-    inline AnimTransform() : mLink(), mpRes(NULL), mFrame(0.0f) {}
-
-    u16 GetFrameSize() const;
-    bool IsLoopData() const;
-    virtual ~AnimTransform() = 0;                                                                  // at 0x08
-    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor) = 0; // at 0x0C
-    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor,      //
-            u16 animNum) = 0;                                                                      // at 0x10
-    virtual void Bind(Pane *pPane, bool bRecursive) = 0;                                           // at 0x14
-    virtual void Bind(Material *pMaterial, bool bDisable) = 0;                                     // at 0x18
-    virtual void Animate(u32 idx, Pane *pPane) = 0;                                                // at 0x1C
-    virtual void Animate(u32 idx, Material *pMaterial) = 0;                                        // at 0x20
-
-    ut::LinkListNode mLink;     // at 0x4
-    res::AnimationBlock *mpRes; // at 0xC
-    f32 mFrame;                 // at 0x10
-};
 struct AnimationShareInfo {
     const char *GetTargetGroupName() const {
         return targetGroupName;

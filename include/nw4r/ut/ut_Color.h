@@ -18,7 +18,7 @@ public:
         Set(red, green, blue, alpha);
     }
     Color(const GXColor &clr) {
-        *this = *(u32 *)&clr;
+        ToU32ref() = *(u32 *)&clr;
     }
     ~Color() {}
 
@@ -35,7 +35,8 @@ public:
     }
 
     Color &operator=(const GXColor &c) {
-        *(u32 *)this = *(u32 *)&c; // TODO -> This Seems Maybe Wrong
+        ToU32ref() = *(u32 *)&c; // TODO -> This Seems Maybe Wrong
+        return *this;
     }
 
     Color operator|(u32 color) {

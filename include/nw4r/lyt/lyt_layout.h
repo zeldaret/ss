@@ -9,7 +9,6 @@
 #include <nw4r/ut/ut_ResFont.h>
 #include <rvl/MEM/mem_allocator.h>
 
-
 namespace nw4r {
 namespace lyt {
 
