@@ -1073,7 +1073,7 @@ config.libs = [
     Rel(NonMatching, "d_t_sw_area", "REL/d/t/d_t_sw_area.cpp"),
     Rel(Matching, "d_t_tackle", "REL/d/t/d_t_tackle.cpp"),
     Rel(NonMatching, "d_t_telop", "REL/d/t/d_t_telop.cpp"),
-    Rel(NonMatching, "d_t_timer", "REL/d/t/d_t_timer.cpp"),
+    Rel(Matching, "d_t_timer", "REL/d/t/d_t_timer.cpp"),
     Rel(NonMatching, "d_t_time_area_check", "REL/d/t/d_t_time_area_check.cpp"),
     Rel(NonMatching, "d_t_time_door_beam", "REL/d/t/d_t_time_door_beam.cpp"),
     Rel(NonMatching, "d_t_touch", "REL/d/t/d_t_touch.cpp"),
