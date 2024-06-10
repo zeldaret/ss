@@ -30,8 +30,8 @@ struct BinaryFileHeader {
 };
 
 struct DataBlockHeader {
-    u32 kind; // at 0x0
-    u32 size; // at 0x4
+    char kind[4]; // at 0x0
+    u32 size;     // at 0x4
 };
 
 struct TexSRT {
@@ -250,7 +250,7 @@ struct WindowContent {
 struct AnimationBlock {
     DataBlockHeader blockHeader; // at 0x00
     u16 frameSize;               // at 0x08
-    bool loop;                   // at 0x0A
+    u8 loop;                     // at 0x0A
     u8 padding1;                 // at 0x0B
     u16 fileNum;                 // at 0x0C
     u16 animContNum;             // at 0x0E
@@ -308,7 +308,7 @@ struct AnimationContent {
     char name[20]; // at 0x00
     u8 num;        // at 0x14
     u8 type;       // at 0x15
-    u8 padding[2]; // at 0x17
+    u8 padding[2]; // at 0x67
 };
 
 } // namespace res

@@ -78,11 +78,19 @@ public:
         mSize = value;
     }
 
+    void SetSRTElement(u32 idx, f32 f) {
+        ((f32 *)&mTranslate)[idx] = f;
+    }
+
     const res::ExtUserDataList *GetExtUserDataList() const {
         return mpExtUserDataList;
     }
     void SetExtUserDataList(const res::ExtUserDataList *pBlock) {
         mpExtUserDataList = pBlock;
+    }
+
+    const char *GetName() const {
+        return mName;
     }
 
     Pane();

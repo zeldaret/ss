@@ -252,7 +252,7 @@ def EGGLib(lib_name, objects):
 def nw4rLib(lib_name, objects, extra_cflags=[]):
     return {
         "lib": lib_name,
-        "mw_version": "Wii/1.1", # most seem to be around 1.2, snd is 1.6
+        "mw_version": "Wii/1.3", # most seem to be around 1.2, snd is 1.6
         "cflags": cflags_nw4r + extra_cflags,
         "host": False,
         "objects": objects,

@@ -57,11 +57,27 @@ static inline u16 __OSf32tou16(register f32 arg) {
     r = *(u16 *)ptr;
     return r;
 }
+static inline u8 __OSf32tou8(register f32 arg) {
+    f32 a;
+    register f32 *ptr = &a;
+    register u8 r;
 
+    // clang-format off
+    asm {
+        psq_st arg, 0(ptr), 1, 2
+        lbz r, 0(ptr)
+    }
+    // clang-format on
+
+    return r;
+}
 static inline void OSf32tou16(const f32 *in, u16 *out) {
     *out = __OSf32tou16(*in);
 }
 
+static inline void OSf32tou8(const f32 *in, u8 *out) {
+    *out = __OSf32tou8(*in);
+}
 static inline f32 __OSs16tof32(register const s16 *arg) {
     register f32 ret;
 

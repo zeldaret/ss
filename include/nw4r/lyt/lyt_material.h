@@ -78,8 +78,15 @@ public:
     }
 
     // SetTexSRTElement__Q34nw4r3lyt8MaterialFUlUlf
+    void SetTexSRTElement(u32 texSRTIdx, u32 eleIdx, f32 value) {
+        f32 *srtAry = (f32 *)&(GetTexSRTAry()[texSRTIdx]);
+        srtAry[eleIdx] = value;
+    }
 
     // GetTexturePtr__Q34nw4r3lyt8MaterialFUc
+    TexMap *GetTexturePtr(u8 idx) {
+        return &GetTexMapAry()[idx];
+    }
 
     // GetTexSRTCap__Q34nw4r3lyt8MaterialCFv
     u8 GetTexSRTCap() const {
@@ -90,7 +97,12 @@ public:
     u8 GetIndTexSRTCap() const {
         return mGXMemCap.indSRT;
     }
+
     // SetIndTexSRTElement__Q34nw4r3lyt8MaterialFUlUlf
+    void SetIndTexSRTElement(u32 texSRTIdx, u32 eleIdx, f32 value) {
+        f32 *srtAry = (f32 *)&(GetIndTexSRTAry()[texSRTIdx]);
+        srtAry[eleIdx] = value;
+    }
 
     ut::LinkList<AnimationLink, 0> *GetAnimationList() {
         return &mAnimList;

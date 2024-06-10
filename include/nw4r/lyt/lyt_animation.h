@@ -25,14 +25,24 @@ public:
     virtual void Animate(u32 idx, Pane *pPane) = 0;                                                // at 0x1C
     virtual void Animate(u32 idx, Material *pMaterial) = 0;                                        // at 0x20
 
-    res::AnimationBlock *GetAnimResource() const {
+    f32 GetFrameMax() const {
+        return mFrame; // TOOD
+    }
+
+    const res::AnimationBlock *GetAnimResource() const {
         return mpRes;
+    }
+    f32 GetFrame() const {
+        return mFrame;
+    }
+    void SetFrame(f32 frame) {
+        mFrame = frame;
     }
 
     ut::LinkListNode mLink; // at 0x4
 protected:
-    res::AnimationBlock *mpRes; // at 0xC
-    f32 mFrame;                 // at 0x10
+    const res::AnimationBlock *mpRes; // at 0xC
+    f32 mFrame;                       // at 0x10
 };
 
 class AnimResource {
@@ -44,10 +54,10 @@ public:
     void Set(const void *anmResBuf);
     void Init();
     u16 GetGroupNum() const;
-    AnimationGroupRef *GetGroupArray() const;
+    const AnimationGroupRef *GetGroupArray() const;
     bool IsDescendingBind() const;
     u16 GetAnimationShareInfoNum() const;
-    AnimationShareInfo *GetAnimationShareInfoArray() const;
+    const AnimationShareInfo *GetAnimationShareInfoArray() const;
     u16 CalcAnimationNum(Pane *pPane, bool bRecursive) const;
     u16 CalcAnimationNum(Group *pGroup, bool bRecursive) const;
 
@@ -71,7 +81,7 @@ private:
 class AnimTransformBasic : public AnimTransform {
 public:
     AnimTransformBasic();
-    AnimationLink *FindUnbindLink(AnimationLink *pLink);
+    AnimationLink *FindUnbindLink(AnimationLink *pLink) const;
 
     virtual ~AnimTransformBasic();                                                                          // at 0x08
     virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor);              // at 0x0C
@@ -84,8 +94,12 @@ public:
     template <typename T>
     AnimationLink *Bind(T *pTarget, AnimationLink *pAnimLink, u16 idx, bool bDisable);
 
-private:
-    void *mpFileResAry;          // at 0x14
+    AnimationLink *GetAnimLinkAry() const {
+        return mAnimLinkAry;
+    }
+
+protected:
+    void **mpFileResAry;         // at 0x14
     AnimationLink *mAnimLinkAry; // at 0x18
     u16 mAnimLinkNum;            // at 0x1C
 };
@@ -97,7 +111,10 @@ public:
         Init();
         Set(pTargetPane, animRes);
     }
-    bool IsEnabled() const;
+    bool IsEnabled() const {
+        // TODO
+        return false;
+    }
     static u16 FindAnimContent(const res::AnimationBlock *pAnimBlock, const char *animContName, u8 animContType);
     void Init();
     void Set(Pane *pTargetPane, const AnimResource &animRes);

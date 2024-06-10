@@ -41,6 +41,11 @@ inline void SetVerticalPosition(u8 *pVar, u8 newVal) {
     *pVar = newVal * 3 + GetHorizontalPosition(*pVar);
 }
 
+inline const char *GetStrTableStr(const void *pStrTable, int index) {
+    const u32 *offsets = (u32 *)pStrTable;
+    const char *stringPool = (char *)pStrTable;
+    return &stringPool[offsets[index]];
+}
 typedef math::VEC2 TexCoordData[TEXCOORD_VTX_COUNT];
 
 class TexCoordAry {

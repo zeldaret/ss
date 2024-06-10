@@ -93,7 +93,7 @@ bool Layout::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
     const void *dataPtr = ((u8 *)lytResBuf + pFileHead->headerSize);
     for (int i = 0; i < pFileHead->dataBlocks; i++) {
         const res::DataBlockHeader *pDataBlockHead = (const res::DataBlockHeader *)dataPtr;
-        switch (pDataBlockHead->kind) {
+        switch (detail::GetSignatureInt(pDataBlockHead->kind)) {
         case 'lyt1': // Main Layout
         {
             const res::Layout *pResLyt = ((const res::Layout *)dataPtr);
@@ -114,7 +114,7 @@ bool Layout::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
         case 'txt1': // Text Box
         case 'bnd1': // Boundary Pane
         {
-            Pane *pPane = BuildPaneObj(pDataBlockHead->kind, dataPtr, resBlockSet);
+            Pane *pPane = BuildPaneObj(detail::GetSignatureInt(pDataBlockHead->kind), dataPtr, resBlockSet);
             if (pPane) {
                 if (mpRootPane == nullptr) {
                     mpRootPane = pPane;
@@ -164,7 +164,7 @@ bool Layout::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
 
 // CreateAnimTransform__Q34nw4r3lyt6LayoutFv
 AnimTransform *Layout::CreateAnimTransform() {
-    AnimTransform *pAnimTrans = NewObj<AnimTransformBasic>();
+    AnimTransformBasic *pAnimTrans = NewObj<AnimTransformBasic>();
     if (pAnimTrans) {
         mAnimTransList.PushBack(pAnimTrans);
     }
