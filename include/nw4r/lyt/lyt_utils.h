@@ -8,6 +8,12 @@ namespace nw4r {
 namespace lyt {
 
 void BindAnimation(Group *pGroup, AnimTransform *pAnimTrans, bool bRecursive, bool bDisable);
+void UnbindAnimation(Group *pGroup, AnimTransform *pAnimTrans, bool bRecusive);
+void SetAnimationEnable(Group *pGroup, AnimTransform *pAnimTrans, bool bEnable, bool bRecursive);
+bool IsContain(Pane *pPane, const math::VEC2 &pos);
+Pane *FindHitPane(Pane *pPane, const math::VEC2 &pos);
+Pane *FindHitPane(Layout *pLayout, const math::VEC2 &pos);
+Pane *GetNextPane(Pane *);
 
 } // namespace lyt
 

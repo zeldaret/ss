@@ -401,6 +401,10 @@ nw4r/lyt/lyt_common.cpp:
 	.sdata2     start:0x8057F2E0 end:0x8057F2E8
 	.bss        start:0x80673AA8 end:0x80673AC8
 
+nw4r/lyt/lyt_util.cpp:
+	.text       start:0x804932E0 end:0x8049350C
+	.sdata2     start:0x8057F2E8 end:0x8057F2EC
+
 egg/core/eggArchive.cpp:
 	.text       start:0x80493510 end:0x80494254
 	.data       start:0x8056E820 end:0x8056E830

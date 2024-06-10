@@ -50,8 +50,8 @@ public:
         return &mAnimList;
     }
 
-    const math::MTX34 *GetGlobalMtx() const {
-        return &mGlbMtx;
+    const math::MTX34 &GetGlobalMtx() const {
+        return mGlbMtx;
     }
     Pane *GetParent() const {
         return mpParent;
