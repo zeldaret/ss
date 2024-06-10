@@ -219,6 +219,23 @@ toBeSorted/counters/extra_wallet_counter.cpp:
 	.data       start:0x805280B0 end:0x805280D0
 	.sbss       start:0x80575640 end:0x80575648
 
+s/s_StateId.cpp:
+	.text       start:0x802DDDB0 end:0x802DE1F4
+	.ctors      start:0x804DB8B8 end:0x804DB8BC
+	.data       start:0x80541930 end:0x805419A8
+	.sbss       start:0x80575B68 end:0x80575B70
+	.bss        start:0x805B84B0 end:0x805B84C8
+
+s/s_StateMethod.cpp:
+	.text       start:0x802DE200 end:0x802DE534
+	.data       start:0x805419A8 end:0x805419E8
+
+s/s_StateMethodUsr_FI.cpp:
+	.text       start:0x802DE540 end:0x802DE6EC
+
+s/s_Phase.cpp:
+	.text       start:0x802DEEB0 end:0x802DEF74
+
 DynamicLink.cpp:
 	.text       start:0x802DF100 end:0x802DFD74
 	.data       start:0x805419E8 end:0x80541A70

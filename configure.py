@@ -315,6 +315,10 @@ config.libs = [
             Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
             Object(Matching, "m/m_pad.cpp"),
+            Object(Matching, "s/s_StateId.cpp"),
+            Object(Matching, "s/s_StateMethod.cpp"),
+            Object(Matching, "s/s_StateMethodUsr_FI.cpp"),
+            Object(Matching, "s/s_Phase.cpp"),
             Object(Matching, "DynamicLink.cpp"),
             # framework (f_name)
             # d stuff (d_name)
@@ -1055,7 +1059,7 @@ config.libs = [
     Rel(NonMatching, "d_t_reaction", "REL/d/t/d_t_reaction.cpp"),
     Rel(NonMatching, "d_t_restart_time_stone", "REL/d/t/d_t_restart_time_stone.cpp"),
     Rel(NonMatching, "d_t_ride_rock_set", "REL/d/t/d_t_ride_rock_set.cpp"),
-    Rel(NonMatching, "d_t_rock_boat", "REL/d/t/d_t_rock_boat.cpp"),
+    Rel(Matching, "d_t_rock_boat", "REL/d/t/d_t_rock_boat.cpp"),
     Rel(NonMatching, "d_t_roll_attack_log", "REL/d/t/d_t_roll_attack_log.cpp"),
     Rel(NonMatching, "d_t_ro_at_target_manager", "REL/d/t/d_t_ro_at_target_manager.cpp"),
     Rel(NonMatching, "d_t_scene_change", "REL/d/t/d_t_scene_change.cpp"),
