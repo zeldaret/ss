@@ -67,10 +67,7 @@ unquarantine it using:
   - Once this has completed, copy the following files into the the `orig/SOUE01` folder of this
     project. The rest can be deleted to save space.
     - `DATA/sys/main.dol`
-    - `DATA/files/rels/*.rel`
-    - `DATA/files/RELS.arc`
-  - Be sure to place any rels into a `rels` subfolder. See the README.md file in the `orig` folder
-    for more information.
+    - `DATA/files/rels.arc`
 - Run the configure script:
   ```
   python configure.py
