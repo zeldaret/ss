@@ -1,8 +1,9 @@
 #include "toBeSorted/file_manager.h"
 #include "f/f_base.h"
 #include <m/m_heap.h>
-// #include "libc.h"
-#include <MSL_C/string.h>
+// clang-format off
+#include <sized_string.h>
+// clang-format on
 
 // This class here makes no sense and the name might
 // be a total misnomer, but this gets the sinit section correct
@@ -101,29 +102,6 @@ u16 *FileManager::getStoryFlagsMut() {
 /* 8000AA30 */ u16 *FileManager::getSkipFlags() {}
 /* 8000AA40 */ void FileManager::setSkipFlagsChecked(u16 *flags, u32 offset, u16 count) {}
 
-// This does strncat things - append src to dest
-inline void fake_strncat(char *dest, const char *src, size_t max_len) {
-    if (src != nullptr) {
-        size_t len = strlen(dest);
-        size_t count = strlen(src);
-        count = len + count + 1 >= max_len ? max_len - len - 1 : count;
-        strncpy(dest + len, src, count);
-        // one instshuffle here - this should be (len + count),
-        // but then regalloc blows up and uses one more register in initFile
-        dest[count + len] = '\0';
-    }
-}
-
-// A function like this is inlined into in a bunch of area-related code
-// It doesn't make a whole lot of sense to use strncat on a string just
-// clipped to zero length...
-inline void strnsth(char *dest, const char *src, size_t max_len) {
-    if (src != dest) {
-        dest[0] = '\0';
-        fake_strncat(dest, src, max_len);
-    }
-}
-
 /* 8000AAA0 */ void FileManager::initFile(int fileNum) {
 
     mIsFileInvalid[1] = 1;
@@ -140,10 +118,9 @@ inline void strnsth(char *dest, const char *src, size_t max_len) {
     file->selectedDowsingSlot = 0x8;
     file->lastUsedPouchItemSlot = 0x8;
 
-    char buf[0x20];
-    buf[0] = '\0';
-    strnsth(buf, "F405", 0x20);
-    file->setAreaT1(buf);
+    SizedString<32> buf;
+    buf = "F405";
+    file->setAreaT1(&buf);
     file->room_id_t1 = 0;
     file->forced_layer_t1 = 0;
     file->entrance_t1_load_flag = 1;

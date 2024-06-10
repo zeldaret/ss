@@ -1,6 +1,8 @@
 #include <d/d_dvd.h>
 #include <m/m_dvd.h>
-
+// clang-format off
+#include <sized_string.h>
+// clang-format on
 namespace dDvd {
 
 /** 800520f0 */
@@ -19,25 +21,20 @@ loader_c::loader_c() {
 /** 80052130 */
 loader_c::~loader_c() {}
 
-// sprintf2
-extern "C" void fn_8003D650(char *out, const char *fmt, ...);
-
 /** 80052170 */
 void *loader_c::request(const char *path, u8 mountDirection, EGG::Heap *heap) {
-    char buf[128];
-
     if (mpBuffer != nullptr) {
         return mpBuffer;
     }
     if (mpCommand == 0) {
         mSize = -1;
         mpHeap = heap != nullptr ? heap : mDvd::getArchiveHeap();
-        buf[0] = '\0';
-        fn_8003D650(buf, "US%s", path);
-        if (!mDvd::IsExistPath(buf)) {
-            fn_8003D650(buf, "%s", path);
+        SizedString<128> buf;
+        buf.sprintf("US%s", path);
+        if (!mDvd::IsExistPath(&buf)) {
+            buf.sprintf("%s", path);
         }
-        mpCommand = mDvd_toMainRam_normal_c::create(buf, mountDirection, heap);
+        mpCommand = mDvd_toMainRam_normal_c::create(&buf, mountDirection, heap);
     }
     if (mpCommand != nullptr && mpCommand->mStatus != 0) {
         mpBuffer = mpCommand->mDataPtr;

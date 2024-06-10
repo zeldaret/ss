@@ -74,9 +74,9 @@ typedef struct ARCEntry {
 
 typedef struct ARCDirEntry {
     ARCHandle *handle; // at 0x0
-    u32 path_begin;    // at 0x4
-    u32 path_it;       // at 0x8
-    u32 path_end;      // at 0xC
+    u32 entryNum;      // at 0x4
+    u32 isDir;         // at 0x8
+    const char *name;  // at 0xC
 } ARCDirEntry;
 
 BOOL ARCGetCurrentDir(ARCHandle *handle, char *string, u32 maxlen);

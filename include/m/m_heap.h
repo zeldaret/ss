@@ -44,7 +44,7 @@ public:
     /* 802f1590 */ static void createCommandHeap(size_t size, EGG::Heap *parentHeap);
     /* 802f15c0 */ static void createDylinkHeap(size_t size, EGG::Heap *parentHeap);
     /* 802f15f0 */ static EGG::AssertHeap *createAssertHeap(EGG::Heap *parentHeap);
-    /* 802f1640 */ static EGG::Heap *makeHeapOnCurrentGameHeap(size_t size, const char *name, u32 align, u32 flags);
+    /* 802f1640 */ static EGG::FrmHeap *makeHeapOnCurrentGameHeap(size_t size, const char *name, u32 align, u32 flags);
 
     static int getDefaultGameHeapId();
 
