@@ -19,16 +19,11 @@ public:
     }
 
     mVec3_c(const mVec3_c &other) {
-        x = other.x;
-        y = other.y;
-        z = other.z;
+        set(other.x, other.y, other.z);
     }
 
-    /// @brief Constructs a vector from three floating point values.
     mVec3_c(f32 fx, f32 fy, f32 fz) {
-        x = fx;
-        y = fy;
-        z = fz;
+        set(fx, fy, fz);
     }
 
     mVec3_c &operator=(const mVec3_c &r) {

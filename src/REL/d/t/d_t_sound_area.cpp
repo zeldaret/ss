@@ -5,6 +5,11 @@
 
 SPECIAL_ACTOR_PROFILE(TAG_SOUND_AREA, dTgSndAr_c, fProfile::TAG_SOUND_AREA, 0x0146, 0, 0);
 
+void float_ordering() {
+    f32 arr[6] = {0, 100, 100, 100, 100, 100};
+    0.01f;
+}
+
 struct SoundAreaManager {
     u8 unk[0xFC];
     u32 bgmFlags;
@@ -49,9 +54,7 @@ int dTgSndAr_c::doDelete() {
 
 struct Unk {
     u8 unk[0x144];
-    f32 x;
-    f32 y;
-    f32 z;
+    mVec3_c v;
 };
 
 extern Unk *lbl_80575D58;
@@ -63,7 +66,7 @@ int dTgSndAr_c::actorExecute() {
     }
     if (lbl_80575D58 != nullptr) {
         // Halp
-        mVec3_c pos(lbl_80575D58->x, lbl_80575D58->y, lbl_80575D58->z);
+        mVec3_c pos = lbl_80575D58->v;
         if (checkPosInArea(pos) && lbl_805756EC != nullptr) {
             lbl_805756EC->bgmFlags |= 1 << (params & 0xFF);
         }
@@ -90,39 +93,44 @@ bool dTgSndAr_c::checkPosInArea(mVec3_c &pos) {
     return false;
 }
 
+inline bool inRange(f32 val, f32 tolerance) {
+    return (-tolerance <= val && val <= tolerance);
+}
 // Box
-bool dTgSndAr_c::checkAlg0(mVec3_c &pos) {
+bool dTgSndAr_c::checkAlg0(const mVec3_c &pos) {
     mVec3_c c2 = pos;
     PSMTXMultVec(mtx.m, c2, c2);
-    f32 scaleX = scale.x;
-    f32 scaleZ = scale.z;
-    if (c2.x >= scaleX * -50.0f && c2.x <= scaleX * 50.0f && c2.y >= 0.0f && c2.y <= scale.y * 100.0f &&
-            c2.z >= scaleZ * -50.0f && c2.z <= scaleZ * 50.0f) {
+    f32 sxLower = -50.0f * scale.x;
+    f32 sxUpper = 50.0f * scale.x;
+    f32 syLower = 0.0f;
+    f32 syUpper = 100.0f * scale.y;
+    f32 szLower = -50.0f * scale.z;
+    f32 szUpper = 50.0f * scale.z;
+
+    if (sxLower <= c2.x && c2.x <= sxUpper && syLower <= c2.y && c2.y <= syUpper && szLower <= c2.z &&
+            c2.z <= szUpper) {
         return true;
     }
-
     return false;
 }
 
 // Sphere
-bool dTgSndAr_c::checkAlg1(mVec3_c &pos) {
+bool dTgSndAr_c::checkAlg1(const mVec3_c &pos) {
     f32 tgtDist = scale.x * 100.0f;
     f32 tgtDist2 = tgtDist * tgtDist;
     return PSVECSquareDistance(position, pos) < tgtDist2;
 }
 
 // Cylinder
-bool dTgSndAr_c::checkAlg2(mVec3_c &pos) {
-    f32 f3 = position.x;
-    if (pos.y < f3 || (f3 + scale.y * 100.0f < pos.y)) {
+bool dTgSndAr_c::checkAlg2(const mVec3_c &pos) {
+    if (pos.y < position.y || pos.y > (position.y + 100.0f * scale.y)) {
         return false;
     }
 
-    f32 f1 = position.z;
-    f32 f2 = position.x;
-    f3 = scale.x * 100.0f;
-    return f2 * f2 + f1 * f1 <= f3 * f3;
+    mVec3_c diff(pos.x - position.x, pos.z - position.z, scale.x * 100.0f);
+
+    return diff.x * diff.x + diff.y * diff.y <= diff.x * diff.z;
 }
 
 // ???
-bool dTgSndAr_c::checkAlg3(mVec3_c &pos) {}
+bool dTgSndAr_c::checkAlg3(const mVec3_c &pos) {}

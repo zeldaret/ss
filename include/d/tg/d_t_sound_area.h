@@ -2,9 +2,10 @@
 #define D_T_SOUND_AREA_H
 
 #include <d/tg/d_tg.h>
-#include <m/m_vec.h>
 #include <m/m_mtx.h>
+#include <m/m_vec.h>
 #include <toBeSorted/actor_on_rail.h>
+
 
 class dTgSndAr_c : public dTg_c {
 public:
@@ -21,10 +22,10 @@ private:
     }
     bool checkPosInArea(mVec3_c &pos);
 
-    bool checkAlg0(mVec3_c &pos);
-    bool checkAlg1(mVec3_c &pos);
-    bool checkAlg2(mVec3_c &pos);
-    bool checkAlg3(mVec3_c &pos);
+    bool checkAlg0(const mVec3_c &pos);
+    bool checkAlg1(const mVec3_c &pos);
+    bool checkAlg2(const mVec3_c &pos);
+    bool checkAlg3(const mVec3_c &pos);
 
     mMtx_c mtx;
     ActorOnRail mRail;
