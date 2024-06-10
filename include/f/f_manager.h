@@ -29,6 +29,7 @@ public:
         PROC_FLAG_DRAW = GET_PROC_FLAG(DRAW)
     };
     fManager_c(fBase_c *owner) : connect_node(owner), execute_node(owner), draw_node(owner), search_node(owner) {}
+    ~fManager_c() {}
     /* 802e28c0 */ int getSearchTableNum();
     /* 802e28d0 */ static fBase_c *searchBaseByID(fBaseID_e id);
     /* 802e2920 */ static fBase_c *searchBaseByProfName(ProfileName profID, const fBase_c *parent);

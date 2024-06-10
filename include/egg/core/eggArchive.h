@@ -45,7 +45,7 @@ public:
     /* 80493a40 */ static Archive *mountNandFile(NANDFileInfo *, Heap *heap, s32 align);
     /* 80493ac0 */ static Archive *loadFST(const char *fileName, Heap *heap, s32 align);
     /* 80493b80 */ void unmount();
-    /* 80493c20 */ u32 getFile(const char *name, FileInfo *out);
+    /* 80493c20 */ void *getFile(const char *name, FileInfo *out);
     /* 80493cf0 */ s32 convertPathToEntryID(const char *path);
     /* 80493d00 */ void *getFileFast(s32 entryId, FileInfo *fileinfo);
     /* 80493dc0 */ void *getFileFast(s32 entryId, Heap *heap, s32 align);

@@ -207,6 +207,6 @@ EGG::AssertHeap *mHeap::createAssertHeap(EGG::Heap *parent) {
     return g_assertHeap;
 }
 
-EGG::Heap *mHeap::makeHeapOnCurrentGameHeap(size_t size, const char *name, u32 align, u32 flags) {
+EGG::FrmHeap *mHeap::makeHeapOnCurrentGameHeap(size_t size, const char *name, u32 align, u32 flags) {
     return makeFrmHeapAndUpdate(size, g_gameHeaps[0], name, align, flags);
 }

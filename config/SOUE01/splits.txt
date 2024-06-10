@@ -107,6 +107,7 @@ d/d_player.cpp:
 
 d/d_rawarchive.cpp:
 	.text       start:0x80061B10 end:0x800629D0
+	.data       start:0x8050DDD8 end:0x8050DDF8
 
 d/d_scene.cpp:
 	.text       start:0x800629D0 end:0x80062E40
@@ -117,6 +118,26 @@ d/d_stage.cpp:
 
 d/d_sys.cpp:
 	.text       start:0x80064250 end:0x80064920
+
+toBeSorted/arc_managers/current_stage_arc_manager.cpp:
+	.text       start:0x80068FD0 end:0x80069910
+	.ctors      start:0x804DB6A8 end:0x804DB6AC
+	.data       start:0x8050DFE0 end:0x8050E010
+	.sdata      start:0x80571D30 end:0x80571D40
+	.sbss       start:0x80575278 end:0x80575280
+	.bss        start:0x805A0868 end:0x805A08C8
+
+toBeSorted/arc_managers/oarc_manager.cpp:
+	.text       start:0x80069910 end:0x80069ED4
+	.data       start:0x8050E010 end:0x8050E038
+	.sdata      start:0x80571D40 end:0x80571D68
+	.sbss       start:0x80575280 end:0x80575288
+
+toBeSorted/arc_managers/layout_arc_manager.cpp:
+	.text       start:0x8006A0C0 end:0x8006A2D4
+	.data       start:0x8050E048 end:0x8050E054
+	.sdata      start:0x80571D68 end:0x80571D70
+	.sbss       start:0x80575288 end:0x80575290
 
 toBeSorted/sceneflag_manager.cpp:
 	.text       start:0x800BD8C0 end:0x800BE7A8
@@ -197,6 +218,23 @@ toBeSorted/counters/extra_wallet_counter.cpp:
 	.ctors      start:0x804DB7D4 end:0x804DB7D8
 	.data       start:0x805280B0 end:0x805280D0
 	.sbss       start:0x80575640 end:0x80575648
+
+s/s_StateId.cpp:
+	.text       start:0x802DDDB0 end:0x802DE1F4
+	.ctors      start:0x804DB8B8 end:0x804DB8BC
+	.data       start:0x80541930 end:0x805419A8
+	.sbss       start:0x80575B68 end:0x80575B70
+	.bss        start:0x805B84B0 end:0x805B84C8
+
+s/s_StateMethod.cpp:
+	.text       start:0x802DE200 end:0x802DE534
+	.data       start:0x805419A8 end:0x805419E8
+
+s/s_StateMethodUsr_FI.cpp:
+	.text       start:0x802DE540 end:0x802DE6EC
+
+s/s_Phase.cpp:
+	.text       start:0x802DEEB0 end:0x802DEF74
 
 DynamicLink.cpp:
 	.text       start:0x802DF100 end:0x802DFD74
