@@ -295,13 +295,13 @@ struct AnimationInfo {
 };
 
 struct AnimationTarget {
-    u8 id;           // at 0x0
-    u8 target;       // at 0x1
-    u8 curveType;    // at 0x2
-    u8 padding1;     // at 0x3
-    u16 keyNum;      // at 0x4
-    u16 padding2[2]; // at 0x6
-    u32 keyOffset;   // at 0x8
+    u8 id;          // at 0x0
+    u8 target;      // at 0x1
+    u8 curveType;   // at 0x2
+    u8 padding1;    // at 0x3
+    u16 keyNum;     // at 0x4
+    u8 padding2[2]; // at 0x6
+    u32 keyOffset;  // at 0x8
 };
 
 struct AnimationContent {
