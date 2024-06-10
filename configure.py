@@ -155,6 +155,7 @@ cflags_base = [
     "-str reuse",
     "-enc SJIS",
     "-i include",
+    "-i include/MSL_C",
     f"-i build/{config.version}/include",
     f"-DVERSION={version_num}",
 ]
@@ -204,6 +205,7 @@ cflags_nw4r = [
     *cflags_base,
     "-ipa file",
     "-fp_contract off",
+    ""
 ]
 
 # REL flags
@@ -249,11 +251,11 @@ def EGGLib(lib_name, objects):
     }
 
 
-def nw4rLib(lib_name, objects):
+def nw4rLib(lib_name, objects, extra_cflags=[]):
     return {
         "lib": lib_name,
-        "mw_version": "Wii/1.1", # most seem to be around 1.2, snd is 1.6
-        "cflags": cflags_nw4r,
+        "mw_version": "Wii/1.3", # most seem to be around 1.2, snd is 1.6
+        "cflags": cflags_nw4r + extra_cflags,
         "host": False,
         "objects": objects,
     }
@@ -370,6 +372,27 @@ config.libs = [
             Object(Matching, "nw4r/ut/ut_CharWriter.cpp"),
             Object(Matching, "nw4r/ut/ut_TextWriterBase.cpp"),
         ],
+    ),
+    nw4rLib(
+        "lyt",
+        [
+            Object(Matching, "nw4r/lyt/lyt_init.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_pane.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_group.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_layout.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_picture.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_textBox.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_window.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_bounding.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_material.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_texMap.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_drawInfo.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_animation.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_resourceAccessor.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_arcResourceAccessor.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_common.cpp"),
+            Object(Matching, "nw4r/lyt/lyt_util.cpp"),
+        ], [""]
     ),
     # EGG
     EGGLib(

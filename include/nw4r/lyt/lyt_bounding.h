@@ -1,36 +1,21 @@
 #ifndef NW4R_LYT_BOUNDING_H
 #define NW4R_LYT_BOUNDING_H
-#include "types_nw4r.h"
-#include "lyt_pane.h"
-#include "lyt_drawInfo.h"
+#include "common.h"
+#include "nw4r/lyt/lyt_drawInfo.h"
+#include "nw4r/lyt/lyt_material.h"
+#include "nw4r/lyt/lyt_pane.h"
 
-namespace nw4r
-{
-    namespace lyt
-    {
-        namespace res
-        {
-            struct Bounding : Pane
-            {
+namespace nw4r {
+namespace lyt {
 
-            };
-        }
-
-        struct ResBlockSet
-        {
-
-        };
-
-        struct Bounding : Pane
-        {
-            Bounding(const res::Bounding *, const ResBlockSet&);
-            virtual ~Bounding();
-            virtual const ut::detail::RuntimeTypeInfo * GetRuntimeTypeInfo() const;
-            virtual void DrawSelf(const DrawInfo&);
-
-            static ut::detail::RuntimeTypeInfo typeInfo;
-        };
-    }
-}
+class Bounding : public Pane {
+public:
+    Bounding(const res::Bounding *pBlock, const ResBlockSet &);
+    virtual ~Bounding();
+    NW4R_UT_RTTI_DECL(Bounding);
+    virtual void DrawSelf(const DrawInfo &drawInfo);
+};
+} // namespace lyt
+} // namespace nw4r
 
 #endif

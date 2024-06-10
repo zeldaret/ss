@@ -1,7 +1,7 @@
 #ifndef NW4R_SND_TASK_MANAGER_H
 #define NW4R_SND_TASK_MANAGER_H
+#include "common.h"
 #include "snd_Task.h"
-#include "types_nw4r.h"
 #include "ut_LinkList.h"
 #include "ut_lock.h"
 #include <rvl/OS/OSThread.h>

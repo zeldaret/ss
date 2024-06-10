@@ -1,7 +1,7 @@
 #ifndef NW4R_G3D_ANMCAMERA_H
 #define NW4R_G3D_ANMCAMERA_H
+#include "common.h"
 #include "math_types.h"
-#include "types_nw4r.h"
 #include <rvl/GX.h>
 
 

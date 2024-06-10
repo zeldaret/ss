@@ -209,10 +209,10 @@ struct MTX34 : _MTX34 {
     }
     // clang-format on
 
-    operator MtxRef() {
+    inline operator MtxRef() {
         return mtx;
     }
-    operator MtxRefConst() const {
+    inline operator MtxRefConst() const {
         return mtx;
     }
 };

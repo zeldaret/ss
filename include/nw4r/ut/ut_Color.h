@@ -17,6 +17,9 @@ public:
     Color(int red, int green, int blue, int alpha) {
         Set(red, green, blue, alpha);
     }
+    Color(const GXColor &clr) {
+        ToU32ref() = *(u32 *)&clr;
+    }
     ~Color() {}
 
     void Set(int red, int green, int blue, int alpha) {
@@ -28,6 +31,11 @@ public:
 
     Color &operator=(u32 color) {
         ToU32ref() = color;
+        return *this;
+    }
+
+    Color &operator=(const GXColor &c) {
+        ToU32ref() = *(u32 *)&c; // TODO -> This Seems Maybe Wrong
         return *this;
     }
 

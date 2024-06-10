@@ -1,6 +1,6 @@
 #ifndef NW4R_G3D_G3DOBJ_H
 #define NW4R_G3D_G3DOBJ_H
-#include "types_nw4r.h"
+#include "common.h"
 #include <rvl/MEM/mem_allocator.h>
 
 #define NW4R_G3D_TYPE_OBJ_DECL(VAL) static const nw4r::g3d::G3dObj::ResNameDataT<sizeof(#VAL)> TYPE_NAME
