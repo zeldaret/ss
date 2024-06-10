@@ -29,7 +29,7 @@ toBeSorted/save_manager.cpp:
 
 d/a/d_a_base.cpp:
 	.text       start:0x8002C3A0 end:0x8002DE40
-	.data       start:0x80501544 end:0x805015B8
+	.data       start:0x80501538 end:0x805015B8
 	.sdata      start:0x80571920 end:0x80571930
 	.sbss       start:0x80575080 end:0x80575098
 	.sdata2     start:0x80576C88 end:0x80576C8C
@@ -55,11 +55,22 @@ d/d_cc.cpp:
 	.text       start:0x80050A20 end:0x800520F0
 
 d/d_dvd.cpp:
-	.text       start:0x800520F0 end:0x80052E00
+	.text       start:0x800520F0 end:0x800522FC
+	.data       start:0x805033F0 end:0x80503400
+	.sdata      start:0x80571C10 end:0x80571C20
+
+d/d_dvd_unk.cpp:
+	.text       start:0x80052300 end:0x80052E00
+	.sbss       start:0x805750D0 end:0x805750D8
 
 d/d_dylink.cpp:
 	.text       start:0x80052E00 end:0x80053A30
 	.ctors      start:0x804DB674 end:0x804DB678
+	.rodata     start:0x804DDFD0 end:0x804DDFF0
+	.data       start:0x8050D2D8 end:0x8050D348
+	.sdata      start:0x80571C40 end:0x80571C50
+	.sbss       start:0x805750E0 end:0x805750FC
+	.bss        start:0x805975B0 end:0x80597608
 
 d/d_fader.cpp:
 	.text       start:0x80053A30 end:0x80053E70
@@ -137,6 +148,10 @@ toBeSorted/skipflag_manager.cpp:
 	.sbss       start:0x80575408 end:0x8057540C
 	.bss        start:0x805A9C68 end:0x805A9C88
 
+toBeSorted/special_item_drop_mgr.cpp:
+	.text       start:0x800C7B60 end:0x800C82B0
+	.sbss       start:0x80575438 end:0x80575440
+
 toBeSorted/counters/counter.cpp:
 	.text       start:0x8016CC40 end:0x8016CD94
 
@@ -183,6 +198,12 @@ toBeSorted/counters/extra_wallet_counter.cpp:
 	.data       start:0x805280B0 end:0x805280D0
 	.sbss       start:0x80575640 end:0x80575648
 
+DynamicLink.cpp:
+	.text       start:0x802DF100 end:0x802DFD74
+	.data       start:0x805419E8 end:0x80541A70
+	.sdata      start:0x80573F78 end:0x80573FB0
+	.sbss       start:0x80575B80 end:0x80575BA0
+
 c/c_list.cpp:
 	.text       start:0x802E08C0 end:0x802E0A10
 
@@ -208,10 +229,22 @@ f/f_manager.cpp:
 	.sbss       start:0x80575BB8 end:0x80575BC0
 	.bss        start:0x805B84D8 end:0x805B8588
 
+m/m_allocator.cpp:
+	.text       start:0x802EE0E0 end:0x802EE5EC
+	.data       start:0x80542820 end:0x80542848
+
 m/m_angle.cpp:
 	.text       start:0x802EE5F0 end:0x802EE6B8
 	.ctors      start:0x804DB8CC end:0x804DB8D0
 	.sbss       start:0x80575C08 end:0x80575C10
+
+m/m_dvd.cpp:
+	.text       start:0x802EEBA0 end:0x802F0494
+	.ctors      start:0x804DB8D0 end:0x804DB8D4
+	.data       start:0x80542870 end:0x80542968
+	.sdata      start:0x80573FD0 end:0x80573FF8
+	.sbss       start:0x80575C10 end:0x80575C38
+	.bss        start:0x805B85C0 end:0x805CB078
 
 m/m_heap.cpp:
 	.text       start:0x802F0F00 end:0x802F1660
@@ -224,6 +257,13 @@ m/m_heap.cpp:
 m/m_mtx.cpp:
 	.text       start:0x802F1660 end:0x802F1F20
 	.ctors      start:0x804DB8D4 end:0x804DB8D8
+
+m/m_pad.cpp:
+	.text       start:0x802F1F20 end:0x802F232C
+	.ctors      start:0x804DB8D8 end:0x804DB8DC
+	.sbss       start:0x80575C50 end:0x80575C70
+	.sdata2     start:0x8057CDF8 end:0x8057CE00
+	.bss        start:0x805CB0B8 end:0x805CB1F8
 
 rvl/CX/cx.c:
 	.text       start:0x803CEE90 end:0x803D0B20
@@ -315,6 +355,32 @@ nw4r/db/db_directPrint.cpp:
 	.data       start:0x8056C000 end:0x8056C010
 	.sbss       start:0x805765E8 end:0x805765EC
 	.bss        start:0x80636B80 end:0x80636BA4
+
+nw4r/db/db_console.cpp:
+	.text       start:0x80434EA0 end:0x8043598C
+	.data       start:0x8056C010 end:0x8056C038
+	.sdata      start:0x80574DC8 end:0x80574DD0
+	.sbss       start:0x805765F0 end:0x805765F8
+	.bss        start:0x80636BA8 end:0x80636FC0
+
+nw4r/db/db_exception.cpp:
+	.text       start:0x80435990 end:0x80436A48
+	.data       start:0x8056C038 end:0x8056C5F0
+	.sdata      start:0x80574DD0 end:0x80574E10
+	.sbss       start:0x805765F8 end:0x80576600
+	.sdata2     start:0x8057EBA8 end:0x8057EBAC
+	.bss        start:0x80636FC0 end:0x8063B320
+
+nw4r/db/db_mapFile.cpp:
+	.text       start:0x80436A50 end:0x804373B4
+	.data       start:0x8056C5F0 end:0x8056C600
+	.sdata      start:0x80574E10 end:0x80574E24
+	.sbss       start:0x80576600 end:0x8057660C
+	.bss        start:0x8063B320 end:0x8063B560
+
+nw4r/db/db_assert.cpp:
+	.text       start:0x804373C0 end:0x804373D0
+	.sbss       start:0x80576610 end:0x80576618
 
 nw4r/lyt/lyt_init.cpp:
 	.text       start:0x80486A70 end:0x80486AC4
@@ -544,8 +610,13 @@ egg/prim/eggAssert.cpp:
 egg/gfx/eggCamera.cpp:
 	.text       start:0x8049C5C0 end:0x8049CAC8
 
-Runtime/__init_cpp_exceptions.cpp:
+Runtime.PPCEABI.H/global_destructor_chain.c:
+	.text       start:0x804C65C0 end:0x804C6620
+	.sbss       start:0x80576930 end:0x80576938
+
+Runtime.PPCEABI.H/__init_cpp_exceptions.cpp:
 	.text       start:0x804C71A8 end:0x804C7218
 	.ctors      start:0x804DB640 end:0x804DB644 rename:.ctors$10
 	.dtors      start:0x804DB9E0 end:0x804DB9E4 rename:.dtors$10
 	.dtors      start:0x804DB9E4 end:0x804DB9E8 rename:.dtors$15
+	.sdata      start:0x80574F78 end:0x80574F7C

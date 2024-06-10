@@ -18,7 +18,7 @@ extern "C" void fn_802DE710();
 // TODO TU splits?
 
 void dHeapAllocator::onAlloc(EGG::HeapAllocArg *arg) {
-    if (arg->heap != nullptr) {
+    if (arg->ptr != nullptr) {
         return;
     }
     if (lbl_80571C58 == 0) {

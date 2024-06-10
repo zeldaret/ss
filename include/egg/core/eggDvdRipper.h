@@ -20,7 +20,7 @@ public:
     /* 804947e0 */ static u8 *loadToMainRAM(DvdFile *file, u8 *dst, Heap *heap, EAllocDirection allocDir, u32 offset,
             u32 *amountRead, u32 *fileSize);
     /* 804949b0 */ static void *loadToMainRAMDecomp(DvdFile *file, StreamDecomp *decompressor, u8 *dst, Heap *heap,
-            EAllocDirection allocDir, u32 offset, s32 size, u32 maxChunkSize, u32 *amountRead, u32 *fileSize);
+            EAllocDirection allocDir, s32 offset, u32 size, u32 maxChunkSize, u32 *amountRead, u32 *fileSize);
 
 public:
     /* 80574ed0 */ static bool sErrorRetry;

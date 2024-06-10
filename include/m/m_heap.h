@@ -32,7 +32,7 @@ public:
     }
     /* 802f12b0 */ mHeap(EGG::Heap *heap);
     /* 802f12f0 */ ~mHeap();
-    /* 802f1350 */ static EGG::Heap *createHeap(size_t size, EGG::Heap *, const char *name);
+    /* 802f1350 */ static EGG::ExpHeap *createHeap(size_t size, EGG::Heap *, const char *name);
     /* 802f13d0 */ static void saveCurrentHeap();
     /* 802f13e0 */ static void restoreCurrentHeap();
     /* 802f1410 */ static EGG::FrmHeap *makeFrmHeapAndUpdate(size_t size, EGG::Heap *parentHeap, const char *name,
@@ -56,7 +56,7 @@ public:
     static EGG::Heap *s_SavedCurrentHeap;
     static EGG::Heap *g_archiveHeap;
     static EGG::Heap *g_commandHeap;
-    static EGG::Heap *g_dylinkHeap;
+    static EGG::ExpHeap *g_dylinkHeap;
     static EGG::AssertHeap *g_assertHeap;
     static u8 g_DefaultGameHeapId;
     static const char *const s_GameHeapNames[4];
