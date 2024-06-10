@@ -23,14 +23,9 @@ public:
     STATE_FUNC_DECLARE(dTgRockBoat_c, Wait);
 
 private:
-
-    sFStateMgr_c<dTgRockBoat_c, sStateMethodUsr_FI_c> mStateMgr;
+    STATE_MGR_DECLARE(dTgRockBoat_c);
     int cooldown;
     int boatNum;
-
-    void dummy() {
-        mStateMgr.getStateID();
-    }
 };
 
 #endif

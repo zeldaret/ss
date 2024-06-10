@@ -30,11 +30,8 @@ private:
     bool shouldDoWind();
     void doSpawnTumbleweed();
     void getWind(mVec3_c *);
-    void unused() {
-        mStateMgr.getStateID();
-    }
 
-    sFStateMgr_c<dTgTumbleWeed_c, sStateMethodUsr_FI_c> mStateMgr;
+    STATE_MGR_DECLARE(dTgTumbleWeed_c);
     u16 tumbleweedTimer;
     u16 padding;
     u16 windTimer;
