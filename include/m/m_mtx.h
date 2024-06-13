@@ -17,7 +17,7 @@ public:
     /* 802f16b0 */ void XrotS(mAng angle);        ///< Generates a rotation matrix for the X axis with the given angle.
     /* 802f1770 */ void XrotM(mAng angle);        ///< Rotates the matrix on the X axis by the given angle.
     /* 802f17c0 */ void YrotS(mAng angle);        ///< Generates a rotation matrix for the Y axis with the given angle.
-    /* 802f1880 */ void YrotM(s16 &angle); ///< Rotates the matrix on the Y axis by the given angle.
+    /* 802f1880 */ void YrotM(s16 &angle);        ///< Rotates the matrix on the Y axis by the given angle.
     /* 802f18d0 */ void ZrotS(mAng angle);        ///< Generates a rotation matrix for the Z axis with the given angle.
     /* 802f1990 */ void ZrotM(mAng angle);        ///< Rotates the matrix on the Z axis by the given angle.
 

@@ -17,6 +17,8 @@ public:
 
     /* 800A6D90 */
     bool init(int pathIndex, int roomId, int pathSubtype);
+    /* 800A68B0 */
+    mVec3_c *getPntPosForIndex(int index);
 };
 
 #endif

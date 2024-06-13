@@ -65,7 +65,6 @@ int dTgSndAr_c::actorExecute() {
         link->setBit_field_0xE8(params & 0xFF);
     }
     if (lbl_80575D58 != nullptr) {
-        // Halp
         mVec3_c pos = lbl_80575D58->v;
         if (checkPosInArea(pos) && lbl_805756EC != nullptr) {
             lbl_805756EC->bgmFlags |= 1 << (params & 0xFF);
@@ -96,6 +95,7 @@ bool dTgSndAr_c::checkPosInArea(mVec3_c &pos) {
 inline bool inRange(f32 val, f32 tolerance) {
     return (-tolerance <= val && val <= tolerance);
 }
+
 // Box
 bool dTgSndAr_c::checkAlg0(const mVec3_c &pos) {
     mVec3_c c2 = pos;
@@ -129,8 +129,46 @@ bool dTgSndAr_c::checkAlg2(const mVec3_c &pos) {
 
     mVec3_c diff(pos.x - position.x, pos.z - position.z, scale.x * 100.0f);
 
-    return diff.x * diff.x + diff.y * diff.y <= diff.x * diff.z;
+    return diff.x * diff.x + diff.y * diff.y <= diff.z * diff.z;
 }
 
+struct UnkStruct {
+    /* 0x00 */ mVec3_c vec;
+    /* 0x0C */ mVec3_c vec2;
+    /* 0x18 */ u32 unk;
+    /* 0x1C */ f32 field_0x1C;
+    /* 0x20 */ u8 field_0x20;
+    /* 0x24 */ u32 field_0x24;
+};
+
+extern "C" void fn_80337EA0(UnkStruct *);
+extern "C" void fn_80337EF0(UnkStruct *, mVec3_c&, mVec3_c&, f32);
+extern "C" int fn_8032BFB0(UnkStruct *, mVec3_c&, f32*, f32&, int);
+
 // ???
-bool dTgSndAr_c::checkAlg3(const mVec3_c &pos) {}
+bool dTgSndAr_c::checkAlg3(const mVec3_c &pos) {
+    f32 q[4];
+    UnkStruct unk;
+
+    f32 radius = scale.x * 100.0f;
+    radius = radius * radius;
+    mVec3_c a = pos;
+    fn_80337EA0(&unk);
+
+    mVec3_c b = *mRail.getPntPosForIndex(0);
+    mVec3_c c = *mRail.getPntPosForIndex(1);
+
+    fn_80337EF0(&unk, b, c, scale.x * 100.0f);
+    f32 d;
+    if (fn_8032BFB0(&unk, a, q, d, 0)) {
+        return d < radius;
+    } else {
+        f32 distSq = PSVECSquareDistance(unk.vec, pos);
+        if (distSq < radius) {
+            return true;
+        } else {
+            distSq = PSVECSquareDistance(unk.vec2, pos);
+            return distSq < radius;
+        }
+    }
+}
