@@ -127,9 +127,10 @@ bool dTgSndAr_c::checkAlg2(const mVec3_c &pos) {
         return false;
     }
 
-    mVec3_c diff(pos.x - position.x, pos.z - position.z, scale.x * 100.0f);
+    mVec3_c diff = pos - position;
+    f32 radius = scale.x * 100.0f;
 
-    return diff.x * diff.x + diff.y * diff.y <= diff.z * diff.z;
+    return diff.x * diff.x + diff.z * diff.z < radius * radius;
 }
 
 struct UnkStruct {
