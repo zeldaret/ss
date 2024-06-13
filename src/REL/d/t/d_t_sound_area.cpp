@@ -143,7 +143,7 @@ struct UnkStruct {
 
 extern "C" void fn_80337EA0(UnkStruct *);
 extern "C" void fn_80337EF0(UnkStruct *, mVec3_c&, mVec3_c&, f32);
-extern "C" int fn_8032BFB0(UnkStruct *, mVec3_c&, f32*, f32&, int);
+extern "C" int fn_8032BFB0(UnkStruct *, EGG::Vector3f&, f32*, f32&, int);
 
 // ???
 bool dTgSndAr_c::checkAlg3(const mVec3_c &pos) {
@@ -152,7 +152,7 @@ bool dTgSndAr_c::checkAlg3(const mVec3_c &pos) {
 
     f32 radius = scale.x * 100.0f;
     radius = radius * radius;
-    mVec3_c a = pos;
+    EGG::Vector3f a = pos;
     fn_80337EA0(&unk);
 
     mVec3_c b = *mRail.getPntPosForIndex(0);
