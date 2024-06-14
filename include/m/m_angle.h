@@ -16,7 +16,6 @@ class mAng3_c {
 public:
     mAng3_c() {}
 
-    s16 x, y, z;
     mAng3_c(s16 fx, s16 fy, s16 fz) : x(fx), y(fy), z(fz) {}
 
     void set(s16 fx, s16 fy, s16 fz) {
@@ -24,6 +23,8 @@ public:
         y = fy;
         z = fz;
     }
+
+    mAng x, y, z;
 
     static mAng3_c Zero;
 };
