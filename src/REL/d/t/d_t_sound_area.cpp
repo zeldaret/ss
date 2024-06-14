@@ -127,10 +127,13 @@ bool dTgSndAr_c::checkAlg2(const mVec3_c &pos) {
         return false;
     }
 
-    mVec3_c diff = pos - position;
     f32 radius = scale.x * 100.0f;
+    mVec3_c diff = pos - position;
 
-    return diff.x * diff.x + diff.z * diff.z < radius * radius;
+    f32 dist = diff.x * diff.x + diff.z * diff.z;
+    f32 r2 = radius * radius;
+
+    return !(dist > r2);
 }
 
 struct UnkStruct {
@@ -143,8 +146,8 @@ struct UnkStruct {
 };
 
 extern "C" void fn_80337EA0(UnkStruct *);
-extern "C" void fn_80337EF0(UnkStruct *, mVec3_c&, mVec3_c&, f32);
-extern "C" int fn_8032BFB0(UnkStruct *, EGG::Vector3f&, f32*, f32&, int);
+extern "C" void fn_80337EF0(UnkStruct *, mVec3_c &, mVec3_c &, f32);
+extern "C" int fn_8032BFB0(UnkStruct *, EGG::Vector3f &, f32 *, f32 &, int);
 
 // ???
 bool dTgSndAr_c::checkAlg3(const mVec3_c &pos) {
