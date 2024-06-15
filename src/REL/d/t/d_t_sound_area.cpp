@@ -1,6 +1,7 @@
 #include <d/a/obj/d_a_obj_base.h>
 #include <d/d_player.h>
 #include <d/tg/d_t_sound_area.h>
+#include <d/tg/d_t_sound_area_mgr.h>
 #include <rvl/MTX.h>
 
 SPECIAL_ACTOR_PROFILE(TAG_SOUND_AREA, dTgSndAr_c, fProfile::TAG_SOUND_AREA, 0x0146, 0, 0);
@@ -10,16 +11,10 @@ void float_ordering() {
     0.01f;
 }
 
-struct SoundAreaManager {
-    u8 unk[0xFC];
-    u32 bgmFlags;
-};
-
-extern SoundAreaManager *lbl_805756EC;
 
 int dTgSndAr_c::create() {
     scale *= 0.01f;
-    if (lbl_805756EC == nullptr) {
+    if (dTgSndMg_c::sInstance == nullptr) {
         dAcObjBase_c::createActorUnkGroup3(fProfile::SOUND_AREA_MGR, roomid, 0, nullptr, nullptr, nullptr, -1);
     }
 
@@ -66,8 +61,8 @@ int dTgSndAr_c::actorExecute() {
     }
     if (lbl_80575D58 != nullptr) {
         mVec3_c pos = lbl_80575D58->v;
-        if (checkPosInArea(pos) && lbl_805756EC != nullptr) {
-            lbl_805756EC->bgmFlags |= 1 << (params & 0xFF);
+        if (checkPosInArea(pos) && dTgSndMg_c::sInstance != nullptr) {
+            dTgSndMg_c::sInstance->setBgmFlag(params & 0xFF);
         }
     }
     return 1;
