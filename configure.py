@@ -1096,7 +1096,7 @@ config.libs = [
     Rel(NonMatching, "d_t_skyEnemy", "REL/d/t/d_t_skyEnemy.cpp"),
     Rel(NonMatching, "d_t_sound", "REL/d/t/d_t_sound.cpp"),
     Rel(Matching, "d_t_sound_area", "REL/d/t/d_t_sound_area.cpp"),
-    Rel(NonMatching, "d_t_sound_area_mgr", "REL/d/t/d_t_sound_area_mgr.cpp"),
+    Rel(Matching, "d_t_sound_area_mgr", "REL/d/t/d_t_sound_area_mgr.cpp"),
     Rel(NonMatching, "d_t_sparks2", "REL/d/t/d_t_sparks2.cpp"),
     Rel(NonMatching, "d_t_sparks", "REL/d/t/d_t_sparks.cpp"),
     Rel(NonMatching, "d_t_spore", "REL/d/t/d_t_spore.cpp"),
