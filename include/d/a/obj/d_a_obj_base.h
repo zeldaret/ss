@@ -2,8 +2,9 @@
 #define D_A_OBJ_BASE_H
 
 #include "d/a/d_a_base.h"
-#include "m/types_m.h"
 #include "m/m_mtx.h"
+#include "m/types_m.h"
+
 
 // Ghidra: ActorObjectBase
 //   size: 0x330

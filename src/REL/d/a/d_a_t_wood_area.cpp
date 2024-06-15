@@ -24,18 +24,31 @@ public:
     void dropItems();
     bool attachObject(dAcObjBase_c *obj);
 
-    inline f32 getAttachRadius() {
-        return scale.x * 100.0f;
+    f32 getAttachRadius() {
+        return scale.x * scaleX;
+    }
+    f32 getAttachRadiusSquare() {
+        return getAttachRadius() * getAttachRadius();
+    }
+
+    f32 getAttachHeight() {
+        return scale.y * scaleY;
     }
 
     STATE_FUNC_DECLARE(dAcTWoodArea_c, Init);
     STATE_FUNC_DECLARE(dAcTWoodArea_c, Wait);
+
+    static const f32 scaleX;
+    static const f32 scaleY;
 
 private:
     STATE_MGR_DECLARE(dAcTWoodArea_c);
 
     fLiNdBa_Wood_c mRefs[8];
 };
+
+const f32 dAcTWoodArea_c::scaleX = 100.0f;
+const f32 dAcTWoodArea_c::scaleY = 100.0f;
 
 SPECIAL_ACTOR_PROFILE(TAG_WOOD_AREA, dAcTWoodArea_c, fProfile::WOODAREA_TAG, 0x166, 0, 2);
 
@@ -45,13 +58,8 @@ STATE_DEFINE(dAcTWoodArea_c, Wait);
 int dAcTWoodArea_c::actorCreate() {
     mStateMgr.changeState(StateID_Init);
     PSMTXTrans(worldMatrix.m, position.x, position.y, position.z);
-    boundingBox.min.x = -0.0f;
-    boundingBox.min.y = -0.0f;
-    boundingBox.min.z = -0.0f;
-    boundingBox.max.x = 0.0f;
-    boundingBox.max.y = 0.0f;
-    boundingBox.max.z = 0.0f;
-    // Fun dead stores to stack here
+    boundingBox.min = mVec3_c(-0.0f, -0.0f, -0.0f);
+    boundingBox.max = mVec3_c(0.0f, 0.0f, 0.0f);
     return 1;
 }
 
@@ -103,7 +111,7 @@ void dAcTWoodArea_c::executeState_Wait() {
             bool someEffectThing = subtype != 1 ? (params & 0xF) != 0 ? false : true : true;
             if (someEffectThing) {
                 fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING[8],
-                        &mVec3_c(position.x, position.y + scale.y * 100.0f, position.z), nullptr, 0, 0, 0, 0, 0);
+                        &mVec3_c(position.x, position.y + getAttachHeight(), position.z), nullptr, 0, 0, 0, 0, 0);
             }
             dropItems();
         }
@@ -112,10 +120,8 @@ void dAcTWoodArea_c::executeState_Wait() {
 void dAcTWoodArea_c::finalizeState_Wait() {}
 
 void dAcTWoodArea_c::attachCloseObjects(ProfileName profID) {
-    // TODO FPR regshuffle
-    f32 dist = getAttachRadius();
-    dist = dist * dist;
     fBase_c *base = nullptr;
+    f32 attachRadius = getAttachRadius() * getAttachRadius();
     while (true) {
         base = fManager_c::searchBaseByProfName(profID, base);
         if (base == nullptr) {
@@ -123,14 +129,11 @@ void dAcTWoodArea_c::attachCloseObjects(ProfileName profID) {
         }
 
         dAcObjBase_c *obj = static_cast<dAcObjBase_c *>(base);
-        if (!obj->canBeLinkedToWoodTag()) {
-            continue;
-        }
-
-        mVec3_c diff = obj->position - position;
-        if (!(diff.x * diff.x + diff.z * diff.z > dist)) {
-            if (!attachObject(obj)) {
-                return;
+        if (obj->canBeLinkedToWoodTag()) {
+            if (!(obj->getSquareDistanceTo(position) > attachRadius)) {
+                if (!attachObject(obj)) {
+                    return;
+                }
             }
         }
     }

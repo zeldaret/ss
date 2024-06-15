@@ -93,13 +93,13 @@ protected:
 public:
     /* 8002c3b0 */ dAcBase_c();
 
-    void setPostion(mVec3_c &r) {
+    void setPostion(const mVec3_c &r) {
         position = r;
     }
-    void SetScale(mVec3_c &r) {
+    void SetScale(const mVec3_c &r) {
         scale = r;
     }
-    void SetRotation(mAng3_c &r) {
+    void SetRotation(const mAng3_c &r) {
         rotation = r;
     }
 
@@ -113,8 +113,17 @@ public:
     void copyRotation() {
         rot_copy = rotation;
     }
-    mVec3_c GetPostionDifference(const dAcBase_c *other) {
-        return position - other->position;
+    mVec3_c GetPostionDifference(const dAcBase_c &other) {
+        return position - other.position;
+    }
+
+    f32 getSquareDistanceTo(const mVec3_c &point) {
+        mVec3_c diff = position - point;
+        return diff.x * diff.x + diff.z * diff.z;
+    }
+
+    bool IsOutOfRange(const mVec3_c &point, f32 radius) {
+        return getSquareDistanceTo(point) > radius;
     }
 
 public:
