@@ -61,7 +61,7 @@ public:
     /* 0xC0 */ mVec3_c position;
     /* 0xCC */ mVec3_c scale;
     /* 0xD8 */ u32 actor_properties;
-    /* 0xDC */ fLiNdBa_c actor_node;
+    /* 0xDC */ dAcRef_c<dAcBase_c> actor_node;
     /* 0xE8 */ u32 field_0xe8;
     /* 0xEC */ s8 roomid;
     /* 0xED */ u8 actor_subtype;
@@ -117,7 +117,7 @@ public:
         return position - other.position;
     }
 
-    f32 getSquareDistanceTo(const mVec3_c &point) {
+    f32 getSquareDistanceTo(const mVec3_c &point) const {
         mVec3_c diff = position - point;
         return diff.x * diff.x + diff.z * diff.z;
     }
@@ -155,7 +155,7 @@ public:
     // same concept as above
     /* 8002d290 */ bool getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle,
             f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX);
-    /* 8002d3e0 */ bool isWithinPlayerRadius(f32 radius);
+    /* 8002d3e0 */ bool isWithinPlayerRadius(f32 radius) const;
     /* 8002d440 */ bool getDistanceAndAngleToPlayer(f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist,
             s16 *outDiffAngleY, s16 *outDiffAngleX);
     /* 8002d470 */ f32 getDistToPlayer();
@@ -183,7 +183,7 @@ public:
     // End of SoundSource stuff
 
     /* 8002d890 */ void FUN_8002d890();
-    /* 8002d920 */ void setActorRef(dBase_c *);
+    /* 8002d920 */ void setActorRef(dAcBase_c *);
     // next three funcs are related
     /* 8002d930 */ void setEnemyDefeatFlag();
     /* 8002d940 */ void changeLoadedEntitiesWithSet();

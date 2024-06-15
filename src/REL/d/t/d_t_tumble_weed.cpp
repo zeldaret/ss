@@ -74,12 +74,12 @@ void dTgTumbleWeed_c::executeState_AreaIn() {
 }
 void dTgTumbleWeed_c::finalizeState_AreaIn() {}
 
-extern "C" void fn_475_1B00(fBase_c *, mVec3_c&);
+extern "C" void fn_475_1B00(fBase_c *, mVec3_c &);
 void dTgTumbleWeed_c::initializeState_Wind() {
     mVec3_c vec;
     getWind(&vec);
-    if (childTumbleweed.p_owner != nullptr) {
-        fn_475_1B00(childTumbleweed.p_owner, vec);
+    if (childTumbleweed.get() != nullptr) {
+        fn_475_1B00(childTumbleweed.get(), vec);
     }
 }
 
@@ -94,7 +94,7 @@ void dTgTumbleWeed_c::finalizeState_Wind() {}
 
 bool dTgTumbleWeed_c::shouldSpawnTumbleweed() {
     bool spawnAllowed = false;
-    if (childTumbleweed.p_owner == nullptr && cM::rnd() <= 0.8f) {
+    if (childTumbleweed.get() == nullptr && cM::rnd() <= 0.8f) {
         spawnAllowed = true;
     }
 
@@ -105,10 +105,8 @@ bool dTgTumbleWeed_c::shouldSpawnTumbleweed() {
     return false;
 }
 
-
 bool dTgTumbleWeed_c::shouldDoWind() {
-    return childTumbleweed.p_owner != nullptr && cM::rnd() <= 0.5f;
+    return childTumbleweed.get() != nullptr && cM::rnd() <= 0.5f;
 }
-void dTgTumbleWeed_c::doSpawnTumbleweed() {
-}
-void dTgTumbleWeed_c::getWind(mVec3_c*) {}
+void dTgTumbleWeed_c::doSpawnTumbleweed() {}
+void dTgTumbleWeed_c::getWind(mVec3_c *) {}

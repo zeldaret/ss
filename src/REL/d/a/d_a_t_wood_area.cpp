@@ -4,12 +4,6 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-// Look I don't know why these levels of subclasses work
-class fLiNdBa_Wood_c : public fLiNdBaAutoUnlink_c {
-public:
-    fLiNdBa_Wood_c() : fLiNdBaAutoUnlink_c(nullptr) {}
-};
-
 class dAcTWoodArea_c : public dAcObjBase_c {
 public:
     dAcTWoodArea_c() : mStateMgr(*this, sStateID::null) {}
@@ -44,7 +38,7 @@ public:
 private:
     STATE_MGR_DECLARE(dAcTWoodArea_c);
 
-    fLiNdBa_Wood_c mRefs[8];
+    dAcRef_c<dAcObjBase_c> mRefs[8];
 };
 
 const f32 dAcTWoodArea_c::scaleX = 100.0f;
@@ -141,8 +135,8 @@ void dAcTWoodArea_c::attachCloseObjects(ProfileName profID) {
 
 void dAcTWoodArea_c::dropItems() {
     for (int i = 0; i < 8; i++) {
-        if (mRefs[i].p_owner != nullptr) {
-            if (static_cast<dAcObjBase_c *>(mRefs[i].p_owner)->drop()) {
+        if (mRefs[i].get() != nullptr) {
+            if (mRefs[i].get()->drop()) {
                 mRefs[i].unlink();
             }
         }
@@ -151,7 +145,7 @@ void dAcTWoodArea_c::dropItems() {
 
 bool dAcTWoodArea_c::attachObject(dAcObjBase_c *obj) {
     for (int i = 0; i < 8; i++) {
-        if (mRefs[i].p_owner == nullptr) {
+        if (mRefs[i].get() == nullptr) {
             mRefs[i].link(obj);
             return true;
         }

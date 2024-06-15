@@ -72,7 +72,7 @@ dAcBase_c::dAcBase_c()
 }
 
 // 8002c530
-dBase_c::~dBase_c() {}
+// dBase_c::~dBase_c() {}
 
 dAcBase_c::~dAcBase_c() {}
 
@@ -392,7 +392,7 @@ bool dAcBase_c::getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16
 }
 
 // 8002d3e0
-bool dAcBase_c::isWithinPlayerRadius(f32 radius) {
+bool dAcBase_c::isWithinPlayerRadius(f32 radius) const {
     f32 dist_diff = getSquareDistanceTo(dPlayer::LINK->position);
     return dist_diff < radius * radius;
 }
@@ -462,7 +462,7 @@ SoundSource *dAcBase_c::getSoundSource() {
 void dAcBase_c::FUN_8002d890() {}
 
 // current name is Global__setActorRef
-void dAcBase_c::setActorRef(dBase_c *ref) {
+void dAcBase_c::setActorRef(dAcBase_c *ref) {
     actor_node.link(ref);
 }
 

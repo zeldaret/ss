@@ -6,12 +6,6 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class fLiNdTumbleweed_c : public fLiNdBaAutoUnlink_c {
-public:
-    fLiNdTumbleweed_c(fBase_c *owner) : fLiNdBaAutoUnlink_c(owner) {}
-    u16 someField;
-};
-
 class dTgTumbleWeed_c : public dTg_c {
 public:
     dTgTumbleWeed_c() : mStateMgr(*this, sStateID::null), childTumbleweed(nullptr) {}
@@ -35,7 +29,9 @@ private:
     u16 tumbleweedTimer;
     u16 padding;
     u16 windTimer;
-    fLiNdTumbleweed_c childTumbleweed;
+    // TODO dAcObjTumbleWeed
+    dAcRef_c<dAcBase_c> childTumbleweed;
+    u16 someField;
 };
 
 #endif

@@ -6,7 +6,10 @@
 struct mAng {
     mAng() {}
     mAng(s16 s) : mVal(s) {}
-
+    mAng(const mAng &other) : mVal(other.mVal) {}
+    operator s16() const {
+        return mVal;
+    }
     s32 step(s16 target, s32 steps, s16 max, s16 min);
 
     s16 mVal;
@@ -17,6 +20,17 @@ public:
     mAng3_c() {}
 
     mAng3_c(s16 fx, s16 fy, s16 fz) : x(fx), y(fy), z(fz) {}
+
+    mAng3_c(const mAng3_c &r) {
+        *this = r;
+    }
+
+    mAng3_c &operator=(const mAng3_c &r) {
+        x = r.x;
+        y = r.y;
+        z = r.z;
+        return *this;
+    }
 
     void set(s16 fx, s16 fy, s16 fz) {
         x = fx;
