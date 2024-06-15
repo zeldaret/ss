@@ -1,45 +1,4 @@
-#include <d/a/obj/d_a_obj_base.h>
-#include <d/d_player.h>
-#include <f/f_list_nd.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
-
-class dAcTWoodArea_c : public dAcObjBase_c {
-public:
-    dAcTWoodArea_c() : mStateMgr(*this, sStateID::null) {}
-    virtual ~dAcTWoodArea_c() {}
-    virtual int actorCreate() override;
-    virtual int actorPostCreate() override;
-    virtual int actorExecute() override;
-    virtual int draw() override;
-    virtual int doDelete() override;
-
-    void attachCloseObjects(ProfileName profID);
-    void dropItems();
-    bool attachObject(dAcObjBase_c *obj);
-
-    f32 getAttachRadius() {
-        return scale.x * scaleX;
-    }
-    f32 getAttachRadiusSquare() {
-        return getAttachRadius() * getAttachRadius();
-    }
-
-    f32 getAttachHeight() {
-        return scale.y * scaleY;
-    }
-
-    STATE_FUNC_DECLARE(dAcTWoodArea_c, Init);
-    STATE_FUNC_DECLARE(dAcTWoodArea_c, Wait);
-
-    static const f32 scaleX;
-    static const f32 scaleY;
-
-private:
-    STATE_MGR_DECLARE(dAcTWoodArea_c);
-
-    dAcRef_c<dAcObjBase_c> mRefs[8];
-};
+#include <d/a/d_a_t_wood_area.h>
 
 const f32 dAcTWoodArea_c::scaleX = 100.0f;
 const f32 dAcTWoodArea_c::scaleY = 100.0f;
@@ -95,6 +54,7 @@ extern "C" void fn_800298B0(u16, mVec3_c *, mAng3_c *, u32, u32, u32, u32, u32);
 extern u16 PARTICLE_RESOURCE_ID_MAPPING[];
 
 void dAcTWoodArea_c::initializeState_Wait() {}
+
 void dAcTWoodArea_c::executeState_Wait() {
     if (dPlayer::LINK != nullptr && (dPlayer::LINK->someFlags & 0x2000)) {
         // This is a bit messed up
