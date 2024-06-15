@@ -393,8 +393,8 @@ bool dAcBase_c::getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16
 
 // 8002d3e0
 bool dAcBase_c::isWithinPlayerRadius(f32 radius) {
-    mVec3_c dist_diff = GetPostionDifference(dPlayer::LINK);
-    return dist_diff.x * dist_diff.x + dist_diff.z * dist_diff.z < radius * radius;
+    f32 dist_diff = getSquareDistanceTo(dPlayer::LINK->position);
+    return dist_diff < radius * radius;
 }
 
 // 8002d440

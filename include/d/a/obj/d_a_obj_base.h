@@ -2,7 +2,9 @@
 #define D_A_OBJ_BASE_H
 
 #include "d/a/d_a_base.h"
+#include "m/m_mtx.h"
 #include "m/types_m.h"
+
 
 // Ghidra: ActorObjectBase
 //   size: 0x330
@@ -25,6 +27,12 @@ public:
     f32 forwardAccel;
     f32 forwardMaxSpeed;
     // TODO: add the rest
+    u8 unk1[0x15C - 0x150];
+    /* 0x15C */ mMtx_c worldMatrix;
+
+    nw4r::math::AABB boundingBox;
+
+    u8 unk_0x1A4[0x330 - 0x1A4];
 
 public:
     // could be their own thing?
@@ -39,12 +47,12 @@ public:
 public:
     /* 8002def0 */ dAcObjBase_c();
     /* 8002e050 */ virtual ~dAcObjBase_c();
-    /* 8002e0e0 */ virtual int preCreate();
-    /* 8002e150 */ virtual int preExecute();
-    /* 8002e2a0 */ virtual void postExecute();
-    /* 8002e330 */ virtual int preDraw();
+    /* 8002e0e0 */ virtual int preCreate() override;
+    /* 8002e150 */ virtual int preExecute() override;
+    /* 8002e2a0 */ virtual void postExecute(MAIN_STATE_e state) override;
+    /* 8002e330 */ virtual int preDraw() override;
     /* 8002e5b0 */ virtual void *getObjectListEntry();
-    /* 8002e5c0 */ virtual bool restorePosRotFromCopy();
+    /* 8002e5c0 */ virtual bool restorePosRotFromCopy() override;
     /* 8002ea10 */ virtual bool canBeLinkedToWoodTag();
     /* 8002ea20 */ virtual bool drop();
 
