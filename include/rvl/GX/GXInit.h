@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_GX_INIT_H
 #define RVL_SDK_GX_INIT_H
-#include <RVL/GX/GXFifo.h>
+#include <rvl/GX/GXFifo.h>
 #include <common.h>
 #ifdef __cplusplus
 extern "C" {
