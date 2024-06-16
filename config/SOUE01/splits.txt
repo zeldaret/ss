@@ -289,6 +289,13 @@ f/f_manager.cpp:
 	.sbss       start:0x80575BB8 end:0x80575BC0
 	.bss        start:0x805B84D8 end:0x805B8588
 
+m/m2d.cpp:
+	.text       start:0x802E2D80 end:0x802E3E50
+	.data       start:0x805423E8 end:0x805424A0
+	.sbss       start:0x80575BC8 end:0x80575BD0
+	.sdata2     start:0x8057CC98 end:0x8057CCB8
+	.bss        start:0x805B8588 end:0x805B85C0
+
 m/m3d/m3d.cpp:
 	.text       start:0x802E3E50 end:0x802E4714
 	.sbss       start:0x80575BD0 end:0x80575BEC
