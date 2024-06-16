@@ -276,6 +276,11 @@ m/m_angle.cpp:
 	.ctors      start:0x804DB8CC end:0x804DB8D0
 	.sbss       start:0x80575C08 end:0x80575C10
 
+m/m_color_fader.cpp:
+	.text       start:0x802EE7E0 end:0x802EEB94
+	.data       start:0x80542848 end:0x80542870
+	.sdata2     start:0x8057CDC0 end:0x8057CDD8
+
 m/m_dvd.cpp:
 	.text       start:0x802EEBA0 end:0x802F0494
 	.ctors      start:0x804DB8D0 end:0x804DB8D4
@@ -283,6 +288,13 @@ m/m_dvd.cpp:
 	.sdata      start:0x80573FD0 end:0x80573FF8
 	.sbss       start:0x80575C10 end:0x80575C38
 	.bss        start:0x805B85C0 end:0x805CB078
+
+m/m_fader.cpp:
+	.text       start:0x802F04A0 end:0x802F061C
+
+m/m_fader_base.cpp:
+	.text       start:0x802F0620 end:0x802F081C
+	.data       start:0x80542968 end:0x80542990
 
 m/m_heap.cpp:
 	.text       start:0x802F0F00 end:0x802F1660
