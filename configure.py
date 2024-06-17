@@ -127,7 +127,7 @@ config.wibo_tag = "0.6.11"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
-config.check_sha_path = Path("orig") / f"{config.version}.sha1"
+config.check_sha_path = Path("config") / config.version / "build.sha1"
 config.linker_version = "Wii/1.6"
 config.ldflags = [
     "-fp hardware",

@@ -1,13 +1,14 @@
 # Necessary files
 
-In this folder, place the extracted `main.dol` and `rels.arc` files.
+In this folder, place the extracted `sys/main.dol` and `files/rels.arc` files.
 
 Your folder structure should look like this:
 ```
-├── orig
-    ├── SOEU01.sha1
+└── orig
     └── SOEU01
-        ├── main.dol
-        ├── rels.arc
+        ├── sys
+        │   └── main.dol
+        ├── files
+        │   └── rels.arc
         └── README.md
 ```

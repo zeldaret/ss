@@ -1,4 +1,14 @@
-# The Legend of Zelda: Skyward Sword
+The Legend of Zelda: Skyward Sword  
+[![Build Status]][actions] ![Progress] ![DOL Progress] ![RELs Progress] [![Discord Badge]][discord]
+=============
+
+[Build Status]: https://github.com/zeldaret/ss/actions/workflows/build.yml/badge.svg
+[actions]: https://github.com/zeldaret/ss/actions/workflows/build.yml
+[Progress]: https://img.shields.io/endpoint?label=Code&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Fss%2FSOUE01%2Fall%2F%3Fmode%3Dshield%26measure%3Dcode
+[DOL Progress]: https://img.shields.io/endpoint?label=DOL&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Fss%2FSOUE01%2Fdol%2F%3Fmode%3Dshield%26measure%3Dcode
+[RELs Progress]: https://img.shields.io/endpoint?label=RELs&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Fss%2FSOUE01%2Fmodules%2F%3Fmode%3Dshield%26measure%3Dcode
+[Discord Badge]: https://img.shields.io/discord/688807550715560050?color=%237289DA&logo=discord&logoColor=%23FFFFFF
+[discord]: https://discord.zelda64.dev
 
 This repository contains a work-in-progress decompilation of *The Legend of Zelda: Skyward Sword*
 for the Nintendo Wii system.
@@ -55,19 +65,19 @@ unquarantine it using:
 
 - Clone the repository:
   ```
-  git clone https://github.com/lepelog/ss-dtk.git
+  git clone https://github.com/zeldaret/ss.git
   ```
-- Using [Dolphin Emulator](https://dolphin-emu.org/), extract your `SOUE01` game ISO
+- Using [Dolphin Emulator](https://dolphin-emu.org/), extract your `SOUE01` game ISO to `orig/SOUE01`.
   - Right-click The Legend of Zelda: Skyward Sword game in Dolphin and select `Properties` to open
     a new window containing various game properties
 ![The Legend of Zelda: Skyward Sword is selected in the Dolphin Emulator. The "right-click" context menu has been opened and the "Properties" option is highlighted.](assets/dolphin-game-properties.png)
   - Select the `Filesystem` tab at the top of this new window (it should be the rightmost tab)
-  - Right-click the topmost entry labelled `Disc` and select `Extract Entire Disk`
-![The Legend of Zelda: Skyward Sword's properties window in Dolphin with the "Filesystem" tab open. The entry named "Disc" is selected and the "right-click" context menu has been opened with the "Extract Entire Disc..." option highlighted.](assets/dolphin-extract-entire-disc.png)
-  - Once this has completed, copy the following files into the the `orig/SOUE01` folder of this
-    project. The rest can be deleted to save space.
-    - `DATA/sys/main.dol`
-    - `DATA/files/rels.arc`
+  - Right-click the entry labelled `Data Partition` and select `Extract Entire Partition...`
+![The Legend of Zelda: Skyward Sword's properties window in Dolphin with the "Filesystem" tab open. The entry named "Data Partition" is selected and the "right-click" context menu has been opened with the "Extract Entire Partition..." option highlighted.](assets/dolphin-extract-entire-partition.png)
+  - Extract the partition to `orig/SOUE01`
+  - To save space, the only necessary files are the following. Any others can be deleted:
+    - `sys/main.dol`
+    - `files/rels.arc`
 - Run the configure script:
   ```
   python configure.py
