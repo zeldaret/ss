@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_DVD_FS_H
 #define RVL_SDK_DVD_FS_H
-#include <RVL/DVD/dvd.h>
-#include <RVL/OS.h>
+#include <rvl/DVD/dvd.h>
+#include <rvl/OS.h>
 #include <common.h>
 
 #ifdef __cplusplus
