@@ -148,6 +148,7 @@ config.asflags = [
     f"-I build/{config.version}/include",
     f"--defsym version={version_num}",
 ]
+config.linker_version = "Wii/1.6"
 config.ldflags = [
     "-fp hardware",
     "-nodefaults",
