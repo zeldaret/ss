@@ -110,8 +110,8 @@ void dAcTWoodArea_c::executeState_Wait() {
         if (dist.x * dist.x + dist.z * dist.z < attachRadius) {
             bool someEffectThing = subtype != 1 ? (params & 0xF) != 0 ? false : true : true;
             if (someEffectThing) {
-                fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING[8],
-                        &mVec3_c(position.x, position.y + getAttachHeight(), position.z), nullptr, 0, 0, 0, 0, 0);
+                mVec3_c tmp(position.x, position.y + getAttachHeight(), position.z);
+                fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING[8], &tmp, nullptr, 0, 0, 0, 0, 0);
             }
             dropItems();
         }

@@ -60,7 +60,7 @@ bool spawnSpecialDropItem(SpecialItemDropMgr *mgr, int specialItemId, int roomid
     s16 currentRot;
     s16 tempOther;
     u16 itemid = SPECIAL_ITEM_ARRAY[unk];
-    mAng3_c itemRot = {0, 0, 0};
+    mAng3_c itemRot(0, 0, 0);
 
     if (subtype == 2 || subtype == 6) {
         currentRot = *rot;
