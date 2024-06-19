@@ -370,8 +370,8 @@ bool dAcBase_c::getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16
         angleToActorY = targetAngleY(&position, &actor->position);
         angleToActorX = targetAngleX(&position, &actor->position);
 
-        if ((distSquared <= distThresh * distThresh) && (doAbs(s32(rotation.y - angleToActorY)) <= yAngle) &&
-                (doAbs(s32(rotation.x - angleToActorX)) <= xAngle)) {
+        if ((distSquared <= distThresh * distThresh) && (doAbs(s32(rotation.y.mVal - angleToActorY)) <= yAngle) &&
+                (doAbs(s32(rotation.x.mVal - angleToActorX)) <= xAngle)) {
             isWithinRange = true;
         }
     }
