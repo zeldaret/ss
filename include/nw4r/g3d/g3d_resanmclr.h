@@ -1,7 +1,8 @@
 #ifndef NW4R_G3D_RESANMCLR_H
 #define NW4R_G3D_RESANMCLR_H
-#include "g3d_resdict.h"
-#include "g3d_resanm.h"
+#include "nw4r/g3d/g3d_resdict.h"
+#include "nw4r/g3d/g3d_resanm.h"
+#include "nw4r/g3d/g3d_anmclr.h"
 
 namespace nw4r
 {

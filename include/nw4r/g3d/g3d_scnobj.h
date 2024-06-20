@@ -1,9 +1,9 @@
 #ifndef NW4R_G3D_SCNOBJ_H
 #define NW4R_G3D_SCNOBJ_H
 #include "common.h"
-#include "g3d_obj.h"
-#include "math_geometry.h"
-#include "math_types.h"
+#include "nw4r/g3d/g3d_obj.h"
+#include "nw4r/math/math_geometry.h"
+#include "nw4r/math/math_types.h"
 
 namespace nw4r {
 namespace g3d {
@@ -39,9 +39,9 @@ public:
         FLAG_60 = FLAG_40 | FLAG_20
     };
 
-    enum ScnObjMtxType { MTX_TYPE_0, MTX_TYPE_WORLD, MTX_TYPE_VIEW, MTX_TYPE_MAX };
+    enum ScnObjMtxType { MTX_TYPE_LOCAL, MTX_TYPE_WORLD, MTX_TYPE_VIEW, MTX_TYPE_MAX };
 
-    enum Timing { TIMING_1 = 0x1, TIMING_2 = 0x2, TIMING_4 = 0x4 };
+    enum Timing { TIMING_1 = 0x1, TIMING_2 = 0x2, TIMING_4 = 0x4, TIMING_ALL = 0x7 };
 
     enum ExecOp { EXEC_OP_1 = 0x1, EXEC_OP_2 = 0x2, EXEC_OP_4 = 0x4 };
 
@@ -88,6 +88,9 @@ public:
     void EnableScnObjCallbackExecOp(ExecOp);
     bool SetBoundingVolume(ScnObjBoundingVolumeType, const math::AABB *);
     bool GetBoundingVolume(ScnObjBoundingVolumeType, math::AABB *) const;
+    void SetCallback(IScnObjCallback *cb) {
+        mCallback = cb;
+    }
 
     const math::MTX34 *GetMtxPtr(ScnObjMtxType type) const {
         return &mMatrices[type];
@@ -202,6 +205,17 @@ public:
     ScaleProperty GetScaleProperty() const;
     void DefG3dProcScnLeaf(u32, u32, void *);
 
+    inline void SetScale(f32 x, f32 y, f32 z) {
+        mScale.x = x;
+        mScale.y = y;
+        mScale.z = z;
+    }
+
+    inline void SetScale(const math::VEC3& scale)
+    {
+        mScale = scale;
+    }
+
 private:
     math::VEC3 mScale;
 
@@ -235,6 +249,10 @@ public:
         return TypeObj(TYPE_NAME);
     }
 
+    bool PushBack(ScnObj *obj) {
+        return Insert(Size(), obj);
+    }
+
     bool Empty() const {
         return mSize == 0;
     }
@@ -262,8 +280,6 @@ public:
     void ScnGroup_G3DPROC_CALC_MAT(u32, void *);
     void ScnGroup_G3DPROC_CALC_VIEW(u32, const math::MTX34 *);
     void DefG3dProcScnGroup(u32, u32, void *);
-
-    bool PushBack(ScnObj *);
 
     ScnObj **mObjects; // at 0xDC
     u32 mCapacity;     // at 0xE0

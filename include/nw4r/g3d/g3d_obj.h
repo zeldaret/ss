@@ -90,6 +90,7 @@ public:
     }
 
     void Destroy();
+    void DetachFromParent();
 
     G3dObj(MEMAllocator *pAllocator, G3dObj *pParent) : mAllocator(pAllocator), mParent(pParent) {}
 

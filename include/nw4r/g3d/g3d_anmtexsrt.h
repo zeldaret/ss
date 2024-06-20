@@ -1,6 +1,6 @@
 #ifndef NW4R_G3D_ANMTEXSRT_H
 #define NW4R_G3D_ANMTEXSRT_H
-#include "g3d_restex.h"
+#include "nw4r/g3d/g3d_restex.h"
 
 namespace nw4r
 {

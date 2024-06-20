@@ -1,8 +1,8 @@
 #ifndef NW4R_G3D_RESFILE_H
 #define NW4R_G3D_RESFILE_H
 #include "common.h"
-#include "g3d_rescommon.h"
-#include "g3d_resdict.h"
+#include "nw4r/g3d/g3d_rescommon.h"
+#include "nw4r/g3d/g3d_resdict.h"
 #include "ut_binaryFileFormat.h"
 
 namespace nw4r {

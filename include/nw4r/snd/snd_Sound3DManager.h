@@ -4,7 +4,7 @@
 #include "snd_SoundArchive.h"
 #include "snd_SoundActor.h"
 #include "snd_InstancePool.h"
-#include "math_types.h"
+#include "nw4r/math/math_types.h"
 
 namespace nw4r
 {

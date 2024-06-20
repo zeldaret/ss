@@ -1,8 +1,8 @@
 #ifndef NW4R_G3D_RESSHP_H
 #define NW4R_G3D_RESSHP_H
-#include "g3d_rescommon.h"
-#include "g3d_resmdl.h"
-#include "g3d_resvtx.h"
+#include "nw4r/g3d/g3d_rescommon.h"
+#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/g3d_resvtx.h"
 #include <GXAttr.h>#include "common.h"
 
 

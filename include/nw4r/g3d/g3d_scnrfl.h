@@ -1,7 +1,7 @@
 #ifndef NW4R_G3D_SCNRFL_H
 #define NW4R_G3D_SCNRFL_H
 #include "common.h"
-#include "g3d_scnleaf.h"
+#include "nw4r/g3d/g3d_scnobj.h"
 #include <RFL/RFL_MiddleDatabase.h>
 #include <RFL/RFL_Model.h>
 

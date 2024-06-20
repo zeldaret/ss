@@ -1,9 +1,9 @@
 #ifndef NW4R_G3D_RESANMSCN_H
 #define NW4R_G3D_RESANMSCN_H
 #include "common.h"
-#include "g3d_resanmcamera.h"
-#include "g3d_resanmfog.h"
-#include "g3d_rescommon.h"
+#include "nw4r/g3d/g3d_resanmcamera.h"
+#include "nw4r/g3d/g3d_resanmfog.h"
+#include "nw4r/g3d/g3d_rescommon.h"
 
 namespace nw4r {
 namespace g3d {
