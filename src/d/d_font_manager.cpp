@@ -4,8 +4,8 @@
 
 static dFontMng_c l_dFontMng_obj[3];
 
-static char *systemFonts[] = {"normal_00.brfnt", "special_00.brfnt", "picture_00.brfnt"};
-static char *fonts[] = {"normal_00.brfnt", "normal_01.brfnt", "special_00.brfnt", "special_01.brfnt",
+static const char *systemFonts[] = {"normal_00.brfnt", "special_00.brfnt", "picture_00.brfnt"};
+static const char *fonts[] = {"normal_00.brfnt", "normal_01.brfnt", "special_00.brfnt", "special_01.brfnt",
         "picture_00.brfnt"};
 
 // TODO What's up with these?
@@ -29,7 +29,7 @@ nw4r::ut::ResFont *dFontMng_c::getFont(u8 type) {
     return &l_dFontMng_obj[index].mFont;
 }
 
-char *getFontName(u8 type) {
+const char *getFontName(u8 type) {
     return fonts[type];
 }
 
