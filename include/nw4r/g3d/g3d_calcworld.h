@@ -5,6 +5,9 @@
 
 namespace nw4r {
 namespace g3d {
+
+class WorldMtxManip {};
+
 void CalcWorld(math::MTX34 *, u32 *, const u8 *, const math::MTX34 *, ResMdl, AnmObjChr *, FuncObjCalcWorld *, u32);
 
 void CalcWorld(math::MTX34 *, u32 *, const u8 *, const math::MTX34 *, ResMdl, AnmObjChr *, FuncObjCalcWorld *);

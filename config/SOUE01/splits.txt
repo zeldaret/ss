@@ -301,6 +301,7 @@ m/m3d/m_fanm.cpp:
 m/m3d/m_mdl.cpp:
 	.text       start:0x802EAF80 end:0x802EBB5C
 	.data       start:0x805426C0 end:0x80542708
+	.sdata2     start:0x8057CD60 end:0x8057CD68
 
 m/m3d/m_scnLeaf.cpp:
 	.text       start:0x802EBBD0 end:0x802EBFF8
