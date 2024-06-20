@@ -3,7 +3,7 @@
 #include "common.h"
 #include "nw4r/g3d/g3d_rescommon.h"
 #include "nw4r/g3d/g3d_resdict.h"
-#include "ut_binaryFileFormat.h"
+#include "nw4r/ut/ut_binaryFileFormat.h"
 
 namespace nw4r {
 namespace g3d {
