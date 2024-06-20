@@ -327,7 +327,7 @@ void dAcBase_c::forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *p
 }
 
 // 8002d190
-mAng dAcBase_c::getXZAngleToPlayer(s16 *angle) {
+mAng dAcBase_c::getXZAngleToPlayer() {
     return targetAngleY(&this->position, &dPlayer::LINK->position);
 }
 
