@@ -1,4 +1,5 @@
 #include <m/m3d/m_calc_ratio.h>
+#include <nw4r/math/math_arithmetic.h>
 
 namespace m3d {
 
@@ -45,26 +46,23 @@ void calcRatio_c::set(f32 value) {
 }
 
 void calcRatio_c::calc() {
-    f32 max = 1.0f;
-    f32 start = mf1;
-    if (start == 0.0f) {
+    if (mf1 == 0.0f) {
         return;
     }
 
     mf2 += mf3;
     if (mf2 >= 1.0f) {
         reset();
-        return;
     } else {
         mb2 = 1;
-        mf1 = start - start * mf2 * mf2;
-        max = 1.0f - mf1;
-        // TODO here be ASM
-        f32 f4 = mf1 / start + max;
-        f32 f1 = __fres(f4);
-        f4 = -(f4 * f1 * f1 - (f1 + f1));
-        mf4 = (mf1 / start) * f4;
-        mf5 = max * f4;
+        f32 start = mf1;
+        f32 tmp = start - start * mf2 * mf2;
+        mf1 = tmp;
+        f32 max = 1.0f - mf1;
+        tmp = mf1 / start;
+        f32 inv = nw4r::math::FInv(tmp + max);
+        mf4 = tmp * inv;
+        mf5 = max * inv;
     }
 }
 
