@@ -20,7 +20,7 @@ public:
     virtual void remove();
     virtual int entry();
 
-    void setOption(unsigned long flag, unsigned long set);
+    void setOption(u32 flag, u32 set);
     void setScale(f32, f32, f32);
     void setScale(const nw4r::math::VEC3 &);
 
@@ -31,6 +31,8 @@ public:
 
     void calc(bool);
     void calcVtx(bool);
+
+    void setPriorityDraw(int, int);
 
 protected:
     nw4r::g3d::ScnLeaf *mpScnLeaf;

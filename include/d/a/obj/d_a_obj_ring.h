@@ -1,5 +1,5 @@
-#ifndef D_A_OBJ_RING
-#define D_A_OBJ_RING
+#ifndef D_A_OBJ_RING_H
+#define D_A_OBJ_RING_H
 
 #include <d/a/obj/d_a_obj_base.h>
 #include <m/m3d/m_smdl.h>

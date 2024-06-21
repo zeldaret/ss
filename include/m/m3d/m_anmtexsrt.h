@@ -22,7 +22,7 @@ class anmTexSrt_c : public banm_c {
     };
 
 public:
-    anmTexSrt_c() {}
+    anmTexSrt_c(): mpChildren(nullptr) {}
     virtual ~anmTexSrt_c();
 
     virtual int getType() override;

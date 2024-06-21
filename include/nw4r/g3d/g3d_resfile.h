@@ -18,6 +18,9 @@ struct ResFileData {
 struct ResFile {
     ResCommon<ResFileData> mFile; // at 0x0
 
+    ResFile(): mFile((void*)nullptr) {}
+    ResFile(void *ptr): mFile(ptr) {}
+
     inline ResFileData &ref() const {
         return mFile.ref();
     }
