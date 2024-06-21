@@ -63,23 +63,25 @@ protected:
     NW4R_G3D_TYPE_OBJ_DECL(AnmObjChrNode);
 };
 
-struct AnmObjChrBlend : public AnmObjChrNode {
+class AnmObjChrBlend : public AnmObjChrNode {
 public:
     static const TypeObj GetTypeObjStatic() {
         return TypeObj(TYPE_NAME);
     }
+
+    static AnmObjChrBlend *Construct(MEMAllocator*, u32*, ResMdl, int);
 
 protected:
     NW4R_G3D_TYPE_OBJ_DECL(AnmObjChrBlend);
 };
 
-struct AnmObjChrRes : public AnmObjChr, public FrameCtrl {
+class AnmObjChrRes : public AnmObjChr, public FrameCtrl {
 public:
     static const TypeObj GetTypeObjStatic() {
         return TypeObj(TYPE_NAME);
     }
 
-    static AnmObjChrRes *Construct(MEMAllocator*, u32*, nw4r::g3d::ResAnmChr, nw4r::g3d::ResMdl, bool);
+    static AnmObjChrRes *Construct(MEMAllocator*, u32*, ResAnmChr, ResMdl, bool);
 
 protected:
     NW4R_G3D_TYPE_OBJ_DECL(AnmObjChrRes);

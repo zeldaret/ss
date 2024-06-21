@@ -280,6 +280,10 @@ m/m3d/m_anmchr.cpp:
 	.data       start:0x805424D0 end:0x805424E8
 	.sdata2     start:0x8057CCC0 end:0x8057CCD0
 
+m/m3d/m_anmchrblend.cpp:
+	.text       start:0x802E4DA0 end:0x802E5260
+	.data       start:0x805424E8 end:0x80542500
+
 m/m3d/m_anmtexsrt.cpp:
 	.text       start:0x802E6EC0 end:0x802E7A54
 	.data       start:0x80542598 end:0x805425C8
