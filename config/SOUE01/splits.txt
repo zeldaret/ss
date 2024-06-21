@@ -284,6 +284,11 @@ m/m3d/m_anmchrblend.cpp:
 	.text       start:0x802E4DA0 end:0x802E5260
 	.data       start:0x805424E8 end:0x80542500
 
+m/m3d/m_anmmatclr.cpp:
+	.text       start:0x802E5260 end:0x802E5D94
+	.data       start:0x80542500 end:0x80542530
+	.sdata2     start:0x8057CCD0 end:0x8057CCE0
+
 m/m3d/m_anmtexsrt.cpp:
 	.text       start:0x802E6EC0 end:0x802E7A54
 	.data       start:0x80542598 end:0x805425C8

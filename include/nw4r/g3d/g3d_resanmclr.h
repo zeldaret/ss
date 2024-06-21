@@ -33,6 +33,9 @@ namespace nw4r
 			char UNK_0xC[0x4];
 			s32 mMatDictOffset; // at 0x10
 			ResAnmClrInfoData mInfo; // at 0x14
+			char UNK_0x1E[0x2];
+			u16 mNumFrames; // at 0x20
+			AnmPolicy mAnmPolicy; // at 0x24
 		};
 		
 		struct ResAnmClr
@@ -54,6 +57,16 @@ namespace nw4r
 			inline bool CheckRevision() const
 			{
 				return ref().mRevision == REVISION;
+			}
+
+			AnmPolicy GetAnmPolicy() const
+			{
+				return ref().mAnmPolicy;
+			}
+
+			int GetNumFrame() const
+			{
+				return ref().mNumFrames;
 			}
 			
 			inline const ResAnmClrMatData * GetMatAnm(u32 i) const
