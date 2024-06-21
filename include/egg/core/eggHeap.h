@@ -141,7 +141,7 @@ public:
         return (int)mHeapHandle->end;
     }
 
-    inline const char *getName() {
+    inline const char *getName() const {
         return mName;
     }
 
