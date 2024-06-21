@@ -28,6 +28,23 @@ public:
     bool checkFrame(f32) const;
     bool unk_802EAE70() const;
 
+    inline void setPlayState(playMode_e state) {
+        mPlayState = state;
+    }
+
+    inline f32 getEndFrame() {
+        return mEndFrame;
+    }
+
+    // Something about this is wrong
+    inline void setStartFrame(f32 f) {
+        mEndFrame = f;
+    }
+
+    inline f32 getStartFrame() {
+        return mStartFrame;
+    }
+
 private:
     f32 mEndFrame;
     f32 mStartFrame;

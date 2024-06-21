@@ -337,6 +337,7 @@ config.libs = [
             Object(Matching, "f/f_manager.cpp"),
             Object(NonMatching, "m/m3d/m3d.cpp"),
             Object(NonMatching, "m/m3d/m_anmchr.cpp"),
+            Object(Matching, "m/m3d/m_anmtexsrt.cpp"),
             Object(Matching, "m/m3d/m_anmvis.cpp"),
             Object(Matching, "m/m3d/m_banm.cpp"),
             Object(NonMatching, "m/m3d/m_bmdl.cpp"),

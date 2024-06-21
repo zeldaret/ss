@@ -28,6 +28,10 @@ namespace nw4r
 			u32 mRevision; // at 0x8
 			char UNK_0xC[0x4];
 			s32 mMatDictOffset; // at 0x10
+			char UNK_0x14[0x0C];
+			u16 mNumFrames; // at 0x20
+			UNKWORD UNK_0x24;
+			AnmPolicy mAnmPolicy; // at 0x28
 		};
 
 		struct ResAnmTexSrt
@@ -54,6 +58,16 @@ namespace nw4r
 			inline const ResAnmTexSrtMatData * GetMatAnm(u32 i) const
 			{
 				return static_cast<const ResAnmTexSrtMatData *>(mAnmTexSrt.ofs_to_obj<ResDic>(ref().mMatDictOffset)[i]);
+			}
+
+			AnmPolicy GetAnmPolicy() const
+			{
+				return ref().mAnmPolicy;
+			}
+
+			int GetNumFrame() const
+			{
+				return ref().mNumFrames;
 			}
 			
 			void GetAnmResult(TexSrtAnmResult *, u32, float) const;

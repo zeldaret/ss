@@ -53,6 +53,8 @@ BLOCKING_SYMBOLS = [
     ['fn_801BB6F0', 'getCamera'],
     ['fn_800225F0', 'something light'],
     ['fn_80179250', 'shutter fence list'],
+    ['fn_8033AB50', 'getCollisionCheckContext'],
+    ['fn_383_D10', 'getAcOStageSink_ptr'],
 ]
 
 def main():
