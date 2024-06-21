@@ -9,7 +9,7 @@ namespace m3d {
 
 anmVis_c::~anmVis_c() {}
 
-int anmVis_c::getType() {
+int anmVis_c::getType() const {
     return 1;
 }
 

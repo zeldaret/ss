@@ -7,7 +7,7 @@ namespace m3d {
 
 anmChr_c::~anmChr_c() {}
 
-int anmChr_c::getType() {
+int anmChr_c::getType() const {
     return 0;
 }
 

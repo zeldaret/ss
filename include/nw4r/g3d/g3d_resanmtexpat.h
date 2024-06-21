@@ -52,6 +52,8 @@ namespace nw4r
 			char UNK_0x24[0xC];
 			u16 mTexCount; // at 0x30
 			u16 mPlttCount; // at 0x32
+			char UNK_0x34[0x4];
+			AnmPolicy mAnmPolicy; // at 0x38
 		};
 
 		struct ResAnmTexPat
@@ -78,6 +80,16 @@ namespace nw4r
 			inline const ResAnmTexPatMatData * GetMatAnm(u32 i) const
 			{
 				return static_cast<const ResAnmTexPatMatData *>(mAnmTexPat.ofs_to_obj<ResDic>(ref().mMatDictOffset)[i]);
+			}
+
+			AnmPolicy GetAnmPolicy() const
+			{
+				return ref().mAnmPolicy;
+			}
+
+			int GetNumFrame() const
+			{
+				return ref().mTexCount;
 			}
 			
 			void GetAnmResult(TexPatAnmResult *, u32, float) const;

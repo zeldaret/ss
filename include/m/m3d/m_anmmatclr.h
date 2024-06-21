@@ -12,7 +12,7 @@ class anmMatClr_c : public banm_c {
     public:
         child_c() {}
         virtual ~child_c();
-        virtual int getType() override;
+        virtual int getType() const override;
 
         static u32 heapCost(nw4r::g3d::ResMdl, nw4r::g3d::ResAnmClr, bool);
         bool create(nw4r::g3d::ResMdl, nw4r::g3d::ResAnmClr, mAllocator_c *, u32 *);
@@ -25,7 +25,7 @@ public:
     anmMatClr_c() : mpChildren(nullptr) {}
     virtual ~anmMatClr_c();
 
-    virtual int getType() override;
+    virtual int getType() const override;
     virtual void remove() override;
     virtual void play() override;
 

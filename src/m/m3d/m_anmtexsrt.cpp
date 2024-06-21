@@ -5,7 +5,7 @@
 
 namespace m3d {
 
-int anmTexSrt_c::child_c::getType() {
+int anmTexSrt_c::child_c::getType() const {
     return 0x04;
 }
 
@@ -135,7 +135,7 @@ anmTexSrt_c::~anmTexSrt_c() {
     anmTexSrt_c::remove();
 }
 
-int anmTexSrt_c::getType() {
+int anmTexSrt_c::getType() const {
     return 0x04;
 }
 

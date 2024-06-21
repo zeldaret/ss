@@ -12,7 +12,7 @@ public:
     banm_c() : mpAnmObj(nullptr), mpFrameHeap(nullptr) {}
     virtual ~banm_c();
 
-    virtual int getType() = 0;
+    virtual int getType() const = 0;
     virtual void remove();
     virtual void play();
 

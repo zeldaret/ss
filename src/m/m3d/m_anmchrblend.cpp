@@ -7,7 +7,7 @@ namespace m3d {
 
 anmChrBlend_c::~anmChrBlend_c() {}
 
-int anmChrBlend_c::getType() {
+int anmChrBlend_c::getType() const {
     return 0;
 }
 

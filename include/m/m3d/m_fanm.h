@@ -18,7 +18,7 @@ public:
     fanm_c();
     virtual ~fanm_c();
 
-    virtual int getType() = 0;
+    virtual int getType() const  = 0;
     virtual void play();
 
     void set(f32, playMode_e, f32, f32);

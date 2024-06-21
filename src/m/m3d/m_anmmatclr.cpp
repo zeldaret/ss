@@ -7,7 +7,7 @@ namespace m3d {
 
 anmMatClr_c::child_c::~child_c() {}
 
-int anmMatClr_c::child_c::getType() {
+int anmMatClr_c::child_c::getType() const {
     return 0x02;
 }
 
@@ -124,7 +124,7 @@ anmMatClr_c::~anmMatClr_c() {
     anmMatClr_c::remove();
 }
 
-int anmMatClr_c::getType() {
+int anmMatClr_c::getType() const {
     return 0x02;
 }
 

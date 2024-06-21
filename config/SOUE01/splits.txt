@@ -275,6 +275,9 @@ m/m3d/m3d.cpp:
 	.text       start:0x802E3E50 end:0x802E4714
 	.sbss       start:0x80575BD0 end:0x80575BE8
 
+m/m3d/m_proc.cpp:
+	.text       start:0x802E4720 end:0x802E48D4
+
 m/m3d/m_anmchr.cpp:
 	.text       start:0x802E48E0 end:0x802E4D98
 	.data       start:0x805424D0 end:0x805424E8
@@ -288,6 +291,11 @@ m/m3d/m_anmmatclr.cpp:
 	.text       start:0x802E5260 end:0x802E5D94
 	.data       start:0x80542500 end:0x80542530
 	.sdata2     start:0x8057CCD0 end:0x8057CCE0
+
+m/m3d/m_anmtexpat.cpp:
+	.text       start:0x802E63C0 end:0x802E6EB4
+	.data       start:0x80542568 end:0x80542598
+	.sdata2     start:0x8057CCF8 end:0x8057CD08
 
 m/m3d/m_anmtexsrt.cpp:
 	.text       start:0x802E6EC0 end:0x802E7A54

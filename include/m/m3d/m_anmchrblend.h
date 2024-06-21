@@ -12,7 +12,7 @@ class anmChrBlend_c : public banm_c {
 public:
     virtual ~anmChrBlend_c();
 
-    virtual int getType() override;
+    virtual int getType() const override;
 
     bool create(nw4r::g3d::ResMdl, int, mAllocator_c *, u32 *);
     bool attach(int, nw4r::g3d::AnmObjChrRes *, f32);

@@ -12,7 +12,7 @@ class anmChr_c : public fanm_c {
 public:
     virtual ~anmChr_c();
 
-    virtual int getType() override;
+    virtual int getType() const override;
 
     bool create(nw4r::g3d::ResMdl, nw4r::g3d::ResAnmChr, mAllocator_c*, u32*);
     void setAnm(bmdl_c &, nw4r::g3d::ResAnmChr, playMode_e);
