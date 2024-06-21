@@ -58,7 +58,6 @@ void *Heap::alloc(size_t size, int align, Heap *heap) {
             heap = currentHeap;
         }
         if (heap != sAllocatableHeap) {
-            // TODO small instshuffle here, related to regshuffle problems
             OSReport("cannot allocate from heap %x(%s) : allocatable heap is %x(%s)\n", heap, heap->getName(),
                     sAllocatableHeap, sAllocatableHeap->getName());
             OSReport("\tthread heap=%x(%s)\n", threadHeap, threadHeap != nullptr ? threadHeap->getName() : "none");
@@ -153,14 +152,13 @@ void Heap::dispose() {
 /* 804958a0 */
 void Heap::dump() {}
 
-// TODO: This debugging function with stripped out error reports doesn't match yet
 /* 804958b0 */
 void Heap::dumpAll() {
+    Heap *heap = nullptr;
     u32 mem[2] = {0, 0};
 
     OSLockMutex(&sRootMutex);
-    Heap *heap = nullptr;
-    while ((heap = (Heap *)nw4r::ut::List_GetNext(&sHeapList, &heap)) != nullptr) {
+    while ((heap = (Heap *)nw4r::ut::List_GetNext(&sHeapList, heap)) != nullptr) {
         Heap *childHeap = nullptr;
         Heap *parentHeap = heap->findParentHeap();
         if ((u32)heap < 0x90000000) {
@@ -195,13 +193,10 @@ Heap *Heap::_becomeCurrentHeapWithoutLock() {
     return h;
 }
 
-// TODO
-extern "C" void MEMInitAllocatorForHeap(Allocator *alloc, s32 align, Heap *heap);
-
 // TODO this could be an inline virtual function
 /* 80495a40 */
 void Heap::initAllocator(Allocator *alloc, s32 align) {
-    MEMInitAllocatorForHeap(alloc, align, this);
+    MEMInitAllocatorFor_Heap(alloc, align, this);
 }
 
 } // namespace EGG
