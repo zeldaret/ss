@@ -8,6 +8,11 @@ namespace g3d {
 struct ResAnmChrData {
     char UNK_0x0[0x8];
     u32 mRevision; // at 0x8
+    char UNK_0xC[0x4];
+    s32 mMatDictOffset; // at 0x10
+    char UNK_0x14[0x0C];
+    u16 mNumFrames; // at 0x20
+    AnmPolicy mAnmPolicy; // at 0x24
 };
 
 struct ResAnmChr {
@@ -19,6 +24,16 @@ struct ResAnmChr {
 
     inline bool CheckRevision() const {
         return mAnmChr.ref().mRevision == REVISION;
+    }
+
+    AnmPolicy GetAnmPolicy() const
+    {
+        return mAnmChr.ref().mAnmPolicy;
+    }
+
+    int GetNumFrame() const
+    {
+        return mAnmChr.ref().mNumFrames;
     }
 };
 } // namespace g3d

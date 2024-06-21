@@ -1,5 +1,5 @@
-#ifndef M_ANMVIS_H
-#define M_ANMVIS_H
+#ifndef M3D_M_ANMVIS_H
+#define M3D_M_ANMVIS_H
 
 #include <m/m3d/m_bmdl.h>
 #include <m/m3d/m_fanm.h>
@@ -8,6 +8,7 @@
 namespace m3d {
 
 class anmVis_c : public fanm_c {
+public:
     virtual ~anmVis_c();
 
     virtual int getType() override;
