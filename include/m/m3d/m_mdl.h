@@ -4,6 +4,7 @@
 #include <m/m3d/m_banm.h>
 #include <m/m3d/m_calc_ratio.h>
 #include <m/m3d/m_smdl.h>
+#include <nw4r/g3d/g3d_anmchr.h>
 #include <nw4r/g3d/g3d_calcworld.h>
 #include <nw4r/g3d/g3d_resmdl.h>
 
@@ -19,19 +20,11 @@ public:
     virtual void timingC(nw4r::math::MTX34 *, nw4r::g3d::ResMdl) {}
 };
 
-struct UnkNode {
-    UNKWORD field_0x00;
-    f32 field_0x04;
-    f32 field_0x08;
-    f32 field_0x0C;
-    UNKWORD field_0x10;
-    UNKWORD field_0x14;
-    UNKWORD field_0x18;
-    nw4r::math::MTX34 mtx;
-};
-
 class mdl_c : public smdl_c {
 public:
+    // TODO this is not the correct callback class, since NSMBW has
+    // the A, B, C names and also the _CALC_X from IScnObjCallback,
+    // so there must be a different callback interface
     class mdlCallback_c : public nw4r::g3d::IScnObjCallback {
     public:
         mdlCallback_c();
@@ -39,10 +32,9 @@ public:
 
         bool create(nw4r::g3d::ResMdl, mAllocator_c *, u32 *);
 
-        // TODO g3d headers
-        virtual void ExecCallbackA();
-        virtual void ExecCallbackB();
-        virtual void ExecCallbackC();
+        virtual void ExecCallbackA(nw4r::g3d::ChrAnmResult *, nw4r::g3d::ResMdl, nw4r::g3d::FuncObjCalcWorld *);
+        virtual void ExecCallbackB(nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl, nw4r::g3d::FuncObjCalcWorld *);
+        virtual void ExecCallbackC(nw4r::math::MTX34 *, nw4r::g3d::ResMdl, nw4r::g3d::FuncObjCalcWorld *);
 
         void remove();
         void setBlendFrame(f32);
@@ -57,11 +49,11 @@ public:
         }
 
     private:
-        calcRatio_c mCalcRatio;
-        int mNumNode;
-        UnkNode *mpNodes;
-        callback_c *mpBaseCallback;
-        mAllocator_c *mpAlloc;
+        /* 0x04 */ calcRatio_c mCalcRatio;
+        /* 0x20 */ int mNumNode;
+        /* 0x24 */ nw4r::g3d::ChrAnmResult *mpNodes;
+        /* 0x28 */ callback_c *mpBaseCallback;
+        /* 0x2C */ mAllocator_c *mpAlloc;
     };
 
     mdl_c();

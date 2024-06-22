@@ -18,14 +18,30 @@ public:
     void calc();
     bool isEnd() const;
 
+    f32 get0x10() const {
+        return mf4;
+    }
+
+    f32 get0x14() const {
+        return mf5;
+    }
+
+    bool is0x18() const {
+        return mb1;
+    }
+
+    bool is0x19() const {
+        return mb2;
+    }
+
 private:
-    f32 mf1;
-    f32 mf2;
-    f32 mf3;
-    f32 mf4;
-    f32 mf5;
-    u8 mb1;
-    u8 mb2;
+    /* 0x04 */ f32 mf1;
+    /* 0x08 */ f32 mf2;
+    /* 0x0C */ f32 mf3;
+    /* 0x10 */ f32 mf4;
+    /* 0x14 */ f32 mf5;
+    /* 0x18 */ bool mb1;
+    /* 0x19 */ bool mb2;
 };
 
 } // namespace m3d

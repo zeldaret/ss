@@ -22,6 +22,7 @@ public:
     virtual void play();
 
     void set(f32, playMode_e, f32, f32);
+    void set2(f32, playMode_e, f32, f32, f32);
     void setFrame(f32);
     void setFrameOnly(f32);
     bool isStop() const;

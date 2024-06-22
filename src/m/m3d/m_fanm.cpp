@@ -26,6 +26,7 @@ void fanm_c::play() {
             newFrame = frame - rate;
         } else if ((mPlayState & 1) == 0) {
             newFrame = frame + ((mEndFrame - rate) - mStartFrame);
+            // TODO there's a duplicate branch to the function end here
         }
     } else {
         newFrame = frame + rate;
@@ -45,9 +46,12 @@ void fanm_c::play() {
 
 void fanm_c::set(f32 startFrame, playMode_e mode, f32 updateRate, f32 currentFrame) {
     if (currentFrame < 0.0f) {
-        // TODO shuffle
-        f32 newFrame = mode == PLAY_MODE_1 ? 0.0f : startFrame - 1.0f;
-        currentFrame = newFrame;
+        currentFrame = startFrame;
+        if (mode == PLAY_MODE_1) {
+            currentFrame = 0.0f;
+        } else {
+            currentFrame -= 1.0f;
+        }
     }
 
     mEndFrame = startFrame;
@@ -58,8 +62,17 @@ void fanm_c::set(f32 startFrame, playMode_e mode, f32 updateRate, f32 currentFra
     mCurrentFrame = currentFrame;
 }
 
-void fanm_c::setFrame(f32) {
-    // TODO g3d headers
+void fanm_c::set2(f32 startFrame, playMode_e mode, f32 endFrame, f32 rate, f32 currentFrame) {
+    if (currentFrame < 0.0f) {
+        currentFrame = rate < 0.0f ? endFrame - 1.0f : startFrame;
+    }
+
+    mStartFrame = startFrame;
+    mEndFrame = endFrame;
+    mpAnmObj->SetFrame(currentFrame);
+    mpAnmObj->SetUpdateRate(rate);
+    mPlayState = (u8)mode;
+    mCurrentFrame = currentFrame;
 }
 
 // assumed name
@@ -69,15 +82,52 @@ void fanm_c::setFrameOnly(f32 frame) {
 }
 
 bool fanm_c::isStop() const {
-    // TODO g3d headers
+    f32 frame = mpAnmObj->GetFrame();
+    f32 rate = mpAnmObj->GetUpdateRate();
+    if (rate < 0.0f || mPlayState == PLAY_MODE_3) {
+        return frame <= mStartFrame;
+    } else if (mPlayState == PLAY_MODE_1) {
+        return frame >= mEndFrame - 1.0f;
+    }
+    return false;
 }
 
-bool fanm_c::checkFrame(f32) const {
-    // TODO g3d headers
+bool fanm_c::checkFrame(f32 frame) const {
+    f32 stored = mpAnmObj->GetFrame();
+    if (mCurrentFrame == stored) {
+        return stored == frame;
+    }
+
+    f32 rate = mpAnmObj->GetUpdateRate();
+    if (rate < 0.0f || (mPlayState & 2)) {
+        if (mCurrentFrame > stored) {
+            if (mCurrentFrame > frame && stored <= frame) {
+                return true;
+            }
+        } else if (frame < mCurrentFrame || frame >= stored) {
+            return true;
+        }
+    } else {
+        if (mCurrentFrame < stored) {
+            if (mCurrentFrame < frame && stored >= frame) {
+                return true;
+            }
+        } else if (frame > mCurrentFrame || frame <= stored) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool fanm_c::unk_802EAE70() const {
-    // TODO g3d headers
+    f32 frame = mpAnmObj->GetFrame();
+    f32 rate = mpAnmObj->GetUpdateRate();
+    if (rate < 0.0f || (mPlayState & 2)) {
+        return mCurrentFrame < frame;
+    } else {
+        return mCurrentFrame > frame;
+    }
 }
 
 } // namespace m3d

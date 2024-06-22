@@ -332,6 +332,8 @@ m/m3d/m_calc_ratio.cpp:
 
 m/m3d/m_fanm.cpp:
 	.text       start:0x802EA8A0 end:0x802EAF10
+	.data       start:0x805426A8 end:0x805426C0
+	.sdata2     start:0x8057CD50 end:0x8057CD60
 
 m/m3d/m_mdl.cpp:
 	.text       start:0x802EAF80 end:0x802EBB5C
