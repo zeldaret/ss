@@ -4,8 +4,8 @@
 #include <m/m3d/m_banm.h>
 #include <m/m3d/m_calc_ratio.h>
 #include <m/m3d/m_smdl.h>
-#include <nw4r/g3d/g3d_resmdl.h>
 #include <nw4r/g3d/g3d_calcworld.h>
+#include <nw4r/g3d/g3d_resmdl.h>
 
 class UnkClass3 {};
 
@@ -16,7 +16,7 @@ public:
     virtual ~callback_c() {}
     virtual void timingA(u32, nw4r::g3d::ChrAnmResult *, nw4r::g3d::ResMdl) {}
     virtual void timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl) {}
-    virtual void timingC(nw4r::math::MTX34*, nw4r::g3d::ResMdl) {}
+    virtual void timingC(nw4r::math::MTX34 *, nw4r::g3d::ResMdl) {}
 };
 
 struct UnkNode {
@@ -30,7 +30,8 @@ struct UnkNode {
     nw4r::math::MTX34 mtx;
 };
 
-class mdl_c : smdl_c {
+class mdl_c : public smdl_c {
+public:
     class mdlCallback_c : public nw4r::g3d::IScnObjCallback {
     public:
         mdlCallback_c();
@@ -63,7 +64,6 @@ class mdl_c : smdl_c {
         mAllocator_c *mpAlloc;
     };
 
-public:
     mdl_c();
     virtual ~mdl_c();
 

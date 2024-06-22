@@ -293,6 +293,16 @@ m/m3d/m_anmmatclr.cpp:
 	.data       start:0x80542500 end:0x80542530
 	.sdata2     start:0x8057CCD0 end:0x8057CCE0
 
+m/m3d/m_anmmdl.cpp:
+	.text       start:0x802E5DA0 end:0x802E60D0
+	.data       start:0x80542530 end:0x80542550
+	.sdata2     start:0x8057CCE0 end:0x8057CCE8
+
+m/m3d/m_anmshp.cpp:
+	.text       start:0x802E60D0 end:0x802E63B8
+	.data       start:0x80542550 end:0x80542568
+	.sdata2     start:0x8057CCE8 end:0x8057CCF8
+
 m/m3d/m_anmtexpat.cpp:
 	.text       start:0x802E63C0 end:0x802E6EB4
 	.data       start:0x80542568 end:0x80542598

@@ -339,6 +339,8 @@ config.libs = [
             Object(Matching, "m/m3d/m_proc.cpp"),
             Object(Matching, "m/m3d/m_anmchr.cpp"),
             Object(Matching, "m/m3d/m_anmchrblend.cpp"),
+            Object(Matching, "m/m3d/m_anmmdl.cpp"),
+            Object(Matching, "m/m3d/m_anmshp.cpp"),
             Object(Matching, "m/m3d/m_anmtexpat.cpp"),
             Object(Matching, "m/m3d/m_anmtexsrt.cpp"),
             Object(Matching, "m/m3d/m_anmmatclr.cpp"),
