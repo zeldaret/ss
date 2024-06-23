@@ -105,7 +105,6 @@ bool mdl_c::mdlCallback_c::create(nw4r::g3d::ResMdl mdl, mAllocator_c *alloc, u3
     if (alloc == nullptr) {
         alloc = internal::l_allocator_p;
     }
-    0.0f;
 
     u32 size = 0;
     if (pSize == nullptr) {
@@ -176,14 +175,11 @@ bool mdl_c::create(nw4r::g3d::ResMdl mdl, mdl_c::mdlCallback_c *cb, mAllocator_c
         pSize2 = &tmp2;
     }
 
-    bool success;
-
     if (!smdl_c::create(mdl, alloc, bufferOption, nView, pSize1)) {
         return false;
     }
 
     if (cb == nullptr) {
-        // TODO sizeof
         mpOwnedCallback = (mdlCallback_c *)alloc->alloc(sizeof(mdlCallback_c));
         if (mpOwnedCallback == nullptr) {
             remove();

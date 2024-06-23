@@ -10,7 +10,6 @@ extern "C" void fn_801B42D0(nw4r::g3d::ResFile *);
 extern "C" void fn_801B4320(nw4r::g3d::ResFile *);
 
 bool dAcOsunLight_c::createHeap() {
-    // TODO stack order shuffle
     mBrres = CurrentStageArcManager::sInstance->getData("g3d/stage.brres");
     fn_801B42D0(&mBrres);
     fn_801B4320(&mBrres);
