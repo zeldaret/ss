@@ -22,10 +22,7 @@ public:
 
 class mdl_c : public smdl_c {
 public:
-    // TODO this is not the correct callback class, since NSMBW has
-    // the A, B, C names and also the _CALC_X from IScnObjCallback,
-    // so there must be a different callback interface
-    class mdlCallback_c : public nw4r::g3d::IScnObjCallback {
+    class mdlCallback_c : public nw4r::g3d::ICalcWorldCallback {
     public:
         mdlCallback_c();
         virtual ~mdlCallback_c();

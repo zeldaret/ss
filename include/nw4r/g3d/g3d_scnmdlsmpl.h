@@ -4,6 +4,7 @@
 #include "nw4r/math/math_types.h"
 #include "nw4r/g3d/g3d_resmdl.h"
 #include "nw4r/g3d/g3d_scnobj.h"
+#include "nw4r/g3d/g3d_calcworld.h"
 
 namespace nw4r {
 namespace g3d {
@@ -75,6 +76,10 @@ public:
         return mNumViewMtx;
     }
 
+    void SetCalcWorldCallback(ICalcWorldCallback *cb) {
+        mpCalcWorldCallback = cb;
+    }
+
 private:
     ResMdl mResMdl;               // at 0xE8
     math::MTX34 *mWldMatrixArray; // at 0xEC
@@ -90,6 +95,8 @@ private:
     void *mByteCodeMix;     // at 0x10C
     void *mByteCodeDrawOpa; // at 0x110
     void *mByteCodeDrawXlu; // at 0x114
+    UNKWORD WORD_0x118;
+    ICalcWorldCallback *mpCalcWorldCallback; // at 0x11C
 
     NW4R_G3D_TYPE_OBJ_DECL(ScnMdlSimple);
 };

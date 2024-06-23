@@ -14,7 +14,8 @@ mdl_c::mdlCallback_c::~mdlCallback_c() {}
 
 void mdl_c::mdlCallback_c::ExecCallbackA(nw4r::g3d::ChrAnmResult *result, nw4r::g3d::ResMdl mdl,
         nw4r::g3d::FuncObjCalcWorld *o) {
-    nw4r::g3d::ChrAnmResult *resPtr = &mpNodes[o->GetNodeId()];
+    u16 nodeId = o->GetNodeId();
+    nw4r::g3d::ChrAnmResult *resPtr = &mpNodes[nodeId];
     if (mCalcRatio.is0x18() && !mCalcRatio.isEnd()) {
         if (!mCalcRatio.is0x19()) {
             *result = *resPtr;
@@ -23,7 +24,8 @@ void mdl_c::mdlCallback_c::ExecCallbackA(nw4r::g3d::ChrAnmResult *result, nw4r::
             f32 f2 = mCalcRatio.get0x10();
             f32 f1 = mCalcRatio.get0x14();
 
-            // TODO the math operators cause ps inline assembly
+            // TODO clean up this code, what does it even do, why do operators
+            // break
             if ((flags & 8) == 0) {
                 result->VEC3_0x4.x = (result->VEC3_0x4.x * f1 + resPtr->VEC3_0x4.x * f2);
                 result->VEC3_0x4.y = (result->VEC3_0x4.y * f1 + resPtr->VEC3_0x4.y * f2);
@@ -36,8 +38,8 @@ void mdl_c::mdlCallback_c::ExecCallbackA(nw4r::g3d::ChrAnmResult *result, nw4r::
 
             nw4r::math::QUAT q1;
             nw4r::math::QUAT q2;
+
             C_QUATMtx(q1, resPtr->mMtx);
-            // TODO ...
             if ((flags & 0x20) == 0) {
                 C_QUATMtx(q2, result->mMtx);
             } else {
@@ -46,12 +48,28 @@ void mdl_c::mdlCallback_c::ExecCallbackA(nw4r::g3d::ChrAnmResult *result, nw4r::
                 q2.z = 0.0f;
                 q2.w = 1.0f;
             }
-            nw4r::math::QUAT q3;
-            C_QUATSlerp(q1, q2, q3, f1);
-            PSMTXQuat(result->mMtx, q3);
-            result->VEC3_0x10 = (flags & 0x40) == 0 ?
-                    nw4r::math::VEC3(result->VEC3_0x10.x * f1, result->VEC3_0x10.y * f1, result->VEC3_0x10.z * f1) :
-                    result->VEC3_0x10;
+
+            C_QUATSlerp(q1, q2, q1, f1);
+            // TODO weird hacks to force register order, probably more inlines
+            f32 tmp3, tmp2, tmp1;
+            tmp1 = result->mMtx._03;
+            tmp2 = result->mMtx._13;
+            tmp3 = result->mMtx._23;
+            nw4r::math::VEC3 tmp(tmp1, tmp2, tmp3);
+            PSMTXQuat(result->mMtx, q1);
+            result->mMtx._03 = tmp.x;
+            result->mMtx._13 = tmp.y;
+            result->mMtx._23 = tmp.z;
+            if ((flags & 0x40) == 0) {
+                result->mMtx._03 = tmp.x * f1;
+                result->mMtx._13 = tmp.y * f1;
+                result->mMtx._23 = tmp.z * f1;
+            }
+            u32 flags2 = result->mFlags & ~(0x80000000 | 0x80000040 | 0x80000020 | 0x80000008);
+            result->mMtx._03 += resPtr->mMtx._03 * f2;
+            result->mMtx._13 += resPtr->mMtx._13 * f2;
+            result->mMtx._23 += resPtr->mMtx._23 * f2;
+            result->mFlags = flags2;
             *resPtr = *result;
         }
     } else {
@@ -59,7 +77,7 @@ void mdl_c::mdlCallback_c::ExecCallbackA(nw4r::g3d::ChrAnmResult *result, nw4r::
     }
 
     if (mpBaseCallback != nullptr) {
-        mpBaseCallback->timingA(mNumNode, result, mdl);
+        mpBaseCallback->timingA(nodeId, result, mdl);
     }
 }
 
@@ -69,9 +87,11 @@ void mdl_c::mdlCallback_c::ExecCallbackB(nw4r::g3d::WorldMtxManip *m, nw4r::g3d:
     if (mpBaseCallback != nullptr) {
         mpBaseCallback->timingB(nodeId, m, mdl);
     }
+    // Not sure what this does
     u32 num = mdl.GetResNodeNumEntries();
-    u32 numInc = num + 1;
-    o->SetNodeId(numInc - (numInc / num) * num);
+    u32 nodeInc = nodeId + 1;
+    u32 tmp = (nodeInc / num);
+    o->SetNodeId(nodeInc - tmp * num);
 }
 
 void mdl_c::mdlCallback_c::ExecCallbackC(nw4r::math::MTX34 *mat, nw4r::g3d::ResMdl mdl, nw4r::g3d::FuncObjCalcWorld *) {
@@ -185,7 +205,7 @@ bool mdl_c::create(nw4r::g3d::ResMdl mdl, mdl_c::mdlCallback_c *cb, mAllocator_c
     }
     nw4r::g3d::ScnMdlSimple *sMdl;
     sMdl = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdlSimple>(mpScnLeaf);
-    sMdl->SetCallback(mpCallback);
+    sMdl->SetCalcWorldCallback(mpCallback);
     sMdl->EnableScnObjCallbackTiming(nw4r::g3d::ScnObj::TIMING_ALL);
     setCallback(nullptr);
     return true;
