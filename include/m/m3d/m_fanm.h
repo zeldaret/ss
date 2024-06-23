@@ -48,8 +48,6 @@ public:
     }
 
 private:
-    f32 getNextFrame(f32 frame, f32 rate, bool rateWasNegative);
-
     f32 mEndFrame;
     f32 mStartFrame;
     f32 mCurrentFrame;
