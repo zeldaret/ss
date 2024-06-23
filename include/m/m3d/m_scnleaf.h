@@ -31,8 +31,15 @@ public:
     void getWorldMtx(nw4r::math::MTX34 *) const;
     void getViewMtx(nw4r::math::MTX34 *) const;
 
+    void setCallback(nw4r::g3d::IScnObjCallback *cb);
+    nw4r::g3d::IScnObjCallback *swapCallback(nw4r::g3d::IScnObjCallback *cb);
+
+    void enableCallbackTiming(nw4r::g3d::ScnObj::Timing);
+    void enableCallbackOp(nw4r::g3d::ScnObj::ExecOp);
+
     void calc(bool);
     void calcVtx(bool);
+    void calcView(void *, bool);
 
     void setPriorityDraw(int, int);
 

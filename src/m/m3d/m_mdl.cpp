@@ -202,7 +202,7 @@ bool mdl_c::create(nw4r::g3d::ResMdl mdl, mdl_c::mdlCallback_c *cb, mAllocator_c
     nw4r::g3d::ScnMdlSimple *sMdl;
     sMdl = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdlSimple>(mpScnLeaf);
     sMdl->SetCalcWorldCallback(mpCallback);
-    sMdl->EnableScnObjCallbackTiming(nw4r::g3d::ScnObj::TIMING_ALL);
+    sMdl->EnableScnMdlCallbackTiming(nw4r::g3d::ScnObj::TIMING_ALL);
     setCallback(nullptr);
     return true;
 }

@@ -92,6 +92,10 @@ public:
         mCallback = cb;
     }
 
+    IScnObjCallback* GetScnObjCallback() {
+        return mCallback;
+    }
+
     const math::MTX34 *GetMtxPtr(ScnObjMtxType type) const {
         return &mMatrices[type];
     }

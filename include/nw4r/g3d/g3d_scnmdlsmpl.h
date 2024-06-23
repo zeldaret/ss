@@ -57,6 +57,7 @@ public:
     virtual bool RemoveAnmObj(AnmObjType type);
 
     const u8 *GetByteCode(ByteCodeType) const;
+    void EnableScnMdlCallbackTiming(Timing);
 
     const ResMdl GetResMdl() const {
         return mResMdl;
