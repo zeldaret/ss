@@ -17,31 +17,33 @@ void fanm_c::play() {
         rate *= -1.0f;
     }
     mCurrentFrame = frame;
+    mpAnmObj->SetFrame(getNextFrame(frame, rate, rateWasNegative));
+}
 
-    f32 newFrame;
-
+inline f32 fanm_c::getNextFrame(f32 frame, f32 rate, bool rateWasNegative) {
+    // This inline is needed for the double branch
     if (rateWasNegative || (mPlayState & 2)) {
-        newFrame = mStartFrame;
         if (frame >= rate + mStartFrame) {
-            newFrame = frame - rate;
+            return frame - rate;
         } else if ((mPlayState & 1) == 0) {
-            newFrame = frame + ((mEndFrame - rate) - mStartFrame);
-            // TODO there's a duplicate branch to the function end here
+            return frame + ((mEndFrame - rate) - mStartFrame);
+        } else {
+            return mStartFrame;
         }
     } else {
-        newFrame = frame + rate;
+        frame += rate;
         if ((mPlayState & 1) == 0) {
-            if (newFrame >= mEndFrame) {
-                newFrame = newFrame - mEndFrame;
+            if (frame >= mEndFrame) {
+                frame = frame - mEndFrame;
             }
         } else {
             f32 t = mEndFrame - 1.0f;
-            if (newFrame >= t) {
-                newFrame = t;
+            if (frame >= t) {
+                frame = t;
             }
         }
+        return frame;
     }
-    mpAnmObj->SetFrame(newFrame);
 }
 
 void fanm_c::set(f32 startFrame, playMode_e mode, f32 updateRate, f32 currentFrame) {

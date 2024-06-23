@@ -1,3 +1,4 @@
+#include <m//m3d/m3d.h>
 #include <m/m3d/m_scnleaf.h>
 
 namespace m3d {
@@ -15,12 +16,20 @@ void scnLeaf_c::remove() {
     }
 }
 
-void scnLeaf_c::setOption(unsigned long flag, unsigned long set) {
+void scnLeaf_c::setOption(u32 flag, u32 set) {
     mpScnLeaf->SetScnObjOption(flag, set);
 }
 
 void scnLeaf_c::setScale(f32 x, f32 y, f32 z) {
     mpScnLeaf->SetScale(x, y, z);
+}
+
+void scnLeaf_c::getScale(nw4r::math::VEC3 *vec) const {
+    mpScnLeaf->GetScale(vec);
+}
+
+int scnLeaf_c::entry() {
+    return pushBack(mpScnLeaf);
 }
 
 void scnLeaf_c::setScale(const nw4r::math::VEC3 &scale) {
@@ -33,6 +42,14 @@ void scnLeaf_c::setLocalMtx(const nw4r::math::MTX34 *mtx) {
 
 void scnLeaf_c::getLocalMtx(nw4r::math::MTX34 *mtx) const {
     mpScnLeaf->GetMtx(nw4r::g3d::ScnObj::MTX_TYPE_LOCAL, mtx);
+}
+
+const nw4r::math::MTX34 *scnLeaf_c::getLocalMtx() const {
+    return mpScnLeaf->GetMtxPtr(nw4r::g3d::ScnObj::MTX_TYPE_LOCAL);
+}
+
+void scnLeaf_c::getWorldMtx(nw4r::math::MTX34 *mtx) const {
+    mpScnLeaf->GetMtx(nw4r::g3d::ScnObj::MTX_TYPE_WORLD, mtx);
 }
 
 void scnLeaf_c::getViewMtx(nw4r::math::MTX34 *mtx) const {

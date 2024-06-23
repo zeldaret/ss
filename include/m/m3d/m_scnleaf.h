@@ -23,10 +23,12 @@ public:
     void setOption(u32 flag, u32 set);
     void setScale(f32, f32, f32);
     void setScale(const nw4r::math::VEC3 &);
+    void getScale(nw4r::math::VEC3 *) const;
 
     void setLocalMtx(const nw4r::math::MTX34 *);
     void getLocalMtx(nw4r::math::MTX34 *) const;
-
+    const nw4r::math::MTX34 *getLocalMtx() const;
+    void getWorldMtx(nw4r::math::MTX34 *) const;
     void getViewMtx(nw4r::math::MTX34 *) const;
 
     void calc(bool);

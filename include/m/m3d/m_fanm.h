@@ -29,6 +29,7 @@ public:
     bool checkFrame(f32) const;
     bool unk_802EAE70() const;
 
+
     inline void setPlayState(playMode_e state) {
         mPlayState = state;
     }
@@ -47,6 +48,8 @@ public:
     }
 
 private:
+    f32 getNextFrame(f32 frame, f32 rate, bool rateWasNegative);
+
     f32 mEndFrame;
     f32 mStartFrame;
     f32 mCurrentFrame;

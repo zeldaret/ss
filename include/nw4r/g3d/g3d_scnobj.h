@@ -216,6 +216,12 @@ public:
         mScale = scale;
     }
 
+    inline void GetScale(math::VEC3* scale) const {
+        if (scale) {
+            *scale = mScale;
+        }
+    }
+
 private:
     math::VEC3 mScale;
 
