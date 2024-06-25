@@ -27,7 +27,7 @@ int dAcOring_c::create() {
     setBoundingBox(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
     updateMatrix();
     mModel.setScale(scale);
-    mModel.setLocalMtx(&worldMatrix.nw4rm);
+    mModel.setLocalMtx(worldMatrix);
     forwardAccel = -5.0f;
     forwardMaxSpeed = -40.0f;
     field_0x38C = dPlayer::LINK->position.y;
@@ -45,7 +45,7 @@ int dAcOring_c::actorExecute() {
     position += velocity;
     position += posIncrements;
     updateMatrix();
-    mModel.setLocalMtx(&worldMatrix.nw4rm);
+    mModel.setLocalMtx(worldMatrix);
     return 1;
 }
 

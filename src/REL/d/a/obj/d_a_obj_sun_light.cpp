@@ -15,7 +15,7 @@ bool dAcOsunLight_c::createHeap() {
     fn_801B4320(&mBrres);
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("StageF000Light");
     // This whole code is a bit weird again
-    bool success1 = createModel(mdl);
+    bool success1 = mModel.create(mdl, &heap_allocator, 0x120);
     if (!success1) {
         return success1;
     }
@@ -46,7 +46,7 @@ int dAcOsunLight_c::actorExecute() {
         mTexAnm.play();
     }
     updateMatrix();
-    mModel.setLocalMtx(&worldMatrix.nw4rm);
+    mModel.setLocalMtx(worldMatrix);
     return 1;
 }
 

@@ -15,6 +15,9 @@ public:
     virtual ~smdl_c();
 
     bool create(nw4r::g3d::ResMdl mdl, mAllocator_c *alloc, u32 bufferOption, int nView, u32 *pSize);
+    bool create(nw4r::g3d::ResMdl mdl, mAllocator_c *alloc, u32 bufferOption) {
+        return create(mdl, alloc, bufferOption, 1, nullptr);
+    }
 };
 
 } // namespace m3d

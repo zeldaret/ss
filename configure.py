@@ -888,7 +888,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_megami_island", "REL/d/a/obj/d_a_obj_megami_island.cpp"),
     Rel(NonMatching, "d_a_obj_mg_pumpkin", "REL/d/a/obj/d_a_obj_mg_pumpkin.cpp"),
     Rel(NonMatching, "d_a_obj_mole_cover", "REL/d/a/obj/d_a_obj_mole_cover.cpp"),
-    Rel(NonMatching, "d_a_obj_mole_soil", "REL/d/a/obj/d_a_obj_mole_soil.cpp"),
+    Rel(Matching, "d_a_obj_mole_soil", "REL/d/a/obj/d_a_obj_mole_soil.cpp"),
     Rel(NonMatching, "d_a_obj_move_elec", "REL/d/a/obj/d_a_obj_move_elec.cpp"),
     Rel(NonMatching, "d_a_obj_move_lift_vol", "REL/d/a/obj/d_a_obj_move_lift_vol.cpp"),
     Rel(NonMatching, "d_a_obj_musasabi", "REL/d/a/obj/d_a_obj_musasabi.cpp"),

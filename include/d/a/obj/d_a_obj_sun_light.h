@@ -17,11 +17,6 @@ public:
     virtual int draw() override;
     virtual int doDelete() override;
 
-    // This inline fixes stack alloc
-    inline bool createModel(nw4r::g3d::ResMdl mdl) {
-        return mModel.create(mdl, &heap_allocator, 0x120, 1, nullptr);
-    }
-
     bool isDay();
 
     STATE_FUNC_DECLARE(dAcOsunLight_c, Wait);

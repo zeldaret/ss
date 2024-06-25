@@ -173,7 +173,7 @@ void anmMatClr_c::setFrame(f32 f, s32 idx) {
 }
 
 f32 anmMatClr_c::getRate(s32 idx) const {
-    mpChildren[idx].getRate();
+    return mpChildren[idx].getRate();
 }
 
 void anmMatClr_c::setRate(f32 f, s32 idx) {
