@@ -952,7 +952,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_skull", "REL/d/a/obj/d_a_obj_skull.cpp"),
     Rel(NonMatching, "d_a_obj_slice_log", "REL/d/a/obj/d_a_obj_slice_log.cpp"),
     Rel(NonMatching, "d_a_obj_slice_log_parts", "REL/d/a/obj/d_a_obj_slice_log_parts.cpp"),
-    Rel(NonMatching, "d_a_obj_smoke", "REL/d/a/obj/d_a_obj_smoke.cpp"),
+    Rel(Matching, "d_a_obj_smoke", "REL/d/a/obj/d_a_obj_smoke.cpp"),
     Rel(NonMatching, "d_a_obj_soil", "REL/d/a/obj/d_a_obj_soil.cpp"),
     Rel(NonMatching, "d_a_obj_spider_line", "REL/d/a/obj/d_a_obj_spider_line.cpp"),
     Rel(NonMatching, "d_a_obj_spike", "REL/d/a/obj/d_a_obj_spike.cpp"),

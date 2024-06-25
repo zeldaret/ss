@@ -9,12 +9,8 @@ bool dAcOring_c::createHeap() {
     nw4r::g3d::ResFile f = getOarcResFile("PRing");
     nw4r::g3d::ResMdl mdl = f.GetResMdl("PeehatRing");
     // This matches but in a really weird way. Maybe an inline function?
-    bool success = mModel.create(mdl, &heap_allocator, 0x20, 1, nullptr);
-    bool rc = true;
-    if (success == false) {
-        rc = success;
-    }
-    return rc;
+    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x20, 1, nullptr));
+    return true;
 }
 
 int dAcOring_c::create() {

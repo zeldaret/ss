@@ -14,14 +14,10 @@ bool dAcOsunLight_c::createHeap() {
     fn_801B42D0(&mBrres);
     fn_801B4320(&mBrres);
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("StageF000Light");
-    // This whole code is a bit weird again
-    bool success1 = mModel.create(mdl, &heap_allocator, 0x120);
-    if (!success1) {
-        return success1;
-    }
+    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
     nw4r::g3d::ResAnmTexSrt srt = mBrres.GetResAnmTexSrt("StageF000Light");
-    bool success2 = mTexAnm.create(mdl, srt, &heap_allocator, nullptr, 1);
-    return success2 ? true : success2;
+    TRY_CREATE(mTexAnm.create(mdl, srt, &heap_allocator, nullptr, 1));
+    return true;
 }
 
 int dAcOsunLight_c::create() {

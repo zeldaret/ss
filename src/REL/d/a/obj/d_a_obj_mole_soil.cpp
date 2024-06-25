@@ -1,6 +1,4 @@
 #include <d/a/obj/d_a_obj_mole_soil.h>
-#include <toBeSorted/arc_managers/current_stage_arc_manager.h>
-#include <toBeSorted/spawn_struct.h>
 
 SPECIAL_ACTOR_PROFILE(OBJ_MOLE_SOIL, dAcOmoleSoil_c, fProfile::OBJ_MOLE_SOIL, 0x008B, 0, 6);
 
@@ -18,11 +16,7 @@ bool dAcOmoleSoil_c::createHeap() {
     }
     mBrres = file;
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("MogumaMud");
-    // This whole code is a bit weird again
-    bool success1 = mModel.create(mdl, &heap_allocator, 0x120, 1, nullptr);
-    if (!success1) {
-        return success1;
-    }
+    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120, 1, nullptr));
     mModel.setPriorityDraw(0x1c, 9);
     return true;
 }
