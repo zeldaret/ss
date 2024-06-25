@@ -1,18 +1,16 @@
 #include <d/a/obj/d_a_obj_sun_light.h>
 #include <toBeSorted/arc_managers/current_stage_arc_manager.h>
 #include <toBeSorted/spawn_struct.h>
+#include <toBeSorted/room_manager.h>
 
 SPECIAL_ACTOR_PROFILE(OBJ_SUN_LIGHT, dAcOsunLight_c, fProfile::OBJ_SUN_LIGHT, 0x0219, 0, 3);
 
 STATE_DEFINE(dAcOsunLight_c, Wait);
 
-extern "C" void fn_801B42D0(nw4r::g3d::ResFile *);
-extern "C" void fn_801B4320(nw4r::g3d::ResFile *);
-
 bool dAcOsunLight_c::createHeap() {
     mBrres = CurrentStageArcManager::sInstance->getData("g3d/stage.brres");
-    fn_801B42D0(&mBrres);
-    fn_801B4320(&mBrres);
+    RoomManager::bindStageResToFile(&mBrres);
+    RoomManager::bindSkyCmnToResFile(&mBrres);
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("StageF000Light");
     TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
     nw4r::g3d::ResAnmTexSrt srt = mBrres.GetResAnmTexSrt("StageF000Light");

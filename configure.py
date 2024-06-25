@@ -871,7 +871,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_kumite_wall", "REL/d/a/obj/d_a_obj_kumite_wall.cpp"),
     Rel(NonMatching, "d_a_obj_lamp", "REL/d/a/obj/d_a_obj_lamp.cpp"),
     Rel(NonMatching, "d_a_obj_lava_d201", "REL/d/a/obj/d_a_obj_lava_d201.cpp"),
-    Rel(NonMatching, "d_a_obj_lava_F200", "REL/d/a/obj/d_a_obj_lava_F200.cpp"),
+    Rel(Matching, "d_a_obj_lava_F200", "REL/d/a/obj/d_a_obj_lava_F200.cpp"),
     Rel(NonMatching, "d_a_obj_lava_plate", "REL/d/a/obj/d_a_obj_lava_plate.cpp"),
     Rel(NonMatching, "d_a_obj_leaf_swing", "REL/d/a/obj/d_a_obj_leaf_swing.cpp"),
     Rel(NonMatching, "d_a_obj_lighthouse_harp", "REL/d/a/obj/d_a_obj_lighthouse_harp.cpp"),
