@@ -25,6 +25,41 @@ struct SoundInfo {
     SoundInfo *prev;
 };
 
+/**
+ * A list node that will automatically unlink upon destruction.
+ */
+class dAcRefBase_c : public fLiNdBa_c {
+public:
+    dAcRefBase_c(fBase_c *owner) : fLiNdBa_c(owner) {}
+    ~dAcRefBase_c() {
+        unlink();
+    }
+};
+
+/**
+ * A type-safe list node that can hold a specific actor reference.
+ * Unlinks upon destruction. This setup is inferred from
+ * double null checks in inline dtors and instantiated ctors/dtors
+ * for arrays of these nodes in classes.
+ */
+template <typename T>
+class dAcRef_c : dAcRefBase_c {
+public:
+    dAcRef_c(T *owner) : dAcRefBase_c(owner) {}
+    dAcRef_c() : dAcRefBase_c(nullptr) {}
+    ~dAcRef_c() {}
+
+    void link(T *ref) {
+        fLiNdBa_c::link(ref);
+    }
+    void unlink() {
+        fLiNdBa_c::unlink();
+    }
+    T *get() {
+        return static_cast<T *>(p_owner);
+    }
+};
+
 template <typename T, int offset>
 struct TList {
     T *GetOffset() {
