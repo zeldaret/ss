@@ -15,7 +15,7 @@ bool dAcOring_c::createHeap() {
 
 int dAcOring_c::create() {
     if (!initAllocatorWork1Heap(-1, "dAcOring_c::m_allocator", 0x20)) {
-        return 2;
+        return FAILED;
     }
 
     field_0x388 = getArgFromParams();
@@ -28,7 +28,7 @@ int dAcOring_c::create() {
     forwardMaxSpeed = -40.0f;
     field_0x38C = dPlayer::LINK->position.y;
     mStateMgr.changeState(StateID_Move);
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOring_c::doDelete() {

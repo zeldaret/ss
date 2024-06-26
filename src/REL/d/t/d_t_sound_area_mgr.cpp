@@ -7,7 +7,7 @@ int dTgSndMg_c::create() {
     s8 tmpRoomId = roomid;
     addActorToRoom(-1);
     roomid = tmpRoomId;
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgSndMg_c::doDelete() {

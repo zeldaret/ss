@@ -26,7 +26,7 @@ bool dAcOsmoke_c::createHeap() {
 
 int dAcOsmoke_c::create() {
     if (!initAllocatorWork1Heap(-1, "dAcOsmoke_c::m_allocator", 0x20)) {
-        return 2;
+        return FAILED;
     }
 
     mModel.setAnm(mTexAnm);
@@ -35,7 +35,7 @@ int dAcOsmoke_c::create() {
     mStateMgr.changeState(StateID_Wait);
     mModel.setPriorityDraw(0x1C, 9);
     setBoundingBox(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOsmoke_c::doDelete() {

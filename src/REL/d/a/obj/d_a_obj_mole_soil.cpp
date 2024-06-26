@@ -27,7 +27,7 @@ bool intToBool(int a) {
 
 int dAcOmoleSoil_c::create() {
     if (!initAllocatorWork1Heap(-1, "dAcOmoleSoil_c::m_allocator", 0x20)) {
-        return 2;
+        return FAILED;
     }
 
     mScale = sHalfScale;
@@ -35,7 +35,7 @@ int dAcOmoleSoil_c::create() {
     mStateMgr.changeState(StateID_Wait);
 
     setBoundingBox(mVec3_c(-100.0f, -0.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOmoleSoil_c::doDelete() {

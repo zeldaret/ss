@@ -20,14 +20,14 @@ bool dAcOsunLight_c::createHeap() {
 
 int dAcOsunLight_c::create() {
     if (!initAllocatorWork1Heap(-1, "dAcOsunLight_c::m_allocator", 0x20)) {
-        return 2;
+        return FAILED;
     }
 
     mModel.setAnm(mTexAnm);
     mStateMgr.changeState(StateID_Wait);
     mModel.setPriorityDraw(0x1C, 9);
     setBoundingBox(mVec3_c(-200.0f, -100.0f, -200.0f), mVec3_c(200.0f, 600.0f, 500.0f));
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOsunLight_c::doDelete() {

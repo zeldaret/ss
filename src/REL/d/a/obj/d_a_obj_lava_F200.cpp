@@ -26,7 +26,7 @@ bool dAcOlavaF200_c::createHeap() {
 
 int dAcOlavaF200_c::create() {
     if (!initAllocatorWork1Heap(-1, "dAcOlavaF200_c::m_allocator", 0x20)) {
-        return 2;
+        return FAILED;
     }
 
     mModels[0].setAnm(mTexAnms[0]);
@@ -43,7 +43,7 @@ int dAcOlavaF200_c::create() {
     mModels[1].setPriorityDraw(0x22, 9);
     setBoundingBox(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
 
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOlavaF200_c::doDelete() {
