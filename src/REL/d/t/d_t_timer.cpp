@@ -14,17 +14,17 @@ bool increment(u16 *t) {
 
 int dTgTimer_c::create() {
     switch (getSubtypeFromParams()) {
-        case 0:
-            mGetTargetTimeFunc = dTgTimer_c::getConstant0x50_Thunk;
-            break;
-        case 1:
-            mTargetTime = getTimerFromParams() * 0x1e;
-            mGetTargetTimeFunc = getStoredTargetTime;
-            break;
-        default:
-            mTargetTime = getTimerFromParams();
-            mGetTargetTimeFunc = getStoredTargetTime;
-            break;
+    case 0:
+        mGetTargetTimeFunc = &dTgTimer_c::getConstant0x50_Thunk;
+        break;
+    case 1:
+        mTargetTime = getTimerFromParams() * 0x1e;
+        mGetTargetTimeFunc = &dTgTimer_c::getStoredTargetTime;
+        break;
+    default:
+        mTargetTime = getTimerFromParams();
+        mGetTargetTimeFunc = &dTgTimer_c::getStoredTargetTime;
+        break;
     }
     resetTimer();
     return 1;
@@ -68,7 +68,7 @@ u16 dTgTimer_c::getConstant0x50() {
     return 0x50;
 }
 
-u16 dTgTimer_c::setTimer(u16 val) {
+void dTgTimer_c::setTimer(u16 val) {
     mTimer = val;
 }
 

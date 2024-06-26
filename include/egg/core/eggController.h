@@ -19,7 +19,7 @@ class CoreController;
 enum eCoreDevType {};
 
 typedef void (*ConnectCallback)(int args[]);
-typedef class CoreController* (*ControllerFactory)();
+typedef class CoreController *(*ControllerFactory)();
 
 class CoreStatus {
 public:
@@ -52,16 +52,42 @@ public:
     // vtable 0x000 | 8056ec50
     // TODO all of these have inline implementations and are scattered
     // across the binary
-    /* vt 0x08 | 80064920 */ virtual void setPosParam(f32, f32) {}
-    /* vt 0x0C | 8049a940 */ virtual void setHoriParam(f32, f32) {}
-    /* vt 0x10 | 8049a930 */ virtual void setDistParam(f32, f32) {}
-    /* vt 0x14 | 8049a920 */ virtual void setAccParam(f32, f32) {}
-    /* vt 0x18 | 80059820 */ virtual bool isPressed(u32 mask) {}
-    /* vt 0x1C | 80059a60 */ virtual bool isAnyPressed(u32 mask) {}
-    /* vt 0x20 | 80014e30 */ virtual bool isTriggered(u32 mask) {}
-    /* vt 0x24 | 800599e0 */ virtual bool isReleased() {}
-    /* vt 0x28 | 80059840 */ virtual bool isAllPressed() {}
-    /* vt 0x2C | 80059a80 */ virtual bool isNotPressed() {}
+    /* vt 0x08 | 80064920 */ virtual void setPosParam(f32, f32) {
+        // TODO
+    }
+    /* vt 0x0C | 8049a940 */ virtual void setHoriParam(f32, f32) {
+        // TODO
+    }
+    /* vt 0x10 | 8049a930 */ virtual void setDistParam(f32, f32) {
+        // TODO
+    }
+    /* vt 0x14 | 8049a920 */ virtual void setAccParam(f32, f32) {
+        // TODO
+    }
+    /* vt 0x18 | 80059820 */ virtual bool isPressed(u32 mask) {
+        // TODO
+        return false;
+    }
+    /* vt 0x1C | 80059a60 */ virtual bool isAnyPressed(u32 mask) {
+        // TODO
+        return false;
+    }
+    /* vt 0x20 | 80014e30 */ virtual bool isTriggered(u32 mask) {
+        // TODO
+        return false;
+    }
+    /* vt 0x24 | 800599e0 */ virtual bool isReleased() {
+        // TODO
+        return false;
+    }
+    /* vt 0x28 | 80059840 */ virtual bool isAllPressed() {
+        // TODO
+        return false;
+    }
+    /* vt 0x2C | 80059a80 */ virtual bool isNotPressed() {
+        // TODO
+        return false;
+    }
     // We know the above are inline because if a class has any non-inline virtual functions,
     // then the TU that contains an implementation of said function gets the vtable,
     // and we know that eggController.cpp contains the vtable and the functions below
@@ -163,14 +189,16 @@ public:
 class ControllerRumbleUnit {
 public:
     // 0x00 vtable | 8056ebb4
-    inline ControllerRumbleUnit(): mFlag(0) { init(); }
+    inline ControllerRumbleUnit() : mFlag(0) {
+        init();
+    }
     /* vt 0x08 | 8049a8e0 */ virtual ~ControllerRumbleUnit() {}
 
 public:
     /* 0x04 */ const char *mPattern;
     /* 0x08 */ const char *mPatternPos;
-    /* 0x0C */ s32 mTimer;    // guess
-    /* 0x10 */ f32 mRampUp;   // guess
+    /* 0x0C */ s32 mTimer;     // guess
+    /* 0x10 */ f32 mRampUp;    // guess
     /* 0x14 */ f32 mIntensity; // guess
     /* 0x18 */ TBitFlag<u8> mFlag;
     /* 0x1C */ nw4r::ut::Node mNode;
@@ -199,7 +227,6 @@ public:
     /* 8049a7a0 */ void startPattern(const char *pattern, int, bool);
     /* 8049a7f0 */ ControllerRumbleUnit *getUnitFromList(bool bGrabActive);
 };
-
 
 } // namespace EGG
 

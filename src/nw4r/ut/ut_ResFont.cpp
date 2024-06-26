@@ -94,18 +94,20 @@ FontInformation *ResFont::Rebuild(BinaryFileHeader *header) {
         case MAGIC_TEXGLYPH:
             ResolveOffset<u8>(reinterpret_cast<FontTextureGlyph *>(block + 1)->sheetImage, header);
             break;
-        case MAGIC_CHARWIDTH:
+        case MAGIC_CHARWIDTH: {
             FontWidth *width = reinterpret_cast<FontWidth *>(block + 1);
             if (width->next != 0) {
                 ResolveOffset<FontWidth>(width->next, header);
             }
             break;
-        case MAGIC_CHARMAP:
+        }
+        case MAGIC_CHARMAP: {
             FontCodeMap *map = reinterpret_cast<FontCodeMap *>(block + 1);
             if (map->next != 0) {
                 ResolveOffset<FontCodeMap>(map->next, header);
             }
             break;
+        }
         case MAGIC_GLGR:
             break;
         default:

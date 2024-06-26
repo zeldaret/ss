@@ -127,8 +127,8 @@ void create(int priority, EGG::Heap *commandHeap, EGG::Heap *archiveHeap, EGG::H
 }
 
 /** 802eef30 */
-static void *loadToMainRAM(int entryNum, char *dst, EGG::Heap *heap, EGG::DvdRipper::EAllocDirection allocDir, s32 offset,
-        u32 *outAmountRead, u32 *outFileSize, u32 decompressorType) {
+static void *loadToMainRAM(int entryNum, char *dst, EGG::Heap *heap, EGG::DvdRipper::EAllocDirection allocDir,
+        s32 offset, u32 *outAmountRead, u32 *outFileSize, u32 decompressorType) {
     void *result;
     u32 amountRead = 0;
     u32 fileSize = 0;
@@ -492,7 +492,9 @@ u32 mDvd_mountMemArchive_c::execute() {
         mDataPtr = archive;
     } else {
         if (data != nullptr) {
-            delete data;
+            // TODO so far data seems to have been passed around as void *
+            // but this silences a compiler warning. Unsure about the actual type.
+            delete (char *)data;
         }
         mAmountRead = 0;
     }
@@ -568,7 +570,8 @@ mDvd_toMainRam_arc_c *mDvd_toMainRam_arc_c::create(EGG::Archive *arc, const char
 }
 
 /** 802efe90 */
-mDvd_toMainRam_arc_c *mDvd_toMainRam_arc_c::createOrFail(EGG::Archive *arc, const char *path, int mountDirection, EGG::Heap *heap) {
+mDvd_toMainRam_arc_c *mDvd_toMainRam_arc_c::createOrFail(EGG::Archive *arc, const char *path, int mountDirection,
+        EGG::Heap *heap) {
     mDvd_toMainRam_arc_c *cmd = mDvd_toMainRam_arc_c::create(arc, path, mountDirection, heap);
     while (!cmd) {}
     return cmd;
