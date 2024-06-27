@@ -60,7 +60,7 @@ public:
     operator u32() const {
         return ToU32ref();
     }
-};
+} ALIGN(4);
 
 } // namespace ut
 } // namespace nw4r
