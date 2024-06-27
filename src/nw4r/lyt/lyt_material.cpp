@@ -591,13 +591,14 @@ void Material::SetColorElement(u32 colorType, s16 value) {
     // 28:[TevKCol->r] 29:[TevKCol->g] 30:[TevKCol->b] 31:[TevKCol->a]
     // clang-format off
     switch (colorType) {
-    case 0: case 1: case 2: case 3:
+    case 0: case 1: case 2: case 3: {
         if (mGXMemNum.matCol < 1 ) {
             break;
         }
         ut::Color *matCols = GetMatColAry();
         SetColorComponentValue(matCols, colorType , value);
         break;
+    }
     case  4: case  5: case  6: case  7: case  8: case  9:
     case 10: case 11: case 12: case 13: case 14: case 15: {
         u32 regIdx = (colorType - 4) / 4;

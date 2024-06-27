@@ -23,7 +23,7 @@ public:
     u16 getCheckSceneflag();
     u16 getSetSceneflag();
     u16 getTimer();
-    u16 setTimer(u16 val);
+    void setTimer(u16 val);
     u16 getTargetTime();
     bool checkShouldTrigger();
     u16 getStoredTargetTime();
