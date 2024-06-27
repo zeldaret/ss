@@ -28,10 +28,4 @@ public:
     fBase_c *p_owner;
 };
 
-class fLiNdBaAutoUnlink_c  : public fLiNdBa_c {
-public:
-    fLiNdBaAutoUnlink_c(fBase_c *owner) : fLiNdBa_c(owner) {}
-    ~fLiNdBaAutoUnlink_c() { unlink(); }
-};
-
 #endif

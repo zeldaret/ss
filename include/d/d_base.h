@@ -16,7 +16,7 @@ public:
     /* 800508f0 */ virtual void postExecute(MAIN_STATE_e state);
     /* 80050920 */ virtual int preDraw();
     /* 80050860 */ virtual void postDraw(MAIN_STATE_e state);
-    /* 8002c530 */ virtual ~dBase_c();
+    /* 8002c530 */ virtual ~dBase_c() {}
 
 public:
     /* 80050980 */ static void resetFlags();
