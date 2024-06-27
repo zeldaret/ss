@@ -77,8 +77,12 @@ d/d_fader.cpp:
 	.ctors      start:0x804DB678 end:0x804DB67C
 
 d/d_font_manager.cpp:
-	.text       start:0x80053E70 end:0x800541D0
+	.text       start:0x80053E70 end:0x800541EC
 	.ctors      start:0x804DB67C end:0x804DB680
+	.rodata     start:0x804DDFF0 end:0x804DE008
+	.data       start:0x8050D358 end:0x8050D440
+	.sbss       start:0x80575108 end:0x80575110
+	.bss        start:0x80597608 end:0x80597740
 
 d/d_gfx.cpp:
 	.text       start:0x800541F0 end:0x80054B00
