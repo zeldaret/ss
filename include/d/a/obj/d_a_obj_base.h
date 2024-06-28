@@ -62,7 +62,7 @@ public:
     // could be their own thing?
     /* 8002de40 */ static void *getOarcFile(const char *oarcName, const char *fileName);
     /* 8002de60 */ static void *getOarcSubEntry(const char *oarcName, const char *fileName);
-    /* 8002de80 */ static nw4r::g3d::ResFile getOarcResFile(const char *oarcName);
+    /* 8002de80 */ static void *getOarcResFile(const char *oarcName);
     /* 8002de90 */ static void *getOarcModelFile(const char *oarcName);
     /* 8002dea0 */ static void *getOarcZev(const char *oarcName);
     /* 8002deb0 */ static void *getOarcDZB(const char *dzbName);

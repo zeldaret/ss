@@ -31,7 +31,6 @@ BLOCKING_SYMBOLS = [
     ['fn_80353F30', 'UnkCollider::ctor2'],
     ['fn_80353FF0', 'UnkCollider::init'],
     ['fn_800C3EC0', 'ActorEventFlowManagerRelated::checkEventFinished'],
-    ['fn_802E6000', 'mdlAnmChr_c::create'],
     ['fn_800275C0', 'EffectsStruct::ctor'],
     ['fn_80027610', 'EffectsStruct::ctor'],
     ['fn_803465D0', 'ActorCollision::ctor'],

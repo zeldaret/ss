@@ -582,7 +582,7 @@ config.libs = [
     Rel(NonMatching, "d_a_e_gunhob", "REL/d/a/e/d_a_e_gunhob.cpp"),
     Rel(NonMatching, "d_a_e_gunho", "REL/d/a/e/d_a_e_gunho.cpp"),
     Rel(NonMatching, "d_a_e_hb", "REL/d/a/e/d_a_e_hb.cpp"),
-    Rel(NonMatching, "d_a_e_hb_leaf", "REL/d/a/e/d_a_e_hb_leaf.cpp"),
+    Rel(Matching, "d_a_e_hb_leaf", "REL/d/a/e/d_a_e_hb_leaf.cpp"),
     Rel(NonMatching, "d_a_e_hidokari", "REL/d/a/e/d_a_e_hidokari.cpp"),
     Rel(NonMatching, "d_a_e_hidokaris", "REL/d/a/e/d_a_e_hidokaris.cpp"),
     Rel(NonMatching, "d_a_e_hidory", "REL/d/a/e/d_a_e_hidory.cpp"),
