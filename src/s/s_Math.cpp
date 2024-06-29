@@ -1,14 +1,14 @@
-#include <s/s_Math.h>
 #include <math.h>
+#include <s/s_Math.h>
 
 namespace sLib {
 
-extern "C" float fn_802DE740(float f1, float f2, float f3) {
-    float diff = f2 - f1;
-    if (f3 < 1.0f) {
-        return f2;
+float extrapolate(float start, float end, float scale) {
+    float diff = end - start;
+    if (scale < 1.0f) {
+        return end;
     }
-    return f1 + diff / f3;
+    return start + diff / scale;
 }
 
 float addCalc(float *value, float target, float ratio, float maxStepSize, float minStepSize) {
@@ -21,7 +21,7 @@ float addCalc(float *value, float target, float ratio, float maxStepSize, float 
             if (step < -maxStepSize) {
                 step = -maxStepSize;
             }
-            *value = *value + step;
+            *value += step;
         } else if (step > 0.0f) {
             if (step < minStepSize) {
                 *value = *value + minStepSize;
@@ -30,7 +30,7 @@ float addCalc(float *value, float target, float ratio, float maxStepSize, float 
                 }
             }
         } else if (step > -minStepSize) {
-            *value = *value + (-minStepSize);
+            *value += -minStepSize;
             if (*value < target) {
                 *value = target;
             }
@@ -45,7 +45,7 @@ float addCalc(float *value, float target, float ratio, float maxStepSize, float 
     }
 }
 
-extern "C" void fn_802DE830(float *value, float target, float ratio, float maxStepSize) {
+void addCalcScaledDiff(float *value, float target, float ratio, float maxStepSize) {
     if (*value == target) {
         return;
     }
@@ -59,44 +59,52 @@ extern "C" void fn_802DE830(float *value, float target, float ratio, float maxSt
     *value += step;
 }
 
-extern "C" void fn_802DE880(float *value, float p2, float p3) {
-    float step = *value * p2;
-    if (step > p3) {
-        step = p3;
-    } else if (step < -p3) {
-        step = -p3;
+void addCalcScaled(float *value, float stepSize, float maxStep) {
+    float step = *value * stepSize;
+    if (step > maxStep) {
+        step = maxStep;
+    } else if (step < -maxStep) {
+        step = -maxStep;
     }
     *value -= step;
 }
 
-extern "C" int fn_802DE8C0(short a1, short a2) {
+int absDiff(short a1, short a2) {
     return abs((short)(a1 - a2));
 }
 
 template <typename T>
-BOOL chaseT(T *value, T target, T stepSize) {
-    if (*value == target) {
-        return 1;
+T addCalcAngleT(T *value, T target, T ratio, T maxStepSize, T minStepSize) {
+    T diff = target - *value;
+    if (*value != target) {
+        T step = diff / ratio;
+        // TODO this is simpler in the original assembly
+        if (step > minStepSize || step < -minStepSize) {
+            T actualStep = maxStepSize;
+            if (maxStepSize > step) {
+                actualStep = step;
+                if (step < -maxStepSize) {
+                    actualStep = -maxStepSize;
+                }
+            }
+            *value += actualStep;
+        } else if (target - *value >= 0) {
+            T newVal = *value + minStepSize;
+            *value = newVal;
+            if ((T)(target - newVal) <= 0) {
+                *value = target;
+            }
+        } else {
+            T newVal = *value - minStepSize;
+            *value = newVal;
+            if ((T)(target - newVal) >= 0) {
+                *value = target;
+            }
+        }
     }
 
-    if (stepSize != 0) {
-        if (*value > target) {
-            stepSize = -stepSize;
-        }
-
-        T step = *value + stepSize;
-        *value = step;
-        if (stepSize * (step - target) >= 0) {
-            *value = target;
-            return 1;
-        }
-    }
-
-    return 0;
+    return target - *value;
 }
-
-template <typename T>
-T addCalcAngleT(T *p1, T p2, T p3, T p4, T p5) {}
 
 template <typename T>
 void addCalcAngleT(T *value, T target, T ratio, T maxStepSize) {
@@ -111,15 +119,55 @@ void addCalcAngleT(T *value, T target, T ratio, T maxStepSize) {
     }
 }
 
-short addCalcAngle(short *a, short b, short c, short d, short e) {
-    return addCalcAngleT(a, b, c, d, e);
+short addCalcAngle(short *value, short target, short ratio, short maxStepSize, short minStepSize) {
+    return addCalcAngleT(value, target, ratio, maxStepSize, minStepSize);
 }
 
 void addCalcAngle(short *value, short target, short ratio, short maxStepSize) {
     return addCalcAngleT(value, target, ratio, maxStepSize);
 }
 
-// template BOOL chaseT<char>(char*, char, char);
+extern "C" BOOL fn_802DEB80(u8 *value, u8 target, u8 stepSize) {
+    if (stepSize != 0) {
+        s16 val = *value;
+        s16 tgt = target;
+        s16 szs = stepSize;
+        if (val > tgt) {
+            szs = -stepSize;
+        }
+        s16 step = val + szs;
+        if (szs * (step - tgt) >= 0) {
+            *value = tgt;
+            return 1;
+        }
+        *value = step;
+    } else if (*value == target) {
+        return 1;
+    }
+
+    return 0;
+}
+
+template <typename T>
+BOOL chaseT(T *value, T target, T stepSize) {
+    if (*value == target) {
+        return 1;
+    }
+
+    if (stepSize != 0) {
+        if (*value > target) {
+            stepSize = -stepSize;
+        }
+
+        *value += stepSize;
+        if (stepSize * (*value - target) >= 0) {
+            *value = target;
+            return 1;
+        }
+    }
+
+    return 0;
+}
 
 BOOL chase(short *value, short target, short stepSize) {
     return chaseT(value, target, stepSize);
@@ -130,7 +178,23 @@ BOOL chase(int *value, int target, int stepSize) {
 }
 
 BOOL chase(float *value, float target, float stepSize) {
+    // TODO the != 0 comparison in the instantiated function has swapped regs for some reason
     return chaseT(value, target, stepSize);
+}
+
+template <typename T>
+BOOL isInRangeT(T val, T min, T max) {
+    BOOL ret;
+    if (min < max) {
+        return val >= min && val <= max ? 1 : 0;
+    } else {
+        return val >= max && val <= min ? 1 : 0;
+    }
+    return ret;
+}
+
+BOOL isInRange(float val, float min, float max) {
+    return isInRangeT(val, min, max);
 }
 
 BOOL chaseAngle(short *value, short target, short stepSize) {
@@ -143,9 +207,37 @@ BOOL chaseAngle(short *value, short target, short stepSize) {
             stepSize = -stepSize;
         }
 
-        short step = *value + stepSize;
-        *value = step;
-        if (stepSize * (short)(step - target) >= 0) {
+        *value += stepSize;
+        if (stepSize * (short)(*value - target) >= 0) {
+            *value = target;
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+// Found in NSMBW (0x801618c0), but no symbol name found yet
+extern "C" BOOL fn_802DEE10(short *value, short target, short stepSize) {
+    if (*value == target) {
+        return 1;
+    }
+
+    if (stepSize != 0) {
+        short szs = stepSize;
+        if (stepSize < 0) {
+            szs = 0x7fff;
+            if (stepSize != 0x8000) {
+                szs = -stepSize;
+            }
+        }
+        if ((short)(*value - target) > 0) {
+            szs = -szs;
+        }
+
+        *value += stepSize;
+        int b = stepSize * szs;
+        if (b > 0 && stepSize * (short)(*value - target) >= 0) {
             *value = target;
             return 1;
         }
