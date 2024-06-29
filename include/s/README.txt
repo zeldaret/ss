@@ -1,4 +1,4 @@
-This library was ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
+The state system in this library was ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
 with differences/modifications outlined below:
 
 ## No inline destructors

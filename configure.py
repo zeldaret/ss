@@ -344,6 +344,8 @@ config.libs = [
             Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
             Object(Matching, "m/m_pad.cpp"),
+            Object(Matching, "s/s_Crc.cpp"),
+            Object(NonMatching, "s/s_Math.cpp"),
             Object(Matching, "s/s_StateId.cpp"),
             Object(Matching, "s/s_StateMethod.cpp"),
             Object(Matching, "s/s_StateMethodUsr_FI.cpp"),
