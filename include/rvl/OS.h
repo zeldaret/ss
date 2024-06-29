@@ -12,6 +12,7 @@ extern "C" {
 #include "rvl/OS/OSAudioSystem.h"
 #include "rvl/OS/OSCache.h"
 #include "rvl/OS/OSContext.h"
+#include "rvl/OS/OSCrc.h"
 #include "rvl/OS/OSError.h"
 #include "rvl/OS/OSExec.h"
 #include "rvl/OS/OSFastCast.h"

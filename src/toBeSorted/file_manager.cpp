@@ -1,6 +1,7 @@
 #include "toBeSorted/file_manager.h"
 #include "f/f_base.h"
 #include <m/m_heap.h>
+#include <s/s_Crc.h>
 // clang-format off
 #include <sized_string.h>
 // clang-format on
@@ -426,7 +427,9 @@ extern "C" void fn_800C01F0(); // todo flag managers
 /* 80011270 */ SaveFile *FileManager::getFileB() {
     return &mFileB;
 }
-/* 80011280 */ u32 FileManager::calcFileCRC(const void *data, u32 length) {}
+/* 80011280 */ u32 FileManager::calcFileCRC(const void *data, u32 length) {
+    return sCrc::calcCRC(data, length);
+}
 /* 80011290 */ void FileManager::updateEmptyFiles() {
     updateEmptyFileFlags();
     refreshSaveFileData();
