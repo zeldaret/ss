@@ -140,6 +140,17 @@ public:
     bool operator!=(const mVec3_c &v) const {
         return x != v.x || y != v.y || z != v.z;
     }
+
+    void normalize();
+    bool normalizeRS();
+
+    inline f32 mag() const {
+        return PSVECMag(*this);
+    }
+
+    inline f32 dot(const mVec3_c &other) const {
+        return x * other.x + y * other.y + z * other.z;
+    }
 };
 
 #endif

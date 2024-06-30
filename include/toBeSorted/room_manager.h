@@ -21,7 +21,7 @@ class dRoomCollision {
     char todo[352];
 };
 
-class dRoom : dBase_c {
+class dRoom : public dBase_c {
 public:
     mAllocator_c allocator;
     nw4r::g3d::ResFile *roomRes;
@@ -94,8 +94,8 @@ public:
     /* 80575760 */ static RoomManager *m_Instance;
 
 public:
-    dRoom *GetRoomByIndex(int roomid);
-    /* 801b42b0 */ static dBase_c *getRoom(int roomid);
+    /* 801b3970 */ dRoom *GetRoomByIndex(int roomid);
+    /* 801b42b0 */ static dRoom *getRoom(int roomid);
     /* 801b42d0 */ static void bindStageResToFile(nw4r::g3d::ResFile *);
     /* 801b4320 */ static void bindSkyCmnToResFile(nw4r::g3d::ResFile *);
     /* 801b4380 */ static bool getMA0AnmTexSrt(nw4r::g3d::ResAnmTexSrt *, char *);
