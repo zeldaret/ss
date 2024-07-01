@@ -146,7 +146,7 @@ bool DowsingTarget::hasDowsingInSlot(int slot) {
 
 #define MYCLAMP(low, high, x) ((x) < (low) ? (low) : ((x) > (high) ? (high) : (x)))
 
-DowsingTarget *DowsingTarget::getDowsingInfo(mVec3_c &playerPosition, mVec3_c &dowsingDirection, f32 *p3, f32 *p4,
+DowsingTarget *DowsingTarget::getDowsingInfo(const mVec3_c &playerPosition, const mVec3_c &dowsingDirection, f32 *p3, f32 *p4,
         f32 *intensity, int slot) {
     if (slot >= 8) {
         return nullptr;
@@ -159,12 +159,8 @@ DowsingTarget *DowsingTarget::getDowsingInfo(mVec3_c &playerPosition, mVec3_c &d
     for (TList<DowsingTarget, 0>::Iterator node = list->GetBeginIter(); node != list->GetEndIter(); ++node) {
         mVec3_c targetPos;
         node->getPosition(targetPos);
-        // TODO Small instruction order problem
         mVec3_c targetDir = mVec3_c(targetPos - playerPosition);
-        f32 proximity = 10000.0f - targetDir.mag();
-        if (proximity < 0.0f) {
-            proximity = 0.0f;
-        }
+        f32 proximity = nw4r::ut::Max(10000.0f - targetDir.mag(), 0.0f);
 
         targetDir.normalize();
 

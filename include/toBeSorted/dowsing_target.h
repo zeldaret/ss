@@ -59,7 +59,7 @@ public:
 
     static bool hasDowsingInSlot(int slot);
 
-    static DowsingTarget *getDowsingInfo(mVec3_c &playerPosition, mVec3_c &dowsingDirection, f32 *, f32 *,
+    static DowsingTarget *getDowsingInfo(const mVec3_c &playerPosition, const mVec3_c &dowsingDirection, f32 *, f32 *,
             f32 *intensity, int slot);
 
     static void init();
