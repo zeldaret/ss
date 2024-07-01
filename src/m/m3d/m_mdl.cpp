@@ -50,12 +50,10 @@ void mdl_c::mdlCallback_c::ExecCallbackA(nw4r::g3d::ChrAnmResult *result, nw4r::
             }
 
             C_QUATSlerp(q1, q2, q1, f1);
-            // TODO weird hacks to force register order, probably more inlines
-            f32 tmp3, tmp2, tmp1;
-            tmp1 = result->mMtx._03;
-            tmp2 = result->mMtx._13;
-            tmp3 = result->mMtx._23;
-            nw4r::math::VEC3 tmp(tmp1, tmp2, tmp3);
+            nw4r::math::VEC3 tmp;
+            tmp.x = result->mMtx._03;
+            tmp.y = result->mMtx._13;
+            tmp.z = result->mMtx._23;
             PSMTXQuat(result->mMtx, q1);
             result->mMtx._03 = tmp.x;
             result->mMtx._13 = tmp.y;
@@ -65,11 +63,10 @@ void mdl_c::mdlCallback_c::ExecCallbackA(nw4r::g3d::ChrAnmResult *result, nw4r::
                 result->mMtx._13 = tmp.y * f1;
                 result->mMtx._23 = tmp.z * f1;
             }
-            u32 flags2 = result->mFlags & ~(0x80000000 | 0x80000040 | 0x80000020 | 0x80000008);
             result->mMtx._03 += resPtr->mMtx._03 * f2;
             result->mMtx._13 += resPtr->mMtx._13 * f2;
             result->mMtx._23 += resPtr->mMtx._23 * f2;
-            result->mFlags = flags2;
+            result->mFlags = result->mFlags & ~(0x80000000 | 0x00000040 | 0x00000020 | 0x00000008);
             *resPtr = *result;
         }
     } else {
