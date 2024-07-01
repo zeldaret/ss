@@ -1,8 +1,8 @@
 #ifndef NW4R_G3D_RESANMFOG_H
 #define NW4R_G3D_RESANMFOG_H
 #include "common.h"
-#include "g3d_anmfog.h"
-#include "g3d_rescommon.h"
+#include "nw4r/g3d/g3d_anmfog.h"
+#include "nw4r/g3d/g3d_rescommon.h"
 
 namespace nw4r {
 namespace g3d {

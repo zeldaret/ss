@@ -31,15 +31,11 @@ BLOCKING_SYMBOLS = [
     ['fn_80353F30', 'UnkCollider::ctor2'],
     ['fn_80353FF0', 'UnkCollider::init'],
     ['fn_800C3EC0', 'ActorEventFlowManagerRelated::checkEventFinished'],
-    ['fn_802E6000', 'mdlAnmChr_c::create'],
-    ['fn_802EB6F0', 'm3d::mdl_c::mdl_c'],
-    ['fn_802EDF30', 'm3d::smdl_c::smdl_c'],
     ['fn_800275C0', 'EffectsStruct::ctor'],
     ['fn_80027610', 'EffectsStruct::ctor'],
     ['fn_803465D0', 'ActorCollision::ctor'],
     ['fn_80341A70', 'checkCollision'],
     ['fn_80016C10', 'AnimModelWrapper::ctor'],
-    ['fn_802EBBD0', 'm3d::scnLeaf_c::scnLeaf_c'],
     ['fn_8009C910', 'ActorEventRelated::ctor'],
     ['fn_802E32B0', 'm2d::FrameCtrl_c::setFrame'],
     ['fn_802F04A0', 'mFader_c::draw'],
@@ -56,6 +52,8 @@ BLOCKING_SYMBOLS = [
     ['fn_801BB6F0', 'getCamera'],
     ['fn_800225F0', 'something light'],
     ['fn_80179250', 'shutter fence list'],
+    ['fn_8033AB50', 'getCollisionCheckContext'],
+    ['fn_383_D10', 'getAcOStageSink_ptr'],
 ]
 
 def main():

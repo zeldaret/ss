@@ -40,7 +40,7 @@ int dTgSndAr_c::create() {
             ac->setBit_field_0xE8(params & 0xFF);
         }
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgSndAr_c::doDelete() {

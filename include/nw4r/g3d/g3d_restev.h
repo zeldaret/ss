@@ -2,8 +2,8 @@
 #define NW4R_G3D_RESTEV_H
 #include <GXTev.h>
 #include <GXTexture.h>
-#include "g3d_cpu.h"
-#include "g3d_rescommon.h"
+#include "nw4r/g3d/g3d_cpu.h"
+#include "nw4r/g3d/g3d_rescommon.h"
 
 namespace nw4r
 {

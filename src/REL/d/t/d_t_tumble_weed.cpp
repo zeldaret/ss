@@ -12,7 +12,7 @@ int dTgTumbleWeed_c::create() {
     tumbleweedTimer = 0;
     windTimer = 0x96;
     mStateMgr.changeState(StateID_AreaOut);
-    return 1;
+    return SUCCEEDED;
 }
 
 u16 decr(u16 *num);

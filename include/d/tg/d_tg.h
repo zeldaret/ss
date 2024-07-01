@@ -16,7 +16,7 @@ public:
         return 1;
     }
     virtual int create() override {
-        return 1;
+        return SUCCEEDED;
     }
 };
 

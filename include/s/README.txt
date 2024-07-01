@@ -16,3 +16,9 @@ In order for vtable ordering to match, some classes had to be extracted to a new
 
 S_StateMethod_c's destructors calls back into another destructors. sStateMethodIf_c follows the example of
 the other abstract interface classes and provides this dtor.
+
+## operator== / != return BOOL instead of bool
+
+We're observing a lot of word-to-bool casts in code after these
+operators are invoked, and while there are ways to force the conversion,
+this seems the most reasonable.

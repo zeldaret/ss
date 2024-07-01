@@ -1,9 +1,9 @@
 #ifndef NW4R_G3D_SCN_MDL1_MAT1_SHP_H
 #define NW4R_G3D_SCN_MDL1_MAT1_SHP_H
 #include "common.h"
-#include "g3d_resmat.h"
-#include "g3d_resshp.h"
-#include "g3d_scnobj.h"
+#include "nw4r/g3d/g3d_resmat.h"
+#include "nw4r/g3d/g3d_resshp.h"
+#include "nw4r/g3d/g3d_scnobj.h"
 
 namespace nw4r {
 namespace g3d {

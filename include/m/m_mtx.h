@@ -38,10 +38,15 @@ public:
     /* 802f1c40 */ void rot(int, int); // does some werrd operation to rotate the matrix
     /* 802f1e60 */ bool quatRelated();
 
+    operator nw4r::math::MTX34*() {
+        return &nw4rm;
+    }
+
 public:
     union {
         EGG::Matrix34f mat;
         f32 m[3][4];
+        nw4r::math::MTX34 nw4rm;
         struct {
             f32 xx, xy, xz, xw;
             f32 yx, yy, yz, yw;

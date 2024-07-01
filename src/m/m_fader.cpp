@@ -1,13 +1,10 @@
 #include <m/m_fader.h>
-
-// nw4r::g3d::G3DState::Invalidate
-extern "C" void fn_8044E3B0(u32 flags);
-// m3d::resetMaterial according to NSMBW
-extern "C" void fn_802E46D0();
+#include <m/m3d/m3d.h>
+#include <nw4r/g3d/g3d_state.h>
 
 void mFader_c::draw() {
-    fn_8044E3B0(0x7ff);
-    fn_802E46D0();
+    nw4r::g3d::G3DState::Invalidate(0x7ff);
+    m3d::resetMaterial();
     mpFader->draw();
 }
 

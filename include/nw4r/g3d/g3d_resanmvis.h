@@ -1,8 +1,8 @@
 #ifndef NW4R_G3D_RESANMVIS_H
 #define NW4R_G3D_RESANMVIS_H
-#include "g3d_resdict.h"
-#include "g3d_resanm.h"
-#include "g3d_anmobj.h"
+#include "nw4r/g3d/g3d_resdict.h"
+#include "nw4r/g3d/g3d_resanm.h"
+#include "nw4r/g3d/g3d_anmobj.h"
 
 namespace nw4r
 {
@@ -10,10 +10,10 @@ namespace nw4r
 	{
 		struct ResAnmVisInfoData
 		{
-			char UNK_0x0[0x8];
-			u16 mNumFrames; // at 0x1C
+			char UNK_0x0[0xC];
+			u16 mNumFrames; // at 0x20
 			u16 mNumNodes;
-			AnmPolicy mAnmPolicy; // at 0x20
+			AnmPolicy mAnmPolicy; // at 0x24
 		};
 		
 		struct ResAnmVisNodeData

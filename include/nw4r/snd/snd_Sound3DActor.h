@@ -2,7 +2,7 @@
 #define NW4R_SND_SOUND_3D_ACTOR_H
 #include "snd_BasicSound.h"
 #include "snd_SoundActor.h"
-#include "math_types.h"
+#include "nw4r/math/math_types.h"
 
 namespace nw4r
 {

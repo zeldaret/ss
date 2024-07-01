@@ -1,7 +1,7 @@
 #ifndef NW4R_G3D_SCNPROC_H
 #define NW4R_G3D_SCNPROC_H
 #include "common.h"
-#include "g3d_scnobj.h"
+#include "nw4r/g3d/g3d_scnobj.h"
 
 namespace nw4r {
 namespace g3d {
