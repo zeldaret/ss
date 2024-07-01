@@ -15,8 +15,8 @@ public:
     virtual int getType() const override;
 
     bool create(nw4r::g3d::ResMdl, int, mAllocator_c *, u32 *);
-    bool attach(int, nw4r::g3d::AnmObjChrRes *, f32);
-    bool attach(int, anmChr_c *, f32);
+    void attach(int, nw4r::g3d::AnmObjChrRes *, f32);
+    void attach(int, anmChr_c *, f32);
     void detach(int);
     // Not in NSMBW
     void setWeight(int, f32);

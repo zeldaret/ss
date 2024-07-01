@@ -30,13 +30,13 @@ bool anmChrBlend_c::create(nw4r::g3d::ResMdl mdl, int num, mAllocator_c *alloc, 
     return true;
 }
 
-bool anmChrBlend_c::attach(int idx, nw4r::g3d::AnmObjChrRes *anm, f32 weight) {
+void anmChrBlend_c::attach(int idx, nw4r::g3d::AnmObjChrRes *anm, f32 weight) {
     nw4r::g3d::AnmObjChrBlend *obj = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::AnmObjChrBlend>(mpAnmObj);
     obj->SetWeight(idx, weight);
     obj->Attach(idx, anm);
 }
 
-bool anmChrBlend_c::attach(int idx, anmChr_c *anm, f32 weight) {
+void anmChrBlend_c::attach(int idx, anmChr_c *anm, f32 weight) {
     nw4r::g3d::AnmObjChrRes *res = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::AnmObjChrRes>(anm->getAnimObj());
     attach(idx, res, weight);
 }
@@ -50,7 +50,7 @@ void anmChrBlend_c::setWeight(int idx, f32 weight) {
 }
 
 f32 anmChrBlend_c::getWeight(int idx) const {
-    nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::AnmObjChrBlend>(mpAnmObj)->GetWeight(idx);
+    return nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::AnmObjChrBlend>(mpAnmObj)->GetWeight(idx);
 }
 
 } // namespace m3d
