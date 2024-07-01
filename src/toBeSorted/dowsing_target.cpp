@@ -24,7 +24,7 @@ DowsingTarget::~DowsingTarget() {
     doUnregister();
 }
 
-void DowsingTarget::initialize(u8 type, u16 unk, const mVec3_c *offset, f32 unk2) {
+void DowsingTarget::initialize(DowsingSlot type, u16 unk, const mVec3_c *offset, f32 unk2) {
     reinitialize(type);
     field_0x0E = unk;
     if (offset != nullptr) {
@@ -43,7 +43,7 @@ bool DowsingTarget::doUnregister() {
     return removeDowsingTarget(this);
 }
 
-void DowsingTarget::reinitialize(u8 type) {
+void DowsingTarget::reinitialize(DowsingSlot type) {
     bool res = doUnregister();
     mDowsingSlot = type;
     if (res) {
@@ -204,7 +204,7 @@ void DowsingTarget::execute() {}
 
 static bool insertDowsingTarget(DowsingTarget *target) {
     // TODO regshuffles
-    if (target->getSlot() == 8) {
+    if (target->getSlot() == DowsingTarget::SLOT_NONE) {
         return false;
     }
 
@@ -229,7 +229,7 @@ static bool insertDowsingTarget(DowsingTarget *target) {
 static bool removeDowsingTarget(DowsingTarget *target) {
     // TODO regshuffles
     u8 slot = target->getSlot();
-    if (slot == 8) {
+    if (slot == DowsingTarget::SLOT_NONE) {
         return false;
     }
 

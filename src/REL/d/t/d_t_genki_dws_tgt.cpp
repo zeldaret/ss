@@ -55,7 +55,7 @@ int dTgGenkiDwsTgt_c::create() {
     scale.z = 1.0f;
 
     static mVec3_c offset(0.0f, 25.0f, 0.0f);
-    mDowsingTarget.initialize(3, 0, &offset, 1.0f);
+    mDowsingTarget.initialize(DowsingTarget::SLOT_CRYSTALS, 0, &offset, 1.0f);
     return SUCCEEDED;
 }
 

@@ -20,9 +20,9 @@ public:
     /** 0x1C */ virtual bool doCommit() = 0;
     /** 0x20 */ virtual void setFlag(u16 flag);
     /** 0x24 */ virtual void unsetFlag(u16 flag);
-    /** 0x28 */ virtual void setFlagOrCounterToValue();
+    /** 0x28 */ virtual void setFlagOrCounterToValue(u16 flag, u16 value);
     /** 0x2C */ virtual u16 getCounterOrFlag(u16 flag) const;
-    /** 0x30 */ virtual u32 getUncommittedValue(u16 flag);
+    /** 0x30 */ virtual u16 getUncommittedValue(u16 flag);
     /** 0x34 */ virtual void unk3();
     /** 0x38 */ virtual u16 *getSaveFlagSpace() = 0;
 
