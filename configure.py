@@ -1094,7 +1094,7 @@ config.libs = [
     Rel(NonMatching, "d_t_col_bomb_shield", "REL/d/t/d_t_col_bomb_shield.cpp"),
     Rel(NonMatching, "d_t_D3_scene_change", "REL/d/t/d_t_D3_scene_change.cpp"),
     Rel(NonMatching, "d_t_defeat_boss", "REL/d/t/d_t_defeat_boss.cpp"),
-    Rel(NonMatching, "d_t_dowsing", "REL/d/t/d_t_dowsing.cpp"),
+    Rel(Matching, "d_t_dowsing", "REL/d/t/d_t_dowsing.cpp"),
     Rel(NonMatching, "d_t_drum", "REL/d/t/d_t_drum.cpp"),
     Rel(NonMatching, "d_t_dungeon_start", "REL/d/t/d_t_dungeon_start.cpp"),
     Rel(NonMatching, "d_t_effect_gen", "REL/d/t/d_t_effect_gen.cpp"),

@@ -15,6 +15,19 @@ private:
     mVec3_c mOffset;    // 0x10
 
 public:
+    // TODO
+    enum DowsingSlot {
+        SLOT_0,
+        SLOT_1,
+        SLOT_2,
+        SLOT_CRYSTALS,
+        SLOT_4,
+        SLOT_5,
+        SLOT_6,
+        SLOT_7,
+        SLOT_NONE
+    };
+
     DowsingTarget(dAcBase_c *ac, u8 dowsingSlot) : mpActor(ac), mDowsingSlot(dowsingSlot) {}
     // vt offset 0x1C
     virtual ~DowsingTarget();            // 0x08
@@ -22,11 +35,11 @@ public:
 
     bool doRegister();
     bool doUnregister();
-    void initialize(u8 type, u16 unk, const mVec3_c *offset, f32 f);
-    void reinitialize(u8 type);
+    void initialize(DowsingSlot type, u16 unk, const mVec3_c *offset, f32 f);
+    void reinitialize(DowsingSlot type);
 
-    inline u8 getSlot() {
-        return mDowsingSlot;
+    inline DowsingSlot getSlot() {
+        return (DowsingSlot)mDowsingSlot;
     }
 
     static bool hasZeldaDowsing();
