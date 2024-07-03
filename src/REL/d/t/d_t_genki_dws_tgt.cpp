@@ -18,9 +18,10 @@ public:
     virtual int doDelete() override;
     virtual int actorExecute() override;
 
-    u16 getSceneFlagFromParams();
 
 private:
+    u16 getSceneFlagFromParams();
+
     DowsingTarget mDowsingTarget; // 0xFC
 };
 

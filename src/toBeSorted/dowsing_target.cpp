@@ -146,8 +146,8 @@ bool DowsingTarget::hasDowsingInSlot(int slot) {
 
 #define MYCLAMP(low, high, x) ((x) < (low) ? (low) : ((x) > (high) ? (high) : (x)))
 
-DowsingTarget *DowsingTarget::getDowsingInfo(const mVec3_c &playerPosition, const mVec3_c &dowsingDirection, f32 *p3, f32 *p4,
-        f32 *intensity, int slot) {
+DowsingTarget *DowsingTarget::getDowsingInfo(const mVec3_c &playerPosition, const mVec3_c &dowsingDirection, f32 *p3,
+        f32 *p4, f32 *intensity, int slot) {
     if (slot >= 8) {
         return nullptr;
     }
@@ -156,7 +156,7 @@ DowsingTarget *DowsingTarget::getDowsingInfo(const mVec3_c &playerPosition, cons
     DowsingList *list = &DOWSING_LISTS[slot];
     DowsingTarget *best = nullptr;
 
-    for (TList<DowsingTarget, 0>::Iterator node = list->GetBeginIter(); node != list->GetEndIter(); ++node) {
+    for (DowsingList::Iterator node = list->GetBeginIter(); node != list->GetEndIter(); ++node) {
         mVec3_c targetPos;
         node->getPosition(targetPos);
         mVec3_c targetDir = mVec3_c(targetPos - playerPosition);
@@ -198,53 +198,36 @@ void DowsingTarget::init() {}
 
 void DowsingTarget::execute() {}
 
-static bool insertDowsingTarget(DowsingTarget *target) {
-    // TODO regshuffles
-    if (target->getSlot() == DowsingTarget::SLOT_NONE) {
-        return false;
-    }
-
-    // TODO this is probably something from the TList header.
-    // It's not clear to me what this is even checking
-    TListNode *currentList;
-    if (target->mLink.mpNext == nullptr || target->mLink.mpPrev == nullptr) {
-        currentList = &DOWSING_LISTS[target->getSlot()].mNode;
+// Not sure what this is
+inline static TListNode *getNode(u8 slot, DowsingTarget *t) {
+    if (t->mLink.mpNext == nullptr || t->mLink.mpPrev == nullptr) {
+        return &DOWSING_LISTS[slot].mNode;
     } else {
-        currentList = &target->mLink;
+        return &t->mLink;
     }
-
-    DowsingList *targetList = &DOWSING_LISTS[target->getSlot()];
-
-    if (currentList != &targetList->mNode) {
-        return false;
-    }
-    targetList->insert(target);
-    return true;
 }
 
-static bool removeDowsingTarget(DowsingTarget *target) {
-    // TODO regshuffles
+static bool insertDowsingTarget(DowsingTarget *target) {
     u8 slot = target->getSlot();
     if (slot == DowsingTarget::SLOT_NONE) {
         return false;
     }
 
-    // TODO this is probably something from the TList header.
-    // It's not clear to me what this is even checking
-    TListNode *currentList;
-    if (target->mLink.mpNext == nullptr || target->mLink.mpPrev == nullptr) {
-        currentList = &DOWSING_LISTS[slot].mNode;
-    } else {
-        currentList = &target->mLink;
+    if (getNode(slot, target) != &DOWSING_LISTS[slot].mNode) {
+        return false;
+    }
+    DOWSING_LISTS[slot].insert(target);
+    return true;
+}
+
+static bool removeDowsingTarget(DowsingTarget *target) {
+    u8 slot = target->getSlot();
+    if (slot == DowsingTarget::SLOT_NONE) {
+        return false;
     }
 
-    DowsingList *targetList = &DOWSING_LISTS[slot];
-
-    if (currentList != &targetList->mNode) {
-        targetList->remove(target);
-        // TODO this decrement should be in the list function but for some reason that won't cause
-        // the DOWSING_LISTS[slot] address to be reloaded
-        DOWSING_LISTS[slot].mCount--;
+    if (getNode(slot, target) != &DOWSING_LISTS[slot].mNode) {
+        DOWSING_LISTS[slot].remove(target);
         return true;
     }
     return false;
