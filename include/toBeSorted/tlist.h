@@ -118,9 +118,9 @@ public:
         } else {
             GetNodeFromPointer(node->mpNext)->mpPrev = node->mpPrev;
         }
-        // mCount--;
         node->mpPrev = nullptr;
         node->mpNext = nullptr;
+        mCount--;
     }
 
     TListNode mNode;
