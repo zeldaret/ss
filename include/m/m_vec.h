@@ -122,7 +122,7 @@ public:
 
     /// @brief Scalar product operator.
     mVec3_c operator*(f32 f) const {
-        return mVec3_c(f * x, f * y, f * z);
+        return mVec3_c(x * f, y * f, z * f);
     }
 
     /// @brief Scalar division operator.
@@ -148,9 +148,10 @@ public:
         return PSVECMag(*this);
     }
 
-    inline f32 dot(const mVec3_c &other) const {
-        return x * other.x + y * other.y + z * other.z;
-    }
+    static mVec3_c Zero;
+    static mVec3_c Ex;
+    static mVec3_c Ey;
+    static mVec3_c Ez;
 };
 
 #endif

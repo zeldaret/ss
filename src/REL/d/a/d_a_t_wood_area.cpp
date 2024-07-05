@@ -56,7 +56,7 @@ extern u16 PARTICLE_RESOURCE_ID_MAPPING[];
 void dAcTWoodArea_c::initializeState_Wait() {}
 
 void dAcTWoodArea_c::executeState_Wait() {
-    if (dPlayer::LINK != nullptr && (dPlayer::LINK->someFlags & 0x2000)) {
+    if (dPlayer::LINK != nullptr && (dPlayer::LINK->someFlags_0x350 & 0x2000)) {
         // This is a bit messed up
         mVec3_c dist = position - dPlayer::LINK->position;
         f32 attachRadius = getAttachRadius();
