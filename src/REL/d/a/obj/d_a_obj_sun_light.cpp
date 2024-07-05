@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_sun_light.h>
 #include <toBeSorted/arc_managers/current_stage_arc_manager.h>
-#include <toBeSorted/spawn_struct.h>
+#include <toBeSorted/scgame.h>
 #include <toBeSorted/room_manager.h>
 
 SPECIAL_ACTOR_PROFILE(OBJ_SUN_LIGHT, dAcOsunLight_c, fProfile::OBJ_SUN_LIGHT, 0x0219, 0, 3);
@@ -58,5 +58,5 @@ void dAcOsunLight_c::executeState_Wait() {}
 void dAcOsunLight_c::finalizeState_Wait() {}
 
 bool dAcOsunLight_c::isDay() {
-    return !SpawnStruct::sInstance.mNight;
+    return !ScGame::currentSpawnInfo.isNight();
 }
