@@ -27,7 +27,7 @@ int dTgTimer_c::create() {
         break;
     }
     resetTimer();
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgTimer_c::actorExecute() {

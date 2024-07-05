@@ -1,7 +1,8 @@
 #ifndef NW4R_G3D_RESANMCLR_H
 #define NW4R_G3D_RESANMCLR_H
-#include "g3d_resdict.h"
-#include "g3d_resanm.h"
+#include "nw4r/g3d/g3d_resdict.h"
+#include "nw4r/g3d/g3d_resanm.h"
+#include "nw4r/g3d/g3d_anmclr.h"
 
 namespace nw4r
 {
@@ -32,6 +33,9 @@ namespace nw4r
 			char UNK_0xC[0x4];
 			s32 mMatDictOffset; // at 0x10
 			ResAnmClrInfoData mInfo; // at 0x14
+			char UNK_0x1E[0x2];
+			u16 mNumFrames; // at 0x20
+			AnmPolicy mAnmPolicy; // at 0x24
 		};
 		
 		struct ResAnmClr
@@ -53,6 +57,16 @@ namespace nw4r
 			inline bool CheckRevision() const
 			{
 				return ref().mRevision == REVISION;
+			}
+
+			AnmPolicy GetAnmPolicy() const
+			{
+				return ref().mAnmPolicy;
+			}
+
+			int GetNumFrame() const
+			{
+				return ref().mNumFrames;
 			}
 			
 			inline const ResAnmClrMatData * GetMatAnm(u32 i) const

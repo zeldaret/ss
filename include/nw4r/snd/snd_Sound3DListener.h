@@ -1,7 +1,7 @@
 #ifndef NW4R_SND_SOUND_3D_LISTENER_H
 #define NW4R_SND_SOUND_3D_LISTENER_H
 #include "common.h"
-#include "math_types.h"
+#include "nw4r/math/math_types.h"
 
 namespace nw4r {
 namespace snd {

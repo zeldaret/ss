@@ -23,8 +23,8 @@ public:
     virtual bool isNull() const = 0; ///<  Returns whether this is a null state.
     virtual bool isEqual(const sStateIDIf_c &other) const = 0; ///<  Returns whether both states have the same number.
 
-    virtual bool operator==(const sStateIDIf_c &other) const = 0; ///<  Overloaded equality operator, using ::isEqual.
-    virtual bool operator!=(const sStateIDIf_c &other) const = 0; ///<  Overloaded inequality operator, using ::isEqual.
+    virtual BOOL operator==(const sStateIDIf_c &other) const = 0; ///<  Overloaded equality operator, using ::isEqual.
+    virtual BOOL operator!=(const sStateIDIf_c &other) const = 0; ///<  Overloaded inequality operator, using ::isEqual.
 
     virtual bool isSameName(const char *name) const = 0; ///<  Returns whether this state ID is called @p name.
     virtual const char *name() const = 0; ///<  Returns the name of this state ID.

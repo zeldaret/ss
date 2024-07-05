@@ -90,6 +90,7 @@ public:
     }
 
     void Destroy();
+    void DetachFromParent();
 
     G3dObj(MEMAllocator *pAllocator, G3dObj *pParent) : mAllocator(pAllocator), mParent(pParent) {}
 
@@ -115,7 +116,10 @@ public:
 
     template <typename T>
     static T *DynamicCast(G3dObj *obj) {
-        return (obj != NULL && obj->IsDerivedFrom(T::GetTypeObjStatic())) ? static_cast<T *>(obj) : NULL;
+        if (obj != nullptr && obj->IsDerivedFrom(T::GetTypeObjStatic())) {
+            return static_cast<T *>(obj);
+        }
+        return nullptr;
     }
 
 private:

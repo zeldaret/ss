@@ -1,6 +1,7 @@
 #ifndef NW4R_G3D_STATE_H
 #define NW4R_G3D_STATE_H
 #include "common.h"
+#include "nw4r/math.h"
 #include <rvl/GX.h>
 
 namespace nw4r {

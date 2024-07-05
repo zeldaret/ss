@@ -1,7 +1,8 @@
 #ifndef NW4R_G3D_XSI_H
 #define NW4R_G3D_XSI_H
 #include "common.h"
-#include "g3d_anmtexsrt.h"
+#include "nw4r/math.h"
+#include "nw4r/g3d/g3d_anmtexsrt.h"
 
 namespace nw4r {
 namespace g3d {

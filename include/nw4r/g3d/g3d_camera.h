@@ -1,8 +1,8 @@
 #ifndef NW4R_G3D_CAMERA_H
 #define NW4R_G3D_CAMERA_H
 #include "common.h"
-#include "g3d_rescommon.h"
-#include "math_types.h"
+#include "nw4r/g3d/g3d_rescommon.h"
+#include "nw4r/math/math_types.h"
 #include <rvl/MTX.h>
 
 
