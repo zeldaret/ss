@@ -1107,7 +1107,7 @@ config.libs = [
     Rel(NonMatching, "d_t_group_test", "REL/d/t/d_t_group_test.cpp"),
     Rel(NonMatching, "d_t_harp", "REL/d/t/d_t_harp.cpp"),
     Rel(NonMatching, "d_t_heat_resist", "REL/d/t/d_t_heat_resist.cpp"),
-    Rel(NonMatching, "d_t_holy_water", "REL/d/t/d_t_holy_water.cpp"),
+    Rel(Matching, "d_t_holy_water", "REL/d/t/d_t_holy_water.cpp"),
     Rel(NonMatching, "d_t_insect", "REL/d/t/d_t_insect.cpp"),
     Rel(NonMatching, "d_t_ks", "REL/d/t/d_t_ks.cpp"),
     Rel(NonMatching, "d_t_kytag", "REL/d/t/d_t_kytag.cpp"),
