@@ -35,7 +35,7 @@ public:
     }
 
 private:
-    char UNK_0x118[0x144 - 0x118];
+    char UNK_0x120[0x144 - 0x120];
     DrawResMdlReplacement mDrawMdlReplace; // at 0x144
 
     NW4R_G3D_TYPE_OBJ_DECL(ScnMdl);

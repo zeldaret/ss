@@ -3,7 +3,8 @@
 #include "nw4r/g3d/g3d_rescommon.h"
 #include "nw4r/g3d/g3d_resmdl.h"
 #include "nw4r/g3d/g3d_resvtx.h"
-#include <GXAttr.h>#include "common.h"
+#include <rvl/GX.h>
+#include "common.h"
 
 
 namespace nw4r {
@@ -70,7 +71,7 @@ struct ResShpPrePrim {
 
 struct ResShp {
     ResCommon<ResShpData> mShp;
-
+    inline ResShp() : mShp((void*)nullptr) {}
     inline ResShp(void *vptr) : mShp(vptr) {}
     bool IsValid() const {
         return mShp.IsValid();

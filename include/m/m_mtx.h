@@ -12,9 +12,30 @@
 #pragma warning off(10402)
 class mMtx_c {
 public:
-    mMtx_c(){};
+    mMtx_c() {};
     /* 802f1660 */ mMtx_c(f32 xx, f32 xy, f32 xz, f32 xw, f32 yx, f32 yy, f32 yz, f32 yw, f32 zx, f32 zy, f32 zz,
             f32 zw);
+
+    // not sure if this breaks anything but we need a matrix type
+    // with an inline copy assignment operator
+    mMtx_c &operator=(const mMtx_c &r) {
+        xx = r.xx;
+        xy = r.xy;
+        xz = r.xz;
+        xw = r.xw;
+
+        yx = r.yx;
+        yy = r.yy;
+        yz = r.yz;
+        yw = r.yw;
+
+        zx = r.zx;
+        zy = r.zy;
+        zz = r.zz;
+        zw = r.zw;
+
+        return *this;
+    }
 
     /* 802f16b0 */ void XrotS(const mAng &angle); ///< Generates a rotation matrix for the X axis with the given angle.
     /* 802f1770 */ void XrotM(const mAng &angle); ///< Rotates the matrix on the X axis by the given angle.

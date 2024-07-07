@@ -369,6 +369,14 @@ m/m3d/m_scnleaf.cpp:
 	.text       start:0x802EBBD0 end:0x802EBFF8
 	.data       start:0x80542708 end:0x8054272C
 
+m/m3d/m_shadow.cpp:
+	.text       start:0x802EC000 end:0x802EDF2C
+	.ctors      start:0x804DB8C8 end:0x804DB8CC
+	.data       start:0x80542730 end:0x805427EC
+	.sdata      start:0x80573FC8 end:0x80573FCC
+	.sbss       start:0x80575BF0 end:0x80575C04
+	.sdata2     start:0x8057CD68 end:0x8057CD90
+
 m/m3d/m_smdl.cpp:
 	.text       start:0x802EDF30 end:0x802EE094
 	.data       start:0x805427F0 end:0x80542820
