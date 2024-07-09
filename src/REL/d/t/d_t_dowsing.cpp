@@ -65,7 +65,7 @@ private:
 
 SPECIAL_ACTOR_PROFILE(T_DOWSING, dTgDowsing_c, fProfile::T_DOWSING, 0x0293, 0, 0);
 
-dTgDowsing_c::dTgDowsing_c() : mDowsingTarget(this, 8) {}
+dTgDowsing_c::dTgDowsing_c() : mDowsingTarget(this, DowsingTarget::SLOT_NONE) {}
 
 int dTgDowsing_c::create() {
     mDowsingOption = getDowsingOption();

@@ -11,7 +11,7 @@ class UnkIntermediateClass : public dAcBase_c {};
 
 class dTgGenkiDwsTgt_c : public UnkIntermediateClass {
 public:
-    dTgGenkiDwsTgt_c() : mDowsingTarget(this, 8) {}
+    dTgGenkiDwsTgt_c() : mDowsingTarget(this, DowsingTarget::SLOT_NONE) {}
     virtual ~dTgGenkiDwsTgt_c() {}
 
     virtual int create() override;
