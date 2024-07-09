@@ -4,7 +4,7 @@
 
 class dTgHolyWater_c : public dTg_c {
 public:
-    dTgHolyWater_c() : mDowsingTarget(this, 8) {}
+    dTgHolyWater_c() : mDowsingTarget(this, DowsingTarget::SLOT_NONE) {}
     virtual ~dTgHolyWater_c() {}
 
     virtual int create() override;
