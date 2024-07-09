@@ -27,6 +27,9 @@ toBeSorted/file_manager.cpp:
 toBeSorted/save_manager.cpp:
 	.text       start:0x80011730 end:0x80015310
 
+toBeSorted/sound_info.cpp:
+	.text       start:0x8002C250 end:0x8002C308
+
 d/a/d_a_base.cpp:
 	.text       start:0x8002C3A0 end:0x8002DE40
 	.data       start:0x80501538 end:0x805015B8
@@ -142,6 +145,14 @@ toBeSorted/arc_managers/layout_arc_manager.cpp:
 	.data       start:0x8050E048 end:0x8050E054
 	.sdata      start:0x80571D68 end:0x80571D70
 	.sbss       start:0x80575288 end:0x80575290
+
+toBeSorted/dowsing_target.cpp:
+	.text       start:0x80097570 end:0x80098574
+	.ctors      start:0x804DB6BC end:0x804DB6C0
+	.rodata     start:0x804E3698 end:0x804E36B8
+	.data       start:0x8050F550 end:0x8050F560
+	.sdata2     start:0x80579640 end:0x80579670
+	.bss        start:0x805A2FB0 end:0x805A3010
 
 toBeSorted/sceneflag_manager.cpp:
 	.text       start:0x800BD8C0 end:0x800BE7A8

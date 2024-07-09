@@ -10,6 +10,7 @@
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "toBeSorted/room_manager.h"
+#include "toBeSorted/tlist.h"
 
 class dAcBase_c;
 
@@ -58,21 +59,6 @@ public:
     T *get() {
         return static_cast<T *>(p_owner);
     }
-};
-
-template <typename T, int offset>
-struct TList {
-    T *GetOffset() {
-        return (T *)((u8 *)this - offset);
-    }
-    TList() {
-        sound_info_next = GetOffset();
-        sound_info_tail = GetOffset();
-        count = 0;
-    }
-    T *sound_info_tail;
-    T *sound_info_next;
-    s32 count;
 };
 
 // Ghidra: ActorBase

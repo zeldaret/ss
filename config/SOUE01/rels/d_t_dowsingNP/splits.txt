@@ -11,3 +11,5 @@ REL/executor.c:
 
 REL/d/t/d_t_dowsing.cpp:
 	.text       start:0x00000070 end:0x00000580
+	.rodata     start:0x00000000 end:0x00000004
+	.data       start:0x00000000 end:0x000000B0
