@@ -229,7 +229,7 @@ static void drawSub2(void *data, u8 i) {
     int id;
     u16 wid = i * 2;
     GXSetTexCopySrc(0, 0, wid, wid);
-    GXSetTexCopyDst(i, i, 4, 1);
+    GXSetTexCopyDst(i, i, GX_TF_RGB565, 1);
     GXCopyTex(data, false);
     GXPixModeSync();
     GXInvalidateTexAll();
@@ -308,7 +308,7 @@ static void drawSub1(void *data, u8 i) {
 
     GXSetZMode(true, GX_ALWAYS, true);
     GXSetTexCopySrc(0, 0, wid, wid);
-    GXSetTexCopyDst(i, i, 4, 1);
+    GXSetTexCopyDst(i, i, GX_TF_RGB565, 1);
     GXCopyTex(data, true);
     GXPixModeSync();
     GXInvalidateTexAll();

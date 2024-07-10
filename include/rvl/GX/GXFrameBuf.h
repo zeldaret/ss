@@ -31,8 +31,7 @@ u32 GXSetDispCopyYScale(f32 scale);
 void GXCopyDisp(void *data, GXBool bUpdate);
 
 void GXSetTexCopySrc(u16 left, u16 top, u16 width, u16 height);
-// TODO GX types
-void GXSetTexCopyDst(u16 left, u16 top, int, int);
+void GXSetTexCopyDst(u16 left, u16 top, GXTexFmt fmt, u8 mipmap);
 void GXCopyTex(void *data, GXBool bUpdate);
 
 // Not sure where this belongs
