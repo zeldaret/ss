@@ -48,7 +48,7 @@ int dAcOPoolCock_c::actorExecute() {
     mStateMgr.executeState();
     calcVelocity();
     position += velocity;
-    position += posIncrements;
+    position += mCCdStruct.posIncrements;
     updateMatrix();
     mMtx_c mdl1Transform;
     mMtx_c mdl2Transform;

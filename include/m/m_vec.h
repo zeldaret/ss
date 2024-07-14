@@ -61,6 +61,11 @@ public:
         return (Vec *)&x;
     }
 
+    /// @brief Vec cast operator.
+    operator Vec() const {
+        return *(Vec *)&x;
+    }
+
     operator EGG::Vector3f *() {
         return (EGG::Vector3f *)&x;
     }

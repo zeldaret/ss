@@ -26,7 +26,7 @@ void dAcOswMdlCallback_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip *manip, n
 }
 
 static bool isPushableBlock(dAcBase_c *actor) {
-    return dBase_c::isActorPlayer(*actor) || actor->profile_name == fProfile::OBJ_PUSH_BLOCK ||
+    return actor->isActorPlayer() || actor->profile_name == fProfile::OBJ_PUSH_BLOCK ||
             actor->profile_name == fProfile::OBJ_KIBAKO;
 }
 
@@ -34,7 +34,7 @@ void dAcOsw_c::interactCallback(void *unknown, dAcBase_c *actor, dAcObjBase_c *i
     if (!isPushableBlock(interactor)) {
         return;
     }
-    dAcPy_c *link = dBase_c::isActorPlayer(*interactor) ? static_cast<dAcPy_c *>(interactor) : nullptr;
+    dAcPy_c *link = interactor->isActorPlayer() ? static_cast<dAcPy_c *>(interactor) : nullptr;
     dAcOsw_c *sw = static_cast<dAcOsw_c *>(actor);
 
     // halp

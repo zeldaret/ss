@@ -20,7 +20,7 @@ public:
 
 public:
     /* 80050980 */ static void resetFlags();
-    /* 800509a0 */ static bool isActorPlayer(dBase_c &);
+    /* 800509a0 */ bool isActorPlayer();
     /* 800509e0 */ static void initLoader();
     /* 80050a00 */ static dBase_c *createBase(ProfileName, dBase_c *, u32, u8);
     /* 80050a10 */ static dBase_c *createRoot(ProfileName, u32, u8);

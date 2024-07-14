@@ -2,6 +2,7 @@
 #define M_ANGLE_H
 
 #include <common.h>
+#include <nw4r/math/math_triangular.h>
 
 struct mAng {
     mAng() {}
@@ -11,6 +12,14 @@ struct mAng {
         return mVal;
     }
     s32 step(s16 target, s32 steps, s16 max, s16 min);
+
+    inline f32 sin() const {
+        return nw4r::math::SinIdx(*this);
+    }
+
+    inline f32 cos() const {
+        return nw4r::math::CosIdx(*this);
+    }
 
     s16 mVal;
 };
