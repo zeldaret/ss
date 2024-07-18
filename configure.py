@@ -1221,7 +1221,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_time_door_before", "REL/d/a/obj/d_a_obj_time_door_before.cpp"),
     Rel(NonMatching, "d_a_obj_time_stage_bg", "REL/d/a/obj/d_a_obj_time_stage_bg.cpp"),
     Rel(NonMatching, "d_a_obj_time_stone", "REL/d/a/obj/d_a_obj_time_stone.cpp"),
-    Rel(NonMatching, "d_a_obj_toD3_stone_figure", "REL/d/a/obj/d_a_obj_toD3_stone_figure.cpp"),
+    Rel(Matching, "d_a_obj_toD3_stone_figure", "REL/d/a/obj/d_a_obj_toD3_stone_figure.cpp"),
     Rel(NonMatching, "d_a_obj_toge_trap", "REL/d/a/obj/d_a_obj_toge_trap.cpp"),
     Rel(NonMatching, "d_a_obj_tornado", "REL/d/a/obj/d_a_obj_tornado.cpp"),
     Rel(NonMatching, "d_a_obj_tower_bomb", "REL/d/a/obj/d_a_obj_tower_bomb.cpp"),

@@ -162,6 +162,9 @@ public:
     void clearFlag() {
         mSrc.field_0x04 = mSrc.field_0x04 & 0xFFFFFFFE;
     }
+    void setFlag(u32 f) {
+        mSrc.field_0x04 |= f;
+    }
     void set0x4C(u32 val) {
         field_0x4C = val;
     }
@@ -181,6 +184,9 @@ public:
     virtual ~dCcD_GObjCo();
     void clearFlag() {
         mSrc.mBase.mGFlag = mSrc.mBase.mGFlag & 0xFFFFFFFE;
+    }
+    void setFlag(u32 f) {
+        mSrc.mBase.mGFlag |= f;
     }
     void init(const dCcD_SrcGObjCo *);
     void setSomeAtFlags(u32 flags);
@@ -272,6 +278,11 @@ public:
 
     inline void clearCoFlag() {
         mGObjCo.clearFlag();
+    }
+
+    void setTgCoFlag(u32 f) {
+        mGObjTg.setFlag(f);
+        mGObjCo.setFlag(f);
     }
 
     inline void setSomeDefendValue(u32 val) {
