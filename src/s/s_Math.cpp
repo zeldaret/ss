@@ -80,25 +80,25 @@ T addCalcAngleT(T *value, T target, T ratio, T maxStepSize, T minStepSize) {
         T step = diff / ratio;
         // TODO this is simpler in the original assembly
         if (step > minStepSize || step < -minStepSize) {
-            T actualStep = maxStepSize;
-            if (maxStepSize > step) {
-                actualStep = step;
-                if (step < -maxStepSize) {
-                    actualStep = -maxStepSize;
-                }
+            if (step > maxStepSize) {
+                step = maxStepSize;
+            } else if (step < -maxStepSize) {
+                step = -maxStepSize;
             }
-            *value += actualStep;
-        } else if (target - *value >= 0) {
-            T newVal = *value + minStepSize;
-            *value = newVal;
-            if ((T)(target - newVal) <= 0) {
-                *value = target;
-            }
+            *value += step;
         } else {
-            T newVal = *value - minStepSize;
-            *value = newVal;
-            if ((T)(target - newVal) >= 0) {
-                *value = target;
+            if (0 <= diff) {
+                T newVal = *value + minStepSize;
+                *value = newVal;
+                if ((T)(target - *value) <= 0) {
+                    *value = target;
+                }
+            } else {
+                T newVal = *value - minStepSize;
+                *value = newVal;
+                if ((T)(target - newVal) >= 0) {
+                    *value = target;
+                }
             }
         }
     }
@@ -127,25 +127,37 @@ void addCalcAngle(short *value, short target, short ratio, short maxStepSize) {
     return addCalcAngleT(value, target, ratio, maxStepSize);
 }
 
-extern "C" BOOL fn_802DEB80(u8 *value, u8 target, u8 stepSize) {
-    if (stepSize != 0) {
+extern "C" s16 fn_802DEA10(s16 *pValue, s16 target, s16 scale, s16 maxStep, s16 minStep) {
+    // NYI
+}
+
+// Is the same as cLib_chaseUC
+BOOL chaseUC(u8 *value, u8 target, u8 stepSize) {
+    if (stepSize) {
         s16 val = *value;
         s16 tgt = target;
-        s16 szs = stepSize;
+        s16 szs;
+
         if (val > tgt) {
             szs = -stepSize;
+        } else {
+            szs = stepSize;
         }
-        s16 step = val + szs;
-        if (szs * (step - tgt) >= 0) {
-            *value = tgt;
-            return 1;
+
+        val += szs;
+
+        if (szs * (val - tgt) >= 0) {
+            *value = target;
+            return TRUE;
+        } else {
+            *value = val;
         }
-        *value = step;
-    } else if (*value == target) {
-        return 1;
     }
 
-    return 0;
+    else if (*value == target) {
+        return TRUE;
+    }
+    return FALSE;
 }
 
 template <typename T>
@@ -154,7 +166,7 @@ BOOL chaseT(T *value, T target, T stepSize) {
         return 1;
     }
 
-    if (stepSize != 0) {
+    if (stepSize) {
         if (*value > target) {
             stepSize = -stepSize;
         }
@@ -186,9 +198,9 @@ template <typename T>
 BOOL isInRangeT(T val, T min, T max) {
     BOOL ret;
     if (min < max) {
-        return val >= min && val <= max ? 1 : 0;
+        return val >= min && val <= max;
     } else {
-        return val >= max && val <= min ? 1 : 0;
+        return val >= max && val <= min;
     }
     return ret;
 }
@@ -220,30 +232,34 @@ BOOL chaseAngle(short *value, short target, short stepSize) {
 // Found in NSMBW (0x801618c0), but no symbol name found yet
 extern "C" BOOL fn_802DEE10(short *value, short target, short stepSize) {
     if (*value == target) {
-        return 1;
+        return TRUE;
     }
 
-    if (stepSize != 0) {
-        short szs = stepSize;
+    if (stepSize) {
+        short step = stepSize;
+
         if (stepSize < 0) {
-            szs = 0x7fff;
             if (stepSize != 0x8000) {
-                szs = -stepSize;
+                stepSize = -stepSize;
+            } else {
+                stepSize = 0x7FFF;
             }
         }
+
         if ((short)(*value - target) > 0) {
-            szs = -szs;
+            stepSize = -stepSize;
         }
 
-        *value += stepSize;
-        int b = stepSize * szs;
-        if (b > 0 && stepSize * (short)(*value - target) >= 0) {
-            *value = target;
-            return 1;
+        *value += step;
+
+        if (step * stepSize > 0) {
+            if (step * (short)(*value - target) >= 0) {
+                *value = target;
+                return TRUE;
+            }
         }
     }
-
-    return 0;
+    return FALSE;
 }
 
 } // namespace sLib
