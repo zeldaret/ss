@@ -136,7 +136,7 @@ if not config.non_matching:
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
 config.dtk_tag = "v0.9.4"
-config.objdiff_tag = "v2.0.0-beta.3"
+config.objdiff_tag = "v2.0.0-beta.5"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
 
@@ -462,7 +462,6 @@ config.libs = [
             Object(Matching, "egg/core/eggDisplay.cpp"),
             Object(Matching, "egg/core/eggColorFader.cpp"),
             Object(Matching, "egg/core/eggAsyncDisplay.cpp"),
-            Object(Matching, "egg/core/eggXfb.cpp"),
             Object(Matching, "egg/core/eggVideo.cpp"),
             Object(Matching, "egg/core/eggXfb.cpp"),
             Object(Matching, "egg/core/eggXfbManager.cpp"),
