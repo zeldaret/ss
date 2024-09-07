@@ -8,12 +8,12 @@ AlignEscapedNewlines: DontAlign
 AlignOperands: DontAlign
 AllowAllArgumentsOnNextLine: False
 AllowAllParametersOfDeclarationOnNextLine: False
-AllowShortBlocksOnASingleLine: Empty
-AllowShortCaseLabelsOnASingleLine: False
-AllowShortEnumsOnASingleLine: True
-AllowShortFunctionsOnASingleLine: Empty
-AllowShortIfStatementsOnASingleLine: Never
-AllowShortLoopsOnASingleLine: False
+AllowShortBlocksOnASingleLine: Always
+AllowShortCaseLabelsOnASingleLine: True
+AllowShortEnumsOnASingleLine: False
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Always
+AllowShortLoopsOnASingleLine: True
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: True
 AlwaysBreakTemplateDeclarations: Yes
@@ -25,7 +25,7 @@ BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: False
 BreakStringLiterals: True
 ColumnLimit: 120
-ContinuationIndentWidth: 8
+ContinuationIndentWidth: 4
 IncludeBlocks: Preserve
 IndentAccessModifiers: False
 IndentCaseLabels: False
