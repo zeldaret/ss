@@ -1,4 +1,5 @@
 #include <d/a/obj/d_a_obj_mole_soil.h>
+#include <s/s_Math.h>
 
 SPECIAL_ACTOR_PROFILE(OBJ_MOLE_SOIL, dAcOmoleSoil_c, fProfile::OBJ_MOLE_SOIL, 0x008B, 0, 6);
 
@@ -73,9 +74,6 @@ int dAcOmoleSoil_c::draw() {
     return 1;
 }
 
-// sLib::chase
-extern "C" bool fn_802DECC0(f32 *, f32, f32);
-
 void dAcOmoleSoil_c::initializeState_Wait() {
     mDesiredNextState = 0;
 }
@@ -87,7 +85,7 @@ void dAcOmoleSoil_c::initializeState_Appear() {
 }
 void dAcOmoleSoil_c::executeState_Appear() {
     f32 stepSize = 0.05f;
-    if (fn_802DECC0(&mScale, sFullScale, stepSize)) {
+    if (sLib::chase(&mScale, sFullScale, stepSize)) {
         mStateMgr.changeState(StateID_Wait);
     } else {
         mModel.setScale(mScale, mScale, mScale);
@@ -109,7 +107,7 @@ void dAcOmoleSoil_c::executeState_DisAppear() {
     // all the stack operations for the cast.
     int scalar = 0;
     f32 stepSize = 0.01f * scalar + 0.05f;
-    if (fn_802DECC0(&mScale, sHalfScale, stepSize)) {
+    if (sLib::chase(&mScale, sHalfScale, stepSize)) {
         mStateMgr.changeState(StateID_Wait);
     } else {
         mModel.setScale(mScale, mScale, mScale);
