@@ -72,11 +72,6 @@ parser.add_argument(
     help="generate map file(s)",
 )
 parser.add_argument(
-    "--no-asm",
-    action="store_true",
-    help="don't incorporate .s files from asm directory",
-)
-parser.add_argument(
     "--debug",
     action="store_true",
     help="build with debug info (non-matching)",
@@ -93,6 +88,12 @@ parser.add_argument(
     metavar="BINARY | DIR",
     type=Path,
     help="path to decomp-toolkit binary or source (optional)",
+)
+parser.add_argument(
+    "--objdiff",
+    metavar="BINARY | DIR",
+    type=Path,
+    help="path to objdiff-cli binary or source (optional)",
 )
 parser.add_argument(
     "--sjiswrap",
@@ -128,15 +129,16 @@ config.non_matching = args.non_matching
 config.sjiswrap_path = args.sjiswrap
 if not is_windows():
     config.wrapper = args.wrapper
-if args.no_asm:
+if not config.non_matching:
     config.asm_dir = None
 
 # Tool versions
 config.binutils_tag = "2.42-1"
-config.compilers_tag = "20231018"
-config.dtk_tag = "v0.9.0"
+config.compilers_tag = "20240706"
+config.dtk_tag = "v0.9.4"
+config.objdiff_tag = "v2.0.0-beta.5"
 config.sjiswrap_tag = "v1.1.1"
-config.wibo_tag = "0.6.14"
+config.wibo_tag = "0.6.11"
 
 # Project
 config.config_path = Path("config") / config.version / "config.yml"
@@ -286,9 +288,10 @@ def nw4rLib(lib_name, objects, extra_cflags=[]):
 
 Matching = True
 NonMatching = False
+Equivalent = config.non_matching  # Object should be linked when configured with --non-matching
 
-config.warn_missing_config = False
-config.warn_missing_source = False  # TODO
+config.warn_missing_config = False 
+config.warn_missing_source = False
 config.libs = [
     {
         "lib": "framework",
@@ -296,7 +299,6 @@ config.libs = [
         "cflags": cflags_framework,
         "host": False,
         "objects": [
-            # machine (m_name
             Object(Matching, "toBeSorted/unk_flag_stuff.cpp"),
             Object(Matching, "toBeSorted/bitwise_flag_helper.cpp"),
             Object(Matching, "toBeSorted/sceneflag_manager.cpp"),
@@ -335,6 +337,15 @@ config.libs = [
             Object(NonMatching, "f/f_base.cpp"),
             Object(Matching, "f/f_list.cpp"),
             Object(Matching, "f/f_manager.cpp"),
+            Object(Matching, "DynamicLink.cpp"),
+        ],
+    },
+    {
+        "lib": "mlib",
+        "mw_version": "Wii/1.5",
+        "cflags": cflags_framework,
+        "host": False,
+        "objects": [
             Object(NonMatching, "m/m3d/m3d.cpp"),
             Object(Matching, "m/m3d/m_proc.cpp"),
             Object(Matching, "m/m3d/m_anmchr.cpp"),
@@ -361,13 +372,20 @@ config.libs = [
             Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
             Object(Matching, "m/m_pad.cpp"),
+        ],
+    },
+    {
+        "lib": "slib",
+        "mw_version": "Wii/1.5",
+        "cflags": cflags_framework,
+        "host": False,
+        "objects": [
+            Object(Matching, "s/s_Crc.cpp"),
+            Object(NonMatching, "s/s_Math.cpp"),
             Object(Matching, "s/s_StateId.cpp"),
             Object(Matching, "s/s_StateMethod.cpp"),
             Object(Matching, "s/s_StateMethodUsr_FI.cpp"),
             Object(Matching, "s/s_Phase.cpp"),
-            Object(Matching, "DynamicLink.cpp"),
-            # framework (f_name)
-            # d stuff (d_name)
         ],
     },
     # DolphinLib(
@@ -458,7 +476,6 @@ config.libs = [
             Object(Matching, "egg/core/eggDisplay.cpp"),
             Object(Matching, "egg/core/eggColorFader.cpp"),
             Object(Matching, "egg/core/eggAsyncDisplay.cpp"),
-            Object(Matching, "egg/core/eggXfb.cpp"),
             Object(Matching, "egg/core/eggVideo.cpp"),
             Object(Matching, "egg/core/eggXfb.cpp"),
             Object(Matching, "egg/core/eggXfbManager.cpp"),

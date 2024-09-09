@@ -237,6 +237,13 @@ s/s_StateMethod.cpp:
 s/s_StateMethodUsr_FI.cpp:
 	.text       start:0x802DE540 end:0x802DE6EC
 
+s/s_Crc.cpp:
+	.text       start:0x802DE6F0 end:0x802DE6F4
+
+s/s_Math.cpp:
+	.text       start:0x802DE740 end:0x802DEEB0
+	.sdata2     start:0x8057CC38 end:0x8057CC40
+
 s/s_Phase.cpp:
 	.text       start:0x802DEEB0 end:0x802DEF74
 
