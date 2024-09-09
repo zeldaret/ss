@@ -18,7 +18,7 @@ public:
         ResGenMode GetResGenMode(bool);
 
     private:
-        char UNK_0x0[0x2C];
+        char UNK_0x0[0x34];
     };
 
 public:
