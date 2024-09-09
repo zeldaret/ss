@@ -7,7 +7,7 @@ namespace m3d {
 anmShp_c::~anmShp_c() {}
 
 int anmShp_c::getType() const {
-    return 0x5;
+    return nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_SHP;
 }
 
 bool anmShp_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmShp anm, mAllocator_c *alloc, u32 *pSize) {

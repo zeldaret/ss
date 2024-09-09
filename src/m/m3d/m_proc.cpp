@@ -16,7 +16,7 @@ void proc_c_drawProc(nw4r::g3d::ScnProc *proc, bool b) {
 proc_c::~proc_c() {}
 
 int proc_c::getType() const {
-    return 0x2;
+    return SCN_LEAF_PROC;
 }
 
 void proc_c::drawOpa() {}

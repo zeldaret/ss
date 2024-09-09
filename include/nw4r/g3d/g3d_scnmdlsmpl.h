@@ -1,10 +1,10 @@
 #ifndef NW4R_G3D_SCN_MDL_SIMPLE_H
 #define NW4R_G3D_SCN_MDL_SIMPLE_H
 #include "common.h"
-#include "nw4r/math/math_types.h"
+#include "nw4r/g3d/g3d_calcworld.h"
 #include "nw4r/g3d/g3d_resmdl.h"
 #include "nw4r/g3d/g3d_scnobj.h"
-#include "nw4r/g3d/g3d_calcworld.h"
+#include "nw4r/math/math_types.h"
 
 namespace nw4r {
 namespace g3d {
@@ -18,21 +18,22 @@ public:
     };
 
     enum AnmObjType {
-        ANMOBJ_0,
-        ANMOBJ_1,
-        ANMOBJ_2,
-        ANMOBJ_3,
-        ANMOBJ_4,
-        ANMOBJ_5,
-        ANMOBJ_6,
+        ANMOBJTYPE_CHR = 0,
+        ANMOBJTYPE_VIS = 1,
+        ANMOBJTYPE_MATCLR = 2,
+        ANMOBJTYPE_TEXPAT = 3,
+        ANMOBJTYPE_TEXSRT = 4,
+        ANMOBJTYPE_SHP = 5,
+        ANMOBJTYPE_NOT_SPECIFIED = 6,
+        ANMOBJTYPE_VTX = 5,
     };
 
 public:
     ScnMdlSimple(MEMAllocator *, ResMdl, math::MTX34 *, u32 *, math::MTX34 *, math::MTX33 *, math::MTX34 *, int, int);
 
-    static ScnMdlSimple *Construct(MEMAllocator*, unsigned long*, nw4r::g3d::ResMdl, int);
+    static ScnMdlSimple *Construct(MEMAllocator *, unsigned long *, nw4r::g3d::ResMdl, int);
 
-    bool GetScnMtxPos(math::MTX34* pOut, ScnObjMtxType tp, u32 nodeID) const;
+    bool GetScnMtxPos(math::MTX34 *pOut, ScnObjMtxType tp, u32 nodeID) const;
 
     virtual bool IsDerivedFrom(TypeObj other) const // at 0x8
     {
@@ -52,9 +53,11 @@ public:
         return GetTypeObj().GetTypeName();
     }
 
-    virtual bool SetAnmObj(AnmObj* p, AnmObjType type);
+    virtual bool SetAnmObj(AnmObj *p, AnmObjType type);
     virtual bool RemoveAnmObj(AnmObj *p);
     virtual bool RemoveAnmObj(AnmObjType type);
+    virtual AnmObj *GetAnmObj(AnmObjType type);
+    virtual AnmObj *GetAnmObj(AnmObjType type) const;
 
     const u8 *GetByteCode(ByteCodeType) const;
     void EnableScnMdlCallbackTiming(Timing);

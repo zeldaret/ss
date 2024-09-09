@@ -8,7 +8,7 @@ namespace m3d {
 anmMatClr_c::child_c::~child_c() {}
 
 int anmMatClr_c::child_c::getType() const {
-    return 0x02;
+    return nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_MATCLR;
 }
 
 u32 anmMatClr_c::child_c::heapCost(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmClr clr, bool b) {
@@ -125,7 +125,7 @@ anmMatClr_c::~anmMatClr_c() {
 }
 
 int anmMatClr_c::getType() const {
-    return 0x02;
+    return nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_MATCLR;
 }
 
 void anmMatClr_c::remove() {

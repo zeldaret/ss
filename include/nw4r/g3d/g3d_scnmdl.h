@@ -12,17 +12,19 @@ public:
     class CopiedMatAccess {
     public:
         CopiedMatAccess(ScnMdl *, u32);
-        ResTexSrt GetResTexSrtEx();
+        ResTexSrt GetResTexSrtEx(bool);
+        ResMatPix GetResMatPix(bool);
+        ResMatTevColor GetResMatTevColor(bool);
+        ResGenMode GetResGenMode(bool);
 
     private:
         char UNK_0x0[0x2C];
     };
 
 public:
+    virtual bool SetAnmObj(AnmObj *p, AnmObjType type) override;
 
-    virtual bool SetAnmObj(AnmObj* p, AnmObjType type) override;
-
-    static ScnMdl *Construct(MEMAllocator*, unsigned long*, nw4r::g3d::ResMdl, u32 bufferOption, int);
+    static ScnMdl *Construct(MEMAllocator *, unsigned long *, nw4r::g3d::ResMdl, u32 bufferOption, int);
 
     static const G3dObj::TypeObj GetTypeObjStatic() {
         return TypeObj(TYPE_NAME);

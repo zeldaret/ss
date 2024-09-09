@@ -12,7 +12,7 @@ namespace internal {
 extern mAllocator_c *l_allocator_p;
 extern nw4r::g3d::ScnRoot *l_scnRoot_p;
 
-}
+} // namespace internal
 
 bool create(EGG::Heap *heap, u32 u1, u32 u2, u32 u3, u32 u4);
 
@@ -33,6 +33,9 @@ bool pushBack(nw4r::g3d::ScnObj *obj);
 void clear();
 
 void reset();
+
+int getMatID(nw4r::g3d::ResMdl, const char *);
+int getNodeID(nw4r::g3d::ResMdl, const char *);
 
 void resetMaterial();
 

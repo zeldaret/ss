@@ -226,7 +226,7 @@ void mdl_c::play() {
 }
 
 void mdl_c::setAnm(m3d::banm_c &anm, f32 f) {
-    if (anm.getType() == 0) {
+    if (anm.getType() == nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_CHR) {
         mpCallback->setBlendFrame(f);
     }
     bmdl_c::setAnm(anm);

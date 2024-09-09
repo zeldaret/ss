@@ -15,24 +15,24 @@ class anmTexSrt_c : public banm_c {
         virtual int getType() const override;
 
         static u32 heapCost(nw4r::g3d::ResMdl, nw4r::g3d::ResAnmTexSrt, bool);
-        bool create(nw4r::g3d::ResMdl, nw4r::g3d::ResAnmTexSrt, mAllocator_c*, u32*);
-        void setAnm(m3d::bmdl_c&, nw4r::g3d::ResAnmTexSrt, m3d::playMode_e);
+        bool create(nw4r::g3d::ResMdl, nw4r::g3d::ResAnmTexSrt, mAllocator_c *, u32 *);
+        void setAnm(m3d::bmdl_c &, nw4r::g3d::ResAnmTexSrt, m3d::playMode_e);
         void releaseAnm();
-        void setFrmCtrlDefault(nw4r::g3d::ResAnmTexSrt&, playMode_e);
+        void setFrmCtrlDefault(nw4r::g3d::ResAnmTexSrt &, playMode_e);
     };
 
 public:
-    anmTexSrt_c(): mpChildren(nullptr) {}
+    anmTexSrt_c() : mpChildren(nullptr) {}
     virtual ~anmTexSrt_c();
 
     virtual int getType() const override;
     virtual void remove() override;
     virtual void play() override;
 
-    bool create(nw4r::g3d::ResMdl, nw4r::g3d::ResAnmTexSrt, mAllocator_c*, u32*, s32);
+    bool create(nw4r::g3d::ResMdl, nw4r::g3d::ResAnmTexSrt, mAllocator_c *, u32 *, s32);
     static u32 heapCost(nw4r::g3d::ResMdl, nw4r::g3d::ResAnmTexSrt, s32, bool);
 
-    void setAnm(bmdl_c&, nw4r::g3d::ResAnmTexSrt, s32, playMode_e);
+    void setAnm(bmdl_c &, nw4r::g3d::ResAnmTexSrt, s32, playMode_e);
 
     void play(s32);
     f32 getFrame(s32) const;

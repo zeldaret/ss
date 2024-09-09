@@ -3,7 +3,6 @@
 #include <nw4r/g3d/g3d_scnmdl.h>
 #include <nw4r/g3d/g3d_scnmdlsmpl.h>
 
-
 namespace m3d {
 
 smdl_c::smdl_c() {}

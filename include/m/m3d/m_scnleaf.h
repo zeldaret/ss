@@ -7,6 +7,12 @@
 
 namespace m3d {
 
+// NON-OFFICIAL
+enum ScnLeafType_e {
+    SCN_LEAF_MODEL = 0,
+    SCN_LEAF_PROC = 2,
+};
+
 class UnkClass {
 public:
     UnkClass() {}

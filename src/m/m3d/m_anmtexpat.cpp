@@ -6,7 +6,7 @@
 namespace m3d {
 
 int anmTexPat_c::child_c::getType() const {
-    return 0x03;
+    return nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_TEXPAT;
 }
 
 anmTexPat_c::child_c::~child_c() {}
@@ -20,7 +20,7 @@ u32 anmTexPat_c::child_c::heapCost(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexPa
     return size;
 }
 
-bool anmTexPat_c::child_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexPat pat, mAllocator_c* alloc, u32* pSize) {
+bool anmTexPat_c::child_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexPat pat, mAllocator_c *alloc, u32 *pSize) {
     if (alloc == nullptr) {
         alloc = internal::l_allocator_p;
     }
@@ -80,7 +80,7 @@ u32 anmTexPat_c::heapCost(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexPat pat, s3
     return size;
 }
 
-bool anmTexPat_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexPat pat, mAllocator_c* alloc, u32* pSize, s32 num) {
+bool anmTexPat_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexPat pat, mAllocator_c *alloc, u32 *pSize, s32 num) {
     if (alloc == nullptr) {
         alloc = internal::l_allocator_p;
     }
@@ -98,7 +98,7 @@ bool anmTexPat_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexPat pat, mAl
     mpAnmObj = nw4r::g3d::AnmObjTexPatOverride::Construct(&mAllocator, nullptr, mdl, num);
 
     // TODO inline?
-    mpChildren = (child_c*)MEMAllocFromAllocator(&mAllocator, ROUND_UP(num * sizeof(child_c), 0x20));
+    mpChildren = (child_c *)MEMAllocFromAllocator(&mAllocator, ROUND_UP(num * sizeof(child_c), 0x20));
 
     nw4r::g3d::AnmObjTexPatOverride *obj = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::AnmObjTexPatOverride>(mpAnmObj);
     child_c *child = mpChildren;
@@ -125,7 +125,7 @@ anmTexPat_c::~anmTexPat_c() {
 }
 
 int anmTexPat_c::getType() const {
-    return 0x03;
+    return nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_TEXPAT;
 }
 
 void anmTexPat_c::remove() {

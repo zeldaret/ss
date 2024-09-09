@@ -8,7 +8,7 @@ namespace m3d {
 anmChrBlend_c::~anmChrBlend_c() {}
 
 int anmChrBlend_c::getType() const {
-    return 0;
+    return nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_CHR;
 }
 
 bool anmChrBlend_c::create(nw4r::g3d::ResMdl mdl, int num, mAllocator_c *alloc, u32 *pSize) {

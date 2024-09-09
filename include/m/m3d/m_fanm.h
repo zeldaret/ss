@@ -18,7 +18,7 @@ public:
     fanm_c();
     virtual ~fanm_c();
 
-    virtual int getType() const  = 0;
+    virtual int getType() const = 0;
     virtual void play();
 
     void set(f32, playMode_e, f32, f32);
@@ -28,7 +28,6 @@ public:
     bool isStop() const;
     bool checkFrame(f32) const;
     bool unk_802EAE70() const;
-
 
     inline void setPlayState(playMode_e state) {
         mPlayState = state;

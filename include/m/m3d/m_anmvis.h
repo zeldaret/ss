@@ -4,7 +4,6 @@
 #include <m/m3d/m_bmdl.h>
 #include <m/m3d/m_fanm.h>
 
-
 namespace m3d {
 
 class anmVis_c : public fanm_c {

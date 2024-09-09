@@ -1,5 +1,7 @@
 #include <m/m3d/m3d.h>
 #include <nw4r/g3d/g3d_init.h>
+#include <nw4r/g3d/g3d_resmat.h>
+#include <nw4r/g3d/g3d_resmdl.h>
 #include <nw4r/g3d/g3d_state.h>
 #include <rvl/GX.h>
 
@@ -87,6 +89,26 @@ void clear() {
 void reset() {
     nw4r::g3d::G3dReset();
     // TODO EGG
+}
+
+int getMatID(nw4r::g3d::ResMdl mdl, const char *name) {
+    if (mdl.IsValid()) {
+        nw4r::g3d::ResMat mat = mdl.GetResMat(name);
+        if (mat.IsValid()) {
+            return mat.ref().id;
+        }
+    }
+    return -1;
+}
+
+int getNodeID(nw4r::g3d::ResMdl mdl, const char *name) {
+    if (mdl.IsValid()) {
+        nw4r::g3d::ResNode node = mdl.GetResNode(name);
+        if (node.IsValid()) {
+            return node.GetID();
+        }
+    }
+    return -1;
 }
 
 void resetMaterial() {

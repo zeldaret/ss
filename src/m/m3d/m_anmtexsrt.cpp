@@ -6,7 +6,7 @@
 namespace m3d {
 
 int anmTexSrt_c::child_c::getType() const {
-    return 0x04;
+    return nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_TEXSRT;
 }
 
 anmTexSrt_c::child_c::~child_c() {}
@@ -20,7 +20,7 @@ u32 anmTexSrt_c::child_c::heapCost(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexSr
     return size;
 }
 
-bool anmTexSrt_c::child_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexSrt srt, mAllocator_c* alloc, u32* pSize) {
+bool anmTexSrt_c::child_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexSrt srt, mAllocator_c *alloc, u32 *pSize) {
     if (alloc == nullptr) {
         alloc = internal::l_allocator_p;
     }
@@ -83,7 +83,7 @@ u32 anmTexSrt_c::heapCost(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexSrt srt, s3
     return size;
 }
 
-bool anmTexSrt_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexSrt srt, mAllocator_c* alloc, u32* pSize, s32 num) {
+bool anmTexSrt_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexSrt srt, mAllocator_c *alloc, u32 *pSize, s32 num) {
     if (alloc == nullptr) {
         alloc = internal::l_allocator_p;
     }
@@ -104,7 +104,7 @@ bool anmTexSrt_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmTexSrt srt, mAl
     }
 
     // TODO inline?
-    mpChildren = (child_c*)MEMAllocFromAllocator(&mAllocator, ROUND_UP(num * sizeof(child_c), 0x20));
+    mpChildren = (child_c *)MEMAllocFromAllocator(&mAllocator, ROUND_UP(num * sizeof(child_c), 0x20));
     if (!mpChildren) {
         remove();
         return false;
@@ -136,7 +136,7 @@ anmTexSrt_c::~anmTexSrt_c() {
 }
 
 int anmTexSrt_c::getType() const {
-    return 0x04;
+    return nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_TEXSRT;
 }
 
 void anmTexSrt_c::remove() {

@@ -4,13 +4,12 @@
 #include <nw4r/g3d/g3d_resanmvis.h>
 #include <nw4r/g3d/g3d_resmdl.h>
 
-
 namespace m3d {
 
 anmVis_c::~anmVis_c() {}
 
 int anmVis_c::getType() const {
-    return 1;
+    return nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_VIS;
 }
 
 bool anmVis_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmVis anm, mAllocator_c *alloc, u32 *pSize) {

@@ -8,6 +8,8 @@
 #include "nw4r/nw4r_types.h"
 #include <common.h>
 
+#pragma push
+#pragma warning off(10402)
 class mMtx_c {
 public:
     mMtx_c(){};
@@ -38,7 +40,7 @@ public:
     /* 802f1c40 */ void rot(int, int); // does some werrd operation to rotate the matrix
     /* 802f1e60 */ bool quatRelated();
 
-    operator nw4r::math::MTX34*() {
+    operator nw4r::math::MTX34 *() {
         return &nw4rm;
     }
 
@@ -57,5 +59,7 @@ public:
 public:
     static mMtx_c Identity;
 };
+
+#pragma pop
 
 #endif

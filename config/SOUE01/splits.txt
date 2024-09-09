@@ -324,6 +324,7 @@ m/m3d/m_banm.cpp:
 
 m/m3d/m_bmdl.cpp:
 	.text       start:0x802E9270 end:0x802EA6EC
+	.data       start:0x80542668 end:0x80542694
 
 m/m3d/m_calc_ratio.cpp:
 	.text       start:0x802EA6F0 end:0x802EA898

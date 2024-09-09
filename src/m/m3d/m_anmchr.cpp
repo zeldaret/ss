@@ -1,17 +1,16 @@
-#include <m/m3d/m_anmchr.h>
 #include <m/m3d/m3d.h>
+#include <m/m3d/m_anmchr.h>
 #include <nw4r/g3d/g3d_anmchr.h>
 #include <nw4r/g3d/g3d_resanmchr.h>
 
 namespace m3d {
 
 anmChr_c::~anmChr_c() {}
-
 int anmChr_c::getType() const {
-    return 0;
+    return nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_CHR;
 }
 
-bool anmChr_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmChr anm, mAllocator_c* alloc, u32* pSize) {
+bool anmChr_c::create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmChr anm, mAllocator_c *alloc, u32 *pSize) {
     if (alloc == nullptr) {
         alloc = internal::l_allocator_p;
     }
@@ -70,9 +69,7 @@ void anmChr_c::setAnmAfter(bmdl_c &mdl, nw4r::g3d::ResAnmChr anm, playMode_e mod
         nw4r::g3d::AnmObjChrRes *o = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::AnmObjChrRes>(mpAnmObj);
         node->SetWeight(idx, weight);
         node->Attach(idx, o);
-
     }
-
 }
 
 void anmChr_c::setFrmCtrlDefault(nw4r::g3d::ResAnmChr &anm, m3d::playMode_e mode) {
