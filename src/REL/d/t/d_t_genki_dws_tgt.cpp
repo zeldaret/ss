@@ -1,26 +1,8 @@
-#include <d/tg/d_tg.h>
-#include <toBeSorted/dowsing_target.h>
+#include <d/tg/d_t_genki_dws_tgt.h>
 #include <toBeSorted/room_manager.h>
 #include <toBeSorted/sceneflag_manager.h>
 #include <toBeSorted/item_story_flag_manager.h>
 #include <toBeSorted/scgame.h>
-
-
-class dTgGenkiDwsTgt_c : public dTg_c {
-public:
-    dTgGenkiDwsTgt_c() : mDowsingTarget(this, DowsingTarget::SLOT_NONE) {}
-    virtual ~dTgGenkiDwsTgt_c() {}
-
-    virtual int create() override;
-    virtual int doDelete() override;
-    virtual int actorExecute() override;
-
-
-private:
-    u16 getSceneFlagFromParams();
-
-    DowsingTarget mDowsingTarget; // 0xFC
-};
 
 SPECIAL_ACTOR_PROFILE(TAG_GENKI_DOWSING_TARGET, dTgGenkiDwsTgt_c, fProfile::TAG_GENKI_DOWSING_TARGET, 0x02A5, 0, 0);
 
