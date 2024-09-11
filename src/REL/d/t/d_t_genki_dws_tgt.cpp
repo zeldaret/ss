@@ -6,10 +6,7 @@
 #include <toBeSorted/scgame.h>
 
 
-// Maybe this is dTg_c and it is empty?
-class UnkIntermediateClass : public dAcBase_c {};
-
-class dTgGenkiDwsTgt_c : public UnkIntermediateClass {
+class dTgGenkiDwsTgt_c : public dTg_c {
 public:
     dTgGenkiDwsTgt_c() : mDowsingTarget(this, DowsingTarget::SLOT_NONE) {}
     virtual ~dTgGenkiDwsTgt_c() {}

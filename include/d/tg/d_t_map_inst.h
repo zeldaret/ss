@@ -9,6 +9,9 @@ public:
     virtual ~dTgMapInst_c() {}
 
     virtual int create() override;
+    virtual int doDelete() override;
+    virtual int actorExecute() override;
+    virtual int draw() override;
 
     u8 field_0xfc;
 };
