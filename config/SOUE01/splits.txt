@@ -329,6 +329,11 @@ m/m3d/m_banm.cpp:
 	.text       start:0x802E7D50 end:0x802E7F94
 	.data       start:0x805425E0 end:0x80542628
 
+m/m3d/m_bline.cpp:
+	.text       start:0x802E7FA0 end:0x802E926C
+	.data       start:0x80542628 end:0x80542664
+	.sdata2     start:0x8057CD28 end:0x8057CD48
+
 m/m3d/m_bmdl.cpp:
 	.text       start:0x802E9270 end:0x802EA6EC
 	.data       start:0x80542668 end:0x80542694

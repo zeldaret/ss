@@ -99,6 +99,6 @@ void mHeapAllocator_c::adjustFrmHeapRestoreCurrent() {
     mHeap::adjustFrmHeap(static_cast<EGG::FrmHeap *>(getHeapOfKind(heap, EGG::Heap::HEAP_KIND_FRAME)));
 }
 
-void *mHeapAllocator_c::allocOnHeap(u32 size, mHeapAllocator_c *allocator) {
+void *operator new[](size_t size, mAllocator_c *allocator) {
     return allocator->alloc(size);
 }

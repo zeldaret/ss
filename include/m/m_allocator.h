@@ -26,6 +26,8 @@ public:
     s32 adjustExpHeap();
     bool createNewTempFrmHeap(s32 size, EGG::Heap *newHeap, char *heapName, s32 align, u32 unk);
     void adjustFrmHeapRestoreCurrent();
-    static void *allocOnHeap(u32 size, mHeapAllocator_c *allocator);
 };
+
+void *operator new[](size_t size, mAllocator_c *);
+
 #endif

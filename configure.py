@@ -357,6 +357,7 @@ config.libs = [
             Object(Matching, "m/m3d/m_anmmatclr.cpp"),
             Object(Matching, "m/m3d/m_anmvis.cpp"),
             Object(Matching, "m/m3d/m_banm.cpp"),
+            Object(NonMatching, "m/m3d/m_bline.cpp"),
             Object(NonMatching, "m/m3d/m_bmdl.cpp"),
             Object(Matching, "m/m3d/m_calc_ratio.cpp"),
             Object(Matching, "m/m3d/m_fanm.cpp"),
