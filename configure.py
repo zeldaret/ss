@@ -123,7 +123,6 @@ config.build_dir = args.build_dir
 config.dtk_path = args.dtk
 config.binutils_path = args.binutils
 config.compilers_path = args.compilers
-config.debug = args.debug
 config.generate_map = args.map
 config.non_matching = args.non_matching
 config.sjiswrap_path = args.sjiswrap
@@ -135,8 +134,8 @@ if not config.non_matching:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
-config.dtk_tag = "v0.9.4"
-config.objdiff_tag = "v2.0.0-beta.5"
+config.dtk_tag = "v0.9.5"
+config.objdiff_tag = "v2.0.0"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
 
@@ -154,8 +153,14 @@ config.linker_version = "Wii/1.6"
 config.ldflags = [
     "-fp hardware",
     "-nodefaults",
-    "-listclosure", # Uncomment for Wii linkers
 ]
+if args.debug:
+    # config.ldflags.append("-g")
+    config.ldflags.append("-gdwarf-2")  # -gdwarf-2 for Wii linkers
+if args.map:
+    config.ldflags.append("-mapunused")
+    config.ldflags.append("-listclosure") # For Wii linkers
+
 # Use for any additional files that should cause a re-configure when modified
 config.reconfig_deps = []
 
@@ -184,7 +189,10 @@ cflags_base = [
     f"-i build/{config.version}/include",
     f"-DVERSION={version_num}",
 ]
-if config.debug:
+
+# Debug flags
+if args.debug:
+    # Or -sym dwarf-2 for Wii compilers
     cflags_base.extend(["-sym on", "-DDEBUG=1"])
 else:
     cflags_base.append("-DNDEBUG=1")
