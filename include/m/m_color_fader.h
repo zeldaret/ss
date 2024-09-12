@@ -12,7 +12,7 @@ public:
     virtual ~mColorFader_c();
 
     virtual void setStatus(EStatus status) override;
-    virtual u8 calc() override;
+    virtual bool calc() override;
     virtual void draw() override;
 
     u8 mAspectRatio;

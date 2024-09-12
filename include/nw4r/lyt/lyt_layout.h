@@ -51,6 +51,10 @@ public:
         return mpRootPane;
     }
 
+    GroupContainer *GetGroupContainer() const {
+        return mpGroupContainer;
+    }
+
 private:
     ut::LinkList<AnimTransform, 4> mAnimTransList; // at 0x04
     Pane *mpRootPane;                              // at 0x10

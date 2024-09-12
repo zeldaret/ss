@@ -62,6 +62,19 @@ public:
         return mCurrFrame;
     }
 
+    inline void setToStart() {
+        setFrame(0.0f);
+    }
+
+    inline bool isEndReached() {
+        f32 actualEnd = mEndFrame - 1.0f;
+        return mCurrFrame >= actualEnd;
+    }
+
+    inline void setToEnd() {
+        setFrame(mEndFrame - 1.0f);
+    }
+
 private:
     inline bool notLooping() const {
         return (mFlags & FLAG_NO_LOOP) != 0;
@@ -114,9 +127,11 @@ class Base_c {
 public:
     Base_c(u8 priority) : mPriority(priority) {}
     /* 0x00 */ nw4r::ut::Node mLink;
-    /* vt 0x04 */
-    virtual ~Base_c();
-    virtual void draw();
+
+    /* vt offset 0x04 */
+    /* vt 0x08 */ virtual ~Base_c();
+    /* vt 0x0C */ virtual void draw();
+
     /* 0x0C */ u8 mPriority;
 
     void addToDrawList();
@@ -125,10 +140,10 @@ public:
 class Simple_c : public Base_c {
 public:
     Simple_c();
-    virtual ~Simple_c();
-    virtual void draw() override;
-    virtual void calc();
-    virtual bool build(const char *name, ResAccIf_c *acc);
+    /* vt 0x08 */ virtual ~Simple_c();
+    /* vt 0x0C */ virtual void draw() override;
+    /* vt 0x10 */ virtual void calc();
+    /* vt 0x14 */ virtual bool build(const char *name, ResAccIf_c *acc);
 
     void calcBefore();
     void calcAfter();
@@ -148,6 +163,6 @@ private:
     u32 field_0x94;
 };
 
-} // namespace m2d
+}
 
 #endif

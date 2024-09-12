@@ -18,8 +18,8 @@ void mColorFader_c::setStatus(EStatus status) {
     }
 }
 
-u8 mColorFader_c::calc() {
-    u8 result = mFaderBase_c::calc();
+bool mColorFader_c::calc() {
+    bool result = mFaderBase_c::calc();
     u16 elapsed = mElapsed;
     u16 frame = mFrame;
     if (elapsed > mFrame) {

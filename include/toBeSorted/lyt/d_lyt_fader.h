@@ -1,0 +1,45 @@
+#ifndef D_LYT_FADER_H
+#define D_LYT_FADER_H
+
+#include <m/m_fader_base.h>
+#include <toBeSorted/lyt/d2d.h>
+
+class dLytFontRefAndAccess : public m2d::ResAccIf_c {
+public:
+    /* 0xB4 */ nw4r::lyt::FontRefLink mFontRefLinks[5];
+
+    void fn_800A9D30();
+    void fn_800A9D90(void *data, const char *name);
+};
+
+class dLytFader_c : public mFaderBase_c {
+public:
+    dLytFader_c(const mColor &color, EStatus status);
+    virtual ~dLytFader_c();
+
+    virtual void setStatus(EStatus status) override;
+    virtual bool fadeIn() override;
+    virtual bool fadeOut() override;
+    virtual bool calc() override;
+    virtual void draw() override;
+
+    bool init();
+
+private:
+    void fn_801758F0();
+    void fn_801759B0();
+    void fn_80175A50();
+    void fn_80175B10();
+    void fn_80175BC0(s32);
+
+    /* 0x014 */ dLytFontRefAndAccess mFont;
+    /* 0x384 */ d2d::LytBase_c mLytBase;
+    /* 0x414 */ d2d::dLytStructA mLytStructAs[3];
+    /* 0x4D4 */ s32 field_0x4D4;
+    /* 0x4D8 */ s32 field_0x4D8;
+    /* 0x4DC */ u8 field_0x4DC[0x4DD - 0x4DC];
+    
+    bool field_0x4DD;
+};
+
+#endif
