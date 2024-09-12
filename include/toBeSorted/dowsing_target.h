@@ -15,17 +15,16 @@ private:
     mVec3_c mOffset;    // 0x10
 
 public:
-    // TODO
     enum DowsingSlot {
-        SLOT_0,
-        SLOT_1,
-        SLOT_2,
-        SLOT_CRYSTALS,
-        SLOT_4,
-        SLOT_5,
-        SLOT_6,
-        SLOT_7,
-        SLOT_NONE
+        SLOT_STORY_EVENT = 0,
+        SLOT_RUPEE = 1,
+        SLOT_QUEST = 2,
+        SLOT_CRYSTAL = 3,
+        SLOT_HEART = 4,
+        SLOT_GODDESS_CUBE = 5,
+        SLOT_LOOK = 6,
+        SLOT_TREASURE = 7,
+        SLOT_NONE = 8,
     };
 
     DowsingTarget(dAcBase_c *ac, u8 dowsingSlot) : mpActor(ac), mDowsingSlot(dowsingSlot) {}

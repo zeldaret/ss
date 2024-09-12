@@ -4,7 +4,7 @@
 SPECIAL_ACTOR_PROFILE(TAG_HOLY_WATER, dTgHolyWater_c, fProfile::TAG_HOLY_WATER, 0x0224, 0, 4);
 
 int dTgHolyWater_c::create() {
-    mDowsingTarget.initialize(DowsingTarget::SLOT_0, 0, nullptr, 0.0f);
+    mDowsingTarget.initialize(DowsingTarget::SLOT_STORY_EVENT, 0, nullptr, 0.0f);
     return SUCCEEDED;
 }
 

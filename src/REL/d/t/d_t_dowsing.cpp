@@ -17,7 +17,7 @@ int dTgDowsing_c::create() {
     rotation.z = 0;
     bool doThing = getDowsingOptionNum() <= DOWSING_MAX && (1 << getDowsingOptionNum() & 0xC3F) != 0;
 
-    mDowsingTarget.initialize(!doThing ? DowsingTarget::SLOT_2 : DowsingTarget::SLOT_0, 0, nullptr, 0);
+    mDowsingTarget.initialize(!doThing ? DowsingTarget::SLOT_QUEST : DowsingTarget::SLOT_STORY_EVENT, 0, nullptr, 0);
     mTargetActive = false;
     return SUCCEEDED;
 }
