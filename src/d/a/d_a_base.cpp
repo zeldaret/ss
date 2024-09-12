@@ -109,9 +109,8 @@ int dAcBase_c::initAllocatorWork1Heap(int size, char *name, int align) {
     return initAllocator(size, name, dHeap::work1Heap.heap, align);
 }
 
-extern "C" int fn_802EE510(mAllocator_c *, int size, EGG::Heap *heap, char *name, int align, int unk);
 int dAcBase_c::initAllocator(int size, char *name, EGG::Heap *heap, int align) {
-    if (fn_802EE510(&heap_allocator, size, heap, name, 0x20, 0) == 0) {
+    if (!heap_allocator.createNewTempFrmHeap(size, heap, name, 0x20, 0)) {
         return 0;
     }
     sound_source = FUN_8002c690();

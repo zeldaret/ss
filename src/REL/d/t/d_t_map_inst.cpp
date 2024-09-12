@@ -6,3 +6,15 @@ int dTgMapInst_c::create() {
     field_0xfc = params & 0xff;
     return SUCCEEDED;
 }
+
+int dTgMapInst_c::doDelete() {
+    return 1;
+}
+
+int dTgMapInst_c::actorExecute() {
+    return 1;
+}
+
+int dTgMapInst_c::draw() {
+    return 1;
+}

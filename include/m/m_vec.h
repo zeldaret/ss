@@ -122,7 +122,7 @@ public:
 
     /// @brief Scalar product operator.
     mVec3_c operator*(f32 f) const {
-        return mVec3_c(f * x, f * y, f * z);
+        return mVec3_c(x * f, y * f, z * f);
     }
 
     /// @brief Scalar division operator.
@@ -140,6 +140,18 @@ public:
     bool operator!=(const mVec3_c &v) const {
         return x != v.x || y != v.y || z != v.z;
     }
+
+    void normalize();
+    bool normalizeRS();
+
+    inline f32 mag() const {
+        return PSVECMag(*this);
+    }
+
+    static mVec3_c Zero;
+    static mVec3_c Ex;
+    static mVec3_c Ey;
+    static mVec3_c Ez;
 };
 
 #endif

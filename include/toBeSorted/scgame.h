@@ -14,9 +14,8 @@ struct SpawnInfo {
     /* 0x27 */ s8 transitionType;
     /* 0x28 */ s32 unk;
 
-    // TODO figure out correct types
     bool isNight() {
-        return (u8)night;
+        return night == 1;
     }
 };
 
