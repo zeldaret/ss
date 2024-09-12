@@ -19,6 +19,7 @@ from pathlib import Path
 from tools.project import (
     Object,
     ProjectConfig,
+    ProgressCategory,
     calculate_progress,
     generate_build,
     is_windows,
@@ -208,14 +209,6 @@ cflags_runtime = [
     "-func_align 4",
 ]
 
-# Dolphin library flags
-cflags_dolphin = [
-    *cflags_base,
-    "-use_lmw_stmw on",
-    "-str reuse,pool,readonly",
-    "-inline auto",
-]
-
 # Framework flags
 cflags_framework = [
     *cflags_base,
@@ -255,22 +248,11 @@ def Rel(status, rel_name, cpp_name, extra_cflags=[]):
         "lib": rel_name,
         "mw_version": "Wii/1.6",
         "cflags": cflags_rel + extra_cflags,
+        "progress_category": "game",
         "host": False,
         "objects": [
             Object(status, cpp_name),
         ],
-    }
-
-
-# From tww. IDK if it needs changing for Wii (probably)
-# Helper function for Dolphin libraries
-def DolphinLib(lib_name, objects):
-    return {
-        "lib": lib_name,
-        "mw_version": "Wii/1.0", # from version strings
-        "cflags": cflags_dolphin,
-        "host": False,
-        "objects": objects,
     }
 
 
@@ -279,6 +261,7 @@ def EGGLib(lib_name, objects):
         "lib": lib_name,
         "mw_version": "Wii/1.6",
         "cflags": cflags_egg,
+        "progress_category": "egg",
         "host": False,
         "objects": objects,
     }
@@ -289,6 +272,7 @@ def nw4rLib(lib_name, objects, extra_cflags=[]):
         "lib": lib_name,
         "mw_version": "Wii/1.3", # most seem to be around 1.2, snd is 1.6
         "cflags": cflags_nw4r + extra_cflags,
+        "progress_category": "nw4r",
         "host": False,
         "objects": objects,
     }
@@ -302,9 +286,10 @@ config.warn_missing_config = False
 config.warn_missing_source = False
 config.libs = [
     {
-        "lib": "framework",
+        "lib": "game_code",
         "mw_version": "Wii/1.6",
         "cflags": cflags_framework,
+        "progress_category": "game",
         "host": False,
         "objects": [
             Object(Matching, "toBeSorted/unk_flag_stuff.cpp"),
@@ -315,8 +300,6 @@ config.libs = [
             Object(Matching, "toBeSorted/dungeonflag_manager.cpp"),
             Object(Matching, "toBeSorted/skipflag_manager.cpp"),
             Object(NonMatching, "toBeSorted/special_item_drop_mgr.cpp"),
-            Object(Matching, "c/c_list.cpp"),
-            Object(Matching, "c/c_tree.cpp"),
             Object(Matching, "d/d_base.cpp"),
             Object(Matching, "d/d_dvd.cpp"),
             Object(NonMatching, "d/d_dvd_unk.cpp"),
@@ -344,16 +327,25 @@ config.libs = [
             Object(Matching, "toBeSorted/counters/extra_wallet_counter.cpp"),
             Object(NonMatching, "toBeSorted/file_manager.cpp"),
             Object(NonMatching, "toBeSorted/save_manager.cpp"),
-            Object(NonMatching, "f/f_base.cpp"),
-            Object(Matching, "f/f_list.cpp"),
-            Object(Matching, "f/f_manager.cpp"),
             Object(Matching, "DynamicLink.cpp"),
+        ],
+    },
+    {
+        "lib": "clib",
+        "mw_version": "Wii/1.6",
+        "cflags": cflags_framework,
+        "progress_category": "core",
+        "host": False,
+        "objects": [
+            Object(Matching, "c/c_list.cpp"),
+            Object(Matching, "c/c_tree.cpp"),
         ],
     },
     {
         "lib": "mlib",
         "mw_version": "Wii/1.5",
         "cflags": cflags_framework,
+        "progress_category": "core",
         "host": False,
         "objects": [
             Object(Matching, "m/m3d/m3d.cpp"),
@@ -389,6 +381,7 @@ config.libs = [
         "lib": "slib",
         "mw_version": "Wii/1.5",
         "cflags": cflags_framework,
+        "progress_category": "core",
         "host": False,
         "objects": [
             Object(Matching, "s/s_Crc.cpp"),
@@ -399,14 +392,23 @@ config.libs = [
             Object(Matching, "s/s_Phase.cpp"),
         ],
     },
-    # DolphinLib(
-    #     "name",
-    #     [ ],
-    # ),
+    {
+        "lib": "flib",
+        "mw_version": "Wii/1.6",
+        "cflags": cflags_framework,
+        "progress_category": "core",
+        "host": False,
+        "objects": [
+            Object(NonMatching, "f/f_base.cpp"),
+            Object(Matching, "f/f_list.cpp"),
+            Object(Matching, "f/f_manager.cpp"),
+        ],
+    },
     {
         "lib": "Runtime.PPCEABI.H",
         "mw_version": "Wii/1.6",
         "cflags": cflags_runtime,
+        "progress_category": "core",
         "host": False,
         "objects": [
             Object(Matching, "Runtime.PPCEABI.H/global_destructor_chain.c"),
@@ -530,6 +532,7 @@ config.libs = [
         "lib": "REL",
         "mw_version": "Wii/1.6",
         "cflags": cflags_rel,
+        "progress_category": "core",
         "host": False,
         "objects": [
             Object(Matching, "REL/executor.c"),
@@ -1182,6 +1185,16 @@ config.libs = [
     Rel(NonMatching, "d_t_touch", "REL/d/t/d_t_touch.cpp"),
     Rel(NonMatching, "d_t_tumble_weed", "REL/d/t/d_t_tumble_weed.cpp"),
 ]
+
+# Optional extra categories for progress tracking
+config.progress_categories = [
+    ProgressCategory("core", "Core Game Engine"),
+    ProgressCategory("game", "SS Game Code"),
+    ProgressCategory("egg", "EGG Code"),
+    ProgressCategory("nw4r", "NW4R Code"),
+    ProgressCategory("rvl", "Wii Specific Code"),
+]
+config.progress_each_module = args.verbose
 
 if args.mode == "configure":
     # Write build.ninja and objdiff.json
