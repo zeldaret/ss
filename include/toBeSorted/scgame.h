@@ -13,6 +13,10 @@ struct SpawnInfo {
     /* 0x26 */ s8 trial;
     /* 0x27 */ s8 transitionType;
     /* 0x28 */ s32 unk;
+
+    bool isNight() {
+        return night == 1;
+    }
 };
 
 class ScGame {

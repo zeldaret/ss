@@ -7,6 +7,11 @@ class dTgTackle_c : public dTg_c {
 public:
     dTgTackle_c() {}
     virtual ~dTgTackle_c() {}
+
+    virtual int create() override;
+    virtual int doDelete() override;
+    virtual int actorExecute() override;
+    virtual int draw() override;
 };
 
 #endif

@@ -7,6 +7,11 @@ class dTgLightShaftEff_c : public dTg_c {
 public:
     dTgLightShaftEff_c() {}
     virtual ~dTgLightShaftEff_c() {}
+
+    virtual int create() override;
+    virtual int doDelete() override;
+    virtual int actorExecute() override;
+    virtual int draw() override;
 };
 
 #endif
