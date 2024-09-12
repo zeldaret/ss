@@ -3,8 +3,10 @@
 
 #include <common.h>
 #include <egg/core/eggHeap.h>
+#include <egg/gfx/eggTexture.h>
 #include <egg/math/eggMatrix.h>
 #include <rvl/GX.h>
+
 
 namespace EGG {
 
@@ -13,6 +15,7 @@ public:
     static void Initialize(Heap *);
 
     static GXTexMapID GetTexMapDefault();
+    static void LoadTexture(const EGG::ResTIMG *, GXTexMapID);
 
     // TODO MORE
 

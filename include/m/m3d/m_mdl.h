@@ -8,8 +8,6 @@
 #include <nw4r/g3d/g3d_calcworld.h>
 #include <nw4r/g3d/g3d_resmdl.h>
 
-class UnkClass3 {};
-
 namespace m3d {
 
 class callback_c {
