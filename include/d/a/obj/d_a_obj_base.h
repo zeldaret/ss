@@ -4,7 +4,25 @@
 #include "d/a/d_a_base.h"
 #include "m/m_mtx.h"
 #include "m/types_m.h"
+#include "nw4r/g3d/g3d_resfile.h"
 
+// Size: 0xA8
+struct ActorCarryStruct {
+    /* 0x00 */ fLiNdBa_c actorLink;
+    /* 0x0C */ fLiNdBa_c *carriedActor;
+    /* 0x10 */ u32 carryFlags;
+    /* 0x14 */ int carryType;
+    /* 0x18 */ u16 field_0x18;
+    /* 0x1A */ u16 field_0x1A;
+    /* 0x1C */ mVec3_c field_0x1C;
+    /* 0x28 */ mMtx_c carryTransMtx;
+    /* 0x58 */ mMtx_c field_0x58;
+    /* 0x88 */ s32 isCarried;
+    /* 0x8C */ u8 field_0x8C[0x10]; // mQuat_c
+    /* 0x9C */ void *dtor; // ???
+    /* 0xA0 */ u32 field_0xA0;
+    /* 0xA4 */ u32 field_0xA4;
+};
 
 // Ghidra: ActorObjectBase
 //   size: 0x330
@@ -26,23 +44,29 @@ public:
     f32 forwardSpeed;
     f32 forwardAccel;
     f32 forwardMaxSpeed;
-    // TODO: add the rest
-    u8 unk1[0x15C - 0x150];
+    mVec3_c velocity;
     /* 0x15C */ mMtx_c worldMatrix;
-
     nw4r::math::AABB boundingBox;
 
-    u8 unk_0x1A4[0x330 - 0x1A4];
+    u8 unk_0x1A4[0x1E8 - 0x1A4];
+
+    /* 0x1E8 */ mVec3_c posIncrements;
+
+    u8 unk_0x1F4[0x210 - 0x1F4];
+
+    /* 0x210 */ ActorCarryStruct mActorCarryInfo;
+
+    u8 unk_0x1EC[0x330 - 0x2B8];
 
 public:
     // could be their own thing?
-    /* 8002de40 */ static void *getOarcFile(char *oarcName, char *fileName);
-    /* 8002de60 */ static void *getOarcSubEntry(char *oarcName, char *fileName);
-    /* 8002de80 */ static void *getOarcResFile(char *oarcName);
-    /* 8002de90 */ static void *getOarcModelFile(char *oarcName);
-    /* 8002dea0 */ static void *getOarcZev(char *oarcName);
-    /* 8002deb0 */ static void *getOarcDZB(char *dzbName);
-    /* 8002ded0 */ static void *getOarcPLC(char *plcName);
+    /* 8002de40 */ static void *getOarcFile(const char *oarcName, const char *fileName);
+    /* 8002de60 */ static void *getOarcSubEntry(const char *oarcName, const char *fileName);
+    /* 8002de80 */ static void *getOarcResFile(const char *oarcName);
+    /* 8002de90 */ static void *getOarcModelFile(const char *oarcName);
+    /* 8002dea0 */ static void *getOarcZev(const char *oarcName);
+    /* 8002deb0 */ static void *getOarcDZB(const char *dzbName);
+    /* 8002ded0 */ static void *getOarcPLC(const char *plcName);
 
 public:
     /* 8002def0 */ dAcObjBase_c();
@@ -74,7 +98,7 @@ public:
     /* 8002eb30 */ void fn_8002EB30(void *);
     /* 8002eb90 */ void putInODesert(f32 depth, mVec3_c *position);
     // Disabling makes Items and Link Disappear
-    /* 8002ec70 */ void drawModelType1();
+    /* 8002ec70 */ void drawModelType1(m3d::smdl_c *smdl);
     // Disabling make Lava and other objects Disappear
     /* 8002ecd0 */ void drawModel2();
     /* 8002ed20 */ void fn_8002ed20();
@@ -93,6 +117,15 @@ public:
             mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2);
     /* 8002f260 */ static dAcBase_c *createActorUnkGroup3(char *name, u32 roomId, u32 params1, mVec3_c *pos,
             mAng3_c *rot, mVec3_c *scale, u32 params2, u16 id, u8 viewclipId);
+
+protected:
+    inline void setBoundingBox(mVec3_c min, mVec3_c max) {
+        boundingBox.min = min;
+        boundingBox.max = max;
+    }
 };
+
+// Actors' createHeap functions often have patterns that can be matched with this macro
+#define TRY_CREATE(thing) do { bool result = (thing); if (!result) return result; } while (0);
 
 #endif

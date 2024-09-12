@@ -1,6 +1,7 @@
 #ifndef NW4R_G3D_CALC_VIEW_H
 #define NW4R_G3D_CALC_VIEW_H
 #include "common.h"
+#include "nw4r/math.h"
 
 namespace nw4r {
 namespace g3d {

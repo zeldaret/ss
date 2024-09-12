@@ -127,6 +127,7 @@ struct Vector3s {
     s16 x, y, z;
 
 public:
+    Vector3s() {}
     Vector3s(s16 sx, s16 sy, s16 sz) {
         x = sx;
         y = sy;

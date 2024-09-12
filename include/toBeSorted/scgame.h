@@ -4,7 +4,7 @@
 #include <common.h>
 
 struct SpawnInfo {
-    /* 0x00 */ char stageName[32];
+    /* 0x00 */ char stageName[32]; // Probably SizedString<32>
     /* 0x20 */ s16 transitionFadeFrames;
     /* 0x22 */ s8 room;
     /* 0x23 */ s8 layer;

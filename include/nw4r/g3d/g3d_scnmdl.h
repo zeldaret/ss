@@ -1,9 +1,9 @@
 #ifndef NW4R_G3D_SCN_MDL_H
 #define NW4R_G3D_SCN_MDL_H
 #include "common.h"
-#include "g3d_draw.h"
-#include "g3d_resmat.h"
-#include "g3d_scnmdlsmpl.h"
+#include "nw4r/g3d/g3d_draw.h"
+#include "nw4r/g3d/g3d_resmat.h"
+#include "nw4r/g3d/g3d_scnmdlsmpl.h"
 
 namespace nw4r {
 namespace g3d {
@@ -12,13 +12,20 @@ public:
     class CopiedMatAccess {
     public:
         CopiedMatAccess(ScnMdl *, u32);
-        ResTexSrt GetResTexSrtEx();
+        ResTexSrt GetResTexSrtEx(bool);
+        ResMatPix GetResMatPix(bool);
+        ResMatTevColor GetResMatTevColor(bool);
+        ResGenMode GetResGenMode(bool);
 
     private:
-        char UNK_0x0[0x2C];
+        char UNK_0x0[0x34];
     };
 
 public:
+    virtual bool SetAnmObj(AnmObj *p, AnmObjType type) override;
+
+    static ScnMdl *Construct(MEMAllocator *, unsigned long *, nw4r::g3d::ResMdl, u32 bufferOption, int);
+
     static const G3dObj::TypeObj GetTypeObjStatic() {
         return TypeObj(TYPE_NAME);
     }

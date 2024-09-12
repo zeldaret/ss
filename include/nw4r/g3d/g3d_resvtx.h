@@ -1,7 +1,7 @@
 #ifndef NW4R_G3D_RESVTX_H
 #define NW4R_G3D_RESVTX_H
 #include <GXAttr.h>
-#include "g3d_rescommon.h"
+#include "nw4r/g3d/g3d_rescommon.h"
 
 namespace nw4r
 {

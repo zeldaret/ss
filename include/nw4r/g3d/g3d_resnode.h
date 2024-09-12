@@ -1,12 +1,14 @@
 #ifndef NW4R_G3D_RESNODE_H
 #define NW4R_G3D_RESNODE_H
 #include "common.h"
-#include "g3d_anmchr.h"
-#include "g3d_rescommon.h"
-#include "math_types.h"
+#include "nw4r/g3d/g3d_rescommon.h"
+#include "nw4r/math/math_types.h"
 
 namespace nw4r {
 namespace g3d {
+
+class ChrAnmResult;
+
 struct ResNodeData {
     u32 INT_0x0;
     s32 INT_0x4;

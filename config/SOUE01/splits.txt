@@ -289,6 +289,90 @@ f/f_manager.cpp:
 	.sbss       start:0x80575BB8 end:0x80575BC0
 	.bss        start:0x805B84D8 end:0x805B8588
 
+m/m3d/m3d.cpp:
+	.text       start:0x802E3E50 end:0x802E4714
+	.sbss       start:0x80575BD0 end:0x80575BEC
+	.sdata2     start:0x8057CCB8 end:0x8057CCBC
+
+m/m3d/m_proc.cpp:
+	.text       start:0x802E4720 end:0x802E48D4
+	.data       start:0x805424A0 end:0x805424D0
+
+m/m3d/m_anmchr.cpp:
+	.text       start:0x802E48E0 end:0x802E4D98
+	.data       start:0x805424D0 end:0x805424E8
+	.sdata2     start:0x8057CCC0 end:0x8057CCD0
+
+m/m3d/m_anmchrblend.cpp:
+	.text       start:0x802E4DA0 end:0x802E5260
+	.data       start:0x805424E8 end:0x80542500
+
+m/m3d/m_anmmatclr.cpp:
+	.text       start:0x802E5260 end:0x802E5D94
+	.data       start:0x80542500 end:0x80542530
+	.sdata2     start:0x8057CCD0 end:0x8057CCE0
+
+m/m3d/m_anmmdl.cpp:
+	.text       start:0x802E5DA0 end:0x802E60D0
+	.data       start:0x80542530 end:0x80542550
+	.sdata2     start:0x8057CCE0 end:0x8057CCE8
+
+m/m3d/m_anmshp.cpp:
+	.text       start:0x802E60D0 end:0x802E63B8
+	.data       start:0x80542550 end:0x80542568
+	.sdata2     start:0x8057CCE8 end:0x8057CCF8
+
+m/m3d/m_anmtexpat.cpp:
+	.text       start:0x802E63C0 end:0x802E6EB4
+	.data       start:0x80542568 end:0x80542598
+	.sdata2     start:0x8057CCF8 end:0x8057CD08
+
+m/m3d/m_anmtexsrt.cpp:
+	.text       start:0x802E6EC0 end:0x802E7A54
+	.data       start:0x80542598 end:0x805425C8
+	.sdata2     start:0x8057CD08 end:0x8057CD18
+
+m/m3d/m_anmvis.cpp:
+	.text       start:0x802E7A60 end:0x802E7D48
+	.data       start:0x805425C8 end:0x805425E0
+	.sdata2     start:0x8057CD18 end:0x8057CD28
+
+m/m3d/m_banm.cpp:
+	.text       start:0x802E7D50 end:0x802E7F94
+	.data       start:0x805425E0 end:0x80542628
+
+m/m3d/m_bline.cpp:
+	.text       start:0x802E7FA0 end:0x802E926C
+	.data       start:0x80542628 end:0x80542664
+	.sdata2     start:0x8057CD28 end:0x8057CD48
+
+m/m3d/m_bmdl.cpp:
+	.text       start:0x802E9270 end:0x802EA6EC
+	.data       start:0x80542668 end:0x80542694
+
+m/m3d/m_calc_ratio.cpp:
+	.text       start:0x802EA6F0 end:0x802EA898
+	.data       start:0x80542698 end:0x805426A8
+	.sdata2     start:0x8057CD48 end:0x8057CD50
+
+m/m3d/m_fanm.cpp:
+	.text       start:0x802EA8A0 end:0x802EAF10
+	.data       start:0x805426A8 end:0x805426C0
+	.sdata2     start:0x8057CD50 end:0x8057CD60
+
+m/m3d/m_mdl.cpp:
+	.text       start:0x802EAF80 end:0x802EBB5C
+	.data       start:0x805426C0 end:0x80542708
+	.sdata2     start:0x8057CD60 end:0x8057CD68
+
+m/m3d/m_scnleaf.cpp:
+	.text       start:0x802EBBD0 end:0x802EBFF8
+	.data       start:0x80542708 end:0x8054272C
+
+m/m3d/m_smdl.cpp:
+	.text       start:0x802EDF30 end:0x802EE094
+	.data       start:0x805427F0 end:0x80542820
+
 m/m_allocator.cpp:
 	.text       start:0x802EE0E0 end:0x802EE5EC
 	.data       start:0x80542820 end:0x80542848
