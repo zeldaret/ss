@@ -23,20 +23,20 @@ public:
     enum ForEachResult { FOREACH_RESULT_0, FOREACH_RESULT_1 };
 
     enum ScnObjFlag {
-        FLAG_1 = 0x1,
-        FLAG_2 = 0x2,
-        FLAG_4 = 0x4,
-        FLAG_8 = 0x8,
-        FLAG_10 = 0x10,
-        FLAG_20 = 0x20,
-        FLAG_40 = 0x40,
-        FLAG_80 = 0x80,
-        FLAG_10000000 = 0x10000000,
-        FLAG_20000000 = 0x20000000,
-        FLAG_40000000 = 0x40000000,
-        FLAG_80000000 = 0x80000000,
-
-        FLAG_60 = FLAG_40 | FLAG_20
+        SCNOBJFLAG_DISABLE_CALC_WORLD = 1,
+        SCNOBJFLAG_DISABLE_CALC_MAT = 2,
+        SCNOBJFLAG_DISABLE_CALC_VTX = 4,
+        SCNOBJFLAG_DISABLE_CALC_VIEW = 8,
+        SCNOBJFLAG_DISABLE_GATHER_SCNOBJ = 16,
+        SCNOBJFLAG_DISABLE_DRAW_OPA = 32,
+        SCNOBJFLAG_DISABLE_DRAW_XLU = 64,
+        SCNOBJFLAG_DISABLE_UPDATEFRAME = 128,
+        SCNOBJFLAG_IGNORE_ANMCHR_TRANS = 256,
+        SCNOBJFLAG_ENABLE_CULLING = 268435456,
+        SCNOBJFLAG_NOT_GATHER_DRAW_OPA = 536870912,
+        SCNOBJFLAG_NOT_GATHER_DRAW_XLU = 1073741824,
+        SCNOBJFLAG_MTX_LOCAL_IDENTITY = -2147483648,
+        SCNOBJFLAG_DISABLE_DRAW = 96,
     };
 
     enum ScnObjMtxType { MTX_TYPE_LOCAL, MTX_TYPE_WORLD, MTX_TYPE_VIEW, MTX_TYPE_MAX };
@@ -92,7 +92,7 @@ public:
         mCallback = cb;
     }
 
-    IScnObjCallback* GetScnObjCallback() {
+    IScnObjCallback *GetScnObjCallback() {
         return mCallback;
     }
 
@@ -215,12 +215,11 @@ public:
         mScale.z = z;
     }
 
-    inline void SetScale(const math::VEC3& scale)
-    {
+    inline void SetScale(const math::VEC3 &scale) {
         mScale = scale;
     }
 
-    inline void GetScale(math::VEC3* scale) const {
+    inline void GetScale(math::VEC3 *scale) const {
         if (scale) {
             *scale = mScale;
         }

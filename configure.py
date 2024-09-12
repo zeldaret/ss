@@ -346,7 +346,7 @@ config.libs = [
         "cflags": cflags_framework,
         "host": False,
         "objects": [
-            Object(NonMatching, "m/m3d/m3d.cpp"),
+            Object(Matching, "m/m3d/m3d.cpp"),
             Object(Matching, "m/m3d/m_proc.cpp"),
             Object(Matching, "m/m3d/m_anmchr.cpp"),
             Object(Matching, "m/m3d/m_anmchrblend.cpp"),

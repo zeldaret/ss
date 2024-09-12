@@ -57,6 +57,9 @@ public:
     }
 };
 
+template <class TVideo, class TDisplay, class TXfbManager, class TAudioManager, class TSceneManager, class TPerfView>
+class TSystem : ConfigurationData {};
+
 } // namespace EGG
 
 #endif

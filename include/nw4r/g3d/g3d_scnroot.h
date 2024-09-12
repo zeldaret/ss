@@ -3,8 +3,8 @@
 #include "common.h"
 #include "nw4r/g3d/g3d_camera.h"
 #include "nw4r/g3d/g3d_fog.h"
-#include "nw4r/g3d/g3d_scnobj.h"
 #include "nw4r/g3d/g3d_light.h"
+#include "nw4r/g3d/g3d_scnobj.h"
 
 namespace nw4r {
 namespace g3d {
@@ -15,7 +15,8 @@ public:
     void SetCurrentCamera(int);
     Fog GetFog(int);
 
-    static ScnRoot *Construct(MEMAllocator *param_1,u32 *param_2,u32 param_3,u32 param_4, u32 param_5,u32 param_6);
+    static ScnRoot *Construct(MEMAllocator *pHeap, u32 *pSize, u32 maxNumChildren, u32 maxNumScnObj, u32 numLightObj,
+            u32 numLightSet);
 
     void UpdateFrame();
     void CalcWorld();

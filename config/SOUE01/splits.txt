@@ -280,7 +280,8 @@ f/f_manager.cpp:
 
 m/m3d/m3d.cpp:
 	.text       start:0x802E3E50 end:0x802E4714
-	.sbss       start:0x80575BD0 end:0x80575BE8
+	.sbss       start:0x80575BD0 end:0x80575BEC
+	.sdata2     start:0x8057CCB8 end:0x8057CCBC
 
 m/m3d/m_proc.cpp:
 	.text       start:0x802E4720 end:0x802E48D4
