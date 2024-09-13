@@ -6,10 +6,9 @@
 
 namespace EGG {
 
-struct Quatf : Vector3f {
+struct Quatf : public Vector3f {
     Quatf() {}
     Quatf(f32 f, Vector3f v) : w(f), Vector3f(v) {}
-
     ~Quatf() {}
 
     friend Quatf operator*(const Quatf &q, const Vector3f &vec) {

@@ -81,7 +81,7 @@ private:
     /* 0x154 */ UNKWORD field_0x154;
     /* 0x158 */ u8 mMaxNumLeaves;
     /* 0x159 */ u8 mNumLeaves;
-    /* 0x15A */ u8 field_0x15A;
+    /* 0x15A */ u8 mColorChanIdx;
 };
 
 /**
@@ -108,8 +108,8 @@ class mShadow_c : public proc_c {
 
 public:
     mShadow_c(EGG::Heap *heap)
-        : mpHeap(heap), mpCurrentHeap(nullptr), mpChilds(nullptr), mpBuf(nullptr), mpCallback(nullptr),
-          mCurrentHeapIdx(0), field_0x62(0), field_0x66(true) {
+        : mpHeap(heap), mpCurrentHeap(nullptr), mpChilds(nullptr), mpTexBuf(nullptr), mpCallback(nullptr),
+          mCurrentHeapIdx(0), mFreeChildIdx(0), field_0x66(true) {
         nw4r::ut::List_Init(&mList, 0);
     }
     virtual ~mShadow_c();
@@ -127,8 +127,12 @@ public:
     void draw(const mMtx_c &, u32);
     void afterDraw();
 
+    EGG::FrmHeap *changeHeap(int index) {
+        mCurrentHeapIdx = index % 2;
+        mpCurrentHeap = mpFrmHeaps[mCurrentHeapIdx];
+    }
     void swapHeaps();
-    void create(int count, int unk1, int unk2, u16 texBufferSize, u32 drawOpaPriority, nw4r::g3d::ResMdl mdl,
+    void create(int count, u8 unk1, int unk2, u16 texBufferSize, u32 drawOpaPriority, nw4r::g3d::ResMdl mdl,
             u32 heapSize);
     void reset();
 
@@ -149,15 +153,15 @@ private:
     /* 0x40 */ EGG::FrmHeap *mpCurrentHeap;
     /* 0x44 */ nw4r::ut::List mList;
     /* 0x50 */ mShadowChild_c *mpChilds;
-    /* 0x54 */ void *mpBuf;
+    /* 0x54 */ void *mpTexBuf;
     /* 0x58 */ u32 mTexBufferSize;
     /* 0x5C */ mShadowCallback_c *mpCallback;
     /* 0x60 */ u8 mCurrentHeapIdx;
-    /* 0x61 */ u8 field_0x61;
-    /* 0x62 */ u8 field_0x62;
-    /* 0x63 */ u8 field_0x63;
-    /* 0x64 */ u8 field_0x64;
-    /* 0x65 */ u8 field_0x65;
+    /* 0x61 */ u8 mChildCount;
+    /* 0x62 */ u8 mFreeChildIdx;
+    /* 0x63 */ u8 mNumTexBuffers;
+    /* 0x64 */ u8 mFreeTexIdx;
+    /* 0x65 */ u8 mTexSize;
     /* 0x66 */ bool field_0x66;
 
 public:

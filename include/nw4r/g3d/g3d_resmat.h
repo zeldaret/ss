@@ -123,14 +123,13 @@ struct ResGenMode : public ResCommon<ResGenModeData> {
     void GXSetCullMode(GXCullMode);
 };
 
-struct ResTexObjData {
-};
+struct ResTexObjData {};
 
 struct ResTexObj {
     ResCommon<ResTexObjData> mTexObj;
     inline ResTexObj(void *vptr) : mTexObj(vptr) {}
 
-    GXTexObj *GetTexObj(int);
+    GXTexObj *GetTexObj(GXTexMapID);
 };
 
 struct ResMatData {
@@ -154,8 +153,7 @@ struct ResMatData {
 };
 
 struct ResMat : public ResCommon<ResMatData> {
-
-    ResMat(void *ptr): ResCommon<ResMatData>(ptr) {}
+    ResMat(void *ptr) : ResCommon<ResMatData>(ptr) {}
 
     ResMatTevColor GetResMatTevColor() {
         return ResMatTevColor(&ofs_to_ptr<ResMatDLData>(ref().toResMatDLData)->dlTevColor);

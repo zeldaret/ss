@@ -9,7 +9,7 @@
 class mFrustum_c {
 public:
     void set(f32, f32, f32, f32, f32 near, f32 far, const mMtx_c &mtx, bool);
-    /* 0x00 */ mMtx_c mMtx;
+    /* 0x00 */ mMtx_c mView;
     /* 0x30 */ nw4r::math::PLANE mPlane_0x30;
     /* 0x40 */ nw4r::math::PLANE mPlane_0x40;
     /* 0x50 */ nw4r::math::PLANE mPlane_0x50;

@@ -12,7 +12,7 @@
 // All of this is completely made up, as we don't have symbols for this TU
 // (contrary to the rest of m3d and most of nw4r::g3d)
 
-#define FRM_HEAP_STATE 0x74616730
+#define FRM_HEAP_STATE 'tag0'
 
 namespace m3d {
 
@@ -37,37 +37,44 @@ void mShadow_c::drawOpa() {
     }
 }
 
-void mShadow_c::create(int count, int unk1, int unk2, u16 texBufferSize, u32 drawOpaPriority, nw4r::g3d::ResMdl mdl,
+void mShadow_c::create(int count, u8 unk1, int unk2, u16 texSize, u32 drawOpaPriority, nw4r::g3d::ResMdl mdl,
         u32 heapSize) {
     // Regswaps
     mAllocator.attach(mpHeap, 0x20);
     proc_c::create(&mAllocator, nullptr);
-    u32 bufSize = GXGetTexBufferSize(texBufferSize, texBufferSize, 4, false, 0);
+    u32 bufSize = GXGetTexBufferSize(texSize, texSize, GX_TF_RGB565, false, 0);
     mTexBufferSize = bufSize;
-    u32 b = (unk2 + 2) / 3;
-    mpBuf = mpHeap->alloc(bufSize * b, 0x20);
+    u32 numTexBuffers = (unk2 + 2) / 3;
+    mpTexBuf = mpHeap->alloc(bufSize * numTexBuffers, 0x20);
 
+    // Maybe an Inline?
     EGG::FrmHeap **heap = mpFrmHeaps;
     for (int i = 0; i < 2; i++) {
-        heap[i] = mHeap::createFrmHeap(heapSize, mpHeap, "ShadowTmp", 0x4, 0);
-        heap[i]->recordState(FRM_HEAP_STATE);
+        heap[0] = mHeap::createFrmHeap(heapSize, mpHeap, "ShadowTmp", 0x4, 0);
+        heap[0]->recordState(FRM_HEAP_STATE);
+        heap++;
     }
     swapHeaps();
-    mShadowChild_c *childs = new (mpHeap, 0x04) mShadowChild_c[count]();
+
+    mShadowChild_c *childs = new (mpHeap, 0x04) mShadowChild_c[count];
     mpChilds = childs;
     for (int i = 0; i < count; i++) {
-        childs[i].create(unk1, mpHeap);
+        childs->create(unk1, mpHeap);
+        childs++;
     }
+
     setPriorityDraw(drawOpaPriority, 0);
     setOption(/* DISABLE_DRAW_XLU */ 0x07, 1);
-    field_0x61 = count;
-    field_0x62 = 0;
-    field_0x63 = bufSize * 3;
-    field_0x64 = 0;
-    field_0x65 = texBufferSize;
+
+    mChildCount = count;
+    mFreeChildIdx = 0;
+    mNumTexBuffers = numTexBuffers * 3;
+    mFreeTexIdx = 0;
+    mTexSize = texSize;
+
     nw4r::g3d::ResMat mat = mdl.GetResMat(0);
     sResShp = mdl.GetResShp(0);
-    sTexObj = mat.GetResTexObj().GetTexObj(0);
+    sTexObj = mat.GetResTexObj().GetTexObj(GX_TEXMAP0);
 }
 
 void mShadow_c::remove() {
@@ -85,9 +92,9 @@ void mShadow_c::remove() {
             }
         }
 
-        if (mpBuf != nullptr) {
-            mpHeap->free(mpBuf);
-            mpBuf = nullptr;
+        if (mpTexBuf != nullptr) {
+            mpHeap->free(mpTexBuf);
+            mpTexBuf = nullptr;
         }
 
         scnLeaf_c::remove();
@@ -104,28 +111,28 @@ void mShadow_c::reset() {
         circle->mpChild = nullptr;
         iter = static_cast<mShadowChild_c *>(nw4r::ut::List_GetNext(&mList, iter));
     }
-    field_0x62 = 0;
-    field_0x64 = 0;
+    mFreeChildIdx = 0;
+    mFreeTexIdx = 0;
     nw4r::ut::List_Init(&mList, 0);
     swapHeaps();
 }
 
-bool mShadow_c::addCircle(mShadowCircle_c *circle, u32 priority, u32 unk) {
+bool mShadow_c::addCircle(mShadowCircle_c *circle, u32 priority, u32 isMdl) {
     if (circle->mpChild != nullptr) {
         // Already linked, OK
         return true;
     }
 
     mShadowChild_c *childPtr;
-    if (field_0x62 < field_0x61 && (unk == 0 || field_0x64 < field_0x63)) {
+    if (mFreeChildIdx < mChildCount && (!isMdl || mFreeTexIdx < mNumTexBuffers)) {
         // There are free entries in our buffer, so just add a new child
-        childPtr = &mpChilds[field_0x62];
-        if (field_0x62++ == 0) {
+        childPtr = &mpChilds[mFreeChildIdx];
+        if (mFreeChildIdx++ == 0) {
             entry();
         }
 
-        if (unk != 0) {
-            field_0x64++;
+        if (isMdl) {
+            mFreeTexIdx++;
         }
     } else {
         // There are no free entries in our buffer, so replace an existing entry?
@@ -134,8 +141,8 @@ bool mShadow_c::addCircle(mShadowCircle_c *circle, u32 priority, u32 unk) {
             return false;
         }
 
-        if (unk != 0) {
-            if (field_0x64 >= field_0x63) {
+        if (isMdl) {
+            if (mFreeTexIdx >= mNumTexBuffers) {
                 while (childPtr->mNumLeaves == 0) {
                     childPtr = static_cast<mShadowChild_c *>(nw4r::ut::List_GetPrev(&mList, childPtr));
                     if (priority >= childPtr->mPriorityMaybe) {
@@ -143,7 +150,7 @@ bool mShadow_c::addCircle(mShadowCircle_c *circle, u32 priority, u32 unk) {
                     }
                 }
             } else {
-                field_0x64++;
+                mFreeTexIdx++;
             }
         }
         childPtr->mNumLeaves = 0;
@@ -225,9 +232,8 @@ bool mShadow_c::drawTexObj(mShadowCircle_c *circle, u32 priority, const GXTexObj
 }
 
 static void drawSub2(void *data, u8 i) {
-    // TODO this function has one regswap
-    int id;
-    u16 wid = i * 2;
+    s16 ang;
+    u32 wid = i * 2;
     GXSetTexCopySrc(0, 0, wid, wid);
     GXSetTexCopyDst(i, i, GX_TF_RGB565, 1);
     GXCopyTex(data, false);
@@ -241,21 +247,18 @@ static void drawSub2(void *data, u8 i) {
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_RGBX8, 0);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB565, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U8, 0);
     GXSetNumChans(0);
     GXSetNumTexGens(8);
     GXSetNumTevStages(8);
     GXSetTevColor(GX_TEVREG1, nw4r::ut::Color(0, 0, 0, 0x20));
-    s16 ang = 0;
-    id = GX_TEXCOORD0;
-    u32 idx = 0x1E;
-    for (; id < GX_MAX_TEXCOORD; id++) {
-        GXSetTexCoordGen2((GXTexCoordID)id, GX_TG_MTX2x4, GX_TG_TEX0, idx, false, 0x7D);
+    ang = 0;
+    for (int id = GX_TEXCOORD0, idx = GX_TEXMTX0; id < GX_MAX_TEXCOORD;
+            id += 1, idx += (GX_TEXMTX1 - GX_TEXMTX0), ang += STEP) {
+        GXSetTexCoordGen2((GXTexCoordID)id, GX_TG_MTX2x4, GX_TG_TEX0, idx, FALSE, GX_DUALMTX_IDENT);
         sTexMtx[0][3] = 0.01f * nw4r::math::CosIdx(ang);
         sTexMtx[1][3] = 0.01f * nw4r::math::SinIdx(ang);
         GXLoadTexMtxImm(sTexMtx, idx, GX_MTX_2x4);
-        idx += 3;
-        ang += STEP;
     }
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_A0, GX_CC_ZERO);
@@ -269,15 +272,20 @@ static void drawSub2(void *data, u8 i) {
         GXSetTevAlphaOp((GXTevStageID)id, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
     }
     GXSetBlendMode(GX_BM_NONE, GX_BL_ONE, GX_BL_ONE, GX_LO_SET);
-    GXLoadPosMtxImm(mMtx_c::Identity.m, 0);
+    GXLoadPosMtxImm(mMtx_c::Identity, 0);
     GXSetCurrentMtx(0);
+
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
     GXPosition2u16(0, 0);
     GXPosition2u8(0, 0);
+
     GXPosition2u16(wid, 0);
     GXPosition2u8(1, 0);
+
     GXPosition2u16(wid, wid);
     GXPosition2u8(1, 1);
+
     GXPosition2u16(0, wid);
     GXPosition2u8(0, 1);
     // GXEnd();
@@ -295,10 +303,11 @@ static void drawSub1(void *data, u8 i) {
     GXSetNumTevStages(1);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-    GXBegin(GX_LINESTRIP, GX_VTXFMT0, 5);
 
+    GXBegin(GX_LINESTRIP, GX_VTXFMT0, 5);
     GXPosition2u16(0, 0);
     GXPosition2u16(wid, 0);
     GXPosition2u16(wid, wid);
@@ -317,8 +326,8 @@ static void drawSub1(void *data, u8 i) {
 void mShadow_c::drawAllShadows() {
     mShadowChild_c *iter = static_cast<mShadowChild_c *>(nw4r::ut::List_GetFirst(&mList));
     if (iter != nullptr) {
-        f32 wid = field_0x65 * 2;
-        u16 wid2 = field_0x65 * 2;
+        f32 wid = mTexSize * 2;
+        u16 wid2 = mTexSize * 2;
         GXSetViewport(0.0f, 0.0f, wid, wid, 0.0f, 1.0f);
         GXSetScissor(0, 0, wid2, wid2);
         GXSetScissorBoxOffset(0, 0);
@@ -350,14 +359,14 @@ void mShadow_c::drawAllShadows() {
         GXSetProjection(mtx, GX_ORTHOGRAPHIC);
         GXSetLineWidth(0x18, 0);
         int i = 0;
-        void *imgData = mpBuf;
+        void *imgData = mpTexBuf;
         do {
             iter->updateMtx();
             if (iter->mNumLeaves != 0) {
                 if (i == 0) {
                     GXClearVtxDesc();
                     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-                    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_RGBX8, 0);
+                    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_U16, 0);
                     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                     GXPosition2u16(0, 0);
                     GXPosition2u16(wid2, 0);
@@ -367,13 +376,13 @@ void mShadow_c::drawAllShadows() {
                     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
                     GXSetBlendMode(GX_BM_LOGIC, GX_BL_ONE, GX_BL_ONE, GX_LO_OR);
                 }
-                iter->field_0x15A = i;
-                GXInitTexObj(&iter->mTexObj, imgData, field_0x65, field_0x65, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, false);
+                iter->mColorChanIdx = i;
+                GXInitTexObj(&iter->mTexObj, imgData, mTexSize, mTexSize, GX_TF_RGB565, GX_CLAMP, GX_CLAMP, false);
                 GXInitTexObjLOD(&iter->mTexObj, GX_LINEAR, GX_LINEAR, 0.0f, 0.0f, 0.0f, 0, 0, GX_ANISO_1);
                 iter->drawMdl();
                 i = (i + 1) % 3;
                 if (i == 0) {
-                    drawSub1(imgData, field_0x65);
+                    drawSub1(imgData, mTexSize);
                     imgData = (void *)((u8 *)imgData + mTexBufferSize);
                 }
             }
@@ -381,7 +390,7 @@ void mShadow_c::drawAllShadows() {
         } while (iter != nullptr);
 
         if (i != 0) {
-            drawSub1(imgData, field_0x65);
+            drawSub1(imgData, mTexSize);
         }
 
         GXSetClipMode(GX_CLIP_ENABLE);
@@ -415,10 +424,7 @@ void mShadow_c::afterDraw() {
 }
 
 void mShadow_c::swapHeaps() {
-    // TODO I don't know how to generate this assembly
-    u8 newIndex = ((u32)mCurrentHeapIdx + 1) & 1;
-    mCurrentHeapIdx = newIndex;
-    mpCurrentHeap = mpFrmHeaps[newIndex];
+    changeHeap(mCurrentHeapIdx + 1);
     mpCurrentHeap->freeState(FRM_HEAP_STATE);
     mpCurrentHeap->recordState(FRM_HEAP_STATE);
 }
@@ -473,6 +479,7 @@ bool mShadowChild_c::addMdl(scnLeaf_c &mdl, const mQuat_c &quat) {
     // TODO this copy is a bit weird (reads members in a different order)
     mQuat_c q = quat;
     PSMTXMultVec(mtx.m, q, q);
+
     if (mNumLeaves == 0) {
         mQuat = q;
     } else {
@@ -508,36 +515,36 @@ void mShadowChild_c::updateMtx() {
 
 void mShadowChild_c::drawMdl() {
     // TODO maybe roughly equivalent
+    using namespace nw4r;
     mMtx_c mtx;
-    GXSetTevColor(GX_TEVREG0, sColors[field_0x15A]);
+    GXSetTevColor(GX_TEVREG0, sColors[mColorChanIdx]);
     C_MTXOrtho(mtx.m, field_0x13C, -field_0x13C, -field_0x13C, field_0x13C, 0.0f, 100.0f + (-mFrustum.mFar));
     GXSetProjection(mtx.m, GX_ORTHOGRAPHIC);
-    nw4r::g3d::G3DState::Invalidate(0x7FF);
+    g3d::G3DState::Invalidate(0x7FF);
+
     for (scnLeaf_c **leaf = &mpLeaves[mNumLeaves - 1]; leaf >= &mpLeaves[0]; leaf--) {
         scnLeaf_c *lf = *leaf;
-        if (lf->getType() == 0) {
-            nw4r::g3d::ScnMdlSimple *mdl = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdlSimple>(lf->getG3dObject());
+        if (lf->getType() == 0 /* Model */) {
+            g3d::ScnMdlSimple *mdl = g3d::G3dObj::DynamicCast<g3d::ScnMdlSimple>(lf->getG3dObject());
 
-            u32 bufSize = mdl->GetNumViewMtx() * sizeof(nw4r::math::MTX34);
-            nw4r::math::MTX34 *buf =
-                    static_cast<nw4r::math::MTX34 *>(mShadow_c::sInstance->mpHeap->alloc(bufSize, 0x20));
-            nw4r::g3d::CalcView(buf, nullptr, mdl->GetWldMtxArray(), mdl->GetWldMtxAttribArray(), mdl->GetNumViewMtx(),
-                    mFrustum.mMtx, mdl->GetResMdl(), nullptr);
-            DCStoreRange(buf, bufSize);
+            u32 bufSize = mdl->GetNumViewMtx() * sizeof(math::MTX34);
+            math::MTX34 *viewPosArray = static_cast<math::MTX34 *>(mShadow_c::sInstance->mpHeap->alloc(bufSize, 0x20));
 
-            nw4r::g3d::ScnMdl *mdl2 = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdl>(lf->getG3dObject());
-            nw4r::g3d::DrawResMdlReplacement *repl;
-            if (mdl2 != nullptr) {
-                repl = mdl2->GetDrawResMdlReplacement();
-            } else {
-                repl = nullptr;
-            }
-            nw4r::g3d::DrawResMdlDirectly(mdl->GetResMdl(), buf, nullptr, nullptr,
-                    mdl2->GetByteCode(nw4r::g3d::ScnMdlSimple::BYTE_CODE_DRAW_OPA), nullptr, repl, 0x0C);
+            g3d::CalcView(viewPosArray, nullptr, mdl->GetWldMtxArray(), mdl->GetWldMtxAttribArray(),
+                    mdl->GetNumViewMtx(), mFrustum.mView, mdl->GetResMdl(), nullptr);
+            DCStoreRange(viewPosArray, bufSize);
+
+            g3d::ScnMdl *mdl2 = g3d::G3dObj::DynamicCast<g3d::ScnMdl>(lf->getG3dObject());
+
+            g3d::DrawResMdlReplacement *pRep = mdl2 ? mdl2->GetDrawResMdlReplacement() : nullptr;
+
+            g3d::DrawResMdlDirectly(mdl->GetResMdl(), viewPosArray, nullptr, nullptr,
+                    mdl2->GetByteCode(g3d::ScnMdlSimple::BYTE_CODE_DRAW_OPA), nullptr, pRep,
+                    g3d::RESMDL_DRAWMODE_FORCE_LIGHTOFF | g3d::RESMDL_DRAWMODE_IGNORE_MATERIAL);
             GXInvalidateVtxCache();
         } else {
             // this happens with bomb bag, and goes to 0x802EDC90 (mCustomShadow_c::draw)
-            static_cast<mCustomShadow_c *>(lf)->draw(mFrustum.mMtx);
+            static_cast<mCustomShadow_c *>(lf)->draw(mFrustum.mView);
         }
     }
 }
@@ -546,7 +553,7 @@ static GXTevColorChan sChans[] = {GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPH
 
 void mShadowChild_c::draw() {
     if (mNumLeaves != 0) {
-        GXTevColorChan chan = sChans[field_0x15A];
+        GXTevColorChan chan = sChans[mColorChanIdx];
         GXSetTevSwapModeTable(GX_TEV_SWAP0, chan, chan, chan, chan);
     } else {
         GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
@@ -555,9 +562,9 @@ void mShadowChild_c::draw() {
     GXSetTevColor(GX_TEVREG0, mShadowColor);
     Mtx mtx;
     C_MTXLightOrtho(mtx, field_0x13C, -field_0x13C, -field_0x13C, field_0x13C, 0.5f, -0.5f, 0.5f, 0.5f);
-    PSMTXConcat(mtx, mFrustum.mMtx.m, mtx);
-    GXLoadTexMtxImm(mtx, 0x1E, GX_MTX_3x4);
-    mShadow_c::sInstance->draw(mFrustum.mMtx, field_0x154);
+    PSMTXConcat(mtx, mFrustum.mView.m, mtx);
+    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX_3x4);
+    mShadow_c::sInstance->draw(mFrustum.mView, field_0x154);
     GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
 }
 
@@ -590,15 +597,19 @@ void mCustomShadow_c::draw(const mMtx_c &arg) {
 
 void mCustomShadow_c::calc(mMtx_c mtx, mMtx_c &mtx2) {
     // TODO some shuffles
+
+    mVec3_c trans;
     mtx2 = mMtx;
-    mVec3_c v(0.0f, field_0x48, 0.0f);
-    mVec3_c v2;
-    PSMTXMultVec(mtx2.m, v, v2);
-    PSMTXMultVec(mtx.m, v2, v);
-    PSMTXTrans(mtx2.m, v2.x, v2.y, v2.z);
+    mVec3_c offset(0.0f, 0.0f, 0.0f);
+    offset.y = field_0x48;
+    PSMTXMultVec(mtx2, offset, trans);
+    PSMTXMultVec(mtx, trans, trans);
+
+    PSMTXTrans(mtx2, trans.x, trans.y, trans.z);
+
     mMtx_c scaleMtx;
-    PSMTXScale(scaleMtx.m, field_0x4C, field_0x4C, field_0x4C);
-    PSMTXConcat(mtx2.m, scaleMtx.m, mtx2.m);
+    PSMTXScale(scaleMtx, field_0x4C, field_0x4C, field_0x4C);
+    PSMTXConcat(mtx2, scaleMtx, mtx2);
 }
 
 } // namespace m3d

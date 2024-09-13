@@ -11,8 +11,11 @@
 #pragma push
 #pragma warning off(10402)
 class mMtx_c {
+    typedef f32 (*MtxRef)[4];
+    typedef const f32 (*MtxRefConst)[4];
+
 public:
-    mMtx_c() {};
+    mMtx_c(){};
     /* 802f1660 */ mMtx_c(f32 xx, f32 xy, f32 xz, f32 xw, f32 yx, f32 yy, f32 yz, f32 yw, f32 zx, f32 zy, f32 zz,
             f32 zw);
 
@@ -35,6 +38,16 @@ public:
         zw = r.zw;
 
         return *this;
+    }
+
+    inline operator MtxRef() {
+        return m;
+    }
+    inline operator MtxRefConst() const {
+        return m;
+    }
+    operator nw4r::math::MTX34 *() {
+        return &nw4rm;
     }
 
     /* 802f16b0 */ void XrotS(const mAng &angle); ///< Generates a rotation matrix for the X axis with the given angle.
@@ -60,10 +73,6 @@ public:
 
     /* 802f1c40 */ void rot(int, int); // does some werrd operation to rotate the matrix
     /* 802f1e60 */ bool quatRelated();
-
-    operator nw4r::math::MTX34 *() {
-        return &nw4rm;
-    }
 
 public:
     union {
