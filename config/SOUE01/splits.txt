@@ -234,7 +234,7 @@ toBeSorted/counters/extra_wallet_counter.cpp:
 	.data       start:0x805280B0 end:0x805280D0
 	.sbss       start:0x80575640 end:0x80575648
 
-s/s_StateId.cpp:
+s/s_StateID.cpp:
 	.text       start:0x802DDDB0 end:0x802DE1F4
 	.ctors      start:0x804DB8B8 end:0x804DB8BC
 	.data       start:0x80541930 end:0x805419A8
