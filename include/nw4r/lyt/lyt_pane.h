@@ -50,6 +50,10 @@ public:
         return &mAnimList;
     }
 
+    void SetTranslate(const nw4r::math::VEC3 &value) {
+        mTranslate = value;
+    }
+
     const math::MTX34 &GetGlobalMtx() const {
         return mGlbMtx;
     }

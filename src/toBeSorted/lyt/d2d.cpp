@@ -19,8 +19,4 @@ LytBase_c::~LytBase_c() {
     }
 }
 
-void LytBase_c::draw() {
-    mLayout.Draw(mDrawInfo);
-}
-
 } // namespace d2d

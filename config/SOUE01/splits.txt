@@ -207,6 +207,15 @@ toBeSorted/lyt/pause_disp_00.cpp:
 	.ctors      start:0x804DB798 end:0x804DB79C
 	.data       start:0x80525138 end:0x80525EE0
 
+toBeSorted/lyt/common_arrow.cpp:
+	.text       start:0x80167FE0 end:0x801695E8
+	.ctors      start:0x804DB7AC end:0x804DB7B0
+	.rodata     start:0x804E8D28 end:0x804E8D70
+	.data       start:0x80527298 end:0x80527600
+	.sdata      start:0x805729D0 end:0x805729D8
+	.sdata2     start:0x8057A180 end:0x8057A188
+	.bss        start:0x805B1CB0 end:0x805B1DB0
+
 toBeSorted/counters/counter.cpp:
 	.text       start:0x8016CC40 end:0x8016CD94
 

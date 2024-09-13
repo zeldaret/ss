@@ -352,6 +352,7 @@ config.libs = [
             Object(Matching, "toBeSorted/cc/d_cc_shape_colliders.cpp"),
             Object(NonMatching, "toBeSorted/lyt/d2d.cpp"),
             Object(Matching, "toBeSorted/lyt/d_lyt_fader.cpp"),
+            Object(NonMatching, "toBeSorted/lyt/common_arrow.cpp"),
             Object(NonMatching, "toBeSorted/lyt/pause_disp_00.cpp"),
             Object(NonMatching, "toBeSorted/file_manager.cpp"),
             Object(NonMatching, "toBeSorted/save_manager.cpp"),

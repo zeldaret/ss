@@ -58,7 +58,7 @@ public:
     f32 getEndFrame() const;
     f32 getEndFrame2() const;
 
-    inline f32 getFrame() {
+    inline f32 getFrame() const {
         return mCurrFrame;
     }
 
@@ -66,7 +66,7 @@ public:
         setFrame(0.0f);
     }
 
-    inline bool isEndReached() {
+    inline bool isEndReached() const {
         f32 actualEnd = mEndFrame - 1.0f;
         return mCurrFrame >= actualEnd;
     }
@@ -84,11 +84,11 @@ private:
         return (mFlags & FLAG_BACKWARDS) != 0;
     }
 
-    f32 mEndFrame;
-    f32 mCurrFrame;
-    f32 mPrevFrame;
-    f32 mRate;
-    u8 mFlags;
+    /* 0x04 */ f32 mEndFrame;
+    /* 0x08 */ f32 mCurrFrame;
+    /* 0x0C */ f32 mPrevFrame;
+    /* 0x10 */ f32 mRate;
+    /* 0x14 */ u8 mFlags;
 };
 
 class Anm_c {

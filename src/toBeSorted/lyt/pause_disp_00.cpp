@@ -54,10 +54,7 @@ void dLytPauseDisp00_c::init() {
 
 void dLytPauseDisp00_c::displayElement(int i, float frame) {
     d2d::dLytStructA *s = &field_0x00D0[i];
-    s->fn_800AC6D0(false);
-    s->fn_800AC870(true);
-    s->mpFrameCtrl->setFrame(frame);
-    s->fn_800AC910();
+    s->setFrame(frame);
 }
 
 dLytPauseDisp00_c::~dLytPauseDisp00_c() {}

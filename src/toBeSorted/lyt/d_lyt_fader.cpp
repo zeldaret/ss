@@ -29,7 +29,7 @@ void dLytFader_c::setStatus(EStatus status) {
         s->fn_800AC6D0(false);
         s->mpFrameCtrl->setToEnd();
         s->fn_800AC910();
-        s->fn_800AC780(true);
+        s->fn_800AC870(true);
         s->mpFrameCtrl->play();
         s->fn_800AC910();
         mLytBase.fn_Multi_c_0x14();
@@ -42,7 +42,7 @@ void dLytFader_c::setStatus(EStatus status) {
         s->fn_800AC6D0(false);
         s->mpFrameCtrl->setToStart();
         s->fn_800AC910();
-        s->fn_800AC780(true);
+        s->fn_800AC870(true);
         mLytBase.fn_Multi_c_0x14();
         fn_80175BC0(2);
         mLytBase.getLayout()->GetRootPane()->SetVisible(false);
@@ -120,7 +120,7 @@ void dLytFader_c::fn_801758F0() {
     s->mpFrameCtrl->setFrame(0.0f);
     s->fn_800AC910();
     s->mpFrameCtrl->setRate(20.0f / (mFrame - 1));
-    s->fn_800AC780(true);
+    s->fn_800AC870(true);
     mLytBase.getLayout()->GetRootPane()->SetVisible(true);
 }
 
@@ -143,7 +143,7 @@ void dLytFader_c::fn_80175A50() {
     s->mpFrameCtrl->setFrame(0.0f);
     s->fn_800AC910();
     s->mpFrameCtrl->setRate(20.0f / (mFrame - 1));
-    s->fn_800AC780(true);
+    s->fn_800AC870(true);
     mLytBase.getLayout()->GetRootPane()->SetVisible(true);
 }
 

@@ -6,6 +6,14 @@
 namespace d2d
 {
 
+class ResAccIf_c : public m2d::ResAccIf_c {
+public:
+    /* 0xB4 */ nw4r::lyt::FontRefLink mFontRefLinks[5];
+
+    void fn_800A9D30();
+    void fn_800A9D90(void *data, const char *name);
+};
+
 struct LytBrlanMapping {
     const char *mFile;
     const char *mName;
@@ -51,7 +59,9 @@ class LytBase_c : public Multi_c {
 public:
     LytBase_c();
     virtual ~LytBase_c();
-    virtual void draw() override;
+    virtual void draw() override {
+        mLayout.Draw(mDrawInfo);
+    };
 
     LytBase_c *fn_800AAAD0(const char *name);
     void fn_800AAB70();
@@ -67,10 +77,17 @@ struct dLytStructA {
     void init(const char *fileName, m2d::ResAccIf_c* acc, d2d::Layout_c *layout, const char *animName);
 
     void fn_800AC6D0(bool);
-    void fn_800AC780(bool);
+    void fn_800AC7D0();
     void fn_800AC860();
     void fn_800AC870(bool);
     void fn_800AC910();
+
+    inline void setFrame(f32 frame) {
+        fn_800AC6D0(false);
+        fn_800AC870(true);
+        mpFrameCtrl->setFrame(frame);
+        fn_800AC910();
+    }
 
     u8 field_0x00[0x08 - 0x00];
 
@@ -111,8 +128,13 @@ struct dLytStructD_Base {
 struct dLytStructD : dLytStructD_Base {
     dLytStructD() : field_0x18(0), field_0x1C(0), field_0x20(0), field_0x22(0), field_0x23(0), field_0x24(0) {}
 
+    virtual ~dLytStructD();
+
     void init(nw4r::lyt::Pane*, u16, u8, u8);
     void append(dLytStructD *other);
+    void detach(dLytStructD *other);
+    void fn_80065E70(nw4r::lyt::Pane*, s32, s32, s32);
+    void fn_80065F70();
 
     u32 field_0x18;
     u32 field_0x1C;

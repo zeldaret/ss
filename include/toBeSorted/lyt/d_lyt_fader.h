@@ -4,14 +4,6 @@
 #include <m/m_fader_base.h>
 #include <toBeSorted/lyt/d2d.h>
 
-class dLytFontRefAndAccess : public m2d::ResAccIf_c {
-public:
-    /* 0xB4 */ nw4r::lyt::FontRefLink mFontRefLinks[5];
-
-    void fn_800A9D30();
-    void fn_800A9D90(void *data, const char *name);
-};
-
 class dLytFader_c : public mFaderBase_c {
 public:
     dLytFader_c(const mColor &color, EStatus status);
@@ -32,7 +24,7 @@ private:
     void fn_80175B10();
     void fn_80175BC0(s32);
 
-    /* 0x014 */ dLytFontRefAndAccess mFont;
+    /* 0x014 */ d2d::ResAccIf_c mFont;
     /* 0x384 */ d2d::LytBase_c mLytBase;
     /* 0x414 */ d2d::dLytStructA mLytStructAs[3];
     /* 0x4D4 */ s32 field_0x4D4;
