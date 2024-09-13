@@ -261,6 +261,15 @@ def Rel(status, rel_name, cpp_name, extra_cflags=[]):
         ],
     }
 
+def MultiRel(rel_name, objects, extra_cflags=[]):
+    return {
+        "lib": rel_name,
+        "mw_version": "Wii/1.6",
+        "cflags": cflags_rel + extra_cflags,
+        "host": False,
+        "objects": objects,
+    }
+
 
 # From tww. IDK if it needs changing for Wii (probably)
 # Helper function for Dolphin libraries
@@ -895,7 +904,10 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_island_nusi", "REL/d/a/obj/d_a_obj_island_nusi.cpp"),
     Rel(NonMatching, "d_a_obj_item_heart_container", "REL/d/a/obj/d_a_obj_item_heart_container.cpp"),
     Rel(NonMatching, "d_a_obj_ivy_rope", "REL/d/a/obj/d_a_obj_ivy_rope.cpp"),
-    Rel(NonMatching, "d_a_obj_junk_repairing", "REL/d/a/obj/d_a_obj_junk_repairing.cpp"),
+    MultiRel("d_a_obj_junk_repairing", [
+        Object(Matching, "REL/d/a/obj/d_a_obj_junk_repairing.cpp"),
+        Object(Matching, "REL/d/a/obj/d_a_obj_junk_repairing_data.cpp"),
+    ]),
     Rel(NonMatching, "d_a_obj_kanban_stone", "REL/d/a/obj/d_a_obj_kanban_stone.cpp"),
     Rel(NonMatching, "d_a_obj_kibako", "REL/d/a/obj/d_a_obj_kibako.cpp"),
     Rel(NonMatching, "d_a_obj_kumite_wall", "REL/d/a/obj/d_a_obj_kumite_wall.cpp"),

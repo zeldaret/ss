@@ -3,6 +3,8 @@
 
 #include "d/a/d_a_base.h"
 #include "m/m_mtx.h"
+#include "m/m3d/m_smdl.h"
+#include "m/m3d/m_shadow.h"
 #include "m/types_m.h"
 #include "nw4r/g3d/g3d_resfile.h"
 
@@ -102,7 +104,7 @@ public:
     // Disabling make Lava and other objects Disappear
     /* 8002ecd0 */ void drawModel2();
     /* 8002ed20 */ void fn_8002ed20();
-    /* 8002edb0 */ void fn_8002edb0();
+    /* 8002edb0 */ void fn_8002edb0(m3d::mShadowCircle_c& shadow, m3d::smdl_c& smdl, const mQuat_c *rot, s32, s32, f32);
     /* 8002ee40 */ void drawShadow();
     /* 8002ef40 */ void createChildAttached(fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot,
             mVec3_c *scale, u32 params2, u32 roomId);
