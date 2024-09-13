@@ -374,6 +374,7 @@ config.libs = [
             Object(Matching, "m/m3d/m_mdl.cpp"),
             Object(Matching, "m/m3d/m_scnleaf.cpp"),
             Object(Matching, "m/m3d/m_smdl.cpp"),
+            Object(Matching, "m/m2d.cpp"),
             Object(Matching, "m/m_allocator.cpp"),
             Object(Matching, "m/m_angle.cpp"),
             Object(Matching, "m/m_color_fader.cpp"),

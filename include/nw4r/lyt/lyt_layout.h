@@ -43,6 +43,14 @@ public:
     virtual void Animate(u32 option);                                                                    // at 0x38
     virtual void SetTagProcessor(ut::TagProcessorBase<wchar_t> *pTagProcessor);                          // at 0x3C
 
+    ut::LinkList<AnimTransform, 4> &GetAnimTransformList() {
+        return mAnimTransList;
+    }
+
+    Pane *GetRootPane() const {
+        return mpRootPane;
+    }
+
 private:
     ut::LinkList<AnimTransform, 4> mAnimTransList; // at 0x04
     Pane *mpRootPane;                              // at 0x10
