@@ -49,8 +49,12 @@ public:
 
     void setPriorityDraw(int, int);
 
+    inline nw4r::g3d::ScnLeaf *getG3dObject() {
+        return mpScnLeaf;
+    }
+
 protected:
-    nw4r::g3d::ScnLeaf *mpScnLeaf;
+    /* 0x14 */ nw4r::g3d::ScnLeaf *mpScnLeaf;
 };
 
 } // namespace m3d

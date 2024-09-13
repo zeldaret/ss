@@ -7,8 +7,8 @@ namespace nw4r {
 namespace g3d {
 struct DrawResMdlReplacement {};
 
-void DrawResMdlDirectly(ResMdl, const math::MTX34 *, const math::MTX33 *, const math::MTX34 *, const u8 *, const u8 *,
-        DrawResMdlReplacement *, u32);
+void DrawResMdlDirectly(ResMdl mdl, const math::MTX34 *pViewPos, const math::MTX33 *pViewNrm,
+        const math::MTX34 *pViewEnv, const u8 *pOpa, const u8 *pXlu, DrawResMdlReplacement *pRep, u32 resMdlDrawMode);
 } // namespace g3d
 } // namespace nw4r
 

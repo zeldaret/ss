@@ -27,6 +27,8 @@ void GXGetTexObjAll(const GXTexObj *pTexObj, void **pImage, u16 *width, u16 *hei
 void GXGetTexObjLODAll(const GXTexObj *pTexObj, GXTexFilter *minFilter, GXTexFilter *magFilter, f32 *minLOD,
         f32 *maxLOD, f32 *LODBias, u8 *biasClampEnable, u8 *edgeLODEnable, GXAnisotropy *anisotropy);
 u32 GXGetTexObjTlut(GXTexObj *);
+u32 GXGetTexBufferSize(u16 width, u16 height, u32 format, GXBool arg3, u8 arg4);
+void GXInvalidateTexAll();
 
 #ifdef __cplusplus
 }

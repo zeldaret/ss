@@ -41,6 +41,10 @@ inline f32 SinRad(f32 rad) {
  */
 f32 CosFIdx(f32 fidx);
 
+inline f32 CosIdx(u16 idx) {
+    return CosFIdx(NW4R_MATH_IDX_TO_FIDX(U16ToF32(idx)));
+}
+
 inline f32 CosDeg(f32 deg) {
     return CosFIdx(NW4R_MATH_DEG_TO_FIDX(deg));
 }

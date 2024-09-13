@@ -5,8 +5,9 @@
 
 namespace nw4r {
 namespace g3d {
-void CalcView(math::MTX34 *, math::MTX33 *, const math::MTX34 *, const u32 *, u32, const math::MTX34 *, ResMdl,
-        math::MTX34 *);
+void CalcView(math::MTX34 *pViewPosArray, math::MTX33 *pViewNrmArray, const math::MTX34 *pModelMtxArray,
+        const u32 *pModelMtxAttribArray, u32 numMtx, const math::MTX34 *pView, ResMdl resMdl,
+        math::MTX34 *pVewTexMtxArray);
 }
 } // namespace nw4r
 

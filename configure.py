@@ -372,6 +372,7 @@ config.libs = [
             Object(Matching, "m/m3d/m_calc_ratio.cpp"),
             Object(Matching, "m/m3d/m_fanm.cpp"),
             Object(Matching, "m/m3d/m_mdl.cpp"),
+            Object(NonMatching, "m/m3d/m_shadow.cpp"),
             Object(Matching, "m/m3d/m_scnleaf.cpp"),
             Object(Matching, "m/m3d/m_smdl.cpp"),
             Object(Matching, "m/m2d.cpp"),
