@@ -61,7 +61,7 @@ def main():
     with open('./objdiff.json') as f:
         objdiff = json.load(f)
         for unit in objdiff["units"]:
-            if unit.get("complete", False):
+            if unit.get("metadata", {}).get("complete", False):
                 matched_names.add(unit["name"].split('/')[-1])
     data = {}
     for folder in os.listdir('./build/SOUE01'):
