@@ -42,7 +42,6 @@ BLOCKING_SYMBOLS = [
     ['fn_801695F0', 'LytCommonTitle::ctor'],
     ['fn_80067020', 'matrixCreateFromPosRotYScale'],
     ['fn_800C43D0', 'ActorEventFlowManagerRelated *FUN_800c43d0'],
-    ['fn_801BB3C0', 'isCurrentStage'],
     ['fn_8037DCC0', 'EnemySoundMgr'],
     ['fn_800A6690', 'ActorOnRail::ctor'],
     ['fn_80355080', 'getColliderManager'],

@@ -24,6 +24,8 @@ public:
     static SpawnInfo currentSpawnInfo;
     static SpawnInfo nextSpawnInfo;
     static ScGame *sInstance;
+
+    static bool isCurrentStage(const char *stageName);
 };
 
 #endif

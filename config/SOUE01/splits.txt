@@ -154,6 +154,9 @@ toBeSorted/dowsing_target.cpp:
 	.sdata2     start:0x80579640 end:0x80579670
 	.bss        start:0x805A2FB0 end:0x805A3010
 
+toBeSorted/time_area_mgr.cpp:
+	.text       start:0x800B9280 end:0x800BB2A0
+
 toBeSorted/sceneflag_manager.cpp:
 	.text       start:0x800BD8C0 end:0x800BE7A8
 	.sbss       start:0x805753E0 end:0x805753F0
