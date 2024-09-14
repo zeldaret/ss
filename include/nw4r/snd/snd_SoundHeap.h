@@ -1,31 +1,58 @@
 #ifndef NW4R_SND_SOUND_HEAP_H
 #define NW4R_SND_SOUND_HEAP_H
-#include "common.h"
-#include "snd_FrameHeap.h"
-#include "snd_SoundMemoryAllocatable.h"
-#include <OSMutex.h>
+#include <nw4r/types_nw4r.h>
+
+#include <nw4r/snd/snd_FrameHeap.h>
+#include <nw4r/snd/snd_SoundMemoryAllocatable.h>
+
+#include <nw4r/ut.h>
+
+#include <rvl/OS.h>
 
 namespace nw4r {
 namespace snd {
-struct SoundHeap : SoundMemoryAllocatable {
+
+class SoundHeap : public SoundMemoryAllocatable {
+public:
     SoundHeap();
-    virtual ~SoundHeap(); // VMT 0x8
-    bool Create(void *, u32);
+    virtual ~SoundHeap(); // at 0x8
+
+    virtual void* Alloc(u32 size); // at 0xC
+
+    void* Alloc(u32 size, detail::FrameHeap::FreeCallback pCallback,
+                void* pCallbackArg);
+
+    bool Create(void* pBase, u32 size);
     void Destroy();
-    virtual void *Alloc(u32); // VMT 0xC
-    void *Alloc(u32, detail::FrameHeap::AllocCallback, void *);
+
     void Clear();
+
     int SaveState();
-    void LoadState(int);
-    static void DisposeCallbackFunc(void *, u32, void *);
+    void LoadState(int id);
 
     bool IsValid() {
-        return mFrameHeap.PTR_0x0 != NULL;
+        return mFrameHeap.IsValid();
     }
 
-    OSMutex mMutex;               // 0x00
-    detail::FrameHeap mFrameHeap; // 0x1C
+    int GetCurrentLevel() const {
+        ut::detail::AutoLock<OSMutex> lock(mMutex);
+        return mFrameHeap.GetCurrentLevel();
+    }
+
+    u32 GetFreeSize() const {
+        ut::detail::AutoLock<OSMutex> lock(mMutex);
+        return mFrameHeap.GetFreeSize();
+    }
+
+private:
+    static void DisposeCallbackFunc(void* pBuffer, u32 size,
+                                    void* pCallbackArg);
+
+private:
+    mutable OSMutex mMutex;       // at 0x0
+    detail::FrameHeap mFrameHeap; // at 0x1C
 };
+
 } // namespace snd
 } // namespace nw4r
 

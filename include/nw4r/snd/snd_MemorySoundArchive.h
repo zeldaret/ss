@@ -1,33 +1,44 @@
 #ifndef NW4R_SND_MEMORY_SOUND_ARCHIVE_H
 #define NW4R_SND_MEMORY_SOUND_ARCHIVE_H
-#include "ut_FileStream.h"
-#include "snd_SoundArchive.h"
-#include "snd_SoundArchiveFile.h"
+#include <nw4r/types_nw4r.h>
 
-namespace nw4r
-{
-	namespace snd
-	{
-		struct MemorySoundArchive : SoundArchive
-		{
-			struct MemoryFileStream;		
-				
-			const void * mMemory; // at 0x108
-			detail::SoundArchiveFileReader mFileReader; // at 0x10c
-			
-			MemorySoundArchive();
-			virtual ~MemorySoundArchive(); // at 0x8
-			
-			bool Setup(const void *);
-			void Shutdown();
-			
-			virtual const void * detail_GetFileAddress(u32) const;
-			virtual const void * detail_GetWaveDataFileAddress(u32) const;
-			virtual int detail_GetRequiredStreamBufferSize() const;
-			virtual ut::FileStream * OpenStream(void *, int, u32, u32) const; // at 0x18
-			virtual ut::FileStream * OpenExtStream(void *, int, const char *, u32, u32) const; // at 0x1c
-		};
-	}
-}
+#include <nw4r/snd/snd_SoundArchive.h>
+#include <nw4r/snd/snd_SoundArchiveFile.h>
+
+#include <nw4r/ut.h>
+
+namespace nw4r {
+namespace snd {
+
+class MemorySoundArchive : public SoundArchive {
+private:
+    class MemoryFileStream;
+
+public:
+    MemorySoundArchive();
+    virtual ~MemorySoundArchive(); // at 0x8
+
+    virtual const void* detail_GetFileAddress(u32 id) const;         // at 0xC
+    virtual const void* detail_GetWaveDataFileAddress(u32 id) const; // at 0x10
+
+    virtual int detail_GetRequiredStreamBufferSize() const; // at 0x14
+
+    virtual ut::FileStream* OpenStream(void* pBuffer, int size, u32 offset,
+                                       u32 length) const; // at 0x18
+
+    virtual ut::FileStream* OpenExtStream(void* pBuffer, int size,
+                                          const char* pExtPath, u32 offset,
+                                          u32 length) const; // at 0x1C
+
+    bool Setup(const void* pBuffer);
+    void Shutdown();
+
+private:
+    const void* mData;                          // at 0x108
+    detail::SoundArchiveFileReader mFileReader; // at 0x10C
+};
+
+} // namespace snd
+} // namespace nw4r
 
 #endif

@@ -1,243 +1,300 @@
 #ifndef NW4R_SND_SOUND_ARCHIVE_FILE_H
 #define NW4R_SND_SOUND_ARCHIVE_FILE_H
-#include "common.h"
-#include "snd_SoundArchive.h"
-#include "snd_Util.h"
-#include "ut_binaryFileFormat.h"
+#include <nw4r/types_nw4r.h>
+
+#include <nw4r/snd/snd_SoundArchive.h>
+#include <nw4r/snd/snd_Util.h>
+
+#include <nw4r/ut.h>
 
 namespace nw4r {
 namespace snd {
 namespace detail {
 namespace SoundArchiveFile {
-struct Header {
-    ut::BinaryFileHeader mHeader;            // at 0x0
-    u32 mLabelStringChunkOffset;             // at 0x10
-    u32 mLabelStringChunkSize;               // at 0x14
-    u32 mInfoChunkOffset;                    // at 0x18
-    u32 mInfoChunkSize;                      // at 0x1c
-    UNKWORD UNK_0x20[0x8 / sizeof(UNKWORD)]; // at 0x20
+
+/******************************************************************************
+ *
+ * Symbol (SYMB) block
+ *
+ ******************************************************************************/
+struct StringTreeNode {
+    u16 flags;    // at 0x0
+    u16 bit;      // at 0x2
+    u32 leftIdx;  // at 0x4
+    u32 rightIdx; // at 0x8
+    u32 strIdx;   // at 0xC
+    u32 id;       // at 0x10
 };
 
-struct Sound3DParam {
-    UNKWORD WORD_0x0;
-    u8 BYTE_0x4;
-    u8 BYTE_0x5;
+struct StringTree {
+    u32 rootIdx;                           // at 0x0
+    Util::Table<StringTreeNode> nodeTable; // at 0x4
 };
 
+struct StringTable {
+    Util::Table<u32> offsetTable; // at 0x0
+};
+
+struct StringChunk {
+    u32 tableOffset;      // at 0x0
+    u32 soundTreeOffset;  // at 0x4
+    u32 playerTreeOffset; // at 0x8
+    u32 groupTreeOffset;  // at 0xC
+    u32 bankTreeOffset;   // at 0x10
+};
+
+struct StringBlock {
+    union {
+        StringTable stringTable;
+        StringChunk stringChunk;
+    }; // at 0x0
+};
+
+struct SymbolBlock {
+    ut::BinaryBlockHeader blockHeader; // at 0x0
+    StringBlock stringBlock;           // at 0x8
+};
+
+/******************************************************************************
+ *
+ * Info (INFO) block
+ *
+ ******************************************************************************/
 struct SeqSoundInfo {
-    UNKWORD WORD_0x0;
-    UNKWORD WORD_0x4;
-    UNKWORD WORD_0x8;
-    u8 BYTE_0xC;
-    u8 BYTE_0xD;
+    u32 dataOffset;        // at 0x0
+    u32 bankId;            // at 0x4
+    u32 allocTrack;        // at 0x8
+    u8 channelPriority;    // at 0xC
+    u8 releasePriorityFix; // at 0xD
 };
 
 struct StrmSoundInfo {};
 
 struct WaveSoundInfo {
-    UNKWORD WORD_0x0;
-    char UNK_0x4[0x4];
-    u8 BYTE_0x8;
-    u8 BYTE_0x9;
+    s32 subNo;             // at 0x0
+    u32 allocTrack;        // at 0x4
+    u8 channelPriority;    // at 0x8
+    u8 releasePriorityFix; // at 0x9
 };
+typedef Util::DataRef<void, SeqSoundInfo, StrmSoundInfo, WaveSoundInfo>
+    SoundInfoOffset;
 
-typedef Util::DataRef<void, SeqSoundInfo, StrmSoundInfo, WaveSoundInfo> SoundInfoOffset;
+struct Sound3DParam {
+    u32 flags;     // at 0x0
+    u8 decayCurve; // at 0x4
+    u8 decayRatio; // at 0x5
+};
 
 struct SoundCommonInfo {
-    u32 mSoundStringId; // at 0x0
-    UNKWORD WORD_0x4;
-    UNKWORD WORD_0x8;
-    Util::DataRef<Sound3DParam, void, void, void> mSound3DParam; // at 0xc
-    u8 BYTE_0x14;
-    u8 BYTE_0x15;
-    u8 mType; // at 0x16
-    u8 BYTE_0x17;
-    SoundInfoOffset mSoundInfoOffset; // at 0x18
-    UNKWORD mSoundUserParam;          // at 0x20
-    char UNK_0x24[0x4];
-    u8 BYTE_0x28;
-    u8 BYTE_0x29;
+    u32 stringId;                           // at 0x0
+    u32 fileId;                             // at 0x4
+    u32 playerId;                           // at 0x8
+    Util::DataRef<Sound3DParam> param3dRef; // at 0xC
+    u8 volume;                              // at 0x14
+    u8 playerPriority;                      // at 0x15
+    u8 soundType;                           // at 0x16
+    u8 remoteFilter;                        // at 0x17
+    SoundInfoOffset soundInfoRef;           // at 0x18
+    u32 userParam[2];                       // at 0x20
+    u8 panMode;                             // at 0x28
+    u8 panCurve;                            // at 0x29
 };
-
-typedef Util::Table<Util::DataRef<SoundCommonInfo, void, void, void>> SoundCommonTable;
+typedef Util::Table<Util::DataRef<SoundCommonInfo> > SoundCommonTable;
 
 struct BankInfo {
-    char UNK_0x0[0x4];
-    UNKWORD WORD_0x4;
+    u32 stringId; // at 0x0
+    u32 fileId;   // at 0x4
 };
-
-typedef Util::Table<Util::DataRef<BankInfo, void, void, void>> BankTable;
+typedef Util::Table<Util::DataRef<BankInfo> > BankTable;
 
 struct PlayerInfo {
-    char UNK_0x0[0x4];
-    u8 BYTE_0x4;
-    UNKWORD WORD_0x8;
+    u32 stringId;          // at 0x0
+    u8 playableSoundCount; // at 0x4
+    u32 heapSize;          // at 0x8
 };
+typedef Util::Table<Util::DataRef<PlayerInfo> > PlayerTable;
 
-typedef Util::Table<Util::DataRef<PlayerInfo, void, void, void>> PlayerTable;
-
-struct GroupItemInfo {
-    UNKWORD WORD_0x0;
-    u32 INT_0x4;
-    u32 INT_0x8;
-    u32 INT_0xC;
-    UNKWORD WORD_0x10;
-};
-
-typedef Util::Table<Util::DataRef<GroupItemInfo, void, void, void>> GroupItemTable;
-
-struct GroupInfo {
-    char UNK_0x0[0x8];
-    Util::DataRef<char, void, void, void> mExternalFileName; // at 0x8
-    u32 INT_0x10;
-    u32 INT_0x14;
-    u32 INT_0x18;
-    u32 INT_0x1C;
-    Util::DataRef<GroupItemTable, void, void, void> mGroupItemTable; // at 0x20
-};
-
-typedef Util::Table<Util::DataRef<GroupInfo, void, void, void>> GroupTable;
-
-struct SoundArchivePlayerInfo {
-    u16 SIZE_0x0;
-    u16 SHORT_0x2;
-    u16 SIZE_0x4;
-    u16 SHORT_0x6;
-    u16 SHORT_0x8;
-    u16 SIZE_0xA;
-    u16 SHORT_0xC;
-};
-
-typedef Util::Table<Util::DataRef<SoundArchive::FilePos, void, void, void>> FilePosTable;
+typedef Util::Table<Util::DataRef<SoundArchive::FilePos> > FilePosTable;
 
 struct FileInfo {
-    UNKWORD WORD_0x0;
-    UNKWORD WORD_0x4;
-    char UNK_0x8[0x4];
-    Util::DataRef<char, void, void, void> mExternalFileName; // at 0xc
-    Util::DataRef<FilePosTable, void, void, void> TABLE_0x14;
+    u32 fileSize;                                // at 0x0
+    u32 waveDataSize;                            // at 0x4
+    s32 entryNum;                                // at 0x8
+    Util::DataRef<char> extFilePathRef;          // at 0xC
+    Util::DataRef<FilePosTable> filePosTableRef; // at 0x14
+};
+typedef Util::Table<Util::DataRef<FileInfo> > FileTable;
+
+struct GroupItemInfo {
+    u32 fileId;         // at 0x0
+    u32 offset;         // at 0x4
+    u32 size;           // at 0x8
+    u32 waveDataOffset; // at 0xC
+    u32 waveDataSize;   // at 0x10
+};
+typedef Util::Table<Util::DataRef<GroupItemInfo> > GroupItemTable;
+
+struct GroupInfo {
+    u32 stringId;                               // at 0x0
+    s32 entryNum;                               // at 0x4
+    Util::DataRef<char> extFilePathRef;         // at 0x8
+    u32 offset;                                 // at 0x10
+    u32 size;                                   // at 0x14
+    u32 waveDataOffset;                         // at 0x18
+    u32 waveDataSize;                           // at 0x1C
+    Util::DataRef<GroupItemTable> itemTableRef; // at 0x20
+};
+typedef Util::Table<Util::DataRef<GroupInfo> > GroupTable;
+
+struct SoundArchivePlayerInfo {
+    u16 seqSoundCount;    // at 0x0
+    u16 seqTrackCount;    // at 0x2
+    u16 strmSoundCount;   // at 0x4
+    u16 strmTrackCount;   // at 0x6
+    u16 strmChannelCount; // at 0x8
+    u16 waveSoundCount;   // at 0xA
+    u16 waveTrackCount;   // at 0xC
 };
 
-typedef Util::Table<Util::DataRef<FileInfo, void, void, void>> FileTable;
-
-struct StringNode {
-    enum { FLAG_LEAF = 0x0001 };
-
-    u16 mFlags; // at 0x0
-    u16 SHORT_0x2;
-    u32 mLeftIndex;  // at 0x4
-    u32 mRightIndex; // at 0x8
-    u32 mStringId;   // at 0xc
-    u32 mId;         // at 0x10
+struct Info {
+    Util::DataRef<SoundCommonTable> soundTableRef;                   // at 0x0
+    Util::DataRef<BankTable> bankTableRef;                           // at 0x8
+    Util::DataRef<PlayerTable> playerTableRef;                       // at 0x10
+    Util::DataRef<FileTable> fileTableRef;                           // at 0x18
+    Util::DataRef<GroupTable> groupTableRef;                         // at 0x20
+    Util::DataRef<SoundArchivePlayerInfo> soundArchivePlayerInfoRef; // at 0x28
 };
 
-struct StringTree {
-    u32 mRootIndex; // at 0x0
-    u32 INT_0x4;
-    StringNode mNodes[]; // at 0x8
+struct InfoBlock {
+    ut::BinaryBlockHeader blockHeader; // at 0x0
+    Info info;                         // at 0x8
 };
 
-struct StringChunk {
-    u32 mTableOffset;      // at 0x0
-    u32 mSoundTreeOffset;  // at 0x4
-    u32 mPlayerTreeOffset; // at 0x8
-    u32 mGroupTreeOffset;  // at 0xc
-    u32 OFFSET_0x10;
+/******************************************************************************
+ *
+ * File header
+ *
+ ******************************************************************************/
+struct Header {
+    ut::BinaryFileHeader fileHeader; // at 0x0
+    u32 symbolDataOffset;            // at 0x10
+    u32 symbolDataSize;              // at 0x14
+    u32 infoOffset;                  // at 0x18
+    u32 infoSize;                    // at 0x1C
+    u32 fileImageOffset;             // at 0x20
+    u32 fileImageSize;               // at 0x24
 };
 
-struct InfoChunk {
-    Util::DataRef<SoundCommonTable, void, void, void> mSoundCommonTable;             // at 0x0
-    Util::DataRef<BankTable, void, void, void> mBankTable;                           // at 0x8
-    Util::DataRef<PlayerTable, void, void, void> mPlayerTable;                       // at 0x10
-    Util::DataRef<FileTable, void, void, void> mFileTable;                           // at 0x18
-    Util::DataRef<GroupTable, void, void, void> mGroupTable;                         // at 0x20
-    Util::DataRef<SoundArchivePlayerInfo, void, void, void> mSoundArchivePlayerInfo; // at 0x28
-};
-}; // namespace SoundArchiveFile
+// TODO: How is this calculated?
+static const int HEADER_AREA_SIZE = ROUND_UP(sizeof(Header), 32) + 40;
 
-struct SoundArchiveFileReader {
-    struct StringBlock {
-        ut::BinaryBlockHeader mHeader;        // at 0x0
-        SoundArchiveFile::StringChunk mChunk; // at 0x8
-    };
+} // namespace SoundArchiveFile
 
-    struct InfoBlock {
-        ut::BinaryBlockHeader mHeader;      // at 0x0
-        SoundArchiveFile::InfoChunk mChunk; // at 0x8
-    };
+class SoundArchiveFileReader {
+public:
+    static const u32 SIGNATURE = 'RSAR';
+    static const int VERSION = NW4R_VERSION(1, 3);
 
-    SoundArchiveFile::Header mHeader; // at 0x0
-
-    const SoundArchiveFile::InfoChunk *mInfoChunk;         // at 0x28
-    const SoundArchiveFile::StringChunk *mStringChunk;     // at 0x2c
-    const Util::Table<u32> *mStringTable;                  // at 0x30
-    const SoundArchiveFile::StringTree *mSoundStringTree;  // at 0x34
-    const SoundArchiveFile::StringTree *mPlayerStringTree; // at 0x38
-    const SoundArchiveFile::StringTree *mGroupStringTree;  // at 0x3c
-    const UNKTYPE *PTR_0x40;
-
+public:
     SoundArchiveFileReader();
 
-    bool IsValidFileHeader(const void *); // inlined
-    void Init(const void *);
+    void Init(const void* pSoundArchiveBin);
+    bool IsValidFileHeader(const void* pSoundArchiveBin);
 
-    const void *GetPtrConst(const void *, u32) const; // inlined
+    void SetStringChunk(const void* pChunk, u32 size);
+    void SetInfoChunk(const void* pChunk, u32 size);
 
-    void SetStringChunk(const void *, u32);
-    void SetInfoChunk(const void *, u32);
+    SoundType GetSoundType(u32 id) const;
+    bool ReadSoundInfo(u32 id, SoundArchive::SoundInfo* pInfo) const;
+    bool ReadSound3DParam(u32 id, SoundArchive::Sound3DParam* pParam) const;
+    bool ReadSeqSoundInfo(u32 id, SoundArchive::SeqSoundInfo* pInfo) const;
+    bool ReadStrmSoundInfo(u32 id, SoundArchive::StrmSoundInfo* pInfo) const;
+    bool ReadWaveSoundInfo(u32 id, SoundArchive::WaveSoundInfo* pInfo) const;
+    bool ReadBankInfo(u32 id, SoundArchive::BankInfo* pInfo) const;
+    bool ReadPlayerInfo(u32 id, SoundArchive::PlayerInfo* pInfo) const;
+    bool ReadGroupInfo(u32 id, SoundArchive::GroupInfo* pInfo) const;
+    bool ReadGroupItemInfo(u32 groupId, u32 itemId,
+                           SoundArchive::GroupItemInfo* pInfo) const;
+    bool ReadSoundArchivePlayerInfo(
+        SoundArchive::SoundArchivePlayerInfo* pInfo) const;
 
-    UNKWORD GetSoundType(u32) const;
-
-    const SoundArchiveFile::SoundCommonInfo *impl_GetSoundInfo(u32) const; // inlined
-    bool ReadSoundInfo(u32, SoundArchive::SoundInfo *) const;
-    bool ReadSound3DParam(u32, SoundArchive::Sound3DParam *) const;
-    bool ReadSeqSoundInfo(u32, SoundArchive::SeqSoundInfo *) const;
-    bool ReadStrmSoundInfo(u32, SoundArchive::StrmSoundInfo *) const;
-    bool ReadWaveSoundInfo(u32, SoundArchive::WaveSoundInfo *) const;
-    const SoundArchiveFile::BankInfo *impl_GetBankInfo(u32) const; // inlined
-    bool ReadBankInfo(u32, SoundArchive::BankInfo *) const;
-    const SoundArchiveFile::PlayerInfo *impl_GetPlayerInfo(u32) const; // inlined
-    bool ReadPlayerInfo(u32, SoundArchive::PlayerInfo *) const;
-    const SoundArchiveFile::GroupInfo *impl_GetGroupInfo(u32) const; // inlined
-    bool ReadGroupInfo(u32, SoundArchive::GroupInfo *) const;
-    bool ReadGroupItemInfo(u32, u32, SoundArchive::GroupItemInfo *) const;
-    bool ReadSoundArchivePlayerInfo(SoundArchive::SoundArchivePlayerInfo *) const;
-
+    u32 GetSoundStringId(u32 id) const;
     u32 GetPlayerCount() const;
     u32 GetGroupCount() const;
 
-    u32 GetSoundStringId(u32) const;  // inlined
-    const char *GetString(u32) const; // inlined
-    const char *GetSoundLabelString(u32) const;
-    UNKWORD GetSoundUserParam(u32) const;
+    const char* GetSoundLabelString(u32 id) const;
+    u32 GetSoundUserParam(u32 id) const;
 
-    bool ReadFileInfo(u32, SoundArchive::FileInfo *) const;
-    bool ReadFilePos(u32, u32, SoundArchive::FilePos *) const;
+    bool ReadFileInfo(u32 id, SoundArchive::FileInfo* pInfo) const;
+    bool ReadFilePos(u32 fileId, u32 id, SoundArchive::FilePos* pPos) const;
 
-    u32 ConvertLabelStringToId(const SoundArchiveFile::StringTree *, const char *) const;
+    const char* GetString(u32 id) const;
 
-    SoundArchiveFile::SoundInfoOffset impl_GetSoundInfoOffset(u32) const;
-
-    inline u16 GetVersion() const {
-        return mHeader.mHeader.version;
+    u32 ConvertLabelStringToSoundId(const char* pLabel) const {
+        return ConvertLabelStringToId(mStringTreeSound, pLabel);
+    }
+    u32 ConvertLabelStringToPlayerId(const char* pLabel) const {
+        return ConvertLabelStringToId(mStringTreePlayer, pLabel);
+    }
+    u32 ConvertLabelStringToGroupId(const char* pLabel) const {
+        return ConvertLabelStringToId(mStringTreeGroup, pLabel);
     }
 
-    inline u32 GetLabelStringChunkOffset() const {
-        return mHeader.mLabelStringChunkOffset;
+    u16 GetVersion() const {
+        return mHeader.fileHeader.version;
     }
 
-    inline u32 GetLabelStringChunkSize() const {
-        return mHeader.mLabelStringChunkSize;
+    u32 GetLabelStringChunkOffset() const {
+        return mHeader.symbolDataOffset;
     }
 
-    inline u32 GetInfoChunkOffset() const {
-        return mHeader.mInfoChunkOffset;
+    u32 GetLabelStringChunkSize() const {
+        return mHeader.symbolDataSize;
     }
 
-    inline u32 GetInfoChunkSize() const {
-        return mHeader.mInfoChunkSize;
+    u32 GetInfoChunkOffset() const {
+        return mHeader.infoOffset;
     }
+
+    u32 GetInfoChunkSize() const {
+        return mHeader.infoSize;
+    }
+
+private:
+    u32 ConvertLabelStringToId(const SoundArchiveFile::StringTree* pTree,
+                               const char* pLabel) const;
+
+    const SoundArchiveFile::SoundCommonInfo* impl_GetSoundInfo(u32 id) const;
+    SoundArchiveFile::SoundInfoOffset impl_GetSoundInfoOffset(u32 id) const
+        DECOMP_DONT_INLINE;
+
+    const SoundArchiveFile::SeqSoundInfo* impl_GetSeqSoundInfo(u32 id) const;
+    const SoundArchiveFile::StrmSoundInfo* impl_GetStrmSoundInfo(u32 id) const;
+    const SoundArchiveFile::WaveSoundInfo* impl_GetWaveSoundInfo(u32 id) const;
+
+    const SoundArchiveFile::BankInfo* impl_GetBankInfo(u32 id) const;
+    const SoundArchiveFile::PlayerInfo* impl_GetPlayerInfo(u32 id) const;
+    const SoundArchiveFile::GroupInfo* impl_GetGroupInfo(u32 id) const;
+
+    const void* GetPtrConst(const void* pBase, u32 offset) const {
+        if (offset == 0) {
+            return NULL;
+        }
+
+        return ut::AddOffsetToPtr(pBase, offset);
+    }
+
+private:
+    SoundArchiveFile::Header mHeader;                      // at 0x0
+    const SoundArchiveFile::Info* mInfo;                   // at 0x28
+    const void* mStringBase;                               // at 0x2C
+    const SoundArchiveFile::StringTable* mStringTable;     // at 0x30
+    const SoundArchiveFile::StringTree* mStringTreeSound;  // at 0x34
+    const SoundArchiveFile::StringTree* mStringTreePlayer; // at 0x38
+    const SoundArchiveFile::StringTree* mStringTreeGroup;  // at 0x3C
+    const SoundArchiveFile::StringTree* mStringTreeBank;   // at 0x40
 };
+
 } // namespace detail
 } // namespace snd
 } // namespace nw4r

@@ -4,11 +4,11 @@
 extern "C" {
 #endif
 
-#include "rvl/MEM/mem_heapCommon.h"
-#include "rvl/MEM/mem_allocator.h"
-#include "rvl/MEM/mem_expHeap.h"
-#include "rvl/MEM/mem_frameHeap.h"
-#include "rvl/MEM/mem_list.h"
+#include <rvl/MEM/mem_allocator.h>
+#include <rvl/MEM/mem_expHeap.h>
+#include <rvl/MEM/mem_frameHeap.h>
+#include <rvl/MEM/mem_heapCommon.h>
+#include <rvl/MEM/mem_list.h>
 
 #ifdef __cplusplus
 }

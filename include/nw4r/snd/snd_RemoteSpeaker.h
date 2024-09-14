@@ -1,68 +1,97 @@
 #ifndef NW4R_SND_REMOTE_SPEAKER_H
 #define NW4R_SND_REMOTE_SPEAKER_H
-#include <OS.h>
-#include <OSAlarm.h>#include "common.h"
+#include <nw4r/types_nw4r.h>
+
+#include <rvl/OS.h>
+#include <rvl/WENC.h>
+#include <rvl/WPAD.h>
 
 namespace nw4r {
 namespace snd {
-struct RemoteSpeaker {
-    typedef void (*RemoteSpeakerCallback)(s32, s32);
 
-    enum SpeakerCommand {
-        SpeakerCommand_None,
-        SpeakerCommand_On,
-        SpeakerCommand_Play,
-        SpeakerCommand_Off,
+class RemoteSpeaker {
+public:
+    enum SpeakerState {
+        STATE_INVALID,
+        STATE_EXEC_SPEAKER_ON,
+        STATE_SPEAKER_ON,
+        STATE_EXEC_SPEAKER_PLAY,
+        STATE_SPEAKER_PLAY,
+        STATE_EXEC_SPEAKER_OFF,
+        STATE_SPEAKER_OFF
     };
 
-    bool mPoweredFlag; // at 0x0
-    bool BOOL_0x1;
-    bool mEnabledOutputFlag; // at 0x2
-    bool BOOL_0x3;
-    bool BOOL_0x4;
-    bool BOOL_0x5;
-    bool BOOL_0x6;
-    bool BOOL_0x7;
-    volatile bool BOOL_0x8;
+    enum SpeakerCommand {
+        COMMAND_NONE,
+        COMMAND_SPEAKER_ON,
+        COMMAND_SPEAKER_PLAY,
+        COMMAND_SPEAKER_OFF
+    };
 
-    UNKWORD WORD_0xC;
-    SpeakerCommand CMD_0x10;
-    SpeakerCommand CMD_0x14;
-    char UNK_0x18[0x20];
-    s32 mChannelIndex;               // at 0x38
-    RemoteSpeakerCallback mCallback; // at 0x3c
-    OSAlarm ALARM_0x40;
-    OSAlarm ALARM_0x70;
-    s64 mTime; // at 0xa0
+    static const int SAMPLES_PER_AUDIO_PACKET = 40;
 
+public:
     RemoteSpeaker();
-    void ClearParam(); // inlined
-    void InitParam();  // inlined
 
-    bool Setup(RemoteSpeakerCallback);
-    void Shutdown(RemoteSpeakerCallback);
+    void InitParam();
+    bool Setup(WPADCallback pCallback);
+    void Shutdown(WPADCallback pCallback);
 
-    bool EnableOutput(bool);
+    bool EnableOutput(bool enable);
     bool IsEnabledOutput() const;
 
     void Update();
-    void ExecCommand(SpeakerCommand);
+    void UpdateStreamData(const s16* pRmtSamples);
 
-    bool IsAllSampleZero(const s16 *); // inlined
-    void UpdateStreamData(const s16 *);
-
-    void NotifyCallback(s32, s32); // inlined
-    static void SpeakerOnCallback(s32, s32);
-    static void SpeakerPlayCallback(s32, s32);
-    static void SpeakerOffCallback(s32, s32);
-
-    static void ContinueAlarmHandler(OSAlarm *, OSContext *);
-    static void IntervalAlarmHandler(OSAlarm *, OSContext *);
-
-    inline void SetChannelIndex(int channelIndex) {
-        mChannelIndex = channelIndex;
+    bool IsAvailable() const {
+        return mState == STATE_SPEAKER_PLAY;
     }
+
+    void SetChannelIndex(int index) {
+        mChannelIndex = index;
+    }
+
+private:
+    static const int SAMPLES_PER_ENCODED_PACKET =
+        (SAMPLES_PER_AUDIO_PACKET + 1) / 2;
+
+    static const int CONTINUOUS_PLAY_INTERVAL_MINUTES = 8;
+
+private:
+    void ClearParam();
+    void ExecCommand(SpeakerCommand command);
+
+    bool IsAllSampleZero(const s16* pRmtSamples);
+    void NotifyCallback(s32 chan, s32 result);
+
+    static void SpeakerOnCallback(s32 chan, s32 result);
+    static void SpeakerPlayCallback(s32 chan, s32 result);
+    static void SpeakerOffCallback(s32 chan, s32 result);
+
+    static void ContinueAlarmHandler(OSAlarm* pAlarm, OSContext* pCtx);
+    static void IntervalAlarmHandler(OSAlarm* pAlarm, OSContext* pCtx);
+
+private:
+    bool mInitFlag;                  // at 0x0
+    bool mPlayFlag;                  // at 0x1
+    bool mEnableFlag;                // at 0x2
+    bool mFirstEncodeFlag;           // at 0x3
+    bool mValidCallbackFlag;         // at 0x4
+    bool mCommandBusyFlag;           // at 0x5
+    bool mForceResumeFlag;           // at 0x6
+    bool mContinueFlag;              // at 0x7
+    volatile bool mIntervalFlag;     // at 0x8
+    SpeakerState mState;             // at 0xC
+    SpeakerCommand mUserCommand;     // at 0x10
+    SpeakerCommand mInternalCommand; // at 0x14
+    WENCInfo mEncodeInfo;            // at 0x18
+    int mChannelIndex;               // at 0x38
+    WPADCallback mWpadCallback;      // at 0x3C
+    OSAlarm mContinueAlarm;          // at 0x40
+    OSAlarm mIntervalAlarm;          // at 0x70
+    s64 mContinueBeginTime;          // at 0xA0
 };
+
 } // namespace snd
 } // namespace nw4r
 
