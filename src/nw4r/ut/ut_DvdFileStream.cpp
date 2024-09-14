@@ -66,7 +66,7 @@ bool DvdFileStream::Open(s32 entrynum) {
 
     if (DVDFastOpen(entrynum, &mAsyncContext.info)) {
         mFilePosition.SetFileSize(mAsyncContext.info.size);
-        mFilePosition.Seek(0, SEEK_BEG);
+        mFilePosition.Seek(0, SEEKORG_BEG);
 
         mCloseOnDestroy = true;
         mAllowClose = true;
@@ -85,7 +85,7 @@ bool DvdFileStream::Open(const DVDFileInfo *info, bool close) {
 
     mAsyncContext.info = *info;
     mFilePosition.SetFileSize(mAsyncContext.info.size);
-    mFilePosition.Seek(0, SEEK_BEG);
+    mFilePosition.Seek(0, SEEKORG_BEG);
 
     mCloseOnDestroy = false;
     mAllowClose = close;

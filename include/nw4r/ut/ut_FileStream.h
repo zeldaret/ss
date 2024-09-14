@@ -10,7 +10,7 @@ class FileStream : public IOStream {
 public:
     NW4R_UT_RTTI_DECL(FileStream);
     
-    enum SeekOrigin { SEEK_BEG, SEEK_CUR, SEEK_END };
+    enum SeekOrigin { SEEKORG_BEG, SEEKORG_CUR, SEEKORG_END };
 
     class FilePosition {
     public:
