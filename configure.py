@@ -451,6 +451,15 @@ config.libs = [
         ],
     ),
     nw4rLib(
+        "math",
+        [
+            Object(NonMatching, "nw4r/math/math_arithmetic.cpp"),
+            Object(NonMatching, "nw4r/math/math_triangular.cpp"),
+            Object(NonMatching, "nw4r/math/math_types.cpp"),
+            Object(NonMatching, "nw4r/math/math_geometry.cpp"),
+        ]
+    ),
+    nw4rLib(
         "g3d",
         [
             Object(NonMatching, "nw4r/g3d/res/g3d_rescommon.cpp"),

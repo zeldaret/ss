@@ -553,6 +553,18 @@ nw4r/db/db_assert.cpp:
 	.text       start:0x804373C0 end:0x804373D0
 	.sbss       start:0x80576610 end:0x80576618
 
+nw4r/math/math_arithmetic.cpp:
+	.text       start:0x804373D0 end:0x804375AC
+
+nw4r/math/math_triangular.cpp:
+	.text       start:0x804375B0 end:0x804378D0
+
+nw4r/math/math_types.cpp:
+	.text       start:0x804378D0 end:0x80437D34
+
+nw4r/math/math_geometry.cpp:
+	.text       start:0x80437D40 end:0x80438F4C
+
 nw4r/g3d/res/g3d_rescommon.cpp:
 	.text       start:0x80438F50 end:0x804390F4
 
