@@ -68,12 +68,11 @@ def main():
         if folder.startswith('d_') and not folder[:-2] in matched_names:
             data[folder] = []
             s_files = glob.glob(f'./build/SOUE01/{folder}/asm/REL/d/**/*.s', recursive=True)
-            # maybe won't be true at some point?
-            assert len(s_files) == 1
-            text = pathlib.Path(s_files[0]).read_text()
-            for [sym, comment] in BLOCKING_SYMBOLS:
-                if sym in text:
-                    data[folder].append(comment)
+            for f in s_files:
+                text = pathlib.Path(f).read_text()
+                for [sym, comment] in BLOCKING_SYMBOLS:
+                    if sym in text:
+                        data[folder].append(comment)
     
 
     output = sorted([
