@@ -192,7 +192,7 @@ int dAcBase_c::execute() {}
 
 // 8002cca0
 int dAcBase_c::actorExecute() {
-    return 1;
+    return SUCCEEDED;
 }
 
 // 8002ccb0

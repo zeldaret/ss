@@ -9,7 +9,7 @@ int dTgHolyWater_c::create() {
 }
 
 int dTgHolyWater_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgHolyWater_c::actorExecute() {
@@ -21,11 +21,11 @@ int dTgHolyWater_c::actorExecute() {
     if (isLinkNearby()) {
         dPlayer::LINK->mForceOrPreventActionFlags |= 0x10000000;
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgHolyWater_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }
 
 bool dTgHolyWater_c::isLinkNearby() {

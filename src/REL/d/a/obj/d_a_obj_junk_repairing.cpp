@@ -30,9 +30,7 @@ bool dAcOJunkRep_c::createHeap() {
 }
 
 int dAcOJunkRep_c::create() {
-    if (!initAllocatorWork1Heap(-1, "dAcOJunkRep_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR(dAcOJunkRep_c);
 
     forwardAccel = -1.0f;
     forwardMaxSpeed = -40.0f;
@@ -48,21 +46,21 @@ int dAcOJunkRep_c::create() {
 }
 
 int dAcOJunkRep_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOJunkRep_c::actorExecute() {
     mStateMgr.executeState();
     updateMatrix();
     mpModelToUse->setLocalMtx(worldMatrix);
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOJunkRep_c::draw() {
     drawModelType1(mpModelToUse);
     static mQuat_c rot(0.0f, 37.5f, 0.0f, 75.0f);
     fn_8002edb0(mShadow, *mpModelToUse, &rot, -1, -1, sSomeFloat);
-    return 1;
+    return SUCCEEDED;
 }
 
 void dAcOJunkRep_c::realizeState() {

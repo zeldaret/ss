@@ -19,9 +19,7 @@ bool dAcEhb_leaf_c::createHeap() {
 }
 
 int dAcEhb_leaf_c::create() {
-    if (!initAllocatorWork1Heap(-1, "dAcEhb_leaf_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR(dAcEhb_leaf_c);
 
     setBoundingBox(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
 
@@ -72,14 +70,14 @@ int dAcEhb_leaf_c::create() {
 }
 
 int dAcEhb_leaf_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcEhb_leaf_c::actorExecute() {
     if (mType != 0) {
         doCheck();
         if (isNearZero()) {
-            return 1;
+            return SUCCEEDED;
         }
     }
 
@@ -93,7 +91,7 @@ int dAcEhb_leaf_c::actorExecute() {
     mModel.getModel().calc(false);
     someRot++;
 
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcEhb_leaf_c::draw() {
@@ -101,7 +99,7 @@ int dAcEhb_leaf_c::draw() {
         drawModelType1(&mModel.getModel());
     }
 
-    return 1;
+    return SUCCEEDED;
 }
 
 void dAcEhb_leaf_c::setAnm(const char *anm, f32 pos) {

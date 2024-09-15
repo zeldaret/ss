@@ -24,7 +24,6 @@ void (*fBase_c::sUnloadCallback)();
 fBase_c::fBase_c()
     : unique_ID(m_rootUniqueID), params(m_tmpCtData.params), profile_name(m_tmpCtData.prof_name),
       group_type(m_tmpCtData.group_type), manager(this) {
-
     m_rootUniqueID = (fBaseID_e)(m_rootUniqueID + 1);
     if (m_rootUniqueID == INVALID) {
         for (;;) {
@@ -68,7 +67,7 @@ int fBase_c::commonPack(int (fBase_c::*doFunc)(), int (fBase_c::*preFunc)(), voi
 
     // Pre Function to setup
     int result = (this->*preFunc)();
-    if (result) {
+    if (result != NOT_READY) {
         // Do function to handle current
         result = (this->*doFunc)();
         if (result == NOT_READY) {
@@ -115,7 +114,7 @@ void fBase_c::postCreate(MAIN_STATE_e state) {
 
 /* 802e1670 */
 int fBase_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 /* 802e1680 */

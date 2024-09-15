@@ -41,7 +41,7 @@ int dTgGenkiDwsTgt_c::create() {
 
 int dTgGenkiDwsTgt_c::doDelete() {
     changeLoadedEntitiesNoSet();
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgGenkiDwsTgt_c::actorExecute() {
@@ -61,7 +61,7 @@ int dTgGenkiDwsTgt_c::actorExecute() {
             }
         }
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 u16 dTgGenkiDwsTgt_c::getSceneFlagFromParams() {

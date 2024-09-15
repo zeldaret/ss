@@ -7,13 +7,13 @@ int dTgLightShaftEff_c::create() {
 }
 
 int dTgLightShaftEff_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgLightShaftEff_c::actorExecute() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgLightShaftEff_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }

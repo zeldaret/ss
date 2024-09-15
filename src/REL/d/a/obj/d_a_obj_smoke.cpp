@@ -25,9 +25,7 @@ bool dAcOsmoke_c::createHeap() {
 }
 
 int dAcOsmoke_c::create() {
-    if (!initAllocatorWork1Heap(-1, "dAcOsmoke_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR(dAcOsmoke_c);
 
     mModel.setAnm(mTexAnm);
     updateMatrix();
@@ -39,18 +37,18 @@ int dAcOsmoke_c::create() {
 }
 
 int dAcOsmoke_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOsmoke_c::actorExecute() {
     mStateMgr.executeState();
     mTexAnm.play();
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOsmoke_c::draw() {
     drawModelType1(&mModel);
-    return 1;
+    return SUCCEEDED;
 }
 
 void dAcOsmoke_c::initializeState_Wait() {}

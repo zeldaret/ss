@@ -11,7 +11,7 @@ int dTgSndMg_c::create() {
 }
 
 int dTgSndMg_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgSndMg_c::actorExecute() {
@@ -19,9 +19,9 @@ int dTgSndMg_c::actorExecute() {
         dPlayer::LINK->field_0xe8 = 0;
     }
     mBgmFlags = 0;
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgSndMg_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }

@@ -10,16 +10,16 @@ int dTgMoleProhibit_c::create() {
 }
 
 int dTgMoleProhibit_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgMoleProhibit_c::actorExecute() {
     mStateMgr.executeState();
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgMoleProhibit_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }
 
 void dTgMoleProhibit_c::initializeState_Wait() {}

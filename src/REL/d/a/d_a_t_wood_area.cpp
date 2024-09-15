@@ -13,7 +13,7 @@ int dAcTWoodArea_c::actorCreate() {
     PSMTXTrans(worldMatrix.m, position.x, position.y, position.z);
     boundingBox.min = mVec3_c(-0.0f, -0.0f, -0.0f);
     boundingBox.max = mVec3_c(0.0f, 0.0f, 0.0f);
-    return 1;
+    return SUCCEEDED;
 }
 
 static const ProfileName FILTER_PROFILE[] = {
@@ -28,20 +28,20 @@ int dAcTWoodArea_c::actorPostCreate() {
     for (u32 i = 0; i < 5; i++) {
         attachCloseObjects(FILTER_PROFILE[i]);
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcTWoodArea_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcTWoodArea_c::actorExecute() {
     mStateMgr.executeState();
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcTWoodArea_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }
 
 void dAcTWoodArea_c::initializeState_Init() {}

@@ -19,9 +19,7 @@ bool dAcOsunLight_c::createHeap() {
 }
 
 int dAcOsunLight_c::create() {
-    if (!initAllocatorWork1Heap(-1, "dAcOsunLight_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR(dAcOsunLight_c);
 
     mModel.setAnm(mTexAnm);
     mStateMgr.changeState(StateID_Wait);
@@ -31,7 +29,7 @@ int dAcOsunLight_c::create() {
 }
 
 int dAcOsunLight_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOsunLight_c::actorExecute() {
@@ -41,14 +39,14 @@ int dAcOsunLight_c::actorExecute() {
     }
     updateMatrix();
     mModel.setLocalMtx(worldMatrix);
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOsunLight_c::draw() {
     if (isDay()) {
         drawModelType1(&mModel);
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 void dAcOsunLight_c::initializeState_Wait() {}
