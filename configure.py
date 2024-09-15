@@ -1148,7 +1148,7 @@ config.libs = [
     Rel(NonMatching, "d_t_minigame_insect_capture", "REL/d/t/d_t_minigame_insect_capture.cpp"),
     Rel(NonMatching, "d_t_mist", "REL/d/t/d_t_mist.cpp"),
     Rel(NonMatching, "d_t_mole_mgr", "REL/d/t/d_t_mole_mgr.cpp"),
-    Rel(NonMatching, "d_t_mole_prohibit", "REL/d/t/d_t_mole_prohibit.cpp"),
+    Rel(Matching, "d_t_mole_prohibit", "REL/d/t/d_t_mole_prohibit.cpp"),
     Rel(NonMatching, "d_t_musasabi", "REL/d/t/d_t_musasabi.cpp"),
     Rel(NonMatching, "d_t_musou", "REL/d/t/d_t_musou.cpp"),
     Rel(Matching, "d_t_noeffect_area", "REL/d/t/d_t_noeffect_area.cpp"),
