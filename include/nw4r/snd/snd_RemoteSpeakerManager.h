@@ -1,34 +1,44 @@
 #ifndef NW4R_SND_REMOTE_SPEAKER_MANAGER_H
 #define NW4R_SND_REMOTE_SPEAKER_MANAGER_H
-#include <OSAlarm.h>
-#include "snd_RemoteSpeaker.h"
+#include <nw4r/types_nw4r.h>
 
-namespace nw4r
-{
-	namespace snd
-	{
-		namespace detail
-		{
-			struct RemoteSpeakerManager
-			{
-				bool mPoweredFlag; // at 0x0
-				char UNK_0x4[4];
-				OSAlarm mAlarm; // at 0x8
-				RemoteSpeaker mRemoteSpeakers[4];
-				
-				RemoteSpeakerManager(); //inlined
-				
-				static RemoteSpeakerManager * GetInstance();
-				
-				RemoteSpeaker * GetRemoteSpeaker(int);
-				
-				void Setup();
-				void Shutdown();
-				
-				static void RemoteSpeakerAlarmProc(OSAlarm *, OSContext *);
-			};
-		}
-	}
-}
+#include <nw4r/snd/snd_RemoteSpeaker.h>
+
+#include <rvl/OS.h>
+#include <rvl/WPAD.h>
+
+namespace nw4r {
+namespace snd {
+namespace detail {
+
+class RemoteSpeakerManager {
+public:
+    static RemoteSpeakerManager& GetInstance();
+
+    RemoteSpeaker& GetRemoteSpeaker(int i);
+
+    void Setup();
+    void Shutdown();
+
+private:
+    static const int SPEAKER_ALARM_HZ = 150;
+
+    static const int SPEAKER_ALARM_PERIOD_NSEC =
+        static_cast<int>(1.0f / SPEAKER_ALARM_HZ * 1000 * 1000 * 1000);
+
+private:
+    RemoteSpeakerManager();
+
+    static void RemoteSpeakerAlarmProc(OSAlarm* pAlarm, OSContext* pCtx);
+
+private:
+    bool mInitialized;                            // at 0x0
+    OSAlarm mRemoteSpeakerAlarm;                  // at 0x8
+    RemoteSpeaker mSpeaker[WPAD_MAX_CONTROLLERS]; // at 0x38
+};
+
+} // namespace detail
+} // namespace snd
+} // namespace nw4r
 
 #endif

@@ -86,7 +86,7 @@ public:
         return TypeObj(TYPE_NAME);
     }
 
-    static AnmObjShpRes *Construct(MEMAllocator *, u32 *, ResAnmShp, ResMdl, int);
+    static AnmObjShpRes *Construct(MEMAllocator *, u32 *, ResAnmShp, ResMdl, bool);
 
 private:
     ResAnmShp mResAnmShp; // at 0x2C

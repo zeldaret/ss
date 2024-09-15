@@ -1,45 +1,60 @@
 #ifndef NW4R_SND_SOUND_ARCHIVE_LOADER_H
 #define NW4R_SND_SOUND_ARCHIVE_LOADER_H
-#include "common.h"
-#include "snd_SoundMemoryAllocatable.h"
-#include "ut_FileStream.h"
-#include <OSMutex.h>
+#include <nw4r/types_nw4r.h>
 
+#include <nw4r/ut.h>
+
+#include <rvl/OS.h>
 
 namespace nw4r {
 namespace snd {
+
+// Forward declarations
+class SoundMemoryAllocatable;
+
 namespace detail {
-struct FileStreamHandle {
-    ut::FileStream *mFileStream;
 
-    inline FileStreamHandle(ut::FileStream *pFileStream) : mFileStream(pFileStream) {}
+class FileStreamHandle {
+public:
+    FileStreamHandle(ut::FileStream* pFileStream) : mStream(pFileStream) {}
 
-    inline ~FileStreamHandle() {
-        if (mFileStream) {
-            mFileStream->Close();
+    ~FileStreamHandle() {
+        if (mStream != NULL) {
+            mStream->Close();
         }
     }
 
-    inline operator bool() const {
-        return mFileStream;
+    ut::FileStream* GetFileStream() {
+        return mStream;
     }
 
-    inline ut::FileStream *operator->() {
-        return mFileStream;
+    ut::FileStream* operator->() {
+        return mStream;
     }
+
+    operator bool() const {
+        return mStream;
+    }
+
+private:
+    ut::FileStream* mStream; // at 0x0
 };
 
-struct SoundArchiveLoader {
-    OSMutex mMutex;               // at 0x0
-    const SoundArchive &mArchive; // at 0x18
-    u8 mBuffer[0x200];            // at 0x1c
-    ut::FileStream *mFileStream;  // at 0x21c
-
-    SoundArchiveLoader(const SoundArchive &);
+class SoundArchiveLoader {
+public:
+    explicit SoundArchiveLoader(const SoundArchive& rArchive);
     ~SoundArchiveLoader();
 
-    void *LoadGroup(u32, SoundMemoryAllocatable *, void **, u32);
+    void* LoadGroup(u32 id, SoundMemoryAllocatable* pAllocatable,
+                    void** ppWaveBuffer, u32 blockSize);
+
+private:
+    mutable OSMutex mMutex;   // at 0x0
+    const SoundArchive& mArc; // at 0x18
+    u8 mStreamArea[512];      // at 0x1C
+    ut::FileStream* mStream;  // at 0x21C
 };
+
 } // namespace detail
 } // namespace snd
 } // namespace nw4r

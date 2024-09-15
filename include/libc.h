@@ -5,8 +5,8 @@
 
 extern "C" {
 
-void *memset(void *dest, s32 value, u32 count);
-void *memcpy(void *dest, const void *src, u32 count);
+// void *memset(void *dest, s32 value, u32 count);
+// void *memcpy(void *dest, const void *src, u32 count);
 void *checkedMemcpy(void *dest, u16 destLen, const void *src, u16 count);
 }
 

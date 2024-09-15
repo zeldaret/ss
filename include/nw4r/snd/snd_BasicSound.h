@@ -1,9 +1,12 @@
 #ifndef NW4R_SND_BASIC_SOUND_H
 #define NW4R_SND_BASIC_SOUND_H
+#include <nw4r/types_nw4r.h>
+
 #include <nw4r/snd/snd_Common.h>
 #include <nw4r/snd/snd_MoveValue.h>
-#include <nw4r/types_nw4r.h>
+
 #include <nw4r/ut.h>
+
 #include <rvl/WPAD.h>
 
 namespace nw4r {
@@ -17,25 +20,41 @@ public:
     NW4R_UT_RTTI_DECL(BasicSound);
 
     struct AmbientParamUpdateCallback {
-        virtual void detail_Update(SoundParam *param, u32 id, BasicSound *sound, const void *arg, u32 flags) = 0;
+        enum ParamUpdateFlags {
+            PARAM_UPDATE_VOLUME = (1 << 0),
+            PARAM_UPDATE_PAN = (1 << 1),
+            PARAM_UPDATE_SURROUND_PAN = (1 << 2),
+            PARAM_UPDATE_PRIORITY = (1 << 3),
+        };
+
+        virtual void detail_Update(SoundParam* pParam, u32 id,
+                                   BasicSound* pSound, const void* pArg,
+                                   u32 flags) = 0; // at 0xC
     };
 
     struct AmbientArgUpdateCallback {
-        virtual void detail_Update(void *arg, const BasicSound *sound) = 0;
+        virtual void detail_Update(void* pArg,
+                                   const BasicSound* pSound) = 0; // at 0xC
     };
 
     struct AmbientArgAllocaterCallback {
-        virtual void *detail_AllocAmbientArg(u32 size) = 0;
-        virtual void detail_FreeAmbientArg(void *arg, const BasicSound *sound) = 0;
+        virtual void* detail_AllocAmbientArg(u32 size) = 0; // at 0xC
+
+        virtual void
+        detail_FreeAmbientArg(void* pArg,
+                              const BasicSound* pSound) = 0; // at 0x10
     };
 
     struct AmbientArgInfo {
-        AmbientParamUpdateCallback *mParamUpdateCallback;   // at 0x0
-        AmbientArgUpdateCallback *mArgUpdateCallback;       // at 0x4
-        AmbientArgAllocaterCallback *mArgAllocaterCallback; // at 0x8
-        void *arg;                                          // at 0xC
-        u32 argSize;                                        // at 0x10
+        AmbientParamUpdateCallback* paramUpdateCallback;   // at 0x0
+        AmbientArgUpdateCallback* argUpdateCallback;       // at 0x4
+        AmbientArgAllocaterCallback* argAllocaterCallback; // at 0x8
+        void* arg;                                         // at 0xC
+        u32 argSize;                                       // at 0x10
     };
+
+    static const u32 INVALID_ID = 0xFFFFFFFF;
+    static const int PRIORITY_MAX = 127;
 
 public:
     BasicSound();
@@ -51,27 +70,29 @@ public:
     virtual bool IsPrepared() const = 0;        // at 0x2C
     virtual bool IsPause() const;               // at 0x30
 
-    virtual void SetInitialVolume(f32 vol);                // at 0x34
-    virtual void SetVolume(f32 vol, int frames);           // at 0x38
-    virtual void SetPitch(f32 pitch);                      // at 0x3C
-    virtual void SetPan(f32 pan);                          // at 0x40
-    virtual void SetSurroundPan(f32 pan);                  // at 0x44
-    virtual void SetLpfFreq(f32 freq);                     // at 0x48
-    virtual void SetPlayerPriority(int prio);              // at 0x4C
-    virtual void SetRemoteFilter(int filter);              // at 0x50
-    virtual void SetPanMode(PanMode mode);                 // at 0x54
-    virtual void SetPanCurve(PanCurve curve);              // at 0x58
-    virtual bool IsAttachedTempSpecialHandle() = 0;        // at 0x5C
-    virtual void DetachTempSpecialHandle() = 0;            // at 0x60
-    virtual void InitParam();                              // at 0x64
-    virtual BasicPlayer *GetBasicPlayer() = 0;             // at 0x68
-    virtual const BasicPlayer *GetBasicPlayer() const = 0; // at 0x6C
+    virtual void SetInitialVolume(f32 vol);       // at 0x34
+    virtual void SetVolume(f32 vol, int frames);  // at 0x38
+    virtual void SetPitch(f32 pitch);             // at 0x3C
+    virtual void SetPan(f32 pan);                 // at 0x40
+    virtual void SetSurroundPan(f32 pan);         // at 0x44
+    virtual void SetLpfFreq(f32 freq);            // at 0x48
+    virtual void SetPlayerPriority(int priority); // at 0x4C
+    virtual void SetRemoteFilter(int filter);     // at 0x50
+    virtual void SetPanMode(PanMode mode);        // at 0x54
+    virtual void SetPanCurve(PanCurve curve);     // at 0x58
 
-    PlayerHeap *GetPlayerHeap() {
-        return mPlayerHeap;
+    virtual bool IsAttachedTempSpecialHandle() = 0; // at 0x5C
+    virtual void DetachTempSpecialHandle() = 0;     // at 0x60
+
+    virtual void InitParam();                              // at 0x64
+    virtual BasicPlayer& GetBasicPlayer() = 0;             // at 0x68
+    virtual const BasicPlayer& GetBasicPlayer() const = 0; // at 0x6C
+
+    PlayerHeap* GetPlayerHeap() {
+        return mHeap;
     }
-    void SetPlayerHeap(PlayerHeap *heap) {
-        mPlayerHeap = heap;
+    void SetPlayerHeap(PlayerHeap* pHeap) {
+        mHeap = pHeap;
     }
 
     bool IsAttachedGeneralHandle();
@@ -80,45 +101,51 @@ public:
     bool IsAttachedTempGeneralHandle();
     void DetachTempGeneralHandle();
 
-    SoundPlayer *GetSoundPlayer() {
+    SoundPlayer* GetSoundPlayer() {
         return mSoundPlayer;
     }
-    void SetSoundPlayer(SoundPlayer *player) {
-        mSoundPlayer = player;
+    void SetSoundPlayer(SoundPlayer* pPlayer) {
+        mSoundPlayer = pPlayer;
     }
 
-    ExternalSoundPlayer *GetExternalSoundPlayer() {
+    ExternalSoundPlayer* GetExternalSoundPlayer() {
         return mExtSoundPlayer;
     }
-    void SetExternalSoundPlayer(ExternalSoundPlayer *player) {
-        mExtSoundPlayer = player;
+    void SetExternalSoundPlayer(ExternalSoundPlayer* pExtPlayer) {
+        mExtSoundPlayer = pExtPlayer;
     }
 
-    AmbientParamUpdateCallback *GetAmbientParamUpdateCallback() {
-        return mParamUpdateCallback;
+    AmbientParamUpdateCallback* GetAmbientParamUpdateCallback() {
+        return mAmbientParamUpdateCallback;
     }
 
-    AmbientArgUpdateCallback *GetAmbientArgUpdateCallback() {
-        return mArgUpdateCallback;
+    AmbientArgUpdateCallback* GetAmbientArgUpdateCallback() {
+        return mAmbientArgUpdateCallback;
     }
     void ClearAmbientArgUpdateCallback() {
-        mArgUpdateCallback = NULL;
+        mAmbientArgUpdateCallback = NULL;
     }
 
-    AmbientArgAllocaterCallback *GetAmbientArgAllocaterCallback() {
-        return mArgAllocCallback;
+    AmbientArgAllocaterCallback* GetAmbientArgAllocaterCallback() {
+        return mAmbientArgAllocaterCallback;
     }
 
-    void *GetAmbientArg() {
-        return mCallbackArg;
+    void* GetAmbientArg() {
+        return mAmbientArg;
     }
 
-    SoundParam &GetAmbientParam() {
+    SoundParam& GetAmbientParam() {
         return mAmbientParam;
     }
 
-    void SetAmbientParamCallback(AmbientParamUpdateCallback *paramUpdate, AmbientArgUpdateCallback *argUpdate,
-            AmbientArgAllocaterCallback *argAlloc, void *arg);
+    void SetAmbientParamCallback(AmbientParamUpdateCallback* pParamUpdate,
+                                 AmbientArgUpdateCallback* pArgUpdate,
+                                 AmbientArgAllocaterCallback* pArgAlloc,
+                                 void* pArg);
+
+    void SetPriority(int priority) {
+        mPriority = priority;
+    }
 
     u32 GetId() const {
         return mId;
@@ -126,7 +153,7 @@ public:
     void SetId(u32 id);
 
     f32 GetMoveVolume() {
-        return mExtVolume.GetValue();
+        return mExtMoveVolume.GetValue();
     }
 
     f32 GetInitialVolume() const;
@@ -147,45 +174,46 @@ public:
     void SetFxSend(AuxBus bus, f32 send);
 
     int CalcCurrentPlayerPriority() const {
-        return ut::Clamp(mPriority + mAmbientParam.priority, PRIORITY_MIN, PRIORITY_MAX);
+        return ut::Clamp(mPriority + mAmbientParam.priority, 0, PRIORITY_MAX);
     }
 
-public:
-    static const int PRIORITY_MIN = 0;
-    static const int PRIORITY_MAX = 127;
-
 private:
-    PlayerHeap *mPlayerHeap;                          // at 0x4
-    SoundHandle *mGeneralHandle;                      // at 0x8
-    SoundHandle *mTempGeneralHandle;                  // at 0xC
-    SoundPlayer *mSoundPlayer;                        // at 0x10
-    ExternalSoundPlayer *mExtSoundPlayer;             // at 0x14
-    AmbientParamUpdateCallback *mParamUpdateCallback; // at 0x18
-    AmbientArgUpdateCallback *mArgUpdateCallback;     // at 0x1C
-    AmbientArgAllocaterCallback *mArgAllocCallback;   // at 0x20
-    void *mCallbackArg;                               // at 0x24
-    SoundParam mAmbientParam;                         // at 0x28
-    MoveValue<f32, int> mFadeVolume;                  // at 0x44
-    MoveValue<f32, int> mPauseFadeVolume;             // at 0x54
-    bool mIsStarting;                                 // at 0x64
-    bool mIsStarted;                                  // at 0x65
-    bool mIsAutoStop;                                 // at 0x66
-    bool mIsPause;                                    // at 0x67
-    bool mIsPauseFade;                                // at 0x68
-    bool mIsFadeOut;                                  // at 0x69
-    int mAutoStopCounter;                             // at 0x6C
-    u32 mUpdateCounter;                               // at 0x70
-    u8 mPriority;                                     // at 0x74
-    u32 mId;                                          // at 0x78
-    MoveValue<f32, int> mExtVolume;                   // at 0x7C
-    f32 mInitVolume;                                  // at 0x8C
-    f32 mExtPan;                                      // at 0x90
-    f32 mExtSurroundPan;                              // at 0x94
-    f32 mExtPitch;                                    // at 0x98
-    bool mEnableOutputLine;                           // at 0x9C
-    int mOutputLine;                                  // at 0xA0
-    f32 mMainOutVolume;                               // at 0xA4
-    f32 mRemoteOutVolumes[WPAD_MAX_CONTROLLERS];      // at 0xA8
+    PlayerHeap* mHeap;                    // at 0x4
+    SoundHandle* mGeneralHandle;          // at 0x8
+    SoundHandle* mTempGeneralHandle;      // at 0xC
+    SoundPlayer* mSoundPlayer;            // at 0x10
+    ExternalSoundPlayer* mExtSoundPlayer; // at 0x14
+
+    AmbientParamUpdateCallback* mAmbientParamUpdateCallback;   // at 0x18
+    AmbientArgUpdateCallback* mAmbientArgUpdateCallback;       // at 0x1C
+    AmbientArgAllocaterCallback* mAmbientArgAllocaterCallback; // at 0x20
+    void* mAmbientArg;                                         // at 0x24
+    SoundParam mAmbientParam;                                  // at 0x28
+
+    MoveValue<f32, int> mFadeVolume;      // at 0x44
+    MoveValue<f32, int> mPauseFadeVolume; // at 0x54
+    bool mStartFlag;                      // at 0x64
+    bool mStartedFlag;                    // at 0x65
+    bool mAutoStopFlag;                   // at 0x66
+    bool mPauseFlag;                      // at 0x67
+    bool mPauseFadeFlag;                  // at 0x68
+    bool mFadeOutFlag;                    // at 0x69
+    int mAutoStopCounter;                 // at 0x6C
+    u32 mUpdateCounter;                   // at 0x70
+
+    u8 mPriority; // at 0x74
+    u32 mId;      // at 0x78
+
+    MoveValue<f32, int> mExtMoveVolume; // at 0x7C
+    f32 mInitVolume;                    // at 0x8C
+    f32 mExtPan;                        // at 0x90
+    f32 mExtSurroundPan;                // at 0x94
+    f32 mExtPitch;                      // at 0x98
+
+    bool mOutputLineFlagEnable;                 // at 0x9C
+    int mOutputLineFlag;                        // at 0xA0
+    f32 mMainOutVolume;                         // at 0xA4
+    f32 mRemoteOutVolume[WPAD_MAX_CONTROLLERS]; // at 0xA8
 
 public:
     NW4R_UT_LIST_NODE_DECL_EX(Prio);       // at 0xB8

@@ -21,6 +21,9 @@
 #define DECL_WEAK __declspec(weak)
 #define DONT_INLINE __attribute__((never_inline))
 
+// TODO - Fix MSL (stddef.h)
+#define offsetof(ST, M) ((size_t) & (((ST*)0)->M))
+
 // Codewarrior tricks for matching decomp
 // (Functions are given prototypes for -requireprotos)
 #ifdef __MWERKS__

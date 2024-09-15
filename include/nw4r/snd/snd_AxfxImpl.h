@@ -1,6 +1,7 @@
 #ifndef NW4R_SND_AXFX_IMPL_H
 #define NW4R_SND_AXFX_IMPL_H
 #include <nw4r/types_nw4r.h>
+
 #include <rvl/AXFX.h>
 #include <rvl/MEM.h>
 
@@ -9,10 +10,16 @@ namespace snd {
 namespace detail {
 
 struct AxfxImpl {
-    static void *Alloc(u32 size);
-    static void Free(void *block);
+    bool mIsActive;      // at 0x0
+    MEMiHeapHead* mHeap; // at 0x4
+    u32 mAllocCount;     // at 0x8
+
+    static const u32 HEAP_SIZE_MIN = MEM_FRM_HEAP_MIN_SIZE + 32;
 
     AxfxImpl() : mIsActive(false), mHeap(NULL), mAllocCount(0) {}
+
+    bool CreateHeap(void* pBuffer, u32 size);
+    void DestroyHeap();
 
     u32 GetHeapTotalSize() {
         if (mHeap == NULL) {
@@ -22,16 +29,13 @@ struct AxfxImpl {
         return MEMGetHeapTotalSize(mHeap);
     }
 
-    bool CreateHeap(void *buffer, u32 size);
-    void DestroyHeap();
-    void HookAlloc(AXFXAllocHook *allocHook, AXFXFreeHook *freeHook);
+    void HookAlloc(AXFXAllocHook* pAllocHook, AXFXFreeHook* pFreeHook);
     void RestoreAlloc(AXFXAllocHook allocHook, AXFXFreeHook freeHook);
 
-    bool mIsActive;      // at 0x0
-    MEMiHeapHead *mHeap; // at 0x4
-    u32 mAllocCount;     // at 0x8
+    static void* Alloc(u32 size);
+    static void Free(void* pBlock);
 
-    static AxfxImpl *mCurrentFx;
+    static AxfxImpl* mCurrentFx;
     static u32 mAllocatedSize;
 };
 
