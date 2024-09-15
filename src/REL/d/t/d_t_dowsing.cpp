@@ -23,7 +23,7 @@ int dTgDowsing_c::create() {
 }
 
 int dTgDowsing_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgDowsing_c::actorExecute() {
@@ -37,11 +37,11 @@ int dTgDowsing_c::actorExecute() {
         mDowsingTarget.doRegister();
         mTargetActive = true;
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgDowsing_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }
 
 bool dTgDowsing_c::checkDowsing() const {

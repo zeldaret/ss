@@ -127,7 +127,7 @@ public:
     void draw(const mMtx_c &, u32);
     void afterDraw();
 
-    EGG::FrmHeap *changeHeap(int index) {
+    void changeHeap(int index) {
         mCurrentHeapIdx = index % 2;
         mpCurrentHeap = mpFrmHeaps[mCurrentHeapIdx];
     }

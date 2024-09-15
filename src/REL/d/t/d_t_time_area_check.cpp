@@ -11,7 +11,7 @@ int dTgTimeAreaCheck_c::create() {
 }
 
 int dTgTimeAreaCheck_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgTimeAreaCheck_c::actorExecute() {
@@ -31,9 +31,9 @@ int dTgTimeAreaCheck_c::actorExecute() {
             SceneflagManager::sInstance->setFlag(roomid, mPresentSceneFlag);
         }
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgTimeAreaCheck_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }

@@ -128,6 +128,8 @@ protected:
 };
 
 // Actors' createHeap functions often have patterns that can be matched with this macro
-#define TRY_CREATE(thing) do { bool result = (thing); if (!result) return result; } while (0);
+#define TRY_CREATE(thing) do { bool result = (thing); if (!result) return result; } while (0)
+
+#define CREATE_ALLOCATOR(className) do { if (!initAllocatorWork1Heap(-1, #className "::m_allocator", 0x20)) { return FAILED; } } while (0)
 
 #endif

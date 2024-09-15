@@ -14,9 +14,7 @@ bool dAcOring_c::createHeap() {
 }
 
 int dAcOring_c::create() {
-    if (!initAllocatorWork1Heap(-1, "dAcOring_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR(dAcOring_c);
 
     field_0x388 = getArgFromParams();
 
@@ -32,7 +30,7 @@ int dAcOring_c::create() {
 }
 
 int dAcOring_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOring_c::actorExecute() {
@@ -42,12 +40,12 @@ int dAcOring_c::actorExecute() {
     position += posIncrements;
     updateMatrix();
     mModel.setLocalMtx(worldMatrix);
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOring_c::draw() {
     drawModelType1(&mModel);
-    return 1;
+    return SUCCEEDED;
 }
 
 void dAcOring_c::initializeState_Move() {}

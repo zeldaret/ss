@@ -44,7 +44,7 @@ int dTgSndAr_c::create() {
 }
 
 int dTgSndAr_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 struct Unk {
@@ -65,11 +65,11 @@ int dTgSndAr_c::actorExecute() {
             dTgSndMg_c::sInstance->setBgmFlag(params & 0xFF);
         }
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgSndAr_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }
 
 bool dTgSndAr_c::checkPosInArea(mVec3_c &pos) {

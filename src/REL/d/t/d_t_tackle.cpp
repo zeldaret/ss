@@ -7,13 +7,13 @@ int dTgTackle_c::create() {
 }
 
 int dTgTackle_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgTackle_c::actorExecute() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgTackle_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }

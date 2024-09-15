@@ -25,9 +25,7 @@ bool dAcOlavaF200_c::createHeap() {
 }
 
 int dAcOlavaF200_c::create() {
-    if (!initAllocatorWork1Heap(-1, "dAcOlavaF200_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR(dAcOlavaF200_c);
 
     mModels[0].setAnm(mTexAnms[0]);
     mModels[1].setAnm(mTexAnms[1]);
@@ -47,7 +45,7 @@ int dAcOlavaF200_c::create() {
 }
 
 int dAcOlavaF200_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOlavaF200_c::actorExecute() {
@@ -55,12 +53,12 @@ int dAcOlavaF200_c::actorExecute() {
     mTexAnms[1].play();
     mClrAnms[0].play();
     mClrAnms[1].play();
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOlavaF200_c::draw() {
     for (int i = 0; i < 2; i++) {
         drawModelType1(&mModels[i]);
     }
-    return 1;
+    return SUCCEEDED;
 }

@@ -18,15 +18,15 @@ int dTgNoEffectArea_c::create() {
 
 int dTgNoEffectArea_c::doDelete() {
     sList.remove(&this->mEntry);
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgNoEffectArea_c::actorExecute() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgNoEffectArea_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }
 
 void dTgNoEffectArea_c::addToList(fLiMgBa_c &list) {

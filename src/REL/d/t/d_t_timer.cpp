@@ -41,7 +41,7 @@ int dTgTimer_c::actorExecute() {
     } else {
         resetTimer();
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgTimer_c::getSubtypeFromParams() {

@@ -27,9 +27,7 @@ bool intToBool(int a) {
 }
 
 int dAcOmoleSoil_c::create() {
-    if (!initAllocatorWork1Heap(-1, "dAcOmoleSoil_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR(dAcOmoleSoil_c);
 
     mScale = sHalfScale;
     scale.set(sHalfScale, sHalfScale, sHalfScale);
@@ -40,7 +38,7 @@ int dAcOmoleSoil_c::create() {
 }
 
 int dAcOmoleSoil_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOmoleSoil_c::actorExecute() {
@@ -64,14 +62,14 @@ int dAcOmoleSoil_c::actorExecute() {
     mStateMgr.executeState();
     updateMatrix();
     mModel.setLocalMtx(worldMatrix);
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOmoleSoil_c::draw() {
     if (field_0x391) {
         drawModelType1(&mModel);
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 void dAcOmoleSoil_c::initializeState_Wait() {

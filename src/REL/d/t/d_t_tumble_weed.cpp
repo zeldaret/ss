@@ -18,13 +18,13 @@ int dTgTumbleWeed_c::create() {
 u16 decr(u16 *num);
 
 int dTgTumbleWeed_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgTumbleWeed_c::actorExecute() {
     mStateMgr.executeState();
     decr(&tumbleweedTimer);
-    return 1;
+    return SUCCEEDED;
 }
 
 u16 decr(u16 *num) {
@@ -35,7 +35,7 @@ u16 decr(u16 *num) {
 }
 
 int dTgTumbleWeed_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }
 
 void dTgTumbleWeed_c::initializeState_AreaOut() {}
