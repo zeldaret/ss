@@ -7,7 +7,7 @@ dCcD_Unk1::~dCcD_Unk1() {}
 
 void dCcD_Unk1::init(const dCcD_SrcUnk &src) {
     dCcD_GObjInf::init(src.mObjInf);
-    cCcD_ShapeAttr1::init(src.mUnk1Inf);
+    dCcD_ShapeAttr1::init(src.mUnk1Inf);
 }
 
 void *dCcD_Unk1::dCcD_GObjInf_0x0C() {
@@ -40,7 +40,7 @@ dCcD_Cyl::~dCcD_Cyl() {}
 
 void dCcD_Cyl::init(const dCcD_SrcCyl &src) {
     dCcD_GObjInf::init(src.mObjInf);
-    cCcD_ShapeAttr3::init(src.mCylAttr);
+    dCcD_ShapeAttr3::init(src.mCylAttr);
 }
 
 void *dCcD_Cyl::dCcD_GObjInf_0x0C() {
@@ -65,7 +65,7 @@ dCcD_Sph::~dCcD_Sph() {}
 
 void dCcD_Sph::init(const dCcD_SrcSph &src) {
     dCcD_GObjInf::init(src.mObjInf);
-    cCcD_ShapeAttr4::init(src.mSphAttr);
+    dCcD_ShapeAttr4::init(src.mSphAttr);
 }
 
 void dCcD_Sph::setCenter(const mVec3_c &c) {
@@ -95,7 +95,7 @@ dCcD_Aabb::~dCcD_Aabb() {}
 
 void dCcD_Aabb::init(const dCcD_SrcAabb &src) {
     dCcD_GObjInf::init(src.mObjInf);
-    cCcD_ShapeAttr5::init(src.mAabbAttr);
+    dCcD_ShapeAttr5::init(src.mAabbAttr);
 }
 
 void *dCcD_Aabb::dCcD_GObjInf_0x0C() {

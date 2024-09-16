@@ -9,19 +9,26 @@
 #include <toBeSorted/cc/d_cc_m3d_g_cyl.h>
 #include <toBeSorted/cc/d_cc_m3d_g_sph.h>
 
-class cCcD_DivideInfo {
+// Largely modeled off
+// https://github.com/zeldaret/tp/blob/main/include/SSystem/SComponent/c_cc_d.h
+// https://github.com/zeldaret/tp/blob/main/include/d/cc/d_cc_d.h
+// - the SComponent/d split seems to not exist anymore in SS, so we'll just
+//   go with the d names for this merger of the two
+
+class dCcD_DivideInfo {
 private:
     /* 0x00 */ u32 mXDivInfo;
     /* 0x04 */ u32 mYDivInfo;
     /* 0x08 */ u32 mZDivInfo;
     /* 0x0C vtable */
 public:
-    /* 80328120 */ cCcD_DivideInfo();
-    /* 80328130 */ virtual ~cCcD_DivideInfo();
+    /* 80328120 */ dCcD_DivideInfo();
+    /* 80328130 */ virtual ~dCcD_DivideInfo();
     // void Set(u32, u32, u32);
-    // bool Chk(cCcD_DivideInfo const &) const;
+    // bool Chk(dCcD_DivideInfo const &) const;
 }; // Size = 0x10
 
+// This Aabb type really could be anything
 struct Aabb {
     mVec3_c mMin;
     mVec3_c mMax;
@@ -32,7 +39,7 @@ struct Aabb {
     }
 }; // Size = 0x18
 
-class cCcD_DivideArea : public Aabb {
+class dCcD_DivideArea : public Aabb {
 private:
     /* 0x18 */ bool mXDiffIsZero;
     /* 0x1C */ f32 mScaledXDiff;
@@ -46,11 +53,11 @@ private:
 
 public:
     /* vt at 0x3C */
-    cCcD_DivideArea();
-    virtual ~cCcD_DivideArea();
+    dCcD_DivideArea();
+    virtual ~dCcD_DivideArea();
     /* 803281c0 */ void SetArea(Aabb const &);
-    /* 803282d0 */ void CalcDivideInfo(cCcD_DivideInfo *, Aabb const &, u32);
-    /* 80328470 */ void CalcDivideInfoOverArea(cCcD_DivideInfo *, Aabb const &);
+    /* 803282d0 */ void CalcDivideInfo(dCcD_DivideInfo *, Aabb const &, u32);
+    /* 80328470 */ void CalcDivideInfoOverArea(dCcD_DivideInfo *, Aabb const &);
 }; // Size = 0x40
 
 class dCcD_GAtTgCoCommonBase {
@@ -197,34 +204,34 @@ public:
     }
 };
 
-class cCcD_ShapeAttr {
+class dCcD_ShapeAttr {
 public:
     /* 0x00 */ u8 UNK_0x00[0x18 - 0x00];
-    /* 0x18 */ cCcD_DivideInfo field_0x18;
+    /* 0x18 */ dCcD_DivideInfo field_0x18;
 
-    cCcD_ShapeAttr();
+    dCcD_ShapeAttr();
 
-    /* vt 0x08 */ virtual ~cCcD_ShapeAttr();
-    /* vt 0x0C */ virtual void cCcD_ShapeAttr_0x0C();
-    /* vt 0x10 */ virtual void cCcD_ShapeAttr_0x10();
-    /* vt 0x14 */ virtual void cCcD_ShapeAttr_0x14() = 0;
-    /* vt 0x18 */ virtual void cCcD_ShapeAttr_0x18() = 0;
-    /* vt 0x18 */ virtual void cCcD_ShapeAttr_0x1C() = 0;
-    /* vt 0x20 */ virtual void cCcD_ShapeAttr_0x20() = 0;
-    /* vt 0x24 */ virtual void cCcD_ShapeAttr_0x24() = 0;
-    /* vt 0x28 */ virtual void cCcD_ShapeAttr_0x28(); // 0x80329110
-    /* vt 0x2C */ virtual void cCcD_ShapeAttr_0x2C() = 0;
-    /* vt 0x30 */ virtual void cCcD_ShapeAttr_0x30() = 0;
-    /* vt 0x34 */ virtual void cCcD_ShapeAttr_0x34() = 0;
-    /* vt 0x38 */ virtual void cCcD_ShapeAttr_0x38() = 0;
-    /* vt 0x3C */ virtual void cCcD_ShapeAttr_0x3C() = 0;
+    /* vt 0x08 */ virtual ~dCcD_ShapeAttr();
+    /* vt 0x0C */ virtual void dCcD_ShapeAttr_0x0C();
+    /* vt 0x10 */ virtual void dCcD_ShapeAttr_0x10();
+    /* vt 0x14 */ virtual void dCcD_ShapeAttr_0x14() = 0;
+    /* vt 0x18 */ virtual void dCcD_ShapeAttr_0x18() = 0;
+    /* vt 0x18 */ virtual void dCcD_ShapeAttr_0x1C() = 0;
+    /* vt 0x20 */ virtual void dCcD_ShapeAttr_0x20() = 0;
+    /* vt 0x24 */ virtual void dCcD_ShapeAttr_0x24() = 0;
+    /* vt 0x28 */ virtual void dCcD_ShapeAttr_0x28(); // 0x80329110
+    /* vt 0x2C */ virtual void dCcD_ShapeAttr_0x2C() = 0;
+    /* vt 0x30 */ virtual void dCcD_ShapeAttr_0x30() = 0;
+    /* vt 0x34 */ virtual void dCcD_ShapeAttr_0x34() = 0;
+    /* vt 0x38 */ virtual void dCcD_ShapeAttr_0x38() = 0;
+    /* vt 0x3C */ virtual void dCcD_ShapeAttr_0x3C() = 0;
     /* vt 0x40 */ virtual mVec3_c *getVirtualCenter(); // 0x80329120
-    /* vt 0x44 */ virtual void cCcD_ShapeAttr_0x44() = 0;
-    /* vt 0x48 */ virtual void cCcD_ShapeAttr_0x48() = 0;
+    /* vt 0x44 */ virtual void dCcD_ShapeAttr_0x44() = 0;
+    /* vt 0x48 */ virtual void dCcD_ShapeAttr_0x48() = 0;
     /* vt 0x4C */ virtual void getShapeAccess(); // 0x80329090
-    /* vt 0x50 */ virtual void cCcD_ShapeAttr_0x50() = 0;
-    /* vt 0x54 */ virtual void cCcD_ShapeAttr_0x54(); // 0x803290F0
-    /* vt 0x58 */ virtual void cCcD_ShapeAttr_0x58() = 0;
+    /* vt 0x50 */ virtual void dCcD_ShapeAttr_0x50() = 0;
+    /* vt 0x54 */ virtual void dCcD_ShapeAttr_0x54(); // 0x803290F0
+    /* vt 0x58 */ virtual void dCcD_ShapeAttr_0x58() = 0;
 
     static mVec3_c m_virtual_center;
 };
@@ -311,13 +318,13 @@ public:
     void adjustHitPos(f32 dx, f32 dz);
 };
 
-struct cCcD_SrcCylAttr {
+struct dCcD_SrcCylAttr {
 public:
     /* 0x00 */ f32 mRadius;
     /* 0x04 */ f32 mHeight;
 }; // Size = 0x8
 
-struct cCcD_SrcSphAttr {
+struct dCcD_SrcSphAttr {
     /* 0x00 */ f32 mRadius;
 }; // Size = 0x4
 
@@ -339,11 +346,11 @@ public:
     void setMinMax(const mVec3_c &min, const mVec3_c &max);
 };
 
-struct cCcD_SrcAabbAttr {
+struct dCcD_SrcAabbAttr {
     /* 0x00 */ f32 minX, minY, minZ, maxX, maxY, maxZ;
 }; // Size = 0x18
 
-struct cCcD_SrcUnk1Attr {};
+struct dCcD_SrcUnk1Attr {};
 
 class cM3dGUnk1 {
 public:
@@ -362,151 +369,151 @@ public:
 };
 
 // Unk1
-class cCcD_ShapeAttr1 : public cCcD_ShapeAttr, public cM3dGUnk1 {
+class dCcD_ShapeAttr1 : public dCcD_ShapeAttr, public cM3dGUnk1 {
 public:
-    cCcD_ShapeAttr1();
+    dCcD_ShapeAttr1();
 
-    void init(const cCcD_SrcUnk1Attr &);
+    void init(const dCcD_SrcUnk1Attr &);
 
-    /* vt 0x08 */ virtual ~cCcD_ShapeAttr1();
-    /* vt 0x0C */ virtual void cCcD_ShapeAttr_0x0C() override;
-    /* vt 0x10 */ virtual void cCcD_ShapeAttr_0x10() override;
-    /* vt 0x14 */ virtual void cCcD_ShapeAttr_0x14() override;
-    /* vt 0x18 */ virtual void cCcD_ShapeAttr_0x18() override;
-    /* vt 0x18 */ virtual void cCcD_ShapeAttr_0x1C() override;
-    /* vt 0x20 */ virtual void cCcD_ShapeAttr_0x20() override;
-    /* vt 0x24 */ virtual void cCcD_ShapeAttr_0x24() override;
-    /* vt 0x28 */ virtual void cCcD_ShapeAttr_0x28() override;
-    /* vt 0x2C */ virtual void cCcD_ShapeAttr_0x2C() override;
-    /* vt 0x30 */ virtual void cCcD_ShapeAttr_0x30() override;
-    /* vt 0x34 */ virtual void cCcD_ShapeAttr_0x34() override;
-    /* vt 0x38 */ virtual void cCcD_ShapeAttr_0x38() override;
-    /* vt 0x3C */ virtual void cCcD_ShapeAttr_0x3C() override;
+    /* vt 0x08 */ virtual ~dCcD_ShapeAttr1();
+    /* vt 0x0C */ virtual void dCcD_ShapeAttr_0x0C() override;
+    /* vt 0x10 */ virtual void dCcD_ShapeAttr_0x10() override;
+    /* vt 0x14 */ virtual void dCcD_ShapeAttr_0x14() override;
+    /* vt 0x18 */ virtual void dCcD_ShapeAttr_0x18() override;
+    /* vt 0x18 */ virtual void dCcD_ShapeAttr_0x1C() override;
+    /* vt 0x20 */ virtual void dCcD_ShapeAttr_0x20() override;
+    /* vt 0x24 */ virtual void dCcD_ShapeAttr_0x24() override;
+    /* vt 0x28 */ virtual void dCcD_ShapeAttr_0x28() override;
+    /* vt 0x2C */ virtual void dCcD_ShapeAttr_0x2C() override;
+    /* vt 0x30 */ virtual void dCcD_ShapeAttr_0x30() override;
+    /* vt 0x34 */ virtual void dCcD_ShapeAttr_0x34() override;
+    /* vt 0x38 */ virtual void dCcD_ShapeAttr_0x38() override;
+    /* vt 0x3C */ virtual void dCcD_ShapeAttr_0x3C() override;
     /* vt 0x40 */ virtual mVec3_c *getVirtualCenter() override;
-    /* vt 0x44 */ virtual void cCcD_ShapeAttr_0x44() override;
-    /* vt 0x48 */ virtual void cCcD_ShapeAttr_0x48() override;
+    /* vt 0x44 */ virtual void dCcD_ShapeAttr_0x44() override;
+    /* vt 0x48 */ virtual void dCcD_ShapeAttr_0x48() override;
     /* vt 0x4C */ virtual void getShapeAccess() override;
-    /* vt 0x50 */ virtual void cCcD_ShapeAttr_0x50() override;
-    // /* vt 0x54 */ virtual void cCcD_ShapeAttr_0x54() override;
-    /* vt 0x58 */ virtual void cCcD_ShapeAttr_0x58() override;
+    /* vt 0x50 */ virtual void dCcD_ShapeAttr_0x50() override;
+    // /* vt 0x54 */ virtual void dCcD_ShapeAttr_0x54() override;
+    /* vt 0x58 */ virtual void dCcD_ShapeAttr_0x58() override;
 };
 
 // Unk1
-class cCcD_ShapeAttr2 : public cCcD_ShapeAttr, public cM3dGUnk2 {
+class dCcD_ShapeAttr2 : public dCcD_ShapeAttr, public cM3dGUnk2 {
 public:
-    cCcD_ShapeAttr2();
+    dCcD_ShapeAttr2();
 
-    /* vt 0x08 */ virtual ~cCcD_ShapeAttr2();
-    /* vt 0x0C */ virtual void cCcD_ShapeAttr_0x0C() override;
-    /* vt 0x10 */ virtual void cCcD_ShapeAttr_0x10() override;
-    /* vt 0x14 */ virtual void cCcD_ShapeAttr_0x14() override;
-    /* vt 0x18 */ virtual void cCcD_ShapeAttr_0x18() override;
-    /* vt 0x18 */ virtual void cCcD_ShapeAttr_0x1C() override;
-    /* vt 0x20 */ virtual void cCcD_ShapeAttr_0x20() override;
-    /* vt 0x24 */ virtual void cCcD_ShapeAttr_0x24() override;
-    /* vt 0x28 */ virtual void cCcD_ShapeAttr_0x28() override;
-    /* vt 0x2C */ virtual void cCcD_ShapeAttr_0x2C() override;
-    /* vt 0x30 */ virtual void cCcD_ShapeAttr_0x30() override;
-    /* vt 0x34 */ virtual void cCcD_ShapeAttr_0x34() override;
-    /* vt 0x38 */ virtual void cCcD_ShapeAttr_0x38() override;
-    /* vt 0x3C */ virtual void cCcD_ShapeAttr_0x3C() override;
+    /* vt 0x08 */ virtual ~dCcD_ShapeAttr2();
+    /* vt 0x0C */ virtual void dCcD_ShapeAttr_0x0C() override;
+    /* vt 0x10 */ virtual void dCcD_ShapeAttr_0x10() override;
+    /* vt 0x14 */ virtual void dCcD_ShapeAttr_0x14() override;
+    /* vt 0x18 */ virtual void dCcD_ShapeAttr_0x18() override;
+    /* vt 0x18 */ virtual void dCcD_ShapeAttr_0x1C() override;
+    /* vt 0x20 */ virtual void dCcD_ShapeAttr_0x20() override;
+    /* vt 0x24 */ virtual void dCcD_ShapeAttr_0x24() override;
+    /* vt 0x28 */ virtual void dCcD_ShapeAttr_0x28() override;
+    /* vt 0x2C */ virtual void dCcD_ShapeAttr_0x2C() override;
+    /* vt 0x30 */ virtual void dCcD_ShapeAttr_0x30() override;
+    /* vt 0x34 */ virtual void dCcD_ShapeAttr_0x34() override;
+    /* vt 0x38 */ virtual void dCcD_ShapeAttr_0x38() override;
+    /* vt 0x3C */ virtual void dCcD_ShapeAttr_0x3C() override;
     // /* vt 0x40 */ virtual mVec3_c *getVirtualCenter() override;
-    /* vt 0x44 */ virtual void cCcD_ShapeAttr_0x44() override;
-    /* vt 0x48 */ virtual void cCcD_ShapeAttr_0x48() override;
+    /* vt 0x44 */ virtual void dCcD_ShapeAttr_0x44() override;
+    /* vt 0x48 */ virtual void dCcD_ShapeAttr_0x48() override;
     /* vt 0x4C */ virtual void getShapeAccess() override;
-    /* vt 0x50 */ virtual void cCcD_ShapeAttr_0x50() override;
-    // /* vt 0x54 */ virtual void cCcD_ShapeAttr_0x54() override;
-    /* vt 0x58 */ virtual void cCcD_ShapeAttr_0x58() override;
+    /* vt 0x50 */ virtual void dCcD_ShapeAttr_0x50() override;
+    // /* vt 0x54 */ virtual void dCcD_ShapeAttr_0x54() override;
+    /* vt 0x58 */ virtual void dCcD_ShapeAttr_0x58() override;
 };
 
 // Aabb
-class cCcD_ShapeAttr5 : public cCcD_ShapeAttr, public cM3dGAabb {
+class dCcD_ShapeAttr5 : public dCcD_ShapeAttr, public cM3dGAabb {
 public:
-    cCcD_ShapeAttr5();
+    dCcD_ShapeAttr5();
 
-    void init(const cCcD_SrcAabbAttr &);
+    void init(const dCcD_SrcAabbAttr &);
 
-    /* vt 0x08 */ virtual ~cCcD_ShapeAttr5();
-    /* vt 0x0C */ virtual void cCcD_ShapeAttr_0x0C() override;
-    /* vt 0x10 */ virtual void cCcD_ShapeAttr_0x10() override;
-    /* vt 0x14 */ virtual void cCcD_ShapeAttr_0x14() override;
-    /* vt 0x18 */ virtual void cCcD_ShapeAttr_0x18() override;
-    /* vt 0x18 */ virtual void cCcD_ShapeAttr_0x1C() override;
-    /* vt 0x20 */ virtual void cCcD_ShapeAttr_0x20() override;
-    /* vt 0x24 */ virtual void cCcD_ShapeAttr_0x24() override;
-    /* vt 0x28 */ virtual void cCcD_ShapeAttr_0x28() override;
-    /* vt 0x2C */ virtual void cCcD_ShapeAttr_0x2C() override;
-    /* vt 0x30 */ virtual void cCcD_ShapeAttr_0x30() override;
-    /* vt 0x34 */ virtual void cCcD_ShapeAttr_0x34() override;
-    /* vt 0x38 */ virtual void cCcD_ShapeAttr_0x38() override;
-    /* vt 0x3C */ virtual void cCcD_ShapeAttr_0x3C() override;
+    /* vt 0x08 */ virtual ~dCcD_ShapeAttr5();
+    /* vt 0x0C */ virtual void dCcD_ShapeAttr_0x0C() override;
+    /* vt 0x10 */ virtual void dCcD_ShapeAttr_0x10() override;
+    /* vt 0x14 */ virtual void dCcD_ShapeAttr_0x14() override;
+    /* vt 0x18 */ virtual void dCcD_ShapeAttr_0x18() override;
+    /* vt 0x18 */ virtual void dCcD_ShapeAttr_0x1C() override;
+    /* vt 0x20 */ virtual void dCcD_ShapeAttr_0x20() override;
+    /* vt 0x24 */ virtual void dCcD_ShapeAttr_0x24() override;
+    /* vt 0x28 */ virtual void dCcD_ShapeAttr_0x28() override;
+    /* vt 0x2C */ virtual void dCcD_ShapeAttr_0x2C() override;
+    /* vt 0x30 */ virtual void dCcD_ShapeAttr_0x30() override;
+    /* vt 0x34 */ virtual void dCcD_ShapeAttr_0x34() override;
+    /* vt 0x38 */ virtual void dCcD_ShapeAttr_0x38() override;
+    /* vt 0x3C */ virtual void dCcD_ShapeAttr_0x3C() override;
     /* vt 0x40 */ virtual mVec3_c *getVirtualCenter() override;
-    /* vt 0x44 */ virtual void cCcD_ShapeAttr_0x44() override;
-    /* vt 0x48 */ virtual void cCcD_ShapeAttr_0x48() override;
+    /* vt 0x44 */ virtual void dCcD_ShapeAttr_0x44() override;
+    /* vt 0x48 */ virtual void dCcD_ShapeAttr_0x48() override;
     // /* vt 0x4C */ virtual void getShapeAccess() override;
-    /* vt 0x50 */ virtual void cCcD_ShapeAttr_0x50() override;
-    // /* vt 0x54 */ virtual void cCcD_ShapeAttr_0x54() override;
-    /* vt 0x58 */ virtual void cCcD_ShapeAttr_0x58() override;
+    /* vt 0x50 */ virtual void dCcD_ShapeAttr_0x50() override;
+    // /* vt 0x54 */ virtual void dCcD_ShapeAttr_0x54() override;
+    /* vt 0x58 */ virtual void dCcD_ShapeAttr_0x58() override;
 };
 
 // Cyl
-class cCcD_ShapeAttr3 : public cCcD_ShapeAttr, public cM3dGCyl {
+class dCcD_ShapeAttr3 : public dCcD_ShapeAttr, public cM3dGCyl {
 public:
-    cCcD_ShapeAttr3();
+    dCcD_ShapeAttr3();
 
-    void init(const cCcD_SrcCylAttr &);
+    void init(const dCcD_SrcCylAttr &);
 
-    /* vt 0x08 */ virtual ~cCcD_ShapeAttr3();
-    /* vt 0x0C */ virtual void cCcD_ShapeAttr_0x0C() override;
-    /* vt 0x10 */ virtual void cCcD_ShapeAttr_0x10() override;
-    /* vt 0x14 */ virtual void cCcD_ShapeAttr_0x14() override;
-    /* vt 0x18 */ virtual void cCcD_ShapeAttr_0x18() override;
-    /* vt 0x18 */ virtual void cCcD_ShapeAttr_0x1C() override;
-    /* vt 0x20 */ virtual void cCcD_ShapeAttr_0x20() override;
-    /* vt 0x24 */ virtual void cCcD_ShapeAttr_0x24() override;
-    /* vt 0x28 */ virtual void cCcD_ShapeAttr_0x28() override;
-    /* vt 0x2C */ virtual void cCcD_ShapeAttr_0x2C() override;
-    /* vt 0x30 */ virtual void cCcD_ShapeAttr_0x30() override;
-    /* vt 0x34 */ virtual void cCcD_ShapeAttr_0x34() override;
-    /* vt 0x38 */ virtual void cCcD_ShapeAttr_0x38() override;
-    /* vt 0x3C */ virtual void cCcD_ShapeAttr_0x3C() override;
+    /* vt 0x08 */ virtual ~dCcD_ShapeAttr3();
+    /* vt 0x0C */ virtual void dCcD_ShapeAttr_0x0C() override;
+    /* vt 0x10 */ virtual void dCcD_ShapeAttr_0x10() override;
+    /* vt 0x14 */ virtual void dCcD_ShapeAttr_0x14() override;
+    /* vt 0x18 */ virtual void dCcD_ShapeAttr_0x18() override;
+    /* vt 0x18 */ virtual void dCcD_ShapeAttr_0x1C() override;
+    /* vt 0x20 */ virtual void dCcD_ShapeAttr_0x20() override;
+    /* vt 0x24 */ virtual void dCcD_ShapeAttr_0x24() override;
+    /* vt 0x28 */ virtual void dCcD_ShapeAttr_0x28() override;
+    /* vt 0x2C */ virtual void dCcD_ShapeAttr_0x2C() override;
+    /* vt 0x30 */ virtual void dCcD_ShapeAttr_0x30() override;
+    /* vt 0x34 */ virtual void dCcD_ShapeAttr_0x34() override;
+    /* vt 0x38 */ virtual void dCcD_ShapeAttr_0x38() override;
+    /* vt 0x3C */ virtual void dCcD_ShapeAttr_0x3C() override;
     /* vt 0x40 */ virtual mVec3_c *getVirtualCenter() override;
-    /* vt 0x44 */ virtual void cCcD_ShapeAttr_0x44() override;
-    /* vt 0x48 */ virtual void cCcD_ShapeAttr_0x48() override;
+    /* vt 0x44 */ virtual void dCcD_ShapeAttr_0x44() override;
+    /* vt 0x48 */ virtual void dCcD_ShapeAttr_0x48() override;
     /* vt 0x4C */ virtual void getShapeAccess() override;
-    /* vt 0x50 */ virtual void cCcD_ShapeAttr_0x50() override;
-    // /* vt 0x54 */ virtual void cCcD_ShapeAttr_0x54() override;
-    /* vt 0x58 */ virtual void cCcD_ShapeAttr_0x58() override;
+    /* vt 0x50 */ virtual void dCcD_ShapeAttr_0x50() override;
+    // /* vt 0x54 */ virtual void dCcD_ShapeAttr_0x54() override;
+    /* vt 0x58 */ virtual void dCcD_ShapeAttr_0x58() override;
 };
 
 // Sph
-class cCcD_ShapeAttr4 : public cCcD_ShapeAttr, public cM3dGSph {
+class dCcD_ShapeAttr4 : public dCcD_ShapeAttr, public cM3dGSph {
 public:
-    cCcD_ShapeAttr4();
+    dCcD_ShapeAttr4();
 
-    void init(const cCcD_SrcSphAttr &);
+    void init(const dCcD_SrcSphAttr &);
 
-    /* vt 0x08 */ virtual ~cCcD_ShapeAttr4();
-    /* vt 0x0C */ virtual void cCcD_ShapeAttr_0x0C() override;
-    /* vt 0x10 */ virtual void cCcD_ShapeAttr_0x10() override;
-    /* vt 0x14 */ virtual void cCcD_ShapeAttr_0x14() override;
-    /* vt 0x18 */ virtual void cCcD_ShapeAttr_0x18() override;
-    /* vt 0x18 */ virtual void cCcD_ShapeAttr_0x1C() override;
-    /* vt 0x20 */ virtual void cCcD_ShapeAttr_0x20() override;
-    /* vt 0x24 */ virtual void cCcD_ShapeAttr_0x24() override;
-    /* vt 0x28 */ virtual void cCcD_ShapeAttr_0x28() override;
-    /* vt 0x2C */ virtual void cCcD_ShapeAttr_0x2C() override;
-    /* vt 0x30 */ virtual void cCcD_ShapeAttr_0x30() override;
-    /* vt 0x34 */ virtual void cCcD_ShapeAttr_0x34() override;
-    /* vt 0x38 */ virtual void cCcD_ShapeAttr_0x38() override;
-    /* vt 0x3C */ virtual void cCcD_ShapeAttr_0x3C() override;
+    /* vt 0x08 */ virtual ~dCcD_ShapeAttr4();
+    /* vt 0x0C */ virtual void dCcD_ShapeAttr_0x0C() override;
+    /* vt 0x10 */ virtual void dCcD_ShapeAttr_0x10() override;
+    /* vt 0x14 */ virtual void dCcD_ShapeAttr_0x14() override;
+    /* vt 0x18 */ virtual void dCcD_ShapeAttr_0x18() override;
+    /* vt 0x18 */ virtual void dCcD_ShapeAttr_0x1C() override;
+    /* vt 0x20 */ virtual void dCcD_ShapeAttr_0x20() override;
+    /* vt 0x24 */ virtual void dCcD_ShapeAttr_0x24() override;
+    /* vt 0x28 */ virtual void dCcD_ShapeAttr_0x28() override;
+    /* vt 0x2C */ virtual void dCcD_ShapeAttr_0x2C() override;
+    /* vt 0x30 */ virtual void dCcD_ShapeAttr_0x30() override;
+    /* vt 0x34 */ virtual void dCcD_ShapeAttr_0x34() override;
+    /* vt 0x38 */ virtual void dCcD_ShapeAttr_0x38() override;
+    /* vt 0x3C */ virtual void dCcD_ShapeAttr_0x3C() override;
     /* vt 0x40 */ virtual mVec3_c *getVirtualCenter() override;
-    /* vt 0x44 */ virtual void cCcD_ShapeAttr_0x44() override;
-    /* vt 0x48 */ virtual void cCcD_ShapeAttr_0x48() override;
+    /* vt 0x44 */ virtual void dCcD_ShapeAttr_0x44() override;
+    /* vt 0x48 */ virtual void dCcD_ShapeAttr_0x48() override;
     /* vt 0x4C */ virtual void getShapeAccess() override;
-    /* vt 0x50 */ virtual void cCcD_ShapeAttr_0x50() override;
-    /* vt 0x54 */ virtual void cCcD_ShapeAttr_0x54() override;
-    /* vt 0x58 */ virtual void cCcD_ShapeAttr_0x58() override;
+    /* vt 0x50 */ virtual void dCcD_ShapeAttr_0x50() override;
+    /* vt 0x54 */ virtual void dCcD_ShapeAttr_0x54() override;
+    /* vt 0x58 */ virtual void dCcD_ShapeAttr_0x58() override;
 };
 
 #endif

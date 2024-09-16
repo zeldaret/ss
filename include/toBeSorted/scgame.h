@@ -26,6 +26,7 @@ public:
     static ScGame *sInstance;
 
     static bool isCurrentStage(const char *stageName);
+    void triggerExit(s32 room, u8 exitIndex, s32 forcedNight = 2, s32 forcedTrial = 2);
 };
 
 #endif

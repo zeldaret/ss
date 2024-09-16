@@ -6,10 +6,10 @@
 
 struct dCcD_SrcUnk {
     /* 0x00 */ dCcD_SrcGObjInf mObjInf;
-    /* 0x44 */ cCcD_SrcUnk1Attr mUnk1Inf;
+    /* 0x44 */ dCcD_SrcUnk1Attr mUnk1Inf;
 }; // Size: ???
 
-class dCcD_Unk1 : public dCcD_GObjInf, public cCcD_ShapeAttr1 {
+class dCcD_Unk1 : public dCcD_GObjInf, public dCcD_ShapeAttr1 {
 public:
     dCcD_Unk1();
     virtual ~dCcD_Unk1();
@@ -26,7 +26,7 @@ struct dCcD_SrcEmpty {
 
 // Not sure what this is, the init function
 // doesn't call the shape initializer
-class dCcD_Empty : public dCcD_GObjInf, public cCcD_ShapeAttr2 {
+class dCcD_Empty : public dCcD_GObjInf, public dCcD_ShapeAttr2 {
 public:
     dCcD_Empty();
     virtual ~dCcD_Empty();
@@ -38,11 +38,11 @@ public:
 
 struct dCcD_SrcCyl {
     /* 0x00 */ dCcD_SrcGObjInf mObjInf;
-    /* 0x40 */ cCcD_SrcCylAttr mCylAttr;
+    /* 0x40 */ dCcD_SrcCylAttr mCylAttr;
 }; // Size: 0x44
 
 // Cylinder
-class dCcD_Cyl : public dCcD_GObjInf, public cCcD_ShapeAttr3 {
+class dCcD_Cyl : public dCcD_GObjInf, public dCcD_ShapeAttr3 {
 public:
     dCcD_Cyl();
     virtual ~dCcD_Cyl();
@@ -55,11 +55,11 @@ public:
 
 struct dCcD_SrcSph {
     /* 0x00 */ dCcD_SrcGObjInf mObjInf;
-    /* 0x40 */ cCcD_SrcSphAttr mSphAttr;
+    /* 0x40 */ dCcD_SrcSphAttr mSphAttr;
 }; // Size: 0x44
 
 // Sphere
-class dCcD_Sph : public dCcD_GObjInf, public cCcD_ShapeAttr4 {
+class dCcD_Sph : public dCcD_GObjInf, public dCcD_ShapeAttr4 {
 public:
     dCcD_Sph();
     virtual ~dCcD_Sph();
@@ -73,10 +73,10 @@ public:
 
 struct dCcD_SrcAabb {
     /* 0x00 */ dCcD_SrcGObjInf mObjInf;
-    /* 0x40 */ cCcD_SrcAabbAttr mAabbAttr;
+    /* 0x40 */ dCcD_SrcAabbAttr mAabbAttr;
 }; // Size: 0x58
 
-class dCcD_Aabb : public dCcD_GObjInf, public cCcD_ShapeAttr5 {
+class dCcD_Aabb : public dCcD_GObjInf, public dCcD_ShapeAttr5 {
 public:
     dCcD_Aabb();
     virtual ~dCcD_Aabb();

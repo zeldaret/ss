@@ -5,13 +5,13 @@
 
 inline bool cM3d_IsZero(f32 f);
 
-mVec3_c cCcD_ShapeAttr::m_virtual_center = mVec3_c::Zero;
+mVec3_c dCcD_ShapeAttr::m_virtual_center = mVec3_c::Zero;
 
-cCcD_DivideInfo::cCcD_DivideInfo() {}
-cCcD_DivideInfo::~cCcD_DivideInfo() {}
+dCcD_DivideInfo::dCcD_DivideInfo() {}
+dCcD_DivideInfo::~dCcD_DivideInfo() {}
 
-cCcD_DivideArea::cCcD_DivideArea() {}
-cCcD_DivideArea::~cCcD_DivideArea() {}
+dCcD_DivideArea::dCcD_DivideArea() {}
+dCcD_DivideArea::~dCcD_DivideArea() {}
 
 void d_cc_d_float_order() {
     1.0f / 32.0f;
@@ -26,7 +26,7 @@ void d_cc_d_float_order() {
 }
 
 // Very certain
-void cCcD_DivideArea::SetArea(Aabb const &aab) {
+void dCcD_DivideArea::SetArea(Aabb const &aab) {
     Set(aab.mMin, aab.mMax);
 
     mScaledXDiff = 1.0f / 32.0f * (mMax.x - mMin.x);
@@ -256,40 +256,40 @@ void dCcD_GObjInf::adjustHitPos(f32 dx, f32 dz) {
  *
  */
 
-cCcD_ShapeAttr::cCcD_ShapeAttr() {}
+dCcD_ShapeAttr::dCcD_ShapeAttr() {}
 
-cCcD_ShapeAttr::~cCcD_ShapeAttr() {}
+dCcD_ShapeAttr::~dCcD_ShapeAttr() {}
 
-mVec3_c *cCcD_ShapeAttr::getVirtualCenter() {
+mVec3_c *dCcD_ShapeAttr::getVirtualCenter() {
     return &m_virtual_center;
 }
 
-cCcD_ShapeAttr2::cCcD_ShapeAttr2() {}
-cCcD_ShapeAttr2::~cCcD_ShapeAttr2() {}
+dCcD_ShapeAttr2::dCcD_ShapeAttr2() {}
+dCcD_ShapeAttr2::~dCcD_ShapeAttr2() {}
 
-cCcD_ShapeAttr5::cCcD_ShapeAttr5() {}
-cCcD_ShapeAttr5::~cCcD_ShapeAttr5() {}
+dCcD_ShapeAttr5::dCcD_ShapeAttr5() {}
+dCcD_ShapeAttr5::~dCcD_ShapeAttr5() {}
 
-void cCcD_ShapeAttr5::init(const cCcD_SrcAabbAttr &src) {
+void dCcD_ShapeAttr5::init(const dCcD_SrcAabbAttr &src) {
     setMinMax(mVec3_c(src.minX, src.minY, src.minZ), mVec3_c(src.maxX, src.maxY, src.maxZ));
 }
 
-mVec3_c *cCcD_ShapeAttr5::getVirtualCenter() {
+mVec3_c *dCcD_ShapeAttr5::getVirtualCenter() {
     return &mVirtualCenter;
 }
 
-cCcD_ShapeAttr1::cCcD_ShapeAttr1() {}
-cCcD_ShapeAttr1::~cCcD_ShapeAttr1() {}
+dCcD_ShapeAttr1::dCcD_ShapeAttr1() {}
+dCcD_ShapeAttr1::~dCcD_ShapeAttr1() {}
 
-mVec3_c *cCcD_ShapeAttr1::getVirtualCenter() {
+mVec3_c *dCcD_ShapeAttr1::getVirtualCenter() {
     return &mVirtualCenter;
 }
 
-cCcD_ShapeAttr3::cCcD_ShapeAttr3() {}
+dCcD_ShapeAttr3::dCcD_ShapeAttr3() {}
 
-cCcD_ShapeAttr3::~cCcD_ShapeAttr3() {}
+dCcD_ShapeAttr3::~dCcD_ShapeAttr3() {}
 
-void cCcD_ShapeAttr3::init(const cCcD_SrcCylAttr &src) {
+void dCcD_ShapeAttr3::init(const dCcD_SrcCylAttr &src) {
     setR(src.mRadius);
     setH(src.mHeight);
     mVec3_c v;
@@ -299,14 +299,14 @@ void cCcD_ShapeAttr3::init(const cCcD_SrcCylAttr &src) {
     setC(v);
 }
 
-mVec3_c *cCcD_ShapeAttr3::getVirtualCenter() {
+mVec3_c *dCcD_ShapeAttr3::getVirtualCenter() {
     return &mCenter;
 }
 
-cCcD_ShapeAttr4::cCcD_ShapeAttr4() {}
-cCcD_ShapeAttr4::~cCcD_ShapeAttr4() {}
+dCcD_ShapeAttr4::dCcD_ShapeAttr4() {}
+dCcD_ShapeAttr4::~dCcD_ShapeAttr4() {}
 
-void cCcD_ShapeAttr4::init(const cCcD_SrcSphAttr &src) {
+void dCcD_ShapeAttr4::init(const dCcD_SrcSphAttr &src) {
     setR(src.mRadius);
     mVec3_c v;
     v.z = 0.0f;
@@ -315,7 +315,7 @@ void cCcD_ShapeAttr4::init(const cCcD_SrcSphAttr &src) {
     setC(v);
 }
 
-mVec3_c *cCcD_ShapeAttr4::getVirtualCenter() {
+mVec3_c *dCcD_ShapeAttr4::getVirtualCenter() {
     return &mCenter;
 }
 

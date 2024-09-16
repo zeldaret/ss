@@ -1,6 +1,8 @@
 #include <d/a/obj/d_a_obj_toD3_stone_figure.h>
+#include <toBeSorted/attention.h>
 #include <toBeSorted/cc/d_cc_mgr.h>
 #include <toBeSorted/event.h>
+#include <toBeSorted/event_manager.h>
 #include <toBeSorted/scgame.h>
 #include <toBeSorted/item_story_flag_manager.h>
 
@@ -98,22 +100,15 @@ void dAcOtoD3StoneFigure_c::initializeState_OneEye() {
     }
 }
 
-extern "C" void fn_801BB080(void *, s32, u8, s32, s32);
-extern "C" void *lbl_80575794;
-
-extern "C" bool fn_8009FF30(dAcBase_c *, const char *);
-extern "C" void *lbl_80575370;
-extern "C" void fn_80096C00(void *, dAcBase_c *, s32, f32, f32, f32, f32);
-extern "C" void fn_80096C30(void *, dAcBase_c *, s32, f32, f32, f32);
 void dAcOtoD3StoneFigure_c::executeState_OneEye() {
-    if (fn_8009FF30(this, "D3OpenStart")) {
-        fn_801BB080(lbl_80575794, roomid, mExitId, 2, 2);
+    if (EventManager::isInEvent(this, "D3OpenStart")) {
+        ScGame::sInstance->triggerExit(roomid, mExitId);
     } else {
         if (hasStoneOfTrials() && ScGame::currentSpawnInfo.night != 1) {
             // These are interaction related
             -0.0f;
-            fn_80096C00(lbl_80575370, this, 1, 300.0f, 50.0f, -100.0f, 100.0f);
-            fn_80096C30(lbl_80575370, this, 1, 200.0f, -100.0f, 100.0f);
+            dAttention_c::sInstance->addTarget(this, 1, 300.0f, 50.0f, -100.0f, 100.0f);
+            dAttention_c::sInstance->addTarget(this, 1, 200.0f, -100.0f, 100.0f);
         }
     }
 }
@@ -131,11 +126,10 @@ bool dAcOtoD3StoneFigure_c::isStoneOfTrialsPlaced() const {
     return StoryFlagManager::sInstance->getCounterOrFlag(22);
 }
 
-extern "C" bool alsoSetAsCurrentEvent(dAcBase_c *, Event *, void *);
 void dAcOtoD3StoneFigure_c::doInteraction(s32 arg) {
     if (arg == 5) {
         Event event = Event("D3OpenStart", 100, 0x100001, nullptr, nullptr);
-        alsoSetAsCurrentEvent(this, &event, nullptr);
+        EventManager::alsoSetAsCurrentEvent(this, &event, nullptr);
     }
 }
 
