@@ -30,6 +30,19 @@ private:
     /* 0x1B */ u8 field_0x1B;
 };
 
+struct TimeAreaStruct {
+    TimeAreaStruct(f32 arg): field_0x00(arg), field_0x08(0) {}
+    /* 0x00 */ f32 field_0x00;
+    /* 0x04 */ UNKWORD field_0x04;
+    /* 0x08 */ u8 field_0x08;
+
+    bool isNearZero() {
+        return fabsf(field_0x00) <= FLT_EPSILON;
+    }
+
+    bool check(int, const mVec3_c &, u32, f32, f32);
+};
+
 class dTimeAreaMgr_c {
 public:
     dTimeAreaMgr_c();

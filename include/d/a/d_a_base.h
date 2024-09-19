@@ -186,7 +186,7 @@ public:
     // Start of SoundSource stuff
     /* 8002d590 */ void FUN_8002d590();
     /* 8002d5b0 */ void FUN_8002d5b0();
-    /* 8002d5d0 */ void playSound();
+    /* 8002d5d0 */ void playSound(u16 effect);
     /* 8002d600 */ void FUN_8002d600();
     /* 8002d630 */ void FUN_8002d630();
     /* 8002d6d0 */ void FUN_8002d6d0();
