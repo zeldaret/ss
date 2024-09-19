@@ -51,7 +51,8 @@ int dAcOPoolCock_c::actorExecute() {
     updateMatrix();
     mMtx_c mdl1Transform;
     mMtx_c mdl2Transform;
-    mdl2Transform = mdl1Transform = worldMatrix;
+    mdl1Transform = worldMatrix;
+    mdl2Transform = worldMatrix;
 
     mMtx_c tmp1;
     mMtx_c tmp2;
