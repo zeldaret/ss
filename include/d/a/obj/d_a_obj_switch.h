@@ -5,8 +5,9 @@
 #include <m/m3d/m_mdl.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
-#include <toBeSorted/time_area_mgr.h>
 #include <toBeSorted/actor_collision.h>
+#include <toBeSorted/time_area_mgr.h>
+
 
 // OBJ_VSD?
 class dAcOScatterSand_tmp : public dAcObjBase_c {
@@ -64,7 +65,6 @@ public:
     static void interactCallback(void *unknown, dAcBase_c *actor, dAcObjBase_c *interactor);
 
 private:
-
     /* 0x330 */ m3d::mdl_c mModel;
     /* 0x354 */ ActorCollision mCollision;
     /* 0x564 */ STATE_MGR_DECLARE(dAcOsw_c);

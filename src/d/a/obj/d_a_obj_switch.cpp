@@ -30,10 +30,6 @@ static bool isPushableBlock(dAcBase_c *actor) {
             actor->profile_name == fProfile::OBJ_KIBAKO;
 }
 
-inline static bool someCondition(dAcPy_c *link) {
-    // return ;
-}
-
 void dAcOsw_c::interactCallback(void *unknown, dAcBase_c *actor, dAcObjBase_c *interactor) {
     if (!isPushableBlock(interactor)) {
         return;
