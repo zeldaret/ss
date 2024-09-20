@@ -21,7 +21,27 @@ public:
     }
 };
 
-class WorldMtxManip {};
+class WorldMtxManip {
+public:
+    void GetMtx(nw4r::math::MTX34 *out) {
+        if (out != nullptr) {
+            PSMTXCopy(*mpM, *out);
+        }
+    }
+
+    void SetMtx(const nw4r::math::MTX34 *arg) {
+        if (arg != nullptr) {
+            PSMTXCopy(*arg, *mpM);
+        } else {
+            PSMTXIdentity(*mpM);
+        }
+    }
+
+private:
+    nw4r::math::MTX34 *mpM;
+    nw4r::math::VEC3 *mpS;
+    u32 *mpWMAttr;
+};
 
 // Name from ketteiban
 class ICalcWorldCallback {

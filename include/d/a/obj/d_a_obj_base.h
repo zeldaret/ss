@@ -24,6 +24,10 @@ struct ActorCarryStruct {
     /* 0x9C */ void *dtor; // ???
     /* 0xA0 */ u32 field_0xA0;
     /* 0xA4 */ u32 field_0xA4;
+
+    bool testCarryFlag(u32 flag) {
+        return (carryFlags & flag) != 0;
+    }
 };
 
 // Ghidra: ActorObjectBase
@@ -49,8 +53,11 @@ public:
     mVec3_c velocity;
     /* 0x15C */ mMtx_c worldMatrix;
     nw4r::math::AABB boundingBox;
+    /* 0x1A4 */ f32 mCullingDistance;
+    /* 0x1A8 */ f32 field_0x1A8;
+    /* 0x1AC */ u32 mObjectActorFlags;
 
-    u8 unk_0x1A4[0x1E8 - 0x1A4];
+    u8 unk_0x1B0[0x1E8 - 0x1B0];
 
     /* 0x1E8 */ mVec3_c posIncrements;
 

@@ -328,7 +328,7 @@ config.libs = [
             Object(NonMatching, "d/a/obj/d_a_obj_fairy.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_tbox.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_time_area.cpp"),
-            Object(NonMatching, "d/a/obj/d_a_obj_switch.cpp"),
+            Object(Matching, "d/a/obj/d_a_obj_switch.cpp"),
             Object(Matching, "toBeSorted/arc_managers/current_stage_arc_manager.cpp"),
             Object(Matching, "toBeSorted/arc_managers/oarc_manager.cpp"),
             Object(Matching, "toBeSorted/arc_managers/layout_arc_manager.cpp"),

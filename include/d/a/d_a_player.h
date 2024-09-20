@@ -43,7 +43,7 @@ public:
     /* vt 0x10C */ virtual void isUsingShield();
     /* vt 0x110 */ virtual void getTargetedActor1();
     /* vt 0x114 */ virtual void somethingWithCarriedActorFlags();
-    /* vt 0x118 */ virtual void getCurrentCarriedActor();
+    /* vt 0x118 */ virtual dAcObjBase_c *getCurrentCarriedActor();
     /* vt 0x11C */ virtual void checkBeetleActorReferences();
     /* vt 0x120 */ virtual void getBeetleActorReferencesSize();
     /* vt 0x124 */ virtual void vt_0x124();
@@ -179,6 +179,8 @@ public:
     /* 0x350 */ u32 someFlags_0x350;
     u8 UNK_0x354[0x35C - 0x354];
     /* 0x35C */ u32 mForceOrPreventActionFlags;
+    /* 0x360 */ UNKWORD field_0x360;
+    /* 0x364 */ u32 mActionFlags;
 
     static dAcPy_c *LINK;
 };

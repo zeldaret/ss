@@ -6,28 +6,37 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 #include <toBeSorted/time_area_mgr.h>
+#include <toBeSorted/actor_collision.h>
 
-class dAcOScatterSand_tmp : public dAcObjBase_c {};
-
-class ActorCollision {
+// OBJ_VSD?
+class dAcOScatterSand_tmp : public dAcObjBase_c {
 public:
-    ActorCollision();
-    ~ActorCollision();
+    /* 0x330 */ u8 field_0x330[0x6DC - 0x330];
+    /* 0x6DC */ u16 field_0x6DC;
+    /* 0x6DE */ u8 field_0x6DE[0x6E4 - 0x6DE];
+    /* 0x6E4 */ bool field_0x6E4;
 
-    u32 create(void *dzbData, void *plcData, bool, const mMtx_c &, const mVec3_c &);
-    void execute();
-
-    u8 field_0x00[0x1FC - 0x000];
-    /* 0x1FC */ void *multMatrix;
-    /* 0x200 */ void *interactFunc;
-    /* 0x204 */ u8 field_0x204[0x210 - 0x204];
+    inline f32 getSomeScale() {
+        return scale.y * 41.65f / 100.0f;
+    }
 };
 
+/**
+ * A callback implementation that controls the button node in the switch model.
+ */
 class dAcOswMdlCallback_c : public m3d::callback_c {
 public:
     dAcOswMdlCallback_c() {}
     virtual ~dAcOswMdlCallback_c() {}
     virtual void timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl) override;
+
+    /* 0x04 */ f32 mElevation;
+    /* 0x08 */ u32 mNodeId;
+
+    void init(u32 nodeId) {
+        mNodeId = nodeId;
+        mElevation = 0.0f;
+    }
 };
 
 class dAcOsw_c : public dAcObjBase_c {
@@ -44,7 +53,7 @@ public:
     virtual int actorExecuteInEvent() override;
     virtual int draw() override;
 
-    bool someInteractCheck(u8);
+    bool someInteractCheck(bool);
 
     STATE_FUNC_DECLARE(dAcOsw_c, OnWait);
     STATE_FUNC_DECLARE(dAcOsw_c, On);
@@ -52,7 +61,10 @@ public:
     STATE_FUNC_DECLARE(dAcOsw_c, Off);
     STATE_FUNC_DECLARE(dAcOsw_c, None);
 
+    static void interactCallback(void *unknown, dAcBase_c *actor, dAcObjBase_c *interactor);
+
 private:
+
     /* 0x330 */ m3d::mdl_c mModel;
     /* 0x354 */ ActorCollision mCollision;
     /* 0x564 */ STATE_MGR_DECLARE(dAcOsw_c);
@@ -67,13 +79,11 @@ private:
     /* 0x5F1 */ u8 field_0x5F1;
     /* 0x5F2 */ u8 field_0x5F2;
     /* 0x5F3 */ u8 field_0x5F3;
-    /* 0x5F4 */ u8 field_0x5F4;
+    /* 0x5F4 */ u8 mActivatedByPlayer;
     /* 0x5F5 */ bool mCanBeSeen;
     /* 0x5F6 */ bool mShown;
     /* 0x5F7 */ bool mHidden;
-    /* 0x5F8 */ dAcOswMdlCallback_c mCallback;
-    /* 0x5FC */ f32 field_0x5FC;
-    /* 0x600 */ UNKWORD field_0x600;
+    /* 0x5F8 */ dAcOswMdlCallback_c mButtonCtrl;
 };
 
 #endif

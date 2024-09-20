@@ -14,14 +14,55 @@ STATE_DEFINE(dAcOsw_c, OffWait);
 STATE_DEFINE(dAcOsw_c, Off);
 STATE_DEFINE(dAcOsw_c, None);
 
-void dAcOswMdlCallback_c::timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl) {}
+void dAcOswMdlCallback_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip *manip, nw4r::g3d::ResMdl mdl) {
+    if (nodeId == mNodeId) {
+        mMtx_c mtx1;
+        mMtx_c mtx2;
+        manip->GetMtx(mtx1);
+        PSMTXTrans(mtx2, mElevation, 0.0f, 0.0f);
+        PSMTXConcat(mtx1, mtx2, mtx1);
+        manip->SetMtx(mtx1);
+    }
+}
 
 static bool isPushableBlock(dAcBase_c *actor) {
     return dBase_c::isActorPlayer(*actor) || actor->profile_name == fProfile::OBJ_PUSH_BLOCK ||
             actor->profile_name == fProfile::OBJ_KIBAKO;
 }
 
-static void interactCallback(void *unknown, dAcBase_c *actor, dAcPy_c *player) {}
+inline static bool someCondition(dAcPy_c *link) {
+    // return ;
+}
+
+void dAcOsw_c::interactCallback(void *unknown, dAcBase_c *actor, dAcObjBase_c *interactor) {
+    if (!isPushableBlock(interactor)) {
+        return;
+    }
+    dAcPy_c *link = dBase_c::isActorPlayer(*interactor) ? static_cast<dAcPy_c *>(interactor) : nullptr;
+    dAcOsw_c *sw = static_cast<dAcOsw_c *>(actor);
+
+    // halp
+    if (!(link == nullptr ||
+                ((link->mActionFlags & 0x40000) == 0 &&
+                        (((link->someFlags_0x340 & 0x800000) == 0 ||
+                                ((link->getCurrentCarriedActor() != nullptr &&
+                                        link->getCurrentCarriedActor()->mActorCarryInfo.testCarryFlag(0x04)))))))) {
+        return;
+    }
+    if (interactor->mActorCarryInfo.isCarried != 1) {
+        if (link == nullptr || (link->mActionFlags & 0xC70852) == 0) {
+            if (!sw->someInteractCheck(link != nullptr)) {
+                bool needsOnFlag = sw->mOnSceneFlag < 0xFF &&
+                        !SceneflagManager::sInstance->checkBoolFlag(sw->roomid, sw->mOnSceneFlag);
+                if (!needsOnFlag && sw->mObjRef.get() == nullptr && link != nullptr && sw->field_0x5F1 == 0 &&
+                        sw->mStateMgr.isState(StateID_On)) {
+                    link->field_0x360 |= 0x8000;
+                }
+            }
+        }
+        interactor->mObjectActorFlags |= 0x40;
+    }
+}
 
 extern "C" void fn_8033CE10();
 
@@ -38,22 +79,21 @@ bool dAcOsw_c::createHeap() {
     updateMatrix();
     field_0x5B8.set(worldMatrix);
     mModel.setLocalMtx(worldMatrix);
-    u32 result = mCollision.create(dbzData, plcData, true, field_0x5B8, scale);
-    mCollision.multMatrix = fn_8033CE10;
-    return (bool)result;
+    return !mCollision.create(dbzData, plcData, true, field_0x5B8, scale, fn_8033CE10);
 }
 
 int dAcOsw_c::actorCreate() {
     mSwitchType = params & 0xF;
     mOnSceneFlag = (params >> 0xE);
     CREATE_ALLOCATOR(dAcOsw_c);
-    mModel.setCallback(&mCallback);
+    mCollision.interactFunc = interactCallback;
+    mModel.setCallback(&mButtonCtrl);
+    CollisionCheckContext::get()->registerActorBgCollision(mCollision, this);
     mOffSceneFlag = (params >> 0x4);
     mCanBeSeen = ((params >> 0xC) & 3) == 0;
     nw4r::g3d::ResMdl resMdl = mModel.getResMdl();
     nw4r::g3d::ResNode node = resMdl.GetResNode("button");
-    field_0x600 = node.GetID();
-    field_0x5FC = 0.0f;
+    mButtonCtrl.init(node.GetID());
     if (mOffSceneFlag >= 0xFF) {
         mStateMgr.changeState(StateID_None);
     } else if (SceneflagManager::sInstance->checkBoolFlag(roomid, mOffSceneFlag)) {
@@ -81,7 +121,7 @@ int dAcOsw_c::actorPostCreate() {
     dAcBase_c *parent = nullptr;
     do {
         parent = static_cast<dAcBase_c *>(fManager_c::searchBaseByProfName(fProfile::OBJ_VSD, parent));
-        if (parent != nullptr && fabsf(parent->position.y - position.y) < 30.0f) {
+        if (parent != nullptr && nw4r::math::FAbs(parent->position.y - position.y) < 30.0f) {
             if (getSquareDistanceTo(parent->position) < 900.0f) {
                 mObjRef.link(static_cast<dAcOScatterSand_tmp *>(parent));
                 break;
@@ -104,23 +144,52 @@ int dAcOsw_c::doDelete() {
     return SUCCEEDED;
 }
 
+extern "C" u16 lbl_8057A994;
+extern "C" void fn_800298B0(u16, mVec3_c *, mAng3_c *, u32, u32, u32, u32, u32);
+
 int dAcOsw_c::actorExecute() {
     mStateMgr.executeState();
     if (mCanBeSeen) {
         field_0x5A0.check(roomid, position, 0, 30.0f, 0.1f);
+        if (field_0x5A0.field_0x00 <= 0.0f) {
+            if (scale.x >= 1.0f) {
+                if (!mHidden) {
+                    fn_800298B0(lbl_8057A994, &position, &rotation, 0, 0, 0, 0, 0);
+                    playSound(0xC0B);
+                    mHidden = true;
+                }
+            } else {
+                mHidden = false;
+            }
+            sLib::chase(&scale.x, 0.0f, 0.07f);
+            scale.y = scale.x;
+            scale.z = scale.x;
+        } else {
+            if (scale.x <= 0.0f) {
+                if (!mShown) {
+                    fn_800298B0(lbl_8057A994, &position, &rotation, 0, 0, 0, 0, 0);
+                    playSound(0xC0A);
+                    mShown = true;
+                }
+            } else {
+                mShown = false;
+            }
+            sLib::chase(&scale.x, 1.0f, 0.07f);
+            scale.z = scale.x;
+        }
     }
 
     updateMatrix();
     field_0x5B8.set(worldMatrix);
     mMtx_c tmp;
-    PSMTXTrans(tmp, 0.0f, field_0x5FC, 0.0f);
+    PSMTXTrans(tmp, 0.0f, mButtonCtrl.mElevation, 0.0f);
     PSMTXConcat(field_0x5B8, tmp, field_0x5B8);
     mModel.setScale(scale);
     mModel.setLocalMtx(worldMatrix);
     mModel.calc(false);
     mCollision.execute();
     field_0x5F3 = 0;
-    field_0x5F4 = 0;
+    mActivatedByPlayer = 0;
     field_0x5F2 = field_0x5F1;
     return SUCCEEDED;
 }
@@ -135,8 +204,8 @@ int dAcOsw_c::draw() {
     return SUCCEEDED;
 }
 
-bool dAcOsw_c::someInteractCheck(u8 arg) {
-    field_0x5F4 = arg;
+bool dAcOsw_c::someInteractCheck(bool activatedByPlayer) {
+    mActivatedByPlayer = activatedByPlayer;
     field_0x5F3 = 1;
     return SceneflagManager::sInstance->checkBoolFlag(roomid, mOffSceneFlag);
 }
@@ -152,7 +221,14 @@ void dAcOsw_c::executeState_OnWait() {
         field_0x5F3 = 1;
     }
 
-    if (mObjRef.get() == nullptr) {
+    dAcOScatterSand_tmp *ac = mObjRef.get();
+
+    if (ac != nullptr) {
+        if (ac != nullptr && (ac->getSomeScale() * 100.0f) <= 40.0f && !ac->field_0x6E4) {
+            ac->field_0x6E4 = true;
+            ac->field_0x6DC = 10;
+        }
+    } else {
         if (field_0x5F3 != 0) {
             bool doIt = false;
             if ((mOnSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mOnSceneFlag))) {
@@ -162,8 +238,6 @@ void dAcOsw_c::executeState_OnWait() {
                 mStateMgr.changeState(StateID_On);
             }
         }
-    } else {
-        
     }
 }
 void dAcOsw_c::finalizeState_OnWait() {}
@@ -172,7 +246,7 @@ void dAcOsw_c::initializeState_On() {
     playSound(0xA19);
 }
 void dAcOsw_c::executeState_On() {
-    if (sLib::chase(&field_0x5FC, -20.0f, 2.0f)) {
+    if (sLib::chase(&mButtonCtrl.mElevation, -20.0f, 2.0f)) {
         mStateMgr.changeState(StateID_OffWait);
     }
 }
@@ -189,7 +263,7 @@ void dAcOsw_c::initializeState_OffWait() {
         SceneflagManager::sInstance->setFlag(roomid, mOffSceneFlag);
     }
     field_0x5EC = 30;
-    field_0x5FC = -20.0f;
+    mButtonCtrl.mElevation = -20.0f;
 }
 void dAcOsw_c::executeState_OffWait() {
     if (field_0x5F1 != 0) {
@@ -205,7 +279,7 @@ void dAcOsw_c::initializeState_Off() {
     playSound(0xA19);
 }
 void dAcOsw_c::executeState_Off() {
-    if (sLib::chase(&field_0x5FC, 0.0f, 2.0f)) {
+    if (sLib::chase(&mButtonCtrl.mElevation, 0.0f, 2.0f)) {
         mStateMgr.changeState(StateID_OnWait);
     }
 }
@@ -213,7 +287,7 @@ void dAcOsw_c::finalizeState_Off() {}
 
 void dAcOsw_c::initializeState_None() {
     scale.y = 0.8f;
-    field_0x5FC = -20.0f;
+    mButtonCtrl.mElevation = -20.0f;
 }
 void dAcOsw_c::executeState_None() {}
 void dAcOsw_c::finalizeState_None() {}
