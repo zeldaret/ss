@@ -38,12 +38,13 @@ public:
     /* vt 0x24 | 804944a0 */ virtual bool open(const char *path, void *);
 
 public:
+    /* 80494260 */ void initialize();
     /* 804942a0 */ DvdFile();
     /* 80494360 */ void initiate();
     /* 804945f0 */ s32 sync();
     /* 80494650 */ static void doneProcess(s32 result, DVDFileInfo *fileInfo);
 
-public:
+private:
     /* 80576730 */ static bool sIsInitialized;
     /* 80673ad8 */ static nw4r::ut::List sDvdList;
 };

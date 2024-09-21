@@ -640,8 +640,8 @@ config.libs = [
     EGGLib(
         "core",
         [
-            Object(NonMatching, "egg/core/eggArchive.cpp"),
-            Object(NonMatching, "egg/core/eggDvdFile.cpp"),
+            Object(Matching, "egg/core/eggArchive.cpp"),
+            Object(Matching, "egg/core/eggDvdFile.cpp"),
             Object(NonMatching, "egg/core/eggDvdRipper.cpp"),
             Object(NonMatching, "egg/core/eggStream.cpp"),
             Object(Matching, "egg/core/eggAllocator.cpp"),

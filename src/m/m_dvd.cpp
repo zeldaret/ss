@@ -1,3 +1,4 @@
+#include <MSL_C/string.h>
 #include <egg/core/eggArchive.h>
 #include <egg/core/eggDecomp.h>
 #include <egg/core/eggDvdFile.h>
@@ -6,10 +7,7 @@
 #include <m/m_dvd.h>
 #include <m/m_heap.h>
 #include <rvl/DVD.h>
-// clang-format off
-// TODO a define in here stomps another header
-#include <MSL_C/string.h>
-// clang-format on
+
 
 static int ConvertPathToEntrynum(const char *path, u8 *outType);
 

@@ -1036,23 +1036,24 @@ nw4r/lyt/lyt_util.cpp:
 
 egg/core/eggArchive.cpp:
 	.text       start:0x80493510 end:0x80494254
-	.data       start:0x8056E820 end:0x8056E830
-	.sbss       start:0x80576728 end:0x80576730
-	.bss        start:0x80673AC8 end:0x80673AD8
+	.data       start:0x8056E820 end:0x8056E82C
+	.sdata      start:0x80574EC8 end:0x80574ECA
+	.sbss       start:0x80576728 end:0x80576729
+	.bss        start:0x80673AC8 end:0x80673AD4
 
 egg/core/eggDvdFile.cpp:
 	.text       start:0x80494260 end:0x80494678
 	.data       start:0x8056E830 end:0x8056E858
-	.sbss       start:0x80576730 end:0x80576738
-	.bss        start:0x80673AD8 end:0x80673AE8
+	.sbss       start:0x80576730 end:0x80576731
+	.bss        start:0x80673AD8 end:0x80673AE4
 
 egg/core/eggDvdRipper.cpp:
 	.text       start:0x80494680 end:0x80494C80
-	.sdata      start:0x80574ED0 end:0x80574ED8
-	.sbss       start:0x80576738 end:0x80576740
+	.sdata      start:0x80574ED0 end:0x80574ED1
+	.sbss       start:0x80576738 end:0x8057673C
 
 egg/core/eggStream.cpp:
-	.text       start:0x80494C80 end:0x804952B8
+	.text       start:0x80494C80 end:0x804952C8
 	.data       start:0x8056E858 end:0x8056E8D0
 
 egg/core/eggAllocator.cpp:

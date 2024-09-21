@@ -25,7 +25,7 @@ BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: False
 BreakStringLiterals: True
 ColumnLimit: 120
-ContinuationIndentWidth: 8
+ContinuationIndentWidth: 4
 IncludeBlocks: Preserve
 IndentAccessModifiers: False
 IndentCaseLabels: False

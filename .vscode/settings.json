@@ -29,6 +29,7 @@
         "utility": "cpp",
         "initializer_list": "cpp",
         "new": "cpp",
-        "cstdlib": "cpp"
+        "cstdlib": "cpp",
+        "xmemory": "cpp"
     }
 }
