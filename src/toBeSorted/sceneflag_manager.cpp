@@ -165,7 +165,7 @@ bool SceneflagManager::checkTempOrSceneflag(u16 flag) {
         return checkSceneflagGlobal(mSceneIdx, flag);
     }
 }
-bool SceneflagManager::checkUncommittedFlag(u16 roomId, u16 flag) {
+u16 SceneflagManager::checkUncommittedFlag(u16 roomId, u16 flag) {
     if (isZoneFlag(flag)) {
         return checkUncommittedZoneflag(roomId, flag);
     } else {
