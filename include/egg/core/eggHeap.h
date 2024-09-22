@@ -54,17 +54,17 @@ public:
         HEAP_KIND_UNIT,
         HEAP_KIND_ASSERT,
     };
-    // vtable at 0x0 | 8056e950
-    /* vt 0x08 | 804954c0 */ virtual ~Heap();
-    /* vt 0x0C | 00000000 */ virtual eHeapKind getHeapKind() const = 0;
-    /* vt 0x10 | 80495a40 */ virtual void initAllocator(Allocator *allocator, s32 align);
-    /* vt 0x14 | 00000000 */ virtual void *alloc(u32 size, s32 align) = 0;
-    /* vt 0x18 | 00000000 */ virtual void free(void *block) = 0;
-    /* vt 0x1C | 00000000 */ virtual void destroy() = 0;
-    /* vt 0x20 | 00000000 */ virtual u32 resizeForMBlock(void *block, u32 size) = 0;
-    /* vt 0x24 | 00000000 */ virtual u32 getTotalFreeSize() = 0;
-    /* vt 0x28 | 00000000 */ virtual u32 getAllocatableSize(s32 align) = 0;
-    /* vt 0x2C | 00000000 */ virtual u32 adjust() = 0;
+    // vtable at 0x0
+    /* vt 0x08 */ virtual ~Heap();
+    /* vt 0x0C */ virtual eHeapKind getHeapKind() const = 0;
+    /* vt 0x10 */ virtual void initAllocator(Allocator *allocator, s32 align);
+    /* vt 0x14 */ virtual void *alloc(u32 size, s32 align) = 0;
+    /* vt 0x18 */ virtual void free(void *block) = 0;
+    /* vt 0x1C */ virtual void destroy() = 0;
+    /* vt 0x20 */ virtual u32 resizeForMBlock(void *block, u32 size) = 0;
+    /* vt 0x24 */ virtual u32 getTotalFreeSize() = 0;
+    /* vt 0x28 */ virtual u32 getAllocatableSize(s32 align) = 0;
+    /* vt 0x2C */ virtual u32 adjust() = 0;
 
 public:
     void setName(const char *name) {

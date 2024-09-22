@@ -38,7 +38,7 @@ void mShadow_c::drawOpa() {
 }
 
 void mShadow_c::create(int count, u8 unk1, int unk2, u16 texSize, u32 drawOpaPriority, nw4r::g3d::ResMdl mdl,
-        u32 heapSize) {
+    u32 heapSize) {
     // Regswaps
     mAllocator.attach(mpHeap, 0x20);
     proc_c::create(&mAllocator, nullptr);
@@ -180,7 +180,7 @@ bool mShadow_c::addCircle(mShadowCircle_c *circle, u32 priority, u32 isMdl) {
 }
 
 bool mShadow_c::drawMdl(mShadowCircle_c *circle, u32 priority, scnLeaf_c &mdl, const mQuat_c &quat, mVec3_c &pos,
-        mColor color, u32 param9, f32 dist) {
+    mColor color, u32 param9, f32 dist) {
     if (!addCircle(circle, priority, 1)) {
         return false;
     }
@@ -213,14 +213,14 @@ static f32 sTexMtx[2][4] = {{1.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.0f}};
 static u32 STEP = 0x2492;
 
 static GXColor sColors[] = {
-        {0xFF, 0x00, 0x00, 0x00},
-        {0x00, 0xFF, 0x00, 0x00},
-        {0x00, 0x00, 0xFF, 0x00},
-        {0x00, 0x00, 0x00, 0x00},
+    {0xFF, 0x00, 0x00, 0x00},
+    {0x00, 0xFF, 0x00, 0x00},
+    {0x00, 0x00, 0xFF, 0x00},
+    {0x00, 0x00, 0x00, 0x00},
 };
 
 bool mShadow_c::drawTexObj(mShadowCircle_c *circle, u32 priority, const GXTexObj *texObj, const mMtx_c &mtx,
-        const mQuat_c &quat, mVec3_c &pos, mColor color, u32 param9, f32 dist) {
+    const mQuat_c &quat, mVec3_c &pos, mColor color, u32 param9, f32 dist) {
     if (!addCircle(circle, priority, 0)) {
         return false;
     }
@@ -254,7 +254,7 @@ static void drawSub2(void *data, u8 i) {
     GXSetTevColor(GX_TEVREG1, nw4r::ut::Color(0, 0, 0, 0x20));
     ang = 0;
     for (int id = GX_TEXCOORD0, idx = GX_TEXMTX0; id < GX_MAX_TEXCOORD;
-            id += 1, idx += (GX_TEXMTX1 - GX_TEXMTX0), ang += STEP) {
+         id += 1, idx += (GX_TEXMTX1 - GX_TEXMTX0), ang += STEP) {
         GXSetTexCoordGen2((GXTexCoordID)id, GX_TG_MTX2x4, GX_TG_TEX0, idx, FALSE, GX_DUALMTX_IDENT);
         sTexMtx[0][3] = 0.01f * nw4r::math::CosIdx(ang);
         sTexMtx[1][3] = 0.01f * nw4r::math::SinIdx(ang);
@@ -402,7 +402,7 @@ void mShadow_c::drawAllShadows() {
 void mShadow_c::create(const mShadowCircleConfig *config, nw4r::g3d::ResMdl mdl, EGG::Heap *heap) {
     mShadow_c::sInstance = new (heap, 0x04) mShadow_c(heap);
     mShadow_c::sInstance->create(config->count, config->unk1, config->unk2, config->texBufferSize,
-            config->drawOpaPriority, mdl, config->heapSize);
+        config->drawOpaPriority, mdl, config->heapSize);
 }
 
 void mShadow_c::beforeDraw() {
@@ -425,7 +425,7 @@ void mShadow_c::afterDraw() {
 
 void mShadow_c::swapHeaps() {
     changeHeap(mCurrentHeapIdx + 1);
-    mpCurrentHeap->freeState(FRM_HEAP_STATE);
+    mpCurrentHeap->freeByState(FRM_HEAP_STATE);
     mpCurrentHeap->recordState(FRM_HEAP_STATE);
 }
 
@@ -506,9 +506,8 @@ void mShadowChild_c::updateMtx() {
     mVec3_c b = *(mVec3_c *)(&mQuat) - mPositionMaybe * field_0x13C;
     mMtx_c mtx;
     C_MTXLookAt(mtx.m, b,
-            *(fabsf((a.x - b.x) * (a.x - b.x) + (a.z - b.z) * (a.z - b.z)) <= FLT_EPSILON ? &mVec3_c::Ez :
-                                                                                            &mVec3_c::Ey),
-            a);
+        *(fabsf((a.x - b.x) * (a.x - b.x) + (a.z - b.z) * (a.z - b.z)) <= FLT_EPSILON ? &mVec3_c::Ez : &mVec3_c::Ey),
+        a);
     f32 f = field_0x13C;
     mFrustum.set(f, -f, -f, f, f, f + mOffsetMaybe, mtx, true);
 }
@@ -531,7 +530,7 @@ void mShadowChild_c::drawMdl() {
             math::MTX34 *viewPosArray = static_cast<math::MTX34 *>(mShadow_c::sInstance->mpHeap->alloc(bufSize, 0x20));
 
             g3d::CalcView(viewPosArray, nullptr, mdl->GetWldMtxArray(), mdl->GetWldMtxAttribArray(),
-                    mdl->GetNumViewMtx(), mFrustum.mView, mdl->GetResMdl(), nullptr);
+                mdl->GetNumViewMtx(), mFrustum.mView, mdl->GetResMdl(), nullptr);
             DCStoreRange(viewPosArray, bufSize);
 
             g3d::ScnMdl *mdl2 = g3d::G3dObj::DynamicCast<g3d::ScnMdl>(lf->getG3dObject());
@@ -539,8 +538,8 @@ void mShadowChild_c::drawMdl() {
             g3d::DrawResMdlReplacement *pRep = mdl2 ? mdl2->GetDrawResMdlReplacement() : nullptr;
 
             g3d::DrawResMdlDirectly(mdl->GetResMdl(), viewPosArray, nullptr, nullptr,
-                    mdl2->GetByteCode(g3d::ScnMdlSimple::BYTE_CODE_DRAW_OPA), nullptr, pRep,
-                    g3d::RESMDL_DRAWMODE_FORCE_LIGHTOFF | g3d::RESMDL_DRAWMODE_IGNORE_MATERIAL);
+                mdl2->GetByteCode(g3d::ScnMdlSimple::BYTE_CODE_DRAW_OPA), nullptr, pRep,
+                g3d::RESMDL_DRAWMODE_FORCE_LIGHTOFF | g3d::RESMDL_DRAWMODE_IGNORE_MATERIAL);
             GXInvalidateVtxCache();
         } else {
             // this happens with bomb bag, and goes to 0x802EDC90 (mCustomShadow_c::draw)
