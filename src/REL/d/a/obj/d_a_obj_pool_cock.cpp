@@ -1,4 +1,5 @@
 #include <d/a/obj/d_a_obj_pool_cock.h>
+#include <d/a/obj/d_a_obj_vortex.h>
 #include <s/s_Math.h>
 #include <toBeSorted/sceneflag_manager.h>
 
@@ -82,22 +83,13 @@ int dAcOPoolCock_c::draw() {
 
 void dAcOPoolCock_c::initializeState_Wait() {}
 
-struct dAcObjVortex_c_tmp {
-    u8 field_0x00[0xd8 - 0x00];
-    u32 field_0xd8;
-    u8 field_0xdc[0x870 - 0xdc];
-    u8 field_0x870;
-};
-
 void dAcOPoolCock_c::executeState_Wait() {
     if (mOpenSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mOpenSceneflag)) {
         sLib::chase(&mOpenProgress, 400.0f, 5.0f);
         if (!mHasActivatedVortex) {
-            dAcObjVortex_c_tmp *vortex =
-                    (dAcObjVortex_c_tmp *)fManager_c::searchBaseByProfName(fProfile::OBJ_VORTEX, nullptr);
+            dAcObjVortex_c *vortex = (dAcObjVortex_c *)fManager_c::searchBaseByProfName(fProfile::OBJ_VORTEX, nullptr);
             if (vortex) {
-                // TODO
-                vortex->field_0xd8 |= 0x4;
+                vortex->actor_properties |= 0x4;
                 vortex->field_0x870 = 1;
             }
             mHasActivatedVortex = true;
