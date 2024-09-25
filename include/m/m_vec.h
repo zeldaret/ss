@@ -3,6 +3,7 @@
 
 #include "egg/math/eggVector.h"
 #include "rvl/MTX.h"
+#include "m/m_angle.h"
 #include <common.h>
 
 class mVec3_c : public EGG::Vector3f {
@@ -147,6 +148,8 @@ public:
     inline f32 mag() const {
         return PSVECMag(*this);
     }
+
+    void rotY(const mAng &angle);
 
     static mVec3_c Zero;
     static mVec3_c Ex;

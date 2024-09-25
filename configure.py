@@ -1112,7 +1112,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_pipe", "REL/d/a/obj/d_a_obj_pipe.cpp"),
     Rel(NonMatching, "d_a_obj_piston", "REL/d/a/obj/d_a_obj_piston.cpp"),
     Rel(NonMatching, "d_a_obj_pole_stony", "REL/d/a/obj/d_a_obj_pole_stony.cpp"),
-    Rel(NonMatching, "d_a_obj_pool_cock", "REL/d/a/obj/d_a_obj_pool_cock.cpp"),
+    Rel(Matching, "d_a_obj_pool_cock", "REL/d/a/obj/d_a_obj_pool_cock.cpp"),
     Rel(NonMatching, "d_a_obj_pot_sal", "REL/d/a/obj/d_a_obj_pot_sal.cpp"),
     Rel(NonMatching, "d_a_obj_propeller_lift", "REL/d/a/obj/d_a_obj_propeller_lift.cpp"),
     Rel(NonMatching, "d_a_obj_propera", "REL/d/a/obj/d_a_obj_propera.cpp"),
