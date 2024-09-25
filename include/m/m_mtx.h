@@ -21,7 +21,7 @@ public:
 
     // not sure if this breaks anything but we need a matrix type
     // with an inline copy assignment operator
-    mMtx_c &operator=(const mMtx_c &r) {
+    void set(const mMtx_c &r) {
         xx = r.xx;
         xy = r.xy;
         xz = r.xz;
@@ -36,8 +36,6 @@ public:
         zy = r.zy;
         zz = r.zz;
         zw = r.zw;
-
-        return *this;
     }
 
     inline operator MtxRef() {
