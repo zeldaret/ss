@@ -1,5 +1,5 @@
 #include <d/a/obj/d_a_obj_base.h>
-#include <d/d_player.h>
+#include <d/a/d_a_player.h>
 #include <d/tg/d_t_sound_area.h>
 #include <d/tg/d_t_sound_area_mgr.h>
 #include <rvl/MTX.h>
@@ -55,7 +55,7 @@ struct Unk {
 extern Unk *lbl_80575D58;
 
 int dTgSndAr_c::actorExecute() {
-    dAcBase_c *link = dPlayer::LINK;
+    dAcBase_c *link = dAcPy_c::LINK;
     if (link != nullptr && checkPosInArea(link->position)) {
         link->setBit_field_0xE8(params & 0xFF);
     }

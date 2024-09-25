@@ -236,4 +236,9 @@ void mdl_c::setCallback(callback_c *cb) {
     mpCallback->setBaseCallback(cb);
 }
 
+callback_c::~callback_c() {}
+void callback_c::timingA(u32, nw4r::g3d::ChrAnmResult *, nw4r::g3d::ResMdl) {}
+void callback_c::timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl) {}
+void callback_c::timingC(nw4r::math::MTX34 *, nw4r::g3d::ResMdl) {}
+
 } // namespace m3d

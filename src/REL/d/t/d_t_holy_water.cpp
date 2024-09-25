@@ -1,4 +1,4 @@
-#include <d/d_player.h>
+#include <d/a/d_a_player.h>
 #include <d/tg/d_t_holy_water.h>
 
 SPECIAL_ACTOR_PROFILE(TAG_HOLY_WATER, dTgHolyWater_c, fProfile::TAG_HOLY_WATER, 0x0224, 0, 4);
@@ -19,7 +19,7 @@ int dTgHolyWater_c::actorExecute() {
         mDowsingTarget.doUnregister();
     }
     if (isLinkNearby()) {
-        dPlayer::LINK->mForceOrPreventActionFlags |= 0x10000000;
+        dAcPy_c::LINK->mForceOrPreventActionFlags |= 0x10000000;
     }
     return SUCCEEDED;
 }
@@ -29,7 +29,7 @@ int dTgHolyWater_c::draw() {
 }
 
 bool dTgHolyWater_c::isLinkNearby() {
-    mVec3_c diff = dPlayer::LINK->position - (position + mVec3_c::Ey * scale.y * 0.5f);
+    mVec3_c diff = dAcPy_c::LINK->position - (position + mVec3_c::Ey * scale.y * 0.5f);
     diff.x /= scale.x;
     diff.y /= scale.y;
     diff.z /= scale.z;

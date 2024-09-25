@@ -24,6 +24,10 @@ struct ActorCarryStruct {
     /* 0x9C */ void *dtor; // ???
     /* 0xA0 */ u32 field_0xA0;
     /* 0xA4 */ u32 field_0xA4;
+
+    bool testCarryFlag(u32 flag) {
+        return (carryFlags & flag) != 0;
+    }
 };
 
 // Ghidra: ActorObjectBase
@@ -49,8 +53,11 @@ public:
     mVec3_c velocity;
     /* 0x15C */ mMtx_c worldMatrix;
     nw4r::math::AABB boundingBox;
+    /* 0x1A4 */ f32 mCullingDistance;
+    /* 0x1A8 */ f32 field_0x1A8;
+    /* 0x1AC */ u32 mObjectActorFlags;
 
-    u8 unk_0x1A4[0x1E8 - 0x1A4];
+    u8 unk_0x1B0[0x1E8 - 0x1B0];
 
     /* 0x1E8 */ mVec3_c posIncrements;
 
@@ -67,8 +74,8 @@ public:
     /* 8002de80 */ static void *getOarcResFile(const char *oarcName);
     /* 8002de90 */ static void *getOarcModelFile(const char *oarcName);
     /* 8002dea0 */ static void *getOarcZev(const char *oarcName);
-    /* 8002deb0 */ static void *getOarcDZB(const char *dzbName);
-    /* 8002ded0 */ static void *getOarcPLC(const char *plcName);
+    /* 8002deb0 */ static void *getOarcDZB(const char *dzbName, const char *dzbName2);
+    /* 8002ded0 */ static void *getOarcPLC(const char *plcName, const char *plcName2);
 
 public:
     /* 8002def0 */ dAcObjBase_c();
@@ -105,7 +112,7 @@ public:
     /* 8002ecd0 */ void drawModel2();
     /* 8002ed20 */ void fn_8002ed20();
     /* 8002edb0 */ void fn_8002edb0(m3d::mShadowCircle_c& shadow, m3d::smdl_c& smdl, const mQuat_c *rot, s32, s32, f32);
-    /* 8002ee40 */ void drawShadow();
+    /* 8002ee40 */ void drawShadow(m3d::mShadowCircle_c& shadow, void*, const mMtx_c &mtx, const mQuat_c *rot, s32, s32, s32, s32, s32, f32);
     /* 8002ef40 */ void createChildAttached(fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot,
             mVec3_c *scale, u32 params2, u32 roomId);
     /* 8002ef40 */ void createChildNonAttached(fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos,
