@@ -24,7 +24,7 @@ typedef class CoreController *(*ControllerFactory)();
 class CoreStatus {
 public:
     /* 0x00 */ u8 field_0x00[0x0C];
-    /* 0x0C */ f32 accel[3];
+    /* 0x0C */ Vector3f acc;
     /* 0x18 */ u8 field_0x01[0x20 - 0x18];
     /* 0x20 */ f32 dpdRawX;
     /* 0x24 */ f32 dpdRawY;
@@ -42,8 +42,12 @@ public:
     /* 80498f90 */ void init();
     /* 80498fa0 */ u32 getFSStickButton() const;
 
-    inline Vector2f getUnk() {
+    Vector2f getUnk() {
         return Vector2f(float_0x54, float_0x58);
+    }
+
+    const Vector3f &getAccel() const {
+        return acc;
     }
 };
 
@@ -132,10 +136,19 @@ public:
     /* 804991c0 */ void createRumbleMgr(u8);
     /* 80499220 */ void startPatternRumble(const char *, int, bool);
     /* 80499240 */ void stopRumbleMgr();
-    /* 80499260 */ CoreStatus *getCoreStatus(s32 idx);
+    /* 80499260 */ CoreStatus *getCoreStatus(int idx);
     /* 80499270 */ void calc_posture_matrix(Matrix34f &mat, bool);
     /* 80499ac0 */ f32 getFreeStickX() const;
     /* 80499ae0 */ f32 getFreeStickY() const;
+
+    const Vector3f &getAccel() const {
+        return coreStatus[0].getAccel();
+    }
+
+    // Guess ?
+    bool isStable(u8 p1) const {
+        return (mAccelFlags.getDirect() & 7) == p1;
+    }
 };
 
 class CoreControllerMgr {

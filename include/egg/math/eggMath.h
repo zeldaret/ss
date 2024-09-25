@@ -1,8 +1,8 @@
 #ifndef EGG_MATH_H
 #define EGG_MATH_H
 
-#include <common.h>
 #include <MSL_C/float.h>
+#include <common.h>
 
 namespace EGG {
 
@@ -33,6 +33,10 @@ public:
 
     static T abs(T t) {
         return t > 0 ? t : -t;
+    }
+
+    static T zero() {
+        return (T)0;
     }
 
     static T sqrt(T);

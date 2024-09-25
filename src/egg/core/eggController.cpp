@@ -3,8 +3,8 @@
 #include "egg/core/eggAllocator.h"
 #include "egg/core/eggExpHeap.h"
 #include "egg/core/eggSystem.h"
+#include "egg/math/eggMath.h"
 #include "rvl/VI.h"
-
 
 EGG::NullController null_controller;
 namespace EGG {
@@ -17,11 +17,11 @@ ConnectCallback CoreControllerMgr::sConnectCallback;
 bool CoreControllerMgr::sUseBuiltinWpadAllocator;
 static Allocator *sWPADAllocator;
 
-/* 0x80498F90 */ void CoreStatus::init() {
+void CoreStatus::init() {
     memset(this, 0, sizeof(CoreStatus));
 }
 
-/* 0x80498FA0 */ u32 CoreStatus::getFSStickButton() const {
+u32 CoreStatus::getFSStickButton() const {
     f32 button = this->fsStickButton;
     u32 result = 0;
     // TODO what are these flags and why is this code so weird?
@@ -50,7 +50,7 @@ static Allocator *sWPADAllocator;
     return result;
 }
 
-/* 0x80499050 */ CoreController::CoreController() : mDpdPos(), mAccel(), mAccelFlags(), mFlag(0) {
+CoreController::CoreController() : mDpdPos(), mAccel(), mAccelFlags(), mFlag(0) {
     this->mRumbleMgr = nullptr;
     this->mButtonHeld = 0;
     this->mButtonTriggered = 0;
@@ -59,7 +59,7 @@ static Allocator *sWPADAllocator;
     this->mFlag.makeAllZero();
 }
 
-/* 0x804990B0 */ void CoreController::sceneReset() {
+void CoreController::sceneReset() {
     this->mAccel.set(0.0, 0.0, 0.0);
     this->mDpdPos.x = 0.0;
     this->mDpdPos.y = 0.0;
@@ -81,62 +81,100 @@ static Allocator *sWPADAllocator;
     this->stopRumbleMgr();
 }
 
-/* 0x80499170 */ Vector2f CoreController::getDpdRawPos() const {
+Vector2f CoreController::getDpdRawPos() const {
     return Vector2f(this->coreStatus[0].dpdRawX, this->coreStatus[0].dpdRawY);
 }
 
-/* 0x80499190 */ s32 CoreController::getDpdDistance() const {
+s32 CoreController::getDpdDistance() const {
     return this->coreStatus[0].dpdDistance;
 }
 
 // TODO
 extern "C" void fn_803DB1E0(s32 channel, bool arg);
 
-/* 0x804991A0 */ void CoreController::startMotor() {
+void CoreController::startMotor() {
     fn_803DB1E0(mChannelID, true);
 }
 
-/* 0x804991B0 */ void CoreController::stopMotor() {
+void CoreController::stopMotor() {
     fn_803DB1E0(mChannelID, false);
 }
 
-/* 0x804991C0 */ void CoreController::createRumbleMgr(u8 numUnits) {
+void CoreController::createRumbleMgr(u8 numUnits) {
     this->mRumbleMgr = new ControllerRumbleMgr();
     this->mRumbleMgr->createUnit(numUnits, this);
 }
 
-/* 0x80499220 */ void CoreController::startPatternRumble(const char *pattern, int duration, bool bGrabActive) {
+void CoreController::startPatternRumble(const char *pattern, int duration, bool bGrabActive) {
     if (this->mRumbleMgr) {
         this->mRumbleMgr->startPattern(pattern, duration, bGrabActive);
     }
 }
 
-/* 0x80499240 */ void CoreController::stopRumbleMgr() {
+void CoreController::stopRumbleMgr() {
     if (this->mRumbleMgr) {
         this->mRumbleMgr->stop();
     }
 }
 
-/* 0x80499260 */ CoreStatus *CoreController::getCoreStatus(s32 idx) {
+CoreStatus *CoreController::getCoreStatus(int idx) {
     return &this->coreStatus[idx];
 }
 
-/* 0x80499270 */ void CoreController::calc_posture_matrix(Matrix34f &mat, bool someBool) {
-    if (!someBool || this->mAccelFlags.onBit(7)) {
-        Vector3f vec = Vector3f(-mat(2, 3), -mat(2, 2), -mat(2, 1));
-        Vector3f vec3 = vec;
-        vec.normalise();
-        // TODO lots of inlined math
+void CoreController::calc_posture_matrix(Matrix34f &mat, bool someBool) {
+    if (someBool && !isStable(7)) {
+        return;
     }
+
+    Vector3f acc = -getAccel();
+    Vector3f vy = acc;
+    vy.normalise();
+
+    Vector3f vz(0.0f, 0.0f, 1.0f);
+    Vector3f vx(1.0f, 0.0f, 0.0f);
+
+    Vector3f bx(mPostureMatrixPrev(0, 0), mPostureMatrixPrev(1, 0), mPostureMatrixPrev(2, 0));
+    Vector3f by(mPostureMatrixPrev(0, 1), mPostureMatrixPrev(1, 1), mPostureMatrixPrev(2, 1));
+    Vector3f bz(mPostureMatrixPrev(0, 2), mPostureMatrixPrev(1, 2), mPostureMatrixPrev(2, 2));
+
+    // Vector3f bx, by, bz;
+    // mPostureMatrixPrev.getBase(0, bx);
+    // mPostureMatrixPrev.getBase(1, by);
+    // mPostureMatrixPrev.getBase(2, bz);
+
+    Vector3f vz_n(0.0f, 0.0f, -1.0f);
+    Vector3f vx_n(-1.0f, 0.0f, 0.0f);
+
+    if (vz.dot(bz) < vz_n.dot(bz)) {
+        vz = vz_n;
+    }
+
+    if (vx.dot(bx) < vx_n.dot(bx)) {
+        vx = vx_n;
+    }
+
+    if (Math<f32>::abs(vy.dot(vx)) < Math<f32>::abs(vy.dot(vz))) {
+        vz = vx.cross(vy);
+        vz.normalise();
+        vx = vy.cross(vz);
+        vx.normalise();
+    } else {
+        vx = vy.cross(vz);
+        vx.normalise();
+        vz = vx.cross(vy);
+        vz.normalise();
+    }
+
+    mat.setBase(0, vx);
+    mat.setBase(1, vy);
+    mat.setBase(2, vz);
 }
 
-/* 0x80499660 */ void CoreController::beginFrame(void *padStatus) {}
+void CoreController::beginFrame(void *padStatus) {}
 
-/* 0x80499A60 */ void CoreController::endFrame() {
-    this->mAccel(0) = this->coreStatus[0].accel[0];
-    this->mAccel(1) = this->coreStatus[0].accel[1];
-    this->mAccel(2) = this->coreStatus[0].accel[2];
-    this->mDpdPos = this->getDpdRawPos();
+void CoreController::endFrame() {
+    mAccel = getAccel();
+    mDpdPos = getDpdRawPos();
 }
 
 /* 0x80499AC0 */ f32 CoreController::getFreeStickX() const {

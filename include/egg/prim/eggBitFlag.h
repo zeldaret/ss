@@ -15,7 +15,7 @@ public:
         value = T();
     }
     inline TBitFlag() {}
-    inline TBitFlag(T value): value(value) {}
+    inline TBitFlag(T value) : value(value) {}
     inline T makeMask(u8 bit) const {
         return 1 << bit;
     }
@@ -57,7 +57,7 @@ public:
             resetBit(bit);
         }
     }
-    inline T getDirect() {
+    inline T getDirect() const {
         return value;
     }
 };
