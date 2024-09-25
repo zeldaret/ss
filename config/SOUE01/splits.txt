@@ -146,6 +146,14 @@ toBeSorted/arc_managers/layout_arc_manager.cpp:
 	.sdata      start:0x80571D68 end:0x80571D70
 	.sbss       start:0x80575288 end:0x80575290
 
+toBeSorted/attention.cpp:
+	.text       start:0x80093A80 end:0x80096EAC
+	.ctors      start:0x804DB6B8 end:0x804DB6BC
+	.rodata     start:0x804E3560 end:0x804E3580
+	.data       start:0x8050F1C8 end:0x8050F540
+	.sdata2     start:0x80579600 end:0x80579638
+	.bss        start:0x805A2F58 end:0x805A2FB0
+
 toBeSorted/dowsing_target.cpp:
 	.text       start:0x80097570 end:0x80098574
 	.ctors      start:0x804DB6BC end:0x804DB6C0
