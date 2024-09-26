@@ -1,256 +1,15 @@
-#include <common.h>
-#include <d/a/obj/d_a_obj_base.h>
+#include <c/c_lib.h>
+#include <d/a/d_a_player.h>
 #include <d/d_pad.h>
-#include <m/m3d/m_anmchr.h>
-#include <m/m3d/m_anmmatclr.h>
-#include <m/m3d/m_anmtexpat.h>
-#include <m/m3d/m_smdl.h>
-#include <m/m_allocator.h>
+#include <toBeSorted/attention.h>
 #include <toBeSorted/arc_managers/oarc_manager.h>
 #include <toBeSorted/event_manager.h>
-
-static const u32 OFF = 'off ';
-static const u32 NONE = 'none';
-static const u32 KEEP = 'keep';
-static const u32 NEXT = 'next';
-static const u32 ON = 'on  ';
-static const u32 AWAY = 'away';
 
 mVec3_c attnVectors[4];
 
 mVec3_c getPosCopy3(const dAcObjBase_c &actor) {
     return actor.poscopy3;
 }
-
-class SomeRaiiMaybe {
-public:
-    m3d::anmChr_c *mPtr;
-
-    SomeRaiiMaybe() : mPtr(nullptr) {}
-    ~SomeRaiiMaybe() {
-        if (mPtr != nullptr) {
-            delete mPtr;
-            mPtr = nullptr;
-        }
-    }
-};
-
-class InteractionMdl {
-public:
-    m3d::smdl_c mMdl;
-    m3d::anmMatClr_c mAnmClr;
-    m3d::anmTexPat_c mAnmTex;
-    SomeRaiiMaybe mAnmChr;
-    u8 field_0x78;
-    u8 field_0x79;
-
-    InteractionMdl() {}
-    ~InteractionMdl() {}
-};
-
-enum InteractionType {
-    UNK_0,
-    PICK_UP,
-    OPEN,
-    UNK_3,
-    TALK,
-    EXAMINE_TALK,
-    EXAMINE_6,
-    UNK_7,
-    GET_IN,
-    READY_SWORD,
-    UNK_10,
-    UNK_11,
-    READ,
-    GRAB,
-    CATCH,
-    UNK_15,
-    UNK_16,
-    DIG,
-    UNK_18,
-    SIT,
-    UNK_20,
-};
-
-class AttentionInfo {
-public:
-    AttentionInfo() {}
-    ~AttentionInfo() {}
-
-    /* 0x00 */ u8 unk;
-    /* 0x01 */ u8 mActorIdx;
-    /* 0x02 */ u8 mInteractionType;
-    /* 0x03 */ u8 field_0x03;
-    /* 0x04 */ f32 field_0x04;
-    /* 0x08 */ mVec3_c field_0x08;
-};
-
-class AttentionPool {
-public:
-    AttentionPool() {}
-    ~AttentionPool() {}
-    dAcRef_c<dAcObjBase_c> mRefs[8];
-    AttentionInfo mInfos[8];
-    s32 mNumUsedRefs;
-
-    int fn_80096190(dAcObjBase_c *actor, u8 unk, InteractionType interactionType);
-    bool insertTarget(dAcObjBase_c *actor, u32 unk1, mVec3_c *pos, InteractionType interactionType, u8 field_0x03,
-            f32 field_0x04);
-
-    dAcObjBase_c *getActor(s32 i) {
-        return i < mNumUsedRefs && mInfos[i].mActorIdx != -1 ? mRefs[mInfos[i].mActorIdx].get() : nullptr;
-    }
-
-    void clear() {
-        for (int i = 0; i < 8; i++) {
-            mInfos[i].unk = 0;
-            mInfos[i].mActorIdx = -1;
-            mInfos[i].field_0x04 = 0.0f;
-            mInfos[i].field_0x03 = 0;
-            mInfos[i].mInteractionType = 0;
-            mRefs[i].unlink();
-        }
-        mNumUsedRefs = 0;
-    }
-};
-
-class AttentionGroup {
-public:
-    AttentionGroup() {}
-    ~AttentionGroup() {}
-
-    AttentionPool mPools[2];
-    u32 mWhichPool;
-
-    AttentionPool *getOtherPool() {
-        return &mPools[mWhichPool ^ 1];
-    }
-
-    AttentionPool *getPool() {
-        return &mPools[mWhichPool];
-    }
-
-    void fn_800964B0();
-};
-
-struct InteractionTargetDef {
-    s32 field_0x00;
-    u32 field_0x04;
-    u32 field_0x08;
-    InteractionType interactType;
-    u32 interactFlags;
-    f32 field_0x14;
-    f32 field_0x18;
-    f32 field_0x1C;
-    f32 field_0x20;
-    f32 field_0x24;
-    f32 field_0x28;
-    f32 field_0x2C;
-};
-
-class EffectsStruct {
-private:
-    u8 field_0x00[0x1C - 0x00];
-
-public:
-    // vt at 0x1C
-    EffectsStruct();
-    EffectsStruct(dAcBase_c *);
-    virtual ~EffectsStruct();
-
-    inline void init(dAcBase_c *owner) {
-        mpOwner = owner;
-    }
-
-private:
-    u8 field_0x20[0x28 - 0x20];
-    /* 0x28 */ dAcBase_c *mpOwner;
-    u8 field_0x2C[0x34 - 0x2C];
-};
-
-class InteractionModels {
-public:
-    /* 0x00 */ UNKWORD field_0xA5C;
-    /* 0x04 */ s32 mCurrentTargetInfoIdx;
-    /* 0x08 */ u32 mState;
-    /* 0x0C */ nw4r::g3d::ResFile mResFile;
-    /* 0x10 */ InteractionMdl mMdls[2];
-};
-
-class AttentionManager {
-    mHeapAllocator_c mAllocator;
-    /* 0x01C */ AttentionGroup mGroups[5];
-    /* 0xA58 */ bool mTargeted;
-    /* 0xA59 */ bool mHoldingZ;
-    /* 0xA5A */ u8 field_0xA58[0xA5C - 0xA5A];
-    /* 0xA5C */ InteractionModels mModels;
-    /* 0xB64 */ u8 mHasTarget;
-    /* 0xB65 */ u8 field_0xB65[0xB68 - 0xB65];
-    /* 0xB68 */ UNKWORD field_0xB68;
-    /* 0xB6C */ EffectsStruct mEffect1;
-    /* 0xBA0 */ EffectsStruct mEffect2;
-    /* 0xBD4 */ u8 field_0xBD4;
-    /* 0xBD5 */ u8 field_0xBD5;
-
-public:
-    AttentionManager();
-    /* vt at 0xBDC */ virtual ~AttentionManager();
-
-private:
-    /* 0xBDC */ u8 field_0xBDC;
-
-public:
-    bool create();
-    bool createHeap();
-    bool isInNormalGameState();
-    bool checkZButtonPressed();
-    bool checkZButtonHeld();
-    bool checkLink1();
-    bool checkLink2();
-    bool execute();
-    bool switchTarget(s32 target);
-    bool playTargetAnim(s32 target);
-    bool draw();
-
-    bool isZButtonPressed();
-    bool isZButtonHeld();
-    bool checkUnknown();
-
-    bool fn_80096B40(dAcObjBase_c *actor);
-
-    void addTarget(dAcObjBase_c &actor, const InteractionTargetDef &def, u32, mVec3_c *);
-
-    void addPickUpTarget(dAcObjBase_c &actor, f32 field_0x14);
-    void addSitTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14);
-
-    void addTalkTarget_unused(dAcObjBase_c &actor);
-
-    void addExamineTalkTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20,
-            f32 field_0x24);
-    void addExamineTalkTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x20, f32 field_0x24);
-
-    void addCatchTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x24_neg, f32 field_0x20_neg);
-
-    void addCatchLikeTarget(dAcObjBase_c &actor, InteractionType interactionType, u32 flags, f32 field_0x14,
-            f32 field_0x24_neg, f32 field_0x20_neg);
-
-    void addUnk3Target(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x24_neg, f32 field_0x20_neg);
-
-    void addUnk3Target(dAcObjBase_c &actor, u32 flags, f32 arg5, f32 field_0x14, f32 field_0x24_neg,
-            f32 field_0x20_neg);
-    void addUnk3Target(dAcObjBase_c &actor, u32 arg2, mVec3_c *arg3, u32 flags, f32 arg5, f32 field_0x14,
-            f32 field_0x24_neg, f32 field_0x20_neg);
-
-    void addNpcTalkTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20, f32 field_0x24);
-
-    void addUnk7Target(dAcObjBase_c &actor, u32 flags, f32 arg5, f32 field_0x14, f32 field_0x24_neg,
-            f32 field_0x20_neg);
-
-    void addReadTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20, f32 field_0x24);
-    void addReadTarget2(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x20, f32 field_0x24);
-
-    static AttentionManager *sInstance;
-};
 
 class UnkAttnClass {
 public:
@@ -370,25 +129,31 @@ bool AttentionManager::createHeap() {
     return true;
 }
 
-bool AttentionManager::isInNormalGameState() {
+bool AttentionManager::isInNormalGameState() const {
     return false;
 }
 
-bool AttentionManager::isZButtonPressed() {
+bool AttentionManager::isZButtonPressed() const {
     return dPad::checkButtonZPressed();
 }
 
-bool AttentionManager::isZButtonHeld() {
+bool AttentionManager::isZButtonHeld() const {
     return dPad::checkButtonZHeld();
 }
 
-bool AttentionManager::checkUnknown() {
+bool AttentionManager::checkUnknown() const {
     return false;
 }
 
-bool AttentionManager::checkLink1() {}
+bool AttentionManager::checkLink1() const {
+    dAcPy_c *link = dAcPy_c::LINK;
+    if (!isInNormalGameState() || !link->checkFlags0x350(0x40000)) {
+        return false;
+    }
+    return true;
+}
 
-bool AttentionManager::checkLink2() {}
+bool AttentionManager::checkLink2() const {}
 
 bool AttentionManager::execute() {
     field_0xBDC = 0;
@@ -627,8 +392,8 @@ bool AttentionPool::insertTarget(dAcObjBase_c *actor, u32 unk1, mVec3_c *pos, In
 }
 
 void AttentionGroup::fn_800964B0() {
-    AttentionPool *left = &mPools[mWhichPool];
-    AttentionPool *right = &mPools[mWhichPool ^ 1];
+    AttentionPool *left = getPool();
+    AttentionPool *right = getOtherPool();
     for (int i = 0; i < left->mNumUsedRefs; i++) {
         // This effectively copies a position vector from "left" to "right",
         // where left and right are swapped sometimes. So this is effectively
@@ -641,9 +406,20 @@ void AttentionGroup::fn_800964B0() {
     }
 }
 
+extern "C" f32 lbl_8057CD9C;
+
+f32 AttentionManager::targetScore(dAcObjBase_c *target, dAcObjBase_c *origin) {
+    s32 angle = cLib::targetAngleY(target->position, origin->position);
+    f32 viewAngle = fabsf(lbl_8057CD9C * (s16)(angle - origin->rotation.y.mVal));
+    if (viewAngle > 0.5f) {
+        return viewAngle;
+    }
+    return viewAngle * 0.5f + 0.25f;
+}
+
 // Maybe checks if actor is currently targeted
 bool AttentionManager::fn_80096B40(dAcObjBase_c *actor) {
-    AttentionPool *refs = &mGroups[1].mPools[mGroups[1].mWhichPool ^ 1];
+    AttentionPool *refs = mGroups[1].getOtherPool();
     dAcObjBase_c *ac = refs->getActor(mModels.mCurrentTargetInfoIdx);
     if (ac == actor) {
         mHasTarget = 1;
