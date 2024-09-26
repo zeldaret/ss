@@ -144,6 +144,9 @@ struct IScnObjCallback {
     virtual void ExecCallback_CALC_WORLD(ScnObj::Timing, ScnObj *, u32, void *) {} // at 0xC
     virtual void ExecCallback_CALC_MAT(ScnObj::Timing, ScnObj *, u32, void *) {}   // at 0x10
     virtual void ExecCallback_CALC_VIEW(ScnObj::Timing, ScnObj *, u32, void *) {}  // at 0x14
+    // SS: We apparently have two more members
+    virtual void ExecCallback_CALC_0x18(ScnObj::Timing, ScnObj *, u32, void *) {} // at 0x18
+    virtual void ExecCallback_CALC_0x1C(ScnObj::Timing, ScnObj *, u32, void *) {} // at 0x1C
 };
 
 // Is there a better way of resolving this dependency?
