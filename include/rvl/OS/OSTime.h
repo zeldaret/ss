@@ -6,6 +6,9 @@
 extern "C" {
 #endif
 
+typedef s64 OSTime;
+typedef u32 OSTick;
+
 // Time base frequency = 1/4 bus clock
 #define OS_TIME_SPEED (OS_BUS_CLOCK_SPEED / 4)
 
@@ -34,14 +37,14 @@ typedef struct OSCalendarTime {
     s32 usec;      // at 0x24
 } OSCalendarTime;
 
-s64 OSGetTime(void);
-s32 OSGetTick(void);
+OSTime OSGetTime(void);
+OSTick OSGetTick(void);
 
-s64 __OSGetSystemTime(void);
-s64 __OSTimeToSystemTime(s64 time);
+OSTime __OSGetSystemTime(void);
+OSTime __OSTimeToSystemTime(OSTime time);
 
-void OSTicksToCalendarTime(s64 time, OSCalendarTime *cal);
-s64 OSCalendarTimeToTicks(const OSCalendarTime *cal);
+void OSTicksToCalendarTime(OSTime time, OSCalendarTime *cal);
+OSTime OSCalendarTimeToTicks(const OSCalendarTime *cal);
 
 #ifdef __cplusplus
 }

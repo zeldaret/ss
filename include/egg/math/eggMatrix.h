@@ -60,21 +60,25 @@ public:
     void multVectorTo(const Vector3f &from, Vector3f &to) const;
     void transposeTo(Matrix34f &to) const;
     void setBase(int idx, const Vector3f &b) {
-        m[0][idx] = b.x;
-        m[1][idx] = b.y;
-        m[2][idx] = b.z;
+        (*this)(0, idx) = b.x;
+        (*this)(1, idx) = b.y;
+        (*this)(2, idx) = b.z;
     }
+
     void getBase(int idx, Vector3f &b) const {
-        b.x = m[0][idx];
-        b.y = m[1][idx];
-        b.z = m[2][idx];
+        b(0) = (*this)(0, idx);
+        b(1) = (*this)(1, idx);
+        b(2) = (*this)(2, idx);
     }
+
     void setTranslation(const Vector3f &t) {
         setBase(3, t);
     }
+
     void getTranslation(Vector3f &t) const {
         getBase(3, t);
     }
+
     void makeZero() {
         for (int i = 0; i < 12; i++) {
             arr[i] = 0.0f;
