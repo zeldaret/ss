@@ -181,7 +181,6 @@ public:
     bool execute();
     bool draw();
 
-private:
     void addTarget(dAcObjBase_c &actor, const InteractionTargetDef &def, u32, mVec3_c *);
 
     void addPickUpTarget(dAcObjBase_c &actor, f32 field_0x14);
