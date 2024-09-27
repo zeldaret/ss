@@ -948,7 +948,8 @@ config.libs = [
     Rel(NonMatching, "d_a_nusi_npc", "REL/d/a/d_a_nusi_npc.cpp"),
     Rel(NonMatching, "d_a_obj_amber", "REL/d/a/obj/d_a_obj_amber.cpp"),
     Rel(NonMatching, "d_a_obj_ancient_jewels", "REL/d/a/obj/d_a_obj_ancient_jewels.cpp"),
-    Rel(Matching, "d_a_obj_appear_bridge", "REL/d/a/obj/d_a_obj_appear_bridge.cpp"),
+    # matching except for IScnObjCallback weak function order issue
+    Rel(NonMatching, "d_a_obj_appear_bridge", "REL/d/a/obj/d_a_obj_appear_bridge.cpp"),
     Rel(NonMatching, "d_a_obj_arrow_switch", "REL/d/a/obj/d_a_obj_arrow_switch.cpp"),
     Rel(NonMatching, "d_a_obj_asura_pillar", "REL/d/a/obj/d_a_obj_asura_pillar.cpp"),
     Rel(NonMatching, "d_a_obj_asura_sword", "REL/d/a/obj/d_a_obj_asura_sword.cpp"),
