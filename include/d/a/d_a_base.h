@@ -76,7 +76,7 @@ public:
     /* 0xAC */ mAng3_c rot_copy;
     /* 0xB2 */ u16 obj_id; // enemydefeat flag / id on obj-map
     /* 0xB4 */ s8 room_id_copy;
-    /* 0xB5 */ u8 viewclip_index;
+    /* 0xB5 */ s8 viewclip_index;
     /* 0xB6 */ u8 subtype;
     /* 0xB8 */ mAng3_c rotation;
     /* 0xC0 */ mVec3_c position;
