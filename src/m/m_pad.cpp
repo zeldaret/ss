@@ -18,7 +18,6 @@ static bool s_WPADInfoAvailable[4];
 static u32 s_GetWPADInfoInterval = 0;
 static u32 s_GetWPADInfoCount = 0;
 
-
 struct PadAdditionalData_t {
     PadAdditionalData_t() {}
     ~PadAdditionalData_t() {}
@@ -48,7 +47,6 @@ void create() {
 // (just indexing the arrays normally)
 // but has an annoying regshuffle
 void beginPad() {
-
     g_PadFrame++;
     g_padMg->beginFrame();
 
@@ -77,8 +75,8 @@ void beginPad() {
 
             // Not sure why this checks the controller index against the tick count
             if (s_GetWPADInfoInterval != 0 &&
-                    ((s_GetWPADInfoInterval == 1 || s_GetWPADInfoCount == i) ||
-                            (s_GetWPADInfoInterval <= 3 && (s_GetWPADInfoCount & 1) == (i & 1)))) {
+                ((s_GetWPADInfoInterval == 1 || s_GetWPADInfoCount == i) ||
+                    (s_GetWPADInfoInterval <= 3 && (s_GetWPADInfoCount & 1) == (i & 1)))) {
                 getWPADInfoCB(i);
             }
         } else if (*connected) {
@@ -113,15 +111,15 @@ void endPad() {
 }
 
 static inline void clear(WPADInfo *info) {
-    info->field_0x00 = 0;
-    info->field_0x04 = 0;
-    info->field_0x08 = 0;
-    info->field_0x0C = 0;
-    info->field_0x10 = 0;
-    info->field_0x14 = false;
-    info->field_0x15 = false;
-    info->field_0x16 = false;
-    info->field_0x17 = false;
+    info->dpd = FALSE;
+    info->speaker = FALSE;
+    info->attach = FALSE;
+    info->lowBat = FALSE;
+    info->nearempty = FALSE;
+    info->battery = 0;
+    info->led = 0;
+    info->protocol = 0;
+    info->firmware = 0;
 }
 
 static void clearWPADInfo(int controller) {
