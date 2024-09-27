@@ -2,11 +2,14 @@
 #define D_A_OBJ_BASE_H
 
 #include "d/a/d_a_base.h"
+#include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m3d/m_shadow.h"
+#include "m/m_vec.h"
 #include "m/types_m.h"
 #include "nw4r/g3d/g3d_resfile.h"
+#include "toBeSorted/cc/d_cc_d.h"
 
 // Size: 0xA8
 struct ActorCarryStruct {
@@ -21,7 +24,7 @@ struct ActorCarryStruct {
     /* 0x58 */ mMtx_c field_0x58;
     /* 0x88 */ s32 isCarried;
     /* 0x8C */ u8 field_0x8C[0x10]; // mQuat_c
-    /* 0x9C */ void *dtor; // ???
+    /* 0x9C */ void *dtor;          // ???
     /* 0xA0 */ u32 field_0xA0;
     /* 0xA4 */ u32 field_0xA4;
 
@@ -57,11 +60,12 @@ public:
     /* 0x1A8 */ f32 field_0x1A8;
     /* 0x1AC */ u32 mObjectActorFlags;
 
-    u8 unk_0x1B0[0x1E8 - 0x1B0];
+    u8 unk_0x1B0[0x1C0 - 0x1B0];
 
-    /* 0x1E8 */ mVec3_c posIncrements;
+    /* 0x1C0 */ UnkCCDStruct mCCdStruct;
 
-    u8 unk_0x1F4[0x210 - 0x1F4];
+    mVec3_c mStartingPos;
+    mAng3_c mStartingRot;
 
     /* 0x210 */ ActorCarryStruct mActorCarryInfo;
 
@@ -136,7 +140,7 @@ protected:
 
 // Actors' createHeap functions often have patterns that can be matched with this macro
 #define TRY_CREATE(thing) do { bool result = (thing); if (!result) return result; } while (0)
-
+// Use this in actors' createHeap functions
 #define CREATE_ALLOCATOR(className) do { if (!initAllocatorWork1Heap(-1, #className "::m_allocator", 0x20)) { return FAILED; } } while (0)
 
 #endif
