@@ -7,7 +7,6 @@
 #include <egg/math/eggMatrix.h>
 #include <rvl/GX.h>
 
-
 namespace EGG {
 
 class DrawGX {

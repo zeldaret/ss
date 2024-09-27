@@ -46,26 +46,14 @@ public:
         s32 sc_oy; // at 0x1C
     };
 
-    static u16 GetSizeXMax(TVMode mode) {
-        return sTVModeInfo[mode].width;
-    }
-    static u16 GetSizeYMax(TVMode mode) {
-        return sTVModeInfo[mode].height;
-    }
-    static u16 GetSizeXMax() {
-        return sTVModeInfo[sTVMode].width;
-    }
-    static u16 GetSizeYMax() {
-        return sTVModeInfo[sTVMode].height;
-    }
+    static u16 GetSizeXMax(TVMode mode) { return sTVModeInfo[mode].width; }
+    static u16 GetSizeYMax(TVMode mode) { return sTVModeInfo[mode].height; }
+    static u16 GetSizeXMax() { return sTVModeInfo[sTVMode].width; }
+    static u16 GetSizeYMax() { return sTVModeInfo[sTVMode].height; }
 
-    static inline f32 GetAdjustScale() {
-        return (f32)sTVModeInfo[0].width / sTVModeInfo[Screen::sTVMode].width;
-    }
+    static inline f32 GetAdjustScale() { return (f32)sTVModeInfo[0].width / sTVModeInfo[Screen::sTVMode].width; }
 
-    static TVMode GetTVMode() {
-        return sTVMode;
-    }
+    static TVMode GetTVMode() { return sTVMode; }
 
     static TVMode sTVMode;
 

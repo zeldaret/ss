@@ -4,22 +4,20 @@
 // This file was adapted from https://github.com/riidefi/mkw/blob/master/source/egg/core/eggDisposer.hpp
 
 #include "nw4r/ut.h"
+
 #include <common.h>
 
 namespace EGG {
 
 class Heap;
 class Disposer : private NonCopyable {
-
 public:
-    /* vt 0x08 | 80496890 */ virtual ~Disposer();
+    /* vt 0x08 */ virtual ~Disposer();
     /* 80496830 */ Disposer();
 
 public:
     enum eLifetime { LIFETIME_UNMANAGED, LIFETIME_HEAP_GC };
-    inline eLifetime getLifetime() const {
-        return mContainHeap != nullptr ? LIFETIME_HEAP_GC : LIFETIME_UNMANAGED;
-    }
+    inline eLifetime getLifetime() const { return mContainHeap != nullptr ? LIFETIME_HEAP_GC : LIFETIME_UNMANAGED; }
 
 private:
     /* 0x04 */ Heap *mContainHeap;

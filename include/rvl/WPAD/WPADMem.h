@@ -2,10 +2,9 @@
 #define RVL_SDK_WPAD_MEMORY_H
 
 #include <common.h>
-
+#include <rvl/OS/OSTime.h>
 #include <rvl/WPAD/WPAD.h>
 
-#include <rvl/OS/OSTime.h>
 
 /*******************************************************************************
  * macros
@@ -48,8 +47,8 @@ typedef struct WPADGameInfo {
  * functions
  */
 
-WPADResult WPADWriteExtReg(WPADChannel chan, const void *data, u16 length, WPADExtRegType extReg, u16 address,
-    WPADCallback *cb);
+WPADResult
+WPADWriteExtReg(WPADChannel chan, const void *data, u16 length, WPADExtRegType extReg, u16 address, WPADCallback *cb);
 
 #ifdef __cplusplus
 }

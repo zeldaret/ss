@@ -15,29 +15,17 @@ public:
         return 3.402823466e+38f;
     }
 
-    static T pi() {
-        return 3.14159265f;
-    }
+    static T pi() { return 3.14159265f; }
 
-    static T pi_half() {
-        return pi() / 2.0f;
-    }
+    static T pi_half() { return pi() / 2.0f; }
 
-    static T epsilon() {
-        return 1.192092896e-07f;
-    }
+    static T epsilon() { return 1.192092896e-07f; }
 
-    static T inv(T t) {
-        return 1 / t;
-    }
+    static T inv(T t) { return 1 / t; }
 
-    static T abs(T t) {
-        return t > 0 ? t : -t;
-    }
+    static T abs(T t) { return t > (T)0 ? t : -t; }
 
-    static T zero() {
-        return (T)0;
-    }
+    static T zero() { return (T)0; }
 
     static T sqrt(T);
     static T sin(T);

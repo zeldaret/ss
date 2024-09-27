@@ -4,20 +4,21 @@
 #include "egg/core/eggFader.h"
 #include "egg/prim/eggBitFlag.h"
 #include "nw4r/ut.h"
+
 #include <common.h>
 
 namespace EGG {
 
 class ColorFader : public Fader {
 public:
-    // vtable at 0x00 | 8056eae8
-    /* vt 0x08 | 80497a10 */ virtual void setStatus(EStatus);
-    /* vt 0x0C | 80067ec0 */ virtual EStatus getStatus() const { return mStatus; };
-    /* vt 0x10 | 80497a50 */ virtual bool fadeIn();
-    /* vt 0x14 | 80497a80 */ virtual bool fadeOut();
-    /* vt 0x18 | 80497ab0 */ virtual bool calc();
-    /* vt 0x1C | 80497ba0 */ virtual void draw();
-    /* vt 0x1C | 80131b70 */ virtual ~ColorFader() {}
+    // vtable at 0x00
+    /* vt 0x08 */ virtual void setStatus(EStatus);
+    /* vt 0x0C */ virtual EStatus getStatus() const { return mStatus; };
+    /* vt 0x10 */ virtual bool fadeIn();
+    /* vt 0x14 */ virtual bool fadeOut();
+    /* vt 0x18 */ virtual bool calc();
+    /* vt 0x1C */ virtual void draw();
+    /* vt 0x1C */ virtual ~ColorFader() {}
 
 public:
     /* 0x04 */ EStatus mStatus;
@@ -32,9 +33,9 @@ public:
     /* 0x20 */ f32 mEndY;
 
 public:
-    /* 80497930 */ ColorFader(f32 startX, f32 startY, f32 lengthX, f32 lengthY, nw4r::ut::Color color, EStatus status);
-    /* 804979e0 */ void setFrame(u16 frame);
-    /* 804979f0 */ void setColor(nw4r::ut::Color);
+    ColorFader(f32 startX, f32 startY, f32 lengthX, f32 lengthY, nw4r::ut::Color color, EStatus status);
+    void setFrame(u16 frame);
+    void setColor(nw4r::ut::Color);
     float getWidth() const { return mEndX - mStartX; }
     float getHeight() const { return mEndY - mStartY; }
 };

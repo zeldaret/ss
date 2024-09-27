@@ -2,6 +2,7 @@
 #define EGG_SYSTEM_H
 
 #include "egg/core/eggHeap.h"
+
 #include <common.h>
 
 namespace EGG {
@@ -12,19 +13,19 @@ class Video;
 
 class ConfigurationData {
 public:
-    // vtable at 0x0 | 8056ea8c
-    /* vt 0x08 | 00000000 */ virtual Video *getVideo() = 0;
-    /* vt 0x0C | 00000000 */ virtual Heap *getSystemHeap() = 0;
-    /* vt 0x10 | 00000000 */ virtual Display *getDisplay() = 0;
-    /* vt 0x14 | 00000000 */ virtual XfbManager *getXfbMgr() = 0;
-    /* vt 0x18 | 00000000 */ virtual void getPerfView() = 0;
-    /* vt 0x1C | 00000000 */ virtual void getScnMgr() = 0;
-    /* vt 0x20 | 00000000 */ virtual void getAudioMgr() = 0;
-    /* vt 0x24 | 800643d0 */ virtual void onBeginFrame();
-    /* vt 0x28 | 80064430 */ virtual void onEndFrame();
-    /* vt 0x2C | 80064ea0 */ virtual void initRenderMode();
-    /* vt 0x30 | 80497170 */ virtual void initMemory();
-    /* vt 0x34 | 804972f0 */ virtual void run();
+    // vtable at 0x0
+    /* vt 0x08 */ virtual Video *getVideo() = 0;
+    /* vt 0x0C */ virtual Heap *getSystemHeap() = 0;
+    /* vt 0x10 */ virtual Display *getDisplay() = 0;
+    /* vt 0x14 */ virtual XfbManager *getXfbMgr() = 0;
+    /* vt 0x18 */ virtual void getPerfView() = 0;
+    /* vt 0x1C */ virtual void getScnMgr() = 0;
+    /* vt 0x20 */ virtual void getAudioMgr() = 0;
+    /* vt 0x24 */ virtual void onBeginFrame();
+    /* vt 0x28 */ virtual void onEndFrame();
+    /* vt 0x2C */ virtual void initRenderMode();
+    /* vt 0x30 */ virtual void initMemory();
+    /* vt 0x34 */ virtual void run();
 
 public:
     /* 0x04 */ u32 mRoot1HeapStart;
@@ -45,16 +46,10 @@ public:
 };
 class BaseSystem {
 public:
-    /* 80576780 */ static ConfigurationData *mConfigData;
-    static XfbManager *getXfbMgr() {
-        return mConfigData->getXfbMgr();
-    }
-    static Display *getDisplay() {
-        return mConfigData->getDisplay();
-    }
-    static Video *getVideo() {
-        return mConfigData->getVideo();
-    }
+    static ConfigurationData *mConfigData;
+    static XfbManager *getXfbMgr() { return mConfigData->getXfbMgr(); }
+    static Display *getDisplay() { return mConfigData->getDisplay(); }
+    static Video *getVideo() { return mConfigData->getVideo(); }
 };
 
 template <class TVideo, class TDisplay, class TXfbManager, class TAudioManager, class TSceneManager, class TPerfView>

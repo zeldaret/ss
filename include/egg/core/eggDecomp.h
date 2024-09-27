@@ -2,7 +2,9 @@
 #define EGG_STREAM_DECOMP_H
 
 #include "rvl/CX/cx.h"
+
 #include <common.h>
+
 
 // NOTE: I put StreamDecomp stuff here. im unsure of the correct place
 
@@ -23,12 +25,8 @@ class StreamDecompLZ : public StreamDecomp {
 public:
     virtual bool init(void *pDest, u32 maxCompressedSize) override;
     virtual bool decomp(const void *pSrc, u32 len) override;
-    virtual u32 getHeaderSize() override {
-        return 0x20;
-    }
-    virtual u32 getUncompressedSize(const void *pSrc) override {
-        return CXGetUncompressedSize(pSrc);
-    }
+    virtual u32 getHeaderSize() override { return 0x20; }
+    virtual u32 getUncompressedSize(const void *pSrc) override { return CXGetUncompressedSize(pSrc); }
 
 public:
     /* 0x0C */ CXUncompContextLZ mContext;
@@ -37,12 +35,8 @@ class StreamDecompRL : public StreamDecomp {
 public:
     virtual bool init(void *pDest, u32 maxCompressedSize) override;
     virtual bool decomp(const void *pSrc, u32 len) override;
-    virtual u32 getHeaderSize() override {
-        return 0x20;
-    }
-    virtual u32 getUncompressedSize(const void *pSrc) override {
-        return CXGetUncompressedSize(pSrc);
-    }
+    virtual u32 getHeaderSize() override { return 0x20; }
+    virtual u32 getUncompressedSize(const void *pSrc) override { return CXGetUncompressedSize(pSrc); }
 
 public:
     /* 0x0C */ CXUncompContextRL mContext;
@@ -52,12 +46,8 @@ class StreamDecompLH : public StreamDecomp {
 public:
     virtual bool init(void *pDest, u32 maxCompressedSize) override;
     virtual bool decomp(const void *pSrc, u32 len) override;
-    virtual u32 getHeaderSize() override {
-        return 0x20;
-    }
-    virtual u32 getUncompressedSize(const void *pSrc) override {
-        return CXGetUncompressedSize(pSrc);
-    }
+    virtual u32 getHeaderSize() override { return 0x20; }
+    virtual u32 getUncompressedSize(const void *pSrc) override { return CXGetUncompressedSize(pSrc); }
 
 public:
     /* 0x0C */ CXUncompContextLH mContext;
@@ -66,12 +56,8 @@ class StreamDecompLRC : public StreamDecomp {
 public:
     virtual bool init(void *pDest, u32 maxCompressedSize) override;
     virtual bool decomp(const void *pSrc, u32 len) override;
-    virtual u32 getHeaderSize() override {
-        return 0x20;
-    }
-    virtual u32 getUncompressedSize(const void *pSrc) override {
-        return CXGetUncompressedSize(pSrc);
-    }
+    virtual u32 getHeaderSize() override { return 0x20; }
+    virtual u32 getUncompressedSize(const void *pSrc) override { return CXGetUncompressedSize(pSrc); }
 
 public:
     /* 0x0C */ CXUncompContextLRC mContext;
@@ -81,8 +67,8 @@ public:
 struct UncompContextSZS {
     /* 80494e00 */ static u32 getUncompressedSize(const void *pSrc);
     /* 80494e30 */ void initUncompContext(void *pDest);
-    /* 80494e60 */ static s32 readHeader(u8 *pHeaderLen, s32 *pUncompSize, const u8 *src, u32 maxCompLen,
-        s32 maxUncompSize);
+    /* 80494e60 */ static s32
+    readHeader(u8 *pHeaderLen, s32 *pUncompSize, const u8 *src, u32 maxCompLen, s32 maxUncompSize);
     /* 80494f60 */ s32 readUncomp(const void *pSrc, u32 len);
 
     /* 0x00 */ u8 *mpDest;
@@ -100,12 +86,8 @@ class StreamDecompSZS : public StreamDecomp {
 public:
     virtual bool init(void *pDest, u32 maxCompressedSize) override;
     virtual bool decomp(const void *pSrc, u32 len) override;
-    virtual u32 getHeaderSize() override {
-        return 0x20;
-    }
-    virtual u32 getUncompressedSize(const void *pSrc) override {
-        return mContext.getUncompressedSize(pSrc);
-    }
+    virtual u32 getHeaderSize() override { return 0x20; }
+    virtual u32 getUncompressedSize(const void *pSrc) override { return mContext.getUncompressedSize(pSrc); }
 
 public:
     /* 0x0C */ UncompContextSZS mContext;

@@ -660,7 +660,7 @@ config.libs = [
             Object(Matching, "egg/core/eggXfb.cpp"),
             Object(Matching, "egg/core/eggXfbManager.cpp"),
             Object(Matching, "egg/core/eggGraphicsFifo.cpp"),
-            Object(NonMatching, "egg/core/eggController.cpp"),
+            Object(Matching, "egg/core/eggController.cpp"),
         ],
     ),
     EGGLib(

@@ -2,6 +2,7 @@
 #define EGG_XFB_H
 
 #include "egg/core/eggHeap.h"
+
 #include <common.h>
 
 namespace EGG {
@@ -23,9 +24,10 @@ public:
     /* 0x0C */ Xfb *mNext; // idk the actual order, but they always link to each other
     /* 0x10 */ Xfb *mPrev; // idk the actual order, but they always link to each other
 public:
-    /* 804989e0 */ void init(u16 width, u16 height, Heap *heap);
-    /* 80498a60 */ Xfb(Heap *heap);
-    /* 80498ad0 */ static u32 calcBufferSize(u16 width, u16 height);
+    Xfb(Heap *heap);
+    void init(u16 width, u16 height, Heap *heap);
+
+    static u32 calcBufferSize(u16 width, u16 height);
 };
 
 } // namespace EGG

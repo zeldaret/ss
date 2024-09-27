@@ -1,14 +1,12 @@
-#ifndef RVL_SDK_PUBLIC_KPA_H
-#define RVL_SDK_PUBLIC_KPA_H
-
-#include <common.h>
-
+#ifndef RVL_SDK_PUBLIC_KPAD_H
+#define RVL_SDK_PUBLIC_KPAD_H
+#ifdef __cplusplus
 extern "C" {
+#endif
 
-typedef void (*KPADConnectCallback)(s32, s32);
-// TODO: Create Proper Headers
-void KPADInitEx(void * /* UNKTYPE */, u32);
-void KPADSetConnectCallback(u32, KPADConnectCallback);
+#include <rvl/KPAD/KPAD.h>
+
+#ifdef __cplusplus
 }
-
+#endif
 #endif

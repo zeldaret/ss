@@ -63,7 +63,7 @@ void beginPad() {
         if (ctl->mFlag.onBit(0)) {
             // These sort of look like value, first order derivative, and second order derivative
             // So perhaps value, velocity, acceleration?
-            EGG::Vector2f pos = ctl->coreStatus[0].getUnk();
+            EGG::Vector2f pos = ctl->mCoreStatus[0].getUnk();
             EGG::Vector2f v = pos - dat->v1;
             dat->v1 = pos;
             dat->v3 = v - dat->v2;
@@ -76,11 +76,12 @@ void beginPad() {
             // Not sure why this checks the controller index against the tick count
             if (s_GetWPADInfoInterval != 0 &&
                 ((s_GetWPADInfoInterval == 1 || s_GetWPADInfoCount == i) ||
-                    (s_GetWPADInfoInterval <= 3 && (s_GetWPADInfoCount & 1) == (i & 1)))) {
+                 (s_GetWPADInfoInterval <= 3 && (s_GetWPADInfoCount & 1) == (i & 1))))
+            {
                 getWPADInfoCB(i);
             }
         } else if (*connected) {
-            ctl->coreStatus->init();
+            ctl->mCoreStatus->init();
             ctl->sceneReset();
             dat->v1.x = 0.0f;
             dat->v1.y = 0.0f;
