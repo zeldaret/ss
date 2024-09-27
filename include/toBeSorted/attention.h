@@ -222,7 +222,6 @@ private:
     bool checkLink2() const;
     bool switchTarget(s32 target);
     bool playTargetAnim(s32 target);
-    
 
     bool isZButtonPressed() const;
     bool isZButtonHeld() const;

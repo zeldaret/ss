@@ -11,3 +11,5 @@ REL/executor.c:
 
 REL/d/a/obj/d_a_obj_triforce.cpp:
 	.text       start:0x00000070 end:0x0000050C
+	.rodata     start:0x00000000 end:0x00000028
+	.data       start:0x00000000 end:0x000000E8

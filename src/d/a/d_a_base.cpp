@@ -4,6 +4,7 @@
 #include "f/f_list_nd.h"
 #include "m/m_vec.h"
 #include "toBeSorted/event.h"
+#include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/misc_flag_managers.h"
 #include "toBeSorted/scgame.h"
@@ -32,7 +33,6 @@ extern "C" s16 targetAngleX(mVec3_c *, mVec3_c *);
 extern "C" bool checkCollision(mVec3_c *pos);
 extern "C" s8 collisionCheckGetRoom();
 extern "C" dRoom *getRoomByIndex(RoomManager *mgr, s8 roomid);
-extern "C" bool alsoSetAsCurrentEvent(dAcBase_c *, Event *, void *);
 
 bool dAcBase_c::createHeap() {
     return true;
@@ -547,7 +547,7 @@ void dAcBase_c::unkVirtFunc_0x6C() {}
 void dAcBase_c::doInteraction(s32 param) {
     if (param == 4 || param == 5 || param == 12) {
         Event event = Event("DefaultTalk", 400, 0x100001, nullptr, nullptr);
-        alsoSetAsCurrentEvent(this, &event, nullptr);
+        EventManager::alsoSetAsCurrentEvent(this, &event, nullptr);
     }
 }
 

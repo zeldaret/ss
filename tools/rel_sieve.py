@@ -27,9 +27,6 @@ import os
 import pathlib
 
 BLOCKING_SYMBOLS = [
-    ['fn_80353D70', 'UnkCollider::ctor'],
-    ['fn_80353F30', 'UnkCollider::ctor2'],
-    ['fn_80353FF0', 'UnkCollider::init'],
     ['fn_800C3EC0', 'ActorEventFlowManagerRelated::checkEventFinished'],
     ['fn_800275C0', 'EffectsStruct::ctor'],
     ['fn_80027610', 'EffectsStruct::ctor'],
@@ -42,7 +39,6 @@ BLOCKING_SYMBOLS = [
     ['fn_800C43D0', 'ActorEventFlowManagerRelated *FUN_800c43d0'],
     ['fn_8037DCC0', 'EnemySoundMgr'],
     ['fn_800A6690', 'ActorOnRail::ctor'],
-    ['fn_80355080', 'getColliderManager'],
     ['fn_800975D0', 'initializeDowsingTarget'],
     ['fn_800A0680', 'getCurrentEventActor'],
     ['fn_80390FE0', 'something harp sound'],
@@ -50,6 +46,8 @@ BLOCKING_SYMBOLS = [
     ['fn_800225F0', 'something light'],
     ['fn_80179250', 'shutter fence list'],
     ['fn_8033AB50', 'getCollisionCheckContext'],
+    ['fn_8033F150', 'fn_8033F150'],
+    ['fn_80341040', 'fn_80341040'],
     ['fn_383_D10', 'getAcOStageSink_ptr'],
 ]
 

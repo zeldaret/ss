@@ -523,6 +523,31 @@ m/m_pad.cpp:
 	.sdata2     start:0x8057CDF8 end:0x8057CE00
 	.bss        start:0x805CB0B8 end:0x805CB1F8
 
+toBeSorted/cc/d_cc_d.cpp:
+	.text       start:0x80328120 end:0x8032BC78
+	.ctors      start:0x804DB8F8 end:0x804DB8FC
+	.rodata     start:0x804F0AF0 end:0x804F0B80
+	.data       start:0x805473D8 end:0x80547668
+	.sdata2     start:0x8057CF98 end:0x8057CFBC
+	.bss        start:0x805D0128 end:0x805D0134
+
+toBeSorted/cc/d_cc_unknown.cpp:
+	.text       start:0x8032BEC0 end:0x8032BF00
+	.data       start:0x80547668 end:0x80547678
+
+toBeSorted/cc/d_cc_m3d.cpp:
+	.text       start:0x8032BF00 end:0x80337B58
+
+toBeSorted/cc/d_cc_m3d_g_cyl.cpp:
+	.text       start:0x80338020 end:0x80338348
+
+toBeSorted/cc/d_cc_m3d_g_sph.cpp:
+	.text       start:0x80338680 end:0x803388D8
+
+toBeSorted/cc/d_cc_shape_colliders.cpp:
+	.text       start:0x80353B50 end:0x80354298
+	.data       start:0x80548340 end:0x80548580
+
 rvl/CX/cx.c:
 	.text       start:0x803CEE90 end:0x803D0B20
 

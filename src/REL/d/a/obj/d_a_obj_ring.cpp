@@ -37,7 +37,7 @@ int dAcOring_c::actorExecute() {
     mStateMgr.executeState();
     calcVelocity();
     position += velocity;
-    position += posIncrements;
+    position += mCCdStruct.posIncrements;
     updateMatrix();
     mModel.setLocalMtx(worldMatrix);
     return SUCCEEDED;
