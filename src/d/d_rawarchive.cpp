@@ -2,7 +2,7 @@
 #include <rvl/VI.h>
 
 
-extern "C" int fn_80061B10(void *d, u32 len) {
+int computeChecksumInner(void *d, u32 len) {
     u32 *data = (u32 *)d;
     u32 result = 0;
     // Compiler will unroll this loop
@@ -12,15 +12,14 @@ extern "C" int fn_80061B10(void *d, u32 len) {
     return result;
 }
 
-extern "C" int fn_80061BA0(void *data, u32 len) {
-    int result = fn_80061B10(data, len);
+int computeChecksum(void *data, u32 len) {
+    int result = computeChecksumInner(data, len);
     return result != 0 ? result : -1;
 }
 
-extern "C" void fn_80061BE0(ArcCallbackHandler *mgr, const char *name, size_t len) {
-    // All spaces
+void setPrefix(ArcCallbackHandler *mgr, const char *name, size_t len) {
     mgr->mPrefix = '    ';
-    // Copy the actual name 
+    // Copy the actual name
     memcpy(&mgr->mPrefix, name, len);
 }
 
@@ -48,7 +47,7 @@ void dRawArcEntry_c::searchCallback(void *arg, void *data, const ARCDirEntry *en
     ArcCallbackHandler *mgr = (ArcCallbackHandler *)arg;
     if (entry->isDir) {
         int len = strlen(entry->name);
-        fn_80061BE0(mgr, entry->name, len <= 4 ? len : 4);
+        setPrefix(mgr, entry->name, len <= 4 ? len : 4);
     } else {
         // dolphin: arg vtable at 8050df50
         // any others?
@@ -191,7 +190,7 @@ int dRawArcEntry_c::ensureLoadedMaybe(void *callbackArg) {
         int result = onMount(callbackArg);
         mHeap::restoreCurrentHeap();
         mHeap::adjustFrmHeap(mpFrmHeap);
-        mChecksum = fn_80061BA0(mpData, mAmountRead);
+        mChecksum = computeChecksum(mpData, mAmountRead);
         if (result == -1) {
             return result;
         }
