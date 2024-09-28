@@ -12,8 +12,7 @@ static const char *const sBambooIslandNames[] = {
 SPECIAL_ACTOR_PROFILE(OBJ_BAMBOO_ISLAND, dAcObambooIsland_c, fProfile::OBJ_BAMBOO_ISLAND, 0x01F9, 0, 3);
 
 void dAcObambooIsland_c::interactCallback(void *unknown, dAcBase_c *actor, dAcObjBase_c *interactor) {
-    if (dBase_c::isActorPlayer(*interactor) && actor != nullptr &&
-            StoryFlagManager::sInstance->getCounterOrFlag(284) == 0) {
+    if (interactor->isActorPlayer() && actor != nullptr && StoryFlagManager::sInstance->getCounterOrFlag(284) == 0) {
         StoryFlagManager::sInstance->setFlag(284);
     }
 }
