@@ -12,8 +12,8 @@ AF = currentProgram.getAddressFactory()
 mem = currentProgram.getMemory()
 listing = currentProgram.getListing()
 
-sym_re = re.compile("(?:lbl|fn|FUN|DAT)_[0-9A-Fa-f]{8} = \.([a-z0-9]+):0x([0-9A-Fa-f]{8})(.*)\n")
-default_sym_re = re.compile(".*_[0-9A-Za-z]{8}$")
+sym_re = re.compile("(?:lbl|fn|FUN|DAT)_[0-9A-Fa-f_]+ = \.([a-z0-9]+):0x([0-9A-Fa-f]{8})(.*)\n")
+default_sym_re = re.compile(".*_[0-9A-Za-z]+$")
 
 used_symbols = set()
 
@@ -28,7 +28,9 @@ def transformer_for_file(file_name):
                 return None
             # in rels, every section is relocated indivdually, so treat
             # this as an offset
-            block = mem.getBlock(file_name + "_." + section + "0")
+            block_name = file_name + "_." + section + "0"
+            print(block_name)
+            block = mem.getBlock(block_name)
             addr_obj = block.getStart().add(address)
 
         symbol = getSymbolAt(addr_obj)
@@ -103,6 +105,7 @@ def transform_symbols_file(file, transformer):
     return new_file
 
 path = str(askDirectory("Program config directory (e.g. config/SOUE01)", "Export"))
+
 new_contents = None
 main_symbols = os.path.join(path, "symbols.txt")
 with open(main_symbols, "rt") as file:
@@ -110,3 +113,14 @@ with open(main_symbols, "rt") as file:
 
 with open(main_symbols, 'w') as f:
     f.write(new_contents)
+
+
+rels_dir = os.path.join(path, "rels")
+for rel_name in os.listdir(rels_dir):
+    if rel_name.endswith("NP"):
+        rel_symbols = os.path.join(rels_dir, rel_name, "symbols.txt")
+        with open(rel_symbols, "rt") as file:
+            new_contents = transform_symbols_file(file, transformer_for_file(rel_name))
+
+        with open(rel_symbols, 'w') as f:
+            f.write(new_contents)

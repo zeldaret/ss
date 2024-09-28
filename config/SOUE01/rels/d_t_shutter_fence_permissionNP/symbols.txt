@@ -1,11 +1,11 @@
 _prolog = .text:0x00000000; // type:function size:0x2C scope:global
 _epilog = .text:0x00000030; // type:function size:0x2C scope:global
 _unresolved = .text:0x00000060; // type:function size:0x4 scope:global
-fn_630_70 = .text:0x00000070; // type:function size:0x30
-fn_630_A0 = .text:0x000000A0; // type:function size:0x3C
+TgShutterFencePermission__ctor = .text:0x00000070; // type:function size:0x30
+TgShutterFencePermission__ctorCont = .text:0x000000A0; // type:function size:0x3C
 fn_630_E0 = .text:0x000000E0; // type:function size:0x58
 fn_630_140 = .text:0x00000140; // type:function size:0x5C
-fn_630_1A0 = .text:0x000001A0; // type:function size:0x3D0
+TgShutterFencePermission__init = .text:0x000001A0; // type:function size:0x3D0
 fn_630_570 = .text:0x00000570; // type:function size:0x1F0
 fn_630_760 = .text:0x00000760; // type:function size:0x144
 fn_630_8B0 = .text:0x000008B0; // type:function size:0xC

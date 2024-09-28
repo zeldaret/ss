@@ -1,12 +1,12 @@
 _prolog = .text:0x00000000; // type:function size:0x2C scope:global
 _epilog = .text:0x00000030; // type:function size:0x2C scope:global
 _unresolved = .text:0x00000060; // type:function size:0x4 scope:global
-fn_502_70 = .text:0x00000070; // type:function size:0x4C
-fn_502_C0 = .text:0x000000C0; // type:function size:0x9C
+TagPlightChg__ctor = .text:0x00000070; // type:function size:0x4C
+TagPlightChg__inti = .text:0x000000C0; // type:function size:0x9C
 fn_502_160 = .text:0x00000160; // type:function size:0x8
 fn_502_170 = .text:0x00000170; // type:function size:0x184
 fn_502_300 = .text:0x00000300; // type:function size:0x264
-fn_502_570 = .text:0x00000570; // type:function size:0xC8
+TagPlightChg__update = .text:0x00000570; // type:function size:0xC8
 fn_502_640 = .text:0x00000640; // type:function size:0x8
 fn_502_650 = .text:0x00000650; // type:function size:0x5C
 _ctors = .ctors:0x00000000; // type:label scope:global
