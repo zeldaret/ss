@@ -140,7 +140,7 @@ int dAcOsw_c::doDelete() {
     return SUCCEEDED;
 }
 
-extern "C" u16 lbl_8057A994;
+extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_754_;
 extern "C" void fn_800298B0(u16, mVec3_c *, mAng3_c *, u32, u32, u32, u32, u32);
 
 int dAcOsw_c::actorExecute() {
@@ -150,7 +150,7 @@ int dAcOsw_c::actorExecute() {
         if (field_0x5A0.field_0x00 <= 0.0f) {
             if (scale.x >= 1.0f) {
                 if (!mHidden) {
-                    fn_800298B0(lbl_8057A994, &position, &rotation, 0, 0, 0, 0, 0);
+                    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_754_, &position, &rotation, 0, 0, 0, 0, 0);
                     playSound(0xC0B);
                     mHidden = true;
                 }
@@ -163,7 +163,7 @@ int dAcOsw_c::actorExecute() {
         } else {
             if (scale.x <= 0.0f) {
                 if (!mShown) {
-                    fn_800298B0(lbl_8057A994, &position, &rotation, 0, 0, 0, 0, 0);
+                    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_754_, &position, &rotation, 0, 0, 0, 0, 0);
                     playSound(0xC0A);
                     mShown = true;
                 }

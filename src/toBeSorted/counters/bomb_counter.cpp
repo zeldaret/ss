@@ -9,6 +9,6 @@ public:
     }
 };
 
-/* 80575620 */ BombCounter lbl_80575620;
+/* 80575620 */ BombCounter BOMB_COUNTER;
 
 /* 8016E060 */ BombCounter::BombCounter(): Counter(0x1f3) { }

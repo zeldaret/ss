@@ -133,7 +133,7 @@ void dAcOtoD3StoneFigure_c::doInteraction(s32 arg) {
     }
 }
 
-extern "C" s32 fn_80251B70(s32);
+extern "C" s32 AcItem__checkFlag(s32);
 bool dAcOtoD3StoneFigure_c::hasStoneOfTrials() const {
-    return fn_80251B70(0xB4);
+    return AcItem__checkFlag(0xB4);
 }
