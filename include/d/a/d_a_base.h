@@ -70,9 +70,9 @@ public:
     /* 0x84 */ ObjInfo *obj_info;
     /* 0x88 */ TList<SoundInfo, 0xC> sound_list;
     /* 0x94 */ SoundSource *sound_source;
-    /* 0x9C */ mVec3_c *obj_pos;
-    /* 0x9c */ mVec3_c pos_copy;
-    /* 0xa8 */ u32 params2;
+    /* 0x98 */ mVec3_c *obj_pos;
+    /* 0x9C */ mVec3_c pos_copy;
+    /* 0xA8 */ u32 params2;
     /* 0xAC */ mAng3_c rot_copy;
     /* 0xB2 */ u16 obj_id; // enemydefeat flag / id on obj-map
     /* 0xB4 */ s8 room_id_copy;

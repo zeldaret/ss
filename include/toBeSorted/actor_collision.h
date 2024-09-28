@@ -32,6 +32,7 @@ public:
 
     static CollisionCheckContext* get();
     void registerActorBgCollision(ActorCollision&, dAcObjBase_c*);
+    void destroyActorBgCollision(ActorCollision&);
 };
 
 #endif
