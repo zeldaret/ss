@@ -1,5 +1,5 @@
-#ifndef D_T_GENKI_DWS_TGT_H
-#define D_T_GENKI_DWS_TGT_H
+#ifndef D_T_OBJ_FAIRY_H
+#define D_T_OBJ_FAIRY_H
 
 #include <d/a/obj/d_a_obj_fairy.h>
 #include <d/tg/d_tg.h>
