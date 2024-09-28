@@ -52,10 +52,10 @@ public:
     f32 getFSStickX() const { return mFSStickX; }
     f32 getFSStickY() const { return mFSStickY; }
     bool down(u32 mask) const { return (mask & mHold); }
-    bool up(u32 mask) const { return !(mask & mHold); }
+    bool up(u32 mask) const { return (mask & mHold) != mask; }
     bool downTrigger(u32 mask) const { return (mask & mTrig); }
     bool upTrigger(u32 mask) const { return (mask & mRelease); }
-    bool downAll(u32 mask) const { return mHold == mask; }
+    bool downAll(u32 mask) const { return (mask & mHold) == mask; }
     bool upAll(u32 mask) const { return (mask & mHold) == 0; }
 
     s32 getDevType() const { return mDevType; }
