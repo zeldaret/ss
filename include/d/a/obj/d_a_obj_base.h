@@ -97,7 +97,7 @@ public:
     /* 8002e630 */ static dAcObjBase_c *create(fProfile::PROFILE_NAME_e actorId, s8 roomId, u32 params1, mVec3_c *pos,
             mAng3_c *rot, mVec3_c *scale, u32 params2);
     /* 8002e6d0 */ static dAcObjBase_c *create(char *name, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot,
-            mVec3_c *scale, u32 params2, u16 id, u8 viewclipId);
+            mVec3_c *scale, u32 params2, u16 id, s8 viewclipId);
     /* 8002e770 */ static dAcObjBase_c *findObject(fProfile::PROFILE_NAME_e actorId, fLiNdBa_c *refList,
             dAcObjBase_c *parent);
     /* 8002e7f0 */ static dAcObjBase_c *getNextObject(fLiNdBa_c *ref, dAcObjBase_c *parent);
