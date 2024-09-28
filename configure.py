@@ -319,6 +319,7 @@ config.libs = [
             Object(NonMatching, "d/d_stage.cpp"),
             Object(NonMatching, "d/d_sys.cpp"),
             Object(NonMatching, "toBeSorted/sound_info.cpp"),
+            Object(Matching, "toBeSorted/arc_callback_handler.cpp"),
             Object(NonMatching, "d/a/d_a_base.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_base.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_item.cpp"),

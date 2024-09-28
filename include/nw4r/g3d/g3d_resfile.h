@@ -18,8 +18,8 @@ struct ResFileData {
 struct ResFile {
     ResCommon<ResFileData> mFile; // at 0x0
 
-    ResFile(): mFile((void*)nullptr) {}
-    ResFile(void *ptr): mFile(ptr) {}
+    ResFile() : mFile((void *)nullptr) {}
+    ResFile(void *ptr) : mFile(ptr) {}
 
     inline ResFileData &ref() const {
         return mFile.ref();
@@ -79,6 +79,9 @@ struct ResFile {
     u32 GetResAnmScnNumEntries() const;
 
     bool Bind(ResFile);
+    bool Bind() {
+        return Bind(*this);
+    }
     void Release();
     void Init();
     void Terminate();

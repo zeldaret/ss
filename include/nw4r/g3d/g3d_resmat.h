@@ -46,6 +46,8 @@ struct ResPixDL {
 struct ResMatPix : public ResCommon<ResPixDL> {
     ResMatPix(void *vptr) : ResCommon(vptr) {}
     void DCStore(bool sync);
+    void GXGetDstAlpha(u8*, u8*) const;
+    void GXSetDstAlpha(u8, u8);
     void CallDisplayList(bool bSync) const;
     ResMatPix CopyTo(void *p) const;
 
@@ -178,6 +180,8 @@ struct ResMat : public ResCommon<ResMatData> {
     ResMatTexCoordGen GetResMatTexCoordGen() {
         return ResMatTexCoordGen(&ofs_to_ptr<ResMatDLData>(ref().toResMatDLData)->dlTexCoordGen);
     }
+
+    bool IsOpaque() const;
 
     bool Bind(ResFile);
     UNKTYPE Release();

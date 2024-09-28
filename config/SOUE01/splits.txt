@@ -126,6 +126,13 @@ d/d_stage.cpp:
 d/d_sys.cpp:
 	.text       start:0x80064250 end:0x80064920
 
+toBeSorted/arc_callback_handler.cpp:
+	.text       start:0x80065050 end:0x80065590
+	.ctors      start:0x804DB69C end:0x804DB6A0
+	.data       start:0x8050DF28 end:0x8050DF60
+	.sdata      start:0x80571D10 end:0x80571D20
+	.sbss       start:0x80575250 end:0x80575258
+
 toBeSorted/arc_managers/current_stage_arc_manager.cpp:
 	.text       start:0x80068FD0 end:0x80069910
 	.ctors      start:0x804DB6A8 end:0x804DB6AC

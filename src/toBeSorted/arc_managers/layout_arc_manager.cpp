@@ -11,10 +11,8 @@ LayoutArcManager::~LayoutArcManager() {
     sInstance = nullptr;
 }
 
-extern char lbl_80575250;
-
 void LayoutArcManager::init(EGG::Heap *heap) {
-    mArcTable.init(16, &lbl_80575250, heap);
+    mArcTable.init(16, &ArcCallbackHandler::sInstance, heap);
 }
 
 bool LayoutArcManager::loadLayoutArcFromDisk(const char *object, EGG::Heap *heap) {
