@@ -37,9 +37,9 @@ private:
     ActorEventRelated mActorEvent;
 
     // TODO the weak IScnObjCallback functions are in the wrong order.
-    // The vtable order is            dtor, World, Mat, View, 0x18, 0x1C
-    // and the emitted order is       dtor, 0x1C, 0x18, View, Mat, World
-    // but the order in the binary is dtor, 0x1C, 0x18, Mat, World, View
+    // The vtable order is            dtor, World,   Mat,  View,   Opa,   Xlu
+    // and the emitted order is       dtor,   Xlu,   Opa,  View,   Mat, World
+    // but the order in the binary is dtor,   Xlu,   Opa,  Mat,  World,  View
     dScnCallback_c mSceneCallback;
     /* 0x650 */ mVec3_c mSoundPosition;
     /* 0x65C */ f32 field_0x65C;
