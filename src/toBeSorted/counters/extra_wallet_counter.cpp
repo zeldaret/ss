@@ -10,6 +10,6 @@ public:
 };
 
 
-/* 80575640 */ ExtraWalletCounter lbl_80575640;
+/* 80575640 */ ExtraWalletCounter EXTRA_WALLET_COUNTER;
 
 /* 8016E260 */ ExtraWalletCounter::ExtraWalletCounter(): Counter(0x1fc) { }

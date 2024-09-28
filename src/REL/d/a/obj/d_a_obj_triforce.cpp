@@ -53,7 +53,7 @@ int dAcOtriforce_c::doDelete() {
     return 1;
 }
 
-extern const u16 lbl_8057AB3E;
+extern const u16 PARTICLE_RESOURCE_ID_MAPPING_967_;
 extern "C" void fn_80029AE0(EffectsStruct *, u16, mMtx_c *, void *, void *);
 
 int dAcOtriforce_c::actorExecute() {
@@ -71,7 +71,7 @@ int dAcOtriforce_c::actorExecute() {
     PSMTXConcat(worldMatrix.m, m, worldMatrix.m);
     mMdl.setLocalMtx(worldMatrix);
     mAnm.play();
-    fn_80029AE0(&mEffects, lbl_8057AB3E, &worldMatrix, nullptr, nullptr);
+    fn_80029AE0(&mEffects, PARTICLE_RESOURCE_ID_MAPPING_967_, &worldMatrix, nullptr, nullptr);
     return 1;
 }
 

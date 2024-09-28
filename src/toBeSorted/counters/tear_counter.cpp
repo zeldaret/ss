@@ -9,6 +9,6 @@ public:
     };
 };
 
-/* 80575628 */ TearCounter lbl_80575628;
+/* 80575628 */ TearCounter TEAR_COUNTER;
 
 /* 8016E0E0 */ TearCounter::TearCounter(): Counter(0x1f4) { }

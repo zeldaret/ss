@@ -142,9 +142,6 @@ BOOL dRawArcEntry_c::checkArcExistsOnDisk(const char *fileName, const char *dirN
     return checkArcExistsOnDiskInner(path, fileName, dirName);
 }
 
-// sprintf2
-extern "C" void fn_8003D650(char *out, const char *fmt, ...);
-
 BOOL dRawArcEntry_c::checkArcExistsOnDiskInner(SizedString<128> &path, const char *fileName, const char *dirName) {
     path.sprintf("/US/%s/%s.arc", dirName, fileName);
     if (!mDvd::IsExistPath(&path)) {
