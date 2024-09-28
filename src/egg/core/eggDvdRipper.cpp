@@ -7,8 +7,9 @@ bool DvdRipper::sErrorRetry = true;
 DvdRipper::UnkCallback DvdRipper::sCallback;
 
 /* 80494680 */
-u8 *DvdRipper::loadToMainRAM(s32 entryNum, u8 *dst, Heap *heap, EAllocDirection allocDir, u32 offset, u32 *amountRead,
-    u32 *fileSize) {
+u8 *DvdRipper::loadToMainRAM(
+    s32 entryNum, u8 *dst, Heap *heap, EAllocDirection allocDir, u32 offset, u32 *amountRead, u32 *fileSize
+) {
     DvdFile file = DvdFile();
     if (!file.open(entryNum)) {
         return nullptr;
@@ -17,8 +18,9 @@ u8 *DvdRipper::loadToMainRAM(s32 entryNum, u8 *dst, Heap *heap, EAllocDirection 
 }
 
 /* 80494730 */
-u8 *DvdRipper::loadToMainRAM(const char *path, u8 *dst, Heap *heap, EAllocDirection allocDir, u32 offset,
-    u32 *amountRead, u32 *fileSize) {
+u8 *DvdRipper::loadToMainRAM(
+    const char *path, u8 *dst, Heap *heap, EAllocDirection allocDir, u32 offset, u32 *amountRead, u32 *fileSize
+) {
     DvdFile file = DvdFile();
     if (!file.open(path)) {
         return nullptr;
@@ -27,8 +29,9 @@ u8 *DvdRipper::loadToMainRAM(const char *path, u8 *dst, Heap *heap, EAllocDirect
 }
 
 /* 804947e0 */
-u8 *DvdRipper::loadToMainRAM(DvdFile *pFile, u8 *pOut, Heap *pHeap, EAllocDirection allocDir, u32 offset, u32 *pRead,
-    u32 *pSize) {
+u8 *DvdRipper::loadToMainRAM(
+    DvdFile *pFile, u8 *pOut, Heap *pHeap, EAllocDirection allocDir, u32 offset, u32 *pRead, u32 *pSize
+) {
     u32 size;
     bool memAllocated = false;
     u32 alignedSize;
@@ -104,8 +107,10 @@ u8 *DvdRipper::loadToMainRAM(DvdFile *pFile, u8 *pOut, Heap *pHeap, EAllocDirect
 }
 
 /* 804949b0 */
-void *DvdRipper::loadToMainRAMDecomp(DvdFile *file, StreamDecomp *decompressor, u8 *pOut, Heap *heap,
-    EAllocDirection allocDir, s32 offset, u32 size, u32 chunkSize, u32 *pRead, u32 *pSize) {
+void *DvdRipper::loadToMainRAMDecomp(
+    DvdFile *file, StreamDecomp *decompressor, u8 *pOut, Heap *heap, EAllocDirection allocDir, s32 offset, u32 size,
+    u32 chunkSize, u32 *pRead, u32 *pSize
+) {
     // TODO Regswaps
 
     s32 uncomp_align = allocDir == ALLOC_DIR_TOP ? 0x20 : -0x20;
@@ -130,12 +135,12 @@ void *DvdRipper::loadToMainRAMDecomp(DvdFile *file, StreamDecomp *decompressor, 
     }
 
     s32 result = DVDReadPrio(&file->mFileInfo, read_buffer, decompressor->getHeaderSize(), offset, DVD_PRIO_MEDIUM);
-    s32 read_size = decompressor->getHeaderSize();
+    file_size = decompressor->getHeaderSize();
 
-    if (result == read_size) {
-        read_size = decompressor->getUncompressedSize(read_buffer);
+    if (result == file_size) {
+        file_size = decompressor->getUncompressedSize(read_buffer);
     } else {
-        // BUG - Read buffer never freed
+        // BUG? - Read buffer never freed
         return nullptr;
     }
     heap->free(read_buffer);
@@ -148,7 +153,7 @@ void *DvdRipper::loadToMainRAMDecomp(DvdFile *file, StreamDecomp *decompressor, 
 
     // Ensure decompression space
     if (!pOut) {
-        pOut = (u8 *)heap->alloc(read_size, uncomp_align);
+        pOut = (u8 *)heap->alloc(file_size, uncomp_align);
     }
 
     if (!pOut) {
@@ -156,26 +161,26 @@ void *DvdRipper::loadToMainRAMDecomp(DvdFile *file, StreamDecomp *decompressor, 
     }
 
     // Read and decompress the chunks
-    read_buffer = heap->alloc(chunkSize, align);
-    if (read_buffer) {
-        read_size = 0;
+    void *chunk_buffer = heap->alloc(chunkSize, align);
+    if (chunk_buffer) {
+        s32 file_size = 0;
         decompressor->init(pOut, max_read);
 
         while (true) {
-            u32 chunk_size = MIN(max_read - read_size, chunkSize);
-            u32 chunk_offset = offset + read_size;
+            u32 chunk_size = MIN(max_read - file_size, chunkSize);
+            u32 chunk_offset = offset + file_size;
 
-            result =
-                DVDReadPrio(&file->mFileInfo, read_buffer, ROUND_UP(chunk_size, 0x20), chunk_offset, DVD_PRIO_MEDIUM);
+            s32 result =
+                DVDReadPrio(&file->mFileInfo, chunk_buffer, ROUND_UP(chunk_size, 0x20), chunk_offset, DVD_PRIO_MEDIUM);
 
-            if (result < DVD_RESULT_OK || decompressor->decomp(read_buffer, result)) {
+            if (result < DVD_RESULT_OK || decompressor->decomp(chunk_buffer, result)) {
                 break;
             }
-            read_size += result;
+            file_size += result;
         }
-        heap->free(read_buffer);
+        heap->free(chunk_buffer);
         if (pRead) {
-            *pRead = read_size + decompressor->getHeaderSize();
+            *pRead = file_size + decompressor->getHeaderSize();
         }
     }
 

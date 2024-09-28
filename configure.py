@@ -642,7 +642,7 @@ config.libs = [
         [
             Object(Matching, "egg/core/eggArchive.cpp"),
             Object(Matching, "egg/core/eggDvdFile.cpp"),
-            Object(NonMatching, "egg/core/eggDvdRipper.cpp"),
+            Object(Matching, "egg/core/eggDvdRipper.cpp"),
             Object(Matching, "egg/core/eggStream.cpp"),
             Object(Matching, "egg/core/eggAllocator.cpp"),
             Object(Matching, "egg/core/eggHeap.cpp"),
