@@ -89,7 +89,7 @@ public:
 
 public:
     /* 0x004 */ s32 mChannelID;
-    /* 0x008 */ u32 mButtonHeld; // these fields may need a slight amount of work
+    /* 0x008 */ u32 mButtonHeld;
     /* 0x00C */ u32 mButtonTriggered;
     /* 0x010 */ u32 mButtonReleased;
     /* 0x014 */ u32 field_0x14;
@@ -107,7 +107,7 @@ public:
     /* 0xf48 */ ControllerRumbleMgr *mRumbleMgr;
     /* 0xf4c */ Matrix34f mPostureMatrix;
     /* 0xf7c */ Matrix34f mPostureMatrixPrev;
-    /* 0xfac */ TBitFlag<u8> mAccelFlags;
+    /* 0xfac */ TBitFlag<u8> mAccelFlags; // May not be TBitFlag?
     /* 0xfb0 */ s32 mMaxAccelFrameTime;
     /* 0xfb4 */ s32 mAccelFrameTime[3];
     /* 0xfc0 */ f32 mMaxAccelDiff;

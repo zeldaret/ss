@@ -66,11 +66,11 @@ void UncompContextSZS::initUncompContext(void *pDest) {
     mUncompSize = 0;
     mHeaderLen = 0x10;
     mMaxUncompSize = 0;
-    _x0C = 0;
-    _x0D = 0;
-    _x0E = 0;
-    mChunkType = 0;
-    _x10 = 0;
+    mGroupHead = 0;
+    mSecondByte = 0;
+    mFirstByte = 0;
+    mState = 0;
+    mCopySrc = 0;
 }
 
 s32 UncompContextSZS::readHeader(u8 *pHeaderLen, s32 *pUncompSize, const u8 *src, u32 maxCompLen, s32 maxUncompSize) {
@@ -111,12 +111,12 @@ s32 UncompContextSZS::readHeader(u8 *pHeaderLen, s32 *pUncompSize, const u8 *src
     return read_amount;
 }
 
-s32 UncompContextSZS::readUncomp(const void *pSrc, u32 len) {
-    // TODO
+s32 UncompContextSZS::readUncomp(const void *pSrca, u32 len) {
+    const u8 *pSrc = static_cast<const u8 *>(pSrca);
     if (mHeaderLen != 0) {
-        s32 read_len = readHeader(&mHeaderLen, &mUncompSize, (u8 *)pSrc, len, mMaxUncompSize);
-        pSrc = (u8 *)pSrc - read_len;
-        len = len - read_len;
+        s32 read_len = readHeader(&mHeaderLen, &mUncompSize, pSrc, len, mMaxUncompSize);
+        pSrc += read_len;
+        len -= read_len;
 
         if (len == 0) {
             if (mHeaderLen == 0) {
@@ -126,35 +126,68 @@ s32 UncompContextSZS::readUncomp(const void *pSrc, u32 len) {
         }
     }
 
-    do {
-        u32 uncompressed_left = mUncompSize;
-        if (uncompressed_left < 1) {
-            break;
-        }
-        if (mChunkType == 2) {
-            u8 byte = *(u8 *)pSrc;
-            pSrc = (u8 *)pSrc + 1;
+    while (mUncompSize > 0) {
+        if (mState == 2) {
+            u32 num_bytes = *pSrc++ + 0x12;
             len--;
-
-            u16 chunkLen = byte + 0x12;
-            if (uncompressed_left < chunkLen) {
+            if (num_bytes > mUncompSize) {
                 if (mMaxUncompSize == 0) {
                     return CX_READ_ERR_4;
                 }
-                chunkLen = uncompressed_left;
+                num_bytes = (u16)mUncompSize;
             }
-            mUncompSize -= chunkLen;
+            mUncompSize -= num_bytes;
             do {
-                chunkLen--;
-                *mpDest = mpDest[-_x10];
+                *mpDest = *(mpDest - mCopySrc);
                 mpDest++;
-            } while (chunkLen != 0);
-            mChunkType = 0;
-        } else if (mChunkType == 1) {
-        } else {
-        }
+            } while (--num_bytes);
+            mState = 0;
+        } else if (mState == 1) {
+            len--;
+            u32 b1 = (mFirstByte << 8) | *pSrc++;
+            u32 num_bytes = b1 >> 12;
+            mCopySrc = (b1 & 0xFFF) + 1;
 
-    } while (len != 0);
+            if (num_bytes == 0) {
+                mState = 2;
+            } else {
+                num_bytes += 2;
+                if (num_bytes > mUncompSize) {
+                    if (mMaxUncompSize == 0) {
+                        return CX_READ_ERR_4;
+                    }
+                    num_bytes = (u16)mUncompSize;
+                }
+                mUncompSize -= num_bytes;
+                do {
+                    *mpDest = *(mpDest - mCopySrc);
+                    mpDest++;
+                } while (--num_bytes);
+                mState = 0;
+            }
+        } else {
+            if (mGroupHead == 0) {
+                len--;
+                mSecondByte = *pSrc++;
+                mGroupHead = 0x80;
+                if (len == 0) {
+                    break;
+                }
+            }
+            if (mSecondByte & mGroupHead) {
+                *mpDest++ = *pSrc++;
+                mUncompSize--;
+            } else {
+                mFirstByte = *pSrc++;
+                mState = 1;
+            }
+            len--;
+            mGroupHead >>= 1;
+        }
+        if (len == 0) {
+            break;
+        }
+    }
 
     if (mUncompSize == 0 && mMaxUncompSize == 0 && len > 0x20) {
         return CX_READ_ERR_3;
@@ -170,7 +203,7 @@ bool StreamDecompSZS::init(void *pDest, u32 maxCompressedSize) {
 }
 
 bool StreamDecompSZS::decomp(const void *pSrc, u32 len) {
-    return mContext.readUncomp(pSrc, len) == CX_READ_OK;
+    return mContext.readUncomp((const u8 *)pSrc, len) == CX_READ_OK;
 }
 
 } // namespace EGG

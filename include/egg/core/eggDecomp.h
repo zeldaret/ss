@@ -5,7 +5,6 @@
 
 #include <common.h>
 
-
 // NOTE: I put StreamDecomp stuff here. im unsure of the correct place
 
 namespace EGG {
@@ -69,16 +68,16 @@ struct UncompContextSZS {
     /* 80494e30 */ void initUncompContext(void *pDest);
     /* 80494e60 */ static s32
     readHeader(u8 *pHeaderLen, s32 *pUncompSize, const u8 *src, u32 maxCompLen, s32 maxUncompSize);
-    /* 80494f60 */ s32 readUncomp(const void *pSrc, u32 len);
+    /* 80494f60 */ s32 readUncomp(const void *pSrca, u32 len);
 
     /* 0x00 */ u8 *mpDest;
     /* 0x04 */ s32 mUncompSize;
     /* 0x08 */ s32 mMaxUncompSize;
-    /* 0x0C */ u8 _x0C;
-    /* 0x0D */ u8 _x0D;
-    /* 0x0E */ u8 _x0E;
-    /* 0x0F */ u8 mChunkType;
-    /* 0x10 */ u16 _x10;
+    /* 0x0C */ u8 mGroupHead;
+    /* 0x0D */ u8 mSecondByte;
+    /* 0x0E */ u8 mFirstByte;
+    /* 0x0F */ u8 mState;
+    /* 0x10 */ u16 mCopySrc;
     /* 0x12 */ u8 mHeaderLen;
 };
 

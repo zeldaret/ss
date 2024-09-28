@@ -47,7 +47,7 @@ ColumnLimit: 120
 ContinuationIndentWidth: 4
 IncludeBlocks: Regroup
 IndentAccessModifiers: False
-IndentCaseLabels: False
+IndentCaseLabels: True
 IndentGotoLabels: True
 IndentWidth: 4
 InsertBraces: True
