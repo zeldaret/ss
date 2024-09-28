@@ -16,6 +16,7 @@ public:
         multMatrix = callback;
         return result;
     }
+    void init();
     void execute();
 
     u8 field_0x00[0x1FC - 0x000];

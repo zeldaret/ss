@@ -963,7 +963,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_ballista_f3", "REL/d/a/obj/d_a_obj_ballista_f3.cpp"),
     Rel(NonMatching, "d_a_obj_ballista_handle", "REL/d/a/obj/d_a_obj_ballista_handle.cpp"),
     Rel(NonMatching, "d_a_obj_bamboo", "REL/d/a/obj/d_a_obj_bamboo.cpp"),
-    Rel(NonMatching, "d_a_obj_bamboo_island", "REL/d/a/obj/d_a_obj_bamboo_island.cpp"),
+    Rel(Matching, "d_a_obj_bamboo_island", "REL/d/a/obj/d_a_obj_bamboo_island.cpp"),
     Rel(NonMatching, "d_a_obj_barrel", "REL/d/a/obj/d_a_obj_barrel.cpp"),
     Rel(NonMatching, "d_a_obj_bblargebomb", "REL/d/a/obj/d_a_obj_bblargebomb.cpp"),
     Rel(NonMatching, "d_a_obj_bbstone", "REL/d/a/obj/d_a_obj_bbstone.cpp"),
