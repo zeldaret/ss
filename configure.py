@@ -333,6 +333,7 @@ config.libs = [
             Object(Matching, "toBeSorted/arc_managers/current_stage_arc_manager.cpp"),
             Object(Matching, "toBeSorted/arc_managers/oarc_manager.cpp"),
             Object(Matching, "toBeSorted/arc_managers/layout_arc_manager.cpp"),
+            Object(NonMatching, "toBeSorted/attention.cpp"),
             Object(NonMatching, "toBeSorted/dowsing_target.cpp"),
             Object(NonMatching, "toBeSorted/time_area_mgr.cpp"),
             Object(Matching, "toBeSorted/save_file.cpp"),

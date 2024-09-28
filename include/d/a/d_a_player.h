@@ -182,5 +182,13 @@ public:
     /* 0x360 */ UNKWORD field_0x360;
     /* 0x364 */ u32 mActionFlags;
 
+    inline bool checkFlags0x340(u32 mask) const {
+        return (someFlags_0x340 & mask) != 0;
+    }
+
+    inline bool checkFlags0x350(u32 mask) const {
+        return (someFlags_0x350 & mask) != 0;
+    }
+
     static dAcPy_c *LINK;
 };

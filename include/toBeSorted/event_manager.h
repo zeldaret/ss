@@ -1,3 +1,4 @@
+
 #ifndef EVENT_MANAGER_H
 #define EVENT_MANAGER_H
 
@@ -11,6 +12,18 @@ public:
     static bool alsoSetAsCurrentEvent(dAcBase_c *actor, Event *event, void *unknown);
 
     static EventManager *sInstance;
+
+    static bool isInEvent() {
+        return sInstance != nullptr && sInstance->mState != 0;
+    }
+
+    static bool isInEventOtherThan7() {
+        return isInEvent() && sInstance != nullptr && sInstance->mState != 7;
+    }
+
+private:
+    u8 field_0x000[0x184 - 0x000];
+    int mState;
 };
 
 #endif

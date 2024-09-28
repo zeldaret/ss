@@ -3,8 +3,8 @@
 #include <toBeSorted/cc/d_cc_mgr.h>
 #include <toBeSorted/event.h>
 #include <toBeSorted/event_manager.h>
-#include <toBeSorted/scgame.h>
 #include <toBeSorted/item_story_flag_manager.h>
+#include <toBeSorted/scgame.h>
 
 SPECIAL_ACTOR_PROFILE(OBJ_TOD3_STONE, dAcOtoD3StoneFigure_c, fProfile::OBJ_TOD3_STONE, 0x1B3, 0, 0);
 
@@ -76,20 +76,20 @@ int dAcOtoD3StoneFigure_c::create() {
 }
 
 int dAcOtoD3StoneFigure_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOtoD3StoneFigure_c::actorExecute() {
     mStateMgr.executeState();
     ColliderManager::getColliderManager()->addCollider(&mCollision);
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcOtoD3StoneFigure_c::draw() {
     if (ScGame::currentSpawnInfo.layer != 0x12) {
         drawModelType1(&mMdl);
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 void dAcOtoD3StoneFigure_c::initializeState_OneEye() {
@@ -107,8 +107,8 @@ void dAcOtoD3StoneFigure_c::executeState_OneEye() {
         if (hasStoneOfTrials() && ScGame::currentSpawnInfo.night != 1) {
             // These are interaction related
             -0.0f;
-            dAttention_c::sInstance->addTarget(this, 1, 300.0f, 50.0f, -100.0f, 100.0f);
-            dAttention_c::sInstance->addTarget(this, 1, 200.0f, -100.0f, 100.0f);
+            AttentionManager::sInstance->addExamineTalkTarget(*this, 1, 300.0f, 50.0f, -100.0f, 100.0f);
+            AttentionManager::sInstance->addExamineTalkTarget(*this, 1, 200.0f, -100.0f, 100.0f);
         }
     }
 }

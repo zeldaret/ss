@@ -6,10 +6,10 @@
 #include <sized_string.h>
 
 class OarcManager {
+public:
     OarcManager();
     virtual ~OarcManager();
 
-    dRawArcTable_c mArcTable;
 
     static OarcManager *sInstance;
 
@@ -31,6 +31,8 @@ class OarcManager {
     void *getDzbFromArc(const char *oarcName, const char *fileName);
     void *getPlcFromArc(const char *oarcName, const char *fileName);
     void *getSubEntryData(const char *oarcName, const char *fileName);
+private:
+    dRawArcTable_c mArcTable;
 };
 
 #endif
