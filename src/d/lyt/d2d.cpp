@@ -139,8 +139,8 @@ bool Layout_c::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
         {
             Pane *pPane = BuildPaneObj(detail::GetSignatureInt(pDataBlockHead->kind), dataPtr, resBlockSet);
             if (pPane) {
-                if (GetRootPane() == nullptr) {
-                    SetRootPane(pPane);
+                if (mpRootPane == nullptr) {
+                    mpRootPane = pPane;
                 }
                 if (pParentPane) {
                     pParentPane->AppendChild(pPane);
@@ -164,7 +164,7 @@ bool Layout_c::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
                 mpGroupContainer = MyNewObj<GroupContainer>();
             } else {
                 if (mpGroupContainer && groupNestLevel == 1) {
-                    Group *pGroup = MyNewObj<Group>((const res::Group *)dataPtr, GetRootPane());
+                    Group *pGroup = MyNewObj<Group>((const res::Group *)dataPtr, mpRootPane);
                     if (pGroup) {
                         mpGroupContainer->AppendGroup(pGroup);
                     }
