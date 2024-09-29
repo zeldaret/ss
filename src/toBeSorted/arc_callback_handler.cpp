@@ -15,7 +15,6 @@ ArcCallbackHandler ArcCallbackHandler::sInstance;
 #define NAME_OARC 'oarc'
 #define NAME_RARC 'rarc'
 
-extern "C" void replaceModelTextures__Q23EGG19LightTextureManagerCFPQ34nw4r3g3d6ResMdl(void *, nw4r::g3d::ResMdl);
 extern "C" void FUN_804a7260(nw4r::g3d::ResMdl, const char *prefix);
 
 
@@ -27,10 +26,10 @@ void BindSystemModelsAndLighting(nw4r::g3d::ResFile file) {
 
     EGG::LightManager *mgr = m3d::getLightMgr(0);
     if (mgr != nullptr && mgr->GetTextureMgr() != nullptr) {
-        void *lightTexMgr = mgr->GetTextureMgr();
+        EGG::LightTextureManager *lightTexMgr = mgr->GetTextureMgr();
         for (int i = 0; i < file.GetResMdlNumEntries(); i++) {
             nw4r::g3d::ResMdl mdl = file.GetResMdl(i);
-            replaceModelTextures__Q23EGG19LightTextureManagerCFPQ34nw4r3g3d6ResMdl(lightTexMgr, mdl);
+            lightTexMgr->replaceModelTextures(mdl);
             FUN_804a7260(mdl, "Lm");
             for (int j = 0; j < mdl.GetResMatNumEntries(); j++) {
                 nw4r::g3d::ResMat mat = mdl.GetResMat(j);
