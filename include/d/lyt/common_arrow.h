@@ -1,10 +1,9 @@
 #ifndef D_LYT_COMMON_ARROW_H
 #define D_LYT_COMMON_ARROW_H
 
+#include <d/lyt/d2d.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
-#include <toBeSorted/lyt/d2d.h>
-
 
 class dLytCommonArrow_c {
 public:
@@ -33,7 +32,6 @@ public:
     void fn_80168880();
 
 private:
-
     STATE_MGR_DECLARE(dLytCommonArrow_c);
     /* 0x40 */ d2d::LytBase_c mLytBase;
     d2d::ResAccIf_c mResAcc;
@@ -53,6 +51,5 @@ private:
     u8 field_0x6CB;
     u8 field_0x6CC;
 };
-
 
 #endif

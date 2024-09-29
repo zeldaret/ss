@@ -1,6 +1,5 @@
-#include <toBeSorted/lyt/pause_disp_00.h>
+#include <d/lyt/pause_disp_00.h>
 #include <nw4r/lyt/lyt_group.h>
-
 
 STATE_DEFINE(dLytPauseDisp00_c, None);
 STATE_DEFINE(dLytPauseDisp00_c, In);
@@ -15,11 +14,10 @@ extern "C" char lbl_804E8898[];
 
 extern const char *B_LIST[];
 
+dLytPauseDisp00_c::dLytPauseDisp00_c() : mStateMgr(*this, sStateID::null) {}
 
-dLytPauseDisp00_c::dLytPauseDisp00_c(): mStateMgr(*this, sStateID::null) {}
-
-extern "C" void fn_800AC3C0(nw4r::lyt::Group *, nw4r::ut::LinkList<d2d::dLytStructB, 0>*);
-extern "C" d2d::dLytStructD* lbl_80575260;
+extern "C" void fn_800AC3C0(nw4r::lyt::Group *, nw4r::ut::LinkList<d2d::dLytStructB, 0> *);
+extern "C" d2d::dLytStructD *lbl_80575260;
 
 void dLytPauseDisp00_c::init() {
     mLytBase.build("pause_00.brlyt", nullptr);
@@ -33,7 +31,6 @@ void dLytPauseDisp00_c::init() {
         field_0x2050[i].init(nullptr, lbl_804E8898[i]);
         mList.PushBack(&field_0x2050[i]);
     }
-
 
     if (mLytBase.getLayout()->GetGroupContainer() != nullptr) {
         nw4r::lyt::Group *group = mLytBase.getLayout()->GetGroupContainer()->FindGroupByName("G_ref_00");

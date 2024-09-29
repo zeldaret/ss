@@ -1,10 +1,9 @@
 #ifndef LYT_PAUSE_DISP_00_H
 #define LYT_PAUSE_DISP_00_H
 
+#include <d/lyt/d2d.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
-#include <toBeSorted/lyt/d2d.h>
-
 
 class dLytPauseDisp00_c {
 public:
@@ -22,8 +21,6 @@ public:
     STATE_FUNC_DECLARE(dLytPauseDisp00_c, Out);
 
 private:
-
-
     void displayElement(int idx, float value);
 
     STATE_MGR_DECLARE(dLytPauseDisp00_c);

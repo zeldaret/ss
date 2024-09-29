@@ -1,14 +1,14 @@
 #include <d/d_font_manager.h>
+#include <d/lyt/d2d.h>
+#include <d/lyt/d_textbox.h>
+#include <d/lyt/d_window.h>
 #include <egg/gfx/eggScreen.h>
 #include <nw4r/lyt/lyt_bounding.h>
 #include <nw4r/lyt/lyt_group.h>
 #include <nw4r/lyt/lyt_picture.h>
 #include <nw4r/lyt/lyt_textBox.h>
-#include <nw4r/lyt/lyt_window.h>
 #include <nw4r/lyt/lyt_utils.h>
-#include <toBeSorted/lyt/d2d.h>
-#include <toBeSorted/lyt/d_textbox.h>
-#include <toBeSorted/lyt/d_window.h>
+#include <nw4r/lyt/lyt_window.h>
 
 using namespace nw4r::lyt;
 
@@ -320,7 +320,6 @@ bool AnmGroup_c::fn_800AC6D0(bool b) {
         return false;
     }
 
-
     nw4r::lyt::BindAnimation(mpGroup, anmTransform, false, b);
     mFlags |= 1;
     if (b) {
@@ -354,7 +353,6 @@ bool AnmGroup_c::fn_800AC7D0() {
     mFlags = (mFlags & ~1);
     return true;
 }
-
 
 bool AnmGroup_c::fn_800AC860() {
     return true;

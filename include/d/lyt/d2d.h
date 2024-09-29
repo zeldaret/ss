@@ -5,8 +5,7 @@
 #include <nw4r/lyt/lyt_pane.h>
 #include <nw4r/lyt/lyt_picture.h>
 
-namespace d2d
-{
+namespace d2d {
 
 class ResAccIf_c : public m2d::ResAccIf_c {
 public:
@@ -35,7 +34,6 @@ private:
     nw4r::lyt::Pane *BuildPaneObj(s32 kind, const void *dataPtr, const nw4r::lyt::ResBlockSet &resBlockSet);
 };
 
-
 class Multi_c : public m2d::Base_c {
 public:
     Multi_c();
@@ -60,7 +58,6 @@ public:
         mpResAcc = resAcc;
     }
 
-
 protected:
     Layout_c mLayout;
     nw4r::lyt::DrawInfo mDrawInfo;
@@ -84,8 +81,8 @@ struct AnmGroup_c {
     AnmGroup_c() {}
     ~AnmGroup_c() {}
 
-    bool init(const char *fileName, m2d::ResAccIf_c* acc, d2d::Layout_c *layout, const char *animName);
-    bool init(nw4r::lyt::AnimTransform *transform, const char *fileName, m2d::ResAccIf_c* acc, nw4r::lyt::Group *group);
+    bool init(const char *fileName, m2d::ResAccIf_c *acc, d2d::Layout_c *layout, const char *animName);
+    bool init(nw4r::lyt::AnimTransform *transform, const char *fileName, m2d::ResAccIf_c *acc, nw4r::lyt::Group *group);
 
     bool fn_800AC6D0(bool);
     bool fn_800AC7D0();
@@ -162,10 +159,10 @@ struct dLytStructD : dLytStructD_Base {
 
     virtual ~dLytStructD();
 
-    void init(nw4r::lyt::Pane*, u16, u8, u8);
+    void init(nw4r::lyt::Pane *, u16, u8, u8);
     void append(dLytStructD *other);
     void detach(dLytStructD *other);
-    void fn_80065E70(nw4r::lyt::Pane*, s32, s32, s32);
+    void fn_80065E70(nw4r::lyt::Pane *, s32, s32, s32);
     void fn_80065F70();
 
     u32 field_0x18;

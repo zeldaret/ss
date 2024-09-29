@@ -1,8 +1,8 @@
 #ifndef D_LYT_FADER_H
 #define D_LYT_FADER_H
 
+#include <d/lyt/d2d.h>
 #include <m/m_fader_base.h>
-#include <toBeSorted/lyt/d2d.h>
 
 class dLytFader_c : public mFaderBase_c {
 public:
@@ -30,7 +30,7 @@ private:
     /* 0x4D4 */ s32 field_0x4D4;
     /* 0x4D8 */ s32 field_0x4D8;
     /* 0x4DC */ u8 field_0x4DC[0x4DD - 0x4DC];
-    
+
     bool field_0x4DD;
 };
 

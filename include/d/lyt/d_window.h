@@ -10,6 +10,7 @@ public:
     dWindow_c(const nw4r::lyt::res::Window *pBlock, const nw4r::lyt::ResBlockSet &ResBlockSet);
     virtual ~dWindow_c() {}
     void fn_800B1670(dTextBox_c *textBox, f32 f);
+
 private:
     UNKWORD field_0x108;
 };

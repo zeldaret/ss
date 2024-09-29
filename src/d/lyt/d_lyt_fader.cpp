@@ -1,6 +1,5 @@
+#include <d/lyt/d_lyt_fader.h>
 #include <toBeSorted/arc_managers/layout_arc_manager.h>
-#include <toBeSorted/lyt/d_lyt_fader.h>
-
 
 static const d2d::LytBrlanMapping blanMap[] = {
         {"wipe_01_wipeStart.brlan", "G_wipe_00"},
@@ -153,7 +152,6 @@ void dLytFader_c::fn_80175B10() {
     s->play();
     mLytBase.fn_Multi_c_0x14();
 }
-
 
 void dLytFader_c::fn_80175BC0(s32 arg) {
     field_0x4D4 = arg;

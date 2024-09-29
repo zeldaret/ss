@@ -1,5 +1,5 @@
+#include <d/lyt/common_arrow.h>
 #include <toBeSorted/arc_managers/layout_arc_manager.h>
-#include <toBeSorted/lyt/common_arrow.h>
 
 STATE_DEFINE(dLytCommonArrow_c, None);
 STATE_DEFINE(dLytCommonArrow_c, In);
@@ -129,9 +129,7 @@ void dLytCommonArrow_c::fn_80168810(d2d::AnmGroup_c *ctrl) {
     }
 }
 
-void dLytCommonArrow_c::fn_80168880() {
-
-}
+void dLytCommonArrow_c::fn_80168880() {}
 
 void dLytCommonArrow_c::initializeState_None() {
     mLytBase.unbindAnims();

@@ -1,6 +1,5 @@
-#include <toBeSorted/lyt/d_textbox.h>
-#include <toBeSorted/lyt/d_window.h>
-
+#include <d/lyt/d_textbox.h>
+#include <d/lyt/d_window.h>
 
 dWindow_c::dWindow_c(const nw4r::lyt::res::Window *pBlock, const nw4r::lyt::ResBlockSet &ResBlockSet)
     : nw4r::lyt::Window(pBlock, ResBlockSet) {}
