@@ -35,38 +35,7 @@ bool ResAccIf_c::attach(void *data, const char *name) {
     return ok;
 }
 
-// These need to not inline, so they're copied outside of the class
-template <typename T>
-static T *MyNewObj() {
-    T *pMem = (T *)Layout::AllocMemory(sizeof(T));
-    if (pMem) {
-        return new (pMem) T();
-    } else {
-        return nullptr;
-    }
-}
-
-template <typename T, typename P1>
-static T *MyNewObj(P1 param1) {
-    T *pMem = (T *)Layout::AllocMemory(sizeof(T));
-    if (pMem) {
-        return new (pMem) T(param1);
-    } else {
-        return nullptr;
-    }
-}
-
-template <typename T, typename P1, typename P2>
-static T *MyNewObj(P1 param1, P2 param2) {
-    T *pMem = (T *)Layout::AllocMemory(sizeof(T));
-    if (pMem) {
-        return new (pMem) T(param1, param2);
-    } else {
-        return nullptr;
-    }
-}
-
-// Copied from lyt, with NewObj replaced and some types replaced
+// Copied from lyt, with some types replaced
 nw4r::lyt::Pane *Layout_c::BuildPaneObj(s32 kind, const void *dataPtr, const ResBlockSet &resBlockSet) {
     // Oddly enough the breaks are required here to not inline the function???
     // Had them as left over from editing and somehow when removing them it just broke Build.
@@ -74,23 +43,23 @@ nw4r::lyt::Pane *Layout_c::BuildPaneObj(s32 kind, const void *dataPtr, const Res
     switch (kind) {
     case 'pan1': {
         const res::Pane *pResPane = (const res::Pane *)dataPtr;
-        return MyNewObj<Pane>(pResPane);
+        return NewObj<Pane>(pResPane);
     } break;
     case 'pic1': {
         const res::Picture *pResPic = (const res::Picture *)dataPtr;
-        return MyNewObj<Picture>(pResPic, resBlockSet);
+        return NewObj<Picture>(pResPic, resBlockSet);
     } break;
     case 'txt1': {
         const res::TextBox *pBlock = (const res::TextBox *)dataPtr;
-        return MyNewObj<dTextBox_c>(pBlock, resBlockSet);
+        return NewObj<dTextBox_c>(pBlock, resBlockSet);
     } break;
     case 'wnd1': {
         const res::Window *pBlock = (const res::Window *)dataPtr;
-        return MyNewObj<dWindow_c>(pBlock, resBlockSet);
+        return NewObj<dWindow_c>(pBlock, resBlockSet);
     } break;
     case 'bnd1': {
         const res::Bounding *pResBounding = (const res::Bounding *)dataPtr;
-        return MyNewObj<Bounding>(pResBounding, resBlockSet);
+        return NewObj<Bounding>(pResBounding, resBlockSet);
     } break;
     default:
         return nullptr;
@@ -161,10 +130,10 @@ bool Layout_c::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
         case 'grp1': // Group
             if (!bReadRootGroup) {
                 bReadRootGroup = true;
-                mpGroupContainer = MyNewObj<GroupContainer>();
+                mpGroupContainer = NewObj<GroupContainer>();
             } else {
                 if (mpGroupContainer && groupNestLevel == 1) {
-                    Group *pGroup = MyNewObj<Group>((const res::Group *)dataPtr, mpRootPane);
+                    Group *pGroup = NewObj<Group>((const res::Group *)dataPtr, mpRootPane);
                     if (pGroup) {
                         mpGroupContainer->AppendGroup(pGroup);
                     }
