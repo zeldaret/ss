@@ -35,7 +35,16 @@ bool ResAccIf_c::attach(void *data, const char *name) {
     return ok;
 }
 
-// TODO these need to not inline...
+// These need to not inline, so they're copied outside of the class
+template <typename T>
+static T *MyNewObj() {
+    T *pMem = (T *)Layout::AllocMemory(sizeof(T));
+    if (pMem) {
+        return new (pMem) T();
+    } else {
+        return nullptr;
+    }
+}
 
 template <typename T, typename P1>
 static T *MyNewObj(P1 param1) {
@@ -57,7 +66,7 @@ static T *MyNewObj(P1 param1, P2 param2) {
     }
 }
 
-// TODO this has inlining problems. Copied from nw4r::lyt::Layout
+// Copied from lyt, with NewObj replaced and some types replaced
 nw4r::lyt::Pane *Layout_c::BuildPaneObj(s32 kind, const void *dataPtr, const ResBlockSet &resBlockSet) {
     // Oddly enough the breaks are required here to not inline the function???
     // Had them as left over from editing and somehow when removing them it just broke Build.
@@ -152,10 +161,10 @@ bool Layout_c::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
         case 'grp1': // Group
             if (!bReadRootGroup) {
                 bReadRootGroup = true;
-                SetGroupContainer(NewObj<GroupContainer>());
+                SetGroupContainer(MyNewObj<GroupContainer>());
             } else {
                 if (GetGroupContainer() && groupNestLevel == 1) {
-                    Group *pGroup = NewObj<Group>((const res::Group *)dataPtr, GetRootPane());
+                    Group *pGroup = MyNewObj<Group>((const res::Group *)dataPtr, GetRootPane());
                     if (pGroup) {
                         GetGroupContainer()->AppendGroup(pGroup);
                     }

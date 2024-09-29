@@ -3733,8 +3733,8 @@ MyNewObj<10dTextBox_c,PCQ44nw4r3lyt3res7TextBox,Q34nw4r3lyt11ResBlockSet>__3d2dF
 MyNewObj<Q34nw4r3lyt7Picture,PCQ44nw4r3lyt3res7Picture,Q34nw4r3lyt11ResBlockSet>__3d2dFPCQ44nw4r3lyt3res7PictureQ34nw4r3lyt11ResBlockSet_PQ34nw4r3lyt7Picture = .text:0x800AA070; // type:function size:0x60
 MyNewObj<Q34nw4r3lyt4Pane,PCQ44nw4r3lyt3res4Pane>__3d2dFPCQ44nw4r3lyt3res4Pane_PQ34nw4r3lyt4Pane = .text:0x800AA0D0; // type:function size:0x50
 Build__Q23d2d8Layout_cFPCvPQ34nw4r3lyt16ResourceAccessor = .text:0x800AA120; // type:function size:0x2F4
-fn_800AA420 = .text:0x800AA420; // type:function size:0x60
-fn_800AA480 = .text:0x800AA480; // type:function size:0x58
+MyNewObj<Q34nw4r3lyt5Group,PCQ44nw4r3lyt3res5Group,PQ34nw4r3lyt4Pane>__3d2dFPCQ44nw4r3lyt3res5GroupPQ34nw4r3lyt4Pane_PQ34nw4r3lyt5Group = .text:0x800AA420; // type:function size:0x60
+MyNewObj<Q34nw4r3lyt14GroupContainer>__3d2dFv_PQ34nw4r3lyt14GroupContainer = .text:0x800AA480; // type:function size:0x58
 fn_800AA4E0 = .text:0x800AA4E0; // type:function size:0x50
 __ct__Q23d2d7Multi_cFv = .text:0x800AA530; // type:function size:0xD0
 __dt__Q23d2d8Layout_cFv = .text:0x800AA600; // type:function size:0x58
