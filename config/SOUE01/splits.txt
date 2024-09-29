@@ -1277,6 +1277,28 @@ egg/gfx/eggStateGX.cpp:
 egg/gfx/eggTextureBuffer.cpp:
 	.text       start:0x804B53F0 end:0x804B59DC
 
+egg/audio/eggAudioArcPlayerMgr.cpp:
+	.text       start:0x804B59E0 end:0x804B6428
+
+egg/audio/eggAudioHeapMgr.cpp:
+	.text       start:0x804B6430 end:0x804B64A8
+
+egg/audio/eggAudioMgr.cpp:
+	.text       start:0x804B64B0 end:0x804B69C8
+
+egg/audio/eggAudioRmtSpeakerMgr.cpp:
+	.text       start:0x804B69D0 end:0x804B6F58
+
+egg/audio/eggAudioUtility.cpp:
+	.text       start:0x804B6F60 end:0x804B720C
+	.ctors      start:0x804DB9B0 end:0x804DB9B4
+
+egg/audio/eggAudioSystem.cpp:
+	.text       start:0x804B7210 end:0x804B7544
+
+egg/util/eggException.cpp:
+	.text       start:0x804B7550 end:0x804B7B48
+
 Runtime.PPCEABI.H/global_destructor_chain.c:
 	.text       start:0x804C65C0 end:0x804C6620
 	.sbss       start:0x80576930 end:0x80576938
