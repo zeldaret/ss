@@ -19,6 +19,8 @@ public:
         mpOwner = owner;
     }
 
+    void remove(bool);
+
 private:
     u8 field_0x20[0x28 - 0x20];
     /* 0x28 */ dAcBase_c *mpOwner;

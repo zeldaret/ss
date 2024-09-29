@@ -146,14 +146,14 @@ u32 UnkCCDStruct::getSomething(int arg) {
     }
 }
 
-dCcD_GAtTgCoCommonBase::dCcD_GAtTgCoCommonBase() : field_0x00(0), field_0x14(0), mEffCounter(0) {}
+dCcD_GAtTgCoCommonBase::dCcD_GAtTgCoCommonBase() : mCallback(nullptr), field_0x14(0), mEffCounter(0) {}
 
 dCcD_GAtTgCoCommonBase::~dCcD_GAtTgCoCommonBase() {
     unlink();
     field_0x14 = 0;
     unlink();
     decreaseCount();
-    field_0x00 = 0;
+    mCallback = nullptr;
 }
 
 void dCcD_GAtTgCoCommonBase::unlink() {

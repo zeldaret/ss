@@ -22,10 +22,6 @@ bool dAcOmoleSoil_c::createHeap() {
     return true;
 }
 
-bool intToBool(int a) {
-    return a;
-}
-
 int dAcOmoleSoil_c::create() {
     CREATE_ALLOCATOR(dAcOmoleSoil_c);
 

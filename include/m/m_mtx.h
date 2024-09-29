@@ -46,14 +46,14 @@ public:
     /* 802f18d0 */ void ZrotS(const mAng &angle); ///< Generates a rotation matrix for the Z axis with the given angle.
     /* 802f1990 */ void ZrotM(const mAng &angle); ///< Rotates the matrix on the Z axis by the given angle.
 
-    /* 802f19e0 */ void ZXYrotS(mAng xRot, mAng yRot,
-            mAng zRot); ///< Generates the matrix on the Y, X and Z axes by the given angles.
-    /* 802f1a40 */ void ZXYrotM(mAng xRot, mAng yRot,
-            mAng zRot); ///< Rotates the matrix on the Y, X and Z axes by the given angles.
-    /* 802f1aa0 */ void XYZrotS(mAng xRot, mAng yRot,
-            mAng zRot); ///< Generates the matrix on the Z, Y and X axes by the given angles.
-    /* 802f1b00 */ void XYZrotM(mAng xRot, mAng yRot,
-            mAng zRot); ///< Rotates the matrix on the Z, Y and X axes by the given angles.
+    /* 802f19e0 */ void ZXYrotS(const mAng & xRot, const mAng & yRot,
+            const mAng & zRot); ///< Generates the matrix on the Y, X and Z axes by the given angles.
+    /* 802f1a40 */ void ZXYrotM(const mAng & xRot, const mAng & yRot,
+            const mAng & zRot); ///< Rotates the matrix on the Y, X and Z axes by the given angles.
+    /* 802f1aa0 */ void XYZrotS(const mAng & xRot, const mAng & yRot,
+            const mAng & zRot); ///< Generates the matrix on the Z, Y and X axes by the given angles.
+    /* 802f1b00 */ void XYZrotM(const mAng & xRot, const mAng & yRot,
+            const mAng & zRot); ///< Rotates the matrix on the Z, Y and X axes by the given angles.
 
     /* 802f1b60 */ void toRot(mAng3_c &out) const; ///< Converts the matrix to a rotation vector.
 
