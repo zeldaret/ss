@@ -59,11 +59,7 @@ public:
         return mpGroupContainer;
     }
 
-    void SetGroupContainer(GroupContainer *container) {
-        mpGroupContainer = container;
-    }
-
-private:
+protected:
     ut::LinkList<AnimTransform, 4> mAnimTransList; // at 0x04
     Pane *mpRootPane;                              // at 0x10
     GroupContainer *mpGroupContainer;              // at 0x14

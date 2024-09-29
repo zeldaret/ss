@@ -97,7 +97,7 @@ nw4r::lyt::Pane *Layout_c::BuildPaneObj(s32 kind, const void *dataPtr, const Res
     }
 }
 
-// TODO this is copied from nw4r::lyt::Layout but has the same inlining problem
+// This is exactly copied from nw4r::lyt::Layout
 bool Layout_c::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
     const res::BinaryFileHeader *pFileHead = (const res::BinaryFileHeader *)(lytResBuf);
     if (!detail::TestFileHeader(*pFileHead, 'RLYT')) {
@@ -120,7 +120,7 @@ bool Layout_c::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
         case 'lyt1': // Main Layout
         {
             const res::Layout *pResLyt = ((const res::Layout *)dataPtr);
-            // mLayoutSize = pResLyt->layoutSize;
+            mLayoutSize = pResLyt->layoutSize;
         } break;
         case 'txl1': // Texture List
             resBlockSet.pTextureList = (const res::TextureList *)dataPtr;
@@ -161,12 +161,12 @@ bool Layout_c::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
         case 'grp1': // Group
             if (!bReadRootGroup) {
                 bReadRootGroup = true;
-                SetGroupContainer(MyNewObj<GroupContainer>());
+                mpGroupContainer = MyNewObj<GroupContainer>();
             } else {
-                if (GetGroupContainer() && groupNestLevel == 1) {
+                if (mpGroupContainer && groupNestLevel == 1) {
                     Group *pGroup = MyNewObj<Group>((const res::Group *)dataPtr, GetRootPane());
                     if (pGroup) {
-                        GetGroupContainer()->AppendGroup(pGroup);
+                        mpGroupContainer->AppendGroup(pGroup);
                     }
                 }
             }
