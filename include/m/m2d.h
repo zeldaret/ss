@@ -34,10 +34,10 @@ public:
     virtual void noop();
     virtual nw4r::lyt::ArcResourceAccessor *getAccessor();
 
-    void attach(void *data, const char *name);
+    bool attach(void *data, const char *name);
     void detach();
 
-private:
+protected:
     nw4r::lyt::ArcResourceAccessor mAccessor;
 };
 
@@ -73,6 +73,14 @@ public:
 
     inline void setToEnd() {
         setFrame(mEndFrame - 1.0f);
+    }
+
+    inline void setForward() {
+        mFlags = mFlags & ~FLAG_BACKWARDS;
+    }
+
+    inline void setBackward() {
+        mFlags = mFlags | FLAG_BACKWARDS;
     }
 
 private:

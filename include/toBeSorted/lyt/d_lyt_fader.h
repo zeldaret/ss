@@ -24,9 +24,9 @@ private:
     void fn_80175B10();
     void fn_80175BC0(s32);
 
-    /* 0x014 */ d2d::ResAccIf_c mFont;
+    /* 0x014 */ d2d::ResAccIf_c mResAcc;
     /* 0x384 */ d2d::LytBase_c mLytBase;
-    /* 0x414 */ d2d::dLytStructA mLytStructAs[3];
+    /* 0x414 */ d2d::AnmGroup_c mLytStructAs[3];
     /* 0x4D4 */ s32 field_0x4D4;
     /* 0x4D8 */ s32 field_0x4D8;
     /* 0x4DC */ u8 field_0x4DC[0x4DD - 0x4DC];

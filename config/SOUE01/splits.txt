@@ -164,6 +164,13 @@ toBeSorted/dowsing_target.cpp:
 
 toBeSorted/lyt/d2d.cpp:
 	.text       start:0x800A9D30 end:0x800ACAB8
+	.data       start:0x80510010 end:0x80510088
+	.sdata2     start:0x80579788 end:0x805797B0
+
+toBeSorted/lyt/d_window.cpp:
+	.text       start:0x800B1630 end:0x800B1818
+	.data       start:0x80510820 end:0x805108B0
+	.sdata2     start:0x805797F0 end:0x805797F8
 
 toBeSorted/time_area_mgr.cpp:
 	.text       start:0x800B9280 end:0x800BB2A0

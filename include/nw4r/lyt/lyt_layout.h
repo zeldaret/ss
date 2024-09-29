@@ -51,8 +51,16 @@ public:
         return mpRootPane;
     }
 
+    void SetRootPane(Pane* root) {
+        mpRootPane = root;
+    }
+
     GroupContainer *GetGroupContainer() const {
         return mpGroupContainer;
+    }
+
+    void SetGroupContainer(GroupContainer *container) {
+        mpGroupContainer = container;
     }
 
 private:

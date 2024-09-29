@@ -2,6 +2,8 @@
 #define D2D_H
 
 #include <m/m2d.h>
+#include <nw4r/lyt/lyt_pane.h>
+#include <nw4r/lyt/lyt_picture.h>
 
 namespace d2d
 {
@@ -10,8 +12,8 @@ class ResAccIf_c : public m2d::ResAccIf_c {
 public:
     /* 0xB4 */ nw4r::lyt::FontRefLink mFontRefLinks[5];
 
-    void fn_800A9D30();
-    void fn_800A9D90(void *data, const char *name);
+    bool attach(void *data, const char *name);
+    void detach();
 };
 
 struct LytBrlanMapping {
@@ -22,11 +24,17 @@ struct LytBrlanMapping {
 class Layout_c : public nw4r::lyt::Layout {
 public:
     virtual ~Layout_c() {}
-
     virtual bool Build(const void *lytResBuf, nw4r::lyt::ResourceAccessor *pResAcsr) override;
     virtual nw4r::lyt::AnimTransform *CreateAnimTransform(const void *animResBuf,
             nw4r::lyt::ResourceAccessor *pResAcsr) override;
+
+    // Bring the overloaded, otherwise shadowed functions in scope
+    using nw4r::lyt::Layout::CreateAnimTransform;
+
+private:
+    nw4r::lyt::Pane *BuildPaneObj(s32 kind, const void *dataPtr, const nw4r::lyt::ResBlockSet &resBlockSet);
 };
+
 
 class Multi_c : public m2d::Base_c {
 public:
@@ -34,11 +42,15 @@ public:
     virtual ~Multi_c() {}
     virtual void draw() override;
     virtual void calc();
-    virtual bool fn_Multi_c_0x14();
+    virtual void fn_Multi_c_0x14();
     virtual bool build(const char *name, m2d::ResAccIf_c *acc);
 
     void calcBefore();
     void calcAfter();
+    nw4r::lyt::Pane *findPane(const char *name) const;
+    nw4r::lyt::Picture *findPicture(const char *name) const;
+    nw4r::lyt::Bounding *findBounding(const char *name) const;
+    void unbindAnims();
 
     Layout_c *getLayout() {
         return &mLayout;
@@ -48,11 +60,12 @@ public:
         mpResAcc = resAcc;
     }
 
+
 protected:
     Layout_c mLayout;
     nw4r::lyt::DrawInfo mDrawInfo;
     m2d::ResAccIf_c *mpResAcc;
-    u32 field_0x88;
+    u32 mFlags;
 };
 
 class LytBase_c : public Multi_c {
@@ -63,37 +76,56 @@ public:
         mLayout.Draw(mDrawInfo);
     };
 
-    LytBase_c *fn_800AAAD0(const char *name);
-    void fn_800AAB70();
-
 private:
     void *mpMsbtInfo;
 };
 
-struct dLytStructA {
-    dLytStructA() {}
-    ~dLytStructA() {}
+struct AnmGroup_c {
+    AnmGroup_c() {}
+    ~AnmGroup_c() {}
 
-    void init(const char *fileName, m2d::ResAccIf_c* acc, d2d::Layout_c *layout, const char *animName);
+    bool init(const char *fileName, m2d::ResAccIf_c* acc, d2d::Layout_c *layout, const char *animName);
+    bool init(nw4r::lyt::AnimTransform *transform, const char *fileName, m2d::ResAccIf_c* acc, nw4r::lyt::Group *group);
 
-    void fn_800AC6D0(bool);
-    void fn_800AC7D0();
-    void fn_800AC860();
+    bool fn_800AC6D0(bool);
+    bool fn_800AC7D0();
+    bool fn_800AC860();
     void fn_800AC870(bool);
-    void fn_800AC910();
+    void setAnmFrame(f32);
+    void syncAnmFrame();
+    void setForward();
+    void setBackward();
 
     inline void setFrame(f32 frame) {
         fn_800AC6D0(false);
         fn_800AC870(true);
         mpFrameCtrl->setFrame(frame);
-        fn_800AC910();
+        syncAnmFrame();
+    }
+
+    inline void play() {
+        mpFrameCtrl->play();
+        syncAnmFrame();
+    }
+
+    inline void setToStart() {
+        mpFrameCtrl->setToStart();
+        syncAnmFrame();
+    }
+
+    inline void setToEnd() {
+        mpFrameCtrl->setToEnd();
+        syncAnmFrame();
     }
 
     u8 field_0x00[0x08 - 0x00];
 
     /* 0x08 */ m2d::FrameCtrl_c *mpFrameCtrl;
-
-    u8 field_0x0C[0x40 - 0x0C];
+    /* 0x0C */ u8 mFlags;
+    /* 0x10 */ nw4r::lyt::AnimResource mAnmResource;
+    /* 0x20 */ nw4r::lyt::Group *mpGroup;
+    /* 0x24 */ nw4r::lyt::AnimTransform *mpAnmTransform;
+    /* 0x28 */ u8 field_0x20[0x40 - 0x28];
 };
 
 struct dLytStructB {

@@ -46,14 +46,14 @@ void dLytPauseDisp00_c::init() {
     lbl_80575260->append(&field_0xE29C);
     for (int i = 0; i < 0x25; i++) {
         if (i != 0x1F && i != 0x20) {
-            d2d::LytBase_c *b = mLytBase.fn_800AAAD0(B_LIST[i]);
+            nw4r::lyt::Bounding *b = mLytBase.findBounding(B_LIST[i]);
             // TODO
         }
     }
 }
 
 void dLytPauseDisp00_c::displayElement(int i, float frame) {
-    d2d::dLytStructA *s = &field_0x00D0[i];
+    d2d::AnmGroup_c *s = &field_0x00D0[i];
     s->setFrame(frame);
 }
 

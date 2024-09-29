@@ -29,7 +29,7 @@ public:
     bool fn_80168760();
     void fn_80168790(s32, f32);
     void fn_80168800(s32);
-    void fn_80168810(d2d::dLytStructA *);
+    void fn_80168810(d2d::AnmGroup_c *);
     void fn_80168880();
 
 private:
@@ -37,7 +37,7 @@ private:
     STATE_MGR_DECLARE(dLytCommonArrow_c);
     /* 0x40 */ d2d::LytBase_c mLytBase;
     d2d::ResAccIf_c mResAcc;
-    d2d::dLytStructA field_0x440[0x9];
+    d2d::AnmGroup_c field_0x440[0x9];
     d2d::dLytStructD field_0x680;
     void *field_0x6A8;
     void *field_0x6AC;

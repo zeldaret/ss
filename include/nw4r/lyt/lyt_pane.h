@@ -50,6 +50,10 @@ public:
         return &mAnimList;
     }
 
+    const math::VEC3 &GetTranslate() const {
+        return mTranslate;
+    }
+
     void SetTranslate(const nw4r::math::VEC3 &value) {
         mTranslate = value;
     }

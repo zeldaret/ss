@@ -26,7 +26,7 @@ extern "C" d2d::dLytStructD *lbl_80575260;
 
 bool dLytCommonArrow_c::init() {
     void *data = LayoutArcManager::sInstance->getLoadedData("CommonArrow");
-    mResAcc.fn_800A9D90(data, "");
+    mResAcc.attach(data, "");
     mLytBase.build("commonArrow_00.brlyt", &mResAcc);
     mLytBase.mPriority = 0x86;
 
@@ -35,8 +35,8 @@ bool dLytCommonArrow_c::init() {
     }
     field_0x680.fn_80065E70(mLytBase.getLayout()->GetRootPane(), 1, 0, 0);
     lbl_80575260->append(&field_0x680);
-    field_0x6A8 = mLytBase.fn_800AAAD0("B_arrowL_00");
-    field_0x6AC = mLytBase.fn_800AAAD0("B_arrowR_00");
+    field_0x6A8 = mLytBase.findBounding("B_arrowL_00");
+    field_0x6AC = mLytBase.findBounding("B_arrowR_00");
     mStateMgr.changeState(StateID_None);
     setState(0);
     return true;
@@ -44,7 +44,7 @@ bool dLytCommonArrow_c::init() {
 
 bool dLytCommonArrow_c::fn_80168490() {
     lbl_80575260->detach(&field_0x680);
-    mLytBase.fn_800AAB70();
+    mLytBase.unbindAnims();
     for (int i = 0; i < 9; i++) {
         field_0x440[i].fn_800AC860();
     }
@@ -55,7 +55,7 @@ bool dLytCommonArrow_c::fn_80168500() {
     mStateMgr.executeState();
     if (!mStateMgr.getStateID()->isEqual(StateID_None)) {
         field_0x440[1].mpFrameCtrl->play();
-        field_0x440[1].fn_800AC910();
+        field_0x440[1].syncAnmFrame();
     }
     mLytBase.fn_Multi_c_0x14();
     field_0x680.field_0x22 = 0;
@@ -110,7 +110,7 @@ bool dLytCommonArrow_c::fn_80168760() {
 }
 
 void dLytCommonArrow_c::fn_80168790(s32 idx, f32 frame) {
-    d2d::dLytStructA *s = &field_0x440[idx];
+    d2d::AnmGroup_c *s = &field_0x440[idx];
     s->setFrame(frame);
 }
 
@@ -118,14 +118,14 @@ void dLytCommonArrow_c::fn_80168800(s32 idx) {
     field_0x440[idx].fn_800AC7D0();
 }
 
-void dLytCommonArrow_c::fn_80168810(d2d::dLytStructA *ctrl) {
+void dLytCommonArrow_c::fn_80168810(d2d::AnmGroup_c *ctrl) {
     if (ctrl->mpFrameCtrl->getFrame()) {
         f32 newFrame = ctrl->mpFrameCtrl->getFrame() - 1.0f;
         if (newFrame <= 0.0f) {
             newFrame = 0.0f;
         }
         ctrl->mpFrameCtrl->setFrame(newFrame);
-        ctrl->fn_800AC910();
+        ctrl->syncAnmFrame();
     }
 }
 
@@ -134,7 +134,7 @@ void dLytCommonArrow_c::fn_80168880() {
 }
 
 void dLytCommonArrow_c::initializeState_None() {
-    mLytBase.fn_800AAB70();
+    mLytBase.unbindAnims();
     field_0x6C8 = 0;
     field_0x6C9 = 0;
     field_0x6CA = 0;
@@ -172,13 +172,13 @@ void dLytCommonArrow_c::initializeState_In() {
 void dLytCommonArrow_c::executeState_In() {
     switch (field_0x6C4) {
     case 0:
-        d2d::dLytStructA *s = &field_0x440[0];
+        d2d::AnmGroup_c *s = &field_0x440[0];
         if (s->mpFrameCtrl->isEndReached() == 1) {
             field_0x6C4 += 1;
             field_0x6CA = 1;
         } else {
             s->mpFrameCtrl->play();
-            s->fn_800AC910();
+            s->syncAnmFrame();
         }
         break;
     case 1:
@@ -202,12 +202,10 @@ void dLytCommonArrow_c::executeState_Wait() {
 
     fn_80168880();
     if (field_0x6B8 == 0) {
-        field_0x440[3].mpFrameCtrl->play();
-        field_0x440[3].fn_800AC910();
+        field_0x440[3].play();
         fn_80168810(&field_0x440[4]);
     } else if (field_0x6B8 == 1) {
-        field_0x440[4].mpFrameCtrl->play();
-        field_0x440[4].fn_800AC910();
+        field_0x440[4].play();
         fn_80168810(&field_0x440[3]);
     } else {
         fn_80168810(&field_0x440[3]);
@@ -224,13 +222,12 @@ void dLytCommonArrow_c::initializeState_Out() {
 void dLytCommonArrow_c::executeState_Out() {
     switch (field_0x6C4) {
     case 0:
-        d2d::dLytStructA *s = &field_0x440[8];
+        d2d::AnmGroup_c *s = &field_0x440[8];
         if (s->mpFrameCtrl->isEndReached() == 1) {
             field_0x6C4 = 1;
             field_0x6CA = 1;
         }
-        s->mpFrameCtrl->play();
-        s->fn_800AC910();
+        s->play();
         break;
     case 1:
         mStateMgr.changeState(StateID_None);

@@ -17,31 +17,28 @@ dLytFader_c::~dLytFader_c() {
         for (int i = 0; i < 3; i++) {
             mLytStructAs[i].fn_800AC860();
         }
-        mFont.fn_800A9D30();
+        mResAcc.detach();
     }
 }
 
 void dLytFader_c::setStatus(EStatus status) {
     if (status == FADED_OUT) {
         mStatus = FADED_OUT;
-        mLytBase.fn_800AAB70();
-        d2d::dLytStructA *s = &mLytStructAs[0];
+        mLytBase.unbindAnims();
+        d2d::AnmGroup_c *s = &mLytStructAs[0];
         s->fn_800AC6D0(false);
-        s->mpFrameCtrl->setToEnd();
-        s->fn_800AC910();
+        s->setToEnd();
         s->fn_800AC870(true);
-        s->mpFrameCtrl->play();
-        s->fn_800AC910();
+        s->play();
         mLytBase.fn_Multi_c_0x14();
         fn_80175BC0(2);
         mLytBase.getLayout()->GetRootPane()->SetVisible(true);
     } else if (status == FADED_IN) {
         mStatus = FADED_IN;
-        mLytBase.fn_800AAB70();
-        d2d::dLytStructA *s = &mLytStructAs[0];
+        mLytBase.unbindAnims();
+        d2d::AnmGroup_c *s = &mLytStructAs[0];
         s->fn_800AC6D0(false);
-        s->mpFrameCtrl->setToStart();
-        s->fn_800AC910();
+        s->setToStart();
         s->fn_800AC870(true);
         mLytBase.fn_Multi_c_0x14();
         fn_80175BC0(2);
@@ -100,12 +97,12 @@ bool dLytFader_c::init() {
         if (!data) {
             return false;
         }
-        mFont.fn_800A9D90(data, "");
-        mLytBase.setResAcc(&mFont);
+        mResAcc.attach(data, "");
+        mLytBase.setResAcc(&mResAcc);
         mLytBase.build("wipe_01.brlyt", nullptr);
 
         for (int i = 0; i < 3; i++) {
-            mLytStructAs[i].init(blanMap[i].mFile, &mFont, mLytBase.getLayout(), blanMap[i].mName);
+            mLytStructAs[i].init(blanMap[i].mFile, &mResAcc, mLytBase.getLayout(), blanMap[i].mName);
         }
         field_0x4DD = true;
         return true;
@@ -114,48 +111,46 @@ bool dLytFader_c::init() {
 
 void dLytFader_c::fn_801758F0() {
     fn_80175BC0(0);
-    mLytBase.fn_800AAB70();
-    d2d::dLytStructA *s = &mLytStructAs[0];
+    mLytBase.unbindAnims();
+    d2d::AnmGroup_c *s = &mLytStructAs[0];
     s->fn_800AC6D0(false);
     s->mpFrameCtrl->setFrame(0.0f);
-    s->fn_800AC910();
+    s->syncAnmFrame();
     s->mpFrameCtrl->setRate(20.0f / (mFrame - 1));
     s->fn_800AC870(true);
     mLytBase.getLayout()->GetRootPane()->SetVisible(true);
 }
 
 void dLytFader_c::fn_801759B0() {
-    d2d::dLytStructA *s = &mLytStructAs[0];
+    d2d::AnmGroup_c *s = &mLytStructAs[0];
     if (s->mpFrameCtrl->isEndReached() == true) {
         fn_80175BC0(2);
         mStatus = FADED_OUT;
     }
-    s->mpFrameCtrl->play();
-    s->fn_800AC910();
+    s->play();
     mLytBase.fn_Multi_c_0x14();
 }
 
 void dLytFader_c::fn_80175A50() {
     fn_80175BC0(1);
-    mLytBase.fn_800AAB70();
-    d2d::dLytStructA *s = &mLytStructAs[1];
+    mLytBase.unbindAnims();
+    d2d::AnmGroup_c *s = &mLytStructAs[1];
     s->fn_800AC6D0(false);
     s->mpFrameCtrl->setFrame(0.0f);
-    s->fn_800AC910();
+    s->syncAnmFrame();
     s->mpFrameCtrl->setRate(20.0f / (mFrame - 1));
     s->fn_800AC870(true);
     mLytBase.getLayout()->GetRootPane()->SetVisible(true);
 }
 
 void dLytFader_c::fn_80175B10() {
-    d2d::dLytStructA *s = &mLytStructAs[1];
+    d2d::AnmGroup_c *s = &mLytStructAs[1];
     if (s->mpFrameCtrl->isEndReached() == true) {
         fn_80175BC0(2);
         mStatus = FADED_IN;
         mLytBase.getLayout()->GetRootPane()->SetVisible(false);
     }
-    s->mpFrameCtrl->play();
-    s->fn_800AC910();
+    s->play();
     mLytBase.fn_Multi_c_0x14();
 }
 
