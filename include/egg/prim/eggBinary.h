@@ -1,6 +1,8 @@
 #ifndef EGG_BINARY_H
 #define EGG_BINARY_H
 
+#include <common.h>
+
 template <class T>
 class IBinary {
 public:

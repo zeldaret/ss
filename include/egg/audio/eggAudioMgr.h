@@ -1,9 +1,10 @@
-#ifndef EGG_IAUDIO_MANAGER_H
-#define EGG_IAUDIO_MANAGER_H
+#ifndef EGG_AUDIO_MANAGER_H
+#define EGG_AUDIO_MANAGER_H
 
+#include "egg/audio/eggAudioArcPlayerMgr.h"
+#include "egg/audio/eggAudioHeapMgr.h"
 #include "egg/core/eggHeap.h"
 #include "egg/egg_types.h"
-
 
 namespace EGG {
 class IAudioMgr {

@@ -1230,8 +1230,14 @@ egg/gfx/eggIScnProc.cpp:
 	.text       start:0x804A7BC0 end:0x804A7F7C
 
 egg/gfx/eggLight.cpp:
-	.text       start:0x804A7F80 end:0x804AE644
+	.text       start:0x804A7F80 end:0x804AB24C
+
+egg/gfx/eggLightTexture.cpp:
+	.text       start:0x804AB250 end:0x804AD448
 	.ctors      start:0x804DB9A4 end:0x804DB9A8
+
+egg/gfx/eggLightTextureMgr.cpp:
+	.text       start:0x804AD450 end:0x804AE644
 
 egg/gfx/eggModelEx.cpp:
 	.text       start:0x804AE650 end:0x804AEC20
