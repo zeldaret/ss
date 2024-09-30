@@ -20,6 +20,19 @@ static const d2d::LytBrlanMapping brlanMap[] = {
         {"commonArrow_00_out.brlan", "G_inOut_00"},
 };
 
+#define ANIM_IN 0
+#define ANIM_LOOP 1
+#define ANIM_TYPE 2
+#define ANIM_ONOFF_L 3
+#define ANIM_ONOFF_R 4
+
+#define ANIM_DECIDE_OFFSET 5
+
+#define ANIM_DECIDE_L 5
+#define ANIM_DECIDE_R 6
+#define ANIM_INPUT 7
+#define ANIM_OUT 8
+
 dLytCommonArrow_c::dLytCommonArrow_c() : mStateMgr(*this, sStateID::null) {}
 
 extern "C" d2d::dLytStructD *lbl_80575260;
@@ -31,7 +44,7 @@ bool dLytCommonArrow_c::init() {
     mLytBase.mPriority = 0x86;
 
     for (int i = 0; i < 9; i++) {
-        field_0x440[i].init(brlanMap[i].mFile, &mResAcc, mLytBase.getLayout(), brlanMap[i].mName);
+        mAnmGroups[i].init(brlanMap[i].mFile, &mResAcc, mLytBase.getLayout(), brlanMap[i].mName);
     }
     field_0x680.fn_80065E70(mLytBase.getLayout()->GetRootPane(), 1, 0, 0);
     lbl_80575260->append(&field_0x680);
@@ -46,7 +59,7 @@ bool dLytCommonArrow_c::fn_80168490() {
     lbl_80575260->detach(&field_0x680);
     mLytBase.unbindAnims();
     for (int i = 0; i < 9; i++) {
-        field_0x440[i].fn_800AC860();
+        mAnmGroups[i].fn_800AC860();
     }
     return true;
 }
@@ -54,8 +67,7 @@ bool dLytCommonArrow_c::fn_80168490() {
 bool dLytCommonArrow_c::fn_80168500() {
     mStateMgr.executeState();
     if (!mStateMgr.getStateID()->isEqual(StateID_None)) {
-        field_0x440[1].mpFrameCtrl->play();
-        field_0x440[1].syncAnmFrame();
+        mAnmGroups[ANIM_LOOP].play();
     }
     mLytBase.calc();
     field_0x680.field_0x22 = 0;
@@ -71,18 +83,19 @@ bool dLytCommonArrow_c::addToDrawList() {
     return true;
 }
 
-void dLytCommonArrow_c::setState(s32 state) {
-    field_0x6B0 = state;
-    if (state == 0) {
+void dLytCommonArrow_c::setState(s32 ty) {
+    mType = ty;
+    if (ty == 0) {
         mLytBase.mPriority = 0x86;
     } else {
         mLytBase.mPriority = 0x80;
     }
 }
 
-void dLytCommonArrow_c::fn_80168640(f32 *arg) {
-    // TODO
-    mLytBase.getLayout()->GetRootPane()->SetTranslate(nw4r::math::VEC3(arg[0], arg[1], 0.0f));
+void dLytCommonArrow_c::fn_80168640(const mVec3_c &arg) {
+    nw4r::math::VEC3 v((Vec &)arg);
+    v.z = 0.0f;
+    mLytBase.getLayout()->GetRootPane()->SetTranslate(v);
 }
 
 bool dLytCommonArrow_c::fn_80168680() {
@@ -110,26 +123,46 @@ bool dLytCommonArrow_c::fn_80168760() {
 }
 
 void dLytCommonArrow_c::fn_80168790(s32 idx, f32 frame) {
-    d2d::AnmGroup_c *s = &field_0x440[idx];
-    s->setFrame(frame);
+    d2d::AnmGroup_c &g = mAnmGroups[idx];
+    g.setFrameAndControlThings(frame);
 }
 
 void dLytCommonArrow_c::fn_80168800(s32 idx) {
-    field_0x440[idx].fn_800AC7D0();
+    mAnmGroups[idx].fn_800AC7D0();
 }
 
 void dLytCommonArrow_c::fn_80168810(d2d::AnmGroup_c *ctrl) {
-    if (ctrl->mpFrameCtrl->getFrame()) {
-        f32 newFrame = ctrl->mpFrameCtrl->getFrame() - 1.0f;
+    if (ctrl->getFrame()) {
+        f32 newFrame = ctrl->getFrame() - 1.0f;
         if (newFrame <= 0.0f) {
             newFrame = 0.0f;
         }
-        ctrl->mpFrameCtrl->setFrame(newFrame);
-        ctrl->syncAnmFrame();
+        ctrl->setFrame(newFrame);
     }
 }
 
-void dLytCommonArrow_c::fn_80168880() {}
+void dLytCommonArrow_c::fn_80168880() {
+    int i = -1;
+    if (lbl_80572D10 == 0) {
+        field_0x6B4 = 2;
+        return;
+    }
+
+    SomeVtableThing *thing = C_BASE->getThing();
+    if (thing != nullptr && thing->getType() == 'lyt ') {
+        if (thing->field_0x24 == field_0x6A8) {
+            i = 0;
+        } else if (thing->field_0x24 == field_0x6AC) {
+            i = 1;
+        }
+    }
+
+    if (i >= 0) {
+        field_0x6B4 = i;
+    } else {
+        field_0x6B4 = 2;
+    }
+}
 
 void dLytCommonArrow_c::initializeState_None() {
     mLytBase.unbindAnims();
@@ -142,7 +175,7 @@ void dLytCommonArrow_c::initializeState_None() {
     field_0x6BC = 2;
     field_0x6C0 = 2;
     field_0x6C4 = 0;
-    fn_80168790(0, 0.0f);
+    fn_80168790(ANIM_IN, 0.0f);
     field_0x6CC = 1;
 }
 void dLytCommonArrow_c::executeState_None() {
@@ -158,25 +191,24 @@ void dLytCommonArrow_c::finalizeState_None() {
 void dLytCommonArrow_c::initializeState_In() {
     field_0x6C4 = 0;
     field_0x6CB = 1;
-    f32 tmp = 0.0f;
-    if (field_0x6B0 == 1) {
-        tmp = 1.0f;
+    f32 animType = 0.0f;
+    if (mType == 1) {
+        animType = 1.0f;
     }
-    fn_80168790(2, tmp);
-    fn_80168790(3, 0.0f);
-    fn_80168790(4, 0.0f);
-    fn_80168790(7, 0.0f);
+    fn_80168790(ANIM_TYPE, animType);
+    fn_80168790(ANIM_ONOFF_L, 0.0f);
+    fn_80168790(ANIM_ONOFF_R, 0.0f);
+    fn_80168790(ANIM_INPUT, 0.0f);
 }
 void dLytCommonArrow_c::executeState_In() {
     switch (field_0x6C4) {
     case 0:
-        d2d::AnmGroup_c *s = &field_0x440[0];
-        if (s->mpFrameCtrl->isEndReached() == 1) {
+        d2d::AnmGroup_c *s = &mAnmGroups[ANIM_IN];
+        if (s->isEndReached() == 1) {
             field_0x6C4 += 1;
             field_0x6CA = 1;
         } else {
-            s->mpFrameCtrl->play();
-            s->syncAnmFrame();
+            s->play();
         }
         break;
     case 1:
@@ -186,12 +218,16 @@ void dLytCommonArrow_c::executeState_In() {
     }
 }
 void dLytCommonArrow_c::finalizeState_In() {
-    fn_80168800(0);
+    fn_80168800(ANIM_IN);
 }
 
 void dLytCommonArrow_c::initializeState_Wait() {
     field_0x6C4 = 0;
 }
+
+extern "C" void SmallSoundManager__playSound(void *, u32);
+extern "C" void *SOUND_EFFECT_SOUND_MGR;
+
 void dLytCommonArrow_c::executeState_Wait() {
     if (field_0x6C9 == 1) {
         mStateMgr.changeState(StateID_Out);
@@ -200,28 +236,73 @@ void dLytCommonArrow_c::executeState_Wait() {
 
     fn_80168880();
     if (field_0x6B8 == 0) {
-        field_0x440[3].play();
-        fn_80168810(&field_0x440[4]);
+        d2d::AnmGroup_c &g = mAnmGroups[ANIM_ONOFF_L];
+        g.play();
+        fn_80168810(&mAnmGroups[ANIM_ONOFF_R]);
     } else if (field_0x6B8 == 1) {
-        field_0x440[4].play();
-        fn_80168810(&field_0x440[3]);
+        d2d::AnmGroup_c &g = mAnmGroups[ANIM_ONOFF_R];
+        g.play();
+        fn_80168810(&mAnmGroups[ANIM_ONOFF_L]);
     } else {
-        fn_80168810(&field_0x440[3]);
-        fn_80168810(&field_0x440[4]);
+        fn_80168810(&mAnmGroups[ANIM_ONOFF_L]);
+        fn_80168810(&mAnmGroups[ANIM_ONOFF_R]);
+    }
+
+    d2d::AnmGroup_c &g2 = mAnmGroups[ANIM_INPUT];
+    if (field_0x6CC != 0) {
+        fn_80168810(&g2);
+    } else {
+        g2.play();
+    }
+
+    switch (field_0x6C4) {
+    case 0:
+        if (field_0x6C0 != 2) {
+            fn_80168790(field_0x6C0 + ANIM_DECIDE_OFFSET, 0.0f);
+            if (field_0x6C0 == 0) {
+                SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x142D);
+            } else {
+                SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x142E);
+            }
+            field_0x6C4++;
+        }
+        break;
+    case 1: {
+        d2d::AnmGroup_c &g = mAnmGroups[field_0x6C0 + ANIM_DECIDE_OFFSET];
+        if (g.isEndReached() == true) {
+            field_0x6C4++;
+            field_0x6CA = 1;
+        }
+        g.play();
+    } break;
+    case 2:
+        fn_80168800(field_0x6C0 + ANIM_DECIDE_OFFSET);
+        field_0x6C4 = 0;
+        field_0x6CA = 0;
+        field_0x6C0 = 2;
+        break;
+    }
+
+    if (field_0x6BC != field_0x6B8 && field_0x6B8 != 2) {
+        if (field_0x6B8 == 0) {
+            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x142B);
+        } else {
+            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x142C);
+        }
     }
 }
 void dLytCommonArrow_c::finalizeState_Wait() {}
 
 void dLytCommonArrow_c::initializeState_Out() {
     field_0x6C4 = 0;
-    fn_80168790(8, 0.0f);
+    fn_80168790(ANIM_OUT, 0.0f);
     field_0x6C9 = 0;
 }
 void dLytCommonArrow_c::executeState_Out() {
     switch (field_0x6C4) {
     case 0:
-        d2d::AnmGroup_c *s = &field_0x440[8];
-        if (s->mpFrameCtrl->isEndReached() == 1) {
+        d2d::AnmGroup_c *s = &mAnmGroups[ANIM_OUT];
+        if (s->isEndReached() == 1) {
             field_0x6C4 = 1;
             field_0x6CA = 1;
         }
