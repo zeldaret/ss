@@ -3,9 +3,25 @@
 
 #include <common.h>
 #include <m/m_dvd.h>
-// clang-format off
 #include <sized_string.h>
-// clang-format on
+
+class ArcCallbackHandlerBase {
+public:
+    ArcCallbackHandlerBase(): mPrefix('    ') {}
+    /* vtable at 8050df50 */
+    /** 800651c0 */
+    virtual void CreateArcEntry(void *data, const char *path);
+    /** 800653d0 */
+    virtual void DestroyArcEntry(const char *path);
+
+    u32 mPrefix;
+};
+
+class ArcCallbackHandler : public ArcCallbackHandlerBase {
+public:
+    ArcCallbackHandler() {}
+    static ArcCallbackHandler sInstance;
+};
 
 // TODO: loading status could be an enum (-2/-1/0/+1)
 
@@ -22,7 +38,7 @@ public:
     static BOOL checkArcExistsOnDisk(const char *fileName, const char *dirName);
     static BOOL checkArcExistsOnDiskInner(SizedString<128> &path, const char *fileName, const char *dirName);
 
-    int mount(const char *name, void *data, void *callbackArg, u8 mountDirection, EGG::Heap *heap);
+    int mount(const char *name, void *data, ArcCallbackHandler *callbackArg, u8 mountDirection, EGG::Heap *heap);
     int onMount(void *callbackArg);
 
     int ensureLoadedMaybe(void *callbackArg);
@@ -83,7 +99,7 @@ public:
     dRawArcTable_c();
     ~dRawArcTable_c();
 
-    bool init(u16 count, void *callbackArg, EGG::Heap *heap);
+    bool init(u16 count, ArcCallbackHandler *callbackArg, EGG::Heap *heap);
     BOOL getArcOrLoadFromDisk(const char *name, const char *dirName, u8 mountDirection, EGG::Heap *heap);
     BOOL addEntryFromSuperArc(const char *name, void *data, u8 mountDirection, EGG::Heap *heap);
     int ensureLoadedMaybe2(const char *name);
@@ -101,7 +117,7 @@ public:
 private:
     /* 0x0 */ dRawArcEntry_c *mpEntries;
     /* 0x4 */ u16 mCount;
-    /* 0x8 */ void *mCallbackArg;
+    /* 0x8 */ ArcCallbackHandler *mCallbackArg;
 };
 
 #endif;
