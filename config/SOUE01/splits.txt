@@ -78,6 +78,8 @@ d/d_dylink.cpp:
 d/d_fader.cpp:
 	.text       start:0x80053A30 end:0x80053E70
 	.ctors      start:0x804DB678 end:0x804DB67C
+	.data       start:0x8050D348 end:0x8050D358
+	.sbss       start:0x80575100 end:0x80575108
 
 d/d_font_manager.cpp:
 	.text       start:0x80053E70 end:0x800541EC
@@ -282,6 +284,11 @@ d/lyt/d_lyt_fader.cpp:
 	.data       start:0x80528CC8 end:0x80528D68
 	.sdata      start:0x80572AA8 end:0x80572AB0
 	.sdata2     start:0x8057ABC8 end:0x8057ABE0
+
+d/lyt/d_screen_fader.cpp:
+	.text       start:0x80175BD0 end:0x80175FC4
+	.data       start:0x80528D68 end:0x80528D90
+	.sdata2     start:0x8057ABE0 end:0x8057AC08
 
 d/a/d_a_player.cpp:
 	.text       start:0x801C5C30 end:0x802471F8
