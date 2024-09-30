@@ -57,7 +57,7 @@ bool dLytCommonArrow_c::fn_80168500() {
         field_0x440[1].mpFrameCtrl->play();
         field_0x440[1].syncAnmFrame();
     }
-    mLytBase.fn_Multi_c_0x14();
+    mLytBase.calc();
     field_0x680.field_0x22 = 0;
     field_0x680.fn_80065F70();
     field_0x6BC = field_0x6B8;
