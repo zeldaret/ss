@@ -3738,8 +3738,8 @@ NewObj<Q34nw4r3lyt14GroupContainer>__Q34nw4r3lyt6LayoutFv_PQ34nw4r3lyt14GroupCon
 fn_800AA4E0 = .text:0x800AA4E0; // type:function size:0x50
 __ct__Q23d2d7Multi_cFv = .text:0x800AA530; // type:function size:0xD0
 __dt__Q23d2d8Layout_cFv = .text:0x800AA600; // type:function size:0x58
-calc__Q23d2d7Multi_cFv = .text:0x800AA660; // type:function size:0x24
-fn_Multi_c_0x14__Q23d2d7Multi_cFv = .text:0x800AA690; // type:function size:0x34
+animate__Q23d2d7Multi_cFv = .text:0x800AA660; // type:function size:0x24
+calc__Q23d2d7Multi_cFv = .text:0x800AA690; // type:function size:0x34
 calcBefore__Q23d2d7Multi_cFv = .text:0x800AA6D0; // type:function size:0x24
 calcAfter__Q23d2d7Multi_cFv = .text:0x800AA700; // type:function size:0x78
 draw__Q23d2d7Multi_cFv = .text:0x800AA780; // type:function size:0x178

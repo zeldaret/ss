@@ -161,7 +161,7 @@ Multi_c::Multi_c() : Base_c(0x80), mLayout(), mDrawInfo(), mpResAcc(nullptr), mF
     mDrawInfo.SetLocationAdjust(true);
 }
 
-void Multi_c::calc() {
+void Multi_c::animate() {
     u32 arg = 0;
     if ((mFlags & 1) != 0) {
         arg = 1;
@@ -169,7 +169,7 @@ void Multi_c::calc() {
     mLayout.Animate(arg);
 }
 
-void Multi_c::fn_Multi_c_0x14() {
+void Multi_c::calc() {
     calcBefore();
     calcAfter();
 }
@@ -210,7 +210,7 @@ bool Multi_c::build(const char *name, m2d::ResAccIf_c *acc) {
 
     bool ok = mLayout.Build(res, acc->getAccessor());
     if (ok) {
-        fn_Multi_c_0x14();
+        calc();
     }
     return ok;
 }

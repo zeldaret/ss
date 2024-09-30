@@ -29,7 +29,7 @@ void dLytFader_c::setStatus(EStatus status) {
         s->setToEnd();
         s->fn_800AC870(true);
         s->play();
-        mLytBase.fn_Multi_c_0x14();
+        mLytBase.calc();
         fn_80175BC0(2);
         mLytBase.getLayout()->GetRootPane()->SetVisible(true);
     } else if (status == FADED_IN) {
@@ -39,7 +39,7 @@ void dLytFader_c::setStatus(EStatus status) {
         s->fn_800AC6D0(false);
         s->setToStart();
         s->fn_800AC870(true);
-        mLytBase.fn_Multi_c_0x14();
+        mLytBase.calc();
         fn_80175BC0(2);
         mLytBase.getLayout()->GetRootPane()->SetVisible(false);
     }
@@ -127,7 +127,7 @@ void dLytFader_c::fn_801759B0() {
         mStatus = FADED_OUT;
     }
     s->play();
-    mLytBase.fn_Multi_c_0x14();
+    mLytBase.calc();
 }
 
 void dLytFader_c::fn_80175A50() {
@@ -150,7 +150,7 @@ void dLytFader_c::fn_80175B10() {
         mLytBase.getLayout()->GetRootPane()->SetVisible(false);
     }
     s->play();
-    mLytBase.fn_Multi_c_0x14();
+    mLytBase.calc();
 }
 
 void dLytFader_c::fn_80175BC0(s32 arg) {

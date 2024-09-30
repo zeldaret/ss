@@ -39,8 +39,8 @@ public:
     Multi_c();
     virtual ~Multi_c() {}
     virtual void draw() override;
+    virtual void animate();
     virtual void calc();
-    virtual void fn_Multi_c_0x14();
     virtual bool build(const char *name, m2d::ResAccIf_c *acc);
 
     void calcBefore();
