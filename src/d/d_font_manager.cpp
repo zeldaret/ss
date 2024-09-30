@@ -29,7 +29,7 @@ nw4r::ut::ResFont *dFontMng_c::getFont(u8 type) {
     return &l_dFontMng_obj[index].mFont;
 }
 
-const char *getFontName(u8 type) {
+const char *dFontMng_c::getFontName(u8 type) {
     return fonts[type];
 }
 

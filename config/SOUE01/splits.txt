@@ -169,6 +169,16 @@ toBeSorted/dowsing_target.cpp:
 	.sdata2     start:0x80579640 end:0x80579670
 	.bss        start:0x805A2FB0 end:0x805A3010
 
+d/lyt/d2d.cpp:
+	.text       start:0x800A9D30 end:0x800ACAB8
+	.data       start:0x80510010 end:0x80510088
+	.sdata2     start:0x80579788 end:0x805797B0
+
+d/lyt/d_window.cpp:
+	.text       start:0x800B1630 end:0x800B1818
+	.data       start:0x80510820 end:0x805108B0
+	.sdata2     start:0x805797F0 end:0x805797F8
+
 toBeSorted/time_area_mgr.cpp:
 	.text       start:0x800B9280 end:0x800BB2A0
 
@@ -205,6 +215,20 @@ toBeSorted/skipflag_manager.cpp:
 toBeSorted/special_item_drop_mgr.cpp:
 	.text       start:0x800C7B60 end:0x800C82B0
 	.sbss       start:0x80575438 end:0x80575440
+
+d/lyt/pause_disp_00.cpp:
+	.text       start:0x80159E80 end:0x8015EDE8
+	.ctors      start:0x804DB798 end:0x804DB79C
+	.data       start:0x80525138 end:0x80525EE0
+
+d/lyt/common_arrow.cpp:
+	.text       start:0x80167FE0 end:0x801695E8
+	.ctors      start:0x804DB7AC end:0x804DB7B0
+	.rodata     start:0x804E8D28 end:0x804E8D70
+	.data       start:0x80527298 end:0x80527600
+	.sdata      start:0x805729D0 end:0x805729D8
+	.sdata2     start:0x8057A180 end:0x8057A188
+	.bss        start:0x805B1CB0 end:0x805B1DB0
 
 toBeSorted/counters/counter.cpp:
 	.text       start:0x8016CC40 end:0x8016CD94
@@ -251,6 +275,13 @@ toBeSorted/counters/extra_wallet_counter.cpp:
 	.ctors      start:0x804DB7D4 end:0x804DB7D8
 	.data       start:0x805280B0 end:0x805280D0
 	.sbss       start:0x80575640 end:0x80575648
+
+d/lyt/d_lyt_fader.cpp:
+	.text       start:0x801753A0 end:0x80175BD0
+	.rodata     start:0x804E9AB8 end:0x804E9AD0
+	.data       start:0x80528CC8 end:0x80528D68
+	.sdata      start:0x80572AA8 end:0x80572AB0
+	.sdata2     start:0x8057ABC8 end:0x8057ABE0
 
 d/a/d_a_player.cpp:
 	.text       start:0x801C5C30 end:0x802471F8

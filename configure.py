@@ -150,7 +150,7 @@ config.asflags = [
     f"-I build/{config.version}/include",
     f"--defsym version={version_num}",
 ]
-config.linker_version = "Wii/1.6"
+config.linker_version = "Wii/1.5"
 config.ldflags = [
     "-fp hardware",
     "-nodefaults",
@@ -246,7 +246,7 @@ cflags_rel = [
 def Rel(status, rel_name, cpp_name, extra_cflags=[]):
     return {
         "lib": rel_name,
-        "mw_version": "Wii/1.6",
+        "mw_version": "Wii/1.5",
         "cflags": cflags_rel + extra_cflags,
         "progress_category": "game",
         "host": False,
@@ -258,7 +258,7 @@ def Rel(status, rel_name, cpp_name, extra_cflags=[]):
 def MultiRel(rel_name, objects, extra_cflags=[]):
     return {
         "lib": rel_name,
-        "mw_version": "Wii/1.6",
+        "mw_version": "Wii/1.5",
         "cflags": cflags_rel + extra_cflags,
         "host": False,
         "objects": objects,
@@ -268,7 +268,7 @@ def MultiRel(rel_name, objects, extra_cflags=[]):
 def EGGLib(lib_name, objects):
     return {
         "lib": lib_name,
-        "mw_version": "Wii/1.6",
+        "mw_version": "Wii/1.5",
         "cflags": cflags_egg,
         "progress_category": "egg",
         "host": False,
@@ -296,7 +296,7 @@ config.warn_missing_source = False
 config.libs = [
     {
         "lib": "game_code",
-        "mw_version": "Wii/1.6",
+        "mw_version": "Wii/1.5",
         "cflags": cflags_framework,
         "progress_category": "game",
         "host": False,
@@ -351,6 +351,12 @@ config.libs = [
             Object(NonMatching, "toBeSorted/cc/d_cc_m3d_g_cyl.cpp"),
             Object(NonMatching, "toBeSorted/cc/d_cc_m3d_g_sph.cpp"),
             Object(Matching, "toBeSorted/cc/d_cc_shape_colliders.cpp"),
+            Object(NonMatching, "d/lyt/d2d.cpp"),
+            Object(NonMatching, "d/lyt/d_textbox.cpp"),
+            Object(Matching, "d/lyt/d_window.cpp"),
+            Object(Matching, "d/lyt/d_lyt_fader.cpp"),
+            Object(NonMatching, "d/lyt/common_arrow.cpp"),
+            Object(NonMatching, "d/lyt/pause_disp_00.cpp"),
             Object(NonMatching, "toBeSorted/file_manager.cpp"),
             Object(NonMatching, "toBeSorted/save_manager.cpp"),
             Object(Matching, "DynamicLink.cpp"),

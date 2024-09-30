@@ -34,10 +34,10 @@ public:
     virtual void noop();
     virtual nw4r::lyt::ArcResourceAccessor *getAccessor();
 
-    void attach(void *data, const char *name);
+    bool attach(void *data, const char *name);
     void detach();
 
-private:
+protected:
     nw4r::lyt::ArcResourceAccessor mAccessor;
 };
 
@@ -58,8 +58,29 @@ public:
     f32 getEndFrame() const;
     f32 getEndFrame2() const;
 
-    inline f32 getFrame() {
+    inline f32 getFrame() const {
         return mCurrFrame;
+    }
+
+    inline void setToStart() {
+        setFrame(0.0f);
+    }
+
+    inline bool isEndReached() const {
+        f32 actualEnd = mEndFrame - 1.0f;
+        return mCurrFrame >= actualEnd;
+    }
+
+    inline void setToEnd() {
+        setFrame(mEndFrame - 1.0f);
+    }
+
+    inline void setForward() {
+        mFlags = mFlags & ~FLAG_BACKWARDS;
+    }
+
+    inline void setBackward() {
+        mFlags = mFlags | FLAG_BACKWARDS;
     }
 
 private:
@@ -71,11 +92,11 @@ private:
         return (mFlags & FLAG_BACKWARDS) != 0;
     }
 
-    f32 mEndFrame;
-    f32 mCurrFrame;
-    f32 mPrevFrame;
-    f32 mRate;
-    u8 mFlags;
+    /* 0x04 */ f32 mEndFrame;
+    /* 0x08 */ f32 mCurrFrame;
+    /* 0x0C */ f32 mPrevFrame;
+    /* 0x10 */ f32 mRate;
+    /* 0x14 */ u8 mFlags;
 };
 
 class Anm_c {
@@ -114,9 +135,11 @@ class Base_c {
 public:
     Base_c(u8 priority) : mPriority(priority) {}
     /* 0x00 */ nw4r::ut::Node mLink;
-    /* vt 0x04 */
-    virtual ~Base_c();
-    virtual void draw();
+
+    /* vt offset 0x04 */
+    /* vt 0x08 */ virtual ~Base_c();
+    /* vt 0x0C */ virtual void draw();
+
     /* 0x0C */ u8 mPriority;
 
     void addToDrawList();
@@ -125,10 +148,10 @@ public:
 class Simple_c : public Base_c {
 public:
     Simple_c();
-    virtual ~Simple_c();
-    virtual void draw() override;
-    virtual void calc();
-    virtual bool build(const char *name, ResAccIf_c *acc);
+    /* vt 0x08 */ virtual ~Simple_c();
+    /* vt 0x0C */ virtual void draw() override;
+    /* vt 0x10 */ virtual void calc();
+    /* vt 0x14 */ virtual bool build(const char *name, ResAccIf_c *acc);
 
     void calcBefore();
     void calcAfter();
@@ -148,6 +171,6 @@ private:
     u32 field_0x94;
 };
 
-} // namespace m2d
+}
 
 #endif
