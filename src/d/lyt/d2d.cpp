@@ -220,7 +220,6 @@ nw4r::lyt::Pane *Multi_c::findPane(const char *name) const {
 }
 
 nw4r::lyt::Picture *Multi_c::findPicture(const char *name) const {
-    // This doesn't want to match quite yet
     nw4r::lyt::Pane *p = findPane(name);
     if (p != nullptr) {
         return nw4r::ut::DynamicCast<nw4r::lyt::Picture *>(p);
@@ -229,7 +228,6 @@ nw4r::lyt::Picture *Multi_c::findPicture(const char *name) const {
 }
 
 nw4r::lyt::Bounding *Multi_c::findBounding(const char *name) const {
-    // This doesn't want to match quite yet
     nw4r::lyt::Pane *p = findPane(name);
     if (p != nullptr) {
         return nw4r::ut::DynamicCast<nw4r::lyt::Bounding *>(p);

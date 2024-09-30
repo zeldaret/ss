@@ -9,7 +9,7 @@ class dTextBox_c : public nw4r::lyt::TextBox {
 public:
     dTextBox_c(const nw4r::lyt::res::TextBox *pBlock, const nw4r::lyt::ResBlockSet &ResBlockSet);
 
-    f32 calcWidthMaybe(f32 *);
+    f32 GetLineWidth(f32 *pOutSpacing);
 
 private:
     u8 field_0x104[0x204 - 0x104];

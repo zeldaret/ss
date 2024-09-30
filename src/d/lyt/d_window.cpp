@@ -4,7 +4,7 @@
 dWindow_c::dWindow_c(const nw4r::lyt::res::Window *pBlock, const nw4r::lyt::ResBlockSet &ResBlockSet)
     : nw4r::lyt::Window(pBlock, ResBlockSet) {}
 
-void dWindow_c::fn_800B1670(dTextBox_c *textBox, f32 f) {
+void dWindow_c::UpdateSize(dTextBox_c *textBox, f32 f) {
     if (textBox == nullptr) {
         return;
     }
@@ -20,9 +20,9 @@ void dWindow_c::fn_800B1670(dTextBox_c *textBox, f32 f) {
         f = (my.x - other.x) * 2.0f;
     }
 
-    nw4r::lyt::Size size = *GetSize();
-    f32 tmp = textBox->calcWidthMaybe(nullptr);
-    tmp += f;
-    size.width = tmp;
+    nw4r::lyt::Size size = GetSize();
+    f32 width = textBox->GetLineWidth(nullptr);
+    width += f;
+    size.width = width;
     SetSize(size);
 }

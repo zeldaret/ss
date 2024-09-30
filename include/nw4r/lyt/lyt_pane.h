@@ -65,8 +65,8 @@ public:
         return mpParent;
     }
 
-    const math::VEC2 *GetScale() const {
-        return &mScale;
+    const math::VEC2 &GetScale() const {
+        return mScale;
     }
     void SetScale(const math::VEC2 &value) {
         mScale = value;
@@ -79,8 +79,8 @@ public:
         mAlpha = value;
     }
 
-    const Size *GetSize() const {
-        return &mSize;
+    const Size &GetSize() const {
+        return mSize;
     }
     void SetSize(const Size &value) {
         mSize = value;
