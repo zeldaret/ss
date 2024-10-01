@@ -47,7 +47,7 @@ struct DataRef {
 
 template <typename T> struct Table {
     u32 count; // at 0x0
-    T items[]; // at 0x4
+    T items[1]; // at 0x4
 };
 
 template <typename T0, typename T1, typename T2, typename T3>
