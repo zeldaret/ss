@@ -314,7 +314,7 @@ config.libs = [
             Object(NonMatching, "d/d_dvd_unk.cpp"),
             Object(NonMatching, "d/d_dylink.cpp"),
             Object(Matching, "d/d_font_manager.cpp"),
-            Object(NonMatching, "d/d_heap.cpp"),
+            Object(Matching, "d/d_heap.cpp"),
             Object(Matching, "d/d_rawarchive.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
             Object(NonMatching, "d/d_sys.cpp"),
