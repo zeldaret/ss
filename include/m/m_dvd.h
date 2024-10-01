@@ -2,8 +2,8 @@
 #define M_DVD_H
 
 #include <egg/core/eggArchive.h>
-#include <egg/core/eggDecomp.h>
 #include <egg/core/eggHeap.h>
+#include <egg/core/eggStreamDecomp.h>
 #include <egg/core/eggThread.h>
 #include <m/m_heap.h>
 
@@ -19,9 +19,7 @@ class TUncompressInfo_Base_c {
 public:
     TUncompressInfo_Base_c(u8 type, const char *extension) : mType(type), mExtension(extension) {}
     virtual ~TUncompressInfo_Base_c() {}
-    virtual EGG::StreamDecomp *Construct() const {
-        return nullptr;
-    }
+    virtual EGG::StreamDecomp *Construct() const { return nullptr; }
     virtual void Destruct() const {}
 
     u8 mType;
@@ -32,9 +30,7 @@ template <typename T>
 class TUncompressInfo_c : public TUncompressInfo_Base_c {
 public:
     TUncompressInfo_c(u8 type, const char *extension) : TUncompressInfo_Base_c(type, extension) {}
-    virtual T *Construct() const {
-        return new (somePtr) T();
-    }
+    virtual T *Construct() const { return new (somePtr) T(); }
     virtual void Destruct() const {}
 };
 
@@ -172,13 +168,9 @@ public:
 
     virtual void *run() override;
 
-    OSThread *getMyOsThread() {
-        return mOSThread;
-    }
+    OSThread *getMyOsThread() { return mOSThread; }
 
-    void setThreadHeap(EGG::Heap *heap) {
-        setThreadCurrentHeap(heap);
-    }
+    void setThreadHeap(EGG::Heap *heap) { setThreadCurrentHeap(heap); }
 
     static void *run(mDvd_param_c *dvd);
 };

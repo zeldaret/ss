@@ -1,4 +1,4 @@
-#include <egg/core/eggDecomp.h>
+#include <egg/core/eggStreamDecomp.h>
 
 namespace EGG {
 

@@ -1,9 +1,9 @@
 #ifndef EGG_DVD_RIPPER_H
 #define EGG_DVD_RIPPER_H
 
-#include "egg/core/eggDecomp.h"
 #include "egg/core/eggDvdFile.h"
 #include "egg/core/eggHeap.h"
+#include "egg/core/eggStreamDecomp.h"
 
 #include <common.h>
 
