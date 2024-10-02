@@ -2,6 +2,7 @@
 #define EGG_QUAT_H
 
 #include "egg/math/eggVector.h"
+
 #include <common.h>
 
 namespace EGG {

@@ -2,18 +2,19 @@
 #define EGG_ASYNC_DISPLAY_H
 
 #include "egg/core/eggDisplay.h"
+
 #include <common.h>
 
 namespace EGG {
 
 class AsyncDisplay : public Display {
 public:
-    // vtable at 0x04 | 8056eb60
-    /* vt 0x08 | 80497f20 */ virtual void beginFrame();
-    /* vt 0x10 | 804980e0 */ virtual void endRender();
-    /* vt 0x14 | 804980c0 */ virtual void endFrame();
-    /* vt 0x18 | 804982d0 */ virtual u32 getTickPerFrame();
-    /* vt 0x1C | 80498100 */ virtual void preVRetrace();
+    // vtable at 0x04
+    /* vt 0x08 */ virtual void beginFrame();
+    /* vt 0x10 */ virtual void endRender();
+    /* vt 0x14 */ virtual void endFrame();
+    /* vt 0x18 */ virtual u32 getTickPerFrame();
+    /* vt 0x1C */ virtual void preVRetrace();
 
 private:
     inline void waitForMsg(bool);
@@ -35,10 +36,10 @@ public:
     /* 0xBC */ u32 field_0xBC;
 
 public:
-    /* 80497e40 */ AsyncDisplay(u8 maxRetrace);
-    /* 80497ec0 */ f32 calcS();
-    /* 80498260 */ void clearEFB();
-    /* 804982f0 */ void clearEFB(u16, u16, u16, u16, u16, u16, nw4r::ut::Color);
+    AsyncDisplay(u8 maxRetrace);
+    f32 calcS();
+    void clearEFB();
+    void clearEFB(u16, u16, u16, u16, u16, u16, nw4r::ut::Color);
 };
 
 } // namespace EGG

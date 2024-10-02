@@ -1,6 +1,7 @@
 #ifndef EGG_LIGHT_H
 #define EGG_LIGHT_H
 
+#include <egg/core/eggHeap.h>
 #include <egg/prim/eggBinary.h>
 #include <nw4r/types_nw4r.h>
 

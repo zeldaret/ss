@@ -665,21 +665,21 @@ config.libs = [
             Object(Matching, "nw4r/lyt/lyt_arcResourceAccessor.cpp"),
             Object(Matching, "nw4r/lyt/lyt_common.cpp"),
             Object(Matching, "nw4r/lyt/lyt_util.cpp"),
-        ], [""]
+        ],
     ),
     # EGG
     EGGLib(
         "core",
         [
-            Object(NonMatching, "egg/core/eggArchive.cpp"),
-            Object(NonMatching, "egg/core/eggDvdFile.cpp"),
-            Object(NonMatching, "egg/core/eggDvdRipper.cpp"),
-            Object(NonMatching, "egg/core/eggStream.cpp"),
+            Object(Matching, "egg/core/eggArchive.cpp"),
+            Object(Matching, "egg/core/eggDvdFile.cpp"),
+            Object(Matching, "egg/core/eggDvdRipper.cpp"),
+            Object(Matching, "egg/core/eggStreamDecomp.cpp"),
             Object(Matching, "egg/core/eggAllocator.cpp"),
             Object(Matching, "egg/core/eggHeap.cpp"),
             Object(Matching, "egg/core/eggExpHeap.cpp"),
-            Object(NonMatching, "egg/core/eggFrmHeap.cpp"),
-            Object(NonMatching, "egg/core/eggAssertHeap.cpp"),
+            Object(Matching, "egg/core/eggFrmHeap.cpp"),
+            Object(Matching, "egg/core/eggAssertHeap.cpp"),
             Object(Matching, "egg/core/eggDisposer.cpp"),
             Object(Matching, "egg/core/eggThread.cpp"),
             Object(NonMatching, "egg/core/eggUnk.cpp"),
@@ -691,7 +691,7 @@ config.libs = [
             Object(Matching, "egg/core/eggXfb.cpp"),
             Object(Matching, "egg/core/eggXfbManager.cpp"),
             Object(Matching, "egg/core/eggGraphicsFifo.cpp"),
-            Object(NonMatching, "egg/core/eggController.cpp"),
+            Object(Matching, "egg/core/eggController.cpp"),
         ],
     ),
     EGGLib(
@@ -707,6 +707,63 @@ config.libs = [
         "prim",
         [
             Object(Matching, "egg/prim/eggAssert.cpp"),
+        ],
+    ),
+    EGGLib(
+        "gfx",
+        [
+            Object(NonMatching, "egg/gfx/eggCamera.cpp"),
+            Object(NonMatching, "egg/gfx/eggPalette.cpp"),
+            Object(NonMatching, "egg/gfx/eggTexture.cpp"),
+            Object(NonMatching, "egg/gfx/eggUnk1.cpp"),  # Unknown
+            Object(NonMatching, "egg/gfx/eggCapTexture.cpp"),
+            Object(NonMatching, "egg/gfx/eggCpuTexture.cpp"),
+            Object(NonMatching, "egg/gfx/eggDrawGX.cpp"),
+            Object(NonMatching, "egg/gfx/eggDrawPathBase.cpp"),
+            Object(NonMatching, "egg/gfx/eggDrawPathUnk1.cpp"),
+            Object(NonMatching, "egg/gfx/eggDrawPathDOF.cpp"),
+            Object(NonMatching, "egg/gfx/eggDrawPathUnk2.cpp"),
+            Object(NonMatching, "egg/gfx/eggFog.cpp"),
+            Object(NonMatching, "egg/gfx/eggFrustum.cpp"),
+            Object(NonMatching, "egg/gfx/eggG3DUtility.cpp"), # Unknown Guess
+            Object(NonMatching, "egg/gfx/eggGfxEngine.cpp"),
+            Object(NonMatching, "egg/gfx/eggGlobalDrawState.cpp"),
+            Object(NonMatching, "egg/gfx/eggGXUtility.cpp"),
+            Object(NonMatching, "egg/gfx/eggIScnProc.cpp"),
+            Object(NonMatching, "egg/gfx/eggLight.cpp"),
+            Object(NonMatching, "egg/gfx/eggLightTexture.cpp"),
+            Object(NonMatching, "egg/gfx/eggLightTextureMgr.cpp"),
+            Object(NonMatching, "egg/gfx/eggModelEx.cpp"),
+            Object(NonMatching, "egg/gfx/eggPostEffectBase.cpp"),
+            Object(NonMatching, "egg/gfx/eggPostEffectBlur.cpp"),
+            Object(NonMatching, "egg/gfx/eggPostEffectUnk1.cpp"), # Unknown
+            Object(NonMatching, "egg/gfx/eggPostEffectUnk2.cpp"),  # Unknown
+            Object(NonMatching, "egg/gfx/eggPostEffectMask.cpp"),
+            Object(NonMatching, "egg/gfx/eggPostEffectMaskDOF.cpp"),
+            Object(NonMatching, "egg/gfx/eggPostEffectSimple.cpp"),
+            Object(NonMatching, "egg/gfx/eggScreen.cpp"),
+            Object(NonMatching, "egg/gfx/eggScreenEffectBase.cpp"),
+            Object(NonMatching, "egg/gfx/eggScreenEffectBlur.cpp"), # Unknown Guess
+            Object(NonMatching, "egg/gfx/eggStateEfb.cpp"),
+            Object(NonMatching, "egg/gfx/eggStateGX.cpp"),
+            Object(NonMatching, "egg/gfx/eggTextureBuffer.cpp"),
+        ],
+    ),
+    EGGLib(
+        "audio",
+        [
+            Object(NonMatching, "egg/audio/eggAudioArcPlayerMgr.cpp"),
+            Object(NonMatching, "egg/audio/eggAudioHeapMgr.cpp"),
+            Object(NonMatching, "egg/audio/eggAudioMgr.cpp"),
+            Object(NonMatching, "egg/audio/eggAudioRmtSpeakerMgr.cpp"),
+            Object(NonMatching, "egg/audio/eggAudioUtility.cpp"),
+            Object(NonMatching, "egg/audio/eggAudioSystem.cpp"),
+        ],
+    ),
+    EGGLib(
+        "util",
+        [
+            Object(NonMatching, "egg/util/eggException.cpp"),
         ],
     ),
     # {

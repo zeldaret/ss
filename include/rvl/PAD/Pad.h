@@ -5,6 +5,9 @@
 extern "C" {
 #endif
 
+typedef struct {
+} PADStatus;
+
 extern u32 __PADSpec;
 
 BOOL __PADDisableRecalibration(BOOL);

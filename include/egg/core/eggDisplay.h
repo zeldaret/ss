@@ -6,29 +6,33 @@
 #include "egg/prim/eggBitFlag.h"
 #include "nw4r/ut.h"
 #include "rvl/VI.h"
-#include <common.h>
 
-/* 80497530 */ // void PreRetraceCallback(void);
+#include <common.h>
 
 namespace EGG {
 
 class Display {
 public:
-    enum EFlagBits { mFlag_SetClear, mFlag_WaitForRetrace };
+    enum EFlagBits {
+        mFlag_SetClear,
+        mFlag_WaitForRetrace
+    };
     /* 0x00*/ TBitFlag<u8> mFlag;
+    enum EScreenStateBits {
+        mScreenStateFlag_SetBlack
+    };
 
 public:
-    // vtable at 0x04 | 8056eac8
-    /* vt 0x08 | 80497600 */ virtual void beginFrame();
-    /* vt 0x0C | 804976c0 */ virtual void beginRender();
-    /* vt 0x10 | 804976d0 */ virtual void endRender();
-    /* vt 0x14 | 804976e0 */ virtual void endFrame();
-    /* vt 0x18 | 804975f0 */ virtual u32 getTickPerFrame();
-    /* vt 0x1C | 804976f0 */ virtual void preVRetrace();
+    // vtable at 0x04
+    /* vt 0x08 */ virtual void beginFrame();
+    /* vt 0x0C */ virtual void beginRender();
+    /* vt 0x10 */ virtual void endRender();
+    /* vt 0x14 */ virtual void endFrame();
+    /* vt 0x18 */ virtual u32 getTickPerFrame();
+    /* vt 0x1C */ virtual void preVRetrace();
 
 public:
     /* 0x08 */ u8 mMaxRetraces;
-    enum EScreenStateBits { mScreenStateFlag_SetBlack };
     /* 0x09 */ TBitFlag<u8> mScreenStateFlag;
     /* 0x0C */ u32 mRetraceCount;
     /* 0x10 */ u32 mFrameCount;
@@ -40,13 +44,13 @@ public:
     /* 0x28 */ f32 mFrequency;
 
 public:
-    /* 80497570 */ Display(u8 maxRetrace);
-    /* 804977d0 */ void copyEFBtoXFB();
-    /* 80497870 */ void calcFrequency();
-    /*  inline  */ void setBlack(bool b) {}
+    Display(u8 maxRetrace);
+    void copyEFBtoXFB();
+    void calcFrequency();
+    void setBlack(bool b) {}
 
 public:
-    /* 80497900 */ static u32 sTickPeriod;
+    static u32 sTickPeriod;
 };
 
 } // namespace EGG

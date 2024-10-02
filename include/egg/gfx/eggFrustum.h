@@ -9,8 +9,12 @@ namespace EGG {
 // TODO: Fill out more
 class Frustum {
 public:
-    enum CanvasMode {};
-    enum ProjectionType { PROJ_ORTHO, PROJ_PERSP };
+    enum CanvasMode {
+    };
+    enum ProjectionType {
+        PROJ_ORTHO,
+        PROJ_PERSP
+    };
 
 private:
     /* 0x00 */ ProjectionType mProjType;

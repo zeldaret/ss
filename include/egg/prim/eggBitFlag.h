@@ -11,53 +11,53 @@ template <typename T>
 class TBitFlag {
 public:
     T value;
-    inline void makeAllZero() {
+    void makeAllZero() {
         value = T();
     }
-    inline TBitFlag() {}
-    inline TBitFlag(T value): value(value) {}
-    inline T makeMask(u8 bit) const {
+    TBitFlag() {}
+    TBitFlag(T value) : value(value) {}
+    T makeMask(u8 bit) const {
         return 1 << bit;
     }
-    inline bool on(T mask) const {
-        return value & mask;
+    bool on(T mask) const {
+        return (value & mask);
     }
-    inline bool off(T mask) const {
+    bool off(T mask) const {
         return !(value & mask);
     }
-    inline void set(T mask) {
+    void set(T mask) {
         value |= mask;
     }
-    inline void reset(T mask) {
+    void reset(T mask) {
         value &= ~mask;
     }
-    inline bool onBit(u8 bit) const {
+    bool onBit(u8 bit) const {
         return on(makeMask(bit));
     }
-    inline bool offBit(u8 bit) const {
+    bool offBit(u8 bit) const {
         return off(makeMask(bit));
     }
-    inline void setBit(u8 bit) {
+    void setBit(u8 bit) {
         set(makeMask(bit));
     }
-    inline void resetBit(u8 bit) {
+    void resetBit(u8 bit) {
         reset(makeMask(bit));
     }
-    inline void toggleBit(u8 bit) {
+    void toggleBit(u8 bit) {
         if (!onBit(bit)) {
             setBit(bit);
         } else {
             resetBit(bit);
         }
     }
-    inline void changeBit(u8 bit, bool b) {
+    void changeBit(u8 bit, bool b) {
         if (b) {
             setBit(bit);
         } else {
             resetBit(bit);
         }
     }
-    inline T getDirect() {
+    T getDirect() const {
         return value;
     }
 };

@@ -2,14 +2,14 @@
 
 namespace EGG {
 
-/* 80495ab0 */ ExpHeap::ExpHeap(MEMiHeapHead *heapHandle) : Heap(heapHandle) {}
+ExpHeap::ExpHeap(MEMiHeapHead *heapHandle) : Heap(heapHandle) {}
 
-/* 80495af0 */ ExpHeap::~ExpHeap() {
+ExpHeap::~ExpHeap() {
     dispose();
     MEMDestroyExpHeap(mHeapHandle);
 }
 
-/* 80495b70 */ ExpHeap *ExpHeap::create(void *heapStart, size_t size, u16 attr) {
+ExpHeap *ExpHeap::create(void *heapStart, size_t size, u16 attr) {
     ExpHeap *heap = nullptr;
     void *startAddr = heapStart;
     void *heapEnd = ROUND_DOWN_PTR((u8 *)heapStart + size, 0x04);
@@ -31,7 +31,7 @@ namespace EGG {
     return heap;
 }
 
-/* 80495c30 */ ExpHeap *ExpHeap::create(size_t size, Heap *heap, u16 attr) {
+ExpHeap *ExpHeap::create(size_t size, Heap *heap, u16 attr) {
     ExpHeap *newHeap = nullptr;
     if (heap == nullptr) {
         heap = sCurrentHeap;
@@ -52,7 +52,7 @@ namespace EGG {
     return newHeap;
 }
 
-/* 80495d00 */ void ExpHeap::destroy() {
+void ExpHeap::destroy() {
     if (sDestroyCallback != nullptr) {
         sDestroyCallback(this);
     }
@@ -64,7 +64,7 @@ namespace EGG {
     }
 }
 
-/* 80495d90 */ void *ExpHeap::alloc(u32 size, s32 align) {
+void *ExpHeap::alloc(u32 size, s32 align) {
     if (mFlag.onBit(0)) {
 #line 182
         OSError("DAME DAME\n");
@@ -84,7 +84,7 @@ namespace EGG {
     return ptr;
 }
 
-/* 80495e50 */ void ExpHeap::free(void *ptr) {
+void ExpHeap::free(void *ptr) {
     if (sFreeCallback != nullptr) {
         HeapFreeArg arg;
         arg.userArg = sFreeCallbackArg;
@@ -95,26 +95,26 @@ namespace EGG {
     MEMFreeToExpHeap(mHeapHandle, ptr);
 }
 
-/* 80495ec0 */ u32 ExpHeap::resizeForMBlock(void *block, u32 size) {
+u32 ExpHeap::resizeForMBlock(void *block, u32 size) {
     return MEMResizeForMBlockExpHeap(mHeapHandle, block, size);
 }
 
-/* 80495ed0 */ u32 ExpHeap::getTotalFreeSize() {
+u32 ExpHeap::getTotalFreeSize() {
     return MEMGetAllocatableSizeForExpHeap(mHeapHandle);
 }
 
-/* 80495ee0 */ u32 ExpHeap::getAllocatableSize(s32 align) {
+u32 ExpHeap::getAllocatableSize(s32 align) {
     return MEMGetAllocatableSizeForExpHeapEx(mHeapHandle, align);
 }
 
-/* 80495d00 */ void ExpHeap::setGroupID(u16 groupId) {
+void ExpHeap::setGroupID(u16 groupId) {
     MEMSetGroupIdForExpHeap(mHeapHandle, groupId);
 }
 
-/* 80495f00 */ u32 ExpHeap::adjust() {
+u32 ExpHeap::adjust() {
     u32 adjustedSize = MEMAdjustExpHeap(mHeapHandle);
-    u32 totalSize = adjustedSize + 0x34;
-    if (totalSize > 0x34) {
+    u32 totalSize = adjustedSize + sizeof(ExpHeap);
+    if (totalSize > sizeof(ExpHeap)) {
         Heap *parent = findParentHeap();
         if (parent != nullptr) {
             parent->resizeForMBlock(mParentBlock, totalSize);
@@ -124,11 +124,11 @@ namespace EGG {
     return 0;
 }
 
-/* 80495f80 */ u32 ExpHeap::getSizeForMBlock(const void *block) {
+u32 ExpHeap::getSizeForMBlock(const void *block) {
     return MEMGetSizeForMBlockExpHeap(block);
 }
 
-/* 80495f90 */ Heap::eHeapKind ExpHeap::getHeapKind() const {
+Heap::eHeapKind ExpHeap::getHeapKind() const {
     return HEAP_KIND_EXPANDED;
 }
 

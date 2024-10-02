@@ -1,16 +1,23 @@
 AccessModifierOffset: -4
-AlignAfterOpenBracket: DontAlign
+AlignAfterOpenBracket: BlockIndent
+AlignArrayOfStructures: Right
 AlignConsecutiveAssignments: None
 AlignConsecutiveBitFields: None
 AlignConsecutiveDeclarations: None
 AlignConsecutiveMacros: None
-AlignEscapedNewlines: DontAlign
-AlignOperands: DontAlign
-AllowAllArgumentsOnNextLine: False
-AllowAllParametersOfDeclarationOnNextLine: False
+AlignConsecutiveShortCaseStatements:
+  Enabled: true
+  AcrossEmptyLines: true
+  AcrossComments: true
+  AlignCaseColons: false
+AlignOperands: AlignAfterOperator
+AlignTrailingComments: Always
+AlignEscapedNewlines: Right
+AllowAllArgumentsOnNextLine: True
+AllowAllParametersOfDeclarationOnNextLine: True
 AllowShortBlocksOnASingleLine: Empty
-AllowShortCaseLabelsOnASingleLine: False
-AllowShortEnumsOnASingleLine: True
+AllowShortCaseLabelsOnASingleLine: True
+AllowShortEnumsOnASingleLine: False
 AllowShortFunctionsOnASingleLine: Empty
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: False
@@ -20,15 +27,27 @@ AlwaysBreakTemplateDeclarations: Yes
 BinPackArguments: True
 BinPackParameters: True
 BitFieldColonSpacing: Both
+BreakBeforeBraces: Custom
+BraceWrapping:
+    AfterCaseLabel: False
+    AfterClass: False
+    AfterControlStatement: Never
+    AfterEnum: False
+    AfterFunction: False
+    AfterNamespace: False
+    AfterUnion: False
+    AfterExternBlock: False
+    BeforeCatch: True
+    BeforeElse: False
+    BeforeWhile: False
 BreakBeforeBinaryOperators: None
-BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: False
 BreakStringLiterals: True
 ColumnLimit: 120
-ContinuationIndentWidth: 8
-IncludeBlocks: Preserve
+ContinuationIndentWidth: 4
+IncludeBlocks: Regroup
 IndentAccessModifiers: False
-IndentCaseLabels: False
+IndentCaseLabels: True
 IndentGotoLabels: True
 IndentWidth: 4
 InsertBraces: True

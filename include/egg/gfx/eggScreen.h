@@ -21,7 +21,13 @@ public:
 
     u8 TODO_0x3C[0x88 - 0x3C];
 
-    enum TVMode { TV_MODE_1, TV_MODE_2, TV_MODE_3, TV_MODE_4, TV_MODE_MAX };
+    enum TVMode {
+        TV_MODE_1,
+        TV_MODE_2,
+        TV_MODE_3,
+        TV_MODE_4,
+        TV_MODE_MAX
+    };
 
     struct TVModeInfo {
         TVModeInfo() {}

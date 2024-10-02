@@ -5,6 +5,7 @@ extern "C" {
 #endif
 
 #include <rvl/WPAD/WPAD.h>
+#include <rvl/WPAD/WPADMem.h>
 
 #ifdef __cplusplus
 }
