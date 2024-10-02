@@ -84,11 +84,7 @@ void mdl_c::mdlCallback_c::ExecCallbackB(nw4r::g3d::WorldMtxManip *m, nw4r::g3d:
     if (mpBaseCallback != nullptr) {
         mpBaseCallback->timingB(nodeId, m, mdl);
     }
-    // Not sure what this does
-    u32 num = mdl.GetResNodeNumEntries();
-    u32 nodeInc = nodeId + 1;
-    u32 tmp = (nodeInc / num);
-    o->SetNodeId(nodeInc - tmp * num);
+    o->SetNodeId((nodeId + 1) % mdl.GetResNodeNumEntries());
 }
 
 void mdl_c::mdlCallback_c::ExecCallbackC(nw4r::math::MTX34 *mat, nw4r::g3d::ResMdl mdl, nw4r::g3d::FuncObjCalcWorld *) {
