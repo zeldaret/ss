@@ -21,6 +21,7 @@ public:
     virtual void GetBinaryInner(Bin *) const override;
     virtual size_t GetBinarySize() override;
     virtual void SetBinaryInner(const Bin &, const Bin &, f32) override;
+    void replaceModelTextures(nw4r::g3d::ResMdl) const;
 
     void drawAndCaptureTexture(f32, f32, f32, f32);
 };

@@ -1,18 +1,8 @@
 #include <d/d_rawarchive.h>
 #include <rvl/VI.h>
 
-class UnkManager {
-public:
-    /* vtable at 8050df50 */
-    /** 800651c0 */
-    virtual void CreateArc(void *data, const char *path);
-    /** 800653d0 */
-    virtual void DestroyArc(const char *path);
 
-    u32 stage;
-};
-
-extern "C" int fn_80061B10(void *d, u32 len) {
+int computeChecksumInner(void *d, u32 len) {
     u32 *data = (u32 *)d;
     u32 result = 0;
     // Compiler will unroll this loop
@@ -22,16 +12,15 @@ extern "C" int fn_80061B10(void *d, u32 len) {
     return result;
 }
 
-extern "C" int fn_80061BA0(void *data, u32 len) {
-    int result = fn_80061B10(data, len);
+int computeChecksum(void *data, u32 len) {
+    int result = computeChecksumInner(data, len);
     return result != 0 ? result : -1;
 }
 
-extern "C" void fn_80061BE0(UnkManager *mgr, const char *name, size_t len) {
-    // Sets stage to all spaces
-    mgr->stage = 0x20202020;
-    // copies the stage name?
-    memcpy((char *)&mgr->stage, name, len);
+void setPrefix(ArcCallbackHandler *mgr, const char *name, size_t len) {
+    mgr->mPrefix = '    ';
+    // Copy the actual name
+    memcpy(&mgr->mPrefix, name, len);
 }
 
 dRawArcEntry_c::dRawArcEntry_c() {
@@ -55,18 +44,18 @@ dRawArcEntry_c::~dRawArcEntry_c() {
 }
 
 void dRawArcEntry_c::searchCallback(void *arg, void *data, const ARCDirEntry *entry, const char *path, bool ctrl) {
-    UnkManager *mgr = (UnkManager *)arg;
+    ArcCallbackHandler *mgr = (ArcCallbackHandler *)arg;
     if (entry->isDir) {
         int len = strlen(entry->name);
-        fn_80061BE0(mgr, entry->name, len <= 4 ? len : 4);
+        setPrefix(mgr, entry->name, len <= 4 ? len : 4);
     } else {
         // dolphin: arg vtable at 8050df50
         // any others?
         if (ctrl) {
-            mgr->CreateArc(data, path);
+            mgr->CreateArcEntry(data, path);
             // branch to 800651c0, sets up room
         } else {
-            mgr->DestroyArc(path);
+            mgr->DestroyArcEntry(path);
             // branch to 800653d0, destroys room
         }
     }
@@ -142,9 +131,6 @@ BOOL dRawArcEntry_c::checkArcExistsOnDisk(const char *fileName, const char *dirN
     return checkArcExistsOnDiskInner(path, fileName, dirName);
 }
 
-// sprintf2
-extern "C" void fn_8003D650(char *out, const char *fmt, ...);
-
 BOOL dRawArcEntry_c::checkArcExistsOnDiskInner(SizedString<128> &path, const char *fileName, const char *dirName) {
     path.sprintf("/US/%s/%s.arc", dirName, fileName);
     if (!mDvd::IsExistPath(&path)) {
@@ -156,7 +142,7 @@ BOOL dRawArcEntry_c::checkArcExistsOnDiskInner(SizedString<128> &path, const cha
     return true;
 }
 
-int dRawArcEntry_c::mount(const char *name, void *data, void *callbackArg, u8 mountDirection, EGG::Heap *heap) {
+int dRawArcEntry_c::mount(const char *name, void *data, ArcCallbackHandler *callbackArg, u8 mountDirection, EGG::Heap *heap) {
     mArcName = name;
     mpArc = EGG::Archive::mount(data, heap, (mountDirection == 0 || mountDirection == 1) ? 4 : -4);
     if (mpArc == nullptr) {
@@ -204,7 +190,7 @@ int dRawArcEntry_c::ensureLoadedMaybe(void *callbackArg) {
         int result = onMount(callbackArg);
         mHeap::restoreCurrentHeap();
         mHeap::adjustFrmHeap(mpFrmHeap);
-        mChecksum = fn_80061BA0(mpData, mAmountRead);
+        mChecksum = computeChecksum(mpData, mAmountRead);
         if (result == -1) {
             return result;
         }
@@ -236,7 +222,7 @@ dRawArcTable_c::~dRawArcTable_c() {
     }
 }
 
-bool dRawArcTable_c::init(u16 count, void *callbackArg, EGG::Heap *heap) {
+bool dRawArcTable_c::init(u16 count, ArcCallbackHandler *callbackArg, EGG::Heap *heap) {
     mpEntries = new (heap, 0x04) dRawArcEntry_c[count]();
     if (mpEntries == nullptr) {
         return false;

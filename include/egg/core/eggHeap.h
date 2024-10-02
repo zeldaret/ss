@@ -146,6 +146,38 @@ public:
         return mName;
     }
 
+    struct AllocCallbackBundle {
+        HeapAllocCallback AllocCallback;
+        void *AllocCallbackArg;
+    };
+
+    struct FreeCallbackBundle {
+        HeapFreeCallback FreeCallback;
+        void *FreeCallbackArg;
+    };
+
+    static inline AllocCallbackBundle setAllocCallback(HeapAllocCallback AllocCallback, void *AllocCallbackArg) {
+        AllocCallbackBundle ret;
+
+        ret.AllocCallback = sAllocCallback;
+        ret.AllocCallbackArg = sAllocCallbackArg;
+        sAllocCallback = AllocCallback;
+        sAllocCallbackArg = AllocCallbackArg;
+
+        return ret;
+    }
+
+    static inline FreeCallbackBundle setFreeCallback(HeapFreeCallback FreeCallback, void *FreeCallbackArg) {
+        FreeCallbackBundle ret;
+
+        ret.FreeCallback = sFreeCallback;
+        ret.FreeCallbackArg = sFreeCallbackArg;
+        sFreeCallback = FreeCallback;
+        sFreeCallbackArg = FreeCallbackArg;
+
+        return ret;
+    }
+
     static nw4r::ut::List sHeapList;
     static OSMutex sRootMutex;
     static Heap *sCurrentHeap;

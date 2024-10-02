@@ -36,12 +36,12 @@ struct WalletStruct {
 }
 
 // TODO main counters class
-extern "C" u16 fn_8016D730(u16);
+extern "C" u16 getCounterByIndex(u16);
 
 /* 8016DEC0 */ static u16 getExtraWalletCapacity() {
-    return 300 * fn_8016D730(0x27);
+    return 300 * getCounterByIndex(0x27);
 }
 
-/* 80575610 */ RupeeCounter lbl_80575610;
+/* 80575610 */ RupeeCounter RUPEE_COUNTER;
 
 /* 8016DF30 */ RupeeCounter::RupeeCounter() : Counter(0x1f5) {}

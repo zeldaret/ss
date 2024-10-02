@@ -11,10 +11,8 @@ OarcManager::~OarcManager() {
     sInstance = nullptr;
 }
 
-extern char lbl_80575250;
-
 void OarcManager::init(EGG::Heap *heap) {
-    mArcTable.init(200, &lbl_80575250, heap);
+    mArcTable.init(200, &ArcCallbackHandler::sInstance, heap);
 }
 
 bool OarcManager::checkIfObjectArcExistsOnDisk(const char *object) {

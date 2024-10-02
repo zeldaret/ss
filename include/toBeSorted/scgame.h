@@ -7,7 +7,7 @@ struct SpawnInfo {
     /* 0x00 */ char stageName[32]; // Probably SizedString<32>
     /* 0x20 */ s16 transitionFadeFrames;
     /* 0x22 */ s8 room;
-    /* 0x23 */ s8 layer;
+    /* 0x23 */ u8 layer;
     /* 0x24 */ s8 entrance;
     /* 0x25 */ s8 night;
     /* 0x26 */ s8 trial;
@@ -26,6 +26,7 @@ public:
     static ScGame *sInstance;
 
     static bool isCurrentStage(const char *stageName);
+    void triggerExit(s32 room, u8 exitIndex, s32 forcedNight = 2, s32 forcedTrial = 2);
 };
 
 #endif

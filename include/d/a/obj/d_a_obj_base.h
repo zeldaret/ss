@@ -2,11 +2,14 @@
 #define D_A_OBJ_BASE_H
 
 #include "d/a/d_a_base.h"
+#include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m3d/m_shadow.h"
+#include "m/m_vec.h"
 #include "m/types_m.h"
 #include "nw4r/g3d/g3d_resfile.h"
+#include "toBeSorted/cc/d_cc_d.h"
 
 // Size: 0xA8
 struct ActorCarryStruct {
@@ -21,9 +24,13 @@ struct ActorCarryStruct {
     /* 0x58 */ mMtx_c field_0x58;
     /* 0x88 */ s32 isCarried;
     /* 0x8C */ u8 field_0x8C[0x10]; // mQuat_c
-    /* 0x9C */ void *dtor; // ???
+    /* 0x9C */ void *dtor;          // ???
     /* 0xA0 */ u32 field_0xA0;
     /* 0xA4 */ u32 field_0xA4;
+
+    bool testCarryFlag(u32 flag) {
+        return (carryFlags & flag) != 0;
+    }
 };
 
 // Ghidra: ActorObjectBase
@@ -49,12 +56,16 @@ public:
     mVec3_c velocity;
     /* 0x15C */ mMtx_c worldMatrix;
     nw4r::math::AABB boundingBox;
+    /* 0x1A4 */ f32 mCullingDistance;
+    /* 0x1A8 */ f32 field_0x1A8;
+    /* 0x1AC */ u32 mObjectActorFlags;
 
-    u8 unk_0x1A4[0x1E8 - 0x1A4];
+    u8 unk_0x1B0[0x1C0 - 0x1B0];
 
-    /* 0x1E8 */ mVec3_c posIncrements;
+    /* 0x1C0 */ UnkCCDStruct mCCdStruct;
 
-    u8 unk_0x1F4[0x210 - 0x1F4];
+    mVec3_c mStartingPos;
+    mAng3_c mStartingRot;
 
     /* 0x210 */ ActorCarryStruct mActorCarryInfo;
 
@@ -67,8 +78,8 @@ public:
     /* 8002de80 */ static void *getOarcResFile(const char *oarcName);
     /* 8002de90 */ static void *getOarcModelFile(const char *oarcName);
     /* 8002dea0 */ static void *getOarcZev(const char *oarcName);
-    /* 8002deb0 */ static void *getOarcDZB(const char *dzbName);
-    /* 8002ded0 */ static void *getOarcPLC(const char *plcName);
+    /* 8002deb0 */ static void *getOarcDZB(const char *dzbName, const char *dzbName2);
+    /* 8002ded0 */ static void *getOarcPLC(const char *plcName, const char *plcName2);
 
 public:
     /* 8002def0 */ dAcObjBase_c();
@@ -86,7 +97,7 @@ public:
     /* 8002e630 */ static dAcObjBase_c *create(fProfile::PROFILE_NAME_e actorId, s8 roomId, u32 params1, mVec3_c *pos,
             mAng3_c *rot, mVec3_c *scale, u32 params2);
     /* 8002e6d0 */ static dAcObjBase_c *create(char *name, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot,
-            mVec3_c *scale, u32 params2, u16 id, u8 viewclipId);
+            mVec3_c *scale, u32 params2, u16 id, s8 viewclipId);
     /* 8002e770 */ static dAcObjBase_c *findObject(fProfile::PROFILE_NAME_e actorId, fLiNdBa_c *refList,
             dAcObjBase_c *parent);
     /* 8002e7f0 */ static dAcObjBase_c *getNextObject(fLiNdBa_c *ref, dAcObjBase_c *parent);
@@ -105,7 +116,7 @@ public:
     /* 8002ecd0 */ void drawModel2();
     /* 8002ed20 */ void fn_8002ed20();
     /* 8002edb0 */ void fn_8002edb0(m3d::mShadowCircle_c& shadow, m3d::smdl_c& smdl, const mQuat_c *rot, s32, s32, f32);
-    /* 8002ee40 */ void drawShadow();
+    /* 8002ee40 */ void drawShadow(m3d::mShadowCircle_c& shadow, void*, const mMtx_c &mtx, const mQuat_c *rot, s32, s32, s32, s32, s32, f32);
     /* 8002ef40 */ void createChildAttached(fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot,
             mVec3_c *scale, u32 params2, u32 roomId);
     /* 8002ef40 */ void createChildNonAttached(fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos,
@@ -129,7 +140,7 @@ protected:
 
 // Actors' createHeap functions often have patterns that can be matched with this macro
 #define TRY_CREATE(thing) do { bool result = (thing); if (!result) return result; } while (0)
-
+// Use this in actors' createHeap functions
 #define CREATE_ALLOCATOR(className) do { if (!initAllocatorWork1Heap(-1, #className "::m_allocator", 0x20)) { return FAILED; } } while (0)
 
 #endif

@@ -1,6 +1,6 @@
 #include "m/m_vec.h"
 #include "m/m_Angle.h"
-#include "d/d_player.h"
+#include "d/a/d_a_player.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 
 SpecialItemDropMgr* SpecialItemDropMgr::sInstance = nullptr;
@@ -66,7 +66,7 @@ bool spawnSpecialDropItem(SpecialItemDropMgr *mgr, int specialItemId, int roomid
         currentRot = *rot;
         tempOther = -0xe39;
     } else {
-        currentRot = targetAngleY(&(dPlayer::LINK->position), pos);
+        currentRot = targetAngleY(&(dAcPy_c::LINK->position), pos);
         tempOther = -0x8000;
         currentRot += 0x4000;
     }

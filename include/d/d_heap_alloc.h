@@ -12,21 +12,13 @@ public:
     inline void doInitCallbacks() {
         if (!mCallbacksInitialized) {
             mCallbacksInitialized = 1;
+            EGG::Heap::AllocCallbackBundle prev = EGG::Heap::setAllocCallback(&allocCallback, this);
+            mPreviousAllocCallback = prev.AllocCallback;
+            mPreviousAllocCallbackArg = prev.AllocCallbackArg;
 
-            void *oldAllocCallbackArg = EGG::Heap::sAllocCallbackArg;
-            void *oldFreeCallbackArg = EGG::Heap::sFreeCallbackArg;
-            EGG::HeapAllocCallback oldAllocCallback = EGG::Heap::sAllocCallback;
-            EGG::HeapFreeCallback oldFreeCallback = EGG::Heap::sFreeCallback;
-
-            EGG::Heap::sAllocCallback = &allocCallback;
-            EGG::Heap::sAllocCallbackArg = this;
-            mPreviousAllocCallback = oldAllocCallback;
-            mPreviousAllocCallbackArg = oldAllocCallbackArg;
-
-            EGG::Heap::sFreeCallback = &freeCallback;
-            EGG::Heap::sFreeCallbackArg = this;
-            mPreviousFreeCallback = oldFreeCallback;
-            mPreviousFreeCallbackArg = oldFreeCallbackArg;
+            EGG::Heap::FreeCallbackBundle prev2 = EGG::Heap::setFreeCallback(&freeCallback, this);
+            mPreviousFreeCallback = prev2.FreeCallback;
+            mPreviousFreeCallbackArg = prev2.FreeCallbackArg;
         }
     }
     static void allocCallback(EGG::HeapAllocArg *arg) {
@@ -50,8 +42,8 @@ public:
     }
 
     virtual ~dHeapAllocatorBase() {}
-    virtual void onAlloc(EGG::HeapAllocArg *arg){};
-    virtual void onFree(EGG::HeapFreeArg *arg){};
+    virtual void onAlloc(EGG::HeapAllocArg *arg) {};
+    virtual void onFree(EGG::HeapFreeArg *arg) {};
 
     /* 0x04 */ bool mCallbacksInitialized;
     /* 0x08 */ EGG::HeapAllocCallback mPreviousAllocCallback;

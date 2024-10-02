@@ -56,8 +56,8 @@ int dAcEhb_leaf_c::create() {
     }
 
     if (mType == 2) {
-        field_0x3CC = 1;
-        someFloat = 1.0f;
+        mTimeAreaStruct.field_0x08 = 1;
+        mTimeAreaStruct.field_0x00 = 1.0f;
     }
 
     if (mType != 0) {
@@ -76,7 +76,7 @@ int dAcEhb_leaf_c::doDelete() {
 int dAcEhb_leaf_c::actorExecute() {
     if (mType != 0) {
         doCheck();
-        if (isNearZero()) {
+        if (mTimeAreaStruct.isNearZero()) {
             return SUCCEEDED;
         }
     }
@@ -84,7 +84,7 @@ int dAcEhb_leaf_c::actorExecute() {
     updateMatrix();
     if (mType != 0) {
         Mtx m;
-        PSMTXScale(m, someFloat, someFloat, someFloat);
+        PSMTXScale(m, mTimeAreaStruct.field_0x00, mTimeAreaStruct.field_0x00, mTimeAreaStruct.field_0x00);
         PSMTXConcat(worldMatrix.m, m, worldMatrix.m);
     }
     mModel.getModel().setLocalMtx(worldMatrix);

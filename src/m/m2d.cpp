@@ -85,9 +85,10 @@ nw4r::lyt::ArcResourceAccessor *ResAccIf_c::getAccessor() {
 
 void ResAccIf_c::noop() {}
 
-void ResAccIf_c::attach(void *data, const char *name) {
-    mAccessor.Attach(data, name);
+bool ResAccIf_c::attach(void *data, const char *name) {
+    return mAccessor.Attach(data, name);
 }
+
 void ResAccIf_c::detach() {
     mAccessor.Detach();
 }

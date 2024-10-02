@@ -473,7 +473,7 @@ bool mShadowChild_c::addMdl(scnLeaf_c &mdl, const mQuat_c &quat) {
     if (mdl.getType() == 0) {
         mdl.getLocalMtx(mtx);
     } else {
-        mtx = static_cast<mCustomShadow_c &>(mdl).mMtx;
+        mtx.set(static_cast<mCustomShadow_c &>(mdl).mMtx);
     }
 
     // TODO this copy is a bit weird (reads members in a different order)
@@ -598,7 +598,7 @@ void mCustomShadow_c::calc(mMtx_c mtx, mMtx_c &mtx2) {
     // TODO some shuffles
 
     mVec3_c trans;
-    mtx2 = mMtx;
+    mtx2.set(mMtx);
     mVec3_c offset(0.0f, 0.0f, 0.0f);
     offset.y = field_0x48;
     PSMTXMultVec(mtx2, offset, trans);

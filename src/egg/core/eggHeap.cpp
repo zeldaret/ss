@@ -112,12 +112,12 @@ Heap *Heap::findParentHeap() {
     return retHeap;
 }
 
-extern "C" MEMiHeapHead *fn_803CC670(const void *memBlock);
+extern "C" MEMiHeapHead *findSomethingInListObject(const void *memBlock);
 
 /* 80495780 */
 Heap *Heap::findContainHeap(const void *memBlock) {
     Heap *retHeap = nullptr;
-    MEMiHeapHead *heap = fn_803CC670(memBlock);
+    MEMiHeapHead *heap = findSomethingInListObject(memBlock);
     if (heap) {
         retHeap = findHeap(heap);
     }
@@ -128,7 +128,7 @@ Heap *Heap::findContainHeap(const void *memBlock) {
 /* 804957c0 */
 void Heap::free(void *ptr, Heap *heap) {
     if (heap == nullptr) {
-        MEMiHeapHead *iheap = fn_803CC670(ptr);
+        MEMiHeapHead *iheap = findSomethingInListObject(ptr);
         if (iheap == nullptr) {
             return;
         }

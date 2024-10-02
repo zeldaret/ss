@@ -1,5 +1,5 @@
 #include <d/a/obj/d_a_obj_ring.h>
-#include <d/d_player.h>
+#include <d/a/d_a_player.h>
 
 SPECIAL_ACTOR_PROFILE(OBJ_RING, dAcOring_c, fProfile::OBJ_RING, 0x00f2, 0, 0x103);
 
@@ -24,7 +24,7 @@ int dAcOring_c::create() {
     mModel.setLocalMtx(worldMatrix);
     forwardAccel = -5.0f;
     forwardMaxSpeed = -40.0f;
-    field_0x38C = dPlayer::LINK->position.y;
+    field_0x38C = dAcPy_c::LINK->position.y;
     mStateMgr.changeState(StateID_Move);
     return SUCCEEDED;
 }
@@ -37,7 +37,7 @@ int dAcOring_c::actorExecute() {
     mStateMgr.executeState();
     calcVelocity();
     position += velocity;
-    position += posIncrements;
+    position += mCCdStruct.posIncrements;
     updateMatrix();
     mModel.setLocalMtx(worldMatrix);
     return SUCCEEDED;

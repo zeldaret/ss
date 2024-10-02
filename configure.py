@@ -113,6 +113,12 @@ parser.add_argument(
     action="store_true",
     help="builds equivalent (but non-matching) or modded objects",
 )
+parser.add_argument(
+    "--no-progress",
+    dest="progress",
+    action="store_false",
+    help="disable progress calculation",
+)
 args = parser.parse_args()
 
 config = ProjectConfig()
@@ -127,6 +133,7 @@ config.compilers_path = args.compilers
 config.generate_map = args.map
 config.non_matching = args.non_matching
 config.sjiswrap_path = args.sjiswrap
+config.progress = args.progress
 if not is_windows():
     config.wrapper = args.wrapper
 if not config.non_matching:
@@ -135,8 +142,8 @@ if not config.non_matching:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
-config.dtk_tag = "v0.9.5"
-config.objdiff_tag = "v2.0.0"
+config.dtk_tag = "v1.0.0"
+config.objdiff_tag = "v2.2.1"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
 
@@ -150,7 +157,7 @@ config.asflags = [
     f"-I build/{config.version}/include",
     f"--defsym version={version_num}",
 ]
-config.linker_version = "Wii/1.6"
+config.linker_version = "Wii/1.5"
 config.ldflags = [
     "-fp hardware",
     "-nodefaults",
@@ -246,7 +253,7 @@ cflags_rel = [
 def Rel(status, rel_name, cpp_name, extra_cflags=[]):
     return {
         "lib": rel_name,
-        "mw_version": "Wii/1.6",
+        "mw_version": "Wii/1.5",
         "cflags": cflags_rel + extra_cflags,
         "progress_category": "game",
         "host": False,
@@ -258,7 +265,7 @@ def Rel(status, rel_name, cpp_name, extra_cflags=[]):
 def MultiRel(rel_name, objects, extra_cflags=[]):
     return {
         "lib": rel_name,
-        "mw_version": "Wii/1.6",
+        "mw_version": "Wii/1.5",
         "cflags": cflags_rel + extra_cflags,
         "host": False,
         "objects": objects,
@@ -268,7 +275,7 @@ def MultiRel(rel_name, objects, extra_cflags=[]):
 def EGGLib(lib_name, objects):
     return {
         "lib": lib_name,
-        "mw_version": "Wii/1.6",
+        "mw_version": "Wii/1.5",
         "cflags": cflags_egg,
         "progress_category": "egg",
         "host": False,
@@ -296,7 +303,7 @@ config.warn_missing_source = False
 config.libs = [
     {
         "lib": "game_code",
-        "mw_version": "Wii/1.6",
+        "mw_version": "Wii/1.5",
         "cflags": cflags_framework,
         "progress_category": "game",
         "host": False,
@@ -313,17 +320,29 @@ config.libs = [
             Object(Matching, "d/d_dvd.cpp"),
             Object(NonMatching, "d/d_dvd_unk.cpp"),
             Object(NonMatching, "d/d_dylink.cpp"),
+            Object(Matching, "d/d_fader.cpp"),
             Object(Matching, "d/d_font_manager.cpp"),
-            Object(NonMatching, "d/d_heap.cpp"),
+            Object(Matching, "d/d_heap.cpp"),
             Object(Matching, "d/d_rawarchive.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
             Object(NonMatching, "d/d_sys.cpp"),
             Object(NonMatching, "toBeSorted/sound_info.cpp"),
+            Object(Matching, "toBeSorted/arc_callback_handler.cpp"),
             Object(NonMatching, "d/a/d_a_base.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_base.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_item.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_bomb.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_arrow.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_boomerang.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_fairy.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_tbox.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_time_area.cpp"),
+            Object(Matching, "d/a/obj/d_a_obj_switch.cpp"),
+            Object(Matching, "d/tg/d_t_switch.cpp"),
             Object(Matching, "toBeSorted/arc_managers/current_stage_arc_manager.cpp"),
             Object(Matching, "toBeSorted/arc_managers/oarc_manager.cpp"),
             Object(Matching, "toBeSorted/arc_managers/layout_arc_manager.cpp"),
+            Object(NonMatching, "toBeSorted/attention.cpp"),
             Object(NonMatching, "toBeSorted/dowsing_target.cpp"),
             Object(NonMatching, "toBeSorted/time_area_mgr.cpp"),
             Object(Matching, "toBeSorted/save_file.cpp"),
@@ -335,6 +354,18 @@ config.libs = [
             Object(Matching, "toBeSorted/counters/slingshot_seed_counter.cpp"),
             Object(Matching, "toBeSorted/counters/key_piece_counter.cpp"),
             Object(Matching, "toBeSorted/counters/extra_wallet_counter.cpp"),
+            Object(NonMatching, "toBeSorted/cc/d_cc_d.cpp"),
+            Object(NonMatching, "toBeSorted/cc/d_cc_m3d.cpp"),
+            Object(NonMatching, "toBeSorted/cc/d_cc_m3d_g_cyl.cpp"),
+            Object(NonMatching, "toBeSorted/cc/d_cc_m3d_g_sph.cpp"),
+            Object(Matching, "toBeSorted/cc/d_cc_shape_colliders.cpp"),
+            Object(NonMatching, "d/lyt/d2d.cpp"),
+            Object(NonMatching, "d/lyt/d_textbox.cpp"),
+            Object(Matching, "d/lyt/d_window.cpp"),
+            Object(Matching, "d/lyt/d_lyt_fader.cpp"),
+            Object(Matching, "d/lyt/d_screen_fader.cpp"),
+            Object(NonMatching, "d/lyt/common_arrow.cpp"),
+            Object(NonMatching, "d/lyt/pause_disp_00.cpp"),
             Object(NonMatching, "toBeSorted/file_manager.cpp"),
             Object(NonMatching, "toBeSorted/save_manager.cpp"),
             Object(Matching, "DynamicLink.cpp"),
@@ -996,6 +1027,7 @@ config.libs = [
     Rel(NonMatching, "d_a_nusi_npc", "REL/d/a/d_a_nusi_npc.cpp"),
     Rel(NonMatching, "d_a_obj_amber", "REL/d/a/obj/d_a_obj_amber.cpp"),
     Rel(NonMatching, "d_a_obj_ancient_jewels", "REL/d/a/obj/d_a_obj_ancient_jewels.cpp"),
+    # matching except for IScnObjCallback weak function order issue
     Rel(NonMatching, "d_a_obj_appear_bridge", "REL/d/a/obj/d_a_obj_appear_bridge.cpp"),
     Rel(NonMatching, "d_a_obj_arrow_switch", "REL/d/a/obj/d_a_obj_arrow_switch.cpp"),
     Rel(NonMatching, "d_a_obj_asura_pillar", "REL/d/a/obj/d_a_obj_asura_pillar.cpp"),
@@ -1005,7 +1037,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_ballista_f3", "REL/d/a/obj/d_a_obj_ballista_f3.cpp"),
     Rel(NonMatching, "d_a_obj_ballista_handle", "REL/d/a/obj/d_a_obj_ballista_handle.cpp"),
     Rel(NonMatching, "d_a_obj_bamboo", "REL/d/a/obj/d_a_obj_bamboo.cpp"),
-    Rel(NonMatching, "d_a_obj_bamboo_island", "REL/d/a/obj/d_a_obj_bamboo_island.cpp"),
+    Rel(Matching, "d_a_obj_bamboo_island", "REL/d/a/obj/d_a_obj_bamboo_island.cpp"),
     Rel(NonMatching, "d_a_obj_barrel", "REL/d/a/obj/d_a_obj_barrel.cpp"),
     Rel(NonMatching, "d_a_obj_bblargebomb", "REL/d/a/obj/d_a_obj_bblargebomb.cpp"),
     Rel(NonMatching, "d_a_obj_bbstone", "REL/d/a/obj/d_a_obj_bbstone.cpp"),
@@ -1160,7 +1192,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_pipe", "REL/d/a/obj/d_a_obj_pipe.cpp"),
     Rel(NonMatching, "d_a_obj_piston", "REL/d/a/obj/d_a_obj_piston.cpp"),
     Rel(NonMatching, "d_a_obj_pole_stony", "REL/d/a/obj/d_a_obj_pole_stony.cpp"),
-    Rel(NonMatching, "d_a_obj_pool_cock", "REL/d/a/obj/d_a_obj_pool_cock.cpp"),
+    Rel(Matching, "d_a_obj_pool_cock", "REL/d/a/obj/d_a_obj_pool_cock.cpp"),
     Rel(NonMatching, "d_a_obj_pot_sal", "REL/d/a/obj/d_a_obj_pot_sal.cpp"),
     Rel(NonMatching, "d_a_obj_propeller_lift", "REL/d/a/obj/d_a_obj_propeller_lift.cpp"),
     Rel(NonMatching, "d_a_obj_propera", "REL/d/a/obj/d_a_obj_propera.cpp"),
@@ -1213,7 +1245,7 @@ config.libs = [
     Rel(Matching, "d_a_obj_smoke", "REL/d/a/obj/d_a_obj_smoke.cpp"),
     Rel(NonMatching, "d_a_obj_soil", "REL/d/a/obj/d_a_obj_soil.cpp"),
     Rel(NonMatching, "d_a_obj_spider_line", "REL/d/a/obj/d_a_obj_spider_line.cpp"),
-    Rel(NonMatching, "d_a_obj_spike", "REL/d/a/obj/d_a_obj_spike.cpp"),
+    Rel(Matching, "d_a_obj_spike", "REL/d/a/obj/d_a_obj_spike.cpp"),
     Rel(NonMatching, "d_a_obj_stage_cover", "REL/d/a/obj/d_a_obj_stage_cover.cpp"),
     Rel(NonMatching, "d_a_obj_stage_crack", "REL/d/a/obj/d_a_obj_stage_crack.cpp"),
     Rel(NonMatching, "d_a_obj_stage_debris", "REL/d/a/obj/d_a_obj_stage_debris.cpp"),
@@ -1264,7 +1296,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_time_door_before", "REL/d/a/obj/d_a_obj_time_door_before.cpp"),
     Rel(NonMatching, "d_a_obj_time_stage_bg", "REL/d/a/obj/d_a_obj_time_stage_bg.cpp"),
     Rel(NonMatching, "d_a_obj_time_stone", "REL/d/a/obj/d_a_obj_time_stone.cpp"),
-    Rel(NonMatching, "d_a_obj_toD3_stone_figure", "REL/d/a/obj/d_a_obj_toD3_stone_figure.cpp"),
+    Rel(Matching, "d_a_obj_toD3_stone_figure", "REL/d/a/obj/d_a_obj_toD3_stone_figure.cpp"),
     Rel(NonMatching, "d_a_obj_toge_trap", "REL/d/a/obj/d_a_obj_toge_trap.cpp"),
     Rel(NonMatching, "d_a_obj_tornado", "REL/d/a/obj/d_a_obj_tornado.cpp"),
     Rel(NonMatching, "d_a_obj_tower_bomb", "REL/d/a/obj/d_a_obj_tower_bomb.cpp"),
@@ -1275,7 +1307,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_trap_rock_1", "REL/d/a/obj/d_a_obj_trap_rock_1.cpp"),
     Rel(NonMatching, "d_a_obj_treasure_island", "REL/d/a/obj/d_a_obj_treasure_island.cpp"),
     Rel(NonMatching, "d_a_obj_treasure_island_b", "REL/d/a/obj/d_a_obj_treasure_island_b.cpp"),
-    Rel(NonMatching, "d_a_obj_triforce", "REL/d/a/obj/d_a_obj_triforce.cpp"),
+    Rel(Matching, "d_a_obj_triforce", "REL/d/a/obj/d_a_obj_triforce.cpp"),
     Rel(NonMatching, "d_a_obj_trolley", "REL/d/a/obj/d_a_obj_trolley.cpp"),
     Rel(NonMatching, "d_a_obj_trolley_shutter", "REL/d/a/obj/d_a_obj_trolley_shutter.cpp"),
     Rel(NonMatching, "d_a_obj_truck", "REL/d/a/obj/d_a_obj_truck.cpp"),
@@ -1351,7 +1383,7 @@ config.libs = [
     Rel(NonMatching, "d_t_drum", "REL/d/t/d_t_drum.cpp"),
     Rel(NonMatching, "d_t_dungeon_start", "REL/d/t/d_t_dungeon_start.cpp"),
     Rel(NonMatching, "d_t_effect_gen", "REL/d/t/d_t_effect_gen.cpp"),
-    Rel(NonMatching, "d_t_fairytag", "REL/d/t/d_t_fairytag.cpp"),
+    Rel(Matching, "d_t_fairytag", "REL/d/t/d_t_fairytag.cpp"),
     Rel(NonMatching, "d_t_fence_synchronizer", "REL/d/t/d_t_fence_synchronizer.cpp"),
     Rel(NonMatching, "d_t_gate_to_ground", "REL/d/t/d_t_gate_to_ground.cpp"),
     Rel(NonMatching, "d_t_gekotag", "REL/d/t/d_t_gekotag.cpp"),

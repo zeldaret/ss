@@ -5,7 +5,7 @@
 #include <libc.h>
 
 // TODO move
-extern "C" UnkFlagDefinition lbl_80511AF0[];
+extern "C" UnkFlagDefinition DungeonflagManager__FLAG_DEFINITIONS[];
 
 class DungeonflagManager {
 public:
@@ -57,7 +57,7 @@ DungeonflagManager::DungeonflagManager()
 
 /** 800bf980 */
 void DungeonflagManager::setupFlagStuff() {
-    mFlagStuff = new UnkFlagStuff(0x11, lbl_80511AF0);
+    mFlagStuff = new UnkFlagStuff(0x11, DungeonflagManager__FLAG_DEFINITIONS);
     mShouldCommit = false;
 }
 

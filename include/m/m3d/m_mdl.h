@@ -12,10 +12,10 @@ namespace m3d {
 
 class callback_c {
 public:
-    virtual ~callback_c() {}
-    virtual void timingA(u32, nw4r::g3d::ChrAnmResult *, nw4r::g3d::ResMdl) {}
-    virtual void timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl) {}
-    virtual void timingC(nw4r::math::MTX34 *, nw4r::g3d::ResMdl) {}
+    virtual ~callback_c();
+    virtual void timingA(u32, nw4r::g3d::ChrAnmResult *, nw4r::g3d::ResMdl);
+    virtual void timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl);
+    virtual void timingC(nw4r::math::MTX34 *, nw4r::g3d::ResMdl);
 };
 
 class mdl_c : public smdl_c {

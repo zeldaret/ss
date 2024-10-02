@@ -2,6 +2,7 @@
 #define EGG_ASSERT_H
 
 #include <common.h>
+#include <Runtime.PPCEABI.H/__va_arg.h>
 
 namespace EGG {
 // All this is guess

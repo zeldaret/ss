@@ -36,7 +36,7 @@ public:
     virtual const sStateIDIf_c *getOldStateID() const { return mMethod.getOldStateID(); }
 
     // SS addition
-    bool isState(const sStateIDIf_c& other) {
+    bool isState(const sStateIDIf_c& other) const {
         return *getStateID() == other;
     }
 

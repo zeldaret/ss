@@ -21,23 +21,12 @@ public:
 
     // not sure if this breaks anything but we need a matrix type
     // with an inline copy assignment operator
-    mMtx_c &operator=(const mMtx_c &r) {
-        xx = r.xx;
-        xy = r.xy;
-        xz = r.xz;
-        xw = r.xw;
-
-        yx = r.yx;
-        yy = r.yy;
-        yz = r.yz;
-        yw = r.yw;
-
-        zx = r.zx;
-        zy = r.zy;
-        zz = r.zz;
-        zw = r.zw;
-
-        return *this;
+    void set(const mMtx_c &r) {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                m[i][j] = r.m[i][j];
+            }
+        }
     }
 
     inline operator MtxRef() {

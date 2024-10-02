@@ -1,4 +1,5 @@
 #include <d/a/d_a_t_wood_area.h>
+#include <d/a/d_a_player.h>
 
 const f32 dAcTWoodArea_c::scaleX = 100.0f;
 const f32 dAcTWoodArea_c::scaleY = 100.0f;
@@ -56,9 +57,9 @@ extern u16 PARTICLE_RESOURCE_ID_MAPPING[];
 void dAcTWoodArea_c::initializeState_Wait() {}
 
 void dAcTWoodArea_c::executeState_Wait() {
-    if (dPlayer::LINK != nullptr && (dPlayer::LINK->someFlags_0x350 & 0x2000)) {
+    if (dAcPy_c::LINK != nullptr && (dAcPy_c::LINK->someFlags_0x350 & 0x2000)) {
         // This is a bit messed up
-        mVec3_c dist = position - dPlayer::LINK->position;
+        mVec3_c dist = position - dAcPy_c::LINK->position;
         f32 attachRadius = getAttachRadius();
         attachRadius = attachRadius * attachRadius;
         if (dist.x * dist.x + dist.z * dist.z < attachRadius) {

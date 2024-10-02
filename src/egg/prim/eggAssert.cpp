@@ -1,4 +1,3 @@
-#include <Runtime.PPCEABI.H/__va_arg.h>
 #include <egg/core/eggSystem.h>
 #include <egg/core/eggXfbManager.h>
 #include <egg/prim/eggAssert.h>
