@@ -16,8 +16,13 @@ public:
     /* 80496830 */ Disposer();
 
 public:
-    enum eLifetime { LIFETIME_UNMANAGED, LIFETIME_HEAP_GC };
-    inline eLifetime getLifetime() const { return mContainHeap != nullptr ? LIFETIME_HEAP_GC : LIFETIME_UNMANAGED; }
+    enum eLifetime {
+        LIFETIME_UNMANAGED,
+        LIFETIME_HEAP_GC
+    };
+    inline eLifetime getLifetime() const {
+        return mContainHeap != nullptr ? LIFETIME_HEAP_GC : LIFETIME_UNMANAGED;
+    }
 
 private:
     /* 0x04 */ Heap *mContainHeap;

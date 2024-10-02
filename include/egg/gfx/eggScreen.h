@@ -21,7 +21,13 @@ public:
 
     u8 TODO_0x3C[0x88 - 0x3C];
 
-    enum TVMode { TV_MODE_1, TV_MODE_2, TV_MODE_3, TV_MODE_4, TV_MODE_MAX };
+    enum TVMode {
+        TV_MODE_1,
+        TV_MODE_2,
+        TV_MODE_3,
+        TV_MODE_4,
+        TV_MODE_MAX
+    };
 
     struct TVModeInfo {
         TVModeInfo() {}
@@ -46,14 +52,26 @@ public:
         s32 sc_oy; // at 0x1C
     };
 
-    static u16 GetSizeXMax(TVMode mode) { return sTVModeInfo[mode].width; }
-    static u16 GetSizeYMax(TVMode mode) { return sTVModeInfo[mode].height; }
-    static u16 GetSizeXMax() { return sTVModeInfo[sTVMode].width; }
-    static u16 GetSizeYMax() { return sTVModeInfo[sTVMode].height; }
+    static u16 GetSizeXMax(TVMode mode) {
+        return sTVModeInfo[mode].width;
+    }
+    static u16 GetSizeYMax(TVMode mode) {
+        return sTVModeInfo[mode].height;
+    }
+    static u16 GetSizeXMax() {
+        return sTVModeInfo[sTVMode].width;
+    }
+    static u16 GetSizeYMax() {
+        return sTVModeInfo[sTVMode].height;
+    }
 
-    static inline f32 GetAdjustScale() { return (f32)sTVModeInfo[0].width / sTVModeInfo[Screen::sTVMode].width; }
+    static inline f32 GetAdjustScale() {
+        return (f32)sTVModeInfo[0].width / sTVModeInfo[Screen::sTVMode].width;
+    }
 
-    static TVMode GetTVMode() { return sTVMode; }
+    static TVMode GetTVMode() {
+        return sTVMode;
+    }
 
     static TVMode sTVMode;
 

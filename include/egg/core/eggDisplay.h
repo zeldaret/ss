@@ -13,9 +13,14 @@ namespace EGG {
 
 class Display {
 public:
-    enum EFlagBits { mFlag_SetClear, mFlag_WaitForRetrace };
+    enum EFlagBits {
+        mFlag_SetClear,
+        mFlag_WaitForRetrace
+    };
     /* 0x00*/ TBitFlag<u8> mFlag;
-    enum EScreenStateBits { mScreenStateFlag_SetBlack };
+    enum EScreenStateBits {
+        mScreenStateFlag_SetBlack
+    };
 
 public:
     // vtable at 0x04

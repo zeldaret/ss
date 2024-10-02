@@ -10,17 +10,17 @@ AlignConsecutiveShortCaseStatements:
   AcrossEmptyLines: true
   AcrossComments: true
   AlignCaseColons: false
-AlignOperands: DontAlign
+AlignOperands: AlignAfterOperator
 AlignTrailingComments: Always
 AlignEscapedNewlines: Right
 AllowAllArgumentsOnNextLine: True
 AllowAllParametersOfDeclarationOnNextLine: True
-AllowShortBlocksOnASingleLine: Always
+AllowShortBlocksOnASingleLine: Empty
 AllowShortCaseLabelsOnASingleLine: True
-AllowShortEnumsOnASingleLine: True
-AllowShortFunctionsOnASingleLine: Inline
-AllowShortIfStatementsOnASingleLine: WithoutElse
-AllowShortLoopsOnASingleLine: True
+AllowShortEnumsOnASingleLine: False
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: False
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: True
 AlwaysBreakTemplateDeclarations: Yes
@@ -31,7 +31,7 @@ BreakBeforeBraces: Custom
 BraceWrapping:
     AfterCaseLabel: False
     AfterClass: False
-    AfterControlStatement: MultiLine
+    AfterControlStatement: Never
     AfterEnum: False
     AfterFunction: False
     AfterNamespace: False

@@ -274,8 +274,9 @@ s32 Archive::countFile() {
     return count;
 }
 
-void searchInsideWithPath(Archive *arc, ARCHandle *handle, FileCallbackFunc cb, void *cbArg, char *outPath,
-        u32 max_len) {
+void searchInsideWithPath(
+    Archive *arc, ARCHandle *handle, FileCallbackFunc cb, void *cbArg, char *outPath, u32 max_len
+) {
     ARCDir dir;
     if (ARCOpenDir(handle, outPath, &dir)) {
         ARCDirEntry dirEntry;

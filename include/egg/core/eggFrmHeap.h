@@ -5,7 +5,6 @@
 
 #include <common.h>
 
-
 namespace EGG {
 
 class FrmHeap : public Heap {

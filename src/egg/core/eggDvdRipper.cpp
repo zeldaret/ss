@@ -111,8 +111,6 @@ void *DvdRipper::loadToMainRAMDecomp(
     DvdFile *file, StreamDecomp *decompressor, u8 *pOut, Heap *heap, EAllocDirection allocDir, s32 offset, u32 size,
     u32 chunkSize, u32 *pRead, u32 *pSize
 ) {
-    // TODO Regswaps
-
     s32 uncomp_align = allocDir == ALLOC_DIR_TOP ? 0x20 : -0x20;
     s32 align = allocDir == ALLOC_DIR_TOP ? -0x20 : 0x20;
 

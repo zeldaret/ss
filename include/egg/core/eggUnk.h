@@ -2,7 +2,9 @@
 #define EGG_UNK_H
 
 #include "rvl/OS.h"
+
 #include <common.h>
+
 
 // This is seen in Animal Crossing: City Folk also. Idk where it belongs
 

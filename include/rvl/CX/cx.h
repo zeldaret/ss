@@ -48,7 +48,6 @@ typedef struct CXUncompContextLRC {
     u8 _[0x902C];
 } CXUncompContextLRC;
 
-// TODO(Zeldex) : Fix Params
 /* 803cee90 */ void CXInitUncompContextRL(CXUncompContextRL *);
 /* 803ceec0 */ void CXInitUncompContextLZ(CXUncompContextLZ *);
 /* 803cef00 */ s32 CXReadUncompRL(CXUncompContextRL *, const void *, u32);

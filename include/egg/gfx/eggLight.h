@@ -5,7 +5,6 @@
 #include <egg/prim/eggBinary.h>
 #include <nw4r/types_nw4r.h>
 
-
 namespace EGG {
 
 // TODO: Fill out more
@@ -41,7 +40,9 @@ public:
     virtual void CalcView(const nw4r::math::MTX34 &, u8, nw4r::g3d::ScnRoot *);
     virtual void DoneDraw();
 
-    LightTextureManager *GetTextureMgr() const { return mTextureMgr; }
+    LightTextureManager *GetTextureMgr() const {
+        return mTextureMgr;
+    }
 
     u8 TODO_0x04[0x14 - 0x04];
     LightTextureManager *mTextureMgr;

@@ -5,7 +5,6 @@ namespace EGG {
 /* 80673b10 */ nw4r::ut::List Thread::sThreadList;
 /* 80576770 */ void (*Thread::sOldSwitchThreadCallback)(OSThread *, OSThread *);
 
-
 /* 80496910 */ Thread::Thread(u32 stackSize, int msgCount, int priority, Heap *heap) {
     if (heap == nullptr) {
         heap = Heap::sCurrentHeap;
@@ -86,7 +85,7 @@ namespace EGG {
 /* 80496c70 */ void Thread::switchThreadCallback(OSThread *from, OSThread *to) {
     Thread *fromThread = from != nullptr ? findThread(from) : nullptr;
     Thread *toThread = to != nullptr ? findThread(to) : nullptr;
-    
+
     if (fromThread != nullptr) {
         fromThread->onExit();
         if (fromThread->mCurrentHeap != nullptr) {
@@ -95,7 +94,7 @@ namespace EGG {
             fromThread->mCurrentHeap = curr;
         }
     }
-    
+
     if (toThread != nullptr) {
         if (toThread->mCurrentHeap != nullptr) {
             Heap *curr = Heap::sCurrentHeap;
@@ -118,7 +117,7 @@ namespace EGG {
 }
 
 /* 80496dc0 */ void *Thread::start(void *arg) {
-    Thread *thread = static_cast<Thread*>(arg);
+    Thread *thread = static_cast<Thread *>(arg);
     return thread->run();
 }
 

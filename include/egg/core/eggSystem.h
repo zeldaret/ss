@@ -47,9 +47,15 @@ public:
 class BaseSystem {
 public:
     static ConfigurationData *mConfigData;
-    static XfbManager *getXfbMgr() { return mConfigData->getXfbMgr(); }
-    static Display *getDisplay() { return mConfigData->getDisplay(); }
-    static Video *getVideo() { return mConfigData->getVideo(); }
+    static XfbManager *getXfbMgr() {
+        return mConfigData->getXfbMgr();
+    }
+    static Display *getDisplay() {
+        return mConfigData->getDisplay();
+    }
+    static Video *getVideo() {
+        return mConfigData->getVideo();
+    }
 };
 
 template <class TVideo, class TDisplay, class TXfbManager, class TAudioManager, class TSceneManager, class TPerfView>

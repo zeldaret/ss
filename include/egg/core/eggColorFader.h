@@ -13,7 +13,9 @@ class ColorFader : public Fader {
 public:
     // vtable at 0x00
     /* vt 0x08 */ virtual void setStatus(EStatus);
-    /* vt 0x0C */ virtual EStatus getStatus() const { return mStatus; };
+    /* vt 0x0C */ virtual EStatus getStatus() const {
+        return mStatus;
+    };
     /* vt 0x10 */ virtual bool fadeIn();
     /* vt 0x14 */ virtual bool fadeOut();
     /* vt 0x18 */ virtual bool calc();
@@ -36,8 +38,12 @@ public:
     ColorFader(f32 startX, f32 startY, f32 lengthX, f32 lengthY, nw4r::ut::Color color, EStatus status);
     void setFrame(u16 frame);
     void setColor(nw4r::ut::Color);
-    float getWidth() const { return mEndX - mStartX; }
-    float getHeight() const { return mEndY - mStartY; }
+    float getWidth() const {
+        return mEndX - mStartX;
+    }
+    float getHeight() const {
+        return mEndY - mStartY;
+    }
 };
 
 } // namespace EGG

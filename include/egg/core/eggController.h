@@ -18,7 +18,8 @@ class ControllerRumbleMgr;
 class CoreController;
 
 // To Be Filled out
-enum eCoreDevType {};
+enum eCoreDevType {
+};
 
 typedef void (*ConnectCallback)(int args[]);
 typedef class CoreController *(*ControllerFactory)();
@@ -49,41 +50,91 @@ public:
 public:
     void init();
     u32 getFSStickButton() const;
-    f32 getFSStickX() const { return mFSStickX; }
-    f32 getFSStickY() const { return mFSStickY; }
-    bool down(u32 mask) const { return (mask & mHold); }
-    bool up(u32 mask) const { return (mask & mHold) != mask; }
-    bool downTrigger(u32 mask) const { return (mask & mTrig); }
-    bool upTrigger(u32 mask) const { return (mask & mRelease); }
-    bool downAll(u32 mask) const { return (mask & mHold) == mask; }
-    bool upAll(u32 mask) const { return (mask & mHold) == 0; }
+    f32 getFSStickX() const {
+        return mFSStickX;
+    }
+    f32 getFSStickY() const {
+        return mFSStickY;
+    }
+    bool down(u32 mask) const {
+        return (mask & mHold);
+    }
+    bool up(u32 mask) const {
+        return (mask & mHold) != mask;
+    }
+    bool downTrigger(u32 mask) const {
+        return (mask & mTrig);
+    }
+    bool upTrigger(u32 mask) const {
+        return (mask & mRelease);
+    }
+    bool downAll(u32 mask) const {
+        return (mask & mHold) == mask;
+    }
+    bool upAll(u32 mask) const {
+        return (mask & mHold) == 0;
+    }
 
-    s32 getDevType() const { return mDevType; }
-    bool isCore() const { return getDevType() == WPAD_DEV_CORE; }
-    bool isFreestyle() const { return getDevType() == WPAD_DEV_FS; }
+    s32 getDevType() const {
+        return mDevType;
+    }
+    bool isCore() const {
+        return getDevType() == WPAD_DEV_CORE;
+    }
+    bool isFreestyle() const {
+        return getDevType() == WPAD_DEV_FS;
+    }
 
-    u32 getHold() const { return mHold; }
+    u32 getHold() const {
+        return mHold;
+    }
 
-    s8 getDpdValidFlag() const { return mDpdValid; };
+    s8 getDpdValidFlag() const {
+        return mDpdValid;
+    };
 
-    Vector2f getUnk() { return Vector2f(float_0x54, float_0x58); }
+    Vector2f getUnk() {
+        return Vector2f(float_0x54, float_0x58);
+    }
 
-    const Vector3f &getAccel() const { return mAccel; }
+    const Vector3f &getAccel() const {
+        return mAccel;
+    }
 };
 
 class CoreController {
 public:
     // vtable 0x0000
-    /* vt 0x08 */ virtual void setPosParam(f32 f1, f32 f2) { KPADSetPosParam(mChannelID, f1, f2); }
-    /* vt 0x0C */ virtual void setHoriParam(f32 f1, f32 f2) { KPADSetHoriParam(mChannelID, f1, f2); }
-    /* vt 0x10 */ virtual void setDistParam(f32 f1, f32 f2) { KPADSetDistParam(mChannelID, f1, f2); }
-    /* vt 0x14 */ virtual void setAccParam(f32 f1, f32 f2) { KPADSetAccParam(mChannelID, f1, f2); }
-    /* vt 0x18 */ virtual bool down(u32 mask) const { return mCoreStatus[0].down(mask); }
-    /* vt 0x1C */ virtual bool up(u32 mask) const { return mCoreStatus[0].up(mask); }
-    /* vt 0x20 */ virtual bool downTrigger(u32 mask) const { return mCoreStatus[0].downTrigger(mask); }
-    /* vt 0x24 */ virtual bool upTrigger(u32 mask) const { return mCoreStatus[0].upTrigger(mask); }
-    /* vt 0x28 */ virtual bool downAll(u32 mask) const { return mCoreStatus[0].downAll(mask); }
-    /* vt 0x2C */ virtual bool upAll(u32 mask) const { return mCoreStatus[0].upAll(mask); }
+    /* vt 0x08 */ virtual void setPosParam(f32 f1, f32 f2) {
+        KPADSetPosParam(mChannelID, f1, f2);
+    }
+    /* vt 0x0C */ virtual void setHoriParam(f32 f1, f32 f2) {
+        KPADSetHoriParam(mChannelID, f1, f2);
+    }
+    /* vt 0x10 */ virtual void setDistParam(f32 f1, f32 f2) {
+        KPADSetDistParam(mChannelID, f1, f2);
+    }
+    /* vt 0x14 */ virtual void setAccParam(f32 f1, f32 f2) {
+        KPADSetAccParam(mChannelID, f1, f2);
+    }
+    /* vt 0x18 */ virtual bool down(u32 mask) const {
+        return mCoreStatus[0].down(mask);
+    }
+    /* vt 0x1C */ virtual bool up(u32 mask) const {
+        return mCoreStatus[0].up(mask);
+    }
+    /* vt 0x20 */ virtual bool downTrigger(u32 mask) const {
+        return mCoreStatus[0].downTrigger(mask);
+    }
+    /* vt 0x24 */ virtual bool upTrigger(u32 mask) const {
+        return mCoreStatus[0].upTrigger(mask);
+    }
+    /* vt 0x28 */ virtual bool downAll(u32 mask) const {
+        return mCoreStatus[0].downAll(mask);
+    }
+    /* vt 0x2C */ virtual bool upAll(u32 mask) const {
+        return mCoreStatus[0].upAll(mask);
+    }
     /* vt 0x30 */ virtual void beginFrame(PADStatus *padStatus);
     /* vt 0x34 */ virtual void endFrame();
 
@@ -129,10 +180,14 @@ public:
     f32 getFreeStickX() const;
     f32 getFreeStickY() const;
 
-    const Vector3f &getAccel() const { return mCoreStatus[0].getAccel(); }
+    const Vector3f &getAccel() const {
+        return mCoreStatus[0].getAccel();
+    }
 
     // Guess ?
-    bool isStable(u8 p1) const { return (mAccelFlags.getDirect() & p1) == p1; }
+    bool isStable(u8 p1) const {
+        return (mAccelFlags.getDirect() & p1) == p1;
+    }
 };
 
 class CoreControllerMgr {
@@ -180,7 +235,9 @@ public:
 
 class NullController : public CoreController {
 public:
-    NullController() { unk[92] = 0xfe; }
+    NullController() {
+        unk[92] = 0xfe;
+    }
     // idk this has NO effect on anything
     u8 unk[0x80674c00 - 0x80674b10];
 };
@@ -188,7 +245,9 @@ public:
 class ControllerRumbleUnit {
 public:
     // 0x00 vtable
-    inline ControllerRumbleUnit() : mFlag(0) { init(); }
+    inline ControllerRumbleUnit() : mFlag(0) {
+        init();
+    }
     /* vt 0x08 */ virtual ~ControllerRumbleUnit() {}
 
 public:

@@ -11,7 +11,11 @@ namespace EGG {
 
 class DvdRipper {
 public:
-    enum EAllocDirection { ALLOC_CIR_PAD, ALLOC_DIR_TOP, ALLOC_DIR_BOTTOM };
+    enum EAllocDirection {
+        ALLOC_CIR_PAD,
+        ALLOC_DIR_TOP,
+        ALLOC_DIR_BOTTOM
+    };
 
     struct UnkCallback_Arg {
         u8 UNK_0x00[4];

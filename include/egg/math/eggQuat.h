@@ -5,7 +5,6 @@
 
 #include <common.h>
 
-
 namespace EGG {
 
 struct Quatf : public Vector3f {
@@ -48,15 +47,21 @@ struct Quatf : public Vector3f {
     /*          */ void makeVectorRotationLimit(Vector3f &, Vector3f &, f32);
     /* 8049bbb0 */ void makeVectorRotation(Vector3f &, Vector3f &);
 
-    f32 dot(const Quatf &q) const { return w * w + q.x * q.x + q.y * q.y + q.z * q.z; }
-    f32 length() const { return Math<f32>::sqrt(dot(*this)); }
+    f32 dot(const Quatf &q) const {
+        return w * w + q.x * q.x + q.y * q.y + q.z * q.z;
+    }
+    f32 length() const {
+        return Math<f32>::sqrt(dot(*this));
+    }
     void multScalar(f32 s) {
         w *= s;
         x *= s;
         y *= s;
         z *= s;
     }
-    void setUnit() { set(1.0f, 0.0f, 0.0f, 0.0f); }
+    void setUnit() {
+        set(1.0f, 0.0f, 0.0f, 0.0f);
+    }
     // union {
     //     Vector3f v;
     //     struct {

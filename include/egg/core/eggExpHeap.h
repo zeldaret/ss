@@ -28,7 +28,9 @@ public:
     static u32 getSizeForMBlock(const void *block);
 
     // Placement new for ::create
-    inline void *operator new(size_t size, void *ptr) { return ptr; }
+    inline void *operator new(size_t size, void *ptr) {
+        return ptr;
+    }
 };
 
 } // namespace EGG

@@ -5,7 +5,6 @@
 
 #include <common.h>
 
-
 namespace EGG {
 
 template <typename T>
@@ -20,8 +19,12 @@ public:
     }
     /* vt 0x0C */ virtual void allocate(int n, int);
     /* vt 0x10 */ virtual void allocate(int n, Heap *heap, int);
-    /* vt 0x14 */ virtual void onAllocate(Heap *) { return; }
-    /* vt 0x18 */ virtual void errRangeOver() { return; }
+    /* vt 0x14 */ virtual void onAllocate(Heap *) {
+        return;
+    }
+    /* vt 0x18 */ virtual void errRangeOver() {
+        return;
+    }
 
 public:
     /* 0x08 */ s32 mSize;
@@ -30,7 +33,9 @@ public:
 public:
     inline TBuffer() : mSize(0), mBuffer(nullptr) {}
 
-    inline bool isRangeValid(int i) { return (i >= 0 && i < mSize); }
+    inline bool isRangeValid(int i) {
+        return (i >= 0 && i < mSize);
+    }
     inline void checkRange(int i) {
         if (!isRangeValid(i)) {
             errRangeOver();
@@ -40,7 +45,9 @@ public:
         checkRange(i);
         return mBuffer[i];
     }
-    inline s32 getSize() { return mSize; }
+    inline s32 getSize() {
+        return mSize;
+    }
 };
 
 template <typename T>

@@ -12,10 +12,18 @@ struct Matrix34f {
     Matrix34f() {}
     Matrix34f(f32 xx, f32 xy, f32 xz, f32 xw, f32 yx, f32 yy, f32 yz, f32 yw, f32 zx, f32 zy, f32 zz, f32 zw);
 
-    f32 operator()(int i, int j) const { return m[i][j]; }
-    f32 &operator()(int i, int j) { return m[i][j]; }
-    f32 operator()(int i) const { return arr[i]; }
-    f32 &operator()(int i) { return arr[i]; }
+    f32 operator()(int i, int j) const {
+        return m[i][j];
+    }
+    f32 &operator()(int i, int j) {
+        return m[i][j];
+    }
+    f32 operator()(int i) const {
+        return arr[i];
+    }
+    f32 &operator()(int i) {
+        return arr[i];
+    }
 
     void rotateBaseX(Vector3f &, Matrix34f &);
     void rotateVectorChange(Vector3f &, Vector3f &, Matrix34f &);
@@ -65,9 +73,13 @@ public:
         b(2) = (*this)(2, idx);
     }
 
-    void setTranslation(const Vector3f &t) { setBase(3, t); }
+    void setTranslation(const Vector3f &t) {
+        setBase(3, t);
+    }
 
-    void getTranslation(Vector3f &t) const { getBase(3, t); }
+    void getTranslation(Vector3f &t) const {
+        getBase(3, t);
+    }
 
     void makeZero() {
         for (int i = 0; i < 12; i++) {

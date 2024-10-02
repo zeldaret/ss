@@ -58,8 +58,10 @@ void *Heap::alloc(size_t size, int align, Heap *heap) {
             heap = currentHeap;
         }
         if (heap != sAllocatableHeap) {
-            OSReport("cannot allocate from heap %x(%s) : allocatable heap is %x(%s)\n", heap, heap->getName(),
-                    sAllocatableHeap, sAllocatableHeap->getName());
+            OSReport(
+                "cannot allocate from heap %x(%s) : allocatable heap is %x(%s)\n", heap, heap->getName(),
+                sAllocatableHeap, sAllocatableHeap->getName()
+            );
             OSReport("\tthread heap=%x(%s)\n", threadHeap, threadHeap != nullptr ? threadHeap->getName() : "none");
             if (sErrorCallback != nullptr) {
                 HeapErrorArg arg;

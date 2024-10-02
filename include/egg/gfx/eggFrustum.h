@@ -9,8 +9,12 @@ namespace EGG {
 // TODO: Fill out more
 class Frustum {
 public:
-    enum CanvasMode {};
-    enum ProjectionType { PROJ_ORTHO, PROJ_PERSP };
+    enum CanvasMode {
+    };
+    enum ProjectionType {
+        PROJ_ORTHO,
+        PROJ_PERSP
+    };
 
 private:
     /* 0x00 */ ProjectionType mProjType;
@@ -30,13 +34,21 @@ public:
     virtual void SetProjectionGX() const;
     virtual void CopyToG3D(nw4r::g3d::Camera) const;
 
-    ProjectionType GetProjectionType() const { return mProjType; }
-    void SetProjectionType(ProjectionType type) { mProjType = type; }
+    ProjectionType GetProjectionType() const {
+        return mProjType;
+    }
+    void SetProjectionType(ProjectionType type) {
+        mProjType = type;
+    }
 
     void ResetOrthographic(f32, f32, f32, f32, f32, f32);
 
-    void SetScale(const nw4r::math::VEC3 &scale) { mScale = scale; }
-    void SetOffset(const nw4r::math::VEC2 &offset) { mOffset = offset; }
+    void SetScale(const nw4r::math::VEC3 &scale) {
+        mScale = scale;
+    }
+    void SetOffset(const nw4r::math::VEC2 &offset) {
+        mOffset = offset;
+    }
 };
 
 } // namespace EGG

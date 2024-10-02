@@ -68,10 +68,16 @@ public:
     /* vt 0x2C */ virtual u32 adjust() = 0;
 
 public:
-    void setName(const char *name) { mName = name; }
-    inline bool isExpHeap() { return getHeapKind() == HEAP_KIND_EXPANDED; }
+    void setName(const char *name) {
+        mName = name;
+    }
+    inline bool isExpHeap() {
+        return getHeapKind() == HEAP_KIND_EXPANDED;
+    }
     // inline Heap* getParentHeap() { return mParentHeap; } // not part of ss
-    inline void *getStartAddress() { return this; }
+    inline void *getStartAddress() {
+        return this;
+    }
 
 public:
     // members
@@ -113,18 +119,32 @@ public:
     }
 
 public:
-    static void *addOffset(void *begin, u32 size) { return reinterpret_cast<char *>(begin) + size; }
+    static void *addOffset(void *begin, u32 size) {
+        return reinterpret_cast<char *>(begin) + size;
+    }
 
-    inline void appendDisposer(Disposer *disposer) { nw4r::ut::List_Append(&mChildren, disposer); }
-    inline void removeDisposer(Disposer *disposer) { nw4r::ut::List_Remove(&mChildren, disposer); }
+    inline void appendDisposer(Disposer *disposer) {
+        nw4r::ut::List_Append(&mChildren, disposer);
+    }
+    inline void removeDisposer(Disposer *disposer) {
+        nw4r::ut::List_Remove(&mChildren, disposer);
+    }
 
-    inline MEMiHeapHead *getHeapHandle() { return mHeapHandle; }
+    inline MEMiHeapHead *getHeapHandle() {
+        return mHeapHandle;
+    }
 
-    static inline Heap *getCurrentHeap() { return sCurrentHeap; }
+    static inline Heap *getCurrentHeap() {
+        return sCurrentHeap;
+    }
 
-    inline int getArenaEnd() { return (int)mHeapHandle->end; }
+    inline int getArenaEnd() {
+        return (int)mHeapHandle->end;
+    }
 
-    inline const char *getName() const { return mName; }
+    inline const char *getName() const {
+        return mName;
+    }
 
     static nw4r::ut::List sHeapList;
     static OSMutex sRootMutex;

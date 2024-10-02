@@ -12,7 +12,9 @@ namespace EGG {
 class Thread {
 public: // vtable: 0x00
     /* 0x08 */ virtual ~Thread();
-    /* 0x0C */ virtual void *run() { return nullptr; }
+    /* 0x0C */ virtual void *run() {
+        return nullptr;
+    }
     /* 0x10 */ virtual void onEnter() {}
     /* 0x14 */ virtual void onExit() {}
 

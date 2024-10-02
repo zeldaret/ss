@@ -176,16 +176,16 @@ void CoreController::beginFrame(PADStatus *padStatus) {
 
     WPADDeviceType dev_type;
     switch (WPADProbe(mChannelID, &dev_type)) {
-    case WPAD_ERR_OK: {
-        if ((u32)dev_type == WPAD_DEV_NONE) {
+        case WPAD_ERR_OK: {
+            if ((u32)dev_type == WPAD_DEV_NONE) {
+                mFlag.resetBit(0);
+            } else {
+                mFlag.setBit(0);
+            }
+        } break;
+        case WPAD_ERR_NO_CONTROLLER: {
             mFlag.resetBit(0);
-        } else {
-            mFlag.setBit(0);
-        }
-    } break;
-    case WPAD_ERR_NO_CONTROLLER: {
-        mFlag.resetBit(0);
-    } break;
+        } break;
     }
 
     if (mReadStatusIdx > 0) {

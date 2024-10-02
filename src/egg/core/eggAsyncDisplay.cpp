@@ -58,8 +58,10 @@ inline void AsyncDisplay::waitForMsg(bool b) {
     // This is really ugly but I couldn't find a different way
     // to make the compiler use the registers
     XfbManager *xfb;
-    while (!((xfb = BaseSystem::mConfigData->getXfbMgr(), 1 < xfb->mNumXfbs - this->field_0xAC) &&
-            (BaseSystem::mConfigData->getXfbMgr()->mToCopyXfb != nullptr || b))) {
+    while (
+        !((xfb = BaseSystem::mConfigData->getXfbMgr(), 1 < xfb->mNumXfbs - this->field_0xAC) &&
+          (BaseSystem::mConfigData->getXfbMgr()->mToCopyXfb != nullptr || b))
+    ) {
         OSReceiveMessage(&this->mMesgQueue, this->mMesgBuf, 1);
 
         while (OSReceiveMessage(&this->mMesgQueue, this->mMesgBuf, 0)) {}
@@ -159,8 +161,9 @@ void AsyncDisplay::preVRetrace() {
 void AsyncDisplay::clearEFB() {
     Video *video = BaseSystem::mConfigData->getVideo();
     GXRenderModeObj const *renderMode = video->pRenderMode;
-    this->clearEFB(renderMode->fbWidth, renderMode->efbHeight, 0, 0, renderMode->fbWidth, renderMode->efbHeight,
-            this->mClearColor);
+    this->clearEFB(
+        renderMode->fbWidth, renderMode->efbHeight, 0, 0, renderMode->fbWidth, renderMode->efbHeight, this->mClearColor
+    );
 }
 
 u32 AsyncDisplay::getTickPerFrame() {
