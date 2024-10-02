@@ -1,24 +1,33 @@
-#ifndef NW4R_SND_TASKTHREAD_H
-#define NW4R_SND_TASKTHREAD_H
-#include "common.h"
-#include <rvl/OS/OSThread.h>
+#ifndef NW4R_SND_TASK_THREAD_H
+#define NW4R_SND_TASK_THREAD_H
+#include <nw4r/types_nw4r.h>
+
+#include <rvl/OS.h>
 
 namespace nw4r {
 namespace snd {
 namespace detail {
-struct TaskThread {
-    static void *ThreadFunc(void *);
 
+class TaskThread {
+public:
     TaskThread();
     ~TaskThread();
-    bool Create(s32, void *, u32);
+
+    bool Create(s32 priority, void* pStack, u32 stackSize);
     void Destroy();
 
+private:
+    static void* ThreadFunc(void* pArg);
+    void ThreadProc();
+
+private:
     OSThread mThread; // at 0x0
-    void *mStackEnd;  // at 0x318
-    bool mIsExiting;  // at 0x31C
-    bool mIsAlive;    // at 0x31D
+    u32* mStackEnd;   // at 0x318
+
+    volatile bool mFinishFlag; // at 0x31C
+    bool mCreateFlag;          // at 0x31D
 };
+
 } // namespace detail
 } // namespace snd
 } // namespace nw4r

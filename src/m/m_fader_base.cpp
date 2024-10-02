@@ -50,8 +50,8 @@ bool mFaderBase_c::fadeOut() {
     return canFadeOut;
 }
 
-u8 mFaderBase_c::calc() {
-    u8 result = 0;
+bool mFaderBase_c::calc() {
+    bool result = 0;
     if (mStatus == FADING_IN) {
         if (mElapsed++ > mFrame) {
             mStatus = FADED_IN;

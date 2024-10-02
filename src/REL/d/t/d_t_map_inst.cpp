@@ -4,5 +4,17 @@ SPECIAL_ACTOR_PROFILE(TAG_MAP_INST, dTgMapInst_c, fProfile::TAG_MAP_INST, 0x021d
 
 int dTgMapInst_c::create() {
     field_0xfc = params & 0xff;
-    return 1;
+    return SUCCEEDED;
+}
+
+int dTgMapInst_c::doDelete() {
+    return SUCCEEDED;
+}
+
+int dTgMapInst_c::actorExecute() {
+    return SUCCEEDED;
+}
+
+int dTgMapInst_c::draw() {
+    return SUCCEEDED;
 }

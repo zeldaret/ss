@@ -2,14 +2,15 @@
 #define EGG_QUAT_H
 
 #include "egg/math/eggVector.h"
+
 #include <common.h>
 
 namespace EGG {
 
-struct Quatf : Vector3f {
+struct Quatf : public Vector3f {
     Quatf() {}
     Quatf(f32 f, Vector3f v) : w(f), Vector3f(v) {}
-
+    Quatf(f32 f, f32 x, f32 y, f32 z) : w(f), Vector3f(Vector3f(x, y, z)) {}
     ~Quatf() {}
 
     friend Quatf operator*(const Quatf &q, const Vector3f &vec) {

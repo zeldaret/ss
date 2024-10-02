@@ -8,20 +8,20 @@ STATE_DEFINE(dTgRockBoat_c, Wait);
 int dTgRockBoat_c::create() {
     mStateMgr.changeState(StateID_Wait);
     cooldown = 1;
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgRockBoat_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgRockBoat_c::actorExecute() {
     mStateMgr.executeState();
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgRockBoat_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }
 
 void dTgRockBoat_c::initializeState_Wait() {}

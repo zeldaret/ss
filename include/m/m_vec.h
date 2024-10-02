@@ -3,6 +3,7 @@
 
 #include "egg/math/eggVector.h"
 #include "rvl/MTX.h"
+#include "m/m_angle.h"
 #include <common.h>
 
 class mVec3_c : public EGG::Vector3f {
@@ -58,6 +59,11 @@ public:
     /// @brief Vec cast operator.
     operator Vec *() {
         return (Vec *)&x;
+    }
+
+    /// @brief Vec cast operator.
+    operator Vec() const {
+        return *(Vec *)&x;
     }
 
     operator EGG::Vector3f *() {
@@ -122,7 +128,7 @@ public:
 
     /// @brief Scalar product operator.
     mVec3_c operator*(f32 f) const {
-        return mVec3_c(f * x, f * y, f * z);
+        return mVec3_c(x * f, y * f, z * f);
     }
 
     /// @brief Scalar division operator.
@@ -140,6 +146,20 @@ public:
     bool operator!=(const mVec3_c &v) const {
         return x != v.x || y != v.y || z != v.z;
     }
+
+    void normalize();
+    bool normalizeRS();
+
+    inline f32 mag() const {
+        return PSVECMag(*this);
+    }
+
+    void rotY(const mAng &angle);
+
+    static mVec3_c Zero;
+    static mVec3_c Ex;
+    static mVec3_c Ey;
+    static mVec3_c Ez;
 };
 
 #endif

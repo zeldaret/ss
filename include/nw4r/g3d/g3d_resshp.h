@@ -1,9 +1,10 @@
 #ifndef NW4R_G3D_RESSHP_H
 #define NW4R_G3D_RESSHP_H
-#include "g3d_rescommon.h"
-#include "g3d_resmdl.h"
-#include "g3d_resvtx.h"
-#include <GXAttr.h>#include "common.h"
+#include "nw4r/g3d/g3d_rescommon.h"
+#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/g3d_resvtx.h"
+#include <rvl/GX.h>
+#include "common.h"
 
 
 namespace nw4r {
@@ -70,7 +71,7 @@ struct ResShpPrePrim {
 
 struct ResShp {
     ResCommon<ResShpData> mShp;
-
+    inline ResShp() : mShp((void*)nullptr) {}
     inline ResShp(void *vptr) : mShp(vptr) {}
     bool IsValid() const {
         return mShp.IsValid();

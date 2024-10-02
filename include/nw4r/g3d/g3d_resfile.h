@@ -1,9 +1,9 @@
 #ifndef NW4R_G3D_RESFILE_H
 #define NW4R_G3D_RESFILE_H
 #include "common.h"
-#include "g3d_rescommon.h"
-#include "g3d_resdict.h"
-#include "ut_binaryFileFormat.h"
+#include "nw4r/g3d/g3d_rescommon.h"
+#include "nw4r/g3d/g3d_resdict.h"
+#include "nw4r/ut/ut_binaryFileFormat.h"
 
 namespace nw4r {
 namespace g3d {
@@ -17,6 +17,9 @@ struct ResFileData {
 
 struct ResFile {
     ResCommon<ResFileData> mFile; // at 0x0
+
+    ResFile() : mFile((void *)nullptr) {}
+    ResFile(void *ptr) : mFile(ptr) {}
 
     inline ResFileData &ref() const {
         return mFile.ref();
@@ -76,6 +79,9 @@ struct ResFile {
     u32 GetResAnmScnNumEntries() const;
 
     bool Bind(ResFile);
+    bool Bind() {
+        return Bind(*this);
+    }
     void Release();
     void Init();
     void Terminate();

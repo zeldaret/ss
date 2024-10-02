@@ -15,6 +15,7 @@ public:
     static dFontMng_c *getFontManager(int idx);
     static u8 getFontMgrIdx(u8 type);
     static const char *getFontPath(u8 idx);
+    static const char *getFontName(u8 type);
 
     static bool create();
 

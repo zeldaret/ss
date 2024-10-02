@@ -1,12 +1,26 @@
 #ifndef NW4R_G3D_RESMDL_H
 #define NW4R_G3D_RESMDL_H
 #include "common.h"
-#include "g3d_rescommon.h"
-#include "g3d_resdict.h"
-#include "g3d_resnode.h"
+#include "nw4r/g3d/g3d_rescommon.h"
+#include "nw4r/g3d/g3d_resdict.h"
+#include "nw4r/g3d/g3d_resnode.h"
 
 namespace nw4r {
 namespace g3d {
+
+enum ResMdlDrawMode {
+    RESMDL_DRAWMODE_SORT_OPA_NONE = 0,
+    RESMDL_DRAWMODE_SORT_OPA_Z = 1,
+    RESMDL_DRAWMODE_SORT_XLU_NONE = 0,
+    RESMDL_DRAWMODE_SORT_XLU_Z = 2,
+    RESMDL_DRAWMODE_IGNORE_MATERIAL = 4,
+    RESMDL_DRAWMODE_FORCE_LIGHTOFF = 8,
+    RESMDL_DRAWMODE_NOPPCSYNC = 16,
+    RESMDL_DRAWMODE_DEFAULT = 2,
+    REDMDL_DRAWMODE_SORT_NONE = 0,
+    RESMDL_DRAWMODE_SORT_Z = 3,
+};
+
 struct ResMdlData {
     char mMagic[4]; // "MDL0"
     u32 INT_0x4;

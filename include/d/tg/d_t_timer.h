@@ -2,14 +2,9 @@
 #define D_T_TIMER_H
 
 #include <d/a/d_a_base.h>
+#include <d/tg/d_tg.h>
 
-class dTgTimerBase_c : public dAcBase_c {
-public:
-    virtual ~dTgTimerBase_c() {}
-};
-
-
-class dTgTimer_c : public dTgTimerBase_c {
+class dTgTimer_c : public dTg_c {
 public:
     dTgTimer_c() {}
     virtual ~dTgTimer_c() {}

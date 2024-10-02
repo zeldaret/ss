@@ -1,4 +1,5 @@
 #include <d/a/d_a_t_wood_area.h>
+#include <d/a/d_a_player.h>
 
 const f32 dAcTWoodArea_c::scaleX = 100.0f;
 const f32 dAcTWoodArea_c::scaleY = 100.0f;
@@ -13,7 +14,7 @@ int dAcTWoodArea_c::actorCreate() {
     PSMTXTrans(worldMatrix.m, position.x, position.y, position.z);
     boundingBox.min = mVec3_c(-0.0f, -0.0f, -0.0f);
     boundingBox.max = mVec3_c(0.0f, 0.0f, 0.0f);
-    return 1;
+    return SUCCEEDED;
 }
 
 static const ProfileName FILTER_PROFILE[] = {
@@ -28,20 +29,20 @@ int dAcTWoodArea_c::actorPostCreate() {
     for (u32 i = 0; i < 5; i++) {
         attachCloseObjects(FILTER_PROFILE[i]);
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcTWoodArea_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcTWoodArea_c::actorExecute() {
     mStateMgr.executeState();
-    return 1;
+    return SUCCEEDED;
 }
 
 int dAcTWoodArea_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }
 
 void dAcTWoodArea_c::initializeState_Init() {}
@@ -56,9 +57,9 @@ extern u16 PARTICLE_RESOURCE_ID_MAPPING[];
 void dAcTWoodArea_c::initializeState_Wait() {}
 
 void dAcTWoodArea_c::executeState_Wait() {
-    if (dPlayer::LINK != nullptr && (dPlayer::LINK->someFlags & 0x2000)) {
+    if (dAcPy_c::LINK != nullptr && (dAcPy_c::LINK->someFlags_0x350 & 0x2000)) {
         // This is a bit messed up
-        mVec3_c dist = position - dPlayer::LINK->position;
+        mVec3_c dist = position - dAcPy_c::LINK->position;
         f32 attachRadius = getAttachRadius();
         attachRadius = attachRadius * attachRadius;
         if (dist.x * dist.x + dist.z * dist.z < attachRadius) {

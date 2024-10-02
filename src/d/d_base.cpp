@@ -53,8 +53,8 @@ void dBase_c::resetFlags() {
     s_NextExecuteControlFlags = 0;
 }
 
-bool dBase_c::isActorPlayer(dBase_c &base) {
-    return base.profile_name == fProfile::PLAYER;
+bool dBase_c::isActorPlayer() {
+    return profile_name == fProfile::PLAYER;
 }
 
 int dBase_c::loadAsyncCallback() {

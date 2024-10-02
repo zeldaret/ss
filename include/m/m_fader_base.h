@@ -26,7 +26,7 @@ public:
     virtual EStatus getStatus() const;
     virtual bool fadeIn();
     virtual bool fadeOut();
-    virtual u8 calc();
+    virtual bool calc();
     virtual void draw() = 0;
 
     void setFrame(u16 frame);

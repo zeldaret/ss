@@ -9,6 +9,6 @@ public:
     };
 };
 
-/* 80575618 */ ArrowCounter lbl_80575618;
+/* 80575618 */ ArrowCounter ARROW_COUNTER;
 
 /* 8016DFE0 */ ArrowCounter::ArrowCounter() : Counter(0x1f2) {}

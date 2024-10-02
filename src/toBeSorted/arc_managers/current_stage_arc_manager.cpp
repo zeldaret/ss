@@ -11,10 +11,8 @@ CurrentStageArcManager::~CurrentStageArcManager() {
     sInstance = nullptr;
 }
 
-extern char lbl_80575250;
-
 void CurrentStageArcManager::init(EGG::Heap *heap) {
-    mArcTable.init(18, &lbl_80575250, heap);
+    mArcTable.init(18, &ArcCallbackHandler::sInstance, heap);
 }
 
 bool CurrentStageArcManager::setStage(const char *newStage) {

@@ -9,6 +9,6 @@ public:
     }
 };
 
-/* 80575638 */ KeyPieceCounter lbl_80575638;
+/* 80575638 */ KeyPieceCounter KEY_PIECE_COUNTER;
 
 /* 8016E1E0 */ KeyPieceCounter::KeyPieceCounter() : Counter(0x1f9) {}

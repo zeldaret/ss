@@ -1,143 +1,254 @@
 #ifndef NW4R_SND_CHANNEL_H
 #define NW4R_SND_CHANNEL_H
-#include "common.h"
-#include "snd_EnvGenerator.h"
-#include "snd_InstancePool.h"
-#include "snd_Lfo.h"
-#include "snd_MoveValue.h"
-#include "snd_Voice.h"
-#include "snd_WaveFile.h"
-#include "ut_LinkList.h"
+#include <nw4r/types_nw4r.h>
+
+#include <nw4r/snd/snd_Common.h>
+#include <nw4r/snd/snd_EnvGenerator.h>
+#include <nw4r/snd/snd_Lfo.h>
+#include <nw4r/snd/snd_MoveValue.h>
+#include <nw4r/snd/snd_Voice.h>
+
+#include <nw4r/ut.h>
 
 namespace nw4r {
 namespace snd {
 namespace detail {
-struct Channel {
-    enum ChannelCallbackStatus { CALLBACK_STATUS_0, CALLBACK_STATUS_1, CALLBACK_STATUS_2, CALLBACK_STATUS_3 };
 
-    typedef void (*ChannelCallback)(Channel *, ChannelCallbackStatus, u32);
+class Channel {
+public:
+    enum ChannelCallbackStatus {
+        CALLBACK_STATUS_STOPPED,
+        CALLBACK_STATUS_DROP,
+        CALLBACK_STATUS_FINISH,
+        CALLBACK_STATUS_CANCEL
+    };
 
-    static void VoiceCallbackFunc(Voice *, Voice::VoiceCallbackStatus, void *);
+    typedef void (*ChannelCallback)(Channel* pDropChannel,
+                                    ChannelCallbackStatus status,
+                                    u32 callbackArg);
 
-    static Channel *AllocChannel(int, int, int, ChannelCallback, u32);
-    static void FreeChannel(Channel *);
+    enum LfoTarget { LFO_TARGET_PITCH, LFO_TARGET_VOLUME, LFO_TARGET_PAN };
+
+public:
     Channel();
+    ~Channel();
 
-    UNKTYPE InitParam(ChannelCallback, u32);
-    void Update(bool);
-    UNKTYPE Start(const WaveData &, int, u32);
-    UNKTYPE Release();
-    UNKTYPE Stop();
+    void InitParam(ChannelCallback pCallback, u32 callbackArg);
+    void Update(bool periodic);
+    void Start(const WaveData& rData, int length, u32 offset);
+    void Release();
+    void Stop();
 
-    float GetSweepValue() const;
-    void UpdateSweep(int);
-    void SetSweepParam(float, int, bool);
+    void SetAttack(int attack) {
+        mEnvelope.SetAttack(attack);
+    }
+    void SetDecay(int decay) {
+        mEnvelope.SetDecay(decay);
+    }
+    void SetSustain(int sustain) {
+        mEnvelope.SetSustain(sustain);
+    }
+    void SetRelease(int release) {
+        mEnvelope.SetRelease(release);
+    }
+    bool IsRelease() const {
+        return mEnvelope.GetStatus() == EnvGenerator::STATUS_RELEASE;
+    }
 
-    EnvGenerator mEnvGenerator; // at 0x0
-    Lfo mLfo;                   // at 0x18
-    u8 BYTE_0x30;
-    bool mPauseFlag;  // at 0x31
-    bool mActiveFlag; // at 0x32
-    bool BOOL_0x33;
-    bool mAutoUpdateSweepFlag;    // at 0x34
-    bool mReleasePriorityFixFlag; // at 0x35
+    void SetLfoParam(const LfoParam& rParam) {
+        mLfo.SetParam(rParam);
+    }
+    void SetLfoTarget(LfoTarget target) {
+        mLfoTarget = target;
+    }
 
-    float FLOAT_0x38;
-    float FLOAT_0x3C;
-    float FLOAT_0x40;
-    float FLOAT_0x44;
-    float FLOAT_0x48;
+    void Pause(bool pause) {
+        mPauseFlag = pause;
+        mVoice->Pause(pause);
+    }
+    void SetReleasePriorityFix(bool fix) {
+        mReleasePriorityFixFlag = fix;
+    }
 
-    int mRemoteFilter; // at 0x4c
-    int mOutputLine;   // at 0x50
-
-    float FLOAT_0x54;
-    float FLOAT_0x58;
-
-    float ARR_0x5C[3];
-
-    float mRemoteOutVolumes[4]; // at 0x68
-    float ARR_0x78[4];
-    float ARR_0x88[4];
-
-    float FLOAT_0x98;
-    float FLOAT_0x9C;
-
-    int INT_0xA0;
-    int INT_0xA4;
-
-    float FLOAT_0xA8;
-    float FLOAT_0xAC;
-    float FLOAT_0xB0;
-    float FLOAT_0xB4;
-    MoveValue<u8, u16> MV_0xB8;
-    UNKWORD INT_0xC0;
-    UNKWORD INT_0xC4;
-    int mLength; // at 0xc8
-
-    PanMode mPanMode;   // at 0xcc
-    PanCurve mPanCurve; // at 0xd0
-
-    ChannelCallback mCallback; // at 0xd4
-    u32 INT_0xD8;
-    Voice *mVoice;          // at 0xdc
-    Channel *mNext;         // at 0xe0
-    ut::LinkListNode mNode; // at 0xe4
-
-    inline bool IsActive() const {
+    bool IsPause() const {
+        return mPauseFlag != false;
+    }
+    bool IsActive() const {
         return mActiveFlag;
     }
-
-    inline void SetRelease(int release) {
-        if (release >= 0) {
-            mEnvGenerator.SetRelease(release);
-        }
-
-        Release();
+    bool IsAutoUpdateSweep() const {
+        return mAutoSweep;
     }
 
-    inline bool IsAutoUpdateSweep() const {
-        return mAutoUpdateSweepFlag;
+    void SetUserVolume(f32 volume) {
+        mUserVolume = volume;
+    }
+    void SetUserPitch(f32 pitch) {
+        mUserPitch = pitch;
+    }
+    void SetUserPitchRatio(f32 ratio) {
+        mUserPitchRatio = ratio;
+    }
+    void SetUserPan(f32 pan) {
+        mUserPan = pan;
+    }
+    void SetUserSurroundPan(f32 pan) {
+        mUserSurroundPan = pan;
+    }
+    void SetUserLpfFreq(f32 freq) {
+        mUserLpfFreq = freq;
     }
 
-    inline bool IsPause() const {
-        return mPauseFlag;
+    void SetRemoteFilter(int filter) {
+        mRemoteFilter = filter;
+    }
+    void SetOutputLine(int flag) {
+        mOutputLineFlag = flag;
     }
 
-    inline void Pause(bool flag) {
-        mPauseFlag = flag;
-
-        mVoice->Pause(flag);
+    void SetMainOutVolume(f32 volume) {
+        mMainOutVolume = volume;
+    }
+    void SetMainSend(f32 send) {
+        mMainSend = send;
+    }
+    void SetFxSend(AuxBus bus, f32 send) {
+        mFxSend[bus] = send;
     }
 
-    inline void SetLfoParam(const LfoParam &lfoParam) {
-        mLfo.SetParam(lfoParam);
+    void SetRemoteOutVolume(int remote, f32 volume) {
+        mRemoteOutVolume[remote] = volume;
+    }
+    void SetRemoteSend(int remote, f32 send) {
+        mRemoteSend[remote] = send;
+    }
+    void SetRemoteFxSend(int remote, f32 send) {
+        mRemoteFxSend[remote] = send;
     }
 
-    inline void SetSilence(bool silentFlag, int time) {
-        MV_0xB8.SetTarget(silentFlag ? 0 : 0xFF, time);
+    void UpdateSweep(int count);
+    void SetSweepParam(f32 pitch, int time, bool autoUpdate);
+    f32 GetSweepValue() const;
+
+    void SetInitVolume(f32 volume) {
+        mInitVolume = volume;
     }
+    void SetInitPan(f32 pan) {
+        mInitPan = pan;
+    }
+    void SetInitSurroundPan(f32 pan) {
+        mInitSurroundPan = pan;
+    }
+    void SetTune(f32 tune) {
+        mTune = tune;
+    }
+    void SetSilence(bool silence, int fadeTime) {
+        mSilenceVolume.SetTarget(silence ? 0 : SILENCE_VOLUME_MAX, fadeTime);
+    }
+
+    void SetKey(int key) {
+        mKey = key;
+    }
+    void SetOriginalKey(int key) {
+        mOriginalKey = key;
+    }
+
+    s32 GetLength() const {
+        return mLength;
+    }
+    void SetLength(s32 length) {
+        mLength = length;
+    }
+
+    void SetPanMode(PanMode mode) {
+        mPanMode = mode;
+    }
+    void SetPanCurve(PanCurve curve) {
+        mPanCurve = curve;
+    }
+
+    Channel* GetNextTrackChannel() const {
+        return mNextLink;
+    }
+    void SetNextTrackChannel(Channel* pChannel) {
+        mNextLink = pChannel;
+    }
+
+    static Channel* AllocChannel(int channels, int voices, int priority,
+                                 ChannelCallback pCallback, u32 callbackArg);
+    static void FreeChannel(Channel* pChannel);
+
+private:
+    static const u8 SILENCE_VOLUME_MAX = 255;
+
+    static const int KEY_INIT = 60;
+    static const int ORIGINAL_KEY_INIT = 60;
+
+    static const int PRIORITY_RELEASE = 1;
+
+private:
+    static void VoiceCallbackFunc(Voice* pDropVoice,
+                                  Voice::VoiceCallbackStatus status,
+                                  void* pCallbackArg);
+
+private:
+    EnvGenerator mEnvelope; // at 0x0
+    Lfo mLfo;               // at 0x18
+    u8 mLfoTarget;          // at 0x30
+
+    bool mPauseFlag;              // at 0x31
+    bool mActiveFlag;             // at 0x32
+    bool mAllocFlag;              // at 0x33
+    bool mAutoSweep;              // at 0x34
+    bool mReleasePriorityFixFlag; // at 0x35
+
+    f32 mUserVolume;      // at 0x38
+    f32 mUserPitchRatio;  // at 0x3C
+    f32 mUserPan;         // at 0x40
+    f32 mUserSurroundPan; // at 0x44
+    f32 mUserLpfFreq;     // at 0x48
+
+    int mRemoteFilter;   // at 0x4C
+    int mOutputLineFlag; // at 0x50
+
+    f32 mMainOutVolume;       // at 0x54
+    f32 mMainSend;            // at 0x58
+    f32 mFxSend[AUX_BUS_NUM]; // at 0x5C
+
+    f32 mRemoteOutVolume[WPAD_MAX_CONTROLLERS]; // at 0x68
+    f32 mRemoteSend[WPAD_MAX_CONTROLLERS];      // at 0x78
+    f32 mRemoteFxSend[WPAD_MAX_CONTROLLERS];    // at 0x88
+
+    f32 mUserPitch;    // at 0x98
+    f32 mSweepPitch;   // at 0x9C
+    int mSweepCounter; // at 0xA0
+    int mSweepLength;  // at 0xA4
+
+    f32 mInitVolume;                   // at 0xA8
+    f32 mInitPan;                      // at 0xAC
+    f32 mInitSurroundPan;              // at 0xB0
+    f32 mTune;                         // at 0xB4
+    MoveValue<u8, u16> mSilenceVolume; // at 0xB8
+
+    int mKey;         // at 0xC0
+    int mOriginalKey; // at 0xC4
+    int mLength;      // at 0xC8
+
+    PanMode mPanMode;   // at 0xCC
+    PanCurve mPanCurve; // at 0xD0
+
+    ChannelCallback mCallback; // at 0xD4
+    u32 mCallbackData;         // at 0xD8
+
+    Voice* mVoice;      // at 0xDC
+    Channel* mNextLink; // at 0xE0
+
+public:
+    NW4R_UT_LIST_NODE_DECL(); // at 0xE4
 };
 
-struct ChannelManager {
-    ChannelManager();
+NW4R_UT_LIST_TYPEDEF_DECL(Channel);
 
-    u32 GetRequiredMemSize();
-    void Setup(void *, u32);
-    void Shutdown();
-    UNKTYPE UpdateAllChannel();
-    static void Free(Channel *); // inlined
-    Channel *Alloc();            // inlined
-    static ChannelManager *GetInstance();
-
-    InstancePool<Channel> mPool;       // at 0x0
-    ut::LinkList<Channel, 0xE4> mList; // at 0x4
-
-    bool BOOL_0x10;
-    u32 INT_0x14;
-    UNKTYPE *PTR_0x18;
-    u32 INT_0x1C;
-};
 } // namespace detail
 } // namespace snd
 } // namespace nw4r

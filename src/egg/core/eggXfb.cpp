@@ -2,7 +2,6 @@
 #include <egg/core/eggVideo.h>
 #include <egg/core/eggXfb.h>
 
-
 namespace EGG {
 
 /* 804989e0 */ void Xfb::init(u16 width, u16 height, Heap *heap) {

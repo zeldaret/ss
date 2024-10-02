@@ -24,7 +24,6 @@ void (*fBase_c::sUnloadCallback)();
 fBase_c::fBase_c()
     : unique_ID(m_rootUniqueID), params(m_tmpCtData.params), profile_name(m_tmpCtData.prof_name),
       group_type(m_tmpCtData.group_type), manager(this) {
-
     m_rootUniqueID = (fBaseID_e)(m_rootUniqueID + 1);
     if (m_rootUniqueID == INVALID) {
         for (;;) {
@@ -68,7 +67,7 @@ int fBase_c::commonPack(int (fBase_c::*doFunc)(), int (fBase_c::*preFunc)(), voi
 
     // Pre Function to setup
     int result = (this->*preFunc)();
-    if (result) {
+    if (result != NOT_READY) {
         // Do function to handle current
         result = (this->*doFunc)();
         if (result == NOT_READY) {
@@ -115,13 +114,13 @@ void fBase_c::postCreate(MAIN_STATE_e state) {
 
 /* 802e1670 */
 int fBase_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 /* 802e1680 */
 int fBase_c::createPack() {
     // Returns PACK_RESULT_e
-    return commonPack(&create, &preCreate, &postCreate);
+    return commonPack(&fBase_c::create, &fBase_c::preCreate, &fBase_c::postCreate);
 }
 
 /* 802e1730 */
@@ -169,7 +168,7 @@ void fBase_c::postDelete(MAIN_STATE_e state) {
 /* 802e15d0 */
 int fBase_c::deletePack() {
     // Returns PACK_RESULT_e
-    return commonPack(&doDelete, &preDelete, &postDelete);
+    return commonPack(&fBase_c::doDelete, &fBase_c::preDelete, &fBase_c::postDelete);
 }
 
 /* 802e1910 */
@@ -196,12 +195,12 @@ void fBase_c::postExecute(MAIN_STATE_e state) {
 /* 802e1960 */
 int fBase_c::executePack() {
     // Returns PACK_RESULT_e
-    int result = commonPack(&execute, &preExecute, &postExecute);
+    int result = commonPack(&fBase_c::execute, &fBase_c::preExecute, &fBase_c::postExecute);
 
     // Check force update list (bamboo cut to force a cut type of thing)
     fLiNdBa_c *node = m_forceExecuteList.getFirst();
     while (node != nullptr) {
-        node->p_owner->commonPack(&execute, &preExecute, &postExecute);
+        node->p_owner->commonPack(&fBase_c::execute, &fBase_c::preExecute, &fBase_c::postExecute);
         fLiNdBa_c *tempNode = node->getNext();
         m_forceExecuteList.remove(node);
         node = tempNode;
@@ -234,7 +233,7 @@ void fBase_c::postDraw(MAIN_STATE_e state) {
 /* 802e1ae0 */
 int fBase_c::drawPack() {
     // Returns PACK_RESULT_e
-    return commonPack(&draw, &preDraw, &postDraw);
+    return commonPack(&fBase_c::draw, &fBase_c::preDraw, &fBase_c::postDraw);
 }
 
 /* 802e1b90 */

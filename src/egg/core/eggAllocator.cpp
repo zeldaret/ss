@@ -1,11 +1,11 @@
 #include <egg/core/eggAllocator.h>
 #include <egg/core/eggHeap.h>
 
-/* 804952d0 */ static void *MEM_AllocFor_Heap(MEMAllocator* alloc, u32 size) {
-    return static_cast<EGG::Heap*>(static_cast<EGG::Allocator*>(alloc)->heap)->alloc(size, alloc->heapParam1);
+/* 804952d0 */ static void *MEM_AllocFor_Heap(MEMAllocator *alloc, u32 size) {
+    return static_cast<EGG::Heap *>(static_cast<EGG::Allocator *>(alloc)->heap)->alloc(size, alloc->heapParam1);
 }
-/* 804952f0 */ static void MEM_FreeFor_Heap(MEMAllocator* alloc, void* block) {
-    return static_cast<EGG::Heap*>(static_cast<EGG::Allocator*>(alloc)->heap)->free(block);
+/* 804952f0 */ static void MEM_FreeFor_Heap(MEMAllocator *alloc, void *block) {
+    return static_cast<EGG::Heap *>(static_cast<EGG::Allocator *>(alloc)->heap)->free(block);
 }
 
 const MEMAllocatorFuncs eggAllocatorFuncs = {
@@ -15,13 +15,12 @@ const MEMAllocatorFuncs eggAllocatorFuncs = {
 
 // TODO this is used from eggHeap for some reason. Figure out
 // the correct privacy boundary later.
-/* 80495310 */ void MEMInitAllocatorFor_Heap(MEMAllocator* alloc, s32 align, void* heap) {
+/* 80495310 */ void MEMInitAllocatorFor_Heap(MEMAllocator *alloc, s32 align, void *heap) {
     alloc->funcs = &eggAllocatorFuncs;
     alloc->heap = heap;
     alloc->heapParam1 = align;
     alloc->heapParam2 = 0;
 }
-
 
 namespace EGG {
 

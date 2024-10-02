@@ -35,6 +35,11 @@ public:
     virtual const sStateIDIf_c *getStateID() const { return mMethod.getStateID(); }
     virtual const sStateIDIf_c *getOldStateID() const { return mMethod.getOldStateID(); }
 
+    // SS addition
+    bool isState(const sStateIDIf_c& other) const {
+        return *getStateID() == other;
+    }
+
 private:
     Check mCheck;
     Factory<T> mFactory;

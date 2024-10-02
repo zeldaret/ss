@@ -6,14 +6,9 @@
 #include <sized_string.h>
 
 class CurrentStageArcManager {
+public:
     CurrentStageArcManager();
     virtual ~CurrentStageArcManager();
-
-    SizedString<32> mStageName;
-    SizedString<32> mCurrentLoadingStageArcName;
-    SizedString<32> mStageExtraLayerArcName;
-
-    dRawArcTable_c mArcTable;
 
     static CurrentStageArcManager *sInstance;
 
@@ -36,6 +31,13 @@ class CurrentStageArcManager {
     const char *getRoomArcDirectory(int room) const;
 
     static EGG::ExpHeap *getHeap();
+
+private:
+    SizedString<32> mStageName;
+    SizedString<32> mCurrentLoadingStageArcName;
+    SizedString<32> mStageExtraLayerArcName;
+
+    dRawArcTable_c mArcTable;
 };
 
 #endif

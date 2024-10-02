@@ -48,7 +48,7 @@ public:
     u16 checkFlag(u16 roomId, u16 flag);
     bool checkSceneflagGlobal(u16 sceneIdx, u16 flag);
     bool checkTempOrSceneflag(u16 flag);
-    bool checkUncommittedFlag(u16 roomId, u16 flag);
+    u16 checkUncommittedFlag(u16 roomId, u16 flag);
     void setZoneflag(u16 roomId, u16 flag);
     void setFlag(u16 roomId, u16 flag);
     void setSceneflagGlobal(u16 sceneIdx, u16 flag);
@@ -58,6 +58,11 @@ public:
     void unsetSceneflagGlobal(u16 sceneIdx, u16 flag);
     void unsetTempOrSceneflag(u16 flag);
     s32 doCommit();
+
+
+    bool checkBoolFlag(u16 roomid, u16 flag) {
+        return checkFlag(roomid, flag);
+    }
 };
 
 #endif

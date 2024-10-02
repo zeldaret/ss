@@ -21,7 +21,9 @@ public:
         mCounter = 0;
     }
 
-    bool IsFinished() const { return mCounter >= mFrame; }
+    bool IsFinished() const {
+        return mCounter >= mFrame;
+    }
 
     TValue GetValue() const {
         if (IsFinished()) {

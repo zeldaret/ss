@@ -17,3 +17,9 @@ REL/global_destructor_chain.c:
 REL/d/a/obj/d_a_obj_junk_repairing.cpp:
 	.text       start:0x000000F0 end:0x00000D08
 	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x00000030
+	.data       start:0x00000000 end:0x000001C8
+	.bss        start:0x00000008 end:0x00000060
+
+REL/d/a/obj/d_a_obj_junk_repairing_data.cpp:
+	.data       start:0x000001C8 end:0x000001F0

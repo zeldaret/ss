@@ -6,6 +6,7 @@
 #include <sized_string.h>
 
 class LayoutArcManager {
+public:
     LayoutArcManager();
     virtual ~LayoutArcManager();
 

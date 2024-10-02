@@ -9,6 +9,7 @@
 #include "nw4r/ut.h"
 #include "rvl/MEM.h"
 #include "rvl/OS.h"
+
 #include <common.h>
 
 namespace EGG {
@@ -54,17 +55,17 @@ public:
         HEAP_KIND_UNIT,
         HEAP_KIND_ASSERT,
     };
-    // vtable at 0x0 | 8056e950
-    /* vt 0x08 | 804954c0 */ virtual ~Heap();
-    /* vt 0x0C | 00000000 */ virtual eHeapKind getHeapKind() const = 0;
-    /* vt 0x10 | 80495a40 */ virtual void initAllocator(Allocator *allocator, s32 align);
-    /* vt 0x14 | 00000000 */ virtual void *alloc(u32 size, s32 align) = 0;
-    /* vt 0x18 | 00000000 */ virtual void free(void *block) = 0;
-    /* vt 0x1C | 00000000 */ virtual void destroy() = 0;
-    /* vt 0x20 | 00000000 */ virtual u32 resizeForMBlock(void *block, u32 size) = 0;
-    /* vt 0x24 | 00000000 */ virtual u32 getTotalFreeSize() = 0;
-    /* vt 0x28 | 00000000 */ virtual u32 getAllocatableSize(s32 align) = 0;
-    /* vt 0x2C | 00000000 */ virtual u32 adjust() = 0;
+    // vtable at 0x0
+    /* vt 0x08 */ virtual ~Heap();
+    /* vt 0x0C */ virtual eHeapKind getHeapKind() const = 0;
+    /* vt 0x10 */ virtual void initAllocator(Allocator *allocator, s32 align);
+    /* vt 0x14 */ virtual void *alloc(u32 size, s32 align) = 0;
+    /* vt 0x18 */ virtual void free(void *block) = 0;
+    /* vt 0x1C */ virtual void destroy() = 0;
+    /* vt 0x20 */ virtual u32 resizeForMBlock(void *block, u32 size) = 0;
+    /* vt 0x24 */ virtual u32 getTotalFreeSize() = 0;
+    /* vt 0x28 */ virtual u32 getAllocatableSize(s32 align) = 0;
+    /* vt 0x2C */ virtual u32 adjust() = 0;
 
 public:
     void setName(const char *name) {
@@ -94,18 +95,18 @@ public:
     };
 
 public:
-    /* 804953f0 */ static void initialize();
-    /* 80495430 */ Heap(MEMiHeapHead *heapHandle);
-    /* 80495690 */ static Heap *findHeap(MEMiHeapHead *heapHandle);
-    /* 80495730 */ Heap *findParentHeap();
-    /* 80495780 */ static Heap *findContainHeap(const void *memBlock);
-    /* 80495560 */ static void *alloc(size_t size, int align, Heap *heap);
-    /* 804957c0 */ static void free(void *memBlock, Heap *heap);
-    /* 80495830 */ void dispose();
-    /* 804958a0 */ void dump();
-    /* 804958b0 */ static void dumpAll();
-    /* 804959a0 */ Heap *becomeCurrentHeap();
-    /* 80495a00 */ Heap *_becomeCurrentHeapWithoutLock();
+    static void initialize();
+    Heap(MEMiHeapHead *heapHandle);
+    static Heap *findHeap(MEMiHeapHead *heapHandle);
+    Heap *findParentHeap();
+    static Heap *findContainHeap(const void *memBlock);
+    static void *alloc(size_t size, int align, Heap *heap);
+    static void free(void *memBlock, Heap *heap);
+    void dispose();
+    void dump();
+    static void dumpAll();
+    Heap *becomeCurrentHeap();
+    Heap *_becomeCurrentHeapWithoutLock();
 
 public:
     template <typename T>
@@ -145,26 +146,58 @@ public:
         return mName;
     }
 
-    /* 80673ae8 */ static nw4r::ut::List sHeapList;
-    /* 80673af8 */ static OSMutex sRootMutex;
-    /* 80576740 */ static Heap *sCurrentHeap;
-    /* 80576744 */ static int sIsHeapListInitialized;
-    /* 80576748 */ static Heap *sAllocatableHeap;
-    /* 8057674c */ static ErrorCallback sErrorCallback;
-    /* 80576750 */ static HeapAllocCallback sAllocCallback;
-    /* 80576754 */ static HeapFreeCallback sFreeCallback;
-    /* 80576758 */ static void *sErrorCallbackArg;
-    /* 8057675c */ static void *sAllocCallbackArg;
-    /* 80576760 */ static void *sFreeCallbackArg;
-    /* 80576764 */ static HeapCreateCallback sCreateCallback;
-    /* 80576764 */ static HeapDestroyCallback sDestroyCallback;
+    struct AllocCallbackBundle {
+        HeapAllocCallback AllocCallback;
+        void *AllocCallbackArg;
+    };
+
+    struct FreeCallbackBundle {
+        HeapFreeCallback FreeCallback;
+        void *FreeCallbackArg;
+    };
+
+    static inline AllocCallbackBundle setAllocCallback(HeapAllocCallback AllocCallback, void *AllocCallbackArg) {
+        AllocCallbackBundle ret;
+
+        ret.AllocCallback = sAllocCallback;
+        ret.AllocCallbackArg = sAllocCallbackArg;
+        sAllocCallback = AllocCallback;
+        sAllocCallbackArg = AllocCallbackArg;
+
+        return ret;
+    }
+
+    static inline FreeCallbackBundle setFreeCallback(HeapFreeCallback FreeCallback, void *FreeCallbackArg) {
+        FreeCallbackBundle ret;
+
+        ret.FreeCallback = sFreeCallback;
+        ret.FreeCallbackArg = sFreeCallbackArg;
+        sFreeCallback = FreeCallback;
+        sFreeCallbackArg = FreeCallbackArg;
+
+        return ret;
+    }
+
+    static nw4r::ut::List sHeapList;
+    static OSMutex sRootMutex;
+    static Heap *sCurrentHeap;
+    static int sIsHeapListInitialized;
+    static Heap *sAllocatableHeap;
+    static ErrorCallback sErrorCallback;
+    static HeapAllocCallback sAllocCallback;
+    static HeapFreeCallback sFreeCallback;
+    static void *sErrorCallbackArg;
+    static void *sAllocCallbackArg;
+    static void *sFreeCallbackArg;
+    static HeapCreateCallback sCreateCallback;
+    static HeapDestroyCallback sDestroyCallback;
 };
 } // namespace EGG
 
-/* 80495a60 */ void *operator new(size_t, void *p);
-/* 80495a70 */ void *operator new(size_t size, EGG::Heap *heap, int align);
-/* 80495a80 */ void *operator new(size_t size, EGG::Allocator *alloc);
-/* 80495a90 */ void *operator new[](size_t size, int align);
-/* 80495aa0 */ void *operator new[](size_t size, EGG::Heap *heap, int align);
+void *operator new(size_t, void *p);
+void *operator new(size_t size, EGG::Heap *heap, int align = 4);
+void *operator new(size_t size, EGG::Allocator *alloc);
+void *operator new[](size_t size, int align);
+void *operator new[](size_t size, EGG::Heap *heap, int align = 4);
 
 #endif

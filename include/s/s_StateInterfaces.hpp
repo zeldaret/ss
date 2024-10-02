@@ -1,6 +1,8 @@
 #ifndef S_STATEINTERFACES_H
 #define S_STATEINTERFACES_H
 
+#include <common.h>
+
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
 // See include/s/README.txt for changes made
 
@@ -23,8 +25,8 @@ public:
     virtual bool isNull() const = 0; ///<  Returns whether this is a null state.
     virtual bool isEqual(const sStateIDIf_c &other) const = 0; ///<  Returns whether both states have the same number.
 
-    virtual bool operator==(const sStateIDIf_c &other) const = 0; ///<  Overloaded equality operator, using ::isEqual.
-    virtual bool operator!=(const sStateIDIf_c &other) const = 0; ///<  Overloaded inequality operator, using ::isEqual.
+    virtual BOOL operator==(const sStateIDIf_c &other) const = 0; ///<  Overloaded equality operator, using ::isEqual.
+    virtual BOOL operator!=(const sStateIDIf_c &other) const = 0; ///<  Overloaded inequality operator, using ::isEqual.
 
     virtual bool isSameName(const char *name) const = 0; ///<  Returns whether this state ID is called @p name.
     virtual const char *name() const = 0; ///<  Returns the name of this state ID.

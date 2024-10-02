@@ -1,8 +1,10 @@
 #include "d/a/d_a_base.h"
-#include "d/d_player.h"
+#include "d/a/obj/d_a_obj_base.h"
+#include "d/a/d_a_player.h"
 #include "f/f_list_nd.h"
 #include "m/m_vec.h"
 #include "toBeSorted/event.h"
+#include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/misc_flag_managers.h"
 #include "toBeSorted/scgame.h"
@@ -31,7 +33,6 @@ extern "C" s16 targetAngleX(mVec3_c *, mVec3_c *);
 extern "C" bool checkCollision(mVec3_c *pos);
 extern "C" s8 collisionCheckGetRoom();
 extern "C" dRoom *getRoomByIndex(RoomManager *mgr, s8 roomid);
-extern "C" bool alsoSetAsCurrentEvent(dAcBase_c *, Event *, void *);
 
 bool dAcBase_c::createHeap() {
     return true;
@@ -109,9 +110,8 @@ int dAcBase_c::initAllocatorWork1Heap(int size, char *name, int align) {
     return initAllocator(size, name, dHeap::work1Heap.heap, align);
 }
 
-extern "C" int fn_802EE510(mAllocator_c *, int size, EGG::Heap *heap, char *name, int align, int unk);
 int dAcBase_c::initAllocator(int size, char *name, EGG::Heap *heap, int align) {
-    if (fn_802EE510(&heap_allocator, size, heap, name, 0x20, 0) == 0) {
+    if (!heap_allocator.createNewTempFrmHeap(size, heap, name, 0x20, 0)) {
         return 0;
     }
     sound_source = FUN_8002c690();
@@ -193,7 +193,7 @@ int dAcBase_c::execute() {}
 
 // 8002cca0
 int dAcBase_c::actorExecute() {
-    return 1;
+    return SUCCEEDED;
 }
 
 // 8002ccb0
@@ -328,7 +328,7 @@ void dAcBase_c::forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *p
 
 // 8002d190
 mAng dAcBase_c::getXZAngleToPlayer() {
-    return targetAngleY(&this->position, &dPlayer::LINK->position);
+    return targetAngleY(&this->position, &dAcPy_c::LINK->position);
 }
 
 // 8002d1d0
@@ -393,24 +393,24 @@ bool dAcBase_c::getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16
 
 // 8002d3e0
 bool dAcBase_c::isWithinPlayerRadius(f32 radius) const {
-    f32 dist_diff = getSquareDistanceTo(dPlayer::LINK->position);
+    f32 dist_diff = getSquareDistanceTo(dAcPy_c::LINK->position);
     return dist_diff < radius * radius;
 }
 
 // 8002d440
 bool dAcBase_c::getDistanceAndAngleToPlayer(f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY,
         s16 *outDiffAngleX) {
-    return getDistanceAndAngleToActor(dPlayer::LINK, distThresh, yAngle, xAngle, outDist, outDiffAngleY, outDiffAngleX);
+    return getDistanceAndAngleToActor(dAcPy_c::LINK, distThresh, yAngle, xAngle, outDist, outDiffAngleY, outDiffAngleX);
 }
 
 // 8002d470
 f32 dAcBase_c::getDistToPlayer() {
-    return EGG::Math<f32>::sqrt(PSVECSquareDistance(position, dPlayer::LINK->position));
+    return EGG::Math<f32>::sqrt(PSVECSquareDistance(position, dAcPy_c::LINK->position));
 }
 
 // 8002d4a0
 f32 dAcBase_c::getSquareDistToPlayer() {
-    return PSVECSquareDistance(position, dPlayer::LINK->position);
+    return PSVECSquareDistance(position, dAcPy_c::LINK->position);
 }
 
 // Some weirdness with the float registers being used
@@ -436,7 +436,7 @@ bool dAcBase_c::isRoomFlags_0x6_Set() {
 // Start of SoundSource stuff
 void dAcBase_c::FUN_8002d590() {}
 void dAcBase_c::FUN_8002d5b0() {}
-void dAcBase_c::playSound() {}
+void dAcBase_c::playSound(u16) {}
 void dAcBase_c::FUN_8002d600() {}
 void dAcBase_c::FUN_8002d630() {}
 void dAcBase_c::FUN_8002d6d0() {}
@@ -547,7 +547,7 @@ void dAcBase_c::unkVirtFunc_0x6C() {}
 void dAcBase_c::doInteraction(s32 param) {
     if (param == 4 || param == 5 || param == 12) {
         Event event = Event("DefaultTalk", 400, 0x100001, nullptr, nullptr);
-        alsoSetAsCurrentEvent(this, &event, nullptr);
+        EventManager::alsoSetAsCurrentEvent(this, &event, nullptr);
     }
 }
 

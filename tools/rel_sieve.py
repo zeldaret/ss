@@ -27,35 +27,28 @@ import os
 import pathlib
 
 BLOCKING_SYMBOLS = [
-    ['fn_80353D70', 'UnkCollider::ctor'],
-    ['fn_80353F30', 'UnkCollider::ctor2'],
-    ['fn_80353FF0', 'UnkCollider::init'],
     ['fn_800C3EC0', 'ActorEventFlowManagerRelated::checkEventFinished'],
-    ['fn_802E6000', 'mdlAnmChr_c::create'],
-    ['fn_802EB6F0', 'm3d::mdl_c::mdl_c'],
-    ['fn_802EDF30', 'm3d::smdl_c::smdl_c'],
     ['fn_800275C0', 'EffectsStruct::ctor'],
     ['fn_80027610', 'EffectsStruct::ctor'],
-    ['fn_803465D0', 'ActorCollision::ctor'],
     ['fn_80341A70', 'checkCollision'],
     ['fn_80016C10', 'AnimModelWrapper::ctor'],
-    ['fn_802EBBD0', 'm3d::scnLeaf_c::scnLeaf_c'],
-    ['fn_8009C910', 'ActorEventRelated::ctor'],
     ['fn_802E32B0', 'm2d::FrameCtrl_c::setFrame'],
     ['fn_802F04A0', 'mFader_c::draw'],
     ['fn_801695F0', 'LytCommonTitle::ctor'],
     ['fn_80067020', 'matrixCreateFromPosRotYScale'],
     ['fn_800C43D0', 'ActorEventFlowManagerRelated *FUN_800c43d0'],
-    ['fn_801BB3C0', 'isCurrentStage'],
     ['fn_8037DCC0', 'EnemySoundMgr'],
     ['fn_800A6690', 'ActorOnRail::ctor'],
-    ['fn_80355080', 'getColliderManager'],
     ['fn_800975D0', 'initializeDowsingTarget'],
     ['fn_800A0680', 'getCurrentEventActor'],
     ['fn_80390FE0', 'something harp sound'],
     ['fn_801BB6F0', 'getCamera'],
     ['fn_800225F0', 'something light'],
     ['fn_80179250', 'shutter fence list'],
+    ['fn_8033AB50', 'getCollisionCheckContext'],
+    ['fn_8033F150', 'fn_8033F150'],
+    ['fn_80341040', 'fn_80341040'],
+    ['fn_383_D10', 'getAcOStageSink_ptr'],
 ]
 
 def main():
@@ -63,19 +56,18 @@ def main():
     with open('./objdiff.json') as f:
         objdiff = json.load(f)
         for unit in objdiff["units"]:
-            if unit.get("complete", False):
+            if unit.get("metadata", {}).get("complete", False):
                 matched_names.add(unit["name"].split('/')[-1])
     data = {}
     for folder in os.listdir('./build/SOUE01'):
         if folder.startswith('d_') and not folder[:-2] in matched_names:
             data[folder] = []
             s_files = glob.glob(f'./build/SOUE01/{folder}/asm/REL/d/**/*.s', recursive=True)
-            # maybe won't be true at some point?
-            assert len(s_files) == 1
-            text = pathlib.Path(s_files[0]).read_text()
-            for [sym, comment] in BLOCKING_SYMBOLS:
-                if sym in text:
-                    data[folder].append(comment)
+            for f in s_files:
+                text = pathlib.Path(f).read_text()
+                for [sym, comment] in BLOCKING_SYMBOLS:
+                    if sym in text:
+                        data[folder].append(comment)
     
 
     output = sorted([

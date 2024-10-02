@@ -2,6 +2,7 @@
 #define EGG_BUFFER_H
 
 #include "egg/core/eggHeap.h"
+
 #include <common.h>
 
 namespace EGG {
@@ -16,19 +17,8 @@ public:
             mBuffer = nullptr;
         }
     }
-    /* vt 0x0C */ virtual void allocate(int n, int) {
-        mSize = n;
-        mBuffer = new T[n];
-        onAllocate(nullptr);
-    }
-    /* vt 0x10 */ virtual void allocate(int n, Heap *heap, int) {
-        mSize = n;
-        if (heap == nullptr) {
-            heap = Heap::sCurrentHeap;
-        }
-        mBuffer = new (heap, 4) T[mSize];
-        onAllocate(heap);
-    }
+    /* vt 0x0C */ virtual void allocate(int n, int);
+    /* vt 0x10 */ virtual void allocate(int n, Heap *heap, int);
     /* vt 0x14 */ virtual void onAllocate(Heap *) {
         return;
     }
@@ -59,6 +49,23 @@ public:
         return mSize;
     }
 };
+
+template <typename T>
+void TBuffer<T>::allocate(int n, int) {
+    mSize = n;
+    mBuffer = new T[n];
+    onAllocate(nullptr);
+}
+
+template <typename T>
+void TBuffer<T>::allocate(int n, Heap *heap, int) {
+    mSize = n;
+    if (heap == nullptr) {
+        heap = Heap::sCurrentHeap;
+    }
+    mBuffer = new (heap, 4) T[mSize];
+    onAllocate(heap);
+}
 
 } // namespace EGG
 

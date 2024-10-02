@@ -1,4 +1,5 @@
 #include <toBeSorted/counters/counter.h>
+#include <toBeSorted/item_story_flag_manager.h>
 
 static u16 getBaseCapacity();
 static u16 getExtraWalletCapacity();
@@ -17,10 +18,6 @@ struct WalletStruct {
     u16 capacity;
 };
 
-// TODO set up item flag manager
-extern "C" void *lbl_80575400;
-extern "C" u16 fn_800BF5E0(void *data, u16 flag);
-
 /* 8016DE10 */ static u16 getBaseCapacity() {
     int i = 0;
     /* 804E91B0 */ WalletStruct wallet_definitions[4] = {
@@ -31,7 +28,7 @@ extern "C" u16 fn_800BF5E0(void *data, u16 flag);
     };
     const WalletStruct *wallet = &wallet_definitions[3];
     for (; i < 4; i++, wallet--) {
-        if (fn_800BF5E0(lbl_80575400, wallet->flag)) {
+        if (ItemFlagManager::sInstance->getFlag(wallet->flag)) {
             return wallet->capacity;
         }
     }
@@ -39,12 +36,12 @@ extern "C" u16 fn_800BF5E0(void *data, u16 flag);
 }
 
 // TODO main counters class
-extern "C" u16 fn_8016D730(u16);
+extern "C" u16 getCounterByIndex(u16);
 
 /* 8016DEC0 */ static u16 getExtraWalletCapacity() {
-    return 300 * fn_8016D730(0x27);
+    return 300 * getCounterByIndex(0x27);
 }
 
-/* 80575610 */ RupeeCounter lbl_80575610;
+/* 80575610 */ RupeeCounter RUPEE_COUNTER;
 
 /* 8016DF30 */ RupeeCounter::RupeeCounter() : Counter(0x1f5) {}

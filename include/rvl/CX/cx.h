@@ -9,6 +9,14 @@
 extern "C" {
 #endif
 
+enum CXReadResult {
+    CX_READ_ERR_4 = -4,
+    CX_READ_ERR_3 = -3,
+    CX_READ_ERR_2 = -2,
+    CX_READ_ERR_1 = -1,
+    CX_READ_OK = 0,
+};
+
 typedef struct CXUncompContextLZ {
     u8 _[0x18];
 } CXUncompContextLZ;
@@ -40,19 +48,18 @@ typedef struct CXUncompContextLRC {
     u8 _[0x902C];
 } CXUncompContextLRC;
 
-// TODO(Zeldex) : Fix Params
-/* 803cee90 */ void CXInitUncompContextRL();
-/* 803ceec0 */ void CXInitUncompContextLZ();
-/* 803cef00 */ void CXReadUncompRL();
-/* 803cf1b0 */ void CXReadUncompLZ();
-/* 803cf570 */ void CXInitUncompContextLH();
-/* 803cf5b0 */ void CXReadUncompLH();
+/* 803cee90 */ void CXInitUncompContextRL(CXUncompContextRL *);
+/* 803ceec0 */ void CXInitUncompContextLZ(CXUncompContextLZ *);
+/* 803cef00 */ s32 CXReadUncompRL(CXUncompContextRL *, const void *, u32);
+/* 803cf1b0 */ s32 CXReadUncompLZ(CXUncompContextLZ *, const void *, u32);
+/* 803cf570 */ void CXInitUncompContextLH(CXUncompContextLH *);
+/* 803cf5b0 */ s32 CXReadUncompLH(CXUncompContextLH *, const void *, u32);
 /* 803cfda0 */ void RCAddCount_();
 /* 803cff90 */ void RCSearch_();
 /* 803d0030 */ void RCGetData_();
-/* 803d0140 */ void CXInitUncompContextLRC();
-/* 803d0390 */ void CXReadUncompLRC();
-/* 803d0790 */ void CXGetUncompressedSize();
+/* 803d0140 */ void CXInitUncompContextLRC(CXUncompContextLRC *);
+/* 803d0390 */ s32 CXReadUncompLRC(CXUncompContextLRC *, const void *, u32);
+/* 803d0790 */ u32 CXGetUncompressedSize(const void *);
 /* 803d07d0 */ void CXUncompressLZ();
 /* 803d0920 */ void CXiLHVerifyTable();
 

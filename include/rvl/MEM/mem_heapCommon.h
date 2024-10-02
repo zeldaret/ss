@@ -2,7 +2,9 @@
 #define RVL_SDK_MEM_HEAP_COMMON_H
 #include "rvl/MEM/mem_list.h"
 #include "rvl/OS.h"
+#include <MSL_C/string.h>
 #include <common.h>
+
 // #include "string.h"
 #ifdef __cplusplus
 extern "C" {
@@ -73,10 +75,20 @@ static inline void LockHeap(MEMiHeapHead *heap) {
     }
 }
 
-static inline void UnlockHeap(MEMiHeapHead *heap) {
+static void UnlockHeap(MEMiHeapHead* heap) {
     if (GetOptForHeap(heap) & MEM_HEAP_OPT_CAN_LOCK) {
         OSUnlockMutex(&heap->mutex);
     }
+}
+
+static void FillAllocMemory(MEMiHeapHead* heap, void* memBlock, u32 size) {
+    if (GetOptForHeap(heap) & MEM_HEAP_OPT_CLEAR_ALLOC) {
+        memset(memBlock, 0, size);
+    }
+}
+
+static s32 MEMGetHeapTotalSize(MEMiHeapHead* heap) {
+    return GetOffsetFromPtr(heap, heap->end);
 }
 
 static void FillAllocMemory(MEMiHeapHead *heap, void *memBlock, u32 size);

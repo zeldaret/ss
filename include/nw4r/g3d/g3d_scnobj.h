@@ -1,9 +1,9 @@
 #ifndef NW4R_G3D_SCNOBJ_H
 #define NW4R_G3D_SCNOBJ_H
 #include "common.h"
-#include "g3d_obj.h"
-#include "math_geometry.h"
-#include "math_types.h"
+#include "nw4r/g3d/g3d_obj.h"
+#include "nw4r/math/math_geometry.h"
+#include "nw4r/math/math_types.h"
 
 namespace nw4r {
 namespace g3d {
@@ -23,25 +23,25 @@ public:
     enum ForEachResult { FOREACH_RESULT_0, FOREACH_RESULT_1 };
 
     enum ScnObjFlag {
-        FLAG_1 = 0x1,
-        FLAG_2 = 0x2,
-        FLAG_4 = 0x4,
-        FLAG_8 = 0x8,
-        FLAG_10 = 0x10,
-        FLAG_20 = 0x20,
-        FLAG_40 = 0x40,
-        FLAG_80 = 0x80,
-        FLAG_10000000 = 0x10000000,
-        FLAG_20000000 = 0x20000000,
-        FLAG_40000000 = 0x40000000,
-        FLAG_80000000 = 0x80000000,
-
-        FLAG_60 = FLAG_40 | FLAG_20
+        SCNOBJFLAG_DISABLE_CALC_WORLD = 1,
+        SCNOBJFLAG_DISABLE_CALC_MAT = 2,
+        SCNOBJFLAG_DISABLE_CALC_VTX = 4,
+        SCNOBJFLAG_DISABLE_CALC_VIEW = 8,
+        SCNOBJFLAG_DISABLE_GATHER_SCNOBJ = 16,
+        SCNOBJFLAG_DISABLE_DRAW_OPA = 32,
+        SCNOBJFLAG_DISABLE_DRAW_XLU = 64,
+        SCNOBJFLAG_DISABLE_UPDATEFRAME = 128,
+        SCNOBJFLAG_IGNORE_ANMCHR_TRANS = 256,
+        SCNOBJFLAG_ENABLE_CULLING = 268435456,
+        SCNOBJFLAG_NOT_GATHER_DRAW_OPA = 536870912,
+        SCNOBJFLAG_NOT_GATHER_DRAW_XLU = 1073741824,
+        SCNOBJFLAG_MTX_LOCAL_IDENTITY = -2147483648,
+        SCNOBJFLAG_DISABLE_DRAW = 96,
     };
 
-    enum ScnObjMtxType { MTX_TYPE_0, MTX_TYPE_WORLD, MTX_TYPE_VIEW, MTX_TYPE_MAX };
+    enum ScnObjMtxType { MTX_TYPE_LOCAL, MTX_TYPE_WORLD, MTX_TYPE_VIEW, MTX_TYPE_MAX };
 
-    enum Timing { TIMING_1 = 0x1, TIMING_2 = 0x2, TIMING_4 = 0x4 };
+    enum Timing { TIMING_1 = 0x1, TIMING_2 = 0x2, TIMING_4 = 0x4, TIMING_ALL = 0x7 };
 
     enum ExecOp { EXEC_OP_1 = 0x1, EXEC_OP_2 = 0x2, EXEC_OP_4 = 0x4 };
 
@@ -88,6 +88,13 @@ public:
     void EnableScnObjCallbackExecOp(ExecOp);
     bool SetBoundingVolume(ScnObjBoundingVolumeType, const math::AABB *);
     bool GetBoundingVolume(ScnObjBoundingVolumeType, math::AABB *) const;
+    void SetCallback(IScnObjCallback *cb) {
+        mCallback = cb;
+    }
+
+    IScnObjCallback *GetScnObjCallback() {
+        return mCallback;
+    }
 
     const math::MTX34 *GetMtxPtr(ScnObjMtxType type) const {
         return &mMatrices[type];
@@ -137,6 +144,8 @@ struct IScnObjCallback {
     virtual void ExecCallback_CALC_WORLD(ScnObj::Timing, ScnObj *, u32, void *) {} // at 0xC
     virtual void ExecCallback_CALC_MAT(ScnObj::Timing, ScnObj *, u32, void *) {}   // at 0x10
     virtual void ExecCallback_CALC_VIEW(ScnObj::Timing, ScnObj *, u32, void *) {}  // at 0x14
+    virtual void ExecCallback_DRAW_OPA(ScnObj::Timing, ScnObj *, u32, void *) {}   // at 0x18
+    virtual void ExecCallback_DRAW_XLU(ScnObj::Timing, ScnObj *, u32, void *) {}   // at 0x1C
 };
 
 // Is there a better way of resolving this dependency?
@@ -202,6 +211,22 @@ public:
     ScaleProperty GetScaleProperty() const;
     void DefG3dProcScnLeaf(u32, u32, void *);
 
+    inline void SetScale(f32 x, f32 y, f32 z) {
+        mScale.x = x;
+        mScale.y = y;
+        mScale.z = z;
+    }
+
+    inline void SetScale(const math::VEC3 &scale) {
+        mScale = scale;
+    }
+
+    inline void GetScale(math::VEC3 *scale) const {
+        if (scale) {
+            *scale = mScale;
+        }
+    }
+
 private:
     math::VEC3 mScale;
 
@@ -235,6 +260,10 @@ public:
         return TypeObj(TYPE_NAME);
     }
 
+    bool PushBack(ScnObj *obj) {
+        return Insert(Size(), obj);
+    }
+
     bool Empty() const {
         return mSize == 0;
     }
@@ -262,8 +291,6 @@ public:
     void ScnGroup_G3DPROC_CALC_MAT(u32, void *);
     void ScnGroup_G3DPROC_CALC_VIEW(u32, const math::MTX34 *);
     void DefG3dProcScnGroup(u32, u32, void *);
-
-    bool PushBack(ScnObj *);
 
     ScnObj **mObjects; // at 0xDC
     u32 mCapacity;     // at 0xE0

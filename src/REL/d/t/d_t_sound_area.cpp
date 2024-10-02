@@ -1,5 +1,5 @@
 #include <d/a/obj/d_a_obj_base.h>
-#include <d/d_player.h>
+#include <d/a/d_a_player.h>
 #include <d/tg/d_t_sound_area.h>
 #include <d/tg/d_t_sound_area_mgr.h>
 #include <rvl/MTX.h>
@@ -10,7 +10,6 @@ void float_ordering() {
     f32 arr[6] = {0, 100, 100, 100, 100, 100};
     0.01f;
 }
-
 
 int dTgSndAr_c::create() {
     scale *= 0.01f;
@@ -34,17 +33,16 @@ int dTgSndAr_c::create() {
         if ((base = fManager_c::searchBaseByGroupType(ACTOR, base)) == nullptr) {
             break;
         }
-        // This has got to be just a member function
         dAcBase_c *ac = static_cast<dAcBase_c *>(base);
-        if (!dBase_c::isActorPlayer(*ac) && checkPosInArea(ac->position)) {
+        if (!ac->isActorPlayer() && checkPosInArea(ac->position)) {
             ac->setBit_field_0xE8(params & 0xFF);
         }
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgSndAr_c::doDelete() {
-    return 1;
+    return SUCCEEDED;
 }
 
 struct Unk {
@@ -55,7 +53,7 @@ struct Unk {
 extern Unk *lbl_80575D58;
 
 int dTgSndAr_c::actorExecute() {
-    dAcBase_c *link = dPlayer::LINK;
+    dAcBase_c *link = dAcPy_c::LINK;
     if (link != nullptr && checkPosInArea(link->position)) {
         link->setBit_field_0xE8(params & 0xFF);
     }
@@ -65,11 +63,11 @@ int dTgSndAr_c::actorExecute() {
             dTgSndMg_c::sInstance->setBgmFlag(params & 0xFF);
         }
     }
-    return 1;
+    return SUCCEEDED;
 }
 
 int dTgSndAr_c::draw() {
-    return 1;
+    return SUCCEEDED;
 }
 
 bool dTgSndAr_c::checkPosInArea(mVec3_c &pos) {
@@ -142,26 +140,31 @@ struct UnkStruct {
 
 extern "C" void fn_80337EA0(UnkStruct *);
 extern "C" void fn_80337EF0(UnkStruct *, mVec3_c &, mVec3_c &, f32);
-extern "C" int fn_8032BFB0(UnkStruct *, EGG::Vector3f &, f32 *, f32 &, int);
+extern "C" int cM3d_Len3dSqPntAndSegLine(UnkStruct *, Vec &, Vec *, f32 *, f32 *);
 
-// ???
+// Capsule
 bool dTgSndAr_c::checkAlg3(const mVec3_c &pos) {
-    f32 q[4];
-    UnkStruct unk;
+    Vec q;
 
     f32 radius = scale.x * 100.0f;
     radius = radius * radius;
-    EGG::Vector3f a = pos;
+    Vec a = pos;
+
+    UnkStruct unk;
     fn_80337EA0(&unk);
 
+    // Line between b and c
     mVec3_c b = *mRail.getPntPosForIndex(0);
     mVec3_c c = *mRail.getPntPosForIndex(1);
 
     fn_80337EF0(&unk, b, c, scale.x * 100.0f);
     f32 d;
-    if (fn_8032BFB0(&unk, a, q, d, 0)) {
+    if (cM3d_Len3dSqPntAndSegLine(&unk, a, &q, &d, nullptr)) {
+        // At the cylindrical part of the capsule, just check the distance to
+        // the line
         return d < radius;
     } else {
+        // Otherwise check if we are within the spheres around the endpoints
         f32 distSq = PSVECSquareDistance(unk.vec, pos);
         if (distSq < radius) {
             return true;

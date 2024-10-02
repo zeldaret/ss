@@ -1,40 +1,44 @@
+
 #ifndef NW4R_SND_SOUND_3D_ACTOR_H
 #define NW4R_SND_SOUND_3D_ACTOR_H
-#include "snd_BasicSound.h"
-#include "snd_SoundActor.h"
-#include "math_types.h"
+#include <nw4r/types_nw4r.h>
 
-namespace nw4r
-{
-	namespace snd
-	{
-		struct Sound3DActor :
-			detail::SoundActor,
-			detail::BasicSound::AmbientArgUpdateCallback
-		{
-			Sound3DManager & mManager; // at 0xac
-			SoundArchivePlayer & mArchivePlayer; // at 0xb0
-			UNKWORD WORD_0xB4;
-			math::VEC3 mPosition; // at 0xb8
-			
-			Sound3DActor(SoundArchivePlayer &, Sound3DManager &);
-			
-			~Sound3DActor();
-			
-			UNKWORD detail_SetupSound(SoundHandle *,
-				u32,
-				detail::BasicSound::AmbientArgInfo *,
-				detail::ExternalSoundPlayer *,
-				bool,
-				const SoundStartable::StartInfo *);
-			
-			void SetPosition(const math::VEC3 &);
-			
-			void detail_Update(void *, const detail::BasicSound *);
+#include <nw4r/snd/snd_BasicSound.h>
+#include <nw4r/snd/snd_SoundActor.h>
 
-			static void ClearUpdateCallback(SoundHandle& handle);
-		};
-	}
-}
+#include <nw4r/math.h>
+
+namespace nw4r {
+namespace snd {
+
+class Sound3DActor : public detail::SoundActor,
+                     public detail::BasicSound::AmbientArgUpdateCallback {
+public:
+    Sound3DActor(SoundArchivePlayer& rPlayer, Sound3DManager& rManager);
+    virtual ~Sound3DActor(); // at 0x8
+
+    virtual StartResult
+    detail_SetupSound(SoundHandle* pHandle, u32 id,
+                      detail::BasicSound::AmbientArgInfo* pArgInfo,
+                      detail::ExternalSoundPlayer* pPlayer, bool hold,
+                      const StartInfo* pStartInfo); // at 0xC
+
+    virtual void detail_Update(void* pArg,
+                               const detail::BasicSound* pSound); // at 0xC
+
+    void SetPosition(const math::VEC3& rPosition);
+
+private:
+    static void ClearUpdateCallback(SoundHandle& rHandle);
+
+private:
+    Sound3DManager& m3DManager;              // at 0xAC
+    SoundArchivePlayer& mSoundArchivePlayer; // at 0xB0
+    u32 mUserParam;                          // at 0xB4
+    math::VEC3 mPosition;                    // at 0xB8
+};
+
+} // namespace snd
+} // namespace nw4r
 
 #endif
