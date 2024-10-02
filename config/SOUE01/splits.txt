@@ -568,6 +568,29 @@ m/m_pad.cpp:
 	.sdata2     start:0x8057CDF8 end:0x8057CE00
 	.bss        start:0x805CB0B8 end:0x805CB1F8
 
+libms/commonlib.c:
+	extab       start:0x80006720 end:0x80006738
+	extabindex  start:0x80006920 end:0x80006944
+	.text       start:0x80323A70 end:0x80323C94
+
+libms/flowfile.c:
+	extab       start:0x80006738 end:0x80006758
+	extabindex  start:0x80006944 end:0x80006974
+	.text       start:0x80323CA0 end:0x80323F74
+	.data       start:0x80547268 end:0x80547278
+	.sdata      start:0x80574010 end:0x80574028
+
+libms/libms.c:
+	.text       start:0x80323F80 end:0x803240D8
+	.sbss       start:0x80575C90 end:0x80575C98
+
+libms/msgfile.c:
+	extab       start:0x80006758 end:0x80006780
+	extabindex  start:0x80006974 end:0x800069B0
+	.text       start:0x803240E0 end:0x80324434
+	.data       start:0x80547278 end:0x80547288
+	.sdata      start:0x80574028 end:0x80574048
+
 toBeSorted/cc/d_cc_d.cpp:
 	.text       start:0x80328120 end:0x8032BC78
 	.ctors      start:0x804DB8F8 end:0x804DB8FC
