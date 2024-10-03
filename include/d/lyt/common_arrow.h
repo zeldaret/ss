@@ -2,6 +2,7 @@
 #define D_LYT_COMMON_ARROW_H
 
 #include <d/lyt/d2d.h>
+#include <d/lyt/d_structd.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 

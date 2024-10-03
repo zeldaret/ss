@@ -22,8 +22,6 @@ static const d2d::LytBrlanMapping brlanMap[] = {
 
 dLytCommonArrow_c::dLytCommonArrow_c() : mStateMgr(*this, sStateID::null) {}
 
-extern "C" d2d::dLytStructD *lbl_80575260;
-
 bool dLytCommonArrow_c::init() {
     void *data = LayoutArcManager::sInstance->getLoadedData("CommonArrow");
     mResAcc.attach(data, "");
@@ -34,7 +32,7 @@ bool dLytCommonArrow_c::init() {
         field_0x440[i].init(brlanMap[i].mFile, &mResAcc, mLytBase.getLayout(), brlanMap[i].mName);
     }
     field_0x680.fn_80065E70(mLytBase.getLayout()->GetRootPane(), 1, 0, 0);
-    lbl_80575260->append(&field_0x680);
+    d2d::dLytStructDList::sInstance->appendToList2(&field_0x680);
     field_0x6A8 = mLytBase.findBounding("B_arrowL_00");
     field_0x6AC = mLytBase.findBounding("B_arrowR_00");
     mStateMgr.changeState(StateID_None);
@@ -43,7 +41,7 @@ bool dLytCommonArrow_c::init() {
 }
 
 bool dLytCommonArrow_c::fn_80168490() {
-    lbl_80575260->detach(&field_0x680);
+    d2d::dLytStructDList::sInstance->removeFromList2(&field_0x680);
     mLytBase.unbindAnims();
     for (int i = 0; i < 9; i++) {
         field_0x440[i].fn_800AC860();
@@ -169,7 +167,7 @@ void dLytCommonArrow_c::initializeState_In() {
 }
 void dLytCommonArrow_c::executeState_In() {
     switch (field_0x6C4) {
-    case 0:
+    case 0: {
         d2d::AnmGroup_c *s = &field_0x440[0];
         if (s->mpFrameCtrl->isEndReached() == 1) {
             field_0x6C4 += 1;
@@ -178,7 +176,7 @@ void dLytCommonArrow_c::executeState_In() {
             s->mpFrameCtrl->play();
             s->syncAnmFrame();
         }
-        break;
+    } break;
     case 1:
         field_0x6CA = 0;
         mStateMgr.changeState(StateID_Wait);
@@ -219,14 +217,14 @@ void dLytCommonArrow_c::initializeState_Out() {
 }
 void dLytCommonArrow_c::executeState_Out() {
     switch (field_0x6C4) {
-    case 0:
+    case 0: {
         d2d::AnmGroup_c *s = &field_0x440[8];
         if (s->mpFrameCtrl->isEndReached() == 1) {
             field_0x6C4 = 1;
             field_0x6CA = 1;
         }
         s->play();
-        break;
+    } break;
     case 1:
         mStateMgr.changeState(StateID_None);
         break;

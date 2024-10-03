@@ -135,6 +135,9 @@ toBeSorted/arc_callback_handler.cpp:
 	.sdata      start:0x80571D10 end:0x80571D20
 	.sbss       start:0x80575250 end:0x80575258
 
+d/lyt/d_structd.cpp:
+	.text       start:0x80065600 end:0x80066478
+
 toBeSorted/arc_managers/current_stage_arc_manager.cpp:
 	.text       start:0x80068FD0 end:0x80069910
 	.ctors      start:0x804DB6A8 end:0x804DB6AC
@@ -173,8 +176,16 @@ toBeSorted/dowsing_target.cpp:
 
 d/lyt/d2d.cpp:
 	.text       start:0x800A9D30 end:0x800ACAB8
-	.data       start:0x80510010 end:0x80510088
+	.data       start:0x8050FFC8 end:0x80510088
+	.sdata      start:0x80572288 end:0x805722B8
 	.sdata2     start:0x80579788 end:0x805797B0
+
+d/lyt/d_lyt_draw_mark.cpp:
+	.text       start:0x800ACEC0 end:0x800AE958
+	.ctors      start:0x804DB6CC end:0x804DB6D0
+
+d/lyt/d_textbox.cpp:
+	.text       start:0x800AE960 end:0x800B1628
 
 d/lyt/d_window.cpp:
 	.text       start:0x800B1630 end:0x800B1818
@@ -217,6 +228,73 @@ toBeSorted/skipflag_manager.cpp:
 toBeSorted/special_item_drop_mgr.cpp:
 	.text       start:0x800C7B60 end:0x800C82B0
 	.sbss       start:0x80575438 end:0x80575440
+
+d/lyt/meter/d_lyt_meter_12_btns.cpp:
+	.text       start:0x800C8950 end:0x800DFCB8
+	.ctors      start:0x804DB6E0 end:0x804DB6E4
+
+d/lyt/meter/d_lyt_meter_a_btn.cpp:
+	.text       start:0x800DFCC0 end:0x800E1188
+	.ctors      start:0x804DB6E4 end:0x804DB6E8
+
+d/lyt/meter/d_lyt_meter_z_btn.cpp:
+	.text       start:0x800E1190 end:0x800E2238
+	.ctors      start:0x804DB6E8 end:0x804DB6EC
+
+d/lyt/meter/d_lyt_meter_key.cpp:
+	.text       start:0x800E2240 end:0x800E4928
+	.ctors      start:0x804DB6EC end:0x804DB6F0
+
+d/lyt/meter/d_lyt_meter_drink.cpp:
+	.text       start:0x800E4930 end:0x800E6AC8
+	.ctors      start:0x804DB6F0 end:0x804DB6F4
+
+d/lyt/meter/d_lyt_meter_remocon_bg.cpp:
+	.text       start:0x800E6AD0 end:0x800E7218
+	.ctors      start:0x804DB6F4 end:0x804DB6F8
+
+d/lyt/meter/d_lyt_meter_nunchaku_bg.cpp:
+	.text       start:0x800E7220 end:0x800E8168
+	.ctors      start:0x804DB6F8 end:0x804DB6FC
+
+d/lyt/meter/d_lyt_meter_nun_stk.cpp:
+	.text       start:0x800E8170 end:0x800E8ED8
+	.ctors      start:0x804DB6FC end:0x804DB700
+
+d/lyt/meter/d_lyt_meter_item_select.cpp:
+	.text       start:0x800E8EE0 end:0x800F35A8
+	.ctors      start:0x804DB700 end:0x804DB704
+
+d/lyt/meter/d_lyt_meter_plus_btn.cpp:
+	.text       start:0x800F35B0 end:0x800F4768
+	.ctors      start:0x804DB704 end:0x804DB708
+
+d/lyt/meter/d_lyt_meter_minus_btn.cpp:
+	.text       start:0x800F4770 end:0x800F8D98
+	.ctors      start:0x804DB708 end:0x804DB70C
+
+d/lyt/meter/d_lyt_meter_cross_btn.cpp:
+	.text       start:0x800F8DA0 end:0x800FAFC8
+	.ctors      start:0x804DB70C end:0x804DB710
+
+d/lyt/meter/d_lyt_meter_dowsing.cpp:
+	.text       start:0x800FAFD0 end:0x801003E8
+	.ctors      start:0x804DB710 end:0x804DB714
+
+d/lyt/meter/d_lyt_meter_rupy.cpp:
+	.text       start:0x801003F0 end:0x801026A8
+	.ctors      start:0x804DB714 end:0x804DB718
+
+d/lyt/meter/d_lyt_meter_heart.cpp:
+	.text       start:0x8010AEC0 end:0x8010BD48
+
+d/lyt/meter/d_lyt_meter_shield_gauge.cpp:
+	.text       start:0x8010BD50 end:0x8010CEC8
+	.ctors      start:0x804DB724 end:0x804DB728
+
+d/lyt/d_lyt_do_button.cpp:
+	.text       start:0x8010CED0 end:0x8010EAF8
+	.ctors      start:0x804DB728 end:0x804DB72C
 
 d/lyt/pause_disp_00.cpp:
 	.text       start:0x80159E80 end:0x8015EDE8
