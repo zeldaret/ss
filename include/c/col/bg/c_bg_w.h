@@ -19,14 +19,20 @@ public:
 
     virtual ~cBgW_BgId() {}
 
-    cBgW_BgId() { Ct(); }
-    void Ct() { m_id = BG_ID_MAX; }
+    cBgW_BgId() {
+        Ct();
+    }
+    void Ct() {
+        m_id = BG_ID_MAX;
+    }
 
-    u16 GetId() const { return m_id; }
+    u16 GetId() const {
+        return m_id;
+    }
 };
 
-bool cBgW_CheckBGround(float a1);
-bool cBgW_CheckBRoof(float a1);
-bool cBgW_CheckBWall(float a1);
+bool cBgW_CheckBGround(f32 a1);
+bool cBgW_CheckBRoof(f32 a1);
+bool cBgW_CheckBWall(f32 a1);
 
 #endif

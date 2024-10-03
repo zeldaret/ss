@@ -15,7 +15,9 @@ public:
     /* 0x10 vtable */
 
 public:
-    cBgS_ChkElm() : m_actor(nullptr) { this->Release(); }
+    cBgS_ChkElm() : m_actor(nullptr) {
+        this->Release();
+    }
     void Init();
     void Release();
 
@@ -53,7 +55,9 @@ public:
     virtual void Ct();
     virtual void Dt();
 
-    fBase_c *GetActorPointer(cBgS_PolyInfo const &info) const { return GetActorPointer(info.GetBgIndex()); }
+    fBase_c *GetActorPointer(cBgS_PolyInfo const &info) const {
+        return GetActorPointer(info.GetBgIndex());
+    }
 }; // Size: 0x2EFC
 
 class dBgS_Acch;
@@ -99,29 +103,41 @@ public:
     f32 RoofChk(dBgS_RoofChk *);
     bool SplGrpChk(dBgS_SplGrpChk *);
     bool SphChk(dBgS_SphChk *, void *);
-    void MoveBgCrrPos(cBgS_PolyInfo const &i_poly, bool param_1, mVec3_c *i_pos, mAng3_c *i_angle,
-        mAng3_c *i_shapeAngle, bool param_5, bool param_6);
-    void MoveBgTransPos(cBgS_PolyInfo const &i_poly, bool param_1, mVec3_c *i_pos, mAng3_c *i_angle,
-        mAng3_c *i_shapeAngle);
+    void MoveBgCrrPos(
+        cBgS_PolyInfo const &i_poly, bool param_1, mVec3_c *i_pos, mAng3_c *i_angle, mAng3_c *i_shapeAngle,
+        bool param_5, bool param_6
+    );
+    void
+    MoveBgTransPos(cBgS_PolyInfo const &i_poly, bool param_1, mVec3_c *i_pos, mAng3_c *i_angle, mAng3_c *i_shapeAngle);
     void MoveBgMatrixCrrPos(cBgS_PolyInfo const &, bool, mVec3_c *, mAng3_c *, mAng3_c *);
     void RideCallBack(cBgS_PolyInfo const &, fopAc_ac_c *);
     void ArrowStickCallBack(cBgS_PolyInfo const &, fopAc_ac_c *, mVec3_c &);
     fopAc_ac_c *PushPullCallBack(cBgS_PolyInfo const &, fopAc_ac_c *, s16, dBgW_Base::PushPullLabel);
 
-    bool WaterChk(dBgS_SplGrpChk *chk) { return SplGrpChk(chk); }
-    u32 GetMtrlSndId(const cBgS_PolyInfo &param_0) { return dKy_pol_sound_get(&param_0); }
+    bool WaterChk(dBgS_SplGrpChk *chk) {
+        return SplGrpChk(chk);
+    }
+    u32 GetMtrlSndId(const cBgS_PolyInfo &param_0) {
+        return dKy_pol_sound_get(&param_0);
+    }
 
 }; // Size: 0x1404
 
 bool dBgS_CheckBGroundPoly(cBgS_PolyInfo const &);
 bool dBgS_CheckBRoofPoly(cBgS_PolyInfo const &);
 bool dBgS_CheckBWallPoly(cBgS_PolyInfo const &);
-void dBgS_MoveBGProc_Typical(dBgW *param_0, void *param_1, cBgS_PolyInfo const &param_2, bool param_3, mVec3_c *param_4,
-    mAng3_c *param_5, mAng3_c *param_6);
-void dBgS_MoveBGProc_TypicalRotY(dBgW *param_0, void *param_1, cBgS_PolyInfo const &param_2, bool param_3,
-    mVec3_c *param_4, mAng3_c *param_5, mAng3_c *param_6);
-void dBgS_MoveBGProc_Trans(dBgW *i_bgw, void *i_actor_ptr, cBgS_PolyInfo const &i_poly, bool param_3, mVec3_c *i_pos,
-    mAng3_c *i_angle, mAng3_c *i_shapeAngle);
+void dBgS_MoveBGProc_Typical(
+    dBgW *param_0, void *param_1, cBgS_PolyInfo const &param_2, bool param_3, mVec3_c *param_4, mAng3_c *param_5,
+    mAng3_c *param_6
+);
+void dBgS_MoveBGProc_TypicalRotY(
+    dBgW *param_0, void *param_1, cBgS_PolyInfo const &param_2, bool param_3, mVec3_c *param_4, mAng3_c *param_5,
+    mAng3_c *param_6
+);
+void dBgS_MoveBGProc_Trans(
+    dBgW *i_bgw, void *i_actor_ptr, cBgS_PolyInfo const &i_poly, bool param_3, mVec3_c *i_pos, mAng3_c *i_angle,
+    mAng3_c *i_shapeAngle
+);
 f32 dBgS_GetNY(cBgS_PolyInfo const &poly);
 
 #endif /* D_BG_D_BG_S_H */

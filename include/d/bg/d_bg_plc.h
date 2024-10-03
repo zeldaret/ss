@@ -3,7 +3,9 @@
 
 #include "d/bg/d_bg_pc.h"
 
-enum { ZELDA_CODE_SIZE = 0x14 };
+enum {
+    ZELDA_CODE_SIZE = 0x14
+};
 
 struct PLC {
     /* 0x0 */ u32 magic;

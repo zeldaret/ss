@@ -1,8 +1,8 @@
 #ifndef D_CC_SHAPE_COLLIDERS_H
 #define D_CC_SHAPE_COLLIDERS_H
 
+#include <d/cc/d_cc_d.h>
 #include <m/m_vec.h>
-#include <toBeSorted/cc/d_cc_d.h>
 
 struct dCcD_SrcUnk {
     /* 0x00 */ dCcD_SrcGObjInf mObjInf;

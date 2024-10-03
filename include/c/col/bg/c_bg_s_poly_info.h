@@ -5,10 +5,10 @@
 
 class cBgS_PolyInfo {
 private:
-    /* 0x00 */ u16 mPolyIndex;
-    /* 0x02 */ u16 mBgIndex;
-    /* 0x04 */ void *unk_0x04;        // Collision Pointer?
-    /* 0x08 */ unsigned int mActorId; // Matched the Unique Actor Id
+    /* 0x00 */ u32 mPolyIndex;
+    /* 0x04 */ u32 mBgIndex;
+    /* 0x08 */ void *unk_0x04;        // Collision Pointer?
+    /* 0x0C */ unsigned int mActorId; // Matched the Unique Actor Id
 
 public:
     cBgS_PolyInfo();
@@ -22,8 +22,12 @@ public:
 
     virtual ~cBgS_PolyInfo();
 
-    u16 GetPolyIndex() const { return mPolyIndex; }
-    u16 GetBgIndex() const { return mBgIndex; }
+    u32 GetPolyIndex() const {
+        return mPolyIndex;
+    }
+    u32 GetBgIndex() const {
+        return mBgIndex;
+    }
 }; // Size: 0x10
 
 #endif /* C_BG_S_POLY_INFO_H */

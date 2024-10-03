@@ -2,12 +2,13 @@
 #define TOSORT_D_CC_D_H
 
 #include <d/a/d_a_base.h>
+#include <d/cc/d_cc_m3d_g_aab.h>
+#include <d/cc/d_cc_m3d_g_cyl.h>
+#include <d/cc/d_cc_m3d_g_sph.h>
 #include <f/f_base_id.h>
 #include <m/m_mtx.h>
 #include <m/m_vec.h>
 #include <nw4r/math/math_types.h>
-#include <toBeSorted/cc/d_cc_m3d_g_cyl.h>
-#include <toBeSorted/cc/d_cc_m3d_g_sph.h>
 
 // Largely modeled off
 // https://github.com/zeldaret/tp/blob/main/include/SSystem/SComponent/c_cc_d.h
@@ -28,18 +29,7 @@ public:
     // bool Chk(dCcD_DivideInfo const &) const;
 }; // Size = 0x10
 
-// This Aabb type really could be anything
-struct Aabb {
-    mVec3_c mMin;
-    mVec3_c mMax;
-
-    void Set(mVec3_c const &a, mVec3_c const &b) {
-        mMin = a;
-        mMax = b;
-    }
-}; // Size = 0x18
-
-class dCcD_DivideArea : public Aabb {
+class dCcD_DivideArea : public cM3dGAab {
 private:
     /* 0x18 */ bool mXDiffIsZero;
     /* 0x1C */ f32 mScaledXDiff;
@@ -55,9 +45,9 @@ public:
     /* vt at 0x3C */
     dCcD_DivideArea();
     virtual ~dCcD_DivideArea();
-    /* 803281c0 */ void SetArea(Aabb const &);
-    /* 803282d0 */ void CalcDivideInfo(dCcD_DivideInfo *, Aabb const &, u32);
-    /* 80328470 */ void CalcDivideInfoOverArea(dCcD_DivideInfo *, Aabb const &);
+    /* 803281c0 */ void SetArea(cM3dGAab const &);
+    /* 803282d0 */ void CalcDivideInfo(dCcD_DivideInfo *, cM3dGAab const &, u32);
+    /* 80328470 */ void CalcDivideInfoOverArea(dCcD_DivideInfo *, cM3dGAab const &);
 }; // Size = 0x40
 
 class dCcD_GAtTgCoCommonBase {

@@ -1,10 +1,11 @@
 #include <d/a/obj/d_a_obj_toD3_stone_figure.h>
+#include <d/cc/d_cc_mgr.h>
 #include <toBeSorted/attention.h>
-#include <toBeSorted/cc/d_cc_mgr.h>
 #include <toBeSorted/event.h>
 #include <toBeSorted/event_manager.h>
 #include <toBeSorted/item_story_flag_manager.h>
 #include <toBeSorted/scgame.h>
+
 
 SPECIAL_ACTOR_PROFILE(OBJ_TOD3_STONE, dAcOtoD3StoneFigure_c, fProfile::OBJ_TOD3_STONE, 0x1B3, 0, 0);
 

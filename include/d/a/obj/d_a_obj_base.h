@@ -2,14 +2,15 @@
 #define D_A_OBJ_BASE_H
 
 #include "d/a/d_a_base.h"
+#include "d/cc/d_cc_d.h"
+#include "m/m3d/m_shadow.h"
+#include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
-#include "m/m3d/m_smdl.h"
-#include "m/m3d/m_shadow.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
 #include "nw4r/g3d/g3d_resfile.h"
-#include "toBeSorted/cc/d_cc_d.h"
+
 
 // Size: 0xA8
 struct ActorCarryStruct {
@@ -94,12 +95,16 @@ public:
     /* 8002ea20 */ virtual bool drop();
 
 public:
-    /* 8002e630 */ static dAcObjBase_c *create(fProfile::PROFILE_NAME_e actorId, s8 roomId, u32 params1, mVec3_c *pos,
-            mAng3_c *rot, mVec3_c *scale, u32 params2);
-    /* 8002e6d0 */ static dAcObjBase_c *create(char *name, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot,
-            mVec3_c *scale, u32 params2, u16 id, s8 viewclipId);
-    /* 8002e770 */ static dAcObjBase_c *findObject(fProfile::PROFILE_NAME_e actorId, fLiNdBa_c *refList,
-            dAcObjBase_c *parent);
+    /* 8002e630 */ static dAcObjBase_c *create(
+        fProfile::PROFILE_NAME_e actorId, s8 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale,
+        u32 params2
+    );
+    /* 8002e6d0 */ static dAcObjBase_c *create(
+        char *name, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, u16 id,
+        s8 viewclipId
+    );
+    /* 8002e770 */ static dAcObjBase_c *
+    findObject(fProfile::PROFILE_NAME_e actorId, fLiNdBa_c *refList, dAcObjBase_c *parent);
     /* 8002e7f0 */ static dAcObjBase_c *getNextObject(fLiNdBa_c *ref, dAcObjBase_c *parent);
     /* 8002e850 */ bool isPlayer();
     /* 8002e870 */ void calcVelocity(mVec3_c &pos, f32 speed);
@@ -115,21 +120,33 @@ public:
     // Disabling make Lava and other objects Disappear
     /* 8002ecd0 */ void drawModel2();
     /* 8002ed20 */ void fn_8002ed20();
-    /* 8002edb0 */ void fn_8002edb0(m3d::mShadowCircle_c& shadow, m3d::smdl_c& smdl, const mQuat_c *rot, s32, s32, f32);
-    /* 8002ee40 */ void drawShadow(m3d::mShadowCircle_c& shadow, void*, const mMtx_c &mtx, const mQuat_c *rot, s32, s32, s32, s32, s32, f32);
-    /* 8002ef40 */ void createChildAttached(fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot,
-            mVec3_c *scale, u32 params2, u32 roomId);
-    /* 8002ef40 */ void createChildNonAttached(fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos,
-            mAng3_c *rot, mVec3_c *scale, u32 params2, u32 roomId);
+    /* 8002edb0 */ void fn_8002edb0(m3d::mShadowCircle_c &shadow, m3d::smdl_c &smdl, const mQuat_c *rot, s32, s32, f32);
+    /* 8002ee40 */ void drawShadow(
+        m3d::mShadowCircle_c &shadow, void *, const mMtx_c &mtx, const mQuat_c *rot, s32, s32, s32, s32, s32, f32
+    );
+    /* 8002ef40 */ void createChildAttached(
+        fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
+        u32 roomId
+    );
+    /* 8002ef40 */ void createChildNonAttached(
+        fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
+        u32 roomId
+    );
     /* 8002efa0 */ void fn_8002efa0();
     /* 8002eff0 */ bool fn_8002eff0(f32 *, s16 *, UnkCollider *, f32 *, f32 *);
-    /* 8002f190 */ void createChildAttached2(fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot,
-            mVec3_c *scale, u32 params2, u32 roomId);
+    /* 8002f190 */ void createChildAttached2(
+        fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
+        u32 roomId
+    );
     // These may not belong here
-    /* 8002f1c0 */ static dAcBase_c *createActorUnkGroup3(fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1,
-            mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2);
-    /* 8002f260 */ static dAcBase_c *createActorUnkGroup3(char *name, u32 roomId, u32 params1, mVec3_c *pos,
-            mAng3_c *rot, mVec3_c *scale, u32 params2, u16 id, u8 viewclipId);
+    /* 8002f1c0 */ static dAcBase_c *createActorUnkGroup3(
+        fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale,
+        u32 params2
+    );
+    /* 8002f260 */ static dAcBase_c *createActorUnkGroup3(
+        char *name, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, u16 id,
+        u8 viewclipId
+    );
 
 protected:
     inline void setBoundingBox(mVec3_c min, mVec3_c max) {
@@ -139,8 +156,18 @@ protected:
 };
 
 // Actors' createHeap functions often have patterns that can be matched with this macro
-#define TRY_CREATE(thing) do { bool result = (thing); if (!result) return result; } while (0)
+#define TRY_CREATE(thing)                                                                                              \
+    do {                                                                                                               \
+        bool result = (thing);                                                                                         \
+        if (!result)                                                                                                   \
+            return result;                                                                                             \
+    } while (0)
 // Use this in actors' createHeap functions
-#define CREATE_ALLOCATOR(className) do { if (!initAllocatorWork1Heap(-1, #className "::m_allocator", 0x20)) { return FAILED; } } while (0)
+#define CREATE_ALLOCATOR(className)                                                                                    \
+    do {                                                                                                               \
+        if (!initAllocatorWork1Heap(-1, #className "::m_allocator", 0x20)) {                                           \
+            return FAILED;                                                                                             \
+        }                                                                                                              \
+    } while (0)
 
 #endif

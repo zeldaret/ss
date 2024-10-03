@@ -3,12 +3,13 @@
 
 #include <c/c_math.h>
 #include <d/a/obj/d_a_obj_base.h>
+#include <d/cc/d_cc_shape_colliders.h>
 #include <m/m3d/m_anmtexsrt.h>
 #include <m/m3d/m_smdl.h>
 #include <m/m_angle.h>
 #include <nw4r/g3d/g3d_resfile.h>
-#include <toBeSorted/cc/d_cc_shape_colliders.h>
 #include <toBeSorted/effects_struct.h>
+
 
 class dAcOtriforce_c : public dAcObjBase_c {
 public:

@@ -1,7 +1,8 @@
 #include <c/c_math.h>
 #include <d/a/obj/d_a_obj_triforce.h>
+#include <d/cc/d_cc_mgr.h>
 #include <m/m_vec.h>
-#include <toBeSorted/cc/d_cc_mgr.h>
+
 
 SPECIAL_ACTOR_PROFILE(OBJ_TRIFORCE, dAcOtriforce_c, fProfile::OBJ_TRIFORCE, 0x15D, 0, 4);
 

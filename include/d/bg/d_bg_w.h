@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "d/bg/d_bg_w_base.h"
-#include "m/m_aabb.h"
+#include "d/cc/d_cc_m3d_g_aab.h"
 #include "m/m_math.h"
 #include "m/m_plane.h"
 #include "rvl/MTX.h"
@@ -31,7 +31,7 @@ public:
     /*  */ virtual ~cBgW_RwgElm();
 }; // Size: 0x8
 
-class cBgW_NodeTree : public mAABB_c {
+class cBgW_NodeTree : public cM3dGAab {
 public:
     /*  */ cBgW_NodeTree();
     /*  */ virtual ~cBgW_NodeTree();
@@ -41,7 +41,7 @@ class cBgW_GrpElm {
 public:
     /*  */ cBgW_GrpElm();
     /*  */ virtual ~cBgW_GrpElm();
-    /* 0x4 */ mAABB_c m_aab;
+    /* 0x4 */ cM3dGAab m_aab;
 };
 
 struct cBgW_BlkElm {
@@ -159,7 +159,7 @@ public:
     virtual u32 ChkMoveFlag() const = 0;
     /*  */ virtual mPlane_c GetTriPla(cBgS_PolyInfo const &) const;
     /*  */ virtual bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c *, mVec3_c *, mVec3_c *) const;
-    /*  */ virtual mAABB_c *GetBnd() const;
+    /*  */ virtual cM3dGAab *GetBnd() const;
     /*  */ virtual u32 GetGrpInf(cBgS_PolyInfo const &) const;
     virtual void OffMoveFlag() = 0;
     /*  */ virtual void GetTopUnder(f32 *, f32 *) const;
@@ -214,12 +214,24 @@ public:
 
     // u32 GetOldInvMtx(Mtx m) { return MTXInverse(m_inv_mtx, m); }
     // MtxP GetBaseMtxP() { return pm_base; }
-    bool ChkNoCalcVtx() { return mFlags & NO_CALC_VTX_e; }
-    bool ChkFlush() { return field_0x91 & 8; }
-    void SetLock() { mFlags |= LOCK_e; }
-    bool ChkRoofRegist() { return field_0x91 & 4; }
-    cBgD_Vtx_t *GetVtxTbl() const { return pm_vtx_tbl; }
-    int GetVtxNum() const { return pm_bgd->m_v_num; }
+    bool ChkNoCalcVtx() {
+        return mFlags & NO_CALC_VTX_e;
+    }
+    bool ChkFlush() {
+        return field_0x91 & 8;
+    }
+    void SetLock() {
+        mFlags |= LOCK_e;
+    }
+    bool ChkRoofRegist() {
+        return field_0x91 & 4;
+    }
+    cBgD_Vtx_t *GetVtxTbl() const {
+        return pm_vtx_tbl;
+    }
+    int GetVtxNum() const {
+        return pm_bgd->m_v_num;
+    }
 
 public:
     /* 0x18 */ mMtx_c *pm_base; // Model Matrix
@@ -250,7 +262,7 @@ class dBgW : public cBgW {
 public:
     /* */ dBgW();
     /* */ void Move();
-    /* */ void positionWallCorrect(dBgS_Acch *, f32, mPlane_c &, mAng3_c *pupper_pos, f32);
+    /* */ void positionWallCorrect(dBgS_Acch *, f32, mPlane_c &, mAng3_c *pUpperPos, f32);
     /* */ bool RwgWallCorrect(dBgS_Acch *, u16);
     /* */ bool WallCorrectRp(dBgS_Acch *, int);
     /* */ bool WallCorrectGrpRp(dBgS_Acch *, int, int);
@@ -318,9 +330,15 @@ public:
     /*  */ virtual bool ChkShdwDrawThrough(int, cBgS_PolyPassChk *);
     /*  */ virtual bool ChkGrpThrough(int, cBgS_GrpPassChk *, int);
 
-    void SetCrrFunc(dBgW_CrrFunc func) { m_crr_func = func; }
-    void SetRideCallback(dBgW_RideCallback func) { m_ride_callback = func; }
-    void OnMoveFlag() { m_flags |= 1; }
+    void SetCrrFunc(dBgW_CrrFunc func) {
+        m_crr_func = func;
+    }
+    void SetRideCallback(dBgW_RideCallback func) {
+        m_ride_callback = func;
+    }
+    void OnMoveFlag() {
+        m_flags |= 1;
+    }
 
 private:
     /* 0xB0 */ dBgW_CrrFunc m_crr_func;
