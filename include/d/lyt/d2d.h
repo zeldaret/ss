@@ -3,7 +3,7 @@
 
 #include <libms/msgfile.h>
 #include <m/m2d.h>
-#include <d/lyt/meter/d_lyt_meter.h>
+#include <d/lyt/meter/d_lyt_meter_base.h>
 #include <nw4r/lyt/lyt_pane.h>
 #include <nw4r/lyt/lyt_picture.h>
 
@@ -115,6 +115,7 @@ struct AnmGroupBase_c {
     AnmGroupBase_c(m2d::FrameCtrl_c *frameCtrl): field_0x04(nullptr), mFlags(0), mpFrameCtrl(frameCtrl) {}
     virtual ~AnmGroupBase_c() {}
 
+protected:
     /* 0x04 */ void *field_0x04;
     /* 0x08 */ m2d::FrameCtrl_c *mpFrameCtrl;
     /* 0x0C */ u8 mFlags;
@@ -130,15 +131,15 @@ struct AnmGroup_c : public AnmGroupBase_c {
     bool fn_800AC6D0(bool);
     bool fn_800AC7D0();
     bool fn_800AC860();
-    void fn_800AC870(bool);
+    void setAnimEnable(bool);
     void setAnmFrame(f32);
     void syncAnmFrame();
     void setForward();
     void setBackward();
 
-    inline void setFrame(f32 frame) {
+    inline void setFrameAndControlThings(f32 frame) {
         fn_800AC6D0(false);
-        fn_800AC870(true);
+        setAnimEnable(true);
         mpFrameCtrl->setFrame(frame);
         syncAnmFrame();
     }
@@ -146,6 +147,15 @@ struct AnmGroup_c : public AnmGroupBase_c {
     inline void play() {
         mpFrameCtrl->play();
         syncAnmFrame();
+    }
+
+    inline void setFrame(f32 frame) {
+        mpFrameCtrl->setFrame(frame);
+        syncAnmFrame();
+    }
+
+    inline f32 getFrame() const {
+        return mpFrameCtrl->getFrame();
     }
 
     inline void setToStart() {
@@ -157,6 +167,17 @@ struct AnmGroup_c : public AnmGroupBase_c {
         mpFrameCtrl->setToEnd();
         syncAnmFrame();
     }
+
+    inline bool isEndReached() const {
+        return mpFrameCtrl->isEndReached();
+    }
+
+    inline void setRate(f32 rate) {
+        mpFrameCtrl->setRate(rate);
+        setAnimEnable(true);
+    }
+
+private:
 
     /* 0x10 */ nw4r::lyt::AnimResource mAnmResource;
     /* 0x20 */ nw4r::lyt::Group *mpGroup;

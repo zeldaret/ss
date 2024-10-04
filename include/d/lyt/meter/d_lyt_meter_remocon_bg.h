@@ -1,20 +1,8 @@
 #include <d/lyt/d2d.h>
-#include <d/lyt/meter/d_lyt_meter.h>
+#include <d/lyt/d_lyt_sub.h>
+#include <d/lyt/meter/d_lyt_meter_base.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
-
-
-class dLytSub : public d2d::LytBase_c {
-public:
-    dLytSub() {}
-    virtual bool build(const char *name, m2d::ResAccIf_c *acc) override;
-
-    const char *getName() const {
-        return mpName;
-    }
-private:
-    const char *mpName;
-};
 
 class dLytMeterRemoconBg_c : public dLytMeterBase {
 public:

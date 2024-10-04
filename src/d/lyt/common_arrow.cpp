@@ -52,8 +52,7 @@ bool dLytCommonArrow_c::fn_80168490() {
 bool dLytCommonArrow_c::fn_80168500() {
     mStateMgr.executeState();
     if (!mStateMgr.getStateID()->isEqual(StateID_None)) {
-        field_0x440[1].mpFrameCtrl->play();
-        field_0x440[1].syncAnmFrame();
+        field_0x440[1].play();
     }
     mLytBase.calc();
     field_0x680.field_0x22 = 0;
@@ -109,7 +108,7 @@ bool dLytCommonArrow_c::fn_80168760() {
 
 void dLytCommonArrow_c::fn_80168790(s32 idx, f32 frame) {
     d2d::AnmGroup_c *s = &field_0x440[idx];
-    s->setFrame(frame);
+    s->setFrameAndControlThings(frame);
 }
 
 void dLytCommonArrow_c::fn_80168800(s32 idx) {
@@ -117,13 +116,12 @@ void dLytCommonArrow_c::fn_80168800(s32 idx) {
 }
 
 void dLytCommonArrow_c::fn_80168810(d2d::AnmGroup_c *ctrl) {
-    if (ctrl->mpFrameCtrl->getFrame()) {
-        f32 newFrame = ctrl->mpFrameCtrl->getFrame() - 1.0f;
+    if (ctrl->getFrame()) {
+        f32 newFrame = ctrl->getFrame() - 1.0f;
         if (newFrame <= 0.0f) {
             newFrame = 0.0f;
         }
-        ctrl->mpFrameCtrl->setFrame(newFrame);
-        ctrl->syncAnmFrame();
+        ctrl->setFrame(newFrame);
     }
 }
 
@@ -169,12 +167,11 @@ void dLytCommonArrow_c::executeState_In() {
     switch (field_0x6C4) {
     case 0: {
         d2d::AnmGroup_c *s = &field_0x440[0];
-        if (s->mpFrameCtrl->isEndReached() == 1) {
+        if (s->isEndReached() == 1) {
             field_0x6C4 += 1;
             field_0x6CA = 1;
         } else {
-            s->mpFrameCtrl->play();
-            s->syncAnmFrame();
+            s->play();
         }
     } break;
     case 1:
@@ -219,7 +216,7 @@ void dLytCommonArrow_c::executeState_Out() {
     switch (field_0x6C4) {
     case 0: {
         d2d::AnmGroup_c *s = &field_0x440[8];
-        if (s->mpFrameCtrl->isEndReached() == 1) {
+        if (s->isEndReached() == 1) {
             field_0x6C4 = 1;
             field_0x6CA = 1;
         }

@@ -869,7 +869,7 @@ bool AnmGroup_c::fn_800AC860() {
     return true;
 }
 
-void AnmGroup_c::fn_800AC870(bool b) {
+void AnmGroup_c::setAnimEnable(bool b) {
     nw4r::lyt::Group *group = mpGroup;
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     nw4r::lyt::SetAnimationEnable(group, anmTransform, b, mAnmResource.IsDescendingBind());

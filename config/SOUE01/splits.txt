@@ -297,6 +297,13 @@ d/lyt/meter/d_lyt_meter_shield_gauge.cpp:
 d/lyt/d_lyt_do_button.cpp:
 	.text       start:0x8010CED0 end:0x8010EAF8
 	.ctors      start:0x804DB728 end:0x804DB72C
+	.rodata     start:0x804E6D60 end:0x804E7080
+	.data       start:0x8051A5A8 end:0x8051AC00
+	.bss        start:0x805ACE10 end:0x805ACF78
+
+d/lyt/d_lyt_msg_window.cpp:
+	.text       start:0x801148F0 end:0x8011C8C8
+	.ctors      start:0x804DB738 end:0x804DB73C
 
 d/lyt/pause_disp_00.cpp:
 	.text       start:0x80159E80 end:0x8015EDE8

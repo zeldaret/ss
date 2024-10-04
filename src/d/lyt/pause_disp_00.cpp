@@ -48,5 +48,5 @@ void dLytPauseDisp00_c::init() {
 
 void dLytPauseDisp00_c::displayElement(int i, float frame) {
     d2d::AnmGroup_c *s = &field_0x00D0[i];
-    s->setFrame(frame);
+    s->setFrameAndControlThings(frame);
 }
