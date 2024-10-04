@@ -1,3 +1,6 @@
+#ifndef D_LYT_METER_REMOCON_BH_H
+#define D_LYT_METER_REMOCON_BH_H
+
 #include <d/lyt/d2d.h>
 #include <d/lyt/d_lyt_sub.h>
 #include <d/lyt/meter/d_lyt_meter_base.h>
@@ -30,3 +33,5 @@ private:
     /* 0xE8 */ u32 field_0xE8;
     /* 0xEC */ bool field_0xEC;
 };
+
+#endif

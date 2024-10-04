@@ -167,6 +167,10 @@ struct AnmGroupBase_c {
         setAnimEnable(true);
     }
 
+    inline bool isFlag2() const {
+        return (mFlags & 2) != 0;
+    }
+
 private:
 
     /* 0x04 */ void *field_0x04;

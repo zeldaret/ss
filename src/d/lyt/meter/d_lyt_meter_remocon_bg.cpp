@@ -41,7 +41,10 @@ bool dLytMeterRemoconBg_c::LytMeter0x10() {
     return true;
 }
 
-bool dLytMeterRemoconBg_c::LytMeter0x14() {}
+bool dLytMeterRemoconBg_c::LytMeter0x14() {
+    // TODO
+    return true;
+}
 
 const char *dLytMeterRemoconBg_c::getName() const {
     return mLyt.getName();
