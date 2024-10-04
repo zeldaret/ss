@@ -376,7 +376,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_remocon_bg.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_rupy.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_do_button.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_battery.cpp"),
+            Object(Matching, "d/lyt/d_lyt_battery.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_pause_disp_00.cpp"),
             Object(Matching, "d/lyt/d_lyt_fader.cpp"),
             Object(Matching, "d/lyt/d_screen_fader.cpp"),

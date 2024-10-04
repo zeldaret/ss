@@ -6,7 +6,10 @@
 class dLytSub : public d2d::LytBase_c {
 public:
     dLytSub() {}
-    virtual bool build(const char *name, m2d::ResAccIf_c *acc) override;
+    virtual bool build(const char *name, m2d::ResAccIf_c *acc) override {
+        mpName = name;
+        d2d::LytBase_c::build(name, acc);
+    }
 
     const char *getName() const {
         return mpName;
