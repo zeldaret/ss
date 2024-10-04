@@ -225,6 +225,15 @@ cflags_framework = [
     "-ipa file",
 ]
 
+# libms flags
+cflags_libms = [
+    *cflags_base,
+    "-inline noauto",
+    "-fp_contract off",
+    "-lang=C++",
+    "-Cpp_exceptions on",
+]
+
 # EGG flags
 cflags_egg = [
     *cflags_base,
@@ -418,6 +427,19 @@ config.libs = [
             Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
             Object(Matching, "m/m_pad.cpp"),
+        ],
+    },
+    {
+        "lib": "libms",
+        "mw_version": "Wii/1.5",
+        "cflags": cflags_libms,
+        "progress_category": "core",
+        "host": False,
+        "objects": [
+            Object(NonMatching, "libms/commonlib.c"),
+            Object(NonMatching, "libms/flowfile.c"),
+            Object(NonMatching, "libms/libms.c"),
+            Object(NonMatching, "libms/msgfile.c"),
         ],
     },
     {
