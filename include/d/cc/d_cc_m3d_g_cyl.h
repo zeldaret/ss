@@ -1,5 +1,5 @@
-#ifndef TO_SORT_D_CC_M3D_G_CYL_H
-#define TO_SORT_D_CC_M3D_G_CYL_H
+#ifndef D_CC_M3D_G_CYL_H
+#define D_CC_M3D_G_CYL_H
 
 #include <m/m_vec.h>
 

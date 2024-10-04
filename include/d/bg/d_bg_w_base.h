@@ -9,9 +9,9 @@
 #include "c/col/bg/c_bg_w.h"
 #include "d/a/d_a_base.h"
 #include "d/cc/d_cc_m3d_g_aab.h"
+#include "d/cc/d_cc_m3d_g_pla.h"
 #include "m/m_allocator.h"
 #include "m/m_math.h"
-#include "m/m_plane.h"
 
 class cBgS_GndChk;
 class cBgS_LinChk;
@@ -80,7 +80,7 @@ public:
     /* 0x01C */ virtual bool ChkLock() const = 0;
     /* 0x020 */ virtual bool ChkMoveBg() const = 0;
     /* 0x024 */ virtual u32 ChkMoveFlag() const = 0;
-    /* 0x028 */ virtual mPlane_c GetTriPla(cBgS_PolyInfo const &) const = 0;
+    /* 0x028 */ virtual cM3dGPla GetTriPla(cBgS_PolyInfo const &) const = 0;
     /* 0x02C */ virtual bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c *, mVec3_c *, mVec3_c *) const = 0;
     /* 0x030 */ virtual cM3dGAab *GetBnd() const = 0;
     /* 0x034 */ virtual u32 GetCode4(cBgS_PolyInfo const &) const = 0; // ?
@@ -152,6 +152,7 @@ public:
     // bool chkStickRoof() {
     //     return field_0xb & 2;
     // }
+
     void SetPushPullCallback(PushPull_CallBack i_callBack) {
         mpPushPull_cb = i_callBack;
     }

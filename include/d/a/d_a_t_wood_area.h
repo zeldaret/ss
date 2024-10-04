@@ -24,13 +24,13 @@ public:
     bool attachObject(dAcObjBase_c *obj);
 
     f32 getAttachRadius() {
-        return scale.x * scaleX;
+        return mScale.x * scaleX;
     }
     f32 getAttachRadiusSquare() {
         return getAttachRadius() * getAttachRadius();
     }
     f32 getAttachHeight() {
-        return scale.y * scaleY;
+        return mScale.y * scaleY;
     }
 
     static const f32 scaleX;

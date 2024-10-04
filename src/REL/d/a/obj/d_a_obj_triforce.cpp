@@ -3,7 +3,6 @@
 #include <d/cc/d_cc_mgr.h>
 #include <m/m_vec.h>
 
-
 SPECIAL_ACTOR_PROFILE(OBJ_TRIFORCE, dAcOtriforce_c, fProfile::OBJ_TRIFORCE, 0x15D, 0, 4);
 
 // clang-format off
@@ -43,10 +42,10 @@ int dAcOtriforce_c::create() {
     mEffects.init(this);
     mCollision.setSomeDefendValue(0x2000);
     updateMatrix();
-    scale.x = sScale;
-    scale.y = sScale;
-    scale.z = sScale;
-    mMdl.setLocalMtx(worldMatrix);
+    mScale.x = sScale;
+    mScale.y = sScale;
+    mScale.z = sScale;
+    mMdl.setLocalMtx(mWorldMtx);
     return SUCCEEDED;
 }
 
@@ -68,11 +67,11 @@ int dAcOtriforce_c::actorExecute() {
     ColliderManager::getColliderManager()->addCollider(&mCollision);
     updateMatrix();
     Mtx m;
-    PSMTXScale(m, scale.x, scale.y, scale.z);
-    PSMTXConcat(worldMatrix.m, m, worldMatrix.m);
-    mMdl.setLocalMtx(worldMatrix);
+    PSMTXScale(m, mScale.x, mScale.y, mScale.z);
+    PSMTXConcat(mWorldMtx.m, m, mWorldMtx.m);
+    mMdl.setLocalMtx(mWorldMtx);
     mAnm.play();
-    fn_80029AE0(&mEffects, PARTICLE_RESOURCE_ID_MAPPING_967_, &worldMatrix, nullptr, nullptr);
+    fn_80029AE0(&mEffects, PARTICLE_RESOURCE_ID_MAPPING_967_, &mWorldMtx, nullptr, nullptr);
     return 1;
 }
 

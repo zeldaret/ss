@@ -1,5 +1,5 @@
-#ifndef C_M3D_G_AAB_H
-#define C_M3D_G_AAB_H
+#ifndef D_CC_M3D_G_AAB_H
+#define D_CC_M3D_G_AAB_H
 
 #include "d/cc/d_cc_m3d.h"
 #include "d/cc/d_cc_m3d_g_lin.h"

@@ -38,7 +38,7 @@ int dAcOsunLight_c::actorExecute() {
         mTexAnm.play();
     }
     updateMatrix();
-    mModel.setLocalMtx(worldMatrix);
+    mModel.setLocalMtx(mWorldMtx);
     return SUCCEEDED;
 }
 

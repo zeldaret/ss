@@ -33,9 +33,9 @@ int dAcOspike_c::create() {
     mCollision.initUnk(mCCdStruct);
 
     updateMatrix();
-    mMdl.setLocalMtx(worldMatrix);
+    mMdl.setLocalMtx(mWorldMtx);
     mVec3_c tmp;
-    PSMTXMultVecSR(worldMatrix.m, mVec3_c::Ex, tmp);
+    PSMTXMultVecSR(mWorldMtx.m, mVec3_c::Ex, tmp);
     mCollision.setAtVec(tmp);
 
     mMtx_c mtx;

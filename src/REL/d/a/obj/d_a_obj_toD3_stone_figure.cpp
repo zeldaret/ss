@@ -6,7 +6,6 @@
 #include <toBeSorted/item_story_flag_manager.h>
 #include <toBeSorted/scgame.h>
 
-
 SPECIAL_ACTOR_PROFILE(OBJ_TOD3_STONE, dAcOtoD3StoneFigure_c, fProfile::OBJ_TOD3_STONE, 0x1B3, 0, 0);
 
 STATE_DEFINE(dAcOtoD3StoneFigure_c, OneEye);
@@ -40,7 +39,7 @@ int dAcOtoD3StoneFigure_c::create() {
         return FAILED;
     }
 
-    mMdl.setLocalMtx(worldMatrix);
+    mMdl.setLocalMtx(mWorldMtx);
     mCCdStruct.setField0x38ToMagicValue();
     mCollision.init(sCcSrc);
     mCollision.initUnk(mCCdStruct);
@@ -97,7 +96,7 @@ void dAcOtoD3StoneFigure_c::initializeState_OneEye() {
     if (ScGame::currentSpawnInfo.night == 1) {
         rotation.y.mVal += -0x8000;
         updateMatrix();
-        mMdl.setLocalMtx(worldMatrix);
+        mMdl.setLocalMtx(mWorldMtx);
     }
 }
 

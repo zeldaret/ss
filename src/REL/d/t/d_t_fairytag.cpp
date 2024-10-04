@@ -52,7 +52,8 @@ void dTgFairy_c::createFairies() {
             mVec3_c v = calcLocation(f);
             v2 = v;
             dAcObjFairy_c *ac = static_cast<dAcObjFairy_c *>(
-                    dAcObjBase_c::create("Fairy", roomid, fairyParams1, &v2, nullptr, nullptr, -1, -1, viewclip_index));
+                dAcObjBase_c::create("Fairy", roomid, fairyParams1, &v2, nullptr, nullptr, -1, -1, viewclip_index)
+            );
             if (ac != nullptr) {
                 mpFairyRefs[i].link(ac);
             }
@@ -62,9 +63,9 @@ void dTgFairy_c::createFairies() {
 
 mVec3_c dTgFairy_c::calcLocation(const f32 &offset) {
     mVec3_c v;
-    v.y = scale.y * 0.5f;
-    v.x = scale.x * calcRnd(0.5f, offset);
-    v.z = scale.z * calcRnd(0.5f, offset);
+    v.y = mScale.y * 0.5f;
+    v.x = mScale.x * calcRnd(0.5f, offset);
+    v.z = mScale.z * calcRnd(0.5f, offset);
     v.rotY(rotation.y);
     return position + v;
 }

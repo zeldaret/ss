@@ -11,7 +11,6 @@
 #include "m/types_m.h"
 #include "nw4r/g3d/g3d_resfile.h"
 
-
 // Size: 0xA8
 struct ActorCarryStruct {
     /* 0x00 */ fLiNdBa_c actorLink;
@@ -55,7 +54,7 @@ public:
     f32 forwardAccel;
     f32 forwardMaxSpeed;
     mVec3_c velocity;
-    /* 0x15C */ mMtx_c worldMatrix;
+    /* 0x15C */ mMtx_c mWorldMtx;
     nw4r::math::AABB boundingBox;
     /* 0x1A4 */ f32 mCullingDistance;
     /* 0x1A8 */ f32 field_0x1A8;

@@ -1,5 +1,5 @@
-#ifndef C_M3D_G_LIN_H
-#define C_M3D_G_LIN_H
+#ifndef D_CC_M3D_G_LIN_H
+#define D_CC_M3D_G_LIN_H
 
 #include <common.h>
 #include <m/m_vec.h>

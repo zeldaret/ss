@@ -6,7 +6,7 @@
 #include "f/f_base.h"
 
 class dBgW;
-class fopAc_ac_c;
+class fBase_c;
 
 class cBgS_ChkElm {
 public:
@@ -46,7 +46,7 @@ public:
     dBgW_Base *GetBgWBasePointer(cBgS_PolyInfo const &) const;
     bool ChkPolySafe(cBgS_PolyInfo const &);
     s32 GetGrpRoomId(cBgS_PolyInfo const &) const;
-    bool GetTriPla(cBgS_PolyInfo const &, mPlane_c *) const;
+    bool GetTriPla(cBgS_PolyInfo const &, cM3dGPla *) const;
     bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c *, mVec3_c *, mVec3_c *) const;
     void ShdwDraw(cBgS_ShdwDraw *);
     u32 GetGrpInf(cBgS_PolyInfo const &) const;
@@ -75,7 +75,7 @@ public:
     void Dt();
     void ClrMoveFlag();
     void Move();
-    bool Regist(dBgW_Base *, fopAc_ac_c *);
+    bool Regist(dBgW_Base *, fBase_c *);
     bool ChkMoveBG(cBgS_PolyInfo const &);
     bool ChkMoveBG_NoDABg(cBgS_PolyInfo const &);
     s32 GetExitId(cBgS_PolyInfo const &);
@@ -110,9 +110,9 @@ public:
     void
     MoveBgTransPos(cBgS_PolyInfo const &i_poly, bool param_1, mVec3_c *i_pos, mAng3_c *i_angle, mAng3_c *i_shapeAngle);
     void MoveBgMatrixCrrPos(cBgS_PolyInfo const &, bool, mVec3_c *, mAng3_c *, mAng3_c *);
-    void RideCallBack(cBgS_PolyInfo const &, fopAc_ac_c *);
-    void ArrowStickCallBack(cBgS_PolyInfo const &, fopAc_ac_c *, mVec3_c &);
-    fopAc_ac_c *PushPullCallBack(cBgS_PolyInfo const &, fopAc_ac_c *, s16, dBgW_Base::PushPullLabel);
+    void RideCallBack(cBgS_PolyInfo const &, fBase_c *);
+    void ArrowStickCallBack(cBgS_PolyInfo const &, fBase_c *, mVec3_c &);
+    fBase_c *PushPullCallBack(cBgS_PolyInfo const &, fBase_c *, s16, dBgW_Base::PushPullLabel);
 
     bool WaterChk(dBgS_SplGrpChk *chk) {
         return SplGrpChk(chk);
@@ -121,7 +121,8 @@ public:
         return dKy_pol_sound_get(&param_0);
     }
 
-}; // Size: 0x1404
+    static dBgS &GetInstance();
+};
 
 bool dBgS_CheckBGroundPoly(cBgS_PolyInfo const &);
 bool dBgS_CheckBRoofPoly(cBgS_PolyInfo const &);

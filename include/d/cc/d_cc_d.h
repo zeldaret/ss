@@ -1,5 +1,5 @@
-#ifndef TOSORT_D_CC_D_H
-#define TOSORT_D_CC_D_H
+#ifndef D_CC_D_H
+#define D_CC_D_H
 
 #include <d/a/d_a_base.h>
 #include <d/cc/d_cc_m3d_g_aab.h>

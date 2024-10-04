@@ -80,7 +80,7 @@ public:
     /* 0xB6 */ u8 subtype;
     /* 0xB8 */ mAng3_c rotation;
     /* 0xC0 */ mVec3_c position;
-    /* 0xCC */ mVec3_c scale;
+    /* 0xCC */ mVec3_c mScale;
     /* 0xD8 */ u32 actor_properties;
     /* 0xDC */ dAcRef_c<dAcBase_c> actor_node;
     /* 0xE8 */ u32 field_0xe8;
@@ -118,7 +118,7 @@ public:
         position = r;
     }
     void SetScale(const mVec3_c &r) {
-        scale = r;
+        mScale = r;
     }
     void SetRotation(const mAng3_c &r) {
         rotation = r;
@@ -149,8 +149,10 @@ public:
 
 public:
     // funcs found in TU
-    /* 8002c650 */ static void setTempCreateParams(mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2,
-            dAcBase_c *parent, u8 subtype, s16 unkFlag, u8 viewClipIdx, ObjInfo *objInfo);
+    /* 8002c650 */ static void setTempCreateParams(
+        mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2, dAcBase_c *parent, u8 subtype, s16 unkFlag,
+        u8 viewClipIdx, ObjInfo *objInfo
+    );
 
     /* 8002c690 */ SoundSource *FUN_8002c690();
     /* 8002c710 */ int initAllocatorWork1Heap(int size, char *name, int align);
@@ -173,11 +175,13 @@ public:
     // returns true if under the distThresh, False if not. the actual distance is returned in outDist
     /* 8002d1d0 */ bool getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDist);
     // same concept as above
-    /* 8002d290 */ bool getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle,
-            f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX);
+    /* 8002d290 */ bool getDistanceAndAngleToActor(
+        dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX
+    );
     /* 8002d3e0 */ bool isWithinPlayerRadius(f32 radius) const;
-    /* 8002d440 */ bool getDistanceAndAngleToPlayer(f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist,
-            s16 *outDiffAngleY, s16 *outDiffAngleX);
+    /* 8002d440 */ bool getDistanceAndAngleToPlayer(
+        f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX
+    );
     /* 8002d470 */ f32 getDistToPlayer();
     /* 8002d4a0 */ f32 getSquareDistToPlayer();
     /* 8002d4b0 */ void updateRoomId(f32 yOffs);
@@ -209,11 +213,15 @@ public:
     /* 8002d940 */ void changeLoadedEntitiesWithSet();
     /* 8002d960 */ void changeLoadedEntitiesNoSet();
 
-    /* 8002d980 */ dAcBase_c *createActor(ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale,
-            u32 params2, s32 roomId, dBase_c *ref);
+    /* 8002d980 */ dAcBase_c *createActor(
+        ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, s32 roomId,
+        dBase_c *ref
+    );
 
-    /* 8002da80 */ dAcBase_c *createActorStage(ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot,
-            mVec3_c *scale, u32 params2, s32 roomId, dBase_c *ref);
+    /* 8002da80 */ dAcBase_c *createActorStage(
+        ProfileName actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, s32 roomId,
+        dBase_c *ref
+    );
 
     /* 8002dc20 */ void FUN_8002dc20(s16 *, s16 *);
     /* 8002dc50 */ void incrementKillCounter();
