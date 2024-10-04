@@ -7,6 +7,7 @@
 class dLytMeterRemoconBg_c : public dLytMeterBase {
 public:
     dLytMeterRemoconBg_c();
+    virtual ~dLytMeterRemoconBg_c();
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool LytMeter0x10() override;
     virtual bool LytMeter0x14() override;
@@ -20,7 +21,7 @@ private:
     STATE_FUNC_DECLARE(dLytMeterRemoconBg_c, Active);
     STATE_FUNC_DECLARE(dLytMeterRemoconBg_c, Off);
 
-    STATE_MGR_DECLARE(dLytMeterRemoconBg_c);
+    UI_STATE_MGR_DECLARE(dLytMeterRemoconBg_c);
     dLytSub mLyt;
     /* 0xD8 */ nw4r::lyt::Pane *mpPane;
     /* 0xDC */ u32 field_0xDC;

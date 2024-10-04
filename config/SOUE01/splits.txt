@@ -301,16 +301,100 @@ d/lyt/d_lyt_do_button.cpp:
 	.data       start:0x8051A5A8 end:0x8051AC00
 	.bss        start:0x805ACE10 end:0x805ACF78
 
+d/lyt/d_lyt_common_icon_material.cpp:
+	.text       start:0x8010F820 end:0x80111718
+	.ctors      start:0x804DB730 end:0x804DB734
+
+d/lyt/d_lyt_common_icon_item.cpp:
+	.text       start:0x80111720 end:0x80113ED8
+	.ctors      start:0x804DB734 end:0x804DB738
+
 d/lyt/d_lyt_msg_window.cpp:
 	.text       start:0x801148F0 end:0x8011C8C8
 	.ctors      start:0x804DB738 end:0x804DB73C
 
-d/lyt/pause_disp_00.cpp:
+d/lyt/d_lyt_msg_window_select_btn.cpp:
+	.text       start:0x8011C8D0 end:0x80120988
+	.ctors      start:0x804DB73C end:0x804DB740
+
+d/lyt/d_lyt_msg_window_talk.cpp:
+	.text       start:0x80120A20 end:0x801223C8
+	.ctors      start:0x804DB740 end:0x804DB744
+
+d/lyt/d_lyt_msg_window_link.cpp:
+	.text       start:0x801223D0 end:0x80123738
+	.ctors      start:0x804DB744 end:0x804DB748
+
+d/lyt/d_lyt_msg_window_get.cpp:
+	.text       start:0x80123740 end:0x80124678
+	.ctors      start:0x804DB748 end:0x804DB74C
+
+d/lyt/d_lyt_msg_window_sword.cpp:
+	.text       start:0x80124680 end:0x80125BA8
+	.ctors      start:0x804DB74C end:0x804DB750
+
+d/lyt/d_lyt_msg_window_wood.cpp:
+	.text       start:0x80125BB0 end:0x801267F8
+	.ctors      start:0x804DB750 end:0x804DB754
+
+d/lyt/d_lyt_msg_window_stone.cpp:
+	.text       start:0x80126800 end:0x80127478
+	.ctors      start:0x804DB754 end:0x804DB758
+
+d/lyt/d_lyt_msg_window_demo.cpp:
+	.text       start:0x80127480 end:0x801281F8
+	.ctors      start:0x804DB758 end:0x804DB75C
+
+d/lyt/d_lyt_simple_window.cpp:
+	.text       start:0x80128200 end:0x8012B948
+	.ctors      start:0x804DB75C end:0x804DB760
+
+d/lyt/d_lyt_auto_caption.cpp:
+	.text       start:0x8012B950 end:0x8012C568
+	.ctors      start:0x804DB760 end:0x804DB764
+
+d/lyt/d_lyt_auto_explain.cpp:
+	.text       start:0x8012C570 end:0x8012D188
+	.ctors      start:0x804DB764 end:0x804DB768
+
+d/lyt/d_lyt_map_capture.cpp:
+	.text       start:0x8012D190 end:0x8012DC28
+	.ctors      start:0x804DB768 end:0x804DB76C
+
+d/lyt/d_lyt_map.cpp:
+	.text       start:0x8012DC30 end:0x80148DE8
+	.ctors      start:0x804DB76C end:0x804DB770
+
+d/lyt/d_lyt_note.cpp:
+	.text       start:0x80148DF0 end:0x80149C28
+	.ctors      start:0x804DB770 end:0x804DB774
+
+d/lyt/d_lyt_battery.cpp:
+	.text       start:0x80149C30 end:0x8014AD18
+	.ctors      start:0x804DB774 end:0x804DB778
+
+d/lyt/d_lyt_pause_disp_00.cpp:
 	.text       start:0x80159E80 end:0x8015EDE8
 	.ctors      start:0x804DB798 end:0x804DB79C
 	.data       start:0x80525138 end:0x80525EE0
 
-d/lyt/common_arrow.cpp:
+d/lyt/d_lyt_pause_disp_01.cpp:
+	.text       start:0x8015EDF0 end:0x80161F98
+	.ctors      start:0x804DB79C end:0x804DB7A0
+
+d/lyt/d_lyt_pause_info.cpp:
+	.text       start:0x80161FA0 end:0x80163568
+	.ctors      start:0x804DB7A0 end:0x804DB7A4
+
+d/lyt/d_lyt_pause_text.cpp:
+	.text       start:0x80163570 end:0x80164F88
+	.ctors      start:0x804DB7A4 end:0x804DB7A8
+
+d/lyt/d_lyt_save_msg_window.cpp:
+	.text       start:0x80164F90 end:0x80166968
+	.ctors      start:0x804DB7A8 end:0x804DB7AC
+
+d/lyt/d_lyt_common_arrow.cpp:
 	.text       start:0x80167FE0 end:0x801695E8
 	.ctors      start:0x804DB7AC end:0x804DB7B0
 	.rodata     start:0x804E8D28 end:0x804E8D70
@@ -318,6 +402,14 @@ d/lyt/common_arrow.cpp:
 	.sdata      start:0x805729D0 end:0x805729D8
 	.sdata2     start:0x8057A180 end:0x8057A188
 	.bss        start:0x805B1CB0 end:0x805B1DB0
+
+d/lyt/d_lyt_common_title.cpp:
+	.text       start:0x801695F0 end:0x8016B2A8
+	.ctors      start:0x804DB7B0 end:0x804DB7B4
+
+d/lyt/d_lyt_cursor_stick.cpp:
+	.text       start:0x8016B2B0 end:0x8016BCD8
+	.ctors      start:0x804DB7B4 end:0x804DB7B8
 
 toBeSorted/counters/counter.cpp:
 	.text       start:0x8016CC40 end:0x8016CD94
@@ -452,6 +544,33 @@ d/tg/d_t_event_f.cpp:
 d/tg/d_tk_event.cpp:
 	.text       start:0x8027AB30 end:0x8027B408
 	.ctors      start:0x804DB84C end:0x804DB850
+
+d/lyt/d_lyt_pause.cpp:
+	.text       start:0x8027E9E0 end:0x80282678
+	.ctors      start:0x804DB85C end:0x804DB860
+
+d/lyt/d_lyt_game_over.cpp:
+	.text       start:0x80282680 end:0x80284FA8
+	.ctors      start:0x804DB860 end:0x804DB864
+
+d/lyt/d_lyt_save_mgr.cpp:
+	.text       start:0x80284FB0 end:0x80286C88
+	.ctors      start:0x804DB864 end:0x804DB868
+
+d/lyt/d_lyt_enemy_icon.cpp:
+	.text       start:0x8028AA00 end:0x8028BCD8
+	.ctors      start:0x804DB870 end:0x804DB874
+
+d/lyt/d_lyt_mini_game.cpp:
+	.text       start:0x802940D0 end:0x802969E0
+
+d/lyt/d_lyt_demo_dowsing.cpp:
+	.text       start:0x802A0B10 end:0x802A17C8
+	.ctors      start:0x804DB880 end:0x804DB884
+
+d/lyt/d_lyt_control_game.cpp:
+	.text       start:0x802CC7B0 end:0x802D16A8
+	.ctors      start:0x804DB8A0 end:0x804DB8A4
 
 s/s_StateID.cpp:
 	.text       start:0x802DDDB0 end:0x802DE1F4

@@ -23,7 +23,7 @@ private:
     STATE_FUNC_DECLARE(dLytDobutton_c, Wait);
     STATE_FUNC_DECLARE(dLytDobutton_c, Out);
 
-    STATE_MGR_DECLARE(dLytDobutton_c);
+    UI_STATE_MGR_DECLARE(dLytDobutton_c);
     /* 0x040 */ dLytSub mLyt;
     /* 0x0D4 */ d2d::AnmGroup_c mAnmGroups[12];
     /* 0x3D4 */ u8 field_0x3D4[0x470 - 0x3D4];

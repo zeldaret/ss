@@ -1,4 +1,4 @@
-#include <d/lyt/pause_disp_00.h>
+#include <d/lyt/d_lyt_pause_disp_00.h>
 #include <nw4r/lyt/lyt_group.h>
 
 STATE_DEFINE(dLytPauseDisp00_c, None);

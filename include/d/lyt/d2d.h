@@ -115,16 +115,6 @@ struct AnmGroupBase_c {
     AnmGroupBase_c(m2d::FrameCtrl_c *frameCtrl): field_0x04(nullptr), mFlags(0), mpFrameCtrl(frameCtrl) {}
     virtual ~AnmGroupBase_c() {}
 
-protected:
-    /* 0x04 */ void *field_0x04;
-    /* 0x08 */ m2d::FrameCtrl_c *mpFrameCtrl;
-    /* 0x0C */ u8 mFlags;
-};
-
-struct AnmGroup_c : public AnmGroupBase_c {
-    AnmGroup_c(): AnmGroupBase_c(&mFrameCtrl) {}
-    virtual ~AnmGroup_c() {}
-
     bool init(const char *fileName, m2d::ResAccIf_c *acc, d2d::Layout_c *layout, const char *animName);
     bool init(nw4r::lyt::AnimTransform *transform, const char *fileName, m2d::ResAccIf_c *acc, nw4r::lyt::Group *group);
 
@@ -179,9 +169,17 @@ struct AnmGroup_c : public AnmGroupBase_c {
 
 private:
 
+    /* 0x04 */ void *field_0x04;
+    /* 0x08 */ m2d::FrameCtrl_c *mpFrameCtrl;
+    /* 0x0C */ u8 mFlags;
     /* 0x10 */ nw4r::lyt::AnimResource mAnmResource;
     /* 0x20 */ nw4r::lyt::Group *mpGroup;
     /* 0x24 */ nw4r::lyt::AnimTransform *mpAnmTransform;
+};
+
+struct AnmGroup_c : public AnmGroupBase_c {
+    AnmGroup_c(): AnmGroupBase_c(&mFrameCtrl) {}
+    virtual ~AnmGroup_c() {}
     /* 0x28 */ m2d::FrameCtrl_c mFrameCtrl;
 };
 

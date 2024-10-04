@@ -783,7 +783,7 @@ void LytBase_c::linkMeters(nw4r::lyt::Group *group, LytMeterGroup *meterGroup) {
     }
 }
 
-bool AnmGroup_c::init(const char *fileName, m2d::ResAccIf_c *resAcc, d2d::Layout_c *layout, const char *groupName) {
+bool AnmGroupBase_c::init(const char *fileName, m2d::ResAccIf_c *resAcc, d2d::Layout_c *layout, const char *groupName) {
     if (layout->GetGroupContainer() == nullptr) {
         return false;
     }
@@ -796,7 +796,7 @@ bool AnmGroup_c::init(const char *fileName, m2d::ResAccIf_c *resAcc, d2d::Layout
     return init(transform, fileName, resAcc, group);
 }
 
-bool AnmGroup_c::init(nw4r::lyt::AnimTransform *transform, const char *name, m2d::ResAccIf_c *acc,
+bool AnmGroupBase_c::init(nw4r::lyt::AnimTransform *transform, const char *name, m2d::ResAccIf_c *acc,
         nw4r::lyt::Group *group) {
     if (transform == nullptr) {
         return false;
@@ -821,7 +821,7 @@ bool AnmGroup_c::init(nw4r::lyt::AnimTransform *transform, const char *name, m2d
     return true;
 }
 
-bool AnmGroup_c::fn_800AC6D0(bool b) {
+bool AnmGroupBase_c::fn_800AC6D0(bool b) {
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     if (anmTransform == nullptr) {
         return false;
@@ -849,7 +849,7 @@ bool AnmGroup_c::fn_800AC6D0(bool b) {
     return true;
 }
 
-bool AnmGroup_c::fn_800AC7D0() {
+bool AnmGroupBase_c::fn_800AC7D0() {
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     if (anmTransform == nullptr) {
         return false;
@@ -865,11 +865,11 @@ bool AnmGroup_c::fn_800AC7D0() {
     return true;
 }
 
-bool AnmGroup_c::fn_800AC860() {
+bool AnmGroupBase_c::fn_800AC860() {
     return true;
 }
 
-void AnmGroup_c::setAnimEnable(bool b) {
+void AnmGroupBase_c::setAnimEnable(bool b) {
     nw4r::lyt::Group *group = mpGroup;
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     nw4r::lyt::SetAnimationEnable(group, anmTransform, b, mAnmResource.IsDescendingBind());
@@ -880,19 +880,19 @@ void AnmGroup_c::setAnimEnable(bool b) {
     }
 }
 
-void AnmGroup_c::setAnmFrame(f32 arg) {
+void AnmGroupBase_c::setAnmFrame(f32 arg) {
     mpAnmTransform->SetFrame(arg);
 }
 
-void AnmGroup_c::syncAnmFrame() {
+void AnmGroupBase_c::syncAnmFrame() {
     setAnmFrame(mpFrameCtrl->getFrame());
 }
 
-void AnmGroup_c::setForward() {
+void AnmGroupBase_c::setForward() {
     mpFrameCtrl->setForward();
 }
 
-void AnmGroup_c::setBackward() {
+void AnmGroupBase_c::setBackward() {
     mpFrameCtrl->setBackward();
 }
 
