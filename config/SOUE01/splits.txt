@@ -378,6 +378,34 @@ d/lyt/d_lyt_battery.cpp:
 	.sdata2     start:0x80579FC8 end:0x80579FD0
 	.bss        start:0x805B0930 end:0x805B0A70
 
+d/lyt/d_lyt_area_caption.cpp:
+	.text       start:0x8014AD20 end:0x8014C6B8
+	.ctors      start:0x804DB778 end:0x804DB77C
+
+d/lyt/d_lyt_wipe.cpp:
+	.text       start:0x8014C6C0 end:0x8014E008
+	.ctors      start:0x804DB77C end:0x804DB780
+
+d/lyt/d_lyt_bird_gauge.cpp:
+	.text       start:0x80152FD0 end:0x801548D8
+	.ctors      start:0x804DB784 end:0x804DB788
+
+d/lyt/d_lyt_sky_gauge.cpp:
+	.text       start:0x801548E0 end:0x80155CC8
+	.ctors      start:0x804DB788 end:0x804DB78C
+
+d/lyt/d_lyt_deposit_stock.cpp:
+	.text       start:0x80155CD0 end:0x801578A8
+	.ctors      start:0x804DB78C end:0x804DB790
+
+d/lyt/d_lyt_bigboss_gauge.cpp:
+	.text       start:0x80158290 end:0x80158E78
+	.ctors      start:0x804DB790 end:0x804DB794
+
+d/lyt/d_lyt_pause_back.cpp:
+	.text       start:0x80158E80 end:0x80159E78
+	.ctors      start:0x804DB794 end:0x804DB798
+
 d/lyt/d_lyt_pause_disp_00.cpp:
 	.text       start:0x80159E80 end:0x8015EDE8
 	.ctors      start:0x804DB798 end:0x804DB79C
