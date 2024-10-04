@@ -375,6 +375,8 @@ config.libs = [
             Object(Matching, "d/lyt/d_lyt_fader.cpp"),
             Object(Matching, "d/lyt/d_screen_fader.cpp"),
             Object(NonMatching, "d/lyt/common_arrow.cpp"),
+            Object(NonMatching, "d/lyt/meter/d_lyt_meter.cpp"),
+            Object(NonMatching, "d/lyt/meter/d_lyt_meter_remocon_bg.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_rupy.cpp"),
             Object(NonMatching, "d/lyt/pause_disp_00.cpp"),
             Object(NonMatching, "toBeSorted/file_manager.cpp"),

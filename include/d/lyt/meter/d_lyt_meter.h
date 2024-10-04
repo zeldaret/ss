@@ -4,19 +4,19 @@
 #include <nw4r/lyt/lyt_pane.h>
 
 namespace d2d {
-    class ResAccIf_c;
+class ResAccIf_c;
 }
 
 class dLytMeterBase {
 public:
-    dLytMeterBase() : field_0x04(false) {}
+    dLytMeterBase() : field_0x04(false), field_0x05(0) {}
     virtual ~dLytMeterBase() {}
-    virtual bool build(d2d::ResAccIf_c *resAcc);
-    virtual bool LytMeter0x10();
-    virtual bool LytMeter0x14();
-    virtual nw4r::lyt::Pane *LytMeter0x18();
-    virtual void *LytMeter0x1C();
-    virtual const char *LytMeter0x20() const;
+    virtual bool build(d2d::ResAccIf_c *resAcc) = 0;
+    virtual bool LytMeter0x10() = 0;
+    virtual bool LytMeter0x14() = 0;
+    virtual nw4r::lyt::Pane *LytMeter0x18() = 0;
+    virtual void *LytMeter0x1C() = 0;
+    virtual const char *LytMeter0x20() const = 0;
     virtual bool LytMeter0x24() const {
         return field_0x04;
     }
@@ -41,9 +41,6 @@ struct LytMeterListNode {
     nw4r::lyt::Pane *mpPane;
 };
 
-struct LytMeterGroup {
-    nw4r::ut::LinkList<LytMeterListNode, 0> list;
-};
-
+typedef nw4r::ut::LinkList<LytMeterListNode, 0> LytMeterGroup;
 
 #endif

@@ -3,7 +3,7 @@
 
 #include <libms/msgfile.h>
 #include <m/m2d.h>
-#include <d/lyt/d_lyt_meter.h>
+#include <d/lyt/meter/d_lyt_meter.h>
 #include <nw4r/lyt/lyt_pane.h>
 #include <nw4r/lyt/lyt_picture.h>
 
@@ -55,6 +55,10 @@ public:
     nw4r::lyt::Bounding *findBounding(const char *name) const;
     void unbindAnims();
 
+    const Layout_c *getLayout() const {
+        return &mLayout;
+    }
+
     Layout_c *getLayout() {
         return &mLayout;
     }
@@ -104,12 +108,21 @@ private:
     MsbtInfo *getMsbtInfo() const;
     bool fn_800AB930(dTextBox_c *box);
 
-    MsbtInfo *mpMsbtInfo;
+    /* 0x8C */ MsbtInfo *mpMsbtInfo;
 };
 
-struct AnmGroup_c {
-    AnmGroup_c() {}
-    ~AnmGroup_c() {}
+struct AnmGroupBase_c {
+    AnmGroupBase_c(m2d::FrameCtrl_c *frameCtrl): field_0x04(nullptr), mFlags(0), mpFrameCtrl(frameCtrl) {}
+    virtual ~AnmGroupBase_c() {}
+
+    /* 0x04 */ void *field_0x04;
+    /* 0x08 */ m2d::FrameCtrl_c *mpFrameCtrl;
+    /* 0x0C */ u8 mFlags;
+};
+
+struct AnmGroup_c : public AnmGroupBase_c {
+    AnmGroup_c(): AnmGroupBase_c(&mFrameCtrl) {}
+    virtual ~AnmGroup_c() {}
 
     bool init(const char *fileName, m2d::ResAccIf_c *acc, d2d::Layout_c *layout, const char *animName);
     bool init(nw4r::lyt::AnimTransform *transform, const char *fileName, m2d::ResAccIf_c *acc, nw4r::lyt::Group *group);
@@ -145,20 +158,23 @@ struct AnmGroup_c {
         syncAnmFrame();
     }
 
-    u8 field_0x00[0x08 - 0x00];
-
-    /* 0x08 */ m2d::FrameCtrl_c *mpFrameCtrl;
-    /* 0x0C */ u8 mFlags;
     /* 0x10 */ nw4r::lyt::AnimResource mAnmResource;
     /* 0x20 */ nw4r::lyt::Group *mpGroup;
     /* 0x24 */ nw4r::lyt::AnimTransform *mpAnmTransform;
-    /* 0x28 */ u8 field_0x20[0x40 - 0x28];
+    /* 0x28 */ m2d::FrameCtrl_c mFrameCtrl;
 };
 
 // Probably pause menu specific
 struct dLytStructB: public dLytMeterBase {
     dLytStructB();
     ~dLytStructB();
+
+    virtual bool build(d2d::ResAccIf_c *resAcc) override;
+    virtual bool LytMeter0x10() override;
+    virtual bool LytMeter0x14() override;
+    virtual nw4r::lyt::Pane *LytMeter0x18() override;
+    virtual void *LytMeter0x1C() override;
+    virtual const char *LytMeter0x20() const override;
 
     void init(void *, u8);
 

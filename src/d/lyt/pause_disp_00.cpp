@@ -26,7 +26,7 @@ void dLytPauseDisp00_c::init() {
 
     for (int i = 0; i < 0x18; i++) {
         field_0x2050[i].init(nullptr, lbl_804E8898[i]);
-        mLytMeterGroup.list.PushBack(&field_0xE11C[i]);
+        mLytMeterGroup.PushBack(&field_0xE11C[i]);
     }
 
     if (mLytBase.getLayout()->GetGroupContainer() != nullptr) {
@@ -50,5 +50,3 @@ void dLytPauseDisp00_c::displayElement(int i, float frame) {
     d2d::AnmGroup_c *s = &field_0x00D0[i];
     s->setFrame(frame);
 }
-
-dLytPauseDisp00_c::~dLytPauseDisp00_c() {}

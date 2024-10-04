@@ -9,7 +9,7 @@
 class dLytPauseDisp00_c {
 public:
     dLytPauseDisp00_c();
-    virtual ~dLytPauseDisp00_c();
+    virtual ~dLytPauseDisp00_c() {}
 
     void init();
 

@@ -1,6 +1,5 @@
 #include <d/d_font_manager.h>
 #include <d/lyt/d2d.h>
-#include <d/lyt/d_lyt_meter.h>
 #include <d/lyt/d_textbox.h>
 #include <d/lyt/d_window.h>
 #include <egg/gfx/eggScreen.h>
@@ -758,8 +757,8 @@ char *sRef = "ref";
 
 void LytBase_c::linkMeters(nw4r::lyt::Group *group, LytMeterGroup *meterGroup) {
     // single regswap
-    nw4r::ut::LinkList<LytMeterListNode, 0>::Iterator beginIt = meterGroup->list.GetBeginIter();
-    nw4r::ut::LinkList<LytMeterListNode, 0>::Iterator endIt = meterGroup->list.GetEndIter();
+    nw4r::ut::LinkList<LytMeterListNode, 0>::Iterator beginIt = meterGroup->GetBeginIter();
+    nw4r::ut::LinkList<LytMeterListNode, 0>::Iterator endIt = meterGroup->GetEndIter();
 
     for (nw4r::lyt::PaneList::Iterator paneIt = group->GetPaneList()->GetBeginIter();
             paneIt != group->GetPaneList()->GetEndIter(); ++paneIt) {
