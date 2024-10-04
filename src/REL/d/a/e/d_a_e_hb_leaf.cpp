@@ -27,23 +27,14 @@ int dAcEhb_leaf_c::create() {
     someRot = rotation.y.mVal;
 
     switch (getParam1()) {
-    case 0:
-    case 7:
-        mType = 0;
-        break;
-    case 1:
-        mType = 1;
-        break;
-    case 2:
-        mType = 2;
-        break;
-    case 3:
-    case 4:
-    case 5:
-        rotation.z = -0x8000;
-        break;
-    default:
-        break;
+        case 0:
+        case 7:  mType = 0; break;
+        case 1:  mType = 1; break;
+        case 2:  mType = 2; break;
+        case 3:
+        case 4:
+        case 5:  rotation.z = -0x8000; break;
+        default: break;
     }
 
     if (mType == 0) {
@@ -85,9 +76,9 @@ int dAcEhb_leaf_c::actorExecute() {
     if (mType != 0) {
         Mtx m;
         PSMTXScale(m, mTimeAreaStruct.field_0x00, mTimeAreaStruct.field_0x00, mTimeAreaStruct.field_0x00);
-        PSMTXConcat(worldMatrix.m, m, worldMatrix.m);
+        PSMTXConcat(mWorldMtx.m, m, mWorldMtx.m);
     }
-    mModel.getModel().setLocalMtx(worldMatrix);
+    mModel.getModel().setLocalMtx(mWorldMtx);
     mModel.getModel().calc(false);
     someRot++;
 

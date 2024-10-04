@@ -1,5 +1,5 @@
-#include <d/a/obj/d_a_obj_ring.h>
 #include <d/a/d_a_player.h>
+#include <d/a/obj/d_a_obj_ring.h>
 
 SPECIAL_ACTOR_PROFILE(OBJ_RING, dAcOring_c, fProfile::OBJ_RING, 0x00f2, 0, 0x103);
 
@@ -20,8 +20,8 @@ int dAcOring_c::create() {
 
     setBoundingBox(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
     updateMatrix();
-    mModel.setScale(scale);
-    mModel.setLocalMtx(worldMatrix);
+    mModel.setScale(mScale);
+    mModel.setLocalMtx(mWorldMtx);
     forwardAccel = -5.0f;
     forwardMaxSpeed = -40.0f;
     field_0x38C = dAcPy_c::LINK->position.y;
@@ -39,7 +39,7 @@ int dAcOring_c::actorExecute() {
     position += velocity;
     position += mCCdStruct.posIncrements;
     updateMatrix();
-    mModel.setLocalMtx(worldMatrix);
+    mModel.setLocalMtx(mWorldMtx);
     return SUCCEEDED;
 }
 

@@ -37,10 +37,7 @@ int dAcOJunkRep_c::create() {
 
     mStateMgr.changeState(StateID_Wait);
 
-    setBoundingBox(
-        mVec3_c(-30.0f, -0.0f, -20.0f),
-        mVec3_c(30.0f, 120.0f, 20.0f)
-    );
+    setBoundingBox(mVec3_c(-30.0f, -0.0f, -20.0f), mVec3_c(30.0f, 120.0f, 20.0f));
 
     return SUCCEEDED;
 }
@@ -52,7 +49,7 @@ int dAcOJunkRep_c::doDelete() {
 int dAcOJunkRep_c::actorExecute() {
     mStateMgr.executeState();
     updateMatrix();
-    mpModelToUse->setLocalMtx(worldMatrix);
+    mpModelToUse->setLocalMtx(mWorldMtx);
     return SUCCEEDED;
 }
 

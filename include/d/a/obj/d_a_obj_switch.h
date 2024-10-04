@@ -2,12 +2,11 @@
 #define D_A_OBJ_SWITCH_H
 
 #include <d/a/obj/d_a_obj_base.h>
+#include <d/bg/d_bg_w.h>
 #include <m/m3d/m_mdl.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
-#include <toBeSorted/actor_collision.h>
 #include <toBeSorted/time_area_mgr.h>
-
 
 // OBJ_VSD?
 class dAcOScatterSand_tmp : public dAcObjBase_c {
@@ -18,7 +17,7 @@ public:
     /* 0x6E4 */ bool field_0x6E4;
 
     inline f32 getSomeScale() {
-        return scale.y * 41.65f / 100.0f;
+        return mScale.y * 41.65f / 100.0f;
     }
 };
 
@@ -62,11 +61,11 @@ public:
     STATE_FUNC_DECLARE(dAcOsw_c, Off);
     STATE_FUNC_DECLARE(dAcOsw_c, None);
 
-    static void interactCallback(void *unknown, dAcBase_c *actor, dAcObjBase_c *interactor);
+    static void rideCallback(dBgW *unknown, dAcBase_c *actor, dAcObjBase_c *interactor);
 
 private:
     /* 0x330 */ m3d::mdl_c mModel;
-    /* 0x354 */ ActorCollision mCollision;
+    /* 0x354 */ dBgW mCollision;
     /* 0x564 */ STATE_MGR_DECLARE(dAcOsw_c);
     /* 0x5A0 */ TimeAreaStruct field_0x5A0;
     /* 0x5AC */ dAcRef_c<dAcOScatterSand_tmp> mObjRef;

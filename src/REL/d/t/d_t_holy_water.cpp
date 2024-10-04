@@ -29,10 +29,10 @@ int dTgHolyWater_c::draw() {
 }
 
 bool dTgHolyWater_c::isLinkNearby() {
-    mVec3_c diff = dAcPy_c::LINK->position - (position + mVec3_c::Ey * scale.y * 0.5f);
-    diff.x /= scale.x;
-    diff.y /= scale.y;
-    diff.z /= scale.z;
+    mVec3_c diff = dAcPy_c::LINK->position - (position + mVec3_c::Ey * mScale.y * 0.5f);
+    diff.x /= mScale.x;
+    diff.y /= mScale.y;
+    diff.z /= mScale.z;
     return diff.x <= 0.5f && diff.x >= -0.5f && diff.y <= 0.5f && diff.y >= -0.5f && diff.z <= 0.5f && diff.z >= -0.5f;
 }
 

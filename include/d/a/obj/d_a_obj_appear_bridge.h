@@ -2,14 +2,15 @@
 #define D_A_OBJ_APPEAR_BRIDGE_H
 
 #include <d/a/obj/d_a_obj_base.h>
+#include <d/bg/d_bg_w.h>
 #include <m/m3d/m_anmmatclr.h>
 #include <m/m3d/m_anmtexsrt.h>
 #include <m/m3d/m_smdl.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
-#include <toBeSorted/actor_collision.h>
 #include <toBeSorted/actor_event.h>
 #include <toBeSorted/stage_render_stuff.h>
+
 
 class dAcOappearBridge_c : public dAcObjBase_c {
 public:
@@ -32,7 +33,7 @@ private:
     m3d::smdl_c mModel;
     m3d::anmTexSrt_c mSrtAnm;
     m3d::anmMatClr_c mClrAnm;
-    ActorCollision mCollision;
+    dBgW mCollision;
     STATE_MGR_DECLARE(dAcOappearBridge_c);
     ActorEventRelated mActorEvent;
 

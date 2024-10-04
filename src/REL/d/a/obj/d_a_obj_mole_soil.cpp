@@ -30,7 +30,7 @@ int dAcOmoleSoil_c::create() {
     CREATE_ALLOCATOR(dAcOmoleSoil_c);
 
     mScale = sHalfScale;
-    scale.set(sHalfScale, sHalfScale, sHalfScale);
+    dAcBase_c::mScale.set(sHalfScale, sHalfScale, sHalfScale);
     mStateMgr.changeState(StateID_Wait);
 
     setBoundingBox(mVec3_c(-100.0f, -0.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
@@ -43,25 +43,25 @@ int dAcOmoleSoil_c::doDelete() {
 
 int dAcOmoleSoil_c::actorExecute() {
     switch (getNextState()) {
-    case 1:
-        if (!mStateMgr.isState(StateID_Appear)) {
-            mStateMgr.changeState(StateID_Appear);
-        }
-        break;
-    case 2:
-        if (!mStateMgr.isState(StateID_DisAppear)) {
-            mStateMgr.changeState(StateID_DisAppear);
-        }
-        break;
-    case 3:
-        if (!mStateMgr.isState(StateID_Appear)) {
-            mStateMgr.changeState(StateID_Appear);
-        }
-        break;
+        case 1:
+            if (!mStateMgr.isState(StateID_Appear)) {
+                mStateMgr.changeState(StateID_Appear);
+            }
+            break;
+        case 2:
+            if (!mStateMgr.isState(StateID_DisAppear)) {
+                mStateMgr.changeState(StateID_DisAppear);
+            }
+            break;
+        case 3:
+            if (!mStateMgr.isState(StateID_Appear)) {
+                mStateMgr.changeState(StateID_Appear);
+            }
+            break;
     }
     mStateMgr.executeState();
     updateMatrix();
-    mModel.setLocalMtx(worldMatrix);
+    mModel.setLocalMtx(mWorldMtx);
     return SUCCEEDED;
 }
 

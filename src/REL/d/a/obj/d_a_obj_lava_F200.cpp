@@ -34,7 +34,7 @@ int dAcOlavaF200_c::create() {
 
     updateMatrix();
     for (int i = 0; i < 2; i++) {
-        mModels[i].setLocalMtx(worldMatrix);
+        mModels[i].setLocalMtx(mWorldMtx);
     }
 
     mModels[0].setPriorityDraw(0x1C, 9);

@@ -2,15 +2,16 @@
 #define M_VEC_H
 
 #include "egg/math/eggVector.h"
-#include "rvl/MTX.h"
 #include "m/m_angle.h"
+#include "rvl/MTX.h"
+
 #include <common.h>
 
 class mVec3_c : public EGG::Vector3f {
 public:
     /// @brief Constructs an empty vector.
-    /* 80009ee0 */ mVec3_c() {}
-    /* 80007460 */ ~mVec3_c() {}
+    mVec3_c() {}
+    ~mVec3_c() {}
 
     /// @brief Constructs a vector from a float array.
     mVec3_c(const f32 *p) {
@@ -27,6 +28,7 @@ public:
         set(fx, fy, fz);
     }
 
+    /// @brief Assignment operator
     mVec3_c &operator=(const mVec3_c &r) {
         set(r.x, r.y, r.z);
         return *this;
@@ -66,6 +68,7 @@ public:
         return *(Vec *)&x;
     }
 
+    /// @brief Vector3f cast operator.
     operator EGG::Vector3f *() {
         return (EGG::Vector3f *)&x;
     }

@@ -1,5 +1,5 @@
 #include <d/a/obj/d_a_obj_spike.h>
-#include <toBeSorted/cc/d_cc_mgr.h>
+#include <d/cc/d_cc_mgr.h>
 
 SPECIAL_ACTOR_PROFILE(OBJ_SPIKE, dAcOspike_c, fProfile::OBJ_SPIKE, 0x1D9, 0, 2);
 
@@ -33,9 +33,9 @@ int dAcOspike_c::create() {
     mCollision.initUnk(mCCdStruct);
 
     updateMatrix();
-    mMdl.setLocalMtx(worldMatrix);
+    mMdl.setLocalMtx(mWorldMtx);
     mVec3_c tmp;
-    PSMTXMultVecSR(worldMatrix.m, mVec3_c::Ex, tmp);
+    PSMTXMultVecSR(mWorldMtx.m, mVec3_c::Ex, tmp);
     mCollision.setAtVec(tmp);
 
     mMtx_c mtx;

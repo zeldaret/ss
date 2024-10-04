@@ -1,13 +1,13 @@
 #include <d/a/obj/d_a_obj_smoke.h>
 
 static const char *const sSmokeNames1[] = {
-        "SmokeF200",
-        "SmokeF202",
+    "SmokeF200",
+    "SmokeF202",
 };
 
 static const char *const sSmokeNames2[] = {
-        "SmokeF200",
-        "SmokeF202",
+    "SmokeF200",
+    "SmokeF202",
 };
 
 SPECIAL_ACTOR_PROFILE(OBJ_SMOKE, dAcOsmoke_c, fProfile::OBJ_SMOKE, 0x01DB, 0, 4);
@@ -29,7 +29,7 @@ int dAcOsmoke_c::create() {
 
     mModel.setAnm(mTexAnm);
     updateMatrix();
-    mModel.setLocalMtx(worldMatrix);
+    mModel.setLocalMtx(mWorldMtx);
     mStateMgr.changeState(StateID_Wait);
     mModel.setPriorityDraw(0x1C, 9);
     setBoundingBox(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
