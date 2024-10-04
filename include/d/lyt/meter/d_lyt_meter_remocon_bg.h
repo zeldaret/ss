@@ -11,9 +11,9 @@ public:
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool LytMeter0x10() override;
     virtual bool LytMeter0x14() override;
-    virtual nw4r::lyt::Pane *LytMeter0x18() override;
+    virtual nw4r::lyt::Pane *getPane() override;
     virtual void *LytMeter0x1C() override;
-    virtual const char *LytMeter0x20() const override;
+    virtual const char *getName() const override;
 
 private:
     STATE_FUNC_DECLARE(dLytMeterRemoconBg_c, Wait);

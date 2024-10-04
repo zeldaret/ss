@@ -14,9 +14,9 @@ public:
     virtual bool build(d2d::ResAccIf_c *resAcc) = 0;
     virtual bool LytMeter0x10() = 0;
     virtual bool LytMeter0x14() = 0;
-    virtual nw4r::lyt::Pane *LytMeter0x18() = 0;
+    virtual nw4r::lyt::Pane *getPane() = 0;
     virtual void *LytMeter0x1C() = 0;
-    virtual const char *LytMeter0x20() const = 0;
+    virtual const char *getName() const = 0;
     virtual bool LytMeter0x24() const {
         return field_0x04;
     }

@@ -43,7 +43,7 @@ bool dLytMeterRemoconBg_c::LytMeter0x10() {
 
 bool dLytMeterRemoconBg_c::LytMeter0x14() {}
 
-const char *dLytMeterRemoconBg_c::LytMeter0x20() const {
+const char *dLytMeterRemoconBg_c::getName() const {
     return mLyt.getName();
 }
 
@@ -51,6 +51,6 @@ void *dLytMeterRemoconBg_c::LytMeter0x1C() {
     return &mLyt;
 }
 
-nw4r::lyt::Pane *dLytMeterRemoconBg_c::LytMeter0x18() {
+nw4r::lyt::Pane *dLytMeterRemoconBg_c::getPane() {
     return mLyt.getLayout()->GetRootPane();
 }

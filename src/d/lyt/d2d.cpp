@@ -770,9 +770,9 @@ void LytBase_c::linkMeters(nw4r::lyt::Group *group, LytMeterGroup *meterGroup) {
                 for (nw4r::ut::LinkList<LytMeterListNode, 0>::Iterator it = beginIt; it != endIt; ++it) {
                     dLytMeterBase *meter = it->mpMeter;
                     if (!meter->LytMeter0x24()) {
-                        if (hasSameBaseName(dat->GetString(), meter->LytMeter0x20())) {
+                        if (hasSameBaseName(dat->GetString(), meter->getName())) {
                             it->mpPane = pane;
-                            pane->AppendChild(meter->LytMeter0x18());
+                            pane->AppendChild(meter->getPane());
                             meter->LytMeter0x28(true);
                             break;
                         }
