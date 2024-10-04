@@ -19,26 +19,26 @@ bool CurrentStageArcManager::setStage(const char *newStage) {
     mStageName = newStage;
 
     mCurrentLoadingStageArcName.sprintf("%s_stg_l0", mStageName);
-    if (dRawArcEntry_c::checkArcExistsOnDisk(&mCurrentLoadingStageArcName, getCurrentStageDirectory())) {
-        return (bool)mArcTable.getArcOrLoadFromDisk(&mCurrentLoadingStageArcName, getCurrentStageDirectory(), 0,
+    if (dRawArcEntry_c::checkArcExistsOnDisk(mCurrentLoadingStageArcName, getCurrentStageDirectory())) {
+        return (bool)mArcTable.getArcOrLoadFromDisk(mCurrentLoadingStageArcName, getCurrentStageDirectory(), 0,
                 dHeap::work2Heap.heap);
     } else {
         mCurrentLoadingStageArcName.sprintf("%s_stg", mStageName);
-        return (bool)mArcTable.getArcOrLoadFromDisk(&mCurrentLoadingStageArcName, getCurrentStageDirectory(), 0,
+        return (bool)mArcTable.getArcOrLoadFromDisk(mCurrentLoadingStageArcName, getCurrentStageDirectory(), 0,
                 dHeap::work2Heap.heap);
     }
 }
 
 bool CurrentStageArcManager::decrement() {
-    return mArcTable.decreaseRefCount(&mCurrentLoadingStageArcName);
+    return mArcTable.decreaseRefCount(mCurrentLoadingStageArcName);
 }
 
 void *CurrentStageArcManager::getData(const char *fileName) {
-    return mArcTable.getDataFromOarc(&mCurrentLoadingStageArcName, fileName);
+    return mArcTable.getDataFromOarc(mCurrentLoadingStageArcName, fileName);
 }
 
 void *CurrentStageArcManager::getFileFromCurrentLay0Arc(const char *fileName) {
-    return mArcTable.getSubEntryData(&mCurrentLoadingStageArcName, fileName);
+    return mArcTable.getSubEntryData(mCurrentLoadingStageArcName, fileName);
 }
 
 bool CurrentStageArcManager::loadFileFromExtraLayerArc(int layer) {
@@ -47,8 +47,8 @@ bool CurrentStageArcManager::loadFileFromExtraLayerArc(int layer) {
     }
 
     mStageExtraLayerArcName.sprintf("%s_stg_l%d", mStageName, layer);
-    if (dRawArcEntry_c::checkArcExistsOnDisk(&mStageExtraLayerArcName, getCurrentStageDirectory())) {
-        return (bool)mArcTable.getArcOrLoadFromDisk(&mStageExtraLayerArcName, getCurrentStageDirectory(), 0,
+    if (dRawArcEntry_c::checkArcExistsOnDisk(mStageExtraLayerArcName, getCurrentStageDirectory())) {
+        return (bool)mArcTable.getArcOrLoadFromDisk(mStageExtraLayerArcName, getCurrentStageDirectory(), 0,
                 dHeap::work2Heap.heap);
     } else {
         return true;
@@ -56,8 +56,8 @@ bool CurrentStageArcManager::loadFileFromExtraLayerArc(int layer) {
 }
 
 bool CurrentStageArcManager::unloadExtraLayerArc() {
-    if (mArcTable.hasEntry(&mStageExtraLayerArcName)) {
-        return mArcTable.decreaseRefCount(&mStageExtraLayerArcName);
+    if (mArcTable.hasEntry(mStageExtraLayerArcName)) {
+        return mArcTable.decreaseRefCount(mStageExtraLayerArcName);
     }
     return true;
 }
@@ -96,16 +96,16 @@ EGG::ExpHeap *getHeap() {
 const char *CurrentStageArcManager::getCurrentStageDirectory() {
     static SizedString<64> sStageDirTmp;
     sStageDirTmp = "Stage/";
-    sStageDirTmp += &mStageName;
+    sStageDirTmp += mStageName;
 
-    return &sStageDirTmp;
+    return sStageDirTmp;
 }
 
 static SizedString<32> s_roomArcTmp;
 
 const char *CurrentStageArcManager::getRoomArcDirectory(int room) const {
     s_roomArcTmp.sprintf("%s_r%02d", mStageName, room);
-    return &s_roomArcTmp;
+    return s_roomArcTmp;
 }
 
 bool CurrentStageArcManager::create(EGG::Heap *heap) {

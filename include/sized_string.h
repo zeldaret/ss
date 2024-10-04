@@ -25,11 +25,11 @@ struct SizedString {
 
     char mChars[Size];
 
-    char *operator&() {
+    operator char *() {
         return mChars;
     }
 
-    const char *operator&() const {
+    operator const char *() const {
         return mChars;
     }
 

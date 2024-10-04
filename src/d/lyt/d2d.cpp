@@ -334,7 +334,7 @@ bool LytBase_c::build(const char *name, m2d::ResAccIf_c *acc) {
     SizedString<0x80> localizedName;
     localizedName.sprintf("%s_%s", getUsedLanguageString(), fileName);
 
-    void *data = acc->getAccessor()->GetResource(0, &localizedName, nullptr);
+    void *data = acc->getAccessor()->GetResource(0, localizedName, nullptr);
     if (data == nullptr) {
         mpMsbtInfo = nullptr;
     } else {
@@ -612,10 +612,10 @@ bool LytBase_c::fn_800ABCE0(const nw4r::lyt::res::ExtUserData *userDatum, dTextB
         // TODO this operator is not behaving correctly here - there's
         // an additional null check, and the source string address is
         // computed twice via stack instead of once.
-        str1 += &str2;
+        str1 += str2;
     }
 
-    const char *text = LMS_GetTextByLabel(getMsbtInfo(), &str1);
+    const char *text = LMS_GetTextByLabel(getMsbtInfo(), str1);
     if (text == nullptr) {
         return false;
     }
@@ -704,10 +704,10 @@ bool LytBase_c::fn_800AC1AC(const nw4r::lyt::res::ExtUserData *userDatum, dTextB
         // TODO this operator is not behaving correctly here - there's
         // an additional null check, and the source string address is
         // computed twice via stack instead of once.
-        str1 += &str2;
+        str1 += str2;
     }
 
-    fn_800AF840(textbox1, getMsbtInfo(), &str1, arg, unk);
+    fn_800AF840(textbox1, getMsbtInfo(), str1, arg, unk);
     return true;
 }
 
