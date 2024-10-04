@@ -93,7 +93,7 @@ struct AnmGroup_c {
     void setForward();
     void setBackward();
 
-    inline void setFrame(f32 frame) {
+    inline void setFrameAndControlThings(f32 frame) {
         fn_800AC6D0(false);
         fn_800AC870(true);
         mpFrameCtrl->setFrame(frame);
@@ -105,6 +105,15 @@ struct AnmGroup_c {
         syncAnmFrame();
     }
 
+    inline void setFrame(f32 frame) {
+        mpFrameCtrl->setFrame(frame);
+        syncAnmFrame();
+    }
+
+    inline f32 getFrame() const {
+        return mpFrameCtrl->getFrame();
+    }
+
     inline void setToStart() {
         mpFrameCtrl->setToStart();
         syncAnmFrame();
@@ -114,6 +123,17 @@ struct AnmGroup_c {
         mpFrameCtrl->setToEnd();
         syncAnmFrame();
     }
+
+    inline bool isEndReached() const {
+        return mpFrameCtrl->isEndReached();
+    }
+
+    inline void setRate(f32 rate) {
+        mpFrameCtrl->setRate(rate);
+        fn_800AC870(true);
+    }
+
+private:
 
     u8 field_0x00[0x08 - 0x00];
 
