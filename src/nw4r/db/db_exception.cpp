@@ -125,7 +125,6 @@ void *RunThread_(void *) {
 
 static void PrintContext_(u16, const OSContext *, u32, u32);
 static void WaitTime_(s32 time);
-static void Console_SetVisible(ConsoleHandle, bool);
 static void Console_SetViewBaseLine(ConsoleHandle, s32);
 static u32 Console_GetBufferHeadLine(ConsoleHandle);
 
@@ -476,17 +475,6 @@ void DrawConsoleEndless_(detail::ConsoleHead *) {
     // TODO
 }
 */
-static void Console_SetVisible(detail::ConsoleHead *, bool) {
-    // TODO
-}
-
-static void Console_SetViewBaseLine(detail::ConsoleHead *console, s32 line) {
-    console->viewTopLine = line;
-}
-
-static u32 Console_GetBufferHeadLine(detail::ConsoleHead *console) {
-    return console->ringTopLineCnt;
-}
 
 } // namespace db
 } // namespace nw4r
