@@ -1444,7 +1444,7 @@ config.libs = [
     Rel(NonMatching, "d_t_scene_change", "REL/d/t/d_t_scene_change.cpp"),
     Rel(NonMatching, "d_t_ship_flood", "REL/d/t/d_t_ship_flood.cpp"),
     Rel(NonMatching, "d_t_ship_slope", "REL/d/t/d_t_ship_slope.cpp"),
-    Rel(NonMatching, "d_t_ship_window", "REL/d/t/d_t_ship_window.cpp"),
+    Rel(Matching, "d_t_ship_window", "REL/d/t/d_t_ship_window.cpp"),
     Rel(NonMatching, "d_t_shutter_fence_forbiddance", "REL/d/t/d_t_shutter_fence_forbiddance.cpp"),
     Rel(NonMatching, "d_t_shutter_fence_permission", "REL/d/t/d_t_shutter_fence_permission.cpp"),
     Rel(NonMatching, "d_t_siren_time_attack", "REL/d/t/d_t_siren_time_attack.cpp"),
