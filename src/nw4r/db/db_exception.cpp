@@ -125,8 +125,6 @@ void *RunThread_(void *) {
 
 static void PrintContext_(u16, const OSContext *, u32, u32);
 static void WaitTime_(s32 time);
-static void Console_SetViewBaseLine(ConsoleHandle, s32);
-static u32 Console_GetBufferHeadLine(ConsoleHandle);
 
 static void DrawConsoleEndless_(ConsoleHandle console) {
     s32 lineCnt = Console_GetBufferHeadLine(console);
