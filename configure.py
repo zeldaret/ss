@@ -1463,7 +1463,7 @@ config.libs = [
     Rel(Matching, "d_t_timer", "REL/d/t/d_t_timer.cpp"),
     Rel(Matching, "d_t_time_area_check", "REL/d/t/d_t_time_area_check.cpp"),
     Rel(NonMatching, "d_t_time_door_beam", "REL/d/t/d_t_time_door_beam.cpp"),
-    Rel(NonMatching, "d_t_touch", "REL/d/t/d_t_touch.cpp"),
+    Rel(Matching, "d_t_touch", "REL/d/t/d_t_touch.cpp"),
     Rel(NonMatching, "d_t_tumble_weed", "REL/d/t/d_t_tumble_weed.cpp"),
 ]
 
