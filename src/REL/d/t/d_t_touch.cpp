@@ -1,7 +1,7 @@
 #include <c/c_math.h>
 #include <d/tg/d_t_touch.h>
-#include <toBeSorted/sceneflag_manager.h>
 #include <toBeSorted/area_math.h>
+#include <toBeSorted/sceneflag_manager.h>
 
 SPECIAL_ACTOR_PROFILE(TOUCH_TAG, dTgTouchTag, fProfile::TOUCH_TAG, 0x028E, 0, 0);
 
@@ -13,9 +13,9 @@ const static u16 ACTIVATORS[] = {
 };
 
 int dTgTouchTag::create() {
-    mActivatorIndex = !((params & 0xF) == 0xF) ? (params & 0xF) : 0;
-    mZoneFlag = (params >> 4);
-    mChkFlag = (params >> 0xC);
+    mActivatorIndex = !(getActivatorIndex() == 0xF) ? getActivatorIndex() : 0;
+    mZoneFlag = getZoneFlag();
+    mChkFlag = getChkFlag();
     matrixCreateFromPosRotYScale(mAreaOfEffect, position, rotation.y, scale, nullptr, 0.0f);
     mStateMgr.changeState(StateID_Wait);
     return SUCCEEDED;

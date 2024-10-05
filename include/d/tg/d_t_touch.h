@@ -18,6 +18,18 @@ public:
     STATE_FUNC_DECLARE(dTgTouchTag, Wait);
 
 private:
+    u8 getActivatorIndex() {
+        return params & 0xF;
+    }
+
+    u8 getZoneFlag() {
+        return params >> 0x4;
+    }
+
+    u8 getChkFlag() {
+        return params >> 0xC;
+    }
+
     STATE_MGR_DECLARE(dTgTouchTag);
     mMtx_c mAreaOfEffect;
     u16 mFlagTimer;
