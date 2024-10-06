@@ -3,6 +3,7 @@
 
 #include "d/col/c/c_m3d.h"
 #include "d/col/c/c_m3d_g_lin.h"
+#include "d/col/c/c_m3d_g_sph.h"
 
 #include <common.h>
 
@@ -23,14 +24,15 @@ public:
     void ClearForMinMax(void);
     void SetMinMax(const mVec3_c &);
     void SetMinMax(const cM3dGAab &);
-    void SetMin(const mVec3_c &min) {
-        mMin = min;
-    }
-    void SetMax(const mVec3_c &max) {
-        mMax = max;
-    }
-    void CalcCenter(mVec3_c *) const;
+    void SetMin(const mVec3_c &min);
+    void SetMax(const mVec3_c &max);
+    void CalcCenter(mVec3_c &) const;
     void PlusR(f32);
+    void Clamp(const mVec3_c &, mVec3_c &) const;
+    void Set(const cM3dGSph &);
+    bool Cross(const mVec3_c &) const;
+    void SetBounds(const mVec3_c &, const mVec3_c &);
+
     const mVec3_c *GetMaxP(void) const {
         return &mMax;
     }
@@ -68,6 +70,6 @@ public:
     // bool Cross(const cM3dGSph *param_1) {
     //     return cM3d_Cross_AabSph(this, param_1);
     // }
-}; // Size = 0x1C
+};
 
 #endif /* C_M3D_G_AAB_H */

@@ -3,25 +3,25 @@
 #include "m/m_vec.h"
 
 cM3dGSph::cM3dGSph() {
-    field_0x10 = 1.0f;
+    mRatio = 1.0f;
 }
 
-void cM3dGSph::setC(const mVec3_c &c) {
+void cM3dGSph::SetC(const mVec3_c &c) {
     mCenter = c;
 }
 
-void cM3dGSph::set(const mVec3_c &c, f32 r) {
-    setC(c);
-    setR(r);
+void cM3dGSph::Set(const mVec3_c &c, f32 r) {
+    SetC(c);
+    SetR(r);
 }
 
-void cM3dGSph::setR(f32 r) {
+void cM3dGSph::SetR(f32 r) {
     if (r < 0.0f) {
         r = 0.0f;
     }
     mRadius = r;
 }
 
-void cM3dGSph::setC(f32 x, f32 y, f32 z) {
-    setC(mVec3_c(x, y, z));
+void cM3dGSph::SetC(f32 x, f32 y, f32 z) {
+    SetC(mVec3_c(x, y, z));
 }

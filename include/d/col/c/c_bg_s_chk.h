@@ -1,8 +1,9 @@
 #ifndef C_BG_S_CHK_H
 #define C_BG_S_CHK_H
 
-#include <f/f_base.h>
-#include <rvl/MTX.h>
+#include "d/col/c/c_partition.h"
+#include "f/f_base.h"
+#include "rvl/MTX.h"
 
 struct cBgD_Vtx_t : public Vec {};
 
@@ -15,23 +16,21 @@ class cBgS_PolyPassChk;
 
 class cBgS_Chk {
 public:
-    /* 0x0 */ cBgS_PolyPassChk *mPolyPassChk;
-    /* 0x4 */ cBgS_GrpPassChk *mGrpPassChk;
-    /* 0x8 */ u16 mActorPid;
-    /* 0xC */ u8 unk_0x0C;
-    /* 0x10 */ // __vtable__
+    /* 0x00 */ cBgS_PolyPassChk *mPolyPassChk;
+    /* 0x04 */ cBgS_GrpPassChk *mGrpPassChk;
+    /* 0x08 */ u32 mActorId;
+    /* 0x0C */ u16 mField_0x0C;
+    /* 0x0E */ u16 mField_0x0E;
+    /* 0x10 */ u8 mField_0x10;
+    /* 0x14 */ cPartition mPartition;
+    /* 0x24 */ // __vtable__
 
 public:
     cBgS_Chk();
-    void SetExtChk(cBgS_Chk &);
-    bool ChkSameActorPid(unsigned int) const;
+    // vt at 0x24
+    virtual ~cBgS_Chk();
+    void SetActorID(u32 *);
 
-    // void SetActorPid(fpc_ProcID pid) {
-    //     mActorPid = pid;
-    // }
-    // fpc_ProcID GetActorPid() const {
-    //     return mActorPid;
-    // }
     void SetPolyPassChk(cBgS_PolyPassChk *p_chk) {
         mPolyPassChk = p_chk;
     }
@@ -44,8 +43,6 @@ public:
     cBgS_GrpPassChk *GetGrpPassChk() const {
         return mGrpPassChk;
     }
-
-    virtual ~cBgS_Chk(void);
-}; // Size: 0x14
+};
 
 #endif

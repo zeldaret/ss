@@ -1,9 +1,9 @@
 #include <d/a/d_a_player.h>
 #include <d/a/obj/d_a_obj_base.h>
+#include <d/col/c/c_m3d_g_cps.h>
 #include <d/tg/d_t_sound_area.h>
 #include <d/tg/d_t_sound_area_mgr.h>
 #include <rvl/MTX.h>
-
 
 SPECIAL_ACTOR_PROFILE(TAG_SOUND_AREA, dTgSndAr_c, fProfile::TAG_SOUND_AREA, 0x0146, 0, 0);
 
@@ -133,38 +133,32 @@ struct UnkStruct {
     /* 0x24 */ u32 field_0x24;
 };
 
-extern "C" void fn_80337EA0(UnkStruct *);
-extern "C" void fn_80337EF0(UnkStruct *, mVec3_c &, mVec3_c &, f32);
-extern "C" int cM3d_Len3dSqPntAndSegLine(UnkStruct *, Vec &, Vec *, f32 *, f32 *);
-
 // Capsule
 bool dTgSndAr_c::checkAlg3(const mVec3_c &pos) {
-    Vec q;
+    mVec3_c q;
 
     f32 radius = mScale.x * 100.0f;
     radius = radius * radius;
-    Vec a = pos;
-
-    UnkStruct unk;
-    fn_80337EA0(&unk);
+    nw4r::math::VEC3 a = pos;
+    cM3dGCps unk;
 
     // Line between b and c
     mVec3_c b = *mRail.getPntPosForIndex(0);
     mVec3_c c = *mRail.getPntPosForIndex(1);
 
-    fn_80337EF0(&unk, b, c, mScale.x * 100.0f);
+    unk.Set(b, c, mScale.x * 100.0f);
     f32 d;
-    if (cM3d_Len3dSqPntAndSegLine(&unk, a, &q, &d, nullptr)) {
+    if (cM3d_Len3dSqPntAndSegLine(&unk, &a, &q, &d, nullptr)) {
         // At the cylindrical part of the capsule, just check the distance to
         // the line
         return d < radius;
     } else {
         // Otherwise check if we are within the spheres around the endpoints
-        f32 distSq = PSVECSquareDistance(unk.vec, pos);
+        f32 distSq = PSVECSquareDistance(unk.GetStart(), pos);
         if (distSq < radius) {
             return true;
         } else {
-            distSq = PSVECSquareDistance(unk.vec2, pos);
+            distSq = PSVECSquareDistance(unk.GetEnd(), pos);
             return distSq < radius;
         }
     }

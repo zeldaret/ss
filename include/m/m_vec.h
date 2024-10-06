@@ -28,6 +28,10 @@ public:
         set(fx, fy, fz);
     }
 
+    void copyFrom(const Vec *pV) {
+        set(pV->x, pV->y, pV->z);
+    }
+
     /// @brief Assignment operator
     mVec3_c &operator=(const mVec3_c &r) {
         set(r.x, r.y, r.z);
@@ -89,6 +93,14 @@ public:
     }
 
     /// @brief Augmented subtraction operator.
+    mVec3_c &operator+=(const mVec3_c &v) {
+        x += v.x;
+        y += v.y;
+        z += v.z;
+        return *this;
+    }
+
+    /// @brief Augmented subtraction operator.
     mVec3_c &operator-=(const mVec3_c &v) {
         x -= v.x;
         y -= v.y;
@@ -111,6 +123,20 @@ public:
 
     /// @brief Positive operator.
     mVec3_c operator+() const {
+        return *this;
+    }
+
+    mVec3_c &operator-=(f32 f) {
+        x -= f;
+        y -= f;
+        z -= f;
+        return *this;
+    }
+
+    mVec3_c &operator+=(f32 f) {
+        x += f;
+        y += f;
+        z += f;
         return *this;
     }
 

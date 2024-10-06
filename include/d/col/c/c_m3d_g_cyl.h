@@ -10,15 +10,20 @@ public:
     /* 0x10 */ f32 mHeight;
     cM3dGCyl() {}
 
-    void setC(const mVec3_c &, f32 radius, f32 height);
-    void setC(const mVec3_c &);
-    void setH(f32);
-    void setR(f32);
+    void Set(const mVec3_c &, f32, f32);
+    void SetC(const mVec3_c &, f32 radius, f32 height);
+    void SetC(const mVec3_c &);
+    void SetH(f32);
+    void SetR(f32);
+
+    bool fn_803380e0(/* TODO */);
+    bool fn_803380f0(/* TODO */);
+    bool Cross(const mVec3_c &) const;
+    void fn_80338170(const mVec3_c &, mVec3_c &);
 
     const mVec3_c &GetC() const {
         return mCenter;
     }
-
-}; // Size = 0x14
+};
 
 #endif

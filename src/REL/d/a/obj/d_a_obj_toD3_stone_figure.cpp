@@ -44,9 +44,9 @@ int dAcOtoD3StoneFigure_c::create() {
     mCollision.init(sCcSrc);
     mCollision.initUnk(mCCdStruct);
     int zero = 0;
-    mCollision.setC(position);
-    mCollision.setR(dAcOtoD3StoneFigure_c::sRadius + zero);
-    mCollision.setH(dAcOtoD3StoneFigure_c::sHeight + zero);
+    mCollision.SetC(position);
+    mCollision.SetR(dAcOtoD3StoneFigure_c::sRadius + zero);
+    mCollision.SetH(dAcOtoD3StoneFigure_c::sHeight + zero);
     ColliderManager::getColliderManager()->addCollider(&mCollision);
     // mCollision.clearCoFlag();
     mCollision.setTgCoFlag(1);

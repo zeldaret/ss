@@ -52,12 +52,12 @@ void *dCcD_Cyl::dCcD_GObjInf_0x0C() {
 
 void dCcD_Cyl::setCenter(const mVec3_c &c) {
     setAtVec(mVec3_c::Zero);
-    setC(c);
+    SetC(c);
 }
 
 void dCcD_Cyl::moveCenter(const mVec3_c &c) {
     setAtVec(c - GetC());
-    setC(c);
+    SetC(c);
 }
 
 dCcD_Sph::dCcD_Sph() {}
@@ -70,17 +70,17 @@ void dCcD_Sph::init(const dCcD_SrcSph &src) {
 
 void dCcD_Sph::setCenter(const mVec3_c &c) {
     setAtVec(mVec3_c::Zero);
-    setC(c);
+    SetC(c);
 }
 
 void dCcD_Sph::moveCenter(const mVec3_c &c) {
     setAtVec(c - GetC());
-    setC(c);
+    SetC(c);
 }
 
 void dCcD_Sph::setCenterAndAtVec(const mVec3_c &a, const mVec3_c &b) {
     setAtVec(b);
-    setC(a);
+    SetC(a);
 }
 
 void *dCcD_Sph::dCcD_GObjInf_0x0C() {

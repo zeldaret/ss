@@ -15,12 +15,16 @@ public:
         mNormal = *v;
         f = mD;
     }
-    bool crossInfLin(const mVec3_c &, const mVec3_c &, mVec3_c &) const;
-    void SetupNP0(const mVec3_c &, const mVec3_c &);
-    void SetupNP(const mVec3_c &, const mVec3_c &);
-    bool getCrossY(const mVec3_c &, f32 *) const;
+    bool CrossInfLin(const mVec3_c &, const mVec3_c &, mVec3_c &) const;
     bool getCrossYLessD(const mVec3_c &, f32 *) const;
-    void Set(const cM3dGPla *);
+    mAng GetAngle(mAng) const;
+    mAng GetNegativeAngle(mAng) const;
+
+    // Unused
+    // void SetupNP0(const mVec3_c &, const mVec3_c &);
+    // void SetupNP(const mVec3_c &, const mVec3_c &);
+    // bool getCrossY(const mVec3_c &, f32 *) const;
+    // void Set(const cM3dGPla *);
 
     // f32 getPlaneFunc(const Vec *pPoint) const {
     //     return mD + VECDotProduct(mNormal, pPoint);

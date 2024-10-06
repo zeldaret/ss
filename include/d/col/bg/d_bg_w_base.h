@@ -6,6 +6,7 @@
 #include "d/col/c/c_bg_w.h"
 #include "d/col/c/c_m3d_g_aab.h"
 #include "d/col/c/c_m3d_g_pla.h"
+#include "d/col/c/c_partition.h"
 #include "m/m_allocator.h"
 #include "m/m_math.h"
 
@@ -19,25 +20,12 @@ class dBgS_SphChk;
 class dBgS_SplGrpChk;
 
 // TODO
-// Possibly a precalculated index into the octree
-class dBgW_Base_0x8 {
-public:
-    /* 0x00 */ u32 mIdxX;
-    /* 0x04 */ u32 mIdxY;
-    /* 0x08 */ u32 mIdxZ;
-
-    dBgW_Base_0x8();
-    /* vt at 0x0C */
-    /* vt 0x08*/ virtual ~dBgW_Base_0x8();
-};
-
-// TODO
 class dBgW_Base_0x18 {
 public:
     /* 0x00 */ u8 field_0x00;
     dBgW_Base_0x18();
     /* vt at 0x04 */
-    /* vt 0x08*/ virtual ~dBgW_Base_0x18();
+    virtual ~dBgW_Base_0x18();
 };
 
 // TODO
@@ -53,7 +41,6 @@ public:
 
 class dBgW_Base : public cBgW_BgId {
 public:
-    // carry over from TP, not yet known if still exist
     enum PushPullLabel {
         PPLABEL_NONE = 0,
         PPLABEL_PUSH = 1,
@@ -192,7 +179,7 @@ public:
     // }
 
 private:
-    /* 0x08 */ dBgW_Base_0x8 mPartitionInfo;
+    /* 0x08 */ cPartition mPartitionInfo;
     /* 0x18 */ dBgW_Base_0x18 mField_0x18;
     /* 0x20 */ u16 field_0x20;
     /* 0x22 */ u16 field_0x22;

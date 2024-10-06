@@ -62,7 +62,7 @@ int dAcOtriforce_c::actorExecute() {
     position = mStartingPos + offset;
     mStartingOffset.mVal += 0x16C;
 
-    mCollision.setC(position.x, position.y + 90.0f + zero, position.z);
+    mCollision.SetC(position.x, position.y + 90.0f + zero, position.z);
 
     ColliderManager::getColliderManager()->addCollider(&mCollision);
     updateMatrix();

@@ -570,21 +570,26 @@ m/m_pad.cpp:
 
 d/col/c/c_bg_s_chk.cpp:
 	.text       start:0x80327140 end:0x8032721C
+	.data       start:0x80547388 end:0x80547394
 
 d/col/c/c_bg_s_gnd_chk.cpp:
 	.text       start:0x80327220 end:0x8032734C
+	.data       start:0x80547398 end:0x805473A4
 
 d/col/c/c_bg_s_lin_chk.cpp:
 	.text       start:0x80327350 end:0x80327504
+	.data       start:0x805473A8 end:0x805473B8
 
 d/col/c/c_bg_s_poly_info.cpp:
 	.text       start:0x80327510 end:0x8032766C
 
-d/col/c/c_bg_s_time_chk.cpp:
+d/col/c/c_bg_s_time_area.cpp:
 	.text       start:0x80327670 end:0x80328064
+	.data       start:0x805473B8 end:0x805473C4
 
 d/col/c/c_bg_w.cpp:
 	.text       start:0x80328070 end:0x80328114
+	.data       start:0x805473C8 end:0x805473D4
 
 d/col/c/c_cc_d.cpp:
 	.text       start:0x80328120 end:0x8032BC78
@@ -595,14 +600,15 @@ d/col/c/c_cc_d.cpp:
 	.bss        start:0x805D0128 end:0x805D0134
 
 d/col/c/c_m2d.cpp:
-	.text       start:0x8032BEC0 end:0x8032BF00
-	.data       start:0x80547668 end:0x80547678
+	.text       start:0x8032BC80 end:0x8032BEB8
 
 d/col/c/c_m3d.cpp:
-	.text       start:0x8032BF00 end:0x80337B58
+	.text       start:0x8032BEC0 end:0x80337B58
+	.data       start:0x80547668 end:0x80547678
 
 d/col/c/c_m3d_g_aab.cpp:
-	.text       start:0x80337B60 end:0x80337C7C
+	.text       start:0x80337B60 end:0x80337E94
+	.sdata2     start:0x8057D030 end:0x8057D038
 
 d/col/c/c_m3d_g_cps.cpp:
 	.text       start:0x80337EA0 end:0x80338018
@@ -625,7 +631,7 @@ d/col/c/c_m3d_g_tri.cpp:
 d/col/c/c_m3d_g_unk.cpp:
 	.text       start:0x80338940 end:0x80338F4C
 
-d/col/bg/d_bg_partition.cpp:
+d/col/c/c_partition.cpp:
 	.text       start:0x80338F50 end:0x80339BAC
 	.ctors      start:0x804DB8FC end:0x804DB900
 
