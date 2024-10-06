@@ -94,7 +94,7 @@ public:
     /* 8002ea20 */ virtual bool drop();
 
 public:
-    /* 8002e630 */ static dAcObjBase_c *create(fProfile::PROFILE_NAME_e actorId, s8 roomId, u32 params1, mVec3_c *pos,
+    /* 8002e630 */ static dAcObjBase_c *create(fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, mVec3_c *pos,
             mAng3_c *rot, mVec3_c *scale, u32 params2);
     /* 8002e6d0 */ static dAcObjBase_c *create(char *name, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot,
             mVec3_c *scale, u32 params2, u16 id, s8 viewclipId);

@@ -11,6 +11,14 @@ struct mAng {
     operator s16() const {
         return mVal;
     }
+
+    mAng operator-() {
+        return mAng(-mVal);
+    }
+
+    mAng operator+(const mAng& other) const {
+        return mAng(mVal + other.mVal);
+    }
     s32 step(s16 target, s32 steps, s16 max, s16 min);
 
     inline f32 sin() const {
