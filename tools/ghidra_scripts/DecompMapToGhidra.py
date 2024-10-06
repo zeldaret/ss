@@ -139,17 +139,12 @@ def update_addr(addr, mangled_name):
             namespace = NamespaceUtils.createNamespaceHierarchy(namespace_str, None, currentProgram, IMPORTED)
 
         sym = getSymbolAt(addr)
+        if namespace is None:
+            namespace = currentProgram.getGlobalNamespace()
         if sym:
-            if namespace:
-                sym.setNameAndNamespace(symbol_str, namespace, IMPORTED)
-            else:
-                sym.setName(symbol_str, IMPORTED)
+            sym.setNameAndNamespace(symbol_str, namespace, IMPORTED)
         else:
-            if namespace:
-                createLabel(addr, symbol_str, namespace, True, IMPORTED)
-            else:
-                createLabel(addr, symbol_str, True, IMPORTED)
-        
+            createLabel(addr, symbol_str, namespace, True, IMPORTED)
         unit.setComment(PLATE_COMMENT, new_comment)
 
 def apply_symbols_map(symbols_map, file_name):
