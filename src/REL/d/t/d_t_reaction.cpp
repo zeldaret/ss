@@ -41,11 +41,11 @@ int dTgReaction_c::create() {
         return FAILED;
     }
 
-    if (getParam0x1C() != 3) {
-        if (getParam0x00() >= 0xFF) {
+    if (getReactType() != REACT_GUST_BELLOWS) {
+        if (getSceneFlag() >= 0xFF) {
             return FAILED;
         }
-        if (SceneflagManager::sInstance->checkBoolFlag(roomid, getParam0x00())) {
+        if (SceneflagManager::sInstance->checkBoolFlag(roomid, getSceneFlag())) {
             return FAILED;
         }
     }
@@ -76,20 +76,20 @@ int dTgReaction_c::create() {
     mCollision.init(sCcSrc);
     mCollision.initUnk(mCCdStruct);
 
-    switch (getParam0x1C()) {
-        case 1:
+    switch (getReactType()) {
+        case REACT_BONK:
             mCollision.setTgFlag(0x80);
             mCollision.setTgField0x0A(0);
             mCollision.setR(sCcSrc.mCylAttr.mRadius * scale.x);
             mCollision.setH(scale.y * sCcSrc.mCylAttr.mHeight);
             break;
-        case 2:
+        case REACT_SLINGSHOT:
             mCollision.setTgFlag(0x10000);
             mCollision.setTgField0x0A(8);
             mCollision.setR(sCcSrc.mCylAttr.mRadius * scale.x);
             mCollision.setH(scale.y * sCcSrc.mCylAttr.mHeight);
             break;
-        case 3:
+        case REACT_GUST_BELLOWS:
             mCollision.setTgFlag(0x100000);
             mCollision.setTgField0x0A(0);
             mCollision.setR(sCcSrc.mCylAttr.mRadius * scale.x);
@@ -129,7 +129,7 @@ int dTgReaction_c::doDelete() {
 }
 
 int dTgReaction_c::actorExecute() {
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, getParam0x00())) {
+    if (SceneflagManager::sInstance->checkBoolFlag(roomid, getSceneFlag())) {
         onDelete();
         return SUCCEEDED;
     } else {
@@ -144,12 +144,12 @@ int dTgReaction_c::draw() {
 
 void dTgReaction_c::initializeState_Wait() {}
 void dTgReaction_c::executeState_Wait() {
-    switch (getParam0x1C()) {
-        case 0:
-        case 4: checkForBonkItem(); break;
-        case 1:
-        case 2: checkForSlingBellowsItem(); break;
-        case 3: checkForBubble(); break;
+    switch (getReactType()) {
+        case REACT_BONK:
+        case REACT_4: checkForBonkItem(); break;
+        case REACT_SLINGSHOT:
+        case REACT_GUST_BELLOWS: checkForSlingBellowsItem(); break;
+        case REACT_UNDERWATER: checkForBubble(); break;
     }
 }
 void dTgReaction_c::finalizeState_Wait() {}
@@ -166,14 +166,14 @@ void dTgReaction_c::checkForBonkItem() {
             return;
         }
 
-        if (getParam0x1C() == 4) {
+        if (getReactType() == REACT_4) {
             if (field_0x4DD == 0) {
                 mVec3_c c = mVec3_c::Ez * rad;
                 mVec3_c c2 = position;
                 c.rotY(rotation.y);
                 c2 += c;
                 c2.y += field_0x4E4;
-                u32 newItemParms = dAcItem_c::createItemParams(/* HEART_PIECE */ 0x5E, 1, 0, getParam0x00(), 1, 0xFF);
+                u32 newItemParms = dAcItem_c::createItemParams(/* HEART_PIECE */ 0x5E, 1, 0, getSceneFlag(), 1, 0xFF);
                 if (dAcObjBase_c::create(fProfile::ITEM, roomid, newItemParms, &c2, nullptr, nullptr, 0xFFFFFFFF)) {
                     field_0x4DD = 1;
                     onDelete();
@@ -201,7 +201,7 @@ void dTgReaction_c::checkForBonkItem() {
             if (fn_578_DB0(pos, uVar3)) {
                 SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AE);
             }
-            SceneflagManager::sInstance->setFlag(roomid, getParam0x00());
+            SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
             onDelete();
         }
     }
@@ -242,7 +242,7 @@ void dTgReaction_c::checkForSlingBellowsItem() {
         if (fn_578_DB0(spawnPos, uVar3)) {
             SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AE);
         }
-        SceneflagManager::sInstance->setFlag(roomid, getParam0x00());
+        SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
         onDelete();
     }
     mCollision.setC(position);

@@ -24,7 +24,15 @@ private:
     static const f32 sRadius;
     static const f32 sHeight;
 
-    u32 getParam0x00() {
+    enum ReactType {
+        REACT_BONK,
+        REACT_SLINGSHOT,
+        REACT_GUST_BELLOWS,
+        REACT_UNDERWATER,
+        REACT_4,
+    };
+
+    u32 getSceneFlag() {
         return params & 0xFF;
     }
 
@@ -40,8 +48,8 @@ private:
         return (params >> 0x14) & 0x1;
     }
 
-    int getParam0x1C() {
-        return params >> 0x1C;
+    ReactType getReactType() {
+        return (ReactType)(params >> 0x1C);
     }
 
     void onDelete();
