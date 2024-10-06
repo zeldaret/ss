@@ -55,7 +55,7 @@ def parse_symbol(line):
     vAddr = objs[2]
     name = objs[5]
 
-    if name.startswith("gap_") or name == "*fill*" or name.startswith(".") or "........" in vAddr:
+    if name.startswith("pad_") or name.startswith("gap_") or name == "*fill*" or name.startswith(".") or "........" in vAddr:
         return None
     if default_sym_re.match(name):
         return None
