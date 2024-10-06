@@ -7,6 +7,8 @@
 
 #include <common.h>
 
+extern "C" GXRenderModeObj lbl_8055FC64;
+
 namespace EGG {
 
 class Video {
@@ -27,6 +29,13 @@ public:
     static u32 getTickPerVRetrace(u32 tvFormat);
     static u32 getTickPerVRetrace();
     static const GXRenderModeObj *getStandardRenderModeObj(const RenderModeObjSet *);
+
+    GXRenderModeObj* getCurrentOrFallbackRenderModeObj() const {
+        if (pRenderMode == nullptr) {
+            return &lbl_8055FC64;
+        }
+        return pRenderMode;
+    }
 
 public:
     void setBlack(bool b) {

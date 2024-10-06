@@ -1771,6 +1771,8 @@ egg/audio/eggAudioSystem.cpp:
 
 egg/util/eggException.cpp:
 	.text       start:0x804B7550 end:0x804B7B48
+	.data       start:0x8056F420 end:0x8056F438
+	.sbss       start:0x80576900 end:0x80576920
 
 Runtime.PPCEABI.H/global_destructor_chain.c:
 	.text       start:0x804C65C0 end:0x804C6620
