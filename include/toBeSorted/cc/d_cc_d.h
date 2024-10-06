@@ -186,6 +186,9 @@ public:
     void setSrc0x0A(u32 flag) {
         mSrc.field_0x0A = flag;
     }
+    u32 get0x58() {
+        return field_0x58;
+    }
     void init(const dCcD_SrcGObjTg *);
     void adjustHitPos(f32 dx, f32 dz);
 };
