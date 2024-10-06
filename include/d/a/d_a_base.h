@@ -147,6 +147,10 @@ public:
         return getSquareDistanceTo(point) > radius;
     }
 
+    u32 getRoomId() {
+        return roomid;
+    }
+
 public:
     // funcs found in TU
     /* 8002c650 */ static void setTempCreateParams(mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2,
