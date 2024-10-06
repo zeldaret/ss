@@ -101,4 +101,4 @@ u32 dBgWKCol::GetGrpInf(cBgS_PolyInfo const &pi) const {
 
 void dBgWKCol::OffMoveFlag() {}
 
-// bool dBgWKCol::ChkPolyThrough(dBgPc *pPoly, cBgS_Chk *pChk)
+bool dBgWKCol::ChkPolyThrough(dBgPc *pPoly, cBgS_Chk *pChk) const {}

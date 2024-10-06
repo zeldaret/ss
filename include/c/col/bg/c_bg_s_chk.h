@@ -26,12 +26,12 @@ public:
     void SetExtChk(cBgS_Chk &);
     bool ChkSameActorPid(unsigned int) const;
 
-    void SetActorPid(fpc_ProcID pid) {
-        mActorPid = pid;
-    }
-    fpc_ProcID GetActorPid() const {
-        return mActorPid;
-    }
+    // void SetActorPid(fpc_ProcID pid) {
+    //     mActorPid = pid;
+    // }
+    // fpc_ProcID GetActorPid() const {
+    //     return mActorPid;
+    // }
     void SetPolyPassChk(cBgS_PolyPassChk *p_chk) {
         mPolyPassChk = p_chk;
     }

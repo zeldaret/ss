@@ -1,6 +1,7 @@
 #ifndef D_BG_D_BG_W_KCOL_H
 #define D_BG_D_BG_W_KCOL_H
 
+#include "c/col/bg/c_bg_s_chk.h"
 #include "d/bg/d_bg_plc.h"
 #include "d/bg/d_bg_w_base.h"
 #include "d/cc/d_cc_m3d_g_aab.h"
