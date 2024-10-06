@@ -1,7 +1,6 @@
 #include <d/a/obj/d_a_obj_bamboo_island.h>
-#include <d/bg/d_bg_s.h>
+#include <d/col/bg/d_bg_s.h>
 #include <toBeSorted/item_story_flag_manager.h>
-
 
 const f32 dAcObambooIsland_c::unusedFloat1 = 100000.0f;
 const f32 dAcObambooIsland_c::unusedFloat2 = 0.0f;

@@ -1,4 +1,4 @@
-#include <d/bg/d_bg_w_kcol.h>
+#include <d/col/bg/d_bg_w_kcol.h>
 #include <d/d_rawarchive.h>
 #include <egg/gfx/eggLight.h>
 #include <m/m3d/m3d.h>

@@ -2,7 +2,7 @@
 #define D_A_OBJ_BAMBOO_ISLAND_H
 
 #include <d/a/obj/d_a_obj_base.h>
-#include <d/bg/d_bg_w.h>
+#include <d/col/bg/d_bg_w.h>
 #include <m/m3d/m_smdl.h>
 
 class dAcObambooIsland_c : public dAcObjBase_c {

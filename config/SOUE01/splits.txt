@@ -568,25 +568,25 @@ m/m_pad.cpp:
 	.sdata2     start:0x8057CDF8 end:0x8057CE00
 	.bss        start:0x805CB0B8 end:0x805CB1F8
 
-c/c_bg_s_chk.cpp:
+d/col/c/c_bg_s_chk.cpp:
 	.text       start:0x80327140 end:0x8032721C
 
-c/c_bg_s_gnd_chk.cpp:
+d/col/c/c_bg_s_gnd_chk.cpp:
 	.text       start:0x80327220 end:0x8032734C
 
-c/c_bg_s_lin_chk.cpp:
+d/col/c/c_bg_s_lin_chk.cpp:
 	.text       start:0x80327350 end:0x80327504
 
-c/c_bg_s_poly_info.cpp:
+d/col/c/c_bg_s_poly_info.cpp:
 	.text       start:0x80327510 end:0x8032766C
 
-c/c_bg_s_time_chk.cpp:
+d/col/c/c_bg_s_time_chk.cpp:
 	.text       start:0x80327670 end:0x80328064
 
-c/c_bg_w.cpp:
+d/col/c/c_bg_w.cpp:
 	.text       start:0x80328070 end:0x80328114
 
-c/c_cc_d.cpp:
+d/col/c/c_cc_d.cpp:
 	.text       start:0x80328120 end:0x8032BC78
 	.ctors      start:0x804DB8F8 end:0x804DB8FC
 	.rodata     start:0x804F0AF0 end:0x804F0B80
@@ -594,104 +594,104 @@ c/c_cc_d.cpp:
 	.sdata2     start:0x8057CF98 end:0x8057CFBC
 	.bss        start:0x805D0128 end:0x805D0134
 
-c/c_m2d.cpp:
+d/col/c/c_m2d.cpp:
 	.text       start:0x8032BEC0 end:0x8032BF00
 	.data       start:0x80547668 end:0x80547678
 
-c/c_m3d.cpp:
+d/col/c/c_m3d.cpp:
 	.text       start:0x8032BF00 end:0x80337B58
 
-c/c_m3d_g_aab.cpp:
+d/col/c/c_m3d_g_aab.cpp:
 	.text       start:0x80337B60 end:0x80337C7C
 
-c/c_m3d_g_cps.cpp:
+d/col/c/c_m3d_g_cps.cpp:
 	.text       start:0x80337EA0 end:0x80338018
 
-c/c_m3d_g_cyl.cpp:
+d/col/c/c_m3d_g_cyl.cpp:
 	.text       start:0x80338020 end:0x80338348
 
-c/c_m3d_g_lin.cpp:
+d/col/c/c_m3d_g_lin.cpp:
 	.text       start:0x80338350 end:0x8033842C
 
-c/c_m3d_g_pla.cpp:
+d/col/c/c_m3d_g_pla.cpp:
 	.text       start:0x80338430 end:0x80338678
 
-c/c_m3d_g_sph.cpp:
+d/col/c/c_m3d_g_sph.cpp:
 	.text       start:0x80338680 end:0x803388D8
 
-c/c_m3d_g_tri.cpp:
+d/col/c/c_m3d_g_tri.cpp:
 	.text       start:0x803388E0 end:0x80338940
 
-c/c_m3d_g_unk.cpp:
+d/col/c/c_m3d_g_unk.cpp:
 	.text       start:0x80338940 end:0x80338F4C
 
-d/bg/d_bg_partition.cpp:
+d/col/bg/d_bg_partition.cpp:
 	.text       start:0x80338F50 end:0x80339BAC
 	.ctors      start:0x804DB8FC end:0x804DB900
 
-d/bg/d_bg_pc.cpp:
+d/col/bg/d_bg_pc.cpp:
 	.text       start:0x80339BB0 end:0x80339BC8
 
-d/bg/d_bg_plc.cpp:
+d/col/bg/d_bg_plc.cpp:
 	.text       start:0x80339BD0 end:0x80339BF8
 
-d/bg/d_bg_s.cpp:
+d/col/bg/d_bg_s.cpp:
 	.text       start:0x80339C00 end:0x8033F14C
 
-d/bg/d_bg_s_acch.cpp:
+d/col/bg/d_bg_s_acch.cpp:
 	.text       start:0x8033F150 end:0x803412F8
 
-d/bg/d_bg_s_chk.cpp:
+d/col/bg/d_bg_s_chk.cpp:
 	.text       start:0x80341300 end:0x80341488
 
-d/bg/d_bg_s_gnd_chk.cpp:
+d/col/bg/d_bg_s_gnd_chk.cpp:
 	.text       start:0x80341490 end:0x80341D68
 	.ctors      start:0x804DB900 end:0x804DB904
 
-d/bg/d_bg_s_grp_pass_chk.cpp:
+d/col/bg/d_bg_s_grp_pass_chk.cpp:
 	.text       start:0x80341D70 end:0x80341E18
 
-d/bg/d_bg_s_lin_chk.cpp:
+d/col/bg/d_bg_s_lin_chk.cpp:
 	.text       start:0x80341E20 end:0x80342C98
 	.ctors      start:0x804DB904 end:0x804DB908
 
-d/bg/d_bg_s_poly_pass_chk.cpp:
+d/col/bg/d_bg_s_poly_pass_chk.cpp:
 	.text       start:0x80342CA0 end:0x80342D68
 
-d/bg/d_bg_s_roof_chk.cpp:
+d/col/bg/d_bg_s_roof_chk.cpp:
 	.text       start:0x80342D68 end:0x803431A8
 	.ctors      start:0x804DB908 end:0x804DB90C
 
-d/bg/d_bg_s_sph_chk.cpp:
+d/col/bg/d_bg_s_sph_chk.cpp:
 	.text       start:0x803431B0 end:0x80343428
 
-d/bg/d_bg_s_spl_grp_chk.cpp:
+d/col/bg/d_bg_s_spl_grp_chk.cpp:
 	.text       start:0x80343430 end:0x803435C8
 
-d/bg/d_bg_s_wtr_chk.cpp:
+d/col/bg/d_bg_s_wtr_chk.cpp:
 	.text       start:0x803435D0 end:0x80343818
 	.ctors      start:0x804DB90C end:0x804DB910
 
-d/bg/d_bg_w.cpp:
+d/col/bg/d_bg_w.cpp:
 	.text       start:0x80343820 end:0x8034A94C
 	.ctors      start:0x804DB910 end:0x804DB914
 
-d/bg/d_bg_w_base.cpp:
+d/col/bg/d_bg_w_base.cpp:
 	.text       start:0x8034A950 end:0x8034AF48
 	.data       start:0x80547F10 end:0x80548018
 
-d/bg/d_bg_w_kcol.cpp:
+d/col/bg/d_bg_w_kcol.cpp:
 	.text       start:0x8034AF50 end:0x80352138
 	.data       start:0x80548018 end:0x80548120
 	.sdata2     start:0x8057D1B0 end:0x8057D228
 
-d/bg/d_bg_w_sv.cpp:
+d/col/bg/d_bg_w_sv.cpp:
 	.text       start:0x80352140 end:0x80352920
 
-d/bg/d_bg_w_time.cpp:
+d/col/bg/d_bg_w_time.cpp:
 	.text       start:0x80352920 end:0x80353B44
 
-d/cc/d_cc_shape_colliders.cpp:
+d/col/cc/d_cc_shape_colliders.cpp:
 	.text       start:0x80353B50 end:0x80354298
 	.data       start:0x80548340 end:0x80548580
 

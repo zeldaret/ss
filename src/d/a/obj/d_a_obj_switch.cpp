@@ -1,8 +1,8 @@
 #include <c/c_math.h>
 #include <d/a/d_a_player.h>
 #include <d/a/obj/d_a_obj_switch.h>
-#include <d/bg/d_bg_s.h>
-#include <d/bg/d_bg_w.h>
+#include <d/col/bg/d_bg_s.h>
+#include <d/col/bg/d_bg_w.h>
 #include <s/s_Math.h>
 #include <toBeSorted/sceneflag_manager.h>
 

@@ -2,7 +2,7 @@
 #define D_A_OBJ_SWITCH_H
 
 #include <d/a/obj/d_a_obj_base.h>
-#include <d/bg/d_bg_w.h>
+#include <d/col/bg/d_bg_w.h>
 #include <m/m3d/m_mdl.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>

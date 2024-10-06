@@ -2,7 +2,7 @@
 #define D_A_OBJ_APPEAR_BRIDGE_H
 
 #include <d/a/obj/d_a_obj_base.h>
-#include <d/bg/d_bg_w.h>
+#include <d/col/bg/d_bg_w.h>
 #include <m/m3d/m_anmmatclr.h>
 #include <m/m3d/m_anmtexsrt.h>
 #include <m/m3d/m_smdl.h>
@@ -10,7 +10,6 @@
 #include <s/s_StateMgr.hpp>
 #include <toBeSorted/actor_event.h>
 #include <toBeSorted/stage_render_stuff.h>
-
 
 class dAcOappearBridge_c : public dAcObjBase_c {
 public:

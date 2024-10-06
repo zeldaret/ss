@@ -1,5 +1,5 @@
 #include <d/a/obj/d_a_obj_toD3_stone_figure.h>
-#include <d/cc/d_cc_mgr.h>
+#include <d/col/cc/d_cc_mgr.h>
 #include <toBeSorted/attention.h>
 #include <toBeSorted/event.h>
 #include <toBeSorted/event_manager.h>

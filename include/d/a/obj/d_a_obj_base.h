@@ -2,7 +2,7 @@
 #define D_A_OBJ_BASE_H
 
 #include "d/a/d_a_base.h"
-#include "d/cc/d_cc_d.h"
+#include "d/col/cc/d_cc_d.h"
 #include "m/m3d/m_shadow.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
