@@ -236,6 +236,10 @@ dAcBase_c *dCcD_GObjInf::GetAtActor() {
     return mGObjAt.getActor();
 }
 
+bool dCcD_GObjInf::CheckCollidedMask(u32 mask) {
+    return (mGObjTg.field_0x58 & mask);
+}
+
 dAcBase_c *dCcD_GObjInf::GetTgActor() {
     return mGObjTg.getActor();
 }
