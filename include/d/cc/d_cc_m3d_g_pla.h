@@ -9,18 +9,18 @@ class cM3dGPla {
 public:
     /* 0x00 */ mVec3_c mNormal;
     /* 0x0C */ f32 mD;
-    /* 0x10   vtable */
 
     cM3dGPla() {}
-    cM3dGPla(const mVec3_c *, f32);
+    cM3dGPla(const mVec3_c *v, f32 f) {
+        mNormal = *v;
+        f = mD;
+    }
     bool crossInfLin(const mVec3_c &, const mVec3_c &, mVec3_c &) const;
-    void SetupNP0(const Vec &, const Vec &);
-    void SetupNP(const Vec &, const Vec &);
+    void SetupNP0(const mVec3_c &, const mVec3_c &);
+    void SetupNP(const mVec3_c &, const mVec3_c &);
     bool getCrossY(const mVec3_c &, f32 *) const;
-    bool getCrossYLessD(const Vec &, f32 *) const;
+    bool getCrossYLessD(const mVec3_c &, f32 *) const;
     void Set(const cM3dGPla *);
-
-    virtual ~cM3dGPla() {}
 
     // f32 getPlaneFunc(const Vec *pPoint) const {
     //     return mD + VECDotProduct(mNormal, pPoint);

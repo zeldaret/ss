@@ -16,11 +16,14 @@ struct PLC {
 
 class dBgPlc {
 public:
-    dBgPlc();
-    ~dBgPlc();
+    dBgPlc() : m_base(nullptr) {}
     void setBase(void *);
-    sBgPc *getCode(int, sBgPc **) const;
-    u32 getGrpCode(int) const;
+    const sBgPc *getCode(int idx) const {
+        sBgPc *rv = m_base->field_0x8;
+        rv += idx;
+        return rv;
+    }
+    u32 getGrpCode(int idx) const;
 
 private:
     /* 0x00 */ PLC *m_base;

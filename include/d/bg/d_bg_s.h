@@ -76,6 +76,7 @@ public:
     void ClrMoveFlag();
     void Move();
     bool Regist(dBgW_Base *, fBase_c *);
+    bool UnRegist(dBgW_Base *);
     bool ChkMoveBG(cBgS_PolyInfo const &);
     bool ChkMoveBG_NoDABg(cBgS_PolyInfo const &);
     s32 GetExitId(cBgS_PolyInfo const &);

@@ -30,22 +30,27 @@ public:
     /* 0x04 */ u32 mIdxY;
     /* 0x08 */ u32 mIdxZ;
 
+    dBgW_Base_0x8();
     /* vt at 0x0C */
-    /* vt 0x08*/ virtual ~dBgW_Base_0x8(){};
+    /* vt 0x08*/ virtual ~dBgW_Base_0x8();
 };
 
 // TODO
 class dBgW_Base_0x18 {
 public:
     /* 0x00 */ u8 field_0x00;
-
+    dBgW_Base_0x18();
     /* vt at 0x04 */
-    /* vt 0x08*/ virtual ~dBgW_Base_0x18(){};
+    /* vt 0x08*/ virtual ~dBgW_Base_0x18();
 };
 
 // TODO
 class dBgW_Base_MapRelated {
 public:
+    void Clear() {
+        mpPrismIdx = nullptr;
+        mCount = 0;
+    }
     /* 0x0 */ int *mpPrismIdx;
     /* 0x4 */ int mCount;
 };
@@ -70,20 +75,27 @@ public:
     dBgW_Base();
     void ClrDBgWBase();
     void CalcDiffShapeAngleY(s16);
+    bool InitMapStuff(mAllocator_c *pAllocator);
+    bool fn_8034AD70() const;
+    bool fn_8034ADA0() const;
+    void Regist(u16 id);
+    void UnRegist();
+    bool ChkReady() const;
+    void Set0x2F(u8);
 
     /* vt at 0x08 */
     /* 0x008 */ virtual ~dBgW_Base();
     /* 0x00C */ virtual bool ChkMemoryError();
-    /* 0x010 */ virtual void SetOldShapeAngleY();
+    /* 0x010 */ virtual void SetOldShapeAngleY(s16);
     /* 0x014 */ virtual bool GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const = 0; // ?
     /* 0x018 */ virtual bool ChkNotReady() const = 0;
     /* 0x01C */ virtual bool ChkLock() const = 0;
     /* 0x020 */ virtual bool ChkMoveBg() const = 0;
     /* 0x024 */ virtual u32 ChkMoveFlag() const = 0;
-    /* 0x028 */ virtual cM3dGPla GetTriPla(cBgS_PolyInfo const &) const = 0;
-    /* 0x02C */ virtual bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c *, mVec3_c *, mVec3_c *) const = 0;
-    /* 0x030 */ virtual cM3dGAab *GetBnd() const = 0;
-    /* 0x034 */ virtual u32 GetCode4(cBgS_PolyInfo const &) const = 0; // ?
+    /* 0x028 */ virtual void GetTriPla(cBgS_PolyInfo const &, cM3dGPla &) const = 0;
+    /* 0x02C */ virtual bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c &, mVec3_c &, mVec3_c &) const = 0;
+    /* 0x030 */ virtual const cM3dGAab *GetBnd() const = 0;
+    /* 0x034 */ virtual u32 GetGrpInf(cBgS_PolyInfo const &) const = 0; // ?
     /* 0x038 */ virtual void OffMoveFlag() = 0;
     /* 0x03C */ virtual void vt_0x3C() = 0;
     /* 0x040 */ virtual bool LineCheck(cBgS_LinChk *) = 0; // ?
@@ -130,12 +142,16 @@ public:
     /* 0x0E4 */ virtual void CrrPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) = 0;
     /* 0x0E8 */ virtual void TransPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) = 0;
     /* 0x0EC */ virtual void MatrixCrrPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) = 0;
-    /* 0x0F0 */ virtual bool CallRideCallback(dAcBase_c *, dAcBase_c *) = 0;
-    /* 0x0F4 */ virtual bool CallArrowStickCallback(dAcBase_c *, dAcBase_c *) = 0;
+    /* 0x0F0 */ virtual void CallRideCallback(dAcBase_c *, dAcBase_c *) = 0;
+    /* 0x0F4 */ virtual void CallArrowStickCallback(dAcBase_c *, dAcBase_c *) = 0;
     /* 0x0F8 */ virtual bool CallUnkCallback(dAcBase_c *, dAcBase_c *) = 0;
-    /* 0x0FC */ virtual bool PreDraw(mAllocator_c *) = 0;
+    /* 0x0FC */ virtual bool UpdateDraw(mAllocator_c *) = 0;
     /* 0x100 */ virtual bool GetIsDraw(int) = 0;
     /* 0x104 */ virtual void DrawOnMap(int, bool) = 0;
+
+    u16 GetRegistId() const {
+        return mRegistId;
+    }
 
     PushPull_CallBack GetPushPullCallback() const {
         return mpPushPull_cb;
@@ -146,6 +162,13 @@ public:
     int GetRoomId() {
         return mRoomId;
     }
+
+    void ClearMap() {
+        for (int i = 0; i < 31; i++) {
+            mMapRelated[i].Clear();
+        }
+    }
+
     // bool chkStickWall() {
     //     return field_0xb & 1;
     // }
@@ -180,11 +203,11 @@ private:
     /* 0x24 */ u16 field_0x24;
     /* 0x26 */ s16 mOldShapeAngleY;
     /* 0x28 */ s16 mDiffShapeAngleY;
-    /* 0x2A */ s16 mRegistId;
+    /* 0x2A */ u16 mRegistId;
     /* 0x2C */ u8 mPriority;
     /* 0x2D */ u8 mRoomId;
     /* 0x2E */ u8 field_0x2E;
-    /* 0x2F */ u8 field_0x2F;
+    /* 0x2F */ s8 field_0x2F;
     /* 0x30 */ PushPull_CallBack mpPushPull_cb;
     /* 0x34 */ dBgW_Base_MapRelated mMapRelated[31];
 }; // Size: 0x12C

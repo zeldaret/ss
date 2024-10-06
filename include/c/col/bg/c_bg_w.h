@@ -17,14 +17,10 @@ public:
     bool ChkUsed() const;
     void Regist(int);
 
-    virtual ~cBgW_BgId() {}
+    virtual ~cBgW_BgId();
 
-    cBgW_BgId() {
-        Ct();
-    }
-    void Ct() {
-        m_id = BG_ID_MAX;
-    }
+    cBgW_BgId();
+    void Ct();
 
     u16 GetId() const {
         return m_id;

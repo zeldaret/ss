@@ -161,10 +161,10 @@ public:
     /* 0x01C */ virtual bool ChkLock() const override;
     /* 0x020 */ virtual bool ChkMoveBg() const override;
     /* 0x024 */ virtual u32 ChkMoveFlag() const override = 0;
-    /* 0x028 */ virtual cM3dGPla GetTriPla(cBgS_PolyInfo const &) const override;
-    /* 0x02C */ virtual bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c *, mVec3_c *, mVec3_c *) const override;
-    /* 0x030 */ virtual cM3dGAab *GetBnd() const override;
-    /* 0x034 */ virtual u32 GetCode4(cBgS_PolyInfo const &) const override; // ?
+    /* 0x028 */ virtual void GetTriPla(cBgS_PolyInfo const &, cM3dGPla &) const override;
+    /* 0x02C */ virtual bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c &, mVec3_c &, mVec3_c &) const override;
+    /* 0x030 */ virtual const cM3dGAab *GetBnd() const override;
+    /* 0x034 */ virtual u32 GetGrpInf(cBgS_PolyInfo const &) const override; // ?
     /* 0x038 */ virtual void OffMoveFlag() override = 0;
     /* 0x03C */ virtual void vt_0x3C() override = 0;
     /* 0x040 */ virtual bool LineCheck(cBgS_LinChk *) override; // ?
@@ -331,10 +331,10 @@ public:
     /* 0x0E8 */ virtual void TransPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) override;
     /* 0x0EC */ virtual void
     MatrixCrrPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) override;
-    /* 0x0F0 */ virtual bool CallRideCallback(dAcBase_c *, dAcBase_c *) override;
-    /* 0x0F4 */ virtual bool CallArrowStickCallback(dAcBase_c *, dAcBase_c *) override;
+    /* 0x0F0 */ virtual void CallRideCallback(dAcBase_c *, dAcBase_c *) override;
+    /* 0x0F4 */ virtual void CallArrowStickCallback(dAcBase_c *, dAcBase_c *) override;
     /* 0x0F8 */ virtual bool CallUnkCallback(dAcBase_c *, dAcBase_c *) override;
-    /* 0x0FC */ virtual bool PreDraw(mAllocator_c *) override;
+    /* 0x0FC */ virtual bool UpdateDraw(mAllocator_c *) override;
     /* 0x100 */ virtual bool GetIsDraw(int) override;
     /* 0x104 */ virtual void DrawOnMap(int, bool) override;
     /* 0x110 */ virtual u32 GetWallAtt(int);
