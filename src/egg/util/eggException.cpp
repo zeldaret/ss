@@ -57,18 +57,23 @@ bool Exception::ExceptionCallback_(nw4r::db::ConsoleHandle console, void *data) 
             }
         }
     }
-    int start = nw4r::db::Console_GetBufferHeadLine(console);
+    int line, start, end;
+    start = nw4r::db::Console_GetBufferHeadLine(console);
+    line = start;
     nw4r::db::Console_SetVisible(console, true);
-    int end = nw4r::db::Console_GetTotalLines(console);
-    for (int i = start; i < end; i++) {
-        nw4r::db::Console_SetViewBaseLine(console, i);
+    end = nw4r::db::Console_GetTotalLines(console);
+    for (; line < end; line++) {
+        nw4r::db::Console_SetViewBaseLine(console, line);
         nw4r::db::Console_DrawDirect(console);
         ExceptionWaitTime(250);
     }
+
+    int prevY, newY;
+    int newX, prevX;
+
+    newY = start;
+
     nw4r::db::Console_SetViewBaseLine(console, start);
-
-    int newY = start;
-
     nw4r::db::Console_DrawDirect(console);
     while (true) {
         KPADRead(0, &status, 1);
@@ -80,26 +85,27 @@ bool Exception::ExceptionCallback_(nw4r::db::ConsoleHandle console, void *data) 
             (*sUserCallbackFunc)(&status);
             continue;
         }
-        int newX = nw4r::db::Console_GetPositionX(console);
-        int prevX = newX;
-        int prevY = newY;
-        u32 st = status.mHold;
-        if (st & (/* DPAD_DOWN */ 0x4)) {
+
+        prevX = newX = nw4r::db::Console_GetPositionX(console);
+        ;
+        prevY = newY;
+
+        if (status.mHold & (/* DPAD_DOWN */ 0x4)) {
             newY += 1;
             if (newY > end) {
                 newY = end;
             }
-        } else if (st & (/* DPAD_UP */ 0x8)) {
+        } else if (status.mHold & (/* DPAD_UP */ 0x8)) {
             newY -= 1;
             if (newY < start) {
                 newY = start;
             }
-        } else if (st & (/* DPAD_RIGHT */ 0x2)) {
+        } else if (status.mHold & (/* DPAD_RIGHT */ 0x2)) {
             newX -= 5;
             if (newX < -150) {
                 newX = -150;
             }
-        } else if (st & (/* DPAD_LEFT */ 0x1)) {
+        } else if (status.mHold & (/* DPAD_LEFT */ 0x1)) {
             newX += 5;
             if (newX > 10) {
                 newX = 10;
@@ -174,12 +180,14 @@ Exception::Exception(u16 width, u16 height, u16 attr, EGG::Heap *heap, int mapFi
 
     GXRenderModeObj *o = EGG::BaseSystem::getVideo()->getCurrentOrFallbackRenderModeObj();
     nw4r::db::Exception_SetConsole(sConsoleHandle, o);
+
     nw4r::db::Console_SetPosition(sConsoleHandle, 0, 30);
     nw4r::db::Console_SetVisible(sConsoleHandle, false);
+
     sMapFileNumMax = mapFileNum;
+    size_t size = mapFileNum * 0x14;
     sCurrentMapFileNum = 0;
-    size_t bufsize = mapFileNum * 0x14;
-    sMapFileWorks = Heap::alloc(bufsize, 4, heap);
+    sMapFileWorks = Heap::alloc(size, 4, heap);
     SetCallbackArgs(nullptr);
 }
 
