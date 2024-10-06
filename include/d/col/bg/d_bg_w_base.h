@@ -1,9 +1,9 @@
 #ifndef D_BG_W_BASE_H
 #define D_BG_W_BASE_H
 
-#include "c/col/bg/c_bg_s_poly_info.h"
-#include "c/col/bg/c_bg_w.h"
 #include "d/a/d_a_base.h"
+#include "d/col/c/c_bg_s_poly_info.h"
+#include "d/col/c/c_bg_w.h"
 #include "d/col/c/c_m3d_g_aab.h"
 #include "d/col/c/c_m3d_g_pla.h"
 #include "m/m_allocator.h"
