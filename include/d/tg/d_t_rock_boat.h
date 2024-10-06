@@ -1,17 +1,12 @@
 #ifndef D_T_ROCK_BOAT
 #define D_T_ROCK_BOAT
 
-#include <d/a/d_a_base.h>
+#include <d/tg/d_tg.h>
 #include <f/f_list_nd.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dTgAbs_c : public dAcBase_c {
-public:
-    virtual ~dTgAbs_c() {}
-};
-
-class dTgRockBoat_c : public dTgAbs_c {
+class dTgRockBoat_c : public dTg_c {
 public:
     dTgRockBoat_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dTgRockBoat_c() {}

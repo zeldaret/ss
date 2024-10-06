@@ -3,6 +3,8 @@
 
 #include <MSL_C/string.h>
 
+extern "C" bool strequals(const char *a, const char *b);
+
 /**
  * A statically sized string buffer used for resource
  * identification where strings are guaranteed to be short.
@@ -23,11 +25,11 @@ struct SizedString {
 
     char mChars[Size];
 
-    char *operator&() {
+    operator char *() {
         return mChars;
     }
 
-    const char *operator&() const {
+    operator const char *() const {
         return mChars;
     }
 
@@ -55,6 +57,10 @@ struct SizedString {
             size_t offset = destLen + copyLen;
             mChars[offset] = '\0';
         }
+    }
+
+    bool operator==(const char* other) const {
+        return strequals(mChars, other);
     }
 
     int sprintf(const char *fmt, ...) {

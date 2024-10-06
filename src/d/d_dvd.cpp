@@ -31,10 +31,10 @@ void *loader_c::request(const char *path, u8 mountDirection, EGG::Heap *heap) {
         mpHeap = heap != nullptr ? heap : mDvd::getArchiveHeap();
         SizedString<128> buf;
         buf.sprintf("US%s", path);
-        if (!mDvd::IsExistPath(&buf)) {
+        if (!mDvd::IsExistPath(buf)) {
             buf.sprintf("%s", path);
         }
-        mpCommand = mDvd_toMainRam_normal_c::create(&buf, mountDirection, heap);
+        mpCommand = mDvd_toMainRam_normal_c::create(buf, mountDirection, heap);
     }
     if (mpCommand != nullptr && mpCommand->mStatus != 0) {
         mpBuffer = mpCommand->mDataPtr;

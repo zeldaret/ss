@@ -112,7 +112,7 @@ bool dRawArcEntry_c::loadArcFromDiskChecked(const char *fileName, const char *di
     SizedString<128> path;
 
     if (checkArcExistsOnDiskInner(path, fileName, dirName)) {
-        return loadArcFromDisk(fileName, &path, mountDirection, heap);
+        return loadArcFromDisk(fileName, path, mountDirection, heap);
     }
     return false;
 }
@@ -133,9 +133,9 @@ BOOL dRawArcEntry_c::checkArcExistsOnDisk(const char *fileName, const char *dirN
 
 BOOL dRawArcEntry_c::checkArcExistsOnDiskInner(SizedString<128> &path, const char *fileName, const char *dirName) {
     path.sprintf("/US/%s/%s.arc", dirName, fileName);
-    if (!mDvd::IsExistPath(&path)) {
+    if (!mDvd::IsExistPath(path)) {
         path.sprintf("/%s/%s.arc", dirName, fileName);
-        if (!mDvd::IsExistPath(&path)) {
+        if (!mDvd::IsExistPath(path)) {
             return false;
         }
     }
@@ -347,12 +347,10 @@ int dRawArcTable_c::ensureAllEntriesLoaded() {
     return 0;
 }
 
-extern "C" bool strequals(const char *, const char *);
-
 dRawArcEntry_c *dRawArcTable_c::findEntry(const char *name) const {
     dRawArcEntry_c *entry = mpEntries;
     for (int i = 0; i < mCount; i++) {
-        if (entry->isReferenced() && strequals(entry->name(), name)) {
+        if (entry->isReferenced() && entry->name() == name) {
             return entry;
         }
         entry++;

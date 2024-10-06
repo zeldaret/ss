@@ -143,7 +143,35 @@ struct Group {
     u16 paneNum;                    // at 0x18
     u16 padding;                    // at 0x1A
 };
+
+enum ExtUserDataType {
+    TYPE_STRING,
+    TYPE_INT,
+    TYPE_FLOAT,
+};
+
 struct ExtUserData {
+    inline const char *GetString() const {
+        return detail::ConvertOffsToPtr<const char>(this, datOffs);
+    }
+
+    inline float GetFloat() const {
+        return *detail::ConvertOffsToPtr<float>(this, datOffs);
+    }
+
+    inline int GetInt() const {
+        return *detail::ConvertOffsToPtr<int>(this, datOffs);
+    }
+
+    inline const char *GetName() const {
+        return nameOffs != 0 ? detail::ConvertOffsToPtr<const char>(this, nameOffs) : nullptr;
+    }
+
+    inline ExtUserDataType GetType() const {
+        return (ExtUserDataType)type;
+    }
+
+private:
     u32 nameOffs;   // at 0x00
     u32 datOffs;    // at 0x04
     u16 numEntries; // at 0x08

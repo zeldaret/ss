@@ -9,6 +9,7 @@
 #include <nw4r/lyt/lyt_textBox.h>
 #include <nw4r/lyt/lyt_utils.h>
 #include <nw4r/lyt/lyt_window.h>
+#include <sized_string.h>
 
 using namespace nw4r::lyt;
 
@@ -154,9 +155,17 @@ bool Layout_c::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
     return true;
 }
 
+nw4r::lyt::AnimTransform *Layout_c::CreateAnimTransform(const void *animResBuf, nw4r::lyt::ResourceAccessor *pResAcsr) {
+    nw4r::lyt::AnimTransform *transform = nw4r::lyt::Layout::CreateAnimTransform(animResBuf, pResAcsr);
+    if (transform != nullptr) {
+        mAnimTransList.Erase(transform);
+    }
+    return transform;
+}
+
 Multi_c::Multi_c() : Base_c(0x80), mLayout(), mDrawInfo(), mpResAcc(nullptr), mFlags(0) {
-    mDrawInfo.SetLocationAdjustScale(nw4r::math::VEC2((float)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_1) /
-                    (float)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_2),
+    mDrawInfo.SetLocationAdjustScale(nw4r::math::VEC2((f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_1) /
+                    (f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_2),
             1.0f));
     mDrawInfo.SetLocationAdjust(true);
 }
@@ -189,7 +198,29 @@ void Multi_c::calcAfter() {
     mLayout.CalculateMtx(mDrawInfo);
 }
 
-void Multi_c::draw() {}
+extern "C" bool NeedsScreenAdjustment();
+
+// Largerly copied from m2d::Simple_c::draw
+void Multi_c::draw() {
+    nw4r::ut::Rect r = mLayout.GetLayoutRect();
+    f32 near = 0.0f;
+    f32 far = 500.0f;
+    EGG::Screen s;
+    bool needsAdjust = NeedsScreenAdjustment();
+    f32 f1 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_2);
+    f32 f2 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_1);
+
+    f32 left = needsAdjust ? f1 * r.left / f2 : r.left;
+    f32 right = needsAdjust ? f1 * r.right / f2 : r.right;
+    s.SetProjectionType(EGG::Frustum::PROJ_ORTHO);
+    s.ResetOrthographic(r.top, r.bottom, left, right, near, far);
+    if (needsAdjust) {
+        s.SetScale(nw4r::math::VEC3(f2 / f1, 1.0f, 1.0f));
+    }
+    s.SetProjectionGX();
+    mDrawInfo.SetMultipleViewMtxOnDraw(false);
+    mLayout.Draw(mDrawInfo);
+}
 
 bool Multi_c::build(const char *name, m2d::ResAccIf_c *acc) {
     if (mLayout.GetRootPane() != nullptr) {
@@ -241,14 +272,518 @@ void Multi_c::unbindAnims() {
 
 LytBase_c::LytBase_c() : mpMsbtInfo(nullptr) {}
 
-extern "C" void libms__LMS_CloseMessage(void *);
 LytBase_c::~LytBase_c() {
     if (mpMsbtInfo != nullptr) {
-        libms__LMS_CloseMessage(mpMsbtInfo);
+        LMS_CloseMessage(mpMsbtInfo);
     }
 }
 
-bool AnmGroup_c::init(const char *fileName, m2d::ResAccIf_c *resAcc, d2d::Layout_c *layout, const char *groupName) {
+extern "C" const char *getUsedLanguageString();
+extern "C" nw4r::ut::TagProcessorBase<wchar_t> *GLOBAL_TEXT_MANAGER;
+
+bool LytBase_c::build(const char *name, m2d::ResAccIf_c *acc) {
+    if (mLayout.GetRootPane() != nullptr) {
+        return true;
+    }
+
+    mFlags |= 0x1;
+
+    if (acc == nullptr) {
+        acc = mpResAcc;
+        if (acc == nullptr) {
+            return false;
+        }
+    }
+
+    void *resource = acc->getAccessor()->GetResource(0, name, nullptr);
+    if (resource == nullptr) {
+        return false;
+    }
+
+    // Copy the name, and once we reach a '.' append 'msbt'
+    char fileName[0x32];
+    int suffixIdx = 0;
+    for (int i = 0; i < 0x32; i++) {
+        if (suffixIdx == 0) {
+            if (name[i] == '.') {
+                suffixIdx = 1;
+            }
+            fileName[i] = name[i];
+        } else if (suffixIdx == 1) {
+            fileName[i] = 'm';
+            suffixIdx = 2;
+        } else if (suffixIdx == 2) {
+            fileName[i] = 's';
+            suffixIdx = 3;
+        } else if (suffixIdx == 3) {
+            fileName[i] = 'b';
+            suffixIdx = 4;
+        } else if (suffixIdx == 4) {
+            fileName[i] = 't';
+            suffixIdx = 5;
+        } else {
+            fileName[i] = '\0';
+            suffixIdx = 6;
+        }
+    }
+
+    if (suffixIdx < 6) {
+        return false;
+    }
+
+    SizedString<0x80> localizedName;
+    localizedName.sprintf("%s_%s", getUsedLanguageString(), fileName);
+
+    void *data = acc->getAccessor()->GetResource(0, localizedName, nullptr);
+    if (data == nullptr) {
+        mpMsbtInfo = nullptr;
+    } else {
+        mpMsbtInfo = LMS_InitMessage(data);
+    }
+
+    bool ok = mLayout.Build(resource, acc->getAccessor());
+    if (ok) {
+        mLayout.SetTagProcessor(GLOBAL_TEXT_MANAGER);
+        calc();
+        setPropertiesRecursive(mLayout.GetRootPane(), -9999.0f, -9999.0f, -9999.0f, -9999.0f, -9999.0f);
+    }
+
+    return ok;
+}
+
+dTextBox_c *LytBase_c::getTextBox(const char *name) {
+    nw4r::lyt::Pane *pane = findPane(name);
+    if (pane != nullptr) {
+        nw4r::ut::DynamicCast<dTextBox_c *>(pane)->setLytBase(this);
+        return nw4r::ut::DynamicCast<dTextBox_c *>(pane);
+    }
+
+    return nullptr;
+}
+
+dWindow_c *LytBase_c::getWindow(const char *name) {
+    nw4r::lyt::Pane *pane = findPane(name);
+    if (pane != nullptr) {
+        return nw4r::ut::DynamicCast<dWindow_c *>(pane);
+    }
+
+    return nullptr;
+}
+
+dTextBox_c *LytBase_c::getSizeBoxInWindow(const char *windowName) {
+    nw4r::lyt::Pane *pane = findPane(windowName);
+    if (pane != nullptr) {
+        dWindow_c *window = nw4r::ut::DynamicCast<dWindow_c *>(pane);
+        return getTextBoxViaUserData(window, "size");
+    }
+    return nullptr;
+}
+
+dTextBox_c *LytBase_c::getTextBoxViaUserData(nw4r::lyt::Pane *pane, const char *name) {
+    u16 num = pane->GetExtUserDataNum();
+    const nw4r::lyt::res::ExtUserData *dat;
+    dTextBox_c *textBox;
+    if (num == 0) {
+        goto fail;
+    }
+
+    dat = pane->FindExtUserDataByName(name);
+    if (dat == nullptr) {
+        goto fail;
+    }
+
+    if (dat->GetType() != nw4r::lyt::res::TYPE_STRING) {
+        goto fail;
+    }
+
+    textBox = getTextBox(dat->GetString());
+    if (textBox == nullptr) {
+        goto fail;
+    }
+
+    return textBox;
+
+fail:
+    return nullptr;
+}
+
+void LytBase_c::setPropertiesRecursive(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 scale, f32 spaceX,
+        f32 spaceY) {
+    u16 num = pane->GetExtUserDataNum();
+    if (num != 0) {
+        const nw4r::lyt::res::ExtUserData *list = pane->GetExtUserData();
+        for (int i = 0; i < num; i++) {
+            SizedString<0x40> userDatName;
+            userDatName = list->GetName();
+            if (userDatName == "c11n-posX-1" && list->GetType() == nw4r::lyt::res::TYPE_FLOAT) {
+                posX = list->GetFloat();
+            }
+            if (userDatName == "c11n-posY-1" && list->GetType() == nw4r::lyt::res::TYPE_FLOAT) {
+                posY = list->GetFloat();
+            }
+            if (userDatName == "c11n-scale-1" && list->GetType() == nw4r::lyt::res::TYPE_FLOAT) {
+                scale = list->GetFloat();
+            }
+            if (userDatName == "c11n-spaceX-1" && list->GetType() == nw4r::lyt::res::TYPE_FLOAT) {
+                spaceX = list->GetFloat();
+            }
+            if (userDatName == "c11n-spaceY-1" && list->GetType() == nw4r::lyt::res::TYPE_FLOAT) {
+                spaceY = list->GetFloat();
+            }
+
+            list++;
+        }
+    }
+
+    setProperties(pane, posX, posY, scale, spaceX, spaceY);
+    for (nw4r::ut::LinkList<Pane, 4>::Iterator it = pane->GetChildList()->GetBeginIter();
+            it != pane->GetChildList()->GetEndIter(); ++it) {
+        setPropertiesRecursive(&*it, posX, posY, scale, spaceX, spaceY);
+    }
+}
+
+extern "C" const char *fn_801B2600(const char *);
+extern "C" void fn_800AF930(dTextBox_c *, const char *);
+extern "C" void fn_800B0F40(dTextBox_c *);
+
+// NOTE: This function uses `textBox->GetTranslateX1()` as a general placeholder to figure
+// out the details first. In reality these are all different functions!
+void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 scale, f32 spaceX, f32 spaceY) {
+    if (pane->GetName()[0] != 'T') {
+        return;
+    }
+
+    dTextBox_c *textBox = nw4r::ut::DynamicCast<dTextBox_c *>(pane);
+    if (textBox == nullptr) {
+        return;
+    }
+
+    textBox->AllocStringBuffer(0x200);
+    textBox->setLytBase(this);
+    fn_800B0F40(textBox);
+
+    if (posX != -9999.0f || posY != -9999.0f) {
+        if (posX == -9999.0f) {
+            posX = 0.0f;
+        }
+        if (posY == -9999.0f) {
+            posY = 0.0f;
+        }
+        nw4r::math::VEC3 t1 = textBox->GetTranslate();
+        t1.x += posX;
+        t1.y += posY;
+        textBox->SetTranslate(t1);
+    }
+
+    nw4r::math::VEC3 t2 = textBox->GetTranslate();
+    t2.x += textBox->GetTranslateX1();
+    t2.y += textBox->GetTranslateX1();
+    textBox->SetTranslate(t2);
+
+
+    if (scale != -9999.0f) {
+        const nw4r::ut::Font *f = textBox->GetFont();
+        if (f != nullptr) {
+            // VEC2 internally copied via GPRs here, should be FPRs
+            textBox->SetScale(scale * 0.01f);
+        }
+    } else {
+        const nw4r::ut::Font *f = textBox->GetFont();
+        if (f != nullptr) {
+            // VEC2 internally copied via GPRs here, should be FPRs
+            textBox->SetScale(textBox->GetTranslateX1());
+        }
+    }
+
+
+    f32 f4 = 0.0f;
+    f32 f6 = 0.0f;
+
+    if (spaceX != -9999.0f) {
+        textBox->SetCharSpace(spaceX);
+    } else {
+        f6 = textBox->GetTranslateX1();
+    }
+
+    if (spaceY != -9999.0f) {
+        textBox->SetLineSpace(spaceY);
+    } else {
+        f4 = textBox->GetTranslateX1();
+    }
+
+    textBox->SetCharSpace(f6 + textBox->GetCharSpace() + textBox->GetTranslateX1());
+    textBox->SetLineSpace(f4 + textBox->GetLineSpace() + textBox->GetTranslateX1());
+    fn_800AB930(textBox);
+}
+
+
+bool LytBase_c::fn_800AB930(dTextBox_c *box) {
+    return fn_800AB9A0(box, -1);
+}
+
+bool LytBase_c::fn_800AB940(const char *name, int arg) {
+    dTextBox_c *box = getTextBox(name);
+    if (box == nullptr) {
+        return false;
+    }
+
+    return fn_800AB9A0(box, arg);
+}
+
+bool LytBase_c::fn_800AB9A0(dTextBox_c *textbox, int arg) {
+    if (getMsbtInfo() == nullptr) {
+        return false;
+    }
+    u16 num = textbox->GetExtUserDataNum();
+    if (num == 0) {
+        return false;
+    }
+    u32 found = 0;
+    s32 ty = 2;
+    const nw4r::lyt::res::ExtUserData *list = textbox->GetExtUserData();
+    for (int i = 0; i < num; i++) {
+        SizedString<0x40> userDatName;
+        userDatName = list->GetName();
+        if (userDatName == "embed" && list->GetType() == nw4r::lyt::res::TYPE_INT) {
+            found = 1;
+            ty = 0;
+            break;
+        }
+
+        if (userDatName == "copy" && list->GetType() == nw4r::lyt::res::TYPE_STRING) {
+            found = 1;
+            ty = 1;
+            break;
+        }
+        list++;
+    }
+
+    if (found != 1) {
+        return false;
+    }
+
+    if (ty == 1) {
+        dTextBox_c *otherBox = getTextBox(list->GetString());
+        if (otherBox != nullptr) {
+            return fn_800ABB80(textbox, otherBox, arg);
+        }
+    } else {
+        return fn_800ABCE0(list, textbox, textbox, arg);
+    }
+    return false;
+}
+
+bool LytBase_c::fn_800ABB80(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg) {
+    u16 num = textbox2->GetExtUserDataNum();
+    if (num == 0) {
+        return false;
+    }
+    u32 found = 0;
+    const nw4r::lyt::res::ExtUserData *list = textbox2->GetExtUserData();
+    for (int i = 0; i < num; i++) {
+        SizedString<0x40> userDatName;
+        userDatName = list->GetName();
+        if (userDatName == "embed" && list->GetType() == nw4r::lyt::res::TYPE_INT) {
+            found = 1;
+            break;
+        }
+        list++;
+    }
+
+    if (found != 1) {
+        return false;
+    }
+    return fn_800ABCE0(list, textbox1, textbox2, arg);
+}
+
+bool LytBase_c::fn_800ABCE0(const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2,
+        int arg) {
+    int userDatInt = userDatum->GetInt();
+    SizedString<0x40> str1;
+    SizedString<0x40> str2;
+
+    str1 = textbox2->GetName();
+    if (userDatInt != 0) {
+        userDatInt = 0;
+        if (arg != -1) {
+            userDatInt = arg;
+        }
+        str2.sprintf(":%02d", userDatInt);
+        // TODO this operator is not behaving correctly here - there's
+        // an additional null check, and the source string address is
+        // computed twice via stack instead of once.
+        str1 += str2;
+    }
+
+    const char *text = LMS_GetTextByLabel(getMsbtInfo(), str1);
+    if (text == nullptr) {
+        return false;
+    }
+
+    fn_800AF930(textbox1, fn_801B2600(text));
+    return true;
+}
+
+// Now largely the same functions again, but with an additional argument
+bool LytBase_c::fn_800ABE50(dTextBox_c *textbox, int arg, void *unk) {
+    if (getMsbtInfo() == nullptr) {
+        return false;
+    }
+    u16 num = textbox->GetExtUserDataNum();
+    if (num == 0) {
+        return false;
+    }
+    u32 found = 0;
+    s32 ty = 2;
+    const nw4r::lyt::res::ExtUserData *list = textbox->GetExtUserData();
+    for (int i = 0; i < num; i++) {
+        SizedString<0x40> userDatName;
+        userDatName = list->GetName();
+        if (userDatName == "embed" && list->GetType() == nw4r::lyt::res::TYPE_INT) {
+            found = 1;
+            ty = 0;
+            break;
+        }
+
+        if (userDatName == "copy" && list->GetType() == nw4r::lyt::res::TYPE_STRING) {
+            found = 1;
+            ty = 1;
+            break;
+        }
+        list++;
+    }
+
+    if (found != 1) {
+        return false;
+    }
+
+    if (ty == 1) {
+        dTextBox_c *otherBox = getTextBox(list->GetString());
+        if (otherBox != nullptr) {
+            return fn_800AC040(textbox, otherBox, arg, unk);
+        }
+    } else {
+        return fn_800AC1AC(list, textbox, textbox, arg, unk);
+    }
+    return false;
+}
+
+bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk) {
+    u16 num = textbox2->GetExtUserDataNum();
+    if (num == 0) {
+        return false;
+    }
+    u32 found = 0;
+    const nw4r::lyt::res::ExtUserData *list = textbox2->GetExtUserData();
+    for (int i = 0; i < num; i++) {
+        SizedString<0x40> userDatName;
+        userDatName = list->GetName();
+        if (userDatName == "embed" && list->GetType() == nw4r::lyt::res::TYPE_INT) {
+            found = 1;
+            break;
+        }
+        list++;
+    }
+
+    if (found != 1) {
+        return false;
+    }
+    return fn_800AC1AC(list, textbox1, textbox2, arg, unk);
+}
+
+extern "C" void fn_800AF840(dTextBox_c *textbox1, MsbtInfo *, const char *, int arg, void *unk);
+
+bool LytBase_c::fn_800AC1AC(const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk) {
+    int userDatInt = userDatum->GetInt();
+    SizedString<0x40> str1;
+    SizedString<0x40> str2;
+
+    str1 = textbox2->GetName();
+    if (userDatInt != 0) {
+        str2.sprintf(":%02d", 0);
+        // TODO this operator is not behaving correctly here - there's
+        // an additional null check, and the source string address is
+        // computed twice via stack instead of once.
+        str1 += str2;
+    }
+
+    fn_800AF840(textbox1, getMsbtInfo(), str1, arg, unk);
+    return true;
+}
+
+MsbtInfo *LytBase_c::getMsbtInfo() const {
+    return mpMsbtInfo;
+}
+
+nw4r::lyt::Group *LytBase_c::findGroupByName(const char *name) {
+    nw4r::lyt::Group *ret = nullptr;
+    if (mLayout.GetGroupContainer() != nullptr) {
+        ret = mLayout.GetGroupContainer()->FindGroupByName(name);
+    }
+    return ret;
+}
+
+bool hasSameBaseName(const char *left, const char *right) {
+    // A for loop turns this into a bdnz
+    bool same = true;
+    int i = 0;
+    while (true) {
+        if (i >= 0x1E) {
+            same = false;
+            break;
+        }
+        char a = *left;
+        char b = *right;
+        if (a == '\0' && b == '\0') {
+            break;
+        }
+        if (a != b) {
+            if (b != '.') {
+                same = false;
+                break;
+            }
+            break;
+        }
+        left++;
+        right++;
+        i++;
+    }
+
+    return same;
+}
+
+char *sRef = "ref";
+
+
+void LytBase_c::linkMeters(nw4r::lyt::Group *group, LytMeterGroup *meterGroup) {
+    // single regswap
+    nw4r::ut::LinkList<LytMeterListNode, 0>::Iterator beginIt = meterGroup->GetBeginIter();
+    nw4r::ut::LinkList<LytMeterListNode, 0>::Iterator endIt = meterGroup->GetEndIter();
+
+    for (nw4r::lyt::PaneList::Iterator paneIt = group->GetPaneList()->GetBeginIter();
+            paneIt != group->GetPaneList()->GetEndIter(); ++paneIt) {
+        nw4r::lyt::Pane *pane = paneIt->mTarget;
+        int num = pane->GetExtUserDataNum();
+        if (num != 0) {
+            const nw4r::lyt::res::ExtUserData *dat = pane->FindExtUserDataByName(sRef);
+            if (dat != nullptr && dat->GetType() == nw4r::lyt::res::TYPE_STRING) {
+                for (nw4r::ut::LinkList<LytMeterListNode, 0>::Iterator it = beginIt; it != endIt; ++it) {
+                    dLytMeterBase *meter = it->mpMeter;
+                    if (!meter->LytMeter0x24()) {
+                        if (hasSameBaseName(dat->GetString(), meter->getName())) {
+                            it->mpPane = pane;
+                            pane->AppendChild(meter->getPane());
+                            meter->LytMeter0x28(true);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+bool AnmGroupBase_c::init(const char *fileName, m2d::ResAccIf_c *resAcc, d2d::Layout_c *layout, const char *groupName) {
     if (layout->GetGroupContainer() == nullptr) {
         return false;
     }
@@ -261,7 +796,7 @@ bool AnmGroup_c::init(const char *fileName, m2d::ResAccIf_c *resAcc, d2d::Layout
     return init(transform, fileName, resAcc, group);
 }
 
-bool AnmGroup_c::init(nw4r::lyt::AnimTransform *transform, const char *name, m2d::ResAccIf_c *acc,
+bool AnmGroupBase_c::init(nw4r::lyt::AnimTransform *transform, const char *name, m2d::ResAccIf_c *acc,
         nw4r::lyt::Group *group) {
     if (transform == nullptr) {
         return false;
@@ -286,7 +821,7 @@ bool AnmGroup_c::init(nw4r::lyt::AnimTransform *transform, const char *name, m2d
     return true;
 }
 
-bool AnmGroup_c::fn_800AC6D0(bool b) {
+bool AnmGroupBase_c::fn_800AC6D0(bool b) {
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     if (anmTransform == nullptr) {
         return false;
@@ -314,7 +849,7 @@ bool AnmGroup_c::fn_800AC6D0(bool b) {
     return true;
 }
 
-bool AnmGroup_c::fn_800AC7D0() {
+bool AnmGroupBase_c::fn_800AC7D0() {
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     if (anmTransform == nullptr) {
         return false;
@@ -330,11 +865,11 @@ bool AnmGroup_c::fn_800AC7D0() {
     return true;
 }
 
-bool AnmGroup_c::fn_800AC860() {
+bool AnmGroupBase_c::fn_800AC860() {
     return true;
 }
 
-void AnmGroup_c::fn_800AC870(bool b) {
+void AnmGroupBase_c::setAnimEnable(bool b) {
     nw4r::lyt::Group *group = mpGroup;
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     nw4r::lyt::SetAnimationEnable(group, anmTransform, b, mAnmResource.IsDescendingBind());
@@ -345,19 +880,19 @@ void AnmGroup_c::fn_800AC870(bool b) {
     }
 }
 
-void AnmGroup_c::setAnmFrame(f32 arg) {
+void AnmGroupBase_c::setAnmFrame(f32 arg) {
     mpAnmTransform->SetFrame(arg);
 }
 
-void AnmGroup_c::syncAnmFrame() {
+void AnmGroupBase_c::syncAnmFrame() {
     setAnmFrame(mpFrameCtrl->getFrame());
 }
 
-void AnmGroup_c::setForward() {
+void AnmGroupBase_c::setForward() {
     mpFrameCtrl->setForward();
 }
 
-void AnmGroup_c::setBackward() {
+void AnmGroupBase_c::setBackward() {
     mpFrameCtrl->setBackward();
 }
 

@@ -46,6 +46,7 @@ protected:
 
 class FrameCtrl_c {
 public:
+    FrameCtrl_c() : mEndFrame(0.0f), mCurrFrame(0.0f), mPrevFrame(0.0f), mRate(1.0f) {}
     virtual ~FrameCtrl_c();
 
     void play();

@@ -527,14 +527,7 @@ const res::ExtUserData *Pane::FindExtUserDataByName(const char *name) {
     }
     int i = 0;
     for (int i = 0; i < this->mpExtUserDataList->num; i++, pUserData++) {
-        u32 offset = pUserData->nameOffs;
-        const char *str = 0;
-        if (offset != 0) {
-            str = detail::ConvertOffsToPtr<char>(pUserData, offset);
-        } else {
-            str = nullptr;
-        }
-
+        const char *str = pUserData->GetName();
         if (strcmp(name, str) == 0) {
             return pUserData;
         };

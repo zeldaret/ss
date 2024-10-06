@@ -121,7 +121,7 @@ u16 *FileManager::getStoryFlagsMut() {
 
     SizedString<32> buf;
     buf = "F405";
-    file->setAreaT1(&buf);
+    file->setAreaT1(buf);
     file->room_id_t1 = 0;
     file->forced_layer_t1 = 0;
     file->entrance_t1_load_flag = 1;

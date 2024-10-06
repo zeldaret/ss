@@ -64,14 +64,14 @@ void ArcCallbackHandlerBase::CreateArcEntry(void *data, const char *path) {
     } else if (mPrefix == NAME_OARC) {
         SizedString<64> oarcPath = path;
         char buf[64];
-        sscanf(&oarcPath, "/oarc/%31[^.]arc", buf);
+        sscanf(oarcPath, "/oarc/%31[^.]arc", buf);
         u32 oldPrefix = mPrefix;
         OarcManager::sInstance->addEntryFromSuperArc(buf, data, nullptr);
         mPrefix = oldPrefix;
     } else if (mPrefix == NAME_RARC) {
         SizedString<64> oarcPath = path;
         char buf[64];
-        sscanf(&oarcPath, "/rarc/%31[^.]arc", buf);
+        sscanf(oarcPath, "/rarc/%31[^.]arc", buf);
         u32 oldPrefix = mPrefix;
         CurrentStageArcManager::sInstance->addEntryFromSuperArc(buf, data);
         mPrefix = oldPrefix;
@@ -82,14 +82,14 @@ void ArcCallbackHandlerBase::DestroyArcEntry(const char *path) {
     if (mPrefix == NAME_OARC) {
         SizedString<64> oarcPath = path;
         char buf[64];
-        sscanf(&oarcPath, "/oarc/%31[^.]arc", buf);
+        sscanf(oarcPath, "/oarc/%31[^.]arc", buf);
         u32 oldPrefix = mPrefix;
         OarcManager::sInstance->decrement(buf);
         mPrefix = oldPrefix;
     } else if (mPrefix == NAME_RARC) {
         SizedString<64> oarcPath = path;
         char buf[64];
-        sscanf(&oarcPath, "/rarc/%31[^.]arc", buf);
+        sscanf(oarcPath, "/rarc/%31[^.]arc", buf);
         u32 oldPrefix = mPrefix;
         CurrentStageArcManager::sInstance->decrement(buf);
         mPrefix = oldPrefix;

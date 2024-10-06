@@ -2,6 +2,7 @@
 #define D_LYT_COMMON_ARROW_H
 
 #include <d/lyt/d2d.h>
+#include <d/lyt/d_structd.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
@@ -32,7 +33,7 @@ public:
     void fn_80168880();
 
 private:
-    STATE_MGR_DECLARE(dLytCommonArrow_c);
+    UI_STATE_MGR_DECLARE(dLytCommonArrow_c);
     /* 0x40 */ d2d::LytBase_c mLytBase;
     d2d::ResAccIf_c mResAcc;
     d2d::AnmGroup_c field_0x440[0x9];
