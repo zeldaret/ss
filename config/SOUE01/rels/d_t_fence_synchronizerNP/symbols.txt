@@ -20,5 +20,5 @@ fn_623_810 = .text:0x00000810; // type:function size:0xC
 fn_623_820 = .text:0x00000820; // type:function size:0xC
 _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
-lbl_623_section4_0 = .rodata:0x00000000; // type:object size:0x10
-lbl_623_section4_10 = .rodata:0x00000010; // type:object size:0x74
+lbl_623_section4_0 = .data:0x00000000; // type:object size:0x10
+lbl_623_section4_10 = .data:0x00000010; // type:object size:0x74

@@ -13,5 +13,5 @@ fn_494_380 = .text:0x00000380; // type:function size:0xC
 fn_494_390 = .text:0x00000390; // type:function size:0x5C
 _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
-lbl_494_section4_0 = .rodata:0x00000000; // type:object size:0x10
-lbl_494_section4_10 = .rodata:0x00000010; // type:object size:0x74
+lbl_494_section4_0 = .data:0x00000000; // type:object size:0x10
+lbl_494_section4_10 = .data:0x00000010; // type:object size:0x74

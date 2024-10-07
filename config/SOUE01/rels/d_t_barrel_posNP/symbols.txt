@@ -9,5 +9,5 @@ fn_443_240 = .text:0x00000240; // type:function size:0x8
 fn_443_250 = .text:0x00000250; // type:function size:0x74
 _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
-lbl_443_section4_0 = .rodata:0x00000000; // type:object size:0x10
-lbl_443_section4_10 = .rodata:0x00000010; // type:object size:0x74
+lbl_443_section4_0 = .data:0x00000000; // type:object size:0x10
+lbl_443_section4_10 = .data:0x00000010; // type:object size:0x74
