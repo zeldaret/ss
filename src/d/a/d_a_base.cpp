@@ -413,10 +413,9 @@ f32 dAcBase_c::getSquareDistToPlayer() {
     return PSVECSquareDistance(position, dAcPy_c::LINK->position);
 }
 
-// Some weirdness with the float registers being used
 // 8002d4b0
 void dAcBase_c::updateRoomId(f32 yOffset) {
-    if (getConnectParent()->profile_name != 701 /* fProfile::PROFILE_NAME_e::ROOM */) {
+    if (getConnectParent()->profile_name != fProfile::ROOM) {
         mVec3_c actorPos(position.x, position.y + yOffset, position.z);
 
         if (checkCollision(&actorPos)) {

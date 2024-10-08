@@ -60,9 +60,13 @@ public:
     /* 80328470 */ void CalcDivideInfoOverArea(dCcD_DivideInfo *, Aabb const &);
 }; // Size = 0x40
 
+class dAcObjBase_c;
+class dCcD_GObjInf;
+typedef bool (*dCcD_HitCallback)(dAcObjBase_c* i_actorA, dCcD_GObjInf* i_objInfA, dAcObjBase_c* i_actorB, dCcD_GObjInf* i_objInfB);
+
 class dCcD_GAtTgCoCommonBase {
 protected:
-    /* 0x00 */ u32 field_0x00;
+    /* 0x00 */ dCcD_HitCallback mCallback;
     /* 0x04 */ s8 mEffCounter;
     /* 0x08 */ dAcRef_c<dAcBase_c> mActor;
     /* 0x14 */ u32 field_0x14;
@@ -76,6 +80,9 @@ public:
     }
     void resetField0x14() {
         field_0x14 = 0;
+    }
+    void setCallback(dCcD_HitCallback cb) {
+        mCallback = cb;
     }
     void decreaseCount();
     void unlink();
@@ -129,6 +136,10 @@ private:
 public:
     dCcD_GObjAt();
     virtual ~dCcD_GObjAt();
+
+    void setFlag(u32 f) {
+        mSrc.field_0x04 |= f;
+    }
 
     void clearFlag() {
         mSrc.field_0x04 = mSrc.field_0x04 & 0xFFFFFFFE;
@@ -292,6 +303,10 @@ public:
         mGObjCo.setFlag(f);
     }
 
+    void setAtFlagFlag(u32 f) {
+        mGObjAt.setFlag(f);
+    }
+
     inline void setSomeDefendValue(u32 val) {
         mGObjTg.set0x4C(val);
     }
@@ -302,6 +317,10 @@ public:
 
     inline mVec3_c *getAtVec() {
         return mGObjAt.GetSomeVec();
+    }
+
+    inline void setAtCallback(dCcD_HitCallback cb) {
+        mGObjAt.setCallback(cb);
     }
 
     void ResetAtHit();

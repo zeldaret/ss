@@ -31,6 +31,7 @@ private:
 };
 
 struct TimeAreaStruct {
+    TimeAreaStruct(): field_0x00(0.0f), field_0x08(0) {}
     TimeAreaStruct(f32 arg): field_0x00(arg), field_0x08(0) {}
     /* 0x00 */ f32 field_0x00;
     /* 0x04 */ UNKWORD field_0x04;
