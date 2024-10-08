@@ -1,6 +1,7 @@
 #ifndef C_M3D_G_PLA_H
 #define C_M3D_G_PLA_H
 
+#include "c/c_math.h"
 #include "d/col/c/c_m3d.h"
 #include "m/m_vec.h"
 
@@ -26,9 +27,9 @@ public:
     // bool getCrossY(const mVec3_c &, f32 *) const;
     // void Set(const cM3dGPla *);
 
-    // f32 getPlaneFunc(const Vec *pPoint) const {
-    //     return mD + VECDotProduct(mNormal, pPoint);
-    // }
+    f32 getPlaneFunc(const mVec3_c &pnt) const {
+        return mD + VEC3Dot(mNormal, pnt);
+    }
     mVec3_c *GetNP() {
         return &mNormal;
     }
@@ -43,6 +44,10 @@ public:
     // }
     f32 getCrossY_NonIsZero(const mVec3_c *param_1) {
         return ((-mNormal.x * param_1->x - mNormal.z * param_1->z) - mD) / mNormal.y;
+    }
+
+    u32 GetXZAngle() const {
+        return cM::atan2s(mNormal.x, mNormal.z);
     }
 };
 

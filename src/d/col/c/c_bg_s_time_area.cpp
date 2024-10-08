@@ -7,7 +7,7 @@ cBgS_TimeArea::cBgS_TimeArea() {
 cBgS_TimeArea::~cBgS_TimeArea() {}
 
 void cBgS_TimeArea::Set(const mVec3_c &start, const mVec3_c &end) {
-    mLin.SetStartEnd(start, end);
+    mLin.Set(start, end);
 }
 
 void cBgS_TimeArea::SetCallback(TimeDrawCallback pCallback) {

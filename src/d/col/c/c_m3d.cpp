@@ -88,27 +88,17 @@ bool cM3d_Cross_SphSph(const cM3dGSph *, const cM3dGSph *, f32 *) {}
 bool cM3d_Cross_SphSph(const cM3dGSph *, const cM3dGSph *, f32 *, f32 *) {}
 bool cM3d_Cross_SphSph(const cM3dGSph *, const cM3dGSph *, VEC3 *) {}
 
-inline void cM3d_InDivPos1(const VEC3 *pVecA, const VEC3 *pVecB, f32 pF, VEC3 *pOut) {
-    VEC3 tmp;
-    VEC3Scale(&tmp, pVecB, pF);
-    VEC3Add(&tmp, pVecA, pOut);
-}
-inline void cM3d_InDivPos2(const VEC3 *pVecA, const VEC3 *pVecB, f32 pF, VEC3 *pOut) {
-    VEC3 tmp;
-    VEC3Sub(&tmp, pVecB, pVecA);
-    cM3d_InDivPos1(pVecA, &tmp, pF, pOut);
-}
-
 void cM3d_CalcSphVsTriCrossPoint(const cM3dGSph *pSph, const cM3dGTri *pTri, VEC3 *pPnt) {
     VEC3 scale, add;
     PSVECAdd(pTri->mA, pTri->mB, add);
     PSVECScale(add, scale, 0.5f);
-    f32 mag = VEC3DistSq(&scale, pSph->GetC());
+    f32 mag = VEC3DistSq(&scale, &pSph->GetC());
     if (cM3d_IsZero(mag)) {
         *pPnt = pSph->GetC();
-    } else {
-        cM3d_InDivPos2(&pSph->GetC(), &scale, pSph->GetR() / mag, pPnt);
+        return;
     }
+    f32 a = pSph->GetR() / mag;
+    cM3d_InDivPos2(&pSph->GetC(), &scale, a, pPnt);
 }
 bool cM3d_Cross_SphTri(const cM3dGSph *, const cM3dGTri *, VEC3 *, f32 *, VEC3 *) {}
 bool cM3d_Cross_CylCyl(const cM3dGCyl *, const cM3dGCyl *, f32 *) {}

@@ -1,6 +1,7 @@
 #ifndef C_M3D_G_CYL_H
 #define C_M3D_G_CYL_H
 
+#include <d/col/c/c_m3d_g_unk.h>
 #include <m/m_vec.h>
 
 class cM3dGCyl {
@@ -16,10 +17,10 @@ public:
     void SetH(f32);
     void SetR(f32);
 
-    bool fn_803380e0(/* TODO */);
-    bool fn_803380f0(/* TODO */);
+    bool fn_803380e0(cM3dGUnk *, mVec3_c *);
+    bool fn_803380f0(cM3dGUnk *, f32 *);
     bool Cross(const mVec3_c &) const;
-    void fn_80338170(const mVec3_c &, mVec3_c &);
+    void Clamp(const mVec3_c &, mVec3_c &) const;
 
     const mVec3_c &GetC() const {
         return mCenter;

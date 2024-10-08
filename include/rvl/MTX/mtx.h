@@ -21,7 +21,7 @@ void PSMTXCopy(const Mtx, Mtx);
 void PSMTXConcat(const Mtx, const Mtx, Mtx);
 void PSMTXConcatArray(const Mtx, const Mtx, Mtx, u32);
 void PSMTXTranspose(const Mtx, Mtx);
-void PSMTXInverse(const Mtx, Mtx);
+bool PSMTXInverse(const Mtx, Mtx);
 void PSMTXInvXpose(const Mtx, Mtx);
 void PSMTXRotRad(Mtx, f32, char);
 void PSMTXRotTrig(Mtx, f32, f32, char);

@@ -28,6 +28,7 @@ public:
         set(fx, fy, fz);
     }
 
+    // ?? Sometimes Works
     void copyFrom(const Vec *pV) {
         set(pV->x, pV->y, pV->z);
     }
@@ -35,6 +36,22 @@ public:
     /// @brief Assignment operator
     mVec3_c &operator=(const mVec3_c &r) {
         set(r.x, r.y, r.z);
+        return *this;
+    }
+
+    /// @brief Assignment operator
+    mVec3_c &operator=(const EGG::Vector3f &r) {
+        x = r.x;
+        y = r.y;
+        z = r.z;
+        return *this;
+    }
+
+    /// @brief Assignment operator
+    mVec3_c &operator=(const nw4r::math::VEC3 &r) {
+        x = r.x;
+        y = r.y;
+        z = r.z;
         return *this;
     }
 
@@ -47,6 +64,13 @@ public:
 
     /// @brief Constructs a new vector from an existing vector from the nw4r::math library.
     mVec3_c(const nw4r::math::VEC3 &v) {
+        x = v.x;
+        y = v.y;
+        z = v.z;
+    }
+
+    /// @brief Constructs a new vector from an existing vector from the EGG library.
+    mVec3_c(const EGG::Vector3f &v) {
         x = v.x;
         y = v.y;
         z = v.z;

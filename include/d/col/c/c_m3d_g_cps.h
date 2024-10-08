@@ -3,6 +3,7 @@
 
 #include "d/col/c/c_m3d.h"
 #include "d/col/c/c_m3d_g_lin.h"
+#include "d/col/c/c_m3d_g_unk.h"
 #include "m/m_vec.h"
 
 class cM3dGCps : public cM3dGLin {
@@ -17,7 +18,7 @@ public:
     void Set(const mVec3_c &, const mVec3_c &, f32);
     void SetR(f32 r);
     void Set_0x1C(f32);
-    bool fn_80337f30(/* TODO */);
+    bool fn_80337f30(cM3dGUnk *, mVec3_c *);
     bool fn_80337f40(const mVec3_c &) const;
 
     f32 GetR() const {

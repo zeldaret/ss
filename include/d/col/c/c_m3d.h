@@ -74,6 +74,12 @@ bool cM3d_3PlaneCrossPos(const cM3dGPla &, const cM3dGPla &, const cM3dGPla &, n
 f32 cM3d_lineVsPosSuisenCross(const cM3dGLin *, const nw4r::math::VEC3 *, nw4r::math::VEC3 *);
 f32 cM3d_lineVsPosSuisenCross(const nw4r::math::VEC3 &, const nw4r::math::VEC3 &, const nw4r::math::VEC3 &, nw4r::math::VEC3 *);
 
+bool fn_80336110(cM3dGCyl *, cM3dGUnk *, nw4r::math::VEC3 *);
+bool fn_803364e0(cM3dGCyl *, cM3dGUnk *, f32 *);
+bool fn_80336d90(cM3dGCps *, cM3dGUnk *, nw4r::math::VEC3 *);
+bool fn_80337690(cM3dGUnk *, cM3dGSph *, nw4r::math::VEC3 *);
+bool fn_80337780(cM3dGUnk *, cM3dGSph *, f32 *);
+
 inline bool cM3d_IsZero(f32 f) {
     return fabsf(f) < G_CM3D_F_ABS_MIN;
 }
@@ -81,6 +87,19 @@ inline bool cM3d_IsZero(f32 f) {
 // won't
 inline bool cM3d_IsZero_inverted(f32 param_0) {
     return !(fabsf(param_0) < G_CM3D_F_ABS_MIN);
+}
+
+inline void
+cM3d_InDivPos1(const nw4r::math::VEC3 *pVecA, const nw4r::math::VEC3 *pVecB, f32 pF, nw4r::math::VEC3 *pOut) {
+    nw4r::math::VEC3 tmp;
+    VEC3Scale(&tmp, pVecB, pF);
+    VEC3Add(pOut, &tmp, pVecA);
+}
+inline void
+cM3d_InDivPos2(const nw4r::math::VEC3 *pVecA, const nw4r::math::VEC3 *pVecB, f32 pF, nw4r::math::VEC3 *pOut) {
+    nw4r::math::VEC3 tmp;
+    VEC3Sub(&tmp, pVecB, pVecA);
+    cM3d_InDivPos1(pVecA, &tmp, pF, pOut);
 }
 
 #endif

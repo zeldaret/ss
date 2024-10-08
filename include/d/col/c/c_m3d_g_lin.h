@@ -4,20 +4,23 @@
 #include <common.h>
 #include <m/m_vec.h>
 
-// Line
 class cM3dGLin {
 public:
+    typedef nw4r::math::VEC3 VEC3;
+    typedef EGG::Vector3f Vector3f;
+
     /* 0x00 */ mVec3_c mStart;
     /* 0x0C */ mVec3_c mEnd;
 
     cM3dGLin() {}
-    cM3dGLin(const mVec3_c &, const mVec3_c &);
 
-    void SetStartEnd(const mVec3_c &start, const mVec3_c &end) {
+    void SetStartEnd(const VEC3 &, const VEC3 &);
+    void SetStartEnd(const mVec3_c *, const mVec3_c *);
+
+    void Set(const mVec3_c &start, const mVec3_c &end) {
         mStart = start;
         mEnd = end;
     }
-    void SetStartEnd(const mVec3_c *, const mVec3_c *);
     void CalcPos(mVec3_c *, f32) const;
 
     void CalcVec(Vec *pOut) const {
@@ -25,33 +28,35 @@ public:
     }
 
     void SetStart(const mVec3_c &);
-    void SetEnd(const mVec3_c &);
 
-    mVec3_c &GetStart() {
-        return mStart;
-    }
-    const mVec3_c &GetStart() const {
+    nw4r::math::VEC3 &GetStart() {
         return mStart;
     }
 
-    mVec3_c *GetStartP(void) {
+    const nw4r::math::VEC3 &GetStart() const {
+        return mStart;
+    }
+
+    nw4r::math::VEC3 *GetStartP(void) {
         return &mStart;
     }
-    const mVec3_c *GetStartP(void) const {
+    const nw4r::math::VEC3 *GetStartP(void) const {
         return &mStart;
     }
 
-    mVec3_c &GetEnd() {
-        return mEnd;
-    }
-    const mVec3_c &GetEnd() const {
+    nw4r::math::VEC3 &GetEnd() {
         return mEnd;
     }
 
-    mVec3_c *GetEndP(void) {
+    const nw4r::math::VEC3 &GetEnd() const {
+        return mEnd;
+    }
+
+    nw4r::math::VEC3 *GetEndP(void) {
         return &mEnd;
     }
-    const mVec3_c *GetEndP(void) const {
+
+    const nw4r::math::VEC3 *GetEndP(void) const {
         return &mEnd;
     }
 };
