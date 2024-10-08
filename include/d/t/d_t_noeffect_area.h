@@ -1,7 +1,7 @@
 #ifndef D_T_NOEFFECT_AREA_H
 #define D_T_NOEFFECT_AREA_H
 
-#include <d/tg/d_tg.h>
+#include <d/t/d_tg.h>
 #include <f/f_list_mg.h>
 #include <m/m_mtx.h>
 

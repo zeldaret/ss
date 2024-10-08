@@ -1,4 +1,4 @@
-#include <d/tg/d_t_noeffect_area.h>
+#include <d/t/d_t_noeffect_area.h>
 
 SPECIAL_ACTOR_PROFILE(TAG_NOEFFECT_AREA, dTgNoEffectArea_c, fProfile::TAG_NOEFFECT_AREA, 0x0158, 0, 0);
 

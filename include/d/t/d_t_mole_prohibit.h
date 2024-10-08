@@ -1,7 +1,7 @@
 #ifndef D_T_MOLE_PROHIBIT_H
 #define D_T_MOLE_PROHIBIT_H
 
-#include <d/tg/d_tg.h>
+#include <d/t/d_tg.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 

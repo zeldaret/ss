@@ -1,7 +1,7 @@
 #ifndef D_T_SHIP_WINDOW_H
 #define D_T_SHIP_WINDOW_H
 
-#include <d/tg/d_tg.h>
+#include <d/t/d_tg.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 #include <toBeSorted/actor_event.h>

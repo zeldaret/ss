@@ -1,7 +1,7 @@
 #ifndef D_T_TIME_AREA_CHECK_H
 #define D_T_TIME_AREA_CHECK_H
 
-#include <d/tg/d_tg.h>
+#include <d/t/d_tg.h>
 
 class dTgTimeAreaCheck_c : public dTg_c {
 public:

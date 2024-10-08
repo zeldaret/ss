@@ -1,7 +1,7 @@
 #ifndef D_T_HOLY_WATER_H
 #define D_T_HOLY_WATER_H
 
-#include <d/tg/d_tg.h>
+#include <d/t/d_tg.h>
 #include <toBeSorted/dowsing_target.h>
 
 class dTgHolyWater_c : public dTg_c {

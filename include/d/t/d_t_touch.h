@@ -1,7 +1,7 @@
 #ifndef D_T_TOUCH_H
 #define D_T_TOUCH_H
 
-#include <d/tg/d_tg.h>
+#include <d/t/d_tg.h>
 #include <m/m_mtx.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>

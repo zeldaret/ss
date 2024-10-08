@@ -2,7 +2,7 @@
 #define D_T_OBJ_FAIRY_H
 
 #include <d/a/obj/d_a_obj_fairy.h>
-#include <d/tg/d_tg.h>
+#include <d/t/d_tg.h>
 
 class dTgFairy_c : public dTg_c {
 public:

@@ -1,7 +1,7 @@
 #ifndef D_T_SOUND_AREA_MGR_H
 #define D_T_SOUND_AREA_MGR_H
 
-#include <d/tg/d_tg.h>
+#include <d/t/d_tg.h>
 
 class dTgSndMg_c : public dTg_c {
 public:

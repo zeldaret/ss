@@ -1,7 +1,7 @@
 #ifndef D_T_SOUND_AREA_H
 #define D_T_SOUND_AREA_H
 
-#include <d/tg/d_tg.h>
+#include <d/t/d_tg.h>
 #include <m/m_mtx.h>
 #include <m/m_vec.h>
 #include <toBeSorted/actor_on_rail.h>

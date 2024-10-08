@@ -1,7 +1,7 @@
 #ifndef D_T_ROCK_BOAT
 #define D_T_ROCK_BOAT
 
-#include <d/tg/d_tg.h>
+#include <d/t/d_tg.h>
 #include <f/f_list_nd.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
