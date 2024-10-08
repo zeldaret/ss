@@ -5,8 +5,11 @@
 
 #include "egg/math/eggMatrix.h"
 #include "m/m_angle.h"
+#include "m/m_vec.h"
 #include "nw4r/nw4r_types.h"
+
 #include <common.h>
+
 
 #pragma push
 #pragma warning off(10402)
@@ -16,8 +19,7 @@ class mMtx_c {
 
 public:
     mMtx_c(){};
-    /* 802f1660 */ mMtx_c(f32 xx, f32 xy, f32 xz, f32 xw, f32 yx, f32 yy, f32 yz, f32 yw, f32 zx, f32 zy, f32 zz,
-            f32 zw);
+    mMtx_c(f32 xx, f32 xy, f32 xz, f32 xw, f32 yx, f32 yy, f32 yz, f32 yw, f32 zx, f32 zy, f32 zz, f32 zw);
 
     // not sure if this breaks anything but we need a matrix type
     // with an inline copy assignment operator
@@ -39,29 +41,36 @@ public:
         return &nw4rm;
     }
 
-    /* 802f16b0 */ void XrotS(const mAng &angle); ///< Generates a rotation matrix for the X axis with the given angle.
-    /* 802f1770 */ void XrotM(const mAng &angle); ///< Rotates the matrix on the X axis by the given angle.
-    /* 802f17c0 */ void YrotS(const mAng &angle); ///< Generates a rotation matrix for the Y axis with the given angle.
-    /* 802f1880 */ void YrotM(const mAng &angle); ///< Rotates the matrix on the Y axis by the given angle.
-    /* 802f18d0 */ void ZrotS(const mAng &angle); ///< Generates a rotation matrix for the Z axis with the given angle.
-    /* 802f1990 */ void ZrotM(const mAng &angle); ///< Rotates the matrix on the Z axis by the given angle.
+    void XrotS(const mAng &angle); ///< Generates a rotation matrix for the X axis with the given angle.
+    void XrotM(const mAng &angle); ///< Rotates the matrix on the X axis by the given angle.
+    void YrotS(const mAng &angle); ///< Generates a rotation matrix for the Y axis with the given angle.
+    void YrotM(const mAng &angle); ///< Rotates the matrix on the Y axis by the given angle.
+    void ZrotS(const mAng &angle); ///< Generates a rotation matrix for the Z axis with the given angle.
+    void ZrotM(const mAng &angle); ///< Rotates the matrix on the Z axis by the given angle.
 
-    /* 802f19e0 */ void ZXYrotS(mAng xRot, mAng yRot,
-            mAng zRot); ///< Generates the matrix on the Y, X and Z axes by the given angles.
-    /* 802f1a40 */ void ZXYrotM(mAng xRot, mAng yRot,
-            mAng zRot); ///< Rotates the matrix on the Y, X and Z axes by the given angles.
-    /* 802f1aa0 */ void XYZrotS(mAng xRot, mAng yRot,
-            mAng zRot); ///< Generates the matrix on the Z, Y and X axes by the given angles.
-    /* 802f1b00 */ void XYZrotM(mAng xRot, mAng yRot,
-            mAng zRot); ///< Rotates the matrix on the Z, Y and X axes by the given angles.
+    void ZXYrotS(mAng xRot, mAng yRot,
+                 mAng zRot); ///< Generates the matrix on the Y, X and Z axes by the given angles.
+    void ZXYrotM(mAng xRot, mAng yRot,
+                 mAng zRot); ///< Rotates the matrix on the Y, X and Z axes by the given angles.
+    void XYZrotS(mAng xRot, mAng yRot,
+                 mAng zRot); ///< Generates the matrix on the Z, Y and X axes by the given angles.
 
-    /* 802f1b60 */ void toRot(mAng3_c &out) const; ///< Converts the matrix to a rotation vector.
+    void XYZrotM(mAng xRot, mAng yRot,
+                 mAng zRot); ///< Rotates the matrix on the Z, Y and X axes by the given angles.
+
+    void toRot(mAng3_c &out) const; ///< Converts the matrix to a rotation vector.
 
     void multVecZero(nw4r::math::VEC3 &out) const; ///< Converts the matrix to a vector.
     void zero();                                   ///< Zeroes out the matrix.
 
-    /* 802f1c40 */ void rot(int, int); // does some werrd operation to rotate the matrix
-    /* 802f1e60 */ bool quatRelated();
+    void rot(int, int); // does some werrd operation to rotate the matrix
+    bool quatRelated();
+
+    void SetTranslation(const mVec3_c &t) {
+        m[0][3] = t.x;
+        m[1][3] = t.y;
+        m[2][3] = t.z;
+    }
 
 public:
     union {

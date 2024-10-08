@@ -9,6 +9,9 @@
 
 class cPartition {
 public:
+    // static u32 sShift;
+    // static u32 sMask;
+
     /* 0x0 */ u32 mX;
     /* 0x4 */ u32 mY;
     /* 0x8 */ u32 mZ;

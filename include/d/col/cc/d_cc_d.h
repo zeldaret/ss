@@ -3,8 +3,10 @@
 
 #include <d/a/d_a_base.h>
 #include <d/col/c/c_m3d_g_aab.h>
+#include <d/col/c/c_m3d_g_cps.h>
 #include <d/col/c/c_m3d_g_cyl.h>
 #include <d/col/c/c_m3d_g_sph.h>
+#include <d/col/c/c_m3d_g_unk.h>
 #include <f/f_base_id.h>
 #include <m/m_mtx.h>
 #include <m/m_vec.h>
@@ -318,24 +320,6 @@ struct dCcD_SrcSphAttr {
     /* 0x00 */ f32 mRadius;
 }; // Size = 0x4
 
-class cM3dGAabb {
-public:
-    /* 0x00 */ mMtx_c mMtx1;
-    /* 0x30 */ mMtx_c mMtx2;
-    /* 0x60 */ mVec3_c mMin;
-    /* 0x6C */ mVec3_c mMax;
-    /* 0x78 */ u8 field_0x78[0xB8 - 0x78];
-    /* 0xB8 */ mVec3_c mVirtualCenter;
-    /* 0xC4 */ u32 field_0xC4;
-
-    cM3dGAabb();
-    /* vt 0xC8 */
-    virtual ~cM3dGAabb() {}
-
-    void setWithYRot(const mVec3_c &translation, const mAng &rot);
-    void setMinMax(const mVec3_c &min, const mVec3_c &max);
-};
-
 struct dCcD_SrcAabbAttr {
     /* 0x00 */ f32 minX, minY, minZ, maxX, maxY, maxZ;
 }; // Size = 0x18
@@ -344,12 +328,7 @@ struct dCcD_SrcUnk1Attr {};
 
 class cM3dGUnk1 {
 public:
-    /* 0x00 */ mVec3_c field_0x00;
-    /* 0x0C */ mVec3_c field_0x0C;
-    /* 0x18 */ f32 field_0x18;
-    /* 0x1C */ f32 field_0x1C;
-    /* 0x20 */ u8 field_0x20;
-    /* 0x24 */ u32 field_0x24;
+    /* 0x00 */ cM3dGCps mCps;
     /* 0x28 */ mVec3_c mVirtualCenter;
     cM3dGUnk1();
 };
@@ -417,7 +396,7 @@ public:
 };
 
 // Aabb
-class dCcD_ShapeAttr5 : public dCcD_ShapeAttr, public cM3dGAabb {
+class dCcD_ShapeAttr5 : public dCcD_ShapeAttr, public cM3dGUnk {
 public:
     dCcD_ShapeAttr5();
 

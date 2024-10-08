@@ -46,8 +46,12 @@ public:
         return ((-mNormal.x * param_1->x - mNormal.z * param_1->z) - mD) / mNormal.y;
     }
 
-    u32 GetXZAngle() const {
+    s32 GetAngleY() const {
         return cM::atan2s(mNormal.x, mNormal.z);
+    }
+
+    f32 GetXZDist() const {
+        return EGG::Math<f32>::sqrt(mNormal.x * mNormal.x + mNormal.z * mNormal.z);
     }
 };
 

@@ -27,12 +27,11 @@ bool cM3dGPla::getCrossYLessD(const mVec3_c &point, f32 *out) const {
 }
 
 mAng cM3dGPla::GetAngle(mAng ang) const {
-    // reg swap
-    mAng tmp1 = GetXZAngle();
-    f32 cos = nw4r::math::CosIdx(tmp1 - ang);
-    f32 sq = EGG::Math<f32>::sqrt(mNormal.x * mNormal.x + mNormal.z * mNormal.z);
-
-    return cM::atan2s(sq * cos, mNormal.y);
+    mAng angleY = GetAngleY();
+    // Regswap
+    angleY = angleY - ang;
+    f32 dist = GetXZDist() * angleY.cos();
+    return cM::atan2s(dist, mNormal.y);
 }
 
 mAng cM3dGPla::GetNegativeAngle(mAng ang) const {

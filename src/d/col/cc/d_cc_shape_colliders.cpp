@@ -18,7 +18,7 @@ void *dCcD_Unk1::dCcD_GObjInf_0x0C() {
 }
 
 void dCcD_Unk1::unknownCalc() {
-    PSVECSubtract(*&field_0x0C, *&field_0x00, *getAtVec());
+    PSVECSubtract(mCps.mEnd, mCps.mStart, *getAtVec());
 }
 
 dCcD_Empty::dCcD_Empty() {}

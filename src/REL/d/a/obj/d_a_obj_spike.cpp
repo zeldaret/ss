@@ -61,7 +61,7 @@ int dAcOspike_c::create() {
         tmp3.z = copy;
     }
 
-    mCollision.setMinMax(tmp2, tmp3);
+    mCollision.Set(tmp2, tmp3);
     mStateMgr.changeState(StateID_Wait);
     setBoundingBox(mVec3_c(-10.0f, -250.0f, -480.0f), mVec3_c(80.0f, 260.0f, 490.0f));
     return SUCCEEDED;
@@ -73,7 +73,7 @@ int dAcOspike_c::doDelete() {
 
 int dAcOspike_c::actorExecute() {
     mStateMgr.executeState();
-    mCollision.setWithYRot(position, rotation.y);
+    mCollision.Set(position, rotation.y);
     ColliderManager::getColliderManager()->addCollider(&mCollision);
     return 1;
 }

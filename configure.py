@@ -390,7 +390,7 @@ config.libs = [
             Object(NonMatching, "d/col/c/c_m3d_g_pla.cpp"),
             Object(Matching, "d/col/c/c_m3d_g_sph.cpp"),
             Object(Matching, "d/col/c/c_m3d_g_tri.cpp"),
-            Object(NonMatching, "d/col/c/c_m3d_g_unk.cpp"),
+            Object(Matching, "d/col/c/c_m3d_g_unk.cpp"),
             Object(NonMatching, "d/col/c/c_partition.cpp"),
             Object(NonMatching, "d/col/bg/d_bg_pc.cpp"),
             Object(NonMatching, "d/col/bg/d_bg_plc.cpp"),
