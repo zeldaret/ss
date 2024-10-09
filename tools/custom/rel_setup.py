@@ -7,6 +7,9 @@ templated state system with 5 vtables, 24 function instances, and another
 but it *is* quite tedious. But even if setting up a REL takes 5 minutes,
 we're looking at 50+ hours, so if I can write this script in less than 50
 hours, it was worth it.
+
+Note that much of this script is basically obsolete the moment its result
+is merged in, but maybe it's a starting point for future automation.
 """
 
 from dataclasses import dataclass
@@ -32,11 +35,12 @@ CLASS_DIR_TREE = {
 def get_file_path(file_name: str, tree = CLASS_DIR_TREE):
     name_components = file_name.split('_', 1)
     if len(name_components) == 1:
-        return name_components[0]
-    elif (subtree := tree.get(name_components[0], None)):
-        return name_components[0] + "/" + get_file_path(name_components[1], subtree)
-    else:
         return ""
+    subtree = tree.get(name_components[0], None)
+    if subtree is None:
+        return ""
+    else:
+        return name_components[0] + "/" + get_file_path(name_components[1], subtree)
     
 
 
@@ -58,15 +62,15 @@ def m_instructions(instrs: list):
 
 def simple_state_function(fn_name: str, load_02: str):
     instrs = m_instructions([f"lwzu r12, 0x18(r3)", f"lwz r12, {load_02}(r12)"])
-    return ([m_size(0x10), instrs], lambda x: fn_name + L(["sStateMgr_c<", L(x), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "FRC12sStateIDIf_c")
+    return ([m_size(0x10), instrs], lambda x: fn_name + L(["sStateMgr_c<", L(x), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv")
 
 def state_proxy_function(fn_name: str, load_01: str):
     instrs = m_instructions(["mr r4, r3", "lwz r3, 0x8(r3)", "lwz r4, 0x4(r4)", "lwz r12, 0x0(r3)", f"lwz r12, {load_01}(r12)"])
     return ([m_size(0x1C), instrs], lambda x: fn_name + L(["sFState_c<", L(x), ">"]) + "Fv")
 
-def state_proxy_function_c(fn_name: str, load_01: str):
-    instrs = m_instructions(["mr r4, r3", "lwz r3, 0x8(r3)", "lwz r4, 0x4(r4)", "lwz r12, 0x0(r3)", f"lwz r12, {load_01}(r12)"])
-    return ([m_size(0x1C), instrs], lambda x: fn_name + L(["sFState_c<", L(x), ">"]) + "CFv")
+def state_get_function(fn_name: str, load_01: str):
+    instrs = m_instructions(["lwzu r12, 0x18(r3)", f"lwz r12, {load_01}(r12)"])
+    return ([m_size(0x10), instrs], lambda x: fn_name + L(["sStateMgr_c<", L(x), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "CFv")
 
 def state_invoker_function(fn_name: str, ptmf_offset: str):
     instrs = m_instructions([f"addi r12, r5, {ptmf_offset}", "bl __ptmf_scall"])
@@ -77,22 +81,23 @@ FUNCTION_MATCHERS = [
     ([m_size(0x6C), m_instructions(["bl __dt__13sStateFctIf_cFv"])], lambda x : "__dt__" + L(["sFStateFct_c<", L(x), ">"]) + "Fv"),
     ([m_size(0xA0), m_instructions(["bl __dt__13sStateMgrIf_cFv"])], lambda x : "__dt__" + L(["sStateMgr_c<", L(x), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv"),
     ([m_size(0xA4), m_instructions(["bl __dt__13sStateMgrIf_cFv"])], lambda x : "__dt__" + L(["sFStateMgr_c<", L(x), ",20sStateMethodUsr_FI_c>"]) + "Fv"),
-    simple_state_function("changeState__", "0x18"),
+    ([m_size(0x10), m_instructions([f"lwzu r12, 0x18(r3)", f"lwz r12, 0x18(r12)"])], lambda x: "changeState__" + L(["sStateMgr_c<", L(x), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "FRC12sStateIDIf_c"),
     simple_state_function("executeState__", "0x10"),
-    state_proxy_function_c("getStateID__", "0x28"),
+    state_get_function("getStateID__", "0x28"),
     ([m_size(0x60), m_instructions(["lwz r12, 0xc(r12)"])], lambda x : "build__" + L(["sFStateFct_c<", L(x), ">"]) + "FRC12sStateIDIf_c"),
+    ([m_size(0xC), m_instructions(["stw r0, 0x0(r4)"])], lambda x : "dispose__" + L(["sFStateFct_c<", L(x), ">"]) + "FRP10sStateIf_c"),
     state_proxy_function("initialize__", "0x28"),
     state_proxy_function("execute__", "0x2c"),
     state_proxy_function("finalize__", "0x30"),
     simple_state_function("initializeState__", "0xc"),
     simple_state_function("finalizeState__", "0x14"),
     simple_state_function("refreshState__", "0x1c"),
-    state_proxy_function_c("getState__", "0x20"),
-    state_proxy_function_c("getNewStateID__", "0x24"),
-    state_proxy_function_c("getOldStateID__", "0x2c"),
+    state_get_function("getState__", "0x20"),
+    state_get_function("getNewStateID__", "0x24"),
+    state_get_function("getOldStateID__", "0x2c"),
     state_invoker_function("finalizeState__", "0x24"),
     state_invoker_function("executeState__", "0x18"),
-    state_invoker_function("initializeState", "0xc"),
+    state_invoker_function("initializeState__", "0xc"),
     ([m_size(0x58), m_instructions(["bl __dt__10sStateID_cFv"])], lambda x : "__dt__" + L(["sFStateID_c<", L(x), ">"]) + "Fv"),
     ([m_size(0x88), m_instructions(["bl strrchr", "bl strcmp"])], lambda x : "isSameName__" + L(["sFStateID_c<", L(x), ">"]) + "CFPCc"),
 ]
@@ -102,10 +107,13 @@ BASE_CLASSES = [
     ("bl __ct__7dBase_cFv", "dBase_c", "d/d_base.h"),
     ("bl __ct__9dAcBase_cFv", "dAcBase_c", "d/a/d_a_base.h"),
     ("bl __ct__12dAcObjBase_cFv", "dAcObjBase_c", "d/a/obj/d_a_obj_base.h"),
-    ("bl __ct__11dAcEnBase_cFv", "dAcEnBase_c", "d/a/en/d_a_en_base.h"),
-    ("bl __ct__8dAcNpc_cFv", "dAcNpc_c", "d/a/npc/d_a_npc_base.h"),
-    ("bl ActorNpcBase__ctor2", "dAcNpc_c", "d/a/npc/d_a_npc_base.h"),
-    ("bl __ct__16dAcObjDoor_cFv", "dAcObjDoor_c", "d/a/obj/d_a_obj_door.h"),
+    ("bl __ct__11dAcEnBase_cFv", "dAcEnBase_c", "d/a/e/d_a_en_base.h"),
+    ("bl __ct__8dAcNpc_cFv", "dAcNpc_c", "d/a/npc/d_a_npc.h"),
+    ("bl ActorNpcBase__ctor2", "dAcNpc_c", "d/a/npc/d_a_npc.h"),
+    ("bl __ct__16dAcObjDoor_cFv", "dAcObjDoor_c", "d/a/obj/d_a_obj_door_base.h"),
+    # bit of a lie but not worth automating
+    ("bl ActorLytBase__ctor", "dBase_c", "d/d_base.h"),
+    ("bl fn_800629D0", "dBase_c", "d/d_base.h"),
 ]
 
 @dataclass
@@ -204,7 +212,7 @@ def parse_data(file):
             block_lines = []
             size = int(m.group(3), 16)
             i += 1
-            obj_name = lines[i].split(",")[0][4:]
+            obj_name = lines[i].split(",")[0][5:]
             i += 1
             while not lines[i].startswith(".endobj"):
                 block_lines.append(lines[i].strip())
@@ -226,7 +234,7 @@ def parse_function(file):
             block_lines = []
             size = int(m.group(3), 16)
             i += 1
-            obj_name = lines[i].split(",")[0][3:]
+            obj_name = lines[i].split(",")[0][4:]
             i += 1
             while not lines[i].startswith(".endfn"):
                 if lines[i].startswith("/*"):
@@ -327,15 +335,9 @@ def process_file(file_name, data_blocks: List[DataObj], fns: List[Function]):
     for b in data_blocks:
         if (res := match_class_profile(b, name, old_static_ctor_name)):
             new_static_ctor_name, new_data_name, decl_header = res
-            old_profile_data_name = b.name
             renames.append((old_static_ctor_name, new_static_ctor_name))
             renames.append((b.name, new_data_name))
             break
-    else:
-        print(file_name, "no profile")
-        return
-
-
 
     for f in fns:
         for ctor, base_class_, include_ in BASE_CLASSES:
@@ -344,33 +346,49 @@ def process_file(file_name, data_blocks: List[DataObj], fns: List[Function]):
                 base_class = base_class_
                 include = include_
 
+    for f in fns:
+        # two state classes
+        if "d_lyt_file_select" not in file_name:
+            for (matchers, name_fn) in FUNCTION_MATCHERS:
+                if all(match(f) for match in matchers):
+                    renames.append((f.name, name_fn(name)))
+
+        if "bl __ct__10sStateID_cFPCc" in f.instructions:
+            renames.append((f.name, f"__sinit_\\{file_name}_cpp"))
+
     uses_state_system = any("bl __ct__10sStateID_cFPCc" in fn.instructions for fn in fns)
+    if "d_lyt_file_select" in file_name:
+        # two state classes
+        uses_state_system = False
     auto_functions = []
     state_decls = []
     state_defs = []
     includes = [include]
     if uses_state_system:
+        includes.append("s/s_State.hpp")
+        includes.append("s/s_StateMgr.hpp")
         state_names = find_state_names(strings)
         state_candidates = find_state_candidates(data_blocks, len(state_names))
         if state_candidates:
-            includes.append("s/s_State.hpp")
-            includes.append("s/s_StateMgr.hpp")
-
             for idx, orig in enumerate(state_candidates):
                 if idx % 3 == 0:
-                    method = "initialize"
+                    method = "finalize"
                 elif idx % 3 == 1:
                     method = "execute"
                 elif idx % 3 == 2:
-                    method = "finalize"
+                    method = "initialize"
                 
                 state_name = state_names[idx // 3]
 
-                readable_function = f"void {name}::{method}State_{state_name}" + " {}"
+                readable_function = f"void {name}::{method}State_{state_name}()" + " {}"
                 mangled_function = f"{method}State_{state_name}__" + L(name) + "Fv"
 
                 renames.append((orig, mangled_function))
                 auto_functions.append(readable_function)
+
+                # fix order
+                if idx % 3 == 2:
+                    auto_functions[-1], auto_functions[-3] = auto_functions[-3], auto_functions[-1]
 
             for state_name in state_names:
                 state_decls.append(f"STATE_FUNC_DECLARE({name}, {state_name});")
@@ -417,6 +435,8 @@ def process_file(file_name, data_blocks: List[DataObj], fns: List[Function]):
     with open(os.path.join('./src/REL/', file_path + '.cpp'), 'w+') as f:
         f.write(f"#include <{file_path}.h>\n\n")
 
+        f.write(f"{decl_header}\n\n")
+
         if state_defs:
             for s in state_defs:
                 f.write(f"{s}\n")
@@ -427,10 +447,25 @@ def process_file(file_name, data_blocks: List[DataObj], fns: List[Function]):
             if uses_state_system:
                 f.write(" : mStateMgr(*this, sStateID::null)")
             f.write(" {}\n")
-            f.write(f"virtual {name}::~{name}() {{}}\n\n")
+            f.write(f"{name}::~{name}() {{}}\n\n")
 
-    if uses_state_system:
-        raise ValueError("test")
+        for fn in auto_functions:
+            f.write(fn + "\n")
+
+    symbols_path = pathlib.Path(os.path.join('./config/SOUE01/rels/', file_name + "NP", 'symbols.txt')) 
+    symbols_txt = symbols_path.read_text()
+    # print(renames)
+    for (orig, new_name) in renames:
+        symbols_txt = symbols_txt.replace(f"{orig} = .", f"{new_name} = .")
+
+    symbol_lines = symbols_txt.splitlines()
+    for idx, l in enumerate(symbol_lines):
+        if l.startswith("__sinit"):
+            symbol_lines[idx] += " scope:local"
+
+    symbols_txt = "\n".join(symbol_lines)
+
+    symbols_path.write_text(symbols_txt)
 
 def main():
     for folder in os.listdir('./build/SOUE01'):
