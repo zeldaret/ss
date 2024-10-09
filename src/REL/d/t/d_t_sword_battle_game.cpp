@@ -1,0 +1,4 @@
+#include <d/t/d_t_sword_battle_game.h>
+
+SPECIAL_ACTOR_PROFILE(TAG_SWORD_BATTLE_GAME, dTgSwordBattleGame_c, fProfile::TAG_SWORD_BATTLE_GAME, 0X6F, 0, 4);
+

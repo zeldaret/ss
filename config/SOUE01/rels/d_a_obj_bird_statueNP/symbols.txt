@@ -1,14 +1,14 @@
 _prolog = .text:0x00000000; // type:function size:0x2C scope:global
 _epilog = .text:0x00000030; // type:function size:0x2C scope:global
 _unresolved = .text:0x00000060; // type:function size:0x4 scope:global
-fn_627_70 = .text:0x00000070; // type:function size:0x54
+dAcOBirdStatue_c_classInit__Fv = .text:0x00000070; // type:function size:0x54
 fn_627_D0 = .text:0x000000D0; // type:function size:0x98
 fn_627_170 = .text:0x00000170; // type:function size:0xA4
 fn_627_220 = .text:0x00000220; // type:function size:0x28
-fn_627_250 = .text:0x00000250; // type:function size:0x68
+__dt__16dAcOBirdStatue_cFv = .text:0x00000250; // type:function size:0x68
 _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
-lbl_627_section4_0 = .data:0x00000000; // type:object size:0x10
+g_profile_OBJ_BIRD_STATUE = .data:0x00000000; // type:object size:0x10
 lbl_627_section4_10 = .data:0x00000010; // type:object size:0xC
 lbl_627_section4_1C = .data:0x0000001C; // type:object size:0x24
 lbl_627_section4_40 = .data:0x00000040; // type:object size:0x80

@@ -311,7 +311,13 @@ def find_state_names(strings):
 
     return states
 
+RELS_WITH_MULTIPLE_STATE_MGRS = [
+    "d_lyt_file_select",
+    "d_a_b_girahimu3_first"
+]
+
 def process_file(file_name, data_blocks: List[DataObj], fns: List[Function]):
+    has_multiple_templates = file_name in RELS_WITH_MULTIPLE_STATE_MGRS
     strings = [s for b in data_blocks for s in get_strings(b)]
     name = build_class_name(strings, file_name)
 
@@ -347,8 +353,7 @@ def process_file(file_name, data_blocks: List[DataObj], fns: List[Function]):
                 include = include_
 
     for f in fns:
-        # two state classes
-        if "d_lyt_file_select" not in file_name:
+        if not has_multiple_templates:
             for (matchers, name_fn) in FUNCTION_MATCHERS:
                 if all(match(f) for match in matchers):
                     renames.append((f.name, name_fn(name)))
@@ -356,10 +361,7 @@ def process_file(file_name, data_blocks: List[DataObj], fns: List[Function]):
         if "bl __ct__10sStateID_cFPCc" in f.instructions:
             renames.append((f.name, f"__sinit_\\{file_name}_cpp"))
 
-    uses_state_system = any("bl __ct__10sStateID_cFPCc" in fn.instructions for fn in fns)
-    if "d_lyt_file_select" in file_name:
-        # two state classes
-        uses_state_system = False
+    uses_state_system = not has_multiple_templates and any("bl __ct__10sStateID_cFPCc" in fn.instructions for fn in fns)
     auto_functions = []
     state_decls = []
     state_defs = []
@@ -430,7 +432,7 @@ def process_file(file_name, data_blocks: List[DataObj], fns: List[Function]):
             f.write(f"\t/* 0x??? */ STATE_MGR_DECLARE({name});\n")
 
         f.write("};\n")
-        f.write("#endif")
+        f.write("#endif\n")
 
     with open(os.path.join('./src/REL/', file_path + '.cpp'), 'w+') as f:
         f.write(f"#include <{file_path}.h>\n\n")
