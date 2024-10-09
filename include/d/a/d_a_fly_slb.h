@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcFlySlb_c : public dAcObjBase_c { 
+class dAcFlySlb_c : public dAcObjBase_c {
 public:
-	dAcFlySlb_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcFlySlb_c() {}
+    dAcFlySlb_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcFlySlb_c() {}
 
-	STATE_FUNC_DECLARE(dAcFlySlb_c, Fly);
+    STATE_FUNC_DECLARE(dAcFlySlb_c, Fly);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcFlySlb_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcFlySlb_c);
 };
 
 #endif

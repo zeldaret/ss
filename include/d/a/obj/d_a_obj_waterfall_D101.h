@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOWaterFallD101_c : public dAcObjBase_c { 
+class dAcOWaterFallD101_c : public dAcObjBase_c {
 public:
-	dAcOWaterFallD101_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOWaterFallD101_c() {}
+    dAcOWaterFallD101_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOWaterFallD101_c() {}
 
-	STATE_FUNC_DECLARE(dAcOWaterFallD101_c, Wait);
+    STATE_FUNC_DECLARE(dAcOWaterFallD101_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOWaterFallD101_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOWaterFallD101_c);
 };
 
 #endif

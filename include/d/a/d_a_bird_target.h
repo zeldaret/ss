@@ -5,19 +5,19 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dBird_Target_c : public dAcObjBase_c { 
+class dBird_Target_c : public dAcObjBase_c {
 public:
-	dBird_Target_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dBird_Target_c() {}
+    dBird_Target_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dBird_Target_c() {}
 
-	STATE_FUNC_DECLARE(dBird_Target_c, Wait);
-	STATE_FUNC_DECLARE(dBird_Target_c, Move);
-	STATE_FUNC_DECLARE(dBird_Target_c, LevelUpDemo);
-	STATE_FUNC_DECLARE(dBird_Target_c, NpcWait);
-	STATE_FUNC_DECLARE(dBird_Target_c, NpcGlide);
+    STATE_FUNC_DECLARE(dBird_Target_c, Wait);
+    STATE_FUNC_DECLARE(dBird_Target_c, Move);
+    STATE_FUNC_DECLARE(dBird_Target_c, LevelUpDemo);
+    STATE_FUNC_DECLARE(dBird_Target_c, NpcWait);
+    STATE_FUNC_DECLARE(dBird_Target_c, NpcGlide);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dBird_Target_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dBird_Target_c);
 };
 
 #endif

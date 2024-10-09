@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOTimeBlock_c : public dAcObjBase_c { 
+class dAcOTimeBlock_c : public dAcObjBase_c {
 public:
-	dAcOTimeBlock_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOTimeBlock_c() {}
+    dAcOTimeBlock_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOTimeBlock_c() {}
 
-	STATE_FUNC_DECLARE(dAcOTimeBlock_c, Wait);
-	STATE_FUNC_DECLARE(dAcOTimeBlock_c, TimeSlip);
+    STATE_FUNC_DECLARE(dAcOTimeBlock_c, Wait);
+    STATE_FUNC_DECLARE(dAcOTimeBlock_c, TimeSlip);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOTimeBlock_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOTimeBlock_c);
 };
 
 #endif

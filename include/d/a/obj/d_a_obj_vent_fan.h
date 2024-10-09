@@ -5,17 +5,17 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOventFan_c : public dAcObjBase_c { 
+class dAcOventFan_c : public dAcObjBase_c {
 public:
-	dAcOventFan_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOventFan_c() {}
+    dAcOventFan_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOventFan_c() {}
 
-	STATE_FUNC_DECLARE(dAcOventFan_c, Normal);
-	STATE_FUNC_DECLARE(dAcOventFan_c, Reverse);
-	STATE_FUNC_DECLARE(dAcOventFan_c, Vacuum);
+    STATE_FUNC_DECLARE(dAcOventFan_c, Normal);
+    STATE_FUNC_DECLARE(dAcOventFan_c, Reverse);
+    STATE_FUNC_DECLARE(dAcOventFan_c, Vacuum);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOventFan_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOventFan_c);
 };
 
 #endif

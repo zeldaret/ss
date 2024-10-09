@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcObjBirdSp_c : public dAcObjBase_c { 
+class dAcObjBirdSp_c : public dAcObjBase_c {
 public:
-	dAcObjBirdSp_c() {}
-	virtual ~dAcObjBirdSp_c() {}
+    dAcObjBirdSp_c() {}
+    virtual ~dAcObjBirdSp_c() {}
 
 private:
 };

@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOdesertDebris_c : public dAcObjBase_c { 
+class dAcOdesertDebris_c : public dAcObjBase_c {
 public:
-	dAcOdesertDebris_c() {}
-	virtual ~dAcOdesertDebris_c() {}
+    dAcOdesertDebris_c() {}
+    virtual ~dAcOdesertDebris_c() {}
 
 private:
 };

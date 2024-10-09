@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgShutterFenceForbiddance_c : public dAcBase_c { 
+class dTgShutterFenceForbiddance_c : public dAcBase_c {
 public:
-	dTgShutterFenceForbiddance_c();
-	virtual ~dTgShutterFenceForbiddance_c();
+    dTgShutterFenceForbiddance_c();
+    virtual ~dTgShutterFenceForbiddance_c();
 
 private:
 };

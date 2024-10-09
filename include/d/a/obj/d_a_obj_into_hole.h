@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcArrow_c : public dAcObjBase_c { 
+class dAcArrow_c : public dAcObjBase_c {
 public:
-	dAcArrow_c() {}
-	virtual ~dAcArrow_c() {}
+    dAcArrow_c() {}
+    virtual ~dAcArrow_c() {}
 
 private:
 };

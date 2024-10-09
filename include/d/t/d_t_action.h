@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgAction_c : public dAcBase_c { 
+class dTgAction_c : public dAcBase_c {
 public:
-	dTgAction_c() {}
-	virtual ~dTgAction_c() {}
+    dTgAction_c() {}
+    virtual ~dTgAction_c() {}
 
 private:
 };

@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOdistantShip_c : public dAcObjBase_c { 
+class dAcOdistantShip_c : public dAcObjBase_c {
 public:
-	dAcOdistantShip_c() {}
-	virtual ~dAcOdistantShip_c() {}
+    dAcOdistantShip_c() {}
+    virtual ~dAcOdistantShip_c() {}
 
 private:
 };

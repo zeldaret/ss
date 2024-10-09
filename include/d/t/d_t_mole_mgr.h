@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgMoleMgr_c : public dAcBase_c { 
+class dTgMoleMgr_c : public dAcBase_c {
 public:
-	dTgMoleMgr_c() {}
-	virtual ~dTgMoleMgr_c() {}
+    dTgMoleMgr_c() {}
+    virtual ~dTgMoleMgr_c() {}
 
 private:
 };

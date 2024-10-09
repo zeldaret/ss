@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dTgColBombShield : public dAcBase_c { 
+class dTgColBombShield : public dAcBase_c {
 public:
-	dTgColBombShield() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dTgColBombShield() {}
+    dTgColBombShield() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dTgColBombShield() {}
 
-	STATE_FUNC_DECLARE(dTgColBombShield, Wait);
+    STATE_FUNC_DECLARE(dTgColBombShield, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dTgColBombShield);
+    /* 0x??? */ STATE_MGR_DECLARE(dTgColBombShield);
 };
 
 #endif

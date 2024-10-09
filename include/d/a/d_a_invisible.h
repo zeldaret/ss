@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcInvisible : public dAcObjBase_c { 
+class dAcInvisible : public dAcObjBase_c {
 public:
-	dAcInvisible() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcInvisible() {}
+    dAcInvisible() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcInvisible() {}
 
-	STATE_FUNC_DECLARE(dAcInvisible, Wait);
+    STATE_FUNC_DECLARE(dAcInvisible, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcInvisible);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcInvisible);
 };
 
 #endif

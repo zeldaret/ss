@@ -5,13 +5,13 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcGirahimuBase_c : public dAcEnBase_c { 
+class dAcGirahimuBase_c : public dAcEnBase_c {
 public:
-	dAcGirahimuBase_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcGirahimuBase_c() {}
+    dAcGirahimuBase_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcGirahimuBase_c() {}
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcGirahimuBase_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcGirahimuBase_c);
 };
 
 #endif

@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOdisplayOnlyNbs_c : public dAcObjBase_c { 
+class dAcOdisplayOnlyNbs_c : public dAcObjBase_c {
 public:
-	dAcOdisplayOnlyNbs_c() {}
-	virtual ~dAcOdisplayOnlyNbs_c() {}
+    dAcOdisplayOnlyNbs_c() {}
+    virtual ~dAcOdisplayOnlyNbs_c() {}
 
 private:
 };

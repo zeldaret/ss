@@ -3,10 +3,10 @@
 
 #include <d/d_base.h>
 
-class dLytFileSelectMgr_c : public dBase_c { 
+class dLytFileSelectMgr_c : public dBase_c {
 public:
-	dLytFileSelectMgr_c();
-	virtual ~dLytFileSelectMgr_c();
+    dLytFileSelectMgr_c();
+    virtual ~dLytFileSelectMgr_c();
 
 private:
 };

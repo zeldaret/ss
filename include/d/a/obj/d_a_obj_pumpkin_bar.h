@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOpumpkinBar_c : public dAcObjBase_c { 
+class dAcOpumpkinBar_c : public dAcObjBase_c {
 public:
-	dAcOpumpkinBar_c() {}
-	virtual ~dAcOpumpkinBar_c() {}
+    dAcOpumpkinBar_c() {}
+    virtual ~dAcOpumpkinBar_c() {}
 
 private:
 };

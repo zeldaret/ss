@@ -5,19 +5,19 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcObeltObstacle_c : public dAcObjBase_c { 
+class dAcObeltObstacle_c : public dAcObjBase_c {
 public:
-	dAcObeltObstacle_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcObeltObstacle_c() {}
+    dAcObeltObstacle_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcObeltObstacle_c() {}
 
-	STATE_FUNC_DECLARE(dAcObeltObstacle_c, Wait);
-	STATE_FUNC_DECLARE(dAcObeltObstacle_c, Init);
-	STATE_FUNC_DECLARE(dAcObeltObstacle_c, BeltMove);
-	STATE_FUNC_DECLARE(dAcObeltObstacle_c, TeniN);
-	STATE_FUNC_DECLARE(dAcObeltObstacle_c, TeniNonly);
+    STATE_FUNC_DECLARE(dAcObeltObstacle_c, Wait);
+    STATE_FUNC_DECLARE(dAcObeltObstacle_c, Init);
+    STATE_FUNC_DECLARE(dAcObeltObstacle_c, BeltMove);
+    STATE_FUNC_DECLARE(dAcObeltObstacle_c, TeniN);
+    STATE_FUNC_DECLARE(dAcObeltObstacle_c, TeniNonly);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcObeltObstacle_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcObeltObstacle_c);
 };
 
 #endif

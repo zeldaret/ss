@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOfortuneRing_c : public dAcObjBase_c { 
+class dAcOfortuneRing_c : public dAcObjBase_c {
 public:
-	dAcOfortuneRing_c();
-	virtual ~dAcOfortuneRing_c();
+    dAcOfortuneRing_c();
+    virtual ~dAcOfortuneRing_c();
 
-	STATE_FUNC_DECLARE(dAcOfortuneRing_c, Wait);
-	STATE_FUNC_DECLARE(dAcOfortuneRing_c, Play);
+    STATE_FUNC_DECLARE(dAcOfortuneRing_c, Wait);
+    STATE_FUNC_DECLARE(dAcOfortuneRing_c, Play);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOfortuneRing_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOfortuneRing_c);
 };
 
 #endif

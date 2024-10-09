@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOpuzzleIsland_c : public dAcObjBase_c { 
+class dAcOpuzzleIsland_c : public dAcObjBase_c {
 public:
-	dAcOpuzzleIsland_c() {}
-	virtual ~dAcOpuzzleIsland_c() {}
+    dAcOpuzzleIsland_c() {}
+    virtual ~dAcOpuzzleIsland_c() {}
 
 private:
 };

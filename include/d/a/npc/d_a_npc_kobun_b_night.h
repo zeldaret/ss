@@ -3,10 +3,10 @@
 
 #include <d/a/npc/d_a_npc.h>
 
-class dAcNpcKobunBNight_c : public dAcNpc_c { 
+class dAcNpcKobunBNight_c : public dAcNpc_c {
 public:
-	dAcNpcKobunBNight_c() {}
-	virtual ~dAcNpcKobunBNight_c() {}
+    dAcNpcKobunBNight_c() {}
+    virtual ~dAcNpcKobunBNight_c() {}
 
 private:
 };

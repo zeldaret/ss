@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOsiren2dmap_c : public dAcObjBase_c { 
+class dAcOsiren2dmap_c : public dAcObjBase_c {
 public:
-	dAcOsiren2dmap_c() {}
-	virtual ~dAcOsiren2dmap_c() {}
+    dAcOsiren2dmap_c() {}
+    virtual ~dAcOsiren2dmap_c() {}
 
 private:
 };

@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcE_Mr_Shield_c : public dAcEnBase_c { 
+class dAcE_Mr_Shield_c : public dAcEnBase_c {
 public:
-	dAcE_Mr_Shield_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcE_Mr_Shield_c() {}
+    dAcE_Mr_Shield_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcE_Mr_Shield_c() {}
 
-	STATE_FUNC_DECLARE(dAcE_Mr_Shield_c, Move);
-	STATE_FUNC_DECLARE(dAcE_Mr_Shield_c, Wait);
+    STATE_FUNC_DECLARE(dAcE_Mr_Shield_c, Move);
+    STATE_FUNC_DECLARE(dAcE_Mr_Shield_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcE_Mr_Shield_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcE_Mr_Shield_c);
 };
 
 #endif

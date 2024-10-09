@@ -5,13 +5,13 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcNpcSma2_c : public dAcNpc_c { 
+class dAcNpcSma2_c : public dAcNpc_c {
 public:
-	dAcNpcSma2_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcNpcSma2_c() {}
+    dAcNpcSma2_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcNpcSma2_c() {}
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcNpcSma2_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcNpcSma2_c);
 };
 
 #endif

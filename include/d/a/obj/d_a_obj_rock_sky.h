@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOrockSky_c : public dAcObjBase_c { 
+class dAcOrockSky_c : public dAcObjBase_c {
 public:
-	dAcOrockSky_c() {}
-	virtual ~dAcOrockSky_c() {}
+    dAcOrockSky_c() {}
+    virtual ~dAcOrockSky_c() {}
 
 private:
 };

@@ -5,17 +5,17 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOShutter_c : public dAcObjDoor_c { 
+class dAcOShutter_c : public dAcObjDoor_c {
 public:
-	dAcOShutter_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOShutter_c() {}
+    dAcOShutter_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOShutter_c() {}
 
-	STATE_FUNC_DECLARE(dAcOShutter_c, Wait);
-	STATE_FUNC_DECLARE(dAcOShutter_c, Open);
-	STATE_FUNC_DECLARE(dAcOShutter_c, Close);
+    STATE_FUNC_DECLARE(dAcOShutter_c, Wait);
+    STATE_FUNC_DECLARE(dAcOShutter_c, Open);
+    STATE_FUNC_DECLARE(dAcOShutter_c, Close);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOShutter_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOShutter_c);
 };
 
 #endif

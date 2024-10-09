@@ -5,18 +5,18 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcNpcSenpaiB_c : public dAcNpc_c { 
+class dAcNpcSenpaiB_c : public dAcNpc_c {
 public:
-	dAcNpcSenpaiB_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcNpcSenpaiB_c() {}
+    dAcNpcSenpaiB_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcNpcSenpaiB_c() {}
 
-	STATE_FUNC_DECLARE(dAcNpcSenpaiB_c, Think);
-	STATE_FUNC_DECLARE(dAcNpcSenpaiB_c, ThinkWait);
-	STATE_FUNC_DECLARE(dAcNpcSenpaiB_c, ThinkTurn);
-	STATE_FUNC_DECLARE(dAcNpcSenpaiB_c, ThinkRandom);
+    STATE_FUNC_DECLARE(dAcNpcSenpaiB_c, Think);
+    STATE_FUNC_DECLARE(dAcNpcSenpaiB_c, ThinkWait);
+    STATE_FUNC_DECLARE(dAcNpcSenpaiB_c, ThinkTurn);
+    STATE_FUNC_DECLARE(dAcNpcSenpaiB_c, ThinkRandom);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcNpcSenpaiB_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcNpcSenpaiB_c);
 };
 
 #endif

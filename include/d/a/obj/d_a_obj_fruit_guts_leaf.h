@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOFruitGutsLeaf_c : public dAcObjBase_c { 
+class dAcOFruitGutsLeaf_c : public dAcObjBase_c {
 public:
-	dAcOFruitGutsLeaf_c() {}
-	virtual ~dAcOFruitGutsLeaf_c() {}
+    dAcOFruitGutsLeaf_c() {}
+    virtual ~dAcOFruitGutsLeaf_c() {}
 
 private:
 };

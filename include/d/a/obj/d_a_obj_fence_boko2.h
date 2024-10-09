@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOfenceBoko2_c : public dAcObjBase_c { 
+class dAcOfenceBoko2_c : public dAcObjBase_c {
 public:
-	dAcOfenceBoko2_c() {}
-	virtual ~dAcOfenceBoko2_c() {}
+    dAcOfenceBoko2_c() {}
+    virtual ~dAcOfenceBoko2_c() {}
 
 private:
 };

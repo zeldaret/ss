@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOSwWhipLever_c : public dAcObjBase_c { 
+class dAcOSwWhipLever_c : public dAcObjBase_c {
 public:
-	dAcOSwWhipLever_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOSwWhipLever_c() {}
+    dAcOSwWhipLever_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOSwWhipLever_c() {}
 
-	STATE_FUNC_DECLARE(dAcOSwWhipLever_c, Wait);
+    STATE_FUNC_DECLARE(dAcOSwWhipLever_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOSwWhipLever_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOSwWhipLever_c);
 };
 
 #endif

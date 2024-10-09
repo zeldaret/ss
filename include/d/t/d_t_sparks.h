@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dTgSparksTag : public dAcBase_c { 
+class dTgSparksTag : public dAcBase_c {
 public:
-	dTgSparksTag() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dTgSparksTag() {}
+    dTgSparksTag() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dTgSparksTag() {}
 
-	STATE_FUNC_DECLARE(dTgSparksTag, Wait);
+    STATE_FUNC_DECLARE(dTgSparksTag, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dTgSparksTag);
+    /* 0x??? */ STATE_MGR_DECLARE(dTgSparksTag);
 };
 
 #endif

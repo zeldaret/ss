@@ -5,18 +5,18 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcEChb_c : public dAcEnBase_c { 
+class dAcEChb_c : public dAcEnBase_c {
 public:
-	dAcEChb_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcEChb_c() {}
+    dAcEChb_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcEChb_c() {}
 
-	STATE_FUNC_DECLARE(dAcEChb_c, Standby);
-	STATE_FUNC_DECLARE(dAcEChb_c, Chase);
-	STATE_FUNC_DECLARE(dAcEChb_c, Start);
-	STATE_FUNC_DECLARE(dAcEChb_c, Attack);
+    STATE_FUNC_DECLARE(dAcEChb_c, Standby);
+    STATE_FUNC_DECLARE(dAcEChb_c, Chase);
+    STATE_FUNC_DECLARE(dAcEChb_c, Start);
+    STATE_FUNC_DECLARE(dAcEChb_c, Attack);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcEChb_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcEChb_c);
 };
 
 #endif

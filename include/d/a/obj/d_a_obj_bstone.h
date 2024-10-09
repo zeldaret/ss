@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcObstonec : public dAcObjBase_c { 
+class dAcObstonec : public dAcObjBase_c {
 public:
-	dAcObstonec() {}
-	virtual ~dAcObstonec() {}
+    dAcObstonec() {}
+    virtual ~dAcObstonec() {}
 
 private:
 };

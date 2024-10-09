@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOshrineBefInside_c : public dAcObjBase_c { 
+class dAcOshrineBefInside_c : public dAcObjBase_c {
 public:
-	dAcOshrineBefInside_c() {}
-	virtual ~dAcOshrineBefInside_c() {}
+    dAcOshrineBefInside_c() {}
+    virtual ~dAcOshrineBefInside_c() {}
 
 private:
 };

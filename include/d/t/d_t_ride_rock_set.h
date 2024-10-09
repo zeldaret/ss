@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgRideRockSet_c : public dAcBase_c { 
+class dTgRideRockSet_c : public dAcBase_c {
 public:
-	dTgRideRockSet_c() {}
-	virtual ~dTgRideRockSet_c() {}
+    dTgRideRockSet_c() {}
+    virtual ~dTgRideRockSet_c() {}
 
 private:
 };

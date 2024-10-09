@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOSwDir_c : public dAcObjBase_c { 
+class dAcOSwDir_c : public dAcObjBase_c {
 public:
-	dAcOSwDir_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOSwDir_c() {}
+    dAcOSwDir_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOSwDir_c() {}
 
-	STATE_FUNC_DECLARE(dAcOSwDir_c, Wait);
-	STATE_FUNC_DECLARE(dAcOSwDir_c, Done);
+    STATE_FUNC_DECLARE(dAcOSwDir_c, Wait);
+    STATE_FUNC_DECLARE(dAcOSwDir_c, Done);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOSwDir_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOSwDir_c);
 };
 
 #endif

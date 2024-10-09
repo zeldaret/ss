@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOgodMark_c : public dAcObjBase_c { 
+class dAcOgodMark_c : public dAcObjBase_c {
 public:
-	dAcOgodMark_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOgodMark_c() {}
+    dAcOgodMark_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOgodMark_c() {}
 
-	STATE_FUNC_DECLARE(dAcOgodMark_c, Wait);
-	STATE_FUNC_DECLARE(dAcOgodMark_c, Shine);
+    STATE_FUNC_DECLARE(dAcOgodMark_c, Wait);
+    STATE_FUNC_DECLARE(dAcOgodMark_c, Shine);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOgodMark_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOgodMark_c);
 };
 
 #endif

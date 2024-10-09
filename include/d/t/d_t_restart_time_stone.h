@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgRestartTimeStone_c : public dAcBase_c { 
+class dTgRestartTimeStone_c : public dAcBase_c {
 public:
-	dTgRestartTimeStone_c() {}
-	virtual ~dTgRestartTimeStone_c() {}
+    dTgRestartTimeStone_c() {}
+    virtual ~dTgRestartTimeStone_c() {}
 
 private:
 };

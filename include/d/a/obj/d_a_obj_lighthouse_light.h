@@ -5,17 +5,17 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOlighthouseLight_c : public dAcObjBase_c { 
+class dAcOlighthouseLight_c : public dAcObjBase_c {
 public:
-	dAcOlighthouseLight_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOlighthouseLight_c() {}
+    dAcOlighthouseLight_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOlighthouseLight_c() {}
 
-	STATE_FUNC_DECLARE(dAcOlighthouseLight_c, Wait);
-	STATE_FUNC_DECLARE(dAcOlighthouseLight_c, Move);
-	STATE_FUNC_DECLARE(dAcOlighthouseLight_c, Appear);
+    STATE_FUNC_DECLARE(dAcOlighthouseLight_c, Wait);
+    STATE_FUNC_DECLARE(dAcOlighthouseLight_c, Move);
+    STATE_FUNC_DECLARE(dAcOlighthouseLight_c, Appear);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOlighthouseLight_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOlighthouseLight_c);
 };
 
 #endif

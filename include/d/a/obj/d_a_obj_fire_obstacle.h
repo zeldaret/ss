@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOfireObstacle_c : public dAcObjBase_c { 
+class dAcOfireObstacle_c : public dAcObjBase_c {
 public:
-	dAcOfireObstacle_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOfireObstacle_c() {}
+    dAcOfireObstacle_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOfireObstacle_c() {}
 
-	STATE_FUNC_DECLARE(dAcOfireObstacle_c, Wait);
-	STATE_FUNC_DECLARE(dAcOfireObstacle_c, Vanish);
+    STATE_FUNC_DECLARE(dAcOfireObstacle_c, Wait);
+    STATE_FUNC_DECLARE(dAcOfireObstacle_c, Vanish);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOfireObstacle_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOfireObstacle_c);
 };
 
 #endif

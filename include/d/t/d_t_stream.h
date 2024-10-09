@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgStream_c : public dAcBase_c { 
+class dTgStream_c : public dAcBase_c {
 public:
-	dTgStream_c() {}
-	virtual ~dTgStream_c() {}
+    dTgStream_c() {}
+    virtual ~dTgStream_c() {}
 
 private:
 };

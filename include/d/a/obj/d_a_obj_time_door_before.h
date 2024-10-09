@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOTimeDoorBefore_c : public dAcObjBase_c { 
+class dAcOTimeDoorBefore_c : public dAcObjBase_c {
 public:
-	dAcOTimeDoorBefore_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOTimeDoorBefore_c() {}
+    dAcOTimeDoorBefore_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOTimeDoorBefore_c() {}
 
-	STATE_FUNC_DECLARE(dAcOTimeDoorBefore_c, Wait);
+    STATE_FUNC_DECLARE(dAcOTimeDoorBefore_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOTimeDoorBefore_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOTimeDoorBefore_c);
 };
 
 #endif

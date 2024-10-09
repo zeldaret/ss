@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgBeltObstacle_c : public dAcBase_c { 
+class dTgBeltObstacle_c : public dAcBase_c {
 public:
-	dTgBeltObstacle_c() {}
-	virtual ~dTgBeltObstacle_c() {}
+    dTgBeltObstacle_c() {}
+    virtual ~dTgBeltObstacle_c() {}
 
 private:
 };

@@ -5,19 +5,19 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOlighthouseHarp_c : public dAcObjBase_c { 
+class dAcOlighthouseHarp_c : public dAcObjBase_c {
 public:
-	dAcOlighthouseHarp_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOlighthouseHarp_c() {}
+    dAcOlighthouseHarp_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOlighthouseHarp_c() {}
 
-	STATE_FUNC_DECLARE(dAcOlighthouseHarp_c, Wait);
-	STATE_FUNC_DECLARE(dAcOlighthouseHarp_c, Move);
-	STATE_FUNC_DECLARE(dAcOlighthouseHarp_c, Appear);
-	STATE_FUNC_DECLARE(dAcOlighthouseHarp_c, Roll);
-	STATE_FUNC_DECLARE(dAcOlighthouseHarp_c, HarpFinish);
+    STATE_FUNC_DECLARE(dAcOlighthouseHarp_c, Wait);
+    STATE_FUNC_DECLARE(dAcOlighthouseHarp_c, Move);
+    STATE_FUNC_DECLARE(dAcOlighthouseHarp_c, Appear);
+    STATE_FUNC_DECLARE(dAcOlighthouseHarp_c, Roll);
+    STATE_FUNC_DECLARE(dAcOlighthouseHarp_c, HarpFinish);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOlighthouseHarp_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOlighthouseHarp_c);
 };
 
 #endif

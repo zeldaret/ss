@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOKanbanStone_c : public dAcObjBase_c { 
+class dAcOKanbanStone_c : public dAcObjBase_c {
 public:
-	dAcOKanbanStone_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOKanbanStone_c() {}
+    dAcOKanbanStone_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOKanbanStone_c() {}
 
-	STATE_FUNC_DECLARE(dAcOKanbanStone_c, Wait);
-	STATE_FUNC_DECLARE(dAcOKanbanStone_c, Message);
+    STATE_FUNC_DECLARE(dAcOKanbanStone_c, Wait);
+    STATE_FUNC_DECLARE(dAcOKanbanStone_c, Message);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOKanbanStone_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOKanbanStone_c);
 };
 
 #endif

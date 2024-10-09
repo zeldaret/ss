@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgSound_c : public dAcBase_c { 
+class dTgSound_c : public dAcBase_c {
 public:
-	dTgSound_c() {}
-	virtual ~dTgSound_c() {}
+    dTgSound_c() {}
+    virtual ~dTgSound_c() {}
 
 private:
 };

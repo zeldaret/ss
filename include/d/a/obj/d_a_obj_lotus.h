@@ -5,18 +5,18 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOLotus_c : public dAcObjBase_c { 
+class dAcOLotus_c : public dAcObjBase_c {
 public:
-	dAcOLotus_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOLotus_c() {}
+    dAcOLotus_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOLotus_c() {}
 
-	STATE_FUNC_DECLARE(dAcOLotus_c, Wait);
-	STATE_FUNC_DECLARE(dAcOLotus_c, Reverse);
-	STATE_FUNC_DECLARE(dAcOLotus_c, Rotate);
-	STATE_FUNC_DECLARE(dAcOLotus_c, EndRotate);
+    STATE_FUNC_DECLARE(dAcOLotus_c, Wait);
+    STATE_FUNC_DECLARE(dAcOLotus_c, Reverse);
+    STATE_FUNC_DECLARE(dAcOLotus_c, Rotate);
+    STATE_FUNC_DECLARE(dAcOLotus_c, EndRotate);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOLotus_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOLotus_c);
 };
 
 #endif

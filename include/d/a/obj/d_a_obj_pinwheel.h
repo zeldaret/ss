@@ -5,18 +5,18 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOpinwheel_c : public dAcObjBase_c { 
+class dAcOpinwheel_c : public dAcObjBase_c {
 public:
-	dAcOpinwheel_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOpinwheel_c() {}
+    dAcOpinwheel_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOpinwheel_c() {}
 
-	STATE_FUNC_DECLARE(dAcOpinwheel_c, Wait);
-	STATE_FUNC_DECLARE(dAcOpinwheel_c, Acceleration);
-	STATE_FUNC_DECLARE(dAcOpinwheel_c, RollMaxSpeed);
-	STATE_FUNC_DECLARE(dAcOpinwheel_c, Deceleration);
+    STATE_FUNC_DECLARE(dAcOpinwheel_c, Wait);
+    STATE_FUNC_DECLARE(dAcOpinwheel_c, Acceleration);
+    STATE_FUNC_DECLARE(dAcOpinwheel_c, RollMaxSpeed);
+    STATE_FUNC_DECLARE(dAcOpinwheel_c, Deceleration);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOpinwheel_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOpinwheel_c);
 };
 
 #endif

@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOtogeTrap_c : public dAcObjBase_c { 
+class dAcOtogeTrap_c : public dAcObjBase_c {
 public:
-	dAcOtogeTrap_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOtogeTrap_c() {}
+    dAcOtogeTrap_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOtogeTrap_c() {}
 
-	STATE_FUNC_DECLARE(dAcOtogeTrap_c, Wait);
-	STATE_FUNC_DECLARE(dAcOtogeTrap_c, Move);
+    STATE_FUNC_DECLARE(dAcOtogeTrap_c, Wait);
+    STATE_FUNC_DECLARE(dAcOtogeTrap_c, Move);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOtogeTrap_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOtogeTrap_c);
 };
 
 #endif

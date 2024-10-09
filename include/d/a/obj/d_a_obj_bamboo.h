@@ -5,17 +5,17 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcObamboo_c : public dAcObjBase_c { 
+class dAcObamboo_c : public dAcObjBase_c {
 public:
-	dAcObamboo_c();
-	virtual ~dAcObamboo_c();
+    dAcObamboo_c();
+    virtual ~dAcObamboo_c();
 
-	STATE_FUNC_DECLARE(dAcObamboo_c, Wait);
-	STATE_FUNC_DECLARE(dAcObamboo_c, Fall);
-	STATE_FUNC_DECLARE(dAcObamboo_c, CutMark);
+    STATE_FUNC_DECLARE(dAcObamboo_c, Wait);
+    STATE_FUNC_DECLARE(dAcObamboo_c, Fall);
+    STATE_FUNC_DECLARE(dAcObamboo_c, CutMark);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcObamboo_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcObamboo_c);
 };
 
 #endif

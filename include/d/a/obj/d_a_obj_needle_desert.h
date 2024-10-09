@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcONeedleDesert_c : public dAcObjBase_c { 
+class dAcONeedleDesert_c : public dAcObjBase_c {
 public:
-	dAcONeedleDesert_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcONeedleDesert_c() {}
+    dAcONeedleDesert_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcONeedleDesert_c() {}
 
-	STATE_FUNC_DECLARE(dAcONeedleDesert_c, On);
-	STATE_FUNC_DECLARE(dAcONeedleDesert_c, Off);
+    STATE_FUNC_DECLARE(dAcONeedleDesert_c, On);
+    STATE_FUNC_DECLARE(dAcONeedleDesert_c, Off);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcONeedleDesert_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcONeedleDesert_c);
 };
 
 #endif

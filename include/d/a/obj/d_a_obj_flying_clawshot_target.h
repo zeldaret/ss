@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOFlyingClawshotTarget_c : public dAcObjBase_c { 
+class dAcOFlyingClawshotTarget_c : public dAcObjBase_c {
 public:
-	dAcOFlyingClawshotTarget_c() {}
-	virtual ~dAcOFlyingClawshotTarget_c() {}
+    dAcOFlyingClawshotTarget_c() {}
+    virtual ~dAcOFlyingClawshotTarget_c() {}
 
 private:
 };

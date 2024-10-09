@@ -5,13 +5,13 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcObjPropera_c : public dAcObjBase_c { 
+class dAcObjPropera_c : public dAcObjBase_c {
 public:
-	dAcObjPropera_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcObjPropera_c() {}
+    dAcObjPropera_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcObjPropera_c() {}
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcObjPropera_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcObjPropera_c);
 };
 
 #endif

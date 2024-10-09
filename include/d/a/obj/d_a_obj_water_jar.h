@@ -5,13 +5,13 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOWaterJar_c : public dAcObjBase_c { 
+class dAcOWaterJar_c : public dAcObjBase_c {
 public:
-	dAcOWaterJar_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOWaterJar_c() {}
+    dAcOWaterJar_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOWaterJar_c() {}
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOWaterJar_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOWaterJar_c);
 };
 
 #endif

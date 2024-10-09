@@ -3,10 +3,10 @@
 
 #include <d/a/npc/d_a_npc.h>
 
-class dAcNpcSalbageRobotFlyBase_c : public dAcNpc_c { 
+class dAcNpcSalbageRobotFlyBase_c : public dAcNpc_c {
 public:
-	dAcNpcSalbageRobotFlyBase_c() {}
-	virtual ~dAcNpcSalbageRobotFlyBase_c() {}
+    dAcNpcSalbageRobotFlyBase_c() {}
+    virtual ~dAcNpcSalbageRobotFlyBase_c() {}
 
 private:
 };

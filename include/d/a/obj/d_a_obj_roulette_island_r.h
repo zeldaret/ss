@@ -5,18 +5,18 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOrouletteIslandR_c : public dAcObjBase_c { 
+class dAcOrouletteIslandR_c : public dAcObjBase_c {
 public:
-	dAcOrouletteIslandR_c();
-	virtual ~dAcOrouletteIslandR_c();
+    dAcOrouletteIslandR_c();
+    virtual ~dAcOrouletteIslandR_c();
 
-	STATE_FUNC_DECLARE(dAcOrouletteIslandR_c, Wait);
-	STATE_FUNC_DECLARE(dAcOrouletteIslandR_c, Move);
-	STATE_FUNC_DECLARE(dAcOrouletteIslandR_c, Reduce);
-	STATE_FUNC_DECLARE(dAcOrouletteIslandR_c, End);
+    STATE_FUNC_DECLARE(dAcOrouletteIslandR_c, Wait);
+    STATE_FUNC_DECLARE(dAcOrouletteIslandR_c, Move);
+    STATE_FUNC_DECLARE(dAcOrouletteIslandR_c, Reduce);
+    STATE_FUNC_DECLARE(dAcOrouletteIslandR_c, End);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOrouletteIslandR_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOrouletteIslandR_c);
 };
 
 #endif

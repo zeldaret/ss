@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOF400GateLeaf_c : public dAcObjBase_c { 
+class dAcOF400GateLeaf_c : public dAcObjBase_c {
 public:
-	dAcOF400GateLeaf_c() {}
-	virtual ~dAcOF400GateLeaf_c() {}
+    dAcOF400GateLeaf_c() {}
+    virtual ~dAcOF400GateLeaf_c() {}
 
 private:
 };

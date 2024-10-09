@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOruinedSave_c : public dAcObjBase_c { 
+class dAcOruinedSave_c : public dAcObjBase_c {
 public:
-	dAcOruinedSave_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOruinedSave_c() {}
+    dAcOruinedSave_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOruinedSave_c() {}
 
-	STATE_FUNC_DECLARE(dAcOruinedSave_c, Wait);
-	STATE_FUNC_DECLARE(dAcOruinedSave_c, Vanish);
+    STATE_FUNC_DECLARE(dAcOruinedSave_c, Wait);
+    STATE_FUNC_DECLARE(dAcOruinedSave_c, Vanish);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOruinedSave_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOruinedSave_c);
 };
 
 #endif

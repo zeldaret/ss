@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgBarrelPos_c : public dAcBase_c { 
+class dTgBarrelPos_c : public dAcBase_c {
 public:
-	dTgBarrelPos_c() {}
-	virtual ~dTgBarrelPos_c() {}
+    dTgBarrelPos_c() {}
+    virtual ~dTgBarrelPos_c() {}
 
 private:
 };

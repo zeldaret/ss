@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dMistTag_c : public dAcBase_c { 
+class dMistTag_c : public dAcBase_c {
 public:
-	dMistTag_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dMistTag_c() {}
+    dMistTag_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dMistTag_c() {}
 
-	STATE_FUNC_DECLARE(dMistTag_c, Wait);
+    STATE_FUNC_DECLARE(dMistTag_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dMistTag_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dMistTag_c);
 };
 
 #endif

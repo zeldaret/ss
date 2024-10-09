@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgTelop_c : public dAcBase_c { 
+class dTgTelop_c : public dAcBase_c {
 public:
-	dTgTelop_c() {}
-	virtual ~dTgTelop_c() {}
+    dTgTelop_c() {}
+    virtual ~dTgTelop_c() {}
 
 private:
 };

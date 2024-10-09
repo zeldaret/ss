@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcODayNight_c : public dAcObjBase_c { 
+class dAcODayNight_c : public dAcObjBase_c {
 public:
-	dAcODayNight_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcODayNight_c() {}
+    dAcODayNight_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcODayNight_c() {}
 
-	STATE_FUNC_DECLARE(dAcODayNight_c, Wait);
+    STATE_FUNC_DECLARE(dAcODayNight_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcODayNight_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcODayNight_c);
 };
 
 #endif

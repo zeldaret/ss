@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgSceneChange_c : public dAcBase_c { 
+class dTgSceneChange_c : public dAcBase_c {
 public:
-	dTgSceneChange_c() {}
-	virtual ~dTgSceneChange_c() {}
+    dTgSceneChange_c() {}
+    virtual ~dTgSceneChange_c() {}
 
 private:
 };

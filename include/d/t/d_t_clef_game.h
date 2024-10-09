@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgClefGame_c : public dAcBase_c { 
+class dTgClefGame_c : public dAcBase_c {
 public:
-	dTgClefGame_c() {}
-	virtual ~dTgClefGame_c() {}
+    dTgClefGame_c() {}
+    virtual ~dTgClefGame_c() {}
 
 private:
 };

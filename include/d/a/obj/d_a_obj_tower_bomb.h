@@ -5,17 +5,17 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOTowerBomb_c : public dAcObjBase_c { 
+class dAcOTowerBomb_c : public dAcObjBase_c {
 public:
-	dAcOTowerBomb_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOTowerBomb_c() {}
+    dAcOTowerBomb_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOTowerBomb_c() {}
 
-	STATE_FUNC_DECLARE(dAcOTowerBomb_c, Wait);
-	STATE_FUNC_DECLARE(dAcOTowerBomb_c, Bomb);
-	STATE_FUNC_DECLARE(dAcOTowerBomb_c, Broken);
+    STATE_FUNC_DECLARE(dAcOTowerBomb_c, Wait);
+    STATE_FUNC_DECLARE(dAcOTowerBomb_c, Bomb);
+    STATE_FUNC_DECLARE(dAcOTowerBomb_c, Broken);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOTowerBomb_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOTowerBomb_c);
 };
 
 #endif

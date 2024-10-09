@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgAutoMessage_c : public dAcBase_c { 
+class dTgAutoMessage_c : public dAcBase_c {
 public:
-	dTgAutoMessage_c() {}
-	virtual ~dTgAutoMessage_c() {}
+    dTgAutoMessage_c() {}
+    virtual ~dTgAutoMessage_c() {}
 
 private:
 };

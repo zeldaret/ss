@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgGateToGround_c : public dAcBase_c { 
+class dTgGateToGround_c : public dAcBase_c {
 public:
-	dTgGateToGround_c() {}
-	virtual ~dTgGateToGround_c() {}
+    dTgGateToGround_c() {}
+    virtual ~dTgGateToGround_c() {}
 
 private:
 };

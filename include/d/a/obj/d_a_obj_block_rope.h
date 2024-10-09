@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOblockRope_c : public dAcObjBase_c { 
+class dAcOblockRope_c : public dAcObjBase_c {
 public:
-	dAcOblockRope_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOblockRope_c() {}
+    dAcOblockRope_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOblockRope_c() {}
 
-	STATE_FUNC_DECLARE(dAcOblockRope_c, Wait);
-	STATE_FUNC_DECLARE(dAcOblockRope_c, Delete);
+    STATE_FUNC_DECLARE(dAcOblockRope_c, Wait);
+    STATE_FUNC_DECLARE(dAcOblockRope_c, Delete);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOblockRope_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOblockRope_c);
 };
 
 #endif

@@ -5,19 +5,19 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcInsectFirefly_c : public dAcObjBase_c { 
+class dAcInsectFirefly_c : public dAcObjBase_c {
 public:
-	dAcInsectFirefly_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcInsectFirefly_c() {}
+    dAcInsectFirefly_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcInsectFirefly_c() {}
 
-	STATE_FUNC_DECLARE(dAcInsectFirefly_c, Move);
-	STATE_FUNC_DECLARE(dAcInsectFirefly_c, Escape);
-	STATE_FUNC_DECLARE(dAcInsectFirefly_c, Fly);
-	STATE_FUNC_DECLARE(dAcInsectFirefly_c, Finalize);
-	STATE_FUNC_DECLARE(dAcInsectFirefly_c, Dead);
+    STATE_FUNC_DECLARE(dAcInsectFirefly_c, Move);
+    STATE_FUNC_DECLARE(dAcInsectFirefly_c, Escape);
+    STATE_FUNC_DECLARE(dAcInsectFirefly_c, Fly);
+    STATE_FUNC_DECLARE(dAcInsectFirefly_c, Finalize);
+    STATE_FUNC_DECLARE(dAcInsectFirefly_c, Dead);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcInsectFirefly_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcInsectFirefly_c);
 };
 
 #endif

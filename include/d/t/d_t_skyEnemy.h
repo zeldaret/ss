@@ -5,22 +5,22 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dTgSkyEnemyTag : public dAcBase_c { 
+class dTgSkyEnemyTag : public dAcBase_c {
 public:
-	dTgSkyEnemyTag() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dTgSkyEnemyTag() {}
+    dTgSkyEnemyTag() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dTgSkyEnemyTag() {}
 
-	STATE_FUNC_DECLARE(dTgSkyEnemyTag, Wait);
-	STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthRupeeGue);
-	STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthSkytail);
-	STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthTornado);
-	STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthBirdNpc);
-	STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthFrontBirdNpc);
-	STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthNusiNpc);
-	STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthHighSpeed);
+    STATE_FUNC_DECLARE(dTgSkyEnemyTag, Wait);
+    STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthRupeeGue);
+    STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthSkytail);
+    STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthTornado);
+    STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthBirdNpc);
+    STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthFrontBirdNpc);
+    STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthNusiNpc);
+    STATE_FUNC_DECLARE(dTgSkyEnemyTag, BirthHighSpeed);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dTgSkyEnemyTag);
+    /* 0x??? */ STATE_MGR_DECLARE(dTgSkyEnemyTag);
 };
 
 #endif

@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOblowCoal_c : public dAcObjBase_c { 
+class dAcOblowCoal_c : public dAcObjBase_c {
 public:
-	dAcOblowCoal_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOblowCoal_c() {}
+    dAcOblowCoal_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOblowCoal_c() {}
 
-	STATE_FUNC_DECLARE(dAcOblowCoal_c, Wait);
-	STATE_FUNC_DECLARE(dAcOblowCoal_c, Dead);
+    STATE_FUNC_DECLARE(dAcOblowCoal_c, Wait);
+    STATE_FUNC_DECLARE(dAcOblowCoal_c, Dead);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOblowCoal_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOblowCoal_c);
 };
 
 #endif

@@ -5,20 +5,20 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcEHidory_c : public dAcEnBase_c { 
+class dAcEHidory_c : public dAcEnBase_c {
 public:
-	dAcEHidory_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcEHidory_c() {}
+    dAcEHidory_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcEHidory_c() {}
 
-	STATE_FUNC_DECLARE(dAcEHidory_c, Wait);
-	STATE_FUNC_DECLARE(dAcEHidory_c, Hovering);
-	STATE_FUNC_DECLARE(dAcEHidory_c, Attack);
-	STATE_FUNC_DECLARE(dAcEHidory_c, Whip_Damage);
-	STATE_FUNC_DECLARE(dAcEHidory_c, Damage);
-	STATE_FUNC_DECLARE(dAcEHidory_c, Death);
+    STATE_FUNC_DECLARE(dAcEHidory_c, Wait);
+    STATE_FUNC_DECLARE(dAcEHidory_c, Hovering);
+    STATE_FUNC_DECLARE(dAcEHidory_c, Attack);
+    STATE_FUNC_DECLARE(dAcEHidory_c, Whip_Damage);
+    STATE_FUNC_DECLARE(dAcEHidory_c, Damage);
+    STATE_FUNC_DECLARE(dAcEHidory_c, Death);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcEHidory_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcEHidory_c);
 };
 
 #endif

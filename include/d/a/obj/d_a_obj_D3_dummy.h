@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOD3Dummy_c : public dAcObjBase_c { 
+class dAcOD3Dummy_c : public dAcObjBase_c {
 public:
-	dAcOD3Dummy_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOD3Dummy_c() {}
+    dAcOD3Dummy_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOD3Dummy_c() {}
 
-	STATE_FUNC_DECLARE(dAcOD3Dummy_c, Wait);
+    STATE_FUNC_DECLARE(dAcOD3Dummy_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOD3Dummy_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOD3Dummy_c);
 };
 
 #endif

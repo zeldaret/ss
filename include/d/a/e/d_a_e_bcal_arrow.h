@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcEbcalarrow_c : public dAcEnBase_c { 
+class dAcEbcalarrow_c : public dAcEnBase_c {
 public:
-	dAcEbcalarrow_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcEbcalarrow_c() {}
+    dAcEbcalarrow_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcEbcalarrow_c() {}
 
-	STATE_FUNC_DECLARE(dAcEbcalarrow_c, Move);
+    STATE_FUNC_DECLARE(dAcEbcalarrow_c, Move);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcEbcalarrow_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcEbcalarrow_c);
 };
 
 #endif

@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dAcFishMgr_c : public dAcBase_c { 
+class dAcFishMgr_c : public dAcBase_c {
 public:
-	dAcFishMgr_c() {}
-	virtual ~dAcFishMgr_c() {}
+    dAcFishMgr_c() {}
+    virtual ~dAcFishMgr_c() {}
 
 private:
 };

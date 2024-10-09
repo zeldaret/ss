@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgPltchg_c : public dAcBase_c { 
+class dTgPltchg_c : public dAcBase_c {
 public:
-	dTgPltchg_c() {}
-	virtual ~dTgPltchg_c() {}
+    dTgPltchg_c() {}
+    virtual ~dTgPltchg_c() {}
 
 private:
 };

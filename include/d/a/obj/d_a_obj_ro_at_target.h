@@ -5,17 +5,17 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOroAtTarget_c : public dAcObjBase_c { 
+class dAcOroAtTarget_c : public dAcObjBase_c {
 public:
-	dAcOroAtTarget_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOroAtTarget_c() {}
+    dAcOroAtTarget_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOroAtTarget_c() {}
 
-	STATE_FUNC_DECLARE(dAcOroAtTarget_c, Wait);
-	STATE_FUNC_DECLARE(dAcOroAtTarget_c, Play);
-	STATE_FUNC_DECLARE(dAcOroAtTarget_c, Death);
+    STATE_FUNC_DECLARE(dAcOroAtTarget_c, Wait);
+    STATE_FUNC_DECLARE(dAcOroAtTarget_c, Play);
+    STATE_FUNC_DECLARE(dAcOroAtTarget_c, Death);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOroAtTarget_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOroAtTarget_c);
 };
 
 #endif

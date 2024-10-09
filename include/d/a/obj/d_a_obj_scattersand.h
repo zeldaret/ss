@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOScatterSand : public dAcObjBase_c { 
+class dAcOScatterSand : public dAcObjBase_c {
 public:
-	dAcOScatterSand() {}
-	virtual ~dAcOScatterSand() {}
+    dAcOScatterSand() {}
+    virtual ~dAcOScatterSand() {}
 
 private:
 };

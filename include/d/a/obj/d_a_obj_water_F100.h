@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOwaterF100_c : public dAcObjBase_c { 
+class dAcOwaterF100_c : public dAcObjBase_c {
 public:
-	dAcOwaterF100_c() {}
-	virtual ~dAcOwaterF100_c() {}
+    dAcOwaterF100_c() {}
+    virtual ~dAcOwaterF100_c() {}
 
 private:
 };

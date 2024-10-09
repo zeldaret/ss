@@ -5,19 +5,19 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcNpcDiveGameJudge_c : public dAcNpc_c { 
+class dAcNpcDiveGameJudge_c : public dAcNpc_c {
 public:
-	dAcNpcDiveGameJudge_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcNpcDiveGameJudge_c() {}
+    dAcNpcDiveGameJudge_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcNpcDiveGameJudge_c() {}
 
-	STATE_FUNC_DECLARE(dAcNpcDiveGameJudge_c, Sad);
-	STATE_FUNC_DECLARE(dAcNpcDiveGameJudge_c, PreWatch);
-	STATE_FUNC_DECLARE(dAcNpcDiveGameJudge_c, Watch);
-	STATE_FUNC_DECLARE(dAcNpcDiveGameJudge_c, Escape);
-	STATE_FUNC_DECLARE(dAcNpcDiveGameJudge_c, EscapeEnd);
+    STATE_FUNC_DECLARE(dAcNpcDiveGameJudge_c, Sad);
+    STATE_FUNC_DECLARE(dAcNpcDiveGameJudge_c, PreWatch);
+    STATE_FUNC_DECLARE(dAcNpcDiveGameJudge_c, Watch);
+    STATE_FUNC_DECLARE(dAcNpcDiveGameJudge_c, Escape);
+    STATE_FUNC_DECLARE(dAcNpcDiveGameJudge_c, EscapeEnd);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcNpcDiveGameJudge_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcNpcDiveGameJudge_c);
 };
 
 #endif

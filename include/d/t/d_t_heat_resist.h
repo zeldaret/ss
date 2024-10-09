@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgHeatResist_c : public dAcBase_c { 
+class dTgHeatResist_c : public dAcBase_c {
 public:
-	dTgHeatResist_c() {}
-	virtual ~dTgHeatResist_c() {}
+    dTgHeatResist_c() {}
+    virtual ~dTgHeatResist_c() {}
 
 private:
 };

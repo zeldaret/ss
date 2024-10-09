@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgMegamiDiving_c : public dAcBase_c { 
+class dTgMegamiDiving_c : public dAcBase_c {
 public:
-	dTgMegamiDiving_c() {}
-	virtual ~dTgMegamiDiving_c() {}
+    dTgMegamiDiving_c() {}
+    virtual ~dTgMegamiDiving_c() {}
 
 private:
 };

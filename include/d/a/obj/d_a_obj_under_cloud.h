@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOunderCloud_c : public dAcObjBase_c { 
+class dAcOunderCloud_c : public dAcObjBase_c {
 public:
-	dAcOunderCloud_c() {}
-	virtual ~dAcOunderCloud_c() {}
+    dAcOunderCloud_c() {}
+    virtual ~dAcOunderCloud_c() {}
 
 private:
 };

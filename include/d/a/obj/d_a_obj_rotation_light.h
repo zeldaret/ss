@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOrotationLight_c : public dAcObjBase_c { 
+class dAcOrotationLight_c : public dAcObjBase_c {
 public:
-	dAcOrotationLight_c() {}
-	virtual ~dAcOrotationLight_c() {}
+    dAcOrotationLight_c() {}
+    virtual ~dAcOrotationLight_c() {}
 
 private:
 };

@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOshrineAfter_c : public dAcObjBase_c { 
+class dAcOshrineAfter_c : public dAcObjBase_c {
 public:
-	dAcOshrineAfter_c() {}
-	virtual ~dAcOshrineAfter_c() {}
+    dAcOshrineAfter_c() {}
+    virtual ~dAcOshrineAfter_c() {}
 
 private:
 };

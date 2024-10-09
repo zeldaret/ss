@@ -5,18 +5,18 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcEstwire_c : public dAcEnBase_c { 
+class dAcEstwire_c : public dAcEnBase_c {
 public:
-	dAcEstwire_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcEstwire_c() {}
+    dAcEstwire_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcEstwire_c() {}
 
-	STATE_FUNC_DECLARE(dAcEstwire_c, Shoot);
-	STATE_FUNC_DECLARE(dAcEstwire_c, Fix);
-	STATE_FUNC_DECLARE(dAcEstwire_c, Out);
-	STATE_FUNC_DECLARE(dAcEstwire_c, AirBack);
+    STATE_FUNC_DECLARE(dAcEstwire_c, Shoot);
+    STATE_FUNC_DECLARE(dAcEstwire_c, Fix);
+    STATE_FUNC_DECLARE(dAcEstwire_c, Out);
+    STATE_FUNC_DECLARE(dAcEstwire_c, AirBack);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcEstwire_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcEstwire_c);
 };
 
 #endif

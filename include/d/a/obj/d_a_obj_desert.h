@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcODesert : public dAcObjBase_c { 
+class dAcODesert : public dAcObjBase_c {
 public:
-	dAcODesert();
-	virtual ~dAcODesert();
+    dAcODesert();
+    virtual ~dAcODesert();
 
 private:
 };

@@ -5,17 +5,17 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcAsuraArm_c : public dAcObjBase_c { 
+class dAcAsuraArm_c : public dAcObjBase_c {
 public:
-	dAcAsuraArm_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcAsuraArm_c() {}
+    dAcAsuraArm_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcAsuraArm_c() {}
 
-	STATE_FUNC_DECLARE(dAcAsuraArm_c, Pulled);
-	STATE_FUNC_DECLARE(dAcAsuraArm_c, Wait);
-	STATE_FUNC_DECLARE(dAcAsuraArm_c, Demo);
+    STATE_FUNC_DECLARE(dAcAsuraArm_c, Pulled);
+    STATE_FUNC_DECLARE(dAcAsuraArm_c, Wait);
+    STATE_FUNC_DECLARE(dAcAsuraArm_c, Demo);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcAsuraArm_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcAsuraArm_c);
 };
 
 #endif

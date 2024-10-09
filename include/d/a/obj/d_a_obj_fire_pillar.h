@@ -5,18 +5,18 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOfirePillar_c : public dAcObjBase_c { 
+class dAcOfirePillar_c : public dAcObjBase_c {
 public:
-	dAcOfirePillar_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOfirePillar_c() {}
+    dAcOfirePillar_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOfirePillar_c() {}
 
-	STATE_FUNC_DECLARE(dAcOfirePillar_c, Wait);
-	STATE_FUNC_DECLARE(dAcOfirePillar_c, WaterWait);
-	STATE_FUNC_DECLARE(dAcOfirePillar_c, Vacuum);
-	STATE_FUNC_DECLARE(dAcOfirePillar_c, Small);
+    STATE_FUNC_DECLARE(dAcOfirePillar_c, Wait);
+    STATE_FUNC_DECLARE(dAcOfirePillar_c, WaterWait);
+    STATE_FUNC_DECLARE(dAcOfirePillar_c, Vacuum);
+    STATE_FUNC_DECLARE(dAcOfirePillar_c, Small);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOfirePillar_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOfirePillar_c);
 };
 
 #endif

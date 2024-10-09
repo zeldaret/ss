@@ -5,13 +5,13 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcNusiBase_c : public dAcEnBase_c { 
+class dAcNusiBase_c : public dAcEnBase_c {
 public:
-	dAcNusiBase_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcNusiBase_c() {}
+    dAcNusiBase_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcNusiBase_c() {}
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcNusiBase_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcNusiBase_c);
 };
 
 #endif

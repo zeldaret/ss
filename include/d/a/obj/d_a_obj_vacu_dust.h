@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOVacuDust : public dAcObjBase_c { 
+class dAcOVacuDust : public dAcObjBase_c {
 public:
-	dAcOVacuDust();
-	virtual ~dAcOVacuDust();
+    dAcOVacuDust();
+    virtual ~dAcOVacuDust();
 
 private:
 };

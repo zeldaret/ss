@@ -5,22 +5,22 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOmusasabi_c : public dAcObjBase_c { 
+class dAcOmusasabi_c : public dAcObjBase_c {
 public:
-	dAcOmusasabi_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOmusasabi_c() {}
+    dAcOmusasabi_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOmusasabi_c() {}
 
-	STATE_FUNC_DECLARE(dAcOmusasabi_c, Wait);
-	STATE_FUNC_DECLARE(dAcOmusasabi_c, Approach);
-	STATE_FUNC_DECLARE(dAcOmusasabi_c, Near);
-	STATE_FUNC_DECLARE(dAcOmusasabi_c, Far);
-	STATE_FUNC_DECLARE(dAcOmusasabi_c, Formation);
-	STATE_FUNC_DECLARE(dAcOmusasabi_c, Away);
-	STATE_FUNC_DECLARE(dAcOmusasabi_c, Disappear);
-	STATE_FUNC_DECLARE(dAcOmusasabi_c, FormNotPlayer);
+    STATE_FUNC_DECLARE(dAcOmusasabi_c, Wait);
+    STATE_FUNC_DECLARE(dAcOmusasabi_c, Approach);
+    STATE_FUNC_DECLARE(dAcOmusasabi_c, Near);
+    STATE_FUNC_DECLARE(dAcOmusasabi_c, Far);
+    STATE_FUNC_DECLARE(dAcOmusasabi_c, Formation);
+    STATE_FUNC_DECLARE(dAcOmusasabi_c, Away);
+    STATE_FUNC_DECLARE(dAcOmusasabi_c, Disappear);
+    STATE_FUNC_DECLARE(dAcOmusasabi_c, FormNotPlayer);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOmusasabi_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOmusasabi_c);
 };
 
 #endif

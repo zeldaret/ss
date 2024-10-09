@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgPlayerRestart_c : public dAcBase_c { 
+class dTgPlayerRestart_c : public dAcBase_c {
 public:
-	dTgPlayerRestart_c() {}
-	virtual ~dTgPlayerRestart_c() {}
+    dTgPlayerRestart_c() {}
+    virtual ~dTgPlayerRestart_c() {}
 
 private:
 };

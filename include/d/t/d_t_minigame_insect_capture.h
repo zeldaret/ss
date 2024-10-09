@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgMinigameInsectCapture_c : public dAcBase_c { 
+class dTgMinigameInsectCapture_c : public dAcBase_c {
 public:
-	dTgMinigameInsectCapture_c();
-	virtual ~dTgMinigameInsectCapture_c();
+    dTgMinigameInsectCapture_c();
+    virtual ~dTgMinigameInsectCapture_c();
 
 private:
 };

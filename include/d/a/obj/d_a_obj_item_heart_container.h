@@ -5,22 +5,22 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOItemHeartContainer_c : public dAcObjBase_c { 
+class dAcOItemHeartContainer_c : public dAcObjBase_c {
 public:
-	dAcOItemHeartContainer_c();
-	virtual ~dAcOItemHeartContainer_c();
+    dAcOItemHeartContainer_c();
+    virtual ~dAcOItemHeartContainer_c();
 
-	STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, Hide);
-	STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, RequestAppearEvent);
-	STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, AppearEffect);
-	STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, Appear);
-	STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, WaitFall);
-	STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, Fall);
-	STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, WaitGet);
-	STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, WaitGetQuake);
+    STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, Hide);
+    STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, RequestAppearEvent);
+    STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, AppearEffect);
+    STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, Appear);
+    STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, WaitFall);
+    STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, Fall);
+    STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, WaitGet);
+    STATE_FUNC_DECLARE(dAcOItemHeartContainer_c, WaitGetQuake);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOItemHeartContainer_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOItemHeartContainer_c);
 };
 
 #endif

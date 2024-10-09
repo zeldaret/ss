@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOPoleStony_c : public dAcObjBase_c { 
+class dAcOPoleStony_c : public dAcObjBase_c {
 public:
-	dAcOPoleStony_c() {}
-	virtual ~dAcOPoleStony_c() {}
+    dAcOPoleStony_c() {}
+    virtual ~dAcOPoleStony_c() {}
 
 private:
 };

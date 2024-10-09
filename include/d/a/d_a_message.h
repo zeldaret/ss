@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcMessage_c : public dAcObjBase_c { 
+class dAcMessage_c : public dAcObjBase_c {
 public:
-	dAcMessage_c() {}
-	virtual ~dAcMessage_c() {}
+    dAcMessage_c() {}
+    virtual ~dAcMessage_c() {}
 
 private:
 };

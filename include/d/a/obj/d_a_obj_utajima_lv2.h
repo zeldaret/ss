@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOutajimaLv2_c : public dAcObjBase_c { 
+class dAcOutajimaLv2_c : public dAcObjBase_c {
 public:
-	dAcOutajimaLv2_c() {}
-	virtual ~dAcOutajimaLv2_c() {}
+    dAcOutajimaLv2_c() {}
+    virtual ~dAcOutajimaLv2_c() {}
 
 private:
 };

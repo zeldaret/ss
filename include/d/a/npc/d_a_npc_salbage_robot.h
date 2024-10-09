@@ -5,19 +5,19 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcNpcSlb_c : public dAcNpc_c { 
+class dAcNpcSlb_c : public dAcNpc_c {
 public:
-	dAcNpcSlb_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcNpcSlb_c() {}
+    dAcNpcSlb_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcNpcSlb_c() {}
 
-	STATE_FUNC_DECLARE(dAcNpcSlb_c, Hide);
-	STATE_FUNC_DECLARE(dAcNpcSlb_c, HideDelivary);
-	STATE_FUNC_DECLARE(dAcNpcSlb_c, DelivaryReq);
-	STATE_FUNC_DECLARE(dAcNpcSlb_c, Kill);
-	STATE_FUNC_DECLARE(dAcNpcSlb_c, Kill2);
+    STATE_FUNC_DECLARE(dAcNpcSlb_c, Hide);
+    STATE_FUNC_DECLARE(dAcNpcSlb_c, HideDelivary);
+    STATE_FUNC_DECLARE(dAcNpcSlb_c, DelivaryReq);
+    STATE_FUNC_DECLARE(dAcNpcSlb_c, Kill);
+    STATE_FUNC_DECLARE(dAcNpcSlb_c, Kill2);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcNpcSlb_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcNpcSlb_c);
 };
 
 #endif

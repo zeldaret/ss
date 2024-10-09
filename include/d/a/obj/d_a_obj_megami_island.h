@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOmegamiIsland_c : public dAcObjBase_c { 
+class dAcOmegamiIsland_c : public dAcObjBase_c {
 public:
-	dAcOmegamiIsland_c() {}
-	virtual ~dAcOmegamiIsland_c() {}
+    dAcOmegamiIsland_c() {}
+    virtual ~dAcOmegamiIsland_c() {}
 
 private:
 };

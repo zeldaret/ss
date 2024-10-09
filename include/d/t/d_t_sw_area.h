@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgSwArea_c : public dAcBase_c { 
+class dTgSwArea_c : public dAcBase_c {
 public:
-	dTgSwArea_c() {}
-	virtual ~dTgSwArea_c() {}
+    dTgSwArea_c() {}
+    virtual ~dTgSwArea_c() {}
 
 private:
 };

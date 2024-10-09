@@ -5,21 +5,21 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOAncientJewels_c : public dAcObjBase_c { 
+class dAcOAncientJewels_c : public dAcObjBase_c {
 public:
-	dAcOAncientJewels_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOAncientJewels_c() {}
+    dAcOAncientJewels_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOAncientJewels_c() {}
 
-	STATE_FUNC_DECLARE(dAcOAncientJewels_c, Wait);
-	STATE_FUNC_DECLARE(dAcOAncientJewels_c, WaitDrop);
-	STATE_FUNC_DECLARE(dAcOAncientJewels_c, Drop);
-	STATE_FUNC_DECLARE(dAcOAncientJewels_c, Buried);
-	STATE_FUNC_DECLARE(dAcOAncientJewels_c, WhipCarry);
-	STATE_FUNC_DECLARE(dAcOAncientJewels_c, GetItem);
-	STATE_FUNC_DECLARE(dAcOAncientJewels_c, UnderLog);
+    STATE_FUNC_DECLARE(dAcOAncientJewels_c, Wait);
+    STATE_FUNC_DECLARE(dAcOAncientJewels_c, WaitDrop);
+    STATE_FUNC_DECLARE(dAcOAncientJewels_c, Drop);
+    STATE_FUNC_DECLARE(dAcOAncientJewels_c, Buried);
+    STATE_FUNC_DECLARE(dAcOAncientJewels_c, WhipCarry);
+    STATE_FUNC_DECLARE(dAcOAncientJewels_c, GetItem);
+    STATE_FUNC_DECLARE(dAcOAncientJewels_c, UnderLog);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOAncientJewels_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOAncientJewels_c);
 };
 
 #endif

@@ -3,10 +3,10 @@
 
 #include <d/a/e/d_a_en_base.h>
 
-class dAcNpcHc_c : public dAcEnBase_c { 
+class dAcNpcHc_c : public dAcEnBase_c {
 public:
-	dAcNpcHc_c() {}
-	virtual ~dAcNpcHc_c() {}
+    dAcNpcHc_c() {}
+    virtual ~dAcNpcHc_c() {}
 
 private:
 };

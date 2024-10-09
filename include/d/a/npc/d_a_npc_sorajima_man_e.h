@@ -3,10 +3,10 @@
 
 #include <d/a/npc/d_a_npc.h>
 
-class dAcNpcSoManE_c : public dAcNpc_c { 
+class dAcNpcSoManE_c : public dAcNpc_c {
 public:
-	dAcNpcSoManE_c() {}
-	virtual ~dAcNpcSoManE_c() {}
+    dAcNpcSoManE_c() {}
+    virtual ~dAcNpcSoManE_c() {}
 
 private:
 };

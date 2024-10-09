@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOutaDemoPedest_c : public dAcObjBase_c { 
+class dAcOutaDemoPedest_c : public dAcObjBase_c {
 public:
-	dAcOutaDemoPedest_c() {}
-	virtual ~dAcOutaDemoPedest_c() {}
+    dAcOutaDemoPedest_c() {}
+    virtual ~dAcOutaDemoPedest_c() {}
 
 private:
 };

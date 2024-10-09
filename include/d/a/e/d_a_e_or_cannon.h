@@ -5,17 +5,17 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcEorCannon_c : public dAcEnBase_c { 
+class dAcEorCannon_c : public dAcEnBase_c {
 public:
-	dAcEorCannon_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcEorCannon_c() {}
+    dAcEorCannon_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcEorCannon_c() {}
 
-	STATE_FUNC_DECLARE(dAcEorCannon_c, Wait);
-	STATE_FUNC_DECLARE(dAcEorCannon_c, Attack);
-	STATE_FUNC_DECLARE(dAcEorCannon_c, Death);
+    STATE_FUNC_DECLARE(dAcEorCannon_c, Wait);
+    STATE_FUNC_DECLARE(dAcEorCannon_c, Attack);
+    STATE_FUNC_DECLARE(dAcEorCannon_c, Death);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcEorCannon_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcEorCannon_c);
 };
 
 #endif

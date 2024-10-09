@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcBBbshockwave_c : public dAcObjBase_c { 
+class dAcBBbshockwave_c : public dAcObjBase_c {
 public:
-	dAcBBbshockwave_c() {}
-	virtual ~dAcBBbshockwave_c() {}
+    dAcBBbshockwave_c() {}
+    virtual ~dAcBBbshockwave_c() {}
 
 private:
 };

@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOironStage_c : public dAcObjBase_c { 
+class dAcOironStage_c : public dAcObjBase_c {
 public:
-	dAcOironStage_c() {}
-	virtual ~dAcOironStage_c() {}
+    dAcOironStage_c() {}
+    virtual ~dAcOironStage_c() {}
 
 private:
 };

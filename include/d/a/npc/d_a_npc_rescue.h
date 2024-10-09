@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcNpcRescue_c : public dAcObjBase_c { 
+class dAcNpcRescue_c : public dAcObjBase_c {
 public:
-	dAcNpcRescue_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcNpcRescue_c() {}
+    dAcNpcRescue_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcNpcRescue_c() {}
 
-	STATE_FUNC_DECLARE(dAcNpcRescue_c, Wait);
+    STATE_FUNC_DECLARE(dAcNpcRescue_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcNpcRescue_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcNpcRescue_c);
 };
 
 #endif

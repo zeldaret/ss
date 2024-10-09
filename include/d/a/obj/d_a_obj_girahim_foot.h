@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOgirahimFoot_c : public dAcObjBase_c { 
+class dAcOgirahimFoot_c : public dAcObjBase_c {
 public:
-	dAcOgirahimFoot_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOgirahimFoot_c() {}
+    dAcOgirahimFoot_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOgirahimFoot_c() {}
 
-	STATE_FUNC_DECLARE(dAcOgirahimFoot_c, Wait);
-	STATE_FUNC_DECLARE(dAcOgirahimFoot_c, Appear);
+    STATE_FUNC_DECLARE(dAcOgirahimFoot_c, Wait);
+    STATE_FUNC_DECLARE(dAcOgirahimFoot_c, Appear);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOgirahimFoot_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOgirahimFoot_c);
 };
 
 #endif

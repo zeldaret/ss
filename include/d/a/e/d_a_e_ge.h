@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcEge_c : public dAcEnBase_c { 
+class dAcEge_c : public dAcEnBase_c {
 public:
-	dAcEge_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcEge_c() {}
+    dAcEge_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcEge_c() {}
 
-	STATE_FUNC_DECLARE(dAcEge_c, Wait);
+    STATE_FUNC_DECLARE(dAcEge_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcEge_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcEge_c);
 };
 
 #endif

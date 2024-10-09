@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcORailPost : public dAcObjBase_c { 
+class dAcORailPost : public dAcObjBase_c {
 public:
-	dAcORailPost();
-	virtual ~dAcORailPost();
+    dAcORailPost();
+    virtual ~dAcORailPost();
 
 private:
 };

@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOinsectIsland_c : public dAcObjBase_c { 
+class dAcOinsectIsland_c : public dAcObjBase_c {
 public:
-	dAcOinsectIsland_c() {}
-	virtual ~dAcOinsectIsland_c() {}
+    dAcOinsectIsland_c() {}
+    virtual ~dAcOinsectIsland_c() {}
 
 private:
 };

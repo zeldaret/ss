@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgFenceSynchronizer_c : public dAcBase_c { 
+class dTgFenceSynchronizer_c : public dAcBase_c {
 public:
-	dTgFenceSynchronizer_c();
-	virtual ~dTgFenceSynchronizer_c();
+    dTgFenceSynchronizer_c();
+    virtual ~dTgFenceSynchronizer_c();
 
 private:
 };

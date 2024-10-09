@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOtruckStopper_c : public dAcObjBase_c { 
+class dAcOtruckStopper_c : public dAcObjBase_c {
 public:
-	dAcOtruckStopper_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOtruckStopper_c() {}
+    dAcOtruckStopper_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOtruckStopper_c() {}
 
-	STATE_FUNC_DECLARE(dAcOtruckStopper_c, Wait);
-	STATE_FUNC_DECLARE(dAcOtruckStopper_c, Break);
+    STATE_FUNC_DECLARE(dAcOtruckStopper_c, Wait);
+    STATE_FUNC_DECLARE(dAcOtruckStopper_c, Break);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOtruckStopper_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOtruckStopper_c);
 };
 
 #endif

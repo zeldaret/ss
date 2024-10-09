@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOwarpHole_c : public dAcObjBase_c { 
+class dAcOwarpHole_c : public dAcObjBase_c {
 public:
-	dAcOwarpHole_c() {}
-	virtual ~dAcOwarpHole_c() {}
+    dAcOwarpHole_c() {}
+    virtual ~dAcOwarpHole_c() {}
 
 private:
 };

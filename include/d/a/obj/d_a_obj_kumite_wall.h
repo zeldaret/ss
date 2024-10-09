@@ -5,18 +5,18 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOkumiteWall_c : public dAcObjBase_c { 
+class dAcOkumiteWall_c : public dAcObjBase_c {
 public:
-	dAcOkumiteWall_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOkumiteWall_c() {}
+    dAcOkumiteWall_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOkumiteWall_c() {}
 
-	STATE_FUNC_DECLARE(dAcOkumiteWall_c, Wait);
-	STATE_FUNC_DECLARE(dAcOkumiteWall_c, Appear);
-	STATE_FUNC_DECLARE(dAcOkumiteWall_c, Exist);
-	STATE_FUNC_DECLARE(dAcOkumiteWall_c, Vanish);
+    STATE_FUNC_DECLARE(dAcOkumiteWall_c, Wait);
+    STATE_FUNC_DECLARE(dAcOkumiteWall_c, Appear);
+    STATE_FUNC_DECLARE(dAcOkumiteWall_c, Exist);
+    STATE_FUNC_DECLARE(dAcOkumiteWall_c, Vanish);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOkumiteWall_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOkumiteWall_c);
 };
 
 #endif

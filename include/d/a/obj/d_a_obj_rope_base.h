@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOropeBase_c : public dAcObjBase_c { 
+class dAcOropeBase_c : public dAcObjBase_c {
 public:
-	dAcOropeBase_c() {}
-	virtual ~dAcOropeBase_c() {}
+    dAcOropeBase_c() {}
+    virtual ~dAcOropeBase_c() {}
 
 private:
 };

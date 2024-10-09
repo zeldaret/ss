@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOhole_c : public dAcObjBase_c { 
+class dAcOhole_c : public dAcObjBase_c {
 public:
-	dAcOhole_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOhole_c() {}
+    dAcOhole_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOhole_c() {}
 
-	STATE_FUNC_DECLARE(dAcOhole_c, Wait);
+    STATE_FUNC_DECLARE(dAcOhole_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOhole_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOhole_c);
 };
 
 #endif

@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcGirahimuSwordBeam_c : public dAcObjBase_c { 
+class dAcGirahimuSwordBeam_c : public dAcObjBase_c {
 public:
-	dAcGirahimuSwordBeam_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcGirahimuSwordBeam_c() {}
+    dAcGirahimuSwordBeam_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcGirahimuSwordBeam_c() {}
 
-	STATE_FUNC_DECLARE(dAcGirahimuSwordBeam_c, BulletMove);
-	STATE_FUNC_DECLARE(dAcGirahimuSwordBeam_c, Damage);
+    STATE_FUNC_DECLARE(dAcGirahimuSwordBeam_c, BulletMove);
+    STATE_FUNC_DECLARE(dAcGirahimuSwordBeam_c, Damage);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcGirahimuSwordBeam_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcGirahimuSwordBeam_c);
 };
 
 #endif

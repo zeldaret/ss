@@ -5,18 +5,18 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcInsectCicada_c : public dAcObjBase_c { 
+class dAcInsectCicada_c : public dAcObjBase_c {
 public:
-	dAcInsectCicada_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcInsectCicada_c() {}
+    dAcInsectCicada_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcInsectCicada_c() {}
 
-	STATE_FUNC_DECLARE(dAcInsectCicada_c, Wait);
-	STATE_FUNC_DECLARE(dAcInsectCicada_c, Fly);
-	STATE_FUNC_DECLARE(dAcInsectCicada_c, Finalize);
-	STATE_FUNC_DECLARE(dAcInsectCicada_c, Dead);
+    STATE_FUNC_DECLARE(dAcInsectCicada_c, Wait);
+    STATE_FUNC_DECLARE(dAcInsectCicada_c, Fly);
+    STATE_FUNC_DECLARE(dAcInsectCicada_c, Finalize);
+    STATE_FUNC_DECLARE(dAcInsectCicada_c, Dead);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcInsectCicada_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcInsectCicada_c);
 };
 
 #endif

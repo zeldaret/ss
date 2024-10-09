@@ -5,17 +5,17 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOD300_c : public dAcObjBase_c { 
+class dAcOD300_c : public dAcObjBase_c {
 public:
-	dAcOD300_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOD300_c() {}
+    dAcOD300_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOD300_c() {}
 
-	STATE_FUNC_DECLARE(dAcOD300_c, Wait);
-	STATE_FUNC_DECLARE(dAcOD300_c, Appear);
-	STATE_FUNC_DECLARE(dAcOD300_c, End);
+    STATE_FUNC_DECLARE(dAcOD300_c, Wait);
+    STATE_FUNC_DECLARE(dAcOD300_c, Appear);
+    STATE_FUNC_DECLARE(dAcOD300_c, End);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOD300_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOD300_c);
 };
 
 #endif

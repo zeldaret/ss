@@ -3,10 +3,10 @@
 
 #include <d/a/e/d_a_en_base.h>
 
-class dAcBBigbossbase_c : public dAcEnBase_c { 
+class dAcBBigbossbase_c : public dAcEnBase_c {
 public:
-	dAcBBigbossbase_c() {}
-	virtual ~dAcBBigbossbase_c() {}
+    dAcBBigbossbase_c() {}
+    virtual ~dAcBBigbossbase_c() {}
 
 private:
 };

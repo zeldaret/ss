@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgRoAtTargetManager_c : public dAcBase_c { 
+class dTgRoAtTargetManager_c : public dAcBase_c {
 public:
-	dTgRoAtTargetManager_c() {}
-	virtual ~dTgRoAtTargetManager_c() {}
+    dTgRoAtTargetManager_c() {}
+    virtual ~dTgRoAtTargetManager_c() {}
 
 private:
 };

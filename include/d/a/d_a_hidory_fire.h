@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcHidoryFire_c : public dAcObjBase_c { 
+class dAcHidoryFire_c : public dAcObjBase_c {
 public:
-	dAcHidoryFire_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcHidoryFire_c() {}
+    dAcHidoryFire_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcHidoryFire_c() {}
 
-	STATE_FUNC_DECLARE(dAcHidoryFire_c, BulletMove);
-	STATE_FUNC_DECLARE(dAcHidoryFire_c, Damage);
+    STATE_FUNC_DECLARE(dAcHidoryFire_c, BulletMove);
+    STATE_FUNC_DECLARE(dAcHidoryFire_c, Damage);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcHidoryFire_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcHidoryFire_c);
 };
 
 #endif

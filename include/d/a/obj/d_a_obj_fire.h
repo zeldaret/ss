@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOfire_c : public dAcObjBase_c { 
+class dAcOfire_c : public dAcObjBase_c {
 public:
-	dAcOfire_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOfire_c() {}
+    dAcOfire_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOfire_c() {}
 
-	STATE_FUNC_DECLARE(dAcOfire_c, Wait);
+    STATE_FUNC_DECLARE(dAcOfire_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOfire_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOfire_c);
 };
 
 #endif

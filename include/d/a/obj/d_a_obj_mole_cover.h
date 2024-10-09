@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOmoleCover_c : public dAcObjBase_c { 
+class dAcOmoleCover_c : public dAcObjBase_c {
 public:
-	dAcOmoleCover_c() {}
-	virtual ~dAcOmoleCover_c() {}
+    dAcOmoleCover_c() {}
+    virtual ~dAcOmoleCover_c() {}
 
 private:
 };

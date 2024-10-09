@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOstageKrakenParts_c : public dAcObjBase_c { 
+class dAcOstageKrakenParts_c : public dAcObjBase_c {
 public:
-	dAcOstageKrakenParts_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOstageKrakenParts_c() {}
+    dAcOstageKrakenParts_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOstageKrakenParts_c() {}
 
-	STATE_FUNC_DECLARE(dAcOstageKrakenParts_c, Shake);
-	STATE_FUNC_DECLARE(dAcOstageKrakenParts_c, Fall);
+    STATE_FUNC_DECLARE(dAcOstageKrakenParts_c, Shake);
+    STATE_FUNC_DECLARE(dAcOstageKrakenParts_c, Fall);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOstageKrakenParts_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOstageKrakenParts_c);
 };
 
 #endif

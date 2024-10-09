@@ -5,19 +5,19 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOutajimaStopper_c : public dAcObjBase_c { 
+class dAcOutajimaStopper_c : public dAcObjBase_c {
 public:
-	dAcOutajimaStopper_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOutajimaStopper_c() {}
+    dAcOutajimaStopper_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOutajimaStopper_c() {}
 
-	STATE_FUNC_DECLARE(dAcOutajimaStopper_c, Down);
-	STATE_FUNC_DECLARE(dAcOutajimaStopper_c, Rise);
-	STATE_FUNC_DECLARE(dAcOutajimaStopper_c, Up);
-	STATE_FUNC_DECLARE(dAcOutajimaStopper_c, Fall);
-	STATE_FUNC_DECLARE(dAcOutajimaStopper_c, Wait);
+    STATE_FUNC_DECLARE(dAcOutajimaStopper_c, Down);
+    STATE_FUNC_DECLARE(dAcOutajimaStopper_c, Rise);
+    STATE_FUNC_DECLARE(dAcOutajimaStopper_c, Up);
+    STATE_FUNC_DECLARE(dAcOutajimaStopper_c, Fall);
+    STATE_FUNC_DECLARE(dAcOutajimaStopper_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOutajimaStopper_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOutajimaStopper_c);
 };
 
 #endif

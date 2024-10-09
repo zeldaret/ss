@@ -5,13 +5,13 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcNpcSalbageRobotRepair_c : public dAcNpc_c { 
+class dAcNpcSalbageRobotRepair_c : public dAcNpc_c {
 public:
-	dAcNpcSalbageRobotRepair_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcNpcSalbageRobotRepair_c() {}
+    dAcNpcSalbageRobotRepair_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcNpcSalbageRobotRepair_c() {}
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcNpcSalbageRobotRepair_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcNpcSalbageRobotRepair_c);
 };
 
 #endif

@@ -5,17 +5,17 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOevilField_c : public dAcObjBase_c { 
+class dAcOevilField_c : public dAcObjBase_c {
 public:
-	dAcOevilField_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOevilField_c() {}
+    dAcOevilField_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOevilField_c() {}
 
-	STATE_FUNC_DECLARE(dAcOevilField_c, Wait);
-	STATE_FUNC_DECLARE(dAcOevilField_c, UpDown);
-	STATE_FUNC_DECLARE(dAcOevilField_c, Stop);
+    STATE_FUNC_DECLARE(dAcOevilField_c, Wait);
+    STATE_FUNC_DECLARE(dAcOevilField_c, UpDown);
+    STATE_FUNC_DECLARE(dAcOevilField_c, Stop);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOevilField_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOevilField_c);
 };
 
 #endif

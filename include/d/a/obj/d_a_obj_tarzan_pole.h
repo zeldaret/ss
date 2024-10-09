@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOTarzanPole_c : public dAcObjBase_c { 
+class dAcOTarzanPole_c : public dAcObjBase_c {
 public:
-	dAcOTarzanPole_c() {}
-	virtual ~dAcOTarzanPole_c() {}
+    dAcOTarzanPole_c() {}
+    virtual ~dAcOTarzanPole_c() {}
 
 private:
 };

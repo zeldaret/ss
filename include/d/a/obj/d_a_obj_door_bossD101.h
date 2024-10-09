@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcODoorBossD101_c : public dAcObjBase_c { 
+class dAcODoorBossD101_c : public dAcObjBase_c {
 public:
-	dAcODoorBossD101_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcODoorBossD101_c() {}
+    dAcODoorBossD101_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcODoorBossD101_c() {}
 
-	STATE_FUNC_DECLARE(dAcODoorBossD101_c, Wait);
-	STATE_FUNC_DECLARE(dAcODoorBossD101_c, End);
+    STATE_FUNC_DECLARE(dAcODoorBossD101_c, Wait);
+    STATE_FUNC_DECLARE(dAcODoorBossD101_c, End);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcODoorBossD101_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcODoorBossD101_c);
 };
 
 #endif

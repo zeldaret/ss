@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcAsuraBullet_c : public dAcObjBase_c { 
+class dAcAsuraBullet_c : public dAcObjBase_c {
 public:
-	dAcAsuraBullet_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcAsuraBullet_c() {}
+    dAcAsuraBullet_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcAsuraBullet_c() {}
 
-	STATE_FUNC_DECLARE(dAcAsuraBullet_c, Attack);
-	STATE_FUNC_DECLARE(dAcAsuraBullet_c, Wait);
+    STATE_FUNC_DECLARE(dAcAsuraBullet_c, Attack);
+    STATE_FUNC_DECLARE(dAcAsuraBullet_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcAsuraBullet_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcAsuraBullet_c);
 };
 
 #endif

@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOwaterShield_c : public dAcObjBase_c { 
+class dAcOwaterShield_c : public dAcObjBase_c {
 public:
-	dAcOwaterShield_c() {}
-	virtual ~dAcOwaterShield_c() {}
+    dAcOwaterShield_c() {}
+    virtual ~dAcOwaterShield_c() {}
 
 private:
 };

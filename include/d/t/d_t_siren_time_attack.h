@@ -5,13 +5,13 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dTgSirenTimeAttack_c : public dAcBase_c { 
+class dTgSirenTimeAttack_c : public dAcBase_c {
 public:
-	dTgSirenTimeAttack_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dTgSirenTimeAttack_c() {}
+    dTgSirenTimeAttack_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dTgSirenTimeAttack_c() {}
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dTgSirenTimeAttack_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dTgSirenTimeAttack_c);
 };
 
 #endif

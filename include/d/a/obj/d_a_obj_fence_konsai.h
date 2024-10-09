@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOfenceKonsai_c : public dAcObjBase_c { 
+class dAcOfenceKonsai_c : public dAcObjBase_c {
 public:
-	dAcOfenceKonsai_c() {}
-	virtual ~dAcOfenceKonsai_c() {}
+    dAcOfenceKonsai_c() {}
+    virtual ~dAcOfenceKonsai_c() {}
 
 private:
 };

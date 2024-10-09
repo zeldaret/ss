@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOTimeBoatBullet_c : public dAcObjBase_c { 
+class dAcOTimeBoatBullet_c : public dAcObjBase_c {
 public:
-	dAcOTimeBoatBullet_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOTimeBoatBullet_c() {}
+    dAcOTimeBoatBullet_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOTimeBoatBullet_c() {}
 
-	STATE_FUNC_DECLARE(dAcOTimeBoatBullet_c, Wait);
-	STATE_FUNC_DECLARE(dAcOTimeBoatBullet_c, Explode);
+    STATE_FUNC_DECLARE(dAcOTimeBoatBullet_c, Wait);
+    STATE_FUNC_DECLARE(dAcOTimeBoatBullet_c, Explode);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOTimeBoatBullet_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOTimeBoatBullet_c);
 };
 
 #endif

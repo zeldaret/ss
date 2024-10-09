@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOBlockUnderground : public dAcObjBase_c { 
+class dAcOBlockUnderground : public dAcObjBase_c {
 public:
-	dAcOBlockUnderground();
-	virtual ~dAcOBlockUnderground();
+    dAcOBlockUnderground();
+    virtual ~dAcOBlockUnderground();
 
 private:
 };

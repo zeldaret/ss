@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOBirdStatue_c : public dAcObjBase_c { 
+class dAcOBirdStatue_c : public dAcObjBase_c {
 public:
-	dAcOBirdStatue_c() {}
-	virtual ~dAcOBirdStatue_c() {}
+    dAcOBirdStatue_c() {}
+    virtual ~dAcOBirdStatue_c() {}
 
 private:
 };

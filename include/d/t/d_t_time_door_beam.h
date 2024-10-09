@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgTimeDoorBeam_c : public dAcBase_c { 
+class dTgTimeDoorBeam_c : public dAcBase_c {
 public:
-	dTgTimeDoorBeam_c() {}
-	virtual ~dTgTimeDoorBeam_c() {}
+    dTgTimeDoorBeam_c() {}
+    virtual ~dTgTimeDoorBeam_c() {}
 
 private:
 };

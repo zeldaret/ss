@@ -5,17 +5,17 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOpushBlk_c : public dAcObjBase_c { 
+class dAcOpushBlk_c : public dAcObjBase_c {
 public:
-	dAcOpushBlk_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOpushBlk_c() {}
+    dAcOpushBlk_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOpushBlk_c() {}
 
-	STATE_FUNC_DECLARE(dAcOpushBlk_c, Wait);
-	STATE_FUNC_DECLARE(dAcOpushBlk_c, Move);
-	STATE_FUNC_DECLARE(dAcOpushBlk_c, RopeGrab);
+    STATE_FUNC_DECLARE(dAcOpushBlk_c, Wait);
+    STATE_FUNC_DECLARE(dAcOpushBlk_c, Move);
+    STATE_FUNC_DECLARE(dAcOpushBlk_c, RopeGrab);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOpushBlk_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOpushBlk_c);
 };
 
 #endif

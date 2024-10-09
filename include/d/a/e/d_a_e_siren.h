@@ -5,20 +5,20 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcESiren_c : public dAcEnBase_c { 
+class dAcESiren_c : public dAcEnBase_c {
 public:
-	dAcESiren_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcESiren_c() {}
+    dAcESiren_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcESiren_c() {}
 
-	STATE_FUNC_DECLARE(dAcESiren_c, Wait);
-	STATE_FUNC_DECLARE(dAcESiren_c, Revival);
-	STATE_FUNC_DECLARE(dAcESiren_c, Move);
-	STATE_FUNC_DECLARE(dAcESiren_c, PathMove);
-	STATE_FUNC_DECLARE(dAcESiren_c, Turn);
-	STATE_FUNC_DECLARE(dAcESiren_c, Event);
+    STATE_FUNC_DECLARE(dAcESiren_c, Wait);
+    STATE_FUNC_DECLARE(dAcESiren_c, Revival);
+    STATE_FUNC_DECLARE(dAcESiren_c, Move);
+    STATE_FUNC_DECLARE(dAcESiren_c, PathMove);
+    STATE_FUNC_DECLARE(dAcESiren_c, Turn);
+    STATE_FUNC_DECLARE(dAcESiren_c, Event);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcESiren_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcESiren_c);
 };
 
 #endif

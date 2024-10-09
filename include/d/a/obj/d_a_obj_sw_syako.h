@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOSwSyako_c : public dAcObjBase_c { 
+class dAcOSwSyako_c : public dAcObjBase_c {
 public:
-	dAcOSwSyako_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOSwSyako_c() {}
+    dAcOSwSyako_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOSwSyako_c() {}
 
-	STATE_FUNC_DECLARE(dAcOSwSyako_c, Wait);
-	STATE_FUNC_DECLARE(dAcOSwSyako_c, Event);
+    STATE_FUNC_DECLARE(dAcOSwSyako_c, Wait);
+    STATE_FUNC_DECLARE(dAcOSwSyako_c, Event);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOSwSyako_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOSwSyako_c);
 };
 
 #endif

@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dTgGekoTag : public dAcBase_c { 
+class dTgGekoTag : public dAcBase_c {
 public:
-	dTgGekoTag() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dTgGekoTag() {}
+    dTgGekoTag() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dTgGekoTag() {}
 
-	STATE_FUNC_DECLARE(dTgGekoTag, Wait);
+    STATE_FUNC_DECLARE(dTgGekoTag, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dTgGekoTag);
+    /* 0x??? */ STATE_MGR_DECLARE(dTgGekoTag);
 };
 
 #endif

@@ -5,17 +5,17 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOutajimaPedestal_c : public dAcObjBase_c { 
+class dAcOutajimaPedestal_c : public dAcObjBase_c {
 public:
-	dAcOutajimaPedestal_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOutajimaPedestal_c() {}
+    dAcOutajimaPedestal_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOutajimaPedestal_c() {}
 
-	STATE_FUNC_DECLARE(dAcOutajimaPedestal_c, Wait);
-	STATE_FUNC_DECLARE(dAcOutajimaPedestal_c, Move);
-	STATE_FUNC_DECLARE(dAcOutajimaPedestal_c, Reset);
+    STATE_FUNC_DECLARE(dAcOutajimaPedestal_c, Wait);
+    STATE_FUNC_DECLARE(dAcOutajimaPedestal_c, Move);
+    STATE_FUNC_DECLARE(dAcOutajimaPedestal_c, Reset);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOutajimaPedestal_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOutajimaPedestal_c);
 };
 
 #endif

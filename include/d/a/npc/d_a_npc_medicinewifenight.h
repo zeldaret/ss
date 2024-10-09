@@ -3,10 +3,10 @@
 
 #include <d/a/npc/d_a_npc.h>
 
-class dAcNpcMedicineWifeNight_c : public dAcNpc_c { 
+class dAcNpcMedicineWifeNight_c : public dAcNpc_c {
 public:
-	dAcNpcMedicineWifeNight_c() {}
-	virtual ~dAcNpcMedicineWifeNight_c() {}
+    dAcNpcMedicineWifeNight_c() {}
+    virtual ~dAcNpcMedicineWifeNight_c() {}
 
 private:
 };

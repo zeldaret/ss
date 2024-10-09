@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOTeniRail : public dAcObjBase_c { 
+class dAcOTeniRail : public dAcObjBase_c {
 public:
-	dAcOTeniRail();
-	virtual ~dAcOTeniRail();
+    dAcOTeniRail();
+    virtual ~dAcOTeniRail();
 
 private:
 };

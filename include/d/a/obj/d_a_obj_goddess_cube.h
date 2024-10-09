@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOGoddessCube_c : public dAcObjBase_c { 
+class dAcOGoddessCube_c : public dAcObjBase_c {
 public:
-	dAcOGoddessCube_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOGoddessCube_c() {}
+    dAcOGoddessCube_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOGoddessCube_c() {}
 
-	STATE_FUNC_DECLARE(dAcOGoddessCube_c, Wait);
-	STATE_FUNC_DECLARE(dAcOGoddessCube_c, Shot);
+    STATE_FUNC_DECLARE(dAcOGoddessCube_c, Wait);
+    STATE_FUNC_DECLARE(dAcOGoddessCube_c, Shot);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOGoddessCube_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOGoddessCube_c);
 };
 
 #endif

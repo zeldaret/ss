@@ -5,13 +5,13 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcObjRoulette_c : public dAcObjBase_c { 
+class dAcObjRoulette_c : public dAcObjBase_c {
 public:
-	dAcObjRoulette_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcObjRoulette_c() {}
+    dAcObjRoulette_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcObjRoulette_c() {}
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcObjRoulette_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcObjRoulette_c);
 };
 
 #endif

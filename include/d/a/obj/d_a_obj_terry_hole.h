@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOTerryHole_c : public dAcObjBase_c { 
+class dAcOTerryHole_c : public dAcObjBase_c {
 public:
-	dAcOTerryHole_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOTerryHole_c() {}
+    dAcOTerryHole_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOTerryHole_c() {}
 
-	STATE_FUNC_DECLARE(dAcOTerryHole_c, Wait);
+    STATE_FUNC_DECLARE(dAcOTerryHole_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOTerryHole_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOTerryHole_c);
 };
 
 #endif

@@ -5,13 +5,13 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dTgSwordBattleGame_c : public dAcBase_c { 
+class dTgSwordBattleGame_c : public dAcBase_c {
 public:
-	dTgSwordBattleGame_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dTgSwordBattleGame_c() {}
+    dTgSwordBattleGame_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dTgSwordBattleGame_c() {}
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dTgSwordBattleGame_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dTgSwordBattleGame_c);
 };
 
 #endif

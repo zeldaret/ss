@@ -5,18 +5,18 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcOTableWare_c : public dAcObjBase_c { 
+class dAcOTableWare_c : public dAcObjBase_c {
 public:
-	dAcOTableWare_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcOTableWare_c() {}
+    dAcOTableWare_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcOTableWare_c() {}
 
-	STATE_FUNC_DECLARE(dAcOTableWare_c, Wait);
-	STATE_FUNC_DECLARE(dAcOTableWare_c, Down);
-	STATE_FUNC_DECLARE(dAcOTableWare_c, Drop);
-	STATE_FUNC_DECLARE(dAcOTableWare_c, WindMove);
+    STATE_FUNC_DECLARE(dAcOTableWare_c, Wait);
+    STATE_FUNC_DECLARE(dAcOTableWare_c, Down);
+    STATE_FUNC_DECLARE(dAcOTableWare_c, Drop);
+    STATE_FUNC_DECLARE(dAcOTableWare_c, WindMove);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcOTableWare_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcOTableWare_c);
 };
 
 #endif

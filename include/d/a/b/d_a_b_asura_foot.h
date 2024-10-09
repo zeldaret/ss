@@ -5,16 +5,16 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcAsuraFoot_c : public dAcObjBase_c { 
+class dAcAsuraFoot_c : public dAcObjBase_c {
 public:
-	dAcAsuraFoot_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcAsuraFoot_c() {}
+    dAcAsuraFoot_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcAsuraFoot_c() {}
 
-	STATE_FUNC_DECLARE(dAcAsuraFoot_c, Pulled);
-	STATE_FUNC_DECLARE(dAcAsuraFoot_c, Wait);
+    STATE_FUNC_DECLARE(dAcAsuraFoot_c, Pulled);
+    STATE_FUNC_DECLARE(dAcAsuraFoot_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcAsuraFoot_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcAsuraFoot_c);
 };
 
 #endif

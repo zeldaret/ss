@@ -3,10 +3,10 @@
 
 #include <d/a/e/d_a_en_base.h>
 
-class dAcGirahimu3First_c : public dAcEnBase_c { 
+class dAcGirahimu3First_c : public dAcEnBase_c {
 public:
-	dAcGirahimu3First_c() {}
-	virtual ~dAcGirahimu3First_c() {}
+    dAcGirahimu3First_c() {}
+    virtual ~dAcGirahimu3First_c() {}
 
 private:
 };

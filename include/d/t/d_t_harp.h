@@ -5,15 +5,15 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dTgHarp_c : public dAcBase_c { 
+class dTgHarp_c : public dAcBase_c {
 public:
-	dTgHarp_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dTgHarp_c() {}
+    dTgHarp_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dTgHarp_c() {}
 
-	STATE_FUNC_DECLARE(dTgHarp_c, Wait);
+    STATE_FUNC_DECLARE(dTgHarp_c, Wait);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dTgHarp_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dTgHarp_c);
 };
 
 #endif

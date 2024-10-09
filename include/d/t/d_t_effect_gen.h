@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgEffectGen_c : public dAcBase_c { 
+class dTgEffectGen_c : public dAcBase_c {
 public:
-	dTgEffectGen_c() {}
-	virtual ~dTgEffectGen_c() {}
+    dTgEffectGen_c() {}
+    virtual ~dTgEffectGen_c() {}
 
 private:
 };

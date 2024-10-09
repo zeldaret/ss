@@ -3,10 +3,10 @@
 
 #include <d/a/d_a_base.h>
 
-class dTgMapMark_c : public dAcBase_c { 
+class dTgMapMark_c : public dAcBase_c {
 public:
-	dTgMapMark_c() {}
-	virtual ~dTgMapMark_c() {}
+    dTgMapMark_c() {}
+    virtual ~dTgMapMark_c() {}
 
 private:
 };

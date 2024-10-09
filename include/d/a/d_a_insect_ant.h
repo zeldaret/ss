@@ -5,20 +5,20 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcInsectAnt_c : public dAcObjBase_c { 
+class dAcInsectAnt_c : public dAcObjBase_c {
 public:
-	dAcInsectAnt_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcInsectAnt_c() {}
+    dAcInsectAnt_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcInsectAnt_c() {}
 
-	STATE_FUNC_DECLARE(dAcInsectAnt_c, Wait);
-	STATE_FUNC_DECLARE(dAcInsectAnt_c, Walk);
-	STATE_FUNC_DECLARE(dAcInsectAnt_c, Escape);
-	STATE_FUNC_DECLARE(dAcInsectAnt_c, Dig);
-	STATE_FUNC_DECLARE(dAcInsectAnt_c, Dead);
-	STATE_FUNC_DECLARE(dAcInsectAnt_c, Finalize);
+    STATE_FUNC_DECLARE(dAcInsectAnt_c, Wait);
+    STATE_FUNC_DECLARE(dAcInsectAnt_c, Walk);
+    STATE_FUNC_DECLARE(dAcInsectAnt_c, Escape);
+    STATE_FUNC_DECLARE(dAcInsectAnt_c, Dig);
+    STATE_FUNC_DECLARE(dAcInsectAnt_c, Dead);
+    STATE_FUNC_DECLARE(dAcInsectAnt_c, Finalize);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcInsectAnt_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcInsectAnt_c);
 };
 
 #endif

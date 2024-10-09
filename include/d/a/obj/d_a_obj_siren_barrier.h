@@ -3,10 +3,10 @@
 
 #include <d/a/obj/d_a_obj_base.h>
 
-class dAcOSirenBarrier_c : public dAcObjBase_c { 
+class dAcOSirenBarrier_c : public dAcObjBase_c {
 public:
-	dAcOSirenBarrier_c() {}
-	virtual ~dAcOSirenBarrier_c() {}
+    dAcOSirenBarrier_c() {}
+    virtual ~dAcOSirenBarrier_c() {}
 
 private:
 };

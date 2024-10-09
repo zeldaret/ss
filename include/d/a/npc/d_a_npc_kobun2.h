@@ -5,18 +5,18 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
-class dAcNpcKbn2_c : public dAcNpc_c { 
+class dAcNpcKbn2_c : public dAcNpc_c {
 public:
-	dAcNpcKbn2_c() : mStateMgr(*this, sStateID::null) {}
-	virtual ~dAcNpcKbn2_c() {}
+    dAcNpcKbn2_c() : mStateMgr(*this, sStateID::null) {}
+    virtual ~dAcNpcKbn2_c() {}
 
-	STATE_FUNC_DECLARE(dAcNpcKbn2_c, RaceInit);
-	STATE_FUNC_DECLARE(dAcNpcKbn2_c, RaceRun);
-	STATE_FUNC_DECLARE(dAcNpcKbn2_c, RaceDive);
-	STATE_FUNC_DECLARE(dAcNpcKbn2_c, RaceRide);
+    STATE_FUNC_DECLARE(dAcNpcKbn2_c, RaceInit);
+    STATE_FUNC_DECLARE(dAcNpcKbn2_c, RaceRun);
+    STATE_FUNC_DECLARE(dAcNpcKbn2_c, RaceDive);
+    STATE_FUNC_DECLARE(dAcNpcKbn2_c, RaceRide);
 
 private:
-	/* 0x??? */ STATE_MGR_DECLARE(dAcNpcKbn2_c);
+    /* 0x??? */ STATE_MGR_DECLARE(dAcNpcKbn2_c);
 };
 
 #endif
