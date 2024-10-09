@@ -16,11 +16,11 @@ struct mAng {
     s32 step(s16 target, s32 steps, s16 max, s16 min);
 
     f32 sin() const {
-        return nw4r::math::SinIdx(mVal);
+        return nw4r::math::SinIdx(*this);
     }
 
     f32 cos() const {
-        return nw4r::math::CosIdx(mVal);
+        return nw4r::math::CosIdx(*this);
     }
 
     s16 mVal;
