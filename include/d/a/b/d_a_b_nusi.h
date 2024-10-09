@@ -13,4 +13,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcNusi_c);
 };
+
 #endif

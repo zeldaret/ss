@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_vd_bullet.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_VDB, dAcObjVdb_c, fProfile::OBJ_VDB, 0XBD, 0, 0);
+SPECIAL_ACTOR_PROFILE(OBJ_VDB, dAcObjVdb_c, fProfile::OBJ_VDB, 0xBD, 0, 0);
 
 STATE_DEFINE(dAcObjVdb_c, BulletMove);
 STATE_DEFINE(dAcObjVdb_c, BulletLost);

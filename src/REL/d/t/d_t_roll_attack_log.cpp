@@ -1,6 +1,6 @@
 #include <d/t/d_t_roll_attack_log.h>
 
-SPECIAL_ACTOR_PROFILE(TAG_ROLL_ATTACK_LOG, dTgRollAttackLog_c, fProfile::TAG_ROLL_ATTACK_LOG, 0X227, 0, 0);
+SPECIAL_ACTOR_PROFILE(TAG_ROLL_ATTACK_LOG, dTgRollAttackLog_c, fProfile::TAG_ROLL_ATTACK_LOG, 0x227, 0, 0);
 
 STATE_DEFINE(dTgRollAttackLog_c, Wait);
 STATE_DEFINE(dTgRollAttackLog_c, RollAttack);

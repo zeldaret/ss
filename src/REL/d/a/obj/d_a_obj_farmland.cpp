@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_farmland.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_FARMLAND, dAcOFarmLand_c, fProfile::OBJ_FARMLAND, 0X155, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_FARMLAND, dAcOFarmLand_c, fProfile::OBJ_FARMLAND, 0x155, 0, 3);
 
 STATE_DEFINE(dAcOFarmLand_c, Wait);
 STATE_DEFINE(dAcOFarmLand_c, DummyEvent);

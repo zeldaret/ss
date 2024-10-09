@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_lighthouse_harp.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_LIGHTHOUSE_HARP, dAcOlighthouseHarp_c, fProfile::OBJ_LIGHTHOUSE_HARP, 0X1DF, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_LIGHTHOUSE_HARP, dAcOlighthouseHarp_c, fProfile::OBJ_LIGHTHOUSE_HARP, 0x1DF, 0, 2);
 
 STATE_DEFINE(dAcOlighthouseHarp_c, Wait);
 STATE_DEFINE(dAcOlighthouseHarp_c, Move);

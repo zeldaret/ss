@@ -1,6 +1,6 @@
 #include <d/a/b/d_a_b_girahimu3_second.h>
 
-SPECIAL_ACTOR_PROFILE(B_GIRAHIMU3_SECOND, dAcGirahimu3Second_c, fProfile::B_GIRAHIMU3_SECOND, 0X112, 0, 0);
+SPECIAL_ACTOR_PROFILE(B_GIRAHIMU3_SECOND, dAcGirahimu3Second_c, fProfile::B_GIRAHIMU3_SECOND, 0x112, 0, 0);
 
 STATE_DEFINE(dAcGirahimu3Second_c, Demo);
 STATE_DEFINE(dAcGirahimu3Second_c, Demo2);

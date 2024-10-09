@@ -29,4 +29,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcNusiTentakle_c);
 };
+
 #endif

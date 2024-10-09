@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_bridge_step.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BRIDGE_STEP, dAcOBridgeStep_c, fProfile::OBJ_BRIDGE_STEP, 0X231, 0, 7);
+SPECIAL_ACTOR_PROFILE(OBJ_BRIDGE_STEP, dAcOBridgeStep_c, fProfile::OBJ_BRIDGE_STEP, 0x231, 0, 7);
 
 STATE_DEFINE(dAcOBridgeStep_c, Wait);
 STATE_DEFINE(dAcOBridgeStep_c, SwitchPushed);

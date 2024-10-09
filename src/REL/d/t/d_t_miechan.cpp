@@ -1,6 +1,6 @@
 #include <d/t/d_t_miechan.h>
 
-SPECIAL_ACTOR_PROFILE(TAG_MIECHAN, dTgMiechan_c, fProfile::TAG_MIECHAN, 0X2A, 0, 0);
+SPECIAL_ACTOR_PROFILE(TAG_MIECHAN, dTgMiechan_c, fProfile::TAG_MIECHAN, 0x2A, 0, 0);
 
 STATE_DEFINE(dTgMiechan_c, Search);
 STATE_DEFINE(dTgMiechan_c, Wait1);

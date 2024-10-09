@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_wind.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_WIND, dAcOwind_c, fProfile::OBJ_WIND, 0XDB, 0, 261);
+SPECIAL_ACTOR_PROFILE(OBJ_WIND, dAcOwind_c, fProfile::OBJ_WIND, 0xDB, 0, 261);
 
 STATE_DEFINE(dAcOwind_c, Wait);
 

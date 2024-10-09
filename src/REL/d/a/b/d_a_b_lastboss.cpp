@@ -1,6 +1,6 @@
 #include <d/a/b/d_a_b_lastboss.h>
 
-SPECIAL_ACTOR_PROFILE(B_LASTBOSS, dAcBlastboss_c, fProfile::B_LASTBOSS, 0XBA, 0, 0);
+SPECIAL_ACTOR_PROFILE(B_LASTBOSS, dAcBlastboss_c, fProfile::B_LASTBOSS, 0xBA, 0, 0);
 
 STATE_DEFINE(dAcBlastboss_c, Fight);
 STATE_DEFINE(dAcBlastboss_c, Guard);

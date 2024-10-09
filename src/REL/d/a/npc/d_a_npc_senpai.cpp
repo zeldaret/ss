@@ -1,6 +1,6 @@
 #include <d/a/npc/d_a_npc_senpai.h>
 
-SPECIAL_ACTOR_PROFILE(NPC_SENPAI, dAcNpcSenpai_c, fProfile::NPC_SENPAI, 0X90, 0, 3);
+SPECIAL_ACTOR_PROFILE(NPC_SENPAI, dAcNpcSenpai_c, fProfile::NPC_SENPAI, 0x90, 0, 3);
 
 STATE_DEFINE(dAcNpcSenpai_c, ReadyWatch1);
 STATE_DEFINE(dAcNpcSenpai_c, ReadyWatch2);

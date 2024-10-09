@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_fence.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_FENCE, dAcOFence_c, fProfile::OBJ_FENCE, 0X18B, 0, 4);
+SPECIAL_ACTOR_PROFILE(OBJ_FENCE, dAcOFence_c, fProfile::OBJ_FENCE, 0x18B, 0, 4);
 
 STATE_DEFINE(dAcOFence_c, WaitOpen);
 STATE_DEFINE(dAcOFence_c, Open);

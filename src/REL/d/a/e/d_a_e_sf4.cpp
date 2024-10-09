@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_sf4.h>
 
-SPECIAL_ACTOR_PROFILE(E_SF4, dAcEsf4_c, fProfile::E_SF4, 0XC9, 0, 2);
+SPECIAL_ACTOR_PROFILE(E_SF4, dAcEsf4_c, fProfile::E_SF4, 0xC9, 0, 2);
 
 STATE_DEFINE(dAcEsf4_c, Standby);
 STATE_DEFINE(dAcEsf4_c, Fight);

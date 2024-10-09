@@ -1,6 +1,6 @@
 #include <d/t/d_t_pumpkin_clay.h>
 
-SPECIAL_ACTOR_PROFILE(TAG_PUMPKIN_CLAY, dTgPumpkinClay_c, fProfile::TAG_PUMPKIN_CLAY, 0X150, 0, 0);
+SPECIAL_ACTOR_PROFILE(TAG_PUMPKIN_CLAY, dTgPumpkinClay_c, fProfile::TAG_PUMPKIN_CLAY, 0x150, 0, 0);
 
 STATE_DEFINE(dTgPumpkinClay_c, Wait);
 

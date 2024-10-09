@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_hp.h>
 
-SPECIAL_ACTOR_PROFILE(E_HP, dAcEHp_c, fProfile::E_HP, 0X102, 0, 18);
+SPECIAL_ACTOR_PROFILE(E_HP, dAcEHp_c, fProfile::E_HP, 0x102, 0, 18);
 
 STATE_DEFINE(dAcEHp_c, BobUpAndDown);
 STATE_DEFINE(dAcEHp_c, Chase);

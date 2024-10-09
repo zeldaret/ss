@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_water_igaiga.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_WATER_IGAIGA, dAcOwaterIgaiga_c, fProfile::OBJ_WATER_IGAIGA, 0X1E2, 0, 7);
+SPECIAL_ACTOR_PROFILE(OBJ_WATER_IGAIGA, dAcOwaterIgaiga_c, fProfile::OBJ_WATER_IGAIGA, 0x1E2, 0, 7);
 
 STATE_DEFINE(dAcOwaterIgaiga_c, Wait);
 STATE_DEFINE(dAcOwaterIgaiga_c, Stick);

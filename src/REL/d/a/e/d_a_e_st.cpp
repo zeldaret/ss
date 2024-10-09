@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_st.h>
 
-SPECIAL_ACTOR_PROFILE(E_ST, dAcEst_c, fProfile::E_ST, 0XCA, 0, 2);
+SPECIAL_ACTOR_PROFILE(E_ST, dAcEst_c, fProfile::E_ST, 0xCA, 0, 2);
 
 STATE_DEFINE(dAcEst_c, Home);
 STATE_DEFINE(dAcEst_c, HomeLine);

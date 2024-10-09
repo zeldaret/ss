@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_roll_pillar.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_ROLL_PILLAR, dAcORollPillar_c, fProfile::OBJ_ROLL_PILLAR, 0X13C, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_ROLL_PILLAR, dAcORollPillar_c, fProfile::OBJ_ROLL_PILLAR, 0x13C, 0, 3);
 
 STATE_DEFINE(dAcORollPillar_c, Wait);
 STATE_DEFINE(dAcORollPillar_c, Rotate);

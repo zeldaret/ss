@@ -1,6 +1,6 @@
 #include <d/d_s_boot.h>
 
-SPECIAL_ACTOR_PROFILE(BOOT, dScBoot_c, fProfile::BOOT, 0X2A7, 0, 1174405120);
+SPECIAL_ACTOR_PROFILE(BOOT, dScBoot_c, fProfile::BOOT, 0x2A7, 0, 1174405120);
 
 STATE_DEFINE(dScBoot_c, Init);
 STATE_DEFINE(dScBoot_c, Strap);

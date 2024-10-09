@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_hydra.h>
 
-SPECIAL_ACTOR_PROFILE(E_HYDRA, dAcEhydra_c, fProfile::E_HYDRA, 0XE6, 0, 4131);
+SPECIAL_ACTOR_PROFILE(E_HYDRA, dAcEhydra_c, fProfile::E_HYDRA, 0xE6, 0, 4131);
 
 STATE_DEFINE(dAcEhydra_c, Wait);
 STATE_DEFINE(dAcEhydra_c, Walk);

@@ -13,4 +13,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcNpcSha_c);
 };
+
 #endif

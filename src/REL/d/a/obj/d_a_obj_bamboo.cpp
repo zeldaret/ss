@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_bamboo.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BAMBOO, dAcObamboo_c, fProfile::OBJ_BAMBOO, 0X131, 0, 35);
+SPECIAL_ACTOR_PROFILE(OBJ_BAMBOO, dAcObamboo_c, fProfile::OBJ_BAMBOO, 0x131, 0, 35);
 
 STATE_DEFINE(dAcObamboo_c, Wait);
 STATE_DEFINE(dAcObamboo_c, Fall);

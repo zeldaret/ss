@@ -1,6 +1,6 @@
 #include <d/a/b/d_a_b_nusi_tentakle.h>
 
-SPECIAL_ACTOR_PROFILE(B_NUSI_TENTAKLE, dAcNusiTentakle_c, fProfile::B_NUSI_TENTAKLE, 0XB4, 0, 0);
+SPECIAL_ACTOR_PROFILE(B_NUSI_TENTAKLE, dAcNusiTentakle_c, fProfile::B_NUSI_TENTAKLE, 0xB4, 0, 0);
 
 STATE_DEFINE(dAcNusiTentakle_c, Hide);
 STATE_DEFINE(dAcNusiTentakle_c, Appear);

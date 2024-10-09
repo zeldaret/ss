@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_roll_rock.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_ROLL_ROCK, dAcOrollRock_c, fProfile::OBJ_ROLL_ROCK, 0X266, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_ROLL_ROCK, dAcOrollRock_c, fProfile::OBJ_ROLL_ROCK, 0x266, 0, 2);
 
 STATE_DEFINE(dAcOrollRock_c, Wait);
 STATE_DEFINE(dAcOrollRock_c, Slope);

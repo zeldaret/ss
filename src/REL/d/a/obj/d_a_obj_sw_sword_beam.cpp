@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_sw_sword_beam.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SW_SWORD_BEAM, dAcOSwSwordBeam_c, fProfile::OBJ_SW_SWORD_BEAM, 0X1A2, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_SW_SWORD_BEAM, dAcOSwSwordBeam_c, fProfile::OBJ_SW_SWORD_BEAM, 0x1A2, 0, 3);
 
 STATE_DEFINE(dAcOSwSwordBeam_c, Wait);
 STATE_DEFINE(dAcOSwSwordBeam_c, Rotate);

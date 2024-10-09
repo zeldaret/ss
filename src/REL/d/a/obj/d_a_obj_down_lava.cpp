@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_down_lava.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_DOWN_LAVA, dAcOdownLava_c, fProfile::OBJ_DOWN_LAVA, 0X1FB, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_DOWN_LAVA, dAcOdownLava_c, fProfile::OBJ_DOWN_LAVA, 0x1FB, 0, 6);
 
 STATE_DEFINE(dAcOdownLava_c, Wait);
 STATE_DEFINE(dAcOdownLava_c, Move);

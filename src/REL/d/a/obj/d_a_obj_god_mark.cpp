@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_god_mark.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_GOD_MARK, dAcOgodMark_c, fProfile::OBJ_GOD_MARK, 0X20A, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_GOD_MARK, dAcOgodMark_c, fProfile::OBJ_GOD_MARK, 0x20A, 0, 6);
 
 STATE_DEFINE(dAcOgodMark_c, Wait);
 STATE_DEFINE(dAcOgodMark_c, Shine);

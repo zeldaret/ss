@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_save.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SAVE, dAcOSave_c, fProfile::OBJ_SAVE, 0X273, 0, 7);
+SPECIAL_ACTOR_PROFILE(OBJ_SAVE, dAcOSave_c, fProfile::OBJ_SAVE, 0x273, 0, 7);
 
 STATE_DEFINE(dAcOSave_c, Moss);
 STATE_DEFINE(dAcOSave_c, Shine);

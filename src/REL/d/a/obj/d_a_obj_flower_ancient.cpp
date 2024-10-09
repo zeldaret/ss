@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_flower_ancient.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_FLOWER_ANCIENT, dAcOFlowerAncient_c, fProfile::OBJ_FLOWER_ANCIENT, 0X245, 0, 4098);
+SPECIAL_ACTOR_PROFILE(OBJ_FLOWER_ANCIENT, dAcOFlowerAncient_c, fProfile::OBJ_FLOWER_ANCIENT, 0x245, 0, 4098);
 
 STATE_DEFINE(dAcOFlowerAncient_c, Wait);
 STATE_DEFINE(dAcOFlowerAncient_c, TimeSlip);

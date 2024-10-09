@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_eye.h>
 
-SPECIAL_ACTOR_PROFILE(E_EYE, dAcEEye_c, fProfile::E_EYE, 0XF6, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_EYE, dAcEEye_c, fProfile::E_EYE, 0xF6, 0, 3);
 
 STATE_DEFINE(dAcEEye_c, Open);
 STATE_DEFINE(dAcEEye_c, Wait);

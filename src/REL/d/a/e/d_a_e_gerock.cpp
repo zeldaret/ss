@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_gerock.h>
 
-SPECIAL_ACTOR_PROFILE(E_GEROCK, dAcEgerock_c, fProfile::E_GEROCK, 0X108, 0, 4099);
+SPECIAL_ACTOR_PROFILE(E_GEROCK, dAcEgerock_c, fProfile::E_GEROCK, 0x108, 0, 4099);
 
 STATE_DEFINE(dAcEgerock_c, Attack);
 STATE_DEFINE(dAcEgerock_c, Damage);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_time_stone.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_TIME_STONE, dAcOTimeStone_c, fProfile::OBJ_TIME_STONE, 0X19A, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_TIME_STONE, dAcOTimeStone_c, fProfile::OBJ_TIME_STONE, 0x19A, 0, 6);
 
 STATE_DEFINE(dAcOTimeStone_c, Wait);
 STATE_DEFINE(dAcOTimeStone_c, TimeSlip);

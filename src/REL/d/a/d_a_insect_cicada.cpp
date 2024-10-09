@@ -1,6 +1,6 @@
 #include <d/a/d_a_insect_cicada.h>
 
-SPECIAL_ACTOR_PROFILE(INSECT_CICADA, dAcInsectCicada_c, fProfile::INSECT_CICADA, 0X16C, 0, 2);
+SPECIAL_ACTOR_PROFILE(INSECT_CICADA, dAcInsectCicada_c, fProfile::INSECT_CICADA, 0x16C, 0, 2);
 
 STATE_DEFINE(dAcInsectCicada_c, Wait);
 STATE_DEFINE(dAcInsectCicada_c, Fly);

@@ -1,6 +1,6 @@
 #include <d/t/d_t_ship_slope.h>
 
-SPECIAL_ACTOR_PROFILE(TAG_SHIP_SLOPE, dTgShipSlope_c, fProfile::TAG_SHIP_SLOPE, 0X21F, 0, 0);
+SPECIAL_ACTOR_PROFILE(TAG_SHIP_SLOPE, dTgShipSlope_c, fProfile::TAG_SHIP_SLOPE, 0x21F, 0, 0);
 
 STATE_DEFINE(dTgShipSlope_c, Wait);
 STATE_DEFINE(dTgShipSlope_c, Stop);

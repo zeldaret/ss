@@ -1,6 +1,6 @@
 #include <d/a/b/d_a_b_bigboss.h>
 
-SPECIAL_ACTOR_PROFILE(B_BIGBOSS, dAcBBigBoss_c, fProfile::B_BIGBOSS, 0XA0, 0, 0);
+SPECIAL_ACTOR_PROFILE(B_BIGBOSS, dAcBBigBoss_c, fProfile::B_BIGBOSS, 0xA0, 0, 0);
 
 STATE_DEFINE(dAcBBigBoss_c, AppearWait);
 STATE_DEFINE(dAcBBigBoss_c, AppearDemo);

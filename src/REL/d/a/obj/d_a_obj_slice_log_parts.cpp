@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_slice_log_parts.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SLICE_LOG_PARTS, dAcOsliceLogParts_c, fProfile::OBJ_SLICE_LOG_PARTS, 0X1F6, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_SLICE_LOG_PARTS, dAcOsliceLogParts_c, fProfile::OBJ_SLICE_LOG_PARTS, 0x1F6, 0, 6);
 
 STATE_DEFINE(dAcOsliceLogParts_c, Wait);
 STATE_DEFINE(dAcOsliceLogParts_c, Fly);

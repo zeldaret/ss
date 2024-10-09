@@ -1,6 +1,6 @@
 #include <d/a/d_a_insect_scarab.h>
 
-SPECIAL_ACTOR_PROFILE(INSECT_SCARAB, dAcInsectScarab_c, fProfile::INSECT_SCARAB, 0X16F, 0, 3);
+SPECIAL_ACTOR_PROFILE(INSECT_SCARAB, dAcInsectScarab_c, fProfile::INSECT_SCARAB, 0x16F, 0, 3);
 
 STATE_DEFINE(dAcInsectScarab_c, Wait);
 STATE_DEFINE(dAcInsectScarab_c, Walk);

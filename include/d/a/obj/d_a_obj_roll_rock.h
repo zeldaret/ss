@@ -28,4 +28,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcOrollRock_c);
 };
+
 #endif

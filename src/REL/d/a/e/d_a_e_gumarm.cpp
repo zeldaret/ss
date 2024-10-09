@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_gumarm.h>
 
-SPECIAL_ACTOR_PROFILE(E_GUMARM, dAcGumarm_c, fProfile::E_GUMARM, 0X11F, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_GUMARM, dAcGumarm_c, fProfile::E_GUMARM, 0x11F, 0, 3);
 
 STATE_DEFINE(dAcGumarm_c, Hide);
 STATE_DEFINE(dAcGumarm_c, HideWait);

@@ -1,6 +1,6 @@
 #include <d/a/npc/d_a_npc_rival.h>
 
-SPECIAL_ACTOR_PROFILE(NPC_RVL, dAcNpcRvl_c, fProfile::NPC_RVL, 0X31, 0, 2);
+SPECIAL_ACTOR_PROFILE(NPC_RVL, dAcNpcRvl_c, fProfile::NPC_RVL, 0x31, 0, 2);
 
 STATE_DEFINE(dAcNpcRvl_c, RaceInit);
 STATE_DEFINE(dAcNpcRvl_c, RaceRun);

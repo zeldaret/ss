@@ -1,6 +1,6 @@
 #include <d/t/d_t_group_test.h>
 
-SPECIAL_ACTOR_PROFILE(GROUP_TEST, dTgGroupTest_c, fProfile::GROUP_TEST, 0XC4, 0, 0);
+SPECIAL_ACTOR_PROFILE(GROUP_TEST, dTgGroupTest_c, fProfile::GROUP_TEST, 0xC4, 0, 0);
 
 STATE_DEFINE(dTgGroupTest_c, Wait);
 STATE_DEFINE(dTgGroupTest_c, CreateLeft);

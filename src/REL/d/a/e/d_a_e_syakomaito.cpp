@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_syakomaito.h>
 
-SPECIAL_ACTOR_PROFILE(E_SYAKOMAITO, dAcESyakomaito_c, fProfile::E_SYAKOMAITO, 0XC0, 0, 4099);
+SPECIAL_ACTOR_PROFILE(E_SYAKOMAITO, dAcESyakomaito_c, fProfile::E_SYAKOMAITO, 0xC0, 0, 4099);
 
 STATE_DEFINE(dAcESyakomaito_c, Wait);
 STATE_DEFINE(dAcESyakomaito_c, Kyoro);

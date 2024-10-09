@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_tornado.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_TORNADO, dAcOTornado_c, fProfile::OBJ_TORNADO, 0XDF, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_TORNADO, dAcOTornado_c, fProfile::OBJ_TORNADO, 0xDF, 0, 2);
 
 STATE_DEFINE(dAcOTornado_c, Wait);
 

@@ -1,6 +1,6 @@
 #include <d/t/d_t_sparks2.h>
 
-SPECIAL_ACTOR_PROFILE(SPARKS2_TAG, dSparks2Tag_c, fProfile::SPARKS2_TAG, 0X1A, 0, 388);
+SPECIAL_ACTOR_PROFILE(SPARKS2_TAG, dSparks2Tag_c, fProfile::SPARKS2_TAG, 0x1A, 0, 388);
 
 STATE_DEFINE(dSparks2Tag_c, Wait);
 

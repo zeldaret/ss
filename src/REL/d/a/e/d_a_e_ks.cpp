@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_ks.h>
 
-SPECIAL_ACTOR_PROFILE(E_KS, dAcEKs_c, fProfile::E_KS, 0XFE, 0, 4099);
+SPECIAL_ACTOR_PROFILE(E_KS, dAcEKs_c, fProfile::E_KS, 0xFE, 0, 4099);
 
 STATE_DEFINE(dAcEKs_c, Wait);
 STATE_DEFINE(dAcEKs_c, WakeUp);

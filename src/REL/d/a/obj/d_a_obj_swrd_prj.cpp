@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_swrd_prj.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SWRD_PRJ, dAcOSwrdPrj, fProfile::OBJ_SWRD_PRJ, 0X27D, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_SWRD_PRJ, dAcOSwrdPrj, fProfile::OBJ_SWRD_PRJ, 0x27D, 0, 3);
 
 STATE_DEFINE(dAcOSwrdPrj, WaitHarp);
 STATE_DEFINE(dAcOSwrdPrj, WaitAppear);

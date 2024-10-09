@@ -1,6 +1,6 @@
 #include <d/a/d_a_control.h>
 
-SPECIAL_ACTOR_PROFILE(ENEMY_CONTROL, dAcEnCl_c, fProfile::ENEMY_CONTROL, 0XE0, 0, 0);
+SPECIAL_ACTOR_PROFILE(ENEMY_CONTROL, dAcEnCl_c, fProfile::ENEMY_CONTROL, 0xE0, 0, 0);
 
 STATE_DEFINE(dAcEnCl_c, pathMove);
 STATE_DEFINE(dAcEnCl_c, pathRoof);

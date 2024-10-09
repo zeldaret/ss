@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_bridge_bone.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BRIDGE_BONE, dAcOBridgeBone_c, fProfile::OBJ_BRIDGE_BONE, 0X1A0, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_BRIDGE_BONE, dAcOBridgeBone_c, fProfile::OBJ_BRIDGE_BONE, 0x1A0, 0, 3);
 
 STATE_DEFINE(dAcOBridgeBone_c, Wait);
 

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_trolley_shutter.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_TROLLEY_SHUTTER, dAcOTrolleyShutter_c, fProfile::OBJ_TROLLEY_SHUTTER, 0X186, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_TROLLEY_SHUTTER, dAcOTrolleyShutter_c, fProfile::OBJ_TROLLEY_SHUTTER, 0x186, 0, 6);
 
 STATE_DEFINE(dAcOTrolleyShutter_c, Wait);
 STATE_DEFINE(dAcOTrolleyShutter_c, OpenEvent);

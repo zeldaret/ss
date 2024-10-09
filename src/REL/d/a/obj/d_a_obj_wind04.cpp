@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_wind04.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_WIND04, dAcOwind04_c, fProfile::OBJ_WIND04, 0XDE, 0, 263);
+SPECIAL_ACTOR_PROFILE(OBJ_WIND04, dAcOwind04_c, fProfile::OBJ_WIND04, 0xDE, 0, 263);
 
 STATE_DEFINE(dAcOwind04_c, Wait);
 STATE_DEFINE(dAcOwind04_c, Loop);

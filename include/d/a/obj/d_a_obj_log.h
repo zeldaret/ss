@@ -19,4 +19,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcOlog_c);
 };
+
 #endif

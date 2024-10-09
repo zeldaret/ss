@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_skull.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SKULL, dAcOSkull_c, fProfile::OBJ_SKULL, 0X165, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_SKULL, dAcOSkull_c, fProfile::OBJ_SKULL, 0x165, 0, 3);
 
 STATE_DEFINE(dAcOSkull_c, NormalWait);
 STATE_DEFINE(dAcOSkull_c, GrabCarry);

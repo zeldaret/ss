@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_hidokaris.h>
 
-SPECIAL_ACTOR_PROFILE(E_HIDOKARIS, dAcEhidokaris_c, fProfile::E_HIDOKARIS, 0XE4, 0, 2);
+SPECIAL_ACTOR_PROFILE(E_HIDOKARIS, dAcEhidokaris_c, fProfile::E_HIDOKARIS, 0xE4, 0, 2);
 
 STATE_DEFINE(dAcEhidokaris_c, Wait);
 STATE_DEFINE(dAcEhidokaris_c, BombWait);

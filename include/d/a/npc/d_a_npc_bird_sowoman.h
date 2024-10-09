@@ -16,4 +16,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcNpcBdsw_c);
 };
+
 #endif

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_water_nut.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_WATER_NUT, dAcOWaterNut_c, fProfile::OBJ_WATER_NUT, 0X137, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_WATER_NUT, dAcOWaterNut_c, fProfile::OBJ_WATER_NUT, 0x137, 0, 3);
 
 STATE_DEFINE(dAcOWaterNut_c, Wait);
 STATE_DEFINE(dAcOWaterNut_c, SwordCarry);

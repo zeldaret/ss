@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_block_rope.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BLOCK_ROPE, dAcOblockRope_c, fProfile::OBJ_BLOCK_ROPE, 0X264, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_BLOCK_ROPE, dAcOblockRope_c, fProfile::OBJ_BLOCK_ROPE, 0x264, 0, 2);
 
 STATE_DEFINE(dAcOblockRope_c, Wait);
 STATE_DEFINE(dAcOblockRope_c, Delete);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_stage_debris.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_STAGE_DEBRIS, dAcOstageDebris_c, fProfile::OBJ_STAGE_DEBRIS, 0X1F8, 0, 7);
+SPECIAL_ACTOR_PROFILE(OBJ_STAGE_DEBRIS, dAcOstageDebris_c, fProfile::OBJ_STAGE_DEBRIS, 0x1F8, 0, 7);
 
 STATE_DEFINE(dAcOstageDebris_c, Wait);
 STATE_DEFINE(dAcOstageDebris_c, Break);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_vortex.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_VORTEX, dAcOVortex_c, fProfile::OBJ_VORTEX, 0X246, 0, 0);
+SPECIAL_ACTOR_PROFILE(OBJ_VORTEX, dAcOVortex_c, fProfile::OBJ_VORTEX, 0x246, 0, 0);
 
 STATE_DEFINE(dAcOVortex_c, Wait);
 STATE_DEFINE(dAcOVortex_c, Appear);

@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_hoc.h>
 
-SPECIAL_ACTOR_PROFILE(E_HOC, dAcEhoc_c, fProfile::E_HOC, 0XCC, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_HOC, dAcEhoc_c, fProfile::E_HOC, 0xCC, 0, 3);
 
 STATE_DEFINE(dAcEhoc_c, Fight);
 STATE_DEFINE(dAcEhoc_c, Attack);

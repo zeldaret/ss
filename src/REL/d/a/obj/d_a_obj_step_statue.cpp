@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_step_statue.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_STEP_STATUE, dAcOStepStatue_c, fProfile::OBJ_STEP_STATUE, 0X17C, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_STEP_STATUE, dAcOStepStatue_c, fProfile::OBJ_STEP_STATUE, 0x17C, 0, 3);
 
 STATE_DEFINE(dAcOStepStatue_c, Wait);
 STATE_DEFINE(dAcOStepStatue_c, CarryBomb);

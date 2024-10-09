@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_liza_tail.h>
 
-SPECIAL_ACTOR_PROFILE(E_LIZA_TAIL, dAcEliza_tail_c, fProfile::E_LIZA_TAIL, 0XE3, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_LIZA_TAIL, dAcEliza_tail_c, fProfile::E_LIZA_TAIL, 0xE3, 0, 3);
 
 STATE_DEFINE(dAcEliza_tail_c, Wait);
 STATE_DEFINE(dAcEliza_tail_c, Damage);

@@ -1,6 +1,6 @@
 #include <d/t/d_t_ks.h>
 
-SPECIAL_ACTOR_PROFILE(KIESU_TAG, dTgKiesuTag_c, fProfile::KIESU_TAG, 0XFD, 0, 0);
+SPECIAL_ACTOR_PROFILE(KIESU_TAG, dTgKiesuTag_c, fProfile::KIESU_TAG, 0xFD, 0, 0);
 
 STATE_DEFINE(dTgKiesuTag_c, CreateChildren);
 STATE_DEFINE(dTgKiesuTag_c, ControlWait);

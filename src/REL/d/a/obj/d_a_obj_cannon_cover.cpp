@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_cannon_cover.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_CANNON_COVER, dAcOcannonCover_c, fProfile::OBJ_CANNON_COVER, 0X1D3, 0, 4);
+SPECIAL_ACTOR_PROFILE(OBJ_CANNON_COVER, dAcOcannonCover_c, fProfile::OBJ_CANNON_COVER, 0x1D3, 0, 4);
 
 STATE_DEFINE(dAcOcannonCover_c, Wait);
 STATE_DEFINE(dAcOcannonCover_c, Open);

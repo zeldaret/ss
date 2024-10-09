@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_sword_stab.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SWORD_STAB, dAcOSwordStab_c, fProfile::OBJ_SWORD_STAB, 0X25D, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_SWORD_STAB, dAcOSwordStab_c, fProfile::OBJ_SWORD_STAB, 0x25D, 0, 3);
 
 STATE_DEFINE(dAcOSwordStab_c, Wait);
 

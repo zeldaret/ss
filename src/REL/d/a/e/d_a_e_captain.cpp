@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_captain.h>
 
-SPECIAL_ACTOR_PROFILE(E_CAPTAIN, dAcEcaptain_c, fProfile::E_CAPTAIN, 0XBE, 0, 32);
+SPECIAL_ACTOR_PROFILE(E_CAPTAIN, dAcEcaptain_c, fProfile::E_CAPTAIN, 0xBE, 0, 32);
 
 STATE_DEFINE(dAcEcaptain_c, Opening);
 STATE_DEFINE(dAcEcaptain_c, Wait);

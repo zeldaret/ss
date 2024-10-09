@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_gunhob.h>
 
-SPECIAL_ACTOR_PROFILE(E_GUNHOB, dAcEgunhob_c, fProfile::E_GUNHOB, 0XE8, 0, 4130);
+SPECIAL_ACTOR_PROFILE(E_GUNHOB, dAcEgunhob_c, fProfile::E_GUNHOB, 0xE8, 0, 4130);
 
 STATE_DEFINE(dAcEgunhob_c, BulletMove);
 STATE_DEFINE(dAcEgunhob_c, BulletReflection);

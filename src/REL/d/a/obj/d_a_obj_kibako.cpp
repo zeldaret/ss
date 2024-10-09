@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_kibako.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_KIBAKO, dAcOkibako_c, fProfile::OBJ_KIBAKO, 0X12C, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_KIBAKO, dAcOkibako_c, fProfile::OBJ_KIBAKO, 0x12C, 0, 2);
 
 STATE_DEFINE(dAcOkibako_c, Wait);
 STATE_DEFINE(dAcOkibako_c, Fire);

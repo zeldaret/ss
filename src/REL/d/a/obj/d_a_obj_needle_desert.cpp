@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_needle_desert.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_NEEDLE_DESERT, dAcONeedleDesert_c, fProfile::OBJ_NEEDLE_DESERT, 0X1AA, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_NEEDLE_DESERT, dAcONeedleDesert_c, fProfile::OBJ_NEEDLE_DESERT, 0x1AA, 0, 3);
 
 STATE_DEFINE(dAcONeedleDesert_c, On);
 STATE_DEFINE(dAcONeedleDesert_c, Off);

@@ -1,6 +1,6 @@
 #include <d/a/b/d_a_b_kr_arm.h>
 
-SPECIAL_ACTOR_PROFILE(B_KRA, dAcBkra_c, fProfile::B_KRA, 0XB9, 0, 0);
+SPECIAL_ACTOR_PROFILE(B_KRA, dAcBkra_c, fProfile::B_KRA, 0xB9, 0, 0);
 
 STATE_DEFINE(dAcBkra_c, Wait);
 STATE_DEFINE(dAcBkra_c, InRoom);

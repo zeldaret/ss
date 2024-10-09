@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_lighthouse_light.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_LIGHTHOUSE_LIGHT, dAcOlighthouseLight_c, fProfile::OBJ_LIGHTHOUSE_LIGHT, 0X1DE, 0, 0);
+SPECIAL_ACTOR_PROFILE(OBJ_LIGHTHOUSE_LIGHT, dAcOlighthouseLight_c, fProfile::OBJ_LIGHTHOUSE_LIGHT, 0x1DE, 0, 0);
 
 STATE_DEFINE(dAcOlighthouseLight_c, Wait);
 STATE_DEFINE(dAcOlighthouseLight_c, Move);

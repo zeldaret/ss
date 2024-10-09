@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_sw_bank.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SW_BANK, dAcOSwBank_c, fProfile::OBJ_SW_BANK, 0X22B, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_SW_BANK, dAcOSwBank_c, fProfile::OBJ_SW_BANK, 0x22B, 0, 3);
 
 STATE_DEFINE(dAcOSwBank_c, Wait);
 STATE_DEFINE(dAcOSwBank_c, Dial);

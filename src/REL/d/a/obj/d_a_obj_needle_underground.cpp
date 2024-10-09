@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_needle_underground.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_NEEDLE_UNDERGROUND, dAcONeedleUnderground_c, fProfile::OBJ_NEEDLE_UNDERGROUND, 0X27C, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_NEEDLE_UNDERGROUND, dAcONeedleUnderground_c, fProfile::OBJ_NEEDLE_UNDERGROUND, 0x27C, 0, 2);
 
 STATE_DEFINE(dAcONeedleUnderground_c, RemainOpen);
 STATE_DEFINE(dAcONeedleUnderground_c, Close);

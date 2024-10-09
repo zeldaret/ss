@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_rope_igaiga.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_ROPE_IGAIGA, dAcOropeIgaiga_c, fProfile::OBJ_ROPE_IGAIGA, 0X265, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_ROPE_IGAIGA, dAcOropeIgaiga_c, fProfile::OBJ_ROPE_IGAIGA, 0x265, 0, 2);
 
 STATE_DEFINE(dAcOropeIgaiga_c, Init);
 STATE_DEFINE(dAcOropeIgaiga_c, Rope);

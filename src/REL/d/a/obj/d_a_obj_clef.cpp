@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_clef.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_CLEF, dAcOClef_c, fProfile::OBJ_CLEF, 0X2D, 0, 7);
+SPECIAL_ACTOR_PROFILE(OBJ_CLEF, dAcOClef_c, fProfile::OBJ_CLEF, 0x2D, 0, 7);
 
 STATE_DEFINE(dAcOClef_c, WaitPhantom);
 STATE_DEFINE(dAcOClef_c, Wait);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_belt_obstacle.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BELT_OBSTACLE, dAcObeltObstacle_c, fProfile::OBJ_BELT_OBSTACLE, 0X270, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_BELT_OBSTACLE, dAcObeltObstacle_c, fProfile::OBJ_BELT_OBSTACLE, 0x270, 0, 2);
 
 STATE_DEFINE(dAcObeltObstacle_c, Wait);
 STATE_DEFINE(dAcObeltObstacle_c, Init);

@@ -16,4 +16,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcOstageWater_c);
 };
+
 #endif

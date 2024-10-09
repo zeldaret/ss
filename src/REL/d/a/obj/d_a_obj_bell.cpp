@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_bell.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BELL, dAcObell_c, fProfile::OBJ_BELL, 0X208, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_BELL, dAcObell_c, fProfile::OBJ_BELL, 0x208, 0, 2);
 
 STATE_DEFINE(dAcObell_c, Wait);
 STATE_DEFINE(dAcObell_c, WaitRupee);

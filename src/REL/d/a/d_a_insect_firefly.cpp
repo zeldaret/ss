@@ -1,6 +1,6 @@
 #include <d/a/d_a_insect_firefly.h>
 
-SPECIAL_ACTOR_PROFILE(INSECT_FIREFLY, dAcInsectFirefly_c, fProfile::INSECT_FIREFLY, 0X170, 0, 3);
+SPECIAL_ACTOR_PROFILE(INSECT_FIREFLY, dAcInsectFirefly_c, fProfile::INSECT_FIREFLY, 0x170, 0, 3);
 
 STATE_DEFINE(dAcInsectFirefly_c, Move);
 STATE_DEFINE(dAcInsectFirefly_c, Escape);

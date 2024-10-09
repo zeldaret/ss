@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_bb_broken_parts.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BB_BROKEN_PARTS, dAcObbBrokenParts_c, fProfile::OBJ_BB_BROKEN_PARTS, 0X215, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_BB_BROKEN_PARTS, dAcObbBrokenParts_c, fProfile::OBJ_BB_BROKEN_PARTS, 0x215, 0, 3);
 
 STATE_DEFINE(dAcObbBrokenParts_c, Wait);
 STATE_DEFINE(dAcObbBrokenParts_c, Break);

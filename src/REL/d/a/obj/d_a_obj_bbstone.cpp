@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_bbstone.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BSTN, dAcOBBStone, fProfile::OBJ_BSTN, 0XA5, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_BSTN, dAcOBBStone, fProfile::OBJ_BSTN, 0xA5, 0, 3);
 
 STATE_DEFINE(dAcOBBStone, Wait);
 STATE_DEFINE(dAcOBBStone, FirstWait);

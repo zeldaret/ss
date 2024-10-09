@@ -1,6 +1,6 @@
 #include <d/a/d_a_insect_beetle.h>
 
-SPECIAL_ACTOR_PROFILE(INSECT_BEETLE, dAcInsectBeetle_c, fProfile::INSECT_BEETLE, 0X16A, 0, 3);
+SPECIAL_ACTOR_PROFILE(INSECT_BEETLE, dAcInsectBeetle_c, fProfile::INSECT_BEETLE, 0x16A, 0, 3);
 
 STATE_DEFINE(dAcInsectBeetle_c, Wait);
 STATE_DEFINE(dAcInsectBeetle_c, Walk);

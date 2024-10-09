@@ -1,6 +1,6 @@
 #include <d/a/d_a_bullet_gue.h>
 
-SPECIAL_ACTOR_PROFILE(GUE_BULLET, dAcBulletGue_c, fProfile::GUE_BULLET, 0X105, 0, 2);
+SPECIAL_ACTOR_PROFILE(GUE_BULLET, dAcBulletGue_c, fProfile::GUE_BULLET, 0x105, 0, 2);
 
 STATE_DEFINE(dAcBulletGue_c, Wait);
 STATE_DEFINE(dAcBulletGue_c, Hold);

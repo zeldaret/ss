@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_chest.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_CHEST, dAcOChest_c, fProfile::OBJ_CHEST, 0X13E, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_CHEST, dAcOChest_c, fProfile::OBJ_CHEST, 0x13E, 0, 3);
 
 STATE_DEFINE(dAcOChest_c, Wait);
 STATE_DEFINE(dAcOChest_c, OpenEvent);

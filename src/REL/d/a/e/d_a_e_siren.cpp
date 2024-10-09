@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_siren.h>
 
-SPECIAL_ACTOR_PROFILE(E_SIREN, dAcESiren_c, fProfile::E_SIREN, 0XEF, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_SIREN, dAcESiren_c, fProfile::E_SIREN, 0xEF, 0, 3);
 
 STATE_DEFINE(dAcESiren_c, Wait);
 STATE_DEFINE(dAcESiren_c, Revival);

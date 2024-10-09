@@ -1,6 +1,6 @@
 #include <d/a/b/d_a_b_nusi_bullet.h>
 
-SPECIAL_ACTOR_PROFILE(B_NUSI_BULLET, dAcNusi_Bullet_c, fProfile::B_NUSI_BULLET, 0XB5, 0, 0);
+SPECIAL_ACTOR_PROFILE(B_NUSI_BULLET, dAcNusi_Bullet_c, fProfile::B_NUSI_BULLET, 0xB5, 0, 0);
 
 STATE_DEFINE(dAcNusi_Bullet_c, Move);
 STATE_DEFINE(dAcNusi_Bullet_c, Wait);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_ground_cover.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_GROUND_COVER, dAcOgroundCover_c, fProfile::OBJ_GROUND_COVER, 0X1FD, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_GROUND_COVER, dAcOgroundCover_c, fProfile::OBJ_GROUND_COVER, 0x1FD, 0, 6);
 
 STATE_DEFINE(dAcOgroundCover_c, Wait);
 STATE_DEFINE(dAcOgroundCover_c, Wait2);

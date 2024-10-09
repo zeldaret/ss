@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_warp.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_WARP, dAcOWarp_c, fProfile::OBJ_WARP, 0X238, 0, 7);
+SPECIAL_ACTOR_PROFILE(OBJ_WARP, dAcOWarp_c, fProfile::OBJ_WARP, 0x238, 0, 7);
 
 STATE_DEFINE(dAcOWarp_c, Wait);
 STATE_DEFINE(dAcOWarp_c, SirenFinish);

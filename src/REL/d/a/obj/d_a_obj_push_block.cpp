@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_push_block.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_PUSH_BLOCK, dAcOpushBlk_c, fProfile::OBJ_PUSH_BLOCK, 0X12D, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_PUSH_BLOCK, dAcOpushBlk_c, fProfile::OBJ_PUSH_BLOCK, 0x12D, 0, 2);
 
 STATE_DEFINE(dAcOpushBlk_c, Wait);
 STATE_DEFINE(dAcOpushBlk_c, Move);

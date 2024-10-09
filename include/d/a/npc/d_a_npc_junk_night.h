@@ -13,4 +13,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcNpcJunkNight_c);
 };
+
 #endif

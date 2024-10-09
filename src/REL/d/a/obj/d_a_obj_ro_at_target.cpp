@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_ro_at_target.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_RO_AT_TARGET, dAcOroAtTarget_c, fProfile::OBJ_RO_AT_TARGET, 0X1FE, 0, 0);
+SPECIAL_ACTOR_PROFILE(OBJ_RO_AT_TARGET, dAcOroAtTarget_c, fProfile::OBJ_RO_AT_TARGET, 0x1FE, 0, 0);
 
 STATE_DEFINE(dAcOroAtTarget_c, Wait);
 STATE_DEFINE(dAcOroAtTarget_c, Play);

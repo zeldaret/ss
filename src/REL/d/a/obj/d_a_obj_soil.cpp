@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_soil.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SOIL, dAcOsoil_c, fProfile::OBJ_SOIL, 0X268, 0, 7);
+SPECIAL_ACTOR_PROFILE(OBJ_SOIL, dAcOsoil_c, fProfile::OBJ_SOIL, 0x268, 0, 7);
 
 STATE_DEFINE(dAcOsoil_c, Soil);
 STATE_DEFINE(dAcOsoil_c, Hole);

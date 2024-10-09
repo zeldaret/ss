@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_truck_rail_col.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_TRUCK_RAIL_COL, dAcOTruckRailCol_c, fProfile::OBJ_TRUCK_RAIL_COL, 0X29C, 0, 0);
+SPECIAL_ACTOR_PROFILE(OBJ_TRUCK_RAIL_COL, dAcOTruckRailCol_c, fProfile::OBJ_TRUCK_RAIL_COL, 0x29C, 0, 0);
 
 STATE_DEFINE(dAcOTruckRailCol_c, Wait);
 

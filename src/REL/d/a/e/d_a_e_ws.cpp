@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_ws.h>
 
-SPECIAL_ACTOR_PROFILE(E_WS, dAcEws_c, fProfile::E_WS, 0X10C, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_WS, dAcEws_c, fProfile::E_WS, 0x10C, 0, 3);
 
 STATE_DEFINE(dAcEws_c, Wait);
 STATE_DEFINE(dAcEws_c, Move);

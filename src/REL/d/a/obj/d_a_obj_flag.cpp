@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_flag.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_FLAG, dAcOFlag_c, fProfile::OBJ_FLAG, 0X14E, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_FLAG, dAcOFlag_c, fProfile::OBJ_FLAG, 0x14E, 0, 3);
 
 STATE_DEFINE(dAcOFlag_c, Wait);
 

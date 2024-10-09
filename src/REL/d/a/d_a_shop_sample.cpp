@@ -1,6 +1,6 @@
 #include <d/a/d_a_shop_sample.h>
 
-SPECIAL_ACTOR_PROFILE(SHOP_SAMPLE, dAcShopSample_c, fProfile::SHOP_SAMPLE, 0X276, 0, 3);
+SPECIAL_ACTOR_PROFILE(SHOP_SAMPLE, dAcShopSample_c, fProfile::SHOP_SAMPLE, 0x276, 0, 3);
 
 STATE_DEFINE(dAcShopSample_c, Wait);
 STATE_DEFINE(dAcShopSample_c, PickUp);

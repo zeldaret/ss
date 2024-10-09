@@ -1,6 +1,6 @@
 #include <d/a/b/d_a_b_asura_arm.h>
 
-SPECIAL_ACTOR_PROFILE(ASURA_ARM, dAcAsuraArm_c, fProfile::ASURA_ARM, 0X118, 0, 0);
+SPECIAL_ACTOR_PROFILE(ASURA_ARM, dAcAsuraArm_c, fProfile::ASURA_ARM, 0x118, 0, 0);
 
 STATE_DEFINE(dAcAsuraArm_c, Pulled);
 STATE_DEFINE(dAcAsuraArm_c, Wait);

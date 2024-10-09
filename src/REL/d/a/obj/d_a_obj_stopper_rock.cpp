@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_stopper_rock.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_STOPPER_ROCK, dAcOstopperRock_c, fProfile::OBJ_STOPPER_ROCK, 0X26C, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_STOPPER_ROCK, dAcOstopperRock_c, fProfile::OBJ_STOPPER_ROCK, 0x26C, 0, 2);
 
 STATE_DEFINE(dAcOstopperRock_c, Wait);
 STATE_DEFINE(dAcOstopperRock_c, Bomb);

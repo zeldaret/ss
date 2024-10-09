@@ -1,6 +1,6 @@
 #include <d/t/d_t_skyEnemy.h>
 
-SPECIAL_ACTOR_PROFILE(SKYENEMY_T, dTgSkyEnemyTag, fProfile::SKYENEMY_T, 0X28D, 0, 0);
+SPECIAL_ACTOR_PROFILE(SKYENEMY_T, dTgSkyEnemyTag, fProfile::SKYENEMY_T, 0x28D, 0, 0);
 
 STATE_DEFINE(dTgSkyEnemyTag, Wait);
 STATE_DEFINE(dTgSkyEnemyTag, BirthRupeeGue);

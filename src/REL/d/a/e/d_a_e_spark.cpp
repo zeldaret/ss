@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_spark.h>
 
-SPECIAL_ACTOR_PROFILE(E_SPARK, dAcEspark_c, fProfile::E_SPARK, 0XF9, 0, 0);
+SPECIAL_ACTOR_PROFILE(E_SPARK, dAcEspark_c, fProfile::E_SPARK, 0xF9, 0, 0);
 
 STATE_DEFINE(dAcEspark_c, Wait);
 STATE_DEFINE(dAcEspark_c, EyeWait);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_goddess_statue.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_GODDESS_STATUE, dAcOGoddessStatue_c, fProfile::OBJ_GODDESS_STATUE, 0X24A, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_GODDESS_STATUE, dAcOGoddessStatue_c, fProfile::OBJ_GODDESS_STATUE, 0x24A, 0, 3);
 
 STATE_DEFINE(dAcOGoddessStatue_c, Wait);
 

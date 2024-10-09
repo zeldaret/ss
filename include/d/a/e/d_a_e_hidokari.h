@@ -31,4 +31,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcEhidokari_c);
 };
+
 #endif

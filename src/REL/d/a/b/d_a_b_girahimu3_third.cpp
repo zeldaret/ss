@@ -1,6 +1,6 @@
 #include <d/a/b/d_a_b_girahimu3_third.h>
 
-SPECIAL_ACTOR_PROFILE(B_GIRAHIMU3_THIRD, dAcGirahimu3Third_c, fProfile::B_GIRAHIMU3_THIRD, 0X113, 0, 0);
+SPECIAL_ACTOR_PROFILE(B_GIRAHIMU3_THIRD, dAcGirahimu3Third_c, fProfile::B_GIRAHIMU3_THIRD, 0x113, 0, 0);
 
 STATE_DEFINE(dAcGirahimu3Third_c, Demo);
 STATE_DEFINE(dAcGirahimu3Third_c, SceneChange);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_trolley.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_TROLLEY, dAcOTrolley_c, fProfile::OBJ_TROLLEY, 0X14A, 0, 4099);
+SPECIAL_ACTOR_PROFILE(OBJ_TROLLEY, dAcOTrolley_c, fProfile::OBJ_TROLLEY, 0x14A, 0, 4099);
 
 STATE_DEFINE(dAcOTrolley_c, Wait);
 STATE_DEFINE(dAcOTrolley_c, RideAction);

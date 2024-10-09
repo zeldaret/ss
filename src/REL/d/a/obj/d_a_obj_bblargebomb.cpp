@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_bblargebomb.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BBLARGEBOMB, dAcOBblargebomb_c, fProfile::OBJ_BBLARGEBOMB, 0XA7, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_BBLARGEBOMB, dAcOBblargebomb_c, fProfile::OBJ_BBLARGEBOMB, 0xA7, 0, 3);
 
 STATE_DEFINE(dAcOBblargebomb_c, Wait);
 STATE_DEFINE(dAcOBblargebomb_c, Explode);

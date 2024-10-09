@@ -1,6 +1,6 @@
 #include <d/a/b/d_a_b_kr_hair.h>
 
-SPECIAL_ACTOR_PROFILE(B_KRH, dAcBkrh_c, fProfile::B_KRH, 0XB8, 0, 0);
+SPECIAL_ACTOR_PROFILE(B_KRH, dAcBkrh_c, fProfile::B_KRH, 0xB8, 0, 0);
 
 STATE_DEFINE(dAcBkrh_c, Normal);
 STATE_DEFINE(dAcBkrh_c, Attack);

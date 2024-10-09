@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_stage_crack.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_STAGE_CRACK, dAcOstageCrack_c, fProfile::OBJ_STAGE_CRACK, 0X1E0, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_STAGE_CRACK, dAcOstageCrack_c, fProfile::OBJ_STAGE_CRACK, 0x1E0, 0, 2);
 
 STATE_DEFINE(dAcOstageCrack_c, Wait);
 STATE_DEFINE(dAcOstageCrack_c, Stay);

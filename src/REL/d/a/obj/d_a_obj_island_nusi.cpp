@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_island_nusi.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_ISLAND_NUSI, dAcOislandNusi_c, fProfile::OBJ_ISLAND_NUSI, 0X204, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_ISLAND_NUSI, dAcOislandNusi_c, fProfile::OBJ_ISLAND_NUSI, 0x204, 0, 3);
 
 STATE_DEFINE(dAcOislandNusi_c, Wait);
 STATE_DEFINE(dAcOislandNusi_c, NusiFight);

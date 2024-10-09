@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_seat_sword.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SEAT_SWORD, dAcOSeatSword_c, fProfile::OBJ_SEAT_SWORD, 0X249, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_SEAT_SWORD, dAcOSeatSword_c, fProfile::OBJ_SEAT_SWORD, 0x249, 0, 3);
 
 STATE_DEFINE(dAcOSeatSword_c, Wait);
 STATE_DEFINE(dAcOSeatSword_c, Get);

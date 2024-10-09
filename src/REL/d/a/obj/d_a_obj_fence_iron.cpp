@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_fence_iron.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_FENCE_IRON, dAcOfenceIron_c, fProfile::OBJ_FENCE_IRON, 0X1C4, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_FENCE_IRON, dAcOfenceIron_c, fProfile::OBJ_FENCE_IRON, 0x1C4, 0, 2);
 
 STATE_DEFINE(dAcOfenceIron_c, Close);
 STATE_DEFINE(dAcOfenceIron_c, PreMoveUp);

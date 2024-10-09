@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_po.h>
 
-SPECIAL_ACTOR_PROFILE(E_PO, dAcEPo_c, fProfile::E_PO, 0XF0, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_PO, dAcEPo_c, fProfile::E_PO, 0xF0, 0, 3);
 
 STATE_DEFINE(dAcEPo_c, Stop);
 STATE_DEFINE(dAcEPo_c, Revival);

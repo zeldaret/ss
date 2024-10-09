@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_am.h>
 
-SPECIAL_ACTOR_PROFILE(E_AM, dAcEAm_c, fProfile::E_AM, 0XC1, 0, 4131);
+SPECIAL_ACTOR_PROFILE(E_AM, dAcEAm_c, fProfile::E_AM, 0xC1, 0, 4131);
 
 STATE_DEFINE(dAcEAm_c, Stop);
 STATE_DEFINE(dAcEAm_c, Appear);

@@ -1,6 +1,6 @@
 #include <d/a/d_a_knight_leader_bird.h>
 
-SPECIAL_ACTOR_PROFILE(KNIGHT_LEADER_BIRD, dAcKnightLeaderBird_c, fProfile::KNIGHT_LEADER_BIRD, 0X8E, 0, 2);
+SPECIAL_ACTOR_PROFILE(KNIGHT_LEADER_BIRD, dAcKnightLeaderBird_c, fProfile::KNIGHT_LEADER_BIRD, 0x8E, 0, 2);
 
 STATE_DEFINE(dAcKnightLeaderBird_c, Wait);
 

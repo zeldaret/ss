@@ -15,4 +15,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcFlySlb_c);
 };
+
 #endif

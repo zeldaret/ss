@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_carry_stone.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_CARRY_STONE, dAcOcarryStone_c, fProfile::OBJ_CARRY_STONE, 0X12A, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_CARRY_STONE, dAcOcarryStone_c, fProfile::OBJ_CARRY_STONE, 0x12A, 0, 2);
 
 STATE_DEFINE(dAcOcarryStone_c, Wait);
 STATE_DEFINE(dAcOcarryStone_c, GrabCarry);

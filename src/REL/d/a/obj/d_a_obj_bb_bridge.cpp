@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_bb_bridge.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BB_BRIDGE, dAcObbBridge_c, fProfile::OBJ_BB_BRIDGE, 0X1A1, 0, 7);
+SPECIAL_ACTOR_PROFILE(OBJ_BB_BRIDGE, dAcObbBridge_c, fProfile::OBJ_BB_BRIDGE, 0x1A1, 0, 7);
 
 STATE_DEFINE(dAcObbBridge_c, Wait);
 STATE_DEFINE(dAcObbBridge_c, BrokenDemo);

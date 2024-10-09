@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_tackle.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_TACKLE, dAcOTackle_c, fProfile::OBJ_TACKLE, 0X240, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_TACKLE, dAcOTackle_c, fProfile::OBJ_TACKLE, 0x240, 0, 6);
 
 STATE_DEFINE(dAcOTackle_c, Wait);
 STATE_DEFINE(dAcOTackle_c, Broken);

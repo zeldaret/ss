@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_roulette_island_r.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_ROULETTE_ISLAND_R, dAcOrouletteIslandR_c, fProfile::OBJ_ROULETTE_ISLAND_R, 0X1CB, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_ROULETTE_ISLAND_R, dAcOrouletteIslandR_c, fProfile::OBJ_ROULETTE_ISLAND_R, 0x1CB, 0, 2);
 
 STATE_DEFINE(dAcOrouletteIslandR_c, Wait);
 STATE_DEFINE(dAcOrouletteIslandR_c, Move);

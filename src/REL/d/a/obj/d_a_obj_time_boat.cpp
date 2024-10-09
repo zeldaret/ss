@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_time_boat.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_TIME_BOAT, dAcOTimeBoat_c, fProfile::OBJ_TIME_BOAT, 0X19B, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_TIME_BOAT, dAcOTimeBoat_c, fProfile::OBJ_TIME_BOAT, 0x19B, 0, 2);
 
 STATE_DEFINE(dAcOTimeBoat_c, Wait);
 STATE_DEFINE(dAcOTimeBoat_c, StartTimeSlip);

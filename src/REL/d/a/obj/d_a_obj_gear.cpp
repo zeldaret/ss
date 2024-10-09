@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_gear.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_GEAR, dAcOGear_c, fProfile::OBJ_GEAR, 0X233, 0, 7);
+SPECIAL_ACTOR_PROFILE(OBJ_GEAR, dAcOGear_c, fProfile::OBJ_GEAR, 0x233, 0, 7);
 
 STATE_DEFINE(dAcOGear_c, Wait);
 STATE_DEFINE(dAcOGear_c, Rotation);

@@ -17,4 +17,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcOBridgeFall_c);
 };
+
 #endif

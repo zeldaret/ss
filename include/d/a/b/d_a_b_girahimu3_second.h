@@ -33,4 +33,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcGirahimu3Second_c);
 };
+
 #endif

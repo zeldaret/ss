@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_ballista.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BALLISTA, dAcOBallista_c, fProfile::OBJ_BALLISTA, 0X23C, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_BALLISTA, dAcOBallista_c, fProfile::OBJ_BALLISTA, 0x23C, 0, 2);
 
 STATE_DEFINE(dAcOBallista_c, Wait);
 STATE_DEFINE(dAcOBallista_c, Grab);

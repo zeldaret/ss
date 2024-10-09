@@ -1,6 +1,6 @@
 #include <d/a/d_a_insect_grasshopper.h>
 
-SPECIAL_ACTOR_PROFILE(INSECT_GRASSHOPPER, dAcInsectGrasshopper_c, fProfile::INSECT_GRASSHOPPER, 0X16B, 0, 3);
+SPECIAL_ACTOR_PROFILE(INSECT_GRASSHOPPER, dAcInsectGrasshopper_c, fProfile::INSECT_GRASSHOPPER, 0x16B, 0, 3);
 
 STATE_DEFINE(dAcInsectGrasshopper_c, Wait);
 STATE_DEFINE(dAcInsectGrasshopper_c, Walk);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_himo.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_HIMO, dAcOhimo_c, fProfile::OBJ_HIMO, 0XD9, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_HIMO, dAcOhimo_c, fProfile::OBJ_HIMO, 0xD9, 0, 2);
 
 STATE_DEFINE(dAcOhimo_c, Wait);
 

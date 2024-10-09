@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_kumite_wall.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_KUMITE_WALL, dAcOkumiteWall_c, fProfile::OBJ_KUMITE_WALL, 0X217, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_KUMITE_WALL, dAcOkumiteWall_c, fProfile::OBJ_KUMITE_WALL, 0x217, 0, 2);
 
 STATE_DEFINE(dAcOkumiteWall_c, Wait);
 STATE_DEFINE(dAcOkumiteWall_c, Appear);

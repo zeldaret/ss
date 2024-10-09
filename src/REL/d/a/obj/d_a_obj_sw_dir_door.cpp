@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_sw_dir_door.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SW_DIR_DOOR, dAcOSwDirDoor_c, fProfile::OBJ_SW_DIR_DOOR, 0X22A, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_SW_DIR_DOOR, dAcOSwDirDoor_c, fProfile::OBJ_SW_DIR_DOOR, 0x22A, 0, 3);
 
 STATE_DEFINE(dAcOSwDirDoor_c, Wait);
 STATE_DEFINE(dAcOSwDirDoor_c, CorrectStart);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_waterfall_D100.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_WATERFALL_D100, dAcOwaterfallD100_c, fProfile::OBJ_WATERFALL_D100, 0X20D, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_WATERFALL_D100, dAcOwaterfallD100_c, fProfile::OBJ_WATERFALL_D100, 0x20D, 0, 6);
 
 STATE_DEFINE(dAcOwaterfallD100_c, Wait);
 STATE_DEFINE(dAcOwaterfallD100_c, Spout);

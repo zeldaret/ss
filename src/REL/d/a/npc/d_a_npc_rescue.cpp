@@ -1,6 +1,6 @@
 #include <d/a/npc/d_a_npc_rescue.h>
 
-SPECIAL_ACTOR_PROFILE(NPC_RESCUE, dAcNpcRescue_c, fProfile::NPC_RESCUE, 0X93, 0, 0);
+SPECIAL_ACTOR_PROFILE(NPC_RESCUE, dAcNpcRescue_c, fProfile::NPC_RESCUE, 0x93, 0, 0);
 
 STATE_DEFINE(dAcNpcRescue_c, Wait);
 

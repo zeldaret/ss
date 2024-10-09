@@ -1,6 +1,6 @@
 #include <d/a/npc/d_a_npc_kyui_first.h>
 
-SPECIAL_ACTOR_PROFILE(NPC_KYUI_FIRST, dAcNpcKyuiFirst_c, fProfile::NPC_KYUI_FIRST, 0X43, 0, 3);
+SPECIAL_ACTOR_PROFILE(NPC_KYUI_FIRST, dAcNpcKyuiFirst_c, fProfile::NPC_KYUI_FIRST, 0x43, 0, 3);
 
 STATE_DEFINE(dAcNpcKyuiFirst_c, Fear);
 STATE_DEFINE(dAcNpcKyuiFirst_c, Rest);

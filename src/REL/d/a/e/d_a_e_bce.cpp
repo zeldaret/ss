@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_bce.h>
 
-SPECIAL_ACTOR_PROFILE(E_BCE, dAcEbce_c, fProfile::E_BCE, 0XD1, 0, 4099);
+SPECIAL_ACTOR_PROFILE(E_BCE, dAcEbce_c, fProfile::E_BCE, 0xD1, 0, 4099);
 
 STATE_DEFINE(dAcEbce_c, Standby);
 STATE_DEFINE(dAcEbce_c, Home);

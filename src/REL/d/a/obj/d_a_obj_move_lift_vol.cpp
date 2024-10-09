@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_move_lift_vol.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_MOVE_LIFT_VOL, dAcOmoveLiftVol_c, fProfile::OBJ_MOVE_LIFT_VOL, 0X269, 0, 0);
+SPECIAL_ACTOR_PROFILE(OBJ_MOVE_LIFT_VOL, dAcOmoveLiftVol_c, fProfile::OBJ_MOVE_LIFT_VOL, 0x269, 0, 0);
 
 STATE_DEFINE(dAcOmoveLiftVol_c, Wait);
 STATE_DEFINE(dAcOmoveLiftVol_c, Ready);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_windmill_desert.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_WINDMILL_DESERT, dAcOwindmillDesert_c, fProfile::OBJ_WINDMILL_DESERT, 0X20B, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_WINDMILL_DESERT, dAcOwindmillDesert_c, fProfile::OBJ_WINDMILL_DESERT, 0x20B, 0, 6);
 
 STATE_DEFINE(dAcOwindmillDesert_c, Wait);
 STATE_DEFINE(dAcOwindmillDesert_c, Acceleration);

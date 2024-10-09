@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_battleshipfish.h>
 
-SPECIAL_ACTOR_PROFILE(E_BFISH, dAcEbfish_c, fProfile::E_BFISH, 0XE9, 0, 4098);
+SPECIAL_ACTOR_PROFILE(E_BFISH, dAcEbfish_c, fProfile::E_BFISH, 0xE9, 0, 4098);
 
 STATE_DEFINE(dAcEbfish_c, Wait);
 STATE_DEFINE(dAcEbfish_c, Move);

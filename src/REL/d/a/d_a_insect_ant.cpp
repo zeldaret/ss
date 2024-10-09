@@ -1,6 +1,6 @@
 #include <d/a/d_a_insect_ant.h>
 
-SPECIAL_ACTOR_PROFILE(INSECT_ANT, dAcInsectAnt_c, fProfile::INSECT_ANT, 0X16D, 0, 3);
+SPECIAL_ACTOR_PROFILE(INSECT_ANT, dAcInsectAnt_c, fProfile::INSECT_ANT, 0x16D, 0, 3);
 
 STATE_DEFINE(dAcInsectAnt_c, Wait);
 STATE_DEFINE(dAcInsectAnt_c, Walk);

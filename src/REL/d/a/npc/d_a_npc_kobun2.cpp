@@ -1,6 +1,6 @@
 #include <d/a/npc/d_a_npc_kobun2.h>
 
-SPECIAL_ACTOR_PROFILE(NPC_KBN2, dAcNpcKbn2_c, fProfile::NPC_KBN2, 0X34, 0, 2);
+SPECIAL_ACTOR_PROFILE(NPC_KBN2, dAcNpcKbn2_c, fProfile::NPC_KBN2, 0x34, 0, 2);
 
 STATE_DEFINE(dAcNpcKbn2_c, RaceInit);
 STATE_DEFINE(dAcNpcKbn2_c, RaceRun);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_move_elec.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_MOVE_ELEC, dAcOMoveElec_c, fProfile::OBJ_MOVE_ELEC, 0X1A8, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_MOVE_ELEC, dAcOMoveElec_c, fProfile::OBJ_MOVE_ELEC, 0x1A8, 0, 6);
 
 STATE_DEFINE(dAcOMoveElec_c, WaitOff);
 STATE_DEFINE(dAcOMoveElec_c, WaitOn);

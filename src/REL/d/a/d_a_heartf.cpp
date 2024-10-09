@@ -1,6 +1,6 @@
 #include <d/a/d_a_heartf.h>
 
-SPECIAL_ACTOR_PROFILE(HEART_FLOWER, dAcHeartf_c, fProfile::HEART_FLOWER, 0X127, 0, 7);
+SPECIAL_ACTOR_PROFILE(HEART_FLOWER, dAcHeartf_c, fProfile::HEART_FLOWER, 0x127, 0, 7);
 
 STATE_DEFINE(dAcHeartf_c, Wait);
 STATE_DEFINE(dAcHeartf_c, Wind);

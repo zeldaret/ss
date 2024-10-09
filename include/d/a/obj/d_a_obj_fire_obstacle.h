@@ -16,4 +16,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcOfireObstacle_c);
 };
+
 #endif

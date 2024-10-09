@@ -21,4 +21,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcObjGirahimuSwordLink_c);
 };
+
 #endif

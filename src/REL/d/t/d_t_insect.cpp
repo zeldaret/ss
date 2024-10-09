@@ -1,6 +1,6 @@
 #include <d/t/d_t_insect.h>
 
-SPECIAL_ACTOR_PROFILE(TAG_INSECT, dTgInsect_c, fProfile::TAG_INSECT, 0X167, 0, 0);
+SPECIAL_ACTOR_PROFILE(TAG_INSECT, dTgInsect_c, fProfile::TAG_INSECT, 0x167, 0, 0);
 
 STATE_DEFINE(dTgInsect_c, Wait);
 STATE_DEFINE(dTgInsect_c, WaitCreate);

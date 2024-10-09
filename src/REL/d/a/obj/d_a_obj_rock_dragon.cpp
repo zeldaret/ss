@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_rock_dragon.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_ROCK_DRAGON, dAcORockDragon_c, fProfile::OBJ_ROCK_DRAGON, 0X147, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_ROCK_DRAGON, dAcORockDragon_c, fProfile::OBJ_ROCK_DRAGON, 0x147, 0, 3);
 
 STATE_DEFINE(dAcORockDragon_c, Upper_Wait);
 STATE_DEFINE(dAcORockDragon_c, Upper_Move);

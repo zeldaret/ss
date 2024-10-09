@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_bcz.h>
 
-SPECIAL_ACTOR_PROFILE(E_BCZ, dAcEBcZ_c, fProfile::E_BCZ, 0XD6, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_BCZ, dAcEBcZ_c, fProfile::E_BCZ, 0xD6, 0, 3);
 
 STATE_DEFINE(dAcEBcZ_c, Arise);
 STATE_DEFINE(dAcEBcZ_c, Wait);

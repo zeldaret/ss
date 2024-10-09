@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_stage_kraken.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_STAGE_KRAKEN, dAcOstageKraken_c, fProfile::OBJ_STAGE_KRAKEN, 0X1BE, 0, 0);
+SPECIAL_ACTOR_PROFILE(OBJ_STAGE_KRAKEN, dAcOstageKraken_c, fProfile::OBJ_STAGE_KRAKEN, 0x1BE, 0, 0);
 
 STATE_DEFINE(dAcOstageKraken_c, Wait);
 STATE_DEFINE(dAcOstageKraken_c, MarkLight);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_tower_bomb.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_TOWER_BOMB, dAcOTowerBomb_c, fProfile::OBJ_TOWER_BOMB, 0X247, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_TOWER_BOMB, dAcOTowerBomb_c, fProfile::OBJ_TOWER_BOMB, 0x247, 0, 6);
 
 STATE_DEFINE(dAcOTowerBomb_c, Wait);
 STATE_DEFINE(dAcOTowerBomb_c, Bomb);

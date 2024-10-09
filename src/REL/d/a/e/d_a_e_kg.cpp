@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_kg.h>
 
-SPECIAL_ACTOR_PROFILE(E_KG, dAcEkg_c, fProfile::E_KG, 0X122, 0, 4099);
+SPECIAL_ACTOR_PROFILE(E_KG, dAcEkg_c, fProfile::E_KG, 0x122, 0, 4099);
 
 STATE_DEFINE(dAcEkg_c, Wait);
 STATE_DEFINE(dAcEkg_c, Walk);

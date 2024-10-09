@@ -17,4 +17,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcOTuboBig_c);
 };
+
 #endif

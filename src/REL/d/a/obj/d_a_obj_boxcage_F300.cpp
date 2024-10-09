@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_boxcage_F300.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BOXCAGE_F300, dAcOBoxCageF300_c, fProfile::OBJ_BOXCAGE_F300, 0X179, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_BOXCAGE_F300, dAcOBoxCageF300_c, fProfile::OBJ_BOXCAGE_F300, 0x179, 0, 3);
 
 STATE_DEFINE(dAcOBoxCageF300_c, Wait);
 STATE_DEFINE(dAcOBoxCageF300_c, Move);

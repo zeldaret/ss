@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_drum.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_DRUM, dAcOdrum_c, fProfile::OBJ_DRUM, 0X26F, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_DRUM, dAcOdrum_c, fProfile::OBJ_DRUM, 0x26F, 0, 2);
 
 STATE_DEFINE(dAcOdrum_c, Wait);
 STATE_DEFINE(dAcOdrum_c, Move);

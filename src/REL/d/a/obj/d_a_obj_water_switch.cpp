@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_water_switch.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_WATER_SWITCH, dAcOwaterSwitch_c, fProfile::OBJ_WATER_SWITCH, 0X1B9, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_WATER_SWITCH, dAcOwaterSwitch_c, fProfile::OBJ_WATER_SWITCH, 0x1B9, 0, 6);
 
 STATE_DEFINE(dAcOwaterSwitch_c, Off);
 STATE_DEFINE(dAcOwaterSwitch_c, Wait1);

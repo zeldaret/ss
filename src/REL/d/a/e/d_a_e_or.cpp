@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_or.h>
 
-SPECIAL_ACTOR_PROFILE(E_OR, dAcEor_c, fProfile::E_OR, 0XF3, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_OR, dAcEor_c, fProfile::E_OR, 0xF3, 0, 3);
 
 STATE_DEFINE(dAcEor_c, Wait);
 STATE_DEFINE(dAcEor_c, Appear);

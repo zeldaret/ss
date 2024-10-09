@@ -1,6 +1,6 @@
 #include <d/d_title_manager.h>
 
-SPECIAL_BASE_PROFILE(TITLE_MANAGER, dTitleMgr_c, fProfile::TITLE_MANAGER, 0X2AE, 0);
+SPECIAL_BASE_PROFILE(TITLE_MANAGER, dTitleMgr_c, fProfile::TITLE_MANAGER, 0x2AE, 0);
 
 STATE_DEFINE(dTitleMgr_c, Init);
 STATE_DEFINE(dTitleMgr_c, OpeningDemo);

@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_lizarufos.h>
 
-SPECIAL_ACTOR_PROFILE(E_LIZARUFOS, dAcELizarufos_c, fProfile::E_LIZARUFOS, 0XE2, 0, 34);
+SPECIAL_ACTOR_PROFILE(E_LIZARUFOS, dAcELizarufos_c, fProfile::E_LIZARUFOS, 0xE2, 0, 34);
 
 STATE_DEFINE(dAcELizarufos_c, Demo);
 STATE_DEFINE(dAcELizarufos_c, Wait);

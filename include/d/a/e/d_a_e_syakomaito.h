@@ -31,4 +31,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcESyakomaito_c);
 };
+
 #endif

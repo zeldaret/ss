@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_tn2.h>
 
-SPECIAL_ACTOR_PROFILE(E_TN2, dAcEtn2_c, fProfile::E_TN2, 0X109, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_TN2, dAcEtn2_c, fProfile::E_TN2, 0x109, 0, 3);
 
 STATE_DEFINE(dAcEtn2_c, ArmorAttack);
 STATE_DEFINE(dAcEtn2_c, ArmorWait);

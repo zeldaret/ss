@@ -39,4 +39,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcELizarufos_c);
 };
+
 #endif

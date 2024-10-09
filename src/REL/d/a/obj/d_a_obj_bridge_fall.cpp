@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_bridge_fall.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BRIDGE_FALL, dAcOBridgeFall_c, fProfile::OBJ_BRIDGE_FALL, 0X230, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_BRIDGE_FALL, dAcOBridgeFall_c, fProfile::OBJ_BRIDGE_FALL, 0x230, 0, 6);
 
 STATE_DEFINE(dAcOBridgeFall_c, Wait);
 STATE_DEFINE(dAcOBridgeFall_c, Fall);

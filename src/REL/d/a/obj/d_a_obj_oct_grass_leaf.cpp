@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_oct_grass_leaf.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_OCT_GRASS_LEAF, dAcOOctGrassLeaf_c, fProfile::OBJ_OCT_GRASS_LEAF, 0X237, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_OCT_GRASS_LEAF, dAcOOctGrassLeaf_c, fProfile::OBJ_OCT_GRASS_LEAF, 0x237, 0, 3);
 
 STATE_DEFINE(dAcOOctGrassLeaf_c, Wait);
 STATE_DEFINE(dAcOOctGrassLeaf_c, Shake);

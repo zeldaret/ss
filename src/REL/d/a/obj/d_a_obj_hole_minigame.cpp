@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_hole_minigame.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_HOLE_MINIGAME, dAcOholeMinigame_c, fProfile::OBJ_HOLE_MINIGAME, 0X1C1, 0, 4);
+SPECIAL_ACTOR_PROFILE(OBJ_HOLE_MINIGAME, dAcOholeMinigame_c, fProfile::OBJ_HOLE_MINIGAME, 0x1C1, 0, 4);
 
 STATE_DEFINE(dAcOholeMinigame_c, Wait);
 STATE_DEFINE(dAcOholeMinigame_c, Start);

@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_geko.h>
 
-SPECIAL_ACTOR_PROFILE(E_GEKO, dAcEgeko_c, fProfile::E_GEKO, 0XED, 0, 4099);
+SPECIAL_ACTOR_PROFILE(E_GEKO, dAcEgeko_c, fProfile::E_GEKO, 0xED, 0, 4099);
 
 STATE_DEFINE(dAcEgeko_c, Wait);
 STATE_DEFINE(dAcEgeko_c, Move);

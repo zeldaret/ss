@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_oc.h>
 
-SPECIAL_ACTOR_PROFILE(E_OC, dAcEoc_c, fProfile::E_OC, 0XCD, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_OC, dAcEoc_c, fProfile::E_OC, 0xCD, 0, 3);
 
 STATE_DEFINE(dAcEoc_c, Wait);
 STATE_DEFINE(dAcEoc_c, Standby);

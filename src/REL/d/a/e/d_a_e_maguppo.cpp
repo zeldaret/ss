@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_maguppo.h>
 
-SPECIAL_ACTOR_PROFILE(E_MAGUPPO, dAcEmaguppo_c, fProfile::E_MAGUPPO, 0XFB, 0, 4098);
+SPECIAL_ACTOR_PROFILE(E_MAGUPPO, dAcEmaguppo_c, fProfile::E_MAGUPPO, 0xFB, 0, 4098);
 
 STATE_DEFINE(dAcEmaguppo_c, Attack);
 STATE_DEFINE(dAcEmaguppo_c, Appear);

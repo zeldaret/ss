@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_utajima_stopper.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_UTAJIMA_STOPPER, dAcOutajimaStopper_c, fProfile::OBJ_UTAJIMA_STOPPER, 0X1CF, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_UTAJIMA_STOPPER, dAcOutajimaStopper_c, fProfile::OBJ_UTAJIMA_STOPPER, 0x1CF, 0, 6);
 
 STATE_DEFINE(dAcOutajimaStopper_c, Down);
 STATE_DEFINE(dAcOutajimaStopper_c, Rise);

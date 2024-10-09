@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_truck.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_TRUCK, dAcOtruck_c, fProfile::OBJ_TRUCK, 0X26A, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_TRUCK, dAcOtruck_c, fProfile::OBJ_TRUCK, 0x26A, 0, 2);
 
 STATE_DEFINE(dAcOtruck_c, Wait);
 STATE_DEFINE(dAcOtruck_c, Ready);

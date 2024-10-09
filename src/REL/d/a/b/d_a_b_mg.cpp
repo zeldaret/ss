@@ -1,6 +1,6 @@
 #include <d/a/b/d_a_b_mg.h>
 
-SPECIAL_ACTOR_PROFILE(B_MG, dAcBmg_c, fProfile::B_MG, 0XB6, 0, 2);
+SPECIAL_ACTOR_PROFILE(B_MG, dAcBmg_c, fProfile::B_MG, 0xB6, 0, 2);
 
 STATE_DEFINE(dAcBmg_c, Start);
 STATE_DEFINE(dAcBmg_c, DiveWait);

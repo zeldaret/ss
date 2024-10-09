@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_guard_log.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_GUARD_LOG, dAcOguardLog_c, fProfile::OBJ_GUARD_LOG, 0X1F4, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_GUARD_LOG, dAcOguardLog_c, fProfile::OBJ_GUARD_LOG, 0x1F4, 0, 2);
 
 STATE_DEFINE(dAcOguardLog_c, Init);
 STATE_DEFINE(dAcOguardLog_c, Wait);

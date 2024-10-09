@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_fruit.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_FRUIT, dAcOFruit_c, fProfile::OBJ_FRUIT, 0X164, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_FRUIT, dAcOFruit_c, fProfile::OBJ_FRUIT, 0x164, 0, 3);
 
 STATE_DEFINE(dAcOFruit_c, NormalWait);
 STATE_DEFINE(dAcOFruit_c, StickWait);

@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_kumite_gira.h>
 
-SPECIAL_ACTOR_PROFILE(E_KGIRA, dAcEKumiteGira_c, fProfile::E_KGIRA, 0XCE, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_KGIRA, dAcEKumiteGira_c, fProfile::E_KGIRA, 0xCE, 0, 3);
 
 STATE_DEFINE(dAcEKumiteGira_c, Wait);
 STATE_DEFINE(dAcEKumiteGira_c, PlayAnm);

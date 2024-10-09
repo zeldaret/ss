@@ -1,6 +1,6 @@
 #include <d/a/d_a_bird_rival.h>
 
-SPECIAL_ACTOR_PROFILE(BIRD_RIVAL, dBird_Rival_c, fProfile::BIRD_RIVAL, 0XAA, 0, 2);
+SPECIAL_ACTOR_PROFILE(BIRD_RIVAL, dBird_Rival_c, fProfile::BIRD_RIVAL, 0xAA, 0, 2);
 
 STATE_DEFINE(dBird_Rival_c, Wait);
 STATE_DEFINE(dBird_Rival_c, Chase);

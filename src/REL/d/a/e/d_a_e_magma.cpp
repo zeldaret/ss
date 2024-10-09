@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_magma.h>
 
-SPECIAL_ACTOR_PROFILE(E_MAGMA, dAcEmagma_c, fProfile::E_MAGMA, 0XFA, 0, 0);
+SPECIAL_ACTOR_PROFILE(E_MAGMA, dAcEmagma_c, fProfile::E_MAGMA, 0xFA, 0, 0);
 
 STATE_DEFINE(dAcEmagma_c, Birth);
 STATE_DEFINE(dAcEmagma_c, Move);

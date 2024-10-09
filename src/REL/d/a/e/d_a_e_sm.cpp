@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_sm.h>
 
-SPECIAL_ACTOR_PROFILE(E_SM, dAcEsm_c, fProfile::E_SM, 0XEB, 0, 4098);
+SPECIAL_ACTOR_PROFILE(E_SM, dAcEsm_c, fProfile::E_SM, 0xEB, 0, 4098);
 
 STATE_DEFINE(dAcEsm_c, BaseMother);
 STATE_DEFINE(dAcEsm_c, Wait);

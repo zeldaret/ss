@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_log.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_LOG, dAcOlog_c, fProfile::OBJ_LOG, 0X12E, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_LOG, dAcOlog_c, fProfile::OBJ_LOG, 0x12E, 0, 2);
 
 STATE_DEFINE(dAcOlog_c, Wait);
 STATE_DEFINE(dAcOlog_c, Move);

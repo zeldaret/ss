@@ -1,6 +1,6 @@
 #include <d/a/npc/d_a_npc_kyui_wizard.h>
 
-SPECIAL_ACTOR_PROFILE(NPC_KYUI_WIZARD, dAcNpcKyuiWizard_c, fProfile::NPC_KYUI_WIZARD, 0X42, 0, 2);
+SPECIAL_ACTOR_PROFILE(NPC_KYUI_WIZARD, dAcNpcKyuiWizard_c, fProfile::NPC_KYUI_WIZARD, 0x42, 0, 2);
 
 STATE_DEFINE(dAcNpcKyuiWizard_c, SleepFirst);
 STATE_DEFINE(dAcNpcKyuiWizard_c, Sleep);

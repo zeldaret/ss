@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_D300.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_D300, dAcOD300_c, fProfile::OBJ_D300, 0X248, 0, 5);
+SPECIAL_ACTOR_PROFILE(OBJ_D300, dAcOD300_c, fProfile::OBJ_D300, 0x248, 0, 5);
 
 STATE_DEFINE(dAcOD300_c, Wait);
 STATE_DEFINE(dAcOD300_c, Appear);

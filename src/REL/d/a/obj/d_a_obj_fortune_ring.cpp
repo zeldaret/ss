@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_fortune_ring.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_FORTUNE_RING, dAcOfortuneRing_c, fProfile::OBJ_FORTUNE_RING, 0X1C6, 0, 0);
+SPECIAL_ACTOR_PROFILE(OBJ_FORTUNE_RING, dAcOfortuneRing_c, fProfile::OBJ_FORTUNE_RING, 0x1C6, 0, 0);
 
 STATE_DEFINE(dAcOfortuneRing_c, Wait);
 STATE_DEFINE(dAcOfortuneRing_c, Play);

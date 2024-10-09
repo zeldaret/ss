@@ -1,6 +1,6 @@
 #include <d/a/d_a_little_bird.h>
 
-SPECIAL_ACTOR_PROFILE(LITTLE_BIRD, dAcLittleBird_c, fProfile::LITTLE_BIRD, 0X99, 0, 391);
+SPECIAL_ACTOR_PROFILE(LITTLE_BIRD, dAcLittleBird_c, fProfile::LITTLE_BIRD, 0x99, 0, 391);
 
 STATE_DEFINE(dAcLittleBird_c, Init);
 STATE_DEFINE(dAcLittleBird_c, Wait);

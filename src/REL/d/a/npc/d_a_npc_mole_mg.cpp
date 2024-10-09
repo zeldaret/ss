@@ -1,6 +1,6 @@
 #include <d/a/npc/d_a_npc_mole_mg.h>
 
-SPECIAL_ACTOR_PROFILE(NPC_MOLE_MG, dAcNpcMoleMg_c, fProfile::NPC_MOLE_MG, 0X7D, 0, 3);
+SPECIAL_ACTOR_PROFILE(NPC_MOLE_MG, dAcNpcMoleMg_c, fProfile::NPC_MOLE_MG, 0x7D, 0, 3);
 
 STATE_DEFINE(dAcNpcMoleMg_c, Result);
 STATE_DEFINE(dAcNpcMoleMg_c, Hide);

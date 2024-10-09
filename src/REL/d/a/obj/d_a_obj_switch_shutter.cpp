@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_switch_shutter.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SWITCH_SHUTTER, dAcOSwShutter_c, fProfile::OBJ_SWITCH_SHUTTER, 0X13A, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_SWITCH_SHUTTER, dAcOSwShutter_c, fProfile::OBJ_SWITCH_SHUTTER, 0x13A, 0, 3);
 
 STATE_DEFINE(dAcOSwShutter_c, Wait);
 STATE_DEFINE(dAcOSwShutter_c, Move);

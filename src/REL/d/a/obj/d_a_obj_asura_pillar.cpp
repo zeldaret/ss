@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_asura_pillar.h>
 
-SPECIAL_ACTOR_PROFILE(ASURA_PILLAR, dAcAsuraPillar_c, fProfile::ASURA_PILLAR, 0X11C, 0, 2);
+SPECIAL_ACTOR_PROFILE(ASURA_PILLAR, dAcAsuraPillar_c, fProfile::ASURA_PILLAR, 0x11C, 0, 2);
 
 STATE_DEFINE(dAcAsuraPillar_c, Damage);
 STATE_DEFINE(dAcAsuraPillar_c, Wait);

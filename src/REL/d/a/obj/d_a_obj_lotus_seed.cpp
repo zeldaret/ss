@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_lotus_seed.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_LOTUS_SEED, dAcOLotusSeed_c, fProfile::OBJ_LOTUS_SEED, 0X175, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_LOTUS_SEED, dAcOLotusSeed_c, fProfile::OBJ_LOTUS_SEED, 0x175, 0, 3);
 
 STATE_DEFINE(dAcOLotusSeed_c, Init);
 STATE_DEFINE(dAcOLotusSeed_c, Stick);

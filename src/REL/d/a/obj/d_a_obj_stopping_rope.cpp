@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_stopping_rope.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_STOPPING_ROPE, dAcOStoppingRope_c, fProfile::OBJ_STOPPING_ROPE, 0X23B, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_STOPPING_ROPE, dAcOStoppingRope_c, fProfile::OBJ_STOPPING_ROPE, 0x23B, 0, 3);
 
 STATE_DEFINE(dAcOStoppingRope_c, Wait);
 STATE_DEFINE(dAcOStoppingRope_c, SwitchOn);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_sw_whiplever.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SW_WHIPLEVER, dAcOSwWhipLever_c, fProfile::OBJ_SW_WHIPLEVER, 0X139, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_SW_WHIPLEVER, dAcOSwWhipLever_c, fProfile::OBJ_SW_WHIPLEVER, 0x139, 0, 3);
 
 STATE_DEFINE(dAcOSwWhipLever_c, Wait);
 

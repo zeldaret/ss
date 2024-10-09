@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_barrel.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BARREL, dAcOBarrel_c, fProfile::OBJ_BARREL, 0X239, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_BARREL, dAcOBarrel_c, fProfile::OBJ_BARREL, 0x239, 0, 3);
 
 STATE_DEFINE(dAcOBarrel_c, Wait);
 STATE_DEFINE(dAcOBarrel_c, Grab);

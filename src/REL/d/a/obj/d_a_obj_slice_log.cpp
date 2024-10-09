@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_slice_log.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SLICE_LOG, dAcOsliceLog_c, fProfile::OBJ_SLICE_LOG, 0X1F5, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_SLICE_LOG, dAcOsliceLog_c, fProfile::OBJ_SLICE_LOG, 0x1F5, 0, 6);
 
 STATE_DEFINE(dAcOsliceLog_c, Fall);
 STATE_DEFINE(dAcOsliceLog_c, Bound);

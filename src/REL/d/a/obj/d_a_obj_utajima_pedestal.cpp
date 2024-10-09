@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_utajima_pedestal.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_UTAJIMA_PEDESTAL, dAcOutajimaPedestal_c, fProfile::OBJ_UTAJIMA_PEDESTAL, 0X1D1, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_UTAJIMA_PEDESTAL, dAcOutajimaPedestal_c, fProfile::OBJ_UTAJIMA_PEDESTAL, 0x1D1, 0, 2);
 
 STATE_DEFINE(dAcOutajimaPedestal_c, Wait);
 STATE_DEFINE(dAcOutajimaPedestal_c, Move);

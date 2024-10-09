@@ -1,6 +1,6 @@
 #include <d/a/d_a_bird.h>
 
-SPECIAL_ACTOR_PROFILE(BIRD, dBird_c, fProfile::BIRD, 0XA8, 0, 2);
+SPECIAL_ACTOR_PROFILE(BIRD, dBird_c, fProfile::BIRD, 0xA8, 0, 2);
 
 STATE_DEFINE(dBird_c, Wait);
 STATE_DEFINE(dBird_c, PreMove);

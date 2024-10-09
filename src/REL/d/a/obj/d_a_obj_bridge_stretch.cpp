@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_bridge_stretch.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_BRIDGE_STRETCH, dAcObridgeStretch_c, fProfile::OBJ_BRIDGE_STRETCH, 0X1CC, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_BRIDGE_STRETCH, dAcObridgeStretch_c, fProfile::OBJ_BRIDGE_STRETCH, 0x1CC, 0, 2);
 
 STATE_DEFINE(dAcObridgeStretch_c, Wait);
 STATE_DEFINE(dAcObridgeStretch_c, Move);

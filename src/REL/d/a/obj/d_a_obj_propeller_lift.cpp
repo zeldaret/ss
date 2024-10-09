@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_propeller_lift.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_PROPELLER_LIFT, dAcOPropellerLift_c, fProfile::OBJ_PROPELLER_LIFT, 0X156, 0, 4099);
+SPECIAL_ACTOR_PROFILE(OBJ_PROPELLER_LIFT, dAcOPropellerLift_c, fProfile::OBJ_PROPELLER_LIFT, 0x156, 0, 4099);
 
 STATE_DEFINE(dAcOPropellerLift_c, Normal);
 STATE_DEFINE(dAcOPropellerLift_c, BackMove);

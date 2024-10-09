@@ -1,6 +1,6 @@
 #include <d/a/d_a_demo_npc_bird.h>
 
-SPECIAL_ACTOR_PROFILE(DEMO_NPC_BIRD, dAcDemoNpcBird_c, fProfile::DEMO_NPC_BIRD, 0X2F, 0, 2);
+SPECIAL_ACTOR_PROFILE(DEMO_NPC_BIRD, dAcDemoNpcBird_c, fProfile::DEMO_NPC_BIRD, 0x2F, 0, 2);
 
 STATE_DEFINE(dAcDemoNpcBird_c, Hide);
 STATE_DEFINE(dAcDemoNpcBird_c, Call);

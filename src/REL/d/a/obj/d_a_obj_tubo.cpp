@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_tubo.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_TUBO, dAcOtubo_c, fProfile::OBJ_TUBO, 0X194, 0, 130);
+SPECIAL_ACTOR_PROFILE(OBJ_TUBO, dAcOtubo_c, fProfile::OBJ_TUBO, 0x194, 0, 130);
 
 STATE_DEFINE(dAcOtubo_c, Wait);
 STATE_DEFINE(dAcOtubo_c, Grab);

@@ -49,4 +49,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcEbc_c);
 };
+
 #endif

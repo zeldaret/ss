@@ -1,6 +1,6 @@
 #include <d/t/d_t_harp.h>
 
-SPECIAL_ACTOR_PROFILE(HARP_TAG, dTgHarp_c, fProfile::HARP_TAG, 0X1A4, 0, 0);
+SPECIAL_ACTOR_PROFILE(HARP_TAG, dTgHarp_c, fProfile::HARP_TAG, 0x1A4, 0, 0);
 
 STATE_DEFINE(dTgHarp_c, Wait);
 

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_hit_lever_sw.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_HIT_LEVER_SW, dAcOhitLeverSw_c, fProfile::OBJ_HIT_LEVER_SW, 0X1C0, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_HIT_LEVER_SW, dAcOhitLeverSw_c, fProfile::OBJ_HIT_LEVER_SW, 0x1C0, 0, 6);
 
 STATE_DEFINE(dAcOhitLeverSw_c, Right);
 STATE_DEFINE(dAcOhitLeverSw_c, Left);

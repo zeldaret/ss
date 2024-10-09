@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_musasabi.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_MUSASABI, dAcOmusasabi_c, fProfile::OBJ_MUSASABI, 0X1C3, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_MUSASABI, dAcOmusasabi_c, fProfile::OBJ_MUSASABI, 0x1C3, 0, 6);
 
 STATE_DEFINE(dAcOmusasabi_c, Wait);
 STATE_DEFINE(dAcOmusasabi_c, Approach);

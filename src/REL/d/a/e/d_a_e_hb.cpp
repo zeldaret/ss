@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_hb.h>
 
-SPECIAL_ACTOR_PROFILE(E_HB, dAcEhb_c, fProfile::E_HB, 0XFF, 0, 4096);
+SPECIAL_ACTOR_PROFILE(E_HB, dAcEhb_c, fProfile::E_HB, 0xFF, 0, 4096);
 
 STATE_DEFINE(dAcEhb_c, Under);
 STATE_DEFINE(dAcEhb_c, Appear);

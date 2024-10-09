@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_door_boss.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_DOOR_BOSS, dAcOdoorBoss_c, fProfile::OBJ_DOOR_BOSS, 0X189, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_DOOR_BOSS, dAcOdoorBoss_c, fProfile::OBJ_DOOR_BOSS, 0x189, 0, 2);
 
 STATE_DEFINE(dAcOdoorBoss_c, UnlockWait);
 STATE_DEFINE(dAcOdoorBoss_c, CorrectKey);

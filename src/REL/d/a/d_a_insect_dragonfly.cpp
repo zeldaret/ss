@@ -1,6 +1,6 @@
 #include <d/a/d_a_insect_dragonfly.h>
 
-SPECIAL_ACTOR_PROFILE(INSECT_DRAGONFLY, dAcInsectDragonfly_c, fProfile::INSECT_DRAGONFLY, 0X169, 0, 3);
+SPECIAL_ACTOR_PROFILE(INSECT_DRAGONFLY, dAcInsectDragonfly_c, fProfile::INSECT_DRAGONFLY, 0x169, 0, 3);
 
 STATE_DEFINE(dAcInsectDragonfly_c, Wait);
 STATE_DEFINE(dAcInsectDragonfly_c, Move);

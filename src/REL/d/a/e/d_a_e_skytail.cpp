@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_skytail.h>
 
-SPECIAL_ACTOR_PROFILE(E_SKYTAIL, dAcESkytail_c, fProfile::E_SKYTAIL, 0XD7, 0, 2);
+SPECIAL_ACTOR_PROFILE(E_SKYTAIL, dAcESkytail_c, fProfile::E_SKYTAIL, 0xD7, 0, 2);
 
 STATE_DEFINE(dAcESkytail_c, RandomMove);
 STATE_DEFINE(dAcESkytail_c, Move);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_grave.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_GRAVE, dAcOGrave_c, fProfile::OBJ_GRAVE, 0X255, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_GRAVE, dAcOGrave_c, fProfile::OBJ_GRAVE, 0x255, 0, 2);
 
 STATE_DEFINE(dAcOGrave_c, Wait);
 STATE_DEFINE(dAcOGrave_c, Move);

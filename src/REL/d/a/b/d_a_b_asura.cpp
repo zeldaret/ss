@@ -1,6 +1,6 @@
 #include <d/a/b/d_a_b_asura.h>
 
-SPECIAL_ACTOR_PROFILE(B_ASURA, dAcBAsura_c, fProfile::B_ASURA, 0X117, 0, 0);
+SPECIAL_ACTOR_PROFILE(B_ASURA, dAcBAsura_c, fProfile::B_ASURA, 0x117, 0, 0);
 
 STATE_DEFINE(dAcBAsura_c, Attack);
 STATE_DEFINE(dAcBAsura_c, AttackHigh);

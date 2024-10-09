@@ -1,6 +1,6 @@
 #include <d/a/d_a_bird_kobunA.h>
 
-SPECIAL_ACTOR_PROFILE(BIRD_KOBUNA, dBird_KobunA_c, fProfile::BIRD_KOBUNA, 0XAB, 0, 2);
+SPECIAL_ACTOR_PROFILE(BIRD_KOBUNA, dBird_KobunA_c, fProfile::BIRD_KOBUNA, 0xAB, 0, 2);
 
 STATE_DEFINE(dBird_KobunA_c, Wait);
 STATE_DEFINE(dBird_KobunA_c, Chase);

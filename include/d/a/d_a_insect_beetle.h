@@ -23,4 +23,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcInsectBeetle_c);
 };
+
 #endif

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_switch_wall.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SWITCH_WALL, dAcOswitchWall_c, fProfile::OBJ_SWITCH_WALL, 0X191, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_SWITCH_WALL, dAcOswitchWall_c, fProfile::OBJ_SWITCH_WALL, 0x191, 0, 2);
 
 STATE_DEFINE(dAcOswitchWall_c, Up);
 STATE_DEFINE(dAcOswitchWall_c, Down);

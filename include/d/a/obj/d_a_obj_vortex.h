@@ -23,4 +23,5 @@ private:
 	/* 0x??? */ u8 field____[0x870 - 0x36C];
 	/* 0x870 */ u8 field_0x870;
 };
+
 #endif

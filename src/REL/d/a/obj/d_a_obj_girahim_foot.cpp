@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_girahim_foot.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_GIRAHIM_FOOT, dAcOgirahimFoot_c, fProfile::OBJ_GIRAHIM_FOOT, 0X210, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_GIRAHIM_FOOT, dAcOgirahimFoot_c, fProfile::OBJ_GIRAHIM_FOOT, 0x210, 0, 6);
 
 STATE_DEFINE(dAcOgirahimFoot_c, Wait);
 STATE_DEFINE(dAcOgirahimFoot_c, Appear);

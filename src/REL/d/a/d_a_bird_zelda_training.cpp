@@ -1,6 +1,6 @@
 #include <d/a/d_a_bird_zelda_training.h>
 
-SPECIAL_ACTOR_PROFILE(BIRD_ZELDA_TRAINING, dBird_ZeldaTraining_c, fProfile::BIRD_ZELDA_TRAINING, 0XAE, 0, 2);
+SPECIAL_ACTOR_PROFILE(BIRD_ZELDA_TRAINING, dBird_ZeldaTraining_c, fProfile::BIRD_ZELDA_TRAINING, 0xAE, 0, 2);
 
 STATE_DEFINE(dBird_ZeldaTraining_c, Wait);
 STATE_DEFINE(dBird_ZeldaTraining_c, Chase);

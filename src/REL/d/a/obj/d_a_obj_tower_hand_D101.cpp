@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_tower_hand_D101.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_TOWER_HAND_D101, dAcOTowerHandD101_c, fProfile::OBJ_TOWER_HAND_D101, 0X180, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_TOWER_HAND_D101, dAcOTowerHandD101_c, fProfile::OBJ_TOWER_HAND_D101, 0x180, 0, 6);
 
 STATE_DEFINE(dAcOTowerHandD101_c, RemainOpen);
 STATE_DEFINE(dAcOTowerHandD101_c, Close);

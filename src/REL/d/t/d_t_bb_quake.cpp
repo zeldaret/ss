@@ -1,6 +1,6 @@
 #include <d/t/d_t_bb_quake.h>
 
-SPECIAL_ACTOR_PROFILE(T_QUAKE, dTgBBQuake_c, fProfile::T_QUAKE, 0XC2, 0, 0);
+SPECIAL_ACTOR_PROFILE(T_QUAKE, dTgBBQuake_c, fProfile::T_QUAKE, 0xC2, 0, 0);
 
 STATE_DEFINE(dTgBBQuake_c, Wait);
 STATE_DEFINE(dTgBBQuake_c, Wake);

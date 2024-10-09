@@ -1,6 +1,6 @@
 #include <d/t/d_t_group_summon.h>
 
-SPECIAL_ACTOR_PROFILE(GROUP_SUMMON, dTgGroupSummon_c, fProfile::GROUP_SUMMON, 0XC5, 0, 0);
+SPECIAL_ACTOR_PROFILE(GROUP_SUMMON, dTgGroupSummon_c, fProfile::GROUP_SUMMON, 0xC5, 0, 0);
 
 STATE_DEFINE(dTgGroupSummon_c, Wait);
 STATE_DEFINE(dTgGroupSummon_c, PreSummon);

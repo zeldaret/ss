@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_gue.h>
 
-SPECIAL_ACTOR_PROFILE(E_GUE, dAcEgue_c, fProfile::E_GUE, 0X104, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_GUE, dAcEgue_c, fProfile::E_GUE, 0x104, 0, 3);
 
 STATE_DEFINE(dAcEgue_c, Attack);
 STATE_DEFINE(dAcEgue_c, Blow);

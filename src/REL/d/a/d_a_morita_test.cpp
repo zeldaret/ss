@@ -1,6 +1,6 @@
 #include <d/a/d_a_morita_test.h>
 
-SPECIAL_ACTOR_PROFILE(J_TEST, dAcJtest_c, fProfile::J_TEST, 0XBB, 0, 2);
+SPECIAL_ACTOR_PROFILE(J_TEST, dAcJtest_c, fProfile::J_TEST, 0xBB, 0, 2);
 
 STATE_DEFINE(dAcJtest_c, FishNormalSwim);
 STATE_DEFINE(dAcJtest_c, FishEscapeSwim);

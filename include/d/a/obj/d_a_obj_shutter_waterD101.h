@@ -16,4 +16,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcOShutterWaterD101_c);
 };
+
 #endif

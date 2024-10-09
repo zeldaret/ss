@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_pinwheel.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_PINWHEEL, dAcOpinwheel_c, fProfile::OBJ_PINWHEEL, 0X1DD, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_PINWHEEL, dAcOpinwheel_c, fProfile::OBJ_PINWHEEL, 0x1DD, 0, 2);
 
 STATE_DEFINE(dAcOpinwheel_c, Wait);
 STATE_DEFINE(dAcOpinwheel_c, Acceleration);

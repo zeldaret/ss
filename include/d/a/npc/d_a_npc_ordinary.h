@@ -7,4 +7,5 @@
 //   size:
 // official name
 class dAcOrdinaryNpc_c : public dAcNpc_c {};
+
 #endif

@@ -1,6 +1,6 @@
 #include <d/t/d_t_reaction.h>
 
-SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0X151, 0, 0);
+SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0x151, 0, 0);
 
 STATE_DEFINE(dTgReaction_c, Wait);
 

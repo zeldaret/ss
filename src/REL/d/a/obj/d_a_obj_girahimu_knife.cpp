@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_girahimu_knife.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_GH_KNIFE, dAcObjGirahimuKnife_c, fProfile::OBJ_GH_KNIFE, 0X115, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_GH_KNIFE, dAcObjGirahimuKnife_c, fProfile::OBJ_GH_KNIFE, 0x115, 0, 2);
 
 STATE_DEFINE(dAcObjGirahimuKnife_c, Wait);
 STATE_DEFINE(dAcObjGirahimuKnife_c, SpinWait);

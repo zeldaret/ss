@@ -26,4 +26,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dLytSeekerStone_c);
 };
+
 #endif

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_arrow_switch.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_ARROW_SWITCH, dAcOarrowSwitch_c, fProfile::OBJ_ARROW_SWITCH, 0X1B5, 0, 6);
+SPECIAL_ACTOR_PROFILE(OBJ_ARROW_SWITCH, dAcOarrowSwitch_c, fProfile::OBJ_ARROW_SWITCH, 0x1B5, 0, 6);
 
 STATE_DEFINE(dAcOarrowSwitch_c, Off);
 STATE_DEFINE(dAcOarrowSwitch_c, On);

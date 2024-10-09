@@ -55,4 +55,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcBBigBoss3_c);
 };
+
 #endif

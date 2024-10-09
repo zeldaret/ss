@@ -25,4 +25,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcEhydra_c);
 };
+
 #endif

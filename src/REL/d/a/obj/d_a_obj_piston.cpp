@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_piston.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_PISTON, dAcOPiston_c, fProfile::OBJ_PISTON, 0X172, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_PISTON, dAcOPiston_c, fProfile::OBJ_PISTON, 0x172, 0, 3);
 
 STATE_DEFINE(dAcOPiston_c, WaitDelay);
 STATE_DEFINE(dAcOPiston_c, OnAnim);

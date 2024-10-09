@@ -1,6 +1,6 @@
 #include <d/a/npc/d_a_npc_shinkan2.h>
 
-SPECIAL_ACTOR_PROFILE(NPC_SKN2, dAcNpcSkn2_c, fProfile::NPC_SKN2, 0X37, 0, 3);
+SPECIAL_ACTOR_PROFILE(NPC_SKN2, dAcNpcSkn2_c, fProfile::NPC_SKN2, 0x37, 0, 3);
 
 STATE_DEFINE(dAcNpcSkn2_c, Watch);
 STATE_DEFINE(dAcNpcSkn2_c, Watch0);

@@ -1,6 +1,6 @@
 #include <d/a/d_a_invisible.h>
 
-SPECIAL_ACTOR_PROFILE(INVISIBLE, dAcInvisible, fProfile::INVISIBLE, 0X11D, 0, 0);
+SPECIAL_ACTOR_PROFILE(INVISIBLE, dAcInvisible, fProfile::INVISIBLE, 0x11D, 0, 0);
 
 STATE_DEFINE(dAcInvisible, Wait);
 

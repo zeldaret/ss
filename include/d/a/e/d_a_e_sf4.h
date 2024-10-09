@@ -24,4 +24,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcEsf4_c);
 };
+
 #endif

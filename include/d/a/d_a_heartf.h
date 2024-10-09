@@ -20,4 +20,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcHeartf_c);
 };
+
 #endif

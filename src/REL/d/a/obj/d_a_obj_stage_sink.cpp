@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_stage_sink.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_STAGE_SINK, dAcOstageSink_c, fProfile::OBJ_STAGE_SINK, 0X1E5, 0, 0);
+SPECIAL_ACTOR_PROFILE(OBJ_STAGE_SINK, dAcOstageSink_c, fProfile::OBJ_STAGE_SINK, 0x1E5, 0, 0);
 
 STATE_DEFINE(dAcOstageSink_c, Wait);
 STATE_DEFINE(dAcOstageSink_c, Move);

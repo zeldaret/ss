@@ -1,6 +1,6 @@
 #include <d/a/d_a_insect_butterfly.h>
 
-SPECIAL_ACTOR_PROFILE(INSECT_BUTTERFLY, dAcInsectButterfly_c, fProfile::INSECT_BUTTERFLY, 0X16E, 0, 3);
+SPECIAL_ACTOR_PROFILE(INSECT_BUTTERFLY, dAcInsectButterfly_c, fProfile::INSECT_BUTTERFLY, 0x16E, 0, 3);
 
 STATE_DEFINE(dAcInsectButterfly_c, Move);
 STATE_DEFINE(dAcInsectButterfly_c, Escape);

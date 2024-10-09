@@ -1,6 +1,6 @@
 #include <d/a/d_a_pumpkin.h>
 
-SPECIAL_ACTOR_PROFILE(PUMPKIN, dAcPumpkin_c, fProfile::PUMPKIN, 0X134, 0, 3);
+SPECIAL_ACTOR_PROFILE(PUMPKIN, dAcPumpkin_c, fProfile::PUMPKIN, 0x134, 0, 3);
 
 STATE_DEFINE(dAcPumpkin_c, Stick);
 STATE_DEFINE(dAcPumpkin_c, Wait);

@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_ph.h>
 
-SPECIAL_ACTOR_PROFILE(E_PH, dAcEPh_c, fProfile::E_PH, 0XF1, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_PH, dAcEPh_c, fProfile::E_PH, 0xF1, 0, 3);
 
 STATE_DEFINE(dAcEPh_c, Stop);
 STATE_DEFINE(dAcEPh_c, PathMove);

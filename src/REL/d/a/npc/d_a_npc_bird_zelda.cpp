@@ -1,6 +1,6 @@
 #include <d/a/npc/d_a_npc_bird_zelda.h>
 
-SPECIAL_ACTOR_PROFILE(NPC_BDZ, dAcNpcBdz_c, fProfile::NPC_BDZ, 0X5E, 0, 0);
+SPECIAL_ACTOR_PROFILE(NPC_BDZ, dAcNpcBdz_c, fProfile::NPC_BDZ, 0x5E, 0, 0);
 
 STATE_DEFINE(dAcNpcBdz_c, Wait);
 STATE_DEFINE(dAcNpcBdz_c, Demo);

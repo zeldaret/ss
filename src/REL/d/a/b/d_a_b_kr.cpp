@@ -1,6 +1,6 @@
 #include <d/a/b/d_a_b_kr.h>
 
-SPECIAL_ACTOR_PROFILE(B_KR, dAcBkr_c, fProfile::B_KR, 0XB7, 0, 0);
+SPECIAL_ACTOR_PROFILE(B_KR, dAcBkr_c, fProfile::B_KR, 0xB7, 0, 0);
 
 STATE_DEFINE(dAcBkr_c, StartDemo);
 STATE_DEFINE(dAcBkr_c, UnderWater);

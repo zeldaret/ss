@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_hidokari.h>
 
-SPECIAL_ACTOR_PROFILE(E_HIDOKARI, dAcEhidokari_c, fProfile::E_HIDOKARI, 0XE5, 0, 2);
+SPECIAL_ACTOR_PROFILE(E_HIDOKARI, dAcEhidokari_c, fProfile::E_HIDOKARI, 0xE5, 0, 2);
 
 STATE_DEFINE(dAcEhidokari_c, Wait);
 STATE_DEFINE(dAcEhidokari_c, Walk);

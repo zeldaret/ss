@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_time_base.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_TIME_BASE, dAcOTimeBase_c, fProfile::OBJ_TIME_BASE, 0X19E, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_TIME_BASE, dAcOTimeBase_c, fProfile::OBJ_TIME_BASE, 0x19E, 0, 3);
 
 STATE_DEFINE(dAcOTimeBase_c, Wait);
 STATE_DEFINE(dAcOTimeBase_c, Event);

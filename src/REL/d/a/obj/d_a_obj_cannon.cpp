@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_cannon.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_CANNON, dAcOcannon_c, fProfile::OBJ_CANNON, 0X1C9, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_CANNON, dAcOcannon_c, fProfile::OBJ_CANNON, 0x1C9, 0, 2);
 
 STATE_DEFINE(dAcOcannon_c, Wait);
 STATE_DEFINE(dAcOcannon_c, PreCharge);

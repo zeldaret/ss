@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_sw_harp.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_SW_HARP, dAcOSwHarp_c, fProfile::OBJ_SW_HARP, 0X1A3, 0, 7);
+SPECIAL_ACTOR_PROFILE(OBJ_SW_HARP, dAcOSwHarp_c, fProfile::OBJ_SW_HARP, 0x1A3, 0, 7);
 
 STATE_DEFINE(dAcOSwHarp_c, Wait);
 STATE_DEFINE(dAcOSwHarp_c, OnSwitch);

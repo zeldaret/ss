@@ -20,4 +20,5 @@ public:
 private:
 	/* 0x??? */ STATE_MGR_DECLARE(dAcOBallistaF3_c);
 };
+
 #endif

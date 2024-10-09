@@ -1,6 +1,6 @@
 #include <d/a/e/d_a_e_remly.h>
 
-SPECIAL_ACTOR_PROFILE(E_REMLY, dAcEremly_c, fProfile::E_REMLY, 0XE1, 0, 3);
+SPECIAL_ACTOR_PROFILE(E_REMLY, dAcEremly_c, fProfile::E_REMLY, 0xE1, 0, 3);
 
 STATE_DEFINE(dAcEremly_c, Wait);
 STATE_DEFINE(dAcEremly_c, Walk);

@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_terry_island.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_TERRY_ISLAND, dAcOterryIsland_c, fProfile::OBJ_TERRY_ISLAND, 0X1E7, 0, 3);
+SPECIAL_ACTOR_PROFILE(OBJ_TERRY_ISLAND, dAcOterryIsland_c, fProfile::OBJ_TERRY_ISLAND, 0x1E7, 0, 3);
 
 STATE_DEFINE(dAcOterryIsland_c, Wait);
 STATE_DEFINE(dAcOterryIsland_c, Vanish);

@@ -1,6 +1,6 @@
 #include <d/a/d_a_kanban.h>
 
-SPECIAL_ACTOR_PROFILE(KANBAN, dAcKanban_c, fProfile::KANBAN, 0X181, 0, 3);
+SPECIAL_ACTOR_PROFILE(KANBAN, dAcKanban_c, fProfile::KANBAN, 0x181, 0, 3);
 
 STATE_DEFINE(dAcKanban_c, Wait);
 STATE_DEFINE(dAcKanban_c, Message);

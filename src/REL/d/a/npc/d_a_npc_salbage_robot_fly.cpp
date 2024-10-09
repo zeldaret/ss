@@ -1,6 +1,6 @@
 #include <d/a/npc/d_a_npc_salbage_robot_fly.h>
 
-SPECIAL_ACTOR_PROFILE(NPC_SLFL, dAcNpcSalbageRobotFly_c, fProfile::NPC_SLFL, 0X8A, 0, 4);
+SPECIAL_ACTOR_PROFILE(NPC_SLFL, dAcNpcSalbageRobotFly_c, fProfile::NPC_SLFL, 0x8A, 0, 4);
 
 STATE_DEFINE(dAcNpcSalbageRobotFly_c, ChasePlayerBird);
 STATE_DEFINE(dAcNpcSalbageRobotFly_c, FlyWithPlayerBird);

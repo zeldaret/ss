@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_girahimu_sword_link.h>
 
-SPECIAL_ACTOR_PROFILE(OBJ_GH_SW_L, dAcObjGirahimuSwordLink_c, fProfile::OBJ_GH_SW_L, 0X114, 0, 2);
+SPECIAL_ACTOR_PROFILE(OBJ_GH_SW_L, dAcObjGirahimuSwordLink_c, fProfile::OBJ_GH_SW_L, 0x114, 0, 2);
 
 STATE_DEFINE(dAcObjGirahimuSwordLink_c, Hide);
 STATE_DEFINE(dAcObjGirahimuSwordLink_c, Equip);
