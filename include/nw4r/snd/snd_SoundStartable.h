@@ -59,8 +59,7 @@ public:
 
     virtual StartResult
     detail_SetupSound(SoundHandle* pHandle, u32 id,
-                      detail::BasicSound::AmbientArgInfo* pArgInfo,
-                      detail::ExternalSoundPlayer* pPlayer, bool hold,
+                      bool hold,
                       const StartInfo* pStartInfo) = 0; // at 0xC
 
     virtual u32

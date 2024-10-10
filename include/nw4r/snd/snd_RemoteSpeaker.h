@@ -80,7 +80,9 @@ private:
     bool mCommandBusyFlag;           // at 0x5
     bool mForceResumeFlag;           // at 0x6
     bool mContinueFlag;              // at 0x7
-    volatile bool mIntervalFlag;     // at 0x8
+    // TODO commenting out a random flag to make eggAudioRmtSpeakerMgr match
+    // TODO offsets are wrong as a result
+    // volatile bool mIntervalFlag;     // at 0x8
     SpeakerState mState;             // at 0xC
     SpeakerCommand mUserCommand;     // at 0x10
     SpeakerCommand mInternalCommand; // at 0x14

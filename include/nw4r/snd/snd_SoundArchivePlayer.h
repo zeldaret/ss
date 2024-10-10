@@ -44,15 +44,14 @@ public:
     virtual void InvalidateWaveData(const void* pStart,
                                     const void* pEnd); // at 0x10
 
-    virtual StartResult
-    detail_SetupSound(SoundHandle* pHandle, u32 id,
-                      detail::BasicSound::AmbientArgInfo* pArgInfo,
-                      detail::ExternalSoundPlayer* pPlayer, bool hold,
-                      const StartInfo* pStartInfo); // at 0x28
-
     virtual u32 detail_ConvertLabelStringToSoundId(const char* pLabel) {
         return mSoundArchive->ConvertLabelStringToSoundId(pLabel);
-    } // at 0x2C
+    } // at 0x28
+
+    virtual StartResult
+    detail_SetupSound(SoundHandle* pHandle, u32 id,
+                      bool hold,
+                      const StartInfo* pStartInfo); // at 0x2C
 
     bool IsAvailable() const;
 
@@ -197,6 +196,9 @@ private:
     detail::SeqTrackAllocator* mSeqTrackAllocator; // at 0x1C
     SeqNoteOnCallback mSeqCallback;                // at 0x20
     WsdCallback mWsdCallback;                      // at 0x28
+
+    // @TODO The comments here are wrong
+    u8 field_0x30[0x3C - 0x30];
 
     u32 mSoundPlayerCount;      // at 0x30
     SoundPlayer* mSoundPlayers; // at 0x34
