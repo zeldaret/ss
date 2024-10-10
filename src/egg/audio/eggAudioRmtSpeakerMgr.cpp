@@ -37,15 +37,14 @@ void AudioRmtSpeakerMgr::shutdownCallback(s32 arg1, s32 arg2) {
 }
 
 void AudioRmtSpeakerMgr::fn_804B6AF0(s32 i, WPADCallback *pCallback, bool enable) {
-    // Regswaps
     BOOL intr = OSDisableInterrupts();
 
-    u32 index = mTaskRequestCount++;
+    u32 index = mTaskRequestCount;
     sTasks[index].mChannel = i;
     sTasks[index].field_0x00 = enable;
     sTasks[index].mpCallback = pCallback;
     sTasks[index].field_0x01 = false;
-    if (mTaskRequestCount >= 0x14) {
+    if (++mTaskRequestCount >= 0x14) {
         mTaskRequestCount = 0;
     }
 

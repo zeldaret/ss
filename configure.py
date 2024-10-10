@@ -783,7 +783,7 @@ config.libs = [
             Object(NonMatching, "egg/audio/eggAudioArcPlayerMgr.cpp"),
             Object(Matching, "egg/audio/eggAudioHeapMgr.cpp"),
             Object(Matching, "egg/audio/eggAudioMgr.cpp"),
-            Object(NonMatching, "egg/audio/eggAudioRmtSpeakerMgr.cpp"),
+            Object(Matching, "egg/audio/eggAudioRmtSpeakerMgr.cpp"),
             Object(NonMatching, "egg/audio/eggAudioUtility.cpp"),
             Object(Matching, "egg/audio/eggAudioSystem.cpp"),
         ],
