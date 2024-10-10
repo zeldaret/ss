@@ -1,4 +1,4 @@
-#include <d/tg/d_t_ship_window.h>
+#include <d/t/d_t_ship_window.h>
 #include <toBeSorted/event_manager.h>
 #include <toBeSorted/sceneflag_manager.h>
 

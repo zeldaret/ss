@@ -1,4 +1,4 @@
-#include <d/tg/d_t_timer.h>
+#include <d/t/d_t_timer.h>
 #include <toBeSorted/sceneflag_manager.h>
 
 SPECIAL_ACTOR_PROFILE(TIMER_TAG, dTgTimer_c, fProfile::TAG_TIMER, 0x029F, 0, 0);

@@ -1,4 +1,4 @@
-#include <d/tg/d_t_genki_dws_tgt.h>
+#include <d/t/d_t_genki_dws_tgt.h>
 #include <toBeSorted/room_manager.h>
 #include <toBeSorted/sceneflag_manager.h>
 #include <toBeSorted/item_story_flag_manager.h>

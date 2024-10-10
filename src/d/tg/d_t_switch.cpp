@@ -1,5 +1,5 @@
 #include <c/c_math.h>
-#include <d/tg/d_t_switch.h>
+#include <d/t/d_t_switch.h>
 #include <toBeSorted/event.h>
 #include <toBeSorted/sceneflag_manager.h>
 #include <toBeSorted/scgame.h>

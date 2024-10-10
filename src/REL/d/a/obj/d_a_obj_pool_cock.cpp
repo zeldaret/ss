@@ -87,10 +87,9 @@ void dAcOPoolCock_c::executeState_Wait() {
     if (mOpenSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mOpenSceneflag)) {
         sLib::chase(&mOpenProgress, 400.0f, 5.0f);
         if (!mHasActivatedVortex) {
-            dAcObjVortex_c *vortex = (dAcObjVortex_c *)fManager_c::searchBaseByProfName(fProfile::OBJ_VORTEX, nullptr);
+            dAcOVortex_c *vortex = (dAcOVortex_c *)fManager_c::searchBaseByProfName(fProfile::OBJ_VORTEX, nullptr);
             if (vortex) {
-                vortex->actor_properties |= 0x4;
-                vortex->field_0x870 = 1;
+                vortex->triggerActivation();
             }
             mHasActivatedVortex = true;
         }
