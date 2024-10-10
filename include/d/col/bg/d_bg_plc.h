@@ -18,11 +18,17 @@ class dBgPlc {
 public:
     dBgPlc() : m_base(nullptr) {}
     void setBase(void *);
+
     const sBgPc *getCode(int idx) const {
         sBgPc *rv = m_base->field_0x8;
         rv += idx;
         return rv;
     }
+
+    const dBgPc *GetDBgPc(int idx) const {
+        return (dBgPc *)&m_base->field_0x8[idx];
+    }
+
     u32 getGrpCode(int idx) const;
 
 private:

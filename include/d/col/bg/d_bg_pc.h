@@ -30,6 +30,7 @@ enum dBgPc_ECode {
 class dBgPc {
 public:
     void setCode(sBgPc &);
+    bool getWtr() const;
 
     s32 getWallCode() const {
         return m_code.code1 >> 0x8 & 0xF;

@@ -2,42 +2,50 @@
 #define D_BG_S_H
 
 #include "common.h"
+#include "d/a/d_a_base.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_w_base.h"
+#include "d/col/bg/d_bg_w_kcol.h"
 #include "f/f_base.h"
 
 class dBgW;
 class fBase_c;
+class dAcObg_c;
 
 class cBgS_ChkElm {
 public:
-    /* 0x00 */ dBgW_Base *m_bgw_base_ptr;
-    /* 0x04 */ fLiNdBa_c m_actor;
+    /* 0x00 */ dBgW_Base *mpBgW;
+    /* 0x04 */ dAcRef_c<dAcObjBase_c> mObj;
     /* 0x10 vtable */
 
 public:
-    cBgS_ChkElm() : m_actor(nullptr) {
-        this->Release();
-    }
+    cBgS_ChkElm();
+    virtual ~cBgS_ChkElm();
     void Init();
     void Release();
 
-    virtual ~cBgS_ChkElm() {}
-    virtual void Regist2(dBgW_Base *, fBase_c *);
+    void Regist2(dBgW_Base *, dAcObjBase_c *);
 
     // bool ChkUsed() const { return m_used; }
 }; // Size: 0x14
 
 class cBgS {
 public:
-    /* 0x0000 */ cBgS_ChkElm m_chk_element[BG_ID_MAX];
-    /* 0x2EE0 */ u32 m_set_counter;
+    /* 0x0000 */ cBgS_ChkElm mChkElem[BG_ID_MAX];
+    /* 0x2EE0 */ u32 mSetCounter;
     /* 0x2EE4 vtable */
-    /* 0x2EEC */ fLiNdBa_c m_0x2EEC;
-    /* 0x2EF8 */ u32 m_0x2EF8;
+    virtual ~cBgS();
+    virtual void Ct();
+    virtual void Dt();
+
+    /* 0x2EE8 */ dBgWKCol *mpBgKCol;
+    /* 0x2EEC */ dAcRef_c<dAcObjBase_c> mAcOBg;
+    /* 0x2EF8 */ u32 mField_0x2EF8;
 
 public:
     cBgS();
     bool Regist(dBgW_Base *, unsigned int, void *);
+    static void fn_80339de0(dBgW_Base *);
     int Release(dBgW_Base *);
     bool LineCross(cBgS_LinChk *);
     f32 GroundCross(cBgS_GndChk *);
@@ -50,10 +58,6 @@ public:
     bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c *, mVec3_c *, mVec3_c *) const;
     void ShdwDraw(cBgS_ShdwDraw *);
     u32 GetGrpInf(cBgS_PolyInfo const &) const;
-
-    virtual ~cBgS() {}
-    virtual void Ct();
-    virtual void Dt();
 
     fBase_c *GetActorPointer(cBgS_PolyInfo const &info) const {
         return GetActorPointer(info.GetBgIndex());

@@ -6,6 +6,7 @@
  * Some Mask/Quick index into the collision octree
  */
 #include "common.h"
+#include "d/col/c/c_m3d_g_aab.h"
 
 class cPartition {
 public:
@@ -19,6 +20,8 @@ public:
     cPartition();
     // vt at 0xC
     virtual ~cPartition();
+
+    static bool fn_80339070(const cM3dGAab *);
 };
 
 #endif

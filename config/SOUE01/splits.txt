@@ -648,6 +648,7 @@ d/col/bg/d_bg_plc.cpp:
 
 d/col/bg/d_bg_s.cpp:
 	.text       start:0x80339C00 end:0x8033F14C
+	.data       start:0x80547698 end:0x805477C0
 
 d/col/bg/d_bg_s_acch.cpp:
 	.text       start:0x8033F150 end:0x803412F8
