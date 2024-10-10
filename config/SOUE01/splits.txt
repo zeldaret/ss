@@ -1763,6 +1763,9 @@ egg/audio/eggAudioMgr.cpp:
 
 egg/audio/eggAudioRmtSpeakerMgr.cpp:
 	.text       start:0x804B69D0 end:0x804B6F58
+	.sdata      start:0x80574F68 end:0x80574F6C
+	.sbss       start:0x805768D8 end:0x805768E8
+	.bss        start:0x80675390 end:0x80675480
 
 egg/audio/eggAudioUtility.cpp:
 	.text       start:0x804B6F60 end:0x804B720C
