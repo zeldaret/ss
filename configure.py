@@ -781,11 +781,11 @@ config.libs = [
         "audio",
         [
             Object(NonMatching, "egg/audio/eggAudioArcPlayerMgr.cpp"),
-            Object(NonMatching, "egg/audio/eggAudioHeapMgr.cpp"),
-            Object(NonMatching, "egg/audio/eggAudioMgr.cpp"),
+            Object(Matching, "egg/audio/eggAudioHeapMgr.cpp"),
+            Object(Matching, "egg/audio/eggAudioMgr.cpp"),
             Object(NonMatching, "egg/audio/eggAudioRmtSpeakerMgr.cpp"),
             Object(NonMatching, "egg/audio/eggAudioUtility.cpp"),
-            Object(NonMatching, "egg/audio/eggAudioSystem.cpp"),
+            Object(Matching, "egg/audio/eggAudioSystem.cpp"),
         ],
     ),
     EGGLib(
