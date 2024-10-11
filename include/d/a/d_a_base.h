@@ -59,6 +59,9 @@ public:
     T *get() {
         return static_cast<T *>(p_owner);
     }
+    const T *get() const {
+        return static_cast<const T *>(p_owner);
+    }
 };
 
 // Ghidra: ActorBase
@@ -145,6 +148,10 @@ public:
 
     bool IsOutOfRange(const mVec3_c &point, f32 radius) {
         return getSquareDistanceTo(point) > radius;
+    }
+
+    bool ChkProperty_0x40000000() const {
+        return actor_properties & 0x40000000;
     }
 
 public:

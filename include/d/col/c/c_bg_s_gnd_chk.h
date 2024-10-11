@@ -9,7 +9,8 @@ class cBgS_GndChk : public cBgS_Chk, public cBgS_PolyInfo {
 public:
     /* 0x54 */ mVec3_c mPos;
     /* 0x60 */ f32 mNowY;
-    /* 0x64 */ u8 unk0x64[0x74 - 0x64];
+    /* 0x64 */ u8 unk0x64[0x68 - 0x64];
+    /* 0x68 */ mVec3_c mField_0x68;
     /* 0x74 */ u8 mField_0x74;
 
     cBgS_GndChk();
@@ -25,6 +26,9 @@ public:
     }
     const mVec3_c &GetPointP() {
         return mPos;
+    }
+    void SetField_0x68(const mVec3_c &other) {
+        mField_0x68 = other;
     }
     // u32 GetWallPrecheck() const {
     //     return mWallPrecheck;

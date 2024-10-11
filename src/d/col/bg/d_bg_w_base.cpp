@@ -80,11 +80,11 @@ bool dBgW_Base::UpdateDraw(mAllocator_c * /* unused */) {
     return true;
 }
 
-void dBgW_Base::Regist(u16 id) {
+void dBgW_Base::RegistBg(u16 id) {
     mRegistId = id;
 }
 
-void dBgW_Base::UnRegist() {
+void dBgW_Base::UnRegistBg() {
     mRegistId = BG_ID_MAX;
 }
 

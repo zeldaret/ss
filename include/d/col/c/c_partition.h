@@ -18,8 +18,15 @@ public:
     /* 0x8 */ u32 mZ;
 
     cPartition();
+
     // vt at 0xC
     virtual ~cPartition();
+
+    void Calc(mVec3_c *pPos);
+
+    void fn_803391f0(const cM3dGAab *);
+
+    static void fn_80338fb0();
 
     static bool fn_80339070(const cM3dGAab *);
 };

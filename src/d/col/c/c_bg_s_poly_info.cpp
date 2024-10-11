@@ -11,7 +11,6 @@ bool cBgS_PolyInfo::ChkSetInfo() const {
 }
 
 void cBgS_PolyInfo::SetPolyInfo(const cBgS_PolyInfo &other) {
-    // FPR Swap
     *this = other;
 }
 

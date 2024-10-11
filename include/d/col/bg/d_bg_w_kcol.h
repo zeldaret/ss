@@ -63,8 +63,8 @@ public:
     /* 0x01C */ virtual bool ChkLock() const override;
     /* 0x020 */ virtual bool ChkMoveBg() const override;
     /* 0x024 */ virtual u32 ChkMoveFlag() const override;
-    /* 0x028 */ virtual void GetTriPla(cBgS_PolyInfo const &, cM3dGPla &) const override;
-    /* 0x02C */ virtual bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c &, mVec3_c &, mVec3_c &) const override;
+    /* 0x028 */ virtual void GetTriPla(cBgS_PolyInfo const &, cM3dGPla *) const override;
+    /* 0x02C */ virtual bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c *, mVec3_c *, mVec3_c *) const override;
     /* 0x030 */ virtual const cM3dGAab *GetBnd() const override;
     /* 0x034 */ virtual u32 GetGrpInf(cBgS_PolyInfo const &) const override;
     /* 0x038 */ virtual void OffMoveFlag() override;

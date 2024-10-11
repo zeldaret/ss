@@ -43,6 +43,22 @@ public:
     cBgS_GrpPassChk *GetGrpPassChk() const {
         return mGrpPassChk;
     }
+
+    int ChkSameActorPid(const fBase_c *pActor) {
+        int id = pActor ? pActor->unique_ID : 0;
+        if (id == 0 || mActorId == 0 || mField_0x10 == 0) {
+            return false;
+        }
+        return mActorId == id ? 1 : 0;
+    }
+
+    bool ChkField_0xC(const dBgW_Base *pBg) const {
+        return mField_0x0C & pBg->GetField_0x20();
+    }
+
+    bool ChkField_0xE(const dBgW_Base *pBg) const {
+        return mField_0x0E & pBg->GetField_0x22();
+    }
 };
 
 #endif

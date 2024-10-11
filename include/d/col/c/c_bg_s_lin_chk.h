@@ -11,17 +11,27 @@ public:
     /* 0x6C */ mVec3_c mField_0x6C;
     /* 0x78 */ bool mField_0x78;
     /* 0x79 */ bool mField_0x79;
-    /* 0x7A */ bool mField_0x7A;
+    /* 0x7A */ bool mHit;
     /* 0x7B */ bool mField_0x7B;
     /* 0x7C */ bool mField_0x7C;
     /* 0x7D */ bool mField_0x7D;
 
     cBgS_LinChk();
     virtual ~cBgS_LinChk();
-    virtual void vt_0xC();
+    virtual void vt_0xC(mVec3_c *);
 
     void Ct();
     void Set2(const mVec3_c &, const mVec3_c &, u32);
+
+    bool ChkHit() const {
+        return mHit;
+    }
+    void ClrHit() {
+        mHit = false;
+    }
+    void SetHit() {
+        mHit = true;
+    }
 };
 
 #endif

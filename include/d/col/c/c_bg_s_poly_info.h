@@ -21,11 +21,16 @@ public:
     }
     bool ChkSetInfo() const;
     void SetPolyInfo(const cBgS_PolyInfo &);
-    void SetActorInfo(int, void *, s32);
     bool ChkSafe(const void *, s32) const;
     void SetPolyIndex(int);
     bool ChkBgIndex() const;
     mAng GetAngle(mAng) const;
+
+    void SetActorInfo(int bgIndex, void *pData, u32 actor_pid) {
+        unk_0x04 = pData;
+        mBgIndex = bgIndex;
+        mActorPId = actor_pid;
+    }
 
     void ClearPi() {
         mPolyIndex = 0xFFFF;

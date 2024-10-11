@@ -96,7 +96,7 @@ bool cM3dGAab::Cross(const mVec3_c &pos) const {
     return false;
 }
 
-void cM3dGAab::SetBounds(const mVec3_c &pntA, const mVec3_c &pntB) {
+cM3dGAab::cM3dGAab(const mVec3_c &pntA, const mVec3_c &pntB) {
     if (pntA.x < pntB.x) {
         mMin.x = pntA.x;
         mMax.x = pntB.x;

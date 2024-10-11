@@ -90,19 +90,19 @@ struct cBgD_Grp_t {
 }; // Size: 0x34
 
 struct cBgD_t {
-    /* 0x00 */ int m_v_num;         // vertex num
-    /* 0x04 */ cBgD_Vtx_t *m_v_tbl; // vertex table
-    /* 0x08 */ int m_t_num;         // triangle num
-    /* 0x0C */ cBgD_Tri_t *m_t_tbl; // triangle table
-    /* 0x10 */ int m_b_num;
-    /* 0x14 */ cBgD_Blk_t *m_b_tbl;
-    /* 0x18 */ int m_tree_num;
-    /* 0x1C */ cBgD_Tree_t *m_tree_tbl;
-    /* 0x20 */ int m_g_num;
-    /* 0x24 */ cBgD_Grp_t *m_g_tbl;
-    /* 0x28 */ int m_ti_num;
-    /* 0x2C */ cBgD_Ti_t *m_ti_tbl;
-    /* 0x30 */ int mFlags;
+    /* 0x00 */ int mVtxNum;         // vertex num
+    /* 0x04 */ cBgD_Vtx_t *mVtxTbl; // vertex table
+    /* 0x08 */ int mTriNum;         // triangle num
+    /* 0x0C */ cBgD_Tri_t *mTriTbl; // triangle table
+    /* 0x10 */ int mBlkNum;
+    /* 0x14 */ cBgD_Blk_t *mBlkTbl;
+    /* 0x18 */ int mTreeNum;
+    /* 0x1C */ cBgD_Tree_t *mTreeTbl;
+    /* 0x20 */ int mGrpNum;
+    /* 0x24 */ cBgD_Grp_t *mGrpTbl;
+    /* 0x28 */ int mTiNum;
+    /* 0x2C */ cBgD_Ti_t *mTiTbl;
+    /* 0x30 */ u32 mFlags;
 };
 
 class cBgW : public dBgW_Base {
@@ -161,8 +161,8 @@ public:
     /* 0x01C */ virtual bool ChkLock() const override;
     /* 0x020 */ virtual bool ChkMoveBg() const override;
     /* 0x024 */ virtual u32 ChkMoveFlag() const override = 0;
-    /* 0x028 */ virtual void GetTriPla(cBgS_PolyInfo const &, cM3dGPla &) const override;
-    /* 0x02C */ virtual bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c &, mVec3_c &, mVec3_c &) const override;
+    /* 0x028 */ virtual void GetTriPla(cBgS_PolyInfo const &, cM3dGPla *) const override;
+    /* 0x02C */ virtual bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c *, mVec3_c *, mVec3_c *) const override;
     /* 0x030 */ virtual const cM3dGAab *GetBnd() const override;
     /* 0x034 */ virtual u32 GetGrpInf(cBgS_PolyInfo const &) const override; // ?
     /* 0x038 */ virtual void OffMoveFlag() override = 0;
@@ -230,7 +230,7 @@ public:
         return mpVtxTbl;
     }
     int GetVtxNum() const {
-        return mpBgd->m_v_num;
+        return mpBgd->mVtxNum;
     }
 
 public:

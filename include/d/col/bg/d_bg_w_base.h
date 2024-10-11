@@ -61,8 +61,8 @@ public:
     bool InitMapStuff(mAllocator_c *pAllocator);
     bool fn_8034AD70() const;
     bool fn_8034ADA0() const;
-    void Regist(u16 id);
-    void UnRegist();
+    void RegistBg(u16 id);
+    void UnRegistBg();
     bool ChkReady() const;
     void Set0x2F(u8);
 
@@ -75,8 +75,8 @@ public:
     /* 0x01C */ virtual bool ChkLock() const = 0;
     /* 0x020 */ virtual bool ChkMoveBg() const = 0;
     /* 0x024 */ virtual u32 ChkMoveFlag() const = 0;
-    /* 0x028 */ virtual void GetTriPla(cBgS_PolyInfo const &, cM3dGPla &) const = 0;
-    /* 0x02C */ virtual bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c &, mVec3_c &, mVec3_c &) const = 0;
+    /* 0x028 */ virtual void GetTriPla(cBgS_PolyInfo const &, cM3dGPla *) const = 0;
+    /* 0x02C */ virtual bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c *, mVec3_c *, mVec3_c *) const = 0;
     /* 0x030 */ virtual const cM3dGAab *GetBnd() const = 0;
     /* 0x034 */ virtual u32 GetGrpInf(cBgS_PolyInfo const &) const = 0; // ?
     /* 0x038 */ virtual void OffMoveFlag() = 0;
@@ -177,6 +177,17 @@ public:
     // void onStickRoof() {
     //     field_0xb |= 2;
     // }
+
+    const cPartition &GetPartition() const {
+        return mPartitionInfo;
+    }
+
+    u16 GetField_0x20() const {
+        return field_0x20;
+    }
+    u16 GetField_0x22() const {
+        return field_0x22;
+    }
 
 private:
     /* 0x08 */ cPartition mPartitionInfo;

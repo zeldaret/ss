@@ -14,6 +14,9 @@ public:
     /* 0x00 */ mVec3_c mMin;
     /* 0x0C */ mVec3_c mMax;
 
+    cM3dGAab() {}
+    cM3dGAab(const mVec3_c &, const mVec3_c &);
+
     void Set(const mVec3_c &min, const mVec3_c &max) {
         mMin = min;
         mMax = max;
@@ -31,7 +34,6 @@ public:
     void Clamp(const mVec3_c &, mVec3_c &) const;
     void Set(const cM3dGSph &);
     bool Cross(const mVec3_c &) const;
-    void SetBounds(const mVec3_c &, const mVec3_c &);
 
     const mVec3_c *GetMaxP(void) const {
         return &mMax;

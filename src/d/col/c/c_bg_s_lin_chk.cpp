@@ -15,15 +15,15 @@ void cBgS_LinChk::Ct() {
     mField_0x7D = false;
     mField_0x78 = true;
     mField_0x79 = false;
-    mField_0x7A = false;
+    mHit = false;
 }
 
 void cBgS_LinChk::Set2(const mVec3_c &start, const mVec3_c &end, u32 id) {
     mLin.Set(start, end);
     mField_0x6C = end;
     mActorId = id;
-    mField_0x7A = false;
+    mHit = false;
     ClearPi();
 }
 
-void cBgS_LinChk::vt_0xC() {}
+void cBgS_LinChk::vt_0xC(mVec3_c *) {}

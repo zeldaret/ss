@@ -4,6 +4,7 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/col/bg/d_bg_w.h"
 #include "d/col/bg/d_bg_w_base.h"
 #include "d/col/bg/d_bg_w_kcol.h"
 #include "f/f_base.h"
@@ -26,42 +27,73 @@ public:
 
     void Regist2(dBgW_Base *, dAcObjBase_c *);
 
-    // bool ChkUsed() const { return m_used; }
-}; // Size: 0x14
+    bool ChkUsed() const {
+        if (mpBgW == nullptr) {
+            return false;
+        }
+        const dAcObjBase_c *pObj = mObj.get();
+        return !(pObj && pObj->ChkProperty_0x40000000());
+    }
+
+    bool CheckAll(cBgS_Chk *other) const {
+        bool check = ChkUsed();
+        if (check) {
+            const cPartition &part = mpBgW->GetPartition();
+            if ((part.mX & other->mPartition.mX) && (part.mZ & other->mPartition.mZ) &&
+                (part.mY & other->mPartition.mY)) {
+                check = true;
+            } else {
+                check = false;
+            }
+        }
+        if (check) {
+            check = !other->ChkSameActorPid(mObj.get());
+        }
+        if (check) {
+            check = !(other->mField_0x0C & mpBgW->GetField_0x20());
+        }
+        if (check) {
+            check = (other->mField_0x0E & mpBgW->GetField_0x22());
+        }
+        return check;
+    }
+};
 
 class cBgS {
 public:
     /* 0x0000 */ cBgS_ChkElm mChkElem[BG_ID_MAX];
-    /* 0x2EE0 */ u32 mSetCounter;
+    /* 0x2EE0 */ s32 mSetCounter;
     /* 0x2EE4 vtable */
     virtual ~cBgS();
     virtual void Ct();
     virtual void Dt();
 
     /* 0x2EE8 */ dBgWKCol *mpBgKCol;
-    /* 0x2EEC */ dAcRef_c<dAcObjBase_c> mAcOBg;
+    /* 0x2EEC */ dAcRef_c<dAcObg_c> mAcOBg;
     /* 0x2EF8 */ u32 mField_0x2EF8;
 
 public:
     cBgS();
-    bool Regist(dBgW_Base *, unsigned int, void *);
     static void fn_80339de0(dBgW_Base *);
-    int Release(dBgW_Base *);
+    bool Regist(dBgW_Base *, dAcObjBase_c *);
+    bool Release(dBgW_Base *);
+    static void ConvDzb(void *);
     bool LineCross(cBgS_LinChk *);
     f32 GroundCross(cBgS_GndChk *);
-    static void *ConvDzb(void *);
-    fBase_c *GetActorPointer(int) const;
+    void ShdwDraw(cBgS_ShdwDraw *);
+    void fn_8033a1e0();
+
+    bool RegistKCol(dBgWKCol *, dAcObg_c *);
+
+    const dAcObjBase_c *GetActorPointer(int) const;
     dBgW_Base *GetBgWBasePointer(cBgS_PolyInfo const &) const;
-    bool ChkPolySafe(cBgS_PolyInfo const &);
+    bool ChkPolySafe(cBgS_PolyInfo const &) const;
     s32 GetGrpRoomId(cBgS_PolyInfo const &) const;
     bool GetTriPla(cBgS_PolyInfo const &, cM3dGPla *) const;
     bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c *, mVec3_c *, mVec3_c *) const;
-    void ShdwDraw(cBgS_ShdwDraw *);
     u32 GetGrpInf(cBgS_PolyInfo const &) const;
 
-    fBase_c *GetActorPointer(cBgS_PolyInfo const &info) const {
-        return GetActorPointer(info.GetBgIndex());
-    }
+    const dAcObjBase_c *GetActorPointer(const cBgS_PolyInfo &info) const;
 }; // Size: 0x2EFC
 
 class dBgS_Acch;
