@@ -188,23 +188,6 @@ struct AnmGroup_c : public AnmGroupBase_c {
     /* 0x28 */ m2d::FrameCtrl_c mFrameCtrl;
 };
 
-// Probably pause menu specific
-struct dLytStructB : public dLytMeterBase {
-    dLytStructB();
-    ~dLytStructB();
-
-    virtual bool build(d2d::ResAccIf_c *resAcc) override;
-    virtual bool LytMeter0x10() override;
-    virtual bool LytMeter0x14() override;
-    virtual nw4r::lyt::Pane *getPane() override;
-    virtual void *LytMeter0x1C() override;
-    virtual const char *getName() const override;
-
-    void init(void *, u8);
-
-    u8 field_0x00[0x808 - 0x08];
-};
-
 } // namespace d2d
 
 #endif

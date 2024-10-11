@@ -234,8 +234,18 @@ toBeSorted/special_item_drop_mgr.cpp:
 	.sbss       start:0x80575438 end:0x80575440
 
 d/lyt/meter/d_lyt_meter.cpp:
-	.text       start:0x800C8950 end:0x800DFCB8
+	.text       start:0x800C8950 end:0x800DF8A8
 	.ctors      start:0x804DB6E0 end:0x804DB6E4
+	.rodata     start:0x804E4EE0 end:0x804E5020
+	.data       start:0x80511C80 end:0x80513B60
+	.sdata      start:0x80572318 end:0x80572380
+	.sdata2     start:0x80579AD0 end:0x80579AF0
+	.bss        start:0x805A9C98 end:0x805AA190
+
+d/lyt/meter/d_lyt_meter_unk.cpp:
+	.text       start:0x800DF8B0 end:0x800DFCB8
+	.data       start:0x80513B60 end:0x80513B70
+	.sdata2     start:0x80579AF0 end:0x80579B60
 
 d/lyt/meter/d_lyt_meter_a_btn.cpp:
 	.text       start:0x800DFCC0 end:0x800E1188
@@ -294,6 +304,7 @@ d/lyt/meter/d_lyt_meter_rupy.cpp:
 d/lyt/meter/d_lyt_meter_ganbari_gauge.cpp:
 	.text       start:0x801026B0 end:0x80105548
 	.ctors      start:0x804DB718 end:0x804DB71C
+	.data       start:0x80518F00 end:0x80519578
 
 d/lyt/meter/d_lyt_meter_heart.cpp:
 	.text       start:0x8010AEC0 end:0x8010BD48

@@ -1,5 +1,5 @@
-#ifndef D_LYT_METER_REMOCON_BH_H
-#define D_LYT_METER_REMOCON_BH_H
+#ifndef D_LYT_METER_REMOCON_BG_H
+#define D_LYT_METER_REMOCON_BG_H
 
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_sub.h"
@@ -9,7 +9,7 @@
 
 class dLytMeterRemoconBg_c : public dLytMeterBase {
 public:
-    dLytMeterRemoconBg_c();
+    dLytMeterRemoconBg_c() : mStateMgr(*this, sStateID::null) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool LytMeter0x10() override;
     virtual bool LytMeter0x14() override;
@@ -17,7 +17,7 @@ public:
     virtual void *LytMeter0x1C() override;
     virtual const char *getName() const override;
 
-    virtual ~dLytMeterRemoconBg_c();
+    virtual ~dLytMeterRemoconBg_c() {}
 
 private:
     STATE_FUNC_DECLARE(dLytMeterRemoconBg_c, Wait);

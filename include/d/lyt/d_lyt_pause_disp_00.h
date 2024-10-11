@@ -3,6 +3,7 @@
 
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_structd.h"
+#include "d/lyt/d_lyt_common_icon_item.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 
@@ -27,7 +28,7 @@ private:
     STATE_MGR_DECLARE(dLytPauseDisp00_c);
     d2d::LytBase_c mLytBase;
     d2d::AnmGroup_c field_0x00D0[0x7E];
-    d2d::dLytStructB field_0x2050[0x18];
+    dLytCommonIconItem_c field_0x2050[0x18];
     /* 0xE110 */ LytMeterGroup mLytMeterGroup;
     LytMeterListNode field_0xE11C[0x18];
     d2d::dLytStructD field_0xE29C;
