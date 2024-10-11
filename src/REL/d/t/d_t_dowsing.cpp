@@ -1,4 +1,4 @@
-#include <d/tg/d_t_dowsing.h>
+#include <d/t/d_t_dowsing.h>
 #include <toBeSorted/item_story_flag_manager.h>
 #include <toBeSorted/room_manager.h>
 #include <toBeSorted/sceneflag_manager.h>

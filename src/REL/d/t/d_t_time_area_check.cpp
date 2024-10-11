@@ -1,4 +1,4 @@
-#include <d/tg/d_t_time_area_check.h>
+#include <d/t/d_t_time_area_check.h>
 #include <toBeSorted/time_area_mgr.h>
 #include <toBeSorted/sceneflag_manager.h>
 

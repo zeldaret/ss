@@ -53,6 +53,25 @@ public:
     void SetFontSize(const Size &fontSize) {
         mFontSize = fontSize;
     }
+
+
+    f32 GetCharSpace() const {
+        return mCharSpace;
+    }
+
+    void SetCharSpace(f32 charSpace) {
+        mCharSpace = charSpace;
+    }
+
+
+    f32 GetLineSpace() const {
+        return mLineSpace;
+    }
+
+    void SetLineSpace(f32 lineSpace) {
+        mLineSpace = lineSpace;
+    }
+
     ut::TagProcessorBase<wchar_t> *GetTagProcessor() const {
         return mpTagProcessor;
     }

@@ -27,7 +27,7 @@ void dLytFader_c::setStatus(EStatus status) {
         d2d::AnmGroup_c *s = &mLytStructAs[0];
         s->fn_800AC6D0(false);
         s->setToEnd();
-        s->fn_800AC870(true);
+        s->setAnimEnable(true);
         s->play();
         mLytBase.calc();
         fn_80175BC0(2);
@@ -38,7 +38,7 @@ void dLytFader_c::setStatus(EStatus status) {
         d2d::AnmGroup_c *s = &mLytStructAs[0];
         s->fn_800AC6D0(false);
         s->setToStart();
-        s->fn_800AC870(true);
+        s->setAnimEnable(true);
         mLytBase.calc();
         fn_80175BC0(2);
         mLytBase.getLayout()->GetRootPane()->SetVisible(false);
@@ -113,16 +113,14 @@ void dLytFader_c::fn_801758F0() {
     mLytBase.unbindAnims();
     d2d::AnmGroup_c *s = &mLytStructAs[0];
     s->fn_800AC6D0(false);
-    s->mpFrameCtrl->setFrame(0.0f);
-    s->syncAnmFrame();
-    s->mpFrameCtrl->setRate(20.0f / (mFrame - 1));
-    s->fn_800AC870(true);
+    s->setFrame(0.0f);
+    s->setRate(20.0f / (mFrame - 1));
     mLytBase.getLayout()->GetRootPane()->SetVisible(true);
 }
 
 void dLytFader_c::fn_801759B0() {
     d2d::AnmGroup_c *s = &mLytStructAs[0];
-    if (s->mpFrameCtrl->isEndReached() == true) {
+    if (s->isEndReached() == true) {
         fn_80175BC0(2);
         mStatus = FADED_OUT;
     }
@@ -135,16 +133,14 @@ void dLytFader_c::fn_80175A50() {
     mLytBase.unbindAnims();
     d2d::AnmGroup_c *s = &mLytStructAs[1];
     s->fn_800AC6D0(false);
-    s->mpFrameCtrl->setFrame(0.0f);
-    s->syncAnmFrame();
-    s->mpFrameCtrl->setRate(20.0f / (mFrame - 1));
-    s->fn_800AC870(true);
+    s->setFrame(0.0f);
+    s->setRate(20.0f / (mFrame - 1));
     mLytBase.getLayout()->GetRootPane()->SetVisible(true);
 }
 
 void dLytFader_c::fn_80175B10() {
     d2d::AnmGroup_c *s = &mLytStructAs[1];
-    if (s->mpFrameCtrl->isEndReached() == true) {
+    if (s->isEndReached() == true) {
         fn_80175BC0(2);
         mStatus = FADED_IN;
         mLytBase.getLayout()->GetRootPane()->SetVisible(false);

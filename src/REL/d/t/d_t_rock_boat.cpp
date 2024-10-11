@@ -1,4 +1,4 @@
-#include <d/tg/d_t_rock_boat.h>
+#include <d/t/d_t_rock_boat.h>
 #include <d/a/obj/d_a_obj_base.h>
 
 SPECIAL_ACTOR_PROFILE(TAG_ROCK_BOAT, dTgRockBoat_c, fProfile::TAG_ROCK_BOAT, 0x173, 0, 3);

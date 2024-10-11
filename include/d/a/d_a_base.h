@@ -150,6 +150,10 @@ public:
         return getSquareDistanceTo(point) > radius;
     }
 
+    u32 getRoomId() {
+        return roomid;
+    }
+
     bool ChkProperty_0x40000000() const {
         return actor_properties & 0x40000000;
     }

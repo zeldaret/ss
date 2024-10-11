@@ -15,6 +15,8 @@ struct PaneLink {
 };
 } // namespace detail
 
+typedef ut::LinkList<detail::PaneLink, 0> PaneList;
+
 class Group {
 public:
     Group(const res::Group *pResGroup, Pane *pRootPane);
@@ -23,7 +25,7 @@ public:
     void AppendPane(Pane *pPane);
     void Init();
 
-    ut::LinkList<detail::PaneLink, 0> *GetPaneList() {
+    PaneList *GetPaneList() {
         return &mPaneListLink;
     }
     bool IsUserAllocated() const {
@@ -35,7 +37,7 @@ public:
 
 private:
     ut::LinkListNode mLink;                          // at 0x04
-    ut::LinkList<detail::PaneLink, 0> mPaneListLink; // at 0x0C
+    PaneList mPaneListLink; // at 0x0C
     char mName[NW4R_RES_NAME_SIZE + 1];              // at 0x18
     bool mbUserAllocated;                            // at 0x29
     u8 mPadding[2];                                  // at 0x2A

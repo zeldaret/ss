@@ -13,6 +13,7 @@ typedef void (*KPADConnectCallback)(s32, s32);
 // TODO: Create Proper Headers
 void KPADInitEx(void * /* UNKTYPE */, u32);
 
+s32 KPADRead(s32 chan, UNKTYPE *status, s32);
 s32 KPADReadEx(s32 chan, UNKTYPE *status, s32, s32 *);
 
 void KPADSetConnectCallback(u32, KPADConnectCallback);

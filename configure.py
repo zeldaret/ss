@@ -225,6 +225,15 @@ cflags_framework = [
     "-ipa file",
 ]
 
+# libms flags
+cflags_libms = [
+    *cflags_base,
+    "-inline noauto",
+    "-fp_contract off",
+    "-lang=C++",
+    "-Cpp_exceptions on",
+]
+
 # EGG flags
 cflags_egg = [
     *cflags_base,
@@ -354,13 +363,19 @@ config.libs = [
             Object(Matching, "toBeSorted/counters/slingshot_seed_counter.cpp"),
             Object(Matching, "toBeSorted/counters/key_piece_counter.cpp"),
             Object(Matching, "toBeSorted/counters/extra_wallet_counter.cpp"),
+            Object(NonMatching, "d/lyt/d_structd.cpp"),
             Object(NonMatching, "d/lyt/d2d.cpp"),
             Object(NonMatching, "d/lyt/d_textbox.cpp"),
             Object(Matching, "d/lyt/d_window.cpp"),
+            Object(NonMatching, "d/lyt/meter/d_lyt_meter.cpp"),
+            Object(NonMatching, "d/lyt/meter/d_lyt_meter_remocon_bg.cpp"),
+            Object(NonMatching, "d/lyt/meter/d_lyt_meter_rupy.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_do_button.cpp"),
+            Object(Matching, "d/lyt/d_lyt_battery.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_pause_disp_00.cpp"),
             Object(Matching, "d/lyt/d_lyt_fader.cpp"),
             Object(Matching, "d/lyt/d_screen_fader.cpp"),
-            Object(NonMatching, "d/lyt/common_arrow.cpp"),
-            Object(NonMatching, "d/lyt/pause_disp_00.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_common_arrow.cpp"),
             Object(NonMatching, "toBeSorted/file_manager.cpp"),
             Object(NonMatching, "toBeSorted/save_manager.cpp"),
             Object(Matching, "DynamicLink.cpp"),
@@ -460,6 +475,19 @@ config.libs = [
             Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
             Object(Matching, "m/m_pad.cpp"),
+        ],
+    },
+    {
+        "lib": "libms",
+        "mw_version": "Wii/1.5",
+        "cflags": cflags_libms,
+        "progress_category": "core",
+        "host": False,
+        "objects": [
+            Object(NonMatching, "libms/commonlib.c"),
+            Object(NonMatching, "libms/flowfile.c"),
+            Object(NonMatching, "libms/libms.c"),
+            Object(NonMatching, "libms/msgfile.c"),
         ],
     },
     {
@@ -1239,7 +1267,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_propeller_lift", "REL/d/a/obj/d_a_obj_propeller_lift.cpp"),
     Rel(NonMatching, "d_a_obj_propera", "REL/d/a/obj/d_a_obj_propera.cpp"),
     Rel(NonMatching, "d_a_obj_pumpkin_bar", "REL/d/a/obj/d_a_obj_pumpkin_bar.cpp"),
-    Rel(NonMatching, "d_a_obj_pumpkin_leaf", "REL/d/a/obj/d_a_obj_pumpkin_leaf.cpp"),
+    Rel(Matching, "d_a_obj_pumpkin_leaf", "REL/d/a/obj/d_a_obj_pumpkin_leaf.cpp"),
     Rel(NonMatching, "d_a_obj_push_block", "REL/d/a/obj/d_a_obj_push_block.cpp"),
     Rel(NonMatching, "d_a_obj_puzzle_island", "REL/d/a/obj/d_a_obj_puzzle_island.cpp"),
     Rel(NonMatching, "d_a_obj_rail_end", "REL/d/a/obj/d_a_obj_rail_end.cpp"),
@@ -1288,7 +1316,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_soil", "REL/d/a/obj/d_a_obj_soil.cpp"),
     Rel(NonMatching, "d_a_obj_spider_line", "REL/d/a/obj/d_a_obj_spider_line.cpp"),
     Rel(Matching, "d_a_obj_spike", "REL/d/a/obj/d_a_obj_spike.cpp"),
-    Rel(NonMatching, "d_a_obj_stage_cover", "REL/d/a/obj/d_a_obj_stage_cover.cpp"),
+    Rel(Matching, "d_a_obj_stage_cover", "REL/d/a/obj/d_a_obj_stage_cover.cpp"),
     Rel(NonMatching, "d_a_obj_stage_crack", "REL/d/a/obj/d_a_obj_stage_crack.cpp"),
     Rel(NonMatching, "d_a_obj_stage_debris", "REL/d/a/obj/d_a_obj_stage_debris.cpp"),
     Rel(NonMatching, "d_a_obj_stage_kraken", "REL/d/a/obj/d_a_obj_stage_kraken.cpp"),
@@ -1464,7 +1492,7 @@ config.libs = [
     Rel(NonMatching, "d_t_scene_change", "REL/d/t/d_t_scene_change.cpp"),
     Rel(NonMatching, "d_t_ship_flood", "REL/d/t/d_t_ship_flood.cpp"),
     Rel(NonMatching, "d_t_ship_slope", "REL/d/t/d_t_ship_slope.cpp"),
-    Rel(NonMatching, "d_t_ship_window", "REL/d/t/d_t_ship_window.cpp"),
+    Rel(Matching, "d_t_ship_window", "REL/d/t/d_t_ship_window.cpp"),
     Rel(NonMatching, "d_t_shutter_fence_forbiddance", "REL/d/t/d_t_shutter_fence_forbiddance.cpp"),
     Rel(NonMatching, "d_t_shutter_fence_permission", "REL/d/t/d_t_shutter_fence_permission.cpp"),
     Rel(NonMatching, "d_t_siren_time_attack", "REL/d/t/d_t_siren_time_attack.cpp"),
@@ -1483,7 +1511,7 @@ config.libs = [
     Rel(Matching, "d_t_timer", "REL/d/t/d_t_timer.cpp"),
     Rel(Matching, "d_t_time_area_check", "REL/d/t/d_t_time_area_check.cpp"),
     Rel(NonMatching, "d_t_time_door_beam", "REL/d/t/d_t_time_door_beam.cpp"),
-    Rel(NonMatching, "d_t_touch", "REL/d/t/d_t_touch.cpp"),
+    Rel(Matching, "d_t_touch", "REL/d/t/d_t_touch.cpp"),
     Rel(NonMatching, "d_t_tumble_weed", "REL/d/t/d_t_tumble_weed.cpp"),
 ]
 

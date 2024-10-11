@@ -12,6 +12,8 @@ public:
 
     bool isThisActorInEvent();
     void scheduleEvent(Event &, u32);
+    u32 getCurrentEventCommand() const;
+    void advanceNext();
 
 private:
     u8 field_0x00[0x50 - 0x00];

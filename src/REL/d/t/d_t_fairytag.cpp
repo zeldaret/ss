@@ -1,5 +1,5 @@
 #include <c/c_math.h>
-#include <d/tg/d_t_fairytag.h>
+#include <d/t/d_t_fairytag.h>
 
 SPECIAL_ACTOR_PROFILE(T_FAIRY, dTgFairy_c, fProfile::T_FAIRY, 0x0296, 0, 0);
 

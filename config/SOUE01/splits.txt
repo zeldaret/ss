@@ -135,6 +135,9 @@ toBeSorted/arc_callback_handler.cpp:
 	.sdata      start:0x80571D10 end:0x80571D20
 	.sbss       start:0x80575250 end:0x80575258
 
+d/lyt/d_structd.cpp:
+	.text       start:0x80065600 end:0x80066478
+
 toBeSorted/arc_managers/current_stage_arc_manager.cpp:
 	.text       start:0x80068FD0 end:0x80069910
 	.ctors      start:0x804DB6A8 end:0x804DB6AC
@@ -173,8 +176,16 @@ toBeSorted/dowsing_target.cpp:
 
 d/lyt/d2d.cpp:
 	.text       start:0x800A9D30 end:0x800ACAB8
-	.data       start:0x80510010 end:0x80510088
+	.data       start:0x8050FFC8 end:0x80510088
+	.sdata      start:0x80572288 end:0x805722B8
 	.sdata2     start:0x80579788 end:0x805797B0
+
+d/lyt/d_lyt_draw_mark.cpp:
+	.text       start:0x800ACEC0 end:0x800AE958
+	.ctors      start:0x804DB6CC end:0x804DB6D0
+
+d/lyt/d_textbox.cpp:
+	.text       start:0x800AE960 end:0x800B1628
 
 d/lyt/d_window.cpp:
 	.text       start:0x800B1630 end:0x800B1818
@@ -218,12 +229,205 @@ toBeSorted/special_item_drop_mgr.cpp:
 	.text       start:0x800C7B60 end:0x800C82B0
 	.sbss       start:0x80575438 end:0x80575440
 
-d/lyt/pause_disp_00.cpp:
+d/lyt/meter/d_lyt_meter.cpp:
+	.text       start:0x800C8950 end:0x800DFCB8
+	.ctors      start:0x804DB6E0 end:0x804DB6E4
+
+d/lyt/meter/d_lyt_meter_a_btn.cpp:
+	.text       start:0x800DFCC0 end:0x800E1188
+	.ctors      start:0x804DB6E4 end:0x804DB6E8
+
+d/lyt/meter/d_lyt_meter_z_btn.cpp:
+	.text       start:0x800E1190 end:0x800E2238
+	.ctors      start:0x804DB6E8 end:0x804DB6EC
+
+d/lyt/meter/d_lyt_meter_key.cpp:
+	.text       start:0x800E2240 end:0x800E4928
+	.ctors      start:0x804DB6EC end:0x804DB6F0
+
+d/lyt/meter/d_lyt_meter_drink.cpp:
+	.text       start:0x800E4930 end:0x800E6AC8
+	.ctors      start:0x804DB6F0 end:0x804DB6F4
+
+d/lyt/meter/d_lyt_meter_remocon_bg.cpp:
+	.text       start:0x800E6AD0 end:0x800E7218
+	.ctors      start:0x804DB6F4 end:0x804DB6F8
+	.data       start:0x80514D60 end:0x80514F10
+	.bss        start:0x805AA9D0 end:0x805AAAD0
+
+d/lyt/meter/d_lyt_meter_nunchaku_bg.cpp:
+	.text       start:0x800E7220 end:0x800E8168
+	.ctors      start:0x804DB6F8 end:0x804DB6FC
+
+d/lyt/meter/d_lyt_meter_nun_stk.cpp:
+	.text       start:0x800E8170 end:0x800E8ED8
+	.ctors      start:0x804DB6FC end:0x804DB700
+
+d/lyt/meter/d_lyt_meter_item_select.cpp:
+	.text       start:0x800E8EE0 end:0x800F35A8
+	.ctors      start:0x804DB700 end:0x804DB704
+
+d/lyt/meter/d_lyt_meter_plus_btn.cpp:
+	.text       start:0x800F35B0 end:0x800F4768
+	.ctors      start:0x804DB704 end:0x804DB708
+
+d/lyt/meter/d_lyt_meter_minus_btn.cpp:
+	.text       start:0x800F4770 end:0x800F8D98
+	.ctors      start:0x804DB708 end:0x804DB70C
+
+d/lyt/meter/d_lyt_meter_cross_btn.cpp:
+	.text       start:0x800F8DA0 end:0x800FAFC8
+	.ctors      start:0x804DB70C end:0x804DB710
+
+d/lyt/meter/d_lyt_meter_dowsing.cpp:
+	.text       start:0x800FAFD0 end:0x801003E8
+	.ctors      start:0x804DB710 end:0x804DB714
+
+d/lyt/meter/d_lyt_meter_rupy.cpp:
+	.text       start:0x801003F0 end:0x801026A8
+	.ctors      start:0x804DB714 end:0x804DB718
+
+d/lyt/meter/d_lyt_meter_heart.cpp:
+	.text       start:0x8010AEC0 end:0x8010BD48
+
+d/lyt/meter/d_lyt_meter_shield_gauge.cpp:
+	.text       start:0x8010BD50 end:0x8010CEC8
+	.ctors      start:0x804DB724 end:0x804DB728
+
+d/lyt/d_lyt_do_button.cpp:
+	.text       start:0x8010CED0 end:0x8010EAF8
+	.ctors      start:0x804DB728 end:0x804DB72C
+	.rodata     start:0x804E6D60 end:0x804E7080
+	.data       start:0x8051A5A8 end:0x8051AC00
+	.bss        start:0x805ACE10 end:0x805ACF78
+
+d/lyt/d_lyt_common_icon_material.cpp:
+	.text       start:0x8010F820 end:0x80111718
+	.ctors      start:0x804DB730 end:0x804DB734
+
+d/lyt/d_lyt_common_icon_item.cpp:
+	.text       start:0x80111720 end:0x80113ED8
+	.ctors      start:0x804DB734 end:0x804DB738
+
+d/lyt/d_lyt_msg_window.cpp:
+	.text       start:0x801148F0 end:0x8011C8C8
+	.ctors      start:0x804DB738 end:0x804DB73C
+
+d/lyt/d_lyt_msg_window_select_btn.cpp:
+	.text       start:0x8011C8D0 end:0x80120988
+	.ctors      start:0x804DB73C end:0x804DB740
+
+d/lyt/d_lyt_msg_window_talk.cpp:
+	.text       start:0x80120A20 end:0x801223C8
+	.ctors      start:0x804DB740 end:0x804DB744
+
+d/lyt/d_lyt_msg_window_link.cpp:
+	.text       start:0x801223D0 end:0x80123738
+	.ctors      start:0x804DB744 end:0x804DB748
+
+d/lyt/d_lyt_msg_window_get.cpp:
+	.text       start:0x80123740 end:0x80124678
+	.ctors      start:0x804DB748 end:0x804DB74C
+
+d/lyt/d_lyt_msg_window_sword.cpp:
+	.text       start:0x80124680 end:0x80125BA8
+	.ctors      start:0x804DB74C end:0x804DB750
+
+d/lyt/d_lyt_msg_window_wood.cpp:
+	.text       start:0x80125BB0 end:0x801267F8
+	.ctors      start:0x804DB750 end:0x804DB754
+
+d/lyt/d_lyt_msg_window_stone.cpp:
+	.text       start:0x80126800 end:0x80127478
+	.ctors      start:0x804DB754 end:0x804DB758
+
+d/lyt/d_lyt_msg_window_demo.cpp:
+	.text       start:0x80127480 end:0x801281F8
+	.ctors      start:0x804DB758 end:0x804DB75C
+
+d/lyt/d_lyt_simple_window.cpp:
+	.text       start:0x80128200 end:0x8012B948
+	.ctors      start:0x804DB75C end:0x804DB760
+
+d/lyt/d_lyt_auto_caption.cpp:
+	.text       start:0x8012B950 end:0x8012C568
+	.ctors      start:0x804DB760 end:0x804DB764
+
+d/lyt/d_lyt_auto_explain.cpp:
+	.text       start:0x8012C570 end:0x8012D188
+	.ctors      start:0x804DB764 end:0x804DB768
+
+d/lyt/d_lyt_map_capture.cpp:
+	.text       start:0x8012D190 end:0x8012DC28
+	.ctors      start:0x804DB768 end:0x804DB76C
+
+d/lyt/d_lyt_map.cpp:
+	.text       start:0x8012DC30 end:0x80148DE8
+	.ctors      start:0x804DB76C end:0x804DB770
+
+d/lyt/d_lyt_note.cpp:
+	.text       start:0x80148DF0 end:0x80149C28
+	.ctors      start:0x804DB770 end:0x804DB774
+
+d/lyt/d_lyt_battery.cpp:
+	.text       start:0x80149C30 end:0x8014AD18
+	.ctors      start:0x804DB774 end:0x804DB778
+	.rodata     start:0x804E7F80 end:0x804E7FA0
+	.data       start:0x80522820 end:0x80522B00
+	.sdata      start:0x80572870 end:0x80572878
+	.sdata2     start:0x80579FC8 end:0x80579FD0
+	.bss        start:0x805B0930 end:0x805B0A70
+
+d/lyt/d_lyt_area_caption.cpp:
+	.text       start:0x8014AD20 end:0x8014C6B8
+	.ctors      start:0x804DB778 end:0x804DB77C
+
+d/lyt/d_lyt_wipe.cpp:
+	.text       start:0x8014C6C0 end:0x8014E008
+	.ctors      start:0x804DB77C end:0x804DB780
+
+d/lyt/d_lyt_bird_gauge.cpp:
+	.text       start:0x80152FD0 end:0x801548D8
+	.ctors      start:0x804DB784 end:0x804DB788
+
+d/lyt/d_lyt_sky_gauge.cpp:
+	.text       start:0x801548E0 end:0x80155CC8
+	.ctors      start:0x804DB788 end:0x804DB78C
+
+d/lyt/d_lyt_deposit_stock.cpp:
+	.text       start:0x80155CD0 end:0x801578A8
+	.ctors      start:0x804DB78C end:0x804DB790
+
+d/lyt/d_lyt_bigboss_gauge.cpp:
+	.text       start:0x80158290 end:0x80158E78
+	.ctors      start:0x804DB790 end:0x804DB794
+
+d/lyt/d_lyt_pause_back.cpp:
+	.text       start:0x80158E80 end:0x80159E78
+	.ctors      start:0x804DB794 end:0x804DB798
+
+d/lyt/d_lyt_pause_disp_00.cpp:
 	.text       start:0x80159E80 end:0x8015EDE8
 	.ctors      start:0x804DB798 end:0x804DB79C
 	.data       start:0x80525138 end:0x80525EE0
 
-d/lyt/common_arrow.cpp:
+d/lyt/d_lyt_pause_disp_01.cpp:
+	.text       start:0x8015EDF0 end:0x80161F98
+	.ctors      start:0x804DB79C end:0x804DB7A0
+
+d/lyt/d_lyt_pause_info.cpp:
+	.text       start:0x80161FA0 end:0x80163568
+	.ctors      start:0x804DB7A0 end:0x804DB7A4
+
+d/lyt/d_lyt_pause_text.cpp:
+	.text       start:0x80163570 end:0x80164F88
+	.ctors      start:0x804DB7A4 end:0x804DB7A8
+
+d/lyt/d_lyt_save_msg_window.cpp:
+	.text       start:0x80164F90 end:0x80166968
+	.ctors      start:0x804DB7A8 end:0x804DB7AC
+
+d/lyt/d_lyt_common_arrow.cpp:
 	.text       start:0x80167FE0 end:0x801695E8
 	.ctors      start:0x804DB7AC end:0x804DB7B0
 	.rodata     start:0x804E8D28 end:0x804E8D70
@@ -231,6 +435,14 @@ d/lyt/common_arrow.cpp:
 	.sdata      start:0x805729D0 end:0x805729D8
 	.sdata2     start:0x8057A180 end:0x8057A188
 	.bss        start:0x805B1CB0 end:0x805B1DB0
+
+d/lyt/d_lyt_common_title.cpp:
+	.text       start:0x801695F0 end:0x8016B2A8
+	.ctors      start:0x804DB7B0 end:0x804DB7B4
+
+d/lyt/d_lyt_cursor_stick.cpp:
+	.text       start:0x8016B2B0 end:0x8016BCD8
+	.ctors      start:0x804DB7B4 end:0x804DB7B8
 
 toBeSorted/counters/counter.cpp:
 	.text       start:0x8016CC40 end:0x8016CD94
@@ -365,6 +577,84 @@ d/tg/d_t_event_f.cpp:
 d/tg/d_tk_event.cpp:
 	.text       start:0x8027AB30 end:0x8027B408
 	.ctors      start:0x804DB84C end:0x804DB850
+
+d/lyt/d_lyt_pause.cpp:
+	.text       start:0x8027E9E0 end:0x80282678
+	.ctors      start:0x804DB85C end:0x804DB860
+
+d/lyt/d_lyt_game_over.cpp:
+	.text       start:0x80282680 end:0x80284FA8
+	.ctors      start:0x804DB860 end:0x804DB864
+
+d/lyt/d_lyt_save_mgr.cpp:
+	.text       start:0x80284FB0 end:0x80286C88
+	.ctors      start:0x804DB864 end:0x804DB868
+
+d/lyt/d_lyt_enemy_icon.cpp:
+	.text       start:0x8028AA00 end:0x8028BCD8
+	.ctors      start:0x804DB870 end:0x804DB874
+
+d/lyt/d_lyt_mini_game.cpp:
+	.text       start:0x802940D0 end:0x802969E0
+
+d/lyt/d_lyt_demo_dowsing.cpp:
+	.text       start:0x802A0B10 end:0x802A17C8
+	.ctors      start:0x804DB880 end:0x804DB884
+
+d/lyt/d_lyt_shop.cpp:
+	.text       start:0x802A17D0 end:0x802A7FD8
+	.ctors      start:0x804DB884 end:0x804DB888
+
+d/lyt/d_lyt_deposit.cpp:
+	.text       start:0x802A7FE0 end:0x802B02C8
+	.ctors      start:0x804DB888 end:0x804DB88C
+
+d/lyt/d_lyt_demo_title.cpp:
+	.text       start:0x802B02D0 end:0x802B22E8
+	.ctors      start:0x804DB88C end:0x804DB890
+
+d/lyt/d_lyt_end_roll.cpp:
+	.text       start:0x802B22F0 end:0x802B6B98
+	.ctors      start:0x804DB890 end:0x804DB894
+
+d/lyt/d_lyt_control_game.cpp:
+	.text       start:0x802CC7B0 end:0x802D16A8
+	.ctors      start:0x804DB8A0 end:0x804DB8A4
+
+d/lyt/d_lyt_control_title.cpp:
+	.text       start:0x802D16B0 end:0x802D17BC
+
+d/tg/d_t_map_area.cpp:
+	.text       start:0x802D17C0 end:0x802D18EC
+
+d/tg/d_t_truck_rails.cpp:
+	.text       start:0x802D18F0 end:0x802D4FD8
+
+d/a/obj/d_a_obj_force_sign.cpp:
+	.text       start:0x802D4FE0 end:0x802D58D0
+	.ctors      start:0x804DB8A4 end:0x804DB8A8
+
+d/tg/d_t_force_get_flag.cpp:
+	.text       start:0x802D58D0 end:0x802D5BF4
+	.ctors      start:0x804DB8A8 end:0x804DB8AC
+
+d/a/obj/d_a_obj_water_spout.cpp:
+	.text       start:0x802D5C00 end:0x802D67F8
+	.ctors      start:0x804DB8AC end:0x804DB8B0
+
+d/tg/d_t_siren_tag.cpp:
+	.text       start:0x802D6800 end:0x802D84F8
+	.ctors      start:0x804DB8B0 end:0x804DB8B4
+
+d/a/obj/d_a_obj_spore.cpp:
+	.text       start:0x802D8500 end:0x802D9408
+	.ctors      start:0x804DB8B4 end:0x804DB8B8
+
+d/tg/d_t_genki_mgr.cpp:
+	.text       start:0x802D9410 end:0x802D9D60
+
+d/a/obj/d_a_obj_water_mark.cpp:
+	.text       start:0x802D9D60 end:0x802DA0BC
 
 s/s_StateID.cpp:
 	.text       start:0x802DDDB0 end:0x802DE1F4
@@ -567,6 +857,29 @@ m/m_pad.cpp:
 	.sbss       start:0x80575C50 end:0x80575C70
 	.sdata2     start:0x8057CDF8 end:0x8057CE00
 	.bss        start:0x805CB0B8 end:0x805CB1F8
+
+libms/commonlib.c:
+	extab       start:0x80006720 end:0x80006738
+	extabindex  start:0x80006920 end:0x80006944
+	.text       start:0x80323A70 end:0x80323C94
+
+libms/flowfile.c:
+	extab       start:0x80006738 end:0x80006758
+	extabindex  start:0x80006944 end:0x80006974
+	.text       start:0x80323CA0 end:0x80323F74
+	.data       start:0x80547268 end:0x80547278
+	.sdata      start:0x80574010 end:0x80574028
+
+libms/libms.c:
+	.text       start:0x80323F80 end:0x803240D8
+	.sbss       start:0x80575C90 end:0x80575C98
+
+libms/msgfile.c:
+	extab       start:0x80006758 end:0x80006780
+	extabindex  start:0x80006974 end:0x800069B0
+	.text       start:0x803240E0 end:0x80324434
+	.data       start:0x80547278 end:0x80547288
+	.sdata      start:0x80574028 end:0x80574048
 
 d/col/c/c_bg_s_chk.cpp:
 	.text       start:0x80327140 end:0x8032721C
@@ -1572,6 +1885,8 @@ egg/audio/eggAudioSystem.cpp:
 
 egg/util/eggException.cpp:
 	.text       start:0x804B7550 end:0x804B7B48
+	.data       start:0x8056F420 end:0x8056F438
+	.sbss       start:0x80576900 end:0x80576920
 
 Runtime.PPCEABI.H/global_destructor_chain.c:
 	.text       start:0x804C65C0 end:0x804C6620

@@ -1,9 +1,14 @@
 #ifndef D2D_H
 #define D2D_H
 
+#include <libms/msgfile.h>
 #include <m/m2d.h>
+#include <d/lyt/meter/d_lyt_meter_base.h>
 #include <nw4r/lyt/lyt_pane.h>
 #include <nw4r/lyt/lyt_picture.h>
+
+class dTextBox_c;
+class dWindow_c;
 
 namespace d2d {
 
@@ -50,6 +55,10 @@ public:
     nw4r::lyt::Bounding *findBounding(const char *name) const;
     void unbindAnims();
 
+    const Layout_c *getLayout() const {
+        return &mLayout;
+    }
+
     Layout_c *getLayout() {
         return &mLayout;
     }
@@ -73,13 +82,38 @@ public:
         mLayout.Draw(mDrawInfo);
     };
 
+    virtual bool build(const char *name, m2d::ResAccIf_c *acc) override;
+    dTextBox_c *getTextBox(const char *name);
+    dTextBox_c *getSizeBoxInWindow(const char *windowName);
+    dWindow_c *getWindow(const char *name);
+    nw4r::lyt::Group *findGroupByName(const char *name);
+
+    bool fn_800AB940(const char *name, int arg);
+    bool fn_800AB9A0(dTextBox_c *textbox, int arg);
+
+    bool fn_800ABE50(dTextBox_c *textbox, int arg, void *unk);
+
+    static void linkMeters(nw4r::lyt::Group *group, LytMeterGroup *meterGroup);
+
 private:
-    void *mpMsbtInfo;
+    void setPropertiesRecursive(nw4r::lyt::Pane *pane, f32, f32, f32, f32, f32);
+    void setProperties(nw4r::lyt::Pane *pane, f32, f32, f32, f32, f32);
+    dTextBox_c *getTextBoxViaUserData(nw4r::lyt::Pane *pane, const char *name);
+    bool fn_800ABB80(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg);
+    bool fn_800ABCE0(const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg);
+
+    bool fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk);
+    bool fn_800AC1AC(const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg,
+            void *unk);
+    MsbtInfo *getMsbtInfo() const;
+    bool fn_800AB930(dTextBox_c *box);
+
+    /* 0x8C */ MsbtInfo *mpMsbtInfo;
 };
 
-struct AnmGroup_c {
-    AnmGroup_c() {}
-    ~AnmGroup_c() {}
+struct AnmGroupBase_c {
+    AnmGroupBase_c(m2d::FrameCtrl_c *frameCtrl): field_0x04(nullptr), mFlags(0), mpFrameCtrl(frameCtrl) {}
+    virtual ~AnmGroupBase_c() {}
 
     bool init(const char *fileName, m2d::ResAccIf_c *acc, d2d::Layout_c *layout, const char *animName);
     bool init(nw4r::lyt::AnimTransform *transform, const char *fileName, m2d::ResAccIf_c *acc, nw4r::lyt::Group *group);
@@ -87,15 +121,15 @@ struct AnmGroup_c {
     bool fn_800AC6D0(bool);
     bool fn_800AC7D0();
     bool fn_800AC860();
-    void fn_800AC870(bool);
+    void setAnimEnable(bool);
     void setAnmFrame(f32);
     void syncAnmFrame();
     void setForward();
     void setBackward();
 
-    inline void setFrame(f32 frame) {
+    inline void setFrameAndControlThings(f32 frame) {
         fn_800AC6D0(false);
-        fn_800AC870(true);
+        setAnimEnable(true);
         mpFrameCtrl->setFrame(frame);
         syncAnmFrame();
     }
@@ -103,6 +137,15 @@ struct AnmGroup_c {
     inline void play() {
         mpFrameCtrl->play();
         syncAnmFrame();
+    }
+
+    inline void setFrame(f32 frame) {
+        mpFrameCtrl->setFrame(frame);
+        syncAnmFrame();
+    }
+
+    inline f32 getFrame() const {
+        return mpFrameCtrl->getFrame();
     }
 
     inline void setToStart() {
@@ -115,62 +158,50 @@ struct AnmGroup_c {
         syncAnmFrame();
     }
 
-    u8 field_0x00[0x08 - 0x00];
+    inline bool isEndReached() const {
+        return mpFrameCtrl->isEndReached();
+    }
 
+    inline void setRate(f32 rate) {
+        mpFrameCtrl->setRate(rate);
+        setAnimEnable(true);
+    }
+
+    inline bool isFlag2() const {
+        return (mFlags & 2) != 0;
+    }
+
+private:
+
+    /* 0x04 */ void *field_0x04;
     /* 0x08 */ m2d::FrameCtrl_c *mpFrameCtrl;
     /* 0x0C */ u8 mFlags;
     /* 0x10 */ nw4r::lyt::AnimResource mAnmResource;
     /* 0x20 */ nw4r::lyt::Group *mpGroup;
     /* 0x24 */ nw4r::lyt::AnimTransform *mpAnmTransform;
-    /* 0x28 */ u8 field_0x20[0x40 - 0x28];
 };
 
-struct dLytStructB {
+struct AnmGroup_c : public AnmGroupBase_c {
+    AnmGroup_c(): AnmGroupBase_c(&mFrameCtrl) {}
+    virtual ~AnmGroup_c() {}
+    /* 0x28 */ m2d::FrameCtrl_c mFrameCtrl;
+};
+
+// Probably pause menu specific
+struct dLytStructB: public dLytMeterBase {
     dLytStructB();
     ~dLytStructB();
 
+    virtual bool build(d2d::ResAccIf_c *resAcc) override;
+    virtual bool LytMeter0x10() override;
+    virtual bool LytMeter0x14() override;
+    virtual nw4r::lyt::Pane *getPane() override;
+    virtual void *LytMeter0x1C() override;
+    virtual const char *getName() const override;
+
     void init(void *, u8);
 
-    u8 field_0x00[0x808 - 0x00];
-};
-
-struct dLytStructC {
-    dLytStructC();
-    ~dLytStructC();
-
-    u8 field_0x00[0x10 - 0x00];
-};
-
-struct dLytStructD_Base {
-    dLytStructD_Base()
-        : field_0x04(0), field_0x08(0), field_0x0C(0), field_0x10(0), field_0x14(0), field_0x015(0), field_0x016(0) {}
-    virtual ~dLytStructD_Base();
-    u32 field_0x04;
-    u32 field_0x08;
-    u32 field_0x0C;
-    u32 field_0x10;
-    u16 field_0x14;
-    u8 field_0x015;
-    u8 field_0x016;
-};
-
-struct dLytStructD : dLytStructD_Base {
-    dLytStructD() : field_0x18(0), field_0x1C(0), field_0x20(0), field_0x22(0), field_0x23(0), field_0x24(0) {}
-
-    virtual ~dLytStructD();
-
-    void init(nw4r::lyt::Pane *, u16, u8, u8);
-    void append(dLytStructD *other);
-    void detach(dLytStructD *other);
-    void fn_80065E70(nw4r::lyt::Pane *, s32, s32, s32);
-    void fn_80065F70();
-
-    u32 field_0x18;
-    u32 field_0x1C;
-    u16 field_0x20;
-    u8 field_0x22;
-    u8 field_0x23;
-    u32 field_0x24;
+    u8 field_0x00[0x808 - 0x08];
 };
 
 } // namespace d2d
