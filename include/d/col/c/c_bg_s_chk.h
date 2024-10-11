@@ -1,6 +1,7 @@
 #ifndef C_BG_S_CHK_H
 #define C_BG_S_CHK_H
 
+#include "d/col/bg/d_bg_w_base.h"
 #include "d/col/c/c_partition.h"
 #include "f/f_base.h"
 #include "rvl/MTX.h"

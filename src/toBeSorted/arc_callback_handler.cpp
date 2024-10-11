@@ -1,3 +1,4 @@
+#include <d/col/bg/d_bg_s.h>
 #include <d/col/bg/d_bg_w_kcol.h>
 #include <d/d_rawarchive.h>
 #include <egg/gfx/eggLight.h>
@@ -48,8 +49,6 @@ void BindSystemModelsAndLighting(nw4r::g3d::ResFile file) {
     }
 }
 
-extern "C" void fn_8033A140(void *data);
-
 void ArcCallbackHandlerBase::CreateArcEntry(void *data, const char *path) {
     if (mPrefix == NAME_G3D) {
         nw4r::g3d::ResFile file = data;
@@ -59,7 +58,7 @@ void ArcCallbackHandlerBase::CreateArcEntry(void *data, const char *path) {
     } else if (mPrefix == NAME_KCL) {
         dBgWKCol::initKCollision(data);
     } else if (mPrefix == NAME_DZB) {
-        fn_8033A140(data);
+        cBgS::ConvDzb(data);
     } else if (mPrefix == NAME_OARC) {
         SizedString<64> oarcPath = path;
         char buf[64];

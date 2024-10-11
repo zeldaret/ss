@@ -50,8 +50,8 @@ public:
     void Set(void *pprism, void *plc);
     void GetTriNrm(KC_PrismData *, mVec3_c **) const;
     cM3dGPla GetTriPla(int) const;
-    bool GetTriPnt(KC_PrismData const *, mVec3_c &, mVec3_c &, mVec3_c &) const;
-    bool GetTriPnt(int, mVec3_c &, mVec3_c &, mVec3_c &) const;
+    bool GetTriPnt(KC_PrismData const *, mVec3_c *, mVec3_c *, mVec3_c *) const;
+    bool GetTriPnt(int, mVec3_c *, mVec3_c *, mVec3_c *) const;
     void GetPolyCode(int, dBgPc *) const;
     bool ChkPolyThrough(dBgPc *, cBgS_Chk *) const;
     bool ChkShdwDrawThrough(dBgPc *);

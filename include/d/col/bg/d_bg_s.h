@@ -4,14 +4,12 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/a/obj/d_a_obj_bg.h"
 #include "d/col/bg/d_bg_w.h"
 #include "d/col/bg/d_bg_w_base.h"
 #include "d/col/bg/d_bg_w_kcol.h"
-#include "f/f_base.h"
 
 class dBgW;
-class fBase_c;
-class dAcObg_c;
 
 class cBgS_ChkElm {
 public:

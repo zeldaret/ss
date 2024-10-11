@@ -60,26 +60,26 @@ u32 dBgWKCol::ChkMoveFlag() const {
     return 0;
 }
 
-void dBgWKCol::GetTriPla(cBgS_PolyInfo const &polyInf, cM3dGPla &plane) const {
+void dBgWKCol::GetTriPla(cBgS_PolyInfo const &polyInf, cM3dGPla *plane) const {
     mVec3_c *pFaceNrm;
     KC_PrismData *pPrismData = GetPrismData(polyInf.GetPolyIndex());
     GetTriNrm(pPrismData, &pFaceNrm);
 
     mVec3_c *pPos = GetTriPos(pPrismData);
-    plane.mNormal = *pFaceNrm;
-    plane.mD = -VEC3Dot(plane.mNormal, *pPos);
+    plane->mNormal = *pFaceNrm;
+    plane->mD = -VEC3Dot(plane->mNormal, *pPos);
 }
 
-bool dBgWKCol::GetTriPnt(cBgS_PolyInfo const &polyInf, mVec3_c &v1, mVec3_c &v2, mVec3_c &v3) const {
+bool dBgWKCol::GetTriPnt(cBgS_PolyInfo const &polyInf, mVec3_c *v1, mVec3_c *v2, mVec3_c *v3) const {
     return GetTriPnt(polyInf.GetPolyIndex(), v1, v2, v3);
 }
 
-bool dBgWKCol::GetTriPnt(int poly_index, mVec3_c &v1, mVec3_c &v2, mVec3_c &v3) const {
+bool dBgWKCol::GetTriPnt(int poly_index, mVec3_c *v1, mVec3_c *v2, mVec3_c *v3) const {
     return GetTriPnt(GetPrismData(poly_index), v1, v2, v3);
 }
 
-bool dBgWKCol::GetTriPnt(KC_PrismData const *pPrism, mVec3_c &v1, mVec3_c &v2, mVec3_c &v3) const {
-    v1 = *GetTriPos(pPrism);
+bool dBgWKCol::GetTriPnt(KC_PrismData const *pPrism, mVec3_c *v1, mVec3_c *v2, mVec3_c *v3) const {
+    *v1 = *GetTriPos(pPrism);
     mVec3_c *pFaceNrm = GetTriNrm(pPrism);
     mVec3_c *pEdgeNrm1 = GetEdgeNrm1(pPrism);
     mVec3_c *pEdgeNrm2 = GetEdgeNrm2(pPrism);

@@ -178,7 +178,8 @@ void cBgS::fn_8033a1e0() {
 bool cBgS::LineCross(cBgS_LinChk *pLine) {
     pLine->ClearPi();
     pLine->ClrHit();
-    cM3dGAab aabb(pLine->mLin.mStart, pLine->mLin.mEnd);
+    cM3dGAab aabb;
+    aabb.SetBounds(pLine->mLin.mStart, pLine->mLin.mEnd);
     pLine->mPartition.fn_803391f0(&aabb);
 
     cBgS_ChkElm *chkElm = mChkElem;
