@@ -4,7 +4,7 @@
 const f32 dAcTWoodArea_c::scaleX = 100.0f;
 const f32 dAcTWoodArea_c::scaleY = 100.0f;
 
-SPECIAL_ACTOR_PROFILE(TAG_WOOD_AREA, dAcTWoodArea_c, fProfile::WOODAREA_TAG, 0x166, 0, 2);
+SPECIAL_ACTOR_PROFILE(WOODAREA_TAG, dAcTWoodArea_c, fProfile::WOODAREA_TAG, 0x166, 0, 2);
 
 STATE_DEFINE(dAcTWoodArea_c, Init);
 STATE_DEFINE(dAcTWoodArea_c, Wait);
