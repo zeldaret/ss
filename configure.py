@@ -1388,7 +1388,7 @@ config.libs = [
     Rel(NonMatching, "d_lyt_file_select", "REL/d/d_lyt_file_select.cpp"),
     Rel(NonMatching, "d_lyt_seeker_stone", "REL/d/d_lyt_seeker_stone.cpp"),
     Rel(NonMatching, "d_lyt_title_BG", "REL/d/d_lyt_title_BG.cpp"),
-    Rel(NonMatching, "d_profile", "REL/d/d_profile.cpp"),
+    Rel(Matching, "d_profile", "REL/d/d_profile.cpp"),
     Rel(NonMatching, "d_SoftwareKeyboard", "REL/d/d_SoftwareKeyboard.cpp"),
     Rel(NonMatching, "d_s_boot", "REL/d/d_s_boot.cpp"),
     Rel(NonMatching, "d_title_manager", "REL/d/d_title_manager.cpp"),
