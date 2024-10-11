@@ -44,7 +44,7 @@ bool dLytCommonArrow_c::fn_80168490() {
     d2d::dLytStructDList::sInstance->removeFromList2(&field_0x680);
     mLytBase.unbindAnims();
     for (int i = 0; i < 9; i++) {
-        field_0x440[i].fn_800AC860();
+        field_0x440[i].afterUnbind();
     }
     return true;
 }
@@ -112,7 +112,7 @@ void dLytCommonArrow_c::fn_80168790(s32 idx, f32 frame) {
 }
 
 void dLytCommonArrow_c::fn_80168800(s32 idx) {
-    field_0x440[idx].fn_800AC7D0();
+    field_0x440[idx].unbind();
 }
 
 void dLytCommonArrow_c::fn_80168810(d2d::AnmGroup_c *ctrl) {

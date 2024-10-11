@@ -45,7 +45,7 @@ bool dLytBattery_c::init() {
 
     for (int i = 0; i < 4; i++) {
         mAnmGroups[i].init(brlanMap[i].mFile, &mResAcc, mLyt.getLayout(), brlanMap[i].mName);
-        mAnmGroups[i].fn_800AC6D0(false);
+        mAnmGroups[i].setDirection(false);
         mAnmGroups[i].setAnimEnable(false);
     }
 
