@@ -8,6 +8,8 @@
 #include "d/col/bg/d_bg_w.h"
 #include "d/col/bg/d_bg_w_base.h"
 #include "d/col/bg/d_bg_w_kcol.h"
+#include "egg/gfx/eggCpuTexture.h"
+#include "toBeSorted/tlist.h"
 
 class dBgW;
 
@@ -68,7 +70,6 @@ public:
 
     /* 0x2EE8 */ dBgWKCol *mpBgKCol;
     /* 0x2EEC */ dAcRef_c<dAcObg_c> mAcOBg;
-    /* 0x2EF8 */ u32 mField_0x2EF8;
 
 public:
     cBgS();
@@ -80,8 +81,8 @@ public:
     f32 GroundCross(cBgS_GndChk *);
     void ShdwDraw(cBgS_ShdwDraw *);
     void fn_8033a1e0();
-
     bool RegistKCol(dBgWKCol *, dAcObg_c *);
+    bool ReleaseKCol(dBgWKCol *);
 
     const dAcObjBase_c *GetActorPointer(int) const;
     dBgW_Base *GetBgWBasePointer(cBgS_PolyInfo const &) const;
@@ -98,82 +99,168 @@ class dBgS_Acch;
 
 u8 dKy_pol_sound_get(cBgS_PolyInfo const *param_0);
 
+struct dMapGradation {
+    dMapGradation()
+        : mHasDifferingGrad(false), mGradHigh(0.0f), mGradLow(0.0f), mHasGradation(false), mColorR(0), mColorG(0),
+          mColorB(0), mColorA(0) {}
+    /* 0x00 */ bool mHasDifferingGrad;
+    /* 0x04 */ f32 mGradHigh;
+    /* 0x08 */ f32 mGradLow;
+    /* 0x0C */ bool mHasGradation;
+    /* 0x0D */ u8 mColorR;
+    /* 0x0E */ u8 mColorG;
+    /* 0x0F */ u8 mColorB;
+    /* 0x10 */ u8 mColorA;
+};
+
+struct MapLineSegment {
+    MapLineSegment();
+    virtual ~MapLineSegment();
+    virtual void Draw(int, mMtx_c *, bool, int);
+
+    void fn_8033e9a0();
+    void fn_8033e8b0();
+    void fn_8033e9c0();
+    void Append();
+    void Remove();
+
+    /* 0x4 */ bool bShow;
+    /* 0x8 */ TListNode mLink;
+};
+
 class dBgS : public cBgS {
 private:
-    static dBgS sInstance;
+    static dBgS *spInstance;
+    static const void *spSolidMatTex[31];
+    static const void *spLiquidMatTex[5];
+    typedef TList<MapLineSegment, offsetof(MapLineSegment, mLink)> MapLineList;
 
 public:
+    /* 0x2EF8 */ EGG::CpuTexture *mMapTexture;
+    /* 0x2EFC */ dBgW_Base *mColllisionTbl[BG_ID_MAX];
+    /* 0x385C */ s32 mColllisionTblLen;
+    /* 0x3860 */ bool mInSkyKeep;
+    /* 0x3861 */ u32 mUnk_0x3861[10];
+    /* 0x388C */ MapLineList mList_0x388C;
+    /* 0x3894 */ dMapGradation mMapGradation;
+
     dBgS();
     ~dBgS();
     void Ct();
     void Dt();
     void ClrMoveFlag();
     void Move();
-    bool Regist(dBgW_Base *, fBase_c *);
+    void Regist(dBgW_Base *, int);
+    static dBgS *GetInstance();
+    bool Regist(dBgW_Base *, dAcObjBase_c *);   // Registers Actor to Bg
+    bool RegistBg(dBgW_Base *, dAcObjBase_c *); // Registers Bg
     bool UnRegist(dBgW_Base *);
-    bool ChkMoveBG(cBgS_PolyInfo const &);
-    bool ChkMoveBG_NoDABg(cBgS_PolyInfo const &);
-    s32 GetExitId(cBgS_PolyInfo const &);
-    s32 GetPolyColor(cBgS_PolyInfo const &);
-    BOOL GetHorseNoEntry(cBgS_PolyInfo const &);
+    bool ChkMoveBG(cBgS_PolyInfo const &, bool);
+    u32 ChkShadowThrough(cBgS_PolyInfo const &);
     int GetSpecialCode(cBgS_PolyInfo const &);
-    int GetMagnetCode(cBgS_PolyInfo const &);
-    int GetMonkeyBarsCode(cBgS_PolyInfo const &);
-    u32 GetUnderwaterRoofCode(cBgS_PolyInfo const &);
     s32 GetWallCode(cBgS_PolyInfo const &);
+    // s32 GetExitId(cBgS_PolyInfo const &);
+    static int GetMapCode(int, int, bool);
+    int GetPolyMaterial(cBgS_PolyInfo const &);
     int GetPolyAtt0(cBgS_PolyInfo const &);
     int GetPolyAtt1(cBgS_PolyInfo const &);
+    int GetLightingCode(cBgS_PolyInfo const &);
     int GetGroundCode(cBgS_PolyInfo const &);
-    s32 GetCamMoveBG(cBgS_PolyInfo const &);
+    int GetCode1_0x02000000(cBgS_PolyInfo const &);
     s32 GetRoomCamId(cBgS_PolyInfo const &);
-    s32 GetRoomPathId(cBgS_PolyInfo const &);
-    s32 GetRoomPathPntNo(cBgS_PolyInfo const &);
-    int GetGrpSoundId(cBgS_PolyInfo const &);
-    u32 ChkGrpInf(cBgS_PolyInfo const &, u32);
     s32 GetRoomId(cBgS_PolyInfo const &);
-    bool GetPolyAttackThrough(cBgS_PolyInfo const &);
-    u32 ChkPolyHSStick(cBgS_PolyInfo const &);
-    void WallCorrect(dBgS_Acch *);
-    void WallCorrectSort(dBgS_Acch *);
+
+    bool GetPolyObjectThrough(cBgS_PolyInfo const &);
+    bool GetPolyCameraThrough(cBgS_PolyInfo const &);
+    bool GetPolyShadowThrough(cBgS_PolyInfo const &);
+    bool GetPolyLinkThrough(cBgS_PolyInfo const &);
+    bool GetPolyArrowThrough(cBgS_PolyInfo const &);
+    bool GetPolyBombThrough(cBgS_PolyInfo const &);
+    bool GetPolyBeetleThrough(cBgS_PolyInfo const &);
+    bool GetPolyClawshotThrough(cBgS_PolyInfo const &);
+    bool GetPolyThrough_Code1_0x04000000(cBgS_PolyInfo const &);
+    bool GetPolyThrough_Code1_0x08000000(cBgS_PolyInfo const &);
+    bool GetPolyWhipThrough(cBgS_PolyInfo const &);
+    bool GetPolySlingshotThrough(cBgS_PolyInfo const &);
+
+    void WallCorrect(dBgS_Acch *, bool);
     f32 RoofChk(dBgS_RoofChk *);
     bool SplGrpChk(dBgS_SplGrpChk *);
     bool SphChk(dBgS_SphChk *, void *);
-    void MoveBgCrrPos(
-        cBgS_PolyInfo const &i_poly, bool param_1, mVec3_c *i_pos, mAng3_c *i_angle, mAng3_c *i_shapeAngle,
-        bool param_5, bool param_6
-    );
-    void
-    MoveBgTransPos(cBgS_PolyInfo const &i_poly, bool param_1, mVec3_c *i_pos, mAng3_c *i_angle, mAng3_c *i_shapeAngle);
-    void MoveBgMatrixCrrPos(cBgS_PolyInfo const &, bool, mVec3_c *, mAng3_c *, mAng3_c *);
-    void RideCallBack(cBgS_PolyInfo const &, fBase_c *);
-    void ArrowStickCallBack(cBgS_PolyInfo const &, fBase_c *, mVec3_c &);
-    fBase_c *PushPullCallBack(cBgS_PolyInfo const &, fBase_c *, s16, dBgW_Base::PushPullLabel);
+    // void MoveBgCrrPos(
+    //     cBgS_PolyInfo const &, bool param_1, mVec3_c *i_pos, mAng3_c *i_angle, mAng3_c *i_shapeAngle,
+    //     bool param_5, bool param_6
+    // );
+    // MoveBgTransPos(cBgS_PolyInfo const &i_poly, bool param_1, mVec3_c *i_pos, mAng3_c *i_angle, mAng3_c
+    // *i_shapeAngle)
 
-    bool WaterChk(dBgS_SplGrpChk *chk) {
-        return SplGrpChk(chk);
-    }
-    u32 GetMtrlSndId(const cBgS_PolyInfo &param_0) {
-        return dKy_pol_sound_get(&param_0);
-    }
+    // u32 GetUnderwaterRoofCode(cBgS_PolyInfo const &);
+    // s32 GetCamMoveBG(cBgS_PolyInfo const &);
+    // s32 GetRoomPathId(cBgS_PolyInfo const &);
+    // s32 GetRoomPathPntNo(cBgS_PolyInfo const &);
+    // int GetGrpSoundId(cBgS_PolyInfo const &);
+    // u32 ChkGrpInf(cBgS_PolyInfo const &, u32);
+    // bool GetPolyAttackThrough(cBgS_PolyInfo const &);
+    // u32 ChkPolyHSStick(cBgS_PolyInfo const &);
+    // void WallCorrectSort(dBgS_Acch *);
+    // void MoveBgMatrixCrrPos(cBgS_PolyInfo const &, bool, mVec3_c *, mAng3_c *, mAng3_c *);
 
-    static dBgS &GetInstance();
+    void MoveBgCrrPos(cBgS_PolyInfo const &, bool, mVec3_c *, mAng3_c *, mAng3_c *, bool, bool);
+    void MoveBgTransPos(cBgS_PolyInfo const &, bool, mVec3_c *, mAng3_c *, mAng3_c *);
+
+    void RideCallBack(cBgS_PolyInfo const &, dAcBase_c *);
+    void ArrowStickCallBack(cBgS_PolyInfo const &, dAcBase_c *, mVec3_c &);
+    void UnkCallback(cBgS_PolyInfo const &, dAcBase_c *);
+    dAcBase_c *PushPullCallBack(cBgS_PolyInfo const &, dAcBase_c *, s16, dBgW_Base::PushPullLabel);
+
+    void UpdateScrollTex();
+    void SetupMapGX(mMtx_c *);
+    void SetupMapMaterial(int matIdx, bool, s32 roomId);
+    UNKTYPE *GetMapAccessor();
+    void DrawMap(u8 roomId, mMtx_c *, bool bColor, int);
+    void SetupScrollGX();
+    void SetupScrollMaterial(int matIdx, s32, bool);
+    void DrawMapScroll(u8 roomId, mMtx_c *, bool bColor, int);
+    void DrawSkyKeepMap(mMtx_c *, int);
+    bool ConfigureMapTexture(EGG::Heap *);
+
+    void InitMapParts();
+    void AppendMapSegment(MapLineSegment *);
+    void RemoveMapSegment(MapLineSegment *);
+    void DrawMapSegments(int, mMtx_c *, bool, int);
+    void ClearMapSegments();
+
+    void SetLightingCode(dAcObjBase_c *, const cBgS_GndChk &);
+    void SetLightingCode(dAcObjBase_c *, f32);
+    int GetLightingCode(const mVec3_c *);
+    bool GetPolyPreventObjOnly(const cBgS_PolyInfo &);
+    bool GetMapGradationColor(GXColor *);
 };
 
-bool dBgS_CheckBGroundPoly(cBgS_PolyInfo const &);
-bool dBgS_CheckBRoofPoly(cBgS_PolyInfo const &);
-bool dBgS_CheckBWallPoly(cBgS_PolyInfo const &);
-void dBgS_MoveBGProc_Typical(
-    dBgW *param_0, void *param_1, cBgS_PolyInfo const &param_2, bool param_3, mVec3_c *param_4, mAng3_c *param_5,
-    mAng3_c *param_6
-);
-void dBgS_MoveBGProc_TypicalRotY(
-    dBgW *param_0, void *param_1, cBgS_PolyInfo const &param_2, bool param_3, mVec3_c *param_4, mAng3_c *param_5,
-    mAng3_c *param_6
-);
 void dBgS_MoveBGProc_Trans(
     dBgW *i_bgw, void *i_actor_ptr, cBgS_PolyInfo const &i_poly, bool param_3, mVec3_c *i_pos, mAng3_c *i_angle,
     mAng3_c *i_shapeAngle
 );
+
+void dBgS_MoveBGProc_Typical(
+    dBgW *param_0, void *param_1, cBgS_PolyInfo const &param_2, bool param_3, mVec3_c *param_4, mAng3_c *param_5,
+    mAng3_c *param_6
+);
+
+void dBgS_MoveBGProc_RotY(
+    dBgW *param_0, void *param_1, cBgS_PolyInfo const &param_2, bool param_3, mVec3_c *param_4, mAng3_c *param_5,
+    mAng3_c *param_6
+);
+
+void dBgS_MoveBGProc_TypicalRotY(
+    dBgW *param_0, void *param_1, cBgS_PolyInfo const &param_2, bool param_3, mVec3_c *param_4, mAng3_c *param_5,
+    mAng3_c *param_6
+);
+
+bool dBgS_CheckBWallPoly(cBgS_PolyInfo const &);
+bool dBgS_CheckBGroundPoly(cBgS_PolyInfo const &);
+bool dBgS_CheckBRoofPoly(cBgS_PolyInfo const &);
 f32 dBgS_GetNY(cBgS_PolyInfo const &poly);
+mVec3_c dBgS_GetN(cBgS_PolyInfo const &);
 
 #endif /* D_BG_D_BG_S_H */

@@ -20,10 +20,8 @@ public:
 
 class dBgS_ObjGndChk : public dBgS_GndChk {
 public:
-    dBgS_ObjGndChk() {
-        // SetObj();
-    }
-    virtual ~dBgS_ObjGndChk() {}
+    dBgS_ObjGndChk();
+    virtual ~dBgS_ObjGndChk();
 
     dBgS_ObjGndChk &GetInstance();
     static void CtInstance();

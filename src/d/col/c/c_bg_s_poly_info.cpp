@@ -27,7 +27,7 @@ bool cBgS_PolyInfo::ChkBgIndex() const {
 
 mAng cBgS_PolyInfo::GetAngle(mAng angle) const {
     cM3dGPla pla;
-    if (!dBgS::GetInstance().GetTriPla(*this, &pla)) {
+    if (!dBgS::GetInstance()->GetTriPla(*this, &pla)) {
         return mAng(0);
     } else {
         return pla.GetAngle(angle);

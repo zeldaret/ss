@@ -961,7 +961,10 @@ d/col/bg/d_bg_plc.cpp:
 
 d/col/bg/d_bg_s.cpp:
 	.text       start:0x80339C00 end:0x8033F14C
+	.rodata     start:0x804F0C00 end:0x804F0D00
 	.data       start:0x80547698 end:0x805477C0
+	.sdata      start:0x80574060 end:0x80574070
+	.sdata2     start:0x8057D068 end:0x8057D0C0
 
 d/col/bg/d_bg_s_acch.cpp:
 	.text       start:0x8033F150 end:0x803412F8

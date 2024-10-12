@@ -10,7 +10,6 @@ public:
     OarcManager();
     virtual ~OarcManager();
 
-
     static OarcManager *sInstance;
 
     static bool create(EGG::Heap *heap);
@@ -31,6 +30,7 @@ public:
     void *getDzbFromArc(const char *oarcName, const char *fileName);
     void *getPlcFromArc(const char *oarcName, const char *fileName);
     void *getSubEntryData(const char *oarcName, const char *fileName);
+
 private:
     dRawArcTable_c mArcTable;
 };

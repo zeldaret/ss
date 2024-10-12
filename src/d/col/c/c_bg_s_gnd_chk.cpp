@@ -7,11 +7,11 @@ cBgS_GndChk::cBgS_GndChk() {
 
 cBgS_GndChk::~cBgS_GndChk() {}
 
-void cBgS_GndChk::SetPos(const mVec3_c *pPos) {
-    mPos.x = pPos->x;
-    mPos.y = pPos->y;
-    mPos.z = pPos->z;
+void cBgS_GndChk::SetPos(const mVec3_c &pPos) {
+    mPos.x = pPos.x;
+    mPos.y = pPos.y;
+    mPos.z = pPos.z;
 }
-void cBgS_GndChk::SetPos(const Vec *pPos) {
-    mPos.copyFrom(pPos);
+void cBgS_GndChk::SetPos(const mVec3_c *pPos) {
+    mPos = *pPos;
 }

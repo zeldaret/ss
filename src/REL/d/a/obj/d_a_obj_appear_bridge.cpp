@@ -33,7 +33,7 @@ bool dAcOappearBridge_c::createHeap() {
 
 int dAcOappearBridge_c::create() {
     CREATE_ALLOCATOR(dAcOappearBridge_c);
-    dBgS::GetInstance().Regist(&mCollision, this);
+    dBgS::GetInstance()->Regist(&mCollision, this);
     mAreaIdx = params & 0xFF;
     mEventId = (params >> 8) & 0xFF;
     mSoundPosition = position + positionOffset;
@@ -66,7 +66,7 @@ int dAcOappearBridge_c::draw() {
 }
 
 void dAcOappearBridge_c::initializeState_Wait() {
-    dBgS::GetInstance().Release(&mCollision);
+    dBgS::GetInstance()->Release(&mCollision);
 }
 void dAcOappearBridge_c::executeState_Wait() {
     if (checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->position, nullptr)) {
@@ -90,7 +90,7 @@ void dAcOappearBridge_c::finalizeState_Wait() {
 void dAcOappearBridge_c::initializeState_Appear() {
     mSrtAnm.setRate(sMovementRate, 0);
     mClrAnm.setRate(sMovementRate, 0);
-    dBgS::GetInstance().Regist(&mCollision, this);
+    dBgS::GetInstance()->Regist(&mCollision, this);
     playSound(0xAA4);
 }
 void dAcOappearBridge_c::executeState_Appear() {

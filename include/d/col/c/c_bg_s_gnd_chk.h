@@ -15,8 +15,8 @@ public:
 
     cBgS_GndChk();
     virtual ~cBgS_GndChk();
+    void SetPos(mVec3_c const &);
     void SetPos(mVec3_c const *);
-    void SetPos(Vec const *);
 
     f32 GetNowY() const {
         return mNowY;

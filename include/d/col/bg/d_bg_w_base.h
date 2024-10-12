@@ -61,7 +61,7 @@ public:
     bool InitMapStuff(mAllocator_c *pAllocator);
     bool fn_8034AD70() const;
     bool fn_8034ADA0() const;
-    void RegistBg(u16 id);
+    void RegistBg(int id);
     void UnRegistBg();
     bool ChkReady() const;
     void Set0x2F(u8);
@@ -105,12 +105,12 @@ public:
     /* 0x094 */ virtual u32 GetPolyClawshotThrough(int) = 0;
     /* 0x098 */ virtual u32 GetPolyBombThrough(int) = 0;
     /* 0x09C */ virtual u32 GetPolyWhipThrough(int) = 0;
-    /* 0x0A0 */ virtual bool GetShdwThrough(int) = 0;
+    /* 0x0A0 */ virtual u32 GetShdwThrough(int) = 0;
     /* 0x0A4 */ virtual u32 GetUnderwaterRoofCode(int) = 0;
     /* 0x0A8 */ virtual int GetCode0_0x80000000(cBgS_PolyInfo const &) = 0;
     /* 0x0AC */ virtual int GetLinkNo(cBgS_PolyInfo const &) = 0;
     /* 0x0B0 */ virtual s32 GetWallCode(cBgS_PolyInfo const &) = 0;
-    /* 0x0B4 */ virtual int GetPoltAtt0Material(cBgS_PolyInfo const &) = 0;
+    /* 0x0B4 */ virtual int GetPolyAtt0Material(cBgS_PolyInfo const &) = 0;
     /* 0x0B8 */ virtual int GetPolyAtt0(cBgS_PolyInfo const &) = 0;
     /* 0x0Bc */ virtual int GetPolyAtt1(cBgS_PolyInfo const &) = 0;
     /* 0x0C0 */ virtual int GetGroundCode(cBgS_PolyInfo const &) = 0;

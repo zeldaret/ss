@@ -86,7 +86,7 @@ int dAcOsw_c::actorCreate() {
     CREATE_ALLOCATOR(dAcOsw_c);
     mCollision.SetRideCallback(rideCallback);
     mModel.setCallback(&mButtonCtrl);
-    dBgS::GetInstance().Regist(&mCollision, this);
+    dBgS::GetInstance()->Regist(&mCollision, this);
     mOffSceneFlag = (params >> 0x4);
     mCanBeSeen = ((params >> 0xC) & 3) == 0;
     nw4r::g3d::ResMdl resMdl = mModel.getResMdl();

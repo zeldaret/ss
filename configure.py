@@ -384,7 +384,7 @@ config.libs = [
     {
         "lib": "collision",
         "mw_version": "Wii/1.5",
-        "cflags": cflags_framework ,
+        "cflags": cflags_framework + ["-str reuse,readonly"],
         "progress_category": "game",
         "host": False,
         "objects": [

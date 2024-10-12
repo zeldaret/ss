@@ -9,10 +9,10 @@ dBgW_Base::dBgW_Base() {
 
 dBgW_Base::~dBgW_Base() {
     if (ChkUsed()) {
-        dBgS::GetInstance().Release(this);
+        dBgS::GetInstance()->Release(this);
     }
     if (GetRegistId() != BG_ID_MAX) {
-        dBgS::GetInstance().UnRegist(this);
+        dBgS::GetInstance()->UnRegist(this);
     }
     ClrDBgWBase();
 }
@@ -80,7 +80,7 @@ bool dBgW_Base::UpdateDraw(mAllocator_c * /* unused */) {
     return true;
 }
 
-void dBgW_Base::RegistBg(u16 id) {
+void dBgW_Base::RegistBg(int id) {
     mRegistId = id;
 }
 
