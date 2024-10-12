@@ -3,6 +3,7 @@
 // TODO sort includes for vtable order
 // clang-format off
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_do_button.h"
 #include "d/lyt/meter/d_lyt_meter_shield_gauge.h"
 #include "d/lyt/d_lyt_common_icon_item.h"
 #include "d/lyt/meter/d_lyt_meter_cross_btn.h"
@@ -19,16 +20,6 @@
 #include "d/lyt/meter/d_lyt_meter_ganbari_gauge.h"
 #include "d/lyt/meter/d_lyt_meter_event_skip.h"
 #include "d/lyt/meter/d_lyt_meter_item_select.h"
-
-#include "d/lyt/d_lyt_unknowns.h"
-#include "d/lyt/d_lyt_do_button.h"
-
-#include <d/lyt/meter/d_lyt_meter_timer.h>
-#include <d/lyt/d_lyt_sky_gauge.h>
-#include <d/lyt/d_lyt_bird_gauge.h>
-#include <d/lyt/d_lyt_boss_gauge.h>
-#include <d/lyt/meter/d_lyt_meter_key.h>
-#include <d/lyt/meter/d_lyt_meter_drink.h>
 
 // clang-format on
 
@@ -101,6 +92,20 @@ private:
     UI_STATE_MGR_DECLARE(dLytMeterParts_c);
     u8 field_0x3C[0x10];
 };
+
+// TODO sort includes for vtable order
+// clang-format off
+
+#include "d/lyt/meter/d_lyt_meter_key.h"
+#include "d/lyt/d_lyt_unknowns.h"
+
+#include "d/lyt/meter/d_lyt_meter_drink.h"
+#include "d/lyt/meter/d_lyt_meter_timer.h"
+#include "d/lyt/d_lyt_bird_gauge.h"
+#include "d/lyt/d_lyt_boss_gauge.h"
+#include "d/lyt/d_lyt_sky_gauge.h"
+
+// clang-format on
 
 class dLytMeter_c {
 public:

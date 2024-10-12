@@ -25,8 +25,8 @@ public:
     dLytMeterBossKey_c() : mStateMgr(*this, sStateID::null) {}
     ~dLytMeterBossKey_c() {}
 
-    virtual void BossKey0x8();
-    virtual void BossKey0xC();
+    virtual void BossKey0x8() {}
+    virtual void BossKey0xC() {}
 
     bool build(d2d::ResAccIf_c *);
 private:
@@ -43,8 +43,8 @@ public:
     dLytMeterSmallKey_c() : mStateMgr(*this, sStateID::null) {}
     ~dLytMeterSmallKey_c() {}
 
-    virtual void SmallKey0x8();
-    virtual void SmallKey0xC();
+    virtual void SmallKey0x8() {}
+    virtual void SmallKey0xC() {}
 
     bool build(d2d::ResAccIf_c *);
 private:

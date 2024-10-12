@@ -420,7 +420,7 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
         mpBossKey->build(resAcc);
     }
 
-    if (StageManager__isAreaTypeDungeon(STAGE_MANAGER) ||
+    if (StageManager__isAreaTypeDungeon(STAGE_MANAGER) &&
         (!(ScGame::currentSpawnInfo.stageName == "F100_1") && !(ScGame::currentSpawnInfo.stageName == "F103_1")) ||
         ScGame::currentSpawnInfo.stageName == "F302" || ScGame::currentSpawnInfo.stageName == "F302") {
         mpSmallKey = new dLytMeterSmallKey_c();
@@ -429,11 +429,11 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
         mpSmallKey = nullptr;
     }
 
-    if (GLOBAL_TITLE_RELOADER == nullptr) {
+    if (GLOBAL_TITLE_RELOADER != nullptr) {
+        mpDrink = nullptr;
+    } else {
         mpDrink = new dLytMeterDrink_c();
         mpDrink->build(resAcc);
-    } else {
-        mpDrink = nullptr;
     }
 }
 

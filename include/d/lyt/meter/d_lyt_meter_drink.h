@@ -5,13 +5,21 @@
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
 
+class dLytMeterDrinkParts_c {
+public:
+    dLytMeterDrinkParts_c() : mStateMgr(*this, sStateID::null) {}
+    ~dLytMeterDrinkParts_c() {}
+private:
+    /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterDrinkParts_c);
+};
+
 class dLytMeterDrink_c {
 public:
     dLytMeterDrink_c() : mStateMgr(*this, sStateID::null) {}
     ~dLytMeterDrink_c() {}
 
-    virtual void BossKey0x8();
-    virtual void BossKey0xC();
+    virtual void BossKey0x8() {}
+    virtual void BossKey0xC() {}
 
     bool build(d2d::ResAccIf_c *);
 private:
@@ -20,7 +28,7 @@ private:
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterDrink_c);
     /* 0x040 */ d2d::dLytSub mLyt;
     /* 0x0D4 */ d2d::AnmGroup_c mAnmGroups[20];
-    /* 0x5E4 */ mVec3_c mVecs[3];
+    /* 0x5E4 */ dLytMeterDrinkParts_c mParts[3];
 };
 
 
