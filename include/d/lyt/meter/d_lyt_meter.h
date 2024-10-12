@@ -23,6 +23,13 @@
 #include "d/lyt/d_lyt_unknowns.h"
 #include "d/lyt/d_lyt_do_button.h"
 
+#include <d/lyt/meter/d_lyt_meter_timer.h>
+#include <d/lyt/d_lyt_sky_gauge.h>
+#include <d/lyt/d_lyt_bird_gauge.h>
+#include <d/lyt/d_lyt_boss_gauge.h>
+#include <d/lyt/meter/d_lyt_meter_key.h>
+#include <d/lyt/meter/d_lyt_meter_drink.h>
+
 // clang-format on
 
 class dLytMeter1Button_c : public dLytMeterBase {
@@ -102,6 +109,8 @@ public:
 
     bool build(d2d::ResAccIf_c *resAcc);
 
+    bool isSilentRealm();
+
     /* 0x00004 */ d2d::ResAccIf_c mResAcc;
     /* 0x00374 */ d2d::LytBase_c mLyt;
     /* 0x00404 */ d2d::AnmGroup_c mAnmGroups[34];
@@ -122,10 +131,19 @@ public:
     /* 0x12DA4 */ dLytMeterShieldGauge_c mShield;
     /* 0x130C4 */ dLytMeter1Button_c *mp1Button;
     /* 0x130C8 */ dLytMeter2Button_c *mp2Button;
-    u8 field_0x130CC[0x130FC - 0x130D4];
-    LytMeterGroup mMeters;
+    /* 0x130CC */ dLytMeterTimer_c *mpTimer;
+    /* 0x130D0 */ LytMeterTimerPart1_c *mpTimerPart1;
+    /* 0x130D4 */ LytMeterTimerPart2_c *mpTimerPart2;
+    /* 0x130D8 */ dLytMeterKakeraKey_c *mpKakeraKey;
+    /* 0x130DC */ dLytMeterBossKey_c *mpBossKey;
+    /* 0x130E0 */ dLytMeterSmallKey_c *mpSmallKey;
+    /* 0x130E4 */ dLytMeterDrink_c *mpDrink;
+    /* 0x130E8 */ dLytSkyGauge_c *mpSkyGauge;
+    /* 0x130EC */ dLytBirdGauge_c *mpBirdGauge;
+    /* 0x130F0 */ dLytBossGauge_c *mpBossGauge;
+    /* 0x130F4 */ LytMeterGroup mMeters;
 
-    /* 0x13000 */ LytMeterListNode mNodes[16];
+    /* 0x13100 */ LytMeterListNode mNodes[16];
     /* 0x13200 */ u8 field_0x13200[0x13204 - 0x13200];
     /* 0x13204 */ dLytMeterParts_c mParts[16];
 

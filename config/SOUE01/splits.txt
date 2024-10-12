@@ -429,7 +429,7 @@ d/lyt/d_lyt_deposit_stock.cpp:
 	.text       start:0x80155CD0 end:0x801578A8
 	.ctors      start:0x804DB78C end:0x804DB790
 
-d/lyt/d_lyt_bigboss_gauge.cpp:
+d/lyt/d_lyt_boss_gauge.cpp:
 	.text       start:0x80158290 end:0x80158E78
 	.ctors      start:0x804DB790 end:0x804DB794
 

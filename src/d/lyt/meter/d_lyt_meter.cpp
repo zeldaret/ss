@@ -1,8 +1,9 @@
-#include "d/lyt/d_lyt_meter_configuration.h"
-#include "d/lyt/meter/d_lyt_meter.h"
 #include "d/lyt/d_lyt_area_caption.h"
+#include "d/lyt/d_lyt_meter_configuration.h"
 #include "d/lyt/d_window.h"
+#include "d/lyt/meter/d_lyt_meter.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
+#include "toBeSorted/scgame.h"
 
 static dLytMeterConfiguration_c sConf;
 
@@ -82,8 +83,8 @@ void dLytMeter1Button_c::finalizeState_Unuse() {}
 
 static const d2d::LytBrlanMapping btn1BrlanMap[] = {
     {"remoConBtn_04_input.brlan", "G_input_00"},
-    {"remoConBtn_04_call.brlan", "G_call_00"},
-    {"remoConBtn_04_loop.brlan", "G_loop_00"},
+    { "remoConBtn_04_call.brlan",  "G_call_00"},
+    { "remoConBtn_04_loop.brlan",  "G_loop_00"},
 };
 
 static char *sWindowName1 = "W_bgP_00";
@@ -193,8 +194,8 @@ void dLytMeter2Button_c::finalizeState_Unuse() {}
 
 static const d2d::LytBrlanMapping btn2BrlanMap[] = {
     {"remoConBtn_05_input.brlan", "G_input_00"},
-    {"remoConBtn_05_call.brlan", "G_call_00"},
-    {"remoConBtn_05_loop.brlan", "G_loop_00"},
+    { "remoConBtn_05_call.brlan",  "G_call_00"},
+    { "remoConBtn_05_loop.brlan",  "G_loop_00"},
 };
 
 static char *sWindowName2 = "W_bgP_00";
@@ -264,43 +265,47 @@ extern "C" void fn_801B2D10(void *);
 extern "C" void *GLOBAL_MESSAGE_RELATED_CONTEXT;
 
 static const d2d::LytBrlanMapping meterBrlanMap[] = {
-    {"basicPosition_00_in.brlan", "G_remoConBtn_00"},
-    {"basicPosition_00_in.brlan", "G_remoConBtn_01"},
-    {"basicPosition_00_in.brlan", "G_remoConBtn_02"},
-    {"basicPosition_00_in.brlan", "G_remoConBtn_03"},
-    {"basicPosition_00_in.brlan", "G_remoConBtn_04"},
-    {"basicPosition_00_in.brlan", "G_remoConBtn_05"},
-    {"basicPosition_00_in.brlan", "G_remoConBtn_06"},
-    {"basicPosition_00_in.brlan", "G_remoConBg_00"},
-    {"basicPosition_00_in.brlan", "G_nunBtn_03"},
-    {"basicPosition_00_in.brlan", "G_nunBtn_01"},
-    {"basicPosition_00_in.brlan", "G_nunBtn_02"},
-    {"basicPosition_00_in.brlan", "G_nunBg_00"},
-    {"basicPosition_00_in.brlan", "G_shield_00"},
-    {"basicPosition_00_in.brlan", "G_rupy_00"},
-    {"basicPosition_00_in.brlan", "G_heart_00"},
-    {"basicPosition_00_in.brlan", "G_ganbari_00"},
+    {          "basicPosition_00_in.brlan", "G_remoConBtn_00"},
+    {          "basicPosition_00_in.brlan", "G_remoConBtn_01"},
+    {          "basicPosition_00_in.brlan", "G_remoConBtn_02"},
+    {          "basicPosition_00_in.brlan", "G_remoConBtn_03"},
+    {          "basicPosition_00_in.brlan", "G_remoConBtn_04"},
+    {          "basicPosition_00_in.brlan", "G_remoConBtn_05"},
+    {          "basicPosition_00_in.brlan", "G_remoConBtn_06"},
+    {          "basicPosition_00_in.brlan",  "G_remoConBg_00"},
+    {          "basicPosition_00_in.brlan",     "G_nunBtn_03"},
+    {          "basicPosition_00_in.brlan",     "G_nunBtn_01"},
+    {          "basicPosition_00_in.brlan",     "G_nunBtn_02"},
+    {          "basicPosition_00_in.brlan",      "G_nunBg_00"},
+    {          "basicPosition_00_in.brlan",     "G_shield_00"},
+    {          "basicPosition_00_in.brlan",       "G_rupy_00"},
+    {          "basicPosition_00_in.brlan",      "G_heart_00"},
+    {          "basicPosition_00_in.brlan",    "G_ganbari_00"},
 
-    {"basicPosition_00_out.brlan", "G_remoConBtn_00"},
-    {"basicPosition_00_out.brlan", "G_remoConBtn_01"},
-    {"basicPosition_00_out.brlan", "G_remoConBtn_02"},
-    {"basicPosition_00_out.brlan", "G_remoConBtn_03"},
-    {"basicPosition_00_out.brlan", "G_remoConBtn_04"},
-    {"basicPosition_00_out.brlan", "G_remoConBtn_05"},
-    {"basicPosition_00_out.brlan", "G_remoConBtn_06"},
-    {"basicPosition_00_out.brlan", "G_remoConBg_00"},
-    {"basicPosition_00_out.brlan", "G_nunBtn_03"},
-    {"basicPosition_00_out.brlan", "G_nunBtn_01"},
-    {"basicPosition_00_out.brlan", "G_nunBtn_02"},
-    {"basicPosition_00_out.brlan", "G_nunBg_00"},
-    {"basicPosition_00_out.brlan", "G_shield_00"},
-    {"basicPosition_00_out.brlan", "G_rupy_00"},
-    {"basicPosition_00_out.brlan", "G_heart_00"},
-    {"basicPosition_00_out.brlan", "G_ganbari_00"},
+    {         "basicPosition_00_out.brlan", "G_remoConBtn_00"},
+    {         "basicPosition_00_out.brlan", "G_remoConBtn_01"},
+    {         "basicPosition_00_out.brlan", "G_remoConBtn_02"},
+    {         "basicPosition_00_out.brlan", "G_remoConBtn_03"},
+    {         "basicPosition_00_out.brlan", "G_remoConBtn_04"},
+    {         "basicPosition_00_out.brlan", "G_remoConBtn_05"},
+    {         "basicPosition_00_out.brlan", "G_remoConBtn_06"},
+    {         "basicPosition_00_out.brlan",  "G_remoConBg_00"},
+    {         "basicPosition_00_out.brlan",     "G_nunBtn_03"},
+    {         "basicPosition_00_out.brlan",     "G_nunBtn_01"},
+    {         "basicPosition_00_out.brlan",     "G_nunBtn_02"},
+    {         "basicPosition_00_out.brlan",      "G_nunBg_00"},
+    {         "basicPosition_00_out.brlan",     "G_shield_00"},
+    {         "basicPosition_00_out.brlan",       "G_rupy_00"},
+    {         "basicPosition_00_out.brlan",      "G_heart_00"},
+    {         "basicPosition_00_out.brlan",    "G_ganbari_00"},
 
-    {"basicPosition_00_position.brlan", "G_position_00"},
-    {"basicPosition_00_rupyPosition.brlan", "G_rupyPosi_00"},
+    {    "basicPosition_00_position.brlan",   "G_position_00"},
+    {"basicPosition_00_rupyPosition.brlan",   "G_rupyPosi_00"},
 };
+
+extern "C" void *STAGE_MANAGER;
+extern "C" bool StageManager__isAreaTypeSky(void *stageMgr);
+extern "C" bool StageManager__isAreaTypeDungeon(void *stageMgr);
 
 bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setResAcc(resAcc);
@@ -365,12 +370,76 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
             mMeters.PushBack(&mNodes[i]);
         }
     }
+
+    if (isSilentRealm()) {
+        void *sirenData = LayoutArcManager::sInstance->getLoadedData("Siren");
+        mResAcc.attach(sirenData, "");
+        mpTimer = new dLytMeterTimer_c();
+        mpTimerPart1 = new LytMeterTimerPart1_c();
+        mpTimerPart2 = new LytMeterTimerPart2_c();
+
+        mpTimerPart1->build(&mResAcc);
+        mpTimerPart2->build(&mResAcc);
+        mpTimer->build();
+    } else {
+        mpTimer = nullptr;
+        mpTimerPart1 = nullptr;
+        mpTimerPart2 = nullptr;
+    }
+
+    if (GLOBAL_TITLE_RELOADER == nullptr && StageManager__isAreaTypeSky(STAGE_MANAGER)) {
+        mpSkyGauge = new dLytSkyGauge_c();
+        mpSkyGauge->build(resAcc);
+
+        mpBirdGauge = new dLytBirdGauge_c();
+        mpBirdGauge->build(resAcc);
+    } else {
+        mpSkyGauge = nullptr;
+        mpBirdGauge = nullptr;
+    }
+
+    if (ScGame::currentSpawnInfo.stageName == "F401") {
+        mpBossGauge = new dLytBossGauge_c();
+        mpBossGauge->build();
+    } else {
+        mpBossGauge = nullptr;
+    }
+
+    if (ScGame::isCurrentStage("F200") || ScGame::isCurrentStage("F210") || ScGame::isCurrentStage("F211")) {
+        mpKakeraKey = new dLytMeterKakeraKey_c();
+        mpKakeraKey->build(resAcc);
+    } else {
+        mpKakeraKey = nullptr;
+    }
+
+    if (!StageManager__isAreaTypeDungeon(STAGE_MANAGER) || ScGame::currentSpawnInfo.stageName == "F100_1" ||
+        ScGame::currentSpawnInfo.stageName == "F103_1") {
+        mpBossKey = nullptr;
+    } else {
+        mpBossKey = new dLytMeterBossKey_c();
+        mpBossKey->build(resAcc);
+    }
+
+    if (StageManager__isAreaTypeDungeon(STAGE_MANAGER) ||
+        (!(ScGame::currentSpawnInfo.stageName == "F100_1") && !(ScGame::currentSpawnInfo.stageName == "F103_1")) ||
+        ScGame::currentSpawnInfo.stageName == "F302" || ScGame::currentSpawnInfo.stageName == "F302") {
+        mpSmallKey = new dLytMeterSmallKey_c();
+        mpSmallKey->build(resAcc);
+    } else {
+        mpSmallKey = nullptr;
+    }
+
+    if (GLOBAL_TITLE_RELOADER == nullptr) {
+        mpDrink = new dLytMeterDrink_c();
+        mpDrink->build(resAcc);
+    } else {
+        mpDrink = nullptr;
+    }
 }
 
 dLytMeterContainer_c::dLytMeterContainer_c() {
     sInstance = this;
 }
-
 
 bool dLytMeterContainer_c::build() {
     void *data = LayoutArcManager::sInstance->getLoadedData("DoButton");
