@@ -18,6 +18,23 @@ STATE_DEFINE(dLytMeterParts_c, In);
 STATE_DEFINE(dLytMeterParts_c, Visible);
 STATE_DEFINE(dLytMeterParts_c, Out);
 
+void floats() {
+    32.0f;
+    1.0f;
+    0.0f;
+    int x = 0;
+    f32 f = x;
+}
+
+void floats2() {
+    5.0f;
+    3.0f;
+}
+
 #pragma dont_inline on
 dLytMeter_c::dLytMeter_c() {}
 #pragma dont_inline off
+
+dLytMeterContainer_c::dLytMeterContainer_c() {
+    sInstance = this;
+}

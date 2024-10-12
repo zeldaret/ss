@@ -15,6 +15,8 @@ namespace d2d {
 
 class ResAccIf_c : public m2d::ResAccIf_c {
 public:
+    ResAccIf_c() {}
+    virtual ~ResAccIf_c() {}
     /* 0xB4 */ nw4r::lyt::FontRefLink mFontRefLinks[5];
 
     bool attach(void *data, const char *name);
