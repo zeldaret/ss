@@ -49,8 +49,8 @@ public:
     void removeFromList2(dLytStructD *other);
 
 private:
-    TList<dLytStructD> mList2;
-    TList<dLytStructD> mList1;
+    TList<dLytStructD_Base> mList2;
+    TList<dLytStructD_Base> mList1;
     bool field_0x18;
 };
 

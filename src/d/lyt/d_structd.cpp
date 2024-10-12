@@ -1,18 +1,15 @@
 #include <d/lyt/d_structd.h>
 
-namespace d2d
-{
-    
+namespace d2d {
+
 dLytStructDList::dLytStructDList() {
     field_0x18 = true;
     sInstance = this;
 }
 
-
 dLytStructDList *dLytStructDList::create(EGG::Heap *heap) {
-    return new(heap) dLytStructDList();
+    return new (heap) dLytStructDList();
 }
-
 
 void dLytStructDList::appendToList1(dLytStructD *other) {
     mList1.insert(other);
