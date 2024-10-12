@@ -2,7 +2,6 @@
 #define D_LYT_METER_MINUS_BTN_H
 
 #include <d/lyt/d2d.h>
-#include <d/lyt/d_lyt_sub.h>
 #include <d/lyt/meter/d_lyt_meter_base.h>
 #include <d/lyt/d_lyt_common_icon_item.h>
 #include <toBeSorted/effects_struct.h>
@@ -63,7 +62,7 @@ private:
     dLytMeterMinusBtnText_c mText[2];
     UI_STATE_MGR_DECLARE(dLytMeterMinusBtn_c);
 
-    /* 0x490 */ dLytSub mLyt;
+    /* 0x490 */ d2d::dLytSub mLyt;
 
     /* 0x524 */ d2d::AnmGroup_c mAnmGroups[33];
 
@@ -84,6 +83,7 @@ private:
     s32 field_0x5760;
     s32 field_0x5764;
     s32 field_0x5768;
+    /* 0x??? */ u8 padding[0x13730 - 0x136D8];
 };
 
 #endif

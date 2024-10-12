@@ -115,6 +115,22 @@ private:
     /* 0x8C */ MsbtInfo *mpMsbtInfo;
 };
 
+class dLytSub : public d2d::LytBase_c {
+public:
+    dLytSub() {}
+    virtual bool build(const char *name, m2d::ResAccIf_c *acc) override {
+        mpName = name;
+        return d2d::LytBase_c::build(name, acc);
+    }
+
+    const char *getName() const {
+        return mpName;
+    }
+private:
+    /// This name is stored by `build` and usually accessed by dLytMeters' getName functions
+    const char *mpName;
+};
+
 struct AnmGroupBase_c {
     AnmGroupBase_c(m2d::FrameCtrl_c *frameCtrl) : field_0x04(nullptr), mFlags(0), mpFrameCtrl(frameCtrl) {}
     virtual ~AnmGroupBase_c() {}
@@ -173,6 +189,25 @@ struct AnmGroupBase_c {
 
     inline bool isFlag2() const {
         return (mFlags & 2) != 0;
+    }
+
+    inline bool isStop2() const {
+        return mpFrameCtrl->isStop2();
+    }
+
+
+    inline void playBackwardsOnce() {
+        mpFrameCtrl->setFlags(FLAG_NO_LOOP | FLAG_BACKWARDS);
+        m2d::FrameCtrl_c &ctrl = *mpFrameCtrl;
+        ctrl.setCurrFrame(ctrl.getEndFrame());
+        syncAnmFrame();
+    }
+
+    inline void playLoop() {
+        mpFrameCtrl->setFlags(FLAG_NO_LOOP);
+        m2d::FrameCtrl_c &ctrl = *mpFrameCtrl;
+        ctrl.setCurrFrame(ctrl.getEndFrame());
+        syncAnmFrame();
     }
 
 private:

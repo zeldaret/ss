@@ -2,7 +2,6 @@
 #define D_LYT_METER_REMOCON_BG_H
 
 #include "d/lyt/d2d.h"
-#include "d/lyt/d_lyt_sub.h"
 #include "d/lyt/meter/d_lyt_meter_base.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
@@ -26,7 +25,7 @@ private:
     STATE_FUNC_DECLARE(dLytMeterRemoconBg_c, Off);
 
     UI_STATE_MGR_DECLARE(dLytMeterRemoconBg_c);
-    dLytSub mLyt;
+    d2d::dLytSub mLyt;
     /* 0xD8 */ nw4r::lyt::Pane *mpPane;
     /* 0xDC */ u32 field_0xDC;
     /* 0xE0 */ u32 field_0xE0;

@@ -2,7 +2,6 @@
 #define D_LYT_METER_GANBARI_GAUGE_H
 
 #include <d/lyt/d2d.h>
-#include <d/lyt/d_lyt_sub.h>
 #include <d/lyt/meter/d_lyt_meter_base.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
@@ -36,8 +35,9 @@ private:
     STATE_MGR(dLytMeterGanbariGauge_c) mStateMgr1;
     STATE_MGR(dLytMeterGanbariGauge_c) mStateMgr2;
 
-    /* 0x080 */ dLytSub mLyt;
+    /* 0x080 */ d2d::dLytSub mLyt;
     /* 0x114 */ d2d::AnmGroup_c mAnmGroups[16];
+    /* 0x??? */ u8 padding[0x11E8 - 0x11A0];
 };
 
 

@@ -3,7 +3,6 @@
 
 #include <d/lyt/d2d.h>
 #include <d/lyt/d_lyt_common_icon_item.h>
-#include <d/lyt/d_lyt_sub.h>
 #include <d/lyt/meter/d_lyt_meter_base.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
@@ -71,13 +70,15 @@ private:
     /* 0x2D0 */ dLytMeterDowsingText_c mText[2];
     /* 0x358 */ UI_STATE_MGR_DECLARE(dLytMeterDowsing_c);
 
-    /* 0x490 */ dLytSub mLyt;
+    /* 0x490 */ d2d::dLytSub mLyt;
 
     /* 0x428 */ d2d::AnmGroup_c mAnmGroups[29];
+    /* 0xB68 */ u8 field_0xB68[0xBEC - 0xB68];
     /* 0xBEC */ dLytCommonIconItem_c mItemIcons[9];
 
     /* 0x5434 */ LytMeterGroup mNodeList;
     /* 0x5440 */ LytMeterListNode mNodes[9];
+    /* 0x??? */ u8 padding[0x11E34 - 0x11DF8];
 };
 
 #endif

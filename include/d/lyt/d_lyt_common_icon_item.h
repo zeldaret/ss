@@ -2,7 +2,6 @@
 #define D_LYT_COMMON_ICON_ITEM_H
 
 #include <d/lyt/d2d.h>
-#include <d/lyt/d_lyt_sub.h>
 #include <d/lyt/d_structd.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
@@ -12,7 +11,7 @@ public:
     dLytCommonIconItemPart1_c()
         : field_0x2D4(0), field_0x2D5(0), field_0x2FC(0), field_0x2FD(0), field_0x2FE(0), field_0x2FF(0) {}
     virtual ~dLytCommonIconItemPart1_c() {}
-    dLytSub lyt;
+    d2d::dLytSub lyt;
     d2d::AnmGroup_c mAnm[7];
     u32 unk[0x3];
     d2d::dLytStructD structD;
@@ -31,7 +30,7 @@ public:
         : field_0x64C(0), field_0x64D(0), field_0x674(0), field_0x675(0), field_0x676(0), field_0x677(0),
           field_0x678(1), field_0x67C(0.0f) {}
     virtual ~dLytCommonIconItemPart2_c() {}
-    dLytSub lyt;
+    d2d::dLytSub lyt;
     d2d::AnmGroup_c mAnm[10];
     u32 unk[0x3];
     d2d::dLytStructD structD;
@@ -50,7 +49,7 @@ class dLytCommonIconItemPart3_c {
 public:
     dLytCommonIconItemPart3_c() : field_0x804(0), field_0x805(0), field_0x806(0) {}
     virtual ~dLytCommonIconItemPart3_c() {}
-    dLytSub lyt;
+    d2d::dLytSub lyt;
     d2d::AnmGroup_c mAnm[3];
     u32 unk;
     d2d::dLytStructD structD;

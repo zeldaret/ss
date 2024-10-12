@@ -2,7 +2,6 @@
 #define D_LYT_METER_A_BTN_H
 
 #include <d/lyt/d2d.h>
-#include <d/lyt/d_lyt_sub.h>
 #include <d/lyt/meter/d_lyt_meter_base.h>
 #include <s/s_State.hpp>
 #include <s/s_StateMgr.hpp>
@@ -18,6 +17,10 @@ public:
     virtual const char *getName() const override;
 
     virtual ~dLytMeterABtn_c() {}
+    void setContainerGroups(d2d::AnmGroup_c *g1, d2d::AnmGroup_c *g2) {
+        mpContainerAnmGroup1 = g1;
+        mpContainerAnmGroup2 = g2;
+    }
 private:
     STATE_FUNC_DECLARE(dLytMeterABtn_c, InvisibleWait);
     STATE_FUNC_DECLARE(dLytMeterABtn_c, In);
@@ -28,8 +31,11 @@ private:
     STATE_FUNC_DECLARE(dLytMeterABtn_c, Off);
 
     UI_STATE_MGR_DECLARE(dLytMeterABtn_c);
-    dLytSub mLyt;
+    d2d::dLytSub mLyt;
     /* 0x0D8 */ d2d::AnmGroup_c mAnmGroups[3];
+    /* 0x??? */ d2d::AnmGroup_c *mpContainerAnmGroup1;
+    /* 0x??? */ d2d::AnmGroup_c *mpContainerAnmGroup2;
+    /* 0x??? */ u8 padding[0x12000 - 0x11FD4];
 };
 
 #endif
