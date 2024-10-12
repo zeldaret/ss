@@ -126,7 +126,7 @@ public:
     /* 0x0E8 */ virtual void TransPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) = 0;
     /* 0x0EC */ virtual void MatrixCrrPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) = 0;
     /* 0x0F0 */ virtual void CallRideCallback(dAcBase_c *, dAcBase_c *) = 0;
-    /* 0x0F4 */ virtual void CallArrowStickCallback(dAcBase_c *, dAcBase_c *) = 0;
+    /* 0x0F4 */ virtual void CallArrowStickCallback(dAcBase_c *, dAcBase_c *, mVec3_c *) = 0;
     /* 0x0F8 */ virtual bool CallUnkCallback(dAcBase_c *, dAcBase_c *) = 0;
     /* 0x0FC */ virtual bool UpdateDraw(mAllocator_c *) = 0;
     /* 0x100 */ virtual bool GetIsDraw(int) = 0;
@@ -187,6 +187,13 @@ public:
     }
     u16 GetField_0x22() const {
         return field_0x22;
+    }
+
+    bool ChkStickWall() const {
+        return field_0x24 & 1;
+    }
+    bool ChkStickRoof() const {
+        return field_0x24 & 2;
     }
 
 private:

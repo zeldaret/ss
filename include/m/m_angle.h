@@ -13,6 +13,11 @@ struct mAng {
         return mVal;
     }
 
+    mAng &operator+=(const mAng &other) {
+        mVal += other.mVal;
+        return *this;
+    }
+
     s32 step(s16 target, s32 steps, s16 max, s16 min);
 
     f32 sin() const {

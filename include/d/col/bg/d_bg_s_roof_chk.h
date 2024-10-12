@@ -7,8 +7,18 @@
 
 class dBgS_RoofChk : public cBgS_PolyInfo, public cBgS_Chk, public dBgS_Chk {
 public:
+    /* 0x6C */ mVec3_c mPos;
+    /* 0x78 */ f32 mNowY;
+    /* 0x7C */ int field_0x48;
+    /* 0x80 */ mVec3_c mPosCopy;
+
     dBgS_RoofChk();
-    void Init();
+
+    void Init() {
+        SetNowY(1e9f);
+        ClearPi();
+    }
+
     void SetPos(mVec3_c const &);
 
     virtual ~dBgS_RoofChk();
@@ -17,19 +27,18 @@ public:
         mNowY = y;
     }
     void i_SetPos(mVec3_c const &pos) {
-        m_pos = pos;
+        mPos = pos;
     }
     f32 GetNowY() {
         return mNowY;
     }
     mVec3_c *GetPosP() {
-        return &m_pos;
+        return &mPos;
     }
 
-private:
-    mVec3_c m_pos;
-    int field_0x48;
-    f32 mNowY;
+    void CopyPos() {
+        mPosCopy = mPos;
+    }
 };
 
 class dBgS_LinkRoofChk : public dBgS_RoofChk {

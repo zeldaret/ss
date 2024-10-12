@@ -27,8 +27,8 @@ public:
     mAng GetAngle(mAng) const;
 
     void SetActorInfo(int bgIndex, void *pData, u32 actor_pid) {
-        unk_0x04 = pData;
         mBgIndex = bgIndex;
+        unk_0x04 = pData;
         mActorPId = actor_pid;
     }
 

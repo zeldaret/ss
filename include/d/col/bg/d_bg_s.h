@@ -5,6 +5,7 @@
 #include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_bg.h"
+#include "d/col/bg/d_bg_s_sph_chk.h"
 #include "d/col/bg/d_bg_w.h"
 #include "d/col/bg/d_bg_w_base.h"
 #include "d/col/bg/d_bg_w_kcol.h"
@@ -35,7 +36,9 @@ public:
         return !(pObj && pObj->ChkProperty_0x40000000());
     }
 
-    bool CheckAll(cBgS_Chk *other) const {
+    // ??? Template seems bad
+    template <class T>
+    bool CheckAll(const T *other) const {
         bool check = ChkUsed();
         if (check) {
             const cPartition &part = mpBgW->GetPartition();
@@ -93,6 +96,7 @@ public:
     u32 GetGrpInf(cBgS_PolyInfo const &) const;
 
     const dAcObjBase_c *GetActorPointer(const cBgS_PolyInfo &info) const;
+
 }; // Size: 0x2EFC
 
 class dBgS_Acch;
@@ -113,13 +117,20 @@ struct dMapGradation {
     /* 0x10 */ u8 mColorA;
 };
 
+struct MapSrollText_t {
+    /* 0x00 */ u8 _0[0x0E - 0x00];
+    /* 0x0E */ s16 mField_0x0E;
+    /* 0x10 */ s16 mField_0x10;
+    /* 0x12 */ u8 _1[0x1C - 0x12];
+};
+
 struct MapLineSegment {
     MapLineSegment();
     virtual ~MapLineSegment();
     virtual void Draw(int, mMtx_c *, bool, int);
 
     void fn_8033e9a0();
-    void fn_8033e8b0();
+    void Dt();
     void fn_8033e9c0();
     void Append();
     void Remove();
@@ -132,7 +143,7 @@ class dBgS : public cBgS {
 private:
     static dBgS *spInstance;
     static const void *spSolidMatTex[31];
-    static const void *spLiquidMatTex[5];
+    static const void *spScrollMapTex[5];
     typedef TList<MapLineSegment> MapLineList;
 
 public:
@@ -140,7 +151,8 @@ public:
     /* 0x2EFC */ dBgW_Base *mColllisionTbl[BG_ID_MAX];
     /* 0x385C */ s32 mColllisionTblLen;
     /* 0x3860 */ bool mInSkyKeep;
-    /* 0x3861 */ u32 mUnk_0x3861[10];
+    /* 0x3864 */ s32 mField_0x3864[5];
+    /* 0x3878 */ s32 mField_0x3878[5];
     /* 0x388C */ MapLineList mList_0x388C;
     /* 0x3894 */ dMapGradation mMapGradation;
 
@@ -210,8 +222,8 @@ public:
 
     void RideCallBack(cBgS_PolyInfo const &, dAcBase_c *);
     void ArrowStickCallBack(cBgS_PolyInfo const &, dAcBase_c *, mVec3_c &);
-    void UnkCallback(cBgS_PolyInfo const &, dAcBase_c *);
-    dAcBase_c *PushPullCallBack(cBgS_PolyInfo const &, dAcBase_c *, s16, dBgW_Base::PushPullLabel);
+    bool UnkCallback(cBgS_PolyInfo const &, dAcBase_c *);
+    dAcBase_c *PushPullCallBack(cBgS_PolyInfo const &, dAcBase_c *, dBgW_Base::PushPullLabel);
 
     void UpdateScrollTex();
     void SetupMapGX(mMtx_c *);

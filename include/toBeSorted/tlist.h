@@ -35,9 +35,8 @@ public:
 
 template <typename T>
 class TList {
-    typedef TListNode<T> TNode;
-
 public:
+    typedef TListNode<T> TNode;
     class Iterator {
     public:
         Iterator() : pVal(NULL) {}

@@ -218,7 +218,7 @@ public:
     /* 0x108 */ virtual void CalcPlane();
     /* 0x10C */ virtual void ClassifyPlane();
 
-    // u32 GetOldInvMtx(Mtx m) { return MTXInverse(m_inv_mtx, m); }
+    u32 GetOldInvMtx(mMtx_c *m);
     // MtxP GetBaseMtxP() { return pm_base; }
     bool ChkNoCalcVtx() {
         return mFlags & NO_CALC_VTX_e;
@@ -333,7 +333,7 @@ public:
     /* 0x0EC */ virtual void
     MatrixCrrPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) override;
     /* 0x0F0 */ virtual void CallRideCallback(dAcBase_c *, dAcBase_c *) override;
-    /* 0x0F4 */ virtual void CallArrowStickCallback(dAcBase_c *, dAcBase_c *) override;
+    /* 0x0F4 */ virtual void CallArrowStickCallback(dAcBase_c *, dAcBase_c *, mVec3_c *) override;
     /* 0x0F8 */ virtual bool CallUnkCallback(dAcBase_c *, dAcBase_c *) override;
     /* 0x0FC */ virtual bool UpdateDraw(mAllocator_c *) override;
     /* 0x100 */ virtual bool GetIsDraw(int) override;

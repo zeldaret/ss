@@ -7,6 +7,13 @@
 
 class dBgS_SplGrpChk : public cBgS_PolyInfo, public cBgS_Chk, public dBgS_Chk {
 public:
+    /* 0x6C */ mVec3_c mGround;
+    /* 0x78 */ f32 mRoof;
+    /* 0x7C */ f32 mHeight;
+    /* 0x80 */ f32 mField_0x80;
+    /* 0x84 */ u32 mFlags;
+    /* 0x88 */ mVec3_c mGroundCopy;
+
     enum {
         /* 0x1 */ FIND = 1,
         /* 0x2 */ IN = 2,
@@ -15,46 +22,51 @@ public:
 
     void Set(mVec3_c &, f32);
     dBgS_SplGrpChk();
-    void Init();
+
+    void Init() {
+        OffIn();
+        OffFind();
+
+        mField_0x80 = -1e9f;
+        SetHeight(mGround.y);
+        ClearPi();
+    }
 
     virtual ~dBgS_SplGrpChk();
 
     void OffFind() {
-        m_flags &= ~FIND;
+        mFlags &= ~FIND;
     }
     void OffIn() {
-        m_flags &= ~IN;
+        mFlags &= ~IN;
     }
     void OffMoveBGOnly() {
-        m_flags &= ~MOVE_BG_ONLY;
+        mFlags &= ~MOVE_BG_ONLY;
     }
     void OnMoveBGOnly() {
-        m_flags |= MOVE_BG_ONLY;
+        mFlags |= MOVE_BG_ONLY;
     }
     void OnFind() {
-        m_flags |= FIND;
+        mFlags |= FIND;
     }
     bool ChkMoveBGOnly() {
-        return m_flags & MOVE_BG_ONLY;
+        return mFlags & MOVE_BG_ONLY;
     }
     void SetHeight(f32 height) {
-        m_height = height;
+        mHeight = height;
     }
     f32 GetHeight() {
-        return m_height;
+        return mHeight;
     }
     mVec3_c &GetPosP() {
-        return m_ground;
+        return mGround;
     }
     f32 GetRoof() const {
-        return m_roof;
+        return mRoof;
     }
-
-private:
-    mVec3_c m_ground;
-    f32 m_roof;
-    f32 m_height;
-    u32 m_flags;
+    void CopyGnd() {
+        mGroundCopy = mGround;
+    }
 };
 
 #endif

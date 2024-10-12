@@ -26,6 +26,8 @@ public:
 
     void fn_803391f0(const cM3dGAab *);
 
+    void fn_80339740(mVec3_c *, f32);
+    void fn_803399b0(mVec3_c *);
     static void fn_80338fb0();
 
     static bool fn_80339070(const cM3dGAab *);

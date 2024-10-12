@@ -45,7 +45,7 @@ public:
         return mGrpPassChk;
     }
 
-    int ChkSameActorPid(const fBase_c *pActor) {
+    int ChkSameActorPid(const fBase_c *pActor) const {
         int id = pActor ? pActor->unique_ID : 0;
         if (id == 0 || mActorId == 0 || mField_0x10 == 0) {
             return false;

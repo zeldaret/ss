@@ -1,8 +1,10 @@
 #include "d/col/bg/d_bg_s.h"
 
+#include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/col/bg/d_bg_s_roof_chk.h"
+#include "d/col/bg/d_bg_s_sph_chk.h"
 #include "d/col/bg/d_bg_s_wtr_chk.h"
 #include "d/col/c/c_bg_s_shdw_draw.h"
 #include "d/col/c/c_m3d.h"
@@ -52,6 +54,8 @@ const char *SKYKEEP_STAGE_NAMES[8] = {
     "D003_0", "D003_1", "D003_2", "D003_3", "D003_4", "D003_5", "D003_6", "D003_7",
 };
 
+GXColor Color_0x80574060 = {0xFF, 0xFF, 0xFF, 0x80};
+char common_folder[] = "Common";
 char MAP_GRADATION_FILE[] = "dat/MapGradation.dat";
 char MAP_SCROLL_TEX_FILE[] = "dat/mapScrollTex_00.dat";
 
@@ -379,7 +383,7 @@ void dBgS::Ct() {
     }
 
     // TODO
-    OarcManager::sInstance->getData("Common", MAP_GRADATION_FILE);
+    OarcManager::sInstance->getData(common_folder, MAP_GRADATION_FILE);
 
     mInSkyKeep = false;
     for (int i = 0; i < 8; ++i) {
@@ -723,107 +727,404 @@ bool dBgS::GetPolySlingshotThrough(cBgS_PolyInfo const &info) {
     return false;
 }
 
-void dBgS::WallCorrect(dBgS_Acch *, bool) {}
-
-f32 dBgS::RoofChk(dBgS_RoofChk *) {}
-
-bool dBgS::SplGrpChk(dBgS_SplGrpChk *) {}
-
-bool dBgS::SphChk(dBgS_SphChk *, void *) {}
-
-void dBgS::MoveBgCrrPos(
-    cBgS_PolyInfo const &, bool param_1, mVec3_c *i_pos, mAng3_c *i_angle, mAng3_c *i_shapeAngle, bool param_5,
-    bool param_6
-) {}
-
-void dBgS::MoveBgTransPos(
-    cBgS_PolyInfo const &i_poly, bool param_1, mVec3_c *i_pos, mAng3_c *i_angle, mAng3_c *i_shapeAngle
-) {}
-
-void dBgS_MoveBGProc_Typical(
-    dBgW *param_0, void *param_1, cBgS_PolyInfo const &param_2, bool param_3, mVec3_c *param_4, mAng3_c *param_5,
-    mAng3_c *param_6
-) {}
-
-void dBgS_MoveBGProc_RotY(
-    dBgW *param_0, void *param_1, cBgS_PolyInfo const &param_2, bool param_3, mVec3_c *param_4, mAng3_c *param_5,
-    mAng3_c *param_6
-) {}
-
-void dBgS_MoveBGProc_TypicalRotY(
-    dBgW *param_0, void *param_1, cBgS_PolyInfo const &param_2, bool param_3, mVec3_c *param_4, mAng3_c *param_5,
-    mAng3_c *param_6
-) {}
-
-void dBgS::RideCallBack(cBgS_PolyInfo const &, dAcBase_c *) {}
-
-void dBgS::ArrowStickCallBack(cBgS_PolyInfo const &, dAcBase_c *, mVec3_c &) {}
-
-void UnkCallback(cBgS_PolyInfo const &, dAcBase_c *) {}
-
-dAcBase_c *dBgS::PushPullCallBack(cBgS_PolyInfo const &, dAcBase_c *, s16, dBgW_Base::PushPullLabel) {}
-
-bool dBgS_CheckBWallPoly(cBgS_PolyInfo const &) {}
-
-bool dBgS_CheckBGroundPoly(cBgS_PolyInfo const &) {}
-
-bool dBgS_CheckBRoofPoly(cBgS_PolyInfo const &) {}
-
-f32 dBgS_GetNY(cBgS_PolyInfo const &poly) {}
-
-mVec3_c dBgS_GetN(cBgS_PolyInfo const &) {}
-
-void dBgS::UpdateScrollTex() {}
-
-void dBgS::SetupMapGX(mMtx_c *) {}
-
-void dBgS::SetupMapMaterial(int matIdx, bool, s32 roomId) {}
-
-UNKTYPE *dBgS::GetMapAccessor() {}
-
-void dBgS::DrawMap(u8 roomId, mMtx_c *, bool bColor, int) {}
-
-void dBgS::SetupScrollGX() {}
-
-void dBgS::SetupScrollMaterial(int matIdx, s32, bool) {
-    const char *_ = "dat/mapScrollTex_00.dat";
+void dBgS::WallCorrect(dBgS_Acch *pAcch, bool bSort) {
+    // Lmao im not doing this rn
+    // pAcch->CalcWallRR();
+    // pAcch->CalcMovePosWork();
 }
 
-void dBgS::DrawMapScroll(u8 roomId, mMtx_c *, bool bColor, int) {}
+f32 dBgS::RoofChk(dBgS_RoofChk *pRoof) {
+    pRoof->Init();
+    pRoof->mPartition.fn_803399b0(pRoof->GetPosP());
+    pRoof->CopyPos();
 
-void dBgS::DrawSkyKeepMap(mMtx_c *, int) {}
+    cBgS_ChkElm *chkElm = mChkElem;
+    int i = 0;
+    do {
+        if (chkElm->CheckAll(pRoof)) {
+            const dAcObjBase_c *pObj = chkElm->mObj.get();
+            dBgW_Base *pBgW = chkElm->mpBgW;
 
-bool dBgS::ConfigureMapTexture(EGG::Heap *) {}
+            if (pBgW->RoofChk(pRoof)) {
+                const dAcObjBase_c *pObj = chkElm->mObj.get();
+                pRoof->SetActorInfo(i, chkElm->mpBgW, pObj ? pObj->unique_ID : 0);
+            }
+        }
+        ++i;
+        ++chkElm;
+    } while (i < mSetCounter);
 
-MapLineSegment::MapLineSegment() {}
+    return pRoof->GetNowY();
+}
 
-MapLineSegment::~MapLineSegment() {}
+bool dBgS::SplGrpChk(dBgS_SplGrpChk *pSplGrp) {
+    bool ret = false;
 
-void MapLineSegment::fn_8033e9a0() {}
+    pSplGrp->Init();
+    pSplGrp->mPartition.fn_80339740(&pSplGrp->mGround, pSplGrp->mRoof);
+    pSplGrp->CopyGnd();
 
-void MapLineSegment::fn_8033e8b0() {}
+    cBgS_ChkElm *chkElm = mChkElem;
+    int i = 0;
+    do {
+        if (chkElm->CheckAll(pSplGrp)) {
+            const dAcObjBase_c *pObj = chkElm->mObj.get();
+            dBgW_Base *pBgW = chkElm->mpBgW;
 
-void MapLineSegment::fn_8033e9c0() {}
+            if (!pSplGrp->ChkMoveBGOnly() || (pBgW->ChkMoveBg() && !pBgW->ChkLock())) {
+                if (pBgW->SplGrpChk(pSplGrp)) {
+                    ret = true;
+                    const dAcObjBase_c *pObj = chkElm->mObj.get();
+                    pSplGrp->SetActorInfo(i, chkElm->mpBgW, pObj ? pObj->unique_ID : 0);
+                    pSplGrp->OnFind();
+                }
+            }
+        }
+        ++i;
+        ++chkElm;
+    } while (i < mSetCounter);
 
-void MapLineSegment::Append() {}
+    return ret;
+}
 
-void MapLineSegment::Remove() {}
+bool dBgS::SphChk(dBgS_SphChk *pSph, void *p1) {
+    if (pSph->mCallback == NULL) {
+        return false;
+    }
+    bool ret = false;
 
-void MapLineSegment::Draw(int, mMtx_c *, bool, int) {}
+    pSph->ClearPi();
+    pSph->mAabb.Set(*pSph);
+    pSph->mPartition.fn_803391f0(&pSph->mAabb);
 
-void dBgS::InitMapParts() {
-    for (int i = 0; i < 31; ++i) {
-        if (MAP_SOLID_MATERIAL_NAMES[i]) {
-            spSolidMatTex[i] = OarcManager::sInstance->getData("Common", MAP_SOLID_MATERIAL_NAMES[i]);
-        } else {
-            spSolidMatTex[i] = nullptr;
+    pSph->SetInfo(BG_ID_MAX, 0, 0);
+
+    cBgS_ChkElm *chkElm = mChkElem;
+    int i = 0;
+    do {
+        if (chkElm->CheckAll(pSph)) {
+            const dAcObjBase_c *pObj = chkElm->mObj.get();
+            dBgW_Base *pBgW = chkElm->mpBgW;
+
+            pSph->SetInfo(i, pBgW, pObj ? pObj->unique_ID : 0);
+            if (pBgW->SphChk(pSph, p1)) {
+                const dAcObjBase_c *pObj = chkElm->mObj.get();
+                pSph->SetActorInfo(i, chkElm->mpBgW, pObj ? pObj->unique_ID : 0);
+                ret = true;
+            }
+        }
+        ++i;
+        ++chkElm;
+    } while (i < mSetCounter);
+
+    return ret;
+}
+
+void dBgS::MoveBgCrrPos(
+    cBgS_PolyInfo const &info, bool param_1, mVec3_c *i_pos, mAng3_c *i_angle, mAng3_c *i_shapeAngle, bool param_5,
+    bool param_6
+) {
+    if (!param_1 || !info.ChkBgIndex()) {
+        return;
+    }
+    int bgIdx = info.GetBgIndex();
+    dBgW_Base *pBg = mChkElem[bgIdx].mpBgW;
+    if (pBg && (!param_5 || pBg->ChkStickWall()) && (!param_6 || pBg->ChkStickRoof()) && pBg->ChkMoveFlag() &&
+        ChkPolySafe(info)) {
+        // TODO -> Check CrrPos Params (void may be dAcObjBase_c)
+        pBg->CrrPos(info, mChkElem[bgIdx].mObj.get(), param_1, i_pos, i_angle, i_shapeAngle);
+    }
+}
+
+void dBgS::MoveBgTransPos(
+    cBgS_PolyInfo const &info, bool param_1, mVec3_c *i_pos, mAng3_c *i_angle, mAng3_c *i_shapeAngle
+) {
+    if (!param_1 || !info.ChkBgIndex()) {
+        return;
+    }
+    int bgIdx = info.GetBgIndex();
+    dBgW_Base *pBg = mChkElem[bgIdx].mpBgW;
+    if (pBg && ChkPolySafe(info)) {
+        const dAcObjBase_c *pObj = GetInstance()->GetActorPointer(info);
+        if ((!pObj || (pObj->baseProperties & 4)) && pBg->ChkMoveFlag()) {
+            // TODO -> Check TransPos Params (void may be dAcObjBase_c)
+            pBg->TransPos(info, mChkElem[bgIdx].mObj.get(), param_1, i_pos, i_angle, i_shapeAngle);
         }
     }
 }
 
-void dBgS::AppendMapSegment(MapLineSegment *) {}
+void dBgS_MoveBGProc_Typical(
+    dBgW *i_bgw, void *i_actor_ptr, cBgS_PolyInfo const &info, bool param_3, mVec3_c *i_pos, mAng3_c *i_angle,
+    mAng3_c *i_shapeAngle
+) {
+    mMtx_c a;
+    if (i_bgw->GetOldInvMtx(&a) != NULL) {
+        mVec3_c moveOld;
+        PSMTXMultVec(a, *i_pos, moveOld);
 
-void dBgS::RemoveMapSegment(MapLineSegment *) {}
+        mVec3_c movePos;
+        PSMTXMultVec(i_bgw->mInvMtx, moveOld, movePos);
+        *i_pos = movePos;
+    }
+}
+
+void dBgS_MoveBGProc_RotY(
+    dBgW *i_bgw, void *i_actor_ptr, cBgS_PolyInfo const &info, bool param_3, mVec3_c *i_pos, mAng3_c *i_angle,
+    mAng3_c *i_shapeAngle
+) {
+    if (!i_shapeAngle) {
+        return;
+    }
+    s16 diffY = i_bgw->GetDiffShapeAngleY();
+    if (i_shapeAngle) {
+        i_shapeAngle->y += diffY;
+    }
+    if (i_angle) {
+        i_angle->y += diffY;
+    }
+}
+
+void dBgS_MoveBGProc_TypicalRotY(
+    dBgW *i_bgw, void *i_actor_ptr, cBgS_PolyInfo const &i_poly, bool param_3, mVec3_c *i_pos, mAng3_c *i_angle,
+    mAng3_c *i_shapeAngle
+) {
+    dBgS_MoveBGProc_Typical(i_bgw, i_actor_ptr, i_poly, param_3, i_pos, i_angle, i_shapeAngle);
+    dBgS_MoveBGProc_RotY(i_bgw, i_actor_ptr, i_poly, param_3, i_pos, i_angle, i_shapeAngle);
+}
+
+void dBgS::RideCallBack(cBgS_PolyInfo const &info, dAcBase_c *pAc) {
+    int idx = info.GetBgIndex();
+
+    dBgW_Base *pBgW = mChkElem[idx].mpBgW;
+    if (!pBgW->ChkUsed()) {
+        return;
+    }
+    pBgW->CallRideCallback(mChkElem[idx].mObj.get(), pAc);
+}
+
+void dBgS::ArrowStickCallBack(cBgS_PolyInfo const &info, dAcBase_c *pAc, mVec3_c &vec) {
+    int idx = info.GetBgIndex();
+
+    dBgW_Base *pBgW = mChkElem[idx].mpBgW;
+    if (!pBgW->ChkUsed()) {
+        return;
+    }
+    pBgW->CallArrowStickCallback(mChkElem[idx].mObj.get(), pAc, &vec);
+}
+
+bool dBgS::UnkCallback(cBgS_PolyInfo const &info, dAcBase_c *pAc) {
+    int idx = info.GetBgIndex();
+
+    dBgW_Base *pBgW = mChkElem[idx].mpBgW;
+    if (!pBgW->ChkUsed()) {
+        return nullptr;
+    }
+    return pBgW->CallUnkCallback(mChkElem[idx].mObj.get(), pAc);
+}
+
+dAcBase_c *dBgS::PushPullCallBack(cBgS_PolyInfo const &info, dAcBase_c *pAc, dBgW_Base::PushPullLabel label) {
+    int idx = info.GetBgIndex();
+
+    dBgW_Base *pBgW = mChkElem[idx].mpBgW;
+    if (!pBgW->ChkUsed()) {
+        return nullptr;
+    }
+    dAcObjBase_c *pObj = mChkElem[idx].mObj.get();
+    if (!pObj) {
+        return false;
+    }
+
+    if (pBgW->GetPushPullCallback() == nullptr) {
+        return false;
+    }
+    return pBgW->GetPushPullCallback()(pObj, pAc, label);
+}
+
+bool dBgS_CheckBWallPoly(cBgS_PolyInfo const &info) {
+    cM3dGPla plane;
+    if (!dBgS::GetInstance()->GetTriPla(info, &plane)) {
+        return false;
+    }
+    if (!(plane.mNormal.y > 0.5f || plane.mNormal.y < -0.8f)) {
+        return true;
+    }
+    return false;
+}
+
+bool dBgS_CheckBGroundPoly(cBgS_PolyInfo const &info) {
+    cM3dGPla plane;
+    if (!dBgS::GetInstance()->GetTriPla(info, &plane)) {
+        return false;
+    }
+    return plane.mNormal.y > 0.5f ? true : false;
+}
+
+bool dBgS_CheckBRoofPoly(cBgS_PolyInfo const &info) {
+    cM3dGPla plane;
+    if (!dBgS::GetInstance()->GetTriPla(info, &plane)) {
+        return false;
+    }
+    return plane.mNormal.y < -0.8f ? true : false;
+}
+
+f32 dBgS_GetNY(cBgS_PolyInfo const &info) {
+    cM3dGPla plane;
+    dBgS::GetInstance()->GetTriPla(info, &plane);
+    return plane.mNormal.y;
+}
+
+mVec3_c dBgS_GetN(cBgS_PolyInfo const &info) {
+    cM3dGPla plane;
+    dBgS::GetInstance()->GetTriPla(info, &plane);
+    return plane.mNormal;
+}
+
+void dBgS::UpdateScrollTex() {
+    MapSrollText_t *scrollTex = (MapSrollText_t *)OarcManager::sInstance->getData(common_folder, MAP_SCROLL_TEX_FILE);
+    for (int i = 0; i < 5; ++i, ++scrollTex) {
+        if (++mField_0x3864[i] >= scrollTex->mField_0x0E) {
+            mField_0x3864[i] = 0;
+        }
+        if (++mField_0x3878[i] >= scrollTex->mField_0x10) {
+            mField_0x3878[i] = 0;
+        }
+    }
+}
+
+void dBgS::SetupMapGX(mMtx_c *) {
+    // TODO
+}
+
+void dBgS::SetupMapMaterial(int matIdx, bool, s32 roomId) {
+    // TODO
+}
+
+extern "C" UNKTYPE *lbl_805754B0;
+UNKTYPE *dBgS::GetMapAccessor() {
+    return lbl_805754B0;
+}
+
+void dBgS::DrawMap(u8 roomId, mMtx_c *, bool bColor, int) {
+    // TODO
+}
+
+void dBgS::SetupScrollGX() {
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX0, FALSE, GX_DUALMTX_IDENT);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX3x4, GX_TG_POS, GX_TEXMTX1, FALSE, GX_DUALMTX_IDENT);
+    GXSetNumIndStages(0);
+    GXSetNumTevStages(4);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevKColor(GX_KCOLOR3, Color_0x80574060);
+    GXSetTevKColorSel(GX_TEVSTAGE1, GX_TEV_KCSEL_K3_A);
+    GXSetTevKAlphaSel(GX_TEVSTAGE1, GX_TEV_KASEL_K3_A);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, GX_TEXMAP1, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_TEXC, GX_CC_CPREV, GX_CC_KONST, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_TEXA, GX_CA_APREV, GX_CA_KONST, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_C0, GX_CC_C1, GX_CC_CPREV, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_A1);
+    GXSetTevAlphaOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevOrder(GX_TEVSTAGE3, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+    GXSetTevColorIn(GX_TEVSTAGE3, GX_CC_ZERO, GX_CC_CPREV, GX_CC_C2, GX_CC_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE3, GX_CA_ZERO, GX_CA_APREV, GX_CA_A2, GX_CA_ZERO);
+    GXSetTevAlphaOp(GX_TEVSTAGE3, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_OR, GX_ALWAYS, 0);
+}
+
+void dBgS::SetupScrollMaterial(int matIdx, s32, bool) {
+    // TODO
+}
+
+void dBgS::DrawMapScroll(u8 roomId, mMtx_c *, bool bColor, int) {
+    // TODO
+}
+
+void dBgS::DrawSkyKeepMap(mMtx_c *, int) {
+    if (!mInSkyKeep) {
+        return;
+    }
+    // TODO
+}
+
+bool dBgS::ConfigureMapTexture(EGG::Heap *) {
+    // TODO
+}
+
+MapLineSegment::MapLineSegment() : bShow(false) {}
+
+MapLineSegment::~MapLineSegment() {
+    Dt();
+}
+
+void MapLineSegment::fn_8033e9a0() {
+    // Shrug
+}
+
+void MapLineSegment::Dt() {
+    Remove();
+}
+
+void MapLineSegment::fn_8033e9c0() {
+    // Shrug
+}
+
+void MapLineSegment::Append() {
+    if (!bShow) {
+        dBgS::GetInstance()->AppendMapSegment(this);
+        bShow = true;
+    }
+}
+
+void MapLineSegment::Remove() {
+    if (bShow) {
+        dBgS::GetInstance()->RemoveMapSegment(this);
+        bShow = false;
+    }
+}
+
+void MapLineSegment::Draw(int, mMtx_c *, bool, int) {
+    // Default no draw
+}
+
+void dBgS::InitMapParts() {
+    MapLineList::Iterator it, end;
+    it = mList_0x388C.GetBeginIter();
+    end = mList_0x388C.GetEndIter();
+    for (MapLineList::Iterator temp = it; it != end;) {
+        if (it != end) {
+            mList_0x388C.remove(&*temp);
+            temp = ++it;
+        }
+    }
+
+    for (int i = 0; i < 31; ++i) {
+        if (MAP_SOLID_MATERIAL_NAMES[i]) {
+            spSolidMatTex[i] = OarcManager::sInstance->getData(common_folder, MAP_SOLID_MATERIAL_NAMES[i]);
+        } else {
+            spSolidMatTex[i] = nullptr;
+        }
+    }
+    for (int i = 0; i < 5; ++i) {
+        spScrollMapTex[i] = OarcManager::sInstance->getData(common_folder, MAP_SCROLL_MATERIAL_NAMES[i]);
+    }
+}
+
+void dBgS::AppendMapSegment(MapLineSegment *pSeg) {
+    mList_0x388C.insert(pSeg);
+}
+
+void dBgS::RemoveMapSegment(MapLineSegment *pSeg) {
+    mList_0x388C.remove(pSeg);
+}
 
 void dBgS::DrawMapSegments(int p1, mMtx_c *p2, bool p3, int p4) {
     MapLineList::Iterator end, it;
@@ -837,8 +1138,11 @@ void dBgS::DrawMapSegments(int p1, mMtx_c *p2, bool p3, int p4) {
 
 void dBgS::ClearMapSegments() {
     // Idk tbh
-    for (MapLineList::Iterator prevIt, it = mList_0x388C.GetBeginIter(); it != mList_0x388C.GetEndIter(); it = prevIt) {
-        prevIt = ++it;
+    MapLineList::Iterator prevIt, it;
+    it = mList_0x388C.GetBeginIter();
+    while (it != mList_0x388C.GetEndIter()) {
+        prevIt = it;
+        ++it;
         mList_0x388C.remove(&*prevIt);
     };
 }
