@@ -5,7 +5,7 @@
 #include <toBeSorted/item_story_flag_manager.h>
 #include <toBeSorted/tlist.h>
 
-typedef TList<DowsingTarget, 0> DowsingList;
+typedef TList<DowsingTarget> DowsingList;
 
 DowsingList DOWSING_LISTS[8];
 
@@ -193,9 +193,9 @@ void DowsingTarget::init() {}
 void DowsingTarget::execute() {}
 
 // Not sure what this is
-inline static TListNode *getNode(u8 slot, DowsingTarget *t) {
+inline static TListNode<DowsingTarget> *getNode(u8 slot, DowsingTarget *t) {
     if (t->mLink.mpNext == nullptr || t->mLink.mpPrev == nullptr) {
-        return &DOWSING_LISTS[slot].mNode;
+        return &DOWSING_LISTS[slot].mStartEnd;
     } else {
         return &t->mLink;
     }
@@ -207,7 +207,7 @@ static bool insertDowsingTarget(DowsingTarget *target) {
         return false;
     }
 
-    if (getNode(slot, target) != &DOWSING_LISTS[slot].mNode) {
+    if (getNode(slot, target) != &DOWSING_LISTS[slot].mStartEnd) {
         return false;
     }
     DOWSING_LISTS[slot].insert(target);
@@ -220,7 +220,7 @@ static bool removeDowsingTarget(DowsingTarget *target) {
         return false;
     }
 
-    if (getNode(slot, target) != &DOWSING_LISTS[slot].mNode) {
+    if (getNode(slot, target) != &DOWSING_LISTS[slot].mStartEnd) {
         DOWSING_LISTS[slot].remove(target);
         return true;
     }

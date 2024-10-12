@@ -125,7 +125,7 @@ struct MapLineSegment {
     void Remove();
 
     /* 0x4 */ bool bShow;
-    /* 0x8 */ TListNode mLink;
+    /* 0x8 */ TListNode<MapLineSegment> mLink;
 };
 
 class dBgS : public cBgS {
@@ -133,7 +133,7 @@ private:
     static dBgS *spInstance;
     static const void *spSolidMatTex[31];
     static const void *spLiquidMatTex[5];
-    typedef TList<MapLineSegment, offsetof(MapLineSegment, mLink)> MapLineList;
+    typedef TList<MapLineSegment> MapLineList;
 
 public:
     /* 0x2EF8 */ EGG::CpuTexture *mMapTexture;
@@ -230,8 +230,8 @@ public:
     void DrawMapSegments(int, mMtx_c *, bool, int);
     void ClearMapSegments();
 
-    void SetLightingCode(dAcObjBase_c *, const cBgS_GndChk &);
-    void SetLightingCode(dAcObjBase_c *, f32);
+    void SetLightingCode(dAcObjBase_c *, const cBgS_PolyInfo &);
+    f32 SetLightingCode(dAcObjBase_c *, f32);
     int GetLightingCode(const mVec3_c *);
     bool GetPolyPreventObjOnly(const cBgS_PolyInfo &);
     bool GetMapGradationColor(GXColor *);

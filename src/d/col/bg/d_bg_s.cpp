@@ -825,7 +825,15 @@ void dBgS::AppendMapSegment(MapLineSegment *) {}
 
 void dBgS::RemoveMapSegment(MapLineSegment *) {}
 
-void dBgS::DrawMapSegments(int, mMtx_c *, bool, int) {}
+void dBgS::DrawMapSegments(int p1, mMtx_c *p2, bool p3, int p4) {
+    MapLineList::Iterator end, it;
+    end = mList_0x388C.GetEndIter();
+    it = mList_0x388C.GetBeginIter();
+    while (it != end) {
+        it->Draw(p1, p2, p3, p4);
+        ++it;
+    };
+}
 
 void dBgS::ClearMapSegments() {
     // Idk tbh
@@ -835,9 +843,26 @@ void dBgS::ClearMapSegments() {
     };
 }
 
-void dBgS::SetLightingCode(dAcObjBase_c *, const cBgS_GndChk &) {}
+void dBgS::SetLightingCode(dAcObjBase_c *pObj, const cBgS_PolyInfo &info) {
+    const dAcObjBase_c *actor = GetInstance()->GetActorPointer(info);
+    if (actor && actor->mLightingInfo.mLightingCode != 0xF) {
+        pObj->mLightingInfo.mLightingCode = actor->mLightingInfo.mLightingCode;
+    } else {
+        pObj->mLightingInfo.mLightingCode = GetLightingCode(info);
+    }
+}
 
-void dBgS::SetLightingCode(dAcObjBase_c *, f32) {}
+f32 dBgS::SetLightingCode(dAcObjBase_c *pObj, f32 height) {
+    dBgS_ObjGndChk objGndChk;
+    mVec3_c pos = pObj->GetPostion();
+    pos.y += height;
+    objGndChk.SetPos(&pos);
+    f32 gndCross = GroundCross(&objGndChk);
+    if (gndCross != -1.0e9f) {
+        SetLightingCode(pObj, objGndChk);
+    }
+    return gndCross;
+}
 
 int dBgS::GetLightingCode(const mVec3_c *pPos) {
     dBgS_ObjGndChk objGndChk;

@@ -33,43 +33,49 @@ struct ActorCarryStruct {
     }
 };
 
+// Ghidra has it as `unk_ActorObjectBase`
+struct LightingInfo {
+    /* 0x00 */ u8 mField_0x00[0x60 - 0x00];
+    /* 0x60 */ u8 mLightingCode;
+    /* 0x61 */ u8 mField_0x61[0x70 - 0x61];
+};
+
 // Ghidra: ActorObjectBase
 //   size: 0x330
 // vtable: 0x805015b8
 // non-official name
 class dAcObjBase_c : public dAcBase_c {
 public:
-    // Data Members
-    f32 yoffset;
-    char _0[4];
-    f32 unkfloat;
-    char _1[12];
-    u16 targetFiTextId;
-    u8 unkByteTargetFiRelated;
-    mVec3_c poscopy1;
-    mVec3_c poscopy2;
-    mVec3_c poscopy3;
-    mAng3_c rotcopy1;
-    f32 forwardSpeed;
-    f32 forwardAccel;
-    f32 forwardMaxSpeed;
-    mVec3_c velocity;
+    /* 0x0FC */ f32 yoffset;
+    /* 0x100 */ char _0[4];
+    /* 0x104 */ f32 unkfloat;
+    /* 0x108 */ char _1[12];
+    /* 0x114 */ u16 targetFiTextId;
+    /* 0x116 */ u8 unkByteTargetFiRelated;
+    /* 0x118 */ mVec3_c poscopy1;
+    /* 0x124 */ mVec3_c poscopy2;
+    /* 0x130 */ mVec3_c poscopy3;
+    /* 0x13C */ mAng3_c rotcopy1;
+    /* 0x144 */ f32 forwardSpeed;
+    /* 0x148 */ f32 forwardAccel;
+    /* 0x14C */ f32 forwardMaxSpeed;
+    /* 0x150 */ mVec3_c velocity;
     /* 0x15C */ mMtx_c mWorldMtx;
-    nw4r::math::AABB boundingBox;
+    /* 0x18C */ nw4r::math::AABB boundingBox;
     /* 0x1A4 */ f32 mCullingDistance;
     /* 0x1A8 */ f32 field_0x1A8;
     /* 0x1AC */ u32 mObjectActorFlags;
 
-    u8 unk_0x1B0[0x1C0 - 0x1B0];
+    /* 0x1B0 */ u8 unk_0x1B0[0x1C0 - 0x1B0];
 
     /* 0x1C0 */ UnkCCDStruct mCCdStruct;
 
-    mVec3_c mStartingPos;
-    mAng3_c mStartingRot;
-
+    /* 0x1FC */ mVec3_c mStartingPos;
+    /* 0x208 */ mAng3_c mStartingRot;
     /* 0x210 */ ActorCarryStruct mActorCarryInfo;
-
-    u8 unk_0x1EC[0x330 - 0x2B8];
+    /* 0x2B8 */ u32 mField_0x2B8;
+    /* 0x2BC */ LightingInfo mLightingInfo;
+    /* 0x32C */ u32 mField_0x32C;
 
 public:
     // could be their own thing?
