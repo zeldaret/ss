@@ -985,6 +985,7 @@ d/col/bg/d_bg_s_gnd_chk.cpp:
 
 d/col/bg/d_bg_s_grp_pass_chk.cpp:
 	.text       start:0x80341D70 end:0x80341E18
+	.data       start:0x80547998 end:0x805479A4
 
 d/col/bg/d_bg_s_lin_chk.cpp:
 	.text       start:0x80341E20 end:0x80342C98
