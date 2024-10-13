@@ -219,7 +219,9 @@ public:
     /* 0x10C */ virtual void ClassifyPlane();
 
     u32 GetOldInvMtx(mMtx_c *m);
+
     // MtxP GetBaseMtxP() { return pm_base; }
+
     bool ChkNoCalcVtx() {
         return mFlags & NO_CALC_VTX_e;
     }
