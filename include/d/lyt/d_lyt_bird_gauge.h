@@ -20,7 +20,7 @@ private:
 
     /* 0x04 */ UI_STATE_MGR_DECLARE(dLytBirdGaugeMain_c);
     /* 0x40 */ d2d::dLytSub mLyt;
-    /* 0xD4 */ d2d::AnmGroup_c mAnmGroups[3];
+    /* 0xD4 */ d2d::AnmGroup_c mAnmGroups[8];
 };
 
 class dLytBirdGauge_c : public dLytMeterBase {
