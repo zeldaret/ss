@@ -392,6 +392,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_heart.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_shield_gauge.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_do_button.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_note.cpp"),
             Object(Matching, "d/lyt/d_lyt_battery.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_area_caption.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_pause_disp_00.cpp"),

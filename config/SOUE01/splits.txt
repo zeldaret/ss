@@ -402,6 +402,11 @@ d/lyt/d_lyt_map.cpp:
 d/lyt/d_lyt_note.cpp:
 	.text       start:0x80148DF0 end:0x80149C28
 	.ctors      start:0x804DB770 end:0x804DB774
+	.rodata     start:0x804E7F50 end:0x804E7F80
+	.data       start:0x805225E8 end:0x80522820
+	.sdata      start:0x80572868 end:0x80572870
+	.sdata2     start:0x80579FB8 end:0x80579FC8
+	.bss        start:0x805B0830 end:0x805B0930
 
 d/lyt/d_lyt_battery.cpp:
 	.text       start:0x80149C30 end:0x8014AD18
@@ -423,6 +428,10 @@ d/lyt/d_lyt_area_caption.cpp:
 d/lyt/d_lyt_wipe.cpp:
 	.text       start:0x8014C6C0 end:0x8014E008
 	.ctors      start:0x804DB77C end:0x804DB780
+
+d/lyt/d_lyt_help.cpp:
+	.text       start:0x8014E010 end:0x80150428
+	.ctors      start:0x804DB780 end:0x804DB784
 
 d/lyt/d_lyt_bird_gauge.cpp:
 	.text       start:0x80152FD0 end:0x801548D8

@@ -23,8 +23,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterPlusBtn_c, ToUnuse);
     STATE_FUNC_DECLARE(dLytMeterPlusBtn_c, Unuse);
 
-    UI_STATE_MGR_DECLARE(dLytMeterPlusBtn_c);
-    d2d::dLytSub mLyt;
+    /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterPlusBtn_c);
+    /* 0x040 */ d2d::dLytSub mLyt;
     /* 0x0D8 */ d2d::AnmGroup_c mAnmGroups[3];
     /* 0x??? */ u8 padding[0x7A64 - 0x7A38];
 };

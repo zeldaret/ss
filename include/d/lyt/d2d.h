@@ -221,6 +221,7 @@ private:
     /* 0x24 */ nw4r::lyt::AnimTransform *mpAnmTransform;
 };
 
+// Size: 0x40
 struct AnmGroup_c : public AnmGroupBase_c {
     AnmGroup_c() : AnmGroupBase_c(&mFrameCtrl) {}
     virtual ~AnmGroup_c() {}
