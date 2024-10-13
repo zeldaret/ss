@@ -39,7 +39,7 @@ bool dLytMeterRemoconBg_c::build(d2d::ResAccIf_c *resAcc) {
     return true;
 }
 
-bool dLytMeterRemoconBg_c::LytMeter0x10() {
+bool dLytMeterRemoconBg_c::remove() {
     return true;
 }
 
@@ -52,7 +52,7 @@ const char *dLytMeterRemoconBg_c::getName() const {
     return mLyt.getName();
 }
 
-void *dLytMeterRemoconBg_c::LytMeter0x1C() {
+d2d::LytBase_c *dLytMeterRemoconBg_c::getLyt() {
     return &mLyt;
 }
 

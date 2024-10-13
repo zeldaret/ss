@@ -117,7 +117,7 @@ bool dLytMeter1Button_c::build(d2d::ResAccIf_c *resAcc) {
     return true;
 }
 
-bool dLytMeter1Button_c::LytMeter0x10() {
+bool dLytMeter1Button_c::remove() {
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].unbind();
         mAnmGroups[i].afterUnbind();
@@ -225,7 +225,7 @@ bool dLytMeter2Button_c::build(d2d::ResAccIf_c *resAcc) {
     return true;
 }
 
-bool dLytMeter2Button_c::LytMeter0x10() {
+bool dLytMeter2Button_c::remove() {
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].unbind();
         mAnmGroups[i].afterUnbind();

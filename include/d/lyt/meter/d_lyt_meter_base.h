@@ -5,6 +5,7 @@
 
 namespace d2d {
 class ResAccIf_c;
+class LytBase_c;
 }
 
 class dLytMeterBase {
@@ -12,10 +13,10 @@ public:
     dLytMeterBase() : field_0x04(false), field_0x05(0) {}
     virtual ~dLytMeterBase() {}
     virtual bool build(d2d::ResAccIf_c *resAcc) = 0;
-    virtual bool LytMeter0x10() = 0;
+    virtual bool remove() = 0;
     virtual bool LytMeter0x14() = 0;
     virtual nw4r::lyt::Pane *getPane() = 0;
-    virtual void *LytMeter0x1C() = 0;
+    virtual d2d::LytBase_c *getLyt() = 0;
     virtual const char *getName() const = 0;
     virtual bool LytMeter0x24() const {
         return field_0x04;

@@ -28,13 +28,13 @@ public:
     dLytMeter1Button_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dLytMeter1Button_c() {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
-    virtual bool LytMeter0x10() override;
+    virtual bool remove() override;
     virtual bool LytMeter0x14() override;
     virtual nw4r::lyt::Pane *getPane() override {
         return mLyt.getLayout()->GetRootPane();
     }
-    virtual void *LytMeter0x1C() override {
-        return (void*)&mLyt;
+    virtual d2d::LytBase_c *getLyt() override {
+        return &mLyt;
     }
     virtual const char *getName() const {
         return mLyt.getName();
@@ -62,13 +62,13 @@ public:
     dLytMeter2Button_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dLytMeter2Button_c() {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
-    virtual bool LytMeter0x10() override;
+    virtual bool remove() override;
     virtual bool LytMeter0x14() override;
     virtual nw4r::lyt::Pane *getPane() override {
         return mLyt.getLayout()->GetRootPane();
     }
-    virtual void *LytMeter0x1C() override {
-        return (void*)&mLyt;
+    virtual d2d::LytBase_c *getLyt() override {
+        return &mLyt;
     }
     virtual const char *getName() const {
         return mLyt.getName();

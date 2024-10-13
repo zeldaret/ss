@@ -71,7 +71,7 @@ bool dLytMeterGanbariGauge_c::build(d2d::ResAccIf_c *resAcc) {
     return true;
 }
 
-bool dLytMeterGanbariGauge_c::LytMeter0x10() {
+bool dLytMeterGanbariGauge_c::remove() {
     return true;
 }
 
@@ -84,7 +84,7 @@ const char *dLytMeterGanbariGauge_c::getName() const {
     return mLyt.getName();
 }
 
-void *dLytMeterGanbariGauge_c::LytMeter0x1C() {
+d2d::LytBase_c *dLytMeterGanbariGauge_c::getLyt() {
     return &mLyt;
 }
 

@@ -149,7 +149,7 @@ bool FrameCtrl_c::isStop() const {
     f32 actualEnd;
     switch (mFlags) {
         case FLAG_NO_LOOP:                  actualEnd = mEndFrame - 1.0f; return mCurrFrame >= actualEnd;
-        case FLAG_NO_LOOP | FLAG_BACKWARDS: return mCurrFrame <= 0;
+        case FLAG_NO_LOOP | FLAG_BACKWARDS: return mCurrFrame <= 0.0f;
         default:                            return false;
     }
 }

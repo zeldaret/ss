@@ -198,13 +198,15 @@ struct AnmGroupBase_c {
 
     inline void playBackwardsOnce() {
         mpFrameCtrl->setFlags(FLAG_NO_LOOP | FLAG_BACKWARDS);
-        m2d::FrameCtrl_c &ctrl = *mpFrameCtrl;
-        ctrl.setCurrFrame(ctrl.getEndFrame());
-        syncAnmFrame();
+        setToEnd2();
     }
 
     inline void playLoop() {
         mpFrameCtrl->setFlags(FLAG_NO_LOOP);
+        setToEnd2();
+    }
+
+    inline void setToEnd2() {
         m2d::FrameCtrl_c &ctrl = *mpFrameCtrl;
         ctrl.setCurrFrame(ctrl.getEndFrame());
         syncAnmFrame();
