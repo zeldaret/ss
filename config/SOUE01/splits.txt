@@ -978,6 +978,10 @@ d/col/bg/d_bg_s_chk.cpp:
 d/col/bg/d_bg_s_gnd_chk.cpp:
 	.text       start:0x80341490 end:0x80341D68
 	.ctors      start:0x804DB900 end:0x804DB904
+	.data       start:0x80547898 end:0x80547994
+	.sbss       start:0x80575CF8 end:0x80575CFC
+	.sdata2     start:0x8057D140 end:0x8057D144
+	.bss        start:0x805D01C8 end:0x805D0268
 
 d/col/bg/d_bg_s_grp_pass_chk.cpp:
 	.text       start:0x80341D70 end:0x80341E18
