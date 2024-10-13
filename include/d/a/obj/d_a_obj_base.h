@@ -52,10 +52,10 @@ public:
     /* 0x108 */ char _1[12];
     /* 0x114 */ u16 targetFiTextId;
     /* 0x116 */ u8 unkByteTargetFiRelated;
-    /* 0x118 */ mVec3_c poscopy1;
+    /* 0x118 */ mVec3_c mOldPosition;
     /* 0x124 */ mVec3_c poscopy2;
     /* 0x130 */ mVec3_c poscopy3;
-    /* 0x13C */ mAng3_c rotcopy1;
+    /* 0x13C */ mAng3_c angle;
     /* 0x144 */ f32 forwardSpeed;
     /* 0x148 */ f32 forwardAccel;
     /* 0x14C */ f32 forwardMaxSpeed;
@@ -78,6 +78,16 @@ public:
     /* 0x32C */ u32 mField_0x32C;
 
 public:
+    mVec3_c &GetOldPosition() {
+        return mOldPosition;
+    }
+    mVec3_c &GetVelocity() {
+        return velocity;
+    }
+    mAng3_c &GetAngle() {
+        return angle;
+    }
+
     // could be their own thing?
     /* 8002de40 */ static void *getOarcFile(const char *oarcName, const char *fileName);
     /* 8002de60 */ static void *getOarcSubEntry(const char *oarcName, const char *fileName);
@@ -154,6 +164,7 @@ public:
     );
 
 protected:
+    // TODO May be cM3dGAab (has a very similar set func)
     inline void setBoundingBox(mVec3_c min, mVec3_c max) {
         boundingBox.min = min;
         boundingBox.max = max;

@@ -12,6 +12,7 @@ void cBgS_GndChk::SetPos(const mVec3_c &pPos) {
     mPos.y = pPos.y;
     mPos.z = pPos.z;
 }
+
 void cBgS_GndChk::SetPos(const mVec3_c *pPos) {
     mPos = *pPos;
 }

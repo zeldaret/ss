@@ -27,7 +27,7 @@ public:
         OffIn();
         OffFind();
 
-        mField_0x80 = -1e9f;
+        mField_0x80 = -1000000000.0f;
         SetHeight(mGround.y);
         ClearPi();
     }

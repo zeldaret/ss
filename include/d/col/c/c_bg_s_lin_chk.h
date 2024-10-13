@@ -32,6 +32,10 @@ public:
     void SetHit() {
         mHit = true;
     }
+
+    const mVec3_c &GetLinEnd() const {
+        return mLin.mEnd;
+    }
 };
 
 #endif

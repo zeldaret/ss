@@ -28,7 +28,6 @@ public:
 
 public:
     cBgS_Chk();
-    // vt at 0x24
     virtual ~cBgS_Chk();
     void SetActorID(u32 *);
 
@@ -59,6 +58,15 @@ public:
 
     bool ChkField_0xE(const dBgW_Base *pBg) const {
         return mField_0x0E & pBg->GetField_0x22();
+    }
+
+    void SetExtChk(const cBgS_Chk &other) {
+        mPolyPassChk = other.mPolyPassChk;
+        mGrpPassChk = other.mGrpPassChk;
+        mActorId = other.mActorId;
+        mField_0x10 = other.mField_0x10;
+        mField_0x0C = other.mField_0x0C;
+        mField_0x0E = other.mField_0x0E;
     }
 };
 

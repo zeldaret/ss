@@ -59,6 +59,27 @@ char common_folder[] = "Common";
 char MAP_GRADATION_FILE[] = "dat/MapGradation.dat";
 char MAP_SCROLL_TEX_FILE[] = "dat/mapScrollTex_00.dat";
 
+void _float_ordering() {
+    -1000000000.0f;
+    1000000000.0f;
+    0.0f;
+    1000.0f;
+    1.0f;
+    -1.0f;
+    0.5f;
+    -0.8f;
+    1200.0f;
+    -0.5f;
+    -10000.0f;
+    100.0f;
+    255.0f;
+    4503599627370496.0; // Conversions
+    4503601774854144.0; // Conversions
+    135.0f;
+    (f32)65535;
+    (1 / 256.f);
+}
+
 cBgS_ChkElm::cBgS_ChkElm() {
     Init();
 }

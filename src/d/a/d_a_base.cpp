@@ -11,7 +11,6 @@
 #include "toBeSorted/scgame.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 
-
 // .sdata
 u32 dAcBase_c::s_Create_RoomId = -1;
 u32 dAcBase_c::s_Create_Params2 = -1;

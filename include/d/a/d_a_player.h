@@ -1,7 +1,49 @@
 #include <d/a/obj/d_a_obj_base.h>
 
 class dAcPy_c : public dAcObjBase_c {
+    // See Below for some info
+    // https://github.com/lepelog/skywardsword-tools/wiki/Player-Actor
 public:
+    // These Flags are named under general guesses. Very likely may need some changes
+    // Correspond to mActionFlags
+    enum dAcPy_FLG0 {
+        FLG0_ON_FOOT = 0x80000000,
+        FLG0_USE_ITEM_0 = 0x40000000,
+        FLG0_USE_ITEM_1 = 0x20000000,
+        FLG0_UNK_GEN_MOVE = 0x10000000,
+        FLG0_ATTACK_MOVE = 0x8000000,
+        FLG0_USE_ITEM_2 = 0x4000000,
+        FLG0_RECOVER_ELEC = 0x2000000,
+        FLG0_CRAWLING = 0x1000000,
+        FLG0_TIGHT_ROPE = 0x800000,
+        FLG0_SWING_ROPE = 0x400000,
+        FLG0_PUSHPULL = 0x200000,
+        FLG0_UNK_100000 = 0x100000,
+        FLG0_UNK_80000 = 0x80000,
+        FLG0_IN_WATER = 0x40000,
+        FLG0_ON_LADDDER = 0x20000,
+        FLG0_ON_VINES = 0x10000,
+        FLG0_UNK_0x8000 = 0x8000,
+        FLG0_UNK_0x4000 = 0x4000,
+        FLG0_INTERATION = 0x2000,
+        FLG0_BASIC_ACTION = 0x1000,
+        FLG0_HANGING_ITEM = 0x800,
+        FLG0_EXTERN_CONTROL = 0x400,
+        FLG0_ATTACK_RELATED = 0x200,
+        FLG0_UNK_0x100 = 0x100,
+        FLG0_UNK_0x80 = 0x80,
+        FLG0_HANGING_LEDGE = 0x40,
+        FLG0_UNK_0x20 = 0x20,
+        FLG0_UNK_0x10 = 0x10,
+        FLG0_DAMAGED = 0x8,
+        FLG0_UNK_0x4 = 0x4,
+        FLG0_IN_AIR = 0x2,
+        FLG0_STATIONARY = 0x1,
+
+        FLG0_FLY = FLG0_TIGHT_ROPE | FLG0_SWING_ROPE | FLG0_IN_WATER | FLG0_ON_LADDDER | FLG0_ON_VINES |
+                   FLG0_HANGING_ITEM | FLG0_HANGING_LEDGE | FLG0_UNK_0x10 | FLG0_IN_AIR,
+    };
+
     dAcPy_c();
     virtual ~dAcPy_c();
 
@@ -188,6 +230,10 @@ public:
 
     inline bool checkFlags0x350(u32 mask) const {
         return (someFlags_0x350 & mask) != 0;
+    }
+
+    bool CheckPlayerFly() const {
+        return mActionFlags & FLG0_FLY;
     }
 
     static dAcPy_c *LINK;

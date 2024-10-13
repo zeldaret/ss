@@ -70,17 +70,17 @@ void dCcD_Sph::init(const dCcD_SrcSph &src) {
 
 void dCcD_Sph::setCenter(const mVec3_c &c) {
     setAtVec(mVec3_c::Zero);
-    SetC(c);
+    SetC(&c);
 }
 
 void dCcD_Sph::moveCenter(const mVec3_c &c) {
     setAtVec(c - GetC());
-    SetC(c);
+    SetC(&c);
 }
 
 void dCcD_Sph::setCenterAndAtVec(const mVec3_c &a, const mVec3_c &b) {
     setAtVec(b);
-    SetC(a);
+    SetC(&a);
 }
 
 void *dCcD_Sph::dCcD_GObjInf_0x0C() {

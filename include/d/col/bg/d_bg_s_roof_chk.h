@@ -9,17 +9,17 @@ class dBgS_RoofChk : public cBgS_PolyInfo, public cBgS_Chk, public dBgS_Chk {
 public:
     /* 0x6C */ mVec3_c mPos;
     /* 0x78 */ f32 mNowY;
-    /* 0x7C */ int field_0x48;
+    /* 0x7C */ u8 field_0x7C;
     /* 0x80 */ mVec3_c mPosCopy;
 
     dBgS_RoofChk();
 
     void Init() {
-        SetNowY(1e9f);
+        SetNowY(1000000000.0f);
         ClearPi();
     }
 
-    void SetPos(mVec3_c const &);
+    void SetPos(mVec3_c const *);
 
     virtual ~dBgS_RoofChk();
 

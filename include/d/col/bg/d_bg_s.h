@@ -5,7 +5,6 @@
 #include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_bg.h"
-#include "d/col/bg/d_bg_s_sph_chk.h"
 #include "d/col/bg/d_bg_w.h"
 #include "d/col/bg/d_bg_w_base.h"
 #include "d/col/bg/d_bg_w_kcol.h"
@@ -247,6 +246,10 @@ public:
     int GetLightingCode(const mVec3_c *);
     bool GetPolyPreventObjOnly(const cBgS_PolyInfo &);
     bool GetMapGradationColor(GXColor *);
+
+    bool WaterChk(dBgS_SplGrpChk *chk) {
+        return SplGrpChk(chk);
+    }
 };
 
 void dBgS_MoveBGProc_Trans(

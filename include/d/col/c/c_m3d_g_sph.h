@@ -11,8 +11,8 @@ public:
     /* 0x10 */ f32 mRatio;
     cM3dGSph();
 
-    void SetC(const mVec3_c &);
-    void Set(const mVec3_c &, f32);
+    void SetC(const mVec3_c *);
+    void Set(const mVec3_c *, f32);
     void SetR(f32);
     void SetC(f32, f32, f32);
 

@@ -7,7 +7,7 @@ class dBgS_WtrChk : public dBgS_SplGrpChk {
 public:
     dBgS_WtrChk();
 
-    virtual ~dBgS_WtrChk() {}
+    virtual ~dBgS_WtrChk();
 
     dBgS_WtrChk &GetInstance();
     static void CtInstance();

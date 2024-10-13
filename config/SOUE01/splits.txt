@@ -964,10 +964,12 @@ d/col/bg/d_bg_s.cpp:
 	.rodata     start:0x804F0C00 end:0x804F0D00
 	.data       start:0x80547698 end:0x805477C0
 	.sdata      start:0x80574060 end:0x80574070
-	.sdata2     start:0x8057D068 end:0x8057D0C0
+	.sdata2     start:0x8057D068 end:0x8057D0FC
 
 d/col/bg/d_bg_s_acch.cpp:
 	.text       start:0x8033F150 end:0x803412F8
+	.data       start:0x805477C0 end:0x80547868
+	.sdata2     start:0x8057D100 end:0x8057D13C
 
 d/col/bg/d_bg_s_chk.cpp:
 	.text       start:0x80341300 end:0x80341488

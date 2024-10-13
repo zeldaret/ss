@@ -27,8 +27,8 @@ class cM3dGCir : public cM2dGCir {
     f32 mPosZ;
 
 public:
-    cM3dGCir(void);
-    virtual ~cM3dGCir();
+    cM3dGCir() {}
+    virtual ~cM3dGCir(){};
     void Set(f32, f32, f32, f32);
 };
 

@@ -129,13 +129,17 @@ public:
     void copyPosition() {
         pos_copy = position;
     }
-
-    const mVec3_c &GetPostion() const {
-        return position;
-    }
     void copyRotation() {
         rot_copy = rotation;
     }
+
+    mVec3_c &GetPostion() {
+        return position;
+    }
+    mAng3_c &GetRotation() {
+        return rotation;
+    }
+
     mVec3_c GetPostionDifference(const dAcBase_c &other) {
         return position - other.position;
     }
