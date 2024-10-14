@@ -996,6 +996,7 @@ d/col/bg/d_bg_s_lin_chk.cpp:
 
 d/col/bg/d_bg_s_poly_pass_chk.cpp:
 	.text       start:0x80342CA0 end:0x80342D68
+	.data       start:0x80547B88 end:0x80547B94
 
 d/col/bg/d_bg_s_roof_chk.cpp:
 	.text       start:0x80342D68 end:0x803431A8
