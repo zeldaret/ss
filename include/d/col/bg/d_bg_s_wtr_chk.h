@@ -9,10 +9,20 @@ public:
 
     virtual ~dBgS_WtrChk();
 
-    dBgS_WtrChk &GetInstance();
-    static void ClearInstance();
+    static dBgS_WtrChk &GetInstance() {
+        return sInstance;
+    }
+    static f32 GetWaterHeight() {
+        return sWaterHeight;
+    }
 
+    static void ClearInstance();
+    static bool CheckPos(const mVec3_c *, bool, f32, f32);
+    static int GetMaterial();
+
+private:
     static dBgS_WtrChk sInstance;
+    static f32 sWaterHeight;
 };
 
 #endif

@@ -7,10 +7,10 @@
 
 class dBgS_SplGrpChk : public cBgS_PolyInfo, public cBgS_Chk, public dBgS_Chk {
 public:
-    /* 0x6C */ mVec3_c mGround;
+    /* 0x6C */ mVec3_c mGnd;
     /* 0x78 */ f32 mRoof;
     /* 0x7C */ f32 mHeight;
-    /* 0x80 */ f32 mField_0x80;
+    /* 0x80 */ f32 mGroundH;
     /* 0x84 */ u32 mFlags;
     /* 0x88 */ mVec3_c mGroundCopy;
 
@@ -27,8 +27,8 @@ public:
         OffIn();
         OffFind();
 
-        mField_0x80 = -1000000000.0f;
-        SetHeight(mGround.y);
+        mGroundH = -1000000000.0f;
+        SetHeight(mGnd.y);
         ClearPi();
     }
 
@@ -59,13 +59,13 @@ public:
         return mHeight;
     }
     mVec3_c &GetPosP() {
-        return mGround;
+        return mGnd;
     }
     f32 GetRoof() const {
         return mRoof;
     }
     void CopyGnd() {
-        mGroundCopy = mGround;
+        mGroundCopy = mGnd;
     }
 };
 

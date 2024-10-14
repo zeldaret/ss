@@ -1019,6 +1019,9 @@ d/col/bg/d_bg_s_spl_grp_chk.cpp:
 d/col/bg/d_bg_s_wtr_chk.cpp:
 	.text       start:0x803435D0 end:0x80343818
 	.ctors      start:0x804DB90C end:0x804DB910
+	.data       start:0x80547CB8 end:0x80547CE8
+	.sbss       start:0x80575D08 end:0x80575D0C
+	.bss        start:0x805D0458 end:0x805D0500
 
 d/col/bg/d_bg_w.cpp:
 	.text       start:0x80343820 end:0x8034A94C

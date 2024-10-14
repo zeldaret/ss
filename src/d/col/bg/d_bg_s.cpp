@@ -782,7 +782,7 @@ bool dBgS::SplGrpChk(dBgS_SplGrpChk *pSplGrp) {
     bool ret = false;
 
     pSplGrp->Init();
-    pSplGrp->mPartition.fn_80339740(&pSplGrp->mGround, pSplGrp->mRoof);
+    pSplGrp->mPartition.fn_80339740(&pSplGrp->mGnd, pSplGrp->mRoof);
     pSplGrp->CopyGnd();
 
     cBgS_ChkElm *chkElm = mChkElem;
