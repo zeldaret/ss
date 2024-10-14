@@ -9,12 +9,12 @@ class cBgS_LinChk : public cBgS_Chk, public cBgS_PolyInfo {
 public:
     /* 0x54 */ cM3dGLin mLin;
     /* 0x6C */ mVec3_c mField_0x6C;
-    /* 0x78 */ bool mField_0x78;
-    /* 0x79 */ bool mField_0x79;
+    /* 0x78 */ bool mFrontFlag;
+    /* 0x79 */ bool mBackFlag;
     /* 0x7A */ bool mHit;
-    /* 0x7B */ bool mField_0x7B;
-    /* 0x7C */ bool mField_0x7C;
-    /* 0x7D */ bool mField_0x7D;
+    /* 0x7B */ bool mPreRoofChk;
+    /* 0x7C */ bool mPreWallChk;
+    /* 0x7D */ bool mPreGroundChk;
 
     cBgS_LinChk();
     virtual ~cBgS_LinChk();
@@ -31,6 +31,27 @@ public:
     }
     void SetHit() {
         mHit = true;
+    }
+    bool ChkBackFlag() const {
+        return mBackFlag;
+    }
+    void OnBackFlag() {
+        mBackFlag = true;
+    }
+    bool ChkFrontFlag() const {
+        return mFrontFlag;
+    }
+    void OnFrontFlag() {
+        mFrontFlag = true;
+    }
+    bool GetPreWallChk() const {
+        return mPreWallChk;
+    }
+    bool GetPreGroundChk() const {
+        return mPreGroundChk;
+    }
+    bool GetPreRoofChk() const {
+        return mPreRoofChk;
     }
 
     const mVec3_c &GetLinEnd() const {

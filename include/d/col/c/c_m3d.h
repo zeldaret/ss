@@ -43,7 +43,7 @@ bool cM3d_CrossZ_Tri(const cM3dGTri *, const nw4r::math::VEC3 *);
 bool cM3d_CrossZ_Tri(const cM3dGTri *, const nw4r::math::VEC3 *, f32 *);
 bool cM3d_Cross_LinTri(const cM3dGLin *, const cM3dGTri *, nw4r::math::VEC3 *, bool, bool);
 bool cM3d_Cross_LinTri(
-    const cM3dGLin *, const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, const cM3dGTri *,
+    const cM3dGLin *, const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, const cM3dGPla *,
     nw4r::math::VEC3 *, bool, bool
 );
 bool cM3d_Cross_LinTri_Easy(const cM3dGTri *, const nw4r::math::VEC3 *);

@@ -913,7 +913,7 @@ void dBgS_MoveBGProc_TypicalRotY(
     dBgS_MoveBGProc_RotY(i_bgw, i_actor_ptr, i_poly, param_3, i_pos, i_angle, i_shapeAngle);
 }
 
-void dBgS::RideCallBack(cBgS_PolyInfo const &info, dAcBase_c *pAc) {
+void dBgS::RideCallBack(cBgS_PolyInfo const &info, dAcObjBase_c *pAc) {
     int idx = info.GetBgIndex();
 
     dBgW_Base *pBgW = mChkElem[idx].mpBgW;
@@ -923,17 +923,17 @@ void dBgS::RideCallBack(cBgS_PolyInfo const &info, dAcBase_c *pAc) {
     pBgW->CallRideCallback(mChkElem[idx].mObj.get(), pAc);
 }
 
-void dBgS::ArrowStickCallBack(cBgS_PolyInfo const &info, dAcBase_c *pAc, mVec3_c &vec) {
+void dBgS::ArrowStickCallBack(cBgS_PolyInfo const &info, dAcObjBase_c *pAc, mVec3_c &vec) {
     int idx = info.GetBgIndex();
 
     dBgW_Base *pBgW = mChkElem[idx].mpBgW;
     if (!pBgW->ChkUsed()) {
         return;
     }
-    pBgW->CallArrowStickCallback(mChkElem[idx].mObj.get(), pAc, &vec);
+    pBgW->CallArrowStickCallback(mChkElem[idx].mObj.get(), pAc, vec);
 }
 
-bool dBgS::UnkCallback(cBgS_PolyInfo const &info, dAcBase_c *pAc) {
+bool dBgS::UnkCallback(cBgS_PolyInfo const &info, dAcObjBase_c *pAc) {
     int idx = info.GetBgIndex();
 
     dBgW_Base *pBgW = mChkElem[idx].mpBgW;
@@ -943,7 +943,7 @@ bool dBgS::UnkCallback(cBgS_PolyInfo const &info, dAcBase_c *pAc) {
     return pBgW->CallUnkCallback(mChkElem[idx].mObj.get(), pAc);
 }
 
-dAcBase_c *dBgS::PushPullCallBack(cBgS_PolyInfo const &info, dAcBase_c *pAc, dBgW_Base::PushPullLabel label) {
+dAcObjBase_c *dBgS::PushPullCallBack(cBgS_PolyInfo const &info, dAcObjBase_c *pAc, dBgW_Base::PushPullLabel label) {
     int idx = info.GetBgIndex();
 
     dBgW_Base *pBgW = mChkElem[idx].mpBgW;

@@ -39,9 +39,9 @@ public:
     f32 GetD() const {
         return mD;
     }
-    // void SetupFrom3Vtx(const Vec *v1, const Vec *v2, const Vec *v3) {
-    //     cM3d_CalcPla(v1, v2, v3, &mNormal, &mD);
-    // }
+    void SetupFrom3Vtx(const nw4r::math::VEC3 *v1, const nw4r::math::VEC3 *v2, const nw4r::math::VEC3 *v3) {
+        cM3d_CalcPla(v1, v2, v3, &mNormal, &mD);
+    }
     f32 getCrossY_NonIsZero(const mVec3_c *param_1) {
         return ((-mNormal.x * param_1->x - mNormal.z * param_1->z) - mD) / mNormal.y;
     }

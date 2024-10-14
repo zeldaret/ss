@@ -32,7 +32,7 @@ dBgS_CamLinChk_NorWtr::~dBgS_CamLinChk_NorWtr() {}
 
 dBgS_ObjLinChk::dBgS_ObjLinChk() {
     SetObj();
-    mField_0x7B = false;
+    mPreRoofChk = false;
 }
 
 dBgS_ObjLinChk::~dBgS_ObjLinChk() {}

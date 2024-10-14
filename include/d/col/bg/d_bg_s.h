@@ -219,10 +219,10 @@ public:
     void MoveBgCrrPos(cBgS_PolyInfo const &, bool, mVec3_c *, mAng3_c *, mAng3_c *, bool, bool);
     void MoveBgTransPos(cBgS_PolyInfo const &, bool, mVec3_c *, mAng3_c *, mAng3_c *);
 
-    void RideCallBack(cBgS_PolyInfo const &, dAcBase_c *);
-    void ArrowStickCallBack(cBgS_PolyInfo const &, dAcBase_c *, mVec3_c &);
-    bool UnkCallback(cBgS_PolyInfo const &, dAcBase_c *);
-    dAcBase_c *PushPullCallBack(cBgS_PolyInfo const &, dAcBase_c *, dBgW_Base::PushPullLabel);
+    void RideCallBack(cBgS_PolyInfo const &, dAcObjBase_c *);
+    void ArrowStickCallBack(cBgS_PolyInfo const &, dAcObjBase_c *, mVec3_c &);
+    bool UnkCallback(cBgS_PolyInfo const &, dAcObjBase_c *);
+    dAcObjBase_c *PushPullCallBack(cBgS_PolyInfo const &, dAcObjBase_c *, dBgW_Base::PushPullLabel);
 
     void UpdateScrollTex();
     void SetupMapGX(mMtx_c *);

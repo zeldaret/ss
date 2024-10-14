@@ -53,7 +53,7 @@ public:
     bool GetTriPnt(KC_PrismData const *, mVec3_c *, mVec3_c *, mVec3_c *) const;
     bool GetTriPnt(int, mVec3_c *, mVec3_c *, mVec3_c *) const;
     void GetPolyCode(int, dBgPc *) const;
-    bool ChkPolyThrough(dBgPc *, cBgS_Chk *) const;
+    static bool ChkPolyThrough(int id, dBgPc *, cBgS_Chk *);
     bool ChkShdwDrawThrough(dBgPc *);
 
     /* vt at 0x08 */

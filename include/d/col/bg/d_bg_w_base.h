@@ -19,6 +19,8 @@ class dBgS_RoofChk;
 class dBgS_SphChk;
 class dBgS_SplGrpChk;
 
+class dAcObjBase_c;
+
 // TODO
 class dBgW_Base_0x18 {
 public:
@@ -53,7 +55,7 @@ public:
         PRIORITY_0,
     };
 
-    typedef dAcBase_c *(*PushPull_CallBack)(dAcBase_c *, dAcBase_c *, dBgW_Base::PushPullLabel);
+    typedef dAcObjBase_c *(*PushPull_CallBack)(dAcObjBase_c *, dAcObjBase_c *, dBgW_Base::PushPullLabel);
 
     dBgW_Base();
     void ClrDBgWBase();
@@ -125,9 +127,9 @@ public:
     /* 0x0E4 */ virtual void CrrPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) = 0;
     /* 0x0E8 */ virtual void TransPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) = 0;
     /* 0x0EC */ virtual void MatrixCrrPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) = 0;
-    /* 0x0F0 */ virtual void CallRideCallback(dAcBase_c *, dAcBase_c *) = 0;
-    /* 0x0F4 */ virtual void CallArrowStickCallback(dAcBase_c *, dAcBase_c *, mVec3_c *) = 0;
-    /* 0x0F8 */ virtual bool CallUnkCallback(dAcBase_c *, dAcBase_c *) = 0;
+    /* 0x0F0 */ virtual void CallRideCallback(dAcObjBase_c *, dAcObjBase_c *) = 0;
+    /* 0x0F4 */ virtual void CallArrowStickCallback(dAcObjBase_c *, dAcObjBase_c *, mVec3_c &) = 0;
+    /* 0x0F8 */ virtual bool CallUnkCallback(dAcObjBase_c *, dAcObjBase_c *) = 0;
     /* 0x0FC */ virtual bool UpdateDraw(mAllocator_c *) = 0;
     /* 0x100 */ virtual bool GetIsDraw(int) = 0;
     /* 0x104 */ virtual void DrawOnMap(int, bool) = 0;
@@ -149,6 +151,11 @@ public:
     void ClearMap() {
         for (int i = 0; i < 31; i++) {
             mMapRelated[i].Clear();
+        }
+    }
+    void ClearMapCount() {
+        for (int i = 0; i < 31; i++) {
+            mMapRelated[i].mCount = 0;
         }
     }
 
@@ -178,7 +185,7 @@ public:
     //     field_0xb |= 2;
     // }
 
-    const cPartition &GetPartition() const {
+    cPartition &GetPartition() {
         return mPartitionInfo;
     }
 
@@ -196,7 +203,11 @@ public:
         return field_0x24 & 2;
     }
 
-private:
+    bool Chk0x24_0x20() const {
+        return field_0x24 & 0x20;
+    }
+
+    // private:
     /* 0x08 */ cPartition mPartitionInfo;
     /* 0x18 */ dBgW_Base_0x18 mField_0x18;
     /* 0x20 */ u16 field_0x20;

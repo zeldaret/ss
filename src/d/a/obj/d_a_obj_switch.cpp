@@ -32,7 +32,7 @@ static bool isPushableBlock(dAcBase_c *actor) {
            actor->profile_name == fProfile::OBJ_KIBAKO;
 }
 
-void dAcOsw_c::rideCallback(dBgW *unknown, dAcBase_c *actor, dAcObjBase_c *interactor) {
+void dAcOsw_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *interactor) {
     if (!isPushableBlock(interactor)) {
         return;
     }
@@ -69,7 +69,7 @@ bool dAcOsw_c::createHeap() {
     field_0x5E8 = mScale.x *
                   (resMdl.GetResNode("base").mNode.ref().FLOAT_0x50 - resMdl.GetResNode("base").mNode.ref().FLOAT_0x44);
     cBgD_t *dbzData = (cBgD_t *)getOarcDZB(SWITCH_TYPES[mSwitchType], SWITCH_TYPES[mSwitchType]);
-    dBgPc *plcData = (dBgPc *)getOarcPLC(SWITCH_TYPES[mSwitchType], SWITCH_TYPES[mSwitchType]);
+    PLC *plcData = (PLC *)getOarcPLC(SWITCH_TYPES[mSwitchType], SWITCH_TYPES[mSwitchType]);
     mScale.set(1.0f, 0.8f, 1.0f);
     updateMatrix();
     field_0x5B8.set(mWorldMtx);

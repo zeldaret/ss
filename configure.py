@@ -392,7 +392,7 @@ config.libs = [
             Object(Matching, "d/col/c/c_bg_s_gnd_chk.cpp"),
             Object(Matching, "d/col/c/c_bg_s_lin_chk.cpp"),
             Object(Matching, "d/col/c/c_bg_s_poly_info.cpp"),
-            Object(NonMatching, "d/col/c/c_bg_s_time_area.cpp"),
+            Object(NonMatching, "d/col/c/c_bg_s_shdw_draw.cpp"),
             Object(NonMatching, "d/col/c/c_bg_w.cpp"),
             Object(NonMatching, "d/col/c/c_cc_d.cpp"),
             Object(NonMatching, "d/col/c/c_m2d.cpp"),

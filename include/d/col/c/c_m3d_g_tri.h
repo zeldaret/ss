@@ -14,6 +14,12 @@ public:
 
     cM3dGTri() {}
     void SetPos(const VecType *, const VecType *, const VecType *);
+
+    void SetBg(const VecType *, const VecType *, const VecType *, const cM3dGPla *pla);
+
+    bool cross(const cM3dGLin *lin, VecType *xyz, bool param_2, bool param_3) const {
+        return cM3d_Cross_LinTri(lin, this, xyz, param_2, param_3);
+    }
 };
 
 #endif

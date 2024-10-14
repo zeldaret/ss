@@ -32,11 +32,14 @@ public:
     void setCode(sBgPc &);
     bool getWtr() const;
 
-    s32 getWallCode() const {
-        return m_code.code1 >> 0x8 & 0xF;
+    u32 getObjThrough() {
+        return m_code.code0 & CODE_OBJ_THRU;
     }
-    u32 getGroundCode() const {
-        return m_code.code1 >> 20 & 0x1F;
+    u32 getCamThrough() {
+        return m_code.code0 & CODE_CAM_THRU;
+    }
+    u32 getLinkThrough() {
+        return m_code.code0 & CODE_LINK_THRU;
     }
     u32 getObjThrough() const {
         return m_code.code0 & CODE_OBJ_THRU;
@@ -53,10 +56,16 @@ public:
     u32 getClawshotThrough() const {
         return m_code.code0 & CODE_CLAWSHOT_THRU;
     }
-    u32 getTargetThrough() const {
+    u32 getSlingshotThrough() const {
+        return m_code.code0 & CODE_SLINGSHOT_THRU;
+    }
+    u32 getBeetleThrough() const {
+        return m_code.code0 & CODE_BEETLE_THRU;
+    }
+    bool getTargetThrough() const {
         return m_code.code0 & CODE_TARGET_THRU;
     }
-    u32 getShdwThrough() const {
+    bool getShdwThrough() const {
         return m_code.code0 & CODE_SHDW_THRU;
     }
     u32 getBombThrough() const {
@@ -68,31 +77,68 @@ public:
     u32 getUnderwaterRoof() const {
         return m_code.code0 & CODE_UNDERWATER_ROOF;
     }
-    u32 getCode0_0x80000000() const {
+    bool getCode0_0x80000000() const {
         return m_code.code0 & CODE_UNUSED_8000_0000;
+    }
+
+    s32 getWallCode() const {
+        return m_code.code1 >> 0x8 & 0xF;
+    }
+    u32 getCode1_0x02000000() const {
+        return m_code.code1 & 0x02000000;
+    }
+    u32 getCode1_0x04000000() const {
+        return m_code.code1 & 0x04000000;
+    }
+    u32 getCode1_0x08000000() const {
+        return m_code.code1 & 0x08000000;
+    }
+
+    u32 getGroundCode() const {
+        return m_code.code1 >> 20 & 0x1F;
+    }
+    u32 getLightingCode() const {
+        return m_code.code1 >> 28;
+    }
+    u32 getSpecialCode() const {
+        return m_code.code3 & 0x1F;
     }
 
     u32 getAtt0Code() const {
         return m_code.code3 >> 5 & 0x3F;
     }
     u32 getAtt1Code() const {
-        return m_code.code3 >> 17 & 0x7;
+        return m_code.code1 >> 17 & 0x7;
     }
 
-    // Currently this is masked, but totally unused
-    // u8 getExit() const { return m_code.code0 & 0x3F; }
+    u8 getGrpRoomIdx() const {
+        return m_code.code0 & 0x3F;
+    }
 
-    // Currently this is masked, but totally unused
-    // u8 getPolyCol() const { return m_code.code0 >> 6; }
+    u8 getExitId() const {
+        return m_code.code0 >> 6;
+    }
 
-    // Currently this is masked, but totally unused
-    // u8 getLinkNo() const { return m_code.code1; }
+    u32 getCode0_0x30000000() const {
+        return m_code.code0 >> 0x1C & 3;
+    }
 
-    // Currently these are masked, but totally unused
-    // u8 getCamMoveBG() const { return m_code.code2; }
-    // u8 getRoomCam() const { return m_code.code2 >> 8; }
-    // u8 getRoomPath() const { return m_code.code2 >> 0x10; }
-    // u8 getRoomPathPnt() const { return m_code.code2 >> 0x18; }
+    u8 getLinkNo() const {
+        return m_code.code1;
+    }
+
+    u8 getCamMoveBG() const {
+        return m_code.code2;
+    }
+    u8 getRoomCam() const {
+        return m_code.code2 >> 8;
+    }
+    u8 getRoomPath() const {
+        return m_code.code2 >> 0x10;
+    }
+    u8 getRoomPathPnt() const {
+        return m_code.code2 >> 0x18;
+    }
 
     u8 getRoomInf() const {
         return m_code.code4;
@@ -102,16 +148,6 @@ public:
     }
     u32 maskNrm() {
         return m_code.code4 & 0x100;
-    }
-
-    u32 getObjThrough() {
-        return m_code.code0 & CODE_OBJ_THRU;
-    }
-    u32 getCamThrough() {
-        return m_code.code0 & CODE_CAM_THRU;
-    }
-    u32 getLinkThrough() {
-        return m_code.code0 & CODE_LINK_THRU;
     }
 
     /* 0x0 */ sBgPc m_code;

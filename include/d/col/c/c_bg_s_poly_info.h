@@ -22,7 +22,9 @@ public:
     bool ChkSetInfo() const;
     void SetPolyInfo(const cBgS_PolyInfo &);
     bool ChkSafe(const void *, s32) const;
-    void SetPolyIndex(int);
+    void SetPolyIndex(int idx) {
+        mPolyIndex = idx;
+    }
     bool ChkBgIndex() const;
     mAng GetAngle(mAng) const;
 

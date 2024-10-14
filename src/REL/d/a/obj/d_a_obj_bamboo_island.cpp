@@ -12,7 +12,7 @@ static const char *const sBambooIslandNames[] = {
 
 SPECIAL_ACTOR_PROFILE(OBJ_BAMBOO_ISLAND, dAcObambooIsland_c, fProfile::OBJ_BAMBOO_ISLAND, 0x01F9, 0, 3);
 
-void dAcObambooIsland_c::rideCallback(dBgW *unknown, dAcBase_c *actor, dAcObjBase_c *interactor) {
+void dAcObambooIsland_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *interactor) {
     if (interactor->isActorPlayer() && actor != nullptr && StoryFlagManager::sInstance->getCounterOrFlag(284) == 0) {
         StoryFlagManager::sInstance->setFlag(284);
     }
@@ -27,7 +27,7 @@ bool dAcObambooIsland_c::createHeap() {
         TRY_CREATE(mModels[i].create(mdl, &heap_allocator, 0x120));
     }
     cBgD_t *dzb = (cBgD_t *)getOarcFile("IslBamb", "dzb/IslBamb.dzb");
-    dBgPc *plc = (dBgPc *)getOarcFile("IslBamb", "dat/IslBamb.plc");
+    PLC *plc = (PLC *)getOarcFile("IslBamb", "dat/IslBamb.plc");
     updateMatrix();
     for (int i = 0; i < 2; i++) {
         mModels[i].setLocalMtx(mWorldMtx);

@@ -896,7 +896,7 @@ d/col/c/c_bg_s_lin_chk.cpp:
 d/col/c/c_bg_s_poly_info.cpp:
 	.text       start:0x80327510 end:0x8032766C
 
-d/col/c/c_bg_s_time_area.cpp:
+d/col/c/c_bg_s_shdw_draw.cpp:
 	.text       start:0x80327670 end:0x80328064
 	.data       start:0x805473B8 end:0x805473C4
 
@@ -1026,6 +1026,10 @@ d/col/bg/d_bg_s_wtr_chk.cpp:
 d/col/bg/d_bg_w.cpp:
 	.text       start:0x80343820 end:0x8034A94C
 	.ctors      start:0x804DB910 end:0x804DB914
+	.data       start:0x80547CE8 end:0x80547F10
+	.sbss       start:0x80575D10 end:0x80575D20
+	.sdata2     start:0x8057D170 end:0x8057D1AC
+	.bss        start:0x805D0500 end:0x805D0A50
 
 d/col/bg/d_bg_w_base.cpp:
 	.text       start:0x8034A950 end:0x8034AF48

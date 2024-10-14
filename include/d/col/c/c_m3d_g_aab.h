@@ -23,8 +23,6 @@ public:
     bool CrossY(const mVec3_c &) const;
     bool UnderPlaneYUnder(f32) const;
     bool TopPlaneYUnder(f32) const;
-    void ClearForMinMax(void);
-    void SetMinMax(const mVec3_c &);
     void SetMinMax(const cM3dGAab &);
     void SetMin(const mVec3_c &min);
     void SetMax(const mVec3_c &max);
@@ -33,6 +31,20 @@ public:
     void Clamp(const mVec3_c &, mVec3_c &) const;
     void Set(const cM3dGSph &);
     bool Cross(const mVec3_c &) const;
+
+    void SetMinMax(const mVec3_c &minMax) {
+        SetMin(minMax);
+        SetMax(minMax);
+    }
+
+    void ClearForMinMax(void) {
+        mMin.z = 1000000000.0f;
+        mMin.y = 1000000000.0f;
+        mMin.x = 1000000000.0f;
+        mMax.z = -1000000000.0f;
+        mMax.y = -1000000000.0f;
+        mMax.x = -1000000000.0f;
+    }
 
     const mVec3_c *GetMaxP(void) const {
         return &mMax;
@@ -58,10 +70,9 @@ public:
     const f32 GetMinZ(void) const {
         return mMin.z;
     }
-    // bool Cross(const cM3dGLin *param_1) {
-    //     return cM3d_Cross_MinMaxBoxLine(GetMinP(), GetMaxP(), (Vec *)&param_1->GetStartP(), (Vec
-    //     *)&param_1->GetEndP());
-    // }
+    bool Cross(const cM3dGLin *pLin) {
+        return cM3d_Cross_MinMaxBoxLine(mMin, mMax, pLin->mStart, pLin->mEnd);
+    }
     // bool Cross(const cM3dGAab *param_1) {
     //     return cM3d_Cross_AabAab(this, param_1);
     // }

@@ -19,7 +19,7 @@ private:
     static const f32 unusedFloat1;
     static const f32 unusedFloat2;
 
-    static void rideCallback(dBgW *unknown, dAcBase_c *actor, dAcObjBase_c *interactor);
+    static void rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *interactor);
 
     m3d::smdl_c mModels[2];
     nw4r::g3d::ResFile mBrres;

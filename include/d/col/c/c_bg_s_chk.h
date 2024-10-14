@@ -6,7 +6,7 @@
 #include "f/f_base.h"
 #include "rvl/MTX.h"
 
-struct cBgD_Vtx_t : public Vec {};
+struct cBgD_Vtx_t : public nw4r::math::VEC3 {};
 
 class cBgS_GrpPassChk {
 public:

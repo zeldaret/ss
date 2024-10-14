@@ -37,15 +37,15 @@ bool dBgW_Base::ChkMemoryError() {
     return false;
 }
 
-void dBgW_Base::CallRideCallback(dAcBase_c *, dAcBase_c *) {
+void dBgW_Base::CallRideCallback(dAcObjBase_c *, dAcObjBase_c *) {
     // No Call
 }
 
-void dBgW_Base::CallArrowStickCallback(dAcBase_c *, dAcBase_c *, mVec3_c *) {
+void dBgW_Base::CallArrowStickCallback(dAcObjBase_c *, dAcObjBase_c *, mVec3_c &) {
     // No Call
 }
 
-bool dBgW_Base::CallUnkCallback(dAcBase_c *, dAcBase_c *) {
+bool dBgW_Base::CallUnkCallback(dAcObjBase_c *, dAcObjBase_c *) {
     return false;
 }
 

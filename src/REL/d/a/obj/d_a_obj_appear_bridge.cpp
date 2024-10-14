@@ -23,7 +23,7 @@ bool dAcOappearBridge_c::createHeap() {
     nw4r::g3d::ResAnmClr clr = mResFile.GetResAnmClr("TongueStage");
     TRY_CREATE(mClrAnm.create(mdl, clr, &heap_allocator, nullptr, 1));
     cBgD_t *dzb = (cBgD_t *)getOarcFile("TongueStage", "dzb/TongueStage.dzb");
-    dBgPc *plc = (dBgPc *)getOarcFile("TongueStage", "dat/TongueStage.plc");
+    PLC *plc = (PLC *)getOarcFile("TongueStage", "dat/TongueStage.plc");
     updateMatrix();
     mModel.setLocalMtx(mWorldMtx);
     TRY_CREATE(!mCollision.Set(dzb, plc, 1, &mWorldMtx, &mScale));

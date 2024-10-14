@@ -61,7 +61,7 @@ public:
     STATE_FUNC_DECLARE(dAcOsw_c, Off);
     STATE_FUNC_DECLARE(dAcOsw_c, None);
 
-    static void rideCallback(dBgW *unknown, dAcBase_c *actor, dAcObjBase_c *interactor);
+    static void rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *interactor);
 
 private:
     /* 0x330 */ m3d::mdl_c mModel;

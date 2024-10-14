@@ -63,7 +63,7 @@ bool cM3d_CrossZ_Tri(const cM3dGTri *, const VEC3 *) {}
 bool cM3d_CrossZ_Tri(const cM3dGTri *, const VEC3 *, f32 *) {}
 bool cM3d_Cross_LinTri(const cM3dGLin *, const cM3dGTri *, VEC3 *, bool, bool) {}
 bool cM3d_Cross_LinTri(
-    const cM3dGLin *, const VEC3 *, const VEC3 *, const VEC3 *, const cM3dGTri *, VEC3 *, bool, bool
+    const cM3dGLin *, const VEC3 *, const VEC3 *, const VEC3 *, const cM3dGPla *, VEC3 *, bool, bool
 ) {}
 
 bool cM3d_Cross_LinTri_Easy(const cM3dGTri *pTri, const VEC3 *pPos) {

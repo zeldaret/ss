@@ -154,7 +154,7 @@ void dBgS_Acch::GroundCheck(dBgS &bgs, bool param2) {
             line.Set2(pos, old_pos, mActorId);
 
             line.SetExtChk(*this);
-            line.mField_0x79 = true;
+            line.mBackFlag = true;
             if (!bgs.LineCross(&line)) {
                 dBgS_RoofChk roof;
                 roof.mActorId = mGnd.mActorId;
@@ -338,14 +338,14 @@ void dBgS_Acch::LineCheck(dBgS &bgs) {
             line.Set2(old_pos, pos, mActorId);
 
             if (ChkCirUnk0x8(i)) {
-                line.mField_0x7D = true;
+                line.mPreGroundChk = true;
             } else {
-                line.mField_0x7D = false;
+                line.mPreGroundChk = false;
             }
             if (ChkCirUnk0x10(i)) {
-                line.mField_0x7B = true;
+                line.mPreRoofChk = true;
             } else {
-                line.mField_0x7B = false;
+                line.mPreRoofChk = false;
             }
 
             line.SetExtChk(*this);

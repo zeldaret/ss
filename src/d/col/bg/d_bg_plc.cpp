@@ -1,7 +1,7 @@
 #include "d/col/bg/d_bg_plc.h"
 
 void dBgPlc::setBase(void *pPlc) {
-    m_base = (PLC *)pPlc;
+    mBase = (PLC *)pPlc;
 }
 
 u32 dBgPlc::getGrpCode(int idx) const {

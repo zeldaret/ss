@@ -10,11 +10,11 @@ void cBgS_LinChk::Ct() {
     mVec3_c set = mVec3_c::Zero;
     mLin.Set(set, set);
     mField_0x6C = set;
-    mField_0x7B = false;
-    mField_0x7C = false;
-    mField_0x7D = false;
-    mField_0x78 = true;
-    mField_0x79 = false;
+    mPreRoofChk = false;
+    mPreWallChk = false;
+    mPreGroundChk = false;
+    mFrontFlag = true;
+    mBackFlag = false;
     mHit = false;
 }
 
