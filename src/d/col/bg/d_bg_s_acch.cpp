@@ -47,7 +47,7 @@ dBgS_Acch::dBgS_Acch()
     SetGrpPassChk(GetGrpPassChkInfo());
 
     SetRoofNone();
-    mRoof.field_0x7C = 1;
+    mRoof.mField_0x7C = 1;
 
     mField_0x398.set(0.0f, 0.0f, 0.0f);
     mField_0x3A4.set(0.0f, 0.0f, 0.0f);

@@ -9,10 +9,12 @@ class dBgS_RoofChk : public cBgS_PolyInfo, public cBgS_Chk, public dBgS_Chk {
 public:
     /* 0x6C */ mVec3_c mPos;
     /* 0x78 */ f32 mNowY;
-    /* 0x7C */ u8 field_0x7C;
+    /* 0x7C */ u8 mField_0x7C;
     /* 0x80 */ mVec3_c mPosCopy;
 
     dBgS_RoofChk();
+
+    virtual ~dBgS_RoofChk();
 
     void Init() {
         SetNowY(1000000000.0f);
@@ -20,8 +22,6 @@ public:
     }
 
     void SetPos(mVec3_c const *);
-
-    virtual ~dBgS_RoofChk();
 
     void SetNowY(f32 y) {
         mNowY = y;
@@ -41,26 +41,30 @@ public:
     }
 };
 
-class dBgS_LinkRoofChk : public dBgS_RoofChk {
-public:
-    dBgS_LinkRoofChk() {
-        SetLink();
-    }
-    virtual ~dBgS_LinkRoofChk() {}
-};
-
 class dBgS_ObjRoofChk : public dBgS_RoofChk {
 public:
-    dBgS_ObjRoofChk() {
-        SetObj();
+    dBgS_ObjRoofChk();
+
+    virtual ~dBgS_ObjRoofChk();
+
+    static dBgS_ObjRoofChk &GetInstance() {
+        return sInstance;
     }
-
-    virtual ~dBgS_ObjRoofChk() {}
-
-    dBgS_ObjRoofChk &GetInstance();
+    static f32 GetRoofHeight() {
+        return sRoofHeight;
+    }
     static void ClearInstance();
+    static bool CheckPos(const mVec3_c *);
 
+private:
     static dBgS_ObjRoofChk sInstance;
+    static f32 sRoofHeight;
 };
 
+class dBgS_LinkRoofChk : public dBgS_RoofChk {
+public:
+    dBgS_LinkRoofChk();
+
+    virtual ~dBgS_LinkRoofChk();
+};
 #endif

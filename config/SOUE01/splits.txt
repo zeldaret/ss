@@ -999,12 +999,17 @@ d/col/bg/d_bg_s_poly_pass_chk.cpp:
 	.data       start:0x80547B88 end:0x80547B94
 
 d/col/bg/d_bg_s_roof_chk.cpp:
-	.text       start:0x80342D68 end:0x803431A8
+	.text       start:0x80342D70 end:0x803431A8
 	.ctors      start:0x804DB908 end:0x804DB90C
-	.sdata2     start:0x8057D150 end:0x8057D15C
+	.data       start:0x80547B98 end:0x80547C28
+	.sbss       start:0x80575D00 end:0x80575D04
+	.sdata2     start:0x8057D150 end:0x8057D158
+	.bss        start:0x805D03B8 end:0x805D0458
 
 d/col/bg/d_bg_s_sph_chk.cpp:
 	.text       start:0x803431B0 end:0x80343428
+	.data       start:0x80547C28 end:0x80547C88
+	.sdata2     start:0x8057D158 end:0x8057D15C
 
 d/col/bg/d_bg_s_spl_grp_chk.cpp:
 	.text       start:0x80343430 end:0x803435C8

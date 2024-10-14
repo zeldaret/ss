@@ -18,7 +18,7 @@ public:
     /* 0x8C */ f32 mField_0x8C;
     /* 0x90 */ cM3dGAab mAabb;
     /* 0xA8 */ u32 mField_0xA8;
-    /* 0xAC */ void *mField_0xAC; // pBgW?
+    /* 0xAC */ void *mField_0xAC;
     /* 0xB0 */ u32 mField_0xB0;
     /* 0xB4 */ SphChk_Callback mCallback;
 
@@ -30,6 +30,12 @@ public:
 
     dBgS_SphChk();
     virtual ~dBgS_SphChk();
+};
+
+class dBgS_CamSphChk : public dBgS_SphChk {
+public:
+    dBgS_CamSphChk();
+    virtual ~dBgS_CamSphChk();
 };
 
 #endif
