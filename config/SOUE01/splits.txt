@@ -1013,6 +1013,8 @@ d/col/bg/d_bg_s_sph_chk.cpp:
 
 d/col/bg/d_bg_s_spl_grp_chk.cpp:
 	.text       start:0x80343430 end:0x803435C8
+	.data       start:0x80547C88 end:0x80547CB8
+	.sdata2     start:0x8057D160 end:0x8057D16C
 
 d/col/bg/d_bg_s_wtr_chk.cpp:
 	.text       start:0x803435D0 end:0x80343818
