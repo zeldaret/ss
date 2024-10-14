@@ -26,4 +26,4 @@ void cBgS_LinChk::Set2(const mVec3_c &start, const mVec3_c &end, u32 id) {
     ClearPi();
 }
 
-void cBgS_LinChk::vt_0xC(mVec3_c *) {}
+void cBgS_LinChk::SetEnd(const mVec3_c *) {}

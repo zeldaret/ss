@@ -174,11 +174,11 @@ void cBgS::Ct() {
     cPartition::fn_80338fb0();
     mpBgKCol = nullptr;
     mAcOBg.unlink();
-    dBgS_ObjGndChk::CtInstance();
-    dBgS_ObjLinChk::CtInstance();
-    dBgS_WtrLinChk::CtInstance();
-    dBgS_ObjRoofChk::CtInstance();
-    dBgS_WtrChk::CtInstance();
+    dBgS_ObjGndChk::ClearInstance();
+    dBgS_ObjLinChk::ClearInstance();
+    dBgS_WtrLinChk::ClearInstance();
+    dBgS_ObjRoofChk::ClearInstance();
+    dBgS_WtrChk::ClearInstance();
 }
 
 void cBgS::Dt() {
@@ -268,7 +268,7 @@ bool cBgS::LineCross(cBgS_LinChk *pLine) {
     } while (i < mSetCounter);
 
     if (pLine->ChkHit()) {
-        pLine->vt_0xC(&pLine->mLin.mEnd);
+        pLine->SetEnd(&pLine->mLin.mEnd);
         return true;
     } else {
         return false;

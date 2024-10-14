@@ -58,7 +58,7 @@ public:
     virtual ~dBgS_ObjRoofChk() {}
 
     dBgS_ObjRoofChk &GetInstance();
-    static void CtInstance();
+    static void ClearInstance();
 
     static dBgS_ObjRoofChk sInstance;
 };

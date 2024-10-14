@@ -990,6 +990,9 @@ d/col/bg/d_bg_s_grp_pass_chk.cpp:
 d/col/bg/d_bg_s_lin_chk.cpp:
 	.text       start:0x80341E20 end:0x80342C98
 	.ctors      start:0x804DB904 end:0x804DB908
+	.data       start:0x805479A8 end:0x80547B88
+	.sdata2     start:0x8057D148 end:0x8057D150
+	.bss        start:0x805D0268 end:0x805D03B8
 
 d/col/bg/d_bg_s_poly_pass_chk.cpp:
 	.text       start:0x80342CA0 end:0x80342D68
@@ -997,6 +1000,7 @@ d/col/bg/d_bg_s_poly_pass_chk.cpp:
 d/col/bg/d_bg_s_roof_chk.cpp:
 	.text       start:0x80342D68 end:0x803431A8
 	.ctors      start:0x804DB908 end:0x804DB90C
+	.sdata2     start:0x8057D150 end:0x8057D15C
 
 d/col/bg/d_bg_s_sph_chk.cpp:
 	.text       start:0x803431B0 end:0x80343428

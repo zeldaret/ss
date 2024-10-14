@@ -28,6 +28,9 @@ public:
     }
 
     void SetStart(const mVec3_c &);
+    void SetEnd(const mVec3_c *pEnd) {
+        mEnd = *pEnd;
+    }
 
     nw4r::math::VEC3 &GetStart() {
         return mStart;

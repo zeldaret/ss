@@ -54,7 +54,7 @@ dBgS_CamGndChk_Wtr::dBgS_CamGndChk_Wtr() {
 
 dBgS_CamGndChk_Wtr::~dBgS_CamGndChk_Wtr() {}
 
-void dBgS_ObjGndChk::CtInstance() {
+void dBgS_ObjGndChk::ClearInstance() {
     sInstance.ClearPi();
 }
 

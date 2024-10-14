@@ -10,7 +10,7 @@ public:
     virtual ~dBgS_WtrChk();
 
     dBgS_WtrChk &GetInstance();
-    static void CtInstance();
+    static void ClearInstance();
 
     static dBgS_WtrChk sInstance;
 };

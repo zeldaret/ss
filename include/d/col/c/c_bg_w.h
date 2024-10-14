@@ -30,10 +30,18 @@ public:
 };
 
 // Defines are required for these checks to not inline some float comp bool things
-
 #if 1
 
 #define cBgW_CheckBGround(f) (f > 0.5f)
+#define cBgW_CheckBRoof(f) (f < (-4.0f / 5.0f))
+
+inline bool cBgW_CheckBWall(f32 a1) {
+    if (!cBgW_CheckBGround(a1) && !cBgW_CheckBRoof(a1)) {
+        return true;
+    }
+
+    return false;
+}
 
 #else
 inline bool cBgW_CheckBGround(f32 f) {

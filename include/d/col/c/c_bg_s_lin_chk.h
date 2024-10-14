@@ -18,7 +18,7 @@ public:
 
     cBgS_LinChk();
     virtual ~cBgS_LinChk();
-    virtual void vt_0xC(mVec3_c *);
+    virtual void SetEnd(const mVec3_c *);
 
     void Ct();
     void Set2(const mVec3_c &, const mVec3_c &, u32);

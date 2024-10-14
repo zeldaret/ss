@@ -414,7 +414,7 @@ config.libs = [
             Object(Matching, "d/col/bg/d_bg_s_chk.cpp"),
             Object(Matching, "d/col/bg/d_bg_s_gnd_chk.cpp"),
             Object(Matching, "d/col/bg/d_bg_s_grp_pass_chk.cpp"),
-            Object(NonMatching, "d/col/bg/d_bg_s_lin_chk.cpp"),
+            Object(Matching, "d/col/bg/d_bg_s_lin_chk.cpp"),
             Object(NonMatching, "d/col/bg/d_bg_s_poly_pass_chk.cpp"),
             Object(NonMatching, "d/col/bg/d_bg_s_roof_chk.cpp"),
             Object(NonMatching, "d/col/bg/d_bg_s_sph_chk.cpp"),

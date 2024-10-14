@@ -40,7 +40,7 @@ public:
         return mUnderwaterRoof;
     }
     bool Chk0xD() {
-        return mField_0xD;
+        return mBellows;
     }
     bool Chk0xE() {
         return mField_0xE;
@@ -73,8 +73,8 @@ public:
     void ClrUnderwaterRoof() {
         mUnderwaterRoof = false;
     }
-    void Clr0xD() {
-        mField_0xD = false;
+    void ClrBellows() {
+        mBellows = false;
     }
     void Clr0xE() {
         mField_0xE = false;
@@ -107,8 +107,8 @@ public:
     void SetUnderwaterRoof() {
         mUnderwaterRoof = true;
     }
-    void Set0xD() {
-        mField_0xD = true;
+    void SetBellows() {
+        mBellows = true;
     }
     void Set0xE() {
         mField_0xE = true;
@@ -126,7 +126,7 @@ private:
     /* 0xA */ bool mBeetle;
     /* 0xB */ bool mClawshot;
     /* 0xC */ bool mUnderwaterRoof;
-    /* 0xD */ bool mField_0xD;
+    /* 0xD */ bool mBellows;
     /* 0xE */ bool mField_0xE;
 };
 

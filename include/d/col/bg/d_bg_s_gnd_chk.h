@@ -31,7 +31,7 @@ public:
         return sGroundHeight;
     }
 
-    static void CtInstance();
+    static void ClearInstance();
     static bool CheckPos(const mVec3_c *);
     static int GetMaterial();
     static int GetPolyAtt1();
