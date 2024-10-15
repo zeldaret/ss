@@ -13,9 +13,7 @@ typedef void *(*SphChk_Callback)(dBgS_SphChk *, cBgD_Vtx_t *, int, int, int, cM3
 class dBgS_SphChk : public cM3dGSph, public cBgS_PolyInfo, public cBgS_Chk, public dBgS_Chk {
 public:
     /* 0x80 */ f32 mField_0x80;
-    /* 0x84 */ f32 mField_0x84;
-    /* 0x88 */ f32 mField_0x88;
-    /* 0x8C */ f32 mField_0x8C;
+    /* 0x84 */ mVec3_c mField_0x84;
     /* 0x90 */ cM3dGAab mAabb;
     /* 0xA8 */ u32 mField_0xA8;
     /* 0xAC */ void *mField_0xAC;

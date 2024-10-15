@@ -2,9 +2,7 @@
 
 dBgS_SphChk::dBgS_SphChk() {
     mField_0x80 = 0.0f;
-    mField_0x84 = 0.0f;
-    mField_0x88 = 0.0f;
-    mField_0x8C = 0.0f;
+    mField_0x84.set(0.0f, 0.0f, 0.0f);
 
     SetInfo(600, 0, 0);
 

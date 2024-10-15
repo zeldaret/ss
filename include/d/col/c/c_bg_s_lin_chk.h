@@ -54,6 +54,9 @@ public:
         return mPreRoofChk;
     }
 
+    const mVec3_c &GetLinStart() const {
+        return mLin.mStart;
+    }
     const mVec3_c &GetLinEnd() const {
         return mLin.mEnd;
     }

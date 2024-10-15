@@ -2,11 +2,15 @@
 #define D_BG_W_TIME_H
 
 #include "d/col/bg/d_bg_w_base.h"
+#include "d/col/c/c_bg_s_chk.h"
 #include "d/col/c/c_m3d_g_cyl.h"
 
 class dBgWTime : public dBgW_Base {
 public:
     dBgWTime();
+
+    bool fn_803537a0(mVec3_c *, cBgS_Chk *);
+    void fn_80353a00(cBgS_PolyInfo *, mVec3_c *);
 
     /* vt at 0x08 */
     /* 0x008 */ virtual ~dBgWTime();
@@ -71,6 +75,8 @@ public:
 
     /* 0x12C */ cM3dGCyl mCyl;
     /* 0x140 */ cM3dGAab mBnd;
+
+    static cBgD_Vtx_t sVtx[3];
 };
 
 #endif
