@@ -34,10 +34,10 @@ public:
 class dBgW_Base_MapRelated {
 public:
     void Clear() {
-        mpPrismIdx = nullptr;
+        mpIdx = nullptr;
         mCount = 0;
     }
-    /* 0x0 */ int *mpPrismIdx;
+    /* 0x0 */ int *mpIdx;
     /* 0x4 */ int mCount;
 };
 
@@ -156,6 +156,11 @@ public:
     void ClearMapCount() {
         for (int i = 0; i < 31; i++) {
             mMapRelated[i].mCount = 0;
+        }
+    }
+    void SetMapCount(int c) {
+        for (int i = 0; i < 31; i++) {
+            mMapRelated[i].mCount = c;
         }
     }
 

@@ -45,9 +45,9 @@ struct KCol_Header {
 
 // Made up?
 struct KC_Tri {
-    mVec3_c v1;
-    mVec3_c v2;
-    mVec3_c v3;
+    mVec3_c mA;
+    mVec3_c mB;
+    mVec3_c mC;
 };
 
 class dBgWKCol : public dBgW_Base {
@@ -67,7 +67,7 @@ public:
 
     bool ChkShdwDrawThrough(dBgPc *);
 
-    static int GetMapCode(int polyIdx, KC_PrismData *prism, int *pOut);
+    int GetMapCode(KC_PrismData *prism, int *pOut);
     void DrawMapSection(int, f32, f32, f32);
     int GetPrismIdx(const KC_PrismData *);
 
@@ -152,6 +152,14 @@ public:
         return &mpKCHead->mpNormalData[pd->mEdgeNrmIdx3];
     }
 
+    const dBgPc *GetPolyCode(int polyIdx) const {
+        return mCode.GetDBgPc(mpKCHead->mpPrismData[polyIdx].mAttribute);
+    }
+
+    KC_Tri *GetTri(int idx) {
+        return &mpTri[idx];
+    }
+
 private:
     /* 0x12C */ pkcdata *mpKCHead;
     /* 0x130 */ dBgPlc mCode;
@@ -160,7 +168,7 @@ private:
     /* 0x150 */ u32 mAreaWidthMaskX;
     /* 0x154 */ u32 mAreaWidthMaskY;
     /* 0x158 */ u32 mAreaWidthMaskZ;
-    /* 0x15C */ KC_Tri *mField0x15C;
+    /* 0x15C */ KC_Tri *mpTri;
 };
 
 #endif /* D_BG_D_BG_W_KCOL_H */

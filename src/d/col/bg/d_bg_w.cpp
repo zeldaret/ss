@@ -854,8 +854,8 @@ bool dBgW::UpdateDraw(mAllocator_c *alloc) {
     }
     for (int i = 0; i < 0x1F; ++i) {
         if (mMapRelated[i].mCount > 0) {
-            mMapRelated[i].mpPrismIdx = new (alloc) int[mMapRelated[i].mCount];
-            if (mMapRelated[i].mpPrismIdx == nullptr) {
+            mMapRelated[i].mpIdx = new (alloc) int[mMapRelated[i].mCount];
+            if (mMapRelated[i].mpIdx == nullptr) {
                 return false;
             }
         }
@@ -868,7 +868,7 @@ bool dBgW::UpdateDraw(mAllocator_c *alloc) {
     for (int i = 0; i < mpBgd->mTriNum; i++) {
         int idx = 0;
         if (!GetMapCode(i, &idx)) {
-            mMapRelated[idx].mpPrismIdx[local_cnt[idx]] = i;
+            mMapRelated[idx].mpIdx[local_cnt[idx]] = i;
             local_cnt[idx]++;
         }
     }
