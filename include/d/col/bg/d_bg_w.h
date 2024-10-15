@@ -171,7 +171,7 @@ public:
     /* vt at 0x08 */
     /* 0x008 */ virtual ~cBgW();
     /* 0x00C */ virtual bool ChkMemoryError() override;
-    /* 0x014 */ virtual bool GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const override; // ?
+    /* 0x014 */ virtual bool GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const override;
     /* 0x018 */ virtual bool ChkNotReady() const override;
     /* 0x01C */ virtual bool ChkLock() const override;
     /* 0x020 */ virtual bool ChkMoveBg() const override;
@@ -179,18 +179,18 @@ public:
     /* 0x028 */ virtual void GetTriPla(cBgS_PolyInfo const &, cM3dGPla *) const override;
     /* 0x02C */ virtual bool GetTriPnt(cBgS_PolyInfo const &, mVec3_c *, mVec3_c *, mVec3_c *) const override;
     /* 0x030 */ virtual const cM3dGAab *GetBnd() const override;
-    /* 0x034 */ virtual u32 GetGrpInf(cBgS_PolyInfo const &) const override; // ?
+    /* 0x034 */ virtual u32 GetGrpInf(cBgS_PolyInfo const &) const override;
     /* 0x038 */ virtual void OffMoveFlag() override = 0;
     /* 0x03C */ virtual void vt_0x3C() override = 0;
     /* 0x040 */ virtual bool LineCheck(cBgS_LinChk *) override;
     /* 0x044 */ virtual bool GroundCross(cBgS_GndChk *) override;
     /* 0x048 */ virtual void ShdwDraw(cBgS_ShdwDraw *) override;
     /* 0x04C */ virtual void CaptPoly(dBgS_CaptPoly &) override = 0;
-    /* 0x050 */ virtual bool WallCorrect(dBgS_Acch *) override = 0;      // ?
-    /* 0x054 */ virtual bool WallCorrectSort(dBgS_Acch *) override = 0;  // ?
-    /* 0x058 */ virtual bool RoofChk(dBgS_RoofChk *) override = 0;       // ?
-    /* 0x05C */ virtual bool SplGrpChk(dBgS_SplGrpChk *) override = 0;   // ?
-    /* 0x060 */ virtual bool SphChk(dBgS_SphChk *, void *) override = 0; // ?
+    /* 0x050 */ virtual bool WallCorrect(dBgS_Acch *) override = 0;
+    /* 0x054 */ virtual bool WallCorrectSort(dBgS_Acch *) override = 0;
+    /* 0x058 */ virtual bool RoofChk(dBgS_RoofChk *) override = 0;
+    /* 0x05C */ virtual bool SplGrpChk(dBgS_SplGrpChk *) override = 0;
+    /* 0x060 */ virtual bool SphChk(dBgS_SphChk *, void *) override = 0;
     /* 0x064 */ virtual s32 GetGrpRoomIndex(cBgS_PolyInfo const &) const override = 0;
     /* 0x068 */ virtual s32 GetExitId(cBgS_PolyInfo const &) override = 0;
     /* 0x06C */ virtual s32 GetZTargetThrough(cBgS_PolyInfo const &) override = 0;

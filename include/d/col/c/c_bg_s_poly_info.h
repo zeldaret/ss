@@ -47,6 +47,16 @@ public:
     u32 GetBgIndex() const {
         return mBgIndex;
     }
+    const cM3dGPla &GetPlane() const {
+        return mPla;
+    }
+    cM3dGPla *GetPlaneP() {
+        return &mPla;
+    }
+
+    const mVec3_c &GetField0x20() const {
+        return mField_0x20;
+    }
 };
 
 #endif
