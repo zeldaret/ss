@@ -423,7 +423,7 @@ config.libs = [
             Object(NonMatching, "d/col/bg/d_bg_w.cpp"),
             Object(Matching, "d/col/bg/d_bg_w_base.cpp"),
             Object(NonMatching, "d/col/bg/d_bg_w_kcol.cpp"),
-            Object(NonMatching, "d/col/bg/d_bg_w_sv.cpp"),
+            Object(Matching, "d/col/bg/d_bg_w_sv.cpp"),
             Object(NonMatching, "d/col/bg/d_bg_w_time.cpp"),
             Object(Matching, "d/col/cc/d_cc_shape_colliders.cpp"),
         ],

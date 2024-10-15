@@ -238,6 +238,12 @@ public:
     bool ChkNoCalcVtx() {
         return mFlags & NO_CALC_VTX_e;
     }
+    void SetNoCalcVtx() {
+        mFlags |= NO_CALC_VTX_e;
+    }
+    void ClrNoCalcVtx() {
+        mFlags &= ~NO_CALC_VTX_e;
+    }
     void SetLock() {
         mFlags |= LOCK_e;
     }
@@ -321,7 +327,6 @@ public:
 
     /* vt at 0x08 */
     /* 0x008 */ virtual ~dBgW();
-    /* 0x020 */ virtual bool ChkMoveBg() const override;
     /* 0x024 */ virtual u32 ChkMoveFlag() const override;
     /* 0x038 */ virtual void OffMoveFlag() override;
     /* 0x03C */ virtual void vt_0x3C() override;
