@@ -144,6 +144,7 @@ public:
     bool GroundCrossRp(cBgS_GndChk *, int);
     bool RwgGroundCheckCommon(f32, u16, cBgS_GndChk *) {
         // Is Inlined
+        return false;
     }
     bool RwgGroundCheckGnd(u16, cBgS_GndChk *);
     bool RwgGroundCheckWall(u16, cBgS_GndChk *);

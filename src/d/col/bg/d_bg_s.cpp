@@ -623,6 +623,8 @@ int dBgS::GetMapCode(int att0, int att1, bool bAlt) {
             return 0x1d;
         }
     }
+
+    return att0;
 }
 
 int dBgS::GetLightingCode(cBgS_PolyInfo const &info) {

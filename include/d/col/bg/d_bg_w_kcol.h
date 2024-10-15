@@ -43,6 +43,13 @@ struct KCol_Header {
     /* 0xC */ u32 block_data_offset;
 };
 
+// Made up?
+struct KC_Tri {
+    mVec3_c v1;
+    mVec3_c v2;
+    mVec3_c v3;
+};
+
 class dBgWKCol : public dBgW_Base {
 public:
     dBgWKCol();
@@ -53,8 +60,16 @@ public:
     bool GetTriPnt(KC_PrismData const *, mVec3_c *, mVec3_c *, mVec3_c *) const;
     bool GetTriPnt(int, mVec3_c *, mVec3_c *, mVec3_c *) const;
     void GetPolyCode(int, dBgPc *) const;
+
+    // These two functions are similar, first one checks roof, second doesnt. Idk a good name
     static bool ChkPolyThrough(int id, dBgPc *, cBgS_Chk *);
+    static bool ChkPolyThroughGnd(int id, dBgPc *, cBgS_Chk *);
+
     bool ChkShdwDrawThrough(dBgPc *);
+
+    static int GetMapCode(int polyIdx, KC_PrismData *prism, int *pOut);
+    void DrawMapSection(int, f32, f32, f32);
+    int GetPrismIdx(const KC_PrismData *);
 
     /* vt at 0x08 */
     /* 0x008 */ virtual ~dBgWKCol() override;
@@ -145,7 +160,7 @@ private:
     /* 0x150 */ u32 mAreaWidthMaskX;
     /* 0x154 */ u32 mAreaWidthMaskY;
     /* 0x158 */ u32 mAreaWidthMaskZ;
-    /* 0x15C */ u32 mField0x15C;
+    /* 0x15C */ KC_Tri *mField0x15C;
 };
 
 #endif /* D_BG_D_BG_W_KCOL_H */
