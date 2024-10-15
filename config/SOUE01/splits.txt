@@ -1042,6 +1042,8 @@ d/col/bg/d_bg_w_kcol.cpp:
 
 d/col/bg/d_bg_w_sv.cpp:
 	.text       start:0x80352140 end:0x80352920
+	.data       start:0x80548120 end:0x80548234
+	.sdata2     start:0x8057D228 end:0x8057D230
 
 d/col/bg/d_bg_w_time.cpp:
 	.text       start:0x80352920 end:0x80353B44
