@@ -127,10 +127,10 @@ public:
     /* 0x0E4 */ virtual void CrrPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) = 0;
     /* 0x0E8 */ virtual void TransPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) = 0;
     /* 0x0EC */ virtual void MatrixCrrPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) = 0;
-    /* 0x0F0 */ virtual void CallRideCallback(dAcObjBase_c *, dAcObjBase_c *) = 0;
-    /* 0x0F4 */ virtual void CallArrowStickCallback(dAcObjBase_c *, dAcObjBase_c *, mVec3_c &) = 0;
-    /* 0x0F8 */ virtual bool CallUnkCallback(dAcObjBase_c *, dAcObjBase_c *) = 0;
-    /* 0x0FC */ virtual bool UpdateDraw(mAllocator_c *) = 0;
+    /* 0x0F0 */ virtual void CallRideCallback(dAcObjBase_c *, dAcObjBase_c *);
+    /* 0x0F4 */ virtual void CallArrowStickCallback(dAcObjBase_c *, dAcObjBase_c *, mVec3_c &);
+    /* 0x0F8 */ virtual bool CallUnkCallback(dAcObjBase_c *, dAcObjBase_c *);
+    /* 0x0FC */ virtual bool UpdateDraw(mAllocator_c *);
     /* 0x100 */ virtual bool GetIsDraw(int) = 0;
     /* 0x104 */ virtual void DrawOnMap(int, bool) = 0;
 
@@ -159,13 +159,6 @@ public:
         }
     }
 
-    // bool chkStickWall() {
-    //     return field_0xb & 1;
-    // }
-    // bool chkStickRoof() {
-    //     return field_0xb & 2;
-    // }
-
     void SetPushPullCallback(PushPull_CallBack i_callBack) {
         mpPushPull_cb = i_callBack;
     }
@@ -178,12 +171,12 @@ public:
     void SetPriority(PRIORITY priority) {
         mPriority = priority;
     }
-    // void onStickWall() {
-    //     field_0xb |= 1;
-    // }
-    // void onStickRoof() {
-    //     field_0xb |= 2;
-    // }
+    void OnStickWall() {
+        field_0x24 |= 1;
+    }
+    void OnStickRoof() {
+        field_0x24 |= 2;
+    }
 
     cPartition &GetPartition() {
         return mPartitionInfo;

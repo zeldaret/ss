@@ -19,9 +19,12 @@ dBgW_Base::~dBgW_Base() {
 
 void dBgW_Base::ClrDBgWBase() {
     // Regswap?
+
     mRoomId = 0xFF;
     mPriority = 2;
     field_0x2E = 0xFF;
+    // A set to 0 is required. I think 0x24 may be flags, so an unset then set?
+    field_0x24 = 0;
     field_0x24 = 4;
     mRegistId = BG_ID_MAX;
     field_0x2F = 0xFF;
@@ -30,7 +33,7 @@ void dBgW_Base::ClrDBgWBase() {
     SetPushPullCallback(nullptr);
     ClearMap();
     field_0x20 = 0;
-    field_0x22 = -1;
+    field_0x22 = 0xFFFF;
 }
 
 bool dBgW_Base::ChkMemoryError() {
