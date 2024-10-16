@@ -30,7 +30,6 @@ BLOCKING_SYMBOLS = [
     ['fn_800C3EC0', 'ActorEventFlowManagerRelated::checkEventFinished'],
     ['fn_800275C0', 'EffectsStruct::ctor'],
     ['fn_80027610', 'EffectsStruct::ctor'],
-    ['fn_80341A70', 'checkCollision'],
     ['fn_80016C10', 'AnimModelWrapper::ctor'],
     ['fn_802E32B0', 'm2d::FrameCtrl_c::setFrame'],
     ['fn_802F04A0', 'mFader_c::draw'],
@@ -45,9 +44,6 @@ BLOCKING_SYMBOLS = [
     ['fn_801BB6F0', 'getCamera'],
     ['fn_800225F0', 'something light'],
     ['fn_80179250', 'shutter fence list'],
-    ['fn_8033AB50', 'getCollisionCheckContext'],
-    ['fn_8033F150', 'fn_8033F150'],
-    ['fn_80341040', 'fn_80341040'],
     ['fn_383_D10', 'getAcOStageSink_ptr'],
 ]
 
