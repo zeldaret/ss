@@ -6,15 +6,18 @@
 
 SPECIAL_ACTOR_PROFILE(SW_AREA_TAG, dTgSwArea_c, fProfile::SW_AREA_TAG, 0x292, 0, 0);
 
-int dTgSwArea_c::create() {
-    setSceneflag = params;
-    unsetSceneflag = (params >> 0x8);
-    unsetOnLeave = (params >> 0x10 & 1) == 0;
+u32 dTgSwArea_c::sDefaultRotX = 0;
+u32 dTgSwArea_c::sDefaultRotZ = 0;
 
-    setStoryflag = rotation.x & 0x7FF;
-    unsetStoryflag = rotation.z & 0x7FF;
-    rotation.x = 0;
-    rotation.z = 0;
+int dTgSwArea_c::create() {
+    setSceneflag = getSetSceneflag();
+    unsetSceneflag = getUnsetSceneflag();
+    unsetOnLeave = !getSetOnLeave();
+
+    setStoryflag = getSetStoryflag();
+    unsetStoryflag = getUnsetStoryflag();
+    rotation.x = sDefaultRotX;
+    rotation.z = sDefaultRotZ;
 
     matrixCreateFromPosRotYScale(area, position, rotation.y, mScale, nullptr, 0.0f);
     return SUCCEEDED;
