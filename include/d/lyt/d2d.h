@@ -118,9 +118,9 @@ struct AnmGroupBase_c {
     bool init(const char *fileName, m2d::ResAccIf_c *acc, d2d::Layout_c *layout, const char *animName);
     bool init(nw4r::lyt::AnimTransform *transform, const char *fileName, m2d::ResAccIf_c *acc, nw4r::lyt::Group *group);
 
-    bool fn_800AC6D0(bool);
-    bool fn_800AC7D0();
-    bool fn_800AC860();
+    bool setDirection(bool backwards);
+    bool unbind();
+    bool afterUnbind();
     void setAnimEnable(bool);
     void setAnmFrame(f32);
     void syncAnmFrame();
@@ -128,7 +128,7 @@ struct AnmGroupBase_c {
     void setBackward();
 
     inline void setFrameAndControlThings(f32 frame) {
-        fn_800AC6D0(false);
+        setDirection(false);
         setAnimEnable(true);
         mpFrameCtrl->setFrame(frame);
         syncAnmFrame();

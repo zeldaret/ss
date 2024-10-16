@@ -821,7 +821,7 @@ bool AnmGroupBase_c::init(nw4r::lyt::AnimTransform *transform, const char *name,
     return true;
 }
 
-bool AnmGroupBase_c::fn_800AC6D0(bool b) {
+bool AnmGroupBase_c::setDirection(bool b) {
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     if (anmTransform == nullptr) {
         return false;
@@ -849,7 +849,7 @@ bool AnmGroupBase_c::fn_800AC6D0(bool b) {
     return true;
 }
 
-bool AnmGroupBase_c::fn_800AC7D0() {
+bool AnmGroupBase_c::unbind() {
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     if (anmTransform == nullptr) {
         return false;
@@ -865,7 +865,7 @@ bool AnmGroupBase_c::fn_800AC7D0() {
     return true;
 }
 
-bool AnmGroupBase_c::fn_800AC860() {
+bool AnmGroupBase_c::afterUnbind() {
     return true;
 }
 

@@ -37,6 +37,10 @@ public:
         }
     }
 
+    void fn_800E0A60(const char *area, ...) {
+        // TODO
+    }
+
     static f32 GetTranslateX1_();
 
     // @bug: This does not implement UT's RTTI, so casts to dTextBox_c will

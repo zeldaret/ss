@@ -141,6 +141,10 @@ public:
     /* vt 0x08 */ virtual ~Base_c();
     /* vt 0x0C */ virtual void draw();
 
+    void setPriority(u8 p) {
+        mPriority = p;
+    }
+
     /* 0x0C */ u8 mPriority;
 
     void addToDrawList();

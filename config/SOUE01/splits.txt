@@ -192,6 +192,10 @@ d/lyt/d_window.cpp:
 	.data       start:0x80510820 end:0x805108B0
 	.sdata2     start:0x805797F0 end:0x805797F8
 
+d/d_text_writer.cpp:
+	.text       start:0x800B35C0 end:0x800B9274
+	.ctors      start:0x804DB6D4 end:0x804DB6D8
+
 toBeSorted/time_area_mgr.cpp:
 	.text       start:0x800B9280 end:0x800BB2A0
 
@@ -287,6 +291,10 @@ d/lyt/meter/d_lyt_meter_rupy.cpp:
 	.text       start:0x801003F0 end:0x801026A8
 	.ctors      start:0x804DB714 end:0x804DB718
 
+d/lyt/meter/d_lyt_meter_ganbari_gauge.cpp:
+	.text       start:0x801026B0 end:0x80105548
+	.ctors      start:0x804DB718 end:0x804DB71C
+
 d/lyt/meter/d_lyt_meter_heart.cpp:
 	.text       start:0x8010AEC0 end:0x8010BD48
 
@@ -381,6 +389,10 @@ d/lyt/d_lyt_battery.cpp:
 d/lyt/d_lyt_area_caption.cpp:
 	.text       start:0x8014AD20 end:0x8014C6B8
 	.ctors      start:0x804DB778 end:0x804DB77C
+	.rodata     start:0x804E7FA0 end:0x804E7FE0
+	.data       start:0x80522B00 end:0x80522E80
+	.sdata      start:0x80572878 end:0x80572880
+	.bss        start:0x805B0A70 end:0x805B0B30
 
 d/lyt/d_lyt_wipe.cpp:
 	.text       start:0x8014C6C0 end:0x8014E008
