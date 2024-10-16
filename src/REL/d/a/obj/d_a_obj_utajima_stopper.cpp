@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_utajima_stopper.h>
+#include "d/a/obj/d_a_obj_utajima_stopper.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_UTAJIMA_STOPPER, dAcOutajimaStopper_c, fProfile::OBJ_UTAJIMA_STOPPER, 0x1CF, 0, 6);
 

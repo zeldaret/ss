@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_switch_wall.h>
+#include "d/a/obj/d_a_obj_switch_wall.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SWITCH_WALL, dAcOswitchWall_c, fProfile::OBJ_SWITCH_WALL, 0x191, 0, 2);
 

@@ -4,10 +4,10 @@
 // This file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_list_mg_ptmf.hpp
 
-#include <common.h>
-
+#include "common.h"
 #include "f/f_list_mg.h"
 #include "f/f_list_nd_prio.h"
+
 
 class fBase_c;
 

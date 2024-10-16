@@ -1,8 +1,9 @@
 #ifndef EGG_AUDIO_REMOTE_SPEAKER_MANAGER_H
 #define EGG_AUDIO_REMOTE_SPEAKER_MANAGER_H
 
-#include <common.h>
-#include <rvl/WPAD.h>
+#include "common.h"
+#include "rvl/WPAD.h" // IWYU pragma: export
+
 
 namespace EGG {
 

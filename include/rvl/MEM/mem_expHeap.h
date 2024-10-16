@@ -1,14 +1,12 @@
 #ifndef RVL_SDK_MEM_EXP_HEAP_H
 #define RVL_SDK_MEM_EXP_HEAP_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define MEM_EXP_HEAP_MIN_SIZE                                                  \
-    (sizeof(MEMiHeapHead) + sizeof(MEMiExpHeapHead) +                          \
-     sizeof(MEMiExpHeapMBlock) + 4)
-     
+#define MEM_EXP_HEAP_MIN_SIZE (sizeof(MEMiHeapHead) + sizeof(MEMiExpHeapHead) + sizeof(MEMiExpHeapMBlock) + 4)
+
 // Forward declarations
 typedef struct MEMiHeapHead;
 

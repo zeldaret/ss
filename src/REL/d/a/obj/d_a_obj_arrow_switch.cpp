@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_arrow_switch.h>
+#include "d/a/obj/d_a_obj_arrow_switch.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_ARROW_SWITCH, dAcOarrowSwitch_c, fProfile::OBJ_ARROW_SWITCH, 0x1B5, 0, 6);
 

@@ -1,5 +1,7 @@
-#include <d/a/obj/d_a_obj_spike.h>
-#include <d/col/cc/d_cc_mgr.h>
+#include "d/a/obj/d_a_obj_spike.h"
+
+#include "d/col/cc/d_cc_mgr.h"
+
 
 SPECIAL_ACTOR_PROFILE(OBJ_SPIKE, dAcOspike_c, fProfile::OBJ_SPIKE, 0x1D9, 0, 2);
 

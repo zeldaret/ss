@@ -1,11 +1,13 @@
-#include <nw4r/lyt/lyt_drawInfo.h>
-#include <nw4r/lyt/lyt_layout.h>
-#include <nw4r/lyt/lyt_material.h>
-#include <nw4r/lyt/lyt_pane.h>
-#include <nw4r/ut/ut_Color.h>
-#include <nw4r/ut/ut_Rect.h>
-#include <nw4r/ut/ut_RuntimeTypeInfo.h>
-#include <nw4r/ut/ut_list.h>
+#include "nw4r/lyt/lyt_pane.h"
+
+#include "nw4r/lyt/lyt_drawInfo.h"
+#include "nw4r/lyt/lyt_layout.h"
+#include "nw4r/lyt/lyt_material.h"
+#include "nw4r/ut/ut_Color.h"
+#include "nw4r/ut/ut_Rect.h"
+#include "nw4r/ut/ut_RuntimeTypeInfo.h"
+#include "nw4r/ut/ut_list.h"
+
 
 // ReverseYAxis__22@unnamed@lyt_pane_cpp@FPQ34nw4r4math5MTX34
 namespace nw4r {
@@ -188,7 +190,7 @@ Pane *Pane::FindPaneByName(const char *findName, bool bRecursive) {
     }
     if (bRecursive) {
         for (ut::LinkList<Pane, 4>::Iterator it = this->mChildList.GetBeginIter(); it != this->mChildList.GetEndIter();
-                it++) {
+             it++) {
             Pane *pPane = it->FindPaneByName(findName, bRecursive);
             if (pPane != nullptr) {
                 return pPane;
@@ -205,7 +207,7 @@ Material *Pane::FindMaterialByName(const char *findName, bool bRecursive) {
     }
     if (bRecursive) {
         for (ut::LinkList<Pane, 4>::Iterator it = this->mChildList.GetBeginIter(); it != this->mChildList.GetEndIter();
-                it++) {
+             it++) {
             Material *pPane = it->FindMaterialByName(findName, bRecursive);
             if (pPane != nullptr) {
                 return pPane;
@@ -313,7 +315,7 @@ void Pane::CalculateMtx(const DrawInfo &drawInfo) {
 // Guess but makes sense
 void Pane::CalculateMtxChild(const DrawInfo &drawInfo) {
     for (ut::LinkList<Pane, 4>::Iterator it = this->mChildList.GetBeginIter(); it != this->mChildList.GetEndIter();
-            it++) {
+         it++) {
         it->CalculateMtx(drawInfo);
     }
 }
@@ -323,7 +325,7 @@ void Pane::Draw(const DrawInfo &drawInfo) {
     if (IsVisible()) {
         this->DrawSelf(drawInfo);
         for (ut::LinkList<Pane, 4>::Iterator it = this->mChildList.GetBeginIter(); it != this->mChildList.GetEndIter();
-                it++) {
+             it++) {
             it->Draw(drawInfo);
         }
     }
@@ -337,7 +339,7 @@ void Pane::Animate(u32 option) {
     this->AnimateSelf(option);
     if (IsVisible() || !(option & 1)) {
         for (ut::LinkList<Pane, 4>::Iterator it = this->mChildList.GetBeginIter(); it != this->mChildList.GetEndIter();
-                it++) {
+             it++) {
             it->Animate(option);
         }
     }
@@ -346,7 +348,7 @@ void Pane::Animate(u32 option) {
 // AnimateSelf__Q34nw4r3lyt4PaneFUl
 void Pane::AnimateSelf(u32 option) {
     for (ut::LinkList<AnimationLink, 0>::Iterator it = this->mAnimList.GetBeginIter();
-            it != this->mAnimList.GetEndIter(); it++) {
+         it != this->mAnimList.GetEndIter(); it++) {
         if (it->IsEnable()) {
             AnimTransform *animTrans = it->GetAnimTransform();
             animTrans->Animate(it->GetIndex(), this);
@@ -369,7 +371,7 @@ void Pane::UnbindAnimation(AnimTransform *pAnimTrans, bool bRecusive) {
     this->UnbindAnimationSelf(pAnimTrans);
     if (bRecusive) {
         for (ut::LinkList<Pane, 4>::Iterator it = this->mChildList.GetBeginIter(); it != this->mChildList.GetEndIter();
-                it++) {
+             it++) {
             it->UnbindAnimation(pAnimTrans, bRecusive);
         }
     }
@@ -416,7 +418,7 @@ void Pane::SetAnimationEnable(AnimTransform *pAnimTrans, bool bEnable, bool bRec
     }
     if (bRecursive) {
         for (ut::LinkList<Pane, 4>::Iterator it = this->mChildList.GetBeginIter(); it != this->mChildList.GetEndIter();
-                it++) {
+             it++) {
             it->SetAnimationEnable(pAnimTrans, bEnable, bRecursive);
         }
     }
@@ -435,7 +437,7 @@ void Pane::SetAnimationEnable(const AnimResource &animRes, bool bEnable, bool bR
     }
     if (bRecursive) {
         for (ut::LinkList<Pane, 4>::Iterator it = this->mChildList.GetBeginIter(); it != this->mChildList.GetEndIter();
-                it++) {
+             it++) {
             it->SetAnimationEnable(animRes, bEnable, bRecursive);
         }
     }
@@ -460,26 +462,14 @@ math::VEC2 Pane::GetVtxPos() const {
     math::VEC2 basePt(0.0f, 0.0f);
 
     switch (this->mBasePosition % 3) {
-    default:
-        basePt.x = 0.0f;
-        break;
-    case 1:
-        basePt.x = -this->mSize.width / 2;
-        break;
-    case 2:
-        basePt.x = -this->mSize.width;
-        break;
+        default: basePt.x = 0.0f; break;
+        case 1:  basePt.x = -this->mSize.width / 2; break;
+        case 2:  basePt.x = -this->mSize.width; break;
     }
     switch (this->mBasePosition / 3) {
-    default:
-        basePt.y = 0.0f;
-        break;
-    case 1:
-        basePt.y = this->mSize.height / 2;
-        break;
-    case 2:
-        basePt.y = this->mSize.height;
-        break;
+        default: basePt.y = 0.0f; break;
+        case 1:  basePt.y = this->mSize.height / 2; break;
+        case 2:  basePt.y = this->mSize.height; break;
     }
     return basePt;
 }

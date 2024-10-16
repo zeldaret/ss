@@ -3,16 +3,12 @@
 
 // NOTE:: Comments about functions pulled from NSMBW
 
+#include "common.h"
 #include "egg/math/eggMatrix.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "nw4r/nw4r_types.h"
 
-#include <common.h>
-
-
-#pragma push
-#pragma warning off(10402)
 class mMtx_c {
     typedef f32 (*MtxRef)[4];
     typedef const f32 (*MtxRefConst)[4];
@@ -31,14 +27,23 @@ public:
         }
     }
 
-    inline operator MtxRef() {
-        return m;
+    operator MtxRef() {
+        return (MtxRef)(this);
     }
-    inline operator MtxRefConst() const {
-        return m;
+    operator MtxRefConst() const {
+        return (MtxRefConst)(this);
     }
     operator nw4r::math::MTX34 *() {
-        return &nw4rm;
+        return (nw4r::math::MTX34 *)(this);
+    }
+    operator EGG::Matrix34f *() {
+        return (EGG::Matrix34f *)(this);
+    }
+    operator nw4r::math::MTX34 &() {
+        return *(nw4r::math::MTX34 *)(this);
+    }
+    operator EGG::Matrix34f &() {
+        return *(EGG::Matrix34f *)(this);
     }
 
     void XrotS(const mAng &angle); ///< Generates a rotation matrix for the X axis with the given angle.
@@ -74,9 +79,7 @@ public:
 
 public:
     union {
-        EGG::Matrix34f mat;
         f32 m[3][4];
-        nw4r::math::MTX34 nw4rm;
         struct {
             f32 xx, xy, xz, xw;
             f32 yx, yy, yz, yw;
@@ -87,7 +90,5 @@ public:
 public:
     static mMtx_c Identity;
 };
-
-#pragma pop
 
 #endif

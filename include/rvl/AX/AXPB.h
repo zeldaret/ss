@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_AX_PB_H
 #define RVL_SDK_AX_PB_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -22,9 +22,15 @@ extern "C" {
 // Amount of nibbles in a frame
 #define AX_ADPCM_NIBBLES_PER_FRAME (AX_ADPCM_FRAME_SIZE * 2)
 
-typedef enum { AX_VOICE_NORMAL, AX_VOICE_STREAM } AXVOICETYPE;
+typedef enum {
+    AX_VOICE_NORMAL,
+    AX_VOICE_STREAM
+} AXVOICETYPE;
 
-typedef enum { AX_VOICE_STOP, AX_VOICE_RUN } AXVOICESTATE;
+typedef enum {
+    AX_VOICE_STOP,
+    AX_VOICE_RUN
+} AXVOICESTATE;
 
 typedef enum {
     AX_SAMPLE_FORMAT_DSP_ADPCM = 0,

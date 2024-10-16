@@ -1,9 +1,9 @@
 #ifndef D_A_HEARTF_H
 #define D_A_HEARTF_H
 
-#include <d/a/obj/d_a_obj_base.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/obj/d_a_obj_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dAcHeartf_c : public dAcObjBase_c {
 public:

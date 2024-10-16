@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_pipe.h>
+#include "d/a/obj/d_a_obj_pipe.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_PIPE, dAcOPipe_c, fProfile::OBJ_PIPE, 0xCF, 0, 0);
 

@@ -1,10 +1,10 @@
 #ifndef D_A_OBJ_STAGE_COVER_H
 #define D_A_OBJ_STAGE_COVER_H
 
-#include <d/a/obj/d_a_obj_base.h>
-#include <m/m3d/m_smdl.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/obj/d_a_obj_base.h"
+#include "m/m3d/m_smdl.h"
+#include "nw4r/g3d/g3d_resfile.h"
+#include "s/s_State.hpp"
 
 class dAcOstageCover_c : public dAcObjBase_c {
 public:

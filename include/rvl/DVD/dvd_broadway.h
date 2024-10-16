@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_DVD_BROADWAY_H
 #define RVL_SDK_DVD_BROADWAY_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -35,8 +35,10 @@ typedef void (*DVDLowCallback)(u32 intType);
 
 BOOL DVDLowInit(void);
 BOOL DVDLowReadDiskID(struct DVDDiskID *out, DVDLowCallback callback);
-BOOL DVDLowOpenPartition(u32 offset, const struct ESPTicket *ticket, u32 certsSize, const void *certs,
-        struct ESPTmd *tmd, DVDLowCallback callback);
+BOOL DVDLowOpenPartition(
+    u32 offset, const struct ESPTicket *ticket, u32 certsSize, const void *certs, struct ESPTmd *tmd,
+    DVDLowCallback callback
+);
 BOOL DVDLowClosePartition(DVDLowCallback callback);
 BOOL DVDLowUnencryptedRead(void *dst, u32 size, u32 offset, DVDLowCallback callback);
 BOOL DVDLowStopMotor(BOOL eject, BOOL kill, DVDLowCallback callback);

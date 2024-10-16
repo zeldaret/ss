@@ -5,10 +5,11 @@
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_list_mg.hpp
 
 #include "c/c_list.h"
+#include "common.h"
 #include "f/f_base_id.h"
 #include "f/f_list_nd.h"
 #include "f/f_profile.h"
-#include <common.h>
+
 
 class fBase_c;
 

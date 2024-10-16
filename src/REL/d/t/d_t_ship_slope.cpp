@@ -1,4 +1,4 @@
-#include <d/t/d_t_ship_slope.h>
+#include "d/t/d_t_ship_slope.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_SHIP_SLOPE, dTgShipSlope_c, fProfile::TAG_SHIP_SLOPE, 0x21F, 0, 0);
 

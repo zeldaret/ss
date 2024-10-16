@@ -1,11 +1,10 @@
 #ifndef NW4R_SND_STRM_FILE_H
 #define NW4R_SND_STRM_FILE_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/snd/snd_Common.h"
+#include "nw4r/snd/snd_Util.h"
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut.h"
 
-#include <nw4r/snd/snd_Common.h>
-#include <nw4r/snd/snd_Util.h>
-
-#include <nw4r/ut.h>
 
 namespace nw4r {
 namespace snd {
@@ -102,11 +101,11 @@ public:
         return mHeader != NULL;
     }
 
-    bool IsValidFileHeader(const void* pStrmBin);
-    void Setup(const void* pStrmBin);
+    bool IsValidFileHeader(const void *pStrmBin);
+    void Setup(const void *pStrmBin);
 
-    bool ReadStrmInfo(StrmInfo* pStrmInfo) const;
-    bool ReadAdpcmInfo(AdpcmInfo* pAdpcmInfo, int channels) const;
+    bool ReadStrmInfo(StrmInfo *pStrmInfo) const;
+    bool ReadAdpcmInfo(AdpcmInfo *pAdpcmInfo, int channels) const;
 
     u32 GetAdpcBlockOffset() const {
         if (IsAvailable()) {
@@ -117,19 +116,18 @@ public:
     }
 
 private:
-    const StrmFile::Header* mHeader;       // at 0x0
-    const StrmFile::HeadBlock* mHeadBlock; // at 0x4
+    const StrmFile::Header *mHeader;       // at 0x0
+    const StrmFile::HeadBlock *mHeadBlock; // at 0x4
 };
 
 class StrmFileLoader {
 public:
-    explicit StrmFileLoader(ut::FileStream& rFileStream)
-        : mStream(rFileStream) {}
+    explicit StrmFileLoader(ut::FileStream &rFileStream) : mStream(rFileStream) {}
 
-    bool LoadFileHeader(void* pStrmBin, u32 size);
-    bool ReadAdpcBlockData(u16* pYN1, u16* pYN2, int block, int channels);
+    bool LoadFileHeader(void *pStrmBin, u32 size);
+    bool ReadAdpcBlockData(u16 *pYN1, u16 *pYN2, int block, int channels);
 
-    bool ReadStrmInfo(StrmInfo* pStrmInfo) const {
+    bool ReadStrmInfo(StrmInfo *pStrmInfo) const {
         if (!mReader.IsAvailable()) {
             return false;
         }
@@ -137,7 +135,7 @@ public:
         return mReader.ReadStrmInfo(pStrmInfo);
     }
 
-    bool ReadAdpcmInfo(AdpcmInfo* pAdpcmInfo, int channel) const {
+    bool ReadAdpcmInfo(AdpcmInfo *pAdpcmInfo, int channel) const {
         if (!mReader.IsAvailable()) {
             return false;
         }
@@ -146,11 +144,10 @@ public:
     }
 
 private:
-    static const int HEADER_ALIGNED_SIZE =
-        ROUND_UP(sizeof(StrmFile::Header), 32);
+    static const int HEADER_ALIGNED_SIZE = ROUND_UP(sizeof(StrmFile::Header), 32);
 
 private:
-    ut::FileStream& mStream; // at 0x0
+    ut::FileStream &mStream; // at 0x0
     StrmFileReader mReader;  // at 0x4
 };
 

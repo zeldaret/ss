@@ -1,7 +1,9 @@
-#include <c/c_math.h>
-#include <d/t/d_t_touch.h>
-#include <toBeSorted/area_math.h>
-#include <toBeSorted/sceneflag_manager.h>
+#include "d/t/d_t_touch.h"
+
+#include "c/c_math.h"
+#include "toBeSorted/area_math.h"
+#include "toBeSorted/sceneflag_manager.h"
+
 
 SPECIAL_ACTOR_PROFILE(TOUCH_TAG, dTgTouchTag, fProfile::TOUCH_TAG, 0x028E, 0, 0);
 

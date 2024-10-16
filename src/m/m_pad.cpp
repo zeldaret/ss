@@ -1,8 +1,10 @@
-#include <common.h>
-#include <egg/core/eggController.h>
-#include <egg/math/eggVector.h>
-#include <m/m_pad.h>
-#include <rvl/WPAD.h>
+#include "m/m_pad.h"
+
+#include "common.h"
+#include "egg/core/eggController.h"
+#include "egg/math/eggVector.h"
+#include "rvl/WPAD.h" // IWYU pragma: export
+
 
 namespace mPad {
 
@@ -74,10 +76,8 @@ void beginPad() {
             }
 
             // Not sure why this checks the controller index against the tick count
-            if (s_GetWPADInfoInterval != 0 &&
-                ((s_GetWPADInfoInterval == 1 || s_GetWPADInfoCount == i) ||
-                 (s_GetWPADInfoInterval <= 3 && (s_GetWPADInfoCount & 1) == (i & 1))))
-            {
+            if (s_GetWPADInfoInterval != 0 && ((s_GetWPADInfoInterval == 1 || s_GetWPADInfoCount == i) ||
+                                               (s_GetWPADInfoInterval <= 3 && (s_GetWPADInfoCount & 1) == (i & 1)))) {
                 getWPADInfoCB(i);
             }
         } else if (*connected) {

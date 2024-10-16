@@ -1,5 +1,7 @@
-#include <d/d_heap.h>
-#include <d/d_heap_alloc.h>
+#include "d/d_heap.h"
+
+#include "d/d_heap_alloc.h"
+
 
 dHeap dHeap::work1Heap;
 dHeap dHeap::work2Heap;

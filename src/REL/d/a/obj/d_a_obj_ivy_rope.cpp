@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_ivy_rope.h>
+#include "d/a/obj/d_a_obj_ivy_rope.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_IVY_ROPE, dAcOivyRope_c, fProfile::OBJ_IVY_ROPE, 0x262, 0, 2);
 

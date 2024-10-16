@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_gumarm.h>
+#include "d/a/e/d_a_e_gumarm.h"
 
 SPECIAL_ACTOR_PROFILE(E_GUMARM, dAcGumarm_c, fProfile::E_GUMARM, 0x11F, 0, 3);
 

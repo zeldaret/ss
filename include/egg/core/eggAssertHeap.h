@@ -1,9 +1,9 @@
 #ifndef EGG_ASSERT_HEAP_H
 #define EGG_ASSERT_HEAP_H
 
+#include "common.h"
 #include "egg/core/eggHeap.h"
 
-#include <common.h>
 
 namespace EGG {
 

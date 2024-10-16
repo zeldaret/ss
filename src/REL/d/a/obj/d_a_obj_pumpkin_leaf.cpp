@@ -1,5 +1,7 @@
-#include <d/a/obj/d_a_obj_pumpkin_leaf.h>
-#include <s/s_Math.h>
+#include "d/a/obj/d_a_obj_pumpkin_leaf.h"
+
+#include "s/s_Math.h"
+
 
 SPECIAL_ACTOR_PROFILE(OBJ_PUMPKIN_LEAF, dAcOPumpkinLeaf_c, fProfile::OBJ_PUMPKIN_LEAF, 0x0135, 0, 3);
 

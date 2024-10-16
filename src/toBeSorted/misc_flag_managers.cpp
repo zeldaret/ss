@@ -1,9 +1,11 @@
-#include <common.h>
-#include <libc.h>
-#include <toBeSorted/misc_flag_managers.h>
-#include <toBeSorted/bitwise_flag_helper.h>
-#include <toBeSorted/file_manager.h>
-#include <toBeSorted/flag_space.h>
+#include "toBeSorted/misc_flag_managers.h"
+
+#include "common.h"
+#include "libc.h"
+#include "toBeSorted/bitwise_flag_helper.h"
+#include "toBeSorted/file_manager.h"
+#include "toBeSorted/flag_space.h"
+
 
 /* 0x800BE7B0 */
 bool CommittableFlagManager::commitIfNecessary() {
@@ -50,8 +52,9 @@ void TBoxFlagManager::copyFromSave(s16 sceneIndex) {
 /* 0x800BE990 */
 bool TBoxFlagManager::checkFlag(u16 sceneIndex, u16 flag) {
     s32 actualFlag = (flag + sceneIndex * 0x20);
-    return mFlagHelper.checkFlag(actualFlag / 16, flag % 16, FileManager::getInstance()->getTBoxFlagsConst(),
-            getFlagCount());
+    return mFlagHelper.checkFlag(
+        actualFlag / 16, flag % 16, FileManager::getInstance()->getTBoxFlagsConst(), getFlagCount()
+    );
 }
 
 /* 0x800BEA30 */

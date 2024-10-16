@@ -1,7 +1,8 @@
-#include <d/lyt/d_lyt_battery.h>
-#include <egg/core/eggController.h>
-#include <m/m_pad.h>
-#include <toBeSorted/arc_managers/layout_arc_manager.h>
+#include "d/lyt/d_lyt_battery.h"
+
+#include "egg/core/eggController.h"
+#include "m/m_pad.h"
+#include "toBeSorted/arc_managers/layout_arc_manager.h"
 
 STATE_DEFINE(dLytBattery_c, Off);
 STATE_DEFINE(dLytBattery_c, In);

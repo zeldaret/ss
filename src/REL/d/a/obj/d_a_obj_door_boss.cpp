@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_door_boss.h>
+#include "d/a/obj/d_a_obj_door_boss.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_DOOR_BOSS, dAcOdoorBoss_c, fProfile::OBJ_DOOR_BOSS, 0x189, 0, 2);
 

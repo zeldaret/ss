@@ -1,3 +1,3 @@
-#include <egg/gfx/eggDrawPathDOF.h>
+#include "egg/gfx/eggDrawPathDOF.h"
 
 namespace EGG {} // namespace EGG

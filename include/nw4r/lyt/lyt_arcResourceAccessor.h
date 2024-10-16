@@ -5,8 +5,9 @@
 #include "nw4r/lyt/lyt_resourceAccessor.h"
 #include "nw4r/ut/ut_Font.h"
 #include "nw4r/ut/ut_LinkList.h"
-#include <rvl/ARC.h>
-#include <string.h>
+#include "rvl/ARC.h" // IWYU pragma: export
+#include "string.h"
+
 
 #define FONTNAMEBUF_MAX 128
 #define ROOTPATH_MAX 128

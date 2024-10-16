@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_rope_igaiga.h>
+#include "d/a/obj/d_a_obj_rope_igaiga.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_ROPE_IGAIGA, dAcOropeIgaiga_c, fProfile::OBJ_ROPE_IGAIGA, 0x265, 0, 2);
 

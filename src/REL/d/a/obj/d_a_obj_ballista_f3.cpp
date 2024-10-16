@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_ballista_f3.h>
+#include "d/a/obj/d_a_obj_ballista_f3.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_BALLISTA_F3, dAcOBallistaF3_c, fProfile::OBJ_BALLISTA_F3, 0x23E, 0, 2);
 

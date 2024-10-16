@@ -1,8 +1,8 @@
 #ifndef NW4R_UT_NAND_FILE_STREAM_H
 #define NW4R_UT_NAND_FILE_STREAM_H
-#include <nw4r/types_nw4r.h>
-#include <nw4r/ut/ut_FileStream.h>
-#include <rvl/NAND.h>
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut/ut_FileStream.h"
+#include "rvl/NAND.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace ut {
@@ -70,16 +70,16 @@ public:
 
     virtual s32 Read(void *dst, u32 size); // at 0x14
     virtual bool ReadAsync(void *dst, u32 size, AsyncCallback callback,
-            void *arg); // at 0x18
+                           void *arg); // at 0x18
 
     virtual s32 Write(const void *src, u32 size); // at 0x1C
     virtual bool WriteAsync(const void *src, u32 size, AsyncCallback callback,
-            void *arg); // at 0x20
+                            void *arg); // at 0x20
 
     virtual void Seek(s32 offset, u32 origin); // at 0x44
 
     bool Open(const char *path, u32 access);
-    bool Open(const NANDFileInfo *info, u32 access, bool close) DECOMP_DONT_INLINE;
+    bool Open(const NANDFileInfo *info, u32 access, bool close) DONT_INLINE;
 
 private:
     static void NandAsyncCallback_(s32 result, NANDCommandBlock *block);

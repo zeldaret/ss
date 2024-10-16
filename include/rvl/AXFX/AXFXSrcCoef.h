@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_AXFX_SRC_COEF_H
 #define RVL_SDK_AXFX_SRC_COEF_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

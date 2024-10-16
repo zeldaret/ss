@@ -1,8 +1,9 @@
 #include "nw4r/lyt/lyt_common.h"
+
 #include "nw4r/lyt/lyt_layout.h"
-#include "nw4r/lyt/lyt_pane.h"
 #include "nw4r/ut/ut_Color.h"
 #include "nw4r/ut/ut_algorithm.h"
+
 
 namespace nw4r {
 namespace lyt {
@@ -84,9 +85,8 @@ bool detail::IsModulateVertexColor(ut::Color *vtxColors, u8 glbAlpha) {
         return true;
     }
 
-    if ((vtxColors != NULL) &&
-            ((vtxColors[0] != 0xFFFFFFFF) || (vtxColors[1] != 0xFFFFFFFF) || (vtxColors[2] != 0xFFFFFFFF) ||
-                    (vtxColors[3] != 0xFFFFFFFF))) {
+    if ((vtxColors != NULL) && ((vtxColors[0] != 0xFFFFFFFF) || (vtxColors[1] != 0xFFFFFFFF) ||
+                                (vtxColors[2] != 0xFFFFFFFF) || (vtxColors[3] != 0xFFFFFFFF))) {
         return true;
     } else {
         return false;
@@ -133,8 +133,10 @@ void detail::SetVertexFormat(bool bModulate, u8 textCoordNum) {
 }
 
 // DrawQuad__Q34nw4r3lyt6detailFRCQ34nw4r4math4VEC2RCQ34nw4r3lyt4SizeUcPA4_CQ34nw4r4math4VEC2PCQ34nw4r2ut5Color
-void detail::DrawQuad(const math::VEC2 &basePt, const Size &size, u8 texCoordNum, const TexCoordData *texCoords,
-        const ut::Color *vtxColors) {
+void detail::DrawQuad(
+    const math::VEC2 &basePt, const Size &size, u8 texCoordNum, const TexCoordData *texCoords,
+    const ut::Color *vtxColors
+) {
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
     GXPosition2f32(basePt.x, basePt.y);
@@ -171,8 +173,10 @@ void detail::DrawQuad(const math::VEC2 &basePt, const Size &size, u8 texCoordNum
 }
 
 // DrawQuad__Q34nw4r3lyt6detailFRCQ34nw4r4math4VEC2RCQ34nw4r3lyt4SizeUcPA4_CQ34nw4r4math4VEC2PCQ34nw4r2ut5ColorUc
-void detail::DrawQuad(const math::VEC2 &basePt, const Size &size, u8 texCoordNum, const TexCoordData *texCoords,
-        const ut::Color *vtxColors, u8 alpha) {
+void detail::DrawQuad(
+    const math::VEC2 &basePt, const Size &size, u8 texCoordNum, const TexCoordData *texCoords,
+    const ut::Color *vtxColors, u8 alpha
+) {
     ut::Color wkVtxColors[4];
     if (vtxColors) {
         MultipleAlpha(wkVtxColors, vtxColors, alpha);

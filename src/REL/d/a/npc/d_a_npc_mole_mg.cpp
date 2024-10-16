@@ -1,4 +1,4 @@
-#include <d/a/npc/d_a_npc_mole_mg.h>
+#include "d/a/npc/d_a_npc_mole_mg.h"
 
 SPECIAL_ACTOR_PROFILE(NPC_MOLE_MG, dAcNpcMoleMg_c, fProfile::NPC_MOLE_MG, 0x7D, 0, 3);
 

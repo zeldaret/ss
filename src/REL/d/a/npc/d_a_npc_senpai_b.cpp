@@ -1,4 +1,4 @@
-#include <d/a/npc/d_a_npc_senpai_b.h>
+#include "d/a/npc/d_a_npc_senpai_b.h"
 
 SPECIAL_ACTOR_PROFILE(NPC_SENPAI_B, dAcNpcSenpaiB_c, fProfile::NPC_SENPAI_B, 0x91, 0, 3);
 

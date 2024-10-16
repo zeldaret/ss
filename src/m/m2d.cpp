@@ -1,11 +1,11 @@
-#include <egg/core/eggExpHeap.h>
-#include <egg/core/eggHeap.h>
-#include <egg/gfx/eggScreen.h>
+#include "m/m2d.h"
 
-#include <m/m2d.h>
-
-#include <rvl/GX.h>
-#include <rvl/SC.h>
+#include "egg/core/eggExpHeap.h"
+#include "egg/core/eggHeap.h"
+#include "egg/gfx/eggScreen.h"
+#include "nw4r/lyt/lyt_init.h"
+#include "rvl/GX.h" // IWYU pragma: export
+#include "rvl/SC.h" // IWYU pragma: export
 
 namespace m2d {
 
@@ -46,7 +46,7 @@ void defaultSet() {
 
 void draw(u8 priority) {
     for (Base_c *base = static_cast<Base_c *>(nw4r::ut::List_GetFirst(&l_list)); base != nullptr;
-            base = static_cast<Base_c *>(nw4r::ut::List_GetNext(&l_list, base))) {
+         base = static_cast<Base_c *>(nw4r::ut::List_GetNext(&l_list, base))) {
         if (base->mPriority >= priority) {
             break;
         }
@@ -56,7 +56,7 @@ void draw(u8 priority) {
 
 void drawBefore(u8 priority) {
     for (Base_c *base = static_cast<Base_c *>(nw4r::ut::List_GetFirst(&l_list)); base != nullptr;
-            base = static_cast<Base_c *>(nw4r::ut::List_GetNext(&l_list, base))) {
+         base = static_cast<Base_c *>(nw4r::ut::List_GetNext(&l_list, base))) {
         if (base->mPriority > priority) {
             base->draw();
         }
@@ -148,13 +148,9 @@ void FrameCtrl_c::setRate(f32 rate) {
 bool FrameCtrl_c::isStop() const {
     f32 actualEnd;
     switch (mFlags) {
-    case FLAG_NO_LOOP:
-        actualEnd = mEndFrame - 1.0f;
-        return mCurrFrame >= actualEnd;
-    case FLAG_NO_LOOP | FLAG_BACKWARDS:
-        return mCurrFrame <= 0;
-    default:
-        return false;
+        case FLAG_NO_LOOP:                  actualEnd = mEndFrame - 1.0f; return mCurrFrame >= actualEnd;
+        case FLAG_NO_LOOP | FLAG_BACKWARDS: return mCurrFrame <= 0;
+        default:                            return false;
     }
 }
 

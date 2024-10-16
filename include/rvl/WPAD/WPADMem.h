@@ -1,9 +1,9 @@
 #ifndef RVL_SDK_WPAD_MEMORY_H
 #define RVL_SDK_WPAD_MEMORY_H
 
-#include <common.h>
-#include <rvl/OS/OSTime.h>
-#include <rvl/WPAD/WPAD.h>
+#include "common.h"
+#include "rvl/OS/OSTime.h"
+#include "rvl/WPAD/WPAD.h"
 
 
 /*******************************************************************************

@@ -1,9 +1,9 @@
 #ifndef LAYOUT_ARC_MANAGER_H
 #define LAYOUT_ARC_MANAGER_H
 
-#include <d/d_rawarchive.h>
-#include <egg/core/eggHeap.h>
-#include <sized_string.h>
+#include "d/d_rawarchive.h"
+#include "egg/core/eggHeap.h"
+#include "sized_string.h"
 
 class LayoutArcManager {
 public:

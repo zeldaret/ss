@@ -1,5 +1,7 @@
-#include <d/lyt/meter/d_lyt_meter_remocon_bg.h>
-#include <toBeSorted/event_manager.h>
+#include "d/lyt/meter/d_lyt_meter_remocon_bg.h"
+
+#include "toBeSorted/event_manager.h"
+
 
 STATE_DEFINE(dLytMeterRemoconBg_c, Wait);
 STATE_DEFINE(dLytMeterRemoconBg_c, On);

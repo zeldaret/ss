@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_asura_pillar.h>
+#include "d/a/obj/d_a_obj_asura_pillar.h"
 
 SPECIAL_ACTOR_PROFILE(ASURA_PILLAR, dAcAsuraPillar_c, fProfile::ASURA_PILLAR, 0x11C, 0, 2);
 

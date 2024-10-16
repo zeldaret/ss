@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_tower_gearD101.h>
+#include "d/a/obj/d_a_obj_tower_gearD101.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TOWER_GEAR_D101, dAcOTowerGearD101_c, fProfile::OBJ_TOWER_GEAR_D101, 0x17E, 0, 7);
 

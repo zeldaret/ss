@@ -1,12 +1,9 @@
 #ifndef NW4R_SND_SOUND_THREAD_H
 #define NW4R_SND_SOUND_THREAD_H
-#include <nw4r/types_nw4r.h>
-
-#include <nw4r/snd/snd_AxManager.h>
-
-#include <nw4r/ut.h>
-
-#include <rvl/OS.h>
+#include "nw4r/snd/snd_AxManager.h"
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut.h" // IWYU pragma: export
+#include "rvl/OS.h"  // IWYU pragma: export
 
 namespace nw4r {
 namespace snd {
@@ -51,13 +48,13 @@ public:
     };
 
 public:
-    static SoundThread& GetInstance();
+    static SoundThread &GetInstance();
 
-    bool Create(s32 priority, void* pStack, u32 stackSize);
+    bool Create(s32 priority, void *pStack, u32 stackSize);
     void Shutdown();
 
-    void RegisterPlayerCallback(PlayerCallback* pCallback);
-    void UnregisterPlayerCallback(PlayerCallback* pCallback);
+    void RegisterPlayerCallback(PlayerCallback *pCallback);
+    void UnregisterPlayerCallback(PlayerCallback *pCallback);
 
 private:
     enum ThreadMessage {
@@ -74,7 +71,7 @@ private:
     static void AxCallbackFunc();
     void AxCallbackProc();
 
-    static void* SoundThreadFunc(void* pArg);
+    static void *SoundThreadFunc(void *pArg);
     void SoundThreadProc();
 
     void Lock() {
@@ -89,7 +86,7 @@ private:
     OSThreadQueue mThreadQueue;               // at 0x318
     OSMessageQueue mMsgQueue;                 // at 0x320
     OSMessage mMsgBuffer[MSG_QUEUE_CAPACITY]; // at 0x340
-    void* mStackEnd;                          // at 0x350
+    void *mStackEnd;                          // at 0x350
     mutable OSMutex mMutex;                   // at 0x354
 
     AxManager::CallbackListNode mAxCallbackNode;    // at 0x36C

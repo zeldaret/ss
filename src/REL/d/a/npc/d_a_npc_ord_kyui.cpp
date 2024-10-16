@@ -1,4 +1,4 @@
-#include <d/a/npc/d_a_npc_ord_kyui.h>
+#include "d/a/npc/d_a_npc_ord_kyui.h"
 
 SPECIAL_ACTOR_PROFILE(NPC_ORD_KYUI, dAcNpcOrdKyui_c, fProfile::NPC_ORD_KYUI, 0x44, 0, 3);
 

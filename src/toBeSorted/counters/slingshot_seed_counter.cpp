@@ -1,4 +1,4 @@
-#include <toBeSorted/counters/counter.h>
+#include "toBeSorted/counters/counter.h"
 
 class SlingshotSeedCounter : public Counter {
 public:

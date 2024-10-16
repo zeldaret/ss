@@ -5,7 +5,7 @@
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_list_nd.hpp
 
 #include "c/c_list.h"
-#include <common.h>
+#include "common.h"
 
 class fBase_c;
 

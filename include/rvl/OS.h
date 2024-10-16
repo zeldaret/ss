@@ -1,5 +1,8 @@
 #ifndef RVL_SDK_PUBLIC_OS_H
 #define RVL_SDK_PUBLIC_OS_H
+
+#include "common.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -40,4 +43,5 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
 #endif

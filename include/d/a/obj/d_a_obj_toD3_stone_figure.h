@@ -1,13 +1,13 @@
 #ifndef D_A_O_TTOD3_STONE_FIGURE_H
 #define D_A_O_TTOD3_STONE_FIGURE_H
 
-#include <c/c_math.h>
-#include <d/a/obj/d_a_obj_base.h>
-#include <d/col/cc/d_cc_shape_colliders.h>
-#include <m/m3d/m_smdl.h>
-#include <nw4r/g3d/g3d_resfile.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "c/c_math.h"
+#include "d/a/obj/d_a_obj_base.h"
+#include "d/col/cc/d_cc_shape_colliders.h"
+#include "m/m3d/m_smdl.h"
+#include "nw4r/g3d/g3d_resfile.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dAcOtoD3StoneFigure_c : public dAcObjBase_c {
 public:

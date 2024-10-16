@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_trap_rock_1.h>
+#include "d/a/obj/d_a_obj_trap_rock_1.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TRAP_ROCK_1, dAcOtrapRock1_c, fProfile::OBJ_TRAP_ROCK_1, 0x26B, 0, 2);
 

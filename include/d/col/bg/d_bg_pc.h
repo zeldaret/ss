@@ -1,7 +1,7 @@
 #ifndef D_BG_PC_H
 #define D_BG_PC_H
 
-#include <common.h>
+#include "common.h"
 
 struct sBgPc { // Size: 0x14
     /* 0x00 */ u32 code0;

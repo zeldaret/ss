@@ -1,10 +1,10 @@
 #ifndef D_T_TUMBLE_WEED_H
 #define D_T_TUMBLE_WEED_H
 
-#include <d/t/d_tg.h>
-#include <f/f_list_nd.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/t/d_tg.h"
+#include "f/f_list_nd.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dTgTumbleWeed_c : public dTg_c {
 public:

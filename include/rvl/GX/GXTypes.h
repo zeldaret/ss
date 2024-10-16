@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_GX_TYPES_H
 #define RVL_SDK_GX_TYPES_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -175,7 +175,10 @@ typedef enum _GXClipMode {
     GX_CLIP_DISABLE,
 } GXClipMode;
 
-typedef enum _GXColorSrc { GX_SRC_REG, GX_SRC_VTX } GXColorSrc;
+typedef enum _GXColorSrc {
+    GX_SRC_REG,
+    GX_SRC_VTX
+} GXColorSrc;
 
 typedef enum _GXCompare {
     GX_NEVER,
@@ -225,9 +228,18 @@ typedef enum _GXCopyClamp {
     GX_CLAMP_ALL,
 } GXCopyClamp;
 
-typedef enum _GXCullMode { GX_CULL_NONE, GX_CULL_FRONT, GX_CULL_BACK, GX_CULL_ALL } GXCullMode;
+typedef enum _GXCullMode {
+    GX_CULL_NONE,
+    GX_CULL_FRONT,
+    GX_CULL_BACK,
+    GX_CULL_ALL
+} GXCullMode;
 
-typedef enum _GXDiffuseFn { GX_DF_NONE, GX_DF_SIGN, GX_DF_CLAMP } GXDiffuseFn;
+typedef enum _GXDiffuseFn {
+    GX_DF_NONE,
+    GX_DF_SIGN,
+    GX_DF_CLAMP
+} GXDiffuseFn;
 
 typedef enum _GXDirtyFlag {
     GX_DIRTY_SU_TEX = (1 << 0),
@@ -260,13 +272,18 @@ typedef enum _GXDirtyFlag {
 
     GX_AMB_MAT_MASK = GX_DIRTY_AMB_COLOR0 | GX_DIRTY_AMB_COLOR1 | GX_DIRTY_MAT_COLOR0 | GX_DIRTY_MAT_COLOR1,
 
-    GX_LIGHT_CHAN_MASK = GX_DIRTY_CHAN_COLOR0 | GX_DIRTY_CHAN_COLOR1 | GX_DIRTY_CHAN_ALPHA0 | GX_DIRTY_CHAN_ALPHA1 |
-            GX_DIRTY_NUM_COLORS,
+    GX_LIGHT_CHAN_MASK =
+        GX_DIRTY_CHAN_COLOR0 | GX_DIRTY_CHAN_COLOR1 | GX_DIRTY_CHAN_ALPHA0 | GX_DIRTY_CHAN_ALPHA1 | GX_DIRTY_NUM_COLORS,
 
     GX_TEX_GEN_MASK = 0x2FF0000,
 } GXDirtyFlag;
 
-typedef enum _GXDistAttnFn { GX_DA_OFF, GX_DA_GENTLE, GX_DA_MEDIUM, GX_DA_STEEP } GXDistAttnFn;
+typedef enum _GXDistAttnFn {
+    GX_DA_OFF,
+    GX_DA_GENTLE,
+    GX_DA_MEDIUM,
+    GX_DA_STEEP
+} GXDistAttnFn;
 
 typedef enum _GXFogType {
     GX_FOG_NONE,
@@ -448,9 +465,20 @@ typedef enum _GXPrimitive {
     GX_QUADS = 0x80,
 } GXPrimitive;
 
-typedef enum _GXProjectionType { GX_PERSPECTIVE, GX_ORTHOGRAPHIC } GXProjectionType;
+typedef enum _GXProjectionType {
+    GX_PERSPECTIVE,
+    GX_ORTHOGRAPHIC
+} GXProjectionType;
 
-typedef enum _GXSpotFn { GX_SP_OFF, GX_SP_FLAT, GX_SP_COS, GX_SP_COS2, GX_SP_SHARP, GX_SP_RING1, GX_SP_RING2 } GXSpotFn;
+typedef enum _GXSpotFn {
+    GX_SP_OFF,
+    GX_SP_FLAT,
+    GX_SP_COS,
+    GX_SP_COS2,
+    GX_SP_SHARP,
+    GX_SP_RING1,
+    GX_SP_RING2
+} GXSpotFn;
 
 typedef enum _GXTevAlphaArg {
     GX_CA_APREV,
@@ -496,7 +524,12 @@ typedef enum _GXTevColorArg {
     GX_CC_QUARTER = GX_CC_KONST
 } GXTevColorArg;
 
-typedef enum _GXTevColorChan { GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA } GXTevColorChan;
+typedef enum _GXTevColorChan {
+    GX_CH_RED,
+    GX_CH_GREEN,
+    GX_CH_BLUE,
+    GX_CH_ALPHA
+} GXTevColorChan;
 
 typedef enum _GXTevOp {
     GX_TEV_ADD,
@@ -642,7 +675,13 @@ typedef enum _GXTevKColorSel {
     GX_TEV_KCSEL_K3_A
 } GXTevKColorSel;
 
-typedef enum _GXTevMode { GX_MODULATE, GX_DECAL, GX_REPLACE, GX_PASSCLR, GX_BLEND } GXTevMode;
+typedef enum _GXTevMode {
+    GX_MODULATE,
+    GX_DECAL,
+    GX_REPLACE,
+    GX_PASSCLR,
+    GX_BLEND
+} GXTevMode;
 
 typedef enum _GXTexCoordID {
     GX_TEXCOORD0,

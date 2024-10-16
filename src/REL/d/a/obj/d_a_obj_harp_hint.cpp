@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_harp_hint.h>
+#include "d/a/obj/d_a_obj_harp_hint.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_HARP_HINT, dAcOHarpHint_c, fProfile::OBJ_HARP_HINT, 0x1B1, 0, 3);
 

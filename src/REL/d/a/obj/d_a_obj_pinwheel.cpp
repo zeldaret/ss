@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_pinwheel.h>
+#include "d/a/obj/d_a_obj_pinwheel.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_PINWHEEL, dAcOpinwheel_c, fProfile::OBJ_PINWHEEL, 0x1DD, 0, 2);
 

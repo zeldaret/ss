@@ -1,4 +1,4 @@
-#include <d/a/d_a_bird.h>
+#include "d/a/d_a_bird.h"
 
 SPECIAL_ACTOR_PROFILE(BIRD, dBird_c, fProfile::BIRD, 0xA8, 0, 2);
 

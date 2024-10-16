@@ -1,7 +1,7 @@
 #include "d/col/c/c_m3d_g_cps.h"
 
 #include "d/col/c/c_m3d.h"
-#include "nw4r/math.h"
+#include "nw4r/math.h" // IWYU pragma: export
 
 cM3dGCps::cM3dGCps() {
     mField_0x1C = 0.0f;

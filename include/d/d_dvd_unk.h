@@ -1,8 +1,8 @@
 #ifndef D_DVD_UNK_H
 #define D_DVD_UNK_H
 
-#include <common.h>
-#include <egg/core/eggHeap.h>
+#include "common.h"
+#include "egg/core/eggHeap.h"
 
 namespace dDvdUnk {
 
@@ -21,6 +21,6 @@ private:
     char field_0x4;
 };
 
-} // dDvdUnk
+} // namespace dDvdUnk
 
 #endif

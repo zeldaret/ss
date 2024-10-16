@@ -1,8 +1,10 @@
-#include <common.h>
-#include <nw4r/db/db_console.h>
-#include <nw4r/db/db_directPrint.h>
-#include <nw4r/ut/ut_TextWriterBase.h>
-#include <rvl/OS.h>
+#include "nw4r/db/db_console.h"
+
+#include "common.h"
+#include "nw4r/db/db_directPrint.h"
+#include "nw4r/ut/ut_TextWriterBase.h"
+#include "rvl/OS.h" // IWYU pragma: export
+
 
 namespace nw4r {
 namespace db {
@@ -204,8 +206,9 @@ err:
 
 void Console_DrawDirect(ConsoleHandle console) {
     if (DirectPrint_IsActive() && console->isVisible) {
-        DirectPrint_EraseXfb(console->viewPosX - 6, console->viewPosY - 3, console->width * 6 + 12,
-                console->viewLines * 10 + 4);
+        DirectPrint_EraseXfb(
+            console->viewPosX - 6, console->viewPosY - 3, console->width * 6 + 12, console->viewLines * 10 + 4
+        );
         DoDrawConsole_(console, nullptr);
         DirectPrint_StoreCache();
     }

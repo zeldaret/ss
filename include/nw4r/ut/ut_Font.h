@@ -1,8 +1,8 @@
 #ifndef NW4R_UT_FONT_H
 #define NW4R_UT_FONT_H
-#include <nw4r/types_nw4r.h>
-#include <nw4r/ut/ut_CharStrmReader.h>
-#include <rvl/GX.h>
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut/ut_CharStrmReader.h"
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace ut {
@@ -24,11 +24,21 @@ struct Glyph {
     u16 cellY;         // at 0x12
 };
 
-enum FontEncoding { FONT_ENCODE_UTF8, FONT_ENCODE_UTF16, FONT_ENCODE_SJIS, FONT_ENCODE_CP1252 };
+enum FontEncoding {
+    FONT_ENCODE_UTF8,
+    FONT_ENCODE_UTF16,
+    FONT_ENCODE_SJIS,
+    FONT_ENCODE_CP1252
+};
 
 class Font {
 public:
-    enum Type { TYPE_NULL, TYPE_ROM, TYPE_RESOURCE, TYPE_PAIR };
+    enum Type {
+        TYPE_NULL,
+        TYPE_ROM,
+        TYPE_RESOURCE,
+        TYPE_PAIR
+    };
 
 public:
     Font() : mReadFunc(&CharStrmReader::ReadNextCharCP1252) {}

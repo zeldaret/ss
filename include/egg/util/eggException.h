@@ -1,8 +1,8 @@
 #ifndef EGG_EXCEPTION_H
 #define EGG_EXCEPTION_H
 
-#include <common.h>
-#include <nw4r/db/db_console.h>
+#include "common.h"
+#include "nw4r/db/db_console.h"
 
 namespace EGG {
 

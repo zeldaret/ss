@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_kibako.h>
+#include "d/a/obj/d_a_obj_kibako.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_KIBAKO, dAcOkibako_c, fProfile::OBJ_KIBAKO, 0x12C, 0, 2);
 

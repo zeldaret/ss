@@ -1,14 +1,16 @@
 #ifndef SIZED_STRING_H
 #define SIZED_STRING_H
 
-#include <MSL_C/string.h>
+#include "__va_arg.h"
+#include "common.h"
+#include "string.h"
 
 extern "C" bool strequals(const char *a, const char *b);
 
 /**
  * A statically sized string buffer used for resource
  * identification where strings are guaranteed to be short.
- * 
+ *
  * Note: We aren't aware of any other projects that use a similar
  * class and given that SS has no debugging info anywhere it's hard
  * to be certain about anything.
@@ -59,7 +61,7 @@ struct SizedString {
         }
     }
 
-    bool operator==(const char* other) const {
+    bool operator==(const char *other) const {
         return strequals(mChars, other);
     }
 

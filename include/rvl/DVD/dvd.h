@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_DVD_H
 #define RVL_SDK_DVD_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -92,8 +92,9 @@ typedef struct DVDFileInfo {
 extern volatile u32 __DVDLayoutFormat;
 
 void DVDInit(void);
-BOOL DVDReadAbsAsyncPrio(DVDCommandBlock *block, void *dst, u32 size, u32 offset, DVDCommandCallback callback,
-        s32 prio);
+BOOL DVDReadAbsAsyncPrio(
+    DVDCommandBlock *block, void *dst, u32 size, u32 offset, DVDCommandCallback callback, s32 prio
+);
 BOOL DVDInquiryAsync(DVDCommandBlock *block, DVDDriveInfo *info, DVDCommandCallback callback);
 s32 DVDGetCommandBlockStatus(const DVDCommandBlock *block);
 s32 DVDGetDriveStatus(void);

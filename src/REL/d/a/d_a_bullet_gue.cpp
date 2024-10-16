@@ -1,4 +1,4 @@
-#include <d/a/d_a_bullet_gue.h>
+#include "d/a/d_a_bullet_gue.h"
 
 SPECIAL_ACTOR_PROFILE(GUE_BULLET, dAcBulletGue_c, fProfile::GUE_BULLET, 0x105, 0, 2);
 

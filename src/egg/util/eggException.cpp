@@ -1,13 +1,14 @@
-#include <egg/core/eggController.h>
-#include <egg/core/eggHeap.h>
-#include <egg/core/eggSystem.h>
-#include <egg/core/eggVideo.h>
-#include <egg/util/eggException.h>
-#include <nw4r/db/db_directPrint.h>
-#include <nw4r/db/db_exception.h>
-#include <nw4r/db/db_mapFile.h>
-#include <rvl/KPAD.h>
-#include <rvl/OS.h>
+#include "egg/util/eggException.h"
+
+#include "egg/core/eggController.h"
+#include "egg/core/eggHeap.h"
+#include "egg/core/eggSystem.h"
+#include "egg/core/eggVideo.h"
+#include "nw4r/db/db_directPrint.h"
+#include "nw4r/db/db_exception.h"
+#include "nw4r/db/db_mapFile.h"
+#include "rvl/KPAD.h" // IWYU pragma: export
+#include "rvl/OS.h"   // IWYU pragma: export
 
 namespace EGG {
 

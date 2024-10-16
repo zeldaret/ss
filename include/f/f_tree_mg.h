@@ -5,8 +5,9 @@
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_tree_mg.hpp
 
 #include "c/c_tree.h"
+#include "common.h"
 #include "f/f_profile.h"
-#include <common.h>
+
 
 class fTrNdBa_c;
 

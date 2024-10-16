@@ -1,3 +1,3 @@
-#include <egg/gfx/eggGlobalDrawState.h>
+#include "egg/gfx/eggGlobalDrawState.h"
 
 namespace EGG {} // namespace EGG

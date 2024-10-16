@@ -1,12 +1,16 @@
 #ifndef NW4R_UT_RES_FONT_BASE_H
 #define NW4R_UT_RES_FONT_BASE_H
-#include <nw4r/types_nw4r.h>
-#include <nw4r/ut/ut_Font.h>
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut/ut_Font.h"
 
 namespace nw4r {
 namespace ut {
 
-enum FontMapMethod { FONT_MAPMETHOD_LINEAR, FONT_MAPMETHOD_ARRAY, FONT_MAPMETHOD_SCAN };
+enum FontMapMethod {
+    FONT_MAPMETHOD_LINEAR,
+    FONT_MAPMETHOD_ARRAY,
+    FONT_MAPMETHOD_SCAN
+};
 
 struct FontTextureGlyph {
     u8 cellWidth;    // at 0x0

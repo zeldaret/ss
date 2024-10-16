@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_skull.h>
+#include "d/a/obj/d_a_obj_skull.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SKULL, dAcOSkull_c, fProfile::OBJ_SKULL, 0x165, 0, 3);
 

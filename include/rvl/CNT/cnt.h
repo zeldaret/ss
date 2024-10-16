@@ -1,7 +1,8 @@
 #ifndef RVL_SDK_CNT_H
 #define RVL_SDK_CNT_H
-#include "rvl/ARC.h"
-#include <common.h>
+#include "common.h"
+#include "rvl/ARC.h" // IWYU pragma: export
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -1,8 +1,9 @@
 #ifndef RVL_SDK_GX_TRANSFORM_H
 #define RVL_SDK_GX_TRANSFORM_H
+#include "common.h"
 #include "rvl/GX/GXTypes.h"
 #include "rvl/MTX.h"
-#include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

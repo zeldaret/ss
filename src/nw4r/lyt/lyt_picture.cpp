@@ -1,8 +1,10 @@
-#include <nw4r/lyt/lyt_bounding.h>
-#include <nw4r/lyt/lyt_layout.h>
-#include <nw4r/lyt/lyt_material.h>
-#include <nw4r/lyt/lyt_picture.h>
-#include <nw4r/lyt/lyt_texMap.h>
+#include "nw4r/lyt/lyt_picture.h"
+
+#include "nw4r/lyt/lyt_bounding.h"
+#include "nw4r/lyt/lyt_layout.h"
+#include "nw4r/lyt/lyt_material.h"
+#include "nw4r/lyt/lyt_texMap.h"
+
 
 namespace nw4r {
 namespace lyt {
@@ -32,7 +34,7 @@ Picture::Picture(const res::Picture *pResPic, const ResBlockSet &resBlockSet)
     }
     const u32 *matOffsTbl = detail::ConvertOffsToPtr<u32>(resBlockSet.pMaterialList, sizeof(res::MaterialList));
     const res::Material *pResMaterial =
-            detail::ConvertOffsToPtr<res::Material>(resBlockSet.pMaterialList, matOffsTbl[pResPic->materialIdx]);
+        detail::ConvertOffsToPtr<res::Material>(resBlockSet.pMaterialList, matOffsTbl[pResPic->materialIdx]);
     mpMaterial = Layout::NewObj<Material>(pResMaterial, resBlockSet);
 }
 
@@ -53,7 +55,7 @@ Picture::~Picture() {
 // Append__Q34nw4r3lyt7PictureFRCQ34nw4r3lyt6TexMap
 void Picture::Append(const TexMap &texMap) {
     if (mpMaterial->GetTextureNum() >= mpMaterial->GetTextureCap() ||
-            mpMaterial->GetTextureNum() >= mpMaterial->GetTexCoordGenCap()) {
+        mpMaterial->GetTextureNum() >= mpMaterial->GetTexCoordGenCap()) {
         return;
     }
     u8 texIdx = mpMaterial->GetTextureNum();
@@ -107,8 +109,10 @@ void Picture::DrawSelf(const DrawInfo &drawInfo) {
         LoadMtx(drawInfo);
         bool bUseVtxCol = mpMaterial->SetupGX(detail::IsModulateVertexColor(mVtxColors, mGlbAlpha), mGlbAlpha);
         detail::SetVertexFormat(bUseVtxCol, mTexCoordAry.GetSize());
-        detail::DrawQuad(GetVtxPos(), mSize, mTexCoordAry.GetSize(), mTexCoordAry.GetArray(),
-                bUseVtxCol ? mVtxColors : nullptr, mGlbAlpha);
+        detail::DrawQuad(
+            GetVtxPos(), mSize, mTexCoordAry.GetSize(), mTexCoordAry.GetArray(), bUseVtxCol ? mVtxColors : nullptr,
+            mGlbAlpha
+        );
     }
 }
 

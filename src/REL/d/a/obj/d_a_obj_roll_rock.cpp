@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_roll_rock.h>
+#include "d/a/obj/d_a_obj_roll_rock.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_ROLL_ROCK, dAcOrollRock_c, fProfile::OBJ_ROLL_ROCK, 0x266, 0, 2);
 

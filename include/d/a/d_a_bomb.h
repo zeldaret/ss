@@ -2,14 +2,15 @@
 #define D_A_BOMB_H
 
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/col/bg/d_bg_s_acch.h"
+#include "d/col/bg/d_bg_s_lin_chk.h"
+#include "d/col/cc/d_cc_shape_colliders.h"
+#include "m/m3d/m_smdl.h"
+#include "nw4r/g3d/g3d_resfile.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
+#include "toBeSorted/effects_struct.h"
 
-#include <d/col/bg/d_bg_s_acch.h>
-#include <d/col/bg/d_bg_s_lin_chk.h>
-#include <d/col/cc/d_cc_shape_colliders.h>
-#include <m/m3d/m_smdl.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
-#include <toBeSorted/effects_struct.h>
 
 class dAcBomb_c : public dAcObjBase_c {
 public:

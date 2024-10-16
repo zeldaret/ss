@@ -1,7 +1,7 @@
 #ifndef NW4R_UT_FILE_STREAM_H
 #define NW4R_UT_FILE_STREAM_H
-#include <nw4r/types_nw4r.h>
-#include <nw4r/ut/ut_IOStream.h>
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut/ut_IOStream.h"
 
 namespace nw4r {
 namespace ut {
@@ -9,8 +9,12 @@ namespace ut {
 class FileStream : public IOStream {
 public:
     NW4R_UT_RTTI_DECL(FileStream);
-    
-    enum SeekOrigin { SEEKORG_BEG, SEEKORG_CUR, SEEKORG_END };
+
+    enum SeekOrigin {
+        SEEKORG_BEG,
+        SEEKORG_CUR,
+        SEEKORG_END
+    };
 
     class FilePosition {
     public:

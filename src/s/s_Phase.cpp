@@ -1,4 +1,4 @@
-#include <s/s_Phase.hpp>
+#include "s/s_Phase.hpp"
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
 // See include/s/README.txt for changes made

@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_desert_meter.h>
+#include "d/a/obj/d_a_obj_desert_meter.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_DESERT_METER, dAcODesertMeter_c, fProfile::OBJ_DESERT_METER, 0x1B0, 0, 7);
 

@@ -1,12 +1,10 @@
 #ifndef NW4R_SND_SOUND_PLAYER_H
 #define NW4R_SND_SOUND_PLAYER_H
-#include <nw4r/types_nw4r.h>
-
-#include <nw4r/snd/snd_BasicSound.h>
-#include <nw4r/snd/snd_PlayerHeap.h>
-
-#include <rvl/OS.h>
-#include <rvl/WPAD.h>
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_PlayerHeap.h"
+#include "nw4r/types_nw4r.h"
+#include "rvl/OS.h"   // IWYU pragma: export
+#include "rvl/WPAD.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace snd {
@@ -17,7 +15,8 @@ class ExternalSoundPlayer;
 class SeqSound;
 class StrmSound;
 class WaveSound;
-template <typename T> class SoundInstanceManager;
+template <typename T>
+class SoundInstanceManager;
 } // namespace detail
 
 class SoundPlayer {
@@ -38,47 +37,41 @@ public:
 
     f32 detail_GetRemoteOutVolume(int i) const;
 
-    void detail_InsertSoundList(detail::BasicSound* pSound);
-    void detail_RemoveSoundList(detail::BasicSound* pSound);
+    void detail_InsertSoundList(detail::BasicSound *pSound);
+    void detail_RemoveSoundList(detail::BasicSound *pSound);
 
-    void detail_InsertPriorityList(detail::BasicSound* pSound);
-    void detail_RemovePriorityList(detail::BasicSound* pSound);
+    void detail_InsertPriorityList(detail::BasicSound *pSound);
+    void detail_RemovePriorityList(detail::BasicSound *pSound);
 
     void detail_SortPriorityList();
 
-    detail::SeqSound* detail_AllocSeqSound(
-        int priority, int startPriority,
-        detail::BasicSound::AmbientArgInfo* pArgInfo,
-        detail::ExternalSoundPlayer* pExtPlayer, u32 id,
-        detail::SoundInstanceManager<detail::SeqSound>* pManager);
+    detail::SeqSound *detail_AllocSeqSound(
+        int priority, int startPriority, detail::BasicSound::AmbientArgInfo *pArgInfo,
+        detail::ExternalSoundPlayer *pExtPlayer, u32 id, detail::SoundInstanceManager<detail::SeqSound> *pManager
+    );
 
-    detail::StrmSound* detail_AllocStrmSound(
-        int priority, int startPriority,
-        detail::BasicSound::AmbientArgInfo* pArgInfo,
-        detail::ExternalSoundPlayer* pExtPlayer, u32 id,
-        detail::SoundInstanceManager<detail::StrmSound>* pManager);
+    detail::StrmSound *detail_AllocStrmSound(
+        int priority, int startPriority, detail::BasicSound::AmbientArgInfo *pArgInfo,
+        detail::ExternalSoundPlayer *pExtPlayer, u32 id, detail::SoundInstanceManager<detail::StrmSound> *pManager
+    );
 
-    detail::WaveSound* detail_AllocWaveSound(
-        int priority, int startPriority,
-        detail::BasicSound::AmbientArgInfo* pArgInfo,
-        detail::ExternalSoundPlayer* pExtPlayer, u32 id,
-        detail::SoundInstanceManager<detail::WaveSound>* pManager);
+    detail::WaveSound *detail_AllocWaveSound(
+        int priority, int startPriority, detail::BasicSound::AmbientArgInfo *pArgInfo,
+        detail::ExternalSoundPlayer *pExtPlayer, u32 id, detail::SoundInstanceManager<detail::WaveSound> *pManager
+    );
 
-    int CalcPriorityReduction(detail::BasicSound::AmbientArgInfo* pArgInfo,
-                              u32 id);
+    int CalcPriorityReduction(detail::BasicSound::AmbientArgInfo *pArgInfo, u32 id);
 
-    void InitAmbientArg(detail::BasicSound* pSound,
-                        detail::BasicSound::AmbientArgInfo* pArgInfo);
+    void InitAmbientArg(detail::BasicSound *pSound, detail::BasicSound::AmbientArgInfo *pArgInfo);
 
     void SetPlayableSoundCount(int count);
     void detail_SetPlayableSoundLimit(int limit);
 
-    bool CheckPlayableSoundCount(int startPriority,
-                                 detail::ExternalSoundPlayer* pExtPlayer);
+    bool CheckPlayableSoundCount(int startPriority, detail::ExternalSoundPlayer *pExtPlayer);
 
-    void detail_AppendPlayerHeap(detail::PlayerHeap* pHeap);
-    detail::PlayerHeap* detail_AllocPlayerHeap(detail::BasicSound* pSound);
-    void detail_FreePlayerHeap(detail::BasicSound* pSound);
+    void detail_AppendPlayerHeap(detail::PlayerHeap *pHeap);
+    detail::PlayerHeap *detail_AllocPlayerHeap(detail::BasicSound *pSound);
+    void detail_FreePlayerHeap(detail::BasicSound *pSound);
 
     int GetPlayingSoundCount() const {
         return mSoundList.GetSize();
@@ -91,7 +84,7 @@ public:
         return mVolume;
     }
 
-    detail::BasicSound* detail_GetLowestPrioritySound() {
+    detail::BasicSound *detail_GetLowestPrioritySound() {
         // @bug UB when the list is empty
         return &mPriorityList.GetFront();
     }

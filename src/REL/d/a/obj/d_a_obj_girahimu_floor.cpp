@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_girahimu_floor.h>
+#include "d/a/obj/d_a_obj_girahimu_floor.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_GIRAHIMU_FLOOR, dAcOGirahimuFloor_c, fProfile::OBJ_GIRAHIMU_FLOOR, 0x25F, 0, 2);
 

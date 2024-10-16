@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_guard_log.h>
+#include "d/a/obj/d_a_obj_guard_log.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_GUARD_LOG, dAcOguardLog_c, fProfile::OBJ_GUARD_LOG, 0x1F4, 0, 2);
 

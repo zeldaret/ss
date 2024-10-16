@@ -1,8 +1,8 @@
 #ifndef NW4R_SND_SEQ_FILE_H
 #define NW4R_SND_SEQ_FILE_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut.h"
 
-#include <nw4r/ut.h>
 
 namespace nw4r {
 namespace snd {
@@ -30,15 +30,15 @@ public:
     static const int VERSION = NW4R_VERSION(1, 0);
 
 public:
-    explicit SeqFileReader(const void* pSeqBin);
+    explicit SeqFileReader(const void *pSeqBin);
 
-    bool IsValidFileHeader(const void* pSeqBin);
+    bool IsValidFileHeader(const void *pSeqBin);
 
-    const void* GetBaseAddress() const;
+    const void *GetBaseAddress() const;
 
 private:
-    const SeqFile::Header* mHeader;       // at 0x0
-    const SeqFile::DataBlock* mDataBlock; // at 0x4
+    const SeqFile::Header *mHeader;       // at 0x0
+    const SeqFile::DataBlock *mDataBlock; // at 0x4
 };
 
 } // namespace detail

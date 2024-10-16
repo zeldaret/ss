@@ -1,8 +1,9 @@
 #ifndef NW4R_UT_DVD_FILE_STREAM_H
 #define NW4R_UT_DVD_FILE_STREAM_H
-#include <nw4r/types_nw4r.h>
-#include <nw4r/ut/ut_FileStream.h>
-#include <rvl/DVD.h>
+
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut/ut_FileStream.h"
+#include "rvl/DVD.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace ut {
@@ -69,11 +70,11 @@ public:
 
     virtual s32 Read(void *dst, u32 size); // at 0x14
     virtual bool ReadAsync(void *dst, u32 size, AsyncCallback callback,
-            void *arg); // at 0x18
+                           void *arg); // at 0x18
 
     virtual s32 Peek(void *dst, u32 size); // at 0x5C
     virtual bool PeekAsync(void *dst, u32 size, AsyncCallback callback,
-            void *arg); // at 0x60
+                           void *arg); // at 0x60
 
     virtual void Seek(s32 offset, u32 origin); // at 0x44
 

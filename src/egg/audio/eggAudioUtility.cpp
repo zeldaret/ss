@@ -1,7 +1,9 @@
-#include <egg/audio/eggAudioRmtSpeakerMgr.h>
-#include <egg/audio/eggAudioUtility.h>
-#include <nw4r/snd/snd_SoundPlayer.h>
-#include <nw4r/snd/snd_SoundSystem.h>
+#include "egg/audio/eggAudioUtility.h"
+
+#include "egg/audio/eggAudioRmtSpeakerMgr.h"
+#include "nw4r/snd/snd_SoundPlayer.h"
+#include "nw4r/snd/snd_SoundSystem.h"
+
 
 namespace EGG {
 

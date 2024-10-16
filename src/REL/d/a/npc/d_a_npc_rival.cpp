@@ -1,4 +1,4 @@
-#include <d/a/npc/d_a_npc_rival.h>
+#include "d/a/npc/d_a_npc_rival.h"
 
 SPECIAL_ACTOR_PROFILE(NPC_RVL, dAcNpcRvl_c, fProfile::NPC_RVL, 0x31, 0, 2);
 

@@ -1,10 +1,10 @@
 #ifndef M3D_M_BMDL_H
 #define M3D_M_BMDL_H
 
-#include <m/m3d/m_banm.h>
-#include <m/m3d/m_scnleaf.h>
-#include <m/m_math.h>
-#include <nw4r/g3d/g3d_scnmdlsmpl.h>
+#include "m/m3d/m_banm.h"
+#include "m/m3d/m_scnleaf.h"
+#include "m/m_math.h"
+#include "nw4r/g3d/g3d_scnmdlsmpl.h"
 
 namespace m3d {
 

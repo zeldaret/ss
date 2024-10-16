@@ -1,7 +1,8 @@
 #ifndef NW4R_UT_COLOR_H
 #define NW4R_UT_COLOR_H
-#include <nw4r/types_nw4r.h>
-#include <rvl/GX.h>
+
+#include "nw4r/types_nw4r.h"
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace ut {
@@ -60,7 +61,7 @@ public:
     operator u32() const {
         return ToU32ref();
     }
-} ALIGN(4);
+} ALIGN_DECL(4);
 
 } // namespace ut
 } // namespace nw4r

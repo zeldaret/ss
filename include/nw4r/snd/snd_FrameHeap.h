@@ -1,10 +1,8 @@
 #ifndef NW4R_SND_FRAME_HEAP_H
 #define NW4R_SND_FRAME_HEAP_H
-#include <nw4r/types_nw4r.h>
-
-#include <nw4r/ut.h>
-
-#include <rvl/MEM.h>
+#include "nw4r/types_nw4r.h" // IWYU pragma: export
+#include "nw4r/ut.h"         // IWYU pragma: export
+#include "rvl/MEM.h"         // IWYU pragma: export
 
 namespace nw4r {
 namespace snd {
@@ -12,16 +10,16 @@ namespace detail {
 
 class FrameHeap {
 public:
-    typedef void (*FreeCallback)(void* pBuffer, u32 size, void* pCallbackArg);
+    typedef void (*FreeCallback)(void *pBuffer, u32 size, void *pCallbackArg);
 
 public:
     FrameHeap();
     ~FrameHeap();
 
-    bool Create(void* pBase, u32 size);
+    bool Create(void *pBase, u32 size);
     void Destroy();
     void Clear();
-    void* Alloc(u32 size, FreeCallback pCallback, void* pCallbackArg);
+    void *Alloc(u32 size, FreeCallback pCallback, void *pCallbackArg);
 
     int SaveState();
     void LoadState(int id);
@@ -38,9 +36,9 @@ private:
         NW4R_UT_LIST_NODE_DECL(); // at 0x0
         u32 mSize;                // at 0x8
         FreeCallback mCallback;   // at 0xc
-        void* mCallbackArg;       // at 0x10
+        void *mCallbackArg;       // at 0x10
 
-        Block(u32 size, FreeCallback pCallback, void* pCallbackArg)
+        Block(u32 size, FreeCallback pCallback, void *pCallbackArg)
             : mSize(size), mCallback(pCallback), mCallbackArg(pCallbackArg) {}
 
         ~Block() {
@@ -49,7 +47,7 @@ private:
             }
         }
 
-        void* GetBufferAddr() {
+        void *GetBufferAddr() {
             return ut::AddOffsetToPtr(this, BLOCK_BUFFER_SIZE);
         }
     };
@@ -61,14 +59,12 @@ private:
         BlockList mBlockList;     // at 0x8
 
         ~Section() {
-            for (BlockList::Iterator it = mBlockList.GetEndIter();
-                 it != mBlockList.GetBeginIter();) {
-
+            for (BlockList::Iterator it = mBlockList.GetEndIter(); it != mBlockList.GetBeginIter();) {
                 (--it)->~Block();
             }
         }
 
-        void AppendBlock(Block* pBlock) {
+        void AppendBlock(Block *pBlock) {
             mBlockList.PushBack(pBlock);
         }
     };
@@ -83,7 +79,7 @@ private:
     void ClearSection();
 
 private:
-    MEMiHeapHead* mHandle;    // at 0x0
+    MEMiHeapHead *mHandle;    // at 0x0
     SectionList mSectionList; // at 0x4
 };
 

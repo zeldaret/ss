@@ -1,11 +1,11 @@
 #ifndef EGG_VIDEO_H
 #define EGG_VIDEO_H
 
+#include "common.h"
 #include "egg/prim/eggBitFlag.h"
-#include "rvl/GX.h"
-#include "rvl/VI.h"
+#include "rvl/GX.h" // IWYU pragma: export
+#include "rvl/VI.h" // IWYU pragma: export
 
-#include <common.h>
 
 extern "C" GXRenderModeObj lbl_8055FC64;
 
@@ -30,7 +30,7 @@ public:
     static u32 getTickPerVRetrace();
     static const GXRenderModeObj *getStandardRenderModeObj(const RenderModeObjSet *);
 
-    GXRenderModeObj* getCurrentOrFallbackRenderModeObj() const {
+    GXRenderModeObj *getCurrentOrFallbackRenderModeObj() const {
         if (pRenderMode == nullptr) {
             return &lbl_8055FC64;
         }

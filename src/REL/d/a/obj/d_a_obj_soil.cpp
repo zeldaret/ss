@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_soil.h>
+#include "d/a/obj/d_a_obj_soil.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SOIL, dAcOsoil_c, fProfile::OBJ_SOIL, 0x268, 0, 7);
 

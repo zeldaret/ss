@@ -1,4 +1,4 @@
-#include <d/a/d_a_avater_race_mng.h>
+#include "d/a/d_a_avater_race_mng.h"
 
 SPECIAL_ACTOR_PROFILE(AVATER_RACE_MNG, dAvater_Race_Mng_c, fProfile::AVATER_RACE_MNG, 0xAF, 0, 2);
 

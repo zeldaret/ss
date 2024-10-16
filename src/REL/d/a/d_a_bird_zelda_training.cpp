@@ -1,4 +1,4 @@
-#include <d/a/d_a_bird_zelda_training.h>
+#include "d/a/d_a_bird_zelda_training.h"
 
 SPECIAL_ACTOR_PROFILE(BIRD_ZELDA_TRAINING, dBird_ZeldaTraining_c, fProfile::BIRD_ZELDA_TRAINING, 0xAE, 0, 2);
 

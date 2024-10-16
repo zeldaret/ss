@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_vortex.h>
+#include "d/a/obj/d_a_obj_vortex.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_VORTEX, dAcOVortex_c, fProfile::OBJ_VORTEX, 0x246, 0, 0);
 

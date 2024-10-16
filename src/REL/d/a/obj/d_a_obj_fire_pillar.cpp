@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_fire_pillar.h>
+#include "d/a/obj/d_a_obj_fire_pillar.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_FIRE_PILLAR, dAcOfirePillar_c, fProfile::OBJ_FIRE_PILLAR, 0x1F0, 0, 4);
 

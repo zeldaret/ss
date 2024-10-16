@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_WPAD_WUD_H
 #define RVL_SDK_WPAD_WUD_H
 
-#include <common.h>
+#include "common.h"
 
 // TODO: Fix when possible
 #include "context_bte.h"

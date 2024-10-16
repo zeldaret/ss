@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_vent_fan.h>
+#include "d/a/obj/d_a_obj_vent_fan.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_VENT_FAN, dAcOventFan_c, fProfile::OBJ_VENT_FAN, 0x1B6, 0, 2);
 

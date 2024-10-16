@@ -2,7 +2,7 @@
 #define NW4R_G3D_RESDICT_H
 #include "common.h"
 #include "nw4r/g3d/g3d_rescommon.h"
-#include <string.h>
+#include "string.h"
 
 namespace nw4r {
 namespace g3d {

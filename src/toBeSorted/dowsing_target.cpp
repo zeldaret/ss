@@ -1,9 +1,11 @@
-#include <c/c_math.h>
-#include <m/m_mtx.h>
-#include <nw4r/ut/ut_LinkList.h>
-#include <toBeSorted/dowsing_target.h>
-#include <toBeSorted/item_story_flag_manager.h>
-#include <toBeSorted/tlist.h>
+#include "toBeSorted/dowsing_target.h"
+
+#include "c/c_math.h"
+#include "m/m_mtx.h"
+#include "nw4r/ut/ut_LinkList.h"
+#include "toBeSorted/item_story_flag_manager.h"
+#include "toBeSorted/tlist.h"
+
 
 typedef TList<DowsingTarget, offsetof(DowsingTarget, mLink)> DowsingList;
 

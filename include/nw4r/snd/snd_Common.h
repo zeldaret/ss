@@ -1,6 +1,6 @@
 #ifndef NW4R_SND_COMMON_H
 #define NW4R_SND_COMMON_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/types_nw4r.h"
 
 namespace nw4r {
 namespace snd {
@@ -25,7 +25,12 @@ enum OutputLineFlag {
     OUTPUT_LINE_REMOTE_N = (1 << 1),
 };
 
-enum AuxBus { AUX_A, AUX_B, AUX_C, AUX_BUS_NUM };
+enum AuxBus {
+    AUX_A,
+    AUX_B,
+    AUX_C,
+    AUX_BUS_NUM
+};
 
 enum OutputMode {
     OUTPUT_MODE_STEREO,

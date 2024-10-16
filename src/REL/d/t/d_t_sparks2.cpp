@@ -1,4 +1,4 @@
-#include <d/t/d_t_sparks2.h>
+#include "d/t/d_t_sparks2.h"
 
 SPECIAL_ACTOR_PROFILE(SPARKS2_TAG, dSparks2Tag_c, fProfile::SPARKS2_TAG, 0x1A, 0, 388);
 

@@ -1,8 +1,10 @@
-#include <d/lyt/d_screen_fader.h>
-#include <egg/gfx/eggDrawGX.h>
-#include <egg/gfx/eggScreen.h>
-#include <m/m_mtx.h>
-#include <nw4r/ut/ut_algorithm.h>
+#include "d/lyt/d_screen_fader.h"
+
+#include "egg/gfx/eggDrawGX.h"
+#include "egg/gfx/eggScreen.h"
+#include "m/m_mtx.h"
+#include "nw4r/ut/ut_algorithm.h"
+
 
 dScreenFader_c::dScreenFader_c(const mColor &color, EStatus status) : mFaderBase_c(color, status), mProgress(0.0f) {}
 
@@ -28,12 +30,8 @@ bool dScreenFader_c::calc() {
     }
 
     switch (mStatus) {
-    case FADING_IN:
-        mProgress = h - (h * nw4r::math::SinRad((float)elapsed * M_PI / ((float)(mFrame * 2))));
-        break;
-    case FADING_OUT:
-        mProgress = h - (h * nw4r::math::CosRad((float)elapsed * M_PI / ((float)(mFrame * 2))));
-        break;
+        case FADING_IN:  mProgress = h - (h * nw4r::math::SinRad((float)elapsed * M_PI / ((float)(mFrame * 2)))); break;
+        case FADING_OUT: mProgress = h - (h * nw4r::math::CosRad((float)elapsed * M_PI / ((float)(mFrame * 2)))); break;
     }
 
     return res;
@@ -52,11 +50,11 @@ void dScreenFader_c::draw() {
     PSMTXTransApply(mtx, mtx, -scaleX * 0.5f, scaleY * 0.5f - mProgress, 0.0f);
 
     GXColor a = EGG::DrawGX::BLACK;
-    EGG::DrawGX::DrawDL(EGG::DrawGX::DL_17, mtx.nw4rm, a);
+    EGG::DrawGX::DrawDL(EGG::DrawGX::DL_17, mtx, a);
 
     PSMTXScale(mtx, scaleX, mProgress, 1.0f);
     PSMTXTransApply(mtx, mtx, -scaleX * 0.5f, -scaleY * 0.5f, 0.0f);
-    EGG::DrawGX::DrawDL(EGG::DrawGX::DL_17, mtx.nw4rm, a);
+    EGG::DrawGX::DrawDL(EGG::DrawGX::DL_17, mtx, a);
 }
 
 bool dScreenFader_c::fadeIn() {

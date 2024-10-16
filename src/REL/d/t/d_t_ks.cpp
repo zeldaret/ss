@@ -1,4 +1,4 @@
-#include <d/t/d_t_ks.h>
+#include "d/t/d_t_ks.h"
 
 SPECIAL_ACTOR_PROFILE(KIESU_TAG, dTgKiesuTag_c, fProfile::KIESU_TAG, 0xFD, 0, 0);
 

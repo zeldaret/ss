@@ -1,8 +1,10 @@
-#include <c/c_math.h>
-#include <d/t/d_t_switch.h>
-#include <toBeSorted/event.h>
-#include <toBeSorted/sceneflag_manager.h>
-#include <toBeSorted/scgame.h>
+#include "d/t/d_t_switch.h"
+
+#include "c/c_math.h"
+#include "toBeSorted/event.h"
+#include "toBeSorted/sceneflag_manager.h"
+#include "toBeSorted/scgame.h"
+
 
 SPECIAL_ACTOR_PROFILE(SW_TAG, dTgSw_c, fProfile::SW_TAG, 0x24, 0, 0);
 
@@ -89,7 +91,7 @@ bool dTgSw_c::isPuzzleSolved() {
     }
 
     if (field_0x192 == 0 &&
-            SceneflagManager::sInstance->checkBoolFlag(roomid, mTrigSceneFlagIdBegin + mCurrentFlagPosition)) {
+        SceneflagManager::sInstance->checkBoolFlag(roomid, mTrigSceneFlagIdBegin + mCurrentFlagPosition)) {
         mCurrentFlagPosition++;
     }
 

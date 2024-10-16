@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_side_shutter.h>
+#include "d/a/obj/d_a_obj_side_shutter.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SIDE_SHUTTER, dAcOsideShutter_c, fProfile::OBJ_SIDE_SHUTTER, 0x1BD, 0, 6);
 

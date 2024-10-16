@@ -1,7 +1,7 @@
 #ifndef DECOMP_UNKNOWN_TYPES_H
 #define DECOMP_UNKNOWN_TYPES_H
 
-#include <common.h>
+#include "common.h"
 
 // MOST LIKELY mVEC
 struct Vec3f {

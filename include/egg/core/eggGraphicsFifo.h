@@ -1,9 +1,9 @@
 #ifndef EGG_GRAPHICS_FIFO_H
 #define EGG_GRAPHICS_FIFO_H
 
+#include "common.h"
 #include "egg/core/eggHeap.h"
 
-#include <common.h>
 
 namespace EGG {
 

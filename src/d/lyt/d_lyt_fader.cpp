@@ -1,10 +1,12 @@
-#include <d/lyt/d_lyt_fader.h>
-#include <toBeSorted/arc_managers/layout_arc_manager.h>
+#include "d/lyt/d_lyt_fader.h"
+
+#include "toBeSorted/arc_managers/layout_arc_manager.h"
+
 
 static const d2d::LytBrlanMapping blanMap[] = {
-        {"wipe_01_wipeStart.brlan", "G_wipe_00"},
-        {"wipe_01_wipeOpen.brlan", "G_wipe_00"},
-        {"wipe_01_out.brlan", "G_out_00"},
+    {"wipe_01_wipeStart.brlan", "G_wipe_00"},
+    { "wipe_01_wipeOpen.brlan", "G_wipe_00"},
+    {      "wipe_01_out.brlan",  "G_out_00"},
 };
 
 dLytFader_c::dLytFader_c(const mColor &color, EStatus status) : mFaderBase_c(color, status), field_0x4DD(false) {}
@@ -48,14 +50,9 @@ void dLytFader_c::setStatus(EStatus status) {
 bool dLytFader_c::calc() {
     if (field_0x4DD == true) {
         switch (field_0x4D4) {
-        case 0:
-            fn_801759B0();
-            break;
-        case 1:
-            fn_80175B10();
-            break;
-        default:
-            break;
+            case 0:  fn_801759B0(); break;
+            case 1:  fn_80175B10(); break;
+            default: break;
         }
         return field_0x4D4 == 2;
     } else {

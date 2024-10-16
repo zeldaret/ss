@@ -1,9 +1,9 @@
 #ifndef D_A_OBJ_ASURA_SWORD_H
 #define D_A_OBJ_ASURA_SWORD_H
 
-#include <d/a/obj/d_a_obj_base.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/obj/d_a_obj_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dAcAsuraSword_c : public dAcObjBase_c {
 public:

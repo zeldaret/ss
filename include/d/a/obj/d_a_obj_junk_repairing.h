@@ -1,11 +1,11 @@
 #ifndef D_A_OBJ_JUNK_REPAIRING_H
 #define D_A_OBJ_JUNK_REPAIRING_H
 
-#include <d/a/obj/d_a_obj_base.h>
-#include <m/m3d/m_smdl.h>
-#include <m/m3d/m_shadow.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/obj/d_a_obj_base.h"
+#include "m/m3d/m_shadow.h"
+#include "m/m3d/m_smdl.h"
+#include "nw4r/g3d/g3d_resfile.h"
+#include "s/s_State.hpp"
 
 class dMyShadowCircle_c : public m3d::mShadowCircle_c {};
 

@@ -1,9 +1,9 @@
 #ifndef D_T_BB_QUAKE_H
 #define D_T_BB_QUAKE_H
 
-#include <d/a/d_a_base.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/d_a_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dTgBBQuake_c : public dAcBase_c {
 public:

@@ -4,9 +4,10 @@
 // From
 // https://github.com/muff1n1634/wpad_11dec2009/blob/3c3aa5416d15ccc5867517d9ed4aaf6d25a70e9c/include/revolution/WPAD/WPAD.h
 
-#include <common.h>
-#include <rvl/SC/scsystem.h>
-#include <rvl/WPAD/WUD.h>
+#include "common.h"
+#include "rvl/SC/scsystem.h"
+#include "rvl/WPAD/WUD.h"
+
 
 /*******************************************************************************
  * macros

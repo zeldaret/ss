@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_cannon.h>
+#include "d/a/obj/d_a_obj_cannon.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_CANNON, dAcOcannon_c, fProfile::OBJ_CANNON, 0x1C9, 0, 2);
 

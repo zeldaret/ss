@@ -1,9 +1,9 @@
 #ifndef D_T_GEKOTAG_H
 #define D_T_GEKOTAG_H
 
-#include <d/a/d_a_base.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/d_a_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dTgGekoTag : public dAcBase_c {
 public:

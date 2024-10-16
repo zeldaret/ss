@@ -13,7 +13,7 @@
 #include "m/m_vec.h"
 #include "math.h"
 #include "nw4r/math/math_types.h"
-#include "rvl/MTX.h"
+#include "rvl/MTX.h" // IWYU pragma: export
 
 using namespace nw4r::math;
 using namespace EGG;

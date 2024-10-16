@@ -5,8 +5,9 @@
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_tree_mg_ptmf.hpp
 
 #include "c/c_tree.h"
+#include "common.h"
 #include "f/f_tree_mg.h"
-#include <common.h>
+
 
 class fBase_c;
 

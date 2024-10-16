@@ -2,7 +2,7 @@
 #ifndef EVENT_MANAGER_H
 #define EVENT_MANAGER_H
 
-#include <toBeSorted/event.h>
+#include "toBeSorted/event.h"
 
 class dAcBase_c;
 

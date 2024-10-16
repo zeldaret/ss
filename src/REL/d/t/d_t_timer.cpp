@@ -1,5 +1,7 @@
-#include <d/t/d_t_timer.h>
-#include <toBeSorted/sceneflag_manager.h>
+#include "d/t/d_t_timer.h"
+
+#include "toBeSorted/sceneflag_manager.h"
+
 
 SPECIAL_ACTOR_PROFILE(TAG_TIMER, dTgTimer_c, fProfile::TAG_TIMER, 0x029F, 0, 0);
 
@@ -14,17 +16,15 @@ bool increment(u16 *t) {
 
 int dTgTimer_c::create() {
     switch (getSubtypeFromParams()) {
-    case 0:
-        mGetTargetTimeFunc = &dTgTimer_c::getConstant0x50_Thunk;
-        break;
-    case 1:
-        mTargetTime = getTimerFromParams() * 0x1e;
-        mGetTargetTimeFunc = &dTgTimer_c::getStoredTargetTime;
-        break;
-    default:
-        mTargetTime = getTimerFromParams();
-        mGetTargetTimeFunc = &dTgTimer_c::getStoredTargetTime;
-        break;
+        case 0: mGetTargetTimeFunc = &dTgTimer_c::getConstant0x50_Thunk; break;
+        case 1:
+            mTargetTime = getTimerFromParams() * 0x1e;
+            mGetTargetTimeFunc = &dTgTimer_c::getStoredTargetTime;
+            break;
+        default:
+            mTargetTime = getTimerFromParams();
+            mGetTargetTimeFunc = &dTgTimer_c::getStoredTargetTime;
+            break;
     }
     resetTimer();
     return SUCCEEDED;

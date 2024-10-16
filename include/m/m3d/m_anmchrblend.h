@@ -1,10 +1,10 @@
 #ifndef M3D_M_ANMCHRBLEND_H
 #define M3D_M_ANMCHRBLEND_H
 
-#include <m/m3d/m_anmchr.h>
-#include <m/m3d/m_banm.h>
-#include <m/m3d/m_bmdl.h>
-#include <nw4r/g3d/g3d_anmchr.h>
+#include "m/m3d/m_anmchr.h"
+#include "m/m3d/m_banm.h"
+#include "m/m3d/m_bmdl.h"
+#include "nw4r/g3d/g3d_anmchr.h"
 
 namespace m3d {
 

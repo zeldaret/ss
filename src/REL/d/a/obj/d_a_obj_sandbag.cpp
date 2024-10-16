@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_sandbag.h>
+#include "d/a/obj/d_a_obj_sandbag.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SANDBAG, dAcOSandbag_c, fProfile::OBJ_SANDBAG, 0x162, 0, 3);
 

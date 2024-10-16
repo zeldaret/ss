@@ -1,7 +1,7 @@
 #ifndef S_CRC_H
 #define S_CRC_H
 
-#include <common.h>
+#include "common.h"
 
 namespace sCrc {
 

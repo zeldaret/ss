@@ -1,5 +1,7 @@
-#include <libms/commonlib.h>
-#include <libms/libms.h>
+#include "libms/commonlib.h"
+
+#include "libms/libms.h"
+
 
 void LMSi_AnalyzeMessageHeader(struct MsbInfo *info) {
     info->version = info->header->version;
@@ -12,8 +14,8 @@ void LMSi_AnalyzeMessageHeader(struct MsbInfo *info) {
     info->fileLength = info->header->fileLength;
 }
 
-inline static struct MsbBlockHeader* GetBlockHeader(struct MsbInfo *info, int offset) {
-    return (struct MsbBlockHeader*)(offset + (unsigned int)info->header);
+inline static struct MsbBlockHeader *GetBlockHeader(struct MsbInfo *info, int offset) {
+    return (struct MsbBlockHeader *)(offset + (unsigned int)info->header);
 }
 
 void LMSi_AnalyzeMessageBlocks(struct MsbInfo *info) {
@@ -29,9 +31,9 @@ void LMSi_AnalyzeMessageBlocks(struct MsbInfo *info) {
         section->name[3] = GetBlockHeader(info, offset)->name[3];
         section->sectionLength = GetBlockHeader(info, offset)->sectionLength;
         section->field_0x0C = GetBlockHeader(info, offset)->field_0x08;
-        offset = offset + 0x10; // section header
+        offset = offset + 0x10;                   // section header
         offset = offset + section->sectionLength; // section
-        offset = ROUND_UP(offset, 0x10); // align
+        offset = ROUND_UP(offset, 0x10);          // align
     }
 }
 

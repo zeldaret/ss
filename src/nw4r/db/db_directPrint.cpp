@@ -1,9 +1,11 @@
 
-#include <MSL_C/stdio.h>
-#include <MSL_C/string.h>
-#include <nw4r/db/db_directPrint.h>
-#include <rvl/OS.h>
-#include <rvl/VI.h>
+#include "nw4r/db/db_directPrint.h"
+
+#include "rvl/OS.h" // IWYU pragma: export
+#include "rvl/VI.h"
+#include "stdio.h"
+#include "string.h"
+
 
 /*
 
@@ -231,7 +233,6 @@ static void DrawStringToXfb_(int posh, int posv, const char *str, bool turnOver,
     }
 }
 
-
 static const char *DrawStringLineToXfb_(int posh, int posv, const char *str, int width) {
     // Vars from DWARF info
     char c;
@@ -274,7 +275,7 @@ static void DrawCharToXfb_(int posh, int posv, int code) {
     int wV = GetDotHeight_();
 
     u16 *pixel =
-            reinterpret_cast<u16 *>(sFrameBufferInfo.frameMemory) + sFrameBufferInfo.frameRow * posv * wV + posh * wH;
+        reinterpret_cast<u16 *>(sFrameBufferInfo.frameMemory) + sFrameBufferInfo.frameRow * posv * wV + posh * wH;
 
     if (posv < 0 || posh < 0) {
         return;
@@ -288,23 +289,23 @@ static void DrawCharToXfb_(int posh, int posv, int code) {
             fontBits = (fontBits & 0xFC000000) >> 1;
         } else {
             fontBits = (twiceBit[fontBits >> 26 & 0x3] << 0 | twiceBit[fontBits >> 28 & 0x3] << 4 |
-                               twiceBit[fontBits >> 30 & 0x3] << 8)
+                        twiceBit[fontBits >> 30 & 0x3] << 8)
                     << 19;
         }
         for (int cnth = 0; cnth < 6 * wH; cnth += 2) {
             u16 pixColor;
             pixColor = ((fontBits & 0x40000000) ? sFrameBufferColor.colorY256 : 0x0) |
-                    ((fontBits & 0x80000000) ? sFrameBufferColor.colorU4 : 0x20) +
-                            ((fontBits & 0x40000000) ? sFrameBufferColor.colorU2 : 0x40) +
-                            ((fontBits & 0x20000000) ? sFrameBufferColor.colorU4 : 0x20);
+                       ((fontBits & 0x80000000) ? sFrameBufferColor.colorU4 : 0x20) +
+                           ((fontBits & 0x40000000) ? sFrameBufferColor.colorU2 : 0x40) +
+                           ((fontBits & 0x20000000) ? sFrameBufferColor.colorU4 : 0x20);
             pixel[0] = pixColor;
             if (wV > 1) {
                 pixel[sFrameBufferInfo.frameRow] = pixColor;
             }
             pixColor = ((fontBits & 0x20000000) ? sFrameBufferColor.colorY256 : 0x0) |
-                    ((fontBits & 0x40000000) ? sFrameBufferColor.colorV4 : 0x20) +
-                            ((fontBits & 0x20000000) ? sFrameBufferColor.colorV2 : 0x40) +
-                            ((fontBits & 0x10000000) ? sFrameBufferColor.colorV4 : 0x20);
+                       ((fontBits & 0x40000000) ? sFrameBufferColor.colorV4 : 0x20) +
+                           ((fontBits & 0x20000000) ? sFrameBufferColor.colorV2 : 0x40) +
+                           ((fontBits & 0x10000000) ? sFrameBufferColor.colorV4 : 0x20);
             pixel[1] = pixColor;
             if (wV > 1) {
                 pixel[sFrameBufferInfo.frameRow + 1] = pixColor;
@@ -316,8 +317,9 @@ static void DrawCharToXfb_(int posh, int posv, int code) {
     }
 }
 
-void detail::DirectPrint_DrawStringToXfb(int posh, int posv, const char *format, __va_list_struct *args, bool turnOver,
-        bool backErase) {
+void detail::DirectPrint_DrawStringToXfb(
+    int posh, int posv, const char *format, __va_list_struct *args, bool turnOver, bool backErase
+) {
     // Vars from dwarf info
     char string[0x100];
     int length = vsnprintf(string, 0x100, format, args);
@@ -356,20 +358,11 @@ void *detail::DirectPrint_SetupFB(const _GXRenderModeObj *rmode) {
     if (!frameMemory) {
         if (!rmode) {
             switch ((u32)VIGetTvFormat()) {
-            case 0:
-                rmode = &GXNtsc480IntDf;
-                break;
-            case 1:
-                rmode = &GXPal528IntDf;
-                break;
-            case 5:
-                rmode = &GXEurgb60Hz480IntDf;
-                break;
-            case 2:
-                rmode = &GXMpal480IntDf;
-                break;
-            default:
-                break;
+                case 0:  rmode = &GXNtsc480IntDf; break;
+                case 1:  rmode = &GXPal528IntDf; break;
+                case 5:  rmode = &GXEurgb60Hz480IntDf; break;
+                case 2:  rmode = &GXMpal480IntDf; break;
+                default: break;
             }
         }
         frameMemory = CreateFB_(rmode);

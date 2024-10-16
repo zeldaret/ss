@@ -1,4 +1,4 @@
-#include <egg/audio/eggAudioHeapMgr.h>
+#include "egg/audio/eggAudioHeapMgr.h"
 
 namespace EGG {
 

@@ -1,4 +1,4 @@
-#include <d/t/d_t_barrel.h>
+#include "d/t/d_t_barrel.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_BARREL, dTgBarrel_c, fProfile::TAG_BARREL, 0x221, 0, 0);
 

@@ -1,10 +1,9 @@
 #ifndef D_TIME_AREA_MGR_H
 #define D_TIME_AREA_MGR_H
 
-#include <m/m3d/m_proc.h>
-#include <m/m_allocator.h>
-#include <m/m_vec.h>
-
+#include "m/m3d/m_proc.h"
+#include "m/m_allocator.h"
+#include "m/m_vec.h"
 
 class dTimeAreaMgrProcA_c : public m3d::proc_c {
 public:
@@ -31,7 +30,7 @@ private:
 };
 
 struct TimeAreaStruct {
-    TimeAreaStruct(f32 arg): field_0x00(arg), field_0x08(0) {}
+    TimeAreaStruct(f32 arg) : field_0x00(arg), field_0x08(0) {}
     /* 0x00 */ f32 field_0x00;
     /* 0x04 */ UNKWORD field_0x04;
     /* 0x08 */ u8 field_0x08;

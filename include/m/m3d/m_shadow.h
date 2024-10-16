@@ -1,15 +1,15 @@
 #ifndef M3D_M_SHADOW_H
 #define M3D_M_SHADOW_H
 
-#include <egg/core/eggFrmHeap.h>
-#include <egg/core/eggHeap.h>
-#include <m/m3d/m_proc.h>
-#include <m/m_color.h>
-#include <m/m_frustum.h>
-#include <m/m_heap.h>
-#include <m/m_mtx.h>
-#include <m/m_quat.h>
-#include <m/m_vec.h>
+#include "egg/core/eggFrmHeap.h"
+#include "egg/core/eggHeap.h"
+#include "m/m3d/m_proc.h"
+#include "m/m_color.h"
+#include "m/m_frustum.h"
+#include "m/m_heap.h"
+#include "m/m_mtx.h"
+#include "m/m_quat.h"
+#include "m/m_vec.h"
 
 namespace m3d {
 
@@ -116,10 +116,14 @@ public:
     virtual void remove() override;
     virtual void drawOpa() override;
 
-    bool drawMdl(mShadowCircle_c *circle, u32 priority, scnLeaf_c &mdl, const mQuat_c &quat, mVec3_c &pos, mColor color,
-            u32 param9, f32 dist);
-    bool drawTexObj(mShadowCircle_c *circle, u32 priority, const GXTexObj *texObj, const mMtx_c &mtx,
-            const mQuat_c &quat, mVec3_c &pos, mColor color, u32 param9, f32 dist);
+    bool drawMdl(
+        mShadowCircle_c *circle, u32 priority, scnLeaf_c &mdl, const mQuat_c &quat, mVec3_c &pos, mColor color,
+        u32 param9, f32 dist
+    );
+    bool drawTexObj(
+        mShadowCircle_c *circle, u32 priority, const GXTexObj *texObj, const mMtx_c &mtx, const mQuat_c &quat,
+        mVec3_c &pos, mColor color, u32 param9, f32 dist
+    );
 
     bool addMdlToCircle(mShadowCircle_c *circle, scnLeaf_c &mdl, const mQuat_c &quat);
 
@@ -132,8 +136,8 @@ public:
         mpCurrentHeap = mpFrmHeaps[mCurrentHeapIdx];
     }
     void swapHeaps();
-    void create(int count, u8 unk1, int unk2, u16 texBufferSize, u32 drawOpaPriority, nw4r::g3d::ResMdl mdl,
-            u32 heapSize);
+    void
+    create(int count, u8 unk1, int unk2, u16 texBufferSize, u32 drawOpaPriority, nw4r::g3d::ResMdl mdl, u32 heapSize);
     void reset();
 
     bool addCircle(mShadowCircle_c *circle, u32 priority, u32 unk);

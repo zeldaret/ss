@@ -1,8 +1,8 @@
 #ifndef D_LYT_FADER_H
 #define D_LYT_FADER_H
 
-#include <d/lyt/d2d.h>
-#include <m/m_fader_base.h>
+#include "d/lyt/d2d.h"
+#include "m/m_fader_base.h"
 
 class dLytFader_c : public mFaderBase_c {
 public:

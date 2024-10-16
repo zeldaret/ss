@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_tackle.h>
+#include "d/a/obj/d_a_obj_tackle.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TACKLE, dAcOTackle_c, fProfile::OBJ_TACKLE, 0x240, 0, 6);
 

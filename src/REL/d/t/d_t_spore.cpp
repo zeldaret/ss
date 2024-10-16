@@ -1,4 +1,4 @@
-#include <d/t/d_t_spore.h>
+#include "d/t/d_t_spore.h"
 
 SPECIAL_ACTOR_PROFILE(SPORE_TAG, dSporeTag_c, fProfile::SPORE_TAG, 0xD, 0, 388);
 

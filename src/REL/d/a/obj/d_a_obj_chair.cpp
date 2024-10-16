@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_chair.h>
+#include "d/a/obj/d_a_obj_chair.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_CHAIR, dAcOChair_c, fProfile::OBJ_CHAIR, 0x196, 0, 7);
 

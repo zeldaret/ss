@@ -1,7 +1,9 @@
-#include <egg/core/eggFrmHeap.h>
-#include <m/m3d/m3d.h>
-#include <m/m3d/m_anmmatclr.h>
-#include <m/m_heap.h>
+#include "m/m3d/m_anmmatclr.h"
+
+#include "egg/core/eggFrmHeap.h"
+#include "m/m3d/m3d.h"
+#include "m/m_heap.h"
+
 
 namespace m3d {
 
@@ -146,7 +148,7 @@ void anmMatClr_c::setAnm(bmdl_c &mdl, nw4r::g3d::ResAnmClr clr, s32 idx, playMod
     mpChildren[idx].setAnm(mdl, clr, mode);
 
     nw4r::g3d::AnmObjMatClrRes *res =
-            nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::AnmObjMatClrRes>(mpChildren[idx].getAnimObj());
+        nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::AnmObjMatClrRes>(mpChildren[idx].getAnimObj());
     o->Attach(idx, res);
 }
 

@@ -1,6 +1,7 @@
 #include "f/f_base.h"
-#include "MSL_C/string.h"
+
 #include "m/m_heap.h"
+#include "string.h"
 
 /*
 .text File Range:
@@ -265,7 +266,7 @@ int fBase_c::connectProc() {
         fBase_c *conn_parent = getConnectParent();
         if (conn_parent != nullptr) {
             if (conn_parent->isProcControlFlag(ROOT_DISABLE_EXECUTE) ||
-                    conn_parent->isProcControlFlag(DISABLE_EXECUTE)) {
+                conn_parent->isProcControlFlag(DISABLE_EXECUTE)) {
                 setProcControlFlag(DISABLE_EXECUTE);
             } else if (isProcControlFlag(DISABLE_EXECUTE)) {
                 clearProcControlFlag(DISABLE_EXECUTE);
@@ -341,7 +342,7 @@ void fBase_c::deleteRequest() {
 void fBase_c::forceUpdate() {
     // There is probably an inline active here
     if (((!delete_request && lifecycle_state != TO_BE_DELETED) && lifecycle_state != ACTIVE) &&
-            (update_request == UPDATE_REQUEST && fManager_c::m_nowLoopProc == fManager_c::EXECUTE)) {
+        (update_request == UPDATE_REQUEST && fManager_c::m_nowLoopProc == fManager_c::EXECUTE)) {
         update_request = UPDATE_FORCE;
         fManager_c::m_drawManage.addNode(&manager.draw_node);
         lifecycle_state = ACTIVE;
@@ -438,8 +439,8 @@ bool fBase_c::entryFrmHeap(size_t size, EGG::Heap *parentHeap) {
     EGG::FrmHeap *new_heap = nullptr;
 
     if (size != 0) {
-        new_heap = mHeap::makeFrmHeapAndUpdate(size, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20,
-                0);
+        new_heap =
+            mHeap::makeFrmHeapAndUpdate(size, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, 0);
         if (new_heap != nullptr) {
             bool create_sucess = createHeap();
             mHeap::restoreCurrentHeap();
@@ -457,7 +458,7 @@ bool fBase_c::entryFrmHeap(size_t size, EGG::Heap *parentHeap) {
     }
     if (new_heap == nullptr) {
         new_heap =
-                mHeap::makeFrmHeapAndUpdate(-1, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, 0);
+            mHeap::makeFrmHeapAndUpdate(-1, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, 0);
 
         if (new_heap != nullptr) {
             bool create_sucess = createHeap();
@@ -472,8 +473,9 @@ bool fBase_c::entryFrmHeap(size_t size, EGG::Heap *parentHeap) {
     }
 
     if (new_heap != nullptr) {
-        EGG::FrmHeap *larger_heap = mHeap::makeFrmHeapAndUpdate(heap_size, parentHeap,
-                "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, 0);
+        EGG::FrmHeap *larger_heap = mHeap::makeFrmHeapAndUpdate(
+            heap_size, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, 0
+        );
         if (larger_heap != nullptr) {
             if (larger_heap < new_heap) {
                 mHeap::destroyFrmHeap(new_heap);
@@ -511,7 +513,7 @@ bool fBase_c::entryFrmHeapNonAdjust(size_t size, EGG::Heap *parentHeap) {
     }
 
     EGG::FrmHeap *new_heap =
-            mHeap::makeFrmHeapAndUpdate(size, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, 0);
+        mHeap::makeFrmHeapAndUpdate(size, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, 0);
     if (new_heap != nullptr) {
         bool create_sucess = createHeap();
         mHeap::restoreCurrentHeap();

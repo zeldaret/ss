@@ -1,8 +1,9 @@
 #ifndef EGG_ALLOCATOR_H
 #define EGG_ALLOCATOR_H
-#include "rvl/MEM.h"
 
-#include <common.h>
+#include "common.h"
+#include "rvl/MEM.h" // IWYU pragma: export
+
 
 void MEMInitAllocatorFor_Heap(MEMAllocator *alloc, s32 align, void *heap);
 

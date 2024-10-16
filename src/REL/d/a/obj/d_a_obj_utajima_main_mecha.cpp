@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_utajima_main_mecha.h>
+#include "d/a/obj/d_a_obj_utajima_main_mecha.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_UTAJIMA_MAIN_MECHA, dAcOutajimaMainMecha_c, fProfile::OBJ_UTAJIMA_MAIN_MECHA, 0x1D0, 0, 2);
 

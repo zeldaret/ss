@@ -1,14 +1,14 @@
 #ifndef D_DVD_H
 #define D_DVD_H
 
-#include <common.h>
-#include <egg/core/eggHeap.h>
-#include <m/m_dvd.h>
+#include "common.h"
+#include "egg/core/eggHeap.h"
+#include "m/m_dvd.h"
 
 namespace dDvd {
 
 // difference to NSMBW: additional heap arg
-void create(s32 priority, EGG::Heap*, EGG::Heap*, EGG::Heap*);
+void create(s32 priority, EGG::Heap *, EGG::Heap *, EGG::Heap *);
 
 class loader_c {
 public:
@@ -21,10 +21,10 @@ public:
 private:
     u32 mSize;
     mDvd_toMainRam_normal_c *mpCommand;
-    EGG::Heap* mpHeap;
-    void* mpBuffer;
+    EGG::Heap *mpHeap;
+    void *mpBuffer;
 };
 
-} // dDvd
+} // namespace dDvd
 
 #endif

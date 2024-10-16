@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_decoA.h>
+#include "d/a/obj/d_a_obj_decoA.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_DECOA, dAcODecoA_c, fProfile::OBJ_DECOA, 0x160, 0, 0);
 

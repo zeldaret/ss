@@ -1,4 +1,4 @@
-#include <d/a/b/d_a_b_asura.h>
+#include "d/a/b/d_a_b_asura.h"
 
 SPECIAL_ACTOR_PROFILE(B_ASURA, dAcBAsura_c, fProfile::B_ASURA, 0x117, 0, 0);
 

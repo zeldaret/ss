@@ -1,7 +1,9 @@
-#include <nw4r/lyt/lyt_animation.h>
-#include <nw4r/lyt/lyt_group.h>
-#include <nw4r/lyt/lyt_layout.h>
-#include <nw4r/lyt/lyt_pane.h>
+#include "nw4r/lyt/lyt_animation.h"
+
+#include "nw4r/lyt/lyt_group.h"
+#include "nw4r/lyt/lyt_layout.h"
+#include "nw4r/lyt/lyt_pane.h"
+
 
 namespace nw4r {
 namespace lyt {
@@ -88,7 +90,7 @@ f32 GetHermiteCurveValue(f32 frame, const res::HermiteKey *keyArray, u32 keySize
     f32 t1t1t1t2t2t2 = t1t1t1t2t2 * t2;
 
     return v0 * (2.0f * t1t1t1t2t2t2 - 3.0f * t1t1t2t2 + 1.0f) + v1 * (-2.0f * t1t1t1t2t2t2 + 3.0f * t1t1t2t2) +
-            s0 * (t1 + (t1t1t1t2t2 - 2.0f * t1t1t2)) + s1 * (t1t1t1t2t2 - t1t1t2);
+           s0 * (t1 + (t1t1t1t2t2 - 2.0f * t1t1t2)) + s1 * (t1t1t1t2t2 - t1t1t2);
 }
 
 // AnimatePainSRT__27@unnamed@lyt_animation_cpp@FPQ34nw4r3lyt4PanePCQ44nw4r3lyt3res13AnimationInfoPCUlf
@@ -96,7 +98,7 @@ f32 GetHermiteCurveValue(f32 frame, const res::HermiteKey *keyArray, u32 keySize
 void AnimatePaneSRT(Pane *pPane, const res::AnimationInfo *pAnimInfo, const u32 *animTargetOffsets, f32 frame) {
     for (int i = 0; i < pAnimInfo->num; i++) {
         const res::AnimationTarget *pAnimTarget =
-                detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
+            detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
         const res::HermiteKey *keys = detail::ConvertOffsToPtr<res::HermiteKey>(pAnimTarget, pAnimTarget->keyOffset);
         pPane->SetSRTElement(pAnimTarget->target, GetHermiteCurveValue(frame, keys, pAnimTarget->keyNum));
     }
@@ -107,7 +109,7 @@ void AnimatePaneSRT(Pane *pPane, const res::AnimationInfo *pAnimInfo, const u32 
 void AnimateVisibility(Pane *pPane, const res::AnimationInfo *pAnimInfo, const u32 *animTargetOffsets, f32 frame) {
     for (int i = 0; i < pAnimInfo->num; i++) {
         const res::AnimationTarget *pAnimTarget =
-                detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
+            detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
         const res::StepKey *keys = detail::ConvertOffsToPtr<res::StepKey>(pAnimTarget, pAnimTarget->keyOffset);
         pPane->SetVisible(GetStepCurveValue(frame, keys, pAnimTarget->keyNum) != 0);
     }
@@ -118,7 +120,7 @@ void AnimateVisibility(Pane *pPane, const res::AnimationInfo *pAnimInfo, const u
 void AnimateVertexColor(Pane *pPane, const res::AnimationInfo *pAnimInfo, const u32 *animTargetOffsets, f32 frame) {
     for (int i = 0; i < pAnimInfo->num; i++) {
         const res::AnimationTarget *pAnimTarget =
-                detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
+            detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
         const res::HermiteKey *keys = detail::ConvertOffsToPtr<res::HermiteKey>(pAnimTarget, pAnimTarget->keyOffset);
         f32 value = GetHermiteCurveValue(frame, keys, pAnimTarget->keyNum);
         value += 0.5f;
@@ -130,11 +132,12 @@ void AnimateVertexColor(Pane *pPane, const res::AnimationInfo *pAnimInfo, const 
 
 // AnimateMaterialColor__27@unnamed@lyt_animation_cpp@FPQ34nw4r3lyt8MaterialPCQ44nw4r3lyt3res13AnimationInfoPCUlf
 // AnimateMaterialColor__Q34nw4r3lyt27@unnamed@lyt_animation_cpp@FPQ34nw4r3lyt8MaterialPCQ44nw4r3lyt3res13AnimationInfoPCUlf
-void AnimateMaterialColor(Material *pMaterial, const res::AnimationInfo *pAnimInfo, const u32 *animTargetOffsets,
-        f32 frame) {
+void AnimateMaterialColor(
+    Material *pMaterial, const res::AnimationInfo *pAnimInfo, const u32 *animTargetOffsets, f32 frame
+) {
     for (int i = 0; i < pAnimInfo->num; i++) {
         const res::AnimationTarget *pAnimTarget =
-                detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
+            detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
         const res::HermiteKey *keys = detail::ConvertOffsToPtr<res::HermiteKey>(pAnimTarget, pAnimTarget->keyOffset);
         f32 value = GetHermiteCurveValue(frame, keys, pAnimTarget->keyNum);
         value += 0.5f;
@@ -147,28 +150,31 @@ void AnimateMaterialColor(Material *pMaterial, const res::AnimationInfo *pAnimIn
 
 // AnimateTextureSRT__27@unnamed@lyt_animation_cpp@FPQ34nw4r3lyt8MaterialPCQ44nw4r3lyt3res13AnimationInfoPCUlf
 // AnimateTextureSRT__Q34nw4r3lyt27@unnamed@lyt_animation_cpp@FPQ34nw4r3lyt8MaterialPCQ44nw4r3lyt3res13AnimationInfoPCUlf
-void AnimateTextureSRT(Material *pMaterial, const res::AnimationInfo *pAnimInfo, const u32 *animTargetOffsets,
-        f32 frame) {
+void AnimateTextureSRT(
+    Material *pMaterial, const res::AnimationInfo *pAnimInfo, const u32 *animTargetOffsets, f32 frame
+) {
     for (int i = 0; i < pAnimInfo->num; i++) {
         const res::AnimationTarget *pAnimTarget =
-                detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
+            detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
         if (pAnimTarget->id < pMaterial->GetTexSRTCap()) {
             const res::HermiteKey *keys =
-                    detail::ConvertOffsToPtr<res::HermiteKey>(pAnimTarget, pAnimTarget->keyOffset);
+                detail::ConvertOffsToPtr<res::HermiteKey>(pAnimTarget, pAnimTarget->keyOffset);
 
-            pMaterial->SetTexSRTElement(pAnimTarget->id, pAnimTarget->target,
-                    GetHermiteCurveValue(frame, keys, pAnimTarget->keyNum));
+            pMaterial->SetTexSRTElement(
+                pAnimTarget->id, pAnimTarget->target, GetHermiteCurveValue(frame, keys, pAnimTarget->keyNum)
+            );
         }
     }
 }
 
 // AnimateTexturePattern__27@unnamed@lyt_animation_cpp@FPQ34nw4r3lyt8MaterialPCQ44nw4r3lyt3res13AnimationInfoPCUlfPPv
 // AnimateTexturePattern__Q34nw4r3lyt27@unnamed@lyt_animation_cpp@FPQ34nw4r3lyt8MaterialPCQ44nw4r3lyt3res13AnimationInfoPCUlfPPv
-void AnimateTexturePattern(Material *pMaterial, const res::AnimationInfo *pAnimInfo, const u32 *animTargetOffsets,
-        f32 frame, void **tpls) {
+void AnimateTexturePattern(
+    Material *pMaterial, const res::AnimationInfo *pAnimInfo, const u32 *animTargetOffsets, f32 frame, void **tpls
+) {
     for (int i = 0; i < pAnimInfo->num; i++) {
         const res::AnimationTarget *pAnimTarget =
-                detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
+            detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
         if (pAnimTarget->id < pMaterial->GetTextureNum()) {
             const res::StepKey *keys = detail::ConvertOffsToPtr<res::StepKey>(pAnimTarget, pAnimTarget->keyOffset);
             u16 fileIdx = GetStepCurveValue(frame, keys, pAnimTarget->keyNum);
@@ -181,16 +187,18 @@ void AnimateTexturePattern(Material *pMaterial, const res::AnimationInfo *pAnimI
 
 // AnimateIndTexSRT__27@unnamed@lyt_animation_cpp@FPQ34nw4r3lyt8MaterialPCQ44nw4r3lyt3res13AnimationInfoPCUlf
 // AnimateIndTexSRT__Q34nw4r3lyt27@unnamed@lyt_animation_cpp@FPQ34nw4r3lyt8MaterialPCQ44nw4r3lyt3res13AnimationInfoPCUlf
-void AnimateIndTexSRT(Material *pMaterial, const res::AnimationInfo *pAnimInfo, const u32 *animTargetOffsets,
-        f32 frame) {
+void AnimateIndTexSRT(
+    Material *pMaterial, const res::AnimationInfo *pAnimInfo, const u32 *animTargetOffsets, f32 frame
+) {
     for (int i = 0; i < pAnimInfo->num; i++) {
         const res::AnimationTarget *pAnimTarget =
-                detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
+            detail::ConvertOffsToPtr<res::AnimationTarget>(pAnimInfo, animTargetOffsets[i]);
         if (pAnimTarget->id < pMaterial->GetIndTexSRTCap()) {
             const res::HermiteKey *keys =
-                    detail::ConvertOffsToPtr<res::HermiteKey>(pAnimTarget, pAnimTarget->keyOffset);
-            pMaterial->SetIndTexSRTElement(pAnimTarget->id, pAnimTarget->target,
-                    GetHermiteCurveValue(frame, keys, pAnimTarget->keyNum));
+                detail::ConvertOffsToPtr<res::HermiteKey>(pAnimTarget, pAnimTarget->keyOffset);
+            pMaterial->SetIndTexSRTElement(
+                pAnimTarget->id, pAnimTarget->target, GetHermiteCurveValue(frame, keys, pAnimTarget->keyNum)
+            );
         }
     }
 }
@@ -275,7 +283,7 @@ void AnimTransformBasic::Bind(Pane *pPane, bool bRecursive, bool bDisable) {
     const u32 *animContOffsets = detail::ConvertOffsToPtr<u32>(mpRes, mpRes->animContOffsetsOffset);
     for (u16 i = 0; i < mpRes->animContNum; i++) {
         const res::AnimationContent &animCont =
-                *detail::ConvertOffsToPtr<res::AnimationContent>(mpRes, animContOffsets[i]);
+            *detail::ConvertOffsToPtr<res::AnimationContent>(mpRes, animContOffsets[i]);
         if (animCont.type == 0) {
             Pane *pFindPane = pPane->FindPaneByName(animCont.name, bRecursive);
             if (pFindPane && !IsBindAnimation(pFindPane, this)) {
@@ -303,7 +311,7 @@ void AnimTransformBasic::Bind(Material *pMaterial, bool bDisable) {
     const u32 *animContOffsets = detail::ConvertOffsToPtr<u32>(mpRes, mpRes->animContOffsetsOffset);
     for (u16 i = 0; i < mpRes->animContNum; i++) {
         const res::AnimationContent &animCont =
-                *detail::ConvertOffsToPtr<res::AnimationContent>(mpRes, animContOffsets[i]);
+            *detail::ConvertOffsToPtr<res::AnimationContent>(mpRes, animContOffsets[i]);
         if (animCont.type == 1) {
             if (detail::EqualsMaterialName(pMaterial->GetName(), animCont.name) && !IsBindAnimation(pMaterial, this)) {
                 pCrAnimLink = Bind(pMaterial, pCrAnimLink, i, bDisable);
@@ -323,18 +331,12 @@ void AnimTransformBasic::Animate(u32 idx, Pane *pPane) {
 
     for (int i = 0; i < pAnimCont->num; i++) {
         const res::AnimationInfo *pAnimInfo =
-                detail::ConvertOffsToPtr<res::AnimationInfo>(pAnimCont, animInfoOffsets[i]);
+            detail::ConvertOffsToPtr<res::AnimationInfo>(pAnimCont, animInfoOffsets[i]);
         const u32 *animTargetOffsets = detail::ConvertOffsToPtr<u32>(pAnimInfo, sizeof(res::AnimationInfo));
         switch (pAnimInfo->kind) {
-        case 'RLPA':
-            AnimatePaneSRT(pPane, pAnimInfo, animTargetOffsets, mFrame);
-            break;
-        case 'RLVI':
-            AnimateVisibility(pPane, pAnimInfo, animTargetOffsets, mFrame);
-            break;
-        case 'RLVC':
-            AnimateVertexColor(pPane, pAnimInfo, animTargetOffsets, mFrame);
-            break;
+            case 'RLPA': AnimatePaneSRT(pPane, pAnimInfo, animTargetOffsets, mFrame); break;
+            case 'RLVI': AnimateVisibility(pPane, pAnimInfo, animTargetOffsets, mFrame); break;
+            case 'RLVC': AnimateVertexColor(pPane, pAnimInfo, animTargetOffsets, mFrame); break;
         }
     }
 }
@@ -347,23 +349,17 @@ void AnimTransformBasic::Animate(u32 idx, Material *pMaterial) {
 
     for (int i = 0; i < pAnimCont->num; i++) {
         const res::AnimationInfo *pAnimInfo =
-                detail::ConvertOffsToPtr<res::AnimationInfo>(pAnimCont, animInfoOffsets[i]);
+            detail::ConvertOffsToPtr<res::AnimationInfo>(pAnimCont, animInfoOffsets[i]);
         const u32 *animTargetOffsets = detail::ConvertOffsToPtr<u32>(pAnimInfo, sizeof(res::AnimationInfo));
         switch (pAnimInfo->kind) {
-        case 'RLMC':
-            AnimateMaterialColor(pMaterial, pAnimInfo, animTargetOffsets, mFrame);
-            break;
-        case 'RLTS':
-            AnimateTextureSRT(pMaterial, pAnimInfo, animTargetOffsets, mFrame);
-            break;
-        case 'RLTP':
-            if (mpFileResAry) {
-                AnimateTexturePattern(pMaterial, pAnimInfo, animTargetOffsets, mFrame, mpFileResAry);
-            }
-            break;
-        case 'RLIM':
-            AnimateIndTexSRT(pMaterial, pAnimInfo, animTargetOffsets, mFrame);
-            break;
+            case 'RLMC': AnimateMaterialColor(pMaterial, pAnimInfo, animTargetOffsets, mFrame); break;
+            case 'RLTS': AnimateTextureSRT(pMaterial, pAnimInfo, animTargetOffsets, mFrame); break;
+            case 'RLTP':
+                if (mpFileResAry) {
+                    AnimateTexturePattern(pMaterial, pAnimInfo, animTargetOffsets, mFrame, mpFileResAry);
+                }
+                break;
+            case 'RLIM': AnimateIndTexSRT(pMaterial, pAnimInfo, animTargetOffsets, mFrame); break;
         }
     }
 }
@@ -411,18 +407,12 @@ void AnimResource::Set(const void *animResBuf) {
         if (detail::TestFileVersion(*pFileHeader)) {
             mpFileHeader = pFileHeader;
             const res::DataBlockHeader *pDataBlockHead =
-                    detail::ConvertOffsToPtr<res::DataBlockHeader>(mpFileHeader, mpFileHeader->headerSize);
+                detail::ConvertOffsToPtr<res::DataBlockHeader>(mpFileHeader, mpFileHeader->headerSize);
             for (int i = 0; i < mpFileHeader->dataBlocks; i++) {
                 switch (detail::GetSignatureInt(pDataBlockHead->kind)) {
-                case 'pat1':
-                    mpTagBlock = (res::AnimationTagBlock *)pDataBlockHead;
-                    break;
-                case 'pah1':
-                    mpShareBlock = (res::AnimationShareBlock *)pDataBlockHead;
-                    break;
-                case 'pai1':
-                    mpResBlock = (res::AnimationBlock *)pDataBlockHead;
-                    break;
+                    case 'pat1': mpTagBlock = (res::AnimationTagBlock *)pDataBlockHead; break;
+                    case 'pah1': mpShareBlock = (res::AnimationShareBlock *)pDataBlockHead; break;
+                    case 'pai1': mpResBlock = (res::AnimationBlock *)pDataBlockHead; break;
                 }
                 pDataBlockHead = detail::ConvertOffsToPtr<res::DataBlockHeader>(pDataBlockHead, pDataBlockHead->size);
             }
@@ -450,7 +440,7 @@ u16 AnimResource::GetGroupNum() const {
 const AnimationGroupRef *AnimResource::GetGroupArray() const {
     if (mpTagBlock) {
         const AnimationGroupRef *groups =
-                detail::ConvertOffsToPtr<AnimationGroupRef>(mpTagBlock, mpTagBlock->groupsOffset);
+            detail::ConvertOffsToPtr<AnimationGroupRef>(mpTagBlock, mpTagBlock->groupsOffset);
         return groups;
     }
     return nullptr;
@@ -486,7 +476,7 @@ u16 AnimResource::CalcAnimationNum(Pane *pPane, bool bRecursive) const {
     const u32 *animContOffsets = detail::ConvertOffsToPtr<u32>(mpResBlock, mpResBlock->animContOffsetsOffset);
     for (u16 i = 0; i < mpResBlock->animContNum; i++) {
         const res::AnimationContent &animCont =
-                *detail::ConvertOffsToPtr<res::AnimationContent>(mpResBlock, animContOffsets[i]);
+            *detail::ConvertOffsToPtr<res::AnimationContent>(mpResBlock, animContOffsets[i]);
         if (animCont.type == 0) {
             Pane *pFindPane = pPane->FindPaneByName(animCont.name, bRecursive);
             if (pFindPane) {
@@ -507,7 +497,7 @@ u16 AnimResource::CalcAnimationNum(Group *pGroup, bool bRecursive) const {
     u16 linkNum = 0;
     ut::LinkList<detail::PaneLink, 0> *paneList = pGroup->GetPaneList();
     for (ut::LinkList<detail::PaneLink, 0>::Iterator it = paneList->GetBeginIter(); it != paneList->GetEndIter();
-            it++) {
+         it++) {
         linkNum += CalcAnimationNum(it->mTarget, bRecursive);
     }
     return linkNum;
@@ -520,7 +510,7 @@ u16 AnimPaneTree::FindAnimContent(const res::AnimationBlock *pAnimBlock, const c
     const u32 *animContOffsets = detail::ConvertOffsToPtr<u32>(pAnimBlock, pAnimBlock->animContOffsetsOffset);
     for (u16 i = 0; i < pAnimBlock->animContNum; i++) {
         const res::AnimationContent *pAnimCont =
-                detail::ConvertOffsToPtr<res::AnimationContent>(pAnimBlock, animContOffsets[i]);
+            detail::ConvertOffsToPtr<res::AnimationContent>(pAnimBlock, animContOffsets[i]);
         if (pAnimCont->type == animContType && EqualsMaterialName(pAnimCont->name, animContName)) {
             return i;
         }

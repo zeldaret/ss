@@ -4,7 +4,7 @@
 // This file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_helper_unk.hpp
 
-#include <common.h>
+#include "common.h"
 
 /// @brief [A helper class for fBase_c with unknown purpose].
 /// @note Unofficial name.

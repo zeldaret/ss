@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_lighthouse_harp.h>
+#include "d/a/obj/d_a_obj_lighthouse_harp.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_LIGHTHOUSE_HARP, dAcOlighthouseHarp_c, fProfile::OBJ_LIGHTHOUSE_HARP, 0x1DF, 0, 2);
 

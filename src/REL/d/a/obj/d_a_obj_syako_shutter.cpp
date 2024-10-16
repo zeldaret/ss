@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_syako_shutter.h>
+#include "d/a/obj/d_a_obj_syako_shutter.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SYAKO_SHUTTER, dAcOSyakoShutter_c, fProfile::OBJ_SYAKO_SHUTTER, 0x178, 0, 3);
 

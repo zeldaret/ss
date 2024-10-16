@@ -1,7 +1,8 @@
-#include <egg/audio/eggAudioMgr.h>
-#include <nw4r/snd/snd_SoundSystem.h>
-#include <rvl/AI.h>
-#include <rvl/AX.h>
+#include "egg/audio/eggAudioMgr.h"
+
+#include "nw4r/snd/snd_SoundSystem.h"
+#include "rvl/AI.h" // IWYU pragma: export
+#include "rvl/AX.h" // IWYU pragma: export
 
 namespace EGG {
 
@@ -51,7 +52,7 @@ void SimpleAudioMgr::initialize(EGG::IAudioMgr::Arg *arg) {
         param.dvdThreadPriority = arg->dvdThreadPriority;
         param.dvdThreadStackSize = arg->dvdThreadStackSize;
         u32 size = nw4r::snd::SoundSystem::GetRequiredMemSize(param);
-        void *ptr = SoundHeapMgr::getSoundHeap()->Alloc(size, nullptr, (void*)'SYST');
+        void *ptr = SoundHeapMgr::getSoundHeap()->Alloc(size, nullptr, (void *)'SYST');
         nw4r::snd::SoundSystem::InitSoundSystem(param, ptr, size);
     }
     ArcPlayer::setSteamBlocks(arg->blocks);

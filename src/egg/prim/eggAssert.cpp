@@ -1,11 +1,14 @@
-#include <egg/core/eggSystem.h>
-#include <egg/core/eggXfbManager.h>
-#include <egg/prim/eggAssert.h>
-#include <nw4r/db/db_directPrint.h>
-#include <nw4r/db/db_mapFile.h>
-#include <rvl/OS.h>
-#include <rvl/VI.h>
-#include <MSL_C/string.h>
+#include "egg/prim/eggAssert.h"
+
+#include "__va_arg.h"
+#include "egg/core/eggSystem.h"
+#include "egg/core/eggXfbManager.h"
+#include "nw4r/db/db_directPrint.h"
+#include "nw4r/db/db_mapFile.h"
+#include "rvl/OS.h" // IWYU pragma: export
+#include "rvl/VI.h" // IWYU pragma: export
+#include "string.h"
+
 
 namespace EGG {
 
@@ -54,7 +57,7 @@ bool sAssertOccurred;
 /* 80674c60 */ char buf[260];
 
 /* 8049c100 */ const char *getMapSymbol(void *arg) {
-    bool success = nw4r::db::MapFile_QuerySymbol((u32)arg, (u8*)buf, sizeof(buf));
+    bool success = nw4r::db::MapFile_QuerySymbol((u32)arg, (u8 *)buf, sizeof(buf));
     return success ? buf : nullptr;
 }
 
@@ -93,7 +96,7 @@ bool sAssertOccurred;
     system_report("\n");
     u32 *stackp = (u32 *)OSGetStackPointer();
     if (sPtrOverride != 0) {
-        stackp = (u32*)((u32*)sPtrOverride)[1];
+        stackp = (u32 *)((u32 *)sPtrOverride)[1];
     }
     u32 *stack = stackp;
 
@@ -108,7 +111,7 @@ bool sAssertOccurred;
         } else {
             system_report("%d: %p\n", num, stack[1]);
         }
-        stack = (u32*)stack[0];
+        stack = (u32 *)stack[0];
         if (isOutsideMEM1((u32)stack)) {
             break;
         }
@@ -153,14 +156,14 @@ bool sAssertOccurred;
                 if (isOutsideMEM1((u32)stack)) {
                     break;
                 }
-                const char *sym = getMapSymbol((void*)stack[1]);
+                const char *sym = getMapSymbol((void *)stack[1]);
                 if (sym != nullptr) {
                     nw4r::db::DirectPrint_Printf(2, line, "%d:%s\n", counter, sym);
                 } else {
-                    nw4r::db::DirectPrint_Printf(2, line, "LR Save[%d]:%p\n", counter, (void*)stack[1]);
+                    nw4r::db::DirectPrint_Printf(2, line, "LR Save[%d]:%p\n", counter, (void *)stack[1]);
                 }
                 nw4r::db::DirectPrint_StoreCache();
-                stack = (u32*)*stack;
+                stack = (u32 *)*stack;
                 if (isOutsideMEM1((u32)stack)) {
                     break;
                 }

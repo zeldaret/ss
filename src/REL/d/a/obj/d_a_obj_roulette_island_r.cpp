@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_roulette_island_r.h>
+#include "d/a/obj/d_a_obj_roulette_island_r.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_ROULETTE_ISLAND_R, dAcOrouletteIslandR_c, fProfile::OBJ_ROULETTE_ISLAND_R, 0x1CB, 0, 2);
 

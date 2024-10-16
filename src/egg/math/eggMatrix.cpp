@@ -1,6 +1,7 @@
-#include <egg/math/eggMatrix.h>
-#include <rvl/GX.h>
-#include <rvl/MTX.h>
+#include "egg/math/eggMatrix.h"
+
+#include "rvl/GX.h"  // IWYU pragma: export
+#include "rvl/MTX.h" // IWYU pragma: export
 
 namespace EGG {
 
@@ -295,32 +296,31 @@ void Matrix34f::toQuat(Quatf &q) const {
     }
 
     switch (tempMax) {
-    case 0:
-        q.w = Math<f32>::sqrt(temp0);
-        q.x = (0.25f / q.w) * (m[2][1] - m[1][2]);
-        q.y = (0.25f / q.w) * (m[0][2] - m[2][0]);
-        q.z = (0.25f / q.w) * (m[1][0] - m[0][1]);
-        break;
-    case 1:
-        q.x = Math<f32>::sqrt(temp1);
-        q.w = (0.25f / q.x) * (m[2][1] - m[1][2]);
-        q.y = (0.25f / q.x) * (m[0][1] + m[1][0]);
-        q.z = (0.25f / q.x) * (m[0][2] + m[2][0]);
-        break;
-    case 2:
-        q.y = Math<f32>::sqrt(temp2);
-        q.w = (0.25f / q.y) * (m[0][2] - m[2][0]);
-        q.z = (0.25f / q.y) * (m[1][2] + m[2][1]);
-        q.x = (0.25f / q.y) * (m[1][0] + m[0][1]);
-        break;
-    case 3:
-        q.z = Math<f32>::sqrt(temp3);
-        q.w = (0.25f / q.z) * (m[1][0] - m[0][1]);
-        q.x = (0.25f / q.z) * (m[2][0] + m[0][2]);
-        q.y = (0.25f / q.z) * (m[2][1] + m[1][2]);
-        break;
-    default:
-        break;
+        case 0:
+            q.w = Math<f32>::sqrt(temp0);
+            q.x = (0.25f / q.w) * (m[2][1] - m[1][2]);
+            q.y = (0.25f / q.w) * (m[0][2] - m[2][0]);
+            q.z = (0.25f / q.w) * (m[1][0] - m[0][1]);
+            break;
+        case 1:
+            q.x = Math<f32>::sqrt(temp1);
+            q.w = (0.25f / q.x) * (m[2][1] - m[1][2]);
+            q.y = (0.25f / q.x) * (m[0][1] + m[1][0]);
+            q.z = (0.25f / q.x) * (m[0][2] + m[2][0]);
+            break;
+        case 2:
+            q.y = Math<f32>::sqrt(temp2);
+            q.w = (0.25f / q.y) * (m[0][2] - m[2][0]);
+            q.z = (0.25f / q.y) * (m[1][2] + m[2][1]);
+            q.x = (0.25f / q.y) * (m[1][0] + m[0][1]);
+            break;
+        case 3:
+            q.z = Math<f32>::sqrt(temp3);
+            q.w = (0.25f / q.z) * (m[1][0] - m[0][1]);
+            q.x = (0.25f / q.z) * (m[2][0] + m[0][2]);
+            q.y = (0.25f / q.z) * (m[2][1] + m[1][2]);
+            break;
+        default: break;
     }
 
     if (q.w < 0.0f) {

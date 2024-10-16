@@ -1,11 +1,12 @@
 #ifndef D2D_H
 #define D2D_H
 
-#include <libms/msgfile.h>
-#include <m/m2d.h>
-#include <d/lyt/meter/d_lyt_meter_base.h>
-#include <nw4r/lyt/lyt_pane.h>
-#include <nw4r/lyt/lyt_picture.h>
+#include "d/lyt/meter/d_lyt_meter_base.h"
+#include "libms/msgfile.h"
+#include "m/m2d.h"
+#include "nw4r/lyt/lyt_pane.h"
+#include "nw4r/lyt/lyt_picture.h"
+
 
 class dTextBox_c;
 class dWindow_c;
@@ -29,8 +30,8 @@ class Layout_c : public nw4r::lyt::Layout {
 public:
     virtual ~Layout_c() {}
     virtual bool Build(const void *lytResBuf, nw4r::lyt::ResourceAccessor *pResAcsr) override;
-    virtual nw4r::lyt::AnimTransform *CreateAnimTransform(const void *animResBuf,
-            nw4r::lyt::ResourceAccessor *pResAcsr) override;
+    virtual nw4r::lyt::AnimTransform *
+    CreateAnimTransform(const void *animResBuf, nw4r::lyt::ResourceAccessor *pResAcsr) override;
 
     // Bring the overloaded, otherwise shadowed functions in scope
     using nw4r::lyt::Layout::CreateAnimTransform;
@@ -103,8 +104,9 @@ private:
     bool fn_800ABCE0(const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg);
 
     bool fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk);
-    bool fn_800AC1AC(const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg,
-            void *unk);
+    bool fn_800AC1AC(
+        const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk
+    );
     MsbtInfo *getMsbtInfo() const;
     bool fn_800AB930(dTextBox_c *box);
 
@@ -112,7 +114,7 @@ private:
 };
 
 struct AnmGroupBase_c {
-    AnmGroupBase_c(m2d::FrameCtrl_c *frameCtrl): field_0x04(nullptr), mFlags(0), mpFrameCtrl(frameCtrl) {}
+    AnmGroupBase_c(m2d::FrameCtrl_c *frameCtrl) : field_0x04(nullptr), mFlags(0), mpFrameCtrl(frameCtrl) {}
     virtual ~AnmGroupBase_c() {}
 
     bool init(const char *fileName, m2d::ResAccIf_c *acc, d2d::Layout_c *layout, const char *animName);
@@ -172,7 +174,6 @@ struct AnmGroupBase_c {
     }
 
 private:
-
     /* 0x04 */ void *field_0x04;
     /* 0x08 */ m2d::FrameCtrl_c *mpFrameCtrl;
     /* 0x0C */ u8 mFlags;
@@ -182,13 +183,13 @@ private:
 };
 
 struct AnmGroup_c : public AnmGroupBase_c {
-    AnmGroup_c(): AnmGroupBase_c(&mFrameCtrl) {}
+    AnmGroup_c() : AnmGroupBase_c(&mFrameCtrl) {}
     virtual ~AnmGroup_c() {}
     /* 0x28 */ m2d::FrameCtrl_c mFrameCtrl;
 };
 
 // Probably pause menu specific
-struct dLytStructB: public dLytMeterBase {
+struct dLytStructB : public dLytMeterBase {
     dLytStructB();
     ~dLytStructB();
 

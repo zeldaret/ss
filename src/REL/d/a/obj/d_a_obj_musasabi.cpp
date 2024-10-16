@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_musasabi.h>
+#include "d/a/obj/d_a_obj_musasabi.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_MUSASABI, dAcOmusasabi_c, fProfile::OBJ_MUSASABI, 0x1C3, 0, 6);
 

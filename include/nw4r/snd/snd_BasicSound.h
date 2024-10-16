@@ -1,13 +1,10 @@
 #ifndef NW4R_SND_BASIC_SOUND_H
 #define NW4R_SND_BASIC_SOUND_H
-#include <nw4r/types_nw4r.h>
-
-#include <nw4r/snd/snd_Common.h>
-#include <nw4r/snd/snd_MoveValue.h>
-
-#include <nw4r/ut.h>
-
-#include <rvl/WPAD.h>
+#include "nw4r/snd/snd_Common.h"
+#include "nw4r/snd/snd_MoveValue.h"
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut.h"  // IWYU pragma: export
+#include "rvl/WPAD.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace snd {
@@ -27,29 +24,29 @@ public:
             PARAM_UPDATE_PRIORITY = (1 << 3),
         };
 
-        virtual void detail_Update(SoundParam* pParam, u32 id,
-                                   BasicSound* pSound, const void* pArg,
-                                   u32 flags) = 0; // at 0xC
+        virtual void detail_Update(
+            SoundParam *pParam, u32 id, BasicSound *pSound, const void *pArg,
+            u32 flags
+        ) = 0; // at 0xC
     };
 
     struct AmbientArgUpdateCallback {
-        virtual void detail_Update(void* pArg,
-                                   const BasicSound* pSound) = 0; // at 0xC
+        virtual void detail_Update(void *pArg,
+                                   const BasicSound *pSound) = 0; // at 0xC
     };
 
     struct AmbientArgAllocaterCallback {
-        virtual void* detail_AllocAmbientArg(u32 size) = 0; // at 0xC
+        virtual void *detail_AllocAmbientArg(u32 size) = 0; // at 0xC
 
-        virtual void
-        detail_FreeAmbientArg(void* pArg,
-                              const BasicSound* pSound) = 0; // at 0x10
+        virtual void detail_FreeAmbientArg(void *pArg,
+                                           const BasicSound *pSound) = 0; // at 0x10
     };
 
     struct AmbientArgInfo {
-        AmbientParamUpdateCallback* paramUpdateCallback;   // at 0x0
-        AmbientArgUpdateCallback* argUpdateCallback;       // at 0x4
-        AmbientArgAllocaterCallback* argAllocaterCallback; // at 0x8
-        void* arg;                                         // at 0xC
+        AmbientParamUpdateCallback *paramUpdateCallback;   // at 0x0
+        AmbientArgUpdateCallback *argUpdateCallback;       // at 0x4
+        AmbientArgAllocaterCallback *argAllocaterCallback; // at 0x8
+        void *arg;                                         // at 0xC
         u32 argSize;                                       // at 0x10
     };
 
@@ -85,13 +82,13 @@ public:
     virtual void DetachTempSpecialHandle() = 0;     // at 0x60
 
     virtual void InitParam();                              // at 0x64
-    virtual BasicPlayer& GetBasicPlayer() = 0;             // at 0x68
-    virtual const BasicPlayer& GetBasicPlayer() const = 0; // at 0x6C
+    virtual BasicPlayer &GetBasicPlayer() = 0;             // at 0x68
+    virtual const BasicPlayer &GetBasicPlayer() const = 0; // at 0x6C
 
-    PlayerHeap* GetPlayerHeap() {
+    PlayerHeap *GetPlayerHeap() {
         return mHeap;
     }
-    void SetPlayerHeap(PlayerHeap* pHeap) {
+    void SetPlayerHeap(PlayerHeap *pHeap) {
         mHeap = pHeap;
     }
 
@@ -101,47 +98,47 @@ public:
     bool IsAttachedTempGeneralHandle();
     void DetachTempGeneralHandle();
 
-    SoundPlayer* GetSoundPlayer() {
+    SoundPlayer *GetSoundPlayer() {
         return mSoundPlayer;
     }
-    void SetSoundPlayer(SoundPlayer* pPlayer) {
+    void SetSoundPlayer(SoundPlayer *pPlayer) {
         mSoundPlayer = pPlayer;
     }
 
-    ExternalSoundPlayer* GetExternalSoundPlayer() {
+    ExternalSoundPlayer *GetExternalSoundPlayer() {
         return mExtSoundPlayer;
     }
-    void SetExternalSoundPlayer(ExternalSoundPlayer* pExtPlayer) {
+    void SetExternalSoundPlayer(ExternalSoundPlayer *pExtPlayer) {
         mExtSoundPlayer = pExtPlayer;
     }
 
-    AmbientParamUpdateCallback* GetAmbientParamUpdateCallback() {
+    AmbientParamUpdateCallback *GetAmbientParamUpdateCallback() {
         return mAmbientParamUpdateCallback;
     }
 
-    AmbientArgUpdateCallback* GetAmbientArgUpdateCallback() {
+    AmbientArgUpdateCallback *GetAmbientArgUpdateCallback() {
         return mAmbientArgUpdateCallback;
     }
     void ClearAmbientArgUpdateCallback() {
         mAmbientArgUpdateCallback = NULL;
     }
 
-    AmbientArgAllocaterCallback* GetAmbientArgAllocaterCallback() {
+    AmbientArgAllocaterCallback *GetAmbientArgAllocaterCallback() {
         return mAmbientArgAllocaterCallback;
     }
 
-    void* GetAmbientArg() {
+    void *GetAmbientArg() {
         return mAmbientArg;
     }
 
-    SoundParam& GetAmbientParam() {
+    SoundParam &GetAmbientParam() {
         return mAmbientParam;
     }
 
-    void SetAmbientParamCallback(AmbientParamUpdateCallback* pParamUpdate,
-                                 AmbientArgUpdateCallback* pArgUpdate,
-                                 AmbientArgAllocaterCallback* pArgAlloc,
-                                 void* pArg);
+    void SetAmbientParamCallback(
+        AmbientParamUpdateCallback *pParamUpdate, AmbientArgUpdateCallback *pArgUpdate,
+        AmbientArgAllocaterCallback *pArgAlloc, void *pArg
+    );
 
     void SetPriority(int priority) {
         mPriority = priority;
@@ -178,16 +175,16 @@ public:
     }
 
 private:
-    PlayerHeap* mHeap;                    // at 0x4
-    SoundHandle* mGeneralHandle;          // at 0x8
-    SoundHandle* mTempGeneralHandle;      // at 0xC
-    SoundPlayer* mSoundPlayer;            // at 0x10
-    ExternalSoundPlayer* mExtSoundPlayer; // at 0x14
+    PlayerHeap *mHeap;                    // at 0x4
+    SoundHandle *mGeneralHandle;          // at 0x8
+    SoundHandle *mTempGeneralHandle;      // at 0xC
+    SoundPlayer *mSoundPlayer;            // at 0x10
+    ExternalSoundPlayer *mExtSoundPlayer; // at 0x14
 
-    AmbientParamUpdateCallback* mAmbientParamUpdateCallback;   // at 0x18
-    AmbientArgUpdateCallback* mAmbientArgUpdateCallback;       // at 0x1C
-    AmbientArgAllocaterCallback* mAmbientArgAllocaterCallback; // at 0x20
-    void* mAmbientArg;                                         // at 0x24
+    AmbientParamUpdateCallback *mAmbientParamUpdateCallback;   // at 0x18
+    AmbientArgUpdateCallback *mAmbientArgUpdateCallback;       // at 0x1C
+    AmbientArgAllocaterCallback *mAmbientArgAllocaterCallback; // at 0x20
+    void *mAmbientArg;                                         // at 0x24
     SoundParam mAmbientParam;                                  // at 0x28
 
     MoveValue<f32, int> mFadeVolume;      // at 0x44

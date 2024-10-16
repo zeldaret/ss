@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_god_mark.h>
+#include "d/a/obj/d_a_obj_god_mark.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_GOD_MARK, dAcOgodMark_c, fProfile::OBJ_GOD_MARK, 0x20A, 0, 6);
 

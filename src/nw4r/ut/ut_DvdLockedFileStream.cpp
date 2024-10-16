@@ -1,7 +1,7 @@
 // Ported From https://github.com/kiwi515/ogws/blob/master/src/nw4r/ut/ut_DvdLockedFileStream.cpp
 
-#include <rvl/OS.h>
-#include <nw4r/ut.h>
+#include "nw4r/ut.h" // IWYU pragma: export
+#include "rvl/OS.h"  // IWYU pragma: export
 
 namespace nw4r {
 namespace ut {

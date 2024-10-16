@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_lizarufos.h>
+#include "d/a/e/d_a_e_lizarufos.h"
 
 SPECIAL_ACTOR_PROFILE(E_LIZARUFOS, dAcELizarufos_c, fProfile::E_LIZARUFOS, 0xE2, 0, 34);
 

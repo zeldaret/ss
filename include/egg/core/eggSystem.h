@@ -1,9 +1,9 @@
 #ifndef EGG_SYSTEM_H
 #define EGG_SYSTEM_H
 
+#include "common.h"
 #include "egg/core/eggHeap.h"
 
-#include <common.h>
 
 namespace EGG {
 

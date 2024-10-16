@@ -1,8 +1,11 @@
-#include <common.h>
-#include <s/s_StateInterfaces.hpp>
-#include <s/s_StateID.hpp>
-#include <s/s_StateMethodUsr_FI.hpp>
-#include <s/s_StateIDChk.hpp>
+// clang-format off
+#include "s/s_StateID.hpp"
+
+#include "common.h"
+#include "s/s_StateMethodUsr_FI.hpp"
+#include "s/s_StateInterfaces.hpp"
+#include "s/s_StateIDChk.hpp"
+// clang-format on
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
 // See include/s/README.txt for changes made

@@ -1,7 +1,9 @@
-#include <egg/core/eggFrmHeap.h>
-#include <m/m3d/m3d.h>
-#include <m/m3d/m_anmtexsrt.h>
-#include <m/m_heap.h>
+#include "m/m3d/m_anmtexsrt.h"
+
+#include "egg/core/eggFrmHeap.h"
+#include "m/m3d/m3d.h"
+#include "m/m_heap.h"
+
 
 namespace m3d {
 
@@ -157,7 +159,7 @@ void anmTexSrt_c::setAnm(bmdl_c &mdl, nw4r::g3d::ResAnmTexSrt srt, s32 idx, play
     mpChildren[idx].setAnm(mdl, srt, mode);
 
     nw4r::g3d::AnmObjTexSrtRes *res =
-            nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::AnmObjTexSrtRes>(mpChildren[idx].getAnimObj());
+        nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::AnmObjTexSrtRes>(mpChildren[idx].getAnimObj());
     o->Attach(idx, res);
 }
 

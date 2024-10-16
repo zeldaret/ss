@@ -1,8 +1,9 @@
 #ifndef RVL_SDK_GX_LIGHT_H
 #define RVL_SDK_GX_LIGHT_H
+#include "common.h"
 #include "rvl/GX/GXInternal.h"
 #include "rvl/GX/GXTypes.h"
-#include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -25,8 +26,10 @@ void GXLoadLightObjIndx(u16 index, GXLightID id);
 void GXSetChanAmbColor(GXChannelID chan, GXColor color);
 void GXSetChanMatColor(GXChannelID chan, GXColor color);
 void GXSetNumChans(u8 num);
-void GXSetChanCtrl(GXChannelID chan, GXBool enable, GXColorSrc ambSrc, GXColorSrc matSrc, GXLightID lightMask,
-        GXDiffuseFn diffFn, GXAttnFn attnFn);
+void GXSetChanCtrl(
+    GXChannelID chan, GXBool enable, GXColorSrc ambSrc, GXColorSrc matSrc, GXLightID lightMask, GXDiffuseFn diffFn,
+    GXAttnFn attnFn
+);
 
 #ifdef __cplusplus
 }

@@ -1,8 +1,8 @@
 #ifndef EGG_AUDIO_HEAP_MANAGER_H
 #define EGG_AUDIO_HEAP_MANAGER_H
 
-#include <egg/core/eggAllocator.h>
-#include <nw4r/snd/snd_SoundHeap.h>
+#include "egg/core/eggAllocator.h"
+#include "nw4r/snd/snd_SoundHeap.h"
 
 namespace EGG {
 

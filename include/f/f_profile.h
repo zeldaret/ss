@@ -3,32 +3,34 @@
 
 // Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_profile.hpp
 
+#include "common.h"
 #include "f/f_profile_name.h"
-#include <common.h>
+
 
 /// @brief Creates a profile of a base with given values for execute and draw order.
-#define SPECIAL_BASE_PROFILE(profName, className, executeOrder, drawOrder, baseProperties) \
-    void *className##_classInit() { \
-        return new className(); \
-    } \
+#define SPECIAL_BASE_PROFILE(profName, className, executeOrder, drawOrder, baseProperties)                             \
+    void *className##_classInit() {                                                                                    \
+        return new className();                                                                                        \
+    }                                                                                                                  \
     fProfile::fBaseProfile_c g_profile_##profName = {&className##_classInit, executeOrder, drawOrder, baseProperties}
 
 /// @brief Creates a profile of an actor with given values for execute and draw order and the actor properties. @see
 /// SPECIAL_BASE_PROFILE
-#define SPECIAL_ACTOR_PROFILE(profName, className, executeOrder, drawOrder, baseProperties, properties) \
-    void *className##_classInit() { \
-        return new className(); \
-    } \
-    fProfile::fActorProfile_c g_profile_##profName = {&className##_classInit, executeOrder, drawOrder, baseProperties, \
-            properties}
+#define SPECIAL_ACTOR_PROFILE(profName, className, executeOrder, drawOrder, baseProperties, properties)                \
+    void *className##_classInit() {                                                                                    \
+        return new className();                                                                                        \
+    }                                                                                                                  \
+    fProfile::fActorProfile_c g_profile_##profName = {                                                                 \
+        &className##_classInit, executeOrder, drawOrder, baseProperties, properties                                    \
+    }
 
 /// @brief Creates a profile for a base, with the profile number as the priority for both the draw and execute order.
 /// @see SPECIAL_BASE_PROFILE
-#define DEFAULT_BASE_PROFILE(profName, className) \
+#define DEFAULT_BASE_PROFILE(profName, className)                                                                      \
     SPECIAL_BASE_PROFILE(profName, className, fProfile::profName, fProfile::profName);
 
 /// @brief Creates a profile of an actor with default values. @see DEFAULT_BASE_PROFILE
-#define DEFAULT_ACTOR_PROFILE(profName, className, baseProperties, properties) \
+#define DEFAULT_ACTOR_PROFILE(profName, className, baseProperties, properties)                                         \
     SPECIAL_ACTOR_PROFILE(profName, className, fProfile::profName, fProfile::profName, baseProperties, properties);
 
 /*

@@ -1,6 +1,6 @@
 #ifndef NW4R_UT_BINARY_FILE_FORMAT_H
 #define NW4R_UT_BINARY_FILE_FORMAT_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/types_nw4r.h"
 
 namespace nw4r {
 namespace ut {

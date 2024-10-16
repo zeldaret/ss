@@ -1,4 +1,4 @@
-#include <d/t/d_t_roll_attack_log.h>
+#include "d/t/d_t_roll_attack_log.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_ROLL_ATTACK_LOG, dTgRollAttackLog_c, fProfile::TAG_ROLL_ATTACK_LOG, 0x227, 0, 0);
 

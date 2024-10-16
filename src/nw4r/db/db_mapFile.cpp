@@ -1,7 +1,9 @@
-#include <MSL_C/string.h>
-#include <nw4r/db/db_mapFile.h>
-#include <rvl/DVD.h>
-#include <rvl/OS.h>
+#include "nw4r/db/db_mapFile.h"
+
+#include "rvl/DVD.h" // IWYU pragma: export
+#include "rvl/OS.h"  // IWYU pragma: export
+#include "stdio.h"
+
 
 namespace nw4r {
 namespace db {
@@ -10,7 +12,7 @@ static u32 sFileLength;
 static MapFile *sMapFileList = nullptr;
 static u8 (*GetCharPtr_)(const u8 *) = nullptr;
 
-static u8 sMapBuf[512] ALIGN(32);
+static u8 sMapBuf[512] ALIGN_DECL(32);
 static DVDFileInfo sFileInfo;
 
 static s32 sMapBufMaxSize = 0x200;

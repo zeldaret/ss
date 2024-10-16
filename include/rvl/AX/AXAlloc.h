@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_AX_ALLOC_H
 #define RVL_SDK_AX_ALLOC_H
-#include <common.h>
-#include <rvl/AX/AXVPB.h>
+#include "common.h"
+#include "rvl/AX/AXVPB.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,16 +1,20 @@
 #ifndef NW4R_UT_CHAR_WRITER_H
 #define NW4R_UT_CHAR_WRITER_H
-#include <nw4r/math.h>
-#include <nw4r/types_nw4r.h>
-#include <nw4r/ut/ut_Color.h>
-#include <rvl/GX.h>
+#include "nw4r/math.h" // IWYU pragma: export
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut/ut_Color.h"
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace ut {
 
 class CharWriter {
 public:
-    enum GradationMode { GRADMODE_NONE, GRADMODE_H, GRADMODE_V };
+    enum GradationMode {
+        GRADMODE_NONE,
+        GRADMODE_H,
+        GRADMODE_V
+    };
 
     struct ColorMapping {
         Color min; // at 0x0

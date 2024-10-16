@@ -1,3 +1,3 @@
-#include <egg/gfx/eggDrawPathUnk1.h>
+#include "egg/gfx/eggDrawPathUnk1.h"
 
 namespace EGG {} // namespace EGG

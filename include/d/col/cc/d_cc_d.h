@@ -1,16 +1,14 @@
 #ifndef D_CC_D_H
 #define D_CC_D_H
 
-#include <d/a/d_a_base.h>
-#include <d/col/c/c_m3d_g_aab.h>
-#include <d/col/c/c_m3d_g_cps.h>
-#include <d/col/c/c_m3d_g_cyl.h>
-#include <d/col/c/c_m3d_g_sph.h>
-#include <d/col/c/c_m3d_g_unk.h>
-#include <f/f_base_id.h>
-#include <m/m_mtx.h>
-#include <m/m_vec.h>
-#include <nw4r/math/math_types.h>
+#include "d/a/d_a_base.h"
+#include "d/col/c/c_m3d_g_aab.h"
+#include "d/col/c/c_m3d_g_cps.h"
+#include "d/col/c/c_m3d_g_cyl.h"
+#include "d/col/c/c_m3d_g_sph.h"
+#include "d/col/c/c_m3d_g_unk.h"
+#include "f/f_base_id.h"
+#include "m/m_vec.h"
 
 // Largely modeled off
 // https://github.com/zeldaret/tp/blob/main/include/SSystem/SComponent/c_cc_d.h

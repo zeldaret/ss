@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_piston.h>
+#include "d/a/obj/d_a_obj_piston.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_PISTON, dAcOPiston_c, fProfile::OBJ_PISTON, 0x172, 0, 3);
 

@@ -1,9 +1,9 @@
 #ifndef M3D_M_SCNLEAF_H
 #define M3D_M_SCNLEAF_H
 
-#include <egg/core/eggDisposer.h>
-#include <m/m_allocator.h>
-#include <nw4r/g3d/g3d_scnobj.h>
+#include "egg/core/eggDisposer.h"
+#include "m/m_allocator.h"
+#include "nw4r/g3d/g3d_scnobj.h"
 
 namespace m3d {
 

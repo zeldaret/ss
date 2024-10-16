@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_smoke.h>
+#include "d/a/obj/d_a_obj_smoke.h"
 
 static const char *const sSmokeNames1[] = {
     "SmokeF200",

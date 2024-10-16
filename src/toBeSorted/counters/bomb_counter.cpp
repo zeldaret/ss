@@ -1,4 +1,4 @@
-#include <toBeSorted/counters/counter.h>
+#include "toBeSorted/counters/counter.h"
 
 class BombCounter : public Counter {
 public:
@@ -11,4 +11,4 @@ public:
 
 /* 80575620 */ BombCounter BOMB_COUNTER;
 
-/* 8016E060 */ BombCounter::BombCounter(): Counter(0x1f3) { }
+/* 8016E060 */ BombCounter::BombCounter() : Counter(0x1f3) {}

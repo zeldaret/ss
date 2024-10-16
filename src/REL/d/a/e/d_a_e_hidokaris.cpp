@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_hidokaris.h>
+#include "d/a/e/d_a_e_hidokaris.h"
 
 SPECIAL_ACTOR_PROFILE(E_HIDOKARIS, dAcEhidokaris_c, fProfile::E_HIDOKARIS, 0xE4, 0, 2);
 

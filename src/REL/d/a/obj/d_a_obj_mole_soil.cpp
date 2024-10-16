@@ -1,5 +1,7 @@
-#include <d/a/obj/d_a_obj_mole_soil.h>
-#include <s/s_Math.h>
+#include "d/a/obj/d_a_obj_mole_soil.h"
+
+#include "s/s_Math.h"
+
 
 SPECIAL_ACTOR_PROFILE(OBJ_MOLE_SOIL, dAcOmoleSoil_c, fProfile::OBJ_MOLE_SOIL, 0x008B, 0, 6);
 

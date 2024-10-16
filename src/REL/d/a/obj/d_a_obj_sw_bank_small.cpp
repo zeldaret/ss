@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_sw_bank_small.h>
+#include "d/a/obj/d_a_obj_sw_bank_small.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SW_BANK_SMALL, dAcOSwBankSmall_c, fProfile::OBJ_SW_BANK_SMALL, 0x22C, 0, 6);
 

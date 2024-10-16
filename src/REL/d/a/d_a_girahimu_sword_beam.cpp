@@ -1,4 +1,4 @@
-#include <d/a/d_a_girahimu_sword_beam.h>
+#include "d/a/d_a_girahimu_sword_beam.h"
 
 SPECIAL_ACTOR_PROFILE(GH_SWORD_BEAM, dAcGirahimuSwordBeam_c, fProfile::GH_SWORD_BEAM, 0x116, 0, 0);
 

@@ -1,6 +1,8 @@
-#include <d/a/obj/d_a_obj_shutter_change_scene.h>
+#include "d/a/obj/d_a_obj_shutter_change_scene.h"
 
-SPECIAL_ACTOR_PROFILE(OBJ_SHUTTER_CHANGE_SCENE, dAcOShutterChangeScene_c, fProfile::OBJ_SHUTTER_CHANGE_SCENE, 0x18A, 0, 6);
+SPECIAL_ACTOR_PROFILE(
+    OBJ_SHUTTER_CHANGE_SCENE, dAcOShutterChangeScene_c, fProfile::OBJ_SHUTTER_CHANGE_SCENE, 0x18A, 0, 6
+);
 
 STATE_DEFINE(dAcOShutterChangeScene_c, WaitOpenShutter);
 STATE_DEFINE(dAcOShutterChangeScene_c, WaitOpenShutterForEvent);

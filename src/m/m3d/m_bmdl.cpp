@@ -1,6 +1,8 @@
-#include <m/m3d/m3d.h>
-#include <m/m3d/m_bmdl.h>
-#include <nw4r/g3d/g3d_scnmdl.h>
+#include "m/m3d/m_bmdl.h"
+
+#include "m/m3d/m3d.h"
+#include "nw4r/g3d/g3d_scnmdl.h"
+
 
 namespace m3d {
 
@@ -21,8 +23,9 @@ int bmdl_c::getNodeID(const char *name) const {
 }
 
 bool bmdl_c::getNodeWorldMtx(u32 p1, nw4r::math::MTX34 *out) const {
-    return nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdlSimple>(mpScnLeaf)->GetScnMtxPos(out,
-            nw4r::g3d::ScnObj::MTX_TYPE_WORLD, p1);
+    return nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdlSimple>(mpScnLeaf)->GetScnMtxPos(
+        out, nw4r::g3d::ScnObj::MTX_TYPE_WORLD, p1
+    );
 }
 
 bool bmdl_c::getNodeWorldMtxMultVecZero(u32 p1, nw4r::math::VEC3 &out) const {
@@ -157,8 +160,9 @@ void bmdl_c::setTevKColorAll(GXTevKColorID tevKId, GXColor color, bool bMarkDirt
     }
 }
 
-void bmdl_c::setBlendModeAll(GXBlendMode blendMode, GXBlendFactor srcFactor, GXBlendFactor dstFactor, GXLogicOp op,
-        bool bMarkDirty) {
+void bmdl_c::setBlendModeAll(
+    GXBlendMode blendMode, GXBlendFactor srcFactor, GXBlendFactor dstFactor, GXLogicOp op, bool bMarkDirty
+) {
     nw4r::g3d::ResMdl resMdl = getResMdl();
     nw4r::g3d::ScnMdl *mdl = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdl>(mpScnLeaf);
     if (mdl) {

@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_fruit.h>
+#include "d/a/obj/d_a_obj_fruit.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_FRUIT, dAcOFruit_c, fProfile::OBJ_FRUIT, 0x164, 0, 3);
 

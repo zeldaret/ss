@@ -1,6 +1,6 @@
 // Ported From https://github.com/kiwi515/ogws/blob/master/src/nw4r/ut/ut_list.cpp
 
-#include <nw4r/ut/ut_list.h>
+#include "nw4r/ut/ut_list.h"
 
 namespace nw4r {
 namespace ut {
@@ -106,7 +106,7 @@ void *List_GetNth(const List *list, u16 n) {
     void *object;
     int c;
 
-    for (c = 0, object = nullptr; object = List_GetNext(list, object); c++) {
+    for (c = 0, object = nullptr; (object = List_GetNext(list, object)); c++) {
         if (n == c) {
             return object;
         }

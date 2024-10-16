@@ -1,11 +1,14 @@
+#include "common.h"
 #include "egg/core/eggHeap.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "toBeSorted/save_file.h"
-#include <common.h>
 
-enum ITEM_ID {};
-enum SAVE_ITEM_ID {};
+
+enum ITEM_ID {
+};
+enum SAVE_ITEM_ID {
+};
 
 class SkipData {
 public:

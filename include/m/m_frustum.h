@@ -1,9 +1,9 @@
 #ifndef M_FRUSTUM_H
 #define M_FRUSTUM_H
 
-#include <common.h>
-#include <m/m_mtx.h>
-#include <nw4r/math/math_geometry.h>
+#include "common.h"
+#include "m/m_mtx.h"
+#include "nw4r/math/math_geometry.h"
 
 // Bunch of untested assumptions in here
 class mFrustum_c {

@@ -124,10 +124,9 @@ args = parser.parse_args()
 config = ProjectConfig()
 config.version = str(args.version)
 version_num = VERSIONS.index(config.version)
-
-# Apply arguments
 config.build_dir = args.build_dir
 config.dtk_path = args.dtk
+config.objdiff_path = args.objdiff
 config.binutils_path = args.binutils
 config.compilers_path = args.compilers
 config.generate_map = args.map
@@ -136,14 +135,15 @@ config.sjiswrap_path = args.sjiswrap
 config.progress = args.progress
 if not is_windows():
     config.wrapper = args.wrapper
+# Don't build asm unless we're --non-matching
 if not config.non_matching:
     config.asm_dir = None
 
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
-config.dtk_tag = "v1.0.0"
-config.objdiff_tag = "v2.2.1"
+config.dtk_tag = "v1.1.2"
+config.objdiff_tag = "v2.3.2"
 config.sjiswrap_tag = "v1.1.1"
 config.wibo_tag = "0.6.11"
 
@@ -167,7 +167,7 @@ if args.debug:
     config.ldflags.append("-gdwarf-2")  # -gdwarf-2 for Wii linkers
 if args.map:
     config.ldflags.append("-mapunused")
-    config.ldflags.append("-listclosure") # For Wii linkers
+    config.ldflags.append("-listclosure")  # For Wii linkers
 
 # Use for any additional files that should cause a re-configure when modified
 config.reconfig_deps = []
@@ -193,8 +193,14 @@ cflags_base = [
     "-str reuse",
     "-enc SJIS",
     "-i include",
-    "-i include/MSL_C",
     f"-i build/{config.version}/include",
+    "-i src",
+    "-i src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Include",
+    "-i src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Include",
+    "-i src/PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/Include",
+    "-i src/PowerPC_EABI_Support/MSL/MSL_C++/MSL_Common/Include",
+    "-i src/PowerPC_EABI_Support/Runtime/Inc",
+    "-i src/PowerPC_EABI_Support/MetroTRK",
     f"-DGAME_VERSION={version_num}",
 ]
 
@@ -243,12 +249,7 @@ cflags_egg = [
 ]
 
 # nw4r flags
-cflags_nw4r = [
-    *cflags_base,
-    "-ipa file",
-    "-fp_contract off",
-    ""
-]
+cflags_nw4r = [*cflags_base, "-ipa file", "-fp_contract off", ""]
 
 # REL flags
 cflags_rel = [
@@ -270,6 +271,7 @@ def Rel(status, rel_name, cpp_name, extra_cflags=[]):
             Object(status, cpp_name),
         ],
     }
+
 
 def MultiRel(rel_name, objects, extra_cflags=[]):
     return {
@@ -295,7 +297,7 @@ def EGGLib(lib_name, objects):
 def nw4rLib(lib_name, objects, extra_cflags=[]):
     return {
         "lib": lib_name,
-        "mw_version": "Wii/1.3", # most seem to be around 1.2, snd is 1.6
+        "mw_version": "Wii/1.3",  # most seem to be around 1.2, snd is 1.6
         "cflags": cflags_nw4r + extra_cflags,
         "progress_category": "nw4r",
         "host": False,
@@ -305,9 +307,11 @@ def nw4rLib(lib_name, objects, extra_cflags=[]):
 
 Matching = True
 NonMatching = False
-Equivalent = config.non_matching  # Object should be linked when configured with --non-matching
+Equivalent = (
+    config.non_matching
+)  # Object should be linked when configured with --non-matching
 
-config.warn_missing_config = False 
+config.warn_missing_config = False
 config.warn_missing_source = False
 config.libs = [
     {
@@ -525,8 +529,12 @@ config.libs = [
         "progress_category": "core",
         "host": False,
         "objects": [
-            Object(Matching, "Runtime.PPCEABI.H/global_destructor_chain.c"),
-            Object(Matching, "Runtime.PPCEABI.H/__init_cpp_exceptions.cpp"),
+            Object(
+                Matching, "PowerPC_EABI_Support/Runtime/Src/global_destructor_chain.c"
+            ),
+            Object(
+                Matching, "PowerPC_EABI_Support/Runtime/Src/__init_cpp_exceptions.cpp"
+            ),
         ],
     },
     # NW4R
@@ -569,7 +577,7 @@ config.libs = [
             Object(NonMatching, "nw4r/math/math_triangular.cpp"),
             Object(NonMatching, "nw4r/math/math_types.cpp"),
             Object(NonMatching, "nw4r/math/math_geometry.cpp"),
-        ]
+        ],
     ),
     nw4rLib(
         "g3d",
@@ -636,7 +644,7 @@ config.libs = [
             Object(NonMatching, "nw4r/g3d/g3d_fog.cpp"),
             Object(NonMatching, "nw4r/g3d/g3d_light.cpp"),
             Object(NonMatching, "nw4r/g3d/g3d_calcvtx.cpp"),
-        ]
+        ],
     ),
     nw4rLib(
         "snd",
@@ -715,7 +723,7 @@ config.libs = [
             Object(NonMatching, "nw4r/snd/snd_WsdFile.cpp"),
             Object(NonMatching, "nw4r/snd/snd_WsdPlayer.cpp"),
             Object(NonMatching, "nw4r/snd/snd_adpcm.cpp"),
-        ]
+        ],
     ),
     nw4rLib(
         "lyt",
@@ -796,7 +804,7 @@ config.libs = [
             Object(NonMatching, "egg/gfx/eggDrawPathUnk2.cpp"),
             Object(NonMatching, "egg/gfx/eggFog.cpp"),
             Object(NonMatching, "egg/gfx/eggFrustum.cpp"),
-            Object(NonMatching, "egg/gfx/eggG3DUtility.cpp"), # Unknown Guess
+            Object(NonMatching, "egg/gfx/eggG3DUtility.cpp"),  # Unknown Guess
             Object(NonMatching, "egg/gfx/eggGfxEngine.cpp"),
             Object(NonMatching, "egg/gfx/eggGlobalDrawState.cpp"),
             Object(NonMatching, "egg/gfx/eggGXUtility.cpp"),
@@ -807,14 +815,14 @@ config.libs = [
             Object(NonMatching, "egg/gfx/eggModelEx.cpp"),
             Object(NonMatching, "egg/gfx/eggPostEffectBase.cpp"),
             Object(NonMatching, "egg/gfx/eggPostEffectBlur.cpp"),
-            Object(NonMatching, "egg/gfx/eggPostEffectUnk1.cpp"), # Unknown
+            Object(NonMatching, "egg/gfx/eggPostEffectUnk1.cpp"),  # Unknown
             Object(NonMatching, "egg/gfx/eggPostEffectUnk2.cpp"),  # Unknown
             Object(NonMatching, "egg/gfx/eggPostEffectMask.cpp"),
             Object(NonMatching, "egg/gfx/eggPostEffectMaskDOF.cpp"),
             Object(NonMatching, "egg/gfx/eggPostEffectSimple.cpp"),
             Object(NonMatching, "egg/gfx/eggScreen.cpp"),
             Object(NonMatching, "egg/gfx/eggScreenEffectBase.cpp"),
-            Object(NonMatching, "egg/gfx/eggScreenEffectBlur.cpp"), # Unknown Guess
+            Object(NonMatching, "egg/gfx/eggScreenEffectBlur.cpp"),  # Unknown Guess
             Object(NonMatching, "egg/gfx/eggStateEfb.cpp"),
             Object(NonMatching, "egg/gfx/eggStateGX.cpp"),
             Object(NonMatching, "egg/gfx/eggTextureBuffer.cpp"),
@@ -865,12 +873,12 @@ config.libs = [
             Object(
                 Matching,
                 "REL/__init_cpp_exceptions.cpp",
-                source="Runtime.PPCEABI.H/__init_cpp_exceptions.cpp",
+                source="PowerPC_EABI_Support/Runtime/Src/__init_cpp_exceptions.cpp",
             ),
             Object(
                 Matching,
                 "REL/global_destructor_chain.c",
-                source="Runtime.PPCEABI.H/global_destructor_chain.c",
+                source="PowerPC_EABI_Support/Runtime/Src/global_destructor_chain.c",
             ),
         ],
     },
@@ -998,8 +1006,16 @@ config.libs = [
     Rel(NonMatching, "d_a_npc_akumakun", "REL/d/a/npc/d_a_npc_akumakun.cpp"),
     Rel(NonMatching, "d_a_npc_aku_human", "REL/d/a/npc/d_a_npc_aku_human.cpp"),
     Rel(NonMatching, "d_a_npc_aqua_dragon", "REL/d/a/npc/d_a_npc_aqua_dragon.cpp"),
-    Rel(NonMatching, "d_a_npc_azukariya_father", "REL/d/a/npc/d_a_npc_azukariya_father.cpp"),
-    Rel(NonMatching, "d_a_npc_azukariya_night", "REL/d/a/npc/d_a_npc_azukariya_night.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_npc_azukariya_father",
+        "REL/d/a/npc/d_a_npc_azukariya_father.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_npc_azukariya_night",
+        "REL/d/a/npc/d_a_npc_azukariya_night.cpp",
+    ),
     Rel(NonMatching, "d_a_npc_bamboo_goron", "REL/d/a/npc/d_a_npc_bamboo_goron.cpp"),
     Rel(NonMatching, "d_a_npc_bbrvl", "REL/d/a/npc/d_a_npc_bbrvl.cpp"),
     Rel(NonMatching, "d_a_npc_bee", "REL/d/a/npc/d_a_npc_bee.cpp"),
@@ -1012,11 +1028,25 @@ config.libs = [
     Rel(NonMatching, "d_a_npc_daishinkan", "REL/d/a/npc/d_a_npc_daishinkan.cpp"),
     Rel(NonMatching, "d_a_npc_daishinkan_n", "REL/d/a/npc/d_a_npc_daishinkan_n.cpp"),
     Rel(NonMatching, "d_a_npc_desertrobot", "REL/d/a/npc/d_a_npc_desertrobot.cpp"),
-    Rel(NonMatching, "d_a_npc_desertrobot_captain", "REL/d/a/npc/d_a_npc_desertrobot_captain.cpp"),
-    Rel(NonMatching, "d_a_npc_dive_game_judge", "REL/d/a/npc/d_a_npc_dive_game_judge.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_npc_desertrobot_captain",
+        "REL/d/a/npc/d_a_npc_desertrobot_captain.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_npc_dive_game_judge",
+        "REL/d/a/npc/d_a_npc_dive_game_judge.cpp",
+    ),
     Rel(NonMatching, "d_a_npc_douguyanight", "REL/d/a/npc/d_a_npc_douguyanight.cpp"),
-    Rel(NonMatching, "d_a_npc_douguya_mother", "REL/d/a/npc/d_a_npc_douguya_mother.cpp"),
-    Rel(NonMatching, "d_a_npc_douguya_mother_lod", "REL/d/a/npc/d_a_npc_douguya_mother_lod.cpp"),
+    Rel(
+        NonMatching, "d_a_npc_douguya_mother", "REL/d/a/npc/d_a_npc_douguya_mother.cpp"
+    ),
+    Rel(
+        NonMatching,
+        "d_a_npc_douguya_mother_lod",
+        "REL/d/a/npc/d_a_npc_douguya_mother_lod.cpp",
+    ),
     Rel(NonMatching, "d_a_npc_fire_dragon", "REL/d/a/npc/d_a_npc_fire_dragon.cpp"),
     Rel(NonMatching, "d_a_npc_girahim", "REL/d/a/npc/d_a_npc_girahim.cpp"),
     Rel(NonMatching, "d_a_npc_goddess_zelda", "REL/d/a/npc/d_a_npc_goddess_zelda.cpp"),
@@ -1024,9 +1054,17 @@ config.libs = [
     Rel(NonMatching, "d_a_npc_grc", "REL/d/a/npc/d_a_npc_grc.cpp"),
     Rel(NonMatching, "d_a_npc_grd", "REL/d/a/npc/d_a_npc_grd.cpp"),
     Rel(NonMatching, "d_a_npc_honeycomb", "REL/d/a/npc/d_a_npc_honeycomb.cpp"),
-    Rel(NonMatching, "d_a_npc_insect_capture_game_kobun", "REL/d/a/npc/d_a_npc_insect_capture_game_kobun.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_npc_insect_capture_game_kobun",
+        "REL/d/a/npc/d_a_npc_insect_capture_game_kobun.cpp",
+    ),
     Rel(NonMatching, "d_a_npc_junk_mother", "REL/d/a/npc/d_a_npc_junk_mother.cpp"),
-    Rel(NonMatching, "d_a_npc_junk_mother_lod", "REL/d/a/npc/d_a_npc_junk_mother_lod.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_npc_junk_mother_lod",
+        "REL/d/a/npc/d_a_npc_junk_mother_lod.cpp",
+    ),
     Rel(NonMatching, "d_a_npc_junk_night", "REL/d/a/npc/d_a_npc_junk_night.cpp"),
     Rel(NonMatching, "d_a_npc_kensei", "REL/d/a/npc/d_a_npc_kensei.cpp"),
     Rel(NonMatching, "d_a_npc_knight_leader", "REL/d/a/npc/d_a_npc_knight_leader.cpp"),
@@ -1038,8 +1076,16 @@ config.libs = [
     Rel(NonMatching, "d_a_npc_kyui_first", "REL/d/a/npc/d_a_npc_kyui_first.cpp"),
     Rel(NonMatching, "d_a_npc_kyui_third", "REL/d/a/npc/d_a_npc_kyui_third.cpp"),
     Rel(NonMatching, "d_a_npc_kyui_wizard", "REL/d/a/npc/d_a_npc_kyui_wizard.cpp"),
-    Rel(NonMatching, "d_a_npc_medicinewifenight", "REL/d/a/npc/d_a_npc_medicinewifenight.cpp"),
-    Rel(NonMatching, "d_a_npc_medicine_husband_night", "REL/d/a/npc/d_a_npc_medicine_husband_night.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_npc_medicinewifenight",
+        "REL/d/a/npc/d_a_npc_medicinewifenight.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_npc_medicine_husband_night",
+        "REL/d/a/npc/d_a_npc_medicine_husband_night.cpp",
+    ),
     Rel(NonMatching, "d_a_npc_mole", "REL/d/a/npc/d_a_npc_mole.cpp"),
     Rel(NonMatching, "d_a_npc_mole_elder", "REL/d/a/npc/d_a_npc_mole_elder.cpp"),
     Rel(NonMatching, "d_a_npc_mole_es_nml", "REL/d/a/npc/d_a_npc_mole_es_nml.cpp"),
@@ -1051,53 +1097,117 @@ config.libs = [
     Rel(NonMatching, "d_a_npc_mole_tackle", "REL/d/a/npc/d_a_npc_mole_tackle.cpp"),
     Rel(NonMatching, "d_a_npc_old_impa", "REL/d/a/npc/d_a_npc_old_impa.cpp"),
     Rel(NonMatching, "d_a_npc_ord_kyui", "REL/d/a/npc/d_a_npc_ord_kyui.cpp"),
-    Rel(NonMatching, "d_a_npc_pumpkin_clay_shooting", "REL/d/a/npc/d_a_npc_pumpkin_clay_shooting.cpp"),
-    Rel(NonMatching, "d_a_npc_pumpkin_daughter", "REL/d/a/npc/d_a_npc_pumpkin_daughter.cpp"),
-    Rel(NonMatching, "d_a_npc_pumpkin_master", "REL/d/a/npc/d_a_npc_pumpkin_master.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_npc_pumpkin_clay_shooting",
+        "REL/d/a/npc/d_a_npc_pumpkin_clay_shooting.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_npc_pumpkin_daughter",
+        "REL/d/a/npc/d_a_npc_pumpkin_daughter.cpp",
+    ),
+    Rel(
+        NonMatching, "d_a_npc_pumpkin_master", "REL/d/a/npc/d_a_npc_pumpkin_master.cpp"
+    ),
     Rel(NonMatching, "d_a_npc_regret_rival", "REL/d/a/npc/d_a_npc_regret_rival.cpp"),
     Rel(NonMatching, "d_a_npc_rescue", "REL/d/a/npc/d_a_npc_rescue.cpp"),
     Rel(NonMatching, "d_a_npc_rival", "REL/d/a/npc/d_a_npc_rival.cpp"),
     Rel(NonMatching, "d_a_npc_rival_lod", "REL/d/a/npc/d_a_npc_rival_lod.cpp"),
     Rel(NonMatching, "d_a_npc_salbage_morry", "REL/d/a/npc/d_a_npc_salbage_morry.cpp"),
     Rel(NonMatching, "d_a_npc_salbage_robot", "REL/d/a/npc/d_a_npc_salbage_robot.cpp"),
-    Rel(NonMatching, "d_a_npc_salbage_robot_fly", "REL/d/a/npc/d_a_npc_salbage_robot_fly.cpp"),
-    Rel(NonMatching, "d_a_npc_salbage_robot_fly_base", "REL/d/a/npc/d_a_npc_salbage_robot_fly_base.cpp"),
-    Rel(NonMatching, "d_a_npc_salbage_robot_repair", "REL/d/a/npc/d_a_npc_salbage_robot_repair.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_npc_salbage_robot_fly",
+        "REL/d/a/npc/d_a_npc_salbage_robot_fly.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_npc_salbage_robot_fly_base",
+        "REL/d/a/npc/d_a_npc_salbage_robot_fly_base.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_npc_salbage_robot_repair",
+        "REL/d/a/npc/d_a_npc_salbage_robot_repair.cpp",
+    ),
     Rel(NonMatching, "d_a_npc_salesman_s", "REL/d/a/npc/d_a_npc_salesman_s.cpp"),
     Rel(NonMatching, "d_a_npc_saltalk", "REL/d/a/npc/d_a_npc_saltalk.cpp"),
-    Rel(NonMatching, "d_a_npc_senpaia_mother", "REL/d/a/npc/d_a_npc_senpaia_mother.cpp"),
-    Rel(NonMatching, "d_a_npc_senpaia_mother_lod", "REL/d/a/npc/d_a_npc_senpaia_mother_lod.cpp"),
+    Rel(
+        NonMatching, "d_a_npc_senpaia_mother", "REL/d/a/npc/d_a_npc_senpaia_mother.cpp"
+    ),
+    Rel(
+        NonMatching,
+        "d_a_npc_senpaia_mother_lod",
+        "REL/d/a/npc/d_a_npc_senpaia_mother_lod.cpp",
+    ),
     Rel(NonMatching, "d_a_npc_senpai", "REL/d/a/npc/d_a_npc_senpai.cpp"),
     Rel(NonMatching, "d_a_npc_senpai_b", "REL/d/a/npc/d_a_npc_senpai_b.cpp"),
     Rel(NonMatching, "d_a_npc_shinkan2", "REL/d/a/npc/d_a_npc_shinkan2.cpp"),
     Rel(NonMatching, "d_a_npc_shinkan", "REL/d/a/npc/d_a_npc_shinkan.cpp"),
     Rel(NonMatching, "d_a_npc_sorajima_boy", "REL/d/a/npc/d_a_npc_sorajima_boy.cpp"),
-    Rel(NonMatching, "d_a_npc_sorajima_father", "REL/d/a/npc/d_a_npc_sorajima_father.cpp"),
-    Rel(NonMatching, "d_a_npc_sorajima_female", "REL/d/a/npc/d_a_npc_sorajima_female.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_npc_sorajima_father",
+        "REL/d/a/npc/d_a_npc_sorajima_father.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_npc_sorajima_female",
+        "REL/d/a/npc/d_a_npc_sorajima_female.cpp",
+    ),
     Rel(NonMatching, "d_a_npc_sorajima_girl", "REL/d/a/npc/d_a_npc_sorajima_girl.cpp"),
-    Rel(NonMatching, "d_a_npc_sorajima_male2", "REL/d/a/npc/d_a_npc_sorajima_male2.cpp"),
-    Rel(NonMatching, "d_a_npc_sorajima_male3", "REL/d/a/npc/d_a_npc_sorajima_male3.cpp"),
+    Rel(
+        NonMatching, "d_a_npc_sorajima_male2", "REL/d/a/npc/d_a_npc_sorajima_male2.cpp"
+    ),
+    Rel(
+        NonMatching, "d_a_npc_sorajima_male3", "REL/d/a/npc/d_a_npc_sorajima_male3.cpp"
+    ),
     Rel(NonMatching, "d_a_npc_sorajima_male", "REL/d/a/npc/d_a_npc_sorajima_male.cpp"),
-    Rel(NonMatching, "d_a_npc_sorajima_man_d", "REL/d/a/npc/d_a_npc_sorajima_man_d.cpp"),
-    Rel(NonMatching, "d_a_npc_sorajima_man_e", "REL/d/a/npc/d_a_npc_sorajima_man_e.cpp"),
-    Rel(NonMatching, "d_a_npc_sorajima_mother", "REL/d/a/npc/d_a_npc_sorajima_mother.cpp"),
+    Rel(
+        NonMatching, "d_a_npc_sorajima_man_d", "REL/d/a/npc/d_a_npc_sorajima_man_d.cpp"
+    ),
+    Rel(
+        NonMatching, "d_a_npc_sorajima_man_e", "REL/d/a/npc/d_a_npc_sorajima_man_e.cpp"
+    ),
+    Rel(
+        NonMatching,
+        "d_a_npc_sorajima_mother",
+        "REL/d/a/npc/d_a_npc_sorajima_mother.cpp",
+    ),
     Rel(NonMatching, "d_a_npc_suisei", "REL/d/a/npc/d_a_npc_suisei.cpp"),
     Rel(NonMatching, "d_a_npc_suisei_normal", "REL/d/a/npc/d_a_npc_suisei_normal.cpp"),
     Rel(NonMatching, "d_a_npc_suisei_sub", "REL/d/a/npc/d_a_npc_suisei_sub.cpp"),
     Rel(NonMatching, "d_a_npc_terry", "REL/d/a/npc/d_a_npc_terry.cpp"),
     Rel(NonMatching, "d_a_npc_testman", "REL/d/a/npc/d_a_npc_testman.cpp"),
-    Rel(NonMatching, "d_a_npc_thunder_dragon", "REL/d/a/npc/d_a_npc_thunder_dragon.cpp"),
-    Rel(NonMatching, "d_a_npc_thunder_dragon_bone", "REL/d/a/npc/d_a_npc_thunder_dragon_bone.cpp"),
-    Rel(NonMatching, "d_a_npc_thunder_dragon_skull", "REL/d/a/npc/d_a_npc_thunder_dragon_skull.cpp"),
+    Rel(
+        NonMatching, "d_a_npc_thunder_dragon", "REL/d/a/npc/d_a_npc_thunder_dragon.cpp"
+    ),
+    Rel(
+        NonMatching,
+        "d_a_npc_thunder_dragon_bone",
+        "REL/d/a/npc/d_a_npc_thunder_dragon_bone.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_npc_thunder_dragon_skull",
+        "REL/d/a/npc/d_a_npc_thunder_dragon_skull.cpp",
+    ),
     Rel(NonMatching, "d_a_npc_toilet_ghost", "REL/d/a/npc/d_a_npc_toilet_ghost.cpp"),
     Rel(NonMatching, "d_a_npc_uranaiya", "REL/d/a/npc/d_a_npc_uranaiya.cpp"),
-    Rel(NonMatching, "d_a_npc_volcano_f2_salbo", "REL/d/a/npc/d_a_npc_volcano_f2_salbo.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_npc_volcano_f2_salbo",
+        "REL/d/a/npc/d_a_npc_volcano_f2_salbo.cpp",
+    ),
     Rel(NonMatching, "d_a_npc_young_impa", "REL/d/a/npc/d_a_npc_young_impa.cpp"),
     Rel(NonMatching, "d_a_npc_zelda", "REL/d/a/npc/d_a_npc_zelda.cpp"),
     Rel(NonMatching, "d_a_nusi_base", "REL/d/a/d_a_nusi_base.cpp"),
     Rel(NonMatching, "d_a_nusi_npc", "REL/d/a/d_a_nusi_npc.cpp"),
     Rel(NonMatching, "d_a_obj_amber", "REL/d/a/obj/d_a_obj_amber.cpp"),
-    Rel(NonMatching, "d_a_obj_ancient_jewels", "REL/d/a/obj/d_a_obj_ancient_jewels.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_ancient_jewels", "REL/d/a/obj/d_a_obj_ancient_jewels.cpp"
+    ),
     # matching except for IScnObjCallback weak function order issue
     Rel(NonMatching, "d_a_obj_appear_bridge", "REL/d/a/obj/d_a_obj_appear_bridge.cpp"),
     Rel(NonMatching, "d_a_obj_arrow_switch", "REL/d/a/obj/d_a_obj_arrow_switch.cpp"),
@@ -1106,34 +1216,54 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_B300_sand", "REL/d/a/obj/d_a_obj_B300_sand.cpp"),
     Rel(NonMatching, "d_a_obj_ballista", "REL/d/a/obj/d_a_obj_ballista.cpp"),
     Rel(NonMatching, "d_a_obj_ballista_f3", "REL/d/a/obj/d_a_obj_ballista_f3.cpp"),
-    Rel(NonMatching, "d_a_obj_ballista_handle", "REL/d/a/obj/d_a_obj_ballista_handle.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_ballista_handle",
+        "REL/d/a/obj/d_a_obj_ballista_handle.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_bamboo", "REL/d/a/obj/d_a_obj_bamboo.cpp"),
     Rel(Matching, "d_a_obj_bamboo_island", "REL/d/a/obj/d_a_obj_bamboo_island.cpp"),
     Rel(NonMatching, "d_a_obj_barrel", "REL/d/a/obj/d_a_obj_barrel.cpp"),
     Rel(NonMatching, "d_a_obj_bblargebomb", "REL/d/a/obj/d_a_obj_bblargebomb.cpp"),
     Rel(NonMatching, "d_a_obj_bbstone", "REL/d/a/obj/d_a_obj_bbstone.cpp"),
     Rel(NonMatching, "d_a_obj_bb_bridge", "REL/d/a/obj/d_a_obj_bb_bridge.cpp"),
-    Rel(NonMatching, "d_a_obj_bb_broken_parts", "REL/d/a/obj/d_a_obj_bb_broken_parts.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_bb_broken_parts",
+        "REL/d/a/obj/d_a_obj_bb_broken_parts.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_bb_objects", "REL/d/a/obj/d_a_obj_bb_objects.cpp"),
     Rel(NonMatching, "d_a_obj_bell", "REL/d/a/obj/d_a_obj_bell.cpp"),
     Rel(NonMatching, "d_a_obj_belt_cvr", "REL/d/a/obj/d_a_obj_belt_cvr.cpp"),
     Rel(NonMatching, "d_a_obj_belt_obstacle", "REL/d/a/obj/d_a_obj_belt_obstacle.cpp"),
     Rel(NonMatching, "d_a_obj_bg", "REL/d/a/obj/d_a_obj_bg.cpp"),
-    Rel(NonMatching, "d_a_obj_bigbomb_flower", "REL/d/a/obj/d_a_obj_bigbomb_flower.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_bigbomb_flower", "REL/d/a/obj/d_a_obj_bigbomb_flower.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_bird_sp", "REL/d/a/obj/d_a_obj_bird_sp.cpp"),
     Rel(NonMatching, "d_a_obj_bird_statue", "REL/d/a/obj/d_a_obj_bird_statue.cpp"),
     Rel(NonMatching, "d_a_obj_blade", "REL/d/a/obj/d_a_obj_blade.cpp"),
     Rel(NonMatching, "d_a_obj_blast_rock", "REL/d/a/obj/d_a_obj_blast_rock.cpp"),
     Rel(NonMatching, "d_a_obj_block_rope", "REL/d/a/obj/d_a_obj_block_rope.cpp"),
-    Rel(NonMatching, "d_a_obj_block_underground", "REL/d/a/obj/d_a_obj_block_underground.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_block_underground",
+        "REL/d/a/obj/d_a_obj_block_underground.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_blow_coal", "REL/d/a/obj/d_a_obj_blow_coal.cpp"),
     Rel(NonMatching, "d_a_obj_boat", "REL/d/a/obj/d_a_obj_boat.cpp"),
     Rel(NonMatching, "d_a_obj_boxcage_F300", "REL/d/a/obj/d_a_obj_boxcage_F300.cpp"),
     Rel(NonMatching, "d_a_obj_bridge_bone", "REL/d/a/obj/d_a_obj_bridge_bone.cpp"),
-    Rel(NonMatching, "d_a_obj_bridge_building", "REL/d/a/obj/d_a_obj_bridge_building.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_bridge_building",
+        "REL/d/a/obj/d_a_obj_bridge_building.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_bridge_fall", "REL/d/a/obj/d_a_obj_bridge_fall.cpp"),
     Rel(NonMatching, "d_a_obj_bridge_step", "REL/d/a/obj/d_a_obj_bridge_step.cpp"),
-    Rel(NonMatching, "d_a_obj_bridge_stretch", "REL/d/a/obj/d_a_obj_bridge_stretch.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_bridge_stretch", "REL/d/a/obj/d_a_obj_bridge_stretch.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_bridge_time", "REL/d/a/obj/d_a_obj_bridge_time.cpp"),
     Rel(NonMatching, "d_a_obj_bstone", "REL/d/a/obj/d_a_obj_bstone.cpp"),
     Rel(NonMatching, "d_a_obj_bubble", "REL/d/a/obj/d_a_obj_bubble.cpp"),
@@ -1148,7 +1278,9 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_city", "REL/d/a/obj/d_a_obj_city.cpp"),
     Rel(NonMatching, "d_a_obj_city_water", "REL/d/a/obj/d_a_obj_city_water.cpp"),
     Rel(NonMatching, "d_a_obj_claw_shot_tg", "REL/d/a/obj/d_a_obj_claw_shot_tg.cpp"),
-    Rel(NonMatching, "d_a_obj_clearness_wall", "REL/d/a/obj/d_a_obj_clearness_wall.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_clearness_wall", "REL/d/a/obj/d_a_obj_clearness_wall.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_clef", "REL/d/a/obj/d_a_obj_clef.cpp"),
     Rel(NonMatching, "d_a_obj_cloud_dive", "REL/d/a/obj/d_a_obj_cloud_dive.cpp"),
     Rel(NonMatching, "d_a_obj_col", "REL/d/a/obj/d_a_obj_col.cpp"),
@@ -1163,23 +1295,43 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_desert_ago", "REL/d/a/obj/d_a_obj_desert_ago.cpp"),
     Rel(NonMatching, "d_a_obj_desert_debris", "REL/d/a/obj/d_a_obj_desert_debris.cpp"),
     Rel(NonMatching, "d_a_obj_desert_meter", "REL/d/a/obj/d_a_obj_desert_meter.cpp"),
-    Rel(NonMatching, "d_a_obj_display_only_nbs", "REL/d/a/obj/d_a_obj_display_only_nbs.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_display_only_nbs",
+        "REL/d/a/obj/d_a_obj_display_only_nbs.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_distant_ship", "REL/d/a/obj/d_a_obj_distant_ship.cpp"),
-    Rel(NonMatching, "d_a_obj_diviner_crystal", "REL/d/a/obj/d_a_obj_diviner_crystal.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_diviner_crystal",
+        "REL/d/a/obj/d_a_obj_diviner_crystal.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_door", "REL/d/a/obj/d_a_obj_door.cpp"),
     Rel(NonMatching, "d_a_obj_door_bossD101", "REL/d/a/obj/d_a_obj_door_bossD101.cpp"),
     Rel(NonMatching, "d_a_obj_door_boss", "REL/d/a/obj/d_a_obj_door_boss.cpp"),
-    Rel(NonMatching, "d_a_obj_door_dungeonD200", "REL/d/a/obj/d_a_obj_door_dungeonD200.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_door_dungeonD200",
+        "REL/d/a/obj/d_a_obj_door_dungeonD200.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_door_dungeon", "REL/d/a/obj/d_a_obj_door_dungeon.cpp"),
-    Rel(NonMatching, "d_a_obj_dormitory_gate", "REL/d/a/obj/d_a_obj_dormitory_gate.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_dormitory_gate", "REL/d/a/obj/d_a_obj_dormitory_gate.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_down_lava", "REL/d/a/obj/d_a_obj_down_lava.cpp"),
     Rel(NonMatching, "d_a_obj_drum", "REL/d/a/obj/d_a_obj_drum.cpp"),
     Rel(NonMatching, "d_a_obj_dungeon_ship", "REL/d/a/obj/d_a_obj_dungeon_ship.cpp"),
-    Rel(NonMatching, "d_a_obj_electric_light", "REL/d/a/obj/d_a_obj_electric_light.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_electric_light", "REL/d/a/obj/d_a_obj_electric_light.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_evil_field", "REL/d/a/obj/d_a_obj_evil_field.cpp"),
     Rel(NonMatching, "d_a_obj_F302_light", "REL/d/a/obj/d_a_obj_F302_light.cpp"),
-    Rel(NonMatching, "d_a_obj_F400_gate_leaf", "REL/d/a/obj/d_a_obj_F400_gate_leaf.cpp"),
-    Rel(NonMatching, "d_a_obj_F400_gate_seal", "REL/d/a/obj/d_a_obj_F400_gate_seal.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_F400_gate_leaf", "REL/d/a/obj/d_a_obj_F400_gate_leaf.cpp"
+    ),
+    Rel(
+        NonMatching, "d_a_obj_F400_gate_seal", "REL/d/a/obj/d_a_obj_F400_gate_seal.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_farmland", "REL/d/a/obj/d_a_obj_farmland.cpp"),
     Rel(NonMatching, "d_a_obj_fence", "REL/d/a/obj/d_a_obj_fence.cpp"),
     Rel(NonMatching, "d_a_obj_fence_boko2", "REL/d/a/obj/d_a_obj_fence_boko2.cpp"),
@@ -1191,20 +1343,40 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_fire_obstacle", "REL/d/a/obj/d_a_obj_fire_obstacle.cpp"),
     Rel(NonMatching, "d_a_obj_fire_pillar", "REL/d/a/obj/d_a_obj_fire_pillar.cpp"),
     Rel(NonMatching, "d_a_obj_flag", "REL/d/a/obj/d_a_obj_flag.cpp"),
-    Rel(NonMatching, "d_a_obj_flower_ancient", "REL/d/a/obj/d_a_obj_flower_ancient.cpp"),
-    Rel(NonMatching, "d_a_obj_flying_clawshot_target", "REL/d/a/obj/d_a_obj_flying_clawshot_target.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_flower_ancient", "REL/d/a/obj/d_a_obj_flower_ancient.cpp"
+    ),
+    Rel(
+        NonMatching,
+        "d_a_obj_flying_clawshot_target",
+        "REL/d/a/obj/d_a_obj_flying_clawshot_target.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_fortune_ring", "REL/d/a/obj/d_a_obj_fortune_ring.cpp"),
     Rel(NonMatching, "d_a_obj_fruitB", "REL/d/a/obj/d_a_obj_fruitB.cpp"),
     Rel(NonMatching, "d_a_obj_fruit", "REL/d/a/obj/d_a_obj_fruit.cpp"),
-    Rel(NonMatching, "d_a_obj_fruit_guts_leaf", "REL/d/a/obj/d_a_obj_fruit_guts_leaf.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_fruit_guts_leaf",
+        "REL/d/a/obj/d_a_obj_fruit_guts_leaf.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_fruit_tree", "REL/d/a/obj/d_a_obj_fruit_tree.cpp"),
     Rel(NonMatching, "d_a_obj_gear", "REL/d/a/obj/d_a_obj_gear.cpp"),
-    Rel(NonMatching, "d_a_obj_girahimu_floor", "REL/d/a/obj/d_a_obj_girahimu_floor.cpp"),
-    Rel(NonMatching, "d_a_obj_girahimu_knife", "REL/d/a/obj/d_a_obj_girahimu_knife.cpp"),
-    Rel(NonMatching, "d_a_obj_girahimu_sword_link", "REL/d/a/obj/d_a_obj_girahimu_sword_link.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_girahimu_floor", "REL/d/a/obj/d_a_obj_girahimu_floor.cpp"
+    ),
+    Rel(
+        NonMatching, "d_a_obj_girahimu_knife", "REL/d/a/obj/d_a_obj_girahimu_knife.cpp"
+    ),
+    Rel(
+        NonMatching,
+        "d_a_obj_girahimu_sword_link",
+        "REL/d/a/obj/d_a_obj_girahimu_sword_link.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_girahim_foot", "REL/d/a/obj/d_a_obj_girahim_foot.cpp"),
     Rel(NonMatching, "d_a_obj_goddess_cube", "REL/d/a/obj/d_a_obj_goddess_cube.cpp"),
-    Rel(NonMatching, "d_a_obj_goddess_statue", "REL/d/a/obj/d_a_obj_goddess_statue.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_goddess_statue", "REL/d/a/obj/d_a_obj_goddess_statue.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_god_mark", "REL/d/a/obj/d_a_obj_god_mark.cpp"),
     Rel(NonMatching, "d_a_obj_grass_coil", "REL/d/a/obj/d_a_obj_grass_coil.cpp"),
     Rel(NonMatching, "d_a_obj_grave", "REL/d/a/obj/d_a_obj_grave.cpp"),
@@ -1221,12 +1393,19 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_iron_stage", "REL/d/a/obj/d_a_obj_iron_stage.cpp"),
     Rel(NonMatching, "d_a_obj_island_LOD", "REL/d/a/obj/d_a_obj_island_LOD.cpp"),
     Rel(NonMatching, "d_a_obj_island_nusi", "REL/d/a/obj/d_a_obj_island_nusi.cpp"),
-    Rel(NonMatching, "d_a_obj_item_heart_container", "REL/d/a/obj/d_a_obj_item_heart_container.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_item_heart_container",
+        "REL/d/a/obj/d_a_obj_item_heart_container.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_ivy_rope", "REL/d/a/obj/d_a_obj_ivy_rope.cpp"),
-    MultiRel("d_a_obj_junk_repairing", [
-        Object(Matching, "REL/d/a/obj/d_a_obj_junk_repairing.cpp"),
-        Object(Matching, "REL/d/a/obj/d_a_obj_junk_repairing_data.cpp"),
-    ]),
+    MultiRel(
+        "d_a_obj_junk_repairing",
+        [
+            Object(Matching, "REL/d/a/obj/d_a_obj_junk_repairing.cpp"),
+            Object(Matching, "REL/d/a/obj/d_a_obj_junk_repairing_data.cpp"),
+        ],
+    ),
     Rel(NonMatching, "d_a_obj_kanban_stone", "REL/d/a/obj/d_a_obj_kanban_stone.cpp"),
     Rel(NonMatching, "d_a_obj_kibako", "REL/d/a/obj/d_a_obj_kibako.cpp"),
     Rel(NonMatching, "d_a_obj_kumite_wall", "REL/d/a/obj/d_a_obj_kumite_wall.cpp"),
@@ -1235,10 +1414,22 @@ config.libs = [
     Rel(Matching, "d_a_obj_lava_F200", "REL/d/a/obj/d_a_obj_lava_F200.cpp"),
     Rel(NonMatching, "d_a_obj_lava_plate", "REL/d/a/obj/d_a_obj_lava_plate.cpp"),
     Rel(NonMatching, "d_a_obj_leaf_swing", "REL/d/a/obj/d_a_obj_leaf_swing.cpp"),
-    Rel(NonMatching, "d_a_obj_lighthouse_harp", "REL/d/a/obj/d_a_obj_lighthouse_harp.cpp"),
-    Rel(NonMatching, "d_a_obj_lighthouse_light", "REL/d/a/obj/d_a_obj_lighthouse_light.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_lighthouse_harp",
+        "REL/d/a/obj/d_a_obj_lighthouse_harp.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_obj_lighthouse_light",
+        "REL/d/a/obj/d_a_obj_lighthouse_light.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_light_line", "REL/d/a/obj/d_a_obj_light_line.cpp"),
-    Rel(NonMatching, "d_a_obj_light_shaft_small", "REL/d/a/obj/d_a_obj_light_shaft_small.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_light_shaft_small",
+        "REL/d/a/obj/d_a_obj_light_shaft_small.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_lock", "REL/d/a/obj/d_a_obj_lock.cpp"),
     Rel(NonMatching, "d_a_obj_log", "REL/d/a/obj/d_a_obj_log.cpp"),
     Rel(NonMatching, "d_a_obj_log_water", "REL/d/a/obj/d_a_obj_log_water.cpp"),
@@ -1255,9 +1446,15 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_musasabi", "REL/d/a/obj/d_a_obj_musasabi.cpp"),
     Rel(NonMatching, "d_a_obj_mushroom", "REL/d/a/obj/d_a_obj_mushroom.cpp"),
     Rel(NonMatching, "d_a_obj_needle_desert", "REL/d/a/obj/d_a_obj_needle_desert.cpp"),
-    Rel(NonMatching, "d_a_obj_needle_underground", "REL/d/a/obj/d_a_obj_needle_underground.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_needle_underground",
+        "REL/d/a/obj/d_a_obj_needle_underground.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_oct_grass", "REL/d/a/obj/d_a_obj_oct_grass.cpp"),
-    Rel(NonMatching, "d_a_obj_oct_grass_leaf", "REL/d/a/obj/d_a_obj_oct_grass_leaf.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_oct_grass_leaf", "REL/d/a/obj/d_a_obj_oct_grass_leaf.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_paint", "REL/d/a/obj/d_a_obj_paint.cpp"),
     Rel(NonMatching, "d_a_obj_pinwheel", "REL/d/a/obj/d_a_obj_pinwheel.cpp"),
     Rel(NonMatching, "d_a_obj_pipe", "REL/d/a/obj/d_a_obj_pipe.cpp"),
@@ -1265,7 +1462,9 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_pole_stony", "REL/d/a/obj/d_a_obj_pole_stony.cpp"),
     Rel(Matching, "d_a_obj_pool_cock", "REL/d/a/obj/d_a_obj_pool_cock.cpp"),
     Rel(NonMatching, "d_a_obj_pot_sal", "REL/d/a/obj/d_a_obj_pot_sal.cpp"),
-    Rel(NonMatching, "d_a_obj_propeller_lift", "REL/d/a/obj/d_a_obj_propeller_lift.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_propeller_lift", "REL/d/a/obj/d_a_obj_propeller_lift.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_propera", "REL/d/a/obj/d_a_obj_propera.cpp"),
     Rel(NonMatching, "d_a_obj_pumpkin_bar", "REL/d/a/obj/d_a_obj_pumpkin_bar.cpp"),
     Rel(Matching, "d_a_obj_pumpkin_leaf", "REL/d/a/obj/d_a_obj_pumpkin_leaf.cpp"),
@@ -1282,10 +1481,20 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_roll_rock", "REL/d/a/obj/d_a_obj_roll_rock.cpp"),
     Rel(NonMatching, "d_a_obj_rope_base", "REL/d/a/obj/d_a_obj_rope_base.cpp"),
     Rel(NonMatching, "d_a_obj_rope_igaiga", "REL/d/a/obj/d_a_obj_rope_igaiga.cpp"),
-    Rel(NonMatching, "d_a_obj_rotation_light", "REL/d/a/obj/d_a_obj_rotation_light.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_rotation_light", "REL/d/a/obj/d_a_obj_rotation_light.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_roulette", "REL/d/a/obj/d_a_obj_roulette.cpp"),
-    Rel(NonMatching, "d_a_obj_roulette_island_c", "REL/d/a/obj/d_a_obj_roulette_island_c.cpp"),
-    Rel(NonMatching, "d_a_obj_roulette_island_r", "REL/d/a/obj/d_a_obj_roulette_island_r.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_roulette_island_c",
+        "REL/d/a/obj/d_a_obj_roulette_island_c.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_obj_roulette_island_r",
+        "REL/d/a/obj/d_a_obj_roulette_island_r.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_ro_at_target", "REL/d/a/obj/d_a_obj_ro_at_target.cpp"),
     Rel(NonMatching, "d_a_obj_ruined_save", "REL/d/a/obj/d_a_obj_ruined_save.cpp"),
     Rel(NonMatching, "d_a_obj_sail", "REL/d/a/obj/d_a_obj_sail.cpp"),
@@ -1301,18 +1510,34 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_ship_window", "REL/d/a/obj/d_a_obj_ship_window.cpp"),
     Rel(NonMatching, "d_a_obj_shrine_after", "REL/d/a/obj/d_a_obj_shrine_after.cpp"),
     Rel(NonMatching, "d_a_obj_shrine_before", "REL/d/a/obj/d_a_obj_shrine_before.cpp"),
-    Rel(NonMatching, "d_a_obj_shrine_bef_inside", "REL/d/a/obj/d_a_obj_shrine_bef_inside.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_shrine_bef_inside",
+        "REL/d/a/obj/d_a_obj_shrine_bef_inside.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_shutter", "REL/d/a/obj/d_a_obj_shutter.cpp"),
-    Rel(NonMatching, "d_a_obj_shutter_change_scene", "REL/d/a/obj/d_a_obj_shutter_change_scene.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_shutter_change_scene",
+        "REL/d/a/obj/d_a_obj_shutter_change_scene.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_shutter_fence", "REL/d/a/obj/d_a_obj_shutter_fence.cpp"),
-    Rel(NonMatching, "d_a_obj_shutter_waterD101", "REL/d/a/obj/d_a_obj_shutter_waterD101.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_shutter_waterD101",
+        "REL/d/a/obj/d_a_obj_shutter_waterD101.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_side_shutter", "REL/d/a/obj/d_a_obj_side_shutter.cpp"),
     Rel(NonMatching, "d_a_obj_sink_floor_f", "REL/d/a/obj/d_a_obj_sink_floor_f.cpp"),
     Rel(NonMatching, "d_a_obj_siren_2dmap", "REL/d/a/obj/d_a_obj_siren_2dmap.cpp"),
     Rel(NonMatching, "d_a_obj_siren_barrier", "REL/d/a/obj/d_a_obj_siren_barrier.cpp"),
     Rel(NonMatching, "d_a_obj_skull", "REL/d/a/obj/d_a_obj_skull.cpp"),
     Rel(NonMatching, "d_a_obj_slice_log", "REL/d/a/obj/d_a_obj_slice_log.cpp"),
-    Rel(NonMatching, "d_a_obj_slice_log_parts", "REL/d/a/obj/d_a_obj_slice_log_parts.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_slice_log_parts",
+        "REL/d/a/obj/d_a_obj_slice_log_parts.cpp",
+    ),
     Rel(Matching, "d_a_obj_smoke", "REL/d/a/obj/d_a_obj_smoke.cpp"),
     Rel(NonMatching, "d_a_obj_soil", "REL/d/a/obj/d_a_obj_soil.cpp"),
     Rel(NonMatching, "d_a_obj_spider_line", "REL/d/a/obj/d_a_obj_spider_line.cpp"),
@@ -1321,19 +1546,27 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_stage_crack", "REL/d/a/obj/d_a_obj_stage_crack.cpp"),
     Rel(NonMatching, "d_a_obj_stage_debris", "REL/d/a/obj/d_a_obj_stage_debris.cpp"),
     Rel(NonMatching, "d_a_obj_stage_kraken", "REL/d/a/obj/d_a_obj_stage_kraken.cpp"),
-    Rel(NonMatching, "d_a_obj_stage_kraken_parts", "REL/d/a/obj/d_a_obj_stage_kraken_parts.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_stage_kraken_parts",
+        "REL/d/a/obj/d_a_obj_stage_kraken_parts.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_stage_sink", "REL/d/a/obj/d_a_obj_stage_sink.cpp"),
     Rel(NonMatching, "d_a_obj_stage_water", "REL/d/a/obj/d_a_obj_stage_water.cpp"),
     Rel(NonMatching, "d_a_obj_step_gumarm", "REL/d/a/obj/d_a_obj_step_gumarm.cpp"),
     Rel(NonMatching, "d_a_obj_step_statue", "REL/d/a/obj/d_a_obj_step_statue.cpp"),
-    Rel(NonMatching, "d_a_obj_step_time_slip", "REL/d/a/obj/d_a_obj_step_time_slip.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_step_time_slip", "REL/d/a/obj/d_a_obj_step_time_slip.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_stone_stand", "REL/d/a/obj/d_a_obj_stone_stand.cpp"),
     Rel(NonMatching, "d_a_obj_stopper_rock", "REL/d/a/obj/d_a_obj_stopper_rock.cpp"),
     Rel(NonMatching, "d_a_obj_stopping_rope", "REL/d/a/obj/d_a_obj_stopping_rope.cpp"),
     Rel(NonMatching, "d_a_obj_stream_lava", "REL/d/a/obj/d_a_obj_stream_lava.cpp"),
     Rel(Matching, "d_a_obj_sun_light", "REL/d/a/obj/d_a_obj_sun_light.cpp"),
     Rel(NonMatching, "d_a_obj_swhit", "REL/d/a/obj/d_a_obj_swhit.cpp"),
-    Rel(NonMatching, "d_a_obj_switch_shutter", "REL/d/a/obj/d_a_obj_switch_shutter.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_switch_shutter", "REL/d/a/obj/d_a_obj_switch_shutter.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_switch_wall", "REL/d/a/obj/d_a_obj_switch_wall.cpp"),
     Rel(NonMatching, "d_a_obj_sword_candle", "REL/d/a/obj/d_a_obj_sword_candle.cpp"),
     Rel(NonMatching, "d_a_obj_sword_stab", "REL/d/a/obj/d_a_obj_sword_stab.cpp"),
@@ -1352,7 +1585,9 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_tarzan_pole", "REL/d/a/obj/d_a_obj_tarzan_pole.cpp"),
     Rel(NonMatching, "d_a_obj_tenijima", "REL/d/a/obj/d_a_obj_tenijima.cpp"),
     Rel(NonMatching, "d_a_obj_teni_rail", "REL/d/a/obj/d_a_obj_teni_rail.cpp"),
-    Rel(NonMatching, "d_a_obj_teni_rail_post", "REL/d/a/obj/d_a_obj_teni_rail_post.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_teni_rail_post", "REL/d/a/obj/d_a_obj_teni_rail_post.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_terry_bicycle", "REL/d/a/obj/d_a_obj_terry_bicycle.cpp"),
     Rel(NonMatching, "d_a_obj_terry_gimmick", "REL/d/a/obj/d_a_obj_terry_gimmick.cpp"),
     Rel(NonMatching, "d_a_obj_terry_hole", "REL/d/a/obj/d_a_obj_terry_hole.cpp"),
@@ -1362,58 +1597,126 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_time_base", "REL/d/a/obj/d_a_obj_time_base.cpp"),
     Rel(NonMatching, "d_a_obj_time_block", "REL/d/a/obj/d_a_obj_time_block.cpp"),
     Rel(NonMatching, "d_a_obj_time_boat", "REL/d/a/obj/d_a_obj_time_boat.cpp"),
-    Rel(NonMatching, "d_a_obj_time_boat_bullet", "REL/d/a/obj/d_a_obj_time_boat_bullet.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_time_boat_bullet",
+        "REL/d/a/obj/d_a_obj_time_boat_bullet.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_time_door", "REL/d/a/obj/d_a_obj_time_door.cpp"),
-    Rel(NonMatching, "d_a_obj_time_door_before", "REL/d/a/obj/d_a_obj_time_door_before.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_time_door_before",
+        "REL/d/a/obj/d_a_obj_time_door_before.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_time_stage_bg", "REL/d/a/obj/d_a_obj_time_stage_bg.cpp"),
     Rel(NonMatching, "d_a_obj_time_stone", "REL/d/a/obj/d_a_obj_time_stone.cpp"),
-    Rel(Matching, "d_a_obj_toD3_stone_figure", "REL/d/a/obj/d_a_obj_toD3_stone_figure.cpp"),
+    Rel(
+        Matching,
+        "d_a_obj_toD3_stone_figure",
+        "REL/d/a/obj/d_a_obj_toD3_stone_figure.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_toge_trap", "REL/d/a/obj/d_a_obj_toge_trap.cpp"),
     Rel(NonMatching, "d_a_obj_tornado", "REL/d/a/obj/d_a_obj_tornado.cpp"),
     Rel(NonMatching, "d_a_obj_tower_bomb", "REL/d/a/obj/d_a_obj_tower_bomb.cpp"),
     Rel(NonMatching, "d_a_obj_tower_D101", "REL/d/a/obj/d_a_obj_tower_D101.cpp"),
-    Rel(NonMatching, "d_a_obj_tower_gearD101", "REL/d/a/obj/d_a_obj_tower_gearD101.cpp"),
-    Rel(NonMatching, "d_a_obj_tower_hand_D101", "REL/d/a/obj/d_a_obj_tower_hand_D101.cpp"),
-    Rel(NonMatching, "d_a_obj_trap_bird_wood", "REL/d/a/obj/d_a_obj_trap_bird_wood.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_tower_gearD101", "REL/d/a/obj/d_a_obj_tower_gearD101.cpp"
+    ),
+    Rel(
+        NonMatching,
+        "d_a_obj_tower_hand_D101",
+        "REL/d/a/obj/d_a_obj_tower_hand_D101.cpp",
+    ),
+    Rel(
+        NonMatching, "d_a_obj_trap_bird_wood", "REL/d/a/obj/d_a_obj_trap_bird_wood.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_trap_rock_1", "REL/d/a/obj/d_a_obj_trap_rock_1.cpp"),
-    Rel(NonMatching, "d_a_obj_treasure_island", "REL/d/a/obj/d_a_obj_treasure_island.cpp"),
-    Rel(NonMatching, "d_a_obj_treasure_island_b", "REL/d/a/obj/d_a_obj_treasure_island_b.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_treasure_island",
+        "REL/d/a/obj/d_a_obj_treasure_island.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_obj_treasure_island_b",
+        "REL/d/a/obj/d_a_obj_treasure_island_b.cpp",
+    ),
     Rel(Matching, "d_a_obj_triforce", "REL/d/a/obj/d_a_obj_triforce.cpp"),
     Rel(NonMatching, "d_a_obj_trolley", "REL/d/a/obj/d_a_obj_trolley.cpp"),
-    Rel(NonMatching, "d_a_obj_trolley_shutter", "REL/d/a/obj/d_a_obj_trolley_shutter.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_trolley_shutter",
+        "REL/d/a/obj/d_a_obj_trolley_shutter.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_truck", "REL/d/a/obj/d_a_obj_truck.cpp"),
-    Rel(NonMatching, "d_a_obj_truck_rail_col", "REL/d/a/obj/d_a_obj_truck_rail_col.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_truck_rail_col", "REL/d/a/obj/d_a_obj_truck_rail_col.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_truck_stopper", "REL/d/a/obj/d_a_obj_truck_stopper.cpp"),
     Rel(NonMatching, "d_a_obj_tr_shutter_cs", "REL/d/a/obj/d_a_obj_tr_shutter_cs.cpp"),
     Rel(NonMatching, "d_a_obj_tubo", "REL/d/a/obj/d_a_obj_tubo.cpp"),
     Rel(NonMatching, "d_a_obj_tubo_big", "REL/d/a/obj/d_a_obj_tubo_big.cpp"),
     Rel(NonMatching, "d_a_obj_tumble_weed", "REL/d/a/obj/d_a_obj_tumble_weed.cpp"),
     Rel(NonMatching, "d_a_obj_underground", "REL/d/a/obj/d_a_obj_underground.cpp"),
-    Rel(NonMatching, "d_a_obj_underground_switch", "REL/d/a/obj/d_a_obj_underground_switch.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_underground_switch",
+        "REL/d/a/obj/d_a_obj_underground_switch.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_under_cloud", "REL/d/a/obj/d_a_obj_under_cloud.cpp"),
     Rel(NonMatching, "d_a_obj_updown_lava", "REL/d/a/obj/d_a_obj_updown_lava.cpp"),
     Rel(NonMatching, "d_a_obj_utajima", "REL/d/a/obj/d_a_obj_utajima.cpp"),
-    Rel(NonMatching, "d_a_obj_utajima_island", "REL/d/a/obj/d_a_obj_utajima_island.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_utajima_island", "REL/d/a/obj/d_a_obj_utajima_island.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_utajima_lv2", "REL/d/a/obj/d_a_obj_utajima_lv2.cpp"),
-    Rel(NonMatching, "d_a_obj_utajima_main_mecha", "REL/d/a/obj/d_a_obj_utajima_main_mecha.cpp"),
-    Rel(NonMatching, "d_a_obj_utajima_pedestal", "REL/d/a/obj/d_a_obj_utajima_pedestal.cpp"),
-    Rel(NonMatching, "d_a_obj_utajima_stopper", "REL/d/a/obj/d_a_obj_utajima_stopper.cpp"),
-    Rel(NonMatching, "d_a_obj_uta_demo_pedest", "REL/d/a/obj/d_a_obj_uta_demo_pedest.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_utajima_main_mecha",
+        "REL/d/a/obj/d_a_obj_utajima_main_mecha.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_obj_utajima_pedestal",
+        "REL/d/a/obj/d_a_obj_utajima_pedestal.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_obj_utajima_stopper",
+        "REL/d/a/obj/d_a_obj_utajima_stopper.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_a_obj_uta_demo_pedest",
+        "REL/d/a/obj/d_a_obj_uta_demo_pedest.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_vacu_dust", "REL/d/a/obj/d_a_obj_vacu_dust.cpp"),
-    Rel(NonMatching, "d_a_obj_vacu_dust_parts", "REL/d/a/obj/d_a_obj_vacu_dust_parts.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_vacu_dust_parts",
+        "REL/d/a/obj/d_a_obj_vacu_dust_parts.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_vd_bullet", "REL/d/a/obj/d_a_obj_vd_bullet.cpp"),
     Rel(NonMatching, "d_a_obj_vent_fan", "REL/d/a/obj/d_a_obj_vent_fan.cpp"),
     Rel(NonMatching, "d_a_obj_vortex", "REL/d/a/obj/d_a_obj_vortex.cpp"),
     Rel(NonMatching, "d_a_obj_warp", "REL/d/a/obj/d_a_obj_warp.cpp"),
     Rel(NonMatching, "d_a_obj_warp_hole", "REL/d/a/obj/d_a_obj_warp_hole.cpp"),
-    Rel(NonMatching, "d_a_obj_waterfall_D100", "REL/d/a/obj/d_a_obj_waterfall_D100.cpp"),
-    Rel(NonMatching, "d_a_obj_waterfall_D101", "REL/d/a/obj/d_a_obj_waterfall_D101.cpp"),
-    Rel(NonMatching, "d_a_obj_waterfall_F102", "REL/d/a/obj/d_a_obj_waterfall_F102.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_waterfall_D100", "REL/d/a/obj/d_a_obj_waterfall_D100.cpp"
+    ),
+    Rel(
+        NonMatching, "d_a_obj_waterfall_D101", "REL/d/a/obj/d_a_obj_waterfall_D101.cpp"
+    ),
+    Rel(
+        NonMatching, "d_a_obj_waterfall_F102", "REL/d/a/obj/d_a_obj_waterfall_F102.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_water_F100", "REL/d/a/obj/d_a_obj_water_F100.cpp"),
     Rel(NonMatching, "d_a_obj_water_igaiga", "REL/d/a/obj/d_a_obj_water_igaiga.cpp"),
     Rel(NonMatching, "d_a_obj_water_jar", "REL/d/a/obj/d_a_obj_water_jar.cpp"),
     Rel(NonMatching, "d_a_obj_water_nut", "REL/d/a/obj/d_a_obj_water_nut.cpp"),
-    Rel(NonMatching, "d_a_obj_water_nut_leaf", "REL/d/a/obj/d_a_obj_water_nut_leaf.cpp"),
+    Rel(
+        NonMatching, "d_a_obj_water_nut_leaf", "REL/d/a/obj/d_a_obj_water_nut_leaf.cpp"
+    ),
     Rel(NonMatching, "d_a_obj_water_shield", "REL/d/a/obj/d_a_obj_water_shield.cpp"),
     Rel(NonMatching, "d_a_obj_water_surface", "REL/d/a/obj/d_a_obj_water_surface.cpp"),
     Rel(NonMatching, "d_a_obj_water_switch", "REL/d/a/obj/d_a_obj_water_switch.cpp"),
@@ -1421,7 +1724,11 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_wind03", "REL/d/a/obj/d_a_obj_wind03.cpp"),
     Rel(NonMatching, "d_a_obj_wind04", "REL/d/a/obj/d_a_obj_wind04.cpp"),
     Rel(NonMatching, "d_a_obj_windmill", "REL/d/a/obj/d_a_obj_windmill.cpp"),
-    Rel(NonMatching, "d_a_obj_windmill_desert", "REL/d/a/obj/d_a_obj_windmill_desert.cpp"),
+    Rel(
+        NonMatching,
+        "d_a_obj_windmill_desert",
+        "REL/d/a/obj/d_a_obj_windmill_desert.cpp",
+    ),
     Rel(NonMatching, "d_a_obj_wind", "REL/d/a/obj/d_a_obj_wind.cpp"),
     Rel(NonMatching, "d_a_obj_wood_board", "REL/d/a/obj/d_a_obj_wood_board.cpp"),
     Rel(NonMatching, "d_a_or_cannon_bullet", "REL/d/a/d_a_or_cannon_bullet.cpp"),
@@ -1473,7 +1780,11 @@ config.libs = [
     Rel(NonMatching, "d_t_map_mark", "REL/d/t/d_t_map_mark.cpp"),
     Rel(NonMatching, "d_t_megami_diving", "REL/d/t/d_t_megami_diving.cpp"),
     Rel(NonMatching, "d_t_miechan", "REL/d/t/d_t_miechan.cpp"),
-    Rel(NonMatching, "d_t_minigame_insect_capture", "REL/d/t/d_t_minigame_insect_capture.cpp"),
+    Rel(
+        NonMatching,
+        "d_t_minigame_insect_capture",
+        "REL/d/t/d_t_minigame_insect_capture.cpp",
+    ),
     Rel(NonMatching, "d_t_mist", "REL/d/t/d_t_mist.cpp"),
     Rel(NonMatching, "d_t_mole_mgr", "REL/d/t/d_t_mole_mgr.cpp"),
     Rel(Matching, "d_t_mole_prohibit", "REL/d/t/d_t_mole_prohibit.cpp"),
@@ -1489,13 +1800,23 @@ config.libs = [
     Rel(NonMatching, "d_t_ride_rock_set", "REL/d/t/d_t_ride_rock_set.cpp"),
     Rel(Matching, "d_t_rock_boat", "REL/d/t/d_t_rock_boat.cpp"),
     Rel(NonMatching, "d_t_roll_attack_log", "REL/d/t/d_t_roll_attack_log.cpp"),
-    Rel(NonMatching, "d_t_ro_at_target_manager", "REL/d/t/d_t_ro_at_target_manager.cpp"),
+    Rel(
+        NonMatching, "d_t_ro_at_target_manager", "REL/d/t/d_t_ro_at_target_manager.cpp"
+    ),
     Rel(NonMatching, "d_t_scene_change", "REL/d/t/d_t_scene_change.cpp"),
     Rel(NonMatching, "d_t_ship_flood", "REL/d/t/d_t_ship_flood.cpp"),
     Rel(NonMatching, "d_t_ship_slope", "REL/d/t/d_t_ship_slope.cpp"),
     Rel(Matching, "d_t_ship_window", "REL/d/t/d_t_ship_window.cpp"),
-    Rel(NonMatching, "d_t_shutter_fence_forbiddance", "REL/d/t/d_t_shutter_fence_forbiddance.cpp"),
-    Rel(NonMatching, "d_t_shutter_fence_permission", "REL/d/t/d_t_shutter_fence_permission.cpp"),
+    Rel(
+        NonMatching,
+        "d_t_shutter_fence_forbiddance",
+        "REL/d/t/d_t_shutter_fence_forbiddance.cpp",
+    ),
+    Rel(
+        NonMatching,
+        "d_t_shutter_fence_permission",
+        "REL/d/t/d_t_shutter_fence_permission.cpp",
+    ),
     Rel(NonMatching, "d_t_siren_time_attack", "REL/d/t/d_t_siren_time_attack.cpp"),
     Rel(NonMatching, "d_t_skyEnemy", "REL/d/t/d_t_skyEnemy.cpp"),
     Rel(NonMatching, "d_t_sound", "REL/d/t/d_t_sound.cpp"),
@@ -1531,7 +1852,6 @@ if args.mode == "configure":
     generate_build(config)
 elif args.mode == "progress":
     # Print progress and write progress.json
-    config.progress_each_module = args.verbose
     calculate_progress(config)
 else:
     sys.exit("Unknown mode: " + args.mode)

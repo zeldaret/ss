@@ -1,14 +1,15 @@
 #ifndef TOBESORTED_ATTENTION_H
 #define TOBESORTED_ATTENTION_H
 
-#include <common.h>
-#include <d/a/obj/d_a_obj_base.h>
-#include <m/m3d/m_anmchr.h>
-#include <m/m3d/m_anmmatclr.h>
-#include <m/m3d/m_anmtexpat.h>
-#include <m/m3d/m_smdl.h>
-#include <m/m_allocator.h>
-#include <toBeSorted/effects_struct.h>
+#include "common.h"
+#include "d/a/obj/d_a_obj_base.h"
+#include "m/m3d/m_anmchr.h"
+#include "m/m3d/m_anmmatclr.h"
+#include "m/m3d/m_anmtexpat.h"
+#include "m/m3d/m_smdl.h"
+#include "m/m_allocator.h"
+#include "toBeSorted/effects_struct.h"
+
 
 static const u32 OFF = 'off ';
 static const u32 NONE = 'none';
@@ -89,11 +90,12 @@ public:
     s32 mNumUsedRefs;
 
     int fn_80096190(dAcObjBase_c *actor, u8 unk, InteractionType interactionType);
-    bool insertTarget(dAcObjBase_c *actor, u32 unk1, mVec3_c *pos, InteractionType interactionType, u8 field_0x03,
-            f32 field_0x04);
+    bool insertTarget(
+        dAcObjBase_c *actor, u32 unk1, mVec3_c *pos, InteractionType interactionType, u8 field_0x03, f32 field_0x04
+    );
 
     dAcObjBase_c *getActor(s32 i) {
-        return i < mNumUsedRefs && mInfos[i].mActorIdx != -1 ? mRefs[mInfos[i].mActorIdx].get() : nullptr;
+        return i < mNumUsedRefs && mInfos[i].mActorIdx != 0xFF ? mRefs[mInfos[i].mActorIdx].get() : nullptr;
     }
 
     void clear() {
@@ -188,26 +190,30 @@ public:
 
     void addTalkTarget_unused(dAcObjBase_c &actor);
 
-    void addExamineTalkTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20,
-            f32 field_0x24);
+    void
+    addExamineTalkTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20, f32 field_0x24);
     void addExamineTalkTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x20, f32 field_0x24);
 
     void addCatchTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x24_neg, f32 field_0x20_neg);
 
-    void addCatchLikeTarget(dAcObjBase_c &actor, InteractionType interactionType, u32 flags, f32 field_0x14,
-            f32 field_0x24_neg, f32 field_0x20_neg);
+    void addCatchLikeTarget(
+        dAcObjBase_c &actor, InteractionType interactionType, u32 flags, f32 field_0x14, f32 field_0x24_neg,
+        f32 field_0x20_neg
+    );
 
     void addUnk3Target(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x24_neg, f32 field_0x20_neg);
 
-    void addUnk3Target(dAcObjBase_c &actor, u32 flags, f32 arg5, f32 field_0x14, f32 field_0x24_neg,
-            f32 field_0x20_neg);
-    void addUnk3Target(dAcObjBase_c &actor, u32 arg2, mVec3_c *arg3, u32 flags, f32 arg5, f32 field_0x14,
-            f32 field_0x24_neg, f32 field_0x20_neg);
+    void
+    addUnk3Target(dAcObjBase_c &actor, u32 flags, f32 arg5, f32 field_0x14, f32 field_0x24_neg, f32 field_0x20_neg);
+    void addUnk3Target(
+        dAcObjBase_c &actor, u32 arg2, mVec3_c *arg3, u32 flags, f32 arg5, f32 field_0x14, f32 field_0x24_neg,
+        f32 field_0x20_neg
+    );
 
     void addNpcTalkTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20, f32 field_0x24);
 
-    void addUnk7Target(dAcObjBase_c &actor, u32 flags, f32 arg5, f32 field_0x14, f32 field_0x24_neg,
-            f32 field_0x20_neg);
+    void
+    addUnk7Target(dAcObjBase_c &actor, u32 flags, f32 arg5, f32 field_0x14, f32 field_0x24_neg, f32 field_0x20_neg);
 
     void addReadTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20, f32 field_0x24);
     void addReadTarget2(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x20, f32 field_0x24);

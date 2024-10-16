@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_F302_light.h>
+#include "d/a/obj/d_a_obj_F302_light.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_F302_LIGHT, dAcOF302Light_c, fProfile::OBJ_F302_LIGHT, 0x1B2, 0, 3);
 

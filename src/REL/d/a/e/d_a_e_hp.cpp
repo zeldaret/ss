@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_hp.h>
+#include "d/a/e/d_a_e_hp.h"
 
 SPECIAL_ACTOR_PROFILE(E_HP, dAcEHp_c, fProfile::E_HP, 0x102, 0, 18);
 
