@@ -69,6 +69,9 @@ public:
     void resetField0x14() {
         field_0x14 = 0;
     }
+    u32 getField0x14() {
+        return field_0x14;
+    }
     void decreaseCount();
     void unlink();
     dAcBase_c *getActor();
@@ -94,7 +97,8 @@ struct dCcD_SrcGObjAt {
 struct dCcD_SrcGObjTg {
     /* 0x00 */ dCcD_SrcGAtTgCoCommonBase base;
     /* 0x04 */ u32 field_0x04;
-    /* 0x08 */ u32 field_0x08;
+    /* 0x08 */ u16 field_0x08;
+    /* 0x10 */ u16 field_0x0A;
     /* 0x0C */ u16 field_0x0C;
     /* 0x0E */ u16 field_0x0E;
 };
@@ -151,7 +155,8 @@ private:
     /* 0x4C */ u32 field_0x4C;
     /* 0x50 */ u32 field_0x50;
     /* 0x54 */ u32 field_0x54;
-    /* 0x58 */ u8 field_0x58[0x6C - 0x58];
+    /* 0x58 */ u32 field_0x58;
+    /* 0x5C */ u8 field_0x5C[0x6C - 0x5C];
     /* 0x6C */ mVec3_c field_0x6C;
     /* 0x78 */ u32 field_0x78;
 
@@ -166,6 +171,15 @@ public:
     }
     void set0x4C(u32 val) {
         field_0x4C = val;
+    }
+    void setSrcFlag(u32 flag) {
+        mSrc.base.mGFlag = flag;
+    }
+    void setSrc0x0A(u32 flag) {
+        mSrc.field_0x0A = flag;
+    }
+    u32 get0x58() {
+        return field_0x58;
     }
     void init(const dCcD_SrcGObjTg *);
     void adjustHitPos(f32 dx, f32 dz);
@@ -250,6 +264,10 @@ struct UnkCCDStruct {
     void setField0x38ToMagicValue() {
         field_0x38 = 0xD;
     }
+
+    void setField0x38(s32 val) {
+        field_0x38 = val;
+    }
 };
 
 // Object Info
@@ -292,8 +310,20 @@ public:
         mGObjAt.SetSomeVec(p);
     }
 
+    inline void setTgFlag(u32 flag) {
+        mGObjTg.setSrcFlag(flag);
+    }
+
     inline mVec3_c *getAtVec() {
         return mGObjAt.GetSomeVec();
+    }
+
+    bool someInteractCheck() {
+        return ((mGObjTg.getField0x14() & 1) != 0 && mGObjTg.getActor() != nullptr);
+    }
+
+    void setTgField0x0A(u32 val) {
+        mGObjTg.setSrc0x0A(val);
     }
 
     void ResetAtHit();
@@ -304,6 +334,7 @@ public:
     mVec3_c *GetAtHitPosP2();
 
     dAcBase_c *GetAtActor();
+    bool CheckCollidedMask(u32 mask);
     dAcBase_c *GetTgActor();
     dAcBase_c *GetCoActor();
 

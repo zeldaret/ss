@@ -17,7 +17,7 @@ f32 dAcOtoD3StoneFigure_c::sHeight = 290.0f;
 // clang-format off
 dCcD_SrcCyl dAcOtoD3StoneFigure_c::sCcSrc = {
     {{{0}, 0, 0, 0, 0, 0, 0, 0, 0}, 
-    {{0xFEB77DFF}, 0x1000111, 0x60407, 0, 0}, 
+    {{0xFEB77DFF}, 0x1000111, 0x06, 0x407, 0, 0}, 
     {0xE9}},
     {dAcOtoD3StoneFigure_c::sRadius, dAcOtoD3StoneFigure_c::sHeight}
 };

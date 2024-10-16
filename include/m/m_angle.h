@@ -13,6 +13,14 @@ struct mAng {
         return mVal;
     }
 
+    mAng operator-() {
+        return mAng(-mVal);
+    }
+
+    mAng operator+(const mAng &other) const {
+        return mAng(mVal + other.mVal);
+    }
+
     mAng &operator+=(const mAng &other) {
         mVal += other.mVal;
         return *this;
