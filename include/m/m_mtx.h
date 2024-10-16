@@ -9,9 +9,6 @@
 #include "m/m_vec.h"
 #include "nw4r/nw4r_types.h"
 
-
-#pragma push
-#pragma warning off(10402)
 class mMtx_c {
     typedef f32 (*MtxRef)[4];
     typedef const f32 (*MtxRefConst)[4];
@@ -93,7 +90,5 @@ public:
 public:
     static mMtx_c Identity;
 };
-
-#pragma pop
 
 #endif

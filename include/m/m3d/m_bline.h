@@ -8,6 +8,8 @@
 
 namespace m3d {
 
+#pragma push
+#pragma warning off(10402)
 // The Actual line
 class bline_c {
 public:
@@ -58,6 +60,7 @@ public:
     /* 0x2E */ u8 mFlags;
     /* 0x2F    u8 _pad; */
 };
+#pragma pop
 
 class blineMat_c : public proc_c {
 public:
