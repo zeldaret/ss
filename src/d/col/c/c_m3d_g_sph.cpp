@@ -23,7 +23,8 @@ void cM3dGSph::SetR(f32 r) {
 }
 
 void cM3dGSph::SetC(f32 x, f32 y, f32 z) {
-    SetC(&mVec3_c(x, y, z));
+    mVec3_c c(x, y, z);
+    SetC(&c);
 }
 
 bool cM3dGSph::fn_80338750(cM3dGUnk *pUnk, mVec3_c *pOut) {
@@ -43,7 +44,7 @@ f32 cM3dGSph::GetYDist(f32 r) const {
 }
 
 bool cM3dGSph::Cross(const cM3dGTri *pTri, f32 *p2, mVec3_c *p3) {
-    cM3d_Cross_SphTri(this, pTri, nullptr, p2, p3);
+    return cM3d_Cross_SphTri(this, pTri, nullptr, p2, p3);
 }
 
 void cM3dGSph::Clamp(const mVec3_c &in, mVec3_c &out) const {
