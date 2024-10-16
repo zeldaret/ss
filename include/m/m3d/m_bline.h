@@ -8,8 +8,6 @@
 
 namespace m3d {
 
-#pragma push
-#pragma warning off(10402)
 // The Actual line
 class bline_c {
 public:
@@ -24,6 +22,7 @@ public:
     };
     // This is mainly a Guess, When the array is created, it has only a ctor
     struct VtxNrm {
+#pragma warning off(10402)
         union {
             struct {
                 Vec3u8 nrm1;
@@ -31,6 +30,7 @@ public:
             };
             EGG::Vector3s nrm_u16; // There is a short by short copy later
         };
+#pragma warning on(10402)
     };
     // This is mainly a Guess, When the array is created, it doesnt use the array alloc
     struct VtxTex {
@@ -60,7 +60,6 @@ public:
     /* 0x2E */ u8 mFlags;
     /* 0x2F    u8 _pad; */
 };
-#pragma pop
 
 class blineMat_c : public proc_c {
 public:
