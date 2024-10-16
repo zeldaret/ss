@@ -21,7 +21,7 @@ private:
         return params >> 0x8;
     }
 
-    u8 getSetOnLeave() {
+    u8 getIsPersistent() {
         return params >> 0x10 & 1;
     }
 
@@ -36,7 +36,7 @@ private:
     mMtx_c area;
     u8 setSceneflag;
     u8 unsetSceneflag;
-    bool unsetOnLeave;
+    bool isTemporary;
     f32 scale;
     u16 setStoryflag;
     u16 unsetStoryflag;

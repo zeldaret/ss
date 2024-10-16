@@ -17,7 +17,7 @@ u32 dTgSwArea_c::sDefaultRotZ = 0;
 int dTgSwArea_c::create() {
     setSceneflag = getSetSceneflag();
     unsetSceneflag = getUnsetSceneflag();
-    unsetOnLeave = !getSetOnLeave();
+    isTemporary = !getIsPersistent();
 
     setStoryflag = getSetStoryflag();
     unsetStoryflag = getUnsetStoryflag();
@@ -61,7 +61,7 @@ int dTgSwArea_c::actorExecute() {
             matrixCreateFromPosRotYScale(area, position, rotation.y, mScale, nullptr, scale);
         }
 
-        if (unsetOnLeave) {
+        if (isTemporary) {
             SceneflagManager::sInstance->unsetFlag(roomid, setSceneflag);
             SceneflagManager::sInstance->setFlag(roomid, unsetSceneflag);
 
