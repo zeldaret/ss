@@ -57,63 +57,63 @@ void DowsingTarget::getPosition(mVec3_c &position) {
 }
 
 bool DowsingTarget::hasZeldaDowsing() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(100);
+    return StoryflagManager::sInstance->getCounterOrFlag(100);
 }
 
 bool DowsingTarget::hasKikwiDowsing() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(56) && !StoryFlagManager::sInstance->getCounterOrFlag(57);
+    return StoryflagManager::sInstance->getCounterOrFlag(56) && !StoryflagManager::sInstance->getCounterOrFlag(57);
 }
 
 bool DowsingTarget::hasKeyPieceDowsing() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(106) && !StoryFlagManager::sInstance->getCounterOrFlag(120);
+    return StoryflagManager::sInstance->getCounterOrFlag(106) && !StoryflagManager::sInstance->getCounterOrFlag(120);
 }
 
 bool DowsingTarget::hasDesertNodeDowsing() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(107) && !StoryFlagManager::sInstance->getCounterOrFlag(8);
+    return StoryflagManager::sInstance->getCounterOrFlag(107) && !StoryflagManager::sInstance->getCounterOrFlag(8);
 }
 
 bool DowsingTarget::hasAnyTrialDowsing() {
     // TODO more complicated code
-    return ItemFlagManager::sInstance->getFlag(187) && !StoryFlagManager::sInstance->getCounterOrFlag(93) ||
-           ItemFlagManager::sInstance->getFlag(188) && !StoryFlagManager::sInstance->getCounterOrFlag(97) ||
-           ItemFlagManager::sInstance->getFlag(189) && !StoryFlagManager::sInstance->getCounterOrFlag(98) ||
-           ItemFlagManager::sInstance->getFlag(193) && !StoryFlagManager::sInstance->getCounterOrFlag(99);
+    return ItemflagManager::sInstance->getFlag(187) && !StoryflagManager::sInstance->getCounterOrFlag(93) ||
+           ItemflagManager::sInstance->getFlag(188) && !StoryflagManager::sInstance->getCounterOrFlag(97) ||
+           ItemflagManager::sInstance->getFlag(189) && !StoryflagManager::sInstance->getCounterOrFlag(98) ||
+           ItemflagManager::sInstance->getFlag(193) && !StoryflagManager::sInstance->getCounterOrFlag(99);
 }
 
 bool DowsingTarget::hasSacredWaterDowsing() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(64) && !StoryFlagManager::sInstance->getCounterOrFlag(65);
+    return StoryflagManager::sInstance->getCounterOrFlag(64) && !StoryflagManager::sInstance->getCounterOrFlag(65);
 }
 
 bool DowsingTarget::hasSandshipDowsing() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(271) && !StoryFlagManager::sInstance->getCounterOrFlag(14);
+    return StoryflagManager::sInstance->getCounterOrFlag(271) && !StoryflagManager::sInstance->getCounterOrFlag(14);
 }
 
 bool DowsingTarget::hasTadtoneDowsing() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(81) && !StoryFlagManager::sInstance->getCounterOrFlag(18);
+    return StoryflagManager::sInstance->getCounterOrFlag(81) && !StoryflagManager::sInstance->getCounterOrFlag(18);
 }
 
 bool DowsingTarget::hasPropellerDowsing() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(668);
+    return StoryflagManager::sInstance->getCounterOrFlag(668);
 }
 
 bool DowsingTarget::hasWaterBasinDowsing() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(669);
+    return StoryflagManager::sInstance->getCounterOrFlag(669);
 }
 
 bool DowsingTarget::hasCrystalBallDowsing() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(670);
+    return StoryflagManager::sInstance->getCounterOrFlag(670);
 }
 
 bool DowsingTarget::hasPumpkinDowsing() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(680);
+    return StoryflagManager::sInstance->getCounterOrFlag(680);
 }
 
 bool DowsingTarget::hasNewPlantSpeciesDowsing() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(681);
+    return StoryflagManager::sInstance->getCounterOrFlag(681);
 }
 
 bool DowsingTarget::hasPartyWheelDowsing() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(682);
+    return StoryflagManager::sInstance->getCounterOrFlag(682);
 }
 
 bool DowsingTarget::hasDowsingInSlot(int slot) {
@@ -131,7 +131,7 @@ bool DowsingTarget::hasDowsingInSlot(int slot) {
     } else if (slot == 2) {
         return hasCrystalBallDowsing() || hasPumpkinDowsing() || hasNewPlantSpeciesDowsing() || hasKikwiDowsing() ||
                hasKeyPieceDowsing() || hasDesertNodeDowsing() || hasPartyWheelDowsing();
-    } else if (StoryFlagManager::sInstance->getCounterOrFlag(DOWSING_TARGET_STORY_FLAGS[slot])) {
+    } else if (StoryflagManager::sInstance->getCounterOrFlag(DOWSING_TARGET_STORY_FLAGS[slot])) {
         // TODO small instruction shuffle
         return true;
     }

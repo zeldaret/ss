@@ -29,18 +29,18 @@ public:
     u16 getFlag(u16 flag) const;
 };
 
-class StoryFlagManager : public ItemStoryManagerBase {
+class StoryflagManager : public ItemStoryManagerBase {
     FlagSpace storyFlags;
 
 public:
-    static StoryFlagManager *sInstance;
+    static StoryflagManager *sInstance;
 };
 
-class ItemFlagManager : public ItemStoryManagerBase {
+class ItemflagManager : public ItemStoryManagerBase {
     FlagSpace itemFlags;
 
 public:
-    static ItemFlagManager *sInstance;
+    static ItemflagManager *sInstance;
 };
 
 #endif

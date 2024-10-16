@@ -125,7 +125,7 @@ const char *dAcOtoD3StoneFigure_c::getModelName() const {
 }
 
 bool dAcOtoD3StoneFigure_c::isStoneOfTrialsPlaced() const {
-    return StoryFlagManager::sInstance->getCounterOrFlag(22);
+    return StoryflagManager::sInstance->getCounterOrFlag(22);
 }
 
 void dAcOtoD3StoneFigure_c::doInteraction(s32 arg) {
