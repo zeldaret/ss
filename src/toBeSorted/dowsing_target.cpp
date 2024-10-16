@@ -5,7 +5,7 @@
 #include <toBeSorted/item_story_flag_manager.h>
 #include <toBeSorted/tlist.h>
 
-typedef TList<DowsingTarget> DowsingList;
+typedef TList<DowsingTarget, offsetof(DowsingTarget, mLink)> DowsingList;
 
 DowsingList DOWSING_LISTS[8];
 

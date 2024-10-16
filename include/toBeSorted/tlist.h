@@ -10,6 +10,8 @@
 
 #define TLIST_NODE_DEF(class) TListNode<class> mLink
 
+#define TLIST_LIST_DEF(class, name) TList<class, offsetof(class, mLink)> name
+
 template <typename T>
 class TListNode {
 public:
@@ -22,18 +24,11 @@ public:
         return mpPrev;
     }
 
-    static TListNode<T> *GetNodeFromPtr(T *pT) {
-        return &(pT->mLink);
-    }
-    T *GetPtr() {
-        return (T *)((u8 *)this - offsetof(T, mLink));
-    }
-
     T *mpPrev;
     T *mpNext;
 };
 
-template <typename T>
+template <typename T, int offset>
 class TList {
 public:
     typedef TListNode<T> TNode;
@@ -43,12 +38,12 @@ public:
         Iterator(T *p_val) : pVal(p_val) {}
 
         Iterator &operator++() {
-            pVal = TNode::GetNodeFromPtr(pVal)->GetNext();
+            pVal = GetNodeFromPtr(pVal)->GetNext();
             return *this;
         }
 
         Iterator &operator--() {
-            pVal = TNode::GetNodeFromPtr(pVal)->GetPrev();
+            pVal = GetNodeFromPtr(pVal)->GetPrev();
             return *this;
         }
 
@@ -73,8 +68,8 @@ public:
     };
 
     TList() {
-        mStartEnd.mpNext = mStartEnd.GetPtr();
-        mStartEnd.mpPrev = mStartEnd.GetPtr();
+        mStartEnd.mpNext = GetPtrFromNode(&mStartEnd);
+        mStartEnd.mpPrev = GetPtrFromNode(&mStartEnd);
         mCount = 0;
     }
 
@@ -87,39 +82,45 @@ public:
     }
 
     Iterator GetEndIter() {
-        return Iterator(mStartEnd.GetPtr());
+        return Iterator(GetPtrFromNode(&mStartEnd));
     }
 
+    static TNode *GetNodeFromPtr(T *pT) {
+        return (TNode *)((u8 *)pT + offset);
+    }
+    static T *GetPtrFromNode(TNode *pN) {
+        return (T *)((u8 *)pN - offset);
+    }
     void insert(T *value) {
-        TNode *node = TNode::GetNodeFromPtr(value);
-        if (mStartEnd.GetPtr() == mStartEnd.mpNext) {
-            node->mpNext = mStartEnd.GetPtr();
-            node->mpPrev = mStartEnd.GetPtr();
+        TNode *node = GetNodeFromPtr(value);
+        if (GetPtrFromNode(&mStartEnd) == mStartEnd.mpNext) {
+            node->mpNext = GetPtrFromNode(&mStartEnd);
+            node->mpPrev = GetPtrFromNode(&mStartEnd);
             mStartEnd.mpNext = value;
             mStartEnd.mpPrev = value;
             mCount++;
         } else {
             node->mpPrev = mStartEnd.mpPrev;
-            node->mpNext = mStartEnd.GetPtr();
-            TNode::GetNodeFromPtr(mStartEnd.mpPrev)->mpNext = value;
+            node->mpNext = GetPtrFromNode(&mStartEnd);
+            GetNodeFromPtr(mStartEnd.mpPrev)->mpNext = value;
             mStartEnd.mpPrev = value;
             mCount++;
         }
     }
 
     void remove(T *value) {
-        TNode *node = TNode::GetNodeFromPtr(value);
+        TNode *node = GetNodeFromPtr(value);
         T *next = reinterpret_cast<T *>(node->mpNext);
-        if (mStartEnd.GetPtr() == node->mpPrev) {
+        if (GetPtrFromNode(&mStartEnd) == node->mpPrev) {
             this->mStartEnd.mpNext = next;
         } else {
-            TNode::GetNodeFromPtr(node->mpPrev)->mpNext = next;
+            GetNodeFromPtr(node->mpPrev)->mpNext = next;
         }
 
-        if (mStartEnd.GetPtr() == node->mpNext) {
+        if (GetPtrFromNode(&mStartEnd) == node->mpNext) {
             this->mStartEnd.mpPrev = node->mpPrev;
         } else {
-            TNode::GetNodeFromPtr(node->mpNext)->mpPrev = node->mpPrev;
+            GetNodeFromPtr(node->mpNext)->mpPrev = node->mpPrev;
         }
         node->mpPrev = nullptr;
         node->mpNext = nullptr;

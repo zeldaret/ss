@@ -70,7 +70,7 @@ class dAcBase_c : public dBase_c {
 public:
     /* 0x68 */ mHeapAllocator_c heap_allocator;
     /* 0x84 */ ObjInfo *obj_info;
-    /* 0x88 */ TList<SoundInfo> sound_list;
+    /* 0x88 */ TList<SoundInfo, offsetof(SoundInfo, mLink)> sound_list;
     /* 0x94 */ SoundSource *sound_source;
     /* 0x98 */ mVec3_c *obj_pos;
     /* 0x9C */ mVec3_c pos_copy;
