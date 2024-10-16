@@ -15,7 +15,7 @@ bool dAcOJunkRep_c::loadMdl(m3d::smdl_c &mdl, const char *name) {
 }
 
 bool dAcOJunkRep_c::getState() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(0x143) == 1;
+    return StoryflagManager::sInstance->getCounterOrFlag(0x143) == 1;
 }
 
 bool dAcOJunkRep_c::createHeap() {

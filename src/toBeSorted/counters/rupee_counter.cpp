@@ -28,7 +28,7 @@ struct WalletStruct {
     };
     const WalletStruct *wallet = &wallet_definitions[3];
     for (; i < 4; i++, wallet--) {
-        if (ItemFlagManager::sInstance->getFlag(wallet->flag)) {
+        if (ItemflagManager::sInstance->getFlag(wallet->flag)) {
             return wallet->capacity;
         }
     }

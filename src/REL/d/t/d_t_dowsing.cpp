@@ -48,21 +48,21 @@ int dTgDowsing_c::draw() {
 
 bool dTgDowsing_c::checkDowsing() const {
     if (!((mUntriggerStoryFlag == 0 || mUntriggerStoryFlag >= 0x7FF ||
-           !StoryFlagManager::sInstance->getCounterOrFlag(mUntriggerStoryFlag)) &&
+           !StoryflagManager::sInstance->getCounterOrFlag(mUntriggerStoryFlag)) &&
           (mTriggerStoryFlag == 0 || mTriggerStoryFlag >= 0x7FF ||
-           StoryFlagManager::sInstance->getCounterOrFlag(mTriggerStoryFlag)))) {
+           StoryflagManager::sInstance->getCounterOrFlag(mTriggerStoryFlag)))) {
         return false;
     }
 
     switch (mDowsingOption) {
         case TRIAL_0:
-            return ItemFlagManager::sInstance->getFlag(187) && !StoryFlagManager::sInstance->getCounterOrFlag(93);
+            return ItemflagManager::sInstance->getFlag(187) && !StoryflagManager::sInstance->getCounterOrFlag(93);
         case TRIAL_1:
-            return ItemFlagManager::sInstance->getFlag(188) && !StoryFlagManager::sInstance->getCounterOrFlag(97);
+            return ItemflagManager::sInstance->getFlag(188) && !StoryflagManager::sInstance->getCounterOrFlag(97);
         case TRIAL_2:
-            return ItemFlagManager::sInstance->getFlag(189) && !StoryFlagManager::sInstance->getCounterOrFlag(98);
+            return ItemflagManager::sInstance->getFlag(189) && !StoryflagManager::sInstance->getCounterOrFlag(98);
         case TRIAL_3:
-            return ItemFlagManager::sInstance->getFlag(193) && !StoryFlagManager::sInstance->getCounterOrFlag(99);
+            return ItemflagManager::sInstance->getFlag(193) && !StoryflagManager::sInstance->getCounterOrFlag(99);
         case PROPELLER:         return DowsingTarget::hasPropellerDowsing();
         case WATER_BASIN:       return DowsingTarget::hasWaterBasinDowsing();
         case CRYSTAL_BALL:      return DowsingTarget::hasCrystalBallDowsing();
