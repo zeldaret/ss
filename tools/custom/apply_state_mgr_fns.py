@@ -52,7 +52,7 @@ sStateMgr_c = Vtable(
     lambda name: [
         None,
         None,
-        "__dt__" + L(["sFStateMgr_c<", L(name), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv",
+        "__dt__" + L(["sStateMgr_c<", L(name), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv",
         # the rest are dupes
     ]
 )
@@ -128,6 +128,8 @@ def parse_data(file):
                         i += 1
                         if new_name is not None:
                             old_name = lines[i].split(" ")[-1]
+                            if old_name.startswith('"') and old_name.endswith('"'):
+                                old_name = old_name[1:-1]
                             renames.append((old_name, new_name))
                     break
         i += 1
@@ -142,7 +144,8 @@ def main():
 
     sym_text = pathlib.Path(sym_file).read_text()
     for (old, new) in renames:
-        sym_text = sym_text.replace(old + " = .text", new + " = .text")
+        if old != new:
+            sym_text = sym_text.replace(old + " = .text", new + " = .text")
 
     pathlib.Path(sym_file).write_text(sym_text)
 

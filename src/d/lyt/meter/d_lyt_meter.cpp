@@ -241,6 +241,22 @@ bool dLytMeter2Button_c::LytMeter0x14() {
     }
 }
 
+void dLytMeterParts_c::initializeState_Invisible() {}
+void dLytMeterParts_c::executeState_Invisible() {}
+void dLytMeterParts_c::finalizeState_Invisible() {}
+
+void dLytMeterParts_c::initializeState_In() {}
+void dLytMeterParts_c::executeState_In() {}
+void dLytMeterParts_c::finalizeState_In() {}
+
+void dLytMeterParts_c::initializeState_Visible() {}
+void dLytMeterParts_c::executeState_Visible() {}
+void dLytMeterParts_c::finalizeState_Visible() {}
+
+void dLytMeterParts_c::initializeState_Out() {}
+void dLytMeterParts_c::executeState_Out() {}
+void dLytMeterParts_c::finalizeState_Out() {}
+
 void floats() {
     32.0f;
     1.0f;
