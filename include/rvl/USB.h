@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include "rvl/USB/usb.h"
+#include <rvl/USB/usb.h>
 
 #ifdef __cplusplus
 }

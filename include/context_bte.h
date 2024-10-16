@@ -1,7 +1,7 @@
 #ifndef CONTEXT_BTE_H
 #define CONTEXT_BTE_H
 
-#include <MSL_C/stdint.h>
+#include <stdint.h>
 
 /* Contains the context of the BTE library that the WPAD library needs to
  * compile.
@@ -743,7 +743,11 @@ typedef struct {
 ** has detected that the controller status has changed. This asynchronous event
 ** is enabled/disabled by calling BTM_RegisterForDeviceStatusNotif().
 */
-enum { BTM_DEV_STATUS_UP, BTM_DEV_STATUS_DOWN, BTM_DEV_STATUS_CMD_TOUT };
+enum {
+    BTM_DEV_STATUS_UP,
+    BTM_DEV_STATUS_DOWN,
+    BTM_DEV_STATUS_CMD_TOUT
+};
 typedef UINT8 tBTM_DEV_STATUS;
 
 typedef void(tBTM_DEV_STATUS_CB)(tBTM_DEV_STATUS status);
@@ -947,8 +951,10 @@ tBTM_STATUS BTM_WritePageTimeout(UINT16 timeout);
 void BTM_SetDefaultLinkPolicy(UINT16 settings);
 void BTM_SetDefaultLinkSuperTout(UINT16 timeout);
 
-BOOLEAN BTM_SecAddDevice(BD_ADDR bd_addr, DEV_CLASS dev_class, BD_NAME bd_name, BD_FEATURES features,
-    UINT32 trusted_mask[], LINK_KEY link_key);
+BOOLEAN BTM_SecAddDevice(
+    BD_ADDR bd_addr, DEV_CLASS dev_class, BD_NAME bd_name, BD_FEATURES features, UINT32 trusted_mask[],
+    LINK_KEY link_key
+);
 
 void *GKI_getbuf(UINT16 size);
 

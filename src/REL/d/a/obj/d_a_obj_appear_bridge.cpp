@@ -1,7 +1,9 @@
-#include <d/a/d_a_player.h>
-#include <d/a/obj/d_a_obj_appear_bridge.h>
-#include <d/col/bg/d_bg_s.h>
-#include <toBeSorted/area_utils.h>
+#include "d/a/obj/d_a_obj_appear_bridge.h"
+
+#include "d/a/d_a_player.h"
+#include "d/col/bg/d_bg_s.h"
+#include "toBeSorted/area_utils.h"
+#include "toBeSorted/room_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_APPEAR_BRIDGE, dAcOappearBridge_c, fProfile::OBJ_APPEAR_BRIDGE, 0x01FC, 0, 6);
 

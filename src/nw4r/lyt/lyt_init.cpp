@@ -1,4 +1,4 @@
-#include <rvl/OS.h>
+#include "rvl/OS.h" // IWYU pragma: export
 namespace {
 const char *NW4R_LYT_Version_ = "<< NW4R    - LYT \tfinal   build: Mar 15 2010 02:17:33 (0x4302_158) >>";
 }

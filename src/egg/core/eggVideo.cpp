@@ -1,7 +1,8 @@
-#include <egg/core/eggVideo.h>
-#include <rvl/OS/OSHardware.h>
-#include <rvl/OS/OSTime.h>
-#include <rvl/SC/scapi.h>
+#include "egg/core/eggVideo.h"
+
+#include "rvl/OS/OSHardware.h"
+#include "rvl/OS/OSTime.h"
+#include "rvl/SC/scapi.h"
 
 namespace {
 

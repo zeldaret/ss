@@ -1,8 +1,10 @@
 #ifndef EGG_STATE_GX_H
 #define EGG_STATE_GX_H
 
+#include "rvl/GX.h" // IWYU pragma: export
+
 #include <common.h>
-#include <rvl/GX.h>
+
 
 namespace EGG {
 

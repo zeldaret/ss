@@ -1,14 +1,17 @@
 #ifndef RVL_SDK_OS_HARDWARE_H
 #define RVL_SDK_OS_HARDWARE_H
-#include "rvl/OS/OSAddress.h"
+
+// #include "rvl/OS/OSAddress.h"
 #include "rvl/OS/OSThread.h"
+
 #include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-typedef struct OSContext;
-typedef struct OSExecParams;
+typedef struct OSContext OSContext;
+typedef struct OSExecParams OSExecParams;
 
 /**
  * For more details, see:
@@ -18,29 +21,29 @@ typedef struct OSExecParams;
  */
 
 // Derive offsets for use with OSAddress functions
-#define __DEF_ADDR_OFFSETS(name, addr) \
-    static const u32 OS_PHYS_##name = (addr)-0x80000000; \
-    static const u32 OS_CACHED_##name = (addr); \
+#define __DEF_ADDR_OFFSETS(name, addr)                                                                                 \
+    static const u32 OS_PHYS_##name = (addr)-0x80000000;                                                               \
+    static const u32 OS_CACHED_##name = (addr);                                                                        \
     static const u32 OS_UNCACHED_##name = (addr) + (0xC0000000 - 0x80000000);
 
 // Define a global variable in *CACHED* MEM1.
 // Can be accessed directly or with OSAddress functions.
-#define OS_DEF_GLOBAL_VAR(type, name, addr) \
-    /* Memory-mapped value for direct access */ \
-    type OS_##name : (addr); \
+#define OS_DEF_GLOBAL_VAR(type, name, addr)                                                                            \
+    /* Memory-mapped value for direct access */                                                                        \
+    type OS_##name AT_ADDRESS(addr);                                                                                   \
     __DEF_ADDR_OFFSETS(name, addr)
 
 // Define a global array in *CACHED* MEM1.
 // Can be accessed directly or with OSAddress functions.
-#define OS_DEF_GLOBAL_ARR(type, name, arr, addr) \
-    /* Memory-mapped value for direct access */ \
-    type OS_##name arr : (addr); \
+#define OS_DEF_GLOBAL_ARR(type, name, arr, addr)                                                                       \
+    /* Memory-mapped value for direct access */                                                                        \
+    type OS_##name arr AT_ADDRESS(addr);                                                                               \
     __DEF_ADDR_OFFSETS(name, addr)
 
 // Define an global variable in the hardware-register range.
-#define OS_DEF_HW_REG(type, name, addr) \
-    /* Memory-mapped value for direct access */ \
-    type OS_##name : (addr);
+#define OS_DEF_HW_REG(type, name, addr)                                                                                \
+    /* Memory-mapped value for direct access */                                                                        \
+    type OS_##name AT_ADDRESS(addr);
 
 typedef struct OSBootInfo {
     u32 appName;    // at 0x0
@@ -114,7 +117,7 @@ OS_DEF_GLOBAL_VAR(u32, CPU_CLOCK_SPEED,                    0x800000FC);
 // clang-format off
 OS_DEF_GLOBAL_ARR(void*, EXCEPTION_TABLE, [15],          0x80003000);
 OS_DEF_GLOBAL_VAR(void*, INTR_HANDLER_TABLE,             0x80003040);
-OS_DEF_GLOBAL_ARR(volatile s32, EXI_800030C0, [],        0x800030C0);
+OS_DEF_GLOBAL_ARR(volatile s32, EXI_800030C0, [2],        0x800030C0);
 OS_DEF_GLOBAL_VAR(void*, FIRST_REL,                      0x800030C8);
 OS_DEF_GLOBAL_VAR(void*, LAST_REL,                       0x800030CC);
 OS_DEF_GLOBAL_VAR(void*, REL_NAME_TABLE,                 0x800030D0);
@@ -154,9 +157,9 @@ OS_DEF_GLOBAL_ARR(u8, SC_PRDINFO, [0x100],               0x80003800);
 // clang-format on
 
 /**
- * PI hardware globals
+ * PI hardware globals - Number in arr is just to satisfy typing
  */
-volatile u32 PI_HW_REGS[] : 0xCC003000;
+volatile u32 PI_HW_REGS[10] AT_ADDRESS(0xCC003000);
 typedef enum {
     PI_INTSR,    //!< 0xCC003000
     PI_INTMR,    //!< 0xCC003004
@@ -207,10 +210,10 @@ typedef enum {
 #define PI_INTMR_ACR (1 << 14)
 
 /**
- * MI Hardware Registers
+ * MI Hardware Registers - Arr size just to satisfy typing
  * https://www.gc-forever.com/yagcd/chap5.html#sec5.5
  */
-volatile u16 MI_HW_REGS[] : 0xCC004000;
+volatile u16 MI_HW_REGS[22] AT_ADDRESS(0xCC004000);
 typedef enum {
     MI_PAGE_MEM0_H, //!< 0xCC004000
     MI_PAGE_MEM0_L, //!< 0xCC004002

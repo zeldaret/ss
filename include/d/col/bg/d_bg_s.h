@@ -143,7 +143,7 @@ private:
     static dBgS *spInstance;
     static const void *spSolidMatTex[31];
     static const void *spScrollMapTex[5];
-    typedef TList<MapLineSegment, offsetof(MapLineSegment, mLink)> MapLineList;
+    typedef TList<MapLineSegment, 8> MapLineList;
 
 public:
     /* 0x2EF8 */ EGG::CpuTexture *mMapTexture;

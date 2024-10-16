@@ -106,7 +106,7 @@ void *List_GetNth(const List *list, u16 n) {
     void *object;
     int c;
 
-    for (c = 0, object = nullptr; object = List_GetNext(list, object); c++) {
+    for (c = 0, object = nullptr; (object = List_GetNext(list, object)); c++) {
         if (n == c) {
             return object;
         }

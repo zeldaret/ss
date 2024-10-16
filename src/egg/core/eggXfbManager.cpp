@@ -1,8 +1,10 @@
+#include "egg/core/eggXfbManager.h"
+
+#include "egg/core/eggXfb.h"
+#include "nw4r/db/db_directPrint.h"
+#include "rvl/VI.h" // IWYU pragma: export
+
 #include <common.h>
-#include <egg/core/eggXfb.h>
-#include <egg/core/eggXfbManager.h>
-#include <nw4r/db/db_directPrint.h>
-#include <rvl/VI/vi.h>
 
 namespace EGG {
 

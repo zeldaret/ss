@@ -1,5 +1,7 @@
-#include <d/a/d_a_player.h>
-#include <d/a/obj/d_a_obj_ring.h>
+#include "d/a/obj/d_a_obj_ring.h"
+
+#include "d/a/d_a_player.h"
+#include "nw4r/g3d/g3d_resfile.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_RING, dAcOring_c, fProfile::OBJ_RING, 0x00f2, 0, 0x103);
 

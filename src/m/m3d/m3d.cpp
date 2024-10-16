@@ -1,19 +1,17 @@
-#include <egg/gfx/eggDrawGX.h>
-#include <egg/gfx/eggGfxEngine.h>
-#include <egg/gfx/eggScreen.h>
-#include <egg/gfx/eggStateGX.h>
+#include "m/m3d/m3d.h"
 
-#include <nw4r/g3d/g3d_camera.h>
-#include <nw4r/g3d/g3d_init.h>
-#include <nw4r/g3d/g3d_resmat.h>
-#include <nw4r/g3d/g3d_resmdl.h>
-#include <nw4r/g3d/g3d_state.h>
-
-#include <m/m3d/m3d.h>
-#include <m/m_heap.h>
-#include <m/m_video.h>
-
-#include <rvl/GX.h>
+#include "egg/gfx/eggDrawGX.h"
+#include "egg/gfx/eggGfxEngine.h"
+#include "egg/gfx/eggScreen.h"
+#include "egg/gfx/eggStateGX.h"
+#include "m/m_heap.h"
+#include "m/m_video.h"
+#include "nw4r/g3d/g3d_camera.h"
+#include "nw4r/g3d/g3d_init.h"
+#include "nw4r/g3d/g3d_resmat.h"
+#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/g3d_state.h"
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace m3d {
 
@@ -40,8 +38,9 @@ bool create(EGG::Heap *pHeap, u32 maxNumChildren, u32 maxNumScnObj, u32 numLight
     nw4r::g3d::G3dInit(true);
     nw4r::g3d::G3DState::SetRenderModeObj(*mVideo::m_video->pRenderMode);
     u32 allocedSize;
-    internal::l_scnRoot_p = nw4r::g3d::ScnRoot::Construct(internal::l_allocator_p, &allocedSize, maxNumChildren,
-            maxNumScnObj, numLightObj, numLightSet);
+    internal::l_scnRoot_p = nw4r::g3d::ScnRoot::Construct(
+        internal::l_allocator_p, &allocedSize, maxNumChildren, maxNumScnObj, numLightObj, numLightSet
+    );
     if (internal::l_scnRoot_p == nullptr) {
         delete internal::l_allocator_p;
         internal::l_allocator_p = nullptr;
@@ -50,8 +49,10 @@ bool create(EGG::Heap *pHeap, u32 maxNumChildren, u32 maxNumScnObj, u32 numLight
     return true;
 }
 
-bool create(EGG::Heap *pHeap, GXPixelFmt pxlFmt, GXColor clearColor, u32 maxNumChildren, u32 maxNumScnObj,
-        u32 numLightObj, u32 numLightSet, u32 numLightMgr, u32 numFogMgr) {
+bool create(
+    EGG::Heap *pHeap, GXPixelFmt pxlFmt, GXColor clearColor, u32 maxNumChildren, u32 maxNumScnObj, u32 numLightObj,
+    u32 numLightSet, u32 numLightMgr, u32 numFogMgr
+) {
     if (internal::l_lightMgr_pp && internal::l_fogMgr_pp) {
         return false;
     }
@@ -94,7 +95,7 @@ bool createLightMgr(EGG::Heap *pHeap, u16 p2, u16 p3, u8 p4, bool bCreateFogMgr,
     using namespace internal;
 
     if (!l_lightMgr_pp || (idx < 0 || idx >= l_numLightMgr || idx >= l_numFogMgr) ||
-            (l_lightMgr_pp[idx] || l_fogMgr_pp[idx])) {
+        (l_lightMgr_pp[idx] || l_fogMgr_pp[idx])) {
         return false;
     }
 
@@ -115,12 +116,9 @@ bool createLightMgr(EGG::Heap *pHeap, u16 p2, u16 p3, u8 p4, bool bCreateFogMgr,
     u8 *output;
     switch (input % 8) {
         do {
-        case 0:
-            *output++ = input;
-        case 1:
-            *output++ = input;
-        case 2:
-            *output++ = input;
+            case 0: *output++ = input;
+            case 1: *output++ = input;
+            case 2: *output++ = input;
         } while (true);
     }
 }

@@ -1,9 +1,11 @@
-#include <MSL_C/string.h>
-#include <nw4r/db/db_directPrint.h>
-#include <nw4r/db/db_exception.h>
-#include <nw4r/db/db_mapFile.h>
-#include <rvl/GX.h>
-#include <rvl/VI.h>
+#include "nw4r/db/db_exception.h"
+
+#include "nw4r/db/db_directPrint.h"
+#include "nw4r/db/db_mapFile.h"
+#include "rvl/GX.h" // IWYU pragma: export
+#include "rvl/VI.h" // IWYU pragma: export
+
+#include <string.h>
 
 namespace nw4r {
 namespace db {
@@ -25,28 +27,28 @@ struct ExceptionStruct {
 static OSMessage sMessageBuffer[1];
 static struct ExceptionStruct sException;
 
-static u8 sThreadBuffer[0x4000] ALIGN(0x20);
+static u8 sThreadBuffer[0x4000] ALIGN_DECL(0x20);
 
 extern "C" u32 lbl_80574960;
 
 const char *CPU_EXP_NAME[] = {
-        "SYSTEM RESET",
-        "MACHINE CHECK",
-        "DSI",
-        "ISI",
-        "EXTERNAL INTERRUPT",
-        "ALIGNMENT",
-        "PROGRAM",
-        "FLOATING POINT",
-        "DECREMENTER",
-        "SYSTEM CALL",
-        "TRACE",
-        "PERFORMACE MONITOR",
-        "BREAK POINT",
-        "SYSTEM INTERRUPT",
-        "THERMAL INTERRUPT",
-        "PROTECTION",
-        "FLOATING POINT",
+    "SYSTEM RESET",
+    "MACHINE CHECK",
+    "DSI",
+    "ISI",
+    "EXTERNAL INTERRUPT",
+    "ALIGNMENT",
+    "PROGRAM",
+    "FLOATING POINT",
+    "DECREMENTER",
+    "SYSTEM CALL",
+    "TRACE",
+    "PERFORMACE MONITOR",
+    "BREAK POINT",
+    "SYSTEM INTERRUPT",
+    "THERMAL INTERRUPT",
+    "PROTECTION",
+    "FLOATING POINT",
 };
 
 void *RunThread_(void *);
@@ -342,8 +344,10 @@ void ShowMainInfo_(u16 error, const OSContext *context, u32 dsisr, u32 dar) {
 void ShowGPR_(const OSContext *ctx) {
     Exception_Printf_("-------------------------------- GPR\n");
     for (int i = 0; i < 10; i++) {
-        Exception_Printf_("R%02d:%08XH  R%02d:%08XH  R%02d:%08XH\n", i, ctx->gprs[i], i + 11, ctx->gprs[i + 11], i + 22,
-                ctx->gprs[i + 22]);
+        Exception_Printf_(
+            "R%02d:%08XH  R%02d:%08XH  R%02d:%08XH\n", i, ctx->gprs[i], i + 11, ctx->gprs[i + 11], i + 22,
+            ctx->gprs[i + 22]
+        );
     }
     Exception_Printf_("R%02d:%08XH  R%02d:%08XH\n", 10, ctx->gprs[10], 21, ctx->gprs[21]);
 }

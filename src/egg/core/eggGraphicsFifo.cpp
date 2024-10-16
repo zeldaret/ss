@@ -1,6 +1,7 @@
-#include <egg/core/eggGraphicsFifo.h>
-#include <egg/core/eggHeap.h>
-#include <rvl/GX.h>
+#include "egg/core/eggGraphicsFifo.h"
+
+#include "egg/core/eggHeap.h"
+#include "rvl/GX.h" // IWYU pragma: export
 
 extern "C" void GXGetGPStatus(GXBool *overhi, GXBool *underlow, GXBool *readIdle, GXBool *cmdIdle, GXBool *brkpt);
 

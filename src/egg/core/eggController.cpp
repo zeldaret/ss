@@ -1,12 +1,13 @@
 
 #include "egg/core/eggController.h"
 
-#include "MSL_C/string.h"
 #include "egg/core/eggAllocator.h"
 #include "egg/core/eggExpHeap.h"
 #include "egg/core/eggSystem.h"
 #include "egg/math/eggMath.h"
-#include "rvl/VI.h"
+#include "rvl/VI.h" // IWYU pragma: export
+
+#include <string.h>
 
 EGG::NullController null_controller;
 namespace EGG {

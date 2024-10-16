@@ -1,11 +1,15 @@
 
 #include "nw4r/lyt/lyt_arcResourceAccessor.h"
+
+#include "common.h"
 #include "nw4r/ut/ut_Font.h"
+
+#include <extras.h>
 
 namespace {
 
 // FindNameResource__37@unnamed@lyt_arcResourceAccessor_cpp@FP9ARCHandlePCc
-DECOMP_DONT_INLINE s32 FindNameResource(ARCHandle *pArcHandle, const char *resName) {
+DONT_INLINE s32 FindNameResource(ARCHandle *pArcHandle, const char *resName) {
     s32 entryNum = -1;
     ARCDir dir;
     ARCDirEntry dirEntry;

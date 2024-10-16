@@ -1,11 +1,11 @@
 #ifndef NW4R_UT_TEXT_WRITER_BASE_H
 #define NW4R_UT_TEXT_WRITER_BASE_H
-#include <MSL_C/stdio.h>
-#include <MSL_C/wchar.h>
 #include <nw4r/math.h>
 #include <nw4r/types_nw4r.h>
 #include <nw4r/ut/ut_CharWriter.h>
 #include <nw4r/ut/ut_TagProcessorBase.h>
+#include <stdio.h>
+#include <wchar.h>
 
 namespace nw4r {
 namespace ut {

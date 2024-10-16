@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include "rvl/DB/db.h"
+#include <rvl/DB/db.h>
 
 #ifdef __cplusplus
 }

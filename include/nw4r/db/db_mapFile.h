@@ -1,7 +1,7 @@
 #ifndef NW4R_DB_MAPFILE_H
 #define NW4R_DB_MAPFILE_H
 
-#include <rvl/OS.h>
+#include "rvl/OS.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace db {

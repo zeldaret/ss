@@ -1,22 +1,35 @@
+# IDE folders
+.idea/
+.vs/
+
+# Caches
 __pycache__
-.vscode/c_cpp_properties.json
+.mypy_cache
+.cache/
 
-# game files
+# Original files
 orig/*/*
-!orig/SOUE01/README.md
 !orig/*/.gitkeep
+*.dol
+*.rel
+*.elf
+*.o
+*.map
+*.MAP
 
-# ninja stuff
-build
+# Build files
+build/
+.ninja_*
 build.ninja
-.ninja_deps
-.ninja_log
 
-# tools
-tools/dtk
-tools/mwcc_compiler/*
-!tools/mwcc_compiler/.gitkeep
-/tools/objdiff.exe
+# decompctx output
+ctx.*
+*.ctx
 
+# Generated configs
 objdiff.json
-ctx.c
+compile_commands.json
+
+# Miscellaneous
+/*.txt
+*.exe

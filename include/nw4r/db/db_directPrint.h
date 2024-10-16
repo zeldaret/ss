@@ -1,9 +1,11 @@
 #ifndef NW4R_DB_DIRECT_PRINT_H
 #define NW4R_DB_DIRECT_PRINT_H
 
-#include <Runtime.PPCEABI.H/__va_arg.h>
+#include "rvl/GX.h" // IWYU pragma: export
+
+#include <__va_arg.h>
 #include <common.h>
-#include <rvl/GX.h>
+
 
 namespace nw4r {
 
@@ -37,8 +39,10 @@ struct YUVColorInfo {
 /* 80434520 */ void DirectPrint_ChangeXfb(void *framBuf, u16 width, u16 height);
 /* 80434560 */ void DirectPrint_StoreCache();
 /* 80434580 */ void DirectPrint_Printf(int posh, int posv, const char *format, ...);
-/* 80434650 */ void DirectPrint_printfsub(int posh, int posv, const char *format,
-        __va_list_struct *args); // ????? Not from a symbol, needs the arg?
+/* 80434650 */ void DirectPrint_printfsub(
+    int posh, int posv, const char *format,
+    __va_list_struct *args
+); // ????? Not from a symbol, needs the arg?
 /*          */ void DirectPrint_Printf(int posh, int posv, bool turnOver, const char *format, ...);
 /*          */ void DirectPrint_DrawString(int posh, int posv, const char *format, ...);
 /* 804346c0 */ void DirectPrint_DrawString(int posh, int posv, bool turnOver, const char *format, ...);
@@ -46,8 +50,9 @@ struct YUVColorInfo {
 /* inlined  */ void DirectPrint_SetColor(u8 r, u8 g, u8 b);
 /*          */ GXColor DirectPrint_GetColor();
 namespace detail {
-/* inlined  */ void DirectPrint_DrawStringToXfb(int posh, int posv, const char *format, __va_list_struct *args,
-        bool turnover, bool backErase);
+/* inlined  */ void DirectPrint_DrawStringToXfb(
+    int posh, int posv, const char *format, __va_list_struct *args, bool turnover, bool backErase
+);
 
 /* local    */ void WaitVIRetrace_();
 

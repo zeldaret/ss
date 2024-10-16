@@ -1,8 +1,8 @@
-#include <egg/core/eggAsyncDisplay.h>
-#include <egg/core/eggXfbManager.h>
-#include <egg/math/eggMatrix.h>
-#include <rvl/GX/GXHardware.h>
-#include <rvl/GX/GXTexture.h>
+#include "egg/core/eggAsyncDisplay.h"
+
+#include "egg/core/eggXfbManager.h"
+#include "egg/math/eggMatrix.h"
+#include "rvl/GX/GXTexture.h"
 
 // TODO: Find the proper place for this symbol? - Ghidra has it literally unused
 extern "C" static EGG::Display *spSelector;
@@ -10,7 +10,7 @@ extern "C" static EGG::Display *spSelector;
 namespace {
 static GXTexObj clear_z_tobj;
 // clang-format off
-u8 clear_z_TX[64] ALIGN(32) = {
+u8 clear_z_TX[64] ALIGN_DECL(32) = {
     0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
     0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0xFF,
     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,

@@ -1,8 +1,8 @@
 #ifndef NW4R_LYT_TEXMAP_H
 #define NW4R_LYT_TEXMAP_H
 #include "common.h"
-#include <rvl/GX.h>
-#include <rvl/TPL/TPL.h>
+#include "rvl/GX.h" // IWYU pragma: export
+#include "rvl/TPL/TPL.h"
 
 namespace nw4r {
 namespace lyt {
@@ -68,8 +68,8 @@ public:
     void SetNoWrap(TPLPalette *, u32);
     void SetNoWrap(const TPLDescriptor *);
 
-    void SetTexParam(void *pImage, u16 width, u16 height, GXTexFmt format, GXTexWrapMode wrapS, GXTexWrapMode wrapT,
-            bool);
+    void
+    SetTexParam(void *pImage, u16 width, u16 height, GXTexFmt format, GXTexWrapMode wrapS, GXTexWrapMode wrapT, bool);
 
     void *GetImage() const {
         return mpImage;

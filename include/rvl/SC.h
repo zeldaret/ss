@@ -4,9 +4,9 @@
 extern "C" {
 #endif
 
-#include "rvl/SC/scapi.h"
-#include "rvl/SC/scapi_prdinfo.h"
-#include "rvl/SC/scsystem.h"
+#include <rvl/SC/scapi.h>
+#include <rvl/SC/scapi_prdinfo.h>
+#include <rvl/SC/scsystem.h>
 
 #ifdef __cplusplus
 }

@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include "rvl/CNT/cnt.h"
+#include <rvl/CNT/cnt.h>
 
 #ifdef __cplusplus
 }

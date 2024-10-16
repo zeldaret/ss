@@ -1,12 +1,9 @@
 #ifndef NW4R_SND_TASK_MANAGER_H
 #define NW4R_SND_TASK_MANAGER_H
-#include <nw4r/types_nw4r.h>
 
-#include <nw4r/snd/snd_Task.h>
-
-#include <nw4r/ut.h>
-
-#include <rvl/OS.h>
+#include "nw4r/snd/snd_Task.h"
+#include "nw4r/ut.h" // IWYU pragma: export
+#include "rvl/OS.h"  // IWYU pragma: export
 
 namespace nw4r {
 namespace snd {
@@ -23,12 +20,12 @@ public:
     };
 
 public:
-    static TaskManager& GetInstance();
+    static TaskManager &GetInstance();
 
-    void AppendTask(Task* pTask, TaskPriority priority = PRIORITY_MIDDLE);
+    void AppendTask(Task *pTask, TaskPriority priority = PRIORITY_MIDDLE);
 
-    Task* ExecuteTask();
-    void CancelTask(Task* pTask);
+    Task *ExecuteTask();
+    void CancelTask(Task *pTask);
     void CancelAllTask();
 
     void WaitTask();
@@ -37,13 +34,13 @@ public:
 private:
     TaskManager();
 
-    Task* PopTask();
-    Task* GetNextTask();
-    Task* GetNextTask(TaskPriority priority, bool remove);
+    Task *PopTask();
+    Task *GetNextTask();
+    Task *GetNextTask(TaskPriority priority, bool remove);
 
 private:
     TaskList mTaskList[PRIORITY_MAX]; // at 0x0
-    Task* volatile mCurrentTask;      // at 0x24
+    Task *volatile mCurrentTask;      // at 0x24
     bool mCancelWaitTaskFlag;         // at 0x28
     OSThreadQueue mAppendThreadQueue; // at 0x2C
     OSThreadQueue mDoneThreadQueue;   // at 0x34

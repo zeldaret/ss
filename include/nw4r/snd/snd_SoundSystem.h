@@ -1,10 +1,11 @@
 #ifndef NW4R_SND_SOUND_SYSTEM_H
 #define NW4R_SND_SOUND_SYSTEM_H
+#include "nw4r/snd/snd_AxManager.h"
+#include "nw4r/snd/snd_RemoteSpeakerManager.h"
+#include "nw4r/snd/snd_TaskThread.h"
+
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/snd/snd_AxManager.h>
-#include <nw4r/snd/snd_RemoteSpeakerManager.h>
-#include <nw4r/snd/snd_TaskThread.h>
 
 namespace nw4r {
 namespace snd {
@@ -18,18 +19,15 @@ public:
         u32 dvdThreadStackSize;   // at 0xC
 
         SoundSystemParam()
-            : soundThreadPriority(DEFAULT_SOUND_THREAD_PRIORITY),
-              soundThreadStackSize(DEFAULT_SOUND_THREAD_STACK_SIZE),
-              dvdThreadPriority(DEFAULT_DVD_THREAD_PRIORITY),
-              dvdThreadStackSize(DEFAULT_DVD_THREAD_STACK_SIZE) {}
+            : soundThreadPriority(DEFAULT_SOUND_THREAD_PRIORITY), soundThreadStackSize(DEFAULT_SOUND_THREAD_STACK_SIZE),
+              dvdThreadPriority(DEFAULT_DVD_THREAD_PRIORITY), dvdThreadStackSize(DEFAULT_DVD_THREAD_STACK_SIZE) {}
     };
 
 public:
     static void InitSoundSystem(s32 soundThreadPrio, s32 dvdThreadPriority);
-    static u32 GetRequiredMemSize(const SoundSystemParam& rParam);
+    static u32 GetRequiredMemSize(const SoundSystemParam &rParam);
 
-    static void InitSoundSystem(const SoundSystemParam& rParam, void* pWork,
-                                u32 workSize);
+    static void InitSoundSystem(const SoundSystemParam &rParam, void *pWork, u32 workSize);
 
     static void ShutdownSoundSystem();
     static void WaitForResetReady();
@@ -49,11 +47,11 @@ public:
         detail::AxManager::GetInstance().SetMasterVolume(volume, frame);
     }
 
-    static RemoteSpeaker& GetRemoteSpeaker(int i) {
+    static RemoteSpeaker &GetRemoteSpeaker(int i) {
         return detail::RemoteSpeakerManager::GetInstance().GetRemoteSpeaker(i);
     }
 
-    static void AppendEffect(AuxBus bus, FxBase* pFx) {
+    static void AppendEffect(AuxBus bus, FxBase *pFx) {
         detail::AxManager::GetInstance().AppendEffect(bus, pFx);
     }
     static void ClearEffect(AuxBus bus, int frame) {

@@ -1,5 +1,7 @@
+#include "rvl/OS.h" // IWYU pragma: export
+
 #include <s/s_Crc.h>
-#include <rvl/OS.h>
+
 
 namespace sCrc {
 

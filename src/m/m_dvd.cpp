@@ -1,12 +1,14 @@
-#include <MSL_C/string.h>
-#include <egg/core/eggArchive.h>
-#include <egg/core/eggDvdFile.h>
-#include <egg/core/eggDvdRipper.h>
-#include <egg/core/eggHeap.h>
-#include <egg/core/eggStreamDecomp.h>
-#include <m/m_dvd.h>
-#include <m/m_heap.h>
-#include <rvl/DVD.h>
+#include "m/m_dvd.h"
+
+#include "egg/core/eggArchive.h"
+#include "egg/core/eggDvdFile.h"
+#include "egg/core/eggDvdRipper.h"
+#include "egg/core/eggHeap.h"
+#include "egg/core/eggStreamDecomp.h"
+#include "m/m_heap.h"
+#include "rvl/DVD.h" // IWYU pragma: export
+
+#include <string.h>
 
 static int ConvertPathToEntrynum(const char *path, u8 *outType);
 
@@ -345,8 +347,7 @@ mDvd_callback_c *mDvd_callback_c::create(dvdReadCallback cb, void *cbData) {
 /** 802ef650 */
 mDvd_callback_c *mDvd_callback_c::createOrFail(dvdReadCallback cb, void *cbData) {
     mDvd_callback_c *cmd = mDvd_callback_c::create(cb, cbData);
-    while (!cmd) {
-    }
+    while (!cmd) {}
     return cmd;
 }
 
@@ -574,8 +575,7 @@ mDvd_toMainRam_arc_c::create(EGG::Archive *arc, const char *path, int mountDirec
 mDvd_toMainRam_arc_c *
 mDvd_toMainRam_arc_c::createOrFail(EGG::Archive *arc, const char *path, int mountDirection, EGG::Heap *heap) {
     mDvd_toMainRam_arc_c *cmd = mDvd_toMainRam_arc_c::create(arc, path, mountDirection, heap);
-    while (!cmd) {
-    }
+    while (!cmd) {}
     return cmd;
 }
 
@@ -615,8 +615,7 @@ mDvd_toMainRam_normal_c *mDvd_toMainRam_normal_c::create(const char *path, int m
 /** 802f0030 */
 mDvd_toMainRam_normal_c *mDvd_toMainRam_normal_c::createOrFail(const char *path, int mountDirection, EGG::Heap *heap) {
     mDvd_toMainRam_normal_c *cmd = mDvd_toMainRam_normal_c::create(path, mountDirection, heap);
-    while (!cmd) {
-    }
+    while (!cmd) {}
     return cmd;
 }
 

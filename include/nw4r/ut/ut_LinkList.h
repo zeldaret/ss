@@ -13,7 +13,7 @@
  *
  * Use the specified link node (name suffix) for classes with multiple nodes.
  */
-#define NW4R_UT_LIST_TYPEDEF_DECL_EX(T, SUFFIX) \
+#define NW4R_UT_LIST_TYPEDEF_DECL_EX(T, SUFFIX)                                                                        \
     typedef nw4r::ut::LinkList<T, offsetof(T, node##SUFFIX)> T##SUFFIX##List;
 
 /**

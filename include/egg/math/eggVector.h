@@ -1,7 +1,6 @@
 #ifndef EGG_VECTOR_H
 #define EGG_VECTOR_H
 
-#include "MSL_C/float.h"
 #include "egg/math/eggMath.h"
 
 #include <common.h>

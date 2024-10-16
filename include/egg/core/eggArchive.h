@@ -2,8 +2,8 @@
 #define EGG_ARCHIVE_H
 
 #include "egg/core/eggDisposer.h"
-#include "rvl/ARC.h"
-#include "rvl/NAND.h"
+#include "rvl/ARC.h"  // IWYU pragma: export
+#include "rvl/NAND.h" // IWYU pragma: export
 
 #include <common.h>
 

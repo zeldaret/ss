@@ -1,9 +1,8 @@
 #ifndef NW4R_DB_EXCEPTION_H
 #define NW4R_DB_EXCEPTION_H
 
-#include <nw4r/db/db_console.h>
-#include <rvl/OS.h>
-
+#include "nw4r/db/db_console.h"
+#include "rvl/OS.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace db {

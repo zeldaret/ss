@@ -1,7 +1,8 @@
 #ifndef RVL_SDK_DVD_FS_H
 #define RVL_SDK_DVD_FS_H
-#include <rvl/DVD/dvd.h>
-#include <rvl/OS.h>
+#include "rvl/DVD/dvd.h"
+#include "rvl/OS.h" // IWYU pragma: export
+
 #include <common.h>
 
 #ifdef __cplusplus

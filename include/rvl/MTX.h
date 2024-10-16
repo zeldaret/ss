@@ -4,11 +4,11 @@
 extern "C" {
 #endif
 
-#include "rvl/MTX/mtx.h"
-#include "rvl/MTX/mtx44.h"
-#include "rvl/MTX/mtxvec.h"
-#include "rvl/MTX/quat.h"
-#include "rvl/MTX/vec.h"
+#include <rvl/MTX/mtx.h>
+#include <rvl/MTX/mtx44.h>
+#include <rvl/MTX/mtxvec.h>
+#include <rvl/MTX/quat.h>
+#include <rvl/MTX/vec.h>
 
 #ifdef __cplusplus
 }

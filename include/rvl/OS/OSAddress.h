@@ -1,6 +1,8 @@
 #ifndef RVL_SDK_OS_ADDRESS_H
 #define RVL_SDK_OS_ADDRESS_H
+
 #include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -20,4 +22,5 @@ static inline void *OSCachedToPhysical(const void *ofs) {
 #ifdef __cplusplus
 }
 #endif
+
 #endif

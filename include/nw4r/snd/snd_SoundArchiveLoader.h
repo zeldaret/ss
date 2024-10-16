@@ -1,10 +1,8 @@
 #ifndef NW4R_SND_SOUND_ARCHIVE_LOADER_H
 #define NW4R_SND_SOUND_ARCHIVE_LOADER_H
-#include <nw4r/types_nw4r.h>
-
-#include <nw4r/ut.h>
-
-#include <rvl/OS.h>
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut.h" // IWYU pragma: export
+#include "rvl/OS.h"  // IWYU pragma: export
 
 namespace nw4r {
 namespace snd {
@@ -16,7 +14,7 @@ namespace detail {
 
 class FileStreamHandle {
 public:
-    FileStreamHandle(ut::FileStream* pFileStream) : mStream(pFileStream) {}
+    FileStreamHandle(ut::FileStream *pFileStream) : mStream(pFileStream) {}
 
     ~FileStreamHandle() {
         if (mStream != NULL) {
@@ -24,11 +22,11 @@ public:
         }
     }
 
-    ut::FileStream* GetFileStream() {
+    ut::FileStream *GetFileStream() {
         return mStream;
     }
 
-    ut::FileStream* operator->() {
+    ut::FileStream *operator->() {
         return mStream;
     }
 
@@ -37,22 +35,21 @@ public:
     }
 
 private:
-    ut::FileStream* mStream; // at 0x0
+    ut::FileStream *mStream; // at 0x0
 };
 
 class SoundArchiveLoader {
 public:
-    explicit SoundArchiveLoader(const SoundArchive& rArchive);
+    explicit SoundArchiveLoader(const SoundArchive &rArchive);
     ~SoundArchiveLoader();
 
-    void* LoadGroup(u32 id, SoundMemoryAllocatable* pAllocatable,
-                    void** ppWaveBuffer, u32 blockSize);
+    void *LoadGroup(u32 id, SoundMemoryAllocatable *pAllocatable, void **ppWaveBuffer, u32 blockSize);
 
 private:
     mutable OSMutex mMutex;   // at 0x0
-    const SoundArchive& mArc; // at 0x18
+    const SoundArchive &mArc; // at 0x18
     u8 mStreamArea[512];      // at 0x1C
-    ut::FileStream* mStream;  // at 0x21C
+    ut::FileStream *mStream;  // at 0x21C
 };
 
 } // namespace detail

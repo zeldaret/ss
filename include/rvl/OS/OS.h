@@ -2,7 +2,9 @@
 #define RVL_SDK_OS_H
 #include "rvl/OS/OSContext.h"
 #include "rvl/OS/OSExec.h"
+
 #include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

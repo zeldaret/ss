@@ -1,9 +1,11 @@
-#include <c/c_lib.h>
-#include <d/a/d_a_player.h>
-#include <d/d_pad.h>
-#include <toBeSorted/attention.h>
-#include <toBeSorted/arc_managers/oarc_manager.h>
-#include <toBeSorted/event_manager.h>
+#include "toBeSorted/attention.h"
+
+#include "c/c_lib.h"
+#include "d/a/d_a_player.h"
+#include "d/d_heap.h"
+#include "d/d_pad.h"
+#include "toBeSorted/arc_managers/oarc_manager.h"
+#include "toBeSorted/event_manager.h"
 
 mVec3_c attnVectors[4];
 
@@ -29,13 +31,9 @@ public:
     f32 field_0x14;
 };
 
-void UnkAttnClass::init() {
+void UnkAttnClass::init() {}
 
-}
-
-void UnkAttnClass::remove() {
-    
-}
+void UnkAttnClass::remove() {}
 
 UnkAttnClass::UnkAttnClass()
     : field_0x00(0), field_0x08(field_0x00 | 8), field_0x0A(300), field_0x0C(30), field_0x10(30), field_0x12(10),
@@ -66,7 +64,6 @@ bool AttentionManager::create() {
         mGroups[i].getOtherPool()->clear();
     }
 
-
     mModels.field_0xA5C = 0;
     mModels.mCurrentTargetInfoIdx = 0;
     mModels.mState = NONE;
@@ -90,8 +87,10 @@ bool AttentionManager::create() {
     return success;
 }
 
-static const CursorStruct s_Cursors[2] = {{"ZcursorA", "ZcursorAInOut_00", "ZcursorALoop_00", nullptr},
-        {"ZcursorB", "ZcursorBIn_00", "ZcursorBLoop_00", "ZcursorBIn_00"}};
+static const CursorStruct s_Cursors[2] = {
+    {"ZcursorA", "ZcursorAInOut_00", "ZcursorALoop_00",         nullptr},
+    {"ZcursorB",    "ZcursorBIn_00", "ZcursorBLoop_00", "ZcursorBIn_00"}
+};
 
 bool AttentionManager::createHeap() {
     mModels.mResFile = OarcManager::sInstance->getMdlFromArc2("UI_Data");
@@ -194,7 +193,8 @@ bool AttentionManager::switchTarget(s32 idx) {
             mHoldingZ = checkZButtonHeld();
             AttentionPool *left = mGroups[idx].getPool();
             AttentionPool *right = mGroups[idx].getOtherPool();
-            if ((attnClass.field_0x08 & 8) != 0 && (mModels.mState == OFF || mModels.mState == NONE) && checkLink2() && right->mNumUsedRefs != 0) {
+            if ((attnClass.field_0x08 & 8) != 0 && (mModels.mState == OFF || mModels.mState == NONE) && checkLink2() &&
+                right->mNumUsedRefs != 0) {
                 zPressed = true;
             }
 
@@ -204,7 +204,6 @@ bool AttentionManager::switchTarget(s32 idx) {
             }
         }
     }
-
 
     debugPrint8("%4.4s -> %4.4s (%c pos=%d, cnt=%d)");
 }
@@ -323,8 +322,9 @@ int AttentionPool::fn_80096190(dAcObjBase_c *actor, u8 arg, InteractionType arg2
     return -1;
 }
 
-bool AttentionPool::insertTarget(dAcObjBase_c *actor, u32 unk1, mVec3_c *pos, InteractionType interactionType,
-        u8 field_0x03, f32 field_0x04) {
+bool AttentionPool::insertTarget(
+    dAcObjBase_c *actor, u32 unk1, mVec3_c *pos, InteractionType interactionType, u8 field_0x03, f32 field_0x04
+) {
     // Bunch of regshuffles
     for (s32 i = 0; i < 8; i++) {
         if (i >= mNumUsedRefs) {
@@ -398,8 +398,10 @@ void AttentionGroup::fn_800964B0() {
         // This effectively copies a position vector from "left" to "right",
         // where left and right are swapped sometimes. So this is effectively
         // a double-buffered object pool?
-        int target = right->fn_80096190(left->mRefs[left->mInfos[i].mActorIdx].get(), left->mInfos[i].unk,
-                (InteractionType)left->mInfos[i].mInteractionType);
+        int target = right->fn_80096190(
+            left->mRefs[left->mInfos[i].mActorIdx].get(), left->mInfos[i].unk,
+            (InteractionType)left->mInfos[i].mInteractionType
+        );
         if (target != -1) {
             right->mInfos[target].field_0x08 = left->mInfos[i].field_0x08;
         }
@@ -446,10 +448,11 @@ void AttentionManager::addTalkTarget_unused(dAcObjBase_c &actor) {
     addTarget(actor, talkTarget, 0, nullptr);
 }
 
-void AttentionManager::addExamineTalkTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored,
-        f32 field_0x20, f32 field_0x24) {
-    static InteractionTargetDef examineTalkTarget = {1, 3, 0, EXAMINE_TALK, 0, 0.0f, 60.0f, 60.0f, 0.0f, 0.0f, 50.0f,
-            1.0f};
+void AttentionManager::addExamineTalkTarget(
+    dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20, f32 field_0x24
+) {
+    static InteractionTargetDef examineTalkTarget = {1,     3,     0,    EXAMINE_TALK, 0,     0.0f,
+                                                     60.0f, 60.0f, 0.0f, 0.0f,         50.0f, 1.0f};
     examineTalkTarget.interactFlags = flags;
     examineTalkTarget.field_0x14 = field_0x14;
     examineTalkTarget.field_0x20 = field_0x20;
@@ -458,10 +461,11 @@ void AttentionManager::addExamineTalkTarget(dAcObjBase_c &actor, u32 flags, f32 
     addTarget(actor, examineTalkTarget, 0, nullptr);
 }
 
-void AttentionManager::addExamineTalkTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x20,
-        f32 field_0x24) {
-    static InteractionTargetDef examineTalkTarget2 = {0, 3, 0, EXAMINE_TALK, 0, 0.0f, 60.0f, 60.0f, 0.0f, 0.0f, 50.0f,
-            1.0f};
+void AttentionManager::addExamineTalkTarget(
+    dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x20, f32 field_0x24
+) {
+    static InteractionTargetDef examineTalkTarget2 = {0,     3,     0,    EXAMINE_TALK, 0,     0.0f,
+                                                      60.0f, 60.0f, 0.0f, 0.0f,         50.0f, 1.0f};
     examineTalkTarget2.interactFlags = flags;
     examineTalkTarget2.field_0x14 = field_0x14;
     examineTalkTarget2.field_0x20 = field_0x20;
@@ -470,8 +474,9 @@ void AttentionManager::addExamineTalkTarget(dAcObjBase_c &actor, u32 flags, f32 
     addTarget(actor, examineTalkTarget2, 0, nullptr);
 }
 
-void AttentionManager::addCatchTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x24_neg,
-        f32 field_0x20_neg) {
+void AttentionManager::addCatchTarget(
+    dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x24_neg, f32 field_0x20_neg
+) {
     static InteractionTargetDef catchTarget = {3, 2, 1, CATCH, 0, 0.0f, 60.0f, 0.0f, 0.0f, 0.0f, 100.0f, 1.0f};
     catchTarget.interactFlags = flags;
     catchTarget.field_0x14 = field_0x14;
@@ -481,8 +486,10 @@ void AttentionManager::addCatchTarget(dAcObjBase_c &actor, u32 flags, f32 field_
     addTarget(actor, catchTarget, 0, nullptr);
 }
 
-void AttentionManager::addCatchLikeTarget(dAcObjBase_c &actor, InteractionType interactionType, u32 flags,
-        f32 field_0x14, f32 field_0x24_neg, f32 field_0x20_neg) {
+void AttentionManager::addCatchLikeTarget(
+    dAcObjBase_c &actor, InteractionType interactionType, u32 flags, f32 field_0x14, f32 field_0x24_neg,
+    f32 field_0x20_neg
+) {
     static InteractionTargetDef catchTarget2 = {4, 2, 1, CATCH, 0, 0.0f, 60.0f, 0.0f, 0.0f, 0.0f, 100.0f, 1.0f};
 
     catchTarget2.interactFlags = flags;
@@ -494,8 +501,9 @@ void AttentionManager::addCatchLikeTarget(dAcObjBase_c &actor, InteractionType i
     addTarget(actor, catchTarget2, 0, nullptr);
 }
 
-void AttentionManager::addUnk3Target(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x24_neg,
-        f32 field_0x20_neg) {
+void AttentionManager::addUnk3Target(
+    dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x24_neg, f32 field_0x20_neg
+) {
     static InteractionTargetDef unk3Target = {2, 2, 1, UNK_3, 0, 0.0f, 90.0f, 0.0f, 0.0f, 0.0f, 50.0f, 1.0f};
 
     unk3Target.interactFlags = flags;
@@ -506,13 +514,16 @@ void AttentionManager::addUnk3Target(dAcObjBase_c &actor, u32 flags, f32 field_0
     addTarget(actor, unk3Target, 0, nullptr);
 }
 
-void AttentionManager::addUnk3Target(dAcObjBase_c &actor, u32 flags, f32 arg5, f32 field_0x14, f32 field_0x24_neg,
-        f32 field_0x20_neg) {
+void AttentionManager::addUnk3Target(
+    dAcObjBase_c &actor, u32 flags, f32 arg5, f32 field_0x14, f32 field_0x24_neg, f32 field_0x20_neg
+) {
     addUnk3Target(actor, 0, nullptr, flags, arg5, field_0x14, field_0x24_neg, field_0x20_neg);
 }
 
-void AttentionManager::addUnk3Target(dAcObjBase_c &actor, u32 arg2, mVec3_c *arg3, u32 flags, f32 arg5,
-        f32 field_0x14, f32 field_0x24_neg, f32 field_0x20_neg) {
+void AttentionManager::addUnk3Target(
+    dAcObjBase_c &actor, u32 arg2, mVec3_c *arg3, u32 flags, f32 arg5, f32 field_0x14, f32 field_0x24_neg,
+    f32 field_0x20_neg
+) {
     static InteractionTargetDef unk3Target2 = {1, 1, 1, UNK_3, 0, 0.0f, 60.0f, 60.0f, 0.0f, 0.0f, 50.0f, 1.2f};
     unk3Target2.interactFlags = flags;
     unk3Target2.field_0x18 = arg5 - field_0x14;
@@ -523,8 +534,9 @@ void AttentionManager::addUnk3Target(dAcObjBase_c &actor, u32 arg2, mVec3_c *arg
     addTarget(actor, unk3Target2, arg2, arg3);
 }
 
-void AttentionManager::addNpcTalkTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20,
-        f32 field_0x24) {
+void AttentionManager::addNpcTalkTarget(
+    dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20, f32 field_0x24
+) {
     static InteractionTargetDef talkTarget = {1, 3, 0, TALK, 0, 0.0f, 45.0f, 45.0f, 0.0f, 0.0f, 50.0f, 1.0f};
     talkTarget.interactFlags = flags;
     talkTarget.field_0x14 = field_0x14;
@@ -534,8 +546,9 @@ void AttentionManager::addNpcTalkTarget(dAcObjBase_c &actor, u32 flags, f32 fiel
     addTarget(actor, talkTarget, 0, nullptr);
 }
 
-void AttentionManager::addUnk7Target(dAcObjBase_c &actor, u32 flags, f32 arg5, f32 field_0x14, f32 field_0x24_neg,
-        f32 field_0x20_neg) {
+void AttentionManager::addUnk7Target(
+    dAcObjBase_c &actor, u32 flags, f32 arg5, f32 field_0x14, f32 field_0x24_neg, f32 field_0x20_neg
+) {
     static InteractionTargetDef unk7Target = {1, 1, 1, UNK_7, 0, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 50.0f, 0.5f};
     unk7Target.interactFlags = flags;
     unk7Target.field_0x18 = arg5 - field_0x14;
@@ -546,8 +559,9 @@ void AttentionManager::addUnk7Target(dAcObjBase_c &actor, u32 flags, f32 arg5, f
     addTarget(actor, unk7Target, 0, nullptr);
 }
 
-void AttentionManager::addReadTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20,
-        f32 field_0x24) {
+void AttentionManager::addReadTarget(
+    dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20, f32 field_0x24
+) {
     static InteractionTargetDef readTarget = {1, 3, 0, READ, 0, 0.0f, 60.0f, 60.0f, 0.0f, 0.0f, 50.0f, 1.0f};
     readTarget.interactFlags = flags;
     readTarget.field_0x14 = field_0x14;
@@ -557,8 +571,7 @@ void AttentionManager::addReadTarget(dAcObjBase_c &actor, u32 flags, f32 field_0
     addTarget(actor, readTarget, 0, nullptr);
 }
 
-void AttentionManager::addReadTarget2(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x20,
-        f32 field_0x24) {
+void AttentionManager::addReadTarget2(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x20, f32 field_0x24) {
     static InteractionTargetDef readTarget2 = {0, 3, 0, READ, 0, 0.0f, 60.0f, 60.0f, 0.0f, 0.0f, 50.0f, 1.0f};
     readTarget2.interactFlags = flags;
     readTarget2.field_0x14 = field_0x14;

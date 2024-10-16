@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include "rvl/CARD/CARD.h"
+#include <rvl/CARD/CARD.h>
 
 #ifdef __cplusplus
 }

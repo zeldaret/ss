@@ -1,6 +1,6 @@
 #ifndef NW4R_MATH_TRIANGULAR_H
 #define NW4R_MATH_TRIANGULAR_H
-#include <MSL_C/math.h>
+#include <math.h>
 #include <nw4r/math/math_arithmetic.h>
 #include <nw4r/types_nw4r.h>
 

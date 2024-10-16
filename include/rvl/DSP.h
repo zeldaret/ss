@@ -4,10 +4,10 @@
 extern "C" {
 #endif
 
-#include "rvl/DSP/dsp.h"
-#include "rvl/DSP/dsp_debug.h"
-#include "rvl/DSP/dsp_hardware.h"
-#include "rvl/DSP/dsp_task.h"
+#include <rvl/DSP/dsp.h>
+#include <rvl/DSP/dsp_debug.h>
+#include <rvl/DSP/dsp_hardware.h>
+#include <rvl/DSP/dsp_task.h>
 
 #ifdef __cplusplus
 }

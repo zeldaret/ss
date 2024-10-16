@@ -1,7 +1,7 @@
 {
     "[c]": {
         "files.encoding": "utf8",
-        "editor.defaultFormatter": "xaver.clang-format"
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
     },
     "[cpp]": {
         "files.encoding": "utf8",
@@ -10,26 +10,14 @@
     // "[python]": {
     //     "editor.defaultFormatter": "ms-python.black-formatter"
     // },
+    // "editor.tabSize": 2,
+    "files.autoSave": "onFocusChange",
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
-    "search.useIgnoreFiles": false,
-    "search.exclude": {
-        "build/*/config.json": true,
-        "build/**/*.MAP": true,
-        "build.ninja": true,
-        ".ninja_*": true,
-        "objdiff.json": true
-    },
     "files.associations": {
-        "*.inc": "cpp",
-        "xutility": "cpp",
-        "type_traits": "cpp",
-        "xtr1common": "cpp",
-        "limits": "cpp",
-        "utility": "cpp",
-        "initializer_list": "cpp",
-        "new": "cpp",
-        "cstdlib": "cpp",
-        "xmemory": "cpp"
-    }
+        "*.inc": "c",
+        ".clangd": "yaml"
+    },
+    // Disable C/C++ IntelliSense, use clangd instead
+    "C_Cpp.intelliSenseEngine": "disabled",
 }

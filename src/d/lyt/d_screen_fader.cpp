@@ -28,12 +28,8 @@ bool dScreenFader_c::calc() {
     }
 
     switch (mStatus) {
-    case FADING_IN:
-        mProgress = h - (h * nw4r::math::SinRad((float)elapsed * M_PI / ((float)(mFrame * 2))));
-        break;
-    case FADING_OUT:
-        mProgress = h - (h * nw4r::math::CosRad((float)elapsed * M_PI / ((float)(mFrame * 2))));
-        break;
+        case FADING_IN:  mProgress = h - (h * nw4r::math::SinRad((float)elapsed * M_PI / ((float)(mFrame * 2)))); break;
+        case FADING_OUT: mProgress = h - (h * nw4r::math::CosRad((float)elapsed * M_PI / ((float)(mFrame * 2)))); break;
     }
 
     return res;
@@ -52,11 +48,11 @@ void dScreenFader_c::draw() {
     PSMTXTransApply(mtx, mtx, -scaleX * 0.5f, scaleY * 0.5f - mProgress, 0.0f);
 
     GXColor a = EGG::DrawGX::BLACK;
-    EGG::DrawGX::DrawDL(EGG::DrawGX::DL_17, mtx.nw4rm, a);
+    EGG::DrawGX::DrawDL(EGG::DrawGX::DL_17, mtx, a);
 
     PSMTXScale(mtx, scaleX, mProgress, 1.0f);
     PSMTXTransApply(mtx, mtx, -scaleX * 0.5f, -scaleY * 0.5f, 0.0f);
-    EGG::DrawGX::DrawDL(EGG::DrawGX::DL_17, mtx.nw4rm, a);
+    EGG::DrawGX::DrawDL(EGG::DrawGX::DL_17, mtx, a);
 }
 
 bool dScreenFader_c::fadeIn() {

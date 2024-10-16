@@ -1,7 +1,9 @@
 #ifndef RVL_SDK_GX_DISPLAY_LIST_H
 #define RVL_SDK_GX_DISPLAY_LIST_H
 #include "rvl/GX/GXHardware.h"
+
 #include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

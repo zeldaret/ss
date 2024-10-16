@@ -1,7 +1,9 @@
 #ifndef RVL_SDK_IPC_CLT_H
 #define RVL_SDK_IPC_CLT_H
-#include "rvl/OS.h"
+#include "rvl/OS.h" // IWYU pragma: export
+
 #include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -134,11 +136,13 @@ s32 IOS_WriteAsync(s32 fd, const void *buf, s32 len, IPCAsyncCallback callback, 
 s32 IOS_Write(s32 fd, const void *buf, s32 len);
 s32 IOS_SeekAsync(s32 fd, s32 offset, IPCSeekMode mode, IPCAsyncCallback callback, void *callbackArg);
 s32 IOS_Seek(s32 fd, s32 offset, IPCSeekMode mode);
-s32 IOS_IoctlAsync(s32 fd, s32 type, void *in, s32 inSize, void *out, s32 outSize, IPCAsyncCallback callback,
-        void *callbackArg);
+s32 IOS_IoctlAsync(
+    s32 fd, s32 type, void *in, s32 inSize, void *out, s32 outSize, IPCAsyncCallback callback, void *callbackArg
+);
 s32 IOS_Ioctl(s32 fd, s32 type, void *in, s32 inSize, void *out, s32 outSize);
-s32 IOS_IoctlvAsync(s32 fd, s32 type, s32 inCount, s32 outCount, IPCIOVector *vectors, IPCAsyncCallback callback,
-        void *callbackArg);
+s32 IOS_IoctlvAsync(
+    s32 fd, s32 type, s32 inCount, s32 outCount, IPCIOVector *vectors, IPCAsyncCallback callback, void *callbackArg
+);
 s32 IOS_Ioctlv(s32 fd, s32 type, s32 inCount, s32 outCount, IPCIOVector *vectors);
 s32 IOS_IoctlvReboot(s32 fd, s32 type, s32 inCount, s32 outCount, IPCIOVector *vectors);
 

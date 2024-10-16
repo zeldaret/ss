@@ -1,7 +1,9 @@
 #ifndef RVL_SDK_FS_H
 #define RVL_SDK_FS_H
-#include "rvl/IPC.h"
+#include "rvl/IPC.h" // IWYU pragma: export
+
 #include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -18,26 +20,32 @@ typedef struct FSStats {
 typedef struct FSFileStats {
     u32 length;   // at 0x0
     u32 position; // at 0x4
-} FSFileStats ALIGN(32);
+} FSFileStats ALIGN_DECL(32);
 
 s32 ISFS_OpenLib(void);
 s32 ISFS_CreateDir(const char *path, u32 attr, u32 ownerPerm, u32 groupPerm, u32 otherPerm);
-s32 ISFS_CreateDirAsync(const char *path, u32 attr, u32 ownerPerm, u32 groupPerm, u32 otherPerm,
-        FSAsyncCallback callback, void *callbackArg);
+s32 ISFS_CreateDirAsync(
+    const char *path, u32 attr, u32 ownerPerm, u32 groupPerm, u32 otherPerm, FSAsyncCallback callback, void *callbackArg
+);
 s32 ISFS_ReadDir(const char *path, char *filesOut, u32 *fileCountOut);
 s32 ISFS_ReadDirAsync(const char *path, char *filesOut, u32 *fileCountOut, FSAsyncCallback callback, void *callbackArg);
-s32 ISFS_GetAttr(const char *path, u32 *ownerIdOut, u16 *groupIdOut, u32 *attrOut, u32 *ownerPermOut, u32 *groupPermOut,
-        u32 *otherPermOut);
-s32 ISFS_GetAttrAsync(const char *path, u32 *ownerIdOut, u16 *groupIdOut, u32 *attrOut, u32 *ownerPermOut,
-        u32 *groupPermOut, u32 *otherPermOut, FSAsyncCallback callback, void *callbackArg);
+s32 ISFS_GetAttr(
+    const char *path, u32 *ownerIdOut, u16 *groupIdOut, u32 *attrOut, u32 *ownerPermOut, u32 *groupPermOut,
+    u32 *otherPermOut
+);
+s32 ISFS_GetAttrAsync(
+    const char *path, u32 *ownerIdOut, u16 *groupIdOut, u32 *attrOut, u32 *ownerPermOut, u32 *groupPermOut,
+    u32 *otherPermOut, FSAsyncCallback callback, void *callbackArg
+);
 s32 ISFS_Delete(const char *path);
 s32 ISFS_DeleteAsync(const char *path, FSAsyncCallback callback, void *callbackArg);
 s32 ISFS_Rename(const char *from, const char *to);
 s32 ISFS_RenameAsync(const char *from, const char *to, FSAsyncCallback callback, void *callbackArg);
 s32 ISFS_GetUsage(const char *path, s32 *blockCountOut, s32 *fileCountOut);
 s32 ISFS_CreateFile(const char *path, u32 attr, u32 ownerPerm, u32 groupPerm, u32 otherPerm);
-s32 ISFS_CreateFileAsync(const char *path, u32 attr, u32 ownerPerm, u32 groupPerm, u32 otherPerm,
-        FSAsyncCallback callback, void *callbackArg);
+s32 ISFS_CreateFileAsync(
+    const char *path, u32 attr, u32 ownerPerm, u32 groupPerm, u32 otherPerm, FSAsyncCallback callback, void *callbackArg
+);
 s32 ISFS_Open(const char *path, IPCOpenMode mode);
 s32 ISFS_OpenAsync(const char *path, IPCOpenMode mode, FSAsyncCallback callback, void *callbackArg);
 s32 ISFS_GetFileStats(s32 fd, FSFileStats *statsOut);

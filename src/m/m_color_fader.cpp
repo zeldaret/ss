@@ -1,6 +1,7 @@
+#include "rvl/SC.h" // IWYU pragma: export
+#include "rvl/VI.h" // IWYU pragma: export
+
 #include <m/m_color_fader.h>
-#include <rvl/SC.h>
-#include <rvl/VI.h>
 
 mColorFader_c::mColorFader_c(const mColor &color, EStatus status) : mFaderBase_c(color, status) {
     mAspectRatio = SCGetAspectRatio();
@@ -27,20 +28,11 @@ bool mColorFader_c::calc() {
     }
 
     switch (mStatus) {
-        case FADED_IN:
-            mFaderColor.a = 0;
-            break;
-        case FADED_OUT:
-            mFaderColor.a = 0xff;
-            break;
-        case FADING_IN:
-            mFaderColor.a = 0xff - (elapsed * 0xff / frame);
-            break;
-        case FADING_OUT:
-            mFaderColor.a = elapsed * 0xff / frame;
-            break;
+        case FADED_IN:   mFaderColor.a = 0; break;
+        case FADED_OUT:  mFaderColor.a = 0xff; break;
+        case FADING_IN:  mFaderColor.a = 0xff - (elapsed * 0xff / frame); break;
+        case FADING_OUT: mFaderColor.a = elapsed * 0xff / frame; break;
     }
-    
 
     return result;
 }

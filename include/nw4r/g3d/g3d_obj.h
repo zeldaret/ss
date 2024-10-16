@@ -1,10 +1,10 @@
 #ifndef NW4R_G3D_G3DOBJ_H
 #define NW4R_G3D_G3DOBJ_H
 #include "common.h"
-#include <rvl/MEM/mem_allocator.h>
+#include "rvl/MEM/mem_allocator.h"
 
 #define NW4R_G3D_TYPE_OBJ_DECL(VAL) static const nw4r::g3d::G3dObj::ResNameDataT<sizeof(#VAL)> TYPE_NAME
-#define NW4R_G3D_TYPE_OBJ_DEF(VAL) \
+#define NW4R_G3D_TYPE_OBJ_DEF(VAL)                                                                                     \
     const nw4r::g3d::G3dObj::ResNameDataT<sizeof(#VAL)> VAL::TYPE_NAME = {sizeof(#VAL), #VAL}
 
 namespace nw4r {

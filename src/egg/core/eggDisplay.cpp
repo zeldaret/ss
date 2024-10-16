@@ -2,9 +2,8 @@
 
 #include "egg/core/eggXfbManager.h"
 #include "nw4r/db/db_directPrint.h"
-#include "rvl/GX.h"
-#include "rvl/OS/OSHardware.h"
-
+#include "rvl/GX.h" // IWYU pragma: export
+#include "rvl/OS.h" // IWYU pragma: export
 
 extern "C" {
 void PreRetraceCallback(u32 retraceCount) {

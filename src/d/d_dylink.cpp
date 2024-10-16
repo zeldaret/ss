@@ -1,13 +1,13 @@
-#include <DynamicLink.h>
+#include "d/d_dylink.h"
+
+#include "DynamicLink.h"
+#include "m/m_dvd.h"
+#include "m/m_heap.h"
+#include "rvl/DVD.h"  // IWYU pragma: export
+#include "rvl/NAND.h" // IWYU pragma: export
+
 #include <common.h>
-#include <d/d_dylink.h>
-#include <m/m_dvd.h>
-#include <m/m_heap.h>
-#include <rvl/DVD.h>
-#include <rvl/NAND.h>
-// clang-format off
-#include <MSL_C/string.h>
-// clang-format on
+#include <string.h>
 
 struct RelNamePtr {
     u16 relId;
@@ -44,8 +44,10 @@ char relsDir[] = "/rels";
 
 /** 80052E00 */
 int initDylinkHeap(int maxRelId, const RelNamePtr *dynNameTable, int dynNameTableNum, EGG::Heap *parentHeap) {
-    cCc_frmHeap = mHeap::createFrmHeap(maxRelId * 0x10 + dynNameTableNum * 0x48, parentHeap,
-            "ダイナミックリンク制御用ヒープ(dDyl::cCc_frmHeap)", 0x20, 0);
+    cCc_frmHeap = mHeap::createFrmHeap(
+        maxRelId * 0x10 + dynNameTableNum * 0x48, parentHeap, "ダイナミックリンク制御用ヒープ(dDyl::cCc_frmHeap)", 0x20,
+        0
+    );
 
     mHeap _guard(cCc_frmHeap);
 
@@ -212,7 +214,7 @@ extern "C" bool fn_80053240(char *relPath, char *tmpRelPath, EGG::Heap *heap) {
     }
 
     if (NANDCreate(tmpRelPath, NAND_PERM_RUSR | NAND_PERM_WUSR, 0) != NAND_RESULT_OK ||
-            NANDOpen(tmpRelPath, &nandFileInfo, 2) != NAND_RESULT_OK) {
+        NANDOpen(tmpRelPath, &nandFileInfo, 2) != NAND_RESULT_OK) {
         goto end;
     }
 
@@ -247,8 +249,10 @@ extern "C" bool fn_80053240(char *relPath, char *tmpRelPath, EGG::Heap *heap) {
                 chunkSize = fileSize - sizeRead;
             }
             // NB the whichThread * totalBufSize / 2 match relies on whichThread * totalBufSize being able to overflow
-            if (!startDvdRead(&nandStructs[whichThread], ((u8 *)buf) + whichThread * totalBufSize / 2, chunkSize,
-                        /* offset */ sizeRead)) {
+            if (!startDvdRead(
+                    &nandStructs[whichThread], ((u8 *)buf) + whichThread * totalBufSize / 2, chunkSize,
+                    /* offset */ sizeRead
+                )) {
                 break;
             }
 

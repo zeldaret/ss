@@ -20,15 +20,15 @@ void _ExitProcess(void);
  */
 
 // Declare linker symbols for a section in the ROM
-#define DECL_ROM_SECTION(x) \
-    extern u8 _f##x[]; \
-    extern u8 _f##x##_rom[]; \
-    extern u8 _e##x[];
+#define DECL_ROM_SECTION(x)                                                    \
+  extern u8 _f##x[];                                                           \
+  extern u8 _f##x##_rom[];                                                     \
+  extern u8 _e##x[];
 
 // Declare linker symbols for a BSS section
-#define DECL_BSS_SECTION(x) \
-    extern u8 _f##x[]; \
-    extern u8 _e##x[];
+#define DECL_BSS_SECTION(x)                                                    \
+  extern u8 _f##x[];                                                           \
+  extern u8 _e##x[];
 
 // Debugger stack
 extern u8 _db_stack_addr[];
@@ -65,21 +65,21 @@ DECL_BSS_SECTION(_sbss);
 DECL_BSS_SECTION(_sbss2);
 
 typedef struct RomSection {
-    void *romOfs;     // at 0x4
-    void *virtualOfs; // at 0x0
-    size_t size;      // at 0x8
+  void *romOfs;     // at 0x4
+  void *virtualOfs; // at 0x0
+  size_t size;      // at 0x8
 } RomSection;
 
 typedef struct BssSection {
-    void *virtualOfs; // at 0x0
-    size_t size;      // at 0x8
+  void *virtualOfs; // at 0x0
+  size_t size;      // at 0x8
 } BssSection;
 
 typedef struct ExtabIndexInfo {
-    void *etiStart;  // at 0x0
-    void *etiEnd;    // at 0x4
-    void *codeStart; // at 0x8
-    u32 codeSize;    // at 0x10
+  void *etiStart;  // at 0x0
+  void *etiEnd;    // at 0x4
+  void *codeStart; // at 0x8
+  u32 codeSize;    // at 0x10
 } ExtabIndexInfo;
 
 DECL_SECTION(".init") extern const RomSection _rom_copy_info[];

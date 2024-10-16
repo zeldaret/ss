@@ -1,15 +1,12 @@
 #ifndef M_M2D_H
 #define M_M2D_H
 
-#include <m/m_allocator.h>
-#include <m/m_mtx.h>
-#include <m/m_vec.h>
-#include <nw4r/lyt/lyt_arcResourceAccessor.h>
-#include <nw4r/lyt/lyt_drawInfo.h>
-#include <nw4r/lyt/lyt_init.h>
-#include <nw4r/lyt/lyt_layout.h>
-#include <nw4r/ut/ut_LinkList.h>
-#include <nw4r/ut/ut_list.h>
+#include "m/m_allocator.h"
+#include "m/m_vec.h"
+#include "nw4r/lyt/lyt_arcResourceAccessor.h"
+#include "nw4r/lyt/lyt_drawInfo.h"
+#include "nw4r/lyt/lyt_layout.h"
+#include "nw4r/ut.h" // IWYU pragma: export
 
 namespace m2d {
 
@@ -19,8 +16,8 @@ extern mAllocator_c *l_allocator;
 class Layout_c : public nw4r::lyt::Layout {
 public:
     virtual ~Layout_c() {}
-    virtual nw4r::lyt::AnimTransform *CreateAnimTransform(const void *animResBuf,
-            nw4r::lyt::ResourceAccessor *pResAcsr) override;
+    virtual nw4r::lyt::AnimTransform *
+    CreateAnimTransform(const void *animResBuf, nw4r::lyt::ResourceAccessor *pResAcsr) override;
 };
 
 class ResAccIfBase_c {
@@ -176,6 +173,6 @@ private:
     u32 field_0x94;
 };
 
-}
+} // namespace m2d
 
 #endif

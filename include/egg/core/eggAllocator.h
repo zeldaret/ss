@@ -1,6 +1,7 @@
 #ifndef EGG_ALLOCATOR_H
 #define EGG_ALLOCATOR_H
-#include "rvl/MEM.h"
+
+#include "rvl/MEM.h" // IWYU pragma: export
 
 #include <common.h>
 

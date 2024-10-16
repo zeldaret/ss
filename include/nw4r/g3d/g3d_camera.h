@@ -3,8 +3,7 @@
 #include "common.h"
 #include "nw4r/g3d/g3d_rescommon.h"
 #include "nw4r/math/math_types.h"
-#include <rvl/MTX.h>
-
+#include "rvl/MTX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -61,15 +60,21 @@ struct Camera {
         CameraData &rCamData = mCamData.ref();
 
         if (rCamData.mFlags & 0x40) {
-            C_MTXOrtho(rCamData.mProjMtx, rCamData.FLOAT_0xBC, rCamData.FLOAT_0xC0, rCamData.FLOAT_0xC4,
-                    rCamData.FLOAT_0xC8, rCamData.FLOAT_0xB4, rCamData.FLOAT_0xB8);
+            C_MTXOrtho(
+                rCamData.mProjMtx, rCamData.FLOAT_0xBC, rCamData.FLOAT_0xC0, rCamData.FLOAT_0xC4, rCamData.FLOAT_0xC8,
+                rCamData.FLOAT_0xB4, rCamData.FLOAT_0xB8
+            );
         } else {
             if (rCamData.mFlags & 0x10) {
-                C_MTXFrustum(rCamData.mProjMtx, rCamData.FLOAT_0xBC, rCamData.FLOAT_0xC0, rCamData.FLOAT_0xC4,
-                        rCamData.FLOAT_0xC8, rCamData.FLOAT_0xB4, rCamData.FLOAT_0xB8);
+                C_MTXFrustum(
+                    rCamData.mProjMtx, rCamData.FLOAT_0xBC, rCamData.FLOAT_0xC0, rCamData.FLOAT_0xC4,
+                    rCamData.FLOAT_0xC8, rCamData.FLOAT_0xB4, rCamData.FLOAT_0xB8
+                );
             } else {
-                C_MTXPerspective(rCamData.mProjMtx, rCamData.FLOAT_0xAC, rCamData.FLOAT_0xB0, rCamData.FLOAT_0xB4,
-                        rCamData.FLOAT_0xB8);
+                C_MTXPerspective(
+                    rCamData.mProjMtx, rCamData.FLOAT_0xAC, rCamData.FLOAT_0xB0, rCamData.FLOAT_0xB4,
+                    rCamData.FLOAT_0xB8
+                );
             }
         }
 

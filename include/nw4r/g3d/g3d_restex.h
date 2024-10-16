@@ -2,8 +2,7 @@
 #define NW4R_G3D_RESTEX_H
 #include "common.h"
 #include "nw4r/g3d/g3d_rescommon.h"
-#include <rvl/GX.h>
-
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -35,7 +34,9 @@ struct ResPlttData {
 };
 
 struct ResTex {
-    enum { REVISION = 1 };
+    enum {
+        REVISION = 1
+    };
 
     ResCommon<ResTexData> mTex; // at 0x0
 
@@ -55,7 +56,9 @@ struct ResTex {
 };
 
 struct ResPltt {
-    enum { REVISION = 1 };
+    enum {
+        REVISION = 1
+    };
 
     ResCommon<ResPlttData> mPltt; // at 0x0
 

@@ -15,7 +15,6 @@
 
 #include <common.h>
 
-
 // Ghidra: fBase
 //   size: 0x64
 // official name

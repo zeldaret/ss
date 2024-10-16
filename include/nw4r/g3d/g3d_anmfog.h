@@ -1,8 +1,8 @@
 #ifndef NW4R_G3D_ANMFOG_H
 #define NW4R_G3D_ANMFOG_H
 #include "common.h"
-#include <nw4r/ut/ut_Color.h>
-#include <rvl/GX.h>
+#include "nw4r/ut/ut_Color.h"
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {

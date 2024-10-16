@@ -1,7 +1,9 @@
 #ifndef NW4R_UT_LOCKED_CACHE_H
 #define NW4R_UT_LOCKED_CACHE_H
+#include "rvl/OS.h" // IWYU pragma: export
+
 #include <nw4r/types_nw4r.h>
-#include <rvl/OS.h>
+
 
 namespace nw4r {
 namespace ut {

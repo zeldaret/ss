@@ -1,8 +1,8 @@
 #ifndef NW4R_MATH_ARITHMETIC_H
 #define NW4R_MATH_ARITHMETIC_H
-#include <MSL_C/math.h>
-#include <nw4r/types_nw4r.h>
-#include <rvl/OS.h>
+#include "math.h"
+#include "nw4r/types_nw4r.h" // IWYU pragma: export
+#include "rvl/OS.h"          // IWYU pragma: export
 
 #define NW4R_MATH_QNAN (-(0.0f / 0.0f))
 #define NW4R_MATH_FLT_MAX 3.402823466e+38f
