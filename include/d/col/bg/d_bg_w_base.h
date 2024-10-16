@@ -72,7 +72,7 @@ public:
     /* 0x008 */ virtual ~dBgW_Base();
     /* 0x00C */ virtual bool ChkMemoryError();
     /* 0x010 */ virtual void SetOldShapeAngleY(s16);
-    /* 0x014 */ virtual bool GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const = 0; // ?
+    /* 0x014 */ virtual void GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const = 0; // ?
     /* 0x018 */ virtual bool ChkNotReady() const = 0;
     /* 0x01C */ virtual bool ChkLock() const = 0;
     /* 0x020 */ virtual bool ChkMoveBg() const = 0;

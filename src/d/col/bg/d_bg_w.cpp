@@ -516,13 +516,13 @@ bool cBgW::GroundCross(cBgS_GndChk *pGnd) {
     return sGndCheck;
 }
 
-bool cBgW::GroundCrossGrpRp(cBgS_GndChk *, int) {}
+void cBgW::GroundCrossGrpRp(cBgS_GndChk *, int) {}
 
-bool cBgW::GroundCrossRp(cBgS_GndChk *, int) {}
+void cBgW::GroundCrossRp(cBgS_GndChk *, int) {}
 
-bool cBgW::RwgGroundCheckGnd(u16, cBgS_GndChk *) {}
+void cBgW::RwgGroundCheckGnd(u16, cBgS_GndChk *) {}
 
-bool cBgW::RwgGroundCheckWall(u16, cBgS_GndChk *) {}
+void cBgW::RwgGroundCheckWall(u16, cBgS_GndChk *) {}
 
 void cBgW::Lock() {}
 
@@ -541,9 +541,20 @@ void cBgW::RwgShdwDraw(int, cBgS_ShdwDraw *) {}
 const cM3dGAab *cBgW::GetBnd() const {
     return &mpGrp[mRootGroupIdx].mAab;
 }
-bool cBgW::GetTriPnt(cBgS_PolyInfo const &, mVec3_c *, mVec3_c *, mVec3_c *) const {}
+bool cBgW::GetTriPnt(cBgS_PolyInfo const &info, mVec3_c *pA, mVec3_c *pB, mVec3_c *pC) const {
+    cBgD_Tri_t &tri = mpBgd->mTriTbl[info.GetPolyIndex()];
 
-bool cBgW::GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const {}
+    *pA = mpVtxTbl[tri.mVtxIdx0];
+    *pB = mpVtxTbl[tri.mVtxIdx1];
+    *pC = mpVtxTbl[tri.mVtxIdx2];
+
+    return true;
+}
+
+void cBgW::GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const {
+    *pOutUnder = mpGrp[mRootGroupIdx].mAab.GetMinP()->y;
+    *pOutTop = mpGrp[mRootGroupIdx].mAab.GetMaxP()->y;
+}
 
 void cBgW::GetTriPla(int idx, cM3dGPla *pPla) {
     *pPla = mpTri[idx];
@@ -721,7 +732,10 @@ void dBgW::WallCorrectRp(dBgS_Acch *, int) {}
 
 void dBgW::WallCorrectGrpRp(dBgS_Acch *, int) {}
 
-bool dBgW::WallCorrect(dBgS_Acch *) {}
+bool dBgW::WallCorrect(dBgS_Acch *) {
+    // TODO - only satisfy warning
+    return false;
+}
 
 void dBgW::RwgWallCorrectSort(dBgS_Acch *, u16) {}
 
@@ -729,7 +743,10 @@ void dBgW::WallCorrectRpSort(dBgS_Acch *, int) {}
 
 void dBgW::WallCorrectGrpRpSort(dBgS_Acch *, int) {}
 
-bool dBgW::WallCorrectSort(dBgS_Acch *) {}
+bool dBgW::WallCorrectSort(dBgS_Acch *) {
+    // TODO - only satisfy warning
+    return false;
+}
 
 void dBgW::RwgRoofChk(u16, dBgS_RoofChk *, f32) {}
 
@@ -741,7 +758,10 @@ void dBgW::RoofChkRp(dBgS_RoofChk *, int) {}
 
 void dBgW::RoofChkGrpRp(dBgS_RoofChk *, int) {}
 
-bool dBgW::RoofChk(dBgS_RoofChk *) {}
+bool dBgW::RoofChk(dBgS_RoofChk *) {
+    // TODO - only satisfy warning
+    return false;
+}
 
 void dBgW::RwgSplGrpChk(u16, dBgS_SplGrpChk *) {}
 
@@ -749,7 +769,10 @@ void dBgW::SplGrpChkRp(dBgS_SplGrpChk *, int) {}
 
 void dBgW::SplGrpChkGrpRp(dBgS_SplGrpChk *, int) {}
 
-bool dBgW::SplGrpChk(dBgS_SplGrpChk *) {}
+bool dBgW::SplGrpChk(dBgS_SplGrpChk *) {
+    // TODO - only satisfy warning
+    return false;
+}
 
 void dBgW::RwgCaptPoly(u16, dBgS_CaptPoly &) {}
 

@@ -140,14 +140,13 @@ public:
     void LineCheckRp(cBgS_LinChk *, int);
     void RwgLineCheck(int, cBgS_LinChk *);
 
-    bool GroundCrossGrpRp(cBgS_GndChk *, int);
-    bool GroundCrossRp(cBgS_GndChk *, int);
-    bool RwgGroundCheckCommon(f32, u16, cBgS_GndChk *) {
+    void GroundCrossGrpRp(cBgS_GndChk *, int);
+    void GroundCrossRp(cBgS_GndChk *, int);
+    void RwgGroundCheckCommon(f32, u16, cBgS_GndChk *) {
         // Is Inlined
-        return false;
     }
-    bool RwgGroundCheckGnd(u16, cBgS_GndChk *);
-    bool RwgGroundCheckWall(u16, cBgS_GndChk *);
+    void RwgGroundCheckGnd(u16, cBgS_GndChk *);
+    void RwgGroundCheckWall(u16, cBgS_GndChk *);
 
     void Lock();
     void CopyOldMtx();
@@ -171,7 +170,7 @@ public:
     /* vt at 0x08 */
     /* 0x008 */ virtual ~cBgW();
     /* 0x00C */ virtual bool ChkMemoryError() override;
-    /* 0x014 */ virtual bool GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const override;
+    /* 0x014 */ virtual void GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const override;
     /* 0x018 */ virtual bool ChkNotReady() const override;
     /* 0x01C */ virtual bool ChkLock() const override;
     /* 0x020 */ virtual bool ChkMoveBg() const override;

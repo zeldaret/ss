@@ -1,5 +1,6 @@
 #include "d/col/bg/d_bg_w_kcol.h"
 
+#include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
 #include "toBeSorted/scgame.h"
@@ -88,15 +89,34 @@ bool dBgWKCol::GetTriPnt(int poly_index, mVec3_c *v1, mVec3_c *v2, mVec3_c *v3) 
 
 bool dBgWKCol::GetTriPnt(KC_PrismData const *pPrism, mVec3_c *v1, mVec3_c *v2, mVec3_c *v3) const {
     *v1 = *GetTriPos(pPrism);
+
+    mVec3_c face_nrm1, face_nrm2;
     mVec3_c *pFaceNrm = GetTriNrm(pPrism);
-    mVec3_c *pEdgeNrm1 = GetEdgeNrm1(pPrism);
-    mVec3_c *pEdgeNrm2 = GetEdgeNrm2(pPrism);
     mVec3_c *pEdgeNrm3 = GetEdgeNrm3(pPrism);
+    VEC3Cross(face_nrm1, pFaceNrm, GetEdgeNrm1(pPrism));
+    f32 mag = VEC3Dot(face_nrm1, pEdgeNrm3);
+    if (cM3d_IsZero(mag)) {
+        return false;
+    }
 
-    mVec3_c face_nrm1;
-    PSVECCrossProduct(*pFaceNrm, *pEdgeNrm1, face_nrm1);
+    mag = pPrism->mHeight / mag;
 
-    // TODO
+    VEC3Scale(face_nrm1, face_nrm1, mag);
+    VEC3Add(v3, face_nrm1, v1);
+
+    VEC3Cross(face_nrm2, GetEdgeNrm2(pPrism), pFaceNrm);
+
+    mag = VEC3Dot(face_nrm1, pEdgeNrm3);
+
+    if (cM3d_IsZero(mag)) {
+        return false;
+    }
+
+    mag = pPrism->mHeight / mag;
+    VEC3Scale(face_nrm2, face_nrm2, mag);
+    VEC3Add(v2, face_nrm2, v1);
+
+    return true;
 }
 
 const cM3dGAab *dBgWKCol::GetBnd() const {
@@ -109,9 +129,15 @@ u32 dBgWKCol::GetGrpInf(cBgS_PolyInfo const &pi) const {
 
 void dBgWKCol::OffMoveFlag() {}
 
-bool dBgWKCol::ChkPolyThrough(int id, dBgPc *, cBgS_Chk *) {}
+bool dBgWKCol::ChkPolyThrough(int id, dBgPc *, cBgS_Chk *) {
+    // TODO - false return to satisify warnings
+    return false;
+}
 
-bool dBgWKCol::ChkPolyThroughGnd(int id, dBgPc *, cBgS_Chk *) {}
+bool dBgWKCol::ChkPolyThroughGnd(int id, dBgPc *, cBgS_Chk *) {
+    // TODO - false return to satisify warnings
+    return false;
+}
 
 void dBgWKCol::vt_0x3C() {
     mPartitionInfo.fn_803391f0(&mBnd);
@@ -130,37 +156,73 @@ bool dBgWKCol::LineCheck(cBgS_LinChk *pLine) {
     // TODO Later lmao
 }
 
-bool dBgWKCol::GroundCross(cBgS_GndChk *pGnd) {}
+bool dBgWKCol::GroundCross(cBgS_GndChk *pGnd) {
+    // TODO - false return to satisify warnings
+    return false;
+}
 
 void dBgWKCol::ShdwDraw(cBgS_ShdwDraw *pShdw) {}
 
 void dBgWKCol::CaptPoly(dBgS_CaptPoly &capt) {}
 
-bool dBgWKCol::WallCorrectSort(dBgS_Acch *pAcch) {}
+bool dBgWKCol::WallCorrectSort(dBgS_Acch *pAcch) {
+    // TODO - false return to satisify warnings
+    return false;
+}
 
-bool dBgWKCol::WallCorrect(dBgS_Acch *pAcch) {}
+bool dBgWKCol::WallCorrect(dBgS_Acch *pAcch) {
+    // TODO - false return to satisify warnings
+    return false;
+}
 
-bool dBgWKCol::RoofChk(dBgS_RoofChk *pRoof) {}
+bool dBgWKCol::RoofChk(dBgS_RoofChk *pRoof) {
+    // TODO - false return to satisify warnings
+    return false;
+}
 
-bool dBgWKCol::SplGrpChk(dBgS_SplGrpChk *) {}
+bool dBgWKCol::SplGrpChk(dBgS_SplGrpChk *) {
+    // TODO - false return to satisify warnings
+    return false;
+}
 
-bool dBgWKCol::SphChk(dBgS_SphChk *, void *) {}
+bool dBgWKCol::SphChk(dBgS_SphChk *, void *) {
+    // TODO - false return to satisify warnings
+    return false;
+}
 
-bool dBgWKCol::GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const {}
+void dBgWKCol::GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const {
+    f32 pos = mpKCHead->mAreaMinPos.y;
+    *pOutUnder = pos;
+    *pOutTop = pos + mAreaWidthMaskY;
+}
 
-s32 dBgWKCol::GetGrpRoomIndex(cBgS_PolyInfo const &info) const {}
+s32 dBgWKCol::GetGrpRoomIndex(cBgS_PolyInfo const &info) const {
+    return GetPolyCode(info.GetPolyIndex())->getGrpRoomIdx();
+}
 
-s32 dBgWKCol::GetExitId(cBgS_PolyInfo const &info) {}
+s32 dBgWKCol::GetExitId(cBgS_PolyInfo const &info) {
+    return GetPolyCode(info.GetPolyIndex())->getExitId();
+}
 
-s32 dBgWKCol::GetZTargetThrough(cBgS_PolyInfo const &info) {}
+s32 dBgWKCol::GetZTargetThrough(cBgS_PolyInfo const &info) {
+    return GetPolyCode(info.GetPolyIndex())->getTargetThrough();
+}
 
-int dBgWKCol::GetSpecialCode(cBgS_PolyInfo const &info) {}
+int dBgWKCol::GetSpecialCode(cBgS_PolyInfo const &info) {
+    return GetSpecialCode(info.GetPolyIndex());
+}
 
-int dBgWKCol::GetSpecialCode(int polyIdx) {}
+int dBgWKCol::GetSpecialCode(int polyIdx) {
+    return GetPolyCode(polyIdx)->getSpecialCode();
+}
 
-int dBgWKCol::GetCode0_0x30000000(cBgS_PolyInfo const &info) {}
+int dBgWKCol::GetCode0_0x30000000(cBgS_PolyInfo const &info) {
+    return GetPolyCode(info.GetPolyIndex())->getCode0_0x30000000();
+}
 
-int dBgWKCol::GetCode0_0x80000000(cBgS_PolyInfo const &info) {}
+int dBgWKCol::GetCode0_0x80000000(cBgS_PolyInfo const &info) {
+    return GetPolyCode(info.GetPolyIndex())->getCode0_0x80000000();
+}
 
 u32 dBgWKCol::GetPolyObjThrough(int polyIdx) {
     return GetPolyCode(polyIdx)->getObjThrough();
@@ -268,7 +330,42 @@ void dBgWKCol::TransPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c 
 
 void dBgWKCol::MatrixCrrPos(cBgS_PolyInfo const &, void *, bool, mVec3_c *, mAng3_c *, mAng3_c *) {}
 
-int dBgWKCol::GetMapCode(KC_PrismData *prism, int *pOut) {}
+int dBgWKCol::GetMapCode(KC_PrismData *prism, int *pOut) {
+    cBgS_PolyInfo info;
+
+    if (mpKCHead->mpNormalData[prism->mFaceNrmIdx].y <= 0.f) {
+        return true;
+    }
+
+    if (mpTri != nullptr) {
+        int idx = GetPrismIdx(prism);
+        KC_Tri &tri = mpTri[idx];
+        mVec3_c a, b, c;
+        VEC3Sub(a, tri.mB, tri.mA);
+        VEC3Sub(b, tri.mC, tri.mB);
+        VEC3Sub(c, tri.mA, tri.mC);
+
+        if (cM3d_IsZero(VEC3Len(a))) {
+            return true;
+        }
+        if (cM3d_IsZero(VEC3Len(b))) {
+            return true;
+        }
+        if (cM3d_IsZero(VEC3Len(c))) {
+            return true;
+        }
+    }
+    info.SetPolyIndex(prism - mpKCHead->mpPrismData);
+    int att0 = GetPolyAtt0(info);
+    int att1 = GetPolyAtt1(info);
+    bool target = GetZTargetThrough(info);
+    if (att0 >= 0x20) {
+        *pOut = dBgS::GetMapCode(att0 - 0x20, att1, target);
+        return false;
+    } else {
+        return true;
+    }
+}
 
 bool dBgWKCol::UpdateDraw(mAllocator_c *alloc) {
     // TODO

@@ -8,7 +8,7 @@ dBgWTime::dBgWTime() {}
 
 dBgWTime::~dBgWTime() {}
 
-bool dBgWTime::GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const {
+void dBgWTime::GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const {
     f32 height = mCyl.mHeight;
     f32 posY = mCyl.GetC().y;
     *pOutTop = posY + height;
@@ -120,7 +120,10 @@ void dBgWTime::ShdwDraw(cBgS_ShdwDraw *) {}
 
 void dBgWTime::CaptPoly(dBgS_CaptPoly &) {}
 
-bool dBgWTime::WallCorrect(dBgS_Acch *) {}
+bool dBgWTime::WallCorrect(dBgS_Acch *) {
+    // TODO - false return to satisfy warning
+    return false;
+}
 
 bool dBgWTime::WallCorrectSort(dBgS_Acch *pAcch) {
     return WallCorrect(pAcch);

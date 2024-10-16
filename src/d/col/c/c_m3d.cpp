@@ -20,7 +20,7 @@ using namespace EGG;
 
 const f32 G_CM3D_F_ABS_MIN = 32 * FLT_EPSILON;
 
-inline VEC3 cM3d_Cross(const VEC3 *pVecA, const VEC3 *pVecB, const VEC3 *pVecC, VEC3 *pVecOut) {
+inline void cM3d_Cross(const VEC3 *pVecA, const VEC3 *pVecB, const VEC3 *pVecC, VEC3 *pVecOut) {
     VEC3 tmp1;
     VEC3 tmp2;
     VEC3Sub(&tmp1, pVecB, pVecA);
@@ -29,9 +29,18 @@ inline VEC3 cM3d_Cross(const VEC3 *pVecA, const VEC3 *pVecB, const VEC3 *pVecC, 
     VEC3Cross(pVecOut, &tmp1, &tmp2);
 }
 
-bool cM3d_Len2dSqPntAndSegLine(f32, f32, f32, f32, f32, f32, f32 *, f32 *, f32 *) {}
-bool cM3d_Len3dSqPntAndSegLine(const cM3dGLin *, const VEC3 *, VEC3 *, f32 *, f32 *) {}
-f32 cM3d_SignedLenPlaAndPos(const cM3dGPla *, const VEC3 *) {}
+bool cM3d_Len2dSqPntAndSegLine(f32, f32, f32, f32, f32, f32, f32 *, f32 *, f32 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Len3dSqPntAndSegLine(const cM3dGLin *, const VEC3 *, VEC3 *, f32 *, f32 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+f32 cM3d_SignedLenPlaAndPos(const cM3dGPla *, const VEC3 *) {
+    // TODO - returns 0.0f to satisfy warning
+    return 0.0f;
+}
 
 void cM3d_CalcPla(const VEC3 *pVecA, const VEC3 *pVecB, const VEC3 *pVecC, VEC3 *pVecOut, f32 *pD) {
     cM3d_Cross(pVecA, pVecB, pVecC, pVecOut);
@@ -47,24 +56,72 @@ void cM3d_CalcPla(const VEC3 *pVecA, const VEC3 *pVecB, const VEC3 *pVecC, VEC3 
         pVecOut->x = 0.0f;
     }
 }
-int cM3d_Check_LinLin(const cM3dGLin *, const cM3dGLin *, f32 *, f32 *) {}
-bool cM3d_Cross_LinPla(const cM3dGLin *, const cM3dGPla *, VEC3 *, bool, bool) {}
-bool cM3d_Cross_MinMaxBoxLine(const VEC3 *, const VEC3 *, const VEC3 *, const VEC3 *) {}
-bool cM3d_InclusionCheckPosIn3PosBox3d(const VEC3 *, const VEC3 *, const VEC3 *, const VEC3 *, f32) {}
-bool cM3d_CrossX_Tri(const cM3dGTri *, const VEC3 *, f32) {}
-bool cM3d_CrossX_Tri(const cM3dGTri *, const VEC3 *) {}
-bool cM3d_CrossY_Tri(const cM3dGTri *, const VEC3 *) {}
-bool cM3d_CrossY_Tri_Front(const VEC3 &, const VEC3 &, const VEC3 &, const VEC3 *) {}
-bool cM3d_CrossY_Tri(const cM3dGTri *, const VEC3 *, f32 *) {}
-bool cM3d_CrossY_Tri(const cM3dGTri *, const VEC3 *, f32) {}
-bool cM3d_CrossY_Tri(const cM3dGTri *, const VEC3 *, const cM3d_Range *, f32 *) {}
-bool cM3d_CrossZ_Tri(const cM3dGTri *, const VEC3 *, f32) {}
-bool cM3d_CrossZ_Tri(const cM3dGTri *, const VEC3 *) {}
-bool cM3d_CrossZ_Tri(const cM3dGTri *, const VEC3 *, f32 *) {}
-bool cM3d_Cross_LinTri(const cM3dGLin *, const cM3dGTri *, VEC3 *, bool, bool) {}
+int cM3d_Check_LinLin(const cM3dGLin *, const cM3dGLin *, f32 *, f32 *) {
+    // TODO - returns false to satisfy warning
+    return 0;
+}
+bool cM3d_Cross_LinPla(const cM3dGLin *, const cM3dGPla *, VEC3 *, bool, bool) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_MinMaxBoxLine(const VEC3 *, const VEC3 *, const VEC3 *, const VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_InclusionCheckPosIn3PosBox3d(const VEC3 *, const VEC3 *, const VEC3 *, const VEC3 *, f32) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_CrossX_Tri(const cM3dGTri *, const VEC3 *, f32) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_CrossX_Tri(const cM3dGTri *, const VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_CrossY_Tri(const cM3dGTri *, const VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_CrossY_Tri_Front(const VEC3 &, const VEC3 &, const VEC3 &, const VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_CrossY_Tri(const cM3dGTri *, const VEC3 *, f32 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_CrossY_Tri(const cM3dGTri *, const VEC3 *, f32) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_CrossY_Tri(const cM3dGTri *, const VEC3 *, const cM3d_Range *, f32 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_CrossZ_Tri(const cM3dGTri *, const VEC3 *, f32) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_CrossZ_Tri(const cM3dGTri *, const VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_CrossZ_Tri(const cM3dGTri *, const VEC3 *, f32 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_LinTri(const cM3dGLin *, const cM3dGTri *, VEC3 *, bool, bool) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
 bool cM3d_Cross_LinTri(
     const cM3dGLin *, const VEC3 *, const VEC3 *, const VEC3 *, const cM3dGPla *, VEC3 *, bool, bool
-) {}
+) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
 
 bool cM3d_Cross_LinTri_Easy(const cM3dGTri *pTri, const VEC3 *pPos) {
     if ((cM3d_IsZero(pTri->mNormal.x) || cM3d_CrossX_Tri(pTri, pPos)) &&
@@ -80,13 +137,34 @@ bool cM3d_Cross_SphPnt(const cM3dGSph *pSph, const VEC3 *pPos) {
     return VEC3DistSq(pSph->GetC(), pPos) < r2 * r2;
 }
 
-bool cM3d_Cross_LinSph(const cM3dGLin *, const cM3dGSph *, VEC3 *) {}
-bool cM3d_Cross_LinSph_CrossPos(const cM3dGSph &, const cM3dGLin &, VEC3 *, VEC3 *) {}
-bool cM3d_Cross_CylSph(const cM3dGCyl *, const cM3dGSph *, f32 *) {}
-bool cM3d_Cross_CylSph(const cM3dGCyl *, const cM3dGSph *, VEC3 *, f32 *) {}
-bool cM3d_Cross_SphSph(const cM3dGSph *, const cM3dGSph *, f32 *) {}
-bool cM3d_Cross_SphSph(const cM3dGSph *, const cM3dGSph *, f32 *, f32 *) {}
-bool cM3d_Cross_SphSph(const cM3dGSph *, const cM3dGSph *, VEC3 *) {}
+bool cM3d_Cross_LinSph(const cM3dGLin *, const cM3dGSph *, VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_LinSph_CrossPos(const cM3dGSph &, const cM3dGLin &, VEC3 *, VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_CylSph(const cM3dGCyl *, const cM3dGSph *, f32 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_CylSph(const cM3dGCyl *, const cM3dGSph *, VEC3 *, f32 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_SphSph(const cM3dGSph *, const cM3dGSph *, f32 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_SphSph(const cM3dGSph *, const cM3dGSph *, f32 *, f32 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_SphSph(const cM3dGSph *, const cM3dGSph *, VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
 
 void cM3d_CalcSphVsTriCrossPoint(const cM3dGSph *pSph, const cM3dGTri *pTri, VEC3 *pPnt) {
     VEC3 scale, add;
@@ -100,20 +178,65 @@ void cM3d_CalcSphVsTriCrossPoint(const cM3dGSph *pSph, const cM3dGTri *pTri, VEC
     f32 a = pSph->GetR() / mag;
     cM3d_InDivPos2(&pSph->GetC(), &scale, a, pPnt);
 }
-bool cM3d_Cross_SphTri(const cM3dGSph *, const cM3dGTri *, VEC3 *, f32 *, VEC3 *) {}
-bool cM3d_Cross_CylCyl(const cM3dGCyl *, const cM3dGCyl *, f32 *) {}
-bool cM3d_Cross_CylCyl(const cM3dGCyl *, const cM3dGCyl *, VEC3 *) {}
-bool cM3d_Cross_CylTri(const cM3dGCyl *, const cM3dGTri *, VEC3 *) {}
-int cM3d_Cross_CylLin(const cM3dGCyl *, const cM3dGLin *, VEC3 *, VEC3 *) {}
-int cM3d_Cross_CylPntPnt(const cM3dGCyl *, const VEC3 *, const VEC3 *, VEC3 *, VEC3 *) {}
-bool cM3d_Cross_CylPnt(const cM3dGCyl *, const VEC3 *) {}
-bool cM3d_Cross_CpsSph_CrossPos(const cM3dGCps &, const cM3dGSph &, const VEC3 &, VEC3 *) {}
-bool cM3d_Cross_CpsSph(const cM3dGCps &, const cM3dGSph &, VEC3 *) {}
-bool cM3d_Cross_TriTri(const cM3dGTri &, const cM3dGTri &, VEC3 *) {}
-bool cM3d_Cross_CpsTri(const cM3dGCps &, cM3dGTri, VEC3 *) {}
+bool cM3d_Cross_SphTri(const cM3dGSph *, const cM3dGTri *, VEC3 *, f32 *, VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_CylCyl(const cM3dGCyl *, const cM3dGCyl *, f32 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_CylCyl(const cM3dGCyl *, const cM3dGCyl *, VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_CylTri(const cM3dGCyl *, const cM3dGTri *, VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+int cM3d_Cross_CylLin(const cM3dGCyl *, const cM3dGLin *, VEC3 *, VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+int cM3d_Cross_CylPntPnt(const cM3dGCyl *, const VEC3 *, const VEC3 *, VEC3 *, VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_CylPnt(const cM3dGCyl *, const VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_CpsSph_CrossPos(const cM3dGCps &, const cM3dGSph &, const VEC3 &, VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_CpsSph(const cM3dGCps &, const cM3dGSph &, VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_TriTri(const cM3dGTri &, const cM3dGTri &, VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_Cross_CpsTri(const cM3dGCps &, cM3dGTri, VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
 void cM3d_CalcVecZAngle(const VEC3 &, mAng3_c *) {}
 void cM3d_PlaneCrossLineProcWork(f32, f32, f32, f32, f32, f32, f32, f32 *, f32 *) {}
-int cM3d_2PlaneCrossLine(const cM3dGPla &, const cM3dGPla &, cM3dGLin *) {}
-bool cM3d_3PlaneCrossPos(const cM3dGPla &, const cM3dGPla &, const cM3dGPla &, VEC3 *) {}
-f32 cM3d_lineVsPosSuisenCross(const cM3dGLin *, const VEC3 *, VEC3 *) {}
-f32 cM3d_lineVsPosSuisenCross(const VEC3 &, const VEC3 &, const VEC3 &, VEC3 *) {}
+int cM3d_2PlaneCrossLine(const cM3dGPla &, const cM3dGPla &, cM3dGLin *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+bool cM3d_3PlaneCrossPos(const cM3dGPla &, const cM3dGPla &, const cM3dGPla &, VEC3 *) {
+    // TODO - returns false to satisfy warning
+    return false;
+}
+f32 cM3d_lineVsPosSuisenCross(const cM3dGLin *, const VEC3 *, VEC3 *) {
+    // TODO - returns 0.0f to satisfy warning
+    return 0.0f;
+}
+f32 cM3d_lineVsPosSuisenCross(const VEC3 &, const VEC3 &, const VEC3 &, VEC3 *) {
+    // TODO - returns 0.0f to satisfy warning
+    return 0.0f;
+}

@@ -14,7 +14,7 @@ public:
 
     /* vt at 0x08 */
     /* 0x008 */ virtual ~dBgWTime();
-    /* 0x014 */ virtual bool GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const override;
+    /* 0x014 */ virtual void GetTopUnder(f32 *pOutTop, f32 *pOutUnder) const override;
     /* 0x018 */ virtual bool ChkNotReady() const override;
     /* 0x01C */ virtual bool ChkLock() const override;
     /* 0x020 */ virtual bool ChkMoveBg() const override;

@@ -1080,6 +1080,7 @@ void dBgS::DrawSkyKeepMap(mMtx_c *, int) {
 
 bool dBgS::ConfigureMapTexture(EGG::Heap *) {
     // TODO
+    return false;
 }
 
 MapLineSegment::MapLineSegment() : bShow(false) {}
