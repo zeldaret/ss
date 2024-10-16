@@ -10,7 +10,7 @@ namespace d2d {
 struct dLytStructD_Base {
     dLytStructD_Base() : field_0x0C(0), field_0x10(0), field_0x14(0), field_0x015(0), field_0x016(0) {}
     virtual ~dLytStructD_Base();
-    TLIST_NODE_DEF(dLytStructD_Base);
+    TListNode<dLytStructD_Base> mLink;
     u32 field_0x0C;
     u32 field_0x10;
     u16 field_0x14;

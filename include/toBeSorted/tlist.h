@@ -7,11 +7,6 @@
 // * Entirely in headers
 // * Swapped node and count members
 // Used in DowsingTarget, maybe also in dAcBase_c.soundStuff
-
-#define TLIST_NODE_DEF(class) TListNode<class> mLink
-
-#define TLIST_LIST_DEF(class, name) TList<class, offsetof(class, mLink)> name
-
 template <typename T>
 class TListNode {
 public:

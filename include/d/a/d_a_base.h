@@ -22,7 +22,7 @@ struct SoundInfo {
     dAcBase_c *actor;
     SoundSource *sound_source;
     mVec3_c *obj_pos;
-    TLIST_NODE_DEF(SoundInfo);
+    TListNode<SoundInfo> mLink;
 };
 
 /**

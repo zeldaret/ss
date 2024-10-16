@@ -7,7 +7,7 @@
 
 class DowsingTarget {
 public:
-    TLIST_NODE_DEF(DowsingTarget); // 0x00
+    TListNode<DowsingTarget> mLink; // 0x00
 private:
     dAcBase_c *mpActor; // 0x08
     u8 mDowsingSlot;    // 0x0C
