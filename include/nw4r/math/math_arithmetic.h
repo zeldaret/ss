@@ -67,7 +67,7 @@ inline f32 FModf(f32 x, f32 *y) {
 }
 
 inline f32 FSqrt(f32 x) {
-    if (x < 0.0f) {
+    if (x <= 0.0f) {
         return 0.0f;
     }
 

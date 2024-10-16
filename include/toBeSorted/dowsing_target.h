@@ -7,7 +7,7 @@
 
 class DowsingTarget {
 public:
-    TListNode mLink; // 0x00
+    TListNode<DowsingTarget> mLink; // 0x00
 private:
     dAcBase_c *mpActor; // 0x08
     u8 mDowsingSlot;    // 0x0C
@@ -58,8 +58,9 @@ public:
 
     static bool hasDowsingInSlot(int slot);
 
-    static DowsingTarget *getDowsingInfo(const mVec3_c &playerPosition, const mVec3_c &dowsingDirection, f32 *, f32 *,
-            f32 *intensity, int slot);
+    static DowsingTarget *getDowsingInfo(
+        const mVec3_c &playerPosition, const mVec3_c &dowsingDirection, f32 *, f32 *, f32 *intensity, int slot
+    );
 
     static void init();
     static void execute();

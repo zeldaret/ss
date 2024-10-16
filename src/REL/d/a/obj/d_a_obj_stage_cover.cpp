@@ -28,7 +28,7 @@ int dAcOstageCover_c::doDelete() {
 int dAcOstageCover_c::actorExecute() {
     mStateMgr.executeState();
     updateMatrix();
-    mModel.setLocalMtx(worldMatrix);
+    mModel.setLocalMtx(mWorldMtx);
     return SUCCEEDED;
 }
 

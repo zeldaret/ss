@@ -1,5 +1,5 @@
 #include <d/a/obj/d_a_obj_spike.h>
-#include <toBeSorted/cc/d_cc_mgr.h>
+#include <d/col/cc/d_cc_mgr.h>
 
 SPECIAL_ACTOR_PROFILE(OBJ_SPIKE, dAcOspike_c, fProfile::OBJ_SPIKE, 0x1D9, 0, 2);
 
@@ -33,9 +33,9 @@ int dAcOspike_c::create() {
     mCollision.initUnk(mCCdStruct);
 
     updateMatrix();
-    mMdl.setLocalMtx(worldMatrix);
+    mMdl.setLocalMtx(mWorldMtx);
     mVec3_c tmp;
-    PSMTXMultVecSR(worldMatrix.m, mVec3_c::Ex, tmp);
+    PSMTXMultVecSR(mWorldMtx.m, mVec3_c::Ex, tmp);
     mCollision.setAtVec(tmp);
 
     mMtx_c mtx;
@@ -61,7 +61,7 @@ int dAcOspike_c::create() {
         tmp3.z = copy;
     }
 
-    mCollision.setMinMax(tmp2, tmp3);
+    mCollision.Set(tmp2, tmp3);
     mStateMgr.changeState(StateID_Wait);
     setBoundingBox(mVec3_c(-10.0f, -250.0f, -480.0f), mVec3_c(80.0f, 260.0f, 490.0f));
     return SUCCEEDED;
@@ -73,7 +73,7 @@ int dAcOspike_c::doDelete() {
 
 int dAcOspike_c::actorExecute() {
     mStateMgr.executeState();
-    mCollision.setWithYRot(position, rotation.y);
+    mCollision.Set(position, rotation.y);
     ColliderManager::getColliderManager()->addCollider(&mCollision);
     return 1;
 }

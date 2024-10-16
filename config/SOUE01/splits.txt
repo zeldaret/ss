@@ -893,7 +893,30 @@ libms/msgfile.c:
 	.data       start:0x80547278 end:0x80547288
 	.sdata      start:0x80574028 end:0x80574048
 
-toBeSorted/cc/d_cc_d.cpp:
+d/col/c/c_bg_s_chk.cpp:
+	.text       start:0x80327140 end:0x8032721C
+	.data       start:0x80547388 end:0x80547394
+
+d/col/c/c_bg_s_gnd_chk.cpp:
+	.text       start:0x80327220 end:0x8032734C
+	.data       start:0x80547398 end:0x805473A4
+
+d/col/c/c_bg_s_lin_chk.cpp:
+	.text       start:0x80327350 end:0x80327504
+	.data       start:0x805473A8 end:0x805473B8
+
+d/col/c/c_bg_s_poly_info.cpp:
+	.text       start:0x80327510 end:0x8032766C
+
+d/col/c/c_bg_s_shdw_draw.cpp:
+	.text       start:0x80327670 end:0x80328064
+	.data       start:0x805473B8 end:0x805473C4
+
+d/col/c/c_bg_w.cpp:
+	.text       start:0x80328070 end:0x80328114
+	.data       start:0x805473C8 end:0x805473D4
+
+d/col/c/c_cc_d.cpp:
 	.text       start:0x80328120 end:0x8032BC78
 	.ctors      start:0x804DB8F8 end:0x804DB8FC
 	.rodata     start:0x804F0AF0 end:0x804F0B80
@@ -901,20 +924,148 @@ toBeSorted/cc/d_cc_d.cpp:
 	.sdata2     start:0x8057CF98 end:0x8057CFBC
 	.bss        start:0x805D0128 end:0x805D0134
 
-toBeSorted/cc/d_cc_unknown.cpp:
-	.text       start:0x8032BEC0 end:0x8032BF00
-	.data       start:0x80547668 end:0x80547678
+d/col/c/c_m2d.cpp:
+	.text       start:0x8032BC80 end:0x8032BEB8
 
-toBeSorted/cc/d_cc_m3d.cpp:
-	.text       start:0x8032BF00 end:0x80337B58
+d/col/c/c_m3d.cpp:
+	.text       start:0x8032BEC0 end:0x80337B58
+	.data       start:0x80547668 end:0x80547674
 
-toBeSorted/cc/d_cc_m3d_g_cyl.cpp:
+d/col/c/c_m3d_g_aab.cpp:
+	.text       start:0x80337B60 end:0x80337E94
+	.sdata2     start:0x8057D030 end:0x8057D038
+
+d/col/c/c_m3d_g_cps.cpp:
+	.text       start:0x80337EA0 end:0x80338018
+	.sdata2     start:0x8057D038 end:0x8057D03C
+
+d/col/c/c_m3d_g_cyl.cpp:
 	.text       start:0x80338020 end:0x80338348
+	.sdata2     start:0x8057D040 end:0x8057D044
 
-toBeSorted/cc/d_cc_m3d_g_sph.cpp:
+d/col/c/c_m3d_g_lin.cpp:
+	.text       start:0x80338350 end:0x8033842C
+
+d/col/c/c_m3d_g_pla.cpp:
+	.text       start:0x80338430 end:0x80338678
+
+d/col/c/c_m3d_g_sph.cpp:
 	.text       start:0x80338680 end:0x803388D8
+	.sdata2     start:0x8057D050 end:0x8057D058
 
-toBeSorted/cc/d_cc_shape_colliders.cpp:
+d/col/c/c_m3d_g_tri.cpp:
+	.text       start:0x803388E0 end:0x80338940
+
+d/col/c/c_m3d_g_unk.cpp:
+	.text       start:0x80338940 end:0x80338F4C
+	.sdata2     start:0x8057D058 end:0x8057D060
+
+d/col/c/c_partition.cpp:
+	.text       start:0x80338F50 end:0x80339BAC
+	.ctors      start:0x804DB8FC end:0x804DB900
+	.data       start:0x80547688 end:0x80547694
+
+d/col/bg/d_bg_pc.cpp:
+	.text       start:0x80339BB0 end:0x80339BC8
+
+d/col/bg/d_bg_plc.cpp:
+	.text       start:0x80339BD0 end:0x80339BF8
+
+d/col/bg/d_bg_s.cpp:
+	.text       start:0x80339C00 end:0x8033F14C
+	.rodata     start:0x804F0C00 end:0x804F0D00
+	.data       start:0x80547698 end:0x805477C0
+	.sdata      start:0x80574060 end:0x80574070
+	.sdata2     start:0x8057D068 end:0x8057D0FC
+
+d/col/bg/d_bg_s_acch.cpp:
+	.text       start:0x8033F150 end:0x803412F8
+	.data       start:0x805477C0 end:0x80547868
+	.sdata2     start:0x8057D100 end:0x8057D13C
+
+d/col/bg/d_bg_s_chk.cpp:
+	.text       start:0x80341300 end:0x80341488
+	.data       start:0x80547868 end:0x80547898
+
+d/col/bg/d_bg_s_gnd_chk.cpp:
+	.text       start:0x80341490 end:0x80341D68
+	.ctors      start:0x804DB900 end:0x804DB904
+	.data       start:0x80547898 end:0x80547994
+	.sbss       start:0x80575CF8 end:0x80575CFC
+	.sdata2     start:0x8057D140 end:0x8057D144
+	.bss        start:0x805D01C8 end:0x805D0268
+
+d/col/bg/d_bg_s_grp_pass_chk.cpp:
+	.text       start:0x80341D70 end:0x80341E18
+	.data       start:0x80547998 end:0x805479A4
+
+d/col/bg/d_bg_s_lin_chk.cpp:
+	.text       start:0x80341E20 end:0x80342C98
+	.ctors      start:0x804DB904 end:0x804DB908
+	.data       start:0x805479A8 end:0x80547B88
+	.sdata2     start:0x8057D148 end:0x8057D150
+	.bss        start:0x805D0268 end:0x805D03B8
+
+d/col/bg/d_bg_s_poly_pass_chk.cpp:
+	.text       start:0x80342CA0 end:0x80342D68
+	.data       start:0x80547B88 end:0x80547B94
+
+d/col/bg/d_bg_s_roof_chk.cpp:
+	.text       start:0x80342D70 end:0x803431A8
+	.ctors      start:0x804DB908 end:0x804DB90C
+	.data       start:0x80547B98 end:0x80547C28
+	.sbss       start:0x80575D00 end:0x80575D04
+	.sdata2     start:0x8057D150 end:0x8057D158
+	.bss        start:0x805D03B8 end:0x805D0458
+
+d/col/bg/d_bg_s_sph_chk.cpp:
+	.text       start:0x803431B0 end:0x80343428
+	.data       start:0x80547C28 end:0x80547C88
+	.sdata2     start:0x8057D158 end:0x8057D15C
+
+d/col/bg/d_bg_s_spl_grp_chk.cpp:
+	.text       start:0x80343430 end:0x803435C8
+	.data       start:0x80547C88 end:0x80547CB8
+	.sdata2     start:0x8057D160 end:0x8057D16C
+
+d/col/bg/d_bg_s_wtr_chk.cpp:
+	.text       start:0x803435D0 end:0x80343818
+	.ctors      start:0x804DB90C end:0x804DB910
+	.data       start:0x80547CB8 end:0x80547CE8
+	.sbss       start:0x80575D08 end:0x80575D0C
+	.bss        start:0x805D0458 end:0x805D0500
+
+d/col/bg/d_bg_w.cpp:
+	.text       start:0x80343820 end:0x8034A94C
+	.ctors      start:0x804DB910 end:0x804DB914
+	.data       start:0x80547CE8 end:0x80547F10
+	.sbss       start:0x80575D10 end:0x80575D20
+	.sdata2     start:0x8057D170 end:0x8057D1AC
+	.bss        start:0x805D0500 end:0x805D0A50
+
+d/col/bg/d_bg_w_base.cpp:
+	.text       start:0x8034A950 end:0x8034AF48
+	.data       start:0x80547F10 end:0x80548018
+
+d/col/bg/d_bg_w_kcol.cpp:
+	.text       start:0x8034AF50 end:0x80352138
+	.data       start:0x80548018 end:0x80548120
+	.sdata      start:0x80574070 end:0x80574088
+	.sdata2     start:0x8057D1B0 end:0x8057D228
+	.bss        start:0x805D0A50 end:0x805D0F90
+
+d/col/bg/d_bg_w_sv.cpp:
+	.text       start:0x80352140 end:0x80352920
+	.data       start:0x80548120 end:0x80548234
+	.sdata2     start:0x8057D228 end:0x8057D230
+
+d/col/bg/d_bg_w_time.cpp:
+	.text       start:0x80352920 end:0x80353B44
+	.data       start:0x80548238 end:0x80548340
+	.sdata2     start:0x8057D230 end:0x8057D240
+	.bss        start:0x805D0F90 end:0x805D0FB4
+
+d/col/cc/d_cc_shape_colliders.cpp:
 	.text       start:0x80353B50 end:0x80354298
 	.data       start:0x80548340 end:0x80548580
 
