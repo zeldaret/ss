@@ -3,6 +3,7 @@
 
 // This file is ported from https://github.com/riidefi/mkw/blob/master/source/egg/core/eggHeap.hpp
 
+#include "common.h"
 #include "egg/core/eggDisposer.h"
 #include "egg/core/eggThread.h"
 #include "egg/prim/eggBitFlag.h"
@@ -10,7 +11,6 @@
 #include "rvl/MEM.h"
 #include "rvl/OS.h"
 
-#include <common.h>
 
 namespace EGG {
 

@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_AXFX_LFO_TABLE_H
 #define RVL_SDK_AXFX_LFO_TABLE_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -1,7 +1,7 @@
 #ifndef UNK_FLAG_STUFF_H
 #define UNK_FLAG_STUFF_H
 
-#include <common.h>
+#include "common.h"
 
 struct UnkFlagDefinition {
     u8 mIndex;

@@ -1,6 +1,7 @@
 #ifndef TOBESORTED_ATTENTION_H
 #define TOBESORTED_ATTENTION_H
 
+#include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "m/m3d/m_anmchr.h"
 #include "m/m3d/m_anmmatclr.h"
@@ -9,7 +10,6 @@
 #include "m/m_allocator.h"
 #include "toBeSorted/effects_struct.h"
 
-#include <common.h>
 
 static const u32 OFF = 'off ';
 static const u32 NONE = 'none';

@@ -1,10 +1,10 @@
 #include "m/m_pad.h"
 
+#include "common.h"
 #include "egg/core/eggController.h"
 #include "egg/math/eggVector.h"
 #include "rvl/WPAD.h" // IWYU pragma: export
 
-#include <common.h>
 
 namespace mPad {
 

@@ -1,7 +1,7 @@
 #ifndef REVOSDK_KPAD_H
 #define REVOSDK_KPAD_H
 #ifdef __cplusplus
-#include <common.h>
+#include "common.h"
 extern "C" {
 #endif
 

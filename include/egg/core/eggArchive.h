@@ -1,11 +1,11 @@
 #ifndef EGG_ARCHIVE_H
 #define EGG_ARCHIVE_H
 
+#include "common.h"
 #include "egg/core/eggDisposer.h"
 #include "rvl/ARC.h"  // IWYU pragma: export
 #include "rvl/NAND.h" // IWYU pragma: export
 
-#include <common.h>
 
 typedef void (*FileCallbackFunc)(void *, void *, const ARCDirEntry *, const char *);
 

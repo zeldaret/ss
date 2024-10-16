@@ -1,9 +1,9 @@
 #ifndef RVL_SDK_ESP_H
 #define RVL_SDK_ESP_H
+#include "common.h"
 #include "rvl/ARC.h" // IWYU pragma: export
 #include "rvl/IPC.h" // IWYU pragma: export
 
-#include <common.h>
 
 #ifdef __cplusplus
 extern "C" {

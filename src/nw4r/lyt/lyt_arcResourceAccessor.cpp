@@ -2,9 +2,9 @@
 #include "nw4r/lyt/lyt_arcResourceAccessor.h"
 
 #include "common.h"
+#include "extras.h"
 #include "nw4r/ut/ut_Font.h"
 
-#include <extras.h>
 
 namespace {
 

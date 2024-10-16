@@ -1,13 +1,13 @@
 #ifndef EGG_DISPLAY_H
 #define EGG_DISPLAY_H
 
+#include "common.h"
 #include "egg/core/eggSystem.h" // for BaseSystem config
 #include "egg/core/eggVideo.h"
 #include "egg/prim/eggBitFlag.h"
 #include "nw4r/ut.h" // IWYU pragma: export
 #include "rvl/VI.h"  // IWYU pragma: export
 
-#include <common.h>
 
 namespace EGG {
 

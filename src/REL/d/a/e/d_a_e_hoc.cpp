@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_hoc.h>
+#include "d/a/e/d_a_e_hoc.h"
 
 SPECIAL_ACTOR_PROFILE(E_HOC, dAcEhoc_c, fProfile::E_HOC, 0xCC, 0, 3);
 

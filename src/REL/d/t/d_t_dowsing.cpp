@@ -1,7 +1,9 @@
-#include <d/t/d_t_dowsing.h>
-#include <toBeSorted/item_story_flag_manager.h>
-#include <toBeSorted/room_manager.h>
-#include <toBeSorted/sceneflag_manager.h>
+#include "d/t/d_t_dowsing.h"
+
+#include "toBeSorted/item_story_flag_manager.h"
+#include "toBeSorted/room_manager.h"
+#include "toBeSorted/sceneflag_manager.h"
+
 
 SPECIAL_ACTOR_PROFILE(T_DOWSING, dTgDowsing_c, fProfile::T_DOWSING, 0x0293, 0, 0);
 
@@ -28,9 +30,9 @@ int dTgDowsing_c::doDelete() {
 
 int dTgDowsing_c::actorExecute() {
     if (getTriggerSceneFlag() < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, getTriggerSceneFlag()) ||
-            getUntriggerSceneFlag() < 0xFF &&
-                    !SceneflagManager::sInstance->checkBoolFlag(roomid, getUntriggerSceneFlag()) ||
-            !checkDowsing()) {
+        getUntriggerSceneFlag() < 0xFF &&
+            !SceneflagManager::sInstance->checkBoolFlag(roomid, getUntriggerSceneFlag()) ||
+        !checkDowsing()) {
         mDowsingTarget.doUnregister();
         mTargetActive = false;
     } else if (!mTargetActive && checkDowsing()) {
@@ -46,36 +48,28 @@ int dTgDowsing_c::draw() {
 
 bool dTgDowsing_c::checkDowsing() const {
     if (!((mUntriggerStoryFlag == 0 || mUntriggerStoryFlag >= 0x7FF ||
-                  !StoryFlagManager::sInstance->getCounterOrFlag(mUntriggerStoryFlag)) &&
-                (mTriggerStoryFlag == 0 || mTriggerStoryFlag >= 0x7FF ||
-                        StoryFlagManager::sInstance->getCounterOrFlag(mTriggerStoryFlag)))) {
+           !StoryFlagManager::sInstance->getCounterOrFlag(mUntriggerStoryFlag)) &&
+          (mTriggerStoryFlag == 0 || mTriggerStoryFlag >= 0x7FF ||
+           StoryFlagManager::sInstance->getCounterOrFlag(mTriggerStoryFlag)))) {
         return false;
     }
 
     switch (mDowsingOption) {
-    case TRIAL_0:
-        return ItemFlagManager::sInstance->getFlag(187) && !StoryFlagManager::sInstance->getCounterOrFlag(93);
-    case TRIAL_1:
-        return ItemFlagManager::sInstance->getFlag(188) && !StoryFlagManager::sInstance->getCounterOrFlag(97);
-    case TRIAL_2:
-        return ItemFlagManager::sInstance->getFlag(189) && !StoryFlagManager::sInstance->getCounterOrFlag(98);
-    case TRIAL_3:
-        return ItemFlagManager::sInstance->getFlag(193) && !StoryFlagManager::sInstance->getCounterOrFlag(99);
-    case PROPELLER:
-        return DowsingTarget::hasPropellerDowsing();
-    case WATER_BASIN:
-        return DowsingTarget::hasWaterBasinDowsing();
-    case CRYSTAL_BALL:
-        return DowsingTarget::hasCrystalBallDowsing();
-    case PUMPKIN:
-        return DowsingTarget::hasPumpkinDowsing();
-    case NEW_PLANT_SPECIES:
-        return DowsingTarget::hasNewPlantSpeciesDowsing();
-    case PARTY_WHEEL:
-        return DowsingTarget::hasPartyWheelDowsing();
-    case ZELDA:
-        return DowsingTarget::hasZeldaDowsing();
-    default:
-        return true;
+        case TRIAL_0:
+            return ItemFlagManager::sInstance->getFlag(187) && !StoryFlagManager::sInstance->getCounterOrFlag(93);
+        case TRIAL_1:
+            return ItemFlagManager::sInstance->getFlag(188) && !StoryFlagManager::sInstance->getCounterOrFlag(97);
+        case TRIAL_2:
+            return ItemFlagManager::sInstance->getFlag(189) && !StoryFlagManager::sInstance->getCounterOrFlag(98);
+        case TRIAL_3:
+            return ItemFlagManager::sInstance->getFlag(193) && !StoryFlagManager::sInstance->getCounterOrFlag(99);
+        case PROPELLER:         return DowsingTarget::hasPropellerDowsing();
+        case WATER_BASIN:       return DowsingTarget::hasWaterBasinDowsing();
+        case CRYSTAL_BALL:      return DowsingTarget::hasCrystalBallDowsing();
+        case PUMPKIN:           return DowsingTarget::hasPumpkinDowsing();
+        case NEW_PLANT_SPECIES: return DowsingTarget::hasNewPlantSpeciesDowsing();
+        case PARTY_WHEEL:       return DowsingTarget::hasPartyWheelDowsing();
+        case ZELDA:             return DowsingTarget::hasZeldaDowsing();
+        default:                return true;
     }
 }

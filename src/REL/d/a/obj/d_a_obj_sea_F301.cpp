@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_sea_F301.h>
+#include "d/a/obj/d_a_obj_sea_F301.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SEA_F301, dAcOSeaF301_c, fProfile::OBJ_SEA_F301, 0x253, 0, 5);
 

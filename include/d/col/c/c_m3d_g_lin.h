@@ -1,8 +1,8 @@
 #ifndef C_M3D_G_LIN_H
 #define C_M3D_G_LIN_H
 
-#include <common.h>
-#include <m/m_vec.h>
+#include "common.h"
+#include "m/m_vec.h"
 
 class cM3dGLin {
 public:

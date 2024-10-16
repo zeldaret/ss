@@ -1,7 +1,7 @@
 #ifndef EGG_MATH_H
 #define EGG_MATH_H
 
-#include <common.h>
+#include "common.h"
 
 namespace EGG {
 

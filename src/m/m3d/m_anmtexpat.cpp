@@ -1,7 +1,9 @@
-#include <egg/core/eggFrmHeap.h>
-#include <m/m3d/m3d.h>
-#include <m/m3d/m_anmtexpat.h>
-#include <m/m_heap.h>
+#include "m/m3d/m_anmtexpat.h"
+
+#include "egg/core/eggFrmHeap.h"
+#include "m/m3d/m3d.h"
+#include "m/m_heap.h"
+
 
 namespace m3d {
 
@@ -146,7 +148,7 @@ void anmTexPat_c::setAnm(bmdl_c &mdl, nw4r::g3d::ResAnmTexPat pat, s32 idx, play
     mpChildren[idx].setAnm(mdl, pat, mode);
 
     nw4r::g3d::AnmObjTexPatRes *res =
-            nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::AnmObjTexPatRes>(mpChildren[idx].getAnimObj());
+        nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::AnmObjTexPatRes>(mpChildren[idx].getAnimObj());
     o->Attach(idx, res);
 }
 

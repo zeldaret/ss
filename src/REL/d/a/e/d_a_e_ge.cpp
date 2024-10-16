@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_ge.h>
+#include "d/a/e/d_a_e_ge.h"
 
 SPECIAL_ACTOR_PROFILE(E_GE, dAcEge_c, fProfile::E_GE, 0x106, 0, 2);
 

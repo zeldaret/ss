@@ -4,9 +4,10 @@
 // This file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_list_nd_prio.hpp
 
+#include "common.h"
 #include "f/f_list_nd.h"
 #include "f/f_profile.h"
-#include <common.h>
+
 
 /// @brief A list node with priority fields for an order in a list.
 /// @note Unofficial name.

@@ -1,15 +1,17 @@
-#include <d/d_font_manager.h>
-#include <d/lyt/d2d.h>
-#include <d/lyt/d_textbox.h>
-#include <d/lyt/d_window.h>
-#include <egg/gfx/eggScreen.h>
-#include <nw4r/lyt/lyt_bounding.h>
-#include <nw4r/lyt/lyt_group.h>
-#include <nw4r/lyt/lyt_picture.h>
-#include <nw4r/lyt/lyt_textBox.h>
-#include <nw4r/lyt/lyt_utils.h>
-#include <nw4r/lyt/lyt_window.h>
-#include <sized_string.h>
+#include "d/lyt/d2d.h"
+
+#include "d/d_font_manager.h"
+#include "d/lyt/d_textbox.h"
+#include "d/lyt/d_window.h"
+#include "egg/gfx/eggScreen.h"
+#include "nw4r/lyt/lyt_bounding.h"
+#include "nw4r/lyt/lyt_group.h"
+#include "nw4r/lyt/lyt_picture.h"
+#include "nw4r/lyt/lyt_textBox.h"
+#include "nw4r/lyt/lyt_utils.h"
+#include "nw4r/lyt/lyt_window.h"
+#include "sized_string.h"
+
 
 using namespace nw4r::lyt;
 
@@ -42,28 +44,27 @@ nw4r::lyt::Pane *Layout_c::BuildPaneObj(s32 kind, const void *dataPtr, const Res
     // Had them as left over from editing and somehow when removing them it just broke Build.
     // Probably some analysis depth as 3 break statements do it
     switch (kind) {
-    case 'pan1': {
-        const res::Pane *pResPane = (const res::Pane *)dataPtr;
-        return NewObj<Pane>(pResPane);
-    } break;
-    case 'pic1': {
-        const res::Picture *pResPic = (const res::Picture *)dataPtr;
-        return NewObj<Picture>(pResPic, resBlockSet);
-    } break;
-    case 'txt1': {
-        const res::TextBox *pBlock = (const res::TextBox *)dataPtr;
-        return NewObj<dTextBox_c>(pBlock, resBlockSet);
-    } break;
-    case 'wnd1': {
-        const res::Window *pBlock = (const res::Window *)dataPtr;
-        return NewObj<dWindow_c>(pBlock, resBlockSet);
-    } break;
-    case 'bnd1': {
-        const res::Bounding *pResBounding = (const res::Bounding *)dataPtr;
-        return NewObj<Bounding>(pResBounding, resBlockSet);
-    } break;
-    default:
-        return nullptr;
+        case 'pan1': {
+            const res::Pane *pResPane = (const res::Pane *)dataPtr;
+            return NewObj<Pane>(pResPane);
+        } break;
+        case 'pic1': {
+            const res::Picture *pResPic = (const res::Picture *)dataPtr;
+            return NewObj<Picture>(pResPic, resBlockSet);
+        } break;
+        case 'txt1': {
+            const res::TextBox *pBlock = (const res::TextBox *)dataPtr;
+            return NewObj<dTextBox_c>(pBlock, resBlockSet);
+        } break;
+        case 'wnd1': {
+            const res::Window *pBlock = (const res::Window *)dataPtr;
+            return NewObj<dWindow_c>(pBlock, resBlockSet);
+        } break;
+        case 'bnd1': {
+            const res::Bounding *pResBounding = (const res::Bounding *)dataPtr;
+            return NewObj<Bounding>(pResBounding, resBlockSet);
+        } break;
+        default: return nullptr;
     }
 }
 
@@ -87,68 +88,67 @@ bool Layout_c::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
     for (int i = 0; i < pFileHead->dataBlocks; i++) {
         const res::DataBlockHeader *pDataBlockHead = (const res::DataBlockHeader *)dataPtr;
         switch (detail::GetSignatureInt(pDataBlockHead->kind)) {
-        case 'lyt1': // Main Layout
-        {
-            const res::Layout *pResLyt = ((const res::Layout *)dataPtr);
-            mLayoutSize = pResLyt->layoutSize;
-        } break;
-        case 'txl1': // Texture List
-            resBlockSet.pTextureList = (const res::TextureList *)dataPtr;
-            break;
-        case 'fnl1': // Font List
-            resBlockSet.pFontList = (const res::FontList *)dataPtr;
-            break;
-        case 'mat1': // Material
-            resBlockSet.pMaterialList = (const res::MaterialList *)dataPtr;
-            break;
-        case 'wnd1': // Window
-        case 'pan1': // Pane
-        case 'pic1': // Picture
-        case 'txt1': // Text Box
-        case 'bnd1': // Boundary Pane
-        {
-            Pane *pPane = BuildPaneObj(detail::GetSignatureInt(pDataBlockHead->kind), dataPtr, resBlockSet);
-            if (pPane) {
-                if (mpRootPane == nullptr) {
-                    mpRootPane = pPane;
+            case 'lyt1': // Main Layout
+            {
+                const res::Layout *pResLyt = ((const res::Layout *)dataPtr);
+                mLayoutSize = pResLyt->layoutSize;
+            } break;
+            case 'txl1': // Texture List
+                resBlockSet.pTextureList = (const res::TextureList *)dataPtr;
+                break;
+            case 'fnl1': // Font List
+                resBlockSet.pFontList = (const res::FontList *)dataPtr;
+                break;
+            case 'mat1': // Material
+                resBlockSet.pMaterialList = (const res::MaterialList *)dataPtr;
+                break;
+            case 'wnd1': // Window
+            case 'pan1': // Pane
+            case 'pic1': // Picture
+            case 'txt1': // Text Box
+            case 'bnd1': // Boundary Pane
+            {
+                Pane *pPane = BuildPaneObj(detail::GetSignatureInt(pDataBlockHead->kind), dataPtr, resBlockSet);
+                if (pPane) {
+                    if (mpRootPane == nullptr) {
+                        mpRootPane = pPane;
+                    }
+                    if (pParentPane) {
+                        pParentPane->AppendChild(pPane);
+                    }
+                    pLastPane = pPane;
                 }
-                if (pParentPane) {
-                    pParentPane->AppendChild(pPane);
-                }
-                pLastPane = pPane;
-            }
-        } break;
-        case 'usd1': // User Data
-            pLastPane->SetExtUserDataList((const res::ExtUserDataList *)dataPtr);
-            break;
-        case 'pas1': // PaneChildren Start
-            pParentPane = pLastPane;
-            break;
-        case 'pae1': // PaneChildren End
-            pLastPane = pParentPane;
-            pParentPane = pLastPane->GetParent();
-            break;
-        case 'grp1': // Group
-            if (!bReadRootGroup) {
-                bReadRootGroup = true;
-                mpGroupContainer = NewObj<GroupContainer>();
-            } else {
-                if (mpGroupContainer && groupNestLevel == 1) {
-                    Group *pGroup = NewObj<Group>((const res::Group *)dataPtr, mpRootPane);
-                    if (pGroup) {
-                        mpGroupContainer->AppendGroup(pGroup);
+            } break;
+            case 'usd1': // User Data
+                pLastPane->SetExtUserDataList((const res::ExtUserDataList *)dataPtr);
+                break;
+            case 'pas1': // PaneChildren Start
+                pParentPane = pLastPane;
+                break;
+            case 'pae1': // PaneChildren End
+                pLastPane = pParentPane;
+                pParentPane = pLastPane->GetParent();
+                break;
+            case 'grp1': // Group
+                if (!bReadRootGroup) {
+                    bReadRootGroup = true;
+                    mpGroupContainer = NewObj<GroupContainer>();
+                } else {
+                    if (mpGroupContainer && groupNestLevel == 1) {
+                        Group *pGroup = NewObj<Group>((const res::Group *)dataPtr, mpRootPane);
+                        if (pGroup) {
+                            mpGroupContainer->AppendGroup(pGroup);
+                        }
                     }
                 }
-            }
-            break;
-        case 'grs1': // Group Children Start
-            groupNestLevel++;
-            break;
-        case 'gre1': // Group Children End
-            groupNestLevel--;
-            break;
-        default:
-            break;
+                break;
+            case 'grs1': // Group Children Start
+                groupNestLevel++;
+                break;
+            case 'gre1': // Group Children End
+                groupNestLevel--;
+                break;
+            default: break;
         }
         dataPtr = ((u8 *)dataPtr + pDataBlockHead->size);
     }
@@ -164,9 +164,10 @@ nw4r::lyt::AnimTransform *Layout_c::CreateAnimTransform(const void *animResBuf, 
 }
 
 Multi_c::Multi_c() : Base_c(0x80), mLayout(), mDrawInfo(), mpResAcc(nullptr), mFlags(0) {
-    mDrawInfo.SetLocationAdjustScale(nw4r::math::VEC2((f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_1) /
-                    (f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_2),
-            1.0f));
+    mDrawInfo.SetLocationAdjustScale(nw4r::math::VEC2(
+        (f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_1) / (f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_2),
+        1.0f
+    ));
     mDrawInfo.SetLocationAdjust(true);
 }
 
@@ -407,8 +408,7 @@ fail:
     return nullptr;
 }
 
-void LytBase_c::setPropertiesRecursive(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 scale, f32 spaceX,
-        f32 spaceY) {
+void LytBase_c::setPropertiesRecursive(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 scale, f32 spaceX, f32 spaceY) {
     u16 num = pane->GetExtUserDataNum();
     if (num != 0) {
         const nw4r::lyt::res::ExtUserData *list = pane->GetExtUserData();
@@ -437,7 +437,7 @@ void LytBase_c::setPropertiesRecursive(nw4r::lyt::Pane *pane, f32 posX, f32 posY
 
     setProperties(pane, posX, posY, scale, spaceX, spaceY);
     for (nw4r::ut::LinkList<Pane, 4>::Iterator it = pane->GetChildList()->GetBeginIter();
-            it != pane->GetChildList()->GetEndIter(); ++it) {
+         it != pane->GetChildList()->GetEndIter(); ++it) {
         setPropertiesRecursive(&*it, posX, posY, scale, spaceX, spaceY);
     }
 }
@@ -480,7 +480,6 @@ void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 sca
     t2.y += textBox->GetTranslateX1();
     textBox->SetTranslate(t2);
 
-
     if (scale != -9999.0f) {
         const nw4r::ut::Font *f = textBox->GetFont();
         if (f != nullptr) {
@@ -494,7 +493,6 @@ void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 sca
             textBox->SetScale(textBox->GetTranslateX1());
         }
     }
-
 
     f32 f4 = 0.0f;
     f32 f6 = 0.0f;
@@ -515,7 +513,6 @@ void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 sca
     textBox->SetLineSpace(f4 + textBox->GetLineSpace() + textBox->GetTranslateX1());
     fn_800AB930(textBox);
 }
-
 
 bool LytBase_c::fn_800AB930(dTextBox_c *box) {
     return fn_800AB9A0(box, -1);
@@ -596,8 +593,9 @@ bool LytBase_c::fn_800ABB80(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg)
     return fn_800ABCE0(list, textbox1, textbox2, arg);
 }
 
-bool LytBase_c::fn_800ABCE0(const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2,
-        int arg) {
+bool LytBase_c::fn_800ABCE0(
+    const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg
+) {
     int userDatInt = userDatum->GetInt();
     SizedString<0x40> str1;
     SizedString<0x40> str2;
@@ -693,7 +691,9 @@ bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg,
 
 extern "C" void fn_800AF840(dTextBox_c *textbox1, MsbtInfo *, const char *, int arg, void *unk);
 
-bool LytBase_c::fn_800AC1AC(const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk) {
+bool LytBase_c::fn_800AC1AC(
+    const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk
+) {
     int userDatInt = userDatum->GetInt();
     SizedString<0x40> str1;
     SizedString<0x40> str2;
@@ -754,14 +754,13 @@ bool hasSameBaseName(const char *left, const char *right) {
 
 char *sRef = "ref";
 
-
 void LytBase_c::linkMeters(nw4r::lyt::Group *group, LytMeterGroup *meterGroup) {
     // single regswap
     nw4r::ut::LinkList<LytMeterListNode, 0>::Iterator beginIt = meterGroup->GetBeginIter();
     nw4r::ut::LinkList<LytMeterListNode, 0>::Iterator endIt = meterGroup->GetEndIter();
 
     for (nw4r::lyt::PaneList::Iterator paneIt = group->GetPaneList()->GetBeginIter();
-            paneIt != group->GetPaneList()->GetEndIter(); ++paneIt) {
+         paneIt != group->GetPaneList()->GetEndIter(); ++paneIt) {
         nw4r::lyt::Pane *pane = paneIt->mTarget;
         int num = pane->GetExtUserDataNum();
         if (num != 0) {
@@ -796,8 +795,9 @@ bool AnmGroupBase_c::init(const char *fileName, m2d::ResAccIf_c *resAcc, d2d::La
     return init(transform, fileName, resAcc, group);
 }
 
-bool AnmGroupBase_c::init(nw4r::lyt::AnimTransform *transform, const char *name, m2d::ResAccIf_c *acc,
-        nw4r::lyt::Group *group) {
+bool AnmGroupBase_c::init(
+    nw4r::lyt::AnimTransform *transform, const char *name, m2d::ResAccIf_c *acc, nw4r::lyt::Group *group
+) {
     if (transform == nullptr) {
         return false;
     }

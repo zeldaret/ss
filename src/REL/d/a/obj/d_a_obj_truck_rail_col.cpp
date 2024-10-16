@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_truck_rail_col.h>
+#include "d/a/obj/d_a_obj_truck_rail_col.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TRUCK_RAIL_COL, dAcOTruckRailCol_c, fProfile::OBJ_TRUCK_RAIL_COL, 0x29C, 0, 0);
 

@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_grave.h>
+#include "d/a/obj/d_a_obj_grave.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_GRAVE, dAcOGrave_c, fProfile::OBJ_GRAVE, 0x255, 0, 2);
 

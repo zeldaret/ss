@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_girahim_foot.h>
+#include "d/a/obj/d_a_obj_girahim_foot.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_GIRAHIM_FOOT, dAcOgirahimFoot_c, fProfile::OBJ_GIRAHIM_FOOT, 0x210, 0, 6);
 

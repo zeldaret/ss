@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_wood_board.h>
+#include "d/a/obj/d_a_obj_wood_board.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_WOOD_BOARD, dAcOwoodBoard_c, fProfile::OBJ_WOOD_BOARD, 0x1B7, 0, 2);
 

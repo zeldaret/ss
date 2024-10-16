@@ -1,4 +1,4 @@
-#include <egg/math/eggQuat.h>
+#include "egg/math/eggQuat.h"
 
 namespace EGG {
 

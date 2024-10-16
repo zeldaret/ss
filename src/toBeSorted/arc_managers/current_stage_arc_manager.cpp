@@ -1,5 +1,7 @@
-#include <d/d_heap.h>
-#include <toBeSorted/arc_managers/current_stage_arc_manager.h>
+#include "toBeSorted/arc_managers/current_stage_arc_manager.h"
+
+#include "d/d_heap.h"
+
 
 CurrentStageArcManager *CurrentStageArcManager::sInstance;
 
@@ -20,12 +22,14 @@ bool CurrentStageArcManager::setStage(const char *newStage) {
 
     mCurrentLoadingStageArcName.sprintf("%s_stg_l0", mStageName);
     if (dRawArcEntry_c::checkArcExistsOnDisk(mCurrentLoadingStageArcName, getCurrentStageDirectory())) {
-        return (bool)mArcTable.getArcOrLoadFromDisk(mCurrentLoadingStageArcName, getCurrentStageDirectory(), 0,
-                dHeap::work2Heap.heap);
+        return (bool)mArcTable.getArcOrLoadFromDisk(
+            mCurrentLoadingStageArcName, getCurrentStageDirectory(), 0, dHeap::work2Heap.heap
+        );
     } else {
         mCurrentLoadingStageArcName.sprintf("%s_stg", mStageName);
-        return (bool)mArcTable.getArcOrLoadFromDisk(mCurrentLoadingStageArcName, getCurrentStageDirectory(), 0,
-                dHeap::work2Heap.heap);
+        return (bool)mArcTable.getArcOrLoadFromDisk(
+            mCurrentLoadingStageArcName, getCurrentStageDirectory(), 0, dHeap::work2Heap.heap
+        );
     }
 }
 
@@ -48,8 +52,8 @@ bool CurrentStageArcManager::loadFileFromExtraLayerArc(int layer) {
 
     mStageExtraLayerArcName.sprintf("%s_stg_l%d", mStageName, layer);
     if (dRawArcEntry_c::checkArcExistsOnDisk(mStageExtraLayerArcName, getCurrentStageDirectory())) {
-        return (bool)mArcTable.getArcOrLoadFromDisk(mStageExtraLayerArcName, getCurrentStageDirectory(), 0,
-                dHeap::work2Heap.heap);
+        return (bool
+        )mArcTable.getArcOrLoadFromDisk(mStageExtraLayerArcName, getCurrentStageDirectory(), 0, dHeap::work2Heap.heap);
     } else {
         return true;
     }
@@ -63,8 +67,8 @@ bool CurrentStageArcManager::unloadExtraLayerArc() {
 }
 
 bool CurrentStageArcManager::loadRoomArc(int room) {
-    return (bool)mArcTable.getArcOrLoadFromDisk(getRoomArcDirectory(room), getCurrentStageDirectory(), 0,
-            dHeap::work2Heap.heap);
+    return (bool
+    )mArcTable.getArcOrLoadFromDisk(getRoomArcDirectory(room), getCurrentStageDirectory(), 0, dHeap::work2Heap.heap);
 }
 
 bool CurrentStageArcManager::addEntryFromSuperArc(const char *path, void *data) {

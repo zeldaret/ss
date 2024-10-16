@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_lava_d201.h>
+#include "d/a/obj/d_a_obj_lava_d201.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_LAVA_D201, dAcOLavaD201_c, fProfile::OBJ_LAVA_D201, 0x254, 0, 6);
 

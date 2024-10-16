@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_drum.h>
+#include "d/a/obj/d_a_obj_drum.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_DRUM, dAcOdrum_c, fProfile::OBJ_DRUM, 0x26F, 0, 2);
 

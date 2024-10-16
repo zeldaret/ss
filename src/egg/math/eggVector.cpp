@@ -1,4 +1,4 @@
-#include <egg/math/eggVector.h>
+#include "egg/math/eggVector.h"
 
 namespace EGG {
 

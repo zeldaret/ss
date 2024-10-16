@@ -1,12 +1,12 @@
 #ifndef NW4R_LYT_ANIMATION_H
 #define NW4R_LYT_ANIMATION_H
 #include "common.h"
-#include <nw4r/lyt/lyt_common.h>
-#include <nw4r/lyt/lyt_material.h>
-#include <nw4r/lyt/lyt_pane.h>
-#include <nw4r/lyt/lyt_resourceAccessor.h>
-#include <nw4r/lyt/lyt_types.h>
-#include <nw4r/ut/ut_LinkList.h>
+#include "nw4r/lyt/lyt_common.h"
+#include "nw4r/lyt/lyt_material.h"
+#include "nw4r/lyt/lyt_pane.h"
+#include "nw4r/lyt/lyt_resourceAccessor.h"
+#include "nw4r/lyt/lyt_types.h"
+#include "nw4r/ut/ut_LinkList.h"
 
 namespace nw4r {
 namespace lyt {
@@ -18,12 +18,14 @@ public:
     bool IsLoopData() const;
     virtual ~AnimTransform() = 0;                                                                  // at 0x08
     virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor) = 0; // at 0x0C
-    virtual void SetResource(const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor,      //
-            u16 animNum) = 0;                                                                      // at 0x10
-    virtual void Bind(Pane *pPane, bool bRecursive, bool bDisable) = 0;                            // at 0x14
-    virtual void Bind(Material *pMaterial, bool bDisable) = 0;                                     // at 0x18
-    virtual void Animate(u32 idx, Pane *pPane) = 0;                                                // at 0x1C
-    virtual void Animate(u32 idx, Material *pMaterial) = 0;                                        // at 0x20
+    virtual void SetResource(
+        const res::AnimationBlock *pRes, ResourceAccessor *pResAccessor, //
+        u16 animNum
+    ) = 0;                                                              // at 0x10
+    virtual void Bind(Pane *pPane, bool bRecursive, bool bDisable) = 0; // at 0x14
+    virtual void Bind(Material *pMaterial, bool bDisable) = 0;          // at 0x18
+    virtual void Animate(u32 idx, Pane *pPane) = 0;                     // at 0x1C
+    virtual void Animate(u32 idx, Material *pMaterial) = 0;             // at 0x20
 
     f32 GetFrameMax() const {
         return mFrame; // TOOD

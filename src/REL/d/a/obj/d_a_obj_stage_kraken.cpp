@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_stage_kraken.h>
+#include "d/a/obj/d_a_obj_stage_kraken.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_STAGE_KRAKEN, dAcOstageKraken_c, fProfile::OBJ_STAGE_KRAKEN, 0x1BE, 0, 0);
 

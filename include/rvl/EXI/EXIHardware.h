@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_EXI_HARDWARE_H
 #define RVL_SDK_EXI_HARDWARE_H
+#include "common.h"
 #include "rvl/EXI/EXICommon.h"
 
-#include <common.h>
 
 #ifdef __cplusplus
 extern "C" {

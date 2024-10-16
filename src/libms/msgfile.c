@@ -1,6 +1,8 @@
-#include <libms/commonlib.h>
-#include <libms/libms.h>
-#include <libms/msgfile.h>
+#include "libms/msgfile.h"
+
+#include "libms/commonlib.h"
+#include "libms/libms.h"
+
 
 struct MsbtInfo {
     /* 0x00 */ struct MsbInfo base;
@@ -64,5 +66,5 @@ const char *LMS_GetLabelByTextIndex(struct MsbtInfo *info, int index) {
 
 struct MsbtAttrInfo *LMS_GetAttribute(struct MsbtInfo *info, int index) {
     int *p = info->base.sectionInfos[info->atr1Index].ptr;
-    return (struct MsbtAttrInfo*)&((const char *)p)[p[1] * index + 8];
+    return (struct MsbtAttrInfo *)&((const char *)p)[p[1] * index + 8];
 }

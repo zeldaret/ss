@@ -1,14 +1,14 @@
 #include "egg/prim/eggAssert.h"
 
+#include "__va_arg.h"
 #include "egg/core/eggSystem.h"
 #include "egg/core/eggXfbManager.h"
 #include "nw4r/db/db_directPrint.h"
 #include "nw4r/db/db_mapFile.h"
 #include "rvl/OS.h" // IWYU pragma: export
 #include "rvl/VI.h" // IWYU pragma: export
+#include "string.h"
 
-#include <__va_arg.h>
-#include <string.h>
 
 namespace EGG {
 

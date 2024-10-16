@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_DVD_QUEUE_H
 #define RVL_SDK_DVD_QUEUE_H
+#include "common.h"
 #include "rvl/DVD/dvd.h"
 
-#include <common.h>
 
 #ifdef __cplusplus
 extern "C" {

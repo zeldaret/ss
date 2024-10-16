@@ -1,5 +1,7 @@
-#include <d/a/d_a_player.h>
-#include <d/a/obj/d_a_obj_fairy.h>
+#include "d/a/obj/d_a_obj_fairy.h"
+
+#include "d/a/d_a_player.h"
+
 
 SPECIAL_ACTOR_PROFILE(OBJ_FAIRY, dAcObjFairy_c, fProfile::OBJ_FAIRY, 0x166, 0, 2);
 

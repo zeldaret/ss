@@ -1,6 +1,6 @@
 #ifndef NW4R_SND_LFO_H
 #define NW4R_SND_LFO_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/types_nw4r.h"
 
 namespace nw4r {
 namespace snd {
@@ -24,10 +24,10 @@ class Lfo {
 public:
     Lfo() : mDelayCounter(0), mCounter(0.0f) {}
 
-    LfoParam& GetParam() {
+    LfoParam &GetParam() {
         return mParam;
     }
-    void SetParam(const LfoParam& rParam) {
+    void SetParam(const LfoParam &rParam) {
         mParam = rParam;
     }
 

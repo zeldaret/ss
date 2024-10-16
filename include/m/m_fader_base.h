@@ -1,9 +1,8 @@
 #ifndef M_FADER_BASE_H
 #define M_FADER_BASE_H
 
-#include <common.h>
-#include <m/m_color.h>
-
+#include "common.h"
+#include "m/m_color.h"
 
 class mFaderBase_c {
 public:

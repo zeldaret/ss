@@ -1,9 +1,9 @@
 #ifndef NW4R_LYT_PICTURE_H
 #define NW4R_LYT_PICTURE_H
 
-#include <nw4r/lyt/lyt_common.h>
-#include <nw4r/lyt/lyt_pane.h>
-#include <nw4r/lyt/lyt_resources.h>
+#include "nw4r/lyt/lyt_common.h"
+#include "nw4r/lyt/lyt_pane.h"
+#include "nw4r/lyt/lyt_resources.h"
 
 namespace nw4r {
 

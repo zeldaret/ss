@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_waterfall_D101.h>
+#include "d/a/obj/d_a_obj_waterfall_D101.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_WATERFALL_D101, dAcOWaterFallD101_c, fProfile::OBJ_WATERFALL_D101, 0x13B, 0, 6);
 

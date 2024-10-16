@@ -1,7 +1,7 @@
 #ifndef BITWISE_FLAG_HELPERS_H
 #define BITWISE_FLAG_HELPERS_H
 
-#include <common.h>
+#include "common.h"
 
 class BitwiseFlagHelper {
 public:

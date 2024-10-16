@@ -1,6 +1,8 @@
-#include <egg/core/eggHeap.h>
-#include <d/d_dvd_unk.h>
-#include <nw4r/ut/ut_ResFont.h>
+#include "d/d_dvd_unk.h"
+
+#include "egg/core/eggHeap.h"
+#include "nw4r/ut/ut_ResFont.h"
+
 
 namespace dDvdUnk {
 
@@ -26,16 +28,13 @@ void unkstruct_c::draw() {
 }
 
 /** 800526b0 */
-void unkstruct_c::execute() {
-
-}
+void unkstruct_c::execute() {}
 
 /** 80052750 */
 void unkstruct_c::init() {
     field_0x0 = 0;
     field_0x4 = 0;
 }
-
 
 void unkstruct_c::createFont(EGG::Heap *heap) {
     fontPtr = new (heap, 0x04) nw4r::ut::ResFont();

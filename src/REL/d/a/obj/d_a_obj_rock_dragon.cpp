@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_rock_dragon.h>
+#include "d/a/obj/d_a_obj_rock_dragon.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_ROCK_DRAGON, dAcORockDragon_c, fProfile::OBJ_ROCK_DRAGON, 0x147, 0, 3);
 

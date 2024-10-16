@@ -1,9 +1,9 @@
 #ifndef D_A_KNIGHT_LEADER_BIRD_H
 #define D_A_KNIGHT_LEADER_BIRD_H
 
-#include <d/a/obj/d_a_obj_base.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/obj/d_a_obj_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dAcKnightLeaderBird_c : public dAcObjBase_c {
 public:

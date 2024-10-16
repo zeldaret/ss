@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_shutter.h>
+#include "d/a/obj/d_a_obj_shutter.h"
 
 SPECIAL_ACTOR_PROFILE(SHUTTER, dAcOShutter_c, fProfile::SHUTTER, 0x183, 0, 6);
 

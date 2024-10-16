@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_bcz.h>
+#include "d/a/e/d_a_e_bcz.h"
 
 SPECIAL_ACTOR_PROFILE(E_BCZ, dAcEBcZ_c, fProfile::E_BCZ, 0xD6, 0, 3);
 

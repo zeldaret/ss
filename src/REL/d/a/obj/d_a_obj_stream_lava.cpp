@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_stream_lava.h>
+#include "d/a/obj/d_a_obj_stream_lava.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_STREAM_LAVA, dAcOstreamLava_c, fProfile::OBJ_STREAM_LAVA, 0x1FA, 0, 6);
 

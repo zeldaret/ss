@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_EXI_COMMON_H
 #define RVL_SDK_EXI_COMMON_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -18,9 +18,19 @@ typedef enum {
     EXI_STATE_BUSY = EXI_STATE_DMA_ACCESS | EXI_STATE_IMM_ACCESS
 } EXIState;
 
-typedef enum { EXI_CHAN_0, EXI_CHAN_1, EXI_CHAN_2, EXI_MAX_CHAN } EXIChannel;
+typedef enum {
+    EXI_CHAN_0,
+    EXI_CHAN_1,
+    EXI_CHAN_2,
+    EXI_MAX_CHAN
+} EXIChannel;
 
-typedef enum { EXI_READ, EXI_WRITE, EXI_TYPE_2, EXI_MAX_TYPE } EXIType;
+typedef enum {
+    EXI_READ,
+    EXI_WRITE,
+    EXI_TYPE_2,
+    EXI_MAX_TYPE
+} EXIType;
 
 typedef void (*EXICallback)(EXIChannel chan, struct OSContext *ctx);
 

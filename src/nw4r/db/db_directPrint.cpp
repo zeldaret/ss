@@ -3,9 +3,9 @@
 
 #include "rvl/OS.h" // IWYU pragma: export
 #include "rvl/VI.h"
+#include "stdio.h"
+#include "string.h"
 
-#include <stdio.h>
-#include <string.h>
 
 /*
 

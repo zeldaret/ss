@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_bridge_step.h>
+#include "d/a/obj/d_a_obj_bridge_step.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_BRIDGE_STEP, dAcOBridgeStep_c, fProfile::OBJ_BRIDGE_STEP, 0x231, 0, 7);
 

@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_stopping_rope.h>
+#include "d/a/obj/d_a_obj_stopping_rope.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_STOPPING_ROPE, dAcOStoppingRope_c, fProfile::OBJ_STOPPING_ROPE, 0x23B, 0, 3);
 

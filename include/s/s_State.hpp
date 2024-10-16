@@ -1,8 +1,8 @@
 #ifndef S_STATE_H
 #define S_STATE_H
 
-#include <s/s_FStateMgr.hpp>
-#include <s/s_StateMethodUsr_FI.hpp>
+#include "s/s_FStateMgr.hpp"
+#include "s/s_StateMethodUsr_FI.hpp"
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
 // See include/s/README.txt for changes made

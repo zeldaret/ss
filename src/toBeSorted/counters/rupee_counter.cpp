@@ -1,5 +1,5 @@
-#include <toBeSorted/counters/counter.h>
-#include <toBeSorted/item_story_flag_manager.h>
+#include "toBeSorted/counters/counter.h"
+#include "toBeSorted/item_story_flag_manager.h"
 
 static u16 getBaseCapacity();
 static u16 getExtraWalletCapacity();
@@ -21,10 +21,10 @@ struct WalletStruct {
 /* 8016DE10 */ static u16 getBaseCapacity() {
     int i = 0;
     /* 804E91B0 */ WalletStruct wallet_definitions[4] = {
-            {0x6c, 500},
-            {0x6d, 1000},
-            {0x6e, 5000},
-            {0x6f, 9000},
+        {0x6c,  500},
+        {0x6d, 1000},
+        {0x6e, 5000},
+        {0x6f, 9000},
     };
     const WalletStruct *wallet = &wallet_definitions[3];
     for (; i < 4; i++, wallet--) {

@@ -1,4 +1,4 @@
-#include <egg/core/eggThread.h>
+#include "egg/core/eggThread.h"
 
 namespace EGG {
 

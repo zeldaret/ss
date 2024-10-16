@@ -1,4 +1,4 @@
-#include <libc.h>
+#include "libc.h"
 #include "toBeSorted/bitwise_flag_helper.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/flag_space.h"
@@ -29,7 +29,7 @@ u16 SkipflagManager::sSkipFlags[16] = {};
 
 // 800bfba0
 void SkipflagManager::copyFromSave() {
-    u16* savedSkipflags = FileManager::sInstance->getSkipFlags();
+    u16 *savedSkipflags = FileManager::sInstance->getSkipFlags();
     mFlagSpace.copyFromSaveFile(savedSkipflags, 0, 0x10);
 }
 
@@ -39,8 +39,7 @@ void SkipflagManager::setCommitFlag(u16 flag) {
 }
 
 // 800bfc00
-SkipflagManager::SkipflagManager() : mFlagSpace(sSkipFlags, ARRAY_LENGTH(sSkipFlags)), mShouldCommit(false) {
-}
+SkipflagManager::SkipflagManager() : mFlagSpace(sSkipFlags, ARRAY_LENGTH(sSkipFlags)), mShouldCommit(false) {}
 
 // 800bfc30
 void SkipflagManager::unsetCommitFlag() {
@@ -66,7 +65,7 @@ void SkipflagManager::setFlag(u16 flag) {
 
 // 800bfd20
 bool SkipflagManager::checkFlag(u16 flag) {
-    u16* savedSkipflags = FileManager::sInstance->getSkipFlags();
+    u16 *savedSkipflags = FileManager::sInstance->getSkipFlags();
     return mFlagHelper.checkFlag(flag / 16, flag % 16, savedSkipflags, 0x10);
 }
 

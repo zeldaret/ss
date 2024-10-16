@@ -1,8 +1,8 @@
 #ifndef NW4R_SND_NOTE_ON_CALLBACK_H
 #define NW4R_SND_NOTE_ON_CALLBACK_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/snd/snd_Channel.h"
+#include "nw4r/types_nw4r.h"
 
-#include <nw4r/snd/snd_Channel.h>
 
 namespace nw4r {
 namespace snd {
@@ -27,8 +27,8 @@ class NoteOnCallback {
 public:
     virtual ~NoteOnCallback() {} // at 0x8
 
-    virtual Channel* NoteOn(SeqPlayer* pPlayer, int bankNo,
-                            const NoteOnInfo& rInfo) = 0; // at 0xC
+    virtual Channel *NoteOn(SeqPlayer *pPlayer, int bankNo,
+                            const NoteOnInfo &rInfo) = 0; // at 0xC
 };
 
 } // namespace detail

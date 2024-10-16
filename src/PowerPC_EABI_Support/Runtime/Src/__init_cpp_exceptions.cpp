@@ -1,6 +1,8 @@
-#include <NMWException.h>
-#include <__init_cpp_exceptions.h>
-#include <__ppc_eabi_linker.h>
+#include "__init_cpp_exceptions.h"
+
+#include "NMWException.h"
+#include "__ppc_eabi_linker.h"
+
 
 #if __MWERKS__
 #pragma exceptions off

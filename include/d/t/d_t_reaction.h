@@ -1,11 +1,11 @@
 #ifndef D_T_REACTION_H
 #define D_T_REACTION_H
 
-#include <d/a/obj/d_a_obj_base.h>
-#include <d/col/cc/d_cc_shape_colliders.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
-#include <toBeSorted/dowsing_target.h>
+#include "d/a/obj/d_a_obj_base.h"
+#include "d/col/cc/d_cc_shape_colliders.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
+#include "toBeSorted/dowsing_target.h"
 
 class dTgReaction_c : public dAcObjBase_c {
 public:

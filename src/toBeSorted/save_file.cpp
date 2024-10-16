@@ -1,7 +1,6 @@
 #include "toBeSorted/save_file.h"
 
-#include <string.h>
-
+#include "string.h"
 
 // 0x800099b0   getStoryFlags0__8SaveFileFv
 u16 *SaveFile::getStoryFlags0() {

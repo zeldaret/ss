@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_bulb_switch.h>
+#include "d/a/obj/d_a_obj_bulb_switch.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_BULB_SWITCH, dAcObulbSwitch_c, fProfile::OBJ_BULB_SWITCH, 0x1BC, 0, 2);
 

@@ -1,10 +1,12 @@
-#include <egg/core/eggAllocator.h>
-#include <m/m_allocator.h>
-#include <m/m_heap.h>
+#include "m/m_allocator.h"
+
+#include "egg/core/eggAllocator.h"
+#include "m/m_heap.h"
+
 
 // TODO this include is weird
-#include <egg/core/eggAssertHeap.h>
-#include <egg/core/eggHeap.h>
+#include "egg/core/eggAssertHeap.h"
+#include "egg/core/eggHeap.h"
 
 mAllocator_c::mAllocator_c() : EGG::Allocator(mHeap::g_assertHeap, 0x04) {}
 

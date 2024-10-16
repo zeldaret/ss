@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_seat_sword.h>
+#include "d/a/obj/d_a_obj_seat_sword.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SEAT_SWORD, dAcOSeatSword_c, fProfile::OBJ_SEAT_SWORD, 0x249, 0, 3);
 

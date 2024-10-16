@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_tr_shutter_cs.h>
+#include "d/a/obj/d_a_obj_tr_shutter_cs.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TR_SHUTTER_CS, dAcOTrlyShtrChgScn_c, fProfile::OBJ_TR_SHUTTER_CS, 0x187, 0, 2);
 

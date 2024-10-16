@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_ARC_H
 #define RVL_SDK_ARC_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -10,7 +10,10 @@ extern "C" {
  * https://github.com/riidefi/WiiCore/tree/master/source/rx
  */
 
-typedef enum { ARC_ENTRY_FILE, ARC_ENTRY_FOLDER } ARCEntryType;
+typedef enum {
+    ARC_ENTRY_FILE,
+    ARC_ENTRY_FOLDER
+} ARCEntryType;
 
 typedef struct ARCNode {
     union {

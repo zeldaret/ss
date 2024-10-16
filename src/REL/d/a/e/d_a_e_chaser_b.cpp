@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_chaser_b.h>
+#include "d/a/e/d_a_e_chaser_b.h"
 
 SPECIAL_ACTOR_PROFILE(E_CHB, dAcEChb_c, fProfile::E_CHB, 0x103, 0, 3);
 

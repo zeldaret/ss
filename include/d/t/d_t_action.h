@@ -1,7 +1,7 @@
 #ifndef D_T_ACTION_H
 #define D_T_ACTION_H
 
-#include <d/a/d_a_base.h>
+#include "d/a/d_a_base.h"
 
 class dTgAction_c : public dAcBase_c {
 public:

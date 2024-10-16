@@ -1,7 +1,7 @@
 #ifndef CONTEXT_BTE_H
 #define CONTEXT_BTE_H
 
-#include <stdint.h>
+#include "stdint.h"
 
 /* Contains the context of the BTE library that the WPAD library needs to
  * compile.

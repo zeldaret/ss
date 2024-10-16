@@ -1,11 +1,11 @@
 #ifndef EGG_COLOR_FADER_H
 #define EGG_COLOR_FADER_H
 
+#include "common.h"
 #include "egg/core/eggFader.h"
 #include "egg/prim/eggBitFlag.h"
 #include "nw4r/ut.h"
 
-#include <common.h>
 
 namespace EGG {
 

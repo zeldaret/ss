@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_battleshipfish.h>
+#include "d/a/e/d_a_e_battleshipfish.h"
 
 SPECIAL_ACTOR_PROFILE(E_BFISH, dAcEbfish_c, fProfile::E_BFISH, 0xE9, 0, 4098);
 

@@ -1,9 +1,9 @@
 #ifndef RVL_SDK_GX_TEXTURE_H
 #define RVL_SDK_GX_TEXTURE_H
+#include "common.h"
 #include "rvl/GX/GXInternal.h"
 #include "rvl/GX/GXTypes.h"
 
-#include <common.h>
 
 #ifdef __cplusplus
 extern "C" {

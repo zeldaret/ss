@@ -2,8 +2,8 @@
 
 #include "rvl/DVD.h" // IWYU pragma: export
 #include "rvl/OS.h"  // IWYU pragma: export
+#include "stdio.h"
 
-#include <stdio.h>
 
 namespace nw4r {
 namespace db {

@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include <rvl/KPAD/KPAD.h>
+#include "rvl/KPAD/KPAD.h"
 
 #ifdef __cplusplus
 }

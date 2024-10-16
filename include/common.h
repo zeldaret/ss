@@ -71,7 +71,7 @@
     }
 #endif
 
-#include <stddef.h>
+#include "stddef.h"
 
 typedef signed char s8;
 typedef signed short s16;

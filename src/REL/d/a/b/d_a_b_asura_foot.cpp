@@ -1,4 +1,4 @@
-#include <d/a/b/d_a_b_asura_foot.h>
+#include "d/a/b/d_a_b_asura_foot.h"
 
 SPECIAL_ACTOR_PROFILE(ASURA_FOOT, dAcAsuraFoot_c, fProfile::ASURA_FOOT, 0x119, 0, 0);
 

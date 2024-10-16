@@ -1,7 +1,8 @@
+#include "m/m_color_fader.h"
+
 #include "rvl/SC.h" // IWYU pragma: export
 #include "rvl/VI.h" // IWYU pragma: export
 
-#include <m/m_color_fader.h>
 
 mColorFader_c::mColorFader_c(const mColor &color, EStatus status) : mFaderBase_c(color, status) {
     mAspectRatio = SCGetAspectRatio();

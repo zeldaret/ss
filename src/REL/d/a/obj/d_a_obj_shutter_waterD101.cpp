@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_shutter_waterD101.h>
+#include "d/a/obj/d_a_obj_shutter_waterD101.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SHUTTER_WATER_D101, dAcOShutterWaterD101_c, fProfile::OBJ_SHUTTER_WATER_D101, 0x17F, 0, 7);
 

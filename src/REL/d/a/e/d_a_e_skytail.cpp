@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_skytail.h>
+#include "d/a/e/d_a_e_skytail.h"
 
 SPECIAL_ACTOR_PROFILE(E_SKYTAIL, dAcESkytail_c, fProfile::E_SKYTAIL, 0xD7, 0, 2);
 

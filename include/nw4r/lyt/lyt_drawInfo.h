@@ -1,9 +1,10 @@
 #ifndef NW4R_LYT_DRAWINFO_H
 #define NW4R_LYT_DRAWINFO_H
 #include "common.h"
+#include "nw4r/lyt/lyt_types.h"
 #include "nw4r/math/math_types.h"
 #include "nw4r/ut/ut_Rect.h"
-#include <nw4r/lyt/lyt_types.h>
+
 namespace nw4r {
 namespace lyt {
 struct DrawInfo {

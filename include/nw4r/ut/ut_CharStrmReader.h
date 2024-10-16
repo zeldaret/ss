@@ -1,6 +1,6 @@
 #ifndef NW4R_UT_CHAR_STRM_READER_H
 #define NW4R_UT_CHAR_STRM_READER_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/types_nw4r.h"
 
 namespace nw4r {
 namespace ut {
@@ -17,23 +17,33 @@ public:
     u16 ReadNextCharCP1252();
     u16 ReadNextCharSJIS();
 
-    const void* GetCurrentPos() const { return mCharStrm; }
-
-    template <typename T> T GetChar(int offset) const {
-        return static_cast<const T*>(mCharStrm)[offset];
+    const void *GetCurrentPos() const {
+        return mCharStrm;
     }
 
-    template <typename T> void StepStrm(int offset) {
-        static_cast<const T*>(mCharStrm) += offset;
+    template <typename T>
+    T GetChar(int offset) const {
+        return static_cast<const T *>(mCharStrm)[offset];
     }
 
-    u16 Next() { return (this->*mReadFunc)(); }
+    template <typename T>
+    void StepStrm(int offset) {
+        static_cast<const T *>(mCharStrm) += offset;
+    }
 
-    void Set(const char* strm) { mCharStrm = strm; }
-    void Set(const wchar_t* strm) { mCharStrm = strm; }
+    u16 Next() {
+        return (this->*mReadFunc)();
+    }
+
+    void Set(const char *strm) {
+        mCharStrm = strm;
+    }
+    void Set(const wchar_t *strm) {
+        mCharStrm = strm;
+    }
 
 private:
-    const void* mCharStrm; // at 0x0
+    const void *mCharStrm; // at 0x0
     ReadFunc mReadFunc;    // at 0x4
 };
 

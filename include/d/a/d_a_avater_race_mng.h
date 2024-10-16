@@ -1,9 +1,9 @@
 #ifndef D_A_AVATER_RACE_MNG_H
 #define D_A_AVATER_RACE_MNG_H
 
-#include <d/a/d_a_base.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/d_a_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dAvater_Race_Mng_c : public dAcBase_c {
 public:

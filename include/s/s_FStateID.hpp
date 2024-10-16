@@ -1,8 +1,8 @@
 #ifndef S_FSTATEID_H
 #define S_FSTATEID_H
 
-#include <s/s_StateID.hpp>
-#include <string.h>
+#include "s/s_StateID.hpp"
+#include "string.h"
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
 // See include/s/README.txt for changes made

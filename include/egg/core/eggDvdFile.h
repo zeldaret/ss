@@ -1,12 +1,12 @@
 #ifndef EGG_DVD_FILE_H
 #define EGG_DVD_FILE_H
 
+#include "common.h"
 #include "egg/core/eggFile.h"
 #include "nw4r/ut.h" // IWYU pragma: export
 #include "rvl/DVD.h" // IWYU pragma: export
 #include "rvl/OS.h"  // IWYU pragma: export
 
-#include <common.h>
 
 namespace EGG {
 

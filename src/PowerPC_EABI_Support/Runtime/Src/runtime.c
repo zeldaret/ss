@@ -1,18 +1,18 @@
-#include <dolphin.h>
+#include "dolphin.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* macros for GPR/FPR resting and saving */
-#define SAVE_FPR(reg)    _savefpr_##reg
+#define SAVE_FPR(reg) _savefpr_##reg
 #define RESTORE_FPR(reg) _restfpr_##reg
-#define SAVE_GPR(reg)    _savegpr_##reg
+#define SAVE_GPR(reg) _savegpr_##reg
 #define RESTORE_GPR(reg) _restgpr_##reg
 
-#define ENTRY_SAVE_FPR(reg)    entry SAVE_FPR(reg)
+#define ENTRY_SAVE_FPR(reg) entry SAVE_FPR(reg)
 #define ENTRY_RESTORE_FPR(reg) entry RESTORE_FPR(reg)
-#define ENTRY_SAVE_GPR(reg)    entry SAVE_GPR(reg)
+#define ENTRY_SAVE_GPR(reg) entry SAVE_GPR(reg)
 #define ENTRY_RESTORE_GPR(reg) entry RESTORE_GPR(reg)
 
 #define save_restore_reg r11
@@ -103,12 +103,11 @@ void RESTORE_GPR(30)(void);
 void RESTORE_GPR(31)(void);
 
 static const u32 __constants[] = {
-	0x00000000, 0x00000000, 0x41F00000, 0x00000000, 0x41E00000, 0x00000000,
+    0x00000000, 0x00000000, 0x41F00000, 0x00000000, 0x41E00000, 0x00000000,
 };
 
 /* 803620AC-80362108 35C9EC 005C+00 0/0 42/42 89/89 .text            __cvt_fp2unsigned */
-asm u32 __cvt_fp2unsigned(register f64 d)
-{
+asm u32 __cvt_fp2unsigned(register f64 d) {
 #ifdef __MWERKS__ // clang-format off
 		nofralloc
 		stwu    r1,-16(r1)
@@ -700,8 +699,7 @@ around:
 }
 
 /* 803626BC-80362770 35CFFC 00B4+00 0/0 1/1 0/0 .text            __cvt_sll_flt */
-asm void __cvt_sll_flt(void)
-{
+asm void __cvt_sll_flt(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
     stwu r1, -0x10(r1)
@@ -757,8 +755,7 @@ lbl_80362758:
 }
 
 /* 80362770-8036283C 35D0B0 00CC+00 0/0 2/2 0/0 .text            __cvt_dbl_usll */
-asm void __cvt_dbl_usll(void)
-{
+asm void __cvt_dbl_usll(void) {
 #ifdef __MWERKS__ // clang-format off
 	nofralloc
 	stwu    r1,-16(r1)

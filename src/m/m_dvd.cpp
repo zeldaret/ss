@@ -7,8 +7,8 @@
 #include "egg/core/eggStreamDecomp.h"
 #include "m/m_heap.h"
 #include "rvl/DVD.h" // IWYU pragma: export
+#include "string.h"
 
-#include <string.h>
 
 static int ConvertPathToEntrynum(const char *path, u8 *outType);
 

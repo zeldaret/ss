@@ -1,1 +1,1 @@
-#include <nw4r/snd/snd_SeqSound.h>
+#include "nw4r/snd/snd_SeqSound.h"

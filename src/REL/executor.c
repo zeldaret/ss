@@ -1,4 +1,4 @@
-#include <REL/executor.h>
+#include "REL/executor.h"
 
 void _prolog(void) {
     ModuleConstructorsX(_ctors);

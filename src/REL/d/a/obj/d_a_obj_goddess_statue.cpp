@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_goddess_statue.h>
+#include "d/a/obj/d_a_obj_goddess_statue.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_GODDESS_STATUE, dAcOGoddessStatue_c, fProfile::OBJ_GODDESS_STATUE, 0x24A, 0, 3);
 

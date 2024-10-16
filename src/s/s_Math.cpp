@@ -1,5 +1,7 @@
-#include <math.h>
-#include <s/s_Math.h>
+#include "s/s_Math.h"
+
+#include "math.h"
+
 
 namespace sLib {
 

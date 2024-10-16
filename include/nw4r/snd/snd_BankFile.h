@@ -1,11 +1,10 @@
 #ifndef NW4R_SND_BANK_FILE_H
 #define NW4R_SND_BANK_FILE_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/snd/snd_Util.h"
+#include "nw4r/snd/snd_WaveFile.h"
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut.h"
 
-#include <nw4r/snd/snd_Util.h>
-#include <nw4r/snd/snd_WaveFile.h>
-
-#include <nw4r/ut.h>
 
 namespace nw4r {
 namespace snd {
@@ -72,8 +71,8 @@ struct InstInfo {
     f32 tune;       // at 0xC
 };
 
-inline u8 ReadByte(const void* pAddr) {
-    return *static_cast<const u8*>(pAddr);
+inline u8 ReadByte(const void *pAddr) {
+    return *static_cast<const u8 *>(pAddr);
 }
 
 class BankFileReader {
@@ -82,23 +81,20 @@ public:
     static const int VERSION = NW4R_VERSION(1, 1);
 
 public:
-    explicit BankFileReader(const void* pBankBin);
+    explicit BankFileReader(const void *pBankBin);
 
-    bool IsValidFileHeader(const void* pBankBin);
+    bool IsValidFileHeader(const void *pBankBin);
 
-    bool ReadInstInfo(InstInfo* pInfo, int prgNo, int key, int velocity) const;
-    bool ReadWaveParam(WaveData* pData, int waveIndex,
-                       const void* pWaveAddr) const;
-
-private:
-    const BankFile::DataRegion*
-    GetReferenceToSubRegion(const BankFile::DataRegion* pRef,
-                            int splitKey) const;
+    bool ReadInstInfo(InstInfo *pInfo, int prgNo, int key, int velocity) const;
+    bool ReadWaveParam(WaveData *pData, int waveIndex, const void *pWaveAddr) const;
 
 private:
-    const BankFile::Header* mHeader;       // at 0x0
-    const BankFile::DataBlock* mDataBlock; // at 0x4
-    const BankFile::WaveBlock* mWaveBlock; // at 0x8
+    const BankFile::DataRegion *GetReferenceToSubRegion(const BankFile::DataRegion *pRef, int splitKey) const;
+
+private:
+    const BankFile::Header *mHeader;       // at 0x0
+    const BankFile::DataBlock *mDataBlock; // at 0x4
+    const BankFile::WaveBlock *mWaveBlock; // at 0x8
 };
 
 } // namespace detail

@@ -1,12 +1,12 @@
 #ifndef EGG_AUDIO_ARC_PLAYER_MANAGER_H
 #define EGG_AUDIO_ARC_PLAYER_MANAGER_H
 
-#include <common.h>
-#include <nw4r/snd/snd_DvdSoundArchive.h>
-#include <nw4r/snd/snd_MemorySoundArchive.h>
-#include <nw4r/snd/snd_NandSoundArchive.h>
-#include <nw4r/snd/snd_SoundArchivePlayer.h>
-#include <nw4r/snd/snd_SoundHeap.h>
+#include "common.h"
+#include "nw4r/snd/snd_DvdSoundArchive.h"
+#include "nw4r/snd/snd_MemorySoundArchive.h"
+#include "nw4r/snd/snd_NandSoundArchive.h"
+#include "nw4r/snd/snd_SoundArchivePlayer.h"
+#include "nw4r/snd/snd_SoundHeap.h"
 
 namespace EGG {
 

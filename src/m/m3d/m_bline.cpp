@@ -1,10 +1,12 @@
-#include <egg/core/eggColorFader.h>
-#include <egg/core/eggHeap.h>
-#include <egg/gfx/eggDrawGX.h>
-#include <m/m3d/m3d.h>
-#include <m/m3d/m_bline.h>
-#include <nw4r/g3d/g3d_light.h>
-#include <nw4r/g3d/g3d_state.h>
+#include "m/m3d/m_bline.h"
+
+#include "egg/core/eggColorFader.h"
+#include "egg/core/eggHeap.h"
+#include "egg/gfx/eggDrawGX.h"
+#include "m/m3d/m3d.h"
+#include "nw4r/g3d/g3d_light.h"
+#include "nw4r/g3d/g3d_state.h"
+
 
 namespace m3d {
 
@@ -12,8 +14,10 @@ blineMat_c::~blineMat_c() {
     remove();
 }
 
-bool blineMat_c::create(mAllocator_c *pAllocator, int numLines, u16 numLinePts, f32 width, f32 repeat,
-        nw4r::ut::Color &color, EGG::ResTIMG *pTex, bool p9) {
+bool blineMat_c::create(
+    mAllocator_c *pAllocator, int numLines, u16 numLinePts, f32 width, f32 repeat, nw4r::ut::Color &color,
+    EGG::ResTIMG *pTex, bool p9
+) {
     if (!proc_c::create(pAllocator, nullptr)) {
         return false;
     }
@@ -60,7 +64,7 @@ void blineMat_c::update() {
     PSMTXMultVec(camMtx, mVec3_c::zero, vec);
 
     for (bline_c *line = (bline_c *)nw4r::ut::List_GetNext(&mLines, 0); line != nullptr;
-            line = (bline_c *)nw4r::ut::List_GetNext(&mLines, line)) {
+         line = (bline_c *)nw4r::ut::List_GetNext(&mLines, line)) {
         if ((line->mFlags & 1) == 0) {
             line->update(&vec);
         }
@@ -77,8 +81,9 @@ void blineMat_c::setupGX(bool bTransparent) {
         u32 mask_diff_color, mask_diff_alpha, mask_spec_color, mask_spec_alpha;
         nw4r::g3d::AmbLightObj ambObj;
 
-        nw4r::g3d::G3DState::LoadLightSet(0, &mask_diff_color, &mask_diff_alpha, &mask_spec_color, &mask_spec_alpha,
-                &ambObj);
+        nw4r::g3d::G3DState::LoadLightSet(
+            0, &mask_diff_color, &mask_diff_alpha, &mask_spec_color, &mask_spec_alpha, &ambObj
+        );
 
         nw4r::ut::Color ambColor(0xFF, 0xFF, 0xFF, 0xFF);
         nw4r::ut::Color matColor(0xFF, 0xFF, 0xFF, 0xFF);
@@ -146,7 +151,7 @@ void blineMat_c::drawOpa() {
     update();
     setupGX(false);
     for (bline_c *line = (bline_c *)nw4r::ut::List_GetNext(&mLines, 0); line != nullptr;
-            line = (bline_c *)nw4r::ut::List_GetNext(&mLines, line)) {
+         line = (bline_c *)nw4r::ut::List_GetNext(&mLines, line)) {
         if ((line->mFlags & 1) == 0 && line->mColor.a == 0xFF) {
             line->draw();
         }
@@ -157,7 +162,7 @@ void blineMat_c::drawXlu() {
     update();
     setupGX(true);
     for (bline_c *line = (bline_c *)nw4r::ut::List_GetNext(&mLines, 0); line != nullptr;
-            line = (bline_c *)nw4r::ut::List_GetNext(&mLines, line)) {
+         line = (bline_c *)nw4r::ut::List_GetNext(&mLines, line)) {
         if ((line->mFlags & 1) == 0 && line->mColor.a != 0xFF) {
             line->draw();
         }

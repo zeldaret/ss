@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_water_nut_leaf.h>
+#include "d/a/obj/d_a_obj_water_nut_leaf.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_WATER_NUT_LEAF, dAcOWaterNutLeaf_c, fProfile::OBJ_WATER_NUT_LEAF, 0x136, 0, 3);
 

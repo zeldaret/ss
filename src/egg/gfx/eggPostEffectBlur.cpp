@@ -1,3 +1,3 @@
-#include <egg/gfx/eggPostEffectBlur.h>
+#include "egg/gfx/eggPostEffectBlur.h"
 
 namespace EGG {} // namespace EGG

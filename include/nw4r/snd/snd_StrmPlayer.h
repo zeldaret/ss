@@ -1,5 +1,6 @@
 #ifndef NW4R_SND_STRM_PLAYER_H
 #define NW4R_SND_STRM_PLAYER_H
+#include "common.h"
 #include "nw4r/snd/snd_BasicPlayer.h"
 #include "nw4r/snd/snd_InstancePool.h"
 #include "nw4r/snd/snd_SoundThread.h"
@@ -10,9 +11,6 @@
 #include "nw4r/types_nw4r.h"
 #include "nw4r/ut.h" // IWYU pragma: export
 #include "rvl/OS.h"  // IWYU pragma: export
-
-#include <common.h>
-
 
 namespace nw4r {
 namespace snd {

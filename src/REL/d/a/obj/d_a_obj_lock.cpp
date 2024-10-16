@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_lock.h>
+#include "d/a/obj/d_a_obj_lock.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SHUTTER_LOCK, dAcOLock_c, fProfile::OBJ_SHUTTER_LOCK, 0x149, 0, 7);
 

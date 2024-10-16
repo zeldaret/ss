@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_goddess_cube.h>
+#include "d/a/obj/d_a_obj_goddess_cube.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_GODDESS_CUBE, dAcOGoddessCube_c, fProfile::OBJ_GODDESS_CUBE, 0x1A6, 0, 3);
 

@@ -1,6 +1,8 @@
-#include <m/m3d/m3d.h>
-#include <m/m3d/m_mdl.h>
-#include <nw4r/g3d/g3d_scnmdlsmpl.h>
+#include "m/m3d/m_mdl.h"
+
+#include "m/m3d/m3d.h"
+#include "nw4r/g3d/g3d_scnmdlsmpl.h"
+
 
 namespace m3d {
 
@@ -12,8 +14,9 @@ mdl_c::mdlCallback_c::mdlCallback_c() {
 }
 mdl_c::mdlCallback_c::~mdlCallback_c() {}
 
-void mdl_c::mdlCallback_c::ExecCallbackA(nw4r::g3d::ChrAnmResult *result, nw4r::g3d::ResMdl mdl,
-        nw4r::g3d::FuncObjCalcWorld *o) {
+void mdl_c::mdlCallback_c::ExecCallbackA(
+    nw4r::g3d::ChrAnmResult *result, nw4r::g3d::ResMdl mdl, nw4r::g3d::FuncObjCalcWorld *o
+) {
     u16 nodeId = o->GetNodeId();
     nw4r::g3d::ChrAnmResult *resPtr = &mpNodes[nodeId];
     if (mCalcRatio.is0x18() && !mCalcRatio.isEnd()) {
@@ -78,8 +81,9 @@ void mdl_c::mdlCallback_c::ExecCallbackA(nw4r::g3d::ChrAnmResult *result, nw4r::
     }
 }
 
-void mdl_c::mdlCallback_c::ExecCallbackB(nw4r::g3d::WorldMtxManip *m, nw4r::g3d::ResMdl mdl,
-        nw4r::g3d::FuncObjCalcWorld *o) {
+void mdl_c::mdlCallback_c::ExecCallbackB(
+    nw4r::g3d::WorldMtxManip *m, nw4r::g3d::ResMdl mdl, nw4r::g3d::FuncObjCalcWorld *o
+) {
     u16 nodeId = o->GetNodeId();
     if (mpBaseCallback != nullptr) {
         mpBaseCallback->timingB(nodeId, m, mdl);
@@ -153,8 +157,9 @@ bool mdl_c::create(nw4r::g3d::ResMdl mdl, mAllocator_c *alloc, u32 bufferOption,
     return create(mdl, nullptr, alloc, bufferOption, nView, pSize);
 }
 
-bool mdl_c::create(nw4r::g3d::ResMdl mdl, mdl_c::mdlCallback_c *cb, mAllocator_c *alloc, u32 bufferOption, int nView,
-        u32 *pSize) {
+bool mdl_c::create(
+    nw4r::g3d::ResMdl mdl, mdl_c::mdlCallback_c *cb, mAllocator_c *alloc, u32 bufferOption, int nView, u32 *pSize
+) {
     if (alloc == nullptr) {
         alloc = internal::l_allocator_p;
     }

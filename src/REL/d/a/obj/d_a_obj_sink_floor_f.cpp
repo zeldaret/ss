@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_sink_floor_f.h>
+#include "d/a/obj/d_a_obj_sink_floor_f.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SINK_FLOOR_F, dAcOSinkFloorF_c, fProfile::OBJ_SINK_FLOOR_F, 0x22E, 0, 6);
 

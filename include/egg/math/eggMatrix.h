@@ -1,10 +1,10 @@
 #ifndef EGG_MATRIX_H
 #define EGG_MATRIX_H
 
+#include "common.h"
 #include "egg/math/eggQuat.h"
 #include "egg/math/eggVector.h"
 
-#include <common.h>
 
 namespace EGG {
 

@@ -1,9 +1,9 @@
 #ifndef D_A_OBJ_SHUTTER_CHANGE_SCENE_H
 #define D_A_OBJ_SHUTTER_CHANGE_SCENE_H
 
-#include <d/a/obj/d_a_obj_door_base.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/obj/d_a_obj_door_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dAcOShutterChangeScene_c : public dAcObjDoor_c {
 public:

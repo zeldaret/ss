@@ -4,10 +4,10 @@
 extern "C" {
 #endif
 
-#include <rvl/IPC/ipcMain.h>
-#include <rvl/IPC/ipcProfile.h>
-#include <rvl/IPC/ipcclt.h>
-#include <rvl/IPC/memory.h>
+#include "rvl/IPC/ipcMain.h"
+#include "rvl/IPC/ipcProfile.h"
+#include "rvl/IPC/ipcclt.h"
+#include "rvl/IPC/memory.h"
 
 #ifdef __cplusplus
 }

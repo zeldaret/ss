@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_time_door_before.h>
+#include "d/a/obj/d_a_obj_time_door_before.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TIME_DOOR_BEFORE, dAcOTimeDoorBefore_c, fProfile::OBJ_TIME_DOOR_BEFORE, 0x251, 0, 3);
 

@@ -1,4 +1,4 @@
-#include <d/a/d_a_insect_butterfly.h>
+#include "d/a/d_a_insect_butterfly.h"
 
 SPECIAL_ACTOR_PROFILE(INSECT_BUTTERFLY, dAcInsectButterfly_c, fProfile::INSECT_BUTTERFLY, 0x16E, 0, 3);
 

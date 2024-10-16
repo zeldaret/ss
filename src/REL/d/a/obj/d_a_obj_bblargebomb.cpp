@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_bblargebomb.h>
+#include "d/a/obj/d_a_obj_bblargebomb.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_BBLARGEBOMB, dAcOBblargebomb_c, fProfile::OBJ_BBLARGEBOMB, 0xA7, 0, 3);
 

@@ -1,10 +1,8 @@
 #ifndef SPECIAL_ITEM_DROP_MGR_H
 #define SPECIAL_ITEM_DROP_MGR_H
 
+#include "common.h"
 #include "m/m_vec.h"
-
-#include <common.h>
-
 
 class SpecialItemDropMgr {
 public:

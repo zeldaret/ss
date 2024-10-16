@@ -1,9 +1,9 @@
 #ifndef D_T_NOEFFECT_AREA_H
 #define D_T_NOEFFECT_AREA_H
 
-#include <d/t/d_tg.h>
-#include <f/f_list_mg.h>
-#include <m/m_mtx.h>
+#include "d/t/d_tg.h"
+#include "f/f_list_mg.h"
+#include "m/m_mtx.h"
 
 class dTgNoEffectArea_c : public dTg_c {
 public:

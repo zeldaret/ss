@@ -1,4 +1,4 @@
-#include <d/a/d_a_insect_ladybug.h>
+#include "d/a/d_a_insect_ladybug.h"
 
 SPECIAL_ACTOR_PROFILE(INSECT_LADYBUG, dAcInsectLadybug_c, fProfile::INSECT_LADYBUG, 0x168, 0, 3);
 

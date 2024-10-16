@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_tower_D101.h>
+#include "d/a/obj/d_a_obj_tower_D101.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TOWER_D101, dAcOTowerD101_c, fProfile::OBJ_TOWER_D101, 0x13D, 0, 2);
 

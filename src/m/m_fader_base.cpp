@@ -1,16 +1,12 @@
-#include <m/m_fader_base.h>
+#include "m/m_fader_base.h"
 
 mFaderBase_c::mFaderBase_c(const mColor &color, EStatus status) : mFlag(0), mFrame(20), mElapsed(0) {
     setColor(color);
     mFlag |= FLAG_2;
 
     switch (status) {
-    case FADED_OUT:
-        mStatus = FADED_OUT;
-        break;
-    case FADED_IN:
-        mStatus = FADED_IN;
-        break;
+        case FADED_OUT: mStatus = FADED_OUT; break;
+        case FADED_IN:  mStatus = FADED_IN; break;
     }
 }
 

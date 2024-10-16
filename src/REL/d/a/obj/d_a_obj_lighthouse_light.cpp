@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_lighthouse_light.h>
+#include "d/a/obj/d_a_obj_lighthouse_light.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_LIGHTHOUSE_LIGHT, dAcOlighthouseLight_c, fProfile::OBJ_LIGHTHOUSE_LIGHT, 0x1DE, 0, 0);
 

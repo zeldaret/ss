@@ -1,4 +1,4 @@
-#include <d/t/d_t_miechan.h>
+#include "d/t/d_t_miechan.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_MIECHAN, dTgMiechan_c, fProfile::TAG_MIECHAN, 0x2A, 0, 0);
 

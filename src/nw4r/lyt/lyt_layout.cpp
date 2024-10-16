@@ -1,13 +1,15 @@
-#include <nw4r/lyt/lyt_animation.h>
-#include <nw4r/lyt/lyt_bounding.h>
-#include <nw4r/lyt/lyt_group.h>
-#include <nw4r/lyt/lyt_layout.h>
-#include <nw4r/lyt/lyt_picture.h>
-#include <nw4r/lyt/lyt_textBox.h>
-#include <nw4r/lyt/lyt_utils.h>
-#include <nw4r/lyt/lyt_window.h>
-#include <nw4r/ut/ut_RuntimeTypeInfo.h>
-#include <nw4r/ut/ut_TagProcessorBase.h>
+#include "nw4r/lyt/lyt_layout.h"
+
+#include "nw4r/lyt/lyt_animation.h"
+#include "nw4r/lyt/lyt_bounding.h"
+#include "nw4r/lyt/lyt_group.h"
+#include "nw4r/lyt/lyt_picture.h"
+#include "nw4r/lyt/lyt_textBox.h"
+#include "nw4r/lyt/lyt_utils.h"
+#include "nw4r/lyt/lyt_window.h"
+#include "nw4r/ut/ut_RuntimeTypeInfo.h"
+#include "nw4r/ut/ut_TagProcessorBase.h"
+
 
 namespace nw4r {
 
@@ -25,26 +27,28 @@ void SetTagProcessorImpl(Pane *pPane, ut::TagProcessorBase<wchar_t> *pTagProcess
         pTextBox->SetTagProcessor(pTagProcessor);
     }
     for (ut::LinkList<Pane, 4>::Iterator it = pPane->GetChildList()->GetBeginIter();
-            it != pPane->GetChildList()->GetEndIter(); ++it) {
+         it != pPane->GetChildList()->GetEndIter(); ++it) {
         SetTagProcessorImpl(&*it, pTagProcessor);
     }
 }
 
 // IsIncludeAnimationGroupRef__Q34nw4r3lyt24@unnamed@lyt_layout_cpp@FPQ34nw4r3lyt14GroupContainerPCQ34nw4r3lyt17AnimationGroupRefUsbPQ34nw4r3lyt4Pane
 // Doesnt match DWARF Vars, but matches
-bool IsIncludeAnimationGroupRef(GroupContainer *pGroupContainer, const AnimationGroupRef *groupRefs, u16 bindGroupNum,
-        bool bDescendingBind, Pane *pTargetPane) {
+bool IsIncludeAnimationGroupRef(
+    GroupContainer *pGroupContainer, const AnimationGroupRef *groupRefs, u16 bindGroupNum, bool bDescendingBind,
+    Pane *pTargetPane
+) {
     for (u16 grpIdx = 0; grpIdx < bindGroupNum; grpIdx++) {
         Group *pGroup = pGroupContainer->FindGroupByName(groupRefs[grpIdx].GetName());
         for (ut::LinkList<detail::PaneLink, 0>::Iterator paneList = pGroup->GetPaneList()->GetBeginIter();
-                paneList != pGroup->GetPaneList()->GetEndIter(); paneList++) {
+             paneList != pGroup->GetPaneList()->GetEndIter(); paneList++) {
             const Pane *t = paneList->mTarget;
             if (t == pTargetPane) {
                 return true;
             }
             if (bDescendingBind) {
                 for (const Pane *pParentPane = pTargetPane->GetParent(); pParentPane != nullptr;
-                        pParentPane = pParentPane->GetParent()) {
+                     pParentPane = pParentPane->GetParent()) {
                     if (t == pParentPane) {
                         return true;
                     }
@@ -94,68 +98,67 @@ bool Layout::Build(const void *lytResBuf, ResourceAccessor *pResAcsr) {
     for (int i = 0; i < pFileHead->dataBlocks; i++) {
         const res::DataBlockHeader *pDataBlockHead = (const res::DataBlockHeader *)dataPtr;
         switch (detail::GetSignatureInt(pDataBlockHead->kind)) {
-        case 'lyt1': // Main Layout
-        {
-            const res::Layout *pResLyt = ((const res::Layout *)dataPtr);
-            mLayoutSize = pResLyt->layoutSize;
-        } break;
-        case 'txl1': // Texture List
-            resBlockSet.pTextureList = (const res::TextureList *)dataPtr;
-            break;
-        case 'fnl1': // Font List
-            resBlockSet.pFontList = (const res::FontList *)dataPtr;
-            break;
-        case 'mat1': // Material
-            resBlockSet.pMaterialList = (const res::MaterialList *)dataPtr;
-            break;
-        case 'wnd1': // Window
-        case 'pan1': // Pane
-        case 'pic1': // Picture
-        case 'txt1': // Text Box
-        case 'bnd1': // Boundary Pane
-        {
-            Pane *pPane = BuildPaneObj(detail::GetSignatureInt(pDataBlockHead->kind), dataPtr, resBlockSet);
-            if (pPane) {
-                if (mpRootPane == nullptr) {
-                    mpRootPane = pPane;
+            case 'lyt1': // Main Layout
+            {
+                const res::Layout *pResLyt = ((const res::Layout *)dataPtr);
+                mLayoutSize = pResLyt->layoutSize;
+            } break;
+            case 'txl1': // Texture List
+                resBlockSet.pTextureList = (const res::TextureList *)dataPtr;
+                break;
+            case 'fnl1': // Font List
+                resBlockSet.pFontList = (const res::FontList *)dataPtr;
+                break;
+            case 'mat1': // Material
+                resBlockSet.pMaterialList = (const res::MaterialList *)dataPtr;
+                break;
+            case 'wnd1': // Window
+            case 'pan1': // Pane
+            case 'pic1': // Picture
+            case 'txt1': // Text Box
+            case 'bnd1': // Boundary Pane
+            {
+                Pane *pPane = BuildPaneObj(detail::GetSignatureInt(pDataBlockHead->kind), dataPtr, resBlockSet);
+                if (pPane) {
+                    if (mpRootPane == nullptr) {
+                        mpRootPane = pPane;
+                    }
+                    if (pParentPane) {
+                        pParentPane->AppendChild(pPane);
+                    }
+                    pLastPane = pPane;
                 }
-                if (pParentPane) {
-                    pParentPane->AppendChild(pPane);
-                }
-                pLastPane = pPane;
-            }
-        } break;
-        case 'usd1': // User Data
-            pLastPane->SetExtUserDataList((const res::ExtUserDataList *)dataPtr);
-            break;
-        case 'pas1': // PaneChildren Start
-            pParentPane = pLastPane;
-            break;
-        case 'pae1': // PaneChildren End
-            pLastPane = pParentPane;
-            pParentPane = pLastPane->GetParent();
-            break;
-        case 'grp1': // Group
-            if (!bReadRootGroup) {
-                bReadRootGroup = true;
-                mpGroupContainer = NewObj<GroupContainer>();
-            } else {
-                if (mpGroupContainer && groupNestLevel == 1) {
-                    Group *pGroup = NewObj<Group>((const res::Group *)dataPtr, mpRootPane);
-                    if (pGroup) {
-                        mpGroupContainer->AppendGroup(pGroup);
+            } break;
+            case 'usd1': // User Data
+                pLastPane->SetExtUserDataList((const res::ExtUserDataList *)dataPtr);
+                break;
+            case 'pas1': // PaneChildren Start
+                pParentPane = pLastPane;
+                break;
+            case 'pae1': // PaneChildren End
+                pLastPane = pParentPane;
+                pParentPane = pLastPane->GetParent();
+                break;
+            case 'grp1': // Group
+                if (!bReadRootGroup) {
+                    bReadRootGroup = true;
+                    mpGroupContainer = NewObj<GroupContainer>();
+                } else {
+                    if (mpGroupContainer && groupNestLevel == 1) {
+                        Group *pGroup = NewObj<Group>((const res::Group *)dataPtr, mpRootPane);
+                        if (pGroup) {
+                            mpGroupContainer->AppendGroup(pGroup);
+                        }
                     }
                 }
-            }
-            break;
-        case 'grs1': // Group Children Start
-            groupNestLevel++;
-            break;
-        case 'gre1': // Group Children End
-            groupNestLevel--;
-            break;
-        default:
-            break;
+                break;
+            case 'grs1': // Group Children Start
+                groupNestLevel++;
+                break;
+            case 'gre1': // Group Children End
+                groupNestLevel--;
+                break;
+            default: break;
         }
         dataPtr = ((u8 *)dataPtr + pDataBlockHead->size);
     }
@@ -252,11 +255,13 @@ bool Layout::BindAnimationAuto(const AnimResource &animRes, ResourceAccessor *pR
                 Group *pGroup = mpGroupContainer->FindGroupByName(animSharInfoAry[i].GetTargetGroupName());
                 ut::LinkList<detail::PaneLink, 0> *paneList = pGroup->GetPaneList();
                 for (ut::LinkList<detail::PaneLink, 0>::Iterator it = paneList->GetBeginIter();
-                        it != paneList->GetEndIter(); it++) {
+                     it != paneList->GetEndIter(); it++) {
                     if (it->mTarget != pSrcPane) {
                         if (bindGroupNum != 0) {
-                            bool bInclude = IsIncludeAnimationGroupRef(mpGroupContainer, animRes.GetGroupArray(),
-                                    bindGroupNum, animRes.IsDescendingBind(), it->mTarget);
+                            bool bInclude = IsIncludeAnimationGroupRef(
+                                mpGroupContainer, animRes.GetGroupArray(), bindGroupNum, animRes.IsDescendingBind(),
+                                it->mTarget
+                            );
                             if (!bInclude) {
                                 continue;
                             }
@@ -318,28 +323,27 @@ Pane *Layout::BuildPaneObj(s32 kind, const void *dataPtr, const ResBlockSet &res
     // Had them as left over from editing and somehow when removing them it just broke Build.
     // Probably some analysis depth as 3 break statements do it
     switch (kind) {
-    case 'pan1': {
-        const res::Pane *pResPane = (const res::Pane *)dataPtr;
-        return NewObj<Pane>(pResPane);
-    } break;
-    case 'pic1': {
-        const res::Picture *pResPic = (const res::Picture *)dataPtr;
-        return NewObj<Picture>(pResPic, resBlockSet);
-    } break;
-    case 'txt1': {
-        const res::TextBox *pBlock = (const res::TextBox *)dataPtr;
-        return NewObj<TextBox>(pBlock, resBlockSet);
-    } break;
-    case 'wnd1': {
-        const res::Window *pBlock = (const res::Window *)dataPtr;
-        return NewObj<Window>(pBlock, resBlockSet);
-    } break;
-    case 'bnd1': {
-        const res::Bounding *pResBounding = (const res::Bounding *)dataPtr;
-        return NewObj<Bounding>(pResBounding, resBlockSet);
-    } break;
-    default:
-        return nullptr;
+        case 'pan1': {
+            const res::Pane *pResPane = (const res::Pane *)dataPtr;
+            return NewObj<Pane>(pResPane);
+        } break;
+        case 'pic1': {
+            const res::Picture *pResPic = (const res::Picture *)dataPtr;
+            return NewObj<Picture>(pResPic, resBlockSet);
+        } break;
+        case 'txt1': {
+            const res::TextBox *pBlock = (const res::TextBox *)dataPtr;
+            return NewObj<TextBox>(pBlock, resBlockSet);
+        } break;
+        case 'wnd1': {
+            const res::Window *pBlock = (const res::Window *)dataPtr;
+            return NewObj<Window>(pBlock, resBlockSet);
+        } break;
+        case 'bnd1': {
+            const res::Bounding *pResBounding = (const res::Bounding *)dataPtr;
+            return NewObj<Bounding>(pResBounding, resBlockSet);
+        } break;
+        default: return nullptr;
     }
 }
 

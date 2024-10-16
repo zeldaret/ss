@@ -1,10 +1,10 @@
 #ifndef RVL_SDK_SC_SCSYSTEM_H
 #define RVL_SDK_SC_SCSYSTEM_H
+#include "common.h"
 #include "rvl/FS.h"   // IWYU pragma: export
 #include "rvl/NAND.h" // IWYU pragma: export
 #include "rvl/OS.h"   // IWYU pragma: export
 
-#include <common.h>
 
 #ifdef __cplusplus
 extern "C" {

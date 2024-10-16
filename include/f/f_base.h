@@ -5,6 +5,7 @@
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_base.hpp and the Skyward Sword
 // Ghidra database. Comments and docs can be seen above. stripped in this file for easier looking
 
+#include "common.h"
 #include "egg/core/eggExpHeap.h"
 #include "egg/core/eggFrmHeap.h"
 #include "f/f_base_id.h"
@@ -13,7 +14,6 @@
 #include "f/f_manager.h"
 #include "f/f_profile.h"
 
-#include <common.h>
 
 // Ghidra: fBase
 //   size: 0x64

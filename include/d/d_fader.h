@@ -1,10 +1,10 @@
 #ifndef D_FADER_H
 #define D_FADER_H
 
-#include <d/lyt/d_lyt_fader.h>
-#include <d/lyt/d_screen_fader.h>
-#include <m/m_color_fader.h>
-#include <m/m_fader.h>
+#include "d/lyt/d_lyt_fader.h"
+#include "d/lyt/d_screen_fader.h"
+#include "m/m_color_fader.h"
+#include "m/m_fader.h"
 
 class dFader_c : mFader_c {
 public:

@@ -1,6 +1,6 @@
-#include <d/a/d_a_player.h>
-#include <d/a/d_a_t_wood_area.h>
+#include "d/a/d_a_t_wood_area.h"
 
+#include "d/a/d_a_player.h"
 
 const f32 dAcTWoodArea_c::scaleX = 100.0f;
 const f32 dAcTWoodArea_c::scaleY = 100.0f;

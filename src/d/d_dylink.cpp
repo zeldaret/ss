@@ -1,13 +1,13 @@
 #include "d/d_dylink.h"
 
 #include "DynamicLink.h"
+#include "common.h"
 #include "m/m_dvd.h"
 #include "m/m_heap.h"
 #include "rvl/DVD.h"  // IWYU pragma: export
 #include "rvl/NAND.h" // IWYU pragma: export
+#include "string.h"
 
-#include <common.h>
-#include <string.h>
 
 struct RelNamePtr {
     u16 relId;

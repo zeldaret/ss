@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_lamp.h>
+#include "d/a/obj/d_a_obj_lamp.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_LAMP, dAcOLamp_c, fProfile::OBJ_LAMP, 0x14B, 0, 3);
 

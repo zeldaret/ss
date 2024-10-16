@@ -1,7 +1,7 @@
 #ifndef RVL_SDK_OS_ADDRESS_H
 #define RVL_SDK_OS_ADDRESS_H
 
-#include <common.h>
+#include "common.h"
 
 #ifdef __cplusplus
 extern "C" {

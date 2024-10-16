@@ -1,7 +1,9 @@
-#include <egg/core/eggAssertHeap.h>
-#include <egg/core/eggExpHeap.h>
-#include <egg/core/eggFrmHeap.h>
-#include <m/m_heap.h>
+#include "m/m_heap.h"
+
+#include "egg/core/eggAssertHeap.h"
+#include "egg/core/eggExpHeap.h"
+#include "egg/core/eggFrmHeap.h"
+
 
 u8 mHeap::g_DefaultGameHeapId = 1;
 
@@ -14,10 +16,10 @@ EGG::Heap *mHeap::g_commandHeap;
 EGG::ExpHeap *mHeap::g_dylinkHeap;
 EGG::AssertHeap *mHeap::g_assertHeap;
 const char *const mHeap::s_GameHeapNames[4] = {
-        0,
-        "ゲーム用汎用ヒープ1(mHeap::gameHeaps[1])",
-        "ゲーム用汎用ヒープ2(mHeap::gameHeaps[2])",
-        0,
+    0,
+    "ゲーム用汎用ヒープ1(mHeap::gameHeaps[1])",
+    "ゲーム用汎用ヒープ2(mHeap::gameHeaps[2])",
+    0,
 };
 
 u16 mHeap::copyAttribute(u32 arg) {

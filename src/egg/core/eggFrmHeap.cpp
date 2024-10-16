@@ -1,4 +1,4 @@
-#include <egg/core/eggFrmHeap.h>
+#include "egg/core/eggFrmHeap.h"
 
 namespace EGG {
 

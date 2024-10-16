@@ -4,9 +4,9 @@
 extern "C" {
 #endif
 
-#include <rvl/NWC24/NWC24Schedule.h>
-#include <rvl/NWC24/NWC24System.h>
-#include <rvl/NWC24/NWC24Time.h>
+#include "rvl/NWC24/NWC24Schedule.h"
+#include "rvl/NWC24/NWC24System.h"
+#include "rvl/NWC24/NWC24Time.h"
 
 #ifdef __cplusplus
 }

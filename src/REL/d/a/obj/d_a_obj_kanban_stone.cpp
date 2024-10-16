@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_kanban_stone.h>
+#include "d/a/obj/d_a_obj_kanban_stone.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_KANBAN_STONE, dAcOKanbanStone_c, fProfile::OBJ_KANBAN_STONE, 0x182, 0, 3);
 

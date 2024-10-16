@@ -1,8 +1,8 @@
 #ifndef EGG_GFXENGINE_H
 #define EGG_GFXENGINE_H
 
-#include <common.h>
-#include <rvl/GX.h>
+#include "common.h"
+#include "rvl/GX.h"
 
 namespace EGG {
 

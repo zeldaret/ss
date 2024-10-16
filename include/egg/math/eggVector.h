@@ -1,10 +1,10 @@
 #ifndef EGG_VECTOR_H
 #define EGG_VECTOR_H
 
+#include "common.h"
 #include "egg/math/eggMath.h"
+#include "nw4r/math.h"
 
-#include <common.h>
-#include <nw4r/math.h>
 
 namespace EGG {
 

@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_VF_PF_H
 #define RVL_SDK_VF_PF_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

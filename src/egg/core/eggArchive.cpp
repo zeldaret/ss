@@ -1,6 +1,8 @@
-#include <egg/core/eggArchive.h>
-#include <egg/core/eggHeap.h>
-#include <string.h>
+#include "egg/core/eggArchive.h"
+
+#include "egg/core/eggHeap.h"
+#include "string.h"
+
 
 namespace EGG {
 

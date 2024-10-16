@@ -1,9 +1,9 @@
 #ifndef EGG_AUDIO_ARC_UTILITY_H
 #define EGG_AUDIO_ARC_UTILITY_H
 
-#include <common.h>
-#include <egg/audio/eggAudioMgr.h>
-#include <nw4r/ut/ut_list.h>
+#include "common.h"
+#include "egg/audio/eggAudioMgr.h"
+#include "nw4r/ut/ut_list.h"
 
 namespace EGG {
 

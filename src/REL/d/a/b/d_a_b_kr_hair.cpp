@@ -1,4 +1,4 @@
-#include <d/a/b/d_a_b_kr_hair.h>
+#include "d/a/b/d_a_b_kr_hair.h"
 
 SPECIAL_ACTOR_PROFILE(B_KRH, dAcBkrh_c, fProfile::B_KRH, 0xB8, 0, 0);
 

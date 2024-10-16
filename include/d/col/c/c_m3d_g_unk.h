@@ -1,10 +1,10 @@
 #ifndef C_M3D_G_UNK_H
 #define C_M3D_G_UNK_H
 
+#include "common.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 
-#include <common.h>
 
 struct cM3dGCps;
 struct cM3dGCyl;

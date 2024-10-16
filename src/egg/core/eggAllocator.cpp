@@ -1,5 +1,7 @@
-#include <egg/core/eggAllocator.h>
-#include <egg/core/eggHeap.h>
+#include "egg/core/eggAllocator.h"
+
+#include "egg/core/eggHeap.h"
+
 
 /* 804952d0 */ static void *MEM_AllocFor_Heap(MEMAllocator *alloc, u32 size) {
     return static_cast<EGG::Heap *>(static_cast<EGG::Allocator *>(alloc)->heap)->alloc(size, alloc->heapParam1);

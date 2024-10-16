@@ -1,8 +1,8 @@
 #ifndef RVL_SDK_IPC_CLT_H
 #define RVL_SDK_IPC_CLT_H
+#include "common.h"
 #include "rvl/OS.h" // IWYU pragma: export
 
-#include <common.h>
 
 #ifdef __cplusplus
 extern "C" {

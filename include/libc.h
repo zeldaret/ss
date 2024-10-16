@@ -1,7 +1,7 @@
 #ifndef DECOMP_LIB_C
 #define DECOMP_LIB_C
 
-#include <common.h>
+#include "common.h"
 
 extern "C" {
 

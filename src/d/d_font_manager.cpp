@@ -1,12 +1,15 @@
-#include <d/d_font_manager.h>
-#include <d/d_heap.h>
-#include <sized_string.h>
+#include "d/d_font_manager.h"
+
+#include "d/d_heap.h"
+#include "sized_string.h"
+
 
 static dFontMng_c l_dFontMng_obj[3];
 
 static const char *systemFonts[] = {"normal_00.brfnt", "special_00.brfnt", "picture_00.brfnt"};
-static const char *fonts[] = {"normal_00.brfnt", "normal_01.brfnt", "special_00.brfnt", "special_01.brfnt",
-        "picture_00.brfnt"};
+static const char *fonts[] = {
+    "normal_00.brfnt", "normal_01.brfnt", "special_00.brfnt", "special_01.brfnt", "picture_00.brfnt"
+};
 
 // TODO What's up with these?
 char dFontMng_c::normal_01[] = "normal_01.brfnt";
@@ -62,7 +65,8 @@ bool dFontMng_c::create() {
         if (l_dFontMng_obj[i].mpFontFile == nullptr) {
             const char *path = getFontPath(i);
             nw4r::ut::BinaryFileHeader *file = static_cast<nw4r::ut::BinaryFileHeader *>(
-                    l_dFontMng_obj[i].mLoader.request(path, 0, dHeap::fontHeap.heap));
+                l_dFontMng_obj[i].mLoader.request(path, 0, dHeap::fontHeap.heap)
+            );
             if (file == nullptr) {
                 return false;
             }

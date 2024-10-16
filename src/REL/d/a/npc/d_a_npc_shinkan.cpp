@@ -1,4 +1,4 @@
-#include <d/a/npc/d_a_npc_shinkan.h>
+#include "d/a/npc/d_a_npc_shinkan.h"
 
 SPECIAL_ACTOR_PROFILE(NPC_SKN, dAcNpcSkn_c, fProfile::NPC_SKN, 0x36, 0, 0);
 

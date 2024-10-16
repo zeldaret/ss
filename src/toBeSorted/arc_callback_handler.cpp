@@ -1,13 +1,13 @@
-#include <d/col/bg/d_bg_s.h>
-#include <d/col/bg/d_bg_w_kcol.h>
-#include <d/d_rawarchive.h>
-#include <egg/gfx/eggLight.h>
-#include <m/m3d/m3d.h>
-#include <nw4r/g3d/g3d_resfile.h>
-#include <nw4r/g3d/g3d_resmat.h>
-#include <nw4r/g3d/g3d_resmdl.h>
-#include <toBeSorted/arc_managers/current_stage_arc_manager.h>
-#include <toBeSorted/arc_managers/oarc_manager.h>
+#include "d/col/bg/d_bg_s.h"
+#include "d/col/bg/d_bg_w_kcol.h"
+#include "d/d_rawarchive.h"
+#include "egg/gfx/eggLight.h"
+#include "m/m3d/m3d.h"
+#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/g3d_resmat.h"
+#include "nw4r/g3d/g3d_resmdl.h"
+#include "toBeSorted/arc_managers/current_stage_arc_manager.h"
+#include "toBeSorted/arc_managers/oarc_manager.h"
 
 ArcCallbackHandler ArcCallbackHandler::sInstance;
 

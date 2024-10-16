@@ -4,8 +4,8 @@
 #include "nw4r/db/db_mapFile.h"
 #include "rvl/GX.h" // IWYU pragma: export
 #include "rvl/VI.h" // IWYU pragma: export
+#include "string.h"
 
-#include <string.h>
 
 namespace nw4r {
 namespace db {

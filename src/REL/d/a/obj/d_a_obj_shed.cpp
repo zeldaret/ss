@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_shed.h>
+#include "d/a/obj/d_a_obj_shed.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SHED, dAcOShed_c, fProfile::OBJ_SHED, 0x256, 0, 6);
 

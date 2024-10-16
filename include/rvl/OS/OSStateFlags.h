@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_OS_STATE_FLAGS_H
 #define RVL_SDK_OS_STATE_FLAGS_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

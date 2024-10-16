@@ -1,8 +1,8 @@
 #ifndef EGG_FOG_H
 #define EGG_FOG_H
 
-#include <egg/prim/eggBinary.h>
-#include <nw4r/types_nw4r.h>
+#include "egg/prim/eggBinary.h"
+#include "nw4r/types_nw4r.h"
 
 namespace EGG {
 

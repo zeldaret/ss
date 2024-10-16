@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_ship_window.h>
+#include "d/a/obj/d_a_obj_ship_window.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SHIP_WINDOW, dAcOshipWindow_c, fProfile::OBJ_SHIP_WINDOW, 0x1EB, 0, 6);
 

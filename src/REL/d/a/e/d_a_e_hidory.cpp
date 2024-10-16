@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_hidory.h>
+#include "d/a/e/d_a_e_hidory.h"
 
 SPECIAL_ACTOR_PROFILE(E_HIDORY, dAcEHidory_c, fProfile::E_HIDORY, 0x10A, 0, 3);
 

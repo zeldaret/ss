@@ -1,3 +1,3 @@
-#include <egg/gfx/eggPostEffectMask.h>
+#include "egg/gfx/eggPostEffectMask.h"
 
 namespace EGG {} // namespace EGG

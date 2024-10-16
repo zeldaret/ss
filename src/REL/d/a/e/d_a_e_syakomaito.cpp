@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_syakomaito.h>
+#include "d/a/e/d_a_e_syakomaito.h"
 
 SPECIAL_ACTOR_PROFILE(E_SYAKOMAITO, dAcESyakomaito_c, fProfile::E_SYAKOMAITO, 0xC0, 0, 4099);
 

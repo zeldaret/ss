@@ -1,10 +1,9 @@
 #ifndef C_M3D_H
 #define C_M3D_H
 
-#include <common.h>
-#include <math.h>
-#include <nw4r/math.h>
-
+#include "common.h"
+#include "math.h"
+#include "nw4r/math.h"
 
 class cM3dGAab;
 class cM3dGCps;

@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_windmill_desert.h>
+#include "d/a/obj/d_a_obj_windmill_desert.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_WINDMILL_DESERT, dAcOwindmillDesert_c, fProfile::OBJ_WINDMILL_DESERT, 0x20B, 0, 6);
 

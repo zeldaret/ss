@@ -1,5 +1,7 @@
-#include <d/d_fader.h>
-#include <m/m_fader.h>
+#include "d/d_fader.h"
+
+#include "m/m_fader.h"
+
 
 static mColor mFaderColor = mColor(200, 200, 200, 0xFF);
 
@@ -45,38 +47,38 @@ bool dFader_c::create() {
 
 bool dFader_c::setFader(s32 fader) {
     switch (fader) {
-    case 0:
-        if (mFader_c::setFader(mpColorFader)) {
-            if (mpColorFader->getStatus() == mFaderBase_c::FADED_IN) {
-                mpColorFader->setColor(mColor(0, 0, 0, 0xFF));
+        case 0:
+            if (mFader_c::setFader(mpColorFader)) {
+                if (mpColorFader->getStatus() == mFaderBase_c::FADED_IN) {
+                    mpColorFader->setColor(mColor(0, 0, 0, 0xFF));
+                }
+                return true;
             }
-            return true;
-        }
-        break;
-    case 1:
-        if (mFader_c::setFader(mpColorFader)) {
-            if (mpColorFader->getStatus() == mFaderBase_c::FADED_IN) {
-                mpColorFader->setColor(mFaderColor);
+            break;
+        case 1:
+            if (mFader_c::setFader(mpColorFader)) {
+                if (mpColorFader->getStatus() == mFaderBase_c::FADED_IN) {
+                    mpColorFader->setColor(mFaderColor);
+                }
+                return true;
             }
-            return true;
-        }
-        break;
-    case 2:
-        if (mFader_c::setFader(mpLytFader)) {
-            if (mpLytFader->getStatus() == mFaderBase_c::FADED_IN) {
-                mpLytFader->setColor(mColor(0, 0, 0, 0xFF));
+            break;
+        case 2:
+            if (mFader_c::setFader(mpLytFader)) {
+                if (mpLytFader->getStatus() == mFaderBase_c::FADED_IN) {
+                    mpLytFader->setColor(mColor(0, 0, 0, 0xFF));
+                }
+                return true;
             }
-            return true;
-        }
-        break;
-    case 3:
-        if (mFader_c::setFader(mpScreenFader)) {
-            if (mpScreenFader->getStatus() == mFaderBase_c::FADED_IN) {
-                mpScreenFader->setColor(mColor(0, 0, 0, 0xFF));
+            break;
+        case 3:
+            if (mFader_c::setFader(mpScreenFader)) {
+                if (mpScreenFader->getStatus() == mFaderBase_c::FADED_IN) {
+                    mpScreenFader->setColor(mColor(0, 0, 0, 0xFF));
+                }
+                return true;
             }
-            return true;
-        }
-        break;
+            break;
     }
 
     return false;

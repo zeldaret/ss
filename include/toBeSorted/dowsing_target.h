@@ -1,9 +1,9 @@
 #ifndef DOWSING_TARGET_H
 #define DOWSING_TARGET_H
 
-#include <d/a/d_a_base.h>
-#include <f/f_list_nd.h>
-#include <m/m_vec.h>
+#include "d/a/d_a_base.h"
+#include "f/f_list_nd.h"
+#include "m/m_vec.h"
 
 class DowsingTarget {
 public:

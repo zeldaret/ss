@@ -1,4 +1,4 @@
-#include <d/a/b/d_a_b_girahimu3_third.h>
+#include "d/a/b/d_a_b_girahimu3_third.h"
 
 SPECIAL_ACTOR_PROFILE(B_GIRAHIMU3_THIRD, dAcGirahimu3Third_c, fProfile::B_GIRAHIMU3_THIRD, 0x113, 0, 0);
 

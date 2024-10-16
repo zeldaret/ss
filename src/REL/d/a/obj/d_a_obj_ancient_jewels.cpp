@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_ancient_jewels.h>
+#include "d/a/obj/d_a_obj_ancient_jewels.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_ANCIENT_JEWELS, dAcOAncientJewels_c, fProfile::OBJ_ANCIENT_JEWELS, 0x14C, 0, 3);
 

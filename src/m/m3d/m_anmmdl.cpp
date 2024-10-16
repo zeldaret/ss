@@ -1,4 +1,4 @@
-#include <m/m3d/m_anmmdl.h>
+#include "m/m3d/m_anmmdl.h"
 
 namespace m3d {
 
@@ -20,18 +20,24 @@ void mdlAnmChr::setRate(f32 rate) {
     mAnm.setRate(rate);
 }
 
-bool mdlAnmChr::create(void *mdlFile, void *anmFile, const char *mdlName, const char *anmName, mAllocator_c *alloc,
-        u32 bufferOption, int nView, u32 *pSize) {
+bool mdlAnmChr::create(
+    void *mdlFile, void *anmFile, const char *mdlName, const char *anmName, mAllocator_c *alloc, u32 bufferOption,
+    int nView, u32 *pSize
+) {
     return create(mdlFile, anmFile, mdlName, anmName, nullptr, alloc, bufferOption, nView, pSize);
 }
 
-bool mdlAnmChr::create2(void *mdlFile, void *anmFile, const char *mdlName, const char *anmName, mAllocator_c *alloc,
-        u32 bufferOption, int nView, u32 *pSize) {
+bool mdlAnmChr::create2(
+    void *mdlFile, void *anmFile, const char *mdlName, const char *anmName, mAllocator_c *alloc, u32 bufferOption,
+    int nView, u32 *pSize
+) {
     return create(mdlFile, anmFile, mdlName, anmName, alloc, bufferOption, nView, pSize);
 }
 
-bool mdlAnmChr::create(void *mdlFile, void *anmFile, const char *mdlName, const char *anmName,
-        mdl_c::mdlCallback_c *callback, mAllocator_c *alloc, u32 bufferOption, int nView, u32 *pSize) {
+bool mdlAnmChr::create(
+    void *mdlFile, void *anmFile, const char *mdlName, const char *anmName, mdl_c::mdlCallback_c *callback,
+    mAllocator_c *alloc, u32 bufferOption, int nView, u32 *pSize
+) {
     mMdlFile = mdlFile;
     mAnmFile = anmFile;
 
@@ -60,8 +66,10 @@ bool mdlAnmChr::create(void *mdlFile, void *anmFile, const char *mdlName, const 
     return true;
 }
 
-bool mdlAnmChr::create(void *resFile, const char *mdlName, const char *anmName, mAllocator_c *alloc, u32 bufferOption,
-        int nView, u32 *pSize) {
+bool mdlAnmChr::create(
+    void *resFile, const char *mdlName, const char *anmName, mAllocator_c *alloc, u32 bufferOption, int nView,
+    u32 *pSize
+) {
     return create(resFile, resFile, mdlName, anmName, nullptr, alloc, bufferOption, nView, pSize);
 }
 

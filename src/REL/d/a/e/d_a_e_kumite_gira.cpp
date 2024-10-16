@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_kumite_gira.h>
+#include "d/a/e/d_a_e_kumite_gira.h"
 
 SPECIAL_ACTOR_PROFILE(E_KGIRA, dAcEKumiteGira_c, fProfile::E_KGIRA, 0xCE, 0, 3);
 

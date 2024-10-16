@@ -1,9 +1,9 @@
 #ifndef D_T_INSECT_H
 #define D_T_INSECT_H
 
-#include <d/a/d_a_base.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/d_a_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dTgInsect_c : public dAcBase_c {
 public:

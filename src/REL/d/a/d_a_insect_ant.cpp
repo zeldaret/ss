@@ -1,4 +1,4 @@
-#include <d/a/d_a_insect_ant.h>
+#include "d/a/d_a_insect_ant.h"
 
 SPECIAL_ACTOR_PROFILE(INSECT_ANT, dAcInsectAnt_c, fProfile::INSECT_ANT, 0x16D, 0, 3);
 

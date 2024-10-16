@@ -1,9 +1,9 @@
 #ifndef EGG_QUAT_H
 #define EGG_QUAT_H
 
+#include "common.h"
 #include "egg/math/eggVector.h"
 
-#include <common.h>
 
 namespace EGG {
 

@@ -1,10 +1,10 @@
 #include "nw4r/db/db_console.h"
 
+#include "common.h"
 #include "nw4r/db/db_directPrint.h"
 #include "nw4r/ut/ut_TextWriterBase.h"
 #include "rvl/OS.h" // IWYU pragma: export
 
-#include <common.h>
 
 namespace nw4r {
 namespace db {

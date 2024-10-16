@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_chest.h>
+#include "d/a/obj/d_a_obj_chest.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_CHEST, dAcOChest_c, fProfile::OBJ_CHEST, 0x13E, 0, 3);
 

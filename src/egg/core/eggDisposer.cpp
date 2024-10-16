@@ -1,5 +1,7 @@
-#include <egg/core/eggDisposer.h>
-#include <egg/core/eggHeap.h>
+#include "egg/core/eggDisposer.h"
+
+#include "egg/core/eggHeap.h"
+
 
 namespace EGG {
 

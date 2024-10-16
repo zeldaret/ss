@@ -1,4 +1,4 @@
-#include <d/a/d_a_shop_sample.h>
+#include "d/a/d_a_shop_sample.h"
 
 SPECIAL_ACTOR_PROFILE(SHOP_SAMPLE, dAcShopSample_c, fProfile::SHOP_SAMPLE, 0x276, 0, 3);
 

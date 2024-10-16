@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_stone_stand.h>
+#include "d/a/obj/d_a_obj_stone_stand.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_STONE_STAND, dAcOStoneStand_c, fProfile::OBJ_STONE_STAND, 0x24B, 0, 3);
 

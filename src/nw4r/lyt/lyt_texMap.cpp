@@ -1,4 +1,4 @@
-#include <nw4r/lyt/lyt_texMap.h>
+#include "nw4r/lyt/lyt_texMap.h"
 
 // NOTICE: This file seems to have been reworked. Not sure if all functions exist anymore, ReplaceImage doesnt even
 // appear stripped in BBA, but is in tokyo friend park 2 DWARF. In NSMBW there seems to be more parameters for
@@ -18,15 +18,20 @@ namespace {
 void TexMap::Get(GXTexObj *pTexObj) const {
     if (detail::IsCITexelFormat(GetTexelFormat())) {
         u32 tlutName = GXGetTexObjTlut(pTexObj);
-        GXInitTexObjCI(pTexObj, GetImage(), GetWidth(), GetHeight(), GetTexelFormat(), GetWrapModeS(), GetWrapModeT(),
-                IsMipMap(), tlutName);
+        GXInitTexObjCI(
+            pTexObj, GetImage(), GetWidth(), GetHeight(), GetTexelFormat(), GetWrapModeS(), GetWrapModeT(), IsMipMap(),
+            tlutName
+        );
     } else {
-        GXInitTexObj(pTexObj, GetImage(), GetWidth(), GetHeight(), GetTexelFormat(), GetWrapModeS(), GetWrapModeT(),
-                IsMipMap());
+        GXInitTexObj(
+            pTexObj, GetImage(), GetWidth(), GetHeight(), GetTexelFormat(), GetWrapModeS(), GetWrapModeT(), IsMipMap()
+        );
     }
 
-    GXInitTexObjLOD(pTexObj, GetMinFilter(), GetMagFilter(), GetMinLOD(), GetMaxLOD(), GetLODBias(),
-            IsBiasClampEnable(), IsEdgeLODEnable(), GetAnisotropy());
+    GXInitTexObjLOD(
+        pTexObj, GetMinFilter(), GetMagFilter(), GetMinLOD(), GetMaxLOD(), GetLODBias(), IsBiasClampEnable(),
+        IsEdgeLODEnable(), GetAnisotropy()
+    );
 }
 
 // Get__Q34nw4r3lyt6TexMapCFP10_GXTlutObj
@@ -52,8 +57,9 @@ void TexMap::Set(const GXTexObj &pTexObj) {
     f32 minLOD, maxLOD, LODBias;
     u8 biasClampEnable, edgeLODEnable;
     GXAnisotropy anisotropy;
-    GXGetTexObjLODAll(&pTexObj, &minFilter, &magFilter, &minLOD, &maxLOD, &LODBias, &biasClampEnable, &edgeLODEnable,
-            &anisotropy);
+    GXGetTexObjLODAll(
+        &pTexObj, &minFilter, &magFilter, &minLOD, &maxLOD, &LODBias, &biasClampEnable, &edgeLODEnable, &anisotropy
+    );
     SetFilter(minFilter, magFilter);
     SetLOD(minLOD, maxLOD);
     SetLODBias(LODBias);

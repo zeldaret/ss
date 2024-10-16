@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_trap_bird_wood.h>
+#include "d/a/obj/d_a_obj_trap_bird_wood.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TRAP_BIRD_WOOD, dAcOTrapBirdWood_c, fProfile::OBJ_TRAP_BIRD_WOOD, 0x23F, 0, 7);
 

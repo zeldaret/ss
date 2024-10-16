@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_maguppo.h>
+#include "d/a/e/d_a_e_maguppo.h"
 
 SPECIAL_ACTOR_PROFILE(E_MAGUPPO, dAcEmaguppo_c, fProfile::E_MAGUPPO, 0xFB, 0, 4098);
 

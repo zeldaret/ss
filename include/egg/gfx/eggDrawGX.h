@@ -1,12 +1,12 @@
 #ifndef EGG_DRAWGX_H
 #define EGG_DRAWGX_H
 
+#include "common.h"
 #include "egg/core/eggHeap.h"
 #include "egg/gfx/eggTexture.h"
 #include "egg/math/eggMatrix.h"
 #include "rvl/GX.h" // IWYU pragma: export
 
-#include <common.h>
 
 namespace EGG {
 

@@ -1,9 +1,11 @@
 #include "toBeSorted/file_manager.h"
+
 #include "f/f_base.h"
-#include <m/m_heap.h>
-#include <s/s_Crc.h>
+#include "m/m_heap.h"
+#include "s/s_Crc.h"
+
 // clang-format off
-#include <sized_string.h>
+#include "sized_string.h"
 // clang-format on
 
 // This class here makes no sense and the name might
@@ -104,7 +106,6 @@ u16 *FileManager::getStoryFlagsMut() {
 /* 8000AA40 */ void FileManager::setSkipFlagsChecked(u16 *flags, u32 offset, u16 count) {}
 
 /* 8000AAA0 */ void FileManager::initFile(int fileNum) {
-
     mIsFileInvalid[1] = 1;
     SaveFile *file = getFileA();
     if (fileNum != 0) {

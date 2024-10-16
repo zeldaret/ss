@@ -1,9 +1,9 @@
 #ifndef EGG_XFB_H
 #define EGG_XFB_H
 
+#include "common.h"
 #include "egg/core/eggHeap.h"
 
-#include <common.h>
 
 namespace EGG {
 

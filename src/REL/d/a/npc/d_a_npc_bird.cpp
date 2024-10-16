@@ -1,4 +1,4 @@
-#include <d/a/npc/d_a_npc_bird.h>
+#include "d/a/npc/d_a_npc_bird.h"
 
 SPECIAL_ACTOR_PROFILE(NPC_BIRD, dNpc_Bird_c, fProfile::NPC_BIRD, 0x120, 0, 2);
 

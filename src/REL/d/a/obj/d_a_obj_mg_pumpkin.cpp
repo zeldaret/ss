@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_mg_pumpkin.h>
+#include "d/a/obj/d_a_obj_mg_pumpkin.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_MG_PUMPKIN, dAcOMgPumpkin_c, fProfile::OBJ_MG_PUMPKIN, 0x14D, 0, 3);
 

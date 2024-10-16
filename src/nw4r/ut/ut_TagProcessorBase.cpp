@@ -1,6 +1,6 @@
 // Ported from https://github.com/kiwi515/ogws/blob/master/src/nw4r/ut/ut_TagProcessorBase.cpp
 
-#include <nw4r/ut.h>
+#include "nw4r/ut.h"
 
 namespace nw4r {
 namespace ut {
@@ -14,12 +14,8 @@ TagProcessorBase<T>::~TagProcessorBase() {}
 template <typename T>
 Operation TagProcessorBase<T>::Process(u16 ch, PrintContext<T> *ctx) {
     switch (ch) {
-    case '\n':
-        ProcessLinefeed(ctx);
-        return OPERATION_NEXT_LINE;
-    case '\t':
-        ProcessTab(ctx);
-        return OPERATION_NO_CHAR_SPACE;
+        case '\n': ProcessLinefeed(ctx); return OPERATION_NEXT_LINE;
+        case '\t': ProcessTab(ctx); return OPERATION_NO_CHAR_SPACE;
     }
 
     return OPERATION_DEFAULT;
@@ -28,26 +24,26 @@ Operation TagProcessorBase<T>::Process(u16 ch, PrintContext<T> *ctx) {
 template <typename T>
 Operation TagProcessorBase<T>::CalcRect(Rect *rect, u16 ch, PrintContext<T> *ctx) {
     switch (ch) {
-    case '\n': {
-        const TextWriterBase<T> &writer = *ctx->writer;
-        rect->right = writer.GetCursorX();
-        rect->top = writer.GetCursorY();
-        ProcessLinefeed(ctx);
-        rect->left = writer.GetCursorX();
-        rect->bottom = writer.GetCursorY() + ctx->writer->GetFontHeight();
-        rect->Normalize();
-        return OPERATION_NEXT_LINE;
-    }
-    case '\t': {
-        const TextWriterBase<T> &writer = *ctx->writer;
-        rect->left = writer.GetCursorX();
-        ProcessTab(ctx);
-        rect->right = writer.GetCursorX();
-        rect->top = writer.GetCursorY();
-        rect->bottom = rect->top + writer.GetFontHeight();
-        rect->Normalize();
-        return OPERATION_NO_CHAR_SPACE;
-    }
+        case '\n': {
+            const TextWriterBase<T> &writer = *ctx->writer;
+            rect->right = writer.GetCursorX();
+            rect->top = writer.GetCursorY();
+            ProcessLinefeed(ctx);
+            rect->left = writer.GetCursorX();
+            rect->bottom = writer.GetCursorY() + ctx->writer->GetFontHeight();
+            rect->Normalize();
+            return OPERATION_NEXT_LINE;
+        }
+        case '\t': {
+            const TextWriterBase<T> &writer = *ctx->writer;
+            rect->left = writer.GetCursorX();
+            ProcessTab(ctx);
+            rect->right = writer.GetCursorX();
+            rect->top = writer.GetCursorY();
+            rect->bottom = rect->top + writer.GetFontHeight();
+            rect->Normalize();
+            return OPERATION_NO_CHAR_SPACE;
+        }
     }
 
     return OPERATION_DEFAULT;

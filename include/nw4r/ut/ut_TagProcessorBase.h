@@ -1,7 +1,7 @@
 #ifndef NW4R_UT_TAG_PROCESSOR_BASE_H
 #define NW4R_UT_TAG_PROCESSOR_BASE_H
-#include <nw4r/types_nw4r.h>
-#include <nw4r/ut/ut_Rect.h>
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut/ut_Rect.h"
 
 namespace nw4r {
 namespace ut {
@@ -35,7 +35,7 @@ public:
 
     virtual Operation Process(u16 ch, PrintContext<T> *ctx); // at 0xC
     virtual Operation CalcRect(Rect *rect, u16 ch,
-            PrintContext<T> *ctx); // at 0x10
+                               PrintContext<T> *ctx); // at 0x10
 
     void ProcessLinefeed(PrintContext<T> *ctx);
     void ProcessTab(PrintContext<T> *ctx);

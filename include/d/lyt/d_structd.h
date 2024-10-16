@@ -1,9 +1,9 @@
 #ifndef D_LYT_STRUCTD_H
 #define D_LYT_STRUCTD_H
 
-#include <egg/core/eggHeap.h>
-#include <nw4r/ut/ut_LinkList.h>
-#include <toBeSorted/tlist.h>
+#include "egg/core/eggHeap.h"
+#include "nw4r/ut/ut_LinkList.h"
+#include "toBeSorted/tlist.h"
 
 namespace d2d {
 

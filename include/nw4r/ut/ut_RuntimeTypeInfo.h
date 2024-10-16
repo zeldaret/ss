@@ -1,12 +1,12 @@
 #ifndef NW4R_UT_RUNTIME_TYPE_INFO_H
 #define NW4R_UT_RUNTIME_TYPE_INFO_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/types_nw4r.h"
 
 // Declare type RTTI and accessor function
-#define NW4R_UT_RTTI_DECL(T) \
-    static nw4r::ut::detail::RuntimeTypeInfo typeInfo; \
-    virtual const nw4r::ut::detail::RuntimeTypeInfo *GetRuntimeTypeInfo() const { \
-        return &typeInfo; \
+#define NW4R_UT_RTTI_DECL(T)                                                                                           \
+    static nw4r::ut::detail::RuntimeTypeInfo typeInfo;                                                                 \
+    virtual const nw4r::ut::detail::RuntimeTypeInfo *GetRuntimeTypeInfo() const {                                      \
+        return &typeInfo;                                                                                              \
     }
 
 // Define type RTTI (base type)

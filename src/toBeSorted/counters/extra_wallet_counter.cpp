@@ -1,4 +1,4 @@
-#include <toBeSorted/counters/counter.h>
+#include "toBeSorted/counters/counter.h"
 
 class ExtraWalletCounter : public Counter {
 public:
@@ -9,7 +9,6 @@ public:
     }
 };
 
-
 /* 80575640 */ ExtraWalletCounter EXTRA_WALLET_COUNTER;
 
-/* 8016E260 */ ExtraWalletCounter::ExtraWalletCounter(): Counter(0x1fc) { }
+/* 8016E260 */ ExtraWalletCounter::ExtraWalletCounter() : Counter(0x1fc) {}

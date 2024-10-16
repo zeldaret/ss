@@ -1,4 +1,4 @@
-#include <d/a/d_a_insect_beetle.h>
+#include "d/a/d_a_insect_beetle.h"
 
 SPECIAL_ACTOR_PROFILE(INSECT_BEETLE, dAcInsectBeetle_c, fProfile::INSECT_BEETLE, 0x16A, 0, 3);
 

@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_log.h>
+#include "d/a/obj/d_a_obj_log.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_LOG, dAcOlog_c, fProfile::OBJ_LOG, 0x12E, 0, 2);
 

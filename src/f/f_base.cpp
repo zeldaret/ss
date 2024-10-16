@@ -1,9 +1,7 @@
 #include "f/f_base.h"
 
 #include "m/m_heap.h"
-
-#include <string.h>
-
+#include "string.h"
 
 /*
 .text File Range:

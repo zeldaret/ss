@@ -1,4 +1,4 @@
-#include <DynamicLink.h>
+#include "DynamicLink.h"
 
 DynamicModuleControlBase *DynamicModuleControlBase::mFirst;
 DynamicModuleControlBase *DynamicModuleControlBase::mLast;
@@ -311,10 +311,10 @@ int DynamicModuleControl::getModuleSize() const {
 
 const char *DynamicModuleControl::getModuleTypeString() const {
     static const char *REL_LOAD_TYPES[4] = {
-            "????",
-            "MEM",
-            "ARAM",
-            "DVD",
+        "????",
+        "MEM",
+        "ARAM",
+        "DVD",
     };
     return REL_LOAD_TYPES[mResourceType & 3];
 }

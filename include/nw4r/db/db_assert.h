@@ -1,7 +1,7 @@
 #ifndef NW4R_DB_ASSERT_H
 #define NW4R_DB_ASSERT_H
 
-#include <nw4r/db/db_console.h>
+#include "nw4r/db/db_console.h"
 
 namespace nw4r {
 namespace db {

@@ -1,8 +1,8 @@
 #ifndef EGG_FRUSTUM_H
 #define EGG_FRUSTUM_H
 
-#include <common.h>
-#include <nw4r/g3d/g3d_camera.h>
+#include "common.h"
+#include "nw4r/g3d/g3d_camera.h"
 
 namespace EGG {
 

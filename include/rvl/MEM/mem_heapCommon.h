@@ -1,10 +1,10 @@
 #ifndef RVL_SDK_MEM_HEAP_COMMON_H
 #define RVL_SDK_MEM_HEAP_COMMON_H
+#include "common.h"
 #include "rvl/MEM/mem_list.h"
 #include "rvl/OS.h" // IWYU pragma: export
+#include "string.h"
 
-#include <common.h>
-#include <string.h>
 
 // #include "string.h"
 #ifdef __cplusplus

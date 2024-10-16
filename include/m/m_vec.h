@@ -1,11 +1,9 @@
 #ifndef M_VEC_H
 #define M_VEC_H
 
+#include "common.h"
 #include "egg/math/eggVector.h"
 #include "m/m_angle.h"
-
-#include <common.h>
-
 
 class mVec3_c : public EGG::Vector3f {
 public:

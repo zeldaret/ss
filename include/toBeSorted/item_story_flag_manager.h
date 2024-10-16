@@ -1,8 +1,8 @@
 #ifndef ITEM_STORY_FLAG_MANAGER_H
 #define ITEM_STORY_FLAG_MANAGER_H
 
-#include <toBeSorted/flag_space.h>
-#include <toBeSorted/unk_flag_stuff.h>
+#include "toBeSorted/flag_space.h"
+#include "toBeSorted/unk_flag_stuff.h"
 
 // TODO These classes have an interesting relation and there are like 5 vtables, so
 // the stuff in this header should not be relied upon for actually implementing these,

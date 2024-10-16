@@ -1,9 +1,9 @@
 #ifndef D_A_NPC_BBRVL_H
 #define D_A_NPC_BBRVL_H
 
-#include <d/a/npc/d_a_npc.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/npc/d_a_npc.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dAcNpcBBRvl_c : public dAcNpc_c {
 public:

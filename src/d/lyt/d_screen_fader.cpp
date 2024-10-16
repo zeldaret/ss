@@ -1,8 +1,10 @@
-#include <d/lyt/d_screen_fader.h>
-#include <egg/gfx/eggDrawGX.h>
-#include <egg/gfx/eggScreen.h>
-#include <m/m_mtx.h>
-#include <nw4r/ut/ut_algorithm.h>
+#include "d/lyt/d_screen_fader.h"
+
+#include "egg/gfx/eggDrawGX.h"
+#include "egg/gfx/eggScreen.h"
+#include "m/m_mtx.h"
+#include "nw4r/ut/ut_algorithm.h"
+
 
 dScreenFader_c::dScreenFader_c(const mColor &color, EStatus status) : mFaderBase_c(color, status), mProgress(0.0f) {}
 

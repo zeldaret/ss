@@ -1,24 +1,17 @@
-#include <common.h>
-#include <s/s_StateInterfaces.hpp>
-#include <s/s_StateMethod.hpp>
-#include <s/s_StateID.hpp>
+#include "s/s_StateMethod.hpp"
+
+#include "common.h"
+#include "s/s_StateID.hpp"
+#include "s/s_StateInterfaces.hpp"
+
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
 // See include/s/README.txt for changes made
 
-sStateMethod_c::sStateMethod_c(sStateIDChkIf_c &checker, sStateFctIf_c &factory, const sStateIDIf_c &initialState) :
-    mpStateChk(checker),
-    mpStateFct(factory),
-    mInitFinalizeLock(false),
-    mExecutionLock(false),
-    mIsValid(false),
-    mStateChanged(false),
-    mRefreshStateMethod(false),
-    mpNewStateID(&initialState),
-    mpOldStateID(&sStateID::null),
-    mpStateID(&initialState),
-    mpState(nullptr) {
-}
+sStateMethod_c::sStateMethod_c(sStateIDChkIf_c &checker, sStateFctIf_c &factory, const sStateIDIf_c &initialState)
+    : mpStateChk(checker), mpStateFct(factory), mInitFinalizeLock(false), mExecutionLock(false), mIsValid(false),
+      mStateChanged(false), mRefreshStateMethod(false), mpNewStateID(&initialState), mpOldStateID(&sStateID::null),
+      mpStateID(&initialState), mpState(nullptr) {}
 
 sStateMethod_c::~sStateMethod_c() {}
 

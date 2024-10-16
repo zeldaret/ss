@@ -1,10 +1,12 @@
-#include <c/c_lib.h>
-#include <c/c_math.h>
-#include <d/a/d_a_player.h>
-#include <d/a/obj/d_a_obj_item.h>
-#include <d/col/cc/d_cc_mgr.h>
-#include <d/t/d_t_reaction.h>
-#include <toBeSorted/sceneflag_manager.h>
+#include "d/t/d_t_reaction.h"
+
+#include "c/c_lib.h"
+#include "c/c_math.h"
+#include "d/a/d_a_player.h"
+#include "d/a/obj/d_a_obj_item.h"
+#include "d/col/cc/d_cc_mgr.h"
+#include "toBeSorted/sceneflag_manager.h"
+
 
 SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0x0151, 0, 0);
 

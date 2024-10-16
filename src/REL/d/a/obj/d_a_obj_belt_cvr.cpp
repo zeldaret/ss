@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_belt_cvr.h>
+#include "d/a/obj/d_a_obj_belt_cvr.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_BELT_CVR, dAcObeltCvr_c, fProfile::OBJ_BELT_CVR, 0x271, 0, 2);
 

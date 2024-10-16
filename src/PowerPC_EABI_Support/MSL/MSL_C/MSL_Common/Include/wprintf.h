@@ -1,8 +1,8 @@
 #ifndef MSL_WPRINTF_H
 #define MSL_WPRINTF_H
 
-#include <__va_arg.h>
-#include <common.h>
+#include "__va_arg.h"
+#include "common.h"
 
 #ifdef __cplusplus
 extern "C" {

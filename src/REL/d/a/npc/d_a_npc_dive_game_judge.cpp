@@ -1,4 +1,4 @@
-#include <d/a/npc/d_a_npc_dive_game_judge.h>
+#include "d/a/npc/d_a_npc_dive_game_judge.h"
 
 SPECIAL_ACTOR_PROFILE(NPC_DIVE_GAME_JUDGE, dAcNpcDiveGameJudge_c, fProfile::NPC_DIVE_GAME_JUDGE, 0x8D, 0, 3);
 

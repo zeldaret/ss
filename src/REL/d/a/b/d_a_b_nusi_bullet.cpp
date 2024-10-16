@@ -1,4 +1,4 @@
-#include <d/a/b/d_a_b_nusi_bullet.h>
+#include "d/a/b/d_a_b_nusi_bullet.h"
 
 SPECIAL_ACTOR_PROFILE(B_NUSI_BULLET, dAcNusi_Bullet_c, fProfile::B_NUSI_BULLET, 0xB5, 0, 0);
 

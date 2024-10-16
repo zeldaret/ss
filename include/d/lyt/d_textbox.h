@@ -1,9 +1,8 @@
 #ifndef D_LYT_TEXTBOX_H
 #define D_LYT_TEXTBOX_H
 
-#include <d/lyt/d2d.h>
-#include <nw4r/lyt/lyt_textBox.h>
-
+#include "d/lyt/d2d.h"
+#include "nw4r/lyt/lyt_textBox.h"
 
 extern "C" void *lbl_805753B0;
 
@@ -28,7 +27,6 @@ public:
         nw4r::lyt::TextBox::SetScale(value);
     }
 
-
     static inline f32 GetTranslateX1() {
         if (lbl_805753B0 != nullptr) {
             return GetTranslateX1_();
@@ -46,7 +44,6 @@ public:
     // @bug: This does not implement UT's RTTI, so casts to dTextBox_c will
     // succeed even if all you have is a lyt::TextBox
 private:
-
     void MySetScale(const nw4r::math::VEC2 &value);
 
     d2d::LytBase_c *mpLytBase;

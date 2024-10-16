@@ -1,4 +1,4 @@
-#include <d/t/d_t_group_test.h>
+#include "d/t/d_t_group_test.h"
 
 SPECIAL_ACTOR_PROFILE(GROUP_TEST, dTgGroupTest_c, fProfile::GROUP_TEST, 0xC4, 0, 0);
 

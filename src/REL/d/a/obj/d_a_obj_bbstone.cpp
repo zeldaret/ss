@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_bbstone.h>
+#include "d/a/obj/d_a_obj_bbstone.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_BSTN, dAcOBBStone, fProfile::OBJ_BSTN, 0xA5, 0, 3);
 

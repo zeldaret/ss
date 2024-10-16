@@ -1,7 +1,7 @@
 #ifndef S_STATEID_H
 #define S_STATEID_H
 
-#include <s/s_StateInterfaces.hpp>
+#include "s/s_StateInterfaces.hpp"
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
 // See include/s/README.txt for changes made
@@ -35,7 +35,7 @@ public:
     virtual unsigned int number() const;
 
 protected:
-    const char *mpName; ///< The name of this state ID.
+    const char *mpName;   ///< The name of this state ID.
     unsigned int mNumber; ///< The number of this state ID.
 
     static NumberMemo_c sm_numberMemo; ///< Used to give each state a unique number.
@@ -43,8 +43,8 @@ protected:
 
 namespace sStateID {
 
-    /// @ingroup state
-    extern sStateID_c null; ///< A null state instance.
-}
+/// @ingroup state
+extern sStateID_c null; ///< A null state instance.
+} // namespace sStateID
 
 #endif

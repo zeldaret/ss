@@ -1,4 +1,4 @@
-#include <d/a/d_a_insect_cicada.h>
+#include "d/a/d_a_insect_cicada.h"
 
 SPECIAL_ACTOR_PROFILE(INSECT_CICADA, dAcInsectCicada_c, fProfile::INSECT_CICADA, 0x16C, 0, 2);
 

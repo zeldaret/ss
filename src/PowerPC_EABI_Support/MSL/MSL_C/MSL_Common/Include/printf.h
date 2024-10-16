@@ -1,8 +1,8 @@
 #ifndef _MSL_COMMON_PRINTF_H
 #define _MSL_COMMON_PRINTF_H
 
-#include <__va_arg.h>
-#include <ansi_files.h>
+#include "__va_arg.h"
+#include "ansi_files.h"
 
 #ifdef __cplusplus
 extern "C" {

@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_AX_DSP_CODE_H
 #define RVL_SDK_AX_DSP_CODE_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

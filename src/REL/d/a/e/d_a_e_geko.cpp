@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_geko.h>
+#include "d/a/e/d_a_e_geko.h"
 
 SPECIAL_ACTOR_PROFILE(E_GEKO, dAcEgeko_c, fProfile::E_GEKO, 0xED, 0, 4099);
 

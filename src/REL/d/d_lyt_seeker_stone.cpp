@@ -1,4 +1,4 @@
-#include <d/d_lyt_seeker_stone.h>
+#include "d/d_lyt_seeker_stone.h"
 
 SPECIAL_BASE_PROFILE(LYT_SEEKER_STONE, dLytSeekerStone_c, fProfile::LYT_SEEKER_STONE, 0x2BC, 1024);
 

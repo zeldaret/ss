@@ -1,9 +1,9 @@
 #ifndef OARC_MANAGER_H
 #define OARC_MANAGER_H
 
-#include <d/d_rawarchive.h>
-#include <egg/core/eggHeap.h>
-#include <sized_string.h>
+#include "d/d_rawarchive.h"
+#include "egg/core/eggHeap.h"
+#include "sized_string.h"
 
 class OarcManager {
 public:

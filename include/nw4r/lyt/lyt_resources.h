@@ -1,10 +1,10 @@
 #ifndef NW4R_LYT_RESOURCES_H
 #define NW4R_LYT_RESOURCES_H
 
-#include <common.h>
-#include <nw4r/lyt/lyt_common.h>
-#include <nw4r/lyt/lyt_types.h>
-#include <nw4r/ut/ut_Color.h>
+#include "common.h"
+#include "nw4r/lyt/lyt_common.h"
+#include "nw4r/lyt/lyt_types.h"
+#include "nw4r/ut/ut_Color.h"
 
 #define PANE_NAME_SIZE 16
 #define PANE_USERDATA_SIZE 8

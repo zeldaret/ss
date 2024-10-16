@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_tumble_weed.h>
+#include "d/a/obj/d_a_obj_tumble_weed.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TUMBLE_WEED, dAcOTumbleWeed_c, fProfile::OBJ_TUMBLE_WEED, 0x243, 0, 2);
 

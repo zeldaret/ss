@@ -1,5 +1,7 @@
-#include <egg/audio/eggAudioSystem.h>
-#include <nw4r/snd/snd_SoundSystem.h>
+#include "egg/audio/eggAudioSystem.h"
+
+#include "nw4r/snd/snd_SoundSystem.h"
+
 
 namespace EGG {
 

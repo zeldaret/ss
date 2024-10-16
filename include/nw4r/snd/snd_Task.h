@@ -1,8 +1,8 @@
 #ifndef NW4R_SND_TASK_H
 #define NW4R_SND_TASK_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut.h"
 
-#include <nw4r/ut.h>
 
 namespace nw4r {
 namespace snd {

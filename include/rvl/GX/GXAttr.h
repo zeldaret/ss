@@ -1,7 +1,8 @@
 #ifndef RVL_SDK_GX_ATTR_H
 #define RVL_SDK_GX_ATTR_H
+#include "common.h"
 #include "rvl/GX/GXTypes.h"
-#include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -36,8 +37,9 @@ void GXGetVtxAttrFmt(GXVtxFmt fmt, GXAttr attr, GXCompCnt *compCnt, GXCompType *
 void GXGetVtxAttrFmtv(GXVtxFmt fmt, GXVtxAttrFmtList *list);
 void GXSetArray(GXAttr attr, u32 base, u8 stride);
 void GXInvalidateVtxCache(void);
-void GXSetTexCoordGen2(GXTexCoordID id, GXTexGenType type, GXTexGenSrc src, u32 texMtxIdx, GXBool normalize,
-        u32 dualTexMtxIdx);
+void GXSetTexCoordGen2(
+    GXTexCoordID id, GXTexGenType type, GXTexGenSrc src, u32 texMtxIdx, GXBool normalize, u32 dualTexMtxIdx
+);
 void GXSetNumTexGens(u8 num);
 
 void __GXSetVCD(void);

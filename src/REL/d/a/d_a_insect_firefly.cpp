@@ -1,4 +1,4 @@
-#include <d/a/d_a_insect_firefly.h>
+#include "d/a/d_a_insect_firefly.h"
 
 SPECIAL_ACTOR_PROFILE(INSECT_FIREFLY, dAcInsectFirefly_c, fProfile::INSECT_FIREFLY, 0x170, 0, 3);
 

@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_mushroom.h>
+#include "d/a/obj/d_a_obj_mushroom.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_MUSHROOM, dAcOMushRoom_c, fProfile::OBJ_MUSHROOM, 0x141, 0, 7);
 

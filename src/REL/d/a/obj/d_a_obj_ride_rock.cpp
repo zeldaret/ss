@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_ride_rock.h>
+#include "d/a/obj/d_a_obj_ride_rock.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_RIDE_ROCK, dAcOrideRock_c, fProfile::OBJ_RIDE_ROCK, 0x267, 0, 6);
 

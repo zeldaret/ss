@@ -1,10 +1,10 @@
 #ifndef NW4R_SND_SOUND_ACTOR_H
 #define NW4R_SND_SOUND_ACTOR_H
+#include "limits.h"
 #include "nw4r/snd/snd_ExternalSoundPlayer.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/types_nw4r.h"
 
-#include <limits.h>
 
 namespace nw4r {
 namespace snd {

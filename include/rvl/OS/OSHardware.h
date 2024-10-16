@@ -2,9 +2,9 @@
 #define RVL_SDK_OS_HARDWARE_H
 
 // #include "rvl/OS/OSAddress.h"
+#include "common.h"
 #include "rvl/OS/OSThread.h"
 
-#include <common.h>
 
 #ifdef __cplusplus
 extern "C" {

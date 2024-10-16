@@ -1,7 +1,8 @@
 #ifndef RVL_SDK_IPC_PROFILE_H
 #define RVL_SDK_IPC_PROFILE_H
+#include "common.h"
 #include "rvl/IPC/ipcclt.h"
-#include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

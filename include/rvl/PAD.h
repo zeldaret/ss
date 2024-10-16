@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include <rvl/PAD/Pad.h>
+#include "rvl/PAD/Pad.h"
 
 #ifdef __cplusplus
 }

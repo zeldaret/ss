@@ -1,7 +1,7 @@
 #ifndef EGG_AUDIO_SYSTEM_H
 #define EGG_AUDIO_SYSTEM_H
 
-#include <common.h>
+#include "common.h"
 
 namespace EGG {
 
