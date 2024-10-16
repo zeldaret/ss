@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_bamboo.h>
+#include "d/a/obj/d_a_obj_bamboo.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_BAMBOO, dAcObamboo_c, fProfile::OBJ_BAMBOO, 0x131, 0, 35);
 

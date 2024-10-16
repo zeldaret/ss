@@ -1,9 +1,9 @@
 #ifndef M3D_M_BANM_H
 #define M3D_M_BANM_H
 
-#include <egg/core/eggFrmHeap.h>
-#include <m/m_allocator.h>
-#include <nw4r/g3d/g3d_anmobj.h>
+#include "egg/core/eggFrmHeap.h"
+#include "m/m_allocator.h"
+#include "nw4r/g3d/g3d_anmobj.h"
 
 namespace m3d {
 

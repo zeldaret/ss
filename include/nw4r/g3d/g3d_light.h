@@ -1,10 +1,9 @@
 #ifndef NW4R_G3D_LIGHT_H
 #define NW4R_G3D_LIGHT_H
 #include "common.h"
-#include "nw4r/g3d/g3d_rescommon.h"
-#include "nw4r/math.h"
-#include <rvl/GX.h>
-
+#include "nw4r/g3d/g3d_rescommon.h" // IWYU pragma: export
+#include "nw4r/math.h"              // IWYU pragma: export
+#include "rvl/GX.h"                 // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {

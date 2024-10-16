@@ -1,9 +1,9 @@
 #ifndef EGG_XFB_MANAGER_H
 #define EGG_XFB_MANAGER_H
 
+#include "common.h"
 #include "egg/core/eggXfb.h"
 
-#include <common.h>
 
 namespace EGG {
 

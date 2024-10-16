@@ -1,6 +1,8 @@
-#include <m/m3d/m3d.h>
-#include <m/m3d/m_anmshp.h>
-#include <nw4r/g3d/g3d_anmshp.h>
+#include "m/m3d/m_anmshp.h"
+
+#include "m/m3d/m3d.h"
+#include "nw4r/g3d/g3d_anmshp.h"
+
 
 namespace m3d {
 

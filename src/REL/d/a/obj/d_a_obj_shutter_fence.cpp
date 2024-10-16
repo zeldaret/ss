@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_shutter_fence.h>
+#include "d/a/obj/d_a_obj_shutter_fence.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SHUTTER_FENCE, dAcOshutterfence_c, fProfile::OBJ_SHUTTER_FENCE, 0x19F, 0, 6);
 

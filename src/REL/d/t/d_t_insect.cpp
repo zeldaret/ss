@@ -1,4 +1,4 @@
-#include <d/t/d_t_insect.h>
+#include "d/t/d_t_insect.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_INSECT, dTgInsect_c, fProfile::TAG_INSECT, 0x167, 0, 0);
 

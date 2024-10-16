@@ -1,7 +1,9 @@
-#include <m/m3d/m3d.h>
-#include <m/m3d/m_smdl.h>
-#include <nw4r/g3d/g3d_scnmdl.h>
-#include <nw4r/g3d/g3d_scnmdlsmpl.h>
+#include "m/m3d/m_smdl.h"
+
+#include "m/m3d/m3d.h"
+#include "nw4r/g3d/g3d_scnmdl.h"
+#include "nw4r/g3d/g3d_scnmdlsmpl.h"
+
 
 namespace m3d {
 

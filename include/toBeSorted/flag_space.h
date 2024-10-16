@@ -1,7 +1,7 @@
 #ifndef FLAG_SPACE_H
 #define FLAG_SPACE_H
 
-#include <common.h>
+#include "common.h"
 
 struct BaseFlagSpace {
     u16 *mpFlags;

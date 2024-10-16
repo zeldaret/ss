@@ -1,4 +1,4 @@
-#include <d/a/d_a_control.h>
+#include "d/a/d_a_control.h"
 
 SPECIAL_ACTOR_PROFILE(ENEMY_CONTROL, dAcEnCl_c, fProfile::ENEMY_CONTROL, 0xE0, 0, 0);
 

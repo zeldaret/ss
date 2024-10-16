@@ -1,9 +1,9 @@
 #ifndef D_A_LITTLE_BIRD_MGR_H
 #define D_A_LITTLE_BIRD_MGR_H
 
-#include <d/a/d_a_base.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/d_a_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dAcLittleBirdMgr_c : public dAcBase_c {
 public:

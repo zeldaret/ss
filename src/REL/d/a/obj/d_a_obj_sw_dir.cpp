@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_sw_dir.h>
+#include "d/a/obj/d_a_obj_sw_dir.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SW_DIR, dAcOSwDir_c, fProfile::OBJ_SW_DIR, 0x229, 0, 7);
 

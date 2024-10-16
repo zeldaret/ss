@@ -1,9 +1,10 @@
-#include <d/a/d_a_player.h>
-#include <d/a/obj/d_a_obj_base.h>
-#include <d/col/c/c_m3d_g_cps.h>
-#include <d/t/d_t_sound_area.h>
-#include <d/t/d_t_sound_area_mgr.h>
-#include <rvl/MTX.h>
+#include "d/t/d_t_sound_area.h"
+
+#include "d/a/d_a_player.h"
+#include "d/a/obj/d_a_obj_base.h"
+#include "d/col/c/c_m3d_g_cps.h"
+#include "d/t/d_t_sound_area_mgr.h"
+#include "rvl/MTX.h" // IWYU pragma: export
 
 SPECIAL_ACTOR_PROFILE(TAG_SOUND_AREA, dTgSndAr_c, fProfile::TAG_SOUND_AREA, 0x0146, 0, 0);
 

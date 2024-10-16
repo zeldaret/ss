@@ -6,7 +6,6 @@
 #include "d/col/c/c_bg_s_chk.h"
 #include "d/col/c/c_bg_s_lin_chk.h"
 #include "d/col/c/c_bg_s_shdw_draw.h"
-#include "d/d_heap_alloc.h"
 #include "toBeSorted/scgame.h"
 
 bool cBgW::sLineCheck;

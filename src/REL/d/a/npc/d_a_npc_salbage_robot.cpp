@@ -1,4 +1,4 @@
-#include <d/a/npc/d_a_npc_salbage_robot.h>
+#include "d/a/npc/d_a_npc_salbage_robot.h"
 
 SPECIAL_ACTOR_PROFILE(NPC_SLB, dAcNpcSlb_c, fProfile::NPC_SLB, 0x94, 0, 0);
 

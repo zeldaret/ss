@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_bell.h>
+#include "d/a/obj/d_a_obj_bell.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_BELL, dAcObell_c, fProfile::OBJ_BELL, 0x208, 0, 2);
 

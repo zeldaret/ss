@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_wind03.h>
+#include "d/a/obj/d_a_obj_wind03.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_WIND03, dAcOwind03_c, fProfile::OBJ_WIND03, 0xDD, 0, 262);
 

@@ -1,7 +1,8 @@
 #ifndef RVL_SDK_GX_GEOMETRY_H
 #define RVL_SDK_GX_GEOMETRY_H
+#include "common.h"
 #include "rvl/GX/GXTypes.h"
-#include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif

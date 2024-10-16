@@ -1,6 +1,8 @@
-#include <d/t/d_t_ship_window.h>
-#include <toBeSorted/event_manager.h>
-#include <toBeSorted/sceneflag_manager.h>
+#include "d/t/d_t_ship_window.h"
+
+#include "toBeSorted/event_manager.h"
+#include "toBeSorted/sceneflag_manager.h"
+
 
 SPECIAL_ACTOR_PROFILE(TAG_SHIP_WINDOW, dTgShipWindow_c, fProfile::TAG_SHIP_WINDOW, 0x0228, 0, 0);
 
@@ -73,7 +75,8 @@ void dTgShipWindow_c::executeState_Off() {
     }
 
     if ((mHasPlayedOffEvent == 0 || mAlwaysPlayEvent == 0) &&
-        (mOutputStateFlagBase >= 0xFF || !SceneflagManager::sInstance->checkBoolFlag(roomid, mOutputStateFlagBase + 1))) {
+        (mOutputStateFlagBase >= 0xFF || !SceneflagManager::sInstance->checkBoolFlag(roomid, mOutputStateFlagBase + 1)
+        )) {
         if (mOffEventId != 0xFF) {
             {
                 // this works but I don't like it
@@ -112,7 +115,8 @@ void dTgShipWindow_c::executeState_On() {
     }
 
     if ((mHasPlayedOnEvent == 0 || mAlwaysPlayEvent == 0) &&
-        (mOutputStateFlagBase >= 0xFF || !SceneflagManager::sInstance->checkBoolFlag(roomid, mOutputStateFlagBase + 2))) {
+        (mOutputStateFlagBase >= 0xFF || !SceneflagManager::sInstance->checkBoolFlag(roomid, mOutputStateFlagBase + 2)
+        )) {
         if (mOnEventId != 0xFF) {
             {
                 // this works but I don't like it

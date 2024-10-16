@@ -1,13 +1,15 @@
 #ifndef M3D_BLINE_H
 #define M3D_BLINE_H
 
-#include <egg/gfx/eggTexture.h>
-#include <m/m3d/m_proc.h>
-#include <m/m_math.h>
-#include <nw4r/ut/ut_Color.h>
+#include "egg/gfx/eggTexture.h"
+#include "m/m3d/m_proc.h"
+#include "m/m_math.h"
+#include "nw4r/ut/ut_Color.h"
 
 namespace m3d {
 
+#pragma push
+#pragma warning off(10402)
 // The Actual line
 class bline_c {
 public:
@@ -58,6 +60,7 @@ public:
     /* 0x2E */ u8 mFlags;
     /* 0x2F    u8 _pad; */
 };
+#pragma pop
 
 class blineMat_c : public proc_c {
 public:
@@ -67,8 +70,10 @@ public:
     virtual void drawXlu() override;
     virtual void setupGX(bool bTransparent);
 
-    bool create(mAllocator_c *pAllocator, int numLines, u16 numLinePts, f32 width, f32 repeat, nw4r::ut::Color &color,
-            EGG::ResTIMG *pTex, bool);
+    bool create(
+        mAllocator_c *pAllocator, int numLines, u16 numLinePts, f32 width, f32 repeat, nw4r::ut::Color &color,
+        EGG::ResTIMG *pTex, bool
+    );
     void update();
     bline_c *getLine(u16 idx);
 

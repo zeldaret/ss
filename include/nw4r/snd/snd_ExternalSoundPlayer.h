@@ -1,8 +1,8 @@
 #ifndef NW4R_SND_EXTERNAL_SOUND_PLAYER_H
 #define NW4R_SND_EXTERNAL_SOUND_PLAYER_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/types_nw4r.h"
 
-#include <nw4r/snd/snd_BasicSound.h>
 
 namespace nw4r {
 namespace snd {
@@ -25,16 +25,15 @@ public:
     f32 detail_GetVolume() const {
         return mVolume;
     }
-    BasicSound* GetLowestPrioritySound();
+    BasicSound *GetLowestPrioritySound();
 
-    void InsertSoundList(BasicSound* pSound);
-    void RemoveSoundList(BasicSound* pSound);
+    void InsertSoundList(BasicSound *pSound);
+    void RemoveSoundList(BasicSound *pSound);
 
     template <typename TForEachFunc>
     TForEachFunc ForEachSound(TForEachFunc pFunction, bool reverse) {
         if (reverse) {
-            BasicSoundExtPlayList::RevIterator it =
-                mSoundList.GetBeginReverseIter();
+            BasicSoundExtPlayList::RevIterator it = mSoundList.GetBeginReverseIter();
 
             while (it != mSoundList.GetEndReverseIter()) {
                 BasicSoundExtPlayList::RevIterator curr = it;
@@ -48,11 +47,8 @@ public:
                 }
             }
         } else {
-            NW4R_UT_LIST_SAFE_FOREACH(mSoundList,
-                SoundHandle handle;
-                handle.detail_AttachSoundAsTempHandle(&*it);
-                pFunction(handle);
-            );
+            NW4R_UT_LIST_SAFE_FOREACH(mSoundList, SoundHandle handle; handle.detail_AttachSoundAsTempHandle(&*it);
+                                      pFunction(handle););
         }
 
         return pFunction;

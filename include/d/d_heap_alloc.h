@@ -1,7 +1,7 @@
 #ifndef D_HEAP_ALLOC
 #define D_HEAP_ALLOC
 
-#include <egg/core/eggHeap.h>
+#include "egg/core/eggHeap.h"
 
 class dHeapAllocatorBase {
 public:
@@ -42,8 +42,8 @@ public:
     }
 
     virtual ~dHeapAllocatorBase() {}
-    virtual void onAlloc(EGG::HeapAllocArg *arg) {};
-    virtual void onFree(EGG::HeapFreeArg *arg) {};
+    virtual void onAlloc(EGG::HeapAllocArg *arg){};
+    virtual void onFree(EGG::HeapFreeArg *arg){};
 
     /* 0x04 */ bool mCallbacksInitialized;
     /* 0x08 */ EGG::HeapAllocCallback mPreviousAllocCallback;

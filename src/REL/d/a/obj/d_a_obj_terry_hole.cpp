@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_terry_hole.h>
+#include "d/a/obj/d_a_obj_terry_hole.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TERRY_HOLE, dAcOTerryHole_c, fProfile::OBJ_TERRY_HOLE, 0x279, 0, 4);
 

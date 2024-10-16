@@ -1,8 +1,8 @@
 #ifndef M3D_M_CALC_RATIO_H
 #define M3D_M_CALC_RATIO_H
 
-#include <egg/core/eggFrmHeap.h>
-#include <m/m_allocator.h>
+#include "egg/core/eggFrmHeap.h"
+#include "m/m_allocator.h"
 
 namespace m3d {
 

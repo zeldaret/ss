@@ -1,8 +1,8 @@
 #ifndef EGG_SCREEN_H
 #define EGG_SCREEN_H
 
-#include <common.h>
-#include <egg/gfx/eggFrustum.h>
+#include "common.h"
+#include "egg/gfx/eggFrustum.h"
 
 namespace EGG {
 

@@ -1,9 +1,8 @@
 #ifndef EGG_UNK_H
 #define EGG_UNK_H
 
-#include "rvl/OS.h"
-
-#include <common.h>
+#include "common.h"
+#include "rvl/OS.h" // IWYU pragma: export
 
 
 // This is seen in Animal Crossing: City Folk also. Idk where it belongs

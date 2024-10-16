@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_B300_sand.h>
+#include "d/a/obj/d_a_obj_B300_sand.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_B300_SAND, dAcOB300Sand_c, fProfile::OBJ_B300_SAND, 0x1AF, 0, 0);
 

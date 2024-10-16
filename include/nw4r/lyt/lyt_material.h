@@ -1,11 +1,11 @@
 #ifndef NW4R_LYT_MATERIAL_H
 #define NW4R_LYT_MATERIAL_H
 #include "nw4r/lyt/lyt_animation.h"
+#include "nw4r/lyt/lyt_resources.h"
+#include "nw4r/lyt/lyt_texMap.h"
+#include "nw4r/ut/ut_Color.h"
 #include "nw4r/ut/ut_LinkList.h"
-#include <nw4r/lyt/lyt_resources.h>
-#include <nw4r/lyt/lyt_texMap.h>
-#include <nw4r/ut/ut_Color.h>
-#include <rvl/GX.h>
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace lyt {
@@ -17,8 +17,10 @@ public:
 
     void Init();
     static void InitBitGXNums(detail::BitGXNums *ptr);
-    void ReserveGXMem(u8 texMapNum, u8 texSRTNum, u8 texCoordGenNum, u8 tevStageNum, bool allocTevSwap, u8 indStageNum,
-            u8 indSRTNum, bool allocChanCtrl, bool allocMatCol, bool allocAlpComp, bool allocBlendMode);
+    void ReserveGXMem(
+        u8 texMapNum, u8 texSRTNum, u8 texCoordGenNum, u8 tevStageNum, bool allocTevSwap, u8 indStageNum, u8 indSRTNum,
+        bool allocChanCtrl, bool allocMatCol, bool allocAlpComp, bool allocBlendMode
+    );
 
     const TexMap *GetTexMapAry() const;
     TexMap *GetTexMapAry();

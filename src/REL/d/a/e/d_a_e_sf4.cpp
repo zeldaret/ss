@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_sf4.h>
+#include "d/a/e/d_a_e_sf4.h"
 
 SPECIAL_ACTOR_PROFILE(E_SF4, dAcEsf4_c, fProfile::E_SF4, 0xC9, 0, 2);
 

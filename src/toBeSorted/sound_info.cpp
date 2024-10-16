@@ -1,4 +1,4 @@
-#include <d/a/d_a_base.h>
+#include "d/a/d_a_base.h"
 
 extern "C" SoundSource *soundForActorInitRelated_803889c0(int, fBase_c *, char *, u8);
 

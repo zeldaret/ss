@@ -1,8 +1,8 @@
-#include <toBeSorted/time_area_mgr.h>
-#include <toBeSorted/scgame.h>
-#include <nw4r/g3d/g3d_obj.h>
-#include <d/d_heap.h>
+#include "toBeSorted/time_area_mgr.h"
 
+#include "d/d_heap.h"
+#include "nw4r/g3d/g3d_obj.h"
+#include "toBeSorted/scgame.h"
 
 dTimeAreaMgr_c::dTimeAreaMgr_c() {
     sInstance = this;
@@ -50,7 +50,7 @@ bool dTimeAreaMgrProcB_c::create(mHeapAllocator_c *alloc) {
     if (!m3d::proc_c::create(alloc, nullptr)) {
         return false;
     }
-    
+
     setPriorityDraw(0x13, 0);
     setOption(/* DISABLE_DRAW_XLU */ 0x07, 1);
     field_0x18 = 0x8C;

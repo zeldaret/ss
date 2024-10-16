@@ -1,9 +1,9 @@
 #ifndef EGG_BUFFER_H
 #define EGG_BUFFER_H
 
+#include "common.h"
 #include "egg/core/eggHeap.h"
 
-#include <common.h>
 
 namespace EGG {
 

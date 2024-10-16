@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_swhit.h>
+#include "d/a/obj/d_a_obj_swhit.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SWHIT, dAcOswhit_c, fProfile::OBJ_SWHIT, 0x132, 0, 18);
 

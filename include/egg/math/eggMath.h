@@ -1,8 +1,7 @@
 #ifndef EGG_MATH_H
 #define EGG_MATH_H
 
-#include <MSL_C/float.h>
-#include <common.h>
+#include "common.h"
 
 namespace EGG {
 

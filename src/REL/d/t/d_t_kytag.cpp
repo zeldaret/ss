@@ -1,4 +1,4 @@
-#include <d/t/d_t_kytag.h>
+#include "d/t/d_t_kytag.h"
 
 SPECIAL_ACTOR_PROFILE(KYTAG_TAG, dKytagTag_c, fProfile::KYTAG_TAG, 0x1B, 0, 388);
 

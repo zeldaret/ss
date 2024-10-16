@@ -1,7 +1,7 @@
 #ifndef EGG_FADER_H
 #define EGG_FADER_H
 
-#include <common.h>
+#include "common.h"
 
 namespace EGG {
 

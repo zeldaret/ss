@@ -1,12 +1,13 @@
 #ifndef D_BG_W_H
 #define D_BG_W_H
 
-#include <common.h>
-#include <d/col/bg/d_bg_plc.h>
-#include <d/col/bg/d_bg_w_base.h>
-#include <d/col/c/c_m3d_g_aab.h>
-#include <m/m_math.h>
-#include <rvl/MTX.h>
+#include "common.h"
+#include "d/col/bg/d_bg_plc.h"
+#include "d/col/bg/d_bg_w_base.h"
+#include "d/col/c/c_m3d_g_aab.h"
+#include "m/m_math.h" // IWYU pragma: export
+#include "rvl/MTX.h"  // IWYU pragma: export
+
 
 class cBgS_GrpPassChk;
 class cBgS_PolyPassChk;

@@ -1,5 +1,7 @@
-#include <d/a/d_a_player.h>
-#include <d/t/d_t_holy_water.h>
+#include "d/t/d_t_holy_water.h"
+
+#include "d/a/d_a_player.h"
+
 
 SPECIAL_ACTOR_PROFILE(TAG_HOLY_WATER, dTgHolyWater_c, fProfile::TAG_HOLY_WATER, 0x0224, 0, 4);
 

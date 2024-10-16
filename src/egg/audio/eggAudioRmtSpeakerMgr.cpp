@@ -1,6 +1,7 @@
-#include <egg/audio/eggAudioRmtSpeakerMgr.h>
-#include <nw4r/snd/snd_SoundSystem.h>
-#include <rvl/OS.h>
+#include "egg/audio/eggAudioRmtSpeakerMgr.h"
+
+#include "nw4r/snd/snd_SoundSystem.h"
+#include "rvl/OS.h" // IWYU pragma: export
 
 namespace EGG {
 

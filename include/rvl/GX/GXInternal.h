@@ -1,7 +1,8 @@
 #ifndef RVL_SDK_GX_INTERNAL_H
 #define RVL_SDK_GX_INTERNAL_H
+#include "common.h"
 #include "rvl/GX/GXTypes.h"
-#include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -21,9 +22,9 @@ extern "C" {
  * (Implementation size is included to require that such a structure already
  * exists.)
  */
-#define GX_DECL_PUBLIC_STRUCT(name, size) \
-    typedef struct _##name { \
-        u8 dummy[(size) - sizeof(name##Impl) + sizeof(name##Impl)]; \
+#define GX_DECL_PUBLIC_STRUCT(name, size)                                                                              \
+    typedef struct _##name {                                                                                           \
+        u8 dummy[(size) - sizeof(name##Impl) + sizeof(name##Impl)];                                                    \
     } name;
 
 typedef struct _GXFifoObjImpl {

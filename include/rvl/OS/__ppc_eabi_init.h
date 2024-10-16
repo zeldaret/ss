@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_OS_PPC_EABI_INIT_H
 #define RVL_SDK_OS_PPC_EABI_INIT_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -20,14 +20,14 @@ void _ExitProcess(void);
  */
 
 // Declare linker symbols for a section in the ROM
-#define DECL_ROM_SECTION(x) \
-    extern u8 _f##x[]; \
-    extern u8 _f##x##_rom[]; \
+#define DECL_ROM_SECTION(x)                                                                                            \
+    extern u8 _f##x[];                                                                                                 \
+    extern u8 _f##x##_rom[];                                                                                           \
     extern u8 _e##x[];
 
 // Declare linker symbols for a BSS section
-#define DECL_BSS_SECTION(x) \
-    extern u8 _f##x[]; \
+#define DECL_BSS_SECTION(x)                                                                                            \
+    extern u8 _f##x[];                                                                                                 \
     extern u8 _e##x[];
 
 // Debugger stack

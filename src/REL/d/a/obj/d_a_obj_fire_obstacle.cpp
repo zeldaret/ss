@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_fire_obstacle.h>
+#include "d/a/obj/d_a_obj_fire_obstacle.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_FIRE_OBSTACLE, dAcOfireObstacle_c, fProfile::OBJ_FIRE_OBSTACLE, 0x1EF, 0, 0);
 

@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_OS_NET_H
 #define RVL_SDK_OS_NET_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif

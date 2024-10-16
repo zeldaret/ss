@@ -1,18 +1,25 @@
 #ifndef NW4R_SND_SEQ_TRACK_H
 #define NW4R_SND_SEQ_TRACK_H
-#include <nw4r/types_nw4r.h>
 
-#include <nw4r/snd/snd_Channel.h>
-#include <nw4r/snd/snd_Lfo.h>
-
-#include <rvl/WPAD.h>
+#include "nw4r/snd/snd_Channel.h"
+#include "nw4r/snd/snd_Lfo.h"
+#include "nw4r/types_nw4r.h"
+#include "rvl/WPAD.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace snd {
 
-enum SeqMute { MUTE_OFF, MUTE_NO_STOP, MUTE_RELEASE, MUTE_STOP };
+enum SeqMute {
+    MUTE_OFF,
+    MUTE_NO_STOP,
+    MUTE_RELEASE,
+    MUTE_STOP
+};
 
-enum ParseResult { PARSE_RESULT_CONTINUE, PARSE_RESULT_FINISH };
+enum ParseResult {
+    PARSE_RESULT_CONTINUE,
+    PARSE_RESULT_FINISH
+};
 
 namespace detail {
 
@@ -22,8 +29,8 @@ public:
     static const int PRGNO_MAX = 0xFFFF;
 
     struct ParserTrackParam {
-        const u8* baseAddr;    // at 0x0
-        const u8* currentAddr; // at 0x4
+        const u8 *baseAddr;    // at 0x0
+        const u8 *currentAddr; // at 0x4
         s32 wait;              // at 0x8
 
         bool muteFlag;       // at 0xC
@@ -82,20 +89,20 @@ public:
     }
 
     void InitParam();
-    void SetSeqData(const void* pBase, s32 offset);
+    void SetSeqData(const void *pBase, s32 offset);
 
     void Open();
     void Close();
 
     void UpdateChannelLength();
-    void UpdateChannelRelease(Channel* pChannel);
+    void UpdateChannelRelease(Channel *pChannel);
 
     int ParseNextTick(bool doNoteOn);
 
     void StopAllChannel();
     void ReleaseAllChannel(int release);
     void PauseAllChannel(bool flag);
-    void AddChannel(Channel* pChannel);
+    void AddChannel(Channel *pChannel);
     void UpdateChannelParam();
     void FreeAllChannel();
 
@@ -103,24 +110,24 @@ public:
     void SetVolume(f32 volume);
     void SetPitch(f32 pitch);
 
-    ParserTrackParam& GetParserTrackParam() {
+    ParserTrackParam &GetParserTrackParam() {
         return mParserTrackParam;
     }
 
-    volatile s16* GetVariablePtr(int i);
+    volatile s16 *GetVariablePtr(int i);
 
-    SeqPlayer* GetSeqPlayer() {
+    SeqPlayer *GetSeqPlayer() {
         return mPlayer;
     }
-    void SetSeqPlayer(SeqPlayer* pPlayer) {
+    void SetSeqPlayer(SeqPlayer *pPlayer) {
         mPlayer = pPlayer;
     }
 
-    Channel* GetLastChannel() const {
+    Channel *GetLastChannel() const {
         return mChannelList;
     }
 
-    Channel* NoteOn(int key, int velocity, s32 length, bool tie);
+    Channel *NoteOn(int key, int velocity, s32 length, bool tie);
 
 private:
     static const int DEFAULT_PRIORITY = 64;
@@ -129,9 +136,7 @@ private:
     static const int DEFAULT_VARIABLE_VALUE = -1;
 
 private:
-    static void ChannelCallbackFunc(Channel* pDropChannel,
-                                    Channel::ChannelCallbackStatus status,
-                                    u32 callbackArg);
+    static void ChannelCallbackFunc(Channel *pDropChannel, Channel::ChannelCallbackStatus status, u32 callbackArg);
 
 private:
     u8 mPlayerTrackNo; // at 0x4
@@ -150,8 +155,8 @@ private:
 
     ParserTrackParam mParserTrackParam;        // at 0x50
     volatile s16 mTrackVariable[VARIABLE_NUM]; // at 0x98
-    SeqPlayer* mPlayer;                        // at 0xB8
-    Channel* mChannelList;                     // at 0xBC
+    SeqPlayer *mPlayer;                        // at 0xB8
+    Channel *mChannelList;                     // at 0xBC
 };
 
 } // namespace detail

@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include <rvl/WENC/wenc.h>
+#include "rvl/WENC/wenc.h"
 
 #ifdef __cplusplus
 }

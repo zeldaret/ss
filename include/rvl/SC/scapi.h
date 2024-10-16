@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_SC_SCAPI_H
 #define RVL_SDK_SC_SCAPI_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -10,9 +10,15 @@ extern "C" {
  * https://wiibrew.org/wiki//shared2/sys/SYSCONF
  */
 
-typedef enum { SC_ASPECT_STD, SC_ASPECT_WIDE } SCAspectRatio;
+typedef enum {
+    SC_ASPECT_STD,
+    SC_ASPECT_WIDE
+} SCAspectRatio;
 
-typedef enum { SC_EURGB_50_HZ, SC_EURGB_60_HZ } SCEuRgb60Mode;
+typedef enum {
+    SC_EURGB_50_HZ,
+    SC_EURGB_60_HZ
+} SCEuRgb60Mode;
 
 typedef enum {
     SC_LANG_JP,
@@ -27,9 +33,16 @@ typedef enum {
     SC_LANG_KR,
 } SCLanguage;
 
-typedef enum { SC_SND_MONO, SC_SND_STEREO, SC_SND_SURROUND } SCSoundMode;
+typedef enum {
+    SC_SND_MONO,
+    SC_SND_STEREO,
+    SC_SND_SURROUND
+} SCSoundMode;
 
-typedef enum { SC_SENSOR_BAR_BOTTOM, SC_SENSOR_BAR_TOP } SCSensorBarPos;
+typedef enum {
+    SC_SENSOR_BAR_BOTTOM,
+    SC_SENSOR_BAR_TOP
+} SCSensorBarPos;
 
 typedef struct SCIdleMode {
     u8 wc24;      // at 0x0

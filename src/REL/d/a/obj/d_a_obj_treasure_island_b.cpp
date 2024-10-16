@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_treasure_island_b.h>
+#include "d/a/obj/d_a_obj_treasure_island_b.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TREASURE_ISLAND_B, dAcOtreasureIslandB_c, fProfile::OBJ_TREASURE_ISLAND_B, 0x206, 0, 2);
 

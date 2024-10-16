@@ -1,8 +1,10 @@
 #ifndef NW4R_LYT_TYPES_H
 #define NW4R_LYT_TYPES_H
 
-#include <nw4r/ut/ut_LinkList.h>
-#include <nw4r/ut/ut_algorithm.h>
+#include "nw4r/math.h" // IWYU pragma: export
+#include "nw4r/ut/ut_LinkList.h"
+#include "nw4r/ut/ut_algorithm.h"
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace lyt {
@@ -400,8 +402,9 @@ struct TevStage { // 17094
         SetAlphaIn(GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_RASA);
         SetColorOp(GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV, GX_TEV_KCSEL_K0);
         SetAlphaOp(GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV, GX_TEV_KASEL_K0_R);
-        SetIndirect(GX_INDTEXSTAGE0, GX_ITF_8, GX_ITB_NONE, GX_ITM_OFF, GX_ITW_OFF, GX_ITW_OFF, false, false,
-                GX_ITBA_OFF);
+        SetIndirect(
+            GX_INDTEXSTAGE0, GX_ITF_8, GX_ITB_NONE, GX_ITM_OFF, GX_ITW_OFF, GX_ITW_OFF, false, false, GX_ITBA_OFF
+        );
     }
 
     // GetTexCoordGen__Q34nw4r3lyt8TevStageCFv
@@ -575,8 +578,9 @@ struct TevStage { // 17094
     }
 
     // SetOrder__Q34nw4r3lyt8TevStageF13_GXTexCoordID11_GXTexMapID12_GXChannelID13_GXTevSwapSel13_GXTevSwapSel
-    void SetOrder(GXTexCoordID aTexCoordGen, GXTexMapID aTexMap, GXChannelID aColChan, GXTevSwapSel rasSel,
-            GXTevSwapSel texSel) {
+    void SetOrder(
+        GXTexCoordID aTexCoordGen, GXTexMapID aTexMap, GXChannelID aColChan, GXTevSwapSel rasSel, GXTevSwapSel texSel
+    ) {
         texCoordGen = aTexCoordGen;
         colChan = aColChan;
         texMap = aTexMap;
@@ -604,8 +608,10 @@ struct TevStage { // 17094
     }
 
     // SetIndirect__Q34nw4r3lyt8TevStageF16_GXIndTexStageID15_GXIndTexFormat16_GXIndTexBiasSel14_GXIndTexMtxID13_GXIndTexWrap13_GXIndTexWrapbb17_GXIndTexAlphaSel
-    void SetIndirect(GXIndTexStageID stage, GXIndTexFormat format, GXIndTexBiasSel bias, GXIndTexMtxID mtxSel,
-            GXIndTexWrap wrapS, GXIndTexWrap wrapT, bool addPrev, bool utcLod, GXIndTexAlphaSel alphaSel) {
+    void SetIndirect(
+        GXIndTexStageID stage, GXIndTexFormat format, GXIndTexBiasSel bias, GXIndTexMtxID mtxSel, GXIndTexWrap wrapS,
+        GXIndTexWrap wrapT, bool addPrev, bool utcLod, GXIndTexAlphaSel alphaSel
+    ) {
         indStage = stage;
         inBiMt = (bias & 0x7) | ((mtxSel & 0xF) << 4);
         indWrap = (wrapS & 0x7) | ((wrapT & 0x7) << 3);

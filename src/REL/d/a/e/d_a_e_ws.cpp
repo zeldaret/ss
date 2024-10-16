@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_ws.h>
+#include "d/a/e/d_a_e_ws.h"
 
 SPECIAL_ACTOR_PROFILE(E_WS, dAcEws_c, fProfile::E_WS, 0x10C, 0, 3);
 

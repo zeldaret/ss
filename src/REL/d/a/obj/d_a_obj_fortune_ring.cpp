@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_fortune_ring.h>
+#include "d/a/obj/d_a_obj_fortune_ring.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_FORTUNE_RING, dAcOfortuneRing_c, fProfile::OBJ_FORTUNE_RING, 0x1C6, 0, 0);
 

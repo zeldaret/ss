@@ -1,8 +1,10 @@
 #ifndef RVL_SDK_GX_PIXEL_H
 #define RVL_SDK_GX_PIXEL_H
+#include "common.h"
 #include "rvl/GX/GXTypes.h"
-#include "rvl/MTX.h"
-#include <common.h>
+#include "rvl/MTX.h" // IWYU pragma: export
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -1,11 +1,12 @@
 #ifndef RVL_SDK_IPC_MAIN_H
 #define RVL_SDK_IPC_MAIN_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-u32 IPC_HW_REGS[] : 0xCD000000;
+// Random number for arg typing
+u32 IPC_HW_REGS[10] AT_ADDRESS(0xCD000000);
 
 static inline u32 ACRReadReg(u32 reg) {
     return *(u32 *)((char *)IPC_HW_REGS + (reg & ~0x3));

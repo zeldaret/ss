@@ -1,4 +1,4 @@
-#include <d/t/d_t_group_summon.h>
+#include "d/t/d_t_group_summon.h"
 
 SPECIAL_ACTOR_PROFILE(GROUP_SUMMON, dTgGroupSummon_c, fProfile::GROUP_SUMMON, 0xC5, 0, 0);
 

@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_eye.h>
+#include "d/a/e/d_a_e_eye.h"
 
 SPECIAL_ACTOR_PROFILE(E_EYE, dAcEEye_c, fProfile::E_EYE, 0xF6, 0, 3);
 

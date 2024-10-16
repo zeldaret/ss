@@ -1,6 +1,8 @@
-#include <d/a/obj/d_a_obj_item_heart_container.h>
+#include "d/a/obj/d_a_obj_item_heart_container.h"
 
-SPECIAL_ACTOR_PROFILE(OBJ_ITEM_HEART_CONTAINER, dAcOItemHeartContainer_c, fProfile::OBJ_ITEM_HEART_CONTAINER, 0x2C, 0, 3);
+SPECIAL_ACTOR_PROFILE(
+    OBJ_ITEM_HEART_CONTAINER, dAcOItemHeartContainer_c, fProfile::OBJ_ITEM_HEART_CONTAINER, 0x2C, 0, 3
+);
 
 STATE_DEFINE(dAcOItemHeartContainer_c, Hide);
 STATE_DEFINE(dAcOItemHeartContainer_c, RequestAppearEvent);

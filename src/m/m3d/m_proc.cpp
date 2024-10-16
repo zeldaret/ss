@@ -1,6 +1,8 @@
-#include <m/m3d/m3d.h>
-#include <m/m3d/m_proc.h>
-#include <nw4r/g3d/g3d_scnproc.h>
+#include "m/m3d/m_proc.h"
+
+#include "m/m3d/m3d.h"
+#include "nw4r/g3d/g3d_scnproc.h"
+
 
 namespace m3d {
 

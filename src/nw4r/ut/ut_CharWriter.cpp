@@ -1,6 +1,6 @@
 // ported from https://github.com/kiwi515/ogws/blob/master/src/nw4r/ut/ut_CharWriter.cpp
 
-#include <nw4r/ut.h>
+#include "nw4r/ut.h"
 
 namespace {
 
@@ -43,22 +43,14 @@ void CharWriter::SetupGX() {
         SetupGXWithColorMapping(mColorMapping.min, mColorMapping.max);
     } else if (mFont != NULL) {
         switch (mFont->GetTextureFormat()) {
-        case GX_TF_I4:
-        case GX_TF_I8:
-            SetupGXForI();
-            break;
-        case GX_TF_IA4:
-        case GX_TF_IA8:
-            SetupGXDefault();
-            break;
-        case GX_TF_RGB565:
-        case GX_TF_RGB5A3:
-        case GX_TF_RGBA8:
-            SetupGXForRGBA();
-            break;
-        default:
-            SetupGXDefault();
-            break;
+            case GX_TF_I4:
+            case GX_TF_I8:     SetupGXForI(); break;
+            case GX_TF_IA4:
+            case GX_TF_IA8:    SetupGXDefault(); break;
+            case GX_TF_RGB565:
+            case GX_TF_RGB5A3:
+            case GX_TF_RGBA8:  SetupGXForRGBA(); break;
+            default:           SetupGXDefault(); break;
         }
     } else {
         SetupGXDefault();

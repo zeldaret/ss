@@ -1,7 +1,7 @@
 #ifndef SCGAME_H
 #define SCGAME_H
 
-#include <common.h>
+#include "common.h"
 
 struct SpawnInfo {
     /* 0x00 */ char stageName[32]; // Probably SizedString<32>

@@ -1,4 +1,4 @@
-#include <d/a/b/d_a_b_bigboss3.h>
+#include "d/a/b/d_a_b_bigboss3.h"
 
 SPECIAL_ACTOR_PROFILE(B_BIGBOSS3, dAcBBigBoss3_c, fProfile::B_BIGBOSS3, 0xA2, 0, 0);
 

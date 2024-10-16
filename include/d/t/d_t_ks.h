@@ -1,9 +1,9 @@
 #ifndef D_T_KS_H
 #define D_T_KS_H
 
-#include <d/a/d_a_base.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/d_a_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dTgKiesuTag_c : public dAcBase_c {
 public:

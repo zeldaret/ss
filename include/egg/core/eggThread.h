@@ -1,11 +1,11 @@
 #ifndef EGG_THREAD_H
 #define EGG_THREAD_H
 
+#include "common.h"
 #include "egg/core/eggHeap.h"
-#include "nw4r/ut.h"
-#include "rvl/OS.h"
+#include "nw4r/ut.h" // IWYU pragma: export
+#include "rvl/OS.h"  // IWYU pragma: export
 
-#include <common.h>
 
 namespace EGG {
 

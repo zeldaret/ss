@@ -1,5 +1,6 @@
 #include "d/col/bg/d_bg_s.h"
 
+#include "common.h"
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
@@ -954,11 +955,11 @@ dAcObjBase_c *dBgS::PushPullCallBack(cBgS_PolyInfo const &info, dAcObjBase_c *pA
     }
     dAcObjBase_c *pObj = mChkElem[idx].mObj.get();
     if (!pObj) {
-        return false;
+        return nullptr;
     }
 
     if (pBgW->GetPushPullCallback() == nullptr) {
-        return false;
+        return nullptr;
     }
     return pBgW->GetPushPullCallback()(pObj, pAc, label);
 }

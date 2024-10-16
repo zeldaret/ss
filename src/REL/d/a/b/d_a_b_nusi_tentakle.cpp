@@ -1,4 +1,4 @@
-#include <d/a/b/d_a_b_nusi_tentakle.h>
+#include "d/a/b/d_a_b_nusi_tentakle.h"
 
 SPECIAL_ACTOR_PROFILE(B_NUSI_TENTAKLE, dAcNusiTentakle_c, fProfile::B_NUSI_TENTAKLE, 0xB4, 0, 0);
 

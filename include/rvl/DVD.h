@@ -12,7 +12,6 @@ extern "C" {
 #include "rvl/DVD/dvdidutils.h"
 #include "rvl/DVD/dvdqueue.h"
 
-
 #ifdef __cplusplus
 }
 #endif

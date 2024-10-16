@@ -1,12 +1,12 @@
 #ifndef M3D_M_MDL_H
 #define M3D_M_MDL_H
 
-#include <m/m3d/m_banm.h>
-#include <m/m3d/m_calc_ratio.h>
-#include <m/m3d/m_smdl.h>
-#include <nw4r/g3d/g3d_anmchr.h>
-#include <nw4r/g3d/g3d_calcworld.h>
-#include <nw4r/g3d/g3d_resmdl.h>
+#include "m/m3d/m_banm.h"
+#include "m/m3d/m_calc_ratio.h"
+#include "m/m3d/m_smdl.h"
+#include "nw4r/g3d/g3d_anmchr.h"
+#include "nw4r/g3d/g3d_calcworld.h"
+#include "nw4r/g3d/g3d_resmdl.h"
 
 namespace m3d {
 

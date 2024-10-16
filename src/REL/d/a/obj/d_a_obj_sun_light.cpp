@@ -1,7 +1,9 @@
-#include <d/a/obj/d_a_obj_sun_light.h>
-#include <toBeSorted/arc_managers/current_stage_arc_manager.h>
-#include <toBeSorted/room_manager.h>
-#include <toBeSorted/scgame.h>
+#include "d/a/obj/d_a_obj_sun_light.h"
+
+#include "toBeSorted/arc_managers/current_stage_arc_manager.h"
+#include "toBeSorted/room_manager.h"
+#include "toBeSorted/scgame.h"
+
 
 SPECIAL_ACTOR_PROFILE(OBJ_SUN_LIGHT, dAcOsunLight_c, fProfile::OBJ_SUN_LIGHT, 0x0219, 0, 3);
 

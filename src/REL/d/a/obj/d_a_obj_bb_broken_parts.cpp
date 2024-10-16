@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_bb_broken_parts.h>
+#include "d/a/obj/d_a_obj_bb_broken_parts.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_BB_BROKEN_PARTS, dAcObbBrokenParts_c, fProfile::OBJ_BB_BROKEN_PARTS, 0x215, 0, 3);
 

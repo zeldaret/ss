@@ -1,10 +1,9 @@
-#include <nw4r/lyt/lyt_bounding.h>
-#include <nw4r/lyt/lyt_drawInfo.h>
-#include <nw4r/lyt/lyt_layout.h>
-#include <nw4r/lyt/lyt_material.h>
-#include <nw4r/lyt/lyt_textBox.h>
-#include <nw4r/ut/ut_Rect.h>
-#include <nw4r/ut/ut_TextWriterBase.h>
+#include "nw4r/lyt/lyt_textBox.h"
+
+#include "nw4r/lyt/lyt_drawInfo.h"
+#include "nw4r/lyt/lyt_layout.h"
+#include "nw4r/lyt/lyt_material.h"
+#include "nw4r/ut.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace lyt {
@@ -36,6 +35,20 @@ ut::Color GetColor(const GXColorS10 &src) {
     return dst;
 }
 
+// Protos
+template <typename T>
+void CalcStringRect(ut::Rect *pRect, ut::TextWriterBase<T> *pTextWriter, const T *str, int length, f32 maxWidth);
+template <typename T>
+int CalcLineStrNum(
+    f32 *pWidth, ut::TextWriterBase<T> *pTextWriter, const T *str, int length, f32 maxWidth, bool *pbOver
+);
+template <typename T>
+int CalcLineRectImpl(
+    ut::Rect *pRect, ut::TextWriterBase<T> *pTextWriter, const T *str, int length, f32 maxWidth, bool *pbOver
+);
+template <typename T>
+void CalcStringRectImpl(ut::Rect *pRect, ut::TextWriterBase<T> *pTextWriter, const T *str, int length, f32 maxWidth);
+
 template <typename T>
 void CalcStringRect(ut::Rect *pRect, ut::TextWriterBase<T> *pTextWriter, const T *str, int length, f32 maxWidth) {
     ut::TextWriterBase<T> myCopy = *pTextWriter;
@@ -43,8 +56,9 @@ void CalcStringRect(ut::Rect *pRect, ut::TextWriterBase<T> *pTextWriter, const T
 }
 
 template <typename T>
-int CalcLineStrNum(f32 *pWidth, ut::TextWriterBase<T> *pTextWriter, const T *str, int length, f32 maxWidth,
-        bool *pbOver) {
+int CalcLineStrNum(
+    f32 *pWidth, ut::TextWriterBase<T> *pTextWriter, const T *str, int length, f32 maxWidth, bool *pbOver
+) {
     ut::Rect rect;
     ut::TextWriterBase<T> myCopy = *pTextWriter;
     myCopy.SetCursor(0.0f, 0.0f);
@@ -55,8 +69,9 @@ int CalcLineStrNum(f32 *pWidth, ut::TextWriterBase<T> *pTextWriter, const T *str
 }
 
 template <typename T>
-int CalcLineRectImpl(ut::Rect *pRect, ut::TextWriterBase<T> *pTextWriter, const T *str, int length, f32 maxWidth,
-        bool *pbOver) {
+int CalcLineRectImpl(
+    ut::Rect *pRect, ut::TextWriterBase<T> *pTextWriter, const T *str, int length, f32 maxWidth, bool *pbOver
+) {
     ut::PrintContext<T> context = {pTextWriter, str, 0.0f, 0.0f, 0};
     f32 x = 0.0f;
 
@@ -225,7 +240,7 @@ TextBox::TextBox(const res::TextBox *pBlock, const ResBlockSet &resBlockSet)
     }
     const u32 *matOffsTbl = detail::ConvertOffsToPtr<u32>(resBlockSet.pMaterialList, sizeof(res::MaterialList));
     const res::Material *pResMaterial =
-            detail::ConvertOffsToPtr<res::Material>(resBlockSet.pMaterialList, matOffsTbl[pBlock->materialIdx]);
+        detail::ConvertOffsToPtr<res::Material>(resBlockSet.pMaterialList, matOffsTbl[pBlock->materialIdx]);
     mpMaterial = Layout::NewObj<Material>(pResMaterial, resBlockSet);
 }
 
@@ -465,38 +480,28 @@ ut::Rect TextBox::GetTextDrawRect(ut::TextWriterBase<wchar_t> *pWriter) const {
 // GetTextMagH__Q34nw4r3lyt7TextBoxCFv
 f32 TextBox::GetTextMagH() const {
     switch (GetTextPositionH()) {
-    default:
-        return 0.0f;
-    case 1:
-        return 0.5f;
-    case 2:
-        return 1.0f;
+        default: return 0.0f;
+        case 1:  return 0.5f;
+        case 2:  return 1.0f;
     }
 }
 
 // GetTextMagV__Q34nw4r3lyt7TextBoxCFv
 f32 TextBox::GetTextMagV() const {
     switch (GetTextPositionV()) {
-    default:
-        return 0.0f;
-    case 1:
-        return 0.5f;
-    case 2:
-        return 1.0f;
+        default: return 0.0f;
+        case 1:  return 0.5f;
+        case 2:  return 1.0f;
     }
 }
 
 // GetTextAlignMag__Q34nw4r3lyt7TextBoxCFv
 f32 TextBox::GetTextAlignMag() const {
     switch (mBits.textAlignment) {
-    default:
-        return GetTextMagH();
-    case 1:
-        return 0.0f;
-    case 2:
-        return 0.5f;
-    case 3:
-        return 1.0f;
+        default: return GetTextMagH();
+        case 1:  return 0.0f;
+        case 2:  return 0.5f;
+        case 3:  return 1.0f;
     }
 }
 

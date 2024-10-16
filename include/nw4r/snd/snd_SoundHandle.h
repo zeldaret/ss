@@ -1,10 +1,9 @@
 #ifndef NW4R_SND_SOUND_HANDLE_H
 #define NW4R_SND_SOUND_HANDLE_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut.h"
 
-#include <nw4r/snd/snd_BasicSound.h>
-
-#include <nw4r/ut.h>
 
 namespace nw4r {
 namespace snd {
@@ -16,14 +15,14 @@ public:
         DetachSound();
     }
 
-    void detail_AttachSound(detail::BasicSound* pSound);
-    void detail_AttachSoundAsTempHandle(detail::BasicSound* pSound);
+    void detail_AttachSound(detail::BasicSound *pSound);
+    void detail_AttachSoundAsTempHandle(detail::BasicSound *pSound);
 
     bool IsAttachedSound() const {
         return mSound != NULL;
     }
 
-    detail::BasicSound* detail_GetAttachedSound() {
+    detail::BasicSound *detail_GetAttachedSound() {
         return mSound;
     }
 
@@ -102,7 +101,7 @@ public:
     }
 
 private:
-    detail::BasicSound* mSound; // at 0x0
+    detail::BasicSound *mSound; // at 0x0
 };
 
 } // namespace snd

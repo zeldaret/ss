@@ -1,6 +1,8 @@
-#include <m/m_fader.h>
-#include <m/m3d/m3d.h>
-#include <nw4r/g3d/g3d_state.h>
+#include "m/m_fader.h"
+
+#include "m/m3d/m3d.h"
+#include "nw4r/g3d/g3d_state.h"
+
 
 void mFader_c::draw() {
     nw4r::g3d::G3DState::Invalidate(0x7ff);
@@ -21,12 +23,8 @@ bool mFader_c::setFader(mFaderBase_c *fader) {
 
     mpFader = fader;
     switch (status) {
-    case mFaderBase_c::FADED_OUT:
-        fader->setStatus(mFaderBase_c::FADED_OUT);
-        break;
-    case mFaderBase_c::FADED_IN:
-        fader->setStatus(mFaderBase_c::FADED_IN);
-        break;
+        case mFaderBase_c::FADED_OUT: fader->setStatus(mFaderBase_c::FADED_OUT); break;
+        case mFaderBase_c::FADED_IN:  fader->setStatus(mFaderBase_c::FADED_IN); break;
     }
 
     return true;

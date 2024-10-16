@@ -1,9 +1,10 @@
 #ifndef NW4R_LYT_COMMON_H
 #define NW4R_LYT_COMMON_H
 #include "common.h"
+#include "nw4r/lyt/lyt_resources.h"
+#include "nw4r/lyt/lyt_types.h"
 #include "nw4r/math/math_types.h"
-#include <nw4r/lyt/lyt_resources.h>
-#include <nw4r/lyt/lyt_types.h>
+
 
 namespace nw4r {
 namespace lyt {
@@ -80,8 +81,10 @@ void MultipleAlpha(ut::Color *, const ut::Color *, u8); // Inlined
 ut::Color MultipleAlpha(ut::Color, u8);
 void SetVertexFormat(bool, u8);
 void DrawQuad(const math::VEC2 &, const Size &, u8, const TexCoordData *, const ut::Color *);
-void DrawQuad(const math::VEC2 &basePt, const Size &size, u8 texCoordNum, const TexCoordData *texCoords,
-        const ut::Color *vtxColors, u8 alpha);
+void DrawQuad(
+    const math::VEC2 &basePt, const Size &size, u8 texCoordNum, const TexCoordData *texCoords,
+    const ut::Color *vtxColors, u8 alpha
+);
 void DrawLine(const math::VEC2 &pos, const Size &size, ut::Color color);
 
 } // namespace detail

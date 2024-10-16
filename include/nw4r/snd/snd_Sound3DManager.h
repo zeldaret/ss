@@ -1,12 +1,11 @@
 #ifndef NW4R_SND_SOUND_3D_MANAGER_H
 #define NW4R_SND_SOUND_3D_MANAGER_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/math.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_InstancePool.h"
+#include "nw4r/snd/snd_SoundArchive.h"
+#include "nw4r/types_nw4r.h"
 
-#include <nw4r/snd/snd_BasicSound.h>
-#include <nw4r/snd/snd_InstancePool.h>
-#include <nw4r/snd/snd_SoundArchive.h>
-
-#include <nw4r/math.h>
 
 namespace nw4r {
 namespace snd {
@@ -25,24 +24,23 @@ public:
 public:
     Sound3DManager();
 
-    virtual void detail_Update(SoundParam* pParam, u32 id,
-                               detail::BasicSound* pSound, const void* pArg,
-                               u32 flags); // at 0x8
+    virtual void detail_Update(
+        SoundParam *pParam, u32 id, detail::BasicSound *pSound, const void *pArg,
+        u32 flags
+    ); // at 0x8
 
-    virtual void Update(SoundParam* pParam, u32 id, SoundHandle* pHandle,
-                        const void* pArg,
+    virtual void Update(SoundParam *pParam, u32 id, SoundHandle *pHandle, const void *pArg,
                         u32 flags); // at 0x10
 
-    virtual void* detail_AllocAmbientArg(u32 size); // at 0x14
+    virtual void *detail_AllocAmbientArg(u32 size); // at 0x14
 
-    virtual void
-    detail_FreeAmbientArg(void* pArg,
-                          const detail::BasicSound* pSound); // at 0x18
+    virtual void detail_FreeAmbientArg(void *pArg,
+                                       const detail::BasicSound *pSound); // at 0x18
 
-    u32 GetRequiredMemSize(const SoundArchive* pArchive);
-    bool Setup(const SoundArchive* pArchive, void* pBuffer, u32 size);
+    u32 GetRequiredMemSize(const SoundArchive *pArchive);
+    bool Setup(const SoundArchive *pArchive, void *pBuffer, u32 size);
 
-    Sound3DListener* GetListener() const {
+    Sound3DListener *GetListener() const {
         return mListener;
     }
 
@@ -66,7 +64,7 @@ private:
 
 private:
     detail::InstancePool<Sound3DActorParam> mParamPool; // at 0x8
-    Sound3DListener* mListener;                         // at 0xC
+    Sound3DListener *mListener;                         // at 0xC
     s32 mMaxPriorityReduction;                          // at 0x10
 
     f32 mSpeakerAngleStereo;    // at 0x14

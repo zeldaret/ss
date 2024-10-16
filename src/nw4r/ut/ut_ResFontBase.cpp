@@ -1,6 +1,6 @@
 // Ported From https://github.com/kiwi515/ogws/blob/master/src/nw4r/ut/ut_ResFontBase.cpp
 
-#include <nw4r/ut.h>
+#include "nw4r/ut.h"
 
 namespace nw4r {
 namespace ut {
@@ -146,31 +146,27 @@ u16 ResFontBase::FindGlyphIndex(const FontCodeMap *map, u16 c) const {
     u16 index = 0xFFFF;
 
     switch (map->mappingMethod) {
-    case FONT_MAPMETHOD_LINEAR:
-        index = map->mapInfo[0] + (c - map->firstChar);
-        break;
-    case FONT_MAPMETHOD_ARRAY:
-        index = map->mapInfo[c - map->firstChar];
-        break;
-    case FONT_MAPMETHOD_SCAN:
-        const CMapInfoScan *info = reinterpret_cast<const CMapInfoScan *>(map->mapInfo);
+        case FONT_MAPMETHOD_LINEAR: index = map->mapInfo[0] + (c - map->firstChar); break;
+        case FONT_MAPMETHOD_ARRAY:  index = map->mapInfo[c - map->firstChar]; break;
+        case FONT_MAPMETHOD_SCAN:
+            const CMapInfoScan *info = reinterpret_cast<const CMapInfoScan *>(map->mapInfo);
 
-        const CMapScanEntry *s = info->entries;
-        const CMapScanEntry *e = &info->entries[info->num - 1];
+            const CMapScanEntry *s = info->entries;
+            const CMapScanEntry *e = &info->entries[info->num - 1];
 
-        while (s <= e) {
-            const CMapScanEntry *m = s + (e - s) / 2;
+            while (s <= e) {
+                const CMapScanEntry *m = s + (e - s) / 2;
 
-            if (m->code < c) {
-                s = m + 1;
-            } else if (c < m->code) {
-                e = m - 1;
-            } else {
-                return m->index;
+                if (m->code < c) {
+                    s = m + 1;
+                } else if (c < m->code) {
+                    e = m - 1;
+                } else {
+                    return m->index;
+                }
             }
-        }
 
-        break;
+            break;
     }
 
     return index;

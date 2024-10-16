@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_truck.h>
+#include "d/a/obj/d_a_obj_truck.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TRUCK, dAcOtruck_c, fProfile::OBJ_TRUCK, 0x26A, 0, 2);
 

@@ -1,7 +1,7 @@
 #ifndef M_TYPES_H
 #define M_TYPES_H
 
-#include <common.h>
+#include "common.h"
 
 class mFaderBase_c;
 class mFader_c;

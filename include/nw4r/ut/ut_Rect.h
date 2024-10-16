@@ -1,7 +1,7 @@
 #ifndef NW4R_UT_RECT_H
 #define NW4R_UT_RECT_H
-#include <nw4r/math.h>
-#include <nw4r/types_nw4r.h>
+#include "nw4r/math.h"
+#include "nw4r/types_nw4r.h"
 
 namespace nw4r {
 namespace ut {

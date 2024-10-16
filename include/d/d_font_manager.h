@@ -1,9 +1,8 @@
 #ifndef D_FONT_MANAGER_H
 #define D_FONT_MANAGER_H
 
-#include <d/d_dvd.h>
-#include <nw4r/ut/ut_ResFont.h>
-
+#include "d/d_dvd.h"
+#include "nw4r/ut/ut_ResFont.h"
 
 class dFontMng_c {
 public:

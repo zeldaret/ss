@@ -1,4 +1,4 @@
-#include <toBeSorted/counters/counter.h>
+#include "toBeSorted/counters/counter.h"
 
 class TearCounter : public Counter {
 public:
@@ -11,4 +11,4 @@ public:
 
 /* 80575628 */ TearCounter TEAR_COUNTER;
 
-/* 8016E0E0 */ TearCounter::TearCounter(): Counter(0x1f4) { }
+/* 8016E0E0 */ TearCounter::TearCounter() : Counter(0x1f4) {}

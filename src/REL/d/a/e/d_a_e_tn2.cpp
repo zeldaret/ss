@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_tn2.h>
+#include "d/a/e/d_a_e_tn2.h"
 
 SPECIAL_ACTOR_PROFILE(E_TN2, dAcEtn2_c, fProfile::E_TN2, 0x109, 0, 3);
 

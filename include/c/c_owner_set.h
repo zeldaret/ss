@@ -4,7 +4,7 @@
 // This file was ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/cLib/c_owner_set.hpp
 
-#include <common.h>
+#include "common.h"
 /// @file
 
 /// @brief A set node with a pointer to the owning container. See cOwnerSetMg_c.

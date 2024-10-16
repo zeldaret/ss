@@ -1,4 +1,4 @@
-#include <c/c_list.h>
+#include "c/c_list.h"
 
 /* 0x802E08C0 */
 void cListMg_c::insertAfter(cListNd_c *node, cListNd_c *prevNode) {

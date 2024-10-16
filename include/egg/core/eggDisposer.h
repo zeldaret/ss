@@ -3,9 +3,8 @@
 
 // This file was adapted from https://github.com/riidefi/mkw/blob/master/source/egg/core/eggDisposer.hpp
 
+#include "common.h"
 #include "nw4r/ut.h"
-
-#include <common.h>
 
 namespace EGG {
 

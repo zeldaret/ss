@@ -1,6 +1,6 @@
-#include <f/f_base.h>
-#include <f/f_list_mg.h>
-#include <f/f_list_mg_ptmf.h>
+#include "f/f_base.h"
+#include "f/f_list_mg.h"
+#include "f/f_list_mg_ptmf.h"
 
 /* 802e2680 */
 void fLiMgPTMF_c::addNode(fLiNdPrio_c *add) {

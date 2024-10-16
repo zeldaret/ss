@@ -1,9 +1,10 @@
-#include "m/m_vec.h"
-#include "m/m_Angle.h"
-#include "d/a/d_a_player.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 
-SpecialItemDropMgr* SpecialItemDropMgr::sInstance = nullptr;
+#include "d/a/d_a_player.h"
+#include "m/m_Angle.h"
+#include "m/m_vec.h"
+
+SpecialItemDropMgr *SpecialItemDropMgr::sInstance = nullptr;
 
 extern "C" short targetAngleY(mVec3_c *, mVec3_c *);
 extern "C" int rndInt(int);
@@ -23,7 +24,8 @@ SpecialItemDropMgr::SpecialItemDropMgr() {
 }
 
 // TODO: Convert to enum once work on items has started
-int SPECIAL_ITEM_ARRAY[28] = {0, 6, 6, 2, 3, 4, 0x2b, 0x28, 0x29, 7, 8, 0x39, 0, 0, 0x1c, 0xa5, 58, 59, 183, 184, 185, 72, 72, 1, 34, 0, 0, 0};
+int SPECIAL_ITEM_ARRAY[28] = {0,    6,    6,  2,  3,   4,   0x2b, 0x28, 0x29, 7, 8,  0x39, 0, 0,
+                              0x1c, 0xa5, 58, 59, 183, 184, 185,  72,   72,   1, 34, 0,    0, 0};
 int RAND_RUPEE_ARRAY[4] = {2, 3, 4, 0};
 
 // 800c7bb0
@@ -36,7 +38,9 @@ short fn_800C7D00(SpecialItemDropMgr *mgr, int specialItemId) {}
 short fn_800C7D20(SpecialItemDropMgr *mgr, int specialItemId) {}
 
 // 800c7d40
-int giveSpecialDropItem(SpecialItemDropMgr *mgr, int specialItemId, int roomid, mVec3_c *pos, int subtype, s16 *rot, s32 unused) {}
+int giveSpecialDropItem(
+    SpecialItemDropMgr *mgr, int specialItemId, int roomid, mVec3_c *pos, int subtype, s16 *rot, s32 unused
+) {}
 
 // 800c7ef0
 // Very unmatching. Just here as a starting point
@@ -108,7 +112,7 @@ bool spawnSpecialDropItem(SpecialItemDropMgr *mgr, int specialItemId, int roomid
 }
 
 // 800c81d0
-void fn_800C81D0(s16, s16, s16) {};
+void fn_800C81D0(s16, s16, s16){};
 
 // 800c8270
 SpecialItemDropMgr::~SpecialItemDropMgr() {}

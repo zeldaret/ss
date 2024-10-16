@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_gear.h>
+#include "d/a/obj/d_a_obj_gear.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_GEAR, dAcOGear_c, fProfile::OBJ_GEAR, 0x233, 0, 7);
 

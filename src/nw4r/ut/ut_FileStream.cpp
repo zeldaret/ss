@@ -1,6 +1,6 @@
 // Ported from https://github.com/kiwi515/ogws/blob/master/src/nw4r/ut/ut_FileStream.cpp
 
-#include <nw4r/ut.h>
+#include "nw4r/ut.h"
 
 namespace nw4r {
 namespace ut {
@@ -39,15 +39,10 @@ u32 FileStream::FilePosition::Append(s32 offset) {
 
 void FileStream::FilePosition::Seek(s32 offset, u32 origin) {
     switch (origin) {
-    case SEEKORG_BEG:
-        mFileOffset = 0;
-        break;
-    case SEEKORG_END:
-        mFileOffset = mFileSize;
-        break;
-    case SEEKORG_CUR:
-    default:
-        break;
+        case SEEKORG_BEG: mFileOffset = 0; break;
+        case SEEKORG_END: mFileOffset = mFileSize; break;
+        case SEEKORG_CUR:
+        default:          break;
     }
 
     Skip(offset);

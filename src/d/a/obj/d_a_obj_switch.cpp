@@ -1,10 +1,12 @@
-#include <c/c_math.h>
-#include <d/a/d_a_player.h>
-#include <d/a/obj/d_a_obj_switch.h>
-#include <d/col/bg/d_bg_s.h>
-#include <d/col/bg/d_bg_w.h>
-#include <s/s_Math.h>
-#include <toBeSorted/sceneflag_manager.h>
+#include "d/a/obj/d_a_obj_switch.h"
+
+#include "c/c_math.h"
+#include "d/a/d_a_player.h"
+#include "d/col/bg/d_bg_s.h"
+#include "d/col/bg/d_bg_w.h"
+#include "nw4r/g3d/g3d_resfile.h"
+#include "s/s_Math.h"
+#include "toBeSorted/sceneflag_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SW, dAcOsw_c, fProfile::OBJ_SW, 0x12B, 0, 0x1002);
 

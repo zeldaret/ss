@@ -9,7 +9,6 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
-#include "nw4r/g3d/g3d_resfile.h"
 
 // Size: 0xA8
 struct ActorCarryStruct {

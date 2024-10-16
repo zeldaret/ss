@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_AX_SPB_H
 #define RVL_SDK_AX_SPB_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -70,8 +70,8 @@ typedef struct _AXSTUDIO {
 #pragma pack(pop)
 
 AXSTUDIO *__AXGetStudio(void);
-void __AXDepopFadeMain(s32 *all, s32 *value, s16 *depop) DECOMP_DONT_INLINE;
-void __AXDepopFadeRmt(s32 *all, s32 *value, s16 *depop) DECOMP_DONT_INLINE;
+void __AXDepopFadeMain(s32 *all, s32 *value, s16 *depop) DONT_INLINE;
+void __AXDepopFadeRmt(s32 *all, s32 *value, s16 *depop) DONT_INLINE;
 void __AXPrintStudio(void);
 void __AXSPBInit(void);
 void __AXDepopVoice(AXPB *pb);

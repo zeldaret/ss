@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_magma.h>
+#include "d/a/e/d_a_e_magma.h"
 
 SPECIAL_ACTOR_PROFILE(E_MAGMA, dAcEmagma_c, fProfile::E_MAGMA, 0xFA, 0, 0);
 

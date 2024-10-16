@@ -16,44 +16,62 @@
 
 #define CLEAR_PATH(x) __memclr((x), sizeof((x)))
 
-#define ALIGN(x) __attribute__((aligned(x)))
+#define READU32_BE(ptr, offset)                                                                                        \
+    (((u32)ptr[offset] << 24) | ((u32)ptr[offset + 1] << 16) | ((u32)ptr[offset + 2] << 8) | (u32)ptr[offset + 3]);
+
+#define ALIGN_DECL(ALIGNMENT) __attribute__((aligned(ALIGNMENT)))
+
+// To remove some warnings
+#ifdef __MWERKS__
 #define DECL_SECTION(x) __declspec(section x)
 #define DECL_WEAK __declspec(weak)
 #define DONT_INLINE __attribute__((never_inline))
-
-// TODO - Fix MSL (stddef.h)
-#define offsetof(ST, M) ((size_t) & (((ST *)0)->M))
-
-// Codewarrior tricks for matching decomp
-// (Functions are given prototypes for -requireprotos)
-#ifdef __MWERKS__
-// Force BSS order
-#define CW_FORCE_BSS(module, ...) \
-    void fake_function(...); \
-    void FORCE_BSS##module##x(void); \
-    void FORCE_BSS##module##x(void) { \
-        fake_function(__VA_ARGS__); \
-    }
-// Force strings into pool
-#define CW_FORCE_STRINGS(module, ...) \
-    void fake_function(...); \
-    void FORCE_STRINGS##module(void); \
-    void FORCE_STRINGS##module(void) { \
-        fake_function(__VA_ARGS__); \
-    }
+#define FORCE_INLINE inline
+#define AT_ADDRESS(xyz) : (xyz)
 #else
-#define CW_FORCE_BSS(module, ...)
-#define CW_FORCE_STRINGS(module, ...)
-#endif
-
-#include <decomp.h>
-
-// For VSCode
-#ifdef __INTELLISENSE__
+#define DECL_SECTION(x)
+#define AT_ADDRESS(xyz)
+#define DECL_WEAK
+#define DONT_INLINE
+#define FORCE_INLINE
 #define asm
-#define __attribute__(x)
-#define __declspec(x)
+#define nofralloc
+// Quick Fixup
+#define __alloca(x) ((void *)x)
 #endif
+
+#ifdef NON_MATCHING
+#define DECOMP_FORCEACTIVE(module, ...)
+#define DECOMP_FORCELITERAL(module, x)
+#define DECOMP_FORCEDTOR(module, cls)
+#else
+// Force reference specific data
+#define __CONCAT(x, y) x##y
+#define CONCAT(x, y) __CONCAT(x, y)
+
+#define DECOMP_FORCEACTIVE(module, ...)                                                                                \
+    void fake_function(...);                                                                                           \
+    void CONCAT(FORCEACTIVE##module, __LINE__)(void);                                                                  \
+    void CONCAT(FORCEACTIVE##module, __LINE__)(void) {                                                                 \
+        fake_function(__VA_ARGS__);                                                                                    \
+    }
+
+// Force literal ordering, such as floats in sdata2
+#define DECOMP_FORCELITERAL(module, ...)                                                                               \
+    void CONCAT(FORCELITERAL##module, __LINE__)(void);                                                                 \
+    void CONCAT(FORCELITERAL##module, __LINE__)(void) {                                                                \
+        (__VA_ARGS__);                                                                                                 \
+    }
+
+// Force reference destructor
+#define DECOMP_FORCEDTOR(module, cls)                                                                                  \
+    void CONCAT(FORCEDTOR##module##cls, __LINE__)(void) {                                                              \
+        cls dummy;                                                                                                     \
+        dummy.~cls();                                                                                                  \
+    }
+#endif
+
+#include "stddef.h"
 
 typedef signed char s8;
 typedef signed short s16;
@@ -70,7 +88,10 @@ typedef double f64;
 typedef int UNKWORD;
 typedef void UNKTYPE;
 
-enum { FALSE, TRUE };
+enum {
+    FALSE,
+    TRUE
+};
 typedef int BOOL;
 
 typedef unsigned char byte_t;
@@ -118,6 +139,18 @@ public:
 private:
     inline NonCopyable(const NonCopyable &) {}
 };
+#endif
+
+#define INT32_MAX (0x7fffffff)
+#define UINT32_MAX (0xffffffff)
+
+#define FLOAT_MIN (1.175494351e-38f)
+#define FLOAT_MAX (3.40282346638528860e+38f)
+
+#ifdef __MWERKS__
+#define AT_ADDRESS(xyz) : (xyz)
+#else
+#define AT_ADDRESS(xyz)
 #endif
 
 #endif

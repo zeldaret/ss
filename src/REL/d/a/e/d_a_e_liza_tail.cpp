@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_liza_tail.h>
+#include "d/a/e/d_a_e_liza_tail.h"
 
 SPECIAL_ACTOR_PROFILE(E_LIZA_TAIL, dAcEliza_tail_c, fProfile::E_LIZA_TAIL, 0xE3, 0, 3);
 

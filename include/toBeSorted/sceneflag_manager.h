@@ -1,9 +1,10 @@
 #ifndef SCENEFLAG_MANAGER_H
 #define SCENEFLAG_MANAGER_H
 
-#include <common.h>
-#include <toBeSorted/flag_space.h>
-#include <toBeSorted/bitwise_flag_helper.h>
+#include "common.h"
+#include "toBeSorted/bitwise_flag_helper.h"
+#include "toBeSorted/flag_space.h"
+
 
 class SceneflagManager {
 public:
@@ -58,7 +59,6 @@ public:
     void unsetSceneflagGlobal(u16 sceneIdx, u16 flag);
     void unsetTempOrSceneflag(u16 flag);
     s32 doCommit();
-
 
     bool checkBoolFlag(u16 roomid, u16 flag) {
         return checkFlag(roomid, flag);

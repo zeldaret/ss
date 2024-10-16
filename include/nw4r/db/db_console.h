@@ -1,8 +1,8 @@
 #ifndef NW4R_DB_CONSOLE_H
 #define NW4R_DB_CONSOLE_H
 
-#include <common.h>
-#include <nw4r/ut/ut_TextWriterBase.h>
+#include "common.h"
+#include "nw4r/ut/ut_TextWriterBase.h"
 
 namespace nw4r {
 namespace db {

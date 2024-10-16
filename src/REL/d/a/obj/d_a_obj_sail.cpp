@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_sail.h>
+#include "d/a/obj/d_a_obj_sail.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SAIL, dAcOSail_c, fProfile::OBJ_SAIL, 0x171, 0, 7);
 

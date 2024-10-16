@@ -1,6 +1,6 @@
-#include <d/d_rawarchive.h>
-#include <rvl/VI.h>
+#include "d/d_rawarchive.h"
 
+#include "rvl/VI.h" // IWYU pragma: export
 
 int computeChecksumInner(void *d, u32 len) {
     u32 *data = (u32 *)d;
@@ -107,8 +107,9 @@ bool dRawArcEntry_c::destroy(void *arg) {
     return true;
 }
 
-bool dRawArcEntry_c::loadArcFromDiskChecked(const char *fileName, const char *dirName, u8 mountDirection,
-        EGG::Heap *heap) {
+bool dRawArcEntry_c::loadArcFromDiskChecked(
+    const char *fileName, const char *dirName, u8 mountDirection, EGG::Heap *heap
+) {
     SizedString<128> path;
 
     if (checkArcExistsOnDiskInner(path, fileName, dirName)) {
@@ -142,7 +143,9 @@ BOOL dRawArcEntry_c::checkArcExistsOnDiskInner(SizedString<128> &path, const cha
     return true;
 }
 
-int dRawArcEntry_c::mount(const char *name, void *data, ArcCallbackHandler *callbackArg, u8 mountDirection, EGG::Heap *heap) {
+int dRawArcEntry_c::mount(
+    const char *name, void *data, ArcCallbackHandler *callbackArg, u8 mountDirection, EGG::Heap *heap
+) {
     mArcName = name;
     mpArc = EGG::Archive::mount(data, heap, (mountDirection == 0 || mountDirection == 1) ? 4 : -4);
     if (mpArc == nullptr) {

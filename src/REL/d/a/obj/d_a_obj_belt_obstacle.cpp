@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_belt_obstacle.h>
+#include "d/a/obj/d_a_obj_belt_obstacle.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_BELT_OBSTACLE, dAcObeltObstacle_c, fProfile::OBJ_BELT_OBSTACLE, 0x270, 0, 2);
 

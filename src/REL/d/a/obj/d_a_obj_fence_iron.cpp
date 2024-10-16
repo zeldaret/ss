@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_fence_iron.h>
+#include "d/a/obj/d_a_obj_fence_iron.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_FENCE_IRON, dAcOfenceIron_c, fProfile::OBJ_FENCE_IRON, 0x1C4, 0, 2);
 

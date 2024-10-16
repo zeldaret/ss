@@ -1,7 +1,5 @@
 #ifndef NW4R_G3D_INIT_H
 #define NW4R_G3D_INIT_H
-#include "common.h"
-#include <rvl/OS.h>
 
 namespace nw4r {
 namespace g3d {

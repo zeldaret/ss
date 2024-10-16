@@ -1,13 +1,13 @@
 #ifndef D_RAWARCHIVE_H
 #define D_RAWARCHIVE_H
 
-#include <common.h>
-#include <m/m_dvd.h>
-#include <sized_string.h>
+#include "common.h"
+#include "m/m_dvd.h"
+#include "sized_string.h"
 
 class ArcCallbackHandlerBase {
 public:
-    ArcCallbackHandlerBase(): mPrefix('    ') {}
+    ArcCallbackHandlerBase() : mPrefix('    ') {}
     /* vtable at 8050df50 */
     /** 800651c0 */
     virtual void CreateArcEntry(void *data, const char *path);

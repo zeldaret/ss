@@ -1,8 +1,8 @@
 #include "toBeSorted/flag_space.h"
+
+#include "common.h"
 #include "libc.h"
 #include "toBeSorted/file_manager.h"
-#include <common.h>
-
 
 u16 *FlagSpace::getFlagPtrChecked() {
     filemanagerCheck();

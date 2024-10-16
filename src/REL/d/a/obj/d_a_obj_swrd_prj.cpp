@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_swrd_prj.h>
+#include "d/a/obj/d_a_obj_swrd_prj.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SWRD_PRJ, dAcOSwrdPrj, fProfile::OBJ_SWRD_PRJ, 0x27D, 0, 3);
 

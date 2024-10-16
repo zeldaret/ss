@@ -1,7 +1,7 @@
 #ifndef NW4R_UT_IO_STREAM_H
 #define NW4R_UT_IO_STREAM_H
-#include <nw4r/types_nw4r.h>
-#include <nw4r/ut/ut_RuntimeTypeInfo.h>
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut/ut_RuntimeTypeInfo.h"
 
 namespace nw4r {
 namespace ut {
@@ -18,14 +18,14 @@ public:
     virtual void Close() = 0;                  // at 0x10
     virtual s32 Read(void *dst, u32 size) = 0; // at 0x14
     virtual bool ReadAsync(void *dst, u32 size, AsyncCallback callback,
-            void *arg);                           // at 0x18
+                           void *arg);            // at 0x18
     virtual s32 Write(const void *src, u32 size); // at 0x1C
     virtual bool WriteAsync(const void *src, u32 size, AsyncCallback callback,
-            void *arg);                // at 0x20
-    virtual bool IsBusy() const;       // at 0x24
-    virtual bool CanAsync() const = 0; // at 0x28
-    virtual bool CanRead() const = 0;  // at 0x2C
-    virtual bool CanWrite() const = 0; // at 0x30
+                            void *arg); // at 0x20
+    virtual bool IsBusy() const;        // at 0x24
+    virtual bool CanAsync() const = 0;  // at 0x28
+    virtual bool CanRead() const = 0;   // at 0x2C
+    virtual bool CanWrite() const = 0;  // at 0x30
     virtual u32 GetOffsetAlign() const {
         return 1;
     } // at 0x34

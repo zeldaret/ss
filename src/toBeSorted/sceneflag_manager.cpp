@@ -1,8 +1,9 @@
-#include "libc.h"
-#include <common.h>
-
 #include "toBeSorted/sceneflag_manager.h"
+
+#include "common.h"
+#include "libc.h"
 #include "toBeSorted/file_manager.h"
+
 
 SceneflagManager *SceneflagManager::sInstance = nullptr;
 u16 SceneflagManager::sTempFlags[] = {};

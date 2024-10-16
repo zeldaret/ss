@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_spark.h>
+#include "d/a/e/d_a_e_spark.h"
 
 SPECIAL_ACTOR_PROFILE(E_SPARK, dAcEspark_c, fProfile::E_SPARK, 0xF9, 0, 0);
 

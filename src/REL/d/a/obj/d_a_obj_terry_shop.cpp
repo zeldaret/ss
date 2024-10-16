@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_terry_shop.h>
+#include "d/a/obj/d_a_obj_terry_shop.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TERRY_SHOP, dAcOterryShop_c, fProfile::OBJ_TERRY_SHOP, 0x26E, 0, 2);
 

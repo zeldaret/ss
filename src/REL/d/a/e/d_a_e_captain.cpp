@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_captain.h>
+#include "d/a/e/d_a_e_captain.h"
 
 SPECIAL_ACTOR_PROFILE(E_CAPTAIN, dAcEcaptain_c, fProfile::E_CAPTAIN, 0xBE, 0, 32);
 

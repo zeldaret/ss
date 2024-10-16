@@ -1,9 +1,8 @@
 #ifndef EFFECTS_STRUCT_H
 #define EFFECTS_STRUCT_H
 
-#include <common.h>
-#include <d/a/d_a_base.h>
-
+#include "common.h"
+#include "d/a/d_a_base.h"
 
 class EffectsStruct {
 private:

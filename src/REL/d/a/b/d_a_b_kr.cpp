@@ -1,4 +1,4 @@
-#include <d/a/b/d_a_b_kr.h>
+#include "d/a/b/d_a_b_kr.h"
 
 SPECIAL_ACTOR_PROFILE(B_KR, dAcBkr_c, fProfile::B_KR, 0xB7, 0, 0);
 

@@ -1,14 +1,13 @@
 #ifndef NW4R_SND_CHANNEL_H
 #define NW4R_SND_CHANNEL_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/snd/snd_Common.h"
+#include "nw4r/snd/snd_EnvGenerator.h"
+#include "nw4r/snd/snd_Lfo.h"
+#include "nw4r/snd/snd_MoveValue.h"
+#include "nw4r/snd/snd_Voice.h"
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut.h"
 
-#include <nw4r/snd/snd_Common.h>
-#include <nw4r/snd/snd_EnvGenerator.h>
-#include <nw4r/snd/snd_Lfo.h>
-#include <nw4r/snd/snd_MoveValue.h>
-#include <nw4r/snd/snd_Voice.h>
-
-#include <nw4r/ut.h>
 
 namespace nw4r {
 namespace snd {
@@ -23,11 +22,13 @@ public:
         CALLBACK_STATUS_CANCEL
     };
 
-    typedef void (*ChannelCallback)(Channel* pDropChannel,
-                                    ChannelCallbackStatus status,
-                                    u32 callbackArg);
+    typedef void (*ChannelCallback)(Channel *pDropChannel, ChannelCallbackStatus status, u32 callbackArg);
 
-    enum LfoTarget { LFO_TARGET_PITCH, LFO_TARGET_VOLUME, LFO_TARGET_PAN };
+    enum LfoTarget {
+        LFO_TARGET_PITCH,
+        LFO_TARGET_VOLUME,
+        LFO_TARGET_PAN
+    };
 
 public:
     Channel();
@@ -35,7 +36,7 @@ public:
 
     void InitParam(ChannelCallback pCallback, u32 callbackArg);
     void Update(bool periodic);
-    void Start(const WaveData& rData, int length, u32 offset);
+    void Start(const WaveData &rData, int length, u32 offset);
     void Release();
     void Stop();
 
@@ -55,7 +56,7 @@ public:
         return mEnvelope.GetStatus() == EnvGenerator::STATUS_RELEASE;
     }
 
-    void SetLfoParam(const LfoParam& rParam) {
+    void SetLfoParam(const LfoParam &rParam) {
         mLfo.SetParam(rParam);
     }
     void SetLfoTarget(LfoTarget target) {
@@ -167,16 +168,15 @@ public:
         mPanCurve = curve;
     }
 
-    Channel* GetNextTrackChannel() const {
+    Channel *GetNextTrackChannel() const {
         return mNextLink;
     }
-    void SetNextTrackChannel(Channel* pChannel) {
+    void SetNextTrackChannel(Channel *pChannel) {
         mNextLink = pChannel;
     }
 
-    static Channel* AllocChannel(int channels, int voices, int priority,
-                                 ChannelCallback pCallback, u32 callbackArg);
-    static void FreeChannel(Channel* pChannel);
+    static Channel *AllocChannel(int channels, int voices, int priority, ChannelCallback pCallback, u32 callbackArg);
+    static void FreeChannel(Channel *pChannel);
 
 private:
     static const u8 SILENCE_VOLUME_MAX = 255;
@@ -187,9 +187,7 @@ private:
     static const int PRIORITY_RELEASE = 1;
 
 private:
-    static void VoiceCallbackFunc(Voice* pDropVoice,
-                                  Voice::VoiceCallbackStatus status,
-                                  void* pCallbackArg);
+    static void VoiceCallbackFunc(Voice *pDropVoice, Voice::VoiceCallbackStatus status, void *pCallbackArg);
 
 private:
     EnvGenerator mEnvelope; // at 0x0
@@ -240,8 +238,8 @@ private:
     ChannelCallback mCallback; // at 0xD4
     u32 mCallbackData;         // at 0xD8
 
-    Voice* mVoice;      // at 0xDC
-    Channel* mNextLink; // at 0xE0
+    Voice *mVoice;      // at 0xDC
+    Channel *mNextLink; // at 0xE0
 
 public:
     NW4R_UT_LIST_NODE_DECL(); // at 0xE4

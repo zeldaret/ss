@@ -1,5 +1,6 @@
-#include <egg/core/eggDvdRipper.h>
-#include <rvl/VI.h>
+#include "egg/core/eggDvdRipper.h"
+
+#include "rvl/VI.h" // IWYU pragma: export
 
 namespace EGG {
 

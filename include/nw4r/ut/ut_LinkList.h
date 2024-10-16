@@ -1,7 +1,7 @@
 #ifndef NW4R_UT_LINK_LIST_H
 #define NW4R_UT_LINK_LIST_H
-#include <nw4r/types_nw4r.h>
-#include <nw4r/ut/ut_NonCopyable.h>
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut/ut_NonCopyable.h"
 
 /**
  * Declare typedef for linked-list specialization.
@@ -13,7 +13,7 @@
  *
  * Use the specified link node (name suffix) for classes with multiple nodes.
  */
-#define NW4R_UT_LIST_TYPEDEF_DECL_EX(T, SUFFIX) \
+#define NW4R_UT_LIST_TYPEDEF_DECL_EX(T, SUFFIX)                                                                        \
     typedef nw4r::ut::LinkList<T, offsetof(T, node##SUFFIX)> T##SUFFIX##List;
 
 /**

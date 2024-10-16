@@ -1,8 +1,8 @@
 #ifndef M_ANGLE_H
 #define M_ANGLE_H
 
-#include <common.h>
-#include <nw4r/math/math_triangular.h>
+#include "common.h"
+#include "nw4r/math/math_triangular.h"
 
 struct mAng {
     mAng() {}

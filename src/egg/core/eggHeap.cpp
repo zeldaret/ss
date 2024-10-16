@@ -1,6 +1,8 @@
-#include <egg/core/eggAllocator.h>
-#include <egg/core/eggHeap.h>
-#include <nw4r/ut/ut_list.h>
+#include "egg/core/eggHeap.h"
+
+#include "egg/core/eggAllocator.h"
+#include "nw4r/ut/ut_list.h"
+
 
 namespace EGG {
 

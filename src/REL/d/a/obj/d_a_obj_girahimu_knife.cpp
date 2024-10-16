@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_girahimu_knife.h>
+#include "d/a/obj/d_a_obj_girahimu_knife.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_GH_KNIFE, dAcObjGirahimuKnife_c, fProfile::OBJ_GH_KNIFE, 0x115, 0, 2);
 

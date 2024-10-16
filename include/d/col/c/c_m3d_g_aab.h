@@ -1,11 +1,11 @@
 #ifndef C_M3D_G_AAB_H
 #define C_M3D_G_AAB_H
 
+#include "common.h"
 #include "d/col/c/c_m3d.h"
 #include "d/col/c/c_m3d_g_lin.h"
 #include "d/col/c/c_m3d_g_sph.h"
 
-#include <common.h>
 
 // Axis aligned bounding box
 class cM3dGAab {

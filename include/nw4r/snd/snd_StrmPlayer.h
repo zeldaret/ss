@@ -1,18 +1,16 @@
 #ifndef NW4R_SND_STRM_PLAYER_H
 #define NW4R_SND_STRM_PLAYER_H
-#include <nw4r/types_nw4r.h>
-
-#include <nw4r/snd/snd_BasicPlayer.h>
-#include <nw4r/snd/snd_InstancePool.h>
-#include <nw4r/snd/snd_SoundThread.h>
-#include <nw4r/snd/snd_StrmChannel.h>
-#include <nw4r/snd/snd_StrmFile.h>
-#include <nw4r/snd/snd_Task.h>
-#include <nw4r/snd/snd_Voice.h>
-
-#include <nw4r/ut.h>
-
-#include <rvl/OS.h>
+#include "common.h"
+#include "nw4r/snd/snd_BasicPlayer.h"
+#include "nw4r/snd/snd_InstancePool.h"
+#include "nw4r/snd/snd_SoundThread.h"
+#include "nw4r/snd/snd_StrmChannel.h"
+#include "nw4r/snd/snd_StrmFile.h"
+#include "nw4r/snd/snd_Task.h"
+#include "nw4r/snd/snd_Voice.h"
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut.h" // IWYU pragma: export
+#include "rvl/OS.h"  // IWYU pragma: export
 
 namespace nw4r {
 namespace snd {
@@ -77,11 +75,10 @@ public:
         mTaskCancelFlag = true;
     }
 
-    bool Setup(StrmBufferPool* pBufferPool);
+    bool Setup(StrmBufferPool *pBufferPool);
     void Shutdown();
 
-    bool Prepare(ut::FileStream* pFileStream, int voices,
-                 StartOffsetType offsetType, int offset);
+    bool Prepare(ut::FileStream *pFileStream, int voices, StartOffsetType offsetType, int offset);
     void InitParam();
 
     void Update();
@@ -94,8 +91,8 @@ private:
         virtual void Cancel();   // at 0x10
         virtual void OnCancel(); // at 0x14
 
-        StrmPlayer* strmPlayer;          // at 0x10
-        ut::FileStream* fileStream;      // at 0x14
+        StrmPlayer *strmPlayer;          // at 0x10
+        ut::FileStream *fileStream;      // at 0x14
         StartOffsetType startOffsetType; // at 0x18
         s32 startOffset;                 // at 0x1C
     };
@@ -107,8 +104,8 @@ private:
         virtual void Cancel();   // at 0x10
         virtual void OnCancel(); // at 0x14
 
-        StrmPlayer* strmPlayer;     // at 0x10
-        ut::FileStream* fileStream; // at 0x14
+        StrmPlayer *strmPlayer;     // at 0x10
+        ut::FileStream *fileStream; // at 0x14
         u32 size;                   // at 0x18
         s32 offset;                 // at 0x1C
         u32 blockSize;              // at 0x20
@@ -128,13 +125,12 @@ private:
     static const int LOAD_BUFFER_SIZE = 0x4000 + 32;
 
 private:
-    bool LoadHeader(ut::FileStream* pFileStream, StartOffsetType offsetType,
-                    int offset);
-    bool LoadStreamData(ut::FileStream* pFileStream, int offset, u32 size,
-                        u32 blockSize, int blockIndex,
-                        bool needUpdateAdpcmLoop);
+    bool LoadHeader(ut::FileStream *pFileStream, StartOffsetType offsetType, int offset);
+    bool LoadStreamData(
+        ut::FileStream *pFileStream, int offset, u32 size, u32 blockSize, int blockIndex, bool needUpdateAdpcmLoop
+    );
 
-    bool SetupPlayer(const StrmHeader* pStrmHeader);
+    bool SetupPlayer(const StrmHeader *pStrmHeader);
 
     bool AllocChannels(int channels, int voices);
     void FreeChannels();
@@ -148,13 +144,11 @@ private:
     void UpdatePauseStatus();
 
     int CalcLoadingBufferBlockCount() const;
-    bool CalcStartOffset(s32* pBlockIndex, u32* pBlockOffset, s32* pLoopCount);
+    bool CalcStartOffset(s32 *pBlockIndex, u32 *pBlockOffset, s32 *pLoopCount);
 
-    static void VoiceCallbackFunc(Voice* pDropVoice,
-                                  Voice::VoiceCallbackStatus status,
-                                  void* pCallbackArg);
+    static void VoiceCallbackFunc(Voice *pDropVoice, Voice::VoiceCallbackStatus status, void *pCallbackArg);
 
-    void SetAdpcmLoopContext(int channels, u16* pPredScale);
+    void SetAdpcmLoopContext(int channels, u16 *pPredScale);
 
 private:
     StrmInfo mStrmInfo; // at 0x80
@@ -201,9 +195,9 @@ private:
     InstancePool<StrmDataLoadTask> mStrmDataLoadTaskPool;         // at 0x134
     StrmDataLoadTask mStrmDataLoadTaskArea[DATA_BLOCK_COUNT_MAX]; // at 0x138
 
-    StrmBufferPool* mBufferPool; // at 0x7B8
-    ut::FileStream* mFileStream; // at 0x7BC
-    Voice* mVoice;               // at 0x7C0
+    StrmBufferPool *mBufferPool; // at 0x7B8
+    ut::FileStream *mFileStream; // at 0x7BC
+    Voice *mVoice;               // at 0x7C0
     s32 mChannelCount;           // at 0x7C4
     s32 mVoiceOutCount;          // at 0x7C8
 
@@ -212,7 +206,7 @@ private:
     u16 mAdpcmLoopYn1[CHANNEL_MAX];       // at 0x840
     u16 mAdpcmLoopYn2[CHANNEL_MAX];       // at 0x844
 
-    static u8 sLoadBuffer[LOAD_BUFFER_SIZE] ALIGN(32);
+    static u8 sLoadBuffer[LOAD_BUFFER_SIZE] ALIGN_DECL(32);
     static OSMutex sLoadBufferMutex;
 
     static bool sStaticInitFlag;

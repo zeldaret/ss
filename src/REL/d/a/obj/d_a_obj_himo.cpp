@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_himo.h>
+#include "d/a/obj/d_a_obj_himo.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_HIMO, dAcOhimo_c, fProfile::OBJ_HIMO, 0xD9, 0, 2);
 

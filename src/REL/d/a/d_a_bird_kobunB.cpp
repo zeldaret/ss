@@ -1,4 +1,4 @@
-#include <d/a/d_a_bird_kobunB.h>
+#include "d/a/d_a_bird_kobunB.h"
 
 SPECIAL_ACTOR_PROFILE(BIRD_KOBUNB, dBird_KobunB_c, fProfile::BIRD_KOBUNB, 0xAC, 0, 2);
 

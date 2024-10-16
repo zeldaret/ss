@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_lotus.h>
+#include "d/a/obj/d_a_obj_lotus.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_LOTUS, dAcOLotus_c, fProfile::OBJ_LOTUS, 0x234, 0, 3);
 

@@ -1,9 +1,9 @@
 #ifndef EGG_ASYNC_DISPLAY_H
 #define EGG_ASYNC_DISPLAY_H
 
+#include "common.h"
 #include "egg/core/eggDisplay.h"
 
-#include <common.h>
 
 namespace EGG {
 

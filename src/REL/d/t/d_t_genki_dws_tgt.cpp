@@ -1,8 +1,10 @@
-#include <d/t/d_t_genki_dws_tgt.h>
-#include <toBeSorted/item_story_flag_manager.h>
-#include <toBeSorted/room_manager.h>
-#include <toBeSorted/sceneflag_manager.h>
-#include <toBeSorted/scgame.h>
+#include "d/t/d_t_genki_dws_tgt.h"
+
+#include "toBeSorted/item_story_flag_manager.h"
+#include "toBeSorted/room_manager.h"
+#include "toBeSorted/sceneflag_manager.h"
+#include "toBeSorted/scgame.h"
+
 
 SPECIAL_ACTOR_PROFILE(TAG_GENKI_DOWSING_TARGET, dTgGenkiDwsTgt_c, fProfile::TAG_GENKI_DOWSING_TARGET, 0x02A5, 0, 0);
 

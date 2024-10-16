@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_propeller_lift.h>
+#include "d/a/obj/d_a_obj_propeller_lift.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_PROPELLER_LIFT, dAcOPropellerLift_c, fProfile::OBJ_PROPELLER_LIFT, 0x156, 0, 4099);
 

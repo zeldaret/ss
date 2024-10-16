@@ -1,8 +1,8 @@
 #ifndef NW4R_UT_LOCK_H
 #define NW4R_UT_LOCK_H
-#include <nw4r/types_nw4r.h>
-#include <nw4r/ut/ut_NonCopyable.h>
-#include <rvl/OS.h>
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut/ut_NonCopyable.h"
+#include "rvl/OS.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace ut {

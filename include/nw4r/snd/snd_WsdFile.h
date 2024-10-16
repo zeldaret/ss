@@ -1,8 +1,8 @@
 #ifndef NW4R_SND_WSD_FILE_H
 #define NW4R_SND_WSD_FILE_H
-#include <nw4r/snd/snd_Util.h>
+#include "nw4r/snd/snd_Util.h"
+#include "nw4r/ut.h"
 
-#include <nw4r/ut.h>
 
 namespace nw4r {
 namespace snd {
@@ -110,20 +110,18 @@ public:
     static const int VERSION = NW4R_VERSION(1, 2);
 
 public:
-    explicit WsdFileReader(const void* pWsdBin);
+    explicit WsdFileReader(const void *pWsdBin);
 
-    bool IsValidFileHeader(const void* pWsdBin);
+    bool IsValidFileHeader(const void *pWsdBin);
 
-    bool ReadWaveSoundInfo(WaveSoundInfo* pSoundInfo, int id) const;
-    bool ReadWaveSoundNoteInfo(WaveSoundNoteInfo* pSoundNoteInfo, int id,
-                               int note) const;
-    bool ReadWaveParam(int id, WaveData* pWaveData,
-                       const void* pWaveAddr) const;
+    bool ReadWaveSoundInfo(WaveSoundInfo *pSoundInfo, int id) const;
+    bool ReadWaveSoundNoteInfo(WaveSoundNoteInfo *pSoundNoteInfo, int id, int note) const;
+    bool ReadWaveParam(int id, WaveData *pWaveData, const void *pWaveAddr) const;
 
 private:
-    const WsdFile::Header* mHeader;       // at 0x0
-    const WsdFile::DataBlock* mDataBlock; // at 0x4
-    const WsdFile::WaveBlock* mWaveBlock; // at 0x8
+    const WsdFile::Header *mHeader;       // at 0x0
+    const WsdFile::DataBlock *mDataBlock; // at 0x4
+    const WsdFile::WaveBlock *mWaveBlock; // at 0x8
 };
 
 } // namespace detail

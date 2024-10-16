@@ -1,4 +1,4 @@
-#include <d/a/d_a_insect_grasshopper.h>
+#include "d/a/d_a_insect_grasshopper.h"
 
 SPECIAL_ACTOR_PROFILE(INSECT_GRASSHOPPER, dAcInsectGrasshopper_c, fProfile::INSECT_GRASSHOPPER, 0x16B, 0, 3);
 

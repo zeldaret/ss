@@ -1,4 +1,4 @@
-#include <toBeSorted/counters/counter.h>
+#include "toBeSorted/counters/counter.h"
 
 class KeyPieceCounter : public Counter {
 public:

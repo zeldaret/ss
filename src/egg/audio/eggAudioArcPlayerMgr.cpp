@@ -1,7 +1,7 @@
-#include <egg/audio/eggAudioArcPlayerMgr.h>
-#include <egg/audio/eggAudioMgr.h>
-#include <nw4r/snd/snd_SoundPlayer.h>
-#include <rvl/OS/OSCache.h>
+#include "egg/audio/eggAudioArcPlayerMgr.h"
+
+// #include "egg/audio/eggAudioMgr.h"
+#include "nw4r/snd/snd_SoundPlayer.h"
 
 namespace EGG {
 
@@ -30,7 +30,7 @@ UNKTYPE *ArcPlayer::openArchive(const char *name, snd::SoundHeap *heap, SARC_STO
 
         case STORAGE_NAND: ret = openNandArchive(name, heap); break;
 
-        default: break;
+        default:           break;
     }
 
     return ret;

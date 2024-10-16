@@ -1,6 +1,6 @@
 // Ported from https://github.com/kiwi515/ogws/blob/master/src/nw4r/ut/ut_RomFont.cpp --- Mostly unused
 
-#include <nw4r/ut.h>
+#include "nw4r/ut.h"
 
 namespace nw4r {
 namespace ut {
@@ -61,10 +61,8 @@ bool RomFont::Load(void *buffer) {
 
 u32 RomFont::GetRequireBufferSize() {
     switch (OSGetFontEncode()) {
-    case OS_FONT_ENCODE_ANSI:
-        return 0x00020120;
-    case OS_FONT_ENCODE_SJIS:
-        return 0x00120F00;
+        case OS_FONT_ENCODE_ANSI: return 0x00020120;
+        case OS_FONT_ENCODE_SJIS: return 0x00120F00;
     }
 
     return 0;
@@ -187,10 +185,8 @@ void RomFont::GetGlyph(Glyph *out, u16 c) const {
 
 FontEncoding RomFont::GetEncoding() const {
     switch (mFontEncode) {
-    case OS_FONT_ENCODE_ANSI:
-        return FONT_ENCODE_CP1252;
-    case OS_FONT_ENCODE_SJIS:
-        return FONT_ENCODE_SJIS;
+        case OS_FONT_ENCODE_ANSI: return FONT_ENCODE_CP1252;
+        case OS_FONT_ENCODE_SJIS: return FONT_ENCODE_SJIS;
     }
 
     return FONT_ENCODE_CP1252;
@@ -213,12 +209,8 @@ u16 RomFont::HandleUndefinedChar(u16 c) const {
     bool valid;
 
     switch (mFontEncode) {
-    case OS_FONT_ENCODE_ANSI:
-        valid = IsCP1252Char(c);
-        break;
-    case OS_FONT_ENCODE_SJIS:
-        valid = IsSJISHalfWidthChar(c) || IsSJISFullWidthChar(c);
-        break;
+        case OS_FONT_ENCODE_ANSI: valid = IsCP1252Char(c); break;
+        case OS_FONT_ENCODE_SJIS: valid = IsSJISHalfWidthChar(c) || IsSJISFullWidthChar(c); break;
     }
 
     return valid ? c : mAlternateChar;

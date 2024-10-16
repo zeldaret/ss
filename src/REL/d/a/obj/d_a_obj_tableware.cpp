@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_tableware.h>
+#include "d/a/obj/d_a_obj_tableware.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TABLEWARE, dAcOTableWare_c, fProfile::OBJ_TABLEWARE, 0x138, 0, 2);
 

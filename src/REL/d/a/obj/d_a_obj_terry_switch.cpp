@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_terry_switch.h>
+#include "d/a/obj/d_a_obj_terry_switch.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TERRY_SWITCH, dAcOTerrySwitch_c, fProfile::OBJ_TERRY_SWITCH, 0x278, 0, 4);
 

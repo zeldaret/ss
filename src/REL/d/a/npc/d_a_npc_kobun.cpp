@@ -1,4 +1,4 @@
-#include <d/a/npc/d_a_npc_kobun.h>
+#include "d/a/npc/d_a_npc_kobun.h"
 
 SPECIAL_ACTOR_PROFILE(NPC_KBN, dAcNpcKbn_c, fProfile::NPC_KBN, 0x33, 0, 2);
 

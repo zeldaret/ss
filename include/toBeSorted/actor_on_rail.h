@@ -1,7 +1,7 @@
 #ifndef ACTOR_ON_RAIL_H
 #define ACTOR_ON_RAIL_H
 
-#include <common.h>
+#include "common.h"
 
 class ActorOnRail {
 private:

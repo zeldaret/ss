@@ -1,9 +1,9 @@
 #ifndef NW4R_MATH_TYPES_H
 #define NW4R_MATH_TYPES_H
-#include <nw4r/math/math_arithmetic.h>
-#include <nw4r/math/math_triangular.h>
-#include <nw4r/types_nw4r.h>
-#include <rvl/MTX.h>
+#include "nw4r/math/math_arithmetic.h"
+#include "nw4r/math/math_triangular.h"
+#include "nw4r/types_nw4r.h"
+#include "rvl/MTX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace math {

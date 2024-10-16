@@ -1,6 +1,5 @@
-#include <egg/core/eggColorFader.h>
-#include <rvl/GX/GXHardware.h>
-#include <rvl/GX/GXTexture.h>
+
+#include "egg/core/eggColorFader.h"
 
 /* 80497930 */
 EGG::ColorFader::ColorFader(

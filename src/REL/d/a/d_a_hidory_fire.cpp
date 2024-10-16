@@ -1,4 +1,4 @@
-#include <d/a/d_a_hidory_fire.h>
+#include "d/a/d_a_hidory_fire.h"
 
 SPECIAL_ACTOR_PROFILE(HIDORY_FIRE, dAcHidoryFire_c, fProfile::HIDORY_FIRE, 0x10B, 0, 0);
 

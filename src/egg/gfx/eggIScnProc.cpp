@@ -1,3 +1,3 @@
-#include <egg/gfx/eggIScnProc.h>
+#include "egg/gfx/eggIScnProc.h"
 
 namespace EGG {} // namespace EGG

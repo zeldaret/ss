@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_light_shaft_small.h>
+#include "d/a/obj/d_a_obj_light_shaft_small.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_LIGHT_SHAFT_SMALL, dAcOLightShaftSmall_c, fProfile::OBJ_LIGHT_SHAFT_SMALL, 0x198, 0, 4);
 

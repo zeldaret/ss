@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_oct_grass_leaf.h>
+#include "d/a/obj/d_a_obj_oct_grass_leaf.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_OCT_GRASS_LEAF, dAcOOctGrassLeaf_c, fProfile::OBJ_OCT_GRASS_LEAF, 0x237, 0, 3);
 

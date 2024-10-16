@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_WENC_H
 #define RVL_SDK_WENC_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -19,8 +19,7 @@ typedef struct WENCInfo {
     u8 padding[8]; // at 0x18
 } WENCInfo;
 
-s32 WENCGetEncodeData(WENCInfo* info, u32 flag, const s16* pcmData, s32 samples,
-                      u8* adpcmData);
+s32 WENCGetEncodeData(WENCInfo *info, u32 flag, const s16 *pcmData, s32 samples, u8 *adpcmData);
 
 #ifdef __cplusplus
 }

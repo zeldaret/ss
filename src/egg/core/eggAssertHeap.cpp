@@ -1,4 +1,4 @@
-#include <egg/core/eggAssertHeap.h>
+#include "egg/core/eggAssertHeap.h"
 
 namespace EGG {
 

@@ -1,6 +1,6 @@
 #include "d/col/c/c_m3d_g_aab.h"
 
-#include "rvl/MTX.h"
+#include "rvl/MTX.h" // IWYU pragma: export
 
 void cM3dGAab::SetMin(const mVec3_c &min) {
     if (mMin.x > min.x) {

@@ -1,18 +1,21 @@
 #ifndef NW4R_SND_WAVE_FILE_H
 #define NW4R_SND_WAVE_FILE_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/snd/snd_AxVoice.h"
+#include "nw4r/snd/snd_Common.h"
+#include "nw4r/types_nw4r.h"
+#include "nw4r/ut.h"
 
-#include <nw4r/snd/snd_AxVoice.h>
-#include <nw4r/snd/snd_Common.h>
-
-#include <nw4r/ut.h>
 
 namespace nw4r {
 namespace snd {
 namespace detail {
 namespace WaveFile {
 
-enum Format { FORMAT_PCM8, FORMAT_PCM16, FORMAT_ADPCM };
+enum Format {
+    FORMAT_PCM8,
+    FORMAT_PCM16,
+    FORMAT_ADPCM
+};
 
 struct WaveInfo {
     u8 format;                  // at 0x0
@@ -41,7 +44,7 @@ struct WaveChannelInfo {
 }; // namespace WaveFile
 
 struct ChannelParam {
-    void* dataAddr;       // at 0x0
+    void *dataAddr;       // at 0x0
     u32 volumeFrontLeft;  // at 0x4
     u32 volumeFrontRight; // at 0x8
     u32 volumeRearLeft;   // at 0xC
@@ -61,14 +64,14 @@ struct WaveData {
 
 class WaveFileReader {
 public:
-    explicit WaveFileReader(const WaveFile::WaveInfo* pWaveInfo);
+    explicit WaveFileReader(const WaveFile::WaveInfo *pWaveInfo);
 
-    bool ReadWaveParam(WaveData* pWaveData, const void* pWaveAddr) const;
+    bool ReadWaveParam(WaveData *pWaveData, const void *pWaveAddr) const;
 
     static AxVoice::Format GetAxVoiceFormatFromWaveFileFormat(u32 format);
 
 private:
-    const WaveFile::WaveInfo* mWaveInfo; // at 0x0
+    const WaveFile::WaveInfo *mWaveInfo; // at 0x0
 };
 
 inline AxVoice::Format WaveFormatToAxFormat(u32 format) {

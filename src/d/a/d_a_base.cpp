@@ -2,12 +2,14 @@
 
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/d_heap.h"
 #include "f/f_list_nd.h"
 #include "m/m_vec.h"
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/misc_flag_managers.h"
+#include "toBeSorted/room_manager.h"
 #include "toBeSorted/scgame.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 
@@ -300,7 +302,7 @@ dAcBase_c *dAcBase_c::findActor(char *objName, dAcBase_c *parent) {
 
 // searches for actor based on groupType
 // 8002d0a0
-DECOMP_INLINE dAcBase_c *findActor(dAcBase_c *parent) {
+FORCE_INLINE dAcBase_c *findActor(dAcBase_c *parent) {
     if (!parent) {
         return (dAcBase_c *)fManager_c::searchBaseByGroupType(2, nullptr);
     }
@@ -358,8 +360,8 @@ bool dAcBase_c::getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDis
 s32 doAbs(s16 val) {
     return labs(val);
 }
-// Similar weirdness as the above function. Also, r29->31 are initted in the wrong order?
-// 8002d290
+// Similar weirdness as the above function. Also, r29->31 are initted in the
+// wrong order? 8002d290
 bool dAcBase_c::getDistanceAndAngleToActor(
     dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX
 ) {

@@ -1,4 +1,4 @@
-#include <d/a/e/d_a_e_rupee_gue.h>
+#include "d/a/e/d_a_e_rupee_gue.h"
 
 SPECIAL_ACTOR_PROFILE(E_RUPEE_GUE, dAcErupeeGue_c, fProfile::E_RUPEE_GUE, 0x107, 0, 3);
 

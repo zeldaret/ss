@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_stage_crack.h>
+#include "d/a/obj/d_a_obj_stage_crack.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_STAGE_CRACK, dAcOstageCrack_c, fProfile::OBJ_STAGE_CRACK, 0x1E0, 0, 2);
 

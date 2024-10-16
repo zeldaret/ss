@@ -1,13 +1,15 @@
-#include <m/m3d/m_shadow.h>
-#include <nw4r/g3d/g3d_calcview.h>
-#include <nw4r/g3d/g3d_draw.h>
-#include <nw4r/g3d/g3d_draw1mat1shp.h>
-#include <nw4r/g3d/g3d_resmat.h>
-#include <nw4r/g3d/g3d_resmdl.h>
-#include <nw4r/g3d/g3d_resshp.h>
-#include <nw4r/g3d/g3d_scnmdl.h>
-#include <nw4r/g3d/g3d_scnmdlsmpl.h>
-#include <nw4r/g3d/g3d_state.h>
+#include "m/m3d/m_shadow.h"
+
+#include "nw4r/g3d/g3d_calcview.h"
+#include "nw4r/g3d/g3d_draw.h"
+#include "nw4r/g3d/g3d_draw1mat1shp.h"
+#include "nw4r/g3d/g3d_resmat.h"
+#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/g3d_resshp.h"
+#include "nw4r/g3d/g3d_scnmdl.h"
+#include "nw4r/g3d/g3d_scnmdlsmpl.h"
+#include "nw4r/g3d/g3d_state.h"
+
 
 // All of this is completely made up, as we don't have symbols for this TU
 // (contrary to the rest of m3d and most of nw4r::g3d)
@@ -37,8 +39,9 @@ void mShadow_c::drawOpa() {
     }
 }
 
-void mShadow_c::create(int count, u8 unk1, int unk2, u16 texSize, u32 drawOpaPriority, nw4r::g3d::ResMdl mdl,
-    u32 heapSize) {
+void mShadow_c::create(
+    int count, u8 unk1, int unk2, u16 texSize, u32 drawOpaPriority, nw4r::g3d::ResMdl mdl, u32 heapSize
+) {
     // Regswaps
     mAllocator.attach(mpHeap, 0x20);
     proc_c::create(&mAllocator, nullptr);
@@ -179,8 +182,10 @@ bool mShadow_c::addCircle(mShadowCircle_c *circle, u32 priority, u32 isMdl) {
     return true;
 }
 
-bool mShadow_c::drawMdl(mShadowCircle_c *circle, u32 priority, scnLeaf_c &mdl, const mQuat_c &quat, mVec3_c &pos,
-    mColor color, u32 param9, f32 dist) {
+bool mShadow_c::drawMdl(
+    mShadowCircle_c *circle, u32 priority, scnLeaf_c &mdl, const mQuat_c &quat, mVec3_c &pos, mColor color, u32 param9,
+    f32 dist
+) {
     if (!addCircle(circle, priority, 1)) {
         return false;
     }
@@ -208,7 +213,10 @@ void mShadow_c::removeCircle(mShadowCircle_c *circle) {
     nw4r::ut::List_Remove(&mList, child);
 }
 
-static f32 sTexMtx[2][4] = {{1.0f, 0.0f, 0.0f, 0.0f}, {0.0f, 1.0f, 0.0f, 0.0f}};
+static f32 sTexMtx[2][4] = {
+    {1.0f, 0.0f, 0.0f, 0.0f},
+    {0.0f, 1.0f, 0.0f, 0.0f}
+};
 
 static u32 STEP = 0x2492;
 
@@ -219,8 +227,10 @@ static GXColor sColors[] = {
     {0x00, 0x00, 0x00, 0x00},
 };
 
-bool mShadow_c::drawTexObj(mShadowCircle_c *circle, u32 priority, const GXTexObj *texObj, const mMtx_c &mtx,
-    const mQuat_c &quat, mVec3_c &pos, mColor color, u32 param9, f32 dist) {
+bool mShadow_c::drawTexObj(
+    mShadowCircle_c *circle, u32 priority, const GXTexObj *texObj, const mMtx_c &mtx, const mQuat_c &quat, mVec3_c &pos,
+    mColor color, u32 param9, f32 dist
+) {
     if (!addCircle(circle, priority, 0)) {
         return false;
     }
@@ -401,8 +411,9 @@ void mShadow_c::drawAllShadows() {
 
 void mShadow_c::create(const mShadowCircleConfig *config, nw4r::g3d::ResMdl mdl, EGG::Heap *heap) {
     mShadow_c::sInstance = new (heap, 0x04) mShadow_c(heap);
-    mShadow_c::sInstance->create(config->count, config->unk1, config->unk2, config->texBufferSize,
-        config->drawOpaPriority, mdl, config->heapSize);
+    mShadow_c::sInstance->create(
+        config->count, config->unk1, config->unk2, config->texBufferSize, config->drawOpaPriority, mdl, config->heapSize
+    );
 }
 
 void mShadow_c::beforeDraw() {
@@ -505,9 +516,10 @@ void mShadowChild_c::updateMtx() {
     mVec3_c a = *(mVec3_c *)(&mQuat) + mPositionMaybe * mOffsetMaybe;
     mVec3_c b = *(mVec3_c *)(&mQuat) - mPositionMaybe * field_0x13C;
     mMtx_c mtx;
-    C_MTXLookAt(mtx.m, b,
-        *(fabsf((a.x - b.x) * (a.x - b.x) + (a.z - b.z) * (a.z - b.z)) <= FLT_EPSILON ? &mVec3_c::Ez : &mVec3_c::Ey),
-        a);
+    C_MTXLookAt(
+        mtx.m, b,
+        *(fabsf((a.x - b.x) * (a.x - b.x) + (a.z - b.z) * (a.z - b.z)) <= FLT_EPSILON ? &mVec3_c::Ez : &mVec3_c::Ey), a
+    );
     f32 f = field_0x13C;
     mFrustum.set(f, -f, -f, f, f, f + mOffsetMaybe, mtx, true);
 }
@@ -529,17 +541,21 @@ void mShadowChild_c::drawMdl() {
             u32 bufSize = mdl->GetNumViewMtx() * sizeof(math::MTX34);
             math::MTX34 *viewPosArray = static_cast<math::MTX34 *>(mShadow_c::sInstance->mpHeap->alloc(bufSize, 0x20));
 
-            g3d::CalcView(viewPosArray, nullptr, mdl->GetWldMtxArray(), mdl->GetWldMtxAttribArray(),
-                mdl->GetNumViewMtx(), mFrustum.mView, mdl->GetResMdl(), nullptr);
+            g3d::CalcView(
+                viewPosArray, nullptr, mdl->GetWldMtxArray(), mdl->GetWldMtxAttribArray(), mdl->GetNumViewMtx(),
+                mFrustum.mView, mdl->GetResMdl(), nullptr
+            );
             DCStoreRange(viewPosArray, bufSize);
 
             g3d::ScnMdl *mdl2 = g3d::G3dObj::DynamicCast<g3d::ScnMdl>(lf->getG3dObject());
 
             g3d::DrawResMdlReplacement *pRep = mdl2 ? mdl2->GetDrawResMdlReplacement() : nullptr;
 
-            g3d::DrawResMdlDirectly(mdl->GetResMdl(), viewPosArray, nullptr, nullptr,
+            g3d::DrawResMdlDirectly(
+                mdl->GetResMdl(), viewPosArray, nullptr, nullptr,
                 mdl2->GetByteCode(g3d::ScnMdlSimple::BYTE_CODE_DRAW_OPA), nullptr, pRep,
-                g3d::RESMDL_DRAWMODE_FORCE_LIGHTOFF | g3d::RESMDL_DRAWMODE_IGNORE_MATERIAL);
+                g3d::RESMDL_DRAWMODE_FORCE_LIGHTOFF | g3d::RESMDL_DRAWMODE_IGNORE_MATERIAL
+            );
             GXInvalidateVtxCache();
         } else {
             // this happens with bomb bag, and goes to 0x802EDC90 (mCustomShadow_c::draw)

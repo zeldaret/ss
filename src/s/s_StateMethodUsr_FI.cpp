@@ -1,12 +1,13 @@
-#include <common.h>
-#include <s/s_StateMethodUsr_FI.hpp>
+#include "s/s_StateMethodUsr_FI.hpp"
+
+#include "common.h"
+
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
 // See include/s/README.txt for changes made
 
-sStateMethodUsr_FI_c::sStateMethodUsr_FI_c(sStateIDChkIf_c &check, sStateFctIf_c &factory, const sStateIDIf_c &state) :
-    sStateMethod_c(check, factory, state) {
-}
+sStateMethodUsr_FI_c::sStateMethodUsr_FI_c(sStateIDChkIf_c &check, sStateFctIf_c &factory, const sStateIDIf_c &state)
+    : sStateMethod_c(check, factory, state) {}
 
 int sStateMethodUsr_FI_c::initializeStateLocalMethod() {
     mpState = mpStateFct.build(*getNewStateID()); // Create new state holder with the next state ID
@@ -25,6 +26,6 @@ void sStateMethodUsr_FI_c::finalizeStateLocalMethod() {
 }
 
 void sStateMethodUsr_FI_c::changeStateLocalMethod(const sStateIDIf_c &newID) {
-    finalizeStateMethod(); // Terminate the current state
+    finalizeStateMethod();   // Terminate the current state
     initializeStateMethod(); // Initialize the new state
 }

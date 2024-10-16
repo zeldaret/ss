@@ -1,4 +1,4 @@
-#include <d/a/d_a_kanban.h>
+#include "d/a/d_a_kanban.h"
 
 SPECIAL_ACTOR_PROFILE(KANBAN, dAcKanban_c, fProfile::KANBAN, 0x181, 0, 3);
 

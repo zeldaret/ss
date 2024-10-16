@@ -1,6 +1,8 @@
 #ifndef T_LIST_H
 #define T_LIST_H
 
+#include "common.h"
+
 // A templated list, similar to nw4r::ut::LinkList.
 // Notable differences are:
 // * No dtor

@@ -1,7 +1,7 @@
 #ifndef D_LYT_WINDOW_H
 #define D_LYT_WINDOW_H
 
-#include <nw4r/lyt/lyt_window.h>
+#include "nw4r/lyt/lyt_window.h"
 
 class dTextBox_c;
 

@@ -1,7 +1,9 @@
 #ifndef RVL_SDK_TPL_H
 #define RVL_SDK_TPL_H
-#include "rvl/GX.h"
-#include <common.h>
+#include "common.h"
+#include "rvl/GX.h" // IWYU pragma: export
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif

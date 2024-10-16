@@ -1,7 +1,7 @@
 #ifndef M_VIDEO_H
 #define M_VIDEO_H
 
-#include <egg/core/eggVideo.h>
+#include "egg/core/eggVideo.h"
 
 namespace mVideo {
 

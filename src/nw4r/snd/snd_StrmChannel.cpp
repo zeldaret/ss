@@ -1,1 +1,1 @@
-#include <nw4r/snd/snd_StrmChannel.h>
+#include "nw4r/snd/snd_StrmChannel.h"

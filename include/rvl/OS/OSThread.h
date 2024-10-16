@@ -1,7 +1,8 @@
 #ifndef RVL_SDK_OS_THREAD_H
 #define RVL_SDK_OS_THREAD_H
+#include "common.h"
 #include "rvl/OS/OSContext.h"
-#include <common.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -19,7 +20,9 @@ typedef enum {
     OS_THREAD_STATE_MORIBUND = 8
 } OSThreadState;
 
-typedef enum { OS_THREAD_DETACHED = (1 << 0) } OSThreadFlag;
+typedef enum {
+    OS_THREAD_DETACHED = (1 << 0)
+} OSThreadFlag;
 
 typedef struct OSThreadQueue {
     struct OSThread *head; // at 0x0
@@ -47,8 +50,8 @@ typedef struct OSThread {
     OSMutexQueue mutexQueue;     // at 0x2F4
     struct OSThread *nextActive; // at 0x2FC
     struct OSThread *prevActive; // at 0x300
-    void *stackBegin;             // at 0x304
-    void *stackEnd;               // at 0x308
+    void *stackBegin;            // at 0x304
+    void *stackEnd;              // at 0x308
     s32 error;                   // at 0x30C
     void *specific[2];           // at 0x310
 } OSThread;
@@ -69,8 +72,9 @@ s32 __OSGetEffectivePriority(OSThread *thread);
 void __OSPromoteThread(OSThread *thread, s32 prio);
 void __OSReschedule(void);
 void OSYieldThread(void);
-BOOL OSCreateThread(OSThread *thread, OSThreadFunc func, void *funcArg, void *stackBegin, u32 stackSize, s32 prio,
-        u16 flags);
+BOOL OSCreateThread(
+    OSThread *thread, OSThreadFunc func, void *funcArg, void *stackBegin, u32 stackSize, s32 prio, u16 flags
+);
 void OSExitThread(OSThread *thread);
 void OSCancelThread(OSThread *thread);
 BOOL OSJoinThread(OSThread *thread, void *val);

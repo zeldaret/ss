@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_stage_debris.h>
+#include "d/a/obj/d_a_obj_stage_debris.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_STAGE_DEBRIS, dAcOstageDebris_c, fProfile::OBJ_STAGE_DEBRIS, 0x1F8, 0, 7);
 

@@ -1,8 +1,8 @@
 #ifndef NW4R_SND_AX_VOICE_MANAGER_H
 #define NW4R_SND_AX_VOICE_MANAGER_H
-#include <nw4r/types_nw4r.h>
+#include "nw4r/snd/snd_AxVoice.h"
+#include "nw4r/types_nw4r.h"
 
-#include <nw4r/snd/snd_AxVoice.h>
 
 namespace nw4r {
 namespace snd {
@@ -15,25 +15,24 @@ public:
     static const int WORK_SIZE_MAX = VOICE_MAX * sizeof(AxVoice);
 
 public:
-    static AxVoiceManager& GetInstance();
+    static AxVoiceManager &GetInstance();
 
     u32 GetRequiredMemSize();
-    void Setup(void* pBuffer, u32 size);
+    void Setup(void *pBuffer, u32 size);
     void Shutdown();
 
-    AxVoice* AcquireAxVoice(u32 priority, AxVoice::AxVoiceCallback pCallback,
-                            void* pArg);
-    void FreeAxVoice(AxVoice* pVoice);
+    AxVoice *AcquireAxVoice(u32 priority, AxVoice::AxVoiceCallback pCallback, void *pArg);
+    void FreeAxVoice(AxVoice *pVoice);
 
-    void ReserveForFreeAxVoice(AxVoice* pVoice);
+    void ReserveForFreeAxVoice(AxVoice *pVoice);
     void FreeAllReservedAxVoice();
 
 private:
     AxVoiceManager();
 
-    AxVoice* Alloc();
-    void Free(AxVoice* pVoice);
-    void ReserveForFree(AxVoice* pVoice);
+    AxVoice *Alloc();
+    void Free(AxVoice *pVoice);
+    void ReserveForFree(AxVoice *pVoice);
 
 private:
     AxVoiceList mActiveVoiceList;       // at 0x0

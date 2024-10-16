@@ -2,8 +2,8 @@
 #define NW4R_G3D_RESMAT_H
 #include "common.h"
 #include "nw4r/g3d/g3d_rescommon.h"
-#include "nw4r/math/math_types.h"
-#include <rvl/GX.h>
+#include "nw4r/math/math_types.h" // IWYU pragma: export
+#include "rvl/GX.h"               // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -46,7 +46,7 @@ struct ResPixDL {
 struct ResMatPix : public ResCommon<ResPixDL> {
     ResMatPix(void *vptr) : ResCommon(vptr) {}
     void DCStore(bool sync);
-    void GXGetDstAlpha(u8*, u8*) const;
+    void GXGetDstAlpha(u8 *, u8 *) const;
     void GXSetDstAlpha(u8, u8);
     void CallDisplayList(bool bSync) const;
     ResMatPix CopyTo(void *p) const;

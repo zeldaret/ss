@@ -1,6 +1,8 @@
-#include <m/m3d/m3d.h>
-#include <m/m3d/m_banm.h>
-#include <m/m_heap.h>
+#include "m/m3d/m_banm.h"
+
+#include "m/m3d/m3d.h"
+#include "m/m_heap.h"
+
 
 namespace m3d {
 banm_c::~banm_c() {
@@ -27,8 +29,9 @@ bool banm_c::createAllocator(mAllocator_c *alloc, u32 *pStart) {
     i2 = ROUND_UP(i1, 0x20) - i2;
     i1 = mHeap::frmHeapCost(i2, 0x20);
     *pStart = ROUND_UP(i1, 0x20);
-    mpFrameHeap = mHeap::createFrmHeap(i2, (EGG::Heap *)alloc->mHeap, "アニメ切り替え用アロケータ(m3d::banm_c::m_heap)",
-            internal::l_alignment, 0);
+    mpFrameHeap = mHeap::createFrmHeap(
+        i2, (EGG::Heap *)alloc->mHeap, "アニメ切り替え用アロケータ(m3d::banm_c::m_heap)", internal::l_alignment, 0
+    );
     mAllocator.attach(mpFrameHeap, 0x20);
     return true;
 }

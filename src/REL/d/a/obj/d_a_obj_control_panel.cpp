@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_control_panel.h>
+#include "d/a/obj/d_a_obj_control_panel.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_CONTROL_PANEL, dAcOCtrlPnl_c, fProfile::OBJ_CONTROL_PANEL, 0x159, 0, 3);
 

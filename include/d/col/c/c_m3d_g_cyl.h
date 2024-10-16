@@ -1,8 +1,8 @@
 #ifndef C_M3D_G_CYL_H
 #define C_M3D_G_CYL_H
 
-#include <d/col/c/c_m3d_g_unk.h>
-#include <m/m_vec.h>
+#include "d/col/c/c_m3d_g_unk.h"
+#include "m/m_vec.h"
 
 class cM3dGCyl {
 public:

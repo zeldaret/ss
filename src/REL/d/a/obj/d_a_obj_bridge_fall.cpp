@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_bridge_fall.h>
+#include "d/a/obj/d_a_obj_bridge_fall.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_BRIDGE_FALL, dAcOBridgeFall_c, fProfile::OBJ_BRIDGE_FALL, 0x230, 0, 6);
 

@@ -1,8 +1,8 @@
 #ifndef NW4R_G3D_ANMCAMERA_H
 #define NW4R_G3D_ANMCAMERA_H
+
 #include "common.h"
-#include "nw4r/math/math_types.h"
-#include <rvl/GX.h>
+#include "rvl/GX.h" // IWYU pragma: export
 
 
 namespace nw4r {

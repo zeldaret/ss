@@ -1,11 +1,8 @@
 #ifndef NW4R_SND_SOUND_ARCHIVE_FILE_H
 #define NW4R_SND_SOUND_ARCHIVE_FILE_H
-#include <nw4r/types_nw4r.h>
-
-#include <nw4r/snd/snd_SoundArchive.h>
-#include <nw4r/snd/snd_Util.h>
-
-#include <nw4r/ut.h>
+#include "nw4r/snd/snd_SoundArchive.h"
+#include "nw4r/snd/snd_Util.h"
+#include "nw4r/types_nw4r.h"
 
 namespace nw4r {
 namespace snd {
@@ -76,8 +73,7 @@ struct WaveSoundInfo {
     u8 channelPriority;    // at 0x8
     u8 releasePriorityFix; // at 0x9
 };
-typedef Util::DataRef<void, SeqSoundInfo, StrmSoundInfo, WaveSoundInfo>
-    SoundInfoOffset;
+typedef Util::DataRef<void, SeqSoundInfo, StrmSoundInfo, WaveSoundInfo> SoundInfoOffset;
 
 struct Sound3DParam {
     u32 flags;     // at 0x0
@@ -198,45 +194,43 @@ public:
 public:
     SoundArchiveFileReader();
 
-    void Init(const void* pSoundArchiveBin);
-    bool IsValidFileHeader(const void* pSoundArchiveBin);
+    void Init(const void *pSoundArchiveBin);
+    bool IsValidFileHeader(const void *pSoundArchiveBin);
 
-    void SetStringChunk(const void* pChunk, u32 size);
-    void SetInfoChunk(const void* pChunk, u32 size);
+    void SetStringChunk(const void *pChunk, u32 size);
+    void SetInfoChunk(const void *pChunk, u32 size);
 
     SoundType GetSoundType(u32 id) const;
-    bool ReadSoundInfo(u32 id, SoundArchive::SoundInfo* pInfo) const;
-    bool ReadSound3DParam(u32 id, SoundArchive::Sound3DParam* pParam) const;
-    bool ReadSeqSoundInfo(u32 id, SoundArchive::SeqSoundInfo* pInfo) const;
-    bool ReadStrmSoundInfo(u32 id, SoundArchive::StrmSoundInfo* pInfo) const;
-    bool ReadWaveSoundInfo(u32 id, SoundArchive::WaveSoundInfo* pInfo) const;
-    bool ReadBankInfo(u32 id, SoundArchive::BankInfo* pInfo) const;
-    bool ReadPlayerInfo(u32 id, SoundArchive::PlayerInfo* pInfo) const;
-    bool ReadGroupInfo(u32 id, SoundArchive::GroupInfo* pInfo) const;
-    bool ReadGroupItemInfo(u32 groupId, u32 itemId,
-                           SoundArchive::GroupItemInfo* pInfo) const;
-    bool ReadSoundArchivePlayerInfo(
-        SoundArchive::SoundArchivePlayerInfo* pInfo) const;
+    bool ReadSoundInfo(u32 id, SoundArchive::SoundInfo *pInfo) const;
+    bool ReadSound3DParam(u32 id, SoundArchive::Sound3DParam *pParam) const;
+    bool ReadSeqSoundInfo(u32 id, SoundArchive::SeqSoundInfo *pInfo) const;
+    bool ReadStrmSoundInfo(u32 id, SoundArchive::StrmSoundInfo *pInfo) const;
+    bool ReadWaveSoundInfo(u32 id, SoundArchive::WaveSoundInfo *pInfo) const;
+    bool ReadBankInfo(u32 id, SoundArchive::BankInfo *pInfo) const;
+    bool ReadPlayerInfo(u32 id, SoundArchive::PlayerInfo *pInfo) const;
+    bool ReadGroupInfo(u32 id, SoundArchive::GroupInfo *pInfo) const;
+    bool ReadGroupItemInfo(u32 groupId, u32 itemId, SoundArchive::GroupItemInfo *pInfo) const;
+    bool ReadSoundArchivePlayerInfo(SoundArchive::SoundArchivePlayerInfo *pInfo) const;
 
     u32 GetSoundStringId(u32 id) const;
     u32 GetPlayerCount() const;
     u32 GetGroupCount() const;
 
-    const char* GetSoundLabelString(u32 id) const;
+    const char *GetSoundLabelString(u32 id) const;
     u32 GetSoundUserParam(u32 id) const;
 
-    bool ReadFileInfo(u32 id, SoundArchive::FileInfo* pInfo) const;
-    bool ReadFilePos(u32 fileId, u32 id, SoundArchive::FilePos* pPos) const;
+    bool ReadFileInfo(u32 id, SoundArchive::FileInfo *pInfo) const;
+    bool ReadFilePos(u32 fileId, u32 id, SoundArchive::FilePos *pPos) const;
 
-    const char* GetString(u32 id) const;
+    const char *GetString(u32 id) const;
 
-    u32 ConvertLabelStringToSoundId(const char* pLabel) const {
+    u32 ConvertLabelStringToSoundId(const char *pLabel) const {
         return ConvertLabelStringToId(mStringTreeSound, pLabel);
     }
-    u32 ConvertLabelStringToPlayerId(const char* pLabel) const {
+    u32 ConvertLabelStringToPlayerId(const char *pLabel) const {
         return ConvertLabelStringToId(mStringTreePlayer, pLabel);
     }
-    u32 ConvertLabelStringToGroupId(const char* pLabel) const {
+    u32 ConvertLabelStringToGroupId(const char *pLabel) const {
         return ConvertLabelStringToId(mStringTreeGroup, pLabel);
     }
 
@@ -261,22 +255,20 @@ public:
     }
 
 private:
-    u32 ConvertLabelStringToId(const SoundArchiveFile::StringTree* pTree,
-                               const char* pLabel) const;
+    u32 ConvertLabelStringToId(const SoundArchiveFile::StringTree *pTree, const char *pLabel) const;
 
-    const SoundArchiveFile::SoundCommonInfo* impl_GetSoundInfo(u32 id) const;
-    SoundArchiveFile::SoundInfoOffset impl_GetSoundInfoOffset(u32 id) const
-        DECOMP_DONT_INLINE;
+    const SoundArchiveFile::SoundCommonInfo *impl_GetSoundInfo(u32 id) const;
+    SoundArchiveFile::SoundInfoOffset impl_GetSoundInfoOffset(u32 id) const DONT_INLINE;
 
-    const SoundArchiveFile::SeqSoundInfo* impl_GetSeqSoundInfo(u32 id) const;
-    const SoundArchiveFile::StrmSoundInfo* impl_GetStrmSoundInfo(u32 id) const;
-    const SoundArchiveFile::WaveSoundInfo* impl_GetWaveSoundInfo(u32 id) const;
+    const SoundArchiveFile::SeqSoundInfo *impl_GetSeqSoundInfo(u32 id) const;
+    const SoundArchiveFile::StrmSoundInfo *impl_GetStrmSoundInfo(u32 id) const;
+    const SoundArchiveFile::WaveSoundInfo *impl_GetWaveSoundInfo(u32 id) const;
 
-    const SoundArchiveFile::BankInfo* impl_GetBankInfo(u32 id) const;
-    const SoundArchiveFile::PlayerInfo* impl_GetPlayerInfo(u32 id) const;
-    const SoundArchiveFile::GroupInfo* impl_GetGroupInfo(u32 id) const;
+    const SoundArchiveFile::BankInfo *impl_GetBankInfo(u32 id) const;
+    const SoundArchiveFile::PlayerInfo *impl_GetPlayerInfo(u32 id) const;
+    const SoundArchiveFile::GroupInfo *impl_GetGroupInfo(u32 id) const;
 
-    const void* GetPtrConst(const void* pBase, u32 offset) const {
+    const void *GetPtrConst(const void *pBase, u32 offset) const {
         if (offset == 0) {
             return NULL;
         }
@@ -286,13 +278,13 @@ private:
 
 private:
     SoundArchiveFile::Header mHeader;                      // at 0x0
-    const SoundArchiveFile::Info* mInfo;                   // at 0x28
-    const void* mStringBase;                               // at 0x2C
-    const SoundArchiveFile::StringTable* mStringTable;     // at 0x30
-    const SoundArchiveFile::StringTree* mStringTreeSound;  // at 0x34
-    const SoundArchiveFile::StringTree* mStringTreePlayer; // at 0x38
-    const SoundArchiveFile::StringTree* mStringTreeGroup;  // at 0x3C
-    const SoundArchiveFile::StringTree* mStringTreeBank;   // at 0x40
+    const SoundArchiveFile::Info *mInfo;                   // at 0x28
+    const void *mStringBase;                               // at 0x2C
+    const SoundArchiveFile::StringTable *mStringTable;     // at 0x30
+    const SoundArchiveFile::StringTree *mStringTreeSound;  // at 0x34
+    const SoundArchiveFile::StringTree *mStringTreePlayer; // at 0x38
+    const SoundArchiveFile::StringTree *mStringTreeGroup;  // at 0x3C
+    const SoundArchiveFile::StringTree *mStringTreeBank;   // at 0x40
 };
 
 } // namespace detail

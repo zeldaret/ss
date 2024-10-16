@@ -1,5 +1,7 @@
-#include <nw4r/lyt/lyt_group.h>
-#include <nw4r/lyt/lyt_layout.h>
+#include "nw4r/lyt/lyt_group.h"
+
+#include "nw4r/lyt/lyt_layout.h"
+
 
 namespace nw4r {
 
@@ -64,7 +66,7 @@ void GroupContainer::AppendGroup(Group *pGroup) {
 // FindGroupByName__Q34nw4r3lyt14GroupContainerFPCc
 Group *GroupContainer::FindGroupByName(const char *findName) {
     for (ut::LinkList<Group, 4>::Iterator it = this->mGroupList.GetBeginIter(); it != this->mGroupList.GetEndIter();
-            it++) {
+         it++) {
         if (detail::EqualsResName(it->GetName(), findName)) {
             return &*it;
         }

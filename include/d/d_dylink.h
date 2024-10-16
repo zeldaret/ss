@@ -1,7 +1,7 @@
 #ifndef D_DYLINK_H
 #define D_DYLINK_H
 
-#include <common.h>
+#include "common.h"
 
 class dDynamicModuleControl {
 public:

@@ -1,7 +1,8 @@
 #ifndef RVL_SDK_OS_ERROR_H
 #define RVL_SDK_OS_ERROR_H
-#include <common.h>
-#include <Runtime.PPCEABI.H/__va_arg.h>
+#include "__va_arg.h"
+#include "common.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -10,8 +11,8 @@ extern "C" {
 typedef struct OSContext;
 
 #define OSError(...) OSPanic(__FILE__, __LINE__, __VA_ARGS__)
-#define OSAssert(exp, ...) \
-    if (!(exp)) \
+#define OSAssert(exp, ...)                                                                                             \
+    if (!(exp))                                                                                                        \
     OSPanic(__FILE__, __LINE__, __VA_ARGS__)
 
 typedef enum {
@@ -41,9 +42,9 @@ typedef void (*OSErrorHandler)(u16 error, OSContext *ctx, u32 dsisr, u32 dar);
 extern OSErrorHandler __OSErrorTable[OS_ERR_MAX];
 extern u32 __OSFpscrEnableBits;
 
-DECL_WEAK void OSReport(const char *msg, ...);
-DECL_WEAK void OSVReport(const char *msg, va_list args);
-DECL_WEAK void OSPanic(const char *file, int line, const char *msg, ...);
+void OSReport(const char *msg, ...);
+void OSVReport(const char *msg, va_list args);
+void OSPanic(const char *file, int line, const char *msg, ...);
 
 OSErrorHandler OSSetErrorHandler(u16 error, OSErrorHandler handler);
 void __OSUnhandledException(u8 error, OSContext *ctx, u32 dsisr, u32 dar);

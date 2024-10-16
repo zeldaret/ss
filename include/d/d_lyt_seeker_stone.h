@@ -1,9 +1,9 @@
 #ifndef D_LYT_SEEKER_STONE_H
 #define D_LYT_SEEKER_STONE_H
 
-#include <d/d_base.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/d_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dLytSeekerStone_c : public dBase_c {
 public:

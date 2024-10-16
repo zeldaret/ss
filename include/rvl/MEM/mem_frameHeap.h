@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_MEM_FRAME_HEAP_H
 #define RVL_SDK_MEM_FRAME_HEAP_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -14,10 +14,8 @@ typedef struct MEMiHeapHead;
 typedef enum {
     MEM_FRM_HEAP_FREE_TO_HEAD = (1 << 0),
     MEM_FRM_HEAP_FREE_TO_TAIL = (1 << 1),
-    MEM_FRM_HEAP_FREE_ALL =
-        MEM_FRM_HEAP_FREE_TO_HEAD | MEM_FRM_HEAP_FREE_TO_TAIL
+    MEM_FRM_HEAP_FREE_ALL = MEM_FRM_HEAP_FREE_TO_HEAD | MEM_FRM_HEAP_FREE_TO_TAIL
 } MEMiFrmFreeFlag;
-
 
 typedef struct MEMiFrmHeapState {
     u32 id;                        // at 0x0

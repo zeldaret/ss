@@ -1,4 +1,4 @@
-#include <d/a/npc/d_a_npc_bird_zelda.h>
+#include "d/a/npc/d_a_npc_bird_zelda.h"
 
 SPECIAL_ACTOR_PROFILE(NPC_BDZ, dAcNpcBdz_c, fProfile::NPC_BDZ, 0x5E, 0, 0);
 

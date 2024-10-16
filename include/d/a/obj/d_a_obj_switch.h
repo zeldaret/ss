@@ -1,12 +1,12 @@
 #ifndef D_A_OBJ_SWITCH_H
 #define D_A_OBJ_SWITCH_H
 
-#include <d/a/obj/d_a_obj_base.h>
-#include <d/col/bg/d_bg_w.h>
-#include <m/m3d/m_mdl.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
-#include <toBeSorted/time_area_mgr.h>
+#include "d/a/obj/d_a_obj_base.h"
+#include "d/col/bg/d_bg_w.h"
+#include "m/m3d/m_mdl.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
+#include "toBeSorted/time_area_mgr.h"
 
 // OBJ_VSD?
 class dAcOScatterSand_tmp : public dAcObjBase_c {

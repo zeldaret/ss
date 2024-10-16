@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_barrel.h>
+#include "d/a/obj/d_a_obj_barrel.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_BARREL, dAcOBarrel_c, fProfile::OBJ_BARREL, 0x239, 0, 3);
 

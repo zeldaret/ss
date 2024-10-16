@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_bridge_stretch.h>
+#include "d/a/obj/d_a_obj_bridge_stretch.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_BRIDGE_STRETCH, dAcObridgeStretch_c, fProfile::OBJ_BRIDGE_STRETCH, 0x1CC, 0, 2);
 

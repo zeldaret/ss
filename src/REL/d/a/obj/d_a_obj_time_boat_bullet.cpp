@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_time_boat_bullet.h>
+#include "d/a/obj/d_a_obj_time_boat_bullet.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TIME_BOAT_BULLET, dAcOTimeBoatBullet_c, fProfile::OBJ_TIME_BOAT_BULLET, 0x19C, 0, 2);
 

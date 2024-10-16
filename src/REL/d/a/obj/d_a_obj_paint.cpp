@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_paint.h>
+#include "d/a/obj/d_a_obj_paint.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_PAINT, dAcOpaint_c, fProfile::OBJ_PAINT, 0x163, 0, 0);
 

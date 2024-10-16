@@ -1,7 +1,9 @@
 #ifndef RVL_SDK_OS_TIME_H
 #define RVL_SDK_OS_TIME_H
-#include "rvl/OS/OSHardware.h"
-#include <common.h>
+#include "common.h"
+#include "rvl/OS/OSHardware.h" // IWYU pragma: export
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif

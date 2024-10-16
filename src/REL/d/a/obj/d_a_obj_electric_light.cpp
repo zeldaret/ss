@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_electric_light.h>
+#include "d/a/obj/d_a_obj_electric_light.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_ELECTRIC_LIGHT, dAcOelectricLight_c, fProfile::OBJ_ELECTRIC_LIGHT, 0x1B8, 0, 2);
 

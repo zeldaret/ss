@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_utajima_pedestal.h>
+#include "d/a/obj/d_a_obj_utajima_pedestal.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_UTAJIMA_PEDESTAL, dAcOutajimaPedestal_c, fProfile::OBJ_UTAJIMA_PEDESTAL, 0x1D1, 0, 2);
 

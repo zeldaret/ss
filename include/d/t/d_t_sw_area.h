@@ -1,7 +1,7 @@
 #ifndef D_T_SW_AREA_H
 #define D_T_SW_AREA_H
 
-#include <d/a/d_a_base.h>
+#include "d/a/d_a_base.h"
 
 class dTgSwArea_c : public dAcBase_c {
 public:

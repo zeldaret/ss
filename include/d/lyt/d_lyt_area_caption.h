@@ -1,10 +1,10 @@
 #ifndef D_LYT_AREA_CAPTION_H
 #define D_LYT_AREA_CAPTION_H
 
-#include <d/lyt/d2d.h>
-#include <d/lyt/d_lyt_sub.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_sub.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dLytAreaCaptionParts_c {
 public:

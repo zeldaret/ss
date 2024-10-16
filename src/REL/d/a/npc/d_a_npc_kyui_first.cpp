@@ -1,4 +1,4 @@
-#include <d/a/npc/d_a_npc_kyui_first.h>
+#include "d/a/npc/d_a_npc_kyui_first.h"
 
 SPECIAL_ACTOR_PROFILE(NPC_KYUI_FIRST, dAcNpcKyuiFirst_c, fProfile::NPC_KYUI_FIRST, 0x43, 0, 3);
 

@@ -1,7 +1,8 @@
 #ifndef RVL_SDK_AX_VPB_H
 #define RVL_SDK_AX_VPB_H
-#include <common.h>
-#include <rvl/AX/AXPB.h>
+#include "common.h"
+#include "rvl/AX/AXPB.h"
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,7 +11,7 @@ extern "C" {
 #define AX_SAMPLE_RATE 32000
 #define AX_VOICE_MAX 96
 
-typedef enum {
+enum {
     AX_PBSYNC_SELECT = (1 << 0),
     AX_PBSYNC_MIXER_CTRL = (1 << 1),
     AX_PBSYNC_STATE = (1 << 2),

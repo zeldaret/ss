@@ -54,6 +54,7 @@ InsertBraces: True
 KeepEmptyLinesAtTheStartOfBlocks: False
 MaxEmptyLinesToKeep: 1
 Language: Cpp
+Standard: C++03
 PointerAlignment: Right
 SortIncludes: CaseSensitive
 SpaceAfterCStyleCast: False

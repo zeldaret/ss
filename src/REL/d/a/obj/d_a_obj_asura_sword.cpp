@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_asura_sword.h>
+#include "d/a/obj/d_a_obj_asura_sword.h"
 
 SPECIAL_ACTOR_PROFILE(ASURA_SWORD, dAcAsuraSword_c, fProfile::ASURA_SWORD, 0x11B, 0, 0);
 

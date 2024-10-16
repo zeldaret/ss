@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_terry_gimmick.h>
+#include "d/a/obj/d_a_obj_terry_gimmick.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TERRY_GIMMICK, dAcOTerryGimmick_c, fProfile::OBJ_TERRY_GIMMICK, 0x277, 0, 4);
 

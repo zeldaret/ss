@@ -1,8 +1,10 @@
 #ifndef S_FSTATE_H
 #define S_FSTATE_H
 
-#include <s/s_StateInterfaces.hpp>
-#include <s/s_FStateID.hpp>
+// clang-format off
+#include "s/s_StateInterfaces.hpp"
+#include "s/s_FStateID.hpp"
+// clang-format on
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
 // See include/s/README.txt for changes made
@@ -10,10 +12,12 @@
 /// @brief A state holder for a given class.
 /// @tparam T The class that this state belongs to.
 /// @ingroup state
-template<class T>
+template <class T>
 class sFState_c : public sStateIf_c {
 public:
-    sFState_c(T &owner) : mpOwner(owner) { mpID = nullptr; }
+    sFState_c(T &owner) : mpOwner(owner) {
+        mpID = nullptr;
+    }
 
     enum STATE_ACTION_e {
         INITIALIZE,
@@ -34,14 +38,22 @@ public:
         }
     }
 
-    virtual void initialize() { performAction(INITIALIZE); }
-    virtual void execute() { performAction(EXECUTE); }
-    virtual void finalize() { performAction(FINALIZE); }
+    virtual const void initialize() {
+        performAction(INITIALIZE);
+    }
+    virtual const void execute() {
+        performAction(EXECUTE);
+    }
+    virtual const void finalize() {
+        performAction(FINALIZE);
+    }
 
-    void setID(const sFStateID_c<T> *id) { mpID = id; }
+    void setID(const sFStateID_c<T> *id) {
+        mpID = id;
+    }
 
 private:
-    T &mpOwner; ///< The owner of this state.
+    T &mpOwner;                 ///< The owner of this state.
     const sFStateID_c<T> *mpID; ///< The state ID that runs the state methods.
 };
 

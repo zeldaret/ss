@@ -1,4 +1,4 @@
-#include <d/a/d_a_bird_mob.h>
+#include "d/a/d_a_bird_mob.h"
 
 SPECIAL_ACTOR_PROFILE(BIRD_MOB, dAcBirdMob_c, fProfile::BIRD_MOB, 0x24F, 0, 7);
 

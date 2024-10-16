@@ -1,7 +1,9 @@
 #ifndef RVL_SDK_OS_MUTEX_H
 #define RVL_SDK_OS_MUTEX_H
+#include "common.h"
 #include "rvl/OS/OSThread.h"
-#include <common.h>
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -1,8 +1,10 @@
 #ifndef RVL_SDK_NDEV_EXI2_AD_DEBUGGER_DRIVER_H
 #define RVL_SDK_NDEV_EXI2_AD_DEBUGGER_DRIVER_H
+#include "common.h"
 #include "rvl/NdevExi2AD/exi2.h"
-#include "rvl/OS.h"
-#include <common.h>
+#include "rvl/OS.h" // IWYU pragma: export
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif

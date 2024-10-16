@@ -1,4 +1,4 @@
-#include <d/a/obj/d_a_obj_sealed_door.h>
+#include "d/a/obj/d_a_obj_sealed_door.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SEALED_DOOR, dAcOsealedDoor_c, fProfile::OBJ_SEALED_DOOR, 0x1F1, 0, 6);
 

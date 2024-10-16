@@ -1,11 +1,11 @@
 #ifndef M3D_H
 #define M3D_H
 
-#include <egg/core/eggHeap.h>
-#include <egg/gfx/eggFog.h>
-#include <egg/gfx/eggLight.h>
-#include <m/m_allocator.h>
-#include <nw4r/g3d/g3d_scnroot.h>
+#include "egg/core/eggHeap.h"
+#include "egg/gfx/eggFog.h"
+#include "egg/gfx/eggLight.h"
+#include "m/m_allocator.h"
+#include "nw4r/g3d/g3d_scnroot.h"
 
 namespace m3d {
 
@@ -22,8 +22,10 @@ extern size_t l_alignment;
 } // namespace internal
 
 bool create(EGG::Heap *pHeap, u32 maxNumChildren, u32 maxNumScnObj, u32 numLightObj, u32 numLightSet);
-bool create(EGG::Heap *pHeap, GXPixelFmt pxlFmt, GXColor clearColor, u32 maxNumChildren, u32 maxNumScnObj,
-        u32 numLightObj, u32 numLightSet, u32 numLightMgr, u32 numFogMgr);
+bool create(
+    EGG::Heap *pHeap, GXPixelFmt pxlFmt, GXColor clearColor, u32 maxNumChildren, u32 maxNumScnObj, u32 numLightObj,
+    u32 numLightSet, u32 numLightMgr, u32 numFogMgr
+);
 bool createLightMgr(EGG::Heap *, u16, u16, u8, bool, int);
 bool createFogMgr(EGG::Heap *, int, int);
 

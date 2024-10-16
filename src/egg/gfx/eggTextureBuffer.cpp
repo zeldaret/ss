@@ -1,3 +1,3 @@
-#include <egg/gfx/eggTextureBuffer.h>
+#include "egg/gfx/eggTextureBuffer.h"
 
 namespace EGG {} // namespace EGG

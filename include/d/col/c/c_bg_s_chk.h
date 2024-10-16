@@ -4,7 +4,7 @@
 #include "d/col/bg/d_bg_w_base.h"
 #include "d/col/c/c_partition.h"
 #include "f/f_base.h"
-#include "rvl/MTX.h"
+#include "rvl/MTX.h" // IWYU pragma: export
 
 struct cBgD_Vtx_t : public nw4r::math::VEC3 {};
 

@@ -1,10 +1,10 @@
 #ifndef D_A_OBJ_RING_H
 #define D_A_OBJ_RING_H
 
-#include <d/a/obj/d_a_obj_base.h>
-#include <m/m3d/m_smdl.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/a/obj/d_a_obj_base.h"
+#include "m/m3d/m_smdl.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dAcOring_c : public dAcObjBase_c {
 public:
@@ -24,15 +24,12 @@ public:
     }
 
 private:
-
     static u32 ROT_PER_TICK;
 
     m3d::smdl_c mModel;
     STATE_MGR_DECLARE(dAcOring_c);
     u8 field_0x388;
     f32 field_0x38C;
-    
-
 };
 
 #endif

@@ -1,6 +1,6 @@
 #ifndef RVL_SDK_AX_CL_H
 #define RVL_SDK_AX_CL_H
-#include <common.h>
+#include "common.h"
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -11,7 +11,11 @@ extern "C" {
 // Each command takes up two bytes
 #define AX_CL_SIZE (AX_CL_MAX_CMD * sizeof(u16))
 
-typedef enum { AX_OUTPUT_STEREO, AX_OUTPUT_SURROUND, AX_OUTPUT_DPL2 } AXOutputMode;
+typedef enum {
+    AX_OUTPUT_STEREO,
+    AX_OUTPUT_SURROUND,
+    AX_OUTPUT_DPL2
+} AXOutputMode;
 
 extern u32 __AXClMode;
 

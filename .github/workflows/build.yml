@@ -6,20 +6,22 @@ on:
 
 jobs:
   build:
+    # This is a *private* build container.
+    # See docs/github_actions.md for more information.
     container: ghcr.io/zeldaret/ss-build:main
 
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
+        # Add game versions here
         version: [SOUE01]
 
     steps:
-    # Checkout the repository (shallow clone)
+    # Checkout the repository
     - name: Checkout
       uses: actions/checkout@v4
       with:
-        fetch-depth: 0
         submodules: recursive
 
     # Set Git config
@@ -40,10 +42,13 @@ jobs:
 
     # Upload progress if we're on the main branch
     - name: Upload progress
+      # If you're using a different branch, change this to match
       if: github.ref == 'refs/heads/main'
       continue-on-error: true
       env:
+        # Replace with your project slug
         PROGRESS_SLUG: ss
+        # Set the API key in your repository secrets
         PROGRESS_API_KEY: ${{ secrets.PROGRESS_API_KEY }}
       run: |
         python tools/upload_progress.py -b https://progress.decomp.club/ \

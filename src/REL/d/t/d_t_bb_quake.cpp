@@ -1,4 +1,4 @@
-#include <d/t/d_t_bb_quake.h>
+#include "d/t/d_t_bb_quake.h"
 
 SPECIAL_ACTOR_PROFILE(T_QUAKE, dTgBBQuake_c, fProfile::T_QUAKE, 0xC2, 0, 0);
 

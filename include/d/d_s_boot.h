@@ -1,9 +1,9 @@
 #ifndef D_S_BOOT_H
 #define D_S_BOOT_H
 
-#include <d/d_base.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/d_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dScBoot_c : public dBase_c {
 public:

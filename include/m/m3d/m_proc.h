@@ -1,8 +1,8 @@
 #ifndef M_M3D_PROC_H
 #define M_M3D_PROC_H
 
-#include <common.h>
-#include <m/m3d/m_scnleaf.h>
+#include "common.h"
+#include "m/m3d/m_scnleaf.h"
 
 namespace m3d {
 

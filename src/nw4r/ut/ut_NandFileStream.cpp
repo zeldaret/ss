@@ -1,7 +1,7 @@
 
 // Ported From https://github.com/kiwi515/ogws/blob/master/src/nw4r/ut/ut_NandFileStream.cpp
 
-#include <nw4r/ut.h>
+#include "nw4r/ut.h"
 
 namespace nw4r {
 namespace ut {
@@ -134,7 +134,7 @@ bool NandFileStream::ReadAsync(void *dst, u32 size, AsyncCallback callback, void
     NANDSeek(&mAsyncContext.info, mFilePosition.Tell(), NAND_SEEK_BEG);
 
     bool success =
-            NANDReadAsync(&mAsyncContext.info, dst, size, NandAsyncCallback_, &mAsyncContext.block) == NAND_RESULT_OK;
+        NANDReadAsync(&mAsyncContext.info, dst, size, NandAsyncCallback_, &mAsyncContext.block) == NAND_RESULT_OK;
 
     if (success) {
         mFilePosition.Skip(size);

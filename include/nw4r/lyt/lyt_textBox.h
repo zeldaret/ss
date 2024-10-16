@@ -1,7 +1,7 @@
 #ifndef LYT_TEXT_BOX_H
 #define LYT_TEXT_BOX_H
 
-#include <nw4r/lyt/lyt_pane.h>
+#include "nw4r/lyt/lyt_pane.h"
 
 namespace nw4r {
 
@@ -54,7 +54,6 @@ public:
         mFontSize = fontSize;
     }
 
-
     f32 GetCharSpace() const {
         return mCharSpace;
     }
@@ -62,7 +61,6 @@ public:
     void SetCharSpace(f32 charSpace) {
         mCharSpace = charSpace;
     }
-
 
     f32 GetLineSpace() const {
         return mLineSpace;

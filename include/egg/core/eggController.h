@@ -1,16 +1,15 @@
 #ifndef EGG_CONTROLLER_H
 #define EGG_CONTROLLER_H
 
-#include "egg/math/eggMath.h"
+#include "common.h"
 #include "egg/math/eggMatrix.h"
 #include "egg/math/eggVector.h"
 #include "egg/prim/eggBitFlag.h"
 #include "egg/prim/eggBuffer.h"
-#include "rvl/KPAD.h"
-#include "rvl/PAD.h"
-#include "rvl/WPAD.h"
+#include "rvl/KPAD.h" // IWYU pragma: exports
+#include "rvl/PAD.h"  // IWYU pragma: exports
+#include "rvl/WPAD.h" // IWYU pragma: exports
 
-#include <common.h>
 
 namespace EGG {
 

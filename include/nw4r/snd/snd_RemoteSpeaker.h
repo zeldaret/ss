@@ -1,10 +1,9 @@
 #ifndef NW4R_SND_REMOTE_SPEAKER_H
 #define NW4R_SND_REMOTE_SPEAKER_H
-#include <nw4r/types_nw4r.h>
 
-#include <rvl/OS.h>
-#include <rvl/WENC.h>
-#include <rvl/WPAD.h>
+#include "rvl/OS.h"   // IWYU pragma: export
+#include "rvl/WENC.h" // IWYU pragma: export
+#include "rvl/WPAD.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace snd {
@@ -41,7 +40,7 @@ public:
     bool IsEnabledOutput() const;
 
     void Update();
-    void UpdateStreamData(const s16* pRmtSamples);
+    void UpdateStreamData(const s16 *pRmtSamples);
 
     bool IsAvailable() const {
         return mState == STATE_SPEAKER_PLAY;
@@ -52,8 +51,7 @@ public:
     }
 
 private:
-    static const int SAMPLES_PER_ENCODED_PACKET =
-        (SAMPLES_PER_AUDIO_PACKET + 1) / 2;
+    static const int SAMPLES_PER_ENCODED_PACKET = (SAMPLES_PER_AUDIO_PACKET + 1) / 2;
 
     static const int CONTINUOUS_PLAY_INTERVAL_MINUTES = 8;
 
@@ -61,25 +59,25 @@ private:
     void ClearParam();
     void ExecCommand(SpeakerCommand command);
 
-    bool IsAllSampleZero(const s16* pRmtSamples);
+    bool IsAllSampleZero(const s16 *pRmtSamples);
     void NotifyCallback(s32 chan, s32 result);
 
     static void SpeakerOnCallback(s32 chan, s32 result);
     static void SpeakerPlayCallback(s32 chan, s32 result);
     static void SpeakerOffCallback(s32 chan, s32 result);
 
-    static void ContinueAlarmHandler(OSAlarm* pAlarm, OSContext* pCtx);
-    static void IntervalAlarmHandler(OSAlarm* pAlarm, OSContext* pCtx);
+    static void ContinueAlarmHandler(OSAlarm *pAlarm, OSContext *pCtx);
+    static void IntervalAlarmHandler(OSAlarm *pAlarm, OSContext *pCtx);
 
 private:
-    bool mInitFlag;                  // at 0x0
-    bool mPlayFlag;                  // at 0x1
-    bool mEnableFlag;                // at 0x2
-    bool mFirstEncodeFlag;           // at 0x3
-    bool mValidCallbackFlag;         // at 0x4
-    bool mCommandBusyFlag;           // at 0x5
-    bool mForceResumeFlag;           // at 0x6
-    bool mContinueFlag;              // at 0x7
+    bool mInitFlag;          // at 0x0
+    bool mPlayFlag;          // at 0x1
+    bool mEnableFlag;        // at 0x2
+    bool mFirstEncodeFlag;   // at 0x3
+    bool mValidCallbackFlag; // at 0x4
+    bool mCommandBusyFlag;   // at 0x5
+    bool mForceResumeFlag;   // at 0x6
+    bool mContinueFlag;      // at 0x7
     // TODO commenting out a random flag to make eggAudioRmtSpeakerMgr match
     // TODO offsets are wrong as a result
     // volatile bool mIntervalFlag;     // at 0x8

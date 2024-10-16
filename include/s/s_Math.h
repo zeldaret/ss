@@ -1,7 +1,7 @@
 #ifndef S_MATH_H
 #define S_MATH_H
 
-#include <common.h>
+#include "common.h"
 
 namespace sLib {
 

@@ -1,14 +1,14 @@
 #ifndef C_M3D_G_UNK_H
 #define C_M3D_G_UNK_H
 
-#include "d/col/c/c_m3d_g_cps.h"
-#include "d/col/c/c_m3d_g_cyl.h"
-#include "d/col/c/c_m3d_g_pla.h"
-#include "d/col/c/c_m3d_g_sph.h"
+#include "common.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 
-#include <common.h>
+
+struct cM3dGCps;
+struct cM3dGCyl;
+struct cM3dGSph;
 
 class cM3dGUnk {
 public:

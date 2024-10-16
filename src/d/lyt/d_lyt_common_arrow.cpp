@@ -1,5 +1,7 @@
-#include <d/lyt/d_lyt_common_arrow.h>
-#include <toBeSorted/arc_managers/layout_arc_manager.h>
+#include "d/lyt/d_lyt_common_arrow.h"
+
+#include "toBeSorted/arc_managers/layout_arc_manager.h"
+
 
 STATE_DEFINE(dLytCommonArrow_c, None);
 STATE_DEFINE(dLytCommonArrow_c, In);
@@ -9,15 +11,15 @@ STATE_DEFINE(dLytCommonArrow_c, Out);
 f32 arrow_fs[0x20];
 
 static const d2d::LytBrlanMapping brlanMap[] = {
-        {"commonArrow_00_in.brlan", "G_inOut_00"},
-        {"commonArrow_00_loop.brlan", "G_loop_00"},
-        {"commonArrow_00_type.brlan", "G_type_00"},
-        {"commonArrow_00_onOff.brlan", "G_arrowL_00"},
-        {"commonArrow_00_onOff.brlan", "G_arrowR_00"},
-        {"commonArrow_00_decide.brlan", "G_arrowL_00"},
-        {"commonArrow_00_decide.brlan", "G_arrowR_00"},
-        {"commonArrow_00_input.brlan", "G_input_00"},
-        {"commonArrow_00_out.brlan", "G_inOut_00"},
+    {    "commonArrow_00_in.brlan",  "G_inOut_00"},
+    {  "commonArrow_00_loop.brlan",   "G_loop_00"},
+    {  "commonArrow_00_type.brlan",   "G_type_00"},
+    { "commonArrow_00_onOff.brlan", "G_arrowL_00"},
+    { "commonArrow_00_onOff.brlan", "G_arrowR_00"},
+    {"commonArrow_00_decide.brlan", "G_arrowL_00"},
+    {"commonArrow_00_decide.brlan", "G_arrowR_00"},
+    { "commonArrow_00_input.brlan",  "G_input_00"},
+    {   "commonArrow_00_out.brlan",  "G_inOut_00"},
 };
 
 dLytCommonArrow_c::dLytCommonArrow_c() : mStateMgr(*this, sStateID::null) {}
@@ -165,19 +167,19 @@ void dLytCommonArrow_c::initializeState_In() {
 }
 void dLytCommonArrow_c::executeState_In() {
     switch (field_0x6C4) {
-    case 0: {
-        d2d::AnmGroup_c *s = &field_0x440[0];
-        if (s->isEndReached() == 1) {
-            field_0x6C4 += 1;
-            field_0x6CA = 1;
-        } else {
-            s->play();
-        }
-    } break;
-    case 1:
-        field_0x6CA = 0;
-        mStateMgr.changeState(StateID_Wait);
-        break;
+        case 0: {
+            d2d::AnmGroup_c *s = &field_0x440[0];
+            if (s->isEndReached() == 1) {
+                field_0x6C4 += 1;
+                field_0x6CA = 1;
+            } else {
+                s->play();
+            }
+        } break;
+        case 1:
+            field_0x6CA = 0;
+            mStateMgr.changeState(StateID_Wait);
+            break;
     }
 }
 void dLytCommonArrow_c::finalizeState_In() {
@@ -214,17 +216,15 @@ void dLytCommonArrow_c::initializeState_Out() {
 }
 void dLytCommonArrow_c::executeState_Out() {
     switch (field_0x6C4) {
-    case 0: {
-        d2d::AnmGroup_c *s = &field_0x440[8];
-        if (s->isEndReached() == 1) {
-            field_0x6C4 = 1;
-            field_0x6CA = 1;
-        }
-        s->play();
-    } break;
-    case 1:
-        mStateMgr.changeState(StateID_None);
-        break;
+        case 0: {
+            d2d::AnmGroup_c *s = &field_0x440[8];
+            if (s->isEndReached() == 1) {
+                field_0x6C4 = 1;
+                field_0x6CA = 1;
+            }
+            s->play();
+        } break;
+        case 1: mStateMgr.changeState(StateID_None); break;
     }
 }
 void dLytCommonArrow_c::finalizeState_Out() {}

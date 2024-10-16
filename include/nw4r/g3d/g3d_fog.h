@@ -3,9 +3,7 @@
 #include "common.h"
 #include "nw4r/g3d/g3d_rescommon.h"
 #include "nw4r/math/math_types.h"
-#include "nw4r/ut/ut_Color.h"
-#include <rvl/GX.h>
-
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {

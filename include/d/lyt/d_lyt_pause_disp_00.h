@@ -1,10 +1,10 @@
 #ifndef LYT_PAUSE_DISP_00_H
 #define LYT_PAUSE_DISP_00_H
 
-#include <d/lyt/d2d.h>
-#include <d/lyt/d_structd.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/lyt/d2d.h"
+#include "d/lyt/d_structd.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dLytPauseDisp00_c {
 public:

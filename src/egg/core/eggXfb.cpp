@@ -1,6 +1,8 @@
-#include <egg/core/eggSystem.h>
-#include <egg/core/eggVideo.h>
-#include <egg/core/eggXfb.h>
+#include "egg/core/eggXfb.h"
+
+#include "egg/core/eggSystem.h"
+#include "egg/core/eggVideo.h"
+
 
 namespace EGG {
 
