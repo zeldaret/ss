@@ -6,8 +6,13 @@
 
 SPECIAL_ACTOR_PROFILE(SW_AREA_TAG, dTgSwArea_c, fProfile::SW_AREA_TAG, 0x292, 0, 0);
 
+// sDefaultRotX got placed in .data despite being zero.
+// There is a handy pragma for this but it's probably not
+// the correct solution.
+#pragma explicit_zero_data on
 u32 dTgSwArea_c::sDefaultRotX = 0;
 u32 dTgSwArea_c::sDefaultRotZ = 0;
+#pragma explicit_zero_data off
 
 int dTgSwArea_c::create() {
     setSceneflag = getSetSceneflag();
