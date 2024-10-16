@@ -24,7 +24,7 @@ public:
     void setupFlagStuff();
     void setToValue(u16 flag, u32 value);
     void setFlag(u16 flag);
-    u32 getDungeonFlag(u16 flag);
+    u16 getDungeonFlag(u16 flag);
     bool doCommit();
 
     /** inline shenanigans to get copyFromSave to match */
@@ -32,6 +32,8 @@ public:
         u32 offset = (flagIndex & 0x1fff) * 8;
         return FileManager::sInstance->getDungeonFlagsConst() + offset;
     }
+
+    static DungeonflagManager *sInstance;
 };
 
 /** 80575404 */
@@ -82,7 +84,7 @@ void DungeonflagManager::setFlag(u16 flag) {
 }
 
 /** 800fbac0 */
-u32 DungeonflagManager::getDungeonFlag(u16 flag) {
+u16 DungeonflagManager::getDungeonFlag(u16 flag) {
     u16 *data = mFlagSpace.getFlagPtrUnchecked();
     return mFlagStuff->getCounterOrFlag(flag, data, 8);
 }
