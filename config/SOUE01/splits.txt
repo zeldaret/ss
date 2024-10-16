@@ -251,21 +251,25 @@ d/lyt/meter/d_lyt_meter_a_btn.cpp:
 	.text       start:0x800DFCC0 end:0x800E1188
 	.ctors      start:0x804DB6E4 end:0x804DB6E8
 	.data       start:0x80513BE8 end:0x80513F38
+	.bss        start:0x805AA190 end:0x805AA350
 
 d/lyt/meter/d_lyt_meter_z_btn.cpp:
 	.text       start:0x800E1190 end:0x800E2238
 	.ctors      start:0x804DB6E8 end:0x804DB6EC
 	.data       start:0x80513F38 end:0x80514188
+	.bss        start:0x805AA350 end:0x805AA450
 
 d/lyt/meter/d_lyt_meter_key.cpp:
 	.text       start:0x800E2240 end:0x800E4928
 	.ctors      start:0x804DB6EC end:0x804DB6F0
 	.data       start:0x80514188 end:0x805148B0
+	.bss        start:0x805AA450 end:0x805AA790
 
 d/lyt/meter/d_lyt_meter_drink.cpp:
 	.text       start:0x800E4930 end:0x800E6AC8
 	.ctors      start:0x804DB6F0 end:0x804DB6F4
 	.data       start:0x805148B0 end:0x80514D60
+	.bss        start:0x805AA790 end:0x805AA9D0
 
 d/lyt/meter/d_lyt_meter_remocon_bg.cpp:
 	.text       start:0x800E6AD0 end:0x800E7218
@@ -320,13 +324,17 @@ d/lyt/meter/d_lyt_meter_event_skip.cpp:
 d/lyt/meter/d_lyt_meter_timer.cpp:
 	.text       start:0x80105F70 end:0x8010AEB8
 	.ctors      start:0x804DB720 end:0x804DB724
+	.data       start:0x80519748 end:0x80519F60
 
 d/lyt/meter/d_lyt_meter_heart.cpp:
 	.text       start:0x8010AEC0 end:0x8010BD48
+	.data       start:0x80519F60 end:0x8051A320
 
 d/lyt/meter/d_lyt_meter_shield_gauge.cpp:
 	.text       start:0x8010BD50 end:0x8010CEC8
 	.ctors      start:0x804DB724 end:0x804DB728
+	.data       start:0x8051A320 end:0x8051A5A8
+	.bss        start:0x805ACD50 end:0x805ACE10
 
 d/lyt/d_lyt_do_button.cpp:
 	.text       start:0x8010CED0 end:0x8010EAF8
@@ -436,10 +444,12 @@ d/lyt/d_lyt_help.cpp:
 d/lyt/d_lyt_bird_gauge.cpp:
 	.text       start:0x80152FD0 end:0x801548D8
 	.ctors      start:0x804DB784 end:0x804DB788
+	.data       start:0x80524020 end:0x80524510
 
 d/lyt/d_lyt_sky_gauge.cpp:
 	.text       start:0x801548E0 end:0x80155CC8
 	.ctors      start:0x804DB788 end:0x804DB78C
+	.data       start:0x80524510 end:0x80524928
 
 d/lyt/d_lyt_deposit_stock.cpp:
 	.text       start:0x80155CD0 end:0x801578A8
@@ -448,6 +458,7 @@ d/lyt/d_lyt_deposit_stock.cpp:
 d/lyt/d_lyt_boss_gauge.cpp:
 	.text       start:0x80158290 end:0x80158E78
 	.ctors      start:0x804DB790 end:0x804DB794
+	.data       start:0x80524CD0 end:0x80524ED0
 
 d/lyt/d_lyt_pause_back.cpp:
 	.text       start:0x80158E80 end:0x80159E78

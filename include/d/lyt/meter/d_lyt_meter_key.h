@@ -11,8 +11,13 @@ public:
     ~dLytMeterKakeraKey_c() {}
 
     bool build(d2d::ResAccIf_c *);
-private:
 
+private:
+    STATE_FUNC_DECLARE(dLytMeterKakeraKey_c, Wait);
+    STATE_FUNC_DECLARE(dLytMeterKakeraKey_c, On);
+    STATE_FUNC_DECLARE(dLytMeterKakeraKey_c, Increase);
+    STATE_FUNC_DECLARE(dLytMeterKakeraKey_c, Active);
+    STATE_FUNC_DECLARE(dLytMeterKakeraKey_c, Off);
 
     /* 0x000 */ UI_STATE_MGR_DECLARE(dLytMeterKakeraKey_c);
     /* 0x03C */ d2d::dLytSub mLyt;
@@ -29,8 +34,12 @@ public:
     virtual void BossKey0xC() {}
 
     bool build(d2d::ResAccIf_c *);
-private:
 
+private:
+    STATE_FUNC_DECLARE(dLytMeterBossKey_c, Wait);
+    STATE_FUNC_DECLARE(dLytMeterBossKey_c, On);
+    STATE_FUNC_DECLARE(dLytMeterBossKey_c, Active);
+    STATE_FUNC_DECLARE(dLytMeterBossKey_c, Off);
 
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterBossKey_c);
     /* 0x040 */ d2d::dLytSub mLyt;
@@ -47,8 +56,12 @@ public:
     virtual void SmallKey0xC() {}
 
     bool build(d2d::ResAccIf_c *);
-private:
 
+private:
+    STATE_FUNC_DECLARE(dLytMeterSmallKey_c, Wait);
+    STATE_FUNC_DECLARE(dLytMeterSmallKey_c, On);
+    STATE_FUNC_DECLARE(dLytMeterSmallKey_c, Active);
+    STATE_FUNC_DECLARE(dLytMeterSmallKey_c, Off);
 
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterSmallKey_c);
     /* 0x040 */ d2d::dLytSub mLyt;

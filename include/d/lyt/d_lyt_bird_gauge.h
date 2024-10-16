@@ -36,8 +36,8 @@ public:
     virtual ~dLytBirdGauge_c() {}
 
 private:
-    STATE_FUNC_DECLARE(dLytBirdGauge_c, None);
     STATE_FUNC_DECLARE(dLytBirdGauge_c, In);
+    STATE_FUNC_DECLARE(dLytBirdGauge_c, None);
     STATE_FUNC_DECLARE(dLytBirdGauge_c, Dash);
     STATE_FUNC_DECLARE(dLytBirdGauge_c, Recovery);
     STATE_FUNC_DECLARE(dLytBirdGauge_c, Out);

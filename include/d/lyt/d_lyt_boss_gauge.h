@@ -13,11 +13,10 @@ public:
 
     bool build();
 private:
-    STATE_FUNC_DECLARE(dLytBossGauge_c, ModeNone);
-    STATE_FUNC_DECLARE(dLytBossGauge_c, ModeIn);
-    STATE_FUNC_DECLARE(dLytBossGauge_c, ModeDash);
-    STATE_FUNC_DECLARE(dLytBossGauge_c, ModeRecovery);
-    STATE_FUNC_DECLARE(dLytBossGauge_c, ModeOut);
+    STATE_FUNC_DECLARE(dLytBossGauge_c, None);
+    STATE_FUNC_DECLARE(dLytBossGauge_c, In);
+    STATE_FUNC_DECLARE(dLytBossGauge_c, Move);
+    STATE_FUNC_DECLARE(dLytBossGauge_c, Out);
 
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytBossGauge_c);
     /* 0x040 */ d2d::ResAccIf_c mResAcc;
