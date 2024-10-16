@@ -6,7 +6,6 @@
 #include <d/t/d_t_reaction.h>
 #include <toBeSorted/sceneflag_manager.h>
 
-
 SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0x0151, 0, 0);
 
 STATE_DEFINE(dTgReaction_c, Wait);
@@ -52,8 +51,8 @@ int dTgReaction_c::create() {
     }
 
     field_0x4E0 = rotation.x & 0xFF;
-    rotcopy1.x = initialRotX;
-    rotation.x = rotcopy1.x;
+    angle.x = initialRotX;
+    rotation.x = angle.x;
     if (field_0x4E0 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, field_0x4E0)) {
         return FAILED;
     }
@@ -81,20 +80,20 @@ int dTgReaction_c::create() {
         case REACT_BONK:
             mCollision.setTgFlag(0x80);
             mCollision.setTgField0x0A(0);
-            mCollision.setR(sCcSrc.mCylAttr.mRadius * scale.x);
-            mCollision.setH(scale.y * sCcSrc.mCylAttr.mHeight);
+            mCollision.SetR(sCcSrc.mCylAttr.mRadius * mScale.x);
+            mCollision.SetH(mScale.y * sCcSrc.mCylAttr.mHeight);
             break;
         case REACT_SLINGSHOT:
             mCollision.setTgFlag(0x10000);
             mCollision.setTgField0x0A(8);
-            mCollision.setR(sCcSrc.mCylAttr.mRadius * scale.x);
-            mCollision.setH(scale.y * sCcSrc.mCylAttr.mHeight);
+            mCollision.SetR(sCcSrc.mCylAttr.mRadius * mScale.x);
+            mCollision.SetH(mScale.y * sCcSrc.mCylAttr.mHeight);
             break;
         case REACT_GUST_BELLOWS:
             mCollision.setTgFlag(0x100000);
             mCollision.setTgField0x0A(0);
-            mCollision.setR(sCcSrc.mCylAttr.mRadius * scale.x);
-            mCollision.setH(scale.y * sCcSrc.mCylAttr.mHeight);
+            mCollision.SetR(sCcSrc.mCylAttr.mRadius * mScale.x);
+            mCollision.SetH(mScale.y * sCcSrc.mCylAttr.mHeight);
             break;
     }
 
@@ -110,7 +109,7 @@ int dTgReaction_c::create() {
         }
         mVec3_c dwsOffset;
         if (!getParam0x14()) {
-            field_0x4E4 = scale.y * sCcSrc.mCylAttr.mHeight * 0.5f;
+            field_0x4E4 = mScale.y * sCcSrc.mCylAttr.mHeight * 0.5f;
             dwsOffset = mVec3_c(0.0f, 0.5f * sCcSrc.mCylAttr.mHeight, 0.0f);
         } else {
             dwsOffset = mVec3_c::Zero;
@@ -162,7 +161,7 @@ void dTgReaction_c::checkForBonkItem() {
     if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x2000)) {
         mVec3_c diff = position - dAcPy_c::LINK->position;
         f32 dist = diff.x * diff.x + diff.z * diff.z;
-        f32 rad = scale.x * 100.0f;
+        f32 rad = mScale.x * 100.0f;
         if (!(dist < rad * rad)) {
             return;
         }
@@ -215,7 +214,7 @@ void dTgReaction_c::checkForBubble() {
             dAcObjBase_c::create(fProfile::OBJ_BUBBLE, roomid, 0x4, &spawnPos, nullptr, nullptr, 0xFFFFFFFF);
         }
     }
-    mCollision.setC(position);
+    mCollision.SetC(position);
     ColliderManager::getColliderManager()->addCollider(&mCollision);
 }
 
@@ -246,7 +245,7 @@ void dTgReaction_c::checkForSlingBellowsItem() {
         SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
         onDelete();
     }
-    mCollision.setC(position);
+    mCollision.SetC(position);
     ColliderManager::getColliderManager()->addCollider(&mCollision);
 }
 
