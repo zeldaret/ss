@@ -1752,22 +1752,32 @@ egg/gfx/eggTextureBuffer.cpp:
 
 egg/audio/eggAudioArcPlayerMgr.cpp:
 	.text       start:0x804B59E0 end:0x804B6428
+	.data       start:0x8056F2C0 end:0x8056F320
 
 egg/audio/eggAudioHeapMgr.cpp:
 	.text       start:0x804B6430 end:0x804B64A8
 
 egg/audio/eggAudioMgr.cpp:
 	.text       start:0x804B64B0 end:0x804B69C8
+	.data       start:0x8056F320 end:0x8056F420
 
 egg/audio/eggAudioRmtSpeakerMgr.cpp:
 	.text       start:0x804B69D0 end:0x804B6F58
+	.sdata      start:0x80574F68 end:0x80574F6C
+	.sbss       start:0x805768D8 end:0x805768E8
+	.bss        start:0x80675390 end:0x80675480
 
 egg/audio/eggAudioUtility.cpp:
 	.text       start:0x804B6F60 end:0x804B720C
 	.ctors      start:0x804DB9B0 end:0x804DB9B4
+	.sdata      start:0x80574F70 end:0x80574F78
+	.sbss       start:0x805768E8 end:0x805768F8
+	.bss        start:0x80675480 end:0x80675490
 
 egg/audio/eggAudioSystem.cpp:
 	.text       start:0x804B7210 end:0x804B7544
+	.sbss       start:0x805768F8 end:0x80576900
+	.sdata2     start:0x8057F8B0 end:0x8057F8C8
 
 egg/util/eggException.cpp:
 	.text       start:0x804B7550 end:0x804B7B48
