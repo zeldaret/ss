@@ -2,9 +2,10 @@
 #include <c/c_math.h>
 #include <d/a/d_a_player.h>
 #include <d/a/obj/d_a_obj_item.h>
-#include <d/tg/d_t_reaction.h>
-#include <toBeSorted/cc/d_cc_mgr.h>
+#include <d/col/cc/d_cc_mgr.h>
+#include <d/t/d_t_reaction.h>
 #include <toBeSorted/sceneflag_manager.h>
+
 
 SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0x0151, 0, 0);
 
@@ -146,10 +147,10 @@ void dTgReaction_c::initializeState_Wait() {}
 void dTgReaction_c::executeState_Wait() {
     switch (getReactType()) {
         case REACT_BONK:
-        case REACT_4: checkForBonkItem(); break;
+        case REACT_4:            checkForBonkItem(); break;
         case REACT_SLINGSHOT:
         case REACT_GUST_BELLOWS: checkForSlingBellowsItem(); break;
-        case REACT_UNDERWATER: checkForBubble(); break;
+        case REACT_UNDERWATER:   checkForBubble(); break;
     }
 }
 void dTgReaction_c::finalizeState_Wait() {}

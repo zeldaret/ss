@@ -8,6 +8,7 @@ struct mAng {
     mAng() {}
     mAng(s16 s) : mVal(s) {}
     mAng(const mAng &other) : mVal(other.mVal) {}
+
     operator s16() const {
         return mVal;
     }
@@ -16,16 +17,22 @@ struct mAng {
         return mAng(-mVal);
     }
 
-    mAng operator+(const mAng& other) const {
+    mAng operator+(const mAng &other) const {
         return mAng(mVal + other.mVal);
     }
+
+    mAng &operator+=(const mAng &other) {
+        mVal += other.mVal;
+        return *this;
+    }
+
     s32 step(s16 target, s32 steps, s16 max, s16 min);
 
-    inline f32 sin() const {
+    f32 sin() const {
         return nw4r::math::SinIdx(*this);
     }
 
-    inline f32 cos() const {
+    f32 cos() const {
         return nw4r::math::CosIdx(*this);
     }
 

@@ -5,19 +5,12 @@
 #include <toBeSorted/item_story_flag_manager.h>
 #include <toBeSorted/tlist.h>
 
-typedef TList<DowsingTarget, 0> DowsingList;
+typedef TList<DowsingTarget, offsetof(DowsingTarget, mLink)> DowsingList;
 
 DowsingList DOWSING_LISTS[8];
 
 static const int DOWSING_TARGET_STORY_FLAGS[8] = {
-        100,
-        105,
-        100,
-        104,
-        108,
-        110,
-        109,
-        102,
+    100, 105, 100, 104, 108, 110, 109, 102,
 };
 
 DowsingTarget::~DowsingTarget() {
@@ -56,7 +49,7 @@ void DowsingTarget::getPosition(mVec3_c &position) {
     mMtx_c mtx2;
     PSMTXTrans(mtx.m, mpActor->position.x, mpActor->position.y, mpActor->position.z);
     mtx.YrotM(mpActor->rotation.y);
-    PSMTXScale(mtx2.m, mpActor->scale.x, mpActor->scale.y, mpActor->scale.z);
+    PSMTXScale(mtx2.m, mpActor->mScale.x, mpActor->mScale.y, mpActor->mScale.z);
     PSMTXConcat(mtx.m, mtx2.m, mtx.m);
     PSMTXMultVec(mtx.m, mOffset, position);
 }
@@ -80,9 +73,9 @@ bool DowsingTarget::hasDesertNodeDowsing() {
 bool DowsingTarget::hasAnyTrialDowsing() {
     // TODO more complicated code
     return ItemFlagManager::sInstance->getFlag(187) && !StoryFlagManager::sInstance->getCounterOrFlag(93) ||
-            ItemFlagManager::sInstance->getFlag(188) && !StoryFlagManager::sInstance->getCounterOrFlag(97) ||
-            ItemFlagManager::sInstance->getFlag(189) && !StoryFlagManager::sInstance->getCounterOrFlag(98) ||
-            ItemFlagManager::sInstance->getFlag(193) && !StoryFlagManager::sInstance->getCounterOrFlag(99);
+           ItemFlagManager::sInstance->getFlag(188) && !StoryFlagManager::sInstance->getCounterOrFlag(97) ||
+           ItemFlagManager::sInstance->getFlag(189) && !StoryFlagManager::sInstance->getCounterOrFlag(98) ||
+           ItemFlagManager::sInstance->getFlag(193) && !StoryFlagManager::sInstance->getCounterOrFlag(99);
 }
 
 bool DowsingTarget::hasSacredWaterDowsing() {
@@ -132,10 +125,10 @@ bool DowsingTarget::hasDowsingInSlot(int slot) {
 
     if (slot == 0) {
         return hasZeldaDowsing() || hasAnyTrialDowsing() || hasSacredWaterDowsing() || hasSandshipDowsing() ||
-                hasTadtoneDowsing() || hasPropellerDowsing() || hasWaterBasinDowsing();
+               hasTadtoneDowsing() || hasPropellerDowsing() || hasWaterBasinDowsing();
     } else if (slot == 2) {
         return hasCrystalBallDowsing() || hasPumpkinDowsing() || hasNewPlantSpeciesDowsing() || hasKikwiDowsing() ||
-                hasKeyPieceDowsing() || hasDesertNodeDowsing() || hasPartyWheelDowsing();
+               hasKeyPieceDowsing() || hasDesertNodeDowsing() || hasPartyWheelDowsing();
     } else if (StoryFlagManager::sInstance->getCounterOrFlag(DOWSING_TARGET_STORY_FLAGS[slot])) {
         // TODO small instruction shuffle
         return true;
@@ -146,8 +139,9 @@ bool DowsingTarget::hasDowsingInSlot(int slot) {
 
 #define MYCLAMP(low, high, x) ((x) < (low) ? (low) : ((x) > (high) ? (high) : (x)))
 
-DowsingTarget *DowsingTarget::getDowsingInfo(const mVec3_c &playerPosition, const mVec3_c &dowsingDirection, f32 *p3,
-        f32 *p4, f32 *intensity, int slot) {
+DowsingTarget *DowsingTarget::getDowsingInfo(
+    const mVec3_c &playerPosition, const mVec3_c &dowsingDirection, f32 *p3, f32 *p4, f32 *intensity, int slot
+) {
     if (slot >= 8) {
         return nullptr;
     }
@@ -199,9 +193,9 @@ void DowsingTarget::init() {}
 void DowsingTarget::execute() {}
 
 // Not sure what this is
-inline static TListNode *getNode(u8 slot, DowsingTarget *t) {
+inline static TListNode<DowsingTarget> *getNode(u8 slot, DowsingTarget *t) {
     if (t->mLink.mpNext == nullptr || t->mLink.mpPrev == nullptr) {
-        return &DOWSING_LISTS[slot].mNode;
+        return &DOWSING_LISTS[slot].mStartEnd;
     } else {
         return &t->mLink;
     }
@@ -213,7 +207,7 @@ static bool insertDowsingTarget(DowsingTarget *target) {
         return false;
     }
 
-    if (getNode(slot, target) != &DOWSING_LISTS[slot].mNode) {
+    if (getNode(slot, target) != &DOWSING_LISTS[slot].mStartEnd) {
         return false;
     }
     DOWSING_LISTS[slot].insert(target);
@@ -226,7 +220,7 @@ static bool removeDowsingTarget(DowsingTarget *target) {
         return false;
     }
 
-    if (getNode(slot, target) != &DOWSING_LISTS[slot].mNode) {
+    if (getNode(slot, target) != &DOWSING_LISTS[slot].mStartEnd) {
         DOWSING_LISTS[slot].remove(target);
         return true;
     }

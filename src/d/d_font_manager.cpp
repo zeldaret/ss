@@ -54,7 +54,7 @@ const char *dFontMng_c::getFontPath(u8 idx) {
     } else {
         TEMP_FONT_NAME.sprintf("/US/Font/%s/%s", getUsedLanguageString(), systemFonts[idx]);
     }
-    return &TEMP_FONT_NAME;
+    return TEMP_FONT_NAME;
 }
 
 bool dFontMng_c::create() {

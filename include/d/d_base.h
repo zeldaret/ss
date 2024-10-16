@@ -9,6 +9,9 @@
 // non-official but likely name
 class dBase_c : public fBase_c {
 public:
+    enum BaseProperties_e {
+        BASE_PROP_0x4 = 0x4,
+    };
     /* 0x64 */ u32 baseProperties; // field from profile init
 public:
     /* 80050800 */ dBase_c();

@@ -1,14 +1,14 @@
 _prolog = .text:0x00000000; // type:function size:0x2C scope:global
 _epilog = .text:0x00000030; // type:function size:0x2C scope:global
 _unresolved = .text:0x00000060; // type:function size:0x4 scope:global
-TgRestartTimeStone__ctor = .text:0x00000070; // type:function size:0x4C
+dTgRestartTimeStone_c_classInit__Fv = .text:0x00000070; // type:function size:0x4C
 TgRestartTimeStone__init = .text:0x000000C0; // type:function size:0xC4
 fn_617_190 = .text:0x00000190; // type:function size:0x8
 TgRestartTimeStone__update = .text:0x000001A0; // type:function size:0x8
 fn_617_1B0 = .text:0x000001B0; // type:function size:0x8
-TgRestartTimeStone__dtor = .text:0x000001C0; // type:function size:0x5C
+__dt__21dTgRestartTimeStone_cFv = .text:0x000001C0; // type:function size:0x5C
 _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_617_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
-lbl_617_data_0 = .data:0x00000000; // type:object size:0x10
+g_profile_TAG_RESTART_TIME_STONE = .data:0x00000000; // type:object size:0x10
 lbl_617_data_10 = .data:0x00000010; // type:object size:0x74

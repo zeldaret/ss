@@ -47,8 +47,8 @@ public:
         return mRefCount != 0;
     }
 
-    inline const char *name() const {
-        return &mArcName;
+    inline const SizedString<32> &name() const {
+        return mArcName;
     }
 
     inline bool isNotLoaded() {

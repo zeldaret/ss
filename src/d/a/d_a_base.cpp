@@ -1,6 +1,7 @@
 #include "d/a/d_a_base.h"
-#include "d/a/obj/d_a_obj_base.h"
+
 #include "d/a/d_a_player.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "f/f_list_nd.h"
 #include "m/m_vec.h"
 #include "toBeSorted/event.h"
@@ -57,7 +58,7 @@ dAcBase_c::dAcBase_c()
     if (s_Create_Scale) {
         SetScale(*s_Create_Scale);
     } else {
-        scale.set(1.0f, 1.0f, 1.0f);
+        mScale.set(1.0f, 1.0f, 1.0f);
     }
 
     if (s_Create_Parent != nullptr) {
@@ -77,8 +78,10 @@ dAcBase_c::dAcBase_c()
 
 dAcBase_c::~dAcBase_c() {}
 
-void dAcBase_c::setTempCreateParams(mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2,
-        dAcBase_c *parent, u8 subtype, s16 unkFlag, u8 viewClipIdx, ObjInfo *objInfo) {
+void dAcBase_c::setTempCreateParams(
+    mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2, dAcBase_c *parent, u8 subtype, s16 unkFlag,
+    u8 viewClipIdx, ObjInfo *objInfo
+) {
     s_Create_Position = pos;
     s_Create_Rotation = rot;
     s_Create_Scale = scale;
@@ -239,8 +242,9 @@ u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
     params2 = param2Copy | 0xFF000000;
     // mAng3_c rot = {};
     s16 rot = 0;
-    return SpecialItemDropMgr::giveSpecialDropItem(SpecialItemDropMgr::sInstance, param2Copy >> 0x18, roomid, spawnPos,
-            subtype, &rot, -1);
+    return SpecialItemDropMgr::giveSpecialDropItem(
+        SpecialItemDropMgr::sInstance, param2Copy >> 0x18, roomid, spawnPos, subtype, &rot, -1
+    );
 }
 
 // 8002cf90
@@ -356,8 +360,9 @@ s32 doAbs(s16 val) {
 }
 // Similar weirdness as the above function. Also, r29->31 are initted in the wrong order?
 // 8002d290
-bool dAcBase_c::getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist,
-        s16 *outDiffAngleY, s16 *outDiffAngleX) {
+bool dAcBase_c::getDistanceAndAngleToActor(
+    dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX
+) {
     f32 distSquared = 3.402823e+38f;
     s16 angleToActorY, angleToActorX;
     bool isWithinRange = false;
@@ -371,7 +376,7 @@ bool dAcBase_c::getDistanceAndAngleToActor(dAcBase_c *actor, f32 distThresh, s16
         angleToActorX = targetAngleX(&position, &actor->position);
 
         if ((distSquared <= distThresh * distThresh) && (doAbs(s32(rotation.y.mVal - angleToActorY)) <= yAngle) &&
-                (doAbs(s32(rotation.x.mVal - angleToActorX)) <= xAngle)) {
+            (doAbs(s32(rotation.x.mVal - angleToActorX)) <= xAngle)) {
             isWithinRange = true;
         }
     }
@@ -398,8 +403,9 @@ bool dAcBase_c::isWithinPlayerRadius(f32 radius) const {
 }
 
 // 8002d440
-bool dAcBase_c::getDistanceAndAngleToPlayer(f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY,
-        s16 *outDiffAngleX) {
+bool dAcBase_c::getDistanceAndAngleToPlayer(
+    f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX
+) {
     return getDistanceAndAngleToActor(dAcPy_c::LINK, distThresh, yAngle, xAngle, outDist, outDiffAngleY, outDiffAngleX);
 }
 
@@ -483,8 +489,10 @@ void dAcBase_c::changeLoadedEntitiesNoSet() {
 
 // spawns GroupType2 (ACTOR)
 // 8002d980
-dAcBase_c *dAcBase_c::createActor(ProfileName actorId, u32 actorParams1, mVec3_c *actorPosition, mAng3_c *actorRotation,
-        mVec3_c *actorScale, u32 actorParams2, s32 actorRoomid, dBase_c *actorRef) {
+dAcBase_c *dAcBase_c::createActor(
+    ProfileName actorId, u32 actorParams1, mVec3_c *actorPosition, mAng3_c *actorRotation, mVec3_c *actorScale,
+    u32 actorParams2, s32 actorRoomid, dBase_c *actorRef
+) {
     if (actorPosition == nullptr) {
         actorPosition = &position;
     }
@@ -494,7 +502,7 @@ dAcBase_c *dAcBase_c::createActor(ProfileName actorId, u32 actorParams1, mVec3_c
     }
 
     if (actorScale == nullptr) {
-        actorScale = &scale;
+        actorScale = &mScale;
     }
 
     if (actorRoomid == 63) {
@@ -503,16 +511,19 @@ dAcBase_c *dAcBase_c::createActor(ProfileName actorId, u32 actorParams1, mVec3_c
 
     u32 newParams2 = actorParams2 != 0 ? getParams2_ignoreLower() : -1;
 
-    setTempCreateParams(actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1,
-            0xFF, nullptr);
+    setTempCreateParams(
+        actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1, 0xFF, nullptr
+    );
     dBase_c *room = RoomManager::getRoom(roomid);
     return (dAcBase_c *)dBase_c::createBase(actorId, room, actorParams1, ACTOR);
 }
 
 // spawns GroupType2 (STAGE)
 // 8002da80
-dAcBase_c *dAcBase_c::createActorStage(ProfileName actorId, u32 actorParams1, mVec3_c *actorPosition,
-        mAng3_c *actorRotation, mVec3_c *actorScale, u32 actorParams2, s32 actorRoomid, dBase_c *actorRef) {
+dAcBase_c *dAcBase_c::createActorStage(
+    ProfileName actorId, u32 actorParams1, mVec3_c *actorPosition, mAng3_c *actorRotation, mVec3_c *actorScale,
+    u32 actorParams2, s32 actorRoomid, dBase_c *actorRef
+) {
     if (actorPosition == nullptr) {
         actorPosition = &position;
     }
@@ -522,7 +533,7 @@ dAcBase_c *dAcBase_c::createActorStage(ProfileName actorId, u32 actorParams1, mV
     }
 
     if (actorScale == nullptr) {
-        actorScale = &scale;
+        actorScale = &mScale;
     }
 
     if (actorRoomid == 63) {
@@ -531,8 +542,9 @@ dAcBase_c *dAcBase_c::createActorStage(ProfileName actorId, u32 actorParams1, mV
 
     u32 newParams2 = actorParams2 != 0 ? getParams2_ignoreLower() : -1;
 
-    setTempCreateParams(actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1,
-            0xFF, nullptr);
+    setTempCreateParams(
+        actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1, 0xFF, nullptr
+    );
     dBase_c *room = RoomManager::getRoom(roomid);
     return (dAcBase_c *)dBase_c::createBase(actorId, room, actorParams1, STAGE);
 }

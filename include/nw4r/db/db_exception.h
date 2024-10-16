@@ -19,6 +19,7 @@ void Exception_Init();
 ConsoleHandle Exception_SetConsole(ConsoleHandle, const _GXRenderModeObj *);
 ConsoleHandle Exception_GetConsole();
 void Exception_SetUserCallback(bool (*)(ConsoleHandle, void *), void *);
+u16 Exception_SetDisplayInfo(u16 newInfo);
 
 } // namespace db
 } // namespace nw4r

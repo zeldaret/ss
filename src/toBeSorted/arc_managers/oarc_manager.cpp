@@ -65,14 +65,14 @@ void *OarcManager::getDzbFromArc(const char *oarcName, const char *fileName) {
     SizedString<32> str = "dzb/";
     str += fileName;
     str += ".dzb";
-    return mArcTable.getDataFromOarc(oarcName, &str);
+    return mArcTable.getDataFromOarc(oarcName, str);
 }
 
 void *OarcManager::getPlcFromArc(const char *oarcName, const char *fileName) {
     SizedString<32> str = "dat/";
     str += fileName;
     str += ".plc";
-    return mArcTable.getDataFromOarc(oarcName, &str);
+    return mArcTable.getDataFromOarc(oarcName, str);
 }
 
 void *OarcManager::getSubEntryData(const char *oarcName, const char *fileName) {

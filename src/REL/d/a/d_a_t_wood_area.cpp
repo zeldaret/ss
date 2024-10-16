@@ -1,28 +1,25 @@
-#include <d/a/d_a_t_wood_area.h>
 #include <d/a/d_a_player.h>
+#include <d/a/d_a_t_wood_area.h>
+
 
 const f32 dAcTWoodArea_c::scaleX = 100.0f;
 const f32 dAcTWoodArea_c::scaleY = 100.0f;
 
-SPECIAL_ACTOR_PROFILE(TAG_WOOD_AREA, dAcTWoodArea_c, fProfile::WOODAREA_TAG, 0x166, 0, 2);
+SPECIAL_ACTOR_PROFILE(WOODAREA_TAG, dAcTWoodArea_c, fProfile::WOODAREA_TAG, 0x166, 0, 2);
 
 STATE_DEFINE(dAcTWoodArea_c, Init);
 STATE_DEFINE(dAcTWoodArea_c, Wait);
 
 int dAcTWoodArea_c::actorCreate() {
     mStateMgr.changeState(StateID_Init);
-    PSMTXTrans(worldMatrix.m, position.x, position.y, position.z);
+    PSMTXTrans(mWorldMtx.m, position.x, position.y, position.z);
     boundingBox.min = mVec3_c(-0.0f, -0.0f, -0.0f);
     boundingBox.max = mVec3_c(0.0f, 0.0f, 0.0f);
     return SUCCEEDED;
 }
 
 static const ProfileName FILTER_PROFILE[] = {
-        fProfile::OBJ_FRUIT,
-        fProfile::ITEM,
-        fProfile::NPC_KYUI_THIRD,
-        fProfile::OBJ_IVY_ROPE,
-        fProfile::NPC_SORAJIMA_BOY,
+    fProfile::OBJ_FRUIT, fProfile::ITEM, fProfile::NPC_KYUI_THIRD, fProfile::OBJ_IVY_ROPE, fProfile::NPC_SORAJIMA_BOY,
 };
 
 int dAcTWoodArea_c::actorPostCreate() {

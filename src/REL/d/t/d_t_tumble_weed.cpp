@@ -1,8 +1,8 @@
 #include <c/c_math.h>
-#include <d/tg/d_t_tumble_weed.h>
+#include <d/t/d_t_tumble_weed.h>
 #include <m/m_vec.h>
 
-SPECIAL_ACTOR_PROFILE(TAG_TUMBLE_WEED, dTgTumbleWeed_c, fProfile::TUMBLE_WEED_TAG, 0x0244, 0, 0);
+SPECIAL_ACTOR_PROFILE(TUMBLE_WEED_TAG, dTgTumbleWeed_c, fProfile::TUMBLE_WEED_TAG, 0x0244, 0, 0);
 
 STATE_DEFINE(dTgTumbleWeed_c, AreaOut);
 STATE_DEFINE(dTgTumbleWeed_c, AreaIn);
@@ -47,7 +47,7 @@ void dTgTumbleWeed_c::executeState_AreaOut() {
             return;
         }
     }
-    if (isWithinPlayerRadius(scale.x)) {
+    if (isWithinPlayerRadius(mScale.x)) {
         mStateMgr.changeState(StateID_AreaIn);
     }
 }
@@ -68,7 +68,7 @@ void dTgTumbleWeed_c::executeState_AreaIn() {
             return;
         }
     }
-    if (!isWithinPlayerRadius(scale.x)) {
+    if (!isWithinPlayerRadius(mScale.x)) {
         mStateMgr.changeState(StateID_AreaOut);
     }
 }
@@ -84,7 +84,7 @@ void dTgTumbleWeed_c::initializeState_Wind() {
 }
 
 void dTgTumbleWeed_c::executeState_Wind() {
-    if (isWithinPlayerRadius(scale.x)) {
+    if (isWithinPlayerRadius(mScale.x)) {
         mStateMgr.changeState(StateID_AreaIn);
     } else {
         mStateMgr.changeState(StateID_AreaOut);

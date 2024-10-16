@@ -2,15 +2,16 @@
 #define M_VEC_H
 
 #include "egg/math/eggVector.h"
-#include "rvl/MTX.h"
 #include "m/m_angle.h"
+#include "rvl/MTX.h"
+
 #include <common.h>
 
 class mVec3_c : public EGG::Vector3f {
 public:
     /// @brief Constructs an empty vector.
-    /* 80009ee0 */ mVec3_c() {}
-    /* 80007460 */ ~mVec3_c() {}
+    mVec3_c() {}
+    ~mVec3_c() {}
 
     /// @brief Constructs a vector from a float array.
     mVec3_c(const f32 *p) {
@@ -27,8 +28,30 @@ public:
         set(fx, fy, fz);
     }
 
+    // ?? Sometimes Works
+    void copyFrom(const Vec *pV) {
+        set(pV->x, pV->y, pV->z);
+    }
+
+    /// @brief Assignment operator
     mVec3_c &operator=(const mVec3_c &r) {
         set(r.x, r.y, r.z);
+        return *this;
+    }
+
+    /// @brief Assignment operator
+    mVec3_c &operator=(const EGG::Vector3f &r) {
+        x = r.x;
+        y = r.y;
+        z = r.z;
+        return *this;
+    }
+
+    /// @brief Assignment operator
+    mVec3_c &operator=(const nw4r::math::VEC3 &r) {
+        x = r.x;
+        y = r.y;
+        z = r.z;
         return *this;
     }
 
@@ -41,6 +64,13 @@ public:
 
     /// @brief Constructs a new vector from an existing vector from the nw4r::math library.
     mVec3_c(const nw4r::math::VEC3 &v) {
+        x = v.x;
+        y = v.y;
+        z = v.z;
+    }
+
+    /// @brief Constructs a new vector from an existing vector from the EGG library.
+    mVec3_c(const EGG::Vector3f &v) {
         x = v.x;
         y = v.y;
         z = v.z;
@@ -66,6 +96,7 @@ public:
         return *(Vec *)&x;
     }
 
+    /// @brief Vector3f cast operator.
     operator EGG::Vector3f *() {
         return (EGG::Vector3f *)&x;
     }
@@ -83,6 +114,14 @@ public:
     /// @brief Const nw4r::math::VEC3 cast operator.
     operator const nw4r::math::VEC3 *() const {
         return (const nw4r::math::VEC3 *)&x;
+    }
+
+    /// @brief Augmented subtraction operator.
+    mVec3_c &operator+=(const mVec3_c &v) {
+        x += v.x;
+        y += v.y;
+        z += v.z;
+        return *this;
     }
 
     /// @brief Augmented subtraction operator.
@@ -108,6 +147,20 @@ public:
 
     /// @brief Positive operator.
     mVec3_c operator+() const {
+        return *this;
+    }
+
+    mVec3_c &operator-=(f32 f) {
+        x -= f;
+        y -= f;
+        z -= f;
+        return *this;
+    }
+
+    mVec3_c &operator+=(f32 f) {
+        x += f;
+        y += f;
+        z += f;
         return *this;
     }
 

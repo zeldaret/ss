@@ -12,7 +12,9 @@
 #include "f/f_list_mg.h"
 #include "f/f_manager.h"
 #include "f/f_profile.h"
+
 #include <common.h>
+
 
 // Ghidra: fBase
 //   size: 0x64
@@ -50,15 +52,28 @@ public:
         ACTOR,
         STAGE,
     };
-    enum MAIN_STATE_e { CANCELED, ERROR, SUCCESS, WAITING };
+    enum MAIN_STATE_e {
+        CANCELED,
+        ERROR,
+        SUCCESS,
+        WAITING
+    };
     enum PACK_RESULT_e {
         NOT_READY,
         SUCCEEDED,
         FAILED,
     };
-    enum PROC_DISABLE_e { ROOT_DISABLE_EXECUTE = 1, DISABLE_EXECUTE = 2, ROOT_DISABLE_DRAW = 4, DISABLE_DRAW = 8 };
+    enum PROC_DISABLE_e {
+        ROOT_DISABLE_EXECUTE = 1,
+        DISABLE_EXECUTE = 2,
+        ROOT_DISABLE_DRAW = 4,
+        DISABLE_DRAW = 8
+    };
 
-    // Inlines
+    int getID() const {
+        return unique_ID;
+    }
+
     bool isProcControlFlag(u8 flag) const {
         return (proc_control & flag) != 0;
     }
@@ -105,8 +120,8 @@ public: // vtable 0x60
     /* 0x48 | 802E1480 */ virtual ~fBase_c();
 
 public:
-    /* 802e1500 */ int commonPack(int (fBase_c::*doFunc)(), int (fBase_c::*preFunc)(),
-            void (fBase_c::*postFunc)(MAIN_STATE_e));
+    /* 802e1500 */ int
+    commonPack(int (fBase_c::*doFunc)(), int (fBase_c::*preFunc)(), void (fBase_c::*postFunc)(MAIN_STATE_e));
     /* 802e1680 */ int createPack();
     /* 802e1860 */ int deletePack();
     /* 802e1960 */ int executePack();

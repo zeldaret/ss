@@ -1,7 +1,6 @@
 #include <d/a/d_a_player.h>
 #include <d/a/obj/d_a_obj_fairy.h>
 
-
 SPECIAL_ACTOR_PROFILE(OBJ_FAIRY, dAcObjFairy_c, fProfile::OBJ_FAIRY, 0x166, 0, 2);
 
 STATE_DEFINE(dAcObjFairy_c, Wait);
@@ -52,7 +51,7 @@ int dAcObjFairy_c::draw() {
 
         if (!isCuring()) {
             static mQuat_c rot(0.0f, 0.0f, 0.0f, 10.0f);
-            drawShadow(mShadow, nullptr, worldMatrix, &rot, -1, -1, -1, -1, -1, position.y - field_0x4B0);
+            drawShadow(mShadow, nullptr, mWorldMtx, &rot, -1, -1, -1, -1, -1, position.y - field_0x4B0);
         }
     }
 
@@ -116,7 +115,7 @@ bool dAcObjFairy_c::shouldAvoidLink() const {
 
 bool dAcObjFairy_c::isCuring() const {
     return mStateMgr.isState(StateID_CureStart) || mStateMgr.isState(StateID_Cure) ||
-            mStateMgr.isState(StateID_CureEnd);
+           mStateMgr.isState(StateID_CureEnd);
 }
 
 bool dAcObjFairy_c::canTargetWithBugNet() const {

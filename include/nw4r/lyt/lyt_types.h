@@ -34,18 +34,18 @@ inline void SetBit(T *bits, int pos, bool val) {
 }
 
 template <typename T>
-T GetBits(T bits, int pos, int len) {
+inline T GetBits(T bits, int pos, int len) {
     u32 mask = T(1 << pos);
     return bits & mask;
 }
 
 template <typename T>
-T *ConvertOffsToPtr(void *baseAddress, unsigned int offset) {
+inline T *ConvertOffsToPtr(void *baseAddress, unsigned int offset) {
     return (T *)((u32)baseAddress + offset);
 }
 
 template <typename T>
-const T *ConvertOffsToPtr(const void *baseAddress, unsigned int offset) {
+inline const T *ConvertOffsToPtr(const void *baseAddress, unsigned int offset) {
     return (const T *)((u32)baseAddress + offset);
 }
 

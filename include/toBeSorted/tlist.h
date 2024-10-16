@@ -7,123 +7,122 @@
 // * Entirely in headers
 // * Swapped node and count members
 // Used in DowsingTarget, maybe also in dAcBase_c.soundStuff
-
-// It's not immediately clear whether this stores pointers to nodes
-// or pointers to objects. DowsingTarget's node offset is 0, so there's
-// no observable difference, but the SoundSource stuff makes it
-// look like it stores object pointers
-
+template <typename T>
 class TListNode {
 public:
     TListNode() : mpPrev(nullptr), mpNext(nullptr) {}
 
-    void *GetNext() const {
+    T *GetNext() const {
         return mpNext;
     }
-    void *GetPrev() const {
+    T *GetPrev() const {
         return mpPrev;
     }
-    void *mpPrev;
-    void *mpNext;
+
+    T *mpPrev;
+    T *mpNext;
 };
 
 template <typename T, int offset>
 class TList {
 public:
+    typedef TListNode<T> TNode;
     class Iterator {
     public:
-        Iterator() : mNode(NULL) {}
-        Iterator(TListNode *node) : mNode(node) {}
+        Iterator() : pVal(NULL) {}
+        Iterator(T *p_val) : pVal(p_val) {}
 
         Iterator &operator++() {
-            mNode = GetNodeFromPointer(mNode->GetNext());
+            pVal = GetNodeFromPtr(pVal)->GetNext();
             return *this;
         }
 
         Iterator &operator--() {
-            mNode = mNode->GetPrev();
+            pVal = GetNodeFromPtr(pVal)->GetPrev();
             return *this;
         }
 
         T *operator->() const {
-            return GetPointerFromNode(mNode);
+            return pVal;
         }
 
         T &operator*() {
             return *this->operator->();
         }
 
-        friend bool operator==(Iterator lhs, Iterator rhs) {
-            return lhs.mNode == rhs.mNode;
+        friend bool operator==(const Iterator &lhs, const Iterator &rhs) {
+            return lhs.pVal == rhs.pVal;
         }
 
-        friend bool operator!=(Iterator lhs, Iterator rhs) {
-            return !(lhs.mNode == rhs.mNode);
+        friend bool operator!=(const Iterator &lhs, const Iterator &rhs) {
+            return !(lhs.pVal == rhs.pVal);
         }
 
     private:
-        TListNode *mNode; // at 0x0
+        T *pVal; // at 0x0
     };
 
     TList() {
-        this->mNode.mpNext = GetPointerFromNode(&mNode);
-        this->mNode.mpPrev = GetPointerFromNode(&mNode);
+        mStartEnd.mpNext = GetPtrFromNode(&mStartEnd);
+        mStartEnd.mpPrev = GetPtrFromNode(&mStartEnd);
         mCount = 0;
     }
 
     Iterator GetBeginIter() {
-        return GetNodeFromPointer(&mNode) != mNode.GetNext() ? Iterator(GetNodeFromPointer(mNode.GetNext())) :
-                                                               Iterator(&mNode);
+        if (GetEndIter() != Iterator(mStartEnd.GetNext())) {
+            return Iterator(mStartEnd.GetNext());
+        } else {
+            return GetEndIter();
+        }
     }
+
     Iterator GetEndIter() {
-        return Iterator(&mNode);
+        return Iterator(GetPtrFromNode(&mStartEnd));
     }
 
-    static TListNode *GetNodeFromPointer(void *p) {
-        return reinterpret_cast<TListNode *>(reinterpret_cast<char *>(p) + offset);
+    static TNode *GetNodeFromPtr(T *pT) {
+        return (TNode *)((u8 *)pT + offset);
     }
-
-    static T *GetPointerFromNode(TListNode *node) {
-        return reinterpret_cast<T *>(reinterpret_cast<char *>(node) - offset);
+    static T *GetPtrFromNode(TNode *pN) {
+        return (T *)((u8 *)pN - offset);
     }
-
     void insert(T *value) {
-        TListNode *node = GetNodeFromPointer(value);
-        if (GetPointerFromNode(&mNode) == this->mNode.mpNext) {
-            node->mpNext = GetPointerFromNode(&mNode);
-            node->mpPrev = GetPointerFromNode(&mNode);
-            this->mNode.mpNext = value;
-            this->mNode.mpPrev = value;
+        TNode *node = GetNodeFromPtr(value);
+        if (GetPtrFromNode(&mStartEnd) == mStartEnd.mpNext) {
+            node->mpNext = GetPtrFromNode(&mStartEnd);
+            node->mpPrev = GetPtrFromNode(&mStartEnd);
+            mStartEnd.mpNext = value;
+            mStartEnd.mpPrev = value;
             mCount++;
         } else {
-            node->mpPrev = this->mNode.mpPrev;
-            node->mpNext = GetPointerFromNode(&mNode);
-            GetNodeFromPointer(this->mNode.mpPrev)->mpNext = value;
-            this->mNode.mpPrev = value;
+            node->mpPrev = mStartEnd.mpPrev;
+            node->mpNext = GetPtrFromNode(&mStartEnd);
+            GetNodeFromPtr(mStartEnd.mpPrev)->mpNext = value;
+            mStartEnd.mpPrev = value;
             mCount++;
         }
     }
 
     void remove(T *value) {
-        TListNode *node = GetNodeFromPointer(value);
+        TNode *node = GetNodeFromPtr(value);
         T *next = reinterpret_cast<T *>(node->mpNext);
-        if (GetPointerFromNode(&mNode) == node->mpPrev) {
-            this->mNode.mpNext = next;
+        if (GetPtrFromNode(&mStartEnd) == node->mpPrev) {
+            this->mStartEnd.mpNext = next;
         } else {
-            GetNodeFromPointer(node->mpPrev)->mpNext = next;
+            GetNodeFromPtr(node->mpPrev)->mpNext = next;
         }
 
-        if (GetPointerFromNode(&mNode) == node->mpNext) {
-            this->mNode.mpPrev = node->mpPrev;
+        if (GetPtrFromNode(&mStartEnd) == node->mpNext) {
+            this->mStartEnd.mpPrev = node->mpPrev;
         } else {
-            GetNodeFromPointer(node->mpNext)->mpPrev = node->mpPrev;
+            GetNodeFromPtr(node->mpNext)->mpPrev = node->mpPrev;
         }
         node->mpPrev = nullptr;
         node->mpNext = nullptr;
         mCount--;
     }
 
-    TListNode mNode;
+    TNode mStartEnd;
     s32 mCount;
 };
 

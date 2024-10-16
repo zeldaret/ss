@@ -7,4 +7,5 @@
 //   size:
 // non-official name
 class dAcEnBase_c : public dAcObjBase_c {};
+
 #endif

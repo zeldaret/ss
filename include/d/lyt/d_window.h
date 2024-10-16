@@ -11,6 +11,9 @@ public:
     virtual ~dWindow_c() {}
     void UpdateSize(dTextBox_c *textBox, f32 f);
 
+    // @bug: This does not implement UT's RTTI, so casts to dWindow_c will
+    // succeed even if all you have is a lyt::Window
+
 private:
     UNKWORD field_0x108;
 };

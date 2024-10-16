@@ -1,4 +1,4 @@
-#include <d/tg/d_t_mole_prohibit.h>
+#include <d/t/d_t_mole_prohibit.h>
 
 SPECIAL_ACTOR_PROFILE(MOLE_PROHIBIT_TAG, dTgMoleProhibit_c, fProfile::MOLE_PROHIBIT_TAG, 0x0025, 0, 0);
 

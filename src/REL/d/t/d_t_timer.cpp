@@ -1,7 +1,7 @@
-#include <d/tg/d_t_timer.h>
+#include <d/t/d_t_timer.h>
 #include <toBeSorted/sceneflag_manager.h>
 
-SPECIAL_ACTOR_PROFILE(TIMER_TAG, dTgTimer_c, fProfile::TAG_TIMER, 0x029F, 0, 0);
+SPECIAL_ACTOR_PROFILE(TAG_TIMER, dTgTimer_c, fProfile::TAG_TIMER, 0x029F, 0, 0);
 
 // TODO counter abstraction
 bool increment(u16 *t) {

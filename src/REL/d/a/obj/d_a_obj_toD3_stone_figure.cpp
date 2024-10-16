@@ -1,6 +1,6 @@
 #include <d/a/obj/d_a_obj_toD3_stone_figure.h>
+#include <d/col/cc/d_cc_mgr.h>
 #include <toBeSorted/attention.h>
-#include <toBeSorted/cc/d_cc_mgr.h>
 #include <toBeSorted/event.h>
 #include <toBeSorted/event_manager.h>
 #include <toBeSorted/item_story_flag_manager.h>
@@ -39,14 +39,14 @@ int dAcOtoD3StoneFigure_c::create() {
         return FAILED;
     }
 
-    mMdl.setLocalMtx(worldMatrix);
+    mMdl.setLocalMtx(mWorldMtx);
     mCCdStruct.setField0x38ToMagicValue();
     mCollision.init(sCcSrc);
     mCollision.initUnk(mCCdStruct);
     int zero = 0;
-    mCollision.setC(position);
-    mCollision.setR(dAcOtoD3StoneFigure_c::sRadius + zero);
-    mCollision.setH(dAcOtoD3StoneFigure_c::sHeight + zero);
+    mCollision.SetC(position);
+    mCollision.SetR(dAcOtoD3StoneFigure_c::sRadius + zero);
+    mCollision.SetH(dAcOtoD3StoneFigure_c::sHeight + zero);
     ColliderManager::getColliderManager()->addCollider(&mCollision);
     // mCollision.clearCoFlag();
     mCollision.setTgCoFlag(1);
@@ -96,7 +96,7 @@ void dAcOtoD3StoneFigure_c::initializeState_OneEye() {
     if (ScGame::currentSpawnInfo.night == 1) {
         rotation.y.mVal += -0x8000;
         updateMatrix();
-        mMdl.setLocalMtx(worldMatrix);
+        mMdl.setLocalMtx(mWorldMtx);
     }
 }
 

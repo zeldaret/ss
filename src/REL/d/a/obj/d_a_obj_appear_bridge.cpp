@@ -1,5 +1,6 @@
 #include <d/a/d_a_player.h>
 #include <d/a/obj/d_a_obj_appear_bridge.h>
+#include <d/col/bg/d_bg_s.h>
 #include <toBeSorted/area_utils.h>
 
 SPECIAL_ACTOR_PROFILE(OBJ_APPEAR_BRIDGE, dAcOappearBridge_c, fProfile::OBJ_APPEAR_BRIDGE, 0x01FC, 0, 6);
@@ -21,18 +22,18 @@ bool dAcOappearBridge_c::createHeap() {
     TRY_CREATE(mSrtAnm.create(mdl, srt, &heap_allocator, nullptr, 1));
     nw4r::g3d::ResAnmClr clr = mResFile.GetResAnmClr("TongueStage");
     TRY_CREATE(mClrAnm.create(mdl, clr, &heap_allocator, nullptr, 1));
-    void *dzb = getOarcFile("TongueStage", "dzb/TongueStage.dzb");
-    void *plc = getOarcFile("TongueStage", "dat/TongueStage.plc");
+    cBgD_t *dzb = (cBgD_t *)getOarcFile("TongueStage", "dzb/TongueStage.dzb");
+    PLC *plc = (PLC *)getOarcFile("TongueStage", "dat/TongueStage.plc");
     updateMatrix();
-    mModel.setLocalMtx(worldMatrix);
-    TRY_CREATE(mCollision.create(dzb, plc, true, worldMatrix, scale) == nullptr);
-    mCollision.init();
+    mModel.setLocalMtx(mWorldMtx);
+    TRY_CREATE(!mCollision.Set(dzb, plc, 1, &mWorldMtx, &mScale));
+    mCollision.Lock();
     return true;
 }
 
 int dAcOappearBridge_c::create() {
     CREATE_ALLOCATOR(dAcOappearBridge_c);
-    CollisionCheckContext::get()->registerActorBgCollision(mCollision, this);
+    dBgS::GetInstance()->Regist(&mCollision, this);
     mAreaIdx = params & 0xFF;
     mEventId = (params >> 8) & 0xFF;
     mSoundPosition = position + positionOffset;
@@ -65,7 +66,7 @@ int dAcOappearBridge_c::draw() {
 }
 
 void dAcOappearBridge_c::initializeState_Wait() {
-    CollisionCheckContext::get()->destroyActorBgCollision(mCollision);
+    dBgS::GetInstance()->Release(&mCollision);
 }
 void dAcOappearBridge_c::executeState_Wait() {
     if (checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->position, nullptr)) {
@@ -89,7 +90,7 @@ void dAcOappearBridge_c::finalizeState_Wait() {
 void dAcOappearBridge_c::initializeState_Appear() {
     mSrtAnm.setRate(sMovementRate, 0);
     mClrAnm.setRate(sMovementRate, 0);
-    CollisionCheckContext::get()->registerActorBgCollision(mCollision, this);
+    dBgS::GetInstance()->Regist(&mCollision, this);
     playSound(0xAA4);
 }
 void dAcOappearBridge_c::executeState_Appear() {
