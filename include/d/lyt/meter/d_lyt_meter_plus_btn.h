@@ -2,11 +2,10 @@
 #define D_LYT_METER_PLUS_BTN_H
 
 #include "d/lyt/d2d.h"
-#include "d/lyt/meter/d_lyt_meter_base.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 
-class dLytMeterPlusBtn_c : public dLytMeterBase {
+class dLytMeterPlusBtn_c : public d2d::dSubPane {
 public:
     dLytMeterPlusBtn_c() : mStateMgr(*this, sStateID::null) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;

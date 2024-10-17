@@ -2,7 +2,6 @@
 #define D_LYT_SKY_GAUGE_H
 
 #include "d/lyt/d2d.h"
-#include "d/lyt/meter/d_lyt_meter_base.h"
 #include "m/m_color.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
@@ -22,7 +21,7 @@ private:
     /* 0xD4 */ d2d::AnmGroup_c mAnmGroups[3];
 };
 
-class dLytSkyGauge_c : public dLytMeterBase {
+class dLytSkyGauge_c : public d2d::dSubPane {
 public:
     dLytSkyGauge_c() : mStateMgr(*this, sStateID::null) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;

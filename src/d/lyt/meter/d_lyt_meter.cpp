@@ -349,22 +349,22 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
         mp2Button = nullptr;
     }
 
-    mNodes[0].mpMeter = &mGanbariGauge;
-    mNodes[1].mpMeter = &mRupy;
-    mNodes[2].mpMeter = &mItemSelect;
-    mNodes[3].mpMeter = &mCrossBtn;
-    mNodes[4].mpMeter = &mPlusBtn;
-    mNodes[5].mpMeter = &mMinusBtn;
-    mNodes[6].mpMeter = &mABtn;
-    mNodes[7].mpMeter = &mDowsing;
-    mNodes[8].mpMeter = &mZBtn;
-    mNodes[9].mpMeter = &mNunStk;
-    mNodes[10].mpMeter = &mRemoCon;
-    mNodes[11].mpMeter = &mNunBg;
-    mNodes[12].mpMeter = &mHeart;
-    mNodes[13].mpMeter = &mShield;
-    mNodes[14].mpMeter = mp1Button;
-    mNodes[15].mpMeter = mp2Button;
+    mNodes[0].mpLytPane = &mGanbariGauge;
+    mNodes[1].mpLytPane = &mRupy;
+    mNodes[2].mpLytPane = &mItemSelect;
+    mNodes[3].mpLytPane = &mCrossBtn;
+    mNodes[4].mpLytPane = &mPlusBtn;
+    mNodes[5].mpLytPane = &mMinusBtn;
+    mNodes[6].mpLytPane = &mABtn;
+    mNodes[7].mpLytPane = &mDowsing;
+    mNodes[8].mpLytPane = &mZBtn;
+    mNodes[9].mpLytPane = &mNunStk;
+    mNodes[10].mpLytPane = &mRemoCon;
+    mNodes[11].mpLytPane = &mNunBg;
+    mNodes[12].mpLytPane = &mHeart;
+    mNodes[13].mpLytPane = &mShield;
+    mNodes[14].mpLytPane = mp1Button;
+    mNodes[15].mpLytPane = mp2Button;
     mPosArray1[0] = mLyt.findPane("N_shield_00")->GetTranslate();
     mPosArray1[1] = mLyt.findPane("N_shield_01")->GetTranslate();
 
@@ -384,8 +384,8 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.findPane("N_rupyAll_00")->SetVisible(false);
 
     for (int i = 0; i < 16; i++) {
-        if (mNodes[i].mpMeter != nullptr) {
-            mNodes[i].mpMeter->build(resAcc);
+        if (mNodes[i].mpLytPane != nullptr) {
+            mNodes[i].mpLytPane->build(resAcc);
             mMeters.PushBack(&mNodes[i]);
         }
     }
@@ -463,16 +463,16 @@ bool dLytMeter_c::remove() {
     }
 
     
-    for (LytMeterGroup::Iterator it = mMeters.GetBeginIter(); it != mMeters.GetEndIter(); ++it) {
-        dLytMeterBase *m = it->mpMeter;
+    for (d2d::SubPaneList::Iterator it = mMeters.GetBeginIter(); it != mMeters.GetEndIter(); ++it) {
+        d2d::dSubPane *m = it->mpLytPane;
         if (m != nullptr) {
             m->getPane()->GetParent()->RemoveChild(m->getPane());
         }
     }
 
     for (int i = 0; i < 16; i++) {
-        if (mNodes[i].mpMeter != nullptr) {
-            mNodes[i].mpMeter->remove();
+        if (mNodes[i].mpLytPane != nullptr) {
+            mNodes[i].mpLytPane->remove();
         }
     }
 

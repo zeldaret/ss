@@ -2,7 +2,6 @@
 #define D_LYT_METER_ITEM_SELECT_H
 
 #include "d/lyt/d2d.h"
-#include "d/lyt/meter/d_lyt_meter_base.h"
 #include "d/lyt/d_lyt_common_icon_item.h"
 #include "toBeSorted/effects_struct.h"
 #include "s/s_State.hpp"
@@ -51,7 +50,7 @@ private:
     u8 padding[0x58 - 0x3C];
 };
 
-class dLytMeterItemSelect_c : public dLytMeterBase {
+class dLytMeterItemSelect_c : public d2d::dSubPane {
 public:
     dLytMeterItemSelect_c();
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
@@ -101,8 +100,8 @@ private:
 
     /* 0xE34 */ dLytCommonIconItem_c mItemIcons[9];
 
-    LytMeterGroup mNodeList;
-    LytMeterListNode mNodes[9];
+    d2d::SubPaneList mNodeList;
+    d2d::SubPaneListNode mNodes[9];
     EffectsStruct mEffects;
     
     s32 field_0x574C;

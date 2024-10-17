@@ -2,7 +2,6 @@
 #define D_LYT_METER_CROSS_BTN_H
 
 #include "d/lyt/d2d.h"
-#include "d/lyt/meter/d_lyt_meter_base.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 
@@ -12,12 +11,17 @@ public:
     dLytMeterCrossBtnParts_c(): mStateMgr(*this, sStateID::null) {}
     ~dLytMeterCrossBtnParts_c() {}
 private:
+    STATE_FUNC_DECLARE(dLytMeterCrossBtnParts_c, Wait);
+    STATE_FUNC_DECLARE(dLytMeterCrossBtnParts_c, On);
+    STATE_FUNC_DECLARE(dLytMeterCrossBtnParts_c, Active);
+    STATE_FUNC_DECLARE(dLytMeterCrossBtnParts_c, Off);
+    
     UI_STATE_MGR_DECLARE(dLytMeterCrossBtnParts_c);
 
     u32 padding[17];
 };
 
-class dLytMeterCrossBtn_c : public dLytMeterBase {
+class dLytMeterCrossBtn_c : public d2d::dSubPane {
 public:
     dLytMeterCrossBtn_c() : mStateMgr(*this, sStateID::null) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;

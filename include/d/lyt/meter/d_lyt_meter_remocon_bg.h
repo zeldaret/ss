@@ -2,11 +2,10 @@
 #define D_LYT_METER_REMOCON_BG_H
 
 #include "d/lyt/d2d.h"
-#include "d/lyt/meter/d_lyt_meter_base.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 
-class dLytMeterRemoconBg_c : public dLytMeterBase {
+class dLytMeterRemoconBg_c : public d2d::dSubPane {
 public:
     dLytMeterRemoconBg_c() : mStateMgr(*this, sStateID::null) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;

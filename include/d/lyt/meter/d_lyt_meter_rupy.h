@@ -2,7 +2,6 @@
 #define D_LYT_METER_RUPY_H
 
 #include "d/lyt/d2d.h"
-#include "d/lyt/meter/d_lyt_meter_base.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 
@@ -32,7 +31,7 @@ private:
     u8 field_0x3C[0x8];
 };
 
-class dLytMeterRupy_c : public dLytMeterBase {
+class dLytMeterRupy_c : public d2d::dSubPane {
 public:
     dLytMeterRupy_c() : mStateMgr(*this, sStateID::null) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;

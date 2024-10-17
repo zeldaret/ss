@@ -58,7 +58,7 @@ public:
     u8 field_0x806;
 };
 
-class dLytCommonIconItem_c : public dLytMeterBase {
+class dLytCommonIconItem_c : public d2d::dSubPane {
 public:
     dLytCommonIconItem_c() : mStateMgr(*this, sStateID::null), unk(3) {}
     ~dLytCommonIconItem_c() {}

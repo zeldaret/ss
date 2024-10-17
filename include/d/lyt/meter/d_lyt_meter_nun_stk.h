@@ -2,11 +2,10 @@
 #define D_LYT_METER_NUN_STK_H
 
 #include "d/lyt/d2d.h"
-#include "d/lyt/meter/d_lyt_meter_base.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 
-class dLytMeterNunStk_c : public dLytMeterBase {
+class dLytMeterNunStk_c : public d2d::dSubPane {
 public:
     dLytMeterNunStk_c() : mStateMgr(*this, sStateID::null) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;

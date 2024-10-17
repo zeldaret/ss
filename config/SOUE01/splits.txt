@@ -295,18 +295,22 @@ d/lyt/meter/d_lyt_meter_item_select.cpp:
 d/lyt/meter/d_lyt_meter_plus_btn.cpp:
 	.text       start:0x800F35B0 end:0x800F4768
 	.ctors      start:0x804DB704 end:0x804DB708
+	.data       start:0x80516A28 end:0x80516C90
 
 d/lyt/meter/d_lyt_meter_minus_btn.cpp:
 	.text       start:0x800F4770 end:0x800F8D98
 	.ctors      start:0x804DB708 end:0x804DB70C
+	.data       start:0x80516C90 end:0x80517818
 
 d/lyt/meter/d_lyt_meter_cross_btn.cpp:
 	.text       start:0x800F8DA0 end:0x800FAFC8
 	.ctors      start:0x804DB70C end:0x804DB710
+	.data       start:0x80517818 end:0x80517CE0
 
 d/lyt/meter/d_lyt_meter_dowsing.cpp:
 	.text       start:0x800FAFD0 end:0x801003E8
 	.ctors      start:0x804DB710 end:0x804DB714
+	.data       start:0x80517CE0 end:0x80518A60
 
 d/lyt/meter/d_lyt_meter_rupy.cpp:
 	.text       start:0x801003F0 end:0x801026A8
@@ -352,6 +356,7 @@ d/lyt/d_lyt_common_icon_material.cpp:
 d/lyt/d_lyt_common_icon_item.cpp:
 	.text       start:0x80111720 end:0x80113ED8
 	.ctors      start:0x804DB734 end:0x804DB738
+	.data       start:0x8051B070 end:0x8051B5A0
 
 d/lyt/d_lyt_msg_window.cpp:
 	.text       start:0x801148F0 end:0x8011C8C8

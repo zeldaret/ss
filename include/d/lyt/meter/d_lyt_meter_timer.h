@@ -2,13 +2,12 @@
 #define D_LYT_METER_TIMER_H
 
 #include "d/lyt/d2d.h"
-#include "d/lyt/meter/d_lyt_meter_base.h"
 #include "m/m_color.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 
 
-class LytMeterTimerPart1_c : public dLytMeterBase {
+class LytMeterTimerPart1_c : public d2d::dSubPane {
 public:
     LytMeterTimerPart1_c() {
         sInstance = this;
@@ -33,7 +32,7 @@ private:
     /* 0x774 */ mColor mColors2[3];
 };
 
-class LytMeterTimerPart2_c : public dLytMeterBase {
+class LytMeterTimerPart2_c : public d2d::dSubPane {
 public:
     LytMeterTimerPart2_c() {
         sInstance = this;

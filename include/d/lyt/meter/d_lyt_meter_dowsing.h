@@ -13,6 +13,11 @@ public:
     virtual ~dLytMeterDowsingMenuIcon_c() {}
 
 private:
+    STATE_FUNC_DECLARE(dLytMeterDowsingMenuIcon_c, Wait);
+    STATE_FUNC_DECLARE(dLytMeterDowsingMenuIcon_c, On);
+    STATE_FUNC_DECLARE(dLytMeterDowsingMenuIcon_c, Select);
+    STATE_FUNC_DECLARE(dLytMeterDowsingMenuIcon_c, Off);
+
     UI_STATE_MGR_DECLARE(dLytMeterDowsingMenuIcon_c);
     u32 field_0x40;
     u32 field_0x44;
@@ -24,6 +29,11 @@ public:
     ~dLytMeterDowsingBlink_c() {}
 
 private:
+    STATE_FUNC_DECLARE(dLytMeterDowsingBlink_c, Wait);
+    STATE_FUNC_DECLARE(dLytMeterDowsingBlink_c, On);
+    STATE_FUNC_DECLARE(dLytMeterDowsingBlink_c, Select);
+    STATE_FUNC_DECLARE(dLytMeterDowsingBlink_c, Off);
+
     UI_STATE_MGR_DECLARE(dLytMeterDowsingBlink_c);
     u32 field_0x40;
     u32 field_0x44;
@@ -35,6 +45,11 @@ public:
     ~dLytMeterDowsingInput_c() {}
 
 private:
+    STATE_FUNC_DECLARE(dLytMeterDowsingInput_c, Wait);
+    STATE_FUNC_DECLARE(dLytMeterDowsingInput_c, On);
+    STATE_FUNC_DECLARE(dLytMeterDowsingInput_c, Select);
+    STATE_FUNC_DECLARE(dLytMeterDowsingInput_c, Off);
+
     UI_STATE_MGR_DECLARE(dLytMeterDowsingInput_c);
     u32 field_0x40;
     u32 field_0x44;
@@ -46,12 +61,17 @@ public:
     ~dLytMeterDowsingText_c() {}
 
 private:
+    STATE_FUNC_DECLARE(dLytMeterDowsingText_c, Wait);
+    STATE_FUNC_DECLARE(dLytMeterDowsingText_c, On);
+    STATE_FUNC_DECLARE(dLytMeterDowsingText_c, Select);
+    STATE_FUNC_DECLARE(dLytMeterDowsingText_c, Off);
+
     UI_STATE_MGR_DECLARE(dLytMeterDowsingText_c);
     u32 field_0x40;
     u32 field_0x44;
 };
 
-class dLytMeterDowsing_c : public dLytMeterBase {
+class dLytMeterDowsing_c : public d2d::dSubPane {
 public:
     dLytMeterDowsing_c() : mStateMgr(*this, sStateID::null) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
@@ -64,6 +84,18 @@ public:
     virtual ~dLytMeterDowsing_c() {}
 
 private:
+    STATE_FUNC_DECLARE(dLytMeterDowsing_c, Invisible);
+    STATE_FUNC_DECLARE(dLytMeterDowsing_c, Wait);
+    STATE_FUNC_DECLARE(dLytMeterDowsing_c, MenuSelectingIn);
+    STATE_FUNC_DECLARE(dLytMeterDowsing_c, MenuSelecting);
+    STATE_FUNC_DECLARE(dLytMeterDowsing_c, MenuSelectingOut);
+    STATE_FUNC_DECLARE(dLytMeterDowsing_c, Reset);
+    STATE_FUNC_DECLARE(dLytMeterDowsing_c, ToUse);
+    STATE_FUNC_DECLARE(dLytMeterDowsing_c, ToUnuse);
+    STATE_FUNC_DECLARE(dLytMeterDowsing_c, Unuse);
+    STATE_FUNC_DECLARE(dLytMeterDowsing_c, DemoMove);
+    STATE_FUNC_DECLARE(dLytMeterDowsing_c, DemoOut);
+
     /* 0x008 */ dLytMeterDowsingMenuIcon_c mIcon[8];
     /* 0x248 */ dLytMeterDowsingBlink_c mBlink;
     /* 0x28C */ dLytMeterDowsingInput_c mInput;
@@ -76,8 +108,8 @@ private:
     /* 0xB68 */ u8 field_0xB68[0xBEC - 0xB68];
     /* 0xBEC */ dLytCommonIconItem_c mItemIcons[9];
 
-    /* 0x5434 */ LytMeterGroup mNodeList;
-    /* 0x5440 */ LytMeterListNode mNodes[9];
+    /* 0x5434 */ d2d::SubPaneList mNodeList;
+    /* 0x5440 */ d2d::SubPaneListNode mNodes[9];
     /* 0x??? */ u8 padding[0x11E34 - 0x11DF8];
 };
 

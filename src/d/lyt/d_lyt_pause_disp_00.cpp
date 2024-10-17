@@ -28,13 +28,13 @@ void dLytPauseDisp00_c::init() {
 
     for (int i = 0; i < 0x18; i++) {
         field_0x2050[i].init(nullptr, lbl_804E8898[i]);
-        mLytMeterGroup.PushBack(&field_0xE11C[i]);
+        mSubpanes.PushBack(&field_0xE11C[i]);
     }
 
     if (mLytBase.getLayout()->GetGroupContainer() != nullptr) {
         nw4r::lyt::Group *group = mLytBase.getLayout()->GetGroupContainer()->FindGroupByName("G_ref_00");
         if (group != nullptr) {
-            mLytBase.linkMeters(group, &mLytMeterGroup);
+            d2d::dSubPane::linkMeters(group, &mSubpanes);
         }
     }
 

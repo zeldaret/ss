@@ -1,7 +1,6 @@
 #ifndef D2D_H
 #define D2D_H
 
-#include "d/lyt/meter/d_lyt_meter_base.h"
 #include "libms/msgfile.h"
 #include "m/m2d.h"
 #include "nw4r/lyt/lyt_pane.h"
@@ -96,8 +95,6 @@ public:
 
     bool fn_800ABE50(dTextBox_c *textbox, int arg, void *unk);
 
-    static void linkMeters(nw4r::lyt::Group *group, LytMeterGroup *meterGroup);
-
 private:
     void setPropertiesRecursive(nw4r::lyt::Pane *pane, f32, f32, f32, f32, f32);
     void setProperties(nw4r::lyt::Pane *pane, f32, f32, f32, f32, f32);
@@ -129,6 +126,46 @@ public:
 private:
     /// This name is stored by `build` and usually accessed by dLytMeters' getName functions
     const char *mpName;
+};
+
+class dSubPane;
+
+struct SubPaneListNode {
+    nw4r::ut::LinkListNode mNode;
+    dSubPane *mpLytPane;
+    nw4r::lyt::Pane *mpPane;
+};
+
+typedef nw4r::ut::LinkList<SubPaneListNode, offsetof(SubPaneListNode, mNode)> SubPaneList;
+
+class dSubPane {
+public:
+    dSubPane() : field_0x04(false), field_0x05(0) {}
+    virtual ~dSubPane() {}
+    virtual bool build(ResAccIf_c *resAcc) = 0;
+    virtual bool remove() = 0;
+    virtual bool LytMeter0x14() = 0;
+    virtual nw4r::lyt::Pane *getPane() = 0;
+    virtual LytBase_c *getLyt() = 0;
+    virtual const char *getName() const = 0;
+    virtual bool LytMeter0x24() const {
+        return field_0x04;
+    }
+    virtual void LytMeter0x28(bool arg) {
+        field_0x04 = arg;
+    }
+    virtual u8 LytMeter0x2C() const {
+        return field_0x05;
+    }
+
+    virtual void LytMeter0x30(u8 arg) {
+        field_0x05 = arg;
+    }
+
+    static void linkMeters(nw4r::lyt::Group *group, SubPaneList *meterGroup);
+
+    bool field_0x04;
+    u8 field_0x05;
 };
 
 struct AnmGroupBase_c {

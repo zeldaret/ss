@@ -754,10 +754,10 @@ bool hasSameBaseName(const char *left, const char *right) {
 
 char *sRef = "ref";
 
-void LytBase_c::linkMeters(nw4r::lyt::Group *group, LytMeterGroup *meterGroup) {
+void dSubPane::linkMeters(nw4r::lyt::Group *group, d2d::SubPaneList *meterGroup) {
     // single regswap
-    nw4r::ut::LinkList<LytMeterListNode, 0>::Iterator beginIt = meterGroup->GetBeginIter();
-    nw4r::ut::LinkList<LytMeterListNode, 0>::Iterator endIt = meterGroup->GetEndIter();
+    nw4r::ut::LinkList<d2d::SubPaneListNode, 0>::Iterator beginIt = meterGroup->GetBeginIter();
+    nw4r::ut::LinkList<d2d::SubPaneListNode, 0>::Iterator endIt = meterGroup->GetEndIter();
 
     for (nw4r::lyt::PaneList::Iterator paneIt = group->GetPaneList()->GetBeginIter();
          paneIt != group->GetPaneList()->GetEndIter(); ++paneIt) {
@@ -766,8 +766,8 @@ void LytBase_c::linkMeters(nw4r::lyt::Group *group, LytMeterGroup *meterGroup) {
         if (num != 0) {
             const nw4r::lyt::res::ExtUserData *dat = pane->FindExtUserDataByName(sRef);
             if (dat != nullptr && dat->GetType() == nw4r::lyt::res::TYPE_STRING) {
-                for (nw4r::ut::LinkList<LytMeterListNode, 0>::Iterator it = beginIt; it != endIt; ++it) {
-                    dLytMeterBase *meter = it->mpMeter;
+                for (nw4r::ut::LinkList<d2d::SubPaneListNode, 0>::Iterator it = beginIt; it != endIt; ++it) {
+                    d2d::dSubPane *meter = it->mpLytPane;
                     if (!meter->LytMeter0x24()) {
                         if (hasSameBaseName(dat->GetString(), meter->getName())) {
                             it->mpPane = pane;

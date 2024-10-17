@@ -23,7 +23,7 @@
 
 // clang-format on
 
-class dLytMeter1Button_c : public dLytMeterBase {
+class dLytMeter1Button_c : public d2d::dSubPane {
 public:
     dLytMeter1Button_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dLytMeter1Button_c() {}
@@ -57,7 +57,7 @@ private:
     /* 0x1AD */ u8 field_0x1AD;
 };
 
-class dLytMeter2Button_c : public dLytMeterBase {
+class dLytMeter2Button_c : public d2d::dSubPane {
 public:
     dLytMeter2Button_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dLytMeter2Button_c() {}
@@ -159,9 +159,9 @@ public:
     /* 0x130E8 */ dLytSkyGauge_c *mpSkyGauge;
     /* 0x130EC */ dLytBirdGauge_c *mpBirdGauge;
     /* 0x130F0 */ dLytBossGauge_c *mpBossGauge;
-    /* 0x130F4 */ LytMeterGroup mMeters;
+    /* 0x130F4 */ d2d::SubPaneList mMeters;
 
-    /* 0x13100 */ LytMeterListNode mNodes[16];
+    /* 0x13100 */ d2d::SubPaneListNode mNodes[16];
     /* 0x13200 */ u8 field_0x13200[0x13204 - 0x13200];
     /* 0x13204 */ dLytMeterParts_c mParts[16];
 
