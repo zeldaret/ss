@@ -12,6 +12,7 @@ public:
     virtual ~dLytBossGauge_c() {}
 
     bool build();
+    bool remove();
 private:
     STATE_FUNC_DECLARE(dLytBossGauge_c, None);
     STATE_FUNC_DECLARE(dLytBossGauge_c, In);

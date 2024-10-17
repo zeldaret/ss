@@ -11,6 +11,8 @@ public:
     dLytMeterEventSkip_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dLytMeterEventSkip_c() {}
     bool build(d2d::ResAccIf_c *resAcc);
+    bool remove();
+
 private:
     STATE_FUNC_DECLARE(dLytMeterEventSkip_c, Invisible);
     STATE_FUNC_DECLARE(dLytMeterEventSkip_c, In);

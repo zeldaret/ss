@@ -125,6 +125,7 @@ public:
     virtual ~dLytMeter_c() {}
 
     bool build(d2d::ResAccIf_c *resAcc);
+    bool remove();
 
     bool isSilentRealm();
 
@@ -182,6 +183,7 @@ public:
     }
 
     bool build();
+    bool remove();
 
     static dLytMeterContainer_c *sInstance;
 

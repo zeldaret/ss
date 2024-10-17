@@ -13,6 +13,7 @@ public:
     virtual ~dLytDobutton_c() {}
 
     bool init(m2d::ResAccIf_c *resAcc);
+    bool remove();
 
     static dLytDobutton_c *sInstance;
 

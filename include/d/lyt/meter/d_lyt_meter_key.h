@@ -11,6 +11,7 @@ public:
     ~dLytMeterKakeraKey_c() {}
 
     bool build(d2d::ResAccIf_c *);
+    bool remove();
 
 private:
     STATE_FUNC_DECLARE(dLytMeterKakeraKey_c, Wait);
@@ -22,6 +23,7 @@ private:
     /* 0x000 */ UI_STATE_MGR_DECLARE(dLytMeterKakeraKey_c);
     /* 0x03C */ d2d::dLytSub mLyt;
     /* 0x0D0 */ d2d::AnmGroup_c mAnmGroups[8];
+    /* 0x2D0 */ u32 field_0x2D0;
     /* 0x2D4 */ mVec3_c mVecs[2];
 };
 
@@ -34,6 +36,7 @@ public:
     virtual void BossKey0xC() {}
 
     bool build(d2d::ResAccIf_c *);
+    bool remove();
 
 private:
     STATE_FUNC_DECLARE(dLytMeterBossKey_c, Wait);
@@ -44,6 +47,7 @@ private:
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterBossKey_c);
     /* 0x040 */ d2d::dLytSub mLyt;
     /* 0x0D4 */ d2d::AnmGroup_c mAnmGroups[5];
+    /* 0x214 */ u32 field_0x2D0;
     /* 0x218 */ mVec3_c mVecs[4];
 };
 
@@ -56,6 +60,7 @@ public:
     virtual void SmallKey0xC() {}
 
     bool build(d2d::ResAccIf_c *);
+    bool remove();
 
 private:
     STATE_FUNC_DECLARE(dLytMeterSmallKey_c, Wait);
@@ -66,6 +71,7 @@ private:
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterSmallKey_c);
     /* 0x040 */ d2d::dLytSub mLyt;
     /* 0x0D4 */ d2d::AnmGroup_c mAnmGroups[5];
+    /* 0x214 */ u32 field_0x2D0;
     /* 0x218 */ mVec3_c mVecs[4];
 };
 

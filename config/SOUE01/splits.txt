@@ -311,6 +311,7 @@ d/lyt/meter/d_lyt_meter_dowsing.cpp:
 d/lyt/meter/d_lyt_meter_rupy.cpp:
 	.text       start:0x801003F0 end:0x801026A8
 	.ctors      start:0x804DB714 end:0x804DB718
+	.data       start:0x80518A60 end:0x80518F00
 
 d/lyt/meter/d_lyt_meter_ganbari_gauge.cpp:
 	.text       start:0x801026B0 end:0x80105548
@@ -320,6 +321,7 @@ d/lyt/meter/d_lyt_meter_ganbari_gauge.cpp:
 d/lyt/meter/d_lyt_meter_event_skip.cpp:
 	.text       start:0x80105550 end:0x80105F68
 	.ctors      start:0x804DB71C end:0x804DB720
+	.data       start:0x80519578 end:0x80519748
 
 d/lyt/meter/d_lyt_meter_timer.cpp:
 	.text       start:0x80105F70 end:0x8010AEB8

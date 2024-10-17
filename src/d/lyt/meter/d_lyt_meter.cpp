@@ -1,9 +1,12 @@
+// clang-format off
+#include "common.h"
 #include "d/lyt/d_lyt_area_caption.h"
 #include "d/lyt/d_lyt_meter_configuration.h"
 #include "d/lyt/d_window.h"
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/scgame.h"
+// clang-format on
 
 static dLytMeterConfiguration_c sConf;
 
@@ -451,6 +454,102 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
         mpDrink = new dLytMeterDrink_c();
         mpDrink->build(resAcc);
     }
+    return true;
+}
+
+bool dLytMeter_c::remove() {
+    for (int i = 0; i < 34; i++) {
+        mAnmGroups[i].afterUnbind();
+    }
+
+    
+    for (LytMeterGroup::Iterator it = mMeters.GetBeginIter(); it != mMeters.GetEndIter(); ++it) {
+        dLytMeterBase *m = it->mpMeter;
+        if (m != nullptr) {
+            m->getPane()->GetParent()->RemoveChild(m->getPane());
+        }
+    }
+
+    for (int i = 0; i < 16; i++) {
+        if (mNodes[i].mpMeter != nullptr) {
+            mNodes[i].mpMeter->remove();
+        }
+    }
+
+    if (mp1Button != nullptr) {
+        delete mp1Button;
+        mp1Button = nullptr;
+    }
+
+    if (mp2Button != nullptr) {
+        delete mp2Button;
+        mp2Button = nullptr;
+    }
+
+    if (mpTimerPart1 != nullptr) {
+        mpTimerPart1->remove();
+        delete mpTimerPart1;
+        mpTimerPart1 = nullptr;
+    }
+
+    if (mpTimerPart2 != nullptr) {
+        mpTimerPart2->remove();
+        delete mpTimerPart2;
+        mpTimerPart2 = nullptr;
+    }
+
+    if (mpTimer != nullptr) {
+        mpTimer->remove();
+        delete mpTimer;
+        mpTimer = nullptr;
+        // WHY IS THIS HERE???
+        mResAcc.detach();
+    }
+
+    if (mpSkyGauge != nullptr) {
+        mpSkyGauge->remove();
+        delete mpSkyGauge;
+        mpSkyGauge = nullptr;
+    }
+
+    if (mpBirdGauge != nullptr) {
+        mpBirdGauge->remove();
+        delete mpBirdGauge;
+        mpBirdGauge = nullptr;
+    }
+
+    if (mpBossGauge != nullptr) {
+        mpBossGauge->remove();
+        delete mpBossGauge;
+        mpBossGauge = nullptr;
+    }
+
+    if (mpKakeraKey != nullptr) {
+        mpKakeraKey->remove();
+        delete mpKakeraKey;
+        mpKakeraKey = nullptr;
+    }
+
+    if (mpBossKey != nullptr) {
+        mpBossKey->remove();
+        delete mpBossKey;
+        mpBossKey = nullptr;
+    }
+
+    if (mpSmallKey != nullptr) {
+        mpSmallKey->remove();
+        delete mpSmallKey;
+        mpSmallKey = nullptr;
+    }
+
+    if (mpDrink != nullptr) {
+        mpDrink->remove();
+        delete mpDrink;
+        mpDrink = nullptr;
+    }
+
+
+    return true;
 }
 
 dLytMeterContainer_c::dLytMeterContainer_c() {
@@ -495,4 +594,33 @@ bool dLytMeterContainer_c::build() {
     fn_800D97E0(0xb);
     fn_800D9800(1);
     fn_801B2D10(GLOBAL_MESSAGE_RELATED_CONTEXT);
+    return true;
+}
+
+bool dLytMeterContainer_c::remove() {
+    if (mpDoButton != nullptr) {
+        mpDoButton->remove();
+        delete mpDoButton;
+        mpDoButton = nullptr;
+    }
+    if (mpDoButtonRelated != nullptr) {
+        mpDoButtonRelated->remove();
+        delete mpDoButtonRelated;
+        mpDoButtonRelated = nullptr;
+
+    }
+    mMeter.remove();
+    if (mpEventSkip != nullptr) {
+        mpEventSkip->remove();
+        delete mpEventSkip;
+        mpEventSkip = nullptr;
+    }
+    if (mpBirdRelated != nullptr) {
+        mpBirdRelated->remove();
+        delete mpBirdRelated;
+        mpBirdRelated = nullptr;
+    }
+    dLytAreaCaption_c::remove();
+    mResAcc.detach();
+    return true;
 }

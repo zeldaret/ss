@@ -17,6 +17,7 @@ private:
     STATE_FUNC_DECLARE(dLytMeterDrinkParts_c, Out);
 
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterDrinkParts_c);
+    /* 0x03C */ u8 field_0x03C[0x18];
 };
 
 class dLytMeterDrink_c {
@@ -28,6 +29,7 @@ public:
     virtual void BossKey0xC() {}
 
     bool build(d2d::ResAccIf_c *);
+    bool remove();
 
 private:
     STATE_FUNC_DECLARE(dLytMeterDrink_c, Invisible);
@@ -39,6 +41,7 @@ private:
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterDrink_c);
     /* 0x040 */ d2d::dLytSub mLyt;
     /* 0x0D4 */ d2d::AnmGroup_c mAnmGroups[20];
+    /* 0x5D4 */ u8 field_0x5D4[0x5E4 - 0x5D4];
     /* 0x5E4 */ dLytMeterDrinkParts_c mParts[3];
 };
 
