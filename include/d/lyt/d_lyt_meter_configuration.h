@@ -1,7 +1,7 @@
 #ifndef D_LYT_METER_CONFIGURATION
 #define D_LYT_METER_CONFIGURATION
 
-#include <common.h>
+#include "common.h"
 
 class dLytMeterConfiguration_c {
 public:

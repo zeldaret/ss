@@ -1,9 +1,9 @@
 #ifndef D_LYT_METER_DRINK_H
 #define D_LYT_METER_DRINK_H
 
-#include <d/lyt/d2d.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/lyt/d2d.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dLytMeterDrinkParts_c {
 public:

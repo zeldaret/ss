@@ -1,12 +1,12 @@
 #ifndef D_LYT_METER_MINUS_BTN_H
 #define D_LYT_METER_MINUS_BTN_H
 
-#include <d/lyt/d2d.h>
-#include <d/lyt/meter/d_lyt_meter_base.h>
-#include <d/lyt/d_lyt_common_icon_item.h>
-#include <toBeSorted/effects_struct.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/lyt/d2d.h"
+#include "d/lyt/meter/d_lyt_meter_base.h"
+#include "d/lyt/d_lyt_common_icon_item.h"
+#include "toBeSorted/effects_struct.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 // At 0x8, [8], size 0x48
 class dLytMeterMinusBtnMenuIcon_c {

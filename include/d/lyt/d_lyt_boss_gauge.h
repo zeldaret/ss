@@ -1,10 +1,10 @@
 #ifndef D_LYT_BOSS_GAUGE_H
 #define D_LYT_BOSS_GAUGE_H
 
-#include <d/lyt/d2d.h>
-#include <m/m_color.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/lyt/d2d.h"
+#include "m/m_color.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dLytBossGauge_c {
 public:

@@ -1,11 +1,11 @@
 #ifndef D_LYT_SKY_GAUGE_H
 #define D_LYT_SKY_GAUGE_H
 
-#include <d/lyt/d2d.h>
-#include <d/lyt/meter/d_lyt_meter_base.h>
-#include <m/m_color.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/lyt/d2d.h"
+#include "d/lyt/meter/d_lyt_meter_base.h"
+#include "m/m_color.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 class dLytSkyGaugeMain_c {
 public:

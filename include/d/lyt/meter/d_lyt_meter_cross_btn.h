@@ -1,10 +1,10 @@
 #ifndef D_LYT_METER_CROSS_BTN_H
 #define D_LYT_METER_CROSS_BTN_H
 
-#include <d/lyt/d2d.h>
-#include <d/lyt/meter/d_lyt_meter_base.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/lyt/d2d.h"
+#include "d/lyt/meter/d_lyt_meter_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 // Size 0x80
 class dLytMeterCrossBtnParts_c {

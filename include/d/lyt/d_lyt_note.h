@@ -1,9 +1,9 @@
 #ifndef D_LYT_NOTE_H
 #define D_LYT_NOTE_H
 
-#include <d/lyt/d2d.h>
-#include <s/s_State.hpp>
-#include <s/s_StateMgr.hpp>
+#include "d/lyt/d2d.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 // size 0x27C
 class dLytNote_c {

@@ -1,4 +1,4 @@
-#include <d/lyt/meter/d_lyt_meter_ganbari_gauge.h>
+#include "d/lyt/meter/d_lyt_meter_ganbari_gauge.h"
 
 STATE_DEFINE(dLytMeterGanbariGauge_c, InvisibleWait);
 STATE_DEFINE(dLytMeterGanbariGauge_c, In);
