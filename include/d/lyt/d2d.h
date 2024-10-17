@@ -1,7 +1,6 @@
 #ifndef D2D_H
 #define D2D_H
 
-#include "d/lyt/meter/d_lyt_meter_base.h"
 #include "libms/msgfile.h"
 #include "m/m2d.h"
 #include "nw4r/lyt/lyt_pane.h"
@@ -15,6 +14,8 @@ namespace d2d {
 
 class ResAccIf_c : public m2d::ResAccIf_c {
 public:
+    ResAccIf_c() {}
+    virtual ~ResAccIf_c() {}
     /* 0xB4 */ nw4r::lyt::FontRefLink mFontRefLinks[5];
 
     bool attach(void *data, const char *name);
@@ -94,8 +95,6 @@ public:
 
     bool fn_800ABE50(dTextBox_c *textbox, int arg, void *unk);
 
-    static void linkMeters(nw4r::lyt::Group *group, LytMeterGroup *meterGroup);
-
 private:
     void setPropertiesRecursive(nw4r::lyt::Pane *pane, f32, f32, f32, f32, f32);
     void setProperties(nw4r::lyt::Pane *pane, f32, f32, f32, f32, f32);
@@ -111,6 +110,62 @@ private:
     bool fn_800AB930(dTextBox_c *box);
 
     /* 0x8C */ MsbtInfo *mpMsbtInfo;
+};
+
+class dLytSub : public d2d::LytBase_c {
+public:
+    dLytSub() {}
+    virtual bool build(const char *name, m2d::ResAccIf_c *acc) override {
+        mpName = name;
+        return d2d::LytBase_c::build(name, acc);
+    }
+
+    const char *getName() const {
+        return mpName;
+    }
+private:
+    /// This name is stored by `build` and usually accessed by dLytMeters' getName functions
+    const char *mpName;
+};
+
+class dSubPane;
+
+struct SubPaneListNode {
+    nw4r::ut::LinkListNode mNode;
+    dSubPane *mpLytPane;
+    nw4r::lyt::Pane *mpPane;
+};
+
+typedef nw4r::ut::LinkList<SubPaneListNode, offsetof(SubPaneListNode, mNode)> SubPaneList;
+
+class dSubPane {
+public:
+    dSubPane() : field_0x04(false), field_0x05(0) {}
+    virtual ~dSubPane() {}
+    virtual bool build(ResAccIf_c *resAcc) = 0;
+    virtual bool remove() = 0;
+    virtual bool LytMeter0x14() = 0;
+    virtual nw4r::lyt::Pane *getPane() = 0;
+    virtual LytBase_c *getLyt() = 0;
+    virtual const char *getName() const = 0;
+    virtual bool LytMeter0x24() const {
+        return field_0x04;
+    }
+    virtual void LytMeter0x28(bool arg) {
+        field_0x04 = arg;
+    }
+    virtual u8 LytMeter0x2C() const {
+        return field_0x05;
+    }
+
+    virtual void LytMeter0x30(u8 arg) {
+        field_0x05 = arg;
+    }
+
+    static void linkMeters(nw4r::lyt::Group *group, SubPaneList *meterGroup);
+
+    bool field_0x04;
+    u8 field_0x05;
 };
 
 struct AnmGroupBase_c {
@@ -173,6 +228,27 @@ struct AnmGroupBase_c {
         return (mFlags & 2) != 0;
     }
 
+    inline bool isStop2() const {
+        return mpFrameCtrl->isStop2();
+    }
+
+
+    inline void playBackwardsOnce() {
+        mpFrameCtrl->setFlags(FLAG_NO_LOOP | FLAG_BACKWARDS);
+        setToEnd2();
+    }
+
+    inline void playLoop() {
+        mpFrameCtrl->setFlags(FLAG_NO_LOOP);
+        setToEnd2();
+    }
+
+    inline void setToEnd2() {
+        m2d::FrameCtrl_c &ctrl = *mpFrameCtrl;
+        ctrl.setCurrFrame(ctrl.getEndFrame());
+        syncAnmFrame();
+    }
+
 private:
     /* 0x04 */ void *field_0x04;
     /* 0x08 */ m2d::FrameCtrl_c *mpFrameCtrl;
@@ -182,27 +258,11 @@ private:
     /* 0x24 */ nw4r::lyt::AnimTransform *mpAnmTransform;
 };
 
+// Size: 0x40
 struct AnmGroup_c : public AnmGroupBase_c {
     AnmGroup_c() : AnmGroupBase_c(&mFrameCtrl) {}
     virtual ~AnmGroup_c() {}
     /* 0x28 */ m2d::FrameCtrl_c mFrameCtrl;
-};
-
-// Probably pause menu specific
-struct dLytStructB : public dLytMeterBase {
-    dLytStructB();
-    ~dLytStructB();
-
-    virtual bool build(d2d::ResAccIf_c *resAcc) override;
-    virtual bool LytMeter0x10() override;
-    virtual bool LytMeter0x14() override;
-    virtual nw4r::lyt::Pane *getPane() override;
-    virtual void *LytMeter0x1C() override;
-    virtual const char *getName() const override;
-
-    void init(void *, u8);
-
-    u8 field_0x00[0x808 - 0x08];
 };
 
 } // namespace d2d

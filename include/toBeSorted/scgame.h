@@ -2,9 +2,10 @@
 #define SCGAME_H
 
 #include "common.h"
+#include "sized_string.h"
 
 struct SpawnInfo {
-    /* 0x00 */ char stageName[32]; // Probably SizedString<32>
+    /* 0x00 */ SizedString<32> stageName;
     /* 0x20 */ s16 transitionFadeFrames;
     /* 0x22 */ s8 room;
     /* 0x23 */ u8 layer;

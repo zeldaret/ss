@@ -60,6 +60,14 @@ public:
         return mCurrFrame;
     }
 
+    inline void setCurrFrame(f32 arg) {
+        mCurrFrame = arg;
+    }
+
+    inline void setFlags(u8 flags) {
+        mFlags = flags;
+    }
+
     inline void setToStart() {
         setFrame(0.0f);
     }

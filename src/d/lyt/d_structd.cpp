@@ -27,4 +27,9 @@ void dLytStructDList::removeFromList2(dLytStructD *other) {
     mList2.remove(other);
 }
 
+dLytStructD::~dLytStructD() {
+    delete[] field_0x1C;
+    field_0x1C = nullptr;
+}
+
 } // namespace d2d
