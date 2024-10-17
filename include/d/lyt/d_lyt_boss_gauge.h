@@ -2,7 +2,6 @@
 #define D_LYT_BOSS_GAUGE_H
 
 #include "d/lyt/d2d.h"
-#include "m/m_color.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 
@@ -13,6 +12,8 @@ public:
 
     bool build();
     bool remove();
+    bool draw();
+
 private:
     STATE_FUNC_DECLARE(dLytBossGauge_c, None);
     STATE_FUNC_DECLARE(dLytBossGauge_c, In);

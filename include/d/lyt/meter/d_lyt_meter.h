@@ -126,6 +126,7 @@ public:
 
     bool build(d2d::ResAccIf_c *resAcc);
     bool remove();
+    bool draw();
 
     bool isSilentRealm();
 
@@ -169,7 +170,9 @@ public:
     /* 0x136DC */ mVec3_c mPosArray2[7];
     /* 0x13730 */ mVec3_c mPos1;
     /* 0x1373C */ mVec3_c mPos2;
-    /* 0x13748 */ u8 field_0x13748[0x137B4 - 0x13748];
+    /* 0x13748 */ u8 field_0x13748[0x13750 - 0x13748];
+    /* 0x13750 */ s32 field_0x13750;
+    /* 0x13754 */ u8 field_0x13754[0x137B4 - 0x13754];
     /* 0x137B4 */ mVec3_c mPos3;
     /* 0x13B38 */ u32 field_0x13B38;
 };
@@ -184,6 +187,7 @@ public:
 
     bool build();
     bool remove();
+    bool draw();
 
     static dLytMeterContainer_c *sInstance;
 
@@ -198,6 +202,7 @@ private:
     /* 0x13B3C */ dLytDobutton_c *mpDoButton;
     /* 0x13B40 */ LytDoButtonRelated *mpDoButtonRelated;
     /* 0x13B44 */ LytBirdButtonRelated *mpBirdRelated;
+    /* 0x13B48 */ bool mVisible;
 };
 
 #endif

@@ -14,6 +14,7 @@ public:
 
     bool init(m2d::ResAccIf_c *resAcc);
     bool remove();
+    bool draw();
 
     static dLytDobutton_c *sInstance;
 

@@ -12,6 +12,7 @@ public:
 
     bool build(d2d::ResAccIf_c *);
     bool remove();
+    bool draw();
 
 private:
     STATE_FUNC_DECLARE(dLytMeterKakeraKey_c, Wait);
@@ -37,6 +38,7 @@ public:
 
     bool build(d2d::ResAccIf_c *);
     bool remove();
+    bool draw();
 
 private:
     STATE_FUNC_DECLARE(dLytMeterBossKey_c, Wait);
@@ -61,6 +63,7 @@ public:
 
     bool build(d2d::ResAccIf_c *);
     bool remove();
+    bool draw();
 
 private:
     STATE_FUNC_DECLARE(dLytMeterSmallKey_c, Wait);

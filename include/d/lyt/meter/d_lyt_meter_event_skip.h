@@ -12,6 +12,7 @@ public:
     virtual ~dLytMeterEventSkip_c() {}
     bool build(d2d::ResAccIf_c *resAcc);
     bool remove();
+    bool draw();
 
 private:
     STATE_FUNC_DECLARE(dLytMeterEventSkip_c, Invisible);

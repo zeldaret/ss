@@ -30,6 +30,7 @@ public:
 
     bool build(d2d::ResAccIf_c *);
     bool remove();
+    bool draw();
 
 private:
     STATE_FUNC_DECLARE(dLytMeterDrink_c, Invisible);

@@ -28,6 +28,7 @@ public:
     }
     bool build(d2d::ResAccIf_c *resAcc);
     bool remove();
+    bool draw();
 
     static LytBirdButtonRelated *sInstance;
 

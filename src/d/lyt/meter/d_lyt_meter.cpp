@@ -552,6 +552,44 @@ bool dLytMeter_c::remove() {
     return true;
 }
 
+bool dLytMeter_c::draw() {
+    mLyt.addToDrawList();
+    if (mpTimerPart1 != nullptr) {
+        mpTimerPart1->getLyt()->addToDrawList();
+    }
+    if (mpTimerPart2 != nullptr) {
+        mpTimerPart2->getLyt()->addToDrawList();
+    }
+    if (mpSkyGauge != nullptr) {
+        mpSkyGauge->getLyt()->addToDrawList();
+    }
+    if (mpBirdGauge != nullptr) {
+        mpBirdGauge->getLyt()->addToDrawList();
+    }
+
+    if (mpBossGauge != nullptr) {
+        mpBossGauge->draw();
+    }
+
+    if (mpKakeraKey != nullptr) {
+        mpKakeraKey->draw();
+    }
+
+    if (mpBossKey != nullptr) {
+        mpBossKey->draw();
+    }
+
+    if (mpSmallKey != nullptr) {
+        mpSmallKey->draw();
+    }
+
+    if (mpDrink != nullptr) {
+        mpDrink->draw();
+    }
+
+    return true;
+}
+
 dLytMeterContainer_c::dLytMeterContainer_c() {
     sInstance = this;
 }
@@ -622,5 +660,25 @@ bool dLytMeterContainer_c::remove() {
     }
     dLytAreaCaption_c::remove();
     mResAcc.detach();
+    return true;
+}
+
+bool dLytMeterContainer_c::draw() {
+    if (mVisible) {
+        mMeter.draw();
+        if (mMeter.field_0x13750 != 3) {
+            if (mpEventSkip != nullptr) {
+                mpEventSkip->draw();
+            }
+            dLytAreaCaption_c::draw();
+            if (mpDoButton != nullptr) {
+                mpDoButton->draw();
+            }
+            if (mpBirdRelated != nullptr) {
+                mpBirdRelated->draw();
+            }
+        }
+    }
+
     return true;
 }
