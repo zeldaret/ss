@@ -8,7 +8,6 @@
 namespace d2d {
 
 class dLytStructC {
-private:
 public:
     dLytStructC() : field_0x10(0), field_0x14(0) {}
     virtual ~dLytStructC() {}

@@ -1,4 +1,8 @@
 #include "d/d_cs_game.h"
+#include "d/d_cs_base.h"
+#include "d/lyt/d_structd.h"
+#include "f/f_base.h"
+#include "toBeSorted/arc_managers/layout_arc_manager.h"
 
 SPECIAL_BASE_PROFILE(C_GAME, dCsGame_c, fProfile::C_GAME, 0x2BF, 0x06F9);
 
@@ -48,6 +52,39 @@ dCsGame_c::dCsGame_c() : mCursorType(0) {
 
 dCsGame_c::~dCsGame_c() {
     sInstance = nullptr;
+}
+
+int dCsGame_c::create() {
+    void *csData = LayoutArcManager::sInstance->getLoadedData("cursor");
+    mCursorResAcc.attach(csData, "arc");
+    void *mainData = LayoutArcManager::sInstance->getLoadedData("Main2D");
+    mMain2DResAcc.attach(mainData, "");
+
+    mLyt1.setResAcc(&mCursorResAcc);
+    mLyt1.dCsGameLytBase_0x10();
+    mLyt2.setResAcc(&mCursorResAcc);
+    mLyt2.dCsGameLytBase_0x10();
+    mCursor.setResAcc(&mMain2DResAcc);
+    mCursor.init();
+    
+    setSomething(0);
+    mCursorType = 0;
+
+    mCursor.setField0x9A0(0);
+    mStructC.field_0x10 = 2;
+    d2d::dLytStructDList::sInstance->appendToList1(&mStructC);
+    dCsBase_c::sInstance->setField703(false);
+    return SUCCEEDED;
+}
+
+int dCsGame_c::doDelete() {
+    mCursor.remove();
+    mLyt2.dCsGameLytBase_0x14();
+    mLyt1.dCsGameLytBase_0x14();
+    d2d::dLytStructDList::sInstance->removeFromList1(&mStructC);
+    mCursorResAcc.detach();
+    mMain2DResAcc.detach();
+    return SUCCEEDED;
 }
 
 void dCsGame_c::lytItemCursor_c::initializeState_Invisible() {}
@@ -125,16 +162,6 @@ void dCsGame_c::lytItemCursor_c::lytBowCsr_c::finalizeState_Draw() {}
 void dCsGame_c::lytItemCursor_c::lytBowCsr_c::initializeState_Charge() {}
 void dCsGame_c::lytItemCursor_c::lytBowCsr_c::executeState_Charge() {}
 void dCsGame_c::lytItemCursor_c::lytBowCsr_c::finalizeState_Charge() {}
-
-/*
-            STATE_FUNC_DECLARE(lytPachinkoCsr_c, Invisible);
-            STATE_FUNC_DECLARE(lytPachinkoCsr_c, Select);
-            STATE_FUNC_DECLARE(lytPachinkoCsr_c, ToDraw);
-            STATE_FUNC_DECLARE(lytPachinkoCsr_c, Draw);
-            STATE_FUNC_DECLARE(lytPachinkoCsr_c, Out);
-            STATE_FUNC_DECLARE(lytPachinkoCsr_c, Charge);
-            STATE_FUNC_DECLARE(lytPachinkoCsr_c, ChargeFull);
-*/
 
 void dCsGame_c::lytItemCursor_c::lytPachinkoCsr_c::initializeState_Invisible() {}
 void dCsGame_c::lytItemCursor_c::lytPachinkoCsr_c::executeState_Invisible() {}

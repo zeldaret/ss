@@ -21,6 +21,10 @@ public:
     int update();
     int similarToDraw();
 
+    void setField703(bool val) {
+        field_0x703 = val;
+    }
+
 private:
     static int sfield0x700Init;
     void setCurrentLyt(int lyt);
