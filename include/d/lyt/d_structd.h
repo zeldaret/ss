@@ -7,9 +7,20 @@
 
 namespace d2d {
 
+class dLytStructC {
+private:
+public:
+    dLytStructC() : field_0x10(0), field_0x14(0) {}
+    virtual ~dLytStructC() {}
+    virtual void *dLytStructC0x0C();
+
+    TListNode<dLytStructC> mLink;
+    u16 field_0x10;
+    s32 field_0x14;
+};
+
 struct dLytStructD_Base {
-    dLytStructD_Base()
-        : field_0x0C(0), field_0x10(0), field_0x14(0), field_0x015(0), field_0x016(0) {}
+    dLytStructD_Base() : field_0x0C(0), field_0x10(0), field_0x14(0), field_0x015(0), field_0x016(0) {}
     virtual ~dLytStructD_Base() {}
     TListNode<dLytStructD_Base> mLink;
     u32 field_0x0C;
@@ -59,15 +70,15 @@ public:
 
     static dLytStructDList *sInstance;
 
-    void appendToList1(dLytStructD *other);
-    void removeFromList1(dLytStructD *other);
+    void appendToList1(dLytStructC *other);
+    void removeFromList1(dLytStructC *other);
 
     void appendToList2(dLytStructD *other);
     void removeFromList2(dLytStructD *other);
 
 private:
+    TList<dLytStructC, offsetof(dLytStructC, mLink)> mList1;
     TList<dLytStructD, offsetof(dLytStructD, mLink)> mList2;
-    TList<dLytStructD, offsetof(dLytStructD, mLink)> mList1;
     bool field_0x18;
 };
 
