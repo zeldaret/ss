@@ -419,6 +419,8 @@ config.libs = [
             Object(NonMatching, "d/lyt/d_lyt_pause_disp_00.cpp"),
             Object(Matching, "d/lyt/d_lyt_fader.cpp"),
             Object(Matching, "d/lyt/d_screen_fader.cpp"),
+            Object(NonMatching, "d/d_cs_base.cpp"),
+            Object(NonMatching, "d/d_cs_game.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_common_arrow.cpp"),
             Object(NonMatching, "toBeSorted/file_manager.cpp"),
             Object(NonMatching, "toBeSorted/save_manager.cpp"),

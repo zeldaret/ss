@@ -11,11 +11,11 @@ dLytStructDList *dLytStructDList::create(EGG::Heap *heap) {
     return new (heap) dLytStructDList();
 }
 
-void dLytStructDList::appendToList1(dLytStructD *other) {
+void dLytStructDList::appendToList1(dLytStructC *other) {
     mList1.insert(other);
 }
 
-void dLytStructDList::removeFromList1(dLytStructD *other) {
+void dLytStructDList::removeFromList1(dLytStructC *other) {
     mList1.remove(other);
 }
 
