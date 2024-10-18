@@ -1,14 +1,11 @@
 #ifndef D_C_BASE_H
 #define D_C_BASE_H
 
-#include "d/d_base.h"
+#include "d/d_cs.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_cursor_stick.h"
 #include "d/lyt/d_structd.h"
 #include "m/m2d.h"
-
-
-class dCs_c : public dBase_c {};
 
 class dCsBase_c : public dCs_c {
 public:

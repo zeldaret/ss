@@ -19,6 +19,16 @@ public:
     s32 field_0x14;
 };
 
+class dLytStructCSub : public dLytStructC {
+private:
+public:
+    dLytStructCSub() {}
+    virtual ~dLytStructCSub() {}
+    virtual void *dLytStructC0x0C();
+
+    u8 field_0x18[8];
+};
+
 struct dLytStructD_Base {
     dLytStructD_Base() : field_0x0C(0), field_0x10(0), field_0x14(0), field_0x015(0), field_0x016(0) {}
     virtual ~dLytStructD_Base() {}
