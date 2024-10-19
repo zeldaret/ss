@@ -1704,7 +1704,7 @@ config.libs = [
     ),
     Rel(NonMatching, "d_a_obj_under_cloud", "REL/d/a/obj/d_a_obj_under_cloud.cpp"),
     Rel(NonMatching, "d_a_obj_updown_lava", "REL/d/a/obj/d_a_obj_updown_lava.cpp"),
-    Rel(NonMatching, "d_a_obj_utajima", "REL/d/a/obj/d_a_obj_utajima.cpp"),
+    Rel(Matching, "d_a_obj_utajima", "REL/d/a/obj/d_a_obj_utajima.cpp"),
     Rel(
         NonMatching, "d_a_obj_utajima_island", "REL/d/a/obj/d_a_obj_utajima_island.cpp"
     ),

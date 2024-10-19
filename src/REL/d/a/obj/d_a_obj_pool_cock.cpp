@@ -34,7 +34,7 @@ int dAcOPoolCock_c::actorCreate() {
 
     mStateMgr.changeState(StateID_Wait);
 
-    setBoundingBox(mVec3_c(-300.0f, -100.0f, -300.0f), mVec3_c(300.0f, 100.0f, 300.0f));
+    boundingBox.Set(mVec3_c(-300.0f, -100.0f, -300.0f), mVec3_c(300.0f, 100.0f, 300.0f));
     return SUCCEEDED;
 }
 

@@ -28,7 +28,7 @@ int dAcObjFairy_c::create() {
     mStateMgr.changeState(StateID_CureStart);
     mStateMgr.changeState(StateID_Wait);
     mModel.getModel().setPriorityDraw(0x7F, 0x7F);
-    setBoundingBox(mVec3_c(-20.0f, -200.0f, -20.0f), mVec3_c(20.0f, 20.0f, 20.0f));
+    boundingBox.Set(mVec3_c(-20.0f, -200.0f, -20.0f), mVec3_c(20.0f, 20.0f, 20.0f));
 
     return SUCCEEDED;
 }
