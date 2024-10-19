@@ -1,23 +1,46 @@
 #ifndef D_CS_GAME_H
 #define D_CS_GAME_H
 
+#include "common.h"
 #include "d/d_cs.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_structd.h"
 #include "m/m2d.h"
+#include "s/s_FStateID.hpp"
 #include "s/s_State.hpp"
 #include "s/s_StateID.hpp"
 #include "toBeSorted/effects_struct.h"
 
-class UnkMaybeEmpty {
-public:
-    virtual ~UnkMaybeEmpty() {}
+struct CsGameConfigMaybe {
+    CsGameConfigMaybe();
+    virtual ~CsGameConfigMaybe() {}
+
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1C;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2C;
+    /* 0x30 */ s32 field_0x30;
+    /* 0x34 */ f32 field_0x34;
+    /* 0x38 */ f32 field_0x38;
+    /* 0x3C */ f32 field_0x3C;
+    /* 0x40 */ u8 field_0x40;
+    /* 0x41 */ u8 field_0x41;
+    /* 0x42 */ u8 field_0x42;
 };
 
 class EffectRelatedTmp {
 public:
     EffectRelatedTmp();
     virtual ~EffectRelatedTmp();
+
+    void doSomething(EffectsStruct *s);
 };
 
 class EffectRelated : public EffectRelatedTmp {
@@ -94,14 +117,7 @@ public:
     Tmp tmp;
 };
 
-class dCsGameBorrowedAnmGroups_c {
-public:
-    dCsGameBorrowedAnmGroups_c(dCsGameAnmGroups_c &g) : mpAnmGroups(g.tmp.mAnmGroups), mNumAnmGroups(0x17) {}
-    virtual ~dCsGameBorrowedAnmGroups_c() {}
-    d2d::AnmGroup_c *mpAnmGroups;
-    s32 mNumAnmGroups;
-};
-
+/// @brief Game cursor.
 class dCsGame_c : public dCs_c {
 public:
     dCsGame_c();
@@ -114,15 +130,30 @@ public:
 
     static dCsGame_c *sInstance;
 
+    /// @brief Item cursor.
     class lytItemCursor_c {
         friend class dCsGame_c;
 
     public:
+
+        enum CursorType_e {
+            BOW = 6,
+        };
+
+        /// @brief Bow cursor.
         class lytBowCsr_c {
         public:
             lytBowCsr_c(dCsGameAnmGroups_c &g, d2d::LytBase_c *lyt)
-                : mAnm(g), mpLyt(lyt), mStateMgr(*this, sStateID::null) {}
+                : mAnm(g.tmp.mAnmGroups, 0x17), mpLyt(lyt), mStateMgr(*this, sStateID::null) {}
             virtual ~lytBowCsr_c() {}
+
+            void init();
+
+            void enter();
+            inline void select() {
+                mStateMgr.changeState(StateID_Select);
+            }
+            void execute();
 
         private:
             STATE_FUNC_DECLARE(lytBowCsr_c, Invisible);
@@ -134,15 +165,23 @@ public:
             STATE_FUNC_DECLARE(lytBowCsr_c, Charge);
 
             UI_STATE_MGR_DECLARE(lytBowCsr_c);
-            dCsGameBorrowedAnmGroups_c mAnm;
-            d2d::LytBase_c *mpLyt;
+            d2d::AnmGroups mAnm;
+            /* 0x4C */ d2d::LytBase_c *mpLyt;
+            /* 0x50 */ f32 field_0x50;
+            /* 0x54 */ f32 field_0x54;
         };
 
+        /// @brief Dowsing cursor.
         class lytDowsingCsr_c {
         public:
             lytDowsingCsr_c(dCsGameAnmGroups_c &g, d2d::LytBase_c *lyt)
-                : mAnm(g), mpLyt(lyt), mStateMgr(*this, sStateID::null) {}
+                : mAnm(g.tmp.mAnmGroups, 0x17), mpLyt(lyt), mStateMgr(*this, sStateID::null) {}
             virtual ~lytDowsingCsr_c() {}
+
+            void init();
+
+            void enter();
+            void execute();
 
         private:
             STATE_FUNC_DECLARE(lytDowsingCsr_c, NotFind);
@@ -152,17 +191,27 @@ public:
             STATE_FUNC_DECLARE(lytDowsingCsr_c, ToNotFind);
 
             UI_STATE_MGR_DECLARE(lytDowsingCsr_c);
-            dCsGameBorrowedAnmGroups_c mAnm;
+            d2d::AnmGroups mAnm;
             d2d::LytBase_c *mpLyt;
-            EffectsStruct mEffects1;
-            EffectsStruct mEffects2;
+            /* 0x50 */ EffectsStruct mEffects1;
+            /* 0x84 */ EffectsStruct mEffects2;
+            /* 0xB8 */ f32 field_0xB8;
+            /* 0xBC */ f32 field_0xBC;
+            /* 0xC0 */ f32 field_0xC0;
         };
 
+        /// @brief Slingshot cursor.
         class lytPachinkoCsr_c {
         public:
             lytPachinkoCsr_c(dCsGameAnmGroups_c &g, d2d::LytBase_c *lyt)
-                : mAnm(g), mpLyt(lyt), mStateMgr(*this, sStateID::null) {}
+                : mAnm(g.tmp.mAnmGroups, 0x17), mpLyt(lyt), mStateMgr(*this, sStateID::null), field_0x50(0),
+                  field_0x54(0.0f), field_0x58(0.0f) {}
             virtual ~lytPachinkoCsr_c() {}
+
+            void init();
+
+            // void enter();
+            void execute();
 
         private:
             STATE_FUNC_DECLARE(lytPachinkoCsr_c, Invisible);
@@ -173,16 +222,25 @@ public:
             STATE_FUNC_DECLARE(lytPachinkoCsr_c, Charge);
             STATE_FUNC_DECLARE(lytPachinkoCsr_c, ChargeFull);
 
-            UI_STATE_MGR_DECLARE(lytPachinkoCsr_c);
-            dCsGameBorrowedAnmGroups_c mAnm;
-            d2d::LytBase_c *mpLyt;
+            /* 0x04 */ UI_STATE_MGR_DECLARE(lytPachinkoCsr_c);
+            /* 0x40 */ d2d::AnmGroups mAnm;
+            /* 0x4C */ d2d::LytBase_c *mpLyt;
+            /* 0x50 */ u8 field_0x50;
+            /* 0x54 */ f32 field_0x54;
+            /* 0x58 */ f32 field_0x58;
         };
 
+        /// @brief Clawshots cursor.
         class lytCrawShotCsr_c {
         public:
             lytCrawShotCsr_c(dCsGameAnmGroups_c &g, d2d::LytBase_c *lyt)
-                : mAnm(g), mpLyt(lyt), mStateMgr(*this, sStateID::null) {}
+                : mAnm(g.tmp.mAnmGroups, 0x17), mpLyt(lyt), mStateMgr(*this, sStateID::null) {}
             virtual ~lytCrawShotCsr_c() {}
+
+            void init();
+
+            void enter();
+            void execute();
 
         private:
             STATE_FUNC_DECLARE(lytCrawShotCsr_c, Normal);
@@ -191,15 +249,21 @@ public:
             STATE_FUNC_DECLARE(lytCrawShotCsr_c, ToNormal);
 
             UI_STATE_MGR_DECLARE(lytCrawShotCsr_c);
-            dCsGameBorrowedAnmGroups_c mAnm;
+            d2d::AnmGroups mAnm;
             d2d::LytBase_c *mpLyt;
         };
 
+        /// @brief Gust Bellows cursor.
         class lytVacuumCsr_c {
         public:
             lytVacuumCsr_c(dCsGameAnmGroups_c &g, d2d::LytBase_c *lyt)
-                : mAnm(g), mpLyt(lyt), mStateMgr(*this, sStateID::null) {}
+                : mAnm(g.tmp.mAnmGroups, 0x17), mpLyt(lyt), mStateMgr(*this, sStateID::null) {}
             virtual ~lytVacuumCsr_c() {}
+
+            void init();
+
+            void enter();
+            void execute();
 
         private:
             STATE_FUNC_DECLARE(lytVacuumCsr_c, Normal);
@@ -208,18 +272,23 @@ public:
             STATE_FUNC_DECLARE(lytVacuumCsr_c, ToNormal);
 
             UI_STATE_MGR_DECLARE(lytVacuumCsr_c);
-            dCsGameBorrowedAnmGroups_c mAnm;
+            d2d::AnmGroups mAnm;
             d2d::LytBase_c *mpLyt;
+            /* 0x5C */ u8 field_0x5C;
         };
 
     public:
         lytItemCursor_c()
-            : mStateMgr(*this, sStateID::null), mAnm(mAnmGroups), mBow(mAnmGroups, &mLyt), mDowsing(mAnmGroups, &mLyt),
-              mPachinko(mAnmGroups, &mLyt), mCrawShot(mAnmGroups, &mLyt), mVacuum(mAnmGroups, &mLyt) {}
+            : mStateMgr(*this, sStateID::null), mAnm(mAnmGroups.tmp.mAnmGroups, 0x17), mBow(mAnmGroups, &mLyt),
+              mDowsing(mAnmGroups, &mLyt), mPachinko(mAnmGroups, &mLyt), mCrawShot(mAnmGroups, &mLyt),
+              mVacuum(mAnmGroups, &mLyt) {}
         virtual ~lytItemCursor_c() {}
         virtual void lytItemCursor0x0C();
         virtual bool init();
         virtual bool remove();
+
+        bool preInit();
+        bool doInit();
 
         void setResAcc(m2d::ResAccIf_c *resAcc) {
             mpResAcc = resAcc;
@@ -228,6 +297,13 @@ public:
         void setField0x9A0(u8 val) {
             field_0x9A0 = val;
         }
+
+        void setNextCursorType(CursorType_e cs) {
+            field_0x9A8 = 1;
+            mNextCursorType = cs;
+        }
+
+        void changeState(const sFStateID_c<lytItemCursor_c> &newState);
 
     private:
         STATE_FUNC_DECLARE(lytItemCursor_c, Invisible);
@@ -238,24 +314,32 @@ public:
         STATE_FUNC_DECLARE(lytItemCursor_c, HookShot);
         STATE_FUNC_DECLARE(lytItemCursor_c, PlayerCam);
 
+
         /* 0x004 */ f32 field_0x004;
         /* 0x008 */ f32 field_0x008;
         /* 0x00C */ UI_STATE_MGR_DECLARE(lytItemCursor_c);
 
         EffectsStruct mEffects;
+        /* 0x070 */ dCsGame_c *mpCsGame;
         EffectRelated mEffectRelated;
         /* 0x0C8 */ m2d::ResAccIf_c *mpResAcc;
         d2d::LytBase_c mLyt;
         dCsGameAnmGroups_c mAnmGroups;
-        dCsGameBorrowedAnmGroups_c mAnm;
-
+        d2d::AnmGroups mAnm;
+        /* 0x??? */ u8 padding[0x44];
         /* 0x72C */ lytBowCsr_c mBow;
         /* 0x794 */ lytDowsingCsr_c mDowsing;
         /* 0x86C */ lytPachinkoCsr_c mPachinko;
         /* 0x8C0 */ lytCrawShotCsr_c mCrawShot;
         /* 0x934 */ lytVacuumCsr_c mVacuum;
+        /* 0x990 */ u8 field_0x990;
+        /* 0x99C */ u8 field_0x99C;
         /* 0x9A0 */ u8 field_0x9A0;
+        /* 0x9A8 */ u8 field_0x9A8;
+        /* 0x9AC */ CursorType_e mNextCursorType;
     };
+
+    void setNextCursorType(lytItemCursor_c::CursorType_e);
 
     /* 0x068 */ m2d::ResAccIf_c mCursorResAcc;
     /* 0x11C */ m2d::ResAccIf_c mMain2DResAcc;

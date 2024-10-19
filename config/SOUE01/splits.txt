@@ -577,6 +577,8 @@ d/d_cs_game.cpp:
 	.text       start:0x801BD250 end:0x801C5C28
 	.ctors      start:0x804DB820 end:0x804DB824
 	.data       start:0x8052E968 end:0x80530170
+	.sdata2     start:0x8057B5C0 end:0x8057B650
+	.bss        start:0x805B38B8 end:0x805B4178
 
 d/a/d_a_player.cpp:
 	.text       start:0x801C5C30 end:0x802471F8
