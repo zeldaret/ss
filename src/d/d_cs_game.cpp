@@ -96,6 +96,32 @@ STATE_DEFINE(dCsGame_c::lytItemCursor_c::lytVacuumCsr_c, ToNormal);
 #define MAIN_ANIM_LOOP_END 21
 #define MAIN_ANIM_LOOP_END_2 22
 
+static const d2d::LytBrlanMapping lytItemCursorMap[] = {
+    {       "itemCursor_00_cursor.brlan",      "G_cursor_00"},
+    {   "itemCursor_00_dowseInOut.brlan",    "G_dowseAll_00"},
+    {         "itemCursor_00_loop.brlan",        "G_loop_00"},
+    {      "itemCursor_00_hookFix.brlan",     "G_hookFix_00"},
+    {   "itemCursor_00_vacuumLock.brlan",  "G_vacuumLock_00"},
+    {     "itemCursor_00_lockLoop.brlan",    "G_lockLoop_00"},
+    {   "itemCursor_00_dowseLoop1.brlan",   "G_dowseLoop_00"},
+    {   "itemCursor_00_dowseLoop2.brlan",   "G_dowseLoop_01"},
+    {   "itemCursor_00_dowseLoop3.brlan",    "G_auraLoop_00"},
+    {    "itemCursor_00_dowseZoom.brlan",    "G_dowseAll_00"},
+    {      "itemCursor_00_arrowOn.brlan",     "G_arrowOn_00"},
+    {  "itemCursor_00_arrowCursor.brlan", "G_arrowCursor_00"},
+    {  "itemCursor_00_arrowEffect.brlan", "G_arrowEffect_00"},
+    {    "itemCursor_00_arrowKeep.brlan", "G_arrowCursor_00"},
+    {    "itemCursor_00_arrowPeak.brlan", "G_arrowCursor_00"},
+    {      "itemCursor_00_slingOn.brlan", "G_slingEffect_00"},
+    {    "itemCursor_00_slingKeep.brlan",  "G_slingGauge_00"},
+    {    "itemCursor_00_slingPeak.brlan",    "G_slingAll_00"},
+    {"itemCursor_00_slingPeakRing.brlan",   "G_slingRing_00"},
+    {     "itemCursor_00_slingOut.brlan", "G_slingEffect_00"},
+    {        "itemCursor_00_loop2.brlan",      "G_arrowLoop"},
+    {      "itemCursor_00_loopEnd.brlan",     "G_loopEnd_00"},
+    {     "itemCursor_00_loopEnd2.brlan",     "G_loopEnd_01"},
+};
+
 dCsGame_c::dCsGame_c() : mCursorType(0) {
     sInstance = this;
 }
@@ -198,32 +224,6 @@ void dCsGame_c::lytItemCursor_c::finalizeState_PlayerCam() {}
 void dCsGame_c::lytItemCursor_c::changeState(const sFStateID_c<lytItemCursor_c> &newState) {
     mStateMgr.changeState(newState);
 }
-
-static const d2d::LytBrlanMapping lytItemCursorMap[] = {
-    {       "itemCursor_00_cursor.brlan",      "G_cursor_00"},
-    {   "itemCursor_00_dowseInOut.brlan",    "G_dowseAll_00"},
-    {         "itemCursor_00_loop.brlan",        "G_loop_00"},
-    {      "itemCursor_00_hookFix.brlan",     "G_hookFix_00"},
-    {   "itemCursor_00_vacuumLock.brlan",  "G_vacuumLock_00"},
-    {     "itemCursor_00_lockLoop.brlan",    "G_lockLoop_00"},
-    {   "itemCursor_00_dowseLoop1.brlan",   "G_dowseLoop_00"},
-    {   "itemCursor_00_dowseLoop2.brlan",   "G_dowseLoop_01"},
-    {   "itemCursor_00_dowseLoop3.brlan",    "G_auraLoop_00"},
-    {    "itemCursor_00_dowseZoom.brlan",    "G_dowseAll_00"},
-    {      "itemCursor_00_arrowOn.brlan",     "G_arrowOn_00"},
-    {  "itemCursor_00_arrowCursor.brlan", "G_arrowCursor_00"},
-    {  "itemCursor_00_arrowEffect.brlan", "G_arrowEffect_00"},
-    {    "itemCursor_00_arrowKeep.brlan", "G_arrowCursor_00"},
-    {    "itemCursor_00_arrowPeak.brlan", "G_arrowCursor_00"},
-    {      "itemCursor_00_slingOn.brlan", "G_slingEffect_00"},
-    {    "itemCursor_00_slingKeep.brlan",  "G_slingGauge_00"},
-    {    "itemCursor_00_slingPeak.brlan",    "G_slingAll_00"},
-    {"itemCursor_00_slingPeakRing.brlan",   "G_slingRing_00"},
-    {     "itemCursor_00_slingOut.brlan", "G_slingEffect_00"},
-    {        "itemCursor_00_loop2.brlan",      "G_arrowLoop"},
-    {      "itemCursor_00_loopEnd.brlan",     "G_loopEnd_00"},
-    {     "itemCursor_00_loopEnd2.brlan",     "G_loopEnd_01"},
-};
 
 bool dCsGame_c::lytItemCursor_c::doInit() {
     mpCsGame = dCsGame_c::sInstance;
