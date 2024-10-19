@@ -23,7 +23,7 @@ int dAcOPumpkinLeaf_c::create() {
     forwardMaxSpeed = -40.0f;
     updateMatrix();
     mStateMgr.changeState(StateID_Wait);
-    setBoundingBox(mVec3_c(-50.0f, -10.0f, -50.0f), mVec3_c(50.0f, 50.0f, 50.0f));
+    boundingBox.Set(mVec3_c(-50.0f, -10.0f, -50.0f), mVec3_c(50.0f, 50.0f, 50.0f));
     dAcObjBase_c::create(
         "PmpknBd", getRoomId(), 0, &position, &rotation, &mScale, getParams2_ignoreLower(), -1, viewclip_index
     );

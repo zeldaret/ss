@@ -2,6 +2,7 @@
 #define D_A_OBJ_BASE_H
 
 #include "d/a/d_a_base.h"
+#include "d/col/c/c_m3d_g_aab.h"
 #include "d/col/cc/d_cc_d.h"
 #include "m/m3d/m_shadow.h"
 #include "m/m3d/m_smdl.h"
@@ -60,7 +61,7 @@ public:
     /* 0x14C */ f32 forwardMaxSpeed;
     /* 0x150 */ mVec3_c velocity;
     /* 0x15C */ mMtx_c mWorldMtx;
-    /* 0x18C */ nw4r::math::AABB boundingBox;
+    /* 0x18C */ cM3dGAab boundingBox;
     /* 0x1A4 */ f32 mCullingDistance;
     /* 0x1A8 */ f32 field_0x1A8;
     /* 0x1AC */ u32 mObjectActorFlags;
@@ -161,13 +162,6 @@ public:
         char *name, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, u16 id,
         u8 viewclipId
     );
-
-protected:
-    // TODO May be cM3dGAab (has a very similar set func)
-    inline void setBoundingBox(mVec3_c min, mVec3_c max) {
-        boundingBox.min = min;
-        boundingBox.max = max;
-    }
 };
 
 // Actors' createHeap functions often have patterns that can be matched with this macro

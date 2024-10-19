@@ -77,7 +77,7 @@ bool dAcOsw_c::createHeap() {
     field_0x5B8.set(mWorldMtx);
     mModel.setLocalMtx(mWorldMtx);
 
-    bool set = mCollision.Set(dbzData, plcData, 1, &field_0x5B8, &mScale);
+    bool set = mCollision.Set(dbzData, plcData, cBgW::MOVE_BG_e, &field_0x5B8, &mScale);
     mCollision.SetCrrFunc(dBgS_MoveBGProc_TypicalRotY);
     return !set;
 }
@@ -101,7 +101,7 @@ int dAcOsw_c::actorCreate() {
     } else {
         mStateMgr.changeState(StateID_OnWait);
     }
-    setBoundingBox(mVec3_c(-90.0f, -10.0f, -90.0f), mVec3_c(90.0f, 70.0f, 90.0f));
+    boundingBox.Set(mVec3_c(-90.0f, -10.0f, -90.0f), mVec3_c(90.0f, 70.0f, 90.0f));
 
     return SUCCEEDED;
 }

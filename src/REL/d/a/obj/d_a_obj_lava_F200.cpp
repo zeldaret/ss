@@ -41,7 +41,7 @@ int dAcOlavaF200_c::create() {
 
     mModels[0].setPriorityDraw(0x1C, 9);
     mModels[1].setPriorityDraw(0x22, 9);
-    setBoundingBox(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
+    boundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
 
     return SUCCEEDED;
 }
