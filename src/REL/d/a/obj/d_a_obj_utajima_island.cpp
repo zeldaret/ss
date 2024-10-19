@@ -43,7 +43,7 @@ int dAcOutajimaIsland_c::actorCreate() {
     mInitialPos = position;
     mInitialRot = rotation;
 
-    mParam1 = getParm1();
+    mRingLayer = getRingLayer();
     mParam2 = getParm2();
     s32 v = getParm2() * 30;
     field_0x5BC = v * lbl_8057CDA4;
@@ -105,11 +105,11 @@ void dAcOutajimaIsland_c::executeState_Wait() {
     }
 
     if (mPlaySound) {
-        if (mParam1 == 1) {
+        if (mRingLayer == 1) {
             playSoundEffect1(0xC6E);
-        } else if (mParam1 == 2) {
+        } else if (mRingLayer == 2) {
             playSoundEffect1(0xC6F);
-        } else if (mParam1 == 3) {
+        } else if (mRingLayer == 3) {
             playSoundEffect1(0xC70);
         }
 
@@ -136,6 +136,6 @@ void dAcOutajimaIsland_c::movePlatforms() {
     sLib::chaseAngle2(&field_0x5BE.x.mVal, field_0x5BC, field_0x5BE.y);
 
     rotation.y = mInitialRot.y - field_0x5BE.x;
-    position.z = mInitialPos.z + ((mParam1 - 1) * 1400.0f + 2500.0f) * rotation.y.cos();
-    position.x = mInitialPos.x + ((mParam1 - 1) * 1400.0f + 2500.0f) * rotation.y.sin();
+    position.z = mInitialPos.z + ((mRingLayer - 1) * 1400.0f + 2500.0f) * rotation.y.cos();
+    position.x = mInitialPos.x + ((mRingLayer - 1) * 1400.0f + 2500.0f) * rotation.y.sin();
 }

@@ -39,7 +39,7 @@ private:
         return ((params >> 4) & 0xF);
     }
 
-    s32 getParm1() {
+    s32 getRingLayer() {
         return params & 0xF;
     }
 
@@ -50,7 +50,7 @@ private:
     /* 0x59C */ dAcRef_c<dAcOutajimaMainMecha_c> mMainMechaRef;
     /* 0x5A8 */ mVec3_c mInitialPos;
     /* 0x5B4 */ mAng3_c mInitialRot;
-    /* 0x5BA */ u8 mParam1;
+    /* 0x5BA */ u8 mRingLayer;
     /* 0x5BB */ u8 mParam2;
     /* 0x5BC */ mAng field_0x5BC;
     /* 0x5BE */ mAng3_c field_0x5BE;
