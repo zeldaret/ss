@@ -11264,7 +11264,7 @@ getOldStateID__86sStateMgr_c<17dLytCursorStick_c,20sStateMethodUsr_FI_c,12sFStat
 dCsGame_c_classInit__Fv = .text:0x801BD250; // type:function size:0x30
 fn_801BD280 = .text:0x801BD280; // type:function size:0x8C
 fn_801BD310 = .text:0x801BD310; // type:function size:0x40
-CsGame__ctorCont = .text:0x801BD350; // type:function size:0x4CC
+__ct__9dCsGame_cFv = .text:0x801BD350; // type:function size:0x4CC
 fn_801BD820 = .text:0x801BD820; // type:function size:0x40
 fn_801BD860 = .text:0x801BD860; // type:function size:0x40
 __dt__13dCsGameLyt1_cFv = .text:0x801BD8A0; // type:function size:0x5C
