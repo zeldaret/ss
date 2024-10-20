@@ -1397,7 +1397,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_fruitB", "REL/d/a/obj/d_a_obj_fruitB.cpp"),
     Rel(NonMatching, "d_a_obj_fruit", "REL/d/a/obj/d_a_obj_fruit.cpp"),
     Rel(
-        NonMatching,
+        Matching,
         "d_a_obj_fruit_guts_leaf",
         "REL/d/a/obj/d_a_obj_fruit_guts_leaf.cpp",
     ),

@@ -51,6 +51,7 @@ public:
     void draw();
 
     f32 checkPositionIsInPastState(s32 roomId, const mVec3_c &position, float *, float);
+    bool fn_800B9B60(s32 roomId, const mVec3_c &position);
 
     static dTimeAreaMgr_c *sInstance;
 
