@@ -226,7 +226,7 @@ void dCsGame_c::lytItemCursor_c::changeState(const sFStateID_c<lytItemCursor_c> 
 }
 
 bool dCsGame_c::lytItemCursor_c::doInit() {
-    mpCsGame = dCsGame_c::sInstance;
+    mEffects.init(dCsGame_c::sInstance);
     preInit();
     mLyt.setPriority(0x88);
     mLyt.calc();

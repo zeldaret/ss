@@ -164,8 +164,8 @@ public:
             STATE_FUNC_DECLARE(lytBowCsr_c, Draw);
             STATE_FUNC_DECLARE(lytBowCsr_c, Charge);
 
-            UI_STATE_MGR_DECLARE(lytBowCsr_c);
-            d2d::AnmGroups mAnm;
+            /* 0x04 */ UI_STATE_MGR_DECLARE(lytBowCsr_c);
+            /* 0x40 */ d2d::AnmGroups mAnm;
             /* 0x4C */ d2d::LytBase_c *mpLyt;
             /* 0x50 */ f32 field_0x50;
             /* 0x54 */ f32 field_0x54;
@@ -190,9 +190,9 @@ public:
             STATE_FUNC_DECLARE(lytDowsingCsr_c, FindMinimum);
             STATE_FUNC_DECLARE(lytDowsingCsr_c, ToNotFind);
 
-            UI_STATE_MGR_DECLARE(lytDowsingCsr_c);
-            d2d::AnmGroups mAnm;
-            d2d::LytBase_c *mpLyt;
+            /* 0x04 */ UI_STATE_MGR_DECLARE(lytDowsingCsr_c);
+            /* 0x40 */ d2d::AnmGroups mAnm;
+            /* 0x4C */ d2d::LytBase_c *mpLyt;
             /* 0x50 */ EffectsStruct mEffects1;
             /* 0x84 */ EffectsStruct mEffects2;
             /* 0xB8 */ f32 field_0xB8;
@@ -248,9 +248,9 @@ public:
             STATE_FUNC_DECLARE(lytCrawShotCsr_c, Lock);
             STATE_FUNC_DECLARE(lytCrawShotCsr_c, ToNormal);
 
-            UI_STATE_MGR_DECLARE(lytCrawShotCsr_c);
-            d2d::AnmGroups mAnm;
-            d2d::LytBase_c *mpLyt;
+            /* 0x04 */ UI_STATE_MGR_DECLARE(lytCrawShotCsr_c);
+            /* 0x40 */ d2d::AnmGroups mAnm;
+            /* 0x4C */ d2d::LytBase_c *mpLyt;
         };
 
         /// @brief Gust Bellows cursor.
@@ -271,9 +271,9 @@ public:
             STATE_FUNC_DECLARE(lytVacuumCsr_c, Lock);
             STATE_FUNC_DECLARE(lytVacuumCsr_c, ToNormal);
 
-            UI_STATE_MGR_DECLARE(lytVacuumCsr_c);
-            d2d::AnmGroups mAnm;
-            d2d::LytBase_c *mpLyt;
+            /* 0x04 */ UI_STATE_MGR_DECLARE(lytVacuumCsr_c);
+            /* 0x40 */ d2d::AnmGroups mAnm;
+            /* 0x4C */ d2d::LytBase_c *mpLyt;
             /* 0x5C */ u8 field_0x5C;
         };
 
@@ -319,14 +319,12 @@ public:
         /* 0x008 */ f32 field_0x008;
         /* 0x00C */ UI_STATE_MGR_DECLARE(lytItemCursor_c);
 
-        EffectsStruct mEffects;
-        /* 0x070 */ dCsGame_c *mpCsGame;
-        EffectRelated mEffectRelated;
+        /* 0x048 */ EffectsStruct mEffects;
+        /* 0x07C */ EffectRelated mEffectRelated;
         /* 0x0C8 */ m2d::ResAccIf_c *mpResAcc;
-        d2d::LytBase_c mLyt;
-        dCsGameAnmGroups_c mAnmGroups;
-        d2d::AnmGroups mAnm;
-        /* 0x??? */ u8 padding[0x44];
+        /* 0x0CC */ d2d::LytBase_c mLyt;
+        /* 0x15C */ dCsGameAnmGroups_c mAnmGroups;
+        /* 0x720 */ d2d::AnmGroups mAnm;
         /* 0x72C */ lytBowCsr_c mBow;
         /* 0x794 */ lytDowsingCsr_c mDowsing;
         /* 0x86C */ lytPachinkoCsr_c mPachinko;
