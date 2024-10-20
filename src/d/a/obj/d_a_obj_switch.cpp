@@ -69,7 +69,7 @@ bool dAcOsw_c::createHeap() {
     TRY_CREATE(mModel.create(resMdl, &heap_allocator, 0x20, 1, nullptr));
 
     field_0x5E8 = mScale.x *
-                  (resMdl.GetResNode("base").mNode.ref().FLOAT_0x50 - resMdl.GetResNode("base").mNode.ref().FLOAT_0x44);
+                  (resMdl.GetResNode("base").mNode.ref().VEC3_0x50.x - resMdl.GetResNode("base").mNode.ref().VEC3_0x44.x);
     cBgD_t *dbzData = (cBgD_t *)getOarcDZB(SWITCH_TYPES[mSwitchType], SWITCH_TYPES[mSwitchType]);
     PLC *plcData = (PLC *)getOarcPLC(SWITCH_TYPES[mSwitchType], SWITCH_TYPES[mSwitchType]);
     mScale.set(1.0f, 0.8f, 1.0f);
