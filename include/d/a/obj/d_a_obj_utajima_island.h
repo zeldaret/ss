@@ -12,9 +12,6 @@
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 
-// Seemingly belongs to mLib / angle related
-extern "C" const f32 lbl_8057CDA4;
-
 class dAcOutajimaIsland_c : public dAcObjBase_c {
 public:
     dAcOutajimaIsland_c() : mStateMgr(*this, sStateID::null) {}

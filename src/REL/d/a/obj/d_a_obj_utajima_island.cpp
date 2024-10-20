@@ -46,7 +46,7 @@ int dAcOutajimaIsland_c::actorCreate() {
     mRingLayer = getRingLayer();
     mParam2 = getParm2();
     s32 v = getParm2() * 30;
-    field_0x5BC = v * lbl_8057CDA4;
+    field_0x5BC = mAng::fromDeg(v);
     field_0x5BE.x = field_0x5BC;
     field_0x5BE.z = 0x88;
     field_0x5BE.y = 0x88;
@@ -127,7 +127,7 @@ void dAcOutajimaIsland_c::finalizeState_Wait() {}
 void dAcOutajimaIsland_c::movePlatforms() {
     // What is going on here?
     s32 diff = field_0x5BC - field_0x5BE.x;
-    if (mAng(diff) > mAng(lbl_8057CDA4 * 90.0f)) {
+    if (mAng(diff) > mAng::fromDeg(90.0f)) {
         sLib::chase(&field_0x5BE.y.mVal, 0x7FFF, 1);
     } else {
         sLib::chase(&field_0x5BE.y.mVal, field_0x5BE.z, 1);

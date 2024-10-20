@@ -883,6 +883,7 @@ m/m_angle.cpp:
 	.text       start:0x802EE5F0 end:0x802EE6B8
 	.ctors      start:0x804DB8CC end:0x804DB8D0
 	.sbss       start:0x80575C08 end:0x80575C10
+	.sdata2     start:0x8057CD90 end:0x8057CDB0
 
 m/m_color_fader.cpp:
 	.text       start:0x802EE7E0 end:0x802EEB94
