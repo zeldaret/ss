@@ -1708,7 +1708,7 @@ config.libs = [
     Rel(
         NonMatching, "d_a_obj_utajima_island", "REL/d/a/obj/d_a_obj_utajima_island.cpp"
     ),
-    Rel(NonMatching, "d_a_obj_utajima_lv2", "REL/d/a/obj/d_a_obj_utajima_lv2.cpp"),
+    Rel(Matching, "d_a_obj_utajima_lv2", "REL/d/a/obj/d_a_obj_utajima_lv2.cpp"),
     Rel(
         NonMatching,
         "d_a_obj_utajima_main_mecha",
