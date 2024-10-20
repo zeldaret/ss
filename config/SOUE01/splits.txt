@@ -1967,8 +1967,11 @@ egg/gfx/eggTextureBuffer.cpp:
 	.text       start:0x804B53F0 end:0x804B59DC
 
 egg/audio/eggAudioArcPlayerMgr.cpp:
-	.text       start:0x804B59E0 end:0x804B6428
+	.text       start:0x804B59E0 end:0x804B641C
 	.data       start:0x8056F2C0 end:0x8056F320
+
+egg/audio/eggAudioExpMgr.cpp:
+	.text       start:0x804B6420 end:0x804B6428
 
 egg/audio/eggAudioHeapMgr.cpp:
 	.text       start:0x804B6430 end:0x804B64A8

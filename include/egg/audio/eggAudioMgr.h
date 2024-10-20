@@ -55,7 +55,7 @@ public:
     SimpleAudioMgr();
     virtual ~SimpleAudioMgr();
 
-    void initialize(EGG::IAudioMgr::Arg *);
+    void initialize(EGG::IAudioMgr::Arg *) override;
     virtual void calc() override;
 
     virtual UNKTYPE *openDvdArchive(const char *, nw4r::snd::SoundHeap *) override;     // at 0x10
