@@ -12,12 +12,14 @@ import re
 import sys
 from typing import Callable, List
 
+
 @dataclass
 class Vtable:
     # A vtable pattern with a match named class_name
     vtable_pat: re.Pattern
     # A factory for function names
     functions: Callable[[str], List[str | None]]
+
 
 def L(items):
     """Join items and add a length prefix"""
@@ -26,77 +28,78 @@ def L(items):
         s = "".join(items)
     else:
         s = items
-    
+
     return str(len(s)) + s
 
+
 sFStateMgr_c = Vtable(
-    re.compile("__vt__[0-9]+sFStateMgr_c<[0-9]+(?P<class_name>[A-Za-z0-9_]+),20sStateMethodUsr_FI_c>"),
+    re.compile("__vt__[0-9]+sFStateMgr_c<(?P<class_name>[A-Za-z0-9_]+),20sStateMethodUsr_FI_c>"),
     lambda name: [
         None,
         None,
-        "__dt__" + L(["sFStateMgr_c<", L(name), ",20sStateMethodUsr_FI_c>"]) + "Fv",
-        "initializeState__" + L(["sStateMgr_c<", L(name), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv",
-        "executeState__" + L(["sStateMgr_c<", L(name), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv",
-        "finalizeState__" + L(["sStateMgr_c<", L(name), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv",
-        "changeState__" + L(["sStateMgr_c<", L(name), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "FRC12sStateIDIf_c",
-        "refreshState__" + L(["sStateMgr_c<", L(name), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv",
-        "getState__" + L(["sStateMgr_c<", L(name), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "CFv",
-        "getNewStateID__" + L(["sStateMgr_c<", L(name), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "CFv",
-        "getStateID__" + L(["sStateMgr_c<", L(name), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "CFv",
-        "getOldStateID__" + L(["sStateMgr_c<", L(name), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "CFv",
+        "__dt__" + L(["sFStateMgr_c<", name, ",20sStateMethodUsr_FI_c>"]) + "Fv",
+        "initializeState__" + L(["sStateMgr_c<", name, ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv",
+        "executeState__" + L(["sStateMgr_c<", name, ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv",
+        "finalizeState__" + L(["sStateMgr_c<", name, ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv",
+        "changeState__" + L(["sStateMgr_c<", name, ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "FRC12sStateIDIf_c",
+        "refreshState__" + L(["sStateMgr_c<", name, ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv",
+        "getState__" + L(["sStateMgr_c<", name, ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "CFv",
+        "getNewStateID__" + L(["sStateMgr_c<", name, ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "CFv",
+        "getStateID__" + L(["sStateMgr_c<", name, ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "CFv",
+        "getOldStateID__" + L(["sStateMgr_c<", name, ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "CFv",
     ]
 )
 
 sStateMgr_c = Vtable(
-    re.compile("__vt__[0-9]+sStateMgr_c<[0-9]+(?P<class_name>[A-Za-z0-9_]+),20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"),
+    re.compile("__vt__[0-9]+sStateMgr_c<(?P<class_name>[A-Za-z0-9_]+),20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"),
     lambda name: [
         None,
         None,
-        "__dt__" + L(["sStateMgr_c<", L(name), ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv",
+        "__dt__" + L(["sStateMgr_c<", name, ",20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c>"]) + "Fv",
         # the rest are dupes
     ]
 )
 
 
 sFStateFct_c = Vtable(
-    re.compile("__vt__[0-9]+sFStateFct_c<[0-9]+(?P<class_name>[A-Za-z0-9_]+)>"),
+    re.compile("__vt__[0-9]+sFStateFct_c<(?P<class_name>[A-Za-z0-9_]+)>"),
     lambda name: [
         None,
         None,
-        "__dt__" + L(["sFStateFct_c<", L(name), ">"]) + "Fv",
-        "build__" + L(["sFStateFct_c<", L(name), ">"]) + "FRC12sStateIDIf_c",
-        "dispose__" + L(["sFStateFct_c<", L(name), ">"]) + "FRP10sStateIf_c",
+        "__dt__" + L(["sFStateFct_c<", name, ">"]) + "Fv",
+        "build__" + L(["sFStateFct_c<", name, ">"]) + "FRC12sStateIDIf_c",
+        "dispose__" + L(["sFStateFct_c<", name, ">"]) + "FRP10sStateIf_c",
     ]
 )
 
 sFState_c = Vtable(
-    re.compile("__vt__[0-9]+sFState_c<[0-9]+(?P<class_name>[A-Za-z0-9_]+)>"),
+    re.compile("__vt__[0-9]+sFState_c<(?P<class_name>[A-Za-z0-9_]+)>"),
     lambda name: [
         None,
         None,
-        "__dt__" + L(["sFState_c<", L(name), ">"]) + "Fv",
-        "initialize__" + L(["sFState_c<", L(name), ">"]) + "Fv",
-        "execute__" + L(["sFState_c<", L(name), ">"]) + "Fv",
-        "finalize__" + L(["sFState_c<", L(name), ">"]) + "Fv",
+        "__dt__" + L(["sFState_c<", name, ">"]) + "Fv",
+        "initialize__" + L(["sFState_c<", name, ">"]) + "Fv",
+        "execute__" + L(["sFState_c<", name, ">"]) + "Fv",
+        "finalize__" + L(["sFState_c<", name, ">"]) + "Fv",
     ]
 )
 
 sFStateID_c = Vtable(
-    re.compile("__vt__[0-9]+sFStateID_c<[0-9]+(?P<class_name>[A-Za-z0-9_]+)>"),
+    re.compile("__vt__[0-9]+sFStateID_c<(?P<class_name>[A-Za-z0-9_]+)>"),
     lambda name: [
         None,
         None,
-        "__dt__" + L(["sFStateID_c<", L(name), ">"]) + "Fv",
+        "__dt__" + L(["sFStateID_c<", name, ">"]) + "Fv",
         None,
         None,
         None,
         None,
-        "isSameName__" + L(["sFStateID_c<", L(name), ">"]) + "CFPCc",
+        "isSameName__" + L(["sFStateID_c<", name, ">"]) + "CFPCc",
         None,
         None,
-        "initializeState__" + L(["sFStateID_c<", L(name), ">"]) + "CFR" + L(name),
-        "executeState__" + L(["sFStateID_c<", L(name), ">"]) + "CFR" + L(name),
-        "finalizeState__" + L(["sFStateID_c<", L(name), ">"]) + "CFR" + L(name),
+        "initializeState__" + L(["sFStateID_c<", name, ">"]) + "CFR" + name,
+        "executeState__" + L(["sFStateID_c<", name, ">"]) + "CFR" + name,
+        "finalizeState__" + L(["sFStateID_c<", name, ">"]) + "CFR" + name,
     ]
 )
 
@@ -136,6 +139,7 @@ def parse_data(file):
 
     return renames
 
+
 def main():
     s_file = sys.argv[1]
     sym_file = sys.argv[2]
@@ -148,7 +152,6 @@ def main():
             sym_text = sym_text.replace(old + " = .text", new + " = .text")
 
     pathlib.Path(sym_file).write_text(sym_text)
-
 
 
 if __name__ == "__main__":

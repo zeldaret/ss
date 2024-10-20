@@ -12,7 +12,6 @@
 #include "nw4r/lyt/lyt_window.h"
 #include "sized_string.h"
 
-
 using namespace nw4r::lyt;
 
 namespace d2d {
@@ -894,6 +893,23 @@ void AnmGroupBase_c::setForward() {
 
 void AnmGroupBase_c::setBackward() {
     mpFrameCtrl->setBackward();
+}
+
+bool AnmGroups::init(
+    d2d::AnmGroup_c *pGroups, const LytBrlanMapping *mappings, u32 num, m2d::ResAccIf_c *acc, d2d::Layout_c *layout
+) {
+    mNumAnmGroups = num;
+    for (int i = 0; i < mNumAnmGroups; i++) {
+        pGroups[i].init(mappings[i].mFile, acc, layout, mappings[i].mName);
+    }
+
+    return true;
+}
+
+void AnmGroups::remove() {
+    for (int i = 0; i < mNumAnmGroups; i++) {
+        mpAnmGroups[i].afterUnbind();
+    }
 }
 
 } // namespace d2d

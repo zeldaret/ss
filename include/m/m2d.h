@@ -89,6 +89,16 @@ public:
         mFlags = mFlags | FLAG_BACKWARDS;
     }
 
+    inline void setRatio(f32 ratio) {
+        f32 actualEnd = mEndFrame - 1.0f;
+        setFrame(actualEnd * ratio);
+    }
+
+    inline void setBackwardsRatio(f32 ratio) {
+        f32 actualEnd = mEndFrame - 1.0f;
+        setFrame(actualEnd - (ratio * actualEnd));
+    }
+
 private:
     inline bool notLooping() const {
         return (mFlags & FLAG_NO_LOOP) != 0;

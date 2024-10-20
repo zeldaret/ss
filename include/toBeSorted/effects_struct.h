@@ -2,7 +2,7 @@
 #define EFFECTS_STRUCT_H
 
 #include "common.h"
-#include "d/a/d_a_base.h"
+#include "d/d_base.h"
 
 class EffectsStruct {
 private:
@@ -11,16 +11,16 @@ private:
 public:
     // vt at 0x1C
     EffectsStruct();
-    EffectsStruct(dAcBase_c *);
+    EffectsStruct(dBase_c *);
     virtual ~EffectsStruct();
 
-    inline void init(dAcBase_c *owner) {
+    inline void init(dBase_c *owner) {
         mpOwner = owner;
     }
 
 private:
     u8 field_0x20[0x28 - 0x20];
-    /* 0x28 */ dAcBase_c *mpOwner;
+    /* 0x28 */ dBase_c *mpOwner;
     u8 field_0x2C[0x34 - 0x2C];
 };
 

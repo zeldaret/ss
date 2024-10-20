@@ -6,7 +6,6 @@
 #include "nw4r/lyt/lyt_pane.h"
 #include "nw4r/lyt/lyt_picture.h"
 
-
 class dTextBox_c;
 class dWindow_c;
 
@@ -123,6 +122,7 @@ public:
     const char *getName() const {
         return mpName;
     }
+
 private:
     /// This name is stored by `build` and usually accessed by dLytMeters' getName functions
     const char *mpName;
@@ -232,7 +232,6 @@ struct AnmGroupBase_c {
         return mpFrameCtrl->isStop2();
     }
 
-
     inline void playBackwardsOnce() {
         mpFrameCtrl->setFlags(FLAG_NO_LOOP | FLAG_BACKWARDS);
         setToEnd2();
@@ -246,6 +245,16 @@ struct AnmGroupBase_c {
     inline void setToEnd2() {
         m2d::FrameCtrl_c &ctrl = *mpFrameCtrl;
         ctrl.setCurrFrame(ctrl.getEndFrame());
+        syncAnmFrame();
+    }
+
+    inline void setRatio(f32 ratio) {
+        mpFrameCtrl->setRatio(ratio);
+        syncAnmFrame();
+    }
+
+    inline void setBackwardsRatio(f32 ratio) {
+        mpFrameCtrl->setBackwardsRatio(ratio);
         syncAnmFrame();
     }
 
@@ -263,6 +272,30 @@ struct AnmGroup_c : public AnmGroupBase_c {
     AnmGroup_c() : AnmGroupBase_c(&mFrameCtrl) {}
     virtual ~AnmGroup_c() {}
     /* 0x28 */ m2d::FrameCtrl_c mFrameCtrl;
+};
+
+// This abstraction is apparently only ever used in CsGame
+class AnmGroups {
+public:
+    AnmGroups(d2d::AnmGroup_c *g, u32 num) : mpAnmGroups(g), mNumAnmGroups(num) {}
+    virtual ~AnmGroups() {}
+
+    bool init(
+        d2d::AnmGroup_c *pGroups, const LytBrlanMapping *mMappings, u32 num, m2d::ResAccIf_c *acc, d2d::Layout_c *layout
+    );
+    void remove();
+
+    d2d::AnmGroup_c &operator[](int idx) {
+        return mpAnmGroups[idx];
+    }
+
+    const d2d::AnmGroup_c &operator[](int idx) const {
+        return mpAnmGroups[idx];
+    }
+
+private:
+    /* 0x04 */ d2d::AnmGroup_c *mpAnmGroups;
+    /* 0x08 */ u32 mNumAnmGroups;
 };
 
 } // namespace d2d
