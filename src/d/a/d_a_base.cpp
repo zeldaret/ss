@@ -449,7 +449,7 @@ void dAcBase_c::FUN_8002d600() {}
 void dAcBase_c::FUN_8002d630() {}
 void dAcBase_c::FUN_8002d6d0() {}
 // currently named ActorBase__playSoundEffect1
-void dAcBase_c::playSoundEffect1() {}
+void dAcBase_c::playSoundEffect1(u16) {}
 void dAcBase_c::FUN_8002d740() {}
 void dAcBase_c::FUN_8002d770() {}
 void dAcBase_c::FUN_8002d7a0() {}
