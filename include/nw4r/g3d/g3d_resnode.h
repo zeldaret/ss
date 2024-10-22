@@ -24,10 +24,8 @@ struct ResNodeData {
     f32 FLOAT_0x38;
     f32 FLOAT_0x3C;
     f32 FLOAT_0x40;
-    f32 FLOAT_0x44;
-    f32 FLOAT_0x48;
-    f32 FLOAT_0x4C;
-    f32 FLOAT_0x50;
+    math::VEC3 VEC3_0x44;
+    math::VEC3 VEC3_0x50;
 };
 
 struct ResNode {
