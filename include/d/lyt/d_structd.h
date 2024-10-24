@@ -1,21 +1,23 @@
 #ifndef D_LYT_STRUCTD_H
 #define D_LYT_STRUCTD_H
 
+#include "common.h"
 #include "egg/core/eggHeap.h"
-#include "nw4r/ut/ut_LinkList.h"
 #include "toBeSorted/tlist.h"
 
 namespace d2d {
 
+class dLytStructD;
+
 class dLytStructC {
 public:
-    dLytStructC() : field_0x10(0), field_0x14(0) {}
+    dLytStructC() : field_0x10(0), field_0x14(nullptr) {}
     virtual ~dLytStructC() {}
     virtual void *dLytStructC0x0C();
 
     TListNode<dLytStructC> mLink;
     u16 field_0x10;
-    s32 field_0x14;
+    dLytStructD *field_0x14;
 };
 
 class dLytStructCSub : public dLytStructC {
@@ -30,7 +32,8 @@ public:
 
 struct dLytStructD_Base {
     dLytStructD_Base() : field_0x0C(0), field_0x10(0), field_0x14(0), field_0x015(0), field_0x016(0) {}
-    virtual ~dLytStructD_Base() {}
+    virtual u32 getType() = 0;
+    virtual void doSomething() = 0;
     TListNode<dLytStructD_Base> mLink;
     u32 field_0x0C;
     u32 field_0x10;
@@ -56,8 +59,10 @@ struct dLytStructDInArray {
 };
 
 struct dLytStructD : dLytStructD_Base {
-    dLytStructD() : field_0x18(0), field_0x1C(nullptr), field_0x20(0), field_0x22(0), field_0x23(0), field_0x24(0) {}
+    dLytStructD() : field_0x18(0), field_0x1C(nullptr), field_0x20(0), field_0x22(0), field_0x23(0), field_0x24(nullptr) {}
 
+    virtual u32 getType() override;
+    virtual void doSomething() override;
     virtual ~dLytStructD();
 
     void init(nw4r::lyt::Pane *, u16, u8, u8);
@@ -69,7 +74,7 @@ struct dLytStructD : dLytStructD_Base {
     u16 field_0x20;
     u8 field_0x22;
     u8 field_0x23;
-    u32 field_0x24;
+    void *field_0x24;
 };
 
 class dLytStructDList {
