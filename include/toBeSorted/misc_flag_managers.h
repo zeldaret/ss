@@ -80,7 +80,7 @@ public:
 
     virtual void doCommit() override {
         FileManager *mgr = FileManager::sInstance;
-        mgr->setItemFlags(mFlagSpace.getFlagPtrUnchecked(), 0, 0x1000);
+        mgr->setEnemyDefeatFlags(mFlagSpace.getFlagPtrUnchecked(), 0, 0x1000);
     };
 };
 

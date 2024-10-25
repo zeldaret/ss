@@ -18,11 +18,11 @@ public:
     static u16 sDungeonFlags[8];
     // static DungeonflagManager *sInstance;
 
-    void copyFromSave(s16 flag);
-    void copyFromSave(u16 flagIndex);
+    void copyFromSave(u32 flag);
+    void copyFromSave_Internal(u16 flagIndex);
     void setCommitFlag(u16 flag);
     DungeonflagManager();
-    void setupFlagStuff();
+    void init();
     void setToValue(u16 flag, u32 value);
     void setFlag(u16 flag);
     u16 getDungeonFlag(u16 flag);
@@ -38,13 +38,13 @@ public:
 };
 
 /** 80575404 */
-// DungeonflagManager *DungeonflagManager::sInstance = nullptr;
+DungeonflagManager *DungeonflagManager::sInstance = nullptr;
 
 /** 805a9c58 */
 u16 DungeonflagManager::sDungeonFlags[8] = {};
 
 /** 800bf8d0 */
-void DungeonflagManager::copyFromSave(u16 flagIndex) {
+void DungeonflagManager::copyFromSave_Internal(u16 flagIndex) {
     mFlagSpace.copyFromSaveFile(saveFilePtr(flagIndex), 0, 0x8);
 }
 
@@ -59,15 +59,15 @@ DungeonflagManager::DungeonflagManager()
       mFlagSpace(sDungeonFlags, ARRAY_LENGTH(sDungeonFlags)) {}
 
 /** 800bf980 */
-void DungeonflagManager::setupFlagStuff() {
+void DungeonflagManager::init() {
     mFlagStuff = new UnkFlagStuff(0x11, DungeonflagManager__FLAG_DEFINITIONS);
     mShouldCommit = false;
 }
 
 /** 800bf9e0 */
-void DungeonflagManager::copyFromSave(s16 flag) {
+void DungeonflagManager::copyFromSave(u32 flag) {
     mStageIndex = flag;
-    copyFromSave((u16)flag);
+    copyFromSave_Internal(flag);
 }
 
 /** 800bf9f0 */

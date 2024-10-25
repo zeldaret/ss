@@ -1,5 +1,7 @@
 // clang-format off
 
+#include "common.h"
+#include "toBeSorted/sceneflag_manager.h"
 #include <toBeSorted/flag_space.h>
 #include <toBeSorted/misc_flag_managers.h>
 #include <toBeSorted/item_story_flag_manager.h>
@@ -11,6 +13,12 @@
 #include <toBeSorted/flag_managers/unk_flag_stuff.inc>
 #include <toBeSorted/flag_managers/bitwise_flag_helper.inc>
 
+u16 StoryflagManager::sFlags[0x80];
+u16 ItemflagManager::sFlags[0x40];
+
+
+StoryflagManager *StoryflagManager::sInstance = nullptr;
+ItemflagManager *ItemflagManager::sInstance = nullptr;
 
 ItemStoryManagerBase::ItemStoryManagerBase(): flagSizeMaybe(0), anotherSizeMaybe(0), storyFlagsPtr(nullptr), unkFlagsPtr(nullptr), dirty(false) {}
 ItemStoryManagerBase::~ItemStoryManagerBase() {
@@ -197,6 +205,10 @@ bool ItemflagManager::commit() {
 static void postSetup();
 static void updateFlagForFlagIndex(u16 stage);
 class TBoxFlagManagerSub : public TBoxFlagManager {
+public:
+    TBoxFlagManagerSub() {
+        TBoxFlagManager::sInstance = this;
+    }
     // virtual ~TBoxFlagManagerSub() {}
 };
 
@@ -213,14 +225,23 @@ class ItemflagManagerSub : public ItemflagManager {
     // virtual ~ItemflagManagerSub() {}
 };
 
+class SceneflagManagerSub : public SceneflagManager {
 
+};
 
+class DungeonflagManagerSub : public DungeonflagManager {
+
+};
+
+class SkipflagManagerSub : public SkipflagManager {
+
+};
 
 void setupFlagManagers(EGG::Heap *heap) {
     if (SceneflagManager::sInstance == nullptr) {
-        SceneflagManager::sInstance = new (heap) SceneflagManager();
+        SceneflagManager::sInstance = new (heap) SceneflagManagerSub();
         mHeap m(heap);
-        SceneflagManager::sInstance->doNothing();
+        SceneflagManager::sInstance->init();
     }
 
     if (TBoxFlagManager::sInstance == nullptr) {
@@ -248,15 +269,15 @@ void setupFlagManagers(EGG::Heap *heap) {
     }
 
     if (DungeonflagManager::sInstance == nullptr) {
-        DungeonflagManager::sInstance = new (heap) DungeonflagManager();
+        DungeonflagManager::sInstance = new (heap) DungeonflagManagerSub();
         mHeap m(heap);
-        DungeonflagManager::sInstance->setupFlagStuff();
+        DungeonflagManager::sInstance->init();
     }
 
     if (SkipflagManager::sInstance == nullptr) {
-        SkipflagManager::sInstance = new (heap) SkipflagManager();
+        SkipflagManager::sInstance = new (heap) SkipflagManagerSub();
         mHeap m(heap);
-        SkipflagManager::sInstance->unsetCommitFlag();
+        SkipflagManager::sInstance->init();
     }
 
     postSetup();
@@ -273,11 +294,26 @@ void copyAllFlagManagersFromSave() {
     StoryflagManager::sInstance->copyFlagsFromSave_Priv();
     ItemflagManager::sInstance->copyFlagsFromSave_Priv();
     DungeonflagManager::sInstance->copyFromSave(flag);
-    SkipflagManager::sInstance->copyFromSave();
+    SkipflagManager::sInstance->thunk_copyFromSave();
     EnemyDefeatManager::sInstance->copyFromSave(flag);
 }
 
-static void updateFlagForFlagIndex(u16 stage) {}
+static void updateFlagForFlagIndex(u16 stage) {
+    SceneflagManager::sInstance->updateFlagindex(stage);
+    TBoxFlagManager::sInstance->copyFromSave(stage);
+    EnemyDefeatManager::sInstance->updateFlagIndex(stage);
+    DungeonflagManager::sInstance->copyFromSave(stage);
+}
+
+void commitAllFlagManagers() {
+    StoryflagManager::sInstance->commit();
+    ItemflagManager::sInstance->commit();
+    DungeonflagManager::sInstance->doCommit();
+    SkipflagManager::sInstance->commitFlags();
+    SceneflagManager::sInstance->doCommit();
+    TBoxFlagManager::sInstance->commitIfNecessary();
+    EnemyDefeatManager::sInstance->commitIfNecessary();
+}
 
 extern "C" bool checkedMemcpy(void *dest, u32 destLen, const void *src, u32 count) {
     if (dest == nullptr || src == nullptr || destLen < count || destLen > 0xFFFF) {

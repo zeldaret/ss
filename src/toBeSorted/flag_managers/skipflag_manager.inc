@@ -17,7 +17,7 @@ public:
     void copyFromSave();
     void setCommitFlag(u16 flag);
     SkipflagManager();
-    void unsetCommitFlag();
+    void init();
     void thunk_copyFromSave();
     void setFlag(u16 flag);
     bool checkFlag(u16 flag);
@@ -44,7 +44,7 @@ void SkipflagManager::setCommitFlag(u16 flag) {
 SkipflagManager::SkipflagManager() : mFlagSpace(sSkipFlags, ARRAY_LENGTH(sSkipFlags)), mShouldCommit(false) {}
 
 // 800bfc30
-void SkipflagManager::unsetCommitFlag() {
+void SkipflagManager::init() {
     mShouldCommit = false;
 }
 

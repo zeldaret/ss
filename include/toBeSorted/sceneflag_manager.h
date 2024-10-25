@@ -20,7 +20,7 @@ public:
     static u16 sZoneFlags[0xFC];
 
     static SceneflagManager *sInstance;
-    void doNothing();
+    void init();
     void setShouldCommit(u16 flag);
     SceneflagManager();
     s32 isNotTempOrZoneFlag(u16 flag);
