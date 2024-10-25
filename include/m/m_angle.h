@@ -46,6 +46,20 @@ struct mAng {
     }
 
     s16 mVal;
+
+    static mAng fromDeg(f32 deg) {
+        return deg * sDegToAng;
+    }
+
+private:
+    static const f32 sHalfCircleDeg;
+    static const f32 sAngToDeg;
+    static const f32 sAngToRad;
+    static const f32 NotSure;
+    static const f32 sDegToRad;
+    static const f32 sDegToAng;
+    static const f32 sRadToAng;
+    static const f32 sRadToDeg;
 };
 
 class mAng3_c {

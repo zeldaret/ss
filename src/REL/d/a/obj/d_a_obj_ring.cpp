@@ -20,7 +20,7 @@ int dAcOring_c::create() {
 
     field_0x388 = getArgFromParams();
 
-    setBoundingBox(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
+    boundingBox.Set(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
     updateMatrix();
     mModel.setScale(mScale);
     mModel.setLocalMtx(mWorldMtx);

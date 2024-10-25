@@ -69,7 +69,7 @@ bool dAcOsw_c::createHeap() {
     TRY_CREATE(mModel.create(resMdl, &heap_allocator, 0x20, 1, nullptr));
 
     field_0x5E8 = mScale.x *
-                  (resMdl.GetResNode("base").mNode.ref().FLOAT_0x50 - resMdl.GetResNode("base").mNode.ref().FLOAT_0x44);
+                  (resMdl.GetResNode("base").mNode.ref().VEC3_0x50.x - resMdl.GetResNode("base").mNode.ref().VEC3_0x44.x);
     cBgD_t *dbzData = (cBgD_t *)getOarcDZB(SWITCH_TYPES[mSwitchType], SWITCH_TYPES[mSwitchType]);
     PLC *plcData = (PLC *)getOarcPLC(SWITCH_TYPES[mSwitchType], SWITCH_TYPES[mSwitchType]);
     mScale.set(1.0f, 0.8f, 1.0f);
@@ -77,7 +77,7 @@ bool dAcOsw_c::createHeap() {
     field_0x5B8.set(mWorldMtx);
     mModel.setLocalMtx(mWorldMtx);
 
-    bool set = mCollision.Set(dbzData, plcData, 1, &field_0x5B8, &mScale);
+    bool set = mCollision.Set(dbzData, plcData, cBgW::MOVE_BG_e, &field_0x5B8, &mScale);
     mCollision.SetCrrFunc(dBgS_MoveBGProc_TypicalRotY);
     return !set;
 }
@@ -101,7 +101,7 @@ int dAcOsw_c::actorCreate() {
     } else {
         mStateMgr.changeState(StateID_OnWait);
     }
-    setBoundingBox(mVec3_c(-90.0f, -10.0f, -90.0f), mVec3_c(90.0f, 70.0f, 90.0f));
+    boundingBox.Set(mVec3_c(-90.0f, -10.0f, -90.0f), mVec3_c(90.0f, 70.0f, 90.0f));
 
     return SUCCEEDED;
 }

@@ -12,3 +12,6 @@ REL/executor.c:
 REL/d/a/obj/d_a_obj_fruit_guts_leaf.cpp:
 	.text       start:0x00000070 end:0x00000504
 	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x00000020
+	.data       start:0x00000000 end:0x000000C8
+	.bss        start:0x00000008 end:0x00000020

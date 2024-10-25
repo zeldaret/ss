@@ -22,13 +22,13 @@
 }
 
 /* 8016cd30 */ u16 Counter::getCommittedValue() {
-    return ItemFlagManager::sInstance->getCounterOrFlag(counterId | 0x4000);
+    return ItemflagManager::sInstance->getCounterOrFlag(counterId | 0x4000);
 }
 
 /* 8016cd50 */ u16 Counter::getUncommittedValue() {
-    return ItemFlagManager::sInstance->getUncommittedValue(counterId | 0x4000);
+    return ItemflagManager::sInstance->getUncommittedValue(counterId | 0x4000);
 }
 
 /* 8016cd70 */ void Counter::setValue(u16 num) {
-    ItemFlagManager::sInstance->setFlagOrCounterToValue(counterId | 0x4000, num);
+    ItemflagManager::sInstance->setFlagOrCounterToValue(counterId | 0x4000, num);
 }

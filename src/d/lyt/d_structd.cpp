@@ -11,11 +11,11 @@ dLytStructDList *dLytStructDList::create(EGG::Heap *heap) {
     return new (heap) dLytStructDList();
 }
 
-void dLytStructDList::appendToList1(dLytStructD *other) {
+void dLytStructDList::appendToList1(dLytStructC *other) {
     mList1.insert(other);
 }
 
-void dLytStructDList::removeFromList1(dLytStructD *other) {
+void dLytStructDList::removeFromList1(dLytStructC *other) {
     mList1.remove(other);
 }
 
@@ -25,6 +25,11 @@ void dLytStructDList::appendToList2(dLytStructD *other) {
 
 void dLytStructDList::removeFromList2(dLytStructD *other) {
     mList2.remove(other);
+}
+
+dLytStructD::~dLytStructD() {
+    delete[] field_0x1C;
+    field_0x1C = nullptr;
 }
 
 } // namespace d2d

@@ -28,7 +28,7 @@ bool dAcOappearBridge_c::createHeap() {
     PLC *plc = (PLC *)getOarcFile("TongueStage", "dat/TongueStage.plc");
     updateMatrix();
     mModel.setLocalMtx(mWorldMtx);
-    TRY_CREATE(!mCollision.Set(dzb, plc, 1, &mWorldMtx, &mScale));
+    TRY_CREATE(!mCollision.Set(dzb, plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mCollision.Lock();
     return true;
 }
@@ -48,7 +48,7 @@ int dAcOappearBridge_c::create() {
     mStateMgr.changeState(StateID_Wait);
     mModel.setPriorityDraw(0x1C, 0x9);
 
-    setBoundingBox(mVec3_c(-3000.0f, -200.0f, -600.0f), mVec3_c(50.0f, 800.0f, 600.0f));
+    boundingBox.Set(mVec3_c(-3000.0f, -200.0f, -600.0f), mVec3_c(50.0f, 800.0f, 600.0f));
 
     return SUCCEEDED;
 }

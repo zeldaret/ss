@@ -12,6 +12,7 @@ BOOL chase(short *value, short target, short stepSize);
 BOOL chase(int *value, int target, int stepSize);
 BOOL chase(float *value, float target, float stepSize);
 BOOL chaseAngle(short *value, short target, short stepSize);
+BOOL chaseAngle2(short *value, short target, short stepSize);
 
 // Inofficial names
 float extrapolate(float start, float end, float scale);

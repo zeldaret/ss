@@ -60,6 +60,14 @@ public:
         return mCurrFrame;
     }
 
+    inline void setCurrFrame(f32 arg) {
+        mCurrFrame = arg;
+    }
+
+    inline void setFlags(u8 flags) {
+        mFlags = flags;
+    }
+
     inline void setToStart() {
         setFrame(0.0f);
     }
@@ -79,6 +87,16 @@ public:
 
     inline void setBackward() {
         mFlags = mFlags | FLAG_BACKWARDS;
+    }
+
+    inline void setRatio(f32 ratio) {
+        f32 actualEnd = mEndFrame - 1.0f;
+        setFrame(actualEnd * ratio);
+    }
+
+    inline void setBackwardsRatio(f32 ratio) {
+        f32 actualEnd = mEndFrame - 1.0f;
+        setFrame(actualEnd - (ratio * actualEnd));
     }
 
 private:

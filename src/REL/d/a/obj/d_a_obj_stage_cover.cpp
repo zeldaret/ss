@@ -19,7 +19,7 @@ int dAcOstageCover_c::create() {
 
     mStateMgr.changeState(StateID_Wait);
     mModel.setPriorityDraw(0x1C, 9);
-    setBoundingBox(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
+    boundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
     return SUCCEEDED;
 }
 

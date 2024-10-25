@@ -35,7 +35,7 @@ int dAcOmoleSoil_c::create() {
     dAcBase_c::mScale.set(sHalfScale, sHalfScale, sHalfScale);
     mStateMgr.changeState(StateID_Wait);
 
-    setBoundingBox(mVec3_c(-100.0f, -0.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
+    boundingBox.Set(mVec3_c(-100.0f, -0.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
     return SUCCEEDED;
 }
 

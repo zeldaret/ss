@@ -15,7 +15,7 @@ bool dAcOJunkRep_c::loadMdl(m3d::smdl_c &mdl, const char *name) {
 }
 
 bool dAcOJunkRep_c::getState() {
-    return StoryFlagManager::sInstance->getCounterOrFlag(0x143) == 1;
+    return StoryflagManager::sInstance->getCounterOrFlag(0x143) == 1;
 }
 
 bool dAcOJunkRep_c::createHeap() {
@@ -39,7 +39,7 @@ int dAcOJunkRep_c::create() {
 
     mStateMgr.changeState(StateID_Wait);
 
-    setBoundingBox(mVec3_c(-30.0f, -0.0f, -20.0f), mVec3_c(30.0f, 120.0f, 20.0f));
+    boundingBox.Set(mVec3_c(-30.0f, -0.0f, -20.0f), mVec3_c(30.0f, 120.0f, 20.0f));
 
     return SUCCEEDED;
 }

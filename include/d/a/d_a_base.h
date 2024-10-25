@@ -206,7 +206,7 @@ public:
     /* 8002d600 */ void FUN_8002d600();
     /* 8002d630 */ void FUN_8002d630();
     /* 8002d6d0 */ void FUN_8002d6d0();
-    /* 8002d710 */ void playSoundEffect1();
+    /* 8002d710 */ void playSoundEffect1(u16 effect);
     /* 8002d740 */ void FUN_8002d740();
     /* 8002d770 */ void FUN_8002d770();
     /* 8002d7a0 */ void FUN_8002d7a0();

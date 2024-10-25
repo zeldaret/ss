@@ -234,24 +234,42 @@ toBeSorted/special_item_drop_mgr.cpp:
 	.sbss       start:0x80575438 end:0x80575440
 
 d/lyt/meter/d_lyt_meter.cpp:
-	.text       start:0x800C8950 end:0x800DFCB8
+	.text       start:0x800C8950 end:0x800DF8A8
 	.ctors      start:0x804DB6E0 end:0x804DB6E4
+	.rodata     start:0x804E4EE0 end:0x804E5020
+	.data       start:0x80511C80 end:0x80513B60
+	.sdata      start:0x80572318 end:0x80572380
+	.sdata2     start:0x80579AD0 end:0x80579AF0
+	.bss        start:0x805A9C98 end:0x805AA190
+
+d/lyt/meter/d_lyt_meter_unk.cpp:
+	.text       start:0x800DF8B0 end:0x800DFCB8
+	.data       start:0x80513B60 end:0x80513B70
+	.sdata2     start:0x80579AF0 end:0x80579B60
 
 d/lyt/meter/d_lyt_meter_a_btn.cpp:
 	.text       start:0x800DFCC0 end:0x800E1188
 	.ctors      start:0x804DB6E4 end:0x804DB6E8
+	.data       start:0x80513BE8 end:0x80513F38
+	.bss        start:0x805AA190 end:0x805AA350
 
 d/lyt/meter/d_lyt_meter_z_btn.cpp:
 	.text       start:0x800E1190 end:0x800E2238
 	.ctors      start:0x804DB6E8 end:0x804DB6EC
+	.data       start:0x80513F38 end:0x80514188
+	.bss        start:0x805AA350 end:0x805AA450
 
 d/lyt/meter/d_lyt_meter_key.cpp:
 	.text       start:0x800E2240 end:0x800E4928
 	.ctors      start:0x804DB6EC end:0x804DB6F0
+	.data       start:0x80514188 end:0x805148B0
+	.bss        start:0x805AA450 end:0x805AA790
 
 d/lyt/meter/d_lyt_meter_drink.cpp:
 	.text       start:0x800E4930 end:0x800E6AC8
 	.ctors      start:0x804DB6F0 end:0x804DB6F4
+	.data       start:0x805148B0 end:0x80514D60
+	.bss        start:0x805AA790 end:0x805AA9D0
 
 d/lyt/meter/d_lyt_meter_remocon_bg.cpp:
 	.text       start:0x800E6AD0 end:0x800E7218
@@ -262,45 +280,67 @@ d/lyt/meter/d_lyt_meter_remocon_bg.cpp:
 d/lyt/meter/d_lyt_meter_nunchaku_bg.cpp:
 	.text       start:0x800E7220 end:0x800E8168
 	.ctors      start:0x804DB6F8 end:0x804DB6FC
+	.data       start:0x80514F10 end:0x80515178
 
 d/lyt/meter/d_lyt_meter_nun_stk.cpp:
 	.text       start:0x800E8170 end:0x800E8ED8
 	.ctors      start:0x804DB6FC end:0x804DB700
+	.data       start:0x80515178 end:0x805153A8
 
 d/lyt/meter/d_lyt_meter_item_select.cpp:
 	.text       start:0x800E8EE0 end:0x800F35A8
 	.ctors      start:0x804DB700 end:0x804DB704
+	.data       start:0x805153A8 end:0x80516A28
 
 d/lyt/meter/d_lyt_meter_plus_btn.cpp:
 	.text       start:0x800F35B0 end:0x800F4768
 	.ctors      start:0x804DB704 end:0x804DB708
+	.data       start:0x80516A28 end:0x80516C90
 
 d/lyt/meter/d_lyt_meter_minus_btn.cpp:
 	.text       start:0x800F4770 end:0x800F8D98
 	.ctors      start:0x804DB708 end:0x804DB70C
+	.data       start:0x80516C90 end:0x80517818
 
 d/lyt/meter/d_lyt_meter_cross_btn.cpp:
 	.text       start:0x800F8DA0 end:0x800FAFC8
 	.ctors      start:0x804DB70C end:0x804DB710
+	.data       start:0x80517818 end:0x80517CE0
 
 d/lyt/meter/d_lyt_meter_dowsing.cpp:
 	.text       start:0x800FAFD0 end:0x801003E8
 	.ctors      start:0x804DB710 end:0x804DB714
+	.data       start:0x80517CE0 end:0x80518A60
 
 d/lyt/meter/d_lyt_meter_rupy.cpp:
 	.text       start:0x801003F0 end:0x801026A8
 	.ctors      start:0x804DB714 end:0x804DB718
+	.data       start:0x80518A60 end:0x80518F00
 
 d/lyt/meter/d_lyt_meter_ganbari_gauge.cpp:
 	.text       start:0x801026B0 end:0x80105548
 	.ctors      start:0x804DB718 end:0x804DB71C
+	.data       start:0x80518F00 end:0x80519578
+
+d/lyt/meter/d_lyt_meter_event_skip.cpp:
+	.text       start:0x80105550 end:0x80105F68
+	.ctors      start:0x804DB71C end:0x804DB720
+	.data       start:0x80519578 end:0x80519748
+
+d/lyt/meter/d_lyt_meter_timer.cpp:
+	.text       start:0x80105F70 end:0x8010AEB8
+	.ctors      start:0x804DB720 end:0x804DB724
+	.data       start:0x80519748 end:0x80519F60
 
 d/lyt/meter/d_lyt_meter_heart.cpp:
 	.text       start:0x8010AEC0 end:0x8010BD48
+	.data       start:0x80519F60 end:0x8051A320
 
 d/lyt/meter/d_lyt_meter_shield_gauge.cpp:
 	.text       start:0x8010BD50 end:0x8010CEC8
 	.ctors      start:0x804DB724 end:0x804DB728
+	.data       start:0x8051A320 end:0x8051A5A8
+	.bss        start:0x805ACD50 end:0x805ACE10
 
 d/lyt/d_lyt_do_button.cpp:
 	.text       start:0x8010CED0 end:0x8010EAF8
@@ -316,6 +356,7 @@ d/lyt/d_lyt_common_icon_material.cpp:
 d/lyt/d_lyt_common_icon_item.cpp:
 	.text       start:0x80111720 end:0x80113ED8
 	.ctors      start:0x804DB734 end:0x804DB738
+	.data       start:0x8051B070 end:0x8051B5A0
 
 d/lyt/d_lyt_msg_window.cpp:
 	.text       start:0x801148F0 end:0x8011C8C8
@@ -376,6 +417,11 @@ d/lyt/d_lyt_map.cpp:
 d/lyt/d_lyt_note.cpp:
 	.text       start:0x80148DF0 end:0x80149C28
 	.ctors      start:0x804DB770 end:0x804DB774
+	.rodata     start:0x804E7F50 end:0x804E7F80
+	.data       start:0x805225E8 end:0x80522820
+	.sdata      start:0x80572868 end:0x80572870
+	.sdata2     start:0x80579FB8 end:0x80579FC8
+	.bss        start:0x805B0830 end:0x805B0930
 
 d/lyt/d_lyt_battery.cpp:
 	.text       start:0x80149C30 end:0x8014AD18
@@ -398,21 +444,28 @@ d/lyt/d_lyt_wipe.cpp:
 	.text       start:0x8014C6C0 end:0x8014E008
 	.ctors      start:0x804DB77C end:0x804DB780
 
+d/lyt/d_lyt_help.cpp:
+	.text       start:0x8014E010 end:0x80150428
+	.ctors      start:0x804DB780 end:0x804DB784
+
 d/lyt/d_lyt_bird_gauge.cpp:
 	.text       start:0x80152FD0 end:0x801548D8
 	.ctors      start:0x804DB784 end:0x804DB788
+	.data       start:0x80524020 end:0x80524510
 
 d/lyt/d_lyt_sky_gauge.cpp:
 	.text       start:0x801548E0 end:0x80155CC8
 	.ctors      start:0x804DB788 end:0x804DB78C
+	.data       start:0x80524510 end:0x80524928
 
 d/lyt/d_lyt_deposit_stock.cpp:
 	.text       start:0x80155CD0 end:0x801578A8
 	.ctors      start:0x804DB78C end:0x804DB790
 
-d/lyt/d_lyt_bigboss_gauge.cpp:
+d/lyt/d_lyt_boss_gauge.cpp:
 	.text       start:0x80158290 end:0x80158E78
 	.ctors      start:0x804DB790 end:0x804DB794
+	.data       start:0x80524CD0 end:0x80524ED0
 
 d/lyt/d_lyt_pause_back.cpp:
 	.text       start:0x80158E80 end:0x80159E78
@@ -513,6 +566,19 @@ d/lyt/d_screen_fader.cpp:
 	.text       start:0x80175BD0 end:0x80175FC4
 	.data       start:0x80528D68 end:0x80528D90
 	.sdata2     start:0x8057ABE0 end:0x8057AC08
+
+d/d_cs_base.cpp:
+	.text       start:0x801BC6C0 end:0x801BD250
+	.data       start:0x8052E860 end:0x8052E968
+	.sdata      start:0x80573430 end:0x80573448
+	.sdata2     start:0x8057B5A8 end:0x8057B5C0
+
+d/d_cs_game.cpp:
+	.text       start:0x801BD250 end:0x801C5C28
+	.ctors      start:0x804DB820 end:0x804DB824
+	.data       start:0x8052E968 end:0x80530170
+	.sdata2     start:0x8057B5C0 end:0x8057B650
+	.bss        start:0x805B38B8 end:0x805B4178
 
 d/a/d_a_player.cpp:
 	.text       start:0x801C5C30 end:0x802471F8
@@ -830,6 +896,7 @@ m/m_angle.cpp:
 	.text       start:0x802EE5F0 end:0x802EE6B8
 	.ctors      start:0x804DB8CC end:0x804DB8D0
 	.sbss       start:0x80575C08 end:0x80575C10
+	.sdata2     start:0x8057CD90 end:0x8057CDB0
 
 m/m_color_fader.cpp:
 	.text       start:0x802EE7E0 end:0x802EEB94
@@ -1915,8 +1982,11 @@ egg/gfx/eggTextureBuffer.cpp:
 	.text       start:0x804B53F0 end:0x804B59DC
 
 egg/audio/eggAudioArcPlayerMgr.cpp:
-	.text       start:0x804B59E0 end:0x804B6428
+	.text       start:0x804B59E0 end:0x804B641C
 	.data       start:0x8056F2C0 end:0x8056F320
+
+egg/audio/eggAudioExpMgr.cpp:
+	.text       start:0x804B6420 end:0x804B6428
 
 egg/audio/eggAudioHeapMgr.cpp:
 	.text       start:0x804B6430 end:0x804B64A8

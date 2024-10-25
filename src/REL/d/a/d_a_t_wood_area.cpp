@@ -13,8 +13,8 @@ STATE_DEFINE(dAcTWoodArea_c, Wait);
 int dAcTWoodArea_c::actorCreate() {
     mStateMgr.changeState(StateID_Init);
     PSMTXTrans(mWorldMtx.m, position.x, position.y, position.z);
-    boundingBox.min = mVec3_c(-0.0f, -0.0f, -0.0f);
-    boundingBox.max = mVec3_c(0.0f, 0.0f, 0.0f);
+    boundingBox.mMin = mVec3_c(-0.0f, -0.0f, -0.0f);
+    boundingBox.mMax = mVec3_c(0.0f, 0.0f, 0.0f);
     return SUCCEEDED;
 }
 

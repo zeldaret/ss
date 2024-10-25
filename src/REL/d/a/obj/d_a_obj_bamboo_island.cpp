@@ -15,8 +15,8 @@ static const char *const sBambooIslandNames[] = {
 SPECIAL_ACTOR_PROFILE(OBJ_BAMBOO_ISLAND, dAcObambooIsland_c, fProfile::OBJ_BAMBOO_ISLAND, 0x01F9, 0, 3);
 
 void dAcObambooIsland_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *interactor) {
-    if (interactor->isActorPlayer() && actor != nullptr && StoryFlagManager::sInstance->getCounterOrFlag(284) == 0) {
-        StoryFlagManager::sInstance->setFlag(284);
+    if (interactor->isActorPlayer() && actor != nullptr && StoryflagManager::sInstance->getCounterOrFlag(284) == 0) {
+        StoryflagManager::sInstance->setFlag(284);
     }
 }
 
@@ -34,7 +34,7 @@ bool dAcObambooIsland_c::createHeap() {
     for (int i = 0; i < 2; i++) {
         mModels[i].setLocalMtx(mWorldMtx);
     }
-    TRY_CREATE(!mCollision.Set(dzb, plc, 1, &mWorldMtx, &mScale));
+    TRY_CREATE(!mCollision.Set(dzb, plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mCollision.Lock();
     return true;
 }
@@ -45,7 +45,7 @@ int dAcObambooIsland_c::create() {
     dBgS::GetInstance()->Regist(&mCollision, this);
     mModels[0].setPriorityDraw(0x1C, 9);
     mModels[1].setPriorityDraw(0x22, 9);
-    setBoundingBox(mVec3_c(-2400.0f, -1600.0f, -2300.0f), mVec3_c(2400.0f, 3900.0f, 2400.0f));
+    boundingBox.Set(mVec3_c(-2400.0f, -1600.0f, -2300.0f), mVec3_c(2400.0f, 3900.0f, 2400.0f));
     mCullingDistance = 500000.0f;
     mCollision.SetRideCallback(rideCallback);
     return SUCCEEDED;
