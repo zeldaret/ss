@@ -948,6 +948,7 @@ d/col/c/c_m3d_g_lin.cpp:
 
 d/col/c/c_m3d_g_pla.cpp:
 	.text       start:0x80338430 end:0x80338678
+	.sdata2     start:0x8057D048 end:0x8057D04C
 
 d/col/c/c_m3d_g_sph.cpp:
 	.text       start:0x80338680 end:0x803388D8

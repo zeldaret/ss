@@ -21,9 +21,35 @@ src_dir = os.path.join(root_dir, "src")
 include_dirs = [
     os.path.join(root_dir, "include"),
     # Add additional include directories here
+    os.path.join(root_dir, "src"),
+    os.path.join(root_dir, "src", "PowerPC_EABI_Support", "MetroTRK"),
+    os.path.join(
+        root_dir, "src", "PowerPC_EABI_Support", "MSL", "MSL_C", "MSL_Common", "Include"
+    ),
+    os.path.join(
+        root_dir,
+        "src",
+        "PowerPC_EABI_Support",
+        "MSL",
+        "MSL_C",
+        "MSL_Common_Embedded",
+        "Math",
+        "Include",
+    ),
+    os.path.join(root_dir, "src", "PowerPC_EABI_Support", "MSL", "MSL_C", "PPC_EABI"),
+    os.path.join(
+        root_dir,
+        "src",
+        "PowerPC_EABI_Support",
+        "MSL",
+        "MSL_C++",
+        "MSL_Common",
+        "Include",
+    ),
+    os.path.join(root_dir, "src", "PowerPC_EABI_Support", "Runtime", "Inc"),
 ]
 
-include_pattern = re.compile(r'^#\s*include\s*[<"](.+?)[>"]$')
+include_pattern = re.compile(r'^#\s*include\s*[<"](.+?)[>"]')
 guard_pattern = re.compile(r"^#\s*ifndef\s+(.*)$")
 
 defines = set()

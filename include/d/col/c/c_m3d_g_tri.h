@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "d/col/c/c_m3d_g_pla.h"
+#include "m/m_vec.h"
 
 class cM3dGTri : public cM3dGPla {
     typedef nw4r::math::VEC3 VecType;
@@ -12,13 +13,23 @@ public:
     /* 0x1C */ VecType mB;
     /* 0x28 */ VecType mC;
 
+    const mVec3_c &GetPntA() const {
+        return *(mVec3_c *)&mA;
+    }
+    const mVec3_c &GetPntB() const {
+        return *(mVec3_c *)&mB;
+    }
+    const mVec3_c &GetPntC() const {
+        return *(mVec3_c *)&mC;
+    }
+
     cM3dGTri() {}
     void SetPos(const VecType *, const VecType *, const VecType *);
 
     void SetBg(const VecType *, const VecType *, const VecType *, const cM3dGPla *pla);
 
-    bool cross(const cM3dGLin *lin, VecType *xyz, bool param_2, bool param_3) const {
-        return cM3d_Cross_LinTri(lin, this, xyz, param_2, param_3);
+    bool cross(const cM3dGLin &lin, VecType *xyz, bool param_2, bool param_3) const {
+        return cM3d_Cross_LinTri(lin, *this, xyz, param_2, param_3);
     }
 };
 

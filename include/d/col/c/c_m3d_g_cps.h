@@ -18,7 +18,7 @@ public:
     void Set(const mVec3_c &, const mVec3_c &, f32);
     void SetR(f32 r);
     void Set_0x1C(f32);
-    bool fn_80337f30(cM3dGUnk *, mVec3_c *);
+    bool Cross(cM3dGUnk &, mVec3_c *);
     bool fn_80337f40(const mVec3_c &) const;
 
     f32 GetR() const {

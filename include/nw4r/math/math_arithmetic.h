@@ -1,5 +1,6 @@
 #ifndef NW4R_MATH_ARITHMETIC_H
 #define NW4R_MATH_ARITHMETIC_H
+
 #include "math.h"
 #include "nw4r/types_nw4r.h" // IWYU pragma: export
 #include "rvl/OS.h"          // IWYU pragma: export
