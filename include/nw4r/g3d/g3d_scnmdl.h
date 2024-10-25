@@ -21,6 +21,15 @@ public:
         char UNK_0x0[0x34];
     };
 
+    class CopiedVisAccess {
+    public:
+        CopiedVisAccess(ScnMdl *, u32);
+        void SetVisibility(bool);
+    private:
+        // TODO
+        char UNK_0x0[0x10];
+    };
+
 public:
     virtual bool SetAnmObj(AnmObj *p, AnmObjType type) override;
 

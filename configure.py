@@ -1434,7 +1434,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_into_hole", "REL/d/a/obj/d_a_obj_into_hole.cpp"),
     Rel(NonMatching, "d_a_obj_iron_stage", "REL/d/a/obj/d_a_obj_iron_stage.cpp"),
     Rel(NonMatching, "d_a_obj_island_LOD", "REL/d/a/obj/d_a_obj_island_LOD.cpp"),
-    Rel(NonMatching, "d_a_obj_island_nusi", "REL/d/a/obj/d_a_obj_island_nusi.cpp"),
+    Rel(Matching, "d_a_obj_island_nusi", "REL/d/a/obj/d_a_obj_island_nusi.cpp"),
     Rel(
         NonMatching,
         "d_a_obj_item_heart_container",
