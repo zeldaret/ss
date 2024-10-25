@@ -6,7 +6,7 @@
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/col/c/c_bg_s_poly_info.h"
-#include "d/col/cc/d_cc_shape_colliders.h"
+#include "d/col/cc/d_cc_d.h"
 #include "d/d_shadow.h"
 #include "m/m3d/m_smdl.h"
 #include "nw4r/g3d/g3d_resfile.h"

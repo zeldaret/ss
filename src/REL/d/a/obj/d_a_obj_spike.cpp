@@ -2,13 +2,12 @@
 
 #include "d/col/cc/d_cc_mgr.h"
 
-
 SPECIAL_ACTOR_PROFILE(OBJ_SPIKE, dAcOspike_c, fProfile::OBJ_SPIKE, 0x1D9, 0, 2);
 
 // clang-format off
-dCcD_SrcAabb dAcOspike_c::sCcSrc = {
-    {{{0x400}, 0x2003F, 0, 1, 0, 0, 0, 0, 0}, 
-    {{0xFEB77DFF}, 0x111, 0x06, 0x407, 0, 0}, 
+dCcD_SrcUnk dAcOspike_c::sCcSrc = {
+    {{0x400, 0x2003F, 0, 1, 0, 0, 0, 0, 0}, 
+    {0xFEB77DFF, 0x111, 0x06, 0x407, 0, }, 
     {0}},
     {-1.0f, -246.0f, -472.0f, 73.0f, 255.0f, 482.0f}};
 // clang-format on
@@ -30,15 +29,15 @@ int dAcOspike_c::create() {
         return FAILED;
     }
 
-    mCCdStruct.setField0x38ToMagicValue();
-    mCollision.init(sCcSrc);
-    mCollision.initUnk(mCCdStruct);
+    mStts.SetDefaultRank();
+    mCollision.Set(sCcSrc);
+    mCollision.SetStts(mStts);
 
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     mVec3_c tmp;
     PSMTXMultVecSR(mWorldMtx.m, mVec3_c::Ex, tmp);
-    mCollision.setAtVec(tmp);
+    mCollision.SetAtVec(tmp);
 
     mMtx_c mtx;
     mtx.XrotS(rotation.x);
@@ -63,7 +62,7 @@ int dAcOspike_c::create() {
         tmp3.z = copy;
     }
 
-    mCollision.Set(tmp2, tmp3);
+    mCollision.cM3dGUnk::Set(tmp2, tmp3);
     mStateMgr.changeState(StateID_Wait);
     boundingBox.Set(mVec3_c(-10.0f, -250.0f, -480.0f), mVec3_c(80.0f, 260.0f, 490.0f));
     return SUCCEEDED;
@@ -75,7 +74,7 @@ int dAcOspike_c::doDelete() {
 
 int dAcOspike_c::actorExecute() {
     mStateMgr.executeState();
-    mCollision.Set(position, rotation.y);
+    mCollision.cM3dGUnk::Set(position, rotation.y);
     ColliderManager::getColliderManager()->addCollider(&mCollision);
     return 1;
 }

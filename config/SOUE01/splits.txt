@@ -1133,7 +1133,7 @@ d/col/bg/d_bg_w_time.cpp:
 	.sdata2     start:0x8057D230 end:0x8057D240
 	.bss        start:0x805D0F90 end:0x805D0FB4
 
-d/col/cc/d_cc_shape_colliders.cpp:
+d/col/cc/d_cc_d.cpp:
 	.text       start:0x80353B50 end:0x80354298
 	.data       start:0x80548340 end:0x80548580
 

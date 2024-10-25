@@ -7,7 +7,6 @@
 #include "toBeSorted/item_story_flag_manager.h"
 #include "toBeSorted/scgame.h"
 
-
 SPECIAL_ACTOR_PROFILE(OBJ_TOD3_STONE, dAcOtoD3StoneFigure_c, fProfile::OBJ_TOD3_STONE, 0x1B3, 0, 0);
 
 STATE_DEFINE(dAcOtoD3StoneFigure_c, OneEye);
@@ -18,8 +17,8 @@ f32 dAcOtoD3StoneFigure_c::sHeight = 290.0f;
 
 // clang-format off
 dCcD_SrcCyl dAcOtoD3StoneFigure_c::sCcSrc = {
-    {{{0}, 0, 0, 0, 0, 0, 0, 0, 0}, 
-    {{0xFEB77DFF}, 0x1000111, 0x06, 0x407, 0, 0}, 
+    {{0, 0, 0, 0, 0, 0, 0, 0, 0}, 
+    {0xFEB77DFF, 0x1000111, 0x06, 0x407, 0, 0}, 
     {0xE9}},
     {dAcOtoD3StoneFigure_c::sRadius, dAcOtoD3StoneFigure_c::sHeight}
 };
@@ -42,9 +41,9 @@ int dAcOtoD3StoneFigure_c::create() {
     }
 
     mMdl.setLocalMtx(mWorldMtx);
-    mCCdStruct.setField0x38ToMagicValue();
-    mCollision.init(sCcSrc);
-    mCollision.initUnk(mCCdStruct);
+    mStts.SetDefaultRank();
+    mCollision.Set(sCcSrc);
+    mCollision.SetStts(mStts);
     int zero = 0;
     mCollision.SetC(position);
     mCollision.SetR(dAcOtoD3StoneFigure_c::sRadius + zero);
@@ -66,7 +65,7 @@ int dAcOtoD3StoneFigure_c::create() {
     poscopy3.y = b;
     poscopy3.z = c;
     // poscopy3 = poscopy2;
-    mCollision.setSomeDefendValue(0x2000);
+    mCollision.SetTg_0x4C(0x2000);
 
     if (!mIsSkyKeepAlreadyOpen) {
         mStateMgr.changeState(StateID_OneEye);

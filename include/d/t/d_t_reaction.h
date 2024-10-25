@@ -2,7 +2,7 @@
 #define D_T_REACTION_H
 
 #include "d/a/obj/d_a_obj_base.h"
-#include "d/col/cc/d_cc_shape_colliders.h"
+#include "d/col/cc/d_cc_d.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 #include "toBeSorted/dowsing_target.h"
@@ -36,7 +36,7 @@ private:
         return params & 0xFF;
     }
 
-    int getParam0x08() {
+    u32 getParam0x08() {
         return (params >> 8) & 0xFF;
     }
 

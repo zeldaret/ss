@@ -471,7 +471,7 @@ config.libs = [
             Object(NonMatching, "d/col/bg/d_bg_w_kcol.cpp"),
             Object(Matching, "d/col/bg/d_bg_w_sv.cpp"),
             Object(NonMatching, "d/col/bg/d_bg_w_time.cpp"),
-            Object(NonMatching, "d/col/cc/d_cc_shape_colliders.cpp"),
+            Object(NonMatching, "d/col/cc/d_cc_d.cpp"),
         ],
     },
     {
@@ -1708,9 +1708,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_under_cloud", "REL/d/a/obj/d_a_obj_under_cloud.cpp"),
     Rel(NonMatching, "d_a_obj_updown_lava", "REL/d/a/obj/d_a_obj_updown_lava.cpp"),
     Rel(Matching, "d_a_obj_utajima", "REL/d/a/obj/d_a_obj_utajima.cpp"),
-    Rel(
-        Matching, "d_a_obj_utajima_island", "REL/d/a/obj/d_a_obj_utajima_island.cpp"
-    ),
+    Rel(Matching, "d_a_obj_utajima_island", "REL/d/a/obj/d_a_obj_utajima_island.cpp"),
     Rel(Matching, "d_a_obj_utajima_lv2", "REL/d/a/obj/d_a_obj_utajima_lv2.cpp"),
     Rel(
         NonMatching,

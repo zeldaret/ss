@@ -277,11 +277,11 @@ int cCcD_Stts::GetWeight(int inRank) const {
     return mRank;
 }
 
-cCcD_GAtTgCoCommonBase::cCcD_GAtTgCoCommonBase() : mHit_cb(nullptr), mEffCounter(0), mAc(), mField_0x14(0) {}
+cCcD_GAtTgCoCommonBase::cCcD_GAtTgCoCommonBase() : mHit_cb(nullptr), mEffCounter(0), mAc(), mRPrm(0) {}
 
 cCcD_GAtTgCoCommonBase::~cCcD_GAtTgCoCommonBase() {
     ClrActorInfo();
-    mField_0x14 = 0;
+    mRPrm = 0;
     ClrActorInfo();
     SubtractEffCounter();
     mHit_cb = nullptr;
@@ -292,7 +292,7 @@ void cCcD_GAtTgCoCommonBase::ClrActorInfo() {
 }
 
 void cCcD_GAtTgCoCommonBase::SetHitActor(dAcObjBase_c *pActor) {
-    mField_0x14 |= 1;
+    mRPrm |= 1;
     mAc.link(pActor);
 }
 
@@ -326,71 +326,71 @@ bool cCcD_GObj::fn_80328ad0(dAcObjBase_c *pObj, u32 attype) {
 }
 
 void cCcD_GObj::ClrSet() {
-    mObjAt.mSrc.mBase.mGFlag &= ~1;
-    mObjTg.mSrc.mBase.mGFlag &= ~1;
-    mObjCo.mSrc.mBase.mGFlag &= ~1;
+    mAt.mSrc.mBase.mGFlag &= ~1;
+    mTg.mSrc.mBase.mGFlag &= ~1;
+    mCo.mSrc.mBase.mGFlag &= ~1;
 }
 
-void cCcD_GObj::Set(const cCcD_SrcObj &src) {
-    mObjAt.Set(src.mObjAt);
-    mObjTg.Set(src.mObjTg);
-    mObjCo.Set(src.mObjCo);
+void cCcD_GObj::Set(const cCcD_SrcGObj &src) {
+    mAt.Set(src.mObjAt);
+    mTg.Set(src.mObjTg);
+    mCo.Set(src.mObjCo);
 }
 
 void cCcD_GObj::ClrAtHit() {
-    mObjAt.mField_0x14 = 0;
-    mObjAt.ClrActorInfo();
-    mObjAt.SubtractEffCounter();
-    mObjAt.mEffCounter = 0;
+    mAt.mRPrm = 0;
+    mAt.ClrActorInfo();
+    mAt.SubtractEffCounter();
+    mAt.mEffCounter = 0;
 }
 void cCcD_GObj::ClrTgHit() {
-    mObjTg.mField_0x14 = 0;
-    mObjTg.ClrActorInfo();
-    mObjTg.SubtractEffCounter();
-    mObjTg.mEffCounter = 0;
+    mTg.mRPrm = 0;
+    mTg.ClrActorInfo();
+    mTg.SubtractEffCounter();
+    mTg.mEffCounter = 0;
 }
 
 void cCcD_GObj::ClrCoHit() {
-    mObjCo.mField_0x14 = 0;
-    mObjCo.ClrActorInfo();
-    mObjCo.SubtractEffCounter();
-    mObjCo.mEffCounter = 0;
+    mCo.mRPrm = 0;
+    mCo.ClrActorInfo();
+    mCo.SubtractEffCounter();
+    mCo.mEffCounter = 0;
 }
 
 const mVec3_c &cCcD_GObj::GetAtHitPos() const {
-    return mObjAt.mHitPos;
+    return mAt.mHitPos;
 }
 
 mVec3_c &cCcD_GObj::GetAtHitPos() {
-    return mObjAt.mHitPos;
+    return mAt.mHitPos;
 }
 
 u32 cCcD_GObj::GetAtFlag0x2() const {
-    return mObjAt.mField_0x14 >> 1 & 1;
+    return mAt.mRPrm >> 1 & 1;
 }
 
 u32 cCcD_GObj::GetAtFlag0x4() const {
-    return mObjAt.mField_0x14 >> 2 & 1;
+    return mAt.mRPrm >> 2 & 1;
 }
 
 u32 cCcD_GObj::GetAtFlag0x8() const {
-    return mObjAt.mField_0x14 >> 3 & 1;
+    return mAt.mRPrm >> 3 & 1;
 }
 
 const mVec3_c &cCcD_GObj::GetTgHitPos() const {
-    return mObjTg.mHitPos;
+    return mTg.mHitPos;
 }
 
 mVec3_c &cCcD_GObj::GetTgHitPos() {
-    return mObjTg.mHitPos;
+    return mTg.mHitPos;
 }
 
 u32 cCcD_GObj::GetTgFlag0x4() const {
-    return mObjTg.mField_0x14 >> 2 & 1;
+    return mTg.mRPrm >> 2 & 1;
 }
 
 u32 cCcD_GObj::GetTgFlag0x8() const {
-    return mObjTg.mField_0x14 >> 3 & 1;
+    return mTg.mRPrm >> 3 & 1;
 }
 
 cCcD_GObjInf *cCcD_GObj::GetGObjInfo() {
@@ -398,7 +398,7 @@ cCcD_GObjInf *cCcD_GObj::GetGObjInfo() {
 }
 
 bool cCcD_GObj::ChkAtClawshot() const {
-    return mObjAt.mField_0x4C >> 19 & 1;
+    return mAt.mField_0x4C >> 19 & 1;
 }
 
 bool cCcD_GObj::ChkAtClawshotDebug() const {
@@ -406,132 +406,132 @@ bool cCcD_GObj::ChkAtClawshotDebug() const {
 }
 
 bool cCcD_GObj::ChkAtElectrified() const {
-    return mObjAt.mField_0x4C >> 18 & 1;
+    return mAt.mField_0x4C >> 18 & 1;
 }
 
 bool cCcD_GObj::ChkAtElectrifiedExtra() const {
-    return mObjAt.mField_0x4C >> 27 & 1;
+    return mAt.mField_0x4C >> 27 & 1;
 }
 
 bool cCcD_GObj::ChkAtWhippable() const {
-    return mObjAt.mField_0x4C >> 23 & 1;
+    return mAt.mField_0x4C >> 23 & 1;
 }
 
 bool cCcD_GObj::ChkAtBit24() const {
-    return mObjAt.mField_0x4C >> 24 & 1;
+    return mAt.mField_0x4C >> 24 & 1;
 }
 
 bool cCcD_GObj::ChkAtArrowStick() const {
-    return mObjAt.mField_0x4C >> 25 & 1;
+    return mAt.mField_0x4C >> 25 & 1;
 }
 
 bool cCcD_GObj::ChkAtWaterScaleBonk() const {
-    return mObjAt.mField_0x4C >> 26 & 1;
+    return mAt.mField_0x4C >> 26 & 1;
 }
 
 bool cCcD_GObj::ChkAtSwordBonk() const {
-    return mObjAt.mField_0x4C >> 16 & 1;
+    return mAt.mField_0x4C >> 16 & 1;
 }
 
 dAcObjBase_c *cCcD_GObj::GetAtActor() {
-    return mObjAt.GetActor();
+    return mAt.GetActor();
 }
 
 bool cCcD_GObj::ChkTg_0x58(u32 mask) const {
-    return mObjTg.mField_0x58 & mask;
+    return mTg.mField_0x58 & mask;
 }
 
 u32 cCcD_GObj::GetTg_0x58() const {
-    return mObjTg.mField_0x58;
+    return mTg.mField_0x58;
 }
 
 bool cCcD_GObj::ChkTgBit14() const {
-    return mObjTg.mField_0x5C >> 14 & 1;
+    return mTg.mField_0x5C >> 14 & 1;
 }
 
 u8 cCcD_GObj::GetTgDamage() const {
-    return mObjTg.mDamageAmount;
+    return mTg.mDamageAmount;
 }
 
 u16 cCcD_GObj::GetTgDamageFlags() const {
-    return mObjTg.mDamageFlags;
+    return mTg.mDamageFlags;
 }
 
 bool cCcD_GObj::ChkTgSkywardStrike() const {
-    return mObjTg.mField_0x5C >> 16 & 1;
+    return mTg.mField_0x5C >> 16 & 1;
 }
 bool cCcD_GObj::ChkTgBit17() const {
-    return mObjTg.mField_0x5C >> 17 & 1;
+    return mTg.mField_0x5C >> 17 & 1;
 }
 
 bool cCcD_GObj::ChkTgBit18() const {
-    return mObjTg.mField_0x5C >> 18 & 1;
+    return mTg.mField_0x5C >> 18 & 1;
 }
 
 bool cCcD_GObj::ChkTgBit19() const {
-    return mObjTg.mField_0x5C >> 19 & 1;
+    return mTg.mField_0x5C >> 19 & 1;
 }
 
 bool cCcD_GObj::ChkTgBit23() const {
-    return mObjTg.mField_0x5C >> 23 & 1;
+    return mTg.mField_0x5C >> 23 & 1;
 }
 
 bool cCcD_GObj::ChkTgBit20() const {
-    return mObjTg.mField_0x5C >> 20 & 1;
+    return mTg.mField_0x5C >> 20 & 1;
 }
 
 bool cCcD_GObj::ChkTgBit24() const {
-    return mObjTg.mField_0x5C >> 24 & 1;
+    return mTg.mField_0x5C >> 24 & 1;
 }
 
 bool cCcD_GObj::ChkTgBit25() const {
-    return mObjTg.mField_0x5C >> 25 & 1;
+    return mTg.mField_0x5C >> 25 & 1;
 }
 
 u16 cCcD_GObj::GetTg_0x68() const {
-    return mObjTg.mField_0x68;
+    return mTg.mField_0x68;
 }
 
 s16 cCcD_GObj::GetTg_0x6A() const {
-    return mObjTg.mField_0x6A;
+    return mTg.mField_0x6A;
 }
 
 bool cCcD_GObj::ChkTgBit8() const {
-    return mObjTg.mField_0x5C >> 8 & 1;
+    return mTg.mField_0x5C >> 8 & 1;
 }
 
 u8 cCcD_GObj::GetTg_0x4A() const {
-    return mObjTg.mField_0x4A;
+    return mTg.mField_0x4A;
 }
 
 dAcObjBase_c *cCcD_GObj::GetTgActor() {
-    return mObjTg.GetActor();
+    return mTg.GetActor();
 }
 
 const mVec3_c &cCcD_GObj::GetTg_0x2C() const {
-    return mObjTg.mField_0x2C;
+    return mTg.mField_0x2C;
 }
 
 dAcObjBase_c *cCcD_GObj::GetCoActor() {
-    return mObjCo.GetActor();
+    return mCo.GetActor();
 }
 
 bool cCcD_GObj::ChkCoBit4() const {
-    return mObjCo.mField_0x24 >> 4 & 1;
+    return mCo.mField_0x24 >> 4 & 1;
 }
 
 void cCcD_GObj::SetAtFlagsUpper(u32 flags) {
-    mObjAt.mSrc.mBase.mGFlag = mObjAt.mSrc.mBase.mGFlag & ~0x3ff0000 | flags;
+    mAt.mSrc.mBase.mGFlag = mAt.mSrc.mBase.mGFlag & ~0x3ff0000 | flags;
 }
 
 bool cCcD_GObj::ChkTgBit1() const {
-    return mObjTg.mField_0x14 >> 1 & 1;
+    return mTg.mRPrm >> 1 & 1;
 }
 
 void cCcD_GObj::AdjustHitPos(f32 x, f32 z) {
-    mObjAt.AdjustHitPos(x, z);
-    mObjTg.AdjustHitPos(x, z);
-    mObjCo.AdjustHitPos(x, z);
+    mAt.AdjustHitPos(x, z);
+    mTg.AdjustHitPos(x, z);
+    mCo.AdjustHitPos(x, z);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -858,8 +858,9 @@ void cCcD_UnkAttr::GetPos(nw4r::math::VEC3 *pPos) const {
 }
 
 void cCcD_UnkAttr::Set(const cCcD_SrcUnkAttr &src) {
-    mVec3_c min = src.mBnd.mMin;
-    mVec3_c max = src.mBnd.mMax;
+    mVec3_c min = mVec3_c(src.mMinX, src.mMinY, src.mMinZ);
+    mVec3_c max = mVec3_c(src.mMaxX, src.mMaxY, src.mMaxZ);
+    ;
     cM3dGUnk::Set(min, max);
 }
 
@@ -1433,7 +1434,7 @@ cCcD_GObjAt::cCcD_GObjAt() {
 
 cCcD_GObjAt::~cCcD_GObjAt() {}
 
-void cCcD_GObjAt::Set(const cCcD_SrcObjAt &info) {
+void cCcD_GObjAt::Set(const cCcD_SrcGObjAt &info) {
     mEffCounter = 0;
     mSrc = info;
     mHitPos = mVec3_c::Zero;
@@ -1454,7 +1455,7 @@ cCcD_GObjTg::cCcD_GObjTg()
 
 cCcD_GObjTg::~cCcD_GObjTg() {}
 
-void cCcD_GObjTg::Set(const cCcD_SrcObjTg &src) {
+void cCcD_GObjTg::Set(const cCcD_SrcGObjTg &src) {
     mEffCounter = 0;
     mSrc = src;
     mField_0x4C = 0;
@@ -1478,7 +1479,7 @@ cCcD_GObjCo::cCcD_GObjCo() {
 
 cCcD_GObjCo::~cCcD_GObjCo() {}
 
-void cCcD_GObjCo::Set(const cCcD_SrcObjCo &src) {
+void cCcD_GObjCo::Set(const cCcD_SrcGObjCo &src) {
     mEffCounter = 0;
     mSrc = src;
     SetCoFlag(mSrc.mBase.mGFlag & 0x1e0);

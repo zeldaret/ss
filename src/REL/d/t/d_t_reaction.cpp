@@ -7,7 +7,6 @@
 #include "d/col/cc/d_cc_mgr.h"
 #include "toBeSorted/sceneflag_manager.h"
 
-
 SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0x0151, 0, 0);
 
 STATE_DEFINE(dTgReaction_c, Wait);
@@ -19,8 +18,8 @@ const f32 dTgReaction_c::sHeight = 100.0f;
 
 // clang-format off
 dCcD_SrcCyl dTgReaction_c::sCcSrc = {
-    {{{0}, 0, 0, 0, 0, 0, 0, 0, 0}, 
-    {{0x10000}, 0x213, 0, 0x8, 0x8, 0}, 
+    {{0, 0, 0, 0, 0, 0, 0, 0, 0}, 
+    {0x10000, 0x213, 0, 0x8, 0x8,}, 
     {0xE8}},
     {dTgReaction_c::sRadius, dTgReaction_c::sHeight}
 };
@@ -43,7 +42,7 @@ int dTgReaction_c::create() {
         return FAILED;
     }
 
-    if (getReactType() != REACT_GUST_BELLOWS) {
+    if (getReactType() != REACT_UNDERWATER) {
         if (getSceneFlag() >= 0xFF) {
             return FAILED;
         }
@@ -74,29 +73,31 @@ int dTgReaction_c::create() {
         }
     }
 
-    mCCdStruct.setField0x38(0);
-    mCollision.init(sCcSrc);
-    mCollision.initUnk(mCCdStruct);
+    mStts.SetRank(0);
+    mCollision.Set(sCcSrc);
+    mCollision.SetStts(mStts);
 
     switch (getReactType()) {
-        case REACT_BONK:
-            mCollision.setTgFlag(0x80);
-            mCollision.setTgField0x0A(0);
-            mCollision.SetR(sCcSrc.mCylAttr.mRadius * mScale.x);
-            mCollision.SetH(mScale.y * sCcSrc.mCylAttr.mHeight);
-            break;
         case REACT_SLINGSHOT:
-            mCollision.setTgFlag(0x10000);
-            mCollision.setTgField0x0A(8);
-            mCollision.SetR(sCcSrc.mCylAttr.mRadius * mScale.x);
-            mCollision.SetH(mScale.y * sCcSrc.mCylAttr.mHeight);
+            mCollision.SetTgFlag(0x80);
+            mCollision.SetTgFlag_0xA(0);
+            mCollision.SetR(sCcSrc.mCylInf.mRadius * mScale.x);
+            mCollision.SetH(sCcSrc.mCylInf.mHeight * mScale.y);
             break;
         case REACT_GUST_BELLOWS:
-            mCollision.setTgFlag(0x100000);
-            mCollision.setTgField0x0A(0);
-            mCollision.SetR(sCcSrc.mCylAttr.mRadius * mScale.x);
-            mCollision.SetH(mScale.y * sCcSrc.mCylAttr.mHeight);
+            mCollision.SetTgFlag(0x10000);
+            mCollision.SetTgFlag_0xA(8);
+            mCollision.SetR(sCcSrc.mCylInf.mRadius * mScale.x);
+            mCollision.SetH(sCcSrc.mCylInf.mHeight * mScale.y);
             break;
+        case REACT_UNDERWATER:
+            mCollision.SetTgFlag(0x100000);
+            mCollision.SetTgFlag_0xA(0);
+            mCollision.SetR(sCcSrc.mCylInf.mRadius * mScale.x);
+            mCollision.SetH(sCcSrc.mCylInf.mHeight * mScale.y);
+            break;
+        case REACT_BONK:
+        case REACT_4:    break;
     }
 
     int item = getParam0x10();
@@ -111,8 +112,8 @@ int dTgReaction_c::create() {
         }
         mVec3_c dwsOffset;
         if (!getParam0x14()) {
-            field_0x4E4 = mScale.y * sCcSrc.mCylAttr.mHeight * 0.5f;
-            dwsOffset = mVec3_c(0.0f, 0.5f * sCcSrc.mCylAttr.mHeight, 0.0f);
+            field_0x4E4 = mScale.y * sCcSrc.mCylInf.mHeight * 0.5f;
+            dwsOffset = mVec3_c(0.0f, sCcSrc.mCylInf.mHeight * 0.5f, 0.0f);
         } else {
             dwsOffset = mVec3_c::Zero;
         }
@@ -210,7 +211,7 @@ void dTgReaction_c::checkForBonkItem() {
 }
 
 void dTgReaction_c::checkForBubble() {
-    if (mCollision.someInteractCheck() && mCollision.CheckCollidedMask(0x100000)) {
+    if (mCollision.ChkTgHit() && mCollision.ChkTg_0x58(0x100000)) {
         if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x40)) {
             mVec3_c spawnPos = position;
             dAcObjBase_c::create(fProfile::OBJ_BUBBLE, roomid, 0x4, &spawnPos, nullptr, nullptr, 0xFFFFFFFF);
@@ -230,14 +231,15 @@ T rndRange(T min, T max) {
 }
 
 void dTgReaction_c::checkForSlingBellowsItem() {
-    if (mCollision.someInteractCheck()) {
+    if (mCollision.ChkTgHit()) {
+        u8 p = getParam0x08();
         u32 uVar3;
-        // mVec3_c pos = position;
-        int p = getParam0x08();
         if (p == 0) {
             uVar3 = 6;
+        } else if (uVar3 == 0xFF) {
+            uVar3 = 5;
         } else {
-            uVar3 = p == 0xFF ? 5 : 6;
+            uVar3 = 6;
         }
         mVec3_c spawnPos = position;
         spawnPos.y += field_0x4E4;

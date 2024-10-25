@@ -10,6 +10,7 @@
 #include "d/col/c/c_m3d_g_sph.h"
 #include "d/col/c/c_m3d_g_tri.h"
 #include "d/col/c/c_m3d_g_unk.h"
+#include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "nw4r/types_nw4r.h"
 
@@ -181,7 +182,8 @@ public:
 };
 
 struct cCcD_SrcUnkAttr {
-    cM3dGAab mBnd;
+    f32 mMinX, mMinY, mMinZ;
+    f32 mMaxX, mMaxY, mMaxZ;
 };
 
 class cCcD_UnkAttr : public cCcD_ShapeAttr, public cM3dGUnk {
@@ -291,23 +293,31 @@ public:
     void PlucCcMove(f32, f32, f32);
     void ClrCcMove();
     int GetWeight(int) const; // idk what to really call it but it removes the rank table
+
+    void SetDefaultRank() {
+        mRank = 0xD;
+    }
+    void SetRank(int rank) {
+        mRank = rank;
+    }
 };
 
-struct cCcD_SrcObjCommonBase {
+struct cCcD_SrcGObjCommonBase {
     /* 0x00 */ s32 mGFlag; // ??
 };
 
-struct cCcD_SrcObjTg {
-    /* 0x00 */ u32 mType;
-    /* 0x04 */ cCcD_SrcObjCommonBase mBase;
-    /* 0x08 */ u32 field_0x08;
+struct cCcD_SrcGObjTg {
+    /* 0x00 */ u32 mSPrm;
+    /* 0x04 */ cCcD_SrcGObjCommonBase mBase;
+    /* 0x08 */ u16 field_0x08;
+    /* 0x0A */ u16 field_0x0A;
     /* 0x0C */ u16 field_0x0C;
     /* 0x0E */ u16 field_0x0E;
 };
 
-struct cCcD_SrcObjAt {
+struct cCcD_SrcGObjAt {
     /* 0x00 */ u32 mType;
-    /* 0x04 */ cCcD_SrcObjCommonBase mBase;
+    /* 0x04 */ cCcD_SrcGObjCommonBase mBase;
     /* 0x08 */ s32 mField_0x8;
     /* 0x0C */ u8 mField_0xC;
     /* 0x0D */ u8 mField_0xD;
@@ -317,14 +327,14 @@ struct cCcD_SrcObjAt {
     /* 0x12 */ s16 mField_0x12;
 };
 
-struct cCcD_SrcObjCo {
-    /* 0x00 */ cCcD_SrcObjCommonBase mBase;
+struct cCcD_SrcGObjCo {
+    /* 0x00 */ cCcD_SrcGObjCommonBase mBase;
 };
 
-struct cCcD_SrcObj {
-    /* 0x00 */ cCcD_SrcObjAt mObjAt;
-    /* 0x14 */ cCcD_SrcObjTg mObjTg;
-    /* 0x1C */ cCcD_SrcObjCo mObjCo;
+struct cCcD_SrcGObj {
+    /* 0x00 */ cCcD_SrcGObjAt mObjAt;
+    /* 0x14 */ cCcD_SrcGObjTg mObjTg;
+    /* 0x1C */ cCcD_SrcGObjCo mObjCo;
 };
 
 class dAcObjBase_c;
@@ -338,7 +348,7 @@ public:
     cCcD_HitCallback mHit_cb;
     s8 mEffCounter;
     dAcRef_c<dAcObjBase_c> mAc;
-    u32 mField_0x14;
+    u32 mRPrm;
 
     cCcD_GAtTgCoCommonBase();
 
@@ -352,18 +362,40 @@ public:
     void SetHitActor(dAcObjBase_c *); // Assumed
     dAcObjBase_c *GetActor();
     void SubtractEffCounter();
+
+    void SetRPrm(u32 f) {
+        mRPrm |= f;
+    }
+
+    u32 GetRPrm(u32 mask) const {
+        return mRPrm & mask;
+    }
 };
 
 class cCcD_GObjAt : public cCcD_GAtTgCoCommonBase {
 public:
     cCcD_GObjAt();
     virtual ~cCcD_GObjAt();
-    void Set(const cCcD_SrcObjAt &);
+    void Set(const cCcD_SrcGObjAt &);
     void SetAtFlag(u32);
     void AdjustHitPos(f32, f32);
 
+    void SetVec(const mVec3_c &vec) {
+        mVec = vec;
+    }
+    mVec3_c &GetVec() {
+        return mVec;
+    }
+
+    void ClrSet() {
+        mSrc.mBase.mGFlag &= ~1;
+    }
+    void SetGPrm(u32 f) {
+        mSrc.mBase.mGFlag |= f;
+    }
+
 public:
-    /* 0x1C */ cCcD_SrcObjAt mSrc;
+    /* 0x1C */ cCcD_SrcGObjAt mSrc;
     /* 0x30 */ mVec3_c mHitPos;
     /* 0x3C */ mVec3_c mVec; // May Not Exist
     /* 0x48 */ u32 mField_0x48;
@@ -377,11 +409,42 @@ class cCcD_GObjTg : public cCcD_GAtTgCoCommonBase {
 public:
     cCcD_GObjTg();
     virtual ~cCcD_GObjTg();
-    void Set(const cCcD_SrcObjTg &);
+    void Set(const cCcD_SrcGObjTg &);
     void AdjustHitPos(f32, f32);
 
+    void SetSPrm(u32 flag) {
+        mSrc.mSPrm = flag;
+    }
+
+    u32 GetSPrm(u32 mask) const {
+        return mSrc.mSPrm & mask;
+    }
+
+    void SetGPrm(u32 f) {
+        mSrc.mBase.mGFlag |= f;
+    }
+
+    u32 Get_0x58() const {
+        return mField_0x58;
+    }
+
+    void SetFlag_0xA(u16 flag) {
+        mSrc.field_0x0A = flag;
+    }
+
+    u16 GetFlag_0xA(u16 mask) const {
+        return mSrc.field_0x0A & mask;
+    }
+    void ClrSet() {
+        mSrc.mBase.mGFlag &= ~1;
+    }
+
+    void Set_0x4C(u32 f) {
+        mField_0x4C = f;
+    }
+
 public:
-    /* 0x1C */ cCcD_SrcObjTg mSrc;
+    /* 0x1C */ cCcD_SrcGObjTg mSrc;
     /* 0x2C */ mVec3_c mField_0x2C;
     /* 0x38 */ mVec3_c mHitPos;
     /* 0x44 */ s16 *mShieldFrontRangeYAngle;
@@ -407,12 +470,19 @@ class cCcD_GObjCo : public cCcD_GAtTgCoCommonBase {
 public:
     cCcD_GObjCo();
     virtual ~cCcD_GObjCo();
-    void Set(const cCcD_SrcObjCo &);
+    void Set(const cCcD_SrcGObjCo &);
     void SetCoFlag(u32);
     void AdjustHitPos(f32, f32);
 
+    void ClrSet() {
+        mSrc.mBase.mGFlag &= ~1;
+    }
+    void SetGPrm(u32 f) {
+        mSrc.mBase.mGFlag |= f;
+    }
+
 public:
-    /* 0x1C */ cCcD_SrcObjCo mSrc;
+    /* 0x1C */ cCcD_SrcGObjCo mSrc;
     /* 0x20 */ u32 mField_0x20;
     /* 0x24 */ u32 mField_0x24;
     /* 0x28 */ u32 mField_0x28;
@@ -428,9 +498,9 @@ public:
 
 class cCcD_GObj {
 public:
-    /* 0x000 */ cCcD_GObjAt mObjAt;
-    /* 0x05C */ cCcD_GObjTg mObjTg;
-    /* 0x0D8 */ cCcD_GObjCo mObjCo;
+    /* 0x000 */ cCcD_GObjAt mAt;
+    /* 0x05C */ cCcD_GObjTg mTg;
+    /* 0x0D8 */ cCcD_GObjCo mCo;
     /* 0x104 */ cCcD_Stts *mStts;
     /* 0x108 */ u32 mField_0x108;
 
@@ -440,7 +510,7 @@ public:
     virtual cCcD_ShapeAttr *GetShapeAttr() = 0;
     virtual cCcD_GObjInf *GetGObjInfo();
     void ClrSet();
-    void Set(const cCcD_SrcObj &);
+    void Set(const cCcD_SrcGObj &);
     void ClrAtHit();
     void ClrTgHit();
     void ClrCoHit();
@@ -496,6 +566,45 @@ public:
     void AdjustHitPos(f32, f32);
 
     static bool fn_80328ad0(dAcObjBase_c *pObj, u32 attype);
+
+    void SetAtVec(const mVec3_c &vec) {
+        mAt.SetVec(vec);
+    }
+
+    void SetStts(cCcD_Stts &stts) {
+        mStts = &stts;
+    }
+
+    void setTgCoFlag(u32 f) {
+        mTg.SetGPrm(f);
+        mCo.SetGPrm(f);
+    }
+
+    void SetTgFlag(u32 flag) {
+        mTg.SetSPrm(flag);
+    }
+
+    void SetTgFlag_0xA(u16 flag) {
+        mTg.SetFlag_0xA(flag);
+    }
+
+    bool ChkTgHit() {
+        return mTg.GetRPrm(1) != 0 && mTg.GetActor() != nullptr;
+    }
+
+    void ClrCoSet() {
+        mCo.ClrSet();
+    }
+    void ClrAtSet() {
+        mAt.ClrSet();
+    }
+    void ClrTgSet() {
+        mTg.ClrSet();
+    }
+
+    void SetTg_0x4C(u32 f) {
+        mTg.Set_0x4C(f);
+    }
 };
 
 #endif
