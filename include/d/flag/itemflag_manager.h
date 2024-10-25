@@ -8,7 +8,7 @@
 
 class ItemflagManager : public ItemStoryManagerBase {
 public:
-    FlagSpace itemFlags;
+    FlagSpace mItemFlags;
 
     ItemflagManager();
     virtual ~ItemflagManager() {}
@@ -16,14 +16,14 @@ public:
     bool commit();
 
     /** 0x0C */ virtual void setFlagszptr() override {
-        storyFlagsPtr = &itemFlags;
+        mpFlagSpace = &mItemFlags;
     }
     /** 0x10 */ virtual void onDirty() override;
     /** 0x14 */ virtual void copyFlagsFromSave();
     /** 0x18 */ virtual void setupUnkFlagsStuff();
     /** 0x1C */ virtual void doCommit() {
-        u16 sz = flagSizeMaybe;
-        u16 *flags = storyFlagsPtr->getFlagPtrUnchecked();
+        u16 sz = mFlagCount;
+        u16 *flags = mpFlagSpace->getFlagPtrUnchecked();
         FileManager::sInstance->setItemFlags(flags, 0, sz);
     }
     /** 0x20 */ virtual void setFlag(u16 flag) {

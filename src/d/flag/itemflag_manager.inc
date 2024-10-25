@@ -4,25 +4,25 @@ u16 ItemflagManager::sFlags[0x40];
 
 ItemflagManager *ItemflagManager::sInstance = nullptr;
 
-ItemflagManager::ItemflagManager() : itemFlags(sFlags, 0x40) {}
+ItemflagManager::ItemflagManager() : mItemFlags(sFlags, 0x40) {}
 
 void ItemflagManager::copyFlagsFromSave() {
     setFlagSizes(0x40, 0x80);
-    copyFlagsFromSave_Priv();
+    ItemStoryManagerBase::copyFlagsFromSave_Priv();
 }
 
-extern "C" UnkFlagDefinition ItemflagManager__ITEMFLAG_DEFINITIONS[];
+extern "C" FlagDefinition ItemflagManager__ITEMFLAG_DEFINITIONS[];
 
 void ItemflagManager::setupUnkFlagsStuff() {
-    setupUnkFlagStuff(ItemflagManager__ITEMFLAG_DEFINITIONS, 0x1FE);
+    setupFlagIndex(ItemflagManager__ITEMFLAG_DEFINITIONS, 0x1FE);
 }
 
 void ItemflagManager::onDirty() {}
 
 bool ItemflagManager::commit() {
-    if (dirty) {
+    if (mDirty) {
         doCommit_Priv();
-        FUN_800bf690();
+        postCommit();
         return true;
     }
     return false;

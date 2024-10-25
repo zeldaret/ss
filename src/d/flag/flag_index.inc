@@ -1,30 +1,30 @@
-#include "d/flag/unk_flag_stuff.h"
+#include "d/flag/flag_index.h"
 
-u16 UnkFlagStuff::calculateMask(s32 shift) {
+u16 FlagIndex::calculateMask(s32 shift) {
     return (2 << (shift & 0xF)) - 1;
 }
 
-void UnkFlagStuff::doNothing(u32 unused) {}
+void FlagIndex::doNothing(u32 unused) {}
 
-UnkFlagStuff::UnkFlagStuff(u16 count, UnkFlagDefinition *definitions) {
+FlagIndex::FlagIndex(u16 count, FlagDefinition *definitions) {
     this->mDefinitionsCount = count;
     this->mpDefinitions = definitions;
 }
 
-void UnkFlagStuff::prepareIndexShiftMask(u16 counterIdx, u32 unused, u16 *indexPtr, u8 *shiftPtr, u16 *maskPtr) {
+void FlagIndex::prepareIndexShiftMask(u16 counterIdx, u32 unused, u16 *indexPtr, u8 *shiftPtr, u16 *maskPtr) {
     doNothing(counterIdx);
     *indexPtr = mpDefinitions[counterIdx].mIndex;
     *shiftPtr = mpDefinitions[counterIdx].mShiftMask >> 4;
     *maskPtr = calculateMask(mpDefinitions[counterIdx].mShiftMask);
 }
 
-u16 UnkFlagStuff::maskForIdx(u16 index, u16 flagSizeMaybe) {
+u16 FlagIndex::maskForIdx(u16 index, u16 flagCount) {
     doNothing(index);
 
     return calculateMask(mpDefinitions[index].mShiftMask);
 }
 
-u16 UnkFlagStuff::getCounterOrFlag(u16 counterIdx, const u16 *dataPtr, u32 param4) {
+u16 FlagIndex::getCounterOrFlag(u16 counterIdx, const u16 *dataPtr, u32 param4) {
     u16 index = 0;
     u8 shift = 0;
     u16 mask = 0;
@@ -32,7 +32,7 @@ u16 UnkFlagStuff::getCounterOrFlag(u16 counterIdx, const u16 *dataPtr, u32 param
     return mask & (dataPtr[index] >> shift);
 }
 
-void UnkFlagStuff::setCounterOrFlag(u16 counterIdx, u16 *dataPtr, u32 flagCount, u32 value) {
+void FlagIndex::setCounterOrFlag(u16 counterIdx, u16 *dataPtr, u32 flagCount, u32 value) {
     u16 index = 0;
     u8 shift = 0;
     u16 mask = 0;
@@ -45,7 +45,7 @@ inline bool isLessThan(int a, int b) {
     return a <= b;
 }
 
-u32 UnkFlagStuff::checkFlagValid(u16 counterIdx, u32 flagCount) {
+u32 FlagIndex::checkFlagValid(u16 counterIdx, u32 flagCount) {
     if (mpDefinitions == nullptr) {
         return 0;
     }

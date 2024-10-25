@@ -1,39 +1,9 @@
-#include "toBeSorted/file_manager.h"
-#include "d/flag/flag_space.h"
-#include "d/flag/unk_flag_stuff.h"
+#include "d/flag/dungeonflag_manager.h"
+#include "d/flag/flag_index.h"
 
 
 // TODO move
-extern "C" UnkFlagDefinition DungeonflagManager__FLAG_DEFINITIONS[];
-
-class DungeonflagManager {
-public:
-    bool mShouldCommit;
-    u16 mStageIndex;
-    UnkFlagStuff *mFlagStuff;
-    FlagSpace mFlagSpace;
-
-    static u16 sDungeonFlags[8];
-    // static DungeonflagManager *sInstance;
-
-    void copyFromSave(u32 flag);
-    void copyFromSave_Internal(u16 flagIndex);
-    void setCommitFlag(u16 flag);
-    DungeonflagManager();
-    void init();
-    void setToValue(u16 flag, u32 value);
-    void setFlag(u16 flag);
-    u16 getDungeonFlag(u16 flag);
-    bool doCommit();
-
-    /** inline shenanigans to get copyFromSave to match */
-    static inline u16 *saveFilePtr(u16 flagIndex) {
-        u32 offset = (flagIndex & 0x1fff) * 8;
-        return FileManager::sInstance->getDungeonFlagsConst() + offset;
-    }
-
-    static DungeonflagManager *sInstance;
-};
+extern "C" FlagDefinition DungeonflagManager__FLAG_DEFINITIONS[];
 
 /** 80575404 */
 DungeonflagManager *DungeonflagManager::sInstance = nullptr;
@@ -53,12 +23,12 @@ void DungeonflagManager::setCommitFlag(u16 flag) {
 
 /** 0x800bf940 */
 DungeonflagManager::DungeonflagManager()
-    : mShouldCommit(false), mStageIndex(-1), mFlagStuff(nullptr),
+    : mShouldCommit(false), mStageIndex(-1), mpFlagIndex(nullptr),
       mFlagSpace(sDungeonFlags, ARRAY_LENGTH(sDungeonFlags)) {}
 
 /** 800bf980 */
 void DungeonflagManager::init() {
-    mFlagStuff = new UnkFlagStuff(0x11, DungeonflagManager__FLAG_DEFINITIONS);
+    mpFlagIndex = new FlagIndex(0x11, DungeonflagManager__FLAG_DEFINITIONS);
     mShouldCommit = false;
 }
 
@@ -71,21 +41,21 @@ void DungeonflagManager::copyFromSave(u32 flag) {
 /** 800bf9f0 */
 void DungeonflagManager::setToValue(u16 flag, u32 value) {
     u16 *data = mFlagSpace.getFlagPtrChecked();
-    mFlagStuff->setCounterOrFlag(flag, data, 8, value);
+    mpFlagIndex->setCounterOrFlag(flag, data, 8, value);
     setCommitFlag(flag);
 }
 
 /** 800bfa60 */
 void DungeonflagManager::setFlag(u16 flag) {
     u16 *data = mFlagSpace.getFlagPtrChecked();
-    mFlagStuff->setCounterOrFlag(flag, data, 8, 1);
+    mpFlagIndex->setCounterOrFlag(flag, data, 8, 1);
     setCommitFlag(flag);
 }
 
 /** 800fbac0 */
 u16 DungeonflagManager::getDungeonFlag(u16 flag) {
     u16 *data = mFlagSpace.getFlagPtrUnchecked();
-    return mFlagStuff->getCounterOrFlag(flag, data, 8);
+    return mpFlagIndex->getCounterOrFlag(flag, data, 8);
 }
 
 /** 800fbb10 */

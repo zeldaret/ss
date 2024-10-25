@@ -11,21 +11,21 @@
 #include "d/flag/enemyflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/flag/itemflag_manager.h"
-// clang-format on
 
+// actual managers
 #include "d/flag/sceneflag_manager.inc"
 #include "d/flag/committable_flag_manager.inc"
 #include "d/flag/tboxflag_manager.inc"
 #include "d/flag/enemyflag_manager.inc"
 #include "d/flag/flag_space.inc"
-#include "d/flag/unk_flag_stuff.inc"
+#include "d/flag/flag_index.inc"
 #include "d/flag/bitwise_flag_helper.inc"
-
 #include "d/flag/baseflag_manager.inc"
 #include "d/flag/storyflag_manager.inc"
 #include "d/flag/itemflag_manager.inc"
 #include "d/flag/dungeonflag_manager.inc"
 #include "d/flag/skipflag_manager.inc"
+// clang-format on
 
 
 static void postSetup();

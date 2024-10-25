@@ -1,7 +1,7 @@
 #ifndef D_FLAG_BASEFLAG_MANAGER_H
 #define D_FLAG_BASEFLAG_MANAGER_H
 
-#include "d/flag/unk_flag_stuff.h"
+#include "d/flag/flag_index.h"
 #include "d/flag/flag_space.h"
 
 class ItemStoryManagerBase {
@@ -24,24 +24,26 @@ public:
 
     
     void init();
-    void setFlagSizes(u16 flagSizeMaybe, u16 anotherFlagSizeMaybe);
     void copyFlagsFromSave_Priv();
-    void setupUnkFlagStuff(UnkFlagDefinition *def, u16 count);
+    void setupFlagIndex(FlagDefinition *def, u16 count);
     void doCommit_Priv();
     void setOrClearFlag(u16 flag, u16 value);
     u16 getFlag(u16 flag) const;
-    void FUN_800bf610(u16 flag);
-    u16 FUN_800bf640(u16 flag);
-    void FUN_800bf690();
+    void onFlagChange(u16 flag);
+    u16 getMaskForFlag(u16 flag);
+    void postCommit();
 
     u16 getUncommittedValue_Priv(u16 flag);
 
 protected:
-    /** 0x04 */ u16 flagSizeMaybe;
-    /** 0x06 */ u16 anotherSizeMaybe;
-    /** 0x08 */ FlagSpace *storyFlagsPtr;
-    /** 0x0C */ UnkFlagStuff *unkFlagsPtr;
-    /** 0x10 */ bool dirty;
+
+    void setFlagSizes(u16 flagCount, u16 flagSizeBytes);
+
+    /** 0x04 */ u16 mFlagCount;
+    /** 0x06 */ u16 mFlagSizeBytes;
+    /** 0x08 */ FlagSpace *mpFlagSpace;
+    /** 0x0C */ FlagIndex *mpFlagIndex;
+    /** 0x10 */ bool mDirty;
 };
 
 #endif

@@ -1,9 +1,6 @@
-#include "d/flag/sceneflag_manager.h"
-
 #include "common.h"
-#include "libc.h"
+#include "d/flag/sceneflag_manager.h"
 #include "toBeSorted/file_manager.h"
-
 
 SceneflagManager *SceneflagManager::sInstance = nullptr;
 u16 SceneflagManager::sTempFlags[] = {};
@@ -20,14 +17,7 @@ SceneflagManager::SceneflagManager()
     mSceneIdx = 0xFFFF;
     mShouldCommit = 0;
 }
-// SceneflagManager::SceneflagManager()
-//     {
-//         mSceneflags.init(sSceneFlags, ARRAY_LENGTH(sSceneFlags));
-//         mTempflags.init(sTempFlags, ARRAY_LENGTH(sTempFlags));
-//         mZoneflags.init(sZoneFlags, ARRAY_LENGTH(sZoneFlags));
-//         mSceneIdx = 0xFFFF;
-//         mShouldCommit = 0;
-//     }
+
 s32 SceneflagManager::isNotTempOrZoneFlag(u16 flag) {
     // return ((s32)flag - 0x80) < 0;
     return flag < 0x80;

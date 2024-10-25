@@ -10,19 +10,19 @@ public:
 
     virtual ~StoryflagManager() {}
 
-    FlagSpace storyFlags;
+    FlagSpace mStoryFlags;
 
     bool commit();
 
     /** 0x0C */ virtual void setFlagszptr() override {
-        storyFlagsPtr = &storyFlags;
+        mpFlagSpace = &mStoryFlags;
     }
     /** 0x10 */ virtual void onDirty() override;
     /** 0x14 */ virtual void copyFlagsFromSave() override;
     /** 0x18 */ virtual void setupUnkFlagsStuff() override;
     /** 0x1C */ virtual void doCommit() override {
-        u16 sz = flagSizeMaybe;
-        u16 *flags = storyFlagsPtr->getFlagPtrUnchecked();
+        u16 sz = mFlagCount;
+        u16 *flags = mpFlagSpace->getFlagPtrUnchecked();
         FileManager::sInstance->setStoryFlags(flags, 0, sz);
     }
     /** 0x24 */ virtual void unsetFlag(u16 flag) override;
