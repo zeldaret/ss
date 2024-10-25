@@ -18,13 +18,13 @@ void UnkFlagStuff::prepareIndexShiftMask(u16 counterIdx, u32 unused, u16 *indexP
     *maskPtr = calculateMask(mpDefinitions[counterIdx].mShiftMask);
 }
 
-u16 UnkFlagStuff::maskForIdx(u16 index) {
+u16 UnkFlagStuff::maskForIdx(u16 index, u16 flagSizeMaybe) {
     doNothing(index);
 
     return calculateMask(mpDefinitions[index].mShiftMask);
 }
 
-u32 UnkFlagStuff::getCounterOrFlag(u16 counterIdx, u16 *dataPtr, u32 param4) {
+u16 UnkFlagStuff::getCounterOrFlag(u16 counterIdx, const u16 *dataPtr, u32 param4) {
     u16 index = 0;
     u8 shift = 0;
     u16 mask = 0;

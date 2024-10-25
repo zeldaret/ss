@@ -42,7 +42,7 @@ TBoxFlagManager::TBoxFlagManager() : CommittableFlagManager(false), mFlagSpace(s
 void TBoxFlagManager::init() {}
 
 /* 0x800BE930 */
-void TBoxFlagManager::copyFromSave(s16 sceneIndex) {
+void TBoxFlagManager::copyFromSave(u32 sceneIndex) {
     u16 idx = sceneIndex;
     mSceneIndex = idx;
     u16 *flags = FileManager::getInstance()->getTBoxFlagsConst();

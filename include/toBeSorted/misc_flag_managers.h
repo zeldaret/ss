@@ -4,12 +4,14 @@
 #include "common.h"
 #include "toBeSorted/bitwise_flag_helper.h"
 #include "toBeSorted/flag_space.h"
+#include "toBeSorted/file_manager.h"
 
 class CommittableFlagManager {
 public:
     bool mNeedsCommit;
 
     virtual void doCommit() = 0;
+    virtual ~CommittableFlagManager() {}
     bool commitIfNecessary();
     void setNeedsCommit(bool commit) {
         mNeedsCommit = commit;
@@ -37,7 +39,7 @@ public:
     TBoxFlagManager();
     virtual ~TBoxFlagManager() {}
     void init();
-    void copyFromSave(s16 sceneIndex);
+    void copyFromSave(u32 sceneIndex);
     bool checkFlag(u16 sceneIndex, u16 flag);
     virtual u16 getFlagCount() const;
     void setFlag(u16 flag);
@@ -46,6 +48,7 @@ public:
         return checkUncommittedFlag(flag);
     }
 };
+
 
 // NOTE: Not actually Enemy Defeat.
 // This is a little more than that, it keeps track of live objects based on their id as a whole
@@ -74,6 +77,11 @@ public:
     virtual ~EnemyDefeatManager() {}
     virtual u16 getFlagCount() const;
     void setFlag(u16 flag);
+
+    virtual void doCommit() override {
+        FileManager *mgr = FileManager::sInstance;
+        mgr->setItemFlags(mFlagSpace.getFlagPtrUnchecked(), 0, 0x1000);
+    };
 };
 
 #endif
