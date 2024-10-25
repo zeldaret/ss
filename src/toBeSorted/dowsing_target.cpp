@@ -2,8 +2,8 @@
 
 #include "c/c_math.h"
 #include "m/m_mtx.h"
-#include "nw4r/ut/ut_LinkList.h"
-#include "toBeSorted/item_story_flag_manager.h"
+#include "d/flag/itemflag_manager.h"
+#include "d/flag/storyflag_manager.h"
 #include "toBeSorted/tlist.h"
 
 

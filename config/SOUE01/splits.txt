@@ -199,7 +199,7 @@ d/d_text_writer.cpp:
 toBeSorted/time_area_mgr.cpp:
 	.text       start:0x800B9280 end:0x800BB2A0
 
-toBeSorted/flag_managers/flag_managers.cpp:
+d/flag/flag_managers.cpp:
 	.text       start:0x800BD8C0 end:0x800C0650
 	.data       start:0x80510B88 end:0x80510D10
 	.sbss       start:0x805753E0 end:0x80575410

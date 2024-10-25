@@ -8,7 +8,7 @@
 #include "nw4r/g3d/g3d_resnode.h"
 #include "nw4r/g3d/g3d_scnmdl.h"
 #include "nw4r/g3d/g3d_scnobj.h"
-#include "toBeSorted/item_story_flag_manager.h"
+#include "d/flag/storyflag_manager.h"
 #include "toBeSorted/room_manager.h"
 
 const f32 dAcOislandNusi_c::someFloat = 100000.0f;

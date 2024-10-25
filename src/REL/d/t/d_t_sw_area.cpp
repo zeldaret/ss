@@ -1,8 +1,8 @@
 #include "d/t/d_t_sw_area.h"
 #include "d/a/d_a_player.h"
 #include "toBeSorted/area_math.h"
-#include "toBeSorted/sceneflag_manager.h"
-#include "toBeSorted/item_story_flag_manager.h"
+#include "d/flag/sceneflag_manager.h"
+#include "d/flag/storyflag_manager.h"
 
 SPECIAL_ACTOR_PROFILE(SW_AREA_TAG, dTgSwArea_c, fProfile::SW_AREA_TAG, 0x292, 0, 0);
 

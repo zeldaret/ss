@@ -1,0 +1,38 @@
+#ifndef D_FLAG_STORYFLAG_MANAGER_H
+#define D_FLAG_STORYFLAG_MANAGER_H
+
+#include "d/flag/baseflag_manager.h"
+#include "toBeSorted/file_manager.h"
+
+class StoryflagManager : public ItemStoryManagerBase {
+public:
+    StoryflagManager();
+
+    virtual ~StoryflagManager() {}
+
+    FlagSpace storyFlags;
+
+    bool commit();
+
+    /** 0x0C */ virtual void setFlagszptr() override {
+        storyFlagsPtr = &storyFlags;
+    }
+    /** 0x10 */ virtual void onDirty() override;
+    /** 0x14 */ virtual void copyFlagsFromSave() override;
+    /** 0x18 */ virtual void setupUnkFlagsStuff() override;
+    /** 0x1C */ virtual void doCommit() override {
+        u16 sz = flagSizeMaybe;
+        u16 *flags = storyFlagsPtr->getFlagPtrUnchecked();
+        FileManager::sInstance->setStoryFlags(flags, 0, sz);
+    }
+    /** 0x24 */ virtual void unsetFlag(u16 flag) override;
+    /** 0x38 */ virtual const u16 *getSaveFlagSpace() const override {
+        return FileManager::sInstance->getStoryFlagsConst();
+    };
+
+public:
+    static StoryflagManager *sInstance;
+    static u16 sFlags[0x80];
+};
+
+#endif

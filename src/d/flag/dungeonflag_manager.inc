@@ -1,8 +1,6 @@
-#include "libc.h"
-#include "toBeSorted/bitwise_flag_helper.h"
 #include "toBeSorted/file_manager.h"
-#include "toBeSorted/flag_space.h"
-#include "toBeSorted/unk_flag_stuff.h"
+#include "d/flag/flag_space.h"
+#include "d/flag/unk_flag_stuff.h"
 
 
 // TODO move

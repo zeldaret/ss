@@ -2,8 +2,8 @@
 #define SCENEFLAG_MANAGER_H
 
 #include "common.h"
-#include "toBeSorted/bitwise_flag_helper.h"
-#include "toBeSorted/flag_space.h"
+#include "d/flag/bitwise_flag_helper.h"
+#include "d/flag/flag_space.h"
 
 
 class SceneflagManager {

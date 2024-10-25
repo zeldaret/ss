@@ -4,7 +4,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/c/c_m3d_g_aab.h"
-#include "toBeSorted/item_story_flag_manager.h"
+#include "d/flag/storyflag_manager.h"
 #include "toBeSorted/room_manager.h"
 
 static const char *const mMdlNames[] = {

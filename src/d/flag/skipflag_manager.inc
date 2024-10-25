@@ -1,27 +1,9 @@
 #include "common.h"
 #include "d/flag/flag_managers.h"
-#include "toBeSorted/bitwise_flag_helper.h"
+#include "d/flag/skipflag_manager.h"
+#include "d/flag/bitwise_flag_helper.h"
 #include "toBeSorted/file_manager.h"
-#include "toBeSorted/flag_space.h"
-
-class SkipflagManager {
-public:
-    bool mShouldCommit;
-    BitwiseFlagHelper mFlagHelper;
-    FlagSpace mFlagSpace;
-
-    static u16 sSkipFlags[16];
-    static SkipflagManager *sInstance;
-
-    void copyFromSave();
-    void setCommitFlag(u16 flag);
-    SkipflagManager();
-    void init();
-    void thunk_copyFromSave();
-    void setFlag(u16 flag);
-    bool checkFlag(u16 flag);
-    bool commitFlags();
-};
+#include "d/flag/flag_space.h"
 
 // 0x80575408
 SkipflagManager *SkipflagManager::sInstance = nullptr;

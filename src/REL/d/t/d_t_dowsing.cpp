@@ -1,8 +1,8 @@
 #include "d/t/d_t_dowsing.h"
 
-#include "toBeSorted/item_story_flag_manager.h"
-#include "toBeSorted/room_manager.h"
-#include "toBeSorted/sceneflag_manager.h"
+#include "d/flag/itemflag_manager.h"
+#include "d/flag/storyflag_manager.h"
+#include "d/flag/sceneflag_manager.h"
 
 
 SPECIAL_ACTOR_PROFILE(T_DOWSING, dTgDowsing_c, fProfile::T_DOWSING, 0x0293, 0, 0);

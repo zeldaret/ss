@@ -1,5 +1,5 @@
 #include "toBeSorted/counters/counter.h"
-#include "toBeSorted/item_story_flag_manager.h"
+#include "d/flag/itemflag_manager.h"
 
 static u16 getBaseCapacity();
 static u16 getExtraWalletCapacity();
