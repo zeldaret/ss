@@ -1,9 +1,11 @@
 {
     "[c]": {
+        "files.autoSave": "onFocusChange",
         "files.encoding": "utf8",
         "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
     },
     "[cpp]": {
+        "files.autoSave": "onFocusChange",
         "files.encoding": "utf8",
         "editor.defaultFormatter": "xaver.clang-format"
     },
@@ -11,7 +13,6 @@
     //     "editor.defaultFormatter": "ms-python.black-formatter"
     // },
     // "editor.tabSize": 2,
-    "files.autoSave": "onFocusChange",
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "files.associations": {

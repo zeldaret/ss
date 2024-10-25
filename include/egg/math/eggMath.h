@@ -2,6 +2,7 @@
 #define EGG_MATH_H
 
 #include "common.h"
+#include "math.h"
 
 namespace EGG {
 

@@ -5,7 +5,7 @@
 #include "d/col/c/c_m3d.h"
 #include "d/col/c/c_m3d_g_lin.h"
 #include "d/col/c/c_m3d_g_sph.h"
-
+#include "m/m_vec.h"
 
 // Axis aligned bounding box
 class cM3dGAab {
@@ -44,6 +44,19 @@ public:
         mMax.z = -1000000000.0f;
         mMax.y = -1000000000.0f;
         mMax.x = -1000000000.0f;
+    }
+
+    const mVec3_c &GetMax() const {
+        return mMax;
+    }
+    mVec3_c &GetMax() {
+        return mMax;
+    }
+    const mVec3_c &GetMin() const {
+        return mMin;
+    }
+    mVec3_c &GetMin() {
+        return mMin;
     }
 
     const mVec3_c *GetMaxP(void) const {

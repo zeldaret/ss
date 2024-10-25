@@ -17,13 +17,22 @@ public:
     void SetH(f32);
     void SetR(f32);
 
-    bool fn_803380e0(cM3dGUnk *, mVec3_c *);
-    bool fn_803380f0(cM3dGUnk *, f32 *);
+    bool Cross(cM3dGUnk &, mVec3_c *);
+    bool Cross(cM3dGUnk &, f32 *);
     bool Cross(const mVec3_c &) const;
     void Clamp(const mVec3_c &, mVec3_c &) const;
 
     const mVec3_c &GetC() const {
         return mCenter;
+    }
+    mVec3_c &GetC() {
+        return mCenter;
+    }
+    f32 GetH() const {
+        return mHeight;
+    }
+    f32 GetR() const {
+        return mRadius;
     }
 };
 

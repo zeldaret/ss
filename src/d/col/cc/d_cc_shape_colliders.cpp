@@ -3,7 +3,6 @@
 #include "d/col/cc/d_cc_d.h"
 #include "m/m_vec.h"
 
-
 dCcD_Unk1::dCcD_Unk1() {}
 dCcD_Unk1::~dCcD_Unk1() {}
 
@@ -14,7 +13,7 @@ void dCcD_Unk1::init(const dCcD_SrcUnk &src) {
 
 void *dCcD_Unk1::dCcD_GObjInf_0x0C() {
     if (this != nullptr) {
-        return &UNK_0x00;
+        return &mBnd;
     }
     return this;
 }
@@ -32,7 +31,7 @@ void dCcD_Empty::init(const dCcD_SrcEmpty &src) {
 
 void *dCcD_Empty::dCcD_GObjInf_0x0C() {
     if (this != nullptr) {
-        return &UNK_0x00;
+        return &mBnd;
     }
     return this;
 }
@@ -47,7 +46,7 @@ void dCcD_Cyl::init(const dCcD_SrcCyl &src) {
 
 void *dCcD_Cyl::dCcD_GObjInf_0x0C() {
     if (this != nullptr) {
-        return &UNK_0x00;
+        return &mBnd;
     }
     return this;
 }
@@ -87,7 +86,7 @@ void dCcD_Sph::setCenterAndAtVec(const mVec3_c &a, const mVec3_c &b) {
 
 void *dCcD_Sph::dCcD_GObjInf_0x0C() {
     if (this != nullptr) {
-        return &UNK_0x00;
+        return &mBnd;
     }
     return this;
 }
@@ -102,7 +101,7 @@ void dCcD_Aabb::init(const dCcD_SrcAabb &src) {
 
 void *dCcD_Aabb::dCcD_GObjInf_0x0C() {
     if (this != nullptr) {
-        return &UNK_0x00;
+        return &mBnd;
     }
     return this;
 }

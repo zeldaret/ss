@@ -4,7 +4,6 @@
 #include "f/f_base_id.h"
 #include "m/m_vec.h"
 
-
 inline bool cM3d_IsZero(f32 f);
 
 mVec3_c dCcD_ShapeAttr::m_virtual_center = mVec3_c::Zero;
@@ -48,10 +47,6 @@ void dCcD_DivideArea::SetArea(cM3dGAab const &aab) {
     if (!mZDiffIsZero) {
         mInvScaledZDiff = 1.0f / mScaledZDiff;
     }
-}
-
-inline bool cM3d_IsZero(f32 f) {
-    return fabsf(f) < FLT_EPSILON;
 }
 
 static u32 const l_base[32] = {

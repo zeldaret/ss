@@ -1,5 +1,6 @@
 #ifndef NW4R_TYPES_H
 #define NW4R_TYPES_H
+
 #include "common.h"
 
 #define NW4R_BYTEORDER_BIG 0xFEFF

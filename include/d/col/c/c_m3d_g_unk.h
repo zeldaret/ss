@@ -2,9 +2,10 @@
 #define C_M3D_G_UNK_H
 
 #include "common.h"
+#include "d/col/c/c_m3d.h"
+#include "d/col/c/c_m3d_g_lin.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-
 
 struct cM3dGCps;
 struct cM3dGCyl;
@@ -16,8 +17,7 @@ public:
     /* 0x30 */ mMtx_c mInvMtx;
     /* 0x60 */ mVec3_c mMin;
     /* 0x6C */ mVec3_c mMax;
-    /* 0x78 */ mVec3_c mField_0x78;
-    /* 0x84 */ mVec3_c mField_0x84;
+    /* 0x78 */ cM3dGLin mLin;
     /* 0x90 */ mVec3_c mField_0x90;
     /* 0x9C */ mVec3_c mField_0x9C;
     /* 0xA8 */ mVec3_c mField_0xA8;
@@ -34,13 +34,13 @@ public:
     void Update();
     void GetStartEnd(mVec3_c &, mVec3_c &);
 
-    void fn_80338c30(cM3dGCps *, mVec3_c *);
-    bool fn_80338c40(cM3dGUnk *, mVec3_c *);
-    bool fn_80338ca0(/* TODO */);
-    bool fn_80338cb0(cM3dGCyl *, mVec3_c *);
-    bool fn_80338cc0(cM3dGCyl *, f32 *);
-    bool fn_80338cd0(cM3dGSph *, mVec3_c *);
-    bool fn_80338ce0(cM3dGSph *, f32 *);
+    bool Cross(cM3dGCps &, mVec3_c *);
+    bool Cross(cM3dGTri &, mVec3_c *);
+    bool Cross(cM3dGUnk &, mVec3_c *);
+    bool Cross(cM3dGCyl &, mVec3_c *);
+    bool Cross(cM3dGCyl &, f32 *);
+    bool Cross(cM3dGSph &, mVec3_c *);
+    bool Cross(cM3dGSph &, f32 *);
 
     void Set(const mMtx_c &);
     void Set(const mVec3_c &, const mAng &);

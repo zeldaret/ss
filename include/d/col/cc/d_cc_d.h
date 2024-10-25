@@ -210,7 +210,7 @@ public:
 
 class dCcD_ShapeAttr {
 public:
-    /* 0x00 */ u8 UNK_0x00[0x18 - 0x00];
+    /* 0x00 */ cM3dGAab mBnd;
     /* 0x18 */ dCcD_DivideInfo field_0x18;
 
     dCcD_ShapeAttr();
@@ -236,6 +236,10 @@ public:
     /* vt 0x50 */ virtual void dCcD_ShapeAttr_0x50() = 0;
     /* vt 0x54 */ virtual void dCcD_ShapeAttr_0x54(); // 0x803290F0
     /* vt 0x58 */ virtual void dCcD_ShapeAttr_0x58() = 0;
+
+    cM3dGAab *getBnd() {
+        return &mBnd;
+    }
 
     static mVec3_c m_virtual_center;
 };

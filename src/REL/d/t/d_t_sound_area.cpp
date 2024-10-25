@@ -149,7 +149,7 @@ bool dTgSndAr_c::checkAlg3(const mVec3_c &pos) {
 
     unk.Set(b, c, mScale.x * 100.0f);
     f32 d;
-    if (cM3d_Len3dSqPntAndSegLine(&unk, &a, &q, &d, nullptr)) {
+    if (cM3d_Len3dSqPntAndSegLine(unk, a, q, &d, nullptr)) {
         // At the cylindrical part of the capsule, just check the distance to
         // the line
         return d < radius;

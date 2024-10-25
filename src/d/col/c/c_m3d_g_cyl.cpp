@@ -27,12 +27,12 @@ void cM3dGCyl::SetR(f32 r) {
     mRadius = r;
 }
 
-bool cM3dGCyl::fn_803380e0(cM3dGUnk *unk, mVec3_c *vec) {
-    return fn_80336110(this, unk, vec);
+bool cM3dGCyl::Cross(cM3dGUnk &unk, mVec3_c *vec) {
+    return cM3d_Cross_CylUnk(*this, unk, vec);
 }
 
-bool cM3dGCyl::fn_803380f0(cM3dGUnk *unk, f32 *vec) {
-    return fn_803364e0(this, unk, vec);
+bool cM3dGCyl::Cross(cM3dGUnk &unk, f32 *vec) {
+    return cM3d_Cross_CylUnk(*this, unk, vec);
 }
 
 bool cM3dGCyl::Cross(const mVec3_c &pnt) const {

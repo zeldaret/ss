@@ -7,7 +7,7 @@
 #include "egg/math/eggMatrix.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
-#include "nw4r/nw4r_types.h"
+#include "nw4r/types_nw4r.h"
 
 class mMtx_c {
     typedef f32 (*MtxRef)[4];
