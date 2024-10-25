@@ -363,7 +363,8 @@ def resolve_templates(s, remangle_add_length):
             break
         elif re.match(r'[-\d]+[>,]', s[i:]) != None:
             # Integer literal
-            literal = re.match(r'[-\d]+', s[i:])[0]
+            # ss/robojumper: fix [0] -> .group(0)
+            literal = re.match(r'[-\d]+', s[i:]).group(0)
             template_str += literal if is_demangle() else 'XLi%sEE' % literal.replace('-', 'n')
             i += len(literal)
         else:
@@ -518,7 +519,8 @@ def demangle_try(s):
     try:
         return demangle(s)
     except Exception as e:
-        sys.stderr.write('Demangler error: ' + str(e) + '\n')
+        # ss/robojumper: more context
+        sys.stderr.write('Demangler error: ' + str(e) + ' trying to demangle ' + s + '\n')
         raise e
 
 def main():
