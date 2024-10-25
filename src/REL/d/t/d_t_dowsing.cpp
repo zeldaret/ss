@@ -56,13 +56,13 @@ bool dTgDowsing_c::checkDowsing() const {
 
     switch (mDowsingOption) {
         case TRIAL_0:
-            return ItemflagManager::sInstance->getFlag(187) && !StoryflagManager::sInstance->getCounterOrFlag(93);
+            return ItemflagManager::sInstance->getFlagDirect(187) && !StoryflagManager::sInstance->getCounterOrFlag(93);
         case TRIAL_1:
-            return ItemflagManager::sInstance->getFlag(188) && !StoryflagManager::sInstance->getCounterOrFlag(97);
+            return ItemflagManager::sInstance->getFlagDirect(188) && !StoryflagManager::sInstance->getCounterOrFlag(97);
         case TRIAL_2:
-            return ItemflagManager::sInstance->getFlag(189) && !StoryflagManager::sInstance->getCounterOrFlag(98);
+            return ItemflagManager::sInstance->getFlagDirect(189) && !StoryflagManager::sInstance->getCounterOrFlag(98);
         case TRIAL_3:
-            return ItemflagManager::sInstance->getFlag(193) && !StoryflagManager::sInstance->getCounterOrFlag(99);
+            return ItemflagManager::sInstance->getFlagDirect(193) && !StoryflagManager::sInstance->getCounterOrFlag(99);
         case PROPELLER:         return DowsingTarget::hasPropellerDowsing();
         case WATER_BASIN:       return DowsingTarget::hasWaterBasinDowsing();
         case CRYSTAL_BALL:      return DowsingTarget::hasCrystalBallDowsing();

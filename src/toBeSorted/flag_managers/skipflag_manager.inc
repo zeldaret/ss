@@ -1,9 +1,8 @@
 #include "common.h"
+#include "d/flag/flag_managers.h"
 #include "toBeSorted/bitwise_flag_helper.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/flag_space.h"
-
-extern "C" bool checkedMemcpy(void *dest, u32 destLen, const void *src, u32 count);
 
 class SkipflagManager {
 public:

@@ -1,8 +1,7 @@
+#include "d/flag/flag_managers.h"
 #include "toBeSorted/flag_space.h"
 #include "toBeSorted/file_manager.h"
-#include <common.h>
-
-extern "C" bool checkedMemcpy(void *dest, u32 destLen, const void *src, u32 count);
+#include "common.h"
 
 u16 *FlagSpace::getFlagPtrChecked() const {
     filemanagerCheck();

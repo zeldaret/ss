@@ -24,7 +24,7 @@ public:
     /** 0x28 */ virtual void setFlagOrCounterToValue(u16 flag, u16 value);
     /** 0x2C */ virtual u16 getCounterOrFlag(u16 flag) const;
     /** 0x30 */ virtual u16 getUncommittedValue(u16 flag);
-    /** 0x34 */ virtual void unk3(u16 arg);
+    /** 0x34 */ virtual u16 unk3(u16 arg);
     /** 0x38 */ virtual const u16 *getSaveFlagSpace() const = 0;
 
     
@@ -33,10 +33,8 @@ public:
     void copyFlagsFromSave_Priv();
     void setupUnkFlagStuff(UnkFlagDefinition *def, u16 count);
     void doCommit_Priv();
-    void thunk_setOrClearFlag(u16 flag, u16 value);
     void setOrClearFlag(u16 flag, u16 value);
-    u16  getFlag(u16 flag) const;
-    u16 FUN_800bf600(u16 flag);
+    u16 getFlag(u16 flag) const;
     void FUN_800bf610(u16 flag);
     u16 FUN_800bf640(u16 flag);
     void FUN_800bf690();
@@ -72,12 +70,7 @@ public:
         u16 *flags = storyFlagsPtr->getFlagPtrUnchecked();
         FileManager::sInstance->setStoryFlags(flags, 0, sz);
     }
-    /** 0x20 */ virtual void setFlag(u16 flag) override;
     /** 0x24 */ virtual void unsetFlag(u16 flag) override;
-    /** 0x28 */ virtual void setFlagOrCounterToValue(u16 flag, u16 value) override;
-    /** 0x2C */ virtual u16 getCounterOrFlag(u16 flag) const override;
-    /** 0x30 */ virtual u16 getUncommittedValue(u16 flag) override;
-    /** 0x34 */ virtual void unk3(u16 arg) override;
     /** 0x38 */ virtual const u16 *getSaveFlagSpace() const override {
         return FileManager::sInstance->getStoryFlagsConst();
     };
@@ -108,25 +101,31 @@ public:
         u16 *flags = storyFlagsPtr->getFlagPtrUnchecked();
         FileManager::sInstance->setItemFlags(flags, 0, sz);
     }
-    /** 0x20 */ virtual void setFlag(u16 flag);
+    /** 0x20 */ virtual void setFlag(u16 flag) {
+        ItemStoryManagerBase::setFlag(flag & ~0x4000);
+    }
     /** 0x24 */ virtual void unsetFlag(u16 flag) {
         ItemStoryManagerBase::unsetFlag(flag & ~0x4000);
     }
     /** 0x28 */ virtual void setFlagOrCounterToValue(u16 flag, u16 value) {
-        ItemStoryManagerBase::thunk_setOrClearFlag(flag & ~0x4000, value);
+        ItemStoryManagerBase::setFlagOrCounterToValue(flag & ~0x4000, value);
     }
     /** 0x2C */ virtual u16 getCounterOrFlag(u16 flag) const {
-        return getFlag(flag & ~0x4000);
+        return ItemStoryManagerBase::getCounterOrFlag(flag & ~0x4000);
     }
     /** 0x30 */ virtual u16 getUncommittedValue(u16 flag) {
         return ItemStoryManagerBase::getUncommittedValue(flag & ~0x4000);
     }
-    /** 0x34 */ virtual void unk3(u16 arg) {
-        FUN_800bf600(arg & ~0x4000);
+    /** 0x34 */ virtual u16 unk3(u16 arg) {
+        return ItemStoryManagerBase::unk3(arg & ~0x4000);
     }
     /** 0x38 */ virtual const u16 *getSaveFlagSpace() const {
         return FileManager::sInstance->getItemFlagsConst();
     };
+
+    u16 getFlagDirect(u16 flag) {
+        return ItemStoryManagerBase::getCounterOrFlag(flag);
+    }
 
 public:
     static ItemflagManager *sInstance;

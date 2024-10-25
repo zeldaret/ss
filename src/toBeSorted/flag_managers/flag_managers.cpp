@@ -1,5 +1,7 @@
 // clang-format off
 
+#include "d/flag/flag_managers.h"
+
 #include "common.h"
 #include "toBeSorted/sceneflag_manager.h"
 #include <toBeSorted/flag_space.h>
@@ -61,7 +63,7 @@ void ItemStoryManagerBase::setFlagszptr() {
 }
 
 /** 800bf480 */
-u16 ItemStoryManagerBase::getCounterOrFlag(u16 flag) const {
+u16 ItemStoryManagerBase::getFlag(u16 flag) const {
     const u16 *data = this->getSaveFlagSpace();
     return this->unkFlagsPtr->getCounterOrFlag(flag, data, this->flagSizeMaybe);
 }
@@ -91,13 +93,13 @@ void ItemStoryManagerBase::unsetFlag(u16 flag) {
 }
 
 /** 800bf5d0 */
-void ItemStoryManagerBase::thunk_setOrClearFlag(u16 flag, u16 value) {
+void ItemStoryManagerBase::setFlagOrCounterToValue(u16 flag, u16 value) {
     this->setOrClearFlag(flag, value);
 }
 
 /** 800bf5e0 */
-u16 ItemStoryManagerBase::getFlag(u16 flag) const {
-    return ItemStoryManagerBase::getCounterOrFlag(flag);
+u16 ItemStoryManagerBase::getCounterOrFlag(u16 flag) const {
+    return ItemStoryManagerBase::getFlag(flag);
 }
 
 /** 800bf5f0 */
@@ -106,7 +108,7 @@ u16 ItemStoryManagerBase::getUncommittedValue(u16 flag) {
 }
 
 /** 800bf600 */
-u16 ItemStoryManagerBase::FUN_800bf600(u16 flag) {
+u16 ItemStoryManagerBase::unk3(u16 flag) {
     return this->FUN_800bf640(flag);
 }
 
@@ -203,79 +205,54 @@ bool ItemflagManager::commit() {
 #include <m/m_heap.h>
 
 static void postSetup();
-static void updateFlagForFlagIndex(u16 stage);
-class TBoxFlagManagerSub : public TBoxFlagManager {
+
+template <typename T>
+class MyFlagManager : public T {
 public:
-    TBoxFlagManagerSub() {
-        TBoxFlagManager::sInstance = this;
+    MyFlagManager<T>() {
     }
-    // virtual ~TBoxFlagManagerSub() {}
-};
-
-class EnemyDefeatManagerSub : public EnemyDefeatManager {
-    // virtual ~EnemyDefeatManagerSub() {}
-};
-
-
-class StoryflagManagerSub : public StoryflagManager {
-    // virtual ~StoryflagManagerSub() {}
-};
-
-class ItemflagManagerSub : public ItemflagManager {
-    // virtual ~ItemflagManagerSub() {}
-};
-
-class SceneflagManagerSub : public SceneflagManager {
-
-};
-
-class DungeonflagManagerSub : public DungeonflagManager {
-
-};
-
-class SkipflagManagerSub : public SkipflagManager {
-
+    ~MyFlagManager<T>() {}
 };
 
 void setupFlagManagers(EGG::Heap *heap) {
     if (SceneflagManager::sInstance == nullptr) {
-        SceneflagManager::sInstance = new (heap) SceneflagManagerSub();
+        SceneflagManager::sInstance = new (heap) MyFlagManager<SceneflagManager>();
         mHeap m(heap);
         SceneflagManager::sInstance->init();
     }
 
     if (TBoxFlagManager::sInstance == nullptr) {
-        TBoxFlagManager::sInstance = new (heap) TBoxFlagManagerSub();
+        TBoxFlagManager::sInstance = new (heap) MyFlagManager<TBoxFlagManager>();
         mHeap m(heap);
         TBoxFlagManager::sInstance->init();
     }
 
     if (EnemyDefeatManager::sInstance == nullptr) {
-        EnemyDefeatManager::sInstance = new (heap) EnemyDefeatManagerSub();
+        EnemyDefeatManager::sInstance = new (heap) MyFlagManager<EnemyDefeatManager>();
         mHeap m(heap);
         EnemyDefeatManager::sInstance->init();
     }
 
     if (StoryflagManager::sInstance == nullptr) {
-        StoryflagManager::sInstance = new (heap) StoryflagManagerSub();
+        StoryflagManager::sInstance = new (heap) MyFlagManager<StoryflagManager>();
         mHeap m(heap);
         StoryflagManager::sInstance->init();
     }
 
     if (ItemflagManager::sInstance == nullptr) {
-        ItemflagManager::sInstance = new (heap) ItemflagManagerSub();
+        ItemflagManager::sInstance = new (heap) MyFlagManager<ItemflagManager>();
         mHeap m(heap);
         ItemflagManager::sInstance->init();
     }
 
     if (DungeonflagManager::sInstance == nullptr) {
-        DungeonflagManager::sInstance = new (heap) DungeonflagManagerSub();
+        DungeonflagManager::sInstance = new (heap) MyFlagManager<DungeonflagManager>();
         mHeap m(heap);
         DungeonflagManager::sInstance->init();
     }
 
     if (SkipflagManager::sInstance == nullptr) {
-        SkipflagManager::sInstance = new (heap) SkipflagManagerSub();
+        SkipflagManager::sInstance = new (heap) MyFlagManager<SkipflagManager>();
         mHeap m(heap);
         SkipflagManager::sInstance->init();
     }
@@ -298,7 +275,7 @@ void copyAllFlagManagersFromSave() {
     EnemyDefeatManager::sInstance->copyFromSave(flag);
 }
 
-static void updateFlagForFlagIndex(u16 stage) {
+void updateFlagForFlagIndex(u16 stage) {
     SceneflagManager::sInstance->updateFlagindex(stage);
     TBoxFlagManager::sInstance->copyFromSave(stage);
     EnemyDefeatManager::sInstance->updateFlagIndex(stage);
@@ -315,7 +292,7 @@ void commitAllFlagManagers() {
     EnemyDefeatManager::sInstance->commitIfNecessary();
 }
 
-extern "C" bool checkedMemcpy(void *dest, u32 destLen, const void *src, u32 count) {
+bool checkedMemcpy(void *dest, u32 destLen, const void *src, u32 count) {
     if (dest == nullptr || src == nullptr || destLen < count || destLen > 0xFFFF) {
         return true;
     } else {

@@ -321,7 +321,7 @@ config.libs = [
         "progress_category": "game",
         "host": False,
         "objects": [
-            Object(NonMatching, "toBeSorted/flag_managers/flag_managers.cpp", extra_cflags=["-i src"]),
+            Object(Matching, "toBeSorted/flag_managers/flag_managers.cpp"),
             Object(NonMatching, "toBeSorted/special_item_drop_mgr.cpp"),
             Object(Matching, "d/d_base.cpp"),
             Object(Matching, "d/d_dvd.cpp"),
