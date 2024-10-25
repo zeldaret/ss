@@ -89,7 +89,9 @@ def do_demangle(name):
     if "__" in name:
         try:
             output = demangle.demangle_try(name)
-            return output.strip()
+            output = output.strip()
+            if output != name:
+                return output
         except Exception:
             pass
     # otherwise we try to undo the effects of the original
