@@ -5,7 +5,7 @@
 #include "d/flag/committable_flag_manager.h"
 #include "d/flag/flag_space.h"
 
-class TBoxFlagManager : public CommittableFlagManager {
+class TBoxflagManager : public CommittableFlagManager {
 public:
     FlagSpace mFlagSpace;
     u16 mSceneIndex;
@@ -13,12 +13,12 @@ public:
 
     static u16 sTBoxFlags[2];
 
-    static TBoxFlagManager *sInstance;
+    static TBoxflagManager *sInstance;
 
     virtual void doCommit() override;
     bool checkUncommittedFlag(u16 flag);
-    TBoxFlagManager();
-    virtual ~TBoxFlagManager() {}
+    TBoxflagManager();
+    virtual ~TBoxflagManager() {}
     void init();
     void copyFromSave(u32 sceneIndex);
     bool checkFlag(u16 sceneIndex, u16 flag);

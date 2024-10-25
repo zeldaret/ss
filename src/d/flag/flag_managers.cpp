@@ -44,16 +44,16 @@ void setupFlagManagers(EGG::Heap *heap) {
         SceneflagManager::sInstance->init();
     }
 
-    if (TBoxFlagManager::sInstance == nullptr) {
-        TBoxFlagManager::sInstance = new (heap) MyFlagManager<TBoxFlagManager>();
+    if (TBoxflagManager::sInstance == nullptr) {
+        TBoxflagManager::sInstance = new (heap) MyFlagManager<TBoxflagManager>();
         mHeap m(heap);
-        TBoxFlagManager::sInstance->init();
+        TBoxflagManager::sInstance->init();
     }
 
-    if (EnemyDefeatManager::sInstance == nullptr) {
-        EnemyDefeatManager::sInstance = new (heap) MyFlagManager<EnemyDefeatManager>();
+    if (EnemyflagManager::sInstance == nullptr) {
+        EnemyflagManager::sInstance = new (heap) MyFlagManager<EnemyflagManager>();
         mHeap m(heap);
-        EnemyDefeatManager::sInstance->init();
+        EnemyflagManager::sInstance->init();
     }
 
     if (StoryflagManager::sInstance == nullptr) {
@@ -90,18 +90,18 @@ static void postSetup() {
 void copyAllFlagManagersFromSave() {
     u16 flag = FileManager::sInstance->getSceneFlagIndex();
     SceneflagManager::sInstance->copyFromSave(flag);
-    TBoxFlagManager::sInstance->copyFromSave(flag);
+    TBoxflagManager::sInstance->copyFromSave(flag);
     StoryflagManager::sInstance->copyFromSave();
     ItemflagManager::sInstance->copyFromSave();
     DungeonflagManager::sInstance->copyFromSave(flag);
     SkipflagManager::sInstance->copyFromSave();
-    EnemyDefeatManager::sInstance->copyFromSave(flag);
+    EnemyflagManager::sInstance->copyFromSave(flag);
 }
 
 void updateFlagForFlagIndex(u16 stage) {
     SceneflagManager::sInstance->updateFlagindex(stage);
-    TBoxFlagManager::sInstance->copyFromSave(stage);
-    EnemyDefeatManager::sInstance->updateFlagIndex(stage);
+    TBoxflagManager::sInstance->copyFromSave(stage);
+    EnemyflagManager::sInstance->updateFlagIndex(stage);
     DungeonflagManager::sInstance->copyFromSave(stage);
 }
 
@@ -111,8 +111,8 @@ void commitAllFlagManagers() {
     DungeonflagManager::sInstance->commit();
     SkipflagManager::sInstance->commit();
     SceneflagManager::sInstance->commit();
-    TBoxFlagManager::sInstance->commit();
-    EnemyDefeatManager::sInstance->commit();
+    TBoxflagManager::sInstance->commit();
+    EnemyflagManager::sInstance->commit();
 }
 
 bool checkedMemcpy(void *dest, u32 destLen, const void *src, u32 count) {

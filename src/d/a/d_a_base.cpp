@@ -476,7 +476,7 @@ void dAcBase_c::setActorRef(dAcBase_c *ref) {
 
 // May not be only purpose
 void dAcBase_c::setEnemyDefeatFlag() {
-    EnemyDefeatManager::sInstance->setFlag(obj_id);
+    EnemyflagManager::sInstance->setFlag(obj_id);
 }
 
 // 8002d940

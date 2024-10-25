@@ -6,7 +6,7 @@
 #include "d/flag/flag_space.h"
 #include "toBeSorted/file_manager.h"
 
-class EnemyDefeatManager : public CommittableFlagManager {
+class EnemyflagManager : public CommittableFlagManager {
 public:
     FlagSpace mFlagSpace;
     BitwiseFlagHelper mFlagHelper;
@@ -14,21 +14,21 @@ public:
 
     static u16 sEnemyDefeatFlags[4096];
 
-    static EnemyDefeatManager *sInstance;
+    static EnemyflagManager *sInstance;
 
     void clearSavedFlags();
     bool checkUncommittedFlag(u16 flag);
     u16 checkUncommittedFlag2(u16 flag) {
         return checkUncommittedFlag(flag);
     }
-    EnemyDefeatManager();
+    EnemyflagManager();
     void init();
     void copyFromSave(u16 sceneIndex);
     void updateFlagIndex(u16 sceneIndex);
     void clearAll();
     bool checkIsValidFlag(u16 flag);
     bool checkFlag(u16 flag);
-    virtual ~EnemyDefeatManager() {}
+    virtual ~EnemyflagManager() {}
     virtual u16 getFlagCount() const;
     void setFlag(u16 flag);
 
