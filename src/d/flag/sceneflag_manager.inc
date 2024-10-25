@@ -249,7 +249,7 @@ void SceneflagManager::unsetTempOrSceneflag(u16 flag) {
         setShouldCommit(flag);
     }
 }
-s32 SceneflagManager::doCommit() {
+s32 SceneflagManager::commit() {
     if (mSceneIdx == 0xFFFF) {
         return 0;
     } else if (mShouldCommit) {

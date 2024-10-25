@@ -13,12 +13,12 @@ void ItemStoryManagerBase::setFlagSizes(u16 flagCount, u16 flagSizeBytes) {
 }
 
 /** 800bf320 */
-void ItemStoryManagerBase::setupFlagIndex(FlagDefinition *def, u16 count) {
+void ItemStoryManagerBase::createFlagIndex(FlagDefinition *def, u16 count) {
     mpFlagIndex = new FlagIndex(count, def);
 }
 
 /** 800bf380 */
-void ItemStoryManagerBase::copyFlagsFromSave_Priv() {
+void ItemStoryManagerBase::copyFromSave() {
     FlagSpace *current = mpFlagSpace;
     const u16 *saved = getSaveFlagSpace();
     current->copyFromSaveFile(saved, 0, mFlagCount);
@@ -28,14 +28,14 @@ void ItemStoryManagerBase::copyFlagsFromSave_Priv() {
 void ItemStoryManagerBase::init() {
     const u16 *space = getSaveFlagSpace();
     if (space == nullptr || mpFlagIndex == nullptr) {
-        setFlagszptr();
-        copyFlagsFromSave();
-        setupUnkFlagsStuff();
+        initFlagSpace();
+        copyFlagsFromSaveFirstTime();
+        setupFlagIndex();
     }
 }
 
 /** 800bf470 */
-void ItemStoryManagerBase::setFlagszptr() {
+void ItemStoryManagerBase::initFlagSpace() {
 
 }
 

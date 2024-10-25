@@ -5,15 +5,15 @@ StoryflagManager *StoryflagManager::sInstance = nullptr;
 
 StoryflagManager::StoryflagManager() : mStoryFlags(sFlags, 0x80) {}
 
-void StoryflagManager::copyFlagsFromSave() {
+void StoryflagManager::copyFlagsFromSaveFirstTime() {
     setFlagSizes(0x80, 0x100);
-    ItemStoryManagerBase::copyFlagsFromSave_Priv();
+    ItemStoryManagerBase::copyFromSave();
 }
 
 extern "C" FlagDefinition StoryflagManager__STORYFLAG_DEFINITIONS[];
 
-void StoryflagManager::setupUnkFlagsStuff() {
-    setupFlagIndex(StoryflagManager__STORYFLAG_DEFINITIONS, 0x4B1);
+void StoryflagManager::setupFlagIndex() {
+    createFlagIndex(StoryflagManager__STORYFLAG_DEFINITIONS, 0x4B1);
 }
 
 void StoryflagManager::onDirty() {}

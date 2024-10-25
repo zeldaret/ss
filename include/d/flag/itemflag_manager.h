@@ -15,12 +15,12 @@ public:
 
     bool commit();
 
-    /** 0x0C */ virtual void setFlagszptr() override {
+    /** 0x0C */ virtual void initFlagSpace() override {
         mpFlagSpace = &mItemFlags;
     }
     /** 0x10 */ virtual void onDirty() override;
-    /** 0x14 */ virtual void copyFlagsFromSave();
-    /** 0x18 */ virtual void setupUnkFlagsStuff();
+    /** 0x14 */ virtual void copyFlagsFromSaveFirstTime();
+    /** 0x18 */ virtual void setupFlagIndex();
     /** 0x1C */ virtual void doCommit() {
         u16 sz = mFlagCount;
         u16 *flags = mpFlagSpace->getFlagPtrUnchecked();

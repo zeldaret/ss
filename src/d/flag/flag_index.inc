@@ -41,10 +41,6 @@ void FlagIndex::setCounterOrFlag(u16 counterIdx, u16 *dataPtr, u32 flagCount, u3
     dataPtr[index] = (u16)(value << shift) | dataPtr[index];
 }
 
-inline bool isLessThan(int a, int b) {
-    return a <= b;
-}
-
 u32 FlagIndex::checkFlagValid(u16 counterIdx, u32 flagCount) {
     if (mpDefinitions == nullptr) {
         return 0;
@@ -52,10 +48,6 @@ u32 FlagIndex::checkFlagValid(u16 counterIdx, u32 flagCount) {
     if (mDefinitionsCount <= counterIdx || mpDefinitions[counterIdx].mIndex == 0xFF) {
         return 0;
     } else {
-        if (isLessThan(flagCount, mpDefinitions[counterIdx].mIndex)) {
-            return 0;
-        } else {
-            return 1;
-        }
+        return (int)mpDefinitions[counterIdx].mIndex < (int)flagCount;
     }
 }

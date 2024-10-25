@@ -59,7 +59,7 @@ u16 DungeonflagManager::getDungeonFlag(u16 flag) {
 }
 
 /** 800fbb10 */
-bool DungeonflagManager::doCommit() {
+bool DungeonflagManager::commit() {
     FileManager *instance;
     u16 idx = mStageIndex;
     if (idx == 0xFFFF) {

@@ -11,7 +11,7 @@ SkipflagManager *SkipflagManager::sInstance = nullptr;
 u16 SkipflagManager::sSkipFlags[16] = {};
 
 // 800bfba0
-void SkipflagManager::copyFromSave() {
+void SkipflagManager::doCopyFromSave() {
     u16 *savedSkipflags = FileManager::sInstance->getSkipFlags();
     mFlagSpace.copyFromSaveFile(savedSkipflags, 0, 0x10);
 }
@@ -30,8 +30,8 @@ void SkipflagManager::init() {
 }
 
 // 800bfc40
-void SkipflagManager::thunk_copyFromSave() {
-    SkipflagManager::copyFromSave();
+void SkipflagManager::copyFromSave() {
+    doCopyFromSave();
 }
 
 // 800bfc50
@@ -53,7 +53,7 @@ bool SkipflagManager::checkFlag(u16 flag) {
 }
 
 // 800bfd90
-bool SkipflagManager::commitFlags() {
+bool SkipflagManager::commit() {
     if (mShouldCommit) {
         FileManager *instance = FileManager::sInstance;
         instance->setSkipFlagsChecked(mFlagSpace.getFlagPtrUnchecked(), 0, 0x10);

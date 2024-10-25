@@ -7,7 +7,7 @@ public:
 
     virtual void doCommit() = 0;
     virtual ~CommittableFlagManager() {}
-    bool commitIfNecessary();
+    bool commit();
     void setNeedsCommit(bool commit) {
         mNeedsCommit = commit;
     }

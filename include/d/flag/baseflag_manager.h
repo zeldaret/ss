@@ -9,10 +9,10 @@ public:
     ItemStoryManagerBase();
 
     /** 0x08 */ virtual ~ItemStoryManagerBase();
-    /** 0x0C */ virtual void setFlagszptr();
+    /** 0x0C */ virtual void initFlagSpace();
     /** 0x10 */ virtual void onDirty();
-    /** 0x14 */ virtual void copyFlagsFromSave() = 0;
-    /** 0x18 */ virtual void setupUnkFlagsStuff() = 0;
+    /** 0x14 */ virtual void copyFlagsFromSaveFirstTime() = 0;
+    /** 0x18 */ virtual void setupFlagIndex() = 0;
     /** 0x1C */ virtual void doCommit() = 0;
     /** 0x20 */ virtual void setFlag(u16 flag);
     /** 0x24 */ virtual void unsetFlag(u16 flag);
@@ -24,8 +24,8 @@ public:
 
     
     void init();
-    void copyFlagsFromSave_Priv();
-    void setupFlagIndex(FlagDefinition *def, u16 count);
+    void copyFromSave();
+    void createFlagIndex(FlagDefinition *def, u16 count);
     void doCommit_Priv();
     void setOrClearFlag(u16 flag, u16 value);
     u16 getFlag(u16 flag) const;

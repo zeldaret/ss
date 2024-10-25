@@ -22,7 +22,7 @@ public:
     void setToValue(u16 flag, u32 value);
     void setFlag(u16 flag);
     u16 getDungeonFlag(u16 flag);
-    bool doCommit();
+    bool commit();
 
     /** inline shenanigans to get copyFromSave to match */
     static inline u16 *saveFilePtr(u16 flagIndex) {

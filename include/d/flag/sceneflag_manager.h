@@ -58,7 +58,7 @@ public:
     void unsetFlag(u16 roomId, u16 flag);
     void unsetSceneflagGlobal(u16 sceneIdx, u16 flag);
     void unsetTempOrSceneflag(u16 flag);
-    s32 doCommit();
+    s32 commit();
 
     bool checkBoolFlag(u16 roomid, u16 flag) {
         return checkFlag(roomid, flag);

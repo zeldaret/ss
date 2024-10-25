@@ -91,10 +91,10 @@ void copyAllFlagManagersFromSave() {
     u16 flag = FileManager::sInstance->getSceneFlagIndex();
     SceneflagManager::sInstance->copyFromSave(flag);
     TBoxFlagManager::sInstance->copyFromSave(flag);
-    StoryflagManager::sInstance->copyFlagsFromSave_Priv();
-    ItemflagManager::sInstance->copyFlagsFromSave_Priv();
+    StoryflagManager::sInstance->copyFromSave();
+    ItemflagManager::sInstance->copyFromSave();
     DungeonflagManager::sInstance->copyFromSave(flag);
-    SkipflagManager::sInstance->thunk_copyFromSave();
+    SkipflagManager::sInstance->copyFromSave();
     EnemyDefeatManager::sInstance->copyFromSave(flag);
 }
 
@@ -108,11 +108,11 @@ void updateFlagForFlagIndex(u16 stage) {
 void commitAllFlagManagers() {
     StoryflagManager::sInstance->commit();
     ItemflagManager::sInstance->commit();
-    DungeonflagManager::sInstance->doCommit();
-    SkipflagManager::sInstance->commitFlags();
-    SceneflagManager::sInstance->doCommit();
-    TBoxFlagManager::sInstance->commitIfNecessary();
-    EnemyDefeatManager::sInstance->commitIfNecessary();
+    DungeonflagManager::sInstance->commit();
+    SkipflagManager::sInstance->commit();
+    SceneflagManager::sInstance->commit();
+    TBoxFlagManager::sInstance->commit();
+    EnemyDefeatManager::sInstance->commit();
 }
 
 bool checkedMemcpy(void *dest, u32 destLen, const void *src, u32 count) {
