@@ -57,11 +57,10 @@ int dAcBombf_c::actorPostCreate() {
     mVec3_c v4 = position - v * 10.0f;
 
     if (dBgS_ObjLinChk::LineCross(&v3, &v4, this)) {
-        dBgS_ObjLinChk &chk = dBgS_ObjLinChk::GetInstance();
-        position = chk.GetLinEnd();
+        position = dBgS_ObjLinChk::GetInstance().GetLinEnd();
         if (rotation.x == 0 && rotation.z == 0 && dBgS_ObjLinChk::ChkGround()) {
             cM3dGPla pla;
-            dBgS::GetInstance()->GetTriPla(chk, &pla);
+            dBgS::GetInstance()->GetTriPla(dBgS_ObjLinChk::GetInstance(), &pla);
             rotation.x = pla.GetAngle(rotation.y);
             rotation.z = pla.GetAngle(rotation.y - 0x4000);
         }
