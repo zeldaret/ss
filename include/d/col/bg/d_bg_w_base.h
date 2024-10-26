@@ -183,6 +183,10 @@ public:
         field_0x24 |= 2;
     }
 
+    void OnStick0x20() {
+        field_0x24 |= 0x20;
+    }
+
     cPartition &GetPartition() {
         return mPartitionInfo;
     }
