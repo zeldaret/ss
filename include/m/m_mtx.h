@@ -14,7 +14,7 @@ class mMtx_c : public EGG::Matrix34f {
     typedef const f32 (*MtxRefConst)[4];
 
 public:
-    mMtx_c(){};
+    mMtx_c() {};
     mMtx_c(f32 xx, f32 xy, f32 xz, f32 xw, f32 yx, f32 yy, f32 yz, f32 yw, f32 zx, f32 zy, f32 zz, f32 zw);
 
     operator MtxRef() {
@@ -37,15 +37,23 @@ public:
     void ZrotS(const mAng &angle); ///< Generates a rotation matrix for the Z axis with the given angle.
     void ZrotM(const mAng &angle); ///< Rotates the matrix on the Z axis by the given angle.
 
-    void ZXYrotS(mAng xRot, mAng yRot,
-                 mAng zRot); ///< Generates the matrix on the Y, X and Z axes by the given angles.
-    void ZXYrotM(mAng xRot, mAng yRot,
-                 mAng zRot); ///< Rotates the matrix on the Y, X and Z axes by the given angles.
-    void XYZrotS(mAng xRot, mAng yRot,
-                 mAng zRot); ///< Generates the matrix on the Z, Y and X axes by the given angles.
+    void ZXYrotS(
+        const mAng &xRot, const mAng &yRot,
+        const mAng &zRot
+    ); ///< Generates the matrix on the Y, X and Z axes by the given angles.
+    void ZXYrotM(
+        const mAng &xRot, const mAng &yRot,
+        const mAng &zRot
+    ); ///< Rotates the matrix on the Y, X and Z axes by the given angles.
+    void XYZrotS(
+        const mAng &xRot, const mAng &yRot,
+        const mAng &zRot
+    ); ///< Generates the matrix on the Z, Y and X axes by the given angles.
 
-    void XYZrotM(mAng xRot, mAng yRot,
-                 mAng zRot); ///< Rotates the matrix on the Z, Y and X axes by the given angles.
+    void XYZrotM(
+        const mAng &xRot, const mAng &yRot,
+        const mAng &zRot
+    ); ///< Rotates the matrix on the Z, Y and X axes by the given angles.
 
     void toRot(mAng3_c &out) const; ///< Converts the matrix to a rotation vector.
 

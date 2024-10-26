@@ -1,10 +1,13 @@
 #include "d/a/d_a_bombf.h"
 
+#include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/col/bg/d_bg_s.h"
-#include "egg/math/eggMatrix.h"
+#include "d/col/bg/d_bg_s_lin_chk.h"
 #include "m/m_mtx.h"
+#include "m/m_vec.h"
 #include "toBeSorted/sceneflag_manager.h"
+#include "toBeSorted/time_area_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(BOMBF, dAcBombf_c, fProfile::BOMBF, 0x129, 0, 4099);
 
@@ -44,9 +47,6 @@ int dAcBombf_c::actorCreate() {
     return SUCCEEDED;
 }
 
-extern "C" bool fn_803421C0(const mVec3_c &, const mVec3_c &, dAcObjBase_c *);
-extern "C" mVec3_c lbl_805D02D8;
-extern "C" bool fn_80342300();
 
 int dAcBombf_c::actorPostCreate() {
     mMtx_c mtx;
@@ -57,11 +57,41 @@ int dAcBombf_c::actorPostCreate() {
     mVec3_c v3 = position + v1;
     mVec3_c v4 = position - v1;
 
-    if (fn_803421C0(v3, v4, this)) {
-        position = lbl_805D02D8;
-        if (rotation.x == 0 && rotation.z == 0 && fn_80342300()) {
-            // TODO
+
+    if (dBgS_ObjLinChk::LineCross(&v3, &v4, this)) {
+        dBgS_ObjLinChk &chk = dBgS_ObjLinChk::GetInstance();
+        position = chk.GetLinEnd();
+        if (rotation.x == 0 && rotation.z == 0 && dBgS_ObjLinChk::ChkGround()) {
+            cM3dGPla pla;
+            dBgS::GetInstance()->GetTriPla(chk, &pla);
+            rotation.x = pla.GetAngle(rotation.y);
+            rotation.z = pla.GetAngle(rotation.x - 0x4000);
         }
+
+        if (dBgS::GetInstance()->ChkMoveBG(dBgS_ObjLinChk::GetInstance(), false)) {
+            field_0x398.SetPolyInfo(dBgS_ObjLinChk::GetInstance());
+            actor_properties = (actor_properties & ~1) | 4;
+        }
+        mLightingInfo.mLightingCode = dBgS::GetInstance()->GetLightingCode(dBgS_ObjLinChk::GetInstance());
+
+        if (field_0x3D2 == 0 || field_0x3D2 == 2) {
+            bool b = dTimeAreaMgr_c::sInstance->fn_800B9B60(roomid, position);
+            // TODO more conditions, weird control flow
+            if (b && field_0x3D2 == 0) {
+                mModel.setScale(0.0001f, 0.0001f, 0.0001f);
+                if (mBombRef.get() != nullptr) {
+                    // TODO wrong field
+                    mBombRef.get()->mScale.x = 0.0001f;
+                }
+            }
+        }
+    }
+
+    updateMatrix();
+    mModel.setLocalMtx(mWorldMtx);
+    regrowBomb();
+    if (mBombRef.get() != nullptr) {
+        mBombRef.get()->mScale.set(0.95f, 0.95f, 0.95f);
     }
 
     return SUCCEEDED;
