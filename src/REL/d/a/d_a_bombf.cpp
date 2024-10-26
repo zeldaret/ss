@@ -4,9 +4,9 @@
 #include "d/a/d_a_player.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
+#include "d/flag/sceneflag_manager.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "toBeSorted/sceneflag_manager.h"
 #include "toBeSorted/time_area_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(BOMBF, dAcBombf_c, fProfile::BOMBF, 0x129, 0, 4099);
@@ -80,8 +80,7 @@ int dAcBombf_c::actorPostCreate() {
         if ((b && field_0x3D2 == 2) || (!b && field_0x3D2 == 0)) {
             mModel.setScale(0.0001f, 0.0001f, 0.0001f);
             if (mBombRef.get() != nullptr) {
-                // TODO wrong field
-                mBombRef.get()->mScale.x = 0.0001f;
+                mBombRef.get()->mField_0xA50 = 0.0001f;
             }
         }
     }
