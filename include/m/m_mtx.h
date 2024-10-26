@@ -9,23 +9,13 @@
 #include "m/m_vec.h"
 #include "nw4r/types_nw4r.h"
 
-class mMtx_c {
+class mMtx_c : public EGG::Matrix34f {
     typedef f32 (*MtxRef)[4];
     typedef const f32 (*MtxRefConst)[4];
 
 public:
     mMtx_c(){};
     mMtx_c(f32 xx, f32 xy, f32 xz, f32 xw, f32 yx, f32 yy, f32 yz, f32 yw, f32 zx, f32 zy, f32 zz, f32 zw);
-
-    // not sure if this breaks anything but we need a matrix type
-    // with an inline copy assignment operator
-    void set(const mMtx_c &r) {
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
-                m[i][j] = r.m[i][j];
-            }
-        }
-    }
 
     operator MtxRef() {
         return (MtxRef)(this);
@@ -36,14 +26,8 @@ public:
     operator nw4r::math::MTX34 *() {
         return (nw4r::math::MTX34 *)(this);
     }
-    operator EGG::Matrix34f *() {
-        return (EGG::Matrix34f *)(this);
-    }
     operator nw4r::math::MTX34 &() {
         return *(nw4r::math::MTX34 *)(this);
-    }
-    operator EGG::Matrix34f &() {
-        return *(EGG::Matrix34f *)(this);
     }
 
     void XrotS(const mAng &angle); ///< Generates a rotation matrix for the X axis with the given angle.
@@ -70,22 +54,6 @@ public:
 
     void rot(int, int); // does some werrd operation to rotate the matrix
     bool quatRelated();
-
-    void SetTranslation(const mVec3_c &t) {
-        m[0][3] = t.x;
-        m[1][3] = t.y;
-        m[2][3] = t.z;
-    }
-
-public:
-    union {
-        f32 m[3][4];
-        struct {
-            f32 xx, xy, xz, xw;
-            f32 yx, yy, yz, yw;
-            f32 zx, zy, zz, zw;
-        };
-    };
 
 public:
     static mMtx_c Identity;

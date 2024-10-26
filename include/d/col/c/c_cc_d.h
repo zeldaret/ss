@@ -394,6 +394,10 @@ public:
         mSrc.mBase.mGFlag |= f;
     }
 
+    void SetCallback(cCcD_HitCallback cb) {
+        mHit_cb = cb;
+    }
+
 public:
     /* 0x1C */ cCcD_SrcGObjAt mSrc;
     /* 0x30 */ mVec3_c mHitPos;
@@ -583,6 +587,9 @@ public:
     void SetTgFlag(u32 flag) {
         mTg.SetSPrm(flag);
     }
+    void SetAtFlag(u32 flag) {
+        mAt.SetGPrm(flag);
+    }
 
     void SetTgFlag_0xA(u16 flag) {
         mTg.SetFlag_0xA(flag);
@@ -604,6 +611,10 @@ public:
 
     void SetTg_0x4C(u32 f) {
         mTg.Set_0x4C(f);
+    }
+
+    void SetAtCallback(cCcD_HitCallback cb) {
+        mAt.SetCallback(cb);
     }
 };
 

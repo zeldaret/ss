@@ -9,6 +9,7 @@
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_shadow.h"
 #include "m/m3d/m_smdl.h"
+#include "m/m_mtx.h"
 #include "nw4r/g3d/g3d_resfile.h"
 #include "s/s_State.hpp"
 #include "s/s_StateID.hpp"
@@ -43,7 +44,9 @@ public:
     STATE_FUNC_DECLARE(dAcBomb_c, Carry);
     STATE_FUNC_DECLARE(dAcBomb_c, WindCarry);
 
-private:
+    void setTransformFromFlower(const mMtx_c &);
+
+public:
     /* 0x330 */ nw4r::g3d::ResFile mBrres;
     /* 0x334 */ m3d::smdl_c mMdl;
     /* 0x350 */ dShadowCircle_c mShdw;
@@ -58,7 +61,11 @@ private:
     /* 0x9BC */ u8 _1[0x9D4 - 0x9BC];
     /* 0x9D4 */ EffectsStruct mEffect1;
     /* 0xA08 */ EffectsStruct mEffect2;
-    /* 0xA3C */ u8 _2[0xA9C - 0xA3C];
+    /* 0xA3C */ u8 _2[0xA44 - 0xA3C];
+    /* 0xA44 */ s16 mField_0xA44;
+    /* 0xA46 */ u8 _3[0xA50 - 0xA46];
+    /* 0xA50 */ f32 mField_0xA50;
+    /* 0xA54 */ u8 _4[0xA9C - 0xA54];
     /* 0xA9C */ STATE_MGR_DECLARE(dAcBomb_c);
 };
 

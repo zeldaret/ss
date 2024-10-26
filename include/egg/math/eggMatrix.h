@@ -5,7 +5,6 @@
 #include "egg/math/eggQuat.h"
 #include "egg/math/eggVector.h"
 
-
 namespace EGG {
 
 struct Matrix34f {

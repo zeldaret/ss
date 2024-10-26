@@ -83,7 +83,7 @@ bool cM3dGUnk::Cross(cM3dGSph &pSph, f32 *pF) {
 }
 
 void cM3dGUnk::Set(const mMtx_c &mtx) {
-    mMtx.set(mtx);
+    mMtx.copyFrom(mtx);
     Update();
 }
 
@@ -91,7 +91,7 @@ void cM3dGUnk::Set(const mVec3_c &vec, const mAng &ang) {
     mMtx_c mtx;
     PSMTXIdentity(mtx);
     mtx.YrotS(ang);
-    mtx.SetTranslation(vec);
+    mtx.setTranslation(vec);
     Set(mtx);
 }
 
@@ -129,7 +129,7 @@ void cM3dGUnk::Clamp(const mVec3_c &in, mVec3_c &out) {
 }
 
 void cM3dGUnk::fn_80338f30(f32 f0, f32 f1) {
-    mMtx.xw += f0;
-    mMtx.zw += f1;
+    mMtx(0, 3) += f0;
+    mMtx(2, 3) += f1;
     Update();
 }

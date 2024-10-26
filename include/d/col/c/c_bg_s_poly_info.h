@@ -2,6 +2,7 @@
 #define C_BG_S_POLY_INFO_H
 
 #include "common.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/col/c/c_bg_w.h"
 #include "d/col/c/c_m3d_g_pla.h"
 #include "m/m_vec.h"

@@ -4,13 +4,13 @@
 #include "d/a/d_a_base.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
-#include "d/col/cc/d_cc_d.h"
 #include "m/m3d/m_shadow.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
+
 
 // Size: 0xA8
 struct ActorCarryStruct {
