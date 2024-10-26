@@ -1,3 +1,6 @@
+#ifndef FILE_MANAGER_H
+#define FILE_MANAGER_H
+
 #include "common.h"
 #include "egg/core/eggHeap.h"
 #include "m/m_angle.h"
@@ -76,7 +79,7 @@ public:
     /* 8000A330 */ u16 *getStoryFlagsMut();
     /* 8000A360 */ const u16 *getStoryFlagsConst() const;
     /* 8000A3B0 */ u16 *getItemFlagsMut();
-    /* 8000A3E0 */ u16 *getItemFlagsConst();
+    /* 8000A3E0 */ const u16 *getItemFlagsConst();
     /* 8000A430 */ u16 *getDungeonFlagsMut();
     /* 8000A460 */ u16 *getDungeonFlagsConst();
     /* 8000A4B0 */ u16 *getSceneFlagsMut();
@@ -210,7 +213,7 @@ public:
     /* 8000CAD0 */ bool isNew_FileA();
 
     /* 8000CB00 */ void setSceneFlagIndex(u16 idx);
-    /* 8000CB30 */ u16 getSceneFlagIndex();
+    /* 8000CB30 */ u32 getSceneFlagIndex();
     /* 8000CB80 */ s32 getFileAreaIndex();
 
     /* 8000CBD0 */ void fn_8000CBD0(u8);
@@ -285,3 +288,5 @@ public:
     }
     static FileManager *sInstance;
 };
+
+#endif

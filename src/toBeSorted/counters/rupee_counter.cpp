@@ -1,5 +1,5 @@
 #include "toBeSorted/counters/counter.h"
-#include "toBeSorted/item_story_flag_manager.h"
+#include "d/flag/itemflag_manager.h"
 
 static u16 getBaseCapacity();
 static u16 getExtraWalletCapacity();
@@ -28,7 +28,7 @@ struct WalletStruct {
     };
     const WalletStruct *wallet = &wallet_definitions[3];
     for (; i < 4; i++, wallet--) {
-        if (ItemflagManager::sInstance->getFlag(wallet->flag)) {
+        if (ItemflagManager::sInstance->getFlagDirect(wallet->flag)) {
             return wallet->capacity;
         }
     }

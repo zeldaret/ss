@@ -1,8 +1,8 @@
 #include "d/t/d_t_genki_dws_tgt.h"
 
-#include "toBeSorted/item_story_flag_manager.h"
 #include "toBeSorted/room_manager.h"
-#include "toBeSorted/sceneflag_manager.h"
+#include "d/flag/sceneflag_manager.h"
+#include "d/flag/storyflag_manager.h"
 #include "toBeSorted/scgame.h"
 
 

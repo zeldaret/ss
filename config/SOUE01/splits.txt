@@ -199,35 +199,11 @@ d/d_text_writer.cpp:
 toBeSorted/time_area_mgr.cpp:
 	.text       start:0x800B9280 end:0x800BB2A0
 
-toBeSorted/sceneflag_manager.cpp:
-	.text       start:0x800BD8C0 end:0x800BE7A8
-	.sbss       start:0x805753E0 end:0x805753F0
-	.bss        start:0x805A78D0 end:0x805A7AD8
-
-toBeSorted/misc_flag_managers.cpp:
-	.text       start:0x800BE7B0 end:0x800BEE00
-	.data       start:0x80510CDC end:0x80510D04
-	.sbss       start:0x805753F0 end:0x805753FC
-	.bss        start:0x805A7AD8 end:0x805A9AD8
-
-toBeSorted/flag_space.cpp:
-	.text       start:0x800BEE00 end:0x800BEF90
-	.data       start:0x80510D04 end:0x80510D10
-
-toBeSorted/unk_flag_stuff.cpp:
-	.text       start:0x800BEF90 end:0x800BF200
-
-toBeSorted/bitwise_flag_helper.cpp:
-	.text       start:0x800BF200 end:0x800BF264
-
-toBeSorted/dungeonflag_manager.cpp:
-	.text       start:0x800BF8D0 end:0x800BFB9C
-	.bss        start:0x805A9C58 end:0x805A9C68
-
-toBeSorted/skipflag_manager.cpp:
-	.text       start:0x800BFBA0 end:0x800BFE00
-	.sbss       start:0x80575408 end:0x8057540C
-	.bss        start:0x805A9C68 end:0x805A9C88
+d/flag/flag_managers.cpp:
+	.text       start:0x800BD8C0 end:0x800C0650
+	.data       start:0x80510B88 end:0x80510D10
+	.sbss       start:0x805753E0 end:0x80575410
+	.bss        start:0x805A78D0 end:0x805A9C88
 
 toBeSorted/special_item_drop_mgr.cpp:
 	.text       start:0x800C7B60 end:0x800C82B0

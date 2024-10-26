@@ -1,16 +1,13 @@
-#include "toBeSorted/sceneflag_manager.h"
-
 #include "common.h"
-#include "libc.h"
+#include "d/flag/sceneflag_manager.h"
 #include "toBeSorted/file_manager.h"
-
 
 SceneflagManager *SceneflagManager::sInstance = nullptr;
 u16 SceneflagManager::sTempFlags[] = {};
 u16 SceneflagManager::sSceneFlags[8] = {};
 u16 SceneflagManager::sZoneFlags[0xFC] = {};
 
-void SceneflagManager::doNothing() {}
+void SceneflagManager::init() {}
 void SceneflagManager::setShouldCommit(u16 flag) {
     mShouldCommit = 1;
 }
@@ -20,14 +17,7 @@ SceneflagManager::SceneflagManager()
     mSceneIdx = 0xFFFF;
     mShouldCommit = 0;
 }
-// SceneflagManager::SceneflagManager()
-//     {
-//         mSceneflags.init(sSceneFlags, ARRAY_LENGTH(sSceneFlags));
-//         mTempflags.init(sTempFlags, ARRAY_LENGTH(sTempFlags));
-//         mZoneflags.init(sZoneFlags, ARRAY_LENGTH(sZoneFlags));
-//         mSceneIdx = 0xFFFF;
-//         mShouldCommit = 0;
-//     }
+
 s32 SceneflagManager::isNotTempOrZoneFlag(u16 flag) {
     // return ((s32)flag - 0x80) < 0;
     return flag < 0x80;
@@ -259,7 +249,7 @@ void SceneflagManager::unsetTempOrSceneflag(u16 flag) {
         setShouldCommit(flag);
     }
 }
-s32 SceneflagManager::doCommit() {
+s32 SceneflagManager::commit() {
     if (mSceneIdx == 0xFFFF) {
         return 0;
     } else if (mShouldCommit) {

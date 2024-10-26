@@ -1,6 +1,6 @@
 #include "d/a/obj/d_a_obj_junk_repairing.h"
 
-#include "toBeSorted/item_story_flag_manager.h"
+#include "d/flag/storyflag_manager.h"
 
 
 SPECIAL_ACTOR_PROFILE(OBJ_JUNK_REPAIR, dAcOJunkRep_c, fProfile::OBJ_JUNK_REPAIR, 0x027B, 0, 3);

@@ -4,7 +4,7 @@
 #include "toBeSorted/attention.h"
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/item_story_flag_manager.h"
+#include "d/flag/storyflag_manager.h"
 #include "toBeSorted/scgame.h"
 
 

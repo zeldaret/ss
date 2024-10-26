@@ -2,8 +2,8 @@
 #define SCENEFLAG_MANAGER_H
 
 #include "common.h"
-#include "toBeSorted/bitwise_flag_helper.h"
-#include "toBeSorted/flag_space.h"
+#include "d/flag/bitwise_flag_helper.h"
+#include "d/flag/flag_space.h"
 
 
 class SceneflagManager {
@@ -20,7 +20,7 @@ public:
     static u16 sZoneFlags[0xFC];
 
     static SceneflagManager *sInstance;
-    void doNothing();
+    void init();
     void setShouldCommit(u16 flag);
     SceneflagManager();
     s32 isNotTempOrZoneFlag(u16 flag);
@@ -58,7 +58,7 @@ public:
     void unsetFlag(u16 roomId, u16 flag);
     void unsetSceneflagGlobal(u16 sceneIdx, u16 flag);
     void unsetTempOrSceneflag(u16 flag);
-    s32 doCommit();
+    s32 commit();
 
     bool checkBoolFlag(u16 roomid, u16 flag) {
         return checkFlag(roomid, flag);
