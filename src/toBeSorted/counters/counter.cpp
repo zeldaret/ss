@@ -1,6 +1,6 @@
 #include "toBeSorted/counters/counter.h"
 
-#include "toBeSorted/item_story_flag_manager.h"
+#include "d/flag/itemflag_manager.h"
 
 /* 8016cc40 */ s32 Counter::checkedAdd(s32 num) {
     s32 uncommitted = getUncommittedValue();

@@ -16,7 +16,7 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "files.associations": {
-        "*.inc": "c",
+        "*.inc": "cpp",
         ".clangd": "yaml"
     },
     // Disable C/C++ IntelliSense, use clangd instead

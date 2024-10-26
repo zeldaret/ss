@@ -1,7 +1,7 @@
 #include "d/t/d_t_ship_window.h"
 
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/sceneflag_manager.h"
+#include "d/flag/sceneflag_manager.h"
 
 
 SPECIAL_ACTOR_PROFILE(TAG_SHIP_WINDOW, dTgShipWindow_c, fProfile::TAG_SHIP_WINDOW, 0x0228, 0, 0);

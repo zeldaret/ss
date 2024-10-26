@@ -80,7 +80,7 @@ u16 *FileManager::getStoryFlagsMut() {
     return getCurrentFile()->getStoryFlags1();
 }
 /* 8000A3B0 */ u16 *FileManager::getItemFlagsMut() {}
-/* 8000A3E0 */ u16 *FileManager::getItemFlagsConst() {}
+/* 8000A3E0 */ const u16 *FileManager::getItemFlagsConst() {}
 /* 8000A430 */ u16 *FileManager::getDungeonFlagsMut() {}
 /* 8000A460 */ u16 *FileManager::getDungeonFlagsConst() {}
 /* 8000A4B0 */ u16 *FileManager::getSceneFlagsMut() {}
@@ -234,7 +234,7 @@ u16 *FileManager::getStoryFlagsMut() {
 /* 8000CAD0 */ bool FileManager::isNew_FileA() {}
 
 /* 8000CB00 */ void FileManager::setSceneFlagIndex(u16 idx) {}
-/* 8000CB30 */ u16 FileManager::getSceneFlagIndex() {}
+/* 8000CB30 */ u32 FileManager::getSceneFlagIndex() {}
 /* 8000CB80 */ s32 FileManager::getFileAreaIndex() {}
 
 /* 8000CBD0 */ void FileManager::fn_8000CBD0(u8) {}

@@ -6,7 +6,7 @@
 #include "d/col/bg/d_bg_w.h"
 #include "nw4r/g3d/g3d_resfile.h"
 #include "s/s_Math.h"
-#include "toBeSorted/sceneflag_manager.h"
+#include "d/flag/sceneflag_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SW, dAcOsw_c, fProfile::OBJ_SW, 0x12B, 0, 0x1002);
 

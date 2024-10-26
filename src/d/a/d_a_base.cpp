@@ -8,7 +8,7 @@
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
-#include "toBeSorted/misc_flag_managers.h"
+#include "d/flag/enemyflag_manager.h"
 #include "toBeSorted/room_manager.h"
 #include "toBeSorted/scgame.h"
 #include "toBeSorted/special_item_drop_mgr.h"
@@ -476,7 +476,7 @@ void dAcBase_c::setActorRef(dAcBase_c *ref) {
 
 // May not be only purpose
 void dAcBase_c::setEnemyDefeatFlag() {
-    EnemyDefeatManager::sInstance->setFlag(obj_id);
+    EnemyflagManager::sInstance->setFlag(obj_id);
 }
 
 // 8002d940

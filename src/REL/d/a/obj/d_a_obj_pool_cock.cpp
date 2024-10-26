@@ -3,7 +3,7 @@
 #include "d/a/obj/d_a_obj_vortex.h"
 #include "s/s_Math.h"
 #include "toBeSorted/room_manager.h"
-#include "toBeSorted/sceneflag_manager.h"
+#include "d/flag/sceneflag_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_POOL_COCK, dAcOPoolCock_c, fProfile::OBJ_POOL_COCK, 0x024D, 0, 7);
 

@@ -1,26 +1,9 @@
-#include "libc.h"
-#include "toBeSorted/bitwise_flag_helper.h"
+#include "common.h"
+#include "d/flag/bitwise_flag_helper.h"
+#include "d/flag/flag_managers.h"
+#include "d/flag/flag_space.h"
+#include "d/flag/skipflag_manager.h"
 #include "toBeSorted/file_manager.h"
-#include "toBeSorted/flag_space.h"
-
-class SkipflagManager {
-public:
-    bool mShouldCommit;
-    BitwiseFlagHelper mFlagHelper;
-    FlagSpace mFlagSpace;
-
-    static u16 sSkipFlags[16];
-    static SkipflagManager *sInstance;
-
-    void copyFromSave();
-    void setCommitFlag(u16 flag);
-    SkipflagManager();
-    void unsetCommitFlag();
-    void thunk_copyFromSave();
-    void setFlag(u16 flag);
-    bool checkFlag(u16 flag);
-    bool commitFlags();
-};
 
 // 0x80575408
 SkipflagManager *SkipflagManager::sInstance = nullptr;
@@ -28,7 +11,7 @@ SkipflagManager *SkipflagManager::sInstance = nullptr;
 u16 SkipflagManager::sSkipFlags[16] = {};
 
 // 800bfba0
-void SkipflagManager::copyFromSave() {
+void SkipflagManager::doCopyFromSave() {
     u16 *savedSkipflags = FileManager::sInstance->getSkipFlags();
     mFlagSpace.copyFromSaveFile(savedSkipflags, 0, 0x10);
 }
@@ -42,13 +25,13 @@ void SkipflagManager::setCommitFlag(u16 flag) {
 SkipflagManager::SkipflagManager() : mFlagSpace(sSkipFlags, ARRAY_LENGTH(sSkipFlags)), mShouldCommit(false) {}
 
 // 800bfc30
-void SkipflagManager::unsetCommitFlag() {
+void SkipflagManager::init() {
     mShouldCommit = false;
 }
 
 // 800bfc40
-void SkipflagManager::thunk_copyFromSave() {
-    SkipflagManager::copyFromSave();
+void SkipflagManager::copyFromSave() {
+    doCopyFromSave();
 }
 
 // 800bfc50
@@ -70,7 +53,7 @@ bool SkipflagManager::checkFlag(u16 flag) {
 }
 
 // 800bfd90
-bool SkipflagManager::commitFlags() {
+bool SkipflagManager::commit() {
     if (mShouldCommit) {
         FileManager *instance = FileManager::sInstance;
         instance->setSkipFlagsChecked(mFlagSpace.getFlagPtrUnchecked(), 0, 0x10);

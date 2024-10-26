@@ -210,8 +210,7 @@ void dBgS_Acch::GroundCheck(dBgS &bgs, bool param2) {
             }
         }
 
-        // UUUUUGH
-        if ((mFlags & ACCH_FLAG_0x4000000) && !(mFlags & GROUND_HIT)) {
+        if (Chk_0x4000000() && !i_ChkGroundHit()) {
             SetGroundAway();
         }
 
