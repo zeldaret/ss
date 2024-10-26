@@ -70,7 +70,7 @@ bool dAcOmegamiIsland_c::createHeap() {
     mBgW.Lock();
 
     if (mVariant == 0) {
-        mBgW.OnStick0x20();
+        mBgW.OnFlag0x20();
     }
 
     return (BOOL)mBgW.InitMapStuff(&heap_allocator);
