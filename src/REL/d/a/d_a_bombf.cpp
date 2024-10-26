@@ -47,16 +47,14 @@ int dAcBombf_c::actorCreate() {
     return SUCCEEDED;
 }
 
-
 int dAcBombf_c::actorPostCreate() {
+    // Preamble problem
     mMtx_c mtx;
     mtx.ZXYrotS(rotation.x, rotation.y, rotation.z);
     mVec3_c v;
     PSMTXMultVecSR(mtx, mVec3_c::Ey, v);
-    mVec3_c v1 = v * 10.0f;
-    mVec3_c v3 = position + v1;
-    mVec3_c v4 = position - v1;
-
+    mVec3_c v3 = position + v * 10.0f;
+    mVec3_c v4 = position - v * 10.0f;
 
     if (dBgS_ObjLinChk::LineCross(&v3, &v4, this)) {
         dBgS_ObjLinChk &chk = dBgS_ObjLinChk::GetInstance();
@@ -65,7 +63,7 @@ int dAcBombf_c::actorPostCreate() {
             cM3dGPla pla;
             dBgS::GetInstance()->GetTriPla(chk, &pla);
             rotation.x = pla.GetAngle(rotation.y);
-            rotation.z = pla.GetAngle(rotation.x - 0x4000);
+            rotation.z = pla.GetAngle(rotation.y - 0x4000);
         }
 
         if (dBgS::GetInstance()->ChkMoveBG(dBgS_ObjLinChk::GetInstance(), false)) {
@@ -73,16 +71,18 @@ int dAcBombf_c::actorPostCreate() {
             actor_properties = (actor_properties & ~1) | 4;
         }
         mLightingInfo.mLightingCode = dBgS::GetInstance()->GetLightingCode(dBgS_ObjLinChk::GetInstance());
+    }
 
-        if (field_0x3D2 == 0 || field_0x3D2 == 2) {
-            bool b = dTimeAreaMgr_c::sInstance->fn_800B9B60(roomid, position);
-            // TODO more conditions, weird control flow
-            if (b && field_0x3D2 == 0) {
-                mModel.setScale(0.0001f, 0.0001f, 0.0001f);
-                if (mBombRef.get() != nullptr) {
-                    // TODO wrong field
-                    mBombRef.get()->mScale.x = 0.0001f;
-                }
+    if (field_0x3D2 == 0 || field_0x3D2 == 2) {
+        bool b = dTimeAreaMgr_c::sInstance->fn_800B9B60(roomid, position);
+        if (b) {
+            mTimeAreaStruct.field_0x00 = 1.0f;
+        }
+        if ((b && field_0x3D2 == 2) || (!b && field_0x3D2 == 0)) {
+            mModel.setScale(0.0001f, 0.0001f, 0.0001f);
+            if (mBombRef.get() != nullptr) {
+                // TODO wrong field
+                mBombRef.get()->mScale.x = 0.0001f;
             }
         }
     }
@@ -189,7 +189,7 @@ void dAcBombf_c::executeState_Wait() {
 
         mVec3_c m3 = position + (m * 30.0f);
 
-        if (mTimeAreaStruct.check(roomid, m3, 0, 30.0f, 1.0f) && field_0x3D4 != 1) {
+        if (mTimeAreaStruct.check(roomid, m3, 0, 30.0f, 0.1f) && field_0x3D4 != 1) {
             if (mTimeAreaStruct.field_0x04 == 1) {
                 playSound(0xC0A);
             } else {
