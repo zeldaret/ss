@@ -1,6 +1,7 @@
 #ifndef D_C_BASE_H
 #define D_C_BASE_H
 
+#include "common.h"
 #include "d/d_cs.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_cursor_stick.h"
@@ -23,6 +24,10 @@ public:
 
     void setField703(bool val) {
         field_0x703 = val;
+    }
+
+    d2d::dLytStructD *getUnk() {
+        return mStructC.field_0x14;
     }
 
 private:
