@@ -408,7 +408,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/d_lyt_wipe.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_help.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_bird_gauge.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_sky_gauge.cpp"),
+            Object(Matching, "d/lyt/d_lyt_sky_gauge.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_boss_gauge.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_pause_disp_00.cpp"),
             Object(Matching, "d/lyt/d_lyt_fader.cpp"),

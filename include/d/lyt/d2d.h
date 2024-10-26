@@ -228,6 +228,10 @@ struct AnmGroupBase_c {
         return (mFlags & 2) != 0;
     }
 
+    inline bool isStop() const {
+        return mpFrameCtrl->isStop();
+    }
+
     inline bool isStop2() const {
         return mpFrameCtrl->isStop2();
     }
