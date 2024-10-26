@@ -345,7 +345,7 @@ config.libs = [
             Object(NonMatching, "d/a/obj/d_a_obj_base.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_item.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_bomb.cpp"),
-            Object(Matching, "d/a/obj/d_a_obj_arrow.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_arrow.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_boomerang.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_fairy.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_tbox.cpp"),
