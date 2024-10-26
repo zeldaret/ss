@@ -1473,7 +1473,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_lotus_flower", "REL/d/a/obj/d_a_obj_lotus_flower.cpp"),
     Rel(NonMatching, "d_a_obj_lotus_seed", "REL/d/a/obj/d_a_obj_lotus_seed.cpp"),
     Rel(NonMatching, "d_a_obj_mapparts", "REL/d/a/obj/d_a_obj_mapparts.cpp"),
-    Rel(NonMatching, "d_a_obj_megami_island", "REL/d/a/obj/d_a_obj_megami_island.cpp"),
+    Rel(Matching, "d_a_obj_megami_island", "REL/d/a/obj/d_a_obj_megami_island.cpp"),
     Rel(NonMatching, "d_a_obj_mg_pumpkin", "REL/d/a/obj/d_a_obj_mg_pumpkin.cpp"),
     Rel(NonMatching, "d_a_obj_mole_cover", "REL/d/a/obj/d_a_obj_mole_cover.cpp"),
     Rel(Matching, "d_a_obj_mole_soil", "REL/d/a/obj/d_a_obj_mole_soil.cpp"),
