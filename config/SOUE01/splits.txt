@@ -244,7 +244,9 @@ d/lyt/meter/d_lyt_meter_key.cpp:
 d/lyt/meter/d_lyt_meter_drink.cpp:
 	.text       start:0x800E4930 end:0x800E6AC8
 	.ctors      start:0x804DB6F0 end:0x804DB6F4
+	.rodata     start:0x804E55A0 end:0x804E5640
 	.data       start:0x805148B0 end:0x80514D60
+	.sdata2     start:0x80579BA0 end:0x80579BB0
 	.bss        start:0x805AA790 end:0x805AA9D0
 
 d/lyt/meter/d_lyt_meter_remocon_bg.cpp:

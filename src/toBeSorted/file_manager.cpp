@@ -171,18 +171,18 @@ u16 *FileManager::getStoryFlagsMut() {
 /* 8000B670 */ void FileManager::setShieldPouchSlot(u8 slot) {}
 /* 8000B6A0 */ u8 FileManager::getShieldPouchSlot() {}
 
-/* 8000B6F0 */ void FileManager::setAirPotionTimer(s16 time) {}
-/* 8000B720 */ s16 FileManager::getAirPotionTimer() {}
-/* 8000B770 */ void FileManager::setAirPotionPlusTimer(s16 time) {}
-/* 8000B7A0 */ s16 FileManager::getAirPotionPlusTimer() {}
-/* 8000B7F0 */ void FileManager::setStaminaPotionTimer(s16 time) {}
-/* 8000B820 */ s16 FileManager::getStaminaPotionTimer() {}
-/* 8000B870 */ void FileManager::setStaminaPotionPlusTimer(s16 time) {}
-/* 8000B8A0 */ s16 FileManager::getStaminaPotionPlusTimer() {}
-/* 8000B8F0 */ void FileManager::setGuardianPotionTimer(s16 time) {}
-/* 8000B920 */ s16 FileManager::getGuardianPotionTimer() {}
-/* 8000B970 */ void FileManager::setGuardianPotionPlusTimer(s16 time) {}
-/* 8000B9A0 */ s16 FileManager::getGuardianPotionPlusTimer() {}
+/* 8000B6F0 */ void FileManager::setAirPotionTimer(u16 time) {}
+/* 8000B720 */ u16 FileManager::getAirPotionTimer() {}
+/* 8000B770 */ void FileManager::setAirPotionPlusTimer(u16 time) {}
+/* 8000B7A0 */ u16 FileManager::getAirPotionPlusTimer() {}
+/* 8000B7F0 */ void FileManager::setStaminaPotionTimer(u16 time) {}
+/* 8000B820 */ u16 FileManager::getStaminaPotionTimer() {}
+/* 8000B870 */ void FileManager::setStaminaPotionPlusTimer(u16 time) {}
+/* 8000B8A0 */ u16 FileManager::getStaminaPotionPlusTimer() {}
+/* 8000B8F0 */ void FileManager::setGuardianPotionTimer(u16 time) {}
+/* 8000B920 */ u16 FileManager::getGuardianPotionTimer() {}
+/* 8000B970 */ void FileManager::setGuardianPotionPlusTimer(u16 time) {}
+/* 8000B9A0 */ u16 FileManager::getGuardianPotionPlusTimer() {}
 
 /* 8000B9F0 */ void FileManager::setDowsingSlotIdx(u8 idx) {}
 /* 8000BA20 */ u8 FileManager::getDowsingSlotIdx() {}

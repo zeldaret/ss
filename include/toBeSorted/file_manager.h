@@ -150,18 +150,18 @@ public:
     /* 8000B670 */ void setShieldPouchSlot(u8 slot);
     /* 8000B6A0 */ u8 getShieldPouchSlot();
 
-    /* 8000B6F0 */ void setAirPotionTimer(s16 time);
-    /* 8000B720 */ s16 getAirPotionTimer();
-    /* 8000B770 */ void setAirPotionPlusTimer(s16 time);
-    /* 8000B7A0 */ s16 getAirPotionPlusTimer();
-    /* 8000B7F0 */ void setStaminaPotionTimer(s16 time);
-    /* 8000B820 */ s16 getStaminaPotionTimer();
-    /* 8000B870 */ void setStaminaPotionPlusTimer(s16 time);
-    /* 8000B8A0 */ s16 getStaminaPotionPlusTimer();
-    /* 8000B8F0 */ void setGuardianPotionTimer(s16 time);
-    /* 8000B920 */ s16 getGuardianPotionTimer();
-    /* 8000B970 */ void setGuardianPotionPlusTimer(s16 time);
-    /* 8000B9A0 */ s16 getGuardianPotionPlusTimer();
+    /* 8000B6F0 */ void setAirPotionTimer(u16 time);
+    /* 8000B720 */ u16 getAirPotionTimer();
+    /* 8000B770 */ void setAirPotionPlusTimer(u16 time);
+    /* 8000B7A0 */ u16 getAirPotionPlusTimer();
+    /* 8000B7F0 */ void setStaminaPotionTimer(u16 time);
+    /* 8000B820 */ u16 getStaminaPotionTimer();
+    /* 8000B870 */ void setStaminaPotionPlusTimer(u16 time);
+    /* 8000B8A0 */ u16 getStaminaPotionPlusTimer();
+    /* 8000B8F0 */ void setGuardianPotionTimer(u16 time);
+    /* 8000B920 */ u16 getGuardianPotionTimer();
+    /* 8000B970 */ void setGuardianPotionPlusTimer(u16 time);
+    /* 8000B9A0 */ u16 getGuardianPotionPlusTimer();
 
     /* 8000B9F0 */ void setDowsingSlotIdx(u8 idx);
     /* 8000BA20 */ u8 getDowsingSlotIdx();
