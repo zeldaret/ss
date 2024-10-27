@@ -547,6 +547,11 @@ d/lyt/d_screen_fader.cpp:
 	.data       start:0x80528D68 end:0x80528D90
 	.sdata2     start:0x8057ABE0 end:0x8057AC08
 
+d/a/d_a_insect.cpp:
+	.text       start:0x8018F190 end:0x80190710
+	.data       start:0x8052ABD8 end:0x8052ACC0
+	.sdata2     start:0x8057ADD8 end:0x8057AE30
+
 d/d_cs_base.cpp:
 	.text       start:0x801BC6C0 end:0x801BD250
 	.data       start:0x8052E860 end:0x8052E968

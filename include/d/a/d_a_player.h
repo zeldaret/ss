@@ -178,7 +178,7 @@ public:
     /* vt 0x280 */ virtual void vt_0x280();
     /* vt 0x284 */ virtual bool isUsingBugnet() const;
     /* vt 0x288 */ virtual const mVec3_c &getBugNetPos() const;
-    /* vt 0x28C */ virtual void isUsingBugnet1();
+    /* vt 0x28C */ virtual bool isUsingBugnet1();
     /* vt 0x290 */ virtual void bugNetCollectTreasure();
     /* vt 0x294 */ virtual void somethingSwitchDials();
     /* vt 0x298 */ virtual void vt_0x298();
