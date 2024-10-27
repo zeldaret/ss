@@ -858,9 +858,9 @@ void cCcD_UnkAttr::GetPos(nw4r::math::VEC3 *pPos) const {
 }
 
 void cCcD_UnkAttr::Set(const cCcD_SrcUnkAttr &src) {
-    mVec3_c min = mVec3_c(src.mMinX, src.mMinY, src.mMinZ);
-    mVec3_c max = mVec3_c(src.mMaxX, src.mMaxY, src.mMaxZ);
-    ;
+    mVec3_c min = src.getMin();
+    mVec3_c max = src.getMax();
+
     cM3dGUnk::Set(min, max);
 }
 

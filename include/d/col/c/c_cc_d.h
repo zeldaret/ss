@@ -184,6 +184,13 @@ public:
 struct cCcD_SrcUnkAttr {
     f32 mMinX, mMinY, mMinZ;
     f32 mMaxX, mMaxY, mMaxZ;
+
+    mVec3_c &getMin() const {
+        return *(mVec3_c *)&mMinX;
+    }
+    mVec3_c &getMax() const {
+        return *(mVec3_c *)&mMaxX;
+    }
 };
 
 class cCcD_UnkAttr : public cCcD_ShapeAttr, public cM3dGUnk {
