@@ -211,7 +211,7 @@ void dTgReaction_c::checkForBonkItem() {
 }
 
 void dTgReaction_c::checkForBubble() {
-    if (mCollision.ChkTgHit() && mCollision.ChkTg_0x58(0x100000)) {
+    if (mCollision.ChkTgHit() && mCollision.ChkTgAtHitType(0x100000)) {
         if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x40)) {
             mVec3_c spawnPos = position;
             dAcObjBase_c::create(fProfile::OBJ_BUBBLE, roomid, 0x4, &spawnPos, nullptr, nullptr, 0xFFFFFFFF);

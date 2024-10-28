@@ -326,9 +326,9 @@ bool cCcD_GObj::fn_80328ad0(dAcObjBase_c *pObj, u32 attype) {
 }
 
 void cCcD_GObj::ClrSet() {
-    mAt.mSrc.mBase.mGFlag &= ~1;
-    mTg.mSrc.mBase.mGFlag &= ~1;
-    mCo.mSrc.mBase.mGFlag &= ~1;
+    mAt.mSrc.mSPrm &= ~1;
+    mTg.mSrc.mSPrm &= ~1;
+    mCo.mSrc.mSPrm &= ~1;
 }
 
 void cCcD_GObj::Set(const cCcD_SrcGObj &src) {
@@ -365,16 +365,16 @@ mVec3_c &cCcD_GObj::GetAtHitPos() {
     return mAt.mHitPos;
 }
 
-u32 cCcD_GObj::GetAtFlag0x2() const {
-    return mAt.mRPrm >> 1 & 1;
+bool cCcD_GObj::GetAtFlag0x2() const {
+    return mAt.MskRPrm(2);
 }
 
-u32 cCcD_GObj::GetAtFlag0x4() const {
-    return mAt.mRPrm >> 2 & 1;
+bool cCcD_GObj::GetAtFlag0x4() const {
+    return mAt.MskRPrm(4);
 }
 
-u32 cCcD_GObj::GetAtFlag0x8() const {
-    return mAt.mRPrm >> 3 & 1;
+bool cCcD_GObj::GetAtFlag0x8() const {
+    return mAt.MskRPrm(8);
 }
 
 const mVec3_c &cCcD_GObj::GetTgHitPos() const {
@@ -385,12 +385,12 @@ mVec3_c &cCcD_GObj::GetTgHitPos() {
     return mTg.mHitPos;
 }
 
-u32 cCcD_GObj::GetTgFlag0x4() const {
-    return mTg.mRPrm >> 2 & 1;
+bool cCcD_GObj::GetTgFlag0x4() const {
+    return mTg.MskRPrm(4);
 }
 
-u32 cCcD_GObj::GetTgFlag0x8() const {
-    return mTg.mRPrm >> 3 & 1;
+bool cCcD_GObj::GetTgFlag0x8() const {
+    return mTg.MskRPrm(0x8);
 }
 
 cCcD_GObjInf *cCcD_GObj::GetGObjInfo() {
@@ -398,7 +398,7 @@ cCcD_GObjInf *cCcD_GObj::GetGObjInfo() {
 }
 
 bool cCcD_GObj::ChkAtClawshot() const {
-    return mAt.mField_0x4C >> 19 & 1;
+    return mAt.MskTgHitSPrm(0x80000);
 }
 
 bool cCcD_GObj::ChkAtClawshotDebug() const {
@@ -406,98 +406,98 @@ bool cCcD_GObj::ChkAtClawshotDebug() const {
 }
 
 bool cCcD_GObj::ChkAtElectrified() const {
-    return mAt.mField_0x4C >> 18 & 1;
+    return mAt.MskTgHitSPrm(0x40000);
 }
 
 bool cCcD_GObj::ChkAtElectrifiedExtra() const {
-    return mAt.mField_0x4C >> 27 & 1;
+    return mAt.MskTgHitSPrm(0x8000000);
 }
 
 bool cCcD_GObj::ChkAtWhippable() const {
-    return mAt.mField_0x4C >> 23 & 1;
+    return mAt.MskTgHitSPrm(0x800000);
 }
 
 bool cCcD_GObj::ChkAtBit24() const {
-    return mAt.mField_0x4C >> 24 & 1;
+    return mAt.MskTgHitSPrm(0x1000000);
 }
 
 bool cCcD_GObj::ChkAtArrowStick() const {
-    return mAt.mField_0x4C >> 25 & 1;
+    return mAt.MskTgHitSPrm(0x2000000);
 }
 
 bool cCcD_GObj::ChkAtWaterScaleBonk() const {
-    return mAt.mField_0x4C >> 26 & 1;
+    return mAt.MskTgHitSPrm(0x4000000);
 }
 
 bool cCcD_GObj::ChkAtSwordBonk() const {
-    return mAt.mField_0x4C >> 16 & 1;
+    return mAt.MskTgHitSPrm(0x10000);
 }
 
 dAcObjBase_c *cCcD_GObj::GetAtActor() {
     return mAt.GetActor();
 }
 
-bool cCcD_GObj::ChkTg_0x58(u32 mask) const {
-    return mTg.mField_0x58 & mask;
+bool cCcD_GObj::ChkTgAtHitType(u32 mask) const {
+    return mTg.mAtHitSrc.mType & mask;
 }
 
 u32 cCcD_GObj::GetTg_0x58() const {
-    return mTg.mField_0x58;
+    return mTg.mAtHitSrc.mType;
 }
 
 bool cCcD_GObj::ChkTgBit14() const {
-    return mTg.mField_0x5C >> 14 & 1;
+    return mTg.MskAtHitSPrm(0x4000);
 }
 
 u8 cCcD_GObj::GetTgDamage() const {
-    return mTg.mDamageAmount;
+    return mTg.mAtHitSrc.mDamage;
 }
 
 u16 cCcD_GObj::GetTgDamageFlags() const {
-    return mTg.mDamageFlags;
+    return mTg.mAtHitSrc.mInfo.mModifier;
 }
 
 bool cCcD_GObj::ChkTgSkywardStrike() const {
-    return mTg.mField_0x5C >> 16 & 1;
+    return mTg.MskAtHitSPrm(0x10000);
 }
 bool cCcD_GObj::ChkTgBit17() const {
-    return mTg.mField_0x5C >> 17 & 1;
+    return mTg.MskAtHitSPrm(0x20000);
 }
 
 bool cCcD_GObj::ChkTgBit18() const {
-    return mTg.mField_0x5C >> 18 & 1;
+    return mTg.MskAtHitSPrm(0x40000);
 }
 
 bool cCcD_GObj::ChkTgBit19() const {
-    return mTg.mField_0x5C >> 19 & 1;
+    return mTg.MskAtHitSPrm(0x80000);
 }
 
 bool cCcD_GObj::ChkTgBit23() const {
-    return mTg.mField_0x5C >> 23 & 1;
+    return mTg.MskAtHitSPrm(0x800000);
 }
 
 bool cCcD_GObj::ChkTgBit20() const {
-    return mTg.mField_0x5C >> 20 & 1;
+    return mTg.MskAtHitSPrm(0x100000);
 }
 
 bool cCcD_GObj::ChkTgBit24() const {
-    return mTg.mField_0x5C >> 24 & 1;
+    return mTg.MskAtHitSPrm(0x1000000);
 }
 
 bool cCcD_GObj::ChkTgBit25() const {
-    return mTg.mField_0x5C >> 25 & 1;
+    return mTg.MskAtHitSPrm(0x2000000);
 }
 
-u16 cCcD_GObj::GetTg_0x68() const {
-    return mTg.mField_0x68;
+u16 cCcD_GObj::GetTgSoundID() const {
+    return mTg.mAtHitSrc.mField_0x10;
 }
 
 s16 cCcD_GObj::GetTg_0x6A() const {
-    return mTg.mField_0x6A;
+    return mTg.mAtHitSrc.mField_0x12;
 }
 
 bool cCcD_GObj::ChkTgBit8() const {
-    return mTg.mField_0x5C >> 8 & 1;
+    return mTg.MskAtHitSPrm(0x100);
 }
 
 u8 cCcD_GObj::GetTg_0x4A() const {
@@ -517,15 +517,16 @@ dAcObjBase_c *cCcD_GObj::GetCoActor() {
 }
 
 bool cCcD_GObj::ChkCoBit4() const {
-    return mCo.mField_0x24 >> 4 & 1;
+    return mCo.mCoHitSrc.mSPrm >> 4 & 1;
 }
 
 void cCcD_GObj::SetAtFlagsUpper(u32 flags) {
-    mAt.mSrc.mBase.mGFlag = mAt.mSrc.mBase.mGFlag & ~0x3ff0000 | flags;
+    mAt.OffSPrm(0x3FF0000);
+    mAt.OnSPrm(flags);
 }
 
 bool cCcD_GObj::ChkTgBit1() const {
-    return mTg.mRPrm >> 1 & 1;
+    return mTg.MskRPrm(2);
 }
 
 void cCcD_GObj::AdjustHitPos(f32 x, f32 z) {
@@ -1441,7 +1442,7 @@ void cCcD_GObjAt::Set(const cCcD_SrcGObjAt &info) {
 }
 
 void cCcD_GObjAt::SetAtFlag(u32 flag) {
-    mSrc.mBase.mGFlag = mSrc.mBase.mGFlag & ~0x3E | flag;
+    mSrc.mSPrm = mSrc.mSPrm & ~0x3E | flag;
 }
 
 void cCcD_GObjAt::AdjustHitPos(f32 x, f32 z) {
@@ -1474,7 +1475,7 @@ void cCcD_GObjTg::AdjustHitPos(f32 x, f32 z) {
 
 cCcD_GObjCo::cCcD_GObjCo() {
     mField_0x20 = 0;
-    mField_0x28 = 0;
+    mField_0x28_callback = 0;
 }
 
 cCcD_GObjCo::~cCcD_GObjCo() {}
@@ -1482,12 +1483,12 @@ cCcD_GObjCo::~cCcD_GObjCo() {}
 void cCcD_GObjCo::Set(const cCcD_SrcGObjCo &src) {
     mEffCounter = 0;
     mSrc = src;
-    SetCoFlag(mSrc.mBase.mGFlag & 0x1e0);
+    SetCoFlag(mSrc.mSPrm & 0x1e0);
 }
 
 void cCcD_GObjCo::SetCoFlag(u32 flag) {
-    mSrc.mBase.mGFlag = mSrc.mBase.mGFlag & ~0x1E0 | flag;
-    mField_0x20 = (mSrc.mBase.mGFlag & 0x1E0) >> 4;
+    mSrc.mSPrm = mSrc.mSPrm & ~0x1E0 | flag;
+    mField_0x20 = (mSrc.mSPrm & 0x1E0) >> 4;
 }
 
 void cCcD_GObjCo::AdjustHitPos(f32, f32) {}

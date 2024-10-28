@@ -6,7 +6,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_SPIKE, dAcOspike_c, fProfile::OBJ_SPIKE, 0x1D9, 0, 2);
 
 // clang-format off
 dCcD_SrcUnk dAcOspike_c::sCcSrc = {
-    {{0x400, 0x2003F, 0, 1, 0, 0, 0, 0, 0}, 
+    {{0x400, 0x2003F, {0, 0, 0}, 1, 0, 0, 0, 0}, 
     {0xFEB77DFF, 0x111, 0x06, 0x407, 0, }, 
     {0}},
     {-1.0f, -246.0f, -472.0f, 73.0f, 255.0f, 482.0f}};

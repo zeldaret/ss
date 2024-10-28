@@ -10,7 +10,6 @@
 #include "d/col/c/c_m3d_g_sph.h"
 #include "d/col/c/c_m3d_g_tri.h"
 #include "d/col/c/c_m3d_g_unk.h"
-#include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "nw4r/types_nw4r.h"
 
@@ -309,24 +308,47 @@ public:
     }
 };
 
-struct cCcD_SrcGObjCommonBase {
-    /* 0x00 */ s32 mGFlag; // ??
+struct cCcD_SrcGObjTgInfo {
+    /* 0x00 */ u16 mField_0x0;
+    /* 0x02 */ u16 mField_0x2;
 };
 
 struct cCcD_SrcGObjTg {
-    /* 0x00 */ u32 mSPrm;
-    /* 0x04 */ cCcD_SrcGObjCommonBase mBase;
-    /* 0x08 */ u16 field_0x08;
-    /* 0x0A */ u16 field_0x0A;
-    /* 0x0C */ u16 field_0x0C;
-    /* 0x0E */ u16 field_0x0E;
+    /* 0x00 */ u32 mType;
+    /* 0x04 */ u32 mSPrm;
+    /* 0x08 */ cCcD_SrcGObjTgInfo mInfo;
+    /* 0x0C */ u16 mField_0x0C;
+    /* 0x0E */ u16 mField_0x0E;
+};
+
+enum cCcD_AtModifiers_e {
+    /* 0x 0000 0001 */ AT_MOD_FIRE = (1 << 0),
+    /* 0x 0000 0002 */ AT_MOD_0x2 = (1 << 1),
+    /* 0x 0000 0004 */ AT_MOD_ELECTRIC = (1 << 2),
+    /* 0x 0000 0008 */ AT_MOD_WIND = (1 << 3),
+    /* 0x 0000 0010 */ AT_MOD_0x10 = (1 << 4),
+    /* 0x 0000 0020 */ AT_MOD_0x20 = (1 << 5),
+    /* 0x 0000 0040 */ AT_MOD_WATER = (1 << 6),
+    /* 0x 0000 0080 */ AT_MOD_0x80 = (1 << 7),
+    /* 0x 0000 0100 */ AT_MOD_0x100 = (1 << 8),
+    /* 0x 0000 0200 */ AT_MOD_STINKY = (1 << 9),
+    /* 0x 0000 0400 */ AT_MOD_CURSED = (1 << 10),
+};
+struct cCcD_SrcGObjAtInfo {
+    /* 0x00 */ u8 mField_0x0;
+    /* 0x01 */ u8 mField_0x1;
+    /* 0x02 */ u16 mModifier;
+};
+
+enum cCcD_AtSPrm {
+    AT_SPRM_DAMAGE = 0x4,
 };
 
 struct cCcD_SrcGObjAt {
     /* 0x00 */ u32 mType;
-    /* 0x04 */ cCcD_SrcGObjCommonBase mBase;
-    /* 0x08 */ s32 mField_0x8;
-    /* 0x0C */ u8 mField_0xC;
+    /* 0x04 */ u32 mSPrm;
+    /* 0x08 */ cCcD_SrcGObjAtInfo mInfo;
+    /* 0x0C */ u8 mDamage;
     /* 0x0D */ u8 mField_0xD;
     /* 0x0E */ u8 mField_0xE;
     /* 0x0F */ u8 mField_0xF;
@@ -335,7 +357,7 @@ struct cCcD_SrcGObjAt {
 };
 
 struct cCcD_SrcGObjCo {
-    /* 0x00 */ cCcD_SrcGObjCommonBase mBase;
+    /* 0x00 */ u32 mSPrm;
 };
 
 struct cCcD_SrcGObj {
@@ -366,16 +388,21 @@ public:
         mHit_cb = nullptr;
     }
     void ClrActorInfo();
-    void SetHitActor(dAcObjBase_c *); // Assumed
+    void SetHitActor(dAcObjBase_c *);
     dAcObjBase_c *GetActor();
     void SubtractEffCounter();
 
-    void SetRPrm(u32 f) {
-        mRPrm |= f;
+    u32 MskRPrm(u32 m) const {
+        return mRPrm & m;
     }
-
-    u32 GetRPrm(u32 mask) const {
-        return mRPrm & mask;
+    void SetRPrm(u32 f) {
+        mRPrm = f;
+    }
+    void OnRPrm(u32 m) {
+        mRPrm |= m;
+    }
+    void OffRPrm(u32 m) {
+        mRPrm = (mRPrm & ~m) | m;
     }
 };
 
@@ -395,25 +422,56 @@ public:
     }
 
     void ClrSet() {
-        mSrc.mBase.mGFlag &= ~1;
-    }
-    void SetGPrm(u32 f) {
-        mSrc.mBase.mGFlag |= f;
+        OffSPrm(1);
     }
 
     void SetCallback(cCcD_HitCallback cb) {
         mHit_cb = cb;
     }
 
+    u32 MskType(u32 mask) const {
+        return mSrc.mType & mask;
+    }
+    void SetType(u32 flag) {
+        mSrc.mType = flag;
+    }
+    void OnType(u32 m) {
+        mSrc.mType |= m;
+    }
+    void OffType(u32 m) {
+        mSrc.mType &= ~m;
+    }
+    u32 MskSPrm(u32 m) const {
+        return mSrc.mSPrm & m;
+    }
+    void SetSPrm(u32 f) {
+        mSrc.mSPrm = f;
+    }
+    void OnSPrm(u32 m) {
+        mSrc.mSPrm |= m;
+    }
+    void OffSPrm(u32 m) {
+        mSrc.mSPrm &= ~m;
+    }
+    u32 MskTgHitSPrm(u32 m) const {
+        return mTgHitSrc.mSPrm & m;
+    }
+    void SetTgHitSPrm(u32 f) {
+        mTgHitSrc.mSPrm = f;
+    }
+    void OnTgHitSPrm(u32 m) {
+        mTgHitSrc.mSPrm |= m;
+    }
+    void OffTgHitSPrm(u32 m) {
+        mTgHitSrc.mSPrm &= ~m;
+    }
+
 public:
     /* 0x1C */ cCcD_SrcGObjAt mSrc;
     /* 0x30 */ mVec3_c mHitPos;
-    /* 0x3C */ mVec3_c mVec; // May Not Exist
-    /* 0x48 */ u32 mField_0x48;
-    /* 0x4C */ u32 mField_0x4C;
-    /* 0x50 */ u32 mField_0x50;
-    /* 0x54 */ s16 mField_0x54;
-    /* 0x58 */ cCcD_HitCallback mField_0x58; // Some Callback
+    /* 0x3C */ mVec3_c mVec;
+    /* 0x48 */ cCcD_SrcGObjTg mTgHitSrc;
+    /* 0x58 */ cCcD_HitCallback mField_0x58;
 };
 
 class cCcD_GObjTg : public cCcD_GAtTgCoCommonBase {
@@ -423,35 +481,60 @@ public:
     void Set(const cCcD_SrcGObjTg &);
     void AdjustHitPos(f32, f32);
 
-    void SetSPrm(u32 flag) {
-        mSrc.mSPrm = flag;
-    }
-
-    u32 GetSPrm(u32 mask) const {
-        return mSrc.mSPrm & mask;
-    }
-
-    void SetGPrm(u32 f) {
-        mSrc.mBase.mGFlag |= f;
-    }
-
-    u32 Get_0x58() const {
-        return mField_0x58;
+    u32 GetAtHitType() const {
+        return mAtHitSrc.mType;
     }
 
     void SetFlag_0xA(u16 flag) {
-        mSrc.field_0x0A = flag;
+        mSrc.mField_0x0E = flag;
     }
 
     u16 GetFlag_0xA(u16 mask) const {
-        return mSrc.field_0x0A & mask;
+        return mSrc.mField_0x0E & mask;
     }
     void ClrSet() {
-        mSrc.mBase.mGFlag &= ~1;
+        OffSPrm(1);
     }
 
     void Set_0x4C(u32 f) {
         mField_0x4C = f;
+    }
+
+    u32 MskType(u32 mask) const {
+        return mSrc.mType & mask;
+    }
+    void SetType(u32 flag) {
+        mSrc.mType = flag;
+    }
+    void OnType(u32 m) {
+        mSrc.mType |= m;
+    }
+    void OffType(u32 m) {
+        mSrc.mType &= ~m;
+    }
+    u32 MskSPrm(u32 m) const {
+        return mSrc.mSPrm & m;
+    }
+    void SetSPrm(u32 f) {
+        mSrc.mSPrm = f;
+    }
+    void OnSPrm(u32 m) {
+        mSrc.mSPrm |= m;
+    }
+    void OffSPrm(u32 m) {
+        mSrc.mSPrm &= ~m;
+    }
+    u32 MskAtHitSPrm(u32 m) const {
+        return mAtHitSrc.mSPrm & m;
+    }
+    void SetAtHitSPrm(u32 f) {
+        mAtHitSrc.mSPrm = f;
+    }
+    void OnAtHitSPrm(u32 m) {
+        mAtHitSrc.mSPrm |= m;
+    }
+    void OffAtHitSPrm(u32 m) {
+        mAtHitSrc.mSPrm &= ~m;
     }
 
 public:
@@ -465,14 +548,7 @@ public:
     /* 0x4C */ u32 mField_0x4C;
     /* 0x50 */ u32 mField_0x50;
     /* 0x54 */ cCcD_HitCallback mField_0x54;
-    /* 0x58 */ u32 mField_0x58;
-    /* 0x5C */ u32 mField_0x5C;
-    /* 0x60 */ u16 mField_0x60;
-    /* 0x62 */ u16 mDamageFlags;
-    /* 0x64 */ u8 mDamageAmount;
-    /* 0x65 */ u8 mField_0x65[0x68 - 0x65];
-    /* 0x68 */ u16 mField_0x68;
-    /* 0x6A */ s16 mField_0x6A;
+    /* 0x58 */ cCcD_SrcGObjAt mAtHitSrc;
     /* 0x6C */ mVec3_c mField_0x6C;
     /* 0x78 */ u32 mField_0x78;
 };
@@ -486,17 +562,26 @@ public:
     void AdjustHitPos(f32, f32);
 
     void ClrSet() {
-        mSrc.mBase.mGFlag &= ~1;
+        OffSPrm(1);
     }
-    void SetGPrm(u32 f) {
-        mSrc.mBase.mGFlag |= f;
+    u32 MskSPrm(u32 m) const {
+        return mSrc.mSPrm & m;
+    }
+    void SetSPrm(u32 f) {
+        mSrc.mSPrm = f;
+    }
+    void OnSPrm(u32 m) {
+        mSrc.mSPrm |= m;
+    }
+    void OffSPrm(u32 m) {
+        mSrc.mSPrm &= ~m;
     }
 
 public:
     /* 0x1C */ cCcD_SrcGObjCo mSrc;
     /* 0x20 */ u32 mField_0x20;
-    /* 0x24 */ u32 mField_0x24;
-    /* 0x28 */ u32 mField_0x28;
+    /* 0x24 */ cCcD_SrcGObjCo mCoHitSrc;
+    /* 0x28 */ cCcD_HitCallback mField_0x28_callback;
 };
 
 // Maybe ?
@@ -528,14 +613,14 @@ public:
 
     const mVec3_c &GetAtHitPos() const;
     mVec3_c &GetAtHitPos();
-    u32 GetAtFlag0x2() const;
-    u32 GetAtFlag0x4() const;
-    u32 GetAtFlag0x8() const;
+    bool GetAtFlag0x2() const;
+    bool GetAtFlag0x4() const;
+    bool GetAtFlag0x8() const;
 
     const mVec3_c &GetTgHitPos() const;
     mVec3_c &GetTgHitPos();
-    u32 GetTgFlag0x4() const;
-    u32 GetTgFlag0x8() const;
+    bool GetTgFlag0x4() const;
+    bool GetTgFlag0x8() const;
 
     bool ChkAtClawshot() const;
     bool ChkAtClawshotDebug() const;
@@ -548,7 +633,7 @@ public:
     bool ChkAtSwordBonk() const;
     dAcObjBase_c *GetAtActor();
 
-    bool ChkTg_0x58(u32) const;
+    bool ChkTgAtHitType(u32) const;
     u32 GetTg_0x58() const;
     bool ChkTgBit14() const;
     u8 GetTgDamage() const;
@@ -561,7 +646,7 @@ public:
     bool ChkTgBit23() const;
     bool ChkTgBit24() const;
     bool ChkTgBit25() const;
-    u16 GetTg_0x68() const;
+    u16 GetTgSoundID() const;
     s16 GetTg_0x6A() const;
     bool ChkTgBit8() const;
     u8 GetTg_0x4A() const;
@@ -586,16 +671,16 @@ public:
         mStts = &stts;
     }
 
-    void setTgCoFlag(u32 f) {
-        mTg.SetGPrm(f);
-        mCo.SetGPrm(f);
+    void OnTgCoFlag(u32 f) {
+        mTg.OnSPrm(f);
+        mCo.OnSPrm(f);
     }
 
     void SetTgFlag(u32 flag) {
-        mTg.SetSPrm(flag);
+        mTg.SetType(flag);
     }
     void SetAtFlag(u32 flag) {
-        mAt.SetGPrm(flag);
+        mAt.SetSPrm(flag);
     }
 
     void SetTgFlag_0xA(u16 flag) {
@@ -603,7 +688,21 @@ public:
     }
 
     bool ChkTgHit() {
-        return mTg.GetRPrm(1) != 0 && mTg.GetActor() != nullptr;
+        return mTg.MskSPrm(1) != 0 && mTg.GetActor() != nullptr;
+    }
+    bool ChkAtHit() {
+        return mAt.MskSPrm(1) != 0 && mAt.GetActor() != nullptr;
+    }
+    bool ChkCoHit() {
+        return mCo.MskSPrm(1) != 0 && mCo.GetActor() != nullptr;
+    }
+
+    dAcObjBase_c *GetAc() {
+        if (mStts == nullptr) {
+            return nullptr;
+        } else {
+            return mStts->mpActor;
+        }
     }
 
     void ClrCoSet() {
@@ -622,6 +721,10 @@ public:
 
     void SetAtCallback(cCcD_HitCallback cb) {
         mAt.SetCallback(cb);
+    }
+
+    u32 ChkTgNoAtHitInfSet() const {
+        return mTg.MskSPrm(0x20);
     }
 };
 

@@ -1,10 +1,10 @@
 #include "d/a/obj/d_a_obj_toD3_stone_figure.h"
 
 #include "d/col/cc/d_cc_mgr.h"
+#include "d/flag/storyflag_manager.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
-#include "d/flag/storyflag_manager.h"
 #include "toBeSorted/scgame.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TOD3_STONE, dAcOtoD3StoneFigure_c, fProfile::OBJ_TOD3_STONE, 0x1B3, 0, 0);
@@ -17,10 +17,40 @@ f32 dAcOtoD3StoneFigure_c::sHeight = 290.0f;
 
 // clang-format off
 dCcD_SrcCyl dAcOtoD3StoneFigure_c::sCcSrc = {
-    {{0, 0, 0, 0, 0, 0, 0, 0, 0}, 
-    {0xFEB77DFF, 0x1000111, 0x06, 0x407, 0, 0}, 
-    {0xE9}},
-    {dAcOtoD3StoneFigure_c::sRadius, dAcOtoD3StoneFigure_c::sHeight}
+    {
+        {
+            0, 
+            0,
+            {
+                0,  
+                0,  
+                0   
+            },
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        }, 
+        {
+            0xFEB77DFF,
+            0x1000111,
+            {
+                0x06,
+                0x407
+            },
+            0,
+            0
+        }, 
+        {
+            0xE9
+        }
+    },
+    {
+        dAcOtoD3StoneFigure_c::sRadius,
+        dAcOtoD3StoneFigure_c::sHeight
+    }
 };
 // clang-format on
 
@@ -49,8 +79,7 @@ int dAcOtoD3StoneFigure_c::create() {
     mCollision.SetR(dAcOtoD3StoneFigure_c::sRadius + zero);
     mCollision.SetH(dAcOtoD3StoneFigure_c::sHeight + zero);
     ColliderManager::getColliderManager()->addCollider(&mCollision);
-    // mCollision.clearCoFlag();
-    mCollision.setTgCoFlag(1);
+    mCollision.OnTgCoFlag(1);
 
     // ???
     f32 a, b, c;
