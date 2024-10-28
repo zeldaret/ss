@@ -1,9 +1,11 @@
 #include "d/d_tag_processor.h"
 
 #include "common.h"
+#include "nw4r/ut/ut_CharWriter.h"
 #include "nw4r/ut/ut_Color.h"
 #include "nw4r/ut/ut_Rect.h"
 #include "nw4r/ut/ut_TagProcessorBase.h"
+#include "nw4r/ut/ut_TextWriterBase.h"
 
 nw4r::ut::Color FontColors1[] = {
     nw4r::ut::Color(0xff, 0x4b, 0x32, 0xff),
@@ -189,7 +191,7 @@ dTagProcessor_c::dTagProcessor_c() {
     field_0xEE2 = 0;
     field_0xEE3 = 0;
     field_0xEE4 = 0;
-    field_0x004 = 0;
+    field_0x004 = nullptr;
     field_0x90C = 0x24;
     field_0x90D = 4;
     field_0xEF0 = 0;
@@ -246,12 +248,8 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
             ctx->str += cmdLen / 2;
             ctx->str += field_0x808[3];
             return nw4r::ut::OPERATION_DEFAULT;
-        case 0x0F0F0F10:
-            fn_800B4FF0(rect, ctx, cmdLen, endPtr);
-            break;
-        case 0x0F0F0F0E:
-            field_0xEE2 = 1;
-            break;
+        case 0x0F0F0F10: fn_800B4FF0(rect, ctx, cmdLen, endPtr); break;
+        case 0x0F0F0F0E: field_0xEE2 = 1; break;
         case 0x3:
             if (field_0xEE1 == 0) {
                 setColor(rect, ctx, cmdLen, endPtr);
@@ -288,12 +286,8 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
                 mNumericArgsCopy[3]++;
             }
             break;
-        case 0x10008:
-            fn_800B61D0(rect, ctx, cmdLen, endPtr);
-            break;
-        case 0x30000:
-            changeScale(rect, ctx, false);
-            break;
+        case 0x10008: fn_800B61D0(rect, ctx, cmdLen, endPtr); break;
+        case 0x30000: changeScale(rect, ctx, false); break;
         case 0x10009:
             if (rect == nullptr && field_0xEE1 == 0) {
                 if (field_0xEE6 == 0 && mNumericArgsCopy[4] == field_0x880) {
@@ -378,10 +372,137 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
     return nw4r::ut::OPERATION_DEFAULT;
 }
 
+void dTagProcessor_c::setColor(nw4r::ut::Rect*rect, nw4r::ut::PrintContext<wchar_t>*ctx, u8 cmdLen, const wchar_t* buf) {
+    // TODO buf probably needs to be not const
+    u16 cmd = buf[0];
+    if (cmd == 0xFFFF) {
+        restoreColor(ctx, field_0x90C);
+        return;
+    }
+    nw4r::ut::Color c1 = FontColors1[cmd & 0xFFFF];
+    nw4r::ut::Color c2 = FontColors2[cmd & 0xFFFF];
+    if (cmd == 0) {
+        if (field_0x90C == 2) {
+            c1.r = 0xFF;
+            c1.g = 0x6E;
+            c1.b = 0x64;
+            c2.r = 0xFF;
+            c2.g = 0x6E;
+            c2.b = 0x64;
+        } else if (field_0x90C == 7) {
+            c1.r = 0xE6;
+            c1.g = 0x4B;
+            c1.b = 0x32;
+            c2.r = 0xE6;
+            c2.g = 0x4B;
+            c2.b = 0x32;
+        }
+    } else if (cmd == 1) {
+        if (field_0x90C == 2) {
+            c1.r = 0xF5;
+            c1.g = 0x64;
+            c1.b = 0x5A;
+            c2.r = 0xC8;
+            c2.g = 0x64;
+            c2.b = 0x5A;
+        } else if (field_0x90C == 7) {
+            c1.r = 0xB4;
+            c1.g = 0x50;
+            c1.b = 0x50;
+            c2.r = 0x8C;
+            c2.g = 0x40;
+            c2.b = 0x40;
+        }
+    } else if (cmd == 3 && field_0x90C >= 2 && field_0x90C < 5) {
+        c1.r = 0x50;
+        c1.g = 0xE6;
+        c1.b = 0xFA;
+        c2.r = 0xC8;
+        c2.g = 0xE6;
+        c2.b = 0xF5;
+    }
+
+    u8 u5 = 0xFF;
+    if (field_0x004 != nullptr) {
+        u5 = field_0x004->GetGlobalAlpha();
+    }
+
+    c2.a = u5;
+    c1.a = u5;
+    ctx->writer->SetGradationMode(nw4r::ut::CharWriter::GRADMODE_V);
+    ctx->writer->SetTextColor(c1, c2);
+}
+
+void dTagProcessor_c::setScale(
+    nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, const wchar_t *buf
+) {
+    // Cool, this needs buf to not be const
+    u16 scale = buf[0];
+    if (scale == 0) {
+        scale = 50;
+    }
+    f32 x = scale / 100.0f;
+    f32 y = scale / 100.0f;
+    ctx->writer->SetScale(x, y);
+}
+
 void dTagProcessor_c::setStringArg(const wchar_t *arg, s32 index) {
     for (int i = 0; i < 0x40; i++) {
         mStringArgs[index][i] = arg[i];
     }
+}
+
+void dTagProcessor_c::restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 windowType) {
+    if (field_0xEE2 != 0) {
+        windowType = 1;
+    }
+    int colorIndex;
+    switch (windowType) {
+        case 2:  colorIndex = 15; break;
+        case 3:  colorIndex = 16; break;
+        case 4:  colorIndex = 17; break;
+        case 5:  colorIndex = 19; break;
+        case 6:  colorIndex = 20; break;
+        case 7:  colorIndex = 21; break;
+        case 8:  colorIndex = 22; break;
+        case 9:  colorIndex = 24; break;
+        case 11: colorIndex = 25; break;
+        case 12: colorIndex = 26; break;
+        case 13: colorIndex = 30; break;
+        case 17: colorIndex = 31; break;
+        case 18: colorIndex = 32; break;
+        case 19: colorIndex = 43; break;
+        case 20: colorIndex = 33; break;
+        case 22: colorIndex = 35; break;
+        case 23: colorIndex = 36; break;
+        case 24: colorIndex = 37; break;
+        case 27: colorIndex = 40; break;
+        case 29: colorIndex = 42; break;
+        case 30: colorIndex = 44; break;
+        case 31: colorIndex = 18; break;
+        default: colorIndex = 14; break;
+    }
+
+    nw4r::ut::Color c1 = FontColors1[colorIndex & 0xFFFF];
+    nw4r::ut::Color c2 = FontColors2[colorIndex & 0xFFFF];
+
+    if (windowType == 7) {
+        c2.a = 0xC8;
+    } else if (windowType == 12) {
+        c2.a = 0xFF;
+    } else if (windowType == 13) {
+        c2.a = 0xC8;
+    }
+
+    u8 u5 = 0xFF;
+    if (field_0x004 != nullptr) {
+        u5 = field_0x004->GetGlobalAlpha();
+    }
+
+    c1.a = c1.a * u5 / 255.0f;
+    c2.a = c2.a * u5 / 255.0f;
+    ctx->writer->SetGradationMode(nw4r::ut::CharWriter::GRADMODE_V);
+    ctx->writer->SetTextColor(c1, c2);
 }
 
 u8 dTagProcessor_c::symbolToFontIdx(s32 s) {
@@ -390,8 +511,7 @@ u8 dTagProcessor_c::symbolToFontIdx(s32 s) {
 }
 
 u32 dTagProcessor_c::mapSomething(s32 arg) {
-    // What is this pattern?
-    if ((u32)arg - 6 <= 1) {
+    if (arg >= 6 && arg < 8) {
         return 4;
     } else if (arg == 9) {
         return 2;

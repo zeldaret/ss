@@ -1,6 +1,7 @@
 #ifndef D_TAG_PROCESSOR_H
 #define D_TAG_PROCESSOR_H
 
+#include "d/lyt/d_textbox.h"
 #include "nw4r/ut/ut_TagProcessorBase.h"
 
 // inofficial name
@@ -31,6 +32,7 @@ public:
     void fn_800B6190(u8 cmdLen, const wchar_t *ptr);
     void fn_800B61B0(u8 cmdLen, const wchar_t *ptr);
     void setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, const wchar_t *ptr);
+    void restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 windowType);
     void setScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, const wchar_t *ptr);
 
     u8 symbolToFontIdx(s32 s);
@@ -50,7 +52,7 @@ public:
     s32 tick0x830();
 
 private:
-    /* 0x004 */ s32 field_0x004;
+    /* 0x004 */ dTextBox_c *field_0x004;
     /* 0x008 */ wchar_t field_0x008[4][256];
     /* 0x808 */ wchar_t field_0x808[4];
     /* 0x810 */ f32 field_0x810;
