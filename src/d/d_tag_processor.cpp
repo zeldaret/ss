@@ -250,7 +250,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
             ctx->str += cmdLen / 2;
             ctx->str += field_0x808[3];
             return nw4r::ut::OPERATION_DEFAULT;
-        case 0x0F0F0F10: fn_800B4FF0(rect, ctx, cmdLen, endPtr); break;
+        case 0x0F0F0F0F: fn_800B4FF0(rect, ctx, cmdLen, endPtr); break;
         case 0x0F0F0F0E: field_0xEE2 = 1; break;
         case 0x3:
             if (field_0xEE1 == 0) {
