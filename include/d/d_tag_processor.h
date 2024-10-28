@@ -17,30 +17,30 @@ public:
     nw4r::ut::Operation ProcessTags(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx);
 
     void changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, bool);
-    void fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, const wchar_t *ptr);
-    void fn_800B6450(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, const wchar_t *ptr);
-    void fn_800B6EE0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, const wchar_t *ptr);
-    void fn_800B61D0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, const wchar_t *ptr);
-    void setFramesLeftOnPause(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, const wchar_t *ptr);
-    void fn_800B5500(u8 cmdLen, const wchar_t *ptr);
-    void fn_800B5540(const wchar_t *ptr);
-    void fn_800B60E0(u8 cmdLen, const wchar_t *ptr);
-    void fn_800B6110(u8 cmdLen, const wchar_t *ptr);
-    void fn_800B6140(u8 cmdLen, const wchar_t *ptr);
-    void fn_800B6160(u8 cmdLen, const wchar_t *ptr);
-    void fn_800B6170(u8 cmdLen, const wchar_t *ptr);
-    void fn_800B6190(u8 cmdLen, const wchar_t *ptr);
-    void fn_800B61B0(u8 cmdLen, const wchar_t *ptr);
-    void setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, const wchar_t *ptr);
+    void fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
+    void fn_800B6450(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
+    void fn_800B6EE0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr);
+    void fn_800B61D0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
+    void setFramesLeftOnPause(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
+    void fn_800B5500(u8 cmdLen, wchar_t *ptr);
+    void fn_800B5540(wchar_t *ptr);
+    void fn_800B60E0(u8 cmdLen, wchar_t *ptr);
+    void fn_800B6110(u8 cmdLen, wchar_t *ptr);
+    void fn_800B6140(u8 cmdLen, wchar_t *ptr);
+    void fn_800B6160(u8 cmdLen, wchar_t *ptr);
+    void fn_800B6170(u8 cmdLen, wchar_t *ptr);
+    void fn_800B6190(u8 cmdLen, wchar_t *ptr);
+    void fn_800B61B0(u8 cmdLen, wchar_t *ptr);
+    void setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 windowType);
-    void setScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, const wchar_t *ptr);
+    void setScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
 
     u8 symbolToFontIdx(s32 s);
     void setStringArg(const wchar_t *arg, s32 index);
 
-    static u32 mapSomething(s32 arg);
+    static s32 mapSomething(s32 arg);
 
-    static void getTextCommand(wchar_t _0xe, const wchar_t *src, u8 *outCmdLen, s32 *outCmd, wchar_t const **outEndPtr);
+    static void getTextCommand(wchar_t _0xe, const wchar_t *src, u8 *outCmdLen, s32 *outCmd, wchar_t **outEndPtr);
     static void process0xFCommand(wchar_t _0xf, const wchar_t *src, s32 *outCmd);
 
     void resetSomething();

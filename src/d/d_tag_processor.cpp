@@ -1,11 +1,13 @@
 #include "d/d_tag_processor.h"
 
 #include "common.h"
+#include "nw4r/lyt/lyt_types.h"
 #include "nw4r/ut/ut_CharWriter.h"
 #include "nw4r/ut/ut_Color.h"
 #include "nw4r/ut/ut_Rect.h"
 #include "nw4r/ut/ut_TagProcessorBase.h"
 #include "nw4r/ut/ut_TextWriterBase.h"
+#include "sized_string.h"
 
 nw4r::ut::Color FontColors1[] = {
     nw4r::ut::Color(0xff, 0x4b, 0x32, 0xff),
@@ -229,7 +231,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
 
     u8 cmdLen = 0;
     s32 cmd = 0;
-    const wchar_t *endPtr = nullptr;
+    wchar_t *endPtr = nullptr;
     getTextCommand(ch, ctx->str, &cmdLen, &cmd, &endPtr);
     switch (cmd) {
         case 0x10000:
@@ -372,7 +374,59 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
     return nw4r::ut::OPERATION_DEFAULT;
 }
 
-void dTagProcessor_c::setColor(nw4r::ut::Rect*rect, nw4r::ut::PrintContext<wchar_t>*ctx, u8 cmdLen, const wchar_t* buf) {
+void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr) {
+    if (field_0x90C != 22 && field_0x90C != 30 && field_0xEE0 != 0) {
+        int arg = ptr[0];
+        nw4r::lyt::Size textBoxSize = field_0x004->GetSize();
+        nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
+        int i1 = mapSomething(field_0x90C);
+        if (arg % i1 == 0 && field_0x90C != 31 && field_0x90C != 8) {
+            int u = 0;
+            int v = 0;
+            for (int i = arg; i < arg + mapSomething(field_0x90C) && i < 0x32; i++) {
+                f32 f6 = getFloat(i);
+                if (f6 > 0.0f) {
+                    v++;
+                    if (u != 0) {
+                        v += u;
+                        u = 0;
+                    }
+                } else {
+                    u++;
+                }
+            }
+
+            // Unfortunately, the code then proceeds to access
+            // some global text stuff at 0x805753b0, which is
+            // completely hidden in the Ghidra decompiler, apparently
+            // because the results aren't used?
+
+            if (u < mapSomething(field_0x90C)) {
+                f32 lineSpace = field_0x004->GetLineSpace();
+                int h = mapSomething(field_0x90C);
+                field_0x814 = ctx->writer->GetCursorY();
+                f32 f7 = (fontSize.height + lineSpace) * 0.5f * (h - v);
+                field_0x818 = ctx->y;
+                field_0xEE4 = 1;
+                if (f7 > 0.0f) {
+                    ctx->writer->SetCursorY(ctx->writer->GetCursorY() + f7);
+                    field_0x810 = f7;
+                }
+            }
+        }
+
+        f32 f7 = getFloat(arg);
+        f32 f8 = (textBoxSize.width - f7) * 0.5f;
+        if ((field_0x90C < 6 || field_0x90C >= 9) && field_0x90C != 30) {
+            f8 = 0.0f;
+        }
+        if (f8 > 0.0f) {
+            ctx->writer->SetCursorX(ctx->writer->GetCursorX() + f8);
+        }
+    }
+}
+
+void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *buf) {
     // TODO buf probably needs to be not const
     u16 cmd = buf[0];
     if (cmd == 0xFFFF) {
@@ -433,9 +487,7 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect*rect, nw4r::ut::PrintContext<wchar
     ctx->writer->SetTextColor(c1, c2);
 }
 
-void dTagProcessor_c::setScale(
-    nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, const wchar_t *buf
-) {
+void dTagProcessor_c::setScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *buf) {
     // Cool, this needs buf to not be const
     u16 scale = buf[0];
     if (scale == 0) {
@@ -446,10 +498,23 @@ void dTagProcessor_c::setScale(
     ctx->writer->SetScale(x, y);
 }
 
-void dTagProcessor_c::setStringArg(const wchar_t *arg, s32 index) {
-    for (int i = 0; i < 0x40; i++) {
-        mStringArgs[index][i] = arg[i];
+void dTagProcessor_c::setFramesLeftOnPause(
+    nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr
+) {
+    mPauseFramesLeft = ptr[0];
+}
+
+void dTagProcessor_c::fn_800B5500(u8 cmdLen, wchar_t *ptr) {
+    u16 val = ptr[0];
+    if (field_0x830 == -1) {
+        field_0x830 = val;
     }
+}
+
+void dTagProcessorDataStuff() {
+    SizedString<32> s;
+    s.sprintf("NAME_ITEM_%03d");
+    s.sprintf("lang:word:%03d:%02d");
 }
 
 void dTagProcessor_c::restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 windowType) {
@@ -510,7 +575,13 @@ u8 dTagProcessor_c::symbolToFontIdx(s32 s) {
     return alphabet[s];
 }
 
-u32 dTagProcessor_c::mapSomething(s32 arg) {
+void dTagProcessor_c::setStringArg(const wchar_t *arg, s32 index) {
+    for (int i = 0; i < 0x40; i++) {
+        mStringArgs[index][i] = arg[i];
+    }
+}
+
+s32 dTagProcessor_c::mapSomething(s32 arg) {
     if (arg >= 6 && arg < 8) {
         return 4;
     } else if (arg == 9) {
@@ -522,12 +593,12 @@ u32 dTagProcessor_c::mapSomething(s32 arg) {
 }
 
 void dTagProcessor_c::getTextCommand(
-    wchar_t _0xe, const wchar_t *src, u8 *outCmdLen, s32 *outCmd, wchar_t const **outEndPtr
+    wchar_t _0xe, const wchar_t *src, u8 *outCmdLen, s32 *outCmd, wchar_t **outEndPtr
 ) {
     *outCmdLen = src[2] + 6;
     *outCmd = *(s32 *)src;
     if (*outCmdLen > 6) {
-        *outEndPtr = src + 3;
+        *outEndPtr = (wchar_t *)src + 3;
     } else {
         *outEndPtr = nullptr;
     }
