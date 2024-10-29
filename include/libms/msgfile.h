@@ -1,3 +1,6 @@
+#ifndef LIBMS_MSGFILE_H
+#define LIBMS_MSGFILE_H
+
 #include "common.h"
 
 #ifdef __cplusplus
@@ -21,4 +24,6 @@ struct MsbtAttrInfo *LMS_GetAttribute(struct MsbtInfo *info, int index);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif

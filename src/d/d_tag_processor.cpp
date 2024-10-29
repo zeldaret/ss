@@ -1,6 +1,7 @@
 #include "d/d_tag_processor.h"
 
 #include "common.h"
+#include "d/d_textunk.h"
 #include "nw4r/lyt/lyt_types.h"
 #include "nw4r/ut/ut_CharWriter.h"
 #include "nw4r/ut/ut_Color.h"
@@ -241,9 +242,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             getTextCommand(c, src + 1, &cmdLen, &cmd, &endPtr);
             bool bVar3 = false;
             switch (cmd) {
-                case 0x20001:
-                    writePtr = fn_800B5680(writePtr, endPtr, &local_b4, &iVar14);
-                    break;
+                case 0x20001: writePtr = fn_800B5680(writePtr, endPtr, &local_b4, &iVar14); break;
             }
         } else if (c == 0xF) {
         } else if (iVar14 == 0 && field_0x90E == 0) {
@@ -584,6 +583,24 @@ void dTagProcessorDataStuff() {
     s.sprintf("lang:word:%03d:%02d");
 }
 
+void dTagProcessor_c::changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, bool direct) {
+    f32 scale;
+    f32 posY;
+
+    if (direct) {
+        scale = field_0x904;
+        posY = field_0x908;
+    } else {
+        field_0x904 = ctx->writer->GetScaleV();
+        field_0x908 = ctx->writer->GetCursorY();
+        scale = field_0x904 * UnkTextThing::getField0x768();
+        posY = field_0x908 - ctx->writer->GetFontAscent() * UnkTextThing::getField0x76C();
+    }
+
+    ctx->writer->SetCursorY(posY);
+    ctx->writer->SetScale(scale, scale);
+}
+
 void dTagProcessor_c::restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 windowType) {
     if (field_0xEE2 != 0) {
         windowType = 1;
@@ -645,6 +662,46 @@ u8 dTagProcessor_c::symbolToFontIdx(s32 s) {
 void dTagProcessor_c::setStringArg(const wchar_t *arg, s32 index) {
     for (int i = 0; i < 0x40; i++) {
         mStringArgs[index][i] = arg[i];
+    }
+}
+
+f32 dTagProcessor_c::fn_800B8040(s8 factor, u32 windowType) {
+    // Fun little recursion here
+    f32 f1 = UnkTextThing::getFn800B1F70();
+    if (windowType == 6) {
+        f32 f2 = fn_800B8040(0, 0);
+        f32 f3 = fn_800B8040(factor, 0);
+        return f1 * ((f3 / f2) * 0.93f);
+    } else if (windowType == 7) {
+        f32 f2 = fn_800B8040(0, 0);
+        f32 f3 = fn_800B8040(factor, 0);
+        return f1 * ((f3 / f2) * 0.93f);
+    } else if (windowType == 9) {
+        f32 f2 = fn_800B8040(0, 0);
+        f32 f3 = fn_800B8040(factor, 0);
+        return f1 * ((f3 / f2) * 0.93f);
+    } else if (windowType == 30) {
+        f32 f2 = fn_800B8040(0, 0);
+        f32 f3 = fn_800B8040(factor, 0);
+        return f1 * ((f3 / f2) * 0.93f);
+    } else if (windowType == 34) {
+        f32 f2 = fn_800B8040(0, 0);
+        f32 f3 = fn_800B8040(factor, 0);
+        return f1 * ((f3 / f2) * 0.93f);
+    } else {
+        f32 x;
+        switch (factor) {
+            case -2: x = 0.55f; break;
+            case -1: x = 0.55f; break;
+            case -0: x = 0.55f; break;
+            case 1:  x = 0.55f; break;
+            case 2:
+                x = 0.55f;
+                break;
+                // @bug: No default, so uninitialized is possible
+        }
+        x *= UnkTextThing::getFn800B1F10();
+        return x * f1;
     }
 }
 

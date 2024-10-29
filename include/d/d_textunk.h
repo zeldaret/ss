@@ -14,6 +14,31 @@ public:
 
     void destroy();
 
+    inline static f32 getField0x768() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x768;
+        }
+        return 0.0f;
+    }
+
+    inline static f32 getField0x76C() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x76C;
+        }
+        return 0.0f;
+    }
+
+    inline static f32 getFn800B1F70() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_800B1F70();
+        }
+        return 1.0f;
+    }
+
+    inline static f32 getFn800B1F10() {
+        return sInstance->fn_800B1F10();
+    }
+
 private:
     static UnkTextThing *sInstance;
 

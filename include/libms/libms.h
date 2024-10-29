@@ -1,3 +1,6 @@
+#ifndef LIBMS_LIBMS_H
+#define LIBMS_LIBMS_H
+
 #include "common.h"
 
 #ifdef __cplusplus
@@ -14,4 +17,6 @@ void LMSi_MemCopy(char *p1, const char *p2, int n);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
