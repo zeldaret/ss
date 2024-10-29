@@ -259,12 +259,25 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             getTextCommand(c, src + 1, &cmdLen, &cmd, &endPtr);
             bool bVar3 = false;
             switch (cmd) {
-                case 0x10008:
-                    if (textBox != nullptr) {
-                        float2 = fn_800B8040(((char *)endPtr)[0], field_0x90C) * textBox->getMyScale();
+                case 0x10000: {
+                    if (((char *)endPtr)[0] == 0) {
+                        state2 = 0;
+                    } else if (((char *)endPtr)[0] == 1) {
+                        state1 = 0;
                     }
-                    writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
-                    break;
+                    field_0x90F[2] = ((char *)endPtr)[1];
+                    StackThing tmp = y;
+                    for (int i = 0; i < 4; i++) {
+                        for (int j = 0; j < 256; j++) {
+                            if (j < 4) {
+                                field_0x008[i][j] = ((wchar_t *)&tmp)[j];
+                            } else {
+                                field_0x008[i][j] = 0;
+                            }
+                        }
+                    }
+                    state3 = 1;
+                } break;
                 case 0x10001:
                     if (((char *)endPtr)[0] == 0) {
                         state2 = 1;
@@ -295,27 +308,16 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     state3 = 4;
                     bVar3 = true;
                     break;
-                case 0x10000: {
-                    if (((char *)endPtr)[0] == 0) {
-                        state2 = 0;
-                    } else if (((char *)endPtr)[0] == 1) {
-                        state1 = 0;
+
+                case 0x10008:
+                    if (textBox != nullptr) {
+                        float2 = fn_800B8040(((char *)endPtr)[0], field_0x90C) * textBox->getMyScale();
                     }
-                    field_0x90F[2] = ((char *)endPtr)[1];
-                    StackThing tmp = y;
-                    for (int i = 0; i < 4; i++) {
-                        for (int j = 0; j < 256; j++) {
-                            if (j < 4) {
-                                field_0x008[i][j] = ((wchar_t *)&tmp)[j];
-                            } else {
-                                field_0x008[i][j] = 0;
-                            }
-                        }
-                    }
-                    state3 = 1;
-                } break;
+                    writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
+                    break;
                 case 0x10009: fn_800B5570(dest, &local_b4, state4); break;
-                case 0x10010: fn_800B5520(endPtr); break;
+                case 0x10010:
+                case 0x20000: fn_800B5520(endPtr); break;
                 case 0x20001: writePtr = fn_800B5680(writePtr, endPtr, &local_b4, state4); break;
                 case 0x20002: writePtr = fn_800B5860(dest, endPtr, &local_b4, state4); break;
                 case 0x20003: writePtr = fn_800B5A20(dest, endPtr, &local_b4, state4); break;
@@ -381,13 +383,15 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
         } else if (state4 != 0 && field_0x90E != 0) {
             fn_800B5FD0(c, &field_0x008[field_0x90E - 1][local_b4], &local_b4);
             src++;
-            if (field_0x90E >= 1 && field_0x90E < 5) {
+            if (field_0x90E - 1 < 4) {
                 field_0x808[field_0x90E - 1]++;
             }
         } else {
             if (textBox != nullptr) {
                 if (c == 10) {
-                    *(writePtr++) = *(src++);
+                    *writePtr = c;
+                    src++;
+                    writePtr++;
                     mCommandInsert++;
                     s32 i10 = mapSomething(field_0x90C);
                     if (mCommandInsert % i10 == 0) {
@@ -397,11 +401,11 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     if (textBox != nullptr) {
                         wchar_t *buf = (wchar_t *)&x;
                         writePtr[0] = buf[0];
-                        writePtr[2] = buf[1];
-                        writePtr[3] = buf[2];
-                        writePtr[4] = buf[3];
-                        writePtr[5] = mCommandInsert;
-                        writePtr += 6;
+                        writePtr[1] = buf[1];
+                        writePtr[2] = buf[2];
+                        writePtr[3] = buf[3];
+                        writePtr[4] = mCommandInsert;
+                        writePtr += 5;
                     }
                 } else {
                     const nw4r::ut::Font *fnt = textBox->GetFont();
