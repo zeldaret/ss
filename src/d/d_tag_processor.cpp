@@ -260,18 +260,18 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             bool bVar3 = false;
             switch (cmd) {
                 case 0x0F0F0F0F:
-                    if (state4 == 0 || field_0x90E == 0) {
-                        for (int i = 0; i < (cmdLen / 2) + 1; i++) {
-                            *writePtr = src[i];
-                            writePtr++;
-                        }
-                    } else {
-                        for (int i = 0; i < (cmdLen / 2) + 1; i++) {
+                    if (state4 != 0 && field_0x90E != 0) {
+                        for (u32 i = 0; i < (cmdLen / 2) + 1; i++) {
                             field_0x008[field_0x90E - 1][local_b4] = src[i];
-                            if (field_0x90E >= 1 && field_0x90E < 5) {
+                            if (field_0x90E - 1 < 4) {
                                 field_0x808[field_0x90E - 1]++;
                             }
                             local_b4++;
+                        }
+                    } else {
+                        for (u32 i = 0; i < (cmdLen / 2) + 1; i++) {
+                            *writePtr = src[i];
+                            writePtr++;
                         }
                     }
                     break;
