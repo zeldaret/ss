@@ -334,8 +334,9 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
                     float2 = tmp;
                 } break;
-                case 0x30001: field_0xEF1 = 1; break;
-
+                case 0x30001:    field_0xEF1 = 1; break;
+                case 0x30004:
+                case 0x0F0F0F0E: writePtr = fn_800B5DD0(writePtr, endPtr, &local_b4, state4); break;
                 case 0x0F0F0F0F:
                     if (state4 == 0 || field_0x90E == 0) {
                         for (int i = 0; i < (cmdLen / 2) + 1; i++) {
@@ -352,10 +353,8 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                         }
                     }
                     break;
-                case 0x30004:
-                case 0x0F0F0F0E: writePtr = fn_800B5DD0(writePtr, endPtr, &local_b4, state4); break;
 
-                default:         writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4); break;
+                default: writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4); break;
             }
 
             if (bVar3) {
