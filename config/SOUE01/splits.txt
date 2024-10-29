@@ -192,6 +192,15 @@ d/lyt/d_window.cpp:
 	.data       start:0x80510820 end:0x805108B0
 	.sdata2     start:0x805797F0 end:0x805797F8
 
+d/d_textunk.cpp:
+	.text       start:0x800B1890 end:0x800B20DC
+	.ctors      start:0x804DB6D0 end:0x804DB6D4
+	.data       start:0x805108C8 end:0x805108D8
+	.sdata      start:0x805722D8 end:0x805722E0
+	.sbss       start:0x805753B0 end:0x805753B8
+	.sdata2     start:0x805797F8 end:0x80579848
+	.bss        start:0x805A6F70 end:0x805A7730
+
 d/d_tag_processor.cpp:
 	.text       start:0x800B35C0 end:0x800B9274
 	.ctors      start:0x804DB6D4 end:0x804DB6D8

@@ -11,12 +11,15 @@ public:
     dTagProcessor_c();
     virtual ~dTagProcessor_c();
 
+    void eventFlowTextProcessingRelated(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen);
+
     virtual nw4r::ut::Operation Process(u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx) override;
     virtual nw4r::ut::Operation CalcRect(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx) override;
 
     nw4r::ut::Operation ProcessTags(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx);
 
     void changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, bool);
+    wchar_t *fn_800B5680(wchar_t *dest, wchar_t *src, s32*, s32*);
     void fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void fn_800B6450(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void fn_800B6EE0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr);
@@ -42,6 +45,9 @@ public:
 
     static void getTextCommand(wchar_t _0xe, const wchar_t *src, u8 *outCmdLen, s32 *outCmd, wchar_t **outEndPtr);
     static void process0xFCommand(wchar_t _0xf, const wchar_t *src, s32 *outCmd);
+
+    static f32 fn_800B8040(s8, u32);
+    wchar_t *fn_800B5FD0(u32, wchar_t *, s32 *);
 
     void resetSomething();
     void resetSomeFloats();

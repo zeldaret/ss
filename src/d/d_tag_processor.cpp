@@ -199,7 +199,75 @@ dTagProcessor_c::dTagProcessor_c() {
     field_0xEF0 = 0;
     field_0xEF1 = 0;
 }
+
 dTagProcessor_c::~dTagProcessor_c() {}
+
+void dTagProcessor_c::eventFlowTextProcessingRelated(
+    dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen
+) {
+    s32 iVar14 = 0;
+    s32 local_b4;
+
+    f32 t = fn_800B8040(0, field_0x90C);
+    if (textBox != nullptr) {
+        t *= textBox->getMyScale();
+        textBox->set0x1F8(0);
+    }
+
+    wchar_t *writePtr = dest;
+    if (textBox != nullptr) {
+        writePtr += 5;
+        dest[0] = 0xE;
+        dest[1] = 0xF0F;
+        dest[2] = 0xF0F;
+        dest[3] = 0x2;
+        dest[4] = mCommandInsert;
+    }
+
+    do {
+        wchar_t c = *src;
+        if (c == nullptr) {
+            if (textBox != nullptr) {
+                mCommandInsert++;
+            }
+            *writePtr = '\0';
+            goto end;
+        }
+
+        if (c == 0xE) {
+            u8 cmdLen = 0;
+            s32 cmd = 0;
+            wchar_t *endPtr = nullptr;
+            getTextCommand(c, src + 1, &cmdLen, &cmd, &endPtr);
+            bool bVar3 = false;
+            switch (cmd) {
+                case 0x20001:
+                    writePtr = fn_800B5680(writePtr, endPtr, &local_b4, &iVar14);
+                    break;
+            }
+        } else if (c == 0xF) {
+        } else if (iVar14 == 0 && field_0x90E == 0) {
+            const nw4r::ut::Font *fnt = textBox->GetFont();
+            f32 charSpace = textBox->GetCharSpace();
+            f32 w = fnt->GetCharWidth(*src);
+            field_0x914[mCommandInsert] = field_0x914[mCommandInsert] + t * w + charSpace;
+            fn_800B5FD0(*src, writePtr, nullptr);
+            src++;
+        } else {
+            fn_800B5FD0(c, &field_0x008[field_0x90E - 1][local_b4], &iVar14);
+            src++;
+            if (field_0x90E >= 1 && field_0x90E < 5) {
+                field_0x808[field_0x90E - 1]++;
+            }
+        }
+
+    } while ((writePtr - dest) / 2 < destLen);
+
+end:
+    if (pOutLen != nullptr) {
+        *pOutLen = (writePtr - dest) / 2;
+    }
+}
 
 nw4r::ut::Operation dTagProcessor_c::Process(u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx) {
     return ProcessTags(nullptr, ch, ctx);
@@ -210,7 +278,6 @@ nw4r::ut::Operation dTagProcessor_c::CalcRect(nw4r::ut::Rect *rect, u16 ch, nw4r
 }
 
 nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx) {
-    // Function is largely OK, but the switch below uses a slightly different partition
     if (ch != 0x0E) {
         if (ch != 0x0F) {
             if (rect != nullptr) {

@@ -27,6 +27,14 @@ public:
         nw4r::lyt::TextBox::SetScale(value);
     }
 
+    void set0x1F8(u8 val) {
+        field_0x1F8 = val;
+    }
+
+    f32 getMyScale() const {
+        return mScale;
+    }
+
     static inline f32 GetTranslateX1() {
         if (lbl_805753B0 != nullptr) {
             return GetTranslateX1_();
@@ -46,11 +54,13 @@ public:
 private:
     void MySetScale(const nw4r::math::VEC2 &value);
 
-    d2d::LytBase_c *mpLytBase;
-    u8 field_0x108[0x118 - 0x108];
+    /* 0x104 */ d2d::LytBase_c *mpLytBase;
+    /* 0x108 */ u8 field_0x108[0x118 - 0x108];
     /* 0x118 */ nw4r::math::VEC2 mTextScale;
     /* 0x120 */ f32 mScale;
-    u8 field_0x124[0x204 - 0x124];
+    /* 0x124 */ u8 field_0x124[0x1F8 - 0x124];
+    /* 0x1F8 */ u8 field_0x1F8;
+    /* 0x1F9 */ u8 field_0x1F9[0x204 - 0x1F9];
 };
 
 #endif
