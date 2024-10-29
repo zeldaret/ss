@@ -315,7 +315,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     }
                     state3 = 1;
                 } break;
-                case 0x10009: fn_800B5570(dest, &local_b4, state4);
+                case 0x10009: fn_800B5570(dest, &local_b4, state4); break;
                 case 0x10010: fn_800B5520(endPtr); break;
 
                 case 0x30001: field_0xEF1 = 1; break;
@@ -337,7 +337,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     }
                     writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
                     float2 = tmp;
-                }
+                } break;
 
                 case 0x0F0F0F0F:
                     if (state4 == 0 || field_0x90E == 0) {
@@ -355,13 +355,10 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                         }
                     }
                     break;
-                case 0x0F0F0F0E:
-                    writePtr = fn_800B5DD0(writePtr, endPtr, &local_b4, state4);
-                    break;
+                case 0x0F0F0F0E: writePtr = fn_800B5DD0(writePtr, endPtr, &local_b4, state4); break;
 
-                default: writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4); break;
+                default:         writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4); break;
             }
-
 
             if (bVar3) {
                 field_0x82C = state1;
@@ -394,7 +391,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     float2 *= textBox->getMyScale();
                 }
                 if (textBox != nullptr) {
-                    wchar_t *buf = (wchar_t*)&x;
+                    wchar_t *buf = (wchar_t *)&x;
                     writePtr[0] = buf[0];
                     writePtr[2] = buf[1];
                     writePtr[3] = buf[2];
