@@ -260,10 +260,9 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             bool bVar3 = false;
             switch (cmd) {
                 case 0x10000: {
-                    if (((char *)endPtr)[0] == 0) {
-                        state2 = 0;
-                    } else if (((char *)endPtr)[0] == 1) {
-                        state1 = 0;
+                    switch (((char *)endPtr)[0]) {
+                        case 0: state2 = 0; break;
+                        case 1: state1 = 0; break;
                     }
                     field_0x90F[2] = ((char *)endPtr)[1];
                     StackThing tmp = y;
@@ -279,30 +278,27 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     state3 = 1;
                 } break;
                 case 0x10001:
-                    if (((char *)endPtr)[0] == 0) {
-                        state2 = 1;
-                    } else if (((char *)endPtr)[0] == 1) {
-                        state1 = 1;
+                    switch (((char *)endPtr)[0]) {
+                        case 0: state2 = 1; break;
+                        case 1: state1 = 1; break;
                     }
                     field_0x90F[1] = ((char *)endPtr)[1];
                     state3 = 2;
                     bVar3 = true;
                     break;
                 case 0x10002:
-                    if (((char *)endPtr)[0] == 0) {
-                        state2 = 2;
-                    } else if (((char *)endPtr)[0] == 1) {
-                        state1 = 2;
+                    switch (((char *)endPtr)[0]) {
+                        case 0: state2 = 2; break;
+                        case 1: state1 = 2; break;
                     }
                     field_0x90F[2] = ((char *)endPtr)[1];
                     state3 = 3;
                     bVar3 = true;
                     break;
                 case 0x10003:
-                    if (((char *)endPtr)[0] == 0) {
-                        state2 = 3;
-                    } else if (((char *)endPtr)[0] == 1) {
-                        state1 = 3;
+                    switch (((char *)endPtr)[0]) {
+                        case 0: state2 = 3; break;
+                        case 1: state1 = 3; break;
                     }
                     field_0x90F[3] = ((char *)endPtr)[1];
                     state3 = 4;
