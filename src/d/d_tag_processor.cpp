@@ -327,19 +327,6 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     }
                     writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
                     break;
-                case 0x10009: fn_800B5570(dest, &local_b4, state4); break;
-                case 0x10010:
-                case 0x20000: fn_800B5520(endPtr); break;
-                case 0x20001: writePtr = fn_800B5680(writePtr, endPtr, &local_b4, state4); break;
-                case 0x20002: writePtr = fn_800B5860(dest, endPtr, &local_b4, state4); break;
-                case 0x20003: writePtr = fn_800B5A20(dest, endPtr, &local_b4, state4); break;
-                case 0x20004:
-                    if (textBox != nullptr) {
-                        fn_800B6320(textBox, endPtr);
-                    }
-                    writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
-                    break;
-
                 case 0x30000: {
                     f32 tmp = float2;
                     if (textBox != nullptr) {
@@ -350,11 +337,27 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
                     float2 = tmp;
                 } break;
-                case 0x30001:    field_0xEF1 = 1; break;
+                case 0x10010:
+                case 0x20000: fn_800B5520(endPtr); break;
+                case 0x20004:
+                    if (textBox != nullptr) {
+                        fn_800B6320(textBox, endPtr);
+                    }
+                    writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
+                    break;
+                case 0x10009:    fn_800B5570(dest, &local_b4, state4); break;
+                case 0x20001:    writePtr = fn_800B5680(writePtr, endPtr, &local_b4, state4); break;
+                case 0x20002:    writePtr = fn_800B5860(dest, endPtr, &local_b4, state4); break;
+                case 0x20003:    writePtr = fn_800B5A20(dest, endPtr, &local_b4, state4); break;
+
                 case 0x30004:
                 case 0x0F0F0F0E: writePtr = fn_800B5DD0(writePtr, endPtr, &local_b4, state4); break;
+                case 0x30001:
+                    field_0xEF1 = 1;
+                    writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
+                    break;
 
-                default:         writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4); break;
+                default: writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4); break;
             }
 
             if (bVar3) {
