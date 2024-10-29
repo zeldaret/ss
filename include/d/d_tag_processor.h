@@ -19,7 +19,9 @@ public:
     nw4r::ut::Operation ProcessTags(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx);
 
     void changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, bool);
-    wchar_t *fn_800B5680(wchar_t *dest, wchar_t *src, s32*, s32*);
+    wchar_t *fn_800B5680(wchar_t *dest, wchar_t *src, s32*, s32);
+    wchar_t *fn_800B5860(wchar_t *dest, wchar_t *src, s32*, s32);
+    wchar_t *fn_800B5A20(wchar_t *dest, wchar_t *src, s32*, s32);
     void fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void fn_800B6450(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void fn_800B6EE0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr);
@@ -48,6 +50,11 @@ public:
 
     static f32 fn_800B8040(s8, u32);
     wchar_t *fn_800B5FD0(u32, wchar_t *, s32 *);
+    wchar_t *writeTextNormal(wchar_t *dest, wchar_t *src, s32*, u8 cmdLen, s32);
+    wchar_t *fn_800B5570(wchar_t *dest, s32*, s32);
+    wchar_t *fn_800B5DD0(wchar_t *dest, wchar_t *src, s32*, s32);
+    void fn_800B5520(wchar_t *dest);
+    void fn_800B6320(dTextBox_c *textBox, wchar_t *cmd);
 
     void resetSomething();
     void resetSomeFloats();
@@ -111,7 +118,7 @@ private:
     /* 0x90E */ u8 field_0x90E;
     /* 0x90F */ u8 field_0x90F[4];
     /* 0x914 */ f32 field_0x914[0x32];
-    /* 0x9DC */ u32 mCommandInsert;
+    /* 0x9DC */ s32 mCommandInsert;
     /* 0x9E0 */ wchar_t mStringArgs[8][64];
     /* 0xDE0 */ u8 field_0xDE0[0xEE0 - 0xDE0];
     /* 0xEE0 */ u8 field_0xEE0;

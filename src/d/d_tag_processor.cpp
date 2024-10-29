@@ -203,17 +203,32 @@ dTagProcessor_c::dTagProcessor_c() {
 
 dTagProcessor_c::~dTagProcessor_c() {}
 
+struct StackThing {
+    u32 u1;
+    u32 u2;
+};
+
 void dTagProcessor_c::eventFlowTextProcessingRelated(
     dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen
 ) {
-    s32 iVar14 = 0;
+    // This function is in serious need of repairing but at least it's in a position
+    // where objdiff puts a number higher than 0% on it
+    s32 state3 = 0;
+    s32 state4 = 0;
     s32 local_b4;
 
-    f32 t = fn_800B8040(0, field_0x90C);
+    s32 state1 = -1;
+    s32 state2 = -1;
+
+    f32 float1 = fn_800B8040(0, field_0x90C);
+    f32 float2 = float1;
     if (textBox != nullptr) {
-        t *= textBox->getMyScale();
+        float2 *= textBox->getMyScale();
+        resetSomeFloats();
         textBox->set0x1F8(0);
     }
+
+    StackThing x = {0x000E0F0F, 0x0F0F0002};
 
     wchar_t *writePtr = dest;
     if (textBox != nullptr) {
@@ -224,6 +239,8 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
         dest[3] = 0x2;
         dest[4] = mCommandInsert;
     }
+
+    StackThing y = {0x000E0F0F, 0x0F0F0002};
 
     do {
         wchar_t c = *src;
@@ -242,29 +259,171 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             getTextCommand(c, src + 1, &cmdLen, &cmd, &endPtr);
             bool bVar3 = false;
             switch (cmd) {
-                case 0x20001: writePtr = fn_800B5680(writePtr, endPtr, &local_b4, &iVar14); break;
+                case 0x20001: writePtr = fn_800B5680(writePtr, endPtr, &local_b4, state4); break;
+                case 0x10008:
+                    if (textBox != nullptr) {
+                        float2 = fn_800B8040(((char *)endPtr)[0], field_0x90C) * textBox->getMyScale();
+                    }
+                    writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
+                    break;
+                case 0x10001:
+                    if (((char *)endPtr)[0] == 0) {
+                        state2 = 1;
+                    } else if (((char *)endPtr)[0] == 1) {
+                        state1 = 1;
+                    }
+                    field_0x90F[1] = ((char *)endPtr)[1];
+                    state3 = 2;
+                    bVar3 = true;
+                    break;
+                case 0x10002:
+                    if (((char *)endPtr)[0] == 0) {
+                        state2 = 2;
+                    } else if (((char *)endPtr)[0] == 1) {
+                        state1 = 2;
+                    }
+                    field_0x90F[2] = ((char *)endPtr)[1];
+                    state3 = 3;
+                    bVar3 = true;
+                    break;
+                case 0x10003:
+                    if (((char *)endPtr)[0] == 0) {
+                        state2 = 3;
+                    } else if (((char *)endPtr)[0] == 1) {
+                        state1 = 3;
+                    }
+                    field_0x90F[3] = ((char *)endPtr)[1];
+                    state3 = 4;
+                    bVar3 = true;
+                    break;
+                case 0x10000: {
+                    if (((char *)endPtr)[0] == 0) {
+                        state2 = 0;
+                    } else if (((char *)endPtr)[0] == 1) {
+                        state1 = 0;
+                    }
+                    field_0x90F[2] = ((char *)endPtr)[1];
+                    StackThing tmp = y;
+                    for (int i = 0; i < 4; i++) {
+                        for (int j = 0; j < 256; j++) {
+                            if (j < 4) {
+                                field_0x008[i][j] = ((wchar_t *)&tmp)[j];
+                            } else {
+                                field_0x008[i][j] = 0;
+                            }
+                        }
+                    }
+                    state3 = 1;
+                } break;
+                case 0x10009: fn_800B5570(dest, &local_b4, state4);
+                case 0x10010: fn_800B5520(endPtr); break;
+
+                case 0x30001: field_0xEF1 = 1; break;
+                case 0x20002: writePtr = fn_800B5860(dest, endPtr, &local_b4, state4); break;
+                case 0x20003: writePtr = fn_800B5A20(dest, endPtr, &local_b4, state4); break;
+                case 0x20004:
+                    if (textBox != nullptr) {
+                        fn_800B6320(textBox, endPtr);
+                    }
+                    writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
+                    break;
+
+                case 0x30000: {
+                    f32 tmp = float2;
+                    if (textBox != nullptr) {
+                        f32 f13 = UnkTextThing::getField0x768();
+                        tmp = float2 * f13 * textBox->getMyScale();
+                        float1 = float2;
+                    }
+                    writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
+                    float2 = tmp;
+                }
+
+                case 0x0F0F0F0F:
+                    if (state4 == 0 || field_0x90E == 0) {
+                        for (int i = 0; i < (cmdLen / 2) + 1; i++) {
+                            *writePtr = src[i];
+                            writePtr++;
+                        }
+                    } else {
+                        for (int i = (cmdLen / 2) + 1; i != 0; i--) {
+                            field_0x008[field_0x90E - 1][local_b4] = src[i];
+                            if (field_0x90E >= 1 && field_0x90E < 5) {
+                                field_0x808[field_0x90E - 1]++;
+                            }
+                            local_b4++;
+                        }
+                    }
+                    break;
+                case 0x0F0F0F0E:
+                    writePtr = fn_800B5DD0(writePtr, endPtr, &local_b4, state4);
+                    break;
+
+                default: writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4); break;
             }
+
+
+            if (bVar3) {
+                field_0x82C = state1;
+                state4 = 1;
+                field_0x828 = state2;
+                field_0x90E = state3;
+                local_b4 = field_0x808[state3 - 1];
+            }
+            src += (cmdLen / 2) + 1;
         } else if (c == 0xF) {
-        } else if (iVar14 == 0 && field_0x90E == 0) {
-            const nw4r::ut::Font *fnt = textBox->GetFont();
-            f32 charSpace = textBox->GetCharSpace();
-            f32 w = fnt->GetCharWidth(*src);
-            field_0x914[mCommandInsert] = field_0x914[mCommandInsert] + t * w + charSpace;
-            fn_800B5FD0(*src, writePtr, nullptr);
-            src++;
+            s32 tmp = 0;
+            process0xFCommand(c, src + 1, &tmp);
+            if (tmp == 0x30000) {
+                float2 = float1;
+            }
+            writePtr[0] = src[0];
+            writePtr[1] = src[1];
+            writePtr[2] = src[2];
+            writePtr += 3;
+        } else if (state4 == 0 && field_0x90E == 0) {
+            if (textBox == nullptr) {
+                writePtr = fn_800B5FD0(c, writePtr, nullptr);
+                src++;
+            } else if (c == 10) {
+                *(writePtr++) = *(src++);
+                mCommandInsert++;
+                s32 i10 = mapSomething(field_0x90C);
+                if (mCommandInsert % i10 == 0) {
+                    float2 = fn_800B8040(0, field_0x90C);
+                    float2 *= textBox->getMyScale();
+                }
+                if (textBox != nullptr) {
+                    wchar_t *buf = (wchar_t*)&x;
+                    writePtr[0] = buf[0];
+                    writePtr[2] = buf[1];
+                    writePtr[3] = buf[2];
+                    writePtr[4] = buf[3];
+                    writePtr[5] = mCommandInsert;
+                    writePtr += 6;
+                }
+            } else {
+                const nw4r::ut::Font *fnt = textBox->GetFont();
+                f32 charSpace = textBox->GetCharSpace();
+                f32 w = fnt->GetCharWidth(*src);
+                field_0x914[mCommandInsert] = field_0x914[mCommandInsert] + float2 * w + charSpace;
+                fn_800B5FD0(*src, writePtr, nullptr);
+                src++;
+            }
         } else {
-            fn_800B5FD0(c, &field_0x008[field_0x90E - 1][local_b4], &iVar14);
+            fn_800B5FD0(c, &field_0x008[field_0x90E - 1][local_b4], &local_b4);
             src++;
             if (field_0x90E >= 1 && field_0x90E < 5) {
                 field_0x808[field_0x90E - 1]++;
             }
         }
 
-    } while ((writePtr - dest) / 2 < destLen);
+    } while (destLen > writePtr - dest);
 
+    dest[destLen - 1] = 0;
 end:
     if (pOutLen != nullptr) {
-        *pOutLen = (writePtr - dest) / 2;
+        *pOutLen = writePtr - dest;
     }
 }
 
@@ -493,7 +652,6 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
 }
 
 void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *buf) {
-    // TODO buf probably needs to be not const
     u16 cmd = buf[0];
     if (cmd == 0xFFFF) {
         restoreColor(ctx, field_0x90C);
@@ -554,7 +712,6 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
 }
 
 void dTagProcessor_c::setScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *buf) {
-    // Cool, this needs buf to not be const
     u16 scale = buf[0];
     if (scale == 0) {
         scale = 50;
