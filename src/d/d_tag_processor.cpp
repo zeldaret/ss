@@ -209,8 +209,10 @@ dTagProcessor_c::dTagProcessor_c() {
 dTagProcessor_c::~dTagProcessor_c() {}
 
 struct StackThing {
-    u32 u1;
-    u32 u2;
+    u16 u1;
+    u16 u2;
+    u16 u3;
+    u16 u4;
 };
 
 void dTagProcessor_c::eventFlowTextProcessingRelated(
@@ -232,7 +234,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
 
     s32 local_b4 = 0;
 
-    StackThing x = {0x000E0F0F, 0x0F0F0002};
+    StackThing x = {0x0F0F, 0x000E, 0x0002, 0x0F0F};
 
     wchar_t *writePtr = dest;
     if (textBox != nullptr) {
@@ -245,7 +247,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
     }
 
     StackThing yTmp;
-    StackThing y = {0x000E0F0F, 0x0F0F0002};
+    StackThing y = {0x0F0F, 0x000E, 0x0002, 0x0F0F};
 
     do {
         wchar_t c = *src;
@@ -277,7 +279,8 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     } else {
                         // This unrolled loop is not quite behaving correctly
                         const wchar_t *t = src;
-                        for (u32 i = 0; i < (cmdLen / 2) + 1; i++) {
+                        u32 len = (cmdLen / 2) + 1;
+                        for (int i = 0; i < len; i++) {
                             *(writePtr++) = *(t++);
                         }
                     }
