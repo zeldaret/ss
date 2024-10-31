@@ -211,8 +211,6 @@ struct StackThing {
 void dTagProcessor_c::eventFlowTextProcessingRelated(
     dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen
 ) {
-    // This function is in serious need of repairing but at least it's in a position
-    // where objdiff puts a number higher than 0% on it
     s32 state3 = 0;
     s32 state4 = 0;
 
@@ -241,6 +239,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
         dest[4] = mCommandInsert;
     }
 
+    StackThing yTmp;
     StackThing y = {0x000E0F0F, 0x0F0F0002};
 
     do {
@@ -262,6 +261,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             switch (cmd) {
                 case 0x0F0F0F0F:
                     if (state4 != 0 && field_0x90E != 0) {
+                        // This unrolled loop is not quite behaving correctly
                         const wchar_t *t = src;
                         u32 len = (cmdLen / 2) + 1;
                         for (u32 i = 0; i < len; i++) {
@@ -288,11 +288,11 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                         case 1: state1 = 0; break;
                     }
                     field_0x90F[0] = b;
-                    StackThing tmp = y;
+                    yTmp = y;
                     for (int i = 0; i < 4; i++) {
                         for (int j = 0; j < 256; j++) {
                             if (j < 4) {
-                                field_0x008[i][j] = ((wchar_t *)&tmp)[j];
+                                field_0x008[i][j] = ((wchar_t *)&yTmp)[j];
                             } else {
                                 field_0x008[i][j] = 0;
                             }
@@ -339,7 +339,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                         float2 = fn_800B8040(((u8 *)endPtr)[0], field_0x90C);
                         float2 *= textBox->getMyScale();
                     }
-                    writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
+                    writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                     break;
                 case 0x30000: {
                     f32 tmp = float2;
@@ -348,7 +348,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                         f32 f13 = UnkTextThing::getField0x768();
                         tmp = float2 * f13 * textBox->getMyScale();
                     }
-                    writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
+                    writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                     float2 = tmp;
                 } break;
                 case 0x10010: fn_800B5520(endPtr); break;
@@ -356,7 +356,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     if (textBox != nullptr) {
                         fn_800B6320(textBox, endPtr, float2);
                     }
-                    writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
+                    writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                     break;
                 case 0x20000: writePtr = fn_800B5570(dest, &local_b4, state4); break;
                 case 0x20001: writePtr = fn_800B5680(writePtr, endPtr, &local_b4, state4); break;
@@ -366,10 +366,10 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                 case 0x30004: writePtr = fn_800B5DD0(writePtr, endPtr, &local_b4, state4); break;
                 case 0x30001:
                     field_0xEF1 = 1;
-                    writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
+                    writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                     break;
 
-                default: writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4); break;
+                default: writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4); break;
             }
 
             if (bVar3) {
@@ -421,9 +421,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     }
                 } else {
                     const nw4r::ut::Font *fnt = textBox->GetFont();
-                    f32 charSpace = textBox->GetCharSpace();
-                    f32 w = fnt->GetCharWidth(*src);
-                    field_0x914[mCommandInsert] = field_0x914[mCommandInsert] + float2 * w + charSpace;
+                    field_0x914[mCommandInsert] += float2 * fnt->GetCharWidth(*src) + textBox->GetCharSpace();
                     writePtr = fn_800B5FD0(*src, writePtr, nullptr);
                     src++;
                 }

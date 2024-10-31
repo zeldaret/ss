@@ -50,7 +50,7 @@ public:
 
     static f32 fn_800B8040(s8, u32);
     wchar_t *fn_800B5FD0(u32, wchar_t *, s32 *);
-    wchar_t *writeTextNormal(wchar_t *dest, wchar_t *src, s32*, u8 cmdLen, s32);
+    wchar_t *writeTextNormal(const wchar_t *src, wchar_t *dest, s32*, u8 cmdLen, s32);
     wchar_t *fn_800B5570(wchar_t *dest, s32*, s32);
     wchar_t *fn_800B5DD0(wchar_t *dest, wchar_t *src, s32*, s32);
     void fn_800B5520(wchar_t *dest);
