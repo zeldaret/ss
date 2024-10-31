@@ -54,7 +54,7 @@ public:
     wchar_t *fn_800B5570(wchar_t *dest, s32*, s32);
     wchar_t *fn_800B5DD0(wchar_t *dest, wchar_t *src, s32*, s32);
     void fn_800B5520(wchar_t *dest);
-    void fn_800B6320(dTextBox_c *textBox, wchar_t *cmd);
+    void fn_800B6320(dTextBox_c *textBox, wchar_t *cmd, f32);
 
     void resetSomething();
     void resetSomeFloats();

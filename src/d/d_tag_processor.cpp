@@ -263,7 +263,8 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                 case 0x0F0F0F0F:
                     if (state4 != 0 && field_0x90E != 0) {
                         const wchar_t *t = src;
-                        for (u32 i = 0; i < (cmdLen / 2) + 1; i++) {
+                        u32 len = (cmdLen / 2) + 1;
+                        for (u32 i = 0; i < len; i++) {
                             field_0x008[field_0x90E - 1][local_b4] = *(t++);
                             if (field_0x90E - 1 < 4) {
                                 field_0x808[field_0x90E - 1]++;
@@ -272,8 +273,9 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                         }
                     } else {
                         const wchar_t *t = src;
-                        for (u32 i = 0; i < (cmdLen / 2) + 1; i++) {
-                            *writePtr = *(t++);
+                        u32 len = (cmdLen / 2) + 1;
+                        for (u32 i = 0; i < len; i++) {
+                            *(writePtr++) = *(t++);
                             writePtr++;
                         }
                     }
@@ -349,21 +351,19 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
                     float2 = tmp;
                 } break;
-                case 0x10010:
-                case 0x20000: fn_800B5520(endPtr); break;
+                case 0x10010: fn_800B5520(endPtr); break;
                 case 0x20004:
                     if (textBox != nullptr) {
-                        fn_800B6320(textBox, endPtr);
+                        fn_800B6320(textBox, endPtr, float2);
                     }
                     writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
                     break;
-                case 0x10009:    fn_800B5570(dest, &local_b4, state4); break;
-                case 0x20001:    writePtr = fn_800B5680(writePtr, endPtr, &local_b4, state4); break;
-                case 0x20002:    writePtr = fn_800B5860(dest, endPtr, &local_b4, state4); break;
-                case 0x20003:    writePtr = fn_800B5A20(dest, endPtr, &local_b4, state4); break;
+                case 0x20000: writePtr = fn_800B5570(dest, &local_b4, state4); break;
+                case 0x20001: writePtr = fn_800B5680(writePtr, endPtr, &local_b4, state4); break;
+                case 0x20002: writePtr = fn_800B5860(dest, endPtr, &local_b4, state4); break;
+                case 0x20003: writePtr = fn_800B5A20(dest, endPtr, &local_b4, state4); break;
 
-                case 0x30004:
-                case 0x0F0F0F0E: writePtr = fn_800B5DD0(writePtr, endPtr, &local_b4, state4); break;
+                case 0x30004: writePtr = fn_800B5DD0(writePtr, endPtr, &local_b4, state4); break;
                 case 0x30001:
                     field_0xEF1 = 1;
                     writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
@@ -392,6 +392,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             writePtr += 3;
             src += 3;
         } else if (state4 != 0 && field_0x90E != 0) {
+            // Note: Return ignored here
             fn_800B5FD0(c, &field_0x008[field_0x90E - 1][local_b4], &local_b4);
             src++;
             if (field_0x90E - 1 < 4) {
@@ -423,7 +424,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     f32 charSpace = textBox->GetCharSpace();
                     f32 w = fnt->GetCharWidth(*src);
                     field_0x914[mCommandInsert] = field_0x914[mCommandInsert] + float2 * w + charSpace;
-                    fn_800B5FD0(*src, writePtr, nullptr);
+                    writePtr = fn_800B5FD0(*src, writePtr, nullptr);
                     src++;
                 }
 
