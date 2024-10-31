@@ -215,7 +215,6 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
     // where objdiff puts a number higher than 0% on it
     s32 state3 = 0;
     s32 state4 = 0;
-    s32 local_b4;
 
     s32 state1 = -1;
     s32 state2 = -1;
@@ -228,15 +227,17 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
         textBox->set0x1F8(0);
     }
 
+    s32 local_b4 = 0;
+
     StackThing x = {0x000E0F0F, 0x0F0F0002};
 
     wchar_t *writePtr = dest;
     if (textBox != nullptr) {
         writePtr += 5;
-        dest[0] = 0xE;
-        dest[1] = 0xF0F;
-        dest[2] = 0xF0F;
-        dest[3] = 0x2;
+        dest[0] = ((wchar_t *)&x)[0];
+        dest[1] = ((wchar_t *)&x)[1];
+        dest[2] = ((wchar_t *)&x)[2];
+        dest[3] = ((wchar_t *)&x)[3];
         dest[4] = mCommandInsert;
     }
 
@@ -261,26 +262,30 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             switch (cmd) {
                 case 0x0F0F0F0F:
                     if (state4 != 0 && field_0x90E != 0) {
+                        const wchar_t *t = src;
                         for (u32 i = 0; i < (cmdLen / 2) + 1; i++) {
-                            field_0x008[field_0x90E - 1][local_b4] = src[i];
+                            field_0x008[field_0x90E - 1][local_b4] = *(t++);
                             if (field_0x90E - 1 < 4) {
                                 field_0x808[field_0x90E - 1]++;
                             }
                             local_b4++;
                         }
                     } else {
+                        const wchar_t *t = src;
                         for (u32 i = 0; i < (cmdLen / 2) + 1; i++) {
-                            *writePtr = src[i];
+                            *writePtr = *(t++);
                             writePtr++;
                         }
                     }
                     break;
                 case 0x10000: {
-                    switch (((char *)endPtr)[0]) {
+                    u8 a = ((u8 *)endPtr)[0];
+                    u8 b = ((u8 *)endPtr)[1];
+                    switch (a) {
                         case 0: state2 = 0; break;
                         case 1: state1 = 0; break;
                     }
-                    field_0x90F[2] = ((char *)endPtr)[1];
+                    field_0x90F[0] = b;
                     StackThing tmp = y;
                     for (int i = 0; i < 4; i++) {
                         for (int j = 0; j < 256; j++) {
@@ -290,49 +295,56 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                                 field_0x008[i][j] = 0;
                             }
                         }
+                        field_0x808[0] = 4;
                     }
                     state3 = 1;
                 } break;
-                case 0x10001:
-                    switch (((char *)endPtr)[0]) {
+                case 0x10001: {
+                    u8 a = ((u8 *)endPtr)[0];
+                    u8 b = ((u8 *)endPtr)[1];
+                    switch (a) {
                         case 0: state2 = 1; break;
                         case 1: state1 = 1; break;
                     }
-                    field_0x90F[1] = ((char *)endPtr)[1];
+                    field_0x90F[1] = b;
                     state3 = 2;
                     bVar3 = true;
-                    break;
-                case 0x10002:
-                    switch (((char *)endPtr)[0]) {
+                } break;
+                case 0x10002: {
+                    u8 a = ((u8 *)endPtr)[0];
+                    u8 b = ((u8 *)endPtr)[1];
+                    switch (a) {
                         case 0: state2 = 2; break;
                         case 1: state1 = 2; break;
                     }
-                    field_0x90F[2] = ((char *)endPtr)[1];
+                    field_0x90F[2] = b;
                     state3 = 3;
                     bVar3 = true;
-                    break;
-                case 0x10003:
-                    switch (((char *)endPtr)[0]) {
+                } break;
+                case 0x10003: {
+                    u8 a = ((u8 *)endPtr)[0];
+                    u8 b = ((u8 *)endPtr)[1];
+                    switch (a) {
                         case 0: state2 = 3; break;
                         case 1: state1 = 3; break;
                     }
-                    field_0x90F[3] = ((char *)endPtr)[1];
+                    field_0x90F[3] = b;
                     state3 = 4;
                     bVar3 = true;
-                    break;
-
+                } break;
                 case 0x10008:
                     if (textBox != nullptr) {
-                        float2 = fn_800B8040(((char *)endPtr)[0], field_0x90C) * textBox->getMyScale();
+                        float2 = fn_800B8040(((u8 *)endPtr)[0], field_0x90C);
+                        float2 *= textBox->getMyScale();
                     }
                     writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
                     break;
                 case 0x30000: {
                     f32 tmp = float2;
                     if (textBox != nullptr) {
+                        float1 = float2;
                         f32 f13 = UnkTextThing::getField0x768();
                         tmp = float2 * f13 * textBox->getMyScale();
-                        float1 = float2;
                     }
                     writePtr = writeTextNormal(dest, writePtr, &local_b4, cmdLen, state4);
                     float2 = tmp;
@@ -378,6 +390,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             writePtr[1] = src[1];
             writePtr[2] = src[2];
             writePtr += 3;
+            src += 3;
         } else if (state4 != 0 && field_0x90E != 0) {
             fn_800B5FD0(c, &field_0x008[field_0x90E - 1][local_b4], &local_b4);
             src++;
