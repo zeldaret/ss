@@ -23,7 +23,6 @@ public:
     bool CrossY(const mVec3_c &) const;
     bool UnderPlaneYUnder(f32) const;
     bool TopPlaneYUnder(f32) const;
-    void SetMinMax(const cM3dGAab &);
     void SetMin(const mVec3_c &min);
     void SetMax(const mVec3_c &max);
     void CalcCenter(mVec3_c &) const;
@@ -31,6 +30,11 @@ public:
     void Clamp(const mVec3_c &, mVec3_c &) const;
     void Set(const cM3dGSph &);
     bool Cross(const mVec3_c &) const;
+
+    void SetMinMax(const cM3dGAab &aab) {
+        SetMin(aab.mMin);
+        SetMax(aab.mMax);
+    }
 
     void SetMinMax(const mVec3_c &minMax) {
         SetMin(minMax);

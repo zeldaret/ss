@@ -39,11 +39,10 @@ public:
     }
 
     bool Chk(cCcD_DivideInfo const &other) const {
-        if ((mXDivInfo & other.mXDivInfo) == 0 || (mZDivInfo & other.mZDivInfo) == 0 ||
-            (mYDivInfo & other.mYDivInfo) == 0) {
-            return false;
-        } else {
+        if ((mXDivInfo & other.mXDivInfo) && (mZDivInfo & other.mZDivInfo) && (mYDivInfo & other.mYDivInfo)) {
             return true;
+        } else {
+            return false;
         }
     }
 };
@@ -296,7 +295,7 @@ public:
     cCcD_Stts(dAcObjBase_c *);
     void Move();
     int GetID() const;
-    void PlucCcMove(f32, f32, f32);
+    void PlusCcMove(f32, f32, f32);
     void ClrCcMove();
     int GetWeight(int) const; // idk what to really call it but it removes the rank table
 
@@ -305,6 +304,9 @@ public:
     }
     void SetRank(int rank) {
         mRank = rank;
+    }
+    dAcObjBase_c *GetAc() {
+        return mpActor;
     }
 };
 
@@ -392,6 +394,16 @@ public:
     dAcObjBase_c *GetActor();
     void SubtractEffCounter();
 
+    bool ChkEffCounter() {
+        return mEffCounter > 0;
+    }
+    void ClrEffCounter() {
+        mEffCounter = 0;
+    }
+    void SetEffCounterTimer() {
+        mEffCounter = 5;
+    }
+
     u32 MskRPrm(u32 m) const {
         return mRPrm & m;
     }
@@ -421,8 +433,17 @@ public:
         return mVec;
     }
 
+    void SetHitPos(mVec3_c &pos) {
+        mHitPos = pos;
+    }
+    mVec3_c &GetHitPos() {
+        return mHitPos;
+    }
     void ClrSet() {
         OffSPrm(1);
+    }
+    u32 ChkSet() {
+        return MskSPrm(1);
     }
 
     void SetCallback(cCcD_HitCallback cb) {
@@ -466,6 +487,16 @@ public:
         mTgHitSrc.mSPrm &= ~m;
     }
 
+    const cCcD_SrcGObjAt &GetSrc() const {
+        return mSrc;
+    }
+    void SetTgHitSrc(const cCcD_SrcGObjTg &src) {
+        mTgHitSrc = src;
+    }
+    const cCcD_SrcGObjTg &GetTgHitSrc() const {
+        return mTgHitSrc;
+    }
+
 public:
     /* 0x1C */ cCcD_SrcGObjAt mSrc;
     /* 0x30 */ mVec3_c mHitPos;
@@ -481,6 +512,13 @@ public:
     void Set(const cCcD_SrcGObjTg &);
     void AdjustHitPos(f32, f32);
 
+    void SetHitPos(mVec3_c &pos) {
+        mHitPos = pos;
+    }
+    mVec3_c &GetHitPos() {
+        return mHitPos;
+    }
+
     u32 GetAtHitType() const {
         return mAtHitSrc.mType;
     }
@@ -494,6 +532,9 @@ public:
     }
     void ClrSet() {
         OffSPrm(1);
+    }
+    u32 ChkSet() {
+        return MskSPrm(1);
     }
 
     void Set_0x4C(u32 f) {
@@ -537,6 +578,16 @@ public:
         mAtHitSrc.mSPrm &= ~m;
     }
 
+    const cCcD_SrcGObjTg &GetSrc() const {
+        return mSrc;
+    }
+    void SetAtHitSrc(const cCcD_SrcGObjAt &src) {
+        mAtHitSrc = src;
+    }
+    const cCcD_SrcGObjAt &GetAtHitSrc() const {
+        return mAtHitSrc;
+    }
+
 public:
     /* 0x1C */ cCcD_SrcGObjTg mSrc;
     /* 0x2C */ mVec3_c mField_0x2C;
@@ -550,7 +601,7 @@ public:
     /* 0x54 */ cCcD_HitCallback mField_0x54;
     /* 0x58 */ cCcD_SrcGObjAt mAtHitSrc;
     /* 0x6C */ mVec3_c mField_0x6C;
-    /* 0x78 */ u32 mField_0x78;
+    /* 0x78 */ cCcD_HitCallback mField_0x78;
 };
 
 class cCcD_GObjCo : public cCcD_GAtTgCoCommonBase {
@@ -563,6 +614,9 @@ public:
 
     void ClrSet() {
         OffSPrm(1);
+    }
+    u32 ChkSet() {
+        return MskSPrm(1);
     }
     u32 MskSPrm(u32 m) const {
         return mSrc.mSPrm & m;
@@ -577,9 +631,16 @@ public:
         mSrc.mSPrm &= ~m;
     }
 
+    const cCcD_SrcGObjCo &GetSrc() const {
+        return mSrc;
+    }
+    void SetCoHitSrc(const cCcD_SrcGObjCo &src) {
+        mCoHitSrc = src;
+    }
+
 public:
     /* 0x1C */ cCcD_SrcGObjCo mSrc;
-    /* 0x20 */ u32 mField_0x20;
+    /* 0x20 */ u32 mGrp;
     /* 0x24 */ cCcD_SrcGObjCo mCoHitSrc;
     /* 0x28 */ cCcD_HitCallback mField_0x28_callback;
 };
@@ -663,13 +724,14 @@ public:
 
     static bool fn_80328ad0(dAcObjBase_c *pObj, u32 attype);
 
-    void SetAtVec(const mVec3_c &vec) {
-        mAt.SetVec(vec);
+    // clang-format off
+    cCcD_Stts* GetStts() {
+        return mStts;
     }
+    void SetStts(cCcD_Stts &stts) { mStts = &stts; }
 
-    void SetStts(cCcD_Stts &stts) {
-        mStts = &stts;
-    }
+    void SetAtVec(const mVec3_c &vec) {  mAt.SetVec(vec); }
+
 
     void OnTgCoFlag(u32 f) {
         mTg.OnSPrm(f);
@@ -714,6 +776,27 @@ public:
     void ClrTgSet() {
         mTg.ClrSet();
     }
+    u32 ChkCoSet() {
+        return mCo.ChkSet();
+    }
+    u32 ChkAtSet() {
+        return mAt.ChkSet();
+    }
+    u32 ChkTgSet() {
+        return mTg.ChkSet();
+    }
+
+    
+    bool ChkAtEffCounter() { return mAt.ChkEffCounter(); }
+    bool ChkTgEffCounter() { return mTg.ChkEffCounter(); }
+    void ClrAtEffCounter() { mAt.ClrEffCounter(); }
+    void ClrTgEffCounter() { mTg.ClrEffCounter(); }
+    void ClrCoEffCounter() { mCo.ClrEffCounter(); }
+    void SetAtEffCounterTimer() { mAt.SetEffCounterTimer(); }
+    void SetTgEffCounterTimer() { mTg.SetEffCounterTimer(); }
+    void SubtractAtEffCounter() { mAt.SubtractEffCounter(); }
+    void SubtractTgEffCounter() { mTg.SubtractEffCounter(); }
+    void SubtractCoEffCounter() { mCo.SubtractEffCounter(); }
 
     void SetTg_0x4C(u32 f) {
         mTg.Set_0x4C(f);
@@ -724,8 +807,98 @@ public:
     }
 
     u32 ChkTgNoAtHitInfSet() const {
-        return mTg.MskSPrm(0x20);
+        return mTg.MskSPrm(0x40);
     }
+    u32 ChkAtNoTgHitInfSet() const {
+        return mAt.MskSPrm(0x40);
+    }
+    u32 ChkCoNoCoHitInfSet() const {
+        return mCo.MskSPrm(0x800); 
+    }
+
+    // At
+
+    u32 ChkAtNoMass() const {
+        return mAt.MskSPrm(0x400);
+    }
+    u32 GetAtGrp() const {
+        return mAt.MskSPrm(0x3E);
+    }
+    u32 ChkAtNoConHit() const {
+        return mAt.MskSPrm(0x80);
+    }
+    u32 ChkAtStopNoConHit() const {
+        return mAt.MskSPrm(0x200);
+    }
+    u32 ChkAtNoGaurd() const {
+        return mAt.MskSPrm(0x200000);
+    }
+
+    // Tg
+
+    u32 GetTgGrp() const {
+        return mTg.MskSPrm(0x3E);
+    }
+    u32 ChkTgNoConHit() const {
+        return mTg.MskSPrm(0x100);
+    }
+    u32 ChkTgStopNoConHit() const {
+        return mTg.MskSPrm(0x100000);
+    }
+    u32 ChkTgShieldFrontRange() const {
+        return mTg.MskSPrm(0x400);
+    }
+
+    // Co
+
+    u32 ChkCoSet2() const {
+        return mCo.MskSPrm(0x800);
+    }
+    u32 ChkCoNoCamHit() const {
+        return mCo.MskSPrm(0x4000);
+    }
+    u32 ChkCoSameActorHit() const {
+        return mCo.MskSPrm(0x1000);
+    }
+
+    /**
+     * SET HIT
+     */
+
+    // Actor Objs
+    void SetAtHit(cCcD_GObj *other) {
+        mAt.SetHitActor(other->GetAc());
+    }
+    void SetTgHit(cCcD_GObj *other) {
+        mTg.SetHitActor(other->GetAc());
+    }
+    void SetCoHit(cCcD_GObj *other) {
+        mCo.SetHitActor(other->GetAc());
+    }
+
+    // Hit Positions
+    void SetAtHitPos(mVec3_c &pos) {
+        mAt.SetHitPos(pos);
+    }
+    void SetTgHitPos(mVec3_c &pos) {
+        mTg.SetHitPos(pos);
+    }
+
+    /**
+     * SET SOURCES
+     */
+
+    void SetAtTgHitSrc(cCcD_GObj *tg) {
+        mAt.SetTgHitSrc(tg->mTg.GetSrc());
+    }
+    void SetTgAtHitSrc(cCcD_GObj *at) {
+        mTg.SetAtHitSrc(at->mAt.GetSrc());
+    }
+    void SetCoCoHitSrc(cCcD_GObj *co) {
+        mCo.SetCoHitSrc(co->mCo.GetSrc());
+    }
+
+    // clang-format on
 };
 
 #endif

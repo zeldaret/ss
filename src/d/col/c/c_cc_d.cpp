@@ -202,7 +202,7 @@ int cCcD_Stts::GetID() const {
     return 0;
 }
 
-void cCcD_Stts::PlucCcMove(f32 x, f32 y, f32 z) {
+void cCcD_Stts::PlusCcMove(f32 x, f32 y, f32 z) {
     if (mField_0x10.x > x) {
         mField_0x10.x = x;
     } else if (mField_0x1C.x < x) {
@@ -341,20 +341,20 @@ void cCcD_GObj::ClrAtHit() {
     mAt.mRPrm = 0;
     mAt.ClrActorInfo();
     mAt.SubtractEffCounter();
-    mAt.mEffCounter = 0;
+    mAt.ClrEffCounter();
 }
 void cCcD_GObj::ClrTgHit() {
     mTg.mRPrm = 0;
     mTg.ClrActorInfo();
     mTg.SubtractEffCounter();
-    mTg.mEffCounter = 0;
+    mTg.ClrEffCounter();
 }
 
 void cCcD_GObj::ClrCoHit() {
     mCo.mRPrm = 0;
     mCo.ClrActorInfo();
     mCo.SubtractEffCounter();
-    mCo.mEffCounter = 0;
+    mCo.ClrEffCounter();
 }
 
 const mVec3_c &cCcD_GObj::GetAtHitPos() const {
@@ -1474,7 +1474,7 @@ void cCcD_GObjTg::AdjustHitPos(f32 x, f32 z) {
 }
 
 cCcD_GObjCo::cCcD_GObjCo() {
-    mField_0x20 = 0;
+    mGrp = 0;
     mField_0x28_callback = 0;
 }
 
@@ -1488,7 +1488,7 @@ void cCcD_GObjCo::Set(const cCcD_SrcGObjCo &src) {
 
 void cCcD_GObjCo::SetCoFlag(u32 flag) {
     mSrc.mSPrm = mSrc.mSPrm & ~0x1E0 | flag;
-    mField_0x20 = (mSrc.mSPrm & 0x1E0) >> 4;
+    mGrp = (mSrc.mSPrm & 0x1E0) >> 4;
 }
 
 void cCcD_GObjCo::AdjustHitPos(f32, f32) {}

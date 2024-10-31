@@ -1113,6 +1113,14 @@ d/col/cc/d_cc_d.cpp:
 	.text       start:0x80353B50 end:0x80354298
 	.data       start:0x80548340 end:0x80548580
 
+d/col/cc/d_cc_mass_s.cpp:
+	.text       start:0x803543F0 end:0x80355080
+	.data       start:0x80548580 end:0x805485A4
+	.sdata2     start:0x8057D240 end:0x8057D254
+
+d/col/cc/d_cc_s.cpp:
+	.text       start:0x80355080 end:0x80358654
+
 rvl/CX/cx.c:
 	.text       start:0x803CEE90 end:0x803D0B20
 

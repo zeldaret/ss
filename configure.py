@@ -466,6 +466,8 @@ config.libs = [
             Object(Matching, "d/col/bg/d_bg_w_sv.cpp"),
             Object(NonMatching, "d/col/bg/d_bg_w_time.cpp"),
             Object(Matching, "d/col/cc/d_cc_d.cpp"),
+            Object(Matching, "d/col/cc/d_cc_mass_s.cpp"),
+            Object(NonMatching, "d/col/cc/d_cc_s.cpp"),
         ],
     },
     {
