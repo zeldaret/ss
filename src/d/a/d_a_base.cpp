@@ -243,9 +243,8 @@ u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
     u32 param2Copy = params2;
     params2 = param2Copy | 0xFF000000;
     // mAng3_c rot = {};
-    s16 rot = 0;
-    return SpecialItemDropMgr::giveSpecialDropItem(
-        SpecialItemDropMgr::sInstance, param2Copy >> 0x18, roomid, spawnPos, subtype, &rot, -1
+    return SpecialItemDropMgr::sInstance->giveSpecialDropItem(
+        param2Copy >> 0x18, roomid, spawnPos, subtype, 0, -1
     );
 }
 

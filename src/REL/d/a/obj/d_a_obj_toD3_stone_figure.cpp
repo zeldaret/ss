@@ -1,6 +1,7 @@
 #include "d/a/obj/d_a_obj_toD3_stone_figure.h"
 
 #include "d/col/cc/d_cc_s.h"
+#include "d/a/obj/d_a_obj_item.h"
 #include "d/flag/storyflag_manager.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/event.h"
@@ -163,7 +164,6 @@ void dAcOtoD3StoneFigure_c::doInteraction(s32 arg) {
     }
 }
 
-extern "C" s32 AcItem__checkFlag(s32);
 bool dAcOtoD3StoneFigure_c::hasStoneOfTrials() const {
-    return AcItem__checkFlag(0xB4);
+    return dAcItem_c::checkFlag(0xB4);
 }
