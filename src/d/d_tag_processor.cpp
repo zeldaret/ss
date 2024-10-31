@@ -1,14 +1,19 @@
 #include "d/d_tag_processor.h"
 
 #include "common.h"
+#include "d/d_font_manager.h"
 #include "d/d_textunk.h"
 #include "nw4r/lyt/lyt_types.h"
 #include "nw4r/ut/ut_CharWriter.h"
 #include "nw4r/ut/ut_Color.h"
+#include "nw4r/ut/ut_Font.h"
 #include "nw4r/ut/ut_Rect.h"
 #include "nw4r/ut/ut_TagProcessorBase.h"
 #include "nw4r/ut/ut_TextWriterBase.h"
 #include "sized_string.h"
+#include "toBeSorted/file_manager.h"
+
+#include <libc.h>
 
 nw4r::ut::Color FontColors1[] = {
     nw4r::ut::Color(0xff, 0x4b, 0x32, 0xff),
@@ -261,10 +266,8 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             switch (cmd) {
                 case 0x0F0F0F0F:
                     if (state4 != 0 && field_0x90E != 0) {
-                        // This unrolled loop is not quite behaving correctly
                         const wchar_t *t = src;
-                        u32 len = (cmdLen / 2) + 1;
-                        for (u32 i = 0; i < len; i++) {
+                        for (u32 i = 0; i < (cmdLen / 2) + 1; i++) {
                             field_0x008[field_0x90E - 1][local_b4] = *(t++);
                             if (field_0x90E - 1 < 4) {
                                 field_0x808[field_0x90E - 1]++;
@@ -272,11 +275,10 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                             local_b4++;
                         }
                     } else {
+                        // This unrolled loop is not quite behaving correctly
                         const wchar_t *t = src;
-                        u32 len = (cmdLen / 2) + 1;
-                        for (u32 i = 0; i < len; i++) {
+                        for (u32 i = 0; i < (cmdLen / 2) + 1; i++) {
                             *(writePtr++) = *(t++);
-                            writePtr++;
                         }
                     }
                     break;
@@ -297,9 +299,10 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                                 field_0x008[i][j] = 0;
                             }
                         }
-                        field_0x808[0] = 4;
+                        field_0x808[i] = 4;
                     }
                     state3 = 1;
+                    bVar3 = true;
                 } break;
                 case 0x10001: {
                     u8 a = ((u8 *)endPtr)[0];
@@ -395,6 +398,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             // Note: Return ignored here
             fn_800B5FD0(c, &field_0x008[field_0x90E - 1][local_b4], &local_b4);
             src++;
+            // This looks like an inline tbh
             if (field_0x90E - 1 < 4) {
                 field_0x808[field_0x90E - 1]++;
             }
@@ -405,7 +409,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     src++;
                     writePtr++;
                     mCommandInsert++;
-                    s32 i10 = mapSomething(field_0x90C);
+                    s32 i10 = getNumLines(field_0x90C);
                     if (mCommandInsert % i10 == 0) {
                         float2 = fn_800B8040(0, field_0x90C);
                         float2 *= textBox->getMyScale();
@@ -618,11 +622,11 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
         int arg = ptr[0];
         nw4r::lyt::Size textBoxSize = field_0x004->GetSize();
         nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
-        int i1 = mapSomething(field_0x90C);
+        int i1 = getNumLines(field_0x90C);
         if (arg % i1 == 0 && field_0x90C != 31 && field_0x90C != 8) {
             int u = 0;
             int v = 0;
-            for (int i = arg; i < arg + mapSomething(field_0x90C) && i < 0x32; i++) {
+            for (int i = arg; i < arg + getNumLines(field_0x90C) && i < 0x32; i++) {
                 f32 f6 = getFloat(i);
                 if (f6 > 0.0f) {
                     v++;
@@ -640,11 +644,18 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
             // completely hidden in the Ghidra decompiler, apparently
             // because the results aren't used?
 
-            if (u < mapSomething(field_0x90C)) {
-                f32 lineSpace = field_0x004->GetLineSpace();
-                int h = mapSomething(field_0x90C);
+            if (u < getNumLines(field_0x90C)) {
+                f32 w1 = fontSize.width * 0.5f;
+                f32 h1 = fontSize.height * 0.5f;
+                if (!(w1 < UnkTextThing::getField0x758())) {
+                    w1 = UnkTextThing::getField0x758();
+                }
+                if (!(h1 < UnkTextThing::getField0x758())) {
+                    h1 = UnkTextThing::getField0x758();
+                }
+
+                f32 f7 = (fontSize.height + field_0x004->GetLineSpace()) * 0.5f * (getNumLines(field_0x90C) - v);
                 field_0x814 = ctx->writer->GetCursorY();
-                f32 f7 = (fontSize.height + lineSpace) * 0.5f * (h - v);
                 field_0x818 = ctx->y;
                 field_0xEE4 = 1;
                 if (f7 > 0.0f) {
@@ -748,10 +759,70 @@ void dTagProcessor_c::fn_800B5500(u8 cmdLen, wchar_t *ptr) {
     }
 }
 
+void dTagProcessor_c::fn_800B5520(wchar_t *src) {
+    field_0x81C = ((u32 *)src)[0];
+    field_0x820 = ((u32 *)src)[1];
+}
+
+wchar_t *dTagProcessor_c::fn_800B5570(wchar_t *dest, s32 *outArg, s32 arg) {
+    if (FileManager::sInstance->getHeroname()[0] != '\0') {
+        for (int i = 0; FileManager::sInstance->getHeroname()[i] != '\0'; i++) {
+            if (arg != 0 && field_0x90E != 0) {
+                wchar_t c = FileManager::sInstance->getHeroname()[i];
+                fn_800B5FD0(c, &field_0x008[field_0x90E - 1][*outArg], outArg);
+                if (field_0x90E - 1 < 4) {
+                    field_0x808[field_0x90E - 1]++;
+                }
+            } else {
+                dest = fn_800B5FD0(FileManager::sInstance->getHeroname()[i], dest, nullptr);
+            }
+        }
+    }
+    return dest;
+}
+
 void dTagProcessorDataStuff() {
     SizedString<32> s;
     s.sprintf("NAME_ITEM_%03d");
     s.sprintf("lang:word:%03d:%02d");
+}
+
+void dTagProcessor_c::fn_800B60E0(u8 cmdLen, wchar_t *ptr) {
+    field_0x844 = *((u8 *)ptr);
+    field_0x848 = *((u8 *)ptr + 1);
+    field_0x84C = *((u8 *)ptr + 2);
+    field_0x850 = *((u8 *)ptr + 3);
+}
+void dTagProcessor_c::fn_800B6110(u8 cmdLen, wchar_t *ptr) {
+    field_0x854 = *((u8 *)ptr);
+    field_0x858 = *((u8 *)ptr + 1);
+    field_0x85C = *((u8 *)ptr + 2);
+    field_0x860 = *((u8 *)ptr + 3);
+}
+void dTagProcessor_c::fn_800B6140(u8 cmdLen, wchar_t *ptr) {
+    field_0x864 = ptr[0];
+    field_0x868 = ptr[1];
+}
+void dTagProcessor_c::fn_800B6160(u8 cmdLen, wchar_t *ptr) {}
+void dTagProcessor_c::fn_800B6170(u8 cmdLen, wchar_t *ptr) {
+    field_0x8FC = ptr[0];
+    field_0x900 = ptr[1];
+}
+void dTagProcessor_c::fn_800B6190(u8 cmdLen, wchar_t *ptr) {
+    field_0x86C = *((char *)ptr);
+    field_0x870 = *((char *)ptr + 1);
+}
+void dTagProcessor_c::fn_800B61B0(u8 cmdLen, wchar_t *ptr) {
+    field_0x874 = *((char *)ptr);
+    field_0x878 = *((s16 *)((char *)ptr + 1));
+}
+
+void dTagProcessor_c::fn_800B61D0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr) {
+    f32 scale = fn_800B8040(*(char *)ptr, field_0x90C);
+    if (field_0x004 != nullptr) {
+        scale *= field_0x004->getMyScale();
+    }
+    ctx->writer->SetScale(scale, scale);
 }
 
 void dTagProcessor_c::changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, bool direct) {
@@ -770,6 +841,19 @@ void dTagProcessor_c::changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
 
     ctx->writer->SetCursorY(posY);
     ctx->writer->SetScale(scale, scale);
+}
+
+void dTagProcessor_c::fn_800B6EE0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr) {
+    nw4r::ut::Font *f = dFontMng_c::getFont(4);
+    u32 c3 = fn_800B7880(*(u8 *)ptr);
+    nw4r::ut::TextWriterBase<wchar_t> copy = *ctx->writer;
+    f32 charWidth = f->GetCharWidth(c3);
+    fn_800B70D0(&copy, ctx, c3, 0xFF);
+    ctx->writer->MoveCursorX(charWidth * copy.GetScaleH());
+
+    f32 cursorX = ctx->writer->GetCursorX();
+    rect->left = rect->left > cursorX ? cursorX : rect->left;
+    rect->right = rect->right < cursorX ? cursorX : rect->right;
 }
 
 void dTagProcessor_c::restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 windowType) {
@@ -825,6 +909,23 @@ void dTagProcessor_c::restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 wind
     ctx->writer->SetTextColor(c1, c2);
 }
 
+wchar_t *dTagProcessor_c::writeTextNormal(const wchar_t *src, wchar_t *dest, s32 *pArg, u8 cmdLen, s32 arg) {
+    if (arg != 0 && field_0x90E != 0) {
+        for (u32 i = 0; i < (cmdLen / 2 + 1); i++) {
+            field_0x008[field_0x90E - 1][*pArg] = *(src++);
+            if (field_0x90E - 1 < 4) {
+                field_0x808[field_0x90E - 1]++;
+            }
+            (*pArg)++;
+        }
+    } else {
+        memcpy(dest, src, cmdLen + 2);
+        dest += (cmdLen / 2 + 1);
+    }
+
+    return dest;
+}
+
 u8 dTagProcessor_c::symbolToFontIdx(s32 s) {
     static const u8 alphabet[] = " !\"#$%&\'()*+,)+-/0123456789";
     return alphabet[s];
@@ -876,7 +977,7 @@ f32 dTagProcessor_c::fn_800B8040(s8 factor, u32 windowType) {
     }
 }
 
-s32 dTagProcessor_c::mapSomething(s32 arg) {
+s32 dTagProcessor_c::getNumLines(s32 arg) {
     if (arg >= 6 && arg < 8) {
         return 4;
     } else if (arg == 9) {

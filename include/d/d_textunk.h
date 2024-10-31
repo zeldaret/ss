@@ -14,6 +14,13 @@ public:
 
     void destroy();
 
+    inline static f32 getField0x758() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x758;
+        }
+        return 0.0f;
+    }
+
     inline static f32 getField0x768() {
         if (sInstance != nullptr) {
             return sInstance->field_0x768;

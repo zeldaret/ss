@@ -3,6 +3,7 @@
 
 #include "d/lyt/d_textbox.h"
 #include "nw4r/ut/ut_TagProcessorBase.h"
+#include "nw4r/ut/ut_TextWriterBase.h"
 
 // inofficial name
 // size: 0xEF4
@@ -43,7 +44,7 @@ public:
     u8 symbolToFontIdx(s32 s);
     void setStringArg(const wchar_t *arg, s32 index);
 
-    static s32 mapSomething(s32 arg);
+    static s32 getNumLines(s32 arg);
 
     static void getTextCommand(wchar_t _0xe, const wchar_t *src, u8 *outCmdLen, s32 *outCmd, wchar_t **outEndPtr);
     static void process0xFCommand(wchar_t _0xf, const wchar_t *src, s32 *outCmd);
@@ -53,8 +54,10 @@ public:
     wchar_t *writeTextNormal(const wchar_t *src, wchar_t *dest, s32*, u8 cmdLen, s32);
     wchar_t *fn_800B5570(wchar_t *dest, s32*, s32);
     wchar_t *fn_800B5DD0(wchar_t *dest, wchar_t *src, s32*, s32);
-    void fn_800B5520(wchar_t *dest);
+    void fn_800B5520(wchar_t *src);
     void fn_800B6320(dTextBox_c *textBox, wchar_t *cmd, f32);
+    char fn_800B7880(u32);
+    void fn_800B70D0(nw4r::ut::TextWriterBase<wchar_t> *, nw4r::ut::PrintContext<wchar_t> *ctx, u16 c, s32);
 
     void resetSomething();
     void resetSomeFloats();
