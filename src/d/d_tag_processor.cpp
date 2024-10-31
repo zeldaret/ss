@@ -209,10 +209,7 @@ dTagProcessor_c::dTagProcessor_c() {
 dTagProcessor_c::~dTagProcessor_c() {}
 
 struct StackThing {
-    u16 u1;
-    u16 u2;
-    u16 u3;
-    u16 u4;
+    wchar_t us[4];
 };
 
 void dTagProcessor_c::eventFlowTextProcessingRelated(
@@ -224,6 +221,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
     s32 state1 = -1;
     s32 state2 = -1;
 
+    // FPR regswap between float1 and float2
     f32 float1 = fn_800B8040(0, field_0x90C);
     f32 float2 = float1;
     if (textBox != nullptr) {
@@ -234,15 +232,15 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
 
     s32 local_b4 = 0;
 
-    StackThing x = {0x0F0F, 0x000E, 0x0002, 0x0F0F};
+    StackThing x = {{0x0F0F, 0x000E, 0x0002, 0x0F0F}};
 
     wchar_t *writePtr = dest;
     if (textBox != nullptr) {
         writePtr += 5;
-        dest[0] = ((wchar_t *)&x)[0];
-        dest[1] = ((wchar_t *)&x)[1];
-        dest[2] = ((wchar_t *)&x)[2];
-        dest[3] = ((wchar_t *)&x)[3];
+        dest[0] = x.us[0];
+        dest[1] = x.us[1];
+        dest[2] = x.us[2];
+        dest[3] = x.us[3];
         dest[4] = mCommandInsert;
     }
 
@@ -269,7 +267,8 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                 case 0x0F0F0F0F:
                     if (state4 != 0 && field_0x90E != 0) {
                         const wchar_t *t = src;
-                        for (u32 i = 0; i < (cmdLen / 2) + 1; i++) {
+                        u32 len = (cmdLen / 2) + 1;
+                        for (int i = 0; i < len; i++) {
                             field_0x008[field_0x90E - 1][local_b4] = *(t++);
                             if (field_0x90E - 1 < 4) {
                                 field_0x808[field_0x90E - 1]++;
@@ -277,7 +276,6 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                             local_b4++;
                         }
                     } else {
-                        // This unrolled loop is not quite behaving correctly
                         const wchar_t *t = src;
                         u32 len = (cmdLen / 2) + 1;
                         for (int i = 0; i < len; i++) {
@@ -286,6 +284,8 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     }
                     break;
                 case 0x10000: {
+                    // This pattern is too efficient and needs
+                    // to use 1 more reg
                     u8 a = ((u8 *)endPtr)[0];
                     u8 b = ((u8 *)endPtr)[1];
                     switch (a) {
@@ -297,7 +297,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     for (int i = 0; i < 4; i++) {
                         for (int j = 0; j < 256; j++) {
                             if (j < 4) {
-                                field_0x008[i][j] = ((wchar_t *)&yTmp)[j];
+                                field_0x008[i][j] = yTmp.us[j];
                             } else {
                                 field_0x008[i][j] = 0;
                             }
@@ -351,8 +351,8 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     f32 tmp = float2;
                     if (textBox != nullptr) {
                         float1 = float2;
-                        f32 f13 = UnkTextThing::getField0x768();
-                        tmp = float2 * f13 * textBox->getMyScale();
+                        tmp *= UnkTextThing::getField0x768();
+                        tmp *= textBox->getMyScale();
                     }
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                     float2 = tmp;
@@ -364,10 +364,10 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                     }
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                     break;
-                case 0x20000: writePtr = fn_800B5570(dest, &local_b4, state4); break;
+                case 0x20000: writePtr = fn_800B5570(writePtr, &local_b4, state4); break;
                 case 0x20001: writePtr = fn_800B5680(writePtr, endPtr, &local_b4, state4); break;
-                case 0x20002: writePtr = fn_800B5860(dest, endPtr, &local_b4, state4); break;
-                case 0x20003: writePtr = fn_800B5A20(dest, endPtr, &local_b4, state4); break;
+                case 0x20002: writePtr = fn_800B5860(writePtr, endPtr, &local_b4, state4); break;
+                case 0x20003: writePtr = fn_800B5A20(writePtr, endPtr, &local_b4, state4); break;
 
                 case 0x30004: writePtr = fn_800B5DD0(writePtr, endPtr, &local_b4, state4); break;
                 case 0x30001:
