@@ -5,6 +5,11 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 
+struct mMtxPair {
+    mMtx_c mMtx;
+    mMtx_c mInv;
+};
+
 class dCcS {
 private:
     /* 0x0000 */ cCcD_Obj *mpObjAt[0x200];
@@ -19,9 +24,9 @@ private:
     /* 0x2D08 */ u32 mUnkCount;
     /* 0x2D0C */ cCcD_DivideArea mDivideArea;
     /* 0x2D4C */ bool mbAreaSet;
-    /* 0x2D50 */ mMtx_c mAreas[16][2]; // could be a structure?
+    /* 0x2D50 */ mMtxPair mAreas[16]; // could be a structure?
     /* 0x3350 */ int mAreaCount;
-    /* 0x3354*/ dCcMassS_Mng mMng;
+    /* 0x3354*/ dCcMassS_Mng mMassMng;
 
 public:
     dCcS();

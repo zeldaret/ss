@@ -3,7 +3,9 @@
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/c/c_cc_d.h"
+#include "d/col/c/c_m3d_g_aab.h"
 #include "f/f_base.h"
+#include "rvl/MTX/mtx.h"
 
 dCcS *dCcS::sInstance;
 
@@ -48,7 +50,7 @@ dCcS::~dCcS() {
 
 void dCcS::Ct() {
     Ct_cCcS();
-    mMng.Ct();
+    mMassMng.Ct();
     ClearArea();
 }
 
@@ -111,14 +113,68 @@ void dCcS::MoveAfterCheck() {}
 
 void dCcS::RemoveDeadObj() {}
 
-void dCcS::CalcArea() {}
+void dCcS::CalcArea() {
+    if (mbAreaSet) {
+        return;
+    }
 
-void dCcS::Move() {}
+    cM3dGAab aab;
+    aab.ClearForMinMax();
+    for (cCcD_Obj **obj = mpObj; obj < mpObj + mObjCount; ++obj) {
+        cCcD_ShapeAttr *attr = (*obj)->GetShapeAttr();
+        attr->CalcAabBox();
+        aab.SetMinMax(attr->GetWorkAab());
+    }
+    // TODO
+}
 
-void dCcS::MassClear() {}
+void dCcS::Move() {
+    RemoveDeadObj();
+    CalcArea();
+    ChkAtTg();
+    ChkCo();
+    for (int i = 0; i < mObjTgCount; ++i) {
+        mpObjTg[i]->SetTg_0x4B(0);
+    }
+    MoveAfterCheck();
+    AdjustHitPos();
+    mObjAtCount = 0;
+    mObjTgCount = 0;
+    mObjCoCount = 0;
+    mObjCount = 0;
+    mUnkCount = 0;
+    mbAreaSet = false;
+    ClearArea();
+}
 
-void dCcS::SetArea(mMtx_c *) {}
+void dCcS::MassClear() {
+    mMassMng.Clear();
+}
 
-void dCcS::ClearArea() {}
+void dCcS::SetArea(mMtx_c *pMtx) {
+    if (mAreaCount >= 16) {
+        return;
+    }
 
-void dCcS::AdjustHitPos() {}
+    // non-match: Huh
+    mAreas[mAreaCount].mInv = mAreas[mAreaCount].mMtx = *pMtx;
+
+    PSMTXInverse(mAreas[mAreaCount].mInv, mAreas[mAreaCount].mInv);
+    mAreaCount++;
+}
+
+void dCcS::ClearArea() {
+    mAreaCount = 0;
+}
+
+extern "C" void *STAGE_MANAGER;
+extern "C" bool fn_8019A7A0(void *stg, f32 *, f32 *);
+void dCcS::AdjustHitPos() {
+    f32 x, z;
+    if (STAGE_MANAGER && fn_8019A7A0(STAGE_MANAGER, &x, &z)) {
+        for (cCcD_Obj **obj = mpObj; obj < mpObj + mObjCount; ++obj) {
+            (*obj)->AdjustHitPos(x, z);
+            (*obj)->GetShapeAttr()->TranslateXZ(x, z);
+        }
+    }
+}

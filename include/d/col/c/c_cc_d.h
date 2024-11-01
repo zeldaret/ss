@@ -592,6 +592,10 @@ public:
         return mAtHitSrc;
     }
 
+    void Set_0x4B(u8 val) {
+        mField_0x4B = val;
+    }
+
 public:
     /* 0x1C */ cCcD_SrcGObjTg mSrc;
     /* 0x2C */ mVec3_c mField_0x2C;
@@ -851,6 +855,10 @@ public:
     }
     u32 ChkTgShieldFrontRange() const {
         return mTg.MskSPrm(0x400);
+    }
+
+    void SetTg_0x4B(u8 val) {
+        mTg.Set_0x4B(val);
     }
 
     // Co
