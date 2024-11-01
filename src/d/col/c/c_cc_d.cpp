@@ -311,13 +311,13 @@ void cCcD_GAtTgCoCommonBase::SubtractEffCounter() {
 // Collision Object
 ///////////////////////////////////////////////////////////////////////////////
 
-cCcD_GObj::cCcD_GObj() : mStts(0), mField_0x108(0) {}
+cCcD_Obj::cCcD_Obj() : mStts(0), mField_0x108(0) {}
 
-cCcD_GObj::~cCcD_GObj() {
+cCcD_Obj::~cCcD_Obj() {
     mStts = 0;
 }
 
-bool cCcD_GObj::fn_80328ad0(dAcObjBase_c *pObj, u32 attype) {
+bool cCcD_Obj::fn_80328ad0(dAcObjBase_c *pObj, u32 attype) {
     bool ret = false;
     if (pObj && pObj->isActorPlayer() && attype == 2) {
         ret = true;
@@ -325,211 +325,211 @@ bool cCcD_GObj::fn_80328ad0(dAcObjBase_c *pObj, u32 attype) {
     return ret;
 }
 
-void cCcD_GObj::ClrSet() {
+void cCcD_Obj::ClrSet() {
     mAt.mSrc.mSPrm &= ~1;
     mTg.mSrc.mSPrm &= ~1;
     mCo.mSrc.mSPrm &= ~1;
 }
 
-void cCcD_GObj::Set(const cCcD_SrcGObj &src) {
+void cCcD_Obj::Set(const cCcD_SrcGObj &src) {
     mAt.Set(src.mObjAt);
     mTg.Set(src.mObjTg);
     mCo.Set(src.mObjCo);
 }
 
-void cCcD_GObj::ClrAtHit() {
+void cCcD_Obj::ClrAtHit() {
     mAt.mRPrm = 0;
     mAt.ClrActorInfo();
     mAt.SubtractEffCounter();
     mAt.ClrEffCounter();
 }
-void cCcD_GObj::ClrTgHit() {
+void cCcD_Obj::ClrTgHit() {
     mTg.mRPrm = 0;
     mTg.ClrActorInfo();
     mTg.SubtractEffCounter();
     mTg.ClrEffCounter();
 }
 
-void cCcD_GObj::ClrCoHit() {
+void cCcD_Obj::ClrCoHit() {
     mCo.mRPrm = 0;
     mCo.ClrActorInfo();
     mCo.SubtractEffCounter();
     mCo.ClrEffCounter();
 }
 
-const mVec3_c &cCcD_GObj::GetAtHitPos() const {
+const mVec3_c &cCcD_Obj::GetAtHitPos() const {
     return mAt.mHitPos;
 }
 
-mVec3_c &cCcD_GObj::GetAtHitPos() {
+mVec3_c &cCcD_Obj::GetAtHitPos() {
     return mAt.mHitPos;
 }
 
-bool cCcD_GObj::GetAtFlag0x2() const {
+bool cCcD_Obj::GetAtFlag0x2() const {
     return mAt.MskRPrm(2);
 }
 
-bool cCcD_GObj::GetAtFlag0x4() const {
+bool cCcD_Obj::GetAtFlag0x4() const {
     return mAt.MskRPrm(4);
 }
 
-bool cCcD_GObj::GetAtFlag0x8() const {
+bool cCcD_Obj::GetAtFlag0x8() const {
     return mAt.MskRPrm(8);
 }
 
-const mVec3_c &cCcD_GObj::GetTgHitPos() const {
+const mVec3_c &cCcD_Obj::GetTgHitPos() const {
     return mTg.mHitPos;
 }
 
-mVec3_c &cCcD_GObj::GetTgHitPos() {
+mVec3_c &cCcD_Obj::GetTgHitPos() {
     return mTg.mHitPos;
 }
 
-bool cCcD_GObj::GetTgFlag0x4() const {
+bool cCcD_Obj::GetTgFlag0x4() const {
     return mTg.MskRPrm(4);
 }
 
-bool cCcD_GObj::GetTgFlag0x8() const {
+bool cCcD_Obj::GetTgFlag0x8() const {
     return mTg.MskRPrm(0x8);
 }
 
-cCcD_GObjInf *cCcD_GObj::GetGObjInfo() {
-    return (cCcD_GObjInf *)this;
+cCcD_ObjInf *cCcD_Obj::GetGObjInfo() {
+    return (cCcD_ObjInf *)this;
 }
 
-bool cCcD_GObj::ChkAtClawshot() const {
+bool cCcD_Obj::ChkAtClawshot() const {
     return mAt.MskTgHitSPrm(0x80000);
 }
 
-bool cCcD_GObj::ChkAtClawshotDebug() const {
+bool cCcD_Obj::ChkAtClawshotDebug() const {
     return false;
 }
 
-bool cCcD_GObj::ChkAtElectrified() const {
+bool cCcD_Obj::ChkAtElectrified() const {
     return mAt.MskTgHitSPrm(0x40000);
 }
 
-bool cCcD_GObj::ChkAtElectrifiedExtra() const {
+bool cCcD_Obj::ChkAtElectrifiedExtra() const {
     return mAt.MskTgHitSPrm(0x8000000);
 }
 
-bool cCcD_GObj::ChkAtWhippable() const {
+bool cCcD_Obj::ChkAtWhippable() const {
     return mAt.MskTgHitSPrm(0x800000);
 }
 
-bool cCcD_GObj::ChkAtBit24() const {
+bool cCcD_Obj::ChkAtBit24() const {
     return mAt.MskTgHitSPrm(0x1000000);
 }
 
-bool cCcD_GObj::ChkAtArrowStick() const {
+bool cCcD_Obj::ChkAtArrowStick() const {
     return mAt.MskTgHitSPrm(0x2000000);
 }
 
-bool cCcD_GObj::ChkAtWaterScaleBonk() const {
+bool cCcD_Obj::ChkAtWaterScaleBonk() const {
     return mAt.MskTgHitSPrm(0x4000000);
 }
 
-bool cCcD_GObj::ChkAtSwordBonk() const {
+bool cCcD_Obj::ChkAtSwordBonk() const {
     return mAt.MskTgHitSPrm(0x10000);
 }
 
-dAcObjBase_c *cCcD_GObj::GetAtActor() {
+dAcObjBase_c *cCcD_Obj::GetAtActor() {
     return mAt.GetActor();
 }
 
-bool cCcD_GObj::ChkTgAtHitType(u32 mask) const {
+bool cCcD_Obj::ChkTgAtHitType(u32 mask) const {
     return mTg.mAtHitSrc.mType & mask;
 }
 
-u32 cCcD_GObj::GetTg_0x58() const {
+u32 cCcD_Obj::GetTg_0x58() const {
     return mTg.mAtHitSrc.mType;
 }
 
-bool cCcD_GObj::ChkTgBit14() const {
+bool cCcD_Obj::ChkTgBit14() const {
     return mTg.MskAtHitSPrm(0x4000);
 }
 
-u8 cCcD_GObj::GetTgDamage() const {
+u8 cCcD_Obj::GetTgDamage() const {
     return mTg.mAtHitSrc.mDamage;
 }
 
-u16 cCcD_GObj::GetTgDamageFlags() const {
+u16 cCcD_Obj::GetTgDamageFlags() const {
     return mTg.mAtHitSrc.mInfo.mModifier;
 }
 
-bool cCcD_GObj::ChkTgSkywardStrike() const {
+bool cCcD_Obj::ChkTgSkywardStrike() const {
     return mTg.MskAtHitSPrm(0x10000);
 }
-bool cCcD_GObj::ChkTgBit17() const {
+bool cCcD_Obj::ChkTgBit17() const {
     return mTg.MskAtHitSPrm(0x20000);
 }
 
-bool cCcD_GObj::ChkTgBit18() const {
+bool cCcD_Obj::ChkTgBit18() const {
     return mTg.MskAtHitSPrm(0x40000);
 }
 
-bool cCcD_GObj::ChkTgBit19() const {
+bool cCcD_Obj::ChkTgBit19() const {
     return mTg.MskAtHitSPrm(0x80000);
 }
 
-bool cCcD_GObj::ChkTgBit23() const {
+bool cCcD_Obj::ChkTgBit23() const {
     return mTg.MskAtHitSPrm(0x800000);
 }
 
-bool cCcD_GObj::ChkTgBit20() const {
+bool cCcD_Obj::ChkTgBit20() const {
     return mTg.MskAtHitSPrm(0x100000);
 }
 
-bool cCcD_GObj::ChkTgBit24() const {
+bool cCcD_Obj::ChkTgBit24() const {
     return mTg.MskAtHitSPrm(0x1000000);
 }
 
-bool cCcD_GObj::ChkTgBit25() const {
+bool cCcD_Obj::ChkTgBit25() const {
     return mTg.MskAtHitSPrm(0x2000000);
 }
 
-u16 cCcD_GObj::GetTgSoundID() const {
+u16 cCcD_Obj::GetTgSoundID() const {
     return mTg.mAtHitSrc.mField_0x10;
 }
 
-s16 cCcD_GObj::GetTg_0x6A() const {
+s16 cCcD_Obj::GetTg_0x6A() const {
     return mTg.mAtHitSrc.mField_0x12;
 }
 
-bool cCcD_GObj::ChkTgBit8() const {
+bool cCcD_Obj::ChkTgBit8() const {
     return mTg.MskAtHitSPrm(0x100);
 }
 
-u8 cCcD_GObj::GetTg_0x4A() const {
+u8 cCcD_Obj::GetTg_0x4A() const {
     return mTg.mField_0x4A;
 }
 
-dAcObjBase_c *cCcD_GObj::GetTgActor() {
+dAcObjBase_c *cCcD_Obj::GetTgActor() {
     return mTg.GetActor();
 }
 
-const mVec3_c &cCcD_GObj::GetTg_0x2C() const {
+const mVec3_c &cCcD_Obj::GetTg_0x2C() const {
     return mTg.mField_0x2C;
 }
 
-dAcObjBase_c *cCcD_GObj::GetCoActor() {
+dAcObjBase_c *cCcD_Obj::GetCoActor() {
     return mCo.GetActor();
 }
 
-bool cCcD_GObj::ChkCoBit4() const {
+bool cCcD_Obj::ChkCoBit4() const {
     return mCo.mCoHitSrc.mSPrm >> 4 & 1;
 }
 
-void cCcD_GObj::SetAtFlagsUpper(u32 flags) {
+void cCcD_Obj::SetAtFlagsUpper(u32 flags) {
     mAt.OffSPrm(0x3FF0000);
     mAt.OnSPrm(flags);
 }
 
-bool cCcD_GObj::ChkTgBit1() const {
+bool cCcD_Obj::ChkTgBit1() const {
     return mTg.MskRPrm(2);
 }
 
-void cCcD_GObj::AdjustHitPos(f32 x, f32 z) {
+void cCcD_Obj::AdjustHitPos(f32 x, f32 z) {
     mAt.AdjustHitPos(x, z);
     mTg.AdjustHitPos(x, z);
     mCo.AdjustHitPos(x, z);
@@ -1429,34 +1429,34 @@ void cCcD_SphAttr::TranslateXZ(f32 x, f32 z) {
 // Attack/Defense/Collide Object Info
 ///////////////////////////////////////////////////////////////////////////////
 
-cCcD_GObjAt::cCcD_GObjAt() {
+cCcD_ObjAt::cCcD_ObjAt() {
     mField_0x58 = 0;
 }
 
-cCcD_GObjAt::~cCcD_GObjAt() {}
+cCcD_ObjAt::~cCcD_ObjAt() {}
 
-void cCcD_GObjAt::Set(const cCcD_SrcGObjAt &info) {
+void cCcD_ObjAt::Set(const cCcD_SrcGObjAt &info) {
     mEffCounter = 0;
     mSrc = info;
     mHitPos = mVec3_c::Zero;
 }
 
-void cCcD_GObjAt::SetAtFlag(u32 flag) {
+void cCcD_ObjAt::SetAtFlag(u32 flag) {
     mSrc.mSPrm = mSrc.mSPrm & ~0x3E | flag;
 }
 
-void cCcD_GObjAt::AdjustHitPos(f32 x, f32 z) {
+void cCcD_ObjAt::AdjustHitPos(f32 x, f32 z) {
     mHitPos.x += x;
     mHitPos.z += z;
 }
 
-cCcD_GObjTg::cCcD_GObjTg()
+cCcD_ObjTg::cCcD_ObjTg()
     : mShieldFrontRangeYAngle(nullptr), mField_0x4A(0), mField_0x4B(0), mField_0x4C(0), mField_0x50(0), mField_0x54(0),
       mField_0x6C(0.f, 0.f, 0.f), mField_0x78(0) {}
 
-cCcD_GObjTg::~cCcD_GObjTg() {}
+cCcD_ObjTg::~cCcD_ObjTg() {}
 
-void cCcD_GObjTg::Set(const cCcD_SrcGObjTg &src) {
+void cCcD_ObjTg::Set(const cCcD_SrcGObjTg &src) {
     mEffCounter = 0;
     mSrc = src;
     mField_0x4C = 0;
@@ -1465,7 +1465,7 @@ void cCcD_GObjTg::Set(const cCcD_SrcGObjTg &src) {
     mShieldRange = 0x4000;
 }
 
-void cCcD_GObjTg::AdjustHitPos(f32 x, f32 z) {
+void cCcD_ObjTg::AdjustHitPos(f32 x, f32 z) {
     mHitPos.x += x;
     mHitPos.z += z;
 
@@ -1473,22 +1473,22 @@ void cCcD_GObjTg::AdjustHitPos(f32 x, f32 z) {
     mField_0x6C.z += z;
 }
 
-cCcD_GObjCo::cCcD_GObjCo() {
+cCcD_ObjCo::cCcD_ObjCo() {
     mGrp = 0;
     mField_0x28_callback = 0;
 }
 
-cCcD_GObjCo::~cCcD_GObjCo() {}
+cCcD_ObjCo::~cCcD_ObjCo() {}
 
-void cCcD_GObjCo::Set(const cCcD_SrcGObjCo &src) {
+void cCcD_ObjCo::Set(const cCcD_SrcGObjCo &src) {
     mEffCounter = 0;
     mSrc = src;
     SetCoFlag(mSrc.mSPrm & 0x1e0);
 }
 
-void cCcD_GObjCo::SetCoFlag(u32 flag) {
+void cCcD_ObjCo::SetCoFlag(u32 flag) {
     mSrc.mSPrm = mSrc.mSPrm & ~0x1E0 | flag;
     mGrp = (mSrc.mSPrm & 0x1E0) >> 4;
 }
 
-void cCcD_GObjCo::AdjustHitPos(f32, f32) {}
+void cCcD_ObjCo::AdjustHitPos(f32, f32) {}

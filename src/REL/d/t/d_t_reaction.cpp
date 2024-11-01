@@ -4,7 +4,7 @@
 #include "c/c_math.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_item.h"
-#include "d/col/cc/d_cc_mgr.h"
+#include "d/col/cc/d_cc_s.h"
 #include "d/flag/sceneflag_manager.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0x0151, 0, 0);
@@ -218,7 +218,7 @@ void dTgReaction_c::checkForBubble() {
         }
     }
     mCollision.SetC(position);
-    ColliderManager::getColliderManager()->addCollider(&mCollision);
+    dCcS::GetInstance()->Set(&mCollision);
 }
 
 // TODO move this somewhere
@@ -250,7 +250,7 @@ void dTgReaction_c::checkForSlingBellowsItem() {
         onDelete();
     }
     mCollision.SetC(position);
-    ColliderManager::getColliderManager()->addCollider(&mCollision);
+    dCcS::GetInstance()->Set(&mCollision);
 }
 
 void dTgReaction_c::onDelete() {

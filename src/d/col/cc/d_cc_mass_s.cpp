@@ -12,7 +12,7 @@ dCcMassS_Obj::dCcMassS_Obj() {}
 
 dCcMassS_Obj::~dCcMassS_Obj() {}
 
-void dCcMassS_Obj::Set(cCcD_GObj *p_obj, u8 priority, dCcMassS_ObjCallback callback) {
+void dCcMassS_Obj::Set(cCcD_Obj *p_obj, u8 priority, dCcMassS_ObjCallback callback) {
     mpObj = p_obj;
     mPriority = priority;
     mpCallback = callback;
@@ -134,7 +134,7 @@ u32 dCcMassS_Mng::Chk(mVec3_c *p_xyz, dAcObjBase_c **p_actor, dCcMassS_HitInf *p
     if (field_0x3A8 & 8) {
         for (dCcMassS_Obj *massObj = mMassAreas; massObj < mMassAreas + mMassAreaCount; ++massObj) {
             if (massObj->GetDivideInfo().Chk(divideInfo)) {
-                cCcD_GObj *obj = massObj->GetObj();
+                cCcD_Obj *obj = massObj->GetObj();
                 cCcD_ShapeAttr *objShape = obj->GetShapeAttr();
                 f32 f;
                 if (obj->ChkCoSet() && mCylAttr.CrossCo(*objShape, &f)) {
@@ -154,7 +154,7 @@ u32 dCcMassS_Mng::Chk(mVec3_c *p_xyz, dAcObjBase_c **p_actor, dCcMassS_HitInf *p
 
     for (dCcMassS_Obj *massObj = mMassObjs; massObj < mMassObjs + mMassObjCount; ++massObj) {
         if (massObj->GetDivideInfo().Chk(divideInfo)) {
-            cCcD_GObj *obj = massObj->GetObj();
+            cCcD_Obj *obj = massObj->GetObj();
             cCcD_ShapeAttr *objShape = obj->GetShapeAttr();
             mVec3_c unusedVec;
             if (obj->ChkAtSet() && !obj->ChkAtNoMass() && (field_0x3A8 & 1)) {
@@ -246,7 +246,7 @@ void dCcMassS_Mng::Clear() {
     field_0x3A9 = 4;
 }
 
-void dCcMassS_Mng::SetObj(cCcD_GObj *p_obj, u8 priority) {
+void dCcMassS_Mng::SetObj(cCcD_Obj *p_obj, u8 priority) {
     if (mMassObjCount >= (s32)ARRAY_LENGTH(mMassObjs)) {
         for (int i = 0; i < (s32)ARRAY_LENGTH(mMassObjs); ++i) {
             int prevPrio = mMassObjs[i].GetPriority();
@@ -261,7 +261,7 @@ void dCcMassS_Mng::SetObj(cCcD_GObj *p_obj, u8 priority) {
     }
 }
 
-void dCcMassS_Mng::SetArea(cCcD_GObj *p_obj, u8 priority, dCcMassS_ObjCallback callback) {
+void dCcMassS_Mng::SetArea(cCcD_Obj *p_obj, u8 priority, dCcMassS_ObjCallback callback) {
     if (mMassAreaCount >= (s32)ARRAY_LENGTH(mMassAreas)) {
         for (int i = 0; i < (s32)ARRAY_LENGTH(mMassAreas); ++i) {
             if (mMassAreas[i].GetPriority() > priority) {

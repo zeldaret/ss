@@ -1120,6 +1120,8 @@ d/col/cc/d_cc_mass_s.cpp:
 
 d/col/cc/d_cc_s.cpp:
 	.text       start:0x80355080 end:0x80358654
+	.data       start:0x805485A8 end:0x805485B4
+	.sbss       start:0x80575D20 end:0x80575D24
 
 rvl/CX/cx.c:
 	.text       start:0x803CEE90 end:0x803D0B20

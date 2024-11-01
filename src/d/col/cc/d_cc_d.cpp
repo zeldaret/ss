@@ -7,7 +7,7 @@ dCcD_Cps::dCcD_Cps() {}
 dCcD_Cps::~dCcD_Cps() {}
 
 void dCcD_Cps::Set(const dCcD_SrcCps &src) {
-    cCcD_GObj::Set(src.mObjInf);
+    cCcD_Obj::Set(src.mObjInf);
     cCcD_CpsAttr::Set(src.mCpsInf);
 }
 
@@ -23,7 +23,7 @@ dCcD_Tri::dCcD_Tri() {}
 dCcD_Tri::~dCcD_Tri() {}
 
 void dCcD_Tri::Set(const dCcD_SrcTri &src) {
-    cCcD_GObj::Set(src.mObjInf);
+    cCcD_Obj::Set(src.mObjInf);
 }
 
 cCcD_ShapeAttr *dCcD_Tri::GetShapeAttr() {
@@ -34,7 +34,7 @@ dCcD_Cyl::dCcD_Cyl() {}
 dCcD_Cyl::~dCcD_Cyl() {}
 
 void dCcD_Cyl::Set(const dCcD_SrcCyl &src) {
-    cCcD_GObj::Set(src.mObjInf);
+    cCcD_Obj::Set(src.mObjInf);
     cCcD_CylAttr::Set(src.mCylInf);
 }
 
@@ -56,7 +56,7 @@ dCcD_Sph::dCcD_Sph() {}
 dCcD_Sph::~dCcD_Sph() {}
 
 void dCcD_Sph::Set(const dCcD_SrcSph &src) {
-    cCcD_GObj::Set(src.mObjInf);
+    cCcD_Obj::Set(src.mObjInf);
     cCcD_SphAttr::Set(src.mSphInf);
 }
 
@@ -83,7 +83,7 @@ dCcD_Unk::dCcD_Unk() {}
 dCcD_Unk::~dCcD_Unk() {}
 
 void dCcD_Unk::Set(const dCcD_SrcUnk &src) {
-    cCcD_GObj::Set(src.mObjInf);
+    cCcD_Obj::Set(src.mObjInf);
     cCcD_UnkAttr::Set(src.mUnkInf);
 }
 

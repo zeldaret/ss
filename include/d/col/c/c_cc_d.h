@@ -369,9 +369,13 @@ struct cCcD_SrcGObj {
 };
 
 class dAcObjBase_c;
-class cCcD_GObj;
+class cCcD_Obj;
+
 typedef bool (*cCcD_HitCallback)(
-    dAcObjBase_c *i_actorA, cCcD_GObj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_GObj *i_objInfB
+    dAcObjBase_c *i_actorA, cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfB
+);
+typedef int (*cCcD_ShieldChkCallback)(
+    dAcObjBase_c *i_actorA, cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfB
 );
 
 class cCcD_GAtTgCoCommonBase {
@@ -418,10 +422,10 @@ public:
     }
 };
 
-class cCcD_GObjAt : public cCcD_GAtTgCoCommonBase {
+class cCcD_ObjAt : public cCcD_GAtTgCoCommonBase {
 public:
-    cCcD_GObjAt();
-    virtual ~cCcD_GObjAt();
+    cCcD_ObjAt();
+    virtual ~cCcD_ObjAt();
     void Set(const cCcD_SrcGObjAt &);
     void SetAtFlag(u32);
     void AdjustHitPos(f32, f32);
@@ -505,10 +509,10 @@ public:
     /* 0x58 */ cCcD_HitCallback mField_0x58;
 };
 
-class cCcD_GObjTg : public cCcD_GAtTgCoCommonBase {
+class cCcD_ObjTg : public cCcD_GAtTgCoCommonBase {
 public:
-    cCcD_GObjTg();
-    virtual ~cCcD_GObjTg();
+    cCcD_ObjTg();
+    virtual ~cCcD_ObjTg();
     void Set(const cCcD_SrcGObjTg &);
     void AdjustHitPos(f32, f32);
 
@@ -598,16 +602,16 @@ public:
     /* 0x4B */ u8 mField_0x4B;
     /* 0x4C */ u32 mField_0x4C;
     /* 0x50 */ u32 mField_0x50;
-    /* 0x54 */ cCcD_HitCallback mField_0x54;
+    /* 0x54 */ cCcD_ShieldChkCallback mField_0x54;
     /* 0x58 */ cCcD_SrcGObjAt mAtHitSrc;
     /* 0x6C */ mVec3_c mField_0x6C;
     /* 0x78 */ cCcD_HitCallback mField_0x78;
 };
 
-class cCcD_GObjCo : public cCcD_GAtTgCoCommonBase {
+class cCcD_ObjCo : public cCcD_GAtTgCoCommonBase {
 public:
-    cCcD_GObjCo();
-    virtual ~cCcD_GObjCo();
+    cCcD_ObjCo();
+    virtual ~cCcD_ObjCo();
     void Set(const cCcD_SrcGObjCo &);
     void SetCoFlag(u32);
     void AdjustHitPos(f32, f32);
@@ -646,26 +650,26 @@ public:
 };
 
 // Maybe ?
-class cCcD_GObjInf {
+class cCcD_ObjInf {
 public:
-    /* 0x000 */ cCcD_GObjAt mObjAt;
-    /* 0x05C */ cCcD_GObjTg mObjTg;
-    /* 0x0D8 */ cCcD_GObjCo mObjCo;
+    /* 0x000 */ cCcD_ObjAt mObjAt;
+    /* 0x05C */ cCcD_ObjTg mObjTg;
+    /* 0x0D8 */ cCcD_ObjCo mObjCo;
 };
 
-class cCcD_GObj {
+class cCcD_Obj {
 public:
-    /* 0x000 */ cCcD_GObjAt mAt;
-    /* 0x05C */ cCcD_GObjTg mTg;
-    /* 0x0D8 */ cCcD_GObjCo mCo;
+    /* 0x000 */ cCcD_ObjAt mAt;
+    /* 0x05C */ cCcD_ObjTg mTg;
+    /* 0x0D8 */ cCcD_ObjCo mCo;
     /* 0x104 */ cCcD_Stts *mStts;
     /* 0x108 */ u32 mField_0x108;
 
 public:
-    cCcD_GObj();
-    virtual ~cCcD_GObj();
+    cCcD_Obj();
+    virtual ~cCcD_Obj();
     virtual cCcD_ShapeAttr *GetShapeAttr() = 0;
-    virtual cCcD_GObjInf *GetGObjInfo();
+    virtual cCcD_ObjInf *GetGObjInfo();
     void ClrSet();
     void Set(const cCcD_SrcGObj &);
     void ClrAtHit();
@@ -866,13 +870,13 @@ public:
      */
 
     // Actor Objs
-    void SetAtHit(cCcD_GObj *other) {
+    void SetAtHit(cCcD_Obj *other) {
         mAt.SetHitActor(other->GetAc());
     }
-    void SetTgHit(cCcD_GObj *other) {
+    void SetTgHit(cCcD_Obj *other) {
         mTg.SetHitActor(other->GetAc());
     }
-    void SetCoHit(cCcD_GObj *other) {
+    void SetCoHit(cCcD_Obj *other) {
         mCo.SetHitActor(other->GetAc());
     }
 
@@ -888,13 +892,13 @@ public:
      * SET SOURCES
      */
 
-    void SetAtTgHitSrc(cCcD_GObj *tg) {
+    void SetAtTgHitSrc(cCcD_Obj *tg) {
         mAt.SetTgHitSrc(tg->mTg.GetSrc());
     }
-    void SetTgAtHitSrc(cCcD_GObj *at) {
+    void SetTgAtHitSrc(cCcD_Obj *at) {
         mTg.SetAtHitSrc(at->mAt.GetSrc());
     }
-    void SetCoCoHitSrc(cCcD_GObj *co) {
+    void SetCoCoHitSrc(cCcD_Obj *co) {
         mCo.SetCoHitSrc(co->mCo.GetSrc());
     }
 

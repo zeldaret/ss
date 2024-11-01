@@ -11,7 +11,7 @@ struct dCcD_SrcCps {
 };
 
 // Capsule
-class dCcD_Cps : public cCcD_GObj, public cCcD_CpsAttr {
+class dCcD_Cps : public cCcD_Obj, public cCcD_CpsAttr {
 public:
     dCcD_Cps();
     virtual ~dCcD_Cps();
@@ -26,7 +26,7 @@ struct dCcD_SrcTri {
     /* 0x00 */ cCcD_SrcGObj mObjInf;
 };
 
-class dCcD_Tri : public cCcD_GObj, public cCcD_TriAttr {
+class dCcD_Tri : public cCcD_Obj, public cCcD_TriAttr {
 public:
     dCcD_Tri();
     virtual ~dCcD_Tri();
@@ -42,7 +42,7 @@ struct dCcD_SrcCyl {
 };
 
 // Cylinder
-class dCcD_Cyl : public cCcD_GObj, public cCcD_CylAttr {
+class dCcD_Cyl : public cCcD_Obj, public cCcD_CylAttr {
 public:
     dCcD_Cyl();
     virtual ~dCcD_Cyl();
@@ -59,7 +59,7 @@ struct dCcD_SrcSph {
 };
 
 // Sphere
-class dCcD_Sph : public cCcD_GObj, public cCcD_SphAttr {
+class dCcD_Sph : public cCcD_Obj, public cCcD_SphAttr {
 public:
     dCcD_Sph();
     virtual ~dCcD_Sph();
@@ -76,7 +76,7 @@ struct dCcD_SrcUnk {
     /* 0x40 */ cCcD_SrcUnkAttr mUnkInf;
 };
 
-class dCcD_Unk : public cCcD_GObj, public cCcD_UnkAttr {
+class dCcD_Unk : public cCcD_Obj, public cCcD_UnkAttr {
 public:
     dCcD_Unk();
     virtual ~dCcD_Unk();

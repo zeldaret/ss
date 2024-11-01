@@ -1,6 +1,6 @@
 #include "d/a/obj/d_a_obj_toD3_stone_figure.h"
 
-#include "d/col/cc/d_cc_mgr.h"
+#include "d/col/cc/d_cc_s.h"
 #include "d/flag/storyflag_manager.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/event.h"
@@ -78,7 +78,7 @@ int dAcOtoD3StoneFigure_c::create() {
     mCollision.SetC(position);
     mCollision.SetR(dAcOtoD3StoneFigure_c::sRadius + zero);
     mCollision.SetH(dAcOtoD3StoneFigure_c::sHeight + zero);
-    ColliderManager::getColliderManager()->addCollider(&mCollision);
+    dCcS::GetInstance()->Set(&mCollision);
     mCollision.OnTgCoFlag(1);
 
     // ???
@@ -111,7 +111,7 @@ int dAcOtoD3StoneFigure_c::doDelete() {
 
 int dAcOtoD3StoneFigure_c::actorExecute() {
     mStateMgr.executeState();
-    ColliderManager::getColliderManager()->addCollider(&mCollision);
+    dCcS::GetInstance()->Set(&mCollision);
     return SUCCEEDED;
 }
 

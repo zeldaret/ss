@@ -28,7 +28,7 @@ public:
     STATE_FUNC_DECLARE(dAcArrow_c, BgStop);
     STATE_FUNC_DECLARE(dAcArrow_c, Bound);
 
-    void hitCallback(cCcD_GObj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_GObj *i_objInfB);
+    void hitCallback(cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfB);
 
 public:
     static cCcD_SrcGObj sCcSrcInf;

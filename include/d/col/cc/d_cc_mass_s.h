@@ -8,7 +8,7 @@ typedef void (*dCcMassS_ObjCallback)(dAcObjBase_c *, mVec3_c *, u32);
 
 class dCcMassS_Obj {
 private:
-    /* 0x00 */ cCcD_GObj *mpObj;
+    /* 0x00 */ cCcD_Obj *mpObj;
     /* 0x04 */ u8 mPriority;
     /* 0x08 */ dCcMassS_ObjCallback mpCallback;
     /* 0x0C */ cCcD_DivideInfo mDivideInfo;
@@ -17,10 +17,10 @@ private:
 public:
     dCcMassS_Obj();
     virtual ~dCcMassS_Obj();
-    void Set(cCcD_GObj *p_obj, u8 priority, dCcMassS_ObjCallback callback);
+    void Set(cCcD_Obj *p_obj, u8 priority, dCcMassS_ObjCallback callback);
     void Clear();
 
-    cCcD_GObj *GetObj() {
+    cCcD_Obj *GetObj() {
         return mpObj;
     }
     u8 GetPriority() const {
@@ -36,9 +36,9 @@ public:
 
 class dCcMassS_HitInf {
 private:
-    /* 0x00 */ cCcD_GObj *mpArea;
-    /* 0x04 */ cCcD_GObj *mpAtObj;
-    /* 0x08 */ cCcD_GObj *mpCoObj;
+    /* 0x00 */ cCcD_Obj *mpArea;
+    /* 0x04 */ cCcD_Obj *mpAtObj;
+    /* 0x08 */ cCcD_Obj *mpCoObj;
     /* 0x0C */ f32 mCoHitLen;
     /* 0x10 vtable */
 public:
@@ -46,19 +46,19 @@ public:
     virtual ~dCcMassS_HitInf();
 
     void ClearPointer();
-    void SetAreaHitObj(cCcD_GObj *obj) {
+    void SetAreaHitObj(cCcD_Obj *obj) {
         mpArea = obj;
     }
-    void SetCoHitObj(cCcD_GObj *obj) {
+    void SetCoHitObj(cCcD_Obj *obj) {
         mpCoObj = obj;
     }
-    void SetAtHitObj(cCcD_GObj *obj) {
+    void SetAtHitObj(cCcD_Obj *obj) {
         mpAtObj = obj;
     }
     void SetCoHitLen(f32 len) {
         mCoHitLen = len;
     }
-    cCcD_GObj *GetAtHitObj() const {
+    cCcD_Obj *GetAtHitObj() const {
         return mpAtObj;
     }
 };
@@ -95,8 +95,8 @@ public:
     void Clear();
 
     // Not original names, but made distinct for clarity (original was just one `Set)
-    void SetObj(cCcD_GObj *p_obj, u8 priority);
-    void SetArea(cCcD_GObj *p_obj, u8 priority, dCcMassS_ObjCallback callback);
+    void SetObj(cCcD_Obj *p_obj, u8 priority);
+    void SetArea(cCcD_Obj *p_obj, u8 priority, dCcMassS_ObjCallback callback);
 
     // void SetCam(cM3dGCps const &cps);
     // u8 GetResultCam() const;

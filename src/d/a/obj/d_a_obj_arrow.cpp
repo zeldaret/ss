@@ -35,7 +35,7 @@ const dCcD_SrcSph dAcArrow_c::sCc2 = {
 
 // clang-format on
 
-bool hitCallback(dAcObjBase_c *i_actorA, cCcD_GObj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_GObj *i_objInfB) {
+bool hitCallback(dAcObjBase_c *i_actorA, cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfB) {
     static_cast<dAcArrow_c *>(i_actorA)->hitCallback(i_objInfA, i_actorB, i_objInfB);
     return true;
 }
@@ -90,7 +90,7 @@ int dAcArrow_c::create() {
 
 dAcArrow_c::~dAcArrow_c() {}
 
-void dAcArrow_c::hitCallback(cCcD_GObj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_GObj *i_objInfB) {}
+void dAcArrow_c::hitCallback(cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfB) {}
 
 int dAcArrow_c::doDelete() {
     // TODO

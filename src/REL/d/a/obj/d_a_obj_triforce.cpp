@@ -1,7 +1,7 @@
 #include "d/a/obj/d_a_obj_triforce.h"
 
 #include "c/c_math.h"
-#include "d/col/cc/d_cc_mgr.h"
+#include "d/col/cc/d_cc_s.h"
 #include "m/m_vec.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TRIFORCE, dAcOtriforce_c, fProfile::OBJ_TRIFORCE, 0x15D, 0, 4);
@@ -65,7 +65,7 @@ int dAcOtriforce_c::actorExecute() {
 
     mCollision.SetC(position.x, position.y + 90.0f + zero, position.z);
 
-    ColliderManager::getColliderManager()->addCollider(&mCollision);
+    dCcS::GetInstance()->Set(&mCollision);
     updateMatrix();
     Mtx m;
     PSMTXScale(m, mScale.x, mScale.y, mScale.z);
