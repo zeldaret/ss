@@ -25,10 +25,8 @@
         mStateMgr.getStateID();                                                                                        \
     }
 
-#define UI_STATE_MGR_DECLARE(class_name) \
-    sFStateMgr_c<class_name, sStateMethodUsr_FI_c> mStateMgr;
+#define UI_STATE_MGR_DECLARE(class_name) sFStateMgr_c<class_name, sStateMethodUsr_FI_c> mStateMgr;
 
-#define STATE_MGR(class_name) \
-    sFStateMgr_c<class_name, sStateMethodUsr_FI_c>
+#define STATE_MGR(class_name) sFStateMgr_c<class_name, sStateMethodUsr_FI_c>
 
 #endif

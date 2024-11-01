@@ -2,7 +2,6 @@
 
 #include "s/s_Math.h"
 
-
 SPECIAL_ACTOR_PROFILE(OBJ_MOLE_SOIL, dAcOmoleSoil_c, fProfile::OBJ_MOLE_SOIL, 0x008B, 0, 6);
 
 STATE_DEFINE(dAcOmoleSoil_c, Wait);
@@ -22,10 +21,6 @@ bool dAcOmoleSoil_c::createHeap() {
     TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120, 1, nullptr));
     mModel.setPriorityDraw(0x1c, 9);
     return true;
-}
-
-bool intToBool(int a) {
-    return a;
 }
 
 int dAcOmoleSoil_c::create() {

@@ -2,7 +2,7 @@
 #define D_A_O_SPIKE_H
 
 #include "d/a/obj/d_a_obj_base.h"
-#include "d/col/cc/d_cc_shape_colliders.h"
+#include "d/col/cc/d_cc_d.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/g3d_resfile.h"
@@ -25,11 +25,11 @@ public:
     static const mVec3_c sVec2;
 
 private:
-    static dCcD_SrcAabb sCcSrc;
+    static dCcD_SrcUnk sCcSrc;
 
     nw4r::g3d::ResFile mResFile;
     m3d::smdl_c mMdl;
-    dCcD_Aabb mCollision;
+    dCcD_Unk mCollision;
 
     STATE_MGR_DECLARE(dAcOspike_c);
 };

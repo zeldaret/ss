@@ -68,13 +68,13 @@ bool dAcOsw_c::createHeap() {
     nw4r::g3d::ResMdl resMdl = resFile.GetResMdl(SWITCH_TYPES[mSwitchType]);
     TRY_CREATE(mModel.create(resMdl, &heap_allocator, 0x20, 1, nullptr));
 
-    field_0x5E8 = mScale.x *
-                  (resMdl.GetResNode("base").mNode.ref().VEC3_0x50.x - resMdl.GetResNode("base").mNode.ref().VEC3_0x44.x);
+    field_0x5E8 = mScale.x * (resMdl.GetResNode("base").mNode.ref().VEC3_0x50.x -
+                              resMdl.GetResNode("base").mNode.ref().VEC3_0x44.x);
     cBgD_t *dbzData = (cBgD_t *)getOarcDZB(SWITCH_TYPES[mSwitchType], SWITCH_TYPES[mSwitchType]);
     PLC *plcData = (PLC *)getOarcPLC(SWITCH_TYPES[mSwitchType], SWITCH_TYPES[mSwitchType]);
     mScale.set(1.0f, 0.8f, 1.0f);
     updateMatrix();
-    field_0x5B8.set(mWorldMtx);
+    field_0x5B8.copyFrom(mWorldMtx);
     mModel.setLocalMtx(mWorldMtx);
 
     bool set = mCollision.Set(dbzData, plcData, cBgW::MOVE_BG_e, &field_0x5B8, &mScale);
@@ -180,7 +180,7 @@ int dAcOsw_c::actorExecute() {
     }
 
     updateMatrix();
-    field_0x5B8.set(mWorldMtx);
+    field_0x5B8.copyFrom(mWorldMtx);
     mMtx_c tmp;
     PSMTXTrans(tmp, 0.0f, mButtonCtrl.mElevation, 0.0f);
     PSMTXConcat(field_0x5B8, tmp, field_0x5B8);

@@ -2,14 +2,15 @@
 #define D_A_OBJ_BASE_H
 
 #include "d/a/d_a_base.h"
+#include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
-#include "d/col/cc/d_cc_d.h"
 #include "m/m3d/m_shadow.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
+
 
 // Size: 0xA8
 struct ActorCarryStruct {
@@ -68,7 +69,7 @@ public:
 
     /* 0x1B0 */ u8 unk_0x1B0[0x1C0 - 0x1B0];
 
-    /* 0x1C0 */ UnkCCDStruct mCCdStruct;
+    /* 0x1C0 */ cCcD_Stts mStts;
 
     /* 0x1FC */ mVec3_c mStartingPos;
     /* 0x208 */ mAng3_c mStartingRot;

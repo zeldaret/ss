@@ -492,8 +492,8 @@ void cBgW::RwgLineCheck(int polyIdx, cBgS_LinChk *pLine) {
         cBgD_Vtx_t *vtxTbl = mpVtxTbl;
         mVec3_c cross_pos;
         if (cM3d_Cross_LinTri(
-                &pLine->mLin, &vtxTbl[triTbl[polyIdx].mVtxIdx0], &vtxTbl[triTbl[polyIdx].mVtxIdx1],
-                &vtxTbl[triTbl[polyIdx].mVtxIdx2], &mpTri[polyIdx], &cross_pos, pLine->ChkFrontFlag(),
+                pLine->mLin, vtxTbl[triTbl[polyIdx].mVtxIdx0], vtxTbl[triTbl[polyIdx].mVtxIdx1],
+                vtxTbl[triTbl[polyIdx].mVtxIdx2], &mpTri[polyIdx], cross_pos, pLine->ChkFrontFlag(),
                 pLine->ChkBackFlag()
             )) {
             dBgPc pc = *mpPolyCodes.GetDBgPc(mpBgd->mTriTbl[polyIdx].mId);

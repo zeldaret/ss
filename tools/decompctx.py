@@ -21,7 +21,7 @@ src_dir = os.path.join(root_dir, "src")
 include_dirs = [
     os.path.join(root_dir, "include"),
     # Add additional include directories here
-        os.path.join(root_dir, "src"),
+    os.path.join(root_dir, "src"),
     os.path.join(root_dir, "src", "PowerPC_EABI_Support", "MetroTRK"),
     os.path.join(
         root_dir, "src", "PowerPC_EABI_Support", "MSL", "MSL_C", "MSL_Common", "Include"

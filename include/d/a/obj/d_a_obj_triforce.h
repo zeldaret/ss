@@ -3,7 +3,7 @@
 
 #include "c/c_math.h"
 #include "d/a/obj/d_a_obj_base.h"
-#include "d/col/cc/d_cc_shape_colliders.h"
+#include "d/col/cc/d_cc_d.h"
 #include "m/m3d/m_anmtexsrt.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"

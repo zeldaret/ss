@@ -1,16 +1,15 @@
 #include "d/a/obj/d_a_obj_triforce.h"
 
 #include "c/c_math.h"
-#include "d/col/cc/d_cc_mgr.h"
+#include "d/col/cc/d_cc_s.h"
 #include "m/m_vec.h"
-
 
 SPECIAL_ACTOR_PROFILE(OBJ_TRIFORCE, dAcOtriforce_c, fProfile::OBJ_TRIFORCE, 0x15D, 0, 4);
 
 // clang-format off
 dCcD_SrcSph dAcOtriforce_c::sCcSrc = {
-    {{{0}, 0, 0, 0, 0, 0, 0, 0, 0}, 
-    {{0xFEB77DFF}, 0x111, 0x06, 0x407, 0, 0}, 
+    {{0, 0, 0, 0, 0, 0, 0, 0, 0}, 
+    {0xFEB77DFF, 0x111, 0x06, 0x407, 0, 0}, 
     {0xE9}},
     {150.0f}};
 // clang-format on
@@ -36,13 +35,13 @@ int dAcOtriforce_c::create() {
         return FAILED;
     }
 
-    mCCdStruct.setField0x38ToMagicValue();
-    mCollision.init(sCcSrc);
-    mCollision.initUnk(mCCdStruct);
-    mCollision.clearCoFlag();
+    mStts.SetDefaultRank();
+    mCollision.Set(sCcSrc);
+    mCollision.SetStts(mStts);
+    mCollision.ClrCoSet();
     mStartingOffset = cM::rndInt(sStartingOffsetRange);
     mEffects.init(this);
-    mCollision.setSomeDefendValue(0x2000);
+    mCollision.SetTg_0x4C(0x2000);
     updateMatrix();
     mScale.x = sScale;
     mScale.y = sScale;
@@ -66,7 +65,7 @@ int dAcOtriforce_c::actorExecute() {
 
     mCollision.SetC(position.x, position.y + 90.0f + zero, position.z);
 
-    ColliderManager::getColliderManager()->addCollider(&mCollision);
+    dCcS::GetInstance()->Set(&mCollision);
     updateMatrix();
     Mtx m;
     PSMTXScale(m, mScale.x, mScale.y, mScale.z);

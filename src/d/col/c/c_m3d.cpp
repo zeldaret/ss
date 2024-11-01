@@ -14,6 +14,7 @@
 #include "math.h"
 #include "nw4r/math/math_types.h"
 #include "rvl/MTX.h" // IWYU pragma: export
+#include "rvl/MTX/vec.h"
 
 using namespace nw4r::math;
 using namespace EGG;
@@ -145,38 +146,40 @@ bool cM3d_Cross_LinSph_CrossPos(const cM3dGSph &, const cM3dGLin &, VEC3 *, VEC3
     // TODO - returns false to satisfy warning
     return false;
 }
-bool cM3d_Cross_CylSph(const cM3dGCyl *, const cM3dGSph *, f32 *) {
+bool cM3d_Cross_CylSph(const cM3dGCyl &, const cM3dGSph &, f32 *) {
     // TODO - returns false to satisfy warning
     return false;
 }
-bool cM3d_Cross_CylSph(const cM3dGCyl *, const cM3dGSph *, VEC3 *, f32 *) {
+bool cM3d_Cross_CylSph(const cM3dGCyl &, const cM3dGSph &, VEC3 *, f32 *) {
     // TODO - returns false to satisfy warning
     return false;
 }
-bool cM3d_Cross_SphSph(const cM3dGSph *, const cM3dGSph *, f32 *) {
+bool cM3d_Cross_SphSph(const cM3dGSph &, const cM3dGSph &, f32 *) {
     // TODO - returns false to satisfy warning
     return false;
 }
-bool cM3d_Cross_SphSph(const cM3dGSph *, const cM3dGSph *, f32 *, f32 *) {
+bool cM3d_Cross_SphSph(const cM3dGSph &, const cM3dGSph &, f32 *, f32 *) {
     // TODO - returns false to satisfy warning
     return false;
 }
-bool cM3d_Cross_SphSph(const cM3dGSph *, const cM3dGSph *, VEC3 *) {
+bool cM3d_Cross_SphSph(const cM3dGSph &, const cM3dGSph &, VEC3 *) {
     // TODO - returns false to satisfy warning
     return false;
 }
 
-void cM3d_CalcSphVsTriCrossPoint(const cM3dGSph *pSph, const cM3dGTri *pTri, VEC3 *pPnt) {
+void cM3d_CalcSphVsTriCrossPoint(const cM3dGSph &pSph, const cM3dGTri &pTri, VEC3 *pPnt) {
     VEC3 scale, add;
-    PSVECAdd(pTri->mA, pTri->mB, add);
+    PSVECAdd(pTri.mA, pTri.mB, add);
     PSVECScale(add, scale, 0.5f);
-    f32 mag = VEC3DistSq(&scale, &pSph->GetC());
+    const f32 mag = VEC3DistSq(&scale, &pSph.GetC());
     if (cM3d_IsZero(mag)) {
-        *pPnt = pSph->GetC();
+        *pPnt = pSph.GetC();
         return;
     }
-    f32 a = pSph->GetR() / mag;
-    cM3d_InDivPos2(&pSph->GetC(), &scale, a, pPnt);
+    const f32 rad = pSph.GetR();
+    f32 a = rad / mag;
+
+    cM3d_InDivPos2(&pSph.GetC(), &scale, a, pPnt);
 }
 bool cM3d_Cross_SphTri(const cM3dGSph *, const cM3dGTri *, VEC3 *, f32 *, VEC3 *) {
     // TODO - returns false to satisfy warning
@@ -218,7 +221,7 @@ bool cM3d_Cross_TriTri(const cM3dGTri &, const cM3dGTri &, VEC3 *) {
     // TODO - returns false to satisfy warning
     return false;
 }
-bool cM3d_Cross_CpsTri(const cM3dGCps &, cM3dGTri, VEC3 *) {
+bool cM3d_Cross_CpsTri(const cM3dGCps &, const cM3dGTri &, VEC3 *) {
     // TODO - returns false to satisfy warning
     return false;
 }
@@ -232,11 +235,31 @@ bool cM3d_3PlaneCrossPos(const cM3dGPla &, const cM3dGPla &, const cM3dGPla &, V
     // TODO - returns false to satisfy warning
     return false;
 }
-f32 cM3d_lineVsPosSuisenCross(const cM3dGLin *, const VEC3 *, VEC3 *) {
+f32 cM3d_lineVsPosSuisenCross(const cM3dGLin &, const VEC3 &, VEC3 *) {
     // TODO - returns 0.0f to satisfy warning
     return 0.0f;
 }
 f32 cM3d_lineVsPosSuisenCross(const VEC3 &, const VEC3 &, const VEC3 &, VEC3 *) {
     // TODO - returns 0.0f to satisfy warning
     return 0.0f;
+}
+
+bool cM3d_Normalize(nw4r::math::VEC3 *pPnt) {
+    f32 mag = PSVECMag(*pPnt);
+    if (cM3d_IsZero(mag)) {
+        return true;
+    }
+    mag = 1.f / mag;
+    pPnt->x *= mag;
+    pPnt->y *= mag;
+    pPnt->z *= mag;
+    return false;
+}
+
+void cM3d_Normalize_Ex(nw4r::math::VEC3 *pPnt) {
+    if (cM3d_Normalize(pPnt)) {
+        pPnt->x = 1.0f;
+        pPnt->y = 0.0f;
+        pPnt->z = 0.0f;
+    }
 }

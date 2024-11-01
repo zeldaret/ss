@@ -1,6 +1,7 @@
 #ifndef M_ANGLE_H
 #define M_ANGLE_H
 
+#include "c/c_math.h"
 #include "common.h"
 #include "nw4r/math/math_triangular.h"
 
@@ -8,6 +9,10 @@ struct mAng {
     mAng() {}
     mAng(s16 s) : mVal(s) {}
     mAng(const mAng &other) : mVal(other.mVal) {}
+
+    static mAng atan2s(f32 a, f32 b) {
+        return mAng(cM::atan2s(a, b));
+    }
 
     operator s16() const {
         return mVal;
@@ -23,6 +28,10 @@ struct mAng {
 
     mAng &operator+=(const mAng &other) {
         mVal += other.mVal;
+        return *this;
+    }
+    mAng &operator-=(const mAng &other) {
+        mVal -= other.mVal;
         return *this;
     }
 
