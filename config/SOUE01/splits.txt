@@ -244,7 +244,9 @@ d/lyt/meter/d_lyt_meter_key.cpp:
 d/lyt/meter/d_lyt_meter_drink.cpp:
 	.text       start:0x800E4930 end:0x800E6AC8
 	.ctors      start:0x804DB6F0 end:0x804DB6F4
+	.rodata     start:0x804E55A0 end:0x804E5640
 	.data       start:0x805148B0 end:0x80514D60
+	.sdata2     start:0x80579BA0 end:0x80579BB0
 	.bss        start:0x805AA790 end:0x805AA9D0
 
 d/lyt/meter/d_lyt_meter_remocon_bg.cpp:
@@ -432,7 +434,11 @@ d/lyt/d_lyt_bird_gauge.cpp:
 d/lyt/d_lyt_sky_gauge.cpp:
 	.text       start:0x801548E0 end:0x80155CC8
 	.ctors      start:0x804DB788 end:0x804DB78C
+	.rodata     start:0x804E8138 end:0x804E8150
 	.data       start:0x80524510 end:0x80524928
+	.sbss       start:0x805754E8 end:0x805754F0
+	.sdata2     start:0x8057A040 end:0x8057A058
+	.bss        start:0x805B1230 end:0x805B1430
 
 d/lyt/d_lyt_deposit_stock.cpp:
 	.text       start:0x80155CD0 end:0x801578A8

@@ -72,12 +72,15 @@ bool DowsingTarget::hasDesertNodeDowsing() {
     return StoryflagManager::sInstance->getCounterOrFlag(107) && !StoryflagManager::sInstance->getCounterOrFlag(8);
 }
 
+inline bool checkTrial(u16 itemflag, u16 storyflag) {
+    return (ItemflagManager::sInstance->getFlagDirect(itemflag) && !StoryflagManager::sInstance->getCounterOrFlag(storyflag)) ? true : false;
+}
+
 bool DowsingTarget::hasAnyTrialDowsing() {
-    // TODO more complicated code
-    return ItemflagManager::sInstance->getFlag(187) && !StoryflagManager::sInstance->getCounterOrFlag(93) ||
-           ItemflagManager::sInstance->getFlag(188) && !StoryflagManager::sInstance->getCounterOrFlag(97) ||
-           ItemflagManager::sInstance->getFlag(189) && !StoryflagManager::sInstance->getCounterOrFlag(98) ||
-           ItemflagManager::sInstance->getFlag(193) && !StoryflagManager::sInstance->getCounterOrFlag(99);
+    return checkTrial(187, 93) ||
+           checkTrial(188, 97) ||
+           checkTrial(189, 98) ||
+           checkTrial(193, 99);
 }
 
 bool DowsingTarget::hasSacredWaterDowsing() {

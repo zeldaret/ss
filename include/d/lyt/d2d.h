@@ -228,6 +228,10 @@ struct AnmGroupBase_c {
         return (mFlags & 2) != 0;
     }
 
+    inline bool isStop() const {
+        return mpFrameCtrl->isStop();
+    }
+
     inline bool isStop2() const {
         return mpFrameCtrl->isStop2();
     }
@@ -256,6 +260,10 @@ struct AnmGroupBase_c {
     inline void setBackwardsRatio(f32 ratio) {
         mpFrameCtrl->setBackwardsRatio(ratio);
         syncAnmFrame();
+    }
+
+    inline f32 getNextFrame() const {
+        return mpFrameCtrl->getNextFrame();
     }
 
 private:
