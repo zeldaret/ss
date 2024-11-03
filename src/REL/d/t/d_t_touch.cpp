@@ -1,9 +1,9 @@
 #include "d/t/d_t_touch.h"
 
 #include "c/c_math.h"
-#include "toBeSorted/area_math.h"
 #include "d/flag/sceneflag_manager.h"
-
+#include "s/s_Math.h"
+#include "toBeSorted/area_math.h"
 
 SPECIAL_ACTOR_PROFILE(TOUCH_TAG, dTgTouchTag, fProfile::TOUCH_TAG, 0x028E, 0, 0);
 
@@ -59,7 +59,7 @@ void dTgTouchTag::executeState_Wait() {
         actor = static_cast<dAcBase_c *>(fManager_c::searchBaseByProfName(ACTIVATORS[mActivatorIndex], actor));
     }
 
-    if (cM::calcTimer(&mFlagTimer) == 0) {
+    if (sLib::calcTimer(&mFlagTimer) == 0) {
         if (mZoneFlag != 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mZoneFlag)) {
             SceneflagManager::sInstance->unsetFlag(roomid, mZoneFlag);
         }

@@ -1,13 +1,12 @@
 #include "d/t/d_t_gekotag.h"
 
-#include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/a/e/d_a_e_geko.h"
 #include "d/a/obj/d_a_obj_base.h"
-#include "f/f_base.h"
 #include "f/f_profile_name.h"
 #include "m/m_angle.h"
+#include "s/s_Math.h"
 
 #pragma explicit_zero_data on
 static u32 initialRotX = 0;
@@ -60,8 +59,8 @@ void dTgGekoTag::executeState_Wait() {
 void dTgGekoTag::finalizeState_Wait() {}
 
 void dTgGekoTag::doExecute() {
-    cM::calcTimer(&mTimer2);
-    if (cM::calcTimer(&mTimer1) != 0) {
+    sLib::calcTimer(&mTimer2);
+    if (sLib::calcTimer(&mTimer1) != 0) {
         return;
     }
 

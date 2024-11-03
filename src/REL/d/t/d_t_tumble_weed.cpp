@@ -1,7 +1,8 @@
 #include "d/t/d_t_tumble_weed.h"
 
-#include "c/c_math.h"
 #include "m/m_vec.h"
+#include "s/s_Math.h"
+
 
 SPECIAL_ACTOR_PROFILE(TUMBLE_WEED_TAG, dTgTumbleWeed_c, fProfile::TUMBLE_WEED_TAG, 0x0244, 0, 0);
 
@@ -16,23 +17,14 @@ int dTgTumbleWeed_c::create() {
     return SUCCEEDED;
 }
 
-u16 decr(u16 *num);
-
 int dTgTumbleWeed_c::doDelete() {
     return SUCCEEDED;
 }
 
 int dTgTumbleWeed_c::actorExecute() {
     mStateMgr.executeState();
-    decr(&tumbleweedTimer);
+    sLib::calcTimer(&tumbleweedTimer);
     return SUCCEEDED;
-}
-
-u16 decr(u16 *num) {
-    if (*num != 0) {
-        (*num)--;
-    }
-    return *num;
 }
 
 int dTgTumbleWeed_c::draw() {
@@ -41,7 +33,7 @@ int dTgTumbleWeed_c::draw() {
 
 void dTgTumbleWeed_c::initializeState_AreaOut() {}
 void dTgTumbleWeed_c::executeState_AreaOut() {
-    if (decr(&windTimer) == 0) {
+    if (sLib::calcTimer(&windTimer) == 0) {
         windTimer = 0x96;
         if (shouldDoWind()) {
             mStateMgr.changeState(StateID_Wind);
@@ -62,7 +54,7 @@ void dTgTumbleWeed_c::executeState_AreaIn() {
         }
         tumbleweedTimer = 600;
     }
-    if (decr(&windTimer) == 0) {
+    if (sLib::calcTimer(&windTimer) == 0) {
         windTimer = 0x96;
         if (shouldDoWind()) {
             mStateMgr.changeState(StateID_Wind);
