@@ -1,7 +1,9 @@
-#ifndef D_A_ITEM_BASE_H
-#define D_A_ITEM_BASE_H
+#ifndef D_A_ITEM_H
+#define D_A_ITEM_H
 
 #include "d/a/obj/d_a_obj_base.h"
+#include "s/s_State.hpp"
+#include "s/s_StateMgr.hpp"
 
 enum dAcItemID_e {
     /* 0x000 */ ITEM_NONE = 0,
@@ -210,12 +212,37 @@ enum dAcItemID_e {
     /* 0x1FF */ MAX_ITEM_ID = 511
 };
 
-class dAcItem_c : public dAcObjBase_c {
+class dAcItemBase_c : public dAcObjBase_c {
 public:
+    dAcItemBase_c() {}
+    virtual ~dAcItemBase_c() {}
+};
+
+class dAcItem_c : public dAcItemBase_c {
+public:
+    dAcItem_c();
+    virtual ~dAcItem_c();
+
+    STATE_FUNC_DECLARE(dAcItem_c, Wait);
+    STATE_FUNC_DECLARE(dAcItem_c, Carry);
+    STATE_FUNC_DECLARE(dAcItem_c, GetBeetle);
+    STATE_FUNC_DECLARE(dAcItem_c, WaitGet);
+    STATE_FUNC_DECLARE(dAcItem_c, Get);
+    STATE_FUNC_DECLARE(dAcItem_c, WaitGetDemo);
+    STATE_FUNC_DECLARE(dAcItem_c, WaitForcedGetDemo);
+    STATE_FUNC_DECLARE(dAcItem_c, GetDemo);
+    STATE_FUNC_DECLARE(dAcItem_c, WaitTBoxGetDemo);
+    STATE_FUNC_DECLARE(dAcItem_c, ResurgeWait);
+    STATE_FUNC_DECLARE(dAcItem_c, WaitTurnOff);
+    STATE_FUNC_DECLARE(dAcItem_c, WaitSacredDewGetEffect);
+
     static u32 createItemParams(u16 itemId, u32 subType, u32 unk, u8 unk2, u8, u8);
 
     static void spawnItem(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot, u32 params, u32 arg);
     static void spawnDrop(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot);
+
+private:
+    /* 0x??? */ STATE_MGR_DECLARE(dAcItem_c);
 };
 
 #endif
