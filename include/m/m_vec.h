@@ -3,9 +3,12 @@
 
 #include "c/c_math.h"
 #include "common.h"
+#include "egg/math/eggMath.h"
 #include "egg/math/eggVector.h"
-#include "m/m_angle.h"
+#include "nw4r/math/math_types.h"
 #include "nw4r/types_nw4r.h"
+#include "rvl/MTX/vec.h"
+
 
 class mAng;
 
@@ -216,11 +219,6 @@ public:
     }
 
     void rotY(const mAng &angle);
-
-    // ???
-    s32 getAngleY() const {
-        return mAng(cM::atan2s(x, z));
-    }
 
     void CopyTo(nw4r::math::VEC3 *p) {
         p->x = x;

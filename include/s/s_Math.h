@@ -22,6 +22,14 @@ void addCalcScaled(float *value, float stepSize, float maxStep);
 int absDiff(short a1, short a2);
 BOOL chaseUC(u8 *value, u8 target, u8 stepSize);
 
+template <typename T>
+T calcTimer(T *val) {
+    if (*val != 0) {
+        *val -= 1;
+    }
+    return *val;
+}
+
 } // namespace sLib
 
 #endif

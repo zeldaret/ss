@@ -179,7 +179,7 @@ public:
     /* vt 0x284 */ virtual bool isUsingBugnet() const;
     /* vt 0x288 */ virtual const mVec3_c &getBugNetPos() const;
     /* vt 0x28C */ virtual void isUsingBugnet1();
-    /* vt 0x290 */ virtual void bugNetCollectTreasure();
+    /* vt 0x290 */ virtual void bugNetCollectTreasure(u32 itemId);
     /* vt 0x294 */ virtual void somethingSwitchDials();
     /* vt 0x298 */ virtual void vt_0x298();
     /* vt 0x29C */ virtual void getDieLargeDamageDir();

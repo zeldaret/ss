@@ -3,6 +3,7 @@
 
 #include "c/c_math.h"
 #include "common.h"
+#include "m/m_vec.h"
 #include "nw4r/math/math_triangular.h"
 
 struct mAng {
@@ -12,6 +13,9 @@ struct mAng {
 
     static mAng atan2s(f32 a, f32 b) {
         return mAng(cM::atan2s(a, b));
+    }
+    static mAng fromVec(const mVec3_c &other) {
+        return mAng(cM::atan2s(other.x, other.z));
     }
 
     operator s16() const {
@@ -49,6 +53,32 @@ struct mAng {
 
     static mAng fromDeg(f32 deg) {
         return deg * sDegToAng;
+    }
+
+    static mAng fromRad(f32 rad) {
+        return rad * sRadToAng;
+    }
+
+    static f32 Radian_to_Degree(f32 rad) {
+        return rad * 57.2957763671875f;
+    }
+    static f32 Degree_to_Radian(f32 deg) {
+        return deg * 0.017453292f;
+    }
+    static s16 Degree_to_SAngle(f32 deg) {
+        return deg * 182.04444885253906f;
+    }
+    static f32 SAngle_to_Degree(s16 angle) {
+        return (360.0f / 65536.0f) * angle;
+    }
+    static f32 SAngle_to_Radian(s16 angle) {
+        return 9.58738E-5f * angle;
+    }
+    static f32 SAngle_to_Normal(s16 angle) {
+        return 3.0517578E-5f * angle;
+    }
+    static s16 Radian_to_SAngle(f32 rad) {
+        return rad * 10430.378f;
     }
 
 private:
