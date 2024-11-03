@@ -3,7 +3,6 @@
 #include "c/c_math.h"
 #include "m/m_vec.h"
 
-
 SPECIAL_ACTOR_PROFILE(TUMBLE_WEED_TAG, dTgTumbleWeed_c, fProfile::TUMBLE_WEED_TAG, 0x0244, 0, 0);
 
 STATE_DEFINE(dTgTumbleWeed_c, AreaOut);
@@ -76,12 +75,11 @@ void dTgTumbleWeed_c::executeState_AreaIn() {
 }
 void dTgTumbleWeed_c::finalizeState_AreaIn() {}
 
-extern "C" void fn_475_1B00(fBase_c *, mVec3_c &);
 void dTgTumbleWeed_c::initializeState_Wind() {
     mVec3_c vec;
     getWind(&vec);
     if (childTumbleweed.get() != nullptr) {
-        fn_475_1B00(childTumbleweed.get(), vec);
+        childTumbleweed.get()->setWind(vec);
     }
 }
 
