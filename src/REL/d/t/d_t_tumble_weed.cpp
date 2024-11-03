@@ -3,7 +3,6 @@
 #include "m/m_vec.h"
 #include "s/s_Math.h"
 
-
 SPECIAL_ACTOR_PROFILE(TUMBLE_WEED_TAG, dTgTumbleWeed_c, fProfile::TUMBLE_WEED_TAG, 0x0244, 0, 0);
 
 STATE_DEFINE(dTgTumbleWeed_c, AreaOut);

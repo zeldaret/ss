@@ -1,8 +1,10 @@
 #include "toBeSorted/special_item_drop_mgr.h"
 
+#include "d/a/d_a_item.h"
 #include "d/a/d_a_player.h"
 #include "m/m_Angle.h"
 #include "m/m_vec.h"
+
 
 SpecialItemDropMgr *SpecialItemDropMgr::sInstance = nullptr;
 
@@ -23,10 +25,15 @@ SpecialItemDropMgr::SpecialItemDropMgr() {
     SpecialItemDropMgr::sInstance = this;
 }
 
-// TODO: Convert to enum once work on items has started
-int SPECIAL_ITEM_ARRAY[28] = {0,    6,    6,  2,  3,   4,   0x2b, 0x28, 0x29, 7, 8,  0x39, 0, 0,
-                              0x1c, 0xa5, 58, 59, 183, 184, 185,  72,   72,   1, 34, 0,    0, 0};
-int RAND_RUPEE_ARRAY[4] = {2, 3, 4, 0};
+int SPECIAL_ITEM_ARRAY[28] = {ITEM_NONE,       ITEM_HEART,         ITEM_HEART,         ITEM_GREEN_RUPEE,
+                              ITEM_BLUE_RUPEE, ITEM_RED_RUPEE,     ITEM_FARORE_TEAR,   ITEM_5_BOMBS,
+                              ITEM_10_BOMBS,   ITEM_SINGLE_ARROW,  ITEM_BUNDLE_ARROWS, ITEM_5_DEKU_SEEDS,
+                              ITEM_NONE,       ITEM_NONE,          ITEM_KEY_PIECE,     ITEM_ELDIN_ORE,
+                              ITEM_UNK_58,     ITEM_UNK_59,        ITEM_UNK_183,       ITEM_UNK_184,
+                              ITEM_UNK_185,    ITEM_FAIRY_BUG_NET, ITEM_FAIRY_BUG_NET, ITEM_SMALL_KEY,
+                              ITEM_RUPOOR,     ITEM_NONE,          ITEM_NONE,          ITEM_NONE};
+
+int RAND_RUPEE_ARRAY[4] = {ITEM_GREEN_RUPEE, ITEM_BLUE_RUPEE, ITEM_RED_RUPEE, ITEM_NONE};
 
 // 800c7bb0
 int fn_800C7BB0(SpecialItemDropMgr *mgr, int specialItemId) {}

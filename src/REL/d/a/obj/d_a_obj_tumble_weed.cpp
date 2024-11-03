@@ -2,6 +2,7 @@
 
 #include "c/c_math.h"
 #include "common.h"
+#include "d/a/d_a_item.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
@@ -22,6 +23,7 @@
 #include "rvl/MTX/vec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/dowsing_target.h"
+
 
 void float_ordering() {
     const f32 arr[] = {5.f, 15.f, 7.f, 0.5f, 0.1f};
@@ -118,7 +120,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     mObjAcch.CrrPos(*dBgS::GetInstance());
     mField_0x974 += position.y - mOldPosition.y;
     if (checkCollect()) {
-        dAcPy_c::LINK->bugNetCollectTreasure(0xA3 /* TODO(Item Id) ITEM_TUMBLEWEED */);
+        dAcPy_c::LINK->bugNetCollectTreasure(ITEM_TUMBLE_WEED);
         FUN_8002dcd0();
         return SUCCEEDED;
     }

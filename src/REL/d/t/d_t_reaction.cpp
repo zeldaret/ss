@@ -2,10 +2,12 @@
 
 #include "c/c_lib.h"
 #include "c/c_math.h"
+#include "d/a/d_a_item.h"
 #include "d/a/d_a_player.h"
-#include "d/a/obj/d_a_obj_item.h"
+#include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/sceneflag_manager.h"
+
 
 SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0x0151, 0, 0);
 
@@ -64,7 +66,7 @@ int dTgReaction_c::create() {
         }
 
         if (field_0x4DE) {
-            u32 heartMedalCount = adventurePouchCountItem(/* HEART_MEDAL*/ 100);
+            u32 heartMedalCount = adventurePouchCountItem(ITEM_HEART_MEDAL);
             if (heartMedalCount == 0) {
                 return FAILED;
             } else if (heartMedalCount == 1 && cM::rnd() < 0.5f) {
@@ -176,11 +178,11 @@ void dTgReaction_c::checkForBonkItem() {
                 c.rotY(rotation.y);
                 c2 += c;
                 c2.y += field_0x4E4;
-                u32 newItemParms = dAcItem_c::createItemParams(/* HEART_PIECE */ 0x5E, 1, 0, getSceneFlag(), 1, 0xFF);
+                u32 newItemParms = dAcItem_c::createItemParams(ITEM_HEART_PIECE, 1, 0, getSceneFlag(), 1, 0xFF);
                 if (dAcObjBase_c::create(fProfile::ITEM, roomid, newItemParms, &c2, nullptr, nullptr, 0xFFFFFFFF)) {
                     field_0x4DD = 1;
                     onDelete();
-                    SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AD);
+                    SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AD); // TODO (Sound ID)
                 }
             }
         } else {
@@ -202,7 +204,7 @@ void dTgReaction_c::checkForBonkItem() {
 
             pos.y += field_0x4E4;
             if (fn_578_DB0(pos, uVar3)) {
-                SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AE);
+                SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AE); // TODO (Sound ID)
             }
             SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
             onDelete();
@@ -211,7 +213,7 @@ void dTgReaction_c::checkForBonkItem() {
 }
 
 void dTgReaction_c::checkForBubble() {
-    if (mCollision.ChkTgHit() && mCollision.ChkTgAtHitType(0x100000)) {
+    if (mCollision.ChkTgHit() && mCollision.ChkTgAtHitType(AT_TYPE_0x100000)) {
         if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x40)) {
             mVec3_c spawnPos = position;
             dAcObjBase_c::create(fProfile::OBJ_BUBBLE, roomid, 0x4, &spawnPos, nullptr, nullptr, 0xFFFFFFFF);
@@ -244,7 +246,7 @@ void dTgReaction_c::checkForSlingBellowsItem() {
         mVec3_c spawnPos = position;
         spawnPos.y += field_0x4E4;
         if (fn_578_DB0(spawnPos, uVar3)) {
-            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AE);
+            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AE); // TODO (Sound ID)
         }
         SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
         onDelete();
@@ -292,11 +294,11 @@ bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 arg, mAng an
         mAng offset = rndRange(-tmp2, tmp2);
         ang.y = mAng(step) + offset;
         if (arg == 5) {
-            dAcItem_c::spawnItem(/* HEART */ 0x6, roomid, pos, ang, 0xFFFFFFFF, 1);
+            dAcItem_c::spawnItem(ITEM_HEART, roomid, pos, ang, 0xFFFFFFFF, 1);
         } else if (arg == 6) {
-            dAcItem_c::spawnItem(/* HEART */ 0x6, roomid, pos, ang, 0xFFFFFFFF, 0);
+            dAcItem_c::spawnItem(ITEM_HEART, roomid, pos, ang, 0xFFFFFFFF, 0);
         } else {
-            dAcItem_c::spawnDrop(/* HEART */ 0x6, roomid, pos, ang);
+            dAcItem_c::spawnDrop(ITEM_HEART, roomid, pos, ang);
         }
         step = mAng(step) - stepSize;
     }
