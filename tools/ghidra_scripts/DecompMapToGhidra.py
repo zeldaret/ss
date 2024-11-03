@@ -235,7 +235,7 @@ def update_addr(addr, mangled_name, create_function=False):
         createLabel(addr, symbol_str, namespace, True, IMPORTED)
 
     if create_function:
-        createFunction(addr, name_list[-1])
+        createFunction(addr, None)
 
     if symbol_needs_history(mangled_name):
         unit.setComment(PLATE_COMMENT, complete_plate_comment)
