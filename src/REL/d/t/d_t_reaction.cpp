@@ -221,25 +221,17 @@ void dTgReaction_c::checkForBubble() {
     dCcS::GetInstance()->Set(&mCollision);
 }
 
-// TODO move this somewhere
-template <typename T>
-T rndRange(T min, T max) {
-    f32 r = cM::rndF(max - min);
-    f32 m = min;
-    m += r;
-    return m;
-}
-
 void dTgReaction_c::checkForSlingBellowsItem() {
     if (mCollision.ChkTgHit()) {
         u8 p = getParam0x08();
         u32 uVar3;
         if (p == 0) {
             uVar3 = 6;
-        } else if (uVar3 == 0xFF) {
-            uVar3 = 5;
         } else {
             uVar3 = 6;
+            if ((int)p == 0xFF) {
+                uVar3 = 5;
+            }
         }
         mVec3_c spawnPos = position;
         spawnPos.y += field_0x4E4;
@@ -287,9 +279,7 @@ bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 arg, mAng an
     tmp2 = mAng(tmp2 / 2);
 
     for (int i = 0; i < numHearts; i++) {
-        // Note: This is a (presumably templated) rndRange function
-        // that takes and returns a struct mAng
-        mAng offset = rndRange(-tmp2, tmp2);
+        mAng offset = cM::rndRange(-tmp2, tmp2);
         ang.y = mAng(step) + offset;
         if (arg == 5) {
             dAcItem_c::spawnItem(/* HEART */ 0x6, roomid, pos, ang, 0xFFFFFFFF, 1);

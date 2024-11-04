@@ -99,7 +99,7 @@ public:
     /* vt 0x144 */ virtual void setActorLinkToSomething();
     /* vt 0x148 */ virtual void applyDamageWithIFrames();
     /* vt 0x14C */ virtual void vt_0x14C();
-    /* vt 0x150 */ virtual void hasLessThanQuarterHealth();
+    /* vt 0x150 */ virtual bool hasLessThanQuarterHealth(bool);
     /* vt 0x154 */ virtual void vt_0x154();
     /* vt 0x158 */ virtual void vt_0x158();
     /* vt 0x15C */ virtual void vt_0x15C();

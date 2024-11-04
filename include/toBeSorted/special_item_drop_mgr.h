@@ -17,11 +17,8 @@ public:
     int fn_800C7BB0(int specialItemId);
     bool shouldTryExtraHearts(int specialItemId);
     bool shouldTryExtraRupees(int specialItemId);
-    int giveSpecialDropItem(
-        int specialItemId, int roomid, mVec3_c *pos, int subtype, mAng rot, s32 unused
-    );
-    bool
-    spawnSpecialDropItem(int specialItemId, int roomid, mVec3_c *pos, int subtype, mAng rot);
+    int giveSpecialDropItem(int specialItemId, int roomid, mVec3_c *pos, int subtype, mAng rot, s32 unused);
+    bool spawnSpecialDropItem(int specialItemId, int roomid, mVec3_c *pos, int subtype, mAng rot);
 };
 
 #endif
