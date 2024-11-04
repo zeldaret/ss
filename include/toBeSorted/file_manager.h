@@ -2,14 +2,12 @@
 #define FILE_MANAGER_H
 
 #include "common.h"
+#include "d/a/d_a_itembase.h"
 #include "egg/core/eggHeap.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "toBeSorted/save_file.h"
 
-
-enum ITEM_ID {
-};
 enum SAVE_ITEM_ID {
 };
 

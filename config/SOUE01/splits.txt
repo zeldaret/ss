@@ -569,6 +569,7 @@ d/a/d_a_player.cpp:
 d/a/d_a_item.cpp:
 	.text       start:0x80247200 end:0x80258E58
 	.ctors      start:0x804DB828 end:0x804DB82C
+	.rodata     start:0x804EBBB0 end:0x804ED33C
 	.data       start:0x80533268 end:0x80534490
 	.sbss       start:0x805758B8 end:0x805758E0
 	.sdata2     start:0x8057BD88 end:0x8057BF7C

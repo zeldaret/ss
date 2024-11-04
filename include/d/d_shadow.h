@@ -1,3 +1,6 @@
+#ifndef D_SHADOW_H
+#define D_SHADOW_H
+
 #include "m/m3d/m_shadow.h"
 
 // This is unofficial, idk if this is close, but this is a common shadow extension.
@@ -7,3 +10,5 @@ public:
     dShadowCircle_c() {}
     virtual ~dShadowCircle_c() {}
 };
+
+#endif
