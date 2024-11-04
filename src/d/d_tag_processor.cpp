@@ -360,14 +360,14 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                 case 0x10010: fn_800B5520(endPtr); break;
                 case 0x20004:
                     if (textBox != nullptr) {
-                        fn_800B6320(textBox, endPtr, float2);
+                        writeIcon(textBox, endPtr, float2);
                     }
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                     break;
-                case 0x20000: writePtr = fn_800B5570(writePtr, &local_b4, state4); break;
-                case 0x20001: writePtr = fn_800B5680(writePtr, endPtr, &local_b4, state4); break;
-                case 0x20002: writePtr = fn_800B5860(writePtr, endPtr, &local_b4, state4); break;
-                case 0x20003: writePtr = fn_800B5A20(writePtr, endPtr, &local_b4, state4); break;
+                case 0x20000: writePtr = writeHeroname(writePtr, &local_b4, state4); break;
+                case 0x20001: writePtr = writeItem(writePtr, endPtr, &local_b4, state4); break;
+                case 0x20002: writePtr = writeStringArg(writePtr, endPtr, &local_b4, state4); break;
+                case 0x20003: writePtr = writeNumericArg(writePtr, endPtr, &local_b4, state4); break;
 
                 case 0x30004: writePtr = fn_800B5DD0(writePtr, endPtr, &local_b4, state4); break;
                 case 0x30001:
@@ -505,6 +505,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
             break;
         case 0x2: setScale(rect, ctx, cmdLen, endPtr); break;
         case 0x10004:
+            // Pause
             if (rect == nullptr && field_0xEE1 == 0) {
                 if (field_0xEED == 0 && field_0x8F0 == field_0x838) {
                     setFramesLeftOnPause(rect, ctx, cmdLen, endPtr);
@@ -557,9 +558,10 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
             }
             break;
         case 0x1000B:
+            // Sound
             if (rect == nullptr && field_0xEE1 == 0) {
                 if (field_0xEE8 == 0 && mNumericArgsCopy[6] == field_0x888) {
-                    fn_800B6160(cmdLen, endPtr);
+                    playSound(cmdLen, endPtr);
                     field_0xEE8 = 1;
                     field_0x888++;
                 }
@@ -567,6 +569,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
             }
             break;
         case 0x1000C:
+            // "entrypoint"
             if (rect == nullptr && field_0xEE1 == 0) {
                 if (field_0xEEA == 0 && mNumericArgsCopy[8] == field_0x890) {
                     fn_800B6170(cmdLen, endPtr);
@@ -767,7 +770,7 @@ void dTagProcessor_c::fn_800B5520(wchar_t *src) {
     field_0x820 = ((u32 *)src)[1];
 }
 
-wchar_t *dTagProcessor_c::fn_800B5570(wchar_t *dest, s32 *outArg, s32 arg) {
+wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
     if (FileManager::sInstance->getHeroname()[0] != '\0') {
         for (int i = 0; FileManager::sInstance->getHeroname()[i] != '\0'; i++) {
             if (arg != 0 && field_0x90E != 0) {
@@ -806,7 +809,7 @@ void dTagProcessor_c::fn_800B6140(u8 cmdLen, wchar_t *ptr) {
     field_0x864 = ptr[0];
     field_0x868 = ptr[1];
 }
-void dTagProcessor_c::fn_800B6160(u8 cmdLen, wchar_t *ptr) {}
+void dTagProcessor_c::playSound(u8 cmdLen, wchar_t *ptr) {}
 void dTagProcessor_c::fn_800B6170(u8 cmdLen, wchar_t *ptr) {
     field_0x8FC = ptr[0];
     field_0x900 = ptr[1];

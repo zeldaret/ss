@@ -20,9 +20,9 @@ public:
     nw4r::ut::Operation ProcessTags(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx);
 
     void changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, bool);
-    wchar_t *fn_800B5680(wchar_t *dest, wchar_t *src, s32*, s32);
-    wchar_t *fn_800B5860(wchar_t *dest, wchar_t *src, s32*, s32);
-    wchar_t *fn_800B5A20(wchar_t *dest, wchar_t *src, s32*, s32);
+    wchar_t *writeItem(wchar_t *dest, wchar_t *src, s32*, s32);
+    wchar_t *writeStringArg(wchar_t *dest, wchar_t *src, s32*, s32);
+    wchar_t *writeNumericArg(wchar_t *dest, wchar_t *src, s32*, s32);
     void fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void fn_800B6450(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void fn_800B6EE0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr);
@@ -33,7 +33,7 @@ public:
     void fn_800B60E0(u8 cmdLen, wchar_t *ptr);
     void fn_800B6110(u8 cmdLen, wchar_t *ptr);
     void fn_800B6140(u8 cmdLen, wchar_t *ptr);
-    void fn_800B6160(u8 cmdLen, wchar_t *ptr);
+    void playSound(u8 cmdLen, wchar_t *ptr);
     void fn_800B6170(u8 cmdLen, wchar_t *ptr);
     void fn_800B6190(u8 cmdLen, wchar_t *ptr);
     void fn_800B61B0(u8 cmdLen, wchar_t *ptr);
@@ -52,10 +52,10 @@ public:
     static f32 fn_800B8040(s8, u32);
     wchar_t *fn_800B5FD0(u32, wchar_t *, s32 *);
     wchar_t *writeTextNormal(const wchar_t *src, wchar_t *dest, s32*, u8 cmdLen, s32);
-    wchar_t *fn_800B5570(wchar_t *dest, s32*, s32);
+    wchar_t *writeHeroname(wchar_t *dest, s32*, s32);
     wchar_t *fn_800B5DD0(wchar_t *dest, wchar_t *src, s32*, s32);
     void fn_800B5520(wchar_t *src);
-    void fn_800B6320(dTextBox_c *textBox, wchar_t *cmd, f32);
+    void writeIcon(dTextBox_c *textBox, wchar_t *cmd, f32);
     char fn_800B7880(u32);
     void fn_800B70D0(nw4r::ut::TextWriterBase<wchar_t> *, nw4r::ut::PrintContext<wchar_t> *ctx, u16 c, s32);
 
