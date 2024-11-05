@@ -10,6 +10,7 @@ namespace snd {
 
 class StrmSoundHandle : private ut::NonCopyable {
 public:
+    StrmSoundHandle(SoundHandle *pHandle);
     void DetachSound();
 
     bool IsAttachedSound() {

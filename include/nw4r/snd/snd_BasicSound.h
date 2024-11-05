@@ -239,14 +239,14 @@ private:
     int mOutputLineFlag;                        // at 0xC8
     f32 mMainOutVolume;                         // at 0xCC
     f32 mMainSend;                              // at 0xD0
-    f32 mFxSend[AUX_BUS_NUM];          // at 0xF4
-    f32 mRemoteOutVolume[WPAD_MAX_CONTROLLERS]; // at 0xD4
+    f32 mFxSend[AUX_BUS_NUM];          // at 0xD4
+    f32 mRemoteOutVolume[WPAD_MAX_CONTROLLERS]; // at 0xF0
 
 public:
-    NW4R_UT_LIST_NODE_DECL_EX(Prio);       // at 0xB8
-    NW4R_UT_LIST_NODE_DECL_EX(PlayerPlay); // at 0xC0
-    NW4R_UT_LIST_NODE_DECL_EX(PlayerPrio); // at 0xC8
-    NW4R_UT_LIST_NODE_DECL_EX(ExtPlay);    // at 0xD0
+    NW4R_UT_LIST_NODE_DECL_EX(Prio);       // at 0x100
+    NW4R_UT_LIST_NODE_DECL_EX(PlayerPlay); // at 0x108
+    NW4R_UT_LIST_NODE_DECL_EX(PlayerPrio); // at 0x110
+    NW4R_UT_LIST_NODE_DECL_EX(ExtPlay);    // at 0x118
 };
 
 NW4R_UT_LIST_TYPEDEF_DECL_EX(BasicSound, Prio);
