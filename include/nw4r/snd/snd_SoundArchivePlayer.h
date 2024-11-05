@@ -52,6 +52,8 @@ public:
         const StartInfo *pStartInfo
     ); // at 0x2C
 
+    StartResult detail_SetupSoundImpl(SoundHandle*, u32, detail::BasicSound::AmbientInfo*, SoundActor*, bool, const SoundStartable::StartInfo* );
+
     bool IsAvailable() const;
 
     bool

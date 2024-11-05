@@ -17,13 +17,16 @@ public:
         return mPlayableCount;
     }
     void SetPlayableSoundCount(int count);
+    void DetachSoundActorAll(SoundActor*);
+    void StopAllSound(int);
+    void PauseAllSound(bool, int);
 
     int GetPlayingSoundCount() const {
         return mSoundList.GetSize();
     }
 
     f32 detail_GetVolume() const {
-        return mVolume;
+        // TODO what happened to this?
     }
     BasicSound *GetLowestPrioritySound();
 
@@ -57,7 +60,6 @@ public:
 private:
     BasicSoundExtPlayList mSoundList; // at 0x0
     u16 mPlayableCount;               // at 0xC
-    f32 mVolume;                      // at 0x10
 };
 
 } // namespace detail

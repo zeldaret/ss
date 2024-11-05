@@ -5,9 +5,9 @@
 #include <nw4r/snd/snd_Sound3DActor.h>
 
 
-class dSndActor_c : public nw4r::snd::detail::SoundActor {
+class dSndActor_c : public nw4r::snd::SoundActor {
 public:
-    dSndActor_c(nw4r::snd::SoundStartable& rStartable);
+    dSndActor_c(nw4r::snd::SoundArchivePlayer& rStartable);
 };
 
 class dSnd3DActor_c : public nw4r::snd::Sound3DActor {

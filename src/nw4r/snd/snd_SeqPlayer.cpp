@@ -10,7 +10,6 @@ namespace snd {
 namespace detail {
 
 volatile s16 SeqPlayer::mGlobalVariable[GLOBAL_VARIABLE_NUM];
-bool SeqPlayer::mGobalVariableInitialized = false;
 
 void SeqPlayer::InitSeqPlayer() {
     for (int i = 0; i < GLOBAL_VARIABLE_NUM; i++) {
@@ -460,8 +459,6 @@ void SeqPlayer::InitGlobalVariable() {
     for (int i = 0; i < GLOBAL_VARIABLE_NUM; i++) {
         mGlobalVariable[i] = DEFAULT_VARIABLE_VALUE;
     }
-
-    mGobalVariableInitialized = true;
 }
 
 Channel *SeqPlayer::NoteOn(int bankNo, const NoteOnInfo &rInfo) {

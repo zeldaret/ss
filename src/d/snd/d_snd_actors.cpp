@@ -1,6 +1,7 @@
+#include "nw4r/snd/snd_SoundArchivePlayer.h"
 #include <d/snd/d_snd_actors.h>
 
-dSndActor_c::dSndActor_c(nw4r::snd::SoundStartable& rStartable): nw4r::snd::detail::SoundActor(rStartable) {
+dSndActor_c::dSndActor_c(nw4r::snd::SoundArchivePlayer& rStartable): nw4r::snd::SoundActor(rStartable) {
 
 }
 

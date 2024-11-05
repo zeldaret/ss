@@ -40,13 +40,15 @@ enum OutputMode {
 };
 
 struct SoundParam {
-    f32 volume;      // at 0x0
-    f32 pitch;       // at 0x4
-    f32 pan;         // at 0x8
-    f32 surroundPan; // at 0xC
-    f32 fxSend;      // at 0x10
-    f32 lpf;         // at 0x14
-    int priority;    // at 0x18
+    f32 volume;            // at 0x0
+    f32 pitch;             // at 0x4
+    f32 pan;               // at 0x8
+    f32 surroundPan;       // at 0xC
+    f32 fxSend;            // at 0x10
+    f32 lpf;               // at 0x14
+    f32 biquadFilterValue; // at 0x18
+    int biquadFilterType;  // at 0x1C
+    int priority;          // at 0x20
 };
 
 enum PanMode {
@@ -94,7 +96,6 @@ struct AdpcmInfo {
     AdpcmLoopParam loopParam; // at 0x28
     u16 padding;
 };
-
 
 struct ChannelParam {
     void *dataAddr;       // at 0x0

@@ -213,7 +213,6 @@ private:
     u32 mTickCounter;                                // at 0x160
 
     static volatile s16 mGlobalVariable[GLOBAL_VARIABLE_NUM];
-    static bool mGobalVariableInitialized; // TYPO
 };
 
 } // namespace detail

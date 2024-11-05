@@ -2,31 +2,38 @@
 #define NW4R_SND_SOUND_ACTOR_H
 #include "limits.h"
 #include "nw4r/snd/snd_ExternalSoundPlayer.h"
+#include "nw4r/snd/snd_SoundArchivePlayer.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/types_nw4r.h"
 
-
 namespace nw4r {
 namespace snd {
-namespace detail {
 
 class SoundActor : public SoundStartable {
 public:
-    explicit SoundActor(SoundStartable &rStartable) : mStartable(rStartable) {
-        detail_GetActorSoundPlayer(0)->SetPlayableSoundCount(INT_MAX);
-    }
+    explicit SoundActor(SoundArchivePlayer &rPlayer);
+    virtual ~SoundActor();
 
     virtual StartResult detail_SetupSound(
-        SoundHandle *pHandle, u32 id, detail::BasicSound::AmbientArgInfo *pArgInfo,
-        detail::ExternalSoundPlayer *pPlayer, bool hold,
+        SoundHandle *pHandle, u32 id, bool hold,
         const StartInfo *pStartInfo
-    ); // at 0xC
+    ) override; // at 0xC
 
-    virtual u32 detail_ConvertLabelStringToSoundId(const char *pLabel) {
-        return mStartable.detail_ConvertLabelStringToSoundId(pLabel);
+    virtual u32 detail_ConvertLabelStringToSoundId(const char *pLabel) override {
+        return mSoundArchivePlayer.detail_ConvertLabelStringToSoundId(pLabel);
     } // at 0x10
 
-    ExternalSoundPlayer *detail_GetActorSoundPlayer(int i) {
+    virtual StartResult
+    SetupSound(nw4r::snd::SoundHandle *pHandle, u32 id, const nw4r::snd::SoundStartable::StartInfo *pStartInfo, void *); // at 0x14
+
+    virtual StartResult
+    detail_SetupSoundWithAmbientInfo(nw4r::snd::SoundHandle *pHandle, u32 id, const nw4r::snd::SoundStartable::StartInfo *pStartInfo, detail::BasicSound::AmbientInfo *ambientArg, void *); // at 0x18
+
+    void StopAllSound(int);
+    void PauseAllSound(bool, int);
+    int GetPlayingSoundCount(int i) const;
+
+    detail::ExternalSoundPlayer *detail_GetActorSoundPlayer(int i) {
         if (i < 0 || i >= ACTOR_PLAYER_COUNT) {
             return NULL;
         }
@@ -37,7 +44,7 @@ public:
     template <typename TForEachFunc>
     TForEachFunc ForEachSound(TForEachFunc pFunction, bool reverse) {
         int i;
-        ExternalSoundPlayer *pPlayer = detail_GetActorSoundPlayer(0);
+        detail::ExternalSoundPlayer *pPlayer = detail_GetActorSoundPlayer(0);
 
         for (i = 0; i < ACTOR_PLAYER_COUNT; i++) {
             pPlayer->ForEachSound(pFunction, reverse);
@@ -48,14 +55,14 @@ public:
     }
 
 private:
-    static const int ACTOR_PLAYER_COUNT = 8;
+    static const int ACTOR_PLAYER_COUNT = 4;
 
 private:
-    SoundStartable &mStartable;                           // at 0x4
-    ExternalSoundPlayer mActorPlayer[ACTOR_PLAYER_COUNT]; // at 0x8
+    SoundArchivePlayer &mSoundArchivePlayer;                      // at 0x4
+    detail::ExternalSoundPlayer mActorPlayer[ACTOR_PLAYER_COUNT]; // at 0x8
+    detail::SoundActorParam mActorParam;                                  // at 0x48
 };
 
-} // namespace detail
 } // namespace snd
 } // namespace nw4r
 

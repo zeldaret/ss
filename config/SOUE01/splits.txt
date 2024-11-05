@@ -1552,6 +1552,7 @@ nw4r/snd/snd_NandSoundArchive.cpp:
 
 nw4r/snd/snd_PlayerHeap.cpp:
 	.text       start:0x804700C0 end:0x804702DC
+	.data       start:0x8056DFF0 end:0x8056E000
 
 nw4r/snd/snd_RemoteSpeaker.cpp:
 	.text       start:0x804702E0 end:0x80470C90
@@ -1596,6 +1597,8 @@ nw4r/snd/snd_Sound3DManager.cpp:
 
 nw4r/snd/snd_SoundActor.cpp:
 	.text       start:0x80475F80 end:0x80476264
+	.data       start:0x8056E170 end:0x8056E190
+	.sdata2     start:0x8057F130 end:0x8057F138
 
 nw4r/snd/snd_SoundArchive.cpp:
 	.text       start:0x80476270 end:0x8047697C
@@ -1618,6 +1621,9 @@ nw4r/snd/snd_SoundHeap.cpp:
 
 nw4r/snd/snd_SoundPlayer.cpp:
 	.text       start:0x8047B420 end:0x8047C050
+	.sbss       start:0x805766B0 end:0x805766B8
+	.sdata2     start:0x8057F148 end:0x8057F150
+	.bss        start:0x80659720 end:0x80659D40
 
 nw4r/snd/snd_SoundStartable.cpp:
 	.text       start:0x8047C050 end:0x8047C3AC
