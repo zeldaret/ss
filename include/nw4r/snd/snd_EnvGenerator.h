@@ -10,9 +10,9 @@ class EnvGenerator {
 public:
     enum Status {
         STATUS_ATTACK,
+        STATUS_UNK_1,
         STATUS_DECAY,
         STATUS_SUSTAIN,
-        STATUS_UNK_2,
         STATUS_RELEASE
     };
 
@@ -35,6 +35,7 @@ public:
     void SetDecay(int decay);
     void SetSustain(int sustain);
     void SetRelease(int release);
+    void SetHold(int hold);
 
 private:
     static const int DECIBEL_SQUARE_TABLE_SIZE = 128;
