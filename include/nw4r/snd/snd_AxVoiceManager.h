@@ -17,7 +17,7 @@ public:
 public:
     static AxVoiceManager &GetInstance();
 
-    u32 GetRequiredMemSize();
+    u32 GetRequiredMemSize(int numVoices);
     void Setup(void *pBuffer, u32 size);
     void Shutdown();
 

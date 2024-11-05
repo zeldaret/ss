@@ -26,6 +26,7 @@ public:
     static u32 GetRequiredMemSize(const SoundSystemParam &rParam);
 
     static void InitSoundSystem(const SoundSystemParam &rParam, void *pWork, u32 workSize);
+    static bool IsInitializedSoundSystem();
 
     static void ShutdownSoundSystem();
     static void WaitForResetReady();
@@ -65,6 +66,7 @@ private:
 
 private:
     static detail::TaskThread sTaskThread;
+    static int sMaxVoices;
 };
 
 } // namespace snd

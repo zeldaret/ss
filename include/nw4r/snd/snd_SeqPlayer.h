@@ -80,6 +80,8 @@ public:
         Stop();
     } // at 0x60
 
+    static void InitSeqPlayer();
+
     void InitParam(int voices, NoteOnCallback *pCallback);
 
     SetupResult Setup(SeqTrackAllocator *pAllocator, u32 allocTrackFlags, int voices, NoteOnCallback *pCallback);
