@@ -131,8 +131,8 @@ public:
 
     enum Format {
         FORMAT_ADPCM = 0,
-        FORMAT_PCM16 = 10,
-        FORMAT_PCM8 = 25,
+        FORMAT_PCM16 = 1,
+        FORMAT_PCM8 = 2,
     };
 
     enum VoiceType {

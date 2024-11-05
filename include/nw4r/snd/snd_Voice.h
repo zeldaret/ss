@@ -6,7 +6,6 @@
 #include "nw4r/ut.h"  // IWYU pragma: export
 #include "rvl/WPAD.h" // IWYU pragma: export
 
-
 namespace nw4r {
 namespace snd {
 
@@ -117,8 +116,6 @@ public:
     void SetFxSend(AuxBus bus, f32 send);
 
     void SetRemoteOutVolume(int remote, f32 volume);
-    void SetRemoteSend(int remote, f32 send);
-    void SetRemoteFxSend(int remote, f32 send);
 
     void SetPriority(int priority);
     void UpdateVoicesPriority();
@@ -156,42 +153,42 @@ private:
 
 private:
     AxVoice *mAxVoice[CHANNEL_MAX][VOICES_MAX]; // at 0xC
-    SoundParam mVoiceOutParam[VOICES_MAX];      // at 0x2C
-    int mChannelCount;                          // at 0x9C
-    int mVoiceOutCount;                         // at 0xA0
+    VoiceOutParam mVoiceOutParam[VOICES_MAX];   // at 0x2C
+    int mChannelCount;                          // at 0x8C
+    int mVoiceOutCount;                         // at 0x90
 
-    VoiceCallback mCallback; // at 0xA4
-    void *mCallbackArg;      // at 0xA8
+    VoiceCallback mCallback; // at 0x94
+    void *mCallbackData;     // at 0x98
 
-    bool mIsActive;   // at 0xAC
-    bool mIsStarting; // at 0xAD
-    bool mIsStarted;  // at 0xAE
-    bool mIsPause;    // at 0xAF
-    bool mIsPausing;  // at 0xB0
+    bool mActiveFlag;  // at 0x9C
+    bool mStartFlag;   // at 0x9D
+    bool mStartedFlag; // at 0x9E
+    bool mPauseFlag;   // at 0x9F
+    bool mPausingFlag; // at 0xA0
 
-    u8 mSyncFlag;                               // at 0xB1
-    u8 mRemoteFilter;                           // at 0xB2
-    u8 mBiquadType;                             // at 0xB3
-    int mPriority;                              // at 0xB4
-    f32 mPan;                                   // at 0xB8
-    f32 mSurroundPan;                           // at 0xBC
-    f32 mLpfFreq;                               // at 0xC0
-    int mOutputLineFlag;                        // at 0xC4
-    f32 mMainOutVolume;                         // at 0xC8
-    f32 mMainSend;                              // at 0xCC
-    f32 mFxSend[AUX_BUS_NUM];                   // at 0xD0
-    f32 mRemoteOutVolume[WPAD_MAX_CONTROLLERS]; // at 0xDC
-    f32 mRemoteSend[WPAD_MAX_CONTROLLERS];      // at 0xEC
-    f32 mRemoteFxSend[WPAD_MAX_CONTROLLERS];    // at 0xFC
-    f32 mPitch;                                 // at 0x10C
-    f32 mVolume;                                // at 0x110
-    f32 mVeInitVolume;                          // at 0x114
-    f32 mVeTargetVolume;                        // at 0x118
-    PanMode mPanMode;                           // at 0x11C
-    PanCurve mPanCurve;                         // at 0x120
+    u8 mVoiceOutParamPitchDisableFlag; // at 0xA1
+    u16 mSyncFlag;                     // at 0xA2
+    u8 mRemoteFilter;                  // at 0xA4
+    u8 mBiquadType;                    // at 0xA5
+    int mPriority;                     // at 0xA8
+    f32 mPan;                          // at 0xAC
+    f32 mSurroundPan;                  // at 0xB0
+    f32 mLpfFreq;                      // at 0xB4
+    f32 mBiquadValue; // at 0xB8
+    int mOutputLineFlag;                        // at 0xBC
+    f32 mMainOutVolume;                         // at 0xC0
+    f32 mMainSend;                              // at 0xC4
+    f32 mFxSend[AUX_BUS_NUM];                   // at 0xC8
+    f32 mRemoteOutVolume[WPAD_MAX_CONTROLLERS]; // at 0xD4
+    f32 mPitch;                                 // at 0xE4
+    f32 mVolume;                                // at 0xE8
+    f32 mVeInitVolume;                          // at 0xEC
+    f32 mVeTargetVolume;                        // at 0xF0
+    PanMode mPanMode;                           // at 0xF4
+    PanCurve mPanCurve;                         // at 0xF8
 
 public:
-    NW4R_UT_LIST_NODE_DECL(); // at 0x124
+    NW4R_UT_LIST_NODE_DECL(); // at 0xFC
 };
 
 NW4R_UT_LIST_TYPEDEF_DECL(Voice);
