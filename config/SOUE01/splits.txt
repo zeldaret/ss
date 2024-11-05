@@ -1656,6 +1656,10 @@ nw4r/snd/snd_VoiceManager.cpp:
 
 nw4r/snd/snd_Util.cpp:
 	.text       start:0x80484700 end:0x80484BD4
+	.rodata     start:0x804F9320 end:0x804FB7A0
+	.data       start:0x8056E340 end:0x8056E350
+	.sdata      start:0x80574EA8 end:0x80574EB0
+	.sdata2     start:0x8057F1C0 end:0x8057F1F0
 
 nw4r/snd/snd_WaveFile.cpp:
 	.text       start:0x80484BE0 end:0x80484F54
