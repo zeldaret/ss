@@ -73,6 +73,7 @@ private:
 
     static void *SoundThreadFunc(void *pArg);
     void SoundThreadProc();
+    void FrameProcess();
 
     void Lock() {
         OSLockMutex(&mMutex);
@@ -95,6 +96,7 @@ private:
 
     u32 mProcessTick; // at 0x390
     bool mCreateFlag; // at 0x394
+    bool field_0x395; // at 0x395
 };
 
 } // namespace detail
