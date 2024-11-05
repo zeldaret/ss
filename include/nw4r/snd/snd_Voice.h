@@ -130,6 +130,7 @@ public:
     void SetLoopFlag(bool loop);
     void StopAtPoint(int channel, const void *pBase, u32 samples);
     void SetVoiceType(AxVoice::VoiceType type);
+    void SetVoiceOutParam(int i, const VoiceOutParam &voiceOutParam);
 
     void CalcAxSrc(bool initial);
     void CalcAxVe();

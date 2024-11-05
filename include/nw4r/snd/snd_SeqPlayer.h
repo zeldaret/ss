@@ -2,13 +2,22 @@
 #define NW4R_SND_SEQ_PLAYER_H
 #include "nw4r/snd/snd_BasicPlayer.h"
 #include "nw4r/snd/snd_DisposeCallback.h"
+#include "nw4r/snd/snd_SeqTrack.h"
 #include "nw4r/snd/snd_SoundThread.h"
 #include "nw4r/types_nw4r.h"
 #include "nw4r/ut.h"
 
-
 namespace nw4r {
 namespace snd {
+
+struct SeqUserprocCallbackParam {
+    volatile s16 *localVariable;
+    volatile s16 *globalVariable;
+    volatile s16 *trackVariable;
+    bool cmpFlag;
+};
+typedef void (*SeqUserprocCallback)(u16, SeqUserprocCallbackParam *, void *);
+
 namespace detail {
 
 // Forward declarations
@@ -93,8 +102,15 @@ public:
     void SetChannelPriority(int priority);
     void SetReleasePriorityFix(bool flag);
 
+    void SetSeqUserprocCallback(SeqUserprocCallback, void *);
+    void CallSeqUserprocCallback(u16, SeqTrack *);
+
+    s16 GetLocalVariable(int i) const;
     void SetLocalVariable(int i, s16 value);
     static void SetGlobalVariable(int i, s16 value);
+
+    void SetTrackMute(u32 trackFlags, SeqMute mute);
+    void SetTrackSilence(u32 trackFlags, bool, int);
 
     void SetTrackVolume(u32 trackFlags, f32 volume);
     void SetTrackPitch(u32 trackFlags, f32 pitch);
@@ -115,6 +131,21 @@ public:
 
                 if (pTrack != NULL) {
                     (pTrack->*pSetter)(param);
+                }
+            }
+        }
+    }
+
+    template <typename T, typename U>
+    void SetTrackParam(u32 trackFlags, void (SeqTrack::*pSetter)(T, U), T param, U param2) {
+        ut::AutoInterruptLock lock;
+
+        for (int i = 0; i < TRACK_NUM && trackFlags != 0; trackFlags >>= 1, i++) {
+            if (trackFlags & 1) {
+                SeqTrack *pTrack = GetPlayerTrack(i);
+
+                if (pTrack != NULL) {
+                    (pTrack->*pSetter)(param, param2);
                 }
             }
         }
@@ -175,11 +206,13 @@ private:
     int mVoiceOutCount;                              // at 0xA4
     ParserPlayerParam mParserParam;                  // at 0xA8
     SeqTrackAllocator *mSeqTrackAllocator;           // at 0xB4
-    SeqTrack *mTracks[TRACK_NUM];                    // at 0xB8
-    volatile s16 mLocalVariable[LOCAL_VARIABLE_NUM]; // at 0xF8
-    u32 mTickCounter;                                // at 0x118
+    SeqUserprocCallback mSeqUserprocCallback;        // at 0xF8
+    void *mSeqUserprocCallbackArg;                   // at 0xFC
+    SeqTrack *mTracks[TRACK_NUM];                    // at 0x100
+    volatile s16 mLocalVariable[LOCAL_VARIABLE_NUM]; // at 0x140
+    u32 mTickCounter;                                // at 0x160
 
-    static volatile s16 mGlobalVariable[LOCAL_VARIABLE_NUM];
+    static volatile s16 mGlobalVariable[GLOBAL_VARIABLE_NUM];
     static bool mGobalVariableInitialized; // TYPO
 };
 

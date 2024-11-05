@@ -124,6 +124,10 @@ public:
         mRemoteOutVolume[remote] = volume;
     }
 
+    void SetRemoteFilter(int remote) {
+        mRemoteFilter = remote;
+    }
+
     void UpdateSweep(int count);
     void SetSweepParam(f32 pitch, int time, bool autoUpdate);
     f32 GetSweepValue() const;
@@ -172,6 +176,10 @@ public:
     }
     void SetNextTrackChannel(Channel *pChannel) {
         mNextLink = pChannel;
+    }
+
+    void SetVoiceOutParam(int i, const VoiceOutParam &voiceOutParam) {
+        mVoice->SetVoiceOutParam(i, voiceOutParam);
     }
 
     static Channel *AllocChannel(int channels, int voices, int priority, ChannelCallback pCallback, u32 callbackArg);

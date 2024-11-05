@@ -120,6 +120,9 @@ public:
     f32 GetRemoteOutVolume(int remote) const;
 
     void SetBiquadFilter(int filter, f32 filterValue);
+    f32 GetBiquadFilterValue() const {
+        return mParamSet.mBiquadFilterValue;
+    }
     void SetRemoteFilter(int filter);
 
     f32 GetRemoteSend(int remote) const;
@@ -141,6 +144,10 @@ public:
     }
     void SetPanCurve(PanCurve curve) {
         mParamSet.mPanCurve = curve;
+    }
+
+    const VoiceOutParam &GetVoiceOutParam(int index) const {
+        return mParamSet.mVoiceOutParam[index];
     }
 
 private:

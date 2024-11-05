@@ -1529,6 +1529,8 @@ nw4r/snd/snd_InstancePool.cpp:
 
 nw4r/snd/snd_Lfo.cpp:
 	.text       start:0x8046DD00 end:0x8046DF08
+	.rodata     start:0x804F92B8 end:0x804F92E0
+	.sdata2     start:0x8057F018 end:0x8057F048
 
 nw4r/snd/snd_MemorySoundArchive.cpp:
 	.text       start:0x8046DF10 end:0x8046E3B0
@@ -1562,6 +1564,9 @@ nw4r/snd/snd_SeqFile.cpp:
 
 nw4r/snd/snd_SeqPlayer.cpp:
 	.text       start:0x80471020 end:0x804727F8
+	.data       start:0x8056E000 end:0x8056E088
+	.sdata2     start:0x8057F068 end:0x8057F080
+	.bss        start:0x806596E8 end:0x80659708
 
 nw4r/snd/snd_SeqSound.cpp:
 	.text       start:0x80472800 end:0x8047316C
