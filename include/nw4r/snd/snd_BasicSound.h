@@ -57,26 +57,26 @@ public:
     BasicSound();
     virtual ~BasicSound() {} // at 0xC
 
-    virtual void Update();                      // at 0x10
-    virtual void StartPrepared();               // at 0x14
-    virtual void Stop(int frames);              // at 0x18
-    virtual void Pause(bool flag, int frames);  // at 0x1C
-    virtual void SetAutoStopCounter(int count); // at 0x20
-    virtual void FadeIn(int frames);            // at 0x24
+    void Update();                      // at 0x10
+    void StartPrepared();               // at 0x14
+    void Stop(int frames);              // at 0x18
+    void Pause(bool flag, int frames);  // at 0x1C
+    void SetAutoStopCounter(int count); // at 0x20
+    void FadeIn(int frames);            // at 0x24
     virtual void Shutdown();                    // at 0x28
     virtual bool IsPrepared() const = 0;        // at 0x2C
-    virtual bool IsPause() const;               // at 0x30
+    bool IsPause() const;               // at 0x30
 
-    virtual void SetInitialVolume(f32 vol);       // at 0x34
-    virtual void SetVolume(f32 vol, int frames);  // at 0x38
-    virtual void SetPitch(f32 pitch);             // at 0x3C
-    virtual void SetPan(f32 pan);                 // at 0x40
-    virtual void SetSurroundPan(f32 pan);         // at 0x44
-    virtual void SetLpfFreq(f32 freq);            // at 0x48
-    virtual void SetPlayerPriority(int priority); // at 0x4C
-    virtual void SetRemoteFilter(int filter);     // at 0x50
-    virtual void SetPanMode(PanMode mode);        // at 0x54
-    virtual void SetPanCurve(PanCurve curve);     // at 0x58
+    void SetInitialVolume(f32 vol);       // at 0x34
+    void SetVolume(f32 vol, int frames);  // at 0x38
+    void SetPitch(f32 pitch);             // at 0x3C
+    void SetPan(f32 pan);                 // at 0x40
+    void SetSurroundPan(f32 pan);         // at 0x44
+    void SetLpfFreq(f32 freq);            // at 0x48
+    void SetPlayerPriority(int priority); // at 0x4C
+    void SetRemoteFilter(int filter);     // at 0x50
+    void SetPanMode(PanMode mode);        // at 0x54
+    void SetPanCurve(PanCurve curve);     // at 0x58
 
     virtual bool IsAttachedTempSpecialHandle() = 0; // at 0x5C
     virtual void DetachTempSpecialHandle() = 0;     // at 0x60
@@ -85,11 +85,15 @@ public:
     virtual BasicPlayer &GetBasicPlayer() = 0;             // at 0x68
     virtual const BasicPlayer &GetBasicPlayer() const = 0; // at 0x6C
 
+    virtual void OnUpdatePlayerPriority() {}
+    virtual void UpdateMoveValue() {}
+    virtual void UpdateParam() {}
+
     PlayerHeap *GetPlayerHeap() {
-        return mHeap;
+        return mPlayerHeap;
     }
     void SetPlayerHeap(PlayerHeap *pHeap) {
-        mHeap = pHeap;
+        mPlayerHeap = pHeap;
     }
 
     bool IsAttachedGeneralHandle();
@@ -175,10 +179,11 @@ public:
     }
 
 private:
-    PlayerHeap *mHeap;                    // at 0x4
+    PlayerHeap *mPlayerHeap;              // at 0x4
     SoundHandle *mGeneralHandle;          // at 0x8
     SoundHandle *mTempGeneralHandle;      // at 0xC
     SoundPlayer *mSoundPlayer;            // at 0x10
+    SoundActor *mSoundActor;
     ExternalSoundPlayer *mExtSoundPlayer; // at 0x14
 
     AmbientParamUpdateCallback *mAmbientParamUpdateCallback;   // at 0x18
@@ -199,6 +204,7 @@ private:
     u32 mUpdateCounter;                   // at 0x70
 
     u8 mPriority; // at 0x74
+    // TODO 0x9C
     u32 mId;      // at 0x78
 
     MoveValue<f32, int> mExtMoveVolume; // at 0x7C

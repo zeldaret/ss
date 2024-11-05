@@ -23,8 +23,8 @@ public:
         int playerPriority;        // at 0x8
         int volume;                // at 0xC
         int remoteFilter;          // at 0x10
-        detail::PanMode panMode;   // at 0x14
-        detail::PanCurve panCurve; // at 0x18
+        PanMode panMode;   // at 0x14
+        PanCurve panCurve; // at 0x18
     };
 
     struct SeqSoundInfo {

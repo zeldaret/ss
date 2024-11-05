@@ -116,7 +116,7 @@ public:
 
     bool ReadWaveSoundInfo(WaveSoundInfo *pSoundInfo, int id) const;
     bool ReadWaveSoundNoteInfo(WaveSoundNoteInfo *pSoundNoteInfo, int id, int note) const;
-    bool ReadWaveParam(int id, WaveData *pWaveData, const void *pWaveAddr) const;
+    bool ReadWaveParam(int id, WaveInfo *pWaveData, const void *pWaveAddr) const;
 
 private:
     const WsdFile::Header *mHeader;       // at 0x0

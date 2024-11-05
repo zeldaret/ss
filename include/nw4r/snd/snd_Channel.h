@@ -1,5 +1,6 @@
 #ifndef NW4R_SND_CHANNEL_H
 #define NW4R_SND_CHANNEL_H
+#include "common.h"
 #include "nw4r/snd/snd_Common.h"
 #include "nw4r/snd/snd_EnvGenerator.h"
 #include "nw4r/snd/snd_Lfo.h"
@@ -8,10 +9,15 @@
 #include "nw4r/types_nw4r.h"
 #include "nw4r/ut.h"
 
-
 namespace nw4r {
 namespace snd {
 namespace detail {
+
+class WaveDataLocationCallback {
+public:
+    virtual void *Callback_0x08() = 0;
+    virtual void Callback_0x0C(const WaveInfo *waveInfo) = 0;
+};
 
 class Channel {
 public:
@@ -36,7 +42,7 @@ public:
 
     void InitParam(ChannelCallback pCallback, u32 callbackArg);
     void Update(bool periodic);
-    void Start(const WaveData &rData, int length, u32 offset);
+    void Start(const WaveInfo &rData, int length, u32 offset);
     void Release();
     void Stop();
 
@@ -100,9 +106,6 @@ public:
         mUserLpfFreq = freq;
     }
 
-    void SetRemoteFilter(int filter) {
-        mRemoteFilter = filter;
-    }
     void SetOutputLine(int flag) {
         mOutputLineFlag = flag;
     }
@@ -120,16 +123,12 @@ public:
     void SetRemoteOutVolume(int remote, f32 volume) {
         mRemoteOutVolume[remote] = volume;
     }
-    void SetRemoteSend(int remote, f32 send) {
-        mRemoteSend[remote] = send;
-    }
-    void SetRemoteFxSend(int remote, f32 send) {
-        mRemoteFxSend[remote] = send;
-    }
 
     void UpdateSweep(int count);
     void SetSweepParam(f32 pitch, int time, bool autoUpdate);
     f32 GetSweepValue() const;
+    void SetBiquadFilter(int enable, f32 value);
+    void NoteOff();
 
     void SetInitVolume(f32 volume) {
         mInitVolume = volume;
@@ -191,58 +190,62 @@ private:
 
 private:
     EnvGenerator mEnvelope; // at 0x0
-    Lfo mLfo;               // at 0x18
-    u8 mLfoTarget;          // at 0x30
+    Lfo mLfo;               // at 0x1C
+    u8 mLfoTarget;          // at 0x34
 
-    bool mPauseFlag;              // at 0x31
-    bool mActiveFlag;             // at 0x32
-    bool mAllocFlag;              // at 0x33
-    bool mAutoSweep;              // at 0x34
-    bool mReleasePriorityFixFlag; // at 0x35
+    bool mPauseFlag;              // at 0x35
+    bool mActiveFlag;             // at 0x36
+    bool mAllocFlag;              // at 0x37
+    bool mAutoSweep;              // at 0x38
+    bool mReleasePriorityFixFlag; // at 0x39
+    bool field_0x3A; // at 0x3A
+    u8 mBiquadFilter; // at 0x3B
+    bool mRemoteFilter; // at 0x3C
 
-    f32 mUserVolume;      // at 0x38
-    f32 mUserPitchRatio;  // at 0x3C
-    f32 mUserPan;         // at 0x40
-    f32 mUserSurroundPan; // at 0x44
-    f32 mUserLpfFreq;     // at 0x48
+    f32 mUserVolume;      // at 0x40
+    f32 mUserPitchRatio;  // at 0x44
+    f32 mUserPan;         // at 0x48
+    f32 mUserSurroundPan; // at 0x4C
+    f32 mUserLpfFreq;     // at 0x50
 
-    int mRemoteFilter;   // at 0x4C
-    int mOutputLineFlag; // at 0x50
+    f32 mBiquadValue; // at 0x54
+    int mOutputLineFlag; // at 0x58
 
-    f32 mMainOutVolume;       // at 0x54
-    f32 mMainSend;            // at 0x58
-    f32 mFxSend[AUX_BUS_NUM]; // at 0x5C
+    f32 mMainOutVolume;       // at 0x5C
+    f32 mMainSend;            // at 0x60
+    f32 mFxSend[AUX_BUS_NUM]; // at 0x64
 
-    f32 mRemoteOutVolume[WPAD_MAX_CONTROLLERS]; // at 0x68
-    f32 mRemoteSend[WPAD_MAX_CONTROLLERS];      // at 0x78
-    f32 mRemoteFxSend[WPAD_MAX_CONTROLLERS];    // at 0x88
+    f32 mRemoteOutVolume[WPAD_MAX_CONTROLLERS]; // at 0x74
 
-    f32 mUserPitch;    // at 0x98
-    f32 mSweepPitch;   // at 0x9C
-    int mSweepCounter; // at 0xA0
-    int mSweepLength;  // at 0xA4
+    f32 mUserPitch;    // at 0x84
+    f32 mSweepPitch;   // at 0x88
+    int mSweepCounter; // at 0x8C
+    int mSweepLength;  // at 0x90
 
-    f32 mInitVolume;                   // at 0xA8
-    f32 mInitPan;                      // at 0xAC
-    f32 mInitSurroundPan;              // at 0xB0
-    f32 mTune;                         // at 0xB4
-    MoveValue<u8, u16> mSilenceVolume; // at 0xB8
+    f32 mInitVolume;                   // at 0x94
+    f32 mInitPan;                      // at 0x98
+    f32 mInitSurroundPan;              // at 0x9C
+    f32 mTune;                         // at 0xA0
+    MoveValue<u8, u16> mSilenceVolume; // at 0xA4
 
-    int mKey;         // at 0xC0
-    int mOriginalKey; // at 0xC4
-    int mLength;      // at 0xC8
+    int mKey;         // at 0xAC
+    int mOriginalKey; // at 0xB0
+    int mLength;      // at 0xB4
 
-    PanMode mPanMode;   // at 0xCC
-    PanCurve mPanCurve; // at 0xD0
+    PanMode mPanMode;   // at 0xB4
+    PanCurve mPanCurve; // at 0xB8
 
-    ChannelCallback mCallback; // at 0xD4
-    u32 mCallbackData;         // at 0xD8
+    int mAlternateAssign; // 0xBC
+    ChannelCallback mCallback; // at 0xC0
+    u32 mCallbackData;         // at 0xC4
+    WaveDataLocationCallback *waveDataLocationCallback; // at 0xC8
+    const WaveInfo* mWaveInfo; // at 0xCC
 
-    Voice *mVoice;      // at 0xDC
-    Channel *mNextLink; // at 0xE0
+    Voice *mVoice;      // at 0xD0
+    Channel *mNextLink; // at 0xD4
 
 public:
-    NW4R_UT_LIST_NODE_DECL(); // at 0xE4
+    NW4R_UT_LIST_NODE_DECL(); // at 0xD8
 };
 
 NW4R_UT_LIST_TYPEDEF_DECL(Channel);

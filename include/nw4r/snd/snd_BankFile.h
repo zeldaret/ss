@@ -86,7 +86,7 @@ public:
     bool IsValidFileHeader(const void *pBankBin);
 
     bool ReadInstInfo(InstInfo *pInfo, int prgNo, int key, int velocity) const;
-    bool ReadWaveParam(WaveData *pData, int waveIndex, const void *pWaveAddr) const;
+    bool ReadWaveParam(WaveInfo *pData, int waveIndex, const void *pWaveAddr) const;
 
 private:
     const BankFile::DataRegion *GetReferenceToSubRegion(const BankFile::DataRegion *pRef, int splitKey) const;

@@ -9,6 +9,24 @@
 
 namespace nw4r {
 namespace snd {
+
+struct VoiceOutParam {
+    VoiceOutParam() {
+        volume = 1.0f;
+        pitch = 1.0f;
+        pan = 0.0f;
+        surroundPan = 0.0f;
+        fxSend = 0.0f;
+        lpf = 0.0f;
+    }
+    f32 volume;
+    f32 pitch;
+    f32 pan;
+    f32 surroundPan;
+    f32 fxSend;
+    f32 lpf;
+};
+
 namespace detail {
 
 // Forward declarations
@@ -72,7 +90,7 @@ public:
     bool Acquire(int channels, int voices, int priority, VoiceCallback pCallback, void *pCallbackArg);
     void Free();
 
-    void Setup(const WaveData &rData, u32 offset);
+    void Setup(const WaveInfo &rData, u32 offset);
 
     void Start();
     void Stop();
@@ -90,6 +108,7 @@ public:
     void SetSurroundPan(f32 pan);
 
     void SetLpfFreq(f32 freq);
+    void SetBiquadFilter(int filter, f32 value);
     void SetRemoteFilter(int filter);
     void SetOutputLine(int flag);
 

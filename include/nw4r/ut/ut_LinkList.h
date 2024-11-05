@@ -29,6 +29,23 @@
 #define NW4R_UT_LIST_NODE_DECL_EX(SUFFIX) nw4r::ut::LinkListNode node##SUFFIX
 
 /**
+ * Linked-list for-each iteration macro, with robust iteration.
+ *
+ * Access the current element with "it"
+ */
+#define NW4R_UT_LIST_SAFE_FOREACH(LIST, ...)                                   \
+    {                                                                          \
+        typedef DECLTYPE(LIST.GetBeginIter()) IterType;                        \
+                                                                               \
+        for (IterType impl = LIST.GetBeginIter();                              \
+             impl != LIST.GetEndIter();) {                                     \
+                                                                               \
+            IterType it = impl++;                                              \
+            __VA_ARGS__                                                        \
+        }                                                                      \
+    }
+
+/**
  * Explicitly instantiate a linked list specialization.
  * (RESERVED FOR MATCHING DECOMP HACKS)
  */

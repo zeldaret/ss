@@ -1,6 +1,7 @@
 #ifndef NW4R_SND_INSTANCE_POOL_H
 #define NW4R_SND_INSTANCE_POOL_H
 #include "nw4r/types_nw4r.h"
+#include "new.h"
 
 namespace nw4r {
 namespace snd {

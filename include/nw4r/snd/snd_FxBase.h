@@ -7,13 +7,6 @@
 namespace nw4r {
 namespace snd {
 
-enum SampleFormat {
-    SAMPLE_FORMAT_PCM_S32,
-    SAMPLE_FORMAT_PCM_S16,
-    SAMPLE_FORMAT_PCM_S8,
-    SAMPLE_FORMAT_DSP_ADPCM
-};
-
 class FxBase : private ut::NonCopyable {
 public:
     virtual ~FxBase() {} // at 0x8
