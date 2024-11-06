@@ -30,8 +30,8 @@ SpecialItemDropMgr *SpecialItemDropMgr::create() {
 }
 
 struct DropEntry {
-    /* 0x0 */ u8 field_0x00;
-    /* 0x0 */ u8 mWeight;
+    /* 0x0 */ u8 mEntryIndex;
+    /* 0x1 */ u8 mDropChance;
 };
 
 struct DropList {
@@ -346,12 +346,12 @@ static const DropList sList[] = {
     {5, FLAG_EXTRA_RUPEES,     e53},
 };
 
-struct S32Pair {
-    s32 u1;
-    s32 u2;
+struct LowHealthReplacement {
+    s32 mOriginalIdx;
+    s32 mReplacementIndex;
 };
 
-const S32Pair MORE_ITEMS[] = {
+const LowHealthReplacement LOW_HEALTH_REPLACEMENTS[] = {
     {
      0x10, 0x11,
      },
@@ -367,7 +367,7 @@ const S32Pair MORE_ITEMS[] = {
 };
 
 // TODO: Convert to enum once work on items has started
-static const u16 SPECIAL_ITEM_ARRAY[28] = {
+static const u16 SPECIAL_ITEM_ARRAY[] = {
     0,    // None
     6,    // Heart
     6,    // Heart
@@ -393,9 +393,6 @@ static const u16 SPECIAL_ITEM_ARRAY[28] = {
     72,   // Fairy
     1,    // Small Key
     34,   // Rupoor
-    0,    // None
-    0,    // None
-    0,    // None
 };
 
 static const u32 sNumDropEntries = 0x36;
@@ -422,8 +419,8 @@ int SpecialItemDropMgr::fn_800C7BB0(int specialItemId) {
     int acc = 0;
 
     for (int i = 0; i < list->mLen; i++) {
-        int entryIdx = e->field_0x00;
-        int weight = e->mWeight;
+        int entryIdx = e->mEntryIndex;
+        int weight = e->mDropChance;
 
         if (entryIdx == 9 || entryIdx == 10) {
             if (getCurrentBowType() == 0) {
@@ -481,9 +478,9 @@ int SpecialItemDropMgr::giveSpecialDropItem(
     }
 
     for (u32 i = 0; i < 4; i++) {
-        const S32Pair &entry = MORE_ITEMS[i];
-        if (specialItemId == entry.u1 && dAcPy_c::LINK->hasLessThanQuarterHealth(false)) {
-            specialItemId = entry.u2;
+        const LowHealthReplacement &entry = LOW_HEALTH_REPLACEMENTS[i];
+        if (specialItemId == entry.mOriginalIdx && dAcPy_c::LINK->hasLessThanQuarterHealth(false)) {
+            specialItemId = entry.mReplacementIndex;
             break;
         }
     }
