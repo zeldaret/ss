@@ -174,6 +174,10 @@ public:
         mPanCurve = curve;
     }
 
+    u32 GetCurrentPlayingSample() const {
+        return mVoice->GetCurrentPlayingSample();
+    }
+
     Channel *GetNextTrackChannel() const {
         return mNextLink;
     }

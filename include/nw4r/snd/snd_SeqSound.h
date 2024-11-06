@@ -26,29 +26,31 @@ public:
     NW4R_UT_RTTI_DECL(SeqSound);
 
 public:
-    explicit SeqSound(SoundInstanceManager<SeqSound> *pManager);
+    explicit SeqSound(SoundInstanceManager<SeqSound> *pManager, int priority, int ambientPriority);
 
-    virtual void Shutdown(); // at 0x28
-    virtual bool IsPrepared() const {
+    virtual void Shutdown() override; // at 0x10
+    virtual bool IsPrepared() override const {
         return mPreparedFlag;
-    } // at 0x2C
+    } // at 0x14
 
-    virtual void SetPlayerPriority(int priority); // at 0x4C
+    void SetPlayerPriority(int priority) override;
 
-    virtual bool IsAttachedTempSpecialHandle(); // at 0x5C
-    virtual void DetachTempSpecialHandle();     // at 0x60
+    virtual bool IsAttachedTempSpecialHandle() override; // at 0x18
+    virtual void DetachTempSpecialHandle() override;     // at 0x1C
 
-    virtual void InitParam(); // at 0x64
+    virtual void InitParam() override; // at 0x20
 
-    virtual BasicPlayer &GetBasicPlayer() {
+    virtual BasicPlayer &GetBasicPlayer() override {
         return mSeqPlayer;
-    } // at 0x68
-    virtual const BasicPlayer &GetBasicPlayer() const {
+    } // at 0x24
+    virtual const BasicPlayer &GetBasicPlayer() override const {
         return mSeqPlayer;
-    } // at 0x6C
+    } // at 0x28
+
+    virtual void OnUpdatePlayerPriority() override; // at 0x2C
 
     SeqPlayer::SetupResult
-    Setup(SeqTrackAllocator *pAllocator, u32 allocTrackFlags, int voices, NoteOnCallback *pCallback);
+    Setup(SeqTrackAllocator *pAllocator, u32 allocTrackFlags, NoteOnCallback *pCallback);
 
     void Prepare(const void *pBase, s32 seqOffset, SeqPlayer::OffsetType startType, int startOffset);
 
@@ -60,11 +62,19 @@ public:
     void SetChannelPriority(int priority);
     void SetReleasePriorityFix(bool flag);
 
+    void SetSeqUserprocCallback(SeqUserprocCallback cb, void *cbArg);
+    void SetTrackMute(u32 trackFlags, SeqMute mute);
+    void SetTrackSilence(u32 trackFlags, bool b, int i);
+    bool ReadVariable(int, s16 *outValue) const;
+
     void SetTrackVolume(u32 trackFlags, f32 volume);
     void SetTrackPitch(u32 trackFlags, f32 pitch);
 
+    bool WriteTrackVariable(int track, int i, s16 value);
     bool WriteVariable(int i, s16 value);
     static bool WriteGlobalVariable(int i, s16 value);
+
+    u32 GetTick() const;
 
     void *GetFileStreamBuffer() {
         return mFileStreamBuffer;
@@ -98,22 +108,21 @@ private:
     static void NotifyLoadAsyncEndSeqData(bool success, const void *pBase, void *pCallbackArg);
 
 private:
-    SeqPlayer mSeqPlayer;                     // at 0xD8
-    SeqSoundHandle *mTempSpecialHandle;       // at 0x1F4
-    SoundInstanceManager<SeqSound> *mManager; // at 0x1F8
+    SeqPlayer mSeqPlayer;                     // at 0x110
+    SeqSoundHandle *mTempSpecialHandle;       // at 0x274
+    SoundInstanceManager<SeqSound> *mManager; // at 0x278
 
-    s32 mSeqOffset;                         // at 0x1FC
-    SeqPlayer::OffsetType mStartOffsetType; // at 0x200
-    int mStartOffset;                       // at 0x204
+    s32 mSeqOffset;                         // at 0x27C
+    SeqPlayer::OffsetType mStartOffsetType; // at 0x280
+    int mStartOffset;                       // at 0x284
 
-    bool mLoadingFlag;           // at 0x208
-    volatile bool mPreparedFlag; // at 0x209
+    volatile bool mLoadingFlag;  // at 0x288
+    volatile bool mPreparedFlag; // at 0x289
 
-    ut::FileStream *mFileStream;                     // at 0x20C
-    char mFileStreamBuffer[FILE_STREAM_BUFFER_SIZE]; // at 0x210
+    ut::FileStream *mFileStream;                     // at 0x28C
+    char mFileStreamBuffer[FILE_STREAM_BUFFER_SIZE]; // at 0x290
 
-    SeqLoadTask mSeqLoadTask; // at 0x410
-    mutable OSMutex mMutex;   // at 0x434
+    SeqLoadTask mSeqLoadTask; // at 0x490
 };
 
 } // namespace detail

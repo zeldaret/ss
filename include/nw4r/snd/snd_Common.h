@@ -85,36 +85,26 @@ struct AdpcmParam {
 
 namespace detail {
 
-
 struct AdpcmLoopParam {
     u16 loop_pred_scale; // at 0x0
     u16 loop_yn1;        // at 0x2
     u16 loop_yn2;        // at 0x4
 };
 
-struct AdpcmInfo {
-    AdpcmParam param;         // at 0x0
-    AdpcmLoopParam loopParam; // at 0x28
-    u16 padding;
-};
-
 struct ChannelParam {
-    void *dataAddr;       // at 0x0
-    u32 volumeFrontLeft;  // at 0x4
-    u32 volumeFrontRight; // at 0x8
-    u32 volumeRearLeft;   // at 0xC
-    u32 volumeRearRight;  // at 0x10
-    AdpcmInfo adpcmInfo;  // at 0x14
+    void *dataAddr;                // at 0x0
+    AdpcmParam adpcmParam;         // at 0x0
+    AdpcmLoopParam adpcmLoopParam; // at 0x28
 };
 
 struct WaveInfo {
-    u8 sampleFormat;                        // at 0x0
-    u8 loopFlag;                            // at 0x1
-    u8 numChannels;                         // at 0x2
-    u32 sampleRate;                         // at 0x4
-    u32 loopStart;                          // at 0x8
-    u32 loopEnd;                            // at 0xC
-    ChannelParam channelParam[CHANNEL_MAX]; // at 0x10
+    SampleFormat sampleFormat;              // at 0x0
+    u8 loopFlag;                            // at 0x4
+    int numChannels;                        // at 0x8
+    int sampleRate;                         // at 0xC
+    u32 loopStart;                          // at 0x10
+    u32 loopEnd;                            // at 0x14
+    ChannelParam channelParam[CHANNEL_MAX]; // at 0x18
 };
 
 } // namespace detail

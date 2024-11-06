@@ -134,6 +134,7 @@ public:
         return mParserTrackParam;
     }
 
+    void SetTrackVariable(int i, s16 var);
     volatile s16 *GetVariablePtr(int i);
 
     SeqPlayer *GetSeqPlayer() {

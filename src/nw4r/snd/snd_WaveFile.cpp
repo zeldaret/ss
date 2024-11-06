@@ -1,4 +1,5 @@
 #include "nw4r/snd/snd_WaveFile.h"
+#include "nw4r/snd/snd_StrmFile.h"
 
 namespace nw4r {
 namespace snd {
@@ -12,7 +13,7 @@ bool WaveFileReader::ReadWaveParam(WaveInfo* pWaveData,
     SampleFormat format =
         GetAxVoiceFormatFromWaveFileFormat(mWaveInfo->format);
 
-    pWaveData->sampleFormat = mWaveInfo->format;
+    pWaveData->sampleFormat = format;
     pWaveData->numChannels = mWaveInfo->numChannels;
     pWaveData->sampleRate =
         (mWaveInfo->sampleRate24 << 16) + mWaveInfo->sampleRate;
@@ -29,20 +30,16 @@ bool WaveFileReader::ReadWaveParam(WaveInfo* pWaveData,
     for (int i = 0; i < mWaveInfo->numChannels; i++) {
         ChannelParam& rParam = pWaveData->channelParam[i];
 
-        WaveFile::WaveChannelInfo* pChannelInfo =
-            const_cast<WaveFile::WaveChannelInfo*>(
+        const WaveFile::WaveChannelInfo* pChannelInfo =
+            reinterpret_cast<const WaveFile::WaveChannelInfo*>(
                 ut::AddOffsetToPtr(mWaveInfo, pInfoOffsetTable[i]));
 
-        rParam.volumeFrontLeft = pChannelInfo->volumeFrontLeft;
-        rParam.volumeFrontRight = pChannelInfo->volumeFrontRight;
-        rParam.volumeRearLeft = pChannelInfo->volumeRearLeft;
-        rParam.volumeRearRight = pChannelInfo->volumeRearRight;
-
         if (pChannelInfo->adpcmOffset != 0) {
-            const AdpcmInfo* pAdpcmInfo = static_cast<const AdpcmInfo*>(
-                ut::AddOffsetToPtr(mWaveInfo, pChannelInfo->adpcmOffset));
-
-            rParam.adpcmInfo = *pAdpcmInfo;
+            const StrmFile::AdpcmParamSet* adpcmParamSet = reinterpret_cast<const StrmFile::AdpcmParamSet*>(
+                ut::AddOffsetToPtr( mWaveInfo, pChannelInfo->adpcmOffset )
+            );
+            rParam.adpcmParam = adpcmParamSet->adpcmParam;
+            rParam.adpcmLoopParam = adpcmParamSet->adpcmLoopParam;
         }
 
         rParam.dataAddr = const_cast<void*>(

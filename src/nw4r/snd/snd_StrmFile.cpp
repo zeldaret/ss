@@ -44,7 +44,7 @@ bool StrmFileReader::ReadStrmInfo(StrmInfo *pStrmInfo) const {
     const StrmFile::StrmDataInfo *pStrmData =
         Util::GetDataRefAddress0(mHeadBlock->refDataHeader, &mHeadBlock->refDataHeader);
 
-    pStrmInfo->format = pStrmData->format;
+    pStrmInfo->format = GetAxVoiceFormatFromWaveFileFormat(pStrmData->format);
     pStrmInfo->loopFlag = pStrmData->loopFlag;
     pStrmInfo->numChannels = pStrmData->numChannels;
     pStrmInfo->sampleRate = (pStrmData->sampleRate24 << 16) + pStrmData->sampleRate;
@@ -64,7 +64,7 @@ bool StrmFileReader::ReadStrmInfo(StrmInfo *pStrmInfo) const {
     return true;
 }
 
-bool StrmFileReader::ReadAdpcmInfo(AdpcmInfo *pAdpcmInfo, int channels) const {
+bool StrmFileReader::ReadAdpcmInfo(AdpcmParam *pAdpcmInfo, AdpcmLoopParam *pAdpcmLoopInfo, int channels) const {
     const StrmFile::StrmDataInfo *pStrmData =
         Util::GetDataRefAddress0(mHeadBlock->refDataHeader, &mHeadBlock->refDataHeader);
 
@@ -82,9 +82,14 @@ bool StrmFileReader::ReadAdpcmInfo(AdpcmInfo *pAdpcmInfo, int channels) const {
     const StrmFile::ChannelInfo *pChannelInfo =
         Util::GetDataRefAddress0(pChannelTable->refChannelHeader[channels], &mHeadBlock->refDataHeader);
 
-    const AdpcmInfo *pSrcInfo = Util::GetDataRefAddress0(pChannelInfo->refAdpcmInfo, &mHeadBlock->refDataHeader);
+    const StrmFile::AdpcmParamSet* pSrcInfo =
+        Util::GetDataRefAddress0(
+            pChannelInfo->refAdpcmInfo,
+            &mHeadBlock->refDataHeader
+        );
 
-    *pAdpcmInfo = *pSrcInfo;
+    *pAdpcmInfo = pSrcInfo->adpcmParam;
+    *pAdpcmLoopInfo = pSrcInfo->adpcmLoopParam;
     return true;
 }
 
@@ -130,7 +135,7 @@ bool StrmFileLoader::ReadAdpcBlockData(u16 *pYN1, u16 *pYN2, int block, int chan
 
     mStream.Seek(offset, ut::FileStream::SEEKORG_BEG);
 
-    u16 buffer[StrmPlayer::StrmHeader::STRM_CHANNEL_MAX * 2] ALIGN_DECL(32);
+    u16 buffer[16] ALIGN_DECL(32);
     if (sizeof(buffer) != mStream.Read(buffer, sizeof(buffer))) {
         return false;
     }
@@ -141,6 +146,19 @@ bool StrmFileLoader::ReadAdpcBlockData(u16 *pYN1, u16 *pYN2, int block, int chan
     }
 
     return true;
+}
+
+SampleFormat StrmFileReader::GetAxVoiceFormatFromWaveFileFormat(int format) {
+    switch (format) {
+        case WaveFile::FORMAT_ADPCM:
+            return SAMPLE_FORMAT_DSP_ADPCM;
+        case WaveFile::FORMAT_PCM16:
+            return SAMPLE_FORMAT_PCM_S16;
+        case WaveFile::FORMAT_PCM8:
+            return SAMPLE_FORMAT_PCM_S8;
+        default:
+            return SAMPLE_FORMAT_DSP_ADPCM;
+    }
 }
 
 } // namespace detail

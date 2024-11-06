@@ -115,13 +115,14 @@ bool StrmPlayer::Start() {
             ChannelParam &rParam = waveData.channelParam[i];
 
             rParam.dataAddr = mChannels[i].bufferAddress;
-            rParam.adpcmInfo = mChannels[i].adpcmInfo;
+            rParam.adpcmParam = mChannels[i].adpcmParam;
+            rParam.adpcmLoopParam = mChannels[i].adpcmLoopParam;
 
             // Isn't the scale only the *bottom nibble*?
-            rParam.adpcmInfo.param.pred_scale = *static_cast<u8 *>(mChannels[i].bufferAddress);
+            rParam.adpcmParam.pred_scale = *static_cast<u8 *>(mChannels[i].bufferAddress);
 
-            rParam.adpcmInfo.param.yn1 = mAdpcmLoopYn1[i];
-            rParam.adpcmInfo.param.yn2 = mAdpcmLoopYn2[i];
+            rParam.adpcmParam.yn1 = mAdpcmLoopYn1[i];
+            rParam.adpcmParam.yn2 = mAdpcmLoopYn2[i];
         }
 
         ut::AutoInterruptLock lock;
@@ -225,38 +226,39 @@ bool StrmPlayer::LoadHeader(ut::FileStream *pFileStream, StartOffsetType offsetT
     ut::detail::AutoLock<OSMutex> lock(sLoadBufferMutex);
 
     StrmFileLoader loader(*pFileStream);
-    if (!loader.LoadFileHeader(sLoadBuffer, ut::RoundUp(sizeof(StrmHeader), 64))) {
+    if (!loader.LoadFileHeader(sLoadBuffer, ut::RoundUp(LOAD_BUFFER_SIZE, 64))) {
         return false;
     }
 
-    StrmHeader header;
-    loader.ReadStrmInfo(&header.strmInfo);
+    // StrmHeader header;
+    loader.ReadStrmInfo(&mStrmInfo);
 
-    for (int i = 0; i < header.strmInfo.numChannels; i++) {
-        loader.ReadAdpcmInfo(&header.adpcmInfo[i], i);
+    for (int i = 0; i < mStrmInfo.numChannels; i++) {
+        loader.ReadAdpcmInfo(&mChannels[i].adpcmParam, &mChannels[i].adpcmLoopParam, i);
     }
 
-    if (header.strmInfo.format == WaveFile::FORMAT_ADPCM) {
+    // TODO types
+    if (mStrmInfo.format == WaveFile::FORMAT_ADPCM) {
         if (offset == 0) {
-            for (int i = 0; i < header.strmInfo.numChannels; i++) {
+            /*for (int i = 0; i < mStrmInfo.numChannels; i++) {
                 header.loopYn1[i] = header.adpcmInfo[i].param.yn1;
                 header.loopYn2[i] = header.adpcmInfo[i].param.yn2;
-            }
+            }*/
         } else {
             int startSample;
             if (offsetType == START_OFFSET_TYPE_SAMPLE) {
                 startSample = offset;
             } else if (offsetType == START_OFFSET_TYPE_MILLISEC) {
-                startSample = offset * header.strmInfo.sampleRate / 1000;
+                startSample = offset * mStrmInfo.sampleRate / 1000;
             }
 
-            s32 block = startSample / static_cast<s32>(header.strmInfo.blockSamples);
+            s32 block = startSample / static_cast<s32>(mStrmInfo.blockSamples);
 
-            loader.ReadAdpcBlockData(header.loopYn1, header.loopYn2, block, header.strmInfo.numChannels);
+            // loader.ReadAdpcBlockData(header.loopYn1, header.loopYn2, block, mStrmInfo.numChannels);
         }
     }
 
-    if (!SetupPlayer(&header)) {
+    if (!SetupPlayer()) {
         return false;
     }
 
@@ -323,9 +325,8 @@ bool StrmPlayer::LoadStreamData(
     return true;
 }
 
-bool StrmPlayer::SetupPlayer(const StrmHeader *pStrmHeader) {
+bool StrmPlayer::SetupPlayer() {
     u32 poolBlockSize = mBufferPool->GetBlockSize();
-    mStrmInfo = pStrmHeader->strmInfo;
 
     s32 blockIndex = 0;
     u32 blockOffset = 0;
@@ -333,14 +334,15 @@ bool StrmPlayer::SetupPlayer(const StrmHeader *pStrmHeader) {
     if (!CalcStartOffset(&blockIndex, &blockOffset, &loopCount)) {
         return false;
     }
-
+    /*
     if (mStrmInfo.format == WaveFile::FORMAT_ADPCM) {
         for (int i = 0; i < mStrmInfo.numChannels; i++) {
-            mChannels[i].adpcmInfo = pStrmHeader->adpcmInfo[i];
+            mChannels[i].adpcmParam = mStrmInfo.adpcmInfo[i];
             mAdpcmLoopYn1[i] = pStrmHeader->loopYn1[i];
             mAdpcmLoopYn2[i] = pStrmHeader->loopYn2[i];
         }
     }
+    */
 
     mLoopStartBlockIndex = mStrmInfo.loopStart / mStrmInfo.blockSamples;
     mLastBlockIndex = mStrmInfo.numBlocks - 1;
@@ -622,7 +624,7 @@ void StrmPlayer::UpdateDataLoopAddress(s32 endBlock) {
                 mVoice->SetVoiceType(AxVoice::VOICE_TYPE_NORMAL);
 
                 for (int i = 0; i < mChannelCount; i++) {
-                    mVoice->SetAdpcmLoop(i, &mChannels[i].adpcmInfo.loopParam);
+                    mVoice->SetAdpcmLoop(i, &mChannels[i].adpcmLoopParam);
                 }
             }
 

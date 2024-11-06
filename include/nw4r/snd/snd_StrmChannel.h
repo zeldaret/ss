@@ -11,7 +11,9 @@ namespace detail {
 struct StrmChannel {
     void *bufferAddress; // at 0x0
     u32 bufferSize;      // at 0x4
-    AdpcmInfo adpcmInfo; // at 0x8
+    AdpcmParam adpcmParam; // at 0x8
+    AdpcmLoopParam adpcmLoopParam; // at 0x??
+    u16 adpcmPredScale;
 };
 
 class StrmBufferPool {

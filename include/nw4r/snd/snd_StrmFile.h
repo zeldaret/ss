@@ -41,8 +41,13 @@ struct TrackTable {
     Util::DataRef<TrackInfo> refTrackHeader[]; // at 0x4
 };
 
+struct AdpcmParamSet {
+    AdpcmParam adpcmParam;         // at 0x00
+    AdpcmLoopParam adpcmLoopParam; // at 0x28
+};
+
 struct ChannelInfo {
-    Util::DataRef<AdpcmInfo> refAdpcmInfo; // at 0x0
+    Util::DataRef<AdpcmParamSet> refAdpcmInfo; // at 0x0
 };
 
 struct ChannelTable {
@@ -75,22 +80,22 @@ public:
     static const int VERSION = NW4R_VERSION(1, 0);
 
     struct StrmInfo {
-        u8 format;               // at 0x0
-        u8 loopFlag;             // at 0x1
-        u8 numChannels;          // at 0x2
-        int sampleRate;          // at 0x4
-        u16 blockHeaderOffset;   // at 0x8
-        u32 loopStart;           // at 0xC
-        u32 loopEnd;             // at 0x10
-        u32 dataOffset;          // at 0x14
-        u32 numBlocks;           // at 0x18
-        u32 blockSize;           // at 0x1C
-        u32 blockSamples;        // at 0x20
-        u32 lastBlockSize;       // at 0x24
-        u32 lastBlockSamples;    // at 0x28
-        u32 lastBlockPaddedSize; // at 0x2C
-        u32 adpcmDataInterval;   // at 0x30
-        u32 adpcmDataSize;       // at 0x34
+        SampleFormat format;     // at 0x0
+        bool loopFlag;           // at 0x4
+        int numChannels;         // at 0x8
+        int sampleRate;          // at 0xC
+        u16 blockHeaderOffset;   // at 0x10
+        u32 loopStart;           // at 0x14
+        u32 loopEnd;             // at 0x18
+        u32 dataOffset;          // at 0x1C
+        u32 numBlocks;           // at 0x20
+        u32 blockSize;           // at 0x24
+        u32 blockSamples;        // at 0x28
+        u32 lastBlockSize;       // at 0x2C
+        u32 lastBlockSamples;    // at 0x30
+        u32 lastBlockPaddedSize; // at 0x34
+        u32 adpcmDataInterval;   // at 0x38
+        u32 adpcmDataSize;       // at 0x3C
     };
 
 public:
@@ -104,7 +109,9 @@ public:
     void Setup(const void *pStrmBin);
 
     bool ReadStrmInfo(StrmInfo *pStrmInfo) const;
-    bool ReadAdpcmInfo(AdpcmInfo *pAdpcmInfo, int channels) const;
+    bool ReadAdpcmInfo(AdpcmParam *pAdpcmParam, AdpcmLoopParam *pAdpcmLoopParam, int channels) const;
+
+    static SampleFormat GetAxVoiceFormatFromWaveFileFormat(int format);
 
     u32 GetAdpcBlockOffset() const {
         if (IsAvailable()) {
@@ -134,12 +141,12 @@ public:
         return mReader.ReadStrmInfo(pStrmInfo);
     }
 
-    bool ReadAdpcmInfo(AdpcmInfo *pAdpcmInfo, int channel) const {
+    bool ReadAdpcmInfo(AdpcmParam *pAdpcmParam, AdpcmLoopParam *pAdpcmLoopParam, int channel) const {
         if (!mReader.IsAvailable()) {
             return false;
         }
 
-        return mReader.ReadAdpcmInfo(pAdpcmInfo, channel);
+        return mReader.ReadAdpcmInfo(pAdpcmParam, pAdpcmLoopParam, channel);
     }
 
 private:

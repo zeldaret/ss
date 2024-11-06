@@ -270,11 +270,12 @@ void Voice::Setup(const WaveInfo& rData, u32 offset) {
 
         void* pAddr = rData.channelParam[i].dataAddr;
         const ChannelParam& rParam = rData.channelParam[i];
-        const AdpcmInfo& rInfo = rData.channelParam[i].adpcmInfo;
+        const AdpcmParam& rInfo = rData.channelParam[i].adpcmParam;
+        const AdpcmLoopParam& rLoopInfo = rData.channelParam[i].adpcmLoopParam;
 
         AdpcmParam param;
         if (format == SAMPLE_FORMAT_PCM_S32) {
-            param = rInfo.param;
+            param = rInfo;
             AxVoice::CalcOffsetAdpcmParam(&param.pred_scale, &param.yn1,
                                           &param.yn2, offset, pAddr, param);
         }
@@ -291,7 +292,7 @@ void Voice::Setup(const WaveInfo& rData, u32 offset) {
 
             if (format == SAMPLE_FORMAT_PCM_S32) {
                 pAxVoice->SetAdpcm(&param);
-                pAxVoice->SetAdpcmLoop(&rInfo.loopParam);
+                pAxVoice->SetAdpcmLoop(&rLoopInfo);
             }
 
             pAxVoice->SetSrcType(AxVoice::SRC_4TAP_AUTO, mPitch);

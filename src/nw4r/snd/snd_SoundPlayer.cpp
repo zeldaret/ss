@@ -133,7 +133,7 @@ void SoundPlayer::detail_SortPriorityList() {
         }
     }
 }
-
+/*
 detail::SeqSound *SoundPlayer::detail_AllocSeqSound(
     int priority, int startPriority, detail::BasicSound::AmbientInfo *pArgInfo, detail::ExternalSoundPlayer *pExtPlayer,
     u32 id, detail::SoundInstanceManager<detail::SeqSound> *pManager
@@ -219,7 +219,7 @@ detail::StrmSound *SoundPlayer::detail_AllocStrmSound(
 
     return pSound;
 }
-/*
+
 detail::WaveSound *SoundPlayer::detail_AllocWaveSound(
     int priority, int startPriority, detail::BasicSound::AmbientInfo *pArgInfo, detail::ExternalSoundPlayer *pExtPlayer,
     u32 id, detail::SoundInstanceManager<detail::WaveSound> *pManager

@@ -207,6 +207,10 @@ public:
         return ut::Clamp(mPriority + mAmbientParam.priority, 0, PRIORITY_MAX);
     }
 
+    bool IsStarted() const {
+        return mStartedFlag;
+    }
+
 private:
     PlayerHeap *mPlayerHeap;              // at 0x4
     SoundHandle *mGeneralHandle;          // at 0x8

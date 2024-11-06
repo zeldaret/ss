@@ -29,7 +29,7 @@ struct VoiceOutParam {
 namespace detail {
 
 // Forward declarations
-class WaveData;
+// class WaveData;
 
 class Voice : public DisposeCallback {
     friend class VoiceManager;

@@ -1586,6 +1586,8 @@ nw4r/snd/snd_SeqPlayer.cpp:
 nw4r/snd/snd_SeqSound.cpp:
 	.text       start:0x80472800 end:0x8047316C
 	.ctors      start:0x804DB960 end:0x804DB964
+	.data       start:0x8056E088 end:0x8056E0D8
+	.sbss       start:0x805766A8 end:0x805766B0
 
 nw4r/snd/snd_SeqSoundHandle.cpp:
 	.text       start:0x80473170 end:0x804732A8
@@ -1714,6 +1716,8 @@ nw4r/snd/snd_WsdFile.cpp:
 
 nw4r/snd/snd_WsdPlayer.cpp:
 	.text       start:0x80485830 end:0x804869D8
+	.data       start:0x8056E388 end:0x8056E3E8
+	.sdata2     start:0x8057F1F8 end:0x8057F220
 
 nw4r/snd/snd_adpcm.cpp:
 	.text       start:0x804869E0 end:0x80486A6C

@@ -26,16 +26,6 @@ public:
         START_OFFSET_TYPE_MILLISEC
     };
 
-    struct StrmHeader {
-        // TODO: Why 8 if the player only supports 2???
-        static const int STRM_CHANNEL_MAX = 8;
-
-        StrmFileReader::StrmInfo strmInfo;                     // at 0x0
-        AdpcmInfo adpcmInfo[STRM_CHANNEL_MAX]; // at 0x38
-        u16 loopYn1[STRM_CHANNEL_MAX];         // at 0x1B8
-        u16 loopYn2[STRM_CHANNEL_MAX];         // at 0x1D8
-    };
-
 public:
     StrmPlayer();
     virtual ~StrmPlayer(); // at 0x8
@@ -130,7 +120,7 @@ private:
         ut::FileStream *pFileStream, int offset, u32 size, u32 blockSize, int blockIndex, bool needUpdateAdpcmLoop
     );
 
-    bool SetupPlayer(const StrmHeader *pStrmHeader);
+    bool SetupPlayer();
 
     bool AllocChannels(int channels, int voices);
     void FreeChannels();
