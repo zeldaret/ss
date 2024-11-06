@@ -1479,6 +1479,8 @@ nw4r/snd/snd_AxVoice.cpp:
 
 nw4r/snd/snd_AxVoiceManager.cpp:
 	.text       start:0x80467640 end:0x80467DC8
+	.sbss       start:0x80576668 end:0x80576670
+	.bss        start:0x80659390 end:0x806593C8
 
 nw4r/snd/snd_AxfxImpl.cpp:
 	.text       start:0x80467DD0 end:0x80467FC8

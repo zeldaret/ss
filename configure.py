@@ -702,7 +702,7 @@ config.libs = [
             Object(NonMatching, "nw4r/snd/snd_AnimSound.cpp"),
             Object(NonMatching, "nw4r/snd/snd_AxManager.cpp"),
             Object(NonMatching, "nw4r/snd/snd_AxVoice.cpp"),
-            Object(NonMatching, "nw4r/snd/snd_AxVoiceManager.cpp"),
+            Object(Matching, "nw4r/snd/snd_AxVoiceManager.cpp"),
             Object(NonMatching, "nw4r/snd/snd_AxfxImpl.cpp"),
             Object(NonMatching, "nw4r/snd/snd_Bank.cpp"),
             Object(NonMatching, "nw4r/snd/snd_BankFile.cpp"),
