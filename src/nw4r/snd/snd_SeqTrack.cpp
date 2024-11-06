@@ -250,25 +250,30 @@ void SeqTrack::UpdateChannelParam() {
     surroundPan += mPlayer->GetSurroundPan();
 
     f32 lpfFreq = 0.0f;
-    lpfFreq += (mParserTrackParam.lpfFreq - 64) / 64.0f;
-    lpfFreq += mExtLpfFreq;
+    lpfFreq += mParserTrackParam.lpfFreq;
+    // lpfFreq += mExtLpfFreq;
     lpfFreq += mPlayer->GetLpfFreq();
 
-    f32 mBiquadValue = mPlayer->GetBiquadFilterValue();
+    int biquadFilterType = mParserTrackParam.biquadType;
+    f32 biquadValue = mParserTrackParam.biquadValue;
+    if (mPlayer->GetBiquadFilterType() != 0) {
+        biquadFilterType = mPlayer->GetBiquadFilterType();
+        biquadValue = mPlayer->GetBiquadFilterValue();
+    }
 
     int remoteFilter = 0;
     remoteFilter += mPlayer->GetRemoteFilter();
 
     f32 mainSend = 0.0f;
     mainSend += (mParserTrackParam.mainSend / 127.0f) - 1.0f;
-    mainSend += mExtMainSend;
+    // mainSend += mExtMainSend;
     mainSend += mPlayer->GetMainSend();
 
     f32 fxSend[AUX_BUS_NUM];
     for (int i = 0; i < AUX_BUS_NUM; i++) {
         fxSend[i] = 0.0f;
         fxSend[i] += mParserTrackParam.fxSend[i] / 127.0f;
-        fxSend[i] += mExtFxSend[i];
+        // fxSend[i] += mExtFxSend[i];
         fxSend[i] += mPlayer->GetFxSend(static_cast<AuxBus>(i));
     }
 
@@ -279,7 +284,7 @@ void SeqTrack::UpdateChannelParam() {
         pIt->SetUserPan(pan);
         pIt->SetUserSurroundPan(surroundPan);
         pIt->SetUserLpfFreq(lpfFreq);
-        pIt->SetBiquadFilter(remoteFilter, mBiquadValue);
+        pIt->SetBiquadFilter(biquadFilterType, biquadValue);
         pIt->SetRemoteFilter(remoteFilter);
         pIt->SetOutputLine(mPlayer->GetOutputLine());
         pIt->SetMainOutVolume(mPlayer->GetMainOutVolume());

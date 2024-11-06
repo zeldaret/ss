@@ -1553,9 +1553,11 @@ nw4r/snd/snd_MmlParser.cpp:
 
 nw4r/snd/snd_MmlSeqTrack.cpp:
 	.text       start:0x8046F640 end:0x8046F6F8
+	.data       start:0x8056DF48 end:0x8056DF58
 
 nw4r/snd/snd_MmlSeqTrackAllocator.cpp:
 	.text       start:0x8046F700 end:0x8046F850
+	.data       start:0x8056DF58 end:0x8056DF70
 
 nw4r/snd/snd_NandSoundArchive.cpp:
 	.text       start:0x8046F850 end:0x804700B8

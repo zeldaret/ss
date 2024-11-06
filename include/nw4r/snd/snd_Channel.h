@@ -211,7 +211,7 @@ private:
     bool mReleasePriorityFixFlag; // at 0x39
     bool field_0x3A; // at 0x3A
     u8 mBiquadFilter; // at 0x3B
-    bool mRemoteFilter; // at 0x3C
+    u8 mRemoteFilter; // at 0x3C
 
     f32 mUserVolume;      // at 0x40
     f32 mUserPitchRatio;  // at 0x44

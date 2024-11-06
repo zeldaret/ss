@@ -171,12 +171,6 @@ private:
     volatile s16 mTrackVariable[VARIABLE_NUM]; // at 0xA0
     SeqPlayer *mPlayer;                        // at 0xC0
     Channel *mChannelList;                     // at 0xC4
-    // ???
-    f32 mExtLpfFreq;                            // at 0x1C
-    f32 mExtMainSend;                           // at 0x20
-    f32 mExtFxSend[AUX_BUS_NUM];                // at 0x24
-    f32 mExtRemoteSend[WPAD_MAX_CONTROLLERS];   // at 0x30
-    f32 mExtRemoteFxSend[WPAD_MAX_CONTROLLERS]; // at 0x40
 };
 
 } // namespace detail

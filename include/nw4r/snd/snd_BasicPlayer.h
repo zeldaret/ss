@@ -123,6 +123,9 @@ public:
     f32 GetBiquadFilterValue() const {
         return mParamSet.mBiquadFilterValue;
     }
+    int GetBiquadFilterType() const {
+        return mParamSet.mBiquadFilter;
+    }
     void SetRemoteFilter(int filter);
 
     f32 GetRemoteSend(int remote) const;

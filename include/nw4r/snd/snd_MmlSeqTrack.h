@@ -31,13 +31,8 @@ public:
         mParser = pParser;
     }
 
-    MmlParserParam &GetMmlParserParam() {
-        return mMmlParserParam;
-    }
-
 private:
     const MmlParser *mParser;       // at 0xC0
-    MmlParserParam mMmlParserParam; // at 0xC4
 };
 
 } // namespace detail
