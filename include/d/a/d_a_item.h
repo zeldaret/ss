@@ -46,6 +46,7 @@ public:
 
     static void spawnItem(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot, u32 params, u32 arg);
     static void spawnDrop(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot);
+    static u32 checkFlag(u32 flag);
 
 private:
     /* 0x334 */ UNKTYPE *mpMdl; // Model has its own handling system

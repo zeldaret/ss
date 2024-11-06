@@ -2,23 +2,20 @@
 
 #include "c/c_math.h"
 #include "common.h"
+#include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
-#include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_pla.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "egg/math/eggMath.h"
 #include "egg/math/eggQuat.h"
-#include "f/f_base.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
-#include "nw4r/math/math_triangular.h"
-#include "rvl/MTX/mtx.h"
 #include "rvl/MTX/vec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/dowsing_target.h"
@@ -118,7 +115,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     mObjAcch.CrrPos(*dBgS::GetInstance());
     mField_0x974 += position.y - mOldPosition.y;
     if (checkCollect()) {
-        dAcPy_c::LINK->bugNetCollectTreasure(0xA3 /* TODO(Item Id) ITEM_TUMBLEWEED */);
+        dAcPy_c::LINK->bugNetCollectTreasure(ITEM_TUMBLE_WEED);
         FUN_8002dcd0();
         return SUCCEEDED;
     }

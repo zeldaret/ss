@@ -1,6 +1,7 @@
 #include "d/t/d_t_tumble_weed.h"
 
 #include "m/m_vec.h"
+#include "s/s_Math.h"
 
 SPECIAL_ACTOR_PROFILE(TUMBLE_WEED_TAG, dTgTumbleWeed_c, fProfile::TUMBLE_WEED_TAG, 0x0244, 0, 0);
 
@@ -44,63 +45,65 @@ void dTgTumbleWeed_c::executeState_AreaOut() {
             mStateMgr.changeState(StateID_AreaIn);
         }
     }
-    void dTgTumbleWeed_c::finalizeState_AreaOut() {}
+}
+void dTgTumbleWeed_c::finalizeState_AreaOut() {}
 
-    void dTgTumbleWeed_c::initializeState_AreaIn() {}
-    void dTgTumbleWeed_c::executeState_AreaIn() {
-        if (tumbleweedTimer == 0) {
-            if (shouldSpawnTumbleweed()) {
-                doSpawnTumbleweed();
-            }
-            tumbleweedTimer = 600;
+void dTgTumbleWeed_c::initializeState_AreaIn() {}
+void dTgTumbleWeed_c::executeState_AreaIn() {
+    if (tumbleweedTimer == 0) {
+        if (shouldSpawnTumbleweed()) {
+            doSpawnTumbleweed();
         }
+        tumbleweedTimer = 600;
+    }
+    if (sLib::calcTimer(&windTimer) == 0) {
         if (sLib::calcTimer(&windTimer) == 0) {
-            if (sLib::calcTimer(&windTimer) == 0) {
-                windTimer = 0x96;
-                if (shouldDoWind()) {
-                    mStateMgr.changeState(StateID_Wind);
-                    return;
-                }
-            }
-            if (!isWithinPlayerRadius(mScale.x)) {
-                mStateMgr.changeState(StateID_AreaOut);
+            windTimer = 0x96;
+            if (shouldDoWind()) {
+                mStateMgr.changeState(StateID_Wind);
+                return;
             }
         }
-        void dTgTumbleWeed_c::finalizeState_AreaIn() {}
-
-        void dTgTumbleWeed_c::initializeState_Wind() {
-            mVec3_c vec;
-            getWind(&vec);
-            if (childTumbleweed.get() != nullptr) {
-                childTumbleweed.get()->setWind(vec);
-                childTumbleweed.get()->setWind(vec);
-            }
+        if (!isWithinPlayerRadius(mScale.x)) {
+            mStateMgr.changeState(StateID_AreaOut);
         }
+    }
+}
+void dTgTumbleWeed_c::finalizeState_AreaIn() {}
 
-        void dTgTumbleWeed_c::executeState_Wind() {
-            if (isWithinPlayerRadius(mScale.x)) {
-                mStateMgr.changeState(StateID_AreaIn);
-            } else {
-                mStateMgr.changeState(StateID_AreaOut);
-            }
-        }
-        void dTgTumbleWeed_c::finalizeState_Wind() {}
+void dTgTumbleWeed_c::initializeState_Wind() {
+    mVec3_c vec;
+    getWind(&vec);
+    if (childTumbleweed.get() != nullptr) {
+        childTumbleweed.get()->setWind(vec);
+        childTumbleweed.get()->setWind(vec);
+    }
+}
 
-        bool dTgTumbleWeed_c::shouldSpawnTumbleweed() {
-            bool spawnAllowed = false;
-            if (childTumbleweed.get() == nullptr && cM::rnd() <= 0.8f) {
-                spawnAllowed = true;
-            }
+void dTgTumbleWeed_c::executeState_Wind() {
+    if (isWithinPlayerRadius(mScale.x)) {
+        mStateMgr.changeState(StateID_AreaIn);
+    } else {
+        mStateMgr.changeState(StateID_AreaOut);
+    }
+}
+void dTgTumbleWeed_c::finalizeState_Wind() {}
 
-            if (spawnAllowed) {
-                return true;
-            }
+bool dTgTumbleWeed_c::shouldSpawnTumbleweed() {
+    bool spawnAllowed = false;
+    if (childTumbleweed.get() == nullptr && cM::rnd() <= 0.8f) {
+        spawnAllowed = true;
+    }
 
-            return false;
-        }
+    if (spawnAllowed) {
+        return true;
+    }
 
-        bool dTgTumbleWeed_c::shouldDoWind() {
-            return childTumbleweed.get() != nullptr && cM::rnd() <= 0.5f;
-        }
-        void dTgTumbleWeed_c::doSpawnTumbleweed() {}
-        void dTgTumbleWeed_c::getWind(mVec3_c *) {}
+    return false;
+}
+
+bool dTgTumbleWeed_c::shouldDoWind() {
+    return childTumbleweed.get() != nullptr && cM::rnd() <= 0.5f;
+}
+void dTgTumbleWeed_c::doSpawnTumbleweed() {}
+void dTgTumbleWeed_c::getWind(mVec3_c *) {}

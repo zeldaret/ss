@@ -1,7 +1,6 @@
 #include "d/a/obj/d_a_obj_toD3_stone_figure.h"
 
 #include "d/a/d_a_item.h"
-#include "d/a/obj/d_a_obj_item.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/storyflag_manager.h"
 #include "toBeSorted/attention.h"
