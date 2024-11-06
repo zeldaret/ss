@@ -1,3 +1,6 @@
+#ifndef LIBMS_FLOWFILE_H
+#define LIBMS_FLOWFILE_H
+
 #include "common.h"
 
 #ifdef __cplusplus
@@ -27,4 +30,6 @@ const unsigned short *LMS_GetBranchPoints(struct MsbfInfo *info, int index);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif

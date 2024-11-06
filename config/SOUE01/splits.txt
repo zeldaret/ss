@@ -192,9 +192,22 @@ d/lyt/d_window.cpp:
 	.data       start:0x80510820 end:0x805108B0
 	.sdata2     start:0x805797F0 end:0x805797F8
 
-d/d_text_writer.cpp:
+d/d_textunk.cpp:
+	.text       start:0x800B1890 end:0x800B20DC
+	.ctors      start:0x804DB6D0 end:0x804DB6D4
+	.data       start:0x805108C8 end:0x805108D8
+	.sdata      start:0x805722D8 end:0x805722E0
+	.sbss       start:0x805753B0 end:0x805753B8
+	.sdata2     start:0x805797F8 end:0x80579848
+	.bss        start:0x805A6F70 end:0x805A7730
+
+d/d_tag_processor.cpp:
 	.text       start:0x800B35C0 end:0x800B9274
 	.ctors      start:0x804DB6D4 end:0x804DB6D8
+	.rodata     start:0x804E4C34 end:0x804E4C50
+	.data       start:0x805108E8 end:0x805109A0
+	.sdata2     start:0x8057986C end:0x805798D0
+	.bss        start:0x805A7730 end:0x805A78B8
 
 toBeSorted/time_area_mgr.cpp:
 	.text       start:0x800B9280 end:0x800BB2A0
@@ -347,8 +360,11 @@ d/lyt/d_lyt_msg_window_select_btn.cpp:
 	.text       start:0x8011C8D0 end:0x80120988
 	.ctors      start:0x804DB73C end:0x804DB740
 
+d/lyt/d_lyt_msg_window_base.cpp:
+	.text       start:0x80120A20 end:0x80120A98
+
 d/lyt/d_lyt_msg_window_talk.cpp:
-	.text       start:0x80120A20 end:0x801223C8
+	.text       start:0x80120AA0 end:0x801223C8
 	.ctors      start:0x804DB740 end:0x804DB744
 
 d/lyt/d_lyt_msg_window_link.cpp:

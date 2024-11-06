@@ -1,3 +1,6 @@
+#ifndef LIBMS_COMMONLIB_H
+#define LIBMS_COMMONLIB_H
+
 #include "common.h"
 
 #ifdef __cplusplus
@@ -48,4 +51,6 @@ int LMSi_GetHashTableIndexFromLabel(const char *label, int tableSize);
 
 #ifdef __cplusplus
 }
+#endif
+
 #endif
