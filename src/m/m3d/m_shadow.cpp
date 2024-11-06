@@ -488,7 +488,7 @@ bool mShadowChild_c::addMdl(scnLeaf_c &mdl, const mQuat_c &quat) {
 
     // TODO this copy is a bit weird (reads members in a different order)
     mQuat_c q = quat;
-    PSMTXMultVec(mtx.m, q, q);
+    PSMTXMultVec(mtx.m, q.v, q.v);
 
     if (mNumLeaves == 0) {
         mQuat = q;
@@ -501,7 +501,7 @@ bool mShadowChild_c::addMdl(scnLeaf_c &mdl, const mQuat_c &quat) {
 
 bool mShadowChild_c::setGeom(const GXTexObj *texObj, const mMtx_c &mtx, const mQuat_c &quat) {
     mQuat = quat;
-    PSMTXMultVec(mtx.m, mQuat, mQuat);
+    PSMTXMultVec(mtx.m, mQuat.v, mQuat.v);
     if (texObj == nullptr) {
         mTexObj = *mShadow_c::sTexObj;
     } else {

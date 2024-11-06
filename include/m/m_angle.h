@@ -3,6 +3,8 @@
 
 #include "c/c_math.h"
 #include "common.h"
+#include "m/m_vec.h"
+#include "math.h"
 #include "nw4r/math/math_triangular.h"
 
 struct mAng {
@@ -12,6 +14,9 @@ struct mAng {
 
     static mAng atan2s(f32 a, f32 b) {
         return mAng(cM::atan2s(a, b));
+    }
+    static mAng fromVec(const mVec3_c &other) {
+        return mAng(cM::atan2s(other.x, other.z));
     }
 
     operator s16() const {
@@ -47,15 +52,53 @@ struct mAng {
 
     s16 mVal;
 
+    f32 degree() const {
+        return (360.0f / 65536.0f) * mVal;
+    }
+
     static mAng fromDeg(f32 deg) {
         return deg * sDegToAng;
+    }
+
+    static s16 angle(const mVec3_c &a, const mVec3_c &b) {
+        f32 rads = a.angle(b);
+        return fromRad(rads);
+    }
+
+    f32 radian() const {
+        return ((2.f * M_PI) / 65536.0f) * mVal;
+    }
+    static s16 fromRad(f32 rad) {
+        return rad * sRadToAng;
+    }
+
+    static f32 rad2deg(f32 rad) {
+        return rad * (360.f / (2.f * M_PI));
+    }
+    static f32 deg2rad(f32 deg) {
+        return deg * ((2.f * M_PI) / 360.f);
+    }
+    static s16 deg2short(f32 deg) {
+        return deg * (65536.0f / 360.0f);
+    }
+    static f32 short2deg(s16 angle) {
+        return (360.0f / 65536.0f) * angle;
+    }
+    static f32 short2rad(s16 angle) {
+        return ((2.f * M_PI) / 65536.0f) * angle;
+    }
+    static f32 short2norm(s16 angle) {
+        return 3.0517578E-5f * angle;
+    }
+    static s16 rad2short(f32 rad) {
+        return rad * (65536.0f / (2.f * M_PI));
     }
 
 private:
     static const f32 sHalfCircleDeg;
     static const f32 sAngToDeg;
     static const f32 sAngToRad;
-    static const f32 NotSure;
+    static const f32 sAngToNorm;
     static const f32 sDegToRad;
     static const f32 sDegToAng;
     static const f32 sRadToAng;

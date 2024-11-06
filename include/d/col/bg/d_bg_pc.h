@@ -27,6 +27,18 @@ enum dBgPc_ECode {
     /* 0x80000000 */ CODE_UNUSED_8000_0000 = 0x80000000,
 };
 
+enum dBgPc_Attribute {
+    POLY_ATTR_NORMAL = 0,
+    POLY_ATTR_SLOPE = 1,
+    POLY_ATTR_LAVA = 7,
+    POLY_ATTR_SAND_SHALLOW = 9,
+    POLY_ATTR_SAND_MED = 10,
+    POLY_ATTR_SAND_DEEP_INSTANT = 11,
+    POLY_ATTR_WATER = 12,
+    POLY_ATTR_DAMAGE = 13,
+    POLY_ATTR_SLOPE_RUN = 15,
+    POLY_ATTR_SAND_DEEP_SLOW = 16,
+};
 class dBgPc {
 public:
     void setCode(sBgPc &);

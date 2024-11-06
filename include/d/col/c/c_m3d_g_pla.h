@@ -57,8 +57,8 @@ public:
         return EGG::Math<f32>::sqrt(mNormal.x * mNormal.x + mNormal.z * mNormal.z);
     }
 
-    mAng GetAngleY() const {
-        return cM::atan2s(mNormal.x, mNormal.z);
+    s32 GetAngleY() const {
+        return mAng(cM::atan2s(mNormal.x, mNormal.z));
     }
 };
 

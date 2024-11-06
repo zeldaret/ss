@@ -126,15 +126,15 @@ void Matrix34f::makeST(const Vector3f &s, const Vector3f &t) {
 }
 
 void Matrix34f::makeSQT(const Vector3f &s, const Quatf &q, const Vector3f &t) {
-    f32 yy = 2.0f * q.y * q.y;
-    f32 zz = 2.0f * q.z * q.z;
-    f32 xx = 2.0f * q.x * q.x;
-    f32 xy = 2.0f * q.x * q.y;
-    f32 xz = 2.0f * q.x * q.z;
-    f32 yz = 2.0f * q.y * q.z;
-    f32 wz = 2.0f * q.w * q.z;
-    f32 wx = 2.0f * q.w * q.x;
-    f32 wy = 2.0f * q.w * q.y;
+    f32 yy = 2.0f * q.v.y * q.v.y;
+    f32 zz = 2.0f * q.v.z * q.v.z;
+    f32 xx = 2.0f * q.v.x * q.v.x;
+    f32 xy = 2.0f * q.v.x * q.v.y;
+    f32 xz = 2.0f * q.v.x * q.v.z;
+    f32 yz = 2.0f * q.v.y * q.v.z;
+    f32 wz = 2.0f * q.w * q.v.z;
+    f32 wx = 2.0f * q.w * q.v.x;
+    f32 wy = 2.0f * q.w * q.v.y;
 
     m[0][0] = s.x * (1.0f - yy - zz);
     m[0][1] = s.y * (xy - wz);
@@ -154,15 +154,15 @@ void Matrix34f::makeSQT(const Vector3f &s, const Quatf &q, const Vector3f &t) {
 }
 
 void Matrix34f::makeQT(const Quatf &q, const Vector3f &t) {
-    f32 yy = 2.0f * q.y * q.y;
-    f32 zz = 2.0f * q.z * q.z;
-    f32 xx = 2.0f * q.x * q.x;
-    f32 xy = 2.0f * q.x * q.y;
-    f32 xz = 2.0f * q.x * q.z;
-    f32 yz = 2.0f * q.y * q.z;
-    f32 wz = 2.0f * q.w * q.z;
-    f32 wx = 2.0f * q.w * q.x;
-    f32 wy = 2.0f * q.w * q.y;
+    f32 yy = 2.0f * q.v.y * q.v.y;
+    f32 zz = 2.0f * q.v.z * q.v.z;
+    f32 xx = 2.0f * q.v.x * q.v.x;
+    f32 xy = 2.0f * q.v.x * q.v.y;
+    f32 xz = 2.0f * q.v.x * q.v.z;
+    f32 yz = 2.0f * q.v.y * q.v.z;
+    f32 wz = 2.0f * q.w * q.v.z;
+    f32 wx = 2.0f * q.w * q.v.x;
+    f32 wy = 2.0f * q.w * q.v.y;
 
     m[0][0] = 1.0f - yy - zz;
     m[0][1] = xy - wz;
@@ -182,15 +182,15 @@ void Matrix34f::makeQT(const Quatf &q, const Vector3f &t) {
 }
 
 void Matrix34f::makeQ(const Quatf &q) {
-    f32 yy = 2.0f * q.y * q.y;
-    f32 zz = 2.0f * q.z * q.z;
-    f32 xx = 2.0f * q.x * q.x;
-    f32 xy = 2.0f * q.x * q.y;
-    f32 xz = 2.0f * q.x * q.z;
-    f32 yz = 2.0f * q.y * q.z;
-    f32 wz = 2.0f * q.w * q.z;
-    f32 wx = 2.0f * q.w * q.x;
-    f32 wy = 2.0f * q.w * q.y;
+    f32 yy = 2.0f * q.v.y * q.v.y;
+    f32 zz = 2.0f * q.v.z * q.v.z;
+    f32 xx = 2.0f * q.v.x * q.v.x;
+    f32 xy = 2.0f * q.v.x * q.v.y;
+    f32 xz = 2.0f * q.v.x * q.v.z;
+    f32 yz = 2.0f * q.v.y * q.v.z;
+    f32 wz = 2.0f * q.w * q.v.z;
+    f32 wx = 2.0f * q.w * q.v.x;
+    f32 wy = 2.0f * q.w * q.v.y;
 
     m[0][0] = 1.0f - yy - zz;
     m[0][1] = xy - wz;
@@ -240,17 +240,17 @@ void Matrix34f::makeT(const Vector3f &t) {
 }
 
 void Matrix34f::fromQuat(const Quatf &q) {
-    m[0][0] = 1.0f - (2 * q.y * q.y) - (2.0f * q.z * q.z);
-    m[0][1] = (2.0f * q.x * q.y) - (2.0f * q.w * q.z);
-    m[0][2] = (2.0f * q.x * q.z) + (2.0f * q.w * q.y);
+    m[0][0] = 1.0f - (2 * q.v.y * q.v.y) - (2.0f * q.v.z * q.v.z);
+    m[0][1] = (2.0f * q.v.x * q.v.y) - (2.0f * q.w * q.v.z);
+    m[0][2] = (2.0f * q.v.x * q.v.z) + (2.0f * q.w * q.v.y);
 
-    m[1][0] = (2.0f * q.x * q.y) + (2.0f * q.w * q.z);
-    m[1][1] = 1.0f - (2.0f * q.x * q.x) - (2.0f * q.z * q.z);
-    m[1][2] = (2.0f * q.y * q.z) - (2.0f * q.w * q.x);
+    m[1][0] = (2.0f * q.v.x * q.v.y) + (2.0f * q.w * q.v.z);
+    m[1][1] = 1.0f - (2.0f * q.v.x * q.v.x) - (2.0f * q.v.z * q.v.z);
+    m[1][2] = (2.0f * q.v.y * q.v.z) - (2.0f * q.w * q.v.x);
 
-    m[2][0] = (2.0f * q.x * q.z) - (2.0f * q.w * q.y);
-    m[2][1] = (2.0f * q.y * q.z) + (2.0f * q.w * q.x);
-    m[2][2] = 1.0f - (2.0f * q.x * q.x) - (2.0f * q.y * q.y);
+    m[2][0] = (2.0f * q.v.x * q.v.z) - (2.0f * q.w * q.v.y);
+    m[2][1] = (2.0f * q.v.y * q.v.z) + (2.0f * q.w * q.v.x);
+    m[2][2] = 1.0f - (2.0f * q.v.x * q.v.x) - (2.0f * q.v.y * q.v.y);
 
     m[2][3] = 0.0f;
     m[1][3] = 0.0f;
@@ -298,38 +298,38 @@ void Matrix34f::toQuat(Quatf &q) const {
     switch (tempMax) {
         case 0:
             q.w = Math<f32>::sqrt(temp0);
-            q.x = (0.25f / q.w) * (m[2][1] - m[1][2]);
-            q.y = (0.25f / q.w) * (m[0][2] - m[2][0]);
-            q.z = (0.25f / q.w) * (m[1][0] - m[0][1]);
+            q.v.x = (0.25f / q.w) * (m[2][1] - m[1][2]);
+            q.v.y = (0.25f / q.w) * (m[0][2] - m[2][0]);
+            q.v.z = (0.25f / q.w) * (m[1][0] - m[0][1]);
             break;
         case 1:
-            q.x = Math<f32>::sqrt(temp1);
-            q.w = (0.25f / q.x) * (m[2][1] - m[1][2]);
-            q.y = (0.25f / q.x) * (m[0][1] + m[1][0]);
-            q.z = (0.25f / q.x) * (m[0][2] + m[2][0]);
+            q.v.x = Math<f32>::sqrt(temp1);
+            q.w = (0.25f / q.v.x) * (m[2][1] - m[1][2]);
+            q.v.y = (0.25f / q.v.x) * (m[0][1] + m[1][0]);
+            q.v.z = (0.25f / q.v.x) * (m[0][2] + m[2][0]);
             break;
         case 2:
-            q.y = Math<f32>::sqrt(temp2);
-            q.w = (0.25f / q.y) * (m[0][2] - m[2][0]);
-            q.z = (0.25f / q.y) * (m[1][2] + m[2][1]);
-            q.x = (0.25f / q.y) * (m[1][0] + m[0][1]);
+            q.v.y = Math<f32>::sqrt(temp2);
+            q.w = (0.25f / q.v.y) * (m[0][2] - m[2][0]);
+            q.v.z = (0.25f / q.v.y) * (m[1][2] + m[2][1]);
+            q.v.x = (0.25f / q.v.y) * (m[1][0] + m[0][1]);
             break;
         case 3:
-            q.z = Math<f32>::sqrt(temp3);
-            q.w = (0.25f / q.z) * (m[1][0] - m[0][1]);
-            q.x = (0.25f / q.z) * (m[2][0] + m[0][2]);
-            q.y = (0.25f / q.z) * (m[2][1] + m[1][2]);
+            q.v.z = Math<f32>::sqrt(temp3);
+            q.w = (0.25f / q.v.z) * (m[1][0] - m[0][1]);
+            q.v.x = (0.25f / q.v.z) * (m[2][0] + m[0][2]);
+            q.v.y = (0.25f / q.v.z) * (m[2][1] + m[1][2]);
             break;
         default: break;
     }
 
     if (q.w < 0.0f) {
         q.w = -q.w;
-        q.x = -q.x;
-        q.y = -q.y;
-        q.z = -q.z;
+        q.v.x = -q.v.x;
+        q.v.y = -q.v.y;
+        q.v.z = -q.v.z;
     }
-    q.multScalar(Math<f32>::inv(q.length()));
+    q.multScalar(Math<f32>::inv(Math<f32>::sqrt(q.w * q.w + q.v.dot(q.v))));
 }
 
 void Matrix34f::slerpTo(const Matrix34f &m2, Matrix34f &out, f32 t) const {
