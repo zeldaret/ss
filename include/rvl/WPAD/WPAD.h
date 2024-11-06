@@ -33,7 +33,7 @@ enum WPADResult_et {
 
     WPAD_ERR_NO_CONTROLLER = -1,       /* name known from asserts */
     WPAD_ERR_COMMUNICATION_ERROR = -2, // [RT3P54] has this as WPAD_ERR_BUSY
-    WPAD_ERR_3 = -3,                   // [RT3P54] has this as WPAD_ERR_TRANSFER
+    WPAD_ERR_TRANSFER = -3,                   // [RT3P54] has this as WPAD_ERR_TRANSFER
     WPAD_ERR_INVALID = -4,             /* name comes from [R89JEL] */
                                        //	WPAD_ERR_5						= -5,	/* unknown */
                                        //	WPAD_ERR_6						= -6,	/* unknown */
@@ -260,8 +260,8 @@ enum WPADMotorCommand_et {
 // WPADControlSpeaker
 typedef u32 WPADSpeakerCommand;
 enum WPADSpeakerCommand_et {
-    WPAD_SPEAKER_DISABLE = 0,
-    WPAD_SPEAKER_ENABLE = 1, // might be ON? see HBMRemoteSpk.cpp
+    WPAD_SPEAKER_OFF = 0,
+    WPAD_SPEAKER_ON = 1,
     WPAD_SPEAKER_MUTE = 2,
     WPAD_SPEAKER_UNMUTE = 3,
     WPAD_SPEAKER_PLAY = 4, // figured out from HBM usage
