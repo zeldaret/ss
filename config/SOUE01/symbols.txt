@@ -25136,9 +25136,9 @@ DetachPlayerHeap__Q44nw4r3snd6detail10BasicSoundFPQ44nw4r3snd6detail10PlayerHeap
 AttachSoundPlayer__Q44nw4r3snd6detail10BasicSoundFPQ34nw4r3snd11SoundPlayer = .text:0x80469E80; // type:function size:0x8
 DetachSoundPlayer__Q44nw4r3snd6detail10BasicSoundFPQ34nw4r3snd11SoundPlayer = .text:0x80469E90; // type:function size:0xC
 FUN_80469ea0 = .text:0x80469EA0; // type:function size:0x8
-FUN_80469eb0 = .text:0x80469EB0; // type:function size:0xC
-FUN_80469ec0 = .text:0x80469EC0; // type:function size:0x8
-FUN_80469ed0 = .text:0x80469ED0; // type:function size:0xC
+DetachSoundActor__Q44nw4r3snd6detail10BasicSoundFPQ34nw4r3snd10SoundActor = .text:0x80469EB0; // type:function size:0xC
+AttachExternalSoundPlayer__Q44nw4r3snd6detail10BasicSoundFPQ44nw4r3snd6detail19ExternalSoundPlayer = .text:0x80469EC0; // type:function size:0x8
+DetachExternalSoundPlayer__Q44nw4r3snd6detail10BasicSoundFPQ44nw4r3snd6detail19ExternalSoundPlayer = .text:0x80469ED0; // type:function size:0xC
 FUN_80469ee0 = .text:0x80469EE0; // type:function size:0x24
 nw4r__snd__detail__BasicSound__GetVoiceOutCount = .text:0x80469F10; // type:function size:0x8
 SetPlayerPriority__Q44nw4r3snd6detail10BasicSoundFi = .text:0x80469F20; // type:function size:0x58

@@ -136,6 +136,12 @@ public:
         mExtSoundPlayer = pExtPlayer;
     }
 
+    void AttachExternalSoundPlayer(ExternalSoundPlayer *pPlayer);
+    void DetachExternalSoundPlayer(ExternalSoundPlayer *pPlayer);
+
+    void AttachSoundActor(SoundActor *pActor);
+    void DetachSoundActor(SoundActor *pActor);
+
     AmbientParamUpdateCallback *GetAmbientParamUpdateCallback() {
         return mAmbientInfo.paramUpdateCallback;
     }
