@@ -39,10 +39,6 @@ public:
         return (T)0;
     }
 
-    static T clamp(T x, T low, T high) {
-        return (x < low ? low : (x > high ? high : x));
-    }
-
     static T sqrt(T);
     static T sin(T);
     static T cos(T);

@@ -8,6 +8,7 @@
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "nw4r/types_nw4r.h"
+#include "rvl/MTX/mtx.h"
 
 class mMtx_c : public EGG::Matrix34f {
     typedef f32 (*MtxRef)[4];
@@ -62,6 +63,18 @@ public:
 
     void rot(int, int); // does some werrd operation to rotate the matrix
     bool quatRelated();
+
+    void trans(const mVec3_c &v) {
+        PSMTXTrans(*this, v.x, v.y, v.z);
+    }
+    void trans(f32 x, f32 y, f32 z) {
+        PSMTXTrans(*this, x, y, z);
+    }
+
+    mMtx_c &operator+=(const mMtx_c &rhs) {
+        PSMTXConcat(*this, rhs, *this);
+        return *this;
+    }
 
 public:
     static mMtx_c Identity;

@@ -9,7 +9,6 @@
 #include "nw4r/types_nw4r.h"
 #include "rvl/MTX/vec.h"
 
-
 class mAng;
 
 class mVec3_c : public EGG::Vector3f {
@@ -224,6 +223,10 @@ public:
         p->x = x;
         p->y = y;
         p->z = z;
+    }
+
+    s16 ang() const {
+        return cM::atan2s(x * x, z * z);
     }
 
     static mVec3_c Zero;

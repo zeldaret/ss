@@ -5,11 +5,13 @@
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_pla.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "egg/math/eggMath.h"
+#include "egg/math/eggQuat.h"
 #include "f/f_base.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
@@ -252,7 +254,7 @@ bool dAcOTumbleWeed_c::checkSlope() {
     const f32 b = mVec3_c::Ey.cross(pla.mNormal).length();
 
     mAng ang = mAng::fromRad(EGG::Math<f32>::abs(EGG::Math<f32>::atan2(b, a)));
-    return sLib::absDiff(ang, 0) > 182;
+    return sLib::absDiff(ang, 0) > mAng::deg2short(1);
 }
 
 bool dAcOTumbleWeed_c::checkCollect() {
@@ -277,34 +279,29 @@ void dAcOTumbleWeed_c::doBreak() {
 }
 
 void dAcOTumbleWeed_c::calcMatrix() {
-    mMtx_c mtx0, mtx1, mtx2;
-    mQuat_c q0, q1, q2, q3;
     if (mField_0x98B) {
-        // Im not even trying
-
         f32 vel_mag = PSVECMag(velocity);
-        mAng a0 = vel_mag * 182.0f * 0.2f;
-        mAng a1 = angle.y - rotation.y;
-        mAng a2 = vel_mag * (mField_0x978 + 200.f);
+        f32 f1 = mAng(vel_mag * (mField_0x978 + 200.f)).radian();
+        f32 f2 = mAng(vel_mag * 182.0f * 0.2f).radian();
+        f32 f0 = mAng(angle.y - rotation.y).radian();
 
-        f32 f0 = mAng::SAngle_to_Radian(a1);
-        f32 f1 = mAng::SAngle_to_Radian(a2);
-        f32 f2 = mAng::SAngle_to_Radian(a0);
+        mQuat_c q0, q1, q2, q3;
         q1.setAxisRotation(mVec3_c::Ey, f0);
         q0.setAxisRotation(mVec3_c::Ey, -f0);
         q3.setAxisRotation(mVec3_c::Ex, f1);
         q2.setAxisRotation(mVec3_c::Ey, f2);
 
-        mField_0x910 = mField_0x910 * q0 * q2 * q1 * q3;
+        mField_0x910 = q1 * q3 * q2 * q0 * mField_0x910;
     }
+
+    mMtx_c mtx0, mtx1, mtx2;
     mShadowMtx.copyFrom(mWorldMtx);
-    mVec3_c pos = getPosition() - position;
-    PSMTXTrans(mtx1, pos.x, pos.y, pos.z);
-    PSMTXConcat(mShadowMtx, mtx2, mShadowMtx);
+    mtx1.trans(getPosition() - position);
+    mShadowMtx += mtx1;
     mtx0.fromQuat(mField_0x910);
-    PSMTXTrans(mtx1, 0.f, 40.f, 0.f);
-    PSMTXConcat(mWorldMtx, mtx0, mWorldMtx);
-    PSMTXConcat(mWorldMtx, mtx2, mWorldMtx);
+    mtx2.trans(0.f, 40.f, 0.f);
+    mWorldMtx += mtx2;
+    mWorldMtx += mtx0;
 }
 
 void dAcOTumbleWeed_c::adjustAngle() {
@@ -317,21 +314,34 @@ void dAcOTumbleWeed_c::adjustAngle() {
 void dAcOTumbleWeed_c::adjustSpeed() {
     cM3dGPla pla;
 
-    const f32 a = mVec3_c::Ey.dot(pla.mNormal);
-    const f32 b = mVec3_c::Ey.cross(pla.mNormal).length();
+    // BUG
+    // the ground angle calculation happens before retrieving the grounds normal
+    // this is probably hard to notice due to the little effect it has.
+    // Effect:
+    //  Tumbleweed slows to the target much quicker than intended
+    //  Tumbleweed speeds to the target + 5.0f much quicker than intended
 
-    mAng ang = mAng::fromRad(EGG::Math<f32>::abs(EGG::Math<f32>::atan2(b, a)));
+    f32 dot = mVec3_c::Ey.dot(pla.GetN());
+    f32 cross = mVec3_c::Ey.cross(pla.GetN()).length();
+
+    f32 angF = EGG::Math<f32>::atan2(cross, dot);
+    mAng gndAngle = mAng::fromRad(EGG::Math<f32>::abs(angF));
 
     dBgS::GetInstance()->GetTriPla(mObjAcch.mGnd, &pla);
 
-    f32 tmp2 = nw4r::math::CosIdx(ang) * 0.5f;
-    if (ang < 182 || sLib::absDiff(cM::atan2s(pla.mNormal.x, pla.mNormal.z), angle.y) > 0x4000) {
-        sLib::chase(&forwardSpeed, mSpeedTarget, tmp2);
-    } else {
-        f32 min = forwardSpeed + tmp2;
-        f32 max = mSpeedTarget + 5.0f;
-        f32 val = mSpeedTarget;
-        forwardSpeed = EGG::Math<f32>::clamp(val, min, max);
+    f32 speedStep = 0.5f;
+    f32 step = gndAngle.cos() * speedStep;
+
+    // Flat Ground or not in the direction of the slope
+    //  Slows down
+    if (gndAngle < mAng::deg2short(1) ||
+        sLib::absDiff(cM::atan2s(pla.GetN().x, pla.GetN().z), GetAngle().y) > mAng::deg2short(90)) {
+        sLib::chase(&forwardSpeed, mSpeedTarget, step);
+    }
+    // Sloped Ground and in the direction of the slope
+    //  Speeds up
+    else {
+        forwardSpeed = cM::minMaxLimit(forwardSpeed + step, mSpeedTarget, mSpeedTarget + 5.0f);
     }
 }
 
@@ -394,4 +404,8 @@ mVec3_c dAcOTumbleWeed_c::getPosition() const {
     mtx.ZXYrotS(rotation.x, rotation.y, rotation.z);
     PSMTXMultVecSR(mtx, mVec3_c::Ey, vec);
     return position + vec * 40.f;
+}
+
+void float_ordering2() {
+    const f32 arr[] = {30.f, 0.07f, 20.f, -10000.f, 5.f};
 }
