@@ -73,39 +73,40 @@ public:
 
 public:
     BasicSound();
+    BasicSound(int priority, int ambientPriority);
     virtual ~BasicSound() {} // at 0xC
 
-    void Update();                       // at 0x10
-    void StartPrepared();                // at 0x14
-    void Stop(int frames);               // at 0x18
-    void Pause(bool flag, int frames);   // at 0x1C
-    void SetAutoStopCounter(int count);  // at 0x20
-    void FadeIn(int frames);             // at 0x24
-    virtual void Shutdown();             // at 0x28
-    virtual bool IsPrepared() const = 0; // at 0x2C
-    bool IsPause() const;                // at 0x30
+    void Update();
+    void StartPrepared();
+    void Stop(int frames);
+    void Pause(bool flag, int frames);
+    void SetAutoStopCounter(int count);
+    void FadeIn(int frames);
+    virtual void Shutdown();             // at 0x10
+    virtual bool IsPrepared() const = 0; // at 0x14
+    bool IsPause() const;
 
-    void SetInitialVolume(f32 vol);       // at 0x34
-    void SetVolume(f32 vol, int frames);  // at 0x38
-    void SetPitch(f32 pitch);             // at 0x3C
-    void SetPan(f32 pan);                 // at 0x40
-    void SetSurroundPan(f32 pan);         // at 0x44
-    void SetLpfFreq(f32 freq);            // at 0x48
-    void SetPlayerPriority(int priority); // at 0x4C
-    void SetRemoteFilter(int filter);     // at 0x50
-    void SetPanMode(PanMode mode);        // at 0x54
-    void SetPanCurve(PanCurve curve);     // at 0x58
+    void SetInitialVolume(f32 vol);
+    void SetVolume(f32 vol, int frames);
+    void SetPitch(f32 pitch);
+    void SetPan(f32 pan);
+    void SetSurroundPan(f32 pan);
+    void SetLpfFreq(f32 freq);
+    void SetPlayerPriority(int priority);
+    void SetRemoteFilter(int filter);
+    void SetPanMode(PanMode mode);
+    void SetPanCurve(PanCurve curve);
 
-    virtual bool IsAttachedTempSpecialHandle() = 0; // at 0x5C
-    virtual void DetachTempSpecialHandle() = 0;     // at 0x60
+    virtual bool IsAttachedTempSpecialHandle() = 0; // at 0x18
+    virtual void DetachTempSpecialHandle() = 0;     // at 0x1C
 
-    virtual void InitParam();                              // at 0x64
-    virtual BasicPlayer &GetBasicPlayer() = 0;             // at 0x68
-    virtual const BasicPlayer &GetBasicPlayer() const = 0; // at 0x6C
+    virtual void InitParam();                              // at 0x20
+    virtual BasicPlayer &GetBasicPlayer() = 0;             // at 0x24
+    virtual const BasicPlayer &GetBasicPlayer() const = 0; // at 0x28
 
-    virtual void OnUpdatePlayerPriority() {}
-    virtual void UpdateMoveValue() {}
-    virtual void UpdateParam() {}
+    virtual void OnUpdatePlayerPriority() {} // at 0x2C
+    virtual void UpdateMoveValue() {} // at 0x30
+    virtual void UpdateParam() {} // at 0x34
 
     PlayerHeap *GetPlayerHeap() {
         return mPlayerHeap;
@@ -200,6 +201,8 @@ public:
 
     void SetFxSend(AuxBus bus, f32 send);
 
+    int GetVoiceOutCount();
+
     int CalcCurrentPlayerPriority() const {
         return ut::Clamp(mPriority + mAmbientParam.priority, 0, PRIORITY_MAX);
     }
@@ -232,7 +235,7 @@ private:
     u8 mPriority;         // at 0x98
     u8 mVoiceOutCount;    // at 0x99
     u8 mBiquadFilterType; // at 0x9A
-    u32 mId; // at 0x9B
+    u32 mId;              // at 0x9B
 
     MoveValue<f32, int> mExtMoveVolume; // at 0xA0
     f32 mInitVolume;                    // at 0xB0
@@ -245,7 +248,7 @@ private:
     int mOutputLineFlag;                        // at 0xC8
     f32 mMainOutVolume;                         // at 0xCC
     f32 mMainSend;                              // at 0xD0
-    f32 mFxSend[AUX_BUS_NUM];          // at 0xD4
+    f32 mFxSend[AUX_BUS_NUM];                   // at 0xD4
     f32 mRemoteOutVolume[WPAD_MAX_CONTROLLERS]; // at 0xF0
 
 public:

@@ -219,7 +219,7 @@ detail::StrmSound *SoundPlayer::detail_AllocStrmSound(
 
     return pSound;
 }
-
+/*
 detail::WaveSound *SoundPlayer::detail_AllocWaveSound(
     int priority, int startPriority, detail::BasicSound::AmbientInfo *pArgInfo, detail::ExternalSoundPlayer *pExtPlayer,
     u32 id, detail::SoundInstanceManager<detail::WaveSound> *pManager
@@ -262,7 +262,7 @@ detail::WaveSound *SoundPlayer::detail_AllocWaveSound(
 
     return pSound;
 }
-
+*/
 int SoundPlayer::CalcPriorityReduction(detail::BasicSound::AmbientInfo *pArgInfo, u32 id) {
     int priority = 0;
 

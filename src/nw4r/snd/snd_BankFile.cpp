@@ -16,7 +16,7 @@ bool BankFileReader::IsValidFileHeader(const void* pBankBin) {
     const ut::BinaryFileHeader* pFileHeader =
         static_cast<const ut::BinaryFileHeader*>(pBankBin);
 
-    if (pFileHeader->magic != SIGNATURE) {
+    if (pFileHeader->signature != SIGNATURE) {
         return false;
     }
 

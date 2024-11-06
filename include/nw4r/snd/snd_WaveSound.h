@@ -25,26 +25,28 @@ public:
     NW4R_UT_RTTI_DECL(WaveSound);
 
 public:
-    explicit WaveSound(SoundInstanceManager<WaveSound> *pManager);
+    explicit WaveSound(SoundInstanceManager<WaveSound> *pManager, int priority, int ambientPriority);
 
-    virtual void Shutdown(); // at 0x28
-    virtual bool IsPrepared() const {
+    virtual void Shutdown() override; // at 0x10
+    virtual bool IsPrepared() override const {
         return mPreparedFlag;
-    } // at 0x2C
+    } // at 0x14
 
-    virtual void SetPlayerPriority(int priority); // at 0x4C
-    virtual bool IsAttachedTempSpecialHandle();   // at 0x5C
-    virtual void DetachTempSpecialHandle();       // at 0x60
+    void SetPlayerPriority(int priority);
+    virtual bool IsAttachedTempSpecialHandle() override;   // at 0x18
+    virtual void DetachTempSpecialHandle();       // at 0x1C
 
     virtual BasicPlayer &GetBasicPlayer() {
         return mWsdPlayer;
-    } // at 0x68
+    } // at 0x24
     virtual const BasicPlayer &GetBasicPlayer() const {
         return mWsdPlayer;
-    } // at 0x6C
+    } // at 0x28
+
+    virtual void OnUpdatePlayerPriority() override; // at 0x2C
 
     bool Prepare(
-        const void *pWsdData, s32 wsdOffset, WsdPlayer::StartOffsetType startType, s32 startOffset, int voices,
+        const void *pWsdData, s32 wsdOffset, WsdPlayer::StartOffsetType startType, s32 startOffset,
         const WsdPlayer::WsdCallback *pCallback, u32 callbackArg
     );
 

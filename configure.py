@@ -769,12 +769,15 @@ config.libs = [
             Object(NonMatching, "nw4r/snd/snd_WaveArchive.cpp"),
             Object(NonMatching, "nw4r/snd/snd_WaveFile.cpp"),
             Object(NonMatching, "nw4r/snd/snd_WaveSound.cpp"),
-            Object(NonMatching, "nw4r/snd/snd_WaveSoundHandle.cpp"),
+            Object(Matching, "nw4r/snd/snd_WaveSoundHandle.cpp"),
             Object(NonMatching, "nw4r/snd/snd_WsdFile.cpp"),
             Object(NonMatching, "nw4r/snd/snd_WsdPlayer.cpp"),
             Object(NonMatching, "nw4r/snd/snd_adpcm.cpp"),
         ],
-        mw_version="Wii/1.6",
+        mw_version="Wii/1.5",
+        # Our SND version string says 1.6 but
+        # ut RTTI code doesn't match on 1.6
+        # mw_version="Wii/1.6",
     ),
     nw4rLib(
         "lyt",

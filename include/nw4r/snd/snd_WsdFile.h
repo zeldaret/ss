@@ -107,7 +107,7 @@ struct WaveSoundNoteInfo {
 class WsdFileReader {
 public:
     static const u32 SIGNATURE = 'RWSD';
-    static const int VERSION = NW4R_VERSION(1, 2);
+    static const int VERSION = NW4R_VERSION(1, 3);
 
 public:
     explicit WsdFileReader(const void *pWsdBin);
