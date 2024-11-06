@@ -1,6 +1,7 @@
 #ifndef NW4R_SND_EXTERNAL_SOUND_PLAYER_H
 #define NW4R_SND_EXTERNAL_SOUND_PLAYER_H
 #include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/types_nw4r.h"
 
 

@@ -88,7 +88,7 @@ public:
     }
 
     void InsertPriorityList(T *pSound, int priority) {
-        TPrioList::Iterator it = mPriorityList.GetBeginIter();
+        typename TPrioList::Iterator it = mPriorityList.GetBeginIter();
 
         for (; it != mPriorityList.GetEndIter(); ++it) {
             if (priority < it->CalcCurrentPlayerPriority()) {

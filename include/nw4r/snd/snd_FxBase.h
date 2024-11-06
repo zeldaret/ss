@@ -21,6 +21,7 @@ public:
         int /* channels */, void ** /* ppBuffer */, u32 /* size */, SampleFormat /* format */, f32 /* sampleRate */,
         OutputMode /* mode */
     ) {}           // at 0x14
+    virtual void OnChangeOutputMode(); // at 0x18
 
 public:
     NW4R_UT_LIST_NODE_DECL(); // at 0x4

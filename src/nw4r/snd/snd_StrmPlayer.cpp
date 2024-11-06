@@ -527,11 +527,6 @@ void StrmPlayer::Update() {
 
 void StrmPlayer::UpdateBuffer() {
     if (mStartedFlag && mVoice != NULL) {
-        if (AxManager::GetInstance().IsDiskError()) {
-            mLoadWaitFlag = true;
-            UpdatePauseStatus();
-        }
-
         if (!mPlayFinishFlag && !mNoRealtimeLoadFlag && !mLoadWaitFlag) {
             u32 sample = mVoice->GetCurrentPlayingSample();
             int block = sample / mStrmInfo.blockSamples;

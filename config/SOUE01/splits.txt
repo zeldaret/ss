@@ -1470,6 +1470,9 @@ nw4r/snd/snd_AnimSound.cpp:
 nw4r/snd/snd_AxManager.cpp:
 	.text       start:0x804630E0 end:0x80464880
 	.ctors      start:0x804DB958 end:0x804DB95C
+	.sbss       start:0x80576650 end:0x80576668
+	.sdata2     start:0x8057EF18 end:0x8057EF30
+	.bss        start:0x80658F80 end:0x80659390
 
 nw4r/snd/snd_AxVoice.cpp:
 	.text       start:0x80464880 end:0x80467634
