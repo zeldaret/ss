@@ -12,7 +12,8 @@ public:
     dTagProcessor_c();
     virtual ~dTagProcessor_c();
 
-    void eventFlowTextProcessingRelated(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen);
+    void
+    eventFlowTextProcessingRelated(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen);
 
     virtual nw4r::ut::Operation Process(u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx) override;
     virtual nw4r::ut::Operation CalcRect(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx) override;
@@ -20,9 +21,9 @@ public:
     nw4r::ut::Operation ProcessTags(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx);
 
     void changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, bool);
-    wchar_t *writeItem(wchar_t *dest, wchar_t *src, s32*, s32);
-    wchar_t *writeStringArg(wchar_t *dest, wchar_t *src, s32*, s32);
-    wchar_t *writeNumericArg(wchar_t *dest, wchar_t *src, s32*, s32);
+    wchar_t *writeItem(wchar_t *dest, wchar_t *src, s32 *, s32);
+    wchar_t *writeStringArg(wchar_t *dest, wchar_t *src, s32 *, s32);
+    wchar_t *writeNumericArg(wchar_t *dest, wchar_t *src, s32 *, s32);
     void fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void fn_800B6450(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void makeSpaceForIconMaybe(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr);
@@ -51,9 +52,9 @@ public:
 
     static f32 fn_800B8040(s8, u32);
     wchar_t *fn_800B5FD0(u32, wchar_t *, s32 *);
-    wchar_t *writeTextNormal(const wchar_t *src, wchar_t *dest, s32*, u8 cmdLen, s32);
-    wchar_t *writeHeroname(wchar_t *dest, s32*, s32);
-    wchar_t *fn_800B5DD0(wchar_t *dest, wchar_t *src, s32*, s32);
+    wchar_t *writeTextNormal(const wchar_t *src, wchar_t *dest, s32 *, u8 cmdLen, s32);
+    wchar_t *writeHeroname(wchar_t *dest, s32 *, s32);
+    wchar_t *fn_800B5DD0(wchar_t *dest, wchar_t *src, s32 *, s32);
     void fn_800B5520(wchar_t *src);
     void writeIcon(dTextBox_c *textBox, wchar_t *cmd, f32);
     char fn_800B7880(u32);
