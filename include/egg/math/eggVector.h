@@ -95,6 +95,12 @@ struct Vector3f : public nw4r::math::VEC3 {
         multScalar(1.0f / f);
     }
 
+    f32 angle(const Vector3f &v) const {
+        f32 a = dot(v);
+        f32 b = cross(v).length();
+        return EGG::Math<f32>::abs(EGG::Math<f32>::atan2(b, a));
+    }
+
     // dot__Q23EGG8Vector3fCFRCQ23EGG8Vector3f
     f32 dot(const Vector3f &v) const {
         return x * v.x + y * v.y + z * v.z;

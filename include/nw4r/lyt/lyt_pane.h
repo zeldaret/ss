@@ -84,6 +84,10 @@ public:
         mAlpha = value;
     }
 
+    u8 GetGlobalAlpha() const {
+        return mGlbAlpha;
+    }
+
     const Size &GetSize() const {
         return mSize;
     }

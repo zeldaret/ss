@@ -2,7 +2,6 @@
 
 #include "c/c_math.h"
 #include "common.h"
-#include "d/a/d_a_item.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
@@ -23,7 +22,6 @@
 #include "rvl/MTX/vec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/dowsing_target.h"
-
 
 void float_ordering() {
     const f32 arr[] = {5.f, 15.f, 7.f, 0.5f, 0.1f};
@@ -120,7 +118,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     mObjAcch.CrrPos(*dBgS::GetInstance());
     mField_0x974 += position.y - mOldPosition.y;
     if (checkCollect()) {
-        dAcPy_c::LINK->bugNetCollectTreasure(ITEM_TUMBLE_WEED);
+        dAcPy_c::LINK->bugNetCollectTreasure(0xA3 /* TODO(Item Id) ITEM_TUMBLEWEED */);
         FUN_8002dcd0();
         return SUCCEEDED;
     }
@@ -252,10 +250,7 @@ bool dAcOTumbleWeed_c::checkSlope() {
     cM3dGPla pla;
     dBgS::GetInstance()->GetTriPla(mObjAcch.mGnd, &pla);
 
-    const f32 a = mVec3_c::Ey.dot(pla.mNormal);
-    const f32 b = mVec3_c::Ey.cross(pla.mNormal).length();
-
-    mAng ang = mAng::fromRad(EGG::Math<f32>::abs(EGG::Math<f32>::atan2(b, a)));
+    mAng ang = mAng::angle(mVec3_c::Ey, pla.GetN());
     return sLib::absDiff(ang, 0) > mAng::deg2short(1);
 }
 
@@ -322,12 +317,7 @@ void dAcOTumbleWeed_c::adjustSpeed() {
     // Effect:
     //  Tumbleweed slows to the target much quicker than intended
     //  Tumbleweed speeds to the target + 5.0f much quicker than intended
-
-    f32 dot = mVec3_c::Ey.dot(pla.GetN());
-    f32 cross = mVec3_c::Ey.cross(pla.GetN()).length();
-
-    f32 angF = EGG::Math<f32>::atan2(cross, dot);
-    mAng gndAngle = mAng::fromRad(EGG::Math<f32>::abs(angF));
+    mAng gndAngle = mAng::angle(mVec3_c::Ey, pla.GetN());
 
     dBgS::GetInstance()->GetTriPla(mObjAcch.mGnd, &pla);
 

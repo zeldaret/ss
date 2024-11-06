@@ -10,7 +10,9 @@ public:
     dLytDobutton_c() : mStateMgr(*this, sStateID::null) {
         sInstance = this;
     }
-    virtual ~dLytDobutton_c() {}
+    virtual ~dLytDobutton_c() {
+        sInstance = nullptr;
+    }
 
     bool init(m2d::ResAccIf_c *resAcc);
     bool remove();
