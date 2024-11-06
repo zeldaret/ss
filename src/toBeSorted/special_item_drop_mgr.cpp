@@ -383,7 +383,7 @@ static const struct {
     0x36,
     sList,
 };
-static const int RAND_RUPEE_ARRAY[4] = {ITEM_GREEN_RUPEE, ITEM_BLUE_RUPEE, ITEM_RED_RUPEE, ITEM_NONE};
+static const int RAND_RUPEE_ARRAY[3] = {ITEM_GREEN_RUPEE, ITEM_BLUE_RUPEE, ITEM_RED_RUPEE};
 
 extern "C" int getCurrentBowType();
 extern "C" int getCurrentSlingshotType();
