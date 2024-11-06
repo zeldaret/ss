@@ -122,6 +122,7 @@ public:
 
     u32 GetPlayerCount() const;
     u32 GetGroupCount() const;
+    u32 GetFileCount() const;
 
     const char *GetSoundLabelString(u32 id) const;
     u32 ConvertLabelStringToSoundId(const char *pLabel) const;
@@ -132,7 +133,7 @@ public:
     SoundType GetSoundType(u32 id) const;
 
     bool ReadSoundInfo(u32 id, SoundInfo *pInfo) const;
-    bool detail_ReadSeqSoundInfo(u32 id, SeqSoundInfo *pInfo) const;
+    bool ReadSeqSoundInfo(u32 id, SeqSoundInfo *pInfo) const;
     bool detail_ReadStrmSoundInfo(u32 id, StrmSoundInfo *pInfo) const;
     bool detail_ReadWaveSoundInfo(u32 id, WaveSoundInfo *pInfo) const;
 
@@ -140,7 +141,7 @@ public:
     bool ReadSoundArchivePlayerInfo(SoundArchivePlayerInfo *pInfo) const;
 
     bool detail_ReadSound3DParam(u32 id, Sound3DParam *pParam) const;
-    bool detail_ReadBankInfo(u32 id, BankInfo *pInfo) const;
+    bool ReadBankInfo(u32 id, BankInfo *pInfo) const;
     bool detail_ReadGroupInfo(u32 id, GroupInfo *pInfo) const;
     bool detail_ReadGroupItemInfo(u32 groupId, u32 itemId, GroupItemInfo *pInfo) const;
 

@@ -1,5 +1,7 @@
 #include "nw4r/snd/snd_adpcm.h"
 
+// Need to compile this with GC 3.0a3.3
+
 namespace nw4r {
 namespace snd {
 namespace detail {

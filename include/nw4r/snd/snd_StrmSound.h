@@ -4,6 +4,7 @@
 #include "nw4r/snd/snd_StrmPlayer.h"
 #include "nw4r/types_nw4r.h"
 #include "nw4r/ut.h"
+#include "nw4r/ut/ut_FileStream.h"
 
 
 namespace nw4r {
@@ -61,8 +62,10 @@ private:
     StrmPlayer mStrmPlayer;                    // at 0xD8
     StrmSoundHandle *mTempSpecialHandle;       // at 0x920
     SoundInstanceManager<StrmSound> *mManager; // at 0x924
-    char UNK_0x928[0x93C - 0x928];
+    MoveValue<f32, int> mTrackVolume[8];
+    ut::FileStream *mFileStream;
     char mFileStreamBuffer[FILE_STREAM_BUFFER_SIZE]; // at 0x93C
+    // Wrong size, needs 0x10B4
 };
 
 } // namespace detail

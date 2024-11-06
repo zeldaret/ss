@@ -4,6 +4,7 @@
 #include "nw4r/snd/snd_MmlParser.h"
 #include "nw4r/snd/snd_MmlSeqTrackAllocator.h"
 #include "nw4r/snd/snd_NoteOnCallback.h"
+#include "nw4r/snd/snd_SeqPlayer.h"
 #include "nw4r/snd/snd_SeqSound.h"
 #include "nw4r/snd/snd_SoundArchive.h"
 #include "nw4r/snd/snd_SoundInstanceManager.h"
@@ -14,7 +15,6 @@
 #include "nw4r/snd/snd_WaveSound.h"
 #include "nw4r/snd/snd_WsdPlayer.h"
 #include "nw4r/types_nw4r.h"
-
 
 namespace nw4r {
 namespace snd {
@@ -52,7 +52,8 @@ public:
         const StartInfo *pStartInfo
     ); // at 0x2C
 
-    StartResult detail_SetupSoundImpl(SoundHandle*, u32, detail::BasicSound::AmbientInfo*, SoundActor*, bool, const SoundStartable::StartInfo* );
+    StartResult
+    detail_SetupSoundImpl(SoundHandle *, u32, detail::BasicSound::AmbientInfo *, SoundActor *, bool, const SoundStartable::StartInfo *);
 
     bool IsAvailable() const;
 
@@ -114,6 +115,13 @@ private:
 
     typedef detail::Util::Table<Group> GroupTable;
 
+    struct File {
+        const void *address;         // at 0x0
+        const void *waveDataAddress; // at 0x4
+    };
+
+    typedef detail::Util::Table<File> FileTable;
+
     class SeqNoteOnCallback : public detail::NoteOnCallback {
     public:
         explicit SeqNoteOnCallback(const SoundArchivePlayer &rPlayer) : mSoundArchivePlayer(rPlayer) {}
@@ -144,11 +152,15 @@ private:
 private:
     bool SetupMram(const SoundArchive *pArchive, void *pBuffer, u32 bufferSize);
 
-    detail::PlayerHeap *CreatePlayerHeap(void *pBuffer, u32 bufferSize);
+    detail::PlayerHeap *CreatePlayerHeap(void **pBuffer, void *endPtr, u32 bufferSize);
 
     bool SetupSoundPlayer(const SoundArchive *pArchive, void **ppBuffer, void *pEnd);
 
     bool CreateGroupAddressTable(const SoundArchive *pArchive, void **ppBuffer, void *pEnd);
+    bool CreateFileAddressTable(const SoundArchive *pArchive, void **ppBuffer, void *pEnd);
+
+    const void *GetFileData(u32 id) const;
+    const void *GetFileWaveData(u32 id) const;
 
     bool SetupSeqSound(const SoundArchive *pArchive, int sounds, void **ppBuffer, void *pEnd);
     bool SetupWaveSound(const SoundArchive *pArchive, int sounds, void **ppBuffer, void *pEnd);
@@ -172,33 +184,34 @@ private:
         SoundStartable::StartInfo::StartOffsetType startType, int startOffset, int voices
     );
 
+
 private:
-    const SoundArchive *mSoundArchive;            // at 0x10
-    GroupTable *mGroupTable;                      // at 0x14
-    SoundArchivePlayer_FileManager *mFileManager; // at 0x18
-
-    detail::SeqTrackAllocator *mSeqTrackAllocator; // at 0x1C
+    const SoundArchive *mSoundArchive;             // at 0x10
+    GroupTable *mGroupTable;                       // at 0x14
+    FileTable *mFileTable;                         // at 0x18
+    SoundArchivePlayer_FileManager *mFileManager;  // at 0x1C
     SeqNoteOnCallback mSeqCallback;                // at 0x20
-    WsdCallback mWsdCallback;                      // at 0x28
+    WsdCallback mWsdCallback;                      // at 0x24
+    detail::SeqTrackAllocator *mSeqTrackAllocator; // at 0x30
 
-    // @TODO The comments here are wrong
-    u8 field_0x30[0x3C - 0x30];
+    SeqUserprocCallback mSeqUserprocCallback; // at 0x34
+    u32 mSeqUserprocCallbackArg;              // at 0x38
 
-    u32 mSoundPlayerCount;      // at 0x30
-    SoundPlayer *mSoundPlayers; // at 0x34
+    u32 mSoundPlayerCount;      // at 0x3C
+    SoundPlayer *mSoundPlayers; // at 0x40
 
-    detail::SoundInstanceManager<detail::SeqSound> mSeqSoundInstanceManager; // at 0x38
+    detail::SoundInstanceManager<detail::SeqSound> mSeqSoundInstanceManager; // at 0x44
 
-    detail::SoundInstanceManager<detail::StrmSound> mStrmSoundInstanceManager; // at 0x60
+    detail::SoundInstanceManager<detail::StrmSound> mStrmSoundInstanceManager; // at 0x6C
 
-    detail::SoundInstanceManager<detail::WaveSound> mWaveSoundInstanceManager; // at 0x88
+    detail::SoundInstanceManager<detail::WaveSound> mWaveSoundInstanceManager; // at 0x94
 
-    detail::MmlSeqTrackAllocator mMmlSeqTrackAllocator; // at 0xB0
-    detail::StrmBufferPool mStrmBufferPool;             // at 0xBC
-    detail::MmlParser mMmlParser;                       // at 0xD4
+    detail::MmlSeqTrackAllocator mMmlSeqTrackAllocator; // at 0xBC
+    detail::StrmBufferPool mStrmBufferPool;             // at 0xC8
+    detail::MmlParser mMmlParser;                       // at 0xE0
 
-    void *mSetupBufferAddress; // at 0xD8
-    u32 mSetupBufferSize;      // at 0xDC
+    void *mSetupBufferAddress; // at 0xE4
+    u32 mSetupBufferSize;      // at 0xE8
 };
 
 } // namespace snd
