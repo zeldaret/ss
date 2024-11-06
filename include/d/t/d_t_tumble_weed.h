@@ -1,10 +1,9 @@
 #ifndef D_T_TUMBLE_WEED_H
 #define D_T_TUMBLE_WEED_H
 
+#include "d/a/obj/d_a_obj_tumble_weed.h"
 #include "d/t/d_tg.h"
-#include "f/f_list_nd.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dTgTumbleWeed_c : public dTg_c {
 public:
@@ -29,8 +28,7 @@ private:
     u16 tumbleweedTimer;
     u16 padding;
     u16 windTimer;
-    // TODO dAcObjTumbleWeed
-    dAcRef_c<dAcBase_c> childTumbleweed;
+    dAcRef_c<dAcOTumbleWeed_c> childTumbleweed;
     u16 someField;
 };
 

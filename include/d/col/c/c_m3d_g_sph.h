@@ -16,6 +16,10 @@ public:
     void SetR(f32);
     void SetC(f32, f32, f32);
 
+    void SetC(const mVec3_c &p) {
+        SetC(&p);
+    }
+
     f32 GetYDist(f32) const;
     bool Cross(const cM3dGTri *, f32 *, mVec3_c *);
     void Clamp(const mVec3_c &, mVec3_c &) const;

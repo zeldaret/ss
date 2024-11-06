@@ -29,7 +29,7 @@ bool cM3dGPla::getCrossYLessD(const mVec3_c &point, f32 *out) const {
 }
 
 mAng cM3dGPla::GetAngle(mAng ang) const {
-    mAng angleY = mNormal.getAngleY();
+    mAng angleY = GetAngleY();
 
     angleY = angleY - ang;
 

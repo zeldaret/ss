@@ -4,31 +4,32 @@
 #include "common.h"
 #include "egg/math/eggVector.h"
 
-
 namespace EGG {
 
-struct Quatf : public Vector3f {
+struct Quatf {
     Quatf() {}
-    Quatf(f32 f, Vector3f v) : w(f), Vector3f(v) {}
-    Quatf(f32 f, f32 x, f32 y, f32 z) : w(f), Vector3f(Vector3f(x, y, z)) {}
+    Quatf(f32 f, const Vector3f &v) : w(f), v(v) {}
+    Quatf(f32 f, f32 x, f32 y, f32 z) : w(f), v(Vector3f(x, y, z)) {}
     ~Quatf() {}
 
     friend Quatf operator*(const Quatf &q, const Vector3f &vec) {
-        Vector3f crossed = q.cross(vec);
+        Vector3f crossed = q.v.cross(vec);
         Vector3f scaled = vec * q.w;
-        Quatf ret = Quatf(-q.Vector3f::dot(vec), crossed + scaled);
+        Quatf ret = Quatf(-q.v.dot(vec), crossed + scaled);
         return ret;
     }
 
-    // TODO: Implement
-    friend Quatf operator*(const Quatf &u, const Quatf &v) {
-        Vector3f cross = u.cross(v);
-        Vector3f v_mul_w = u.w * v;
-        Vector3f u_mul_w = v.w * v;
-        Vector3f added_2 = u_mul_w + (cross + v_mul_w);
-        Quatf out = Quatf(u.w * v.w - u.Vector3f::dot(v), added_2);
-        return out;
-    };
+    friend Quatf operator*(const Quatf &lhs, const Quatf &rhs) {
+        Vector3f cross = lhs.v.cross(rhs.v);
+
+        Vector3f scaledRhs = lhs.w * rhs.v;
+        Vector3f tmp0 = cross + scaledRhs;
+
+        Vector3f scaledLhs = rhs.w * lhs.v;
+        Vector3f tmp1 = tmp0 + scaledLhs;
+
+        return Quatf(lhs.w * rhs.w - lhs.v.dot(rhs.v), tmp1);
+    }
 
     /* 8049b390 */ void set(f32 fw, f32 fx, f32 fy, f32 fz);
     /*          */ void set(f32 f, const Vector3f &vec);
@@ -47,27 +48,17 @@ struct Quatf : public Vector3f {
     /*          */ void makeVectorRotationLimit(Vector3f &, Vector3f &, f32);
     /* 8049bbb0 */ void makeVectorRotation(Vector3f &, Vector3f &);
 
-    f32 dot(const Quatf &q) const {
-        return w * w + q.x * q.x + q.y * q.y + q.z * q.z;
-    }
-    f32 length() const {
-        return Math<f32>::sqrt(dot(*this));
-    }
     void multScalar(f32 s) {
         w *= s;
-        x *= s;
-        y *= s;
-        z *= s;
+        v.x *= s;
+        v.y *= s;
+        v.z *= s;
     }
     void setUnit() {
         set(1.0f, 0.0f, 0.0f, 0.0f);
     }
-    // union {
-    //     Vector3f v;
-    //     struct {
-    //         f32 x, y, z;
-    //     };
-    // };
+
+    Vector3f v;
     f32 w;
 };
 

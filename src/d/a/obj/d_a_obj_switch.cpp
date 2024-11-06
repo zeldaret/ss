@@ -1,12 +1,11 @@
 #include "d/a/obj/d_a_obj_switch.h"
 
-#include "c/c_math.h"
 #include "d/a/d_a_player.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_w.h"
+#include "d/flag/sceneflag_manager.h"
 #include "nw4r/g3d/g3d_resfile.h"
 #include "s/s_Math.h"
-#include "d/flag/sceneflag_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SW, dAcOsw_c, fProfile::OBJ_SW, 0x12B, 0, 0x1002);
 
@@ -269,7 +268,7 @@ void dAcOsw_c::executeState_OffWait() {
     if (field_0x5F1 != 0) {
         field_0x5F3 = 1;
     }
-    if (mSwitchType != 1 && cM::calcTimer(&field_0x5EC) == 0 && field_0x5F3 == 0) {
+    if (mSwitchType != 1 && sLib::calcTimer(&field_0x5EC) == 0 && field_0x5F3 == 0) {
         mStateMgr.changeState(StateID_Off);
     }
 }

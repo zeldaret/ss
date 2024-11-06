@@ -4,13 +4,13 @@
 #include "d/a/d_a_base.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
+#include "egg/math/eggMath.h"
 #include "m/m3d/m_shadow.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
-
 
 // Size: 0xA8
 struct ActorCarryStruct {
@@ -87,6 +87,14 @@ public:
     }
     mAng3_c &GetAngle() {
         return angle;
+    }
+
+    f32 getVelocityMag() const {
+        return fabsf(nw4r::math::VEC3LenSq(velocity));
+    }
+
+    bool isStopped() const {
+        return getVelocityMag() <= EGG::Math<f32>::epsilon();
     }
 
     // could be their own thing?

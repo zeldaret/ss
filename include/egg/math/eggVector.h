@@ -5,7 +5,6 @@
 #include "egg/math/eggMath.h"
 #include "nw4r/math.h"
 
-
 namespace EGG {
 
 struct Vector3f : public nw4r::math::VEC3 {
@@ -28,11 +27,11 @@ struct Vector3f : public nw4r::math::VEC3 {
     }
 
     friend Vector3f operator*(f32 f, const Vector3f &v) {
-        return v.operator*(f);
+        return Vector3f(v.x * f, v.y * f, v.z * f);
     }
 
     // __pl__Q23EGG8Vector3fCFRCQ23EGG8Vector3f
-    Vector3f operator+(const Vector3f &v) {
+    Vector3f operator+(const Vector3f &v) const {
         return Vector3f(x + v.x, y + v.y, z + v.z);
     }
 
@@ -94,6 +93,12 @@ struct Vector3f : public nw4r::math::VEC3 {
     }
     void divScalar(f32 f) {
         multScalar(1.0f / f);
+    }
+
+    f32 angle(const Vector3f &v) const {
+        f32 a = dot(v);
+        f32 b = cross(v).length();
+        return EGG::Math<f32>::abs(EGG::Math<f32>::atan2(b, a));
     }
 
     // dot__Q23EGG8Vector3fCFRCQ23EGG8Vector3f
