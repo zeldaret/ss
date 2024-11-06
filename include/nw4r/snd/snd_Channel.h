@@ -49,6 +49,9 @@ public:
     void SetAttack(int attack) {
         mEnvelope.SetAttack(attack);
     }
+    void SetHold(int attack) {
+        mEnvelope.SetHold(attack);
+    }
     void SetDecay(int decay) {
         mEnvelope.SetDecay(decay);
     }

@@ -62,12 +62,13 @@ struct WaveBlock {
 struct InstInfo {
     s32 waveIndex;  // at 0x0
     u8 attack;      // at 0x4
-    u8 decay;       // at 0x5
-    u8 sustain;     // at 0x6
-    u8 release;     // at 0x7
-    u8 originalKey; // at 0x8
-    u8 pan;         // at 0x9
-    u8 volume;      // at 0xA
+    u8 hold;        // at 0x5
+    u8 decay;       // at 0x6
+    u8 sustain;     // at 0x7
+    u8 release;     // at 0x8
+    u8 originalKey; // at 0x9
+    u8 pan;         // at 0xA
+    u8 volume;      // at 0xB
     f32 tune;       // at 0xC
 };
 
@@ -78,7 +79,7 @@ inline u8 ReadByte(const void *pAddr) {
 class BankFileReader {
 public:
     static const u32 SIGNATURE = 'RBNK';
-    static const int VERSION = NW4R_VERSION(1, 1);
+    static const int VERSION = NW4R_VERSION(1, 2);
 
 public:
     explicit BankFileReader(const void *pBankBin);
