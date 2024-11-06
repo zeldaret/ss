@@ -75,8 +75,6 @@ enum SampleFormat {
     SAMPLE_FORMAT_DSP_ADPCM
 };
 
-namespace detail {
-
 struct AdpcmParam {
     u16 coef[16];   // at 0x0
     u16 gain;       // at 0x20
@@ -84,6 +82,9 @@ struct AdpcmParam {
     u16 yn1;        // at 0x24
     u16 yn2;        // at 0x26
 };
+
+namespace detail {
+
 
 struct AdpcmLoopParam {
     u16 loop_pred_scale; // at 0x0

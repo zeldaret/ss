@@ -95,7 +95,7 @@ public:
     void Stop();
     void Pause(bool flag);
 
-    AxVoice::Format GetFormat() const;
+    SampleFormat GetFormat() const;
 
     void SetVolume(f32 volume);
     void SetVeVolume(f32 target, f32 init);

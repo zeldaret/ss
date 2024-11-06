@@ -49,22 +49,22 @@ public:
 
     bool ReadWaveParam(WaveInfo *pWaveData, const void *pWaveAddr) const;
 
-    static AxVoice::Format GetAxVoiceFormatFromWaveFileFormat(u32 format);
+    static SampleFormat GetAxVoiceFormatFromWaveFileFormat(u32 format);
 
 private:
     const WaveFile::WaveInfo *mWaveInfo; // at 0x0
 };
 
-inline AxVoice::Format WaveFormatToAxFormat(u32 format) {
+inline SampleFormat WaveFormatToAxFormat(u32 format) {
     if (format == WaveFile::FORMAT_PCM16) {
-        return AxVoice::FORMAT_PCM16;
+        return SAMPLE_FORMAT_PCM_S16;
     }
 
     if (format == WaveFile::FORMAT_PCM8) {
-        return AxVoice::FORMAT_PCM8;
+        return SAMPLE_FORMAT_PCM_S8;
     }
 
-    return AxVoice::FORMAT_ADPCM;
+    return SAMPLE_FORMAT_DSP_ADPCM;
 }
 
 } // namespace detail

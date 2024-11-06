@@ -107,7 +107,7 @@ bool StrmPlayer::Start() {
         waveData.sampleRate = mStrmInfo.sampleRate;
         waveData.loopStart = 0;
 
-        AxVoice::Format format = WaveFileReader::GetAxVoiceFormatFromWaveFileFormat(mStrmInfo.format);
+        SampleFormat format = WaveFileReader::GetAxVoiceFormatFromWaveFileFormat(mStrmInfo.format);
 
         waveData.loopEnd = AxVoice::GetSampleByByte(mDataBlockSize * mPlayingBufferBlockCount, format);
 
@@ -579,7 +579,7 @@ void StrmPlayer::UpdatePlayingBlockIndex() {
         UpdateLoopAddress(0, mPlayingBufferBlockCount * mStrmInfo.blockSamples);
     }
 
-    if (mPlayingBufferBlockIndex == mPlayingBufferBlockCount - 1 && mVoice->GetFormat() == AxVoice::FORMAT_ADPCM) {
+    if (mPlayingBufferBlockIndex == mPlayingBufferBlockCount - 1 && mVoice->GetFormat() == SAMPLE_FORMAT_DSP_ADPCM) {
         if (!mSkipUpdateAdpcmLoop && mValidAdpcmLoop) {
             ut::AutoInterruptLock lock;
 
@@ -618,7 +618,7 @@ void StrmPlayer::UpdateDataLoopAddress(s32 endBlock) {
         );
 
         if (mStrmInfo.format == WaveFile::FORMAT_ADPCM) {
-            if (mVoice->GetFormat() == AxVoice::FORMAT_ADPCM) {
+            if (mVoice->GetFormat() == SAMPLE_FORMAT_DSP_ADPCM) {
                 mVoice->SetVoiceType(AxVoice::VOICE_TYPE_NORMAL);
 
                 for (int i = 0; i < mChannelCount; i++) {
