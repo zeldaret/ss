@@ -43,12 +43,8 @@ public:
 
     template <typename TForEachFunc>
     TForEachFunc ForEachSound(TForEachFunc pFunction, bool reverse) {
-        int i;
-        detail::ExternalSoundPlayer *pPlayer = detail_GetActorSoundPlayer(0);
-
-        for (i = 0; i < ACTOR_PLAYER_COUNT; i++) {
-            pPlayer->ForEachSound(pFunction, reverse);
-            pPlayer++;
+        for (int i = 0; i < ACTOR_PLAYER_COUNT; i++) {
+            mActorPlayer[i].ForEachSound(pFunction, reverse);
         }
 
         return pFunction;

@@ -136,24 +136,24 @@ public:
         mExtSoundPlayer = pExtPlayer;
     }
 
-    /*AmbientParamUpdateCallback *GetAmbientParamUpdateCallback() {
-        return mAmbientParamUpdateCallback;
+    AmbientParamUpdateCallback *GetAmbientParamUpdateCallback() {
+        return mAmbientInfo.paramUpdateCallback;
     }
 
     AmbientArgUpdateCallback *GetAmbientArgUpdateCallback() {
-        return mAmbientArgUpdateCallback;
+        return mAmbientInfo.argUpdateCallback;
     }
     void ClearAmbientArgUpdateCallback() {
-        mAmbientArgUpdateCallback = NULL;
+        mAmbientInfo.paramUpdateCallback = NULL;
     }
 
     AmbientArgAllocaterCallback *GetAmbientArgAllocaterCallback() {
-        return mAmbientArgAllocaterCallback;
+        return mAmbientInfo.argAllocaterCallback;
     }
 
     void *GetAmbientArg() {
-        return mAmbientArg;
-    }*/
+        return mAmbientInfo.arg;
+    }
 
     SoundParam &GetAmbientParam() {
         return mAmbientParam;

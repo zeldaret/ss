@@ -2,6 +2,7 @@
 #ifndef NW4R_SND_SOUND_3D_ACTOR_H
 #define NW4R_SND_SOUND_3D_ACTOR_H
 #include "nw4r/math.h"
+#include "nw4r/math/math_types.h"
 #include "nw4r/snd/snd_BasicSound.h"
 #include "nw4r/snd/snd_SoundActor.h"
 #include "nw4r/types_nw4r.h"
@@ -15,25 +16,24 @@ public:
     Sound3DActor(SoundArchivePlayer &rPlayer, Sound3DManager &rManager);
     virtual ~Sound3DActor(); // at 0x8
 
-    virtual StartResult detail_SetupSound(
-        SoundHandle *pHandle, u32 id, detail::BasicSound::AmbientInfo *pArgInfo,
-        detail::ExternalSoundPlayer *pPlayer, bool hold,
-        const StartInfo *pStartInfo
-    ); // at 0xC
-
-    virtual void detail_Update(void *pArg,
-                               const detail::BasicSound *pSound); // at 0xC
-
+    virtual StartResult SetupSound(
+        SoundHandle *pHandle, u32 id,
+        const StartInfo *pStartInfo,
+        void*
+    ) override; // at 0x14
+    
     void SetPosition(const math::VEC3 &rPosition);
 
 private:
     static void ClearUpdateCallback(SoundHandle &rHandle);
 
 private:
-    Sound3DManager &m3DManager;              // at 0xAC
-    SoundArchivePlayer &mSoundArchivePlayer; // at 0xB0
-    u32 mUserParam;                          // at 0xB4
-    math::VEC3 mPosition;                    // at 0xB8
+    Sound3DManager &m3DManager;              // at 0x58
+    SoundArchivePlayer *mSoundArchivePlayer; // at 0x5C
+    u32 mUserParam;                          // at 0x60
+    math::VEC3 mPosition;                    // at 0x64
+    math::VEC3 mVelocity;                     // at 0x70
+    bool field_0x7C;                         // at 0x7C
 };
 
 } // namespace snd

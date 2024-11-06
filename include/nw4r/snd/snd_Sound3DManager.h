@@ -17,6 +17,8 @@ public:
         u32 userParam;                         // at 0x0
         SoundArchive::Sound3DParam soundParam; // at 0x4
         math::VEC3 position;                   // at 0xC
+        math::VEC3 velocity;                   // at 0x18
+        bool b;
 
         Sound3DActorParam();
     };
