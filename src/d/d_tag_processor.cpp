@@ -604,7 +604,7 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
                 if (rect == nullptr) {
                     fn_800B6450(rect, ctx, cmdLen, endPtr);
                 } else {
-                    fn_800B6EE0(rect, ctx, endPtr);
+                    makeSpaceForIconMaybe(rect, ctx, endPtr);
                 }
             }
             break;
@@ -849,7 +849,7 @@ void dTagProcessor_c::changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
     ctx->writer->SetScale(scale, scale);
 }
 
-void dTagProcessor_c::fn_800B6EE0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr) {
+void dTagProcessor_c::makeSpaceForIconMaybe(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr) {
     nw4r::ut::Font *f = dFontMng_c::getFont(4);
     u32 c3 = fn_800B7880(*(u8 *)ptr);
     nw4r::ut::TextWriterBase<wchar_t> copy = *ctx->writer;
@@ -953,28 +953,28 @@ f32 dTagProcessor_c::fn_800B8040(s8 factor, u32 windowType) {
     } else if (windowType == 7) {
         f32 f2 = fn_800B8040(0, 0);
         f32 f3 = fn_800B8040(factor, 0);
-        return f1 * ((f3 / f2) * 0.93f);
+        return f1 * ((f3 / f2) * 0.9f);
     } else if (windowType == 9) {
         f32 f2 = fn_800B8040(0, 0);
         f32 f3 = fn_800B8040(factor, 0);
-        return f1 * ((f3 / f2) * 0.93f);
+        return f1 * ((f3 / f2) * 0.68f);
     } else if (windowType == 30) {
         f32 f2 = fn_800B8040(0, 0);
         f32 f3 = fn_800B8040(factor, 0);
-        return f1 * ((f3 / f2) * 0.93f);
+        return f1 * ((f3 / f2) * 0.9f);
     } else if (windowType == 34) {
         f32 f2 = fn_800B8040(0, 0);
         f32 f3 = fn_800B8040(factor, 0);
-        return f1 * ((f3 / f2) * 0.93f);
+        return f1 * ((f3 / f2) * 0.86f);
     } else {
         f32 x;
         switch (factor) {
             case -2: x = 0.55f; break;
-            case -1: x = 0.55f; break;
-            case -0: x = 0.55f; break;
-            case 1:  x = 0.55f; break;
+            case -1: x = 0.68f; break;
+            case -0: x = 0.9f; break;
+            case 1:  x = 0.95f; break;
             case 2:
-                x = 0.55f;
+                x = 1.1f;
                 break;
                 // @bug: No default, so uninitialized is possible
         }
