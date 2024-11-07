@@ -780,6 +780,48 @@ wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
     return dest;
 }
 
+extern "C" MsbtInfo *getMsbtInfoForIndex(int);
+
+wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
+    // Not sure
+    int i = 0;
+    wchar_t c;
+    SizedString<16> mName;
+    mName.sprintf("NAME_ITEM_%03d", *src);
+    MsbtInfo *info = getMsbtInfoForIndex(3);
+    const wchar_t *text = LMS_GetTextByLabel(info, mName);
+    while ((c = text[i]) != 0) {
+        const wchar_t *readPtr = &text[i];
+        if (c == 0xE) {
+            int len = ((readPtr[3] / 2) & 0x7F) + 4;
+            if (arg != 0 && field_0x90E != 0) {
+                for (int j = 0; j < len; j++) {
+                    fn_800B5FD0(*readPtr, &getTmpBuffer()[*outArg], outArg);
+                    onWriteTmpBuffer();
+                    readPtr++;
+                    i++;
+                }
+            } else {
+                for (int j = 0; j < len; j++) {
+                    dest = fn_800B5FD0(*readPtr, dest, nullptr);
+                    readPtr++;
+                    i++;
+                }
+            }
+        } else {
+            if (arg != 0 && field_0x90E != 0) {
+                fn_800B5FD0(c, &getTmpBuffer()[*outArg], outArg);
+                onWriteTmpBuffer();
+            } else {
+                dest = fn_800B5FD0(c, dest, nullptr);
+            }
+            i++;
+        }
+    }
+
+    return dest;
+}
+
 wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
     int numZeroDigits = ((u8*)src)[4];
     bool writeZeroDigits = false;

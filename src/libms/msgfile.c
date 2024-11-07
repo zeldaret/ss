@@ -2,6 +2,7 @@
 
 #include "libms/commonlib.h"
 #include "libms/libms.h"
+#include <wchar.h>
 
 
 struct MsbtInfo {
@@ -38,7 +39,7 @@ int LMS_GetTextIndexByLabel(struct MsbtInfo *info, const char *label) {
     }
 }
 
-const char *LMS_GetText(struct MsbtInfo *info, int index) {
+const wchar_t *LMS_GetText(struct MsbtInfo *info, int index) {
     if (info->txt2Index == -1) {
         return NULL;
     }
@@ -48,10 +49,10 @@ const char *LMS_GetText(struct MsbtInfo *info, int index) {
         return NULL;
     }
 
-    return &((const char *)header)[header[index + 1]];
+    return &((const wchar_t *)header)[header[index + 1]];
 }
 
-const char *LMS_GetTextByLabel(struct MsbtInfo *info, const char *label) {
+const wchar_t *LMS_GetTextByLabel(struct MsbtInfo *info, const char *label) {
     int index = LMS_GetTextIndexByLabel(info, label);
     if (index < 0) {
         return NULL;
@@ -60,7 +61,7 @@ const char *LMS_GetTextByLabel(struct MsbtInfo *info, const char *label) {
     }
 }
 
-const char *LMS_GetLabelByTextIndex(struct MsbtInfo *info, int index) {
+const wchar_t *LMS_GetLabelByTextIndex(struct MsbtInfo *info, int index) {
     // TODO
 }
 
