@@ -35,8 +35,6 @@ private:
     /* 0x5A2 */ s16 field_0x5A2;
     /* 0x5A4 */ u8 mFrameCounter;
     /* 0x5A5 */ s8 field_0x5A5;
-
-    static const u16 sSomeValue;
 };
 
 #endif

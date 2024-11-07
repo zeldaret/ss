@@ -76,10 +76,12 @@ void dAcOtrapRock1_c::initializeState_TrapAction() {
     field_0x5A2 = 0x2D8;
     playSound(0xB0E);
 }
+
 void dAcOtrapRock1_c::executeState_TrapAction() {
     if (SceneflagManager::sInstance->checkBoolFlag(roomid, mReturnSceneFlag)) {
         mStateMgr.changeState(StateID_TrapReturn);
     } else if (field_0x59E == 0 || mFrameCounter > 4) {
+        // After 5 frames, move rotation.x to 0x4000, then stay until return
         bool reachedPoint = sLib::chaseAngle(&rotation.x.mVal, 0x4000, 0x14);
         if (reachedPoint) {
             return;
@@ -89,33 +91,36 @@ void dAcOtrapRock1_c::executeState_TrapAction() {
         if (mFrameCounter == 0 && rotation.x < 0x4000) {
             ratio = 0.1f;
         } else {
-            ratio = nw4r::math::FAbs((f32)(rotation.x - 0x4000) / (field_0x5A0));
+            f32 b = field_0x5A0;
+            f32 r = (rotation.x - 0x4000) / b;
+            ratio = nw4r::math::FAbs(r);
         }
-        ratio = nw4r::ut::Clamp(ratio, 0.1f, 1.0f);
+        if (ratio > 1.0f) {
+            ratio = 1.0f;
+        }
+        else if (ratio < 0.1f) {
+            ratio = 0.1f;
+        }
         s16 newAng = field_0x5A5 * (1.0f - ratio) * field_0x5A2;
-
-        // What?
-        mAng newAng2;
+        static const u16 sSomeValue = 0x3C;
         if (field_0x5A5 > 0) {
-            if (!((u16)newAng > (u16)(sSomeValue - 1))) {
-                newAng2 = sSomeValue;
+            if ((u16)newAng <= sSomeValue - 1) {
+                newAng = sSomeValue;
             }
-        } else if (!((u16)(newAng + sSomeValue - 1) > (u16)(sSomeValue - 1))) {
-            newAng2 = -sSomeValue;
+        } else if ((u16)(newAng + sSomeValue - 1) <= sSomeValue - 1) {
+            newAng = -sSomeValue;
         }
 
-        // What is even going on here?
-        rotation.x += newAng2;
-        if (field_0x59E > 0 && field_0x59E + 0x4000 > rotation.x ||
+        rotation.x += (int)newAng;
+        if (field_0x59E > 0 && rotation.x > field_0x59E + 0x4000 ||
             field_0x59E < 0 && rotation.x < field_0x59E + 0x4000) {
             rotation.x = field_0x59E + 0x4000;
-            s16 val1 = field_0x59E;
-            field_0x5A5 = field_0x5A5 - (field_0x5A5 * 2);
-            field_0x5A0 = val1;
-            u32 val2 = val1 - (val1 * 2);
-            field_0x59E = val2;
+            u8 r6 = field_0x5A5;
+            field_0x5A5 = r6 - (r6 * 2);
+            field_0x5A0 = field_0x59E;
+            field_0x59E = field_0x59E - (field_0x59E * 2);
             if (mFrameCounter >= 1) {
-                field_0x59E = val1 >> 1;
+                field_0x59E = field_0x59E >> 1;
                 field_0x5A2 = field_0x5A2 >> 2;
             } else {
                 field_0x5A2 = field_0x5A2 * 2 / 3;
@@ -133,5 +138,3 @@ void dAcOtrapRock1_c::executeState_TrapReturn() {
     }
 }
 void dAcOtrapRock1_c::finalizeState_TrapReturn() {}
-
-const u16 dAcOtrapRock1_c::sSomeValue = 0x3C;

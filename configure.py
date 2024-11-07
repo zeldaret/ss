@@ -1670,7 +1670,7 @@ config.libs = [
     Rel(
         NonMatching, "d_a_obj_trap_bird_wood", "REL/d/a/obj/d_a_obj_trap_bird_wood.cpp"
     ),
-    Rel(NonMatching, "d_a_obj_trap_rock_1", "REL/d/a/obj/d_a_obj_trap_rock_1.cpp"),
+    Rel(Matching, "d_a_obj_trap_rock_1", "REL/d/a/obj/d_a_obj_trap_rock_1.cpp"),
     Rel(
         NonMatching,
         "d_a_obj_treasure_island",
