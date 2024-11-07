@@ -367,13 +367,11 @@ const LowHealthReplacement LOW_HEALTH_REPLACEMENTS[] = {
      },
 };
 
-int SPECIAL_ITEM_ARRAY[] = {ITEM_NONE,       ITEM_HEART,         ITEM_HEART,         ITEM_GREEN_RUPEE,
-                            ITEM_BLUE_RUPEE, ITEM_RED_RUPEE,     ITEM_FARORE_TEAR,   ITEM_5_BOMBS,
-                            ITEM_10_BOMBS,   ITEM_SINGLE_ARROW,  ITEM_BUNDLE_ARROWS, ITEM_5_DEKU_SEEDS,
-                            ITEM_NONE,       ITEM_NONE,          ITEM_KEY_PIECE,     ITEM_ELDIN_ORE,
-                            ITEM_UNK_58,     ITEM_UNK_59,        ITEM_UNK_183,       ITEM_UNK_184,
-                            ITEM_UNK_185,    ITEM_FAIRY_BUG_NET, ITEM_FAIRY_BUG_NET, ITEM_SMALL_KEY,
-                            ITEM_RUPOOR};
+int SPECIAL_ITEM_ARRAY[] = {ITEM_NONE,          ITEM_HEART,        ITEM_HEART,   ITEM_GREEN_RUPEE, ITEM_BLUE_RUPEE,
+                            ITEM_RED_RUPEE,     ITEM_FARORE_TEAR,  ITEM_5_BOMBS, ITEM_10_BOMBS,    ITEM_SINGLE_ARROW,
+                            ITEM_BUNDLE_ARROWS, ITEM_5_DEKU_SEEDS, ITEM_NONE,    ITEM_NONE,        ITEM_KEY_PIECE,
+                            ITEM_ELDIN_ORE,     ITEM_UNK_58,       ITEM_UNK_59,  ITEM_UNK_183,     ITEM_UNK_184,
+                            ITEM_UNK_185,       ITEM_FAIRY,        ITEM_FAIRY,   ITEM_SMALL_KEY,   ITEM_RUPOOR};
 
 static const u32 sNumDropEntries = 0x36;
 static const struct {
