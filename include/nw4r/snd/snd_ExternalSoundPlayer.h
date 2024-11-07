@@ -1,6 +1,7 @@
 #ifndef NW4R_SND_EXTERNAL_SOUND_PLAYER_H
 #define NW4R_SND_EXTERNAL_SOUND_PLAYER_H
 #include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/types_nw4r.h"
 
 
@@ -17,18 +18,26 @@ public:
         return mPlayableCount;
     }
     void SetPlayableSoundCount(int count);
+    void DetachSoundActorAll(SoundActor*);
+    void StopAllSound(int);
+    void PauseAllSound(bool, int);
 
     int GetPlayingSoundCount() const {
         return mSoundList.GetSize();
     }
 
     f32 detail_GetVolume() const {
-        return mVolume;
+        // TODO what happened to this?
     }
     BasicSound *GetLowestPrioritySound();
 
     void InsertSoundList(BasicSound *pSound);
     void RemoveSoundList(BasicSound *pSound);
+
+    bool AppendSound(BasicSound *pSound);
+    void RemoveSound(BasicSound *pSound);
+
+    bool detail_CanPlaySound(int priority);
 
     template <typename TForEachFunc>
     TForEachFunc ForEachSound(TForEachFunc pFunction, bool reverse) {
@@ -56,8 +65,7 @@ public:
 
 private:
     BasicSoundExtPlayList mSoundList; // at 0x0
-    u16 mPlayableCount;               // at 0xC
-    f32 mVolume;                      // at 0x10
+    u32 mPlayableCount;               // at 0xC
 };
 
 } // namespace detail

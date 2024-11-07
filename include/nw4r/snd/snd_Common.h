@@ -40,16 +40,16 @@ enum OutputMode {
 };
 
 struct SoundParam {
-    f32 volume;      // at 0x0
-    f32 pitch;       // at 0x4
-    f32 pan;         // at 0x8
-    f32 surroundPan; // at 0xC
-    f32 fxSend;      // at 0x10
-    f32 lpf;         // at 0x14
-    int priority;    // at 0x18
+    f32 volume;            // at 0x0
+    f32 pitch;             // at 0x4
+    f32 pan;               // at 0x8
+    f32 surroundPan;       // at 0xC
+    f32 fxSend;            // at 0x10
+    f32 lpf;               // at 0x14
+    f32 biquadFilterValue; // at 0x18
+    int biquadFilterType;  // at 0x1C
+    int priority;          // at 0x20
 };
-
-namespace detail {
 
 enum PanMode {
     PAN_MODE_DUAL,
@@ -68,6 +68,13 @@ enum PanCurve {
     PAN_CURVE_LINEAR_0DB_CLAMP,
 };
 
+enum SampleFormat {
+    SAMPLE_FORMAT_PCM_S32,
+    SAMPLE_FORMAT_PCM_S16,
+    SAMPLE_FORMAT_PCM_S8,
+    SAMPLE_FORMAT_DSP_ADPCM
+};
+
 struct AdpcmParam {
     u16 coef[16];   // at 0x0
     u16 gain;       // at 0x20
@@ -76,16 +83,28 @@ struct AdpcmParam {
     u16 yn2;        // at 0x26
 };
 
+namespace detail {
+
 struct AdpcmLoopParam {
     u16 loop_pred_scale; // at 0x0
     u16 loop_yn1;        // at 0x2
     u16 loop_yn2;        // at 0x4
 };
 
-struct AdpcmInfo {
-    AdpcmParam param;         // at 0x0
-    AdpcmLoopParam loopParam; // at 0x28
-    u16 padding;
+struct ChannelParam {
+    void *dataAddr;                // at 0x0
+    AdpcmParam adpcmParam;         // at 0x0
+    AdpcmLoopParam adpcmLoopParam; // at 0x28
+};
+
+struct WaveInfo {
+    SampleFormat sampleFormat;              // at 0x0
+    u8 loopFlag;                            // at 0x4
+    int numChannels;                        // at 0x8
+    int sampleRate;                         // at 0xC
+    u32 loopStart;                          // at 0x10
+    u32 loopEnd;                            // at 0x14
+    ChannelParam channelParam[CHANNEL_MAX]; // at 0x18
 };
 
 } // namespace detail

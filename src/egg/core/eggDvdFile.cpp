@@ -84,7 +84,7 @@ s32 DvdFile::writeData(const void *buffer, s32 length, s32 offset) {
 s32 DvdFile::sync() {
     OSMessage msg;
     OSLockMutex(&mMutex);
-    OSReceiveMessage(&mMsgQueue, &msg, OS_MSG_PERSISTENT);
+    OSReceiveMessage(&mMsgQueue, &msg, OS_MSG_BLOCKING);
     mThread = nullptr;
     OSUnlockMutex(&mMutex);
     return (s32)(msg);

@@ -88,7 +88,7 @@ public:
     }
 
     void InsertPriorityList(T *pSound, int priority) {
-        TPrioList::Iterator it = mPriorityList.GetBeginIter();
+        typename TPrioList::Iterator it = mPriorityList.GetBeginIter();
 
         for (; it != mPriorityList.GetEndIter(); ++it) {
             if (priority < it->CalcCurrentPlayerPriority()) {
@@ -104,8 +104,11 @@ public:
     }
 
     void SortPriorityList() {
-        TPrioList listsByPrio[T::PRIORITY_MAX + 1];
+        if (mPriorityList.GetSize() < 2) {
+            return;
+        }
         ut::detail::AutoLock<OSMutex> lock(mMutex);
+        TPrioList listsByPrio[T::PRIORITY_MAX + 1];
 
         while (!mPriorityList.IsEmpty()) {
             T &rSound = mPriorityList.GetFront();

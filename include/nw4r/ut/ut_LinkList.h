@@ -29,6 +29,23 @@
 #define NW4R_UT_LIST_NODE_DECL_EX(SUFFIX) nw4r::ut::LinkListNode node##SUFFIX
 
 /**
+ * Linked-list for-each iteration macro, with robust iteration.
+ *
+ * Access the current element with "it"
+ */
+#define NW4R_UT_LIST_SAFE_FOREACH(LIST, ...)                                   \
+    {                                                                          \
+        typedef DECLTYPE(LIST.GetBeginIter()) IterType;                        \
+                                                                               \
+        for (IterType impl = LIST.GetBeginIter();                              \
+             impl != LIST.GetEndIter();) {                                     \
+                                                                               \
+            IterType it = impl++;                                              \
+            __VA_ARGS__                                                        \
+        }                                                                      \
+    }
+
+/**
  * Explicitly instantiate a linked list specialization.
  * (RESERVED FOR MATCHING DECOMP HACKS)
  */
@@ -328,7 +345,7 @@ public:
         return Iterator(LinkListImpl::GetBeginIter());
     }
     ConstIterator GetBeginIter() const {
-        return ConstIterator(GetBeginIter());
+        return ConstIterator(const_cast<LinkList*>(this)->LinkListImpl::GetBeginIter());
     }
     detail::ReverseIterator<Iterator> GetBeginReverseIter() {
         return detail::ReverseIterator<Iterator>(GetBeginIter());
@@ -338,7 +355,7 @@ public:
         return Iterator(LinkListImpl::GetEndIter());
     }
     ConstIterator GetEndIter() const {
-        return ConstIterator(GetEndIter());
+        return ConstIterator(const_cast<LinkList*>(this)->LinkListImpl::GetEndIter());
     }
     detail::ReverseIterator<Iterator> GetEndReverseIter() {
         return detail::ReverseIterator<Iterator>(GetEndIter());

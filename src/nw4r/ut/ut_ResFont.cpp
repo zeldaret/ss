@@ -34,17 +34,17 @@ bool ResFont::SetResource(void *buffer) {
         return false;
     }
 
-    if (header->magic == MAGIC_UNPACKED) {
+    if (header->signature == MAGIC_UNPACKED) {
         BinaryBlockHeader *block =
             reinterpret_cast<BinaryBlockHeader *>(reinterpret_cast<char *>(header) + header->headerSize);
 
-        for (int i = 0; i < header->numBlocks; i++) {
-            if (block->magic == MAGIC_FONTINFO) {
+        for (int i = 0; i < header->dataBlocks; i++) {
+            if (block->kind == MAGIC_FONTINFO) {
                 info = reinterpret_cast<FontInformation *>(block + 1);
                 break;
             }
 
-            block = reinterpret_cast<BinaryBlockHeader *>(reinterpret_cast<char *>(block) + block->length);
+            block = reinterpret_cast<BinaryBlockHeader *>(reinterpret_cast<char *>(block) + block->size);
         }
     } else {
         if (header->version == NW4R_VERSION(1, 04)) {
@@ -77,8 +77,8 @@ FontInformation *ResFont::Rebuild(BinaryFileHeader *header) {
         reinterpret_cast<BinaryBlockHeader *>(reinterpret_cast<char *>(header) + header->headerSize);
     FontInformation *info = NULL;
 
-    for (int i = 0; i < header->numBlocks; i++) {
-        switch (block->magic) {
+    for (int i = 0; i < header->dataBlocks; i++) {
+        switch (block->kind) {
             case MAGIC_FONTINFO:
                 info = reinterpret_cast<FontInformation *>(block + 1);
                 ResolveOffset<FontTextureGlyph>(info->fontGlyph, header);
@@ -112,10 +112,10 @@ FontInformation *ResFont::Rebuild(BinaryFileHeader *header) {
             default:         return NULL;
         }
 
-        block = reinterpret_cast<BinaryBlockHeader *>(reinterpret_cast<char *>(block) + block->length);
+        block = reinterpret_cast<BinaryBlockHeader *>(reinterpret_cast<char *>(block) + block->size);
     }
 
-    header->magic = MAGIC_UNPACKED;
+    header->signature = MAGIC_UNPACKED;
     return info;
 }
 

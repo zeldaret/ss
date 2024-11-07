@@ -9,8 +9,22 @@ extern "C" {
  * Stereo: Left, Right, Surround
  * DPL2:   Left, Right, Left Surround, Right Surround
  */
-#define AX_STEREO_CHAN_MAX 3
-#define AX_DPL2_CHAN_MAX 4
+typedef enum {
+    AX_STEREO_L,
+    AX_STEREO_R,
+    AX_STEREO_S,
+
+    AX_STEREO_MAX
+} AXStereoChannel;
+
+typedef enum {
+    AX_DPL2_L,
+    AX_DPL2_R,
+    AX_DPL2_LS,
+    AX_DPL2_RS,
+
+    AX_DPL2_MAX
+} AXDPL2Channel;
 
 #define AX_SAMPLES_PER_FRAME 96
 #define AX_SAMPLE_DEPTH_BYTES sizeof(u32)

@@ -91,6 +91,7 @@ struct FxBase;
 struct SoundPlayer;
 struct SoundHandle;
 struct SeqSoundHandle;
+struct SoundActor;
 struct SoundArchive;
 struct SoundArchivePlayer;
 struct Sound3DActor;
@@ -98,6 +99,7 @@ struct Sound3DListener;
 struct Sound3DManager;
 struct SoundHandle;
 struct StrmSoundHandle;
+struct VoiceOutParam;
 struct WaveSoundHandle;
 
 namespace detail {

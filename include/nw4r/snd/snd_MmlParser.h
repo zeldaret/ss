@@ -15,6 +15,7 @@ class SeqPlayer;
 class MmlParser {
 public:
     enum SeqArgType {
+        SEQ_ARG_NONE,
         SEQ_ARG_U8,
         SEQ_ARG_S16,
         SEQ_ARG_VMIDI,

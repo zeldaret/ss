@@ -3,7 +3,6 @@
 #include "nw4r/snd/snd_Voice.h"
 #include "nw4r/types_nw4r.h"
 
-
 namespace nw4r {
 namespace snd {
 namespace detail {
@@ -16,7 +15,7 @@ public:
 public:
     static VoiceManager &GetInstance();
 
-    u32 GetRequiredMemSize();
+    u32 GetRequiredMemSize(int numVoices);
 
     void Setup(void *pBuffer, u32 size);
     void Shutdown();

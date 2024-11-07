@@ -43,8 +43,6 @@ public:
     };
 
     static MoveParamMgr sMoveParamMgr;
-
-    static nw4r::ut::List lbl_80675480;
 };
 
 } // namespace EGG

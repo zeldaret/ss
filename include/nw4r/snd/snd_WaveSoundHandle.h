@@ -10,6 +10,7 @@ namespace snd {
 
 class WaveSoundHandle : private ut::NonCopyable {
 public:
+    WaveSoundHandle(SoundHandle* handle);
     ~WaveSoundHandle() {
         DetachSound();
     }

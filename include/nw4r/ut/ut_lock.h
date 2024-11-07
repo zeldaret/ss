@@ -33,13 +33,13 @@ private:
 
 class AutoInterruptLock : private NonCopyable {
 public:
-    AutoInterruptLock() : mEnabled(OSDisableInterrupts()) {}
+    AutoInterruptLock() : mOldState(OSDisableInterrupts()) {}
     ~AutoInterruptLock() {
-        OSRestoreInterrupts(mEnabled);
+        OSRestoreInterrupts(mOldState);
     }
 
 private:
-    BOOL mEnabled; // at 0x0
+    BOOL mOldState; // at 0x0
 };
 
 } // namespace ut

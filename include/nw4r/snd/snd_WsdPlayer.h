@@ -12,6 +12,14 @@
 
 namespace nw4r {
 namespace snd {
+
+struct WsdDataInfo {
+    bool loopFlag;
+    u32 sampleRate;
+    u32 loopStart;
+    u32 loopEnd;
+};
+
 namespace detail {
 
 class WsdPlayer : public BasicPlayer, public DisposeCallback, public SoundThread::PlayerCallback {
@@ -21,7 +29,7 @@ public:
         virtual ~WsdCallback() {} // at 0x8
 
         virtual bool GetWaveSoundData(
-            WaveSoundInfo *pSoundInfo, WaveSoundNoteInfo *pNoteInfo, WaveData *pWaveData, const void *pWsdData,
+            WaveSoundInfo *pSoundInfo, WaveSoundNoteInfo *pNoteInfo, WaveInfo *pWaveData, const void *pWsdData,
             int index, int noteIndex,
             u32 callbackArg
         ) const = 0; // at 0xC
@@ -94,6 +102,9 @@ public:
         return mChannel != NULL && mChannel->IsActive();
     }
 
+    bool ReadWsdDataInfo(WsdDataInfo *) const;
+    int GetPlaySamplePosition() const;
+
 private:
     static const int DEFAULT_PRIORITY = 64;
 
@@ -108,28 +119,28 @@ private:
     static void ChannelCallbackFunc(Channel *pDropChannel, Channel::ChannelCallbackStatus status, u32 callbackArg);
 
 private:
-    bool mActiveFlag;             // at 0x8C
-    bool mStartedFlag;            // at 0x8D
-    bool mPauseFlag;              // at 0x8E
-    bool mWavePlayFlag;           // at 0x8F
-    bool mReleasePriorityFixFlag; // at 0x90
+    bool mActiveFlag;             // at 0xCC
+    bool mStartedFlag;            // at 0xCD
+    bool mPauseFlag;              // at 0xCE
+    bool mWavePlayFlag;           // at 0xCF
+    bool mReleasePriorityFixFlag; // at 0xD0
 
-    f32 mPanRange;      // at 0x94
-    int mVoiceOutCount; // at 0x98
-    u8 mPriority;       // at 0x9C
+    f32 mPanRange;      // at 0xD4
+    int mVoiceOutCount; // at 0xD8
+    u8 mPriority;       // at 0xDC
 
-    const WsdCallback *mCallback; // at 0xA0
-    u32 mCallbackData;            // at 0xA4
+    const WsdCallback *mCallback; // at 0xE0
+    u32 mCallbackData;            // at 0xE4
 
-    const void *mWsdData; // at 0xA8
-    int mWsdIndex;        // at 0xAC
+    const void *mWsdData; // at 0xE8
+    int mWsdIndex;        // at 0xEC
 
-    StartOffsetType mStartOffsetType; // at 0xB0
-    int mStartOffset;                 // at 0xB4
+    StartOffsetType mStartOffsetType; // at 0xF0
+    int mStartOffset;                 // at 0xF4
 
-    LfoParam mLfoParam;           // at 0xB8
-    WaveSoundInfo mWaveSoundInfo; // at 0xC8
-    Channel *mChannel;            // at 0xD4
+    LfoParam mLfoParam;           // at 0xF8
+    WaveSoundInfo mWaveSoundInfo; // at 0x108
+    Channel *mChannel;            // at 0x114
 };
 
 } // namespace detail

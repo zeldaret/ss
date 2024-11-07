@@ -25,6 +25,7 @@
 #ifdef __MWERKS__
 #define DECL_SECTION(x) __declspec(section x)
 #define DECL_WEAK __declspec(weak)
+#define DECLTYPE(x) __decltype__(x)
 #define DONT_INLINE __attribute__((never_inline))
 #define FORCE_INLINE inline
 #define AT_ADDRESS(xyz) : (xyz)
