@@ -221,7 +221,6 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
     s32 state1 = -1;
     s32 state2 = -1;
 
-    // FPR regswap between float1 and float2
     f32 float1, float2;
     float2 = float1 = fn_800B8040(0, field_0x90C);
 
@@ -269,10 +268,8 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                         const wchar_t *t = src;
                         u32 len = (cmdLen / 2) + 1;
                         for (int i = 0; i < len; i++) {
-                            field_0x008[field_0x90E - 1][local_b4] = *(t++);
-                            if (field_0x90E - 1 < 4) {
-                                field_0x808[field_0x90E - 1]++;
-                            }
+                            getTmpBuffer()[local_b4] = *(t++);
+                            onWriteTmpBuffer();
                             local_b4++;
                         }
                     } else {
@@ -399,12 +396,9 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             src += 3;
         } else if (state4 != 0 && field_0x90E != 0) {
             // Note: Return ignored here
-            fn_800B5FD0(c, &field_0x008[field_0x90E - 1][local_b4], &local_b4);
+            fn_800B5FD0(c, &getTmpBuffer()[local_b4], &local_b4);
             src++;
-            // This looks like an inline tbh
-            if (field_0x90E - 1 < 4) {
-                field_0x808[field_0x90E - 1]++;
-            }
+            onWriteTmpBuffer();
         } else {
             if (textBox != nullptr) {
                 if (c == 10) {
@@ -774,15 +768,99 @@ wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
     if (FileManager::sInstance->getHeroname()[0] != '\0') {
         for (int i = 0; FileManager::sInstance->getHeroname()[i] != '\0'; i++) {
             if (arg != 0 && field_0x90E != 0) {
-                wchar_t c = FileManager::sInstance->getHeroname()[i];
-                fn_800B5FD0(c, &field_0x008[field_0x90E - 1][*outArg], outArg);
-                if (field_0x90E - 1 < 4) {
-                    field_0x808[field_0x90E - 1]++;
-                }
+                wchar_t *heroName = FileManager::sInstance->getHeroname();
+                fn_800B5FD0(heroName[i], &getTmpBuffer()[*outArg], outArg);
+                onWriteTmpBuffer();
             } else {
-                dest = fn_800B5FD0(FileManager::sInstance->getHeroname()[i], dest, nullptr);
+                wchar_t *heroName = FileManager::sInstance->getHeroname();
+                dest = fn_800B5FD0(heroName[i], dest, nullptr);
             }
         }
+    }
+    return dest;
+}
+
+wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
+    int numZeroDigits = ((u8*)src)[4];
+    bool writeZeroDigits = false;
+    s32 argIdx = *((s32*)src);
+    s32 numberArg = mNumericArgs[argIdx];
+    mNumericArgsCopy[0] = numberArg;
+
+    // This could potentially be an unrolled loop
+
+    s32 digit = numberArg / 10000;
+    s32 number = numberArg % 10000;
+
+    if (!writeZeroDigits && numZeroDigits == 5) {
+        writeZeroDigits = true;
+    }
+    if (digit > 0 || writeZeroDigits) {
+        if (arg != 0 && field_0x90E != 0) {
+            getTmpBuffer()[*outArg] = '0' + digit;
+            onWriteTmpBuffer();
+            (*outArg)++;
+        } else {
+            *(dest++) = '0' + digit;
+        }
+        writeZeroDigits = true;
+    }
+
+    digit = number / 1000;
+    number = number % 1000;
+    if (!writeZeroDigits && numZeroDigits == 4) {
+        writeZeroDigits = true;
+    }
+    if (digit > 0 || writeZeroDigits) {
+        if (arg != 0 && field_0x90E != 0) {
+            getTmpBuffer()[*outArg] = '0' + digit;
+            onWriteTmpBuffer();
+            (*outArg)++;
+        } else {
+            *(dest++) = '0' + digit;
+        }
+        writeZeroDigits = true;
+    }
+
+    digit = number / 100;
+    number = number % 100;
+    if (!writeZeroDigits && numZeroDigits == 3) {
+        writeZeroDigits = true;
+    }
+    if (digit > 0 || writeZeroDigits) {
+        if (arg != 0 && field_0x90E != 0) {
+            getTmpBuffer()[*outArg] = '0' + digit;
+            onWriteTmpBuffer();
+            (*outArg)++;
+        } else {
+            *(dest++) = '0' + digit;
+        }
+        writeZeroDigits = true;
+    }
+
+    digit = number / 10;
+    number = number % 10;
+    if (!writeZeroDigits && numZeroDigits == 2) {
+        writeZeroDigits = true;
+    }
+    if (digit > 0 || writeZeroDigits) {
+        if (arg != 0 && field_0x90E != 0) {
+            getTmpBuffer()[*outArg] = '0' + digit;
+            onWriteTmpBuffer();
+            (*outArg)++;
+        } else {
+            *(dest++) = '0' + digit;
+        }
+        writeZeroDigits = true;
+    }
+    
+    digit = number;
+    if (arg != 0 && field_0x90E != 0) {
+        getTmpBuffer()[*outArg] = '0' + digit;
+        onWriteTmpBuffer();
+        (*outArg)++;
+    } else {
+        *(dest++) = '0' + digit;
     }
     return dest;
 }
@@ -847,6 +925,14 @@ void dTagProcessor_c::changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
 
     ctx->writer->SetCursorY(posY);
     ctx->writer->SetScale(scale, scale);
+}
+
+void dTagProcessor_c::writeIcon(dTextBox_c *textBox, wchar_t *cmd, f32 arg) {
+    nw4r::ut::Font *f = dFontMng_c::getFont(4);
+    u32 c3 = fn_800B7880(*(u8 *)cmd);
+    arg = UnkTextThing::getField0x764() / f->GetWidth() * arg;
+
+    field_0x914[mCommandInsert] += arg * f->GetCharWidth(c3) + textBox->GetCharSpace();
 }
 
 void dTagProcessor_c::makeSpaceForIconMaybe(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr) {
@@ -918,10 +1004,8 @@ void dTagProcessor_c::restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 wind
 wchar_t *dTagProcessor_c::writeTextNormal(const wchar_t *src, wchar_t *dest, s32 *pArg, u8 cmdLen, s32 arg) {
     if (arg != 0 && field_0x90E != 0) {
         for (u32 i = 0; i < (cmdLen / 2 + 1); i++) {
-            field_0x008[field_0x90E - 1][*pArg] = *(src++);
-            if (field_0x90E - 1 < 4) {
-                field_0x808[field_0x90E - 1]++;
-            }
+            getTmpBuffer()[*pArg] = *(src++);
+            onWriteTmpBuffer();
             (*pArg)++;
         }
     } else {

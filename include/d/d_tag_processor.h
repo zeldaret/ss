@@ -69,6 +69,17 @@ public:
     s32 tick0x830();
 
 private:
+
+    wchar_t *getTmpBuffer() {
+        return field_0x008[field_0x90E - 1];
+    }
+
+    void onWriteTmpBuffer() {
+        if (field_0x90E - 1 < 4) {
+            field_0x808[field_0x90E - 1]++;
+        }
+    }
+
     /* 0x004 */ dTextBox_c *field_0x004;
     /* 0x008 */ wchar_t field_0x008[4][256];
     /* 0x808 */ wchar_t field_0x808[4];

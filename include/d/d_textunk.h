@@ -21,6 +21,13 @@ public:
         return 0.0f;
     }
 
+    inline static f32 getField0x764() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x764;
+        }
+        return 0.0f;
+    }
+
     inline static f32 getField0x768() {
         if (sInstance != nullptr) {
             return sInstance->field_0x768;
