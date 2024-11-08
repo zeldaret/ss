@@ -23,7 +23,6 @@ int dTgTumbleWeed_c::doDelete() {
 int dTgTumbleWeed_c::actorExecute() {
     mStateMgr.executeState();
     sLib::calcTimer(&tumbleweedTimer);
-    sLib::calcTimer(&tumbleweedTimer);
     return SUCCEEDED;
 }
 
@@ -34,16 +33,14 @@ int dTgTumbleWeed_c::draw() {
 void dTgTumbleWeed_c::initializeState_AreaOut() {}
 void dTgTumbleWeed_c::executeState_AreaOut() {
     if (sLib::calcTimer(&windTimer) == 0) {
-        if (sLib::calcTimer(&windTimer) == 0) {
-            windTimer = 0x96;
-            if (shouldDoWind()) {
-                mStateMgr.changeState(StateID_Wind);
-                return;
-            }
+        windTimer = 0x96;
+        if (shouldDoWind()) {
+            mStateMgr.changeState(StateID_Wind);
+            return;
         }
-        if (isWithinPlayerRadius(mScale.x)) {
-            mStateMgr.changeState(StateID_AreaIn);
-        }
+    }
+    if (isWithinPlayerRadius(mScale.x)) {
+        mStateMgr.changeState(StateID_AreaIn);
     }
 }
 void dTgTumbleWeed_c::finalizeState_AreaOut() {}
@@ -57,16 +54,14 @@ void dTgTumbleWeed_c::executeState_AreaIn() {
         tumbleweedTimer = 600;
     }
     if (sLib::calcTimer(&windTimer) == 0) {
-        if (sLib::calcTimer(&windTimer) == 0) {
-            windTimer = 0x96;
-            if (shouldDoWind()) {
-                mStateMgr.changeState(StateID_Wind);
-                return;
-            }
+        windTimer = 0x96;
+        if (shouldDoWind()) {
+            mStateMgr.changeState(StateID_Wind);
+            return;
         }
-        if (!isWithinPlayerRadius(mScale.x)) {
-            mStateMgr.changeState(StateID_AreaOut);
-        }
+    }
+    if (!isWithinPlayerRadius(mScale.x)) {
+        mStateMgr.changeState(StateID_AreaOut);
     }
 }
 void dTgTumbleWeed_c::finalizeState_AreaIn() {}
@@ -75,7 +70,6 @@ void dTgTumbleWeed_c::initializeState_Wind() {
     mVec3_c vec;
     getWind(&vec);
     if (childTumbleweed.get() != nullptr) {
-        childTumbleweed.get()->setWind(vec);
         childTumbleweed.get()->setWind(vec);
     }
 }
