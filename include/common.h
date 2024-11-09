@@ -117,7 +117,7 @@ typedef volatile f32 vf32;
 typedef volatile f64 vf64;
 
 // Necesary for CW
-#if __cplusplus < 201103L && !defined(_WIN32)
+#if __MWERKS__
 #define override
 #define noexcept
 #define nullptr NULL

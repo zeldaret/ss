@@ -1,4 +1,6 @@
+#include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "m/m_mtx.h"
 
 class dAcPy_c : public dAcObjBase_c {
     // See Below for some info
@@ -47,11 +49,13 @@ public:
     dAcPy_c();
     virtual ~dAcPy_c();
 
-    /* vt 0x080 */ virtual void IfCurrentActionToActor();
-    /* vt 0x084 */ virtual void vt_0x084();
-    /* vt 0x088 */ virtual void set0x439F();
+    void setTransform(const mMtx_c &mtx, UNKWORD, UNKWORD, UNKWORD);
+
+    /* vt 0x080 */ virtual UNKWORD IfCurrentActionToActor(dAcBase_c *ac, UNKWORD);
+    /* vt 0x084 */ virtual void vt_0x084(dAcBase_c *ac, UNKWORD);
+    /* vt 0x088 */ virtual void set0x439F(dAcBase_c *ac, UNKWORD);
     /* vt 0x08C */ virtual void set0x43DE();
-    /* vt 0x090 */ virtual void vt_0x090();
+    /* vt 0x090 */ virtual f32 vt_0x090();
     /* vt 0x094 */ virtual void relatedToUsingItem0x11();
     /* vt 0x098 */ virtual void setPosRot();
     /* vt 0x09C */ virtual void isLiftingObject();
@@ -178,7 +182,7 @@ public:
     /* vt 0x280 */ virtual void vt_0x280();
     /* vt 0x284 */ virtual bool isUsingBugnet() const;
     /* vt 0x288 */ virtual const mVec3_c &getBugNetPos() const;
-    /* vt 0x28C */ virtual void isUsingBugnet1();
+    /* vt 0x28C */ virtual bool isUsingBugnet1();
     /* vt 0x290 */ virtual void bugNetCollectTreasure(u32 itemId);
     /* vt 0x294 */ virtual void somethingSwitchDials();
     /* vt 0x298 */ virtual void vt_0x298();
@@ -224,6 +228,7 @@ public:
     /* 0x360 */ UNKWORD field_0x360;
     /* 0x364 */ u32 mActionFlags;
     /* 0x368 */ u32 mActionFlagsCont;
+    /* 0x36C */ int mCurrentAction; // TODO (Document Enum)
 
     inline bool checkFlags0x340(u32 mask) const {
         return (someFlags_0x340 & mask) != 0;
@@ -235,6 +240,10 @@ public:
 
     bool CheckPlayerFly() const {
         return mActionFlags & FLG0_FLY;
+    }
+
+    int getCurrentAction() const {
+        return mCurrentAction;
     }
 
     static dAcPy_c *LINK;
