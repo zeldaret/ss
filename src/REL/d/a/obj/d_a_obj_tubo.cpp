@@ -249,8 +249,13 @@ void dAcOtubo_c::calcRoll() {
         }
     }
 
-    mMtx_c m;
-    m.fromQuat(mQuat_0x99C * mQuat_0x98C);
+    mMtx_c mtx0, mtx1, mtx2;
+    mtx0.fromQuat(mQuat_0x99C * mQuat_0x98C);
+    mtx1.transS(0.f, 28.f, 0.f);
+    mWorldMtx += mtx1;
+    mWorldMtx += mtx0;
+    mtx2.transS(0.f, -28.f, 0.f);
+    mWorldMtx += mtx2;
 }
 
 mVec3_c dAcOtubo_c::getCenter() const {
