@@ -1,8 +1,8 @@
 #include "d/a/obj/d_a_obj_tower_hand_D101.h"
 
 #include "common.h"
+#include "d/a/d_a_item.h"
 #include "d/a/d_a_player.h"
-#include "d/a/obj/d_a_obj_item.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_w.h"
 #include "d/flag/sceneflag_manager.h"

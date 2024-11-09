@@ -590,9 +590,14 @@ d/a/d_a_player.cpp:
 	.text       start:0x801C5C30 end:0x802471F8
 	.ctors      start:0x804DB824 end:0x804DB828
 
-d/a/obj/d_a_obj_item.cpp:
+d/a/d_a_item.cpp:
 	.text       start:0x80247200 end:0x80258E58
 	.ctors      start:0x804DB828 end:0x804DB82C
+	.rodata     start:0x804EBBB0 end:0x804ED33C
+	.data       start:0x80533268 end:0x80534490
+	.sbss       start:0x805758B8 end:0x805758E0
+	.sdata2     start:0x8057BD88 end:0x8057BF7C
+	.bss        start:0x805B4490 end:0x805B48A8
 
 d/a/obj/d_a_obj_bomb.cpp:
 	.text       start:0x80258E60 end:0x8025D5D8

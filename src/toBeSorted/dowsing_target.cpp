@@ -1,11 +1,10 @@
 #include "toBeSorted/dowsing_target.h"
 
 #include "c/c_math.h"
-#include "m/m_mtx.h"
 #include "d/flag/itemflag_manager.h"
 #include "d/flag/storyflag_manager.h"
+#include "m/m_mtx.h"
 #include "toBeSorted/tlist.h"
-
 
 typedef TList<DowsingTarget, offsetof(DowsingTarget, mLink)> DowsingList;
 
@@ -13,7 +12,7 @@ DowsingList DOWSING_LISTS[8];
 
 static const int DOWSING_TARGET_STORY_FLAGS[8] = {
     100, 105, 100, 104, 108, 110, 109, 102,
-};
+}; // TODO (Story Flag ID)
 
 DowsingTarget::~DowsingTarget() {
     doUnregister();
@@ -56,6 +55,8 @@ void DowsingTarget::getPosition(mVec3_c &position) {
     PSMTXMultVec(mtx.m, mOffset, position);
 }
 
+// TODO (Story Flag IDs)
+
 bool DowsingTarget::hasZeldaDowsing() {
     return StoryflagManager::sInstance->getCounterOrFlag(100);
 }
@@ -73,14 +74,15 @@ bool DowsingTarget::hasDesertNodeDowsing() {
 }
 
 inline bool checkTrial(u16 itemflag, u16 storyflag) {
-    return (ItemflagManager::sInstance->getFlagDirect(itemflag) && !StoryflagManager::sInstance->getCounterOrFlag(storyflag)) ? true : false;
+    return (ItemflagManager::sInstance->getFlagDirect(itemflag) &&
+            !StoryflagManager::sInstance->getCounterOrFlag(storyflag)) ?
+               true :
+               false;
 }
 
+// TODO (Story Flag IDs) (you get the point lmao)
 bool DowsingTarget::hasAnyTrialDowsing() {
-    return checkTrial(187, 93) ||
-           checkTrial(188, 97) ||
-           checkTrial(189, 98) ||
-           checkTrial(193, 99);
+    return checkTrial(187, 93) || checkTrial(188, 97) || checkTrial(189, 98) || checkTrial(193, 99);
 }
 
 bool DowsingTarget::hasSacredWaterDowsing() {
