@@ -32,14 +32,16 @@ public:
 
     bool checkCarryType() const;
 
+    void calcRoll();
     void adjustRoll();
     void fn_272_2A10();
-
+    void fn_272_2670();
     mVec3_c getCenter() const;
     void fn_272_2E60(const mVec3_c &);
     void fn_272_3020();
-
-    void calcRoll();
+    bool fn_272_3730();
+    bool fn_272_3860();
+    bool fn_272_38C0();
 
     bool checkOnLog_0xE4E();
 
@@ -96,14 +98,15 @@ private:
     /* 0x9E0 */ f32 mField_0x9E0;
     /* 0x9E4 */ u8 _9DC[0x9EA - 0x9E4];
     /* 0x9EA */ u8 mField_0x9EA;
-    /* 0x9EB */ u8 mField_0x9EB;
+    /* 0x9EB */ bool mbField_0x9EB;
     /* 0x9EC */ bool mbField_0x9EC;
     /* 0x9ED */ bool mbField_0x9ED;
     /* 0x9EE */ bool mbField_0x9EE;
     /* 0x9EF */ bool mbField_0x9EF;
     /* 0x9F0 */ bool mbField_0x9F0;
-    /* 0x9F1 */ u8 mField_0x9F1;
-    /* 0x9F2 */ u8 _9F2[0x9F4 - 0x9F2];
+    /* 0x9F1 */ bool mbField_0x9F1;
+    /* 0x9F2 */ bool mbField_0x9F2;
+    /* 0x9F3 */ u8 _9F3[0x9F4 - 0x9F3];
     /* 0x9F4 */ u8 mTimer_0x9F4;
     /* 0x9F5 */ u8 _9F5[0x9F8 - 0x9F5];
     /* 0x9F8 */ u8 mSceneflag;

@@ -1,22 +1,30 @@
 #include "d/a/obj/d_a_obj_tubo.h"
 
+#include "c/c_lib.h"
 #include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
+#include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/dungeonflag_manager.h"
 #include "egg/math/eggMath.h"
 #include "f/f_base.h"
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
+#include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "rvl/MTX/mtxvec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/event_manager.h"
+
+// Very Hack ??
+static inline bool IsZero(f32 in) {
+    return in <= EGG::Math<f32>::epsilon();
+}
 
 void float_ordering() {
     f32 f[] = {15.f, .4f, .4f, 5.f};
@@ -170,7 +178,7 @@ int dAcOtubo_c::actorExecute() {
     poscopy2 = position + mVec3_c(0.f, 28.f, 0.f);
     poscopy3 = poscopy2;
     poscopy3.y += 48.f;
-    mField_0x9EB = 0;
+    mbField_0x9EB = 0;
 
     return SUCCEEDED;
 }
@@ -258,6 +266,99 @@ void dAcOtubo_c::calcRoll() {
     mWorldMtx += mtx2;
 }
 
+void dAcOtubo_c::adjustRoll() {
+    if (mObjAcch.ChkGndHit() && !IsZero(fabsf(forwardSpeed))) {
+        int adj = forwardSpeed * 182.f;
+        mVec3_c vel = velocity;
+        vel.y = 0.f;
+        vel.normalize();
+        vel.rotY(0x4000);
+        vel *= mField_0x9D8 * mField_0x9C8.sin();
+
+        mAng old_9C8 = mField_0x9C8;
+        mField_0x9C8 += adj;
+        if (old_9C8.sin() * mField_0x9C8.sin() < 0.f) {
+            mField_0x9D8 *= 0.75f;
+        }
+
+        position += vel;
+    }
+}
+
+void dAcOtubo_c::fn_272_2670() {
+    if (mbField_0x9EF && EventManager::isInEvent()) {
+        mField_0x9DC = 0.f;
+        return;
+    }
+
+    if (mSph.ChkTgHit()) {
+        if (mSph.ChkTgAtHitType(AT_TYPE_0x10000 | AT_TYPE_0x200)) {
+            mField_0x9DC = 0.f;
+            if (mTimer_0x9F4 == 0) {
+                if (!mbField_0x9EB) {
+                    mField_0x9D0 = cM::rndFX(0.25f) + 1.f;
+                }
+                mbField_0x9EB = true;
+                fn_272_2E60(mSph.GetTg_0x2C());
+                return;
+            }
+        }
+    } else {
+        if (mbField_0x9F1 && mField_0x8F0.fn_800051780(mSph)) {
+            velocity += mField_0x9B8;
+            mbField_0x9F1 = false;
+        }
+
+        if (!IsZero(fabsf(mField_0x9CA))) {
+            // Needs to be loaded again?
+            angle.y = mField_0x9CA;
+            mField_0x9CA = 0;
+        } else {
+            mQuat_c q;
+            q.set(1.f, 0.f, 0.f, 0.f);
+            mQuat_0x99C.slerpTo(q, 0.2f, mQuat_0x99C);
+        }
+    }
+
+    if (mObjAcch.ChkGndHit()) {
+        if (yoffset >= 0.f && !checkCarryType()) {
+            mField_0x9DC = 0.f;
+        } else if (fn_272_3730()) {
+            forwardSpeed = 0.0f;
+            mField_0x9EA = 0;
+        }
+    }
+
+    if (mSph.ChkCoHit() && fn_272_38C0()) {
+        fn_272_3020();
+    } else if (IsZero(fabsf(mField_0x9E0))) {
+        mField_0x9E0 = 0.1f;
+    }
+
+    // the ordering is weird here
+    bool noSound = mbField_0x9F2;
+    mEff_0x91C.fn_8002B120(mObjAcch.mWtr.mGroundH, mObjAcch.GetGroundH());
+
+    if (fn_272_3860()) {
+        forwardAccel = -0.8f;
+        forwardMaxSpeed = -7.f;
+        mField_0x9DC = 0.f;
+        cLib::addCalcPosXZ(&velocity, mVec3_c::Zero, 0.05f, 1.0f, 0.2f);
+        forwardSpeed = EGG::Math<f32>::sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
+        if (!noSound) {
+            playSound(0x9A0); // TODO (Sound ID)
+        }
+        mbField_0x9F2 = true;
+    } else {
+        forwardAccel = -4.f;
+        forwardMaxSpeed = -40.f;
+        mbField_0x9F2 = false;
+        if (checkCarryType()) {
+            mStateMgr.changeState(StateID_Grab);
+        }
+    }
+}
+
 mVec3_c dAcOtubo_c::getCenter() const {
     mMtx_c m;
     m.ZXYrotS(rotation.x, rotation.y, rotation.z);
@@ -275,7 +376,7 @@ void dAcOtubo_c::fn_272_2E60(const mVec3_c &vel) {
         }
         forwardSpeed = 0.f;
         velocity = mVec3_c::Zero;
-        mField_0x9F1 = 1;
+        mbField_0x9F1 = 1;
         mField_0x9B8 = vel * 2.f;
     } else if (mSph.ChkTgAtHitType(AT_TYPE_0x10000)) {
         velocity.x += vel.x * 0.06f;
@@ -289,7 +390,7 @@ void dAcOtubo_c::fn_272_2E60(const mVec3_c &vel) {
 }
 
 void dAcOtubo_c::fn_272_3020() {
-    mField_0x9EB = 1;
+    mbField_0x9EB = 1;
     static mVec3_c sRot = mVec3_c::Ey;
 
     mQuat_c quat;

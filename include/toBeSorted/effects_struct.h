@@ -50,6 +50,8 @@ public:
         mField_0x01 = val;
     }
 
+    void fn_8002B120(f32, f32);
+
     /* 0x00 */ u8 mField_0x00;
     /* 0x01 */ u8 mField_0x01;
     /* 0x04 */ f32 mField_0x04;
