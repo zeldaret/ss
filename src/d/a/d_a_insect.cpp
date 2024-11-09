@@ -24,33 +24,6 @@ static inline bool IsZero(f32 in) {
     return in <= EGG::Math<f32>::epsilon();
 }
 
-// void AcOInsectFloats() {
-//     50.0f;
-//     1.0f;
-//     30.0f;
-//     5000.0f;
-//     0.1f;
-//     10.0f;
-//     500.0f;
-//     0.0f;
-//     400.0f;
-//     -200.0f;
-//     200.0f;
-//     20.0f;
-//     EGG::Math<f32>::epsilon();
-//     5.0f;
-//     -5.0f;
-//     0.99f;
-//     int x = 0;
-//     (f32) x;
-// }
-
-// void AcOInsectFloats2() {
-//     -1.0f;
-//     0.5f;
-//     2250000.0f;
-// }
-
 extern "C" void fn_800298B0(u16, mVec3_c *, mVec3_c *, u32, u32, u32, u32, u32);
 extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_394_;
 
@@ -177,7 +150,6 @@ void dAcOInsect_c::addAttentionTarget() {
 }
 
 void dAcOInsect_c::preAttention() {
-    // It's always the simplest vector functions that cause problems
     poscopy2 = position;
     poscopy2.y += 20.f;
     poscopy3 = poscopy2;
