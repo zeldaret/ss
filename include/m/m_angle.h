@@ -68,6 +68,11 @@ struct mAng {
     f32 radian() const {
         return ((2.f * M_PI) / 65536.0f) * mVal;
     }
+
+    f32 radian2() const {
+        return mVal * sAngToRad;
+    }
+
     static s16 fromRad(f32 rad) {
         return rad * sRadToAng;
     }
