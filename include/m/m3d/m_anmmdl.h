@@ -45,6 +45,10 @@ public:
         return mMdl;
     }
 
+    inline anmChr_c &getAnm() {
+        return mAnm;
+    }
+
 private:
     nw4r::g3d::ResFile mMdlFile;
     nw4r::g3d::ResFile mAnmFile;
