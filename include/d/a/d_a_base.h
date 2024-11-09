@@ -2,6 +2,7 @@
 #define D_A_BASE_H
 
 #include "UnknownTypeBelongings.h"
+#include "common.h"
 #include "d/d_base.h"
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
@@ -9,8 +10,8 @@
 #include "stddef.h"
 #include "toBeSorted/tlist.h"
 
-
 class dAcBase_c;
+class dAcObjBase_c;
 
 struct SoundSource {
     // TODO
@@ -107,7 +108,7 @@ protected:
     /* 0x5C | 8002ce90 */ virtual void unkVirtFunc_0x5C();
     /* 0x60 | 8002cea0 */ virtual void unkVirtFunc_0x60();
     /* 0x64 | 8002ceb0 */ virtual bool restorePosRotFromCopy();
-    /* 0x68 | 8002db80 */ virtual void *getCurrentEventActor();
+    /* 0x68 | 8002db80 */ virtual void registerInEvent();
     /* 0x6C | 8002db90 */ virtual void unkVirtFunc_0x6C();
     /* 0x70 | 8002dba0 */ virtual void doInteraction(s32);
 

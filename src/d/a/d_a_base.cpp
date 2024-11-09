@@ -3,12 +3,12 @@
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_heap.h"
+#include "d/flag/enemyflag_manager.h"
 #include "f/f_list_nd.h"
 #include "m/m_vec.h"
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
-#include "d/flag/enemyflag_manager.h"
 #include "toBeSorted/room_manager.h"
 #include "toBeSorted/scgame.h"
 #include "toBeSorted/special_item_drop_mgr.h"
@@ -243,9 +243,7 @@ u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
     u32 param2Copy = params2;
     params2 = param2Copy | 0xFF000000;
     // mAng3_c rot = {};
-    return SpecialItemDropMgr::sInstance->giveSpecialDropItem(
-        param2Copy >> 0x18, roomid, spawnPos, subtype, 0, -1
-    );
+    return SpecialItemDropMgr::sInstance->giveSpecialDropItem(param2Copy >> 0x18, roomid, spawnPos, subtype, 0, -1);
 }
 
 // 8002cf90
@@ -551,7 +549,7 @@ dAcBase_c *dAcBase_c::createActorStage(
 }
 
 // 8002db80
-void *dAcBase_c::getCurrentEventActor() {}
+void dAcBase_c::registerInEvent() {}
 
 // 8002db90
 void dAcBase_c::unkVirtFunc_0x6C() {}

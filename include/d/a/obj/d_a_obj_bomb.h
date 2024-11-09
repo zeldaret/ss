@@ -35,7 +35,7 @@ public:
     /* vt 0x44  */ virtual bool createHeap() override;
     /* vt 0x54  */ virtual int actorExecute() override;
     /* vt 0x5C  */ virtual void unkVirtFunc_0x5C() override;
-    /* vt 0x68  */ virtual void *getCurrentEventActor() override;
+    /* vt 0x68  */ virtual void registerInEvent() override;
     /* vt 0x6C  */ virtual void unkVirtFunc_0x6C() override;
 
     STATE_FUNC_DECLARE(dAcBomb_c, Wait);

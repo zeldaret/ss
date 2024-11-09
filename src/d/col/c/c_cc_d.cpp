@@ -1308,7 +1308,7 @@ void cCcD_SphAttr::Set(const cCcD_SrcSphAttr &src) {
     a.z = 0.0f;
     a.y = 0.0f;
     a.x = 0.0f;
-    SetC(&a);
+    SetC(a);
 }
 
 mVec3_c &cCcD_SphAttr::GetCoP() {

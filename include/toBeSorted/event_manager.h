@@ -2,6 +2,8 @@
 #ifndef EVENT_MANAGER_H
 #define EVENT_MANAGER_H
 
+#include "common.h"
+#include "sized_string.h"
 #include "toBeSorted/event.h"
 
 class dAcBase_c;
@@ -21,9 +23,20 @@ public:
         return isInEvent() && sInstance != nullptr && sInstance->mState != 7;
     }
 
+    static const char *getCurrentEventName() {
+        return isInEvent() ? sInstance->mCurrentEvent.eventName : nullptr;
+    }
+
+    static bool isCurrentEvent(const char *name) {
+        return strequals(getCurrentEventName(), name);
+    }
+
 private:
-    u8 field_0x000[0x184 - 0x000];
-    int mState;
+    /* 0x000 */ u8 _000[0x084 - 0x000];
+    /* 0x084 */ Event mCurrentEvent;
+    /* 0x0C4 */ u8 _0C4[0x184 - 0x0C4];
+    /* 0x184 */ int mState;
+    /* 0x18C */ u8 _18C[0x19C - 0x18C];
 };
 
 #endif

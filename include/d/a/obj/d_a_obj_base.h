@@ -12,6 +12,9 @@
 #include "m/m_vec.h"
 #include "m/types_m.h"
 
+class dAcObjBase_c;
+class dBgS_Acch;
+
 // Size: 0xA8
 struct ActorCarryStruct {
     /* 0x00 */ fLiNdBa_c actorLink;
@@ -24,10 +27,20 @@ struct ActorCarryStruct {
     /* 0x28 */ mMtx_c carryTransMtx;
     /* 0x58 */ mMtx_c field_0x58;
     /* 0x88 */ s32 isCarried;
-    /* 0x8C */ u8 field_0x8C[0x10]; // mQuat_c
-    /* 0x9C */ void *dtor;          // ???
+    /* 0x8C */ f32 field_0x8C;
+    /* 0x90 */ f32 field_0x90;
+    /* 0x94 */ f32 field_0x94;
+    /* 0x98 */ f32 field_0x98;
+    /* 0x9C */ void *dtor; // ???
     /* 0xA0 */ u32 field_0xA0;
     /* 0xA4 */ u32 field_0xA4;
+
+    void set(u32 flags, f32 x, f32 y, f32 z, void *unk);
+
+    // not real name, but sure
+    void bushTpFunc(dBgS_Acch &);
+
+    void fn_800511E0(dAcObjBase_c *);
 
     bool testCarryFlag(u32 flag) {
         return (carryFlags & flag) != 0;
@@ -187,5 +200,20 @@ public:
             return FAILED;                                                                                             \
         }                                                                                                              \
     } while (0)
+
+class dAcObjRef_unk {
+public:
+    dAcObjRef_unk(dAcObjBase_c *ref) : mObj(nullptr), refOwner(ref) {}
+    ~dAcObjRef_unk() {
+        refOwner = nullptr;
+    }
+
+    void modifyMtx();
+
+    /* 0x00 */ dAcRef_c<dAcObjBase_c> mObj;
+    /* 0x0C */ u8 _0C[4];
+    /* 0x10 */ dAcObjBase_c *refOwner;
+    /* 0x14 */ u8 _14[0x2C - 0x14];
+};
 
 #endif

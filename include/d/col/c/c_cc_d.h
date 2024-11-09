@@ -630,6 +630,10 @@ public:
         mField_0x4B = val;
     }
 
+    void SetInfo_0x2(u16 val) {
+        mSrc.mInfo.mField_0x2 = val;
+    }
+
 public:
     /* 0x1C */ cCcD_SrcGObjTg mSrc;
     /* 0x2C */ mVec3_c mField_0x2C;
@@ -860,6 +864,9 @@ public:
 
     // At
 
+    void OnAtSet() {
+        mAt.OnSPrm(1);
+    }
     u32 ChkAtNoMass() const {
         return mAt.MskSPrm(0x400);
     }
@@ -878,6 +885,9 @@ public:
 
     // Tg
 
+    void OnTgSet() {
+        mTg.OnSPrm(1);
+    }
     u32 GetTgGrp() const {
         return mTg.MskSPrm(0x3E);
     }
@@ -894,9 +904,15 @@ public:
     void SetTg_0x4B(u8 val) {
         mTg.Set_0x4B(val);
     }
+    void SetTgInfo_0x2(u16 val) {
+        mTg.SetInfo_0x2(val);
+    }
 
     // Co
 
+    void OnCoSet() {
+        mCo.OnSPrm(1);
+    }
     u32 ChkCoSet2() const {
         return mCo.MskSPrm(0x800);
     }

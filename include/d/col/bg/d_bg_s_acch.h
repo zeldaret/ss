@@ -1,7 +1,6 @@
 #ifndef D_BG_S_ACCH_H
 #define D_BG_S_ACCH_H
 
-#include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/bg/d_bg_s_roof_chk.h"
 #include "d/col/bg/d_bg_s_sph_chk.h"
@@ -10,6 +9,8 @@
 #include "d/col/c/c_m3d_g_cyl.h"
 #include "d/col/c/c_m3d_g_lin.h"
 #include "d/col/c/c_m3d_g_pla.h"
+
+class dAcObjBase_c;
 
 class dBgS_AcchCir : public cBgS_PolyInfo {
 private:
@@ -308,6 +309,16 @@ public:
     }
     bool Chk_0x10000000() {
         return mFlags & ACCH_FLAG_0x10000000;
+    }
+
+    void Clr_0x20000() {
+        mFlags &= ~ACCH_FLAG_0x20000;
+    }
+    void Set_0x20000() {
+        mFlags |= ACCH_FLAG_0x20000;
+    }
+    bool Chk_0x20000() {
+        return mFlags & ACCH_FLAG_0x20000;
     }
     void Clr_0x80000000() {
         mFlags &= ~ACCH_FLAG_0x80000000;
