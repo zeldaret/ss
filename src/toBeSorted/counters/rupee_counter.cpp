@@ -1,5 +1,6 @@
-#include "toBeSorted/counters/counter.h"
+#include "d/a/d_a_item.h"
 #include "d/flag/itemflag_manager.h"
+#include "toBeSorted/counters/counter.h"
 
 static u16 getBaseCapacity();
 static u16 getExtraWalletCapacity();
@@ -21,10 +22,10 @@ struct WalletStruct {
 /* 8016DE10 */ static u16 getBaseCapacity() {
     int i = 0;
     /* 804E91B0 */ WalletStruct wallet_definitions[4] = {
-        {0x6c,  500},
-        {0x6d, 1000},
-        {0x6e, 5000},
-        {0x6f, 9000},
+        {ITEM_MEDIUM_WALLET,  500},
+        {   ITEM_BIG_WALLET, 1000},
+        { ITEM_GIANT_WALLET, 5000},
+        {ITEM_TYCOON_WALLET, 9000},
     };
     const WalletStruct *wallet = &wallet_definitions[3];
     for (; i < 4; i++, wallet--) {
@@ -39,7 +40,7 @@ struct WalletStruct {
 extern "C" u16 getCounterByIndex(u16);
 
 /* 8016DEC0 */ static u16 getExtraWalletCapacity() {
-    return 300 * getCounterByIndex(0x27);
+    return 300 * getCounterByIndex(0x27); // Maybe 0x27 corresponds to item 27 -> small wallet?
 }
 
 /* 80575610 */ RupeeCounter RUPEE_COUNTER;

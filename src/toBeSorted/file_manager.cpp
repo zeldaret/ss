@@ -6,6 +6,7 @@
 
 // clang-format off
 #include "sized_string.h"
+#include "toBeSorted/dowsing_target.h"
 // clang-format on
 
 // This class here makes no sense and the name might
@@ -111,14 +112,15 @@ u16 *FileManager::getStoryFlagsMut() {
     if (fileNum != 0) {
         file = &mFileB;
     }
+
     file->new_file = 0;
-    file->health_capacity = 0x18;
-    file->unused_heart_related = 0x18;
-    file->current_health = 0x18;
+    file->health_capacity = 24; // 6 hearts * 4 quarters
+    file->unused_heart_related = 24;
+    file->current_health = 24;
     file->shield_pouch_slot = 8;
-    file->equipped_b_item = 0xb;
-    file->selectedDowsingSlot = 0x8;
-    file->lastUsedPouchItemSlot = 0x8;
+    file->equipped_b_item = 0xb; // TODO (B Wheel Id)
+    file->selectedDowsingSlot = DowsingTarget::SLOT_NONE;
+    file->lastUsedPouchItemSlot = 8;
 
     SizedString<32> buf;
     buf = "F405";

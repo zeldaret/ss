@@ -6,7 +6,6 @@
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
-#include "stddef.h"
 #include "toBeSorted/tlist.h"
 
 class dAcBase_c;
@@ -57,6 +56,9 @@ public:
     }
     const T *get() const {
         return static_cast<const T *>(p_owner);
+    }
+    BOOL isLinked() const {
+        return get() != nullptr;
     }
 };
 

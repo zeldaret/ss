@@ -3,8 +3,9 @@
 #include "c/c_lib.h"
 #include "c/c_math.h"
 #include "common.h"
+#include "d/a/d_a_item.h"
+#include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
-#include "d/a/obj/d_a_obj_item.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 
@@ -366,34 +367,11 @@ const LowHealthReplacement LOW_HEALTH_REPLACEMENTS[] = {
      },
 };
 
-// TODO: Convert to enum once work on items has started
-static const u16 SPECIAL_ITEM_ARRAY[] = {
-    0,    // None
-    6,    // Heart
-    6,    // Heart
-    2,    // Green Rupee
-    3,    // Blue Rupee
-    4,    // Red Rupee
-    0x2b, // Farore Tear
-    0x28, // 5 Bombs
-    0x29, // 10 Bombs
-    7,    // Single Arrow
-    8,    // Bundle Arrows
-    0x39, // 5 Deku Seeds
-    0,    // None
-    0,    // None
-    0x1c, // ET Key Piece
-    0xa5, // Eldin Ore
-    58,   // ???
-    59,   // ???
-    183,  // ???
-    184,  // ???
-    185,  // ???
-    72,   // Fairy
-    72,   // Fairy
-    1,    // Small Key
-    34,   // Rupoor
-};
+int SPECIAL_ITEM_ARRAY[] = {ITEM_NONE,          ITEM_HEART,        ITEM_HEART,   ITEM_GREEN_RUPEE, ITEM_BLUE_RUPEE,
+                            ITEM_RED_RUPEE,     ITEM_FARORE_TEAR,  ITEM_5_BOMBS, ITEM_10_BOMBS,    ITEM_SINGLE_ARROW,
+                            ITEM_BUNDLE_ARROWS, ITEM_5_DEKU_SEEDS, ITEM_NONE,    ITEM_NONE,        ITEM_KEY_PIECE,
+                            ITEM_ELDIN_ORE,     ITEM_UNK_58,       ITEM_UNK_59,  ITEM_UNK_183,     ITEM_UNK_184,
+                            ITEM_UNK_185,       ITEM_FAIRY,        ITEM_FAIRY,   ITEM_SMALL_KEY,   ITEM_RUPOOR};
 
 static const u32 sNumDropEntries = 0x36;
 static const struct {
@@ -403,8 +381,7 @@ static const struct {
     0x36,
     sList,
 };
-
-static const u16 RAND_RUPEE_ARRAY[] = {2, 3, 4};
+static const int RAND_RUPEE_ARRAY[3] = {ITEM_GREEN_RUPEE, ITEM_BLUE_RUPEE, ITEM_RED_RUPEE};
 
 extern "C" int getCurrentBowType();
 extern "C" int getCurrentSlingshotType();
@@ -435,7 +412,7 @@ int SpecialItemDropMgr::fn_800C7BB0(int specialItemId) {
         } else if (specialItemId != 0x27 && (entryIdx == 1 || entryIdx == 2) && isHeroMode()) {
             // Hearts generally don't drop on Hero Mode unless it's a special kind of heart (which?)
             weight = 0;
-        } else if ((entryIdx == 7 || entryIdx == 8) && !dAcItem_c::checkFlag(/* Bomb Bag */ 92)) {
+        } else if ((entryIdx == 7 || entryIdx == 8) && !dAcItem_c::checkFlag(ITEM_BOMB_BAG)) {
             // Bombs won't drop until you get the Bomb Bag
             weight = 0;
         }
@@ -487,15 +464,14 @@ int SpecialItemDropMgr::giveSpecialDropItem(
 
     bool ret = spawnSpecialDropItem(specialItemId, roomid, pos, subtype, rot);
     if (shouldTryExtraHearts(specialItemId)) {
-        for (u32 i = 0; i < adventurePouchCountItem(/* HEART_MEDAL */ 100); i++) {
+        for (u32 i = 0; i < adventurePouchCountItem(ITEM_HEART_MEDAL); i++) {
             bool ok = spawnSpecialDropItem(0x27, roomid, pos, subtype, rot);
             ret |= ok;
         }
     }
 
     if (shouldTryExtraRupees(specialItemId)) {
-        for (u32 i = 0;
-             i < adventurePouchCountItem(/* RUPEE_MEDAL */ 101) + adventurePouchCountItem(/* CURSED_MEDAL */ 104);
+        for (u32 i = 0; i < adventurePouchCountItem(ITEM_RUPEE_MEDAL) + adventurePouchCountItem(ITEM_CURSED_MEDAL);
              i++) {
             bool ok = spawnSpecialDropItem(0x28, roomid, pos, subtype, rot);
             ret |= ok;

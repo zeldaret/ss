@@ -65,10 +65,10 @@ public:
     void rot(int, int); // does some werrd operation to rotate the matrix
     bool quatRelated();
 
-    void trans(const mVec3_c &v) {
+    void transS(const mVec3_c &v) {
         PSMTXTrans(*this, v.x, v.y, v.z);
     }
-    void trans(f32 x, f32 y, f32 z) {
+    void transS(f32 x, f32 y, f32 z) {
         PSMTXTrans(*this, x, y, z);
     }
     mVec3_c multVec(const mVec3_c &v) const {

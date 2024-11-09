@@ -1,9 +1,9 @@
 #include "d/t/d_t_dowsing.h"
 
+#include "d/a/d_a_item.h"
 #include "d/flag/itemflag_manager.h"
-#include "d/flag/storyflag_manager.h"
 #include "d/flag/sceneflag_manager.h"
-
+#include "d/flag/storyflag_manager.h"
 
 SPECIAL_ACTOR_PROFILE(T_DOWSING, dTgDowsing_c, fProfile::T_DOWSING, 0x0293, 0, 0);
 
@@ -56,13 +56,17 @@ bool dTgDowsing_c::checkDowsing() const {
 
     switch (mDowsingOption) {
         case TRIAL_0:
-            return ItemflagManager::sInstance->getFlagDirect(187) && !StoryflagManager::sInstance->getCounterOrFlag(93);
+            return ItemflagManager::sInstance->getFlagDirect(ITEM_FARORES_COURAGE) &&
+                   !StoryflagManager::sInstance->getCounterOrFlag(93); // TOOD (Counter ID)
         case TRIAL_1:
-            return ItemflagManager::sInstance->getFlagDirect(188) && !StoryflagManager::sInstance->getCounterOrFlag(97);
+            return ItemflagManager::sInstance->getFlagDirect(ITEM_NAYRUS_WISDOM) &&
+                   !StoryflagManager::sInstance->getCounterOrFlag(97); // TOOD (Counter ID)
         case TRIAL_2:
-            return ItemflagManager::sInstance->getFlagDirect(189) && !StoryflagManager::sInstance->getCounterOrFlag(98);
+            return ItemflagManager::sInstance->getFlagDirect(ITEM_DINS_POWER) &&
+                   !StoryflagManager::sInstance->getCounterOrFlag(98); // TOOD (Counter ID)
         case TRIAL_3:
-            return ItemflagManager::sInstance->getFlagDirect(193) && !StoryflagManager::sInstance->getCounterOrFlag(99);
+            return ItemflagManager::sInstance->getFlagDirect(ITEM_SOTH) &&
+                   !StoryflagManager::sInstance->getCounterOrFlag(99); // TOOD (Counter ID)
         case PROPELLER:         return DowsingTarget::hasPropellerDowsing();
         case WATER_BASIN:       return DowsingTarget::hasWaterBasinDowsing();
         case CRYSTAL_BALL:      return DowsingTarget::hasCrystalBallDowsing();

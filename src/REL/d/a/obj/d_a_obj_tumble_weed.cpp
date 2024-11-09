@@ -2,23 +2,20 @@
 
 #include "c/c_math.h"
 #include "common.h"
+#include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
-#include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_pla.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "egg/math/eggMath.h"
 #include "egg/math/eggQuat.h"
-#include "f/f_base.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
-#include "nw4r/math/math_triangular.h"
-#include "rvl/MTX/mtx.h"
 #include "rvl/MTX/vec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/dowsing_target.h"
@@ -118,7 +115,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     mObjAcch.CrrPos(*dBgS::GetInstance());
     mField_0x974 += position.y - mOldPosition.y;
     if (checkCollect()) {
-        dAcPy_c::LINK->bugNetCollectTreasure(0xA3 /* TODO(Item Id) ITEM_TUMBLEWEED */);
+        dAcPy_c::LINK->bugNetCollectTreasure(ITEM_TUMBLE_WEED);
         FUN_8002dcd0();
         return SUCCEEDED;
     }
@@ -293,10 +290,10 @@ void dAcOTumbleWeed_c::calcMatrix() {
 
     mMtx_c mtx0, mtx1, mtx2;
     mShadowMtx.copyFrom(mWorldMtx);
-    mtx1.trans(getPosition() - position);
+    mtx1.transS(getPosition() - position);
     mShadowMtx += mtx1;
     mtx0.fromQuat(mField_0x910);
-    mtx2.trans(0.f, 40.f, 0.f);
+    mtx2.transS(0.f, 40.f, 0.f);
     mWorldMtx += mtx2;
     mWorldMtx += mtx0;
 }
