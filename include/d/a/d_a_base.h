@@ -2,7 +2,6 @@
 #define D_A_BASE_H
 
 #include "UnknownTypeBelongings.h"
-#include "common.h"
 #include "d/d_base.h"
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
@@ -11,7 +10,6 @@
 #include "toBeSorted/tlist.h"
 
 class dAcBase_c;
-class dAcObjBase_c;
 
 struct SoundSource {
     // TODO
