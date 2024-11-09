@@ -9,6 +9,7 @@
 #include "m/m_vec.h"
 #include "nw4r/types_nw4r.h"
 #include "rvl/MTX/mtx.h"
+#include "rvl/MTX/mtxvec.h"
 
 class mMtx_c : public EGG::Matrix34f {
     typedef f32 (*MtxRef)[4];
@@ -69,6 +70,11 @@ public:
     }
     void transS(f32 x, f32 y, f32 z) {
         PSMTXTrans(*this, x, y, z);
+    }
+    mVec3_c multVec(const mVec3_c &v) const {
+        mVec3_c ret = v;
+        PSMTXMultVec(*this, ret, ret);
+        return ret;
     }
 
     mMtx_c &operator+=(const mMtx_c &rhs) {

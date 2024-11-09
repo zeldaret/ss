@@ -217,6 +217,13 @@ public:
         return PSVECMag(*this);
     }
 
+    f32 distance(const mVec3_c &to) const {
+        return EGG::Math<f32>::sqrt(PSVECSquareDistance(*this, to));
+    }
+
+    f32 squareMagXZ() const {
+        return x * x + z * z;
+    }
     void rotY(const mAng &angle);
 
     void CopyTo(nw4r::math::VEC3 *p) {
