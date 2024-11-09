@@ -47,6 +47,9 @@ public:
     static void spawnItem(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot, u32 params, u32 arg);
     static void spawnDrop(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot);
     static u32 checkFlag(u32 flag);
+    void setItemPosition(const mVec3_c &);
+    void getItemFromBWheelItem();
+    bool isStateWait();
 
 private:
     /* 0x334 */ UNKTYPE *mpMdl; // Model has its own handling system
@@ -166,6 +169,7 @@ private:
     /* 0xD66 */ u8 mField_0xD66;
     /* 0xD67 */ u8 mField_0xD67;
 
+public:
     static fLiMgBa_c sItemList;
 };
 

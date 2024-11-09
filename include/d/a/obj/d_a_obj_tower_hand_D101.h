@@ -3,8 +3,8 @@
 
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/a/d_a_item.h"
 #include "d/a/obj/d_a_obj_base.h"
-#include "d/a/obj/d_a_obj_item.h"
 #include "d/col/bg/d_bg_w.h"
 #include "m/m3d/m_anmmdl.h"
 #include "m/m_angle.h"
@@ -14,6 +14,7 @@
 #include "s/s_StateMgr.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/effects_struct.h"
+
 
 class dAcOTowerHandD101_c : public dAcObjBase_c {
 public:
