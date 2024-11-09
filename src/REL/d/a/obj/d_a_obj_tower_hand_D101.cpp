@@ -69,13 +69,7 @@ const mVec3_c &dAcOTowerHandD101_c::getBoundingUpper() {
 }
 
 bool dAcOTowerHandD101_c::isValidDirectionParam(int param) {
-    // TODO
-    bool ok = false;
-    if (param >= 0 && param < 2) {
-        ok = true;
-    }
-
-    return ok;
+    return 0 <= param && param <= 1;
 }
 
 void dAcOTowerHandD101_c::transformMtx(
@@ -94,11 +88,7 @@ f32 dAcOTowerHandD101_c::f32Sq(f32 value) {
 }
 
 bool dAcOTowerHandD101_c::isValidBgWIndex(int index) {
-    // TODO
-    if (index >= 0 && index < 3) {
-        return true;
-    }
-    return false;
+    return 0 <= index && index <= 2;
 }
 
 bool dAcOTowerHandD101_c::createHeap() {
