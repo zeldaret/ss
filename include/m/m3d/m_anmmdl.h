@@ -45,6 +45,18 @@ public:
         return mMdl;
     }
 
+    inline const mdl_c &getModel() const {
+        return mMdl;
+    }
+
+    inline anmChr_c &getAnm() {
+        return mAnm;
+    }
+
+    inline const anmChr_c &getAnm() const {
+        return mAnm;
+    }
+
 private:
     nw4r::g3d::ResFile mMdlFile;
     nw4r::g3d::ResFile mAnmFile;

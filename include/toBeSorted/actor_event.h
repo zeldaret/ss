@@ -14,6 +14,7 @@ public:
     void scheduleEvent(Event &, u32);
     u32 getCurrentEventCommand() const;
     void advanceNext();
+    bool isAdvance();
 
 private:
     u8 field_0x00[0x50 - 0x00];

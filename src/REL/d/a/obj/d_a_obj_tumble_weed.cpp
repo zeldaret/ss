@@ -293,10 +293,10 @@ void dAcOTumbleWeed_c::calcMatrix() {
 
     mMtx_c mtx0, mtx1, mtx2;
     mShadowMtx.copyFrom(mWorldMtx);
-    mtx1.trans(getPosition() - position);
+    mtx1.transS(getPosition() - position);
     mShadowMtx += mtx1;
     mtx0.fromQuat(mField_0x910);
-    mtx2.trans(0.f, 40.f, 0.f);
+    mtx2.transS(0.f, 40.f, 0.f);
     mWorldMtx += mtx2;
     mWorldMtx += mtx0;
 }

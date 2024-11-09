@@ -59,6 +59,9 @@ public:
     const T *get() const {
         return static_cast<const T *>(p_owner);
     }
+    bool isLinked() const {
+        return get() != nullptr;
+    }
 };
 
 // Ghidra: ActorBase
