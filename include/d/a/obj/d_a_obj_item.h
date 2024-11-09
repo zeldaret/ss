@@ -2,6 +2,7 @@
 #define D_A_ITEM_BASE_H
 
 #include "d/a/obj/d_a_obj_base.h"
+#include "m/m_vec.h"
 
 // Ghidra: AcItem
 //   Size: 0xd68
@@ -14,6 +15,11 @@ public:
     static void spawnDrop(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot);
 
     static u32 checkFlag(u32 flag);
+    void setItemPosition(const mVec3_c &);
+    void getItemFromBWheelItem();
+    bool isStateWait();
+
+    static fLiMgBa_c sItemList;
 };
 
 #endif

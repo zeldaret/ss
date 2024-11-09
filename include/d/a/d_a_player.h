@@ -1,4 +1,6 @@
+#include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "m/m_mtx.h"
 
 class dAcPy_c : public dAcObjBase_c {
     // See Below for some info
@@ -47,11 +49,13 @@ public:
     dAcPy_c();
     virtual ~dAcPy_c();
 
-    /* vt 0x080 */ virtual void IfCurrentActionToActor();
-    /* vt 0x084 */ virtual void vt_0x084();
-    /* vt 0x088 */ virtual void set0x439F();
+    void setTransform(const mMtx_c &mtx, UNKWORD, UNKWORD, UNKWORD);
+
+    /* vt 0x080 */ virtual UNKWORD IfCurrentActionToActor(dAcBase_c *ac, UNKWORD);
+    /* vt 0x084 */ virtual void vt_0x084(dAcBase_c *ac, UNKWORD);
+    /* vt 0x088 */ virtual void set0x439F(dAcBase_c *ac, UNKWORD);
     /* vt 0x08C */ virtual void set0x43DE();
-    /* vt 0x090 */ virtual void vt_0x090();
+    /* vt 0x090 */ virtual f32 vt_0x090();
     /* vt 0x094 */ virtual void relatedToUsingItem0x11();
     /* vt 0x098 */ virtual void setPosRot();
     /* vt 0x09C */ virtual void isLiftingObject();

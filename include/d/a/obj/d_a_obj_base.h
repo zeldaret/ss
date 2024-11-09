@@ -133,7 +133,7 @@ public:
     );
     /* 8002e770 */ static dAcObjBase_c *
     findObject(fProfile::PROFILE_NAME_e actorId, fLiNdBa_c *refList, dAcObjBase_c *parent);
-    /* 8002e7f0 */ static dAcObjBase_c *getNextObject(fLiNdBa_c *ref, dAcObjBase_c *parent);
+    /* 8002e7f0 */ static dAcObjBase_c *getNextObject(fLiMgBa_c *ref, dAcObjBase_c *parent);
     /* 8002e850 */ bool isPlayer();
     /* 8002e870 */ void calcVelocity(mVec3_c &pos, f32 speed);
     /* 8002e8e0 */ void calcVelocity();
