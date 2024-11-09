@@ -178,7 +178,7 @@ public:
     /* vt 0x280 */ virtual void vt_0x280();
     /* vt 0x284 */ virtual bool isUsingBugnet() const;
     /* vt 0x288 */ virtual const mVec3_c &getBugNetPos() const;
-    /* vt 0x28C */ virtual void isUsingBugnet1();
+    /* vt 0x28C */ virtual bool isUsingBugnet1();
     /* vt 0x290 */ virtual void bugNetCollectTreasure(u32 itemId);
     /* vt 0x294 */ virtual void somethingSwitchDials();
     /* vt 0x298 */ virtual void vt_0x298();
@@ -224,6 +224,7 @@ public:
     /* 0x360 */ UNKWORD field_0x360;
     /* 0x364 */ u32 mActionFlags;
     /* 0x368 */ u32 mActionFlagsCont;
+    /* 0x36C */ int mCurrentAction; // TODO (Document Enum)
 
     inline bool checkFlags0x340(u32 mask) const {
         return (someFlags_0x340 & mask) != 0;
@@ -235,6 +236,10 @@ public:
 
     bool CheckPlayerFly() const {
         return mActionFlags & FLG0_FLY;
+    }
+
+    int getCurrentAction() const {
+        return mCurrentAction;
     }
 
     static dAcPy_c *LINK;

@@ -97,6 +97,10 @@ public:
         return getVelocityMag() <= EGG::Math<f32>::epsilon();
     }
 
+    bool isSlowerThan(f32 speed) const {
+        return fabsf(forwardSpeed) <= speed;
+    }
+
     // could be their own thing?
     /* 8002de40 */ static void *getOarcFile(const char *oarcName, const char *fileName);
     /* 8002de60 */ static void *getOarcSubEntry(const char *oarcName, const char *fileName);

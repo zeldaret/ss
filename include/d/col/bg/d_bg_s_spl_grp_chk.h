@@ -67,6 +67,10 @@ public:
     void CopyGnd() {
         mGroundCopy = mGnd;
     }
+
+    f32 GetGroundH() const {
+        return mGroundH;
+    }
 };
 
 #endif
