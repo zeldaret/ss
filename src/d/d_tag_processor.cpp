@@ -119,6 +119,10 @@ nw4r::ut::Color FontColors2[] = {
     nw4r::ut::Color(),
 };
 
+extern const u16 flags[2050] = {
+    0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800,
+};
+
 dTagProcessor_c::dTagProcessor_c() {
     field_0x82C = -1;
     field_0x828 = -1;
@@ -783,15 +787,17 @@ wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
 extern "C" MsbtInfo *getMsbtInfoForIndex(int);
 
 wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
-    // Not sure
-    int i = 0;
+    int itemIndex = *src;
     wchar_t c;
+    const wchar_t *readPtr;
+
+    int i = 0;
     SizedString<16> mName;
-    mName.sprintf("NAME_ITEM_%03d", *src);
+    mName.sprintf("NAME_ITEM_%03d", itemIndex);
     MsbtInfo *info = getMsbtInfoForIndex(3);
     const wchar_t *text = LMS_GetTextByLabel(info, mName);
-    while ((c = text[i]) != 0) {
-        const wchar_t *readPtr = &text[i];
+
+    while (readPtr = &text[i], (c = text[i]) != 0) {
         if (c == 0xE) {
             int len = ((readPtr[3] / 2) & 0x7F) + 4;
             if (arg != 0 && field_0x90E != 0) {
@@ -823,9 +829,9 @@ wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s3
 }
 
 wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
-    int numZeroDigits = ((u8*)src)[4];
+    int numZeroDigits = ((u8 *)src)[4];
     bool writeZeroDigits = false;
-    s32 argIdx = *((s32*)src);
+    s32 argIdx = *((s32 *)src);
     s32 numberArg = mNumericArgs[argIdx];
     mNumericArgsCopy[0] = numberArg;
 
@@ -895,7 +901,7 @@ wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outA
         }
         writeZeroDigits = true;
     }
-    
+
     digit = number;
     if (arg != 0 && field_0x90E != 0) {
         getTmpBuffer()[*outArg] = '0' + digit;
