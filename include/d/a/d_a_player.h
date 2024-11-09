@@ -53,7 +53,7 @@ public:
 
     /* vt 0x080 */ virtual UNKWORD IfCurrentActionToActor(dAcBase_c *ac, UNKWORD);
     /* vt 0x084 */ virtual void vt_0x084(dAcBase_c *ac, UNKWORD);
-    /* vt 0x088 */ virtual void set0x439F();
+    /* vt 0x088 */ virtual void set0x439F(dAcBase_c *ac, UNKWORD);
     /* vt 0x08C */ virtual void set0x43DE();
     /* vt 0x090 */ virtual f32 vt_0x090();
     /* vt 0x094 */ virtual void relatedToUsingItem0x11();

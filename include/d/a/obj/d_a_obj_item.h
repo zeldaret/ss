@@ -18,6 +18,8 @@ public:
     void setItemPosition(const mVec3_c &);
     void getItemFromBWheelItem();
     bool isStateWait();
+
+    static fLiMgBa_c sItemList;
 };
 
 #endif

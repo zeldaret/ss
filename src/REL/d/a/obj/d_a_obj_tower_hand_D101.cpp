@@ -47,6 +47,8 @@ static const char *const sCollisionParts[2][3] = {
 static const char *const sLocator1 = "locator1";
 static const char *const sLocator2 = "locator2";
 
+// TODO there are tons of unused floats in the rodata section
+
 bool dAcOTowerHandD101_c::getScale(int direction, mVec3_c &outScale) {
     if (!isValidDirectionParam(direction)) {
         return false;
@@ -180,14 +182,14 @@ int dAcOTowerHandD101_c::actorPostCreate() {
     mVec3_c pos;
     getItemPos(pos);
     bool handClosed = true;
-    dAcObjBase_c *ac = dAcObjBase_c::getNextObject(&dAcObjBase_c::ITEM_ACTOR_LIST, nullptr);
+    dAcObjBase_c *ac = dAcObjBase_c::getNextObject(&dAcItem_c::sItemList, nullptr);
     f32 distLimit = 90000.0f;
     while (handClosed && ac != nullptr) {
         if (PSVECSquareDistance(pos, ac->position) < distLimit) {
             handClosed = false;
             mHeldItem.link(static_cast<dAcItem_c *>(ac));
         } else {
-            ac = dAcObjBase_c::getNextObject(&dAcObjBase_c::ITEM_ACTOR_LIST, ac);
+            ac = dAcObjBase_c::getNextObject(&dAcItem_c::sItemList, ac);
         }
     }
 
@@ -204,23 +206,36 @@ int dAcOTowerHandD101_c::actorPostCreate() {
     return SUCCEEDED;
 }
 
+inline bool dAcOTowerHandD101_c::getItem(dAcItem_c *&outItem) {
+    outItem = !mHeldItem.isLinked() ? nullptr : mHeldItem.get();
+    bool ret = outItem == nullptr;
+    return ret;
+}
+
 int dAcOTowerHandD101_c::actorExecute() {
-    dAcPy_c *link = dAcPy_c::LINK;
+    dAcPy_c *link;
+    dAcItem_c *item;
+    link = dAcPy_c::LINK;
     UNKWORD w = link->IfCurrentActionToActor(this, 0x3D);
-    dAcItem_c *item = mHeldItem.get() != nullptr ? mHeldItem.get() : nullptr;
-    if (item != nullptr && item->isStateWait()) {
+    bool b = getItem(item);
+    if (!b && item->isStateWait()) {
         f32 dist = PSVECSquareDistance(item->position, link->position);
-        if (w != 0 || dist < 15625.0f) {
+        if (w == 0 && dist < 15625.0f) {
             item->getItemFromBWheelItem();
         } else {
-            item->setItemPosition(position);
+            item->setItemPosition(item->position);
         }
     }
 
-    if (item == nullptr || !item->isStateWait()) {
+    bool doSomething;
+    if (b) {
+        doSomething = true;
+    } else {
+        doSomething = !item->isStateWait();
+    }
+    if (b || doSomething) {
         link->vt_0x084(this, 0x3D);
     }
-
     mStateMgr.executeState();
 
     mVec3_c newScale;
@@ -545,6 +560,23 @@ void dAcOTowerHandD101_c::calcItemPosition(const mVec3_c &offset, mVec3_c &outPo
 void dAcOTowerHandD101_c::initializeState_RemainOpen() {
     mMdl.setFrame(mMdl.getAnm().getStartFrame());
 }
+
+inline bool dAcOTowerHandD101_c::getItem(dAcItem_c *&outItem, bool &outIsNotWait) {
+    dAcItem_c *item = mHeldItem.get();
+    if (item == nullptr) {
+        outItem = nullptr;
+    } else {
+        outItem = item;
+    }
+    bool ret = item == nullptr;
+    if (ret) {
+        outIsNotWait = true;
+    } else {
+        outIsNotWait = !outItem->isStateWait();
+    }
+    return ret;
+}
+
 void dAcOTowerHandD101_c::executeState_RemainOpen() {
     dAcPy_c *link = dAcPy_c::LINK;
     mVec3_c pos;
@@ -557,18 +589,13 @@ void dAcOTowerHandD101_c::executeState_RemainOpen() {
         mStateMgr.changeState(StateID_Close);
         return;
     }
-    // This code is equivalent, but the original control flow
-    // and data conversion sequence is significantly more complicated.
-    // It should be noted that this entire file is written in a significantly
-    // more paranoid fashion with a lot of unnecessary extra checks against
-    // programmer error, which also seems to manifest here.
-    bool linked = mHeldItem.get();
-    bool notWait = linked ? true : (!mHeldItem.get()->isStateWait());
-    if (linked) {
+    bool isNotWait;
+    dAcItem_c *item;
+    if (getItem(item, isNotWait)) {
         if (160000.0f < linkDistToItem) {
             doEvent();
         }
-    } else if (!notWait) {
+    } else if (!isNotWait) {
         if (linkDistToItem < getDist1Sq()) {
             mStateMgr.changeState(StateID_Close);
         }
@@ -594,11 +621,36 @@ void dAcOTowerHandD101_c::executeState_Close() {
         return;
     }
     if (EventManager::isInEvent() && getEventStuff().getCurrentEventCommand() == 'clos') {
-        mStateMgr.changeState(StateID_RemainClosed);
+        mMdl.play();
+        if (mMdl.getAnm().isStop()) {
+            mStateMgr.changeState(StateID_RemainClosed);
+        }
         return;
     }
 
-    // TODO
+    bool isNotWait;
+    dAcItem_c *item;
+    if (getItem(item, isNotWait)) {
+        if (160000.0f < linkDistToItem) {
+            doEvent();
+        }
+        mStateMgr.changeState(StateID_Open);
+    } else if (isNotWait) {
+        mStateMgr.changeState(StateID_Open);
+    } else if (link->IfCurrentActionToActor(this, 0x3D)) {
+        mStateMgr.changeState(StateID_Hold);
+    } else {
+        if (mMdl.getAnm().isStop()) {
+            mStateMgr.changeState(StateID_RemainClosed);
+        } else {
+            if (getFrame1() <= mMdl.getAnm().getFrame() && getFrame2() <= mMdl.getAnm().getFrame() &&
+                linkDistToItem < getDist1PlusDist2Sq()) {
+                link->set0x439F(this, 5);
+            }
+
+            mMdl.play();
+        }
+    }
 }
 void dAcOTowerHandD101_c::finalizeState_Close() {}
 
@@ -611,7 +663,53 @@ void dAcOTowerHandD101_c::initializeState_Open() {
     }
     playSound(0xC0D);
 }
-void dAcOTowerHandD101_c::executeState_Open() {}
+void dAcOTowerHandD101_c::executeState_Open() {
+    dAcPy_c *link = dAcPy_c::LINK;
+    mVec3_c pos;
+    getItemPos(pos);
+    f32 linkDistToItem = PSVECSquareDistance(pos, link->position);
+    if (EventManager::isInEvent() && getEventStuff().getCurrentEventCommand() == 'wait') {
+        if (mMdl.getAnm().isStop()) {
+            mStateMgr.changeState(StateID_RemainOpen);
+        } else {
+            mMdl.play();
+        }
+        return;
+    }
+    if (EventManager::isInEvent() && getEventStuff().getCurrentEventCommand() == 'clos') {
+        if (mMdl.getAnm().isStop()) {
+            mStateMgr.changeState(StateID_Close);
+        } else {
+            mMdl.play();
+        }
+        return;
+    }
+
+    bool isNotWait;
+    dAcItem_c *item;
+    if (getItem(item, isNotWait)) {
+        if (160000.0f < linkDistToItem) {
+            doEvent();
+        }
+        if (mMdl.getAnm().isStop()) {
+            mStateMgr.changeState(StateID_Close);
+        } else {
+            mMdl.play();
+        }
+    } else if (isNotWait) {
+        if (mMdl.getAnm().isStop()) {
+            mStateMgr.changeState(StateID_Close);
+        } else {
+            mMdl.play();
+        }
+    } else {
+        if (mMdl.getAnm().isStop()) {
+            mStateMgr.changeState(StateID_Close);
+        } else {
+            mMdl.play();
+        }
+    }
+}
 void dAcOTowerHandD101_c::finalizeState_Open() {}
 
 void dAcOTowerHandD101_c::initializeState_RemainClosed() {
@@ -634,12 +732,26 @@ void dAcOTowerHandD101_c::executeState_RemainClosed() {
     }
 
     if (EventManager::isInEvent() && getEventStuff().getCurrentEventCommand() == 'clos') {
-        mMdl.play();
-        if (mMdl.getAnm().isStop()) {
-            // We are already in RemainClosed. Why are we going to RemainClosed again?
-            mStateMgr.changeState(StateID_RemainClosed);
-        }
         return;
+    }
+    if ((mFlags & 1) == 0) {
+        bool isNotWait;
+        dAcItem_c *item;
+        // Okay here the inline theory completely falls apart because
+        // the 160000.0f is only being loaded once in the middle of that
+        // this suspected inline body does
+        if (getItem(item, isNotWait)) {
+            if (160000.0f < linkDistToItem) {
+                doEvent();
+            }
+            mStateMgr.changeState(StateID_Open);
+        } else if (isNotWait) {
+            mStateMgr.changeState(StateID_Open);
+        } else {
+            if (getDist1PlusDist2Sq() < 160000.0f) {
+                mStateMgr.changeState(StateID_Open);
+            }
+        }
     }
 }
 void dAcOTowerHandD101_c::finalizeState_RemainClosed() {}

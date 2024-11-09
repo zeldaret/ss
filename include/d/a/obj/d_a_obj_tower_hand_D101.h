@@ -40,6 +40,9 @@ private:
     int getSceneFlag() const;
     u32 getEventId() const;
 
+    inline bool getItem(dAcItem_c *&outItem, bool &outIsWait);
+    inline bool getItem(dAcItem_c *&outItem);
+
     static bool isValidDirectionParam(int param);
     static bool getScale(int direction, mVec3_c &outScale);
     bool getNodeMtx(const char *nodeName, mMtx_c &outMtx) const;

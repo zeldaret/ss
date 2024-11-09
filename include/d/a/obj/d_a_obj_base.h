@@ -171,8 +171,6 @@ public:
         char *name, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, u16 id,
         u8 viewclipId
     );
-
-    static fLiMgBa_c ITEM_ACTOR_LIST;
 };
 
 // Actors' createHeap functions often have patterns that can be matched with this macro
