@@ -146,6 +146,10 @@ public:
         return diff.x * diff.x + diff.z * diff.z;
     }
 
+    f32 getDistanceTo(const mVec3_c &to) const {
+        return position.distance(to);
+    }
+
     bool IsOutOfRange(const mVec3_c &point, f32 radius) {
         return getSquareDistanceTo(point) > radius;
     }
