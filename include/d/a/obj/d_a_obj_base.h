@@ -212,6 +212,9 @@ public:
         refOwner = nullptr;
     }
 
+    bool fn_800051780(const cCcD_Obj &);
+    void fn_800051630();
+
     void modifyMtx();
 
     /* 0x00 */ dAcRef_c<dAcObjBase_c> mObj;

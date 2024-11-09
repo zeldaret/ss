@@ -1,6 +1,7 @@
 #ifndef D_A_OBJ_TUBO_H
 #define D_A_OBJ_TUBO_H
 
+#include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/npc/d_a_npc_ce_friend.h"
 #include "d/a/npc/d_a_npc_ce_lady.h"
@@ -34,9 +35,13 @@ public:
     void adjustRoll();
     void fn_272_2A10();
 
+    mVec3_c getCenter() const;
+    void fn_272_2E60(const mVec3_c &);
+    void fn_272_3020();
+
     void calcRoll();
 
-    mVec3_c getCenter() const;
+    bool checkOnLog_0xE4E();
 
     u8 getSubtype() const {
         return params & 0xF; // 0 -> Tubo00, Else -> Tubo01
@@ -78,12 +83,18 @@ private:
     /* 0x97C */ mQuat_c mQuat_0x97C;
     /* 0x98C */ mQuat_c mQuat_0x98C;
     /* 0x99C */ mQuat_c mQuat_0x99C;
-    /* 0x9AC */ u8 _9AC[0x9C8 - 0x9AC];
+    /* 0x9AC */ u8 _9AC[0x9B8 - 0x9AC];
+    /* 0x9B8 */ mVec3_c mField_0x9B8;
+    /* 0x9C4 */ u8 _9C4[0x9C8 - 0x9C4];
     /* 0x9C8 */ mAng mField_0x9C8;
-    /* 0x9CA */ u8 _9CA[0x9D8 - 0x9CA];
+    /* 0x9CA */ mAng mField_0x9CA;
+    /* 0x9CC */ mAng mField_0x9CC;
+    /* 0x9D0 */ f32 mField_0x9D0;
+    /* 0x9D4 */ f32 mField_0x9D4;
     /* 0x9D8 */ f32 mField_0x9D8;
     /* 0x9DC */ f32 mField_0x9DC;
-    /* 0x9E0 */ u8 _9DC[0x9EA - 0x9E0];
+    /* 0x9E0 */ f32 mField_0x9E0;
+    /* 0x9E4 */ u8 _9DC[0x9EA - 0x9E4];
     /* 0x9EA */ u8 mField_0x9EA;
     /* 0x9EB */ u8 mField_0x9EB;
     /* 0x9EC */ bool mbField_0x9EC;
@@ -91,7 +102,8 @@ private:
     /* 0x9EE */ bool mbField_0x9EE;
     /* 0x9EF */ bool mbField_0x9EF;
     /* 0x9F0 */ bool mbField_0x9F0;
-    /* 0x9F1 */ u8 _9F1[0x9F4 - 0x9F1];
+    /* 0x9F1 */ u8 mField_0x9F1;
+    /* 0x9F2 */ u8 _9F2[0x9F4 - 0x9F2];
     /* 0x9F4 */ u8 mTimer_0x9F4;
     /* 0x9F5 */ u8 _9F5[0x9F8 - 0x9F5];
     /* 0x9F8 */ u8 mSceneflag;
