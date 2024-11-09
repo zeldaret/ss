@@ -101,7 +101,7 @@ bool dBgWTime::LineCheck(cBgS_LinChk *pLine) {
     lin.Set(linStart, linEnd);
     mVec3_c vec0;
     mVec3_c vec1;
-    if (!cM3d_Cross_CylLin(&mCyl, &lin, vec0, vec1)) {
+    if (!cM3d_Cross_CylLin(mCyl, lin, vec0, vec1)) {
         return false;
     }
     if (!fn_803537a0(&vec0, pLine)) {

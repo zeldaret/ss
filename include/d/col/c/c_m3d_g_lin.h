@@ -3,14 +3,16 @@
 
 #include "common.h"
 #include "m/m_vec.h"
+#include "nw4r/types_nw4r.h"
 
 class cM3dGLin {
 public:
     typedef nw4r::math::VEC3 VEC3;
     typedef EGG::Vector3f Vector3f;
 
-    /* 0x00 */ mVec3_c mStart;
-    /* 0x0C */ mVec3_c mEnd;
+    // Needs to be mutable for cCcD_CpsAttr::GetPos and cCcD_CpsAttr::GetShapeAccess
+    /* 0x00 */ mutable mVec3_c mStart;
+    /* 0x0C */ mutable mVec3_c mEnd;
 
     cM3dGLin() {}
 
@@ -32,34 +34,34 @@ public:
         mEnd = *pEnd;
     }
 
-    nw4r::math::VEC3 &GetStart() {
+    mVec3_c &GetStart() {
         return mStart;
     }
 
-    const nw4r::math::VEC3 &GetStart() const {
+    const mVec3_c &GetStart() const {
         return mStart;
     }
 
-    nw4r::math::VEC3 *GetStartP(void) {
+    mVec3_c *GetStartP(void) {
         return &mStart;
     }
-    const nw4r::math::VEC3 *GetStartP(void) const {
+    const mVec3_c *GetStartP(void) const {
         return &mStart;
     }
 
-    nw4r::math::VEC3 &GetEnd() {
+    mVec3_c &GetEnd() {
         return mEnd;
     }
 
-    const nw4r::math::VEC3 &GetEnd() const {
+    const mVec3_c &GetEnd() const {
         return mEnd;
     }
 
-    nw4r::math::VEC3 *GetEndP(void) {
+    mVec3_c *GetEndP(void) {
         return &mEnd;
     }
 
-    const nw4r::math::VEC3 *GetEndP(void) const {
+    const mVec3_c *GetEndP(void) const {
         return &mEnd;
     }
 };

@@ -1,51 +1,514 @@
 #include "toBeSorted/special_item_drop_mgr.h"
 
+#include "c/c_lib.h"
+#include "c/c_math.h"
+#include "common.h"
 #include "d/a/d_a_player.h"
-#include "m/m_Angle.h"
+#include "d/a/obj/d_a_obj_item.h"
+#include "m/m_angle.h"
 #include "m/m_vec.h"
 
 SpecialItemDropMgr *SpecialItemDropMgr::sInstance = nullptr;
 
-extern "C" short targetAngleY(mVec3_c *, mVec3_c *);
-extern "C" int rndInt(int);
-extern "C" void spawnItem1(s16 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
-extern "C" void spawnItem2(s16 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
-extern "C" void spawnItem3(s16 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
-extern "C" void spawnItem4(s16 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
-extern "C" void spawnItem5(s16 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
-extern "C" void spawnItem6(s16 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
-extern "C" void spawnItem7(s16 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
-extern "C" void spawnItem8(s16 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
-extern "C" void spawnItem9(s16 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
+extern "C" void spawnItem1(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
+extern "C" void spawnItem2(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
+extern "C" void spawnItem3(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
+extern "C" void spawnItem4(u32 itemid, u32, u32 param2);
+extern "C" void spawnItem5(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
+extern "C" void spawnItem6(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
+extern "C" void spawnItem7(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
+extern "C" void spawnItem8(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, void *, void *, u32 param2, u32 unk);
+extern "C" void spawnItem9(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot);
 
 // 800c7b80
 SpecialItemDropMgr::SpecialItemDropMgr() {
     SpecialItemDropMgr::sInstance = this;
 }
 
+SpecialItemDropMgr *SpecialItemDropMgr::create() {
+    return new SpecialItemDropMgr();
+}
+
+struct DropEntry {
+    /* 0x0 */ u8 mEntryIndex;
+    /* 0x1 */ u8 mDropChance;
+};
+
+struct DropList {
+    /* 0x0 */ u16 mLen;
+    /* 0x2 */ u16 mFlags;
+    /* 0x4 */ const DropEntry *mpEntries;
+};
+
+static const DropEntry e01[] = {
+    {0x01, 20},
+    {0x03, 40},
+    {0x04, 10},
+};
+
+static const DropEntry e02[] = {
+    {0x01, 20},
+    {0x03, 10},
+    {0x04, 40},
+};
+
+static const DropEntry e03[] = {
+    {0x01, 20},
+    {0x04, 25},
+    {0x05, 25},
+};
+
+static const DropEntry e04[] = {
+    {0x01, 100},
+};
+
+static const DropEntry e05[] = {
+    {0x01, 60},
+    {0x02, 10},
+};
+
+static const DropEntry e06[] = {
+    {0x02, 100},
+};
+
+static const DropEntry e07[] = {
+    {0x03, 40},
+    {0x04, 10},
+};
+
+static const DropEntry e08[] = {
+    {0x03, 50},
+    {0x04, 40},
+    {0x05, 10},
+};
+
+static const DropEntry e09[] = {
+    {0x04, 70},
+    {0x05, 30},
+};
+
+static const DropEntry e10[] = {
+    {0x06, 100},
+};
+
+static const DropEntry e11[] = {
+    {0x08, 100},
+};
+
+static const DropEntry e12[] = {
+    {0x0A, 100},
+};
+
+static const DropEntry e13[] = {
+    {0x0B, 100},
+};
+
+static const DropEntry e14[] = {
+    {0x0C, 100},
+};
+
+static const DropEntry e15[] = {
+    {0x0D, 100},
+};
+
+static const DropEntry e16[] = {
+    {0x03, 7},
+    {0x04, 3},
+};
+
+static const DropEntry e17[] = {
+    {0x01, 7},
+    {0x03, 3},
+};
+
+static const DropEntry e18[] = {
+    {0x03, 100},
+};
+
+static const DropEntry e19[] = {
+    {0x04, 100},
+};
+
+static const DropEntry e20[] = {
+    {0x05, 100},
+};
+
+static const DropEntry e21[] = {
+    {0x0E, 100},
+};
+
+static const DropEntry e22[] = {
+    {0x0F, 100},
+};
+
+static const DropEntry e23[] = {
+    {0x03, 60},
+    {0x04, 30},
+    {0x0F, 10},
+};
+
+static const DropEntry e24[] = {
+    {0x03, 30},
+    {0x04, 30},
+    {0x05, 20},
+    {0x0F, 20},
+};
+
+static const DropEntry e25[] = {
+    {0x10, 100},
+};
+
+static const DropEntry e26[] = {
+    {0x12, 100},
+};
+
+static const DropEntry e27[] = {
+    {0x13, 100},
+};
+
+static const DropEntry e28[] = {
+    {0x14, 100},
+};
+
+static const DropEntry e29[] = {
+    {0x10, 10},
+};
+
+static const DropEntry e30[] = {
+    {0x0B, 100},
+};
+
+static const DropEntry e31[] = {
+    {0x01, 100},
+};
+
+static const DropEntry e32[] = {
+    {0x01, 12},
+};
+
+static const DropEntry e33[] = {
+    {0x01, 35},
+};
+
+static const DropEntry e34[] = {
+    {0x16, 30},
+    {0x15, 10},
+    {0x02, 20},
+    {0x01, 20},
+};
+
+static const DropEntry e35[] = {
+    {0x15, 100},
+};
+
+static const DropEntry e36[] = {
+    {0x16, 100},
+};
+
+static const DropEntry e37[] = {
+    {0x01, 20},
+    {0x03, 30},
+    {0x04, 15},
+};
+
+static const DropEntry e38[] = {
+    {0x04, 30},
+    {0x05,  5},
+    {0x03, 45},
+};
+
+static const DropEntry e39[] = {
+    {0x01, 10},
+};
+
+static const DropEntry e40[] = {
+    {0x03, 10},
+    {0x04,  5},
+};
+
+static const DropEntry e41[] = {
+    {0x17, 100},
+};
+
+static const DropEntry e42[] = {
+    {0x01, 20},
+};
+
+static const DropEntry e44[] = {
+    {0x01, 7},
+};
+
+static const DropEntry e45[] = {
+    {0x03, 14},
+    {0x04,  6},
+};
+
+static const DropEntry e46[] = {
+    {0x01,  7},
+    {0x03, 13},
+};
+
+static const DropEntry e47[] = {
+    {0x18, 100},
+};
+
+static const DropEntry e48[] = {
+    {0x01, 7},
+};
+
+static const DropEntry e49[] = {
+    {0x01, 14},
+};
+
+static const DropEntry e50[] = {
+    {0x01, 50},
+};
+
+static const DropEntry e51[] = {
+    {0x0B, 20},
+    {0x03, 20},
+    {0x04, 10},
+};
+
+static const DropEntry e52[] = {
+    {0x0A, 60},
+    {0x01, 20},
+    {0x04, 20},
+};
+
+static const DropEntry e53[] = {
+    {0x08, 20},
+    {0x0A, 20},
+    {0x0B, 20},
+    {0x03, 10},
+    {0x04,  5},
+};
+
+#define FLAG_EXTRA_HEARTS 1
+#define FLAG_EXTRA_RUPEES 2
+
+#define FLAG_EXTRA_ALL (FLAG_EXTRA_HEARTS | FLAG_EXTRA_RUPEES)
+
+static const DropList sList[] = {
+    {0,                 0, nullptr},
+    {3,    FLAG_EXTRA_ALL,     e01},
+    {3,    FLAG_EXTRA_ALL,     e02},
+    {3,    FLAG_EXTRA_ALL,     e03},
+    {1,    FLAG_EXTRA_ALL,     e04},
+    {2,    FLAG_EXTRA_ALL,     e05},
+    {1,    FLAG_EXTRA_ALL,     e06},
+    {2,    FLAG_EXTRA_ALL,     e07},
+    {3,    FLAG_EXTRA_ALL,     e08},
+    {2,    FLAG_EXTRA_ALL,     e09},
+    {1,                 0,     e10},
+    {1,                 0,     e11},
+    {1,                 0,     e12},
+    {1,                 0,     e13},
+    {1,                 0,     e14},
+    {1,                 0,     e15},
+    {2,    FLAG_EXTRA_ALL,     e16},
+    {2,    FLAG_EXTRA_ALL,     e17},
+    {1,                 0,     e18},
+    {1,                 0,     e19},
+    {1,                 0,     e20},
+    {1,                 0,     e21},
+    {1,                 0,     e22},
+    {3,    FLAG_EXTRA_ALL,     e23},
+    {4,    FLAG_EXTRA_ALL,     e24},
+    {1,                 0,     e25},
+    {1,                 0,     e26},
+    {1,                 0,     e27},
+    {1,                 0,     e28},
+    {1,                 0,     e29},
+    {1,                 0,     e30},
+    {1,    FLAG_EXTRA_ALL,     e31},
+    {1,    FLAG_EXTRA_ALL,     e32},
+    {1,    FLAG_EXTRA_ALL,     e33},
+    {4,    FLAG_EXTRA_ALL,     e34},
+    {1,                 0,     e35},
+    {1,                 0,     e36},
+    {3,    FLAG_EXTRA_ALL,     e37},
+    {3,    FLAG_EXTRA_ALL,     e38},
+    {1,                 0,     e39},
+    {2,                 0,     e40},
+    {1,                 0,     e41},
+    {1, FLAG_EXTRA_HEARTS,     e42},
+    {0,                 0, nullptr},
+    {1, FLAG_EXTRA_HEARTS,     e44},
+    {2,    FLAG_EXTRA_ALL,     e45},
+    {2,    FLAG_EXTRA_ALL,     e46},
+    {1,                 0,     e47},
+    {1, FLAG_EXTRA_HEARTS,     e48},
+    {1, FLAG_EXTRA_HEARTS,     e49},
+    {1,                 0,     e50},
+    {3,    FLAG_EXTRA_ALL,     e51},
+    {3,                 0,     e52},
+    {5, FLAG_EXTRA_RUPEES,     e53},
+};
+
+struct LowHealthReplacement {
+    s32 mOriginalIdx;
+    s32 mReplacementIndex;
+};
+
+const LowHealthReplacement LOW_HEALTH_REPLACEMENTS[] = {
+    {
+     0x10, 0x11,
+     },
+    {
+     0x1E, 0x1F,
+     },
+    {
+     0x2B, 0x2C,
+     },
+    {
+     0x2D, 0x2E,
+     },
+};
+
 // TODO: Convert to enum once work on items has started
-int SPECIAL_ITEM_ARRAY[28] = {0,    6,    6,  2,  3,   4,   0x2b, 0x28, 0x29, 7, 8,  0x39, 0, 0,
-                              0x1c, 0xa5, 58, 59, 183, 184, 185,  72,   72,   1, 34, 0,    0, 0};
-int RAND_RUPEE_ARRAY[4] = {2, 3, 4, 0};
+static const u16 SPECIAL_ITEM_ARRAY[] = {
+    0,    // None
+    6,    // Heart
+    6,    // Heart
+    2,    // Green Rupee
+    3,    // Blue Rupee
+    4,    // Red Rupee
+    0x2b, // Farore Tear
+    0x28, // 5 Bombs
+    0x29, // 10 Bombs
+    7,    // Single Arrow
+    8,    // Bundle Arrows
+    0x39, // 5 Deku Seeds
+    0,    // None
+    0,    // None
+    0x1c, // ET Key Piece
+    0xa5, // Eldin Ore
+    58,   // ???
+    59,   // ???
+    183,  // ???
+    184,  // ???
+    185,  // ???
+    72,   // Fairy
+    72,   // Fairy
+    1,    // Small Key
+    34,   // Rupoor
+};
+
+static const u32 sNumDropEntries = 0x36;
+static const struct {
+    u16 mNumEntries;
+    const DropList *mList;
+} sDropTable = {
+    0x36,
+    sList,
+};
+
+static const u16 RAND_RUPEE_ARRAY[] = {2, 3, 4};
+
+extern "C" int getCurrentBowType();
+extern "C" int getCurrentSlingshotType();
+extern "C" bool isHeroMode();
 
 // 800c7bb0
-int fn_800C7BB0(SpecialItemDropMgr *mgr, int specialItemId) {}
+int SpecialItemDropMgr::fn_800C7BB0(int specialItemId) {
+    const DropList *list = &sDropTable.mList[specialItemId];
+    const DropEntry *e = list->mpEntries;
+    int random = cM::rndInt(100);
 
-// 800c7d00
-short fn_800C7D00(SpecialItemDropMgr *mgr, int specialItemId) {}
+    int acc = 0;
 
-// 800c7d20
-short fn_800C7D20(SpecialItemDropMgr *mgr, int specialItemId) {}
+    for (int i = 0; i < list->mLen; i++) {
+        int entryIdx = e->mEntryIndex;
+        int weight = e->mDropChance;
+
+        if (entryIdx == 9 || entryIdx == 10) {
+            if (getCurrentBowType() == 0) {
+                // No arrows until you get the Bow
+                weight = 0;
+            }
+        } else if (entryIdx == 11) {
+            if (getCurrentSlingshotType() == 0) {
+                // No seeds until you get the Slingshot
+                weight = 0;
+            }
+        } else if (specialItemId != 0x27 && (entryIdx == 1 || entryIdx == 2) && isHeroMode()) {
+            // Hearts generally don't drop on Hero Mode unless it's a special kind of heart (which?)
+            weight = 0;
+        } else if ((entryIdx == 7 || entryIdx == 8) && !dAcItem_c::checkFlag(/* Bomb Bag */ 92)) {
+            // Bombs won't drop until you get the Bomb Bag
+            weight = 0;
+        }
+
+        if (weight != 0) {
+            int x = 0x1E / weight;
+            acc += weight;
+            if (x != 0) {
+                int tmp = x <= 3 ? x : 3;
+                if (random % tmp != 0) {
+                    return 0;
+                }
+            }
+
+            if (random < acc) {
+                return entryIdx;
+            }
+        }
+        e++;
+    }
+
+    return 0;
+}
+
+bool SpecialItemDropMgr::shouldTryExtraHearts(int specialItemId) {
+    return sDropTable.mList[specialItemId].mFlags & FLAG_EXTRA_HEARTS;
+}
+bool SpecialItemDropMgr::shouldTryExtraRupees(int specialItemId) {
+    return sDropTable.mList[specialItemId].mFlags & FLAG_EXTRA_RUPEES;
+}
+
+extern "C" bool adventurePouchCountItem(u32 itemId);
 
 // 800c7d40
-int giveSpecialDropItem(
-    SpecialItemDropMgr *mgr, int specialItemId, int roomid, mVec3_c *pos, int subtype, s16 *rot, s32 unused
-) {}
+int SpecialItemDropMgr::giveSpecialDropItem(
+    int specialItemId, int roomid, mVec3_c *pos, int subtype, mAng rot, s32 unused
+) {
+    if (specialItemId == 0xFF) {
+        return 0;
+    }
+
+    for (u32 i = 0; i < 4; i++) {
+        const LowHealthReplacement &entry = LOW_HEALTH_REPLACEMENTS[i];
+        if (specialItemId == entry.mOriginalIdx && dAcPy_c::LINK->hasLessThanQuarterHealth(false)) {
+            specialItemId = entry.mReplacementIndex;
+            break;
+        }
+    }
+
+    bool ret = spawnSpecialDropItem(specialItemId, roomid, pos, subtype, rot);
+    if (shouldTryExtraHearts(specialItemId)) {
+        for (u32 i = 0; i < adventurePouchCountItem(/* HEART_MEDAL */ 100); i++) {
+            bool ok = spawnSpecialDropItem(0x27, roomid, pos, subtype, rot);
+            ret |= ok;
+        }
+    }
+
+    if (shouldTryExtraRupees(specialItemId)) {
+        for (u32 i = 0;
+             i < adventurePouchCountItem(/* RUPEE_MEDAL */ 101) + adventurePouchCountItem(/* CURSED_MEDAL */ 104);
+             i++) {
+            bool ok = spawnSpecialDropItem(0x28, roomid, pos, subtype, rot);
+            ret |= ok;
+        }
+    }
+
+    return ret;
+}
 
 // 800c7ef0
 // Very unmatching. Just here as a starting point
-bool spawnSpecialDropItem(SpecialItemDropMgr *mgr, int specialItemId, int roomid, mVec3_c *pos, int subtype, s16 *rot) {
-    u32 unk = fn_800C7BB0(mgr, specialItemId);
+bool SpecialItemDropMgr::spawnSpecialDropItem(int specialItemId, int roomid, mVec3_c *pos, int subtype, mAng rot) {
+    s32 unk = fn_800C7BB0(specialItemId);
     if (unk == 0) {
         return false;
     }
@@ -61,31 +524,31 @@ bool spawnSpecialDropItem(SpecialItemDropMgr *mgr, int specialItemId, int roomid
         itemCount = 2;
     }
 
-    s16 currentRot;
-    s16 tempOther;
-    u16 itemid = SPECIAL_ITEM_ARRAY[unk];
+    mAng currentRot;
+    mAng tempOther;
+    u32 itemid = SPECIAL_ITEM_ARRAY[unk];
     mAng3_c itemRot(0, 0, 0);
 
     if (subtype == 2 || subtype == 6) {
-        currentRot = *rot;
+        currentRot = rot;
         tempOther = -0xe39;
     } else {
-        currentRot = targetAngleY(&(dAcPy_c::LINK->position), pos);
+        currentRot = cLib::targetAngleY(dAcPy_c::LINK->position, *pos);
         tempOther = -0x8000;
         currentRot += 0x4000;
     }
-    s16 angleDecrement = tempOther / itemCount;
+    // This angle code is annoying. d_t_reaction has similar code
+    s32 angleDecrement = tempOther / itemCount;
     tempOther = angleDecrement / 2;
     currentRot += tempOther;
-    tempOther /= 2;
+    tempOther = tempOther / 2;
 
-    for (s8 currentItemIndex = 0; currentItemIndex < itemCount; currentItemIndex++) {
-        s16 out;
-        SpecialItemDropMgr::fn_800C81D0(out, tempOther, -tempOther);
+    for (int currentItemIndex = 0; currentItemIndex < itemCount; currentItemIndex++) {
+        mAng out = cM::rndRange(tempOther, -tempOther);
 
         itemRot.y = currentRot + out;
-        if (unk < 15) {
-            itemid = RAND_RUPEE_ARRAY[rndInt(3)];
+        if (unk >= 12 && unk < 14) {
+            itemid = RAND_RUPEE_ARRAY[cM::rndInt(3)];
             spawnItem1(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
         } else if (subtype == 2) {
             spawnItem2(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
@@ -93,7 +556,7 @@ bool spawnSpecialDropItem(SpecialItemDropMgr *mgr, int specialItemId, int roomid
             if (subtype == 1) {
                 spawnItem3(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
             } else if (subtype == 4) {
-                spawnItem4(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
+                spawnItem4(itemid, 0, 0xFFFFFFFF);
             } else if (subtype == 3) {
                 spawnItem5(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
             } else if (subtype == 5) {
@@ -101,18 +564,15 @@ bool spawnSpecialDropItem(SpecialItemDropMgr *mgr, int specialItemId, int roomid
             } else if (subtype == 6) {
                 spawnItem7(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
             } else if (subtype == 7) {
-                spawnItem8(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
+                spawnItem8(itemid, roomid, pos, &itemRot, nullptr, nullptr, 0xFFFFFFFF, 0);
             } else {
-                spawnItem9(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
+                spawnItem9(itemid, roomid, pos, &itemRot);
             }
         }
-        currentRot -= angleDecrement;
+        currentRot.mVal -= angleDecrement;
     }
     return true;
 }
 
-// 800c81d0
-void fn_800C81D0(s16, s16, s16){};
-
 // 800c8270
-SpecialItemDropMgr::~SpecialItemDropMgr() {}
+// SpecialItemDropMgr::~SpecialItemDropMgr() {}

@@ -1,12 +1,11 @@
 #include "d/a/obj/d_a_obj_switch.h"
 
-#include "c/c_math.h"
 #include "d/a/d_a_player.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_w.h"
+#include "d/flag/sceneflag_manager.h"
 #include "nw4r/g3d/g3d_resfile.h"
 #include "s/s_Math.h"
-#include "d/flag/sceneflag_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SW, dAcOsw_c, fProfile::OBJ_SW, 0x12B, 0, 0x1002);
 
@@ -68,13 +67,13 @@ bool dAcOsw_c::createHeap() {
     nw4r::g3d::ResMdl resMdl = resFile.GetResMdl(SWITCH_TYPES[mSwitchType]);
     TRY_CREATE(mModel.create(resMdl, &heap_allocator, 0x20, 1, nullptr));
 
-    field_0x5E8 = mScale.x *
-                  (resMdl.GetResNode("base").mNode.ref().VEC3_0x50.x - resMdl.GetResNode("base").mNode.ref().VEC3_0x44.x);
+    field_0x5E8 = mScale.x * (resMdl.GetResNode("base").mNode.ref().VEC3_0x50.x -
+                              resMdl.GetResNode("base").mNode.ref().VEC3_0x44.x);
     cBgD_t *dbzData = (cBgD_t *)getOarcDZB(SWITCH_TYPES[mSwitchType], SWITCH_TYPES[mSwitchType]);
     PLC *plcData = (PLC *)getOarcPLC(SWITCH_TYPES[mSwitchType], SWITCH_TYPES[mSwitchType]);
     mScale.set(1.0f, 0.8f, 1.0f);
     updateMatrix();
-    field_0x5B8.set(mWorldMtx);
+    field_0x5B8.copyFrom(mWorldMtx);
     mModel.setLocalMtx(mWorldMtx);
 
     bool set = mCollision.Set(dbzData, plcData, cBgW::MOVE_BG_e, &field_0x5B8, &mScale);
@@ -180,7 +179,7 @@ int dAcOsw_c::actorExecute() {
     }
 
     updateMatrix();
-    field_0x5B8.set(mWorldMtx);
+    field_0x5B8.copyFrom(mWorldMtx);
     mMtx_c tmp;
     PSMTXTrans(tmp, 0.0f, mButtonCtrl.mElevation, 0.0f);
     PSMTXConcat(field_0x5B8, tmp, field_0x5B8);
@@ -269,7 +268,7 @@ void dAcOsw_c::executeState_OffWait() {
     if (field_0x5F1 != 0) {
         field_0x5F3 = 1;
     }
-    if (mSwitchType != 1 && cM::calcTimer(&field_0x5EC) == 0 && field_0x5F3 == 0) {
+    if (mSwitchType != 1 && sLib::calcTimer(&field_0x5EC) == 0 && field_0x5F3 == 0) {
         mStateMgr.changeState(StateID_Off);
     }
 }

@@ -5,9 +5,9 @@ namespace EGG {
 /* 8049b390 */
 void Quatf::set(f32 fw, f32 fx, f32 fy, f32 fz) {
     w = fw;
-    x = fx;
-    y = fy;
-    z = fz;
+    v.x = fx;
+    v.y = fy;
+    v.z = fz;
 }
 
 void Quatf::set(f32 fw, const Vector3f &vec) {
@@ -30,9 +30,9 @@ void Quatf::setRPY(const EGG::Vector3f &rpy) {
     const f32 sy_cp = sy * cp;
 
     w = (cy_cp * cr) + (sy_sp * sr);
-    x = (cy_cp * sr) - (sy_sp * cr);
-    y = (cy_sp * cr) + (sy_cp * sr);
-    z = (sy_cp * cr) - (cy_sp * sr);
+    v.x = (cy_cp * sr) - (sy_sp * cr);
+    v.y = (cy_sp * cr) + (sy_cp * sr);
+    v.z = (sy_cp * cr) - (cy_sp * sr);
 }
 
 /* NOT IN SS */
@@ -84,7 +84,7 @@ void Quatf::setAxisRotation(const Vector3f &axis, f32 rot) {
 
 /* 8049b450 */
 f32 Quatf::norm() {
-    return w * w + Vector3f::dot(*this);
+    return w * w + v.dot(v);
 }
 
 /* 8049b480 */
@@ -99,7 +99,7 @@ void Quatf::normalise() {
 Quatf Quatf::conjugate() {
     Quatf q;
     q.w = w;
-    (Vector3f &)q = -1.0f * *this;
+    q.v = -1.0f * v;
     return q;
 }
 
@@ -109,7 +109,7 @@ Vector3f Quatf::rotateVector(const Vector3f &vec) {
     conj = conjugate();
     mult = *this * vec;
     mult = mult * conj;
-    return (mult);
+    return (mult.v);
 }
 
 // /* NOT IN SS */
@@ -122,7 +122,7 @@ Vector3f Quatf::rotateVector(const Vector3f &vec) {
 
 /* 8049b800 */
 void Quatf::slerpTo(const Quatf &q2, f32 t, Quatf &out) const {
-    f32 dot = x * q2.x + y * q2.y + z * q2.z + w * q2.w;
+    f32 dot = v.x * q2.v.x + v.y * q2.v.y + v.z * q2.v.z + w * q2.w;
 
     if (dot > 1.0f) {
         dot = 1.0f;
@@ -156,9 +156,9 @@ void Quatf::slerpTo(const Quatf &q2, f32 t, Quatf &out) const {
         b = -b;
     }
 
-    out.x = a * x + b * q2.x;
-    out.y = a * y + b * q2.y;
-    out.z = a * z + b * q2.z;
+    out.v.x = a * v.x + b * q2.v.x;
+    out.v.y = a * v.y + b * q2.v.y;
+    out.v.z = a * v.z + b * q2.v.z;
     out.w = a * w + b * q2.w;
 }
 
@@ -166,7 +166,7 @@ void Quatf::slerpTo(const Quatf &q2, f32 t, Quatf &out) const {
 void Quatf::limitSlerpTo(const Quatf &q2, f32 t, f32 t2, Quatf &out) const {
     t2 *= 0.5f;
 
-    f32 dot = x * q2.x + y * q2.y + z * q2.z + w * q2.w;
+    f32 dot = v.x * q2.v.x + v.y * q2.v.y + v.z * q2.v.z + w * q2.w;
 
     if (dot > 1.0f) {
         dot = 1.0f;
@@ -204,9 +204,9 @@ void Quatf::limitSlerpTo(const Quatf &q2, f32 t, f32 t2, Quatf &out) const {
         b = -b;
     }
 
-    out.x = a * x + b * q2.x;
-    out.y = a * y + b * q2.y;
-    out.z = a * z + b * q2.z;
+    out.v.x = a * v.x + b * q2.v.x;
+    out.v.y = a * v.y + b * q2.v.y;
+    out.v.z = a * v.z + b * q2.v.z;
     out.w = a * w + b * q2.w;
 }
 

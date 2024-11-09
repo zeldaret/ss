@@ -10,7 +10,6 @@
 #include "nw4r/g3d/g3d_scnmdlsmpl.h"
 #include "nw4r/g3d/g3d_state.h"
 
-
 // All of this is completely made up, as we don't have symbols for this TU
 // (contrary to the rest of m3d and most of nw4r::g3d)
 
@@ -362,7 +361,7 @@ void mShadow_c::drawAllShadows() {
         GXSetCullMode(GX_CULL_BACK);
         GXSetDither(0);
         GXSetClipMode(GX_CLIP_DISABLE);
-        GXLoadPosMtxImm(mMtx_c::Identity.m, 0);
+        GXLoadPosMtxImm(mMtx_c::Identity, 0);
         GXSetCurrentMtx(0);
         Mtx44 mtx;
         C_MTXOrtho(mtx, 0.0f, wid, 0.0f, wid, 0.0f, 1.0f);
@@ -484,12 +483,12 @@ bool mShadowChild_c::addMdl(scnLeaf_c &mdl, const mQuat_c &quat) {
     if (mdl.getType() == 0) {
         mdl.getLocalMtx(mtx);
     } else {
-        mtx.set(static_cast<mCustomShadow_c &>(mdl).mMtx);
+        mtx.copyFrom(static_cast<mCustomShadow_c &>(mdl).mMtx);
     }
 
     // TODO this copy is a bit weird (reads members in a different order)
     mQuat_c q = quat;
-    PSMTXMultVec(mtx.m, q, q);
+    PSMTXMultVec(mtx.m, q.v, q.v);
 
     if (mNumLeaves == 0) {
         mQuat = q;
@@ -502,7 +501,7 @@ bool mShadowChild_c::addMdl(scnLeaf_c &mdl, const mQuat_c &quat) {
 
 bool mShadowChild_c::setGeom(const GXTexObj *texObj, const mMtx_c &mtx, const mQuat_c &quat) {
     mQuat = quat;
-    PSMTXMultVec(mtx.m, mQuat, mQuat);
+    PSMTXMultVec(mtx.m, mQuat.v, mQuat.v);
     if (texObj == nullptr) {
         mTexObj = *mShadow_c::sTexObj;
     } else {
@@ -614,7 +613,7 @@ void mCustomShadow_c::calc(mMtx_c mtx, mMtx_c &mtx2) {
     // TODO some shuffles
 
     mVec3_c trans;
-    mtx2.set(mMtx);
+    mtx2.copyFrom(mMtx);
     mVec3_c offset(0.0f, 0.0f, 0.0f);
     offset.y = field_0x48;
     PSMTXMultVec(mtx2, offset, trans);

@@ -192,9 +192,22 @@ d/lyt/d_window.cpp:
 	.data       start:0x80510820 end:0x805108B0
 	.sdata2     start:0x805797F0 end:0x805797F8
 
-d/d_text_writer.cpp:
+d/d_textunk.cpp:
+	.text       start:0x800B1890 end:0x800B20DC
+	.ctors      start:0x804DB6D0 end:0x804DB6D4
+	.data       start:0x805108C8 end:0x805108D8
+	.sdata      start:0x805722D8 end:0x805722E0
+	.sbss       start:0x805753B0 end:0x805753B8
+	.sdata2     start:0x805797F8 end:0x80579848
+	.bss        start:0x805A6F70 end:0x805A7730
+
+d/d_tag_processor.cpp:
 	.text       start:0x800B35C0 end:0x800B9274
 	.ctors      start:0x804DB6D4 end:0x804DB6D8
+	.rodata     start:0x804E4C34 end:0x804E4C50
+	.data       start:0x805108E8 end:0x805109A0
+	.sdata2     start:0x8057986C end:0x805798D0
+	.bss        start:0x805A7730 end:0x805A78B8
 
 toBeSorted/time_area_mgr.cpp:
 	.text       start:0x800B9280 end:0x800BB2A0
@@ -207,7 +220,10 @@ d/flag/flag_managers.cpp:
 
 toBeSorted/special_item_drop_mgr.cpp:
 	.text       start:0x800C7B60 end:0x800C82B0
+	.rodata     start:0x804E4CC8 end:0x804E4EE0
+	.data       start:0x80511C50 end:0x80511C60
 	.sbss       start:0x80575438 end:0x80575440
+	.sdata2     start:0x805799B8 end:0x80579AD0
 
 d/lyt/meter/d_lyt_meter.cpp:
 	.text       start:0x800C8950 end:0x800DF8A8
@@ -244,7 +260,9 @@ d/lyt/meter/d_lyt_meter_key.cpp:
 d/lyt/meter/d_lyt_meter_drink.cpp:
 	.text       start:0x800E4930 end:0x800E6AC8
 	.ctors      start:0x804DB6F0 end:0x804DB6F4
+	.rodata     start:0x804E55A0 end:0x804E5640
 	.data       start:0x805148B0 end:0x80514D60
+	.sdata2     start:0x80579BA0 end:0x80579BB0
 	.bss        start:0x805AA790 end:0x805AA9D0
 
 d/lyt/meter/d_lyt_meter_remocon_bg.cpp:
@@ -342,8 +360,11 @@ d/lyt/d_lyt_msg_window_select_btn.cpp:
 	.text       start:0x8011C8D0 end:0x80120988
 	.ctors      start:0x804DB73C end:0x804DB740
 
+d/lyt/d_lyt_msg_window_base.cpp:
+	.text       start:0x80120A20 end:0x80120A98
+
 d/lyt/d_lyt_msg_window_talk.cpp:
-	.text       start:0x80120A20 end:0x801223C8
+	.text       start:0x80120AA0 end:0x801223C8
 	.ctors      start:0x804DB740 end:0x804DB744
 
 d/lyt/d_lyt_msg_window_link.cpp:
@@ -1000,6 +1021,7 @@ d/col/c/c_m3d_g_lin.cpp:
 
 d/col/c/c_m3d_g_pla.cpp:
 	.text       start:0x80338430 end:0x80338678
+	.sdata2     start:0x8057D048 end:0x8057D04C
 
 d/col/c/c_m3d_g_sph.cpp:
 	.text       start:0x80338680 end:0x803388D8
@@ -1117,9 +1139,19 @@ d/col/bg/d_bg_w_time.cpp:
 	.sdata2     start:0x8057D230 end:0x8057D240
 	.bss        start:0x805D0F90 end:0x805D0FB4
 
-d/col/cc/d_cc_shape_colliders.cpp:
+d/col/cc/d_cc_d.cpp:
 	.text       start:0x80353B50 end:0x80354298
 	.data       start:0x80548340 end:0x80548580
+
+d/col/cc/d_cc_mass_s.cpp:
+	.text       start:0x803543F0 end:0x80355080
+	.data       start:0x80548580 end:0x805485A4
+	.sdata2     start:0x8057D240 end:0x8057D254
+
+d/col/cc/d_cc_s.cpp:
+	.text       start:0x80355080 end:0x80358654
+	.data       start:0x805485A8 end:0x805485B4
+	.sbss       start:0x80575D20 end:0x80575D24
 
 rvl/CX/cx.c:
 	.text       start:0x803CEE90 end:0x803D0B20

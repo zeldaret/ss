@@ -365,6 +365,8 @@ config.libs = [
             Object(NonMatching, "d/lyt/d2d.cpp"),
             Object(NonMatching, "d/lyt/d_textbox.cpp"),
             Object(Matching, "d/lyt/d_window.cpp"),
+            Object(Matching, "d/d_textunk.cpp"),
+            Object(NonMatching, "d/d_tag_processor.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_unk.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_a_btn.cpp"),
@@ -439,11 +441,11 @@ config.libs = [
             Object(NonMatching, "d/col/c/c_m2d.cpp"),
             Object(NonMatching, "d/col/c/c_m3d.cpp"),
             Object(Matching, "d/col/c/c_m3d_g_aab.cpp"),
-            Object(NonMatching, "d/col/c/c_m3d_g_cir.cpp"),
+            # Object(NonMatching, "d/col/c/c_m3d_g_cir.cpp"),
             Object(Matching, "d/col/c/c_m3d_g_cps.cpp"),
             Object(Matching, "d/col/c/c_m3d_g_cyl.cpp"),
             Object(Matching, "d/col/c/c_m3d_g_lin.cpp"),
-            Object(NonMatching, "d/col/c/c_m3d_g_pla.cpp"),
+            Object(Matching, "d/col/c/c_m3d_g_pla.cpp"),
             Object(Matching, "d/col/c/c_m3d_g_sph.cpp"),
             Object(Matching, "d/col/c/c_m3d_g_tri.cpp"),
             Object(Matching, "d/col/c/c_m3d_g_unk.cpp"),
@@ -466,7 +468,9 @@ config.libs = [
             Object(NonMatching, "d/col/bg/d_bg_w_kcol.cpp"),
             Object(Matching, "d/col/bg/d_bg_w_sv.cpp"),
             Object(NonMatching, "d/col/bg/d_bg_w_time.cpp"),
-            Object(Matching, "d/col/cc/d_cc_shape_colliders.cpp"),
+            Object(Matching, "d/col/cc/d_cc_d.cpp"),
+            Object(Matching, "d/col/cc/d_cc_mass_s.cpp"),
+            Object(NonMatching, "d/col/cc/d_cc_s.cpp"),
         ],
     },
     {
@@ -1667,7 +1671,7 @@ config.libs = [
     Rel(
         NonMatching, "d_a_obj_trap_bird_wood", "REL/d/a/obj/d_a_obj_trap_bird_wood.cpp"
     ),
-    Rel(NonMatching, "d_a_obj_trap_rock_1", "REL/d/a/obj/d_a_obj_trap_rock_1.cpp"),
+    Rel(Matching, "d_a_obj_trap_rock_1", "REL/d/a/obj/d_a_obj_trap_rock_1.cpp"),
     Rel(
         NonMatching,
         "d_a_obj_treasure_island",
@@ -1703,9 +1707,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_under_cloud", "REL/d/a/obj/d_a_obj_under_cloud.cpp"),
     Rel(NonMatching, "d_a_obj_updown_lava", "REL/d/a/obj/d_a_obj_updown_lava.cpp"),
     Rel(Matching, "d_a_obj_utajima", "REL/d/a/obj/d_a_obj_utajima.cpp"),
-    Rel(
-        Matching, "d_a_obj_utajima_island", "REL/d/a/obj/d_a_obj_utajima_island.cpp"
-    ),
+    Rel(Matching, "d_a_obj_utajima_island", "REL/d/a/obj/d_a_obj_utajima_island.cpp"),
     Rel(Matching, "d_a_obj_utajima_lv2", "REL/d/a/obj/d_a_obj_utajima_lv2.cpp"),
     Rel(
         NonMatching,

@@ -488,6 +488,10 @@ public:
         return mFlags & GROUND_HIT;
     }
 
+    dBgS_GndChk &GetGnd() {
+        return mGnd;
+    }
+
 public:
     /* 0x040 */ u32 mFlags;
     /* 0x044 */ mVec3_c *mpPos;

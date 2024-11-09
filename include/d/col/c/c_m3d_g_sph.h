@@ -16,16 +16,23 @@ public:
     void SetR(f32);
     void SetC(f32, f32, f32);
 
+    void SetC(const mVec3_c &p) {
+        SetC(&p);
+    }
+
     f32 GetYDist(f32) const;
     bool Cross(const cM3dGTri *, f32 *, mVec3_c *);
     void Clamp(const mVec3_c &, mVec3_c &) const;
 
-    bool fn_80338750(cM3dGUnk *, mVec3_c *);
-    bool fn_80338760(cM3dGUnk *, f32 *);
+    bool Cross(cM3dGUnk &, mVec3_c *);
+    bool Cross(cM3dGUnk &, f32 *);
 
     void SetRatio(f32);
 
     const mVec3_c &GetC() const {
+        return mCenter;
+    }
+    mVec3_c &GetC() {
         return mCenter;
     }
 

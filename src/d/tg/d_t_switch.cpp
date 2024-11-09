@@ -1,8 +1,8 @@
 #include "d/t/d_t_switch.h"
 
-#include "c/c_math.h"
-#include "toBeSorted/event.h"
 #include "d/flag/sceneflag_manager.h"
+#include "s/s_Math.h"
+#include "toBeSorted/event.h"
 #include "toBeSorted/scgame.h"
 
 
@@ -144,7 +144,7 @@ void dTgSw_c::initializeState_On() {
     mTimer = 4;
 }
 void dTgSw_c::executeState_On() {
-    if (cM::calcTimer(&mTimer) == 0) {
+    if (sLib::calcTimer(&mTimer) == 0) {
         mStateMgr.changeState(StateID_OffWait);
     }
 }
@@ -173,7 +173,7 @@ void dTgSw_c::executeState_Off() {
         mActorEvent.scheduleEvent(event, 0);
         return;
     }
-    if (cM::calcTimer(&mTimer) == 0) {
+    if (sLib::calcTimer(&mTimer) == 0) {
         if (mThird2 == 1) {
             resetAllSwitches();
         } else if (mThird2 != 2) {

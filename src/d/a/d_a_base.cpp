@@ -243,9 +243,8 @@ u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
     u32 param2Copy = params2;
     params2 = param2Copy | 0xFF000000;
     // mAng3_c rot = {};
-    s16 rot = 0;
-    return SpecialItemDropMgr::giveSpecialDropItem(
-        SpecialItemDropMgr::sInstance, param2Copy >> 0x18, roomid, spawnPos, subtype, &rot, -1
+    return SpecialItemDropMgr::sInstance->giveSpecialDropItem(
+        param2Copy >> 0x18, roomid, spawnPos, subtype, 0, -1
     );
 }
 
@@ -424,7 +423,7 @@ f32 dAcBase_c::getSquareDistToPlayer() {
 // Some weirdness with the float registers being used
 // 8002d4b0
 void dAcBase_c::updateRoomId(f32 yOffset) {
-    if (getConnectParent()->profile_name != 701 /* fProfile::PROFILE_NAME_e::ROOM */) {
+    if (getConnectParent()->profile_name != fProfile::ROOM) {
         mVec3_c actorPos(position.x, position.y + yOffset, position.z);
 
         if (checkCollision(&actorPos)) {

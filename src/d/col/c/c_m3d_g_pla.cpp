@@ -2,6 +2,8 @@
 #include "d/col/c/c_m3d_g_pla.h"
 
 #include "d/col/c/c_m3d.h"
+#include "m/m_angle.h"
+#include "m/m_vec.h"
 
 bool cM3dGPla::CrossInfLin(const mVec3_c &start, const mVec3_c &end, mVec3_c &out) const {
     f32 tmp1 = getPlaneFunc(start);
@@ -28,10 +30,10 @@ bool cM3dGPla::getCrossYLessD(const mVec3_c &point, f32 *out) const {
 
 mAng cM3dGPla::GetAngle(mAng ang) const {
     mAng angleY = GetAngleY();
-    // Regswap
+
     angleY = angleY - ang;
-    f32 dist = GetXZDist() * angleY.cos();
-    return cM::atan2s(dist, mNormal.y);
+
+    return cM::atan2s(GetXZDist() * angleY.cos(), mNormal.y);
 }
 
 mAng cM3dGPla::GetNegativeAngle(mAng ang) const {

@@ -1,12 +1,12 @@
 #include "d/a/obj/d_a_obj_toD3_stone_figure.h"
 
-#include "d/col/cc/d_cc_mgr.h"
+#include "d/col/cc/d_cc_s.h"
+#include "d/a/obj/d_a_obj_item.h"
+#include "d/flag/storyflag_manager.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
-#include "d/flag/storyflag_manager.h"
 #include "toBeSorted/scgame.h"
-
 
 SPECIAL_ACTOR_PROFILE(OBJ_TOD3_STONE, dAcOtoD3StoneFigure_c, fProfile::OBJ_TOD3_STONE, 0x1B3, 0, 0);
 
@@ -18,10 +18,40 @@ f32 dAcOtoD3StoneFigure_c::sHeight = 290.0f;
 
 // clang-format off
 dCcD_SrcCyl dAcOtoD3StoneFigure_c::sCcSrc = {
-    {{{0}, 0, 0, 0, 0, 0, 0, 0, 0}, 
-    {{0xFEB77DFF}, 0x1000111, 0x06, 0x407, 0, 0}, 
-    {0xE9}},
-    {dAcOtoD3StoneFigure_c::sRadius, dAcOtoD3StoneFigure_c::sHeight}
+    {
+        {
+            0, 
+            0,
+            {
+                0,  
+                0,  
+                0   
+            },
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+        }, 
+        {
+            0xFEB77DFF,
+            0x1000111,
+            {
+                0x06,
+                0x407
+            },
+            0,
+            0
+        }, 
+        {
+            0xE9
+        }
+    },
+    {
+        dAcOtoD3StoneFigure_c::sRadius,
+        dAcOtoD3StoneFigure_c::sHeight
+    }
 };
 // clang-format on
 
@@ -42,16 +72,15 @@ int dAcOtoD3StoneFigure_c::create() {
     }
 
     mMdl.setLocalMtx(mWorldMtx);
-    mCCdStruct.setField0x38ToMagicValue();
-    mCollision.init(sCcSrc);
-    mCollision.initUnk(mCCdStruct);
+    mStts.SetDefaultRank();
+    mCollision.Set(sCcSrc);
+    mCollision.SetStts(mStts);
     int zero = 0;
     mCollision.SetC(position);
     mCollision.SetR(dAcOtoD3StoneFigure_c::sRadius + zero);
     mCollision.SetH(dAcOtoD3StoneFigure_c::sHeight + zero);
-    ColliderManager::getColliderManager()->addCollider(&mCollision);
-    // mCollision.clearCoFlag();
-    mCollision.setTgCoFlag(1);
+    dCcS::GetInstance()->Set(&mCollision);
+    mCollision.OnTgCoFlag(1);
 
     // ???
     f32 a, b, c;
@@ -66,7 +95,7 @@ int dAcOtoD3StoneFigure_c::create() {
     poscopy3.y = b;
     poscopy3.z = c;
     // poscopy3 = poscopy2;
-    mCollision.setSomeDefendValue(0x2000);
+    mCollision.SetTg_0x4C(0x2000);
 
     if (!mIsSkyKeepAlreadyOpen) {
         mStateMgr.changeState(StateID_OneEye);
@@ -83,7 +112,7 @@ int dAcOtoD3StoneFigure_c::doDelete() {
 
 int dAcOtoD3StoneFigure_c::actorExecute() {
     mStateMgr.executeState();
-    ColliderManager::getColliderManager()->addCollider(&mCollision);
+    dCcS::GetInstance()->Set(&mCollision);
     return SUCCEEDED;
 }
 
@@ -135,7 +164,6 @@ void dAcOtoD3StoneFigure_c::doInteraction(s32 arg) {
     }
 }
 
-extern "C" s32 AcItem__checkFlag(s32);
 bool dAcOtoD3StoneFigure_c::hasStoneOfTrials() const {
-    return AcItem__checkFlag(0xB4);
+    return dAcItem_c::checkFlag(0xB4);
 }

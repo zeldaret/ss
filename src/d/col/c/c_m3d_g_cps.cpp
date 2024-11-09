@@ -26,8 +26,8 @@ void cM3dGCps::Set(const mVec3_c &start, const mVec3_c &end, f32 r) {
     SetR(r);
 }
 
-bool cM3dGCps::fn_80337f30(cM3dGUnk *unk, mVec3_c *vec) {
-    return fn_80336d90(this, unk, vec);
+bool cM3dGCps::Cross(cM3dGUnk &unk, mVec3_c *vec) {
+    return cM3d_Cross_CpsUnk(*this, unk, vec);
 }
 
 bool cM3dGCps::fn_80337f40(const mVec3_c &v) const {
@@ -40,7 +40,7 @@ bool cM3dGCps::fn_80337f40(const mVec3_c &v) const {
     }
     f32 tmp;
     mVec3_c tmpv;
-    if (cM3d_Len3dSqPntAndSegLine(this, v, tmpv, &tmp, nullptr) && tmp <= r2) {
+    if (cM3d_Len3dSqPntAndSegLine(*this, v, tmpv, &tmp, nullptr) && tmp <= r2) {
         return true;
     }
     return false;

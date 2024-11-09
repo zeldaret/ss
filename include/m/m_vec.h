@@ -1,9 +1,15 @@
 #ifndef M_VEC_H
 #define M_VEC_H
 
+#include "c/c_math.h"
 #include "common.h"
+#include "egg/math/eggMath.h"
 #include "egg/math/eggVector.h"
-#include "m/m_angle.h"
+#include "nw4r/math/math_types.h"
+#include "nw4r/types_nw4r.h"
+#include "rvl/MTX/vec.h"
+
+class mAng;
 
 class mVec3_c : public EGG::Vector3f {
 public:
@@ -148,6 +154,12 @@ public:
         return *this;
     }
 
+    mVec3_c operator-(f32 f) const {
+        return mVec3_c(x - f, y - f, z - f);
+    }
+    mVec3_c operator+(f32 f) const {
+        return mVec3_c(x + f, y + f, z + f);
+    }
     mVec3_c &operator-=(f32 f) {
         x -= f;
         y -= f;
@@ -206,6 +218,16 @@ public:
     }
 
     void rotY(const mAng &angle);
+
+    void CopyTo(nw4r::math::VEC3 *p) {
+        p->x = x;
+        p->y = y;
+        p->z = z;
+    }
+
+    s16 ang() const {
+        return cM::atan2s(x * x, z * z);
+    }
 
     static mVec3_c Zero;
     static mVec3_c Ex;

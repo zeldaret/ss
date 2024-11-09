@@ -99,6 +99,12 @@ public:
         setFrame(actualEnd - (ratio * actualEnd));
     }
 
+    inline f32 getNextFrame() const {
+        f32 end = mEndFrame;
+        f32 f = mCurrFrame + 1.0f;
+        return f >= end ? 0.0f : f;
+    }
+
 private:
     inline bool notLooping() const {
         return (mFlags & FLAG_NO_LOOP) != 0;

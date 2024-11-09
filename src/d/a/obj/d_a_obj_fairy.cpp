@@ -2,7 +2,6 @@
 
 #include "d/a/d_a_player.h"
 
-
 SPECIAL_ACTOR_PROFILE(OBJ_FAIRY, dAcObjFairy_c, fProfile::OBJ_FAIRY, 0x166, 0, 2);
 
 STATE_DEFINE(dAcObjFairy_c, Wait);
@@ -53,7 +52,8 @@ int dAcObjFairy_c::draw() {
 
         if (!isCuring()) {
             static mQuat_c rot(0.0f, 0.0f, 0.0f, 10.0f);
-            drawShadow(mShadow, nullptr, mWorldMtx, &rot, -1, -1, -1, -1, -1, position.y - field_0x4B0);
+            f32 f = field_0x4B0;
+            drawShadow(mShadow, nullptr, mWorldMtx, &rot, -1, -1, -1, -1, -1, position.y - f);
         }
     }
 
@@ -96,14 +96,13 @@ void dAcObjFairy_c::executeState_CatchDemo() {
 }
 void dAcObjFairy_c::finalizeState_CatchDemo() {
     field_0xB89 = 0;
-    // TODO collision
+    mObjectActorFlags &= ~0x00000200;
 }
 
 bool dAcObjFairy_c::shouldAvoidLink() const {
     // TODO shuffles
     if (dAcPy_c::LINK->isUsingBugnet()) {
-        const mVec3_c &bugNetPos = dAcPy_c::LINK->getBugNetPos();
-        const mVec3_c dist = bugNetPos - position;
+        mVec3_c dist = dAcPy_c::LINK->getBugNetPos() - position;
         bool isClose = false;
         if (dist.mag() < 100.0f && velocity.dot(dist) > 0.0f) {
             isClose = true;

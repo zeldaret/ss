@@ -262,6 +262,10 @@ struct AnmGroupBase_c {
         syncAnmFrame();
     }
 
+    inline f32 getNextFrame() const {
+        return mpFrameCtrl->getNextFrame();
+    }
+
 private:
     /* 0x04 */ void *field_0x04;
     /* 0x08 */ m2d::FrameCtrl_c *mpFrameCtrl;

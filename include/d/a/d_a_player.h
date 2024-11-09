@@ -99,7 +99,7 @@ public:
     /* vt 0x144 */ virtual void setActorLinkToSomething();
     /* vt 0x148 */ virtual void applyDamageWithIFrames();
     /* vt 0x14C */ virtual void vt_0x14C();
-    /* vt 0x150 */ virtual void hasLessThanQuarterHealth();
+    /* vt 0x150 */ virtual bool hasLessThanQuarterHealth(bool);
     /* vt 0x154 */ virtual void vt_0x154();
     /* vt 0x158 */ virtual void vt_0x158();
     /* vt 0x15C */ virtual void vt_0x15C();
@@ -179,7 +179,7 @@ public:
     /* vt 0x284 */ virtual bool isUsingBugnet() const;
     /* vt 0x288 */ virtual const mVec3_c &getBugNetPos() const;
     /* vt 0x28C */ virtual bool isUsingBugnet1();
-    /* vt 0x290 */ virtual void bugNetCollectTreasure();
+    /* vt 0x290 */ virtual void bugNetCollectTreasure(u32 itemId);
     /* vt 0x294 */ virtual void somethingSwitchDials();
     /* vt 0x298 */ virtual void vt_0x298();
     /* vt 0x29C */ virtual void getDieLargeDamageDir();
@@ -223,6 +223,7 @@ public:
     /* 0x35C */ u32 mForceOrPreventActionFlags;
     /* 0x360 */ UNKWORD field_0x360;
     /* 0x364 */ u32 mActionFlags;
+    /* 0x368 */ u32 mActionFlagsCont;
 
     inline bool checkFlags0x340(u32 mask) const {
         return (someFlags_0x340 & mask) != 0;
