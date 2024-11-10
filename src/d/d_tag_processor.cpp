@@ -453,24 +453,22 @@ void dTagProcessor_c::alsoProcessingRelated(
     bool b1 = false;
     int int1 = 0;
     bool b2 = false;
+    wchar_t *writePtr = dest;
+
     f32 float1, float2;
     float2 = float1 = fn_800B8040(0, field_0x90C);
     f32 float3 = 0.0f;
     f32 float4 = 0.0f;
     int int2 = 0;
 
-    wchar_t *writePtr = dest;
 
     if (textBox != nullptr) {
         float1 *= textBox->getMyScale();
     }
 
-    do {
-        SomeTextProcessingOutStruct *outThing = &outThings[int1];
-        if (b1) {
-            goto end;
-        }
-
+    while (b1) {
+        // ???
+        SomeTextProcessingOutStruct *outThing = &outThings[int2];
         wchar_t c = *src;
         if (c == nullptr) {
             *writePtr = '\0';
@@ -580,16 +578,15 @@ void dTagProcessor_c::alsoProcessingRelated(
             if (b2) {
                 *writePtr = c;
                 const nw4r::ut::Font *fnt = textBox->GetFont();
-                f32 wid = fnt->GetCharWidth(*src);
-                f32 tmp = float1 * wid * 0.5f;
+                f32 tmp = float1 * fnt->GetCharWidth(*src) * 0.5f;
                 f32 tmp2 = float4 + tmp;
-                if (unkArg != 0) {
-                    wchar_t s = *dest;
+                if (outThings != 0) {
+                    wchar_t s = *writePtr;
                     if (s != 10 && s != 0x20 && s != 0x3000) {
-                        outThing->f0 = tmp2;
-                        outThing->f1 = float2;
-                        outThing->f2 = float1;
-                        outThing->field_0x0E = *dest;
+                        outThings[int2].f0 = tmp2;
+                        outThings[int2].f1 = float2;
+                        outThings[int2].f2 = float1;
+                        outThings[int2].field_0x0E = *writePtr;
                         int2++;
                     }
                 }
@@ -598,7 +595,7 @@ void dTagProcessor_c::alsoProcessingRelated(
             }
             src++;
         }
-    } while (true);
+    }
 
 end:
     if (pOutLen != nullptr) {
