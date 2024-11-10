@@ -45,6 +45,14 @@ d/a/e/d_a_e_base.cpp:
 	.text       start:0x8002F300 end:0x80030CB0
 	.ctors      start:0x804DB664 end:0x804DB668
 
+d/a/npc/d_a_npc.cpp:
+	.text       start:0x80030CB0 end:0x8003F718
+	.ctors      start:0x804DB668 end:0x804DB66C
+
+d/a/npc/d_a_ordinary_npc.cpp:
+	.text       start:0x800462D0 end:0x8004D810
+	.ctors      start:0x804DB66C end:0x804DB670
+
 d/d_ac_npc_kyui.cpp:
 	.text       start:0x8004D810 end:0x80050800
 	.ctors      start:0x804DB670 end:0x804DB674

@@ -338,6 +338,8 @@ config.libs = [
             Object(NonMatching, "d/a/d_a_base.cpp"),
             Object(NonMatching, "d/a/d_a_item.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_base.cpp"),
+            Object(NonMatching, "d/a/npc/d_a_npc.cpp"),
+            Object(NonMatching, "d/a/npc/d_a_ordinary_npc.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_bomb.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_arrow.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_boomerang.cpp"),
