@@ -523,16 +523,18 @@ void dTagProcessor_c::alsoProcessingRelated(
                 case 0x10002:
                 case 0x10003: b1 = true; break;
                 case 0x10008: {
-                    f32 tmp1 = fn_800B8040(*src, field_0x90C);
-                    f32 tmp2 = fn_800B8040(0, field_0x90C);
-                    if (textBox != nullptr) {
-                        tmp1 *= textBox->getMyScale();
-                        tmp2 *= textBox->getMyScale();
-                    }
-                    if (float1 != tmp1) {
-                        nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
-                        float3 -= fontSize.height * ((float1 - tmp1) / tmp2) * 0.5f * UnkTextThing::getField0x788();
-                        float1 = tmp1;
+                    if (b2) {
+                        f32 tmp1 = fn_800B8040(*(u8 *)endPtr, field_0x90C);
+                        f32 tmp2 = fn_800B8040(0, field_0x90C);
+                        if (textBox != nullptr) {
+                            tmp1 *= textBox->getMyScale();
+                            tmp2 *= textBox->getMyScale();
+                        }
+                        if (float1 != tmp1) {
+                            nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
+                            float3 -= fontSize.height * ((float1 - tmp1) / tmp2) * 0.5f * UnkTextThing::getField0x788();
+                            float1 = tmp1;
+                        }
                     }
                 } break;
                 case 0x30000: {
@@ -591,6 +593,8 @@ void dTagProcessor_c::alsoProcessingRelated(
                         int2++;
                     }
                 }
+                writePtr++;
+                float4 = float2 + (tmp + textBox->GetCharSpace());
             }
             src++;
         }
