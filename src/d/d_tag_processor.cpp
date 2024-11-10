@@ -446,6 +446,162 @@ end:
     }
 }
 
+void dTagProcessor_c::alsoProcessingRelated(
+    dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, s32 unkArg, u16 *pOutLen,
+    SomeTextProcessingOutStruct *outThings
+) {
+    bool b1 = false;
+    int int1 = 0;
+    bool b2 = false;
+    f32 float1, float2;
+    float2 = float1 = fn_800B8040(0, field_0x90C);
+    f32 float3 = 0.0f;
+    f32 float4 = 0.0f;
+    int int2 = 0;
+
+    wchar_t *writePtr = dest;
+
+    if (textBox != nullptr) {
+        float1 *= textBox->getMyScale();
+    }
+
+    do {
+        SomeTextProcessingOutStruct *outThing = &outThings[int1];
+        if (b1) {
+            goto end;
+        }
+
+        wchar_t c = *src;
+        if (c == nullptr) {
+            *writePtr = '\0';
+            goto end;
+        }
+        if (c == 0xE) {
+            u8 cmdLen = 0;
+            s32 cmd = 0;
+            wchar_t *endPtr = nullptr;
+            getTextCommand(c, src + 1, &cmdLen, &cmd, &endPtr);
+            switch (cmd) {
+                case 0x0F0F0F0F: {
+                    if (int1 / getNumLines(field_0x90C) == unkArg) {
+                        nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
+                        float4 = fn_800B8560(int1);
+                        if ((field_0x90C < 6 || field_0x90C >= 10) && field_0x90C != 30) {
+                            float4 = 0.0f;
+                        }
+                        f32 tmp = fn_800B8040(0, field_0x90C);
+                        if (textBox != nullptr) {
+                            tmp *= textBox->getMyScale();
+                        }
+
+                        if (int1 % getNumLines(field_0x90C) == 0) {
+                            float1 = fn_800B8040(0, field_0x90C);
+                            if (textBox != nullptr) {
+                                float1 *= textBox->getMyScale();
+                            }
+                            f32 tmp3;
+                            if (field_0x90C == 30) {
+                                tmp3 = -2.0f;
+                            } else {
+                                tmp3 = 3.0f;
+                            }
+                            float3 = (fn_800B8560(int1) - (fontSize.height * (float1 / tmp) * 0.5f)) - tmp3;
+                        } else {
+                            float3 = (float3 - (fontSize.height * (float1 / tmp) + field_0x004->GetLineSpace()));
+                        }
+                        if (!b2) {
+                            b2 = true;
+                        }
+                    } else if (b2) {
+                        b2 = false;
+                        b1 = true;
+                    }
+                    int1++;
+                } break;
+                case 0x10000:
+                case 0x10001:
+                case 0x10002:
+                case 0x10003: b1 = true; break;
+                case 0x10008: {
+                    f32 tmp1 = fn_800B8040(*src, field_0x90C);
+                    f32 tmp2 = fn_800B8040(0, field_0x90C);
+                    if (textBox != nullptr) {
+                        tmp1 *= textBox->getMyScale();
+                        tmp2 *= textBox->getMyScale();
+                    }
+                    if (float1 != tmp1) {
+                        nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
+                        float3 -= fontSize.height * ((float1 - tmp1) / tmp2) * 0.5f * UnkTextThing::getField0x788();
+                        float1 = tmp1;
+                    }
+                } break;
+                case 0x30000: {
+                    if (b2) {
+                        float2 = float1 * UnkTextThing::getField0x768();
+                        if (textBox != nullptr) {
+                            float2 *= textBox->getMyScale();
+                        }
+                        if (float1 != float2) {
+                            nw4r::lyt::Size _size = field_0x004->GetFontSize();
+                            float1 = float2;
+                        }
+                    }
+                } break;
+                case 0x20004:
+                    if (b2) {
+                        *writePtr = -1;
+                        const nw4r::ut::Font *fnt = dFontMng_c::getFont(4);
+                        wchar_t c = fn_800B7880(*(u8 *)endPtr);
+                        f32 tmp = UnkTextThing::getField0x764();
+                        f32 wid = tmp / fnt->GetWidth() * float1;
+                        f32 charSpace = textBox->GetCharSpace();
+                        f32 charWidth = fnt->GetCharWidth(c);
+                        writePtr++;
+                        float4 += (wid * charWidth + charSpace);
+                    }
+                    break;
+                case 0x10012:
+                    if (b2) {
+                        somethingWithScrapperAndMusic(endPtr);
+                    }
+                    break;
+            }
+            src += cmdLen / 2 + 1;
+        } else if (c == 0xF) {
+            s32 cmd = 0;
+            process0xFCommand(c, &src[1], &cmd);
+            if (cmd == 0x30000) {
+                float2 = float1;
+            }
+            src += 3;
+        } else {
+            if (b2) {
+                *writePtr = c;
+                const nw4r::ut::Font *fnt = textBox->GetFont();
+                f32 wid = fnt->GetCharWidth(*src);
+                f32 tmp = float1 * wid * 0.5f;
+                f32 tmp2 = float4 + tmp;
+                if (unkArg != 0) {
+                    wchar_t s = *dest;
+                    if (s != 10 && s != 0x20 && s != 0x3000) {
+                        outThing->f0 = tmp2;
+                        outThing->f1 = float2;
+                        outThing->f2 = float1;
+                        outThing->field_0x0E = *dest;
+                        int2++;
+                    }
+                }
+            }
+            src++;
+        }
+    } while (true);
+
+end:
+    if (pOutLen != nullptr) {
+        *pOutLen = writePtr - dest;
+    }
+}
+
 nw4r::ut::Operation dTagProcessor_c::Process(u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx) {
     return ProcessTags(nullptr, ch, ctx);
 }
