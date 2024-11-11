@@ -25,9 +25,10 @@ int dTgGekoTag::create() {
         mRefs[i].unlink();
     }
 
-    // Regswaps
     mNoSpawnRadius = getNoSpawnRadius();
-    if (!mNoSpawnRadius) {
+
+    f32 rad = mNoSpawnRadius;
+    if (!rad) {
         mNoSpawnRadius = 100.0f;
     }
 
