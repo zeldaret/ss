@@ -33,11 +33,6 @@
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 
-// Very Hack ??
-static inline bool IsZero(f32 in) {
-    return in <= EGG::Math<f32>::epsilon();
-}
-
 void float_ordering() {
     f32 f[] = {15.f, .4f, .4f, 5.f};
 }
@@ -357,7 +352,7 @@ void dAcOtubo_c::finalizeState_Put() {
 void dAcOtubo_c::initializeState_Slope() {
     cM3dGPla pla;
     dBgS::GetInstance()->GetTriPla(mObjAcch.GetGnd(), &pla);
-    if (IsZero(fabsf(forwardSpeed))) {
+    if (cM::isZero(forwardSpeed)) {
         angle.y = pla.GetAngleY();
     }
     mAng plaAng = pla.GetAngleY();
@@ -499,7 +494,7 @@ void dAcOtubo_c::calcRoll() {
             forwardSpeed = EGG::Math<f32>::sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
             angle.y = cM::atan2s(velocity.x, velocity.z);
         }
-        f32 vel_mag = PSVECMag(velocity);
+        f32 vel_mag = VEC3Len(velocity);
         f32 f1 = mAng(vel_mag * (mField_0x9D4 + 200.f)).radian();
         f32 f2 = mAng(vel_mag * 182.0f * 0.2f).radian();
         f32 f0 = mAng(angle.y - rotation.y).radian();
@@ -528,22 +523,30 @@ void dAcOtubo_c::calcRoll() {
 }
 
 void dAcOtubo_c::adjustRoll() {
-    if (mObjAcch.ChkGndHit() && !IsZero(fabsf(forwardSpeed))) {
-        int adj = forwardSpeed * 182.f;
-        mVec3_c vel = velocity;
-        vel.y = 0.f;
-        vel.normalize();
-        vel.rotY(0x4000);
-        vel *= mField_0x9D8 * mField_0x9C8.sin();
-
-        mAng old_9C8 = mField_0x9C8;
-        mField_0x9C8 += adj;
-        if (old_9C8.sin() * mField_0x9C8.sin() < 0.f) {
-            mField_0x9D8 *= 0.75f;
-        }
-
-        position += vel;
+    if (!mObjAcch.ChkGndHit()) {
+        return;
     }
+    if (cM::isZero(forwardSpeed)) {
+        return;
+    }
+
+    s32 adj = forwardSpeed * 182;
+
+    mVec3_c vel = velocity;
+    vel.y = 0.f;
+
+    vel.normalize();
+    vel.rotY(0x4000);
+    vel *= mField_0x9D8 * mField_0x9C8.sin();
+
+    mAng old_9C8 = mField_0x9C8;
+    mField_0x9C8 += adj;
+
+    if (old_9C8.sin() * mField_0x9C8.sin() < 0.f) {
+        mField_0x9D8 *= 0.75f;
+    }
+
+    position += vel;
 }
 
 void dAcOtubo_c::fn_272_2670() {
@@ -569,10 +572,9 @@ void dAcOtubo_c::fn_272_2670() {
             velocity += mField_0x9B8;
             mbField_0x9F1 = false;
         }
-        if (!IsZero(fabsf(mField_0x9CA))) {
-            // Needs to be loaded again?
-            static const s16 unk = {0}; // needed for rodata ordering
-            angle.y = mField_0x9CA;
+        static const s16 unk = {0}; // needed for rodata ordering
+        if (!cM::isZero(mField_0x9CA)) {
+            angle.y = (*(s16 *)((u8 *)this + 0x9CA)); // HACK to force load again
             mField_0x9CA = 0;
         } else {
             mQuat_c q;
@@ -590,15 +592,19 @@ void dAcOtubo_c::fn_272_2670() {
         }
     }
 
-    if (mSph.ChkCoHit() && fn_272_38C0()) {
-        fn_272_3020();
-    } else if (IsZero(fabsf(mField_0x9E0))) {
+    if (mSph.ChkCoHit()) {
+        if (fn_272_38C0()) {
+            fn_272_3020();
+        }
+    } else if (cM::isZero(mField_0x9E0)) {
         mField_0x9E0 = 0.1f;
     }
 
     // the ordering is weird here
+    f32 groundH = mObjAcch.GetGroundH();
+    f32 waterH = mObjAcch.mWtr.mGroundH;
     bool noSound = mbField_0x9F2;
-    mEff_0x91C.fn_8002B120(mObjAcch.mWtr.mGroundH, mObjAcch.GetGroundH());
+    mEff_0x91C.fn_8002B120(waterH, groundH);
 
     if (checkInWater()) {
         forwardAccel = -0.8f;
@@ -726,7 +732,7 @@ void dAcOtubo_c::fn_272_3020() {
 }
 
 void dAcOtubo_c::addPickupTarget() {
-    if (IsZero(fabsf(forwardSpeed))) {
+    if (cM::isZero(forwardSpeed)) {
         AttentionManager *ins = AttentionManager::sInstance;
         ins->addPickUpTarget(*this, 120.f);
         ins->addUnk3Target(*this, 1, 500.f, -200.f, 200.f);

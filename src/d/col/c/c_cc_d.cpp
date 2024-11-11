@@ -1,5 +1,6 @@
 #include "d/col/c/c_cc_d.h"
 
+#include "c/c_math.h"
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/c/c_m3d.h"
@@ -16,10 +17,6 @@
 #include "rvl/MTX.h" // IWYU pragma: export
 #include "s/s_Math.h"
 
-// Very Hack ??
-static inline bool IsZero(f32 in) {
-    return fabsf(in) <= EGG::Math<f32>::epsilon();
-}
 static inline void MtxTransMinusXYZ(mMtx_c &mtx, f32 x, f32 y, f32 z) {
     PSMTXTrans(mtx, -x, -y, -z);
 }
@@ -612,7 +609,7 @@ bool cCcD_TriAttr::Calc(const mVec3_c &start, const mVec3_c &end, mVec3_c *pOut)
             }
             mVec3_c tmp2 = tmp1 - tmp0;
             f32 mag = tmp2.squaredLength();
-            if (IsZero(mag)) {
+            if (cM::isZero(mag)) {
                 bVar1 = true;
             } else {
                 mag = tmp2.dot(*pOut - tmp0) / mag;
@@ -978,7 +975,7 @@ bool cCcD_CpsAttr::Calc(const mVec3_c &start, const mVec3_c &end, mVec3_c *pOut)
     bool bInverse;
 
     f32 dist = EGG::Math<f32>::sqrt(tmp0.x * tmp0.x + tmp0.z * tmp0.z);
-    if (IsZero(dist)) {
+    if (cM::isZero(dist)) {
         tmp1 = start;
         tmp2 = end;
         if (endRef.y > startRef.y) {

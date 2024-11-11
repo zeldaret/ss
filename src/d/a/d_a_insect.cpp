@@ -10,19 +10,10 @@
 #include "d/col/bg/d_bg_w_base.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_pla.h"
-#include "egg/math/eggMath.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "rvl/MTX/mtxvec.h"
 #include "toBeSorted/attention.h"
-
-#include <cmath.h>
-
-// Very Hack ??
-static inline bool IsZero(f32 in) {
-    return in <= EGG::Math<f32>::epsilon();
-}
 
 extern "C" void fn_800298B0(u16, mVec3_c *, mVec3_c *, u32, u32, u32, u32, u32);
 extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_394_;
@@ -212,7 +203,7 @@ bool dAcOInsect_c::fn_8018FAA0() {
 
 bool dAcOInsect_c::fn_8018FAD0() {
     f32 speed = fabsf(forwardSpeed);
-    if (IsZero(speed)) {
+    if (cM::isLessThanZero(speed)) {
         fn_8018FDF0(mPlane_0x3A8.GetN());
         return true;
     } else {

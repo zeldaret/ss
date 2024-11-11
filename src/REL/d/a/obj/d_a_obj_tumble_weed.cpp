@@ -274,7 +274,7 @@ void dAcOTumbleWeed_c::doBreak() {
 
 void dAcOTumbleWeed_c::calcMatrix() {
     if (mField_0x98B) {
-        f32 vel_mag = PSVECMag(velocity);
+        f32 vel_mag = VEC3Len(velocity);
         f32 f1 = mAng(vel_mag * (mField_0x978 + 200.f)).radian();
         f32 f2 = mAng(vel_mag * 182.0f * 0.2f).radian();
         f32 f0 = mAng(angle.y - rotation.y).radian();

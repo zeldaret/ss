@@ -1,6 +1,7 @@
 #ifndef D_A_OBJ_BASE_H
 #define D_A_OBJ_BASE_H
 
+#include "c/c_math.h"
 #include "d/a/d_a_base.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
