@@ -40,10 +40,15 @@ struct ActorCarryStruct {
     // not real name, but sure
     void bushTpFunc(dBgS_Acch &);
 
+    void fn_80050EA0(dAcObjBase_c *);
     void fn_800511E0(dAcObjBase_c *);
 
     bool testCarryFlag(u32 flag) {
         return (carryFlags & flag) != 0;
+    }
+
+    bool checkCarryType(int type) const {
+        return (isCarried == 1 && carryType == type);
     }
 };
 
@@ -61,7 +66,7 @@ struct LightingInfo {
 class dAcObjBase_c : public dAcBase_c {
 public:
     /* 0x0FC */ f32 yoffset;
-    /* 0x100 */ char _0[4];
+    /* 0x100 */ f32 field_0x100;
     /* 0x104 */ f32 unkfloat;
     /* 0x108 */ char _1[12];
     /* 0x114 */ u16 targetFiTextId;
@@ -79,11 +84,9 @@ public:
     /* 0x1A4 */ f32 mCullingDistance;
     /* 0x1A8 */ f32 field_0x1A8;
     /* 0x1AC */ u32 mObjectActorFlags;
-
-    /* 0x1B0 */ u8 unk_0x1B0[0x1C0 - 0x1B0];
-
+    /* 0x1B0 */ f32 mField_0x1B0;
+    /* 0x1B4 */ mVec3_c mField_0x1B4;
     /* 0x1C0 */ cCcD_Stts mStts;
-
     /* 0x1FC */ mVec3_c mStartingPos;
     /* 0x208 */ mAng3_c mStartingRot;
     /* 0x210 */ ActorCarryStruct mActorCarryInfo;
@@ -112,6 +115,20 @@ public:
 
     bool isSlowerThan(f32 speed) const {
         return fabsf(forwardSpeed) <= speed;
+    }
+
+    bool checkYOffsetField_0x100() const {
+        return yoffset <= field_0x100;
+    }
+
+    void clearObjectProperty(u32 property) {
+        mObjectActorFlags &= ~property;
+    }
+    void setObjectProperty(u32 property) {
+        mObjectActorFlags |= property;
+    }
+    bool checkObjectProperty(u32 property) const {
+        return mObjectActorFlags & property;
     }
 
     // could be their own thing?

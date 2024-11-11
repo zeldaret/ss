@@ -58,7 +58,7 @@ void dAcOsw_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *in
                 }
             }
         }
-        interactor->mObjectActorFlags |= 0x40;
+        interactor->setObjectProperty(0x40);
     }
 }
 

@@ -236,6 +236,10 @@ public:
         return cM::atan2s(x * x, z * z);
     }
 
+    f32 inprodXZ(const mVec3_c &other) const {
+        return x * other.x + z * other.z;
+    }
+
     static mVec3_c Zero;
     static mVec3_c Ex;
     static mVec3_c Ey;

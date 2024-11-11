@@ -131,7 +131,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     adjustTimeScale();
 
     // TODO(mObjectActorFlags)
-    if (mObjectActorFlags & 0x2) {
+    if (checkObjectProperty(0x2)) {
         // Weak function not being placed right
         if (sLib::calcTimer(&mTumbleTimer) == 0) {
             FUN_8002dcd0();

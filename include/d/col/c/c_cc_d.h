@@ -922,6 +922,12 @@ public:
     u32 ChkCoSameActorHit() const {
         return mCo.MskSPrm(0x1000);
     }
+    void ClrCo_0x400() {
+        mCo.OffSPrm(0x400);
+    }
+    void SetCo_0x400() {
+        mCo.OnSPrm(0x400);
+    }
 
     /**
      * SET HIT

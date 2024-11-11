@@ -87,6 +87,8 @@ public:
     /* 0xE8 */ u32 field_0xe8;
     /* 0xEC */ s8 roomid;
     /* 0xED */ u8 actor_subtype;
+    /* 0xEE */ u8 field_0xEE;
+    /* 0xEF */ u8 field_0xEF;
     /* 0xF0 */ u32 JStudio_actor;
     /* 0xF4 */ char someStr[4];
     /* 0xF8 */ char field_0xf8[0xfc - 0xf8];
@@ -160,8 +162,14 @@ public:
         return roomid;
     }
 
-    bool ChkProperty_0x40000000() const {
-        return actor_properties & 0x40000000;
+    void clearActorProperty(u32 property) {
+        actor_properties &= ~property;
+    }
+    void setActorProperty(u32 property) {
+        actor_properties |= property;
+    }
+    bool checkActorProperty(u32 property) const {
+        return actor_properties & property;
     }
 
 public:
@@ -180,7 +188,7 @@ public:
     /* 8002cf90 */ void fillUpperParams2Byte();
     /* 8002cfa0 */ u32 getParams2_ignoreLower();
     /* 8002cfb0 */ void setParams2Upper_ignoreLower(u32 val);
-    /* 8002cfc0 */ u8 getParams2UpperByte();
+    /* 8002cfc0 */ int getParams2UpperByte();
     /* 8002cfd0 */ void setParams2UpperByte(u32 val);
     /* 8002cff0 */ static u32 buildParams2(u32 lower, u32 upper);
     /* 8002d010 */ u32 getParams2Lower();
@@ -213,7 +221,7 @@ public:
     /* 8002d6d0 */ void FUN_8002d6d0();
     /* 8002d710 */ void playSoundEffect1(u16 effect);
     /* 8002d740 */ void FUN_8002d740();
-    /* 8002d770 */ void FUN_8002d770();
+    /* 8002d770 */ void FUN_8002d770(u16, f32);
     /* 8002d7a0 */ void FUN_8002d7a0();
     /* 8002d7d0 */ void FUN_8002d7d0();
     /* 8002d7f0 */ void FUN_8002d7f0();

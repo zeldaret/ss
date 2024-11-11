@@ -366,9 +366,9 @@ public:
     u32 MaskRoofHit() {
         return mFlags & ROOF_HIT;
     }
-    bool ChkRoofHit() {
-        return MaskRoofHit();
-    }
+    // bool ChkRoofHit() {
+    //     return MaskRoofHit();
+    // }
     void OffClrSpeedY() {
         mFlags |= CLR_SPEED_Y;
     }

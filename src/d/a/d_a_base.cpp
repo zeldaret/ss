@@ -262,7 +262,7 @@ void dAcBase_c::setParams2Upper_ignoreLower(u32 val) {
 }
 
 // 8002cfc0
-u8 dAcBase_c::getParams2UpperByte() {
+int dAcBase_c::getParams2UpperByte() {
     return params2 >> 0x18;
 }
 
@@ -448,7 +448,7 @@ void dAcBase_c::FUN_8002d6d0() {}
 // currently named ActorBase__playSoundEffect1
 void dAcBase_c::playSoundEffect1(u16) {}
 void dAcBase_c::FUN_8002d740() {}
-void dAcBase_c::FUN_8002d770() {}
+void dAcBase_c::FUN_8002d770(u16, f32) {}
 void dAcBase_c::FUN_8002d7a0() {}
 void dAcBase_c::FUN_8002d7d0() {}
 void dAcBase_c::FUN_8002d7f0() {}

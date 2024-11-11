@@ -31,19 +31,30 @@ public:
     virtual void registerInEvent() override;
 
     bool checkCarryType() const;
+    void fn_272_1B90();
 
     void calcRoll();
     void adjustRoll();
     void fn_272_2A10();
     void fn_272_2670();
     mVec3_c getCenter() const;
+    void fn_272_2D40(u32 *, const u8 *);
     void fn_272_2E60(const mVec3_c &);
     void fn_272_3020();
-    bool fn_272_3730();
-    bool fn_272_3860();
+    void addPickupTarget();
+    void adjustAngle();
+    void adjustSpeed();
+    bool checkSlope();
+    bool fn_272_3660();
+    bool checkInvalidGround();
+    bool checkOnLava();
+    bool checkInWater();
+    bool fn_272_38A0();
     bool fn_272_38C0();
+    bool checkRollHitMaybe();
+    void fn_272_3A80();
 
-    bool checkOnLog_0xE4E();
+    bool checkOnLog_0xE4E() const;
 
     u8 getSubtype() const {
         return params & 0xF; // 0 -> Tubo00, Else -> Tubo01
@@ -85,9 +96,10 @@ private:
     /* 0x97C */ mQuat_c mQuat_0x97C;
     /* 0x98C */ mQuat_c mQuat_0x98C;
     /* 0x99C */ mQuat_c mQuat_0x99C;
-    /* 0x9AC */ u8 _9AC[0x9B8 - 0x9AC];
+    /* 0x9AC */ mVec3_c mField_0x9AC;
     /* 0x9B8 */ mVec3_c mField_0x9B8;
-    /* 0x9C4 */ u8 _9C4[0x9C8 - 0x9C4];
+    /* 0x9C4 */ mAng mField_0x9C4;
+    /* 0x9C6 */ mAng mField_0x9C6;
     /* 0x9C8 */ mAng mField_0x9C8;
     /* 0x9CA */ mAng mField_0x9CA;
     /* 0x9CC */ mAng mField_0x9CC;
@@ -96,8 +108,9 @@ private:
     /* 0x9D8 */ f32 mField_0x9D8;
     /* 0x9DC */ f32 mField_0x9DC;
     /* 0x9E0 */ f32 mField_0x9E0;
-    /* 0x9E4 */ u8 _9DC[0x9EA - 0x9E4];
-    /* 0x9EA */ u8 mField_0x9EA;
+    /* 0x9E4 */ f32 mField_0x9E4;
+    /* 0x9E8 */ u16 mTimer_0x9E8;
+    /* 0x9EA */ bool mbMovingForward;
     /* 0x9EB */ bool mbField_0x9EB;
     /* 0x9EC */ bool mbField_0x9EC;
     /* 0x9ED */ bool mbField_0x9ED;
@@ -106,12 +119,14 @@ private:
     /* 0x9F0 */ bool mbField_0x9F0;
     /* 0x9F1 */ bool mbField_0x9F1;
     /* 0x9F2 */ bool mbField_0x9F2;
-    /* 0x9F3 */ u8 _9F3[0x9F4 - 0x9F3];
+    /* 0x9F2 */ bool mbField_0x9F3;
     /* 0x9F4 */ u8 mTimer_0x9F4;
-    /* 0x9F5 */ u8 _9F5[0x9F8 - 0x9F5];
+    /* 0x9F5 */ u8 mTimer_0x9F5;
+    /* 0x9F6 */ u8 mField_0x9F6;
+    /* 0x9F7 */ u8 mTimer_0x9F7;
     /* 0x9F8 */ u8 mSceneflag;
     /* 0x9F9 */ u8 mSubtype;
-    /* 0x9FA */ u8 _0x9FA[0xA00 - 0x9FA];
+    /* 0x9FC */ int mField_0x9FC;
 
     static u8 sUnk0;
     static u32 sUnk1;

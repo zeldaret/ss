@@ -32,7 +32,7 @@ public:
             return false;
         }
         const dAcObjBase_c *pObj = mObj.get();
-        return !(pObj && pObj->ChkProperty_0x40000000());
+        return !(pObj && pObj->checkActorProperty(0x40000000));
     }
 
     // ??? Template seems bad

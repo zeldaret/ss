@@ -51,6 +51,10 @@ public:
     void getItemFromBWheelItem();
     bool isStateWait();
 
+    static int getTotalBombCount();
+    static int getTotalArrowCount();
+    static int getTotalSeedCount();
+
 private:
     /* 0x334 */ UNKTYPE *mpMdl; // Model has its own handling system
     /* 0x338 */ dShadowCircle_c mShdw;
