@@ -1,6 +1,7 @@
 #include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "m/m_mtx.h"
+#include "m/m_vec.h"
 
 class dAcPy_c : public dAcObjBase_c {
     // See Below for some info
@@ -74,7 +75,7 @@ public:
     /* vt 0x0D0 */ virtual void tryGrabItemWithWhip();
     /* vt 0x0D4 */ virtual void someFloatWithWhip();
     /* vt 0x0D8 */ virtual void getItemFromClawshotsMaybe();
-    /* vt 0x0DC */ virtual void vt_0x0DC();
+    /* vt 0x0DC */ virtual void vt_0x0DC(dAcBase_c *, mVec3_c &);
     /* vt 0x0E0 */ virtual void isUsingBomb();
     /* vt 0x0E4 */ virtual void vt_0x0E4();
     /* vt 0x0E8 */ virtual void vt_0x0E8();
@@ -236,6 +237,13 @@ public:
 
     inline bool checkFlags0x350(u32 mask) const {
         return (someFlags_0x350 & mask) != 0;
+    }
+
+    inline bool checkActionFlags(u32 mask) const {
+        return (mActionFlags & mask) != 0;
+    }
+    inline bool checkActionFlagsCont(u32 mask) const {
+        return (mActionFlagsCont & mask) != 0;
     }
 
     bool CheckPlayerFly() const {
