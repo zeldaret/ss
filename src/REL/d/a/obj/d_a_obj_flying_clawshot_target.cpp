@@ -37,14 +37,13 @@ bool dAcOFlyingClawshotTarget_c::createHeap() {
     return mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr);
 }
 
+// clang-format off
 const cCcD_SrcGObj dAcOFlyingClawshotTarget_c::sColSrc = {
-  /* mObjInf */
   /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
- /* mObjTg */
-    {0xFEB77DFF, 0x1080111, {6, 0x407}, 0, 0},
- /* mObjCo */
-    {0x0}
+  /* mObjTg */ {0xFEB77DFF, 0x1080111, {6, 0x407}, 0, 0},
+  /* mObjCo */ {0x0}
 };
+// clang-format on
 
 int dAcOFlyingClawshotTarget_c::actorCreate() {
     initAllocatorWork1Heap(-1, "dAcOFlyingClawshotTarget_c::m_allocator", 0x20);
@@ -97,6 +96,7 @@ int dAcOFlyingClawshotTarget_c::actorExecute() {
         (player->checkActionFlagsCont(0x10000000) || player->checkActionFlagsCont(0x20000000))) {
         static mVec3_c vec = -mVec3_c::Ey;
         mVec3_c v2;
+
         v2.copyFrom(mToLink.rotateVector(mVec3_c::Ez));
         f32 f = 0.16f;
 
