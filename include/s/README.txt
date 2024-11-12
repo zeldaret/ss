@@ -22,3 +22,7 @@ the other abstract interface classes and provides this dtor.
 We're observing a lot of word-to-bool casts in code after these
 operators are invoked, and while there are ways to force the conversion,
 this seems the most reasonable.
+
+## s_FStateVirtualID
+
+Implemented by SS based on NSMBW symbols. Probably missing some parts, sync with NSMBW if they get around to it.

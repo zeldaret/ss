@@ -11,7 +11,7 @@
 // See include/s/README.txt for changes made
 
 sStateID_c::NumberMemo_c sStateID_c::sm_numberMemo;
-sStateID_c sStateID::null(nullptr);
+const sStateID_c sStateID::null(nullptr);
 
 sStateID_c::sStateID_c(const char *name) {
     mpName = name;

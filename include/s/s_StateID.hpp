@@ -44,7 +44,7 @@ protected:
 namespace sStateID {
 
 /// @ingroup state
-extern sStateID_c null; ///< A null state instance.
+extern const sStateID_c null; ///< A null state instance.
 } // namespace sStateID
 
 #endif
