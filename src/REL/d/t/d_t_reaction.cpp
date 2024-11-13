@@ -8,7 +8,6 @@
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/sceneflag_manager.h"
 
-
 SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0x0151, 0, 0);
 
 STATE_DEFINE(dTgReaction_c, Wait);
@@ -21,7 +20,7 @@ const f32 dTgReaction_c::sHeight = 100.0f;
 // clang-format off
 dCcD_SrcCyl dTgReaction_c::sCcSrc = {
     {{0, 0, 0, 0, 0, 0, 0, 0, 0}, 
-    {0x10000, 0x213, 0, 0x8, 0x8,}, 
+    {AT_TYPE_BELLOWS, 0x213, 0, 0x8, 0x8,}, 
     {0xE8}},
     {dTgReaction_c::sRadius, dTgReaction_c::sHeight}
 };
@@ -81,19 +80,19 @@ int dTgReaction_c::create() {
 
     switch (getReactType()) {
         case REACT_SLINGSHOT:
-            mCollision.SetTgFlag(0x80);
+            mCollision.SetTgType(AT_TYPE_SLINGSHOT);
             mCollision.SetTgFlag_0xA(0);
             mCollision.SetR(sCcSrc.mCylInf.mRadius * mScale.x);
             mCollision.SetH(sCcSrc.mCylInf.mHeight * mScale.y);
             break;
         case REACT_GUST_BELLOWS:
-            mCollision.SetTgFlag(0x10000);
+            mCollision.SetTgType(AT_TYPE_BELLOWS);
             mCollision.SetTgFlag_0xA(8);
             mCollision.SetR(sCcSrc.mCylInf.mRadius * mScale.x);
             mCollision.SetH(sCcSrc.mCylInf.mHeight * mScale.y);
             break;
         case REACT_UNDERWATER:
-            mCollision.SetTgFlag(0x100000);
+            mCollision.SetTgType(AT_TYPE_BUBBLE);
             mCollision.SetTgFlag_0xA(0);
             mCollision.SetR(sCcSrc.mCylInf.mRadius * mScale.x);
             mCollision.SetH(sCcSrc.mCylInf.mHeight * mScale.y);
@@ -213,7 +212,7 @@ void dTgReaction_c::checkForBonkItem() {
 }
 
 void dTgReaction_c::checkForBubble() {
-    if (mCollision.ChkTgHit() && mCollision.ChkTgAtHitType(AT_TYPE_0x100000)) {
+    if (mCollision.ChkTgHit() && mCollision.ChkTgAtHitType(AT_TYPE_BUBBLE)) {
         if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x40)) {
             mVec3_c spawnPos = position;
             dAcObjBase_c::create(fProfile::OBJ_BUBBLE, roomid, 0x4, &spawnPos, nullptr, nullptr, 0xFFFFFFFF);

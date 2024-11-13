@@ -10,19 +10,10 @@
 #include "d/col/bg/d_bg_w_base.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_pla.h"
-#include "egg/math/eggMath.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "rvl/MTX/mtxvec.h"
 #include "toBeSorted/attention.h"
-
-#include <cmath.h>
-
-// Very Hack ??
-static inline bool IsZero(f32 in) {
-    return in <= EGG::Math<f32>::epsilon();
-}
 
 extern "C" void fn_800298B0(u16, mVec3_c *, mVec3_c *, u32, u32, u32, u32, u32);
 extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_394_;
@@ -179,10 +170,10 @@ bool dAcOInsect_c::checkDeath(cCcD_Obj &col) {
     }
 
     if (col.ChkTgHit() &&
-        (col.ChkTgAtHitType(AT_TYPE_0x2) || col.ChkTgAtHitType(AT_TYPE_0x8) || col.ChkTgAtHitType(AT_TYPE_0x20) ||
-         col.ChkTgAtHitType(AT_TYPE_0x40) || col.ChkTgAtHitType(AT_TYPE_0x80) || col.ChkTgAtHitType(AT_TYPE_0x2000) ||
-         col.ChkTgAtHitType(AT_TYPE_0x4000) || col.ChkTgAtHitType(AT_TYPE_0x800000) ||
-         col.ChkTgAtHitType(AT_TYPE_0x800))) {
+        (col.ChkTgAtHitType(AT_TYPE_SWORD) || col.ChkTgAtHitType(AT_TYPE_PHYSICS) || col.ChkTgAtHitType(AT_TYPE_BOMB) ||
+         col.ChkTgAtHitType(AT_TYPE_0x40) || col.ChkTgAtHitType(AT_TYPE_SLINGSHOT) ||
+         col.ChkTgAtHitType(AT_TYPE_ARROW) || col.ChkTgAtHitType(AT_TYPE_CLAWSHOT) ||
+         col.ChkTgAtHitType(AT_TYPE_0x800000) || col.ChkTgAtHitType(AT_TYPE_WHIP))) {
         mLinkNearby = 0;
         return true;
     }
@@ -212,7 +203,7 @@ bool dAcOInsect_c::fn_8018FAA0() {
 
 bool dAcOInsect_c::fn_8018FAD0() {
     f32 speed = fabsf(forwardSpeed);
-    if (IsZero(speed)) {
+    if (cM::isLessThanZero(speed)) {
         fn_8018FDF0(mPlane_0x3A8.GetN());
         return true;
     } else {

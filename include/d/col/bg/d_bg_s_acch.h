@@ -238,6 +238,9 @@ public:
     mVec3_c *GetOldPos() {
         return mpOldPos;
     }
+    f32 GetWtrGroundH() const {
+        return mWtr.mGroundH;
+    }
     f32 GetGroundH() const {
         return mGroundHeight;
     }

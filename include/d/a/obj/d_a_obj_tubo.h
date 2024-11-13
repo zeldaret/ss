@@ -31,14 +31,14 @@ public:
     virtual void registerInEvent() override;
 
     bool checkCarryType() const;
-    void fn_272_1B90();
+    void destroy();
 
     void calcRoll();
     void adjustRoll();
-    void fn_272_2A10();
+    void attemptDestroy();
     void fn_272_2670();
     mVec3_c getCenter() const;
-    void fn_272_2D40(u32 *, const u8 *);
+    void attemptDestroyOnWall(u32 *, const u8 *);
     void fn_272_2E60(const mVec3_c &);
     void fn_272_3020();
     void addPickupTarget();
@@ -48,11 +48,11 @@ public:
     bool fn_272_3660();
     bool checkInvalidGround();
     bool checkOnLava();
-    bool checkInWater();
+    bool checkSubmerged();
     bool fn_272_38A0();
     bool fn_272_38C0();
     bool checkRollHitMaybe();
-    void fn_272_3A80();
+    void playRollSound();
 
     bool checkOnLog_0xE4E() const;
 
@@ -118,7 +118,7 @@ private:
     /* 0x9EF */ bool mbField_0x9EF;
     /* 0x9F0 */ bool mbField_0x9F0;
     /* 0x9F1 */ bool mbField_0x9F1;
-    /* 0x9F2 */ bool mbField_0x9F2;
+    /* 0x9F2 */ bool mbSubmerged;
     /* 0x9F2 */ bool mbField_0x9F3;
     /* 0x9F4 */ u8 mTimer_0x9F4;
     /* 0x9F5 */ u8 mTimer_0x9F5;

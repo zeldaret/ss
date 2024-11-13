@@ -32,7 +32,7 @@ STATE_DEFINE(dAcOTumbleWeed_c, Slope);
 dCcD_SrcSph dAcOTumbleWeed_c::sSphSrc = {
   /* mObjInf */
     {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */ {0xFFB77FFF, 0x111, {8, 0x40F}, 0, 0},
+     /* mObjTg */ {~(AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000), 0x111, {8, 0x40F}, 0, 0},
      /* mObjCo */ {0xE9}},
  /* mSphInf */
     {60.f},
@@ -124,9 +124,9 @@ int dAcOTumbleWeed_c::actorExecute() {
         return SUCCEEDED;
     }
 
-    if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_0x10000 | AT_TYPE_0x200)) {
+    if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_BELLOWS | AT_TYPE_WIND)) {
         mField_0x974 = 0.f;
-        adjustTumble(mSph.GetTg_0x2C() * 0.06f);
+        adjustTumble(mSph.GetTgAtHitDir() * 0.06f);
     }
     adjustTimeScale();
 
@@ -274,7 +274,7 @@ void dAcOTumbleWeed_c::doBreak() {
 
 void dAcOTumbleWeed_c::calcMatrix() {
     if (mField_0x98B) {
-        f32 vel_mag = PSVECMag(velocity);
+        f32 vel_mag = VEC3Len(velocity);
         f32 f1 = mAng(vel_mag * (mField_0x978 + 200.f)).radian();
         f32 f2 = mAng(vel_mag * 182.0f * 0.2f).radian();
         f32 f0 = mAng(angle.y - rotation.y).radian();
