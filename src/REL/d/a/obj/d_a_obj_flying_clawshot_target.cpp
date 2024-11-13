@@ -40,7 +40,7 @@ bool dAcOFlyingClawshotTarget_c::createHeap() {
 // clang-format off
 const cCcD_SrcGObj dAcOFlyingClawshotTarget_c::sColSrc = {
   /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-  /* mObjTg */ {0xFEB77DFF, 0x1080111, {6, 0x407}, 0, 0},
+  /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x1080111, {6, 0x407}, 0, 0},
   /* mObjCo */ {0x0}
 };
 // clang-format on
