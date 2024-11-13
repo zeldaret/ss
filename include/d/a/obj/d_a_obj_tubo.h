@@ -35,10 +35,10 @@ public:
 
     void calcRoll();
     void adjustRoll();
-    void fn_272_2A10();
+    void attemptDestroy();
     void fn_272_2670();
     mVec3_c getCenter() const;
-    void fn_272_2D40(u32 *, const u8 *);
+    void attemptDestroyOnWall(u32 *, const u8 *);
     void fn_272_2E60(const mVec3_c &);
     void fn_272_3020();
     void addPickupTarget();

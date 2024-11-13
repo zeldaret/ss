@@ -505,8 +505,8 @@ dAcObjBase_c *cCcD_Obj::GetTgActor() {
     return mTg.GetActor();
 }
 
-const mVec3_c &cCcD_Obj::GetTg_0x2C() const {
-    return mTg.mField_0x2C;
+const mVec3_c &cCcD_Obj::GetTgAtHitDir() const {
+    return mTg.mAtHitDir;
 }
 
 dAcObjBase_c *cCcD_Obj::GetCoActor() {

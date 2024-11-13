@@ -171,7 +171,7 @@ int dAcOtubo_c::actorExecute() {
     }
 
     if (mStateMgr.isState(StateID_Wait) || mStateMgr.isState(StateID_Slope)) {
-        fn_272_2A10();
+        attemptDestroy();
     }
     mSph.SetC(getCenter());
     dCcS::GetInstance()->Set(&mSph);
@@ -563,12 +563,12 @@ void dAcOtubo_c::fn_272_2670() {
                     mField_0x9D0 = cM::rndFX(0.25f) + 1.f;
                 }
                 mbField_0x9EB = true;
-                fn_272_2E60(mSph.GetTg_0x2C());
+                fn_272_2E60(mSph.GetTgAtHitDir());
                 return;
             }
         }
     } else {
-        if (mbField_0x9F1 && mField_0x8F0.fn_800051780(mSph)) {
+        if (mbField_0x9F1 && mField_0x8F0.fn_80051780(mSph)) {
             velocity += mField_0x9B8;
             mbField_0x9F1 = false;
         }
@@ -602,7 +602,7 @@ void dAcOtubo_c::fn_272_2670() {
 
     // the ordering is weird here
     f32 groundH = mObjAcch.GetGroundH();
-    f32 waterH = mObjAcch.mWtr.mGroundH;
+    f32 waterH = mObjAcch.GetWtrGroundH();
     bool noSound = mbSubmerged;
     mEff_0x91C.fn_8002B120(waterH, groundH);
 
@@ -626,14 +626,14 @@ void dAcOtubo_c::fn_272_2670() {
     }
 }
 
-void dAcOtubo_c::fn_272_2A10() {
+void dAcOtubo_c::attemptDestroy() {
     if (mbField_0x9EF && mSph.ChkCoHit() && mSph.GetCoActor()->profile_name == fProfile::B_MG) {
         destroy();
         return;
     }
 
     if (mObjAcch.ChkWallHit(nullptr) && sLib::absDiff(mAcchCir.GetWallAngleY(), angle.y) > mAng::deg2short(70.f)) {
-        fn_272_2D40(&sUnk1, &sUnk0);
+        attemptDestroyOnWall(&sUnk1, &sUnk0);
         angle.y = mAcchCir.GetWallAngleY();
         forwardSpeed *= 0.5f;
         return;
@@ -677,7 +677,7 @@ void dAcOtubo_c::fn_272_2A10() {
     }
 }
 
-void dAcOtubo_c::fn_272_2D40(u32 *, const u8 *unk) {
+void dAcOtubo_c::attemptDestroyOnWall(u32 *, const u8 *unk) {
     if (*unk && sLib::absDiff(mAcchCir.GetWallAngleY(), angle.y) > mAng::deg2short(70.f) && 15.f < forwardSpeed) {
         destroy();
     }
@@ -693,7 +693,7 @@ mVec3_c dAcOtubo_c::getCenter() const {
 }
 
 void dAcOtubo_c::fn_272_2E60(const mVec3_c &vel) {
-    if (mField_0x8F0.fn_800051780(mSph)) {
+    if (mField_0x8F0.fn_80051780(mSph)) {
         if (mSph.ChkCoHit()) {
             position += mStts.GetCcMove();
             mField_0x8F0.fn_800051630();
@@ -752,7 +752,7 @@ void dAcOtubo_c::adjustAngle() {
     forwardSpeed = nw4r::math::FSqrt(velocity.x * velocity.x + velocity.z * velocity.z);
     forwardSpeed = cM::minMaxLimit(forwardSpeed, -30.f, 30.f);
 
-    mAng a = mAng::fromVec(pla.GetN());
+    mAng a = mAng::fromVec(pla.GetN()); // Probably mean to be angle from Ey
     if (sLib::absDiff(a, angle.y) < mAng::deg2short(90.f)) {
         sLib::addCalcAngle(angle.y.ref(), pla.GetAngleY(), 5, 0x71C, 0x100);
     } else {

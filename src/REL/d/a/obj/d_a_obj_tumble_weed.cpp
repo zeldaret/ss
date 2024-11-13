@@ -126,7 +126,7 @@ int dAcOTumbleWeed_c::actorExecute() {
 
     if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_BELLOWS | AT_TYPE_WIND)) {
         mField_0x974 = 0.f;
-        adjustTumble(mSph.GetTg_0x2C() * 0.06f);
+        adjustTumble(mSph.GetTgAtHitDir() * 0.06f);
     }
     adjustTimeScale();
 

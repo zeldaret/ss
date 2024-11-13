@@ -230,7 +230,7 @@ public:
         refOwner = nullptr;
     }
 
-    bool fn_800051780(const cCcD_Obj &);
+    bool fn_80051780(const cCcD_Obj &);
     void fn_800051630();
 
     void modifyMtx();

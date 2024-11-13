@@ -637,7 +637,7 @@ public:
 
 public:
     /* 0x1C */ cCcD_SrcGObjTg mSrc;
-    /* 0x2C */ mVec3_c mField_0x2C;
+    /* 0x2C */ mVec3_c mAtHitDir;
     /* 0x38 */ mVec3_c mHitPos;
     /* 0x44 */ s16 *mShieldFrontRangeYAngle;
     /* 0x48 */ s16 mShieldRange;
@@ -759,7 +759,7 @@ public:
     bool ChkTgBit8() const;
     u8 GetTg_0x4A() const;
     dAcObjBase_c *GetTgActor();
-    const mVec3_c &GetTg_0x2C() const;
+    const mVec3_c &GetTgAtHitDir() const;
 
     dAcObjBase_c *GetCoActor();
     bool ChkCoBit4() const;
