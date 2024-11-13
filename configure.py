@@ -1389,7 +1389,7 @@ config.libs = [
         NonMatching, "d_a_obj_flower_ancient", "REL/d/a/obj/d_a_obj_flower_ancient.cpp"
     ),
     Rel(
-        NonMatching,
+        Matching,
         "d_a_obj_flying_clawshot_target",
         "REL/d/a/obj/d_a_obj_flying_clawshot_target.cpp",
     ),

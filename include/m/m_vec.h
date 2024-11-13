@@ -220,11 +220,16 @@ public:
     f32 distance(const mVec3_c &to) const {
         return EGG::Math<f32>::sqrt(PSVECSquareDistance(*this, to));
     }
+    f32 squareDistance(const mVec3_c &to) const {
+        return VEC3DistSq(*this, to);
+    }
 
     f32 squareMagXZ() const {
         return x * x + z * z;
     }
+    void rotX(const mAng &angle);
     void rotY(const mAng &angle);
+    void rotZ(const mAng &angle);
 
     void CopyTo(nw4r::math::VEC3 *p) {
         p->x = x;

@@ -14,7 +14,9 @@ public:
         return *this;
     }
 
+    bool Set(const mVec3_c &, const mVec3_c &);
     void fn_802F2780(const mQuat_c &other);
+    bool fn_802F2450(const mVec3_c &, const mVec3_c &, f32);
 };
 
 #endif
