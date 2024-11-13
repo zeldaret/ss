@@ -32,7 +32,7 @@ STATE_DEFINE(dAcOTumbleWeed_c, Slope);
 dCcD_SrcSph dAcOTumbleWeed_c::sSphSrc = {
   /* mObjInf */
     {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */ {0xFFB77FFF, 0x111, {8, 0x40F}, 0, 0},
+     /* mObjTg */ {~(AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000), 0x111, {8, 0x40F}, 0, 0},
      /* mObjCo */ {0xE9}},
  /* mSphInf */
     {60.f},
@@ -124,7 +124,7 @@ int dAcOTumbleWeed_c::actorExecute() {
         return SUCCEEDED;
     }
 
-    if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_0x10000 | AT_TYPE_0x200)) {
+    if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_BELLOWS | AT_TYPE_WIND)) {
         mField_0x974 = 0.f;
         adjustTumble(mSph.GetTg_0x2C() * 0.06f);
     }

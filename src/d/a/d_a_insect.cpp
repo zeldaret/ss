@@ -170,10 +170,10 @@ bool dAcOInsect_c::checkDeath(cCcD_Obj &col) {
     }
 
     if (col.ChkTgHit() &&
-        (col.ChkTgAtHitType(AT_TYPE_0x2) || col.ChkTgAtHitType(AT_TYPE_0x8) || col.ChkTgAtHitType(AT_TYPE_0x20) ||
-         col.ChkTgAtHitType(AT_TYPE_0x40) || col.ChkTgAtHitType(AT_TYPE_0x80) || col.ChkTgAtHitType(AT_TYPE_0x2000) ||
-         col.ChkTgAtHitType(AT_TYPE_0x4000) || col.ChkTgAtHitType(AT_TYPE_0x800000) ||
-         col.ChkTgAtHitType(AT_TYPE_0x800))) {
+        (col.ChkTgAtHitType(AT_TYPE_SWORD) || col.ChkTgAtHitType(AT_TYPE_PHYSICS) || col.ChkTgAtHitType(AT_TYPE_BOMB) ||
+         col.ChkTgAtHitType(AT_TYPE_0x40) || col.ChkTgAtHitType(AT_TYPE_SLINGSHOT) ||
+         col.ChkTgAtHitType(AT_TYPE_ARROW) || col.ChkTgAtHitType(AT_TYPE_CLAWSHOT) ||
+         col.ChkTgAtHitType(AT_TYPE_0x800000) || col.ChkTgAtHitType(AT_TYPE_WHIP))) {
         mLinkNearby = 0;
         return true;
     }

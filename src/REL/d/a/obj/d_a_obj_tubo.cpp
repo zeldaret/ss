@@ -52,8 +52,8 @@ STATE_DEFINE(dAcOtubo_c, Rebirth);
 
 dCcD_SrcSph dAcOtubo_c::sSphSrc = {
   /* mObjInf */
-    {/* mObjAt */ {AT_TYPE_0x8, 0x12, {0, 0, 0}, 2, 0, 0, 0, 0, 0},
-     /* mObjTg */ {0xFEF77FFF, 0x801111, {0xA, 0x40F}, 8, 0},
+    {/* mObjAt */ {AT_TYPE_PHYSICS, 0x12, {0, 0, 0}, 2, 0, 0, 0, 0, 0},
+     /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_0x80000 | AT_TYPE_0x8000), 0x801111, {0xA, 0x40F}, 8, 0},
      /* mObjCo */ {0x1E9}},
  /* mSphInf */
     {30.f},
@@ -252,7 +252,7 @@ void dAcOtubo_c::executeState_Wait() {
             mSph.ClrAtSet();
         }
 
-        fn_272_3A80();
+        playRollSound();
         if (!mbField_0x9EF) {
             if (dBgS::GetInstance()->ChkMoveBG(mObjAcch.GetGnd(), true)) {
                 clearActorProperty(0x1);
@@ -292,7 +292,7 @@ void dAcOtubo_c::executeState_Grab() {
 
     if (mActorCarryInfo.checkCarryType(5) && sLib::calcTimer(&mTimer_0x9F5) == 0 &&
         (mObjAcch.ChkGndHit() || mObjAcch.ChkWallHit(nullptr) || mObjAcch.ChkRoofHit())) {
-        fn_272_1B90();
+        destroy();
     } else if (dAcPy_c::LINK->getCurrentAction() == 66 /* Put Down Medium */) { // TODO (Link Action ID)
         mStateMgr.changeState(StateID_Put);
     } else {
@@ -380,7 +380,7 @@ void dAcOtubo_c::executeState_Slope() {
         if (mSph.ChkAtSet()) {
             mSph.ClrAtSet();
         }
-        fn_272_3A80();
+        playRollSound();
         if (!checkSlope()) {
             mStateMgr.changeState(StateID_Wait);
             return;
@@ -452,7 +452,7 @@ extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_109_, PARTICLE_RESOURCE_ID_MAPPING_2
 extern "C" void *ENVIRONMENT;
 extern "C" void fn_80022BE0(void *, const mVec3_c &);
 
-void dAcOtubo_c::fn_272_1B90() {
+void dAcOtubo_c::destroy() {
     dAcNpcCeLady_c *lady = mCeLady.get();
     bool boolParam = true;
     if (lady) {
@@ -556,7 +556,7 @@ void dAcOtubo_c::fn_272_2670() {
     }
 
     if (mSph.ChkTgHit()) {
-        if (mSph.ChkTgAtHitType(AT_TYPE_0x10000 | AT_TYPE_0x200)) {
+        if (mSph.ChkTgAtHitType(AT_TYPE_BELLOWS | AT_TYPE_WIND)) {
             mField_0x9DC = 0.f;
             if (mTimer_0x9F4 == 0) {
                 if (!mbField_0x9EB) {
@@ -603,23 +603,23 @@ void dAcOtubo_c::fn_272_2670() {
     // the ordering is weird here
     f32 groundH = mObjAcch.GetGroundH();
     f32 waterH = mObjAcch.mWtr.mGroundH;
-    bool noSound = mbField_0x9F2;
+    bool noSound = mbSubmerged;
     mEff_0x91C.fn_8002B120(waterH, groundH);
 
-    if (checkInWater()) {
+    if (checkSubmerged()) {
         forwardAccel = -0.8f;
         forwardMaxSpeed = -7.f;
         mField_0x9DC = 0.f;
         cLib::addCalcPosXZ(&velocity, mVec3_c::Zero, 0.05f, 1.0f, 0.2f);
         forwardSpeed = EGG::Math<f32>::sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
         if (!noSound) {
-            playSound(0x9A0); // TODO (Sound ID)
+            playSound(0x9A0); // TODO (Sound ID) - Fall Water S
         }
-        mbField_0x9F2 = true;
+        mbSubmerged = true;
     } else {
         forwardAccel = -4.f;
         forwardMaxSpeed = -40.f;
-        mbField_0x9F2 = false;
+        mbSubmerged = false;
         if (checkCarryType()) {
             mStateMgr.changeState(StateID_Grab);
         }
@@ -628,7 +628,7 @@ void dAcOtubo_c::fn_272_2670() {
 
 void dAcOtubo_c::fn_272_2A10() {
     if (mbField_0x9EF && mSph.ChkCoHit() && mSph.GetCoActor()->profile_name == fProfile::B_MG) {
-        fn_272_1B90();
+        destroy();
         return;
     }
 
@@ -639,15 +639,15 @@ void dAcOtubo_c::fn_272_2A10() {
         return;
     }
 
-    if (mSph.ChkTgHit() && ((mSph.ChkTgAtHitType(AT_TYPE_0x400000) && mSph.ChkTgBit14()) ||
-                            !mSph.ChkTgAtHitType(AT_TYPE_0x400000 | AT_TYPE_0x10000 | AT_TYPE_0x800 | AT_TYPE_0x200))) {
-        fn_272_1B90();
+    if (mSph.ChkTgHit() && ((mSph.ChkTgAtHitType(AT_TYPE_BEETLE) && mSph.ChkTgBit14()) ||
+                            !mSph.ChkTgAtHitType(AT_TYPE_BEETLE | AT_TYPE_BELLOWS | AT_TYPE_WHIP | AT_TYPE_WIND))) {
+        destroy();
         return;
     }
 
     if (mObjAcch.ChkGndHit() && yoffset >= 0.f && !checkCarryType()) {
         if ((mField_0x9DC < -100.f && !mbField_0x9EE) || fn_272_3660()) {
-            fn_272_1B90();
+            destroy();
             return;
         }
         mField_0x9DC = 0.f;
@@ -655,7 +655,7 @@ void dAcOtubo_c::fn_272_2A10() {
     if (!mObjAcch.ChkGndHit() && mSph.ChkCoHit()) {
         if (mActorCarryInfo.isCarried != 1 && forwardSpeed > 0.f) {
             if (mSph.GetCoActor()->unkByteTargetFiRelated == 4) {
-                fn_272_1B90();
+                destroy();
                 return;
             }
         }
@@ -664,22 +664,22 @@ void dAcOtubo_c::fn_272_2A10() {
         dAcObjBase_c *obj = mSph.GetCoActor();
         if (obj->isPlayer() &&
             static_cast<dAcPy_c *>(obj)->getCurrentAction() == 0xC /* ROLL */) { // TODO (Player Action ID)
-            fn_272_1B90();
+            destroy();
         }
     }
 
     if (mObjAcch.ChkRoofHit()) {
-        fn_272_1B90();
+        destroy();
     } else if (!mbField_0x9EF && checkYOffsetField_0x100() && getParams_0x3000() != 1) {
         FUN_8002dcd0();
     } else if (fn_272_38A0()) {
-        fn_272_1B90();
+        destroy();
     }
 }
 
 void dAcOtubo_c::fn_272_2D40(u32 *, const u8 *unk) {
     if (*unk && sLib::absDiff(mAcchCir.GetWallAngleY(), angle.y) > mAng::deg2short(70.f) && 15.f < forwardSpeed) {
-        fn_272_1B90();
+        destroy();
     }
 }
 
@@ -702,7 +702,7 @@ void dAcOtubo_c::fn_272_2E60(const mVec3_c &vel) {
         velocity = mVec3_c::Zero;
         mbField_0x9F1 = 1;
         mField_0x9B8 = vel * 2.f;
-    } else if (mSph.ChkTgAtHitType(AT_TYPE_0x10000)) {
+    } else if (mSph.ChkTgAtHitType(AT_TYPE_BELLOWS)) {
         velocity.x += vel.x * 0.06f;
         velocity.y += vel.y * 0.2f;
         velocity.z += vel.z * 0.06f;
@@ -792,7 +792,7 @@ bool dAcOtubo_c::checkSlope() {
 bool dAcOtubo_c::fn_272_3660() {
     int poly_code = dBgS::GetInstance()->GetSpecialCode(mObjAcch.GetGnd());
 
-    return mField_0x9F6 == 2 && !mStateMgr.isState(StateID_Grab) && !checkInWater() && poly_code != POLY_ATTR_LAVA;
+    return mField_0x9F6 == 2 && !mStateMgr.isState(StateID_Grab) && !checkSubmerged() && poly_code != POLY_ATTR_LAVA;
 }
 
 bool dAcOtubo_c::checkInvalidGround() {
@@ -812,7 +812,7 @@ bool dAcOtubo_c::checkCarryType() const {
     return mActorCarryInfo.checkCarryType(1) || mActorCarryInfo.checkCarryType(7) || mActorCarryInfo.checkCarryType(5);
 }
 
-bool dAcOtubo_c::checkInWater() {
+bool dAcOtubo_c::checkSubmerged() {
     return mObjAcch.ChkWaterIn() && position.y + 28.f < mObjAcch.mWtr.GetGroundH();
 }
 
@@ -850,12 +850,12 @@ bool dAcOtubo_c::checkRollHitMaybe() {
     return true;
 }
 
-void dAcOtubo_c::fn_272_3A80() {
+void dAcOtubo_c::playRollSound() {
     if (!(forwardSpeed > 0.f)) {
         return;
     }
 
-    if (checkInWater()) {
+    if (checkSubmerged()) {
         return;
     }
 

@@ -438,7 +438,7 @@ bool cCcD_Obj::ChkTgAtHitType(u32 mask) const {
     return mTg.mAtHitSrc.mType & mask;
 }
 
-u32 cCcD_Obj::GetTg_0x58() const {
+u32 cCcD_Obj::GetTgAtHitType() const {
     return mTg.mAtHitSrc.mType;
 }
 

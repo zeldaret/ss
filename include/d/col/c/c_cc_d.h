@@ -327,36 +327,37 @@ struct cCcD_SrcGObjTg {
     /* 0x0E */ u16 mField_0x0E;
 };
 
-enum cCcD_AtType_e {
+enum dCcD_ObjAtType {
     /* 0x 0000 0001 */ AT_TYPE_0x1 = (1 << 0),
-    /* 0x 0000 0002 */ AT_TYPE_0x2 = (1 << 1),
+    /* 0x 0000 0002 */ AT_TYPE_SWORD = (1 << 1),
     /* 0x 0000 0004 */ AT_TYPE_0x4 = (1 << 2),
-    /* 0x 0000 0008 */ AT_TYPE_0x8 = (1 << 3),
+    /* 0x 0000 0008 */ AT_TYPE_PHYSICS = (1 << 3),
     /* 0x 0000 0010 */ AT_TYPE_0x10 = (1 << 4),
-    /* 0x 0000 0020 */ AT_TYPE_0x20 = (1 << 5),
+    /* 0x 0000 0020 */ AT_TYPE_BOMB = (1 << 5),
     /* 0x 0000 0040 */ AT_TYPE_0x40 = (1 << 6),
-    /* 0x 0000 0080 */ AT_TYPE_0x80 = (1 << 7),
+    /* 0x 0000 0080 */ AT_TYPE_SLINGSHOT = (1 << 7),
     /* 0x 0000 0100 */ AT_TYPE_0x100 = (1 << 8),
-    /* 0x 0000 0200 */ AT_TYPE_0x200 = (1 << 9),
-    /* 0x 0000 0400 */ AT_TYPE_0x400 = (1 << 10),
-    /* 0x 0000 0800 */ AT_TYPE_0x800 = (1 << 11),
+    /* 0x 0000 0200 */ AT_TYPE_WIND = (1 << 9),
+    /* 0x 0000 0400 */ AT_TYPE_DAMAGE = (1 << 10),
+    /* 0x 0000 0800 */ AT_TYPE_WHIP = (1 << 11),
     /* 0x 0000 1000 */ AT_TYPE_0x1000 = (1 << 12),
-    /* 0x 0000 2000 */ AT_TYPE_0x2000 = (1 << 13),
-    /* 0x 0000 4000 */ AT_TYPE_0x4000 = (1 << 14),
+    /* 0x 0000 2000 */ AT_TYPE_ARROW = (1 << 13),
+    /* 0x 0000 4000 */ AT_TYPE_CLAWSHOT = (1 << 14),
     /* 0x 0000 8000 */ AT_TYPE_0x8000 = (1 << 15),
-    /* 0x 0001 0000 */ AT_TYPE_0x10000 = (1 << 16),
+    /* 0x 0001 0000 */ AT_TYPE_BELLOWS = (1 << 16),
     /* 0x 0002 0000 */ AT_TYPE_0x20000 = (1 << 17),
     /* 0x 0004 0000 */ AT_TYPE_0x40000 = (1 << 18),
     /* 0x 0008 0000 */ AT_TYPE_0x80000 = (1 << 19),
-    /* 0x 0010 0000 */ AT_TYPE_0x100000 = (1 << 20),
+    /* 0x 0010 0000 */ AT_TYPE_BUBBLE = (1 << 20),
     /* 0x 0020 0000 */ AT_TYPE_0x200000 = (1 << 21),
-    /* 0x 0040 0000 */ AT_TYPE_0x400000 = (1 << 22),
+    /* 0x 0040 0000 */ AT_TYPE_BEETLE = (1 << 22),
     /* 0x 0080 0000 */ AT_TYPE_0x800000 = (1 << 23),
     /* 0x 0100 0000 */ AT_TYPE_BUGNET = (1 << 24),
     /* 0x 0200 0000 */ AT_TYPE_0x2000000 = (1 << 25),
-    /* 0x 0400 0000 */ AT_TYPE_0x4000000 = (1 << 26),
+    /* 0x 0400 0000 */ AT_TYPE_KOLOKTOS_SWORD = (1 << 26),
     /* 0x 0800 0000 */ AT_TYPE_0x8000000 = (1 << 27),
 };
+
 enum cCcD_AtModifiers_e {
     /* 0x 0000 0001 */ AT_MOD_FIRE = (1 << 0),
     /* 0x 0000 0002 */ AT_MOD_0x2 = (1 << 1),
@@ -741,7 +742,7 @@ public:
     dAcObjBase_c *GetAtActor();
 
     bool ChkTgAtHitType(u32) const;
-    u32 GetTg_0x58() const;
+    u32 GetTgAtHitType() const;
     bool ChkTgBit14() const;
     u8 GetTgDamage() const;
     u16 GetTgDamageFlags() const;
@@ -784,7 +785,7 @@ public:
         mCo.OnSPrm(f);
     }
 
-    void SetTgFlag(u32 flag) {
+    void SetTgType(u32 flag) {
         mTg.SetType(flag);
     }
     void SetAtFlag(u32 flag) {
