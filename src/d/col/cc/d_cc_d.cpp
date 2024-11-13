@@ -62,17 +62,17 @@ void dCcD_Sph::Set(const dCcD_SrcSph &src) {
 
 void dCcD_Sph::setCenter(const mVec3_c &c) {
     SetAtVec(mVec3_c::Zero);
-    SetC(&c);
+    SetC(c);
 }
 
 void dCcD_Sph::moveCenter(const mVec3_c &c) {
     SetAtVec(c - GetC());
-    SetC(&c);
+    SetC(c);
 }
 
 void dCcD_Sph::setCenterAndAtVec(const mVec3_c &a, const mVec3_c &b) {
     SetAtVec(b);
-    SetC(&a);
+    SetC(a);
 }
 
 cCcD_ShapeAttr *dCcD_Sph::GetShapeAttr() {

@@ -30,6 +30,12 @@ public:
         return FileManager::sInstance->getDungeonFlagsConst() + offset;
     }
 
+    u16 getCounterOrFlag(u16 idx, u32 count) const {
+        u16 offset = mStageIndex * 8;
+        const u16 *space = FileManager::sInstance->getDungeonFlagsConst() + offset;
+        return mpFlagIndex->getCounterOrFlag(idx, space, count);
+    }
+
     static DungeonflagManager *sInstance;
 };
 

@@ -32,7 +32,7 @@ public:
     }
 
     static void ClearInstance();
-    static bool CheckPos(const mVec3_c *);
+    static bool CheckPos(const mVec3_c &);
     static int GetMaterial();
     static int GetPolyAtt1();
     static bool GetTriPlane(cM3dGPla *);

@@ -37,6 +37,7 @@ struct TimeAreaStruct {
     /* 0x08 */ u8 field_0x08;
 
     bool isNearZero() {
+        // is cM3d_IsZero
         return fabsf(field_0x00) <= FLT_EPSILON;
     }
 

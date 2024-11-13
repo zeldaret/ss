@@ -96,7 +96,7 @@ void dAcObjFairy_c::executeState_CatchDemo() {
 }
 void dAcObjFairy_c::finalizeState_CatchDemo() {
     field_0xB89 = 0;
-    mObjectActorFlags &= ~0x00000200;
+    clearObjectProperty(0x200);
 }
 
 bool dAcObjFairy_c::shouldAvoidLink() const {

@@ -23,7 +23,7 @@ public:
 
     void remove(bool);
     void fn_80029929(u16 effect, mVec3_c *pos, void *, void *, void *, void *);
-    void setMtx(const mMtx_c&);
+    void setMtx(const mMtx_c &);
 
     bool checkField0x00() const {
         return field_0x00 != 0;
@@ -33,6 +33,32 @@ private:
     u8 field_0x20[0x28 - 0x20];
     /* 0x28 */ dBase_c *mpOwner;
     u8 field_0x2C[0x34 - 0x2C];
+};
+
+// Not sure if these belongs here, but it uses EffectsStruct
+// Related Functions in the 8002B100 area
+class EffectsStruct_Ext {
+public:
+    EffectsStruct_Ext() : mField_0x00(1), mField_0x01(0) {}
+
+    void init(dBase_c *, f32, f32, f32);
+
+    void setField_0x00(u8 val) {
+        mField_0x00 = val;
+    }
+    void setField_0x01(u8 val) {
+        mField_0x01 = val;
+    }
+
+    void fn_8002B120(f32, f32);
+
+    /* 0x00 */ u8 mField_0x00;
+    /* 0x01 */ u8 mField_0x01;
+    /* 0x04 */ f32 mField_0x04;
+    /* 0x08 */ f32 mField_0x08;
+    /* 0x0C */ f32 mField_0x0C;
+    /* 0x10 */ EffectsStruct mEff;
+    virtual ~EffectsStruct_Ext() {}
 };
 
 #endif

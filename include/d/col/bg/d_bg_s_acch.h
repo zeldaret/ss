@@ -1,7 +1,6 @@
 #ifndef D_BG_S_ACCH_H
 #define D_BG_S_ACCH_H
 
-#include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/bg/d_bg_s_roof_chk.h"
 #include "d/col/bg/d_bg_s_sph_chk.h"
@@ -10,6 +9,8 @@
 #include "d/col/c/c_m3d_g_cyl.h"
 #include "d/col/c/c_m3d_g_lin.h"
 #include "d/col/c/c_m3d_g_pla.h"
+
+class dAcObjBase_c;
 
 class dBgS_AcchCir : public cBgS_PolyInfo {
 private:
@@ -237,6 +238,9 @@ public:
     mVec3_c *GetOldPos() {
         return mpOldPos;
     }
+    f32 GetWtrGroundH() const {
+        return mWtr.mGroundH;
+    }
     f32 GetGroundH() const {
         return mGroundHeight;
     }
@@ -309,6 +313,16 @@ public:
     bool Chk_0x10000000() {
         return mFlags & ACCH_FLAG_0x10000000;
     }
+
+    void Clr_0x20000() {
+        mFlags &= ~ACCH_FLAG_0x20000;
+    }
+    void Set_0x20000() {
+        mFlags |= ACCH_FLAG_0x20000;
+    }
+    bool Chk_0x20000() {
+        return mFlags & ACCH_FLAG_0x20000;
+    }
     void Clr_0x80000000() {
         mFlags &= ~ACCH_FLAG_0x80000000;
     }
@@ -355,9 +369,9 @@ public:
     u32 MaskRoofHit() {
         return mFlags & ROOF_HIT;
     }
-    bool ChkRoofHit() {
-        return MaskRoofHit();
-    }
+    // bool ChkRoofHit() {
+    //     return MaskRoofHit();
+    // }
     void OffClrSpeedY() {
         mFlags |= CLR_SPEED_Y;
     }

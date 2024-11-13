@@ -1,6 +1,7 @@
 #ifndef D_A_OBJ_BASE_H
 #define D_A_OBJ_BASE_H
 
+#include "c/c_math.h"
 #include "d/a/d_a_base.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
@@ -11,6 +12,9 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
+
+class dAcObjBase_c;
+class dBgS_Acch;
 
 // Size: 0xA8
 struct ActorCarryStruct {
@@ -24,13 +28,28 @@ struct ActorCarryStruct {
     /* 0x28 */ mMtx_c carryTransMtx;
     /* 0x58 */ mMtx_c field_0x58;
     /* 0x88 */ s32 isCarried;
-    /* 0x8C */ u8 field_0x8C[0x10]; // mQuat_c
-    /* 0x9C */ void *dtor;          // ???
+    /* 0x8C */ f32 field_0x8C;
+    /* 0x90 */ f32 field_0x90;
+    /* 0x94 */ f32 field_0x94;
+    /* 0x98 */ f32 field_0x98;
+    /* 0x9C */ void *dtor; // ???
     /* 0xA0 */ u32 field_0xA0;
     /* 0xA4 */ u32 field_0xA4;
 
+    void set(u32 flags, f32 x, f32 y, f32 z, void *unk);
+
+    // not real name, but sure
+    void bushTpFunc(dBgS_Acch &);
+
+    void fn_80050EA0(dAcObjBase_c *);
+    void fn_800511E0(dAcObjBase_c *);
+
     bool testCarryFlag(u32 flag) {
         return (carryFlags & flag) != 0;
+    }
+
+    bool checkCarryType(int type) const {
+        return (isCarried == 1 && carryType == type);
     }
 };
 
@@ -48,7 +67,7 @@ struct LightingInfo {
 class dAcObjBase_c : public dAcBase_c {
 public:
     /* 0x0FC */ f32 yoffset;
-    /* 0x100 */ char _0[4];
+    /* 0x100 */ f32 field_0x100;
     /* 0x104 */ f32 unkfloat;
     /* 0x108 */ char _1[12];
     /* 0x114 */ u16 targetFiTextId;
@@ -66,11 +85,9 @@ public:
     /* 0x1A4 */ f32 mCullingDistance;
     /* 0x1A8 */ f32 field_0x1A8;
     /* 0x1AC */ u32 mObjectActorFlags;
-
-    /* 0x1B0 */ u8 unk_0x1B0[0x1C0 - 0x1B0];
-
+    /* 0x1B0 */ f32 mField_0x1B0;
+    /* 0x1B4 */ mVec3_c mField_0x1B4;
     /* 0x1C0 */ cCcD_Stts mStts;
-
     /* 0x1FC */ mVec3_c mStartingPos;
     /* 0x208 */ mAng3_c mStartingRot;
     /* 0x210 */ ActorCarryStruct mActorCarryInfo;
@@ -99,6 +116,20 @@ public:
 
     bool isSlowerThan(f32 speed) const {
         return fabsf(forwardSpeed) <= speed;
+    }
+
+    bool checkYOffsetField_0x100() const {
+        return yoffset <= field_0x100;
+    }
+
+    void clearObjectProperty(u32 property) {
+        mObjectActorFlags &= ~property;
+    }
+    void setObjectProperty(u32 property) {
+        mObjectActorFlags |= property;
+    }
+    bool checkObjectProperty(u32 property) const {
+        return mObjectActorFlags & property;
     }
 
     // could be their own thing?
@@ -191,5 +222,23 @@ public:
             return FAILED;                                                                                             \
         }                                                                                                              \
     } while (0)
+
+class dAcObjRef_unk {
+public:
+    dAcObjRef_unk(dAcObjBase_c *ref) : mObj(nullptr), refOwner(ref) {}
+    ~dAcObjRef_unk() {
+        refOwner = nullptr;
+    }
+
+    bool fn_80051780(const cCcD_Obj &);
+    void fn_800051630();
+
+    void modifyMtx();
+
+    /* 0x00 */ dAcRef_c<dAcObjBase_c> mObj;
+    /* 0x0C */ u8 _0C[4];
+    /* 0x10 */ dAcObjBase_c *refOwner;
+    /* 0x14 */ u8 _14[0x2C - 0x14];
+};
 
 #endif

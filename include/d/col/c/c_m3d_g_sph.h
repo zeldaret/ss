@@ -11,14 +11,10 @@ public:
     /* 0x10 */ f32 mRatio;
     cM3dGSph();
 
-    void SetC(const mVec3_c *);
+    void SetC(const mVec3_c &);
     void Set(const mVec3_c *, f32);
     void SetR(f32);
     void SetC(f32, f32, f32);
-
-    void SetC(const mVec3_c &p) {
-        SetC(&p);
-    }
 
     f32 GetYDist(f32) const;
     bool Cross(const cM3dGTri *, f32 *, mVec3_c *);

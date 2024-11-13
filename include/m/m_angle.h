@@ -23,6 +23,10 @@ struct mAng {
         return mVal;
     }
 
+    s16 *ref() {
+        return &mVal;
+    }
+
     mAng operator-() {
         return mAng(-mVal);
     }
@@ -50,14 +54,15 @@ struct mAng {
         return nw4r::math::CosIdx(*this);
     }
 
-    s16 mVal;
-
     f32 degree() const {
         return (360.0f / 65536.0f) * mVal;
     }
 
     static mAng fromDeg(f32 deg) {
         return deg * sDegToAng;
+    }
+    f32 degree2() const {
+        return mVal * sAngToDeg;
     }
 
     static s16 angle(const mVec3_c &a, const mVec3_c &b) {
@@ -98,6 +103,8 @@ struct mAng {
     static s16 rad2short(f32 rad) {
         return rad * (65536.0f / (2.f * M_PI));
     }
+
+    s16 mVal;
 
 private:
     static const f32 sHalfCircleDeg;

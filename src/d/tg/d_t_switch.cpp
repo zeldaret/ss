@@ -5,7 +5,6 @@
 #include "toBeSorted/event.h"
 #include "toBeSorted/scgame.h"
 
-
 SPECIAL_ACTOR_PROFILE(SW_TAG, dTgSw_c, fProfile::SW_TAG, 0x24, 0, 0);
 
 STATE_DEFINE(dTgSw_c, OnWait);

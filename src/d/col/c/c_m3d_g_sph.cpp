@@ -6,12 +6,12 @@ cM3dGSph::cM3dGSph() {
     mRatio = 1.0f;
 }
 
-void cM3dGSph::SetC(const mVec3_c *c) {
-    mCenter = *c;
+void cM3dGSph::SetC(const mVec3_c &c) {
+    mCenter = c;
 }
 
 void cM3dGSph::Set(const mVec3_c *c, f32 r) {
-    SetC(c);
+    SetC(*c);
     SetR(r);
 }
 
@@ -24,7 +24,7 @@ void cM3dGSph::SetR(f32 r) {
 
 void cM3dGSph::SetC(f32 x, f32 y, f32 z) {
     mVec3_c c(x, y, z);
-    SetC(&c);
+    SetC(c);
 }
 
 bool cM3dGSph::Cross(cM3dGUnk &pUnk, mVec3_c *pOut) {

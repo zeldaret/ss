@@ -58,8 +58,8 @@ void dBgS_ObjGndChk::ClearInstance() {
     sInstance.ClearPi();
 }
 
-bool dBgS_ObjGndChk::CheckPos(const mVec3_c *pPos) {
-    sInstance.SetPos(pPos);
+bool dBgS_ObjGndChk::CheckPos(const mVec3_c &pPos) {
+    sInstance.SetPos(&pPos);
     sGroundHeight = dBgS::GetInstance()->GroundCross(&sInstance);
     return sGroundHeight != -1e9f;
 }
