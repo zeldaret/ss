@@ -1157,7 +1157,7 @@ config.libs = [
     Rel(NonMatching, "d_a_npc_regret_rival", "REL/d/a/npc/d_a_npc_regret_rival.cpp"),
     Rel(NonMatching, "d_a_npc_rescue", "REL/d/a/npc/d_a_npc_rescue.cpp"),
     Rel(NonMatching, "d_a_npc_rival", "REL/d/a/npc/d_a_npc_rival.cpp"),
-    Rel(NonMatching, "d_a_npc_rival_lod", "REL/d/a/npc/d_a_npc_rival_lod.cpp"),
+    Rel(Matching, "d_a_npc_rival_lod", "REL/d/a/npc/d_a_npc_rival_lod.cpp"),
     Rel(NonMatching, "d_a_npc_salbage_morry", "REL/d/a/npc/d_a_npc_salbage_morry.cpp"),
     Rel(NonMatching, "d_a_npc_salbage_robot", "REL/d/a/npc/d_a_npc_salbage_robot.cpp"),
     Rel(

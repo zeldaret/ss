@@ -1,4 +1,5 @@
 #include "d/a/npc/d_a_npc.h"
+
 #include "s/s_StateID.hpp"
 
 fLiMgBa_c NPC_ACTOR_LIST;
@@ -22,5 +23,4 @@ extern nw4r::ut::Color sColors[] = {
     nw4r::ut::Color(0, 0, 0, 0),
 };
 
-
-dAcNpc_c::dAcNpc_c() : mStateMgr(*this, sStateID::null) {}
+dAcNpc_c::dAcNpc_c() : mStateMgr(*this, sStateID::null), mActorListEntry(this) {}

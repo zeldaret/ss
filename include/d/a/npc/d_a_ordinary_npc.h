@@ -6,6 +6,8 @@
 
 class dAcOrdinaryNpc_c : public dAcNpc_c {
 public:
+    /* vt 0x1F4 */ virtual int acNpc_vt_0x1F4() override;
+
     STATE_VIRTUAL_OVERRIDE_FUNC_DECLARE(dAcOrdinaryNpc_c, dAcNpc_c, Wait);
     STATE_VIRTUAL_FUNC_DECLARE(dAcOrdinaryNpc_c, Pain);
     STATE_VIRTUAL_FUNC_DECLARE(dAcOrdinaryNpc_c, Surprised);
