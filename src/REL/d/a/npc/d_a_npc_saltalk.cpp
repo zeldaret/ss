@@ -164,7 +164,7 @@ void dAcNpcSltk_c::executeState_Wait() {
     dAcNpcSlb2_c *slb = mRef.get();
     if (slb != nullptr) {
         if (isSomething0()) {
-            checkResult = checkSomething(position);
+            checkResult = checkSomething(link->position);
             if (field_0x76C != 0) {
                 field_0x76C = checkResult;
             } else if (!EventManager::isInEvent() && !slb->fn_61_6A10() && checkResult) {
