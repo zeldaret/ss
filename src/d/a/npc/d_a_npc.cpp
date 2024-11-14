@@ -1,6 +1,7 @@
 #include "d/a/npc/d_a_npc.h"
 
 #include "s/s_StateID.hpp"
+#include "sized_string.h"
 
 fLiMgBa_c NPC_ACTOR_LIST;
 
@@ -20,7 +21,11 @@ extern nw4r::ut::Color sColors[] = {
     nw4r::ut::Color(0x50, 0x46, 0x32, 0),
     nw4r::ut::Color(0xD8, 0xC5, 0x8D, 0),
     nw4r::ut::Color(0x96, 0x69, 0x3C, 0),
-    nw4r::ut::Color(0, 0, 0, 0),
 };
+
+SizedString<128> sNpcStr1;
+SizedString<128> sNpcStr2;
+SizedString<128> sNpcStr3;
+SizedString<128> sNpcStr4;
 
 dAcNpc_c::dAcNpc_c() : mStateMgr(*this, sStateID::null), mActorListEntry(this) {}
