@@ -29,15 +29,6 @@ private:
     static const f32 sActivationRadius;
     static const u8 sEventTimer;
 
-    void setRes(void *data) {
-        mRes = data;
-    }
-
-    nw4r::g3d::ResMdl getMdl(void *data) {
-        mRes = data;
-        return mRes.GetResMdl("SwitchPass");
-    }
-
     /* 0x330 */ nw4r::g3d::ResFile mRes;
     /* 0x334 */ m3d::smdl_c mMdl;
     /* 0x350 */ STATE_MGR_DECLARE(dAcOUgSwitch_c);

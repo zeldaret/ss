@@ -21,16 +21,16 @@ const u8 dAcOUgSwitch_c::sEventTimer = 15;
 bool dAcOUgSwitch_c::createHeap() {
     // Why. Regswap...
     void *data = getOarcResFile("SwitchPass");
-    
+
     mRes = data;
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("SwitchPass");
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
-    
+
     mRes = data;
     mdl = mRes.GetResMdl("SwitchPass");
     nw4r::g3d::ResAnmClr clr = mRes.GetResAnmClr("SwitchPass_Light");
     TRY_CREATE(mAnmClr.create(mdl, clr, &heap_allocator, nullptr, 1));
-    
+
     mMdl.setAnm(mAnmClr);
 
     return true;
