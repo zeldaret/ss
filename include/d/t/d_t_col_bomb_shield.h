@@ -10,11 +10,11 @@ public:
     dTgColBombShield() : mStateMgr(*this, sStateID::null) {}
     virtual ~dTgColBombShield() {}
 
-    bool createHeap() override;
-    int create() override;
-    int doDelete() override;
-    int actorExecute() override;
-    int draw() override;
+    virtual bool createHeap() override;
+    virtual int create() override;
+    virtual int doDelete() override;
+    virtual int actorExecute() override;
+    virtual int draw() override;
 
     STATE_FUNC_DECLARE(dTgColBombShield, Wait);
 
