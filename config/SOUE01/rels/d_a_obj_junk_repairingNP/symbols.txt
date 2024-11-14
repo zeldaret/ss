@@ -54,9 +54,9 @@ __vt__82sStateMgr_c<13dAcOJunkRep_c,20sStateMethodUsr_FI_c,12sFStateFct_c,13sSta
 __vt__29sFStateFct_c<13dAcOJunkRep_c> = .data:0x00000118; // type:object size:0x14
 __vt__26sFState_c<13dAcOJunkRep_c> = .data:0x00000130; // type:object size:0x18
 __vt__17dMyShadowCircle_c = .data:0x00000148; // type:object size:0xC
-lbl_116_data_194 = .data:0x00000194; // type:object size:0x34 scope:local
-sMdlName1__13dAcOJunkRep_c = .data:0x000001C8; // type:object size:0x14
-sMdlName2__13dAcOJunkRep_c = .data:0x000001DC; // type:object size:0x14
+__vt__28sFStateID_c<13dAcOJunkRep_c> = .data:0x00000194; // type:object size:0x34
+@STRING@getMdlName1__13dAcOJunkRep_cFv = .data:0x000001C8; // type:object size:0x11 data:string
+@STRING@getMdlName2__13dAcOJunkRep_cFv = .data:0x000001DC; // type:object size:0x12 data:string
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 lbl_116_bss_8 = .bss:0x00000008; // type:object size:0x10 scope:local
 StateID_Wait__13dAcOJunkRep_c = .bss:0x00000018; // type:object size:0x30 data:4byte
