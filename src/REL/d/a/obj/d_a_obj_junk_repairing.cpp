@@ -20,10 +20,10 @@ bool dAcOJunkRep_c::getState() {
 
 bool dAcOJunkRep_c::createHeap() {
     mResFile = getOarcResFile("Junk");
-    if (!loadMdl(mModel1, sMdlName1)) {
+    if (!loadMdl(mModel1, getMdlName1())) {
         return false;
     }
-    if (!loadMdl(mModel2, sMdlName2)) {
+    if (!loadMdl(mModel2, getMdlName2())) {
         return false;
     }
 

@@ -24,8 +24,12 @@ public:
 private:
     static const f32 sSomeFloat;
 
-    static char sMdlName1[];
-    static char sMdlName2[];
+    inline const char *getMdlName1() {
+        return "JunkRepairobject";
+    }
+    inline const char *getMdlName2() {
+        return "JunkRepairobjectB";
+    }
 
     bool loadMdl(m3d::smdl_c &mdl, const char *name);
     void realizeState();
