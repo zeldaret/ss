@@ -86,12 +86,11 @@ void dAcOTowerGearD101_c::initializeState_Wait() {}
 void dAcOTowerGearD101_c::executeState_Wait() {
     dAcOTowerD101_c *tower = static_cast<dAcOTowerD101_c *>(actor_node.get());
     if (tower != nullptr) {
-        // Regswap prevRotation, newRotation tmp
-        mAng prevRotation = mCurrRotation;
         f32 diff = tower->mGoalElevation - tower->mCurrentElevation;
         s32 scale5 = 0x50000;
+        mAng prevRotation = mCurrRotation;
         mAng newRotation = diff * scale5 / 2400.0f;
-        if (newRotation != prevRotation) {
+        if (newRotation != mCurrRotation) {
             if (mPreviousTurnSpeed == 0) {
                 playSound(0xBF8);
             } else {
