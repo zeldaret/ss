@@ -3,7 +3,6 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dAcOTowerD101_c : public dAcObjBase_c {
 public:
@@ -14,6 +13,10 @@ public:
 
 private:
     /* 0x??? */ STATE_MGR_DECLARE(dAcOTowerD101_c);
+    u8 field_0x___[0xC64 - 0x36C];
+public:
+    /* 0xC64 */ f32 mGoalElevation;
+    /* 0xC68 */ f32 mCurrentElevation;
 };
 
 #endif

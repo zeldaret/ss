@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 
@@ -23,6 +24,7 @@ public:
 
     void remove(bool);
     void fn_80029929(u16 effect, mVec3_c *pos, void *, void *, void *, void *);
+    void fn_80029A10(u16 effect, mVec3_c *pos, mAng3_c *rot, void *, void *, void *);
     void setMtx(const mMtx_c &);
 
     bool checkField0x00() const {
