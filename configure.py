@@ -1794,7 +1794,7 @@ config.libs = [
     Rel(NonMatching, "d_t_belt_obstacle", "REL/d/t/d_t_belt_obstacle.cpp"),
     Rel(NonMatching, "d_t_clef_game", "REL/d/t/d_t_clef_game.cpp"),
     Rel(NonMatching, "d_t_clef_manager", "REL/d/t/d_t_clef_manager.cpp"),
-    Rel(NonMatching, "d_t_col_bomb_shield", "REL/d/t/d_t_col_bomb_shield.cpp"),
+    Rel(Matching, "d_t_col_bomb_shield", "REL/d/t/d_t_col_bomb_shield.cpp"),
     Rel(NonMatching, "d_t_D3_scene_change", "REL/d/t/d_t_D3_scene_change.cpp"),
     Rel(NonMatching, "d_t_defeat_boss", "REL/d/t/d_t_defeat_boss.cpp"),
     Rel(Matching, "d_t_dowsing", "REL/d/t/d_t_dowsing.cpp"),
