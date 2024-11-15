@@ -253,5 +253,8 @@ public:
         return (mActionFlagsCont & mask) != 0;
     }
 
+    static const dAcPy_c *GetLink() {
+        return LINK;
+    }
     static dAcPy_c *LINK;
 };

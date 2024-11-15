@@ -191,7 +191,7 @@ public:
     /* 8002cfc0 */ int getParams2UpperByte();
     /* 8002cfd0 */ void setParams2UpperByte(u32 val);
     /* 8002cff0 */ static u32 buildParams2(u32 lower, u32 upper);
-    /* 8002d010 */ u32 getParams2Lower();
+    /* 8002d010 */ u32 getParams2Lower() const;
     /* 8002d020 */ static dAcBase_c *findActor(char *objName, dAcBase_c *parent);
     /* 8002d0a0 */ static dAcBase_c *searchActor(dAcBase_c *parent);
     // Kinda performs the code of the first param on every actor (second param is optional parent)

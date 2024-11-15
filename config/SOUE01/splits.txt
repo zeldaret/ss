@@ -45,6 +45,19 @@ d/a/e/d_a_e_base.cpp:
 	.text       start:0x8002F300 end:0x80030CB0
 	.ctors      start:0x804DB664 end:0x804DB668
 
+d/a/npc/d_a_npc.cpp:
+	.text       start:0x80030CB0 end:0x8003F718
+	.ctors      start:0x804DB668 end:0x804DB66C
+	.data       start:0x805016E0 end:0x80502050
+	.sbss       start:0x805750A0 end:0x805750A8
+	.bss        start:0x80597030 end:0x805972E0
+
+d/a/npc/d_a_ordinary_npc.cpp:
+	.text       start:0x800462D0 end:0x8004D810
+	.ctors      start:0x804DB66C end:0x804DB670
+	.data       start:0x80502528 end:0x80502C08
+	.bss        start:0x805972E0 end:0x80597520
+
 d/d_ac_npc_kyui.cpp:
 	.text       start:0x8004D810 end:0x80050800
 	.ctors      start:0x804DB670 end:0x804DB674
@@ -572,6 +585,10 @@ d/a/d_a_insect.cpp:
 	.text       start:0x8018F190 end:0x80190710
 	.data       start:0x8052ABD8 end:0x8052ACC0
 	.sdata2     start:0x8057ADD8 end:0x8057AE30
+
+d/tg/d_t_weather.cpp:
+	.text       start:0x801A65D0 end:0x801AF7D8
+	.ctors      start:0x804DB804 end:0x804DB808
 
 d/d_cs_base.cpp:
 	.text       start:0x801BC6C0 end:0x801BD250
