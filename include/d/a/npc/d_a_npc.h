@@ -197,6 +197,8 @@ private:
     /* 0x4FC */ u8 field_0x4FC[0x684 - 0x4FC];
     /* 0x684 */ u8 field_0x684;
     /* 0x685 */ u8 field_0x685[0x6E4 - 0x685];
+
+    static fLiMgBa_c NPC_ACTOR_LIST;
 };
 
 #endif
