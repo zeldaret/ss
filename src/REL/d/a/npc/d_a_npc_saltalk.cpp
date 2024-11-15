@@ -159,8 +159,9 @@ bool dAcNpcSltk_c::checkSomething(mVec3_c pos) {
 void dAcNpcSltk_c::initializeState_Wait() {}
 void dAcNpcSltk_c::executeState_Wait() {
     bool checkResult = false;
-    // Regswap this, link
-    dAcPy_c *link = dAcPy_c::LINK;
+
+    const dAcPy_c *link = dAcPy_c::GetLink();
+
     dAcNpcSlb2_c *slb = mRef.get();
     if (slb != nullptr) {
         if (isSomething0()) {
