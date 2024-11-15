@@ -1176,7 +1176,7 @@ config.libs = [
         "REL/d/a/npc/d_a_npc_salbage_robot_repair.cpp",
     ),
     Rel(NonMatching, "d_a_npc_salesman_s", "REL/d/a/npc/d_a_npc_salesman_s.cpp"),
-    Rel(NonMatching, "d_a_npc_saltalk", "REL/d/a/npc/d_a_npc_saltalk.cpp"),
+    Rel(Matching, "d_a_npc_saltalk", "REL/d/a/npc/d_a_npc_saltalk.cpp"),
     Rel(
         NonMatching, "d_a_npc_senpaia_mother", "REL/d/a/npc/d_a_npc_senpaia_mother.cpp"
     ),

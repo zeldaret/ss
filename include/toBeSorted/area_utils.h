@@ -14,6 +14,6 @@ struct AREA {
 
 /* 800a9b00 */ bool checkPosInArea(AREA **area, const mVec3_c &pos);
 /* 800a9bd0 */ AREA *getAreaForIndexInRoom(s32 areaIndex, s32 roomId);
-/* 800a9c50 */ bool checkPosInArea(s32 areaIndex, s32 roomId, const mVec3_c &pos, AREA **area);
+/* 800a9c50 */ bool checkPosInArea(s32 areaIndex, s32 roomId, const mVec3_c &pos, AREA *const *area);
 
 #endif

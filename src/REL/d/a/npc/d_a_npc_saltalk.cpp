@@ -136,7 +136,7 @@ bool dAcNpcSltk_c::isSomething1() const {
     return getSomething() == 1;
 }
 
-bool dAcNpcSltk_c::checkSomething(mVec3_c pos) {
+bool dAcNpcSltk_c::checkSomething(mVec3_c pos) const {
     if (mAreaIndex != 0xFF) {
         return checkPosInArea(mAreaIndex, roomid, pos, &mpArea) == 1;
     } else {
@@ -145,7 +145,7 @@ bool dAcNpcSltk_c::checkSomething(mVec3_c pos) {
             // TODO reload from position.y here
             f32 fDist = field_0x75C + position.y;
             f32 fDist2 = position.y;
-            if (fDist <= position.y) {
+            if (fDist <= fDist2) {
                 fDist2 = fDist;
                 fDist = position.y;
             }

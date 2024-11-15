@@ -38,7 +38,7 @@ private:
     bool isSomething0() const;
     bool isSomething1() const;
 
-    bool checkSomething(mVec3_c pos);
+    bool checkSomething(mVec3_c pos) const;
 
     /* 0x6E4 */ dAcRef_c<dAcNpcSlb2_c> mRef;
     /* 0x6F0 */ int mAreaIndex;
