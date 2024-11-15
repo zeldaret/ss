@@ -105,7 +105,7 @@ bool dAcTbox_c::createHeap() {
     if (data == nullptr) {
         return false;
     }
-    if (!mMdl1.create(data, data, sMdlNames[mVariant], sAnmNames[mVariant], &heap_allocator, 0x32F, 1, nullptr)) {
+    if (!mMdl1.create(data, sMdlNames[mVariant], sAnmNames[mVariant], &heap_allocator, 0x32F, 1, nullptr)) {
         return false;
     }
     mMdl1.getModel().setLocalMtx(mWorldMtx);
@@ -118,10 +118,10 @@ bool dAcTbox_c::createHeap() {
     }
 
     if (mVariant == 3) {
-        if (data == nullptr) {
+        nw4r::g3d::ResFile res = data;
+        if (!res.mFile.IsValid()) {
             return false;
         }
-        nw4r::g3d::ResFile res = data;
         nw4r::g3d::ResMdl mdl = mMdl1.getModel().getResMdl();
         if (!mdl.IsValid()) {
             return false;
@@ -146,10 +146,10 @@ bool dAcTbox_c::createHeap() {
             mMdl1.getModel().setAnm(mAnmGoddessTexSrt);
         }
     } else if (mVariant == 0) {
-        if (data == nullptr) {
+        nw4r::g3d::ResFile res = data;
+        if (!res.mFile.IsValid()) {
             return false;
         }
-        nw4r::g3d::ResFile res = data;
         nw4r::g3d::ResAnmClr anmClr = res.GetResAnmClr("TBoxNormalTAppear");
         if (!anmClr.mAnmClr.IsValid()) {
             return false;
@@ -179,7 +179,7 @@ bool dAcTbox_c::createHeap() {
         if (!openMdl.IsValid()) {
             return false;
         }
-        if (!mOpenFxMdl.create(openMdl, &heap_allocator, 0x120)) {
+        if (!mOpenFxMdl.create(openMdl, &heap_allocator, 0x120, 1, nullptr)) {
             return false;
         }
         mOpenFxMdl.setPriorityDraw(0x7F, 0x86);
@@ -214,9 +214,10 @@ bool dAcTbox_c::createHeap() {
         fn_8026B380(fxPos);
         mMtx_c fxTransform;
         fxTransform.transS(fxPos);
-        // TODO address calculations here
-        fxTransform.ZXYrotM(rotation.x, rotation.y, rotation.y);
-        mOpenFxMdl.setLocalMtx(mWorldMtx);
+        // TODO address calculations here, otherwise this function
+        // matches surprisingly well
+        fxTransform.ZXYrotM(rotation.x, rotation.y, rotation.z);
+        mOpenFxMdl.setLocalMtx(fxTransform);
         mOpenFxMdl.setScale(fn_8026B3C0());
     }
 
