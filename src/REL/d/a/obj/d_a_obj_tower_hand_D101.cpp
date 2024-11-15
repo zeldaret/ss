@@ -594,11 +594,10 @@ void dAcOTowerHandD101_c::executeState_RemainOpen() {
 void dAcOTowerHandD101_c::finalizeState_RemainOpen() {}
 
 extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_573;
-// extern "C" void fn_80029929()
 void dAcOTowerHandD101_c::initializeState_Close() {
     mMdl.getAnm().setPlayState(m3d::PLAY_MODE_1);
     mMdl.setRate(getCloseRate());
-    mEffects.fn_80029929(PARTICLE_RESOURCE_ID_MAPPING_573, &position, nullptr, nullptr, nullptr, nullptr);
+    mEffects.fn_80029920(PARTICLE_RESOURCE_ID_MAPPING_573, &position, nullptr, nullptr, nullptr, nullptr);
     playSound(0xC0C);
 }
 void dAcOTowerHandD101_c::executeState_Close() {

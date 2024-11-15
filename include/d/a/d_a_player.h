@@ -1,6 +1,11 @@
+#include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "m/m_allocator.h"
+#include "m/m_angle.h"
 #include "m/m_mtx.h"
+#include "m/m_vec.h"
+#include "nw4r/g3d/g3d_resfile.h"
 
 class dAcPy_c : public dAcObjBase_c {
     // See Below for some info
@@ -57,7 +62,7 @@ public:
     /* vt 0x08C */ virtual void set0x43DE();
     /* vt 0x090 */ virtual f32 vt_0x090();
     /* vt 0x094 */ virtual void relatedToUsingItem0x11();
-    /* vt 0x098 */ virtual void setPosRot();
+    /* vt 0x098 */ virtual void setPosRot(const mVec3_c &pos, const mAng3_c &ang, UNKWORD, UNKWORD, UNKWORD);
     /* vt 0x09C */ virtual void isLiftingObject();
     /* vt 0x0A0 */ virtual void isThrowingOrRollingItem();
     /* vt 0x0A4 */ virtual void canThrowObject();
@@ -118,7 +123,7 @@ public:
     /* vt 0x180 */ virtual void setWindMillPos();
     /* vt 0x184 */ virtual void isOffeset0x435eEqual0x20();
     /* vt 0x188 */ virtual void getVec3F_Z();
-    /* vt 0x18C */ virtual void somethingWithMainBodyModel();
+    /* vt 0x18C */ virtual void getBodyMtx(mMtx_c *out_mtx, int boneIdx);
     /* vt 0x190 */ virtual void getSheathModelMatrix();
     /* vt 0x194 */ virtual void getSwordModelMatrix();
     /* vt 0x198 */ virtual void vt_0x198();
@@ -229,6 +234,8 @@ public:
     /* 0x364 */ u32 mActionFlags;
     /* 0x368 */ u32 mActionFlagsCont;
     /* 0x36C */ int mCurrentAction; // TODO (Document Enum)
+    /* 0x370 */ u8 _370[0x3C8 - 0x370];
+    /* 0x3C8 */ nw4r::g3d::ResFile mSwordRes;
 
     inline bool checkFlags0x340(u32 mask) const {
         return (someFlags_0x340 & mask) != 0;
@@ -252,6 +259,8 @@ public:
     inline bool checkActionFlagsCont(u32 mask) const {
         return (mActionFlagsCont & mask) != 0;
     }
+
+    static nw4r::g3d::ResFile getItemResFile(const char *name, mAllocator_c &allocator);
 
     static dAcPy_c *LINK;
 };

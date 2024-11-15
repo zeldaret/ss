@@ -30,6 +30,10 @@ public:
         return FileManager::sInstance->getStoryFlagsConst();
     };
 
+    u16 getFlag(u16 flag) const {
+        return getCounterOrFlag(flag);
+    }
+
 public:
     static StoryflagManager *sInstance;
     static u16 sFlags[0x80];
