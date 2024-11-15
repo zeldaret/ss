@@ -23,8 +23,11 @@ public:
     }
 
     void remove(bool);
-    void fn_80029929(u16 effect, mVec3_c *pos, void *, void *, void *, void *);
-    void fn_80029A10(u16 effect, mVec3_c *pos, mAng3_c *rot, void *, void *, void *);
+    void fn_80027320(u8);
+    void fn_80029920(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
+    void fn_80029980(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
+    void fn_800299F0(u16 effect, mMtx_c *mtx, void *, void *);
+    void fn_80029A10(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
     void setMtx(const mMtx_c &);
 
     bool checkField0x00() const {

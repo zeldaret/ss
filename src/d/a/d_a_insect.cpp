@@ -16,7 +16,7 @@
 #include "toBeSorted/attention.h"
 
 extern "C" void fn_800298B0(u16, mVec3_c *, mVec3_c *, u32, u32, u32, u32, u32);
-extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_394_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_394_;
 
 void dAcOInsect_c::kill() {
     // Small Ordering issue between loading particle id and position
