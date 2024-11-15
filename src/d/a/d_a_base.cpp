@@ -277,7 +277,7 @@ u32 dAcBase_c::buildParams2(u32 lower, u32 upper) {
 }
 
 // 8002d010
-u32 dAcBase_c::getParams2Lower() {
+u32 dAcBase_c::getParams2Lower() const {
     return params2 & 0xFFFF;
 }
 

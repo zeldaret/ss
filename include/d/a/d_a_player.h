@@ -262,5 +262,9 @@ public:
 
     static nw4r::g3d::ResFile getItemResFile(const char *name, mAllocator_c &allocator);
 
+    static const dAcPy_c *GetLink() {
+        return LINK;
+    }
+
     static dAcPy_c *LINK;
 };

@@ -328,6 +328,8 @@ config.libs = [
             Object(NonMatching, "d/a/d_a_base.cpp"),
             Object(NonMatching, "d/a/d_a_item.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_base.cpp"),
+            Object(NonMatching, "d/a/npc/d_a_npc.cpp"),
+            Object(NonMatching, "d/a/npc/d_a_ordinary_npc.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_bomb.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_arrow.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_boomerang.cpp"),
@@ -1145,7 +1147,7 @@ config.libs = [
     Rel(NonMatching, "d_a_npc_regret_rival", "REL/d/a/npc/d_a_npc_regret_rival.cpp"),
     Rel(NonMatching, "d_a_npc_rescue", "REL/d/a/npc/d_a_npc_rescue.cpp"),
     Rel(NonMatching, "d_a_npc_rival", "REL/d/a/npc/d_a_npc_rival.cpp"),
-    Rel(NonMatching, "d_a_npc_rival_lod", "REL/d/a/npc/d_a_npc_rival_lod.cpp"),
+    Rel(Matching, "d_a_npc_rival_lod", "REL/d/a/npc/d_a_npc_rival_lod.cpp"),
     Rel(NonMatching, "d_a_npc_salbage_morry", "REL/d/a/npc/d_a_npc_salbage_morry.cpp"),
     Rel(NonMatching, "d_a_npc_salbage_robot", "REL/d/a/npc/d_a_npc_salbage_robot.cpp"),
     Rel(
@@ -1164,7 +1166,7 @@ config.libs = [
         "REL/d/a/npc/d_a_npc_salbage_robot_repair.cpp",
     ),
     Rel(NonMatching, "d_a_npc_salesman_s", "REL/d/a/npc/d_a_npc_salesman_s.cpp"),
-    Rel(NonMatching, "d_a_npc_saltalk", "REL/d/a/npc/d_a_npc_saltalk.cpp"),
+    Rel(Matching, "d_a_npc_saltalk", "REL/d/a/npc/d_a_npc_saltalk.cpp"),
     Rel(
         NonMatching, "d_a_npc_senpaia_mother", "REL/d/a/npc/d_a_npc_senpaia_mother.cpp"
     ),

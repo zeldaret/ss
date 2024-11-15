@@ -10,6 +10,7 @@
 #include "rvl/MTX/vec.h"
 
 class mAng;
+class mAng3_c;
 
 class mVec3_c : public EGG::Vector3f {
 public:
@@ -212,6 +213,8 @@ public:
 
     void normalize();
     bool normalizeRS();
+
+    static mVec3_c createProjectionXZ(const mAng3_c &ang, f32 scalar);
 
     inline f32 mag() const {
         return PSVECMag(*this);
