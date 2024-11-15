@@ -642,6 +642,7 @@ d/a/obj/d_a_obj_tbox.cpp:
 	.ctors      start:0x804DB83C end:0x804DB840
 	.rodata     start:0x804ED3B0 end:0x804EE548
 	.data       start:0x80535270 end:0x80535A18
+	.sdata2     start:0x8057C238 end:0x8057C3F0
 	.bss        start:0x805B4FA8 end:0x805B5458
 
 d/a/obj/d_a_obj_time_area.cpp:
