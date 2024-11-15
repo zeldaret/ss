@@ -225,10 +225,13 @@ void dAcOSeatSword_c::actorExecuteCommon() {
     mEffPos.x = sEffectPos.x;
     mEffPos.y = sEffectPos.y;
     mEffPos.z = sEffectPos.z;
+
     mEffPos.rotY(player->rotation.y);
+    f32 y = player->position.y;
 
     mEffPos += player->position;
-    mEffPos.y = player->position.y;
+    mEffPos.y = y;
+
     mEff.fn_80029A10(PARTICLE_RESOURCE_ID_MAPPING_76_, &mEffPos, &rotation, &mScale, nullptr, nullptr);
     mEff.fn_80027320(mField_0x7E4);
 }
