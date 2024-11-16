@@ -1647,9 +1647,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_tornado", "REL/d/a/obj/d_a_obj_tornado.cpp"),
     Rel(NonMatching, "d_a_obj_tower_bomb", "REL/d/a/obj/d_a_obj_tower_bomb.cpp"),
     Rel(NonMatching, "d_a_obj_tower_D101", "REL/d/a/obj/d_a_obj_tower_D101.cpp"),
-    Rel(
-        Matching, "d_a_obj_tower_gearD101", "REL/d/a/obj/d_a_obj_tower_gearD101.cpp"
-    ),
+    Rel(Matching, "d_a_obj_tower_gearD101", "REL/d/a/obj/d_a_obj_tower_gearD101.cpp"),
     Rel(
         NonMatching,
         "d_a_obj_tower_hand_D101",

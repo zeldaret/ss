@@ -293,6 +293,9 @@ public:
     /* 0x38 */ int mRank;
 
     cCcD_Stts(dAcObjBase_c *);
+    ~cCcD_Stts() {
+        mpActor = nullptr;
+    }
     void Move();
     int GetID() const;
     void PlusCcMove(f32, f32, f32);
