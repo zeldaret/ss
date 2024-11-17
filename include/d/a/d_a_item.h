@@ -55,6 +55,9 @@ public:
     static int getTotalArrowCount();
     static int getTotalSeedCount();
 
+    static bool isKeyPiece(ITEM_ID item);
+    static bool isTreasure(ITEM_ID item);
+
 private:
     /* 0x334 */ UNKTYPE *mpMdl; // Model has its own handling system
     /* 0x338 */ dShadowCircle_c mShdw;

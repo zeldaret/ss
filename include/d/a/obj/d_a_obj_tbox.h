@@ -1,6 +1,7 @@
 #ifndef D_A_OBJ_TBOX_H
 #define D_A_OBJ_TBOX_H
 
+#include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_item.h"
 #include "d/a/obj/d_a_obj_base.h"
@@ -14,6 +15,7 @@
 #include "m/m3d/m_anmtexsrt.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_vec.h"
+#include "nw4r/ut/ut_Color.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/dowsing_target.h"
@@ -37,14 +39,29 @@ public:
 struct TboxAndMoreUnkCC {
     cListMg_c mList;
     virtual ~TboxAndMoreUnkCC();
+
+    void addCc(dAcTboxCcD &ccD, const dCcD_SrcUnk &src);
+    void SetStts(cCcD_Stts &stts);
 };
 
 class dAcTbox_c : public dAcObjBase_c {
 public:
+    enum TboxVariant_e {
+        NORMAL,
+        SMALL,
+        BOSS,
+        GODDESS,
+    };
+
     dAcTbox_c();
     virtual ~dAcTbox_c();
 
     virtual bool createHeap() override;
+    virtual int create() override;
+    virtual int doDelete() override;
+    virtual int actorExecute() override;
+    virtual int actorExecuteInEvent() override;
+    virtual int draw() override;
 
     STATE_FUNC_DECLARE(dAcTbox_c, DugOut);
     STATE_FUNC_DECLARE(dAcTbox_c, WaitAppear);
@@ -63,8 +80,30 @@ public:
 private:
     bool initBgW(dBgW &bg, const char *arcName, const char *ccName);
     bool isNotSmall() const;
+    void setItemId(u16 item) const;
+    void setChestFlag();
+    void setDoObstructionCheck();
+    int isActualVisibleBox() const;
     void fn_8026B380(mVec3_c &outResult) const;
     const mVec3_c &fn_8026B3C0() const;
+
+    bool noObstructionCheck() const;
+    int fn_8026B370() const;
+    bool fn_8026D670() const;
+    bool getSomeCounter(u32 *outIndex) const;
+    bool checkTboxFlag() const;
+    bool fn_8026D560() const;
+    bool isItemRupee() const;
+    void initDowsingTarget(DowsingTarget::DowsingSlot slot);
+    void initDowsingTargetCube();
+
+    void registerRupeeOrTreasureDowsing();
+    void registerKeyPieceDowsing();
+    void unregisterDowsing();
+    void noRegisterDowsing();
+    void noUnregisterDowsing();
+
+    static bool fn_80268660(int arg);
 
     /* 0x0330 */ m3d::mdlAnmChr mMdl1;
     /* 0x0398 */ m3d::smdl_c mOpenFxMdl;
@@ -78,11 +117,9 @@ private:
     /* 0x04D4 */ dShadowCircle_c mShadowCircle;
 
     // Could be part of an aggregate structure
-    s32 field_0x4DC;
-    s32 field_0x4E0;
-    s32 field_0x4E4;
-    s32 field_0x4E8;
-    s32 field_0x4EC;
+    mVec3_c field_0x4DC;
+    nw4r::ut::Color field_0x4E8;
+    f32 field_0x4EC;
     s32 field_0x4F0;
     s32 field_0x4F4;
 
@@ -98,10 +135,47 @@ private:
     /* 0x1144 */ dAcRef_c<dAcItem_c> mItemRef;
     /* 0x1150 */ DowsingTarget mDowsingTarget1;
     /* 0x1170 */ DowsingTarget mDowsingTarget2;
+    /* 0x1190 */ void (dAcTbox_c::*mRegisterDowsingTarget)();
+    /* 0x119C */ void (dAcTbox_c::*mUnregisterDowsingTarget)();
 
+    /* 0x11A8 */ u8 field_0x11A8[0x11D8 - 0x11A8];
+
+    /* 0x11D8 */ mVec3_c field_0x11D8;
+
+    /* 0x11E4 */ u8 field_0x11E4[0x11EC - 0x11E4];
+    
+    /* 0x11EC */ f32 field_0x11EC;
+    /* 0x11F0 */ UNKWORD field_0x11F0;
+    
+    /* 0x11F4 */ u8 field_0x11F4[0x11FC - 0x11F4];
+    
+    /* 0x11FC */ UNKWORD field_0x11FC;
+
+    /* 0x1200 */ u16 mItemId;
+
+    /* 0x1202 */ u8 field_0x1202[0x1204 - 0x1202];
+    
     /* 0x1204 */ bool mHasBeenOpened;
-    /* 0x1209 */ u8 mVariant;
+    /* 0x1205 */ u8 mSpawnSceneFlag;
+    /* 0x1206 */ u8 mSetSceneFlag; // set when?
 
+    /* 0x1207 */ u8 field_0x1207;
+
+    /* 0x1208 */ u8 field_0x1208;
+    /* 0x1209 */ u8 mVariant;
+    /* 0x120A */ u8 field_0x120A;
+
+    /* 0x120B */ u8 field_0x120B[0x120D - 0x120B];
+
+    /* 0x120D */ u8 field_0x120D;
+
+    /* 0x120E */ u8 field_0x120E;
+
+    /* 0x120F */ bool field_0x120F;
+    /* 0x1210 */ bool field_0x1210;
+    /* 0x1211 */ bool mDoObstructedCheck;
+
+    static const cCcD_SrcGObj sColSrc;
     static fLiMgBa_c sTboxActorList;
 };
 
