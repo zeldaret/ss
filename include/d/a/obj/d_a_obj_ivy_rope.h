@@ -8,6 +8,7 @@
 #include "d/d_rope_model.h"
 #include "d/d_shadow.h"
 #include "m/m3d/m_smdl.h"
+#include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
@@ -94,8 +95,8 @@ public:
     UNKTYPE fn_256_9450(UNKTYPE);
     UNKTYPE fn_256_9C80(UNKTYPE);
     UNKTYPE fn_256_A040(UNKTYPE);
-    UNKTYPE fn_256_A2C0(UNKTYPE);
-    UNKTYPE fn_256_A750(UNKTYPE);
+    void fn_256_A2C0(bool);
+    bool fn_256_A750(bool bool0, f32 float0);
     UNKTYPE fn_256_AA40(UNKTYPE);
     UNKTYPE fn_256_AAB0(UNKTYPE);
     UNKTYPE fn_256_AAF0(UNKTYPE);
@@ -123,15 +124,15 @@ public:
     UNKTYPE fn_256_D1B0(UNKTYPE);
     UNKTYPE fn_256_D2B0(UNKTYPE);
     UNKTYPE fn_256_D3D0(UNKTYPE);
-    UNKTYPE fn_256_D730(UNKTYPE);
-    UNKTYPE fn_256_D7A0(UNKTYPE);
-    UNKTYPE fn_256_D850(UNKTYPE);
-    UNKTYPE fn_256_DAA0(UNKTYPE);
-    UNKTYPE fn_256_DE80(UNKTYPE);
-    UNKTYPE fn_256_DEE0(UNKTYPE);
-    UNKTYPE fn_256_DF30(UNKTYPE);
-    UNKTYPE fn_256_E3E0(UNKTYPE);
-    UNKTYPE fn_256_E790(UNKTYPE);
+    const mVec3_c &fn_256_D730(u32 idx);    // Get Path Point
+    void fn_256_D7A0(u32, const mVec3_c &); // Set Path Point
+    void fn_256_D850();                     // Draw Shadow
+    void fn_256_DAA0(bool, bool, f32, f32);
+    void fn_256_DE80();
+    void fn_256_DEE0();
+    u32 fn_256_DF30();
+    void fn_256_E3E0();
+    bool fn_256_E790();
 
 private:
     /* 0x 330 */ UNKWORD mField_0x330;
@@ -155,21 +156,45 @@ private:
     /* 0x F38 */ mVec3_c mField_0xF38;
     /* 0x F44 */ mVec3_c mField_0xF44;
     /* 0x F50 */ mVec3_c mField_0xF50;
-    /* 0x F5C */ u8 _F5C[0xFB4 - 0xF5C];
+    /* 0x F5C */ u8 _F5C[0xF68 - 0xF5C];
+    /* 0x F68 */ mVec3_c mField_0xF68;
+    /* 0x F74 */ u8 _F74[0xFAC - 0xF74];
+    /* 0x FAC */ f32 mField_0xFAC;
+    /* 0x FB0 */ f32 mField_0xFB0;
     /* 0x FB4 */ f32 mField_0xFB4;
     /* 0x FB8 */ f32 mDistance;
     /* 0x FBC */ f32 mOldDistance;
-    /* 0x FC0 */ u8 _FC0[0xFE4 - 0xFC0];
+    /* 0x FC0 */ u8 _FC0[0xFCC - 0xFC0];
+    /* 0x FCC */ mAng mField_0xFCC;
+    /* 0x FCE */ u8 _FCE[0xFD2 - 0xFCE];
+    /* 0x FD2 */ s16 mField_0xFD2;
+    /* 0x FD4 */ s16 mField_0xFD4;
+    /* 0x FD6 */ s16 mField_0xFD6;
+    /* 0x FD8 */ s16 mField_0xFD8;
+    /* 0x FDA */ u8 _FD9[0xFE4 - 0xFDA];
     /* 0x FE4 */ u8 mDropsceneFlag;
     /* 0x FE5 */ u8 mWoodTagSceneflag;
     /* 0x FE6 */ u8 mSegmentCount;
     /* 0x FE7 */ u8 mSubtype;
-    /* 0x FE8 */ u8 mField_0xFE8;
+    /* 0x FE8 */ bool mbField_0xFE8;
     /* 0x FE9 */ u8 mField_0xFE9;
     /* 0x FEA */ u8 mField_0xFEA;
     /* 0x FEB */ u8 mField_0xFEB;
-    /* 0x FEC */ u8 _FE8[0x103A - 0xFEC];
-    /* 0x103A */ u8 mField_0x103A;
+    /* 0x FEC */ u8 mField_0xFEC;
+    /* 0x FED */ u8 mEventIdx;
+    /* 0x FEE */ u8 mField_0xFEE;
+    /* 0x FEF */ u8 mField_0xFEF;
+    /* 0x FEE */ u8 _FEE[0x1010 - 0xFF0];
+    /* 0x1010 */ mVec3_c mField_0x1010;
+    /* 0x101C */ mVec3_c mField_0x101C;
+    /* 0x1028 */ f32 mField_0x1028;
+    /* 0x102C */ f32 mField_0x102C;
+    /* 0x1030 */ mAng mField_0x1030;
+    /* 0x1032 */ mAng mField_0x1032;
+    /* 0x1034 */ u8 _1034[0x1038 - 0x1034];
+    /* 0x1038 */ u8 mField_0x1038;
+    /* 0x1039 */ u8 mField_0x1039; // TODO make field enum
+    /* 0x103A */ s8 mField_0x103A;
     /* 0x103B */ u8 mField_0x103B;
     /* 0x103C */ u8 mField_0x103C;
     /* 0x103D */ u8 mField_0x103D;
@@ -179,6 +204,13 @@ private:
     /* 0x1088 */ dCcD_Cps mCpsArr2[16];
     /* 0x2788 */ mVec3_c *mPnts1;
     /* 0x278C */ mVec3_c *mPnts2;
+    /* 0x2790 */ u16 mField_0x2790;
+    /* 0x2792 */ u8 mField_0x2792;
+    /* 0x2793 */ bool mbField_0x2793;
+    /* 0x2794 */ u8 _2794[0x27C0 - 0x2794];
+    /* 0x27C0 */ f32 mField_0x27C0;
+    /* 0x27C4 */ bool mbField_0x27C4;
+    /* 0x27C5 */ bool mbField_0x27C5;
 
     static InteractionTargetDef sInteraction;
     static dCcD_SrcCps sCpsSrc;

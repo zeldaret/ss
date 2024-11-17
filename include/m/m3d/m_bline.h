@@ -5,6 +5,7 @@
 #include "egg/gfx/eggTexture.h"
 #include "m/m3d/m_proc.h"
 #include "m/m_math.h"
+#include "m/m_vec.h"
 #include "nw4r/ut/ut_Color.h"
 
 namespace m3d {
@@ -44,6 +45,10 @@ public:
     void update(mVec3_c *startPos);
     void remove();
     void draw();
+
+    mVec3_c &getPathPoint(u16 idx) {
+        return mpPathArr[idx];
+    }
 
     // vt at 0x08
     virtual ~bline_c();
