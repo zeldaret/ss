@@ -6,8 +6,10 @@
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/c/c_cc_d.h"
+#include "d/col/c/c_m3d_g_lin.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/sceneflag_manager.h"
+#include "egg/math/eggMath.h"
 #include "m/m3d/m3d.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
@@ -15,6 +17,7 @@
 #include "m/m_vec.h"
 #include "nw4r/math/math_arithmetic.h"
 #include "nw4r/math/math_triangular.h"
+#include "rvl/MTX/mtxvec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
 
@@ -41,7 +44,7 @@ dCcD_SrcCps dAcOivyRope_c::sCpsSrc = {
      {AT_TYPE_0x800000 | AT_TYPE_BEETLE | AT_TYPE_CLAWSHOT | AT_TYPE_ARROW | AT_TYPE_WHIP | AT_TYPE_SLINGSHOT |
           AT_TYPE_BOMB | AT_TYPE_SWORD,
       0x111,
-      {0x19, 0x407},
+      {0, 0x19, 0x407},
       0,
       0},
      /* mObjCo */ {0x4029}},
@@ -53,7 +56,7 @@ dCcD_SrcSph dAcOivyRope_c::sSphSrc = {
   /* mObjInf */
     {/* mObjAt */ {AT_TYPE_DAMAGE, 0x11, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
      /* mObjTg */
-     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, {0, 0x407}, 0, 0},
+     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, {0, 0, 0x407}, 0, 0},
      /* mObjCo */ {0x29}},
  /* mSphInf */
     {100.f}
@@ -63,7 +66,7 @@ dCcD_SrcCyl dAcOivyRope_c::sCylSrc = {
   /* mObjInf */
     {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
      /* mObjTg */
-     {AT_TYPE_BELLOWS, 0x311, {0, 8}, 8, 0},
+     {AT_TYPE_BELLOWS, 0x311, {0, 0, 8}, 8, 0},
      /* mObjCo */ {0x109}},
  /* mCylInf */
     {10.f, 750.f}
@@ -279,38 +282,243 @@ UNKTYPE dAcOivyRope_c::fn_256_BFF0(UNKTYPE) {}
 
 UNKTYPE dAcOivyRope_c::fn_256_C200(UNKTYPE) {}
 
-UNKTYPE dAcOivyRope_c::fn_256_C410(UNKTYPE) {}
+void dAcOivyRope_c::fn_256_C410() {
+    fn_256_3E70();
+    if (mStateMgr.isState(StateID_RopeReturn)) {
+        mVec3_c diff = dAcPy_c::GetLink()->position - mTightropeEnd;
+        if (diff.squareMagXZ() > 90000.f) {
+            return;
+        }
+    }
 
-UNKTYPE dAcOivyRope_c::fn_256_C6F0(UNKTYPE) {}
+    if (mStateMgr.isState(StateID_PlayerGrip) || mField_0xFCE != 0) {
+        return;
+    }
 
-UNKTYPE dAcOivyRope_c::fn_256_C740(UNKTYPE) {}
+    int count = mSegmentCount - 9;
+    f32 f2 = dAcPy_c::GetLink()->position.y - 100.f;
+    f32 f = 150.f + dAcPy_c::GetLink()->position.y;
+    if (count < 0) {
+        count = 0;
+    }
+    for (int i = 0; i < mField_0xFEB; i++) {
+        // TODO
+    }
+}
 
-UNKTYPE dAcOivyRope_c::fn_256_C810(UNKTYPE) {}
+bool dAcOivyRope_c::fn_256_C6F0() {
+    if (mField_0x105F) {
+        mField_0x105F += mField_0x105E;
+        if (mField_0x105F >= mSegmentCount - 19) {
+            mField_0x105F = mSegmentCount - 20;
+            return true;
+        }
+    }
+    return false;
+}
 
-UNKTYPE dAcOivyRope_c::fn_256_C960(UNKTYPE) {}
+void dAcOivyRope_c::fn_256_C740() {
+    const f32 f2 = (1.f - mField_0x1040) * 4.f + 1.1f;
+    if (mField_0xFA4 <= f2) {
+        const mVec3_c &pnt = fn_256_D730(mSegmentCount - 1);
+        const mVec3_c diff = pnt - dAcPy_c::GetLink()->position;
+        const f32 diffmag = diff.squareMagXZ();
+        if (diffmag < 28900.f) {
+            fn_256_C980(450.f, 200.f);
+        }
+    }
+}
 
-UNKTYPE dAcOivyRope_c::fn_256_C980(UNKTYPE) {}
+void dAcOivyRope_c::fn_256_C810(mVec3_c &pOut, int idx) {
+    if (idx > 0) {
+        mVec3_c end = fn_256_D730(idx);
+        mVec3_c start = fn_256_D730(idx - 1);
+        cLib::addCalcPos(&end, pOut, 0.65f, 75.f, 1.f);
+        mVec3_c diff = end - start;
+        diff.normalize();
+        pOut = start + diff * 25.f;
+    }
+}
+
+void dAcOivyRope_c::fn_256_C960() {
+    fn_256_C980(150.f, 200.f);
+}
+
+void dAcOivyRope_c::fn_256_C980(f32 f0, f32 f1) {
+    sInteraction.field_0x24 = mDistance + f1;
+    sInteraction.field_0x14 = f0;
+    AttentionManager::sInstance->addTarget(*this, sInteraction, 0, nullptr);
+}
 
 UNKTYPE dAcOivyRope_c::fn_256_C9B0(UNKTYPE) {}
 
-UNKTYPE dAcOivyRope_c::fn_256_CD40(UNKTYPE) {}
+void dAcOivyRope_c::fn_256_CD40() {
+    position = poscopy3 = poscopy2 = fn_256_D730(mSegmentCount - 1);
 
-UNKTYPE dAcOivyRope_c::fn_256_CE20(UNKTYPE) {}
+    mCps1.Set(sCpsSrc);
+    mCps1.SetStts(mStts);
+    mCps1.SetR(15.f);
 
-UNKTYPE dAcOivyRope_c::fn_256_CFA0(UNKTYPE) {}
+    mCps1.SetTgInfo_0x1(0xB);
 
-UNKTYPE dAcOivyRope_c::fn_256_D050(UNKTYPE) {}
+    mVec3_c tmp = position;
+    tmp.y -= 50.f;
+    mCps1.cM3dGLin::Set(position, tmp);
 
-UNKTYPE dAcOivyRope_c::fn_256_D110(UNKTYPE) {}
+    mCps1.OnTg_0x200000();
+}
 
-UNKTYPE dAcOivyRope_c::fn_256_D1B0(UNKTYPE) {}
+void dAcOivyRope_c::fn_256_CE20(f32 *pOut1, f32 *pOut2, f32 *pOut3) {
+    f32 f2, f3;
+    f32 f1 = mField_0xFD6;
+    f2 = mField_0xFAC * mField_0xFAC + mField_0xFB0 * mField_0xFB0;
+    f3 = nw4r::math::FSqrt(f2);
+    f32 temp = f3 / f1;
+    f2 = nw4r::math::FAbs(temp);
+    if (f2 > 1.f) {
+        mField_0xFAC = (mField_0xFD6 - 1) * mField_0xFCC.cos();
+        mField_0xFB0 = (mField_0xFD6 - 1) * -mField_0xFCC.sin();
 
-UNKTYPE dAcOivyRope_c::fn_256_D2B0(UNKTYPE) {}
+        f2 = 1.f;
+    }
 
-UNKTYPE dAcOivyRope_c::fn_256_D3D0(UNKTYPE) {}
+    *pOut1 = f1;
+    *pOut2 = f3;
+    *pOut3 = f2;
+}
+
+void dAcOivyRope_c::fn_256_CFA0(bool bool0) {
+    if (bool0 && mField_0x1005 != 0) {
+        mField_0x1005 = 0;
+        mField_0x105F = mSegmentCount - 24;
+
+        mField_0xFF7 = 1;
+        mField_0xFF6 = 1;
+
+        mField_0xFC4 = 0.05f;
+
+        mField_0xFD6 = 20;
+
+        mField_0xFA4 = 1.1f + (s8)mField_0x1005 * 0.1f;
+        mField_0xFA8 = 1.1f + (s8)mField_0x1005 * 0.1f;
+
+        mField_0xFD2 = 0;
+        mField_0xFD4 = 0;
+    }
+}
+void dAcOivyRope_c::fn_256_D050() {
+    bool check = checkSubtype(0) || checkSubtype(4) || checkSubtype(3) || checkSubtype(7) || checkSubtype(6);
+    if (check) {
+        mCyl.Set(sCylSrc);
+        mCyl.SetStts(mStts);
+        mCyl.SetH(mDistance);
+    }
+}
+
+void dAcOivyRope_c::fn_256_D110() {
+    u32 third = (mSegmentCount - 1) / 3;
+    mField_0xFF0[0] = 0;
+    for (int i = 1; i <= 3; i++) {
+        mField_0xFF0[i] = third * i;
+        if (mField_0xFF0[i] > (mSegmentCount - 1)) {
+            mField_0xFF0[i] = (mSegmentCount - 1);
+        }
+    }
+}
+
+void dAcOivyRope_c::fn_256_D1B0() {
+    fn_256_D110();
+    for (int i = 0; i < 3; i++) {
+        mCpsArr[i].Set(sCpsSrc);
+        mCpsArr[i].SetStts(mStts);
+        mCpsArr[i].ClrCoSet();
+        mCpsArr[i].SetR(15.f);
+        mCpsArr[i].OffTgType(AT_TYPE_BEETLE | AT_TYPE_SLINGSHOT | AT_TYPE_SWORD);
+        mCpsArr[i].OnTgType(AT_TYPE_0x40);
+        mCpsArr[i].cM3dGLin::Set(fn_256_D730(mField_0xFF0[i]), fn_256_D730(mField_0xFF0[i + 1]));
+    }
+}
+
+void dAcOivyRope_c::fn_256_D2B0() {
+    if (checkObjectProperty(0x1)) {
+        return;
+    }
+
+    if (mSubtype == 3 && mField_0x1039 == 3) {
+        return;
+    }
+
+    if (mField_0xFEF != 0) {
+        mField_0xFEF--;
+    }
+
+    for (int i = 0; i < 3; i++) {
+        if (mCpsArr[i].ChkTgHit()) {
+            mField_0xFEF = 2;
+        }
+
+        mCpsArr[i].cM3dGLin::Set(fn_256_D730(mField_0xFF0[i]), fn_256_D730(mField_0xFF0[i + 1]));
+
+        dCcS::GetInstance()->Set(&mCpsArr[i]);
+    }
+}
+
+void dAcOivyRope_c::fn_256_D3D0(mVec3_c &pOut1, mVec3_c &pOut2, s16 param2, bool bool0, f32 float0) {
+    mVec3_c playerPos = dAcPy_c::GetLink()->position;
+    mVec3_c playerCenter = dAcPy_c::GetLink()->getCenterTranslation();
+
+    if (bool0) {
+        f32 a = (playerCenter.x - playerPos.x);
+        a *= 0.3f;
+
+        f32 b = (playerCenter.z - playerPos.z);
+        b *= 0.3f;
+
+        playerCenter.x = playerPos.x + a;
+        playerCenter.z = playerPos.z + b;
+    }
+
+    mMtx_c m;
+    m.transS(playerCenter);
+    mAng3_c playerRot = dAcPy_c::GetLink()->rotation;
+    m.ZXYrotM(playerRot.x, playerRot.y, playerRot.z);
+
+    // name 100% guess
+    mAng swingAngle = (mField_0xFCC - 0x8000) - dAcPy_c::GetLink()->rotation.y;
+
+    f32 something = param2 / 5461.f;
+    if (something > 1.f) {
+        something = 1.f;
+    }
+
+    mVec3_c somevec(0.f, 0.f, 0.f);
+    somevec.x += something * swingAngle.sin();
+    somevec.z += something * swingAngle.cos();
+
+    mVec3_c somevec2(0.f, -25.f, float0);
+    PSMTXMultVec(m, somevec, somevec2);
+    somevec2 += somevec;
+    if (somevec2.z < float0) {
+        somevec2.z = float0;
+    }
+
+    // name 100% guess
+    mVec3_c swingTarget;
+    PSMTXMultVec(m, somevec, swingTarget);
+
+    cLib::addCalcPos(&pOut2, swingTarget, 0.3f, 50.f, 1.f);
+
+    if (pOut2.squareDistance(somevec2) > something * something) {
+        pOut1 = pOut2 - somevec2;
+        pOut1.normalize();
+        pOut2 = somevec2 + pOut1 * something;
+    }
+    pOut1 = pOut2 - playerPos;
+    pOut1.normalize();
+}
 
 // Get Path Point
-const mVec3_c &dAcOivyRope_c::fn_256_D730(u32 idx) {
+const mVec3_c &dAcOivyRope_c::fn_256_D730(s32 idx) {
     if (mSubtype == 3) {
         return mCoilMdl.getLine(0)->getPathPoint(idx);
     } else {
@@ -319,7 +527,7 @@ const mVec3_c &dAcOivyRope_c::fn_256_D730(u32 idx) {
 }
 
 // Set Path Point
-void dAcOivyRope_c::fn_256_D7A0(u32 idx, const mVec3_c &pnt) {
+void dAcOivyRope_c::fn_256_D7A0(s32 idx, const mVec3_c &pnt) {
     if (mSubtype == 3) {
         mCoilMdl.getLine(0)->getPathPoint(idx) = pnt;
     } else {

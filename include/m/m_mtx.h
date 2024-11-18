@@ -82,6 +82,12 @@ public:
         return *this;
     }
 
+    mVec3_c operator*(const mVec3_c &rhs) {
+        mVec3_c out;
+        PSMTXMultVec(*this, rhs, out);
+        return out;
+    }
+
 public:
     static mMtx_c Identity;
 };

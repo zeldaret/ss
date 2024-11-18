@@ -318,7 +318,8 @@ public:
 };
 
 struct cCcD_SrcGObjTgInfo {
-    /* 0x00 */ u16 mField_0x0;
+    /* 0x00 */ u8 mField_0x0;
+    /* 0x00 */ u8 mField_0x1;
     /* 0x02 */ u16 mField_0x2;
 };
 
@@ -633,6 +634,9 @@ public:
     void Set_0x4B(u8 val) {
         mField_0x4B = val;
     }
+    void SetInfo_0x1(u8 val) {
+        mSrc.mInfo.mField_0x1 = val;
+    }
 
     void SetInfo_0x2(u16 val) {
         mSrc.mInfo.mField_0x2 = val;
@@ -788,8 +792,14 @@ public:
         mCo.OnSPrm(f);
     }
 
-    void SetTgType(u32 flag) {
-        mTg.SetType(flag);
+    void SetTgType(u32 type) {
+        mTg.SetType(type);
+    }
+    void OnTgType(u32 type) {
+        mTg.OnType(type);
+    }
+    void OffTgType(u32 type) {
+        mTg.OffType(type);
     }
     void SetAtFlag(u32 flag) {
         mAt.SetSPrm(flag);
@@ -905,11 +915,18 @@ public:
         return mTg.MskSPrm(0x400);
     }
 
+    void OnTg_0x200000() {
+        mTg.OnSPrm(0x200000);
+    }
+
     void SetTg_0x4B(u8 val) {
         mTg.Set_0x4B(val);
     }
     void SetTgInfo_0x2(u16 val) {
         mTg.SetInfo_0x2(val);
+    }
+    void SetTgInfo_0x1(u8 val) {
+        mTg.SetInfo_0x1(val);
     }
 
     // Co

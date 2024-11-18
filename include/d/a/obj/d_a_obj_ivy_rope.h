@@ -109,23 +109,23 @@ public:
     UNKTYPE fn_256_BE80(UNKTYPE);
     UNKTYPE fn_256_BFF0(UNKTYPE);
     UNKTYPE fn_256_C200(UNKTYPE);
-    UNKTYPE fn_256_C410(UNKTYPE);
-    UNKTYPE fn_256_C6F0(UNKTYPE);
-    UNKTYPE fn_256_C740(UNKTYPE);
-    UNKTYPE fn_256_C810(UNKTYPE);
-    UNKTYPE fn_256_C960(UNKTYPE);
-    UNKTYPE fn_256_C980(UNKTYPE);
+    void fn_256_C410();
+    bool fn_256_C6F0();
+    void fn_256_C740();
+    void fn_256_C810(mVec3_c &pOut, int idx);
+    void fn_256_C960();
+    void fn_256_C980(f32, f32);
     UNKTYPE fn_256_C9B0(UNKTYPE);
-    UNKTYPE fn_256_CD40(UNKTYPE);
-    UNKTYPE fn_256_CE20(UNKTYPE);
-    UNKTYPE fn_256_CFA0(UNKTYPE);
-    UNKTYPE fn_256_D050(UNKTYPE);
-    UNKTYPE fn_256_D110(UNKTYPE);
-    UNKTYPE fn_256_D1B0(UNKTYPE);
-    UNKTYPE fn_256_D2B0(UNKTYPE);
-    UNKTYPE fn_256_D3D0(UNKTYPE);
-    const mVec3_c &fn_256_D730(u32 idx);    // Get Path Point
-    void fn_256_D7A0(u32, const mVec3_c &); // Set Path Point
+    void fn_256_CD40();
+    void fn_256_CE20(f32 *, f32 *, f32 *);
+    void fn_256_CFA0(bool);
+    void fn_256_D050();
+    void fn_256_D110();
+    void fn_256_D1B0();
+    void fn_256_D2B0();
+    void fn_256_D3D0(mVec3_c &pOut1, mVec3_c &pOut2, s16 param2, bool bool0, f32 float0);
+    const mVec3_c &fn_256_D730(s32 idx);    // Get Path Point
+    void fn_256_D7A0(s32, const mVec3_c &); // Set Path Point
     void fn_256_D850();                     // Draw Shadow
     void fn_256_DAA0(bool, bool, f32, f32);
     void fn_256_DE80();
@@ -133,6 +133,10 @@ public:
     u32 fn_256_DF30();
     void fn_256_E3E0();
     bool fn_256_E790();
+
+    bool checkSubtype(u32 sub) {
+        return mSubtype == sub;
+    }
 
 private:
     /* 0x 330 */ UNKWORD mField_0x330;
@@ -158,15 +162,20 @@ private:
     /* 0x F50 */ mVec3_c mField_0xF50;
     /* 0x F5C */ u8 _F5C[0xF68 - 0xF5C];
     /* 0x F68 */ mVec3_c mField_0xF68;
-    /* 0x F74 */ u8 _F74[0xFAC - 0xF74];
+    /* 0x F74 */ u8 _F74[0xFA4 - 0xF74];
+    /* 0x FA4 */ f32 mField_0xFA4;
+    /* 0x FA8 */ f32 mField_0xFA8;
     /* 0x FAC */ f32 mField_0xFAC;
     /* 0x FB0 */ f32 mField_0xFB0;
     /* 0x FB4 */ f32 mField_0xFB4;
     /* 0x FB8 */ f32 mDistance;
     /* 0x FBC */ f32 mOldDistance;
-    /* 0x FC0 */ u8 _FC0[0xFCC - 0xFC0];
+    /* 0x FC0 */ UNKWORD mField_0xFC0;
+    /* 0x FC4 */ f32 mField_0xFC4;
+    /* 0x FC8 */ UNKWORD mField_0xFC8;
     /* 0x FCC */ mAng mField_0xFCC;
-    /* 0x FCE */ u8 _FCE[0xFD2 - 0xFCE];
+    /* 0x FCE */ u16 mField_0xFCE;
+    /* 0x FD0 */ u8 _FD0[0xFD2 - 0xFD0];
     /* 0x FD2 */ s16 mField_0xFD2;
     /* 0x FD4 */ s16 mField_0xFD4;
     /* 0x FD6 */ s16 mField_0xFD6;
@@ -184,7 +193,14 @@ private:
     /* 0x FED */ u8 mEventIdx;
     /* 0x FEE */ u8 mField_0xFEE;
     /* 0x FEF */ u8 mField_0xFEF;
-    /* 0x FEE */ u8 _FEE[0x1010 - 0xFF0];
+    /* 0x FF0 */ u8 mField_0xFF0[4];
+    /* 0x FF4 */ u8 mField_0xFF4;
+    /* 0x FF5 */ u8 mField_0xFF5;
+    /* 0x FF6 */ u8 mField_0xFF6;
+    /* 0x FF7 */ u8 mField_0xFF7;
+    /* 0x FF8 */ u8 _FE8[0x1005 - 0xFF8];
+    /* 0x1005 */ u8 mField_0x1005;
+    /* 0x1006 */ u8 _1006[0x1010 - 0x1006];
     /* 0x1010 */ mVec3_c mField_0x1010;
     /* 0x101C */ mVec3_c mField_0x101C;
     /* 0x1028 */ f32 mField_0x1028;
@@ -200,7 +216,10 @@ private:
     /* 0x103D */ u8 mField_0x103D;
     /* 0x103E */ bool mDropped;
     /* 0x1040 */ f32 mField_0x1040;
-    /* 0x1044 */ u8 _1044[0x1088 - 0x1044];
+    /* 0x1044 */ u8 _1044[0x105E - 0x1044];
+    /* 0x105E */ u8 mField_0x105E;
+    /* 0x105F */ u8 mField_0x105F;
+    /* 0x1060 */ u8 _1060[0x1088 - 0x1060];
     /* 0x1088 */ dCcD_Cps mCpsArr2[16];
     /* 0x2788 */ mVec3_c *mPnts1;
     /* 0x278C */ mVec3_c *mPnts2;

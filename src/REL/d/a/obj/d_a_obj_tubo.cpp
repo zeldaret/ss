@@ -53,7 +53,7 @@ STATE_DEFINE(dAcOtubo_c, Rebirth);
 dCcD_SrcSph dAcOtubo_c::sSphSrc = {
   /* mObjInf */
     {/* mObjAt */ {AT_TYPE_PHYSICS, 0x12, {0, 0, 0}, 2, 0, 0, 0, 0, 0},
-     /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_0x80000 | AT_TYPE_0x8000), 0x801111, {0xA, 0x40F}, 8, 0},
+     /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_0x80000 | AT_TYPE_0x8000), 0x801111, {0, 0xA, 0x40F}, 8, 0},
      /* mObjCo */ {0x1E9}},
  /* mSphInf */
     {30.f},
