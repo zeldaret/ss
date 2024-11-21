@@ -889,6 +889,9 @@ public:
     void OnTgSet() {
         mTg.OnSPrm(1);
     }
+    void OffTgSet() {
+        mTg.OffSPrm(1);
+    }
     u32 GetTgGrp() const {
         return mTg.MskSPrm(0x3E);
     }

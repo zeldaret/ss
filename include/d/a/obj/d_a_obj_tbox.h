@@ -13,11 +13,13 @@
 #include "m/m3d/m_anmmdl.h"
 #include "m/m3d/m_anmtexpat.h"
 #include "m/m3d/m_anmtexsrt.h"
+#include "m/m3d/m_scnleaf.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_vec.h"
 #include "nw4r/ut/ut_Color.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
+#include "toBeSorted/attention.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/stage_render_stuff.h"
 
@@ -42,6 +44,7 @@ struct TboxAndMoreUnkCC {
 
     void addCc(dAcTboxCcD &ccD, const dCcD_SrcUnk &src);
     void SetStts(cCcD_Stts &stts);
+    void registerColliders();
 };
 
 class dAcTbox_c : public dAcObjBase_c {
@@ -63,6 +66,8 @@ public:
     virtual int actorExecuteInEvent() override;
     virtual int draw() override;
 
+    virtual void *getObjectListEntry() override;
+
     STATE_FUNC_DECLARE(dAcTbox_c, DugOut);
     STATE_FUNC_DECLARE(dAcTbox_c, WaitAppear);
     STATE_FUNC_DECLARE(dAcTbox_c, DemoAppear);
@@ -80,7 +85,7 @@ public:
 private:
     bool initBgW(dBgW &bg, const char *arcName, const char *ccName);
     bool isNotSmall() const;
-    void setItemId(u16 item) const;
+    void setItemId(u16 item);
     void setChestFlag();
     void setDoObstructionCheck();
     int isActualVisibleBox() const;
@@ -104,6 +109,26 @@ private:
     void noUnregisterDowsing();
 
     static bool fn_80268660(int arg);
+    void fn_8026E090();
+    void fn_8026E630();
+    bool fn_8026D540();
+    bool fn_8026D3C0();
+    void syncScaleToMdl(m3d::scnLeaf_c *lf);
+    void fn_8026DD70(mVec3_c *out1, mVec3_c *out2);
+    void getCylParams(mVec3_c *out1, f32 *out2, f32 *out3);
+    void fn_8026DAD0(mVec3_c *src, mVec3_c *dest) const;
+    void fn_8026DAC0(mAng& ang);
+
+    static bool hasCollectedAllTears();
+    static bool isValidVariant(int variant);
+
+    void setActionState();
+
+    void setFlags(u32 flags);
+
+    void fn_8026D140();
+
+    const InteractionTargetDef &getInteractionTargetDef() const;
 
     /* 0x0330 */ m3d::mdlAnmChr mMdl1;
     /* 0x0398 */ m3d::smdl_c mOpenFxMdl;
@@ -142,18 +167,20 @@ private:
 
     /* 0x11D8 */ mVec3_c field_0x11D8;
 
-    /* 0x11E4 */ u8 field_0x11E4[0x11EC - 0x11E4];
+    /* 0x11E4 */ u8 field_0x11E4[0x11E8 - 0x11E4];
+    /* 0x11E8 */ f32 field_0x11E8;
     
     /* 0x11EC */ f32 field_0x11EC;
     /* 0x11F0 */ UNKWORD field_0x11F0;
+    /* 0x11F4 */ UNKWORD field_0x11F4;
     
-    /* 0x11F4 */ u8 field_0x11F4[0x11FC - 0x11F4];
+    /* 0x11F8 */ u8 field_0x11F8[0x11FC - 0x11F8];
     
     /* 0x11FC */ UNKWORD field_0x11FC;
 
     /* 0x1200 */ u16 mItemId;
 
-    /* 0x1202 */ u8 field_0x1202[0x1204 - 0x1202];
+    /* 0x1202 */ u16 mItemModelIdx;
     
     /* 0x1204 */ bool mHasBeenOpened;
     /* 0x1205 */ u8 mSpawnSceneFlag;
@@ -165,7 +192,8 @@ private:
     /* 0x1209 */ u8 mVariant;
     /* 0x120A */ u8 field_0x120A;
 
-    /* 0x120B */ u8 field_0x120B[0x120D - 0x120B];
+    /* 0x120B */ u8 field_0x120B;
+    /* 0x120C */ u8 field_0x120C;
 
     /* 0x120D */ u8 field_0x120D;
 

@@ -35,8 +35,8 @@ bool OarcManager::addEntryFromSuperArc(const char *object, void *data, EGG::Heap
     return mArcTable.addEntryFromSuperArc(object, data, 0, heap);
 }
 
-void OarcManager::ensureLoaded1(const char *object) {
-    mArcTable.ensureLoadedMaybe2(object);
+int OarcManager::ensureLoaded1(const char *object) {
+    return mArcTable.ensureLoadedMaybe2(object);
 }
 
 void OarcManager::ensureLoaded2(const char *object) {

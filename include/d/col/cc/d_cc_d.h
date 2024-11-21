@@ -83,6 +83,9 @@ public:
 
     virtual cCcD_ShapeAttr *GetShapeAttr() override;
 
+    // Have to bring these in scope. Consider renaming this
+    // Set function instead or create an inline?
+    using cM3dGUnk::Set;
     void Set(const dCcD_SrcUnk &src);
 };
 
