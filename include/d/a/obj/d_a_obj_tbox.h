@@ -66,6 +66,9 @@ public:
     virtual int actorExecuteInEvent() override;
     virtual int draw() override;
 
+    virtual void registerInEvent() override;
+    virtual void unkVirtFunc_0x6C() override;
+
     virtual void *getObjectListEntry() override;
 
     STATE_FUNC_DECLARE(dAcTbox_c, DugOut);
@@ -83,7 +86,8 @@ public:
     STATE_FUNC_DECLARE(dAcTbox_c, GoddessWait);
 
 private:
-    bool initBgW(dBgW &bg, const char *arcName, const char *ccName);
+    static f32 getSomeRate();
+    bool initBgW(dBgW &bg, const char *arcName, const char *fileName);
     bool isNotSmall() const;
     void setItemId(u16 item);
     void setChestFlag();
@@ -99,6 +103,9 @@ private:
     bool checkTboxFlag() const;
     bool fn_8026D560() const;
     bool isItemRupee() const;
+
+    void getDowsingTargetOffset(mVec3_c *offset) const;
+    void initDowsingTarget(DowsingTarget *target, DowsingTarget::DowsingSlot slot, mVec3_c *offset);
     void initDowsingTarget(DowsingTarget::DowsingSlot slot);
     void initDowsingTargetCube();
 
@@ -126,8 +133,13 @@ private:
 
     void setFlags(u32 flags);
 
+    bool fn_8026D120() const;
+    void fn_8026D130();
     void fn_8026D140();
+    void fn_8026D950();
 
+    bool checkIsClear() const;
+    static bool fn_802686F0(const mVec3_c &vec, f32 y);
     const InteractionTargetDef &getInteractionTargetDef() const;
 
     /* 0x0330 */ m3d::mdlAnmChr mMdl1;
@@ -158,12 +170,15 @@ private:
     /* 0x10E8 */ fLiNdBa_c mTboxListNode;
     /* 0x10F4 */ ActorEventRelated mEvent;
     /* 0x1144 */ dAcRef_c<dAcItem_c> mItemRef;
-    /* 0x1150 */ DowsingTarget mDowsingTarget1;
-    /* 0x1170 */ DowsingTarget mDowsingTarget2;
+    /* 0x1150 */ DowsingTarget mDowsingTarget;
+    /* 0x1170 */ DowsingTarget mGoddessDowsingTarget;
     /* 0x1190 */ void (dAcTbox_c::*mRegisterDowsingTarget)();
     /* 0x119C */ void (dAcTbox_c::*mUnregisterDowsingTarget)();
 
-    /* 0x11A8 */ u8 field_0x11A8[0x11D8 - 0x11A8];
+    /* 0x11A8 */ u8 field_0x11A8[0x11C0 - 0x11A8];
+
+    /* 0x11C0 */ mVec3_c field_0x11C0;
+    /* 0x11CC */ mVec3_c field_0x11CC;
 
     /* 0x11D8 */ mVec3_c field_0x11D8;
 
@@ -174,7 +189,7 @@ private:
     /* 0x11F0 */ UNKWORD field_0x11F0;
     /* 0x11F4 */ UNKWORD field_0x11F4;
     
-    /* 0x11F8 */ u8 field_0x11F8[0x11FC - 0x11F8];
+    /* 0x11F8 */ UNKWORD field_0x11F8;
     
     /* 0x11FC */ UNKWORD field_0x11FC;
 

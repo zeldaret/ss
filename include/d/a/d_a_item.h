@@ -55,6 +55,7 @@ public:
     static int getTotalArrowCount();
     static int getTotalSeedCount();
 
+    static bool isRupee(ITEM_ID item);
     static bool isKeyPiece(ITEM_ID item);
     static bool isTreasure(ITEM_ID item);
 

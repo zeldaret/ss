@@ -5,11 +5,13 @@
 #include "d/a/d_a_item.h"
 #include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
+#include "d/col/bg/d_bg_s.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "m/m3d/m_fanm.h"
+#include "m/m3d/m_scnleaf.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/g3d_resanmchr.h"
@@ -21,6 +23,7 @@
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/dowsing_target.h"
+#include "toBeSorted/event_manager.h"
 #include "toBeSorted/room_manager.h"
 
 SPECIAL_ACTOR_PROFILE(TBOX, dAcTbox_c, fProfile::TBOX, 0x018D, 0, 6);
@@ -751,9 +754,13 @@ static char *const sOpenCcNames[] = {
     "GoddessTBoxOpen",
 };
 
+f32 dAcTbox_c::getSomeRate() {
+    return 1.0f / 8.333333f;
+}
+
 dAcTbox_c::dAcTbox_c()
     : mStateMgr(*this, sStateID::null), mScnCallback(this), mEvent(*this, nullptr), mTboxListNode(this),
-      mDowsingTarget1(this, DowsingTarget::SLOT_NONE), mDowsingTarget2(this, DowsingTarget::SLOT_NONE) {
+      mDowsingTarget(this, DowsingTarget::SLOT_NONE), mGoddessDowsingTarget(this, DowsingTarget::SLOT_NONE) {
     field_0x120B = 0;
     field_0x120E = 0;
     mDoObstructedCheck = false;
@@ -889,7 +896,7 @@ bool dAcTbox_c::createHeap() {
     return true;
 }
 
-static u32 sSomeCounters[16] = {};
+static u32 sSomeCounters[16] = {0};
 
 int dAcTbox_c::create() {
     if (!isActualVisibleBox()) {
@@ -958,7 +965,7 @@ int dAcTbox_c::create() {
 
             if (b) {
                 other->deleteRequest();
-                field_0x120D = true;
+                other->field_0x120D = true;
             } else {
                 field_0x120D = true;
                 return FAILED;
@@ -1005,7 +1012,7 @@ int dAcTbox_c::create() {
         {0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f},
     };
     mCcD3.Set(s1);
-    mCcD4.SetStts(mStts);
+    mCcD3.SetStts(mStts);
     static const dCcD_SrcCyl s2 = {
         sColSrc,
         {1.0f, 1.0f},
@@ -1245,7 +1252,7 @@ int dAcTbox_c::actorExecute() {
             mCcD2.Set(v1, v2);
             mCcD2.Set(field_0x11D8, rotation.y);
         } else {
-            mCcD2.OffTgSet();
+            mCcD2.ClrTgSet();
         }
         field_0x0D48.registerColliders();
     }
@@ -1431,7 +1438,7 @@ int dAcTbox_c::actorExecuteInEvent() {
             mCcD2.Set(v1, v2);
             mCcD2.Set(field_0x11D8, rotation.y);
         } else {
-            mCcD2.OffTgSet();
+            mCcD2.ClrTgSet();
         }
         field_0x0D48.registerColliders();
     }
@@ -1553,9 +1560,102 @@ const mVec3_c &dAcTbox_c::fn_8026B3C0() const {
     return v2;
 }
 
-void dAcTbox_c::initializeState_DugOut() {}
-void dAcTbox_c::executeState_DugOut() {}
+void dAcTbox_c::initializeState_DugOut() {
+    mScale.set(0.0f, 0.0f, 1.0f);
+    field_0x11E8 = 0.0f;
+    field_0x11F4 &= ~2;
+    if (mHasBeenOpened == 1) {
+        field_0x120C = 1;
+    } else {
+        field_0x120C = 0;
+    }
+    setActorProperty(0x100);
+    if (mVariant == NORMAL) {
+        mMdl1.setAnm(sMdlNames[0], m3d::PLAY_MODE_4);
+    }
+    if (mVariant == NORMAL) {
+        if (checkTboxFlag()) {
+            mMdl1.setFrame(mMdl1.getAnm().getEndFrame());
+        } else {
+            mMdl1.setFrame(mMdl1.getAnm().getStartFrame());
+        }
+    }
+    if (mVariant == NORMAL) {
+        mAnmMatClr1.setFrame(mAnmMatClr1.getFrameMax(0), 0);
+    }
+    fn_8026D140();
+}
+void dAcTbox_c::executeState_DugOut() {
+    field_0x11F4 |= 2;
+    if (field_0x11E8 < 1.0f) {
+        bool result = sLib::chase(&field_0x11E8, 1.0f, 0.2f);
+        switch ((u32)mVariant) {
+            case NORMAL:
+                if (mHasBeenOpened == 1) {
+                    field_0x11C0.set(-61.0f, 0.0f, -90.0f);
+                    field_0x11CC.set(61.0f, 142.0f, 42.0f);
+                } else {
+                    field_0x11C0.set(-61.0f, 0.0f, -42.0f);
+                    field_0x11CC.set(61.0f, 100.0f, 42.0f);
+                }
+                break;
+            case SMALL:
+                if (mHasBeenOpened == 1) {
+                    field_0x11C0.set(-38.0f, 0.0f, -68.0f);
+                    field_0x11CC.set(38.0f, 101.0f, 31.0f);
+                } else {
+                    field_0x11C0.set(-38.0f, 0.0f, -35.0f);
+                    field_0x11CC.set(38.0f, 68.0f, 35.0f);
+                }
+                break;
+            case BOSS:
+                if (mHasBeenOpened == 1) {
+                    field_0x11C0.set(-90.0f, 0.0f, -135.0f);
+                    field_0x11CC.set(90.0f, 163.0f, 56.0f);
+                } else {
+                    field_0x11C0.set(-90.0f, 0.0f, -53.0f);
+                    field_0x11CC.set(90.0f, 133.0f, 56.0f);
+                }
+                break;
+            case GODDESS:
+                if (mHasBeenOpened == 1) {
+                    field_0x11C0.set(-62.0f, 0.0f, -95.0f);
+                    field_0x11CC.set(62.0f, 140.0f, 47.0f);
+                } else {
+                    field_0x11C0.set(-62.0f, 0.0f, -47.0f);
+                    field_0x11CC.set(62.0f, 100.0f, 47.0f);
+                }
+                break;
+        }
+        field_0x11C0 *= field_0x11E8;
+        field_0x11CC *= field_0x11E8;
+        if (!result) {
+            return;
+        }
+    }
+
+    bool bX = sLib::chase(&mScale.x, 1.0f, 0.2f);
+    bool bY = sLib::chase(&mScale.y, 1.0f, 0.2f);
+    if (bX && bY) {
+        if (mVariant == GODDESS) {
+            if (mHasBeenOpened == true) {
+                mStateMgr.changeState(StateID_GoddessWait);
+            } else {
+                if (StoryflagManager::sInstance->getCounterOrFlag(getParams2Lower())) {
+                    mStateMgr.changeState(StateID_GoddessWaitOn);
+                } else {
+                    mStateMgr.changeState(StateID_GoddessWaitOff);
+                }
+            }
+        } else if (mHasBeenOpened == true) {
+            mStateMgr.changeState(StateID_Wait);
+        } else {
+            mStateMgr.changeState(StateID_WaitOpen);
+        }
+    }
+}
 void dAcTbox_c::finalizeState_DugOut() {}
+
 void dAcTbox_c::initializeState_WaitAppear() {
     mScale.set(0.0f, 0.0f, 0.0f);
     setActorProperty(0x100);
@@ -1563,7 +1663,8 @@ void dAcTbox_c::initializeState_WaitAppear() {
     field_0x11E8 = 0.0f;
     field_0x11F4 &= ~0x2;
     field_0x120C = 0;
-    // field_0x11C0
+    field_0x11C0.set(0.0f, 0.0f, 0.0f);
+    field_0x11CC.set(0.0f, 0.0f, 0.0f);
 }
 void dAcTbox_c::executeState_WaitAppear() {
     // @bug doIt is uninitialized here, so WaitAppear is UB unless field_0x120A == 0 or field_0x120A == 3
@@ -1579,22 +1680,155 @@ void dAcTbox_c::executeState_WaitAppear() {
     }
 }
 void dAcTbox_c::finalizeState_WaitAppear() {}
+
 void dAcTbox_c::initializeState_DemoAppear() {
-    // TODO, just referencing this bit of data
+    field_0x11F8 = 0;
+    mScale.set(0.0f, 0.0f, 0.0f);
+    field_0x11E8 = 0.0f;
+    setActorProperty(0x100);
     mMdl1.setAnm(sAppearAnmName, m3d::PLAY_MODE_4);
+    mMdl1.setFrame(mMdl1.getAnm().getStartFrame());
+    mAnmMatClr1.setFrame(0.0f, 0);
+    fn_8026D140();
+    field_0x11E8 = 0.0f;
+    field_0x11F4 &= ~0x2;
+    field_0x120C = 0;
+    field_0x11C0.set(0.0f, 0.0f, 0.0f);
+    field_0x11CC.set(0.0f, 0.0f, 0.0f);
 }
-void dAcTbox_c::executeState_DemoAppear() {}
+extern "C" void SmallSoundManager__playSound(void *, u32);
+extern "C" void *SOUND_EFFECT_SOUND_MGR;
+void dAcTbox_c::executeState_DemoAppear() {
+    int val = field_0x11F8++;
+    if (field_0x11F8 < 11) {
+        field_0x11C0.set(-61.0f, 0.0f, -42.0f);
+        field_0x11CC.set(61.0f, 100.0f, 42.0f);
+        f32 f = field_0x11F8 * 0.1f;
+        field_0x11C0 *= f;
+        field_0x11CC *= f;
+    }
+    if (field_0x11F8 >= 20) {
+        bool b = val < 20;
+        if (b) {
+            fn_8026D950();
+        }
+        if (b) {
+            mScale.set(1.0f, 1.0f, 1.0f);
+        }
+        bool wasStop = mMdl1.getAnm().isStop();
+        if (!wasStop) {
+            mMdl1.play();
+        }
+        bool isStop = mMdl1.getAnm().isStop();
+        if (!wasStop) {
+            field_0x11E8 = mMdl1.getAnm().getFrame() / (mMdl1.getAnm().getEndFrame() - mMdl1.getAnm().getStartFrame());
+        }
+        if (0.0f < field_0x11E8) {
+            field_0x11F4 |= 2;
+        }
+        mAnmMatClr1.play();
+        if (isStop && mAnmMatClr1.isStop(0) && field_0x11F8 > 0x5A) {
+            mEvent.advanceNext();
+            mStateMgr.changeState(StateID_WaitOpen);
+            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AD);
+        }
+    }
+}
 void dAcTbox_c::finalizeState_DemoAppear() {}
-void dAcTbox_c::initializeState_WaitOpen() {}
-void dAcTbox_c::executeState_WaitOpen() {}
-void dAcTbox_c::finalizeState_WaitOpen() {}
-void dAcTbox_c::initializeState_GoddessWaitOff() {}
+
+void dAcTbox_c::initializeState_WaitOpen() {
+    mScale.set(1.0f, 1.0f, 1.0f);
+    field_0x11E8 = 1.0f;
+    field_0x11F4 |= 2;
+    switch ((u32)mVariant) {
+        case NORMAL:
+            field_0x11C0.set(-61.0f, 0.0f, -42.0f);
+            field_0x11CC.set(61.0f, 100.0f, 42.0f);
+            break;
+        case SMALL:
+            field_0x11C0.set(-38.0f, 0.0f, -35.0f);
+            field_0x11CC.set(38.0f, 68.0f, 35.0f);
+            break;
+        case BOSS:
+            field_0x11C0.set(-90.0f, 0.0f, -53.0f);
+            field_0x11CC.set(90.0f, 133.0f, 56.0f);
+            break;
+            // WaitOpen not used for Goddess Chests
+    }
+    field_0x120C = 0;
+    clearActorProperty(0x100);
+    if (mVariant == NORMAL) {
+        mMdl1.setAnm(sMdlNames[0], m3d::PLAY_MODE_4);
+    }
+    if (mVariant == NORMAL) {
+        mMdl1.setFrame(mMdl1.getAnm().getStartFrame());
+    }
+    if (mVariant == NORMAL) {
+        mAnmMatClr1.setFrame(mAnmMatClr1.getFrameMax(0), 0);
+    }
+    fn_8026D130();
+}
+void dAcTbox_c::executeState_WaitOpen() {
+    if ((!mDoObstructedCheck || checkIsClear()) && fn_8026D120()) {
+        AttentionManager *mgr = AttentionManager::sInstance;
+        mgr->addTarget(*this, getInteractionTargetDef(), 0, nullptr);
+    }
+}
+void dAcTbox_c::finalizeState_WaitOpen() {
+    (this->*mUnregisterDowsingTarget)();
+}
+
+void dAcTbox_c::initializeState_GoddessWaitOff() {
+    clearActorProperty(0x100);
+    fn_8026D130();
+    field_0x11C0.set(-62.0f, 0.0f, -47.0f);
+    field_0x11CC.set(62.0f, 100.0f, 47.0f);
+    field_0x11E8 = 1.0f;
+    field_0x11F4 |= 2;
+    field_0x120C = 0;
+}
 void dAcTbox_c::executeState_GoddessWaitOff() {}
 void dAcTbox_c::finalizeState_GoddessWaitOff() {}
-void dAcTbox_c::initializeState_GoddessWaitOn() {}
-void dAcTbox_c::executeState_GoddessWaitOn() {}
-void dAcTbox_c::finalizeState_GoddessWaitOn() {}
-void dAcTbox_c::initializeState_DeleteArchive() {}
+
+void dAcTbox_c::initializeState_GoddessWaitOn() {
+    clearActorProperty(0x100);
+    fn_8026D130();
+    field_0x11C0.set(-62.0f, 0.0f, -47.0f);
+    field_0x11CC.set(62.0f, 100.0f, 47.0f);
+    field_0x11E8 = 1.0f;
+    field_0x11F4 |= 2;
+    mGoddessDowsingTarget.doRegister();
+}
+void dAcTbox_c::executeState_GoddessWaitOn() {
+    if (fn_8026D120()) {
+        AttentionManager *mgr = AttentionManager::sInstance;
+        mgr->addTarget(*this, getInteractionTargetDef(), 0, nullptr);
+    }
+}
+void dAcTbox_c::finalizeState_GoddessWaitOn() {
+    (this->*mUnregisterDowsingTarget)();
+    mGoddessDowsingTarget.doUnregister();
+}
+
+void dAcTbox_c::initializeState_DeleteArchive() {
+    mScale.set(1.0f, 1.0f, 1.0f);
+    clearActorProperty(0x100);
+    if (mVariant == NORMAL) {
+        mMdl1.setAnm(sMdlNames[0], m3d::PLAY_MODE_4);
+    }
+    if (mVariant == NORMAL) {
+        mMdl1.setFrame(mMdl1.getAnm().getStartFrame());
+    }
+    if (mVariant == NORMAL) {
+        mAnmMatClr1.setFrame(mAnmMatClr1.getFrameMax(0), 0);
+    }
+    fn_8026D140();
+    field_0x11C0.set(-61.0f, 0.0f, -42.0f);
+    field_0x11CC.set(61.0f, 100.0f, 42.0f);
+    field_0x11E8 = 1.0f;
+    field_0x11F4 |= 2;
+    field_0x120C = 0;
+}
 void dAcTbox_c::executeState_DeleteArchive() {
     if (sCurrentObtainingItemOarcName != nullptr) {
         OarcManager *mng = OarcManager::sInstance;
@@ -1613,30 +1847,175 @@ void dAcTbox_c::executeState_DeleteArchive() {
     }
 }
 void dAcTbox_c::finalizeState_DeleteArchive() {}
-void dAcTbox_c::initializeState_LoadArchive() {}
-void dAcTbox_c::executeState_LoadArchive() {}
+
+void dAcTbox_c::initializeState_LoadArchive() {
+    mScale.set(1.0f, 1.0f, 1.0f);
+    clearActorProperty(0x100);
+    if (mVariant == NORMAL) {
+        mMdl1.setAnm(sMdlNames[0], m3d::PLAY_MODE_4);
+    }
+    if (mVariant == NORMAL) {
+        mMdl1.setFrame(mMdl1.getAnm().getStartFrame());
+    }
+    if (mVariant == NORMAL) {
+        mAnmMatClr1.setFrame(mAnmMatClr1.getFrameMax(0), 0);
+    }
+    fn_8026D140();
+    sCurrentObtainingItemOarcName = sItemToArchiveName[mItemModelIdx];
+    OarcManager::sInstance->loadObjectArcFromDisk(sCurrentObtainingItemOarcName, nullptr);
+    field_0x11C0.set(-61.0f, 0.0f, -42.0f);
+    field_0x11CC.set(61.0f, 100.0f, 42.0f);
+    field_0x11E8 = 1.0f;
+    field_0x11F4 |= 2;
+    field_0x120C = 0;
+}
+void dAcTbox_c::executeState_LoadArchive() {
+    if (!OarcManager::sInstance->ensureLoaded1(sCurrentObtainingItemOarcName)) {
+        mStateMgr.changeState(StateID_Open);
+    }
+}
 void dAcTbox_c::finalizeState_LoadArchive() {}
+
 void dAcTbox_c::initializeState_Open() {}
 void dAcTbox_c::executeState_Open() {}
 void dAcTbox_c::finalizeState_Open() {}
+
 void dAcTbox_c::initializeState_PresentItem() {}
 void dAcTbox_c::executeState_PresentItem() {}
 void dAcTbox_c::finalizeState_PresentItem() {}
+
 void dAcTbox_c::initializeState_Close() {}
 void dAcTbox_c::executeState_Close() {}
 void dAcTbox_c::finalizeState_Close() {}
+
 void dAcTbox_c::initializeState_Wait() {}
 void dAcTbox_c::executeState_Wait() {}
 void dAcTbox_c::finalizeState_Wait() {}
+
 void dAcTbox_c::initializeState_GoddessWait() {}
 void dAcTbox_c::executeState_GoddessWait() {}
 void dAcTbox_c::finalizeState_GoddessWait() {}
+
+extern "C" dAcBase_c *getCurrentEventActor();
+
+void dAcTbox_c::registerInEvent() {
+    if (getCurrentEventActor() == mItemRef.get()) {
+        if (EventManager::isCurrentEvent("ItemGetDefaultTBox") || EventManager::isCurrentEvent("ItemGetGorgeousTBox")) {
+            field_0x11F4 |= 0x8;
+        }
+    }
+}
+
+void dAcTbox_c::unkVirtFunc_0x6C() {
+    if ((field_0x11F4 & 8) != 0) {
+        if (mVariant == GODDESS && mHasBeenOpened == true) {
+            mAnmGoddessPat.setFrame(0.0f, 0);
+        }
+        field_0x11F4 &= ~8;
+    }
+}
 
 bool dAcTbox_c::isNotSmall() const {
     return mVariant != SMALL;
 }
 
-extern "C" const u32 DAT_804ee478[] = {0, 0, 1, 1};
+void dAcTbox_c::syncScaleToMdl(m3d::scnLeaf_c *lf) {
+    lf->setScale(mScale);
+}
+
+bool dAcTbox_c::initBgW(dBgW &bg, const char *arcName, const char *fileName) {
+    void *dzb = getOarcDZB(arcName, fileName);
+    if (dzb == nullptr) {
+        return false;
+    }
+    void *plc = getOarcPLC(arcName, fileName);
+    if (plc == nullptr) {
+        return false;
+    }
+    // TODO return types
+    bool ok = !(BOOL)bg.Set((cBgD_t *)dzb, (PLC *)plc, 0x81, &mWorldMtx, &mScale);
+    if (!ok) {
+        return false;
+    }
+    bg.SetCrrFunc(dBgS_MoveBGProc_TypicalRotY);
+    return true;
+}
+
+void dAcTbox_c::initDowsingTarget(DowsingTarget *target, DowsingTarget::DowsingSlot slot, mVec3_c *offset) {
+    target->initialize(slot, 0, offset, 0.0f);
+}
+
+bool dAcTbox_c::isItemRupee() const {
+    return dAcItem_c::isRupee((ITEM_ID)mItemId);
+}
+
+void dAcTbox_c::initDowsingTarget(DowsingTarget::DowsingSlot slot) {
+    mVec3_c offset;
+    getDowsingTargetOffset(&offset);
+    initDowsingTarget(&mDowsingTarget, slot, &offset);
+}
+
+void dAcTbox_c::initDowsingTargetCube() {
+    mVec3_c offset;
+    getDowsingTargetOffset(&offset);
+    initDowsingTarget(&mGoddessDowsingTarget, DowsingTarget::SLOT_GODDESS_CUBE, &offset);
+}
+
+void dAcTbox_c::noRegisterDowsing() {}
+
+void dAcTbox_c::registerKeyPieceDowsing() {
+    if ((field_0x11F4 & 4) == 0 && StoryflagManager::sInstance->getCounterOrFlag(0x6A)) {
+        mDowsingTarget.doRegister();
+        field_0x11F4 |= 4;
+    }
+}
+
+void dAcTbox_c::registerRupeeOrTreasureDowsing() {
+    if ((field_0x11F4 & 4) == 0) {
+        mDowsingTarget.doRegister();
+        field_0x11F4 |= 4;
+    }
+}
+
+void dAcTbox_c::noUnregisterDowsing() {}
+
+void dAcTbox_c::unregisterDowsing() {
+    if ((field_0x11F4 & 4) != 0) {
+        mDowsingTarget.doUnregister();
+        field_0x11F4 &= ~4;
+    }
+}
+
+bool dAcTbox_c::checkIsClear() const {
+    f32 fs[] = {
+        position.y,
+        position.y,
+    };
+    fs[0] += 20.0f;
+    fs[1] += 60.0f;
+    static mVec3_c offsets[] = {
+        mVec3_c(50.0f, 500.0f, 50.0f),
+        mVec3_c(50.0f, 500.0f, -50.0f),
+        mVec3_c(-50.0f, 500.0f, 50.0f),
+        mVec3_c(-50.0f, 500.0f, -50.0f),
+    };
+    mVec3_c points[4];
+    for (u32 i = 0; i <= 3; i++) {
+        fn_8026DAD0(&offsets[i], &points[i]);
+    }
+    static const int fsIdxes[] = {0, 0, 1, 1};
+    bool isClear = true;
+    for (u32 i = 0; isClear && i <= 3;) {
+        // @bug should this be points[i] instead?
+        if (fn_802686F0(points[0], fs[fsIdxes[i]])) {
+            isClear = false;
+        } else {
+            i++;
+        }
+    }
+
+    return isClear;
+}
 
 const InteractionTargetDef &dAcTbox_c::getInteractionTargetDef() const {
     switch ((u32)mVariant) {
