@@ -9,6 +9,7 @@
 #include "toBeSorted/tlist.h"
 
 class dAcBase_c;
+struct cBgS_PolyInfo;
 
 struct SoundSource {
     // TODO
@@ -255,7 +256,7 @@ public:
     /* 8002dd50 */ void FUN_8002dd50();
     /* 8002dd90 */ void FUN_8002dd90();
     /* 8002ddd0 */ void FUN_8002ddd0();
-    /* 8002de30 */ void FUN_8002de30();
+    /* 8002de30 */ void FUN_8002de30(cBgS_PolyInfo &p);
 
 public:
     /* 80571920 */ static u32 s_Create_RoomId;

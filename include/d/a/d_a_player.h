@@ -51,6 +51,8 @@ public:
 
     void setTransform(const mMtx_c &mtx, UNKWORD, UNKWORD, UNKWORD);
     void setPosYRot(const mVec3_c &pos, mAng rot, UNKWORD, UNKWORD, UNKWORD);
+    // argument is always false in existing code, true doesn't seem to make a difference
+    void bonk(bool unk = false);
 
     /* vt 0x080 */ virtual UNKWORD IfCurrentActionToActor(dAcBase_c *ac, UNKWORD);
     /* vt 0x084 */ virtual void vt_0x084(dAcBase_c *ac, UNKWORD);

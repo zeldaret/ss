@@ -613,6 +613,6 @@ void dAcBase_c::FUN_8002dd90() {
 void dAcBase_c::FUN_8002ddd0() {}
 
 // 8002de30
-void dAcBase_c::FUN_8002de30() {
+void dAcBase_c::FUN_8002de30(cBgS_PolyInfo &p) {
     FUN_8002ddd0();
 }

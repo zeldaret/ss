@@ -116,13 +116,13 @@ private:
     void noUnregisterDowsing();
 
     static bool fn_80268660(int arg);
-    void fn_8026E090();
+    bool checkForLinkBonk();
     void fn_8026E630();
     bool fn_8026D540();
     bool fn_8026D3C0();
     void syncScaleToMdl(m3d::scnLeaf_c *lf);
-    void fn_8026DD70(mVec3_c *out1, mVec3_c *out2);
-    void getCylParams(mVec3_c *out1, f32 *out2, f32 *out3);
+    void getCCBounds(mVec3_c *out1, mVec3_c *out2) const;
+    void getCylParams(mVec3_c *out1, f32 *out2, f32 *out3) const;
     void fn_8026DAD0(mVec3_c *src, mVec3_c *dest) const;
     void fn_8026DAC0(mAng& ang);
 

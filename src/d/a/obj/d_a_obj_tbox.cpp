@@ -6,6 +6,8 @@
 #include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/col/bg/d_bg_s_gnd_chk.h"
+#include "d/col/c/c_bg_s_poly_info.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/sceneflag_manager.h"
@@ -19,6 +21,7 @@
 #include "nw4r/g3d/g3d_resanmtexsrt.h"
 #include "nw4r/g3d/g3d_resfile.h"
 #include "nw4r/g3d/g3d_resmdl.h"
+#include "rvl/MTX/mtxvec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/attention.h"
@@ -911,7 +914,7 @@ int dAcTbox_c::create() {
     if (mItemId > MAX_ITEM_ID) {
         return FAILED;
     }
-    mVariant = sItemToTBoxVariant[mItemId];
+    mVariant = (TboxVariant_e)sItemToTBoxVariant[mItemId];
     if (mVariant == GODDESS) {
         setItemId((ITEM_ID)(MAX_ITEM_ID - mItemId));
     }
@@ -1147,7 +1150,7 @@ int dAcTbox_c::actorExecute() {
         return SUCCEEDED;
     }
 
-    fn_8026E090();
+    checkForLinkBonk();
     fn_8026E630();
     mStateMgr.executeState();
     if (fn_8026D540()) {
@@ -1160,7 +1163,7 @@ int dAcTbox_c::actorExecute() {
     mMdl1.getModel().calc(false);
     if ((field_0x11F4 & 2) != 0) {
         mVec3_c v1, v2;
-        fn_8026DD70(&v1, &v2);
+        getCCBounds(&v1, &v2);
         v1 *= field_0x11E8;
         v2 *= field_0x11E8;
         mCcD3.Set(v1, v2);
@@ -1283,7 +1286,7 @@ int dAcTbox_c::actorExecuteInEvent() {
         return SUCCEEDED;
     }
 
-    fn_8026E090();
+    checkForLinkBonk();
     fn_8026E630();
 
     switch (mEvent.getCurrentEventCommand()) {
@@ -1346,7 +1349,7 @@ int dAcTbox_c::actorExecuteInEvent() {
     mMdl1.getModel().calc(false);
     if ((field_0x11F4 & 2) != 0) {
         mVec3_c v1, v2;
-        fn_8026DD70(&v1, &v2);
+        getCCBounds(&v1, &v2);
         v1 *= field_0x11E8;
         v2 *= field_0x11E8;
         mCcD3.Set(v1, v2);
@@ -2017,6 +2020,177 @@ bool dAcTbox_c::checkIsClear() const {
     return isClear;
 }
 
+void dAcTbox_c::getCylParams(mVec3_c *c, f32 *r, f32 *h) const {
+    switch ((u32)mVariant) {
+        case NORMAL:
+            switch (field_0x120C) {
+                case 0:
+                    if (c != nullptr) {
+                        c->set(0.0f, 0.0f, 0.0f);
+                    }
+                    if (r != nullptr) {
+                        *r = 70.0f;
+                    }
+                    if (h != nullptr) {
+                        *h = 100.0f;
+                    }
+                    break;
+                case 1:
+                    if (c != nullptr) {
+                        c->set(0.0f, 0.0f, -24.0f);
+                    }
+                    if (r != nullptr) {
+                        *r = 86.0f;
+                    }
+                    if (h != nullptr) {
+                        *h = 140.0f;
+                    }
+                    break;
+            }
+            break;
+        case SMALL:
+            switch (field_0x120C) {
+                case 0:
+                    if (c != nullptr) {
+                        c->set(0.0f, 0.0f, 0.0f);
+                    }
+                    if (r != nullptr) {
+                        *r = 48.0f;
+                    }
+                    if (h != nullptr) {
+                        *h = 68.0f;
+                    }
+                    break;
+                case 1:
+                    if (c != nullptr) {
+                        c->set(0.0f, 0.0f, -14.0f);
+                    }
+                    if (r != nullptr) {
+                        *r = 60.0f;
+                    }
+                    if (h != nullptr) {
+                        *h = 100.0f;
+                    }
+                    break;
+            }
+            break;
+        case BOSS:
+            switch (field_0x120C) {
+                case 0:
+                    if (c != nullptr) {
+                        c->set(0.0f, 0.0f, 0.0f);
+                    }
+                    if (r != nullptr) {
+                        *r = 100.0f;
+                    }
+                    if (h != nullptr) {
+                        *h = 132.0f;
+                    }
+                    break;
+                case 1:
+                    if (c != nullptr) {
+                        c->set(0.0f, 0.0f, -44.0f);
+                    }
+                    if (r != nullptr) {
+                        *r = 122.0f;
+                    }
+                    if (h != nullptr) {
+                        *h = 160.0f;
+                    }
+                    break;
+            }
+            break;
+        case GODDESS:
+            switch (field_0x120C) {
+                case 0:
+                    if (c != nullptr) {
+                        c->set(0.0f, 0.0f, 0.0f);
+                    }
+                    if (r != nullptr) {
+                        *r = 73.0f;
+                    }
+                    if (h != nullptr) {
+                        *h = 100.0f;
+                    }
+                    break;
+                case 1:
+                    if (c != nullptr) {
+                        c->set(0.0f, 0.0f, -23.0f);
+                    }
+                    if (r != nullptr) {
+                        *r = 88.0f;
+                    }
+                    if (h != nullptr) {
+                        *h = 140.0f;
+                    }
+                    break;
+            }
+            break;
+    }
+    if (c != nullptr) {
+        PSMTXMultVec(mWorldMtx, *c, *c);
+    }
+}
+
+void dAcTbox_c::getCCBounds(mVec3_c *lo, mVec3_c *up) const {
+    if (lo != nullptr) {
+        switch ((u32)mVariant) {
+            case NORMAL:
+                switch (field_0x120C) {
+                    case 0: lo->set(-61.0f, 0.0f, -42.0f); break;
+                    case 1: lo->set(-61.0f, 0.0f, -90.0f); break;
+                }
+                break;
+            case SMALL:
+                switch (field_0x120C) {
+                    case 0: lo->set(-38.0f, 0.0f, -35.0f); break;
+                    case 1: lo->set(-38.0f, 0.0f, -68.0f); break;
+                }
+                break;
+            case BOSS:
+                switch (field_0x120C) {
+                    case 0: lo->set(-90.0f, 0.0f, -53.0f); break;
+                    case 1: lo->set(-90.0f, 0.0f, -135.0f); break;
+                }
+                break;
+            case GODDESS:
+                switch (field_0x120C) {
+                    case 0: lo->set(-62.0f, 0.0f, -47.0f); break;
+                    case 1: lo->set(-62.0f, 0.0f, -95.0f); break;
+                }
+                break;
+        }
+    }
+    if (up != nullptr) {
+        switch ((u32)mVariant) {
+            case NORMAL:
+                switch (field_0x120C) {
+                    case 0: up->set(61.0f, 100.0f, 42.0f); break;
+                    case 1: up->set(61.0f, 142.0f, 42.0f); break;
+                }
+                break;
+            case SMALL:
+                switch (field_0x120C) {
+                    case 0: up->set(38.0f, 68.0f, 35.0f); break;
+                    case 1: up->set(38.0f, 101.0f, 31.0f); break;
+                }
+                break;
+            case BOSS:
+                switch (field_0x120C) {
+                    case 0: up->set(90.0f, 133.0f, 56.0f); break;
+                    case 1: up->set(90.0f, 163.0f, 56.0f); break;
+                }
+                break;
+            case GODDESS:
+                switch (field_0x120C) {
+                    case 0: up->set(62.0f, 100.0f, 47.0f); break;
+                    case 1: up->set(62.0f, 140.0f, 47.0f); break;
+                }
+                break;
+        }
+    }
+}
+
 const InteractionTargetDef &dAcTbox_c::getInteractionTargetDef() const {
     switch ((u32)mVariant) {
         case NORMAL:
@@ -2040,5 +2214,65 @@ const InteractionTargetDef &dAcTbox_c::getInteractionTargetDef() const {
                                                            60.0f, 60.0f, -100.0f, 100.0f, 0.0f, 1.0f};
             return tmpTarget;
         }
+    }
+}
+
+bool dAcTbox_c::checkForLinkBonk() {
+    if (!mCcD4.ChkCoHit()) {
+        return false;
+    }
+    dAcPy_c *link = dAcPy_c::LINK;
+    if (link == nullptr) {
+        return false;
+    }
+    if (link->getCurrentAction() != /* ROLL */ 12) {
+        return false;
+    }
+
+    mVec3_c linkPos;
+    PSMTXMultVec(mCcD3.mInvMtx, link->position, linkPos);
+    mVec3_c ccLo, ccHi;
+    getCCBounds(&ccLo, &ccHi);
+    // Math performed in local coordinate space
+    // All of this is wrong
+    if (!(ccLo.y <= linkPos.y + 100.0f && linkPos.y <= ccHi.y)) {
+        return false;
+    }
+
+    bool bonk = false;
+    bonk = bonk || (ccLo.x <= linkPos.x && linkPos.x <= ccHi.x) &&
+                        (ccLo.z - 80.0f <= linkPos.z && linkPos.z <= ccHi.z + 80.0f);
+    bonk = bonk || (ccLo.z <= linkPos.z && linkPos.z <= ccHi.z) &&
+                        (ccLo.x - 80.0f <= linkPos.x && linkPos.x <= ccHi.x + 80.0f);
+    bonk = bonk || (linkPos.x < ccLo.x && linkPos.z < ccLo.z) && (linkPos.inprodXZ(ccLo) <= 6400.0f);
+    bonk = bonk || (ccHi.x < linkPos.x && ccHi.z < linkPos.z) && (linkPos.inprodXZ(ccLo) <= 6400.0f);
+    bonk = bonk || (linkPos.x < ccLo.x && ccLo.z < linkPos.z) && (linkPos.inprodXZ(ccLo) <= 6400.0f);
+    bonk = bonk || (ccHi.x < linkPos.x && linkPos.z < ccHi.z) && (linkPos.inprodXZ(ccLo) <= 6400.0f);
+
+    if (!bonk) {
+        return false;
+    }
+
+    int direction = 0;
+    mVec3_c diff = mVec3_c(linkPos.x - mCcD3.mField_0xA8.x, 0.0f, linkPos.z - mCcD3.mField_0xA8.z);
+    if (VEC3LenSq(diff) <= FLT_EPSILON) {
+        return false;
+    }
+
+    // TODO
+    
+    link->bonk();
+
+    return false;
+}
+
+void dAcTbox_c::fn_8026E630() {
+    mVec3_c offset = mVec3_c::Ey * 10.0f;
+    mVec3_c checkPos = position + offset;
+    // TODO reference vs pointer
+    if (dBgS_ObjGndChk::CheckPos(checkPos) && &dBgS_ObjGndChk::GetInstance()) {
+        cBgS_PolyInfo p = dBgS_ObjGndChk::GetInstance();
+        dBgS::GetInstance()->SetLightingCode(this, p);
+        FUN_8002de30(p);
     }
 }
