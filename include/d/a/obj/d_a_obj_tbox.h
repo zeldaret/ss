@@ -7,6 +7,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_w.h"
 #include "d/col/cc/d_cc_d.h"
+#include "d/d_cc.h"
 #include "d/d_shadow.h"
 #include "m/m3d/m_anmchr.h"
 #include "m/m3d/m_anmmatclr.h"
@@ -22,30 +23,6 @@
 #include "toBeSorted/attention.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/stage_render_stuff.h"
-
-// Somewhere in d_cc
-class dAcTboxCcD : public dCcD_Unk {
-public:
-    dAcTboxCcD() : mpList(nullptr), field_0x210(this) {}
-    virtual ~dAcTboxCcD() {
-        if (mpList != nullptr) {
-            mpList->remove(&mNode);
-            mpList = nullptr;
-        }
-    }
-    /* 0x00 */ cListNd_c mNode;
-    /* 0x08 */ dCcD_Unk *field_0x210;
-    /* 0x0C */ cListMg_c *mpList;
-};
-
-struct TboxAndMoreUnkCC {
-    cListMg_c mList;
-    virtual ~TboxAndMoreUnkCC();
-
-    void addCc(dAcTboxCcD &ccD, const dCcD_SrcUnk &src);
-    void SetStts(cCcD_Stts &stts);
-    void registerColliders();
-};
 
 class dAcTbox_c : public dAcObjBase_c {
 public:
@@ -68,6 +45,7 @@ public:
 
     virtual void registerInEvent() override;
     virtual void unkVirtFunc_0x6C() override;
+    virtual void doInteraction(s32) override;
 
     virtual void *getObjectListEntry() override;
 
@@ -115,19 +93,23 @@ private:
     void noRegisterDowsing();
     void noUnregisterDowsing();
 
-    static bool fn_80268660(int arg);
     bool checkForLinkBonk();
     void fn_8026E630();
     bool fn_8026D540();
-    bool fn_8026D3C0();
+    void fn_8026D3C0();
     void syncScaleToMdl(m3d::scnLeaf_c *lf);
     void getCCBounds(mVec3_c *out1, mVec3_c *out2) const;
     void getCylParams(mVec3_c *out1, f32 *out2, f32 *out3) const;
-    void fn_8026DAD0(mVec3_c *src, mVec3_c *dest) const;
-    void fn_8026DAC0(mAng& ang);
+    void fn_8026DAD0(const mVec3_c *src, mVec3_c *dest) const;
+    void fn_8026DAC0(mAng &ang);
 
     static bool hasCollectedAllTears();
     static bool isValidVariant(int variant);
+    static bool tryGetDowsingTargetOffset(int variant, mVec3_c &out);
+    static void getDowsingTargetOffset(int variant, mVec3_c &out);
+    static bool isValidGroupIndex(int idx);
+    static bool getGroundHeight(f32 *height, const mVec3_c &pos);
+    static bool isBelowGroundAtPos(f32 height, const mVec3_c &pos);
 
     void setActionState();
 
@@ -137,9 +119,14 @@ private:
     void fn_8026D130();
     void fn_8026D140();
     void fn_8026D950();
+    void fn_8026D370();
+
+    bool checkShouldClose();
+    void setShouldCloseFlag();
+    void unsetShouldCloseFlag();
+    void setTboxFlag();
 
     bool checkIsClear() const;
-    static bool fn_802686F0(const mVec3_c &vec, f32 y);
     const InteractionTargetDef &getInteractionTargetDef() const;
 
     /* 0x0330 */ m3d::mdlAnmChr mMdl1;
@@ -161,9 +148,9 @@ private:
     s32 field_0x4F4;
 
     /* 0x04F8 */ dBgW mBgWs[2];
-    /* 0x0918 */ dAcTboxCcD mCcD1;
-    /* 0x0B30 */ dAcTboxCcD mCcD2;
-    /* 0x0D48 */ TboxAndMoreUnkCC field_0x0D48;
+    /* 0x0918 */ LinkedCollider mCcD1;
+    /* 0x0B30 */ LinkedCollider mCcD2;
+    /* 0x0D48 */ ColliderLinkedList field_0x0D48;
     /* 0x0D54 */ dCcD_Unk mCcD3;
     /* 0x0F5C */ dCcD_Cyl mCcD4;
     /* 0x10AC */ STATE_MGR_DECLARE(dAcTbox_c);
@@ -184,19 +171,19 @@ private:
 
     /* 0x11E4 */ u8 field_0x11E4[0x11E8 - 0x11E4];
     /* 0x11E8 */ f32 field_0x11E8;
-    
+
     /* 0x11EC */ f32 field_0x11EC;
     /* 0x11F0 */ UNKWORD field_0x11F0;
     /* 0x11F4 */ UNKWORD field_0x11F4;
-    
+
     /* 0x11F8 */ UNKWORD field_0x11F8;
-    
+
     /* 0x11FC */ UNKWORD field_0x11FC;
 
     /* 0x1200 */ u16 mItemId;
 
     /* 0x1202 */ u16 mItemModelIdx;
-    
+
     /* 0x1204 */ bool mHasBeenOpened;
     /* 0x1205 */ u8 mSpawnSceneFlag;
     /* 0x1206 */ u8 mSetSceneFlag; // set when?

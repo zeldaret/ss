@@ -1,6 +1,7 @@
 #include "d/a/obj/d_a_obj_tbox.h"
 
 #include "c/c_lib.h"
+#include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_item.h"
 #include "d/a/d_a_itembase.h"
@@ -12,6 +13,7 @@
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
+#include "d/flag/tboxflag_manager.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m3d/m_scnleaf.h"
 #include "m/m_mtx.h"
@@ -25,13 +27,15 @@
 #include "s/s_Math.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/attention.h"
+#include "toBeSorted/blur_and_palette_manager.h"
+#include "toBeSorted/counters/goddess_chest_counter.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/room_manager.h"
 
 SPECIAL_ACTOR_PROFILE(TBOX, dAcTbox_c, fProfile::TBOX, 0x018D, 0, 6);
 
-extern "C" mVec3_c vecs[] = {
+static mVec3_c sDowsingTargetOffsets[] = {
     mVec3_c(0.0f, 54.0f, 0.0f), mVec3_c(0.0f, 34.0f, 0.0f), mVec3_c(0.0f, 66.5f, 0.0f), mVec3_c(0.0f, 49.0f, 0.0f)
 };
 
@@ -729,18 +733,18 @@ static const u8 sItemToTBoxVariant[MAX_ITEM_ID + 1] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 };
 
-static char *const sMdlNames[] = {
-    "TBoxNormalT",
-    "TBoxSmallT",
-    "TBoxBossT",
-    "GoddessTBox",
-};
-
 static char *const sAnmNames[] = {
     "TBoxNormalT",
     "TBoxSmallT",
     "TBoxBossT",
     "TBoxNormalT",
+};
+
+static char *const sMdlNames[] = {
+    "TBoxNormalT",
+    "TBoxSmallT",
+    "TBoxBossT",
+    "GoddessTBox",
 };
 
 static char *const sCloseCcNames[] = {
@@ -757,8 +761,53 @@ static char *const sOpenCcNames[] = {
     "GoddessTBoxOpen",
 };
 
+bool dAcTbox_c::tryGetDowsingTargetOffset(int variant, mVec3_c &out) {
+    bool ok = dAcTbox_c::isValidVariant(variant);
+    if (ok) {
+        out.x = sDowsingTargetOffsets[variant].x;
+        out.y = sDowsingTargetOffsets[variant].y;
+        out.z = sDowsingTargetOffsets[variant].z;
+    }
+    return ok;
+}
+
+void dAcTbox_c::getDowsingTargetOffset(int variant, mVec3_c &out) {
+    tryGetDowsingTargetOffset(variant, out);
+}
+
 f32 dAcTbox_c::getSomeRate() {
     return 1.0f / 8.333333f;
+}
+
+bool dAcTbox_c::isValidGroupIndex(int idx) {
+    return 0 <= idx && idx < 15;
+}
+extern "C" void *SIREN_TAG;
+extern "C" bool hasCollectedAllTears(void *SIREN_TAG);
+bool dAcTbox_c::hasCollectedAllTears() {
+    if (SIREN_TAG == nullptr) {
+        return false;
+    }
+    return ::hasCollectedAllTears(SIREN_TAG);
+}
+
+bool dAcTbox_c::getGroundHeight(f32 *height, const mVec3_c &pos) {
+    if (height == nullptr) {
+        return false;
+    }
+    bool ok = dBgS_ObjGndChk::CheckPos(pos);
+    if (ok) {
+        *height = dBgS_ObjGndChk::GetGroundHeight();
+    }
+    return ok;
+}
+
+bool dAcTbox_c::isBelowGroundAtPos(f32 height, const mVec3_c &pos) {
+    f32 gndHeight;
+    if (!getGroundHeight(&gndHeight, pos)) {
+        return false;
+    }
+    return height < gndHeight;
 }
 
 dAcTbox_c::dAcTbox_c()
@@ -899,7 +948,7 @@ bool dAcTbox_c::createHeap() {
     return true;
 }
 
-static u32 sSomeCounters[16] = {0};
+static u32 sSomeCounters[15] = {0};
 
 int dAcTbox_c::create() {
     if (!isActualVisibleBox()) {
@@ -937,7 +986,7 @@ int dAcTbox_c::create() {
 
     // This part of the code checks if there's another chest with similar properties
     // and only keeps one of them.
-    if (fn_80268660(field_0x1208) && !field_0x1210) {
+    if (isValidGroupIndex(field_0x1208) && !field_0x1210) {
         sSomeCounters[field_0x1208]++;
         field_0x1210 = true;
     }
@@ -946,12 +995,12 @@ int dAcTbox_c::create() {
         u32 counterValue = 0;
         getSomeCounter(&counterValue);
         if (counterValue > 1) {
-            bool keepGoing = true;
             dAcTbox_c *other;
+            bool keepGoing = true;
             dAcObjBase_c *cursor = nullptr;
             do {
-                cursor = getNextObject(&sTboxActorList, cursor);
-                other = static_cast<dAcTbox_c *>(cursor);
+                other = static_cast<dAcTbox_c *>(getNextObject(&sTboxActorList, cursor));
+                cursor = other;
                 if (other != nullptr && this != other && !other->field_0x120D && field_0x1208 == other->field_0x1208) {
                     keepGoing = false;
                 }
@@ -1047,8 +1096,8 @@ int dAcTbox_c::create() {
     }
     field_0x0D48.SetStts(mStts);
     // TODO figure out the right fields
-    mCcD1.SetTgType(-1);
-    mCcD2.SetTgType(-1);
+    mCcD1.SetTg_0x4C(-1);
+    mCcD2.SetTg_0x4C(-1);
     mMdl1.setAnm(sAnmNames[mVariant], m3d::PLAY_MODE_4);
     if (mHasBeenOpened == true) {
         mMdl1.setFrame(mMdl1.getAnm().getEndFrame());
@@ -1193,7 +1242,7 @@ int dAcTbox_c::actorExecute() {
                 switch (field_0x120C) {
                     case 0:
                         v1.set(-38.0f, 0.0f, -35.0f);
-                        v2.set(38.0f, 45.0f, 35.0f);
+                        v2.set(38.0f, 45.0f, 31.0f);
                         break;
                     case 1:
                         v1.set(-38.0f, 0.0f, -35.0f);
@@ -1379,7 +1428,7 @@ int dAcTbox_c::actorExecuteInEvent() {
                 switch (field_0x120C) {
                     case 0:
                         v1.set(-38.0f, 0.0f, -35.0f);
-                        v2.set(38.0f, 45.0f, 35.0f);
+                        v2.set(38.0f, 45.0f, 31.0f);
                         break;
                     case 1:
                         v1.set(-38.0f, 0.0f, -35.0f);
@@ -1574,7 +1623,7 @@ void dAcTbox_c::initializeState_DugOut() {
     }
     setActorProperty(0x100);
     if (mVariant == NORMAL) {
-        mMdl1.setAnm(sMdlNames[0], m3d::PLAY_MODE_4);
+        mMdl1.setAnm(sAnmNames[0], m3d::PLAY_MODE_4);
     }
     if (mVariant == NORMAL) {
         if (checkTboxFlag()) {
@@ -1761,7 +1810,7 @@ void dAcTbox_c::initializeState_WaitOpen() {
     field_0x120C = 0;
     clearActorProperty(0x100);
     if (mVariant == NORMAL) {
-        mMdl1.setAnm(sMdlNames[0], m3d::PLAY_MODE_4);
+        mMdl1.setAnm(sAnmNames[0], m3d::PLAY_MODE_4);
     }
     if (mVariant == NORMAL) {
         mMdl1.setFrame(mMdl1.getAnm().getStartFrame());
@@ -1817,7 +1866,7 @@ void dAcTbox_c::initializeState_DeleteArchive() {
     mScale.set(1.0f, 1.0f, 1.0f);
     clearActorProperty(0x100);
     if (mVariant == NORMAL) {
-        mMdl1.setAnm(sMdlNames[0], m3d::PLAY_MODE_4);
+        mMdl1.setAnm(sAnmNames[0], m3d::PLAY_MODE_4);
     }
     if (mVariant == NORMAL) {
         mMdl1.setFrame(mMdl1.getAnm().getStartFrame());
@@ -1855,7 +1904,7 @@ void dAcTbox_c::initializeState_LoadArchive() {
     mScale.set(1.0f, 1.0f, 1.0f);
     clearActorProperty(0x100);
     if (mVariant == NORMAL) {
-        mMdl1.setAnm(sMdlNames[0], m3d::PLAY_MODE_4);
+        mMdl1.setAnm(sAnmNames[0], m3d::PLAY_MODE_4);
     }
     if (mVariant == NORMAL) {
         mMdl1.setFrame(mMdl1.getAnm().getStartFrame());
@@ -1879,28 +1928,282 @@ void dAcTbox_c::executeState_LoadArchive() {
 }
 void dAcTbox_c::finalizeState_LoadArchive() {}
 
-void dAcTbox_c::initializeState_Open() {}
-void dAcTbox_c::executeState_Open() {}
+extern "C" void fn_800298B0(u16 effectIndex, mVec3_c *, mAng3_c *, mVec3_c *, void *, void *, void *, void *);
+extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_209_;
+extern "C" bool isPouchItem(u16);
+extern "C" u8 adventurePouchFindItemSlot(ITEM_ID item);
+extern "C" u16 findItemInItemCheck(ITEM_ID item);
+extern "C" dAcItem_c *giveItem3(u16 item, s32);
+
+void dAcTbox_c::initializeState_Open() {
+    mScale.set(1.0f, 1.0f, 1.0f);
+    playSound(0xA36);
+    clearActorProperty(0x100);
+    if (mVariant == NORMAL) {
+        mAnmMatClr1.setFrame(mAnmMatClr1.getFrameMax(0), 0);
+    }
+    fn_8026D370();
+
+    if (isNotSmall()) {
+        mAnmMatClr2.setFrame(mAnmMatClr2.getFrameStart(0), 0);
+        mAnmChr.setFrameOnly(mAnmChr.getStartFrame());
+        mAnmTexSrt1.setFrame(mAnmTexSrt1.getFrameStart(0), 0);
+    }
+
+    if (isNotSmall()) {
+        mVec3_c pos;
+        fn_8026B380(pos);
+        mVec3_c p2 = fn_8026B3C0();
+        fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_209_, &pos, &rotation, &p2, nullptr, nullptr, nullptr, nullptr);
+    }
+    fn_8026D140();
+    ITEM_ID itemId = mItemId != 0 ? (ITEM_ID)mItemId : ITEM_GODDESS_HARP;
+    if (isPouchItem(itemId) && adventurePouchFindItemSlot(ITEM_NONE) == 8 && findItemInItemCheck(ITEM_NONE) == 0x3C) {
+        setShouldCloseFlag();
+    }
+    dAcItem_c *item = giveItem3(itemId, -1);
+    if (item != nullptr) {
+        mItemRef.link(item);
+        const char *evName;
+        if (dAcItem_c::getItemGetEventName(itemId, &evName)) {
+            Event ev(evName, 300, 4, (void *)dAcItem_c::itemGetEventStart, (void *)dAcItem_c::itemGetEventEnd);
+            EventManager::changeOwnEvent(this, item, &ev, 0);
+        }
+    }
+    field_0x11C0.set(-61.0f, 0.0f, -90.0f);
+    field_0x11CC.set(61.0f, 142.0f, 42.0f);
+    field_0x11E8 = 1.0f;
+    field_0x11F4 |= 2;
+    field_0x120C = 1;
+}
+void dAcTbox_c::executeState_Open() {
+    mMdl1.setFrame(dAcPy_c::LINK->getCurrentAnimFrame());
+    if (mVariant == GODDESS) {
+        if (0.4f < field_0x11EC) {
+            sLib::chase(&field_0x11EC, 0.4f, getSomeRate());
+            BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
+            BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+        }
+    } else if (mVariant != SMALL) {
+        // exact same code as in the other branch
+        if (0.4f < field_0x11EC) {
+            sLib::chase(&field_0x11EC, 0.4f, getSomeRate());
+            BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
+            BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+        }
+    }
+    if (mMdl1.getAnm().isStop()) {
+        mStateMgr.changeState(StateID_PresentItem);
+    }
+}
 void dAcTbox_c::finalizeState_Open() {}
 
-void dAcTbox_c::initializeState_PresentItem() {}
-void dAcTbox_c::executeState_PresentItem() {}
+void dAcTbox_c::initializeState_PresentItem() {
+    if (mVariant == NORMAL) {
+        mAnmMatClr1.setFrame(mAnmMatClr1.getFrameMax(0), 0);
+    }
+    field_0x11C0.set(-61.0f, 0.0f, -90.0f);
+    field_0x11CC.set(61.0f, 142.0f, 42.0f);
+    field_0x11E8 = 1.0f;
+    field_0x11F4 |= 2;
+    field_0x120C = 1;
+}
+
+void dAcTbox_c::executeState_PresentItem() {
+    // Copied from executeState_Open
+    if (mVariant == GODDESS) {
+        if (0.4f < field_0x11EC) {
+            sLib::chase(&field_0x11EC, 0.4f, getSomeRate());
+            BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
+            BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+        }
+    } else if (mVariant != SMALL) {
+        if (0.4f < field_0x11EC) {
+            sLib::chase(&field_0x11EC, 0.4f, getSomeRate());
+            BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
+            BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+        }
+    }
+    mEvent.advanceNext();
+    if (checkShouldClose()) {
+        unsetShouldCloseFlag();
+        mStateMgr.changeState(StateID_Close);
+    } else {
+        mHasBeenOpened = true;
+        if (mSetSceneFlag < 0xFF) {
+            SceneflagManager::sInstance->setFlag(roomid, mSetSceneFlag);
+        }
+        setTboxFlag();
+        if (mVariant == GODDESS) {
+            mStateMgr.changeState(StateID_GoddessWait);
+            GoddessChestCounter::sInstance.checkedAdd(1);
+        } else {
+            mStateMgr.changeState(StateID_Wait);
+        }
+    }
+}
 void dAcTbox_c::finalizeState_PresentItem() {}
 
-void dAcTbox_c::initializeState_Close() {}
-void dAcTbox_c::executeState_Close() {}
+void dAcTbox_c::initializeState_Close() {
+    mMdl1.getAnm().setPlayState(m3d::PLAY_MODE_3);
+    if (mVariant == NORMAL) {
+        mAnmMatClr1.setFrame(mAnmMatClr1.getFrameMax(0), 0);
+    }
+    field_0x11FC = 0x2D;
+    field_0x11C0.set(-61.0f, 0.0f, -90.0f);
+    field_0x11CC.set(61.0f, 142.0f, 42.0f);
+    field_0x11E8 = 1.0f;
+    field_0x11F4 |= 2;
+    field_0x120C = 1;
+}
+void dAcTbox_c::executeState_Close() {
+    switch ((u32)mVariant) {
+        case NORMAL:
+        case BOSS:
+            if (field_0x11FC <= 0) {
+                if (field_0x11EC < 1.0f) {
+                    sLib::chase(&field_0x11EC, 1.0f, getSomeRate());
+                    BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
+                    BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+                }
+            } else {
+                field_0x11FC--;
+            }
+            if (!EventManager::isInEvent()) {
+                if (mMdl1.getAnm().isStop()) {
+                    mMdl1.getAnm().setPlayState(m3d::PLAY_MODE_1);
+                    mStateMgr.changeState(StateID_WaitOpen);
+                } else {
+                    mMdl1.play();
+                }
+            }
+            break;
+        case SMALL:
+            if (!EventManager::isInEvent()) {
+                if (mMdl1.getAnm().isStop()) {
+                    mMdl1.getAnm().setPlayState(m3d::PLAY_MODE_1);
+                    mStateMgr.changeState(StateID_WaitOpen);
+                } else {
+                    mMdl1.play();
+                }
+            }
+            break;
+        case GODDESS:
+            if (field_0x11FC <= 0) {
+                if (field_0x11EC < 1.0f) {
+                    sLib::chase(&field_0x11EC, 1.0f, getSomeRate());
+                    BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
+                    BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+                }
+            } else {
+                field_0x11FC--;
+            }
+            if (!EventManager::isInEvent()) {
+                if (mMdl1.getAnm().isStop()) {
+                    mMdl1.getAnm().setPlayState(m3d::PLAY_MODE_1);
+                    mStateMgr.changeState(StateID_GoddessWaitOn);
+                } else {
+                    mMdl1.play();
+                }
+            }
+            break;
+    }
+}
 void dAcTbox_c::finalizeState_Close() {}
 
-void dAcTbox_c::initializeState_Wait() {}
-void dAcTbox_c::executeState_Wait() {}
+void dAcTbox_c::initializeState_Wait() {
+    mScale.set(1.0f, 1.0f, 1.0f);
+    field_0x11E8 = 1.0f;
+    field_0x11F4 |= 2;
+    switch ((u32)mVariant) {
+        case NORMAL:
+            field_0x11C0.set(-61.0f, 0.0f, -90.0f);
+            field_0x11CC.set(61.0f, 142.0f, 42.0f);
+            break;
+        case SMALL:
+            field_0x11C0.set(-38.0f, 0.0f, -68.0f);
+            field_0x11CC.set(38.0f, 101.0f, 31.0f);
+            break;
+        case BOSS:
+            field_0x11C0.set(-90.0f, 0.0f, -135.0f);
+            field_0x11CC.set(90.0f, 163.0f, 56.0f);
+            break;
+    }
+    field_0x120C = 1;
+    clearActorProperty(0x100);
+    if (mVariant == 0) {
+        mMdl1.setAnm(sAnmNames[0], m3d::PLAY_MODE_4);
+        mAnmMatClr1.setFrame(mAnmMatClr1.getFrameMax(0), 0);
+    }
+    mMdl1.setFrame(mMdl1.getAnm().getEndFrame());
+    field_0x11FC = 0x2D;
+    fn_8026D130();
+}
+void dAcTbox_c::executeState_Wait() {
+    if (mVariant == NORMAL || mVariant == BOSS) {
+        if (field_0x11FC <= 0) {
+            if (field_0x11EC < 1.0f) {
+                sLib::chase(&field_0x11EC, 1.0f, getSomeRate());
+                BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
+                BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+            }
+        } else {
+            field_0x11FC--;
+        }
+    }
+}
 void dAcTbox_c::finalizeState_Wait() {}
 
-void dAcTbox_c::initializeState_GoddessWait() {}
-void dAcTbox_c::executeState_GoddessWait() {}
+void dAcTbox_c::initializeState_GoddessWait() {
+    mScale.set(1.0f, 1.0f, 1.0f);
+    field_0x11C0.set(-62.0f, 0.0f, -95.0f);
+    field_0x11CC.set(62.0f, 140.0f, 47.0f);
+    field_0x11E8 = 1.0f;
+    field_0x11F4 |= 2;
+    field_0x120C = 1;
+    clearActorProperty(0x100);
+    field_0x11FC = 0x2D;
+    fn_8026D130();
+}
+void dAcTbox_c::executeState_GoddessWait() {
+    if (field_0x11FC <= 0) {
+        if (field_0x11EC < 1.0f) {
+            sLib::chase(&field_0x11EC, 1.0f, getSomeRate());
+            BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
+            // this is apparently not needed here
+            // BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+        }
+    } else {
+        field_0x11FC--;
+    }
+}
 void dAcTbox_c::finalizeState_GoddessWait() {}
 
-extern "C" dAcBase_c *getCurrentEventActor();
+void dAcTbox_c::getDowsingTargetOffset(mVec3_c *out) const {
+    return getDowsingTargetOffset(mVariant, *out);
+}
 
+bool dAcTbox_c::fn_8026D120() const {
+    return true;
+}
+
+void dAcTbox_c::fn_8026D130() {
+    setActorProperty(0x1);
+}
+
+void dAcTbox_c::fn_8026D140() {
+    clearActorProperty(0x1);
+}
+
+void dAcTbox_c::doInteraction(s32 _unused) {
+    void *zevDat = getOarcZev(sArcNames[mVariant]);
+    if (zevDat != nullptr) {
+        Event ev(sOpenEventNames[mVariant], zevDat, 100, 0x100001, 0, 0);
+        mEvent.scheduleEvent(ev, 0);
+    }
+}
+
+extern "C" dAcBase_c *getCurrentEventActor();
 void dAcTbox_c::registerInEvent() {
     if (getCurrentEventActor() == mItemRef.get()) {
         if (EventManager::isCurrentEvent("ItemGetDefaultTBox") || EventManager::isCurrentEvent("ItemGetGorgeousTBox")) {
@@ -1918,8 +2221,86 @@ void dAcTbox_c::unkVirtFunc_0x6C() {
     }
 }
 
+bool dAcTbox_c::checkShouldClose() {
+    return field_0x11F4 & 0x1;
+}
+
+void dAcTbox_c::setShouldCloseFlag() {
+    setFlags(field_0x11F4 | 0x1);
+}
+
+void dAcTbox_c::unsetShouldCloseFlag() {
+    setFlags(field_0x11F4 & ~0x1);
+}
+
+void dAcTbox_c::fn_8026D370() {
+    if (isNotSmall()) {
+        field_0x11F0 = 1;
+        BlurAndPaletteManager::GetInstance().fn_800223A0(&field_0x4DC);
+    }
+}
+
+void dAcTbox_c::fn_8026D3C0() {
+    if (mAnmChr.isStop() && mAnmTexSrt1.isStop(0) && mAnmMatClr2.isStop(0)) {
+        field_0x11F0 = 0;
+        BlurAndPaletteManager::GetInstance().fn_80022440(&field_0x4DC);
+    } else {
+        mAnmChr.play();
+        mAnmTexSrt1.play();
+        mAnmMatClr2.play();
+        field_0x4E8.r = 0xAA;
+        field_0x4E8.g = 0x96;
+        field_0x4E8.b = 0x96;
+        field_0x4EC = 125.0f;
+    }
+}
+
+void dAcTbox_c::setChestFlag() {
+    field_0x1207 = (rotation.z >> 9) & 0x3F;
+}
+
+void dAcTbox_c::setTboxFlag() {
+    if (field_0x1207 <= 0x1F) {
+        TBoxflagManager::sInstance->setFlag(field_0x1207);
+    }
+}
+
+bool dAcTbox_c::checkTboxFlag() const {
+    if (field_0x1207 <= 0x1F) {
+        return TBoxflagManager::sInstance->checkFlag(TBoxflagManager::sInstance->mSceneIndex, field_0x1207);
+    }
+    return false;
+}
+
 bool dAcTbox_c::isNotSmall() const {
     return mVariant != SMALL;
+}
+
+bool dAcTbox_c::fn_8026D540() {
+    return field_0x11F0 == 1;
+}
+
+bool dAcTbox_c::fn_8026D560() const {
+    if (isValidGroupIndex(field_0x1208)) {
+        u32 counterVal;
+        getSomeCounter(&counterVal);
+        f32 cmp = 1.0f / counterVal;
+        return cM::rndF(1.0f) <= cmp;
+    }
+    return true;
+}
+
+bool dAcTbox_c::getSomeCounter(u32 *outValue) const {
+    bool ok = isValidGroupIndex(field_0x1208);
+    if (ok) {
+        *outValue = sSomeCounters[field_0x1208];
+        ok = *outValue;
+    }
+    return ok;
+}
+
+bool dAcTbox_c::fn_8026D670() const {
+    return isValidGroupIndex(field_0x1208);
 }
 
 void dAcTbox_c::syncScaleToMdl(m3d::scnLeaf_c *lf) {
@@ -1989,6 +2370,12 @@ void dAcTbox_c::unregisterDowsing() {
     }
 }
 
+extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_208_;
+
+void dAcTbox_c::fn_8026D950() {
+    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_208_, &position, &rotation, nullptr, nullptr, nullptr, nullptr, nullptr);
+}
+
 bool dAcTbox_c::checkIsClear() const {
     f32 fs[] = {
         position.y,
@@ -2010,7 +2397,7 @@ bool dAcTbox_c::checkIsClear() const {
     bool isClear = true;
     for (u32 i = 0; isClear && i <= 3;) {
         // @bug should this be points[i] instead?
-        if (fn_802686F0(points[0], fs[fsIdxes[i]])) {
+        if (isBelowGroundAtPos(fs[fsIdxes[i]], points[0])) {
             isClear = false;
         } else {
             i++;
@@ -2018,6 +2405,14 @@ bool dAcTbox_c::checkIsClear() const {
     }
 
     return isClear;
+}
+
+void dAcTbox_c::fn_8026DAC0(mAng &ang) {
+    ang = rotation.y - 0x8000;
+}
+
+void dAcTbox_c::fn_8026DAD0(const mVec3_c *a, mVec3_c *b) const {
+    PSMTXMultVec(mWorldMtx, *a, *b);
 }
 
 void dAcTbox_c::getCylParams(mVec3_c *c, f32 *r, f32 *h) const {
@@ -2240,10 +2635,10 @@ bool dAcTbox_c::checkForLinkBonk() {
     }
 
     bool bonk = false;
-    bonk = bonk || (ccLo.x <= linkPos.x && linkPos.x <= ccHi.x) &&
-                        (ccLo.z - 80.0f <= linkPos.z && linkPos.z <= ccHi.z + 80.0f);
-    bonk = bonk || (ccLo.z <= linkPos.z && linkPos.z <= ccHi.z) &&
-                        (ccLo.x - 80.0f <= linkPos.x && linkPos.x <= ccHi.x + 80.0f);
+    bonk = bonk ||
+           (ccLo.x <= linkPos.x && linkPos.x <= ccHi.x) && (ccLo.z - 80.0f <= linkPos.z && linkPos.z <= ccHi.z + 80.0f);
+    bonk = bonk ||
+           (ccLo.z <= linkPos.z && linkPos.z <= ccHi.z) && (ccLo.x - 80.0f <= linkPos.x && linkPos.x <= ccHi.x + 80.0f);
     bonk = bonk || (linkPos.x < ccLo.x && linkPos.z < ccLo.z) && (linkPos.inprodXZ(ccLo) <= 6400.0f);
     bonk = bonk || (ccHi.x < linkPos.x && ccHi.z < linkPos.z) && (linkPos.inprodXZ(ccLo) <= 6400.0f);
     bonk = bonk || (linkPos.x < ccLo.x && ccLo.z < linkPos.z) && (linkPos.inprodXZ(ccLo) <= 6400.0f);
@@ -2260,7 +2655,7 @@ bool dAcTbox_c::checkForLinkBonk() {
     }
 
     // TODO
-    
+
     link->bonk();
 
     return false;

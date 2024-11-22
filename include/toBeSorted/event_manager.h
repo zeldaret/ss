@@ -12,6 +12,7 @@ class EventManager {
 public:
     static bool isInEvent(dAcBase_c *actor, const char *eventName);
     static bool finishEvent(dAcBase_c *actor, const char *eventName);
+    static void changeOwnEvent(dAcBase_c *actor1, dAcBase_c *actor2, Event *event, UNKWORD);
     static bool alsoSetAsCurrentEvent(dAcBase_c *actor, Event *event, void *unknown);
 
     static EventManager *sInstance;

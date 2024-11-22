@@ -59,6 +59,10 @@ public:
     static bool isKeyPiece(ITEM_ID item);
     static bool isTreasure(ITEM_ID item);
 
+    static bool getItemGetEventName(u16 item, const char **outName);
+    static void itemGetEventStart(dAcBase_c *);
+    static void itemGetEventEnd(dAcBase_c *);
+
 private:
     /* 0x334 */ UNKTYPE *mpMdl; // Model has its own handling system
     /* 0x338 */ dShadowCircle_c mShdw;
