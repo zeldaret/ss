@@ -21,6 +21,12 @@
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
 
+// TODO inline?
+inline void addAng(mVec3_c &pnt, const f32 step, const mAng &angle) {
+    pnt.x += step * angle.sin();
+    pnt.z += step * angle.cos();
+}
+
 SPECIAL_ACTOR_PROFILE(OBJ_IVY_ROPE, dAcOivyRope_c, fProfile::OBJ_IVY_ROPE, 0x262, 0, 2);
 
 STATE_DEFINE(dAcOivyRope_c, RopeWait);
@@ -95,7 +101,7 @@ UNKTYPE dAcOivyRope_c::fn_256_1480(UNKTYPE) {}
 
 UNKTYPE dAcOivyRope_c::fn_256_2160(UNKTYPE) {}
 
-UNKTYPE dAcOivyRope_c::fn_256_26B0(UNKTYPE) {}
+void dAcOivyRope_c::fn_256_26B0(int, bool, f32) {}
 
 UNKTYPE dAcOivyRope_c::fn_256_2C40(UNKTYPE) {}
 
@@ -258,29 +264,296 @@ void dAcOivyRope_c::fn_256_A2C0(bool bool0) {}
 
 bool dAcOivyRope_c::fn_256_A750(bool bool0, f32 float0) {}
 
-UNKTYPE dAcOivyRope_c::fn_256_AA40(UNKTYPE) {}
+f32 dAcOivyRope_c::fn_256_AA40() {
+    f32 f = mField_0xFB4 / mSegmentCount * 1.5f;
 
-UNKTYPE dAcOivyRope_c::fn_256_AAB0(UNKTYPE) {}
+    f32 ret = f;
+    if (f < 0.6f) {
+        ret = 0.6f;
+    } else if (f > 0.9f) {
+        ret = 0.9f;
+    }
+    return ret;
+}
 
-UNKTYPE dAcOivyRope_c::fn_256_AAF0(UNKTYPE) {}
+f32 dAcOivyRope_c::fn_256_AAB0(f32 f1, f32 f2) {
+    if (cM::isZero(f2)) {
+        return 1.f;
+    }
+    return f1 / f2;
+}
 
-UNKTYPE dAcOivyRope_c::fn_256_ABA0(UNKTYPE) {}
+int dAcOivyRope_c::fn_256_AAF0(f32 f1, f32 f2) {
+    // deal with this later ;-;
+    f32 f = f1 * f2;
+    f32 c = -(90.f * f) + 55.f * f * f;
+    f32 a = 0.8f * (1.f - mField_0x1040);
+    f32 b = (mField_0xFB4 / mSegmentCount) * c;
+    return mField_0xFD8 * (1.f - a) * (mField_0xFB4 + b);
+}
 
-UNKTYPE dAcOivyRope_c::fn_256_AC00(UNKTYPE) {}
+void dAcOivyRope_c::fn_256_ABA0() {
+    mField_0xFDA = 0;
+    mField_0xFDC = 0;
+    fn_256_BB70();
+    fn_256_D050();
+    mStateMgr.changeState(StateID_RopeWait);
+}
 
-UNKTYPE dAcOivyRope_c::fn_256_AE00(UNKTYPE) {}
+void dAcOivyRope_c::fn_256_AC00() {
+    mStateMgr.executeState();
+    if (mStateMgr.isState(StateID_PlayerGrip)) {
+        fn_256_9450();
+    } else if (mStateMgr.isState(StateID_RopeReturn)) {
+        if (mSubtype == 2) {
+            fn_256_9C80();
+        } else {
+            fn_256_A040();
+        }
+    } else if (mStateMgr.isState(StateID_RopeCut)) {
+        fn_256_A040();
+    } else if (mSubtype == 6) {
+        fn_256_DAA0(true, false, 4.0f, 0.13f);
+    } else if (mSubtype == 7) {
+        fn_256_DAA0(false, false, 4.0f, 0.13f);
+    } else {
+        bool check = checkSubtype(0) || checkSubtype(4) || checkSubtype(3) || checkSubtype(7) || checkSubtype(6);
+        if (check) {
+            fn_256_DAA0(false, false, 4.0f, 0.13f);
+        } else {
+            fn_256_A2C0(true);
+        }
+    }
 
-UNKTYPE dAcOivyRope_c::fn_256_B2B0(UNKTYPE) {}
+    fn_256_C410();
+    mField_0xFF8 = 0;
+}
 
-UNKTYPE dAcOivyRope_c::fn_256_BAB0(UNKTYPE) {}
+void dAcOivyRope_c::fn_256_AE00() {
+    mField_0xFDA = rotation.x;
+    mField_0xFDC = rotation.y;
+    rotation.x = 0;
+    rotation.y = 0;
+    int i = 0;
+    updateMatrix();
+    mMtx_c m = mWorldMtx;
+    if (mSegmentCount > i) {
+        for (; i < mSegmentCount; ++i) {
+            m.copyFrom(mWorldMtx);
 
-UNKTYPE dAcOivyRope_c::fn_256_BB70(UNKTYPE) {}
+            mMtx_c m_tmp;
+            m_tmp.transS(0.f, -25.f * i, 0.f);
+            m += m_tmp;
 
-UNKTYPE dAcOivyRope_c::fn_256_BE80(UNKTYPE) {}
+            m.getTranslation(mPnts2[i]);
+            mVec3_c tmp = mPnts2[i];
+            mVec3_c tmp2 = tmp - position;
 
-UNKTYPE dAcOivyRope_c::fn_256_BFF0(UNKTYPE) {}
+            m.copyFrom(mWorldMtx);
+            m.YrotM(mField_0xFDC);
+            m.XrotM(mField_0xFDA);
 
-UNKTYPE dAcOivyRope_c::fn_256_C200(UNKTYPE) {}
+            mMtx_c m_tmp2;
+            m_tmp2.transS(tmp2);
+            m += m_tmp2;
+
+            m.getTranslation(tmp);
+            fn_256_D7A0(i, tmp);
+            mPnts1[i].set(0.f, 0.f, 0.f);
+        }
+    }
+
+    mStts.SetRank(0);
+    for (int curr_idx = 0, i = 0; i < mField_0xFEB; curr_idx += 4, ++i) {
+        int end = mSegmentCount - 1;
+
+        int start_idx = curr_idx;
+        if (start_idx > end) {
+            start_idx = end;
+        }
+
+        int end_idx = curr_idx + 4;
+        if (end_idx > end) {
+            end_idx = end;
+        }
+
+        mCpsArr2[i].Set(sCpsSrc);
+        mCpsArr2[i].SetStts(mStts);
+        mCpsArr2[i].cM3dGLin::Set(fn_256_D730(start_idx), fn_256_D730(end_idx));
+        mCpsArr2[i].SetR(100.f);
+        mCpsArr2[i].ClrTgSet();
+    }
+
+    mField_0x1083 = 0.6f * mSegmentCount;
+    mVec3_c v = fn_256_D730(mField_0x1083);
+    v.y -= nw4r::math::FAbs(80.f / mField_0xFDA.sin());
+
+    fn_256_26B0(mField_0x1083, false, v.y);
+    mField_0xFE2 = -1;
+    fn_256_D050();
+
+    mStateMgr.changeState(StateID_RopeWait);
+}
+
+void dAcOivyRope_c::fn_256_B2B0() {
+    // TODO
+}
+
+void dAcOivyRope_c::fn_256_BAB0(mVec3_c &out, int idx, s16 xRot, s16 yRot) {
+    int pnt2_idx = idx - 1;
+    if (pnt2_idx < 0) {
+        pnt2_idx = 0;
+    }
+
+    mMtx_c m;
+    m.transS(mPnts2[pnt2_idx]);
+    m.YrotM(yRot);
+    m.XrotM(xRot);
+    m.multVec(mVec3_c(0.f, -25.f, 0.f), out);
+}
+
+void dAcOivyRope_c::fn_256_BB70() {
+    mField_0xFDA = rotation.x;
+    mField_0xFDC = rotation.y;
+    rotation.x = 0;
+    rotation.y = 0;
+    updateMatrix();
+
+    mVec3_c *pnt2;
+    mVec3_c *pnt1;
+    mMtx_c m = mWorldMtx;
+    int i;
+    for (i = 0, pnt1 = &mPnts1[i], pnt2 = &mPnts2[i]; i < mSegmentCount; ++i, pnt2++, pnt1++) {
+        m.copyFrom(mWorldMtx);
+        m.YrotM(mField_0xFDC);
+        m.XrotM(mField_0xFDA);
+
+        mMtx_c m_tmp;
+        m_tmp.transS(0.f, -25.f * i, 0.f);
+        m += m_tmp;
+
+        m.getTranslation(*pnt2);
+        fn_256_D7A0(i, *pnt2);
+        pnt1->set(0.f, 0.f, 0.f);
+    }
+
+    mStts.SetRank(1);
+    for (int curr_idx = 0, i = 0; i < mField_0xFEB; curr_idx += 4, ++i) {
+        int end = mSegmentCount - 1;
+
+        int start_idx = curr_idx;
+        if (start_idx > end) {
+            start_idx = end;
+        }
+
+        int end_idx = curr_idx + 4;
+        if (end_idx > end) {
+            end_idx = end;
+        }
+
+        mCpsArr2[i].Set(sCpsSrc);
+        mCpsArr2[i].SetStts(mStts);
+        mCpsArr2[i].cM3dGLin::Set(fn_256_D730(start_idx), fn_256_D730(end_idx));
+        mCpsArr2[i].SetR(100.f);
+        mCpsArr2[i].ClrTgSet();
+    }
+
+    mField_0xFF6 = 1;
+}
+
+void dAcOivyRope_c::fn_256_BE80() {
+    f32 step = 0.f;
+    f32 target = 30.f;
+    mAng angle = mField_0xFCC - 0x8000;
+    f32 stepSize = 0.13f * target;
+
+    if (mSegmentCount >= 0) {
+        for (int i = 1; i < mSegmentCount; i++) {
+            if (sLib::chase(&step, target, stepSize)) {
+                target *= -1.f;
+            }
+
+            mPnts1[i].set(0.f, 0.f, 0.f);
+
+            // inline is required
+            addAng(mPnts1[i], step, angle);
+        }
+    }
+}
+
+void dAcOivyRope_c::fn_256_BFF0(int ang, f32 float0, f32 float1) {
+    f32 target = float0;
+    f32 tmp = float0 * (0.1f - mField_0x1040 * 0.03f);
+    f32 step = 0;
+    f32 f = ang;
+
+    if (mSegmentCount >= 0) {
+        for (int i = 1; i < mSegmentCount; i++) {
+            if (sLib::chase(&step, target, tmp)) {
+                target = cM::isZero(target) ? float0 : 0.f;
+            }
+            mAng angle = f;
+
+            mPnts1[i].set(0.f, 0.f, 0.f);
+
+            // inline is required
+            addAng(mPnts1[i], step, angle);
+            // mVec3_c &pnt = mPnts1[i];
+            // f32 step1 = step;
+            // pnt.x += step1 * angle.sin();
+            // pnt.z += step1 * angle.cos();
+
+            mPnts1[i].y = float1;
+        }
+    }
+}
+
+f32 dAcOivyRope_c::fn_256_C200(int ang) {
+    // I dont like this function
+
+    // Some stuff with mField_0xFB4 here
+
+    f32 y = mPnts2[mSegmentCount - 1].y;
+    f32 x = mPnts2[mSegmentCount - 1].x - mTightropeEnd.x;
+    f32 z = mPnts2[mSegmentCount - 1].z - mTightropeEnd.z;
+
+    f32 float_30 = 30.f * 1.f;
+    f32 float_60 = 60.f * 1.f;
+    f32 flaot_100 = 100.f * 1.f;
+
+    f32 sq = EGG::Math<f32>::sqrt(x * x + z * z);
+    f32 ab = nw4r::math::FAbs(y - mTightropeEnd.y);
+    f32 tmp0, tmp1, tmp2, tmp3;
+    f32 ret;
+
+    s16 angle = cM::atan2s(sq, ab);
+    tmp0 = angle / 9102.f;
+    if (tmp0 > 0.5f) {
+        tmp0 = 0.5f;
+    }
+
+    tmp1 = 1.0f - mField_0x1040;
+    if (tmp1 < 0.3f) {
+        tmp1 = 0.3f;
+    }
+
+    tmp2 = mField_0x1050 / 40.f;
+    tmp3 = tmp2 * tmp1;
+    if (tmp3 > 0.5f) {
+        tmp3 = 0.5f;
+    }
+    if (tmp2 > 0.5f) {
+        tmp2 = 0.5f;
+    }
+    tmp1 = tmp0 + tmp3;
+    if (tmp1 > 1.f) {
+        tmp1 = 1.f;
+    }
+
+    fn_256_BFF0(ang, tmp1 * (mField_0x1040 * flaot_100 + float_30), tmp1 * float_60);
+
+    return tmp2;
+}
 
 void dAcOivyRope_c::fn_256_C410() {
     fn_256_3E70();

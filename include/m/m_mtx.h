@@ -77,6 +77,10 @@ public:
         return ret;
     }
 
+    void multVec(const mVec3_c &in, mVec3_c &out) const {
+        PSMTXMultVec(*this, in, out);
+    }
+
     mMtx_c &operator+=(const mMtx_c &rhs) {
         PSMTXConcat(*this, rhs, *this);
         return *this;
