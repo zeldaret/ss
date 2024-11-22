@@ -39,10 +39,10 @@ static mVec3_c sDowsingTargetOffsets[] = {
     mVec3_c(0.0f, 54.0f, 0.0f), mVec3_c(0.0f, 34.0f, 0.0f), mVec3_c(0.0f, 66.5f, 0.0f), mVec3_c(0.0f, 49.0f, 0.0f)
 };
 
-extern "C" mVec3_c v1 = mVec3_c(0.0f, 0.0f, -2.0f);
-extern "C" mVec3_c v2 = mVec3_c(1.0f, 1.0f, 0.8f);
-extern "C" mVec3_c v3 = mVec3_c(1.0f, 1.0f, 1.0f);
-extern "C" mVec3_c v4 = mVec3_c(0.0f, 0.0f, 88.0f);
+static mVec3_c sVec1 = mVec3_c(0.0f, 0.0f, -2.0f);
+static mVec3_c sVec2 = mVec3_c(1.0f, 1.0f, 0.8f);
+static mVec3_c sVec3 = mVec3_c(1.0f, 1.0f, 1.0f);
+static mVec3_c sVec4 = mVec3_c(0.0f, 0.0f, 88.0f);
 
 STATE_DEFINE(dAcTbox_c, DugOut);
 STATE_DEFINE(dAcTbox_c, WaitAppear);
@@ -76,7 +76,7 @@ static const char *const sOpenAnmClrName = "FX_TBoxOpen";
 
 static const char *const sAppearAnmName = "TBoxNormalT_appear";
 
-extern "C" char *const sOpenEventNames[] = {
+static char *const sOpenEventNames[] = {
     "TreasureBoxOpen",
     "TreasureBoxOpenSmall",
     "TreasureBoxOpenBoss",
@@ -1360,7 +1360,7 @@ int dAcTbox_c::actorExecuteInEvent() {
         case 'crct': {
             mVec3_c v1;
             mAng a1;
-            fn_8026DAD0(&v4, &v1);
+            fn_8026DAD0(&sVec4, &v1);
             fn_8026DAC0(a1);
             dAcPy_c *link = dAcPy_c::LINK;
             if (field_0x120B < 3) {
@@ -1601,15 +1601,15 @@ void dAcTbox_c::fn_8026B380(mVec3_c &out) const {
         out.y = position.y;
         out.z = position.z;
     } else {
-        fn_8026DAD0(&v1, &out);
+        fn_8026DAD0(&sVec1, &out);
     }
 }
 
 const mVec3_c &dAcTbox_c::fn_8026B3C0() const {
     if (mVariant == BOSS) {
-        return v3;
+        return sVec3;
     }
-    return v2;
+    return sVec2;
 }
 
 void dAcTbox_c::initializeState_DugOut() {
