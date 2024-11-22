@@ -15,9 +15,9 @@ public:
             mpList = nullptr;
         }
     }
-    /* 0x00 */ cListNd_c mNode;
-    /* 0x08 */ dCcD_Unk *field_0x210;
-    /* 0x0C */ cListMg_c *mpList;
+    /* 0x208 */ cListNd_c mNode;
+    /* 0x210 */ dCcD_Unk *field_0x210;
+    /* 0x214 */ cListMg_c *mpList;
 };
 
 struct ColliderLinkedList {
