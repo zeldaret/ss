@@ -70,9 +70,13 @@ d/d_base.cpp:
 	.data       start:0x80503380 end:0x805033D0
 	.sbss       start:0x805750C0 end:0x805750CC
 
+d/d_carry.cpp:
+	.text       start:0x80050A20 end:0x80051C00
+	.data       start:0x805033D0 end:0x805033E0
+
 d/d_cc.cpp:
-	.text       start:0x80050A20 end:0x800520F0
-	.data       start:0x805033D0 end:0x805033F0
+	.text       start:0x80051C00 end:0x800520F0
+	.data       start:0x805033E0 end:0x805033F0
 
 d/d_dvd.cpp:
 	.text       start:0x800520F0 end:0x800522FC
