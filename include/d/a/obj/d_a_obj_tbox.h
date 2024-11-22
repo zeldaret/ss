@@ -148,8 +148,8 @@ private:
     s32 field_0x4F4;
 
     /* 0x04F8 */ dBgW mBgWs[2];
-    /* 0x0918 */ LinkedCollider mCcD1;
-    /* 0x0B30 */ LinkedCollider mCcD2;
+    /* 0x0918 */ LinkedColliderUnk mCcD1;
+    /* 0x0B30 */ LinkedColliderUnk mCcD2;
     /* 0x0D48 */ ColliderLinkedList field_0x0D48;
     /* 0x0D54 */ dCcD_Unk mCcD3;
     /* 0x0F5C */ dCcD_Cyl mCcD4;

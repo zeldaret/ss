@@ -72,6 +72,7 @@ d/d_base.cpp:
 
 d/d_cc.cpp:
 	.text       start:0x80050A20 end:0x800520F0
+	.data       start:0x805033D0 end:0x805033F0
 
 d/d_dvd.cpp:
 	.text       start:0x800520F0 end:0x800522FC
@@ -804,7 +805,7 @@ DynamicLink.cpp:
 	.sbss       start:0x80575B80 end:0x80575BA0
 
 c/c_list.cpp:
-	.text       start:0x802E08C0 end:0x802E0A10
+	.text       start:0x802E08C0 end:0x802E0A50
 
 c/c_tree.cpp:
 	.text       start:0x802E0E70 end:0x802E1140

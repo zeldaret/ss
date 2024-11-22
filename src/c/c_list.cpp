@@ -74,3 +74,9 @@ void cListMg_c::prepend(cListNd_c *node) {
     }
     this->mpFirst = node;
 }
+
+void cListMg_c::clear() {
+    while (mpFirst != nullptr) {
+        remove(mpFirst);
+    }
+}
