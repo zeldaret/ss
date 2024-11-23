@@ -275,7 +275,7 @@ void floats2() {
 
 #pragma dont_inline on
 dLytMeter_c::dLytMeter_c() {}
-#pragma dont_inline off
+#pragma dont_inline reset
 
 extern "C" void *GLOBAL_TITLE_RELOADER;
 extern "C" void fn_800D97E0(int i);
