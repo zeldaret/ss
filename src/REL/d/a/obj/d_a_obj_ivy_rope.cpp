@@ -237,8 +237,21 @@ void dAcOivyRope_c::executeState_RopeReturn() {}
 void dAcOivyRope_c::finalizeState_RopeReturn() {}
 
 void dAcOivyRope_c::initializeState_RopeCut() {}
-void dAcOivyRope_c::executeState_RopeCut() {}
-void dAcOivyRope_c::finalizeState_RopeCut() {}
+void dAcOivyRope_c::executeState_RopeCut() {
+    if (mField_0xFF8 != 0) {
+        mStateMgr.changeState(StateID_PlayerGrip);
+    } else {
+        if (mField_0xFCE != 0 && --mField_0xFCE == 0) {
+            position = mTightropeEnd;
+        }
+        fn_256_8590();
+        fn_256_C740();
+    }
+}
+void dAcOivyRope_c::finalizeState_RopeCut() {
+    position = mTightropeEnd;
+    mField_0xFCE = 0;
+}
 
 UNKTYPE dAcOivyRope_c::fn_256_7D50(UNKTYPE) {}
 
@@ -258,11 +271,85 @@ UNKTYPE dAcOivyRope_c::fn_256_9450(UNKTYPE) {}
 
 UNKTYPE dAcOivyRope_c::fn_256_9C80(UNKTYPE) {}
 
-UNKTYPE dAcOivyRope_c::fn_256_A040(UNKTYPE) {}
+UNKTYPE dAcOivyRope_c::fn_256_A040(UNKTYPE) {
+    // Logically wrong i think
+    if (mField_0x1062 == 0) {
+        mVec3_c *pnt2 = mPnts2;
+        int idx = 1;
+        if (mSegmentCount > idx) {
+            f32 f1 = 5.f * mField_0x1040 + 8.f;
+            f32 f2 = -0.05f * mField_0x1040 + 0.15f;
+            mVec3_c nextPoint;
+            mVec3_c vec;
+            mVec3_c *pnt1 = mPnts1 + 1;
+            while (idx < mSegmentCount) {
+                nextPoint = pnt2[1];
+                vec = (pnt2[1] - pnt2[0]) + pnt1[0];
+                vec.y -= f1;
 
-void dAcOivyRope_c::fn_256_A2C0(bool bool0) {}
+                vec.normalize();
 
-bool dAcOivyRope_c::fn_256_A750(bool bool0, f32 float0) {}
+                pnt2[1] = pnt2[0] + vec * 25.f;
+                pnt1[0] *= f2;
+                pnt1[0] += (pnt2[1] - nextPoint) * 0.5f;
+
+                idx++;
+                pnt1++;
+                pnt2++;
+            }
+        }
+
+        if (mTightropeEnd.y - mDistance >= pnt2->y) {
+            mField_0x1062 = 1;
+        }
+    }
+    fn_256_A2C0(false);
+}
+
+void dAcOivyRope_c::fn_256_A2C0(bool bool0) {
+    mMtx_c m = mWorldMtx;
+
+    f32 fVar13 = 0.f;
+
+    f32 fVar14 = mField_0xFAC * (mSegmentCount * 2.f) / 3.0f;
+    f32 fVar2 = mField_0xFB0 * (mSegmentCount * 2.f) / 3.0f;
+
+    // TODO
+}
+
+bool dAcOivyRope_c::fn_256_A750(bool bool0, f32 float0) {
+    // Logically wrong i think
+    int idx = 1;
+    mVec3_c *pnt = mPnts2;
+    if (mSegmentCount >= idx) {
+        f32 f1 = 8.f + mField_0x1040 * 5.f;
+        f32 f2 = 0.15f + mField_0x1040 * -0.05f;
+        for (; idx < mSegmentCount; idx++) {
+            mVec3_c vec = pnt[idx + 1] - pnt[idx] + mPnts1[idx];
+            vec -= f1;
+            vec.normalize();
+            pnt[idx] += vec * 25.f;
+            mPnts1[idx] *= f2;
+            mPnts1[idx] += (pnt[idx + 1] - pnt[idx]) * float0;
+        }
+    }
+
+    if (!bool0) {
+        for (int i = 0; i < mSegmentCount; ++i) {
+            fn_256_D7A0(i, mPnts2[mSegmentCount - 1 - i]);
+        }
+    } else {
+        for (int i = 0; i < mSegmentCount; ++i) {
+            fn_256_D7A0(i, mPnts2[i]);
+        }
+    }
+
+    if (mTightropeEnd.y - mDistance >= pnt->y) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 f32 dAcOivyRope_c::fn_256_AA40() {
     f32 f = mField_0xFB4 / mSegmentCount * 1.5f;
