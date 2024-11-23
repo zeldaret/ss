@@ -476,6 +476,8 @@ config.libs = [
         "host": False,
         "objects": [
             Object(Matching, "c/c_list.cpp"),
+            Object(NonMatching, "c/c_math.cpp"),
+            Object(NonMatching, "c/c_rand.cpp"),
             Object(Matching, "c/c_tree.cpp"),
         ],
     },
