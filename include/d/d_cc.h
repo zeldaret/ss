@@ -18,43 +18,43 @@ public:
     /* 0x0C */ cListMg_c *mpList;
 };
 
-class LinkedColliderUnk : public dCcD_Unk {
+class dCcD_Linked_Unk : public dCcD_Unk {
 public:
-    LinkedColliderUnk() : mNode(this) {}
-    virtual ~LinkedColliderUnk() {
+    dCcD_Linked_Unk() : mNode(this) {}
+    virtual ~dCcD_Linked_Unk() {
         mNode.remove();
     }
     /* 0x210 */ LinkedColliderNode mNode;
 };
 
-class LinkedColliderCyl : public dCcD_Cyl {
+class dCcD_Linked_Cyl : public dCcD_Cyl {
 public:
-    LinkedColliderCyl() : mNode(this) {}
-    virtual ~LinkedColliderCyl() {
+    dCcD_Linked_Cyl() : mNode(this) {}
+    virtual ~dCcD_Linked_Cyl() {
         mNode.remove();
     }
     /* 0x150 */ LinkedColliderNode mNode;
 };
 
-class LinkedColliderSph : public dCcD_Sph {
+class dCcD_Linked_Sph : public dCcD_Sph {
 public:
-    LinkedColliderSph() : mNode(this) {}
-    virtual ~LinkedColliderSph() {
+    dCcD_Linked_Sph() : mNode(this) {}
+    virtual ~dCcD_Linked_Sph() {
         mNode.remove();
     }
     /* 0x150 */ LinkedColliderNode mNode;
 };
 
-class LinkedColliderCps : public dCcD_Cps {
+class dCcD_Linked_Cps : public dCcD_Cps {
 public:
-    LinkedColliderCps() : mNode(this) {}
-    virtual ~LinkedColliderCps() {
+    dCcD_Linked_Cps() : mNode(this) {}
+    virtual ~dCcD_Linked_Cps() {
         mNode.remove();
     }
     /* 0x170 */ LinkedColliderNode mNode;
 };
 
-class ColliderLinkedList {
+class dColliderLinkedList {
 private:
     cListMg_c mList;
     static void Set(cCcD_Obj *obj, void *cbArg);
@@ -67,13 +67,13 @@ private:
     static void ClrCo(cCcD_Obj *obj, void *cbArg);
 
 public:
-    virtual ~ColliderLinkedList();
+    virtual ~dColliderLinkedList();
 
     void postInit(cCcD_Obj &ccD);
-    void addCc(LinkedColliderCyl &ccD, const dCcD_SrcCyl &src);
-    void addCc(LinkedColliderSph &ccD, const dCcD_SrcSph &src);
-    void addCc(LinkedColliderCps &ccD, const dCcD_SrcCps &src);
-    void addCc(LinkedColliderUnk &ccD, const dCcD_SrcUnk &src);
+    void addCc(dCcD_Linked_Cyl &ccD, const dCcD_SrcCyl &src);
+    void addCc(dCcD_Linked_Sph &ccD, const dCcD_SrcSph &src);
+    void addCc(dCcD_Linked_Cps &ccD, const dCcD_SrcCps &src);
+    void addCc(dCcD_Linked_Unk &ccD, const dCcD_SrcUnk &src);
     void SetStts(cCcD_Stts &stts);
     void registerColliders();
 

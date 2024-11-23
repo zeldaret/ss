@@ -1762,7 +1762,7 @@ void dAcTbox_c::executeState_DemoAppear() {
     if (field_0x11F8 >= 20) {
         bool b = val < 20;
         if (b) {
-            fn_8026D950();
+            spawnAppearEffect();
         }
         if (b) {
             mScale.set(1.0f, 1.0f, 1.0f);
@@ -2372,7 +2372,7 @@ void dAcTbox_c::unregisterDowsing() {
 
 extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_208_;
 
-void dAcTbox_c::fn_8026D950() {
+void dAcTbox_c::spawnAppearEffect() {
     fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_208_, &position, &rotation, nullptr, nullptr, nullptr, nullptr, nullptr);
 }
 

@@ -36,7 +36,6 @@ struct ActorCarryStruct {
     ActorCarryStruct();
     /* vt 0x9C */
     virtual ~ActorCarryStruct();
-    // Is this actually part of this struct?
     /* 0xA0 */ u32 field_0xA0;
     /* 0xA4 */ u32 field_0xA4;
 

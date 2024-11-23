@@ -118,7 +118,7 @@ private:
     bool fn_8026D120() const;
     void fn_8026D130();
     void fn_8026D140();
-    void fn_8026D950();
+    void spawnAppearEffect();
     void fn_8026D370();
 
     bool checkShouldClose();
@@ -148,9 +148,9 @@ private:
     s32 field_0x4F4;
 
     /* 0x04F8 */ dBgW mBgWs[2];
-    /* 0x0918 */ LinkedColliderUnk mCcD1;
-    /* 0x0B30 */ LinkedColliderUnk mCcD2;
-    /* 0x0D48 */ ColliderLinkedList field_0x0D48;
+    /* 0x0918 */ dCcD_Linked_Unk mCcD1;
+    /* 0x0B30 */ dCcD_Linked_Unk mCcD2;
+    /* 0x0D48 */ dColliderLinkedList field_0x0D48;
     /* 0x0D54 */ dCcD_Unk mCcD3;
     /* 0x0F5C */ dCcD_Cyl mCcD4;
     /* 0x10AC */ STATE_MGR_DECLARE(dAcTbox_c);
