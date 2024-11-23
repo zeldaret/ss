@@ -71,8 +71,9 @@ d/d_base.cpp:
 	.sbss       start:0x805750C0 end:0x805750CC
 
 d/d_carry.cpp:
-	.text       start:0x80050A20 end:0x80051C00
+	.text       start:0x80050A20 end:0x80051BF8
 	.data       start:0x805033D0 end:0x805033E0
+	.sdata2     start:0x80576ED8 end:0x80576F20
 
 d/d_cc.cpp:
 	.text       start:0x80051C00 end:0x800520F0
@@ -810,6 +811,17 @@ DynamicLink.cpp:
 
 c/c_list.cpp:
 	.text       start:0x802E08C0 end:0x802E0A50
+
+c/c_math.cpp:
+	.text       start:0x802E0A50 end:0x802E0CF8
+	.data       start:0x80541A70 end:0x80542278
+	.sdata2     start:0x8057CC58 end:0x8057CC80
+
+c/c_rand.cpp:
+	.text       start:0x802E0D00 end:0x802E0E64
+	.ctors      start:0x804DB8BC end:0x804DB8C0
+	.sdata      start:0x80573FB0 end:0x80573FB8
+	.sdata2     start:0x8057CC80 end:0x8057CC98
 
 c/c_tree.cpp:
 	.text       start:0x802E0E70 end:0x802E1140
