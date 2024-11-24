@@ -130,7 +130,15 @@ private:
 
 class dLytMapFloorBtnMgr_c : public d2d::dSubPane {
 public:
-    dLytMapFloorBtnMgr_c(void *arg) : field_0x008(arg), mStateMgr(*this, sStateID::null) {}
+    dLytMapFloorBtnMgr_c(void *arg) : field_0x008(arg), field_0x51C(nullptr), mStateMgr(*this, sStateID::null) {
+        field_0x700 = 1;
+        field_0x704 = 0;
+        field_0x708 = 0;
+        field_0x70C = 4;
+        field_0x710 = 0;
+        field_0x711 = 0;
+        field_0x712 = 0;
+    }
     virtual ~dLytMapFloorBtnMgr_c();
 
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
@@ -155,9 +163,16 @@ private:
     /* 0x048 */ d2d::dLytSub mLyt;
     /* 0x0DC */ d2d::AnmGroup_c mAnmGroups[1];
     /* 0x11C */ LytMapFourAnimGroups mMoreGroups[4];
-    /* 0x51C */ u8 field_0x51C[0x520 - 0x51C];
+    /* 0x51C */ void *field_0x51C;
     /* 0x520 */ d2d::dLytStructD mStructDs[4];
     /* 0x5C0 */ dLytMapFloorBtn_c mFloorBtns[4];
+    /* 0x700 */ UNKWORD field_0x700;
+    /* 0x704 */ UNKWORD field_0x704;
+    /* 0x708 */ UNKWORD field_0x708;
+    /* 0x70C */ UNKWORD field_0x70C;
+    /* 0x710 */ u8 field_0x710;
+    /* 0x711 */ u8 field_0x711;
+    /* 0x712 */ u8 field_0x712;
 };
 
 // Size 0x4C
