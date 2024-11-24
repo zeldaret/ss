@@ -423,7 +423,9 @@ d/lyt/d_lyt_map_capture.cpp:
 d/lyt/d_lyt_map.cpp:
 	.text       start:0x8012DC30 end:0x80148DE8
 	.ctors      start:0x804DB76C end:0x804DB770
+	.rodata     start:0x804E76A0 end:0x804E7F50
 	.data       start:0x8051EAE0 end:0x805225E8
+	.sdata2     start:0x80579F40 end:0x80579FB8
 	.bss        start:0x805AF470 end:0x805B0830
 
 d/lyt/d_lyt_note.cpp:

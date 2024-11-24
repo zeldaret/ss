@@ -1,5 +1,8 @@
 #include "d/lyt/d_lyt_map.h"
 
+#include "common.h"
+#include "d/lyt/d2d.h"
+#include "d/lyt/d_structd.h"
 #include "egg/core/eggColorFader.h"
 #include "m/m_video.h"
 #include "sized_string.h"
@@ -174,36 +177,178 @@ void dLytMapFader_c::draw() {
     mFader.draw();
 }
 
-void dLytMapPinIcon_c::initializeState_Wait() {}
-void dLytMapPinIcon_c::executeState_Wait() {}
+#define LYT_MAP_PIN_ICON_ANIM_SCALE 0
+#define LYT_MAP_PIN_ICON_ANIM_ERASE 1
+#define LYT_MAP_PIN_ICON_ANIM_LOOP 2
+
+void dLytMapPinIcon_c::initializeState_Wait() {
+    mLyt.calc();
+}
+void dLytMapPinIcon_c::executeState_Wait() {
+    bool keepGoing = false;
+    if (field_0x1D0 != nullptr) {
+        keepGoing = !field_0x1D0->field_0x04;
+    }
+    if (!keepGoing) {
+        return;
+    }
+
+    if (field_0x1CC == 0) {
+        return;
+    }
+
+    if (field_0x1BC == 0) {
+        return;
+    }
+
+    mStateMgr.changeState(StateID_ToSelect);
+}
 void dLytMapPinIcon_c::finalizeState_Wait() {}
 
-void dLytMapPinIcon_c::initializeState_ToSelect() {}
-void dLytMapPinIcon_c::executeState_ToSelect() {}
-void dLytMapPinIcon_c::finalizeState_ToSelect() {}
+void dLytMapPinIcon_c::initializeState_ToSelect() {
+    d2d::AnmGroup_c *m = &mAnmGroups[1];
+    m->setDirection(false);
+    m->setFrame(0.0f);
+}
+void dLytMapPinIcon_c::executeState_ToSelect() {
+    mStateMgr.changeState(StateID_Select);
+}
+void dLytMapPinIcon_c::finalizeState_ToSelect() {
+    field_0x1D0->field_0x04 = true;
+}
 
 void dLytMapPinIcon_c::initializeState_Select() {}
 void dLytMapPinIcon_c::executeState_Select() {}
 void dLytMapPinIcon_c::finalizeState_Select() {}
 
 void dLytMapPinIcon_c::initializeState_ToUnselect() {}
-void dLytMapPinIcon_c::executeState_ToUnselect() {}
-void dLytMapPinIcon_c::finalizeState_ToUnselect() {}
+void dLytMapPinIcon_c::executeState_ToUnselect() {
+    mStateMgr.changeState(StateID_Wait);
+}
+void dLytMapPinIcon_c::finalizeState_ToUnselect() {
+    field_0x1D0->field_0x04 = false;
+}
 
 void dLytMapPinIcon_c::initializeState_Remove() {}
-void dLytMapPinIcon_c::executeState_Remove() {}
+void dLytMapPinIcon_c::executeState_Remove() {
+    mStateMgr.changeState(StateID_Wait);
+}
 void dLytMapPinIcon_c::finalizeState_Remove() {}
 
+dLytMapPinIcon_c::~dLytMapPinIcon_c() {
+    if (d2d::dLytStructDList::sInstance->fn_80065A30(&mStructD)) {
+        d2d::dLytStructDList::sInstance->removeFromList2(&mStructD);
+    }
+}
+
+static const d2d::LytBrlanMapping sMapPinIconBrlanMap[] = {
+    {"mapPutIcon_00_scale.brlan", "G_scale_00"},
+    {"mapPutIcon_00_erase.brlan", "G_scale_00"},
+    { "mapPutIcon_00_loop.brlan", "G_scale_00"},
+};
+
+bool dLytMapPinIcon_c::build(d2d::ResAccIf_c *resAcc) {
+    mLyt.setResAcc(resAcc);
+    mLyt.build("mapPutIcon_00.brlyt", nullptr);
+
+    d2d::AnmGroup_c *pAnmGroups = mAnmGroups;
+
+    for (int i = 0; i < 3; i++) {
+        pAnmGroups[i].init(sMapPinIconBrlanMap[i].mFile, resAcc, mLyt.getLayout(), sMapPinIconBrlanMap[i].mName);
+        pAnmGroups[i].setDirection(false);
+        pAnmGroups[i].setFrame(0.0f);
+    }
+
+    mLyt.calc();
+
+    for (int i = 0; i < 3; i++) {
+        pAnmGroups[i].unbind();
+    }
+
+    mpBounding = mLyt.findBounding("B_mark_00");
+    mStructD.fn_80065E70(mpBounding, 2, 1, 0);
+    d2d::dLytStructDList::sInstance->appendToList2(&mStructD);
+
+    mAnmGroups[LYT_MAP_PIN_ICON_ANIM_SCALE].setDirection(false);
+    mAnmGroups[LYT_MAP_PIN_ICON_ANIM_LOOP].setDirection(false);
+
+    mLyt.calc();
+
+    mStateMgr.changeState(StateID_Wait);
+    field_0x1BC = 0;
+    field_0x1CC = 0;
+    field_0x1DC = 0;
+    return true;
+}
+
+bool dLytMapPinIcon_c::remove() {
+    d2d::dLytStructDList::sInstance->removeFromList2(&mStructD);
+    for (int i = 0; i < 3; i++) {
+        mAnmGroups[i].afterUnbind();
+    }
+    return true;
+}
+
+bool dLytMapPinIcon_c::execute() {
+    fn_8012EC30();
+    mStateMgr.executeState();
+    field_0x1BC = 0;
+    mAnmGroups[2].setFrame(field_0x1DC);
+    // TODO something MapCapture
+    mLyt.calc();
+    mStructD.field_0x22 = 0;
+    mStructD.fn_80065F70();
+    return true;
+}
+
+bool dLytMapPinIcon_c::draw() {
+    mLyt.draw();
+    return true;
+}
+
 void dLytMapPinIconAggregate_c::initializeState_Wait() {}
-void dLytMapPinIconAggregate_c::executeState_Wait() {}
+void dLytMapPinIconAggregate_c::executeState_Wait() {
+    for (int i = 0; i < 5; i++) {
+        if (mPins[i].isSelect()) {
+            mStateMgr.changeState(StateID_Select);
+        }
+    }
+}
 void dLytMapPinIconAggregate_c::finalizeState_Wait() {}
 
 void dLytMapPinIconAggregate_c::initializeState_Select() {}
-void dLytMapPinIconAggregate_c::executeState_Select() {}
+void dLytMapPinIconAggregate_c::executeState_Select() {
+    bool anyRemove = false;
+    for (int i = 0; i < 5; i++) {
+        if (mPins[i].isRemove()) {
+            mStateMgr.changeState(StateID_Remove);
+            anyRemove = true;
+            // a bit convoluted, an early return would've done the trick
+            break;
+        }
+    }
+
+    if (!anyRemove) {
+        bool allSelect = true;
+        for (int i = 0; i < 5; i++) {
+            if (mPins[i].isSelect()) {
+                allSelect = false;
+                break;
+            }
+        }
+
+        if (allSelect) {
+            mStateMgr.changeState(StateID_Wait);
+        }
+    }
+}
 void dLytMapPinIconAggregate_c::finalizeState_Select() {}
 
 void dLytMapPinIconAggregate_c::initializeState_Remove() {}
-void dLytMapPinIconAggregate_c::executeState_Remove() {}
+void dLytMapPinIconAggregate_c::executeState_Remove() {
+    field_0x9A0->field_0x04 = false;
+    mStateMgr.changeState(StateID_Wait);
+}
 void dLytMapPinIconAggregate_c::finalizeState_Remove() {}
 
 void dLytMapFloorBtn_c::initializeState_Wait() {}
@@ -249,6 +394,16 @@ void dLytMapFloorBtnMgr_c::finalizeState_Invisible() {}
 void dLytMapFloorBtnMgr_c::initializeState_Wait() {}
 void dLytMapFloorBtnMgr_c::executeState_Wait() {}
 void dLytMapFloorBtnMgr_c::finalizeState_Wait() {}
+
+extern "C" void fn_801942F0(int, int);
+dLytMapFloorBtnMgr_c::~dLytMapFloorBtnMgr_c() {
+    for (int i = 0; i < 4; i++) {
+        if (d2d::dLytStructDList::sInstance->fn_80065A30(&mStructDs[i])) {
+            d2d::dLytStructDList::sInstance->removeFromList2(&mStructDs[i]);
+        }
+    }
+    fn_801942F0(0, 0);
+}
 
 void dLytMapPopupInfo_c::initializeState_Invisible() {}
 void dLytMapPopupInfo_c::executeState_Invisible() {}

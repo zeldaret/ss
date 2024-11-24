@@ -8,7 +8,23 @@
 #include "egg/core/eggColorFader.h"
 #include "m/m2d.h"
 #include "m/m_vec.h"
+#include "nw4r/lyt/lyt_bounding.h"
 #include "s/s_State.hpp"
+
+struct LytMap0x80520B5C {
+    LytMap0x80520B5C() : field_0x04(false), field_0x05(false) {}
+    virtual ~LytMap0x80520B5C() {}
+
+    bool field_0x04;
+    bool field_0x05;
+};
+
+struct LytMapFourAnimGroups {
+    /* 0x00 */ d2d::AnmGroup_c mGroup1;
+    /* 0x40 */ d2d::AnmGroup_c mGroup2;
+    /* 0x80 */ d2d::AnmGroup_c mGroup3;
+    /* 0xC0 */ d2d::AnmGroup_c mGroup4;
+};
 
 // Size 0x1E0
 class dLytMapPinIcon_c {
@@ -16,12 +32,24 @@ public:
     friend class dLytMapPinIconAggregate_c;
 
     dLytMapPinIcon_c()
-        : mStateMgr(*this, sStateID::null), field_0x1B8(0), field_0x1BC(0), field_0x1C0(0.0f, 0.0f, 0.0f),
-          field_0x1CC(0), field_0x1D0(0), field_0x1D4(0), mIndex(0), field_0x1DC(0) {}
-    virtual ~dLytMapPinIcon_c() {
-        if (d2d::dLytStructDList::sInstance->fn_80065A30(&mStructD)) {
-            d2d::dLytStructDList::sInstance->removeFromList2(&mStructD);
-        }
+        : mStateMgr(*this, sStateID::null), mpBounding(nullptr), field_0x1BC(0), field_0x1C0(0.0f, 0.0f, 0.0f),
+          field_0x1CC(0), field_0x1D0(nullptr), field_0x1D4(0), mIndex(0), field_0x1DC(0) {}
+    virtual ~dLytMapPinIcon_c();
+
+    bool build(d2d::ResAccIf_c *resAcc);
+    bool remove();
+    bool draw();
+    bool execute();
+
+    void fn_8012EC30();
+
+    bool isSelect() const {
+        return *mStateMgr.getStateID() == dLytMapPinIcon_c::StateID_ToSelect ||
+             *mStateMgr.getStateID() == dLytMapPinIcon_c::StateID_Select;
+    }
+
+    bool isRemove() const {
+        return *mStateMgr.getStateID() == dLytMapPinIcon_c::StateID_Remove;
     }
 
     STATE_FUNC_DECLARE(dLytMapPinIcon_c, Wait);
@@ -33,13 +61,13 @@ public:
 private:
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMapPinIcon_c);
     /* 0x040 */ d2d::LytBase_c mLyt;
-    /* 0x0D0 */ d2d::AnmGroup_c mAnm[3];
+    /* 0x0D0 */ d2d::AnmGroup_c mAnmGroups[3];
     /* 0x190 */ d2d::dLytStructD mStructD;
-    /* 0x1B8 */ UNKWORD field_0x1B8;
+    /* 0x1B8 */ nw4r::lyt::Bounding *mpBounding;
     /* 0x1BC */ UNKWORD field_0x1BC;
     /* 0x1C0 */ mVec3_c field_0x1C0;
     /* 0x1CC */ u8 field_0x1CC;
-    /* 0x1D0 */ UNKWORD field_0x1D0;
+    /* 0x1D0 */ LytMap0x80520B5C *field_0x1D0;
     /* 0x1D4 */ UNKWORD field_0x1D4;
     /* 0x1D8 */ s32 mIndex;
     /* 0x1DC */ UNKWORD field_0x1DC;
@@ -48,7 +76,7 @@ private:
 class dLytMapPinIconAggregate_c {
 public:
     dLytMapPinIconAggregate_c() : mStateMgr(*this, sStateID::null) {
-        field_0x9A0 = 0;
+        field_0x9A0 = nullptr;
         field_0x9A4 = 0;
         field_0x9A8 = 0;
         for (int i = 0; i < 5; i++) {
@@ -56,6 +84,8 @@ public:
         }
     }
     virtual ~dLytMapPinIconAggregate_c() {}
+
+    bool remove();
 
     STATE_FUNC_DECLARE(dLytMapPinIconAggregate_c, Wait);
     STATE_FUNC_DECLARE(dLytMapPinIconAggregate_c, Select);
@@ -65,7 +95,7 @@ private:
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMapPinIconAggregate_c);
     /* 0x040 */ dLytMapPinIcon_c mPins[5];
 
-    /* 0x9A0 */ UNKWORD field_0x9A0;
+    /* 0x9A0 */ LytMap0x80520B5C *field_0x9A0;
     /* 0x9A4 */ UNKWORD field_0x9A4;
     /* 0x9A8 */ UNKWORD field_0x9A8;
 };
@@ -101,7 +131,7 @@ private:
 class dLytMapFloorBtnMgr_c : public d2d::dSubPane {
 public:
     dLytMapFloorBtnMgr_c(void *arg) : field_0x008(arg), mStateMgr(*this, sStateID::null) {}
-    virtual ~dLytMapFloorBtnMgr_c() {}
+    virtual ~dLytMapFloorBtnMgr_c();
 
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
@@ -123,8 +153,9 @@ private:
     /* 0x008 */ void *field_0x008;
     /* 0x00C */ UI_STATE_MGR_DECLARE(dLytMapFloorBtnMgr_c);
     /* 0x048 */ d2d::dLytSub mLyt;
-    /* 0x0DC */ d2d::AnmGroup_c mAnm[1];
-    /* 0x11C */ // unk array
+    /* 0x0DC */ d2d::AnmGroup_c mAnmGroups[1];
+    /* 0x11C */ LytMapFourAnimGroups mMoreGroups[4];
+    /* 0x51C */ u8 field_0x51C[0x520 - 0x51C];
     /* 0x520 */ d2d::dLytStructD mStructDs[4];
     /* 0x5C0 */ dLytMapFloorBtn_c mFloorBtns[4];
 };
@@ -143,7 +174,7 @@ public:
 private:
     /* 0x000 */ UI_STATE_MGR_DECLARE(dLytMapPopupInfo_c);
     /* 0x03C */ d2d::LytBase_c mLyt;
-    /* 0x0CC */ d2d::AnmGroup_c mAnm[3];
+    /* 0x0CC */ d2d::AnmGroup_c mAnmGroups[3];
 };
 
 // Size 0x4C
@@ -169,7 +200,7 @@ public:
 
 private:
     /* 0x000 */ d2d::LytBase_c mLyt;
-    /* 0x090 */ d2d::AnmGroup_c mAnm[2];
+    /* 0x090 */ d2d::AnmGroup_c mAnmGroups[2];
     /* 0x110 */ dLytMapSavePopupAction_c mActions[12];
 };
 
@@ -185,7 +216,7 @@ public:
 private:
     /* 0x000 */ UI_STATE_MGR_DECLARE(dLytMapSaveCaption_c);
     /* 0x03C */ d2d::LytBase_c mLyt;
-    /* 0x0CC */ d2d::AnmGroup_c mAnm[5];
+    /* 0x0CC */ d2d::AnmGroup_c mAnmGroups[5];
 };
 
 // Size 0x190
@@ -202,7 +233,7 @@ public:
 private:
     /* 0x000 */ UI_STATE_MGR_DECLARE(dLytMapSaveObj_c);
     /* 0x03C */ d2d::LytBase_c mLyt;
-    /* 0x0CC */ d2d::AnmGroup_c mAnm[3];
+    /* 0x0CC */ d2d::AnmGroup_c mAnmGroups[3];
     /* 0x18C */ u8 field_0x18C;
     /* 0x18D */ u8 field_0x18D;
     /* 0x18E */ u8 field_0x18E;
@@ -264,7 +295,7 @@ private:
     /* 0x00A4 */ u8 field_0x00A4[0x010C - 0x00A4];
     /* 0x010C */ d2d::LytBase_c mLyt;
     /* 0x019C */ d2d::AnmGroup_c mAnmGroups[54];
-    /* 0x0F1C */ u8 field_0x0F1C[0x0F24 - 0x0F1C];
+    /* 0x0F1C */ LytMap0x80520B5C field_0xF1C;
     /* 0x0F24 */ dLytMapCapture_c mMapCapture;
     /* 0x0FA0 */ dLytMapFloorBtnMgr_c mFloorBtnMgr;
     /* 0x16B4 */ dLytMapPinIconAggregate_c mPinIconAggregate;
