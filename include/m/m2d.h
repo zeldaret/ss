@@ -198,6 +198,9 @@ private:
     u32 field_0x94;
 };
 
+
+void getAllocator();
+
 } // namespace m2d
 
 #endif

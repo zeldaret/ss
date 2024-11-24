@@ -424,7 +424,7 @@ d/lyt/d_lyt_map.cpp:
 	.text       start:0x8012DC30 end:0x80148DE8
 	.ctors      start:0x804DB76C end:0x804DB770
 	.data       start:0x8051EAE0 end:0x805225E8
-	.bss        start:0x805AF480 end:0x805B0830
+	.bss        start:0x805AF470 end:0x805B0830
 
 d/lyt/d_lyt_note.cpp:
 	.text       start:0x80148DF0 end:0x80149C28

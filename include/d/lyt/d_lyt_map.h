@@ -5,6 +5,7 @@
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_map_capture.h"
 #include "d/lyt/d_structd.h"
+#include "egg/core/eggColorFader.h"
 #include "m/m2d.h"
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
@@ -75,6 +76,7 @@ public:
     dLytMapFloorBtn_c()
         : mStateMgr(*this, sStateID::null), field_0x3C(0), field_0x40(0), field_0x44(0), field_0x48(0), field_0x4C(0),
           field_0x4D(0) {}
+    ~dLytMapFloorBtn_c() {}
 
     STATE_FUNC_DECLARE(dLytMapFloorBtn_c, Wait);
     STATE_FUNC_DECLARE(dLytMapFloorBtn_c, ToSelect);
@@ -99,7 +101,7 @@ private:
 class dLytMapFloorBtnMgr_c : public d2d::dSubPane {
 public:
     dLytMapFloorBtnMgr_c(void *arg) : field_0x008(arg), mStateMgr(*this, sStateID::null) {}
-    virtual ~dLytMapFloorBtnMgr_c();
+    virtual ~dLytMapFloorBtnMgr_c() {}
 
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
@@ -213,6 +215,8 @@ public:
     virtual void draw() override;
     virtual void dLytMapMain_vt0x10();
 
+    void build();
+
     STATE_FUNC_DECLARE(dLytMapMain_c, Invisible);
     STATE_FUNC_DECLARE(dLytMapMain_c, RenderingWait);
     STATE_FUNC_DECLARE(dLytMapMain_c, In);
@@ -292,6 +296,19 @@ private:
     /* 0x8DC8 */ UNKWORD field_0x8DC8;
 };
 
+// Made up name
+class dLytMapFader_c : public m2d::Base_c {
+public:
+    dLytMapFader_c();
+    virtual ~dLytMapFader_c();
+    /* vt 0x0C */ virtual void draw() override;
+
+    void calc();
+
+private:
+    /* 0x10 */ EGG::ColorFader mFader;
+};
+
 // Size 0x91FC, inline ctor at 802ccd88
 class dLytMap_c {
 public:
@@ -301,6 +318,12 @@ public:
     virtual ~dLytMap_c() {
         sInstance = nullptr;
     }
+
+    static d2d::ResAccIf_c *getResAcc() {
+        return &sInstance->mResAcc;
+    }
+
+    void build();
 
 private:
     /* 0x0004 */ d2d::ResAccIf_c mResAcc;

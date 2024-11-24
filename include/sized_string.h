@@ -78,4 +78,35 @@ struct SizedString {
     }
 };
 
+// TODO this might be a shared template with SizedString but I'm
+// not sure how to write the inline functions
+template <size_t Size>
+struct SizedWString {
+    SizedWString() {
+        mChars[0] = '\0';
+    }
+
+    wchar_t mChars[Size];
+
+    operator wchar_t *() {
+        return mChars;
+    }
+
+    operator const wchar_t *() const {
+        return mChars;
+    }
+
+    int sprintf(const wchar_t *fmt, ...) {
+        va_list args;
+        va_start(args, fmt);
+
+        int printed = vswprintf(this->mChars, Size, fmt, args);
+        if (printed != wcslen(this->mChars)) {
+            this->mChars[0] = '\0';
+        }
+        va_end(list);
+        return printed;
+    }
+};
+
 #endif
