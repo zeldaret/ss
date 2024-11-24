@@ -63,8 +63,6 @@ void dHeap::createLayoutEx2Heap(size_t size, EGG::Heap *parent) {
     layoutEx2Heap.init(name, size, parent);
 }
 void dHeap::createLayoutResHeap(size_t size, EGG::Heap *parent) {
-    // Supposed to be "レイアウトリソース用ヒープ(dHeap::layoutResHeap)" but
-    // this creates a Linux compile issue with wibo
     static const char name[] = "レイアウトリソース用ヒープ(dHeap::layoutResHeap)";
     layoutResHeap.init(name, size, parent);
 }
