@@ -65,7 +65,7 @@ void dHeap::createLayoutEx2Heap(size_t size, EGG::Heap *parent) {
 void dHeap::createLayoutResHeap(size_t size, EGG::Heap *parent) {
     // Supposed to be "レイアウトリソース用ヒープ(dHeap::layoutResHeap)" but
     // this creates a Linux compile issue with wibo
-    static const char name[] = "レイアウトリ\x83\x5Cース用ヒープ(dHeap::layoutResHeap)";
+    static const char name[] = "レイアウトリソース用ヒープ(dHeap::layoutResHeap)";
     layoutResHeap.init(name, size, parent);
 }
 void dHeap::createFontHeap(size_t size, EGG::Heap *parent) {
