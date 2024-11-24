@@ -174,6 +174,154 @@ void dLytMapFader_c::draw() {
     mFader.draw();
 }
 
+void dLytMapPinIcon_c::initializeState_Wait() {}
+void dLytMapPinIcon_c::executeState_Wait() {}
+void dLytMapPinIcon_c::finalizeState_Wait() {}
+
+void dLytMapPinIcon_c::initializeState_ToSelect() {}
+void dLytMapPinIcon_c::executeState_ToSelect() {}
+void dLytMapPinIcon_c::finalizeState_ToSelect() {}
+
+void dLytMapPinIcon_c::initializeState_Select() {}
+void dLytMapPinIcon_c::executeState_Select() {}
+void dLytMapPinIcon_c::finalizeState_Select() {}
+
+void dLytMapPinIcon_c::initializeState_ToUnselect() {}
+void dLytMapPinIcon_c::executeState_ToUnselect() {}
+void dLytMapPinIcon_c::finalizeState_ToUnselect() {}
+
+void dLytMapPinIcon_c::initializeState_Remove() {}
+void dLytMapPinIcon_c::executeState_Remove() {}
+void dLytMapPinIcon_c::finalizeState_Remove() {}
+
+void dLytMapPinIconAggregate_c::initializeState_Wait() {}
+void dLytMapPinIconAggregate_c::executeState_Wait() {}
+void dLytMapPinIconAggregate_c::finalizeState_Wait() {}
+
+void dLytMapPinIconAggregate_c::initializeState_Select() {}
+void dLytMapPinIconAggregate_c::executeState_Select() {}
+void dLytMapPinIconAggregate_c::finalizeState_Select() {}
+
+void dLytMapPinIconAggregate_c::initializeState_Remove() {}
+void dLytMapPinIconAggregate_c::executeState_Remove() {}
+void dLytMapPinIconAggregate_c::finalizeState_Remove() {}
+
+void dLytMapFloorBtn_c::initializeState_Wait() {}
+void dLytMapFloorBtn_c::executeState_Wait() {}
+void dLytMapFloorBtn_c::finalizeState_Wait() {}
+
+void dLytMapFloorBtn_c::initializeState_ToSelect() {}
+void dLytMapFloorBtn_c::executeState_ToSelect() {}
+void dLytMapFloorBtn_c::finalizeState_ToSelect() {}
+
+void dLytMapFloorBtn_c::initializeState_Select() {}
+void dLytMapFloorBtn_c::executeState_Select() {}
+void dLytMapFloorBtn_c::finalizeState_Select() {}
+
+void dLytMapFloorBtn_c::initializeState_ToWait() {}
+void dLytMapFloorBtn_c::executeState_ToWait() {}
+void dLytMapFloorBtn_c::finalizeState_ToWait() {}
+
+void dLytMapFloorBtn_c::initializeState_ToSelectInDecide() {}
+void dLytMapFloorBtn_c::executeState_ToSelectInDecide() {}
+void dLytMapFloorBtn_c::finalizeState_ToSelectInDecide() {}
+
+void dLytMapFloorBtn_c::initializeState_SelectInDecide() {}
+void dLytMapFloorBtn_c::executeState_SelectInDecide() {}
+void dLytMapFloorBtn_c::finalizeState_SelectInDecide() {}
+
+void dLytMapFloorBtn_c::initializeState_ToDecide() {}
+void dLytMapFloorBtn_c::executeState_ToDecide() {}
+void dLytMapFloorBtn_c::finalizeState_ToDecide() {}
+
+void dLytMapFloorBtn_c::initializeState_Decide() {}
+void dLytMapFloorBtn_c::executeState_Decide() {}
+void dLytMapFloorBtn_c::finalizeState_Decide() {}
+
+void dLytMapFloorBtn_c::initializeState_DecideToSelectInDecide() {}
+void dLytMapFloorBtn_c::executeState_DecideToSelectInDecide() {}
+void dLytMapFloorBtn_c::finalizeState_DecideToSelectInDecide() {}
+
+void dLytMapFloorBtnMgr_c::initializeState_Invisible() {}
+void dLytMapFloorBtnMgr_c::executeState_Invisible() {}
+void dLytMapFloorBtnMgr_c::finalizeState_Invisible() {}
+
+void dLytMapFloorBtnMgr_c::initializeState_Wait() {}
+void dLytMapFloorBtnMgr_c::executeState_Wait() {}
+void dLytMapFloorBtnMgr_c::finalizeState_Wait() {}
+
+void dLytMapPopupInfo_c::initializeState_Invisible() {}
+void dLytMapPopupInfo_c::executeState_Invisible() {}
+void dLytMapPopupInfo_c::finalizeState_Invisible() {}
+
+void dLytMapPopupInfo_c::initializeState_In() {}
+void dLytMapPopupInfo_c::executeState_In() {}
+void dLytMapPopupInfo_c::finalizeState_In() {}
+
+void dLytMapPopupInfo_c::initializeState_Wait() {}
+void dLytMapPopupInfo_c::executeState_Wait() {}
+void dLytMapPopupInfo_c::finalizeState_Wait() {}
+
+void dLytMapPopupInfo_c::initializeState_WaitInvalid() {}
+void dLytMapPopupInfo_c::executeState_WaitInvalid() {}
+void dLytMapPopupInfo_c::finalizeState_WaitInvalid() {}
+
+void dLytMapPopupInfo_c::initializeState_Out() {}
+void dLytMapPopupInfo_c::executeState_Out() {}
+void dLytMapPopupInfo_c::finalizeState_Out() {}
+
+void dLytMapSavePopupAction_c::initializeState_Invisible() {}
+void dLytMapSavePopupAction_c::executeState_Invisible() {}
+void dLytMapSavePopupAction_c::finalizeState_Invisible() {}
+
+void dLytMapSavePopupAction_c::initializeState_In() {}
+void dLytMapSavePopupAction_c::executeState_In() {}
+void dLytMapSavePopupAction_c::finalizeState_In() {}
+
+void dLytMapSavePopupAction_c::initializeState_Wait() {}
+void dLytMapSavePopupAction_c::executeState_Wait() {}
+void dLytMapSavePopupAction_c::finalizeState_Wait() {}
+
+void dLytMapSavePopupAction_c::initializeState_Out() {}
+void dLytMapSavePopupAction_c::executeState_Out() {}
+void dLytMapSavePopupAction_c::finalizeState_Out() {}
+
+void dLytMapSaveCaption_c::initializeState_Invisible() {}
+void dLytMapSaveCaption_c::executeState_Invisible() {}
+void dLytMapSaveCaption_c::finalizeState_Invisible() {}
+
+void dLytMapSaveCaption_c::initializeState_In() {}
+void dLytMapSaveCaption_c::executeState_In() {}
+void dLytMapSaveCaption_c::finalizeState_In() {}
+
+void dLytMapSaveCaption_c::initializeState_Wait() {}
+void dLytMapSaveCaption_c::executeState_Wait() {}
+void dLytMapSaveCaption_c::finalizeState_Wait() {}
+
+void dLytMapSaveCaption_c::initializeState_Out() {}
+void dLytMapSaveCaption_c::executeState_Out() {}
+void dLytMapSaveCaption_c::finalizeState_Out() {}
+
+void dLytMapSaveObj_c::initializeState_Wait() {}
+void dLytMapSaveObj_c::executeState_Wait() {}
+void dLytMapSaveObj_c::finalizeState_Wait() {}
+
+void dLytMapSaveObj_c::initializeState_ToSelect() {}
+void dLytMapSaveObj_c::executeState_ToSelect() {}
+void dLytMapSaveObj_c::finalizeState_ToSelect() {}
+
+void dLytMapSaveObj_c::initializeState_Select() {}
+void dLytMapSaveObj_c::executeState_Select() {}
+void dLytMapSaveObj_c::finalizeState_Select() {}
+
+void dLytMapSaveObj_c::initializeState_ToWait() {}
+void dLytMapSaveObj_c::executeState_ToWait() {}
+void dLytMapSaveObj_c::finalizeState_ToWait() {}
+
+void dLytMapSaveObj_c::initializeState_Decide() {}
+void dLytMapSaveObj_c::executeState_Decide() {}
+void dLytMapSaveObj_c::finalizeState_Decide() {}
+
 #pragma dont_inline on
 dLytMapMain_c::dLytMapMain_c() : mStateMgr(*this), mFloorBtnMgr(&field_0x8DC8) {}
 #pragma dont_inline reset
@@ -197,3 +345,163 @@ void lytMapusesSizedWString() {
     static SizedWString<0x20> sString;
     sString.sprintf(L"%ld", 0);
 }
+
+void dLytMapMain_c::initializeState_Invisible() {}
+void dLytMapMain_c::executeState_Invisible() {}
+void dLytMapMain_c::finalizeState_Invisible() {}
+
+void dLytMapMain_c::initializeState_RenderingWait() {}
+void dLytMapMain_c::executeState_RenderingWait() {}
+void dLytMapMain_c::finalizeState_RenderingWait() {}
+
+void dLytMapMain_c::initializeState_In() {}
+void dLytMapMain_c::executeState_In() {}
+void dLytMapMain_c::finalizeState_In() {}
+
+void dLytMapMain_c::initializeState_Active() {}
+void dLytMapMain_c::executeState_Active() {}
+void dLytMapMain_c::finalizeState_Active() {}
+
+void dLytMapMain_c::initializeState_Out() {}
+void dLytMapMain_c::executeState_Out() {}
+void dLytMapMain_c::finalizeState_Out() {}
+
+void dLytMapMain_c::initializeState_FloorChange() {}
+void dLytMapMain_c::executeState_FloorChange() {}
+void dLytMapMain_c::finalizeState_FloorChange() {}
+
+void dLytMapMain_c::initializeState_ChgMapUpDirection() {}
+void dLytMapMain_c::executeState_ChgMapUpDirection() {}
+void dLytMapMain_c::finalizeState_ChgMapUpDirection() {}
+
+void dLytMapMain_c::initializeState_ChgDispAreaMode_MapRot() {}
+void dLytMapMain_c::executeState_ChgDispAreaMode_MapRot() {}
+void dLytMapMain_c::finalizeState_ChgDispAreaMode_MapRot() {}
+
+void dLytMapMain_c::initializeState_ChgDispAreaMode_Map() {}
+void dLytMapMain_c::executeState_ChgDispAreaMode_Map() {}
+void dLytMapMain_c::finalizeState_ChgDispAreaMode_Map() {}
+
+void dLytMapMain_c::initializeState_ChgDispAreaMode_WA() {}
+void dLytMapMain_c::executeState_ChgDispAreaMode_WA() {}
+void dLytMapMain_c::finalizeState_ChgDispAreaMode_WA() {}
+
+void dLytMapMain_c::initializeState_ChgDispAreaMode_CsrRot() {}
+void dLytMapMain_c::executeState_ChgDispAreaMode_CsrRot() {}
+void dLytMapMain_c::finalizeState_ChgDispAreaMode_CsrRot() {}
+
+void dLytMapMain_c::initializeState_ResetPos() {}
+void dLytMapMain_c::executeState_ResetPos() {}
+void dLytMapMain_c::finalizeState_ResetPos() {}
+
+void dLytMapMain_c::initializeState_ResetPosWithFloorChange() {}
+void dLytMapMain_c::executeState_ResetPosWithFloorChange() {}
+void dLytMapMain_c::finalizeState_ResetPosWithFloorChange() {}
+
+void dLytMapMain_c::initializeState_EventSwBankSmall_Step1() {}
+void dLytMapMain_c::executeState_EventSwBankSmall_Step1() {}
+void dLytMapMain_c::finalizeState_EventSwBankSmall_Step1() {}
+
+void dLytMapMain_c::initializeState_EventSwBankSmall_Step2() {}
+void dLytMapMain_c::executeState_EventSwBankSmall_Step2() {}
+void dLytMapMain_c::finalizeState_EventSwBankSmall_Step2() {}
+
+void dLytMapMain_c::initializeState_EventSwBankSmall_Step3() {}
+void dLytMapMain_c::executeState_EventSwBankSmall_Step3() {}
+void dLytMapMain_c::finalizeState_EventSwBankSmall_Step3() {}
+
+void dLytMapMain_c::initializeState_EventMapIntro_Step1() {}
+void dLytMapMain_c::executeState_EventMapIntro_Step1() {}
+void dLytMapMain_c::finalizeState_EventMapIntro_Step1() {}
+
+void dLytMapMain_c::initializeState_EventMapIntro_Step2() {}
+void dLytMapMain_c::executeState_EventMapIntro_Step2() {}
+void dLytMapMain_c::finalizeState_EventMapIntro_Step2() {}
+
+void dLytMapMain_c::initializeState_EventMapIntro_Step3() {}
+void dLytMapMain_c::executeState_EventMapIntro_Step3() {}
+void dLytMapMain_c::finalizeState_EventMapIntro_Step3() {}
+
+void dLytMapMain_c::initializeState_EventMapIntro_Step4() {}
+void dLytMapMain_c::executeState_EventMapIntro_Step4() {}
+void dLytMapMain_c::finalizeState_EventMapIntro_Step4() {}
+
+void dLytMapMain_c::initializeState_EventDungeonMapGet_Step1() {}
+void dLytMapMain_c::executeState_EventDungeonMapGet_Step1() {}
+void dLytMapMain_c::finalizeState_EventDungeonMapGet_Step1() {}
+
+void dLytMapMain_c::initializeState_EventDungeonMapGet_Step2() {}
+void dLytMapMain_c::executeState_EventDungeonMapGet_Step2() {}
+void dLytMapMain_c::finalizeState_EventDungeonMapGet_Step2() {}
+
+void dLytMapMain_c::initializeState_EventDungeonMapGet_Step3() {}
+void dLytMapMain_c::executeState_EventDungeonMapGet_Step3() {}
+void dLytMapMain_c::finalizeState_EventDungeonMapGet_Step3() {}
+
+void dLytMapMain_c::initializeState_EventFieldMapChange_Step1() {}
+void dLytMapMain_c::executeState_EventFieldMapChange_Step1() {}
+void dLytMapMain_c::finalizeState_EventFieldMapChange_Step1() {}
+
+void dLytMapMain_c::initializeState_EventFieldMapChange_Step2() {}
+void dLytMapMain_c::executeState_EventFieldMapChange_Step2() {}
+void dLytMapMain_c::finalizeState_EventFieldMapChange_Step2() {}
+
+void dLytMapMain_c::initializeState_EventFieldMapChange_Step3() {}
+void dLytMapMain_c::executeState_EventFieldMapChange_Step3() {}
+void dLytMapMain_c::finalizeState_EventFieldMapChange_Step3() {}
+
+void dLytMapMain_c::initializeState_EventFieldMapChange_Step4() {}
+void dLytMapMain_c::executeState_EventFieldMapChange_Step4() {}
+void dLytMapMain_c::finalizeState_EventFieldMapChange_Step4() {}
+
+void dLytMapMain_c::initializeState_EventForestMapChange_Step1() {}
+void dLytMapMain_c::executeState_EventForestMapChange_Step1() {}
+void dLytMapMain_c::finalizeState_EventForestMapChange_Step1() {}
+
+void dLytMapMain_c::initializeState_EventForestMapChange_Step2() {}
+void dLytMapMain_c::executeState_EventForestMapChange_Step2() {}
+void dLytMapMain_c::finalizeState_EventForestMapChange_Step2() {}
+
+void dLytMapMain_c::initializeState_EventForestMapChange_Step3() {}
+void dLytMapMain_c::executeState_EventForestMapChange_Step3() {}
+void dLytMapMain_c::finalizeState_EventForestMapChange_Step3() {}
+
+void dLytMapMain_c::initializeState_EventSignalAdd_Step1() {}
+void dLytMapMain_c::executeState_EventSignalAdd_Step1() {}
+void dLytMapMain_c::finalizeState_EventSignalAdd_Step1() {}
+
+void dLytMapMain_c::initializeState_EventSignalAdd_Step2() {}
+void dLytMapMain_c::executeState_EventSignalAdd_Step2() {}
+void dLytMapMain_c::finalizeState_EventSignalAdd_Step2() {}
+
+void dLytMapMain_c::initializeState_EventSignalAdd_Step3() {}
+void dLytMapMain_c::executeState_EventSignalAdd_Step3() {}
+void dLytMapMain_c::finalizeState_EventSignalAdd_Step3() {}
+
+void dLytMapMain_c::initializeState_EventGoddessCube_Step1() {}
+void dLytMapMain_c::executeState_EventGoddessCube_Step1() {}
+void dLytMapMain_c::finalizeState_EventGoddessCube_Step1() {}
+
+void dLytMapMain_c::initializeState_EventGoddessCube_Step2() {}
+void dLytMapMain_c::executeState_EventGoddessCube_Step2() {}
+void dLytMapMain_c::finalizeState_EventGoddessCube_Step2() {}
+
+void dLytMapMain_c::initializeState_EventGoddessCube_Step3() {}
+void dLytMapMain_c::executeState_EventGoddessCube_Step3() {}
+void dLytMapMain_c::finalizeState_EventGoddessCube_Step3() {}
+
+void dLytMapMain_c::initializeState_EventSaveObjMsgWindow() {}
+void dLytMapMain_c::executeState_EventSaveObjMsgWindow() {}
+void dLytMapMain_c::finalizeState_EventSaveObjMsgWindow() {}
+
+void dLytMapMain_c::initializeState_EventSaveObjSelect() {}
+void dLytMapMain_c::executeState_EventSaveObjSelect() {}
+void dLytMapMain_c::finalizeState_EventSaveObjSelect() {}
+
+void dLytMapMain_c::initializeState_EventSaveObjConfirmMsgWindow() {}
+void dLytMapMain_c::executeState_EventSaveObjConfirmMsgWindow() {}
+void dLytMapMain_c::finalizeState_EventSaveObjConfirmMsgWindow() {}
+
+void dLytMapMain_c::initializeState_EventSaveObjDecide() {}
+void dLytMapMain_c::executeState_EventSaveObjDecide() {}
+void dLytMapMain_c::finalizeState_EventSaveObjDecide() {}
