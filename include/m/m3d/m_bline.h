@@ -1,9 +1,11 @@
 #ifndef M3D_BLINE_H
 #define M3D_BLINE_H
 
+#include "common.h"
 #include "egg/gfx/eggTexture.h"
 #include "m/m3d/m_proc.h"
 #include "m/m_math.h"
+#include "m/m_vec.h"
 #include "nw4r/ut/ut_Color.h"
 
 namespace m3d {
@@ -44,6 +46,10 @@ public:
     void remove();
     void draw();
 
+    mVec3_c &getPathPoint(u16 idx) {
+        return mpPathArr[idx];
+    }
+
     // vt at 0x08
     virtual ~bline_c();
 
@@ -63,6 +69,7 @@ public:
 
 class blineMat_c : public proc_c {
 public:
+    blineMat_c() : mpLineArr(nullptr) {}
     virtual ~blineMat_c();
     virtual void remove() override;
     virtual void drawOpa() override;

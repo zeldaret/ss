@@ -7,7 +7,6 @@
 #include "nw4r/g3d/g3d_light.h"
 #include "nw4r/g3d/g3d_state.h"
 
-
 namespace m3d {
 
 blineMat_c::~blineMat_c() {
@@ -61,7 +60,7 @@ void blineMat_c::update() {
 
     getCurrentCamera().GetCameraMtx(&camMtx);
     PSMTXInverse(camMtx, camMtx);
-    PSMTXMultVec(camMtx, mVec3_c::zero, vec);
+    PSMTXMultVec(camMtx, mVec3_c::Zero, vec);
 
     for (bline_c *line = (bline_c *)nw4r::ut::List_GetNext(&mLines, 0); line != nullptr;
          line = (bline_c *)nw4r::ut::List_GetNext(&mLines, line)) {
@@ -85,15 +84,9 @@ void blineMat_c::setupGX(bool bTransparent) {
             0, &mask_diff_color, &mask_diff_alpha, &mask_spec_color, &mask_spec_alpha, &ambObj
         );
 
-        nw4r::ut::Color ambColor(0xFF, 0xFF, 0xFF, 0xFF);
-        nw4r::ut::Color matColor(0xFF, 0xFF, 0xFF, 0xFF);
-        GXSetChanMatColor(GX_COLOR0, matColor);
+        GXSetChanMatColor(GX_COLOR0, nw4r::ut::Color(0xFF, 0xFF, 0xFF, 0xFF));
 
-        ambColor.r = ambObj.r;
-        ambColor.g = ambObj.g;
-        ambColor.b = ambObj.b;
-        ambColor.a = ambObj.a;
-        GXSetChanAmbColor(GX_COLOR0, ambColor);
+        GXSetChanAmbColor(GX_COLOR0, nw4r::ut::Color(ambObj.r, ambObj.g, ambObj.b, ambObj.a));
 
         GXSetNumChans(1);
         GXSetChanCtrl(GX_COLOR0, TRUE, GX_SRC_REG, GX_SRC_REG, (GXLightID)mask_diff_color, GX_DF_CLAMP, GX_AF_NONE);

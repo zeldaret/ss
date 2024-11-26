@@ -2,6 +2,7 @@
 #define ACTOR_ON_RAIL_H
 
 #include "common.h"
+#include "m/m_vec.h"
 
 class ActorOnRail {
 private:
@@ -19,6 +20,15 @@ public:
     bool init(int pathIndex, int roomId, int pathSubtype);
     /* 800A68B0 */
     mVec3_c *getPntPosForIndex(int index);
+};
+
+class ActorOnRail3 {
+    ActorOnRail mPath;
+    u16 mSomePntIdx;
+    u32 mFlags;
+
+public:
+    ActorOnRail3() : mSomePntIdx(0), mFlags(0) {}
 };
 
 #endif
