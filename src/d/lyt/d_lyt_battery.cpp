@@ -17,6 +17,8 @@ static const d2d::LytBrlanMapping brlanMap[] = {
     { "denchi_00_out.brlan", "G_inOut_00"},
 };
 
+dLytBattery_c *dLytBattery_c::sInstance;
+
 #define LYT_BATTERY_ANIM_IN 0
 #define LYT_BATTERY_ANIM_NONE 1
 #define LYT_BATTERY_ANIM_LOOP 2
