@@ -441,7 +441,7 @@ void LytBase_c::setPropertiesRecursive(nw4r::lyt::Pane *pane, f32 posX, f32 posY
     }
 }
 
-extern "C" const char *fn_801B2600(const char *);
+extern "C" const char *fn_801B2600(const wchar_t  *);
 extern "C" void fn_800AF930(dTextBox_c *, const char *);
 extern "C" void fn_800B0F40(dTextBox_c *);
 
@@ -612,7 +612,7 @@ bool LytBase_c::fn_800ABCE0(
         str1 += str2;
     }
 
-    const char *text = LMS_GetTextByLabel(getMsbtInfo(), str1);
+    const wchar_t *text = LMS_GetTextByLabel(getMsbtInfo(), str1);
     if (text == nullptr) {
         return false;
     }
