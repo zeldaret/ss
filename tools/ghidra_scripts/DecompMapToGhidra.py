@@ -280,6 +280,9 @@ def apply_symbols_map(symbols_map, file_name, build_dir):
 
 path = str(askDirectory("Program build directory (e.g. build/SOUE01)", "Import"))
 commit = askString("Commit hash for symbol history", "Confirm")
+if len(commit) < 7:
+    raise ValueError("commit hash " + commit + " is too short")
+commit = commit[:7]
 new_contents = None
 main_symbols = os.path.join(path, "main.elf.MAP")
 symbols_map = None
