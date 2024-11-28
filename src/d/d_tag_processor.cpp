@@ -503,7 +503,7 @@ void dTagProcessor_c::alsoProcessingRelated(
                             } else {
                                 tmp3 = 3.0f;
                             }
-                            float3 = (fn_800B8560(int1) - (fontSize.height * (float1 / tmp) * 0.5f)) - tmp3;
+                            float3 = (fn_800B85C0(int1) - (fontSize.height * (float1 / tmp) * 0.5f)) - tmp3;
                         } else {
                             float3 = (float3 - (fontSize.height * (float1 / tmp) + field_0x004->GetLineSpace()));
                         }

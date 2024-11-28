@@ -32,6 +32,7 @@ public:
     
     void alsoProcessingRelated(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, s32 unkArg, u16 *pOutLen, SomeTextProcessingOutStruct *outStructs);
     f32 fn_800B8560(s32);
+    f32 fn_800B85C0(s32);
     void somethingWithScrapperAndMusic(wchar_t* src);
 
     void changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, bool);
