@@ -6,6 +6,7 @@
 __pycache__
 .mypy_cache
 .cache/
+*$py.class
 
 # Original files
 orig/*/*

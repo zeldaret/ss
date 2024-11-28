@@ -12,7 +12,7 @@ AF = currentProgram.getAddressFactory()
 mem = currentProgram.getMemory()
 listing = currentProgram.getListing()
 
-sym_re = re.compile("(?:lbl|fn|FUN|DAT)_[0-9A-Fa-f_]+ = \.([a-z0-9]+):0x([0-9A-Fa-f]{8})(.*)\n")
+sym_re = re.compile("(?:lbl|fn|FUN|DAT)_[0-9A-Fa-f_]+ = \\.([a-z0-9]+):0x([0-9A-Fa-f]{8})(.*)\n")
 default_sym_re = re.compile(".*_[0-9A-Za-z]+$")
 
 used_symbols = set()
