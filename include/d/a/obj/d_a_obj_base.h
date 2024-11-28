@@ -18,7 +18,7 @@ class dBgS_Acch;
 
 // Size: 0xA8
 struct ActorCarryStruct {
-    /* 0x00 */ fLiNdBa_c actorLink;
+    /* 0x00 */ dAcRefBase_c actorLink;
     /* 0x0C */ fLiNdBa_c *carriedActor;
     /* 0x10 */ u32 carryFlags;
     /* 0x14 */ int carryType;
@@ -32,7 +32,10 @@ struct ActorCarryStruct {
     /* 0x90 */ f32 field_0x90;
     /* 0x94 */ f32 field_0x94;
     /* 0x98 */ f32 field_0x98;
-    /* 0x9C */ void *dtor; // ???
+
+    ActorCarryStruct();
+    /* vt 0x9C */
+    virtual ~ActorCarryStruct();
     /* 0xA0 */ u32 field_0xA0;
     /* 0xA4 */ u32 field_0xA4;
 
@@ -43,6 +46,8 @@ struct ActorCarryStruct {
 
     void fn_80050EA0(dAcObjBase_c *);
     void fn_800511E0(dAcObjBase_c *);
+    void fn_80051190(dAcObjBase_c *);
+    void fn_80050EB0(dAcObjBase_c *);
 
     bool testCarryFlag(u32 flag) {
         return (carryFlags & flag) != 0;
@@ -215,7 +220,7 @@ public:
         if (!result)                                                                                                   \
             return result;                                                                                             \
     } while (0)
-// Use this in actors' createHeap functions
+// Use this in actors' create functions
 #define CREATE_ALLOCATOR(className)                                                                                    \
     do {                                                                                                               \
         if (!initAllocatorWork1Heap(-1, #className "::m_allocator", 0x20)) {                                           \

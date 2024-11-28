@@ -21,7 +21,7 @@ public:
     virtual ~TBoxflagManager() {}
     void init();
     void copyFromSave(u32 sceneIndex);
-    bool checkFlag(u16 sceneIndex, u16 flag);
+    u16 checkFlag(u16 sceneIndex, u16 flag);
     virtual u16 getFlagCount() const;
     void setFlag(u16 flag);
     bool checkUncommittedFlag(u16 sceneIndex, u16 flag);

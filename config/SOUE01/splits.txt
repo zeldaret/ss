@@ -44,6 +44,9 @@ d/a/obj/d_a_obj_base.cpp:
 d/a/e/d_a_e_base.cpp:
 	.text       start:0x8002F300 end:0x80030CB0
 	.ctors      start:0x804DB664 end:0x804DB668
+	.data       start:0x80501638 end:0x805016E0
+	.sbss       start:0x80575098 end:0x805750A0
+	.bss        start:0x80597020 end:0x80597030
 
 d/a/npc/d_a_npc.cpp:
 	.text       start:0x80030CB0 end:0x8003F718
@@ -67,8 +70,14 @@ d/d_base.cpp:
 	.data       start:0x80503380 end:0x805033D0
 	.sbss       start:0x805750C0 end:0x805750CC
 
+d/d_carry.cpp:
+	.text       start:0x80050A20 end:0x80051BF8
+	.data       start:0x805033D0 end:0x805033E0
+	.sdata2     start:0x80576ED8 end:0x80576F20
+
 d/d_cc.cpp:
-	.text       start:0x80050A20 end:0x800520F0
+	.text       start:0x80051C00 end:0x800520F0
+	.data       start:0x805033E0 end:0x805033F0
 
 d/d_dvd.cpp:
 	.text       start:0x800520F0 end:0x800522FC
@@ -215,15 +224,20 @@ d/d_textunk.cpp:
 	.bss        start:0x805A6F70 end:0x805A7730
 
 d/d_tag_processor.cpp:
-	.text       start:0x800B35C0 end:0x800B9274
+	.text       start:0x800B34F0 end:0x800B9274
 	.ctors      start:0x804DB6D4 end:0x804DB6D8
-	.rodata     start:0x804E4C34 end:0x804E4C50
+	.rodata     start:0x804E39E0 end:0x804E4C50
 	.data       start:0x805108E8 end:0x805109A0
-	.sdata2     start:0x8057986C end:0x805798D0
+	.sdata2     start:0x80579868 end:0x805798D0
 	.bss        start:0x805A7730 end:0x805A78B8
 
 toBeSorted/time_area_mgr.cpp:
-	.text       start:0x800B9280 end:0x800BB2A0
+	.text       start:0x800B9280 end:0x800BC978
+	.ctors      start:0x804DB6D8 end:0x804DB6DC
+	.data       start:0x805109A0 end:0x80510B30
+	.sdata      start:0x805722E0 end:0x805722F8
+	.sbss       start:0x805753C0 end:0x805753D0
+	.sdata2     start:0x805798D0 end:0x80579928
 
 d/flag/flag_managers.cpp:
 	.text       start:0x800BD8C0 end:0x800C0650
@@ -650,7 +664,12 @@ d/a/obj/d_a_obj_fairy.cpp:
 d/a/obj/d_a_obj_tbox.cpp:
 	.text       start:0x802685A0 end:0x8026F488
 	.ctors      start:0x804DB83C end:0x804DB840
+	.rodata     start:0x804ED3B0 end:0x804EE548
 	.data       start:0x80535270 end:0x80535A18
+	.sdata      start:0x80573A48 end:0x80573A50
+	.sbss       start:0x80575910 end:0x80575928
+	.sdata2     start:0x8057C238 end:0x8057C3F0
+	.bss        start:0x805B4FA8 end:0x805B5458
 
 d/a/obj/d_a_obj_time_area.cpp:
 	.text       start:0x8026F490 end:0x80271888
@@ -806,7 +825,18 @@ DynamicLink.cpp:
 	.sbss       start:0x80575B80 end:0x80575BA0
 
 c/c_list.cpp:
-	.text       start:0x802E08C0 end:0x802E0A10
+	.text       start:0x802E08C0 end:0x802E0A50
+
+c/c_math.cpp:
+	.text       start:0x802E0A50 end:0x802E0CF8
+	.data       start:0x80541A70 end:0x80542278
+	.sdata2     start:0x8057CC58 end:0x8057CC80
+
+c/c_rand.cpp:
+	.text       start:0x802E0D00 end:0x802E0E64
+	.ctors      start:0x804DB8BC end:0x804DB8C0
+	.sdata      start:0x80573FB0 end:0x80573FB8
+	.sdata2     start:0x8057CC80 end:0x8057CC98
 
 c/c_tree.cpp:
 	.text       start:0x802E0E70 end:0x802E1140

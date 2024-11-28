@@ -324,6 +324,8 @@ config.libs = [
             Object(Matching, "d/flag/flag_managers.cpp"),
             Object(NonMatching, "toBeSorted/special_item_drop_mgr.cpp"),
             Object(Matching, "d/d_base.cpp"),
+            Object(NonMatching, "d/d_carry.cpp"),
+            Object(Matching, "d/d_cc.cpp"),
             Object(Matching, "d/d_dvd.cpp"),
             Object(NonMatching, "d/d_dvd_unk.cpp"),
             Object(NonMatching, "d/d_dylink.cpp"),
@@ -484,6 +486,8 @@ config.libs = [
         "host": False,
         "objects": [
             Object(Matching, "c/c_list.cpp"),
+            Object(NonMatching, "c/c_math.cpp"),
+            Object(NonMatching, "c/c_rand.cpp"),
             Object(Matching, "c/c_tree.cpp"),
         ],
     },

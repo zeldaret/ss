@@ -16,4 +16,4 @@ public:
     u16 counterId;
 };
 
-#endif COUNTER_H
+#endif

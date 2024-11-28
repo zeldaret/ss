@@ -1237,7 +1237,7 @@ bool cCcD_CylAttr::CrossCo(cCcD_CpsAttr &cpsAttr, f32 *pOut) {
 }
 
 bool cCcD_CylAttr::CrossCo(cCcD_UnkAttr &unkAttr, f32 *pOut) {
-    cM3dGCyl::Cross(unkAttr, pOut);
+    return cM3dGCyl::Cross(unkAttr, pOut);
 }
 
 void cCcD_CylAttr::CalcAabBox() {

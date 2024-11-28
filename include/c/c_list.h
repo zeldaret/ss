@@ -57,6 +57,8 @@ public:
      */
     void prepend(cListNd_c *node);
 
+    void clear();
+
     cListNd_c *getFirst() const {
         return mpFirst;
     }
