@@ -16,44 +16,19 @@ STATE_DEFINE(dAcOtoD3StoneFigure_c, Eyes);
 f32 dAcOtoD3StoneFigure_c::sRadius = 85.0f;
 f32 dAcOtoD3StoneFigure_c::sHeight = 290.0f;
 
-// clang-format off
 dCcD_SrcCyl dAcOtoD3StoneFigure_c::sCcSrc = {
-    {
-        {
-            0, 
-            0,
-            {
-                0,  
-                0,  
-                0   
-            },
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
-        }, 
-        {
-            ~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND),
-            0x1000111,
-            {
-                0x06,
-                0x407
-            },
-            0,
-            0
-        }, 
-        {
-            0xE9
-        }
-    },
-    {
-        dAcOtoD3StoneFigure_c::sRadius,
-        dAcOtoD3StoneFigure_c::sHeight
-    }
+  /* mObjInf */
+    {/* mObjAt*/ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
+     /* mObjTg*/
+     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND),
+      0x1000111,
+      {0, 0x06, 0x407},
+      0,
+      0},
+     /* mObjCo*/ {0xE9}},
+ /* mCylInf */
+    {dAcOtoD3StoneFigure_c::sRadius, dAcOtoD3StoneFigure_c::sHeight}
 };
-// clang-format on
 
 bool dAcOtoD3StoneFigure_c::createHeap() {
     const char *modelName = getModelName();
