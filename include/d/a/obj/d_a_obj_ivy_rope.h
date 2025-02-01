@@ -41,7 +41,8 @@ public:
     STATE_FUNC_DECLARE(dAcOivyRope_c, TerryRopePlayerCarry);
 
     void initTightRope();
-    UNKTYPE fn_256_10C0(UNKTYPE);
+    void fn_256_10C0();
+
     UNKTYPE fn_256_11A0(UNKTYPE);
     UNKTYPE fn_256_1240(UNKTYPE);
     UNKTYPE fn_256_1480(UNKTYPE);
@@ -51,7 +52,7 @@ public:
     UNKTYPE fn_256_2D00(UNKTYPE);
     UNKTYPE fn_256_2DC0(UNKTYPE);
     UNKTYPE fn_256_2EA0(UNKTYPE);
-    UNKTYPE fn_256_30A0(UNKTYPE);
+    void fn_256_30A0(mVec3_c &out);
     UNKTYPE fn_256_33B0(UNKTYPE);
     UNKTYPE fn_256_34B0(UNKTYPE);
     UNKTYPE fn_256_3540(UNKTYPE);
@@ -228,7 +229,10 @@ private:
     /* 0x1060 */ u8 mField_0x1060;
     /* 0x1061 */ u8 mField_0x1061;
     /* 0x1062 */ u8 mField_0x1062;
-    /* 0x1060 */ u8 _1063[0x1083 - 0x1063];
+    /* 0x1064 */ f32 mField_0x1064;
+    /* 0x1068 */ f32 mField_0x1068;
+    /* 0x106C */ f32 mField_0x106C;
+    /* 0x1070 */ u8 _1070[0x1083 - 0x1070];
     /* 0x1083 */ u8 mField_0x1083;
     /* 0x1084 */ u8 _1084[0x1088 - 0x1084];
     /* 0x1088 */ dCcD_Cps mCpsArr2[16];

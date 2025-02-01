@@ -62,7 +62,7 @@ dCcD_SrcSph dAcOivyRope_c::sSphSrc = {
   /* mObjInf */
     {/* mObjAt */ {AT_TYPE_DAMAGE, 0x11, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
      /* mObjTg */
-     {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, {0, 0, 0x407}, 0, 0},
+     {~AT_TYPE_COMMON0, 0x111, {0, 0, 0x407}, 0, 0},
      /* mObjCo */ {0x29}},
  /* mSphInf */
     {100.f}
@@ -91,7 +91,14 @@ dAcOivyRope_c::~dAcOivyRope_c() {
 
 void dAcOivyRope_c::initTightRope() {}
 
-UNKTYPE dAcOivyRope_c::fn_256_10C0(UNKTYPE) {}
+void dAcOivyRope_c::fn_256_10C0() {
+    mField_0x106C = 0.f;
+
+    mVec3_c pnt;
+    fn_256_30A0(pnt);
+
+    // TODO
+}
 
 UNKTYPE dAcOivyRope_c::fn_256_11A0(UNKTYPE) {}
 
@@ -111,7 +118,7 @@ UNKTYPE dAcOivyRope_c::fn_256_2DC0(UNKTYPE) {}
 
 UNKTYPE dAcOivyRope_c::fn_256_2EA0(UNKTYPE) {}
 
-UNKTYPE dAcOivyRope_c::fn_256_30A0(UNKTYPE) {}
+void dAcOivyRope_c::fn_256_30A0(mVec3_c &out) {}
 
 UNKTYPE dAcOivyRope_c::fn_256_33B0(UNKTYPE) {}
 

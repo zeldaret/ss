@@ -360,6 +360,8 @@ enum dCcD_ObjAtType {
     /* 0x 0200 0000 */ AT_TYPE_0x2000000 = (1 << 25),
     /* 0x 0400 0000 */ AT_TYPE_KOLOKTOS_SWORD = (1 << 26),
     /* 0x 0800 0000 */ AT_TYPE_0x8000000 = (1 << 27),
+    /* 0x 0148 8200 */ AT_TYPE_COMMON0 =
+        AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND,
 };
 
 enum cCcD_AtModifiers_e {
