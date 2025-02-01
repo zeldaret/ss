@@ -18,6 +18,7 @@
 #include "m/m_vec.h"
 #include "rvl/MTX/vec.h"
 #include "s/s_Math.h"
+#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/dowsing_target.h"
 
 void float_ordering() {
@@ -91,8 +92,6 @@ int dAcOTumbleWeed_c::doDelete() {
     return SUCCEEDED;
 }
 
-extern "C" void fn_800247D0(void *, mVec3_c, f32);
-extern "C" UNKWORD BLUR_AND_PALETTE_MGR;
 
 int dAcOTumbleWeed_c::actorExecute() {
     if (!mField_0x98C && !isStopped()) {
@@ -106,7 +105,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     calcWind();
 
     sLib::chase(&mField_0x980, 1.f, 0.1f);
-    fn_800247D0(&BLUR_AND_PALETTE_MGR, mField_0x968, mField_0x980);
+    BlurAndPaletteManager::GetInstance().fn_800247D0(mField_0x968, mField_0x980);
 
     calcVelocity();
     position += velocity;

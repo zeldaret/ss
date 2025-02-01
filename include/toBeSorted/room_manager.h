@@ -60,6 +60,10 @@ public:
     char _7[3];
     bool hasAnmTexPat;
     bool didAlreadyInit;
+
+    bool checkFlag(u32 flag) {
+        return flags & flag;
+    }
 };
 
 class dRoomTable {

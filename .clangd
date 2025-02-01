@@ -3,5 +3,6 @@ CompileFlags:
   Add: [
     "-Wno-c++11-compat-deprecated-writable-strings",
     "-Wno-trigraphs",
-    "-fno-trigraphs"
+    "-fno-trigraphs",
+    "-Wno-c++11-extensions"
   ]

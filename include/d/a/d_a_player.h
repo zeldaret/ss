@@ -55,6 +55,9 @@ public:
     virtual ~dAcPy_c();
 
     void setTransform(const mMtx_c &mtx, UNKWORD, UNKWORD, UNKWORD);
+    void setPosYRot(const mVec3_c &pos, mAng rot, UNKWORD, UNKWORD, UNKWORD);
+    // argument is always false in existing code, true doesn't seem to make a difference
+    void bonk(bool unk = false);
 
     /* vt 0x080 */ virtual UNKWORD IfCurrentActionToActor(dAcBase_c *ac, UNKWORD);
     /* vt 0x084 */ virtual void vt_0x084(dAcBase_c *ac, UNKWORD);
@@ -114,7 +117,7 @@ public:
     /* vt 0x15C */ virtual void vt_0x15C();
     /* vt 0x160 */ virtual void vt_0x160();
     /* vt 0x164 */ virtual void vt_0x164();
-    /* vt 0x168 */ virtual void getCurrentAnimFrame();
+    /* vt 0x168 */ virtual f32 getCurrentAnimFrame() const;
     /* vt 0x16C */ virtual void getFloatIfStruggling();
     /* vt 0x170 */ virtual void isSwimming();
     /* vt 0x174 */ virtual void isGustBellowsBeingBlown();

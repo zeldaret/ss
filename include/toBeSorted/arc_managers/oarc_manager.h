@@ -19,7 +19,7 @@ public:
     bool checkIfObjectArcExistsOnDisk(const char *object);
     bool loadObjectArcFromDisk(const char *object, EGG::Heap *heap);
     bool addEntryFromSuperArc(const char *object, void *data, EGG::Heap *heap);
-    void ensureLoaded1(const char *object);
+    int ensureLoaded1(const char *object);
     void ensureLoaded2(const char *object);
     bool decrement(const char *path);
     void *getData(const char *oarcName, const char *fileName);

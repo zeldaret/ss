@@ -90,6 +90,8 @@ public:
     void appendToList2(dLytStructD *other);
     void removeFromList2(dLytStructD *other);
 
+    bool fn_80065A30(dLytStructD *other);
+
 private:
     TList<dLytStructC, offsetof(dLytStructC, mLink)> mList1;
     TList<dLytStructD, offsetof(dLytStructD, mLink)> mList2;

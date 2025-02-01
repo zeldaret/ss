@@ -27,8 +27,7 @@ bool init(mAllocator_c *allocator) {
 void create(EGG::Heap *heap, u32 size) {
     if (size != 0) {
         heap = EGG::ExpHeap::create(size, heap, 0);
-        // Supposed to be 2D表示用ヒープ(m2d::create), but creates a linux compile issue
-        heap->setName("2D\x95\x5C示用ヒープ(m2d::create)");
+        heap->setName("2D表示用ヒープ(m2d::create)");
     }
     mAllocator_c *allocator = new (heap, 0x04) mAllocator_c();
     allocator->attach(heap, 4);

@@ -33,7 +33,7 @@ void TBoxflagManager::copyFromSave(u32 sceneIndex) {
 }
 
 /* 0x800BE990 */
-bool TBoxflagManager::checkFlag(u16 sceneIndex, u16 flag) {
+u16 TBoxflagManager::checkFlag(u16 sceneIndex, u16 flag) {
     s32 actualFlag = (flag + sceneIndex * 0x20);
     return mFlagHelper.checkFlag(
         actualFlag / 16, flag % 16, FileManager::getInstance()->getTBoxFlagsConst(), getFlagCount()

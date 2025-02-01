@@ -155,6 +155,7 @@ public:
 
 class Base_c {
 public:
+    Base_c() : mPriority(0x80) {}
     Base_c(u8 priority) : mPriority(priority) {}
     /* 0x00 */ nw4r::ut::Node mLink;
 
@@ -196,6 +197,9 @@ private:
     mVec3_c mVec;
     u32 field_0x94;
 };
+
+
+void getAllocator();
 
 } // namespace m2d
 

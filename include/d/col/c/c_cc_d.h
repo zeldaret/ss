@@ -896,6 +896,12 @@ public:
     u32 ChkAtNoGaurd() const {
         return mAt.MskSPrm(0x200000);
     }
+    void SetAt_0x40000000() {
+        mAt.OnSPrm(0x40000000);
+    }
+    u32 ChkAt_0x40000000() {
+        return mAt.MskSPrm(0x40000000);
+    }
 
     // Tg
 
@@ -928,6 +934,12 @@ public:
     void SetTgInfo_0x1(u8 val) {
         mTg.SetInfo_0x1(val);
     }
+    void SetTg_0x40000000() {
+        mTg.OnSPrm(0x40000000);
+    }
+    u32 ChkTg_0x40000000() {
+        return mTg.MskSPrm(0x40000000);
+    }
 
     // Co
 
@@ -948,6 +960,12 @@ public:
     }
     void SetCo_0x400() {
         mCo.OnSPrm(0x400);
+    }
+    void SetCo_0x40000000() {
+        mCo.OnSPrm(0x40000000);
+    }
+    u32 ChkCo_0x40000000() {
+        return mCo.MskSPrm(0x40000000);
     }
 
     /**

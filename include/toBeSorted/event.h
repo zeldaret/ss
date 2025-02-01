@@ -16,8 +16,9 @@ public:
 
 public:
     /** 0x800A0C40 */
-    Event(char *eventName, u32 unk, u32 eventFlags, void *callback1, void *callback2);
+    Event(const char *eventName, u32 unk, u32 eventFlags, void *callback1, void *callback2);
     Event(u32 eventId, s32 roomId, u32 eventFlags, void *callback1, void *callback2);
+    Event(const char *eventName, void *zevDat, u32 unk, u32 eventFlags, void *callback1, void *callback2);
     /** 0x800A1240 */
     virtual ~Event();
 };

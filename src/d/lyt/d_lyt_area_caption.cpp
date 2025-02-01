@@ -28,6 +28,8 @@ static const char *captionBoxes[] = {
     "T_captionS_01",
 };
 
+dLytAreaCaption_c *dLytAreaCaption_c::sInstance;
+
 bool dLytAreaCaptionParts_c::init(int first) {
     void *data = LayoutArcManager::sInstance->getLoadedData("DoButton");
     mResAcc.attach(data, "");

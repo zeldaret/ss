@@ -142,9 +142,9 @@ if not config.non_matching:
 # Tool versions
 config.binutils_tag = "2.42-1"
 config.compilers_tag = "20240706"
-config.dtk_tag = "v1.1.2"
-config.objdiff_tag = "v2.3.2"
-config.sjiswrap_tag = "v1.1.1"
+config.dtk_tag = "v1.3.0"
+config.objdiff_tag = "v2.4.0"
+config.sjiswrap_tag = "v1.2.0"
 config.wibo_tag = "0.6.11"
 
 # Project
@@ -171,6 +171,10 @@ if args.map:
 
 # Use for any additional files that should cause a re-configure when modified
 config.reconfig_deps = []
+
+# Optional numeric ID for decomp.me preset
+# Can be overridden in libraries or objects
+config.scratch_preset_id = None
 
 # Base flags, common to most GC/Wii games.
 # Generally leave untouched, with overrides added below.
@@ -301,6 +305,12 @@ Equivalent = (
     config.non_matching
 )  # Object should be linked when configured with --non-matching
 
+
+# Object is only matching for specific versions
+def MatchingFor(*versions):
+    return config.version in versions
+
+
 config.warn_missing_config = False
 config.warn_missing_source = False
 config.libs = [
@@ -314,6 +324,8 @@ config.libs = [
             Object(Matching, "d/flag/flag_managers.cpp"),
             Object(NonMatching, "toBeSorted/special_item_drop_mgr.cpp"),
             Object(Matching, "d/d_base.cpp"),
+            Object(NonMatching, "d/d_carry.cpp"),
+            Object(Matching, "d/d_cc.cpp"),
             Object(Matching, "d/d_dvd.cpp"),
             Object(NonMatching, "d/d_dvd_unk.cpp"),
             Object(NonMatching, "d/d_dylink.cpp"),
@@ -474,6 +486,8 @@ config.libs = [
         "host": False,
         "objects": [
             Object(Matching, "c/c_list.cpp"),
+            Object(NonMatching, "c/c_math.cpp"),
+            Object(NonMatching, "c/c_rand.cpp"),
             Object(Matching, "c/c_tree.cpp"),
         ],
     },

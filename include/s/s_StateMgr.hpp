@@ -1,6 +1,7 @@
 #ifndef S_STATEMGR_H
 #define S_STATEMGR_H
 
+#include "s/s_StateID.hpp"
 #include "s/s_StateInterfaces.hpp"
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
@@ -18,6 +19,8 @@
 template <class T, class Method, template <class> class Factory, class Check>
 class sStateMgr_c : sStateMgrIf_c {
 public:
+    sStateMgr_c(T &owner)
+        : mFactory(owner), mMethod(mCheck, mFactory, sStateID::null) {}
     sStateMgr_c(T &owner, const sStateIDIf_c &initialState)
         : mFactory(owner), mMethod(mCheck, mFactory, initialState) {}
 
