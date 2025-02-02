@@ -15,6 +15,7 @@
 import argparse
 import sys
 from pathlib import Path
+from typing import Any, Dict, List
 
 from tools.project import (
     Object,
@@ -124,6 +125,8 @@ args = parser.parse_args()
 config = ProjectConfig()
 config.version = str(args.version)
 version_num = VERSIONS.index(config.version)
+
+# Apply arguments
 config.build_dir = args.build_dir
 config.dtk_path = args.dtk
 config.objdiff_path = args.objdiff
@@ -156,6 +159,8 @@ config.asflags = [
     "-I include",
     f"-I build/{config.version}/include",
     f"--defsym version={version_num}",
+    f"--defsym BUILD_VERSION={version_num}",
+    f"--defsym VERSION_{config.version}",
 ]
 config.linker_version = "Wii/1.5"
 config.ldflags = [
@@ -198,6 +203,8 @@ cflags_base = [
     "-enc SJIS",
     "-i include",
     f"-i build/{config.version}/include",
+    f"-DBUILD_VERSION={version_num}",
+    f"-DVERSION_{config.version}",
     "-i src",
     "-i src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Include",
     "-i src/PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Include",
@@ -205,7 +212,6 @@ cflags_base = [
     "-i src/PowerPC_EABI_Support/MSL/MSL_C++/MSL_Common/Include",
     "-i src/PowerPC_EABI_Support/Runtime/Inc",
     "-i src/PowerPC_EABI_Support/MetroTRK",
-    f"-DGAME_VERSION={version_num}",
 ]
 
 # Debug flags
@@ -1661,9 +1667,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_tornado", "REL/d/a/obj/d_a_obj_tornado.cpp"),
     Rel(NonMatching, "d_a_obj_tower_bomb", "REL/d/a/obj/d_a_obj_tower_bomb.cpp"),
     Rel(NonMatching, "d_a_obj_tower_D101", "REL/d/a/obj/d_a_obj_tower_D101.cpp"),
-    Rel(
-        Matching, "d_a_obj_tower_gearD101", "REL/d/a/obj/d_a_obj_tower_gearD101.cpp"
-    ),
+    Rel(Matching, "d_a_obj_tower_gearD101", "REL/d/a/obj/d_a_obj_tower_gearD101.cpp"),
     Rel(
         NonMatching,
         "d_a_obj_tower_hand_D101",
@@ -1876,6 +1880,24 @@ config.libs = [
     Rel(Matching, "d_t_touch", "REL/d/t/d_t_touch.cpp"),
     Rel(NonMatching, "d_t_tumble_weed", "REL/d/t/d_t_tumble_weed.cpp"),
 ]
+
+
+# Optional callback to adjust link order. This can be used to add, remove, or reorder objects.
+# This is called once per module, with the module ID and the current link order.
+#
+# For example, this adds "dummy.c" to the end of the DOL link order if configured with --non-matching.
+# "dummy.c" *must* be configured as a Matching (or Equivalent) object in order to be linked.
+def link_order_callback(module_id: int, objects: List[str]) -> List[str]:
+    # Don't modify the link order for matching builds
+    if not config.non_matching:
+        return objects
+    if module_id == 0:  # DOL
+        return objects + ["dummy.c"]
+    return objects
+
+
+# Uncomment to enable the link order callback.
+# config.link_order_callback = link_order_callback
 
 # Optional extra categories for progress tracking
 config.progress_categories = [
