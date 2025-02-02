@@ -3,6 +3,7 @@
 #include "c/c_math.h"
 #include "d/a/d_a_player.h"
 #include "d/col/c/c_cc_d.h"
+#include "nw4r/types_nw4r.h"
 
 SPECIAL_ACTOR_PROFILE(ARROW, dAcArrow_c, fProfile::ARROW, 0x126, 0, 0x80);
 
@@ -44,7 +45,7 @@ bool hitCallback(dAcObjBase_c *i_actorA, cCcD_Obj *i_objInfA, dAcObjBase_c *i_ac
 }
 
 bool dAcArrow_c::createHeap() {
-    mResFile = getOarcResFile("Alink");
+    mResFile = static_cast<nw4r::g3d::ResFile>(getOarcResFile("Alink"));
     nw4r::g3d::ResMdl mdl(nullptr);
     if ((mSubType & 0x10) != 0) {
         mdl = mResFile.GetResMdl("EquipPachinkoBullet");

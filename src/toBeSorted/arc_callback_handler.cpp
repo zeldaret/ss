@@ -3,9 +3,7 @@
 #include "d/d_rawarchive.h"
 #include "egg/gfx/eggLight.h"
 #include "m/m3d/m3d.h"
-#include "nw4r/g3d/g3d_resfile.h"
-#include "nw4r/g3d/g3d_resmat.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d.h" // IWYU pragma: export
 #include "toBeSorted/arc_managers/current_stage_arc_manager.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 
@@ -20,8 +18,8 @@ ArcCallbackHandler ArcCallbackHandler::sInstance;
 extern "C" void FUN_804a7260(nw4r::g3d::ResMdl, const char *prefix);
 
 void BindSystemModelsAndLighting(nw4r::g3d::ResFile file) {
-    nw4r::g3d::ResFile sysFile = OarcManager::sInstance->getMdlFromArc2("System");
-    if (sysFile.mFile.IsValid()) {
+    nw4r::g3d::ResFile sysFile(OarcManager::sInstance->getMdlFromArc2("System"));
+    if (sysFile.IsValid()) {
         file.Bind(sysFile);
     }
 
@@ -51,7 +49,7 @@ void BindSystemModelsAndLighting(nw4r::g3d::ResFile file) {
 
 void ArcCallbackHandlerBase::CreateArcEntry(void *data, const char *path) {
     if (mPrefix == NAME_G3D) {
-        nw4r::g3d::ResFile file = data;
+        nw4r::g3d::ResFile file(data);
         file.Init();
         file.Bind();
         BindSystemModelsAndLighting(file);

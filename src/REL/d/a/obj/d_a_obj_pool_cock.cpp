@@ -1,16 +1,16 @@
 #include "d/a/obj/d_a_obj_pool_cock.h"
 
 #include "d/a/obj/d_a_obj_vortex.h"
+#include "d/flag/sceneflag_manager.h"
 #include "s/s_Math.h"
 #include "toBeSorted/room_manager.h"
-#include "d/flag/sceneflag_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_POOL_COCK, dAcOPoolCock_c, fProfile::OBJ_POOL_COCK, 0x024D, 0, 7);
 
 STATE_DEFINE(dAcOPoolCock_c, Wait);
 
 bool dAcOPoolCock_c::createHeap() {
-    mBrres = getOarcResFile("WaterD101");
+    mBrres = static_cast<nw4r::g3d::ResFile>(getOarcResFile("WaterD101"));
     RoomManager::bindStageResToFile(&mBrres);
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("PoolCockD101");
     for (int i = 0; i < 2; i++) {

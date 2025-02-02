@@ -80,15 +80,20 @@ struct VEC3 : _VEC3 {
         y = fy;
         z = fz;
     }
-    VEC3(const Vec &vec) {
-        x = vec.x;
-        y = vec.y;
-        z = vec.z;
+    VEC3(const _VEC3 &rVec) {
+        x = rVec.x;
+        y = rVec.y;
+        z = rVec.z;
     }
-    VEC3(const f32 *p) {
-        x = p[0];
-        y = p[1];
-        z = p[2];
+    VEC3(const Vec &rVec) {
+        x = rVec.x;
+        y = rVec.y;
+        z = rVec.z;
+    }
+    VEC3(const f32 *pData) {
+        x = pData[0];
+        y = pData[1];
+        z = pData[2];
     }
 
     operator Vec *() {
@@ -401,7 +406,7 @@ inline VEC3 *VEC3Scale(register VEC3 *out, register const VEC3 *in, register f32
         ps_muls0 work1, work0, scale
         psq_st   work1, VEC3.x(out), 0, 0
 
-        // Scale Z
+        // Scale Z 
         psq_l    work0, VEC3.z(in),  1, 0
         ps_muls0 work1, work0, scale
         psq_st   work1, VEC3.z(out), 1, 0

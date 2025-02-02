@@ -5,8 +5,8 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/flag/sceneflag_manager.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resanmclr.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resanmclr.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "toBeSorted/event_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_UG_SWITCH, dAcOUgSwitch_c, fProfile::OBJ_UG_SWITCH, 0x15A, 0, 3);
@@ -22,11 +22,11 @@ bool dAcOUgSwitch_c::createHeap() {
     // Why. Regswap...
     void *data = getOarcResFile("SwitchPass");
 
-    mRes = data;
+    mRes = static_cast<nw4r::g3d::ResFile>(data);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("SwitchPass");
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
 
-    mRes = data;
+    mRes = static_cast<nw4r::g3d::ResFile>(data);
     mdl = mRes.GetResMdl("SwitchPass");
     nw4r::g3d::ResAnmClr clr = mRes.GetResAnmClr("SwitchPass_Light");
     TRY_CREATE(mAnmClr.create(mdl, clr, &heap_allocator, nullptr, 1));

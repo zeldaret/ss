@@ -2,6 +2,7 @@
 
 #include "d/col/bg/d_bg_s.h"
 #include "d/flag/storyflag_manager.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "toBeSorted/room_manager.h"
 
 const f32 dAcObambooIsland_c::unusedFloat1 = 100000.0f;
@@ -21,7 +22,7 @@ void dAcObambooIsland_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObj
 }
 
 bool dAcObambooIsland_c::createHeap() {
-    mBrres = getOarcResFile("IslBamb");
+    mBrres = static_cast<nw4r::g3d::ResFile>(getOarcResFile("IslBamb"));
     RoomManager::bindStageResToFile(&mBrres);
     RoomManager::bindSkyCmnToResFile(&mBrres);
     for (int i = 0; i < 2; i++) {

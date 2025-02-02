@@ -1,14 +1,14 @@
 #include "d/a/obj/d_a_obj_pumpkin_leaf.h"
 
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_Math.h"
-
 
 SPECIAL_ACTOR_PROFILE(OBJ_PUMPKIN_LEAF, dAcOPumpkinLeaf_c, fProfile::OBJ_PUMPKIN_LEAF, 0x0135, 0, 3);
 
 STATE_DEFINE(dAcOPumpkinLeaf_c, Wait);
 
 bool dAcOPumpkinLeaf_c::createHeap() {
-    mBrres = getOarcResFile("Pumpkin");
+    mBrres = static_cast<nw4r::g3d::ResFile>(getOarcResFile("Pumpkin"));
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("Leaf");
     TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120, 1, nullptr));
     return true;

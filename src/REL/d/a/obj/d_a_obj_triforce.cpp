@@ -3,6 +3,7 @@
 #include "c/c_math.h"
 #include "d/col/cc/d_cc_s.h"
 #include "m/m_vec.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TRIFORCE, dAcOtriforce_c, fProfile::OBJ_TRIFORCE, 0x15D, 0, 4);
 
@@ -21,7 +22,7 @@ const u32 dAcOtriforce_c::sStartingOffsetRange = 0x10000;
 // const f32 dAcOtriforce_c::sAmpPos = 23.0f;
 
 bool dAcOtriforce_c::createHeap() {
-    mResFile = getOarcResFile("TriForce");
+    mResFile = static_cast<nw4r::g3d::ResFile>(getOarcResFile("TriForce"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("TriForce");
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x324));
     nw4r::g3d::ResAnmTexSrt anm = mResFile.GetResAnmTexSrt("TriForce");

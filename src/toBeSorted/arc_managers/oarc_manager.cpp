@@ -2,7 +2,6 @@
 
 #include "d/d_heap.h"
 
-
 OarcManager *OarcManager::sInstance;
 
 OarcManager::OarcManager() {

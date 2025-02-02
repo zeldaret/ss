@@ -18,11 +18,11 @@
 #include "m/m3d/m_scnleaf.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resanmchr.h"
-#include "nw4r/g3d/g3d_resanmtexpat.h"
-#include "nw4r/g3d/g3d_resanmtexsrt.h"
-#include "nw4r/g3d/g3d_resfile.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resanmchr.h"
+#include "nw4r/g3d/res/g3d_resanmtexpat.h"
+#include "nw4r/g3d/res/g3d_resanmtexsrt.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "rvl/MTX/mtxvec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
@@ -811,8 +811,12 @@ bool dAcTbox_c::isBelowGroundAtPos(f32 height, const mVec3_c &pos) {
 }
 
 dAcTbox_c::dAcTbox_c()
-    : mStateMgr(*this, sStateID::null), mScnCallback(this), mEvent(*this, nullptr), mTboxListNode(this),
-      mDowsingTarget(this, DowsingTarget::SLOT_NONE), mGoddessDowsingTarget(this, DowsingTarget::SLOT_NONE) {
+    : mStateMgr(*this, sStateID::null),
+      mScnCallback(this),
+      mEvent(*this, nullptr),
+      mTboxListNode(this),
+      mDowsingTarget(this, DowsingTarget::SLOT_NONE),
+      mGoddessDowsingTarget(this, DowsingTarget::SLOT_NONE) {
     field_0x120B = 0;
     field_0x120E = 0;
     mDoObstructedCheck = false;
@@ -842,8 +846,8 @@ bool dAcTbox_c::createHeap() {
     }
 
     if (mVariant == GODDESS) {
-        nw4r::g3d::ResFile res = data;
-        if (!res.mFile.IsValid()) {
+        nw4r::g3d::ResFile res(data);
+        if (!res.IsValid()) {
             return false;
         }
         nw4r::g3d::ResMdl mdl = mMdl1.getModel().getResMdl();
@@ -851,7 +855,7 @@ bool dAcTbox_c::createHeap() {
             return false;
         }
         nw4r::g3d::ResAnmTexPat anmTexPat = res.GetResAnmTexPat("GoddessTBox");
-        if (!anmTexPat.mAnmTexPat.IsValid()) {
+        if (!anmTexPat.IsValid()) {
             return false;
         }
         if (!mAnmGoddessPat.create(mdl, anmTexPat, &heap_allocator, nullptr, 1)) {
@@ -861,7 +865,7 @@ bool dAcTbox_c::createHeap() {
         u16 goddessTBoxActive = getParams2Lower();
         if (StoryflagManager::sInstance->getCounterOrFlag(goddessTBoxActive) && !mHasBeenOpened) {
             nw4r::g3d::ResAnmTexSrt anmTexSrt = res.GetResAnmTexSrt("GoddessTBox");
-            if (!anmTexSrt.mAnmTexSrt.IsValid()) {
+            if (!anmTexSrt.IsValid()) {
                 return false;
             }
             if (!mAnmGoddessTexSrt.create(mdl, anmTexSrt, &heap_allocator, nullptr, 1)) {
@@ -870,12 +874,12 @@ bool dAcTbox_c::createHeap() {
             mMdl1.getModel().setAnm(mAnmGoddessTexSrt);
         }
     } else if (mVariant == NORMAL) {
-        nw4r::g3d::ResFile res = data;
-        if (!res.mFile.IsValid()) {
+        nw4r::g3d::ResFile res(data);
+        if (!res.IsValid()) {
             return false;
         }
         nw4r::g3d::ResAnmClr anmClr = res.GetResAnmClr("TBoxNormalTAppear");
-        if (!anmClr.mAnmClr.IsValid()) {
+        if (!anmClr.IsValid()) {
             return false;
         }
         nw4r::g3d::ResMdl mdl = mMdl1.getModel().getResMdl();
@@ -894,8 +898,8 @@ bool dAcTbox_c::createHeap() {
         if (fxData == nullptr) {
             return false;
         }
-        nw4r::g3d::ResFile fxRes = fxData;
-        if (!fxRes.mFile.IsValid()) {
+        nw4r::g3d::ResFile fxRes(fxData);
+        if (!fxRes.IsValid()) {
             return false;
         }
 
@@ -909,7 +913,7 @@ bool dAcTbox_c::createHeap() {
         mOpenFxMdl.setPriorityDraw(0x7F, 0x86);
 
         nw4r::g3d::ResAnmChr openAnm = fxRes.GetResAnmChr(sOpenAnmChrName);
-        if (!openAnm.mAnmChr.IsValid()) {
+        if (!openAnm.IsValid()) {
             return false;
         }
         if (!mAnmChr.create(openMdl, openAnm, &heap_allocator, nullptr)) {
@@ -918,7 +922,7 @@ bool dAcTbox_c::createHeap() {
         mOpenFxMdl.setAnm(mAnmChr);
 
         nw4r::g3d::ResAnmTexSrt anmTexSrt = fxRes.GetResAnmTexSrt(sOpenAnmTexSrtName);
-        if (!anmTexSrt.mAnmTexSrt.IsValid()) {
+        if (!anmTexSrt.IsValid()) {
             return false;
         }
         if (!mAnmTexSrt1.create(openMdl, anmTexSrt, &heap_allocator, nullptr, 1)) {
@@ -927,7 +931,7 @@ bool dAcTbox_c::createHeap() {
         mOpenFxMdl.setAnm(mAnmTexSrt1);
 
         nw4r::g3d::ResAnmClr anmClr = fxRes.GetResAnmClr(sOpenAnmClrName);
-        if (!anmClr.mAnmClr.IsValid()) {
+        if (!anmClr.IsValid()) {
             return false;
         }
         if (!mAnmMatClr2.create(openMdl, anmClr, &heap_allocator, nullptr, 1)) {

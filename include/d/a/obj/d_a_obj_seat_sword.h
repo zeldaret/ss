@@ -10,7 +10,7 @@
 #include "m/m3d/m_smdl.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/math/math_types.h"
 #include "rvl/MTX/mtx.h"
 #include "s/s_State.hpp"

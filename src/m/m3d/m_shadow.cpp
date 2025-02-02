@@ -3,12 +3,12 @@
 #include "nw4r/g3d/g3d_calcview.h"
 #include "nw4r/g3d/g3d_draw.h"
 #include "nw4r/g3d/g3d_draw1mat1shp.h"
-#include "nw4r/g3d/g3d_resmat.h"
-#include "nw4r/g3d/g3d_resmdl.h"
-#include "nw4r/g3d/g3d_resshp.h"
 #include "nw4r/g3d/g3d_scnmdl.h"
 #include "nw4r/g3d/g3d_scnmdlsmpl.h"
 #include "nw4r/g3d/g3d_state.h"
+#include "nw4r/g3d/res/g3d_resmat.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resshp.h"
 
 // All of this is completely made up, as we don't have symbols for this TU
 // (contrary to the rest of m3d and most of nw4r::g3d)
@@ -548,7 +548,7 @@ void mShadowChild_c::drawMdl() {
 
             g3d::ScnMdl *mdl2 = g3d::G3dObj::DynamicCast<g3d::ScnMdl>(lf->getG3dObject());
 
-            g3d::DrawResMdlReplacement *pRep = mdl2 ? mdl2->GetDrawResMdlReplacement() : nullptr;
+            g3d::DrawResMdlReplacement *pRep = mdl2 ? &mdl2->GetDrawResMdlReplacement() : nullptr;
 
             g3d::DrawResMdlDirectly(
                 mdl->GetResMdl(), viewPosArray, nullptr, nullptr,

@@ -6,7 +6,7 @@
 #include "m/m3d/m_smdl.h"
 #include "nw4r/g3d/g3d_anmchr.h"
 #include "nw4r/g3d/g3d_calcworld.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 
 namespace m3d {
 

@@ -1,7 +1,7 @@
 #include "d/a/obj/d_a_obj_junk_repairing.h"
 
 #include "d/flag/storyflag_manager.h"
-
+#include "nw4r/g3d/res/g3d_resfile.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_JUNK_REPAIR, dAcOJunkRep_c, fProfile::OBJ_JUNK_REPAIR, 0x027B, 0, 3);
 
@@ -19,7 +19,7 @@ bool dAcOJunkRep_c::getState() {
 }
 
 bool dAcOJunkRep_c::createHeap() {
-    mResFile = getOarcResFile("Junk");
+    mResFile = static_cast<nw4r::g3d::ResFile>(getOarcResFile("Junk"));
     if (!loadMdl(mModel1, getMdlName1())) {
         return false;
     }

@@ -7,7 +7,7 @@
 #include "m/m3d/m_anmtexsrt.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "toBeSorted/effects_struct.h"
 
 class dAcOtriforce_c : public dAcObjBase_c {

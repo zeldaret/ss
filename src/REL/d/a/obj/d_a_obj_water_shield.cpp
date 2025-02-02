@@ -1,11 +1,12 @@
 #include "d/a/obj/d_a_obj_water_shield.h"
 
 #include "d/col/bg/d_bg_s.h"
+#include "nw4r/types_nw4r.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_WATER_SHIELD, dAcOwaterShield_c, fProfile::OBJ_WATER_SHIELD, 0x218, 0, 0);
 
 bool dAcOwaterShield_c::createHeap() {
-    mRes = getOarcResFile("WaterWallF103");
+    mRes = static_cast<nw4r::g3d::ResFile>(getOarcResFile("WaterWallF103"));
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("WaterWallF103");
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x32C));
     nw4r::g3d::ResAnmClr clr = mRes.GetResAnmClr("WaterWallF103");
