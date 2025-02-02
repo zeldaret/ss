@@ -4,9 +4,9 @@ The Legend of Zelda: Skyward Sword
 
 [Build Status]: https://github.com/zeldaret/ss/actions/workflows/build.yml/badge.svg
 [actions]: https://github.com/zeldaret/ss/actions/workflows/build.yml
-[Progress]: https://img.shields.io/endpoint?label=Code&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Fss%2FSOUE01%2Fall%2F%3Fmode%3Dshield%26measure%3Dcode
-[DOL Progress]: https://img.shields.io/endpoint?label=DOL&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Fss%2FSOUE01%2Fdol%2F%3Fmode%3Dshield%26measure%3Dcode
-[RELs Progress]: https://img.shields.io/endpoint?label=RELs&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Fss%2FSOUE01%2Fmodules%2F%3Fmode%3Dshield%26measure%3Dcode
+[Progress]: https://decomp.dev/zeldaret/ss.svg?mode=shield&measure=code&label=Code
+[DOL Progress]: https://decomp.dev/zeldaret/ss.svg?mode=shield&measure=code&category=dol&label=DOL
+[RELs Progress]: https://decomp.dev/zeldaret/ss.svg?mode=shield&measure=code&category=modules&label=RELs
 [Discord Badge]: https://img.shields.io/discord/688807550715560050?color=%237289DA&logo=discord&logoColor=%23FFFFFF
 [discord]: https://discord.zelda64.dev
 
