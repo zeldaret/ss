@@ -11,7 +11,7 @@ public:
     bool isStatus(mFaderBase_c::EStatus status) {
         return mpFader->getStatus() == status;
     }
-
+protected:
     mFaderBase_c *mpFader;
 };
 

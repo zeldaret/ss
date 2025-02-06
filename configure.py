@@ -333,6 +333,7 @@ config.libs = [
             Object(Matching, "d/d_font_manager.cpp"),
             Object(Matching, "d/d_heap.cpp"),
             Object(Matching, "d/d_rawarchive.cpp"),
+            Object(Matching, "d/d_scene.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
             Object(NonMatching, "d/d_sys.cpp"),
             Object(NonMatching, "toBeSorted/sound_info.cpp"),
