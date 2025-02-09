@@ -8,7 +8,7 @@
 
 namespace {
 
-NW4R_LIB_VERSION(G3D, "Jun  8 2007", "11:16:25", "0x4199_60831");
+NW4R_LIB_VERSION(G3D, "Dec 22 2009", "02:11:33", "0x4302_158");
 
 } // namespace
 
@@ -27,7 +27,7 @@ void G3dInit(bool enableLockedCache) {
     InitFastCast();
 
     GXRenderModeObj *pMode;
-    switch (VIGetTvFormat()) {
+    switch ((u32)VIGetTvFormat()) {
         case VI_TV_FMT_NTSC: {
             pMode = &GXNtsc480IntDf;
             break;

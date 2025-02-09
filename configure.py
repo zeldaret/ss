@@ -692,7 +692,7 @@ config.libs = [
             Object(NonMatching, "nw4r/g3d/g3d_scnmdl1mat1shp.cpp: .tex"),
             Object(NonMatching, "nw4r/g3d/g3d_scnmdlexpand.cpp: .tex"),
             Object(NonMatching, "nw4r/g3d/g3d_calcmaterial.cpp"),
-            Object(NonMatching, "nw4r/g3d/g3d_init.cpp"),
+            Object(Matching, "nw4r/g3d/g3d_init.cpp"),
             Object(Matching, "nw4r/g3d/g3d_scnproc.cpp"),
             Object(Matching, "nw4r/g3d/g3d_fog.cpp"),
             Object(Matching, "nw4r/g3d/g3d_light.cpp"),

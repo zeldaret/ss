@@ -1506,6 +1506,8 @@ nw4r/g3d/g3d_calcmaterial.cpp:
 
 nw4r/g3d/g3d_init.cpp:
 	.text       start:0x8045FFF0 end:0x804600E8
+	.data       start:0x8056DAB8 end:0x8056DAFE
+	.sdata      start:0x80574E88 end:0x80574E8C
 
 nw4r/g3d/g3d_scnproc.cpp:
 	.text       start:0x804600F0 end:0x804603F0
