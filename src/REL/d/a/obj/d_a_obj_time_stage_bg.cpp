@@ -27,7 +27,7 @@ static const char *sMdl2Names[] = {
 STATE_DEFINE(dAcOTimeStageBg_c, Wait);
 
 bool dAcOTimeStageBg_c::createHeap() {
-    mRes = static_cast<nw4r::g3d::ResFile>(CurrentStageArcManager::sInstance->getData("g3d/stage.brres"));
+    mRes = nw4r::g3d::ResFile(CurrentStageArcManager::sInstance->getData("g3d/stage.brres"));
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl(sMdlNames[mSubType]);
     TRY_CREATE(mMdl1.create(mdl, &heap_allocator, 0x128));
     nw4r::g3d::ResNode nd = mdl.GetResNode(sMdlNames[mSubType]);

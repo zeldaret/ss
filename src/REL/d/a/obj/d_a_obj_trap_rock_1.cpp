@@ -13,7 +13,7 @@ STATE_DEFINE(dAcOtrapRock1_c, TrapAction);
 STATE_DEFINE(dAcOtrapRock1_c, TrapReturn);
 
 bool dAcOtrapRock1_c::createHeap() {
-    mResFile = static_cast<nw4r::g3d::ResFile>(getOarcResFile("TrapRockRoll"));
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("TrapRockRoll"));
     nw4r::g3d::ResMdl m = mResFile.GetResMdl("TrapRockRoll");
 
     TRY_CREATE(mMdl.create(m, &heap_allocator, 0x120));

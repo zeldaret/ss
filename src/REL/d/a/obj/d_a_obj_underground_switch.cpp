@@ -22,11 +22,11 @@ bool dAcOUgSwitch_c::createHeap() {
     // Why. Regswap...
     void *data = getOarcResFile("SwitchPass");
 
-    mRes = static_cast<nw4r::g3d::ResFile>(data);
+    mRes = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("SwitchPass");
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
 
-    mRes = static_cast<nw4r::g3d::ResFile>(data);
+    mRes = nw4r::g3d::ResFile(data);
     mdl = mRes.GetResMdl("SwitchPass");
     nw4r::g3d::ResAnmClr clr = mRes.GetResAnmClr("SwitchPass_Light");
     TRY_CREATE(mAnmClr.create(mdl, clr, &heap_allocator, nullptr, 1));

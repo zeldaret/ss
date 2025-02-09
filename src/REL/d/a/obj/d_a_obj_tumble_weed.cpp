@@ -40,7 +40,7 @@ dCcD_SrcSph dAcOTumbleWeed_c::sSphSrc = {
 };
 
 bool dAcOTumbleWeed_c::createHeap() {
-    mResFile = static_cast<nw4r::g3d::ResFile>(getOarcResFile("GrassRollDry"));
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("GrassRollDry"));
     TRY_CREATE(mMdl.create(mResFile.GetResMdl("GrassRollDry"), &heap_allocator, 0x120, 1, nullptr));
     return true;
 }

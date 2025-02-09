@@ -60,7 +60,7 @@ dCcD_SrcSph dAcOtubo_c::sSphSrc = {
 };
 
 bool dAcOtubo_c::createHeap() {
-    mRes = static_cast<nw4r::g3d::ResFile>(getOarcResFile("Tubo"));
+    mRes = nw4r::g3d::ResFile(getOarcResFile("Tubo"));
     const char *subtype = getSubtype() == 0 ? "Tubo00" : "Tubo01";
     TRY_CREATE(mMdl.create(mRes.GetResMdl(subtype), &heap_allocator, 0x120, 1, nullptr));
     return true;

@@ -25,7 +25,7 @@ STATE_DEFINE(dAcOislandNusi_c, Wait);
 STATE_DEFINE(dAcOislandNusi_c, NusiFight);
 
 bool dAcOislandNusi_c::createHeap() {
-    mRes = static_cast<nw4r::g3d::ResFile>(getOarcResFile("IslNusi"));
+    mRes = nw4r::g3d::ResFile(getOarcResFile("IslNusi"));
     RoomManager::bindStageResToFile(&mRes);
     RoomManager::bindSkyCmnToResFile(&mRes);
     for (int i = 0; i < 2; i++) {

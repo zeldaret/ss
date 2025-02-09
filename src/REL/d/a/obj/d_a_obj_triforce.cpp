@@ -22,7 +22,7 @@ const u32 dAcOtriforce_c::sStartingOffsetRange = 0x10000;
 // const f32 dAcOtriforce_c::sAmpPos = 23.0f;
 
 bool dAcOtriforce_c::createHeap() {
-    mResFile = static_cast<nw4r::g3d::ResFile>(getOarcResFile("TriForce"));
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("TriForce"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("TriForce");
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x324));
     nw4r::g3d::ResAnmTexSrt anm = mResFile.GetResAnmTexSrt("TriForce");

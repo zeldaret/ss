@@ -57,7 +57,7 @@ dCcD_SrcCyl dAcOtoD3StoneFigure_c::sCcSrc = {
 
 bool dAcOtoD3StoneFigure_c::createHeap() {
     const char *modelName = getModelName();
-    mResFile = static_cast<nw4r::g3d::ResFile>(getOarcResFile("BirdObjD3"));
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("BirdObjD3"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(modelName);
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
     return true;

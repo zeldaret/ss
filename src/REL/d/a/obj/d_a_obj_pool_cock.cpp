@@ -10,7 +10,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_POOL_COCK, dAcOPoolCock_c, fProfile::OBJ_POOL_COCK, 0x
 STATE_DEFINE(dAcOPoolCock_c, Wait);
 
 bool dAcOPoolCock_c::createHeap() {
-    mBrres = static_cast<nw4r::g3d::ResFile>(getOarcResFile("WaterD101"));
+    mBrres = nw4r::g3d::ResFile(getOarcResFile("WaterD101"));
     RoomManager::bindStageResToFile(&mBrres);
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("PoolCockD101");
     for (int i = 0; i < 2; i++) {

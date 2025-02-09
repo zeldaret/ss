@@ -22,7 +22,7 @@ void dAcObambooIsland_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObj
 }
 
 bool dAcObambooIsland_c::createHeap() {
-    mBrres = static_cast<nw4r::g3d::ResFile>(getOarcResFile("IslBamb"));
+    mBrres = nw4r::g3d::ResFile(getOarcResFile("IslBamb"));
     RoomManager::bindStageResToFile(&mBrres);
     RoomManager::bindSkyCmnToResFile(&mBrres);
     for (int i = 0; i < 2; i++) {

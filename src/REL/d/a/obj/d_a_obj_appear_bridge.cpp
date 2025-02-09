@@ -17,7 +17,7 @@ STATE_DEFINE(dAcOappearBridge_c, Appear);
 STATE_DEFINE(dAcOappearBridge_c, Disappear);
 
 bool dAcOappearBridge_c::createHeap() {
-    mResFile = static_cast<nw4r::g3d::ResFile>(getOarcResFile("TongueStage"));
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("TongueStage"));
     RoomManager::bindStageResToFile(&mResFile);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("TongueStage");
     TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x128));

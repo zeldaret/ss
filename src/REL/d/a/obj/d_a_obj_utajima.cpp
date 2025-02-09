@@ -23,7 +23,7 @@ void dAcOutajima_c::rideCallback(dBgW *bg, dAcObjBase_c *o1, dAcObjBase_c *o2) {
 }
 
 bool dAcOutajima_c::createHeap() {
-    mRes = static_cast<nw4r::g3d::ResFile>(getOarcResFile("IslSon"));
+    mRes = nw4r::g3d::ResFile(getOarcResFile("IslSon"));
     RoomManager::bindStageResToFile(&mRes);
     RoomManager::bindSkyCmnToResFile(&mRes);
 

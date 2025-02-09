@@ -45,7 +45,7 @@ bool hitCallback(dAcObjBase_c *i_actorA, cCcD_Obj *i_objInfA, dAcObjBase_c *i_ac
 }
 
 bool dAcArrow_c::createHeap() {
-    mResFile = static_cast<nw4r::g3d::ResFile>(getOarcResFile("Alink"));
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("Alink"));
     nw4r::g3d::ResMdl mdl(nullptr);
     if ((mSubType & 0x10) != 0) {
         mdl = mResFile.GetResMdl("EquipPachinkoBullet");

@@ -10,7 +10,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_UTAJIMA_LV2, dAcOutajimaLv2_c, fProfile::OBJ_UTAJIMA_L
 const f32 dAcOutajimaLv2_c::someFloat = 100000.0f;
 
 bool dAcOutajimaLv2_c::createHeap() {
-    mRes = static_cast<nw4r::g3d::ResFile>(getOarcResFile("IslCave"));
+    mRes = nw4r::g3d::ResFile(getOarcResFile("IslCave"));
     RoomManager::bindStageResToFile(&mRes);
     RoomManager::bindSkyCmnToResFile(&mRes);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("IslCave");

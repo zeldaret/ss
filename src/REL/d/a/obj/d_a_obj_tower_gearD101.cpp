@@ -19,7 +19,7 @@ extern "C" void fn_80067340(mVec3_c &, nw4r::g3d::ResMdl *, const char *);
 
 bool dAcOTowerGearD101_c::createHeap() {
     const char *name = "TowerGearD101";
-    mRes = static_cast<nw4r::g3d::ResFile>(getOarcResFile(name));
+    mRes = nw4r::g3d::ResFile(getOarcResFile(name));
     RoomManager::bindStageResToFile(&mRes);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl(name);
     if (!mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr)) {

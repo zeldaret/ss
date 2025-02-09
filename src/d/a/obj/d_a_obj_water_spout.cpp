@@ -16,7 +16,7 @@ STATE_DEFINE(dAcOwaterSpout_c, Wait);
 
 bool dAcOwaterSpout_c::createHeap() {
     void *data = getOarcResFile("FX_WaterColumn");
-    mResFile = static_cast<nw4r::g3d::ResFile>(data);
+    mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("FX_WaterColumn");
     TRY_CREATE(mMdl.create(data, "FX_WaterColumn", "FX_WaterColumn", &heap_allocator, 0x32C));
     nw4r::g3d::ResAnmTexSrt anmSrt = mResFile.GetResAnmTexSrt("FX_WaterColumn");

@@ -6,7 +6,7 @@
 SPECIAL_ACTOR_PROFILE(OBJ_WATER_SHIELD, dAcOwaterShield_c, fProfile::OBJ_WATER_SHIELD, 0x218, 0, 0);
 
 bool dAcOwaterShield_c::createHeap() {
-    mRes = static_cast<nw4r::g3d::ResFile>(getOarcResFile("WaterWallF103"));
+    mRes = nw4r::g3d::ResFile(getOarcResFile("WaterWallF103"));
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("WaterWallF103");
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x32C));
     nw4r::g3d::ResAnmClr clr = mRes.GetResAnmClr("WaterWallF103");

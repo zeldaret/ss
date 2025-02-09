@@ -8,7 +8,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_STAGE_COVER, dAcOstageCover_c, fProfile::OBJ_STAGE_COV
 STATE_DEFINE(dAcOstageCover_c, Wait);
 
 bool dAcOstageCover_c::createHeap() {
-    mBrres = static_cast<nw4r::g3d::ResFile>(CurrentStageArcManager::sInstance->getData("g3d/stage.brres"));
+    mBrres = nw4r::g3d::ResFile(CurrentStageArcManager::sInstance->getData("g3d/stage.brres"));
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("StageCover");
     TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
     return true;

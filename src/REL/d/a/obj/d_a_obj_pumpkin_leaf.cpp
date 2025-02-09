@@ -8,7 +8,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_PUMPKIN_LEAF, dAcOPumpkinLeaf_c, fProfile::OBJ_PUMPKIN
 STATE_DEFINE(dAcOPumpkinLeaf_c, Wait);
 
 bool dAcOPumpkinLeaf_c::createHeap() {
-    mBrres = static_cast<nw4r::g3d::ResFile>(getOarcResFile("Pumpkin"));
+    mBrres = nw4r::g3d::ResFile(getOarcResFile("Pumpkin"));
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("Leaf");
     TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120, 1, nullptr));
     return true;

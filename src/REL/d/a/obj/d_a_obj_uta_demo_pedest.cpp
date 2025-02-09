@@ -24,7 +24,7 @@ bool dAcOutaDemoPedest_c::createHeap() {
         mModelType = 0;
     }
 
-    mRes = static_cast<nw4r::g3d::ResFile>(CurrentStageArcManager::sInstance->getData("g3d/stage.brres"));
+    mRes = nw4r::g3d::ResFile(CurrentStageArcManager::sInstance->getData("g3d/stage.brres"));
     RoomManager::bindStageResToFile(&mRes);
     RoomManager::bindSkyCmnToResFile(&mRes);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl(sMdlNames[mModelType]);

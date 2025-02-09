@@ -40,8 +40,8 @@ bool mdlAnmChr::create(
     void *mdlFile, void *anmFile, const char *mdlName, const char *anmName, mdl_c::mdlCallback_c *callback,
     mAllocator_c *alloc, u32 bufferOption, int nView, u32 *pSize
 ) {
-    mMdlFile = static_cast<nw4r::g3d::ResFile>(mdlFile);
-    mAnmFile = static_cast<nw4r::g3d::ResFile>(anmFile);
+    mMdlFile = nw4r::g3d::ResFile(mdlFile);
+    mAnmFile = nw4r::g3d::ResFile(anmFile);
 
     nw4r::g3d::ResMdl resMdl = mMdlFile.GetResMdl(mdlName);
     if (!mMdl.create(resMdl, callback, alloc, bufferOption, nView, pSize)) {

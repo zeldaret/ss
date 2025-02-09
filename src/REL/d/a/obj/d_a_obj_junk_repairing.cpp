@@ -19,7 +19,7 @@ bool dAcOJunkRep_c::getState() {
 }
 
 bool dAcOJunkRep_c::createHeap() {
-    mResFile = static_cast<nw4r::g3d::ResFile>(getOarcResFile("Junk"));
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("Junk"));
     if (!loadMdl(mModel1, getMdlName1())) {
         return false;
     }

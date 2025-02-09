@@ -24,7 +24,7 @@ const f32 dAcOutajimaIsland_c::floats[] = {
 };
 
 bool dAcOutajimaIsland_c::createHeap() {
-    mRes = static_cast<nw4r::g3d::ResFile>(getOarcResFile("IslPuzIslet00"));
+    mRes = nw4r::g3d::ResFile(getOarcResFile("IslPuzIslet00"));
     RoomManager::bindStageResToFile(&mRes);
     RoomManager::bindSkyCmnToResFile(&mRes);
     nw4r::g3d::ResMdl m = mRes.GetResMdl("IslPuzIslet00");
