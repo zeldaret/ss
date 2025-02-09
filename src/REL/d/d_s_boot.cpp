@@ -13,6 +13,7 @@
 #include "f/f_profile_name.h"
 #include "m/m2d.h"
 #include "m/m_dvd.h"
+#include "m/m_fader_base.h"
 #include "m/m_heap.h"
 #include "m/m_pad.h"
 #include "nw4r/ut/ut_ResFont.h"
@@ -330,7 +331,7 @@ bool dScBoot_c::strap_c::create() {
         // HACK: Why does this use the m2d attach function?
         // Inlines break instruction scheduling, and I don't
         // want to undo shadowing...
-        ((m2d::ResAccIf_c*)&mResAcc)->attach(data, "");
+        ((m2d::ResAccIf_c *)&mResAcc)->attach(data, "");
         mLyt.setResAcc(&mResAcc);
         mLyt.build(mStr2, nullptr);
         mAnm.doSomething(mStr3, &mResAcc);
@@ -347,7 +348,7 @@ bool dScBoot_c::strap_c::remove() {
     mLyt.unbind(&mAnm);
     mAnm.destroySomething();
     // HACK: See above
-    ((m2d::ResAccIf_c*)&mResAcc)->detach();
+    ((m2d::ResAccIf_c *)&mResAcc)->detach();
     LayoutArcManager::sInstance->decrement(mArcName);
     return true;
 }
@@ -396,11 +397,25 @@ dScBoot_c::~dScBoot_c() {
 }
 
 int dScBoot_c::create() {
+    if (!mStrapScreen.create()) {
+        return NOT_READY;
+    };
+
+    mFader.create();
+    mFader.setFadeInFrame(1);
     // TODO
+    dSys::setFrameRate(1);
     mStateMgr.changeState(StateID_Init);
+
+    return SUCCEEDED;
 }
 
 int dScBoot_c::doDelete() {
+    int removed = mStrapScreen.remove();
+    sFPhaseBase::sFPhaseState phaseState = mPhases.step();
+    if (!removed || phaseState != sFPhaseBase::PHASE_ALL_DONE) {
+        return NOT_READY;
+    }
     // TODO
 }
 
@@ -416,7 +431,11 @@ int dScBoot_c::execute() {
 }
 
 int dScBoot_c::draw() {
-    // TODO
+    if (field_0x5E1 == 1) {
+        mStrapScreen.draw();
+    }
+
+    return SUCCEEDED;
 }
 
 void dScBoot_c::deleteReady() {

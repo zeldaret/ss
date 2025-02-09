@@ -35,6 +35,7 @@ public:
 
     virtual void reset();
     virtual sFPhaseState step();
+protected:
     virtual sFPhaseState callPhase() = 0;
     virtual void onReset() = 0;
     virtual void nextPhase() = 0;
@@ -56,6 +57,7 @@ public:
     }
     virtual ~sFPhase() {}
 
+protected:
     virtual sFPhaseState callPhase() override {
         return (mpOwner->*(*mpCurrentPhase))();
     }

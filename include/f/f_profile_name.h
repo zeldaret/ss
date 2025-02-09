@@ -708,7 +708,6 @@ enum PROFILE_NAME_e {
     /* 701 (0x2BD) */ ROOM,
     /* 702 (0x2BE) */ LAST,
     /* 703         */ PROFILE_MAX,
-    INVALID,
 };
 
 }
