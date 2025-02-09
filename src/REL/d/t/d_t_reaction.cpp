@@ -20,7 +20,7 @@ const f32 dTgReaction_c::sHeight = 100.0f;
 // clang-format off
 dCcD_SrcCyl dTgReaction_c::sCcSrc = {
     {{0, 0, 0, 0, 0, 0, 0, 0, 0}, 
-    {AT_TYPE_BELLOWS, 0x213, 0, 0x8, 0x8,}, 
+    {AT_TYPE_BELLOWS, 0x213, {0, 0, 0x8}, 0x8}, 
     {0xE8}},
     {dTgReaction_c::sRadius, dTgReaction_c::sHeight}
 };

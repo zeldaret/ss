@@ -293,6 +293,9 @@ public:
     /* 0x38 */ int mRank;
 
     cCcD_Stts(dAcObjBase_c *);
+    ~cCcD_Stts() {
+        mpActor = nullptr;
+    }
     void Move();
     int GetID() const;
     void PlusCcMove(f32, f32, f32);
@@ -315,7 +318,8 @@ public:
 };
 
 struct cCcD_SrcGObjTgInfo {
-    /* 0x00 */ u16 mField_0x0;
+    /* 0x00 */ u8 mField_0x0;
+    /* 0x00 */ u8 mField_0x1;
     /* 0x02 */ u16 mField_0x2;
 };
 
@@ -356,6 +360,8 @@ enum dCcD_ObjAtType {
     /* 0x 0200 0000 */ AT_TYPE_0x2000000 = (1 << 25),
     /* 0x 0400 0000 */ AT_TYPE_KOLOKTOS_SWORD = (1 << 26),
     /* 0x 0800 0000 */ AT_TYPE_0x8000000 = (1 << 27),
+    /* 0x 0148 8200 */ AT_TYPE_COMMON0 =
+        AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND,
 };
 
 enum cCcD_AtModifiers_e {
@@ -630,6 +636,9 @@ public:
     void Set_0x4B(u8 val) {
         mField_0x4B = val;
     }
+    void SetInfo_0x1(u8 val) {
+        mSrc.mInfo.mField_0x1 = val;
+    }
 
     void SetInfo_0x2(u16 val) {
         mSrc.mInfo.mField_0x2 = val;
@@ -785,8 +794,14 @@ public:
         mCo.OnSPrm(f);
     }
 
-    void SetTgType(u32 flag) {
-        mTg.SetType(flag);
+    void SetTgType(u32 type) {
+        mTg.SetType(type);
+    }
+    void OnTgType(u32 type) {
+        mTg.OnType(type);
+    }
+    void OffTgType(u32 type) {
+        mTg.OffType(type);
     }
     void SetAtFlag(u32 flag) {
         mAt.SetSPrm(flag);
@@ -908,11 +923,18 @@ public:
         return mTg.MskSPrm(0x400);
     }
 
+    void OnTg_0x200000() {
+        mTg.OnSPrm(0x200000);
+    }
+
     void SetTg_0x4B(u8 val) {
         mTg.Set_0x4B(val);
     }
     void SetTgInfo_0x2(u16 val) {
         mTg.SetInfo_0x2(val);
+    }
+    void SetTgInfo_0x1(u8 val) {
+        mTg.SetInfo_0x1(val);
     }
     void SetTg_0x40000000() {
         mTg.OnSPrm(0x40000000);
