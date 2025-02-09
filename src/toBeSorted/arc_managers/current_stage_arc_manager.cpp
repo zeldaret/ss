@@ -19,13 +19,14 @@ void CurrentStageArcManager::init(EGG::Heap *heap) {
 
 bool CurrentStageArcManager::setStage(const char *newStage) {
     mStageName = newStage;
-
+    // UB: Cannot pass object of non-POD type 'SizedString<32>' through variadic method
     mCurrentLoadingStageArcName.sprintf("%s_stg_l0", mStageName);
     if (dRawArcEntry_c::checkArcExistsOnDisk(mCurrentLoadingStageArcName, getCurrentStageDirectory())) {
         return (bool)mArcTable.getArcOrLoadFromDisk(
             mCurrentLoadingStageArcName, getCurrentStageDirectory(), 0, dHeap::work2Heap.heap
         );
     } else {
+        // UB: Cannot pass object of non-POD type 'SizedString<32>' through variadic method
         mCurrentLoadingStageArcName.sprintf("%s_stg", mStageName);
         return (bool)mArcTable.getArcOrLoadFromDisk(
             mCurrentLoadingStageArcName, getCurrentStageDirectory(), 0, dHeap::work2Heap.heap
@@ -50,6 +51,7 @@ bool CurrentStageArcManager::loadFileFromExtraLayerArc(int layer) {
         return true;
     }
 
+    // UB: Cannot pass object of non-POD type 'SizedString<32>' through variadic method
     mStageExtraLayerArcName.sprintf("%s_stg_l%d", mStageName, layer);
     if (dRawArcEntry_c::checkArcExistsOnDisk(mStageExtraLayerArcName, getCurrentStageDirectory())) {
         return (bool
@@ -108,6 +110,7 @@ const char *CurrentStageArcManager::getCurrentStageDirectory() {
 static SizedString<32> s_roomArcTmp;
 
 const char *CurrentStageArcManager::getRoomArcDirectory(int room) const {
+    // UB: Cannot pass object of non-POD type 'const SizedString<32>' through variadic method
     s_roomArcTmp.sprintf("%s_r%02d", mStageName, room);
     return s_roomArcTmp;
 }

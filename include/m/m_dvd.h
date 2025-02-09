@@ -78,6 +78,7 @@ public:
     virtual u32 execute() override;
 
     static mDvd_callback_c *create(dvdReadCallback cb, void *cbData);
+    // createOrDie__15mDvd_callback_cFPFPv_PvPv ?
     static mDvd_callback_c *createOrFail(dvdReadCallback cb, void *cbData);
 
     dvdReadCallback mCallback;

@@ -798,6 +798,9 @@ d/tg/d_t_genki_mgr.cpp:
 d/a/obj/d_a_obj_water_mark.cpp:
 	.text       start:0x802D9D60 end:0x802DA0BC
 
+s/s_FPhase.cpp:
+	.text       start:0x802DDC20 end:0x802DDDB0
+
 s/s_StateID.cpp:
 	.text       start:0x802DDDB0 end:0x802DE1F4
 	.ctors      start:0x804DB8B8 end:0x804DB8BC

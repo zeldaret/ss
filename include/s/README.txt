@@ -26,3 +26,7 @@ this seems the most reasonable.
 ## s_FStateVirtualID
 
 Implemented by SS based on NSMBW symbols. Probably missing some parts, sync with NSMBW if they get around to it.
+
+## s_FPhase
+
+SS-only. Symbols/names completely made up.

@@ -3,14 +3,11 @@
 
 #include "d/d_rawarchive.h"
 #include "egg/core/eggHeap.h"
-#include "sized_string.h"
 
 class LayoutArcManager {
 public:
     LayoutArcManager();
     virtual ~LayoutArcManager();
-
-    dRawArcTable_c mArcTable;
 
     static LayoutArcManager *sInstance;
 
@@ -18,13 +15,20 @@ public:
 
     void init(EGG::Heap *heap);
 
+    inline int ensureAllEntriesLoaded() {
+        return mArcTable.ensureAllEntriesLoaded();
+    }
+
     bool loadLayoutArcFromDisk(const char *object, EGG::Heap *heap);
-    void ensureLoaded1(const char *object);
+    int ensureLoaded1(const char *object);
     void ensureLoaded2(const char *object);
     bool hasEntry(const char *object);
     bool decrement(const char *path);
     void *getData(const char *oarcName, const char *fileName);
     void *getLoadedData(const char *path);
+
+private:
+    dRawArcTable_c mArcTable;
 };
 
 #endif

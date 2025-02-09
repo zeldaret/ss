@@ -552,6 +552,7 @@ config.libs = [
         "objects": [
             Object(Matching, "s/s_Crc.cpp"),
             Object(NonMatching, "s/s_Math.cpp"),
+            Object(Matching, "s/s_FPhase.cpp"),
             Object(Matching, "s/s_StateID.cpp"),
             Object(Matching, "s/s_StateMethod.cpp"),
             Object(Matching, "s/s_StateMethodUsr_FI.cpp"),

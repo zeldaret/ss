@@ -16,21 +16,26 @@ public:
     u8 getColorFaderAlpha();
     bool initForLyt();
 
-    void fadeIn() {
+    bool fadeIn() {
         setFader(mFadeInType);
         mpFader->setFrame(mFadeInFrame);
-        mpFader->fadeIn();
+        return mpFader->fadeIn();
     }
 
-    void fadeOut() {
+    bool fadeOut() {
         setFader(mFadeOutType);
         mpFader->setFrame(mFadeOutFrame);
-        mpFader->fadeOut();
+        return mpFader->fadeOut();
     }
 
     void setTypes(s32 fadeInType, s32 fadeOutType) {
         mFadeInType = fadeInType;
         mFadeOutType = fadeOutType;
+    }
+
+    void resetFrames() {
+        mFadeInFrame = 30;
+        mFadeOutFrame = 30;
     }
 
 private:

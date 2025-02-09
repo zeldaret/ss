@@ -19,7 +19,7 @@ public:
     static dBase_c *staticExecute();
     static void setRootActor(fProfile::PROFILE_NAME_e rootActor, u32 params, s32 fadeInType, s32 fadeOutType);
 
-private:
+protected:
     static dFader_c sFader;
 };
 
