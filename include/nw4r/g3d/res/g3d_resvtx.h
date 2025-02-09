@@ -50,10 +50,22 @@ public:
     }
 
     void *GetData() {
-        return ofs_to_ptr<void>(ref().toVtxPosArray);
+        ResVtxPosData &r = ref();
+
+        if (r.toVtxPosArray != 0) {
+            return reinterpret_cast<void *>(reinterpret_cast<u8 *>(&r) + r.toVtxPosArray);
+        }
+
+        return NULL;
     }
     const void *GetData() const {
-        return ofs_to_ptr<void>(ref().toVtxPosArray);
+        const ResVtxPosData &r = ref();
+
+        if (r.toVtxPosArray != 0) {
+            return reinterpret_cast<const void *>(reinterpret_cast<const u8 *>(&r) + r.toVtxPosArray);
+        }
+
+        return NULL;
     }
 
     u32 GetID() const {
@@ -102,10 +114,22 @@ public:
     }
 
     void *GetData() {
-        return ofs_to_ptr<void>(ref().toVtxNrmArray);
+        ResVtxNrmData &r = ref();
+
+        if (r.toVtxNrmArray != 0) {
+            return reinterpret_cast<void *>(reinterpret_cast<u8 *>(&r) + r.toVtxNrmArray);
+        }
+
+        return NULL;
     }
     const void *GetData() const {
-        return ofs_to_ptr<void>(ref().toVtxNrmArray);
+        const ResVtxNrmData &r = ref();
+
+        if (r.toVtxNrmArray != 0) {
+            return reinterpret_cast<const void *>(reinterpret_cast<const u8 *>(&r) + r.toVtxNrmArray);
+        }
+
+        return NULL;
     }
 
     u32 GetID() const {
@@ -154,10 +178,22 @@ public:
     }
 
     void *GetData() {
-        return ofs_to_ptr<void>(ref().toVtxClrArray);
+        ResVtxClrData &r = ref();
+
+        if (r.toVtxClrArray != 0) {
+            return reinterpret_cast<void *>(reinterpret_cast<u8 *>(&r) + r.toVtxClrArray);
+        }
+
+        return NULL;
     }
     const void *GetData() const {
-        return ofs_to_ptr<void>(ref().toVtxClrArray);
+        const ResVtxClrData &r = ref();
+
+        if (r.toVtxClrArray != 0) {
+            return reinterpret_cast<const void *>(reinterpret_cast<const u8 *>(&r) + r.toVtxClrArray);
+        }
+
+        return NULL;
     }
 
     u32 GetID() const {
@@ -205,10 +241,22 @@ public:
     }
 
     void *GetData() {
-        return ofs_to_ptr<void>(ref().toTexCoordArray);
+        ResVtxTexCoordData &r = ref();
+
+        if (r.toTexCoordArray != 0) {
+            return reinterpret_cast<void *>(reinterpret_cast<u8 *>(&r) + r.toTexCoordArray);
+        }
+
+        return NULL;
     }
     const void *GetData() const {
-        return ofs_to_ptr<void>(ref().toTexCoordArray);
+        const ResVtxTexCoordData &r = ref();
+
+        if (r.toTexCoordArray != 0) {
+            return reinterpret_cast<const void *>(reinterpret_cast<const u8 *>(&r) + r.toTexCoordArray);
+        }
+
+        return NULL;
     }
 
     u32 GetID() const {

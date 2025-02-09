@@ -696,7 +696,7 @@ config.libs = [
             Object(NonMatching, "nw4r/g3d/g3d_scnproc.cpp"),
             Object(NonMatching, "nw4r/g3d/g3d_fog.cpp"),
             Object(NonMatching, "nw4r/g3d/g3d_light.cpp"),
-            Object(NonMatching, "nw4r/g3d/g3d_calcvtx.cpp"),
+            Object(Matching, "nw4r/g3d/g3d_calcvtx.cpp"),
         ],
     ),
     nw4rLib(
