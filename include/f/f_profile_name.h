@@ -707,7 +707,7 @@ enum PROFILE_NAME_e {
     /* 700 (0x2BC) */ BOOT,
     /* 701 (0x2BD) */ ROOM,
     /* 702 (0x2BE) */ LAST,
-    /* 703         */ NUMBER_OF_ACTORS,
+    /* 703         */ PROFILE_MAX,
     INVALID,
 };
 

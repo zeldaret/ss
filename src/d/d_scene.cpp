@@ -7,7 +7,7 @@
 #include "m/m_fader_base.h"
 #include "toBeSorted/reload_color_fader.h"
 
-static u16 RootActorID = fProfile::NUMBER_OF_ACTORS;
+static u16 RootActorID = fProfile::PROFILE_MAX;
 static u32 RootActorParams = 0;
 static bool gameStateIsActive = true;
 
@@ -43,7 +43,7 @@ void dScene_c::postDelete(MAIN_STATE_e state) {
 int dScene_c::preExecute() {
     if (dBase_c::preExecute() == NOT_READY) {
         return NOT_READY;
-    } else if (RootActorID != fProfile::NUMBER_OF_ACTORS) {
+    } else if (RootActorID != fProfile::PROFILE_MAX) {
         if (sFader.isStatus(mFaderBase_c::FADED_IN)) {
             sFader.fadeOut();
         } else if (sFader.isStatus(mFaderBase_c::FADED_OUT)) {
@@ -85,13 +85,13 @@ void dScene_c::staticCreate() {
 }
 
 dBase_c *dScene_c::staticExecute() {
-    if (gameStateIsActive || RootActorID == fProfile::NUMBER_OF_ACTORS) {
+    if (gameStateIsActive || RootActorID == fProfile::PROFILE_MAX) {
         return nullptr;
     }
 
     dBase_c *base = dBase_c::createRoot(RootActorID, RootActorParams, SCENE);
     if (base != nullptr) {
-        RootActorID = fProfile::NUMBER_OF_ACTORS;
+        RootActorID = fProfile::PROFILE_MAX;
         gameStateIsActive = true;
         return base;
     }
@@ -99,7 +99,7 @@ dBase_c *dScene_c::staticExecute() {
 }
 
 void dScene_c::setRootActor(fProfile::PROFILE_NAME_e rootActor, u32 params, s32 fadeOutType, s32 fadeInType) {
-    if (RootActorID != fProfile::NUMBER_OF_ACTORS && rootActor != fProfile::TITLE) {
+    if (RootActorID != fProfile::PROFILE_MAX && rootActor != fProfile::TITLE) {
         return;
     }
     RootActorID = rootActor;
