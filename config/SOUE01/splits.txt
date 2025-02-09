@@ -1512,9 +1512,11 @@ nw4r/g3d/g3d_scnproc.cpp:
 
 nw4r/g3d/g3d_fog.cpp:
 	.text       start:0x804603F0 end:0x80460560
+	.sdata2     start:0x8057EEB8 end:0x8057EEBC
 
 nw4r/g3d/g3d_light.cpp:
 	.text       start:0x80460560 end:0x80460F68
+	.sdata2     start:0x8057EEC0 end:0x8057EEEC
 
 nw4r/g3d/g3d_calcvtx.cpp:
 	.text       start:0x80460F70 end:0x804616F8
