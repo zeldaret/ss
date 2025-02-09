@@ -1509,6 +1509,9 @@ nw4r/g3d/g3d_init.cpp:
 
 nw4r/g3d/g3d_scnproc.cpp:
 	.text       start:0x804600F0 end:0x804603F0
+	.rodata     start:0x804F7B70 end:0x804F7B80
+	.data       start:0x8056DB00 end:0x8056DB34
+	.sdata2     start:0x8057EEB0 end:0x8057EEB4
 
 nw4r/g3d/g3d_fog.cpp:
 	.text       start:0x804603F0 end:0x80460560
