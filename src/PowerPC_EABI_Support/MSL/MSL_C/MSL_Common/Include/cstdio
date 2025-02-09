@@ -1,0 +1,21 @@
+#ifndef MSL_CPP_CSTDIO_H
+#define MSL_CPP_CSTDIO_H
+#include <stdio.h>
+#ifdef __cplusplus
+
+namespace std {
+using ::fclose;
+using ::fflush;
+using ::FILE;
+// using ::ftell;
+// using ::fwide;
+using ::snprintf;
+using ::sprintf;
+// using ::sscanf;
+using ::vprintf;
+using ::vsnprintf;
+// using ::vsprintf;
+} // namespace std
+
+#endif
+#endif

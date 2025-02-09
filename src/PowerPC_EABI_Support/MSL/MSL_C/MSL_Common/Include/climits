@@ -1,0 +1,4 @@
+#ifndef MSL_CPP_CLIMITS_H
+#define MSL_CPP_CLIMITS_H
+#include <limits.h>
+#endif

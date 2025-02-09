@@ -13,7 +13,7 @@
  * Define ResName pascal string for file resource groups.
  */
 #define NW4R_G3D_RESFILE_NAME_DEF(VAR, STR)                                                                            \
-    nw4r::g3d::ResNameData27 ResNameData_##VAR ALIGN(32) = {sizeof(STR) - 1, STR}
+    nw4r::g3d::ResNameData27 ResNameData_##VAR ALIGN_DECL(32) = {sizeof(STR) - 1, STR}
 
 /**
  * Similar to "ofs_to_obj" but accounting for the additional -4 offset.
