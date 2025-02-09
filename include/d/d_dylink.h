@@ -17,4 +17,13 @@ private:
     int mCount;
 };
 
+namespace dDyl {
+
+void initRelsArc();
+bool destroy();
+bool isLinked(u16 relId);
+int tryLink(u16 relId);
+
+} // namespace dDyl
+
 #endif

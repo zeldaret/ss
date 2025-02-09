@@ -339,6 +339,7 @@ config.libs = [
             Object(Matching, "d/d_font_manager.cpp"),
             Object(Matching, "d/d_heap.cpp"),
             Object(Matching, "d/d_rawarchive.cpp"),
+            Object(Matching, "d/d_scene.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
             Object(NonMatching, "d/d_sys.cpp"),
             Object(NonMatching, "toBeSorted/sound_info.cpp"),
@@ -557,6 +558,7 @@ config.libs = [
         "objects": [
             Object(Matching, "s/s_Crc.cpp"),
             Object(NonMatching, "s/s_Math.cpp"),
+            Object(Matching, "s/s_FPhase.cpp"),
             Object(Matching, "s/s_StateID.cpp"),
             Object(Matching, "s/s_StateMethod.cpp"),
             Object(Matching, "s/s_StateMethodUsr_FI.cpp"),

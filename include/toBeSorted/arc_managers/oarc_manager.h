@@ -3,7 +3,6 @@
 
 #include "d/d_rawarchive.h"
 #include "egg/core/eggHeap.h"
-#include "sized_string.h"
 
 class OarcManager {
 public:
@@ -15,6 +14,10 @@ public:
     static bool create(EGG::Heap *heap);
 
     void init(EGG::Heap *heap);
+
+    inline int ensureAllEntriesLoaded() {
+        return mArcTable.ensureAllEntriesLoaded();
+    }
 
     bool checkIfObjectArcExistsOnDisk(const char *object);
     bool loadObjectArcFromDisk(const char *object, EGG::Heap *heap);

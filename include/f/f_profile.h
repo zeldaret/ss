@@ -84,7 +84,7 @@ struct fActorProfile_c /* : fBaseProfile_c */ {
     u32 mActorProperties; ///< Some actor-related properties. @todo Document the bitfield.
 };
 
-extern const fBaseProfile_c *(*sProfileList)[NUMBER_OF_ACTORS]; ///< A list of all profiles.
+extern const fBaseProfile_c *(*sProfileList)[PROFILE_MAX]; ///< A list of all profiles.
 
 } // namespace fProfile
 

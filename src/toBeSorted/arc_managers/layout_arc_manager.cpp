@@ -24,8 +24,8 @@ bool LayoutArcManager::loadLayoutArcFromDisk(const char *object, EGG::Heap *heap
     return mArcTable.getArcOrLoadFromDisk(object, "Layout", 0, heap);
 }
 
-void LayoutArcManager::ensureLoaded1(const char *object) {
-    mArcTable.ensureLoadedMaybe2(object);
+int LayoutArcManager::ensureLoaded1(const char *object) {
+    return mArcTable.ensureLoadedMaybe2(object);
 }
 
 void LayoutArcManager::ensureLoaded2(const char *object) {

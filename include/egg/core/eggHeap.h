@@ -108,6 +108,10 @@ public:
     Heap *becomeCurrentHeap();
     Heap *_becomeCurrentHeapWithoutLock();
 
+    void disableAllocation() {
+        mFlag.set(HEAP_FLAG_LOCKED);
+    }
+
 public:
     template <typename T>
     static T *alloc(u32 count, Heap *heap, int align = 4) {

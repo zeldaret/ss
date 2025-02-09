@@ -38,8 +38,8 @@ bool dFader_c::create() {
 
     mFadeOutType = 0;
     mFadeInType = 0;
-    field_0x20 = 0x1E;
-    field_0x22 = 0x1E;
+    mFadeInFrame = 0x1E;
+    mFadeOutFrame = 0x1E;
     setFader(0);
 
     return true;
