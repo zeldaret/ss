@@ -14,7 +14,7 @@ SPECIAL_ACTOR_PROFILE(BOMBF, dAcBombf_c, fProfile::BOMBF, 0x129, 0, 4099);
 STATE_DEFINE(dAcBombf_c, Wait);
 
 bool dAcBombf_c::createHeap() {
-    nw4r::g3d::ResFile resFile = getOarcResFile("FlowerBomb");
+    nw4r::g3d::ResFile resFile(getOarcResFile("FlowerBomb"));
     nw4r::g3d::ResMdl resMdl = resFile.GetResMdl("LeafBomb");
     return mModel.create(resMdl, &heap_allocator, 0x120, 1, nullptr);
 }

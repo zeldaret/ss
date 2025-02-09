@@ -76,7 +76,7 @@ inline f32 FSqrt(f32 x) {
 }
 
 inline f32 FLog(f32 x) {
-    if (x >= 0.0f) {
+    if (x > 0.0f) {
         return detail::FLog(x);
     }
 

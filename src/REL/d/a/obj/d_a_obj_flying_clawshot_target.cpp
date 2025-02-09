@@ -10,8 +10,8 @@
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "rvl/MTX/mtxvec.h"
 
 SPECIAL_ACTOR_PROFILE(
@@ -25,8 +25,8 @@ bool dAcOFlyingClawshotTarget_c::createHeap() {
         return false;
     }
 
-    nw4r::g3d::ResFile file = data;
-    if (!file.mFile.IsValid()) {
+    nw4r::g3d::ResFile file(data);
+    if (!file.IsValid()) {
         return false;
     }
     nw4r::g3d::ResMdl mdl = file.GetResMdl("BirdObjD3_S");

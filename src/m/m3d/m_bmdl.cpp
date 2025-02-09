@@ -3,7 +3,6 @@
 #include "m/m3d/m3d.h"
 #include "nw4r/g3d/g3d_scnmdl.h"
 
-
 namespace m3d {
 
 bmdl_c::~bmdl_c() {
@@ -24,7 +23,7 @@ int bmdl_c::getNodeID(const char *name) const {
 
 bool bmdl_c::getNodeWorldMtx(u32 p1, nw4r::math::MTX34 *out) const {
     return nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdlSimple>(mpScnLeaf)->GetScnMtxPos(
-        out, nw4r::g3d::ScnObj::MTX_TYPE_WORLD, p1
+        out, nw4r::g3d::ScnObj::MTX_WORLD, p1
     );
 }
 

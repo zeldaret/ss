@@ -3,7 +3,7 @@
 
 #include "m/m3d/m_anmchr.h"
 #include "m/m3d/m_mdl.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 
 namespace m3d {
 

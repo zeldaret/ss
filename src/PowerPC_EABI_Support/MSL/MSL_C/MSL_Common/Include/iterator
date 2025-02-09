@@ -1,0 +1,10 @@
+#ifndef MSL_CPP_ITERATOR_H
+#define MSL_CPP_ITERATOR_H
+
+namespace std {
+
+struct random_access_iterator_tag {};
+
+} // namespace std
+
+#endif

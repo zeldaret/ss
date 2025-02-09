@@ -1,0 +1,4 @@
+#ifndef MSL_CPP_CERRNO_H
+#define MSL_CPP_CERRNO_H
+#include <errno.h>
+#endif

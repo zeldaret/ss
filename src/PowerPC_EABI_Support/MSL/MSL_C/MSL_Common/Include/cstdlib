@@ -1,0 +1,17 @@
+#ifndef MSL_CPP_CSTDLIB_H
+#define MSL_CPP_CSTDLIB_H
+#include <stdlib.h>
+#ifdef __cplusplus
+
+// TODO: Fillout impls
+namespace std {
+// using ::abs;
+// using ::atof;
+// using ::mbstowcs;
+// using ::mbtowc;
+// using ::rand;
+// using ::wcstombs;
+} // namespace std
+
+#endif
+#endif

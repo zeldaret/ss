@@ -2,13 +2,14 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/flag/storyflag_manager.h"
 #include "f/f_base.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resmdl.h"
-#include "nw4r/g3d/g3d_resnode.h"
 #include "nw4r/g3d/g3d_scnmdl.h"
 #include "nw4r/g3d/g3d_scnobj.h"
-#include "d/flag/storyflag_manager.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resnode.h"
 #include "toBeSorted/room_manager.h"
 
 const f32 dAcOislandNusi_c::someFloat = 100000.0f;
@@ -24,7 +25,7 @@ STATE_DEFINE(dAcOislandNusi_c, Wait);
 STATE_DEFINE(dAcOislandNusi_c, NusiFight);
 
 bool dAcOislandNusi_c::createHeap() {
-    mRes = getOarcResFile("IslNusi");
+    mRes = nw4r::g3d::ResFile(getOarcResFile("IslNusi"));
     RoomManager::bindStageResToFile(&mRes);
     RoomManager::bindSkyCmnToResFile(&mRes);
     for (int i = 0; i < 2; i++) {

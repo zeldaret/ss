@@ -2,7 +2,6 @@
 
 #include "m/m3d/m3d.h"
 
-
 namespace m3d {
 
 scnLeaf_c::scnLeaf_c() : mpScnLeaf(nullptr) {}
@@ -39,23 +38,23 @@ void scnLeaf_c::getScale(nw4r::math::VEC3 *vec) const {
 }
 
 void scnLeaf_c::setLocalMtx(const nw4r::math::MTX34 *mtx) {
-    mpScnLeaf->SetMtx(nw4r::g3d::ScnObj::MTX_TYPE_LOCAL, mtx);
+    mpScnLeaf->SetMtx(nw4r::g3d::ScnObj::MTX_LOCAL, mtx);
 }
 
 void scnLeaf_c::getLocalMtx(nw4r::math::MTX34 *mtx) const {
-    mpScnLeaf->GetMtx(nw4r::g3d::ScnObj::MTX_TYPE_LOCAL, mtx);
+    mpScnLeaf->GetMtx(nw4r::g3d::ScnObj::MTX_LOCAL, mtx);
 }
 
 const nw4r::math::MTX34 *scnLeaf_c::getLocalMtx() const {
-    return mpScnLeaf->GetMtxPtr(nw4r::g3d::ScnObj::MTX_TYPE_LOCAL);
+    return mpScnLeaf->GetMtxPtr(nw4r::g3d::ScnObj::MTX_LOCAL);
 }
 
 void scnLeaf_c::getWorldMtx(nw4r::math::MTX34 *mtx) const {
-    mpScnLeaf->GetMtx(nw4r::g3d::ScnObj::MTX_TYPE_WORLD, mtx);
+    mpScnLeaf->GetMtx(nw4r::g3d::ScnObj::MTX_WORLD, mtx);
 }
 
 void scnLeaf_c::getViewMtx(nw4r::math::MTX34 *mtx) const {
-    mpScnLeaf->GetMtx(nw4r::g3d::ScnObj::MTX_TYPE_VIEW, mtx);
+    mpScnLeaf->GetMtx(nw4r::g3d::ScnObj::MTX_VIEW, mtx);
 }
 
 // unofficial

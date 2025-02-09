@@ -6,8 +6,8 @@
 #include "d/flag/storyflag_manager.h"
 #include "f/f_base.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resanmtexsrt.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resanmtexsrt.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "toBeSorted/room_manager.h"
 
 static const char *const sResFiles[] = {
@@ -45,7 +45,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_MEGAMI_ISLAND, dAcOmegamiIsland_c, fProfile::OBJ_MEGAM
 bool dAcOmegamiIsland_c::createHeap() {
     mVariant = getVariant();
 
-    mRes = getOarcResFile(sResFiles[mVariant]);
+    mRes = nw4r::g3d::ResFile(getOarcResFile(sResFiles[mVariant]));
     RoomManager::bindStageResToFile(&mRes);
     RoomManager::bindSkyCmnToResFile(&mRes);
 

@@ -4,11 +4,11 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resanmclr.h"
-#include "nw4r/g3d/g3d_resanmtexsrt.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resanmclr.h"
+#include "nw4r/g3d/res/g3d_resanmtexsrt.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "s/s_State.hpp"
-
 
 SPECIAL_ACTOR_PROFILE(OBJ_WATER_SPOUT, dAcOwaterSpout_c, fProfile::OBJ_WATER_SPOUT, 0x1DA, 0, 6);
 
@@ -16,7 +16,7 @@ STATE_DEFINE(dAcOwaterSpout_c, Wait);
 
 bool dAcOwaterSpout_c::createHeap() {
     void *data = getOarcResFile("FX_WaterColumn");
-    mResFile = data;
+    mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("FX_WaterColumn");
     TRY_CREATE(mMdl.create(data, "FX_WaterColumn", "FX_WaterColumn", &heap_allocator, 0x32C));
     nw4r::g3d::ResAnmTexSrt anmSrt = mResFile.GetResAnmTexSrt("FX_WaterColumn");

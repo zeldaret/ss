@@ -12,8 +12,8 @@ const f32 dAcOmoleSoil_c::sHalfScale = 0.5f;
 const f32 dAcOmoleSoil_c::sFullScale = 1.0f;
 
 bool dAcOmoleSoil_c::createHeap() {
-    nw4r::g3d::ResFile file = getOarcResFile("MogumaMud");
-    if (!file.mFile.IsValid()) {
+    nw4r::g3d::ResFile file(getOarcResFile("MogumaMud"));
+    if (!file.IsValid()) {
         return false;
     }
     mBrres = file;

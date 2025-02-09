@@ -5,7 +5,7 @@
 #include "d/col/bg/d_bg_w.h"
 #include "m/m3d/m_anmtexsrt.h"
 #include "m/m3d/m_smdl.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 
 class dAcOmegamiIsland_c : public dAcObjBase_c {
 public:

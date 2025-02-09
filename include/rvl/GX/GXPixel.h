@@ -4,13 +4,13 @@
 #include "rvl/GX/GXTypes.h"
 #include "rvl/MTX.h" // IWYU pragma: export
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#define GX_FOG_ADJ_TABLE_SZ 10
 typedef struct _GXFogAdjTable {
-    u16 r[10]; // at 0x0
+    u16 r[GX_FOG_ADJ_TABLE_SZ]; // at 0x0
 } GXFogAdjTable;
 
 void GXSetFog(GXFogType type, GXColor color, f32 start, f32 end, f32 near, f32 far);

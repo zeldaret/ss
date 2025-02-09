@@ -13,7 +13,7 @@
 #include "m/m3d/m_smdl.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/effects_struct.h"
 

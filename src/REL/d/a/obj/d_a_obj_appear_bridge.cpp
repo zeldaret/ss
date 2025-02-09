@@ -2,6 +2,7 @@
 
 #include "d/a/d_a_player.h"
 #include "d/col/bg/d_bg_s.h"
+#include "nw4r/types_nw4r.h"
 #include "toBeSorted/area_utils.h"
 #include "toBeSorted/room_manager.h"
 
@@ -16,7 +17,7 @@ STATE_DEFINE(dAcOappearBridge_c, Appear);
 STATE_DEFINE(dAcOappearBridge_c, Disappear);
 
 bool dAcOappearBridge_c::createHeap() {
-    mResFile = getOarcResFile("TongueStage");
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("TongueStage"));
     RoomManager::bindStageResToFile(&mResFile);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("TongueStage");
     TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x128));
