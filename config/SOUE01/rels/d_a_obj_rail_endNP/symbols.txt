@@ -16,4 +16,4 @@ lbl_525_data_0 = .data:0x00000000; // type:object size:0x30
 g_profile_OBJ_RAIL_END = .data:0x00000030; // type:object size:0x10
 lbl_525_data_40 = .data:0x00000040; // type:object size:0x8 data:string
 lbl_525_data_48 = .data:0x00000048; // type:object size:0x20
-lbl_525_data_68 = .data:0x00000068; // type:object size:0x80
+AcORailEnd__vtable = .data:0x00000068; // type:object size:0x80

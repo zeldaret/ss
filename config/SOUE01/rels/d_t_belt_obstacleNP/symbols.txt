@@ -16,4 +16,4 @@ lbl_446_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
 lbl_446_rodata_4 = .rodata:0x00000004; // type:object size:0x4 data:float
 lbl_446_rodata_8 = .rodata:0x00000008; // type:object size:0x4 data:float
 g_profile_TAG_BELT_OBSTACLE = .data:0x00000000; // type:object size:0x10
-lbl_446_data_10 = .data:0x00000010; // type:object size:0x74
+TgBeltObstacle__vtable = .data:0x00000010; // type:object size:0x74

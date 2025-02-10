@@ -15,4 +15,4 @@ lbl_18_rodata_4 = .rodata:0x00000004; // type:object size:0x20 data:float
 lbl_18_rodata_24 = .rodata:0x00000024; // type:object size:0x4 data:float
 g_profile_OBJ_BSTONE = .data:0x00000000; // type:object size:0x40
 lbl_18_data_40 = .data:0x00000040; // type:object size:0x20
-lbl_18_data_60 = .data:0x00000060; // type:object size:0x80
+AcObstonec__vtable = .data:0x00000060; // type:object size:0x80

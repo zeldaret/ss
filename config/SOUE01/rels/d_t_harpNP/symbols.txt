@@ -54,4 +54,4 @@ lbl_536_section4_118 = .data:0x00000118; // type:object size:0xC8
 lbl_536_section4_1E0 = .data:0x000001E0; // type:object size:0x34
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 lbl_536_bss_8 = .bss:0x00000008; // type:object size:0x10
-lbl_536_bss_18 = .bss:0x00000018; // type:object size:0x30 data:4byte
+dTgHarp__ActorState__StateWait = .bss:0x00000018; // type:object size:0x30 data:4byte

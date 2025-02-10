@@ -64,5 +64,5 @@ __vt__30sFStateID_c<15dTgTumbleWeed_c> = .data:0x00000260; // type:object size:0
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 lbl_476_bss_8 = .bss:0x00000008; // type:object size:0x10 data:4byte
 StateID_AreaOut__15dTgTumbleWeed_c = .bss:0x00000018; // type:object size:0x30 data:4byte
-lbl_476_bss_58 = .bss:0x00000058; // type:object size:0x30 data:4byte
-lbl_476_bss_98 = .bss:0x00000098; // type:object size:0x30 data:4byte
+TgTumbleWeed__StateID_AreaIn = .bss:0x00000058; // type:object size:0x30 data:4byte
+TgTumbleWeed__StateID_Wind = .bss:0x00000098; // type:object size:0x30 data:4byte

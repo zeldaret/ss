@@ -13,4 +13,4 @@ _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_205_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
 g_profile_GATE2GND_TAG = .data:0x00000000; // type:object size:0x10
 lbl_205_data_10 = .data:0x00000010; // type:object size:0xC
-lbl_205_data_1C = .data:0x0000001C; // type:object size:0x74
+TgGateToGround__vtable = .data:0x0000001C; // type:object size:0x74
