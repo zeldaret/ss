@@ -24,8 +24,7 @@ AllowShortLoopsOnASingleLine: False
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: True
 AlwaysBreakTemplateDeclarations: Yes
-BinPackArguments: True
-BinPackParameters: True
+BinPackArguments: True 
 BitFieldColonSpacing: Both
 BreakBeforeBraces: Custom
 BraceWrapping:

@@ -23,11 +23,14 @@ public:
         ResTexSrt GetResTexSrt(bool markDirty);
         ResMatChan GetResMatChan(bool markDirty);
         ResGenMode GetResGenMode(bool markDirty);
+        ResMatMisc GetResMatMisc(bool markDirty);
         ResMatPix GetResMatPix(bool markDirty);
         ResMatTevColor GetResMatTevColor(bool markDirty);
         ResTev GetResTev(bool markDirty);
 
+        ResTexObj GetResTexObjEx();
         ResTexSrt GetResTexSrtEx();
+        ResMatChan GetResMatChanEx();
 
     private:
         ScnMdl *mpScnMdl;                     // at 0x0
@@ -59,6 +62,41 @@ public:
         u8 *mpVis;        // at 0x8
     };
 
+    class CopiedVtxAccess {
+    public:
+        ResVtxPos GetResVtxPos(u32 id);
+        ResVtxNrm GetResVtxNrm(u32 id);
+        ResVtxClr GetResVtxClr(u32 id);
+
+        ResVtxPos GetResVtxPosEx(u32 id);
+        ResVtxNrm GetResVtxNrmEx(u32 id);
+        ResVtxClr GetResVtxClrEx(u32 id);
+
+        // Needed an Inline
+        ResVtxPos GetPos(u32 id) {
+            if (mpScnMdl != NULL) {
+                if (id < mpScnMdl->GetResMdl().GetResVtxPosNumEntries()) {
+                    return ResVtxPos(mpScnMdl->mReplacement.vtxPosTable[id]);
+                }
+            }
+            return ResVtxPos(NULL);
+        }
+
+        // Needed an Inline
+        ResVtxNrm GetNrm(u32 id) {
+            if (mpScnMdl != NULL) {
+                if (id < mpScnMdl->GetResMdl().GetResVtxNrmNumEntries()) {
+                    return ResVtxNrm(mpScnMdl->mReplacement.vtxNrmTable[id]);
+                }
+            }
+            return ResVtxNrm(NULL);
+        }
+
+    private:
+        // Idk
+        ScnMdl *mpScnMdl; // at 0x0
+    };
+
 #define OPT(KEY, VALUE) OPTION_##KEY = (0x30000 | (VALUE))
     enum ScnMdlOption {
         OPT(NONE, 0),
@@ -72,7 +110,7 @@ public:
     ScnMdl(
         MEMAllocator *pAllocator, ResMdl mdl, math::MTX34 *pWorldMtxArray, u32 *pWorldMtxAttribArray,
         math::MTX34 *pViewPosMtxArray, math::MTX33 *pViewNrmMtxArray, math::MTX34 *pViewTexMtxArray, int numView,
-        int numViewMtx, DrawResMdlReplacement *pReplacement, u32 *pMatBufferDirtyFlag
+        int numViewMtx, DrawResMdlReplacement *pReplacement, u32 *pMatBufferDirtyFlag, u32 replacementFlag
     );
 
     virtual void G3dProc(u32 task, u32 param, void *pInfo); // at 0xC
@@ -128,6 +166,8 @@ private:
         BUFOPTION_VTXPOS = (1 << 12),
         BUFOPTION_VTXNRM = (1 << 13),
         BUFOPTION_VTXCLR = (1 << 14),
+
+        BUFOPTION_0x1000000 = (1 << 24),
     };
 
 private:
@@ -153,6 +193,7 @@ private:
     u32 mFlagVisBuffer;                 // at 0x13C
     u32 *mpMatBufferDirtyFlag;          // at 0x140
     DrawResMdlReplacement mReplacement; // at 0x144
+    u32 mReplacementFlag;               // at 0x184
 
     NW4R_G3D_RTTI_DECL_DERIVED(ScnMdl, ScnMdlSimple);
 };

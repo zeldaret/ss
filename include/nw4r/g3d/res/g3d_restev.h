@@ -55,9 +55,9 @@ struct ResTevData {
     s32 toResMdlData;                       // at 0x4
     u32 id;                                 // at 0x8
     u8 nStages;                             // at 0xC
-    u8 PADDING_0xD[0x10 - 0xD];             // at 0xD
+    u8 dummy_[0x10 - 0xD];                  // at 0xD
     u8 texCoordToTexMapID[GX_MAX_TEXCOORD]; // at 0x10
-    u8 PADDING_0x18[0x20 - 0x18];           // at 0x18
+    u8 dummy[0x20 - 0x18];                  // at 0x18
     ResTevDL dl;                            // at 0x20
 };
 

@@ -1500,6 +1500,8 @@ nw4r/g3d/g3d_scnmdlsmpl.cpp:
 
 nw4r/g3d/g3d_scnmdl.cpp:
 	.text       start:0x8045D260 end:0x8045FDAC
+	.rodata     start:0x804F7B48 end:0x804F7B58
+	.data       start:0x8056DA70 end:0x8056DAB8
 
 nw4r/g3d/g3d_calcmaterial.cpp:
 	.text       start:0x8045FDB0 end:0x8045FFE4
