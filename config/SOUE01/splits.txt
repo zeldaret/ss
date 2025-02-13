@@ -1497,6 +1497,10 @@ nw4r/g3d/g3d_scnroot.cpp:
 
 nw4r/g3d/g3d_scnmdlsmpl.cpp:
 	.text       start:0x8045B1C0 end:0x8045D25C
+	.rodata     start:0x804F7B30 end:0x804F7B48
+	.data       start:0x8056DA18 end:0x8056DA70
+	.sdata      start:0x80574E70 end:0x80574E88
+	.sdata2     start:0x8057EEA8 end:0x8057EEAC
 
 nw4r/g3d/g3d_scnmdl.cpp:
 	.text       start:0x8045D260 end:0x8045FDAC
