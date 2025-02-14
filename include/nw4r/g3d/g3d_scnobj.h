@@ -109,6 +109,7 @@ public:
     void CalcViewMtx(const math::MTX34 *pCamera);
 
     bool SetMtx(ScnObjMtxType type, const math::MTX34 *pMtx);
+    bool SetMtx(ScnObjMtxType type, const math::MTX34 &rMtx);
     bool GetMtx(ScnObjMtxType type, math::MTX34 *pMtx) const;
     const math::MTX34 *GetMtxPtr(ScnObjMtxType type) const {
         return &mMtxArray[type];
@@ -125,6 +126,7 @@ public:
     }
 
     void EnableScnObjCallbackTiming(Timing timing);
+    void DisableScnObjCallbackTiming(Timing timing);
     void EnableScnObjCallbackExecOp(ExecOp op);
 
     bool SetBoundingVolume(ScnObjBoundingVolumeType type, const math::AABB *pAABB);

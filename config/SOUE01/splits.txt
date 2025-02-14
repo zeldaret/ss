@@ -1491,6 +1491,10 @@ nw4r/g3d/dcc/g3d_3dsmax.cpp:
 
 nw4r/g3d/g3d_scnobj.cpp:
 	.text       start:0x80457DD0 end:0x8045980C
+	.rodata     start:0x804F7AF0 end:0x804F7B20
+	.data       start:0x8056D8B0 end:0x8056D9A8
+	.sbss       start:0x80576648 end:0x8057664C
+	.sdata2     start:0x8057EE98 end:0x8057EEA0
 
 nw4r/g3d/g3d_scnroot.cpp:
 	.text       start:0x80459810 end:0x8045B1BC
