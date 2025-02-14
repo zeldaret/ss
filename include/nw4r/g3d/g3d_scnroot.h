@@ -122,6 +122,8 @@ public:
     virtual void DrawOpa(ResMdlDrawMode *pForceMode); // at 0x20
     virtual void DrawXlu(ResMdlDrawMode *pForceMode); // at 0x24
 
+    virtual CheckStatus CheckScnObj(ScnObj *); // at 0x28
+
 protected:
     ScnObj **mpArrayOpa; // at 0x4
     ScnObj **mpArrayXlu; // at 0x8
