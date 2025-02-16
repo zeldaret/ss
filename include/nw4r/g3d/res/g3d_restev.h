@@ -65,6 +65,9 @@ class ResTev : public ResCommon<ResTevData> {
 public:
     NW4R_G3D_RESOURCE_FUNC_DEF(ResTev);
 
+    ResMdl GetParent();
+    const ResMdl GetParent() const;
+
     bool GXGetTevSwapModeTable(
         GXTevSwapSel swap, GXTevColorChan *pR, GXTevColorChan *pG, GXTevColorChan *pB, GXTevColorChan *pA
     ) const;
@@ -72,6 +75,7 @@ public:
     GXSetTevSwapModeTable(GXTevSwapSel swap, GXTevColorChan r, GXTevColorChan g, GXTevColorChan b, GXTevColorChan a);
 
     bool GXGetTevOrder(GXTevStageID stage, GXTexCoordID *pCoord, GXTexMapID *pMap, GXChannelID *pChannel) const;
+    void GXSetTevOrder(GXTevStageID stage, GXTexCoordID coord, GXTexMapID map, GXChannelID channel);
 
     void GXSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXTevColorArg c, GXTevColorArg d);
 

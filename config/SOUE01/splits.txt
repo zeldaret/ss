@@ -1355,6 +1355,7 @@ nw4r/g3d/res/g3d_resdict.cpp:
 
 nw4r/g3d/res/g3d_resfile.cpp:
 	.text       start:0x80439420 end:0x80439FC4
+	.data       start:0x8056D020 end:0x8056D180
 
 nw4r/g3d/res/g3d_resmdl.cpp:
 	.text       start:0x80439FD0 end:0x8043B244
@@ -1364,6 +1365,7 @@ nw4r/g3d/res/g3d_resshp.cpp:
 
 nw4r/g3d/res/g3d_restev.cpp:
 	.text       start:0x8043BD50 end:0x8043C2B8
+	.rodata     start:0x804F6FF0 end:0x804F7050
 
 nw4r/g3d/res/g3d_resmat.cpp:
 	.text       start:0x8043C2C0 end:0x8043E17C

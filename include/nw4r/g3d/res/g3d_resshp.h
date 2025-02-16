@@ -113,6 +113,8 @@ public:
     ResVtxNrm GetResVtxNrm() const;
     ResVtxClr GetResVtxClr(u32 idx) const;
     ResVtxTexCoord GetResVtxTexCoord(u32 idx) const;
+    ResVtxClr GetResVtxFurVec(u32 idx) const;
+    ResVtxFurPos GetResVtxFurPos() const;
 
     void CallPrePrimitiveDisplayList(bool sync, bool cacheIsSame) const;
     void CallPrimitiveDisplayList(bool sync) const;
@@ -145,6 +147,8 @@ public:
     bool IsVisible() const {
         return !(ref().flag & ResShpData::FLAG_INVISIBLE);
     }
+
+    void DCStore(bool sync);
 };
 
 } // namespace g3d

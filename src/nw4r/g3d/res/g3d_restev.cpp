@@ -1,3 +1,7 @@
+#include "nw4r/g3d/res/g3d_restev.h"
+
+#include "nw4r/g3d/res/g3d_rescommon.h"
+#include "rvl/GX/GXTypes.h"
 #include <nw4r/g3d.h>
 
 #include <rvl/BASE.h>
@@ -126,6 +130,24 @@ bool ResTev::GXGetTevOrder(GXTevStageID stage, GXTexCoordID *pCoord, GXTexMapID 
     }
 
     return true;
+}
+
+void ResTev::GXSetTevOrder(GXTevStageID stage, GXTexCoordID coord, GXTexMapID map, GXChannelID channel) {
+    GXTexCoordID currCoord;
+    GXTexMapID currMap;
+    if (GXGetTevOrder(stage, &currCoord, &currMap, NULL)) {
+        if (currCoord != GX_TEXCOORD_NULL && currMap != GX_TEXMAP_NULL) {
+            ref().texCoordToTexMapID[currCoord] = GX_TEXMAP_NULL;
+        }
+    }
+
+    if (coord != GX_TEXCOORD_NULL) {
+        ref().texCoordToTexMapID[currCoord] = map;
+    }
+
+    u8 *pCmd = ref().dl.dl.var[stage / TEV_STAGES_PER_DL].dl.tevColorCalc[stage % TEV_STAGES_PER_DL];
+
+    // detail::ResWriteBPCmd(pCmd, dlsize);
 }
 
 void ResTev::GXSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXTevColorArg c, GXTevColorArg d) {

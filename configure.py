@@ -635,11 +635,11 @@ config.libs = [
     nw4rLib(
         "g3d",
         [
-            Object(NonMatching, "nw4r/g3d/res/g3d_rescommon.cpp"),
-            Object(NonMatching, "nw4r/g3d/res/g3d_resdict.cpp"),
-            Object(NonMatching, "nw4r/g3d/res/g3d_resfile.cpp"),
+            Object(Matching, "nw4r/g3d/res/g3d_rescommon.cpp"),
+            Object(Matching, "nw4r/g3d/res/g3d_resdict.cpp"),
+            Object(Matching, "nw4r/g3d/res/g3d_resfile.cpp"),
             Object(NonMatching, "nw4r/g3d/res/g3d_resmdl.cpp"),
-            Object(NonMatching, "nw4r/g3d/res/g3d_resshp.cpp"),
+            Object(Matching, "nw4r/g3d/res/g3d_resshp.cpp"),
             Object(NonMatching, "nw4r/g3d/res/g3d_restev.cpp"),
             Object(NonMatching, "nw4r/g3d/res/g3d_resmat.cpp"),
             Object(NonMatching, "nw4r/g3d/res/g3d_resvtx.cpp"),

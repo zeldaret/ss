@@ -8,8 +8,8 @@ namespace g3d {
  * ResByteCode
  *
  ******************************************************************************/
-const u8* ResMdl::GetResByteCode(const char* pName) const {
-    return static_cast<u8*>(ofs_to_obj<ResDic>(ref().toResByteCodeDic)[pName]);
+const u8 *ResMdl::GetResByteCode(const char *pName) const {
+    return static_cast<u8 *>(ofs_to_obj<ResDic>(ref().toResByteCodeDic)[pName]);
 }
 
 /******************************************************************************
@@ -17,7 +17,7 @@ const u8* ResMdl::GetResByteCode(const char* pName) const {
  * ResNode
  *
  ******************************************************************************/
-ResNode ResMdl::GetResNode(const char* pName) const {
+ResNode ResMdl::GetResNode(const char *pName) const {
     return ResNode(ofs_to_obj<ResDic>(ref().toResNodeDic)[pName]);
 }
 
@@ -115,10 +115,38 @@ u32 ResMdl::GetResVtxTexCoordNumEntries() const {
 
 /******************************************************************************
  *
+ * ResVtxFurPos
+ *
+ ******************************************************************************/
+
+ResVtxFurPos ResMdl::GetResVtxFurPos(int idx) const {
+    return ResVtxFurPos(ofs_to_obj<ResDic>(ref().toResVtxFurPosDic)[idx]);
+}
+
+u32 ResMdl::GetResVtxFurPosNumEntries() const {
+    return ofs_to_obj<ResDic>(ref().toResVtxFurPosDic).GetNumData();
+}
+
+/******************************************************************************
+ *
+ * ResVtxFurVec
+ *
+ ******************************************************************************/
+
+ResVtxFurVec ResMdl::GetResVtxFurVec(int idx) const {
+    return ResVtxFurVec(ofs_to_obj<ResDic>(ref().toResVtxFurVecDic)[idx]);
+}
+
+u32 ResMdl::GetResVtxFurVecNumEntries() const {
+    return ofs_to_obj<ResDic>(ref().toResVtxFurVecDic).GetNumData();
+}
+
+/******************************************************************************
+ *
  * ResMat
  *
  ******************************************************************************/
-ResMat ResMdl::GetResMat(const char* pName) const {
+ResMat ResMdl::GetResMat(const char *pName) const {
     return ResMat(ofs_to_obj<ResDic>(ref().toResMatDic)[pName]);
 }
 
@@ -143,7 +171,7 @@ u32 ResMdl::GetResMatNumEntries() const {
  * ResShp
  *
  ******************************************************************************/
-ResShp ResMdl::GetResShp(const char* pName) const {
+ResShp ResMdl::GetResShp(const char *pName) const {
     return ResShp(ofs_to_obj<ResDic>(ref().toResShpDic)[pName]);
 }
 
@@ -165,8 +193,7 @@ u32 ResMdl::GetResShpNumEntries() const {
  *
  ******************************************************************************/
 ResTexPlttInfo ResMdl::GetResTexPlttInfoOffsetFromTexName(int idx) const {
-    return ResTexPlttInfo(
-        ofs_to_obj<ResDic>(ref().toResTexNameToTexPlttInfoDic)[idx]);
+    return ResTexPlttInfo(ofs_to_obj<ResDic>(ref().toResTexNameToTexPlttInfoDic)[idx]);
 }
 
 u32 ResMdl::GetResTexPlttInfoOffsetFromTexNameNumEntries() const {
@@ -230,6 +257,16 @@ void ResMdl::Init() {
     u32 texCoordNum = GetResVtxTexCoordNumEntries();
     for (i = 0; i < texCoordNum; i++) {
         GetResVtxTexCoord(i).Init();
+    }
+
+    u32 vtxFurVecNum = GetResVtxFurVecNumEntries();
+    for (i = 0; i < vtxFurVecNum; i++) {
+        GetResVtxFurVec(i).Init();
+    }
+
+    u32 vtxFurPosNum = GetResVtxFurPosNumEntries();
+    for (i = 0; i < vtxFurPosNum; i++) {
+        GetResVtxFurPos(i).Init();
     }
 }
 

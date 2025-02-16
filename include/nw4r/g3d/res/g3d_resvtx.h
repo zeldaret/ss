@@ -268,6 +268,124 @@ public:
     }
 };
 
+/******************************************************************************
+ *
+ * ResVtxFurPos
+ *
+ ******************************************************************************/
+struct ResVtxFurPosData {
+    u32 size;          // at 0x0
+    s32 toResMdlData;  // at 0x4
+    s32 toFurPosArray; // at 0x8
+    s32 name;          // at 0xC
+    u32 id;            // at 0x10
+    GXCompCnt cmpcnt;  // at 0x14
+    GXCompType tp;     // at 0x18
+    u8 frac;           // at 0x1C
+    u8 stride;         // at 0x1D
+    u16 numFurPos;     // at 0x1E
+    u32 numLayer;      // at 0x20
+    u32 ofsLayer;      // at 0x24
+};
+class ResVtxFurPos : public ResCommon<ResVtxFurPosData> {
+public:
+    NW4R_G3D_RESOURCE_FUNC_DEF(ResVtxFurPos);
+
+    void Init() {
+        DCStore(false);
+    }
+
+    void GetArray(const void **ppBase, u8 *pStride) const;
+    void DCStore(bool sync);
+
+    u32 GetSize() const {
+        return ref().size;
+    }
+
+    void *GetData() {
+        ResVtxFurPosData &r = ref();
+
+        if (r.toFurPosArray != 0) {
+            return reinterpret_cast<void *>(reinterpret_cast<u8 *>(&r) + r.toFurPosArray);
+        }
+
+        return NULL;
+    }
+    const void *GetData() const {
+        const ResVtxFurPosData &r = ref();
+
+        if (r.toFurPosArray != 0) {
+            return reinterpret_cast<const void *>(reinterpret_cast<const u8 *>(&r) + r.toFurPosArray);
+        }
+
+        return NULL;
+    }
+
+    u32 GetID() const {
+        return ref().id;
+    }
+
+    u16 GetNumFurPos() const {
+        return ref().toFurPosArray;
+    }
+};
+
+/******************************************************************************
+ *
+ * ResVtxFurVec
+ *
+ ******************************************************************************/
+struct ResVtxFurVecData {
+    u32 size;          // at 0x0
+    s32 toResMdlData;  // at 0x4
+    s32 toFurVecArray; // at 0x8
+    s32 name;          // at 0xC
+    u32 id;            // at 0x10
+    u16 numFurVec;     // at 0x14
+};
+class ResVtxFurVec : public ResCommon<ResVtxFurVecData> {
+public:
+    NW4R_G3D_RESOURCE_FUNC_DEF(ResVtxFurVec);
+
+    void Init() {
+        DCStore(false);
+    }
+
+    void GetArray(const void **ppBase, u8 *pStride) const;
+    void DCStore(bool sync);
+
+    u32 GetSize() const {
+        return ref().size;
+    }
+
+    void *GetData() {
+        ResVtxFurVecData &r = ref();
+
+        if (r.toFurVecArray != 0) {
+            return reinterpret_cast<void *>(reinterpret_cast<u8 *>(&r) + r.toFurVecArray);
+        }
+
+        return NULL;
+    }
+    const void *GetData() const {
+        const ResVtxFurVecData &r = ref();
+
+        if (r.toFurVecArray != 0) {
+            return reinterpret_cast<const void *>(reinterpret_cast<const u8 *>(&r) + r.toFurVecArray);
+        }
+
+        return NULL;
+    }
+
+    u32 GetID() const {
+        return ref().id;
+    }
+
+    u16 GetNumFurVec() const {
+        return ref().toFurVecArray;
+    }
+};
+
 } // namespace g3d
 } // namespace nw4r
 
