@@ -513,6 +513,19 @@ public:
     void OffSPrm(u32 m) {
         mSrc.mSPrm &= ~m;
     }
+
+    u32 MskSrcModifer(u32 mask) const {
+        return mSrc.mInfo.mModifier & mask;
+    }
+    void SetSrcModifer(u32 modifier) {
+        mSrc.mInfo.mModifier = modifier;
+    }
+    void OnSrcModifer(u32 m) {
+        mSrc.mInfo.mModifier |= m;
+    }
+    void OffSrcModifer(u32 m) {
+        mSrc.mInfo.mModifier &= ~m;
+    }
     u32 MskTgHitSPrm(u32 m) const {
         return mTgHitSrc.mSPrm & m;
     }
@@ -524,6 +537,13 @@ public:
     }
     void OffTgHitSPrm(u32 m) {
         mTgHitSrc.mSPrm &= ~m;
+    }
+
+    void SetAtDamage(u8 amount) {
+        mSrc.mDamage = amount;
+    }
+    u8 GetAtDamage() const {
+        return mSrc.mDamage;
     }
 
     const cCcD_SrcGObjAt &GetSrc() const {
@@ -888,6 +908,14 @@ public:
     }
     u32 ChkAt_0x40000000() {
         return mAt.MskSPrm(0x40000000);
+    }
+
+
+    void SetAtDamage(u8 amount) {
+        mAt.SetAtDamage(amount);
+    }
+    void SetAtModifier(u16 modifier) {
+        mAt.SetSrcModifer(modifier);
     }
 
     // Tg

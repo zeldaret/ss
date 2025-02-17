@@ -40,7 +40,7 @@ public:
  * for arrays of these nodes in classes.
  */
 template <typename T>
-class dAcRef_c : dAcRefBase_c {
+class dAcRef_c : public dAcRefBase_c {
 public:
     dAcRef_c(T *owner) : dAcRefBase_c(owner) {}
     dAcRef_c() : dAcRefBase_c(nullptr) {}
