@@ -17,4 +17,4 @@ lbl_634_rodata_30 = .rodata:0x00000030; // type:object size:0x4 data:float
 lbl_634_rodata_38 = .rodata:0x00000038; // type:object size:0x8 data:double
 g_profile_MESSAGE_ACTOR = .data:0x00000000; // type:object size:0x10
 lbl_634_data_10 = .data:0x00000010; // type:object size:0x10
-lbl_634_data_20 = .data:0x00000020; // type:object size:0x80
+AcOMessage__vtable = .data:0x00000020; // type:object size:0x80

@@ -24,5 +24,5 @@ lbl_401_data_14 = .data:0x00000014; // type:object size:0x14
 g_profile_OBJ_CITY = .data:0x00000028; // type:object size:0x10
 lbl_401_data_38 = .data:0x00000038; // type:object size:0xA0
 lbl_401_data_D8 = .data:0x000000D8; // type:object size:0x18 data:string
-lbl_401_data_F0 = .data:0x000000F0; // type:object size:0x80
+AcOcity__vtable = .data:0x000000F0; // type:object size:0x80
 lbl_401_data_170 = .data:0x00000170; // type:object size:0x18

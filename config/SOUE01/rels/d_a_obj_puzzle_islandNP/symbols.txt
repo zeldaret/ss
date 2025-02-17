@@ -14,4 +14,4 @@ _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_369_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
 g_profile_OBJ_PUZZLE_ISLAND = .data:0x00000000; // type:object size:0x38
 lbl_369_data_38 = .data:0x00000038; // type:object size:0x20 data:string
-lbl_369_data_58 = .data:0x00000058; // type:object size:0x80
+AcOpuzzleIsland__vtable = .data:0x00000058; // type:object size:0x80

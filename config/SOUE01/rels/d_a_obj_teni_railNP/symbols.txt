@@ -32,5 +32,5 @@ g_profile_OBJ_TENI_RAIL = .data:0x00000000; // type:object size:0x34 data:4byte
 lbl_526_data_34 = .data:0x00000034; // type:object size:0x14
 lbl_526_data_48 = .data:0x00000048; // type:object size:0x14
 lbl_526_data_5C = .data:0x0000005C; // type:object size:0xC
-lbl_526_data_68 = .data:0x00000068; // type:object size:0x80
+AcOTeniRail__vtable = .data:0x00000068; // type:object size:0x80
 lbl_526_data_E8 = .data:0x000000E8; // type:object size:0x40 data:4byte

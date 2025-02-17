@@ -13,4 +13,4 @@ _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_381_rodata_0 = .rodata:0x00000000; // type:object size:0x18 data:float
 g_profile_OBJ_FENCE_KONSAI = .data:0x00000000; // type:object size:0x44
 lbl_381_data_44 = .data:0x00000044; // type:object size:0x24
-lbl_381_data_68 = .data:0x00000068; // type:object size:0x80
+AcOfenceKonsai__vtable = .data:0x00000068; // type:object size:0x80

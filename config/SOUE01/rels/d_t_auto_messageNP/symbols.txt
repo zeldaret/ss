@@ -13,4 +13,4 @@ _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_439_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
 g_profile_TAG_AUTO_MESSAGE = .data:0x00000000; // type:object size:0x10
-lbl_439_data_10 = .data:0x00000010; // type:object size:0x74
+TgAutoMessage__vtable = .data:0x00000010; // type:object size:0x74

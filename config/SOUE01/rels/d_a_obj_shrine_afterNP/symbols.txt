@@ -14,4 +14,4 @@ lbl_387_rodata_0 = .rodata:0x00000000; // type:object size:0x18 data:float
 g_profile_OBJ_SHRINE_AFTER = .data:0x00000000; // type:object size:0x10
 lbl_387_data_10 = .data:0x00000010; // type:object size:0x10
 lbl_387_data_20 = .data:0x00000020; // type:object size:0x20
-lbl_387_data_40 = .data:0x00000040; // type:object size:0x80
+AcOshrineAfter__vtable = .data:0x00000040; // type:object size:0x80

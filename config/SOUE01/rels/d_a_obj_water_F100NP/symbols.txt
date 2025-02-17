@@ -18,4 +18,4 @@ lbl_416_data_10 = .data:0x00000010; // type:object size:0x8
 lbl_416_data_18 = .data:0x00000018; // type:object size:0x8
 g_profile_OBJ_WATER_F100 = .data:0x00000020; // type:object size:0x4C
 lbl_416_data_6C = .data:0x0000006C; // type:object size:0x24
-lbl_416_data_90 = .data:0x00000090; // type:object size:0x8C
+AcOwaterF100__vtable = .data:0x00000090; // type:object size:0x8C

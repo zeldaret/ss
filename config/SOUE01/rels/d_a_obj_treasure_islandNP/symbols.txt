@@ -39,4 +39,4 @@ g_profile_OBJ_TREASURE_ISLAND = .data:0x00000140; // type:object size:0x10
 lbl_392_data_150 = .data:0x00000150; // type:object size:0x10
 lbl_392_data_160 = .data:0x00000160; // type:object size:0x10
 lbl_392_data_170 = .data:0x00000170; // type:object size:0x28
-lbl_392_data_198 = .data:0x00000198; // type:object size:0x80
+AcOtreasureIsland__vtable = .data:0x00000198; // type:object size:0x80

@@ -10,4 +10,4 @@ _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 g_profile_TAG_SHUTTER_FENCE_FORBIDDANCE = .data:0x00000000; // type:object size:0x10
 lbl_631_section4_10 = .data:0x00000010; // type:object size:0x74
-lbl_631_bss_8 = .bss:0x00000008; // type:object size:0x4 data:4byte
+TgShutterFenceForbiddance__FIRST_PTR = .bss:0x00000008; // type:object size:0x4 data:4byte

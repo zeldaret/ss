@@ -34,4 +34,4 @@ g_profile_OBJ_BG = .data:0x00000000; // type:object size:0x10
 lbl_577_data_10 = .data:0x00000010; // type:object size:0xC0
 lbl_577_data_D0 = .data:0x000000D0; // type:object size:0xC data:string
 lbl_577_data_DC = .data:0x000000DC; // type:object size:0x4
-lbl_577_data_E0 = .data:0x000000E0; // type:object size:0x80
+AcObg__vtable = .data:0x000000E0; // type:object size:0x80
