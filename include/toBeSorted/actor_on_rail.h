@@ -20,6 +20,8 @@ public:
     bool init(int pathIndex, int roomId, int pathSubtype);
     /* 800A68B0 */
     mVec3_c *getPntPosForIndex(int index);
+
+    void fn_800A7C80(int segmentIndex, mVec3_c &vec, f32 segmentFraction);
 };
 
 class ActorOnRail_Ext : public ActorOnRail {
@@ -29,7 +31,12 @@ public:
 
     void setSegment(u16 segmentIndex, f32 segmentFraction);
     bool initExt(int pathIndex, int roomId, int, int pathSegment, int pathSubtype, f32, f32, f32);
+    void fn_800A9650();
 
+    s32 getSegmentIndex() const {
+        return mSegmentIndex;
+    }
+    
     f32 getSegmentFraction() const {
         return mSegmentFraction;
     }
@@ -50,11 +57,16 @@ public:
         return mPosition;
     }
 
+    void setSpeed(f32 speed) {
+        mSpeed = speed;
+    }
+
+
 
 private:
     s32 mSegmentIndex;
     f32 mSegmentFraction;
-    UNKWORD field_0x18;
+    f32 mSpeed;
     u32 field_0x1C;
     f32 field_0x20;
     UNKWORD field_0x24;

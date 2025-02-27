@@ -41,8 +41,13 @@ private:
 
     void fn_485_1660();
     void fn_485_1720();
-    u32 fn_485_1900();
+    bool fn_485_1830(s32 pathSegmentIndex, s32 direction, s32 *out);
+    u16 fn_485_1900();
     u32 fn_485_1960();
+    f32 fn_485_1A50();
+    f32 fn_485_1A60();
+    static void fn_485_1A70(mVec3_c *);
+
     void fn_485_1A90();
     void fn_485_1BF0();
     void fn_485_1DF0();
@@ -72,12 +77,15 @@ private:
     /* 0x849 */ u8 field_0x849;
     /* 0x84A */ u8 mAppearEvent;
     /* 0x84B */ u8 mPathIdx;
-    /* 0x84C */ u8 field_0x84C[0x850 - 0x84C];
+    /* 0x84C */ u16 field_0x84C;
     /* 0x850 */ u32 field_0x850;
     /* 0x854 */ u8 mNumTimesHit;
     /* 0x855 */ u8 field_0x855;
     /* 0x856 */ s8 field_0x856;
     /* 0x858 */ f32 field_0x858;
+    /* 0x85C */ UNKWORD field_0x85C;
+    /* 0x862 */ u8 field_0x860;
+    /* 0x862 */ u8 field_0x861;
     /* 0x862 */ u8 field_0x862;
     /* 0x863 */ u8 field_0x863;
     /* 0x864 */ u8 field_0x864;

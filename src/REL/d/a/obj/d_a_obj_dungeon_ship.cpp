@@ -1,5 +1,7 @@
 #include "d/a/obj/d_a_obj_dungeon_ship.h"
 
+#include "c/c_lib.h"
+#include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/col/bg/d_bg_s.h"
@@ -8,6 +10,7 @@
 #include "d/flag/storyflag_manager.h"
 #include "f/f_base.h"
 #include "m/m3d/m_fanm.h"
+#include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/g3d_anmclr.h"
@@ -15,6 +18,7 @@
 #include "nw4r/g3d/res/g3d_resanmclr.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
+#include "nw4r/math/math_triangular.h"
 #include "s/s_Math.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event.h"
@@ -55,7 +59,8 @@ void dAcODungeonShip_c::eventEnd_Wrapper(void *arg) {
 }
 
 bool dAcODungeonShip_c::createHeap() {
-    mRes = nw4r::g3d::ResFile(getOarcResFile("ShipDungeon"));
+    const char *arcName = "ShipDungeon";
+    mRes = nw4r::g3d::ResFile(getOarcResFile(arcName));
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("ShipDungeonN");
     if (!mMdl.fn_8001F3B0(mdl, &heap_allocator, 0x120)) {
         return false;
@@ -76,19 +81,25 @@ bool dAcODungeonShip_c::createHeap() {
     mAnmChr.setRate(0.0f);
     mMdl.setPriorityDraw(0x7F, 4);
 
-    void *dzb = getOarcDZB("ShipDungeon", "ShipDungeonN");
-    void *plc = getOarcPLC("ShipDungeon", "ShipDungeonN");
+    const char *dzbPlcName = "ShipDungeonN";
+    void *dzb = getOarcDZB(arcName, dzbPlcName);
+    void *plc = getOarcPLC(arcName, dzbPlcName);
     updateMatrix();
     if (mBg.Set((cBgD_t *)dzb, (PLC *)plc, 1, &mWorldMtx, &mScale)) {
         return false;
     }
 
-    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, (params >> 0x10) & 0xFF) ||
-        (BOOL)mBg.InitMapStuff(&heap_allocator)) {
-        return true;
+    // wat
+    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, (params >> 0x10) & 0xFF)) {
+        goto ok;
+    } else {
+        bool result = (BOOL)mBg.InitMapStuff(&heap_allocator);
+        if (result == false) {
+            return false;
+        }
     }
-
-    return false;
+ok:
+    return true;
 }
 
 #pragma explicit_zero_data on
@@ -368,7 +379,7 @@ void dAcODungeonShip_c::executeState_AppearEvent() {
                 default: mEvent.advanceNext(); break;
             }
         } else {
-            Event ev(mAppearEvent, roomid, 0x10001, (void *)&eventIn_Wrapper, (void *)&eventEnd_Wrapper);
+            Event ev(mAppearEvent, roomid, 0x100001, (void *)&eventIn_Wrapper, (void *)&eventEnd_Wrapper);
             mEvent.scheduleEvent(ev, 0);
         }
     } else {
@@ -424,6 +435,92 @@ void dAcODungeonShip_c::fn_485_1660() {
     }
 }
 
+static u32 rot_7fff = 0x7FFF;
+static u32 rot_4000 = 0x4000;
+
+void dAcODungeonShip_c::fn_485_1720() {
+    mPath.setSpeed(forwardSpeed);
+    mPath.fn_800A9650();
+    // TODO
+    position = mPath.getPosition();
+
+    mVec3_c tmp;
+    mPath.fn_800A7C80(mPath.getSegmentIndex(), tmp, mPath.getSegmentFraction());
+    rotation.y = cM::atan2s(tmp.x, tmp.z);
+    if (mPath.CheckFlag(0x40000000)) {
+        rotation.y += rot_7fff;
+    }
+    rotation.y += rot_4000;
+    angle.y = rotation.y;
+
+    int factor = 0x12C;
+    f32 tmp2 = nw4r::math::SinIdx((field_0x850 * 800));
+    tmp2 *= factor;
+    field_0x84C = tmp2;
+}
+
+bool dAcODungeonShip_c::fn_485_1830(s32 pathSegmentIndex, s32 direction, s32 *out) {
+
+}
+
+u16 dAcODungeonShip_c::fn_485_1900() {
+    s32 sign = mPath.CheckFlag(0x40000000) ? -1 : 1;
+    s32 result;
+    if (fn_485_1830(mPath.getSegmentIndex(), sign, &result)) {
+        return result;
+    } else {
+        return -1;
+    }
+}
+
+u32 dAcODungeonShip_c::fn_485_1960() {
+    const dAcPy_c *link = dAcPy_c::GetLink();
+    if (link == nullptr) {
+        return 0;
+    }
+    mVec3_c v = mVec3_c::Ez;
+    v.rotY(angle.y + mAng(-0x4000));
+    mVec3_c dist = link->position - position;
+    dist.y = 0.0f;
+    dist.normalizeRS();
+    int a1 = cLib::targetAngleY(mVec3_c::Zero, v);
+    int a2 = cLib::targetAngleY(mVec3_c::Zero, dist);
+    // okay
+    return labs(mAng(mAng(a1) - mAng(a2)));
+}
+
+f32 dAcODungeonShip_c::fn_485_1A50() {
+    return 4000.0f;
+}
+
+f32 dAcODungeonShip_c::fn_485_1A60() {
+    return 2000.0f;
+}
+
+void dAcODungeonShip_c::fn_485_1A70(mVec3_c *v) {
+    v->set(0.0f, 0.0f, 0.0f);
+}
+
+void dAcODungeonShip_c::fn_485_1A90() {
+    
+}
+
+void dAcODungeonShip_c::fn_485_1BF0() {
+    
+}
+
+void dAcODungeonShip_c::fn_485_1DF0() {
+    const dAcPy_c *link = dAcPy_c::GetLink();
+    if (link != nullptr) {
+        // unused, stack problems
+        mVec3_c dist = position - link->position;
+        fn_485_1960();
+        field_0x858 = 30.0f;
+        sLib::addCalc(&forwardSpeed, 30.0f, 0.02f, 1.0f, 0.1f);
+        fn_485_1720();
+    }
+}
+
 void dAcODungeonShip_c::updateMatrixAndScale() {
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
@@ -438,4 +535,10 @@ void dAcODungeonShip_c::fn_485_1EE0() {
     nw4r::g3d::AnmObjMatClrRes *nw4rObj = mAnmMatClr.getChild(0);
     nw4r::g3d::ClrAnmResult result;
     field_0x862 = nw4rObj->GetResult(&result, 0)->rgba[nw4r::g3d::ClrAnmResult::CLA_TEV1];
+}
+
+void unusedFloats() {
+    // these are probably not floats but I have no idea why this data is here
+    2.24E-43f;
+    5.6E-44f;
 }
