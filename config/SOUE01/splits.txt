@@ -1359,6 +1359,7 @@ nw4r/g3d/res/g3d_resfile.cpp:
 
 nw4r/g3d/res/g3d_resmdl.cpp:
 	.text       start:0x80439FD0 end:0x8043B244
+	.sdata      start:0x80574E30 end:0x80574E38
 
 nw4r/g3d/res/g3d_resshp.cpp:
 	.text       start:0x8043B250 end:0x8043BD48

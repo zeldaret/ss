@@ -279,5 +279,75 @@ void ResMdl::Terminate() {
     }
 }
 
+bool ResMdl::IsOpaque(u32 mat) const {
+    const u8 *drawOpa = GetResByteCode("DrawOpa");
+
+    if (drawOpa) {
+        while (drawOpa[0] != 1 /* End of Commands*/) {
+            // Code 4 -> Draw Polygon
+            if (drawOpa[0] == 4) {
+                // First two bytes are the MatId
+                u32 matID = (drawOpa[1] << 8 | drawOpa[2]);
+                if (matID == mat) {
+                    return true;
+                }
+                drawOpa += 8 /* Size of Draw Polygon Code*/;
+            } else {
+                return false;
+            }
+        }
+    }
+    return false;
+}
+
+ResMdl::DrawEnumerator::DrawEnumerator(const u8 *pDrawOpa, const u8 *pDrawXlu)
+    : drawOpa(pDrawOpa), drawXlu(pDrawXlu), bOpa(pDrawOpa != NULL) {}
+
+bool ResMdl::DrawEnumerator::IsValid() const {
+    if (bOpa) {
+        return drawOpa && drawOpa[0] == 4;
+    } else {
+        return drawXlu && drawXlu[0] == 4;
+    }
+}
+
+void ResMdl::DrawEnumerator::MoveNext() {
+    // Draw opaque before transparent
+    if (bOpa) {
+        /* Size of Draw Polygon Code*/
+        if (*(drawOpa += 8) == 1) {
+            bOpa = false;
+        }
+
+        return;
+    } else {
+        drawXlu += 8 /* Size of Draw Polygon Code*/;
+    }
+}
+
+u32 ResMdl::DrawEnumerator::GetMatID() const {
+    if (bOpa) {
+        return (drawOpa[1] << 8 | drawOpa[2]);
+    } else {
+        return (drawXlu[1] << 8 | drawXlu[2]);
+    }
+}
+
+u32 ResMdl::DrawEnumerator::GetShpID() const {
+    if (bOpa) {
+        return (drawOpa[3] << 8 | drawOpa[4]);
+    } else {
+        return (drawXlu[3] << 8 | drawXlu[4]);
+    }
+}
+
+u32 ResMdl::DrawEnumerator::GetNodeID() const {
+    if (bOpa) {
+        return (drawOpa[5] << 8 | drawOpa[6]);
+    } else {
+        return (drawXlu[5] << 8 | drawXlu[6]);
+    }
+}
+
 } // namespace g3d
 } // namespace nw4r
