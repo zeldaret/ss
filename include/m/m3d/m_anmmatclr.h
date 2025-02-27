@@ -4,6 +4,7 @@
 #include "m/m3d/m_bmdl.h"
 #include "m/m3d/m_fanm.h"
 #include "nw4r/g3d/g3d_anmclr.h"
+#include "nw4r/g3d/g3d_scnobj.h"
 
 namespace m3d {
 
@@ -47,6 +48,10 @@ public:
     f32 getFrameMax(s32) const;
     void setFrameStart(f32, s32);
     f32 getFrameStart(s32) const;
+
+    nw4r::g3d::AnmObjMatClrRes *getChild(s32 idx) {
+        return nw4r::g3d::ScnObj::DynamicCast<nw4r::g3d::AnmObjMatClrRes>(mpChildren[idx].getAnimObj());
+    }
 
 private:
     child_c *mpChildren;
