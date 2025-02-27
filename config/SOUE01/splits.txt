@@ -141,8 +141,12 @@ d/d_rawarchive.cpp:
 	.data       start:0x8050DDD8 end:0x8050DDF8
 
 d/d_scene.cpp:
-	.text       start:0x800629D0 end:0x80062E40
+	.text       start:0x800629D0 end:0x80062E3C
 	.ctors      start:0x804DB690 end:0x804DB694
+	.data       start:0x8050DDF8 end:0x8050DE48
+	.sdata      start:0x80571D08 end:0x80571D10
+	.sbss       start:0x80575220 end:0x80575228
+	.bss        start:0x805A06F0 end:0x805A0720
 
 d/d_stage.cpp:
 	.text       start:0x80062E40 end:0x80064250
@@ -793,6 +797,9 @@ d/tg/d_t_genki_mgr.cpp:
 
 d/a/obj/d_a_obj_water_mark.cpp:
 	.text       start:0x802D9D60 end:0x802DA0BC
+
+s/s_FPhase.cpp:
+	.text       start:0x802DDC20 end:0x802DDDB0
 
 s/s_StateID.cpp:
 	.text       start:0x802DDDB0 end:0x802DE1F4
