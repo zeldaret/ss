@@ -119,6 +119,10 @@ nw4r::ut::Color FontColors2[] = {
     nw4r::ut::Color(),
 };
 
+extern const u16 flags[2050] = {
+    0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800,
+};
+
 dTagProcessor_c::dTagProcessor_c() {
     field_0x82C = -1;
     field_0x828 = -1;
@@ -221,7 +225,6 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
     s32 state1 = -1;
     s32 state2 = -1;
 
-    // FPR regswap between float1 and float2
     f32 float1, float2;
     float2 = float1 = fn_800B8040(0, field_0x90C);
 
@@ -269,10 +272,8 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                         const wchar_t *t = src;
                         u32 len = (cmdLen / 2) + 1;
                         for (int i = 0; i < len; i++) {
-                            field_0x008[field_0x90E - 1][local_b4] = *(t++);
-                            if (field_0x90E - 1 < 4) {
-                                field_0x808[field_0x90E - 1]++;
-                            }
+                            getTmpBuffer()[local_b4] = *(t++);
+                            onWriteTmpBuffer();
                             local_b4++;
                         }
                     } else {
@@ -399,12 +400,9 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             src += 3;
         } else if (state4 != 0 && field_0x90E != 0) {
             // Note: Return ignored here
-            fn_800B5FD0(c, &field_0x008[field_0x90E - 1][local_b4], &local_b4);
+            fn_800B5FD0(c, &getTmpBuffer()[local_b4], &local_b4);
             src++;
-            // This looks like an inline tbh
-            if (field_0x90E - 1 < 4) {
-                field_0x808[field_0x90E - 1]++;
-            }
+            onWriteTmpBuffer();
         } else {
             if (textBox != nullptr) {
                 if (c == 10) {
@@ -442,6 +440,163 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
     } while (destLen > writePtr - dest);
 
     dest[destLen - 1] = 0;
+end:
+    if (pOutLen != nullptr) {
+        *pOutLen = writePtr - dest;
+    }
+}
+
+void dTagProcessor_c::alsoProcessingRelated(
+    dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, s32 unkArg, u16 *pOutLen,
+    SomeTextProcessingOutStruct *outThings
+) {
+    bool b1 = false;
+    int int1 = 0;
+    bool b2 = false;
+    wchar_t *writePtr = dest;
+
+    f32 float1, float2;
+    float2 = float1 = fn_800B8040(0, field_0x90C);
+    f32 float3 = 0.0f;
+    f32 float4 = 0.0f;
+    int int2 = 0;
+
+
+    if (textBox != nullptr) {
+        float1 *= textBox->getMyScale();
+    }
+
+    while (b1) {
+        // ???
+        SomeTextProcessingOutStruct *outThing = &outThings[int2];
+        wchar_t c = *src;
+        if (c == nullptr) {
+            *writePtr = '\0';
+            goto end;
+        }
+        if (c == 0xE) {
+            u8 cmdLen = 0;
+            s32 cmd = 0;
+            wchar_t *endPtr = nullptr;
+            getTextCommand(c, src + 1, &cmdLen, &cmd, &endPtr);
+            switch (cmd) {
+                case 0x0F0F0F0F: {
+                    if (int1 / getNumLines(field_0x90C) == unkArg) {
+                        nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
+                        float4 = fn_800B8560(int1);
+                        if ((field_0x90C < 6 || field_0x90C >= 10) && field_0x90C != 30) {
+                            float4 = 0.0f;
+                        }
+                        f32 tmp = fn_800B8040(0, field_0x90C);
+                        if (textBox != nullptr) {
+                            tmp *= textBox->getMyScale();
+                        }
+
+                        if (int1 % getNumLines(field_0x90C) == 0) {
+                            float1 = fn_800B8040(0, field_0x90C);
+                            if (textBox != nullptr) {
+                                float1 *= textBox->getMyScale();
+                            }
+                            f32 tmp3;
+                            if (field_0x90C == 30) {
+                                tmp3 = -2.0f;
+                            } else {
+                                tmp3 = 3.0f;
+                            }
+                            float3 = (fn_800B85C0(int1) - (fontSize.height * (float1 / tmp) * 0.5f)) - tmp3;
+                        } else {
+                            float3 = (float3 - (fontSize.height * (float1 / tmp) + field_0x004->GetLineSpace()));
+                        }
+                        if (!b2) {
+                            b2 = true;
+                        }
+                    } else if (b2) {
+                        b2 = false;
+                        b1 = true;
+                    }
+                    int1++;
+                } break;
+                case 0x10000:
+                case 0x10001:
+                case 0x10002:
+                case 0x10003: b1 = true; break;
+                case 0x10008: {
+                    if (b2) {
+                        f32 tmp1 = fn_800B8040(*(u8 *)endPtr, field_0x90C);
+                        f32 tmp2 = fn_800B8040(0, field_0x90C);
+                        if (textBox != nullptr) {
+                            tmp1 *= textBox->getMyScale();
+                            tmp2 *= textBox->getMyScale();
+                        }
+                        if (float1 != tmp1) {
+                            nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
+                            float3 -= fontSize.height * ((float1 - tmp1) / tmp2) * 0.5f * UnkTextThing::getField0x788();
+                            float1 = tmp1;
+                        }
+                    }
+                } break;
+                case 0x30000: {
+                    if (b2) {
+                        float2 = float1 * UnkTextThing::getField0x768();
+                        if (textBox != nullptr) {
+                            float2 *= textBox->getMyScale();
+                        }
+                        if (float1 != float2) {
+                            nw4r::lyt::Size _size = field_0x004->GetFontSize();
+                            float1 = float2;
+                        }
+                    }
+                } break;
+                case 0x20004:
+                    if (b2) {
+                        *writePtr = -1;
+                        const nw4r::ut::Font *fnt = dFontMng_c::getFont(4);
+                        wchar_t c = fn_800B7880(*(u8 *)endPtr);
+                        f32 tmp = UnkTextThing::getField0x764();
+                        f32 wid = tmp / fnt->GetWidth() * float1;
+                        f32 charSpace = textBox->GetCharSpace();
+                        f32 charWidth = fnt->GetCharWidth(c);
+                        writePtr++;
+                        float4 += (wid * charWidth + charSpace);
+                    }
+                    break;
+                case 0x10012:
+                    if (b2) {
+                        somethingWithScrapperAndMusic(endPtr);
+                    }
+                    break;
+            }
+            src += cmdLen / 2 + 1;
+        } else if (c == 0xF) {
+            s32 cmd = 0;
+            process0xFCommand(c, &src[1], &cmd);
+            if (cmd == 0x30000) {
+                float2 = float1;
+            }
+            src += 3;
+        } else {
+            if (b2) {
+                *writePtr = c;
+                const nw4r::ut::Font *fnt = textBox->GetFont();
+                f32 tmp = float1 * fnt->GetCharWidth(*src) * 0.5f;
+                f32 tmp2 = float4 + tmp;
+                if (outThings != 0) {
+                    wchar_t s = *writePtr;
+                    if (s != 10 && s != 0x20 && s != 0x3000) {
+                        outThings[int2].f0 = tmp2;
+                        outThings[int2].f1 = float2;
+                        outThings[int2].f2 = float1;
+                        outThings[int2].field_0x0E = *writePtr;
+                        int2++;
+                    }
+                }
+                writePtr++;
+                float4 = float2 + (tmp + textBox->GetCharSpace());
+            }
+            src++;
+        }
+    }
+
 end:
     if (pOutLen != nullptr) {
         *pOutLen = writePtr - dest;
@@ -774,15 +929,143 @@ wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
     if (FileManager::sInstance->getHeroname()[0] != '\0') {
         for (int i = 0; FileManager::sInstance->getHeroname()[i] != '\0'; i++) {
             if (arg != 0 && field_0x90E != 0) {
-                wchar_t c = FileManager::sInstance->getHeroname()[i];
-                fn_800B5FD0(c, &field_0x008[field_0x90E - 1][*outArg], outArg);
-                if (field_0x90E - 1 < 4) {
-                    field_0x808[field_0x90E - 1]++;
-                }
+                wchar_t *heroName = FileManager::sInstance->getHeroname();
+                fn_800B5FD0(heroName[i], &getTmpBuffer()[*outArg], outArg);
+                onWriteTmpBuffer();
             } else {
-                dest = fn_800B5FD0(FileManager::sInstance->getHeroname()[i], dest, nullptr);
+                wchar_t *heroName = FileManager::sInstance->getHeroname();
+                dest = fn_800B5FD0(heroName[i], dest, nullptr);
             }
         }
+    }
+    return dest;
+}
+
+extern "C" MsbtInfo *getMsbtInfoForIndex(int);
+
+wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
+    int itemIndex = *src;
+    wchar_t c;
+    const wchar_t *readPtr;
+
+    int i = 0;
+    SizedString<16> mName;
+    mName.sprintf("NAME_ITEM_%03d", itemIndex);
+    MsbtInfo *info = getMsbtInfoForIndex(3);
+    const wchar_t *text = LMS_GetTextByLabel(info, mName);
+
+    while (readPtr = &text[i], (c = text[i]) != 0) {
+        if (c == 0xE) {
+            int len = ((readPtr[3] / 2) & 0x7F) + 4;
+            if (arg != 0 && field_0x90E != 0) {
+                for (int j = 0; j < len; j++) {
+                    fn_800B5FD0(*readPtr, &getTmpBuffer()[*outArg], outArg);
+                    onWriteTmpBuffer();
+                    readPtr++;
+                    i++;
+                }
+            } else {
+                for (int j = 0; j < len; j++) {
+                    dest = fn_800B5FD0(*readPtr, dest, nullptr);
+                    readPtr++;
+                    i++;
+                }
+            }
+        } else {
+            if (arg != 0 && field_0x90E != 0) {
+                fn_800B5FD0(c, &getTmpBuffer()[*outArg], outArg);
+                onWriteTmpBuffer();
+            } else {
+                dest = fn_800B5FD0(c, dest, nullptr);
+            }
+            i++;
+        }
+    }
+
+    return dest;
+}
+
+wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
+    int numZeroDigits = ((u8 *)src)[4];
+    bool writeZeroDigits = false;
+    s32 argIdx = *((s32 *)src);
+    s32 numberArg = mNumericArgs[argIdx];
+    mNumericArgsCopy[0] = numberArg;
+
+    // This could potentially be an unrolled loop
+
+    s32 digit = numberArg / 10000;
+    s32 number = numberArg % 10000;
+
+    if (!writeZeroDigits && numZeroDigits == 5) {
+        writeZeroDigits = true;
+    }
+    if (digit > 0 || writeZeroDigits) {
+        if (arg != 0 && field_0x90E != 0) {
+            getTmpBuffer()[*outArg] = '0' + digit;
+            onWriteTmpBuffer();
+            (*outArg)++;
+        } else {
+            *(dest++) = '0' + digit;
+        }
+        writeZeroDigits = true;
+    }
+
+    digit = number / 1000;
+    number = number % 1000;
+    if (!writeZeroDigits && numZeroDigits == 4) {
+        writeZeroDigits = true;
+    }
+    if (digit > 0 || writeZeroDigits) {
+        if (arg != 0 && field_0x90E != 0) {
+            getTmpBuffer()[*outArg] = '0' + digit;
+            onWriteTmpBuffer();
+            (*outArg)++;
+        } else {
+            *(dest++) = '0' + digit;
+        }
+        writeZeroDigits = true;
+    }
+
+    digit = number / 100;
+    number = number % 100;
+    if (!writeZeroDigits && numZeroDigits == 3) {
+        writeZeroDigits = true;
+    }
+    if (digit > 0 || writeZeroDigits) {
+        if (arg != 0 && field_0x90E != 0) {
+            getTmpBuffer()[*outArg] = '0' + digit;
+            onWriteTmpBuffer();
+            (*outArg)++;
+        } else {
+            *(dest++) = '0' + digit;
+        }
+        writeZeroDigits = true;
+    }
+
+    digit = number / 10;
+    number = number % 10;
+    if (!writeZeroDigits && numZeroDigits == 2) {
+        writeZeroDigits = true;
+    }
+    if (digit > 0 || writeZeroDigits) {
+        if (arg != 0 && field_0x90E != 0) {
+            getTmpBuffer()[*outArg] = '0' + digit;
+            onWriteTmpBuffer();
+            (*outArg)++;
+        } else {
+            *(dest++) = '0' + digit;
+        }
+        writeZeroDigits = true;
+    }
+
+    digit = number;
+    if (arg != 0 && field_0x90E != 0) {
+        getTmpBuffer()[*outArg] = '0' + digit;
+        onWriteTmpBuffer();
+        (*outArg)++;
+    } else {
+        *(dest++) = '0' + digit;
     }
     return dest;
 }
@@ -847,6 +1130,14 @@ void dTagProcessor_c::changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
 
     ctx->writer->SetCursorY(posY);
     ctx->writer->SetScale(scale, scale);
+}
+
+void dTagProcessor_c::writeIcon(dTextBox_c *textBox, wchar_t *cmd, f32 arg) {
+    nw4r::ut::Font *f = dFontMng_c::getFont(4);
+    u32 c3 = fn_800B7880(*(u8 *)cmd);
+    arg = UnkTextThing::getField0x764() / f->GetWidth() * arg;
+
+    field_0x914[mCommandInsert] += arg * f->GetCharWidth(c3) + textBox->GetCharSpace();
 }
 
 void dTagProcessor_c::makeSpaceForIconMaybe(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr) {
@@ -918,10 +1209,8 @@ void dTagProcessor_c::restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 wind
 wchar_t *dTagProcessor_c::writeTextNormal(const wchar_t *src, wchar_t *dest, s32 *pArg, u8 cmdLen, s32 arg) {
     if (arg != 0 && field_0x90E != 0) {
         for (u32 i = 0; i < (cmdLen / 2 + 1); i++) {
-            field_0x008[field_0x90E - 1][*pArg] = *(src++);
-            if (field_0x90E - 1 < 4) {
-                field_0x808[field_0x90E - 1]++;
-            }
+            getTmpBuffer()[*pArg] = *(src++);
+            onWriteTmpBuffer();
             (*pArg)++;
         }
     } else {

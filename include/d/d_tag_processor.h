@@ -5,6 +5,16 @@
 #include "nw4r/ut/ut_TagProcessorBase.h"
 #include "nw4r/ut/ut_TextWriterBase.h"
 
+
+struct SomeTextProcessingOutStruct {
+    /* 0x00 */ f32 f0;
+    /* 0x04 */ f32 f1;
+    /* 0x08 */ f32 f2;
+    /* 0x0C */ wchar_t field_0x0C;
+    /* 0x0E */ wchar_t field_0x0E;
+    /* 0x10 */ UNKWORD field_0x10;
+};
+
 // inofficial name
 // size: 0xEF4
 class dTagProcessor_c : public nw4r::ut::TagProcessorBase<wchar_t> {
@@ -19,6 +29,11 @@ public:
     virtual nw4r::ut::Operation CalcRect(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx) override;
 
     nw4r::ut::Operation ProcessTags(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx);
+    
+    void alsoProcessingRelated(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, s32 unkArg, u16 *pOutLen, SomeTextProcessingOutStruct *outStructs);
+    f32 fn_800B8560(s32);
+    f32 fn_800B85C0(s32);
+    void somethingWithScrapperAndMusic(wchar_t* src);
 
     void changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, bool);
     wchar_t *writeItem(wchar_t *dest, wchar_t *src, s32 *, s32);
@@ -69,6 +84,16 @@ public:
     s32 tick0x830();
 
 private:
+    wchar_t *getTmpBuffer() {
+        return field_0x008[field_0x90E - 1];
+    }
+
+    void onWriteTmpBuffer() {
+        if (field_0x90E - 1 < 4) {
+            field_0x808[field_0x90E - 1]++;
+        }
+    }
+
     /* 0x004 */ dTextBox_c *field_0x004;
     /* 0x008 */ wchar_t field_0x008[4][256];
     /* 0x808 */ wchar_t field_0x808[4];
