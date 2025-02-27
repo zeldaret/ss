@@ -27,6 +27,12 @@ toBeSorted/file_manager.cpp:
 toBeSorted/save_manager.cpp:
 	.text       start:0x80011730 end:0x80015310
 
+toBeSorted/blur_and_palette_manager.cpp:
+	.text       start:0x800221A0 end:0x800268AC
+	.ctors      start:0x804DB65C end:0x804DB660
+	.sdata2     start:0x80576BA0 end:0x80576C18
+	.bss        start:0x8058F210 end:0x80594FA0
+
 toBeSorted/sound_info.cpp:
 	.text       start:0x8002C250 end:0x8002C308
 
