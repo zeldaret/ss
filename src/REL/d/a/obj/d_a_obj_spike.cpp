@@ -18,7 +18,7 @@ const mVec3_c dAcOspike_c::sVec2 = mVec3_c(73.0f, 255.0f, 482.0f);
 STATE_DEFINE(dAcOspike_c, Wait);
 
 bool dAcOspike_c::createHeap() {
-    mResFile = getOarcResFile("SpikeD101");
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("SpikeD101"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("SpikeD101");
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
     return true;

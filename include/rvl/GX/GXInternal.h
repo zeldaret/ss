@@ -84,6 +84,14 @@ typedef struct _GXTlutObjImpl {
     u8 todo[0xC];
 } GXTlutObjImpl;
 
+typedef struct _GXTexRegionImpl {
+    u8 todo;
+} GXTexRegionImpl;
+
+typedef struct _GXTlutRegionImpl {
+    u8 todo;
+} GXTlutRegionImpl;
+
 #ifdef __cplusplus
 }
 #endif

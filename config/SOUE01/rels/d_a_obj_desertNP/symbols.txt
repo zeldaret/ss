@@ -60,5 +60,5 @@ lbl_308_data_110 = .data:0x00000110; // type:object size:0x14
 lbl_308_data_124 = .data:0x00000124; // type:object size:0x14
 lbl_308_data_138 = .data:0x00000138; // type:object size:0x30
 lbl_308_data_168 = .data:0x00000168; // type:object size:0x18 data:string
-lbl_308_data_180 = .data:0x00000180; // type:object size:0x80
+AcODesert__vtable = .data:0x00000180; // type:object size:0x80
 lbl_308_data_200 = .data:0x00000200; // type:object size:0x40

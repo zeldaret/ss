@@ -4,7 +4,7 @@
 #include "common.h"
 #include "m/m3d/m_bmdl.h"
 #include "m/m3d/m_fanm.h"
-#include "nw4r/g3d/g3d_resanmshp.h"
+#include "nw4r/g3d/res/g3d_resanmshp.h"
 
 namespace m3d {
 

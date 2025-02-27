@@ -19,4 +19,4 @@ lbl_619_data_10 = .data:0x00000010; // type:object size:0x30
 lbl_619_data_40 = .data:0x00000040; // type:object size:0x1C data:string
 lbl_619_data_5C = .data:0x0000005C; // type:object size:0x1C
 lbl_619_data_78 = .data:0x00000078; // type:object size:0x20
-lbl_619_data_98 = .data:0x00000098; // type:object size:0x80
+AcOwarpHole__vtable = .data:0x00000098; // type:object size:0x80

@@ -13,7 +13,7 @@ STATE_DEFINE(dAcOtrapRock1_c, TrapAction);
 STATE_DEFINE(dAcOtrapRock1_c, TrapReturn);
 
 bool dAcOtrapRock1_c::createHeap() {
-    mResFile = getOarcResFile("TrapRockRoll");
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("TrapRockRoll"));
     nw4r::g3d::ResMdl m = mResFile.GetResMdl("TrapRockRoll");
 
     TRY_CREATE(mMdl.create(m, &heap_allocator, 0x120));
@@ -97,8 +97,7 @@ void dAcOtrapRock1_c::executeState_TrapAction() {
         }
         if (ratio > 1.0f) {
             ratio = 1.0f;
-        }
-        else if (ratio < 0.1f) {
+        } else if (ratio < 0.1f) {
             ratio = 0.1f;
         }
         s16 newAng = field_0x5A5 * (1.0f - ratio) * field_0x5A2;

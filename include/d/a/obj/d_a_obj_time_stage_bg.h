@@ -5,7 +5,7 @@
 #include "m/m3d/m_anmmatclr.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 #include "toBeSorted/stage_render_stuff.h"

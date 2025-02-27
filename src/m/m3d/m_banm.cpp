@@ -3,7 +3,6 @@
 #include "m/m3d/m3d.h"
 #include "m/m_heap.h"
 
-
 namespace m3d {
 banm_c::~banm_c() {
     banm_c::remove();
@@ -40,7 +39,7 @@ bool banm_c::IsBound() const {
     if (mpAnmObj == nullptr) {
         return false;
     }
-    return mpAnmObj->TestAnmFlag(nw4r::g3d::AnmObj::ANMFLAG_ISBOUND);
+    return mpAnmObj->TestAnmFlag(nw4r::g3d::AnmObj::FLAG_ANM_BOUND);
 }
 
 void banm_c::play() {}

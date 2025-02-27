@@ -3,7 +3,8 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "f/f_base.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "toBeSorted/arc_managers/current_stage_arc_manager.h"
 #include "toBeSorted/room_manager.h"
 
@@ -23,7 +24,7 @@ bool dAcOutaDemoPedest_c::createHeap() {
         mModelType = 0;
     }
 
-    mRes = CurrentStageArcManager::sInstance->getData("g3d/stage.brres");
+    mRes = nw4r::g3d::ResFile(CurrentStageArcManager::sInstance->getData("g3d/stage.brres"));
     RoomManager::bindStageResToFile(&mRes);
     RoomManager::bindSkyCmnToResFile(&mRes);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl(sMdlNames[mModelType]);

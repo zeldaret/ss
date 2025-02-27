@@ -8,9 +8,9 @@
 #include "m/m_video.h"
 #include "nw4r/g3d/g3d_camera.h"
 #include "nw4r/g3d/g3d_init.h"
-#include "nw4r/g3d/g3d_resmat.h"
-#include "nw4r/g3d/g3d_resmdl.h"
 #include "nw4r/g3d/g3d_state.h"
+#include "nw4r/g3d/res/g3d_resmat.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "rvl/GX.h" // IWYU pragma: export
 
 namespace m3d {
@@ -164,7 +164,7 @@ void setCurrentCamera(int id) {
 }
 
 nw4r::g3d::LightSetting *getLightSettingP() {
-    return internal::l_scnRoot_p->getLightSetting();
+    return &internal::l_scnRoot_p->GetLightSetting();
 }
 
 EGG::LightManager *getLightMgr(int idx) {

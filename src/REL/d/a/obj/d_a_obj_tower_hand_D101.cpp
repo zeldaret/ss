@@ -11,7 +11,7 @@
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "rvl/MTX/mtx.h"
 #include "rvl/MTX/vec.h"
 #include "s/s_Math.h"
@@ -104,8 +104,8 @@ bool dAcOTowerHandD101_c::createHeap() {
     if (!isValidDirectionParam(direction)) {
         return false;
     }
-    nw4r::g3d::ResFile res = resP;
-    if (!res.mFile.IsValid()) {
+    nw4r::g3d::ResFile res(resP);
+    if (!res.IsValid()) {
         return false;
     }
     RoomManager::bindStageResToFile(&res);

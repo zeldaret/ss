@@ -8,7 +8,7 @@
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
 #include "m/m_angle.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "s/s_Math.h"
 #include "toBeSorted/room_manager.h"
 
@@ -24,7 +24,7 @@ const f32 dAcOutajimaIsland_c::floats[] = {
 };
 
 bool dAcOutajimaIsland_c::createHeap() {
-    mRes = getOarcResFile("IslPuzIslet00");
+    mRes = nw4r::g3d::ResFile(getOarcResFile("IslPuzIslet00"));
     RoomManager::bindStageResToFile(&mRes);
     RoomManager::bindSkyCmnToResFile(&mRes);
     nw4r::g3d::ResMdl m = mRes.GetResMdl("IslPuzIslet00");

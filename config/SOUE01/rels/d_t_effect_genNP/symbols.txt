@@ -15,5 +15,5 @@ lbl_303_rodata_0 = .rodata:0x00000000; // type:object size:0x28 data:float
 lbl_303_rodata_28 = .rodata:0x00000028; // type:object size:0xCC data:float
 g_profile_EFFECT_GEN_TAG = .data:0x00000000; // type:object size:0x10
 lbl_303_data_10 = .data:0x00000010; // type:object size:0x1C data:string
-lbl_303_data_2C = .data:0x0000002C; // type:object size:0x74
+TgEffectGen__vtable = .data:0x0000002C; // type:object size:0x74
 lbl_303_bss_8 = .bss:0x00000008; // type:object size:0x50 data:2byte

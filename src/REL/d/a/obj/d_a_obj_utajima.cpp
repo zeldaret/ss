@@ -23,11 +23,11 @@ void dAcOutajima_c::rideCallback(dBgW *bg, dAcObjBase_c *o1, dAcObjBase_c *o2) {
 }
 
 bool dAcOutajima_c::createHeap() {
-    mRes = getOarcResFile("IslSon");
+    mRes = nw4r::g3d::ResFile(getOarcResFile("IslSon"));
     RoomManager::bindStageResToFile(&mRes);
     RoomManager::bindSkyCmnToResFile(&mRes);
 
-    nw4r::g3d::ResMdl m = nullptr;
+    nw4r::g3d::ResMdl m(nullptr);
 
     for (int i = 0; i < 2; i++) {
         m = mRes.GetResMdl(mMdlNames[i]);

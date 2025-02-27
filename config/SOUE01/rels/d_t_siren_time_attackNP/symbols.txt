@@ -75,5 +75,5 @@ lbl_73_section4_160 = .data:0x00000160; // type:object size:0x120
 lbl_73_section4_280 = .data:0x00000280; // type:object size:0x68
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 lbl_73_bss_8 = .bss:0x00000008; // type:object size:0xC data:4byte
-lbl_73_bss_14 = .bss:0x00000014; // type:object size:0x40 data:4byte
-lbl_73_bss_54 = .bss:0x00000054; // type:object size:0x34 data:4byte
+TgSirenTimeAttack__STATE_WAIT = .bss:0x00000014; // type:object size:0x40 data:4byte
+TgSirenTimeAttack__STATE_MANAGE = .bss:0x00000054; // type:object size:0x34 data:4byte

@@ -14,4 +14,4 @@ lbl_629_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
 g_profile_OBJ_F400_GATE_SEAL = .data:0x00000000; // type:object size:0x10
 lbl_629_data_10 = .data:0x00000010; // type:object size:0x10
 lbl_629_data_20 = .data:0x00000020; // type:object size:0x20 data:string
-lbl_629_data_40 = .data:0x00000040; // type:object size:0x80
+AcOF400GateSeal__vtable = .data:0x00000040; // type:object size:0x80

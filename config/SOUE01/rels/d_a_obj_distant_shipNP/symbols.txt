@@ -18,4 +18,4 @@ lbl_616_data_10 = .data:0x00000010; // type:object size:0x10 data:string
 lbl_616_data_20 = .data:0x00000020; // type:object size:0x20
 lbl_616_data_40 = .data:0x00000040; // type:object size:0x10
 lbl_616_data_50 = .data:0x00000050; // type:object size:0x18
-lbl_616_data_68 = .data:0x00000068; // type:object size:0x80
+AcOdistantShip__vtable = .data:0x00000068; // type:object size:0x80

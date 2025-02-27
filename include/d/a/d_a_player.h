@@ -5,7 +5,7 @@
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 
 class dAcPy_c : public dAcObjBase_c {
     // See Below for some info

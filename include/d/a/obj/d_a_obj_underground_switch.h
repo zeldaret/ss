@@ -4,8 +4,8 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "m/m3d/m_anmmatclr.h"
 #include "m/m3d/m_smdl.h"
-#include "nw4r/g3d/g3d_resfile.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "s/s_State.hpp"
 
 class dAcOUgSwitch_c : public dAcObjBase_c {

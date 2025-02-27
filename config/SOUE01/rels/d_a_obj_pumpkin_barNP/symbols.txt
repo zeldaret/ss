@@ -14,4 +14,4 @@ _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_391_rodata_0 = .rodata:0x00000000; // type:object size:0x20 data:float
 g_profile_OBJ_PUMPKIN_BAR = .data:0x00000000; // type:object size:0x60
 lbl_391_data_60 = .data:0x00000060; // type:object size:0x20
-lbl_391_data_80 = .data:0x00000080; // type:object size:0x80
+AcOpumpkinBar__vtable = .data:0x00000080; // type:object size:0x80

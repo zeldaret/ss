@@ -11,7 +11,7 @@
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "rvl/MTX/mtx.h"
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
@@ -55,7 +55,7 @@ bool dAcOSeatSword_c::createHeap() {
         TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(sword_name), &heap_allocator, 0x120, 1, nullptr));
     }
 
-    nw4r::g3d::ResFile mPedRes = getOarcResFile(SwordSeatNames[mSubtype]);
+    nw4r::g3d::ResFile mPedRes(getOarcResFile(SwordSeatNames[mSubtype]));
     TRY_CREATE(mPedestalMdl.create(mPedRes.GetResMdl(SwordSeatNames[mSubtype]), &heap_allocator, 0x120, 1, nullptr));
     void *dzb = getOarcDZB(SwordSeatNames[mSubtype], SwordSeatNames[mSubtype]);
     void *plc = getOarcPLC(SwordSeatNames[mSubtype], SwordSeatNames[mSubtype]);

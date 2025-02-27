@@ -40,7 +40,7 @@ dCcD_SrcSph dAcOTumbleWeed_c::sSphSrc = {
 };
 
 bool dAcOTumbleWeed_c::createHeap() {
-    mResFile = getOarcResFile("GrassRollDry");
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("GrassRollDry"));
     TRY_CREATE(mMdl.create(mResFile.GetResMdl("GrassRollDry"), &heap_allocator, 0x120, 1, nullptr));
     return true;
 }
@@ -91,7 +91,6 @@ int dAcOTumbleWeed_c::actorPostCreate() {
 int dAcOTumbleWeed_c::doDelete() {
     return SUCCEEDED;
 }
-
 
 int dAcOTumbleWeed_c::actorExecute() {
     if (!mField_0x98C && !isStopped()) {

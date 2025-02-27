@@ -8,7 +8,7 @@
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "toBeSorted/room_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TOWER_GEAR_D101, dAcOTowerGearD101_c, fProfile::OBJ_TOWER_GEAR_D101, 0x17E, 0, 7);
@@ -19,7 +19,7 @@ extern "C" void fn_80067340(mVec3_c &, nw4r::g3d::ResMdl *, const char *);
 
 bool dAcOTowerGearD101_c::createHeap() {
     const char *name = "TowerGearD101";
-    mRes = getOarcResFile(name);
+    mRes = nw4r::g3d::ResFile(getOarcResFile(name));
     RoomManager::bindStageResToFile(&mRes);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl(name);
     if (!mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr)) {
