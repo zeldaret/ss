@@ -243,6 +243,10 @@ toBeSorted/time_area_mgr.cpp:
 	.sbss       start:0x805753C0 end:0x805753D0
 	.sdata2     start:0x805798D0 end:0x80579928
 
+toBeSorted/nand_request_thread.cpp:
+	.text       start:0x800BC980 end:0x800BD604
+	.data       start:0x80510B30 end:0x80510B70
+
 d/flag/flag_managers.cpp:
 	.text       start:0x800BD8C0 end:0x800C0650
 	.data       start:0x80510B88 end:0x80510D10

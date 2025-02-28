@@ -28,7 +28,7 @@ public:
     /* 0x38 */ u32 mStackSize;
     /* 0x3C */ Heap *mAllocatableHeap;
     // TODO from the usage in eggThread this really looks like
-    // it's stashed thread that's restored when switching threads
+    // it's a stashed heap that's restored when switching threads
     /* 0x40 */ Heap *mCurrentHeap;
     /* 0x44 */ nw4r::ut::Node mLink;
 

@@ -364,6 +364,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/attention.cpp"),
             Object(NonMatching, "toBeSorted/dowsing_target.cpp"),
             Object(NonMatching, "toBeSorted/time_area_mgr.cpp"),
+            Object(NonMatching, "toBeSorted/nand_request_thread.cpp"),
             Object(Matching, "toBeSorted/save_file.cpp"),
             Object(Matching, "toBeSorted/counters/counter.cpp"),
             Object(Matching, "toBeSorted/counters/rupee_counter.cpp"),
