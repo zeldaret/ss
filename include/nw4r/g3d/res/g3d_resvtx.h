@@ -296,27 +296,30 @@ public:
     }
 
     void GetArray(const void **ppBase, u8 *pStride) const;
+    void SetArray(u16 idx);
     void DCStore(bool sync);
 
     u32 GetSize() const {
         return ref().size;
     }
 
-    void *GetData() {
+    void *GetData(int idx) {
         ResVtxFurPosData &r = ref();
 
-        if (r.toFurPosArray != 0) {
-            return reinterpret_cast<void *>(reinterpret_cast<u8 *>(&r) + r.toFurPosArray);
-        }
-
-        return NULL;
+        // ternary was required -_- Probably means other GetData funcs are ternaries
+        return (r.toFurPosArray != 0 && idx < (int)r.numLayer && idx >= 0) ?
+                   reinterpret_cast<void *>(reinterpret_cast<u8 *>(&r) + r.toFurPosArray + idx * r.ofsLayer) :
+                   NULL;
     }
-    const void *GetData() const {
+
+    const void *GetData(int idx) const {
         const ResVtxFurPosData &r = ref();
 
-        if (r.toFurPosArray != 0) {
-            return reinterpret_cast<const void *>(reinterpret_cast<const u8 *>(&r) + r.toFurPosArray);
-        }
+        return (r.toFurPosArray != 0 && idx < (int)r.numLayer && idx >= 0) ?
+                   reinterpret_cast<const void *>(
+                       reinterpret_cast<const u8 *>(&r) + r.toFurPosArray + idx * r.ofsLayer
+                   ) :
+                   NULL;
 
         return NULL;
     }
