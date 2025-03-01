@@ -1382,6 +1382,7 @@ nw4r/g3d/res/g3d_restex.cpp:
 
 nw4r/g3d/res/g3d_resnode.cpp:
 	.text       start:0x8043E750 end:0x8043EA58
+	.sdata2     start:0x8057EC50 end:0x8057EC5C
 
 nw4r/g3d/res/g3d_resanm.cpp:
 	.text       start:0x8043EA60 end:0x8043ECB8
