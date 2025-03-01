@@ -133,6 +133,8 @@ bool ResTev::GXGetTevOrder(GXTevStageID stage, GXTexCoordID *pCoord, GXTexMapID 
 }
 
 void ResTev::GXSetTevOrder(GXTevStageID stage, GXTexCoordID coord, GXTexMapID map, GXChannelID channel) {
+    static u8 c2r[0x10] = {0, 1, 0, 1, 0, 1, 7, 5, 6, 0, 0, 0, 0, 0, 0, 7};
+
     GXTexCoordID currCoord;
     GXTexMapID currMap;
     if (GXGetTevOrder(stage, &currCoord, &currMap, NULL)) {
@@ -142,12 +144,36 @@ void ResTev::GXSetTevOrder(GXTevStageID stage, GXTexCoordID coord, GXTexMapID ma
     }
 
     if (coord != GX_TEXCOORD_NULL) {
-        ref().texCoordToTexMapID[currCoord] = map;
+        ref().texCoordToTexMapID[coord] = map;
     }
 
-    u8 *pCmd = ref().dl.dl.var[stage / TEV_STAGES_PER_DL].dl.tevColorCalc[stage % TEV_STAGES_PER_DL];
+    u8 *pCmd = ref().dl.dl.var[stage / TEV_STAGES_PER_DL].dl.tevOrder;
 
-    // detail::ResWriteBPCmd(pCmd, dlsize);
+    // Use the shift to determine if Even or Odd
+    u32 shift = ((stage & 1) ? GX_BP_RAS1_TREF_TEXMAP_ODD_SHIFT : GX_BP_RAS1_TREF_TEXMAP_EVEN_SHIFT);
+
+    // clang-format off
+    u32 mask = (
+        (0xFF << 24) | 
+        ( GX_BP_RAS1_TREF_TEXMAP_EVEN_MASK     | 
+          GX_BP_RAS1_TREF_TEXCOORD_EVEN_MASK   |
+          GX_BP_RAS1_TREF_ENABLE_TEX_EVEN_MASK |
+          GX_BP_RAS1_TREF_COLORCHAN_EVEN_MASK  
+        ) << shift
+    );
+    
+    u32 cmd = ( 
+        ( ( map & GX_BP_RAS1_TREF_TEXMAP_EVEN_LMASK          ) << GX_BP_RAS1_TREF_TEXMAP_EVEN_SHIFT     ) |
+        ( ( coord & GX_BP_RAS1_TREF_TEXCOORD_EVEN_LMASK      ) << GX_BP_RAS1_TREF_TEXCOORD_EVEN_SHIFT   ) |
+        ( ( map != GX_TEXMAP_NULL && !(map & GX_TEX_DISABLE) ) << GX_BP_RAS1_TREF_ENABLE_TEX_EVEN_SHIFT ) |
+        ( ( c2r[channel & 0xF]                               )  << GX_BP_RAS1_TREF_COLORCHAN_EVEN_SHIFT )
+    );
+    // clang-format on
+
+    cmd <<= shift;
+    cmd |= (GX_BP_REG_RAS1_TREF0 + (stage / TEV_STAGES_PER_DL)) << 24;
+
+    detail::ResWriteBPCmd(pCmd, cmd, mask);
 }
 
 void ResTev::GXSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXTevColorArg c, GXTevColorArg d) {
@@ -168,6 +194,55 @@ void ResTev::GXSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg 
           GX_BP_TEVCOLORCOMBINER_OP_OR_COMPARISON_MASK |
           GX_BP_TEVCOLORCOMBINER_BIAS_MASK));
     // clang-format on
+}
+
+bool ResTev::GXGetIndTexOrder(GXIndTexStageID stage, GXTexCoordID *pCoord, GXTexMapID *pMap) const {
+    const u8 *pCmd = ref().dl.dl.common.dl.indTexOrder[stage / GX_MAX_INDTEXSTAGE];
+
+    if (pCmd[0] == 0) {
+        return false;
+    }
+
+    u32 cmd;
+    detail::ResReadBPCmd(pCmd, &cmd);
+
+    u32 shift = (stage % GX_MAX_INDTEXSTAGE) * (GX_BP_RAS1_IREF_MAP0_SZ + GX_BP_RAS1_IREF_TXC0_SZ);
+
+    if (pMap) {
+        *pMap = static_cast<GXTexMapID>(cmd >> (shift + GX_BP_RAS1_IREF_MAP0_SHIFT) & GX_BP_RAS1_IREF_MAP0_LMASK);
+    }
+    if (pCoord) {
+        *pCoord = static_cast<GXTexCoordID>(cmd >> (shift + GX_BP_RAS1_IREF_TXC0_SHIFT) & GX_BP_RAS1_IREF_TXC0_LMASK);
+    }
+
+    return true;
+}
+
+void ResTev::GXSetIndTexOrder(GXIndTexStageID stage, GXTexCoordID coord, GXTexMapID map) {
+    GXTexCoordID currCoord;
+    GXTexMapID currMap;
+    if (GXGetIndTexOrder(stage, &currCoord, &currMap)) {
+        if (currCoord != GX_TEXCOORD_NULL && currMap != GX_TEXMAP_NULL) {
+            ref().texCoordToTexMapID[currCoord] = GX_TEXMAP_NULL;
+        }
+    }
+
+    if (coord != GX_TEXCOORD_NULL) {
+        ref().texCoordToTexMapID[coord] = map;
+    }
+
+    u8 *pCmd = ref().dl.dl.common.dl.indTexOrder[stage / GX_MAX_INDTEXSTAGE];
+
+    u32 shift = (stage % GX_MAX_INDTEXSTAGE) * (GX_BP_RAS1_IREF_MAP0_SZ + GX_BP_RAS1_IREF_TXC0_SZ);
+
+    u32 reg = ((map & GX_BP_RAS1_IREF_MAP0_LMASK) << (shift + GX_BP_RAS1_IREF_MAP0_SHIFT)) |
+              ((coord & GX_BP_RAS1_IREF_TXC0_LMASK) << (shift + GX_BP_RAS1_IREF_TXC0_SHIFT)) |
+              (GX_BP_REG_RAS1_IREF << 24);
+
+    u32 mask = ((GX_BP_RAS1_IREF_MAP0_LMASK) << (shift + GX_BP_RAS1_IREF_MAP0_SHIFT)) |
+               ((GX_BP_RAS1_IREF_TXC0_LMASK) << (shift + GX_BP_RAS1_IREF_TXC0_SHIFT));
+
+    detail::ResWriteBPCmd(pCmd, reg, mask);
 }
 
 void ResTev::CallDisplayList(bool sync) const {
