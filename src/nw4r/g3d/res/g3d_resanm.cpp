@@ -24,8 +24,7 @@ inline f32 HermiteInterpolation(f32 v0, f32 t0, f32 v1, f32 t1, f32 p, f32 d) {
     f32 s = p * invd;   // p / d
     f32 s_1 = s - 1.0f; // (p - d) / d
 
-    return v0 + s * (s * ((2.0f * s - 3.0f) * (v0 - v1))) +
-           p * s_1 * (s_1 * t0 + s * t1);
+    return v0 + s * (s * ((2.0f * s - 3.0f) * (v0 - v1))) + p * s_1 * (s_1 * t0 + s * t1);
 }
 
 /**
@@ -36,14 +35,14 @@ inline f32 HermiteInterpolation(f32 v0, f32 t0, f32 v1, f32 t1, f32 p, f32 d) {
  * The value returned is f(ratio).
  */
 inline u8 LinearInterpColorElem(u8 a, u8 b, s16 ratio) {
-    return a + ((b - a) * ratio >> 15);
+    return a + ((b - a) * ratio >> 0xF);
 }
 
 } // namespace
 
-f32 GetResKeyFrameAnmResult(const ResKeyFrameAnmData* pData, f32 frame) {
-    const ResKeyFrameData& rFirst = pData->keyFrames[0];
-    const ResKeyFrameData& rLast = pData->keyFrames[pData->numKeyFrame - 1];
+f32 GetResKeyFrameAnmResult(const ResKeyFrameAnmData *pData, f32 frame) {
+    const ResKeyFrameData &rFirst = pData->keyFrames[0];
+    const ResKeyFrameData &rLast = pData->keyFrames[pData->numKeyFrame - 1];
 
     if (frame <= rFirst.frame) {
         return rFirst.value;
@@ -59,7 +58,7 @@ f32 GetResKeyFrameAnmResult(const ResKeyFrameAnmData* pData, f32 frame) {
     f32 fEstimate = frameOffset * numKeyFrame * pData->invKeyFrameRange;
     u16 iEstimate = math::F32ToU16(fEstimate);
 
-    const ResKeyFrameData* pLeft = &pData->keyFrames[iEstimate];
+    const ResKeyFrameData *pLeft = &pData->keyFrames[iEstimate];
 
     if (frame < pLeft->frame) {
         do {
@@ -77,16 +76,15 @@ f32 GetResKeyFrameAnmResult(const ResKeyFrameAnmData* pData, f32 frame) {
         return pLeft->value;
     }
 
-    const ResKeyFrameData* pRight = pLeft + 1;
+    const ResKeyFrameData *pRight = pLeft + 1;
     f32 curFrameDelta = frame - pLeft->frame;
     f32 keyFrameDelta = pRight->frame - pLeft->frame;
 
-    return HermiteInterpolation(pLeft->value, pLeft->slope, pRight->value,
-                                pRight->slope, curFrameDelta, keyFrameDelta);
+    return HermiteInterpolation(pLeft->value, pLeft->slope, pRight->value, pRight->slope, curFrameDelta, keyFrameDelta);
 }
 
-u32 GetResColorAnmResult(const ResColorAnmFramesData* pData, f32 frame) {
-    const u32* pColorArray = pData->frameColors;
+u32 GetResColorAnmResult(const ResColorAnmFramesData *pData, f32 frame) {
+    const u32 *pColorArray = pData->frameColors;
 
     f32 intPart;
     f32 fracPart = math::FModf(frame, &intPart);
@@ -96,16 +94,16 @@ u32 GetResColorAnmResult(const ResColorAnmFramesData* pData, f32 frame) {
         return pColorArray[intFrame];
     }
 
-    ut::Color left(pColorArray[intFrame]);
-    ut::Color right(pColorArray[intFrame + 1]);
+    const ut::Color left(pColorArray[intFrame]);
+    const ut::Color right(pColorArray[intFrame + 1]);
 
     f32 biasedRatio = 32768 * fracPart;
     s16 fpRatio = math::F32ToS16(biasedRatio);
 
-    return ut::Color(LinearInterpColorElem(left.r, right.r, fpRatio),
-                     LinearInterpColorElem(left.g, right.g, fpRatio),
-                     LinearInterpColorElem(left.b, right.b, fpRatio),
-                     LinearInterpColorElem(left.a, right.a, fpRatio));
+    return ut::Color(
+        LinearInterpColorElem(left.r, right.r, fpRatio), LinearInterpColorElem(left.g, right.g, fpRatio),
+        LinearInterpColorElem(left.b, right.b, fpRatio), LinearInterpColorElem(left.a, right.a, fpRatio)
+    );
 }
 
 } // namespace detail

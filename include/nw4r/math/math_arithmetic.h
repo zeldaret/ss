@@ -64,7 +64,7 @@ inline f32 FMod(f32 x, f32 y) {
 }
 
 inline f32 FModf(f32 x, f32 *y) {
-    return fmodff(x, y);
+    return modff(x, y);
 }
 
 inline f32 FSqrt(f32 x) {

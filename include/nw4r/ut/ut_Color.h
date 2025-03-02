@@ -10,7 +10,7 @@ namespace ut {
 class Color : public GXColor {
 public:
     Color() {
-        *this = 0xFFFFFFFF;
+        *this = WHITE;
     }
     Color(u32 color) {
         *this = color;
@@ -19,7 +19,7 @@ public:
         Set(red, green, blue, alpha);
     }
     Color(const GXColor &clr) {
-        ToU32ref() = *(u32 *)&clr;
+        *this = clr;
     }
     ~Color() {}
 
@@ -36,7 +36,7 @@ public:
     }
 
     Color &operator=(const GXColor &c) {
-        ToU32ref() = *(u32 *)&c; // TODO -> This Seems Maybe Wrong
+        *this = *reinterpret_cast<const u32 *>(&c);
         return *this;
     }
 
