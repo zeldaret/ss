@@ -124,6 +124,16 @@ public:
         mCount--;
     }
 
+    T* GetFirst() {
+        return GetPtrFromNode(&mStartEnd);
+    }
+
+    void RemoveFirst() {
+        if (mCount != 0) {
+            remove(GetFirst());
+        }
+    }
+
     TNode mStartEnd;
     s32 mCount;
 };
