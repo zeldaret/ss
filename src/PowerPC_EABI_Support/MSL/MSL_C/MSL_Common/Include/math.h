@@ -71,6 +71,9 @@ inline float modff(float x, float *iptr) {
 inline double sqrt_step(double tmpd, float mag) {
     return tmpd * 0.5 * (3.0 - mag * (tmpd * tmpd));
 }
+inline float floorf(float f) {
+    return floor(f);
+}
 
 extern inline float sqrtf(float x) {
     const double _half = .5;
