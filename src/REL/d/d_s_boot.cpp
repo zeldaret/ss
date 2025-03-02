@@ -88,11 +88,11 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb4() {
     return sFPhaseBase::PHASE_NEXT;
 }
 
-u32 dScBoot_c::dvdCallback(void *data) {}
+void *dScBoot_c::dvdCallback(void *data) {}
 
 sFPhaseBase::sFPhaseState dScBoot_c::cb5() {
     if (mpDvdCallback == nullptr) {
-        mpDvdCallback = mDvd_callback_c::createOrFail(&dvdCallback, nullptr);
+        mpDvdCallback = mDvd_callback_c::createOrDie(&dvdCallback, nullptr);
         if (mpDvdCallback == nullptr) {
             return sFPhaseBase::PHASE_RETRY;
         }

@@ -65,7 +65,7 @@ private:
     sFPhaseBase::sFPhaseState cb8();
     sFPhaseBase::sFPhaseState cb9();
 
-    static u32 dvdCallback(void *data);
+    static void *dvdCallback(void *data);
 
     static sFPhase<dScBoot_c>::phaseCallback sCallbacks[];
 
