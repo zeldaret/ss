@@ -37,7 +37,6 @@ allowed_sections = [
 commit = None
 
 
-
 def do_demangle(name):
     # try demangling
     if "__" in name:
@@ -162,7 +161,7 @@ def update_addr(addr, mangled_name, create_function=False):
         comment["original"] = existing_name
 
     demangled_name = do_demangle(mangled_name)
-    postprocessed = postprocess_symbol.postprocess_demangled_name(demangled_name)
+    name_list = postprocess_symbol.postprocess_demangled_name(demangled_name)
     comment["mangled"] = mangled_name
     comment["history"].append(commit + " " + demangled_name)
 
@@ -175,7 +174,7 @@ def update_addr(addr, mangled_name, create_function=False):
 
     complete_plate_comment = "\n".join(complete_plate_comment)
 
-    name_list = [SymbolUtilities.replaceInvalidChars(part, True) for part in postprocessed.split("::")]
+    name_list = [SymbolUtilities.replaceInvalidChars(part, True) for part in name_list]
     symbol_str = name_list[-1]
     namespace = None
     if len(name_list) > 1:

@@ -47,7 +47,22 @@ def postprocess_demangled_name(demangled):
     if guard:
         demangled += "_guard"
 
-    return demangled
+    name_list = []
+    template_depth = 0
+    # do not split namespace within template arguments
+    for part in demangled.split("::"):
+        if template_depth == 0:
+            name_list.append(part)
+        else:
+            name_list[-1] += "::" + part
+
+        for char in part:
+            if char == "<":
+                template_depth += 1
+            elif char == ">":
+                template_depth -= 1
+
+    return name_list
 
 
 if __name__ == "__main__":
@@ -55,17 +70,30 @@ if __name__ == "__main__":
     demangle.mode = 'demangle'
 
     testcases = [
-        ["@GUARD@getFontPath__10dFontMng_cFUc@TEMP_FONT_NAME", "dFontMng_c::getFontPath::TEMP_FONT_NAME_guard"],
-        ["__vt__Q24mDvd42TUncompressInfo_c<Q23EGG15StreamDecompSZS>", "mDvd::TUncompressInfo_c<EGG::StreamDecompSZS>::__vtable"],
-        ["chaseT<i>__4sLibFPiii_i", "sLib::chaseT<int>"],
-        ["CalcAnimationFVS<Q44nw4r3g3d27@unnamed@g3d_resanmchr_cpp@46CAnmFmtTraits<Q34nw4r3g3d18ResAnmChrFVS96Data>>__Q34nw4r3g3d27@unnamed@g3d_resanmchr_cpp@FPCQ34nw4r3g3d16ResAnmChrFVSDataf_f",
-         "nw4r::g3d::anonymous::CalcAnimationFVS<nw4r::g3d::anonymous::CAnmFmtTraits<nw4r::g3d::ResAnmChrFVS96Data>>"],
-        ["baseID_Turn<10sStateID_c>__Fv_RC10sStateID_c", "baseID_Turn<sStateID_c>"],
+        [
+            "@GUARD@getFontPath__10dFontMng_cFUc@TEMP_FONT_NAME",
+            ["dFontMng_c", "getFontPath", "TEMP_FONT_NAME_guard"],
+        ],
+        [
+            "__vt__Q24mDvd42TUncompressInfo_c<Q23EGG15StreamDecompSZS>",
+            ["mDvd", "TUncompressInfo_c<EGG::StreamDecompSZS>", "__vtable"],
+        ],
+        ["chaseT<i>__4sLibFPiii_i", ["sLib", "chaseT<int>"]],
+        [
+            "CalcAnimationFVS<Q44nw4r3g3d27@unnamed@g3d_resanmchr_cpp@46CAnmFmtTraits<Q34nw4r3g3d18ResAnmChrFVS96Data>>__Q34nw4r3g3d27@unnamed@g3d_resanmchr_cpp@FPCQ34nw4r3g3d16ResAnmChrFVSDataf_f",
+            [
+                "nw4r",
+                "g3d",
+                "anonymous",
+                "CalcAnimationFVS<nw4r::g3d::anonymous::CAnmFmtTraits<nw4r::g3d::ResAnmChrFVS96Data>>",
+            ],
+        ],
+        ["baseID_Turn<10sStateID_c>__Fv_RC10sStateID_c", ["baseID_Turn<sStateID_c>"]],
     ]
 
     for mangled, postprocessed in testcases:
         demangled = demangle.demangle(mangled)
         actual = postprocess_demangled_name(demangled)
-        assert actual == postprocessed, demangled + " -> " + actual
+        assert actual == postprocessed, str(demangled) + " -> " + str(actual)
 
     print("OK")
