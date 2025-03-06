@@ -447,7 +447,7 @@ extern "C" void fn_800C01F0(); // todo flag managers
         }
     }
 }
-/* 80011370 */ bool FileManager::isFileEmpty(int fileNum) {}
+/* 80011370 */ bool FileManager::isFileEmpty(u8 fileNum) {}
 /* 80011390 */ bool FileManager::isFileDirty(int fileNum) {}
 /* 800113B0 */ u8 FileManager::get_0xA84C() {}
 /* 800113C0 */ bool FileManager::checkRegionCode() {}
@@ -464,5 +464,5 @@ bool FileManager::isFileInactive() const {
     return false;
 }
 /* 80011500 */ void FileManager::setPlayerInfoFileA() {}
-/* 800115E0 */ void FileManager::setT3Info(mVec3_c *pos, mAng3_c *rot) {}
+/* 800115E0 */ void FileManager::setT3Info(const mVec3_c &pos, const mAng3_c &rot) {}
 /* 800116C0 */ void FileManager::getRegionVersion(char *out) {}

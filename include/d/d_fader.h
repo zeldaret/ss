@@ -33,9 +33,26 @@ public:
         mFadeOutType = fadeOutType;
     }
 
+    void setFadeInType(s32 fadeInType) {
+        mFadeInType = fadeInType;
+    }
+
+    void setFadeOutType(s32 fadeOutType) {
+        mFadeOutType = fadeOutType;
+    }
+
     void resetFrames() {
         mFadeInFrame = 30;
         mFadeOutFrame = 30;
+    }
+
+    void setFrames(u16 fadeIn, u16 fadeOut) {
+        mFadeInFrame = fadeIn;
+        mFadeOutFrame = fadeOut;
+    }
+
+    u16 getFadeOutFrame() const {
+        return mFadeOutFrame;
     }
 
     void setFadeInFrame(u16 frame) {

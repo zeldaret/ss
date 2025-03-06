@@ -1,8 +1,8 @@
 #include "toBeSorted/time_area_mgr.h"
 
 #include "d/d_heap.h"
+#include "d/d_sc_game.h"
 #include "nw4r/g3d/g3d_obj.h"
-#include "toBeSorted/scgame.h"
 
 dTimeAreaMgr_c::dTimeAreaMgr_c() {
     sInstance = this;
@@ -17,7 +17,7 @@ bool dTimeAreaMgr_c::init() {
     mProcA.create(&mAllocator);
     mProcB.create(&mAllocator);
     mAllocator.adjustFrmHeap();
-    mIsInLanayruMiningFacility = ScGame::isCurrentStage("D300") || ScGame::isCurrentStage("D300_1");
+    mIsInLanayruMiningFacility = dScGame_c::isCurrentStage("D300") || dScGame_c::isCurrentStage("D300_1");
     return true;
 }
 

@@ -431,6 +431,8 @@ config.libs = [
             Object(NonMatching, "d/a/d_a_insect.cpp"),
             Object(NonMatching, "d/d_cs_base.cpp"),
             Object(NonMatching, "d/d_cs_game.cpp"),
+            Object(Matching, "d/d_sc_title.cpp"),
+            Object(NonMatching, "d/d_sc_game.cpp"),
             Object(Matching, "d/lyt/d_lyt_common_arrow.cpp"),
             Object(NonMatching, "toBeSorted/file_manager.cpp"),
             Object(NonMatching, "toBeSorted/save_manager.cpp"),

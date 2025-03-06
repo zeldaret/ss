@@ -628,6 +628,24 @@ d/tg/d_t_weather.cpp:
 	.text       start:0x801A65D0 end:0x801AF7D8
 	.ctors      start:0x804DB804 end:0x804DB808
 
+d/d_sc_title.cpp:
+	.text       start:0x801B9230 end:0x801BA3A0
+	.ctors      start:0x804DB818 end:0x804DB81C
+	.data       start:0x8052E438 end:0x8052E5F8
+	.sdata      start:0x805733D0 end:0x805733E8
+	.sbss       start:0x80575780 end:0x80575788
+	.sdata2     start:0x8057B580 end:0x8057B588
+	.bss        start:0x805B3760 end:0x805B37E0
+
+d/d_sc_game.cpp:
+	.text       start:0x801BA3A0 end:0x801BC6B8
+	.ctors      start:0x804DB81C end:0x804DB820
+	.data       start:0x8052E5F8 end:0x8052E860
+	.sdata      start:0x805733E8 end:0x80573430
+	.sbss       start:0x80575788 end:0x805757A8
+	.sdata2     start:0x8057B588 end:0x8057B5A8
+	.bss        start:0x805B37E0 end:0x805B38B8
+
 d/d_cs_base.cpp:
 	.text       start:0x801BC6C0 end:0x801BD250
 	.data       start:0x8052E860 end:0x8052E968

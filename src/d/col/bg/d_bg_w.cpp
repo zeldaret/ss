@@ -6,7 +6,7 @@
 #include "d/col/c/c_bg_s_chk.h"
 #include "d/col/c/c_bg_s_lin_chk.h"
 #include "d/col/c/c_bg_s_shdw_draw.h"
-#include "toBeSorted/scgame.h"
+#include "d/d_sc_game.h"
 
 bool cBgW::sLineCheck;
 bool cBgW::sGndCheck;
@@ -855,7 +855,7 @@ bool dBgW::GetMapCode(int polyIdx, int *pOut) {
     bool target = GetZTargetThrough(info);
     if (att0 >= 0x20) {
         *pOut = dBgS::GetMapCode(att0 - 0x20, att1, target);
-        if (Chk0x24_0x20() && ScGame::currentSpawnInfo.trial == 1) {
+        if (Chk0x24_0x20() && dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL) {
             *pOut = 0x1E;
         }
         return false;

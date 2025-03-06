@@ -10,8 +10,8 @@
 #include "d/col/c/c_bg_s_shdw_draw.h"
 #include "d/col/c/c_m3d.h"
 #include "d/col/c/c_partition.h"
+#include "d/d_sc_game.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
-#include "toBeSorted/scgame.h"
 
 const char *MAP_SOLID_MATERIAL_NAMES[31] = {
     0,
@@ -409,7 +409,7 @@ void dBgS::Ct() {
 
     mInSkyKeep = false;
     for (int i = 0; i < 8; ++i) {
-        if (ScGame::isCurrentStage(SKYKEEP_STAGE_NAMES[i])) {
+        if (dScGame_c::isCurrentStage(SKYKEEP_STAGE_NAMES[i])) {
             mInSkyKeep = true;
             return;
         }
@@ -575,7 +575,7 @@ int dBgS::GetPolyAtt1(cBgS_PolyInfo const &info) {
 
 // TODO: Map to Enums And Cleanup??
 int dBgS::GetMapCode(int att0, int att1, bool bAlt) {
-    if (bAlt && ScGame::currentSpawnInfo.trial == 1) {
+    if (bAlt && dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL) {
         return 0x1E;
     }
     if (att0 == 4 && att1 == 1) {
