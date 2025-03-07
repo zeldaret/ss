@@ -61,6 +61,18 @@ public:
 
     static dTimeAreaMgr_c *sInstance;
 
+    bool isInLanayruMiningFacility() const {
+        return mIsInLanayruMiningFacility;
+    }
+
+    bool isField0x78() const {
+        return field_0x78;
+    }
+
+    void setField0x7A(bool val) {
+        field_0x7A = val;
+    }
+
 private:
     /* 0x04 */ u8 field_0x04[0x0C - 0x04];
     /* 0x0C */ mHeapAllocator_c mAllocator;
@@ -68,7 +80,10 @@ private:
     /* 0x40 */ dTimeAreaMgrProcB_c mProcB;
     /* 0x5C */ u8 field_0x5C[0x64 - 0x5C];
     /* 0x64 */ s32 field_0x64;
-    /* 0x68 */ u8 field_0x68[0x7B - 0x68];
+    /* 0x68 */ u8 field_0x68[0x78 - 0x68];
+    /* 0x78 */ bool field_0x78;
+    /* 0x79 */ u8 field_0x79[0x7A - 0x79];
+    /* 0x7A */ bool field_0x7A;
     /* 0x7B */ bool mIsInLanayruMiningFacility;
 };
 

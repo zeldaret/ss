@@ -1028,7 +1028,7 @@ UNKTYPE *dBgS::GetMapAccessor() {
     return lbl_805754B0;
 }
 
-void dBgS::DrawMap(u8 roomId, mMtx_c *, bool bColor, int) {
+void dBgS::DrawMap(int roomId, mMtx_c *, bool bColor, int) {
     // TODO
 }
 
@@ -1068,7 +1068,7 @@ void dBgS::SetupScrollMaterial(int matIdx, s32, bool) {
     // TODO
 }
 
-void dBgS::DrawMapScroll(u8 roomId, mMtx_c *, bool bColor, int) {
+void dBgS::DrawMapScroll(int roomId, mMtx_c *, bool bColor, int) {
     // TODO
 }
 

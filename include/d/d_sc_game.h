@@ -57,7 +57,7 @@ struct SpawnInfo {
 
     /* 0x00 */ SizedString<32> stageName;
     /* 0x20 */ u16 transitionFadeFrames;
-    /* 0x22 */ s8 room;
+    /* 0x22 */ u8 room;
     /* 0x23 */ u8 layer;
     /* 0x24 */ s8 entrance;
     /* 0x25 */ u8 night;
@@ -136,6 +136,7 @@ public:
     STATE_VIRTUAL_FUNC_DECLARE(dScGame_c, Action);
 
     static bool isCurrentStage(const char *stageName);
+    static bool isStageSkyloftLayer20();
 
     static SpawnInfo currentSpawnInfo;
     static SpawnInfo nextSpawnInfo;

@@ -32,7 +32,7 @@ bool dAcOTimeStageBg_c::createHeap() {
     TRY_CREATE(mMdl1.create(mdl, &heap_allocator, 0x128));
     nw4r::g3d::ResNode nd = mdl.GetResNode(sMdlNames[mSubType]);
 
-    field_0x3EC.copyFrom((nd.ref().volume_min + nd.ref().volume_max) * 0.5f);
+    field_0x3EC.copyFrom((nd.GetBoundsMin() + nd.GetBoundsMax()) * 0.5f);
     if (mSubType == 4) {
         nw4r::g3d::ResAnmClr a = mRes.GetResAnmClr("Teniobj_0");
         TRY_CREATE(mAnm.create(mdl, a, &heap_allocator, nullptr, 1));

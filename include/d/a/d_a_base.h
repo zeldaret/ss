@@ -173,6 +173,14 @@ public:
         return actor_properties & property;
     }
 
+    void callunkVirtFunc_0x60() {
+        unkVirtFunc_0x60();
+    }
+
+    void callrestorePosRotFromCopy() {
+        restorePosRotFromCopy();
+    }
+
 public:
     // funcs found in TU
     /* 8002c650 */ static void setTempCreateParams(

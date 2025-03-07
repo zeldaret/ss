@@ -219,7 +219,7 @@ int bmdl_c::setMatTexture(char *name, GXTexObj *texObj, bool copy, void *unk, in
     // TODO
 }
 
-bool bmdl_c::getBounds(mVec3_c *min, mVec3_c *max) {
+bool bmdl_c::getBounds(mVec3_c *min, mVec3_c *max) const {
     // TODO
 }
 

@@ -3,6 +3,7 @@
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_heap.h"
+#include "d/d_room.h"
 #include "d/d_sc_game.h"
 #include "d/flag/enemyflag_manager.h"
 #include "f/f_list_nd.h"
@@ -35,7 +36,6 @@ extern "C" s16 targetAngleY(mVec3_c *, mVec3_c *);
 extern "C" s16 targetAngleX(mVec3_c *, mVec3_c *);
 extern "C" bool checkCollision(mVec3_c *pos);
 extern "C" s8 collisionCheckGetRoom();
-extern "C" dRoom *getRoomByIndex(RoomManager *mgr, s8 roomid);
 
 bool dAcBase_c::createHeap() {
     return true;
@@ -434,8 +434,8 @@ void dAcBase_c::updateRoomId(f32 yOffset) {
 
 // 8002d540
 bool dAcBase_c::isRoomFlags_0x6_Set() {
-    dRoom *room = RoomManager::m_Instance->GetRoomByIndex(roomid);
-    return (room->flags & 6);
+    dRoom_c *room = RoomManager::m_Instance->GetRoomByIndex(roomid);
+    return (room->checkFlag(0x4 | 0x2));
 }
 
 // Start of SoundSource stuff

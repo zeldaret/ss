@@ -11,6 +11,7 @@
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_room.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/flag/tboxflag_manager.h"
@@ -1191,7 +1192,7 @@ int dAcTbox_c::actorExecute() {
         (this->*mRegisterDowsingTarget)();
     }
 
-    dRoom *r = RoomManager::m_Instance->GetRoomByIndex(roomid);
+    dRoom_c *r = RoomManager::m_Instance->GetRoomByIndex(roomid);
     bool hasFlags = r->checkFlag(0x1E);
     if (hasFlags) {
         setObjectProperty(0x200);
@@ -1327,7 +1328,7 @@ int dAcTbox_c::actorExecuteInEvent() {
         (this->*mRegisterDowsingTarget)();
     }
 
-    dRoom *r = RoomManager::m_Instance->GetRoomByIndex(roomid);
+    dRoom_c *r = RoomManager::m_Instance->GetRoomByIndex(roomid);
     bool hasFlags = r->checkFlag(0x1E);
     if (hasFlags) {
         setObjectProperty(0x200);

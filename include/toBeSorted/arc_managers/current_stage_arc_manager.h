@@ -30,7 +30,7 @@ public:
     const char *getCurrentStageDirectory();
     const char *getRoomArcDirectory(int room) const;
 
-    static EGG::ExpHeap *getHeap();
+    EGG::ExpHeap *getHeap(s32 roomid);
 
 private:
     SizedString<32> mStageName;

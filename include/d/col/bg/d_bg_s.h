@@ -228,10 +228,10 @@ public:
     void SetupMapGX(mMtx_c *);
     void SetupMapMaterial(int matIdx, bool, s32 roomId);
     UNKTYPE *GetMapAccessor();
-    void DrawMap(u8 roomId, mMtx_c *, bool bColor, int);
+    void DrawMap(int roomId, mMtx_c *, bool bColor, int);
     void SetupScrollGX();
     void SetupScrollMaterial(int matIdx, s32, bool);
-    void DrawMapScroll(u8 roomId, mMtx_c *, bool bColor, int);
+    void DrawMapScroll(int roomId, mMtx_c *, bool bColor, int);
     void DrawSkyKeepMap(mMtx_c *, int);
     bool ConfigureMapTexture(EGG::Heap *);
 

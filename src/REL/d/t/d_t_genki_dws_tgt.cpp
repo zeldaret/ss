@@ -1,5 +1,6 @@
 #include "d/t/d_t_genki_dws_tgt.h"
 
+#include "d/d_room.h"
 #include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
@@ -51,9 +52,9 @@ int dTgGenkiDwsTgt_c::actorExecute() {
     } else {
         RoomManager *mgr = RoomManager::m_Instance;
         if (mgr != nullptr) {
-            dRoom *room = RoomManager::m_Instance->GetRoomByIndex(roomid);
+            dRoom_c *room = RoomManager::m_Instance->GetRoomByIndex(roomid);
             if (room != nullptr) {
-                if (room->flags & 8) {
+                if (room->checkFlag(8)) {
                     mDowsingTarget.doRegister();
                 } else {
                     mDowsingTarget.doUnregister();

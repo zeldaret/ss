@@ -3,73 +3,17 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "d/d_room.h"
 #include "m/m_allocator.h"
 #include "m/types_m.h"
-
+#include "nw4r/g3d/res/g3d_resmdl.h"
 
 #define MAX_ROOM_NUMBER 64
-
-class dRoomModel {
-    char mainModel[28]; // Actually smdl_c
-    nw4r::math::AABB *roomBounds;
-    m3d::anmMatClr_c *anmMatClr;
-    m3d::anmTexPat_c *anmTexPat;
-    m3d::anmTexSrt_c *anmTexSrt;
-    m3d::anmVis_c *anmVis;
-};
-
-class dRoomCollision {
-    char todo[352];
-};
-
-class dRoom : public dBase_c {
-public:
-    mAllocator_c allocator;
-    nw4r::g3d::ResFile *roomRes;
-    char unkWithWater[24];
-    dRoomModel roomModels[8];
-    dRoomCollision roomCollisions[2];
-    char stateMgr[60];
-    char _0[4];
-    void *SCEN;
-    void *PLY;
-    void *CAM;
-    void *EVNT;
-    void *PATH;
-    void *PNT;
-    void *BPNT;
-    void *SPTH;
-    void *_1;
-    void *_2;
-    void *AREA;
-    char _3[4];
-    short plyCount;
-    short camCount;
-    short evntCount;
-    short pathCount;
-    short pntCount;
-    short bpntCount;
-    short spthCount;
-    short _4;
-    short _5;
-    short areaCount;
-    char _6[4];
-    u8 flags;
-    void *BZS;
-    s8 roomid;
-    char _7[3];
-    bool hasAnmTexPat;
-    bool didAlreadyInit;
-
-    bool checkFlag(u32 flag) {
-        return flags & flag;
-    }
-};
 
 class dRoomTable {
     /* 801b4670 */ dRoomTable(dRoomTable *roomTable);
     virtual ~dRoomTable();
-    dRoom *rooms[MAX_ROOM_NUMBER - 1];
+    dRoom_c *rooms[MAX_ROOM_NUMBER - 1];
 };
 
 class MapRelated {
@@ -99,16 +43,19 @@ public:
     /* 80575760 */ static RoomManager *m_Instance;
 
 public:
-    /* 801b3970 */ dRoom *GetRoomByIndex(int roomid);
-    /* 801b42b0 */ static dRoom *getRoom(int roomid);
+    /* 801b3970 */ dRoom_c *GetRoomByIndex(int roomid);
+    /* 801b42b0 */ static dRoom_c *getRoom(int roomid);
     /* 801b42d0 */ static void bindStageResToFile(nw4r::g3d::ResFile *);
     /* 801b4320 */ static void bindSkyCmnToResFile(nw4r::g3d::ResFile *);
     /* 801b4380 */ static bool getMA0AnmTexSrt(nw4r::g3d::ResAnmTexSrt *, char *);
-    /* 801b4420 */ static bool getMA0IndirectSrt(nw4r::g3d::ResAnmTexSrt *, char *);
+    /* 801b4420 */ static bool getMA0IndirectSrt(nw4r::g3d::ResAnmTexSrt *, const nw4r::g3d::ResMdl &mdl);
     /* 801b44c0 */ static void changeLoadedEntities(RoomManager *mgr, u32 index_shift, bool set);
     /* 801b4510 */ static u32 checkRoomFlag(RoomManager *mgr, u32 flag);
     /* 801b4550 */ static bool checkEnemyDefeatFlag(RoomManager *mgr, u32 flag);
     /* 801b45c0 */ static bool fn_801B45C0(RoomManager *mgr /* plus others */);
+    /* 801b6c60 */ bool hasVisitedRoomId(s32 roomid) const;
+
+    void setRoom(int roomid, dRoom_c *room);
 };
 
 #endif
