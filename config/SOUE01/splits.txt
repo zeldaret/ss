@@ -619,14 +619,38 @@ d/lyt/d_screen_fader.cpp:
 	.data       start:0x80528D68 end:0x80528D90
 	.sdata2     start:0x8057ABE0 end:0x8057AC08
 
+d/a/d_a_fish_mgr_base.cpp:
+	.text       start:0x8018B880 end:0x8018BFC8
+	.ctors      start:0x804DB7E4 end:0x804DB7E8
+
+d/a/d_a_fish_base.cpp:
+	.text       start:0x8018BFD0 end:0x8018E378
+	.ctors      start:0x804DB7E8 end:0x804DB7EC
+
 d/a/d_a_insect.cpp:
 	.text       start:0x8018F190 end:0x80190710
 	.data       start:0x8052ABD8 end:0x8052ACC0
 	.sdata2     start:0x8057ADD8 end:0x8057AE30
 
+d/a/d_a_salbage_obj.cpp:
+	.text       start:0x80190AB0 end:0x80192AF8
+	.ctors      start:0x804DB7EC end:0x804DB7F0
+
+d/a/d_a_salbage_npc.cpp:
+	.text       start:0x80192B00 end:0x80194080
+	.ctors      start:0x804DB7F0 end:0x804DB7F4
+
 d/tg/d_t_weather.cpp:
 	.text       start:0x801A65D0 end:0x801AF7D8
 	.ctors      start:0x804DB804 end:0x804DB808
+
+d/d_room_mgr.cpp:
+	.text       start:0x801B32A0 end:0x801B5BC8
+	.ctors      start:0x804DB80C end:0x804DB810
+
+d/d_room.cpp:
+	.text       start:0x801B5C80 end:0x801B84D8
+	.ctors      start:0x804DB810 end:0x804DB814
 
 d/d_sc_title.cpp:
 	.text       start:0x801B9230 end:0x801BA3A0
