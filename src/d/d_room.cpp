@@ -9,6 +9,7 @@
 #include "d/col/bg/d_bg_w_kcol.h"
 #include "d/d_sc_game.h"
 #include "d/d_stage.h"
+#include "d/d_stage_mgr.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/t/d_t_mass_obj.h"
@@ -36,7 +37,6 @@
 #include "nw4r/math/math_types.h"
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/current_stage_arc_manager.h"
-#include "toBeSorted/stage_manager.h"
 #include "toBeSorted/time_area_mgr.h"
 #include "toBeSorted/unk_with_water.h"
 

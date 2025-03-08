@@ -32,6 +32,10 @@ public:
 
     EGG::ExpHeap *getHeap(s32 roomid);
 
+    inline int ensureAllEntriesLoaded() {
+        return mArcTable.ensureAllEntriesLoaded();
+    }
+
 private:
     SizedString<32> mStageName;
     SizedString<32> mCurrentLoadingStageArcName;

@@ -623,6 +623,16 @@ d/lyt/d_screen_fader.cpp:
 	.data       start:0x80528D68 end:0x80528D90
 	.sdata2     start:0x8057ABE0 end:0x8057AC08
 
+d/a/d_a_bird_base.cpp:
+	.text       start:0x80175FD0 end:0x80179128
+
+d/a/d_a_door_base.cpp:
+	.text       start:0x80179130 end:0x801792C4
+	.ctors      start:0x804DB7DC end:0x804DB7E0
+
+d/lyt/d_lyt_map_popup.cpp:
+	.text       start:0x801792D0 end:0x80189F9C
+
 d/a/d_a_fish_mgr_base.cpp:
 	.text       start:0x8018B880 end:0x8018BFC8
 	.ctors      start:0x804DB7E4 end:0x804DB7E8
@@ -630,6 +640,9 @@ d/a/d_a_fish_mgr_base.cpp:
 d/a/d_a_fish_base.cpp:
 	.text       start:0x8018BFD0 end:0x8018E378
 	.ctors      start:0x804DB7E8 end:0x804DB7EC
+
+toBeSorted/sword_proj_effect_list.cpp:
+	.text       start:0x8018E380 end:0x8018F188
 
 d/a/d_a_insect.cpp:
 	.text       start:0x8018F190 end:0x80190710
@@ -643,6 +656,21 @@ d/a/d_a_salbage_obj.cpp:
 d/a/d_a_salbage_npc.cpp:
 	.text       start:0x80192B00 end:0x80194080
 	.ctors      start:0x804DB7F0 end:0x804DB7F4
+
+d/d_stage_mgr.cpp:
+	.text       start:0x801975C0 end:0x8019CFD8
+	.ctors      start:0x804DB7FC end:0x804DB800
+	.data       start:0x8052B708 end:0x8052C128
+
+d/d_last.cpp:
+	.text       start:0x8019CFE0 end:0x8019D15C
+
+d/d_camera.cpp:
+	.text       start:0x8019D160 end:0x8019ED0C
+	.ctors      start:0x804DB800 end:0x804DB804
+
+d/d_light_obj.cpp:
+	.text       start:0x8019ED10 end:0x801A65C8
 
 d/tg/d_t_weather.cpp:
 	.text       start:0x801A65D0 end:0x801AF7D8

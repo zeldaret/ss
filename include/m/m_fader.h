@@ -16,6 +16,10 @@ public:
         return isStatus(status) != true;
     }
 
+    bool isSettled() const {
+        return isStatus(mFaderBase_c::FADED_IN) || isStatus(mFaderBase_c::FADED_OUT);
+    }
+
     mFaderBase_c::EStatus getStatus() const {
         return mpFader->getStatus();
     }

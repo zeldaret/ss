@@ -4,9 +4,9 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
+#include "d/d_stage_mgr.h"
 #include "f/f_base.h"
 #include "rvl/MTX/mtx.h"
-#include "toBeSorted/stage_manager.h"
 
 dCcS *dCcS::sInstance;
 
@@ -167,7 +167,6 @@ void dCcS::SetArea(mMtx_c *pMtx) {
 void dCcS::ClearArea() {
     mAreaCount = 0;
 }
-
 
 extern "C" bool fn_8019A7A0(void *stg, f32 *, f32 *);
 void dCcS::AdjustHitPos() {

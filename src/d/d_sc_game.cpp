@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "d/d_stage_mgr.h"
 #include "d/flag/storyflag_manager.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
@@ -15,7 +16,6 @@
 #include "toBeSorted/minigame_mgr.h"
 #include "toBeSorted/music_mgrs.h"
 #include "toBeSorted/some_gxf_thing.h"
-#include "toBeSorted/stage_manager.h"
 
 #include <cstring>
 

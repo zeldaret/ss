@@ -1,3 +1,6 @@
+#ifndef D_CC_S_H
+#define D_CC_S_H
+
 #include "common.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_mass_s.h"
@@ -76,3 +79,5 @@ public:
     static dCcS *GetInstance();
     static dCcS *sInstance;
 };
+
+#endif

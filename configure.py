@@ -429,6 +429,8 @@ config.libs = [
             Object(Matching, "d/lyt/d_lyt_fader.cpp"),
             Object(Matching, "d/lyt/d_screen_fader.cpp"),
             Object(NonMatching, "d/a/d_a_insect.cpp"),
+            Object(NonMatching, "d/d_stage_mgr.cpp"),
+            Object(NonMatching, "d/d_last.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
             Object(NonMatching, "d/d_room.cpp"),
             Object(NonMatching, "d/d_cs_base.cpp"),

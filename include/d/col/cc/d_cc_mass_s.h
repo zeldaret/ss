@@ -1,3 +1,5 @@
+#ifndef D_CC_MASS_OBJ_H
+#define D_CC_MASS_OBJ_H
 
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
@@ -102,3 +104,5 @@ public:
     // u8 GetResultCam() const;
     // void GetCamTopPos(Vec *p_out);
 };
+
+#endif

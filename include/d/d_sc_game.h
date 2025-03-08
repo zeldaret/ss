@@ -62,7 +62,7 @@ struct SpawnInfo {
     /* 0x24 */ s8 entrance;
     /* 0x25 */ u8 night;
     /* 0x26 */ u8 trial;
-    /* 0x27 */ s8 transitionType;
+    /* 0x27 */ u8 transitionType;
     /* 0x28 */ s8 unk;
 
     enum DayNight {
@@ -137,6 +137,8 @@ public:
 
     static bool isCurrentStage(const char *stageName);
     static bool isStageSkyloftLayer20();
+    static bool isInCredits();
+    static bool isStateLayerWithSeekerStoneHintMenu();
 
     static SpawnInfo currentSpawnInfo;
     static SpawnInfo nextSpawnInfo;
@@ -154,6 +156,14 @@ public:
 
     static void resetUpdateFrameCount() {
         sUpdateFrameCount = 0;
+    }
+
+    bool savePromptFlag() const {
+        return mSavePromptFlag;
+    }
+
+    void setSavePromptFlag(bool val) {
+        mSavePromptFlag = val;
     }
 
 protected:
@@ -225,7 +235,7 @@ protected:
     /* 0x29C */ s32 mLastAreaType;
     /* 0x2A0 */ u8 mType0PosFlag;
     /* 0x2A1 */ u8 field_0x2A1;
-    /* 0x2A2 */ u8 mSavePromptFlag;
+    /* 0x2A2 */ bool mSavePromptFlag;
     /* 0x2A3 */ bool mPreventSaveRespawnInfo;
 };
 
