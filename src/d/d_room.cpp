@@ -50,9 +50,12 @@ extern "C" void parseRoomBzs(int roomid, void *bzs);
 int dRoom_c::create() {
     roomid = params & 0x3F;
     field_0x573 = dStageMgr_c::GetInstance()->getSTIFunk1() == 0 &&
+                  // SSH machine room (less sure about D303...)
                   !(dScGame_c::isCurrentStage("D301") && roomid == 12) &&
                   !(dScGame_c::isCurrentStage("D303") && roomid == 12) &&
+                  // LMF first two rooms, Gust Bellows room
                   !(dScGame_c::isCurrentStage("D300") && (roomid == 0 || roomid == 1 || roomid == 4)) &&
+                  // LMF crawlspace, spike maze
                   !(dScGame_c::isCurrentStage("D300_1") && (roomid == 7 || roomid == 9));
     if (!mAllocator.createNewTempFrmHeap(
             -1, CurrentStageArcManager::sInstance->getHeap(roomid), "dRoom_c::m_allocator", 0x20, 0
@@ -258,6 +261,8 @@ void dRoom_c::releaseBg() {
 }
 
 void dRoom_c::drawOnMapIfVisible(mMtx_c *mtx, int param) {
+    // Dungeon map shows rooms but doesn't fill them out
+    // Visited rooms are shown filled out
     bool drawFully = true;
     if (dStageMgr_c::GetInstance()->isAreaTypeDungeonOrBoss()) {
         drawFully = RoomManager::m_Instance->hasVisitedRoomId(roomid);
@@ -265,7 +270,7 @@ void dRoom_c::drawOnMapIfVisible(mMtx_c *mtx, int param) {
             return;
         }
     } else {
-        // "new map part in lake floria"
+        // Lake Floria interior
         if (dStageMgr_c::GetInstance()->isAreaTypeOverworldOrSkyloft() && dScGame_c::isCurrentStage("F102") &&
             !StoryflagManager::sInstance->getCounterOrFlag(115) && roomid >= 3 && roomid < 5) {
             return;
