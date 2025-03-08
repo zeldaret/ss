@@ -395,7 +395,7 @@ bool dRoom_c::mdl_c::create(nw4r::g3d::ResMdl resMdl, mAllocator_c &alloc) {
     calc(false);
     u32 numEntries = resMdl.GetResNodeNumEntries();
     mpAabb = new nw4r::math::AABB[numEntries];
-    ;
+
     if (mpAabb == nullptr) {
         return false;
     }
@@ -407,10 +407,9 @@ bool dRoom_c::mdl_c::create(nw4r::g3d::ResMdl resMdl, mAllocator_c &alloc) {
             mMtx_c mtx;
             getNodeWorldMtx(id, mtx);
             nw4r::g3d::ResNode resNd = resMdl.GetResNode(id);
-            // TODO Vec problems
-            nw4r::math::VEC3 min, max;
-            min = resNd.GetBoundsMin();
-            max = resNd.GetBoundsMax();
+            mVec3_c min, max;
+            min.copyFrom(resNd.GetBoundsMin());
+            max.copyFrom(resNd.GetBoundsMax());
             nw4r::math::AABB bb(min, max);
             buf->Set(&bb, mtx);
             buf++;
