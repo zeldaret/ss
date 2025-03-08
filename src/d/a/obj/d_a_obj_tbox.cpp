@@ -12,6 +12,7 @@
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_room.h"
+#include "d/d_stage.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/flag/tboxflag_manager.h"
@@ -32,7 +33,6 @@
 #include "toBeSorted/counters/goddess_chest_counter.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/room_manager.h"
 
 SPECIAL_ACTOR_PROFILE(TBOX, dAcTbox_c, fProfile::TBOX, 0x018D, 0, 6);
 
@@ -1192,7 +1192,7 @@ int dAcTbox_c::actorExecute() {
         (this->*mRegisterDowsingTarget)();
     }
 
-    dRoom_c *r = RoomManager::m_Instance->GetRoomByIndex(roomid);
+    dRoom_c *r = dStage_c::GetInstance()->getRoom(roomid);
     bool hasFlags = r->checkFlag(0x1E);
     if (hasFlags) {
         setObjectProperty(0x200);
@@ -1328,7 +1328,7 @@ int dAcTbox_c::actorExecuteInEvent() {
         (this->*mRegisterDowsingTarget)();
     }
 
-    dRoom_c *r = RoomManager::m_Instance->GetRoomByIndex(roomid);
+    dRoom_c *r = dStage_c::GetInstance()->getRoom(roomid);
     bool hasFlags = r->checkFlag(0x1E);
     if (hasFlags) {
         setObjectProperty(0x200);

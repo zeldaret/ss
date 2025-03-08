@@ -154,7 +154,7 @@ d/d_scene.cpp:
 	.sbss       start:0x80575220 end:0x80575228
 	.bss        start:0x805A06F0 end:0x805A0720
 
-d/d_stage.cpp:
+d/d_stage_parse.cpp:
 	.text       start:0x80062E40 end:0x80064250
 
 d/d_sys.cpp:
@@ -648,9 +648,12 @@ d/tg/d_t_weather.cpp:
 	.text       start:0x801A65D0 end:0x801AF7D8
 	.ctors      start:0x804DB804 end:0x804DB808
 
-d/d_room_mgr.cpp:
+d/d_stage.cpp:
 	.text       start:0x801B32A0 end:0x801B5BC8
 	.ctors      start:0x804DB80C end:0x804DB810
+	.data       start:0x8052DF40 end:0x8052E080
+	.sdata      start:0x80573290 end:0x805732F8
+	.sdata2     start:0x8057B4E8 end:0x8057B528
 
 d/d_room.cpp:
 	.text       start:0x801B5C80 end:0x801B84D8

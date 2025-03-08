@@ -14,7 +14,6 @@
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
 #include "toBeSorted/music_mgrs.h"
-#include "toBeSorted/room_manager.h"
 #include "toBeSorted/some_gxf_thing.h"
 #include "toBeSorted/stage_manager.h"
 

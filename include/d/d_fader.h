@@ -59,6 +59,10 @@ public:
         mFadeInFrame = frame;
     }
 
+    void setFadeOutFrame(u16 frame) {
+        mFadeOutFrame = frame;
+    }
+
 private:
     /* 0x08 */ mColorFader_c *mpColorFader;
     /* 0x0C */ dLytFader_c *mpLytFader;

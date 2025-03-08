@@ -5,6 +5,7 @@
 #include "d/a/d_a_base.h"
 #include "d/col/bg/d_bg_w_kcol.h"
 #include "d/d_base.h"
+#include "d/d_bzs_types.h"
 #include "m/m3d/m_anmmatclr.h"
 #include "m/m3d/m_anmtexpat.h"
 #include "m/m3d/m_anmtexsrt.h"
@@ -115,13 +116,13 @@ public:
     dRoom_c()
         : mStateMgr(*this, sStateID::null),
           field_0x15C(nullptr),
-          SCEN(nullptr),
-          PLY(nullptr),
-          CAM(nullptr),
-          EVNT(nullptr),
-          PATH(nullptr),
-          PNT(nullptr),
-          BPNT(nullptr),
+          scen(nullptr),
+          ply(nullptr),
+          cam(nullptr),
+          evnt(nullptr),
+          path(nullptr),
+          pnt(nullptr),
+          bpnt(nullptr),
           AREA(nullptr),
           unkCount(0),
           scenCount(0),
@@ -175,17 +176,17 @@ private:
     /* 0x4E0 */ STATE_MGR_DECLARE(dRoom_c);
 
     /* 0x51C */ void *field_0x15C;
-    /* 0x520 */ void *SCEN;
-    /* 0x524 */ void *PLY;
-    /* 0x528 */ void *CAM;
-    /* 0x52C */ void *EVNT;
-    /* 0x530 */ void *PATH;
-    /* 0x534 */ void *PNT;
-    /* 0x538 */ void *BPNT;
-    /* 0x53C */ void *SPTH;
+    /* 0x520 */ SCEN *scen;
+    /* 0x524 */ PLY *ply;
+    /* 0x528 */ CAM *cam;
+    /* 0x52C */ EVNT *evnt;
+    /* 0x530 */ PATH *path;
+    /* 0x534 */ PNT *pnt;
+    /* 0x538 */ BPNT *bpnt;
+    /* 0x53C */ PATH *spth;
     /* 0x540 */ void *field_0x540;
     /* 0x544 */ void *field_0x544;
-    /* 0x548 */ void *AREA;
+    /* 0x548 */ AREA *AREA;
     /* 0x54C */ u16 unkCount;
     /* 0x54E */ u16 scenCount;
     /* 0x550 */ u16 plyCount;

@@ -2,8 +2,8 @@
 
 #include "common.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/d_stage.h"
 #include "m/m_vec.h"
-#include "toBeSorted/room_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_UTAJIMA_LV2, dAcOutajimaLv2_c, fProfile::OBJ_UTAJIMA_LV2, 0x1D5, 0, 3);
 
@@ -11,8 +11,8 @@ const f32 dAcOutajimaLv2_c::someFloat = 100000.0f;
 
 bool dAcOutajimaLv2_c::createHeap() {
     mRes = nw4r::g3d::ResFile(getOarcResFile("IslCave"));
-    RoomManager::bindStageResToFile(&mRes);
-    RoomManager::bindSkyCmnToResFile(&mRes);
+    dStage_c::bindStageResToFile(&mRes);
+    dStage_c::bindSkyCmnToResFile(&mRes);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("IslCave");
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
 

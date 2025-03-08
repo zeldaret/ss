@@ -152,6 +152,10 @@ public:
     void clearSpawnInfo();
     const SpawnInfoExt &getSpawnInfo() const;
 
+    static void resetUpdateFrameCount() {
+        sUpdateFrameCount = 0;
+    }
+
 protected:
     static u32 sUpdateFrameCount;
     static u8 sCurrentLayer;

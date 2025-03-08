@@ -69,6 +69,10 @@ public:
         return field_0x78;
     }
 
+    void setField0x78(bool val) {
+        field_0x78 = val;
+    }
+
     void setField0x7A(bool val) {
         field_0x7A = val;
     }

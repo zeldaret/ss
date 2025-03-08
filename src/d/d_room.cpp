@@ -8,6 +8,7 @@
 #include "d/col/bg/d_bg_w_base.h"
 #include "d/col/bg/d_bg_w_kcol.h"
 #include "d/d_sc_game.h"
+#include "d/d_stage.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/t/d_t_mass_obj.h"
@@ -35,7 +36,6 @@
 #include "nw4r/math/math_types.h"
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/current_stage_arc_manager.h"
-#include "toBeSorted/room_manager.h"
 #include "toBeSorted/stage_manager.h"
 #include "toBeSorted/time_area_mgr.h"
 #include "toBeSorted/unk_with_water.h"
@@ -66,8 +66,8 @@ int dRoom_c::create() {
     bool anyError = false;
 
     mRoomRes = nw4r::g3d::ResFile(CurrentStageArcManager::sInstance->loadFromRoomArc(roomid, "g3d/room.brres"));
-    RoomManager::bindStageResToFile(&mRoomRes);
-    RoomManager::bindSkyCmnToResFile(&mRoomRes);
+    dStage_c::bindStageResToFile(&mRoomRes);
+    dStage_c::bindSkyCmnToResFile(&mRoomRes);
 
     for (s32 i = 0; i < 8; i++) {
         model_c *mdl = &mModels[i];
@@ -99,7 +99,7 @@ int dRoom_c::create() {
         return FAILED;
     }
 
-    RoomManager::m_Instance->setRoom(roomid, this);
+    dStage_c::GetInstance()->setRoom(roomid, this);
     BZS = CurrentStageArcManager::sInstance->loadFromRoomArc(roomid, "dat/room.bzs");
     parseRoomBzs(roomid, BZS);
     mDidAlreadyInit = (params >> 6) & 1;
@@ -123,7 +123,7 @@ int dRoom_c::doDelete() {
         stageMr->destroyUnkWithWater(val, &mWaterThing);
     }
 
-    RoomManager::m_Instance->setRoom(roomid, nullptr);
+    dStage_c::GetInstance()->setRoom(roomid, nullptr);
     return SUCCEEDED;
 }
 
@@ -265,7 +265,7 @@ void dRoom_c::drawOnMapIfVisible(mMtx_c *mtx, int param) {
     // Visited rooms are shown filled out
     bool drawFully = true;
     if (dStageMgr_c::GetInstance()->isAreaTypeDungeonOrBoss()) {
-        drawFully = RoomManager::m_Instance->hasVisitedRoomId(roomid);
+        drawFully = dStage_c::GetInstance()->hasVisitedRoom(roomid);
         if (!drawFully && !dAcItem_c::checkFlag(/* DUNGEON_MAP_FI */ 0x32)) {
             return;
         }
@@ -505,7 +505,7 @@ bool dRoom_c::model_c::create(nw4r::g3d::ResFile resFile, mAllocator_c &alloc, s
 
     nw4r::g3d::ResAnmTexSrt anmSrt = resFile.GetResAnmTexSrt(mdlName);
     if (!anmSrt.IsValid()) {
-        RoomManager::getMA0IndirectSrt(&anmSrt, mdl);
+        dStage_c::getMA0IndirectSrt(&anmSrt, mdl);
     }
     if (anmSrt.IsValid()) {
         mpAnmSrt = new m3d::anmTexSrt_c();

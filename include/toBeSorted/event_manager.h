@@ -6,6 +6,8 @@
 #include "sized_string.h"
 #include "toBeSorted/event.h"
 
+#include <cstring>
+
 class dAcBase_c;
 
 class EventManager {

@@ -5,6 +5,7 @@
 #include "d/a/d_a_player.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_w.h"
+#include "d/d_stage.h"
 #include "d/flag/sceneflag_manager.h"
 #include "f/f_base.h"
 #include "m/m3d/m_fanm.h"
@@ -17,7 +18,6 @@
 #include "s/s_Math.h"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/room_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TOWER_HAND_D101, dAcOTowerHandD101_c, fProfile::OBJ_TOWER_HAND_D101, 0x180, 0, 6);
 
@@ -108,7 +108,7 @@ bool dAcOTowerHandD101_c::createHeap() {
     if (!res.IsValid()) {
         return false;
     }
-    RoomManager::bindStageResToFile(&res);
+    dStage_c::bindStageResToFile(&res);
     if (direction == 1) {
         mMdl.getModel().setCullModeAll(GX_CULL_FRONT, false);
     }

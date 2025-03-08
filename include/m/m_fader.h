@@ -8,12 +8,16 @@ public:
     void draw();
     bool setFader(mFaderBase_c *fader);
 
-    bool isStatus(mFaderBase_c::EStatus status) {
+    bool isStatus(mFaderBase_c::EStatus status) const {
         return mpFader->getStatus() == status;
     }
 
-    bool isNotStatus(mFaderBase_c::EStatus status) {
+    bool isNotStatus(mFaderBase_c::EStatus status) const {
         return isStatus(status) != true;
+    }
+
+    mFaderBase_c::EStatus getStatus() const {
+        return mpFader->getStatus();
     }
 
     void setStatus(mFaderBase_c::EStatus status) {
