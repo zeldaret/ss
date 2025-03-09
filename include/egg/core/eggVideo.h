@@ -30,7 +30,7 @@ public:
     static u32 getTickPerVRetrace();
     static const GXRenderModeObj *getStandardRenderModeObj(const RenderModeObjSet *);
 
-    GXRenderModeObj *getCurrentOrFallbackRenderModeObj() const {
+    const GXRenderModeObj *getCurrentOrFallbackRenderModeObj() const {
         if (pRenderMode == nullptr) {
             return &lbl_8055FC64;
         }

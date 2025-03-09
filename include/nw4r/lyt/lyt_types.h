@@ -27,7 +27,7 @@ struct BitGXNums {
 template <typename T>
 inline bool TestBit(T bits, int index) {
     T mask = 1 << index;
-    return bits & mask;
+    return (bits & mask) != 0;
 }
 template <typename T>
 inline void SetBit(T *bits, int pos, bool val) {

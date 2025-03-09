@@ -362,7 +362,7 @@ config.libs = [
             Object(Matching, "toBeSorted/arc_managers/oarc_manager.cpp"),
             Object(Matching, "toBeSorted/arc_managers/layout_arc_manager.cpp"),
             Object(NonMatching, "toBeSorted/attention.cpp"),
-            Object(NonMatching, "toBeSorted/dowsing_target.cpp"),
+            Object(Matching, "toBeSorted/dowsing_target.cpp"),
             Object(NonMatching, "toBeSorted/time_area_mgr.cpp"),
             Object(NonMatching, "toBeSorted/nand_request_thread.cpp"),
             Object(Matching, "toBeSorted/save_file.cpp"),
@@ -385,7 +385,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_a_btn.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_z_btn.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_key.cpp"),
-            Object(NonMatching, "d/lyt/meter/d_lyt_meter_drink.cpp"),
+            Object(Matching, "d/lyt/meter/d_lyt_meter_drink.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_remocon_bg.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_nunchaku_bg.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_nun_stk.cpp"),
@@ -906,7 +906,7 @@ config.libs = [
     EGGLib(
         "util",
         [
-            Object(NonMatching, "egg/util/eggException.cpp"),
+            Object(Matching, "egg/util/eggException.cpp"),
         ],
     ),
     # {
