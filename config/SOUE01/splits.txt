@@ -1442,6 +1442,9 @@ nw4r/g3d/g3d_anmvis.cpp:
 
 nw4r/g3d/g3d_anmclr.cpp:
 	.text       start:0x80443590 end:0x80444D5C
+	.rodata     start:0x804F7098 end:0x804F7100
+	.data       start:0x8056D308 end:0x8056D428
+	.sdata2     start:0x8057ED10 end:0x8057ED20
 
 nw4r/g3d/g3d_anmtexpat.cpp:
 	.text       start:0x80444D60 end:0x8044635C

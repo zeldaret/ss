@@ -15,12 +15,8 @@ NW4R_G3D_RTTI_DEF(AnmObjMatClrRes);
  * AnmObjMatClr
  *
  ******************************************************************************/
-AnmObjMatClr::AnmObjMatClr(MEMAllocator* pAllocator, u16* pBindingBuf,
-                           int numBinding)
-    : AnmObj(pAllocator, NULL),
-      mNumBinding(numBinding),
-      mpBinding(pBindingBuf) {
-
+AnmObjMatClr::AnmObjMatClr(MEMAllocator *pAllocator, u16 *pBindingBuf, int numBinding)
+    : AnmObj(pAllocator, NULL), mNumBinding(numBinding), mpBinding(pBindingBuf) {
     Release();
 }
 
@@ -40,14 +36,14 @@ void AnmObjMatClr::Release() {
     SetAnmFlag(FLAG_ANM_BOUND, false);
 }
 
-AnmObjMatClrRes* AnmObjMatClr::Attach(int idx, AnmObjMatClrRes* pRes) {
+AnmObjMatClrRes *AnmObjMatClr::Attach(int idx, AnmObjMatClrRes *pRes) {
 #pragma unused(idx)
 #pragma unused(pRes)
 
     return NULL;
 }
 
-AnmObjMatClrRes* AnmObjMatClr::Detach(int idx) {
+AnmObjMatClrRes *AnmObjMatClr::Detach(int idx) {
 #pragma unused(idx)
 
     return NULL;
@@ -60,14 +56,12 @@ void AnmObjMatClr::DetachAll() {}
  * AnmObjMatClrNode
  *
  ******************************************************************************/
-AnmObjMatClrNode::AnmObjMatClrNode(MEMAllocator* pAllocator, u16* pBindingBuf,
-                                   int numBinding,
-                                   AnmObjMatClrRes** ppChildrenBuf,
-                                   int numChildren)
+AnmObjMatClrNode::AnmObjMatClrNode(
+    MEMAllocator *pAllocator, u16 *pBindingBuf, int numBinding, AnmObjMatClrRes **ppChildrenBuf, int numChildren
+)
     : AnmObjMatClr(pAllocator, pBindingBuf, numBinding),
       mChildrenArraySize(numChildren),
       mpChildrenArray(ppChildrenBuf) {
-
     for (int i = 0; i < mChildrenArraySize; i++) {
         mpChildrenArray[i] = NULL;
     }
@@ -77,8 +71,8 @@ AnmObjMatClrNode::~AnmObjMatClrNode() {
     DetachAll();
 }
 
-AnmObjMatClrRes* AnmObjMatClrNode::Attach(int idx, AnmObjMatClrRes* pRes) {
-    AnmObjMatClrRes* pOld = Detach(idx);
+AnmObjMatClrRes *AnmObjMatClrNode::Attach(int idx, AnmObjMatClrRes *pRes) {
+    AnmObjMatClrRes *pOld = Detach(idx);
     bool hasAnm = false;
 
     for (u32 i = 0; i < mNumBinding; i++) {
@@ -99,8 +93,8 @@ AnmObjMatClrRes* AnmObjMatClrNode::Attach(int idx, AnmObjMatClrRes* pRes) {
     return pOld;
 }
 
-AnmObjMatClrRes* AnmObjMatClrNode::Detach(int idx) {
-    AnmObjMatClrRes* pOld = mpChildrenArray[idx];
+AnmObjMatClrRes *AnmObjMatClrNode::Detach(int idx) {
+    AnmObjMatClrRes *pOld = mpChildrenArray[idx];
 
     if (pOld != NULL) {
         pOld->G3dProc(G3DPROC_DETACH_PARENT, 0, this);
@@ -111,7 +105,7 @@ AnmObjMatClrRes* AnmObjMatClrNode::Detach(int idx) {
             u16 binding = BINDING_UNDEFINED;
 
             for (int j = 0; j < mChildrenArraySize; j++) {
-                AnmObjMatClrRes* pChild = mpChildrenArray[j];
+                AnmObjMatClrRes *pChild = mpChildrenArray[j];
 
                 if (pChild == NULL || !pChild->TestDefined(i)) {
                     continue;
@@ -187,7 +181,7 @@ bool AnmObjMatClrNode::Bind(const ResMdl mdl) {
     bool success = false;
 
     for (int i = 0; i < mChildrenArraySize; i++) {
-        AnmObjMatClrRes* pChild = mpChildrenArray[i];
+        AnmObjMatClrRes *pChild = mpChildrenArray[i];
         if (pChild == NULL) {
             continue;
         }
@@ -216,30 +210,30 @@ void AnmObjMatClrNode::Release() {
     AnmObjMatClr::Release();
 }
 
-void AnmObjMatClrNode::G3dProc(u32 task, u32 param, void* pInfo) {
+void AnmObjMatClrNode::G3dProc(u32 task, u32 param, void *pInfo) {
 #pragma unused(param)
 
     switch (task) {
-    case G3DPROC_CHILD_DETACHED: {
-        for (int i = 0; i < mChildrenArraySize; i++) {
-            if (mpChildrenArray[i] == pInfo) {
-                Detach(i);
-                return;
+        case G3DPROC_CHILD_DETACHED: {
+            for (int i = 0; i < mChildrenArraySize; i++) {
+                if (mpChildrenArray[i] == pInfo) {
+                    Detach(i);
+                    return;
+                }
             }
+
+            break;
         }
 
-        break;
-    }
+        case G3DPROC_DETACH_PARENT: {
+            SetParent(NULL);
+            break;
+        }
 
-    case G3DPROC_DETACH_PARENT: {
-        SetParent(NULL);
-        break;
-    }
-
-    case G3DPROC_ATTACH_PARENT: {
-        SetParent(static_cast<G3dObj*>(pInfo));
-        break;
-    }
+        case G3DPROC_ATTACH_PARENT: {
+            SetParent(static_cast<G3dObj *>(pInfo));
+            break;
+        }
     }
 }
 
@@ -248,9 +242,8 @@ void AnmObjMatClrNode::G3dProc(u32 task, u32 param, void* pInfo) {
  * AnmObjMatClrOverride
  *
  ******************************************************************************/
-AnmObjMatClrOverride* AnmObjMatClrOverride::Construct(MEMAllocator* pAllocator,
-                                                      u32* pSize, ResMdl mdl,
-                                                      int numChildren) {
+AnmObjMatClrOverride *
+AnmObjMatClrOverride::Construct(MEMAllocator *pAllocator, u32 *pSize, ResMdl mdl, int numChildren) {
     if (!mdl.IsValid()) {
         return NULL;
     }
@@ -260,7 +253,7 @@ AnmObjMatClrOverride* AnmObjMatClrOverride::Construct(MEMAllocator* pAllocator,
 
     u32 objSize = sizeof(AnmObjMatClrOverride);
     u32 bindSize = bindNum * sizeof(u16);
-    u32 childrenSize = numChildren * sizeof(AnmObjMatClrRes*);
+    u32 childrenSize = numChildren * sizeof(AnmObjMatClrRes *);
 
     u32 bindOfs = align4(objSize);
     u32 childrenOfs = align4(bindOfs + bindSize);
@@ -274,7 +267,7 @@ AnmObjMatClrOverride* AnmObjMatClrOverride::Construct(MEMAllocator* pAllocator,
         return NULL;
     }
 
-    u8* pBuffer = reinterpret_cast<u8*>(Alloc(pAllocator, size));
+    u8 *pBuffer = reinterpret_cast<u8 *>(Alloc(pAllocator, size));
     if (pBuffer == NULL) {
         return NULL;
     }
@@ -289,16 +282,15 @@ AnmObjMatClrOverride* AnmObjMatClrOverride::Construct(MEMAllocator* pAllocator,
     // clang-format on
 }
 
-const ClrAnmResult* AnmObjMatClrOverride::GetResult(ClrAnmResult* pResult,
-                                                    u32 idx) {
+const ClrAnmResult *AnmObjMatClrOverride::GetResult(ClrAnmResult *pResult, u32 idx) {
     for (int i = mChildrenArraySize - 1; i >= 0; i--) {
-        AnmObjMatClrRes* pChild = mpChildrenArray[i];
+        AnmObjMatClrRes *pChild = mpChildrenArray[i];
 
         if (pChild == NULL || !pChild->TestExistence(idx)) {
             continue;
         }
 
-        const ClrAnmResult* pChildResult = pChild->GetResult(pResult, idx);
+        const ClrAnmResult *pChildResult = pChild->GetResult(pResult, idx);
 
         if (pChildResult->bRgbaExist != 0) {
             return pChildResult;
@@ -314,9 +306,8 @@ const ClrAnmResult* AnmObjMatClrOverride::GetResult(ClrAnmResult* pResult,
  * AnmObjMatClrRes
  *
  ******************************************************************************/
-AnmObjMatClrRes* AnmObjMatClrRes::Construct(MEMAllocator* pAllocator,
-                                            u32* pSize, ResAnmClr clr,
-                                            ResMdl mdl, bool cache) {
+AnmObjMatClrRes *
+AnmObjMatClrRes::Construct(MEMAllocator *pAllocator, u32 *pSize, ResAnmClr clr, ResMdl mdl, bool cache) {
     if (!clr.IsValid() || !mdl.IsValid()) {
         return NULL;
     }
@@ -339,31 +330,25 @@ AnmObjMatClrRes* AnmObjMatClrRes::Construct(MEMAllocator* pAllocator,
         return NULL;
     }
 
-    u8* pBuffer = reinterpret_cast<u8*>(Alloc(pAllocator, size));
+    u8 *pBuffer = reinterpret_cast<u8 *>(Alloc(pAllocator, size));
     if (pBuffer == NULL) {
         return NULL;
     }
 
-    ClrAnmResult* pCacheBuf =
-        cache
-            ? reinterpret_cast<ClrAnmResult*>(pBuffer + sizeof(AnmObjMatClrRes))
-            : NULL;
+    ClrAnmResult *pCacheBuf = cache ? reinterpret_cast<ClrAnmResult *>(pBuffer + sizeof(AnmObjMatClrRes)) : NULL;
 
-    u16* pBindingBuf =
-        reinterpret_cast<u16*>(cacheSize + (pBuffer + sizeof(AnmObjMatClrRes)));
+    u16 *pBindingBuf = reinterpret_cast<u16 *>(cacheSize + (pBuffer + sizeof(AnmObjMatClrRes)));
 
-    return new (pBuffer)
-        AnmObjMatClrRes(pAllocator, clr, pBindingBuf, bindNum, pCacheBuf);
+    return new (pBuffer) AnmObjMatClrRes(pAllocator, clr, pBindingBuf, bindNum, pCacheBuf);
 }
 
-AnmObjMatClrRes::AnmObjMatClrRes(MEMAllocator* pAllocator, ResAnmClr clr,
-                                 u16* pBindingBuf, int numBinding,
-                                 ClrAnmResult* pCacheBuf)
+AnmObjMatClrRes::AnmObjMatClrRes(
+    MEMAllocator *pAllocator, ResAnmClr clr, u16 *pBindingBuf, int numBinding, ClrAnmResult *pCacheBuf
+)
     : AnmObjMatClr(pAllocator, pBindingBuf, numBinding),
       FrameCtrl(0.0f, clr.GetNumFrame(), GetAnmPlayPolicy(clr.GetAnmPolicy())),
       mRes(clr),
       mpResultCache(pCacheBuf) {
-
     if (mpResultCache != NULL) {
         UpdateCache();
     }
@@ -383,6 +368,9 @@ f32 AnmObjMatClrRes::GetFrame() const {
 
 void AnmObjMatClrRes::SetUpdateRate(f32 rate) {
     SetRate(rate);
+    if (rate == 0.f && mpResultCache != NULL) {
+        UpdateCache();
+    }
 }
 
 f32 AnmObjMatClrRes::GetUpdateRate() const {
@@ -390,10 +378,11 @@ f32 AnmObjMatClrRes::GetUpdateRate() const {
 }
 
 void AnmObjMatClrRes::UpdateFrame() {
-    UpdateFrm();
-
-    if (mpResultCache != NULL) {
-        UpdateCache();
+    if (GetRate() != 0.f) {
+        UpdateFrm();
+        if (mpResultCache != NULL) {
+            UpdateCache();
+        }
     }
 }
 
@@ -402,7 +391,7 @@ bool AnmObjMatClrRes::Bind(const ResMdl mdl) {
     bool success = false;
 
     for (u16 i = 0; i < numAnim; i++) {
-        const ResAnmClrMatData* pData = mRes.GetMatAnm(i);
+        const ResAnmClrMatData *pData = mRes.GetMatAnm(i);
 
         // Seek back from name string to start of ResName
         ResName name(ut::AddOffsetToPtr(pData, pData->name - 4));
@@ -420,7 +409,7 @@ bool AnmObjMatClrRes::Bind(const ResMdl mdl) {
     return success;
 }
 
-const ClrAnmResult* AnmObjMatClrRes::GetResult(ClrAnmResult* pResult, u32 idx) {
+const ClrAnmResult *AnmObjMatClrRes::GetResult(ClrAnmResult *pResult, u32 idx) {
     u32 id = mpBinding[idx];
 
     if (id & (BINDING_UNDEFINED | BINDING_INVALID)) {
@@ -449,24 +438,24 @@ void AnmObjMatClrRes::UpdateCache() {
     }
 }
 
-void AnmObjMatClrRes::G3dProc(u32 task, u32 param, void* pInfo) {
+void AnmObjMatClrRes::G3dProc(u32 task, u32 param, void *pInfo) {
 #pragma unused(param)
 
     switch (task) {
-    case G3DPROC_UPDATEFRAME: {
-        UpdateFrame();
-        break;
-    }
+        case G3DPROC_UPDATEFRAME: {
+            UpdateFrame();
+            break;
+        }
 
-    case G3DPROC_DETACH_PARENT: {
-        SetParent(NULL);
-        break;
-    }
+        case G3DPROC_DETACH_PARENT: {
+            SetParent(NULL);
+            break;
+        }
 
-    case G3DPROC_ATTACH_PARENT: {
-        SetParent(static_cast<G3dObj*>(pInfo));
-        break;
-    }
+        case G3DPROC_ATTACH_PARENT: {
+            SetParent(static_cast<G3dObj *>(pInfo));
+            break;
+        }
     }
 }
 
@@ -475,61 +464,51 @@ void AnmObjMatClrRes::G3dProc(u32 task, u32 param, void* pInfo) {
  * ApplyClrAnmResult
  *
  ******************************************************************************/
-void ApplyClrAnmResult(ResMatChan chan, ResMatTevColor tev,
-                       const ClrAnmResult* pResult) {
+void ApplyClrAnmResult(ResMatChan chan, ResMatTevColor tev, const ClrAnmResult *pResult) {
     ut::Color c;
 
-    if (pResult->bRgbaExist &
-        (1 << ClrAnmResult::CLA_CLR0 | 1 << ClrAnmResult::CLA_CLR1 |
-         1 << ClrAnmResult::CLA_AMB0 | 1 << ClrAnmResult::CLA_AMB1)) {
-
+    if (pResult->bRgbaExist & (1 << ClrAnmResult::CLA_CLR0 | 1 << ClrAnmResult::CLA_CLR1 | 1 << ClrAnmResult::CLA_AMB0 |
+                               1 << ClrAnmResult::CLA_AMB1)) {
         if (pResult->bRgbaExist & (1 << ClrAnmResult::CLA_CLR0)) {
-            GXColor& rMatColor = chan.ref().chan[0].matColor;
+            GXColor &rMatColor = chan.ref().chan[0].matColor;
             c = rMatColor;
 
-            rMatColor = (c & pResult->rgbaMask[ClrAnmResult::CLA_CLR0]) |
-                        pResult->rgba[ClrAnmResult::CLA_CLR0];
+            rMatColor = (c & pResult->rgbaMask[ClrAnmResult::CLA_CLR0]) | pResult->rgba[ClrAnmResult::CLA_CLR0];
         }
 
         if (pResult->bRgbaExist & (1 << ClrAnmResult::CLA_AMB0)) {
-            GXColor& rMatColor = chan.ref().chan[0].ambColor;
+            GXColor &rMatColor = chan.ref().chan[0].ambColor;
             c = rMatColor;
 
-            rMatColor = (c & pResult->rgbaMask[ClrAnmResult::CLA_AMB0]) |
-                        pResult->rgba[ClrAnmResult::CLA_AMB0];
+            rMatColor = (c & pResult->rgbaMask[ClrAnmResult::CLA_AMB0]) | pResult->rgba[ClrAnmResult::CLA_AMB0];
         }
 
         if (pResult->bRgbaExist & (1 << ClrAnmResult::CLA_CLR1)) {
-            GXColor& rMatColor = chan.ref().chan[1].matColor;
+            GXColor &rMatColor = chan.ref().chan[1].matColor;
             c = rMatColor;
 
-            rMatColor = (c & pResult->rgbaMask[ClrAnmResult::CLA_CLR1]) |
-                        pResult->rgba[ClrAnmResult::CLA_CLR1];
+            rMatColor = (c & pResult->rgbaMask[ClrAnmResult::CLA_CLR1]) | pResult->rgba[ClrAnmResult::CLA_CLR1];
         }
 
         if (pResult->bRgbaExist & (1 << ClrAnmResult::CLA_AMB1)) {
-            GXColor& rMatColor = chan.ref().chan[1].ambColor;
+            GXColor &rMatColor = chan.ref().chan[1].ambColor;
             c = rMatColor;
 
-            rMatColor = (c & pResult->rgbaMask[ClrAnmResult::CLA_AMB1]) |
-                        pResult->rgba[ClrAnmResult::CLA_AMB1];
+            rMatColor = (c & pResult->rgbaMask[ClrAnmResult::CLA_AMB1]) | pResult->rgba[ClrAnmResult::CLA_AMB1];
         }
     }
 
-    if (pResult->bRgbaExist &
-        (1 << ClrAnmResult::CLA_TEV0 | 1 << ClrAnmResult::CLA_TEV1 |
-         1 << ClrAnmResult::CLA_TEV2 | 1 << ClrAnmResult::CLA_TEVK0 |
-         1 << ClrAnmResult::CLA_TEVK1 | 1 << ClrAnmResult::CLA_TEVK2 |
-         1 << ClrAnmResult::CLA_TEVK3)) {
-
+    if (pResult->bRgbaExist & (1 << ClrAnmResult::CLA_TEV0 | 1 << ClrAnmResult::CLA_TEV1 | 1 << ClrAnmResult::CLA_TEV2 |
+                               1 << ClrAnmResult::CLA_TEVK0 | 1 << ClrAnmResult::CLA_TEVK1 |
+                               1 << ClrAnmResult::CLA_TEVK2 | 1 << ClrAnmResult::CLA_TEVK3)) {
         if (pResult->bRgbaExist & (1 << ClrAnmResult::CLA_TEV0)) {
             if (!tev.GXGetTevColor(GX_TEVREG0, &c)) {
                 c = ut::Color::BLACK;
             }
 
-            tev.GXSetTevColor(GX_TEVREG0,
-                              c & pResult->rgbaMask[ClrAnmResult::CLA_TEV0] |
-                                  pResult->rgba[ClrAnmResult::CLA_TEV0]);
+            tev.GXSetTevColor(
+                GX_TEVREG0, c & pResult->rgbaMask[ClrAnmResult::CLA_TEV0] | pResult->rgba[ClrAnmResult::CLA_TEV0]
+            );
         }
 
         if (pResult->bRgbaExist & (1 << ClrAnmResult::CLA_TEV1)) {
@@ -537,9 +516,9 @@ void ApplyClrAnmResult(ResMatChan chan, ResMatTevColor tev,
                 c = ut::Color::BLACK;
             }
 
-            tev.GXSetTevColor(GX_TEVREG1,
-                              c & pResult->rgbaMask[ClrAnmResult::CLA_TEV1] |
-                                  pResult->rgba[ClrAnmResult::CLA_TEV1]);
+            tev.GXSetTevColor(
+                GX_TEVREG1, c & pResult->rgbaMask[ClrAnmResult::CLA_TEV1] | pResult->rgba[ClrAnmResult::CLA_TEV1]
+            );
         }
 
         if (pResult->bRgbaExist & (1 << ClrAnmResult::CLA_TEV2)) {
@@ -547,9 +526,9 @@ void ApplyClrAnmResult(ResMatChan chan, ResMatTevColor tev,
                 c = ut::Color::BLACK;
             }
 
-            tev.GXSetTevColor(GX_TEVREG2,
-                              c & pResult->rgbaMask[ClrAnmResult::CLA_TEV2] |
-                                  pResult->rgba[ClrAnmResult::CLA_TEV2]);
+            tev.GXSetTevColor(
+                GX_TEVREG2, c & pResult->rgbaMask[ClrAnmResult::CLA_TEV2] | pResult->rgba[ClrAnmResult::CLA_TEV2]
+            );
         }
 
         if (pResult->bRgbaExist & (1 << ClrAnmResult::CLA_TEVK0)) {
@@ -557,9 +536,9 @@ void ApplyClrAnmResult(ResMatChan chan, ResMatTevColor tev,
                 c = ut::Color::BLACK;
             }
 
-            tev.GXSetTevKColor(GX_KCOLOR0,
-                               c & pResult->rgbaMask[ClrAnmResult::CLA_TEVK0] |
-                                   pResult->rgba[ClrAnmResult::CLA_TEVK0]);
+            tev.GXSetTevKColor(
+                GX_KCOLOR0, c & pResult->rgbaMask[ClrAnmResult::CLA_TEVK0] | pResult->rgba[ClrAnmResult::CLA_TEVK0]
+            );
         }
 
         if (pResult->bRgbaExist & (1 << ClrAnmResult::CLA_TEVK1)) {
@@ -567,9 +546,9 @@ void ApplyClrAnmResult(ResMatChan chan, ResMatTevColor tev,
                 c = ut::Color::BLACK;
             }
 
-            tev.GXSetTevKColor(GX_KCOLOR1,
-                               c & pResult->rgbaMask[ClrAnmResult::CLA_TEVK1] |
-                                   pResult->rgba[ClrAnmResult::CLA_TEVK1]);
+            tev.GXSetTevKColor(
+                GX_KCOLOR1, c & pResult->rgbaMask[ClrAnmResult::CLA_TEVK1] | pResult->rgba[ClrAnmResult::CLA_TEVK1]
+            );
         }
 
         if (pResult->bRgbaExist & (1 << ClrAnmResult::CLA_TEVK2)) {
@@ -577,9 +556,9 @@ void ApplyClrAnmResult(ResMatChan chan, ResMatTevColor tev,
                 c = ut::Color::BLACK;
             }
 
-            tev.GXSetTevKColor(GX_KCOLOR2,
-                               c & pResult->rgbaMask[ClrAnmResult::CLA_TEVK2] |
-                                   pResult->rgba[ClrAnmResult::CLA_TEVK2]);
+            tev.GXSetTevKColor(
+                GX_KCOLOR2, c & pResult->rgbaMask[ClrAnmResult::CLA_TEVK2] | pResult->rgba[ClrAnmResult::CLA_TEVK2]
+            );
         }
 
         if (pResult->bRgbaExist & (1 << ClrAnmResult::CLA_TEVK3)) {
@@ -587,9 +566,9 @@ void ApplyClrAnmResult(ResMatChan chan, ResMatTevColor tev,
                 c = ut::Color::BLACK;
             }
 
-            tev.GXSetTevKColor(GX_KCOLOR3,
-                               c & pResult->rgbaMask[ClrAnmResult::CLA_TEVK3] |
-                                   pResult->rgba[ClrAnmResult::CLA_TEVK3]);
+            tev.GXSetTevKColor(
+                GX_KCOLOR3, c & pResult->rgbaMask[ClrAnmResult::CLA_TEVK3] | pResult->rgba[ClrAnmResult::CLA_TEVK3]
+            );
         }
 
         tev.DCStore(false);
