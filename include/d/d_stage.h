@@ -5,6 +5,8 @@
 #include "d/d_base.h"
 #include "d/d_fader.h"
 #include "d/d_room.h"
+#include "egg/gfx/eggPostEffectBlur.h"
+#include "egg/gfx/eggScreenEffectBlur.h"
 #include "m/m_allocator.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
@@ -27,30 +29,6 @@ public:
 
 private:
     dRoom_c *mRooms[MAX_ROOM_NUMBER - 1];
-};
-
-class EggScreenEffectBlur {
-public:
-    EggScreenEffectBlur();
-    ~EggScreenEffectBlur();
-
-private:
-    u8 _0x00[0x38 - 0x00];
-};
-
-class EggPostEffectBlur {
-public:
-    EggPostEffectBlur();
-    ~EggPostEffectBlur() {}
-
-    void setField0x30(f32 val) {
-        field_0x30 = val;
-    }
-
-private:
-    u8 _0x00[0x30 - 0x00];
-    f32 field_0x30;
-    u8 _0x03[0x78 - 0x34];
 };
 
 class MapRelated {
@@ -79,8 +57,8 @@ public:
     /* 0x124 */ f32 field_0x124;
     /* 0x128 */ f32 field_0x128;
     /* 0x12C */ f32 field_0x12C;
-    /* 0x130 */ EggScreenEffectBlur mScreenEffect;
-    /* 0x168 */ EggPostEffectBlur mPostEffect;
+    /* 0x130 */ EGG::ScreenEffectBlur mScreenEffect;
+    /* 0x168 */ EGG::PostEffectBlur mPostEffect;
     /* 0x1E0 */ u32 field_0x1E0;
     /* 0x1E4 */ u16 field_0x1E4;
     /* 0x1E6 */ u16 field_0x1E6;
