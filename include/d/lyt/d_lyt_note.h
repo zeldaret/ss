@@ -3,7 +3,6 @@
 
 #include "d/lyt/d2d.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 // size 0x27C
 class dLytNote_c {
@@ -13,8 +12,10 @@ public:
 
     bool build(d2d::ResAccIf_c *);
     bool remove();
-    void execute();
+    void execute(u8 alpha);
     void draw();
+
+    void setTransform(nw4r::lyt::Pane &p);
 
     f32 getField0x260() const;
     void setFrame(f32);
@@ -25,15 +26,15 @@ private:
     STATE_FUNC_DECLARE(dLytNote_c, Move);
     STATE_FUNC_DECLARE(dLytNote_c, Out);
 
-    /* 0x004 */ UI_STATE_MGR_DECLARE(dLytNote_c);
+    /* 0x004 */ STATE_MGR_DECLARE(dLytNote_c);
     /* 0x040 */ d2d::LytBase_c mLyt;
     /* 0x0D0 */ d2d::AnmGroup_c mAnmGroups[6];
     /* 0x250 */ nw4r::lyt::Pane *mpPane;
     /* 0x254 */ mVec3_c mTranslate;
     /* 0x260 */ f32 field_0x260;
-    /* 0x264 */ u32 field_0x264;
-    /* 0x268 */ s32 field_0x268;
-    /* 0x26C */ u32 field_0x26C;
+    /* 0x264 */ s32 mOutAnim;
+    /* 0x268 */ s32 mInAnim;
+    /* 0x26C */ s32 field_0x26C;
     /* 0x270 */ u8 field_0x270;
     /* 0x271 */ u8 field_0x271;
     /* 0x272 */ u8 field_0x272;
