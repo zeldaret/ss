@@ -49,7 +49,7 @@ extern "C" void parseRoomBzs(int roomid, void *bzs);
 
 int dRoom_c::create() {
     roomid = params & 0x3F;
-    field_0x573 = dStageMgr_c::GetInstance()->getSTIFunk1() == 0 &&
+    mCanHavePastState = dStageMgr_c::GetInstance()->getSTIFunk1() == 0 &&
                   // SSH machine room (less sure about D303...)
                   !(dScGame_c::isCurrentStage("D301") && roomid == 12) &&
                   !(dScGame_c::isCurrentStage("D303") && roomid == 12) &&
@@ -130,29 +130,29 @@ int dRoom_c::doDelete() {
 int dRoom_c::execute() {
     mStateMgr.executeState();
     f32 val = 0.0f;
-    if (field_0x573) {
+    if (mCanHavePastState) {
         val = dTimeAreaMgr_c::sInstance->checkPositionIsInPastState(roomid, mVec3_c::Zero, nullptr, 1000000.0f);
-        field_0x576 = !mHasAnmTexPat && (!dTimeAreaMgr_c::sInstance->isInLanayruMiningFacility() || val > 0.0f) &&
+        mSkipDrawing = !mHasAnmTexPat && (!dTimeAreaMgr_c::sInstance->isInLanayruMiningFacility() || val > 0.0f) &&
                       dTimeAreaMgr_c::sInstance->isField0x78();
     } else {
-        field_0x576 = false;
+        mSkipDrawing = false;
     }
 
-    if ((mFlags & 2) != 0 || field_0x576) {
+    if ((mFlags & 2) != 0 || mSkipDrawing) {
         releaseBg();
         return SUCCEEDED;
     }
 
     executeBg();
     for (s32 i = 0; i < 8; i++) {
-        mModels[i].execute(i, field_0x573, val);
+        mModels[i].execute(i, mCanHavePastState, val);
     }
 
     return SUCCEEDED;
 }
 
 int dRoom_c::draw() {
-    if ((mFlags & 2) != 0 || field_0x576) {
+    if ((mFlags & 2) != 0 || mSkipDrawing) {
         return SUCCEEDED;
     }
     for (s32 i = 0; i < 8; i++) {
@@ -169,10 +169,10 @@ void deactivateUpdatesCb(dAcBase_c *ac) {
 }
 
 void dRoom_c::deactivateUpdates() {
-    if (!field_0x572) {
+    if (!mUpdatesDeactivated) {
         foreachObject(deactivateUpdatesCb);
         setProcControlFlag(ROOT_DISABLE_EXECUTE | ROOT_DISABLE_DRAW);
-        field_0x572 = true;
+        mUpdatesDeactivated = true;
     }
 }
 
@@ -184,11 +184,11 @@ void activateUpdatesCb(dAcBase_c *ac) {
 }
 
 void dRoom_c::activateUpdates() {
-    if (field_0x572) {
+    if (mUpdatesDeactivated) {
         foreachObject(activateUpdatesCb);
         clearProcControlFlag(ROOT_DISABLE_EXECUTE);
         clearProcControlFlag(ROOT_DISABLE_DRAW);
-        field_0x572 = false;
+        mUpdatesDeactivated = false;
     }
 }
 
@@ -233,7 +233,7 @@ bool dRoom_c::setupBg() {
                 return true;
             }
 
-            if (field_0x573 && !mHasAnmTexPat) {
+            if (mCanHavePastState && !mHasAnmTexPat) {
                 bg->SetUnkBase();
             }
             // ???
@@ -539,7 +539,7 @@ bool dRoom_c::model_c::create(nw4r::g3d::ResFile resFile, mAllocator_c &alloc, s
     return true;
 }
 
-void dRoom_c::model_c::execute(s32 idx, bool roomfield_0x573, f32 pastState) {
+void dRoom_c::model_c::execute(s32 idx, bool canHavePastState, f32 pastState) {
     if (!mMdl.hasModel()) {
         return;
     }
@@ -556,7 +556,7 @@ void dRoom_c::model_c::execute(s32 idx, bool roomfield_0x573, f32 pastState) {
         mpAnmVis->play();
     }
 
-    if (roomfield_0x573 && !(idx >= 6)) {
+    if (canHavePastState && !(idx >= 6)) {
         if (mpAnmPat) {
             int frame = (pastState > 0.0f);
             mpAnmPat->setFrame(frame, 0);

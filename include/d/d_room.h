@@ -269,14 +269,14 @@ private:
 
     /* 0x564 */ UnkRoomClass mUnk;
     /* 0x568 */ u8 mFlags;
-    void *BZS;
+    /* 0x56C */ void *BZS;
     /* 0x570 */ s8 roomid;
     /* 0x571 */ bool field_0x571;
-    /* 0x572 */ bool field_0x572;
-    /* 0x573 */ bool field_0x573;
+    /* 0x572 */ bool mUpdatesDeactivated;
+    /* 0x573 */ bool mCanHavePastState;
     /* 0x574 */ bool mHasAnmTexPat;
     /* 0x575 */ bool mDidAlreadyInit;
-    /* 0x576 */ bool field_0x576;
+    /* 0x576 */ bool mSkipDrawing;
 };
 
 #endif
