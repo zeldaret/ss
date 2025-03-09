@@ -1413,18 +1413,22 @@ nw4r/g3d/res/g3d_reslightset.cpp:
 
 nw4r/g3d/res/g3d_resanmamblight.cpp:
 	.text       start:0x80441B60 end:0x80441C30
+	.sdata2     start:0x8057ECD0 end:0x8057ECE0
 
 nw4r/g3d/res/g3d_resanmlight.cpp:
 	.text       start:0x80441C30 end:0x80442018
+	.sdata2     start:0x8057ECE0 end:0x8057ECF0
 
 nw4r/g3d/res/g3d_resanmcamera.cpp:
 	.text       start:0x80442020 end:0x80442330
 
 nw4r/g3d/res/g3d_resanmscn.cpp:
 	.text       start:0x80442330 end:0x8044297C
+	.data       start:0x8056D200 end:0x8056D280
 
 nw4r/g3d/res/g3d_resanmshp.cpp:
 	.text       start:0x80442980 end:0x80442AE8
+	.sdata2     start:0x8057ECF0 end:0x8057ECF4
 
 nw4r/g3d/g3d_transform.cpp:
 	.text       start:0x80442AF0 end:0x80442DF4
