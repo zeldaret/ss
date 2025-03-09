@@ -38,4 +38,17 @@ private:
     dRawArcTable_c mArcTable;
 };
 
+class ObjectArcControl {
+public:
+    ObjectArcControl() : mObjectArcs(nullptr), mNumArcs(0) {}
+    virtual ~ObjectArcControl();
+    void set(const char *const *objectArcs, s32 numArcs);
+    void load(EGG::Heap *heap);
+    void release();
+
+private:
+    const char **mObjectArcs;
+    s32 mNumArcs;
+};
+
 #endif

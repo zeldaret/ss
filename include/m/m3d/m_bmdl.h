@@ -37,7 +37,7 @@ public:
     void setCullModeAll(GXCullMode cullMode, bool bMarkDirty);
     void setMatVisible(u32 matId, bool bVisble);
     int setMatTexture(char *name, GXTexObj *texObj, bool copy, void *unk, int, int);
-    bool getBounds(mVec3_c *min, mVec3_c *max);
+    bool getBounds(mVec3_c *min, mVec3_c *max) const;
 
 private:
     banm_c *mpCurrentAnm;

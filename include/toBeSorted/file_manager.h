@@ -210,12 +210,12 @@ public:
 
     /* 8000CAD0 */ bool isNew_FileA();
 
-    /* 8000CB00 */ void setSceneFlagIndex(u16 idx);
+    /* 8000CB00 */ void setSceneFlagIndex(s16 idx);
     /* 8000CB30 */ u32 getSceneFlagIndex();
     /* 8000CB80 */ s32 getFileAreaIndex();
 
     /* 8000CBD0 */ void fn_8000CBD0(u8);
-    /* 8000CC00 */ void fn_8000CC00();
+    /* 8000CC00 */ u8 fn_8000CC00();
 
     /* 8000CC50 */ void setFileTimes();
     /* 8000CCB0 */ void setPlayTime(s64 time);

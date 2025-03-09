@@ -76,6 +76,10 @@ struct SizedString {
         va_end(list);
         return printed;
     }
+
+    size_t len() const {
+        return strlen(mChars);
+    }
 };
 
 // TODO this might be a shared template with SizedString but I'm

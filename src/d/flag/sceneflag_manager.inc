@@ -146,7 +146,7 @@ bool SceneflagManager::checkSceneflagGlobal(u16 sceneIdx, u16 flag) {
     u16 *pData = FileManager::sInstance->getSceneFlagsConst();
     return mFlagHelper.checkFlag(getSceneflagSlotGlobal(sceneIdx, flag), flag % 16, pData, 0x800);
 }
-bool SceneflagManager::checkTempOrSceneflag(u16 flag) {
+u16 SceneflagManager::checkTempOrSceneflag(u16 flag) {
     if (flag >= 0x80) {
         u16 tempflag = flag - 0x80;
         const u16 *pData = FileManager::sInstance->getTempFlagsConst();

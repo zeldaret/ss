@@ -2,11 +2,11 @@
 #include "common.h"
 #include "d/d_sc_game.h"
 #include "d/d_sc_title.h"
+#include "d/d_stage_mgr.h"
 #include "d/lyt/d_lyt_area_caption.h"
 #include "d/lyt/d_lyt_meter_configuration.h"
 #include "d/lyt/d_window.h"
 #include "d/lyt/meter/d_lyt_meter.h"
-#include "toBeSorted/stage_manager.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 // clang-format on
 

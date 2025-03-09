@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "d/d_stage_mgr.h"
 #include "d/flag/storyflag_manager.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
@@ -14,9 +15,7 @@
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
 #include "toBeSorted/music_mgrs.h"
-#include "toBeSorted/room_manager.h"
 #include "toBeSorted/some_gxf_thing.h"
-#include "toBeSorted/stage_manager.h"
 
 #include <cstring>
 
@@ -249,11 +248,11 @@ void SpawnInfoExt::setSpawnData(
     mType0RotY = rot;
 }
 
-void LinkReloadInfo::set(u8 roomid, const mVec3_c &pos, mAng rot, u32 flags) {
+void LinkReloadInfo::set(u8 roomid, const mVec3_c &pos, mAng rot, u32 linkParams) {
     mRoomId = roomid;
     mPosition = pos;
     mRotY = rot;
-    mUnkFlags = flags;
+    mLinkParams = linkParams;
     mType0CsFlag = 1;
 }
 

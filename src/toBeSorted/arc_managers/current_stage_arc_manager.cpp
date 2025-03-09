@@ -95,7 +95,7 @@ void *CurrentStageArcManager::getDataFromRoomArc(int roomId, const char *fileNam
     return mArcTable.getSubEntryData(getRoomArcDirectory(roomId), fileName);
 }
 
-EGG::ExpHeap *getHeap() {
+EGG::ExpHeap *CurrentStageArcManager::getHeap(s32 roomid) {
     return dHeap::workExHeap.heap;
 }
 

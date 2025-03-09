@@ -4,8 +4,8 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/c/c_m3d_g_aab.h"
+#include "d/d_stage.h"
 #include "d/flag/storyflag_manager.h"
-#include "toBeSorted/room_manager.h"
 
 static const char *const mMdlNames[] = {
     "IslSon",
@@ -24,8 +24,8 @@ void dAcOutajima_c::rideCallback(dBgW *bg, dAcObjBase_c *o1, dAcObjBase_c *o2) {
 
 bool dAcOutajima_c::createHeap() {
     mRes = nw4r::g3d::ResFile(getOarcResFile("IslSon"));
-    RoomManager::bindStageResToFile(&mRes);
-    RoomManager::bindSkyCmnToResFile(&mRes);
+    dStage_c::bindStageResToFile(&mRes);
+    dStage_c::bindSkyCmnToResFile(&mRes);
 
     nw4r::g3d::ResMdl m(nullptr);
 

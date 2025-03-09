@@ -53,6 +53,10 @@ public:
         return mpScnLeaf;
     }
 
+    inline const nw4r::g3d::ScnLeaf *getG3dObject() const {
+        return mpScnLeaf;
+    }
+
 protected:
     /* 0x14 */ nw4r::g3d::ScnLeaf *mpScnLeaf;
 };

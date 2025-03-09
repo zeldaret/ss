@@ -1,12 +1,12 @@
 #include "d/a/obj/d_a_obj_uta_demo_pedest.h"
 
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/d_stage.h"
 #include "f/f_base.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "toBeSorted/arc_managers/current_stage_arc_manager.h"
-#include "toBeSorted/room_manager.h"
 
 static const char *const sMdlNames[] = {
     "StageF010rPedest",
@@ -25,8 +25,8 @@ bool dAcOutaDemoPedest_c::createHeap() {
     }
 
     mRes = nw4r::g3d::ResFile(CurrentStageArcManager::sInstance->getData("g3d/stage.brres"));
-    RoomManager::bindStageResToFile(&mRes);
-    RoomManager::bindSkyCmnToResFile(&mRes);
+    dStage_c::bindStageResToFile(&mRes);
+    dStage_c::bindSkyCmnToResFile(&mRes);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl(sMdlNames[mModelType]);
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
 

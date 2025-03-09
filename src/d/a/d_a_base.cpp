@@ -3,14 +3,15 @@
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_heap.h"
+#include "d/d_room.h"
 #include "d/d_sc_game.h"
+#include "d/d_stage.h"
 #include "d/flag/enemyflag_manager.h"
 #include "f/f_list_nd.h"
 #include "m/m_vec.h"
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
-#include "toBeSorted/room_manager.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 
 // .sdata
@@ -35,7 +36,6 @@ extern "C" s16 targetAngleY(mVec3_c *, mVec3_c *);
 extern "C" s16 targetAngleX(mVec3_c *, mVec3_c *);
 extern "C" bool checkCollision(mVec3_c *pos);
 extern "C" s8 collisionCheckGetRoom();
-extern "C" dRoom *getRoomByIndex(RoomManager *mgr, s8 roomid);
 
 bool dAcBase_c::createHeap() {
     return true;
@@ -126,13 +126,13 @@ int dAcBase_c::initAllocator(int size, char *name, EGG::Heap *heap, int align) {
 }
 
 bool dAcBase_c::addActorToRoom(s32 roomId) {
-    dBase_c *room = RoomManager::getRoom(roomId);
+    dBase_c *room = dStage_c::getParentForRoom(roomId);
     if (room == nullptr) {
         return false;
     }
     if (setConnectChild(room)) {
         if (roomId == -1) {
-            this->roomid = RoomManager::m_Instance->curr_room_id;
+            this->roomid = dStage_c::GetInstance()->getCurrRoomId();
         } else {
             this->roomid = roomId;
         }
@@ -427,15 +427,15 @@ void dAcBase_c::updateRoomId(f32 yOffset) {
         if (checkCollision(&actorPos)) {
             roomid = collisionCheckGetRoom();
         } else {
-            roomid = RoomManager::m_Instance->curr_room_id;
+            roomid = dStage_c::GetInstance()->getCurrRoomId();
         }
     }
 }
 
 // 8002d540
 bool dAcBase_c::isRoomFlags_0x6_Set() {
-    dRoom *room = RoomManager::m_Instance->GetRoomByIndex(roomid);
-    return (room->flags & 6);
+    dRoom_c *room = dStage_c::GetInstance()->getRoom(roomid);
+    return (room->checkFlag(0x4 | 0x2));
 }
 
 // Start of SoundSource stuff
@@ -478,12 +478,12 @@ void dAcBase_c::setEnemyDefeatFlag() {
 
 // 8002d940
 void dAcBase_c::changeLoadedEntitiesWithSet() {
-    RoomManager::m_Instance->changeLoadedEntities(RoomManager::m_Instance, obj_id, true);
+    dStage_c::GetInstance()->changeLoadedEntities(obj_id, true);
 }
 
 // 8002d960
 void dAcBase_c::changeLoadedEntitiesNoSet() {
-    RoomManager::m_Instance->changeLoadedEntities(RoomManager::m_Instance, obj_id, false);
+    dStage_c::GetInstance()->changeLoadedEntities(obj_id, false);
 }
 
 // spawns GroupType2 (ACTOR)
@@ -513,7 +513,7 @@ dAcBase_c *dAcBase_c::createActor(
     setTempCreateParams(
         actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1, 0xFF, nullptr
     );
-    dBase_c *room = RoomManager::getRoom(roomid);
+    dBase_c *room = dStage_c::getParentForRoom(roomid);
     return (dAcBase_c *)dBase_c::createBase(actorId, room, actorParams1, ACTOR);
 }
 
@@ -544,7 +544,7 @@ dAcBase_c *dAcBase_c::createActorStage(
     setTempCreateParams(
         actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1, 0xFF, nullptr
     );
-    dBase_c *room = RoomManager::getRoom(roomid);
+    dBase_c *room = dStage_c::getParentForRoom(roomid);
     return (dAcBase_c *)dBase_c::createBase(actorId, room, actorParams1, STAGE);
 }
 

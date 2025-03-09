@@ -57,12 +57,12 @@ struct SpawnInfo {
 
     /* 0x00 */ SizedString<32> stageName;
     /* 0x20 */ u16 transitionFadeFrames;
-    /* 0x22 */ s8 room;
+    /* 0x22 */ u8 room;
     /* 0x23 */ u8 layer;
-    /* 0x24 */ s8 entrance;
+    /* 0x24 */ u8 entrance;
     /* 0x25 */ u8 night;
     /* 0x26 */ u8 trial;
-    /* 0x27 */ s8 transitionType;
+    /* 0x27 */ u8 transitionType;
     /* 0x28 */ s8 unk;
 
     enum DayNight {
@@ -104,13 +104,13 @@ struct SpawnInfoExt : public SpawnInfo {
 
 struct LinkReloadInfo {
     LinkReloadInfo() : mType0CsFlag(0) {}
-    void set(u8 roomid, const mVec3_c &pos, mAng rot, u32 flags);
+    void set(u8 roomid, const mVec3_c &pos, mAng rot, u32 linkParams);
 
     /* 0x00 */ mVec3_c mPosition;
     /* 0x0C */ mAng mRotY;
     /* 0x0E */ u8 mRoomId;
     /* 0x0F */ u8 mType0CsFlag;
-    /* 0x10 */ u32 mUnkFlags;
+    /* 0x10 */ u32 mLinkParams;
 };
 
 class dScGame_c : public dScene_c {
@@ -136,6 +136,9 @@ public:
     STATE_VIRTUAL_FUNC_DECLARE(dScGame_c, Action);
 
     static bool isCurrentStage(const char *stageName);
+    static bool isStageSkyloftLayer20();
+    static bool isInCredits();
+    static bool isStateLayerWithSeekerStoneHintMenu();
 
     static SpawnInfo currentSpawnInfo;
     static SpawnInfo nextSpawnInfo;
@@ -150,6 +153,42 @@ public:
     void setSpawnInfo(u8 roomid, const mVec3_c &pos, mAng rot);
     void clearSpawnInfo();
     const SpawnInfoExt &getSpawnInfo() const;
+
+    static void resetUpdateFrameCount() {
+        sUpdateFrameCount = 0;
+    }
+
+    bool savePromptFlag() const {
+        return mSavePromptFlag;
+    }
+
+    void setSavePromptFlag(bool val) {
+        mSavePromptFlag = val;
+    }
+
+    u8 getType0CsFlag() const {
+        return mReloadInfo.mType0CsFlag;
+    }
+
+    void setType0CsFlag(u8 flag) {
+        mReloadInfo.mType0CsFlag = flag;
+    }
+
+    u8 getType0PosFlag() const {
+        return mType0PosFlag;
+    }
+
+    void setType0PosFlag(u8 flag) {
+        mType0PosFlag = flag;
+    }
+
+    static u8 getReloaderType() {
+        return sReloaderType;
+    }
+
+    static void setReloaderType(u8 type) {
+        sReloaderType = type;
+    }
 
 protected:
     static u32 sUpdateFrameCount;
@@ -220,7 +259,7 @@ protected:
     /* 0x29C */ s32 mLastAreaType;
     /* 0x2A0 */ u8 mType0PosFlag;
     /* 0x2A1 */ u8 field_0x2A1;
-    /* 0x2A2 */ u8 mSavePromptFlag;
+    /* 0x2A2 */ bool mSavePromptFlag;
     /* 0x2A3 */ bool mPreventSaveRespawnInfo;
 };
 

@@ -148,6 +148,10 @@ public:
         return GetRevision() == REVISION;
     }
 
+    const char *GetName() const {
+        return ofs_to_ptr<const char>(ref().name);
+    }
+
     const u8 *GetResByteCode(const char *pName) const;
 
     ResNode GetResNode(const char *pName) const;

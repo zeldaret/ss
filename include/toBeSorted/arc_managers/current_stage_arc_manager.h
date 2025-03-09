@@ -30,7 +30,11 @@ public:
     const char *getCurrentStageDirectory();
     const char *getRoomArcDirectory(int room) const;
 
-    static EGG::ExpHeap *getHeap();
+    EGG::ExpHeap *getHeap(s32 roomid);
+
+    inline int ensureAllEntriesLoaded() {
+        return mArcTable.ensureAllEntriesLoaded();
+    }
 
 private:
     SizedString<32> mStageName;
