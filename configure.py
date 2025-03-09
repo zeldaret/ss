@@ -659,7 +659,7 @@ config.libs = [
             Object(Matching, "nw4r/g3d/res/g3d_resanmscn.cpp"),
             Object(Matching, "nw4r/g3d/res/g3d_resanmshp.cpp"),
             Object(NonMatching, "nw4r/g3d/g3d_transform.cpp"),
-            Object(NonMatching, "nw4r/g3d/g3d_anmvis.cpp"),
+            Object(Matching, "nw4r/g3d/g3d_anmvis.cpp"),
             Object(NonMatching, "nw4r/g3d/g3d_anmclr.cpp"),
             Object(NonMatching, "nw4r/g3d/g3d_anmtexpat.cpp"),
             Object(NonMatching, "nw4r/g3d/g3d_anmtexsrt.cpp"),
