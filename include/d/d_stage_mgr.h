@@ -65,10 +65,58 @@ public:
     void initUnkWithWater(u32 val, UnkWithWater *waterThing);
     void destroyUnkWithWater(u32 val, UnkWithWater *waterThing);
 
+    const RMPL *getRmpl() const {
+        return mpRmpl;
+    }
+
+    u16 getRmplCount() const {
+        return mRmplCount;
+    }
+
+    void setRmpl(const RMPL *pcam, u16 count) {
+        mRmplCount = count;
+        mpRmpl = pcam;
+    }
+
+    const PCAM *getPcam() const {
+        return mpPcam;
+    }
+
+    u16 getPcamCount() const {
+        return mPcamCount;
+    }
+
+    void setPcam(const PCAM *pcam, u16 count) {
+        mPcamCount = count;
+        mpPcam = pcam;
+    }
+
+    void setLyse(const LYSE *lyse, u16 count) {
+        mLyseCount = count;
+        mpLyse = lyse;
+    }
+
+    void overrideLayer0WithLyse();
+
+    void setStif(const STIF *stif);
+    s16 getFlagIndex() const;
+
+    void setDemoName(const SizedString<16>& name) {
+        mDemoName = name;
+    }
+
+    const char *getDemoName() const {
+        return mDemoName;
+    }
+
+    void addLayerArcn(const char *path);
+    void addStageArcn(const char *path);
+    void addObjId(u16 id);
     void addActorId(u16 actorId);
 
 private:
     static void lastExecuteCallback();
+
     void triggerFade(s32 fadeType, u8 fadeFrames);
 
     static dStageMgr_c *sInstance;
@@ -83,6 +131,7 @@ private:
     /* 0x0580 */ LayoutArcControl mLayoutArcCtrl2;
     /* 0x058C */ dBgS mBg;
     // ...
+    u8 _0x00001[0x7D0];
     /* 0x3E40 */ dCcS mCc;
     // ...
     /* 0x7930 */ dFader_c mFader;
@@ -91,10 +140,10 @@ private:
     /* 0x7956 */ u16 mLyseCount;
     /* 0x7958 */ u16 mRmplCount;
     
-    /* 0x795C */ PCAM *pcam;
-    /* 0x7960 */ PCAM *lyse;
-    /* 0x7964 */ STIF *stif;
-    /* 0x7968 */ RMPL *rmpl;
+    /* 0x795C */ const PCAM *mpPcam;
+    /* 0x7960 */ const LYSE *mpLyse;
+    /* 0x7964 */ const STIF *mpStif;
+    /* 0x7968 */ const RMPL *mpRmpl;
     
     /* 0x799C */ mDvd_callback_c *mpDvdCallback;
     /* 0x79A0 */ mDvd_callback_c *mpDvdCallback2;
@@ -105,7 +154,7 @@ private:
     /* 0x8694 */ dTimeAreaMgr_c mTimeAreaMgr;
 
     // ...
-    u8 ___[2450];
+    u8 ___[446];
 
     /* 0x88A0 */ u32 field_0x88A0;
     /* 0x88A4 */ SizedString<16> mDemoName;

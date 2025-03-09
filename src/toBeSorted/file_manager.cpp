@@ -235,12 +235,12 @@ u16 *FileManager::getStoryFlagsMut() {
 
 /* 8000CAD0 */ bool FileManager::isNew_FileA() {}
 
-/* 8000CB00 */ void FileManager::setSceneFlagIndex(u16 idx) {}
+/* 8000CB00 */ void FileManager::setSceneFlagIndex(s16 idx) {}
 /* 8000CB30 */ u32 FileManager::getSceneFlagIndex() {}
 /* 8000CB80 */ s32 FileManager::getFileAreaIndex() {}
 
 /* 8000CBD0 */ void FileManager::fn_8000CBD0(u8) {}
-/* 8000CC00 */ void FileManager::fn_8000CC00() {}
+/* 8000CC00 */ u8 FileManager::fn_8000CC00() {}
 
 /* 8000CC50 */ void FileManager::setFileTimes() {}
 /* 8000CCB0 */ void FileManager::setPlayTime(s64 time) {}

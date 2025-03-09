@@ -3,9 +3,11 @@
 #include "common.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/d_base.h"
+#include "d/d_bzs_types.h"
 #include "d/d_room.h"
 #include "d/d_sc_game.h"
 #include "d/d_sc_title.h"
+#include "d/d_stage_mgr.h"
 #include "d/flag/dungeonflag_manager.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
@@ -53,14 +55,19 @@ extern "C" void ScrapperPickupMgr__dtor();
 extern "C" void fn_80028A80();
 extern "C" void fn_80028EC0();
 extern "C" void fn_80066D30(s32);
+extern "C" void setPCAMpos2(const PCAM *);
 
 int dStage_c::create() {
     if (mPhase.step() != sFPhaseBase::PHASE_ALL_DONE) {
         return NOT_READY;
     }
 
-    // dStageMgr_c *stageMgr = dStageMgr_c::GetInstance();
-    // for (int i = 0; i < dSta)
+    dStageMgr_c *stageMgr = dStageMgr_c::GetInstance();
+    const PCAM *pcam = stageMgr->getPcam();
+    for (int i = 0; i < stageMgr->getPcamCount(); i++) {
+        setPCAMpos2(pcam);
+        pcam++;
+    }
 
     if (mapRelated.field_0x1EB == 0) {
         mVec3_c min, max;

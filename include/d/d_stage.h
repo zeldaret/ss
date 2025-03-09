@@ -122,6 +122,9 @@ public:
     void drawMap(mMtx_c *mtx, int);
     dRoom_c *getRoom(s32 idx);
     void setRoom(int roomid, dRoom_c *room);
+    void handleRoomChange(int roomid);
+
+    bool checkEnemyDefeatFlag(u16 flag);
 
     bool fadeIn(s32 fadeType, u16 frames);
     bool fadeOut(s32 fadeType, u16 frames);

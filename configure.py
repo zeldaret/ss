@@ -340,7 +340,7 @@ config.libs = [
             Object(Matching, "d/d_heap.cpp"),
             Object(Matching, "d/d_rawarchive.cpp"),
             Object(Matching, "d/d_scene.cpp"),
-            Object(NonMatching, "d/d_stage_parse.cpp"),
+            Object(Matching, "d/d_stage_parse.cpp"),
             Object(NonMatching, "d/d_sys.cpp"),
             Object(NonMatching, "toBeSorted/sound_info.cpp"),
             Object(Matching, "toBeSorted/arc_callback_handler.cpp"),

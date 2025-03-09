@@ -5,6 +5,12 @@
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 
+// https://github.com/lepelog/skywardsword-tools/blob/master/bzs.py
+
+// Size 0x2
+struct ARCN {
+    /* 0x00 */ u16 offset;
+};
 
 // Size 0x20
 struct AREA {
@@ -53,11 +59,21 @@ struct EVNT {
     /* 0x18 */ char name[32];
 };
 
+// Size 0x???
+struct bzsFILE {
+    // ???
+};
+
+struct LAY {
+    /* 0x00 */ u16 mCount;
+    /* 0x04 */ u32 mOffset;
+};
+
 // Size 0x04
 struct LYLT {
     /* 0x0 */ u8 layer;
-    /* 0x1 */ u8 demoHigh;
-    /* 0x2 */ u8 demoLow;
+    /* 0x1 */ s8 demoHigh;
+    /* 0x2 */ s8 demoLow;
     /* 0x3 */ u8 dummy;
 };
 
@@ -76,6 +92,11 @@ struct OBJ {
     /* 0x14 */ mAng3_c angle;
     /* 0x1A */ u16 id;
     /* 0x1C */ char name[8];
+};
+
+// Size 0x2
+struct OBJN {
+    /* 0x00 */ u16 offset;
 };
 
 // Size 0xC
@@ -101,9 +122,12 @@ struct PCAM {
 
 // Size 0x18
 struct PLY {
-    /* 0x00 */ u16 storyFlag;
-    /* 0x02 */ u8 playCutscene;
-    /* 0x03 */ u8 _0x03[1];
+    // The Ghidra struct seems to overambitiously encode
+    // the params themselves, this is just an u32 link actor params
+    // /* 0x00 */ u16 storyFlag;
+    // /* 0x02 */ u8 playCutscene;
+    // /* 0x03 */ u8 _0x03[1];
+    /* 0x00 */ u32 linkParams;
     /* 0x04 */ mVec3_c position;
     /* 0x10 */ mAng3_c angle;
     /* 0x16 */ u16 entranceId;
@@ -145,6 +169,15 @@ struct SOBJ {
     /* 0x26 */ u16 id;
     /* 0x28 */ char name[8];
 };
+
+// Size 0x???
+struct SBPT {
+    // ???
+};
+
+// Parsed the same way in ss-tools
+typedef PNT SPNT;
+typedef PATH SPTH;
 
 // Size 0x14
 struct STIF {

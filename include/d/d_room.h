@@ -115,24 +115,24 @@ class dRoom_c : public dBase_c {
 public:
     dRoom_c()
         : mStateMgr(*this, sStateID::null),
-          field_0x15C(nullptr),
-          scen(nullptr),
-          ply(nullptr),
-          cam(nullptr),
-          evnt(nullptr),
-          path(nullptr),
-          pnt(nullptr),
-          bpnt(nullptr),
-          AREA(nullptr),
-          unkCount(0),
-          scenCount(0),
-          plyCount(0),
-          camCount(0),
-          evntCount(0),
-          pathCount(0),
-          pntCount(0),
-          bpntCount(0),
-          areaCount(0),
+          mpFile(nullptr),
+          mpScen(nullptr),
+          mpPly(nullptr),
+          mpCam(nullptr),
+          mpEvnt(nullptr),
+          mpPath(nullptr),
+          mpPnt(nullptr),
+          mpBpnt(nullptr),
+          mpArea(nullptr),
+          mFileCount(0),
+          mScenCount(0),
+          mPlyCount(0),
+          mCamCount(0),
+          mEvntCount(0),
+          mPathCount(0),
+          mPntCount(0),
+          mBpntCount(0),
+          mAreaCount(0),
           mFlags(0) {}
     virtual ~dRoom_c() {}
 
@@ -150,12 +150,73 @@ public:
 
     void drawOnMapIfVisible(mMtx_c *mtx, int param);
     void getBounds(mVec3_c *min, mVec3_c *max) const;
+    const PLY *getEntranceById(u8 id) const;
 
     void someLastBossThing(bool arg);
     f32 getFrame() const;
 
     typedef void (*foreachObjCallback)(dAcBase_c *obj);
     s32 foreachObject(foreachObjCallback cb);
+
+    void setFile(const bzsFILE *file, u16 count) {
+        mFileCount = count;
+        mpFile = file;
+    }
+
+    void setScen(const SCEN *scen, u16 count) {
+        mScenCount = count;
+        mpScen = scen;
+    }
+
+    void setCam(const CAM *file, u16 count) {
+        mCamCount = count;
+        mpCam = file;
+    }
+
+    void setEvnt(const EVNT *evnt, u16 count) {
+        mEvntCount = count;
+        mpEvnt = evnt;
+    }
+
+    void setPath(const PATH *path, u16 count) {
+        mPathCount = count;
+        mpPath = path;
+    }
+
+    void setPnt(const PNT *pnt, u16 count) {
+        mPntCount = count;
+        mpPnt = pnt;
+    }
+
+    void setBpnt(const BPNT *bpnt, u16 count) {
+        mBpntCount = count;
+        mpBpnt = bpnt;
+    }
+
+    void setSpth(const SPTH *spth, u16 count) {
+        mSpthCount = count;
+        mpSpth = spth;
+    }
+
+    void setSpnt(const SPNT *spnt, u16 count) {
+        mSpntCount = count;
+        mpSpnt = spnt;
+    }
+
+    void setSbpt(const SBPT *sbpt, u16 count) {
+        mSbptCount = count;
+        mpSbpt = sbpt;
+    }
+
+    void setArea(const AREA *path, u16 count) {
+        mAreaCount = count;
+        mpArea = path;
+    }
+
+    void setPly(const PLY *ply, u16 count) {
+        mPlyCount = count;
+        mpPly = ply;
+    }
 
 private:
     bool setupBg();
@@ -175,30 +236,30 @@ private:
     /* 0x220 */ dBgWKCol mBg[2];
     /* 0x4E0 */ STATE_MGR_DECLARE(dRoom_c);
 
-    /* 0x51C */ void *field_0x15C;
-    /* 0x520 */ SCEN *scen;
-    /* 0x524 */ PLY *ply;
-    /* 0x528 */ CAM *cam;
-    /* 0x52C */ EVNT *evnt;
-    /* 0x530 */ PATH *path;
-    /* 0x534 */ PNT *pnt;
-    /* 0x538 */ BPNT *bpnt;
-    /* 0x53C */ PATH *spth;
-    /* 0x540 */ void *field_0x540;
-    /* 0x544 */ void *field_0x544;
-    /* 0x548 */ AREA *AREA;
-    /* 0x54C */ u16 unkCount;
-    /* 0x54E */ u16 scenCount;
-    /* 0x550 */ u16 plyCount;
-    /* 0x552 */ u16 camCount;
-    /* 0x554 */ u16 evntCount;
-    /* 0x556 */ u16 pathCount;
-    /* 0x558 */ u16 pntCount;
-    /* 0x55A */ u16 bpntCount;
-    /* 0x55C */ u16 spthCount;
-    /* 0x55E */ u16 unk2Count;
-    /* 0x560 */ u16 unk3Count;
-    /* 0x562 */ u16 areaCount;
+    /* 0x51C */ const bzsFILE *mpFile;
+    /* 0x520 */ const SCEN *mpScen;
+    /* 0x524 */ const PLY *mpPly;
+    /* 0x528 */ const CAM *mpCam;
+    /* 0x52C */ const EVNT *mpEvnt;
+    /* 0x530 */ const PATH *mpPath;
+    /* 0x534 */ const PNT *mpPnt;
+    /* 0x538 */ const BPNT *mpBpnt;
+    /* 0x53C */ const SPTH *mpSpth;
+    /* 0x540 */ const SPNT *mpSpnt;
+    /* 0x544 */ const SBPT *mpSbpt;
+    /* 0x548 */ const AREA *mpArea;
+    /* 0x54C */ u16 mFileCount;
+    /* 0x54E */ u16 mScenCount;
+    /* 0x550 */ u16 mPlyCount;
+    /* 0x552 */ u16 mCamCount;
+    /* 0x554 */ u16 mEvntCount;
+    /* 0x556 */ u16 mPathCount;
+    /* 0x558 */ u16 mPntCount;
+    /* 0x55A */ u16 mBpntCount;
+    /* 0x55C */ u16 mSpthCount;
+    /* 0x55E */ u16 mSpntCount;
+    /* 0x560 */ u16 mSbptCount;
+    /* 0x562 */ u16 mAreaCount;
 
     // peak vtable placement
     class UnkRoomClass {

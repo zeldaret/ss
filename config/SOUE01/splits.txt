@@ -155,7 +155,10 @@ d/d_scene.cpp:
 	.bss        start:0x805A06F0 end:0x805A0720
 
 d/d_stage_parse.cpp:
-	.text       start:0x80062E40 end:0x80064250
+	.text       start:0x80062ED0 end:0x8006424C
+	.rodata     start:0x804E0B38 end:0x804E0C98
+	.data       start:0x8050DE48 end:0x8050DE58
+	.sdata2     start:0x80577920 end:0x80577928
 
 d/d_sys.cpp:
 	.text       start:0x80064250 end:0x80064920

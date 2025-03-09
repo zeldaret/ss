@@ -17,7 +17,6 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/music_mgrs.h"
-#include <cstddef>
 
 SPECIAL_BASE_PROFILE(STAGE_MANAGER, dStageMgr_c, fProfile::STAGE_MANAGER, 0X5, 1536);
 
@@ -52,7 +51,7 @@ void dStageMgr_c::executeState_ReadStageRes() {
 }
 
 void dStageMgr_c::finalizeState_ReadStageRes() {
-    void *stageBzs = CurrentStageArcManager::sInstance->getData("dat/stage.bzs");
+    const void *stageBzs = CurrentStageArcManager::sInstance->getData("dat/stage.bzs");
     if (stageBzs != nullptr) {
         parseStageBzs(-1, stageBzs);
         parseRoomStageBzs(-1, stageBzs);
@@ -70,15 +69,15 @@ void dStageMgr_c::executeState_ReadRoomRes() {
 }
 
 void dStageMgr_c::finalizeState_ReadRoomRes() {
-    if (rmpl != nullptr) {
-        RMPL *itRmpl = rmpl;
+    if (mpRmpl != nullptr) {
+        const RMPL *itRmpl = mpRmpl;
         for (int i = 0; i < mRmplCount; itRmpl++, i++) {
-            void *bzs = CurrentStageArcManager::sInstance->loadFromRoomArc(itRmpl->roomId, "dat/room.bzs");
+            const void *bzs = CurrentStageArcManager::sInstance->loadFromRoomArc(itRmpl->roomId, "dat/room.bzs");
             parseRoomStageBzs(itRmpl->roomId, bzs);
         }
     } else {
         u32 roomId = dScGame_c::currentSpawnInfo.room;
-        void *bzs =
+        const void *bzs =
             CurrentStageArcManager::sInstance->loadFromRoomArc(dScGame_c::currentSpawnInfo.room, "dat/room.bzs");
         parseRoomStageBzs(roomId, bzs);
     }
@@ -116,20 +115,20 @@ static const char *sSeekerStoneLayoutArcs[] = {
 void dStageMgr_c::initializeState_ReadLayerObjectRes() {
     mDemoName = demoName;
 
-    void *bzs = CurrentStageArcManager::sInstance->getData("dat/stage.bzs");
+    const void *bzs = CurrentStageArcManager::sInstance->getData("dat/stage.bzs");
     if (bzs != nullptr) {
         parseBzsStageRoom(-1, bzs);
     }
 
-    if (rmpl != nullptr) {
-        RMPL *itRmpl = rmpl;
+    if (mpRmpl != nullptr) {
+        const RMPL *itRmpl = mpRmpl;
         for (int i = 0; i < mRmplCount; itRmpl++, i++) {
-            void *bzs = CurrentStageArcManager::sInstance->loadFromRoomArc(itRmpl->roomId, "dat/room.bzs");
+            const void *bzs = CurrentStageArcManager::sInstance->loadFromRoomArc(itRmpl->roomId, "dat/room.bzs");
             parseBzsStageRoom(itRmpl->roomId, bzs);
         }
     } else {
         u32 roomId = dScGame_c::currentSpawnInfo.room;
-        void *bzs =
+        const void *bzs =
             CurrentStageArcManager::sInstance->loadFromRoomArc(dScGame_c::currentSpawnInfo.room, "dat/room.bzs");
         parseBzsStageRoom(roomId, bzs);
     }
@@ -234,7 +233,7 @@ void dStageMgr_c::finalizeState_ReadObjectSound() {
 }
 
 extern "C" void *LYT_SAVE_MGR;
-extern "C" void fn_80285600(void*, int, int);
+extern "C" void fn_80285600(void *, int, int);
 void dStageMgr_c::initializeState_SceneChangeSave() {
     dScGame_c::sInstance->setSavePromptFlag(false);
     if (LYT_SAVE_MGR != nullptr) {
@@ -247,7 +246,7 @@ void dStageMgr_c::initializeState_SceneChangeSave() {
 void dStageMgr_c::executeState_SceneChangeSave() {
     if (LYT_SAVE_MGR != nullptr) {
         // "isNotSaving???"
-        if (((u8*)LYT_SAVE_MGR)[0x119C] == true) {
+        if (((u8 *)LYT_SAVE_MGR)[0x119C] == true) {
             mStateMgr.changeState(StateID_RestartSceneWait);
         }
     } else {
@@ -287,9 +286,7 @@ void dStageMgr_c::initializeState_RestartScene() {
 }
 
 void dStageMgr_c::executeState_RestartScene() {
-    if (mFader.isStatus(mFaderBase_c::FADED_OUT)) {
-
-    }
+    if (mFader.isStatus(mFaderBase_c::FADED_OUT)) {}
 }
 
 void dStageMgr_c::finalizeState_RestartScene() {

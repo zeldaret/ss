@@ -248,11 +248,11 @@ void SpawnInfoExt::setSpawnData(
     mType0RotY = rot;
 }
 
-void LinkReloadInfo::set(u8 roomid, const mVec3_c &pos, mAng rot, u32 flags) {
+void LinkReloadInfo::set(u8 roomid, const mVec3_c &pos, mAng rot, u32 linkParams) {
     mRoomId = roomid;
     mPosition = pos;
     mRotY = rot;
-    mUnkFlags = flags;
+    mLinkParams = linkParams;
     mType0CsFlag = 1;
 }
 
