@@ -50,13 +50,13 @@ extern "C" void parseRoomBzs(int roomid, void *bzs);
 int dRoom_c::create() {
     roomid = params & 0x3F;
     mCanHavePastState = dStageMgr_c::GetInstance()->getSTIFunk1() == 0 &&
-                  // SSH machine room (less sure about D303...)
-                  !(dScGame_c::isCurrentStage("D301") && roomid == 12) &&
-                  !(dScGame_c::isCurrentStage("D303") && roomid == 12) &&
-                  // LMF first two rooms, Gust Bellows room
-                  !(dScGame_c::isCurrentStage("D300") && (roomid == 0 || roomid == 1 || roomid == 4)) &&
-                  // LMF crawlspace, spike maze
-                  !(dScGame_c::isCurrentStage("D300_1") && (roomid == 7 || roomid == 9));
+                        // SSH machine room (less sure about D303...)
+                        !(dScGame_c::isCurrentStage("D301") && roomid == 12) &&
+                        !(dScGame_c::isCurrentStage("D303") && roomid == 12) &&
+                        // LMF first two rooms, Gust Bellows room
+                        !(dScGame_c::isCurrentStage("D300") && (roomid == 0 || roomid == 1 || roomid == 4)) &&
+                        // LMF crawlspace, spike maze
+                        !(dScGame_c::isCurrentStage("D300_1") && (roomid == 7 || roomid == 9));
     if (!mAllocator.createNewTempFrmHeap(
             -1, CurrentStageArcManager::sInstance->getHeap(roomid), "dRoom_c::m_allocator", 0x20, 0
         )) {
@@ -69,7 +69,7 @@ int dRoom_c::create() {
     dStage_c::bindStageResToFile(&mRoomRes);
     dStage_c::bindSkyCmnToResFile(&mRoomRes);
 
-    for (s32 i = 0; i < 8; i++) {
+    for (s32 i = 0; i < ARRAY_LENGTH(mModels); i++) {
         model_c *mdl = &mModels[i];
         if (i != 2 || roomid != 1 || dScGame_c::currentSpawnInfo.layer != 14 || !dScGame_c::isCurrentStage("F406")) {
             if (!mdl->create(mRoomRes, mAllocator, i, &mWaterThing)) {
@@ -133,7 +133,7 @@ int dRoom_c::execute() {
     if (mCanHavePastState) {
         val = dTimeAreaMgr_c::sInstance->checkPositionIsInPastState(roomid, mVec3_c::Zero, nullptr, 1000000.0f);
         mSkipDrawing = !mHasAnmTexPat && (!dTimeAreaMgr_c::sInstance->isInLanayruMiningFacility() || val > 0.0f) &&
-                      dTimeAreaMgr_c::sInstance->isField0x78();
+                       dTimeAreaMgr_c::sInstance->isField0x78();
     } else {
         mSkipDrawing = false;
     }
@@ -144,7 +144,7 @@ int dRoom_c::execute() {
     }
 
     executeBg();
-    for (s32 i = 0; i < 8; i++) {
+    for (s32 i = 0; i < ARRAY_LENGTH(mModels); i++) {
         mModels[i].execute(i, mCanHavePastState, val);
     }
 
@@ -155,7 +155,7 @@ int dRoom_c::draw() {
     if ((mFlags & 2) != 0 || mSkipDrawing) {
         return SUCCEEDED;
     }
-    for (s32 i = 0; i < 8; i++) {
+    for (s32 i = 0; i < ARRAY_LENGTH(mModels); i++) {
         mModels[i].draw(roomid);
     }
     return SUCCEEDED;
@@ -165,7 +165,7 @@ void deactivateUpdatesCb(dAcBase_c *ac) {
     if (!ac->checkActorProperty(0x400)) {
         return;
     }
-    ac->callunkVirtFunc_0x60();
+    ac->unkVirtFunc_0x60();
 }
 
 void dRoom_c::deactivateUpdates() {
@@ -180,7 +180,7 @@ void activateUpdatesCb(dAcBase_c *ac) {
     if (!ac->checkActorProperty(0x400)) {
         return;
     }
-    ac->callrestorePosRotFromCopy();
+    ac->restorePosRotFromCopy();
 }
 
 void dRoom_c::activateUpdates() {
@@ -220,7 +220,7 @@ static const BgData sRoomBg[] = {
 };
 
 bool dRoom_c::setupBg() {
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < ARRAY_LENGTH(mBg); i++) {
         dBgWKCol *bg = &mBg[i];
         void *kcl = CurrentStageArcManager::sInstance->getDataFromRoomArc(roomid, sRoomBg[i].kcl);
         if (kcl != nullptr) {
@@ -245,7 +245,7 @@ bool dRoom_c::setupBg() {
 }
 
 void dRoom_c::executeBg() {
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < ARRAY_LENGTH(mBg); i++) {
         if (!mBg[i].ChkNotReady()) {
             dBgS::GetInstance()->Regist(&mBg[i], (dAcObjBase_c *)nullptr);
         }
@@ -281,7 +281,7 @@ void dRoom_c::drawOnMapIfVisible(mMtx_c *mtx, int param) {
 }
 
 void dRoom_c::getBounds(mVec3_c *min, mVec3_c *max) const {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ARRAY_LENGTH(mModels); i++) {
         mVec3_c tMin, tMax;
         mModels[i].getBounds(&tMin, &tMax);
         if (i == 0) {
@@ -301,13 +301,13 @@ void dRoom_c::formatObj(int obj, SizedString<8> &str) {
 void dRoom_c::updateObjNodeInEachRoom(int obj, bool visible) {
     SizedString<8> objName;
     formatObj(obj, objName);
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ARRAY_LENGTH(mModels); i++) {
         mModels[i].updateObjNode(objName, visible);
     }
 }
 
 void dRoom_c::destroyModels() {
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < ARRAY_LENGTH(mModels); i++) {
         mModels[i].destroy();
     }
 }

@@ -94,7 +94,7 @@ public:
     /* 0xF4 */ char someStr[4];
     /* 0xF8 */ char field_0xf8[0xfc - 0xf8];
 
-protected:
+public:
     /* 80501544 */ // vtable
     /* 0x08 | 8002c880 */ virtual int create();
     /* 0x10 | 8002c8f0 */ virtual void postCreate(MAIN_STATE_e state);
@@ -171,14 +171,6 @@ public:
     }
     bool checkActorProperty(u32 property) const {
         return actor_properties & property;
-    }
-
-    void callunkVirtFunc_0x60() {
-        unkVirtFunc_0x60();
-    }
-
-    void callrestorePosRotFromCopy() {
-        restorePosRotFromCopy();
     }
 
 public:

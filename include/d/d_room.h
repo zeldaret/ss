@@ -18,51 +18,13 @@
 #include "nw4r/math/math_geometry.h"
 #include "s/s_State.hpp"
 #include "sized_string.h"
+#include "toBeSorted/raii_ptr.h"
 #include "toBeSorted/unk_with_water.h"
 
 struct DrawPriorityConfig {
     u8 pDrawOpa1;
     u8 pDrawXlu;
     u8 pDrawOpa2;
-};
-
-// This could be std::unique_ptr, but we don't have it yet
-template <typename T>
-class RaiiPtr {
-public:
-    T *mPtr;
-
-    RaiiPtr() : mPtr(nullptr) {}
-    ~RaiiPtr() {
-        if (mPtr != nullptr) {
-            delete mPtr;
-            mPtr = nullptr;
-        }
-    }
-
-    void operator=(T *ptr) {
-        mPtr = ptr;
-    }
-
-    operator bool() const {
-        return mPtr != nullptr;
-    }
-
-    const T *operator->() const {
-        return mPtr;
-    }
-
-    T *operator->() {
-        return mPtr;
-    }
-
-    const T &operator*() const {
-        return *this->operator->();
-    }
-
-    T &operator*() {
-        return *this->operator->();
-    }
 };
 
 class dRoom_c : public dBase_c {

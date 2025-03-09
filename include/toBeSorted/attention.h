@@ -9,7 +9,7 @@
 #include "m/m3d/m_smdl.h"
 #include "m/m_allocator.h"
 #include "toBeSorted/effects_struct.h"
-
+#include "toBeSorted/raii_ptr.h"
 
 static const u32 OFF = 'off ';
 static const u32 NONE = 'none';
@@ -18,25 +18,12 @@ static const u32 NEXT = 'next';
 static const u32 ON = 'on  ';
 static const u32 AWAY = 'away';
 
-class UniquePtrLike {
-public:
-    m3d::anmChr_c *mPtr;
-
-    UniquePtrLike() : mPtr(nullptr) {}
-    ~UniquePtrLike() {
-        if (mPtr != nullptr) {
-            delete mPtr;
-            mPtr = nullptr;
-        }
-    }
-};
-
 class InteractionMdl {
 public:
     m3d::smdl_c mMdl;
     m3d::anmMatClr_c mAnmClr;
     m3d::anmTexPat_c mAnmTex;
-    UniquePtrLike mAnmChr;
+    RaiiPtr<m3d::anmChr_c> mAnmChr;
     u8 field_0x78;
     u8 field_0x79;
 
