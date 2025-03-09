@@ -86,6 +86,8 @@ public:
     ResAnmScn GetResAnmScn(int idx) const;
     ResAnmScn GetResAnmScn(u32 idx) const;
 
+    void *GetExternalData(const char *pName) const;
+
     u32 GetResMdlNumEntries() const;
     u32 GetResPlttNumEntries() const;
     u32 GetResTexNumEntries() const;

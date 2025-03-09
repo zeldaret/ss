@@ -1,3 +1,6 @@
+#include "nw4r/g3d/res/g3d_resshp.h"
+
+#include "nw4r/g3d/res/g3d_resvtx.h"
 #include <nw4r/g3d.h>
 
 #include <rvl/GX.h>
@@ -193,6 +196,16 @@ ResVtxTexCoord ResShp::GetResVtxTexCoord(u32 idx) const {
     return ResVtxTexCoord(NULL);
 }
 
+ResVtxFurPos ResShp::GetResVtxFurPos() const {
+    const ResShpData &r = ref();
+
+    if (r.idVtxFurPos != -1) {
+        return GetParent().GetResVtxFurPos(r.idVtxFurPos);
+    }
+
+    return ResVtxFurPos(NULL);
+}
+
 void ResShp::Init() {
     const void *pBase;
     u8 stride;
@@ -293,5 +306,15 @@ void ResShpPrePrim::DCStore(bool sync) {
     }
 }
 
+void ResShp::DCStore(bool sync) {
+    ResShpData &r = ref();
+    u32 size = r.size;
+
+    if (sync) {
+        DC::StoreRange(&r, size);
+    } else {
+        DC::StoreRangeNoSync(&r, size);
+    }
+}
 } // namespace g3d
 } // namespace nw4r

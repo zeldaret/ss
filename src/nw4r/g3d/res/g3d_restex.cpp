@@ -4,7 +4,7 @@ namespace nw4r {
 namespace g3d {
 
 void ResPltt::DCStore(bool sync) {
-    void* pBase = &ref();
+    void *pBase = &ref();
     u32 size = ref().header.size;
 
     if (sync) {
@@ -14,17 +14,17 @@ void ResPltt::DCStore(bool sync) {
     }
 }
 
-bool ResTex::GetTexObjParam(void** ppTexData, u16* pWidth, u16* pHeight,
-                            GXTexFmt* pFormat, f32* pMinLod, f32* pMaxLod,
-                            GXBool* pMipMap) const {
-    const ResTexData& r = ref();
+bool ResTex::GetTexObjParam(
+    void **ppTexData, u16 *pWidth, u16 *pHeight, GXTexFmt *pFormat, f32 *pMinLod, f32 *pMaxLod, GXBool *pMipMap
+) const {
+    const ResTexData &r = ref();
 
     if (IsCIFmt()) {
         return false;
     }
 
     if (ppTexData != NULL) {
-        *ppTexData = const_cast<void*>(GetTexData());
+        *ppTexData = const_cast<void *>(GetTexData());
     }
 
     if (pWidth != NULL) {
@@ -54,17 +54,17 @@ bool ResTex::GetTexObjParam(void** ppTexData, u16* pWidth, u16* pHeight,
     return true;
 }
 
-bool ResTex::GetTexObjCIParam(void** ppTexData, u16* pWidth, u16* pHeight,
-                              GXCITexFmt* pFormatCI, f32* pMinLod, f32* pMaxLod,
-                              GXBool* pMipMap) const {
-    const ResTexData& r = ref();
+bool ResTex::GetTexObjCIParam(
+    void **ppTexData, u16 *pWidth, u16 *pHeight, GXCITexFmt *pFormatCI, f32 *pMinLod, f32 *pMaxLod, GXBool *pMipMap
+) const {
+    const ResTexData &r = ref();
 
     if (!IsCIFmt()) {
         return false;
     }
 
     if (ppTexData != NULL) {
-        *ppTexData = const_cast<void*>(GetTexData());
+        *ppTexData = const_cast<void *>(GetTexData());
     }
 
     if (pWidth != NULL) {
@@ -95,7 +95,7 @@ bool ResTex::GetTexObjCIParam(void** ppTexData, u16* pWidth, u16* pHeight,
 }
 
 void ResTex::Init() {
-    ResTexData& r = ref();
+    ResTexData &r = ref();
     DC::FlushRangeNoSync(&r, r.header.size);
 }
 

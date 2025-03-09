@@ -42,7 +42,6 @@ ResMatChan ScnMdl::CopiedMatAccess::GetResMatChan(bool markDirty) {
 
         return mChan;
     }
-
     return ResMatChan(NULL);
 }
 
@@ -56,6 +55,18 @@ ResGenMode ScnMdl::CopiedMatAccess::GetResGenMode(bool markDirty) {
     }
 
     return ResGenMode(NULL);
+}
+
+ResMatMisc ScnMdl::CopiedMatAccess::GetResMatMisc(bool markDirty) {
+    if (mpScnMdl != NULL && mMatMisc.IsValid()) {
+        if (markDirty) {
+            mpScnMdl->MatBufferDirty(mMatID, ScnMdl::BUFOPTION_MATMISC);
+        }
+
+        return mMatMisc;
+    }
+
+    return ResMatMisc(NULL);
 }
 
 ResMatPix ScnMdl::CopiedMatAccess::GetResMatPix(bool markDirty) {
@@ -94,6 +105,18 @@ ResTev ScnMdl::CopiedMatAccess::GetResTev(bool markDirty) {
     return ResTev(NULL);
 }
 
+ResTexObj ScnMdl::CopiedMatAccess::GetResTexObjEx() {
+    if (mpScnMdl != NULL) {
+        if (mTexObj.IsValid()) {
+            return mTexObj;
+        }
+
+        return mpScnMdl->GetResMdl().GetResMat(mMatID).GetResTexObj();
+    }
+
+    return ResTexObj(NULL);
+}
+
 ResTexSrt ScnMdl::CopiedMatAccess::GetResTexSrtEx() {
     if (mpScnMdl != NULL) {
         if (mTexSrt.IsValid()) {
@@ -106,7 +129,19 @@ ResTexSrt ScnMdl::CopiedMatAccess::GetResTexSrtEx() {
     return ResTexSrt(NULL);
 }
 
-ScnMdl::CopiedMatAccess::CopiedMatAccess(ScnMdl* pScnMdl, u32 id)
+ResMatChan ScnMdl::CopiedMatAccess::GetResMatChanEx() {
+    if (mpScnMdl != NULL) {
+        if (mChan.IsValid()) {
+            return mChan;
+        }
+
+        return mpScnMdl->GetResMdl().GetResMat(mMatID).GetResMatChan();
+    }
+
+    return ResMatChan(NULL);
+}
+
+ScnMdl::CopiedMatAccess::CopiedMatAccess(ScnMdl *pScnMdl, u32 id)
     : mTexObj(NULL),
       mTlutObj(NULL),
       mTexSrt(NULL),
@@ -118,12 +153,11 @@ ScnMdl::CopiedMatAccess::CopiedMatAccess(ScnMdl* pScnMdl, u32 id)
       mIndMtxAndScale(NULL),
       mTexCoordGen(NULL),
       mTev(NULL) {
-
     if (pScnMdl != NULL && pScnMdl->GetResMdl().GetResMat(id).IsValid()) {
         mpScnMdl = pScnMdl;
         mMatID = id;
 
-        DrawResMdlReplacement& rReplacement = pScnMdl->mReplacement;
+        DrawResMdlReplacement &rReplacement = pScnMdl->mReplacement;
 
         if (rReplacement.texObjDataArray != NULL) {
             mTexObj = ResTexObj(&rReplacement.texObjDataArray[id]);
@@ -174,15 +208,13 @@ ScnMdl::CopiedMatAccess::CopiedMatAccess(ScnMdl* pScnMdl, u32 id)
         }
 
         if (rReplacement.indMtxAndScaleDLArray != NULL) {
-            mIndMtxAndScale =
-                ResMatIndMtxAndScale(&rReplacement.indMtxAndScaleDLArray[id]);
+            mIndMtxAndScale = ResMatIndMtxAndScale(&rReplacement.indMtxAndScaleDLArray[id]);
         } else {
             mIndMtxAndScale = ResMatIndMtxAndScale(NULL);
         }
 
         if (rReplacement.texCoordGenDLArray != NULL) {
-            mTexCoordGen =
-                ResMatTexCoordGen(&rReplacement.texCoordGenDLArray[id]);
+            mTexCoordGen = ResMatTexCoordGen(&rReplacement.texCoordGenDLArray[id]);
         } else {
             mTexCoordGen = ResMatTexCoordGen(NULL);
         }
@@ -228,6 +260,22 @@ bool ScnMdl::CopiedVisAccess::IsVisible() const {
     return false;
 }
 
+bool ScnMdl::CopiedVisAccess::SetVisibility(bool visible) {
+    if (mpScnMdl != NULL && mpVis != NULL) {
+        if (visible) {
+            if (*mpVis == 0) {
+                mpScnMdl->VisBufferDirty();
+                *mpVis = 1;
+            }
+        } else if (*mpVis != 0) {
+            mpScnMdl->VisBufferDirty();
+            *mpVis = 0;
+        }
+        return true;
+    }
+    return false;
+}
+
 bool ScnMdl::CopiedVisAccess::SetVisibilityEx(bool visible) {
     if (mpScnMdl != NULL) {
         if (mpVis != NULL) {
@@ -246,7 +294,7 @@ bool ScnMdl::CopiedVisAccess::SetVisibilityEx(bool visible) {
     return false;
 }
 
-ScnMdl::CopiedVisAccess::CopiedVisAccess(ScnMdl* pScnMdl, u32 id) {
+ScnMdl::CopiedVisAccess::CopiedVisAccess(ScnMdl *pScnMdl, u32 id) {
     if (pScnMdl != NULL && pScnMdl->GetResMdl().GetResNode(id).IsValid()) {
         mpScnMdl = pScnMdl;
         mNodeID = id;
@@ -265,12 +313,32 @@ ScnMdl::CopiedVisAccess::CopiedVisAccess(ScnMdl* pScnMdl, u32 id) {
 
 /******************************************************************************
  *
+ * CopiedVtxAccess
+ *
+ ******************************************************************************/
+
+ResVtxPos ScnMdl::CopiedVtxAccess::GetResVtxPos(u32 id) {
+    ResVtxPos res = GetPos(id); // goto signifies inline... Dwarf doesnt have info
+    if (mpScnMdl != NULL && res == mpScnMdl->GetResMdl().GetResVtxPos(id)) {
+        return ResVtxPos(NULL);
+    }
+    return res;
+}
+
+ResVtxNrm ScnMdl::CopiedVtxAccess::GetResVtxNrm(u32 id) {
+    ResVtxNrm res = GetNrm(id); // goto signifies inline... Dwarf doesnt have info
+    if (mpScnMdl != NULL && res == mpScnMdl->GetResMdl().GetResVtxNrm(id)) {
+        return ResVtxNrm(NULL);
+    }
+    return res;
+}
+
+/******************************************************************************
+ *
  * ScnMdl
  *
  ******************************************************************************/
-ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
-                          u32 bufferOption, int numView) {
-
+ScnMdl *ScnMdl::Construct(MEMAllocator *pAllocator, u32 *pSize, ResMdl mdl, u32 bufferOption, int numView) {
     if (!mdl.IsValid()) {
         return NULL;
     }
@@ -281,7 +349,7 @@ ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
         numView = VIEW_MAX;
     }
 
-    ScnMdl* pScnMdl = NULL;
+    ScnMdl *pScnMdl = NULL;
 
     u32 worldMtxNum = mdl.GetResMdlInfo().GetNumPosNrmMtx();
     u32 viewMtxNum = mdl.GetResMdlInfo().GetNumViewMtx();
@@ -296,16 +364,13 @@ ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
     u32 viewPosMtxArraySize = numView * align32(viewPosMtxArrayUnitSize);
 
     u32 viewNrmMtxArrayUnitSize = viewMtxNum * sizeof(math::MTX33);
-    u32 viewNrmMtxArraySize = mdl.GetResMdlInfo().ref().need_nrm_mtx_array
-                                  ? numView * align32(viewNrmMtxArrayUnitSize)
-                                  : 0;
+    u32 viewNrmMtxArraySize =
+        mdl.GetResMdlInfo().ref().need_nrm_mtx_array ? numView * align32(viewNrmMtxArrayUnitSize) : 0;
 
     u32 viewTexMtxArrayUnitSize = viewPosMtxArrayUnitSize;
 
     // TODO: Fakematch
-    u32 viewTexMtxArraySize = mdl.ref().info.need_tex_mtx_array
-                                  ? numView * align32(viewTexMtxArrayUnitSize)
-                                  : 0;
+    u32 viewTexMtxArraySize = mdl.ref().info.need_tex_mtx_array ? numView * align32(viewTexMtxArrayUnitSize) : 0;
 
     u32 matBufferDirtyFlagSize = matNum * sizeof(u32);
 
@@ -322,6 +387,7 @@ ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
     u32 resIndMtxAndScaleSize = (bufferOption & BUFOPTION_MATINDMTXSCALE) ? matNum  * sizeof(ResIndMtxAndScaleDL)  : 0;
     u32 resTexCoordGenSize    = (bufferOption & BUFOPTION_MATTEXCOORDGEN) ? matNum  * sizeof(ResTexCoordGenDL)     : 0;
     u32 resTevSize            = (bufferOption & BUFOPTION_TEV)            ? matNum  * sizeof(ResTevData)           : 0;
+
     // clang-format on
 
     u32 vtxPosTableSize = 0;
@@ -331,7 +397,7 @@ ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
         u32 vtxPosNum = mdl.GetResVtxPosNumEntries();
         u32 shpNum = mdl.GetResShpNumEntries();
 
-        vtxPosTableSize = vtxPosNum * sizeof(ResVtxPosData*);
+        vtxPosTableSize = vtxPosNum * sizeof(ResVtxPosData *);
 
         for (u32 i = 0; i < vtxPosNum; i++) {
             u32 j;
@@ -358,7 +424,7 @@ ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
         u32 vtxNrmNum = mdl.GetResVtxNrmNumEntries();
         u32 shpNum = mdl.GetResShpNumEntries();
 
-        vtxNrmTableSize = vtxNrmNum * sizeof(ResVtxNrmData*);
+        vtxNrmTableSize = vtxNrmNum * sizeof(ResVtxNrmData *);
 
         for (u32 i = 0; i < vtxNrmNum; i++) {
             u32 j;
@@ -385,7 +451,7 @@ ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
         u32 vtxClrNum = mdl.GetResVtxClrNumEntries();
         u32 shpNum = mdl.GetResShpNumEntries();
 
-        vtxClrTableSize = vtxClrNum * sizeof(ResVtxClrData*);
+        vtxClrTableSize = vtxClrNum * sizeof(ResVtxClrData *);
 
         for (u32 i = 0; i < vtxClrNum; i++) {
             u32 j;
@@ -394,8 +460,7 @@ ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
             for (j = 0; j < shpNum; j++) {
                 ResShp shp = mdl.GetResShp(j);
 
-                if (clr.ptr() == shp.GetResVtxClr(0).ptr() ||
-                    clr.ptr() == shp.GetResVtxClr(1).ptr()) {
+                if (clr.ptr() == shp.GetResVtxClr(0).ptr() || clr.ptr() == shp.GetResVtxClr(1).ptr()) {
                     break;
                 }
             }
@@ -441,13 +506,16 @@ ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
     }
 
     if (pAllocator != NULL) {
-        u8* pBuffer = reinterpret_cast<u8*>(Alloc(pAllocator, size));
+        u8 *pBuffer = reinterpret_cast<u8 *>(Alloc(pAllocator, size));
         if (pBuffer == NULL) {
             return NULL;
         }
-
-        // clang-format off
         DrawResMdlReplacement replacement;
+        replacement.flag = 0;
+        if (!(bufferOption & BUFOPTION_0x1000000)) {
+            replacement.flag |= 1;
+        }
+        // clang-format off
         
         replacement.visArray              = visSize               != 0 ? reinterpret_cast<u8*>(pBuffer + visOfs)                                : NULL;
         replacement.texObjDataArray       = resTexObjSize         != 0 ? reinterpret_cast<ResTexObjData*>(pBuffer + resTexObjOfs)               : NULL;
@@ -486,8 +554,7 @@ ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
                 }
 
                 if (j != shpNum) {
-                    replacement.vtxPosTable[i] =
-                        reinterpret_cast<ResVtxPosData*>(pBuffer + ofs);
+                    replacement.vtxPosTable[i] = reinterpret_cast<ResVtxPosData *>(pBuffer + ofs);
 
                     ofs += align32(pos.GetSize());
                     pos.CopyTo(replacement.vtxPosTable[i]);
@@ -516,8 +583,7 @@ ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
                 }
 
                 if (j != shpNum) {
-                    replacement.vtxNrmTable[i] =
-                        reinterpret_cast<ResVtxNrmData*>(pBuffer + ofs);
+                    replacement.vtxNrmTable[i] = reinterpret_cast<ResVtxNrmData *>(pBuffer + ofs);
 
                     ofs += align32(nrm.GetSize());
                     nrm.CopyTo(replacement.vtxNrmTable[i]);
@@ -540,15 +606,13 @@ ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
                 for (j = 0; j < shpNum; j++) {
                     ResShp shp = mdl.GetResShp(j);
 
-                    if (clr.ptr() == shp.GetResVtxClr(0).ptr() ||
-                        clr.ptr() == shp.GetResVtxClr(1).ptr()) {
+                    if (clr.ptr() == shp.GetResVtxClr(0).ptr() || clr.ptr() == shp.GetResVtxClr(1).ptr()) {
                         break;
                     }
                 }
 
                 if (j != shpNum) {
-                    replacement.vtxClrTable[i] =
-                        reinterpret_cast<ResVtxClrData*>(pBuffer + ofs);
+                    replacement.vtxClrTable[i] = reinterpret_cast<ResVtxClrData *>(pBuffer + ofs);
 
                     ofs += align32(clr.GetSize());
                     clr.CopyTo(replacement.vtxClrTable[i]);
@@ -556,6 +620,10 @@ ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
                     replacement.vtxClrTable[i] = clr.ptr();
                 }
             }
+        }
+        u32 replacementFlag = 0;
+        if (bufferOption & BUFOPTION_0x1000000) {
+            replacementFlag |= 1;
         }
 
         // clang-format off
@@ -570,7 +638,8 @@ ScnMdl* ScnMdl::Construct(MEMAllocator* pAllocator, u32* pSize, ResMdl mdl,
             numView,
             viewMtxNum,
             &replacement,
-            reinterpret_cast<u32*>(pBuffer + matBufferDirtyFlagOfs));
+            reinterpret_cast<u32*>(pBuffer + matBufferDirtyFlagOfs), 
+            replacementFlag);
         // clang-format off
 
         pScnMdl->InitBuffer();
@@ -631,6 +700,26 @@ void ScnMdl::ScnMdl_G3DPROC_CALC_MAT(u32 param, void* pInfo) {
 
         if (IsMatBufferDirty(i, BUFOPTION_MATTEVCOLOR)) {
             CleanMatBuffer(i, BUFOPTION_MATTEVCOLOR);
+        }
+        
+        if (IsMatBufferDirty(i, BUFOPTION_GENMODE)) {
+            CleanMatBuffer(i, BUFOPTION_GENMODE);
+        }
+        
+        if (IsMatBufferDirty(i, BUFOPTION_MATMISC)) {
+            CleanMatBuffer(i, BUFOPTION_MATMISC);
+        }
+        
+        if (IsMatBufferDirty(i, BUFOPTION_MATPIX)) {
+            CleanMatBuffer(i, BUFOPTION_MATPIX);
+        }
+        
+        if (IsMatBufferDirty(i, BUFOPTION_MATTEXCOORDGEN)) {
+            CleanMatBuffer(i, BUFOPTION_MATTEXCOORDGEN);
+        }
+        
+        if (IsMatBufferDirty(i, BUFOPTION_TEV)) {
+            CleanMatBuffer(i, BUFOPTION_TEV);
         }
 
         if (GetAnmObjTexPat() != NULL && GetAnmObjTexPat()->TestExistence(i)) {
@@ -1025,6 +1114,8 @@ bool ScnMdl::SetAnmObj(AnmObj* pObj, AnmObjType type) {
 
                 mpAnmObjShp = pShp;
                 pShp->G3dProc(G3DPROC_ATTACH_PARENT, 0, this);
+                
+                mReplacement.flag &= ~1;
 
                 return true;
             } else {
@@ -1051,41 +1142,46 @@ bool ScnMdl::RemoveAnmObj(AnmObj* pObj) {
         mpAnmObjShp->G3dProc(G3DPROC_DETACH_PARENT, 0, this);
         mpAnmObjShp = NULL;
 
-        if (mReplacement.vtxPosTable != NULL) {
-            u32 vtxPosNum = GetResMdl().GetResVtxPosNumEntries();
-
-            for (u32 i = 0; i < vtxPosNum; i++) {
-                ResVtxPos pos = GetResMdl().GetResVtxPos(i);
-
-                if (pos.ptr() != mReplacement.vtxPosTable[i]) {
-                    pos.CopyTo(mReplacement.vtxPosTable[i]);
-                }
-            }
+        if (!(mReplacementFlag & 1)) {
+            mReplacement.flag |= 1;
+            return true;
         }
 
-        if (mReplacement.vtxNrmTable != NULL) {
-            u32 vtxNrmNum = GetResMdl().GetResVtxNrmNumEntries();
-
-            for (u32 i = 0; i < vtxNrmNum; i++) {
-                ResVtxNrm nrm = GetResMdl().GetResVtxNrm(i);
-
-                if (nrm.ptr() != mReplacement.vtxNrmTable[i]) {
-                    nrm.CopyTo(mReplacement.vtxNrmTable[i]);
+            if (mReplacement.vtxPosTable != NULL) {
+                u32 vtxPosNum = GetResMdl().GetResVtxPosNumEntries();
+    
+                for (u32 i = 0; i < vtxPosNum; i++) {
+                    ResVtxPos pos = GetResMdl().GetResVtxPos(i);
+    
+                    if (pos.ptr() != mReplacement.vtxPosTable[i]) {
+                        pos.CopyTo(mReplacement.vtxPosTable[i]);
+                    }
                 }
             }
-        }
-
-        if (mReplacement.vtxClrTable != NULL) {
-            u32 vtxClrNum = GetResMdl().GetResVtxClrNumEntries();
-
-            for (u32 i = 0; i < vtxClrNum; i++) {
-                ResVtxClr clr = GetResMdl().GetResVtxClr(i);
-
-                if (clr.ptr() != mReplacement.vtxClrTable[i]) {
-                    clr.CopyTo(mReplacement.vtxClrTable[i]);
+    
+            if (mReplacement.vtxNrmTable != NULL) {
+                u32 vtxNrmNum = GetResMdl().GetResVtxNrmNumEntries();
+    
+                for (u32 i = 0; i < vtxNrmNum; i++) {
+                    ResVtxNrm nrm = GetResMdl().GetResVtxNrm(i);
+    
+                    if (nrm.ptr() != mReplacement.vtxNrmTable[i]) {
+                        nrm.CopyTo(mReplacement.vtxNrmTable[i]);
+                    }
                 }
             }
-        }
+    
+            if (mReplacement.vtxClrTable != NULL) {
+                u32 vtxClrNum = GetResMdl().GetResVtxClrNumEntries();
+    
+                for (u32 i = 0; i < vtxClrNum; i++) {
+                    ResVtxClr clr = GetResMdl().GetResVtxClr(i);
+    
+                    if (clr.ptr() != mReplacement.vtxClrTable[i]) {
+                        clr.CopyTo(mReplacement.vtxClrTable[i]);
+                    }
+                }
+            }
 
         return true;
     }
@@ -1123,14 +1219,15 @@ ScnMdl::ScnMdl(MEMAllocator* pAllocator, ResMdl mdl,
                math::MTX34* pWorldMtxArray, u32* pWorldMtxAttribArray,
                math::MTX34* pViewPosMtxArray, math::MTX33* pViewNrmMtxArray,
                math::MTX34* pViewTexMtxArray, int numView, int numViewMtx,
-               DrawResMdlReplacement* pReplacement, u32* pMatBufferDirtyFlag)
+               DrawResMdlReplacement* pReplacement, u32* pMatBufferDirtyFlag, u32 replacementFlag)
     : ScnMdlSimple(pAllocator, mdl, pWorldMtxArray, pWorldMtxAttribArray,
                    pViewPosMtxArray, pViewNrmMtxArray, pViewTexMtxArray,
                    numView, numViewMtx),
       mpAnmObjShp(NULL),
       mFlagVisBuffer(NULL),
       mpMatBufferDirtyFlag(pMatBufferDirtyFlag),
-      mReplacement(*pReplacement) {}
+      mReplacement(*pReplacement),
+      mReplacementFlag(replacementFlag) {}
 
 ScnMdl::~ScnMdl() {
     if (mpAnmObjShp != NULL) {

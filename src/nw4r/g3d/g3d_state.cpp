@@ -1643,10 +1643,10 @@ void LoadResTexSrt(const ResTexSrt srt) {
                 }
 
                 if (rEffect.map_mode == 0) {
-                    CalcTexMtx(&mtx, ident, srt.ref().texSrt[i], srt.GetTexSrtFlag(i), srt.GetTexMtxMode());
+                    CalcTexMtx(&mtx, ident, srt.ref().texSrt[i], srt.GetTexSrtFlag(i));
                 } else {
                     math::MTX34 srtMtx;
-                    CalcTexMtx(&srtMtx, true, srt.ref().texSrt[i], srt.GetTexSrtFlag(i), srt.GetTexMtxMode());
+                    CalcTexMtx(&srtMtx, true, srt.ref().texSrt[i], srt.GetTexSrtFlag(i));
 
                     std::swap(srtMtx._02, srtMtx._03);
                     std::swap(srtMtx._12, srtMtx._13);

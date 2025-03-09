@@ -7,23 +7,21 @@ namespace {
 NW4R_G3D_RESFILE_NAME_DEF(LightSet, "LightSet(NW4R)");
 NW4R_G3D_RESFILE_NAME_DEF(AmbLights, "AmbLights(NW4R)");
 NW4R_G3D_RESFILE_NAME_DEF(Lights, "Lights(NW4R)");
+NW4R_G3D_RESFILE_NAME_DEF(Fogs, "Fogs(NW4R)");
+NW4R_G3D_RESFILE_NAME_DEF(Cameras, "Cameras(NW4R)");
 
 } // namespace
 
 bool ResAnmScn::HasResAnmAmbLight() const {
-    return ResDic(ofs_to_obj<ResDic>(
-               ref().toScnTopLevelDic))[ResName(&ResNameData_AmbLights)] !=
-           NULL;
+    return ResDic(ofs_to_obj<ResDic>(ref().toScnTopLevelDic))[ResName(&ResNameData_AmbLights)] != NULL;
 }
 
 bool ResAnmScn::HasResAnmLight() const {
-    return ResDic(ofs_to_obj<ResDic>(
-               ref().toScnTopLevelDic))[ResName(&ResNameData_Lights)] != NULL;
+    return ResDic(ofs_to_obj<ResDic>(ref().toScnTopLevelDic))[ResName(&ResNameData_Lights)] != NULL;
 }
 
 ResLightSet ResAnmScn::GetResLightSet(int idx) const {
-    void* pResLightSetDicData = ResDic(ofs_to_obj<ResDic>(
-        ref().toScnTopLevelDic))[ResName(&ResNameData_LightSet)];
+    void *pResLightSetDicData = ResDic(ofs_to_obj<ResDic>(ref().toScnTopLevelDic))[ResName(&ResNameData_LightSet)];
 
     if (pResLightSetDicData != NULL) {
         return ResLightSet(ResDic(pResLightSetDicData)[idx]);
@@ -37,8 +35,7 @@ ResLightSet ResAnmScn::GetResLightSet(u32 idx) const {
 }
 
 u32 ResAnmScn::GetResLightSetNumEntries() const {
-    void* pResLightSetDicData = ResDic(ofs_to_obj<ResDic>(
-        ref().toScnTopLevelDic))[ResName(&ResNameData_LightSet)];
+    void *pResLightSetDicData = ResDic(ofs_to_obj<ResDic>(ref().toScnTopLevelDic))[ResName(&ResNameData_LightSet)];
 
     if (pResLightSetDicData != NULL) {
         return ResDic(pResLightSetDicData).GetNumData();
@@ -48,8 +45,7 @@ u32 ResAnmScn::GetResLightSetNumEntries() const {
 }
 
 ResAnmAmbLight ResAnmScn::GetResAnmAmbLight(const ResName name) const {
-    void* pResAnmAmbLightDicData = ResDic(ofs_to_obj<ResDic>(
-        ref().toScnTopLevelDic))[ResName(&ResNameData_AmbLights)];
+    void *pResAnmAmbLightDicData = ResDic(ofs_to_obj<ResDic>(ref().toScnTopLevelDic))[ResName(&ResNameData_AmbLights)];
 
     if (pResAnmAmbLightDicData != NULL) {
         return ResAnmAmbLight(ResDic(pResAnmAmbLightDicData)[name]);
@@ -59,8 +55,7 @@ ResAnmAmbLight ResAnmScn::GetResAnmAmbLight(const ResName name) const {
 }
 
 ResAnmAmbLight ResAnmScn::GetResAnmAmbLight(int idx) const {
-    void* pResAnmAmbLightDicData = ResDic(ofs_to_obj<ResDic>(
-        ref().toScnTopLevelDic))[ResName(&ResNameData_AmbLights)];
+    void *pResAnmAmbLightDicData = ResDic(ofs_to_obj<ResDic>(ref().toScnTopLevelDic))[ResName(&ResNameData_AmbLights)];
 
     if (pResAnmAmbLightDicData != NULL) {
         return ResAnmAmbLight(ResDic(pResAnmAmbLightDicData)[idx]);
@@ -74,8 +69,7 @@ ResAnmAmbLight ResAnmScn::GetResAnmAmbLight(u32 idx) const {
 }
 
 ResAnmLight ResAnmScn::GetResAnmLight(const ResName name) const {
-    void* pResAnmLightDicData = ResDic(ofs_to_obj<ResDic>(
-        ref().toScnTopLevelDic))[ResName(&ResNameData_Lights)];
+    void *pResAnmLightDicData = ResDic(ofs_to_obj<ResDic>(ref().toScnTopLevelDic))[ResName(&ResNameData_Lights)];
 
     if (pResAnmLightDicData != NULL) {
         return ResAnmLight(ResDic(pResAnmLightDicData)[name]);
@@ -85,8 +79,7 @@ ResAnmLight ResAnmScn::GetResAnmLight(const ResName name) const {
 }
 
 ResAnmLight ResAnmScn::GetResAnmLight(int idx) const {
-    void* pResAnmLightDicData = ResDic(ofs_to_obj<ResDic>(
-        ref().toScnTopLevelDic))[ResName(&ResNameData_Lights)];
+    void *pResAnmLightDicData = ResDic(ofs_to_obj<ResDic>(ref().toScnTopLevelDic))[ResName(&ResNameData_Lights)];
 
     if (pResAnmLightDicData != NULL) {
         return ResAnmLight(ResDic(pResAnmLightDicData)[idx]);
@@ -99,85 +92,98 @@ ResAnmLight ResAnmScn::GetResAnmLight(u32 idx) const {
     return GetResAnmLight(static_cast<int>(idx));
 }
 
+ResAnmCamera ResAnmScn::GetResAnmCamera(const ResName name) const {
+    void *pResAnmCameraDicData = ResDic(ofs_to_obj<ResDic>(ref().toScnTopLevelDic))[ResName(&ResNameData_Cameras)];
+
+    if (pResAnmCameraDicData != NULL) {
+        return ResAnmCamera(ResDic(pResAnmCameraDicData)[name]);
+    }
+
+    return ResAnmCamera(NULL);
+}
+
+ResAnmCamera ResAnmScn::GetResAnmCamera(int idx) const {
+    void *pResAnmCameraDicData = ResDic(ofs_to_obj<ResDic>(ref().toScnTopLevelDic))[ResName(&ResNameData_Cameras)];
+
+    if (pResAnmCameraDicData != NULL) {
+        return ResAnmCamera(ResDic(pResAnmCameraDicData)[idx]);
+    }
+
+    return ResAnmCamera(NULL);
+}
+
+ResAnmCamera ResAnmScn::GetResAnmCamera(u32 idx) const {
+    return GetResAnmCamera(static_cast<int>(idx));
+}
+
 ResLightSet ResAnmScn::GetResLightSetByRefNumber(u32 refNumber) const {
-    const ResAnmScnInfoData& rInfoData = ref().info;
+    const ResAnmScnInfoData &rInfoData = ref().info;
 
     if (rInfoData.numResLightSetData <= refNumber) {
         return ResLightSet(NULL);
     }
 
-    const ResLightSetData* pArray =
-        ofs_to_ptr<ResLightSetData>(ref().toResLightSetDataArray);
+    const ResLightSetData *pArray = ofs_to_ptr<ResLightSetData>(ref().toResLightSetDataArray);
 
-    ResLightSetData* pTarget = const_cast<ResLightSetData*>(&pArray[refNumber]);
+    ResLightSetData *pTarget = const_cast<ResLightSetData *>(&pArray[refNumber]);
 
-    return ResLightSet(pTarget->id < rInfoData.numResLightSetData ? pTarget
-                                                                  : NULL);
+    return ResLightSet(pTarget->id < rInfoData.numResLightSetData ? pTarget : NULL);
 }
 
 ResAnmAmbLight ResAnmScn::GetResAnmAmbLightByRefNumber(u32 refNumber) const {
-    const ResAnmScnInfoData& rInfoData = ref().info;
+    const ResAnmScnInfoData &rInfoData = ref().info;
 
     if (rInfoData.numResAnmAmbLightData <= refNumber) {
         return ResAnmAmbLight(NULL);
     }
 
-    const ResAnmAmbLightData* pArray =
-        ofs_to_ptr<ResAnmAmbLightData>(ref().toResAnmAmbLightDataArray);
+    const ResAnmAmbLightData *pArray = ofs_to_ptr<ResAnmAmbLightData>(ref().toResAnmAmbLightDataArray);
 
-    ResAnmAmbLightData* pTarget =
-        const_cast<ResAnmAmbLightData*>(&pArray[refNumber]);
+    ResAnmAmbLightData *pTarget = const_cast<ResAnmAmbLightData *>(&pArray[refNumber]);
 
-    return ResAnmAmbLight(
-        pTarget->id < rInfoData.numResAnmAmbLightData ? pTarget : NULL);
+    return ResAnmAmbLight(pTarget->id < rInfoData.numResAnmAmbLightData ? pTarget : NULL);
 }
 
 ResAnmLight ResAnmScn::GetResAnmLightByRefNumber(u32 refNumber) const {
-    const ResAnmScnInfoData& rInfoData = ref().info;
+    const ResAnmScnInfoData &rInfoData = ref().info;
 
     if (rInfoData.numResAnmLightData <= refNumber) {
         return ResAnmLight(NULL);
     }
 
-    const ResAnmLightData* pArray =
-        ofs_to_ptr<ResAnmLightData>(ref().toResAnmLightDataArray);
+    const ResAnmLightData *pArray = ofs_to_ptr<ResAnmLightData>(ref().toResAnmLightDataArray);
 
-    ResAnmLightData* pTarget = const_cast<ResAnmLightData*>(&pArray[refNumber]);
+    ResAnmLightData *pTarget = const_cast<ResAnmLightData *>(&pArray[refNumber]);
 
-    return ResAnmLight(pTarget->id < rInfoData.numResAnmLightData ? pTarget
-                                                                  : NULL);
+    return ResAnmLight(pTarget->id < rInfoData.numResAnmLightData ? pTarget : NULL);
 }
 
 ResAnmFog ResAnmScn::GetResAnmFogByRefNumber(u32 refNumber) const {
-    const ResAnmScnInfoData& rInfoData = ref().info;
+    const ResAnmScnInfoData &rInfoData = ref().info;
 
     if (rInfoData.numResAnmFogData <= refNumber) {
         return ResAnmFog(NULL);
     }
 
-    const ResAnmFogData* pArray =
-        ofs_to_ptr<ResAnmFogData>(ref().toResAnmFogDataArray);
+    const ResAnmFogData *pArray = ofs_to_ptr<ResAnmFogData>(ref().toResAnmFogDataArray);
 
-    ResAnmFogData* pTarget = const_cast<ResAnmFogData*>(&pArray[refNumber]);
+    ResAnmFogData *pTarget = const_cast<ResAnmFogData *>(&pArray[refNumber]);
 
     return ResAnmFog(pTarget->id < rInfoData.numResAnmFogData ? pTarget : NULL);
 }
 
 ResAnmCamera ResAnmScn::GetResAnmCameraByRefNumber(u32 refNumber) const {
-    const ResAnmScnInfoData& rInfoData = ref().info;
+    const ResAnmScnInfoData &rInfoData = ref().info;
 
     if (rInfoData.numResAnmCameraData <= refNumber) {
         return ResAnmCamera(NULL);
     }
 
-    const ResAnmCameraData* pArray =
-        ofs_to_ptr<ResAnmCameraData>(ref().toResAnmCameraDataArray);
+    const ResAnmCameraData *pArray = ofs_to_ptr<ResAnmCameraData>(ref().toResAnmCameraDataArray);
 
-    ResAnmCameraData* pTarget =
-        const_cast<ResAnmCameraData*>(&pArray[refNumber]);
+    ResAnmCameraData *pTarget = const_cast<ResAnmCameraData *>(&pArray[refNumber]);
 
-    return ResAnmCamera(pTarget->id < rInfoData.numResAnmCameraData ? pTarget
-                                                                    : NULL);
+    return ResAnmCamera(pTarget->id < rInfoData.numResAnmCameraData ? pTarget : NULL);
 }
 
 bool ResAnmScn::Bind(const ResAnmScn scene) {

@@ -13,11 +13,8 @@ NW4R_G3D_RTTI_DEF(AnmObjShpRes);
  * AnmObjShp
  *
  ******************************************************************************/
-AnmObjShp::AnmObjShp(MEMAllocator* pAllocator, u16* pBindingBuf, int numBinding)
-    : AnmObj(pAllocator, NULL),
-      mNumBinding(numBinding),
-      mpBinding(pBindingBuf) {
-
+AnmObjShp::AnmObjShp(MEMAllocator *pAllocator, u16 *pBindingBuf, int numBinding)
+    : AnmObj(pAllocator, NULL), mNumBinding(numBinding), mpBinding(pBindingBuf) {
     Release();
 }
 
@@ -37,14 +34,14 @@ void AnmObjShp::Release() {
     SetAnmFlag(FLAG_ANM_BOUND, false);
 }
 
-AnmObjShpRes* AnmObjShp::Attach(int idx, AnmObjShpRes* pRes) {
+AnmObjShpRes *AnmObjShp::Attach(int idx, AnmObjShpRes *pRes) {
 #pragma unused(idx)
 #pragma unused(pRes)
 
     return NULL;
 }
 
-AnmObjShpRes* AnmObjShp::Detach(int idx) {
+AnmObjShpRes *AnmObjShp::Detach(int idx) {
 #pragma unused(idx)
 
     return NULL;
@@ -68,13 +65,10 @@ void AnmObjShp::DetachAll() {}
  * AnmObjShpNode
  *
  ******************************************************************************/
-AnmObjShpNode::AnmObjShpNode(MEMAllocator* pAllocator, u16* pBindingBuf,
-                             int numBinding, AnmObjShpRes** ppChildrenBuf,
-                             int numChildren)
-    : AnmObjShp(pAllocator, pBindingBuf, numBinding),
-      mChildrenArraySize(numChildren),
-      mpChildrenArray(ppChildrenBuf) {
-
+AnmObjShpNode::AnmObjShpNode(
+    MEMAllocator *pAllocator, u16 *pBindingBuf, int numBinding, AnmObjShpRes **ppChildrenBuf, int numChildren
+)
+    : AnmObjShp(pAllocator, pBindingBuf, numBinding), mChildrenArraySize(numChildren), mpChildrenArray(ppChildrenBuf) {
     for (int i = 0; i < mChildrenArraySize; i++) {
         mpChildrenArray[i] = NULL;
     }
@@ -84,8 +78,8 @@ AnmObjShpNode::~AnmObjShpNode() {
     DetachAll();
 }
 
-AnmObjShpRes* AnmObjShpNode::Attach(int idx, AnmObjShpRes* pRes) {
-    AnmObjShpRes* pOld = Detach(idx);
+AnmObjShpRes *AnmObjShpNode::Attach(int idx, AnmObjShpRes *pRes) {
+    AnmObjShpRes *pOld = Detach(idx);
     bool hasAnm = false;
 
     for (u32 i = 0; i < mNumBinding; i++) {
@@ -106,8 +100,8 @@ AnmObjShpRes* AnmObjShpNode::Attach(int idx, AnmObjShpRes* pRes) {
     return pOld;
 }
 
-AnmObjShpRes* AnmObjShpNode::Detach(int idx) {
-    AnmObjShpRes* pOld = mpChildrenArray[idx];
+AnmObjShpRes *AnmObjShpNode::Detach(int idx) {
+    AnmObjShpRes *pOld = mpChildrenArray[idx];
 
     if (pOld != NULL) {
         pOld->G3dProc(G3DPROC_DETACH_PARENT, 0, this);
@@ -118,7 +112,7 @@ AnmObjShpRes* AnmObjShpNode::Detach(int idx) {
             u16 binding = BINDING_UNDEFINED;
 
             for (int j = 0; j < mChildrenArraySize; j++) {
-                AnmObjShpRes* pChild = mpChildrenArray[j];
+                AnmObjShpRes *pChild = mpChildrenArray[j];
 
                 if (pChild == NULL || !pChild->TestDefined(i)) {
                     continue;
@@ -194,7 +188,7 @@ bool AnmObjShpNode::Bind(const ResMdl mdl) {
     bool success = false;
 
     for (int i = 0; i < mChildrenArraySize; i++) {
-        AnmObjShpRes* pChild = mpChildrenArray[i];
+        AnmObjShpRes *pChild = mpChildrenArray[i];
         if (pChild == NULL) {
             continue;
         }
@@ -223,30 +217,30 @@ void AnmObjShpNode::Release() {
     AnmObjShp::Release();
 }
 
-void AnmObjShpNode::G3dProc(u32 task, u32 param, void* pInfo) {
+void AnmObjShpNode::G3dProc(u32 task, u32 param, void *pInfo) {
 #pragma unused(param)
 
     switch (task) {
-    case G3DPROC_CHILD_DETACHED: {
-        for (int i = 0; i < mChildrenArraySize; i++) {
-            if (mpChildrenArray[i] == pInfo) {
-                Detach(i);
-                return;
+        case G3DPROC_CHILD_DETACHED: {
+            for (int i = 0; i < mChildrenArraySize; i++) {
+                if (mpChildrenArray[i] == pInfo) {
+                    Detach(i);
+                    return;
+                }
             }
+
+            break;
         }
 
-        break;
-    }
+        case G3DPROC_DETACH_PARENT: {
+            SetParent(NULL);
+            break;
+        }
 
-    case G3DPROC_DETACH_PARENT: {
-        SetParent(NULL);
-        break;
-    }
-
-    case G3DPROC_ATTACH_PARENT: {
-        SetParent(static_cast<G3dObj*>(pInfo));
-        break;
-    }
+        case G3DPROC_ATTACH_PARENT: {
+            SetParent(static_cast<G3dObj *>(pInfo));
+            break;
+        }
     }
 }
 
@@ -255,8 +249,7 @@ void AnmObjShpNode::G3dProc(u32 task, u32 param, void* pInfo) {
  * AnmObjShpBlend
  *
  ******************************************************************************/
-AnmObjShpBlend* AnmObjShpBlend::Construct(MEMAllocator* pAllocator, u32* pSize,
-                                          ResMdl mdl, int numChildren) {
+AnmObjShpBlend *AnmObjShpBlend::Construct(MEMAllocator *pAllocator, u32 *pSize, ResMdl mdl, int numChildren) {
     if (!mdl.IsValid()) {
         return NULL;
     }
@@ -264,7 +257,7 @@ AnmObjShpBlend* AnmObjShpBlend::Construct(MEMAllocator* pAllocator, u32* pSize,
     int bindNum = mdl.GetResVtxPosNumEntries();
 
     u32 bindSize = bindNum * sizeof(u16);
-    u32 childrenSize = numChildren * sizeof(AnmObjShpRes*);
+    u32 childrenSize = numChildren * sizeof(AnmObjShpRes *);
     u32 weightSize = numChildren * sizeof(f32);
 
     u32 bindOfs = ut::RoundUp(sizeof(AnmObjShpBlend), 4);
@@ -280,7 +273,7 @@ AnmObjShpBlend* AnmObjShpBlend::Construct(MEMAllocator* pAllocator, u32* pSize,
         return NULL;
     }
 
-    u8* pBuffer = reinterpret_cast<u8*>(Alloc(pAllocator, size));
+    u8 *pBuffer = reinterpret_cast<u8 *>(Alloc(pAllocator, size));
     if (pBuffer == NULL) {
         return NULL;
     }
@@ -296,28 +289,25 @@ AnmObjShpBlend* AnmObjShpBlend::Construct(MEMAllocator* pAllocator, u32* pSize,
     // clang-format on
 }
 
-AnmObjShpBlend::AnmObjShpBlend(MEMAllocator* pAllocator, u16* pBindingBuf,
-                               int numBinding, AnmObjShpRes** ppChildrenBuf,
-                               int numChildren, f32* pWeightBuf)
-    : AnmObjShpNode(pAllocator, pBindingBuf, numBinding, ppChildrenBuf,
-                    numChildren),
-      mpWeightArray(pWeightBuf) {
-
+AnmObjShpBlend::AnmObjShpBlend(
+    MEMAllocator *pAllocator, u16 *pBindingBuf, int numBinding, AnmObjShpRes **ppChildrenBuf, int numChildren,
+    f32 *pWeightBuf
+)
+    : AnmObjShpNode(pAllocator, pBindingBuf, numBinding, ppChildrenBuf, numChildren), mpWeightArray(pWeightBuf) {
     for (int i = 0; i < mChildrenArraySize; i++) {
         mpWeightArray[i] = 1.0f;
     }
 }
 
-const ShpAnmResult* AnmObjShpBlend::GetResult(ShpAnmResult* pResult, u32 idx) {
-    detail::workmem::ShpAnmResultBuf* pWorkBuffer =
-        detail::workmem::GetShpAnmResultBufTemporary();
+const ShpAnmResult *AnmObjShpBlend::GetResult(ShpAnmResult *pResult, u32 idx) {
+    detail::workmem::ShpAnmResultBuf *pWorkBuffer = detail::workmem::GetShpAnmResultBufTemporary();
 
     int blendNum = 0;
     f32 weightSum = 0.0f;
 
     for (int i = 0; i < mChildrenArraySize; i++) {
         f32 weight = mpWeightArray[i];
-        AnmObjShpRes* pChild = mpChildrenArray[i];
+        AnmObjShpRes *pChild = mpChildrenArray[i];
 
         // @note Bitwise AND
         if (!(pChild != NULL & weight != 0.0f)) {
@@ -328,10 +318,9 @@ const ShpAnmResult* AnmObjShpBlend::GetResult(ShpAnmResult* pResult, u32 idx) {
             continue;
         }
 
-        detail::workmem::ShpAnmResultBuf& rAnmBuf = pWorkBuffer[blendNum];
+        detail::workmem::ShpAnmResultBuf &rAnmBuf = pWorkBuffer[blendNum];
 
-        const ShpAnmResult* pMyResult =
-            pChild->GetResult(&rAnmBuf.resultBuf, idx);
+        const ShpAnmResult *pMyResult = pChild->GetResult(&rAnmBuf.resultBuf, idx);
 
         if (!(pMyResult->flags & 1)) {
             continue;
@@ -350,7 +339,7 @@ const ShpAnmResult* AnmObjShpBlend::GetResult(ShpAnmResult* pResult, u32 idx) {
     }
 
     if (blendNum == 1) {
-        detail::workmem::ShpAnmResultBuf& rAnmBuf = *pWorkBuffer;
+        detail::workmem::ShpAnmResultBuf &rAnmBuf = *pWorkBuffer;
 
         if (rAnmBuf.pResult == &rAnmBuf.resultBuf) {
             *pResult = *rAnmBuf.pResult;
@@ -368,14 +357,14 @@ const ShpAnmResult* AnmObjShpBlend::GetResult(ShpAnmResult* pResult, u32 idx) {
     pResult->baseShapeWeight = 0.0f;
 
     for (int i = 0; i < blendNum; i++) {
-        const ShpAnmResult* pMyResult = pWorkBuffer[i].pResult;
+        const ShpAnmResult *pMyResult = pWorkBuffer[i].pResult;
         f32 weight = pWorkBuffer[i].weight;
         f32 ratio = weight * invWeightSum;
 
         pResult->baseShapeWeight += pMyResult->baseShapeWeight * ratio;
 
         for (u32 myKey = 0; myKey < pMyResult->numKeyShape; myKey++) {
-            const BlendVtx& rMyKeyShape = pMyResult->keyShape[myKey];
+            const BlendVtx &rMyKeyShape = pMyResult->keyShape[myKey];
 
             u32 otherKey;
             for (otherKey = 0; otherKey < pResult->numKeyShape; otherKey++) {
@@ -410,8 +399,7 @@ f32 AnmObjShpBlend::GetWeight(int idx) const {
  * AnmObjShpRes
  *
  ******************************************************************************/
-AnmObjShpRes* AnmObjShpRes::Construct(MEMAllocator* pAllocator, u32* pSize,
-                                      ResAnmShp shp, ResMdl mdl, bool cache) {
+AnmObjShpRes *AnmObjShpRes::Construct(MEMAllocator *pAllocator, u32 *pSize, ResAnmShp shp, ResMdl mdl, bool cache) {
     if (!shp.IsValid() || !mdl.IsValid()) {
         return NULL;
     }
@@ -439,33 +427,30 @@ AnmObjShpRes* AnmObjShpRes::Construct(MEMAllocator* pAllocator, u32* pSize,
         return NULL;
     }
 
-    u8* pBuffer = reinterpret_cast<u8*>(Alloc(pAllocator, size));
+    u8 *pBuffer = reinterpret_cast<u8 *>(Alloc(pAllocator, size));
     if (pBuffer == NULL) {
         return NULL;
     }
 
-    u16* const pBindingBuf = reinterpret_cast<u16*>(pBuffer + bindOfs);
+    u16 *const pBindingBuf = reinterpret_cast<u16 *>(pBuffer + bindOfs);
 
-    ShpAnmVtxSet* const pVtxSetBuf =
-        reinterpret_cast<ShpAnmVtxSet*>(pBuffer + vtxSetOfs);
+    ShpAnmVtxSet *const pVtxSetBuf = reinterpret_cast<ShpAnmVtxSet *>(pBuffer + vtxSetOfs);
 
-    ShpAnmResult* const pCacheBuf =
-        reinterpret_cast<ShpAnmResult*>(pBuffer + cacheOfs);
+    ShpAnmResult *const pCacheBuf = reinterpret_cast<ShpAnmResult *>(pBuffer + cacheOfs);
 
     return new (pBuffer)
-        AnmObjShpRes(pAllocator, shp, pBindingBuf, pVtxSetBuf, bindNum,
-                     cacheSize != 0 ? pCacheBuf : NULL);
+        AnmObjShpRes(pAllocator, shp, pBindingBuf, pVtxSetBuf, bindNum, cacheSize != 0 ? pCacheBuf : NULL);
 }
 
-AnmObjShpRes::AnmObjShpRes(MEMAllocator* pAllocator, ResAnmShp shp,
-                           u16* pBindingBuf, ShpAnmVtxSet* pVtxSetBuf,
-                           int numBinding, ShpAnmResult* pCacheBuf)
+AnmObjShpRes::AnmObjShpRes(
+    MEMAllocator *pAllocator, ResAnmShp shp, u16 *pBindingBuf, ShpAnmVtxSet *pVtxSetBuf, int numBinding,
+    ShpAnmResult *pCacheBuf
+)
     : AnmObjShp(pAllocator, pBindingBuf, numBinding),
       FrameCtrl(0.0f, shp.GetNumFrame(), GetAnmPlayPolicy(shp.GetAnmPolicy())),
       mRes(shp),
       mpVtxSetArray(pVtxSetBuf),
       mpResultCache(pCacheBuf) {
-
     if (mpResultCache != NULL) {
         UpdateCache();
     }
@@ -485,6 +470,10 @@ f32 AnmObjShpRes::GetFrame() const {
 
 void AnmObjShpRes::SetUpdateRate(f32 rate) {
     SetRate(rate);
+
+    if (rate == 0.f && mpResultCache != NULL) {
+        UpdateCache();
+    }
 }
 
 f32 AnmObjShpRes::GetUpdateRate() const {
@@ -492,10 +481,12 @@ f32 AnmObjShpRes::GetUpdateRate() const {
 }
 
 void AnmObjShpRes::UpdateFrame() {
-    UpdateFrm();
+    if (GetRate() != 0.f) {
+        UpdateFrm();
 
-    if (mpResultCache != NULL) {
-        UpdateCache();
+        if (mpResultCache != NULL) {
+            UpdateCache();
+        }
     }
 }
 
@@ -504,7 +495,7 @@ bool AnmObjShpRes::Bind(const ResMdl mdl) {
     u32 numAnim = mRes.GetShapeAnmNumEntries();
 
     for (u16 i = 0; i < numAnim; i++) {
-        const ResAnmShpAnmData* pData = mRes.GetShapeAnm(i);
+        const ResAnmShpAnmData *pData = mRes.GetShapeAnm(i);
 
         // Seek back from name string to start of ResName
         ResName name(ut::AddOffsetToPtr(pData, pData->name - 4));
@@ -519,10 +510,10 @@ bool AnmObjShpRes::Bind(const ResMdl mdl) {
     }
 
     int nameNum = mRes.GetNumVtxNames();
-    const s32* pVtxNameArray = mRes.GetVtxNameArray();
+    const s32 *pVtxNameArray = mRes.GetVtxNameArray();
 
     for (int i = 0; i < nameNum; i++) {
-        ShpAnmVtxSet& rSet = mpVtxSetArray[i];
+        ShpAnmVtxSet &rSet = mpVtxSetArray[i];
         s32 offset = pVtxNameArray[i];
 
         // Seek back from name string to start of ResName
@@ -537,7 +528,7 @@ bool AnmObjShpRes::Bind(const ResMdl mdl) {
     return success;
 }
 
-const ShpAnmResult* AnmObjShpRes::GetResult(ShpAnmResult* pResult, u32 idx) {
+const ShpAnmResult *AnmObjShpRes::GetResult(ShpAnmResult *pResult, u32 idx) {
     u32 id = mpBinding[idx];
 
     if (id & (BINDING_UNDEFINED | BINDING_INVALID)) {
@@ -566,24 +557,24 @@ void AnmObjShpRes::UpdateCache() {
     }
 }
 
-void AnmObjShpRes::G3dProc(u32 task, u32 param, void* pInfo) {
+void AnmObjShpRes::G3dProc(u32 task, u32 param, void *pInfo) {
 #pragma unused(param)
 
     switch (task) {
-    case G3DPROC_UPDATEFRAME: {
-        UpdateFrame();
-        break;
-    }
+        case G3DPROC_UPDATEFRAME: {
+            UpdateFrame();
+            break;
+        }
 
-    case G3DPROC_DETACH_PARENT: {
-        SetParent(NULL);
-        break;
-    }
+        case G3DPROC_DETACH_PARENT: {
+            SetParent(NULL);
+            break;
+        }
 
-    case G3DPROC_ATTACH_PARENT: {
-        SetParent(static_cast<G3dObj*>(pInfo));
-        break;
-    }
+        case G3DPROC_ATTACH_PARENT: {
+            SetParent(static_cast<G3dObj *>(pInfo));
+            break;
+        }
     }
 }
 

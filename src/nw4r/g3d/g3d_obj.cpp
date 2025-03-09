@@ -10,7 +10,7 @@ G3dObj::~G3dObj() {
 }
 
 void G3dObj::Destroy() {
-    G3dObj* pParent = GetParent();
+    G3dObj *pParent = GetParent();
 
     if (pParent != NULL) {
         pParent->G3dProc(G3DPROC_CHILD_DETACHED, 0, this);
@@ -19,10 +19,7 @@ void G3dObj::Destroy() {
     delete this;
 }
 
-// clang-format off
-DECOMP_FORCEACTIVE(g3d_obj_cpp,
-                   G3dObj::IsDerivedFrom);
-// clang-format on
+void G3dObj::DetachFromParent() {}
 
 } // namespace g3d
 } // namespace nw4r
