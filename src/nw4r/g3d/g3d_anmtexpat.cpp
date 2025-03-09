@@ -371,6 +371,9 @@ f32 AnmObjTexPatRes::GetFrame() const {
 
 void AnmObjTexPatRes::SetUpdateRate(f32 rate) {
     SetRate(rate);
+    if (rate == 0.f && mpResultCache != NULL) {
+        UpdateCache();
+    }
 }
 
 f32 AnmObjTexPatRes::GetUpdateRate() const {
@@ -378,10 +381,12 @@ f32 AnmObjTexPatRes::GetUpdateRate() const {
 }
 
 void AnmObjTexPatRes::UpdateFrame() {
-    UpdateFrm();
+    if (GetRate() != 0.f) {
+        UpdateFrm();
 
-    if (mpResultCache != NULL) {
-        UpdateCache();
+        if (mpResultCache != NULL) {
+            UpdateCache();
+        }
     }
 }
 
