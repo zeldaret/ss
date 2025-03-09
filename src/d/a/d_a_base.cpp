@@ -243,7 +243,7 @@ u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
     u32 param2Copy = params2;
     params2 = param2Copy | 0xFF000000;
     // mAng3_c rot = {};
-    return SpecialItemDropMgr::sInstance->giveSpecialDropItem(param2Copy >> 0x18, roomid, spawnPos, subtype, 0, -1);
+    return SpecialItemDropMgr::GetInstance()->giveSpecialDropItem(param2Copy >> 0x18, roomid, spawnPos, subtype, 0, -1);
 }
 
 // 8002cf90
@@ -574,7 +574,7 @@ void dAcBase_c::incrementKillCounter() {
         int killCounterId = object->targetFiTextId;
 
         if (killCounterId < 91 && (killCounterId & 0x300) == 0) {
-            FileManager *fileMgr = FileManager::sInstance;
+            FileManager *fileMgr = FileManager::GetInstance();
             u16 killCount = fileMgr->getEnemyKillCount(killCounterId) + 1;
             fileMgr->setEnemyKillCount(killCounterId, killCount);
         }

@@ -51,9 +51,9 @@ void *LayoutArcManager::getLoadedData(const char *path) {
 bool LayoutArcManager::create(EGG::Heap *heap) {
     new (heap, 0x04) LayoutArcManager();
 
-    if (LayoutArcManager::sInstance == nullptr) {
+    if (GetInstance() == nullptr) {
         return false;
     }
-    LayoutArcManager::sInstance->init(heap);
+    GetInstance()->init(heap);
     return true;
 }

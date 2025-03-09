@@ -194,7 +194,7 @@ int dAcOSeatSword_c::draw() {
 
 void dAcOSeatSword_c::initializeState_Wait() {}
 void dAcOSeatSword_c::executeState_Wait() {
-    AttentionManager::sInstance->addTarget(*this, sInteractionDef, 0, nullptr);
+    AttentionManager::GetInstance()->addTarget(*this, sInteractionDef, 0, nullptr);
 
     if (checkPlayerHasSword()) {
         mbNoSword = true;

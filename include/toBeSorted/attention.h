@@ -161,8 +161,14 @@ public:
     AttentionManager();
     /* vt at 0xBDC */ virtual ~AttentionManager();
 
+    static AttentionManager *GetInstance() {
+        return sInstance;
+    }
+
 private:
     /* 0xBDC */ u8 field_0xBDC;
+
+    static AttentionManager *sInstance;
 
 public:
     bool create();
@@ -204,8 +210,6 @@ public:
 
     void addReadTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20, f32 field_0x24);
     void addReadTarget2(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x20, f32 field_0x24);
-
-    static AttentionManager *sInstance;
 
 private:
     bool isInNormalGameState() const;

@@ -12,7 +12,7 @@ u16 SkipflagManager::sSkipFlags[16] = {};
 
 // 800bfba0
 void SkipflagManager::doCopyFromSave() {
-    u16 *savedSkipflags = FileManager::sInstance->getSkipFlags();
+    u16 *savedSkipflags = FileManager::GetInstance()->getSkipFlags();
     mFlagSpace.copyFromSaveFile(savedSkipflags, 0, 0x10);
 }
 
@@ -39,23 +39,23 @@ void SkipflagManager::setFlag(u16 flag) {
     mFlagHelper.setFlag(flag / 16, flag % 16, mFlagSpace.getFlagPtrChecked(), mFlagSpace.mCount);
 
     u16 savedSkipflags[0x10];
-    checkedMemcpy(savedSkipflags, 0x20, FileManager::sInstance->getSkipFlags(), 0x20);
+    checkedMemcpy(savedSkipflags, 0x20, FileManager::GetInstance()->getSkipFlags(), 0x20);
 
     mFlagHelper.setFlag(flag / 16, flag % 16, savedSkipflags, 0x10);
-    FileManager::sInstance->setSkipFlagsChecked(savedSkipflags, 0, 0x10);
+    FileManager::GetInstance()->setSkipFlagsChecked(savedSkipflags, 0, 0x10);
     setCommitFlag(flag);
 }
 
 // 800bfd20
 bool SkipflagManager::checkFlag(u16 flag) {
-    u16 *savedSkipflags = FileManager::sInstance->getSkipFlags();
+    u16 *savedSkipflags = FileManager::GetInstance()->getSkipFlags();
     return mFlagHelper.checkFlag(flag / 16, flag % 16, savedSkipflags, 0x10);
 }
 
 // 800bfd90
 bool SkipflagManager::commit() {
     if (mShouldCommit) {
-        FileManager *instance = FileManager::sInstance;
+        FileManager *instance = FileManager::GetInstance();
         instance->setSkipFlagsChecked(mFlagSpace.getFlagPtrUnchecked(), 0, 0x10);
         mShouldCommit = false;
         return true;

@@ -10,8 +10,6 @@ public:
     LayoutArcManager();
     virtual ~LayoutArcManager();
 
-    static LayoutArcManager *sInstance;
-
     static bool create(EGG::Heap *heap);
 
     void init(EGG::Heap *heap);
@@ -28,7 +26,12 @@ public:
     void *getData(const char *oarcName, const char *fileName);
     void *getLoadedData(const char *path);
 
+    static LayoutArcManager *GetInstance() {
+        return sInstance;
+    }
+
 private:
+    static LayoutArcManager *sInstance;
     dRawArcTable_c mArcTable;
 };
 

@@ -281,9 +281,11 @@ public:
     /* 800116C0 */ static void getRegionVersion(char *out);
     // /* 800116F0 */ void sinit();
 
-    static FileManager *getInstance() {
+    static FileManager *GetInstance() {
         return sInstance;
     }
+
+private:
     static FileManager *sInstance;
 };
 

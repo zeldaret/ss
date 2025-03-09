@@ -41,17 +41,17 @@ dStageMgr_c::~dStageMgr_c() {
 }
 
 void dStageMgr_c::initializeState_ReadStageRes() {
-    CurrentStageArcManager::sInstance->setStage(dScGame_c::currentSpawnInfo.stageName);
+    CurrentStageArcManager::GetInstance()->setStage(dScGame_c::currentSpawnInfo.stageName);
 }
 
 void dStageMgr_c::executeState_ReadStageRes() {
-    if (CurrentStageArcManager::sInstance->ensureAllEntriesLoaded() == 0) {
+    if (CurrentStageArcManager::GetInstance()->ensureAllEntriesLoaded() == 0) {
         mStateMgr.changeState(StateID_ReadRoomRes);
     }
 }
 
 void dStageMgr_c::finalizeState_ReadStageRes() {
-    const void *stageBzs = CurrentStageArcManager::sInstance->getData("dat/stage.bzs");
+    const void *stageBzs = CurrentStageArcManager::GetInstance()->getData("dat/stage.bzs");
     if (stageBzs != nullptr) {
         parseStageBzs(-1, stageBzs);
         parseRoomStageBzs(-1, stageBzs);
@@ -62,8 +62,8 @@ void dStageMgr_c::finalizeState_ReadStageRes() {
 void dStageMgr_c::initializeState_ReadRoomRes() {}
 
 void dStageMgr_c::executeState_ReadRoomRes() {
-    if (CurrentStageArcManager::sInstance->ensureAllEntriesLoaded() == 0 &&
-        LayoutArcManager::sInstance->ensureAllEntriesLoaded() == 0) {
+    if (CurrentStageArcManager::GetInstance()->ensureAllEntriesLoaded() == 0 &&
+        LayoutArcManager::GetInstance()->ensureAllEntriesLoaded() == 0) {
         mStateMgr.changeState(StateID_ReadObjectRes);
     }
 }
@@ -72,13 +72,13 @@ void dStageMgr_c::finalizeState_ReadRoomRes() {
     if (mpRmpl != nullptr) {
         const RMPL *itRmpl = mpRmpl;
         for (int i = 0; i < mRmplCount; itRmpl++, i++) {
-            const void *bzs = CurrentStageArcManager::sInstance->loadFromRoomArc(itRmpl->roomId, "dat/room.bzs");
+            const void *bzs = CurrentStageArcManager::GetInstance()->loadFromRoomArc(itRmpl->roomId, "dat/room.bzs");
             parseRoomStageBzs(itRmpl->roomId, bzs);
         }
     } else {
         u32 roomId = dScGame_c::currentSpawnInfo.room;
         const void *bzs =
-            CurrentStageArcManager::sInstance->loadFromRoomArc(dScGame_c::currentSpawnInfo.room, "dat/room.bzs");
+            CurrentStageArcManager::GetInstance()->loadFromRoomArc(dScGame_c::currentSpawnInfo.room, "dat/room.bzs");
         parseRoomStageBzs(roomId, bzs);
     }
 }
@@ -96,11 +96,11 @@ void dStageMgr_c::executeState_ReadObjectRes() {
 void dStageMgr_c::finalizeState_ReadObjectRes() {}
 
 void dStageMgr_c::initializeState_ReadStageLayerRes() {
-    CurrentStageArcManager::sInstance->loadFileFromExtraLayerArc(dScGame_c::currentSpawnInfo.layer);
+    CurrentStageArcManager::GetInstance()->loadFileFromExtraLayerArc(dScGame_c::currentSpawnInfo.layer);
 }
 
 void dStageMgr_c::executeState_ReadStageLayerRes() {
-    if (CurrentStageArcManager::sInstance->ensureAllEntriesLoaded() == 0) {
+    if (CurrentStageArcManager::GetInstance()->ensureAllEntriesLoaded() == 0) {
         mStateMgr.changeState(StateID_ReadLayerObjectRes);
     }
 }
@@ -115,7 +115,7 @@ static const char *sSeekerStoneLayoutArcs[] = {
 void dStageMgr_c::initializeState_ReadLayerObjectRes() {
     mDemoName = demoName;
 
-    const void *bzs = CurrentStageArcManager::sInstance->getData("dat/stage.bzs");
+    const void *bzs = CurrentStageArcManager::GetInstance()->getData("dat/stage.bzs");
     if (bzs != nullptr) {
         parseBzsStageRoom(-1, bzs);
     }
@@ -123,13 +123,13 @@ void dStageMgr_c::initializeState_ReadLayerObjectRes() {
     if (mpRmpl != nullptr) {
         const RMPL *itRmpl = mpRmpl;
         for (int i = 0; i < mRmplCount; itRmpl++, i++) {
-            const void *bzs = CurrentStageArcManager::sInstance->loadFromRoomArc(itRmpl->roomId, "dat/room.bzs");
+            const void *bzs = CurrentStageArcManager::GetInstance()->loadFromRoomArc(itRmpl->roomId, "dat/room.bzs");
             parseBzsStageRoom(itRmpl->roomId, bzs);
         }
     } else {
         u32 roomId = dScGame_c::currentSpawnInfo.room;
         const void *bzs =
-            CurrentStageArcManager::sInstance->loadFromRoomArc(dScGame_c::currentSpawnInfo.room, "dat/room.bzs");
+            CurrentStageArcManager::GetInstance()->loadFromRoomArc(dScGame_c::currentSpawnInfo.room, "dat/room.bzs");
         parseBzsStageRoom(roomId, bzs);
     }
 
@@ -142,7 +142,7 @@ void dStageMgr_c::initializeState_ReadLayerObjectRes() {
 }
 
 void dStageMgr_c::executeState_ReadLayerObjectRes() {
-    if (mLayerObjCtrl.isLoaded() && LayoutArcManager::sInstance->ensureAllEntriesLoaded() == 0) {
+    if (mLayerObjCtrl.isLoaded() && LayoutArcManager::GetInstance()->ensureAllEntriesLoaded() == 0) {
         mStateMgr.changeState(StateID_SoundLoadSceneData);
     }
 }
@@ -153,9 +153,9 @@ extern "C" void *FOR_LOADED_PARTICLES;
 void dStageMgr_c::finalizeState_ReadLayerObjectRes() {
     if (mDemoName.len() != 0) {
         const char *name = mDemoName;
-        void *jpc = OarcManager::sInstance->getSubEntryData(name, "dat/jparticle.jpc");
+        void *jpc = OarcManager::GetInstance()->getSubEntryData(name, "dat/jparticle.jpc");
         if (jpc != nullptr) {
-            void *jpn = OarcManager::sInstance->getSubEntryData(name, "dat/jparticle.jpn");
+            void *jpn = OarcManager::GetInstance()->getSubEntryData(name, "dat/jparticle.jpn");
             fn_800C85D0(FOR_LOADED_PARTICLES, dHeap::work2Heap.heap, true, jpc, jpn);
         }
     }
@@ -213,7 +213,7 @@ void dStageMgr_c::executeState_ReadObjectSound() {
     }
 
     if (dScGame_c::sInstance != nullptr) {
-        if (dScGame_c::sInstance->savePromptFlag() == true) {
+        if (dScGame_c::GetInstance()->savePromptFlag() == true) {
             mStateMgr.changeState(StateID_SceneChangeSave);
         } else {
             mStateMgr.changeState(StateID_RestartSceneWait);
@@ -235,7 +235,7 @@ void dStageMgr_c::finalizeState_ReadObjectSound() {
 extern "C" void *LYT_SAVE_MGR;
 extern "C" void fn_80285600(void *, int, int);
 void dStageMgr_c::initializeState_SceneChangeSave() {
-    dScGame_c::sInstance->setSavePromptFlag(false);
+    dScGame_c::GetInstance()->setSavePromptFlag(false);
     if (LYT_SAVE_MGR != nullptr) {
         fn_80285600(LYT_SAVE_MGR, 3, 0);
     }

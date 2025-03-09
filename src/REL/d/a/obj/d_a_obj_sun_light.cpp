@@ -10,7 +10,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_SUN_LIGHT, dAcOsunLight_c, fProfile::OBJ_SUN_LIGHT, 0x
 STATE_DEFINE(dAcOsunLight_c, Wait);
 
 bool dAcOsunLight_c::createHeap() {
-    mBrres = nw4r::g3d::ResFile(CurrentStageArcManager::sInstance->getData("g3d/stage.brres"));
+    mBrres = nw4r::g3d::ResFile(CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres"));
     dStage_c::bindStageResToFile(&mBrres);
     dStage_c::bindSkyCmnToResFile(&mBrres);
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("StageF000Light");

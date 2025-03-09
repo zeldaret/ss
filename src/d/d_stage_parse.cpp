@@ -56,7 +56,7 @@ static void handleBzsStif(int roomid, const BzsSectionHead *section) {
     // section->mCount == 1
     dStageMgr_c::GetInstance()->setStif(OFS_TO_PTR(STIF, section));
     s16 flagIndex = dStageMgr_c::GetInstance()->getFlagIndex();
-    FileManager::sInstance->setSceneFlagIndex(flagIndex);
+    FileManager::GetInstance()->setSceneFlagIndex(flagIndex);
     updateFlagForFlagIndex(flagIndex);
 }
 
@@ -163,15 +163,15 @@ static void handleBzsPly(int roomid, const BzsSectionHead *section) {
         bool preventSetRespawnInfo = false;
         u8 reloaderType = dScGame_c::getReloaderType();
         if (reloaderType != 0) {
-            FileManager *fileMgr = FileManager::sInstance;
+            FileManager *fileMgr = FileManager::GetInstance();
             if (reloaderType == 2) {
-                pos = *FileManager::sInstance->getPosT2();
+                pos = *FileManager::GetInstance()->getPosT2();
                 ang.y = fileMgr->getAngleT2();
                 linkPos = &pos;
                 linkAngle = &ang;
                 linkActorParams = 0x7FFFF1B;
             } else if (reloaderType == 3) {
-                pos = *FileManager::sInstance->getPosT3();
+                pos = *FileManager::GetInstance()->getPosT3();
                 ang.y = fileMgr->getAngleT3();
                 linkPos = &pos;
                 linkAngle = &ang;
@@ -183,7 +183,7 @@ static void handleBzsPly(int roomid, const BzsSectionHead *section) {
                     }
                 }
             } else {
-                if (FileManager::sInstance->getEntranceLoadFlagT1() == 0 && dScGame_c::getReloaderType() != 4) {
+                if (FileManager::GetInstance()->getEntranceLoadFlagT1() == 0 && dScGame_c::getReloaderType() != 4) {
                     pos = *fileMgr->getPosT1();
                     ang.y = fileMgr->getAngleT1();
                     if (fileMgr->fn_8000CC00() == 2) {

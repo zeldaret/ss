@@ -88,7 +88,7 @@ static void postSetup() {
 }
 
 void copyAllFlagManagersFromSave() {
-    u16 flag = FileManager::sInstance->getSceneFlagIndex();
+    u16 flag = FileManager::GetInstance()->getSceneFlagIndex();
     SceneflagManager::sInstance->copyFromSave(flag);
     TBoxflagManager::sInstance->copyFromSave(flag);
     StoryflagManager::sInstance->copyFromSave();

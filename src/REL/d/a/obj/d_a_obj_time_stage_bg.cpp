@@ -27,7 +27,7 @@ static const char *sMdl2Names[] = {
 STATE_DEFINE(dAcOTimeStageBg_c, Wait);
 
 bool dAcOTimeStageBg_c::createHeap() {
-    mRes = nw4r::g3d::ResFile(CurrentStageArcManager::sInstance->getData("g3d/stage.brres"));
+    mRes = nw4r::g3d::ResFile(CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres"));
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl(sMdlNames[mSubType]);
     TRY_CREATE(mMdl1.create(mdl, &heap_allocator, 0x128));
     nw4r::g3d::ResNode nd = mdl.GetResNode(sMdlNames[mSubType]);
@@ -80,7 +80,7 @@ int dAcOTimeStageBg_c::actorCreate() {
 
 int dAcOTimeStageBg_c::actorPostCreate() {
     mTimeArea.check(roomid, field_0x3EC, 0, 30.0f, 0.1f);
-    if (dTimeAreaMgr_c::sInstance->fn_800B9B60(roomid, field_0x3EC)) {
+    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, field_0x3EC)) {
         field_0x3F8 = 255.0f;
     } else {
         field_0x3F8 = 0.0f;
@@ -117,7 +117,7 @@ void dAcOTimeStageBg_c::initializeState_Wait() {}
 void dAcOTimeStageBg_c::executeState_Wait() {
     f32 target = 0.0f;
     mTimeArea.check(roomid, field_0x3EC, 0, 30.0f, 0.1f);
-    if (dTimeAreaMgr_c::sInstance->fn_800B9B60(roomid, field_0x3EC)) {
+    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, field_0x3EC)) {
         if (mTimeArea.getDistMaybe() == 1.0f) {
             target = 255.0f;
         }

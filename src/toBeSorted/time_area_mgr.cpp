@@ -22,7 +22,7 @@ bool dTimeAreaMgr_c::init() {
 }
 
 void dTimeAreaMgr_c::draw() {
-    if (field_0x64 != 0 && dTimeAreaMgr_c::sInstance->field_0x68[0x10] == 0) {
+    if (field_0x64 != 0 && !dTimeAreaMgr_c::GetInstance()->isField0x78()) {
         mProcA.entry();
         mProcB.entry();
     }

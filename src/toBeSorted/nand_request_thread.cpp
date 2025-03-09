@@ -105,11 +105,11 @@ NandRequestThread *NandRequestThread::create(
 }
 
 void *NandRequest::operator new(size_t size) {
-    return NandRequestThread::sInstance->mpCommandHeap->alloc(size, -4);
+    return NandRequestThread::GetInstance()->mpCommandHeap->alloc(size, -4);
 }
 
 void NandRequest::free(NandRequest *ptr) {
-    return NandRequestThread::sInstance->mpCommandHeap->free(ptr);
+    return NandRequestThread::GetInstance()->mpCommandHeap->free(ptr);
 }
 
 NANDResult NandRequest::getStatus() const {
@@ -217,7 +217,7 @@ extern "C" NANDResult NANDSimpleSafeClose(NANDFileInfo *info);
 bool NandRequestWrite::execute() {
     NANDFileInfo info;
     mStatus = NANDSimpleSafeOpen(
-        mFilePath, &info, 2, NandRequestThread::getInstance()->getBuf(), NandRequestThread::getInstance()->getBufSize()
+        mFilePath, &info, 2, NandRequestThread::GetInstance()->getBuf(), NandRequestThread::GetInstance()->getBufSize()
     );
     if (mStatus != NAND_RESULT_OK) {
         NANDResult res = NANDSimpleSafeCancel(&info);
@@ -278,7 +278,7 @@ bool NandRequestCheckHolder::check(u32 neededBlocks, u32 neededFiles) {
         return false;
     }
 
-    NandRequestCheck *req = NandRequestThread::getInstance()->checkRequest(neededBlocks, neededFiles);
+    NandRequestCheck *req = NandRequestThread::GetInstance()->checkRequest(neededBlocks, neededFiles);
     if (req == nullptr) {
         return false;
     }
@@ -295,7 +295,7 @@ bool NandRequestCreateHolder::create(const char *filePath, u8 perm, u8 attr) {
         return false;
     }
 
-    NandRequestCreate *req = NandRequestThread::getInstance()->createRequest(filePath, perm, attr);
+    NandRequestCreate *req = NandRequestThread::GetInstance()->createRequest(filePath, perm, attr);
     if (req == nullptr) {
         return false;
     }
@@ -308,7 +308,7 @@ bool NandRequestWriteHolder::write(const char *filePath, void *data, size_t data
         return false;
     }
 
-    NandRequestWrite *req = NandRequestThread::getInstance()->writeRequest(filePath, data, dataSize);
+    NandRequestWrite *req = NandRequestThread::GetInstance()->writeRequest(filePath, data, dataSize);
     if (req == nullptr) {
         return false;
     }

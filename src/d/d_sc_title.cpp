@@ -52,8 +52,8 @@ dScTitle_c::dScTitle_c() {
     } else {
         actuallyTriggerEntrance("F000", 0, 28, 48, 0, 0, 0, 15, -1);
     }
-    FileManager::sInstance->clearTempFileData();
-    FileManager::sInstance->initFile(1);
+    FileManager::GetInstance()->clearTempFileData();
+    FileManager::GetInstance()->initFile(1);
     fn_80052D50(lbl_805750D8);
     lbl_80575787 = 0;
     field_0x2AC = 0;
@@ -94,8 +94,8 @@ int dScTitle_c::create() {
         fn_80058C90(0);
         fn_80015E40();
         field_0x2AD = 0;
-        LayoutArcManager::sInstance->loadLayoutArcFromDisk(sFileSelect, nullptr);
-        LayoutArcManager::sInstance->loadLayoutArcFromDisk(sSkb, nullptr);
+        LayoutArcManager::GetInstance()->loadLayoutArcFromDisk(sFileSelect, nullptr);
+        LayoutArcManager::GetInstance()->loadLayoutArcFromDisk(sSkb, nullptr);
         mDvd_toMainRam_normal_c::create2(&mpSkbArc, "/SKB/sofkeybd.arc", 0, dHeap::work2Heap.heap);
         SizedString<128> fntPath;
         fntPath.sprintf("/US/Font/%s/%s", getUsedLanguageString(), "normal_02.brfnt");
@@ -117,20 +117,20 @@ extern "C" void fn_80015E80();
 int dScTitle_c::doDelete() {
     // TODO return codes
     int result;
-    result = LayoutArcManager::sInstance->ensureLoaded2(sFileSelect);
+    result = LayoutArcManager::GetInstance()->ensureLoaded2(sFileSelect);
     if (result != -2) {
         if (result != 0) {
             return NOT_READY;
         }
-        LayoutArcManager::sInstance->decrement(sFileSelect);
+        LayoutArcManager::GetInstance()->decrement(sFileSelect);
     }
 
-    result = LayoutArcManager::sInstance->ensureLoaded2(sSkb);
+    result = LayoutArcManager::GetInstance()->ensureLoaded2(sSkb);
     if (result != -2) {
         if (result != 0) {
             return NOT_READY;
         }
-        LayoutArcManager::sInstance->decrement(sSkb);
+        LayoutArcManager::GetInstance()->decrement(sSkb);
     }
 
     // TODO here's the other half of the ::destroy fakematch...
@@ -158,7 +158,7 @@ int dScTitle_c::draw() {
 
 extern "C" u32 TITLE_SCREEN_CHANGE;
 void dScTitle_c::loadTitleScreen(u32 params) {
-    FileManager::sInstance->updateEmptyFiles();
+    FileManager::GetInstance()->updateEmptyFiles();
     if (checkAllSaveFilesEmpty() == true && params != 1) {
         params = 2;
     }
@@ -203,7 +203,7 @@ void dScTitle_c::finalizeState_Action() {
 }
 
 bool dScTitle_c::checkAllSaveFilesEmpty() {
-    FileManager *mgr = FileManager::sInstance;
+    FileManager *mgr = FileManager::GetInstance();
     bool allEmpty = true;
     for (int i = 0; i < 3; i++) {
         if (!mgr->isFileEmpty(i)) {

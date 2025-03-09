@@ -10,6 +10,7 @@
 #include "d/d_sc_game.h"
 #include "d/d_stage.h"
 #include "d/d_stage_mgr.h"
+#include "d/d_stage_parse.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/t/d_t_mass_obj.h"
@@ -45,8 +46,6 @@ SPECIAL_BASE_PROFILE(ROOM, dRoom_c, fProfile::ROOM, 0x9, 96);
 STATE_DEFINE(dRoom_c, Active);
 STATE_DEFINE(dRoom_c, NonActive);
 
-extern "C" void parseRoomBzs(int roomid, void *bzs);
-
 int dRoom_c::create() {
     roomid = params & 0x3F;
     mCanHavePastState = dStageMgr_c::GetInstance()->getSTIFunk1() == 0 &&
@@ -58,19 +57,19 @@ int dRoom_c::create() {
                         // LMF crawlspace, spike maze
                         !(dScGame_c::isCurrentStage("D300_1") && (roomid == 7 || roomid == 9));
     if (!mAllocator.createNewTempFrmHeap(
-            -1, CurrentStageArcManager::sInstance->getHeap(roomid), "dRoom_c::m_allocator", 0x20, 0
+            -1, CurrentStageArcManager::GetInstance()->getHeap(roomid), "dRoom_c::m_allocator", 0x20, 0
         )) {
         return FAILED;
     }
 
     bool anyError = false;
 
-    mRoomRes = nw4r::g3d::ResFile(CurrentStageArcManager::sInstance->loadFromRoomArc(roomid, "g3d/room.brres"));
+    mRoomRes = nw4r::g3d::ResFile(CurrentStageArcManager::GetInstance()->loadFromRoomArc(roomid, "g3d/room.brres"));
     dStage_c::bindStageResToFile(&mRoomRes);
     dStage_c::bindSkyCmnToResFile(&mRoomRes);
 
-    for (s32 i = 0; i < ARRAY_LENGTH(mModels); i++) {
-        model_c *mdl = &mModels[i];
+    model_c *mdl = mModels;
+    for (s32 i = 0; i < ROOM_NUM_MODELS; i++, mdl++) {
         if (i != 2 || roomid != 1 || dScGame_c::currentSpawnInfo.layer != 14 || !dScGame_c::isCurrentStage("F406")) {
             if (!mdl->create(mRoomRes, mAllocator, i, &mWaterThing)) {
                 anyError = true;
@@ -100,7 +99,7 @@ int dRoom_c::create() {
     }
 
     dStage_c::GetInstance()->setRoom(roomid, this);
-    BZS = CurrentStageArcManager::sInstance->loadFromRoomArc(roomid, "dat/room.bzs");
+    BZS = CurrentStageArcManager::GetInstance()->loadFromRoomArc(roomid, "dat/room.bzs");
     parseRoomBzs(roomid, BZS);
     mDidAlreadyInit = (params >> 6) & 1;
     mStateMgr.changeState(StateID_Active);
@@ -131,9 +130,9 @@ int dRoom_c::execute() {
     mStateMgr.executeState();
     f32 val = 0.0f;
     if (mCanHavePastState) {
-        val = dTimeAreaMgr_c::sInstance->checkPositionIsInPastState(roomid, mVec3_c::Zero, nullptr, 1000000.0f);
-        mSkipDrawing = !mHasAnmTexPat && (!dTimeAreaMgr_c::sInstance->isInLanayruMiningFacility() || val > 0.0f) &&
-                       dTimeAreaMgr_c::sInstance->isField0x78();
+        val = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(roomid, mVec3_c::Zero, nullptr, 1000000.0f);
+        mSkipDrawing = !mHasAnmTexPat && (!dTimeAreaMgr_c::GetInstance()->isInLanayruMiningFacility() || val > 0.0f) &&
+                       dTimeAreaMgr_c::GetInstance()->isField0x78();
     } else {
         mSkipDrawing = false;
     }
@@ -144,7 +143,7 @@ int dRoom_c::execute() {
     }
 
     executeBg();
-    for (s32 i = 0; i < ARRAY_LENGTH(mModels); i++) {
+    for (s32 i = 0; i < ROOM_NUM_MODELS; i++) {
         mModels[i].execute(i, mCanHavePastState, val);
     }
 
@@ -155,10 +154,31 @@ int dRoom_c::draw() {
     if ((mFlags & 2) != 0 || mSkipDrawing) {
         return SUCCEEDED;
     }
-    for (s32 i = 0; i < ARRAY_LENGTH(mModels); i++) {
+    for (s32 i = 0; i < ROOM_NUM_MODELS; i++) {
         mModels[i].draw(roomid);
     }
     return SUCCEEDED;
+}
+
+const PLY *dRoom_c::getEntranceById(u8 entranceId) const {
+    s32 i = mPlyCount;
+    const PLY *ply = mpPly;
+    while (i > 0) {
+        if (ply->entranceId == entranceId) {
+            return ply;
+        }
+        ply++;
+        i--;
+    }
+    return mpPly;
+}
+
+const CAM *dRoom_c::getCamForIndex(u32 idx) const {
+    return &mpCam[idx];
+}
+
+const EVNT *dRoom_c::getEventForIndex(u32 idx) const {
+    return &mpEvnt[idx];
 }
 
 void deactivateUpdatesCb(dAcBase_c *ac) {
@@ -220,11 +240,11 @@ static const BgData sRoomBg[] = {
 };
 
 bool dRoom_c::setupBg() {
-    for (int i = 0; i < ARRAY_LENGTH(mBg); i++) {
+    for (int i = 0; i < ROOM_NUM_BG; i++) {
         dBgWKCol *bg = &mBg[i];
-        void *kcl = CurrentStageArcManager::sInstance->getDataFromRoomArc(roomid, sRoomBg[i].kcl);
+        void *kcl = CurrentStageArcManager::GetInstance()->getDataFromRoomArc(roomid, sRoomBg[i].kcl);
         if (kcl != nullptr) {
-            void *plc = CurrentStageArcManager::sInstance->loadFromRoomArc(roomid, sRoomBg[i].plc);
+            void *plc = CurrentStageArcManager::GetInstance()->loadFromRoomArc(roomid, sRoomBg[i].plc);
             bg->Set(kcl, plc);
             bg->SetRoomId(roomid);
             bg->SetPriority(dBgW_Base::PRIORITY_0);
@@ -245,7 +265,7 @@ bool dRoom_c::setupBg() {
 }
 
 void dRoom_c::executeBg() {
-    for (int i = 0; i < ARRAY_LENGTH(mBg); i++) {
+    for (int i = 0; i < ROOM_NUM_BG; i++) {
         if (!mBg[i].ChkNotReady()) {
             dBgS::GetInstance()->Regist(&mBg[i], (dAcObjBase_c *)nullptr);
         }
@@ -281,7 +301,7 @@ void dRoom_c::drawOnMapIfVisible(mMtx_c *mtx, int param) {
 }
 
 void dRoom_c::getBounds(mVec3_c *min, mVec3_c *max) const {
-    for (int i = 0; i < ARRAY_LENGTH(mModels); i++) {
+    for (int i = 0; i < ROOM_NUM_MODELS; i++) {
         mVec3_c tMin, tMax;
         mModels[i].getBounds(&tMin, &tMax);
         if (i == 0) {
@@ -301,13 +321,13 @@ void dRoom_c::formatObj(int obj, SizedString<8> &str) {
 void dRoom_c::updateObjNodeInEachRoom(int obj, bool visible) {
     SizedString<8> objName;
     formatObj(obj, objName);
-    for (int i = 0; i < ARRAY_LENGTH(mModels); i++) {
+    for (int i = 0; i < ROOM_NUM_MODELS; i++) {
         mModels[i].updateObjNode(objName, visible);
     }
 }
 
 void dRoom_c::destroyModels() {
-    for (int i = 0; i < ARRAY_LENGTH(mModels); i++) {
+    for (int i = 0; i < ROOM_NUM_MODELS; i++) {
         mModels[i].destroy();
     }
 }
@@ -329,15 +349,12 @@ f32 dRoom_c::getFrame() const {
     return mModels[0].getFrame();
 }
 
-extern "C" void fn_800641D0(int roomid, void *roomBzs);
-extern "C" void fn_80064160(int roomid, void *roomBzs);
-
 void dRoom_c::initializeState_Active() {
     SceneflagManager::sInstance->unsetZoneflagsForRoom(roomid);
     executeBg();
-    fn_800641D0(roomid, BZS);
+    parseRoomActivateBzs(roomid, BZS);
     if (mDidAlreadyInit) {
-        fn_80064160(roomid, BZS);
+        parseRoomReactivateBzs(roomid, BZS);
     } else {
         mFlags |= 8 | 2;
         mDidAlreadyInit = true;
@@ -627,9 +644,9 @@ void dRoom_c::model_c::updateObjNode(const char *node, bool visible) {
     nd.SetVisibility(visible);
     mMdl.somethingVisibility(nd.GetID(), visible);
     if (visible) {
-        dTimeAreaMgr_c::sInstance->setField0x7A(true);
+        dTimeAreaMgr_c::GetInstance()->setField0x7A(true);
     } else {
-        dTimeAreaMgr_c::sInstance->setField0x7A(false);
+        dTimeAreaMgr_c::GetInstance()->setField0x7A(false);
     }
 }
 

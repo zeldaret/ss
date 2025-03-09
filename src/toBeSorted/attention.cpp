@@ -99,7 +99,7 @@ static const CursorStruct s_Cursors[2] = {
 };
 
 bool AttentionManager::createHeap() {
-    mModels.mResFile = nw4r::g3d::ResFile(OarcManager::sInstance->getMdlFromArc2("UI_Data"));
+    mModels.mResFile = nw4r::g3d::ResFile(OarcManager::GetInstance()->getMdlFromArc2("UI_Data"));
 
     for (int i = 0; i < 2; i++) {
         InteractionMdl *iMdl = &mModels.mMdls[i];

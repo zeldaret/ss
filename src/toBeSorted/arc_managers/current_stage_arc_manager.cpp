@@ -118,9 +118,9 @@ const char *CurrentStageArcManager::getRoomArcDirectory(int room) const {
 bool CurrentStageArcManager::create(EGG::Heap *heap) {
     new (heap, 0x04) CurrentStageArcManager();
 
-    if (CurrentStageArcManager::sInstance == nullptr) {
+    if (GetInstance() == nullptr) {
         return false;
     }
-    CurrentStageArcManager::sInstance->init(heap);
+    GetInstance()->init(heap);
     return true;
 }
