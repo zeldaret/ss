@@ -137,8 +137,9 @@ bool DowsingTarget::hasDowsingInSlot(int slot) {
         return hasCrystalBallDowsing() || hasPumpkinDowsing() || hasNewPlantSpeciesDowsing() || hasKikwiDowsing() ||
                hasKeyPieceDowsing() || hasDesertNodeDowsing() || hasPartyWheelDowsing();
     } else {
-        slot = DOWSING_TARGET_STORY_FLAGS[slot];
-        if (StoryflagManager::sInstance->getCounterOrFlag(slot)) {
+        u16 flag = DOWSING_TARGET_STORY_FLAGS[slot];
+        flag = StoryflagManager::sInstance->getCounterOrFlag(flag);
+        if (flag != 0) {
             return true;
         }
     }
