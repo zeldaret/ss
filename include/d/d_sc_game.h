@@ -16,9 +16,9 @@
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 
-class SomeM2dThingBase : public m2d::Base_c {
+class ScGameScreen : public m2d::Base_c {
 public:
-    SomeM2dThingBase(u8 priority) {
+    ScGameScreen(u8 priority) {
         setPriority(priority);
     }
 
@@ -26,12 +26,12 @@ private:
     /* 0x10 */ EGG::Screen mScreen;
 };
 
-class SomeM2dThing : public SomeM2dThingBase {
+class ScGameScreenTargeting : public ScGameScreen {
 public:
-    SomeM2dThing(u8 priority) : SomeM2dThingBase(priority), field_unk(0.0f) {}
+    ScGameScreenTargeting(u8 priority) : ScGameScreen(priority), mLetterboxAmount(0.0f) {}
 
 private:
-    f32 field_unk;
+    f32 mLetterboxAmount;
 };
 
 struct SpawnInfo {
@@ -203,8 +203,8 @@ protected:
     /* 0x0C4 */ LayoutArcControl mLayoutCtrl;
     /* 0x0D0 */ dFader_c mFader;
 
-    /* 0x0F8 */ SomeM2dThing mScreen1;
-    /* 0x194 */ SomeM2dThingBase mScreen2;
+    /* 0x0F8 */ ScGameScreenTargeting mScreen1;
+    /* 0x194 */ ScGameScreen mScreen2;
     /* 0x228 */ UNKWORD field_0x228;
     /* 0x22C */ u8 _0x22C[0x230 - 0x22C];
     /* 0x230 */ dAcRefBase_c mStageMgrRef;
