@@ -201,6 +201,10 @@ struct AnmGroupBase_c {
         syncAnmFrame();
     }
 
+    inline f32 getEndFrameRaw() const {
+        return mpFrameCtrl->getEndFrameRaw();
+    }
+
     inline f32 getFrame() const {
         return mpFrameCtrl->getFrame();
     }

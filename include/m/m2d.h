@@ -105,6 +105,10 @@ public:
         return f >= end ? 0.0f : f;
     }
 
+    inline f32 getEndFrameRaw() const {
+        return mEndFrame;
+    }
+
 private:
     inline bool notLooping() const {
         return (mFlags & FLAG_NO_LOOP) != 0;
