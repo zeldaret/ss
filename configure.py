@@ -362,7 +362,7 @@ config.libs = [
             Object(Matching, "toBeSorted/arc_managers/oarc_manager.cpp"),
             Object(Matching, "toBeSorted/arc_managers/layout_arc_manager.cpp"),
             Object(NonMatching, "toBeSorted/attention.cpp"),
-            Object(NonMatching, "toBeSorted/dowsing_target.cpp"),
+            Object(Matching, "toBeSorted/dowsing_target.cpp"),
             Object(NonMatching, "toBeSorted/time_area_mgr.cpp"),
             Object(NonMatching, "toBeSorted/nand_request_thread.cpp"),
             Object(Matching, "toBeSorted/save_file.cpp"),
@@ -906,7 +906,7 @@ config.libs = [
     EGGLib(
         "util",
         [
-            Object(NonMatching, "egg/util/eggException.cpp"),
+            Object(Matching, "egg/util/eggException.cpp"),
         ],
     ),
     # {

@@ -136,9 +136,11 @@ bool DowsingTarget::hasDowsingInSlot(int slot) {
     } else if (slot == 2) {
         return hasCrystalBallDowsing() || hasPumpkinDowsing() || hasNewPlantSpeciesDowsing() || hasKikwiDowsing() ||
                hasKeyPieceDowsing() || hasDesertNodeDowsing() || hasPartyWheelDowsing();
-    } else if (StoryflagManager::sInstance->getCounterOrFlag(DOWSING_TARGET_STORY_FLAGS[slot])) {
-        // TODO small instruction shuffle
-        return true;
+    } else {
+        slot = DOWSING_TARGET_STORY_FLAGS[slot];
+        if (StoryflagManager::sInstance->getCounterOrFlag(slot)) {
+            return true;
+        }
     }
 
     return false;
@@ -199,12 +201,14 @@ void DowsingTarget::init() {}
 
 void DowsingTarget::execute() {}
 
-// Not sure what this is
-inline static TListNode<DowsingTarget> *getNode(u8 slot, DowsingTarget *t) {
+// I'm not sure if this is a TList inline or something unique to
+// this file, but this returns the slot's list EndIter if the target
+// isn't linked, and returns the target as an iterator if it's linked
+inline static DowsingList::Iterator GetListNode(u8 slot, DowsingTarget *t) {
     if (t->mLink.mpNext == nullptr || t->mLink.mpPrev == nullptr) {
-        return &DOWSING_LISTS[slot].mStartEnd;
+        return DOWSING_LISTS[slot].GetEndIter();
     } else {
-        return &t->mLink;
+        return DowsingList::Iterator(t);
     }
 }
 
@@ -214,7 +218,7 @@ static bool insertDowsingTarget(DowsingTarget *target) {
         return false;
     }
 
-    if (getNode(slot, target) != &DOWSING_LISTS[slot].mStartEnd) {
+    if (GetListNode(slot, target) != DOWSING_LISTS[slot].GetEndIter()) {
         return false;
     }
     DOWSING_LISTS[slot].insert(target);
@@ -227,7 +231,7 @@ static bool removeDowsingTarget(DowsingTarget *target) {
         return false;
     }
 
-    if (getNode(slot, target) != &DOWSING_LISTS[slot].mStartEnd) {
+    if (GetListNode(slot, target) != DOWSING_LISTS[slot].GetEndIter()) {
         DOWSING_LISTS[slot].remove(target);
         return true;
     }
