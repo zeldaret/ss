@@ -24,8 +24,13 @@ enum SpecialItemDropTable {
 };
 
 class SpecialItemDropMgr {
-public:
+private:
     static SpecialItemDropMgr *sInstance;
+
+public:
+    static SpecialItemDropMgr *GetInstance() {
+        return sInstance;
+    }
 
     SpecialItemDropMgr();
     virtual ~SpecialItemDropMgr() {}

@@ -108,8 +108,14 @@ class mShadow_c : public proc_c {
 
 public:
     mShadow_c(EGG::Heap *heap)
-        : mpHeap(heap), mpCurrentHeap(nullptr), mpChilds(nullptr), mpTexBuf(nullptr), mpCallback(nullptr),
-          mCurrentHeapIdx(0), mFreeChildIdx(0), field_0x66(true) {
+        : mpHeap(heap),
+          mpCurrentHeap(nullptr),
+          mpChilds(nullptr),
+          mpTexBuf(nullptr),
+          mpCallback(nullptr),
+          mCurrentHeapIdx(0),
+          mFreeChildIdx(0),
+          field_0x66(true) {
         nw4r::ut::List_Init(&mList, 0);
     }
     virtual ~mShadow_c();
@@ -148,9 +154,13 @@ public:
     static void create(const mShadowCircleConfig *, nw4r::g3d::ResMdl mdl, EGG::Heap *heap);
     static void destroy();
 
-    static mShadow_c *sInstance;
+    static mShadow_c *GetInstance() {
+        return sInstance;
+    }
 
 private:
+    static mShadow_c *sInstance;
+
     /* 0x18 */ EGG::Heap *mpHeap;
     /* 0x1C */ mAllocator_c mAllocator;
     /* 0x38 */ EGG::FrmHeap *mpFrmHeaps[2];

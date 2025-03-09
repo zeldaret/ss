@@ -17,8 +17,6 @@ public:
     virtual int draw() override;
     virtual int execute() override;
 
-    static dCsBase_c *sInstance;
-
     int update();
     int similarToDraw();
 
@@ -30,7 +28,12 @@ public:
         return mStructC.field_0x14;
     }
 
+    static dCsBase_c *GetInstance() {
+        return sInstance;
+    }
+
 private:
+    static dCsBase_c *sInstance;
     static int sfield0x700Init;
     void setCurrentLyt(int lyt);
 

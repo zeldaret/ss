@@ -236,8 +236,8 @@ void dLytMapPinIcon_c::executeState_Remove() {
 void dLytMapPinIcon_c::finalizeState_Remove() {}
 
 dLytMapPinIcon_c::~dLytMapPinIcon_c() {
-    if (d2d::dLytStructDList::sInstance->fn_80065A30(&mStructD)) {
-        d2d::dLytStructDList::sInstance->removeFromList2(&mStructD);
+    if (d2d::dLytStructDList::GetInstance()->fn_80065A30(&mStructD)) {
+        d2d::dLytStructDList::GetInstance()->removeFromList2(&mStructD);
     }
 }
 
@@ -267,7 +267,7 @@ bool dLytMapPinIcon_c::build(d2d::ResAccIf_c *resAcc) {
 
     mpBounding = mLyt.findBounding("B_mark_00");
     mStructD.fn_80065E70(mpBounding, 2, 1, 0);
-    d2d::dLytStructDList::sInstance->appendToList2(&mStructD);
+    d2d::dLytStructDList::GetInstance()->appendToList2(&mStructD);
 
     mAnmGroups[LYT_MAP_PIN_ICON_ANIM_SCALE].setDirection(false);
     mAnmGroups[LYT_MAP_PIN_ICON_ANIM_LOOP].setDirection(false);
@@ -282,7 +282,7 @@ bool dLytMapPinIcon_c::build(d2d::ResAccIf_c *resAcc) {
 }
 
 bool dLytMapPinIcon_c::remove() {
-    d2d::dLytStructDList::sInstance->removeFromList2(&mStructD);
+    d2d::dLytStructDList::GetInstance()->removeFromList2(&mStructD);
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].afterUnbind();
     }
@@ -398,8 +398,8 @@ void dLytMapFloorBtnMgr_c::finalizeState_Wait() {}
 extern "C" void fn_801942F0(int, int);
 dLytMapFloorBtnMgr_c::~dLytMapFloorBtnMgr_c() {
     for (int i = 0; i < 4; i++) {
-        if (d2d::dLytStructDList::sInstance->fn_80065A30(&mStructDs[i])) {
-            d2d::dLytStructDList::sInstance->removeFromList2(&mStructDs[i]);
+        if (d2d::dLytStructDList::GetInstance()->fn_80065A30(&mStructDs[i])) {
+            d2d::dLytStructDList::GetInstance()->removeFromList2(&mStructDs[i]);
         }
     }
     fn_801942F0(0, 0);
@@ -488,7 +488,7 @@ void dLytMapMain_c::draw() {}
 extern "C" void fn_80016690();
 void dLytMap_c::build() {
     fn_80016690();
-    void *data = LayoutArcManager::sInstance->getLoadedData("Map2D");
+    void *data = LayoutArcManager::GetInstance()->getLoadedData("Map2D");
     mResAcc.attach(data, "");
     mMapMain.build();
     m2d::getAllocator();

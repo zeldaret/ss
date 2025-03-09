@@ -59,7 +59,8 @@ struct dLytStructDInArray {
 };
 
 struct dLytStructD : dLytStructD_Base {
-    dLytStructD() : field_0x18(0), field_0x1C(nullptr), field_0x20(0), field_0x22(0), field_0x23(0), field_0x24(nullptr) {}
+    dLytStructD()
+        : field_0x18(0), field_0x1C(nullptr), field_0x20(0), field_0x22(0), field_0x23(0), field_0x24(nullptr) {}
 
     virtual u32 getType() override;
     virtual void doSomething() override;
@@ -82,8 +83,6 @@ public:
     dLytStructDList();
     static dLytStructDList *create(EGG::Heap *heap);
 
-    static dLytStructDList *sInstance;
-
     void appendToList1(dLytStructC *other);
     void removeFromList1(dLytStructC *other);
 
@@ -92,7 +91,12 @@ public:
 
     bool fn_80065A30(dLytStructD *other);
 
+    static dLytStructDList *GetInstance() {
+        return sInstance;
+    }
+
 private:
+    static dLytStructDList *sInstance;
     TList<dLytStructC, offsetof(dLytStructC, mLink)> mList1;
     TList<dLytStructD, offsetof(dLytStructD, mLink)> mList2;
     bool field_0x18;

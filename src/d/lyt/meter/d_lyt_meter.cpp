@@ -29,7 +29,7 @@ STATE_DEFINE(dLytMeterParts_c, Out);
 
 void dLytMeter1Button_c::initializeState_Wait() {}
 void dLytMeter1Button_c::executeState_Wait() {
-    if (dLytMeterContainer_c::sInstance->isButtonFlag(0x80)) {
+    if (dLytMeterContainer_c::GetInstance()->isButtonFlag(0x80)) {
         return;
     }
     mStateMgr.changeState(StateID_ToUnuse);
@@ -74,7 +74,7 @@ void dLytMeter1Button_c::initializeState_Unuse() {
     field_0x1A4 = 15;
 }
 void dLytMeter1Button_c::executeState_Unuse() {
-    if (dLytMeterContainer_c::sInstance->isButtonFlag(0x80)) {
+    if (dLytMeterContainer_c::GetInstance()->isButtonFlag(0x80)) {
         if (!(field_0x1A4 > 0)) {
             mStateMgr.changeState(StateID_ToUse);
             return;
@@ -140,7 +140,7 @@ bool dLytMeter1Button_c::LytMeter0x14() {
 
 void dLytMeter2Button_c::initializeState_Wait() {}
 void dLytMeter2Button_c::executeState_Wait() {
-    if (dLytMeterContainer_c::sInstance->isButtonFlag(0x100)) {
+    if (dLytMeterContainer_c::GetInstance()->isButtonFlag(0x100)) {
         return;
     }
     mStateMgr.changeState(StateID_ToUnuse);
@@ -185,7 +185,7 @@ void dLytMeter2Button_c::initializeState_Unuse() {
     field_0x1A4 = 15;
 }
 void dLytMeter2Button_c::executeState_Unuse() {
-    if (dLytMeterContainer_c::sInstance->isButtonFlag(0x100)) {
+    if (dLytMeterContainer_c::GetInstance()->isButtonFlag(0x100)) {
         if (!(field_0x1A4 > 0)) {
             mStateMgr.changeState(StateID_ToUse);
             return;
@@ -388,7 +388,7 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     }
 
     if (isSilentRealm()) {
-        void *sirenData = LayoutArcManager::sInstance->getLoadedData("Siren");
+        void *sirenData = LayoutArcManager::GetInstance()->getLoadedData("Siren");
         mResAcc.attach(sirenData, "");
         mpTimer = new dLytMeterTimer_c();
         mpTimerPart1 = new LytMeterTimerPart1_c();
@@ -592,7 +592,7 @@ dLytMeterContainer_c::dLytMeterContainer_c() {
 }
 
 bool dLytMeterContainer_c::build() {
-    void *data = LayoutArcManager::sInstance->getLoadedData("DoButton");
+    void *data = LayoutArcManager::GetInstance()->getLoadedData("DoButton");
     mResAcc.attach(data, "");
     if (dScTitle_c::sInstance != nullptr) {
         mpEventSkip = nullptr;

@@ -7,7 +7,7 @@ u16 EnemyflagManager::sEnemyDefeatFlags[4096] = {};
 void EnemyflagManager::clearSavedFlags() {
     u16 empty[0x1000];
     memset(empty, 0, 0x2000);
-    FileManager::getInstance()->setEnemyDefeatFlags(empty, 0, 0x1000);
+    FileManager::GetInstance()->setEnemyDefeatFlags(empty, 0, 0x1000);
 }
 
 /* 0x800BEB00 */
@@ -33,7 +33,7 @@ void EnemyflagManager::init() {
 void EnemyflagManager::copyFromSave(u16 sceneIndex) {
     mSceneIndex = sceneIndex;
     u16 count = mFlagSpace.mCount;
-    u16 *flags = FileManager::getInstance()->getEnemyDefeatFlagsConst();
+    u16 *flags = FileManager::GetInstance()->getEnemyDefeatFlagsConst();
     mFlagSpace.copyFromSaveFile(flags, 0, count);
 }
 
@@ -62,7 +62,7 @@ bool EnemyflagManager::checkFlag(u16 flag) {
     if (!checkIsValidFlag(flag)) {
         return false;
     } else {
-        u16 *pData = FileManager::getInstance()->getEnemyDefeatFlagsConst();
+        u16 *pData = FileManager::GetInstance()->getEnemyDefeatFlagsConst();
         return mFlagHelper.checkFlag(flag / 16, flag % 16, pData, getFlagCount());
     }
 }

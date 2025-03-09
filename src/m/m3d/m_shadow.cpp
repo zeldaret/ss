@@ -410,7 +410,7 @@ void mShadow_c::drawAllShadows() {
 
 void mShadow_c::create(const mShadowCircleConfig *config, nw4r::g3d::ResMdl mdl, EGG::Heap *heap) {
     mShadow_c::sInstance = new (heap, 0x04) mShadow_c(heap);
-    mShadow_c::sInstance->create(
+    mShadow_c::GetInstance()->create(
         config->count, config->unk1, config->unk2, config->texBufferSize, config->drawOpaPriority, mdl, config->heapSize
     );
 }
@@ -441,7 +441,7 @@ void mShadow_c::swapHeaps() {
 
 void mShadow_c::destroy() {
     if (mShadow_c::sInstance != nullptr) {
-        mShadow_c::sInstance->remove();
+        mShadow_c::GetInstance()->remove();
         delete mShadow_c::sInstance;
         mShadow_c::sInstance = nullptr;
     }
@@ -538,7 +538,7 @@ void mShadowChild_c::drawMdl() {
             g3d::ScnMdlSimple *mdl = g3d::G3dObj::DynamicCast<g3d::ScnMdlSimple>(lf->getG3dObject());
 
             u32 bufSize = mdl->GetNumViewMtx() * sizeof(math::MTX34);
-            math::MTX34 *viewPosArray = static_cast<math::MTX34 *>(mShadow_c::sInstance->mpHeap->alloc(bufSize, 0x20));
+            math::MTX34 *viewPosArray = static_cast<math::MTX34 *>(mShadow_c::GetInstance()->mpHeap->alloc(bufSize, 0x20));
 
             g3d::CalcView(
                 viewPosArray, nullptr, mdl->GetWldMtxArray(), mdl->GetWldMtxAttribArray(), mdl->GetNumViewMtx(),
@@ -578,12 +578,12 @@ void mShadowChild_c::draw() {
     C_MTXLightOrtho(mtx, field_0x13C, -field_0x13C, -field_0x13C, field_0x13C, 0.5f, -0.5f, 0.5f, 0.5f);
     PSMTXConcat(mtx, mFrustum.mView.m, mtx);
     GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX_3x4);
-    mShadow_c::sInstance->draw(mFrustum.mView, field_0x154);
+    mShadow_c::GetInstance()->draw(mFrustum.mView, field_0x154);
     GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
 }
 
 mShadowCircle_c::~mShadowCircle_c() {
-    mShadow_c::sInstance->removeCircle(this);
+    mShadow_c::GetInstance()->removeCircle(this);
 }
 
 mCustomShadow_c::~mCustomShadow_c() {}

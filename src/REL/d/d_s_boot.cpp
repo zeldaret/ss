@@ -47,30 +47,30 @@ extern "C" u8 fn_80054F30();
 extern "C" nw4r::ut::ResFont *lbl_805750D8;
 
 sFPhaseBase::sFPhaseState dScBoot_c::cb1() {
-    LayoutArcManager::sInstance->loadLayoutArcFromDisk("cursor", mHeap::g_archiveHeap);
-    LayoutArcManager::sInstance->loadLayoutArcFromDisk("CursorStick", mHeap::g_archiveHeap);
-    LayoutArcManager::sInstance->loadLayoutArcFromDisk("System2D", nullptr);
-    LayoutArcManager::sInstance->loadLayoutArcFromDisk("saveBannerU", nullptr);
+    LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("cursor", mHeap::g_archiveHeap);
+    LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("CursorStick", mHeap::g_archiveHeap);
+    LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("System2D", nullptr);
+    LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("saveBannerU", nullptr);
 
     for (int i = 0; i < 6; i++) {
         SizedString<128> str;
         str.sprintf("%s/%s", getUsedLanguageString(), getEventFlowFileNameByIndex(i, 1));
-        OarcManager::sInstance->loadObjectArcFromDisk(str, mHeap::g_archiveHeap);
+        OarcManager::GetInstance()->loadObjectArcFromDisk(str, mHeap::g_archiveHeap);
     }
-    OarcManager::sInstance->loadObjectArcFromDisk("System", mHeap::g_archiveHeap);
+    OarcManager::GetInstance()->loadObjectArcFromDisk("System", mHeap::g_archiveHeap);
     return sFPhaseBase::PHASE_NEXT;
 }
 
 sFPhaseBase::sFPhaseState dScBoot_c::cb2() {
-    if (OarcManager::sInstance->ensureAllEntriesLoaded()) {
+    if (OarcManager::GetInstance()->ensureAllEntriesLoaded()) {
         return sFPhaseBase::PHASE_RETRY;
     }
-    if (LayoutArcManager::sInstance->ensureAllEntriesLoaded()) {
+    if (LayoutArcManager::GetInstance()->ensureAllEntriesLoaded()) {
         return sFPhaseBase::PHASE_RETRY;
     }
 
     TPLPalette *tpl =
-        static_cast<TPLPalette *>(LayoutArcManager::sInstance->getData("saveBannerU", "tmp/saveBanner.tpl"));
+        static_cast<TPLPalette *>(LayoutArcManager::GetInstance()->getData("saveBannerU", "tmp/saveBanner.tpl"));
     TPLBind(tpl);
 
     return sFPhaseBase::PHASE_NEXT;
@@ -107,10 +107,10 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb5() {
 
 sFPhaseBase::sFPhaseState dScBoot_c::cb6() {
     dDyl::initRelsArc();
-    OarcManager::sInstance->loadObjectArcFromDisk("JpaCommon", dHeap::workExHeap.heap);
-    LayoutArcManager::sInstance->loadLayoutArcFromDisk("Main2D", nullptr);
-    LayoutArcManager::sInstance->loadLayoutArcFromDisk("DoButton", nullptr);
-    LayoutArcManager::sInstance->loadLayoutArcFromDisk("MenuHelp", nullptr);
+    OarcManager::GetInstance()->loadObjectArcFromDisk("JpaCommon", dHeap::workExHeap.heap);
+    LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("Main2D", nullptr);
+    LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("DoButton", nullptr);
+    LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("MenuHelp", nullptr);
     u8 result = fn_80054F30();
     s32 gameOverType;
     if (result == 3) {
@@ -120,15 +120,15 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb6() {
     }
 
     if (gameOverType == 0) {
-        LayoutArcManager::sInstance->loadLayoutArcFromDisk("gameOver_01", nullptr);
+        LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("gameOver_01", nullptr);
     } else if (gameOverType == 1) {
-        LayoutArcManager::sInstance->loadLayoutArcFromDisk("gameOver_02", nullptr);
+        LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("gameOver_02", nullptr);
     } else {
-        LayoutArcManager::sInstance->loadLayoutArcFromDisk("gameOver_03", nullptr);
+        LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("gameOver_03", nullptr);
     }
 
-    if (OarcManager::sInstance->checkIfObjectArcExistsOnDisk("ObjectPack")) {
-        OarcManager::sInstance->loadObjectArcFromDisk("ObjectPack", mHeap::g_archiveHeap);
+    if (OarcManager::GetInstance()->checkIfObjectArcExistsOnDisk("ObjectPack")) {
+        OarcManager::GetInstance()->loadObjectArcFromDisk("ObjectPack", mHeap::g_archiveHeap);
     } else {
         static const char *OBJECT_PACK_OARCS[] = {
             "Camera",
@@ -231,7 +231,7 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb6() {
             "Bc",
         };
         for (int i = 0; i < ARRAY_LENGTH(OBJECT_PACK_OARCS); i++) {
-            OarcManager::sInstance->loadObjectArcFromDisk(OBJECT_PACK_OARCS[i], mHeap::g_archiveHeap);
+            OarcManager::GetInstance()->loadObjectArcFromDisk(OBJECT_PACK_OARCS[i], mHeap::g_archiveHeap);
         }
     }
 
@@ -266,18 +266,18 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb7() {
         return sFPhaseBase::PHASE_RETRY;
     }
 
-    if (OarcManager::sInstance->ensureAllEntriesLoaded()) {
+    if (OarcManager::GetInstance()->ensureAllEntriesLoaded()) {
         return sFPhaseBase::PHASE_RETRY;
     }
 
-    if (LayoutArcManager::sInstance->ensureAllEntriesLoaded()) {
+    if (LayoutArcManager::GetInstance()->ensureAllEntriesLoaded()) {
         return sFPhaseBase::PHASE_RETRY;
     }
 
     // TODO JParticle monkaS
-    OarcManager::sInstance->getData("System", "dat/navi_table.dat");
-    OarcManager::sInstance->getData("JpaCommon", "dat/Common.jpc");
-    OarcManager::sInstance->getData("JpaCommon", "dat/Common.jpn");
+    OarcManager::GetInstance()->getData("System", "dat/navi_table.dat");
+    OarcManager::GetInstance()->getData("JpaCommon", "dat/Common.jpc");
+    OarcManager::GetInstance()->getData("JpaCommon", "dat/Common.jpn");
 
     return sFPhaseBase::PHASE_NEXT;
 }
@@ -318,16 +318,16 @@ dScBoot_c::strap_c::strap_c() {
     mArcName.sprintf("strap%s", str);
     mStr2.sprintf("strap_00_%s.brlyt", str);
     mStr3.sprintf("strap_00_%s_loop.brlan", str);
-    LayoutArcManager::sInstance->loadLayoutArcFromDisk(mArcName, dHeap::work2Heap.heap);
+    LayoutArcManager::GetInstance()->loadLayoutArcFromDisk(mArcName, dHeap::work2Heap.heap);
     field_0x4EC = 0;
 }
 
 bool dScBoot_c::strap_c::create() {
     if (!field_0x4EC) {
-        if (LayoutArcManager::sInstance->ensureLoaded1(mArcName)) {
+        if (LayoutArcManager::GetInstance()->ensureLoaded1(mArcName)) {
             return false;
         }
-        void *data = LayoutArcManager::sInstance->getLoadedData(mArcName);
+        void *data = LayoutArcManager::GetInstance()->getLoadedData(mArcName);
         // HACK: Why does this use the m2d attach function?
         // Inlines break instruction scheduling, and I don't
         // want to undo shadowing...
@@ -349,7 +349,7 @@ bool dScBoot_c::strap_c::remove() {
     mAnm.destroySomething();
     // HACK: See above
     ((m2d::ResAccIf_c *)&mResAcc)->detach();
-    LayoutArcManager::sInstance->decrement(mArcName);
+    LayoutArcManager::GetInstance()->decrement(mArcName);
     return true;
 }
 

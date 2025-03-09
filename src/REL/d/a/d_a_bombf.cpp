@@ -73,7 +73,7 @@ int dAcBombf_c::actorPostCreate() {
     }
 
     if (field_0x3D2 == 0 || field_0x3D2 == 2) {
-        bool b = dTimeAreaMgr_c::sInstance->fn_800B9B60(roomid, position);
+        bool b = dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, position);
         if (b) {
             mTimeAreaStruct.field_0x00 = 1.0f;
         }

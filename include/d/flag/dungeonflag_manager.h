@@ -6,13 +6,16 @@
 #include "toBeSorted/file_manager.h"
 
 class DungeonflagManager {
-public:
+private:
     bool mShouldCommit;
     u16 mStageIndex;
     FlagIndex *mpFlagIndex;
     FlagSpace mFlagSpace;
 
     static u16 sDungeonFlags[8];
+
+public:
+    static DungeonflagManager *sInstance;
 
     void copyFromSave(u32 flag);
     void copyFromSave_Internal(u16 flagIndex);
@@ -27,16 +30,14 @@ public:
     /** inline shenanigans to get copyFromSave to match */
     static inline u16 *saveFilePtr(u16 flagIndex) {
         u32 offset = (flagIndex & 0x1fff) * 8;
-        return FileManager::sInstance->getDungeonFlagsConst() + offset;
+        return FileManager::GetInstance()->getDungeonFlagsConst() + offset;
     }
 
-    u16 getCounterOrFlag(u16 idx, u32 count) const {
+    u16 getCounterOrFlag(u32 idx, u32 count) const {
         u16 offset = mStageIndex * 8;
-        const u16 *space = FileManager::sInstance->getDungeonFlagsConst() + offset;
+        const u16 *space = FileManager::GetInstance()->getDungeonFlagsConst() + offset;
         return mpFlagIndex->getCounterOrFlag(idx, space, count);
     }
-
-    static DungeonflagManager *sInstance;
 };
 
 #endif

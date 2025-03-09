@@ -38,7 +38,7 @@ static const d2d::LytBrlanMapping brlanMap[] = {
 dLytCommonArrow_c::dLytCommonArrow_c() : mStateMgr(*this, sStateID::null) {}
 
 bool dLytCommonArrow_c::init() {
-    void *data = LayoutArcManager::sInstance->getLoadedData("CommonArrow");
+    void *data = LayoutArcManager::GetInstance()->getLoadedData("CommonArrow");
     mResAcc.attach(data, "");
     mLytBase.build("commonArrow_00.brlyt", &mResAcc);
     mLytBase.mPriority = 0x86;
@@ -47,7 +47,7 @@ bool dLytCommonArrow_c::init() {
         mAnmGroups[i].init(brlanMap[i].mFile, &mResAcc, mLytBase.getLayout(), brlanMap[i].mName);
     }
     mStructD.fn_80065E70(mLytBase.getLayout()->GetRootPane(), 1, 0, 0);
-    d2d::dLytStructDList::sInstance->appendToList2(&mStructD);
+    d2d::dLytStructDList::GetInstance()->appendToList2(&mStructD);
     mBoundingL = mLytBase.findBounding("B_arrowL_00");
     mBoundingR = mLytBase.findBounding("B_arrowR_00");
     mStateMgr.changeState(StateID_None);
@@ -56,7 +56,7 @@ bool dLytCommonArrow_c::init() {
 }
 
 bool dLytCommonArrow_c::fn_80168490() {
-    d2d::dLytStructDList::sInstance->removeFromList2(&mStructD);
+    d2d::dLytStructDList::GetInstance()->removeFromList2(&mStructD);
     mLytBase.unbindAnims();
     for (int i = 0; i < 9; i++) {
         mAnmGroups[i].afterUnbind();
@@ -150,7 +150,7 @@ void dLytCommonArrow_c::fn_80168880() {
         return;
     }
 
-    d2d::dLytStructD *thing = dCsBase_c::sInstance->getUnk();
+    d2d::dLytStructD *thing = dCsBase_c::GetInstance()->getUnk();
     if (thing != nullptr && thing->getType() == 'lyt ') {
         if (thing->field_0x24 == mBoundingL) {
             i = 0;

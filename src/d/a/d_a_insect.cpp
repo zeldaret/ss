@@ -131,7 +131,7 @@ void dAcOInsect_c::addAttentionTarget() {
     preAttention();
     static InteractionTargetDef tmpTarget = {1, 0, 0, UNK_18, 0x2, 150.0f, 0.0f, 0.0f, -300.0f, 100.0f, 50.0f, 1.0f};
     if (shouldAddAttentionTarget()) {
-        AttentionManager *attn = AttentionManager::sInstance;
+        AttentionManager *attn = AttentionManager::GetInstance();
         if (attn != nullptr) {
             attn->addCatchTarget(*this, 0x1, 400.0f, -200.0f, 200.0f);
             tmpTarget.field_0x14 = getAttentionField();

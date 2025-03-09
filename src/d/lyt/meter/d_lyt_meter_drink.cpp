@@ -133,26 +133,26 @@ void dLytMeterDrinkParts_c::execute() {
 dLytMeterDrinkParts_c::DrinkFrame_e dLytMeterDrinkParts_c::getDrinkFrame(dLytMeterDrinkParts_c::DrinkType_e type
 ) const {
     if (type == TYPE_STAMINA) {
-        if (FileManager::sInstance->getStaminaPotionPlusTimer()) {
+        if (FileManager::GetInstance()->getStaminaPotionPlusTimer()) {
             return FRAME_STAMINA_PLUS;
         }
-        if (FileManager::sInstance->getStaminaPotionTimer()) {
+        if (FileManager::GetInstance()->getStaminaPotionTimer()) {
             return FRAME_STAMINA;
         }
     }
     if (type == TYPE_AIR) {
-        if (FileManager::sInstance->getAirPotionPlusTimer()) {
+        if (FileManager::GetInstance()->getAirPotionPlusTimer()) {
             return FRAME_AIR_PLUS;
         }
-        if (FileManager::sInstance->getAirPotionTimer()) {
+        if (FileManager::GetInstance()->getAirPotionTimer()) {
             return FRAME_AIR;
         }
     }
     if (type == TYPE_GUARDIAN) {
-        if (FileManager::sInstance->getGuardianPotionPlusTimer()) {
+        if (FileManager::GetInstance()->getGuardianPotionPlusTimer()) {
             return FRAME_GUARDIAN_PLUS;
         }
-        if (FileManager::sInstance->getGuardianPotionTimer()) {
+        if (FileManager::GetInstance()->getGuardianPotionTimer()) {
             return FRAME_GUARDIAN;
         }
     }
@@ -161,17 +161,17 @@ dLytMeterDrinkParts_c::DrinkFrame_e dLytMeterDrinkParts_c::getDrinkFrame(dLytMet
 
 bool dLytMeterDrinkParts_c::isDrinkAboutToExpire() const {
     if (field_0x48 == FRAME_STAMINA_PLUS) {
-        return FileManager::sInstance->getStaminaPotionPlusTimer() < 600;
+        return FileManager::GetInstance()->getStaminaPotionPlusTimer() < 600;
     } else if (field_0x48 == FRAME_STAMINA) {
-        return FileManager::sInstance->getStaminaPotionTimer() < 600;
+        return FileManager::GetInstance()->getStaminaPotionTimer() < 600;
     } else if (field_0x48 == FRAME_AIR_PLUS) {
-        return FileManager::sInstance->getAirPotionPlusTimer() < 600;
+        return FileManager::GetInstance()->getAirPotionPlusTimer() < 600;
     } else if (field_0x48 == FRAME_AIR) {
-        return FileManager::sInstance->getAirPotionTimer() < 600;
+        return FileManager::GetInstance()->getAirPotionTimer() < 600;
     } else if (field_0x48 == FRAME_GUARDIAN_PLUS) {
-        return FileManager::sInstance->getGuardianPotionPlusTimer() < 600;
+        return FileManager::GetInstance()->getGuardianPotionPlusTimer() < 600;
     } else if (field_0x48 == FRAME_GUARDIAN) {
-        return FileManager::sInstance->getGuardianPotionTimer() < 600;
+        return FileManager::GetInstance()->getGuardianPotionTimer() < 600;
     }
     return false;
 }
@@ -444,18 +444,18 @@ int dLytMeterDrink_c::getPartForDrinkType(dLytMeterDrinkParts_c::DrinkType_e ty)
 }
 
 bool dLytMeterDrink_c::fn_800E5C40(int i) {
-    if ((i == 0 || i == 3) && (FileManager::sInstance->getStaminaPotionTimer() != 0 ||
-                               FileManager::sInstance->getStaminaPotionPlusTimer() != 0)) {
+    if ((i == 0 || i == 3) && (FileManager::GetInstance()->getStaminaPotionTimer() != 0 ||
+                               FileManager::GetInstance()->getStaminaPotionPlusTimer() != 0)) {
         return true;
     }
 
     if ((i == 1 || i == 3) &&
-        (FileManager::sInstance->getAirPotionTimer() != 0 || FileManager::sInstance->getAirPotionPlusTimer() != 0)) {
+        (FileManager::GetInstance()->getAirPotionTimer() != 0 || FileManager::GetInstance()->getAirPotionPlusTimer() != 0)) {
         return true;
     }
 
-    if ((i == 2 || i == 3) && (FileManager::sInstance->getGuardianPotionTimer() != 0 ||
-                               FileManager::sInstance->getGuardianPotionPlusTimer() != 0)) {
+    if ((i == 2 || i == 3) && (FileManager::GetInstance()->getGuardianPotionTimer() != 0 ||
+                               FileManager::GetInstance()->getGuardianPotionPlusTimer() != 0)) {
         return true;
     }
 

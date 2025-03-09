@@ -10,8 +10,6 @@ public:
     CurrentStageArcManager();
     virtual ~CurrentStageArcManager();
 
-    static CurrentStageArcManager *sInstance;
-
     static bool create(EGG::Heap *heap);
 
     void init(EGG::Heap *heap);
@@ -36,7 +34,13 @@ public:
         return mArcTable.ensureAllEntriesLoaded();
     }
 
+    static CurrentStageArcManager *GetInstance() {
+        return sInstance;
+    }
+
 private:
+    static CurrentStageArcManager *sInstance;
+
     SizedString<32> mStageName;
     SizedString<32> mCurrentLoadingStageArcName;
     SizedString<32> mStageExtraLayerArcName;

@@ -65,7 +65,7 @@ bool DungeonflagManager::commit() {
     if (idx == 0xFFFF) {
         return false;
     } else if (mShouldCommit) {
-        instance = FileManager::sInstance;
+        instance = FileManager::GetInstance();
         u16 *ptr = mFlagSpace.getFlagPtrUnchecked();
         instance->setDungeonFlags(ptr, (idx & 0x1fff) * 8, 0x08);
         mShouldCommit = false;

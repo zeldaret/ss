@@ -57,19 +57,19 @@ int dRoom_c::create() {
                         // LMF crawlspace, spike maze
                         !(dScGame_c::isCurrentStage("D300_1") && (roomid == 7 || roomid == 9));
     if (!mAllocator.createNewTempFrmHeap(
-            -1, CurrentStageArcManager::sInstance->getHeap(roomid), "dRoom_c::m_allocator", 0x20, 0
+            -1, CurrentStageArcManager::GetInstance()->getHeap(roomid), "dRoom_c::m_allocator", 0x20, 0
         )) {
         return FAILED;
     }
 
     bool anyError = false;
 
-    mRoomRes = nw4r::g3d::ResFile(CurrentStageArcManager::sInstance->loadFromRoomArc(roomid, "g3d/room.brres"));
+    mRoomRes = nw4r::g3d::ResFile(CurrentStageArcManager::GetInstance()->loadFromRoomArc(roomid, "g3d/room.brres"));
     dStage_c::bindStageResToFile(&mRoomRes);
     dStage_c::bindSkyCmnToResFile(&mRoomRes);
 
-    for (s32 i = 0; i < ROOM_NUM_MODELS; i++) {
-        model_c *mdl = &mModels[i];
+    model_c *mdl = mModels;
+    for (s32 i = 0; i < ROOM_NUM_MODELS; i++, mdl++) {
         if (i != 2 || roomid != 1 || dScGame_c::currentSpawnInfo.layer != 14 || !dScGame_c::isCurrentStage("F406")) {
             if (!mdl->create(mRoomRes, mAllocator, i, &mWaterThing)) {
                 anyError = true;
@@ -99,7 +99,7 @@ int dRoom_c::create() {
     }
 
     dStage_c::GetInstance()->setRoom(roomid, this);
-    BZS = CurrentStageArcManager::sInstance->loadFromRoomArc(roomid, "dat/room.bzs");
+    BZS = CurrentStageArcManager::GetInstance()->loadFromRoomArc(roomid, "dat/room.bzs");
     parseRoomBzs(roomid, BZS);
     mDidAlreadyInit = (params >> 6) & 1;
     mStateMgr.changeState(StateID_Active);
@@ -130,9 +130,9 @@ int dRoom_c::execute() {
     mStateMgr.executeState();
     f32 val = 0.0f;
     if (mCanHavePastState) {
-        val = dTimeAreaMgr_c::sInstance->checkPositionIsInPastState(roomid, mVec3_c::Zero, nullptr, 1000000.0f);
-        mSkipDrawing = !mHasAnmTexPat && (!dTimeAreaMgr_c::sInstance->isInLanayruMiningFacility() || val > 0.0f) &&
-                       dTimeAreaMgr_c::sInstance->isField0x78();
+        val = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(roomid, mVec3_c::Zero, nullptr, 1000000.0f);
+        mSkipDrawing = !mHasAnmTexPat && (!dTimeAreaMgr_c::GetInstance()->isInLanayruMiningFacility() || val > 0.0f) &&
+                       dTimeAreaMgr_c::GetInstance()->isField0x78();
     } else {
         mSkipDrawing = false;
     }
@@ -242,9 +242,9 @@ static const BgData sRoomBg[] = {
 bool dRoom_c::setupBg() {
     for (int i = 0; i < ROOM_NUM_BG; i++) {
         dBgWKCol *bg = &mBg[i];
-        void *kcl = CurrentStageArcManager::sInstance->getDataFromRoomArc(roomid, sRoomBg[i].kcl);
+        void *kcl = CurrentStageArcManager::GetInstance()->getDataFromRoomArc(roomid, sRoomBg[i].kcl);
         if (kcl != nullptr) {
-            void *plc = CurrentStageArcManager::sInstance->loadFromRoomArc(roomid, sRoomBg[i].plc);
+            void *plc = CurrentStageArcManager::GetInstance()->loadFromRoomArc(roomid, sRoomBg[i].plc);
             bg->Set(kcl, plc);
             bg->SetRoomId(roomid);
             bg->SetPriority(dBgW_Base::PRIORITY_0);
@@ -644,9 +644,9 @@ void dRoom_c::model_c::updateObjNode(const char *node, bool visible) {
     nd.SetVisibility(visible);
     mMdl.somethingVisibility(nd.GetID(), visible);
     if (visible) {
-        dTimeAreaMgr_c::sInstance->setField0x7A(true);
+        dTimeAreaMgr_c::GetInstance()->setField0x7A(true);
     } else {
-        dTimeAreaMgr_c::sInstance->setField0x7A(false);
+        dTimeAreaMgr_c::GetInstance()->setField0x7A(false);
     }
 }
 

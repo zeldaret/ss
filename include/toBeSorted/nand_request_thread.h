@@ -87,7 +87,7 @@ struct NandRequestWriteHolder : public NandRequestHolderBase {
 };
 
 class NandRequestThread : EGG::Thread {
-    friend NandRequest;
+    friend class NandRequest;
 
 public:
     NandRequestThread(
@@ -103,7 +103,7 @@ public:
         int priority, EGG::Heap *commandHeap, void *bufFromGameHeap, size_t bufSize, void *mThreadArg, EGG::Heap *heap
     );
 
-    static NandRequestThread *getInstance() {
+    static NandRequestThread *GetInstance() {
         return sInstance;
     }
 

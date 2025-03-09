@@ -1,7 +1,6 @@
 #ifndef D_FLAG_SKIPFLAG_MANAGER_H
 #define D_FLAG_SKIPFLAG_MANAGER_H
 
-
 #include "d/flag/bitwise_flag_helper.h"
 #include "d/flag/flag_space.h"
 
@@ -19,7 +18,7 @@ public:
 
 private:
     void doCopyFromSave();
-    
+
     static u16 sSkipFlags[16];
 
     bool mShouldCommit;

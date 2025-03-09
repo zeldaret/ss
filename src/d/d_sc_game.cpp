@@ -116,11 +116,11 @@ sFPhaseBase::sFPhaseState dScGame_c::cb2() {
         return sFPhaseBase::PHASE_RETRY;
     }
 
-    if (OarcManager::sInstance->ensureAllEntriesLoaded()) {
+    if (OarcManager::GetInstance()->ensureAllEntriesLoaded()) {
         return sFPhaseBase::PHASE_RETRY;
     }
 
-    if (LayoutArcManager::sInstance->ensureAllEntriesLoaded()) {
+    if (LayoutArcManager::GetInstance()->ensureAllEntriesLoaded()) {
         return sFPhaseBase::PHASE_RETRY;
     }
 
@@ -182,14 +182,14 @@ void dScGame_c::setRespawnInfo(const mVec3_c &linkPos, const mAng3_c &linkRot, b
     if (mPreventSaveRespawnInfo != true && !isInThunderDragonTrial && !isInHordeFight &&
         (areaType != 2 && !isCurrentStage("B100_1") && !sPreventClearingSomeFlag &&
          (areaType != 1 || (mLastAreaType != 1 && mLastAreaType != 2)))) {
-        FileManager::sInstance->setT3Info(linkPos, linkRot);
+        FileManager::GetInstance()->setT3Info(linkPos, linkRot);
         if (mLastAreaType != 5 && unk) {
             StoryflagManager::sInstance->unsetFlag(752);
         }
     }
 
     if (!isInThunderDragonTrial && isCurrentStage("B400") && mLastAreaType != 2) {
-        FileManager::sInstance->copyCurrentToFileB();
+        FileManager::GetInstance()->copyCurrentToFileB();
     }
     sPreventClearingSomeFlag = 0;
     mPreventSaveRespawnInfo = false;

@@ -1167,7 +1167,7 @@ int dAcTbox_c::doDelete() {
         field_0x1210 = 0;
     }
     if (sCurrentObtainingItemOarcName != nullptr) {
-        OarcManager *mng = OarcManager::sInstance;
+        OarcManager *mng = OarcManager::GetInstance();
         if (!mng->ensureLoaded1(sCurrentObtainingItemOarcName)) {
             mng->decrement(sCurrentObtainingItemOarcName);
             sCurrentObtainingItemOarcName = nullptr;
@@ -1827,7 +1827,7 @@ void dAcTbox_c::initializeState_WaitOpen() {
 }
 void dAcTbox_c::executeState_WaitOpen() {
     if ((!mDoObstructedCheck || checkIsClear()) && fn_8026D120()) {
-        AttentionManager *mgr = AttentionManager::sInstance;
+        AttentionManager *mgr = AttentionManager::GetInstance();
         mgr->addTarget(*this, getInteractionTargetDef(), 0, nullptr);
     }
 }
@@ -1858,7 +1858,7 @@ void dAcTbox_c::initializeState_GoddessWaitOn() {
 }
 void dAcTbox_c::executeState_GoddessWaitOn() {
     if (fn_8026D120()) {
-        AttentionManager *mgr = AttentionManager::sInstance;
+        AttentionManager *mgr = AttentionManager::GetInstance();
         mgr->addTarget(*this, getInteractionTargetDef(), 0, nullptr);
     }
 }
@@ -1888,7 +1888,7 @@ void dAcTbox_c::initializeState_DeleteArchive() {
 }
 void dAcTbox_c::executeState_DeleteArchive() {
     if (sCurrentObtainingItemOarcName != nullptr) {
-        OarcManager *mng = OarcManager::sInstance;
+        OarcManager *mng = OarcManager::GetInstance();
         if (!mng->ensureLoaded1(sCurrentObtainingItemOarcName)) {
             mng->decrement(sCurrentObtainingItemOarcName);
             sCurrentObtainingItemOarcName = nullptr;
@@ -1919,7 +1919,7 @@ void dAcTbox_c::initializeState_LoadArchive() {
     }
     fn_8026D140();
     sCurrentObtainingItemOarcName = sItemToArchiveName[mItemModelIdx];
-    OarcManager::sInstance->loadObjectArcFromDisk(sCurrentObtainingItemOarcName, nullptr);
+    OarcManager::GetInstance()->loadObjectArcFromDisk(sCurrentObtainingItemOarcName, nullptr);
     field_0x11C0.set(-61.0f, 0.0f, -42.0f);
     field_0x11CC.set(61.0f, 100.0f, 42.0f);
     field_0x11E8 = 1.0f;
@@ -1927,7 +1927,7 @@ void dAcTbox_c::initializeState_LoadArchive() {
     field_0x120C = 0;
 }
 void dAcTbox_c::executeState_LoadArchive() {
-    if (!OarcManager::sInstance->ensureLoaded1(sCurrentObtainingItemOarcName)) {
+    if (!OarcManager::GetInstance()->ensureLoaded1(sCurrentObtainingItemOarcName)) {
         mStateMgr.changeState(StateID_Open);
     }
 }
@@ -2272,7 +2272,7 @@ void dAcTbox_c::setTboxFlag() {
 
 bool dAcTbox_c::checkTboxFlag() const {
     if (field_0x1207 <= 0x1F) {
-        return TBoxflagManager::sInstance->checkFlag(TBoxflagManager::sInstance->mSceneIndex, field_0x1207);
+        return TBoxflagManager::sInstance->checkFlagOnCurrentScene(field_0x1207);
     }
     return false;
 }

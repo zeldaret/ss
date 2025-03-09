@@ -131,9 +131,9 @@ dCsGame_c::~dCsGame_c() {
 }
 
 int dCsGame_c::create() {
-    void *csData = LayoutArcManager::sInstance->getLoadedData("cursor");
+    void *csData = LayoutArcManager::GetInstance()->getLoadedData("cursor");
     mCursorResAcc.attach(csData, "arc");
-    void *mainData = LayoutArcManager::sInstance->getLoadedData("Main2D");
+    void *mainData = LayoutArcManager::GetInstance()->getLoadedData("Main2D");
     mMain2DResAcc.attach(mainData, "");
 
     mLyt1.setResAcc(&mCursorResAcc);
@@ -148,8 +148,8 @@ int dCsGame_c::create() {
 
     mCursor.setField0x9A0(0);
     mStructC.field_0x10 = 2;
-    d2d::dLytStructDList::sInstance->appendToList1(&mStructC);
-    dCsBase_c::sInstance->setField703(false);
+    d2d::dLytStructDList::GetInstance()->appendToList1(&mStructC);
+    dCsBase_c::GetInstance()->setField703(false);
     return SUCCEEDED;
 }
 
@@ -157,7 +157,7 @@ int dCsGame_c::doDelete() {
     mCursor.remove();
     mLyt2.dCsGameLytBase_0x14();
     mLyt1.dCsGameLytBase_0x14();
-    d2d::dLytStructDList::sInstance->removeFromList1(&mStructC);
+    d2d::dLytStructDList::GetInstance()->removeFromList1(&mStructC);
     mCursorResAcc.detach();
     mMain2DResAcc.detach();
     return SUCCEEDED;

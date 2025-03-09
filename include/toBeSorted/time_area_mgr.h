@@ -59,8 +59,6 @@ public:
     f32 checkPositionIsInPastState(s32 roomId, const mVec3_c &position, float *, float);
     bool fn_800B9B60(s32 roomId, const mVec3_c &position);
 
-    static dTimeAreaMgr_c *sInstance;
-
     bool isInLanayruMiningFacility() const {
         return mIsInLanayruMiningFacility;
     }
@@ -77,7 +75,13 @@ public:
         field_0x7A = val;
     }
 
+    static dTimeAreaMgr_c *GetInstance() {
+        return sInstance;
+    }
+
 private:
+    static dTimeAreaMgr_c *sInstance;
+
     /* 0x04 */ u8 field_0x04[0x0C - 0x04];
     /* 0x0C */ mHeapAllocator_c mAllocator;
     /* 0x28 */ dTimeAreaMgrProcA_c mProcA;

@@ -133,13 +133,13 @@ void dAcOtoD3StoneFigure_c::initializeState_OneEye() {
 
 void dAcOtoD3StoneFigure_c::executeState_OneEye() {
     if (EventManager::isInEvent(this, "D3OpenStart")) {
-        dScGame_c::sInstance->triggerExit(roomid, mExitId);
+        dScGame_c::GetInstance()->triggerExit(roomid, mExitId);
     } else {
         if (hasStoneOfTrials() && dScGame_c::currentSpawnInfo.getTimeOfDay() != SpawnInfo::NIGHT) {
             // These are interaction related
             -0.0f;
-            AttentionManager::sInstance->addExamineTalkTarget(*this, 1, 300.0f, 50.0f, -100.0f, 100.0f);
-            AttentionManager::sInstance->addExamineTalkTarget(*this, 1, 200.0f, -100.0f, 100.0f);
+            AttentionManager::GetInstance()->addExamineTalkTarget(*this, 1, 300.0f, 50.0f, -100.0f, 100.0f);
+            AttentionManager::GetInstance()->addExamineTalkTarget(*this, 1, 200.0f, -100.0f, 100.0f);
         }
     }
 }

@@ -136,7 +136,7 @@ sFPhaseBase::sFPhaseState dStage_c::createRooms() {
         dBase_c::createBase(fProfile::TITLE, this, 0, OTHER);
     }
 
-    dTimeAreaMgr_c::sInstance->setField0x78(false);
+    dTimeAreaMgr_c::GetInstance()->setField0x78(false);
 
     return sFPhaseBase::PHASE_NEXT;
 }
@@ -218,7 +218,7 @@ void dStage_c::setRoomVisited(int roomid) {
         return;
     }
 
-    if (dScGame_c::sInstance == nullptr || dScGame_c::sInstance->profile_name == fProfile::GAME) {
+    if (dScGame_c::sInstance == nullptr || dScGame_c::GetInstance()->profile_name == fProfile::GAME) {
         u16 flag, shift;
         getFlagPositionForRoomVisit(roomid, &flag, &shift);
         DungeonflagManager *mg = DungeonflagManager::sInstance;
@@ -235,7 +235,7 @@ dRoom_c *dStage_c::createRoom(int roomid, bool flag0x40) {
 
 void dStage_c::createLytSeekerStone() {
     dBase_c::createBase(fProfile::LYT_CONTROL_GAME, this, 0, OTHER);
-    if (LayoutArcManager::sInstance->hasEntry("SeekerStone")) {
+    if (LayoutArcManager::GetInstance()->hasEntry("SeekerStone")) {
         dBase_c::createBase(fProfile::LYT_SEEKER_STONE, this, 0, OTHER);
     }
 }
@@ -248,14 +248,14 @@ dBase_c *dStage_c::getParentForRoom(s32 idx) {
 }
 
 void dStage_c::bindStageResToFile(nw4r::g3d::ResFile *file) {
-    nw4r::g3d::ResFile f = nw4r::g3d::ResFile(CurrentStageArcManager::sInstance->getData("g3d/stage.brres"));
+    nw4r::g3d::ResFile f = nw4r::g3d::ResFile(CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres"));
     if (f.IsValid()) {
         file->Bind(f);
     }
 }
 
 void dStage_c::bindSkyCmnToResFile(nw4r::g3d::ResFile *file) {
-    nw4r::g3d::ResFile f = nw4r::g3d::ResFile(OarcManager::sInstance->getSubEntryData("SkyCmn", "g3d/model.brres"));
+    nw4r::g3d::ResFile f = nw4r::g3d::ResFile(OarcManager::GetInstance()->getSubEntryData("SkyCmn", "g3d/model.brres"));
     if (f.IsValid()) {
         file->Bind(f);
     }
@@ -271,7 +271,7 @@ bool dStage_c::getMA0AnmTexSrt(nw4r::g3d::ResAnmTexSrt *o_srt, const char *matNa
     const char **candidate = sMatsToTry;
     for (int i = 0; i < ARRAY_LENGTH(sMatsToTry); i++, candidate++) {
         if (!std::strncmp(matName, *candidate, std::strlen(*candidate))) {
-            nw4r::g3d::ResFile mdl = nw4r::g3d::ResFile(OarcManager::sInstance->getMdlFromArc2("Common"));
+            nw4r::g3d::ResFile mdl = nw4r::g3d::ResFile(OarcManager::GetInstance()->getMdlFromArc2("Common"));
             *o_srt = mdl.GetResAnmTexSrt(*candidate);
             return true;
         }

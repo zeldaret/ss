@@ -771,16 +771,16 @@ void dTagProcessor_c::fn_800B5520(wchar_t *src) {
 }
 
 wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
-    if (FileManager::sInstance->getHeroname()[0] != '\0') {
-        for (int i = 0; FileManager::sInstance->getHeroname()[i] != '\0'; i++) {
+    if (FileManager::GetInstance()->getHeroname()[0] != '\0') {
+        for (int i = 0; FileManager::GetInstance()->getHeroname()[i] != '\0'; i++) {
             if (arg != 0 && field_0x90E != 0) {
-                wchar_t c = FileManager::sInstance->getHeroname()[i];
+                wchar_t c = FileManager::GetInstance()->getHeroname()[i];
                 fn_800B5FD0(c, &field_0x008[field_0x90E - 1][*outArg], outArg);
                 if (field_0x90E - 1 < 4) {
                     field_0x808[field_0x90E - 1]++;
                 }
             } else {
-                dest = fn_800B5FD0(FileManager::sInstance->getHeroname()[i], dest, nullptr);
+                dest = fn_800B5FD0(FileManager::GetInstance()->getHeroname()[i], dest, nullptr);
             }
         }
     }
