@@ -11,6 +11,7 @@ import re
 
 import demangle
 demangle.mode = 'demangle'
+import postprocess_symbol
 
 from ghidra.app.util import NamespaceUtils
 from ghidra.program.model.symbol import SymbolUtilities
@@ -36,54 +37,6 @@ allowed_sections = [
 commit = None
 
 
-def postprocess_demangled_name(demangled):
-    if demangled.startswith("vtable for "):
-        demangled = demangled[len("vtable for "):] + "::__vtable"
-
-    if demangled.endswith(" const"):
-        demangled = demangled[:-len("const ")]
-
-    thunk = False
-    guard = False
-    if demangled.startswith("non-virtual thunk to "):
-        thunk = True
-        demangled = demangled[len("non-virtual thunk to "):]
-
-    if demangled.startswith("virtual thunk to "):
-        thunk = True
-        demangled = demangled[len("virtual thunk to "):]
-
-    if demangled.startswith("guard variable for "):
-        guard = True
-        demangled = demangled[len("guard variable for "):]
-
-    template_open = demangled.index("<") if "<" in demangled else None
-    first_space = demangled.index(" ") if " " in demangled else None
-    open_paren = demangled.index("(") if "(" in demangled else None
-    if template_open and first_space and open_paren and first_space < template_open and template_open < open_paren:
-        # this looks like a templated return type, so drop the return type
-        demangled = demangled[(first_space+1):]
-
-    demangled = demangled.replace("(anonymous namespace)", "anonymous")
-    demangled = demangled.replace("operator ", "operator_")
-    demangled = demangled.replace(" ", "")
-    if ")::" in demangled:
-        # dFontMng_c::getFontPath(unsigned char)::TEMP_FONT_NAME
-        left = demangled.split("(")[0]
-        right = demangled.rsplit(")")[-1]
-        # dFontMng_c::getFontPath::TEMP_FONT_NAME
-        demangled = left + right
-    else:
-        demangled = demangled.split("(")[0]
-
-    if thunk:
-        demangled += "_thunk"
-    if guard:
-        demangled += "_guard"
-
-    return demangled
-
-
 def do_demangle(name):
     # try demangling
     if "__" in name:
@@ -103,6 +56,7 @@ def do_demangle(name):
 
 
 default_sym_re = re.compile(".*_[0-9A-Fa-f]{8}$")
+
 
 def parse_symbol(line):
     if "entry of" in line:
@@ -198,15 +152,16 @@ def update_addr(addr, mangled_name, create_function=False):
     existing_symbol = getSymbolAt(addr)
     existing_name = existing_symbol.getName(True) if existing_symbol else None
 
+    allow_updating_comment = True
+
     if comment["mangled"] and comment["mangled"] == mangled_name:
-        # skip updating
-        return
+        allow_updating_comment = False
 
     if not comment["mangled"] and not comment["original"] and existing_name and not default_sym_re.match(existing_name):
         comment["original"] = existing_name
 
     demangled_name = do_demangle(mangled_name)
-    postprocessed = postprocess_demangled_name(demangled_name)
+    name_list = postprocess_symbol.postprocess_demangled_name(demangled_name)
     comment["mangled"] = mangled_name
     comment["history"].append(commit + " " + demangled_name)
 
@@ -219,7 +174,7 @@ def update_addr(addr, mangled_name, create_function=False):
 
     complete_plate_comment = "\n".join(complete_plate_comment)
 
-    name_list = [SymbolUtilities.replaceInvalidChars(part, True) for part in postprocessed.split("::")]
+    name_list = [SymbolUtilities.replaceInvalidChars(part, True) for part in name_list]
     symbol_str = name_list[-1]
     namespace = None
     if len(name_list) > 1:
@@ -237,7 +192,7 @@ def update_addr(addr, mangled_name, create_function=False):
     if create_function:
         createFunction(addr, None)
 
-    if symbol_needs_history(mangled_name):
+    if symbol_needs_history(mangled_name) and allow_updating_comment:
         unit.setComment(PLATE_COMMENT, complete_plate_comment)
 
 
