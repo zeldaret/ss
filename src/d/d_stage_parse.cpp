@@ -348,7 +348,7 @@ static void handleBzsStas(int roomid, const BzsSectionHead *section) {
     }
 }
 
-void parseLayerBzs(int roomid, u32 layer, const LAY *head, const BzsTagToParseFunc *handlerTable, s32 tableSize) {
+static void parseLayerBzs(int roomid, u32 layer, const LAY *head, const BzsTagToParseFunc *handlerTable, s32 tableSize) {
     const LAY *lay = head + layer;
     const BzsSectionHead *newHead = OFS_TO_PTR(BzsSectionHead, lay);
     for (s32 i = 0; i < lay->mCount; i++) {
@@ -361,7 +361,7 @@ static const BzsTagToParseFunc layerHandlers[] = {
     {'ARCN', handleBzsLayerArcn},
 };
 
-void handleBzsLay(int roomid, const BzsSectionHead *section) {
+static void handleBzsLay(int roomid, const BzsSectionHead *section) {
     const LAY *lay = OFS_TO_PTR(LAY, section);
     parseLayerBzs(roomid, 0, lay, layerHandlers, ARRAY_LENGTH(layerHandlers));
     if (dScGame_c::currentSpawnInfo.layer != 0) {
@@ -375,7 +375,7 @@ static const BzsTagToParseFunc layerHandlers2[] = {
     {'STAG', handleBzsStas},
 };
 
-void handleBzsLay2(int roomid, const BzsSectionHead *section) {
+static void handleBzsLay2(int roomid, const BzsSectionHead *section) {
     const LAY *lay = OFS_TO_PTR(LAY, section);
     parseLayerBzs(roomid, 0, lay, layerHandlers2, ARRAY_LENGTH(layerHandlers2));
     if (dScGame_c::currentSpawnInfo.layer != 0) {
@@ -392,7 +392,7 @@ static const BzsTagToParseFunc layerHandlers3[] = {
     {'DOOR',  handleBzsObj},
 };
 
-void handleBzsLay3(int roomid, const BzsSectionHead *section) {
+static void handleBzsLay3(int roomid, const BzsSectionHead *section) {
     const LAY *lay = OFS_TO_PTR(LAY, section);
     parseLayerBzs(roomid, 0, lay, layerHandlers3, ARRAY_LENGTH(layerHandlers3));
     if (dScGame_c::currentSpawnInfo.layer != 0) {
