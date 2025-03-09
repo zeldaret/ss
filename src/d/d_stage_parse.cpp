@@ -244,10 +244,6 @@ static void handleBzsPly(int roomid, const BzsSectionHead *section) {
 
 extern "C" u16 getActorIdForObjName2(const char *objname);
 
-// The above function suffered from tons of regswaps that ended up being fixed very quickly
-// (swapping *pos and *ang). The below four functions have a single regswap that I don't
-// understand and that I spent more time trying to fix than in the above function.
-
 static void handleBzsObjn(int roomid, const BzsSectionHead *section) {
     const OBJN *objn = OFS_TO_PTR(OBJN, section);
     const char *buf = reinterpret_cast<const char *>(objn);
