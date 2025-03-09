@@ -1,16 +1,15 @@
 #include "d/t/d_t_genki_dws_tgt.h"
 
-#include "toBeSorted/room_manager.h"
+#include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
-#include "toBeSorted/scgame.h"
-
+#include "toBeSorted/room_manager.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_GENKI_DOWSING_TARGET, dTgGenkiDwsTgt_c, fProfile::TAG_GENKI_DOWSING_TARGET, 0x02A5, 0, 0);
 
 int dTgGenkiDwsTgt_c::create() {
     u16 batQuestActivated = StoryflagManager::sInstance->getCounterOrFlag(304);
-    if (batQuestActivated == 0 || !ScGame::sInstance->currentSpawnInfo.isNight()) {
+    if (batQuestActivated == 0 || !dScGame_c::sInstance->currentSpawnInfo.isNight()) {
         return FAILED;
     }
 

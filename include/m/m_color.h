@@ -7,6 +7,7 @@
 struct mColor : public nw4r::ut::Color {
     mColor() : nw4r::ut::Color() {}
     mColor(int red, int green, int blue, int alpha) : nw4r::ut::Color(red, green, blue, alpha) {}
+    mColor(int hex) : nw4r::ut::Color(hex) {}
 };
 
 #endif

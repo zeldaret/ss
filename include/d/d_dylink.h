@@ -5,7 +5,7 @@
 
 class dDynamicModuleControl {
 public:
-    dDynamicModuleControl() {}
+    dDynamicModuleControl(): mPtr(nullptr) {}
     virtual ~dDynamicModuleControl();
 
     void set(u16 *ptr, int count);

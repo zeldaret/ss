@@ -23,6 +23,7 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/hbm.h"
+#include "toBeSorted/some_gxf_thing.h"
 #include "toBeSorted/reload_color_fader.h"
 
 sFPhase<dScBoot_c>::phaseCallback dScBoot_c::sCallbacks[] = {&dScBoot_c::cb1, &dScBoot_c::cb2, &dScBoot_c::cb3,
@@ -44,7 +45,6 @@ extern "C" const char *getEventFlowFileNameByIndex(int, int);
 extern "C" const char *getUsedLanguageString();
 extern "C" u8 fn_80054F30();
 extern "C" nw4r::ut::ResFont *lbl_805750D8;
-extern "C" u8 *SOME_GFX_THING;
 
 sFPhaseBase::sFPhaseState dScBoot_c::cb1() {
     LayoutArcManager::sInstance->loadLayoutArcFromDisk("cursor", mHeap::g_archiveHeap);
@@ -520,7 +520,7 @@ void dScBoot_c::executeState_Strap() {
 
 void dScBoot_c::finalizeState_Strap() {
     // TODO
-    SOME_GFX_THING[9] = 1;
+    SomeGfxThing::setField0x09(1);
 }
 
 void dScBoot_c::initializeState_Connect() {

@@ -6,6 +6,7 @@ class ReloadColorFader {
 public:
     static ReloadColorFader *GetInstance();
     void fn_80067ED0();
+    void fn_80067EF0(s32);
     void fn_80067F00();
     void fn_80067F50();
 

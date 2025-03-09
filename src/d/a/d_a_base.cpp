@@ -3,6 +3,7 @@
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_heap.h"
+#include "d/d_sc_game.h"
 #include "d/flag/enemyflag_manager.h"
 #include "f/f_list_nd.h"
 #include "m/m_vec.h"
@@ -10,7 +11,6 @@
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/room_manager.h"
-#include "toBeSorted/scgame.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 
 // .sdata
@@ -232,7 +232,7 @@ bool dAcBase_c::restorePosRotFromCopy() {
 
 // 8002cf10
 u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
-    if (ScGame::currentSpawnInfo.trial == 1) {
+    if (dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL) {
         return 0;
     }
 

@@ -28,8 +28,8 @@ int LayoutArcManager::ensureLoaded1(const char *object) {
     return mArcTable.ensureLoadedMaybe2(object);
 }
 
-void LayoutArcManager::ensureLoaded2(const char *object) {
-    mArcTable.ensureLoadedMaybe(object);
+int LayoutArcManager::ensureLoaded2(const char *object) {
+    return mArcTable.ensureLoadedMaybe(object);
 }
 
 bool LayoutArcManager::hasEntry(const char *object) {
