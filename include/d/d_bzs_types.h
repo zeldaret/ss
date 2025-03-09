@@ -55,7 +55,7 @@ struct EVNT {
     /* 0x11 */ u8 skipFlag;
     /* 0x12 */ u8 _0x12[2];
     /* 0x14 */ u16 item;
-    /* 0x16 */ u16 _0x16[2];
+    /* 0x16 */ u16 _0x16[1];
     /* 0x18 */ char name[32];
 };
 

@@ -27,6 +27,9 @@ struct DrawPriorityConfig {
     u8 pDrawOpa2;
 };
 
+#define ROOM_NUM_MODELS (8)
+#define ROOM_NUM_BG (2)
+
 class dRoom_c : public dBase_c {
     class mdl_c : public m3d::smdl_c {
     public:
@@ -113,6 +116,8 @@ public:
     void drawOnMapIfVisible(mMtx_c *mtx, int param);
     void getBounds(mVec3_c *min, mVec3_c *max) const;
     const PLY *getEntranceById(u8 id) const;
+    const CAM *getCamForIndex(u32 idx) const;
+    const EVNT *getEventForIndex(u32 idx) const;
 
     void someLastBossThing(bool arg);
     f32 getFrame() const;
@@ -194,8 +199,8 @@ private:
     /* 0x068 */ mHeapAllocator_c mAllocator;
     /* 0x084 */ nw4r::g3d::ResFile mRoomRes;
     /* 0x088 */ UnkWithWater mWaterThing;
-    /* 0x0A0 */ model_c mModels[8];
-    /* 0x220 */ dBgWKCol mBg[2];
+    /* 0x0A0 */ model_c mModels[ROOM_NUM_MODELS];
+    /* 0x220 */ dBgWKCol mBg[ROOM_NUM_BG];
     /* 0x4E0 */ STATE_MGR_DECLARE(dRoom_c);
 
     /* 0x51C */ const bzsFILE *mpFile;
