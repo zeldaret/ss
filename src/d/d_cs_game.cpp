@@ -5,6 +5,7 @@
 #include "d/lyt/d_structd.h"
 #include "f/f_base.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_BASE_PROFILE(C_GAME, dCsGame_c, fProfile::C_GAME, 0x2BF, 0x06F9);
 
@@ -401,14 +402,12 @@ void dCsGame_c::lytItemCursor_c::lytBowCsr_c::initializeState_Charge() {
     mAnm[MAIN_ANIM_ARROW_EFFECT].setAnimEnable(true);
     mAnm[MAIN_ANIM_ARROW_EFFECT].setFrame(0.0f);
 }
-extern "C" void *SOUND_EFFECT_SOUND_MGR;
-extern "C" void SmallSoundManager__playSound(void *, s32);
 void dCsGame_c::lytItemCursor_c::lytBowCsr_c::executeState_Charge() {
     if (field_0x54 >= 1.0f) {
         if (!mAnm[MAIN_ANIM_ARROW_PEAK].isFlag2()) {
             mAnm[MAIN_ANIM_ARROW_PEAK].setAnimEnable(true);
             mAnm[MAIN_ANIM_ARROW_PEAK].setFrame(0.0f);
-            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x148D);
+            SmallSoundManager::GetInstance()->playSound(SE_S_BW_ALIGN_SIGHT);
         }
         mAnm[MAIN_ANIM_ARROW_KEEP].setAnimEnable(false);
     } else {

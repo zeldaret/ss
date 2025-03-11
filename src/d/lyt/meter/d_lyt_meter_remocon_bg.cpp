@@ -43,7 +43,7 @@ bool dLytMeterRemoconBg_c::remove() {
     return true;
 }
 
-bool dLytMeterRemoconBg_c::LytMeter0x14() {
+bool dLytMeterRemoconBg_c::execute() {
     // TODO
     return true;
 }

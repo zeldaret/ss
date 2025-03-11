@@ -33,6 +33,7 @@
 #include "toBeSorted/counters/goddess_chest_counter.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(TBOX, dAcTbox_c, fProfile::TBOX, 0x018D, 0, 6);
 
@@ -1753,8 +1754,6 @@ void dAcTbox_c::initializeState_DemoAppear() {
     field_0x11C0.set(0.0f, 0.0f, 0.0f);
     field_0x11CC.set(0.0f, 0.0f, 0.0f);
 }
-extern "C" void SmallSoundManager__playSound(void *, u32);
-extern "C" void *SOUND_EFFECT_SOUND_MGR;
 void dAcTbox_c::executeState_DemoAppear() {
     int val = field_0x11F8++;
     if (field_0x11F8 < 11) {
@@ -1787,7 +1786,7 @@ void dAcTbox_c::executeState_DemoAppear() {
         if (isStop && mAnmMatClr1.isStop(0) && field_0x11F8 > 0x5A) {
             mEvent.advanceNext();
             mStateMgr.changeState(StateID_WaitOpen);
-            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AD);
+            SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
         }
     }
 }
