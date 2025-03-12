@@ -254,7 +254,7 @@ bool dRoom_c::setupBg() {
             }
 
             if (mCanHavePastState && !mHasAnmTexPat) {
-                bg->SetUnkBase();
+                bg->SetUnkBase(1);
             }
             // ???
             dBgS::GetInstance()->Regist(bg, (dAcObjBase_c *)nullptr);
