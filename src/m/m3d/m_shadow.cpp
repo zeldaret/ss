@@ -1,5 +1,7 @@
 #include "m/m3d/m_shadow.h"
 
+#include "m/m_mtx.h"
+#include "m/m_vec.h"
 #include "nw4r/g3d/g3d_calcview.h"
 #include "nw4r/g3d/g3d_draw.h"
 #include "nw4r/g3d/g3d_draw1mat1shp.h"
@@ -486,9 +488,8 @@ bool mShadowChild_c::addMdl(scnLeaf_c &mdl, const mQuat_c &quat) {
         mtx.copyFrom(static_cast<mCustomShadow_c &>(mdl).mMtx);
     }
 
-    // TODO this copy is a bit weird (reads members in a different order)
     mQuat_c q = quat;
-    PSMTXMultVec(mtx.m, q.v, q.v);
+    mtx.applyQuat(q);
 
     if (mNumLeaves == 0) {
         mQuat = q;
@@ -515,16 +516,13 @@ void mShadowChild_c::updateMtx() {
     mVec3_c a = *(mVec3_c *)(&mQuat) + mPositionMaybe * mOffsetMaybe;
     mVec3_c b = *(mVec3_c *)(&mQuat) - mPositionMaybe * field_0x13C;
     mMtx_c mtx;
-    C_MTXLookAt(
-        mtx.m, b,
-        *(fabsf((a.x - b.x) * (a.x - b.x) + (a.z - b.z) * (a.z - b.z)) <= FLT_EPSILON ? &mVec3_c::Ez : &mVec3_c::Ey), a
-    );
+    C_MTXLookAt(mtx.m, b, !(fabsf((a - b).squareMagXZ()) <= FLT_EPSILON) ? mVec3_c::Ez : mVec3_c::Ey, a);
     f32 f = field_0x13C;
     mFrustum.set(f, -f, -f, f, f, f + mOffsetMaybe, mtx, true);
 }
 
 void mShadowChild_c::drawMdl() {
-    // TODO maybe roughly equivalent
+    // Equivalent, but stack problems and regswaps
     using namespace nw4r;
     mMtx_c mtx;
     GXSetTevColor(GX_TEVREG0, sColors[mColorChanIdx]);
@@ -532,33 +530,35 @@ void mShadowChild_c::drawMdl() {
     GXSetProjection(mtx.m, GX_ORTHOGRAPHIC);
     g3d::G3DState::Invalidate(0x7FF);
 
+    mMtx_c &viewMtx = mFrustum.mView;
+
     for (scnLeaf_c **leaf = &mpLeaves[mNumLeaves - 1]; leaf >= &mpLeaves[0]; leaf--) {
-        scnLeaf_c *lf = *leaf;
-        if (lf->getType() == 0 /* Model */) {
-            g3d::ScnMdlSimple *mdl = g3d::G3dObj::DynamicCast<g3d::ScnMdlSimple>(lf->getG3dObject());
+        if ((*leaf)->getType() == 0 /* Model */) {
+            g3d::ScnMdlSimple *mdl = g3d::G3dObj::DynamicCast<g3d::ScnMdlSimple>((*leaf)->getG3dObject());
 
             u32 bufSize = mdl->GetNumViewMtx() * sizeof(math::MTX34);
-            math::MTX34 *viewPosArray = static_cast<math::MTX34 *>(mShadow_c::GetInstance()->mpHeap->alloc(bufSize, 0x20));
+            math::MTX34 *viewPosArray =
+                static_cast<math::MTX34 *>(mShadow_c::GetInstance()->mpCurrentHeap->alloc(bufSize, 0x20));
 
+            g3d::ResMdl resMdl = mdl->GetResMdl();
             g3d::CalcView(
                 viewPosArray, nullptr, mdl->GetWldMtxArray(), mdl->GetWldMtxAttribArray(), mdl->GetNumViewMtx(),
-                mFrustum.mView, mdl->GetResMdl(), nullptr
+                viewMtx, resMdl, nullptr
             );
             DCStoreRange(viewPosArray, bufSize);
 
-            g3d::ScnMdl *mdl2 = g3d::G3dObj::DynamicCast<g3d::ScnMdl>(lf->getG3dObject());
+            g3d::ScnMdl *mdl2 = g3d::G3dObj::DynamicCast<g3d::ScnMdl>((*leaf)->getG3dObject());
 
             g3d::DrawResMdlReplacement *pRep = mdl2 ? &mdl2->GetDrawResMdlReplacement() : nullptr;
 
             g3d::DrawResMdlDirectly(
-                mdl->GetResMdl(), viewPosArray, nullptr, nullptr,
-                mdl2->GetByteCode(g3d::ScnMdlSimple::BYTE_CODE_DRAW_OPA), nullptr, pRep,
-                g3d::RESMDL_DRAWMODE_FORCE_LIGHTOFF | g3d::RESMDL_DRAWMODE_IGNORE_MATERIAL
+                resMdl, viewPosArray, nullptr, nullptr, mdl2->GetByteCode(g3d::ScnMdlSimple::BYTE_CODE_DRAW_OPA),
+                nullptr, pRep, g3d::RESMDL_DRAWMODE_FORCE_LIGHTOFF | g3d::RESMDL_DRAWMODE_IGNORE_MATERIAL
             );
             GXInvalidateVtxCache();
         } else {
             // this happens with bomb bag, and goes to 0x802EDC90 (mCustomShadow_c::draw)
-            static_cast<mCustomShadow_c *>(lf)->draw(mFrustum.mView);
+            static_cast<mCustomShadow_c *>(*leaf)->draw(viewMtx);
         }
     }
 }
@@ -609,13 +609,10 @@ void mCustomShadow_c::draw(const mMtx_c &arg) {
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
 }
 
-void mCustomShadow_c::calc(mMtx_c mtx, mMtx_c &mtx2) {
-    // TODO some shuffles
-
+void mCustomShadow_c::calc(mMtx_c mtx, mMtx_c &mtx2) const {
     mVec3_c trans;
     mtx2.copyFrom(mMtx);
-    mVec3_c offset(0.0f, 0.0f, 0.0f);
-    offset.y = field_0x48;
+    mVec3_c offset(0.0f, field_0x48, 0.0f);
     PSMTXMultVec(mtx2, offset, trans);
     PSMTXMultVec(mtx, trans, trans);
 

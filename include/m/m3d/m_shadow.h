@@ -189,7 +189,7 @@ public:
     virtual int getType() const override;
     /* 0x24 */ virtual void draw(const mMtx_c &);
 
-    void calc(mMtx_c, mMtx_c &);
+    void calc(mMtx_c, mMtx_c &) const;
 
     /* 0x18 */ mMtx_c mMtx;
     /* 0x48 */ f32 field_0x48;
