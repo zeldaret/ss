@@ -202,24 +202,13 @@ void DowsingTarget::init() {}
 
 void DowsingTarget::execute() {}
 
-// I'm not sure if this is a TList inline or something unique to
-// this file, but this returns the slot's list EndIter if the target
-// isn't linked, and returns the target as an iterator if it's linked
-inline static DowsingList::Iterator GetListNode(u8 slot, DowsingTarget *t) {
-    if (t->mLink.mpNext == nullptr || t->mLink.mpPrev == nullptr) {
-        return DOWSING_LISTS[slot].GetEndIter();
-    } else {
-        return DowsingList::Iterator(t);
-    }
-}
-
 static bool insertDowsingTarget(DowsingTarget *target) {
     u8 slot = target->getSlot();
     if (slot == DowsingTarget::SLOT_NONE) {
         return false;
     }
 
-    if (GetListNode(slot, target) != DOWSING_LISTS[slot].GetEndIter()) {
+    if (DOWSING_LISTS[slot].GetPosition(target) != DOWSING_LISTS[slot].GetEndIter()) {
         return false;
     }
     DOWSING_LISTS[slot].insert(target);
@@ -232,7 +221,7 @@ static bool removeDowsingTarget(DowsingTarget *target) {
         return false;
     }
 
-    if (GetListNode(slot, target) != DOWSING_LISTS[slot].GetEndIter()) {
+    if (DOWSING_LISTS[slot].GetPosition(target) != DOWSING_LISTS[slot].GetEndIter()) {
         DOWSING_LISTS[slot].remove(target);
         return true;
     }
