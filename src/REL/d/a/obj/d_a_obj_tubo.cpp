@@ -216,7 +216,7 @@ void dAcOtubo_c::executeState_Wait() {
     if (mObjAcch.ChkGroundLanding()) {
         if (!mbField_0x9EF || !EventManager::isInEvent()) {
             if (mField_0x9F6 == 2) {
-                fn_8002A450(position, field_0xEE, field_0xEF, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+                fn_8002A450(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
             }
             if (mbField_0x9F3) {
                 playSound(0xA46);
@@ -224,7 +224,7 @@ void dAcOtubo_c::executeState_Wait() {
             }
             if (checkOnLava()) {
                 if (mField_0x9F6 != 2) {
-                    fn_8002A450(position, field_0xEE, field_0xEF, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+                    fn_8002A450(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
                 }
                 playSound(0x9A3);
             }
@@ -362,7 +362,7 @@ void dAcOtubo_c::initializeState_Slope() {
 }
 void dAcOtubo_c::executeState_Slope() {
     if (mObjAcch.ChkGroundLanding()) {
-        fn_8002A450(position, field_0xEE, field_0xEF, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+        fn_8002A450(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
     } else if (mObjAcch.ChkGndHit()) {
         mField_0x9DC = 0.f;
         addPickupTarget();
