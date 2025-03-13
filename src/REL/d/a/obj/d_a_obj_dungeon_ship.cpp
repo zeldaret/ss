@@ -459,9 +459,7 @@ void dAcODungeonShip_c::fn_485_1720() {
     field_0x84C = tmp2;
 }
 
-bool dAcODungeonShip_c::fn_485_1830(s32 pathSegmentIndex, s32 direction, s32 *out) {
-
-}
+bool dAcODungeonShip_c::fn_485_1830(s32 pathSegmentIndex, s32 direction, s32 *out) {}
 
 u16 dAcODungeonShip_c::fn_485_1900() {
     s32 sign = mPath.CheckFlag(0x40000000) ? -1 : 1;
@@ -483,8 +481,8 @@ u32 dAcODungeonShip_c::fn_485_1960() {
     mVec3_c dist = link->position - position;
     dist.y = 0.0f;
     dist.normalizeRS();
-    int a1 = cLib::targetAngleY(mVec3_c::Zero, v);
-    int a2 = cLib::targetAngleY(mVec3_c::Zero, dist);
+    s32 a1 = cLib::targetAngleY(mVec3_c::Zero, v);
+    s32 a2 = cLib::targetAngleY(mVec3_c::Zero, dist);
     // okay
     return labs(mAng(mAng(a1) - mAng(a2)));
 }
@@ -501,13 +499,9 @@ void dAcODungeonShip_c::fn_485_1A70(mVec3_c *v) {
     v->set(0.0f, 0.0f, 0.0f);
 }
 
-void dAcODungeonShip_c::fn_485_1A90() {
-    
-}
+void dAcODungeonShip_c::fn_485_1A90() {}
 
-void dAcODungeonShip_c::fn_485_1BF0() {
-    
-}
+void dAcODungeonShip_c::fn_485_1BF0() {}
 
 void dAcODungeonShip_c::fn_485_1DF0() {
     const dAcPy_c *link = dAcPy_c::GetLink();

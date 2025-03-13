@@ -51,11 +51,11 @@ STATE_DEFINE(dAcOtubo_c, Slope);
 STATE_DEFINE(dAcOtubo_c, Rebirth);
 
 dCcD_SrcSph dAcOtubo_c::sSphSrc = {
-  /* mObjInf */
+    /* mObjInf */
     {/* mObjAt */ {AT_TYPE_PHYSICS, 0x12, {0, 0, 0}, 2, 0, 0, 0, 0, 0},
      /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_0x80000 | AT_TYPE_0x8000), 0x801111, {0xA, 0x40F}, 8, 0},
      /* mObjCo */ {0x1E9}},
- /* mSphInf */
+    /* mSphInf */
     {30.f},
 };
 
@@ -671,7 +671,7 @@ void dAcOtubo_c::attemptDestroy() {
     if (mObjAcch.ChkRoofHit()) {
         destroy();
     } else if (!mbField_0x9EF && checkYOffsetField_0x100() && getParams_0x3000() != 1) {
-        FUN_8002dcd0();
+        killNoItemDrop();
     } else if (fn_272_38A0()) {
         destroy();
     }

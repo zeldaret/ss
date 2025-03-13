@@ -255,22 +255,22 @@ void dTgReaction_c::onDelete() {
 
 bool dTgReaction_c::fn_578_DB0(const mVec3_c &position, u32 arg) {}
 
-bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 arg, mAng angle) {
+bool dTgReaction_c::spawnHearts(s32 params, mVec3_c *pos, s32 arg, mAng angle) {
     int numHearts = params == 6 ? 3 : 1;
     mAng3_c ang(0, 0, 0);
 
     // This is annoying because we don't know which operators
     // mAng supports
-    mAng tmp1;
-    int tmp3;
+    s32 tmp1;
+    s32 tmp3;
     if (arg == 6) {
         tmp1 = angle;
         static s32 SOME_ANG = -3641;
         tmp3 = SOME_ANG;
     } else {
-        tmp1 = cLib::targetAngleY(dAcPy_c::LINK->position, pos);
+        tmp1 = cLib::targetAngleY(dAcPy_c::LINK->position, *pos);
         tmp3 = -0x8000;
-        tmp1 = tmp1 + mAng(0x4000);
+        tmp1 = (s16)tmp1 + mAng(0x4000);
     }
 
     mAng tmp2 = tmp3;

@@ -2673,6 +2673,6 @@ void dAcTbox_c::fn_8026E630() {
     if (dBgS_ObjGndChk::CheckPos(checkPos) && &dBgS_ObjGndChk::GetInstance()) {
         cBgS_PolyInfo p = dBgS_ObjGndChk::GetInstance();
         dBgS::GetInstance()->SetLightingCode(this, p);
-        FUN_8002de30(p);
+        setPolyAttrsDupe(p);
     }
 }

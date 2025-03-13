@@ -4,6 +4,7 @@
 #include "d/a/d_a_player.h"
 #include "d/d_heap.h"
 #include "d/d_pad.h"
+#include "m/m_angle.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/event_manager.h"

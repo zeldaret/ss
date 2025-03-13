@@ -1,12 +1,18 @@
 #include "d/a/d_a_base.h"
 
+#include "c/c_lib.h"
+#include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/col/bg/d_bg_s.h"
 #include "d/d_heap.h"
 #include "d/d_room.h"
 #include "d/d_sc_game.h"
 #include "d/d_stage.h"
 #include "d/flag/enemyflag_manager.h"
+#include "d\col\bg\d_bg_s_gnd_chk.h"
+#include "egg/core/eggAllocator.h"
+#include "f/f_base.h"
 #include "f/f_list_nd.h"
 #include "m/m_vec.h"
 #include "toBeSorted/event.h"
@@ -32,20 +38,26 @@ extern "C" ObjInfo *getObjByActorIdAndSubtype_unkNamespace(ProfileName, u8);
 extern "C" ObjInfo *getObjByActorName_unkNamespace(char *name);
 extern "C" char *getObjectName_8006a730(ObjInfo *);
 extern "C" SoundSource *soundForActorInitRelated_803889c0(s8, fBase_c *, char *, u8);
-extern "C" s16 targetAngleY(mVec3_c *, mVec3_c *);
-extern "C" s16 targetAngleX(mVec3_c *, mVec3_c *);
-extern "C" bool checkCollision(mVec3_c *pos);
-extern "C" s8 collisionCheckGetRoom();
 
 bool dAcBase_c::createHeap() {
     return true;
 }
 
-// Doesnt Match Yet
+// sound_source and sound_list need to be ironed out before this can match
+// NOT MATCHING
+// 8002c3b0
 dAcBase_c::dAcBase_c()
-    : heap_allocator(), obj_info(s_Create_ObjInfo), sound_source(nullptr), sound_list(), obj_pos(&position),
-      params2(s_Create_Params2), obj_id(s_Create_UnkFlags), viewclip_index(s_Create_ViewClipIdx), actor_node(nullptr),
-      roomid(s_Create_RoomId), actor_subtype(s_Create_Subtype) {
+    : heap_allocator(),
+      obj_info(s_Create_ObjInfo),
+      sound_source(nullptr),
+      sound_list(),
+      obj_pos(&position),
+      params2(s_Create_Params2),
+      obj_id(s_Create_UnkFlags),
+      viewclip_index(s_Create_ViewClipIdx),
+      actor_node(nullptr),
+      roomid(s_Create_RoomId),
+      actor_subtype(s_Create_Subtype) {
     JStudio_actor = 0;
     someStr[0] = 0;
 
@@ -78,11 +90,14 @@ dAcBase_c::dAcBase_c()
 // 8002c530
 // dBase_c::~dBase_c() {}
 
+// Fixing the sound_source and sound_info in the ctor should make this match
+// NOT MATCHING
+// 8002c590
 dAcBase_c::~dAcBase_c() {}
 
 void dAcBase_c::setTempCreateParams(
-    mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2, dAcBase_c *parent, u8 subtype, s16 unkFlag,
-    u8 viewClipIdx, ObjInfo *objInfo
+    mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2, dAcBase_c *parent, u8 subtype, u16 unkFlag,
+    s8 viewClipIdx, ObjInfo *objInfo
 ) {
     s_Create_Position = pos;
     s_Create_Rotation = rot;
@@ -166,7 +181,6 @@ int dAcBase_c::create() {
 }
 
 // 8002c8f0
-// loads f2 before f0 instead of f0 then f2
 void dAcBase_c::postCreate(fBase_c::MAIN_STATE_e state) {
     if (state == SUCCESS) {
         pos_copy = position;
@@ -176,9 +190,44 @@ void dAcBase_c::postCreate(fBase_c::MAIN_STATE_e state) {
     dBase_c::postCreate(state);
 }
 
+// NOT MATCHING
 // 8002c940
-int dAcBase_c::preDelete() {}
+int dAcBase_c::preDelete() {
+    int fbaseDelete = fBase_c::preDelete();
 
+    if ((actor_properties & 0x800) == 0 && (actor_properties & 0x10000000) != 0 &&
+        fBase_c::getConnectParent()->lifecycle_state != TO_BE_DELETED) {
+        if (itemDroppingAndGivingRelated(nullptr, 0) != 0) {
+            setEnemyDefeatFlag();
+        }
+
+    } else {
+        if (sound_source != nullptr) {
+            // TODO: add func call
+        }
+
+        // TODO: add sound_info stuff once the SoundInfo x Heap weirdness is figured out
+    }
+
+    if (fbaseDelete == 0) {
+        return false;
+    }
+
+    if (sound_source != nullptr) {
+        // TODO: add func calls
+        return false;
+    }
+
+    // TODO: add sound_info stuff once the SoundInfo x Heap weirdness is figured out
+
+    if ((actor_properties & 0x20000000) != 0) {
+        changeLoadedEntitiesNoSet();
+    }
+
+    return true;
+}
+
+// NOT MATCHING
 // 8002cb10
 int dAcBase_c::preExecute() {
     if (dBase_c::preExecute() == NOT_READY) {
@@ -188,13 +237,26 @@ int dAcBase_c::preExecute() {
         if (actor_properties & 0x40000000) {
             return NOT_READY;
         }
-        // TODO: Add event control
+
+        // TODO: Fix event control
+        if (EventManager::isInEvent() && JStudio_actor == nullptr && !EventManager::isInEventOtherThan7() &&
+            !EventManager::FUN_800a0ba0() && !EventManager::FUN_800a0570(this) && (actor_properties & 0x4) == 0) {
+            return NOT_READY;
+        }
     }
     return SUCCEEDED;
 }
 
+// Still needs some work in EventManager to match
+// NOT MATCHED
 // 8002cc10
-int dAcBase_c::execute() {}
+int dAcBase_c::execute() {
+    if (EventManager::isInEvent() && !EventManager::isInEventOtherThan7()) {
+        return actorExecuteInEvent();
+    }
+
+    return actorExecute();
+}
 
 // 8002cca0
 int dAcBase_c::actorExecute() {
@@ -206,6 +268,7 @@ int dAcBase_c::actorExecuteInEvent() {
     return actorExecute();
 }
 
+// Can't make progress on this til the SoundInfo x Heap weirdness is figured out
 // 8002ccc0
 void dAcBase_c::postExecute(fBase_c::MAIN_STATE_e state) {}
 
@@ -248,6 +311,7 @@ u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
 
 // 8002cf90
 void dAcBase_c::fillUpperParams2Byte() {
+    // Upper byte of param2 determines item drops when actor is deleted
     params2 |= 0xFF000000;
 }
 
@@ -309,14 +373,17 @@ FORCE_INLINE dAcBase_c *findActor(dAcBase_c *parent) {
     return nullptr;
 }
 
+// control flow sucks ;-;
+// NOT MATCHING
+// 8002d0a0
 dAcBase_c *dAcBase_c::searchActor(dAcBase_c *parent) {
     dAcBase_c *foundActor = ::findActor(parent);
 
-    if (foundActor) {
-        return foundActor;
-    } else {
+    if (!foundActor) {
         return (dAcBase_c *)fManager_c::searchBaseByGroupType(STAGE, parent);
     }
+
+    return foundActor;
 }
 
 // 8002d130
@@ -331,7 +398,7 @@ void dAcBase_c::forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *p
 
 // 8002d190
 mAng dAcBase_c::getXZAngleToPlayer() {
-    return targetAngleY(&this->position, &dAcPy_c::LINK->position);
+    return cLib::targetAngleY(this->position, dAcPy_c::LINK->position);
 }
 
 // 8002d1d0
@@ -354,16 +421,12 @@ bool dAcBase_c::getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDis
     return isWithinThreshhold;
 }
 
-s32 doAbs(s16 val) {
-    return labs(val);
-}
-// Similar weirdness as the above function. Also, r29->31 are initted in the
-// wrong order? 8002d290
+// 8002d290
 bool dAcBase_c::getDistanceAndAngleToActor(
     dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX
 ) {
     f32 distSquared = 3.402823e+38f;
-    s16 angleToActorY, angleToActorX;
+    s32 angleToActorY, angleToActorX;
     bool isWithinRange = false;
 
     angleToActorY = 0;
@@ -371,11 +434,12 @@ bool dAcBase_c::getDistanceAndAngleToActor(
 
     if (actor != nullptr) {
         distSquared = PSVECSquareDistance(position, actor->position);
-        angleToActorY = targetAngleY(&position, &actor->position);
-        angleToActorX = targetAngleX(&position, &actor->position);
+        angleToActorY = cLib::targetAngleY(position, actor->position);
+        angleToActorX = cLib::targetAngleX(position, actor->position);
 
-        if ((distSquared <= distThresh * distThresh) && (doAbs(s32(rotation.y.mVal - angleToActorY)) <= yAngle) &&
-            (doAbs(s32(rotation.x.mVal - angleToActorX)) <= xAngle)) {
+        // These casts are nuts wild ^^'
+        if ((distSquared <= distThresh * distThresh) && (labs(s16(rotation.y.mVal - (s16)angleToActorY)) <= yAngle) &&
+            (labs(s16(rotation.x.mVal - (s16)angleToActorX)) <= xAngle)) {
             isWithinRange = true;
         }
     }
@@ -424,8 +488,8 @@ void dAcBase_c::updateRoomId(f32 yOffset) {
     if (getConnectParent()->profile_name != fProfile::ROOM) {
         mVec3_c actorPos(position.x, position.y + yOffset, position.z);
 
-        if (checkCollision(&actorPos)) {
-            roomid = collisionCheckGetRoom();
+        if (dBgS_ObjGndChk::CheckPos(actorPos)) {
+            roomid = dBgS_ObjGndChk::GetRoomID();
         } else {
             roomid = dStage_c::GetInstance()->getCurrRoomId();
         }
@@ -463,8 +527,38 @@ SoundSource *dAcBase_c::getSoundSource() {
 // End of SoundSource stuff
 
 // first param is not dAcBase_c
+// - are we sure? 8002c1a0 seems to suggest otherwise but this func does behave very weird
+// NOT MATCHING
 // 8002d890
-void dAcBase_c::FUN_8002d890() {}
+void dAcBase_c::FUN_8002d890(SoundInfo *soundInfo) {
+    void *unk1;
+
+    if (soundInfo->mLink.mpNext == nullptr || (soundInfo->mLink.mpPrev == nullptr)) {
+        unk1 = heap_allocator.mHeap;
+    } else {
+        unk1 = soundInfo;
+    }
+
+    void *unk2 = &heap_allocator.mHeap;
+
+    if (unk1 != unk2) {
+        if (unk2 == soundInfo->mLink.mpPrev) {
+            sound_list.mStartEnd.mpNext = soundInfo->mLink.mpNext;
+        } else {
+            soundInfo->mLink.mpPrev->mLink.mpNext = soundInfo->mLink.mpNext;
+        }
+
+        if (unk2 == soundInfo->mLink.mpNext) {
+            sound_list.mStartEnd.mpPrev = soundInfo->mLink.mpPrev;
+        } else {
+            soundInfo->mLink.mpNext->mLink.mpPrev = soundInfo->mLink.mpPrev;
+        }
+
+        soundInfo->mLink.mpPrev = nullptr;
+        soundInfo->mLink.mpNext = nullptr;
+        sound_list.mCount -= 1;
+    }
+}
 
 // current name is Global__setActorRef
 void dAcBase_c::setActorRef(dAcBase_c *ref) {
@@ -511,7 +605,7 @@ dAcBase_c *dAcBase_c::createActor(
     u32 newParams2 = actorParams2 != 0 ? getParams2_ignoreLower() : -1;
 
     setTempCreateParams(
-        actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1, 0xFF, nullptr
+        actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1, -1, nullptr
     );
     dBase_c *room = dStage_c::getParentForRoom(roomid);
     return (dAcBase_c *)dBase_c::createBase(actorId, room, actorParams1, ACTOR);
@@ -542,7 +636,7 @@ dAcBase_c *dAcBase_c::createActorStage(
     u32 newParams2 = actorParams2 != 0 ? getParams2_ignoreLower() : -1;
 
     setTempCreateParams(
-        actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1, 0xFF, nullptr
+        actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1, -1, nullptr
     );
     dBase_c *room = dStage_c::getParentForRoom(roomid);
     return (dAcBase_c *)dBase_c::createBase(actorId, room, actorParams1, STAGE);
@@ -562,9 +656,19 @@ void dAcBase_c::doInteraction(s32 param) {
     }
 }
 
-// Only called by dPlayer::dig and that function fails to decomp in ghidra?
+// Only called by dPlayer::dig
+// Rounds angle to nearest 90 deg?
 // 8002dc20
-void dAcBase_c::FUN_8002dc20(s16 *, s16 *) {}
+void roundAngleToNearest90(s16 *dst_angle, s16 *src_angle) {
+    s32 roundedAngle = *src_angle;
+
+    if (roundedAngle < 0) {
+        roundedAngle += 0x10000;
+    }
+    roundedAngle += 0x2000;
+
+    *dst_angle = (roundedAngle / 0x4000) * 0x4000;
+}
 
 // 8002dc50
 void dAcBase_c::incrementKillCounter() {
@@ -582,37 +686,40 @@ void dAcBase_c::incrementKillCounter() {
 }
 
 // 8002dcd0
-void dAcBase_c::FUN_8002dcd0() {
+void dAcBase_c::killNoItemDrop() {
     fillUpperParams2Byte();
     fBase_c::deleteRequest();
     incrementKillCounter();
 }
 
 // 8002dd10
-void dAcBase_c::FUN_8002dd10() {
+void dAcBase_c::killWithFlag() {
     setEnemyDefeatFlag();
     fBase_c::deleteRequest();
     incrementKillCounter();
 }
 
 // 8002dd50
-void dAcBase_c::FUN_8002dd50() {
+void dAcBase_c::killWithFlagNoItemDrop() {
     fillUpperParams2Byte();
-    FUN_8002dd10();
+    killWithFlag();
 }
 
 // 8002dd90
-void dAcBase_c::FUN_8002dd90() {
+void dAcBase_c::deleteWithFlagNoItemDrop() {
     fillUpperParams2Byte();
     setEnemyDefeatFlag();
     fBase_c::deleteRequest();
 }
 
-// Some collision related thing
 // 8002ddd0
-void dAcBase_c::FUN_8002ddd0() {}
+void dAcBase_c::setPolyAttrs(cBgS_PolyInfo &pPolyInfo) {
+    polyAttr0 = dBgS::GetInstance()->GetPolyAtt0(pPolyInfo);
+    polyAttr1 = dBgS::GetInstance()->GetPolyAtt1(pPolyInfo);
+}
 
+// Idk what's up with this function. It's only used once.
 // 8002de30
-void dAcBase_c::FUN_8002de30(cBgS_PolyInfo &p) {
-    FUN_8002ddd0();
+void dAcBase_c::setPolyAttrsDupe(cBgS_PolyInfo &pPolyInfo) {
+    setPolyAttrs(pPolyInfo);
 }

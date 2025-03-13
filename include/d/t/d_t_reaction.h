@@ -4,7 +4,6 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/cc/d_cc_d.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/dowsing_target.h"
 
 class dTgReaction_c : public dAcObjBase_c {
@@ -58,7 +57,7 @@ private:
     void checkForSlingBellowsItem();
 
     bool fn_578_DB0(const mVec3_c &pos, u32 arg);
-    bool spawnHearts(s32 params, const mVec3_c &pos, s32 arg, mAng angle);
+    bool spawnHearts(s32 params, mVec3_c *pos, s32 arg, mAng angle);
 
     STATE_MGR_DECLARE(dTgReaction_c);
     dCcD_Cyl mCollision;
