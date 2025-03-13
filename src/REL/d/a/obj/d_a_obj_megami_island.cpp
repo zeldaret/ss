@@ -73,7 +73,7 @@ bool dAcOmegamiIsland_c::createHeap() {
         mBgW.OnFlag0x20();
     }
 
-    return (BOOL)mBgW.InitMapStuff(&heap_allocator);
+    return mBgW.InitMapStuff(&heap_allocator);
 }
 
 int dAcOmegamiIsland_c::create() {

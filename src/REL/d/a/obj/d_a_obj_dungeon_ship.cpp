@@ -93,7 +93,7 @@ bool dAcODungeonShip_c::createHeap() {
     if (!SceneflagManager::sInstance->checkBoolFlag(roomid, (params >> 0x10) & 0xFF)) {
         goto ok;
     } else {
-        bool result = (BOOL)mBg.InitMapStuff(&heap_allocator);
+        bool result = mBg.InitMapStuff(&heap_allocator);
         if (result == false) {
             return false;
         }
@@ -459,9 +459,7 @@ void dAcODungeonShip_c::fn_485_1720() {
     field_0x84C = tmp2;
 }
 
-bool dAcODungeonShip_c::fn_485_1830(s32 pathSegmentIndex, s32 direction, s32 *out) {
-
-}
+bool dAcODungeonShip_c::fn_485_1830(s32 pathSegmentIndex, s32 direction, s32 *out) {}
 
 u16 dAcODungeonShip_c::fn_485_1900() {
     s32 sign = mPath.CheckFlag(0x40000000) ? -1 : 1;
@@ -501,13 +499,9 @@ void dAcODungeonShip_c::fn_485_1A70(mVec3_c *v) {
     v->set(0.0f, 0.0f, 0.0f);
 }
 
-void dAcODungeonShip_c::fn_485_1A90() {
-    
-}
+void dAcODungeonShip_c::fn_485_1A90() {}
 
-void dAcODungeonShip_c::fn_485_1BF0() {
-    
-}
+void dAcODungeonShip_c::fn_485_1BF0() {}
 
 void dAcODungeonShip_c::fn_485_1DF0() {
     const dAcPy_c *link = dAcPy_c::GetLink();
