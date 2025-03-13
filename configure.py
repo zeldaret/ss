@@ -1567,7 +1567,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_shed", "REL/d/a/obj/d_a_obj_shed.cpp"),
     Rel(NonMatching, "d_a_obj_ship_window", "REL/d/a/obj/d_a_obj_ship_window.cpp"),
     Rel(Matching, "d_a_obj_shrine_after", "REL/d/a/obj/d_a_obj_shrine_after.cpp"),
-    Rel(NonMatching, "d_a_obj_shrine_before", "REL/d/a/obj/d_a_obj_shrine_before.cpp"),
+    Rel(Matching, "d_a_obj_shrine_before", "REL/d/a/obj/d_a_obj_shrine_before.cpp"),
     Rel(
         NonMatching,
         "d_a_obj_shrine_bef_inside",

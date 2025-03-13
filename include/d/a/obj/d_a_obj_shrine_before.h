@@ -6,7 +6,15 @@
 class dAcOshrineBefore_c : public dAcObjBase_c {
 public:
     dAcOshrineBefore_c() {}
+    virtual int create() override;
+    virtual int doDelete() override;
+    virtual int draw() override;
+    virtual bool createHeap() override;
     virtual ~dAcOshrineBefore_c() {}
+    virtual int actorExecute() override;
+
+    nw4r::g3d::ResFile mResFile;
+    m3d::smdl_c mModel;
 
 private:
 };
