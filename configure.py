@@ -1398,7 +1398,7 @@ config.libs = [
     ),
     Rel(NonMatching, "d_a_obj_farmland", "REL/d/a/obj/d_a_obj_farmland.cpp"),
     Rel(NonMatching, "d_a_obj_fence", "REL/d/a/obj/d_a_obj_fence.cpp"),
-    Rel(NonMatching, "d_a_obj_fence_boko2", "REL/d/a/obj/d_a_obj_fence_boko2.cpp"),
+    Rel(Matching, "d_a_obj_fence_boko2", "REL/d/a/obj/d_a_obj_fence_boko2.cpp"),
     Rel(Matching, "d_a_obj_fence_boko", "REL/d/a/obj/d_a_obj_fence_boko.cpp"),
     Rel(NonMatching, "d_a_obj_fence_iron", "REL/d/a/obj/d_a_obj_fence_iron.cpp"),
     Rel(NonMatching, "d_a_obj_fence_konsai", "REL/d/a/obj/d_a_obj_fence_konsai.cpp"),
