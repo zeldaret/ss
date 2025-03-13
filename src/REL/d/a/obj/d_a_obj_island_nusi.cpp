@@ -43,8 +43,7 @@ bool dAcOislandNusi_c::createHeap() {
     }
     TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mBgW.Lock();
-    // TODO InitMapStuff bool vs BOOL
-    return (BOOL)mBgW.InitMapStuff(&heap_allocator);
+    return mBgW.InitMapStuff(&heap_allocator);
 }
 
 int dAcOislandNusi_c::create() {

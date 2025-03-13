@@ -22,9 +22,7 @@ bool dAcOutajimaLv2_c::createHeap() {
     mMdl.setLocalMtx(mWorldMtx);
     TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mBgW.Lock();
-    // TODO InitMapStuff says it already returns a bool
-    BOOL ok = mBgW.InitMapStuff(&heap_allocator);
-    return ok;
+    return mBgW.InitMapStuff(&heap_allocator);
 }
 
 int dAcOutajimaLv2_c::create() {

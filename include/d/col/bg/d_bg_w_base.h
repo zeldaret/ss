@@ -60,7 +60,7 @@ public:
     dBgW_Base();
     void ClrDBgWBase();
     void CalcDiffShapeAngleY(s16);
-    bool InitMapStuff(mAllocator_c *pAllocator);
+    BOOL InitMapStuff(mAllocator_c *pAllocator);
     bool fn_8034AD70() const;
     bool fn_8034ADA0() const;
     void RegistBg(int id);

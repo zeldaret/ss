@@ -61,7 +61,7 @@ void dBgW_Base::SetOldShapeAngleY(s16 oldShapeAngleY) {
     mOldShapeAngleY = oldShapeAngleY;
 }
 
-bool dBgW_Base::InitMapStuff(mAllocator_c *pAllocator) {
+BOOL dBgW_Base::InitMapStuff(mAllocator_c *pAllocator) {
     ClearMap();
     return UpdateDraw(pAllocator) != false;
 }
