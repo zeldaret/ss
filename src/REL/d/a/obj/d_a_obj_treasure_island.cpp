@@ -84,7 +84,7 @@ int dAcOtreasureIsland_c::create() {
     }
 
     boundingBox.Set(mVec3_c(-1850.0f, -2050.0f, -1900.0f), mVec3_c(1950.0f, 2500.0f, 1850.0f));
-    mCullingDistance = 500000.0;
+    mCullingDistance = 500000.0f;
     return SUCCEEDED;
 }
 
