@@ -5,12 +5,12 @@
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/d_heap.h"
 #include "d/d_room.h"
 #include "d/d_sc_game.h"
 #include "d/d_stage.h"
 #include "d/flag/enemyflag_manager.h"
-#include "d\col\bg\d_bg_s_gnd_chk.h"
 #include "egg/core/eggAllocator.h"
 #include "f/f_base.h"
 #include "f/f_list_nd.h"
@@ -19,6 +19,7 @@
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/special_item_drop_mgr.h"
+
 
 // .sdata
 u32 dAcBase_c::s_Create_RoomId = -1;
