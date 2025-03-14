@@ -15,7 +15,7 @@ int dAcOshrineBefore_c::create() {
     mModel.setLocalMtx(mWorldMtx);
     mModel.setPriorityDraw(0x1C, 0x9);
     boundingBox.Set(mVec3_c(-4000.0f, 7000.0f, 5000.0f), mVec3_c(4000.0f, 13000.0f, 14000.0f));
-    mCullingDistance = 50000.0;
+    mCullingDistance = 50000.0f;
     return SUCCEEDED;
 }
 
