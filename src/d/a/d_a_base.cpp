@@ -49,7 +49,6 @@ bool dAcBase_c::createHeap() {
 dAcBase_c::dAcBase_c()
     : heap_allocator(),
       obj_info(s_Create_ObjInfo),
-      sound_source(nullptr),
       sound_list(),
       obj_pos(&position),
       params2(s_Create_Params2),
@@ -227,7 +226,6 @@ int dAcBase_c::preDelete() {
     return true;
 }
 
-// NOT MATCHING
 // 8002cb10
 int dAcBase_c::preExecute() {
     if (dBase_c::preExecute() == NOT_READY) {
@@ -238,20 +236,17 @@ int dAcBase_c::preExecute() {
             return NOT_READY;
         }
 
-        // TODO: Fix event control
-        if (EventManager::isInEvent() && JStudio_actor == nullptr && !EventManager::isInEventOtherThan7() &&
-            !EventManager::Get_FUN_800a0ba0() && !EventManager::Get_FUN_800a0570(this) && !checkActorProperty(0x4)) {
+        if (EventManager::isInEvent() && JStudio_actor == nullptr && !EventManager::isInEvent0Or7() &&
+            !EventManager::FUN_800a0ba0() && !EventManager::FUN_800a0570(this) && !checkActorProperty(0x4)) {
             return NOT_READY;
         }
     }
     return SUCCEEDED;
 }
 
-// Still needs some work in EventManager to match
-// NOT MATCHED
 // 8002cc10
 int dAcBase_c::execute() {
-    if (EventManager::isInEvent() && !EventManager::isInEventOtherThan7()) {
+    if (EventManager::isInEvent() && !EventManager::isInEvent0Or7()) {
         return actorExecuteInEvent();
     }
 
@@ -522,7 +517,7 @@ void dAcBase_c::FUN_8002d860() {}
 
 // 8002d880
 SoundSource *dAcBase_c::getSoundSource() {
-    return sound_source;
+    return sound_source.get();
 }
 // End of SoundSource stuff
 

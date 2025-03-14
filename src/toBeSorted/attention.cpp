@@ -164,7 +164,7 @@ bool AttentionManager::checkLink2() const {}
 bool AttentionManager::execute() {
     field_0xBDC = 0;
     if (!isInNormalGameState() && !field_0xBD5) {
-        if (!EventManager::isInEvent() && !EventManager::isInEventOtherThan7()) {
+        if (!EventManager::isInEvent() || !EventManager::isInEventOtherThan0Or7()) {
             return false;
         }
 

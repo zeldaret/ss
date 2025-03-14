@@ -6,13 +6,14 @@
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
+#include "toBeSorted/raii_ptr.h"
 #include "toBeSorted/tlist.h"
 
 class dAcBase_c;
 struct cBgS_PolyInfo;
 
 struct SoundSource {
-    // TODO
+    virtual ~SoundSource() {}
 };
 
 struct SoundInfo {
@@ -71,7 +72,7 @@ public:
     /* 0x68 */ mHeapAllocator_c heap_allocator;
     /* 0x84 */ ObjInfo *obj_info;
     /* 0x88 */ TList<SoundInfo, 12> sound_list;
-    /* 0x94 */ SoundSource *sound_source;
+    /* 0x94 */ RaiiPtr<SoundSource> sound_source;
     /* 0x98 */ mVec3_c *obj_pos;
     /* 0x9C */ mVec3_c pos_copy;
     /* 0xA8 */ u32 params2;
