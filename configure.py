@@ -1569,7 +1569,7 @@ config.libs = [
     Rel(Matching, "d_a_obj_shrine_after", "REL/d/a/obj/d_a_obj_shrine_after.cpp"),
     Rel(Matching, "d_a_obj_shrine_before", "REL/d/a/obj/d_a_obj_shrine_before.cpp"),
     Rel(
-        NonMatching,
+        Matching,
         "d_a_obj_shrine_bef_inside",
         "REL/d/a/obj/d_a_obj_shrine_bef_inside.cpp",
     ),
