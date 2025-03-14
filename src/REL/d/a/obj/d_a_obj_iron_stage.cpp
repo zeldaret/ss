@@ -23,7 +23,7 @@ int dAcOironStage_c::create() {
     dBgS::GetInstance()->Regist(&mCollision, this);
     mModel.setPriorityDraw(0x1C, 0x9);
     boundingBox.Set(mVec3_c(-460.0f, -210.0f, -260.0f), mVec3_c(460.0f, 210.0f, 260.0f));
-    mCullingDistance = 15000.0;
+    mCullingDistance = 15000.0f;
     return SUCCEEDED;
 }
 

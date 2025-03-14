@@ -44,9 +44,9 @@ int dAcOpumpkinBar_c::create() {
     // 100000.0 is in the rodata and the instructions need it.
     // This also works if a separate variable is used but I
     // think it's more likely that mCullingDistance got set twice.
-    mCullingDistance = 100000.0;
+    mCullingDistance = 100000.0f;
     boundingBox.Set(mVec3_c(-2790.0f, -1450.0f, -8270.0f), mVec3_c(2880.0f, 2120.0f, 1370.0f));
-    mCullingDistance = 500000.0;
+    mCullingDistance = 500000.0f;
     mBarCollision.SetRideCallback(barCollisionRideCallback);
     return SUCCEEDED;
 }
