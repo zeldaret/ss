@@ -15,7 +15,7 @@ public:
 
     virtual int getType() const override;
     virtual void remove() override;
-    virtual void setAnm(banm_c &anm);
+    virtual bool setAnm(banm_c &anm);
     virtual void play();
 
     int getMatID(const char *name) const;

@@ -14,8 +14,8 @@ void mdlAnmChr::setFrame(f32 f) {
     mAnm.setFrameOnly(f);
 }
 
-void mdlAnmChr::setAnm(const char *name, playMode_e mode) {
-    setAnm(name, mode, 0.0f);
+bool mdlAnmChr::setAnm(const char *name, playMode_e mode) {
+    return setAnm(name, mode, 0.0f);
 }
 
 void mdlAnmChr::setRate(f32 rate) {
@@ -75,13 +75,13 @@ bool mdlAnmChr::create(
     return create(resFile, resFile, mdlName, anmName, nullptr, alloc, bufferOption, nView, pSize);
 }
 
-void mdlAnmChr::setAnm(const char *name, playMode_e mode, f32 blend) {
+bool mdlAnmChr::setAnm(const char *name, playMode_e mode, f32 blend) {
     nw4r::g3d::ResAnmChr anm = mAnmFile.GetResAnmChr(name);
     if (!anm.IsValid()) {
         anm = mMdlFile.GetResAnmChr(name);
     }
     mAnm.setAnm(mMdl, anm, mode);
-    mMdl.setAnm(mAnm, blend);
+    return mMdl.setAnm(mAnm, blend);
 }
 
 } // namespace m3d

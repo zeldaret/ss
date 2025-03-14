@@ -494,6 +494,16 @@ public:
         return ResName(NULL);
     }
 
+    const char *GetTexName() const {
+        const ResTexPlttInfoData &r = ref();
+
+        if (r.nameTex != 0) {
+            return NW4R_G3D_OFS_TO_RESNAME(&r, r.nameTex).GetName();
+        }
+
+        return nullptr;
+    }
+
     bool IsCIFmt() const {
         return ref().namePltt != 0;
     }

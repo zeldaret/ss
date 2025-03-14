@@ -81,6 +81,7 @@ public:
     void GXSetIndTexOrder(GXIndTexStageID stage, GXTexCoordID coord, GXTexMapID map);
 
     void GXSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXTevColorArg c, GXTevColorArg d);
+    void GXSetTevAlphaIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXTevColorArg c, GXTevColorArg d);
 
     void CallDisplayList(bool sync) const;
 

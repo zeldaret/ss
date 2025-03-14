@@ -4,7 +4,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_w.h"
 #include "m/m3d/m_anmtexsrt.h"
-#include "toBeSorted/unk_with_water.h"
+#include "toBeSorted/d_d3d.h"
 
 class dAcOtreasureIsland_c : public dAcObjBase_c {
 public:
@@ -20,7 +20,7 @@ private:
     const static f32 unkFloat0;
     const static f32 unkFloat1;
 
-    /* 0x330 */ UnkWithWater waterStuff;
+    /* 0x330 */ d3d::UnkWithWater waterStuff;
     /* 0x348 */ m3d::smdl_c mModel;
     /* 0x364 */ m3d::smdl_c mWater00;
     /* 0x380 */ m3d::smdl_c mWater01;
