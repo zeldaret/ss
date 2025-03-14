@@ -1688,7 +1688,7 @@ config.libs = [
     ),
     Rel(Matching, "d_a_obj_trap_rock_1", "REL/d/a/obj/d_a_obj_trap_rock_1.cpp"),
     Rel(
-        NonMatching,
+        Matching,
         "d_a_obj_treasure_island",
         "REL/d/a/obj/d_a_obj_treasure_island.cpp",
     ),
