@@ -240,7 +240,8 @@ int dAcBase_c::preExecute() {
 
         // TODO: Fix event control
         if (EventManager::isInEvent() && JStudio_actor == nullptr && !EventManager::isInEventOtherThan7() &&
-            !EventManager::FUN_800a0ba0() && !EventManager::FUN_800a0570(this) && (actor_properties & 0x4) == 0) {
+            !EventManager::Get_FUN_800a0ba0() && !EventManager::Get_FUN_800a0570(this) &&
+            (actor_properties & 0x4) == 0) {
             return NOT_READY;
         }
     }

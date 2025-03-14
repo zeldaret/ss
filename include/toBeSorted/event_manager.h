@@ -35,6 +35,15 @@ public:
         return strequals(getCurrentEventName(), name);
     }
 
+    static bool Get_FUN_800a0570(dAcBase_c *actor) {
+        return FUN_800a0570(actor);
+    }
+
+    static bool Get_FUN_800a0ba0() {
+        return FUN_800a0ba0();
+    }
+
+private:
     // Something like isActorInEvent maybe?
     static bool FUN_800a0570(dAcBase_c *actor) {};
     static bool FUN_800a0ba0() {};
@@ -44,8 +53,6 @@ public:
     /* 0x0C4 */ u8 _0C4[0x184 - 0x0C4];
     /* 0x184 */ int mState;
     /* 0x18C */ u8 _18C[0x19C - 0x18C];
-
-private:
 };
 
 #endif
