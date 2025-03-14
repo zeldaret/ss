@@ -160,7 +160,7 @@ public:
 protected:
     Pane *mpParent;                                // at 0x0C
     ut::LinkList<Pane, 4> mChildList;              // at 0x10
-    ut::LinkList<AnimationLink, 0> mAnimList;      // at 0x1C;
+    ut::LinkList<AnimationLink, 0> mAnimList;      // at 0x1C
     Material *mpMaterial;                          // at 0x28
     math::VEC3 mTranslate;                         // at 0x2C
     math::VEC3 mRotate;                            // at 0x38

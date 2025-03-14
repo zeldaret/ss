@@ -93,7 +93,7 @@ bool dAcODungeonShip_c::createHeap() {
     if (!SceneflagManager::sInstance->checkBoolFlag(roomid, (params >> 0x10) & 0xFF)) {
         goto ok;
     } else {
-        bool result = (BOOL)mBg.InitMapStuff(&heap_allocator);
+        bool result = mBg.InitMapStuff(&heap_allocator);
         if (result == false) {
             return false;
         }

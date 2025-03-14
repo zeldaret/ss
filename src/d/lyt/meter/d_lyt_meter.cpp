@@ -130,7 +130,7 @@ bool dLytMeter1Button_c::remove() {
     return true;
 }
 
-bool dLytMeter1Button_c::LytMeter0x14() {
+bool dLytMeter1Button_c::execute() {
     if (*mStateMgr.getStateID() == StateID_ToUnuse) {
         // TODO
     } else {
@@ -238,7 +238,7 @@ bool dLytMeter2Button_c::remove() {
     return true;
 }
 
-bool dLytMeter2Button_c::LytMeter0x14() {
+bool dLytMeter2Button_c::execute() {
     if (*mStateMgr.getStateID() == StateID_ToUnuse) {
         // TODO
     } else {

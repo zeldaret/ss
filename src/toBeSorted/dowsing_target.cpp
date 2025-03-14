@@ -136,9 +136,12 @@ bool DowsingTarget::hasDowsingInSlot(int slot) {
     } else if (slot == 2) {
         return hasCrystalBallDowsing() || hasPumpkinDowsing() || hasNewPlantSpeciesDowsing() || hasKikwiDowsing() ||
                hasKeyPieceDowsing() || hasDesertNodeDowsing() || hasPartyWheelDowsing();
-    } else if (StoryflagManager::sInstance->getCounterOrFlag(DOWSING_TARGET_STORY_FLAGS[slot])) {
-        // TODO small instruction shuffle
-        return true;
+    } else {
+        u16 flag = DOWSING_TARGET_STORY_FLAGS[slot];
+        flag = StoryflagManager::sInstance->getCounterOrFlag(flag);
+        if (flag != 0) {
+            return true;
+        }
     }
 
     return false;
@@ -199,22 +202,13 @@ void DowsingTarget::init() {}
 
 void DowsingTarget::execute() {}
 
-// Not sure what this is
-inline static TListNode<DowsingTarget> *getNode(u8 slot, DowsingTarget *t) {
-    if (t->mLink.mpNext == nullptr || t->mLink.mpPrev == nullptr) {
-        return &DOWSING_LISTS[slot].mStartEnd;
-    } else {
-        return &t->mLink;
-    }
-}
-
 static bool insertDowsingTarget(DowsingTarget *target) {
     u8 slot = target->getSlot();
     if (slot == DowsingTarget::SLOT_NONE) {
         return false;
     }
 
-    if (getNode(slot, target) != &DOWSING_LISTS[slot].mStartEnd) {
+    if (DOWSING_LISTS[slot].GetPosition(target) != DOWSING_LISTS[slot].GetEndIter()) {
         return false;
     }
     DOWSING_LISTS[slot].insert(target);
@@ -227,7 +221,7 @@ static bool removeDowsingTarget(DowsingTarget *target) {
         return false;
     }
 
-    if (getNode(slot, target) != &DOWSING_LISTS[slot].mStartEnd) {
+    if (DOWSING_LISTS[slot].GetPosition(target) != DOWSING_LISTS[slot].GetEndIter()) {
         DOWSING_LISTS[slot].remove(target);
         return true;
     }

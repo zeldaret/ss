@@ -409,10 +409,10 @@ d/lyt/d_lyt_msg_window_select_btn.cpp:
 	.ctors      start:0x804DB73C end:0x804DB740
 
 d/lyt/d_lyt_msg_window_base.cpp:
-	.text       start:0x80120A20 end:0x80120A98
+	.text       start:0x80120A20 end:0x80121068
 
 d/lyt/d_lyt_msg_window_talk.cpp:
-	.text       start:0x80120AA0 end:0x801223C8
+	.text       start:0x80121070 end:0x801223C8
 	.ctors      start:0x804DB740 end:0x804DB744
 
 d/lyt/d_lyt_msg_window_link.cpp:
@@ -505,8 +505,11 @@ d/lyt/d_lyt_help.cpp:
 d/lyt/d_lyt_bird_gauge.cpp:
 	.text       start:0x80152FD0 end:0x801548D8
 	.ctors      start:0x804DB784 end:0x804DB788
+	.rodata     start:0x804E80F8 end:0x804E8138
 	.data       start:0x80524020 end:0x80524510
 	.sbss       start:0x805754E0 end:0x805754E8
+	.sdata2     start:0x8057A038 end:0x8057A040
+	.bss        start:0x805B0FB0 end:0x805B1230
 
 d/lyt/d_lyt_sky_gauge.cpp:
 	.text       start:0x801548E0 end:0x80155CC8

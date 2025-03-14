@@ -406,6 +406,15 @@ bool dLytMeterDrink_c::build(d2d::ResAccIf_c *resAcc) {
     return true;
 }
 
+bool dLytMeterDrink_c::remove() {
+    for (int i = 0; i < 20; i++) {
+        mAnmGroups[i].unbind();
+        mAnmGroups[i].afterUnbind();
+    }
+
+    return true;
+}
+
 bool dLytMeterDrink_c::execute() {
     mStateMgr.executeState();
 
@@ -420,27 +429,9 @@ bool dLytMeterDrink_c::execute() {
     return true;
 }
 
-bool dLytMeterDrink_c::remove() {
-    for (int i = 0; i < 20; i++) {
-        mAnmGroups[i].unbind();
-        mAnmGroups[i].afterUnbind();
-    }
-
-    return true;
-}
-
 bool dLytMeterDrink_c::draw() {
     mLyt.addToDrawList();
     return true;
-}
-
-int dLytMeterDrink_c::getPartForDrinkType(dLytMeterDrinkParts_c::DrinkType_e ty) const {
-    for (int i = 0; i < 3; i++) {
-        if (ty == mParts[i].mDrinkType) {
-            return i;
-        }
-    }
-    return 3;
 }
 
 bool dLytMeterDrink_c::fn_800E5C40(int i) {
@@ -460,6 +451,15 @@ bool dLytMeterDrink_c::fn_800E5C40(int i) {
     }
 
     return false;
+}
+
+int dLytMeterDrink_c::getPartForDrinkType(dLytMeterDrinkParts_c::DrinkType_e ty) const {
+    for (int i = 0; i < 3; i++) {
+        if (ty == mParts[i].mDrinkType) {
+            return i;
+        }
+    }
+    return 3;
 }
 
 void dLytMeterDrink_c::executeInternal() {

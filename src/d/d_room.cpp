@@ -248,13 +248,13 @@ bool dRoom_c::setupBg() {
             bg->Set(kcl, plc);
             bg->SetRoomId(roomid);
             bg->SetPriority(dBgW_Base::PRIORITY_0);
-            bool ok = (BOOL)bg->InitMapStuff(&mAllocator);
+            bool ok = bg->InitMapStuff(&mAllocator);
             if (!ok) {
                 return true;
             }
 
             if (mCanHavePastState && !mHasAnmTexPat) {
-                bg->SetUnkBase();
+                bg->SetUnkBase(1);
             }
             // ???
             dBgS::GetInstance()->Regist(bg, (dAcObjBase_c *)nullptr);

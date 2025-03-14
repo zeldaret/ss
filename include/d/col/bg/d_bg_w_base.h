@@ -60,7 +60,7 @@ public:
     dBgW_Base();
     void ClrDBgWBase();
     void CalcDiffShapeAngleY(s16);
-    bool InitMapStuff(mAllocator_c *pAllocator);
+    BOOL InitMapStuff(mAllocator_c *pAllocator);
     bool fn_8034AD70() const;
     bool fn_8034ADA0() const;
     void RegistBg(int id);
@@ -176,8 +176,8 @@ public:
     void SetPriority(PRIORITY priority) {
         mPriority = priority;
     }
-    void SetUnkBase() {
-        mField_0x18.field_0x00 = 1;
+    void SetUnkBase(u8 val) {
+        mField_0x18.field_0x00 = val;
     }
     void OnStickWall() {
         field_0x24 |= 1;

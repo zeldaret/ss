@@ -7,6 +7,7 @@
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/sceneflag_manager.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0x0151, 0, 0);
 
@@ -158,9 +159,6 @@ void dTgReaction_c::executeState_Wait() {
 }
 void dTgReaction_c::finalizeState_Wait() {}
 
-extern "C" void *SOUND_EFFECT_SOUND_MGR;
-extern "C" void SmallSoundManager__playSound(void *, u16);
-
 void dTgReaction_c::checkForBonkItem() {
     if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x2000)) {
         mVec3_c diff = position - dAcPy_c::LINK->position;
@@ -181,7 +179,7 @@ void dTgReaction_c::checkForBonkItem() {
                 if (dAcObjBase_c::create(fProfile::ITEM, roomid, newItemParms, &c2, nullptr, nullptr, 0xFFFFFFFF)) {
                     field_0x4DD = 1;
                     onDelete();
-                    SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AD); // TODO (Sound ID)
+                    SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
                 }
             }
         } else {
@@ -203,7 +201,7 @@ void dTgReaction_c::checkForBonkItem() {
 
             pos.y += field_0x4E4;
             if (fn_578_DB0(pos, uVar3)) {
-                SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AE); // TODO (Sound ID)
+                SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_B);
             }
             SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
             onDelete();
@@ -237,7 +235,7 @@ void dTgReaction_c::checkForSlingBellowsItem() {
         mVec3_c spawnPos = position;
         spawnPos.y += field_0x4E4;
         if (fn_578_DB0(spawnPos, uVar3)) {
-            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AE); // TODO (Sound ID)
+            SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_B);
         }
         SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
         onDelete();
