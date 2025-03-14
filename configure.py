@@ -1524,7 +1524,7 @@ config.libs = [
         NonMatching, "d_a_obj_propeller_lift", "REL/d/a/obj/d_a_obj_propeller_lift.cpp"
     ),
     Rel(NonMatching, "d_a_obj_propera", "REL/d/a/obj/d_a_obj_propera.cpp"),
-    Rel(NonMatching, "d_a_obj_pumpkin_bar", "REL/d/a/obj/d_a_obj_pumpkin_bar.cpp"),
+    Rel(Matching, "d_a_obj_pumpkin_bar", "REL/d/a/obj/d_a_obj_pumpkin_bar.cpp"),
     Rel(Matching, "d_a_obj_pumpkin_leaf", "REL/d/a/obj/d_a_obj_pumpkin_leaf.cpp"),
     Rel(NonMatching, "d_a_obj_push_block", "REL/d/a/obj/d_a_obj_push_block.cpp"),
     Rel(NonMatching, "d_a_obj_puzzle_island", "REL/d/a/obj/d_a_obj_puzzle_island.cpp"),
@@ -1688,7 +1688,7 @@ config.libs = [
     ),
     Rel(Matching, "d_a_obj_trap_rock_1", "REL/d/a/obj/d_a_obj_trap_rock_1.cpp"),
     Rel(
-        NonMatching,
+        Matching,
         "d_a_obj_treasure_island",
         "REL/d/a/obj/d_a_obj_treasure_island.cpp",
     ),

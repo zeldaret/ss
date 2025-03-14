@@ -200,6 +200,9 @@ public:
     u16 GetField_0x22() const {
         return field_0x22;
     }
+    void SetField_0x22(u16 val) {
+        field_0x22 = val;
+    }
 
     bool ChkStickWall() const {
         return field_0x24 & 1;
