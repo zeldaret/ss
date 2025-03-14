@@ -2,6 +2,8 @@
 #define NW4R_G3D_RES_RES_MAT_H
 #include <nw4r/types_nw4r.h>
 
+#include "common.h"
+#include "rvl/GX/GXTypes.h"
 #include <nw4r/g3d/res/g3d_resanmtexsrt.h>
 #include <nw4r/g3d/res/g3d_rescommon.h>
 #include <nw4r/g3d/res/g3d_respltt.h>
@@ -100,6 +102,7 @@ public:
 
     GXBool GXGetZCompLoc() const;
     int GetLightSetIdx() const;
+    void SetLightSetIdx(int idx);
     int GetFogIdx() const;
 
     void GetIndirectTexMtxCalcMethod(GXIndTexMtxID id, ResMatMiscData::IndirectMethod *pMethod, s8 *pLightRef);
@@ -485,6 +488,16 @@ public:
         }
 
         return ResName(NULL);
+    }
+
+    const char *GetTexName() const {
+        const ResTexPlttInfoData &r = ref();
+
+        if (r.nameTex != 0) {
+            return NW4R_G3D_OFS_TO_RESNAME(&r, r.nameTex).GetName();
+        }
+
+        return nullptr;
     }
 
     bool IsCIFmt() const {

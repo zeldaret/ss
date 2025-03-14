@@ -15,9 +15,9 @@ public:
 
     virtual void play();                                         // 0x0C
     virtual void setFrame(f32);                                  // 0x10
-    virtual void setAnm(const char *name, playMode_e mode, f32); // 0x14
-    virtual void setAnm(const char *name, playMode_e mode);      // 0x18
-    virtual void setRate(f32);                                   // 0x20
+    virtual bool setAnm(const char *name, playMode_e mode, f32); // 0x14
+    virtual bool setAnm(const char *name, playMode_e mode);      // 0x18
+    virtual void setRate(f32);                                   // 0x1C
 
     bool create(
         void *mdlFile, void *anmFile, const char *mdlName, const char *anmName, mAllocator_c *alloc, u32 bufferOption,
@@ -57,7 +57,7 @@ public:
         return mAnm;
     }
 
-private:
+protected:
     nw4r::g3d::ResFile mMdlFile;
     nw4r::g3d::ResFile mAnmFile;
 

@@ -37,12 +37,12 @@ struct UnalignedColor {
 };
 
 struct PaletteDefaultMCF {
-    /* 0x00 */ mColor MA00_kcolor3;
+    /* 0x00 */ mColor MA00_kColor3;
     /* 0x04 */ mColor MA01_tevReg1;
     /* 0x08 */ mColor MA01_kColor2;
     /* 0x0C */ mColor MA02_tevReg1;
-    /* 0x10 */ mColor MA02_kcolor2;
-    /* 0x14 */ mColor MA03_kcolor3;
+    /* 0x10 */ mColor MA02_kColor2;
+    /* 0x14 */ mColor MA03_kColor3;
     /* 0x18 */ mColor MA06_kColor3;
     /* 0x1C */ mColor field_0x1C;
 };
@@ -231,6 +231,14 @@ public:
     }
     void fn_800223A0(void *);
     void fn_80022440(void *);
+
+    u8 get0x2DE8() const {
+        return field_0x2DE0[8];
+    }
+
+    const PaletteDefaultMCF &GetCurrentDefaultMcf() const {
+        return field_0x5CE4;
+    }
 
 private:
     mColor combineColors(const mColor &c1, const mColor &c2, f32 ratio);

@@ -90,6 +90,8 @@ public:
     void SetOrtho(f32 top, f32 bottom, f32 left, f32 right, f32 near, f32 far);
     void SetProjectionMtxDirectly(const math::MTX44 *pMtx);
 
+    void SetTexMtxParam(f32, f32, f32, f32);
+
     void SetScissor(u32 x, u32 y, u32 width, u32 height);
     void SetScissorBoxOffset(s32 ox, s32 oy);
 
