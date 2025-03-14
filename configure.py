@@ -1329,7 +1329,7 @@ config.libs = [
         NonMatching, "d_a_obj_bridge_stretch", "REL/d/a/obj/d_a_obj_bridge_stretch.cpp"
     ),
     Rel(NonMatching, "d_a_obj_bridge_time", "REL/d/a/obj/d_a_obj_bridge_time.cpp"),
-    Rel(NonMatching, "d_a_obj_bstone", "REL/d/a/obj/d_a_obj_bstone.cpp"),
+    Rel(Matching, "d_a_obj_bstone", "REL/d/a/obj/d_a_obj_bstone.cpp"),
     Rel(NonMatching, "d_a_obj_bubble", "REL/d/a/obj/d_a_obj_bubble.cpp"),
     Rel(NonMatching, "d_a_obj_building", "REL/d/a/obj/d_a_obj_building.cpp"),
     Rel(NonMatching, "d_a_obj_bulb_switch", "REL/d/a/obj/d_a_obj_bulb_switch.cpp"),

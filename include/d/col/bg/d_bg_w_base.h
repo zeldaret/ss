@@ -176,8 +176,8 @@ public:
     void SetPriority(PRIORITY priority) {
         mPriority = priority;
     }
-    void SetUnkBase() {
-        mField_0x18.field_0x00 = 1;
+    void SetUnkBase(u8 val) {
+        mField_0x18.field_0x00 = val;
     }
     void OnStickWall() {
         field_0x24 |= 1;
