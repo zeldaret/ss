@@ -13,8 +13,8 @@ public:
     virtual ~dAcOshrineAfter_c() {}
     virtual int actorExecute() override;
 
-    nw4r::g3d::ResFile mResFile;
-    m3d::smdl_c mModel;
+    /* 0x330 */ nw4r::g3d::ResFile mResFile;
+    /* 0x334 */ m3d::smdl_c mModel;
 
 private:
 };
