@@ -14,11 +14,10 @@ public:
     virtual ~dAcOfenceKonsai_c() {}
     virtual int actorExecute() override;
 
+private:
     /* 0x330 */ nw4r::g3d::ResFile mResFile;
     /* 0x334 */ m3d::smdl_c mModel;
     /* 0x350 */ dBgW mCollision;
-
-private:
 };
 
 #endif

@@ -15,12 +15,11 @@ public:
     virtual ~dAcOpumpkinBar_c() override;
     virtual int actorExecute() override;
 
+private:
     /* 0x330 */ m3d::smdl_c mModel;
     /* 0x34C */ nw4r::g3d::ResFile mResFile;
     /* 0x350 */ dBgW mBarCollision;
     /* 0x560 */ dBgW mBarBirdCollision;
-
-private:
 };
 
 #endif
