@@ -11,3 +11,5 @@ REL/executor.c:
 
 REL/d/a/obj/d_a_obj_pumpkin_bar.cpp:
 	.text       start:0x00000070 end:0x00000490
+	.rodata     start:0x00000000 end:0x00000020
+	.data       start:0x00000000 end:0x00000100
