@@ -232,7 +232,7 @@ public:
     /* 8002d880 */ SoundSource *getSoundSource();
     // End of SoundSource stuff
 
-    /* 8002d890 */ void FUN_8002d890(SoundInfo *);
+    /* 8002d890 */ void removeSoundInfo(SoundInfo *);
     /* 8002d920 */ void setActorRef(dAcBase_c *);
     // next three funcs are related
     /* 8002d930 */ void setEnemyDefeatFlag();

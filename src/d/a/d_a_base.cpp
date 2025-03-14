@@ -526,37 +526,11 @@ SoundSource *dAcBase_c::getSoundSource() {
 }
 // End of SoundSource stuff
 
-// first param is not dAcBase_c
-// - are we sure? 8002c1a0 seems to suggest otherwise but this func does behave very weird
-// NOT MATCHING
 // 8002d890
-void dAcBase_c::FUN_8002d890(SoundInfo *soundInfo) {
-    void *unk1;
-
-    if (soundInfo->mLink.mpNext == nullptr || (soundInfo->mLink.mpPrev == nullptr)) {
-        unk1 = heap_allocator.mHeap;
-    } else {
-        unk1 = soundInfo;
-    }
-
-    void *unk2 = &heap_allocator.mHeap;
-
-    if (unk1 != unk2) {
-        if (unk2 == soundInfo->mLink.mpPrev) {
-            sound_list.mStartEnd.mpNext = soundInfo->mLink.mpNext;
-        } else {
-            soundInfo->mLink.mpPrev->mLink.mpNext = soundInfo->mLink.mpNext;
-        }
-
-        if (unk2 == soundInfo->mLink.mpNext) {
-            sound_list.mStartEnd.mpPrev = soundInfo->mLink.mpPrev;
-        } else {
-            soundInfo->mLink.mpNext->mLink.mpPrev = soundInfo->mLink.mpPrev;
-        }
-
-        soundInfo->mLink.mpPrev = nullptr;
-        soundInfo->mLink.mpNext = nullptr;
-        sound_list.mCount -= 1;
+void dAcBase_c::removeSoundInfo(SoundInfo *soundInfo) {
+    // Position != EndIter -> soundInfo is contained in sound_list
+    if (sound_list.GetPosition(soundInfo) != sound_list.GetEndIter()) {
+        sound_list.remove(soundInfo);
     }
 }
 
