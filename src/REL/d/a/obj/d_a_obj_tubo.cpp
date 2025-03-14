@@ -122,7 +122,8 @@ int dAcOtubo_c::actorPostCreate() {
         if (DungeonflagManager::sInstance->getCounterOrFlag(3, 8) != 0) {
             return FAILED;
         }
-        actor_properties |= 4; // TODO ( actor_properties )
+
+        setActorProperty(0x4);
 
         if (dBgS_ObjGndChk ::CheckPos(position + mVec3_c::Ey * 50.f)) {
             position.y = dBgS_ObjGndChk::GetGroundHeight();

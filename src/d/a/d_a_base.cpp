@@ -20,7 +20,6 @@
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 
-
 // .sdata
 u32 dAcBase_c::s_Create_RoomId = -1;
 u32 dAcBase_c::s_Create_Params2 = -1;
@@ -170,13 +169,13 @@ int dAcBase_c::actorPostCreate() {
 }
 
 int dAcBase_c::create() {
-    if (actor_properties & 0x8000000) {
+    if (checkActorProperty(0x8000000)) {
         return actorPostCreate();
     }
     int success = actorCreate();
     if (success == SUCCEEDED) {
         success = NOT_READY;
-        actor_properties |= 0x8000000;
+        setActorProperty(0x8000000);
     }
     return success;
 }
@@ -196,7 +195,7 @@ void dAcBase_c::postCreate(fBase_c::MAIN_STATE_e state) {
 int dAcBase_c::preDelete() {
     int fbaseDelete = fBase_c::preDelete();
 
-    if ((actor_properties & 0x800) == 0 && (actor_properties & 0x10000000) != 0 &&
+    if (!checkActorProperty(0x800) && checkActorProperty(0x10000000) &&
         fBase_c::getConnectParent()->lifecycle_state != TO_BE_DELETED) {
         if (itemDroppingAndGivingRelated(nullptr, 0) != 0) {
             setEnemyDefeatFlag();
@@ -221,7 +220,7 @@ int dAcBase_c::preDelete() {
 
     // TODO: add sound_info stuff once the SoundInfo x Heap weirdness is figured out
 
-    if ((actor_properties & 0x20000000) != 0) {
+    if (checkActorProperty(0x20000000)) {
         changeLoadedEntitiesNoSet();
     }
 
@@ -234,15 +233,14 @@ int dAcBase_c::preExecute() {
     if (dBase_c::preExecute() == NOT_READY) {
         return NOT_READY;
     }
-    if (actor_properties & 0x10000000) {
-        if (actor_properties & 0x40000000) {
+    if (checkActorProperty(0x10000000)) {
+        if (checkActorProperty(0x40000000)) {
             return NOT_READY;
         }
 
         // TODO: Fix event control
         if (EventManager::isInEvent() && JStudio_actor == nullptr && !EventManager::isInEventOtherThan7() &&
-            !EventManager::Get_FUN_800a0ba0() && !EventManager::Get_FUN_800a0570(this) &&
-            (actor_properties & 0x4) == 0) {
+            !EventManager::Get_FUN_800a0ba0() && !EventManager::Get_FUN_800a0570(this) && !checkActorProperty(0x4)) {
             return NOT_READY;
         }
     }
