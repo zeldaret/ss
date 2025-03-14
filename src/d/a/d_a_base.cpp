@@ -633,7 +633,7 @@ void dAcBase_c::doInteraction(s32 param) {
 // Only called by dPlayer::dig
 // Rounds angle to nearest 90 deg?
 // 8002dc20
-void roundAngleToNearest90(s16 *dst_angle, s16 *src_angle) {
+void dAcBase_c::roundAngleToNearest90(s16 *dst_angle, s16 *src_angle) {
     s32 roundedAngle = *src_angle;
 
     if (roundedAngle < 0) {

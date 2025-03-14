@@ -249,7 +249,7 @@ public:
         dBase_c *ref
     );
 
-    /* 8002dc20 */ void roundAngleToNearest90(s16 *, s16 *);
+    /* 8002dc20 */ static void roundAngleToNearest90(s16 *, s16 *);
     /* 8002dc50 */ void incrementKillCounter();
     /* 8002dcd0 */ void killNoItemDrop();
     /* 8002dd10 */ void killWithFlag();
