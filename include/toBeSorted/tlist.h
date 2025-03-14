@@ -86,7 +86,7 @@ public:
      * list of this type.
      */
     Iterator GetPosition(T *pT) {
-        if (pT->mLink.mpNext == nullptr || pT->mLink.mpPrev == nullptr) {
+        if (GetNodeFromPtr(pT)->mpNext == nullptr || GetNodeFromPtr(pT)->mpPrev == nullptr) {
             return GetEndIter();
         } else {
             return Iterator(pT);
@@ -139,7 +139,7 @@ public:
         mCount--;
     }
 
-    T* GetFirst() {
+    T *GetFirst() {
         return GetPtrFromNode(&mStartEnd);
     }
 

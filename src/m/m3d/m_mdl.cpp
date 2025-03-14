@@ -217,8 +217,8 @@ void mdl_c::remove() {
     bmdl_c::remove();
 }
 
-void mdl_c::setAnm(m3d::banm_c &anm) {
-    setAnm(anm, 0.0f);
+bool mdl_c::setAnm(m3d::banm_c &anm) {
+    return setAnm(anm, 0.0f);
 }
 
 void mdl_c::play() {
@@ -226,11 +226,11 @@ void mdl_c::play() {
     mpCallback->calcBlend();
 }
 
-void mdl_c::setAnm(m3d::banm_c &anm, f32 f) {
+bool mdl_c::setAnm(m3d::banm_c &anm, f32 f) {
     if (anm.getType() == nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_CHR) {
         mpCallback->setBlendFrame(f);
     }
-    bmdl_c::setAnm(anm);
+    return bmdl_c::setAnm(anm);
 }
 
 void mdl_c::setCallback(callback_c *cb) {

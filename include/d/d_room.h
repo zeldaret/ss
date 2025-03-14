@@ -18,8 +18,8 @@
 #include "nw4r/math/math_geometry.h"
 #include "s/s_State.hpp"
 #include "sized_string.h"
+#include "toBeSorted/d_d3d.h"
 #include "toBeSorted/raii_ptr.h"
-#include "toBeSorted/unk_with_water.h"
 
 struct DrawPriorityConfig {
     u8 pDrawOpa1;
@@ -57,7 +57,7 @@ class dRoom_c : public dBase_c {
     public:
         model_c() {}
 
-        bool create(nw4r::g3d::ResFile resFile, mAllocator_c &alloc, s32 idx, UnkWithWater *waterThing);
+        bool create(nw4r::g3d::ResFile resFile, mAllocator_c &alloc, s32 idx, d3d::UnkWithWater *waterThing);
         bool getBounds(mVec3_c *min, mVec3_c *max) const;
         nw4r::g3d::ResNode getResNode(const char *nodeName);
         void updateObjNode(const char *node, bool visible);
@@ -197,7 +197,7 @@ private:
 
     /* 0x068 */ mHeapAllocator_c mAllocator;
     /* 0x084 */ nw4r::g3d::ResFile mRoomRes;
-    /* 0x088 */ UnkWithWater mWaterThing;
+    /* 0x088 */ d3d::UnkWithWater mWaterThing;
     /* 0x0A0 */ model_c mModels[ROOM_NUM_MODELS];
     /* 0x220 */ dBgWKCol mBg[ROOM_NUM_BG];
     /* 0x4E0 */ STATE_MGR_DECLARE(dRoom_c);

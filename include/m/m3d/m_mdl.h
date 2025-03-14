@@ -57,12 +57,12 @@ public:
     bool create(nw4r::g3d::ResMdl, mAllocator_c *, u32, int, u32 *);
     bool create(nw4r::g3d::ResMdl, mdlCallback_c *cb, mAllocator_c *, u32, int, u32 *);
 
-    virtual void remove();
+    virtual void remove() override;
 
     void setCallback(callback_c *cb);
-    void play();
-    void setAnm(banm_c &);
-    void setAnm(banm_c &, f32);
+    virtual void play() override;
+    virtual bool setAnm(banm_c &) override;
+    bool setAnm(banm_c &, f32);
 
 private:
     /** If we allocated the callback ourselves, this is what we need to free */

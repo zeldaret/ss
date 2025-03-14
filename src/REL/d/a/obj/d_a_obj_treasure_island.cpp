@@ -45,7 +45,7 @@ bool dAcOtreasureIsland_c::createHeap() {
         }
 
         mdl = mResFile.GetResMdl("IslTreCWater01");
-        UnkWithWater::linkMdl(mdl, &waterStuff);
+        d3d::UnkWithWater::linkMdl(mdl, &waterStuff);
         TRY_CREATE(mWater01.create(mdl, &heap_allocator, 0x324));
 
         if (dStage_c::getMA0IndirectSrt(&anmSrt, mdl)) {
