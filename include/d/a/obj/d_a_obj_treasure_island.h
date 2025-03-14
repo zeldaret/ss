@@ -16,6 +16,7 @@ public:
     virtual ~dAcOtreasureIsland_c() override;
     virtual int actorExecute() override;
 
+private:
     /* 0x330 */ UnkWithWater waterStuff;
     /* 0x348 */ m3d::smdl_c mModel;
     /* 0x364 */ m3d::smdl_c mWater00;
@@ -25,8 +26,6 @@ public:
     /* 0x3F4 */ nw4r::g3d::ResFile mResFile;
     /* 0x3F8 */ dBgW mCollision;
     /* 0x608 */ u8 subtype;
-
-private:
 };
 
 #endif
