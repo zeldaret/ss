@@ -432,7 +432,7 @@ config.libs = [
             Object(NonMatching, "d/d_stage_mgr.cpp"),
             Object(NonMatching, "d/d_last.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
-            Object(NonMatching, "d/d_room.cpp"),
+            Object(Matching, "d/d_room.cpp"),
             Object(NonMatching, "d/d_cs_base.cpp"),
             Object(NonMatching, "d/d_cs_game.cpp"),
             Object(Matching, "d/d_sc_title.cpp"),
