@@ -8,7 +8,15 @@ class mQuat_c : public EGG::Quatf {
 public:
     mQuat_c() {}
     mQuat_c(f32 x, f32 y, f32 z, f32 w) : EGG::Quatf(w, x, y, z) {}
+    mQuat_c(const mQuat_c &other) : EGG::Quatf(other.w, other.v) {}
+
     mQuat_c &operator=(const EGG::Quatf &rhs) {
+        v = rhs.v;
+        w = rhs.w;
+        return *this;
+    }
+
+    mQuat_c &operator=(const mQuat_c &rhs) {
         v = rhs.v;
         w = rhs.w;
         return *this;

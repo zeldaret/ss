@@ -99,7 +99,6 @@ public:
           mBpntCount(0),
           mAreaCount(0),
           mFlags(0) {}
-    virtual ~dRoom_c() {}
 
     virtual int create() override;
     virtual int doDelete() override;

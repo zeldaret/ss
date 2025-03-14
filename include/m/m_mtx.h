@@ -6,6 +6,7 @@
 #include "common.h"
 #include "egg/math/eggMatrix.h"
 #include "m/m_angle.h"
+#include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/types_nw4r.h"
 #include "rvl/MTX/mtx.h"
@@ -80,6 +81,10 @@ public:
     mMtx_c &operator+=(const mMtx_c &rhs) {
         PSMTXConcat(*this, rhs, *this);
         return *this;
+    }
+
+    void applyQuat(mQuat_c &quat) {
+        PSMTXMultVec(m, quat.v, quat.v);
     }
 
 public:
