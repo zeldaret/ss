@@ -8,6 +8,7 @@
 #include "rvl/VI.h" // IWYU pragma: export
 #include "string.h"
 
+
 EGG::NullController null_controller;
 namespace EGG {
 
@@ -62,8 +63,8 @@ CoreController::CoreController() : mDpdPos(), mAccel(), mAccelFlags(), mFlag(0) 
 
 void CoreController::sceneReset() {
     mAccel.set(0.0, 0.0, 0.0);
-    mDpdPos.x = 0.0f;
-    mDpdPos.y = 0.0f;
+    mDpdPos.x = 0.0;
+    mDpdPos.y = 0.0;
     mIdleTime = 0;
     mPostureMatrixPrev.makeIdentity();
     mPostureMatrix.makeIdentity();
@@ -285,7 +286,7 @@ void CoreController::endFrame() {
 /* 0x80499AC0 */
 f32 CoreController::getFreeStickX() const {
     if (mCoreStatus->getDevType() == WPAD_DEV_CORE) {
-        return 0.0f;
+        return 0.0;
     }
     return mCoreStatus[0].getFSStickX();
 }
@@ -293,7 +294,7 @@ f32 CoreController::getFreeStickX() const {
 /* 0x80499AE0 */
 f32 CoreController::getFreeStickY() const {
     if (mCoreStatus->getDevType() == WPAD_DEV_CORE) {
-        return 0.0f;
+        return 0.0;
     }
     return mCoreStatus[0].getFSStickY();
 }
@@ -428,8 +429,8 @@ void ControllerRumbleUnit::init() {
     mPattern = nullptr;
     mPatternPos = nullptr;
     mTimer = 0;
-    mIntensity = 0.0f;
-    mRampUp = 0.0f;
+    mIntensity = 0.0;
+    mRampUp = 0.0;
     mFlag.makeAllZero();
 }
 
