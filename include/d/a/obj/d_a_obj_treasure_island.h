@@ -17,6 +17,9 @@ public:
     virtual int actorExecute() override;
 
 private:
+    const static f32 unkFloat0;
+    const static f32 unkFloat1;
+
     /* 0x330 */ UnkWithWater waterStuff;
     /* 0x348 */ m3d::smdl_c mModel;
     /* 0x364 */ m3d::smdl_c mWater00;

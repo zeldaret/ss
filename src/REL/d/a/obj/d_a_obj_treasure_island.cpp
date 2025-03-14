@@ -5,6 +5,9 @@
 #include "d/d_stage.h"
 #include "d/d_stage_mgr.h"
 
+const f32 dAcOtreasureIsland_c::unkFloat0 = 100000.0f;
+const f32 dAcOtreasureIsland_c::unkFloat1 = 50000.0f;
+
 static const char *const AcOtreasureIsland__OarcNames[] = {
     "IslTreA", "IslTreB", "IslTreC", "IslTreD", "IslTreE", "IslTreF", "IslTreG", "IslTreH",
 };
