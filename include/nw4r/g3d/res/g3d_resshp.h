@@ -89,8 +89,10 @@ struct ResShpData {
     s16 idVtxNormal;                                  // at 0x4A
     s16 idVtxColor[GX_VA_TEX0 - GX_VA_CLR0];          // at 0x4C
     s16 idVtxTexCoord[GX_POS_MTX_ARRAY - GX_VA_TEX0]; // at 0x50
-    s32 toMtxSetUsed;                                 // at 0x60
-    ResMtxSetUsed msu;                                // at 0x64
+    s16 idVtxFurVec;                                  // at 0x60
+    s16 idVtxFurPos;                                  // at 0x62
+    s32 toMtxSetUsed;                                 // at 0x64
+    ResMtxSetUsed msu;                                // at 0x68
 };
 
 class ResShp : public ResCommon<ResShpData> {
@@ -111,6 +113,8 @@ public:
     ResVtxNrm GetResVtxNrm() const;
     ResVtxClr GetResVtxClr(u32 idx) const;
     ResVtxTexCoord GetResVtxTexCoord(u32 idx) const;
+    ResVtxClr GetResVtxFurVec(u32 idx) const;
+    ResVtxFurPos GetResVtxFurPos() const;
 
     void CallPrePrimitiveDisplayList(bool sync, bool cacheIsSame) const;
     void CallPrimitiveDisplayList(bool sync) const;
@@ -143,6 +147,8 @@ public:
     bool IsVisible() const {
         return !(ref().flag & ResShpData::FLAG_INVISIBLE);
     }
+
+    void DCStore(bool sync);
 };
 
 } // namespace g3d

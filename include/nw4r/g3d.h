@@ -65,6 +65,7 @@
 #include <nw4r/g3d/res/g3d_resshp.h>
 #include <nw4r/g3d/res/g3d_restev.h>
 #include <nw4r/g3d/res/g3d_restex.h>
+#include <nw4r/g3d/res/g3d_resuser.h>
 #include <nw4r/g3d/res/g3d_resvtx.h>
 
 /******************************************************************************

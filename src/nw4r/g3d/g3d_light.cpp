@@ -12,7 +12,7 @@ namespace g3d {
  * LightObj
  *
  ******************************************************************************/
-LightObj& LightObj::operator=(const LightObj& rOther) {
+LightObj &LightObj::operator=(const LightObj &rOther) {
     if (this != &rOther) {
         mFlag = rOther.mFlag;
         detail::Copy32ByteBlocks(&mObj, &rOther.mObj, sizeof(GXLightObj));
@@ -41,13 +41,6 @@ void LightObj::InitLightDir(f32 nx, f32 ny, f32 nz) {
     mFlag |= FLAG_SPOT;
 }
 
-void LightObj::InitSpecularDir(f32 nx, f32 ny, f32 nz) {
-    GXInitLightDir(&mObj, nx, ny, nz);
-    mFlag &= ~FLAG_SPOT;
-    mFlag |= FLAG_SPECULAR;
-    mFlag |= FLAG_SPECULAR_DIR;
-}
-
 void LightObj::InitLightSpot(f32 cutoff, GXSpotFn spotFn) {
     GXInitLightSpot(&mObj, cutoff, spotFn);
     mFlag &= ~FLAG_SPECULAR;
@@ -60,8 +53,7 @@ void LightObj::InitLightAttnA(f32 aa, f32 ab, f32 ac) {
     mFlag |= FLAG_SPOT;
 }
 
-void LightObj::InitLightDistAttn(f32 distance, f32 brightness,
-                                 GXDistAttnFn distAttnFn) {
+void LightObj::InitLightDistAttn(f32 distance, f32 brightness, GXDistAttnFn distAttnFn) {
     GXInitLightDistAttn(&mObj, distance, brightness, distAttnFn);
     mFlag &= ~FLAG_SPECULAR;
     mFlag |= FLAG_SPOT;
@@ -73,14 +65,20 @@ void LightObj::InitLightAttnK(f32 ka, f32 kb, f32 kc) {
     mFlag |= FLAG_SPOT;
 }
 
+void LightObj::InitSpecularDir(f32 nx, f32 ny, f32 nz) {
+    GXInitLightDir(&mObj, nx, ny, nz);
+    mFlag &= ~FLAG_SPOT;
+    mFlag |= FLAG_SPECULAR;
+    mFlag |= FLAG_SPECULAR_DIR;
+}
+
 void LightObj::InitLightShininess(f32 shininess) {
-    GXInitLightAttn(&mObj, 0.0f, 0.0f, 1.0f, shininess / 2.0f, 0.0f,
-                    1.0f - shininess / 2.0f);
+    GXInitLightAttn(&mObj, 0.0f, 0.0f, 1.0f, shininess / 2.0f, 0.0f, 1.0f - shininess / 2.0f);
     mFlag &= ~FLAG_SPOT;
     mFlag |= FLAG_SPECULAR;
 }
 
-void LightObj::GetLightPos(math::VEC3* pPos) const {
+void LightObj::GetLightPos(math::VEC3 *pPos) const {
     if (!pPos) {
         return;
     }
@@ -88,7 +86,7 @@ void LightObj::GetLightPos(math::VEC3* pPos) const {
     GXGetLightPos(&mObj, &pPos->x, &pPos->y, &pPos->z);
 }
 
-void LightObj::GetLightDir(math::VEC3* pDir) const {
+void LightObj::GetLightDir(math::VEC3 *pDir) const {
     if (!pDir) {
         return;
     }
@@ -96,7 +94,7 @@ void LightObj::GetLightDir(math::VEC3* pDir) const {
     GXGetLightDir(&mObj, &pDir->x, &pDir->y, &pDir->z);
 }
 
-void LightObj::ApplyViewMtx(const math::MTX34& rCamera) {
+void LightObj::ApplyViewMtx(const math::MTX34 &rCamera) {
     math::VEC3 dir;
     GetLightDir(&dir);
     math::VEC3TransformNormal(&dir, &rCamera, &dir);
@@ -118,17 +116,17 @@ void LightObj::ApplyViewMtx(const math::MTX34& rCamera) {
  * LightSetting
  *
  ******************************************************************************/
-LightSetting::LightSetting(LightObj* pLightObjArray,
-                           AmbLightObj* pAmbLightObjArray, u32 numLight,
-                           LightSetData* pLightSetDataArray, u32 numLightSet)
+LightSetting::LightSetting(
+    LightObj *pLightObjArray, AmbLightObj *pAmbLightObjArray, u32 numLight, LightSetData *pLightSetDataArray,
+    u32 numLightSet
+)
     : mNumLight(numLight),
       mNumLightSet(numLightSet),
       mpLightObjArray(pLightObjArray),
       mpAmbLightObjArray(pAmbLightObjArray),
       mpLightSetDataArray(pLightSetDataArray) {
-
     for (u32 i = 0; i < mNumLightSet; i++) {
-        LightSetData& rData = mpLightSetDataArray[i];
+        LightSetData &rData = mpLightSetDataArray[i];
         rData.idxAmbLight = -1;
 
         for (u32 j = 0; j < G3DState::NUM_LIGHT_IN_LIGHT_SET; j++) {
@@ -188,9 +186,8 @@ LightSetting::LightSetting(LightObj* pLightObjArray,
     }
 }
 
-bool LightSetting::Import(const LightSetting& rSetting) {
-    if (mNumLight < rSetting.mNumLight ||
-        mNumLightSet < rSetting.mNumLightSet) {
+bool LightSetting::Import(const LightSetting &rSetting) {
+    if (mNumLight < rSetting.mNumLight || mNumLightSet < rSetting.mNumLightSet) {
         return false;
     }
 
@@ -211,7 +208,7 @@ bool LightSetting::Import(const LightSetting& rSetting) {
     return true;
 }
 
-void LightSetting::ApplyViewMtx(const math::MTX34& rCamera, u32 numLight) {
+void LightSetting::ApplyViewMtx(const math::MTX34 &rCamera, u32 numLight) {
     numLight = std::max<u32>(numLight, mNumLight);
 
     for (u32 i = 0; i < numLight; i++) {

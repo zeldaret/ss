@@ -45,67 +45,83 @@ float fmodf(float, float);
 float fmodff(float, float *);
 
 extern float __fabsf(float);
-inline double fabs(double f) { return __fabs(f); }
-inline double fabsf2(float f) { return __fabsf(f); }
-inline float fabsf(float f) { return fabsf2(f); }
+inline double fabs(double f) {
+    return __fabs(f);
+}
+inline double fabsf2(float f) {
+    return __fabsf(f);
+}
+inline float fabsf(float f) {
+    return fabsf2(f);
+}
 
-inline float fmodf(float f1, float f2) { return fmod(f1, f2); }
+inline float fmodf(float f1, float f2) {
+    return fmod(f1, f2);
+}
 
 inline float modff(float x, float *iptr) {
-  float frac;
-  double intg;
+    float frac;
+    double intg;
 
-  frac = modf((double)x, &intg);
-  *iptr = intg;
+    frac = modf((double)x, &intg);
+    *iptr = intg;
 
-  return frac;
+    return frac;
 }
 inline double sqrt_step(double tmpd, float mag) {
-  return tmpd * 0.5 * (3.0 - mag * (tmpd * tmpd));
+    return tmpd * 0.5 * (3.0 - mag * (tmpd * tmpd));
+}
+inline float floorf(float f) {
+    return floor(f);
 }
 
 extern inline float sqrtf(float x) {
-  const double _half = .5;
-  const double _three = 3.0;
-  volatile float y;
-  if (x > 0.0f) {
-    double guess = __frsqrte((double)x); // returns an approximation to
-    guess =
-        _half * guess * (_three - guess * guess * x); // now have 12 sig bits
-    guess =
-        _half * guess * (_three - guess * guess * x); // now have 24 sig bits
-    guess =
-        _half * guess * (_three - guess * guess * x); // now have 32 sig bits
-    y = (float)(x * guess);
-    return y;
-  }
-  return x;
+    const double _half = .5;
+    const double _three = 3.0;
+    volatile float y;
+    if (x > 0.0f) {
+        double guess = __frsqrte((double)x);                  // returns an approximation to
+        guess = _half * guess * (_three - guess * guess * x); // now have 12 sig bits
+        guess = _half * guess * (_three - guess * guess * x); // now have 24 sig bits
+        guess = _half * guess * (_three - guess * guess * x); // now have 32 sig bits
+        y = (float)(x * guess);
+        return y;
+    }
+    return x;
 }
 
 extern inline double sqrt(double x) {
-  if (x > 0.0) {
-    double guess = __frsqrte(x); /* returns an approximation to    */
-    guess = .5 * guess * (3.0 - guess * guess * x); /* now have 8 sig bits */
-    guess = .5 * guess * (3.0 - guess * guess * x); /* now have 16 sig bits */
-    guess = .5 * guess * (3.0 - guess * guess * x); /* now have 32 sig bits */
-    guess = .5 * guess * (3.0 - guess * guess * x); /* now have > 53 sig bits */
-    return x * guess;
-  } else if (x == 0) {
-    return 0;
-  } else if (x) {
-    return NAN;
-  }
+    if (x > 0.0) {
+        double guess = __frsqrte(x);                    /* returns an approximation to    */
+        guess = .5 * guess * (3.0 - guess * guess * x); /* now have 8 sig bits */
+        guess = .5 * guess * (3.0 - guess * guess * x); /* now have 16 sig bits */
+        guess = .5 * guess * (3.0 - guess * guess * x); /* now have 32 sig bits */
+        guess = .5 * guess * (3.0 - guess * guess * x); /* now have > 53 sig bits */
+        return x * guess;
+    } else if (x == 0) {
+        return 0;
+    } else if (x) {
+        return NAN;
+    }
 
-  return HUGE_VALF;
+    return HUGE_VALF;
 }
 
-inline float atan2f(float y, float x) { return (float)atan2(y, x); }
+inline float atan2f(float y, float x) {
+    return (float)atan2(y, x);
+}
 
 // these are duplicated due to sinf/cosf having a symbol, but
 // still being used as inlines elsewhere
-inline float i_sinf(float x) { return sin(x); }
-inline float i_cosf(float x) { return cos(x); }
-inline float i_tanf(float x) { return tanf(x); }
+inline float i_sinf(float x) {
+    return sin(x);
+}
+inline float i_cosf(float x) {
+    return cos(x);
+}
+inline float i_tanf(float x) {
+    return tanf(x);
+}
 
 #ifdef __cplusplus
 };

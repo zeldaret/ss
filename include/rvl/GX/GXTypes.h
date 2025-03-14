@@ -10,7 +10,8 @@ extern "C" {
  * Value is shifted to the specified bit position.
  * (Bit indices are LSB)
  */
-#define GX_BITSET(field, pos, size, value) __rlwimi((field), (value), 31 - (pos) - (size) + 1, (pos), (pos) + (size)-1)
+#define GX_BITSET(field, pos, size, value)                                                                             \
+    __rlwimi((field), (value), 31 - (pos) - (size) + 1, (pos), (pos) + (size) - 1)
 
 /**
  * Compose value from bitfield.
@@ -24,7 +25,7 @@ extern "C" {
  * Value is not shifted, only masked.
  * (Bit indices are LSB)
  */
-#define GX_BITSET_TRUNC(field, pos, size, value) __rlwimi((field), (value), 0, (pos), (pos) + (size)-1)
+#define GX_BITSET_TRUNC(field, pos, size, value) __rlwimi((field), (value), 0, (pos), (pos) + (size) - 1)
 
 /**
  * Compose value from bitfield.
@@ -840,7 +841,7 @@ typedef enum _GXTexWrapMode {
     GX_MAX_TEXWRAPMODE
 } GXTexWrapMode;
 
-typedef enum GXTlut {
+typedef enum _GXTlut {
     GX_TLUT0,
     GX_TLUT1,
     GX_TLUT2,
