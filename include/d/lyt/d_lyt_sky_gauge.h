@@ -3,7 +3,6 @@
 
 #include "d/lyt/d2d.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dLytSkyGauge_c;
 
@@ -53,7 +52,7 @@ public:
     dLytSkyGauge_c() : mStateMgr(*this, sStateID::null) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
-    virtual bool LytMeter0x14() override;
+    virtual bool execute() override;
     virtual nw4r::lyt::Pane *getPane() override {
         return mMain.getLyt().getLayout()->GetRootPane();
     }

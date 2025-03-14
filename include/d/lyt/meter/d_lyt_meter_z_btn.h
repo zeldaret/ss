@@ -10,7 +10,7 @@ public:
     dLytMeterZBtn_c() : mStateMgr(*this, sStateID::null) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
-    virtual bool LytMeter0x14() override;
+    virtual bool execute() override;
     virtual nw4r::lyt::Pane *getPane() override;
     virtual d2d::LytBase_c *getLyt() override;
     virtual const char *getName() const override;
