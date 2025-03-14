@@ -1,6 +1,8 @@
 #include "m/m3d/m_shadow.h"
 
+#include "c/c_math.h"
 #include "m/m_mtx.h"
+#include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/g3d_calcview.h"
 #include "nw4r/g3d/g3d_draw.h"
@@ -512,13 +514,30 @@ bool mShadowChild_c::setGeom(const GXTexObj *texObj, const mMtx_c &mtx, const mQ
 }
 
 void mShadowChild_c::updateMtx() {
-    // TODO all of this is broken
-    mVec3_c a = *(mVec3_c *)(&mQuat) + mPositionMaybe * mOffsetMaybe;
-    mVec3_c b = *(mVec3_c *)(&mQuat) - mPositionMaybe * field_0x13C;
+    const mQuat_c &q = GetQuat();
+    const mVec3_c &pos = GetPostion();
+
+    Set0x13C(q.w);
+
+    mVec3_c a(q.v);
+
+    a += pos * GetOffset();
+
+    mVec3_c b(q.v);
+    b -= pos * Get0x13C();
+
+    const mVec3_c *up;
+    if (cM::isZero((a - b).squareMagXZ())) {
+        up = &mVec3_c::Ez;
+    } else {
+        up = &mVec3_c::Ey;
+    }
+
     mMtx_c mtx;
-    C_MTXLookAt(mtx.m, b, !(fabsf((a - b).squareMagXZ()) <= FLT_EPSILON) ? mVec3_c::Ez : mVec3_c::Ey, a);
-    f32 f = field_0x13C;
-    mFrustum.set(f, -f, -f, f, f, f + mOffsetMaybe, mtx, true);
+    C_MTXLookAt(mtx.m, a, *up, b);
+
+    const f32 f = Get0x13C();
+    mFrustum.set(f, -f, -f, f, f, f + GetOffset(), mtx, true);
 }
 
 void mShadowChild_c::drawMdl() {
