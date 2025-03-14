@@ -82,7 +82,9 @@ public:
     );
 
     dAcObjBase_c *getActor(s32 i) {
-        return i < mNumUsedRefs && mInfos[i].mActorIdx != 0xFF ? mRefs[mInfos[i].mActorIdx].get() : nullptr;
+        // This only matches if the comparision is always true
+        // Logic is hard sometimes I guess xD
+        return i < mNumUsedRefs && mInfos[i].mActorIdx != -1 ? mRefs[mInfos[i].mActorIdx].get() : nullptr;
     }
 
     void clear() {

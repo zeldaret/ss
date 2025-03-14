@@ -481,8 +481,8 @@ u32 dAcODungeonShip_c::fn_485_1960() {
     mVec3_c dist = link->position - position;
     dist.y = 0.0f;
     dist.normalizeRS();
-    int a1 = cLib::targetAngleY(mVec3_c::Zero, v);
-    int a2 = cLib::targetAngleY(mVec3_c::Zero, dist);
+    s32 a1 = cLib::targetAngleY(mVec3_c::Zero, v);
+    s32 a2 = cLib::targetAngleY(mVec3_c::Zero, dist);
     // okay
     return labs(mAng(mAng(a1) - mAng(a2)));
 }

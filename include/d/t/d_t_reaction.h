@@ -3,8 +3,8 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/cc/d_cc_d.h"
+#include "m/m_angle.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/dowsing_target.h"
 
 class dTgReaction_c : public dAcObjBase_c {
