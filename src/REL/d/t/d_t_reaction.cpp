@@ -7,6 +7,7 @@
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/sceneflag_manager.h"
+#include "m/m_angle.h"
 #include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0x0151, 0, 0);
@@ -253,33 +254,31 @@ void dTgReaction_c::onDelete() {
 
 bool dTgReaction_c::fn_578_DB0(const mVec3_c &position, u32 arg) {}
 
-bool dTgReaction_c::spawnHearts(s32 params, mVec3_c *pos, s32 arg, mAng angle) {
+bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 arg, mAng angle) {
     int numHearts = params == 6 ? 3 : 1;
     mAng3_c ang(0, 0, 0);
 
     // This is annoying because we don't know which operators
     // mAng supports
-    s32 tmp1;
-    s32 tmp3;
+    s32 max;
+    s32 min;
     if (arg == 6) {
-        tmp1 = angle;
+        max = angle;
         static s32 SOME_ANG = -3641;
-        tmp3 = SOME_ANG;
+        min = SOME_ANG;
     } else {
-        tmp1 = cLib::targetAngleY(dAcPy_c::LINK->position, *pos);
-        tmp3 = -0x8000;
-        tmp1 = (s16)tmp1 + mAng(0x4000);
+        max = (s16)cLib::targetAngleY(dAcPy_c::LINK->position, pos) + 0x4000;
+        min = -0x8000;
     }
 
-    mAng tmp2 = tmp3;
-    s16 stepSize = tmp2 / numHearts;
-    tmp2 = stepSize / 2;
-    int step = tmp1 + tmp2;
-    tmp2 = mAng(tmp2 / 2);
+    s16 stepSize = s16(min) / numHearts;
+    mAng range = stepSize / 2;
+    s32 step = s16(max) + range;
+    mAng rndMax = range / 2;
+    mAng rndMin = -rndMax;
 
     for (int i = 0; i < numHearts; i++) {
-        mAng offset = cM::rndRange(-tmp2, tmp2);
-        ang.y = mAng(step) + offset;
+        ang.y = mAng(step) + cM::rndRange(rndMin, rndMax);
         if (arg == 5) {
             dAcItem_c::spawnItem(ITEM_HEART, roomid, pos, ang, 0xFFFFFFFF, 1);
         } else if (arg == 6) {
