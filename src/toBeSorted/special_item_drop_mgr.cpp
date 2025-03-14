@@ -11,15 +11,16 @@
 
 SpecialItemDropMgr *SpecialItemDropMgr::sInstance = nullptr;
 
-extern "C" void spawnItem1(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
-extern "C" void spawnItem2(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
-extern "C" void spawnItem3(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
+extern "C" void spawnItem1(u32 itemid, u32 roomid, const mVec3_c &pos, const mAng3_c &rot, u32 param2, u32 unk);
+extern "C" void spawnItem2(u32 itemid, u32 roomid, const mVec3_c &pos, const mAng3_c &rot, u32 param2, u32 unk);
+extern "C" void spawnItem3(u32 itemid, u32 roomid, const mVec3_c &pos, const mAng3_c &rot, u32 param2, u32 unk);
 extern "C" void spawnItem4(u32 itemid, u32, u32 param2);
-extern "C" void spawnItem5(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
-extern "C" void spawnItem6(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
-extern "C" void spawnItem7(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u32 param2, u32 unk);
-extern "C" void spawnItem8(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, void *, void *, u32 param2, u32 unk);
-extern "C" void spawnItem9(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot);
+extern "C" void spawnItem5(u32 itemid, u32 roomid, const mVec3_c &pos, const mAng3_c &rot, u32 param2, u32 unk);
+extern "C" void spawnItem6(u32 itemid, u32 roomid, const mVec3_c &pos, const mAng3_c &rot, u32 param2, u32 unk);
+extern "C" void spawnItem7(u32 itemid, u32 roomid, const mVec3_c &pos, const mAng3_c &rot, u32 param2, u32 unk);
+extern "C" void
+spawnItem8(u32 itemid, u32 roomid, const mVec3_c &pos, const mAng3_c &rot, void *, void *, u32 param2, u32 unk);
+extern "C" void spawnItem9(u32 itemid, u32 roomid, const mVec3_c &pos, const mAng3_c &rot);
 
 // 800c7b80
 SpecialItemDropMgr::SpecialItemDropMgr() {
@@ -450,7 +451,7 @@ extern "C" bool adventurePouchCountItem(u32 itemId);
 
 // 800c7d40
 int SpecialItemDropMgr::giveSpecialDropItem(
-    int specialItemId, int roomid, mVec3_c *pos, int subtype, mAng rot, s32 unused
+    int specialItemId, int roomid, const mVec3_c &pos, int subtype, mAng rot, s32 unused
 ) {
     if (specialItemId == 0xFF) {
         return 0;
@@ -483,9 +484,13 @@ int SpecialItemDropMgr::giveSpecialDropItem(
     return ret;
 }
 
+static s32 SOME_ANG = -3641;
+
 // 800c7ef0
 // Very unmatching. Just here as a starting point
-bool SpecialItemDropMgr::spawnSpecialDropItem(int specialItemId, int roomid, mVec3_c *pos, int subtype, mAng rot) {
+bool SpecialItemDropMgr::spawnSpecialDropItem(
+    int specialItemId, int roomid, const mVec3_c &pos, int subtype, mAng rot
+) {
     s32 unk = fn_800C7BB0(specialItemId);
     if (unk == 0) {
         return false;
@@ -502,52 +507,50 @@ bool SpecialItemDropMgr::spawnSpecialDropItem(int specialItemId, int roomid, mVe
         itemCount = 2;
     }
 
-    mAng currentRot;
-    mAng tempOther;
     u32 itemid = SPECIAL_ITEM_ARRAY[unk];
     mAng3_c itemRot(0, 0, 0);
 
+    s32 max;
+    s32 min;
     if (subtype == 2 || subtype == 6) {
-        currentRot = rot;
-        tempOther = -0xe39;
+        max = rot;
+        min = SOME_ANG;
     } else {
-        currentRot = cLib::targetAngleY(dAcPy_c::LINK->position, *pos);
-        tempOther = -0x8000;
-        currentRot += 0x4000;
+        max = (s16)cLib::targetAngleY(dAcPy_c::LINK->position, pos) + 0x4000;
+        min = -0x8000;
     }
-    // This angle code is annoying. d_t_reaction has similar code
-    s32 angleDecrement = tempOther / itemCount;
-    tempOther = angleDecrement / 2;
-    currentRot += tempOther;
-    tempOther = tempOther / 2;
+
+    s16 stepSize = s16(min) / itemCount;
+    mAng range = stepSize / 2;
+    s32 step = s16(max) + range;
+    mAng rndMax = range / 2;
+    mAng rndMin = -rndMax;
 
     for (int currentItemIndex = 0; currentItemIndex < itemCount; currentItemIndex++) {
-        mAng out = cM::rndRange(tempOther, -tempOther);
-
-        itemRot.y = currentRot + out;
+        itemRot.y = mAng(step) + cM::rndRange(rndMin, rndMax);
         if (unk >= 12 && unk < 14) {
             itemid = RAND_RUPEE_ARRAY[cM::rndInt(3)];
-            spawnItem1(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
+            spawnItem1(itemid, roomid, pos, itemRot, 0xFFFFFFFF, 0);
         } else if (subtype == 2) {
-            spawnItem2(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
+            spawnItem2(itemid, roomid, pos, itemRot, 0xFFFFFFFF, 0);
         } else {
             if (subtype == 1) {
-                spawnItem3(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
+                spawnItem3(itemid, roomid, pos, itemRot, 0xFFFFFFFF, 0);
             } else if (subtype == 4) {
                 spawnItem4(itemid, 0, 0xFFFFFFFF);
             } else if (subtype == 3) {
-                spawnItem5(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
+                spawnItem5(itemid, roomid, pos, itemRot, 0xFFFFFFFF, 0);
             } else if (subtype == 5) {
-                spawnItem6(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
+                spawnItem6(itemid, roomid, pos, itemRot, 0xFFFFFFFF, 0);
             } else if (subtype == 6) {
-                spawnItem7(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
+                spawnItem7(itemid, roomid, pos, itemRot, 0xFFFFFFFF, 0);
             } else if (subtype == 7) {
-                spawnItem8(itemid, roomid, pos, &itemRot, nullptr, nullptr, 0xFFFFFFFF, 0);
+                spawnItem8(itemid, roomid, pos, itemRot, nullptr, nullptr, 0xFFFFFFFF, 0);
             } else {
-                spawnItem9(itemid, roomid, pos, &itemRot);
+                spawnItem9(itemid, roomid, pos, itemRot);
             }
         }
-        currentRot.mVal -= angleDecrement;
+        step = mAng(step) - stepSize;
     }
     return true;
 }

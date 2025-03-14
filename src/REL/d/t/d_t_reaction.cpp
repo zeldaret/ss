@@ -252,9 +252,13 @@ void dTgReaction_c::onDelete() {
     }
 }
 
-bool dTgReaction_c::fn_578_DB0(const mVec3_c &position, u32 arg) {}
+bool dTgReaction_c::fn_578_DB0(const mVec3_c &position, u32 arg) {
+    return true;
+}
 
-bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 arg, mAng angle) {
+static s32 SOME_ANG = -3641;
+
+bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 velocity_type, mAng angle) {
     int numHearts = params == 6 ? 3 : 1;
     mAng3_c ang(0, 0, 0);
 
@@ -262,9 +266,8 @@ bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 arg, mAng an
     // mAng supports
     s32 max;
     s32 min;
-    if (arg == 6) {
+    if (velocity_type == 6) {
         max = angle;
-        static s32 SOME_ANG = -3641;
         min = SOME_ANG;
     } else {
         max = (s16)cLib::targetAngleY(dAcPy_c::LINK->position, pos) + 0x4000;
@@ -279,9 +282,9 @@ bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 arg, mAng an
 
     for (int i = 0; i < numHearts; i++) {
         ang.y = mAng(step) + cM::rndRange(rndMin, rndMax);
-        if (arg == 5) {
+        if (velocity_type == 5) {
             dAcItem_c::spawnItem(ITEM_HEART, roomid, pos, ang, 0xFFFFFFFF, 1);
-        } else if (arg == 6) {
+        } else if (velocity_type == 6) {
             dAcItem_c::spawnItem(ITEM_HEART, roomid, pos, ang, 0xFFFFFFFF, 0);
         } else {
             dAcItem_c::spawnDrop(ITEM_HEART, roomid, pos, ang);
