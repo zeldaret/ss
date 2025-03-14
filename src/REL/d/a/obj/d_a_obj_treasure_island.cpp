@@ -115,5 +115,3 @@ int dAcOtreasureIsland_c::draw() {
     }
     return SUCCEEDED;
 }
-
-dAcOtreasureIsland_c::~dAcOtreasureIsland_c() {}

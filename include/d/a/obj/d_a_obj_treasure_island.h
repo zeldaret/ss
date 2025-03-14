@@ -13,7 +13,7 @@ public:
     virtual int doDelete() override;
     virtual int draw() override;
     virtual bool createHeap() override;
-    virtual ~dAcOtreasureIsland_c() override;
+    virtual ~dAcOtreasureIsland_c() {}
     virtual int actorExecute() override;
 
 private:
