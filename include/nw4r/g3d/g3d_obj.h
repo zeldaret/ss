@@ -114,7 +114,7 @@ public:
     }
 
     void Destroy();
-    void DetachFromParent();
+    G3dObj *DetachFromParent();
 
     static void *Alloc(MEMAllocator *pAllocator, u32 size) {
         return detail::AllocFromAllocator(pAllocator, size);
