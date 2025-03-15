@@ -1528,6 +1528,7 @@ nw4r/g3d/g3d_draw.cpp:
 
 nw4r/g3d/g3d_camera.cpp:
 	.text       start:0x804545F0 end:0x804556AC
+	.sdata2     start:0x8057EE10 end:0x8057EE48
 
 nw4r/g3d/dcc/g3d_basic.cpp:
 	.text       start:0x804556B0 end:0x80455978

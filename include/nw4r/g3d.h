@@ -1,6 +1,7 @@
 #ifndef NW4R_PUBLIC_G3D_H
 #define NW4R_PUBLIC_G3D_H
 
+// IWYU pragma: begin_keep
 #include "nw4r/g3d/g3d_3dsmax.h"
 #include "nw4r/g3d/g3d_anmchr.h"
 #include "nw4r/g3d/g3d_anmclr.h"
@@ -80,4 +81,5 @@
 #include "nw4r/g3d/platform/g3d_gpu.h"
 #include "nw4r/g3d/platform/g3d_tmem.h"
 
+// IWYU pragma: end_keep
 #endif

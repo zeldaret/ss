@@ -5,16 +5,19 @@
 
 #include "rvl/MTX.h" // IWYU pragma: export
 
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define GX_PROJECTION_SZ 7
+#define GX_VIEWPORT_SZ 6
 
 typedef enum {
     GX_FIELD_EVEN,
     GX_FIELD_ODD,
 } GXInterlaceField;
 
+void GXProject(f32 x, f32 y, f32 z, f32 mtx[3][4], f32 *pm, f32 *vp, f32 *sx, f32 *sy, f32 *sz);
 void GXSetProjection(const Mtx44 proj, GXProjectionType type);
 void GXSetProjectionv(const f32 proj[7]);
 void GXGetProjectionv(f32 proj[7]);
