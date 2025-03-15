@@ -2200,7 +2200,14 @@ egg/gfx/eggDrawPathUnk2.cpp:
 	.text       start:0x804A4BF0 end:0x804A54E8
 
 egg/gfx/eggFog.cpp:
-	.text       start:0x804A54F0 end:0x804A5F60
+	.text       start:0x804A54F0 end:0x804A5A08
+	.data       start:0x8056EFF0 end:0x8056F010
+	.sdata      start:0x80574F20 end:0x80574F28
+	.sdata2     start:0x8057F608 end:0x8057F618
+
+egg/gfx/eggFogManager.cpp:
+	.text       start:0x804A5A10 end:0x804A5F60
+	.data       start:0x8056F010 end:0x8056F030
 
 egg/gfx/eggFrustum.cpp:
 	.text       start:0x804A5F60 end:0x804A6854
@@ -2215,15 +2222,21 @@ egg/gfx/eggGfxEngine.cpp:
 egg/gfx/eggGlobalDrawState.cpp:
 	.text       start:0x804A7750 end:0x804A7814
 	.ctors      start:0x804DB9A0 end:0x804DB9A4
+	.sbss       start:0x80576838 end:0x80576848
+	.bss        start:0x80674E48 end:0x80674E78
 
 egg/gfx/eggGXUtility.cpp:
 	.text       start:0x804A7820 end:0x804A7BC0
 
 egg/gfx/eggIScnProc.cpp:
 	.text       start:0x804A7BC0 end:0x804A7F7C
+	.data       start:0x8056F058 end:0x8056F068
 
-egg/gfx/eggLight.cpp:
-	.text       start:0x804A7F80 end:0x804AB24C
+egg/gfx/eggLightManager.cpp:
+	.text       start:0x804A7F80 end:0x804A9808
+
+egg/gfx/eggLightObject.cpp:
+	.text       start:0x804A9810 end:0x804AB24C
 
 egg/gfx/eggLightTexture.cpp:
 	.text       start:0x804AB250 end:0x804AD448
@@ -2263,6 +2276,8 @@ egg/gfx/eggScreen.cpp:
 egg/gfx/eggScreenEffectBase.cpp:
 	.text       start:0x804B30C0 end:0x804B30EC
 	.ctors      start:0x804DB9AC end:0x804DB9B0
+	.data       start:0x8056F268 end:0x8056F278
+	.bss        start:0x80674F88 end:0x80675010
 
 egg/gfx/eggScreenEffectBlur.cpp:
 	.text       start:0x804B30F0 end:0x804B3D98

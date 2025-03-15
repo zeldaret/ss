@@ -180,7 +180,7 @@ void drawDone(int idx) {
         internal::l_lightMgr_pp[idx]->DoneDraw();
     }
     if (internal::l_fogMgr_pp && internal::l_fogMgr_pp[idx]) {
-        internal::l_fogMgr_pp[idx]->mFlag &= 0xFB;
+        internal::l_fogMgr_pp[idx]->DoneDraw();
     }
 }
 

@@ -1,6 +1,23 @@
 #ifndef EGG_SCREEN_EFFECT_BASE_H
 #define EGG_SCREEN_EFFECT_BASE_H
 
-namespace EGG {} // namespace EGG
+#include "common.h"
+#include "egg/gfx/eggScreen.h"
+
+namespace EGG {
+
+class ScreenEffectBase {
+private:
+    u8 mFlag;
+
+public:
+    ScreenEffectBase();
+    virtual ~ScreenEffectBase() {} // at 0x8
+
+protected:
+    static Screen sScreen;
+};
+
+} // namespace EGG
 
 #endif

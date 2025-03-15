@@ -16,10 +16,11 @@ public:
 // TODO: Fill out more
 class LightTextureManager : public IBinary<LightTextureManager> {
 public:
+    struct BinData {};
     virtual ~LightTextureManager();
-    virtual void SetBinaryInner(Bin &) override;
+    virtual void SetBinaryInner(const Bin &) override;
     virtual void GetBinaryInner(Bin *) const override;
-    virtual size_t GetBinarySize() override;
+    virtual size_t GetBinarySize() const override;
     virtual void SetBinaryInner(const Bin &, const Bin &, f32) override;
     void replaceModelTextures(nw4r::g3d::ResMdl) const;
 
@@ -29,12 +30,13 @@ public:
 // TODO: Fill out more
 class LightManager : public IBinary<LightManager> {
 public:
+    struct BinData {};
     // vt at 0x00
     LightManager(u32, u32, u8);
     virtual ~LightManager();
-    virtual void SetBinaryInner(Bin &) override;
+    virtual void SetBinaryInner(const Bin &) override;
     virtual void GetBinaryInner(Bin *) const override;
-    virtual size_t GetBinarySize() override;
+    virtual size_t GetBinarySize() const override;
     virtual void SetBinaryInner(const Bin &, const Bin &, f32) override;
     virtual void Reset();
     virtual void Calc(nw4r::g3d::ScnRoot *);

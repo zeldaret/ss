@@ -27,6 +27,11 @@ public:
 
     static void invalidateTexAllGX();
 
+    static bool GXSetColorUpdate_(bool);
+    static bool GXSetAlphaUpdate_(bool);
+    static bool GXSetDither_(bool);
+    static bool GXSetDstAlpha_(bool, u8);
+
     static bool GXSetColorUpdate(bool);
     static bool GXSetAlphaUpdate(bool);
     static bool GXSetDither();
@@ -38,6 +43,9 @@ public:
     static void GXSetViewport(f32, f32, f32, f32, f32, f32);
     static void GZSetScissor(u32, u32, u32, u32);
     static void GZSetScissorBoxOffset(s32, s32);
+
+
+    static u16 s_commandFlag;
 };
 
 } // namespace EGG
