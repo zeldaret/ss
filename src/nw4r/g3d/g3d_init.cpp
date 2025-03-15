@@ -1,10 +1,10 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
-#include <nw4r/ut.h>
+#include "nw4r/ut.h" // IWYU pragma: export
 
-#include <rvl/GX.h>
-#include <rvl/OS.h>
-#include <rvl/VI.h>
+#include "rvl/GX.h" // IWYU pragma: export
+#include "rvl/OS.h" // IWYU pragma: export
+#include "rvl/VI.h"
 
 namespace {
 

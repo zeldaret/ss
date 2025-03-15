@@ -2,16 +2,14 @@
 #define NW4R_G3D_RES_RES_MAT_H
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/res/g3d_resanmtexsrt.h>
-#include <nw4r/g3d/res/g3d_rescommon.h>
-#include <nw4r/g3d/res/g3d_respltt.h>
-#include <nw4r/g3d/res/g3d_restev.h>
-#include <nw4r/g3d/res/g3d_restex.h>
-#include <nw4r/g3d/res/g3d_resuser.h>
-
-#include <nw4r/math.h>
-
-#include <rvl/GX.h>
+#include "nw4r/g3d/res/g3d_resanmtexsrt.h"
+#include "nw4r/g3d/res/g3d_rescommon.h"
+#include "nw4r/g3d/res/g3d_respltt.h"
+#include "nw4r/g3d/res/g3d_restev.h"
+#include "nw4r/g3d/res/g3d_restex.h"
+#include "nw4r/g3d/res/g3d_resuser.h"
+#include "nw4r/math.h" // IWYU pragma: export
+#include "rvl/GX.h"    // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {

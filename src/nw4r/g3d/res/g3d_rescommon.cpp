@@ -1,8 +1,8 @@
-#include <nw4r/g3d.h>
-
-#include <rvl/GX.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
+#include "rvl/GX.h"   // IWYU pragma: export
 
 #include <cstring>
+
 
 namespace nw4r {
 namespace g3d {

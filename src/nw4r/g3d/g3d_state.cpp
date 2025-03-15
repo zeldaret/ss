@@ -1,5 +1,5 @@
 #include "common.h"
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
 #include <algorithm>
 #include <cstring>

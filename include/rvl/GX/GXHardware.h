@@ -13,7 +13,7 @@
 
 #ifndef RVL_SDK_GX_HARDWARE_H
 #define RVL_SDK_GX_HARDWARE_H
-#include <rvl/GX/GXTypes.h>
+#include "rvl/GX/GXTypes.h"
 
 #include <common.h>
 

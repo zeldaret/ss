@@ -92,15 +92,15 @@ IncludeCategories:
     Priority:        0
     CaseSensitive:   true
 
-  - Regex:           '<egg\/[[:lower:].]+h>' # EGG public headers
+  - Regex:           '"egg\/[[:lower:].]+h"' # EGG public headers
     Priority:        2
     CaseSensitive:   true
 
-  - Regex:           '<nw4r\/[[:lower:].]+h>' # NW4R public headers
+  - Regex:           '"nw4r\/[[:lower:].]+h"' # NW4R public headers
     Priority:        3
     CaseSensitive:   true
 
-  - Regex:           '^<rvl\/[[:upper:].]+h>' # RVL SDK public headers
+  - Regex:           '^"rvl\/[[:upper:].]+h"' # RVL SDK public headers
     Priority:        4
     CaseSensitive:   true
 

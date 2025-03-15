@@ -1,6 +1,6 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
-#include <nw4r/ut.h>
+#include "nw4r/ut.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {

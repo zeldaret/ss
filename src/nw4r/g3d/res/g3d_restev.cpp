@@ -1,11 +1,6 @@
-#include "nw4r/g3d/res/g3d_restev.h"
-
-#include "nw4r/g3d/res/g3d_rescommon.h"
-#include "rvl/GX/GXTypes.h"
-#include <nw4r/g3d.h>
-
-#include <rvl/BASE.h>
-#include <rvl/GX.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
+#include "rvl/BASE.h" // IWYU pragma: export
+#include "rvl/GX.h"   // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {

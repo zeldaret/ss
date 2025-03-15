@@ -1,9 +1,9 @@
 #include "nw4r/g3d/g3d_scnroot.h"
 
+#include "nw4r/g3d.h" // IWYU pragma: export
 #include "nw4r/g3d/g3d_scnobj.h"
-#include <nw4r/g3d.h>
 
-#include <rvl/GX.h>
+#include "rvl/GX.h" // IWYU pragma: export
 
 #include <algorithm>
 #include <new>

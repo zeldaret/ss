@@ -1,8 +1,8 @@
 #ifndef NW4R_G3D_RESCOMMON_H
 #define NW4R_G3D_RESCOMMON_H
 #include "common.h"
+#include "rvl/GX.h" // IWYU pragma: export
 
-#include <rvl/GX.h>
 /******************************************************************************
  *
  * Macros

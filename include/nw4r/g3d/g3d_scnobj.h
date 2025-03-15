@@ -2,9 +2,9 @@
 #define NW4R_G3D_SCN_OBJ_H
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/g3d_obj.h>
+#include "nw4r/g3d/g3d_obj.h"
 
-#include <nw4r/math.h>
+#include "nw4r/math.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {

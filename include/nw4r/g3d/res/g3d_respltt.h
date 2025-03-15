@@ -5,9 +5,8 @@
 /** NOTICE: Revision change from 1->??. Structures, Enums, and/or Functions may have changed and not yet done so
  * (Zeldex72, Feb 1, 2025) */
 
-#include <nw4r/g3d/res/g3d_rescommon.h>
-
-#include <rvl/GX.h>
+#include "nw4r/g3d/res/g3d_rescommon.h"
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {

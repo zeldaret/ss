@@ -1,9 +1,5 @@
-#include "nw4r/g3d/res/g3d_resshp.h"
-
-#include "nw4r/g3d/res/g3d_resvtx.h"
-#include <nw4r/g3d.h>
-
-#include <rvl/GX.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
+#include "rvl/GX.h"   // IWYU pragma: export
 
 #include <cstring>
 

@@ -2,13 +2,13 @@
 #define NW4R_G3D_STATE_H
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/g3d_camera.h>
-#include <nw4r/g3d/g3d_fog.h>
-#include <nw4r/g3d/res/g3d_resmat.h>
+#include "nw4r/g3d/g3d_camera.h"
+#include "nw4r/g3d/g3d_fog.h"
+#include "nw4r/g3d/res/g3d_resmat.h"
 
-#include <nw4r/math.h>
+#include "nw4r/math.h" // IWYU pragma: export
 
-#include <rvl/GX.h>
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
