@@ -16,59 +16,60 @@ namespace {
 using nw4r::math::MTX34;
 using nw4r::math::VEC3;
 
+const f32 norm_epsilon = 1e-18f;
 asm void GetModelLocalAxisY2(
     register math::VEC3 *pVec, register const math::MTX34 *pModelMtx, register const math::MTX34 *pParentModelMtx
 ) {
     // clang-format off
     nofralloc
-
-    psq_l      f2, MTX34._10(pParentModelMtx), 1, 0
-    psq_l      f3, MTX34._11(pParentModelMtx), 0, 0
-    psq_l      f0, MTX34._00(pParentModelMtx), 1, 0
-    psq_l      f1, MTX34._01(pParentModelMtx), 0, 0
-    ps_merge10 f7, f3, f2
-    psq_l      f5, MTX34._21(pParentModelMtx), 0, 0
-    psq_l      f4, MTX34._20(pParentModelMtx), 1, 0
-    ps_merge10 f6,  f1, f0
-    ps_mul     f12, f5, f7
-    ps_merge10 f8,  f5, f4
-    ps_mul     f10, f3, f6
-    ps_mul     f9,  f0, f5
-    ps_mul     f11, f1, f8
-    ps_msub    f12, f3, f8, f12
-    ps_msub    f10, f1, f7, f10
-    ps_msub    f11, f5, f6, f11
-    ps_mul     f7,  f0, f12
-    ps_sub     f6,  f6, f6
-    ps_msub    f9,  f1, f4,  f9
-    ps_madd    f7,  f2, f11, f7
-    stfs       f6,  VEC3.z(pVec)
-    ps_madd    f7,  f4, f10, f7
-    ps_cmpo0   cr0, f7, f6
-    bne        _lbl_80068168
-    psq_st     f6,  VEC3.x(pVec), 0, 0
-
-    blr
-
-_lbl_80068168:
-    fres       f0,  f7
-    psq_l      f1,  MTX34._10(pModelMtx), 0, 0
-    psq_l      f2,  MTX34._02(pModelMtx), 1, 0
+    psq_l      f0,  MTX34._00(pParentModelMtx), 1, 0
+    psq_l      f1,  MTX34._01(pParentModelMtx), 0, 0
+    psq_l      f2,  MTX34._10(pParentModelMtx), 1, 0
+    ps_merge10 f6,  f1,  f0
+    psq_l      f3,  MTX34._11(pParentModelMtx), 0, 0
+    psq_l      f4,  MTX34._20(pParentModelMtx), 1, 0
+    ps_merge10 f7,  f3,  f2
+    psq_l      f5,  MTX34._21(pParentModelMtx), 0, 0
+    ps_mul     f11, f3,  f6
+    ps_mul     f13, f5,  f7
+    ps_merge10 f8,  f5,  f4
+    ps_msub    f11, f1,  f7, f11
+    ps_mul     f12, f1,  f8
+    ps_msub    f13, f3,  f8, f13
+    lis        r12, norm_epsilon@ha
     psq_l      f3,  MTX34._12(pModelMtx), 1, 0
-    ps_add     f6,  f0,  f0
-    ps_mul     f5,  f0,  f0
-    ps_nmsub   f0,  f7,  f5, f6
+    ps_msub    f12, f5,  f6, f12
+    addi       r12, r12, norm_epsilon@l
+    ps_mul     f7,  f0,  f13
+    ps_mul     f9,  f0,  f5
+    psq_l      f6,  0x0(r12), 1, 0
+    ps_madd    f7,  f2,  f12, f7
+    ps_sub     f13, f13, f13
+    psq_l      f2,  MTX34._02(pModelMtx), 1, 0
+    ps_madd    f7,  f4,  f11, f7
+    ps_msub    f9,  f1,  f4,  f9
+    psq_l      f1,  MTX34._10(pModelMtx), 0, 0
+    ps_abs     f8,  f7
+    psq_st     f13, VEC3.z(pVec), 1, 0
+    ps_cmpo0   cr0, f8,  f6
+    bge        _lbl_8044F884
+    psq_st     f13, VEC3.x(pVec), 0, 0
+    blr
+_lbl_8044F884:
+    fres       f8,  f7
+    psq_l      f0,  MTX34._00(pModelMtx), 0, 0
+    ps_add     f11, f8,  f8
+    ps_mul     f10, f7,  f8
+    ps_merge00 f4,  f0,  f1
+    ps_nmsub   f8,  f8,  f10, f11
+    ps_merge11 f5,  f0,  f1
     ps_merge00 f6,  f2,  f3
-    ps_muls0   f11, f11, f0
-    ps_muls0   f9,  f9,  f0
-    psq_l f0,  MTX34._00(pModelMtx), 0, 0
-    ps_merge00 f4, f0, f1
-    ps_merge11 f5, f0, f1
-    ps_muls0   f0, f4, f11
-    ps_madds1  f0, f5, f11, f0
-    ps_madds0  f0, f6, f9,  f0
-    psq_st     f0, VEC3.x(pVec), 0, 0
-
+    ps_muls0   f12, f12, f8
+    ps_muls0   f9,  f9,  f8
+    ps_muls0   f0,  f4,  f12
+    ps_madds1  f0,  f5,  f12, f0
+    ps_madds0  f0,  f6,  f9, f0
+    psq_st     f0,  VEC3.x(pVec), 0, 0
     blr
     // clang-format on
 }
@@ -79,59 +80,60 @@ asm void GetModelLocalAxisY3(
     // clang-format off
     nofralloc
 
-    psq_l      f2, MTX34._10(pParentModelMtx), 1, 0
-    psq_l      f3, MTX34._11(pParentModelMtx), 0, 0
-    psq_l      f0, MTX34._00(pParentModelMtx), 1, 0
-    psq_l      f1, MTX34._01(pParentModelMtx), 0, 0
-    ps_merge10 f7, f3, f2
-    psq_l      f5, MTX34._21(pParentModelMtx), 0, 0
-    psq_l      f4, MTX34._20(pParentModelMtx), 1, 0
-    ps_merge10 f6,  f1, f0
-    ps_mul     f12, f5, f7
-    ps_merge10 f8,  f5, f4
-    ps_mul     f10, f3, f6
-    ps_mul     f9,  f0, f5
-    ps_mul     f11, f1, f8
-    ps_msub    f12, f3, f8, f12
-    ps_msub    f10, f1, f7, f10
-    ps_msub    f11, f5, f6, f11
-    ps_mul     f7,  f0, f12
-    ps_sub     f6,  f6, f6
-    ps_msub    f9,  f1, f4, f9
-    ps_madd    f7,  f2, f11, f7
-    ps_madd    f7,  f4, f10, f7
-    ps_cmpo0   cr0, f7, f6
-    bne        _lbl_80068218
-    psq_st     f6, VEC3.x(pVec), 0, 0
-    stfs       f6, VEC3.z(pVec)
-
+    psq_l      f0,  MTX34._00(pParentModelMtx), 1, 0
+    psq_l      f1,  MTX34._01(pParentModelMtx), 0, 0
+    psq_l      f2,  MTX34._10(pParentModelMtx), 1, 0
+    ps_merge10 f6,  f1,  f0
+    psq_l      f3,  MTX34._11(pParentModelMtx), 0, 0
+    psq_l      f4,  MTX34._20(pParentModelMtx), 1, 0
+    ps_merge10 f7,  f3,  f2
+    psq_l      f5,  MTX34._21(pParentModelMtx), 0, 0
+    ps_mul     f11, f3,  f6
+    ps_mul     f13, f5,  f7
+    ps_merge10 f8,  f5,  f4
+    ps_msub    f11, f1,  f7, f11
+    ps_mul     f12, f1,  f8
+    ps_msub    f13, f3,  f8, f13
+    lis        r12, norm_epsilon@ha
+    psq_l      f3,  MTX34._12(pModelMtx), 1, 0
+    ps_msub    f12, f5,  f6, f12
+    addi       r12, r12, norm_epsilon@l
+    ps_mul     f7,  f0,  f13
+    ps_mul     f9,  f0,  f5
+    psq_l      f6,  0x0(r12), 1, 0
+    ps_madd    f7,  f2,  f12, f7
+    ps_sub     f13, f13, f13
+    psq_l      f2,  MTX34._02(pModelMtx), 1, 0
+    ps_madd    f7,  f4,  f11, f7
+    ps_msub    f9,  f1,  f4,  f9
+    psq_l      f1,  MTX34._10(pModelMtx), 0, 0
+    ps_abs     f8,  f7
+    psq_st     f13, VEC3.z(pVec), 1, 0
+    ps_cmpo0   cr0, f8,  f6
+    bge        _lbl_8044F944
+    psq_st     f13, VEC3.x(pVec), 0, 0
     blr
-
-_lbl_80068218:
-    fres       f0, f7
-    psq_l      f1, MTX34._10(pModelMtx), 0, 0
-    psq_l      f2, MTX34._02(pModelMtx), 1, 0
-    psq_l      f3, MTX34._12(pModelMtx), 1, 0
-    ps_add     f6, f0, f0
-    ps_mul     f5, f0, f0
-    ps_nmsub   f0, f7, f5, f6
-    ps_merge00 f6, f2, f3
-    psq_l      f2, MTX34._22(pModelMtx), 1, 0
-    ps_muls0   f11, f11, f0
-    ps_muls0   f9,  f9,  f0
-    psq_l      f0, MTX34._00(pModelMtx), 0, 0
-    ps_merge00 f4, f0, f1
-    ps_merge11 f5, f0, f1
-    psq_l      f1, MTX34._20(pModelMtx), 0, 0
-    ps_muls0   f0, f4, f11
-    ps_mul     f1, f1, f9
-    ps_madds1  f0, f5, f11, f0
-    ps_sum0    f1, f1, f1,  f1
-    ps_madds0  f0, f6, f9,  f0
-    fmadds     f1, f2, f9,  f1
-    psq_st     f0, VEC3.x(pVec), 0, 0
-    psq_st     f1, VEC3.z(pVec), 1, 0
-
+_lbl_8044F944:
+    fres       f8,  f7
+    psq_l      f0,  MTX34._00(pModelMtx), 0, 0
+    ps_add     f11, f8,  f8
+    ps_mul     f10, f7,  f8
+    ps_merge00 f4,  f0,  f1
+    ps_nmsub   f8,  f8,  f10, f11
+    ps_merge11 f5,  f0,  f1
+    ps_merge00 f6,  f2,  f3
+    ps_muls0   f12, f12, f8
+    psq_l      f1,  MTX34._20(pModelMtx), 0, 0
+    ps_muls0   f9,  f9,  f8
+    psq_l      f2,  MTX34._22(pModelMtx), 1, 0
+    ps_muls0   f0,  f4,  f12
+    ps_mul     f1,  f1,  f9
+    ps_madds1  f0,  f5,  f12, f0
+    ps_sum0    f1,  f1,  f1,  f1
+    ps_madds0  f0,  f6,  f9,  f0
+    fmadds     f1,  f2,  f9,  f1
+    psq_st     f0,  VEC3.x(pVec), 0, 0
+    psq_st     f1,  VEC3.z(pVec), 1, 0
     blr
     // clang-format on
 }
@@ -239,16 +241,20 @@ void Calc_BILLBOARD_STD(
 #pragma unused(mdl)
 
     math::VEC3 vy(pViewPos->_01, pViewPos->_11, 0.0f);
-    math::VEC3Normalize(&vy, &vy);
 
-    if (uniformScale) {
-        f32 s = GetMtx34Scale(pModelMtxArray[id], 0);
-        SetMdlViewMtxSR(pViewPos, vy, s);
+    if (math::FAbs(vy.x) >= norm_epsilon || math::FAbs(vy.y) >= norm_epsilon) {
+        math::VEC3Normalize(&vy, &vy);
+        if (uniformScale) {
+            f32 s = GetMtx34Scale(pModelMtxArray[id], 0);
+            SetMdlViewMtxSR(pViewPos, vy, s);
+        } else {
+            f32 sx = GetMtx34Scale(pModelMtxArray[id], 0);
+            f32 sy = GetMtx34Scale(pModelMtxArray[id], 1);
+            f32 sz = GetMtx34Scale(pModelMtxArray[id], 2);
+            SetMdlViewMtxSR(pViewPos, vy, sx, sy, sz);
+        }
     } else {
-        f32 sx = GetMtx34Scale(pModelMtxArray[id], 0);
-        f32 sy = GetMtx34Scale(pModelMtxArray[id], 1);
-        f32 sz = GetMtx34Scale(pModelMtxArray[id], 2);
-        SetMdlViewMtxSR(pViewPos, vy, sx, sy, sz);
+        math::MTX34Zero(pViewPos);
     }
 }
 
@@ -263,21 +269,27 @@ void Calc_BILLBOARD_PERSP_STD(
     math::VEC3 vy(pViewPos->_01, pViewPos->_11, pViewPos->_21);
     math::VEC3 vz(-pViewPos->_03, -pViewPos->_13, -pViewPos->_23);
 
-    math::VEC3Normalize(&vz, &vz);
-    math::VEC3Cross(&vx, &vy, &vz);
+    if (math::FAbs(vz.x) >= norm_epsilon || math::FAbs(vz.y) >= norm_epsilon || math::FAbs(vz.z) >= norm_epsilon) {
+        math::VEC3Normalize(&vz, &vz);
+        math::VEC3Cross(&vx, &vy, &vz);
 
-    math::VEC3Normalize(&vx, &vx);
-    math::VEC3Cross(&vy, &vz, &vx);
+        if (math::FAbs(vx.x) >= norm_epsilon || math::FAbs(vx.y) >= norm_epsilon || math::FAbs(vx.z) >= norm_epsilon) {
+            math::VEC3Normalize(&vx, &vx);
+            math::VEC3Cross(&vy, &vz, &vx);
 
-    if (uniformScale) {
-        f32 s = GetMtx34Scale(pModelMtxArray[id], 0);
-        SetMdlViewMtxSR(pViewPos, vx, vy, vz, s, s, s);
-    } else {
-        f32 sx = GetMtx34Scale(pModelMtxArray[id], 0);
-        f32 sy = GetMtx34Scale(pModelMtxArray[id], 1);
-        f32 sz = GetMtx34Scale(pModelMtxArray[id], 2);
-        SetMdlViewMtxSR(pViewPos, vx, vy, vz, sx, sy, sz);
+            if (uniformScale) {
+                f32 s = GetMtx34Scale(pModelMtxArray[id], 0);
+                SetMdlViewMtxSR(pViewPos, vx, vy, vz, s, s, s);
+            } else {
+                f32 sx = GetMtx34Scale(pModelMtxArray[id], 0);
+                f32 sy = GetMtx34Scale(pModelMtxArray[id], 1);
+                f32 sz = GetMtx34Scale(pModelMtxArray[id], 2);
+                SetMdlViewMtxSR(pViewPos, vx, vy, vz, sx, sy, sz);
+            }
+            return;
+        }
     }
+    math::MTX34Zero(pViewPos);
 }
 
 void Calc_BILLBOARD_ROT(
@@ -308,16 +320,20 @@ void Calc_BILLBOARD_ROT(
         vy.z = 0.0f;
     }
 
-    math::VEC3Normalize(&vy, &vy);
+    if (math::FAbs(vy.x) >= norm_epsilon || math::FAbs(vy.y) >= norm_epsilon) {
+        math::VEC3Normalize(&vy, &vy);
 
-    if (uniformScale) {
-        f32 s = GetMtx34Scale(pModelMtxArray[id], 0);
-        SetMdlViewMtxSR(pViewPos, vy, s);
+        if (uniformScale) {
+            f32 s = GetMtx34Scale(pModelMtxArray[id], 0);
+            SetMdlViewMtxSR(pViewPos, vy, s);
+        } else {
+            f32 sx = GetMtx34Scale(pModelMtxArray[id], 0);
+            f32 sy = GetMtx34Scale(pModelMtxArray[id], 1);
+            f32 sz = GetMtx34Scale(pModelMtxArray[id], 2);
+            SetMdlViewMtxSR(pViewPos, vy, sx, sy, sz);
+        }
     } else {
-        f32 sx = GetMtx34Scale(pModelMtxArray[id], 0);
-        f32 sy = GetMtx34Scale(pModelMtxArray[id], 1);
-        f32 sz = GetMtx34Scale(pModelMtxArray[id], 2);
-        SetMdlViewMtxSR(pViewPos, vy, sx, sy, sz);
+        math::MTX34Zero(pViewPos);
     }
 }
 
@@ -351,21 +367,27 @@ void Calc_BILLBOARD_PERSP_ROT(
         vy.z = pModelMtxArray[id]._21;
     }
 
-    math::VEC3Normalize(&vz, &vz);
-    math::VEC3Cross(&vx, &vy, &vz);
+    if (math::FAbs(vz.x) >= norm_epsilon || math::FAbs(vz.y) >= norm_epsilon || math::FAbs(vz.z) >= norm_epsilon) {
+        math::VEC3Normalize(&vz, &vz);
+        math::VEC3Cross(&vx, &vy, &vz);
 
-    math::VEC3Normalize(&vx, &vx);
-    math::VEC3Cross(&vy, &vz, &vx);
+        if (math::FAbs(vx.x) >= norm_epsilon || math::FAbs(vx.y) >= norm_epsilon || math::FAbs(vx.z) >= norm_epsilon) {
+            math::VEC3Normalize(&vx, &vx);
+            math::VEC3Cross(&vy, &vz, &vx);
 
-    if (uniformScale) {
-        f32 s = GetMtx34Scale(pModelMtxArray[id], 0);
-        SetMdlViewMtxSR(pViewPos, vx, vy, vz, s, s, s);
-    } else {
-        f32 sx = GetMtx34Scale(pModelMtxArray[id], 0);
-        f32 sy = GetMtx34Scale(pModelMtxArray[id], 1);
-        f32 sz = GetMtx34Scale(pModelMtxArray[id], 2);
-        SetMdlViewMtxSR(pViewPos, vx, vy, vz, sx, sy, sz);
+            if (uniformScale) {
+                f32 s = GetMtx34Scale(pModelMtxArray[id], 0);
+                SetMdlViewMtxSR(pViewPos, vx, vy, vz, s, s, s);
+            } else {
+                f32 sx = GetMtx34Scale(pModelMtxArray[id], 0);
+                f32 sy = GetMtx34Scale(pModelMtxArray[id], 1);
+                f32 sz = GetMtx34Scale(pModelMtxArray[id], 2);
+                SetMdlViewMtxSR(pViewPos, vx, vy, vz, sx, sy, sz);
+            }
+            return;
+        }
     }
+    math::MTX34Zero(pViewPos);
 }
 
 void Calc_BILLBOARD_Y(
@@ -378,22 +400,27 @@ void Calc_BILLBOARD_Y(
     math::VEC3 vz;
     math::VEC3 vy(pViewPos->_01, pViewPos->_11, pViewPos->_21);
     math::VEC3 vx(vy.y, -vy.x, 0.0f);
+    if (math::FAbs(vy.x) >= norm_epsilon || math::FAbs(vx.x) >= norm_epsilon || math::FAbs(vy.z) >= norm_epsilon) {
+        f32 sy = GetMtx34Scale(pModelMtxArray[id], 1);
+        f32 invSY = math::FInv(sy);
 
-    f32 sy = GetMtx34Scale(pModelMtxArray[id], 1);
-    f32 invSY = math::FInv(sy);
+        vy *= invSY;
 
-    vy *= invSY;
+        if (math::FAbs(vx.x) >= norm_epsilon || math::FAbs(vx.y) >= norm_epsilon) {
+            math::VEC3Normalize(&vx, &vx);
+            math::VEC3Cross(&vz, &vx, &vy);
 
-    math::VEC3Normalize(&vx, &vx);
-    math::VEC3Cross(&vz, &vx, &vy);
-
-    if (uniformScale) {
-        SetMdlViewMtxSR(pViewPos, vx, vy, vz, sy, sy, sy);
-    } else {
-        f32 sx = GetMtx34Scale(pModelMtxArray[id], 0);
-        f32 sz = GetMtx34Scale(pModelMtxArray[id], 2);
-        SetMdlViewMtxSR(pViewPos, vx, vy, vz, sx, sy, sz);
+            if (uniformScale) {
+                SetMdlViewMtxSR(pViewPos, vx, vy, vz, sy, sy, sy);
+            } else {
+                f32 sx = GetMtx34Scale(pModelMtxArray[id], 0);
+                f32 sz = GetMtx34Scale(pModelMtxArray[id], 2);
+                SetMdlViewMtxSR(pViewPos, vx, vy, vz, sx, sy, sz);
+            }
+            return;
+        }
     }
+    math::MTX34Zero(pViewPos);
 }
 
 void Calc_BILLBOARD_PERSP_Y(
@@ -407,22 +434,28 @@ void Calc_BILLBOARD_PERSP_Y(
     math::VEC3 vy(pViewPos->_01, pViewPos->_11, pViewPos->_21);
     math::VEC3 vz(-pViewPos->_03, -pViewPos->_13, -pViewPos->_23);
 
-    f32 sy = GetMtx34Scale(pModelMtxArray[id], 1);
-    f32 invSY = math::FInv(sy);
+    if (math::FAbs(vy.x) >= norm_epsilon || math::FAbs(vy.y) >= norm_epsilon || math::FAbs(vy.z) >= norm_epsilon) {
+        f32 sy = GetMtx34Scale(pModelMtxArray[id], 1);
+        f32 invSY = math::FInv(sy);
 
-    vy *= invSY;
-    math::VEC3Cross(&vx, &vy, &vz);
+        vy *= invSY;
+        math::VEC3Cross(&vx, &vy, &vz);
 
-    math::VEC3Normalize(&vx, &vx);
-    math::VEC3Cross(&vz, &vx, &vy);
+        if (math::FAbs(vx.x) >= norm_epsilon || math::FAbs(vx.y) >= norm_epsilon || math::FAbs(vx.z) >= norm_epsilon) {
+            math::VEC3Normalize(&vx, &vx);
+            math::VEC3Cross(&vz, &vx, &vy);
 
-    if (uniformScale) {
-        SetMdlViewMtxSR(pViewPos, vx, vy, vz, sy, sy, sy);
-    } else {
-        f32 sx = GetMtx34Scale(pModelMtxArray[id], 0);
-        f32 sz = GetMtx34Scale(pModelMtxArray[id], 2);
-        SetMdlViewMtxSR(pViewPos, vx, vy, vz, sx, sy, sz);
+            if (uniformScale) {
+                SetMdlViewMtxSR(pViewPos, vx, vy, vz, sy, sy, sy);
+            } else {
+                f32 sx = GetMtx34Scale(pModelMtxArray[id], 0);
+                f32 sz = GetMtx34Scale(pModelMtxArray[id], 2);
+                SetMdlViewMtxSR(pViewPos, vx, vy, vz, sx, sy, sz);
+            }
+            return;
+        }
     }
+    math::MTX34Zero(pViewPos);
 }
 
 typedef void (*BillBoardFunc)(
@@ -493,11 +526,14 @@ void CalcView(
             if (node.IsValid() && node.GetChildNode().IsValid()) {
                 math::MTX34 invWorld;
 
-                u32 ret = math::MTX34Inv(&invWorld, &pModelMtxArray[i]);
+                u32 ret = detail::CalcInvWorldMtx(&invWorld, &pModelMtxArray[i]);
                 if (ret == TRUE) {
                     math::MTX34Mult(&pBbMtxArray[i], &pVArray[i], &invWorld);
                 } else {
                     math::MTX34Identity(&pBbMtxArray[i]);
+                    pBbMtxArray[i]._03 = pViewMtx->_03;
+                    pBbMtxArray[i]._13 = pViewMtx->_13;
+                    pBbMtxArray[i]._23 = pViewMtx->_23;
                 }
             }
         } else {
@@ -539,10 +575,10 @@ void CalcView(
                 math::MTX34ToMTX33(&rNMtx, &rVMtx);
             } else {
                 if (pCurTArray != NULL) {
-                    math::MTX34InvTranspose(&pCurTArray[i], &rVMtx);
+                    detail::CalcViewTexMtx(&pCurTArray[i], &rVMtx);
                     math::MTX34ToMTX33(&rNMtx, &pCurTArray[i]);
                 } else {
-                    math::MTX34InvTranspose(&rNMtx, &rVMtx);
+                    detail::CalcViewNrmMtx(&rNMtx, &rVMtx);
                 }
             }
         }
@@ -643,12 +679,15 @@ void CalcView_LC(
                 if (node.IsValid() && node.GetChildNode().IsValid()) {
                     math::MTX34 invWorld;
 
-                    u32 ret = math::MTX34Inv(&invWorld, &pModelMtxArray[baseMtx + i]);
+                    u32 ret = detail::CalcInvWorldMtx(&invWorld, &pModelMtxArray[baseMtx + i]);
 
                     if (ret == TRUE) {
                         math::MTX34Mult(&pBbMtxArray[baseMtx + i], &pCurVArray[i], &invWorld);
                     } else {
                         math::MTX34Identity(&pBbMtxArray[baseMtx + i]);
+                        pBbMtxArray[baseMtx + i]._03 = pViewMtx->_03;
+                        pBbMtxArray[baseMtx + i]._13 = pViewMtx->_13;
+                        pBbMtxArray[baseMtx + i]._23 = pViewMtx->_23;
                     }
                 }
             } else {
@@ -690,10 +729,10 @@ void CalcView_LC(
                     math::MTX34ToMTX33(&rNMtx, &rVMtx);
                 } else {
                     if (pViewTexMtxArray != NULL) {
-                        math::MTX34InvTranspose(&pCurTArray[i], &rVMtx);
+                        detail::CalcViewTexMtx(&pCurTArray[i], &rVMtx);
                         math::MTX34ToMTX33(&rNMtx, &pCurTArray[i]);
                     } else {
-                        math::MTX34InvTranspose(&rNMtx, &rVMtx);
+                        detail::CalcViewNrmMtx(&rNMtx, &rVMtx);
                     }
                 }
             }
@@ -827,12 +866,15 @@ void CalcView_LC_DMA_ModelMtx(
                 if (node.IsValid() && node.GetChildNode().IsValid()) {
                     math::MTX34 invWorld;
 
-                    u32 ret = math::MTX34Inv(&invWorld, &pModelMtxArray[baseMtx + i]);
+                    u32 ret = detail::CalcInvWorldMtx(&invWorld, &pModelMtxArray[baseMtx + i]);
 
                     if (ret == TRUE) {
                         math::MTX34Mult(&pBbMtxArray[baseMtx + i], &pCurVArray[i], &invWorld);
                     } else {
                         math::MTX34Identity(&pBbMtxArray[baseMtx + i]);
+                        pBbMtxArray[baseMtx + i]._03 = pViewMtx->_03;
+                        pBbMtxArray[baseMtx + i]._13 = pViewMtx->_13;
+                        pBbMtxArray[baseMtx + i]._23 = pViewMtx->_23;
                     }
                 }
             } else {
@@ -874,10 +916,10 @@ void CalcView_LC_DMA_ModelMtx(
                     math::MTX34ToMTX33(&rNMtx, &rVMtx);
                 } else {
                     if (pViewTexMtxArray != NULL) {
-                        math::MTX34InvTranspose(&pCurTArray[i], &rVMtx);
+                        detail::CalcViewTexMtx(&pCurTArray[i], &rVMtx);
                         math::MTX34ToMTX33(&rNMtx, &pCurTArray[i]);
                     } else {
-                        math::MTX34InvTranspose(&rNMtx, &rVMtx);
+                        detail::CalcViewNrmMtx(&rNMtx, &rVMtx);
                     }
                 }
             }
