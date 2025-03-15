@@ -1501,6 +1501,12 @@ nw4r/g3d/platform/g3d_cpu.cpp:
 nw4r/g3d/g3d_state.cpp:
 	.text       start:0x8044B360 end:0x8044EAB0
 	.ctors      start:0x804DB954 end:0x804DB958
+	.rodata     start:0x804F79E8 end:0x804F7A18
+	.data       start:0x8056D888 end:0x8056D8A0
+	.sdata      start:0x80574E48 end:0x80574E50
+	.sbss       start:0x80576628 end:0x80576648
+	.sdata2     start:0x8057EDA0 end:0x8057EDC8
+	.bss        start:0x8063B9A0 end:0x80640F44
 
 nw4r/g3d/g3d_draw1mat1shp.cpp:
 	.text       start:0x8044EAB0 end:0x8044F7F4

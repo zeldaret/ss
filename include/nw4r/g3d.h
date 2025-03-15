@@ -33,8 +33,10 @@
 #include <nw4r/g3d/g3d_scnrfl.h>
 #include <nw4r/g3d/g3d_scnroot.h>
 #include <nw4r/g3d/g3d_state.h>
+#include <nw4r/g3d/g3d_transform.h>
 #include <nw4r/g3d/g3d_workmem.h>
 #include <nw4r/g3d/g3d_xsi.h>
+
 
 /******************************************************************************
  *

@@ -5,8 +5,7 @@
 namespace nw4r {
 namespace g3d {
 
-void CalcTexMtx(math::MTX34* pMtx, bool set, const TexSrt& rSrt,
-                TexSrt::Flag flag, TexSrtTypedef::TexMatrixMode mode) {
+void CalcTexMtx(math::MTX34 *pMtx, bool set, const TexSrt &rSrt, TexSrt::Flag flag, TexSrtTypedef::TexMatrixMode mode) {
     bool ident = true;
 
     if (mode == TexSrtTypedef::TEXMATRIXMODE_MAYA) {

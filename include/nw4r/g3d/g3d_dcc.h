@@ -9,6 +9,7 @@ namespace nw4r {
 namespace g3d {
 
 void CalcTexMtx(math::MTX34 *pMtx, bool set, const TexSrt &rSrt, TexSrt::Flag flag);
+void CalcTexMtx(math::MTX34 *pMtx, bool set, const TexSrt &rSrt, TexSrt::Flag flag, TexSrt::TexMatrixMode mode);
 
 namespace detail {
 
