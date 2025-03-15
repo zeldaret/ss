@@ -1432,6 +1432,7 @@ nw4r/g3d/res/g3d_resanmshp.cpp:
 
 nw4r/g3d/g3d_transform.cpp:
 	.text       start:0x80442AF0 end:0x80442DF4
+	.sdata2     start:0x8057ECF8 end:0x8057ECFC
 
 nw4r/g3d/g3d_anmvis.cpp:
 	.text       start:0x80442E00 end:0x8044358C

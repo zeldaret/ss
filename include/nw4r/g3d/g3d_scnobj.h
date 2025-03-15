@@ -177,7 +177,7 @@ protected:
     }
 
     bool IsG3dProcDisabled(u32 task) const {
-        if (task < __G3DPROC_OPTIONAL_END && ((1 << task - 1) & mScnObjFlags)) {
+        if (task < __G3DPROC_OPTIONAL_END && ((1 << (task - 1)) & mScnObjFlags)) {
             return true;
         }
 
