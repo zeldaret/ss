@@ -48,9 +48,12 @@ u16 GXGetTexObjWidth(const GXTexObj *obj);
 u16 GXGetTexObjHeight(const GXTexObj *obj);
 GXTexFmt GXGetTexObjFormat(const GXTexObj *obj);
 GXBool GXGetTexObjMipMap(const GXTexObj *obj);
-GXTexWrapMode GXGetTexObjWrapS(GXTexObj *obj);
-u32 GXGetTexObjTlut(GXTexObj *);
-GXTexWrapMode GXGetTexObjWrapT(GXTexObj *obj);
+GXTexWrapMode GXGetTexObjWrapS(const GXTexObj *obj);
+u32 GXGetTexObjTlut(const GXTexObj *);
+GXTexWrapMode GXGetTexObjWrapT(const GXTexObj *);
+GXTexFilter GXGetTexObjMinFilt(const GXTexObj *);
+GXTexFilter GXGetTexObjMagFilt(const GXTexObj *);
+void *GXGetTexObjData(const GXTexObj *);
 u32 GXGetTexBufferSize(u16 width, u16 height, u32 format, GXBool arg3, u8 arg4);
 
 void GXInvalidateTexAll();

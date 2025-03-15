@@ -27,15 +27,15 @@ public:
 
     static void invalidateTexAllGX();
 
-    static bool GXSetColorUpdate_(bool);
-    static bool GXSetAlphaUpdate_(bool);
-    static bool GXSetDither_(bool);
-    static bool GXSetDstAlpha_(bool, u8);
+    static GXBool GXSetColorUpdate_(GXBool);
+    static GXBool GXSetAlphaUpdate_(GXBool);
+    static GXBool GXSetDither_(GXBool);
+    static GXBool GXSetDstAlpha_(GXBool, u8);
 
     static bool GXSetColorUpdate(bool);
     static bool GXSetAlphaUpdate(bool);
     static bool GXSetDither();
-    static void GXCopyTex();
+    static void GXCopyTex(void *data, bool);
     static bool GXSetDstAlpha();
     // Unk func here
     static void GXSetProjection(Mtx44, int);

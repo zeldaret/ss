@@ -2179,9 +2179,14 @@ egg/gfx/eggUnk1.cpp:
 
 egg/gfx/eggCapTexture.cpp:
 	.text       start:0x8049D7C0 end:0x8049D9D0
+	.rodata     start:0x804FBA30 end:0x804FBA60
+	.data       start:0x8056ED70 end:0x8056ED80
+	.sdata2     start:0x8057F410 end:0x8057F418
+	.sbss2      start:0x8057FFC0 end:0x8057FFC8
 
 egg/gfx/eggCpuTexture.cpp:
 	.text       start:0x8049DA30 end:0x8049EC94
+	.data       start:0x8056ED80 end:0x8056EDA0
 
 egg/gfx/eggDrawGX.cpp:
 	.text       start:0x8049ECA0 end:0x804A0C24
@@ -2189,6 +2194,7 @@ egg/gfx/eggDrawGX.cpp:
 
 egg/gfx/eggDrawPathBase.cpp:
 	.text       start:0x804A0C30 end:0x804A0E98
+	.data       start:0x8056EE60 end:0x8056EEB0
 
 egg/gfx/eggDrawPathUnk1.cpp:
 	.text       start:0x804A0EA0 end:0x804A29B8

@@ -24,9 +24,9 @@ void GlobalDrawState::beginDrawView(u16 cameraId, const nw4r::math::MTX34 &mtx, 
 }
 
 void GlobalDrawState::setDrawSettingGX(bool b1, bool b2) {
-    StateGX::GXSetColorUpdate_(sDrawFlag & 1);
-    StateGX::GXSetAlphaUpdate_(sDrawFlag & 2);
-    StateGX::GXSetDither_(sDrawFlag & 4);
+    StateGX::GXSetColorUpdate_((sDrawFlag & 1) != 0);
+    StateGX::GXSetAlphaUpdate_((sDrawFlag & 2) != 0);
+    StateGX::GXSetDither_((sDrawFlag & 4) != 0);
     StateGX::GXSetDstAlpha_(false, 0);
     if (b2 && spScreen != nullptr) {
         spScreen->SetProjectionGX();

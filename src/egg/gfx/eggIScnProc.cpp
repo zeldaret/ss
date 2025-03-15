@@ -82,7 +82,7 @@ void IScnProc::drawProcFunc(nw4r::g3d::ScnProc *pScnProc, bool b) {
 
 void IScnProc::drawProcFuncNoGlobalState(nw4r::g3d::ScnProc *pScnProc, bool b) {
     ProcData *dat = static_cast<ProcData *>(pScnProc->GetUserData());
-    dat->mpThis->doDraw(dat->mIndex);
+    dat->mpThis->scnProcDraw(dat->mIndex);
 }
 
 } // namespace EGG

@@ -8,7 +8,7 @@
 namespace EGG {
 
 class IScnProc {
-private:
+protected:
     // Unofficial name
     struct ProcData {
         IScnProc *mpThis;              // at 0x0
@@ -22,7 +22,7 @@ private:
 
 public:
     IScnProc() : mpDataSet(nullptr), mNumScnProc(0) {}
-    virtual void doDraw(u16) = 0; // at 0x8
+    virtual void scnProcDraw(u16) = 0; // at 0x8
     virtual ~IScnProc();          // at 0xC
 
     void createScnProc(u16 procNum, MEMAllocator *allocator);
@@ -37,6 +37,9 @@ public:
     }
     ProcData *getData(u16 procIndex) {
         return &mpDataSet[procIndex];
+    }
+    nw4r::g3d::ScnProc *getProc(u16 procIndex) {
+        return mpDataSet[procIndex].mpScnProc;
     }
 };
 

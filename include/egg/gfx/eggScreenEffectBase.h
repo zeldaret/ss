@@ -7,7 +7,7 @@
 namespace EGG {
 
 class ScreenEffectBase {
-private:
+protected:
     u8 mFlag;
 
 public:
