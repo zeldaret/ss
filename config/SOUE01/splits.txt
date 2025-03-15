@@ -1513,12 +1513,14 @@ nw4r/g3d/g3d_draw1mat1shp.cpp:
 
 nw4r/g3d/g3d_calcview.cpp:
 	.text       start:0x8044F800 end:0x80451A9C
+	.sdata2     start:0x8057EDE8 end:0x8057EDF8
 
 nw4r/g3d/g3d_dcc.cpp:
 	.text       start:0x80451AA0 end:0x80451B84
 
 nw4r/g3d/g3d_workmem.cpp:
 	.text       start:0x80451B90 end:0x80451BDC
+	.bss        start:0x80640F80 end:0x80658F80
 
 nw4r/g3d/g3d_calcworld.cpp:
 	.text       start:0x80451BE0 end:0x8045274C
