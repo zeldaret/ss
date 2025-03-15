@@ -1531,15 +1531,22 @@ nw4r/g3d/g3d_camera.cpp:
 
 nw4r/g3d/dcc/g3d_basic.cpp:
 	.text       start:0x804556B0 end:0x80455978
+	.sdata2     start:0x8057EE48 end:0x8057EE54
 
 nw4r/g3d/dcc/g3d_maya.cpp:
 	.text       start:0x80455980 end:0x80456684
+	.rodata     start:0x804F7A48 end:0x804F7A80
+	.sdata2     start:0x8057EE58 end:0x8057EE6C
 
 nw4r/g3d/dcc/g3d_xsi.cpp:
 	.text       start:0x80456690 end:0x804572A4
+	.rodata     start:0x804F7A80 end:0x804F7AB8
+	.sdata2     start:0x8057EE70 end:0x8057EE7C
 
 nw4r/g3d/dcc/g3d_3dsmax.cpp:
 	.text       start:0x804572B0 end:0x80457DCC
+	.rodata     start:0x804F7AB8 end:0x804F7AF0
+	.sdata2     start:0x8057EE80 end:0x8057EE94
 
 nw4r/g3d/g3d_scnobj.cpp:
 	.text       start:0x80457DD0 end:0x8045980C
