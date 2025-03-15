@@ -9,8 +9,8 @@
 namespace nw4r {
 namespace g3d {
 
-void ApplyTexSrtAnmResult(ResTexSrt srt, const TexSrtAnmResult *pResult);
 void ApplyTexSrtAnmResult(ResTexSrt srt, ResMatIndMtxAndScale ind, const TexSrtAnmResult *pResult);
+void ApplyTexSrtAnmResult(ResTexSrt srt, const TexSrtAnmResult *pResult) DECOMP_DONT_INLINE;
 
 /******************************************************************************
  *

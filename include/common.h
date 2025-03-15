@@ -6,11 +6,11 @@
 
 #define CLAMP(low, high, x) ((x) > (high) ? (high) : ((x) < (low) ? (low) : (x)))
 
-#define ROUND_UP(x, align) (((x) + (align)-1) & (-(align)))
-#define ROUND_UP_PTR(x, align) ((void *)((((u32)(x)) + (align)-1) & (~((align)-1))))
+#define ROUND_UP(x, align) (((x) + (align) - 1) & (-(align)))
+#define ROUND_UP_PTR(x, align) ((void *)((((u32)(x)) + (align) - 1) & (~((align) - 1))))
 
 #define ROUND_DOWN(x, align) ((x) & (-(align)))
-#define ROUND_DOWN_PTR(x, align) ((void *)(((u32)(x)) & (~((align)-1))))
+#define ROUND_DOWN_PTR(x, align) ((void *)(((u32)(x)) & (~((align) - 1))))
 
 #define ARRAY_LENGTH(x) (sizeof((x)) / sizeof((x)[0]))
 
@@ -44,6 +44,8 @@
 #define DECOMP_FORCEACTIVE(module, ...)
 #define DECOMP_FORCELITERAL(module, x)
 #define DECOMP_FORCEDTOR(module, cls)
+#define DECOMP_INLINE
+#define DECOMP_DONT_INLINE
 #else
 // Force reference specific data
 #define __CONCAT(x, y) x##y
@@ -69,6 +71,8 @@
         cls dummy;                                                                                                     \
         dummy.~cls();                                                                                                  \
     }
+#define DECOMP_INLINE inline
+#define DECOMP_DONT_INLINE __attribute__((never_inline))
 #endif
 
 #include "stddef.h"
