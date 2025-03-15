@@ -61,7 +61,7 @@ class WorldMtxManip {
 public:
     WorldMtxManip(math::MTX34 *pM, math::VEC3 *pS, u32 *pWMAttr) : mpM(pM), mpS(pS), mpWMAttr(pWMAttr) {}
 
-    void SetScale(f32, f32, f32);
+    void SetScale(f32 x, f32 y, f32 z);
     void GetMtx(nw4r::math::MTX34 *out) {
         if (out != nullptr) {
             PSMTXCopy(*mpM, *out);
