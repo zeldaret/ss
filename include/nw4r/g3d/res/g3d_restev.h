@@ -3,6 +3,7 @@
 #include <nw4r/types_nw4r.h>
 
 #include "nw4r/g3d/res/g3d_rescommon.h"
+
 #include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {

@@ -12,8 +12,8 @@
 #include "nw4r/g3d/res/g3d_resnode.h"
 #include "nw4r/g3d/res/g3d_resshp.h"
 #include "nw4r/g3d/res/g3d_resvtx.h"
-#include "nw4r/math.h" // IWYU pragma: export
 
+#include "nw4r/math.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {

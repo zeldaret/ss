@@ -1,5 +1,6 @@
 #include "nw4r/g3d.h" // IWYU pragma: export
-#include "rvl/GX.h"   // IWYU pragma: export
+
+#include "rvl/GX.h" // IWYU pragma: export
 
 #include <cstring>
 

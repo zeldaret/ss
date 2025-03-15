@@ -6,6 +6,7 @@
  * (Zeldex72, Feb 1, 2025) */
 
 #include "nw4r/g3d/res/g3d_rescommon.h"
+
 #include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {

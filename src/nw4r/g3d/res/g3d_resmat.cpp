@@ -227,9 +227,9 @@ ResTlutObj ResTlutObj::CopyTo(void *pDst) const {
             // At most two tlut objects can fit into 64 bytes
             detail::Copy32ByteBlocks(&pData->tlutObj, &rSrc.tlutObj, 32);
 
-        } else if (!(flag & static_cast<u8>(
-                                ~(1 << GX_TLUT0 | 1 << GX_TLUT1 | 1 << GX_TLUT2 | 1 << GX_TLUT3 | 1 << GX_TLUT4)
-                            ))) {
+        } else if (!(flag &
+                     static_cast<u8>(~(1 << GX_TLUT0 | 1 << GX_TLUT1 | 1 << GX_TLUT2 | 1 << GX_TLUT3 | 1 << GX_TLUT4))
+                   )) {
             // At most five tlut objects can fit into 64 bytes
             detail::Copy32ByteBlocks(&pData->tlutObj, &rSrc.tlutObj, 64);
 

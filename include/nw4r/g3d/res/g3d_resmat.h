@@ -8,8 +8,10 @@
 #include "nw4r/g3d/res/g3d_restev.h"
 #include "nw4r/g3d/res/g3d_restex.h"
 #include "nw4r/g3d/res/g3d_resuser.h"
+
 #include "nw4r/math.h" // IWYU pragma: export
-#include "rvl/GX.h"    // IWYU pragma: export
+
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -136,9 +138,8 @@ public:
 
     void CallDisplayList(u8 numGens, bool sync) const;
 
-    bool GXGetTexCoordGen2(
-        GXTexCoordID id, GXTexGenType *pFunc, GXTexGenSrc *pParam, GXBool *pNormalize, u32 *pPostMtx
-    ) const;
+    bool GXGetTexCoordGen2(GXTexCoordID id, GXTexGenType *pFunc, GXTexGenSrc *pParam, GXBool *pNormalize, u32 *pPostMtx)
+        const;
     void GXSetTexCoordGen2(GXTexCoordID id, GXTexGenType func, GXTexGenSrc param, GXBool normalize, u32 postMtx);
 
     void EndEdit() {

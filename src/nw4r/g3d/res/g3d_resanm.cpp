@@ -1,4 +1,5 @@
-#include "nw4r/g3d.h"  // IWYU pragma: export
+#include "nw4r/g3d.h" // IWYU pragma: export
+
 #include "nw4r/math.h" // IWYU pragma: export
 #include "nw4r/ut.h"   // IWYU pragma: export
 
