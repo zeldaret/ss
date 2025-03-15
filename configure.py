@@ -677,7 +677,7 @@ config.libs = [
             Object(NonMatching, "nw4r/g3d/g3d_dcc.cpp"),
             Object(NonMatching, "nw4r/g3d/g3d_workmem.cpp"),
             Object(NonMatching, "nw4r/g3d/g3d_calcworld.cpp"),
-            Object(NonMatching, "nw4r/g3d/g3d_draw.cpp"),
+            Object(Matching, "nw4r/g3d/g3d_draw.cpp"),
             Object(Matching, "nw4r/g3d/g3d_camera.cpp"),
             Object(Matching, "nw4r/g3d/dcc/g3d_basic.cpp"),
             Object(Matching, "nw4r/g3d/dcc/g3d_maya.cpp"),

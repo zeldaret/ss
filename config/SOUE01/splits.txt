@@ -1525,6 +1525,8 @@ nw4r/g3d/g3d_calcworld.cpp:
 
 nw4r/g3d/g3d_draw.cpp:
 	.text       start:0x80452750 end:0x804545F0
+	.sdata      start:0x80574E58 end:0x80574E60
+	.sdata2     start:0x8057EE00 end:0x8057EE0C
 
 nw4r/g3d/g3d_camera.cpp:
 	.text       start:0x804545F0 end:0x804556AC
