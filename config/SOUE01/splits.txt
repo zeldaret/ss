@@ -1522,6 +1522,9 @@ nw4r/g3d/g3d_workmem.cpp:
 
 nw4r/g3d/g3d_calcworld.cpp:
 	.text       start:0x80451BE0 end:0x8045274C
+	.data       start:0x8056D8A0 end:0x8056D8A9
+	.sdata      start:0x80574E50 end:0x80574E58
+	.sdata2     start:0x8057EDF8 end:0x8057EE00
 
 nw4r/g3d/g3d_draw.cpp:
 	.text       start:0x80452750 end:0x804545F0

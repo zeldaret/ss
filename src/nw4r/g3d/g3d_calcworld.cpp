@@ -259,6 +259,31 @@ void CalcSkinning(math::MTX34 *pModelMtxArray, u32 *pModelMtxAttribArray, const 
             pByteCode += sizeof(ResByteCodeData::EvpMtxParams);
         }
     }
+    ResMdlInfo mdlInfo = mdl.GetResMdlInfo();
+    switch (mdlInfo.GetEnvelopeMatrixMode()) {
+        case ResMdlInfo::EVPMATRIXMODE_NORMAL: {
+            return;
+        } break;
+        case ResMdlInfo::EVPMATRIXMODE_APPROX: {
+            u32 numWeighted = mdlInfo.GetNumPosNrmMtx() - mdl.GetResNodeNumEntries();
+            u32 end = mdlInfo.GetNumViewMtx();
+            u32 begin = end - numWeighted;
+
+            for (u32 i = begin; i < end; i++) {
+                pModelMtxAttribArray[i] |= detail::WorldMtxAttr::ATTR_S_UNIFORM;
+                pModelMtxAttribArray[i] |= detail::WorldMtxAttr::ATTR_ALL_S_UNIFORM;
+            }
+        } break;
+        case ResMdlInfo::EVPMATRIXMODE_EXACT: {
+            u32 numWeighted = mdlInfo.GetNumPosNrmMtx() - mdl.GetResNodeNumEntries();
+            u32 end = mdlInfo.GetNumViewMtx();
+            u32 begin = end - numWeighted;
+
+            for (u32 i = begin; i < end; i++) {
+                pModelMtxAttribArray[i] &= ~detail::WorldMtxAttr::ATTR_ALL_S_UNIFORM;
+            }
+        } break;
+    }
 
 #undef pWeightCmd
 #undef pWeightEntry
