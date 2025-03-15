@@ -42,6 +42,8 @@ protected:
     /** Load the object from binary, interpolating between values */
     virtual void SetBinaryInner(const Bin &, const Bin &, f32) = 0;
 
+    virtual ~IBinary() {}
+
     /** Get a 4-bytes long ID string corresponding to this type */
     static const char *GetBinaryType();
     /** Get the current version of this type */

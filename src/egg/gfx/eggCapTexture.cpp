@@ -35,9 +35,8 @@ void CapTexture::capture(u16 x, u16 y, bool upscale, int format) {
         0, copyArg2, (mCapFlags & 8) ? true : false, (mCapFlags & 8) ? mCopyFilterArg.values : defaultFilter.values
     );
 
-    // Regswap, grr
-    GXBool prevColorUpdate = StateGX::GXSetColorUpdate_((mCapFlags & 1) != 0);
-    GXBool prevAlphaUpdate = StateGX::GXSetAlphaUpdate_((mCapFlags & 2) != 0);
+    StateGX::ScopedColor colorUpdate((mCapFlags & 1) != 0);
+    StateGX::ScopedAlpha alphaUpdate((mCapFlags & 2) != 0);
     GXSetZMode(true, GX_ALWAYS, (mCapFlags & 4) != 0);
     GXSetCopyClear(mClearColor, field_0x20);
     GXSetCopyClamp(3);
@@ -51,9 +50,6 @@ void CapTexture::capture(u16 x, u16 y, bool upscale, int format) {
     if ((mCapFlags & 0x20) != 0) {
         StateGX::invalidateTexAllGX();
     }
-
-    StateGX::GXSetAlphaUpdate_(prevAlphaUpdate);
-    StateGX::GXSetColorUpdate_(prevColorUpdate);
 }
 
 } // namespace EGG

@@ -8,6 +8,52 @@ namespace EGG {
 
 class StateGX {
 public:
+
+        struct ScopedColor
+        {
+            ScopedColor(bool x)
+            {
+                old = GXSetColorUpdate_(x);
+            }
+
+            ~ScopedColor()
+            {
+                GXSetColorUpdate_(old);
+            }
+
+            bool old;
+        };
+
+        struct ScopedAlpha
+        {
+            ScopedAlpha(bool x)
+            {
+                old = GXSetAlphaUpdate_(x);
+            }
+
+            ~ScopedAlpha()
+            {
+                GXSetAlphaUpdate_(old);
+            }
+
+            bool old;
+        };
+
+        struct ScopedDither
+        {
+            ScopedDither(bool x)
+            {
+                old = GXSetDither_(x);
+            }
+
+            ~ScopedDither()
+            {
+                GXSetDither_(old);
+            }
+
+            bool old;
+        };
+
     static void initialize(u16, u16, GXColor, GXPixelFmt);
     static void frameInit();
     static void textureInit(); // Guess for 804b4810
@@ -27,10 +73,10 @@ public:
 
     static void invalidateTexAllGX();
 
-    static GXBool GXSetColorUpdate_(GXBool);
-    static GXBool GXSetAlphaUpdate_(GXBool);
-    static GXBool GXSetDither_(GXBool);
-    static GXBool GXSetDstAlpha_(GXBool, u8);
+    static bool GXSetColorUpdate_(bool);
+    static bool GXSetAlphaUpdate_(bool);
+    static bool GXSetDither_(bool);
+    static bool GXSetDstAlpha_(bool, u8);
 
     static bool GXSetColorUpdate(bool);
     static bool GXSetAlphaUpdate(bool);
