@@ -1511,6 +1511,8 @@ nw4r/g3d/g3d_state.cpp:
 
 nw4r/g3d/g3d_draw1mat1shp.cpp:
 	.text       start:0x8044EAB0 end:0x8044F7F4
+	.rodata     start:0x804F7A18 end:0x804F7A28
+	.sdata2     start:0x8057EDC8 end:0x8057EDE8
 
 nw4r/g3d/g3d_calcview.cpp:
 	.text       start:0x8044F800 end:0x80451A9C

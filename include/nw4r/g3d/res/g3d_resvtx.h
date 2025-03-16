@@ -331,6 +331,9 @@ public:
     u16 GetNumFurPos() const {
         return ref().toFurPosArray;
     }
+    u32 GetNumLayer() const {
+        return ref().numLayer;
+    }
 };
 
 /******************************************************************************

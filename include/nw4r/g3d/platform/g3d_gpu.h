@@ -2,8 +2,6 @@
 #define NW4R_G3D_PLATFORM_GPU_H
 #include <nw4r/types_nw4r.h>
 
-#include "nw4r/g3d/res/g3d_rescommon.h"
-
 #include "nw4r/math.h" // IWYU pragma: export
 
 #include "rvl/GX.h" // IWYU pragma: export
@@ -95,11 +93,11 @@ inline void GDSetChanCtrlLightOff(GXChannelID chan, u32 param, u32 lightMask) {
 }
 
 inline void GDSetChanAmbColor(GXChannelID chan, GXColor color) {
-    LoadXFCmd(GX_XF_REG_AMBIENT0 + chan, *reinterpret_cast<u32 *>(&color));
+    LoadXFCmd(GX_XF_REG_AMBIENT0 + (chan & 1), *reinterpret_cast<u32 *>(&color));
 }
 
 inline void GDSetChanMatColor(GXChannelID chan, GXColor color) {
-    LoadXFCmd(GX_XF_REG_MATERIAL0 + chan, *reinterpret_cast<u32 *>(&color));
+    LoadXFCmd(GX_XF_REG_MATERIAL0 + (chan & 1), *reinterpret_cast<u32 *>(&color));
 }
 
 } // namespace fifo
