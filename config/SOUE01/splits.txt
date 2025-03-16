@@ -2174,7 +2174,7 @@ egg/gfx/eggPalette.cpp:
 egg/gfx/eggTexture.cpp:
 	.text       start:0x8049CB50 end:0x8049CFE4
 
-egg/gfx/eggUnk1.cpp:
+egg/gfx/eggAnalizeDL.cpp:
 	.text       start:0x8049CFF0 end:0x8049D7C0
 
 egg/gfx/eggCapTexture.cpp:
@@ -2260,6 +2260,8 @@ egg/gfx/eggLightTextureMgr.cpp:
 
 egg/gfx/eggModelEx.cpp:
 	.text       start:0x804AE650 end:0x804AEC20
+	.data       start:0x8056F110 end:0x8056F120
+	.sdata      start:0x80574F48 end:0x80574F60
 
 egg/gfx/eggPostEffectBase.cpp:
 	.text       start:0x804AEC20 end:0x804AF4B4
