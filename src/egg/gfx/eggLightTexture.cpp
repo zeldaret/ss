@@ -19,7 +19,7 @@ static const int sCpuTexGradientOp[NUM_CPU_TEX] = {0, 0, 0, 1, 2, 3, 4, 0, 5, 5,
 
 static nw4r::math::MTX34 sMtx(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-u16 LightTexture::sTextureSize;
+u16 LightTexture::sTextureSize = 0x20;
 CpuTexture *LightTexture::spNormalEnvironment;
 
 static s8 lbl_80574F3A = 0xFE;

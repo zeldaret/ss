@@ -53,10 +53,16 @@ public:
     // These functions below are automatically provided, you should not need to
     // touch them to implement de-/serialization for your type. They will parse
     // the binary header and then invoke the above virtual functions.
-    void GetBinary(void *pData) const;
     void SetBinary(const void *);
+    void GetBinary(void *pData) const;
     void SetBinaryBlend(const void *a, const void *b, f32 blend);
 };
+
+template <typename T>
+void IBinary<T>::SetBinary(const void *a) {
+    const Bin *pBinA = reinterpret_cast<const Bin *>(a);
+    SetBinaryInner(*pBinA);
+}
 
 template <typename T>
 void IBinary<T>::GetBinary(void *pData) const {
@@ -72,12 +78,6 @@ void IBinary<T>::GetBinary(void *pData) const {
     typename T::BinData zeroedDatat = {0};
     pBin->mData = zeroedDatat;
     GetBinaryInner(pBin);
-}
-
-template <typename T>
-void IBinary<T>::SetBinary(const void *a) {
-    const Bin *pBinA = reinterpret_cast<const Bin *>(a);
-    SetBinaryInner(*pBinA);
 }
 
 template <typename T>

@@ -92,6 +92,7 @@ public:
 
 
     static u16 s_commandFlag;
+    static u16 s_flag;
 };
 
 } // namespace EGG

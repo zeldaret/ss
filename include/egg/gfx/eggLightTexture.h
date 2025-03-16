@@ -12,13 +12,14 @@ class LightTextureManager;
 
 class LightTexture : public CapTexture, public IBinary<LightTexture> {
 public:
+#pragma pack(push, 1)
     struct SubData {
         /* 0x00 */ f32 mIntensity;
         /* 0x04 */ u8 mGradientUsed;
         /* 0x05 */ u8 field_0x05;
         /* 0x06 */ u8 _0x06[2];
     };
-    
+
     // Implicit +0x10 from BinHeader
     struct BinData {
         /* 0x00 */ u16 mNumEntries;
@@ -26,29 +27,34 @@ public:
         /* 0x03 */ u8 field_0x03;
         /* 0x04 */ char mName[32];
         /* 0x24 */ u8 mType;
-        /* 0x25 */ u8 _0x25[7];
+        /* 0x25 */ u16 field_0x25;
+        /* 0x27 */ u8 field_0x27;
+        /* 0x28 */ u8 _0x28[4];
         /* 0x2C */ f32 field_0x2C;
         /* 0x30 */ u8 _0x30[4];
         /* 0x34 */ char mName2[32];
         /* 0x54 */ f32 field_0x54;
-
-        u8 _0x00[0x1D];
+        u8 _0x00[0x20];
         SubData mSubData[1];
     };
-    
+#pragma pack(pop)
+
     LightTexture(const char *name, const LightTextureManager *mgr);
     virtual ~LightTexture();
-    
+
     virtual void configure() override; // at 0xC
 
     virtual void SetBinaryInner(const Bin &) override;
     virtual void GetBinaryInner(Bin *) const override;
     virtual size_t GetBinarySize() const override;
-    
+
     static void initialize(u16 textureSize, Heap *pHeap);
 
-private:
+    const char *getName() const {
+        return mName1;
+    }
 
+private:
     f32 getFloat(u16 idx) const {
         return mpFloatData[idx];
     }
