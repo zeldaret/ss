@@ -25,6 +25,14 @@ public:
         return mPtr != nullptr;
     }
 
+    const T *get() const {
+        return mPtr;
+    }
+
+    T *get() {
+        return mPtr;
+    }
+
     const T *operator->() const {
         return mPtr;
     }

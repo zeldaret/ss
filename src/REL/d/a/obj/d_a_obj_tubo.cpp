@@ -51,11 +51,11 @@ STATE_DEFINE(dAcOtubo_c, Slope);
 STATE_DEFINE(dAcOtubo_c, Rebirth);
 
 dCcD_SrcSph dAcOtubo_c::sSphSrc = {
-  /* mObjInf */
+    /* mObjInf */
     {/* mObjAt */ {AT_TYPE_PHYSICS, 0x12, {0, 0, 0}, 2, 0, 0, 0, 0, 0},
      /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_0x80000 | AT_TYPE_0x8000), 0x801111, {0xA, 0x40F}, 8, 0},
      /* mObjCo */ {0x1E9}},
- /* mSphInf */
+    /* mSphInf */
     {30.f},
 };
 
@@ -122,7 +122,8 @@ int dAcOtubo_c::actorPostCreate() {
         if (DungeonflagManager::sInstance->getCounterOrFlag(3, 8) != 0) {
             return FAILED;
         }
-        actor_properties |= 4; // TODO ( actor_properties )
+
+        setActorProperty(0x4);
 
         if (dBgS_ObjGndChk ::CheckPos(position + mVec3_c::Ey * 50.f)) {
             position.y = dBgS_ObjGndChk::GetGroundHeight();
@@ -216,7 +217,7 @@ void dAcOtubo_c::executeState_Wait() {
     if (mObjAcch.ChkGroundLanding()) {
         if (!mbField_0x9EF || !EventManager::isInEvent()) {
             if (mField_0x9F6 == 2) {
-                fn_8002A450(position, field_0xEE, field_0xEF, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+                fn_8002A450(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
             }
             if (mbField_0x9F3) {
                 playSound(0xA46);
@@ -224,7 +225,7 @@ void dAcOtubo_c::executeState_Wait() {
             }
             if (checkOnLava()) {
                 if (mField_0x9F6 != 2) {
-                    fn_8002A450(position, field_0xEE, field_0xEF, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+                    fn_8002A450(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
                 }
                 playSound(0x9A3);
             }
@@ -362,7 +363,7 @@ void dAcOtubo_c::initializeState_Slope() {
 }
 void dAcOtubo_c::executeState_Slope() {
     if (mObjAcch.ChkGroundLanding()) {
-        fn_8002A450(position, field_0xEE, field_0xEF, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+        fn_8002A450(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
     } else if (mObjAcch.ChkGndHit()) {
         mField_0x9DC = 0.f;
         addPickupTarget();
@@ -671,7 +672,7 @@ void dAcOtubo_c::attemptDestroy() {
     if (mObjAcch.ChkRoofHit()) {
         destroy();
     } else if (!mbField_0x9EF && checkYOffsetField_0x100() && getParams_0x3000() != 1) {
-        FUN_8002dcd0();
+        killNoItemDrop();
     } else if (fn_272_38A0()) {
         destroy();
     }

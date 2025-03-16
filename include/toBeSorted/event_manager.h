@@ -23,8 +23,12 @@ public:
         return sInstance != nullptr && sInstance->mState != 0;
     }
 
-    static bool isInEventOtherThan7() {
-        return isInEvent() && sInstance != nullptr && sInstance->mState != 7;
+    static bool isInEvent0Or7() {
+        return sInstance != nullptr && (sInstance->mState == 0 || sInstance->mState == 7);
+    }
+
+    static bool isInEventOtherThan0Or7() {
+        return isInEvent() && !isInEvent0Or7();
     }
 
     static const char *getCurrentEventName() {
@@ -35,7 +39,12 @@ public:
         return strequals(getCurrentEventName(), name);
     }
 
+    // Something like isActorInEvent maybe?
+    static bool FUN_800a0570(dAcBase_c *actor);
+    static bool FUN_800a0ba0();
+
 private:
+
     /* 0x000 */ u8 _000[0x084 - 0x000];
     /* 0x084 */ Event mCurrentEvent;
     /* 0x0C4 */ u8 _0C4[0x184 - 0x0C4];
