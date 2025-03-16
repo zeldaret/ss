@@ -112,10 +112,10 @@ struct PATH {
 
 // Size 0x24
 struct PCAM {
-    /* 0x00 */ mVec3_c position1;
-    /* 0x0C */ mVec3_c position2;
-    /* 0x18 */ f32 field_0x18;
-    /* 0x1C */ f32 field_0x1C;
+    /* 0x00 */ mVec3_c position;
+    /* 0x0C */ mVec3_c target;
+    /* 0x18 */ f32 twist;
+    /* 0x1C */ f32 radius;
     /* 0x20 */ u8 id;
     /* 0x21 */ u8 _0x21[3];
 };

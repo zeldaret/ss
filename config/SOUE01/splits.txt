@@ -36,6 +36,8 @@ toBeSorted/d_d3d.cpp:
 toBeSorted/d_scn_callback.cpp:
 	.text       start:0x80019E80 end:0x8001A590
 	.data       start:0x80500A70 end:0x80500AD8
+	.sbss       start:0x80575020 end:0x80575028
+	.sdata2     start:0x80576A68 end:0x80576A78
 
 toBeSorted/d_unk_proc.cpp:
 	.text       start:0x8001A590 end:0x8001BE58

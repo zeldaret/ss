@@ -112,7 +112,7 @@ void dScnCallback_c::attach(m3d::scnLeaf_c &leaf) {
     leaf.enableCallbackOp(nw4r::g3d::ScnObj::EXECOP_CALC_MAT);
 }
 
-void setPCAMPos2(PCAM *pcam) {
+void setPCAMPos2(const PCAM *pcam) {
     static nw4r::g3d::Camera::PostureInfo sPosture = {
         nw4r::g3d::Camera::POSTURE_AIM,
         nw4r::math::VEC3(0.0f, 0.0f, 0.0f),
@@ -122,29 +122,29 @@ void setPCAMPos2(PCAM *pcam) {
     };
 
     nw4r::g3d::Camera cam = m3d::getCamera(pcam->id);
-    cam.SetPosition(pcam->position1.x, pcam->position1.y, pcam->position1.z);
-    // TODO
-    sPosture.cameraTarget = pcam->position2;
+    cam.SetPosition(pcam->position.x, pcam->position.y, pcam->position.z);
+
+    sPosture.cameraTarget = pcam->target;
+    sPosture.cameraTwist = pcam->twist;
     cam.SetPosture(sPosture);
-    cam.SetOrtho(pcam->field_0x1C, -pcam->field_0x1C, -pcam->field_0x1C, pcam->field_0x1C, 1.0f, 1000000.0f);
+    cam.SetOrtho(pcam->radius, -pcam->radius, -pcam->radius, pcam->radius, 1.0f, 1000000.0f);
     cam.SetTexMtxParam(0.5f, 0.5f, 0.5f, 0.5f);
 }
 
-// TODO
 bool d3d::UnkWithWater::linkMdl(nw4r::g3d::ResMdl &mdl, d3d::UnkWithWater *thing) {
     bool result = false;
-    
-    for (u32 i = 0; i < mdl.GetResMatNumEntries(); i++) {
+
+    for (int i = 0; i < mdl.GetResMatNumEntries(); i++) {
         nw4r::g3d::ResMat mat = mdl.GetResMat(i);
         nw4r::g3d::ResTexSrt srt = mat.GetResTexSrt();
 
-        for (u32 j = 0; j < mat.GetNumResTexPlttInfo(); j++) {
+        for (int j = 0; j < mat.GetNumResTexPlttInfo(); j++) {
             nw4r::g3d::ResTexPlttInfo paletteInfo = mat.GetResTexPlttInfo(j);
             const char *name = paletteInfo.GetTexName();
             if (strequals(name, "DummyWater") || strequals(name, "TimeDoorB_Dummy")) {
                 nw4r::g3d::ResTexObj obj = mat.GetResTexObj();
                 thing->init(obj, paletteInfo.ptr()->mapID);
-                
+
                 u32 mode;
                 int camRef;
                 int lightRef;
