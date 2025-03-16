@@ -18,7 +18,7 @@ ArcCallbackHandler ArcCallbackHandler::sInstance;
 extern "C" void FUN_804a7260(nw4r::g3d::ResMdl, const char *prefix);
 
 void BindSystemModelsAndLighting(nw4r::g3d::ResFile file) {
-    nw4r::g3d::ResFile sysFile(OarcManager::sInstance->getMdlFromArc2("System"));
+    nw4r::g3d::ResFile sysFile(OarcManager::GetInstance()->getMdlFromArc2("System"));
     if (sysFile.IsValid()) {
         file.Bind(sysFile);
     }
@@ -62,14 +62,14 @@ void ArcCallbackHandlerBase::CreateArcEntry(void *data, const char *path) {
         char buf[64];
         sscanf(oarcPath, "/oarc/%31[^.]arc", buf);
         u32 oldPrefix = mPrefix;
-        OarcManager::sInstance->addEntryFromSuperArc(buf, data, nullptr);
+        OarcManager::GetInstance()->addEntryFromSuperArc(buf, data, nullptr);
         mPrefix = oldPrefix;
     } else if (mPrefix == NAME_RARC) {
         SizedString<64> oarcPath = path;
         char buf[64];
         sscanf(oarcPath, "/rarc/%31[^.]arc", buf);
         u32 oldPrefix = mPrefix;
-        CurrentStageArcManager::sInstance->addEntryFromSuperArc(buf, data);
+        CurrentStageArcManager::GetInstance()->addEntryFromSuperArc(buf, data);
         mPrefix = oldPrefix;
     }
 }
@@ -80,14 +80,14 @@ void ArcCallbackHandlerBase::DestroyArcEntry(const char *path) {
         char buf[64];
         sscanf(oarcPath, "/oarc/%31[^.]arc", buf);
         u32 oldPrefix = mPrefix;
-        OarcManager::sInstance->decrement(buf);
+        OarcManager::GetInstance()->decrement(buf);
         mPrefix = oldPrefix;
     } else if (mPrefix == NAME_RARC) {
         SizedString<64> oarcPath = path;
         char buf[64];
         sscanf(oarcPath, "/rarc/%31[^.]arc", buf);
         u32 oldPrefix = mPrefix;
-        CurrentStageArcManager::sInstance->decrement(buf);
+        CurrentStageArcManager::GetInstance()->decrement(buf);
         mPrefix = oldPrefix;
     }
 }

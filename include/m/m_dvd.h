@@ -69,7 +69,7 @@ public:
     u8 mCompressionType;
 };
 
-typedef u32 (*dvdReadCallback)(void *);
+typedef void *(*dvdReadCallback)(void *);
 
 class mDvd_callback_c : public mDvd_command_c {
 public:
@@ -78,19 +78,20 @@ public:
     virtual u32 execute() override;
 
     static mDvd_callback_c *create(dvdReadCallback cb, void *cbData);
-    static mDvd_callback_c *createOrFail(dvdReadCallback cb, void *cbData);
+    // createOrDie__15mDvd_callback_cFPFPv_PvPv ?
+    static mDvd_callback_c *createOrDie(dvdReadCallback cb, void *cbData);
 
     dvdReadCallback mCallback;
     void *mCallbackData;
-    u32 mCallbackResult;
+    void *mCallbackResult;
 };
 
 class mDvd_mountMemArchive_c : public mDvd_command_c {
 public:
     mDvd_mountMemArchive_c(int mountDirection);
     virtual ~mDvd_mountMemArchive_c();
-    virtual u32 execute();
-    virtual void doClear();
+    virtual u32 execute() override;
+    virtual void doClear() override;
 
     static mDvd_mountMemArchive_c *create(const char *path, u8 mountDirection, EGG::Heap *heap);
     void *getArcBinary();
@@ -121,7 +122,7 @@ public:
 
     static mDvd_toMainRam_arc_c *makeRequest(EGG::Archive *arc, int entryNum, int mountDirection, EGG::Heap *heap);
     static mDvd_toMainRam_arc_c *create(EGG::Archive *arc, const char *path, int mountDirection, EGG::Heap *heap);
-    static mDvd_toMainRam_arc_c *createOrFail(EGG::Archive *arc, const char *path, int mountDirection, EGG::Heap *heap);
+    static mDvd_toMainRam_arc_c *createOrDie(EGG::Archive *arc, const char *path, int mountDirection, EGG::Heap *heap);
 
     EGG::Archive *mArcPtr;
     int mEntryNum;
@@ -135,7 +136,7 @@ public:
     virtual void doClear();
 
     static mDvd_toMainRam_normal_c *create(const char *path, int mountDirection, EGG::Heap *heap);
-    static mDvd_toMainRam_normal_c *createOrFail(const char *path, int mountDirection, EGG::Heap *heap);
+    static mDvd_toMainRam_normal_c *createOrDie(const char *path, int mountDirection, EGG::Heap *heap);
     static void create2(mDvd_toMainRam_normal_c **cmd, const char *path, int mountDirection, EGG::Heap *heap);
 
     u8 mCompressionType2;

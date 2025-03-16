@@ -235,12 +235,12 @@ u16 *FileManager::getStoryFlagsMut() {
 
 /* 8000CAD0 */ bool FileManager::isNew_FileA() {}
 
-/* 8000CB00 */ void FileManager::setSceneFlagIndex(u16 idx) {}
+/* 8000CB00 */ void FileManager::setSceneFlagIndex(s16 idx) {}
 /* 8000CB30 */ u32 FileManager::getSceneFlagIndex() {}
 /* 8000CB80 */ s32 FileManager::getFileAreaIndex() {}
 
 /* 8000CBD0 */ void FileManager::fn_8000CBD0(u8) {}
-/* 8000CC00 */ void FileManager::fn_8000CC00() {}
+/* 8000CC00 */ u8 FileManager::fn_8000CC00() {}
 
 /* 8000CC50 */ void FileManager::setFileTimes() {}
 /* 8000CCB0 */ void FileManager::setPlayTime(s64 time) {}
@@ -447,7 +447,7 @@ extern "C" void fn_800C01F0(); // todo flag managers
         }
     }
 }
-/* 80011370 */ bool FileManager::isFileEmpty(int fileNum) {}
+/* 80011370 */ bool FileManager::isFileEmpty(u8 fileNum) {}
 /* 80011390 */ bool FileManager::isFileDirty(int fileNum) {}
 /* 800113B0 */ u8 FileManager::get_0xA84C() {}
 /* 800113C0 */ bool FileManager::checkRegionCode() {}
@@ -464,5 +464,5 @@ bool FileManager::isFileInactive() const {
     return false;
 }
 /* 80011500 */ void FileManager::setPlayerInfoFileA() {}
-/* 800115E0 */ void FileManager::setT3Info(mVec3_c *pos, mAng3_c *rot) {}
+/* 800115E0 */ void FileManager::setT3Info(const mVec3_c &pos, const mAng3_c &rot) {}
 /* 800116C0 */ void FileManager::getRegionVersion(char *out) {}

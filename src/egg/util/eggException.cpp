@@ -13,7 +13,7 @@
 namespace EGG {
 
 Exception *Exception::sException;
-volatile nw4r::db::ConsoleHandle Exception::sConsoleHandle;
+nw4r::db::ConsoleHandle Exception::sConsoleHandle;
 void *Exception::sMapFileWorks;
 u32 Exception::sMapFileNumMax;
 u32 Exception::sCurrentMapFileNum;
@@ -179,16 +179,17 @@ Exception::Exception(u16 width, u16 height, u16 attr, EGG::Heap *heap, int mapFi
         return;
     }
 
-    GXRenderModeObj *o = EGG::BaseSystem::getVideo()->getCurrentOrFallbackRenderModeObj();
-    nw4r::db::Exception_SetConsole(sConsoleHandle, o);
+    const GXRenderModeObj *o = EGG::BaseSystem::getVideo()->getCurrentOrFallbackRenderModeObj();
+    // Fakematch? Everything before Exception_SetConsole matches if it's volatile, but things after
+    // it break
+    nw4r::db::Exception_SetConsole(*(nw4r::db::ConsoleHandle *volatile)&sConsoleHandle, o);
 
     nw4r::db::Console_SetPosition(sConsoleHandle, 0, 30);
     nw4r::db::Console_SetVisible(sConsoleHandle, false);
 
     sMapFileNumMax = mapFileNum;
-    size_t size = mapFileNum * 0x14;
     sCurrentMapFileNum = 0;
-    sMapFileWorks = Heap::alloc(size, 4, heap);
+    sMapFileWorks = Heap::alloc(mapFileNum * 0x14, 4, heap);
     SetCallbackArgs(nullptr);
 }
 

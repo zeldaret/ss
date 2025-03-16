@@ -3,7 +3,7 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
-#include "toBeSorted/scgame.h"
+#include "d/d_sc_game.h"
 
 char STAGE_FS_A[] = "D201";
 char STAGE_FS_B[] = "D201_1";
@@ -518,7 +518,7 @@ void dBgWKCol::DrawOnMap(int idx, bool param2) {
 
     if (param2) {
         // FS Room 9 /* Spiral Staircase  */
-        if (GetRoomId() == 9 && (ScGame::isCurrentStage(STAGE_FS_A) || ScGame::isCurrentStage(STAGE_FS_B))) {
+        if (GetRoomId() == 9 && (dScGame_c::isCurrentStage(STAGE_FS_A) || dScGame_c::isCurrentStage(STAGE_FS_B))) {
             int all = mMapRelated[idx].mCount;
             mVec3_c AB, CA, BC;
             mVec3_c v0, v1, v2;
@@ -646,13 +646,13 @@ void dBgWKCol::DrawOnMap(int idx, bool param2) {
         f32 yPos = (bnd->GetMinP()->y + bnd->GetMaxP()->y) * 0.5f;
 
         // Sandship
-        if (GetRoomId() == 15 && ScGame::isCurrentStage(STAGE_SSH)) {
+        if (GetRoomId() == 15 && dScGame_c::isCurrentStage(STAGE_SSH)) {
             yPos = 0.0f;
         }
         if (idx == 0x12 /* Abyss `Common/tex/naraku.bti`)*/) {
             yPos -= 1.0f;
         }
-        if (ScGame::isCurrentStage(STAGE_FS_A) || ScGame::isCurrentStage(STAGE_FS_B)) {
+        if (dScGame_c::isCurrentStage(STAGE_FS_A) || dScGame_c::isCurrentStage(STAGE_FS_B)) {
             int room = GetRoomId();
             /* FS Room 9 - Spiral Staircse */
             if (room == 9) {

@@ -7,7 +7,7 @@ u16 TBoxflagManager::sTBoxFlags[2] = {};
 /* 0x800BE810 */
 void TBoxflagManager::doCommit() {
     if (mSceneIndex != 0xFFFF) {
-        FileManager::getInstance()->setTBoxFlags(mFlagSpace.getFlagPtrUnchecked(), mSceneIndex * 2, 2);
+        FileManager::GetInstance()->setTBoxFlags(mFlagSpace.getFlagPtrUnchecked(), mSceneIndex * 2, 2);
     }
 }
 
@@ -28,7 +28,7 @@ void TBoxflagManager::init() {}
 void TBoxflagManager::copyFromSave(u32 sceneIndex) {
     u16 idx = sceneIndex;
     mSceneIndex = idx;
-    u16 *flags = FileManager::getInstance()->getTBoxFlagsConst();
+    u16 *flags = FileManager::GetInstance()->getTBoxFlagsConst();
     mFlagSpace.copyFromSaveFile2(flags + (idx * 2), 0, 2);
 }
 
@@ -36,7 +36,7 @@ void TBoxflagManager::copyFromSave(u32 sceneIndex) {
 u16 TBoxflagManager::checkFlag(u16 sceneIndex, u16 flag) {
     s32 actualFlag = (flag + sceneIndex * 0x20);
     return mFlagHelper.checkFlag(
-        actualFlag / 16, flag % 16, FileManager::getInstance()->getTBoxFlagsConst(), getFlagCount()
+        actualFlag / 16, flag % 16, FileManager::GetInstance()->getTBoxFlagsConst(), getFlagCount()
     );
 }
 

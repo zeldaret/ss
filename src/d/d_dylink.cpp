@@ -284,7 +284,7 @@ err:
     return false;
 }
 
-u32 loadRelsArcCallback(void *arg) {
+void *loadRelsArcCallback(void *arg) {
     EGG::Archive *arc = nullptr;
     EGG::Heap *heap = DynamicModuleControl::sDylinkHeap;
 
@@ -297,10 +297,10 @@ u32 loadRelsArcCallback(void *arg) {
     if (arc != nullptr) {
         DynamicModuleControl::sArchive = arc;
     }
-    return (u32)arc;
+    return reinterpret_cast<void *>(arc);
 }
 
-u32 dvdCallback(void *arg) {
+void *dvdCallback(void *arg) {
     DynamicModuleControl::initialize(mHeap::g_dylinkHeap);
     DynamicModuleControl::sRelsDir = relsDir;
     DVDFileInfo info;
@@ -319,16 +319,16 @@ u32 dvdCallback(void *arg) {
     do {
     } while (!result);
     Initialized = 1;
-    return true;
+    return reinterpret_cast<void *>(true);
 }
 
 void initModule() {
     initDylinkHeap(0x2bf, DYNAMIC_NAME_TABLE, 0x27c, mHeap::g_dylinkHeap);
-    DVD = mDvd_callback_c::createOrFail(dvdCallback, mHeap::g_dylinkHeap);
+    DVD = mDvd_callback_c::createOrDie(dvdCallback, mHeap::g_dylinkHeap);
 }
 
 void initRelsArc() {
-    DVD = mDvd_callback_c::createOrFail(loadRelsArcCallback, nullptr);
+    DVD = mDvd_callback_c::createOrDie(loadRelsArcCallback, nullptr);
 }
 
 bool destroy() {

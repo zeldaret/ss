@@ -1,9 +1,9 @@
 #include "d/t/d_t_switch.h"
 
+#include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
 #include "s/s_Math.h"
 #include "toBeSorted/event.h"
-#include "toBeSorted/scgame.h"
 
 SPECIAL_ACTOR_PROFILE(SW_TAG, dTgSw_c, fProfile::SW_TAG, 0x24, 0, 0);
 
@@ -35,7 +35,7 @@ int dTgSw_c::create() {
         mTrigSceneFlagIdEnd += (params >> 0x1C);
     }
 
-    if (ScGame::isCurrentStage("D201")) {
+    if (dScGame_c::isCurrentStage("D201")) {
         if (roomid == 4) {
             if (!SceneflagManager::sInstance->checkBoolFlag(roomid, 0x2F)) {
                 SceneflagManager::sInstance->unsetFlag(roomid, mSetSceneFlagId);
@@ -107,7 +107,7 @@ bool dTgSw_c::isPuzzleSolved() {
 }
 
 bool dTgSw_c::isLmfBossKeyPuzzle() {
-    return ScGame::isCurrentStage("D300_1") && roomid == 8 && mSetSceneFlagId == 0x1C;
+    return dScGame_c::isCurrentStage("D300_1") && roomid == 8 && mSetSceneFlagId == 0x1C;
 }
 
 void dTgSw_c::initializeState_OnWait() {

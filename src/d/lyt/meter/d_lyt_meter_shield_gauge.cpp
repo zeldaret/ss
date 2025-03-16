@@ -29,7 +29,7 @@ bool dLytMeterShieldGauge_c::remove() {
     return true;
 }
 
-bool dLytMeterShieldGauge_c::LytMeter0x14() {
+bool dLytMeterShieldGauge_c::execute() {
     // TODO
     return true;
 }

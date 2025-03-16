@@ -616,6 +616,10 @@ public:
         return ResTexPlttInfo(&pData[id]);
     }
 
+    const char *GetName() const {
+        return ofs_to_ptr<const char>(ref().name);
+    }
+
     ResMatDLData *GetResMatDLData() {
         return ofs_to_ptr<ResMatDLData>(ref().toResMatDLData);
     }

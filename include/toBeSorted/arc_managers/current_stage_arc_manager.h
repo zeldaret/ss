@@ -10,8 +10,6 @@ public:
     CurrentStageArcManager();
     virtual ~CurrentStageArcManager();
 
-    static CurrentStageArcManager *sInstance;
-
     static bool create(EGG::Heap *heap);
 
     void init(EGG::Heap *heap);
@@ -30,9 +28,19 @@ public:
     const char *getCurrentStageDirectory();
     const char *getRoomArcDirectory(int room) const;
 
-    static EGG::ExpHeap *getHeap();
+    EGG::ExpHeap *getHeap(s32 roomid);
+
+    inline int ensureAllEntriesLoaded() {
+        return mArcTable.ensureAllEntriesLoaded();
+    }
+
+    static CurrentStageArcManager *GetInstance() {
+        return sInstance;
+    }
 
 private:
+    static CurrentStageArcManager *sInstance;
+
     SizedString<32> mStageName;
     SizedString<32> mCurrentLoadingStageArcName;
     SizedString<32> mStageExtraLayerArcName;

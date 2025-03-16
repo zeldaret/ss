@@ -27,6 +27,12 @@ toBeSorted/file_manager.cpp:
 toBeSorted/save_manager.cpp:
 	.text       start:0x80011730 end:0x80015310
 
+toBeSorted/blur_and_palette_manager.cpp:
+	.text       start:0x800221A0 end:0x800268AC
+	.ctors      start:0x804DB65C end:0x804DB660
+	.sdata2     start:0x80576BA0 end:0x80576C18
+	.bss        start:0x8058F210 end:0x80594FA0
+
 toBeSorted/sound_info.cpp:
 	.text       start:0x8002C250 end:0x8002C308
 
@@ -141,11 +147,18 @@ d/d_rawarchive.cpp:
 	.data       start:0x8050DDD8 end:0x8050DDF8
 
 d/d_scene.cpp:
-	.text       start:0x800629D0 end:0x80062E40
+	.text       start:0x800629D0 end:0x80062E3C
 	.ctors      start:0x804DB690 end:0x804DB694
+	.data       start:0x8050DDF8 end:0x8050DE48
+	.sdata      start:0x80571D08 end:0x80571D10
+	.sbss       start:0x80575220 end:0x80575228
+	.bss        start:0x805A06F0 end:0x805A0720
 
-d/d_stage.cpp:
-	.text       start:0x80062E40 end:0x80064250
+d/d_stage_parse.cpp:
+	.text       start:0x80062ED0 end:0x8006424C
+	.rodata     start:0x804E0B38 end:0x804E0C98
+	.data       start:0x8050DE48 end:0x8050DE58
+	.sdata2     start:0x80577920 end:0x80577928
 
 d/d_sys.cpp:
 	.text       start:0x80064250 end:0x80064920
@@ -196,6 +209,10 @@ toBeSorted/dowsing_target.cpp:
 	.sdata2     start:0x80579640 end:0x80579670
 	.bss        start:0x805A2FB0 end:0x805A3010
 
+toBeSorted/minigame_mgr.cpp:
+	.text       start:0x800A5060 end:0x800A5608
+	.ctors      start:0x804DB6C4 end:0x804DB6C8
+
 d/lyt/d2d.cpp:
 	.text       start:0x800A9D30 end:0x800ACAB8
 	.data       start:0x8050FFC8 end:0x80510088
@@ -238,6 +255,10 @@ toBeSorted/time_area_mgr.cpp:
 	.sdata      start:0x805722E0 end:0x805722F8
 	.sbss       start:0x805753C0 end:0x805753D0
 	.sdata2     start:0x805798D0 end:0x80579928
+
+toBeSorted/nand_request_thread.cpp:
+	.text       start:0x800BC980 end:0x800BD604
+	.data       start:0x80510B30 end:0x80510B70
 
 d/flag/flag_managers.cpp:
 	.text       start:0x800BD8C0 end:0x800C0650
@@ -388,10 +409,10 @@ d/lyt/d_lyt_msg_window_select_btn.cpp:
 	.ctors      start:0x804DB73C end:0x804DB740
 
 d/lyt/d_lyt_msg_window_base.cpp:
-	.text       start:0x80120A20 end:0x80120A98
+	.text       start:0x80120A20 end:0x80121068
 
 d/lyt/d_lyt_msg_window_talk.cpp:
-	.text       start:0x80120AA0 end:0x801223C8
+	.text       start:0x80121070 end:0x801223C8
 	.ctors      start:0x804DB740 end:0x804DB744
 
 d/lyt/d_lyt_msg_window_link.cpp:
@@ -484,8 +505,11 @@ d/lyt/d_lyt_help.cpp:
 d/lyt/d_lyt_bird_gauge.cpp:
 	.text       start:0x80152FD0 end:0x801548D8
 	.ctors      start:0x804DB784 end:0x804DB788
+	.rodata     start:0x804E80F8 end:0x804E8138
 	.data       start:0x80524020 end:0x80524510
 	.sbss       start:0x805754E0 end:0x805754E8
+	.sdata2     start:0x8057A038 end:0x8057A040
+	.bss        start:0x805B0FB0 end:0x805B1230
 
 d/lyt/d_lyt_sky_gauge.cpp:
 	.text       start:0x801548E0 end:0x80155CC8
@@ -605,14 +629,92 @@ d/lyt/d_screen_fader.cpp:
 	.data       start:0x80528D68 end:0x80528D90
 	.sdata2     start:0x8057ABE0 end:0x8057AC08
 
+d/a/d_a_bird_base.cpp:
+	.text       start:0x80175FD0 end:0x80179128
+
+d/a/d_a_door_base.cpp:
+	.text       start:0x80179130 end:0x801792C4
+	.ctors      start:0x804DB7DC end:0x804DB7E0
+
+d/lyt/d_lyt_map_popup.cpp:
+	.text       start:0x801792D0 end:0x80189F9C
+
+d/a/d_a_fish_mgr_base.cpp:
+	.text       start:0x8018B880 end:0x8018BFC8
+	.ctors      start:0x804DB7E4 end:0x804DB7E8
+
+d/a/d_a_fish_base.cpp:
+	.text       start:0x8018BFD0 end:0x8018E378
+	.ctors      start:0x804DB7E8 end:0x804DB7EC
+
+toBeSorted/sword_proj_effect_list.cpp:
+	.text       start:0x8018E380 end:0x8018F188
+
 d/a/d_a_insect.cpp:
 	.text       start:0x8018F190 end:0x80190710
 	.data       start:0x8052ABD8 end:0x8052ACC0
 	.sdata2     start:0x8057ADD8 end:0x8057AE30
 
+d/a/d_a_salbage_obj.cpp:
+	.text       start:0x80190AB0 end:0x80192AF8
+	.ctors      start:0x804DB7EC end:0x804DB7F0
+
+d/a/d_a_salbage_npc.cpp:
+	.text       start:0x80192B00 end:0x80194080
+	.ctors      start:0x804DB7F0 end:0x804DB7F4
+
+d/d_stage_mgr.cpp:
+	.text       start:0x801975C0 end:0x8019CFD8
+	.ctors      start:0x804DB7FC end:0x804DB800
+	.data       start:0x8052B708 end:0x8052C128
+
+d/d_last.cpp:
+	.text       start:0x8019CFE0 end:0x8019D15C
+
+d/d_camera.cpp:
+	.text       start:0x8019D160 end:0x8019ED0C
+	.ctors      start:0x804DB800 end:0x804DB804
+
+d/d_light_obj.cpp:
+	.text       start:0x8019ED10 end:0x801A65C8
+
 d/tg/d_t_weather.cpp:
 	.text       start:0x801A65D0 end:0x801AF7D8
 	.ctors      start:0x804DB804 end:0x804DB808
+
+d/d_stage.cpp:
+	.text       start:0x801B32A0 end:0x801B5BC8
+	.ctors      start:0x804DB80C end:0x804DB810
+	.data       start:0x8052DF40 end:0x8052E080
+	.sdata      start:0x80573290 end:0x805732F8
+	.sdata2     start:0x8057B4E8 end:0x8057B528
+
+d/d_room.cpp:
+	.text       start:0x801B5C80 end:0x801B84D8
+	.ctors      start:0x804DB810 end:0x804DB814
+	.rodata     start:0x804EAB60 end:0x804EAB88
+	.data       start:0x8052E0D8 end:0x8052E358
+	.sdata      start:0x805732F8 end:0x80573348
+	.sdata2     start:0x8057B528 end:0x8057B540
+	.bss        start:0x805B36E0 end:0x805B3760
+
+d/d_sc_title.cpp:
+	.text       start:0x801B9230 end:0x801BA3A0
+	.ctors      start:0x804DB818 end:0x804DB81C
+	.data       start:0x8052E438 end:0x8052E5F8
+	.sdata      start:0x805733D0 end:0x805733E8
+	.sbss       start:0x80575780 end:0x80575788
+	.sdata2     start:0x8057B580 end:0x8057B588
+	.bss        start:0x805B3760 end:0x805B37E0
+
+d/d_sc_game.cpp:
+	.text       start:0x801BA3A0 end:0x801BC6B8
+	.ctors      start:0x804DB81C end:0x804DB820
+	.data       start:0x8052E5F8 end:0x8052E860
+	.sdata      start:0x805733E8 end:0x80573430
+	.sbss       start:0x80575788 end:0x805757A8
+	.sdata2     start:0x8057B588 end:0x8057B5A8
+	.bss        start:0x805B37E0 end:0x805B38B8
 
 d/d_cs_base.cpp:
 	.text       start:0x801BC6C0 end:0x801BD250
@@ -793,6 +895,9 @@ d/tg/d_t_genki_mgr.cpp:
 
 d/a/obj/d_a_obj_water_mark.cpp:
 	.text       start:0x802D9D60 end:0x802DA0BC
+
+s/s_FPhase.cpp:
+	.text       start:0x802DDC20 end:0x802DDDB0
 
 s/s_StateID.cpp:
 	.text       start:0x802DDDB0 end:0x802DE1F4

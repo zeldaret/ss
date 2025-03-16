@@ -5,6 +5,7 @@
 #include "d/lyt/d_structd.h"
 #include "f/f_base.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_BASE_PROFILE(C_GAME, dCsGame_c, fProfile::C_GAME, 0x2BF, 0x06F9);
 
@@ -131,9 +132,9 @@ dCsGame_c::~dCsGame_c() {
 }
 
 int dCsGame_c::create() {
-    void *csData = LayoutArcManager::sInstance->getLoadedData("cursor");
+    void *csData = LayoutArcManager::GetInstance()->getLoadedData("cursor");
     mCursorResAcc.attach(csData, "arc");
-    void *mainData = LayoutArcManager::sInstance->getLoadedData("Main2D");
+    void *mainData = LayoutArcManager::GetInstance()->getLoadedData("Main2D");
     mMain2DResAcc.attach(mainData, "");
 
     mLyt1.setResAcc(&mCursorResAcc);
@@ -148,8 +149,8 @@ int dCsGame_c::create() {
 
     mCursor.setField0x9A0(0);
     mStructC.field_0x10 = 2;
-    d2d::dLytStructDList::sInstance->appendToList1(&mStructC);
-    dCsBase_c::sInstance->setField703(false);
+    d2d::dLytStructDList::GetInstance()->appendToList1(&mStructC);
+    dCsBase_c::GetInstance()->setField703(false);
     return SUCCEEDED;
 }
 
@@ -157,7 +158,7 @@ int dCsGame_c::doDelete() {
     mCursor.remove();
     mLyt2.dCsGameLytBase_0x14();
     mLyt1.dCsGameLytBase_0x14();
-    d2d::dLytStructDList::sInstance->removeFromList1(&mStructC);
+    d2d::dLytStructDList::GetInstance()->removeFromList1(&mStructC);
     mCursorResAcc.detach();
     mMain2DResAcc.detach();
     return SUCCEEDED;
@@ -401,14 +402,12 @@ void dCsGame_c::lytItemCursor_c::lytBowCsr_c::initializeState_Charge() {
     mAnm[MAIN_ANIM_ARROW_EFFECT].setAnimEnable(true);
     mAnm[MAIN_ANIM_ARROW_EFFECT].setFrame(0.0f);
 }
-extern "C" void *SOUND_EFFECT_SOUND_MGR;
-extern "C" void SmallSoundManager__playSound(void *, s32);
 void dCsGame_c::lytItemCursor_c::lytBowCsr_c::executeState_Charge() {
     if (field_0x54 >= 1.0f) {
         if (!mAnm[MAIN_ANIM_ARROW_PEAK].isFlag2()) {
             mAnm[MAIN_ANIM_ARROW_PEAK].setAnimEnable(true);
             mAnm[MAIN_ANIM_ARROW_PEAK].setFrame(0.0f);
-            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x148D);
+            SmallSoundManager::GetInstance()->playSound(SE_S_BW_ALIGN_SIGHT);
         }
         mAnm[MAIN_ANIM_ARROW_KEEP].setAnimEnable(false);
     } else {

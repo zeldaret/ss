@@ -4,6 +4,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
+#include "d/d_stage_mgr.h"
 #include "f/f_base.h"
 #include "rvl/MTX/mtx.h"
 
@@ -167,11 +168,10 @@ void dCcS::ClearArea() {
     mAreaCount = 0;
 }
 
-extern "C" void *STAGE_MANAGER;
 extern "C" bool fn_8019A7A0(void *stg, f32 *, f32 *);
 void dCcS::AdjustHitPos() {
     f32 x, z;
-    if (STAGE_MANAGER && fn_8019A7A0(STAGE_MANAGER, &x, &z)) {
+    if (dStageMgr_c::GetInstance() != nullptr && fn_8019A7A0(dStageMgr_c::GetInstance(), &x, &z)) {
         for (cCcD_Obj **obj = mpObj; obj < mpObj + mObjCount; ++obj) {
             (*obj)->AdjustHitPos(x, z);
             (*obj)->GetShapeAttr()->TranslateXZ(x, z);

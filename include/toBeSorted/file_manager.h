@@ -210,12 +210,12 @@ public:
 
     /* 8000CAD0 */ bool isNew_FileA();
 
-    /* 8000CB00 */ void setSceneFlagIndex(u16 idx);
+    /* 8000CB00 */ void setSceneFlagIndex(s16 idx);
     /* 8000CB30 */ u32 getSceneFlagIndex();
     /* 8000CB80 */ s32 getFileAreaIndex();
 
     /* 8000CBD0 */ void fn_8000CBD0(u8);
-    /* 8000CC00 */ void fn_8000CC00();
+    /* 8000CC00 */ u8 fn_8000CC00();
 
     /* 8000CC50 */ void setFileTimes();
     /* 8000CCB0 */ void setPlayTime(s64 time);
@@ -270,20 +270,22 @@ public:
     /* 80011280 */ u32 calcFileCRC(const void *data, u32 length);
     /* 80011290 */ void updateEmptyFiles();
     /* 800112D0 */ void updateEmptyFileFlags();
-    /* 80011370 */ bool isFileEmpty(int fileNum);
+    /* 80011370 */ bool isFileEmpty(u8 fileNum);
     /* 80011390 */ bool isFileDirty(int fileNum);
     /* 800113B0 */ u8 get_0xA84C();
     /* 800113C0 */ bool checkRegionCode();
     /* 80011440 */ bool checkFileCRC(u8 fileNum);
     /* 80011490 */ bool isFileInactive() const;
     /* 80011500 */ void setPlayerInfoFileA();
-    /* 800115E0 */ void setT3Info(mVec3_c *pos, mAng3_c *rot);
+    /* 800115E0 */ void setT3Info(const mVec3_c &pos, const mAng3_c &rot);
     /* 800116C0 */ static void getRegionVersion(char *out);
     // /* 800116F0 */ void sinit();
 
-    static FileManager *getInstance() {
+    static FileManager *GetInstance() {
         return sInstance;
     }
+
+private:
     static FileManager *sInstance;
 };
 

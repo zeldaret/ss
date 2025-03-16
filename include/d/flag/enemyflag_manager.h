@@ -7,13 +7,14 @@
 #include "toBeSorted/file_manager.h"
 
 class EnemyflagManager : public CommittableFlagManager {
-public:
+private:
     FlagSpace mFlagSpace;
     BitwiseFlagHelper mFlagHelper;
     u16 mSceneIndex;
 
     static u16 sEnemyDefeatFlags[4096];
 
+public:
     static EnemyflagManager *sInstance;
 
     void clearSavedFlags();
@@ -33,7 +34,7 @@ public:
     void setFlag(u16 flag);
 
     virtual void doCommit() override {
-        FileManager *mgr = FileManager::sInstance;
+        FileManager *mgr = FileManager::GetInstance();
         mgr->setEnemyDefeatFlags(mFlagSpace.getFlagPtrUnchecked(), 0, 0x1000);
     };
 };

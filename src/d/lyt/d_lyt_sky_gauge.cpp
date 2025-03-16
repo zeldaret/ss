@@ -188,11 +188,13 @@ bool dLytSkyGauge_c::build(d2d::ResAccIf_c *resAcc) {
     mStateMgr.changeState(StateID_None);
     return true;
 }
-bool dLytSkyGauge_c::LytMeter0x14() {
+
+bool dLytSkyGauge_c::execute() {
     mMain.execute();
     mStateMgr.executeState();
     return true;
 }
+
 bool dLytSkyGauge_c::remove() {
     mMain.remove();
     return true;

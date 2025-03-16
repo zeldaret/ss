@@ -35,6 +35,7 @@ struct PLANE {
 struct AABB {
     AABB() {}
 
+    AABB(const VEC3 &min, const VEC3 &max) : min(min), max(max) {}
     void Set(const VEC3 *points, unsigned int num);
     void Set(const AABB *box, const MTX34 *mtx);
 

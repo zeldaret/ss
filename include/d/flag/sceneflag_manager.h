@@ -5,9 +5,8 @@
 #include "d/flag/bitwise_flag_helper.h"
 #include "d/flag/flag_space.h"
 
-
 class SceneflagManager {
-public:
+private:
     FlagSpace mSceneflags;
     FlagSpace mTempflags;
     FlagSpace mZoneflags;
@@ -19,7 +18,12 @@ public:
     static u16 sSceneFlags[8];
     static u16 sZoneFlags[0xFC];
 
+    // helper
+    bool checkSceneflagHelper(u16 flag);
+
+public:
     static SceneflagManager *sInstance;
+
     void init();
     void setShouldCommit(u16 flag);
     SceneflagManager();
@@ -48,7 +52,7 @@ public:
     }
     u16 checkFlag(u16 roomId, u16 flag);
     bool checkSceneflagGlobal(u16 sceneIdx, u16 flag);
-    bool checkTempOrSceneflag(u16 flag);
+    u16 checkTempOrSceneflag(u16 flag);
     u16 checkUncommittedFlag(u16 roomId, u16 flag);
     void setZoneflag(u16 roomId, u16 flag);
     void setFlag(u16 roomId, u16 flag);

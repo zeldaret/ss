@@ -66,6 +66,26 @@ public:
         field_0x154 = arg;
     }
 
+    const mQuat_c &GetQuat() const {
+        return mQuat;
+    }
+    const mVec3_c &GetPostion() const {
+        return mPositionMaybe;
+    }
+    const f32 GetOffset() const {
+        return mOffsetMaybe;
+    }
+    const f32 Get0x13C() const {
+        return field_0x13C;
+    }
+    void Set0x13C(const f32 f) {
+        field_0x13C = f;
+    }
+
+    const mFrustum_c &GetFrustum() const {
+        return mFrustum;
+    }
+
 private:
     /* 0x00C */ EGG::Heap *mpHeap;
     /* 0x010 */ mShadowCircle_c *mpCircle;
@@ -108,8 +128,14 @@ class mShadow_c : public proc_c {
 
 public:
     mShadow_c(EGG::Heap *heap)
-        : mpHeap(heap), mpCurrentHeap(nullptr), mpChilds(nullptr), mpTexBuf(nullptr), mpCallback(nullptr),
-          mCurrentHeapIdx(0), mFreeChildIdx(0), field_0x66(true) {
+        : mpHeap(heap),
+          mpCurrentHeap(nullptr),
+          mpChilds(nullptr),
+          mpTexBuf(nullptr),
+          mpCallback(nullptr),
+          mCurrentHeapIdx(0),
+          mFreeChildIdx(0),
+          field_0x66(true) {
         nw4r::ut::List_Init(&mList, 0);
     }
     virtual ~mShadow_c();
@@ -148,9 +174,13 @@ public:
     static void create(const mShadowCircleConfig *, nw4r::g3d::ResMdl mdl, EGG::Heap *heap);
     static void destroy();
 
-    static mShadow_c *sInstance;
+    static mShadow_c *GetInstance() {
+        return sInstance;
+    }
 
 private:
+    static mShadow_c *sInstance;
+
     /* 0x18 */ EGG::Heap *mpHeap;
     /* 0x1C */ mAllocator_c mAllocator;
     /* 0x38 */ EGG::FrmHeap *mpFrmHeaps[2];
@@ -179,7 +209,7 @@ public:
     virtual int getType() const override;
     /* 0x24 */ virtual void draw(const mMtx_c &);
 
-    void calc(mMtx_c, mMtx_c &);
+    void calc(mMtx_c, mMtx_c &) const;
 
     /* 0x18 */ mMtx_c mMtx;
     /* 0x48 */ f32 field_0x48;

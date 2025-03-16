@@ -75,7 +75,7 @@ bool dLytMeterGanbariGauge_c::remove() {
     return true;
 }
 
-bool dLytMeterGanbariGauge_c::LytMeter0x14() {
+bool dLytMeterGanbariGauge_c::execute() {
     // TODO
     return true;
 }

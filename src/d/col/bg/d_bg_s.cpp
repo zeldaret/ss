@@ -10,8 +10,8 @@
 #include "d/col/c/c_bg_s_shdw_draw.h"
 #include "d/col/c/c_m3d.h"
 #include "d/col/c/c_partition.h"
+#include "d/d_sc_game.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
-#include "toBeSorted/scgame.h"
 
 const char *MAP_SOLID_MATERIAL_NAMES[31] = {
     0,
@@ -405,11 +405,11 @@ void dBgS::Ct() {
     }
 
     // TODO
-    OarcManager::sInstance->getData(common_folder, MAP_GRADATION_FILE);
+    OarcManager::GetInstance()->getData(common_folder, MAP_GRADATION_FILE);
 
     mInSkyKeep = false;
     for (int i = 0; i < 8; ++i) {
-        if (ScGame::isCurrentStage(SKYKEEP_STAGE_NAMES[i])) {
+        if (dScGame_c::isCurrentStage(SKYKEEP_STAGE_NAMES[i])) {
             mInSkyKeep = true;
             return;
         }
@@ -575,7 +575,7 @@ int dBgS::GetPolyAtt1(cBgS_PolyInfo const &info) {
 
 // TODO: Map to Enums And Cleanup??
 int dBgS::GetMapCode(int att0, int att1, bool bAlt) {
-    if (bAlt && ScGame::currentSpawnInfo.trial == 1) {
+    if (bAlt && dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL) {
         return 0x1E;
     }
     if (att0 == 4 && att1 == 1) {
@@ -1004,7 +1004,7 @@ mVec3_c dBgS_GetN(cBgS_PolyInfo const &info) {
 }
 
 void dBgS::UpdateScrollTex() {
-    MapSrollText_t *scrollTex = (MapSrollText_t *)OarcManager::sInstance->getData(common_folder, MAP_SCROLL_TEX_FILE);
+    MapSrollText_t *scrollTex = (MapSrollText_t *)OarcManager::GetInstance()->getData(common_folder, MAP_SCROLL_TEX_FILE);
     for (int i = 0; i < 5; ++i, ++scrollTex) {
         if (++mField_0x3864[i] >= scrollTex->mField_0x0E) {
             mField_0x3864[i] = 0;
@@ -1028,7 +1028,7 @@ UNKTYPE *dBgS::GetMapAccessor() {
     return lbl_805754B0;
 }
 
-void dBgS::DrawMap(u8 roomId, mMtx_c *, bool bColor, int) {
+void dBgS::DrawMap(int roomId, mMtx_c *, bool bColor, int) {
     // TODO
 }
 
@@ -1068,7 +1068,7 @@ void dBgS::SetupScrollMaterial(int matIdx, s32, bool) {
     // TODO
 }
 
-void dBgS::DrawMapScroll(u8 roomId, mMtx_c *, bool bColor, int) {
+void dBgS::DrawMapScroll(int roomId, mMtx_c *, bool bColor, int) {
     // TODO
 }
 
@@ -1133,13 +1133,13 @@ void dBgS::InitMapParts() {
 
     for (int i = 0; i < 31; ++i) {
         if (MAP_SOLID_MATERIAL_NAMES[i]) {
-            spSolidMatTex[i] = OarcManager::sInstance->getData(common_folder, MAP_SOLID_MATERIAL_NAMES[i]);
+            spSolidMatTex[i] = OarcManager::GetInstance()->getData(common_folder, MAP_SOLID_MATERIAL_NAMES[i]);
         } else {
             spSolidMatTex[i] = nullptr;
         }
     }
     for (int i = 0; i < 5; ++i) {
-        spScrollMapTex[i] = OarcManager::sInstance->getData(common_folder, MAP_SCROLL_MATERIAL_NAMES[i]);
+        spScrollMapTex[i] = OarcManager::GetInstance()->getData(common_folder, MAP_SCROLL_MATERIAL_NAMES[i]);
     }
 }
 

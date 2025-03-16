@@ -1,13 +1,13 @@
 #include "d/a/obj/d_a_obj_lava_F200.h"
 
+#include "d/d_stage.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
-#include "toBeSorted/room_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_LAVA_F200, dAcOlavaF200_c, fProfile::OBJ_LAVA_F200, 0x0214, 0, 0);
 
 bool dAcOlavaF200_c::createHeap() {
     mBrres = nw4r::g3d::ResFile(getOarcResFile("LavaF200"));
-    RoomManager::bindStageResToFile(&mBrres);
+    dStage_c::bindStageResToFile(&mBrres);
 
     nw4r::g3d::ResMdl mdl0 = mBrres.GetResMdl("LavaF200");
     TRY_CREATE(mModels[0].create(mdl0, &heap_allocator, 0x32C));

@@ -16,13 +16,16 @@ public:
     virtual int doDelete() override;
     virtual int create() override;
 
-    static dTgSndMg_c *sInstance;
-
     void setBgmFlag(int flag) {
         mBgmFlags |= 1 << flag;
     }
 
+    static dTgSndMg_c *GetInstance() {
+        return sInstance;
+    }
+
 private:
+    static dTgSndMg_c *sInstance;
     u32 mBgmFlags;
 };
 

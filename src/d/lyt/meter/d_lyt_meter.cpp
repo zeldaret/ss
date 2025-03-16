@@ -1,11 +1,13 @@
 // clang-format off
 #include "common.h"
+#include "d/d_sc_game.h"
+#include "d/d_sc_title.h"
+#include "d/d_stage_mgr.h"
 #include "d/lyt/d_lyt_area_caption.h"
 #include "d/lyt/d_lyt_meter_configuration.h"
 #include "d/lyt/d_window.h"
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
-#include "toBeSorted/scgame.h"
 // clang-format on
 
 static dLytMeterConfiguration_c sConf;
@@ -27,7 +29,7 @@ STATE_DEFINE(dLytMeterParts_c, Out);
 
 void dLytMeter1Button_c::initializeState_Wait() {}
 void dLytMeter1Button_c::executeState_Wait() {
-    if (dLytMeterContainer_c::sInstance->isButtonFlag(0x80)) {
+    if (dLytMeterContainer_c::GetInstance()->isButtonFlag(0x80)) {
         return;
     }
     mStateMgr.changeState(StateID_ToUnuse);
@@ -72,7 +74,7 @@ void dLytMeter1Button_c::initializeState_Unuse() {
     field_0x1A4 = 15;
 }
 void dLytMeter1Button_c::executeState_Unuse() {
-    if (dLytMeterContainer_c::sInstance->isButtonFlag(0x80)) {
+    if (dLytMeterContainer_c::GetInstance()->isButtonFlag(0x80)) {
         if (!(field_0x1A4 > 0)) {
             mStateMgr.changeState(StateID_ToUse);
             return;
@@ -128,7 +130,7 @@ bool dLytMeter1Button_c::remove() {
     return true;
 }
 
-bool dLytMeter1Button_c::LytMeter0x14() {
+bool dLytMeter1Button_c::execute() {
     if (*mStateMgr.getStateID() == StateID_ToUnuse) {
         // TODO
     } else {
@@ -138,7 +140,7 @@ bool dLytMeter1Button_c::LytMeter0x14() {
 
 void dLytMeter2Button_c::initializeState_Wait() {}
 void dLytMeter2Button_c::executeState_Wait() {
-    if (dLytMeterContainer_c::sInstance->isButtonFlag(0x100)) {
+    if (dLytMeterContainer_c::GetInstance()->isButtonFlag(0x100)) {
         return;
     }
     mStateMgr.changeState(StateID_ToUnuse);
@@ -183,7 +185,7 @@ void dLytMeter2Button_c::initializeState_Unuse() {
     field_0x1A4 = 15;
 }
 void dLytMeter2Button_c::executeState_Unuse() {
-    if (dLytMeterContainer_c::sInstance->isButtonFlag(0x100)) {
+    if (dLytMeterContainer_c::GetInstance()->isButtonFlag(0x100)) {
         if (!(field_0x1A4 > 0)) {
             mStateMgr.changeState(StateID_ToUse);
             return;
@@ -236,7 +238,7 @@ bool dLytMeter2Button_c::remove() {
     return true;
 }
 
-bool dLytMeter2Button_c::LytMeter0x14() {
+bool dLytMeter2Button_c::execute() {
     if (*mStateMgr.getStateID() == StateID_ToUnuse) {
         // TODO
     } else {
@@ -277,7 +279,6 @@ void floats2() {
 dLytMeter_c::dLytMeter_c() {}
 #pragma dont_inline reset
 
-extern "C" void *GLOBAL_TITLE_RELOADER;
 extern "C" void fn_800D97E0(int i);
 extern "C" void fn_800D9800(int i);
 extern "C" void fn_801B2D10(void *);
@@ -322,10 +323,6 @@ static const d2d::LytBrlanMapping meterBrlanMap[] = {
     {"basicPosition_00_rupyPosition.brlan",   "G_rupyPosi_00"},
 };
 
-extern "C" void *STAGE_MANAGER;
-extern "C" bool StageManager__isAreaTypeSky(void *stageMgr);
-extern "C" bool StageManager__isAreaTypeDungeon(void *stageMgr);
-
 bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setResAcc(resAcc);
     mLyt.build("basicPosition_00.brlyt", nullptr);
@@ -341,7 +338,7 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     // out G_shield_00
     mShield.setContainerGroup(&mAnmGroups[28]);
 
-    if (GLOBAL_TITLE_RELOADER == nullptr) {
+    if (dScTitle_c::sInstance == nullptr) {
         mp1Button = new dLytMeter1Button_c();
         mp2Button = new dLytMeter2Button_c();
     } else {
@@ -391,7 +388,7 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     }
 
     if (isSilentRealm()) {
-        void *sirenData = LayoutArcManager::sInstance->getLoadedData("Siren");
+        void *sirenData = LayoutArcManager::GetInstance()->getLoadedData("Siren");
         mResAcc.attach(sirenData, "");
         mpTimer = new dLytMeterTimer_c();
         mpTimerPart1 = new LytMeterTimerPart1_c();
@@ -406,7 +403,7 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
         mpTimerPart2 = nullptr;
     }
 
-    if (GLOBAL_TITLE_RELOADER == nullptr && StageManager__isAreaTypeSky(STAGE_MANAGER)) {
+    if (dScTitle_c::sInstance == nullptr && dStageMgr_c::GetInstance()->isAreaTypeSky()) {
         mpSkyGauge = new dLytSkyGauge_c();
         mpSkyGauge->build(resAcc);
 
@@ -417,38 +414,38 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
         mpBirdGauge = nullptr;
     }
 
-    if (ScGame::currentSpawnInfo.stageName == "F401") {
+    if (dScGame_c::currentSpawnInfo.stageName == "F401") {
         mpBossGauge = new dLytBossGauge_c();
         mpBossGauge->build();
     } else {
         mpBossGauge = nullptr;
     }
 
-    if (ScGame::isCurrentStage("F200") || ScGame::isCurrentStage("F210") || ScGame::isCurrentStage("F211")) {
+    if (dScGame_c::isCurrentStage("F200") || dScGame_c::isCurrentStage("F210") || dScGame_c::isCurrentStage("F211")) {
         mpKakeraKey = new dLytMeterKakeraKey_c();
         mpKakeraKey->build(resAcc);
     } else {
         mpKakeraKey = nullptr;
     }
 
-    if (!StageManager__isAreaTypeDungeon(STAGE_MANAGER) || ScGame::currentSpawnInfo.stageName == "F100_1" ||
-        ScGame::currentSpawnInfo.stageName == "F103_1") {
+    if (!dStageMgr_c::GetInstance()->isAreaTypeDungeon() || dScGame_c::currentSpawnInfo.stageName == "F100_1" ||
+    dScGame_c::currentSpawnInfo.stageName == "F103_1") {
         mpBossKey = nullptr;
     } else {
         mpBossKey = new dLytMeterBossKey_c();
         mpBossKey->build(resAcc);
     }
 
-    if (StageManager__isAreaTypeDungeon(STAGE_MANAGER) &&
-        (!(ScGame::currentSpawnInfo.stageName == "F100_1") && !(ScGame::currentSpawnInfo.stageName == "F103_1")) ||
-        ScGame::currentSpawnInfo.stageName == "F302" || ScGame::currentSpawnInfo.stageName == "F302") {
+    if (dStageMgr_c::GetInstance()->isAreaTypeDungeon() &&
+        (!(dScGame_c::currentSpawnInfo.stageName == "F100_1") && !(dScGame_c::currentSpawnInfo.stageName == "F103_1")) ||
+        dScGame_c::currentSpawnInfo.stageName == "F302" || dScGame_c::currentSpawnInfo.stageName == "F302") {
         mpSmallKey = new dLytMeterSmallKey_c();
         mpSmallKey->build(resAcc);
     } else {
         mpSmallKey = nullptr;
     }
 
-    if (GLOBAL_TITLE_RELOADER != nullptr) {
+    if (dScTitle_c::sInstance != nullptr) {
         mpDrink = nullptr;
     } else {
         mpDrink = new dLytMeterDrink_c();
@@ -595,9 +592,9 @@ dLytMeterContainer_c::dLytMeterContainer_c() {
 }
 
 bool dLytMeterContainer_c::build() {
-    void *data = LayoutArcManager::sInstance->getLoadedData("DoButton");
+    void *data = LayoutArcManager::GetInstance()->getLoadedData("DoButton");
     mResAcc.attach(data, "");
-    if (GLOBAL_TITLE_RELOADER != nullptr) {
+    if (dScTitle_c::sInstance != nullptr) {
         mpEventSkip = nullptr;
     } else {
         mpEventSkip = new dLytMeterEventSkip_c();
@@ -609,7 +606,7 @@ bool dLytMeterContainer_c::build() {
 
     dLytAreaCaption_c::create();
     mMeter.build(&mResAcc);
-    if (GLOBAL_TITLE_RELOADER != nullptr) {
+    if (dScTitle_c::sInstance != nullptr) {
         mpDoButton = nullptr;
         mpDoButtonRelated = nullptr;
         mpBirdRelated = nullptr;

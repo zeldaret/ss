@@ -41,7 +41,7 @@ bool dLytBattery_c::draw() {
 }
 
 bool dLytBattery_c::init() {
-    void *data = LayoutArcManager::sInstance->getLoadedData("System2D");
+    void *data = LayoutArcManager::GetInstance()->getLoadedData("System2D");
     mResAcc.attach(data, "");
     mLyt.setResAcc(&mResAcc);
     mLyt.build("denchi_00.brlyt", nullptr);

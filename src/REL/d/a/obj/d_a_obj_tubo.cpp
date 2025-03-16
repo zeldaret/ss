@@ -392,7 +392,7 @@ void dAcOtubo_c::executeState_Slope() {
 void dAcOtubo_c::finalizeState_Slope() {}
 
 void dAcOtubo_c::initializeState_Rebirth() {
-    SpecialItemDropMgr *mgr = SpecialItemDropMgr::sInstance;
+    SpecialItemDropMgr *mgr = SpecialItemDropMgr::GetInstance();
     mgr->giveSpecialDropItem(getParams2UpperByte(), roomid, &position, 0, rotation.y, -1);
     mField_0x9AC = position;
     obj_pos = &mField_0x9AC;
@@ -733,7 +733,7 @@ void dAcOtubo_c::fn_272_3020() {
 
 void dAcOtubo_c::addPickupTarget() {
     if (cM::isZero(forwardSpeed)) {
-        AttentionManager *ins = AttentionManager::sInstance;
+        AttentionManager *ins = AttentionManager::GetInstance();
         ins->addPickUpTarget(*this, 120.f);
         ins->addUnk3Target(*this, 1, 500.f, -200.f, 200.f);
     }

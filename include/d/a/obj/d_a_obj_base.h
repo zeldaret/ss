@@ -160,11 +160,11 @@ public:
 
 public:
     /* 8002e630 */ static dAcObjBase_c *create(
-        fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale,
+        fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
         u32 params2
     );
     /* 8002e6d0 */ static dAcObjBase_c *create(
-        char *name, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, u16 id,
+        const char *name, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale, u32 params2, u16 id,
         s8 viewclipId
     );
     /* 8002e770 */ static dAcObjBase_c *
@@ -208,8 +208,8 @@ public:
         u32 params2
     );
     /* 8002f260 */ static dAcBase_c *createActorUnkGroup3(
-        char *name, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, u16 id,
-        u8 viewclipId
+        const char *name, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
+        u32 params2, u16 id, s8 viewclipId
     );
 };
 
