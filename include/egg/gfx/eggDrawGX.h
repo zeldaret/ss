@@ -14,7 +14,7 @@ class DrawGX {
 public:
     // made up
     struct DLData {
-        void *mpList;
+        u8 *mpList;
         u32 mLen;
     };
 
@@ -83,6 +83,7 @@ public:
     static GXTexMapID GetTexMapDefault();
     static void LoadTexture(const EGG::ResTIMG *, GXTexMapID);
     static void BeginDrawScreen(bool, bool, bool);
+    static void CreateDisplayList(EGG::Heap*);
     static void DrawDL(enum DL, const nw4r::math::MTX34 &, GXColor);
     static void SetVtxState(enum VtxType);
     static void SetBlendMode(enum Blend);
@@ -93,7 +94,7 @@ public:
 
     static Matrix34f s_cameraMtx;
 
-    /* static ?? s_flag */
+    static u32 s_flag;
 
     static GXColor BLACK;
     static GXColor WHITE;
