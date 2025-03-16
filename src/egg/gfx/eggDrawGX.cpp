@@ -24,21 +24,17 @@ static void DrawCircleYPolygonFan(const nw4r::math::MTX34 &mtx, f32, u16) {}
 
 namespace EGG {
 
+u8 sDetailLevels[] = {10, 20};
 
-extern "C" u8 lbl_8057F528[];
-// Halp
 void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
-    u8 tmpDisplayList[16 * 1024];
-
+    u8 ALIGN_DECL(32) tmpDisplayList[16 * 1024];
+    
     OSInitFastCast();
-
-    DLData *dl = s_DL;
-    u8 *dat = lbl_8057F528;
 
     for (int i = 0; i < DL_MAX; i++) {
         DCInvalidateRange(tmpDisplayList, sizeof(tmpDisplayList));
         GXBeginDisplayList(tmpDisplayList, sizeof(tmpDisplayList));
-        switch ((DL)i) {
+        switch (static_cast<DL>(i)) {
             case DL_0:
                 GXSetChanMatColor(GX_COLOR0A0, RED);
                 GXBegin(GX_LINES, GX_VTXFMT0, 2);
@@ -72,24 +68,24 @@ void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
             case DL_4: GXDrawSphere(8, 16); break;
             case DL_5:
             case DL_6: {
-                u16 numSegments = dat[i - DL_5] + 1;
+                u16 numSegments = sDetailLevels[i - DL_5] + 1;
                 f32 radPerSegment = 2.0f * M_PI / (numSegments - 1);
                 GXBegin(GX_LINESTRIP, GX_VTXFMT0, numSegments);
                 for (int i = 0; i < numSegments; i++) {
                     GXPosition3f32(
-                        nw4r::math::CosRad(i * radPerSegment) / 2.0f, nw4r::math::SinRad(i * radPerSegment) / 2.0f, 0.0f
+                        0.5f * nw4r::math::CosRad(radPerSegment * i), 0.5f * nw4r::math::SinRad(radPerSegment * i), 0.0f
                     );
                 }
                 break;
             }
             case DL_9:
             case DL_10: {
-                u16 numSegments = dat[i - DL_9] + 1;
+                u16 numSegments = sDetailLevels[i - DL_9] + 1;
                 f32 radPerSegment = 2.0f * M_PI / (numSegments - 1);
                 GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, numSegments * 2);
                 for (int i = 0; i < numSegments; i++) {
-                    f32 x = 0.5f * nw4r::math::CosRad(i * radPerSegment);
-                    f32 z = 0.5f * nw4r::math::SinRad(i * radPerSegment);
+                    f32 x = 0.5f * nw4r::math::SinRad(radPerSegment * i);
+                    f32 z = 0.5f * nw4r::math::CosRad(radPerSegment * i);
                     GXPosition3f32(x, -0.5f, z);
                     GXPosition3f32(2.0f * x, 0.0f, 2.0f * z);
                     GXPosition3f32(x, 0.5f, z);
@@ -97,21 +93,21 @@ void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
                 }
                 nw4r::math::MTX34 mtx;
                 PSMTXTrans(mtx, 0.0f, 0.5f, 0.0f);
-                DrawCircleYPolygonFan(mtx, 0.0f, dat[i - DL_9]);
+                DrawCircleYPolygonFan(mtx, 0.0f, sDetailLevels[i - DL_9]);
 
                 PSMTXIdentity(mtx);
                 PSMTXRotRad(mtx, M_PI, 0x7A);
                 PSMTXTransApply(mtx, mtx, 0.0f, -0.5f, 0.0f);
-                DrawCircleYPolygonFan(mtx, 0.0f, dat[i - DL_9]);
+                DrawCircleYPolygonFan(mtx, 0.0f, sDetailLevels[i - DL_9]);
                 break;
             }
             case DL_11:
             case DL_12: {
                 nw4r::math::MTX34 mtx;
                 PSMTXIdentity(mtx);
-                DrawCircleYPolygonFan(mtx, 1.0f, dat[i - DL_11]);
+                DrawCircleYPolygonFan(mtx, 1.0f, sDetailLevels[i - DL_11]);
                 PSMTXRotRad(mtx, M_PI, 0x7A);
-                DrawCircleYPolygonFan(mtx, 0.0f, dat[i - DL_11]);
+                DrawCircleYPolygonFan(mtx, 0.0f, sDetailLevels[i - DL_11]);
                 break;
             }
             case DL_7:
@@ -119,7 +115,7 @@ void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
                 nw4r::math::MTX34 mtx;
                 PSMTXIdentity(mtx);
                 PSMTXRotRad(mtx, M_PI / 2.0f, 0x78);
-                DrawCircleYPolygonFan(mtx, 0.0f, dat[i - DL_7]);
+                DrawCircleYPolygonFan(mtx, 0.0f, sDetailLevels[i - DL_7]);
                 break;
             }
 
@@ -128,19 +124,19 @@ void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
                 GXPosition2u8(0, 0);
                 if (i == DL_13) {
-                    GXCmd1u8(0);
+                    GXPosition1x8(0);
                 }
                 GXPosition2u8(1, 0);
                 if (i == DL_13) {
-                    GXCmd1u8(1);
+                    GXPosition1x8(1);
                 }
                 GXPosition2u8(2, 0);
                 if (i == DL_13) {
-                    GXCmd1u8(2);
+                    GXPosition1x8(2);
                 }
                 GXPosition2u8(3, 0);
                 if (i == DL_13) {
-                    GXCmd1u8(3);
+                    GXPosition1x8(3);
                 }
                 break;
             }
@@ -150,35 +146,35 @@ void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
                 GXPosition3f32(0.5f, 0.5f, 0.0f);
                 GXPosition3f32(0.5f, -0.5f, 0.0f);
                 GXPosition3f32(-0.5f, -0.5f, 0.0f);
-                GXPosition3f32(0.5f, 0.5f, 0.0f);
+                GXPosition3f32(-0.5f, 0.5f, 0.0f);
                 break;
             case DL_16:
             case DL_17:
                 GXBegin(GX_QUADS, GX_VTXFMT0, 4);
-                GXCmd1u8(0);
+                GXPosition1x8(0);
                 if (i == DL_16) {
-                    GXCmd1u8(0);
+                    GXPosition1x8(0);
                 }
-                GXCmd1u8(1);
+                GXPosition1x8(1);
                 if (i == DL_16) {
-                    GXCmd1u8(1);
+                    GXPosition1x8(1);
                 }
-                GXCmd1u8(2);
+                GXPosition1x8(2);
                 if (i == DL_16) {
-                    GXCmd1u8(2);
+                    GXPosition1x8(2);
                 }
-                GXCmd1u8(3);
+                GXPosition1x8(3);
                 if (i == DL_16) {
-                    GXCmd1u8(3);
+                    GXPosition1x8(3);
                 }
                 break;
-            case DL_MAX:
-            default:     break;
+            default: break;
         }
+
         u32 size = GXEndDisplayList();
-        dl[i].mLen = size;
-        u8 *data = new (pHeap, 0x20) u8[(2 * size) - size];
-        dl[i].mpList = data;
+        s_DL[i].mLen = size;
+        u8 *data = new (pHeap, 0x20) u8[size];
+        s_DL[i].mpList = data;
         for (int j = 0; j < size; j++) {
             data[j] = tmpDisplayList[j];
         }
