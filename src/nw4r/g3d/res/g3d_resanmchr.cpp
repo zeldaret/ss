@@ -229,12 +229,6 @@ f32 CalcAnimationFVS(const ResAnmChrFVSData *pFVSData, f32 frame) {
     f32 f_estimatePos = frameOffset * numKeyFrame * pFVSData->invKeyFrameRange;
     u16 i_estimatePos = math::F32ToU16(f_estimatePos);
 
-    // HELP
-    // The getter for the frame is not properly emitting `lbzu`
-    // Insteads loads the base pointer, then loausds from an offset of 0 ...
-    // This only happens for the FVS32Data
-    // Annoyingly enough, putting this line after the `QunatizeFrame` call fixes this
-    // But Instruction ordering is still and issue
     CResAnmChrFrm<TTraits::TFrmData> left = TTraits::GetKeyFrame(pFVSData, i_estimatePos);
 
     const TTraits::TFrame quantized = TTraits::QuantizeFrame(frame);
@@ -798,13 +792,6 @@ void ResAnmChr::GetAnmResult(ChrAnmResult *pResult, u32 idx, f32 frame) const {
  * ChrAnmResult
  *
  ******************************************************************************/
-void ChrAnmResult::GetMtx(math::MTX34 *pMtx) const {
-    GetRotTrans(pMtx);
-    if (!(flags & FLAG_SCALE_ONE)) {
-        math::MTX34Scale(pMtx, pMtx, &s);
-    }
-}
-
 void ChrAnmResult::GetScale(math::VEC3 *pScale) const {
     if (flags & FLAG_SCALE_ONE) {
         pScale->x = 1.0f;
@@ -877,6 +864,13 @@ void ChrAnmResult::GetRotTrans(math::MTX34 *pRotTrans) const {
         pRotTrans->_23 = 0.0f;
     } else {
         math::MTX34Copy(pRotTrans, &rt);
+    }
+}
+
+void ChrAnmResult::GetMtx(math::MTX34 *pMtx) const {
+    GetRotTrans(pMtx);
+    if (!(flags & FLAG_SCALE_ONE)) {
+        math::MTX34Scale(pMtx, pMtx, &s);
     }
 }
 
