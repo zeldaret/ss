@@ -40,7 +40,7 @@ protected:
         return sizeof(Bin);
     }
     /** Load the object from binary, interpolating between values */
-    virtual void SetBinaryInner(const Bin &, const Bin &, f32) = 0;
+    virtual void SetBinaryInner(const Bin &, const Bin &, f32) {}
 
     virtual ~IBinary() {}
 

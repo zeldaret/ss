@@ -1,31 +1,12 @@
 #ifndef EGG_LIGHT_H
 #define EGG_LIGHT_H
 
-#include "egg/core/eggHeap.h"
 #include "egg/prim/eggBinary.h"
 #include "nw4r/types_nw4r.h"
 
 namespace EGG {
 
-// TODO: Fill out more
-class LightTexture {
-public:
-    static void initialize(u16 textureSize, Heap *pHeap);
-};
-
-// TODO: Fill out more
-class LightTextureManager : public IBinary<LightTextureManager> {
-public:
-    struct BinData {};
-    virtual ~LightTextureManager();
-    virtual void SetBinaryInner(const Bin &) override;
-    virtual void GetBinaryInner(Bin *) const override;
-    virtual size_t GetBinarySize() const override;
-    virtual void SetBinaryInner(const Bin &, const Bin &, f32) override;
-    void replaceModelTextures(nw4r::g3d::ResMdl) const;
-
-    void drawAndCaptureTexture(f32, f32, f32, f32);
-};
+class LightTextureManager;
 
 // TODO: Fill out more
 class LightManager : public IBinary<LightManager> {

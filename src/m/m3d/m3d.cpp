@@ -2,6 +2,8 @@
 
 #include "egg/gfx/eggDrawGX.h"
 #include "egg/gfx/eggGfxEngine.h"
+#include "egg/gfx/eggLightTexture.h"
+#include "egg/gfx/eggLightTextureMgr.h"
 #include "egg/gfx/eggScreen.h"
 #include "egg/gfx/eggStateGX.h"
 #include "m/m_heap.h"

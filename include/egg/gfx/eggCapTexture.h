@@ -10,9 +10,22 @@ struct CopyFilter {
 };
 
 class CapTexture : public CpuTexture {
+public:
+    CapTexture() {}
+    CapTexture(u16 width, u16 height, GXTexFmt texFmt): CpuTexture(width, height, texFmt) {}
+    CapTexture(const GXTexObj *pObj): CpuTexture(pObj) {}
+
     virtual void configure() override; // at 0xC
 
     void capture(u16 x, u16 y, bool upscale, int format);
+
+    void setPixModeSync(bool enable) {
+        if (enable) {
+            mCapFlags |= 0x10;
+        } else {
+            mCapFlags &= ~0x10;
+        }
+    }
 
 private:
     /* 0x18 */ u8 mCapFlags;

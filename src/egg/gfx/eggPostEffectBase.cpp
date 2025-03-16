@@ -26,7 +26,7 @@ PostEffectBase::PostEffectBase() {
     mOffsetY = 0.0f;
     mScaleX = 1.0f;
     mScaleY = 1.0f;
-    field_0x24 = 0.0f;
+    mRotation = 0.0f;
 }
 
 void PostEffectBase::draw(f32 width, f32 height) {
@@ -125,7 +125,7 @@ void PostEffectBase::fn_804AF1B0(GXColor &out, const GXColor &c1, const GXColor 
 
 void PostEffectBase::getBaseTexMtx(nw4r::math::MTX34 *mtx) const {
     f32 sin, cos;
-    nw4r::math::SinCosRad(&sin, &cos, field_0x24 * M_PI);
+    nw4r::math::SinCosRad(&sin, &cos, mRotation * M_PI);
     f32 zero = 0.0f;
     f32 scale = 1.0f;
     f32 f8 = zero - 0.5f;

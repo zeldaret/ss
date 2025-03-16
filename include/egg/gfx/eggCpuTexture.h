@@ -62,7 +62,8 @@ public:
     u32 getTexBufferSize() const;
     void buildHeader() const;
     Header *initHeader();
-    void fillNormalMapSphere();
+    void fillNormalMapSphere(f32, f32);
+    void fillGradient(int op, int, u16, u16, const GXColor&, const GXColor&, bool, bool);
     UNKTYPE func_80086C8C(UNKTYPE);
     void allocTexBuffer();
     void allocTexBufferAndHeader();
@@ -109,6 +110,17 @@ public:
     void setWrapT(GXTexWrapMode wrap) {
         mWrapT = wrap;
     }
+
+    void setWrap(GXTexWrapMode wrapS, GXTexWrapMode wrapT) {
+        mWrapS = wrapS;
+        mWrapT = wrapT;
+    }
+
+    void setFilt(GXTexFilter min, GXTexFilter mag) {
+        mMinFilt = min;
+        mMagFilt = mag;
+    }
+
     void setMinFilt(GXTexFilter filt) {
         mMinFilt = filt;
     }

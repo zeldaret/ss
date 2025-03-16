@@ -19,7 +19,7 @@ protected:
     f32 mOffsetY;              // at 0x18
     f32 mScaleX;               // at 0x1C
     f32 mScaleY;               // at 0x20
-    f32 field_0x24;            // at 0x24
+    f32 mRotation;             // at 0x24
 
     PostEffectBase();
     virtual ~PostEffectBase() {} // at 0x8

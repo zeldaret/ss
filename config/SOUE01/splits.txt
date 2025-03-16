@@ -2248,6 +2248,11 @@ egg/gfx/eggLightObject.cpp:
 egg/gfx/eggLightTexture.cpp:
 	.text       start:0x804AB250 end:0x804AD448
 	.ctors      start:0x804DB9A4 end:0x804DB9A8
+	.rodata     start:0x804FBC98 end:0x804FBD08
+	.data       start:0x8056F0B8 end:0x8056F0F0
+	.sdata      start:0x80574F38 end:0x80574F48
+	.sdata2     start:0x8057F6C0 end:0x8057F708
+	.bss        start:0x80674E78 end:0x80674EF0
 
 egg/gfx/eggLightTextureMgr.cpp:
 	.text       start:0x804AD450 end:0x804AE644
