@@ -2,19 +2,19 @@
 #define NW4R_G3D_RES_RES_FILE_H
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/res/g3d_resanmchr.h>
-#include <nw4r/g3d/res/g3d_resanmclr.h>
-#include <nw4r/g3d/res/g3d_resanmscn.h>
-#include <nw4r/g3d/res/g3d_resanmshp.h>
-#include <nw4r/g3d/res/g3d_resanmtexpat.h>
-#include <nw4r/g3d/res/g3d_resanmtexsrt.h>
-#include <nw4r/g3d/res/g3d_resanmvis.h>
-#include <nw4r/g3d/res/g3d_rescommon.h>
-#include <nw4r/g3d/res/g3d_resmdl.h>
-#include <nw4r/g3d/res/g3d_respltt.h>
-#include <nw4r/g3d/res/g3d_restex.h>
+#include "nw4r/g3d/res/g3d_resanmchr.h"
+#include "nw4r/g3d/res/g3d_resanmclr.h"
+#include "nw4r/g3d/res/g3d_resanmscn.h"
+#include "nw4r/g3d/res/g3d_resanmshp.h"
+#include "nw4r/g3d/res/g3d_resanmtexpat.h"
+#include "nw4r/g3d/res/g3d_resanmtexsrt.h"
+#include "nw4r/g3d/res/g3d_resanmvis.h"
+#include "nw4r/g3d/res/g3d_rescommon.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_respltt.h"
+#include "nw4r/g3d/res/g3d_restex.h"
 
-#include <nw4r/ut.h>
+#include "nw4r/ut.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -85,6 +85,8 @@ public:
     ResAnmScn GetResAnmScn(const char *pName) const;
     ResAnmScn GetResAnmScn(int idx) const;
     ResAnmScn GetResAnmScn(u32 idx) const;
+
+    void *GetExternalData(const char *pName) const;
 
     u32 GetResMdlNumEntries() const;
     u32 GetResPlttNumEntries() const;

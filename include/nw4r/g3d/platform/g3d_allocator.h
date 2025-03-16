@@ -2,7 +2,7 @@
 #define NW4R_G3D_PLATFORM_ALLOCATOR_H
 #include <nw4r/types_nw4r.h>
 
-#include <rvl/MEM.h>
+#include "rvl/MEM.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {

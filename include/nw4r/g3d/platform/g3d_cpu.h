@@ -2,7 +2,7 @@
 #define NW4R_G3D_PLATFORM_CPU_H
 #include <nw4r/types_nw4r.h>
 
-#include <rvl/OS.h>
+#include "rvl/OS.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {

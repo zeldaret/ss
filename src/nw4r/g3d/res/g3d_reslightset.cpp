@@ -1,21 +1,21 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
 namespace {
 
-inline void SetBind(u16* pId, u32 id) {
+inline void SetBind(u16 *pId, u32 id) {
     *pId = id;
 }
 
-inline bool IsBound(const u16* pId) {
+inline bool IsBound(const u16 *pId) {
     return *pId != ResLightSetData::INVALID_ID;
 }
 
 } // namespace
 
 bool ResLightSet::Bind(const ResAnmScn scene) {
-    ResLightSetData& r = ref();
+    ResLightSetData &r = ref();
 
     int numAllLight = 0;
     int numBound = 0;
@@ -41,7 +41,7 @@ bool ResLightSet::Bind(const ResAnmScn scene) {
         numAllLight += numLight;
 
         for (u32 i = 0; i < numLight; i++) {
-            u16* pId = &r.lightId[i];
+            u16 *pId = &r.lightId[i];
 
             if (IsBound(pId)) {
                 numBound++;

@@ -2,10 +2,10 @@
 #define NW4R_G3D_CALC_WORLD_H
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/g3d_scnobj.h>
-#include <nw4r/g3d/res/g3d_resmdl.h>
+#include "nw4r/g3d/g3d_scnobj.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 
-#include <nw4r/math.h>
+#include "nw4r/math.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -40,7 +40,7 @@ void CalcSkinning(math::MTX34 *pModelMtxArray, u32 *pModelMtxAttribArray, const 
  ******************************************************************************/
 class ICalcWorldCallback {
 public:
-    virtual ~ICalcWorldCallback(){}; // at 0x8
+    virtual ~ICalcWorldCallback() {}; // at 0x8
 
     virtual void ExecCallbackA(ChrAnmResult *pResult, ResMdl mdl,
                                FuncObjCalcWorld *pFuncObj) = 0; // at 0xC
@@ -61,7 +61,7 @@ class WorldMtxManip {
 public:
     WorldMtxManip(math::MTX34 *pM, math::VEC3 *pS, u32 *pWMAttr) : mpM(pM), mpS(pS), mpWMAttr(pWMAttr) {}
 
-    void SetScale(f32, f32, f32);
+    void SetScale(f32 x, f32 y, f32 z);
     void GetMtx(nw4r::math::MTX34 *out) {
         if (out != nullptr) {
             PSMTXCopy(*mpM, *out);

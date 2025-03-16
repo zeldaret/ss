@@ -1,8 +1,9 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
+#include "nw4r/math/math_types.h"
 
-#include <nw4r/ut.h>
+#include "nw4r/ut.h" // IWYU pragma: export
 
-#include <rvl/GX.h>
+#include "rvl/GX.h" // IWYU pragma: export
 
 #include <cmath.h>
 
@@ -78,7 +79,7 @@ AnmObjChrRes *AnmObjChr::Detach(int idx) {
     return NULL;
 }
 
-void AnmObjChr::SetWeight(int idx, f32 weight){
+void AnmObjChr::SetWeight(int idx, f32 weight) {
 #pragma unused(idx)
 #pragma unused(weight)
 }
@@ -479,6 +480,17 @@ const ChrAnmResult *AnmObjChrBlend::GetResult(ChrAnmResult *pResult, u32 idx) {
             f32 t = weight * invAddedWeight;
             math::C_QUATSlerp(&rot, &rot, &q, t);
         } else if (!(flags & ChrAnmResult::FLAG_ROT_ZERO)) {
+            if (i == 0) {
+                firstRot._00 = pMyResult->rt._00;
+                firstRot._01 = pMyResult->rt._01;
+                firstRot._02 = pMyResult->rt._02;
+                firstRot._10 = pMyResult->rt._10;
+                firstRot._11 = pMyResult->rt._11;
+                firstRot._12 = pMyResult->rt._12;
+                firstRot._20 = pMyResult->rt._20;
+                firstRot._21 = pMyResult->rt._21;
+                firstRot._22 = pMyResult->rt._22;
+            }
             pResult->rt._00 += pMyResult->rt._00 * ratio;
             pResult->rt._01 += pMyResult->rt._01 * ratio;
             pResult->rt._02 += pMyResult->rt._02 * ratio;
@@ -487,6 +499,9 @@ const ChrAnmResult *AnmObjChrBlend::GetResult(ChrAnmResult *pResult, u32 idx) {
             pResult->rt._11 += pMyResult->rt._11 * ratio;
             pResult->rt._12 += pMyResult->rt._12 * ratio;
         } else {
+            if (i == 0) {
+                math::MTX33Identity(&firstRot);
+            }
             pResult->rt._00 += ratio;
             pResult->rt._11 += ratio;
         }
@@ -523,9 +538,21 @@ const ChrAnmResult *AnmObjChrBlend::GetResult(ChrAnmResult *pResult, u32 idx) {
         math::VEC3 *pV2 = reinterpret_cast<math::VEC3 *>(&pResult->rt._20);
         math::VEC3Cross(pV2, pV0, pV1);
 
-        math::VEC3Normalize(pV0, pV0);
-        math::VEC3Normalize(pV2, pV2);
-        math::VEC3Cross(pV1, pV2, pV0);
+        if (math::VEC3LenSq(pV0) == 0.f || math::VEC3LenSq(pV2) == 0.f) {
+            pResult->rt._00 = firstRot._00;
+            pResult->rt._01 = firstRot._01;
+            pResult->rt._02 = firstRot._02;
+            pResult->rt._10 = firstRot._10;
+            pResult->rt._11 = firstRot._11;
+            pResult->rt._12 = firstRot._12;
+            pResult->rt._20 = firstRot._20;
+            pResult->rt._21 = firstRot._21;
+            pResult->rt._22 = firstRot._22;
+        } else {
+            math::VEC3Normalize(pV0, pV0);
+            math::VEC3Normalize(pV2, pV2);
+            math::VEC3Cross(pV1, pV2, pV0);
+        }
     }
 
     pResult->flags &= ~ChrAnmResult::FLAG_ROT_RAW_FMT;
@@ -606,6 +633,9 @@ f32 AnmObjChrRes::GetFrame() const {
 
 void AnmObjChrRes::SetUpdateRate(f32 rate) {
     SetRate(rate);
+    if (rate == 0.f && mpResultCache != NULL) {
+        UpdateCache();
+    }
 }
 
 f32 AnmObjChrRes::GetUpdateRate() const {
@@ -613,10 +643,12 @@ f32 AnmObjChrRes::GetUpdateRate() const {
 }
 
 void AnmObjChrRes::UpdateFrame() {
-    UpdateFrm();
+    if (GetRate() != 0.f) {
+        UpdateFrm();
 
-    if (mpResultCache != NULL) {
-        UpdateCache();
+        if (mpResultCache != NULL) {
+            UpdateCache();
+        }
     }
 }
 

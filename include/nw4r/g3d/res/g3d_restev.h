@@ -2,9 +2,9 @@
 #define NW4R_G3D_RES_RES_TEV_H
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/res/g3d_rescommon.h>
+#include "nw4r/g3d/res/g3d_rescommon.h"
 
-#include <rvl/GX.h>
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -55,15 +55,18 @@ struct ResTevData {
     s32 toResMdlData;                       // at 0x4
     u32 id;                                 // at 0x8
     u8 nStages;                             // at 0xC
-    u8 PADDING_0xD[0x10 - 0xD];             // at 0xD
+    u8 dummy_[0x10 - 0xD];                  // at 0xD
     u8 texCoordToTexMapID[GX_MAX_TEXCOORD]; // at 0x10
-    u8 PADDING_0x18[0x20 - 0x18];           // at 0x18
+    u8 dummy[0x20 - 0x18];                  // at 0x18
     ResTevDL dl;                            // at 0x20
 };
 
 class ResTev : public ResCommon<ResTevData> {
 public:
     NW4R_G3D_RESOURCE_FUNC_DEF(ResTev);
+
+    ResMdl GetParent();
+    const ResMdl GetParent() const;
 
     bool GXGetTevSwapModeTable(
         GXTevSwapSel swap, GXTevColorChan *pR, GXTevColorChan *pG, GXTevColorChan *pB, GXTevColorChan *pA
@@ -72,6 +75,10 @@ public:
     GXSetTevSwapModeTable(GXTevSwapSel swap, GXTevColorChan r, GXTevColorChan g, GXTevColorChan b, GXTevColorChan a);
 
     bool GXGetTevOrder(GXTevStageID stage, GXTexCoordID *pCoord, GXTexMapID *pMap, GXChannelID *pChannel) const;
+    void GXSetTevOrder(GXTevStageID stage, GXTexCoordID coord, GXTexMapID map, GXChannelID channel);
+
+    bool GXGetIndTexOrder(GXIndTexStageID stage, GXTexCoordID *pCoord, GXTexMapID *pMap) const;
+    void GXSetIndTexOrder(GXIndTexStageID stage, GXTexCoordID coord, GXTexMapID map);
 
     void GXSetTevColorIn(GXTevStageID stage, GXTevColorArg a, GXTevColorArg b, GXTevColorArg c, GXTevColorArg d);
 

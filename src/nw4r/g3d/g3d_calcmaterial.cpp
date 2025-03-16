@@ -1,11 +1,9 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
 
-void CalcMaterialDirectly(ResMdl mdl, AnmObjTexPat* pAnmTexPat,
-                          AnmObjTexSrt* pAnmTexSrt, AnmObjMatClr* pAnmMatClr) {
-
+void CalcMaterialDirectly(ResMdl mdl, AnmObjTexPat *pAnmTexPat, AnmObjTexSrt *pAnmTexSrt, AnmObjMatClr *pAnmMatClr) {
     u32 i;
     u32 numMatID = mdl.GetResMatNumEntries();
 
@@ -14,12 +12,11 @@ void CalcMaterialDirectly(ResMdl mdl, AnmObjTexPat* pAnmTexPat,
 
         if (pAnmTexPat != NULL && pAnmTexPat->TestExistence(i)) {
             TexPatAnmResult result;
-            const TexPatAnmResult* pResult;
+            const TexPatAnmResult *pResult;
 
             pResult = pAnmTexPat->GetResult(&result, i);
 
-            ApplyTexPatAnmResult(mat.GetResTexObj(), mat.GetResTlutObj(),
-                                 pResult);
+            ApplyTexPatAnmResult(mat.GetResTexObj(), mat.GetResTlutObj(), pResult);
 
             mat.GetResTexObj().EndEdit();
             mat.GetResTlutObj().EndEdit();
@@ -27,7 +24,7 @@ void CalcMaterialDirectly(ResMdl mdl, AnmObjTexPat* pAnmTexPat,
 
         if (pAnmTexSrt != NULL && pAnmTexSrt->TestExistence(i)) {
             TexSrtAnmResult result;
-            const TexSrtAnmResult* pResult;
+            const TexSrtAnmResult *pResult;
 
             ResTexSrt srt = mat.GetResTexSrt();
             ResMatIndMtxAndScale ind = mat.GetResMatIndMtxAndScale();
@@ -42,7 +39,7 @@ void CalcMaterialDirectly(ResMdl mdl, AnmObjTexPat* pAnmTexPat,
 
         if (pAnmMatClr != NULL && pAnmMatClr->TestExistence(i)) {
             ClrAnmResult result;
-            const ClrAnmResult* pResult;
+            const ClrAnmResult *pResult;
 
             ResMatTevColor tevColor = mat.GetResMatTevColor();
             ResMatChan chan = mat.GetResMatChan();
