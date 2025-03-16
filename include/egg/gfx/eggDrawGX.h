@@ -96,11 +96,11 @@ public:
 
     static u32 s_flag;
 
-    static GXColor BLACK;
-    static GXColor WHITE;
-    static GXColor GREEN;
-    static GXColor RED;
-    static GXColor BLUE;
+    static const GXColor BLACK;
+    static const GXColor WHITE;
+    static const GXColor GREEN;
+    static const GXColor RED;
+    static const GXColor BLUE;
 };
 
 } // namespace EGG

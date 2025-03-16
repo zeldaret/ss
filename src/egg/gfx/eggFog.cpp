@@ -23,8 +23,8 @@ Fog::Fog() {
 void Fog::Reset() {
     // TODO
     mColor = DrawGX::WHITE;
-    mNearZ = 0.0f;
     mFarZ = 0.0f;
+    mNearZ = 0.0f;
     mEndZ = 0.0f;
     mStartZ = 0.0f;
     mFogType = GX_FOG_NONE;
