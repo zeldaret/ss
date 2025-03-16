@@ -12,13 +12,74 @@
 #include "rvl/GX/GXTypes.h"
 #include "rvl/GX/GXVert.h"
 #include "rvl/MTX/mtx.h"
+#include "rvl/MTX/mtxvec.h"
+#include "rvl/MTX/vec.h"
 #include "rvl/OS/OSCache.h"
 
 namespace {
 
-static void DrawQuadNormal(u8, u8, u8, u8, u8) {}
-static void DrawQuadLineStripNormal(u8, u8, u8, u8, u8) {}
-static void DrawCircleYPolygonFan(const nw4r::math::MTX34 &mtx, f32, u16) {}
+static void DrawQuadNormal(u8 x1, u8 x2, u8 x3, u8 x4, u8 y) {
+    GXPosition2u8(x1, y);
+    GXPosition2u8(x2, y);
+    GXPosition2u8(x3, y);
+    GXPosition2u8(x4, y);
+}
+
+static void DrawQuadLineStripNormal(u8 x1, u8 x2, u8 x3, u8 x4, u8 y) {
+    GXBegin(GX_LINESTRIP, GX_VTXFMT0, 5);
+    GXPosition2u8(x1, y);
+    GXPosition2u8(x2, y);
+    GXPosition2u8(x3, y);
+    GXPosition2u8(x4, y);
+    GXPosition2u8(x1, y);
+}
+
+static void DrawCircleYPolygonFan(const nw4r::math::MTX34 &mtx, f32 f, u16 numSegments) {
+    nw4r::math::VEC3 v1(0.0f, 1.0f, 0.0f);
+    nw4r::math::VEC3 v2(0.0f, f, 0.0f);
+
+    f32 stepSize = (2.0f * M_PI / numSegments);
+    int seg = numSegments + 1;
+
+    PSMTXMultVec(mtx, v1, v1);
+    PSMTXMultVec(mtx, v2, v2);
+
+    GXBegin(GX_TRIANGLEFAN, GX_VTXFMT0, seg + 1);
+
+    f32 signedStepSize = -stepSize;
+
+    GXPosition3f32(v2.x, v2.y, v2.z);
+    GXPosition3f32(v1.x, v1.y, v1.z);
+
+    for (int i = 0; i < seg; i++) {
+        nw4r::math::VEC3 v3(
+            0.5f * nw4r::math::SinRad(signedStepSize * i), 0.0f, 0.5f * nw4r::math::CosRad(signedStepSize * i)
+        );
+        PSMTXMultVec(mtx, v3, v3);
+        GXPosition3f32(v3.x, v3.y, v3.z);
+
+        nw4r::math::VEC3 v4(
+            0.5f * nw4r::math::SinRad(signedStepSize * (i - 1)), 0.0f,
+            0.5f * nw4r::math::CosRad(signedStepSize * (i - 1))
+        );
+        nw4r::math::VEC3 v5(
+            0.5f * nw4r::math::SinRad(signedStepSize * (i + 1)), 0.0f,
+            0.5f * nw4r::math::CosRad(signedStepSize * (i + 1))
+        );
+
+        PSMTXMultVec(mtx, v4, v4);
+        PSMTXMultVec(mtx, v5, v5);
+
+        v4 -= v2;
+        v5 -= v2;
+
+        nw4r::math::VEC3 v6;
+        PSVECCrossProduct(v5, v4, v6);
+        PSVECNormalize(v6, v6);
+
+        GXPosition3f32(v6.x, v6.y, v6.z);
+    }
+}
 
 } // namespace
 
@@ -28,7 +89,7 @@ u8 sDetailLevels[] = {10, 20};
 
 void DrawGX::CreateDisplayList(EGG::Heap *pHeap) {
     u8 ALIGN_DECL(32) tmpDisplayList[16 * 1024];
-    
+
     OSInitFastCast();
 
     for (int i = 0; i < DL_MAX; i++) {
