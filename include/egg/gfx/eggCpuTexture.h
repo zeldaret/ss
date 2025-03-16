@@ -132,8 +132,8 @@ public:
         return (Header *)((u8 *)dataPtr - sizeof(Header));
     }
 
-    char *getBuffer() const {
-        return mpBuffer;
+    void *getBuffer() const {
+        return dataPtr;
     }
     void setBuffer(void *pBuffer);
 

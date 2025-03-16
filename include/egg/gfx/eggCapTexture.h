@@ -27,6 +27,10 @@ public:
         }
     }
 
+    void setClearColor(const GXColor &clr) {
+        mClearColor = clr;
+    }
+
 private:
     /* 0x18 */ u8 mCapFlags;
     /* 0x19 */ GXColor mClearColor;

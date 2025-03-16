@@ -2,6 +2,7 @@
 #define EGG_STATE_GX_H
 
 #include "common.h"
+#include "rvl/GX/GXTypes.h"
 #include "rvl/GX.h" // IWYU pragma: export
 
 namespace EGG {
@@ -54,6 +55,8 @@ public:
             bool old;
         };
 
+    static GXColor& getDefaultTexColor() { return sDefaultTexColor; }
+
     static void initialize(u16, u16, GXColor, GXPixelFmt);
     static void frameInit();
     static void textureInit(); // Guess for 804b4810
@@ -93,6 +96,7 @@ public:
 
     static u16 s_commandFlag;
     static u16 s_flag;
+    static GXColor sDefaultTexColor;
 };
 
 } // namespace EGG
