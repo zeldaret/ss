@@ -154,13 +154,12 @@ void Draw1Mat1ShpDirectly(
 
     if (shp.IsValid() && shp.IsVisible()) {
         if (bFur) {
-            const f32 alphaCurve = fur.ref().alphaCurve;
-            const f32 specCurve = fur.ref().specCurve;
+            f32 rateBright, rateAlpha, rateSpec;
+            f32 alphaCurve, specCurve;
+            f32 rate, rateInv;
 
-            // I think someone was c-minded ...
-            GXColor rootColor;
-            GXColor tipColor;
-            GXColor kcolor2;
+            GXColor rootColor, tipColor, kcolor2;
+
             u8 brightness;
             GXColorSrc matSrc[4];
             GXAttnFn attnFunc[4];
@@ -171,6 +170,9 @@ void Draw1Mat1ShpDirectly(
             s8 scale_exp[3];
 
             const GXChannelID targetChan[4] = {GX_COLOR0, GX_ALPHA0, GX_COLOR1, GX_ALPHA1};
+
+            alphaCurve = fur.ref().alphaCurve;
+            specCurve = fur.ref().specCurve;
 
             const ResMatTevColor tevColor =
                 (!pSwap || !pSwap->tevColor.IsValid()) ? mat.GetResMatTevColor() : pSwap->tevColor;
@@ -215,11 +217,11 @@ void Draw1Mat1ShpDirectly(
             ResVtxFurPos furPos = shp.GetResVtxFurPos();
             const u32 numLayer = furPos.ref().numLayer;
             for (u16 i = 0; i < numLayer; i++) {
-                const f32 rate = fur.GetLyrRate(i);
-                const f32 rateInv = 1.f - rate;
-                const f32 rateAlpha = pow(rate, alphaCurve);
-                const f32 rateSpec = pow(rate, specCurve);
-                const f32 rateBright = pow(rate, 4.f);
+                rate = fur.GetLyrRate(i);
+                rateInv = 1.f - rate;
+                rateAlpha = pow(rate, alphaCurve);
+                rateSpec = pow(rate, specCurve);
+                rateBright = pow(rate, 4.f);
 
                 kcolor2.r = 255 * rate;
                 kcolor2.g = brightness * rateBright;
