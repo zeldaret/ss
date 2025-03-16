@@ -440,6 +440,13 @@ config.libs = [
             Object(Matching, "d/lyt/d_lyt_common_arrow.cpp"),
             Object(NonMatching, "toBeSorted/file_manager.cpp"),
             Object(NonMatching, "toBeSorted/save_manager.cpp"),
+            Object(NonMatching, "toBeSorted/d_d3d.cpp"),
+            Object(
+                Matching,
+                "toBeSorted/d_scn_callback.cpp",
+                extra_cflags=["-opt noloop"],
+            ),
+            Object(NonMatching, "toBeSorted/d_unk_proc.cpp"),
             Object(NonMatching, "toBeSorted/blur_and_palette_manager.cpp"),
             Object(Matching, "DynamicLink.cpp"),
         ],

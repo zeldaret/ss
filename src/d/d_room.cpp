@@ -38,8 +38,8 @@
 #include "nw4r/math/math_types.h"
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/current_stage_arc_manager.h"
+#include "toBeSorted/d_d3d.h"
 #include "toBeSorted/time_area_mgr.h"
-#include "toBeSorted/unk_with_water.h"
 
 SPECIAL_BASE_PROFILE(ROOM, dRoom_c, fProfile::ROOM, 0x9, 96);
 
@@ -473,7 +473,7 @@ void dRoom_c::mdl_c::doSomethingWithVis(bool arg) {
     }
 }
 
-bool dRoom_c::model_c::create(nw4r::g3d::ResFile resFile, mAllocator_c &alloc, s32 idx, UnkWithWater *waterThing) {
+bool dRoom_c::model_c::create(nw4r::g3d::ResFile resFile, mAllocator_c &alloc, s32 idx, d3d::UnkWithWater *waterThing) {
     SizedString<16> mdlName;
     mdlName.sprintf("model%d", idx >> 1);
     if ((idx & 1) != 0) {
@@ -485,7 +485,7 @@ bool dRoom_c::model_c::create(nw4r::g3d::ResFile resFile, mAllocator_c &alloc, s
         return true;
     }
 
-    bool linkResult = UnkWithWater::linkMdl(mdl, waterThing);
+    bool linkResult = d3d::UnkWithWater::linkMdl(mdl, waterThing);
     if (!mMdl.create(mdl, alloc)) {
         return false;
     }
@@ -601,11 +601,9 @@ void dRoom_c::model_c::draw(int roomid) {
     mMdl.entry();
 }
 
-extern "C" void fn_80017B10(nw4r::g3d::ResMdl &mdl, bool, bool);
-
 void dRoom_c::model_c::configureSomething(int roomid, mdl_c *mdl) {
     nw4r::g3d::ResMdl resMdl = mdl->getResMdl();
-    fn_80017B10(resMdl, true, false);
+    d3d::setRoomTevColors(resMdl, true, false);
 }
 
 const DrawPriorityConfig cfg[] = {

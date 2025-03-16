@@ -16,8 +16,8 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/attention.h"
+#include "toBeSorted/d_d3d.h"
 #include "toBeSorted/time_area_mgr.h"
-#include "toBeSorted/unk_with_water.h"
 
 class RelObjCtrl {
 public:
@@ -62,8 +62,8 @@ public:
         return (field_0x88A0 & flag) != 0;
     }
 
-    void initUnkWithWater(u32 val, UnkWithWater *waterThing);
-    void destroyUnkWithWater(u32 val, UnkWithWater *waterThing);
+    void initUnkWithWater(u32 val, d3d::UnkWithWater *waterThing);
+    void destroyUnkWithWater(u32 val, d3d::UnkWithWater *waterThing);
 
     const RMPL *getRmpl() const {
         return mpRmpl;

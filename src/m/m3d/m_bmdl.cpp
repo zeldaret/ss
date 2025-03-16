@@ -49,17 +49,17 @@ bool bmdl_c::getNodeWorldMtxMultVec(u32 p1, nw4r::math::VEC3 &in, nw4r::math::VE
     }
 }
 
-void bmdl_c::setAnm(banm_c &anm) {
+bool bmdl_c::setAnm(banm_c &anm) {
     nw4r::g3d::ScnMdlSimple *mdl;
     if (anm.getType() == nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_SHP) {
         mdl = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdl>(mpScnLeaf);
-        mdl->SetAnmObj(anm.getAnimObj(), nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_NOT_SPECIFIED);
+        return mdl->SetAnmObj(anm.getAnimObj(), nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_NOT_SPECIFIED);
     } else {
         mdl = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdlSimple>(mpScnLeaf);
         if (anm.getType() == nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_CHR) {
             mpCurrentAnm = &anm;
         }
-        mdl->SetAnmObj(anm.getAnimObj(), nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_NOT_SPECIFIED);
+        return mdl->SetAnmObj(anm.getAnimObj(), nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_NOT_SPECIFIED);
     }
 }
 

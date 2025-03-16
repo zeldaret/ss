@@ -27,6 +27,22 @@ toBeSorted/file_manager.cpp:
 toBeSorted/save_manager.cpp:
 	.text       start:0x80011730 end:0x80015310
 
+toBeSorted/d_d3d.cpp:
+	.text       start:0x80016700 end:0x80019E74
+	.ctors      start:0x804DB64C end:0x804DB650
+	.data       start:0x80500838 end:0x80500A70
+	.sdata2     start:0x80576A00 end:0x80576A68
+
+toBeSorted/d_scn_callback.cpp:
+	.text       start:0x80019E80 end:0x8001A590
+	.data       start:0x80500A70 end:0x80500AD8
+	.sbss       start:0x80575020 end:0x80575028
+	.sdata2     start:0x80576A68 end:0x80576A78
+
+toBeSorted/d_unk_proc.cpp:
+	.text       start:0x8001A590 end:0x8001BE58
+	.sdata2     start:0x80576A78 end:0x80576B08
+
 toBeSorted/blur_and_palette_manager.cpp:
 	.text       start:0x800221A0 end:0x800268AC
 	.ctors      start:0x804DB65C end:0x804DB660
