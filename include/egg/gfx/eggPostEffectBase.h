@@ -24,11 +24,23 @@ protected:
     PostEffectBase();
     virtual ~PostEffectBase() {} // at 0x8
 
+    void fn_804AED20();
+
+    void setVtxState();
+    void setMatColorChannel();
+    void setMatInd();
+    void setMatPE();
+    void setBlendModeInternal();
+    static void fn_804AF040(GXColor &, const GXColor &, bool, f32);
+    static void fn_804AF1B0(GXColor &, const GXColor &, const GXColor &, f32);
+    void getBaseTexMtx(nw4r::math::MTX34 *mtx) const;
+    static void setProjection(const EGG::Screen &screen);
+
 protected:
-    virtual void draw(f32, f32);                         // at 0xC
-    virtual void setMaterialInternal();                  // at 0x10
-    virtual void loadTextureInternal();                  // at 0x14
-    virtual void drawScreenInternal(f32, f32, f32, f32); // at 0x18
+    virtual void draw(f32 width, f32 height);                                         // at 0xC
+    virtual void setMaterialInternal() {}                                             // at 0x10
+    virtual void loadTextureInternal();                                               // at 0x14
+    virtual void drawScreenInternal(f32 offsetX, f32 offsetY, f32 width, f32 height); // at 0x18
 };
 
 } // namespace EGG

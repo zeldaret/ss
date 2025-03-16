@@ -10,6 +10,7 @@ namespace EGG {
 class Screen : public Frustum {
 public:
     Screen();
+    Screen(const Screen &other);
     Screen(f32, f32, f32, f32, Screen *, CanvasMode);
 
     virtual ~Screen() {}

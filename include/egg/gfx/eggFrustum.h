@@ -10,10 +10,17 @@ namespace EGG {
 class Frustum {
 public:
     enum CanvasMode {
+        CANVAS_0,
+        CANVAS_1,
     };
     enum ProjectionType {
         PROJ_ORTHO,
         PROJ_PERSP
+    };
+
+    enum Flag {
+        FLAG_DIRTY = (1 << 0),
+        FLAG_0x40 = 0x40,
     };
 
 private:
@@ -39,6 +46,33 @@ public:
     }
     void SetProjectionType(ProjectionType type) {
         mProjType = type;
+    }
+
+    void SetDirty(bool dirty) const {
+        if (dirty) {
+            mFlags |= FLAG_DIRTY;
+        } else {
+            mFlags &= ~FLAG_DIRTY;
+        }
+    }
+
+    void SetFlag(Flag f) const {
+        mFlags |= f;
+    }
+
+    CanvasMode GetCanvasMode() const {
+        return mCanvasMode;
+    }
+    void SetCanvasMode(CanvasMode mode) {
+        if (mCanvasMode != mode) {
+            SetDirty(true);
+            mCanvasMode = mode;
+        }
+    }
+
+    void SetNearFar(f32 near, f32 far) {
+        mNearZ = near;
+        mFarZ = far;
     }
 
     void ResetOrthographic(f32, f32, f32, f32, f32, f32);
