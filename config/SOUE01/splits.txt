@@ -1460,169 +1460,262 @@ nw4r/g3d/res/g3d_resdict.cpp:
 
 nw4r/g3d/res/g3d_resfile.cpp:
 	.text       start:0x80439420 end:0x80439FC4
+	.data       start:0x8056D020 end:0x8056D180
 
 nw4r/g3d/res/g3d_resmdl.cpp:
 	.text       start:0x80439FD0 end:0x8043B244
+	.sdata      start:0x80574E30 end:0x80574E38
 
 nw4r/g3d/res/g3d_resshp.cpp:
 	.text       start:0x8043B250 end:0x8043BD48
 
 nw4r/g3d/res/g3d_restev.cpp:
 	.text       start:0x8043BD50 end:0x8043C2B8
+	.rodata     start:0x804F6FF0 end:0x804F7050
+	.data       start:0x8056D180 end:0x8056D190
 
 nw4r/g3d/res/g3d_resmat.cpp:
 	.text       start:0x8043C2C0 end:0x8043E17C
+	.data       start:0x8056D190 end:0x8056D1E4
+	.sdata2     start:0x8057EC18 end:0x8057EC4C
 
 nw4r/g3d/res/g3d_resvtx.cpp:
-	.text       start:0x8043E180 end:0x8043E5B8
+	.text       start:0x8043E180 end:0x8043E598
 
 nw4r/g3d/res/g3d_restex.cpp:
-	.text       start:0x8043E5C0 end:0x8043E74C
+	.text       start:0x8043E5A0 end:0x8043E74C
 
 nw4r/g3d/res/g3d_resnode.cpp:
 	.text       start:0x8043E750 end:0x8043EA58
+	.sdata2     start:0x8057EC50 end:0x8057EC5C
 
 nw4r/g3d/res/g3d_resanm.cpp:
 	.text       start:0x8043EA60 end:0x8043ECB8
+	.sdata2     start:0x8057EC60 end:0x8057EC74
 
 nw4r/g3d/res/g3d_resanmvis.cpp:
 	.text       start:0x8043ECC0 end:0x8043EDE0
+	.sdata2     start:0x8057EC78 end:0x8057EC88
 
 nw4r/g3d/res/g3d_resanmclr.cpp:
 	.text       start:0x8043EDE0 end:0x8043EF4C
+	.sdata2     start:0x8057EC88 end:0x8057EC98
 
 nw4r/g3d/res/g3d_resanmtexpat.cpp:
 	.text       start:0x8043EF50 end:0x8043F320
 
 nw4r/g3d/res/g3d_resanmtexsrt.cpp:
 	.text       start:0x8043F320 end:0x8043F734
+	.sdata2     start:0x8057EC98 end:0x8057ECA0
 
 nw4r/g3d/res/g3d_resanmchr.cpp:
 	.text       start:0x8043F740 end:0x804419EC
+	.rodata     start:0x804F7050 end:0x804F7070
+	.sdata2     start:0x8057ECA0 end:0x8057ECCC
 
 nw4r/g3d/res/g3d_reslightset.cpp:
 	.text       start:0x804419F0 end:0x80441B5C
 
 nw4r/g3d/res/g3d_resanmamblight.cpp:
 	.text       start:0x80441B60 end:0x80441C30
+	.sdata2     start:0x8057ECD0 end:0x8057ECE0
 
 nw4r/g3d/res/g3d_resanmlight.cpp:
 	.text       start:0x80441C30 end:0x80442018
+	.sdata2     start:0x8057ECE0 end:0x8057ECF0
 
 nw4r/g3d/res/g3d_resanmcamera.cpp:
 	.text       start:0x80442020 end:0x80442330
 
 nw4r/g3d/res/g3d_resanmscn.cpp:
 	.text       start:0x80442330 end:0x8044297C
+	.data       start:0x8056D200 end:0x8056D280
 
 nw4r/g3d/res/g3d_resanmshp.cpp:
 	.text       start:0x80442980 end:0x80442AE8
+	.sdata2     start:0x8057ECF0 end:0x8057ECF4
 
 nw4r/g3d/g3d_transform.cpp:
 	.text       start:0x80442AF0 end:0x80442DF4
+	.sdata2     start:0x8057ECF8 end:0x8057ECFC
 
 nw4r/g3d/g3d_anmvis.cpp:
 	.text       start:0x80442E00 end:0x8044358C
+	.rodata     start:0x804F7070 end:0x804F7094
+	.data       start:0x8056D280 end:0x8056D308
+	.sdata      start:0x80574E38 end:0x80574E40
+	.sdata2     start:0x8057ED00 end:0x8057ED10
 
 nw4r/g3d/g3d_anmclr.cpp:
 	.text       start:0x80443590 end:0x80444D5C
+	.rodata     start:0x804F7098 end:0x804F7100
+	.data       start:0x8056D308 end:0x8056D428
+	.sdata2     start:0x8057ED10 end:0x8057ED20
 
 nw4r/g3d/g3d_anmtexpat.cpp:
 	.text       start:0x80444D60 end:0x8044635C
+	.rodata     start:0x804F7100 end:0x804F7168
+	.data       start:0x8056D428 end:0x8056D548
+	.sdata2     start:0x8057ED20 end:0x8057ED30
 
 nw4r/g3d/g3d_anmtexsrt.cpp:
 	.text       start:0x80446360 end:0x804479AC
+	.rodata     start:0x804F7168 end:0x804F71D0
+	.data       start:0x8056D548 end:0x8056D668
+	.sdata2     start:0x8057ED30 end:0x8057ED50
 
 nw4r/g3d/g3d_anmchr.cpp:
 	.text       start:0x804479B0 end:0x804499CC
+	.rodata     start:0x804F71D0 end:0x804F721C
+	.data       start:0x8056D668 end:0x8056D7C8
+	.sdata2     start:0x8057ED50 end:0x8057ED68
 
 nw4r/g3d/g3d_anmshp.cpp:
 	.text       start:0x804499D0 end:0x8044A3BC
+	.rodata     start:0x804F7220 end:0x804F7244
+	.data       start:0x8056D7C8 end:0x8056D868
+	.sdata2     start:0x8057ED68 end:0x8057ED78
 
 nw4r/g3d/g3d_anmscn.cpp:
 	.text       start:0x8044A3C0 end:0x8044A6E8
 
 nw4r/g3d/g3d_obj.cpp:
 	.text       start:0x8044A6F0 end:0x8044A85C
+	.rodata     start:0x804F7248 end:0x804F7254
+	.data       start:0x8056D868 end:0x8056D884
 
 nw4r/g3d/g3d_anmobj.cpp:
 	.text       start:0x8044A860 end:0x8044A928
+	.rodata     start:0x804F7258 end:0x804F7264
+	.sdata      start:0x80574E40 end:0x80574E44
+	.sdata2     start:0x8057ED78 end:0x8057ED7C
 
 nw4r/g3d/platform/g3d_gpu.cpp:
 	.text       start:0x8044A930 end:0x8044AE50
+	.sdata2     start:0x8057ED80 end:0x8057ED98
 
 nw4r/g3d/platform/g3d_tmem.cpp:
 	.text       start:0x8044AE50 end:0x8044B1B0
+	.rodata     start:0x804F7268 end:0x804F79E8
+	.sbss       start:0x80576618 end:0x80576628
+	.bss        start:0x8063B560 end:0x8063B9A0
 
 nw4r/g3d/platform/g3d_cpu.cpp:
 	.text       start:0x8044B1B0 end:0x8044B35C
+	.sdata2     start:0x8057ED98 end:0x8057ED9C
 
 nw4r/g3d/g3d_state.cpp:
 	.text       start:0x8044B360 end:0x8044EAB0
 	.ctors      start:0x804DB954 end:0x804DB958
+	.rodata     start:0x804F79E8 end:0x804F7A18
+	.data       start:0x8056D888 end:0x8056D8A0
+	.sdata      start:0x80574E48 end:0x80574E50
+	.sbss       start:0x80576628 end:0x80576648
+	.sdata2     start:0x8057EDA0 end:0x8057EDC8
+	.bss        start:0x8063B9A0 end:0x80640F44
 
 nw4r/g3d/g3d_draw1mat1shp.cpp:
 	.text       start:0x8044EAB0 end:0x8044F7F4
+	.rodata     start:0x804F7A18 end:0x804F7A28
+	.sdata2     start:0x8057EDC8 end:0x8057EDE8
 
 nw4r/g3d/g3d_calcview.cpp:
 	.text       start:0x8044F800 end:0x80451A9C
+	.rodata     start:0x804F7A28 end:0x804F7A44
+	.sdata2     start:0x8057EDE8 end:0x8057EDF4
 
 nw4r/g3d/g3d_dcc.cpp:
 	.text       start:0x80451AA0 end:0x80451B84
 
 nw4r/g3d/g3d_workmem.cpp:
 	.text       start:0x80451B90 end:0x80451BDC
+	.bss        start:0x80640F80 end:0x80658F80
 
 nw4r/g3d/g3d_calcworld.cpp:
 	.text       start:0x80451BE0 end:0x8045274C
+	.data       start:0x8056D8A0 end:0x8056D8A9
+	.sdata      start:0x80574E50 end:0x80574E58
+	.sdata2     start:0x8057EDF8 end:0x8057EE00
 
 nw4r/g3d/g3d_draw.cpp:
 	.text       start:0x80452750 end:0x804545F0
+	.sdata      start:0x80574E58 end:0x80574E60
+	.sdata2     start:0x8057EE00 end:0x8057EE0C
 
 nw4r/g3d/g3d_camera.cpp:
 	.text       start:0x804545F0 end:0x804556AC
+	.sdata2     start:0x8057EE10 end:0x8057EE48
 
 nw4r/g3d/dcc/g3d_basic.cpp:
 	.text       start:0x804556B0 end:0x80455978
+	.sdata2     start:0x8057EE48 end:0x8057EE54
 
 nw4r/g3d/dcc/g3d_maya.cpp:
 	.text       start:0x80455980 end:0x80456684
+	.rodata     start:0x804F7A48 end:0x804F7A80
+	.sdata2     start:0x8057EE58 end:0x8057EE6C
 
 nw4r/g3d/dcc/g3d_xsi.cpp:
 	.text       start:0x80456690 end:0x804572A4
+	.rodata     start:0x804F7A80 end:0x804F7AB8
+	.sdata2     start:0x8057EE70 end:0x8057EE7C
 
 nw4r/g3d/dcc/g3d_3dsmax.cpp:
 	.text       start:0x804572B0 end:0x80457DCC
+	.rodata     start:0x804F7AB8 end:0x804F7AF0
+	.sdata2     start:0x8057EE80 end:0x8057EE94
 
 nw4r/g3d/g3d_scnobj.cpp:
 	.text       start:0x80457DD0 end:0x8045980C
+	.rodata     start:0x804F7AF0 end:0x804F7B20
+	.data       start:0x8056D8B0 end:0x8056D9A8
+	.sbss       start:0x80576648 end:0x8057664C
+	.sdata2     start:0x8057EE98 end:0x8057EEA0
 
 nw4r/g3d/g3d_scnroot.cpp:
 	.text       start:0x80459810 end:0x8045B1BC
+	.rodata     start:0x804F7B20 end:0x804F7B30
+	.data       start:0x8056D9A8 end:0x8056DA18
+	.sdata      start:0x80574E60 end:0x80574E70
+	.sdata2     start:0x8057EEA0 end:0x8057EEA4
 
 nw4r/g3d/g3d_scnmdlsmpl.cpp:
 	.text       start:0x8045B1C0 end:0x8045D25C
+	.rodata     start:0x804F7B30 end:0x804F7B48
+	.data       start:0x8056DA18 end:0x8056DA70
+	.sdata      start:0x80574E70 end:0x80574E88
+	.sdata2     start:0x8057EEA8 end:0x8057EEAC
 
 nw4r/g3d/g3d_scnmdl.cpp:
 	.text       start:0x8045D260 end:0x8045FDAC
+	.rodata     start:0x804F7B48 end:0x804F7B58
+	.data       start:0x8056DA70 end:0x8056DAB8
 
 nw4r/g3d/g3d_calcmaterial.cpp:
 	.text       start:0x8045FDB0 end:0x8045FFE4
 
 nw4r/g3d/g3d_init.cpp:
 	.text       start:0x8045FFF0 end:0x804600E8
+	.data       start:0x8056DAB8 end:0x8056DAFE
+	.sdata      start:0x80574E88 end:0x80574E8C
 
 nw4r/g3d/g3d_scnproc.cpp:
 	.text       start:0x804600F0 end:0x804603F0
+	.rodata     start:0x804F7B70 end:0x804F7B80
+	.data       start:0x8056DB00 end:0x8056DB34
+	.sdata2     start:0x8057EEB0 end:0x8057EEB4
 
 nw4r/g3d/g3d_fog.cpp:
 	.text       start:0x804603F0 end:0x80460560
+	.sdata2     start:0x8057EEB8 end:0x8057EEBC
 
 nw4r/g3d/g3d_light.cpp:
 	.text       start:0x80460560 end:0x80460F68
+	.sdata2     start:0x8057EEC0 end:0x8057EEEC
 
 nw4r/g3d/g3d_calcvtx.cpp:
 	.text       start:0x80460F70 end:0x804616F8
+	.sdata2     start:0x8057EEF0 end:0x8057EEF4
 
 nw4r/snd/snd_AnimSound.cpp:
 	.text       start:0x80461700 end:0x804630D4

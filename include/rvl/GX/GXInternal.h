@@ -24,7 +24,7 @@ extern "C" {
  */
 #define GX_DECL_PUBLIC_STRUCT(name, size)                                                                              \
     typedef struct _##name {                                                                                           \
-        u8 dummy[(size) - sizeof(name##Impl) + sizeof(name##Impl)];                                                    \
+        u32 dummy[((size) - sizeof(name##Impl) + sizeof(name##Impl)) / sizeof(u32)];                                   \
     } name;
 
 typedef struct _GXFifoObjImpl {

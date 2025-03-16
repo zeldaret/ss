@@ -6,11 +6,11 @@
 
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/res/g3d_resanm.h>
-#include <nw4r/g3d/res/g3d_rescommon.h>
-#include <nw4r/g3d/res/g3d_resmdl.h>
+#include "nw4r/g3d/res/g3d_resanm.h"
+#include "nw4r/g3d/res/g3d_rescommon.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 
-#include <nw4r/math.h>
+#include "nw4r/math.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -49,11 +49,15 @@ struct ChrAnmResult {
     math::MTX34 rt;  // at 0x1C
 
     void GetScale(math::VEC3 *pScale) const;
+    void GetMtx(math::MTX34 *pMtx) const;
     bool GetRotateDeg(math::VEC3 *pRotate) const;
-    void GetTranslate(math::VEC3 *pTrans) const;
+    void GetTranslate(math::VEC3 *pTranslate) const;
     void GetRotTrans(math::MTX34 *pRotTrans) const;
 
     void SetScale(const math::VEC3 *pScale);
+    void SetMtx(const math::MTX34 *pMtx);
+    void SetRotateDeg(const math::VEC3 *pRotate);
+    void SetTranslate(const math::VEC3 *pTranslate);
     void SetRotTrans(const math::MTX34 *pRotTrans);
 };
 

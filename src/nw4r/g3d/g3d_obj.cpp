@@ -1,4 +1,4 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -10,7 +10,7 @@ G3dObj::~G3dObj() {
 }
 
 void G3dObj::Destroy() {
-    G3dObj* pParent = GetParent();
+    G3dObj *pParent = GetParent();
 
     if (pParent != NULL) {
         pParent->G3dProc(G3DPROC_CHILD_DETACHED, 0, this);
@@ -19,10 +19,15 @@ void G3dObj::Destroy() {
     delete this;
 }
 
-// clang-format off
-DECOMP_FORCEACTIVE(g3d_obj_cpp,
-                   G3dObj::IsDerivedFrom);
-// clang-format on
+G3dObj *G3dObj::DetachFromParent() {
+    G3dObj *pParent = GetParent();
+
+    if (pParent != NULL) {
+        pParent->G3dProc(G3DPROC_CHILD_DETACHED, 0, this);
+    }
+
+    return pParent;
+}
 
 } // namespace g3d
 } // namespace nw4r

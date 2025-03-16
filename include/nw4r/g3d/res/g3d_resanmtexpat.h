@@ -6,12 +6,12 @@
 
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/res/g3d_resanm.h>
-#include <nw4r/g3d/res/g3d_rescommon.h>
-#include <nw4r/g3d/res/g3d_resdict.h>
-#include <nw4r/g3d/res/g3d_resmat.h>
-#include <nw4r/g3d/res/g3d_respltt.h>
-#include <nw4r/g3d/res/g3d_restex.h>
+#include "nw4r/g3d/res/g3d_resanm.h"
+#include "nw4r/g3d/res/g3d_rescommon.h"
+#include "nw4r/g3d/res/g3d_resdict.h"
+#include "nw4r/g3d/res/g3d_resmat.h"
+#include "nw4r/g3d/res/g3d_respltt.h"
+#include "nw4r/g3d/res/g3d_restex.h"
 
 namespace nw4r {
 namespace g3d {

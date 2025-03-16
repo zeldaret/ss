@@ -6,14 +6,14 @@
 
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/res/g3d_rescommon.h>
-#include <nw4r/g3d/res/g3d_resdict.h>
-#include <nw4r/g3d/res/g3d_resmat.h>
-#include <nw4r/g3d/res/g3d_resnode.h>
-#include <nw4r/g3d/res/g3d_resshp.h>
-#include <nw4r/g3d/res/g3d_resvtx.h>
+#include "nw4r/g3d/res/g3d_rescommon.h"
+#include "nw4r/g3d/res/g3d_resdict.h"
+#include "nw4r/g3d/res/g3d_resmat.h"
+#include "nw4r/g3d/res/g3d_resnode.h"
+#include "nw4r/g3d/res/g3d_resshp.h"
+#include "nw4r/g3d/res/g3d_resvtx.h"
 
-#include <nw4r/math.h>
+#include "nw4r/math.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -139,7 +139,7 @@ public:
     bool Bind(const ResFile file);
     void Release();
 
-    bool IsOpaque() const;
+    bool IsOpaque(u32 mat) const;
     u32 GetRevision() const {
         return ref().revision;
     }
@@ -153,6 +153,7 @@ public:
     }
 
     const u8 *GetResByteCode(const char *pName) const;
+    u32 GetResByteCodeNumEntries() const;
 
     ResNode GetResNode(const char *pName) const;
     ResNode GetResNode(const ResName name) const;
@@ -178,6 +179,12 @@ public:
     ResVtxTexCoord GetResVtxTexCoord(int idx) const;
     u32 GetResVtxTexCoordNumEntries() const;
 
+    ResVtxFurPos GetResVtxFurPos(int idx) const;
+    u32 GetResVtxFurPosNumEntries() const;
+
+    ResVtxFurVec GetResVtxFurVec(int idx) const;
+    u32 GetResVtxFurVecNumEntries() const;
+
     ResMat GetResMat(const char *pName) const;
     ResMat GetResMat(const ResName name) const;
     ResMat GetResMat(int idx) const;
@@ -198,6 +205,21 @@ public:
     ResMdlInfo GetResMdlInfo() const {
         return ResMdlInfo(const_cast<ResMdlInfoData *>(&ref().info));
     }
+
+    class DrawEnumerator {
+        const u8 *drawOpa;
+        const u8 *drawXlu;
+        bool bOpa;
+
+    public:
+        DrawEnumerator(const u8 *pDrawOpa, const u8 *pDrawXlu);
+
+        bool IsValid() const;
+        void MoveNext();
+        u32 GetMatID() const;
+        u32 GetShpID() const;
+        u32 GetNodeID() const;
+    };
 };
 
 } // namespace g3d

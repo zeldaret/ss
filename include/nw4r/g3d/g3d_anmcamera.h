@@ -2,8 +2,8 @@
 #define NW4R_G3D_ANMCAMERA_H
 
 #include "common.h"
-#include "rvl/GX.h" // IWYU pragma: export
 
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {

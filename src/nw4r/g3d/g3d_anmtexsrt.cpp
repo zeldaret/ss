@@ -1,8 +1,8 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
-#include <nw4r/ut.h>
+#include "nw4r/ut.h" // IWYU pragma: export
 
-#include <rvl/GX.h>
+#include "rvl/GX.h" // IWYU pragma: export
 
 #include <cmath>
 
@@ -296,12 +296,13 @@ const TexSrtAnmResult *AnmObjTexSrtOverride::GetResult(TexSrtAnmResult *pResult,
 
         const TexSrtAnmResult *pChildResult = pChild->GetResult(pResult, idx);
 
-        if (pChildResult->flags != 0) {
+        if (pChildResult->flags != 0 || pChildResult->indFlags != 0) {
             return pChildResult;
         }
     }
 
     pResult->flags = 0;
+    pResult->indFlags = 0;
     return pResult;
 }
 
@@ -372,6 +373,9 @@ f32 AnmObjTexSrtRes::GetFrame() const {
 
 void AnmObjTexSrtRes::SetUpdateRate(f32 rate) {
     SetRate(rate);
+    if (rate == 0.f && mpResultCache != NULL) {
+        UpdateCache();
+    }
 }
 
 f32 AnmObjTexSrtRes::GetUpdateRate() const {
@@ -379,10 +383,12 @@ f32 AnmObjTexSrtRes::GetUpdateRate() const {
 }
 
 void AnmObjTexSrtRes::UpdateFrame() {
-    UpdateFrm();
+    if (GetRate() != 0.f) {
+        UpdateFrm();
 
-    if (mpResultCache != NULL) {
-        UpdateCache();
+        if (mpResultCache != NULL) {
+            UpdateCache();
+        }
     }
 }
 
@@ -414,6 +420,7 @@ const TexSrtAnmResult *AnmObjTexSrtRes::GetResult(TexSrtAnmResult *pResult, u32 
 
     if (id & (BINDING_UNDEFINED | BINDING_INVALID)) {
         pResult->flags = 0;
+        pResult->indFlags = 0;
         return pResult;
     }
 
@@ -466,12 +473,13 @@ void AnmObjTexSrtRes::G3dProc(u32 task, u32 param, void *pInfo) {
  ******************************************************************************/
 void ApplyTexSrtAnmResult(ResTexSrt srt, const TexSrtAnmResult *pResult) {
     ResTexSrtData &r = srt.ref();
-
-    u32 flags = pResult->flags;
+    u32 mdlFlags = r.flag;
+    u32 anmFlags = pResult->flags;
     u32 mask = 0x0F;
 
-    for (int i = 0; flags != 0; flags >>= TexSrt::NUM_OF_FLAGS, mask <<= 4, i++) {
-        if (!(flags & 1)) {
+    for (int i = 0; mdlFlags != 0 && anmFlags != 0;
+         mdlFlags >>= TexSrt::NUM_OF_FLAGS, anmFlags >>= TexSrt::NUM_OF_FLAGS, mask <<= 4, i++) {
+        if (!(mdlFlags & TexSrt::FLAG_ANM_EXISTS) || !(anmFlags & TexSrt::FLAG_ANM_EXISTS)) {
             continue;
         }
 
@@ -482,6 +490,7 @@ void ApplyTexSrtAnmResult(ResTexSrt srt, const TexSrtAnmResult *pResult) {
 }
 
 void ApplyTexSrtAnmResult(ResTexSrt srt, ResMatIndMtxAndScale ind, const TexSrtAnmResult *pResult) {
+    // I need this to not inline :(
     ApplyTexSrtAnmResult(srt, pResult);
 
     u32 flags = pResult->indFlags;
@@ -493,23 +502,20 @@ void ApplyTexSrtAnmResult(ResTexSrt srt, ResMatIndMtxAndScale ind, const TexSrtA
 
         math::MTX34 mtx;
 
-        CalcTexMtx(
-            &mtx, true, pResult->srt[i], static_cast<TexSrt::Flag>(flags & TexSrt::FLAGSET_IDENTITY),
-            TexSrtTypedef::TEXMATRIXMODE_MAYA
-        );
+        CalcTexMtx(&mtx, true, pResult->srt[i], static_cast<TexSrt::Flag>(flags & TexSrt::FLAGSET_IDENTITY));
 
         s8 scaleExp;
 
         f32 maxElem = 0.000000000000000001f;
-        maxElem = ut::Max(maxElem, math::FAbs(mtx._00));
-        maxElem = ut::Max(maxElem, math::FAbs(mtx._01));
-        maxElem = ut::Max(maxElem, math::FAbs(mtx._03));
-        maxElem = ut::Max(maxElem, math::FAbs(mtx._10));
-        maxElem = ut::Max(maxElem, math::FAbs(mtx._11));
-        maxElem = ut::Max(maxElem, math::FAbs(mtx._13));
+        maxElem = ut::Max(maxElem, ut::Abs(mtx._00));
+        maxElem = ut::Max(maxElem, ut::Abs(mtx._01));
+        maxElem = ut::Max(maxElem, ut::Abs(mtx._03));
+        maxElem = ut::Max(maxElem, ut::Abs(mtx._10));
+        maxElem = ut::Max(maxElem, ut::Abs(mtx._11));
+        maxElem = ut::Max(maxElem, ut::Abs(mtx._13));
 
         scaleExp = static_cast<s8>(math::FGetExpPart(maxElem) + 1);
-        f32 invScale = 0.f; // TODO: ldexpf(1.0f, -scaleExp);
+        f32 invScale = std::ldexp(1.0f, -scaleExp); // TODO ldexpf rename
 
         mtx._00 *= invScale;
         mtx._01 *= invScale;
