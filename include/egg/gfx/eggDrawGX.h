@@ -5,6 +5,10 @@
 #include "egg/core/eggHeap.h"
 #include "egg/gfx/eggTexture.h"
 #include "egg/math/eggMatrix.h"
+#include "nw4r/g3d/res/g3d_restex.h"
+#include "nw4r/math/math_types.h"
+#include "rvl/GX/GXTexture.h"
+#include "rvl/GX/GXTypes.h"
 
 #include "rvl/GX.h" // IWYU pragma: export
 
@@ -12,10 +16,26 @@ namespace EGG {
 
 class DrawGX {
 public:
+    DrawGX() {}
     // made up
     struct DLData {
         u8 *mpList;
         u32 mLen;
+    };
+
+    // made up, stride 0xC
+    struct ZModeConfig {
+        bool mTest;
+        GXCompare mCompare;
+        bool mUpdate;
+    };
+
+    // made up, stride 0x10
+    struct BlendModeConfig {
+        GXBlendMode mBlendMode;
+        GXBlendFactor mBlendFactorSrc;
+        GXBlendFactor mBlendFactorDst;
+        GXLogicOp mLogicOp;
     };
 
     enum DL {
@@ -78,21 +98,78 @@ public:
         BLEND_MAX
     };
 
+    enum ZMode {
+        ZMODE_0,
+        ZMODE_1,
+        ZMODE_2,
+        ZMODE_3,
+
+        ZMODE_MAX,
+    };
+
+    enum TevSetting {
+        TEV_0,
+        TEV_1,
+        TEV_2,
+    };
+
+    enum TexGen {
+        TEXGEN_0,
+        TEXGEN_1,
+    };
+
+    enum ColorChannel {
+        COLORCHAN_0,
+        COLORCHAN_1,
+    };
+
     static void Initialize(Heap *);
 
     static GXTexMapID GetTexMapDefault();
-    static void LoadTexture(const EGG::ResTIMG *, GXTexMapID);
+    static GXLightID GetLightMaskDefault();
+
+    static void BeginDrawLine(ColorChannel, ZMode);
+    static void BeginDrawCircleZ(ColorChannel, ZMode);
+    static void BeginDrawQuad(ColorChannel, ZMode, Blend, bool, bool);
     static void BeginDrawScreen(bool, bool, bool);
-    static void CreateDisplayList(EGG::Heap*);
+
+    static void DrawLineStrip(const EGG::Vector3f *, u16, GXColor, u8);
+    static void DrawLine(const EGG::Vector3f *, u16, GXColor, u8);
+    static void ClearEfb(const nw4r::math::MTX34 &, bool, bool, bool, GXColor, bool);
+    static void ResetMaterial(enum ColorChannel);
+    static void SetMat_ColorChannel(enum ColorChannel);
+    static void SetMat_TexGen(enum TexGen);
+    static void SetMat_Ind();
+    static void SetMat_Tev(GXTevStageID, enum TevSetting);
+    static void SetMat_PE(enum ZMode, enum Blend);
+
+    static void LoadTexture(const EGG::ResTIMG *, GXTexMapID);
+    static void LoadTexture(nw4r::g3d::ResTex, GXTexMapID);
+
+    static void CreateDisplayList(EGG::Heap *);
     static void DrawDL(enum DL, const nw4r::math::MTX34 &, GXColor);
     static void SetVtxState(enum VtxType);
+    static void SetZMode(enum ZMode);
     static void SetBlendMode(enum Blend);
+    static void DrawDLWorld(DL dl, const EGG::Matrix34f& mtx, GXColor color);
 
     // TODO MORE
 
+    // not sure
     static DLData s_DL[DL_MAX];
+    static const DL s_DL0;
+    static const DL s_DL7;
+    static const DL s_DL8;
 
-    static Matrix34f s_cameraMtx;
+    static const ZModeConfig s_ZMode[ZMODE_MAX];
+    static const BlendModeConfig s_Blend[BLEND_MAX];
+    static GXTexObj sDummyTexObj;
+    // not sure end
+
+    static GXTexMapID sTexMapDefault;
+    static GXLightID sLightMaskDefault;
+
+    static nw4r::math::MTX34 s_cameraMtx;
 
     static u32 s_flag;
 
