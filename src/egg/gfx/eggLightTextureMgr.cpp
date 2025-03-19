@@ -1,8 +1,11 @@
 #include "egg/gfx/eggLightTextureMgr.h"
 
 #include "common.h"
+#include "egg/gfx/eggG3DUtility.h"
 #include "egg/gfx/eggLightTexture.h"
 #include "egg/gfx/eggStateGX.h"
+#include "nw4r/g3d/res/g3d_resmat.h"
+#include "rvl/GX/GXTexture.h"
 
 #include <cstring>
 
@@ -93,6 +96,28 @@ bool LightTextureManager::deleteTexture(int idx) {
         }
     }
     return false;
+}
+
+int LightTextureManager::replaceModelTextures(nw4r::g3d::ResMdl mdl) const {
+    int count = 0;
+    for (u16 i = 0; i < mTextureCount; i++) {
+        count += replaceModelTexture(i, mdl);
+    }
+    return count;
+}
+
+int LightTextureManager::replaceModelTexture(u16 tex, nw4r::g3d::ResMdl mdl) const {
+    if (mpTextures[tex] == nullptr) {
+        return 0;
+    }
+    GXTexObj obj;
+    mpTextures[tex]->getTexObj(&obj);
+    int count = 0;
+    for (u32 i = 0; i < mdl.GetResMatNumEntries(); i++) {
+        nw4r::g3d::ResMat mat = mdl.GetResMat(i);
+        // TODO 
+        // count += G3DUtility::SetTexture(mat, nullptr, mpLightMgr[tex]->getName(), obj, false, void *param_6, int param_7, int param_8)
+    }
 }
 
 bool LightTextureManager::setBinaryToTexture(const void *data) {

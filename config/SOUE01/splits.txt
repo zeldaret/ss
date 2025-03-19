@@ -2166,7 +2166,7 @@ egg/prim/eggAssert.cpp:
 	.bss        start:0x80674C60 end:0x80674D68
 
 egg/gfx/eggCamera.cpp:
-	.text       start:0x8049C5C0 end:0x8049CAC0
+	.text       start:0x8049C5C0 end:0x8049CAC8
 
 egg/gfx/eggPalette.cpp:
 	.text       start:0x8049CAD0 end:0x8049CB44
