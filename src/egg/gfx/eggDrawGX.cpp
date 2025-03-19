@@ -378,33 +378,26 @@ void DrawGX::SetVtxState(EGG::DrawGX::VtxType type) {
     GXClearVtxDesc();
     switch (type) {
         case VTX_TYPE_0:
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGBA4, 0xe);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_RGBA4, 0xe);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0xe);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S16, 0xe);
             // clang-format off
-            static const ALIGN_DECL(32) u8 sVtxDataType0[] = {
-                0xE0, 0x00, 0x20, 0x00,
-                0xE0, 0x00, 0xE0, 0x00,
-                0x20, 0x00, 0x20, 0x00,
-                0x20, 0x00, 0x20, 0x00,
-                0x20, 0x00, 0x20, 0x00,
-                0x20, 0x00, 0xE0, 0x00,
-                0xE0, 0x00, 0xE0, 0x00,
-                0xE0, 0x00, 0xE0, 0x00,
-                0xE0, 0x00, 0x20, 0x00,
-                0x20, 0x00, 0xE0, 0x00,
-                0x20, 0x00, 0x20, 0x00,
-                0xE0, 0x00, 0xE0, 0x00,
+            static const ALIGN_DECL(32) s16 sVtxDataType0[][3] = {
+                {0xE000, 0x2000, 0xE000},
+                {0xE000, 0x2000, 0x2000},
+                {0x2000, 0x2000, 0x2000},
+                {0x2000, 0x2000, 0xE000},
+                {0xE000, 0xE000, 0xE000},
+                {0xE000, 0xE000, 0x2000},
+                {0x2000, 0xE000, 0x2000},
+                {0x2000, 0xE000, 0xE000},
             };
-            static const ALIGN_DECL(32) u8 sNrmDataType0[] = {
-                0xC0, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x40, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0xC0, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0x40, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x00, 0x00,
-                0xC0, 0x00, 0x00, 0x00,
-                0x00, 0x00, 0x40, 0x00,
+            static const ALIGN_DECL(32) s16 sNrmDataType0[][3] = {
+                {0xC000, 0x0000, 0x0000},
+                {0x4000, 0x0000, 0x0000},
+                {0x0000, 0xC000, 0x0000},
+                {0x0000, 0x4000, 0x0000},
+                {0x0000, 0x0000, 0xC000},
+                {0x0000, 0x0000, 0x4000},
             };
             // clang-format on
             GXSetArray(GX_VA_POS, sVtxDataType0, 6);
@@ -418,37 +411,38 @@ void DrawGX::SetVtxState(EGG::DrawGX::VtxType type) {
         case VTX_TYPE_5:
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxDesc(GX_VA_NRM, GX_DIRECT);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
             break;
         case VTX_TYPE_6:
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxDesc(GX_VA_NRM, GX_DIRECT);
             GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_F32, 0);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
             GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
             break;
         case VTX_TYPE_1:
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
             break;
         case VTX_TYPE_7:
         case VTX_TYPE_8:
             // clang-format off
-            static const ALIGN_DECL(32) u8 sVtxDataType7[] = {
-                0xE0, 0x00, 0x20, 0x00,
-                0x20, 0x00, 0x20, 0x00,
-                0x20, 0x00, 0xE0, 0x00,
-                0xE0, 0x00, 0xE0, 0x00,
+            static const ALIGN_DECL(32) s16 sVtxDataType7[][2] = {
+                {0xE000, 0x2000},
+                {0x2000, 0x2000},
+                {0x2000, 0xE000},
+                {0xE000, 0xE000},
             };
-            static const ALIGN_DECL(32) u8 sNrmDataType7[] = {
-                0x00, 0x00, 0x00, 0x00,
-                0x40, 0x00, 0x00, 0x00,
+            static const ALIGN_DECL(32) s16 sNrmDataType7[][3] = {
+                {0x0000, 0x0000, 0x4000}
             };
-            static const ALIGN_DECL(32) u8 sTexDataType7[] = {
-                0x00, 0x00, 0x01, 0x00,
-                0x01, 0x01, 0x00, 0x01,
+            static const ALIGN_DECL(32) u8 sTexDataType7[][2] = {
+                {0x00, 0x00},
+                {0x01, 0x00},
+                {0x01, 0x01},
+                {0x00, 0x01},
             };
             // clang-format on
             GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
@@ -456,10 +450,10 @@ void DrawGX::SetVtxState(EGG::DrawGX::VtxType type) {
             if (type == VTX_TYPE_7) {
                 GXSetVtxDesc(GX_VA_TEX0, GX_INDEX8);
             }
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_RGBA4, 0xe);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_RGBA4, 0xe);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_S16, 0xe);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S16, 0xe);
             if (type == VTX_TYPE_7) {
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB565, 0);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U8, 0);
             }
             GXSetArray(GX_VA_POS, sVtxDataType7, 4);
             GXSetArray(GX_VA_NRM, sNrmDataType7, 6);
@@ -469,23 +463,20 @@ void DrawGX::SetVtxState(EGG::DrawGX::VtxType type) {
             break;
         case VTX_TYPE_9:
             // clang-format off
-            static const ALIGN_DECL(32) u8 sVtxDataType9[] = {
-                0xE0, 0x00, 0x00, 0x00,
-                0xE0, 0x00, 0x20, 0x00,
-                0x00, 0x00, 0xE0, 0x00,
-                0x20, 0x00, 0x00, 0x00,
-                0x20, 0x00, 0xE0, 0x00,
-                0x00, 0x00, 0x20, 0x00,
+            static const ALIGN_DECL(32) s16 sVtxDataType9[][3] = {
+                {0xE000, 0x0000, 0xE000},
+                {0x2000, 0x0000, 0xE000},
+                {0x2000, 0x0000, 0x2000},
+                {0xE000, 0x0000, 0x2000},
             };
-            static const ALIGN_DECL(32) u8 sNrmDataType9[] = {
-                0x00, 0x00, 0x40, 0x00,
-                0x00, 0x00, 0x00, 0x00,
+            static const ALIGN_DECL(32) s16 sNrmDataType9[][3] = {
+                {0x0000, 0x4000, 0x0000}  
             };
             // clang-format on
             GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
             GXSetVtxDesc(GX_VA_NRM, GX_INDEX8);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_RGBA4, 0xe);
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_CLR_RGB, GX_RGBA4, 0xe);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_S16, 0xe);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S16, 0xe);
             GXSetArray(GX_VA_POS, sVtxDataType9, 6);
             GXSetArray(GX_VA_NRM, sNrmDataType9, 6);
             break;
@@ -494,13 +485,17 @@ void DrawGX::SetVtxState(EGG::DrawGX::VtxType type) {
         case VTX_TYPE_12:
         case VTX_TYPE_13: {
             // clang-format off
-            static const ALIGN_DECL(32) u8 sPosDataType10[] = {
-                0x00, 0x01, 0x01, 0x01,
-                0x01, 0x00, 0x00, 0x00,
+            static const ALIGN_DECL(32) u8 sPosDataType10[][2] = {
+                {0x00, 0x01},
+                {0x01, 0x01},
+                {0x01, 0x00},
+                {0x00, 0x00},
             };
-            static const ALIGN_DECL(32) u8 sTexDataType10[] = {
-                0x00, 0x00, 0x01, 0x00,
-                0x01, 0x01, 0x00, 0x01,
+            static const ALIGN_DECL(32) u8 sTexDataType10[][2] = {
+                {0x00, 0x00},
+                {0x01, 0x00},
+                {0x01, 0x01},
+                {0x00, 0x01},
             };
             // clang-format on
             bool bVar1 = type == VTX_TYPE_11 || type == VTX_TYPE_13;
@@ -513,9 +508,9 @@ void DrawGX::SetVtxState(EGG::DrawGX::VtxType type) {
             if (bVar2) {
                 GXSetArray(GX_VA_TEX0, sTexDataType10, 2);
             }
-            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGB, GX_RGB565, 0);
+            GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XY, GX_U8, 0);
             if (bVar2) {
-                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGB565, 0);
+                GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U8, 0);
             }
             break;
         }
