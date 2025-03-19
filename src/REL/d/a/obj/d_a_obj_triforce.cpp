@@ -10,7 +10,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_TRIFORCE, dAcOtriforce_c, fProfile::OBJ_TRIFORCE, 0x15
 // clang-format off
 dCcD_SrcSph dAcOtriforce_c::sCcSrc = {
     {{0, 0, 0, 0, 0, 0, 0, 0, 0}, 
-    {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, 0x06, 0x407, 0, 0}, 
+    {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, 0x0, 0x06, 0x407, 0, 0}, 
     {0xE9}},
     {150.0f}};
 // clang-format on
