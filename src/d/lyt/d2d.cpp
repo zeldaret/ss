@@ -164,7 +164,7 @@ nw4r::lyt::AnimTransform *Layout_c::CreateAnimTransform(const void *animResBuf, 
 
 Multi_c::Multi_c() : Base_c(0x80), mLayout(), mDrawInfo(), mpResAcc(nullptr), mFlags(0) {
     mDrawInfo.SetLocationAdjustScale(nw4r::math::VEC2(
-        (f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_1) / (f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_2),
+        (f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_4_3) / (f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_16_9),
         1.0f
     ));
     mDrawInfo.SetLocationAdjust(true);
@@ -207,8 +207,8 @@ void Multi_c::draw() {
     f32 far = 500.0f;
     EGG::Screen s;
     bool needsAdjust = NeedsScreenAdjustment();
-    f32 f1 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_2);
-    f32 f2 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_1);
+    f32 f1 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_UNK_3);
+    f32 f2 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_16_9);
 
     f32 left = needsAdjust ? f1 * r.left / f2 : r.left;
     f32 right = needsAdjust ? f1 * r.right / f2 : r.right;

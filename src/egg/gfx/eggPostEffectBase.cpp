@@ -153,7 +153,7 @@ void PostEffectBase::setProjection(const Screen &screen) {
 
     Screen screenCpy(screen);
     screenCpy.SetFlag(Screen::FLAG_0x40);
-    screenCpy.SetCanvasMode(Screen::CANVAS_1);
+    screenCpy.SetCanvasMode(Screen::CANVASMODE_1);
     screenCpy.SetProjectionType(Screen::PROJ_ORTHO);
     screenCpy.SetNearFar(0.0f, 1.0f);
     screenCpy.SetScale(sScale);

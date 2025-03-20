@@ -1,41 +1,20 @@
 #ifndef EGG_SCREEN_H
 #define EGG_SCREEN_H
 
-#include "common.h"
+#include "egg/egg_types.h"
 #include "egg/gfx/eggFrustum.h"
 
 namespace EGG {
 
-// TODO: Fill out more
 class Screen : public Frustum {
 public:
-    Screen();
-    Screen(const Screen &other);
-    Screen(f32, f32, f32, f32, Screen *, CanvasMode);
+    enum TVMode { TV_MODE_4_3, TV_MODE_16_9, TV_MODE_UNK_3, TV_MODE_MAX };
 
-    virtual ~Screen() {}
-    virtual void SetProjectionGX() const override;
-    virtual void CopyToG3D(nw4r::g3d::Camera) const override;
+    typedef void (*ChangeTVModeFunc)(void *);
 
-    static void Initialize(const u16 *, const u16 *, Screen *);
-    static void SetTVModeDefault();
-
-    u8 TODO_0x3C[0x88 - 0x3C];
-
-    enum TVMode {
-        TV_MODE_1,
-        TV_MODE_2,
-        TV_MODE_3,
-        TV_MODE_4,
-        TV_MODE_MAX
-    };
-
-    struct TVModeInfo {
-        TVModeInfo() {}
-        u16 width;
-        u16 height;
-        f32 w_ratio;
-        f32 h_ratio;
+    struct UnkStruct {
+        UNKWORD field_0x00;
+        UNKWORD field_0x04;
     };
 
     struct DataEfb {
@@ -49,9 +28,25 @@ public:
             f32 z2; // at 0x14
         } vp;
 
-        s32 sc_ox; // at 0x18
-        s32 sc_oy; // at 0x1C
+        u32 sc_x;
+        u32 sc_y;
+        u32 sc_w;
+        u32 sc_h;
+
+        s32 sc_ox; // at 0x28
+        s32 sc_oy; // at 0x2C
     };
+
+    struct TVModeInfo {
+        u16 width;
+        u16 height;
+        nw4r::math::VEC2 ratios;
+    };
+
+public:
+    static void Initialize(const u16 *, const u16 *, Screen *);
+    static void SetTVMode(TVMode);
+    static void SetTVModeDefault();
 
     static u16 GetSizeXMax(TVMode mode) {
         return sTVModeInfo[mode].width;
@@ -74,11 +69,40 @@ public:
         return sTVMode;
     }
 
+    Screen();
+    Screen(f32, f32, f32, f32, const Screen *, CanvasMode);
+    Screen(const Screen &);
+
+    virtual ~Screen() {}                             // at 0x8
+    virtual void SetProjectionGX() const;            // at 0xC
+    virtual void CopyToG3D(nw4r::g3d::Camera) const; // at 0x10
+
+    const Screen *GetParent() const {
+        return mParent;
+    }
+    void SetParent(const Screen *parent);
+    void SetUnkFlag8();
+
+    void CopyFromAnother(const Screen &other);
+    void Reset(f32, f32, f32, f32, CanvasMode);
+    void GetPosSizeInEfb() const;
+    const DataEfb &GetDataEfb() const;
+    bool IsChangeEfb() const;
+    void CalcMatrixForDrawQuad(nw4r::math::MTX34 *, f32, f32, f32, f32) const;
+    void FillBufferGX(u32, GXColor, u32) const;
+    void GetGlobalPos(f32 *, f32 *) const;
+
+private:
+    const Screen *mParent;      // at 0x3C
+    nw4r::math::VEC2 mPosition; // at 0x40
+    nw4r::math::VEC2 field_0x44;
+    nw4r::math::VEC2 field_0x48;
+    mutable DataEfb mDataEfb; // at 0x58
+
     static TVMode sTVMode;
 
     static Screen *spRoot;
 
-    typedef void (*ChangeTVModeFunc)(void *);
     static ChangeTVModeFunc sChangeTVModeFunc;
     static void *spChangeTVModeFuncInfo;
     static TVModeInfo sTVModeInfo[Screen::TV_MODE_MAX];

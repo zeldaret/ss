@@ -16,6 +16,7 @@ public:
     static void getTexObj(GXTexObj *, nw4r::g3d::ResTex, GXTexWrapMode, GXTexWrapMode, GXTexFilter, GXTexFilter);
 
     static void getNormalColor(GXColor &outColor, const Vector3f &vec);
+    static void setScaleOffsetPerspective(f32*, f32, f32, f32, f32);
 };
 
 } // namespace EGG

@@ -88,14 +88,16 @@ public:
     static bool GXSetDstAlpha();
     // Unk func here
     static void GXSetProjection(Mtx44, int);
-    static void GXSetProjectionv(const f32 *);
-    static void GXSetViewport(f32, f32, f32, f32, f32, f32);
-    static void GZSetScissor(u32, u32, u32, u32);
-    static void GZSetScissorBoxOffset(s32, s32);
+    static void GXSetProjectionv_(const f32 *);
+    static void GXSetViewport_(f32, f32, f32, f32, f32, f32);
+    static void GXSetScissor_(u32, u32, u32, u32);
+    static void GXSetScissorBoxOffset_(s32, s32);
 
 
     static u16 s_commandFlag;
     static u16 s_flag;
+    static u16 s_widthEfb;
+    static u16 s_heightEfb;
     static GXColor sDefaultTexColor;
 };
 

@@ -2228,6 +2228,9 @@ egg/gfx/eggFogManager.cpp:
 egg/gfx/eggFrustum.cpp:
 	.text       start:0x804A5F60 end:0x804A6854
 	.ctors      start:0x804DB99C end:0x804DB9A0
+	.data       start:0x8056F030 end:0x8056F048
+	.sbss       start:0x80576810 end:0x80576820
+	.sdata2     start:0x8057F618 end:0x8057F63C
 
 egg/gfx/eggG3DUtility.cpp:
 	.text       start:0x804A6860 end:0x804A75B0
@@ -2311,6 +2314,10 @@ egg/gfx/eggPostEffectSimple.cpp:
 egg/gfx/eggScreen.cpp:
 	.text       start:0x804B1E60 end:0x804B30B4
 	.ctors      start:0x804DB9A8 end:0x804DB9AC
+	.data       start:0x8056F230 end:0x8056F268
+	.sbss       start:0x80576870 end:0x80576898
+	.sdata2     start:0x8057F818 end:0x8057F840
+	.bss        start:0x80674F00 end:0x80674F88
 
 egg/gfx/eggScreenEffectBase.cpp:
 	.text       start:0x804B30C0 end:0x804B30EC

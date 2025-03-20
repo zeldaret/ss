@@ -2,12 +2,12 @@
 #define EGG_GFXENGINE_H
 
 #include "common.h"
-#include "rvl/GX.h"
+#include "rvl/GX/GXTypes.h"
 
 namespace EGG {
 
-namespace GfxEngine {
-
+class GfxEngine {
+public:
 struct Configuration {
     /* 0x00 */ u16 efbWidth;
     /* 0x02 */ u16 efbHeight;
@@ -23,7 +23,7 @@ struct Configuration {
     virtual ~Configuration() {}
 };
 
-} // namespace GfxEngine
+};
 
 } // namespace EGG
 
