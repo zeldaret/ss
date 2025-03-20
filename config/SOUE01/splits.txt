@@ -2290,6 +2290,9 @@ egg/gfx/eggPostEffectUnk1.cpp:
 
 egg/gfx/eggPostEffectUnk2.cpp:
 	.text       start:0x804B00A0 end:0x804B0AA4
+	.rodata     start:0x804FBD50 end:0x804FBD88
+	.data       start:0x8056F1B0 end:0x8056F1D0
+	.sdata2     start:0x8057F798 end:0x8057F7C8
 
 egg/gfx/eggPostEffectMask.cpp:
 	.text       start:0x804B0AB0 end:0x804B0F60

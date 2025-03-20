@@ -50,7 +50,7 @@ void PostEffectUnk1::setMaterialInternal() {
     GXSetNumTevStages(numStages);
 
     for (int i = 0; i < numStages; i++) {
-        Kernel &k = field_0x34[i];
+        Stage &k = field_0x34[i];
         GXTevStageID stage = static_cast<GXTevStageID>(i);
         GXSetTevDirect(stage);
         GXSetTevSwapMode(stage, GX_TEV_SWAP0, GX_TEV_SWAP0);

@@ -8,7 +8,7 @@
 namespace EGG {
 
 class PostEffectBlur : PostEffectBase {
-    struct Kernel {
+    struct Stage {
         /* 0x00 */ u8 field_0x00;
         /* 0x01 */ GXColor field_0x01;
         /* 0x08 */ f32 field_0x08;
@@ -38,7 +38,7 @@ private:
     /* 0x2C */ u8 field_0x2C;
     /* 0x30 */ f32 field_0x30;
     /* 0x34 */ f32 field_0x34;
-    /* 0x38 */ Kernel field_0x38[4];
+    /* 0x38 */ Stage field_0x38[4];
 };
 
 } // namespace EGG

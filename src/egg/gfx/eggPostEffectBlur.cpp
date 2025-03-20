@@ -1,6 +1,7 @@
 #include "egg/gfx/eggPostEffectBlur.h"
 
 #include "common.h"
+#include "egg/gfx/eggCapTexture.h"
 #include "egg/gfx/eggDrawGX.h"
 #include "egg/gfx/eggGXUtility.h"
 #include "math.h"
@@ -49,7 +50,7 @@ void PostEffectBlur::draw(f32 width, f32 height) {
 void PostEffectBlur::drawInternal(u8 kernelIdx, u8 p2, f32 f1, f32 f2) {
     // NONMATCHING
     nw4r::math::MTX34 mtx;
-    Kernel &k = field_0x38[kernelIdx];
+    Stage &k = field_0x38[kernelIdx];
 
     // Some regswaps and instruction swaps only at the start of the function
     f32 unk_00 = k.field_0x00;

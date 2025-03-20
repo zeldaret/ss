@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "egg/egg_types.h"
-#include "egg/gfx/eggCapTexture.h"
+#include "nw4r/math/math_types.h"
 #include "rvl/GX/GXTypes.h"
 
 namespace EGG {
