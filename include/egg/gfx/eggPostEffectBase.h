@@ -31,8 +31,8 @@ protected:
     void setMatInd();
     void setMatPE();
     void setBlendModeInternal();
-    static void fn_804AF040(GXColor &, const GXColor &, bool, f32);
-    static void fn_804AF1B0(GXColor &, const GXColor &, const GXColor &, f32);
+    static void scaleColor(GXColor &, const GXColor &, bool, f32);
+    static void lerpColor(GXColor &, const GXColor &, const GXColor &, f32);
     void getBaseTexMtx(nw4r::math::MTX34 *mtx) const;
     static void setProjection(const EGG::Screen &screen);
 

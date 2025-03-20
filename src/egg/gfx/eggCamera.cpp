@@ -26,6 +26,7 @@ Matrix34f &LookAtCamera::getViewMatrixOld() {
 }
 
 void LookAtCamera::doUpdateMatrix() {
+    // NONMATCHING
     mOtherMtx.copyFrom(mViewMtx);
     EGG::Vector3f posRight = mPosition;
     posRight -= mRight;
@@ -61,6 +62,7 @@ OrthoCamera::OrthoCamera() {
 }
 
 void OrthoCamera::update_parms() {
+    // NONMATCHING
     f32 z = field_0x8C;
     f32 sin = Math<f32>::sin(field_0x88);
     f32 cos = Math<f32>::cos(field_0x88);

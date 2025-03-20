@@ -2167,6 +2167,8 @@ egg/prim/eggAssert.cpp:
 
 egg/gfx/eggCamera.cpp:
 	.text       start:0x8049C5C0 end:0x8049CAC8
+	.data       start:0x8056ED00 end:0x8056ED60
+	.sdata2     start:0x8057F3B8 end:0x8057F3C8
 
 egg/gfx/eggPalette.cpp:
 	.text       start:0x8049CAD0 end:0x8049CB44
@@ -2278,9 +2280,13 @@ egg/gfx/eggPostEffectBase.cpp:
 
 egg/gfx/eggPostEffectBlur.cpp:
 	.text       start:0x804AF4C0 end:0x804AFC04
+	.data       start:0x8056F170 end:0x8056F190
+	.sdata2     start:0x8057F750 end:0x8057F788
 
 egg/gfx/eggPostEffectUnk1.cpp:
 	.text       start:0x804AFC10 end:0x804B0098
+	.data       start:0x8056F190 end:0x8056F1B0
+	.sdata2     start:0x8057F788 end:0x8057F798
 
 egg/gfx/eggPostEffectUnk2.cpp:
 	.text       start:0x804B00A0 end:0x804B0AA4

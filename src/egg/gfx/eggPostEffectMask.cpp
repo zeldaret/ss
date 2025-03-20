@@ -15,7 +15,7 @@ void PostEffectMask::setMaterialInternal() {
     bool hasTex2 = mpCapTexture2 != nullptr;
     loadTextureInternal();
     GXColor resColor;
-    fn_804AF040(resColor, mColor, false, field_0x34);
+    scaleColor(resColor, mColor, false, field_0x34);
     setMatColorChannel();
     GXSetNumTexGens(2);
 

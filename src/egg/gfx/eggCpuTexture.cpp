@@ -132,4 +132,80 @@ void CpuTexture::allocate(Heap *pHeap) {
     alloc(pHeap);
 }
 
+void CpuTexture::setColor(u16 x, u16 y, GXColor color) {
+    // NONMATCHING
+    switch (getFormat()) {
+        case GX_TF_RGBA8:
+        case GX_TF_Z24X8: {
+            int offset = ((x >> 2) + (y >> 2) * (getWidth() / 4)) * 0x40 + (y & 3) * 8 + (x & 3) * 2;
+            u8 *dat = static_cast<u8 *>(getBuffer()) + offset;
+            dat[0] = color.a;
+            dat[1] = color.r;
+            dat[0x20] = color.g;
+            dat[0x21] = color.b;
+            break;
+        }
+        case GX_TF_I8:
+        case GX_TF_Z8: {
+            // TODO
+            int offset = ((x >> 3) + (y >> 2) * (getWidth() / 8)) * 0x20 + (x & 3) * 8 + (x & 7);
+            u8 *dat = static_cast<u8 *>(getBuffer()) + offset;
+            dat[0] = color.r;
+            break;
+        }
+
+        case GX_TF_IA8:
+        case GX_TF_Z16: {
+            int offset = ((x >> 2) + (y >> 2) * (getWidth() / 4)) * 0x20 + (y & 3) * 8 + (x & 3) * 2;
+            u8 *dat = static_cast<u8 *>(getBuffer()) + offset;
+            dat[0] = color.a;
+            dat[1] = color.r;
+            break;
+        }
+        default: break;
+    }
+}
+
+GXColor CpuTexture::getColor(u16 x, u16 y) const {
+    // NONMATCHING
+    GXColor c;
+    switch (getFormat()) {
+        case GX_TF_RGBA8:
+        case GX_TF_Z24X8: {
+            int offset = ((x >> 2) + (y >> 2) * (getWidth() / 4)) * 0x40 + (y & 3) * 8 + (x & 3) * 2;
+            u8 *dat = static_cast<u8 *>(getBuffer()) + offset;
+            c.r = dat[1];
+            c.g = dat[0x20];
+            c.b = dat[0x21];
+            c.a = dat[0];
+            break;
+        }
+        case GX_TF_I8:
+        case GX_TF_Z8: {
+            // TODO
+            int offset = ((x >> 3) + (y >> 2) * (getWidth() / 8)) * 0x20 + (x & 3) * 8 + (x & 7);
+            u8 *dat = static_cast<u8 *>(getBuffer()) + offset;
+            c.a = dat[0];
+            c.b = dat[0];
+            c.g = dat[0];
+            c.r = dat[0];
+            break;
+        }
+
+        case GX_TF_IA8:
+        case GX_TF_Z16: {
+            int offset = ((x >> 2) + (y >> 2) * (getWidth() / 4)) * 0x20 + (y & 3) * 8 + (x & 3) * 2;
+            u8 *dat = static_cast<u8 *>(getBuffer()) + offset;
+            // TODO
+            c.a = dat[0];
+            c.b = dat[1];
+            c.g = dat[1];
+            c.r = dat[1];
+            break;
+        }
+        default: break;
+    }
+    return c;
+}
+
 } // namespace EGG

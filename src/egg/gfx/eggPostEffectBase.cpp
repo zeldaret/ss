@@ -96,7 +96,7 @@ void PostEffectBase::setBlendModeInternal() {
     }
 }
 
-void PostEffectBase::fn_804AF040(GXColor &out, const GXColor &c, bool bClamp, f32 amount) {
+void PostEffectBase::scaleColor(GXColor &out, const GXColor &c, bool bClamp, f32 amount) {
     f32 fs[4];
     fs[0] = c.r * amount;
     fs[1] = c.g * amount;
@@ -116,7 +116,7 @@ void PostEffectBase::fn_804AF040(GXColor &out, const GXColor &c, bool bClamp, f3
     }
 }
 
-void PostEffectBase::fn_804AF1B0(GXColor &out, const GXColor &c1, const GXColor &c2, f32 amount) {
+void PostEffectBase::lerpColor(GXColor &out, const GXColor &c1, const GXColor &c2, f32 amount) {
     out.r = c1.r + amount * (c2.r - c1.r);
     out.g = c1.g + amount * (c2.g - c1.g);
     out.b = c1.b + amount * (c2.b - c1.b);

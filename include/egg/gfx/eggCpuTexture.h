@@ -67,7 +67,8 @@ public:
     UNKTYPE func_80086C8C(UNKTYPE);
     void allocTexBuffer();
     void allocTexBufferAndHeader();
-    void setColor(u16, u16, GXColor);
+    void setColor(u16 x, u16 y, GXColor color);
+    GXColor getColor(u16 x, u16 y) const;
 
     bool checkIsConfigure() const {
         return mFlags & CONFIGURED;
