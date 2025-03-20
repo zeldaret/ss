@@ -2304,6 +2304,8 @@ egg/gfx/eggPostEffectMaskDOF.cpp:
 
 egg/gfx/eggPostEffectSimple.cpp:
 	.text       start:0x804B1BF0 end:0x804B1E58
+	.data       start:0x8056F210 end:0x8056F230
+	.sdata2     start:0x8057F810 end:0x8057F818
 
 egg/gfx/eggScreen.cpp:
 	.text       start:0x804B1E60 end:0x804B30B4
