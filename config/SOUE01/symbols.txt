@@ -26545,7 +26545,7 @@ __ct__Q23EGG7FrustumFQ33EGG7Frustum14ProjectionTypeRCQ34nw4r4math4VEC2ffQ33EGG7F
 __ct__Q23EGG7FrustumFRCQ23EGG7Frustum = .text:0x804A5FD0; // type:function size:0x3C
 ResetOrthographic__Q23EGG7FrustumFffffff = .text:0x804A6010; // type:function size:0x104
 CopyFromAnother__Q23EGG7FrustumFRCQ23EGG7Frustum = .text:0x804A6120; // type:function size:0x74
-SetFovy__Q23EGG7FrustumFd = .text:0x804A61A0; // type:function size:0x68
+SetFovy__Q23EGG7FrustumFf = .text:0x804A61A0; // type:function size:0x68
 ConvertToCanvasLU__Q23EGG7FrustumCFffPfPf = .text:0x804A6210; // type:function size:0x4C
 GetScreenSizeToViewSize__Q23EGG7FrustumCFff = .text:0x804A6260; // type:function size:0x30
 SetProjectionGX__Q23EGG7FrustumCFv = .text:0x804A6290; // type:function size:0x14
