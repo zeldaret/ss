@@ -4,10 +4,11 @@
 #include "common.h"
 #include "egg/egg_types.h"
 #include "egg/gfx/eggPostEffectBase.h"
+#include "rvl/GX/GXTypes.h"
 
 namespace EGG {
 
-class PostEffectBlur : PostEffectBase {
+class PostEffectBlur : public PostEffectBase {
     struct Stage {
         /* 0x00 */ u8 field_0x00;
         /* 0x01 */ GXColor field_0x01;
@@ -30,6 +31,18 @@ public:
 
     void setField0x30(f32 val) {
         field_0x30 = val;
+    }
+
+    void setStage0Field0(u8 u1) {
+        field_0x38[0].field_0x00 = u1;
+    }
+
+    void setStage0Color(GXColor clr) {
+        field_0x38[0].field_0x01 = clr;
+    }
+    
+    void setStage0F(f32 f) {
+        field_0x38[0].field_0x0C = f;
     }
 
 private:

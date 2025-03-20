@@ -9,7 +9,6 @@
 namespace EGG {
 
 class CpuTexture {
-    void makeGradient(UNKTYPE);
 
 public:
     struct Header {
@@ -62,11 +61,10 @@ public:
     u32 getTexBufferSize() const;
     void buildHeader() const;
     Header *initHeader();
+
     void fillNormalMapSphere(f32, f32);
     void fillGradient(int op, int, u16, u16, const GXColor&, const GXColor&, bool, bool);
-    UNKTYPE func_80086C8C(UNKTYPE);
-    void allocTexBuffer();
-    void allocTexBufferAndHeader();
+
     void setColor(u16 x, u16 y, GXColor color);
     GXColor getColor(u16 x, u16 y) const;
 

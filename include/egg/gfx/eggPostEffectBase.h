@@ -9,6 +9,13 @@
 namespace EGG {
 
 class PostEffectBase {
+public:
+    void setField_0x00(u32 val) {
+        field_0x00 = val;
+    }
+
+    static void setProjection(const EGG::Screen &screen);
+
 protected:
     u32 field_0x00;            // at 0x0
     CapTexture *mpCapTexture;  // at 0x4
@@ -34,7 +41,6 @@ protected:
     static void scaleColor(GXColor &, const GXColor &, bool, f32);
     static void lerpColor(GXColor &, const GXColor &, const GXColor &, f32);
     void getBaseTexMtx(nw4r::math::MTX34 *mtx) const;
-    static void setProjection(const EGG::Screen &screen);
 
 protected:
     virtual void draw(f32 width, f32 height);                                         // at 0xC

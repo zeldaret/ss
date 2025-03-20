@@ -2189,6 +2189,7 @@ egg/gfx/eggCapTexture.cpp:
 egg/gfx/eggCpuTexture.cpp:
 	.text       start:0x8049DA30 end:0x8049EC94
 	.data       start:0x8056ED80 end:0x8056EDA0
+	.sdata2     start:0x8057F418 end:0x8057F440
 
 egg/gfx/eggDrawGX.cpp:
 	.text       start:0x8049ECA0 end:0x804A0C24
@@ -2319,6 +2320,8 @@ egg/gfx/eggScreenEffectBase.cpp:
 
 egg/gfx/eggScreenEffectBlur.cpp:
 	.text       start:0x804B30F0 end:0x804B3D98
+	.data       start:0x8056F278 end:0x8056F2B0
+	.sdata2     start:0x8057F840 end:0x8057F868
 
 egg/gfx/eggStateEfb.cpp:
 	.text       start:0x804B3DA0 end:0x804B460C

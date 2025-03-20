@@ -83,6 +83,10 @@ public:
     void SetOffset(const nw4r::math::VEC2 &offset) {
         mOffset = offset;
     }
+
+    const nw4r::math::VEC2 &GetSize() {
+        return mSize;
+    }
 };
 
 } // namespace EGG
