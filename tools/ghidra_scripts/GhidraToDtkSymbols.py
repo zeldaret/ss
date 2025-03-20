@@ -16,8 +16,8 @@ AF = currentProgram.getAddressFactory()
 mem = currentProgram.getMemory()
 listing = currentProgram.getListing()
 
-sym_re = re.compile("(?:lbl|fn|FUN|DAT)(?:_[0-9]+_[a-z]+)_[0-9A-Fa-f_]+ = \\.([a-z0-9]+):0x([0-9A-Fa-f]{8})(.*)\n")
-default_sym_re = re.compile("^(lbl|fn|FUN|DAT)_[0-9A-Za-z]+$")
+sym_re = re.compile("(?:lbl|fn|FUN|DAT)(?:_[0-9]+_[a-z]+)?_[0-9A-Fa-f_]+ = \\.([a-z0-9]+):0x([0-9A-Fa-f]{8})(.*)\n")
+default_sym_re = re.compile("_[0-9A-Fa-f]{8}$")
 rel_default_sym_re = re.compile("lbl_[0-9]+_[a-z]+_[0-9A-Za-z]+$")
 
 used_symbols = set()
@@ -61,7 +61,7 @@ def transformer_for_file(file_name, config_dir, fix_mistakes_mode):
                     if comment_str and comment_str.startswith("original-name"):
                         name = comment_str.split('\n')[0][len("original-name "):]
 
-            if default_sym_re.match(name) or name.startswith("@"):
+            if default_sym_re.search(name) or name.startswith("@"):
                 return None
 
             # in our Ghidra the RVL symbols are helpfully namespaced...
