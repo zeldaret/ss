@@ -12,7 +12,7 @@ void BaseCamera::updateMatrix() {
     doUpdateMatrix();
 }
 
-void EGG::BaseCamera::draw(EGG::BaseCamera *cam) {
+void BaseCamera::draw(EGG::BaseCamera *cam) {
     cam->loadMatrix();
     doDraw();
 }
@@ -27,21 +27,37 @@ Matrix34f &LookAtCamera::getViewMatrixOld() {
 
 void LookAtCamera::doUpdateMatrix() {
     // NONMATCHING
-    mOtherMtx.copyFrom(mViewMtx);
-    EGG::Vector3f posRight = mPosition;
-    posRight -= mRight;
-    posRight.normalise();
 
-    EGG::Vector3f forward = posRight.cross(mUp);
-    forward.normalise();
+    mOtherMtx = mViewMtx;
 
-    EGG::Vector3f up = posRight.cross(forward);
+    Vector3f right(mPos);
+
+    right -= mAt;
+    right.normalise();
+
+    Vector3f forward(mUp.cross(right).normalize());
+
+    Vector3f up(right.cross(forward));
     up.normalise();
 
-    mViewMtx.setTranslation(Vector3f((forward.dot(mPosition)), (up.dot(mPosition)), (posRight.dot(mPosition))));
-    mViewMtx.setBase(0, forward);
-    mViewMtx.setBase(1, up);
-    mViewMtx.setBase(2, posRight);
+    f32 tx = -forward.dot(mPos);
+    f32 ty = -up.dot(mPos);
+    f32 tz = -right.dot(mPos);
+
+    mViewMtx(0, 0) = forward(0);
+    mViewMtx(0, 1) = forward(1);
+    mViewMtx(0, 2) = forward(2);
+    mViewMtx(0, 3) = tx;
+
+    mViewMtx(1, 0) = up(0);
+    mViewMtx(1, 1) = up(1);
+    mViewMtx(1, 2) = up(2);
+    mViewMtx(1, 3) = ty;
+
+    mViewMtx(2, 0) = right(0);
+    mViewMtx(2, 1) = right(1);
+    mViewMtx(2, 2) = right(2);
+    mViewMtx(2, 3) = tz;
 }
 
 void LookAtCamera::doDraw() {}
@@ -64,10 +80,15 @@ OrthoCamera::OrthoCamera() {
 void OrthoCamera::update_parms() {
     // NONMATCHING
     f32 z = field_0x8C;
-    f32 sin = Math<f32>::sin(field_0x88);
-    f32 cos = Math<f32>::cos(field_0x88);
-    mPosition.set(mRight.x, mRight.y, z);
-    mUp.set(sin, cos, 0.0f);
+    f32 sin = field_0x88.sin();
+    f32 cos = field_0x88.cos();
+
+    mPos(2) = z;
+    mPos(1) = mAt(1);
+    mPos(0) = mAt(0);
+    mUp(2) = 0.f;
+    mUp(1) = cos;
+    mUp(0) = sin;
 }
 
 void OrthoCamera::doUpdateMatrix() {
