@@ -9,6 +9,7 @@
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/sceneflag_manager.h"
 #include "f/f_base.h"
+#include "m/m_angle.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
@@ -196,19 +197,23 @@ int dAcOChair_c::draw() {
 void dAcOChair_c::initializeState_Wait() {}
 
 void dAcOChair_c::executeState_Wait() {
-    f32 height_diff = (position.y - dAcPy_c::GetLink()->position.y);
-    if ((!isBench() || (50.f < height_diff && height_diff < 60.f)) && field_0xB1A) {
-        if (field_0xB1B && dAcPy_c::GetLink()->checkActionFlagsCont(0x1000)) {
-            return;
+    const f32 height_diff = position.y - dAcPy_c::GetLink()->position.y;
+    if (!isBench() || (50.f < height_diff && height_diff < 60.f)) {
+        if (field_0xB1A && field_0xB1B) {
+            if (dAcPy_c::GetLink()->checkActionFlagsCont(0x1000)) {
+                return;
+            }
+            if (!isBench() && nw4r::math::FAbs(height_diff) > 10.f) {
+                return;
+            }
+            if (field_0xB1C && mChairType == CHAIR_E) {
+                const f32 mag = (mChairPos - poscopy2).squareMagXZ();
+                if (mag < 10000.f) {
+                    return;
+                }
+            }
+            AttentionManager::GetInstance()->addSitTarget(*this, isBench() ? 0 : 3, 120.f);
         }
-        if ((!isBench() && (nw4r::math::FAbs(height_diff) > 10.f))) {
-            return;
-        }
-        if (field_0xB1C && mChairType == CHAIR_E && (mChairPos - poscopy2).squareMagXZ() < 10000.f) {
-            return;
-        }
-
-        AttentionManager::GetInstance()->addSitTarget(*this, isBench() ? 0 : 3, 120.f);
     }
 }
 
@@ -236,4 +241,29 @@ dAcOChair_c::ChairType dAcOChair_c::getChairType(u8 &param) {
     }
 }
 
-void dAcOChair_c::updateChairPos() {}
+void dAcOChair_c::updateChairPos() {
+    if (mChairType != CHAIR_E) {
+        if (isBench()) {
+            poscopy2 = position;
+        } else {
+            mMdl.getNodeWorldMtxMultVecZero(mSeatNodeID, poscopy2);
+        }
+        poscopy3 = poscopy2;
+    } else {
+        field_0xB1A = true;
+        if (!checkObjectProperty(0x8000)) {
+            mVec3_c work = mVec3_c::Ez * getDistToPlayer();
+            mAng rot = getXZAngleToPlayer();
+            work.rotY(rot - rotation.y);
+            work.z = 0.f;
+            work.rotY(rotation.y);
+            poscopy2 = position;
+            if (work.squareMagXZ() < 10000.f) {
+                poscopy2 += work;
+            } else {
+                field_0xB1A = false;
+            }
+        }
+        poscopy3 = poscopy2;
+    }
+}
