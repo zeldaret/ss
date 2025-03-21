@@ -900,7 +900,7 @@ config.libs = [
             Object(Matching, "egg/gfx/eggScreenEffectBase.cpp"),
             Object(NonMatching, "egg/gfx/eggScreenEffectBlur.cpp"),  # Unknown Guess
             Object(NonMatching, "egg/gfx/eggStateEfb.cpp"),
-            Object(NonMatching, "egg/gfx/eggStateGX.cpp"),
+            Object(Matching, "egg/gfx/eggStateGX.cpp"),
             Object(Matching, "egg/gfx/eggTextureBuffer.cpp"),
         ],
     ),

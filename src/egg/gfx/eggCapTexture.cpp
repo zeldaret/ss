@@ -40,7 +40,7 @@ void CapTexture::capture(u16 x, u16 y, bool upscale, int format) {
     GXSetZMode(true, GX_ALWAYS, (mCapFlags & 4) != 0);
     GXSetCopyClear(mClearColor, field_0x20);
     GXSetCopyClamp(3);
-    StateGX::GXCopyTex(dataPtr, true);
+    StateGX::GXCopyTex_(dataPtr, true);
     GXSetCopyFilter(0, copyArg2, 0, defaultFilter.values);
 
     if ((mCapFlags & 0x10) != 0) {

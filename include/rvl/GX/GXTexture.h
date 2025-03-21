@@ -44,6 +44,9 @@ void GXGetTexObjLODAll(
     u8 *biasClampEnable, u8 *edgeLODEnable, GXAnisotropy *anisotropy
 );
 
+void GXSetTexCoordScaleManually(GXTexCoordID, GXBool, u16, u16);
+void GXSetTexCoordBias(GXTexCoordID, GXBool, GXBool);
+
 u16 GXGetTexObjWidth(const GXTexObj *obj);
 u16 GXGetTexObjHeight(const GXTexObj *obj);
 GXTexFmt GXGetTexObjFormat(const GXTexObj *obj);

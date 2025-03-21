@@ -2335,6 +2335,10 @@ egg/gfx/eggStateEfb.cpp:
 
 egg/gfx/eggStateGX.cpp:
 	.text       start:0x804B4610 end:0x804B53EC
+	.rodata     start:0x804FBDA0 end:0x804FBE08
+	.sbss       start:0x805768A0 end:0x805768B8
+	.sdata2     start:0x8057F890 end:0x8057F8B0
+	.bss        start:0x806750A0 end:0x80675190
 
 egg/gfx/eggTextureBuffer.cpp:
 	.text       start:0x804B53F0 end:0x804B59DC

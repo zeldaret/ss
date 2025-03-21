@@ -12,7 +12,7 @@ TextureBuffer::TextureBuffer() : mSize(0), mState(STATE_FREE), mpNext(nullptr), 
 
 void TextureBuffer::configure() {
     CapTexture::configure();
-    setClearColor(StateGX::getDefaultTexColor());
+    setClearColor(StateGX::getClearEfb());
     setWrap(GX_CLAMP, GX_CLAMP);
     setFilt(GX_LINEAR, GX_LINEAR);
     setPixModeSync(true);
