@@ -5,7 +5,6 @@
 #include "egg/gfx/eggStateGX.h"
 #include "rvl/SC/scapi.h"
 
-
 // ported from OGWS, though this class has evolved a fair bit
 
 using namespace nw4r;
@@ -37,22 +36,21 @@ math::VEC2 Screen::sCanvasScale(1.0f, 1.0f);
 math::VEC2 Screen::sCanvasOffset(0.0f, 0.0f);
 
 void Screen::Initialize(const u16 *maxX, const u16 *maxY, Screen *userRoot) {
-
     sTVModeInfo[TV_MODE_4_3].width = maxX[0];
     sTVModeInfo[TV_MODE_4_3].height = maxY[0];
-    
+
     sTVModeInfo[TV_MODE_4_3].ratios.x = (f32)StateGX::s_widthEfb / (f32)sTVModeInfo[TV_MODE_4_3].width;
     sTVModeInfo[TV_MODE_4_3].ratios.y = (f32)StateGX::s_heightEfb / (f32)sTVModeInfo[TV_MODE_4_3].height;
-    
+
     sTVModeInfo[TV_MODE_16_9].width = maxX[1];
     sTVModeInfo[TV_MODE_16_9].height = maxY[1];
 
     sTVModeInfo[TV_MODE_16_9].ratios.x = (f32)StateGX::s_widthEfb / (f32)sTVModeInfo[TV_MODE_16_9].width;
     sTVModeInfo[TV_MODE_16_9].ratios.y = (f32)StateGX::s_heightEfb / (f32)sTVModeInfo[TV_MODE_16_9].height;
-    
+
     sTVModeInfo[TV_MODE_UNK_3].width = StateGX::s_widthEfb;
     sTVModeInfo[TV_MODE_UNK_3].height = StateGX::s_heightEfb;
-    
+
     sTVModeInfo[TV_MODE_UNK_3].ratios.x = 1.0f;
     sTVModeInfo[TV_MODE_UNK_3].ratios.y = 1.0f;
 
@@ -77,10 +75,10 @@ Screen::Screen()
     mParent = nullptr;
     mPosition.x = 0.0f;
     mPosition.y = 0.0f;
-    field_0x44.x = 0.0f;
-    field_0x44.y = 0.0f;
     field_0x48.x = 0.0f;
     field_0x48.y = 0.0f;
+    field_0x50.x = 0.0f;
+    field_0x50.y = 0.0f;
     SetParent(nullptr);
 }
 
@@ -89,10 +87,10 @@ Screen::Screen(f32 x, f32 y, f32 w, f32 h, const Screen *userRoot, CanvasMode ca
     mParent = nullptr;
     mPosition.x = x;
     mPosition.y = y;
-    field_0x44.x = 0.0f;
-    field_0x44.y = 0.0f;
     field_0x48.x = 0.0f;
     field_0x48.y = 0.0f;
+    field_0x50.x = 0.0f;
+    field_0x50.y = 0.0f;
     SetParent(userRoot);
 }
 
@@ -100,8 +98,8 @@ Screen::Screen(const Screen &other)
     : Frustum(other),
       mPosition(other.mPosition),
       mDataEfb(other.mDataEfb),
-      field_0x44(other.field_0x44),
-      field_0x48(other.field_0x48) {
+      field_0x48(other.field_0x48),
+      field_0x50(other.field_0x50) {
     SetParent(other.mParent);
 }
 
@@ -162,8 +160,8 @@ void Screen::CopyFromAnother(const Screen &other) {
     Frustum::CopyFromAnother(other);
 
     mPosition = other.mPosition;
-    field_0x44 = other.field_0x44;
     field_0x48 = other.field_0x48;
+    field_0x50 = other.field_0x50;
     mDataEfb = other.mDataEfb;
     mParent = other.mParent;
 }
@@ -187,77 +185,64 @@ void Screen::SetParent(const Screen *parent) {
 }
 
 void Screen::SetUnkFlag8() {
-    if ((mFlags & 0x8) == 0) {
+    if ((mFlags & FLAG_0x08) == 0) {
         SetDirty(true);
     }
-    mFlags |= 0x8;
+    mFlags |= FLAG_0x08;
 }
 
-void Screen::GetPosSizeInEfb() const {
-    // TODO
-    const TVMode tvMode = (!(mFlags & 0x20)) ? sTVMode : TV_MODE_4_3;
-    const TVModeInfo &tvRatio = sTVModeInfo[tvMode];
+void Screen::OnDirectEfb() const {
+    f32 &x1 = mDataEfb.vp.x1;
+    f32 &y1 = mDataEfb.vp.y1;
+    if (mParent == nullptr) {
+        x1 = mPosition.x * sCanvasScale.x;
+        y1 = mPosition.y * sCanvasScale.y;
+    } else {
+        mParent->fn_804B2EE0(&x1, &y1, mPosition.x, mPosition.y);
+    }
 
-    f32 *px = &mDataEfb.vp.x1;
-    f32 *py = &mDataEfb.vp.y1;
-    GetGlobalPos(px, py);
+    // TODO: Make this work without temporaries?
 
-    *px = sCanvasScale.x * *px;
-    *py = sCanvasScale.y * *py;
-
-    *px *= tvRatio.ratios.x;
-    *py *= tvRatio.ratios.y;
+    mDataEfb.sc_x = x1 + ScaleByX(field_0x48.x);
+    mDataEfb.sc_y = y1 + ScaleByY(field_0x48.y);
 
     mDataEfb.sc_oy = 0;
     mDataEfb.sc_ox = 0;
-
-    const f32 x = *px;
-    if (x < 0.0f) {
-        *px = 0.0f;
-
-        const s32 lx = static_cast<s32>(-x);
-        mDataEfb.sc_ox = lx - (lx & 0x1);
+    if (x1 < 0.0f) {
+        int x1_i = x1;
+        int x1_in = -x1_i;
+        mDataEfb.sc_ox = (x1_in - (x1_in & 1));
+        x1 = x1 - x1_i;
+    }
+    if (y1 < 0.0f) {
+        int y1_i = y1;
+        int y1_in = -y1_i;
+        mDataEfb.sc_oy = (y1_in - (y1_in & 1));
+        y1 = y1 - y1_i;
     }
 
-    const f32 y = *py;
-    if (y < 0.0f) {
-        *py = 0.0f;
-
-        const s32 ly = static_cast<s32>(-y);
-        mDataEfb.sc_oy = ly - (ly & 0x1);
+    if ((mFlags & FLAG_0x02) != 0) {
+        x1 = x1 - (((int)x1) & 1);
+        y1 = y1 - (((int)y1) & 1);
     }
 
-    if (mFlags & 0x2) {
-        *px -= static_cast<s32>(*px) & 0x1;
-        *py -= static_cast<s32>(*py) & 0x1;
+    mDataEfb.vp.x2 = ScaleByX(mSize.x);
+    mDataEfb.vp.y2 = ScaleByY(mSize.y);
+
+    if ((mFlags & FLAG_0x04) != 0) {
+        mDataEfb.vp.x2 -= ((int)mDataEfb.vp.x2 & 3);
+        mDataEfb.vp.y2 -= ((int)mDataEfb.vp.y2 & 3);
     }
+    mDataEfb.vp.x2 = (int)mDataEfb.vp.x2;
+    mDataEfb.vp.y2 = (int)mDataEfb.vp.y2;
 
-    *px = static_cast<s32>(*px);
-    *py = static_cast<s32>(*py);
-
-    mDataEfb.vp.x2 = mSize.x;
-    mDataEfb.vp.y2 = mSize.y;
-
-    if (!(mFlags & 0x8)) {
-        mDataEfb.vp.x2 = mSize.x * tvRatio.ratios.x;
-        mDataEfb.vp.y2 = mSize.y * tvRatio.ratios.y;
-    }
-
-    if (mFlags & 0x4) {
-        mDataEfb.vp.x2 -= static_cast<s32>(mDataEfb.vp.x2) & 0x3;
-        mDataEfb.vp.y2 -= static_cast<s32>(mDataEfb.vp.y2) & 0x3;
-    }
-
-    mDataEfb.vp.x2 = (mDataEfb.vp.x2 >= 0.0f) ? mDataEfb.vp.x2 : 0.0f;
-    mDataEfb.vp.y2 = (mDataEfb.vp.y2 >= 0.0f) ? mDataEfb.vp.y2 : 0.0f;
-
-    mDataEfb.vp.x2 = static_cast<s32>(mDataEfb.vp.x2);
-    mDataEfb.vp.y2 = static_cast<s32>(mDataEfb.vp.y2);
+    mDataEfb.sc_w = mDataEfb.vp.x2 - ScaleByX(field_0x48.x + field_0x50.x);
+    mDataEfb.sc_h = mDataEfb.vp.y2 - ScaleByY(field_0x48.y + field_0x50.y);
 }
 
 const Screen::DataEfb &Screen::GetDataEfb() const {
     if (IsChangeEfb()) {
-        GetPosSizeInEfb();
+        OnDirectEfb();
         mDataEfb.vp.z1 = 0.0f;
         mDataEfb.vp.z2 = 1.0f;
         SetDirty(false);
@@ -303,7 +288,7 @@ void Screen::FillBufferGX(u32 flags, GXColor color, u32 r6) const {
         clone.SetProjectionGX();
         clone.CalcMatrixForDrawQuad(&drawMtx, 0.0f, 0.0f, mSize.x, mSize.y);
         // Ugh
-        DrawGX::ClearEfb(drawMtx, (flags & 1) != 0, (flags & 2) != 0, (flags & 4) != 0, color, true);
+        DrawGX::ClearEfb(drawMtx, (flags & 1), (flags & 2), (flags & 4), color, true);
     }
 }
 
@@ -318,7 +303,6 @@ void Screen::GetGlobalPos(f32 *ox, f32 *oy) const {
         *ox += px;
         *oy += py;
     } else {
-
         *ox = mPosition.x;
         *oy = mPosition.y;
     }
@@ -338,6 +322,13 @@ void Screen::SetTVMode(TVMode tvMode) {
 
 void Screen::SetTVModeDefault() {
     SetTVMode(SCGetAspectRatio() == SC_ASPECT_STD ? TV_MODE_4_3 : TV_MODE_16_9);
+}
+
+void Screen::fn_804B2EE0(f32 *ox, f32 *oy, f32 a, f32 b) const {
+    GetGlobalPos(ox, oy);
+    ConvertToCanvasLU(a, b, &a, &b);
+    *ox = ScaleByX((*ox + a));
+    *oy = ScaleByY((*oy + b));
 }
 
 } // namespace EGG

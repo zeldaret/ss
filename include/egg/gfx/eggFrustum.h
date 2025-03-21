@@ -8,6 +8,10 @@ class Frustum {
 public:
     enum Flag {
         FLAG_DIRTY = (1 << 0),
+        FLAG_0x02 = (1 << 1),
+        FLAG_0x04 = (1 << 2),
+        FLAG_0x08 = (1 << 3),
+        FLAG_0x20 = (1 << 5),
         FLAG_0x40 = (1 << 6),
     };
 
@@ -102,10 +106,8 @@ public:
     }
 
     void SetSize(const nw4r::math::VEC2 &size) {
-        // ???
-        mSize.x = size.x;
-        SetDirty(true);
-        mSize.y = size.y;
+        SetSizeX(size.x);
+        SetSizeY(size.y);
     }
 
     void SetNearZ(f32 nearZ) {

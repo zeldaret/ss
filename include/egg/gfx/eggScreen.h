@@ -3,12 +3,18 @@
 
 #include "egg/egg_types.h"
 #include "egg/gfx/eggFrustum.h"
+#include "egg/gfx/eggStateGX.h"
 
 namespace EGG {
 
 class Screen : public Frustum {
 public:
-    enum TVMode { TV_MODE_4_3, TV_MODE_16_9, TV_MODE_UNK_3, TV_MODE_MAX };
+    enum TVMode {
+        TV_MODE_4_3,
+        TV_MODE_16_9,
+        TV_MODE_UNK_3,
+        TV_MODE_MAX
+    };
 
     typedef void (*ChangeTVModeFunc)(void *);
 
@@ -69,6 +75,14 @@ public:
         return sTVMode;
     }
 
+    TVMode GetComputedTVMode() const {
+        if ((mFlags & FLAG_0x20) == 0) {
+            return (mFlags & FLAG_0x08) == 0 ? sTVMode : TV_MODE_UNK_3;
+        } else {
+            return TV_MODE_4_3;
+        }
+    }
+
     Screen();
     Screen(f32, f32, f32, f32, const Screen *, CanvasMode);
     Screen(const Screen &);
@@ -85,18 +99,27 @@ public:
 
     void CopyFromAnother(const Screen &other);
     void Reset(f32, f32, f32, f32, CanvasMode);
-    void GetPosSizeInEfb() const;
+    void OnDirectEfb() const;
     const DataEfb &GetDataEfb() const;
     bool IsChangeEfb() const;
     void CalcMatrixForDrawQuad(nw4r::math::MTX34 *, f32, f32, f32, f32) const;
     void FillBufferGX(u32, GXColor, u32) const;
     void GetGlobalPos(f32 *, f32 *) const;
+    void fn_804B2EE0(f32 *, f32 *, f32, f32) const;
+
+    f32 ScaleByX(f32 val) const {
+        return val * StateGX::s_widthEfb / GetSizeXMax(GetComputedTVMode());
+    }
+
+    f32 ScaleByY(f32 val) const {
+        return val * StateGX::s_heightEfb / GetSizeYMax(GetComputedTVMode());
+    }
 
 private:
     const Screen *mParent;      // at 0x3C
     nw4r::math::VEC2 mPosition; // at 0x40
-    nw4r::math::VEC2 field_0x44;
-    nw4r::math::VEC2 field_0x48;
+    nw4r::math::VEC2 field_0x48; // at 0x48
+    nw4r::math::VEC2 field_0x50; // at 0x50
     mutable DataEfb mDataEfb; // at 0x58
 
     static TVMode sTVMode;
