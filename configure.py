@@ -896,7 +896,7 @@ config.libs = [
             Object(Matching, "egg/gfx/eggPostEffectMask.cpp"),
             Object(NonMatching, "egg/gfx/eggPostEffectMaskDOF.cpp"),
             Object(Matching, "egg/gfx/eggPostEffectSimple.cpp"),
-            Object(NonMatching, "egg/gfx/eggScreen.cpp"),
+            Object(Matching, "egg/gfx/eggScreen.cpp"),
             Object(Matching, "egg/gfx/eggScreenEffectBase.cpp"),
             Object(NonMatching, "egg/gfx/eggScreenEffectBlur.cpp"),  # Unknown Guess
             Object(NonMatching, "egg/gfx/eggStateEfb.cpp"),

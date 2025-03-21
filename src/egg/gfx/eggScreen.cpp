@@ -287,8 +287,9 @@ void Screen::FillBufferGX(u32 flags, GXColor color, u32 r6) const {
 
         clone.SetProjectionGX();
         clone.CalcMatrixForDrawQuad(&drawMtx, 0.0f, 0.0f, mSize.x, mSize.y);
-        // Ugh
-        DrawGX::ClearEfb(drawMtx, (flags & 1), (flags & 2), (flags & 4), color, true);
+        DrawGX::ClearEfb(
+            drawMtx, (flags & 1) ? true : false, (flags & 2) ? true : false, (flags & 4) ? true : false, color, true
+        );
     }
 }
 
