@@ -37,6 +37,7 @@ class PostEffectBlur;
 class PostEffectBlurGather;
 class PostEffectHDR;
 class PostEffectSimple;
+class PostEffectUnk2;
 class ResTIMG;
 class ScnRenderer;
 class ScnRootEx;

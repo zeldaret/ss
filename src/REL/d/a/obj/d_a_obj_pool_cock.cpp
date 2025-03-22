@@ -52,10 +52,9 @@ int dAcOPoolCock_c::actorExecute() {
     position += velocity;
     position += mStts.mCcMove;
     updateMatrix();
-    mMtx_c mdl1Transform;
-    mMtx_c mdl2Transform;
-    mdl1Transform = mWorldMtx;
-    mdl2Transform = mWorldMtx;
+
+    mMtx_c mdl1Transform(mWorldMtx);
+    mMtx_c mdl2Transform(mWorldMtx);
 
     mMtx_c tmp1;
     mMtx_c tmp2;

@@ -327,7 +327,7 @@ void setRoomTevColors(nw4r::g3d::ResMdl mdl, int b1, bool bUnk) {
 void UnkWithWater::calc(EGG::CpuTexture *tex) {
     GXTexObj obj;
     if (tex != nullptr) {
-        tex->GetTexObj(&obj);
+        tex->getTexObj(&obj);
     }
 
     for (NodeList::Iterator it = mList.GetBeginIter(); it != mList.GetEndIter(); ++it) {

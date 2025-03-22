@@ -17,11 +17,15 @@ void GXSetFog(GXFogType type, GXColor color, f32 start, f32 end, f32 near, f32 f
 void GXInitFogAdjTable(GXFogAdjTable *table, u16 width, const Mtx44 proj);
 void GXSetFogRangeAdj(GXBool enable, u16 center, const GXFogAdjTable *table);
 void GXSetBlendMode(GXBlendMode mode, GXBlendFactor src, GXBlendFactor dst, GXLogicOp op);
+void GXGetColorUpdate(GXBool *enable);
 void GXSetColorUpdate(GXBool enable);
+void GXGetAlphaUpdate(GXBool *enable);
 void GXSetAlphaUpdate(GXBool enable);
 void GXSetZMode(GXBool enableTest, GXCompare func, GXBool enableUpdate);
 void GXSetZCompLoc(GXBool beforeTex);
+void GXGetPixelFmt(GXPixelFmt *pixelFmt, GXZFmt16 *zFmt);
 void GXSetPixelFmt(GXPixelFmt pixelFmt, GXZFmt16 zFmt);
+void GXGetDither(GXBool *enable);
 void GXSetDither(GXBool enable);
 void GXSetDstAlpha(GXBool enable, u8 alpha);
 void GXSetFieldMask(GXBool enableEven, GXBool enableOdd);
