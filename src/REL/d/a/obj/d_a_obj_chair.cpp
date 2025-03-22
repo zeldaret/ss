@@ -253,8 +253,7 @@ void dAcOChair_c::updateChairPos() {
         field_0xB1A = true;
         if (!checkObjectProperty(0x8000)) {
             mVec3_c work = mVec3_c::Ez * getDistToPlayer();
-            mAng rot = getXZAngleToPlayer();
-            work.rotY(rot - rotation.y);
+            work.rotY(getRelativeYRotationToPlayer());
             work.z = 0.f;
             work.rotY(rotation.y);
             poscopy2 = position;
