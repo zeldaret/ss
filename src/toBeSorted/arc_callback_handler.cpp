@@ -2,6 +2,7 @@
 #include "d/col/bg/d_bg_w_kcol.h"
 #include "d/d_rawarchive.h"
 #include "egg/gfx/eggLightTextureMgr.h"
+#include "egg/gfx/eggLightManager.h"
 #include "m/m3d/m3d.h"
 #include "nw4r/g3d.h" // IWYU pragma: export
 #include "toBeSorted/arc_managers/current_stage_arc_manager.h"
