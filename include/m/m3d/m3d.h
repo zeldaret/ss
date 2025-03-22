@@ -1,9 +1,7 @@
 #ifndef M3D_H
 #define M3D_H
 
-#include "egg/core/eggHeap.h"
-#include "egg/gfx/eggFogManager.h"
-#include "egg/gfx/eggLight.h"
+#include "egg/egg_types.h"
 #include "m/m_allocator.h"
 #include "nw4r/g3d/g3d_scnroot.h"
 
