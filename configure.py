@@ -866,8 +866,8 @@ config.libs = [
         "gfx",
         [
             Object(NonMatching, "egg/gfx/eggCamera.cpp"),
-            Object(NonMatching, "egg/gfx/eggPalette.cpp"),
-            Object(NonMatching, "egg/gfx/eggTexture.cpp"),
+            Object(Matching, "egg/gfx/eggPalette.cpp"),
+            Object(Matching, "egg/gfx/eggTexture.cpp"),
             Object(NonMatching, "egg/gfx/eggUnk1.cpp"),  # Unknown
             Object(Matching, "egg/gfx/eggCapTexture.cpp"),
             Object(NonMatching, "egg/gfx/eggCpuTexture.cpp"),
@@ -879,7 +879,7 @@ config.libs = [
             Object(NonMatching, "egg/gfx/eggFog.cpp"),
             Object(NonMatching, "egg/gfx/eggFogManager.cpp"),
             Object(NonMatching, "egg/gfx/eggFrustum.cpp"),
-            Object(NonMatching, "egg/gfx/eggG3DUtility.cpp"),  # Unknown Guess
+            Object(NonMatching, "egg/gfx/eggG3DUtility.cpp"),
             Object(NonMatching, "egg/gfx/eggGfxEngine.cpp"),
             Object(Matching, "egg/gfx/eggGlobalDrawState.cpp"),
             Object(NonMatching, "egg/gfx/eggGXUtility.cpp"),

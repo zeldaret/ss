@@ -29,7 +29,7 @@ void GXInitTexObjLOD(
     u8 biasClampEnable, u8 edgeLODEnable, GXAnisotropy anisotropy
 );
 void GXInitTexObjTlut(GXTexObj *, u32);
-void GXInitTexObjCI(GXTexObj *, void *, u16, u16, GXTexFmt, GXTexWrapMode, GXTexWrapMode, u8, u32);
+void GXInitTexObjCI(GXTexObj *, void *, u16, u16, GXCITexFmt, GXTexWrapMode, GXTexWrapMode, u8, u32);
 
 void GXInitTlutObj(GXTlutObj *, void *, GXTlutFmt, u16);
 void GXLoadTlut(GXTlutObj *, u32);

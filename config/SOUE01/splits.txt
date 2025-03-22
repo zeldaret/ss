@@ -2175,6 +2175,7 @@ egg/gfx/eggPalette.cpp:
 
 egg/gfx/eggTexture.cpp:
 	.text       start:0x8049CB50 end:0x8049CFE4
+	.sdata2     start:0x8057F3C8 end:0x8057F3E0
 
 egg/gfx/eggAnalizeDL.cpp:
 	.text       start:0x8049CFF0 end:0x8049D7C0
