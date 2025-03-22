@@ -3,38 +3,14 @@
 
 #include "common.h"
 #include "egg/core/eggHeap.h"
+#include "egg/gfx/eggTexture.h"
 #include "rvl/GX/GXTexture.h"
 #include "rvl/GX/GXTypes.h"
 
 namespace EGG {
 
 class CpuTexture {
-
 public:
-    struct Header {
-        u8 mTexFormat;
-        u8 BYTE_0x1;
-        u16 mWidth;
-        u16 mHeight;
-        u8 mWrapS;
-        u8 mWrapT;
-        u8 BYTE_0x8;
-        u8 BYTE_0x9;
-        u16 SHORT_0xA;
-        u32 WORD_0xC;
-        u8 BYTE_0xD;
-        u8 BYTE_0xE;
-        u8 BYTE_0xF;
-        u8 BYTE_0x10;
-        u8 mMinFilt;
-        u8 mMagFilt;
-        u8 BYTE_0x13;
-        u8 BYTE_0x14;
-        u8 BYTE_0x15;
-        u16 SHORT_0x16;
-        u32 WORD_0x18;
-    };
-
     enum TexFlag {
         CONFIGURED = 0x1,
         HAS_HEADER = 0x2,
@@ -60,10 +36,10 @@ public:
 
     u32 getTexBufferSize() const;
     void buildHeader() const;
-    Header *initHeader();
+    ResTIMG *initHeader();
 
     void fillNormalMapSphere(f32, f32);
-    void fillGradient(int op, int, u16, u16, const GXColor&, const GXColor&, bool, bool);
+    void fillGradient(int op, int, u16, u16, const GXColor &, const GXColor &, bool, bool);
 
     void setColor(u16 x, u16 y, GXColor color);
     GXColor getColor(u16 x, u16 y) const;
@@ -127,8 +103,8 @@ public:
         mMagFilt = filt;
     }
 
-    Header *getHeader() const {
-        return (Header *)((u8 *)dataPtr - sizeof(Header));
+    ResTIMG *getHeader() const {
+        return (ResTIMG *)((u8 *)dataPtr - sizeof(ResTIMG));
     }
 
     void *getBuffer() const {

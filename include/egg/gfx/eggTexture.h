@@ -29,7 +29,6 @@ struct ResTIMG {
     /* 0x16 */ s8 minLOD;
     /* 0x17 */ s8 maxLOD;
     /* 0x18 */ u8 mipmapCount;
-    /* 0x19 */ u8 unknown;
     /* 0x1A */ s16 LODBias;
     /* 0x1C */ u32 imageOffset;
 };

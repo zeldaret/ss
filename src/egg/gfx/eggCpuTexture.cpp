@@ -3,6 +3,7 @@
 #include "common.h"
 #include "egg/core/eggHeap.h"
 #include "egg/gfx/eggGXUtility.h"
+#include "egg/gfx/eggTexture.h"
 #include "egg/math/eggVector.h"
 #include "rvl/GX/GXTexture.h"
 #include "rvl/GX/GXTypes.h"
@@ -105,7 +106,7 @@ CpuTexture::CpuTexture(const GXTexObj *pObj) {
     mWrapT = GXGetTexObjWrapT(pObj);
     mMinFilt = GXGetTexObjMinFilt(pObj);
     mMagFilt = GXGetTexObjMagFilt(pObj);
-    // why?
+    // Convert Physical to Virtual Address
     dataPtr = (char *)GXGetTexObjData(pObj) - 0x80000000;
     mpBuffer = nullptr;
 }
@@ -139,51 +140,131 @@ void CpuTexture::getTexObj(GXTexObj *pObj) const {
 }
 
 void CpuTexture::flush() const {
-    u32 size = GXGetTexBufferSize(mWidth, mHeight, getFormat(), false, true);
+    size_t size = GXGetTexBufferSize(mWidth, mHeight, getFormat(), false, true);
     DCFlushRange(dataPtr, size);
 }
 
 void CpuTexture::buildHeader() const {
-    Header *pHdr = getHeader();
+    ResTIMG *pHdr = getHeader();
 
-    pHdr->mTexFormat = mTexFormat;
-    pHdr->BYTE_0x1 = 1;
-    pHdr->mWidth = mWidth;
-    pHdr->mHeight = mHeight;
-    pHdr->mWrapS = mWrapS;
-    pHdr->mWrapT = mWrapT;
-    pHdr->BYTE_0x8 = 0;
-    pHdr->BYTE_0x9 = 0;
-    pHdr->SHORT_0xA = 0;
-    pHdr->WORD_0xC = 0;
-    pHdr->BYTE_0xD = 0;
-    pHdr->BYTE_0xE = 0;
-    pHdr->BYTE_0xF = 0;
-    pHdr->BYTE_0x10 = 0;
-    pHdr->mMinFilt = mMinFilt;
-    pHdr->mMagFilt = mMagFilt;
-    pHdr->BYTE_0x13 = 0;
-    pHdr->BYTE_0x14 = 0;
-    pHdr->BYTE_0x15 = 1;
-    pHdr->SHORT_0x16 = 0;
-    pHdr->WORD_0x18 = 32;
+    pHdr->format = mTexFormat;
+    pHdr->alphaEnabled = 1;
+    pHdr->width = mWidth;
+    pHdr->height = mHeight;
+    pHdr->wrapS = mWrapS;
+    pHdr->wrapT = mWrapT;
+    pHdr->indexTexture = 0;
+    pHdr->colorFormat = 0;
+    pHdr->numColors = 0;
+    pHdr->paletteOffset = 0;
+    pHdr->mipmapEnabled = 0;
+    pHdr->doEdgeLOD = 0;
+    pHdr->biasClamp = 0;
+    pHdr->maxAnisotropy = 0;
+    pHdr->minFilter = mMinFilt;
+    pHdr->magFilter = mMagFilt;
+    pHdr->minLOD = 0;
+    pHdr->maxLOD = 0;
+    pHdr->mipmapCount = 1;
+    pHdr->LODBias = 0;
+    pHdr->imageOffset = sizeof(ResTIMG);
+}
+
+extern "C" double sqrt(double);
+
+void CpuTexture::fillNormalMapSphere(f32 f1, f32 f2) {
+    // NONMATCHING
+    // fpr regswaps
+    f32 mid = static_cast<f32>(mWidth / 2);
+
+    for (u16 y = 0; y < mHeight; y++) {
+        for (u16 x = 0; x < mWidth; x++) {
+            Vector3f vec;
+            GXColor c;
+
+            f32 fx = f1 * ((x + f2) - mid);
+            f32 fy = f1 * -((y + f2) - mid);
+            f32 fz = mid * mid - (fx * fx + fy * fy);
+
+            vec.x = fx;
+            vec.y = fy;
+            vec.z = fz < 0.0f ? 0.0f : (f32)sqrt(fz);
+
+            PSVECNormalize(vec, vec);
+            GXUtility::getNormalColor(c, vec);
+            c.r = c.a;
+            setColor(x, y, c);
+        }
+    }
+    flush();
+}
+
+void CpuTexture::fillGradient(
+    int op, int unk, u16 start, u16 end, const GXColor &c1, const GXColor &c2, bool b1, bool b2
+) {
+    GXColor gradient[1024];
+    GXColor colors[256];
+
+    // NONMATCHING - regswaps
+    bool swapMode = unk == 0x73 || unk == 0x53;
+
+    u16 width = swapMode ? mWidth : mHeight;
+    int size = width;
+    u16 height = swapMode ? mHeight : mWidth;
+    int mid = width / 2;
+    makeGradient(op, gradient, size, start, end, c1, c2);
+    if (b1) {
+        for (int i2 = mid, i = 0; i < size; i2++, i++) {
+            colors[i].r = gradient[i < mid ? i2 : i - mid].r;
+            colors[i].g = gradient[i < mid ? i2 : i - mid].g;
+            colors[i].b = gradient[i < mid ? i2 : i - mid].b;
+            colors[i].a = gradient[i < mid ? i2 : i - mid].a;
+        }
+
+        for (int i = 0; i < size; i++) {
+            gradient[i] = colors[i];
+        }
+    }
+
+    u16 start2 = b2 ? 0 : start;
+    u16 end2 = b2 ? size : end;
+
+    for (u16 x = start2; x < end2; x++) {
+        for (u16 y = 0; y < height; y++) {
+            if (swapMode) {
+                setColor(x, y, gradient[x]);
+            } else {
+                setColor(y, x, gradient[x]);
+            }
+        }
+    }
+    flush();
 }
 
 void CpuTexture::alloc(Heap *pHeap) {
-    Heap *heap = pHeap == nullptr ? Heap::getCurrentHeap() : pHeap;
-    u32 size = GXGetTexBufferSize(mWidth, mHeight, getFormat(), false, true);
+    Heap *heap = !pHeap ? Heap::getCurrentHeap() : pHeap;
+
+    size_t size = GXGetTexBufferSize(mWidth, mHeight, getFormat(), false, true);
+
     mpBuffer = new (heap, 0x20) char[size];
     setBuffer(mpBuffer);
+
     mFlags |= NEEDS_BUFFER_FREE;
 }
 
 void CpuTexture::allocWithHeaderDebug(Heap *pHeap) {
-    Heap *heap = pHeap == nullptr ? Heap::getCurrentHeap() : pHeap;
-    u32 size = GXGetTexBufferSize(mWidth, mHeight, getFormat(), false, true);
-    mpBuffer = new (heap, 0x20) char[size + 0x20];
-    char *actualBuf = mpBuffer + 0x20;
-    setBuffer(mpBuffer + 0x20);
-    if (actualBuf != nullptr) {
+    Heap *heap = !pHeap ? Heap::getCurrentHeap() : pHeap;
+
+    size_t size = GXGetTexBufferSize(mWidth, mHeight, getFormat(), false, true);
+
+    // Textures need 32-bit alignment ( ptr is represented with ptr >> 5 )
+    mpBuffer = new (heap, 0x20) char[size + sizeof(ResTIMG)];
+
+    // Texture has Header -> offset to actual image data
+    void *imageData = mpBuffer + sizeof(ResTIMG);
+
+    setBuffer(imageData);
+    if (imageData != nullptr) {
         mFlags |= HAS_HEADER;
     }
     mFlags |= NEEDS_BUFFER_FREE;
@@ -193,7 +274,6 @@ void CpuTexture::allocWithHeaderDebug(Heap *pHeap) {
 void CpuTexture::allocate(Heap *pHeap) {
     alloc(pHeap);
 }
-
 void CpuTexture::setColor(u16 x, u16 y, GXColor color) {
     // NONMATCHING
     switch (getFormat()) {
@@ -268,72 +348,4 @@ GXColor CpuTexture::getColor(u16 x, u16 y) const {
     }
     return c;
 }
-
-extern "C" double sqrt(double);
-
-void CpuTexture::fillNormalMapSphere(f32 f1, f32 f2) {
-    // NONMATCHING
-    // fpr regswaps
-    f32 mid = static_cast<f32>(mWidth / 2);
-    for (u16 y = 0; y < mHeight; y++) {
-        for (u16 x = 0; x < mWidth; x++) {
-            Vector3f vec;
-            vec.x = f1 * ((x + f2) - mid);
-            vec.y = f1 * -((y + f2) - mid);
-            f32 z = mid * mid - (vec.x * vec.x + vec.y * vec.y);
-            vec.z = z < 0.0f ? 0.0f : (f32)sqrt(z);
-            PSVECNormalize(vec, vec);
-            GXColor c;
-            GXUtility::getNormalColor(c, vec);
-            c.r = c.a;
-            setColor(x, y, c);
-        }
-    }
-    flush();
-}
-
-void CpuTexture::fillGradient(
-    int op, int unk, u16 start, u16 end, const GXColor &c1, const GXColor &c2, bool b1, bool b2
-) {
-    GXColor gradient[1024];
-    GXColor colors[256];
-
-
-    // NONMATCHING - regswaps
-    bool swapMode = unk == 0x73 || unk == 0x53;
-
-    u16 width = swapMode ? mWidth : mHeight;
-    int size = width;
-    u16 height = swapMode ? mHeight : mWidth;
-    int mid = width / 2;
-    makeGradient(op, gradient, size, start, end, c1, c2);
-    if (b1) {
-        int i2 = mid;
-        for (int i = 0; i < size; i++, i2++) {
-            colors[i].r = gradient[i < mid ? i2 : i - mid].r;
-            colors[i].g = gradient[i < mid ? i2 : i - mid].g;
-            colors[i].b = gradient[i < mid ? i2 : i - mid].b;
-            colors[i].a = gradient[i < mid ? i2 : i - mid].a;
-        }
-
-        for (int i = 0; i < size; i++) {
-            gradient[i] = colors[i];
-        }
-    }
-
-    u16 start2 = b2 ? 0 : start;
-    u16 end2 = b2 ? size : end;
-
-    for (u16 x = start2; x < end2; x++) {
-        for (u16 y = 0; y < height; y++) {
-            if (swapMode) {
-                setColor(x, y, gradient[x & 0xFFFF]);
-            } else {
-                setColor(y, x, gradient[x & 0xFFFF]);
-            }
-        }
-    }
-    flush();
-}
-
 } // namespace EGG
