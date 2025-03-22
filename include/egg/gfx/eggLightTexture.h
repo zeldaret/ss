@@ -53,11 +53,12 @@ public:
     const char *getName() const {
         return mName1;
     }
-
-private:
+    
     f32 getFloat(u16 idx) const {
         return mpFloatData[idx];
     }
+
+private:
 
     u8 getByte1(u16 idx) const {
         return mpByteData1[idx];
