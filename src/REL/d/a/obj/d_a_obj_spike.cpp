@@ -7,7 +7,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_SPIKE, dAcOspike_c, fProfile::OBJ_SPIKE, 0x1D9, 0, 2);
 // clang-format off
 dCcD_SrcUnk dAcOspike_c::sCcSrc = {
     {{AT_TYPE_DAMAGE, 0x2003F, {0, 0, 0}, 1, 0, 0, 0, 0}, 
-    {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, 0x06, 0x407, 0, }, 
+    {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, 0x0, 0x06, 0x407, 0, }, 
     {0}},
     {-1.0f, -246.0f, -472.0f, 73.0f, 255.0f, 482.0f}};
 // clang-format on

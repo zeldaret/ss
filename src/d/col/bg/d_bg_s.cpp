@@ -498,7 +498,6 @@ bool dBgS::UnRegist(dBgW_Base *pBg) {
         return false;
     }
 
-    // Not Quite Right
     if (id <= (BG_ID_MAX - 1) && mColllisionTbl[id] != nullptr) {
         mColllisionTbl[id] = nullptr;
         pBg->UnRegistBg();
@@ -513,12 +512,11 @@ bool dBgS::UnRegist(dBgW_Base *pBg) {
                 }
             }
         }
-        ret = false;
     } else {
-        ret = true;
+        return true;
     }
 
-    return ret;
+    return false;
 }
 
 bool dBgS::ChkMoveBG(cBgS_PolyInfo const &info, bool bChkLock) {
@@ -1004,7 +1002,8 @@ mVec3_c dBgS_GetN(cBgS_PolyInfo const &info) {
 }
 
 void dBgS::UpdateScrollTex() {
-    MapSrollText_t *scrollTex = (MapSrollText_t *)OarcManager::GetInstance()->getData(common_folder, MAP_SCROLL_TEX_FILE);
+    MapSrollText_t *scrollTex =
+        (MapSrollText_t *)OarcManager::GetInstance()->getData(common_folder, MAP_SCROLL_TEX_FILE);
     for (int i = 0; i < 5; ++i, ++scrollTex) {
         if (++mField_0x3864[i] >= scrollTex->mField_0x0E) {
             mField_0x3864[i] = 0;
