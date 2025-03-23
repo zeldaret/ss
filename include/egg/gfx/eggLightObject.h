@@ -58,6 +58,18 @@ public:
         return mDist;
     }
 
+    void SetIndex(u16 index) {
+        mIndex = index;
+    }
+
+    void ClearField0xA0() {
+        field_0xA0 = 0;
+    }
+
+    void ClearFlag4() {
+        mFlags = mFlags & 0xFFFE;
+    }
+
 private:
     /* 0x04 */ u16 mIndex;
     /* 0x06 */ u16 field_0x06;

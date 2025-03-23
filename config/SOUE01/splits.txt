@@ -2256,6 +2256,9 @@ egg/gfx/eggIScnProc.cpp:
 
 egg/gfx/eggLightManager.cpp:
 	.text       start:0x804A7F80 end:0x804A9808
+	.data       start:0x8056F068 end:0x8056F098
+	.sdata      start:0x80574F28 end:0x80574F30
+	.sdata2     start:0x8057F678 end:0x8057F690
 
 egg/gfx/eggLightObject.cpp:
 	.text       start:0x804A9810 end:0x804AB24C

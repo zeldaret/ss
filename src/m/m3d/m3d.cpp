@@ -1,7 +1,9 @@
 #include "m/m3d/m3d.h"
 
 #include "egg/gfx/eggDrawGX.h"
+#include "egg/gfx/eggFogManager.h"
 #include "egg/gfx/eggGfxEngine.h"
+#include "egg/gfx/eggLightManager.h"
 #include "egg/gfx/eggLightTexture.h"
 #include "egg/gfx/eggLightTextureMgr.h"
 #include "egg/gfx/eggScreen.h"
@@ -13,6 +15,7 @@
 #include "nw4r/g3d/g3d_state.h"
 #include "nw4r/g3d/res/g3d_resmat.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
+
 #include "rvl/GX.h" // IWYU pragma: export
 
 namespace m3d {
