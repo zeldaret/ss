@@ -18,6 +18,8 @@ public:
         void *param_6, int param_7, int param_8
     );
 
+    static void setUpLightSet(nw4r::g3d::LightSetting&, nw4r::g3d::ResAnmScn, int);
+
 private:
     static MEMAllocator *sAllocator;
 };

@@ -30,6 +30,7 @@ public:
     int replaceModelTextures(nw4r::g3d::ResMdl) const;
     int replaceModelTexture(u16, nw4r::g3d::ResMdl) const;
     void drawAndCaptureTexture(f32, f32, f32, f32);
+    void frameReset();
 
     // Inofficial
     static const void *getLtexFromLmap(const void *lmap, u16 index);
