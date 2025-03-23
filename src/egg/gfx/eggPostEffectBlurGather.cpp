@@ -21,7 +21,7 @@ PostEffectBlurGather::PostEffectBlurGather() {
 }
 
 void PostEffectBlurGather::setMaterialInternal() {
-    u8 hasExtraStage = (mpCapTexture != nullptr && (field_0x2D & 1) == 0) ? 1 : 0;
+    u8 hasExtraStage = (mTex1.mpTex != nullptr && (field_0x2D & 1) == 0) ? 1 : 0;
     u8 numStages = field_0x2C + hasExtraStage * 2;
     setMatColorChannel();
     nw4r::math::MTX34 mtx;
@@ -70,7 +70,7 @@ void PostEffectBlurGather::setMaterialInternal() {
             GXSetTevKColorSel(stage, GX_TEV_KCSEL_K2);
             GXSetTevKAlphaSel(stage, GX_TEV_KASEL_K2_A);
             GXSetTevKColor(GX_KCOLOR2, c);
-            GXSetTevOrder(stage, static_cast<GXTexCoordID>(i), mTexMapId, GX_COLOR_NULL);
+            GXSetTevOrder(stage, static_cast<GXTexCoordID>(i), mTex1.mTexMapID, GX_COLOR_NULL);
             GXSetTevColorIn(stage, GX_CC_KONST, GX_CC_ZERO, GX_CC_ZERO, GX_CC_TEXC);
             GXSetTevColorOp(stage, GX_TEV_SUB, GX_TB_ZERO, GX_CS_SCALE_4, 1, GX_TEVPREV);
             GXSetTevAlphaIn(stage, GX_CA_KONST, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);

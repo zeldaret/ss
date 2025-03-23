@@ -4,6 +4,8 @@
 #include "egg/gfx/eggCapTexture.h"
 #include "egg/gfx/eggDrawGX.h"
 #include "egg/gfx/eggGXUtility.h"
+#include "egg/math/eggMath.h"
+#include "egg/math/eggVector.h"
 #include "math.h"
 #include "nw4r/math/math_triangular.h"
 #include "nw4r/math/math_types.h"
@@ -16,15 +18,12 @@
 
 namespace EGG {
 
-PostEffectBlur::PostEffectBlur() {
-    // NONMATCHING
-    static const GXColor c = {0xD7, 0xD7, 0xD7, 0xD7};
-    field_0x2C = 1;
-    field_0x30 = 1.0f;
-    field_0x34 = 1.0f;
-    for (int i = 0; i < ARRAY_LENGTH(field_0x38); i++) {
-        field_0x38[i].init(c);
-    }
+PostEffectBlur::PostEffectBlur() : field_0x2C(1), field_0x30(1.0f), field_0x34(1.0f) {
+    const GXColor clr = (GXColor){0xD7, 0xD7, 0xD7, 0xD7};
+    field_0x38[0].init(clr);
+    field_0x38[1].init(clr);
+    field_0x38[2].init(clr);
+    field_0x38[3].init(clr);
 }
 
 void PostEffectBlur::draw(f32 width, f32 height) {
@@ -34,12 +33,11 @@ void PostEffectBlur::draw(f32 width, f32 height) {
     setMatInd();
     setMatPE();
     setVtxState();
-    f32 f1 = 1.0f / mpCapTexture->getWidth();
-    f32 f2 = 1.0f / mpCapTexture->getHeight();
+    f32 f1 = 1.0f / mTex1.mpTex->getWidth();
+    f32 f2 = 1.0f / mTex1.mpTex->getHeight();
     for (u8 i = 0; i < field_0x2C; i++) {
-        // Regswap
-        int maxNum = field_0x38[i].field_0x00 - 1;
-        for (u8 b = 0; b <= maxNum / 8; b++) {
+        int maxNum = (field_0x38[i].field_0x00 - 1) / 8;
+        for (u8 b = 0; b <= maxNum; b++) {
             drawInternal(i, b, f1, f2);
             drawScreenInternal(mOffsetX, mOffsetY, width * mScaleX, height * mScaleY);
             DrawGX::SetBlendMode(DrawGX::BLEND_2);
@@ -50,17 +48,13 @@ void PostEffectBlur::draw(f32 width, f32 height) {
 void PostEffectBlur::drawInternal(u8 kernelIdx, u8 p2, f32 f1, f32 f2) {
     // NONMATCHING
     nw4r::math::MTX34 mtx;
-    Stage &k = field_0x38[kernelIdx];
+    const Stage &k = field_0x38[kernelIdx];
 
-    // Some regswaps and instruction swaps only at the start of the function
-    f32 unk_00 = k.field_0x00;
+    f32 f4 = k.field_0x0C * f1;
+    f32 f3 = k.field_0x0C * f2;
+    f32 rad1 = k.field_0x08 - mRotation * Math<f32>::pi();
     int unk_00_scale = (p2 & 0x1F) * 8;
-
-    f32 rad1 = (k.field_0x08 - M_PI * mRotation);
-    f32 abc = (2.0f * M_PI / unk_00);
-
-    f32 f3 = k.field_0x0C * f1;
-    f32 f4 = k.field_0x0C * f2;
+    f32 abc = (2.f * Math<f32>::pi() / k.field_0x00);
 
     u8 numTexGens = k.field_0x00 - unk_00_scale;
     if (numTexGens > 8) {
@@ -76,12 +70,11 @@ void PostEffectBlur::drawInternal(u8 kernelIdx, u8 p2, f32 f1, f32 f2) {
         nw4r::math::SinCosRad(&sin, &cos, rad1 + abc * unk_00_scale);
         nw4r::math::MTX34 m(
             // clang-format off
-            1.0f, 0.0f, cos * f3, 0.0f,
-            0.0f, 1.0f, sin * f4, 0.0f,
-            0.0f, 0.0f, 0.0f, 0.0f
+            1.0f, 0.0f, cos * f4, 0.0f,
+            0.0f, 1.0f, sin * f3, 0.0f,
+            0.0f, 0.0f,     0.0f, 0.0f
             // clang-format on
         );
-        // OK from here
         PSMTXConcat(m, mtx, m);
         GXLoadTexMtxImm(m, texMtxId, GX_MTX_2x4);
         unk_00_scale++;
@@ -115,7 +108,7 @@ void PostEffectBlur::drawInternal(u8 kernelIdx, u8 p2, f32 f1, f32 f2) {
 
         GXSetTevKColorSel(stage, GX_TEV_KCSEL_K0);
         GXSetTevKAlphaSel(stage, GX_TEV_KASEL_K0_A);
-        GXSetTevOrder(stage, static_cast<GXTexCoordID>(id), mTexMapId, GX_COLOR_NULL);
+        GXSetTevOrder(stage, static_cast<GXTexCoordID>(id), mTex1.mTexMapID, GX_COLOR_NULL);
         GXSetTevColorIn(stage, GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, a1);
         GXSetTevAlphaIn(stage, GX_CA_ZERO, GX_CA_TEXA, GX_CA_KONST, a2);
 

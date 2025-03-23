@@ -12,7 +12,7 @@ PostEffectMask::PostEffectMask()
     : mColor(DrawGX::WHITE), field_0x2C(0), field_0x34(0.0f), field_0x38(1.0f), field_0x1BC(1) {}
 
 void PostEffectMask::setMaterialInternal() {
-    bool hasTex2 = mpCapTexture2 != nullptr;
+    bool hasTex2 = mTex2.mpTex != nullptr;
     loadTextureInternal();
     GXColor resColor;
     scaleColor(resColor, mColor, false, field_0x34);
@@ -30,7 +30,7 @@ void PostEffectMask::setMaterialInternal() {
     GXTevScale scale = field_0x2C == 0 ? GetTevScale() : GX_CS_SCALE_1;
 
     GXColor c = resColor;
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, mTexMapId, GX_COLOR_NULL);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, mTex1.mTexMapID, GX_COLOR_NULL);
     GXSetTevKColorSel(GX_TEVSTAGE0, GX_TEV_KCSEL_K0);
     GXSetTevKAlphaSel(GX_TEVSTAGE0, GX_TEV_KASEL_K0_A);
     GXSetTevKColor(GX_KCOLOR0, c);
@@ -43,7 +43,7 @@ void PostEffectMask::setMaterialInternal() {
         case 0: {
             if (hasTex2) {
                 GXSetNumTevStages(2);
-                GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, mTexMapId2, GX_COLOR_NULL);
+                GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD1, mTex2.mTexMapID, GX_COLOR_NULL);
                 GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
                 GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
                 GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_TEXA, GX_CA_APREV, GX_CA_ZERO);
@@ -59,12 +59,12 @@ void PostEffectMask::setMaterialInternal() {
             if (hasTex2) {
                 GXSetNumTevStages(3);
                 scale = GetTevScale();
-                GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, mTexMapId, GX_COLOR_NULL);
+                GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, mTex1.mTexMapID, GX_COLOR_NULL);
                 GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXA, GX_CC_ZERO);
                 GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, scale, 1, GX_TEVPREV);
                 GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
                 GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
-                GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, mTexMapId2, GX_COLOR_NULL);
+                GXSetTevOrder(GX_TEVSTAGE2, GX_TEXCOORD1, mTex2.mTexMapID, GX_COLOR_NULL);
                 GXSetTevColorIn(GX_TEVSTAGE2, GX_CC_ZERO, GX_CC_TEXC, GX_CC_CPREV, GX_CC_ZERO);
                 GXSetTevColorOp(GX_TEVSTAGE2, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
                 GXSetTevAlphaIn(GX_TEVSTAGE2, GX_CA_ZERO, GX_CA_TEXA, GX_CA_APREV, GX_CA_ZERO);
@@ -73,7 +73,7 @@ void PostEffectMask::setMaterialInternal() {
             } else {
                 GXSetNumTevStages(2);
                 scale = GetTevScale();
-                GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, mTexMapId, GX_COLOR_NULL);
+                GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, mTex1.mTexMapID, GX_COLOR_NULL);
                 GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXA, GX_CC_ZERO);
                 GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, scale, 1, GX_TEVPREV);
                 GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);

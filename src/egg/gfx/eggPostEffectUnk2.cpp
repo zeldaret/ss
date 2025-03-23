@@ -74,8 +74,8 @@ void PostEffectUnk2::draw(f32 width, f32 height) {
         {-1.0f, 1.0f},
     };
 
-    const f32 s1 = field_0x40 / mpCapTexture->getWidth();
-    const f32 s2 = field_0x40 / mpCapTexture->getHeight();
+    const f32 s1 = field_0x40 / mTex1.mpTex->getWidth();
+    const f32 s2 = field_0x40 / mTex1.mpTex->getHeight();
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
             f32 mtx[2][4];
@@ -120,9 +120,9 @@ void PostEffectUnk2::setMaterialInternal() {
     GXSetTexCoordGen2(GX_TEXCOORD2, GX_TG_MTX2x4, GX_TG_TEX0, 0x1e, 0, 0x7d);
     GXSetTexCoordGen2(GX_TEXCOORD3, GX_TG_MTX2x4, GX_TG_TEX0, 0x21, 0, 0x7d);
     GXSetNumIndStages(3);
-    GXSetIndTexOrder(GX_INDTEXSTAGE0, GX_TEXCOORD0, mTexMapId);
-    GXSetIndTexOrder(GX_INDTEXSTAGE1, GX_TEXCOORD2, mTexMapId);
-    GXSetIndTexOrder(GX_INDTEXSTAGE2, GX_TEXCOORD3, mTexMapId);
+    GXSetIndTexOrder(GX_INDTEXSTAGE0, GX_TEXCOORD0, mTex1.mTexMapID);
+    GXSetIndTexOrder(GX_INDTEXSTAGE1, GX_TEXCOORD2, mTex1.mTexMapID);
+    GXSetIndTexOrder(GX_INDTEXSTAGE2, GX_TEXCOORD3, mTex1.mTexMapID);
     setMatPE();
     mpTexture->load(GX_TEXMAP1);
 

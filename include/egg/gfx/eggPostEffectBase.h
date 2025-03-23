@@ -2,7 +2,9 @@
 #define EGG_POST_EFFECT_BASE_H
 
 #include "common.h"
-#include "egg/egg_types.h"
+#include "egg/gfx/eggCapTexture.h"
+#include "egg/gfx/eggScreen.h"
+#include "egg/math/eggMath.h"
 #include "nw4r/math/math_types.h"
 #include "rvl/GX/GXTypes.h"
 
@@ -10,6 +12,10 @@ namespace EGG {
 
 class PostEffectBase {
 public:
+    struct CapTextureWrapper {
+        CapTexture *mpTex;
+        GXTexMapID mTexMapID;
+    };
     void setField_0x00(u32 val) {
         field_0x00 = val;
     }
@@ -17,16 +23,14 @@ public:
     static void setProjection(const EGG::Screen &screen);
 
 protected:
-    u32 field_0x00;            // at 0x0
-    CapTexture *mpCapTexture;  // at 0x4
-    GXTexMapID mTexMapId;      // at 0x8
-    CapTexture *mpCapTexture2; // at 0xC
-    GXTexMapID mTexMapId2;     // at 0x10
-    f32 mOffsetX;              // at 0x14
-    f32 mOffsetY;              // at 0x18
-    f32 mScaleX;               // at 0x1C
-    f32 mScaleY;               // at 0x20
-    f32 mRotation;             // at 0x24
+    u32 field_0x00;          // at 0x0
+    CapTextureWrapper mTex1; // at 0x4
+    CapTextureWrapper mTex2; // at 0xC
+    f32 mOffsetX;            // at 0x14
+    f32 mOffsetY;            // at 0x18
+    f32 mScaleX;             // at 0x1C
+    f32 mScaleY;             // at 0x20
+    f32 mRotation;           // at 0x24
 
     PostEffectBase();
     virtual ~PostEffectBase() {} // at 0x8

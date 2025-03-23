@@ -1,9 +1,9 @@
 #include "egg/gfx/eggPostEffectBase.h"
 
 #include "common.h"
+#include "egg/gfx/eggCapTexture.h"
 #include "egg/gfx/eggDrawGX.h"
 #include "egg/gfx/eggScreen.h"
-#include "egg/gfx/eggCapTexture.h"
 #include "egg/math/eggVector.h"
 #include "math.h"
 #include "nw4r/math/math_triangular.h"
@@ -17,18 +17,15 @@
 
 namespace EGG {
 
-PostEffectBase::PostEffectBase() {
-    field_0x00 = 0;
-    mpCapTexture = nullptr;
-    mTexMapId = GX_TEXMAP0;
-    mpCapTexture2 = nullptr;
-    mTexMapId2 = GX_TEXMAP0;
-    mOffsetX = 0.0f;
-    mOffsetY = 0.0f;
-    mScaleX = 1.0f;
-    mScaleY = 1.0f;
-    mRotation = 0.0f;
-}
+PostEffectBase::PostEffectBase()
+    : field_0x00(0),
+      mTex1((CapTextureWrapper){nullptr, GX_TEXMAP0}),
+      mTex2((CapTextureWrapper){nullptr, GX_TEXMAP0}),
+      mOffsetX(0.0f),
+      mOffsetY(0.0f),
+      mScaleX(1.0f),
+      mScaleY(1.0f),
+      mRotation(0.0f) {}
 
 void PostEffectBase::draw(f32 width, f32 height) {
     setMaterialInternal();
@@ -37,7 +34,7 @@ void PostEffectBase::draw(f32 width, f32 height) {
 }
 
 void PostEffectBase::fn_804AED20() {
-    draw(mpCapTexture->getWidth(), mpCapTexture->getHeight());
+    draw(mTex1.mpTex->getWidth(), mTex1.mpTex->getHeight());
 }
 
 void PostEffectBase::setVtxState() {
@@ -55,9 +52,9 @@ void PostEffectBase::drawScreenInternal(f32 offsetX, f32 offsetY, f32 width, f32
 }
 
 void PostEffectBase::loadTextureInternal() {
-    mpCapTexture->load(mTexMapId);
-    if (mpCapTexture2 != nullptr) {
-        mpCapTexture2->load(mTexMapId2);
+    mTex1.mpTex->load(mTex1.mTexMapID);
+    if (mTex2.mpTex != nullptr) {
+        mTex2.mpTex->load(mTex2.mTexMapID);
     }
 }
 

@@ -29,7 +29,7 @@ void PostEffectSimple::setMaterialInternal() {
     GXSetTevKColorSel(GX_TEVSTAGE0, GX_TEV_KCSEL_K0);
     GXSetTevKAlphaSel(GX_TEVSTAGE0, GX_TEV_KASEL_K0_A);
     GXSetTevKColor(GX_KCOLOR0, c);
-    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, mTexMapId, GX_COLOR_NULL);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, mTex1.mTexMapID, GX_COLOR_NULL);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_KONST, GX_CC_ZERO);
     GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, field_0x34, 1, GX_TEVPREV);
     switch (field_0x38) {

@@ -15,11 +15,11 @@ class PostEffectBlur : public PostEffectBase {
         /* 0x08 */ f32 field_0x08;
         /* 0x0C */ f32 field_0x0C;
 
-        void init(GXColor clr) {
+        void init(const GXColor &clr) {
             field_0x00 = 16;
             field_0x01 = clr;
-            field_0x08 = 1.0f;
-            field_0x0C = 0.0f;
+            field_0x08 = 0.0f;
+            field_0x0C = 1.0f;
         }
     };
 
@@ -40,7 +40,7 @@ public:
     void setStage0Color(GXColor clr) {
         field_0x38[0].field_0x01 = clr;
     }
-    
+
     void setStage0F(f32 f) {
         field_0x38[0].field_0x0C = f;
     }
