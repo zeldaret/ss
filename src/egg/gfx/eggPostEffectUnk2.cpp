@@ -16,33 +16,32 @@
 
 namespace EGG {
 
-PostEffectUnk2::PostEffectUnk2() {
-    // NONMATCHING
-    field_0x2C = 0;
-    field_0x30 = 0;
-    field_0x34 = 1;
-    field_0x35 = 0xFE;
-    field_0x36 = 7;
-    field_0x38 = 0.0f;
-    field_0x3C = 0.0f;
-    field_0x40 = 1.0f;
-    field_0x44 = 1.0f;
-    field_0x48 = 1.0f;
+inline f32 GetColor(f32 x, u16 w) {
+    return nw4r::ut::Min(x / (w - 1), 1.f) * 0xFF;
+}
+
+PostEffectUnk2::PostEffectUnk2()
+    : // NONMATCHING
+      field_0x2C(0),
+      field_0x30(0),
+      field_0x34(1),
+      field_0x35(0xFE),
+      field_0x36(7),
+      field_0x38(0.0f, 0.0f),
+      field_0x40(1.0f),
+      field_0x44(1.0f),
+      field_0x48(1.0f) {
     mpTexture = new CpuTexture(32, 4, GX_TF_RGBA8);
     mpTexture->configure();
     mpTexture->allocate(nullptr);
     mpTexture->setWrapS(GX_CLAMP);
     mpTexture->setWrapT(GX_CLAMP);
+
     for (u16 y = 0; y < mpTexture->getHeight(); y++) {
         for (u16 x = 0; x < mpTexture->getWidth(); x++) {
-            // The conversion constant 0x43000000 needs to
-            // be stored at the start of the function...
-            f32 xF = x;
-            f32 widF = mpTexture->getWidth() - 1;
-            f32 ratio = nw4r::ut::Min(xF / widF, 1.0f);
-            u8 val = ratio * 255.0f;
-            GXColor color = {val, val, val, val};
-            mpTexture->setColor(x, y, color);
+            u8 val = GetColor(x, mpTexture->getWidth());
+
+            mpTexture->setColor(x, y, (GXColor){val, val, val, val});
         }
     }
 
@@ -62,7 +61,7 @@ void PostEffectUnk2::draw(f32 width, f32 height) {
     GXSetVtxDesc(GX_VA_TEX1, GX_DIRECT);
 
     nw4r::math::MTX34 mtx;
-    PSMTXScale(mtx, mScaleX * width, mScaleY * height, 1.0f);
+    PSMTXScale(mtx, width * mScaleX, height * mScaleY, 1.0f);
     PSMTXTransApply(mtx, mtx, mOffsetX, mOffsetY, 0.0f);
     GXLoadPosMtxImm(mtx, 0);
 
@@ -75,38 +74,40 @@ void PostEffectUnk2::draw(f32 width, f32 height) {
         {-1.0f, 1.0f},
     };
 
-    // TODO
-    f32 s1 = field_0x40 / mpCapTexture->getWidth();
-    f32 s2 = field_0x40 / mpCapTexture->getHeight();
-    f32 f = 0.0f;
+    const f32 s1 = field_0x40 / mpCapTexture->getWidth();
+    const f32 s2 = field_0x40 / mpCapTexture->getHeight();
     for (int i = 0; i < 2; i++) {
         for (int j = 0; j < 2; j++) {
-            EGG::Vector3f(0.0f, 0.0f, 0.0f);
+            f32 mtx[2][4];
+            EGG::Vector3f a(0.f, 0.f, 0.f);
+
             f32 sin, cos;
-            nw4r::math::SinCosRad(&sin, &cos, f);
-            nw4r::math::MTX34 mtx2;
-            mtx2._00 = cos;
-            mtx2._01 = -sin;
-            mtx2._02 = -cos * f + sin * f + (s1 * floats1[i][j]);
-            mtx2._03 = f;
-            mtx2._10 = sin;
-            mtx2._11 = cos;
-            mtx2._12 = -sin * f - cos * f + (s2 * floats2[i][j]);
-            mtx2._13 = f;
-            GXLoadTexMtxImm(mtx2, GXUtility::getTexMtxID(j), GX_MTX_2x4);
+            nw4r::math::SinCosRad(&sin, &cos, a.z);
+
+            mtx[0][0] = cos;
+            mtx[0][1] = -sin;
+            mtx[0][2] = -cos * a.x + sin * a.y + a.x + (s1 * floats1[i][j]);
+
+            mtx[1][0] = sin;
+            mtx[1][1] = cos;
+            mtx[1][2] = -sin * a.x - cos * a.y + a.y + (s2 * floats2[i][j]);
+
+            mtx[1][3] = 0.f;
+            mtx[0][3] = 0.f;
+            GXLoadTexMtxImm(mtx, GXUtility::getTexMtxID(j), GX_MTX_2x4);
         }
         if (i == 1 && field_0x2C <= 1) {
             GXSetBlendMode(GX_BM_LOGIC, GX_BL_ZERO, GX_BL_ZERO, GX_LO_OR);
         }
         GXBegin(GX_QUADS, GX_VTXFMT0, 4);
         GXPosition2u8(0, 0);
-        GXPosition2f32(field_0x38, field_0x3C);
+        GXPosition2f32(field_0x38.x, field_0x38.y);
         GXPosition2u8(1, 1);
-        GXPosition2f32(field_0x38, field_0x3C);
+        GXPosition2f32(field_0x38.x, field_0x38.y);
         GXPosition2u8(2, 2);
-        GXPosition2f32(field_0x38, field_0x3C);
+        GXPosition2f32(field_0x38.x, field_0x38.y);
         GXPosition2u8(3, 3);
-        GXPosition2f32(field_0x38, field_0x3C);
+        GXPosition2f32(field_0x38.x, field_0x38.y);
     }
 }
 
@@ -153,7 +154,7 @@ void PostEffectUnk2::setMaterialInternal() {
 
     GXSetTevSwapMode(GX_TEVSTAGE3, GX_TEV_SWAP0, GX_TEV_SWAP0);
     GXSetTevOrder(GX_TEVSTAGE3, GX_TEXCOORD_NULL, GX_TEXMAP1, GX_COLOR_NULL);
-    if (field_0x2C == 2) {
+    if ((int)field_0x2C == 2) {
         GXSetTevColorIn(GX_TEVSTAGE3, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
         GXSetTevAlphaIn(GX_TEVSTAGE3, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_TEXA);
         GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_GREATER, field_0x35);

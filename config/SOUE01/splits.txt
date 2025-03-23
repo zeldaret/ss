@@ -2206,7 +2206,7 @@ egg/gfx/eggDrawPathBase.cpp:
 	.text       start:0x804A0C30 end:0x804A0E98
 	.data       start:0x8056EE60 end:0x8056EEB0
 
-egg/gfx/eggDrawPathUnk1.cpp:
+egg/gfx/eggDrawPathBloom.cpp:
 	.text       start:0x804A0EA0 end:0x804A29B8
 
 egg/gfx/eggDrawPathDOF.cpp:
@@ -2296,16 +2296,16 @@ egg/gfx/eggPostEffectBlur.cpp:
 	.data       start:0x8056F170 end:0x8056F190
 	.sdata2     start:0x8057F750 end:0x8057F788
 
-egg/gfx/eggPostEffectUnk1.cpp:
+egg/gfx/eggPostEffectBlurGather.cpp:
 	.text       start:0x804AFC10 end:0x804B0098
-	.data       start:0x8056F190 end:0x8056F1B0
+	.data       start:0x8056F190 end:0x8056F1AC
 	.sdata2     start:0x8057F788 end:0x8057F798
 
 egg/gfx/eggPostEffectUnk2.cpp:
 	.text       start:0x804B00A0 end:0x804B0AA4
 	.rodata     start:0x804FBD50 end:0x804FBD88
 	.data       start:0x8056F1B0 end:0x8056F1D0
-	.sdata2     start:0x8057F798 end:0x8057F7C8
+	.sdata2     start:0x8057F798 end:0x8057F7C4
 
 egg/gfx/eggPostEffectMask.cpp:
 	.text       start:0x804B0AB0 end:0x804B0F60

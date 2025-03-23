@@ -1,8 +1,7 @@
-#include "egg/gfx/eggPostEffectUnk1.h"
+#include "egg/gfx/eggPostEffectBlurGather.h"
 
 #include "common.h"
 #include "egg/gfx/eggCpuTexture.h"
-#include "egg/gfx/eggDrawGX.h"
 #include "egg/gfx/eggGXUtility.h"
 #include "nw4r/math/math_types.h"
 #include "rvl/GX/GXAttr.h"
@@ -12,20 +11,16 @@
 
 namespace EGG {
 
-PostEffectUnk1::PostEffectUnk1() {
-    // NONMATCHING
+PostEffectBlurGather::PostEffectBlurGather() {
     field_0x2C = 1;
     field_0x2D = 1;
     field_0x30 = 0.5f;
-    for (int i = 0; i < ARRAY_LENGTH(field_0x34); i++) {
-        field_0x34[i].field_0x00 = nullptr;
-        field_0x34[i].field_0x08 = DrawGX::WHITE;
-        field_0x34[i].field_0x0C = 1.0f;
-        field_0x34[i].field_0x10 = 0;
-    }
+    mBlurGatherData[0].reset();
+    mBlurGatherData[1].reset();
+    mBlurGatherData[2].reset();
 }
 
-void PostEffectUnk1::setMaterialInternal() {
+void PostEffectBlurGather::setMaterialInternal() {
     u8 hasExtraStage = (mpCapTexture != nullptr && (field_0x2D & 1) == 0) ? 1 : 0;
     u8 numStages = field_0x2C + hasExtraStage * 2;
     setMatColorChannel();
@@ -37,7 +32,7 @@ void PostEffectUnk1::setMaterialInternal() {
         int texMtxIdx = GXUtility::getTexMtxID(i);
         GXSetTexCoordGen2(static_cast<GXTexCoordID>(i), GX_TG_MTX2x4, GX_TG_TEX0, texMtxIdx, 0, 0x7D);
         if (i < field_0x2C) {
-            field_0x34[i].field_0x00->load(field_0x34[i].mTexMapId);
+            mBlurGatherData[i].mpCapTexture->load(mBlurGatherData[i].mTexMapId);
         } else {
             loadTextureInternal();
         }
@@ -50,13 +45,13 @@ void PostEffectUnk1::setMaterialInternal() {
     GXSetNumTevStages(numStages);
 
     for (int i = 0; i < numStages; i++) {
-        Stage &k = field_0x34[i];
+        BlurGatherData &k = mBlurGatherData[i];
         GXTevStageID stage = static_cast<GXTevStageID>(i);
         GXSetTevDirect(stage);
         GXSetTevSwapMode(stage, GX_TEV_SWAP0, GX_TEV_SWAP0);
         if (i < field_0x2C) {
             GXColor scaledColor;
-            scaleColor(scaledColor, k.field_0x08, false, k.field_0x0C);
+            scaleColor(scaledColor, k.mColor, false, k.mColorScale);
 
             GXSetTevKColorSel(stage, static_cast<GXTevKColorSel>(GX_TEV_KCSEL_K0 + i));
             GXSetTevKAlphaSel(stage, static_cast<GXTevKAlphaSel>(GX_TEV_KASEL_K0_A + i));

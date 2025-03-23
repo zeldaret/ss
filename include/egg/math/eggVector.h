@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "egg/math/eggMath.h"
+#include "nw4r/math/math_triangular.h"
 
 #include "nw4r/math.h"
 

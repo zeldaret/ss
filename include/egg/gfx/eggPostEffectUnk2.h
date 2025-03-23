@@ -3,6 +3,7 @@
 
 #include "egg/egg_types.h"
 #include "egg/gfx/eggPostEffectBase.h"
+#include "egg/math/eggVector.h"
 
 namespace EGG {
 
@@ -14,13 +15,12 @@ public:
     virtual void setMaterialInternal() override;
 
 private:
-    /* 0x2C */ s32 field_0x2C;
+    /* 0x2C */ u32 field_0x2C;
     /* 0x30 */ u32 field_0x30;
     /* 0x34 */ u8 field_0x34;
     /* 0x35 */ u8 field_0x35;
     /* 0x36 */ s16 field_0x36;
-    /* 0x38 */ f32 field_0x38;
-    /* 0x3C */ f32 field_0x3C;
+    /* 0x38 */ Vector2f field_0x38;
     /* 0x40 */ f32 field_0x40;
     /* 0x44 */ f32 field_0x44;
     /* 0x48 */ f32 field_0x48;

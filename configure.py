@@ -873,7 +873,7 @@ config.libs = [
             Object(NonMatching, "egg/gfx/eggCpuTexture.cpp"),
             Object(NonMatching, "egg/gfx/eggDrawGX.cpp"),
             Object(Matching, "egg/gfx/eggDrawPathBase.cpp"),
-            Object(NonMatching, "egg/gfx/eggDrawPathUnk1.cpp"),
+            Object(NonMatching, "egg/gfx/eggDrawPathBloom.cpp"),
             Object(NonMatching, "egg/gfx/eggDrawPathDOF.cpp"),
             Object(Matching, "egg/gfx/eggDrawPathLightMap.cpp"),
             Object(NonMatching, "egg/gfx/eggFog.cpp"),
@@ -891,7 +891,7 @@ config.libs = [
             Object(NonMatching, "egg/gfx/eggModelEx.cpp"),
             Object(NonMatching, "egg/gfx/eggPostEffectBase.cpp"),
             Object(NonMatching, "egg/gfx/eggPostEffectBlur.cpp"),
-            Object(NonMatching, "egg/gfx/eggPostEffectUnk1.cpp"),  # Unknown
+            Object(Matching, "egg/gfx/eggPostEffectBlurGather.cpp"),
             Object(NonMatching, "egg/gfx/eggPostEffectUnk2.cpp"),  # Unknown
             Object(Matching, "egg/gfx/eggPostEffectMask.cpp"),
             Object(NonMatching, "egg/gfx/eggPostEffectMaskDOF.cpp"),
