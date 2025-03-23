@@ -35,9 +35,9 @@ void DrawPathBase::ExecCallback_CALC_VIEW(
     }
 }
 
-void DrawPathBase::scnProcDraw(u16) {
+void DrawPathBase::scnProcDraw(u16 idx) {
     if (mFlag & 1) {
-        internalDraw();
+        internalDraw(idx);
     }
 }
 

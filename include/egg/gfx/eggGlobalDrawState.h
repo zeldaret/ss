@@ -12,6 +12,25 @@ public:
     static void setDrawSettingGX(bool, bool);
     static void beginDrawView(u16, nw4r::math::MTX34 const &, Screen const &);
 
+    static const Screen &getScreen() {
+        return *spScreen;
+    }
+    static void setScreen(const Screen &screen) {
+        spScreen = &screen;
+    }
+    static u32 getDrawFlag() {
+        return sDrawFlag;
+    }
+    static void setDrawFlag(u32 flag) {
+        sDrawFlag = flag;
+    }
+    static void onDrawFlag(u32 flag) {
+        sDrawFlag |= flag;
+    }
+    static void offDrawFlag(u32 flag) {
+        sDrawFlag &= ~flag;
+    }
+
 private:
     static u16 sCameraId;
     static u32 sDrawFlag;

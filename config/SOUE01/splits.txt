@@ -2213,8 +2213,10 @@ egg/gfx/eggDrawPathDOF.cpp:
 	.text       start:0x804A29C0 end:0x804A4BE8
 	.data       start:0x8056EF28 end:0x8056EFA0
 
-egg/gfx/eggDrawPathUnk2.cpp:
+egg/gfx/eggDrawPathLightMap.cpp:
 	.text       start:0x804A4BF0 end:0x804A54E8
+	.data       start:0x8056EFA0 end:0x8056EFF0
+	.sdata2     start:0x8057F5F8 end:0x8057F608
 
 egg/gfx/eggFog.cpp:
 	.text       start:0x804A54F0 end:0x804A5A08

@@ -875,7 +875,7 @@ config.libs = [
             Object(Matching, "egg/gfx/eggDrawPathBase.cpp"),
             Object(NonMatching, "egg/gfx/eggDrawPathUnk1.cpp"),
             Object(NonMatching, "egg/gfx/eggDrawPathDOF.cpp"),
-            Object(NonMatching, "egg/gfx/eggDrawPathUnk2.cpp"),
+            Object(Matching, "egg/gfx/eggDrawPathLightMap.cpp"),
             Object(NonMatching, "egg/gfx/eggFog.cpp"),
             Object(NonMatching, "egg/gfx/eggFogManager.cpp"),
             Object(NonMatching, "egg/gfx/eggFrustum.cpp"),

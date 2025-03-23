@@ -151,8 +151,11 @@ public:
     static void SetVtxState(enum VtxType);
     static void SetZMode(enum ZMode);
     static void SetBlendMode(enum Blend);
-    static void DrawDLWorld(DL dl, const EGG::Matrix34f& mtx, GXColor color);
+    static void DrawDLWorld(DL dl, const EGG::Matrix34f &mtx, GXColor color);
 
+    static void DrawDL16(const nw4r::math::MTX34 &mtx, GXColor clr) {
+        DrawDL(DL_16, mtx, clr);
+    }
     // TODO MORE
 
     // not sure

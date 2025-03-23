@@ -8,11 +8,19 @@ namespace EGG {
 
 class ScreenEffectBase {
 protected:
-    u8 mFlag;
+    /* 0x0 */ u8 mFlag;
 
 public:
     ScreenEffectBase();
     virtual ~ScreenEffectBase() {} // at 0x8
+
+    static Screen &GetScreen() {
+        return sScreen;
+    }
+
+    bool isFlag0x2() const {
+        return mFlag & 2;
+    }
 
 protected:
     static Screen sScreen;

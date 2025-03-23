@@ -18,7 +18,7 @@ public:
         return 3;
     }
     virtual void internalResetForDraw() override;
-    virtual void internalDraw() override;
+    virtual void internalDraw(u16) override;
 
     virtual void SetBinaryInner(const Bin &) override;
     virtual void GetBinaryInner(Bin *) const override;

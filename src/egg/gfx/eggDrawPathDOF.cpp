@@ -6,7 +6,7 @@ DrawPathDOF::DrawPathDOF() {}
 
 DrawPathDOF::~DrawPathDOF() {}
 
-void DrawPathDOF::internalDraw() {}
+void DrawPathDOF::internalDraw(u16) {}
 
 void DrawPathDOF::internalResetForDraw() {}
 

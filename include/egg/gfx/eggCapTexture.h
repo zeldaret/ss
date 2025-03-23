@@ -12,8 +12,8 @@ struct CopyFilter {
 class CapTexture : public CpuTexture {
 public:
     CapTexture() {}
-    CapTexture(u16 width, u16 height, GXTexFmt texFmt): CpuTexture(width, height, texFmt) {}
-    CapTexture(const GXTexObj *pObj): CpuTexture(pObj) {}
+    CapTexture(u16 width, u16 height, GXTexFmt texFmt) : CpuTexture(width, height, texFmt) {}
+    CapTexture(const GXTexObj *pObj) : CpuTexture(pObj) {}
 
     virtual void configure() override; // at 0xC
 
@@ -25,6 +25,13 @@ public:
         } else {
             mCapFlags &= ~0x10;
         }
+    }
+
+    void onCapFlag(u8 flag) {
+        mCapFlags |= flag;
+    }
+    void offCapFlag(u8 flag) {
+        mCapFlags &= ~flag;
     }
 
     void setClearColor(const GXColor &clr) {
