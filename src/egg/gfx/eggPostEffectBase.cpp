@@ -122,8 +122,11 @@ void PostEffectBase::lerpColor(GXColor &out, const GXColor &c1, const GXColor &c
 }
 
 void PostEffectBase::getBaseTexMtx(nw4r::math::MTX34 *mtx) const {
+    // Feels wrong -> maybe an inline with rotation and pi
+    f32 rot = Math<f32>::pi();
     f32 sin, cos;
-    nw4r::math::SinCosRad(&sin, &cos, mRotation * M_PI);
+    nw4r::math::SinCosRad(&sin, &cos, rot * mRotation);
+
     f32 zero = 0.0f;
     f32 scale = 1.0f;
     f32 f8 = zero - 0.5f;

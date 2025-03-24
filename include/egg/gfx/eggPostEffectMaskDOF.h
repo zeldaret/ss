@@ -16,9 +16,9 @@ public:
     virtual void setMaterialInternal() override;
     virtual ~PostEffectMaskDOF() {}
 
-    const GXColor &getNearColor();
-    const GXColor &getFarColor();
-    const GXColor &getCenterColor();
+    static const GXColor &getNearColor();
+    static const GXColor &getFarColor();
+    static const GXColor &getCenterColor();
 
 private:
     /* 0x2C */ u8 field_0x2C;

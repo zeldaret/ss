@@ -5,6 +5,7 @@
 #include "egg/gfx/eggCapTexture.h"
 #include "egg/gfx/eggScreen.h"
 #include "egg/math/eggMath.h"
+#include "egg/math/eggRotation.h"
 #include "nw4r/math/math_types.h"
 #include "rvl/GX/GXTypes.h"
 
@@ -22,15 +23,19 @@ public:
 
     static void setProjection(const EGG::Screen &screen);
 
+    f32 getRot() const {
+        return mRotation;
+    }
+
 protected:
-    u32 field_0x00;          // at 0x0
-    CapTextureWrapper mTex1; // at 0x4
-    CapTextureWrapper mTex2; // at 0xC
-    f32 mOffsetX;            // at 0x14
-    f32 mOffsetY;            // at 0x18
-    f32 mScaleX;             // at 0x1C
-    f32 mScaleY;             // at 0x20
-    f32 mRotation;           // at 0x24
+    u32 field_0x00;               // at 0x0
+    CapTextureWrapper mTex1;      // at 0x4
+    CapTextureWrapper mTex2;      // at 0xC
+    f32 mOffsetX;                 // at 0x14
+    f32 mOffsetY;                 // at 0x18
+    f32 mScaleX;                  // at 0x1C
+    f32 mScaleY;                  // at 0x20
+    EGG::Rotation<f32> mRotation; // at 0x24
 
     PostEffectBase();
     virtual ~PostEffectBase() {} // at 0x8

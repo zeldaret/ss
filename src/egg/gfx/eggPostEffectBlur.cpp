@@ -50,11 +50,12 @@ void PostEffectBlur::drawInternal(u8 kernelIdx, u8 p2, f32 f1, f32 f2) {
     nw4r::math::MTX34 mtx;
     const Stage &k = field_0x38[kernelIdx];
 
-    f32 f4 = k.field_0x0C * f1;
-    f32 f3 = k.field_0x0C * f2;
-    f32 rad1 = k.field_0x08 - mRotation * Math<f32>::pi();
+    f32 tx = k.field_0x0C * f1;
+    f32 ty = k.field_0x0C * f2;
+    f32 rad1 = k.field_0x08 - Math<f32>::pi() * mRotation;
+    f32 abc = 2.f * Math<f32>::pi() / k.field_0x00;
+
     int unk_00_scale = (p2 & 0x1F) * 8;
-    f32 abc = (2.f * Math<f32>::pi() / k.field_0x00);
 
     u8 numTexGens = k.field_0x00 - unk_00_scale;
     if (numTexGens > 8) {
@@ -70,8 +71,8 @@ void PostEffectBlur::drawInternal(u8 kernelIdx, u8 p2, f32 f1, f32 f2) {
         nw4r::math::SinCosRad(&sin, &cos, rad1 + abc * unk_00_scale);
         nw4r::math::MTX34 m(
             // clang-format off
-            1.0f, 0.0f, cos * f4, 0.0f,
-            0.0f, 1.0f, sin * f3, 0.0f,
+            1.0f, 0.0f, cos * tx, 0.0f,
+            0.0f, 1.0f, sin * ty, 0.0f,
             0.0f, 0.0f,     0.0f, 0.0f
             // clang-format on
         );

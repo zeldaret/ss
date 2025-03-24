@@ -39,7 +39,56 @@ PostEffectMaskDOF::PostEffectMaskDOF()
     field_0x00 = 0;
 }
 
-void PostEffectMaskDOF::setUpGradation() {}
+void PostEffectMaskDOF::setUpGradation() {
+    for (int i = 0; i < 3; i++) {
+        const u16 width = mpCpuTexArr[i]->getWidth();
+        const int mid = width / 2;
+        for (u16 x = 0; x < mid; x++) {
+            f32 val = 1.f - (f32)x / (mid - 1);
+
+            switch (i) {
+                case 1: val *= val; break;
+                case 2:
+                    val *= val;
+                    val *= val;
+                    break;
+            }
+
+            GXColor clr1, clr2;
+            lerpColor(clr1, getCenterColor(), getNearColor(), val);
+            lerpColor(clr2, getCenterColor(), getFarColor(), val);
+
+            mpCpuTexArr[i]->setColor(x, 0, clr1);
+            mpCpuTexArr[i]->setColor(x, 1, clr1);
+            mpCpuTexArr[i]->setColor((width - 1) - x, 0, clr2);
+            mpCpuTexArr[i]->setColor((width - 1) - x, 1, clr2);
+        }
+        mpCpuTexArr[i]->flush();
+    }
+
+    const u16 width = mpCpuTex->getWidth() / 2;
+    for (u16 y = 0; y < mpCpuTex->getHeight(); y++) {
+        const f32 fy = ((f32)y / mpCpuTex->getHeight());
+        for (u16 x = 0; x < width; x++) {
+            f32 fx = (f32)x / width;
+            f32 ratio = fx / (1.f - fy);
+
+            if (ratio > 1.f) {
+                ratio = 1.f;
+            } else if (ratio < 0.f) {
+                ratio = 0.f;
+            }
+            ratio *= ratio;
+            ratio *= ratio;
+            GXColor clr1, clr2;
+            lerpColor(clr1, getCenterColor(), getNearColor(), ratio);
+            lerpColor(clr2, getCenterColor(), getFarColor(), ratio);
+            mpCpuTex->setColor((width - 1) - x, y, clr1);
+            mpCpuTex->setColor(width + x, y, clr2);
+        }
+    }
+    mpCpuTex->flush();
+}
 
 void PostEffectMaskDOF::draw(f32 width, f32 height) {
     setMaterialInternal();
