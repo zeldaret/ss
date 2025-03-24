@@ -286,9 +286,9 @@ void LightObject::CopyFromG3D(
             }
         } else {
             // TODO
-            ClearFlag4();
+            ClearFlag2();
             if (optObj != nullptr) {
-                optObj->ClearFlag4();
+                optObj->ClearFlag2();
             }
         }
     }
@@ -367,7 +367,7 @@ bool LightObject::ApplyAnmResultB(const nw4r::g3d::LightAnmResult &res) {
         mShininess = res.shininess;
         return true;
     } else {
-        ClearFlag4();
+        ClearFlag2();
         return false;
     }
 }

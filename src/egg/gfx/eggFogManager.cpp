@@ -6,7 +6,7 @@
 
 namespace EGG {
 
-FogManager::FogManager(u16 num) : mFlag(0), mCount(num), mCount2(num) {
+FogManager::FogManager(const u16 num) : mFlag(0), mCount(num), mCount2(num) {
     mpFog = new Fog[num];
 }
 

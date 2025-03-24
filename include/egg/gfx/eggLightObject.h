@@ -7,12 +7,32 @@
 #include "nw4r/math/math_types.h"
 #include "rvl/GX/GXLight.h"
 #include "rvl/GX/GXTypes.h"
+#include "rvl/MTX/mtx.h"
 
 namespace EGG {
 
 class LightObject : public IBinary<LightObject> {
 public:
-    struct BinData {};
+    struct BinData {
+        /* 0x00 */ u8 mSpotFn;
+        /* 0x01 */ u8 mDistAttnFn;
+        /* 0x02 */ u8 field_0x02;
+        /* 0x03 */ u8 field_0x03;
+        /* 0x04 */ u16 mIndex;
+        /* 0x06 */ u16 mFlags;
+        /* 0x08 */ Vec mPos;
+        /* 0x14 */ Vec mAt;
+        /* 0x20 */ f32 field_0x20;
+        /* 0x24 */ GXColor mWhite;
+        /* 0x28 */ GXColor mBlack;
+        /* 0x2C */ f32 field_0x2C;
+        /* 0x30 */ f32 field_0x30;
+        /* 0x34 */ f32 field_0x34;
+        /* 0x38 */ f32 field_0x38;
+        /* 0x3C */ u16 field_0x3C;
+        /* 0x3E */ u16 field_0x3E;
+    };
+
     LightObject();
     virtual ~LightObject() {}
 
@@ -66,8 +86,32 @@ public:
         field_0xA0 = 0;
     }
 
-    void ClearFlag4() {
+    void ClearFlag2() {
         mFlags = mFlags & 0xFFFE;
+    }
+
+    bool CheckFlag1() const {
+        return (mFlags & 1) != 0;
+    }
+
+    void SetOtherFlag1() {
+        field_0xA0 |= 1;
+    }
+
+    void ClearOtherFlag1() {
+        field_0xA0 = field_0xA0 & ~1;
+    }
+
+    bool CheckFlag2() const {
+        return (mFlags & 2) != 0;
+    }
+
+    u16 GetField0x06() const {
+        return field_0x06;
+    }
+
+    void UpdatePosAt(LightObject &other) {
+        SetPosAt(other.mPos, other.mAt);
     }
 
 private:

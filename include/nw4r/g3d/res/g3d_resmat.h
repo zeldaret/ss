@@ -501,7 +501,7 @@ public:
             return NW4R_G3D_OFS_TO_RESNAME(&r, r.nameTex).GetName();
         }
 
-        return nullptr;
+        return NULL;
     }
 
     bool IsCIFmt() const {
