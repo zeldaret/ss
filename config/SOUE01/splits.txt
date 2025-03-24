@@ -2347,6 +2347,7 @@ egg/gfx/eggStateEfb.cpp:
 	.text       start:0x804B3DA0 end:0x804B460C
 	.sdata      start:0x80574F60 end:0x80574F68
 	.sbss       start:0x80576898 end:0x805768A0
+	.sdata2     start:0x8057F868 end:0x8057F890
 	.bss        start:0x80675010 end:0x806750A0
 
 egg/gfx/eggStateGX.cpp:

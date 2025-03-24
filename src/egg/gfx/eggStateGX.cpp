@@ -34,7 +34,7 @@ static const f32 identity[3][4] = {
 
 namespace EGG {
 
-GXTexObj StateGX::sDefaultTexObj;
+GXTexObj ALIGN_DECL(32) StateGX::sDefaultTexObj;
 StateGX::MemLayout StateGX::s_tmem_layout;
 StateGX::CacheGX StateGX::s_cacheGX;
 

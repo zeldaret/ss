@@ -89,7 +89,7 @@ public:
     static CacheGX &GXSetDstAlpha_(bool, u8);
     static void GXSetProjection_(Mtx44, GXProjectionType);
     static void GXSetProjectionv_(const f32 *);
-    static void GXSetViewport_(f32, f32, f32, f32, f32, f32);
+    static void GXSetViewport_(f32 ox, f32 oy, f32 sx, f32 sy, f32 near, f32 far);
     static void GXSetScissor_(u32, u32, u32, u32);
     static void GXSetScissorBoxOffset_(s32, s32);
 
