@@ -51,12 +51,7 @@ TextureBuffer *StateEfb::captureEfb(BufferType type, bool noTransparencyMaybe, u
         switch (type) {
             case BUFFER_0:
             case BUFFER_1: {
-                f32 arg;
-                if (type == BUFFER_0) {
-                    arg = 0.25f;
-                } else {
-                    arg = 0.5f;
-                }
+                f32 arg = type == BUFFER_0 ? 0.25f : 0.5f;
 
                 sWorkSpaceV[2] = efb.vp.x2 * arg;
                 sWorkSpaceV[3] = efb.vp.y2 * arg;

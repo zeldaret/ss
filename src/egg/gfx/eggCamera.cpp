@@ -26,8 +26,6 @@ Matrix34f &LookAtCamera::getViewMatrixOld() {
 }
 
 void LookAtCamera::doUpdateMatrix() {
-    // NONMATCHING
-
     mOtherMtx = mViewMtx;
 
     Vector3f right(mPos);
@@ -43,6 +41,8 @@ void LookAtCamera::doUpdateMatrix() {
     f32 tx = -forward.dot(mPos);
     f32 ty = -up.dot(mPos);
     f32 tz = -right.dot(mPos);
+
+    f32 t[] = { tx, ty, tz};
 
     mViewMtx(0, 0) = forward(0);
     mViewMtx(0, 1) = forward(1);

@@ -865,7 +865,7 @@ config.libs = [
     EGGLib(
         "gfx",
         [
-            Object(NonMatching, "egg/gfx/eggCamera.cpp"),
+            Object(Matching, "egg/gfx/eggCamera.cpp"),
             Object(Matching, "egg/gfx/eggPalette.cpp"),
             Object(Matching, "egg/gfx/eggTexture.cpp"),
             Object(NonMatching, "egg/gfx/eggUnk1.cpp"),  # Unknown
