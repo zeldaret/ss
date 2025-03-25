@@ -24,8 +24,8 @@ public:
         CANVASMODE_0,
         CANVASMODE_1,
     };
-
-protected:
+    
+    protected:
     ProjectionType mProjType; // at 0x0
     CanvasMode mCanvasMode;   // at 0x4
     nw4r::math::VEC2 mSize;   // at 0x8

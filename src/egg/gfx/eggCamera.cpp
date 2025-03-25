@@ -78,14 +78,13 @@ OrthoCamera::OrthoCamera() {
 }
 
 void OrthoCamera::update_parms() {
-    // NONMATCHING
     f32 z = field_0x8C;
     f32 sin = field_0x88.sin();
     f32 cos = field_0x88.cos();
 
-    mPos(2) = z;
     mPos(1) = mAt(1);
     mPos(0) = mAt(0);
+    mPos(2) = z;
     mUp(2) = 0.f;
     mUp(1) = cos;
     mUp(0) = sin;

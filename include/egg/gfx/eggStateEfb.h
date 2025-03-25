@@ -30,9 +30,18 @@ class StateEfb {
     static s32 sPushCount;
     static u32 sFlag;
 
+    static f32 *fn_804B4550();
+    static bool GetShouldCapture();
+    static bool GetUseTfRgb565();
+
 public:
     static void Clean();
+    static TextureBuffer *captureEfb(BufferType type, bool, u32 userData);
     static bool releaseEfb(BufferType type, u32 userData);
+
+    // Unknown names
+    static void fn_804B4270(BufferType type, u32 userData);
+    static void fn_804B4310(BufferType type, u32 userData);
 };
 
 } // namespace EGG

@@ -31,10 +31,10 @@ public:
         sDrawFlag &= ~flag;
     }
 
+    static Screen const *spScreen;
 private:
     static u16 sCameraId;
     static u32 sDrawFlag;
-    static Screen const *spScreen;
 
     // unknown
     static nw4r::math::MTX34 sMtx;
