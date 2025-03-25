@@ -38,6 +38,10 @@ public:
         mClearColor = clr;
     }
 
+    void setCopyFilter(const CopyFilter &filt) {
+        mCopyFilterArg = filt;
+    }
+
 private:
     /* 0x18 */ u8 mCapFlags;
     /* 0x19 */ GXColor mClearColor;

@@ -68,6 +68,10 @@ public:
     u16 getHeight() const {
         return mHeight;
     }
+    // Needed for PostEffectMaskDOF::setUpGradation
+    u16 getHeight2() {
+        return mHeight;
+    }
     void setHeight(u16 h) {
         mHeight = h;
     }

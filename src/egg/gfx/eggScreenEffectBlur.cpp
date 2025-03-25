@@ -1,6 +1,7 @@
 #include "egg/gfx/eggScreenEffectBlur.h"
 
 #include "common.h"
+#include "egg/gfx/eggCpuTexture.h"
 #include "egg/gfx/eggDrawGX.h"
 #include "egg/gfx/eggPostEffectBase.h"
 #include "egg/gfx/eggPostEffectBlur.h" // IWYU pragma: keep
@@ -11,6 +12,8 @@
 #include "rvl/GX/GXTev.h"
 #include "rvl/GX/GXTypes.h"
 #include "rvl/MTX/mtx.h"
+
+#include <cstddef>
 
 namespace EGG {
 
@@ -41,9 +44,66 @@ ScreenEffectBlur::~ScreenEffectBlur() {
     delete mpUnk2;
     delete mpBlur;
 }
-
+static const CopyFilter copyFilter = {
+    {0x15, 0, 0, 0x16, 0, 0x15, 0}
+};
 void ScreenEffectBlur::fn_804B32B0() {
-    // Oh god
+    if (mFlag & 1) {
+        StateGX::invalidateTexAllGX();
+        PostEffectBase::setProjection(GetScreen());
+        const Screen::DataEfb &efb = GetScreen().GetDataEfb();
+        u16 x1 = efb.vp.x1;
+        u16 y1 = efb.vp.y1;
+        f32 sizeX = (u16)sScreen.GetSize().x * field_0x10;
+        f32 sizeY = (u16)sScreen.GetSize().y * field_0x10;
+        u16 x2 = efb.vp.x2 * field_0x10;
+        u16 y2 = efb.vp.y2 * field_0x10;
+
+        StateGX::ScopedColor _clr(true);
+        StateGX::ScopedAlpha _alpha(false);
+        StateGX::ScopedDither _dither(false);
+        TextureBuffer *pTex0 = NULL;
+        if (field_0x0C & 1) {
+            pTex0 = TextureBuffer::alloc(x2, y2, GX_TF_RGBA8);
+            pTex0->capture(x1, y1, 0, GX_TF_RGBA8);
+        }
+        TextureBuffer *pTex1 = TextureBuffer::alloc(x2, y2, GX_TF_IA8);
+        pTex1->setMinFilt(GX_NEAR);
+        pTex1->setMagFilt(GX_NEAR);
+        pTex1->capture(x1, y1, false, GX_TF_Z16);
+
+        // . . .
+        if (field_0x0C & 2) {
+            TextureBuffer *pTex2 = TextureBuffer::alloc(x2, y2, GX_TF_RGBA8);
+            pTex2->onCapFlag(0x8);
+            pTex2->setCopyFilter(copyFilter);
+            pTex2->capture(x1, y1, false, GX_CTF_R8);
+            u8 val = field_0x18 * 255.f;
+            GXColor clr = {val, val, val, val};
+            mpBlur->setStage0Color(clr);
+            mpBlur->setStage0F(field_0x1C);
+            mpBlur->mTex1 = (PostEffectBase::CapTextureWrapper){pTex2, GX_TEXMAP1};
+            mpBlur->draw(sizeX * 1.0f, sizeY * 1.0f);
+            pTex2->free();
+        }
+        // . . .
+
+        mpCpuTexture = TextureBuffer::alloc(x2, y2, GX_TF_I8);
+        mpCpuTexture->onCapFlag(0x8);
+        mpCpuTexture->setCopyFilter(copyFilter);
+        mpCpuTexture->capture(x1, y1, false, GX_CTF_R8);
+        pTex1->free();
+
+        if (field_0x0C & 1) {
+            nw4r::math::MTX34 m;
+            PSMTXScale(m, sizeY, sizeY, 1.f);
+            pTex0->load(GX_TEXMAP0);
+            DrawGX::BeginDrawScreen(true, true, false);
+            DrawGX::SetBlendMode(DrawGX::BLEND_14);
+            DrawGX::DrawDL16(m, DrawGX::WHITE);
+            pTex0->free();
+        }
+    }
 }
 
 void ScreenEffectBlur::fn_804B3710() {

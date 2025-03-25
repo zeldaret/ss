@@ -27,7 +27,7 @@ public:
         return mRotation;
     }
 
-protected:
+public:
     u32 field_0x00;               // at 0x0
     CapTextureWrapper mTex1;      // at 0x4
     CapTextureWrapper mTex2;      // at 0xC

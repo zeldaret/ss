@@ -68,10 +68,11 @@ void PostEffectMaskDOF::setUpGradation() {
 
     const u16 width = mpCpuTex->getWidth() / 2;
     for (u16 y = 0; y < mpCpuTex->getHeight(); y++) {
-        const f32 fy = ((f32)y / mpCpuTex->getHeight());
+        f32 fy = (f32)y / mpCpuTex->getHeight2();
         for (u16 x = 0; x < width; x++) {
-            f32 fx = (f32)x / width;
-            f32 ratio = fx / (1.f - fy);
+            // Don't even have to use this one!
+            (void)(f32)width;
+            f32 ratio = ((f32)x / width) / (1.f - fy);
 
             if (ratio > 1.f) {
                 ratio = 1.f;
