@@ -2,9 +2,12 @@
 #define EGG_LIGHT_TEXTURE_H
 
 #include "common.h"
+#include "egg/egg_types.h"
 #include "egg/gfx/eggCapTexture.h"
+#include "egg/gfx/eggTexture.h"
 #include "egg/math/eggVector.h"
 #include "egg/prim/eggBinary.h"
+#include "rvl/GX/GXTypes.h"
 
 namespace EGG {
 
@@ -49,6 +52,13 @@ public:
     virtual size_t GetBinarySize() const override;
 
     static void initialize(u16 textureSize, Heap *pHeap);
+    static void loadTextureFromResTimg(int index, EGG::ResTIMG *img);
+    static void initDrawSetting(u16, u16, u16, u16);
+    void addLight(const EGG::LightObject&);
+
+    void draw(int);
+    void beginDebugDraw();
+    void debugDraw(int);
 
     const char *getName() const {
         return mName1;
@@ -58,7 +68,12 @@ public:
         return mpFloatData[idx];
     }
 
+
 private:
+
+    static void fn_804AB270();
+    static void fn_804AC0A0(int, int*, int*);
+    static void loadTextureData(int index, void *data, GXTexFmt fmt);
 
     u8 getByte1(u16 idx) const {
         return mpByteData1[idx];
@@ -66,6 +81,11 @@ private:
 
     u8 getByte2(u16 idx) const {
         return mpByteData2[idx];
+    }
+
+    // TODO enum
+    int GetLightType() const {
+        return mLightType;
     }
 
     /* 0x30 */ const LightTextureManager *mpMgr;
@@ -76,15 +96,27 @@ private:
     /* 0x38 */ Vector3f field_0x38;
     /* 0x44 */ f32 *mpFloatData;
     /* 0x48 */ char *mpByteData1;
-    /* 0x4C */ char *mpByteData2;
+    /* 0x4C */ u8 *mpByteData2;
     /* 0x50 */ f32 field_0x50;
     /* 0x54 */ char mName1[0x20];
     /* 0x74 */ char mName2[0x20];
     /* 0x94 */ u16 field_0x94;
     /* 0x98 */ f32 field_0x98;
     /* 0x9C */ u8 field_0x9C;
+    /* 0x9D */ u8 field_0x9D;
+    /* 0x9E */ u8 field_0x9E;
+    /* 0x9F */ u8 field_0x9F;
 
     static u16 sTextureSize;
+    
+    static u16 sDrawWidth;
+    static u16 sDrawHeight;
+    static u16 sDrawPosX;
+    static u16 sDrawPosY;
+    static u16 sTexWidth;
+    static u16 sTexHeight;
+    static u16 sDrawNumX;
+    static u16 sDrawNumY;
     static CpuTexture *spNormalEnvironment;
 };
 

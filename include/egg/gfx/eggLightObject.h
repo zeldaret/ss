@@ -62,6 +62,10 @@ public:
     void SetPosAt(nw4r::math::VEC3 const &, nw4r::math::VEC3 const &);
     void SetDist(f32);
 
+    f32 getField0x30() const {
+        return field_0x30;
+    }
+
     int getField0x3C() const {
         return field_0x3C;
     }
@@ -106,13 +110,26 @@ public:
         return (mFlags & 2) != 0;
     }
 
+    bool CheckFlag0x20() const {
+        return (mFlags & 0x20) != 0;
+    }
+
     u16 GetField0x06() const {
         return field_0x06;
+    }
+
+    u16 GetIndex() const {
+        return mIndex;
     }
 
     void UpdatePosAt(LightObject &other) {
         SetPosAt(other.mPos, other.mAt);
     }
+    
+    const GXColor &GetBlack() const {
+        return mBlack;
+    }
+
 
 private:
     /* 0x04 */ u16 mIndex;

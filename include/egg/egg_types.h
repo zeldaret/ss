@@ -25,7 +25,7 @@ class GXUtility;
 class IDrawGX;
 class IScnProc;
 class IScnProcModel;
-class LightObj;
+class LightObject;
 class LightManager;
 class LightTexture;
 class LightTextureManager;
