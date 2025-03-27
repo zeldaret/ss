@@ -13,12 +13,18 @@ public:
         return sAllocator;
     }
 
-    static u16 SetTexture(
-        nw4r::g3d::ResMat resMat, nw4r::g3d::ScnMdl::CopiedMatAccess param_2, char *name, GXTexObj *texObj, bool copy,
-        void *param_6, int param_7, int param_8
+    struct SetTextureResult {
+        /* 0x00 */ u8 _0x00[2];
+        /* 0x02 */ s8 texMapId;
+        /* 0x03 */ s8 texCoordId;
+    };
+
+    static u32 SetTexture(
+        nw4r::g3d::ResMat resMat, nw4r::g3d::ScnMdl::CopiedMatAccess *param_2, const char *name, GXTexObj *texObj, bool copy,
+        SetTextureResult *pResult, int param_7, int param_8
     );
 
-    static void setUpLightSet(nw4r::g3d::LightSetting&, nw4r::g3d::ResAnmScn, int);
+    static void setUpLightSet(nw4r::g3d::LightSetting &, nw4r::g3d::ResAnmScn, int);
 
 private:
     static MEMAllocator *sAllocator;

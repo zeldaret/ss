@@ -2,9 +2,10 @@
 #define EGG_LIGHT_TEXTURE_MGR_H
 
 #include "common.h"
-#include "egg/gfx/eggLightTexture.h"
 #include "egg/gfx/eggLightManager.h"
+#include "egg/gfx/eggLightTexture.h"
 #include "egg/prim/eggBinary.h"
+#include "nw4r/g3d/res/g3d_resmat.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 
 namespace EGG {
@@ -30,9 +31,10 @@ public:
     bool deleteTexture(int idx);
 
     int replaceModelTextures(nw4r::g3d::ResMdl) const;
-    int replaceModelTexture(u16, nw4r::g3d::ResMdl) const;
+    int replaceModelTexture(int, nw4r::g3d::ResMdl) const;
     void drawAndCaptureTexture(f32, f32, f32, f32);
     void frameReset();
+    void correctLightObject();
 
     // Inofficial
     static const void *getLtexFromLmap(const void *lmap, u16 index);
@@ -64,23 +66,26 @@ public:
         return mpObjects[i];
     }
 
-    LightObject *GetLightObject(u16 i) {
+    const LightObject *GetLightObject(u16 i) {
         return mpObjects[i];
     }
 
-    
 private:
-
+    static void fn_804AE340(nw4r::g3d::ResMat, GXTexCoordID);
     int getTextureIndex(const char *name) const;
 
-    /* 0x04 */ u8 field_0x04;
+    bool getSomeTfRelatedBool() const {
+        return (mFlags >> 5) & 1;
+    }
+
+    /* 0x04 */ u8 mFlags;
     /* 0x06 */ u16 mTextureCount;
     /* 0x08 */ LightTexture **mpTextures;
     /* 0x0C */ const LightManager *mpLightMgr;
     /* 0x10 */ u32 field_0x10;
     /* 0x14 */ u16 mMaxNumTextures;
     /* 0x16 */ u8 field_0x16;
-    /* 0x18 */ LightObject **mpObjects;
+    /* 0x18 */ const LightObject **mpObjects;
 };
 
 } // namespace EGG

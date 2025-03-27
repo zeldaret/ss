@@ -58,7 +58,7 @@ public:
 
     void fn_804AC0E0(int, const GXColor&, bool);
     void draw(int);
-    void beginDebugDraw();
+    static void beginDebugDraw();
     void debugDraw(int);
 
     const char *getName() const {
@@ -69,6 +69,7 @@ public:
         return mpFloatData[idx];
     }
 
+    static void getTexDimensions(u16*, u16*, u16*, u16*, u16);
 
 private:
 
@@ -77,7 +78,6 @@ private:
     static void fn_804AB440();
     static void fn_804AB600();
 
-    static void getTexDimensions(u16*, u16*, u16*, u16*, u16);
     static void fn_804AC0A0(int, int*, int*);
     static void loadTextureData(int index, void *data, GXTexFmt fmt);
 

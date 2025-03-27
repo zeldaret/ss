@@ -85,11 +85,11 @@ public:
         return num < 8 ? num : 8;
     }
 
-    const LightObject *GetLightObject(int i) const {
+    const LightObject *GetLightObject(u16 i) const {
         return &mpLightData[i].mLightObject;
     }
 
-    LightObject *GetLightObject(int i) {
+    LightObject *GetLightObject(u16 i) {
         return &mpLightData[i].mLightObject;
     }
 
@@ -97,6 +97,15 @@ public:
         return &mpAmbientObjects[i];
     }
 
+    u8 GetNumLightData() const {
+        return mCounts.mNumEggLightObjects;
+    }
+    
+    u8 GetField0x1D() const {
+        return field_0x1D;
+    }
+
+private:
     /* 0x04 */ Counts mCounts;
     /* 0x06 */ Counts mSavedCounts;
     /* 0x08 */ LightData *mpLightData;
