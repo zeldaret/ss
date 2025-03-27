@@ -54,7 +54,7 @@ AnalizeDL::Status AnalizeDL::step() {
             case 0x98:
             case 0x80:
                 field_0x1C8 = command;
-                field_0x1CA = *reinterpret_cast<const u16*>(pCommand + 1);
+                field_0x1CA = *reinterpret_cast<const u16 *>(pCommand + 1);
                 field_0x1CC = field_0x1CA;
                 mStatus = STATUS_3;
                 mCursor += 3;
@@ -83,13 +83,15 @@ AnalizeDL::Status AnalizeDL::step() {
                 mVtxResult.field_0x04 = *reinterpret_cast<const u16 *>(pCommand);
             }
 
-            GXCompType compType = mAttrFmtList[0].compType;
+            int val;
             u8 shift = mAttrFmtList[0].shift;
-            // REGSWAP
-            const void *pData = reinterpret_cast<const u8 *>(mpArr) + (mArrStride * mVtxResult.field_0x04);
-            switch (compType) {
+
+            const u8 *pData = static_cast<const u8 *>(mpArr);
+            pData += mArrStride * mVtxResult.field_0x04;
+
+            switch (mAttrFmtList[0].compType) {
                 case GX_U8: {
-                    int val = 1 << shift;
+                    val = 1 << shift;
                     const u8 *dat = reinterpret_cast<const u8 *>(pData);
                     mVtxResult.field_0x08.x = dat[0] / (f32)val;
                     mVtxResult.field_0x08.y = dat[1] / (f32)val;
@@ -97,7 +99,7 @@ AnalizeDL::Status AnalizeDL::step() {
                     break;
                 }
                 case GX_S8: {
-                    int val = 1 << shift;
+                    val = 1 << shift;
                     const s8 *dat = reinterpret_cast<const s8 *>(pData);
                     mVtxResult.field_0x08.x = dat[0] / (f32)val;
                     mVtxResult.field_0x08.y = dat[1] / (f32)val;
@@ -105,7 +107,7 @@ AnalizeDL::Status AnalizeDL::step() {
                     break;
                 }
                 case GX_U16: {
-                    int val = 1 << shift;
+                    val = 1 << shift;
                     const u16 *dat = reinterpret_cast<const u16 *>(pData);
                     mVtxResult.field_0x08.x = dat[0] / (f32)val;
                     mVtxResult.field_0x08.y = dat[1] / (f32)val;
@@ -113,7 +115,7 @@ AnalizeDL::Status AnalizeDL::step() {
                     break;
                 }
                 case GX_S16: {
-                    int val = 1 << shift;
+                    val = 1 << shift;
                     const s16 *dat = reinterpret_cast<const s16 *>(pData);
                     mVtxResult.field_0x08.x = dat[0] / (f32)val;
                     mVtxResult.field_0x08.y = dat[1] / (f32)val;
