@@ -72,7 +72,7 @@ void ModelEx::getShapeMinMax(u16 shapeIndex, math::VEC3 *pMin, math::VEC3 *pMax,
 
             bool firstIteration = true;
             AnalizeDL::Status status;
-            while ((status = analyze.step()) != AnalizeDL::STATUS_ERROR) {
+            while ((status = analyze.step()) != AnalizeDL::STATUS_END) {
                 if (status != AnalizeDL::STATUS_VTX) {
                     continue;
                 }
