@@ -27,13 +27,13 @@ class LightManager : public IBinary<LightManager> {
         };
     };
 
+public:
     struct AmbientObject {
         /* 0x00 */ nw4r::g3d::AmbLightObj mLightObj;
         /* 0x04 */ const char *mLightName;
         /* 0x08 */ u8 field_0x08;
     };
 
-public:
     struct BinAmbient {
         /* 0x00 */ u8 field_0x00;
         /* 0x01 */ u8 field_0x01;
@@ -91,6 +91,10 @@ public:
 
     LightObject *GetLightObject(int i) {
         return &mpLightData[i].mLightObject;
+    }
+
+    const AmbientObject *GetAmbientObject(int i) const {
+        return &mpAmbientObjects[i];
     }
 
     /* 0x04 */ Counts mCounts;

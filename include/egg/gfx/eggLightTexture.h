@@ -56,6 +56,7 @@ public:
     static void initDrawSetting(u16, u16, u16, u16);
     void addLight(const EGG::LightObject&);
 
+    void fn_804AC0E0(int, const GXColor&, bool);
     void draw(int);
     void beginDebugDraw();
     void debugDraw(int);
@@ -72,6 +73,11 @@ public:
 private:
 
     static void fn_804AB270();
+    static void fn_804AB310(const GXColor &color);
+    static void fn_804AB440();
+    static void fn_804AB600();
+
+    static void getTexDimensions(u16*, u16*, u16*, u16*, u16);
     static void fn_804AC0A0(int, int*, int*);
     static void loadTextureData(int index, void *data, GXTexFmt fmt);
 
@@ -118,6 +124,9 @@ private:
     static u16 sDrawNumX;
     static u16 sDrawNumY;
     static CpuTexture *spNormalEnvironment;
+
+    // unsure
+    static bool sUseDebug;
 };
 
 } // namespace EGG

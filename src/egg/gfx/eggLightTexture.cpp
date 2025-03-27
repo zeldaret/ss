@@ -8,6 +8,7 @@
 #include "egg/gfx/eggLightObject.h"
 #include "egg/gfx/eggLightTextureMgr.h"
 #include "egg/gfx/eggStateGX.h"
+#include "nw4r/g3d/g3d_light.h"
 #include "nw4r/math/math_types.h"
 #include "rvl/GX/GXBump.h"
 #include "rvl/GX/GXGeometry.h"
@@ -25,12 +26,21 @@ namespace EGG {
 #define NUM_CPU_TEX 18
 
 static CpuTexture *sCpuTexArray[NUM_CPU_TEX];
-static const int sCpuTexGradientOp[NUM_CPU_TEX] = {0, 0, 0, 1, 2, 3, 4, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0};
 
-static nw4r::math::MTX34 sMtx(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+u16 LightTexture::sDrawWidth;
+u16 LightTexture::sDrawHeight;
+u16 LightTexture::sDrawPosX;
+u16 LightTexture::sDrawPosY;
+u16 LightTexture::sTexWidth;
+u16 LightTexture::sTexHeight;
+u16 LightTexture::sDrawNumX;
+u16 LightTexture::sDrawNumY;
+
+CpuTexture *LightTexture::spNormalEnvironment;
+
+bool LightTexture::sUseDebug;
 
 u16 LightTexture::sTextureSize = 0x20;
-CpuTexture *LightTexture::spNormalEnvironment;
 
 static s8 lbl_80574F3A = 0xFE;
 
@@ -44,7 +54,94 @@ int IBinary<LightTexture>::GetVersion() {
     return 3;
 }
 
+void LightTexture::fn_804AB270() {
+    GXSetNumChans(1);
+    GXSetCullMode(GX_CULL_BACK);
+    GXSetChanCtrl(GX_COLOR0A0, false, GX_SRC_VTX, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_SIGN, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR1A1, false, GX_SRC_VTX, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+    GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
+    GXSetZMode(false, GX_LEQUAL, false);
+    EGG::DrawGX::SetBlendMode(DrawGX::BLEND_14);
+}
+
+void LightTexture::fn_804AB310(const GXColor &color) {
+    GXSetNumTexGens(0);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3c, 0, 0x7d);
+    GXSetNumIndStages(0);
+    GXSetNumTevStages(1);
+    GXSetTevDirect(GX_TEVSTAGE0);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR_NULL);
+    GXSetTevKColor(GX_KCOLOR0, color);
+    GXSetTevKColorSel(GX_TEVSTAGE0, GX_TEV_KCSEL_K0);
+    GXSetTevKAlphaSel(GX_TEVSTAGE0, GX_TEV_KASEL_1);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_KONST);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    EGG::DrawGX::SetBlendMode(DrawGX::BLEND_14);
+}
+
+static const GXTevColorArg sTevkColorArg[3] = {GX_CC_C0, GX_CC_C1, GX_CC_C2};
+static const GXTevKColorSel sTevkColorSel[3] = {GX_TEV_KCSEL_K0, GX_TEV_KCSEL_K1, GX_TEV_KCSEL_K2};
+static const GXIndTexMtxID sIndTexMtxId[3] = {GX_ITM_0, GX_ITM_1, GX_ITM_2};
+
+void LightTexture::fn_804AB440() {
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3c, 0, 0x7d);
+    GXSetNumIndStages(1);
+    GXSetIndTexOrder(GX_INDTEXSTAGE0, GX_TEXCOORD0, GX_TEXMAP0);
+    GXSetIndTexCoordScale(GX_INDTEXSTAGE0, GX_ITS_1, GX_ITS_1);
+    GXSetNumTevStages(3);
+    GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
+
+    for (int i = 0; i < 3; i++) {
+        GXTevStageID id = static_cast<GXTevStageID>(GX_TEVSTAGE0 + i);
+        GXTevColorArg tevColorArg = id == GX_TEVSTAGE0 ? GX_CC_ZERO : GX_CC_CPREV;
+
+        GXSetTevSwapMode(id, GX_TEV_SWAP0, GX_TEV_SWAP0);
+        GXSetTevOrder(id, GX_TEXCOORD_NULL, static_cast<GXTexMapID>(GX_TEXMAP1 + i), GX_COLOR_NULL);
+        GXSetTevKColorSel(id, sTevkColorSel[i]);
+        GXSetTevKAlphaSel(id, GX_TEV_KASEL_1);
+        GXSetTevColorIn(id, GX_CC_KONST, sTevkColorArg[i], GX_CC_TEXC, tevColorArg);
+        GXSetTevColorOp(id, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevAlphaIn(id, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
+        GXSetTevAlphaOp(id, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetTevIndirect(
+            id, GX_INDTEXSTAGE0, GX_ITF_8, GX_ITB_STU, sIndTexMtxId[i], GX_ITW_0, GX_ITW_0, false, false, GX_ITBA_OFF
+        );
+    }
+    EGG::DrawGX::SetBlendMode(DrawGX::BLEND_2);
+}
+
+void LightTexture::fn_804AB600() {
+    GXSetNumTexGens(2);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3c, 0, 0x7d);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX0, 0x1e, 0, 0x7d);
+    GXSetNumIndStages(0);
+    GXSetNumTevStages(2);
+    GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
+    for (int i = 0; i < 2; i++) {
+        GXTevStageID id = static_cast<GXTevStageID>(GX_TEVSTAGE0 + i);
+        GXTevColorArg tevColorArg = id == GX_TEVSTAGE0 ? GX_CC_ZERO : GX_CC_CPREV;
+
+        GXSetTevOrder(
+            id, static_cast<GXTexCoordID>(GX_TEXCOORD0 + i), static_cast<GXTexMapID>(GX_TEXMAP0 + i), GX_COLOR_NULL
+        );
+        GXSetTevKColorSel(id, sTevkColorSel[i]);
+        GXSetTevKAlphaSel(id, GX_TEV_KASEL_1);
+        GXSetTevColorIn(id, GX_CC_KONST, sTevkColorArg[i], GX_CC_TEXC, tevColorArg);
+        GXSetTevColorOp(id, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+        GXSetTevAlphaIn(id, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_KONST);
+        GXSetTevAlphaOp(id, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+        GXSetTevDirect(id);
+    }
+    EGG::DrawGX::SetBlendMode(DrawGX::BLEND_2);
+}
+
 void LightTexture::initialize(u16 textureSize, Heap *pHeap) {
+    static const int sCpuTexGradientOp[NUM_CPU_TEX] = {0, 0, 0, 1, 2, 3, 4, 0, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0};
+
     if (pHeap == nullptr) {
         pHeap = Heap::getCurrentHeap();
     }
@@ -145,11 +242,9 @@ LightTexture::~LightTexture() {
     delete[] mpByteData2;
 }
 
-extern "C" bool lbl_8057685C;
-
 void LightTexture::configure() {
     CapTexture::configure();
-    if (lbl_8057685C) {
+    if (sUseDebug) {
         allocWithHeaderDebug(nullptr);
     } else {
         allocate(nullptr);
@@ -179,7 +274,7 @@ void LightTexture::loadTextureFromResTimg(int index, EGG::ResTIMG *img) {
 }
 
 void LightTexture::initDrawSetting(u16 u1, u16 u2, u16 u3, u16 u4) {
-    static const u8 sVtxBuf[] = {0, 0, 0, 1, 1, 1, 1, 0};
+    static const u8 ALIGN_DECL(32) sVtxBuf[] = {0, 0, 0, 1, 1, 1, 1, 0};
 
     nw4r::math::MTX44 mtx;
     C_MTXOrtho(mtx, u4, 0.0f, 0.0f, u3, 0.0f, 1.0f);
@@ -208,7 +303,193 @@ void LightTexture::initDrawSetting(u16 u1, u16 u2, u16 u3, u16 u4) {
     GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
 }
 
-void LightTexture::draw(int i) {}
+void LightTexture::getTexDimensions(u16 *x, u16 *y, u16 *w, u16 *h, u16 count) {
+    *x = sDrawPosX;
+    *y = sDrawPosY;
+
+    u16 s1 = count / (sDrawNumX + 1);
+    u16 wp = (count - s1 * sDrawNumX);
+    *w = wp * sTexWidth;
+    *h = (s1 + 1) * sTexHeight;
+}
+
+void LightTexture::fn_804AC0A0(int i, int *x, int *y) {
+    *y = i / sDrawNumX;
+    *x = sTexWidth * (i % sDrawNumX);
+    *y *= sTexHeight;
+}
+
+static const nw4r::math::MTX34 sIdentityMtx(1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+
+void LightTexture::fn_804AC0E0(int i, const GXColor &color, bool b) {
+    field_0x9F = 0;
+    field_0x9C = 1;
+    int w, h;
+    fn_804AC0A0(i, &w, &h);
+
+    nw4r::math::MTX34 mtx = sIdentityMtx;
+    mtx._00 *= sTexWidth;
+    mtx._11 *= sTexHeight;
+    mtx._03 = w;
+    mtx._13 = sDrawHeight - (h + sTexHeight);
+
+    GXLoadPosMtxImm(mtx, 0);
+    GXLoadTexMtxImm(sIdentityMtx, 0x1E, GX_MTX_2x4);
+
+    GXColor c;
+    if ((field_0x36 & 1) != 0) {
+        const nw4r::g3d::AmbLightObj &obj = mpMgr->GetAmbientObj(field_0x35);
+        c.r = obj.r;
+        c.g = obj.g;
+        c.b = obj.b;
+        c.a = obj.a;
+
+        c.r = c.r * field_0x50;
+        c.g = c.g * field_0x50;
+        c.b = c.b * field_0x50;
+        c.a = 0xFF;
+    } else {
+        c = DrawGX::BLACK;
+    }
+
+    fn_804AB310(c);
+
+    f32 origin = 0.0f;
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+    f32 d = 0.99f;
+
+    GXPosition1x8(0);
+    GXPosition2f32(origin, origin);
+
+    GXPosition1x8(1);
+    GXPosition2f32(origin, origin - d);
+
+    GXPosition1x8(2);
+    GXPosition2f32(d + origin, origin - d);
+
+    GXPosition1x8(3);
+    GXPosition2f32(d + origin, origin);
+
+    switch (mLightType) {
+        case 0:
+        case 2:
+            spNormalEnvironment->load(GX_TEXMAP0);
+            fn_804AB440();
+            field_0x9D = 3;
+            field_0x9E = 1;
+            break;
+
+        case 1:
+            fn_804AB600();
+            field_0x9D = 2;
+            field_0x9E = 0;
+            break;
+    }
+
+    for (int i = 0; i < mpMgr->getMaxNumLightTextures(); i++) {
+        if (mpMgr->GetLightObject(i) == nullptr) {
+            break;
+        }
+        addLight(*mpMgr->GetLightObject(i));
+    }
+
+    int remainder = field_0x9F % field_0x9D;
+    if (remainder > 0) {
+        for (; remainder < field_0x9D; remainder++) {
+            // TODO: color stack slots swapped
+            GXSetTevColor(static_cast<GXTevRegID>(GX_TEVREG0 + remainder), DrawGX::BLACK);
+            GXSetTevKColor(static_cast<GXTevKColorID>(GX_KCOLOR0 + remainder), DrawGX::BLACK);
+        }
+
+        f32 origin = GetLightType() != 2 ? 0.0f : 0.5f;
+        GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+        f32 d = 0.99f;
+        GXPosition1x8(0);
+        GXPosition2f32(origin, origin);
+
+        GXPosition1x8(1);
+        GXPosition2f32(origin, origin - d);
+
+        GXPosition1x8(2);
+        GXPosition2f32(d + origin, origin - d);
+
+        GXPosition1x8(3);
+        GXPosition2f32(d + origin, origin);
+    }
+
+    field_0x9C = 2;
+    if (b) {
+        onCapFlag(1);
+        onCapFlag(2);
+        setClearColor(color);
+    } else {
+        offCapFlag(1);
+        offCapFlag(2);
+    }
+    capture(sDrawPosX + w, sDrawPosY + h, false, -1);
+    field_0x9C = 0;
+}
+
+void LightTexture::draw(int i) {
+    if ((field_0x36 & 2) == 0) {
+        return;
+    }
+
+    LightTexture *other = mpMgr->getTextureByName(mName2);
+    if (other == nullptr) {
+        return;
+    }
+    field_0x9F = 0;
+    int w, h;
+    fn_804AC0A0(i, &w, &h);
+    load(GX_TEXMAP0);
+    other->load(GX_TEXMAP1);
+    DrawGX::SetMat_ColorChannel(DrawGX::COLORCHAN_1);
+    DrawGX::SetMat_TexGen(DrawGX::TEXGEN_1);
+    DrawGX::SetMat_Ind();
+    DrawGX::SetMat_PE(DrawGX::ZMODE_0, DrawGX::BLEND_14);
+    GXSetNumTevStages(2);
+    u8 val = field_0x98 * 255.0f;
+    GXSetTevColor(GX_TEVREG0, (GXColor){val, val, val, val});
+    GXSetTevDirect(GX_TEVSTAGE0);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP1, GX_COLOR_NULL);
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ONE, GX_CC_TEXC, GX_CC_C0, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+    GXSetTevDirect(GX_TEVSTAGE1);
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_CPREV, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO, GX_CA_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, true, GX_TEVPREV);
+
+    nw4r::math::MTX34 mtx = sIdentityMtx;
+    mtx._00 *= sTexWidth;
+    mtx._11 *= sTexHeight;
+    mtx._03 = w;
+    mtx._13 = sDrawHeight - (h + sTexHeight);
+
+    GXLoadPosMtxImm(mtx, 0);
+    GXLoadTexMtxImm(sIdentityMtx, 0x1E, GX_MTX_2x4);
+    GXBegin(GX_QUADS, GX_VTXFMT0, 4);
+
+    GXPosition1x8(0);
+    GXPosition2f32(0.0f, 1.0f);
+
+    GXPosition1x8(1);
+    GXPosition2f32(0.0f, 0.0f);
+
+    GXPosition1x8(2);
+    GXPosition2f32(1.0f, 0.0f);
+
+    GXPosition1x8(3);
+    GXPosition2f32(1.0f, 1.0f);
+
+    capture(sDrawPosX + w, sDrawPosY + h, false, -1);
+}
 
 void LightTexture::beginDebugDraw() {
     DrawGX::SetMat_ColorChannel(DrawGX::COLORCHAN_1);
@@ -238,7 +519,7 @@ void LightTexture::debugDraw(int i) {
     mtx._13 = sDrawHeight - (u2 + sTexHeight);
 
     GXLoadPosMtxImm(mtx, 0);
-    GXLoadTexMtxImm(sMtx, 0x1E, GX_MTX_2x4);
+    GXLoadTexMtxImm(sIdentityMtx, 0x1E, GX_MTX_2x4);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
@@ -288,9 +569,7 @@ void LightTexture::addLight(const EGG::LightObject &obj) {
         mtx[1][1] = 0.0f;
         mtx[1][2] = 0.0f;
 
-        static const GXIndTexMtxID sIds[] = {GX_ITM_0, GX_ITM_1, GX_ITM_2};
-
-        GXSetIndTexMtx(sIds[remainder], mtx, -1);
+        GXSetIndTexMtx(sIndTexMtxId[remainder], mtx, -1);
     }
 
     if (remainder == field_0x9D - 1) {

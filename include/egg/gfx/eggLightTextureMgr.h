@@ -1,7 +1,9 @@
 #ifndef EGG_LIGHT_TEXTURE_MGR_H
 #define EGG_LIGHT_TEXTURE_MGR_H
 
+#include "common.h"
 #include "egg/gfx/eggLightTexture.h"
+#include "egg/gfx/eggLightManager.h"
 #include "egg/prim/eggBinary.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 
@@ -45,7 +47,32 @@ public:
         return mTextureCount;
     }
 
+    LightTexture *getTextureByName(const char *name) const {
+        int idx = getTextureIndex(name);
+        if (idx != -1) {
+            return mpTextures[idx];
+        } else {
+            return nullptr;
+        }
+    }
+
+    const nw4r::g3d::AmbLightObj &GetAmbientObj(int idx) const {
+        return mpLightMgr->GetAmbientObject(idx)->mLightObj;
+    }
+
+    const LightObject *GetLightObject(u16 i) const {
+        return mpObjects[i];
+    }
+
+    LightObject *GetLightObject(u16 i) {
+        return mpObjects[i];
+    }
+
+    
 private:
+
+    int getTextureIndex(const char *name) const;
+
     /* 0x04 */ u8 field_0x04;
     /* 0x06 */ u16 mTextureCount;
     /* 0x08 */ LightTexture **mpTextures;
