@@ -2284,6 +2284,7 @@ egg/gfx/eggLightTextureMgr.cpp:
 
 egg/gfx/eggModelEx.cpp:
 	.text       start:0x804AE650 end:0x804AEC20
+	.rodata     start:0x804FBD08 end:0x804FBD50
 	.data       start:0x8056F110 end:0x8056F120
 	.sdata      start:0x80574F48 end:0x80574F60
 

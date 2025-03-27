@@ -40,7 +40,7 @@ public:
     ModelEx(nw4r::g3d::ScnObj *);
     void getShapeMinMax(u16, nw4r::math::VEC3 *, nw4r::math::VEC3 *, bool);
     void calcWorld(nw4r::math::MTX34 *, const nw4r::math::MTX34 *worldMtx) const;
-    nw4r::g3d::ResMdl getResMdl(u16) const;
+    nw4r::g3d::ResMdl getResMdl() const;
     nw4r::g3d::ResShp getResShp(u16) const;
 
     nw4r::g3d::ScnMdl *getScnMdl() const {
