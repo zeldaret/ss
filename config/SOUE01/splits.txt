@@ -2264,6 +2264,7 @@ egg/gfx/eggLightObject.cpp:
 	.text       start:0x804A9810 end:0x804AB24C
 	.rodata     start:0x804FBC88 end:0x804FBC98
 	.data       start:0x8056F098 end:0x8056F0B8
+	.sdata      start:0x80574F30 end:0x80574F38
 	.sdata2     start:0x8057F690 end:0x8057F6C0
 
 egg/gfx/eggLightTexture.cpp:

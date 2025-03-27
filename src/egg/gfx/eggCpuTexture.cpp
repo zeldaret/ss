@@ -290,7 +290,7 @@ void CpuTexture::setColor(u16 x, u16 y, GXColor color) {
         case GX_TF_I8:
         case GX_TF_Z8: {
             // TODO
-            int offset = ((x >> 3) + (y >> 2) * (getWidth() / 8)) * 0x20 + (x & 3) * 8 + (x & 7);
+            int offset = ((x >> 3) + (y >> 2) * (getWidth() / 8)) * 0x20 + (y & 3) * 8 + (x & 7);
             u8 *dat = static_cast<u8 *>(getBuffer()) + offset;
             dat[0] = color.r;
             break;
@@ -325,7 +325,7 @@ GXColor CpuTexture::getColor(u16 x, u16 y) const {
         case GX_TF_I8:
         case GX_TF_Z8: {
             // TODO
-            int offset = ((x >> 3) + (y >> 2) * (getWidth() / 8)) * 0x20 + (x & 3) * 8 + (x & 7);
+            int offset = ((x >> 3) + (y >> 2) * (getWidth() / 8)) * 0x20 + (y & 3) * 8 + (x & 7);
             u8 *dat = static_cast<u8 *>(getBuffer()) + offset;
             c.a = dat[0];
             c.b = dat[0];
