@@ -18,7 +18,7 @@ struct Configuration {
     /* 0x10 */ u32 bufferSize;
     /* 0x14 */ u16 field_0x14;
     /* 0x16 */ u16 field_0x16;
-    /* 0x18 */ u8 UNK_0x18[4];
+    /* 0x18 */ u8 field_0x18;
     Configuration();
     virtual ~Configuration() {}
 };

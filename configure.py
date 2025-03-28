@@ -880,7 +880,7 @@ config.libs = [
             Object(Matching, "egg/gfx/eggFogManager.cpp"),
             Object(NonMatching, "egg/gfx/eggFrustum.cpp"),
             Object(NonMatching, "egg/gfx/eggG3DUtility.cpp"),
-            Object(NonMatching, "egg/gfx/eggGfxEngine.cpp"),
+            Object(Matching, "egg/gfx/eggGfxEngine.cpp"),
             Object(Matching, "egg/gfx/eggGlobalDrawState.cpp"),
             Object(NonMatching, "egg/gfx/eggGXUtility.cpp"),
             Object(Matching, "egg/gfx/eggIScnProc.cpp"),
