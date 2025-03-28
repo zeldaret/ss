@@ -106,15 +106,15 @@ bool LightTextureManager::deleteTexture(int idx) {
     return false;
 }
 
-int LightTextureManager::replaceModelTextures(nw4r::g3d::ResMdl mdl) const {
-    int count = 0;
+u16 LightTextureManager::replaceModelTextures(nw4r::g3d::ResMdl mdl) const {
+    u16 count = 0;
     for (u16 i = 0; i < mTextureCount; i++) {
         count += replaceModelTexture(i, mdl);
     }
     return count;
 }
 
-int LightTextureManager::replaceModelTexture(int tex, nw4r::g3d::ResMdl mdl) const {
+u16 LightTextureManager::replaceModelTexture(int tex, nw4r::g3d::ResMdl mdl) const {
     if (mpTextures[tex] == nullptr) {
         return 0;
     }
@@ -122,12 +122,12 @@ int LightTextureManager::replaceModelTexture(int tex, nw4r::g3d::ResMdl mdl) con
     G3DUtility::SetTextureResult buf[256];
     GXTexObj obj;
     mpTextures[tex]->getTexObj(&obj);
-    int count = 0;
+    u16 count = 0;
     for (int i = 0; i < mdl.GetResMatNumEntries(); i++) {
         nw4r::g3d::ResMat mat = mdl.GetResMat(i);
 
-        int res = G3DUtility::SetTexture(mat, nullptr, mpTextures[tex]->getName(), &obj, false, buf, 0xFF, 2);
-        for (int j = 0; j < (u16)res; j++) {
+        u16 res = G3DUtility::SetTexture(mat, nullptr, mpTextures[tex]->getName(), &obj, false, buf, 0xFF, 2);
+        for (int j = 0; j < res; j++) {
             if (buf[j].texCoordId != -1) {
                 fn_804AE340(mat, static_cast<GXTexCoordID>(buf[j].texCoordId));
             }

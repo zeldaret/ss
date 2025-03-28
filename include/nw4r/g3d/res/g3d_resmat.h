@@ -246,6 +246,13 @@ public:
         );
     }
 
+    void Disable(u32 id) {
+        ref().flag =
+            ref().flag &
+            ~((TexSrt::FLAG_ANM_EXISTS | TexSrt::FLAG_SCALE_ONE | TexSrt::FLAG_ROT_ZERO | TexSrt::FLAG_TRANS_ZERO)
+              << (id * TexSrt::NUM_OF_FLAGS));
+    }
+
     bool IsExist(u32 id) const {
         if (IsValid()) {
             return ptr()->flag & (1 << id * TexSrt::NUM_OF_FLAGS);
@@ -511,6 +518,35 @@ public:
 private:
     void BindTex_(const ResTex tex, ResTexObj texObj);
     void BindPltt_(const ResPltt pltt, ResTlutObj tlutObj);
+};
+
+/******************************************************************************
+ *
+ * ResTexPlttInfoOffsetData
+ *
+ ******************************************************************************/
+struct ResTexPlttInfoOffsetData {
+    u32 size;    // at 0x0
+    u8 _0x04[4]; // at 0x4
+    struct Unk {
+        s32 texPlltInfo;
+        u8 _0x00[4];
+    } data[1]; // at 0x8
+};
+
+class ResTexPlttInfoOffset : public ResCommon<ResTexPlttInfoOffsetData> {
+public:
+    NW4R_G3D_RESOURCE_FUNC_DEF(ResTexPlttInfoOffset);
+
+    ResTexPlttInfo GetPllt(int idx) const {
+        const ResTexPlttInfoOffsetData &r = ref();
+        return ofs_to_obj<ResTexPlttInfo>(r.data[idx].texPlltInfo);
+    }
+
+    u32 GetNumData() const {
+        const ResTexPlttInfoOffsetData &r = ref();
+        return r.size;
+    }
 };
 
 /******************************************************************************

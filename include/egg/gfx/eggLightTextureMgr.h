@@ -30,8 +30,8 @@ public:
     bool setBinaryToTexture(const void *data);
     bool deleteTexture(int idx);
 
-    int replaceModelTextures(nw4r::g3d::ResMdl) const;
-    int replaceModelTexture(int, nw4r::g3d::ResMdl) const;
+    u16 replaceModelTextures(nw4r::g3d::ResMdl) const;
+    u16 replaceModelTexture(int, nw4r::g3d::ResMdl) const;
     void drawAndCaptureTexture(f32, f32, f32, f32);
     void frameReset();
     void correctLightObject();

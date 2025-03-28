@@ -46,7 +46,7 @@ static const G3DUtility::MdlSearch sMdlSearch[6] = {
 };
 
 void thisProbablyGotDeadStripped() {
-    sMdlSearch[0](g3d::ResMdl(nullptr), "", nullptr, 0);
+    sMdlSearch[0](g3d::ResMdl(nullptr), "", false, nullptr, 0);
 }
 
 extern "C" s32 lbl_8057682C;
@@ -57,11 +57,14 @@ void ModelEx::getShapeMinMax(u16 shapeIndex, math::VEC3 *pMin, math::VEC3 *pMax,
         case cType_ScnMdl:
         case cType_ScnMdl1Mat1Shp: {
             g3d::ResShp shp = getResShp(shapeIndex);
-            lbl_8057682C = 0;
+
+            G3DUtility::ResetBumpAlloc();
+
             g3d::ResMdl mdl = getResMdl();
             math::MTX34 tmpMtx;
             g3d::ResMdlInfo info = mdl.GetResMdlInfo();
-            math::MTX34 *pMtxArr = G3DUtility::GetWorldMtxArray(info.GetNumPosNrmMtx() * sizeof(math::MTX34), 1);
+            math::MTX34 *pMtxArr =
+                reinterpret_cast<math::MTX34 *>(G3DUtility::BumpAlloc(info.GetNumPosNrmMtx() * sizeof(math::MTX34), 1));
             if (doCalcWorld) {
                 PSMTXIdentity(tmpMtx);
                 calcWorld(pMtxArr, &tmpMtx);
@@ -92,7 +95,7 @@ void ModelEx::getShapeMinMax(u16 shapeIndex, math::VEC3 *pMin, math::VEC3 *pMax,
                     math::VEC3Maximize(pMax, pMax, &tmpVec);
                 }
             }
-            lbl_8057682C = 0;
+            G3DUtility::ResetBumpAlloc();
             break;
         }
         case cType_ScnProcModel:

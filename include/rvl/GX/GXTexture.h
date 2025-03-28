@@ -44,6 +44,9 @@ void GXGetTexObjLODAll(
     u8 *biasClampEnable, u8 *edgeLODEnable, GXAnisotropy *anisotropy
 );
 
+void GXInitTexObjFilter(GXTexObj *, GXTexFilter minFilter, GXTexFilter magFilter);
+void GXInitTexObjWrapMode(GXTexObj *, GXTexWrapMode wrapS, GXTexWrapMode wrapT);
+
 void GXSetTexCoordScaleManually(GXTexCoordID, GXBool, u16, u16);
 void GXSetTexCoordBias(GXTexCoordID, GXBool, GXBool);
 

@@ -1,4 +1,5 @@
 #include "nw4r/g3d.h" // IWYU pragma: export
+#include "nw4r/g3d/res/g3d_resmat.h"
 
 namespace nw4r {
 namespace g3d {
@@ -192,8 +193,8 @@ u32 ResMdl::GetResShpNumEntries() const {
  * ResTexPlttInfo
  *
  ******************************************************************************/
-ResTexPlttInfo ResMdl::GetResTexPlttInfoOffsetFromTexName(int idx) const {
-    return ResTexPlttInfo(ofs_to_obj<ResDic>(ref().toResTexNameToTexPlttInfoDic)[idx]);
+ ResTexPlttInfoOffset ResMdl::GetResTexPlttInfoOffsetFromTexName(int idx) const {
+    return ResTexPlttInfoOffset(ofs_to_obj<ResDic>(ref().toResTexNameToTexPlttInfoDic)[idx]);
 }
 
 u32 ResMdl::GetResTexPlttInfoOffsetFromTexNameNumEntries() const {
