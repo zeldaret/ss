@@ -58,6 +58,16 @@ public:
     u32 GetRefNumber() const {
         return ref().refNumber;
     }
+
+    const char *GetName() const {
+        const ResAnmAmbLightData &r = ref();
+
+        if (r.name != 0) {
+            return NW4R_G3D_OFS_TO_RESNAME(&r, r.name).GetName();
+        }
+
+        return NULL;
+    }
 };
 
 } // namespace g3d

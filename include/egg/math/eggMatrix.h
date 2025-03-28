@@ -24,6 +24,11 @@ struct Matrix34f {
         return arr[i];
     }
 
+    Matrix34f &operator=(const Matrix34f &other) {
+        copyFrom(other);
+        return *this;
+    }
+
     void rotateBaseX(Vector3f &, Matrix34f &);
     void rotateVectorChange(Vector3f &, Vector3f &, Matrix34f &);
     void inverseTo(Matrix34f &to) const;

@@ -3,25 +3,20 @@
 
 #include "common.h"
 #include "egg/math/eggMath.h"
+#include "nw4r/math/math_triangular.h"
+
 #include "nw4r/math.h"
 
 namespace EGG {
 
 struct Vector3f : public nw4r::math::VEC3 {
-    // __ct__Q23EGG8Vector3fFv
     Vector3f() : nw4r::math::VEC3() {}
-
-    // __ct__Q23EGG8Vector3fFfff
     Vector3f(f32 fx, f32 fy, f32 fz) : VEC3(fx, fy, fz) {}
 
-    // ~Vector3f() {}
-
-    // __cl__Q23EGG8Vector3fFi
     f32 &operator()(int i) {
         return ((f32 *)this)[i];
     }
 
-    // __ml__Q23EGG8Vector3fCFf
     Vector3f operator*(f32 f) const {
         return Vector3f(x * f, y * f, z * f);
     }
@@ -30,12 +25,10 @@ struct Vector3f : public nw4r::math::VEC3 {
         return Vector3f(v.x * f, v.y * f, v.z * f);
     }
 
-    // __pl__Q23EGG8Vector3fCFRCQ23EGG8Vector3f
     Vector3f operator+(const Vector3f &v) const {
         return Vector3f(x + v.x, y + v.y, z + v.z);
     }
 
-    // __apl__Q23EGG8Vector3fFRCQ23EGG8Vector3f
     Vector3f &operator+=(const Vector3f &v) {
         x += v.x;
         y += v.y;
@@ -43,7 +36,6 @@ struct Vector3f : public nw4r::math::VEC3 {
         return *this;
     }
 
-    // __mi__Q23EGG8Vector3fCFv
     Vector3f operator-() const {
         f32 z = this->z;
         f32 y = this->y;
@@ -51,12 +43,10 @@ struct Vector3f : public nw4r::math::VEC3 {
         return Vector3f(-x, -y, -z);
     }
 
-    // __mi__Q23EGG8Vector3fCFRCQ23EGG8Vector3f
     Vector3f operator-(const Vector3f &v) {
         return Vector3f(x - v.x, y - v.y, z - v.z);
     }
 
-    // __ami__Q23EGG8Vector3fFRCQ23EGG8Vector3f
     Vector3f &operator-=(const Vector3f &v) {
         x -= v.x;
         y -= v.y;
@@ -64,24 +54,20 @@ struct Vector3f : public nw4r::math::VEC3 {
         return *this;
     }
 
-    // __amu__Q23EGG8Vector3fFf
     Vector3f &operator*=(f32 f) {
         multScalar(f);
         return *this;
     }
 
-    // __dv__Q23EGG8Vector3fCFf
     Vector3f operator/(f32 f) const {
         return Vector3f(x / f, y / f, z / f);
     }
 
-    // __adv__Q23EGG8Vector3fCFf // assumed
     Vector3f &operator/=(f32 f) {
         divScalar(f);
         return *this;
     }
 
-    // __ne__Q23EGG8Vector3fCFRCQ23EGG8Vector3f
     bool operator!=(const Vector3f &v) {
         return x != v.x || y != v.y || z != v.z;
     }
@@ -101,12 +87,10 @@ struct Vector3f : public nw4r::math::VEC3 {
         return EGG::Math<f32>::abs(EGG::Math<f32>::atan2(b, a));
     }
 
-    // dot__Q23EGG8Vector3fCFRCQ23EGG8Vector3f
     f32 dot(const Vector3f &v) const {
         return x * v.x + y * v.y + z * v.z;
     }
 
-    // cross__Q23EGG8Vector3fCFRCQ23EGG8Vector3f
     Vector3f cross(const Vector3f &b) const {
         f32 _x = (y * b.z) - (z * b.y);
         f32 _y = (z * b.x) - (x * b.z);
@@ -126,6 +110,13 @@ struct Vector3f : public nw4r::math::VEC3 {
     }
 
     f32 normalise();
+
+    Vector3f normalize() {
+        Vector3f other(x, y, z);
+        other.normalise();
+        return other;
+    }
+
     f32 setLength(const Vector3f &src, f32 len);
     f32 setLength(f32 len);
 

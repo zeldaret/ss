@@ -49,6 +49,10 @@ public:
         return ref().ambLightId;
     }
 
+    u32 GetLightID(u32 index) const {
+        return ref().lightId[index];
+    }
+
     u32 GetNumLight() const {
         return ref().numLight;
     }

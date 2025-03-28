@@ -1,8 +1,10 @@
 #ifndef NW4R_LYT_TEXMAP_H
 #define NW4R_LYT_TEXMAP_H
 #include "common.h"
-#include "rvl/GX.h" // IWYU pragma: export
 #include "rvl/TPL/TPL.h"
+
+#include "rvl/GX.h" // IWYU pragma: export
+
 
 namespace nw4r {
 namespace lyt {

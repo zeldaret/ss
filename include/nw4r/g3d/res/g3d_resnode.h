@@ -67,8 +67,8 @@ struct ResNodeData : ResNodeDataTypedef {
     math::_VEC3 scale;        // at 0x20
     math::_VEC3 rot;          // at 0x2C
     math::_VEC3 translate;    // at 0x38
-    math::_VEC3 volume_min;    // at 0x44
-    math::_VEC3 volume_max;    // at 0x50
+    math::_VEC3 volume_min;   // at 0x44
+    math::_VEC3 volume_max;   // at 0x50
     s32 toParentNode;         // at 0x5C
     s32 toChildNode;          // at 0x60
     s32 toNextSibling;        // at 0x64
@@ -93,6 +93,11 @@ public:
         }
 
         return ResName(NULL);
+    }
+
+    const char *GetName() const {
+        const ResNodeData &r = ref();
+        return ofs_to_ptr<const char>(r.name);
     }
 
     u32 GetID() const {
@@ -145,12 +150,12 @@ public:
 
     // not in the dwarf
     const math::VEC3 &GetBoundsMin() const {
-        return *(const math::VEC3*)&ref().volume_min;
+        return *(const math::VEC3 *)&ref().volume_min;
     }
 
     // not in the dwarf
     const math::VEC3 &GetBoundsMax() const {
-        return *(const math::VEC3*)&ref().volume_max;
+        return *(const math::VEC3 *)&ref().volume_max;
     }
 
     ResNode GetParentNode() {

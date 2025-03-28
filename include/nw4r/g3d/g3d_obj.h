@@ -133,7 +133,7 @@ public:
         if (pObj != NULL && pObj->IsDerivedFrom(TTo::GetTypeObjStatic())) {
             return static_cast<TTo *>(pObj);
         }
-        return nullptr;
+        return NULL;
     }
 
 private:

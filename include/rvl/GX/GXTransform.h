@@ -33,7 +33,7 @@ void GXGetViewportv(f32 view[6]);
 void GXSetZScaleOffset(f32 scale, f32 offset);
 void GXSetScissor(u32 x, u32 y, u32 w, u32 h);
 void GXGetScissor(u32 *x, u32 *y, u32 *w, u32 *h);
-void GXSetScissorBoxOffset(u32 ox, u32 oy);
+void GXSetScissorBoxOffset(s32 ox, s32 oy);
 void GXSetClipMode(GXClipMode mode);
 
 void __GXSetProjection(void);

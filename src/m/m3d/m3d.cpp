@@ -1,7 +1,11 @@
 #include "m/m3d/m3d.h"
 
 #include "egg/gfx/eggDrawGX.h"
+#include "egg/gfx/eggFogManager.h"
 #include "egg/gfx/eggGfxEngine.h"
+#include "egg/gfx/eggLightManager.h"
+#include "egg/gfx/eggLightTexture.h"
+#include "egg/gfx/eggLightTextureMgr.h"
 #include "egg/gfx/eggScreen.h"
 #include "egg/gfx/eggStateGX.h"
 #include "m/m_heap.h"
@@ -11,6 +15,7 @@
 #include "nw4r/g3d/g3d_state.h"
 #include "nw4r/g3d/res/g3d_resmat.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
+
 #include "rvl/GX.h" // IWYU pragma: export
 
 namespace m3d {
@@ -180,7 +185,7 @@ void drawDone(int idx) {
         internal::l_lightMgr_pp[idx]->DoneDraw();
     }
     if (internal::l_fogMgr_pp && internal::l_fogMgr_pp[idx]) {
-        internal::l_fogMgr_pp[idx]->mFlag &= 0xFB;
+        internal::l_fogMgr_pp[idx]->DoneDraw();
     }
 }
 

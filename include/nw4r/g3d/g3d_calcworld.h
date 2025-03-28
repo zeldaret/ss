@@ -63,13 +63,13 @@ public:
 
     void SetScale(f32 x, f32 y, f32 z);
     void GetMtx(nw4r::math::MTX34 *out) {
-        if (out != nullptr) {
+        if (out != NULL) {
             PSMTXCopy(*mpM, *out);
         }
     }
 
     void SetMtx(const nw4r::math::MTX34 *arg) {
-        if (arg != nullptr) {
+        if (arg != NULL) {
             PSMTXCopy(*arg, *mpM);
         } else {
             PSMTXIdentity(*mpM);

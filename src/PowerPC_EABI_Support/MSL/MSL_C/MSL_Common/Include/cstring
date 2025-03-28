@@ -19,7 +19,7 @@ using ::strlen;
 using ::strncat;
 using ::strncmp;
 using ::strncpy;
-// using ::strstr;
+using ::strstr;
 } // namespace std
 
 #endif
