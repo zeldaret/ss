@@ -85,11 +85,11 @@ public:
         return num < 8 ? num : 8;
     }
 
-    const LightObject *GetLightObject(u16 i) const {
+    const LightObject *GetLightObject(int i) const {
         return &mpLightData[i].mLightObject;
     }
 
-    LightObject *GetLightObject(u16 i) {
+    LightObject *GetLightObject(int i) {
         return &mpLightData[i].mLightObject;
     }
 

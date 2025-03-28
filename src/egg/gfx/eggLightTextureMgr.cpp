@@ -161,7 +161,7 @@ bool LightTextureManager::setBinaryToTexture(const void *data) {
 void LightTextureManager::correctLightObject() {
     int j = 0;
     for (int i = 0; i < mpLightMgr->GetNumLightData(); i++) {
-        const LightObject *o = mpLightMgr->GetLightObject(i);
+        const LightObject *o = mpLightMgr->GetLightObject((u16)i);
         if (o->CheckFlag1() && o->CheckFlag0x20()) {
             mpObjects[j] = o;
             j++;
