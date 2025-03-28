@@ -149,22 +149,18 @@ static const s8 sArr1[] = {0, -1, 1, 2};
 static const u8 sArr2[] = {1, 1, 2, 2, 4, 0};
 
 void AnalizeDL::init() {
-    // TODO
-    int k = 0;
-    const u8 *pArr2 = sArr2;
-    const s8 *pArr1 = sArr1;
-
-    for (int i = 0; mVtxDescList[i].attr != GX_VA_NULL; i++) {
-        int x = pArr1[mVtxDescList[i].type];
-        pArr1++;
+    for (int k = 0, i = 0; mVtxDescList[i].attr != GX_VA_NULL; k++, i++) {
+        // Likely a fakematch
+        int x = sArr1[mVtxDescList[i++, --i].type];
         if (x == -1) {
             if (k >= 0 && k <= 8) {
                 x = 1;
+            } else {
+                int j = -1;
+                while (k != mAttrFmtList[++j].attr) {}
+
+                x = sArr2[mAttrFmtList[j].compType];
             }
-        } else {
-            int j = 1;
-            for (; k != mAttrFmtList[j].attr; j++) {}
-            x = pArr2[mAttrFmtList[j - 1].compType];
         }
 
         if (k == 9) {
@@ -175,8 +171,6 @@ void AnalizeDL::init() {
         if (x != 0) {
             field_0x010 |= (1 << k);
         }
-
-        k++;
     }
 }
 
