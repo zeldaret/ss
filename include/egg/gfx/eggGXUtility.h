@@ -12,11 +12,14 @@ namespace EGG {
 class GXUtility {
 public:
     static int getTexMtxID(int);
-    static void getTexObj(GXTexObj *, const EGG::ResTIMG &);
+    static void setScaleOffsetPerspective(f32*, f32, f32, f32, f32);
+    static void getTexObj(GXTexObj *, const ResTIMG &);
     static void getTexObj(GXTexObj *, nw4r::g3d::ResTex, GXTexWrapMode, GXTexWrapMode, GXTexFilter, GXTexFilter);
 
     static void getNormalColor(GXColor &outColor, const Vector3f &vec);
-    static void setScaleOffsetPerspective(f32*, f32, f32, f32, f32);
+
+private:
+    static const u8 s_texMtxIds[8];
 };
 
 } // namespace EGG

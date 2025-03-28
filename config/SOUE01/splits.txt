@@ -2252,6 +2252,7 @@ egg/gfx/eggGlobalDrawState.cpp:
 
 egg/gfx/eggGXUtility.cpp:
 	.text       start:0x804A7820 end:0x804A7BC0
+	.sdata2     start:0x8057F640 end:0x8057F678
 
 egg/gfx/eggIScnProc.cpp:
 	.text       start:0x804A7BC0 end:0x804A7F7C
