@@ -36,14 +36,24 @@ DrawPathBloom::DrawPathBloom(): field_0x01C(1), field_0x01D(8), field_0x37C(0) {
 
 DrawPathBloom::~DrawPathBloom() {}
 
-void DrawPathBloom::internalResetForDraw() {}
+void DrawPathBloom::internalResetForDraw() {
+    // TODO
+}
 
-void DrawPathBloom::internalDraw(u16 idx) {}
+void DrawPathBloom::internalDraw(u16 idx) {
+    // TODO
+}
 
-void DrawPathBloom::SetBinaryInner(const Bin &bin) {}
+void DrawPathBloom::SetBinaryInner(const Bin &bin) {
+    // TODO
+}
 
-void DrawPathBloom::GetBinaryInner(Bin *pBin) const {}
+void DrawPathBloom::GetBinaryInner(Bin *pBin) const {
+    // TODO
+}
 
-void DrawPathBloom::SetBinaryInner(const Bin &, const Bin &, f32) {}
+void DrawPathBloom::SetBinaryInner(const Bin &, const Bin &, f32) {
+    // TODO
+}
 
 } // namespace EGG

@@ -61,7 +61,9 @@ void Fog::GetBinaryInner(Bin *pBin) const {
     pBin->mData.mFlag2 = mFlags;
 }
 
-void Fog::SetBinaryInner(const Bin &, const Bin &, f32) {}
+void Fog::SetBinaryInner(const Bin &, const Bin &, f32) {
+    // TODO
+}
 
 Fog::~Fog() {}
 

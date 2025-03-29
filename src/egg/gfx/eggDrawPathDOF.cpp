@@ -216,10 +216,16 @@ void DrawPathDOF::internalDrawVariant2(u16 idx) {
     }
 }
 
-void DrawPathDOF::SetBinaryInner(const Bin &bin) {}
+void DrawPathDOF::SetBinaryInner(const Bin &bin) {
+    // TODO
+}
 
-void DrawPathDOF::GetBinaryInner(Bin *pBin) const {}
+void DrawPathDOF::GetBinaryInner(Bin *pBin) const {
+    // TODO
+}
 
-void DrawPathDOF::SetBinaryInner(const Bin &, const Bin &, f32) {}
+void DrawPathDOF::SetBinaryInner(const Bin &, const Bin &, f32) {
+    // TODO
+}
 
 } // namespace EGG

@@ -593,9 +593,7 @@ void LightTexture::addLight(const EGG::LightObject &obj) {
 }
 
 void LightTexture::SetBinaryInner(const Bin &bin) {
-    // Not bothering with version differences right now,
-    // since the game uses V3 and GetBinaryInner is enough
-    // for the structure
+    // TODO
 }
 
 void LightTexture::GetBinaryInner(Bin *pOutBin) const {

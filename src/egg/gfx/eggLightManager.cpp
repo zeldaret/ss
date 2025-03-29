@@ -270,6 +270,10 @@ void LightManager::AnmScnRes_GetAmbLightColor(
     obj->mLightObj.a = (color >> 0) & 0xFF;
 }
 
+void LightManager::SetBinaryInner(const Bin &) {
+    // TODO
+}
+
 void LightManager::GetBinaryInner(Bin *bin) const {
     // NONMATCHING - regswaps, loop increments
     u16 numObjs = mSavedCounts.mNumEggLightObjects;
@@ -296,6 +300,10 @@ void LightManager::GetBinaryInner(Bin *bin) const {
     }
 
     bin->mData.mColor = mColor;
+}
+
+void LightManager::SetBinaryInner(const Bin &, const Bin &, f32) {
+    // TODO
 }
 
 void LightManager::BecomeInvalidLight(int idx) {

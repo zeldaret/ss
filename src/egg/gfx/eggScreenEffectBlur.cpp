@@ -167,6 +167,8 @@ void ScreenEffectBlur::GetBinaryInner(Bin *bin) const {
     bin->mData.field_0x1F = field_0x28.a;
 }
 
-void ScreenEffectBlur::SetBinaryInner(const Bin &bin1, const Bin &bin2, f32 blend) {}
+void ScreenEffectBlur::SetBinaryInner(const Bin &bin1, const Bin &bin2, f32 blend) {
+    // TODO
+}
 
 } // namespace EGG
