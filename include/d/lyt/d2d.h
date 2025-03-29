@@ -286,6 +286,8 @@ struct AnmGroup_c : public AnmGroupBase_c {
     /* 0x28 */ m2d::FrameCtrl_c mFrameCtrl;
 };
 
+void pushToEnd(nw4r::lyt::Pane *);
+
 // This abstraction is apparently only ever used in CsGame
 class AnmGroups {
 public:
