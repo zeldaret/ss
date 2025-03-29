@@ -36,6 +36,8 @@ class PostEffectBase;
 class PostEffectBlur;
 class PostEffectBlurGather;
 class PostEffectHDR;
+class PostEffectMask;
+class PostEffectMaskDOF;
 class PostEffectSimple;
 class PostEffectUnk2;
 class ResTIMG;

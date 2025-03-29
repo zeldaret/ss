@@ -111,8 +111,16 @@ public:
         return val * StateGX::s_widthEfb / GetSizeXMax(GetComputedTVMode());
     }
 
+    f32 UnscaleByX(f32 val) const {
+        return val * GetSizeXMax(GetComputedTVMode()) / StateGX::s_widthEfb;
+    }
+
     f32 ScaleByY(f32 val) const {
         return val * StateGX::s_heightEfb / GetSizeYMax(GetComputedTVMode());
+    }
+
+    f32 UnscaleByY(f32 val) const {
+        return val * GetSizeYMax(GetComputedTVMode()) / StateGX::s_heightEfb;
     }
 
 private:

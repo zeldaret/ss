@@ -20,6 +20,22 @@ public:
     static const GXColor &getFarColor();
     static const GXColor &getCenterColor();
 
+    void setParam0x44(f32 f) {
+        field_0x44 = f;
+    }
+
+    void setParam0x48(f32 f) {
+        field_0x48 = f;
+    }
+
+    void setParam0x4C(f32 f) {
+        field_0x4C = f;
+    }
+
+    void setCpuTexArrIdx(int i){
+        mCpuTexArrIdx = i;
+    }
+
 private:
     /* 0x2C */ u8 field_0x2C;
     /* 0x30 */ CpuTexture *mpCpuTexArr[3];

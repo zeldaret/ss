@@ -27,6 +27,18 @@ public:
         return mRotation;
     }
 
+    void setRot(f32 rot) {
+        mRotation = rot;
+    }
+
+    void setCapTexture(CapTexture *tex) {
+        mTex1.mpTex = tex;
+    }
+
+    void setCapTexMapId(GXTexMapID id) {
+        mTex1.mTexMapID = id;
+    }
+
 public:
     u32 field_0x00;               // at 0x0
     CapTextureWrapper mTex1;      // at 0x4
@@ -51,8 +63,9 @@ public:
     static void lerpColor(GXColor &, const GXColor &, const GXColor &, f32);
     void getBaseTexMtx(nw4r::math::MTX34 *mtx) const;
 
-protected:
+public:
     virtual void draw(f32 width, f32 height);                                         // at 0xC
+protected:
     virtual void setMaterialInternal() {}                                             // at 0x10
     virtual void loadTextureInternal();                                               // at 0x14
     virtual void drawScreenInternal(f32 offsetX, f32 offsetY, f32 width, f32 height); // at 0x18

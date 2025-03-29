@@ -10,6 +10,10 @@ public:
     PostEffectSimple();
     virtual void setMaterialInternal() override;
 
+    void setField0x38(s32 v) {
+        field_0x38 = v;
+    }
+
 private:
     /* 0x2C */ GXColor field_0x2C;
     /* 0x30 */ f32 field_0x30;

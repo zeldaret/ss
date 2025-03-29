@@ -2183,7 +2183,7 @@ egg/gfx/eggAnalizeDL.cpp:
 	.sdata2     start:0x8057F3E0 end:0x8057F408
 
 egg/gfx/eggCapTexture.cpp:
-	.text       start:0x8049D7C0 end:0x8049D9C4
+	.text       start:0x8049D7C0 end:0x8049DA28
 	.rodata     start:0x804FBA30 end:0x804FBA48
 	.data       start:0x8056ED70 end:0x8056ED80
 	.sdata2     start:0x8057F410 end:0x8057F418
@@ -2210,10 +2210,14 @@ egg/gfx/eggDrawPathBase.cpp:
 
 egg/gfx/eggDrawPathBloom.cpp:
 	.text       start:0x804A0EA0 end:0x804A29B8
+	.data       start:0x8056EEB0 end:0x8056EF28
+	.sdata2     start:0x8057F538 end:0x8057F580
 
 egg/gfx/eggDrawPathDOF.cpp:
 	.text       start:0x804A29C0 end:0x804A4BE8
+	.rodata     start:0x804FBC70 end:0x804FBC88
 	.data       start:0x8056EF28 end:0x8056EFA0
+	.sdata2     start:0x8057F580 end:0x8057F5F8
 
 egg/gfx/eggDrawPathLightMap.cpp:
 	.text       start:0x804A4BF0 end:0x804A54E8

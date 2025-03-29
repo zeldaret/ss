@@ -24,8 +24,8 @@ public:
         CANVASMODE_0,
         CANVASMODE_1,
     };
-    
-    protected:
+
+protected:
     ProjectionType mProjType; // at 0x0
     CanvasMode mCanvasMode;   // at 0x4
     nw4r::math::VEC2 mSize;   // at 0x8
@@ -138,6 +138,28 @@ public:
 
     void SetFlag(u32 flag) {
         mFlags |= flag;
+    }
+
+    f32 TranslateDepthToViewSpace(f32 depth) const {
+        depth = -depth;
+        f32 bound = -1e-6f;
+        f32 val = depth >= bound ? bound : depth;
+        ProjectionType proj = GetProjectionType();
+        f32 near = mNearZ;
+        f32 far = mFarZ;
+        f32 diff = far - near;
+        f32 viewDepth;
+        if (proj == PROJ_PERSP) {
+            viewDepth = ((val * -near) / diff - (far * near) / diff) / -val + 1.0f;
+        } else {
+            viewDepth = (-val - near) / diff;
+        }
+        if (viewDepth < 0.0f) {
+            return 0.0f;
+        } else if (viewDepth > 1.0f) {
+            return 1.0f;
+        }
+        return viewDepth;
     }
 
 private:

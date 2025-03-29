@@ -52,4 +52,18 @@ void CapTexture::capture(u16 x, u16 y, bool upscale, int format) {
     }
 }
 
+void CapTexture::fn_8049D9D0(u8 arg) {
+    onCapFlag(0x8);
+
+    CopyFilter v;
+    v.values[0] = arg;
+    v.values[1] = 0;
+    v.values[2] = 1;
+    v.values[3] = 64 - (2 * arg) - 1;
+    v.values[4] = 0;
+    v.values[5] = arg;
+    v.values[6] = 0;
+    setCopyFilter(v);
+}
+
 } // namespace EGG

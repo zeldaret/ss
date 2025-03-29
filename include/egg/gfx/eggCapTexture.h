@@ -18,6 +18,7 @@ public:
     virtual void configure() override; // at 0xC
 
     void capture(u16 x, u16 y, bool upscale, int format);
+    void fn_8049D9D0(u8 arg);
 
     void setPixModeSync(bool enable) {
         if (enable) {

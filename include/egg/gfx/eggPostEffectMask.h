@@ -16,6 +16,14 @@ public:
         return static_cast<GXTevScale>(field_0x1BC);
     }
 
+    void setField_0x2C(int i) {
+        field_0x2C = i;
+    }
+
+    void setField_0x34(f32 f) {
+        field_0x34 = f;
+    }
+
 private:
     /* 0x2C */ int field_0x2C;
     /* 0x30 */ GXColor mColor;

@@ -33,6 +33,10 @@ public:
         field_0x30 = val;
     }
 
+    void setField0x2C(int i) {
+        field_0x2C = i;
+    }
+
     void setStage0Field0(u8 u1) {
         field_0x38[0].field_0x00 = u1;
     }
@@ -43,6 +47,13 @@ public:
 
     void setStage0F(f32 f) {
         field_0x38[0].field_0x0C = f;
+    }
+
+    void setStage0ColorThing(u8 i) {
+        f32 color = (255.0f / field_0x38[0].field_0x00) + 0.5f;
+        f32 f = (i * 1.75f) / field_0x38[0].field_0x00;
+        f32 alpha = f <= 255.0f ? f : 255.0f;
+        field_0x38[0].field_0x01 = (GXColor){color, color, color, alpha};
     }
 
 private:
