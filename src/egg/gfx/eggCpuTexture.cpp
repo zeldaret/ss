@@ -173,8 +173,6 @@ void CpuTexture::buildHeader() const {
 extern "C" double sqrt(double);
 
 void CpuTexture::fillNormalMapSphere(f32 f1, f32 f2) {
-    // NONMATCHING
-    // fpr regswaps
     f32 mid = static_cast<f32>(mWidth / 2);
 
     for (u16 y = 0; y < mHeight; y++) {
@@ -184,11 +182,13 @@ void CpuTexture::fillNormalMapSphere(f32 f1, f32 f2) {
 
             f32 fx = f1 * ((x + f2) - mid);
             f32 fy = f1 * -((y + f2) - mid);
-            f32 fz = mid * mid - (fx * fx + fy * fy);
 
-            vec.x = fx;
-            vec.y = fy;
-            vec.z = fz < 0.0f ? 0.0f : (f32)sqrt(fz);
+            f32 mid2 = mid * mid;
+            f32 fz = mid2 - (fx * fx + fy * fy);
+
+            vec(0) = fx;
+            vec(1) = fy;
+            vec(2) = fz < Math<f32>::zero() ? Math<f32>::zero() : (f32)sqrt(fz);
 
             PSVECNormalize(vec, vec);
             GXUtility::getNormalColor(c, vec);
@@ -202,33 +202,33 @@ void CpuTexture::fillNormalMapSphere(f32 f1, f32 f2) {
 void CpuTexture::fillGradient(
     int op, int unk, u16 start, u16 end, const GXColor &c1, const GXColor &c2, bool b1, bool b2
 ) {
+    // NONMATCHING - regswaps
+
     GXColor gradient[1024];
     GXColor colors[256];
 
-    // NONMATCHING - regswaps
     bool swapMode = unk == 0x73 || unk == 0x53;
-
     u16 width = swapMode ? mWidth : mHeight;
-    int size = width;
     u16 height = swapMode ? mHeight : mWidth;
-    int mid = width / 2;
-    makeGradient(op, gradient, size, start, end, c1, c2);
+    u16 mid = width / 2;
+
+    makeGradient(op, gradient, width, start, end, c1, c2);
     if (b1) {
-        for (int i2 = mid, i = 0; i < size; i2++, i++) {
+        // Regswaps here
+        for (int i2 = mid, i = 0; i < width; i2++, i++) {
             colors[i].r = gradient[i < mid ? i2 : i - mid].r;
             colors[i].g = gradient[i < mid ? i2 : i - mid].g;
             colors[i].b = gradient[i < mid ? i2 : i - mid].b;
             colors[i].a = gradient[i < mid ? i2 : i - mid].a;
         }
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < width; i++) {
             gradient[i] = colors[i];
         }
     }
 
     u16 start2 = b2 ? 0 : start;
-    u16 end2 = b2 ? size : end;
-
+    u32 end2 = b2 ? width : end;
     for (u16 x = start2; x < end2; x++) {
         for (u16 y = 0; y < height; y++) {
             if (swapMode) {
@@ -274,13 +274,19 @@ void CpuTexture::allocWithHeaderDebug(Heap *pHeap) {
 void CpuTexture::allocate(Heap *pHeap) {
     alloc(pHeap);
 }
+
 void CpuTexture::setColor(u16 x, u16 y, GXColor color) {
     // NONMATCHING
     switch (getFormat()) {
         case GX_TF_RGBA8:
         case GX_TF_Z24X8: {
-            int offset = ((x >> 2) + (y >> 2) * (getWidth() / 4)) * 0x40 + (y & 3) * 8 + (x & 3) * 2;
+            int pix = (x & 0x3) * 2 + (y & 0x3) * 8;
+            int block = (x >> 2) + (y >> 2) * (getWidth() / 4);
+
+            int offset = block * 0x40 + pix;
+
             u8 *dat = static_cast<u8 *>(getBuffer()) + offset;
+
             dat[0] = color.a;
             dat[1] = color.r;
             dat[0x20] = color.g;
@@ -289,17 +295,30 @@ void CpuTexture::setColor(u16 x, u16 y, GXColor color) {
         }
         case GX_TF_I8:
         case GX_TF_Z8: {
-            // TODO
-            int offset = ((x >> 3) + (y >> 2) * (getWidth() / 8)) * 0x20 + (y & 3) * 8 + (x & 7);
-            u8 *dat = static_cast<u8 *>(getBuffer()) + offset;
+            // Regswaps here
+            int pix = (x & 0x7);
+            int pix_y = (y & 0x3) * 8;
+
+            int block = (x >> 3);
+            int block_y = (y >> 2) * (getWidth() / 8);
+
+            pix = pix + pix_y + (block + block_y) * 0x20;
+
+            u8 *dat = static_cast<u8 *>(getBuffer()) + pix;
             dat[0] = color.r;
+
             break;
         }
 
         case GX_TF_IA8:
         case GX_TF_Z16: {
-            int offset = ((x >> 2) + (y >> 2) * (getWidth() / 4)) * 0x20 + (y & 3) * 8 + (x & 3) * 2;
+            int block = (x >> 2) + (y >> 2) * (getWidth() / 4);
+            int pix = (x & 0x3) * 2 + (y & 0x3) * 8;
+
+            int offset = block * 0x20 + pix;
+
             u8 *dat = static_cast<u8 *>(getBuffer()) + offset;
+
             dat[0] = color.a;
             dat[1] = color.r;
             break;
@@ -324,9 +343,11 @@ GXColor CpuTexture::getColor(u16 x, u16 y) const {
         }
         case GX_TF_I8:
         case GX_TF_Z8: {
-            // TODO
-            int offset = ((x >> 3) + (y >> 2) * (getWidth() / 8)) * 0x20 + (y & 3) * 8 + (x & 7);
-            u8 *dat = static_cast<u8 *>(getBuffer()) + offset;
+            int idx = (x & 0x7);
+            int pixel_idx = (y & 0x3) * 8;
+            int block_idx = ((getWidth() / 8) * (y >> 2) + (x >> 3));
+            idx = idx + pixel_idx + block_idx * 0x20;
+            u8 *dat = static_cast<u8 *>(getBuffer()) + idx;
             c.a = dat[0];
             c.b = dat[0];
             c.g = dat[0];
