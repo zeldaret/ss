@@ -4,7 +4,6 @@
 #include "egg/gfx/eggStateGX.h"
 #include "nw4r/math/math_arithmetic.h"
 
-
 void eggFrustum_float_ordering() {
     1.0f;
 }
@@ -201,12 +200,12 @@ void Frustum::GetOrthographicParam_(f32 *p) const {
     f32 invHor = 1.0f / (r - l);
     f32 invVert = 1.0f / (t - b);
     f32 invZ = 1.0f / (mFarZ - mNearZ);
-    
+
     p[0] = 1.0f;
     p[1] = invHor * 2.0f;
-    p[3] = invVert * 2.0f;
-    
     p[2] = invHor * -(r + l);
+    p[3] = invVert * 2.0f;
+
     p[4] = invVert * -(t + b);
     p[5] = -1.0f * invZ;
     p[6] = -mFarZ * invZ;
