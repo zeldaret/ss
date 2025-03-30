@@ -125,11 +125,10 @@ public:
     void UpdatePosAt(LightObject &other) {
         SetPosAt(other.mPos, other.mAt);
     }
-    
+
     const GXColor &GetBlack() const {
         return mBlack;
     }
-
 
 private:
     /* 0x04 */ u16 mIndex;
@@ -145,9 +144,9 @@ private:
     /* 0x3D */ u8 field_0x3D;
     /* 0x3E */ u8 mSpotFn;
     /* 0x3F */ u8 mDistAttnFn;
-    /* 0x40 */ f32 field_0x40;
-    /* 0x44 */ f32 field_0x44;
-    /* 0x48 */ f32 field_0x48;
+    /* 0x40 */ f32 mCutoff;
+    /* 0x44 */ f32 mRefDist;
+    /* 0x48 */ f32 mRefBrightness;
     /* 0x4C */ nw4r::math::VEC3 field_0x4C;
     /* 0x58 */ nw4r::math::VEC3 field_0x58;
     /* 0x64 */ f32 mShininess;

@@ -47,9 +47,9 @@ LightObject::LightObject()
       field_0x3D(1),
       mSpotFn(GX_SP_OFF),
       mDistAttnFn(GX_DA_OFF),
-      field_0x40(90.0f),
-      field_0x44(0.5f),
-      field_0x48(0.5f),
+      mCutoff(90.0f),
+      mRefDist(0.5f),
+      mRefBrightness(0.5f),
       mShininess(16.0f),
       mFlags(0x661) {}
 
@@ -61,18 +61,16 @@ void LightObject::Reset() {
     field_0x30 = 1.0;
     field_0x3C = 0;
     field_0x3D = 1;
-    field_0x40 = 90.0;
-    field_0x44 = 0.5;
-    field_0x48 = 0.5;
+    mCutoff = 90.0;
+    mRefDist = 0.5;
+    mRefBrightness = 0.5;
     mSpotFn = GX_SP_OFF;
     mDistAttnFn = GX_DA_OFF;
     mShininess = 16.0;
-    field_0x58.x = 1.0;
-    field_0x4C.x = 1.0;
-    field_0x58.z = 0.0;
-    field_0x4C.z = 0.0;
-    field_0x58.y = 0.0;
-    field_0x4C.y = 0.0;
+
+    field_0x4C.x = field_0x58.x = 1.0f;
+    field_0x4C.z = field_0x58.z = 0.0f;
+    field_0x4C.y = field_0x58.y = 0.0f;
 }
 
 void LightObject::Calc() {
@@ -100,9 +98,7 @@ void LightObject::CalcView(nw4r::math::MTX34 const &viewMtx) {
                 field_0x94.y = mViewPos.y = 0.0f;
                 field_0x94.z = mViewPos.z = 1.0f;
                 mViewPos.z *= mDist;
-                mViewAt.z = 0.0f;
-                mViewAt.y = 0.0f;
-                mViewAt.x = 0.0f;
+                mViewAt.x = mViewAt.y = mViewAt.z = 0.0f;
                 break;
             }
             case 2:
@@ -121,8 +117,7 @@ void LightObject::CalcView(nw4r::math::MTX34 const &viewMtx) {
                 nw4r::math::VEC3Scale(&field_0x6C, &angle, -1.0f);
                 PSVECNormalize(field_0x6C, field_0x6C);
             } else {
-                field_0x6C.y = 0.0f;
-                field_0x6C.x = 0.0f;
+                field_0x6C.x = field_0x6C.y = 0.0f;
                 field_0x6C.z = 1.0f;
             }
         }
@@ -172,13 +167,13 @@ void LightObject::InitGX(GXLightObj *obj) const {
         if ((mFlags & 0x80) != 0) {
             GXInitLightAttnA(obj, field_0x4C.x, field_0x4C.y, field_0x4C.z);
         } else {
-            GXInitLightSpot(obj, field_0x40 > 0.0f ? field_0x40 : 0.0001f, getSpotFn());
+            GXInitLightSpot(obj, mCutoff > 0.0f ? mCutoff : 0.0001f, getSpotFn());
         }
 
         if ((mFlags & 0x100) != 0) {
             GXInitLightAttnK(obj, field_0x58.x, field_0x58.y, field_0x58.z);
         } else {
-            GXInitLightDistAttn(obj, field_0x44 * getDistance(), field_0x48, getDistAttnFn());
+            GXInitLightDistAttn(obj, mRefDist * getDistance(), mRefBrightness, getDistAttnFn());
         }
 
         if ((mFlags & 0x800) != 0) {
@@ -207,13 +202,13 @@ void LightObject::CopyToG3D_World(nw4r::g3d::LightObj &g3dObj) const {
         if ((mFlags & 0x80) != 0) {
             g3dObj.InitLightAttnA(field_0x4C.x, field_0x4C.y, field_0x4C.z);
         } else {
-            g3dObj.InitLightSpot(field_0x40 > 0.0f ? field_0x40 : 0.0001f, getSpotFn());
+            g3dObj.InitLightSpot(mCutoff > 0.0f ? mCutoff : 0.0001f, getSpotFn());
         }
 
         if ((mFlags & 0x100) != 0) {
             g3dObj.InitLightAttnK(field_0x58.x, field_0x58.y, field_0x58.z);
         } else {
-            g3dObj.InitLightDistAttn(field_0x44 * getDistance(), field_0x48, getDistAttnFn());
+            g3dObj.InitLightDistAttn(mRefDist * getDistance(), mRefBrightness, getDistAttnFn());
         }
 
         if ((mFlags & 0x800) != 0) {
@@ -229,7 +224,6 @@ void LightObject::CopyToG3D_View(nw4r::g3d::LightObj &g3dObj, const nw4r::math::
         return;
     }
 
-    // TODO
     if (!((mFlags >> 11) & 1)) {
         nw4r::math::VEC3 dir;
         nw4r::math::VEC3 pos;
@@ -237,16 +231,12 @@ void LightObject::CopyToG3D_View(nw4r::g3d::LightObj &g3dObj, const nw4r::math::
             case 1: {
                 nw4r::math::VEC3TransformNormal(&dir, &viewMtx, &field_0x94);
                 nw4r::math::VEC3Scale(&pos, &dir, -1e10f);
-                dir.z = 0.0f;
-                dir.y = 0.0f;
-                dir.x = 0.0f;
+                dir.x = dir.y = dir.z = 0.0f;
                 break;
             }
             case 0: {
                 PSMTXMultVec(viewMtx, mViewPos, pos);
-                dir.z = 0.0f;
-                dir.y = 0.0f;
-                dir.x = 0.0f;
+                dir.x = dir.y = dir.z = 0.0f;
                 break;
             }
             case 2: {
@@ -275,7 +265,6 @@ void LightObject::CopyFromG3D(
                 optObj->mFlags |= 2;
             }
         } else {
-            // TODO
             ClearFlag2();
             if (optObj != nullptr) {
                 optObj->ClearFlag2();
@@ -287,19 +276,17 @@ void LightObject::CopyFromG3D(
 void LightObject::ApplyAnmResultInner(const nw4r::g3d::LightAnmResult &res) {
     // TODO
     mFlags = mFlags & 0xF07E;
-    field_0x40 = 90.0f;
-    field_0x44 = 0.5f;
-    field_0x48 = 0.5f;
+    mCutoff = 90.0f;
+    mRefDist = 0.5f;
+    mRefBrightness = 0.5f;
     mSpotFn = GX_SP_OFF;
     mDistAttnFn = GX_DA_OFF;
     mShininess = 16.0f;
-    // ...
-    field_0x58.x = 1.0f;
-    field_0x4C.x = 1.0f;
-    field_0x58.z = 0.0f;
-    field_0x4C.z = 0.0f;
-    field_0x58.y = 0.0f;
-    field_0x4C.y = 0.0f;
+
+    field_0x4C.x = field_0x58.x = 1.0f;
+    field_0x4C.z = field_0x58.z = 0.0f;
+    field_0x4C.y = field_0x58.y = 0.0f;
+
     if ((res.flags & nw4r::g3d::LightAnmResult::FLAG_COLOR_ENABLE) != 0) {
         mFlags |= 0x200;
     }
@@ -318,10 +305,10 @@ void LightObject::ApplyAnmResultA(const nw4r::g3d::LightAnmResult &res) {
             field_0x3D = 0;
             mWhite = res.color;
             SetPosAt(res.pos, res.pos);
-            field_0x40 = 0.0f;
+            mCutoff = 0.0f;
             mSpotFn = GX_SP_OFF;
-            field_0x44 = res.refDistance;
-            field_0x48 = res.refBrightness;
+            mRefDist = res.refDistance;
+            mRefBrightness = res.refBrightness;
             mDistAttnFn = res.distFunc;
             break;
         }
@@ -338,10 +325,10 @@ void LightObject::ApplyAnmResultA(const nw4r::g3d::LightAnmResult &res) {
             mWhite = res.color;
             SetPosAt(res.pos, res.aim);
             mSpotFn = res.spotFunc;
-            field_0x40 = res.cutoff;
+            mCutoff = res.cutoff;
             mDistAttnFn = res.distFunc;
-            field_0x44 = res.refDistance;
-            field_0x48 = res.refBrightness;
+            mRefDist = res.refDistance;
+            mRefBrightness = res.refBrightness;
             break;
         }
     }
@@ -370,9 +357,7 @@ void LightObject::CalcDirDist() {
     if (mDist > 0.0f) {
         nw4r::math::VEC3Scale(&mDir, &mDir, 1.0f / nw4r::math::FSqrt(mDist));
     } else {
-        mDir.z = 0.0f;
-        mDir.y = 0.0f;
-        mDir.x = 0.0f;
+        mDir.x = mDir.y = mDir.z = 0.0f;
     }
 }
 
