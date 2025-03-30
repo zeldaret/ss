@@ -5,6 +5,7 @@
 #include "egg/core/eggSystem.h" // for BaseSystem config
 #include "egg/core/eggVideo.h"
 #include "egg/prim/eggBitFlag.h"
+#include "nw4r/ut/ut_Color.h"
 #include "nw4r/ut.h" // IWYU pragma: export
 #include "rvl/VI.h"  // IWYU pragma: export
 
@@ -48,6 +49,14 @@ public:
     void copyEFBtoXFB();
     void calcFrequency();
     void setBlack(bool b) {}
+
+    nw4r::ut::Color getClearColor() const {
+        return mClearColor;
+    }
+
+    void setClearColor(nw4r::ut::Color color) {
+        mClearColor = color;
+    }
 
 public:
     static u32 sTickPeriod;

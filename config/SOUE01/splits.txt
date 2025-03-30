@@ -2166,115 +2166,213 @@ egg/prim/eggAssert.cpp:
 	.bss        start:0x80674C60 end:0x80674D68
 
 egg/gfx/eggCamera.cpp:
-	.text       start:0x8049C5C0 end:0x8049CAC0
+	.text       start:0x8049C5C0 end:0x8049CAC8
+	.data       start:0x8056ED00 end:0x8056ED60
+	.sdata2     start:0x8057F3B8 end:0x8057F3C8
 
 egg/gfx/eggPalette.cpp:
 	.text       start:0x8049CAD0 end:0x8049CB44
 
 egg/gfx/eggTexture.cpp:
 	.text       start:0x8049CB50 end:0x8049CFE4
+	.sdata2     start:0x8057F3C8 end:0x8057F3E0
 
-egg/gfx/eggUnk1.cpp:
+egg/gfx/eggAnalizeDL.cpp:
 	.text       start:0x8049CFF0 end:0x8049D7C0
+	.data       start:0x8056ED60 end:0x8056ED70
+	.sdata2     start:0x8057F3E0 end:0x8057F408
 
 egg/gfx/eggCapTexture.cpp:
-	.text       start:0x8049D7C0 end:0x8049D9D0
+	.text       start:0x8049D7C0 end:0x8049DA28
+	.rodata     start:0x804FBA30 end:0x804FBA48
+	.data       start:0x8056ED70 end:0x8056ED80
+	.sdata2     start:0x8057F410 end:0x8057F418
+	.sbss2      start:0x8057FFC0 end:0x8057FFC8
 
 egg/gfx/eggCpuTexture.cpp:
 	.text       start:0x8049DA30 end:0x8049EC94
+	.data       start:0x8056ED80 end:0x8056EDA0
+	.sdata2     start:0x8057F418 end:0x8057F440
 
 egg/gfx/eggDrawGX.cpp:
 	.text       start:0x8049ECA0 end:0x804A0C24
 	.ctors      start:0x804DB998 end:0x804DB99C
+	.rodata     start:0x804FBA60 end:0x804FBC58
+	.data       start:0x8056EDA0 end:0x8056EE60
+	.sdata      start:0x80574F18 end:0x80574F20
+	.sbss       start:0x80576808 end:0x80576810
+	.sdata2     start:0x8057F440 end:0x8057F538
+	.bss        start:0x80674D68 end:0x80674E48
 
 egg/gfx/eggDrawPathBase.cpp:
 	.text       start:0x804A0C30 end:0x804A0E98
+	.data       start:0x8056EE60 end:0x8056EEB0
 
-egg/gfx/eggDrawPathUnk1.cpp:
+egg/gfx/eggDrawPathBloom.cpp:
 	.text       start:0x804A0EA0 end:0x804A29B8
+	.data       start:0x8056EEB0 end:0x8056EF28
+	.sdata2     start:0x8057F538 end:0x8057F580
 
 egg/gfx/eggDrawPathDOF.cpp:
 	.text       start:0x804A29C0 end:0x804A4BE8
+	.rodata     start:0x804FBC70 end:0x804FBC88
+	.data       start:0x8056EF28 end:0x8056EFA0
+	.sdata2     start:0x8057F580 end:0x8057F5F8
 
-egg/gfx/eggDrawPathUnk2.cpp:
+egg/gfx/eggDrawPathLightMap.cpp:
 	.text       start:0x804A4BF0 end:0x804A54E8
+	.data       start:0x8056EFA0 end:0x8056EFF0
+	.sdata2     start:0x8057F5F8 end:0x8057F608
 
 egg/gfx/eggFog.cpp:
-	.text       start:0x804A54F0 end:0x804A5F60
+	.text       start:0x804A54F0 end:0x804A5A08
+	.data       start:0x8056EFF0 end:0x8056F010
+	.sdata      start:0x80574F20 end:0x80574F28
+	.sdata2     start:0x8057F608 end:0x8057F618
+
+egg/gfx/eggFogManager.cpp:
+	.text       start:0x804A5A10 end:0x804A5F60
+	.data       start:0x8056F010 end:0x8056F030
 
 egg/gfx/eggFrustum.cpp:
 	.text       start:0x804A5F60 end:0x804A6854
 	.ctors      start:0x804DB99C end:0x804DB9A0
+	.data       start:0x8056F030 end:0x8056F048
+	.sbss       start:0x80576810 end:0x80576820
+	.sdata2     start:0x8057F618 end:0x8057F63C
 
 egg/gfx/eggG3DUtility.cpp:
 	.text       start:0x804A6860 end:0x804A75B0
 
 egg/gfx/eggGfxEngine.cpp:
 	.text       start:0x804A75B0 end:0x804A7744
+	.data       start:0x8056F048 end:0x8056F058
 
 egg/gfx/eggGlobalDrawState.cpp:
 	.text       start:0x804A7750 end:0x804A7814
 	.ctors      start:0x804DB9A0 end:0x804DB9A4
+	.sbss       start:0x80576838 end:0x80576848
+	.bss        start:0x80674E48 end:0x80674E78
 
 egg/gfx/eggGXUtility.cpp:
 	.text       start:0x804A7820 end:0x804A7BC0
+	.sdata2     start:0x8057F640 end:0x8057F678
 
 egg/gfx/eggIScnProc.cpp:
 	.text       start:0x804A7BC0 end:0x804A7F7C
+	.data       start:0x8056F058 end:0x8056F068
 
-egg/gfx/eggLight.cpp:
-	.text       start:0x804A7F80 end:0x804AB24C
+egg/gfx/eggLightManager.cpp:
+	.text       start:0x804A7F80 end:0x804A9808
+	.data       start:0x8056F068 end:0x8056F098
+	.sdata      start:0x80574F28 end:0x80574F30
+	.sdata2     start:0x8057F678 end:0x8057F690
+
+egg/gfx/eggLightObject.cpp:
+	.text       start:0x804A9810 end:0x804AB24C
+	.rodata     start:0x804FBC88 end:0x804FBC98
+	.data       start:0x8056F098 end:0x8056F0B8
+	.sdata      start:0x80574F30 end:0x80574F38
+	.sdata2     start:0x8057F690 end:0x8057F6C0
 
 egg/gfx/eggLightTexture.cpp:
 	.text       start:0x804AB250 end:0x804AD448
 	.ctors      start:0x804DB9A4 end:0x804DB9A8
+	.rodata     start:0x804FBC98 end:0x804FBD08
+	.data       start:0x8056F0B8 end:0x8056F0F0
+	.sdata      start:0x80574F38 end:0x80574F48
+	.sbss       start:0x80576848 end:0x80576860
+	.sdata2     start:0x8057F6C0 end:0x8057F708
+	.bss        start:0x80674E78 end:0x80674EF0
 
 egg/gfx/eggLightTextureMgr.cpp:
 	.text       start:0x804AD450 end:0x804AE644
+	.data       start:0x8056F0F0 end:0x8056F110
+	.sdata2     start:0x8057F708 end:0x8057F720
 
 egg/gfx/eggModelEx.cpp:
 	.text       start:0x804AE650 end:0x804AEC20
+	.rodata     start:0x804FBD08 end:0x804FBD50
+	.data       start:0x8056F110 end:0x8056F120
+	.sdata      start:0x80574F48 end:0x80574F60
 
 egg/gfx/eggPostEffectBase.cpp:
 	.text       start:0x804AEC20 end:0x804AF4B4
+	.data       start:0x8056F120 end:0x8056F170
+	.sbss       start:0x80576860 end:0x80576870
+	.sdata2     start:0x8057F720 end:0x8057F750
+	.bss        start:0x80674EF0 end:0x80674F00
 
 egg/gfx/eggPostEffectBlur.cpp:
 	.text       start:0x804AF4C0 end:0x804AFC04
+	.data       start:0x8056F170 end:0x8056F190
+	.sdata2     start:0x8057F750 end:0x8057F788
 
-egg/gfx/eggPostEffectUnk1.cpp:
+egg/gfx/eggPostEffectBlurGather.cpp:
 	.text       start:0x804AFC10 end:0x804B0098
+	.data       start:0x8056F190 end:0x8056F1AC
+	.sdata2     start:0x8057F788 end:0x8057F798
 
 egg/gfx/eggPostEffectUnk2.cpp:
 	.text       start:0x804B00A0 end:0x804B0AA4
+	.rodata     start:0x804FBD50 end:0x804FBD88
+	.data       start:0x8056F1B0 end:0x8056F1D0
+	.sdata2     start:0x8057F798 end:0x8057F7C4
 
 egg/gfx/eggPostEffectMask.cpp:
 	.text       start:0x804B0AB0 end:0x804B0F60
+	.data       start:0x8056F1D0 end:0x8056F1F0
+	.sdata2     start:0x8057F7C8 end:0x8057F7D0
 
 egg/gfx/eggPostEffectMaskDOF.cpp:
 	.text       start:0x804B0F60 end:0x804B1BE8
+	.rodata     start:0x804FBD88 end:0x804FBDA0
+	.data       start:0x8056F1F0 end:0x8056F20C
+	.sdata2     start:0x8057F7D0 end:0x8057F80C
+	.sbss2      start:0x8057FFC8 end:0x8057FFCC
 
 egg/gfx/eggPostEffectSimple.cpp:
 	.text       start:0x804B1BF0 end:0x804B1E58
+	.data       start:0x8056F210 end:0x8056F230
+	.sdata2     start:0x8057F810 end:0x8057F818
 
 egg/gfx/eggScreen.cpp:
 	.text       start:0x804B1E60 end:0x804B30B4
 	.ctors      start:0x804DB9A8 end:0x804DB9AC
+	.data       start:0x8056F230 end:0x8056F268
+	.sbss       start:0x80576870 end:0x80576898
+	.sdata2     start:0x8057F818 end:0x8057F840
+	.bss        start:0x80674F00 end:0x80674F88
 
 egg/gfx/eggScreenEffectBase.cpp:
 	.text       start:0x804B30C0 end:0x804B30EC
 	.ctors      start:0x804DB9AC end:0x804DB9B0
+	.data       start:0x8056F268 end:0x8056F278
+	.bss        start:0x80674F88 end:0x80675010
 
 egg/gfx/eggScreenEffectBlur.cpp:
 	.text       start:0x804B30F0 end:0x804B3D98
+	.data       start:0x8056F278 end:0x8056F2B0
+	.sdata2     start:0x8057F840 end:0x8057F868
 
 egg/gfx/eggStateEfb.cpp:
 	.text       start:0x804B3DA0 end:0x804B460C
+	.sdata      start:0x80574F60 end:0x80574F68
+	.sbss       start:0x80576898 end:0x805768A0
+	.sdata2     start:0x8057F868 end:0x8057F890
+	.bss        start:0x80675010 end:0x806750A0
 
 egg/gfx/eggStateGX.cpp:
 	.text       start:0x804B4610 end:0x804B53EC
+	.rodata     start:0x804FBDA0 end:0x804FBE08
+	.sbss       start:0x805768A0 end:0x805768B8
+	.sdata2     start:0x8057F890 end:0x8057F8B0
+	.bss        start:0x806750A0 end:0x80675190
 
 egg/gfx/eggTextureBuffer.cpp:
 	.text       start:0x804B53F0 end:0x804B59DC
+	.data       start:0x8056F2B0 end:0x8056F2C0
+	.sbss       start:0x805768B8 end:0x805768D8
 
 egg/audio/eggAudioArcPlayerMgr.cpp:
 	.text       start:0x804B59E0 end:0x804B641C
