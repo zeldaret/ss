@@ -227,7 +227,7 @@ LightTexture::LightTexture(const char *name, const LightTextureManager *mgr)
     }
     field_0x9C = 0;
     mpFloatData = new float[mNumData];
-    mpByteData1 = new char[mNumData];
+    mpByteData1 = new u8[mNumData];
     mpByteData2 = new u8[mNumData];
     for (int i = 0; i < mNumData; i++) {
         mpByteData2[i] = 0;
@@ -590,9 +590,129 @@ void LightTexture::addLight(const EGG::LightObject &obj) {
 
     field_0x9F++;
 }
-
 void LightTexture::SetBinaryInner(const Bin &bin) {
-    // TODO
+    switch (bin.mHeader.mVersion) {
+        case 0: {
+            const struct Data {
+                /* 0x00 */ u16 mNumEntries;
+                /* 0x02 */ u8 _pad_02[2];
+                /* 0x04 */ char mName[32];
+                /* 0x24 */ u8 mType;
+                /* 0x25 */ u8 _pad_25[3];
+                /* 0x28 */ u32 field_0x28;
+                /* 0x2C */ SubData mSubData[1];
+            } &data = *(const Data *)&bin.mData;
+            mLightType = data.mType;
+            int numData = (u16)MIN(data.mNumEntries, (u16)mNumData);
+
+            const SubData *pSub = data.mSubData;
+            for (int i = 0; numData > 0; numData--, i++, pSub++) {
+                if (data.field_0x28 & (1 << i)) {
+                    onByte1(i);
+                } else {
+                    offByte1(i);
+                }
+                setFloat(i, pSub->mIntensity);
+                setByte2(i, pSub->mGradientUsed);
+            }
+
+            field_0x35 = 0;
+            field_0x50 = 1.f;
+            field_0x36 &= ~1;
+            field_0x36 &= ~2;
+            mName2[0] = '\0';
+            field_0x94 = -1;
+
+        } break;
+        case 1:
+        case 2: {
+            const struct Data {
+                /* 0x00 */ u16 mNumEntries;
+                /* 0x02 */ u8 field_0x02;
+                /* 0x03 */ u8 field_0x03;
+                /* 0x04 */ char mName[32];
+                /* 0x24 */ u8 mType;
+                /* 0x25 */ u8 _pad_25[3];
+                /* 0x28 */ u32 field_0x28;
+                /* 0x2C */ f32 field_0x2C;
+                /* 0x30 */ u8 _30[8];
+                /* 0x38 */ SubData mSubData[1];
+            } &data = *(const Data *)&bin.mData;
+
+            mLightType = data.mType;
+            int numData = (u16)MIN(data.mNumEntries, (u16)mNumData);
+
+            const SubData *pSub = data.mSubData;
+            for (int i = 0; numData > 0; numData--, i++, pSub++) {
+                if (bin.mHeader.mVersion == 1) {
+                    if (data.field_0x28 & (1 << i)) {
+                        onByte1(i);
+                    } else {
+                        offByte1(i);
+                    }
+                } else if (pSub->field_0x05 & 1) {
+                    onByte1(i);
+                } else {
+                    offByte1(i);
+                }
+                setFloat(i, pSub->mIntensity);
+                setByte2(i, pSub->mGradientUsed);
+            }
+
+            if (data.field_0x02 & 1) {
+                field_0x36 |= 1;
+            } else {
+                field_0x36 &= ~1;
+            }
+
+            field_0x35 = data.field_0x03;
+            field_0x50 = data.field_0x2C;
+            field_0x36 &= ~2;
+            mName2[0] = '\0';
+            field_0x94 = -1;
+            field_0x98 = 1.f;
+
+        } break;
+        case 3: {
+            const BinData &data = bin.mData;
+            mLightType = data.mType;
+            int numData = (u16)MIN(data.mNumEntries, (u16)mNumData);
+
+            const SubData *pSub = data.mSubData;
+            for (int i = 0; numData > 0; numData--, i++, pSub++) {
+                if (bin.mHeader.mVersion == 1) {
+                    if (data.field_0x28 & (1 << i)) {
+                        onByte1(i);
+                    } else {
+                        offByte1(i);
+                    }
+                } else if (pSub->field_0x05 & 1) {
+                    onByte1(i);
+                } else {
+                    offByte1(i);
+                }
+                setFloat(i, pSub->mIntensity);
+                setByte2(i, pSub->mGradientUsed);
+            }
+
+            if (data.field_0x02 & 1) {
+                field_0x36 |= 1;
+            } else {
+                field_0x36 &= ~1;
+            }
+            field_0x35 = data.field_0x03;
+            field_0x50 = data.field_0x2C;
+
+            if (data.field_0x02 & 2) {
+                field_0x36 |= 2;
+            } else {
+                field_0x36 &= ~2;
+            }
+            std::strcpy(mName2, data.mName2);
+            field_0x94 = -1;
+            field_0x98 = data.field_0x54;
+        } break;
+    }
 }
 
 void LightTexture::GetBinaryInner(Bin *pOutBin) const {

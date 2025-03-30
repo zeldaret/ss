@@ -886,7 +886,7 @@ config.libs = [
             Object(Matching, "egg/gfx/eggIScnProc.cpp"),
             Object(NonMatching, "egg/gfx/eggLightManager.cpp"),
             Object(NonMatching, "egg/gfx/eggLightObject.cpp"),
-            Object(NonMatching, "egg/gfx/eggLightTexture.cpp"),
+            Object(Matching, "egg/gfx/eggLightTexture.cpp"),
             Object(Matching, "egg/gfx/eggLightTextureMgr.cpp"),
             Object(Matching, "egg/gfx/eggModelEx.cpp"),
             Object(Matching, "egg/gfx/eggPostEffectBase.cpp"),
