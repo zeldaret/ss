@@ -396,9 +396,10 @@ void LightTexture::fn_804AC0E0(int i, const GXColor &color, bool b) {
     int remainder = field_0x9F % field_0x9D;
     if (remainder > 0) {
         for (; remainder < field_0x9D; remainder++) {
-            // TODO: color stack slots swapped
-            GXSetTevColor(static_cast<GXTevRegID>(GX_TEVREG0 + remainder), DrawGX::BLACK);
-            GXSetTevKColor(static_cast<GXTevKColorID>(GX_KCOLOR0 + remainder), DrawGX::BLACK);
+            DrawGX::SetTevColor(
+                static_cast<GXTevRegID>(GX_TEVREG0 + remainder), DrawGX::BLACK,
+                static_cast<GXTevKColorID>(GX_KCOLOR0 + remainder), DrawGX::BLACK
+            );
         }
 
         f32 origin = GetLightType() != 2 ? 0.0f : 0.5f;
@@ -537,7 +538,6 @@ void LightTexture::debugDraw(int i) {
 }
 
 void LightTexture::addLight(const EGG::LightObject &obj) {
-    // NONMATCHING
     if (!(obj.CheckFlag1() && obj.CheckFlag0x20() && (mpByteData1[obj.GetIndex()] & 1) != 0 &&
           (field_0x9F < 2 || mLightType != 1))) {
         return;
@@ -552,14 +552,13 @@ void LightTexture::addLight(const EGG::LightObject &obj) {
     }
     sCpuTexArray[mpByteData2[obj.GetIndex()]]->load(static_cast<GXTexMapID>(field_0x9E + remainder));
 
-    // TODO
-    GXColor blackColor = obj.GetBlack();
-    // Sorry clang-format, what is this formatting???
-    blackColor = (GXColor
-    ){blackColor.r * obj.getField0x30(), blackColor.g * obj.getField0x30(), blackColor.b * obj.getField0x30(),
-      blackColor.a};
-    GXSetTevColor(static_cast<GXTevRegID>(GX_TEVREG0 + remainder), color);
-    GXSetTevKColor(static_cast<GXTevKColorID>(GX_KCOLOR0 + remainder), blackColor);
+    GXColor blk = obj.GetBlack();
+    f32 mult = obj.getField0x30();
+    blk = (GXColor){blk.r * mult, blk.g * mult, blk.b * mult, obj.GetBlack().a};
+
+    DrawGX::SetTevColor(
+        static_cast<GXTevRegID>(GX_TEVREG0 + remainder), color, static_cast<GXTevKColorID>(GX_KCOLOR0 + remainder), blk
+    );
     if (GetLightType() == 0 || GetLightType() == 2) {
         f32 mtx[2][3];
         mtx[0][0] = -vec.x * 0.485f;

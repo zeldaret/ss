@@ -158,6 +158,11 @@ public:
     }
     // TODO MORE
 
+    static void SetTevColor(GXTevRegID regId, GXColor tevClr, GXTevKColorID colorId, GXColor tevkClr) {
+        GXSetTevColor(regId, tevClr);
+        GXSetTevKColor(colorId, tevkClr);
+    }
+
     // not sure
     static DLData s_DL[DL_MAX];
     static const DL s_DL0;
