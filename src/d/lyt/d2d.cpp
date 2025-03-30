@@ -441,8 +441,7 @@ void LytBase_c::setPropertiesRecursive(nw4r::lyt::Pane *pane, f32 posX, f32 posY
     }
 }
 
-extern "C" const char *fn_801B2600(const char *);
-extern "C" void fn_800AF930(dTextBox_c *, const char *);
+extern "C" const wchar_t *fn_801B2600(const char *);
 extern "C" void fn_800B0F40(dTextBox_c *);
 
 void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 scale, f32 spaceX, f32 spaceY) {
@@ -612,7 +611,7 @@ bool LytBase_c::fn_800ABCE0(
         return false;
     }
 
-    fn_800AF930(textbox1, fn_801B2600(text));
+    textbox1->fn_800AF930(fn_801B2600(text));
     return true;
 }
 
@@ -823,11 +822,11 @@ bool AnmGroupBase_c::setDirection(bool b) {
     }
 
     nw4r::lyt::BindAnimation(mpGroup, anmTransform, false, b);
-    mFlags |= 1;
+    mFlags |= ANMGROUP_FLAG_BOUND;
     if (b) {
-        mFlags = (mFlags & ~2);
+        mFlags = (mFlags & ~ANMGROUP_FLAG_ENABLE);
     } else {
-        mFlags |= 2;
+        mFlags |= ANMGROUP_FLAG_ENABLE;
     }
 
     u32 flags = 1;
@@ -852,7 +851,7 @@ bool AnmGroupBase_c::unbind() {
     }
 
     nw4r::lyt::UnbindAnimation(group, anmTransform, mAnmResource.IsDescendingBind());
-    mFlags = (mFlags & ~1);
+    mFlags = (mFlags & ~ANMGROUP_FLAG_BOUND);
     return true;
 }
 
@@ -865,9 +864,9 @@ void AnmGroupBase_c::setAnimEnable(bool b) {
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     nw4r::lyt::SetAnimationEnable(group, anmTransform, b, mAnmResource.IsDescendingBind());
     if (b) {
-        mFlags |= 2;
+        mFlags |= ANMGROUP_FLAG_ENABLE;
     } else {
-        mFlags = mFlags & ~2;
+        mFlags = mFlags & ~ANMGROUP_FLAG_ENABLE;
     }
 }
 

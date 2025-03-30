@@ -402,7 +402,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_shield_gauge.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_do_button.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_common_icon_material.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_common_icon_item.cpp"),
+            Object(Matching, "d/lyt/d_lyt_common_icon_item.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_msg_window.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_msg_window_select_btn.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_msg_window_talk.cpp"),

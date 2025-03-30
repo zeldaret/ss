@@ -153,7 +153,7 @@ bool FrameCtrl_c::isStop() const {
     }
 }
 
-f32 FrameCtrl_c::getEndFrame() const {
+f32 FrameCtrl_c::getStartFrame() const {
     if (isBackwards()) {
         if (notLooping()) {
             return mEndFrame - 1.0f;
@@ -164,7 +164,7 @@ f32 FrameCtrl_c::getEndFrame() const {
     return 0.0f;
 }
 
-f32 FrameCtrl_c::getEndFrame2() const {
+f32 FrameCtrl_c::getEndFrame() const {
     if (isBackwards()) {
         return 0.0f;
     }

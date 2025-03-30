@@ -168,6 +168,9 @@ public:
     u8 field_0x05;
 };
 
+#define ANMGROUP_FLAG_BOUND 1
+#define ANMGROUP_FLAG_ENABLE 2
+
 struct AnmGroupBase_c {
     AnmGroupBase_c(m2d::FrameCtrl_c *frameCtrl) : field_0x04(nullptr), mFlags(0), mpFrameCtrl(frameCtrl) {}
     virtual ~AnmGroupBase_c() {}
@@ -201,17 +204,17 @@ struct AnmGroupBase_c {
         syncAnmFrame();
     }
 
+    inline void setFrameRatio(f32 frame) {
+        f32 end = getEndFrameRaw() - 1.0f;
+        setFrame(end * frame);
+    }
+
     inline f32 getEndFrameRaw() const {
         return mpFrameCtrl->getEndFrameRaw();
     }
 
     inline f32 getFrame() const {
         return mpFrameCtrl->getFrame();
-    }
-
-    inline void setToStart() {
-        mpFrameCtrl->setToStart();
-        syncAnmFrame();
     }
 
     inline void setToEnd() {
@@ -225,11 +228,10 @@ struct AnmGroupBase_c {
 
     inline void setRate(f32 rate) {
         mpFrameCtrl->setRate(rate);
-        setAnimEnable(true);
     }
 
-    inline bool isFlag2() const {
-        return (mFlags & 2) != 0;
+    inline bool isEnabled() const {
+        return (mFlags & ANMGROUP_FLAG_ENABLE) != 0;
     }
 
     inline bool isStop() const {
@@ -240,14 +242,26 @@ struct AnmGroupBase_c {
         return mpFrameCtrl->isStop2();
     }
 
-    inline void playBackwardsOnce() {
+    inline void setBackwardsOnce() {
         mpFrameCtrl->setFlags(FLAG_NO_LOOP | FLAG_BACKWARDS);
-        setToEnd2();
     }
 
-    inline void playLoop() {
+    inline bool isPlayingBackwardsOnce() const {
+        return mpFrameCtrl->getFlags() == (FLAG_NO_LOOP | FLAG_BACKWARDS);
+    }
+
+    inline bool isPlayingForwardsOnce() const  {
+        return mpFrameCtrl->getFlags() == FLAG_NO_LOOP;
+    }
+
+    inline void setForwardOnce() {
         mpFrameCtrl->setFlags(FLAG_NO_LOOP);
-        setToEnd2();
+    }
+
+    inline void setToStart() {
+        m2d::FrameCtrl_c &ctrl = *mpFrameCtrl;
+        ctrl.setCurrFrame(ctrl.getStartFrame());
+        syncAnmFrame();
     }
 
     inline void setToEnd2() {

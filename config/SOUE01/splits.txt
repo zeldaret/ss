@@ -414,7 +414,11 @@ d/lyt/d_lyt_common_icon_material.cpp:
 d/lyt/d_lyt_common_icon_item.cpp:
 	.text       start:0x80111720 end:0x80113ED8
 	.ctors      start:0x804DB734 end:0x804DB738
+	.rodata     start:0x804E7390 end:0x804E7430
 	.data       start:0x8051B070 end:0x8051B5A0
+	.sdata      start:0x80572558 end:0x80572580
+	.sdata2     start:0x80579DB8 end:0x80579DD0
+	.bss        start:0x805AD088 end:0x805AD188
 
 d/lyt/d_lyt_msg_window.cpp:
 	.text       start:0x801148F0 end:0x8011C8C8

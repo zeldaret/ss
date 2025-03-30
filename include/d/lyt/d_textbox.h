@@ -38,6 +38,8 @@ public:
         // TODO
     }
 
+    void fn_800AF930(const wchar_t *);
+
     // @bug: This does not implement UT's RTTI, so casts to dTextBox_c will
     // succeed even if all you have is a lyt::TextBox
 private:

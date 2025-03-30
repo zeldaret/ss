@@ -53,8 +53,8 @@ public:
 
     bool isStop() const;
     bool isStop2() const;
+    f32 getStartFrame() const;
     f32 getEndFrame() const;
-    f32 getEndFrame2() const;
 
     inline f32 getFrame() const {
         return mCurrFrame;
@@ -68,8 +68,8 @@ public:
         mFlags = flags;
     }
 
-    inline void setToStart() {
-        setFrame(0.0f);
+    inline u8 getFlags() const {
+        return mFlags;
     }
 
     inline bool isEndReached() const {

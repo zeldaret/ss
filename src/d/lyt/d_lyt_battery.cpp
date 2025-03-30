@@ -65,7 +65,7 @@ bool dLytBattery_c::doDraw() {
     mStateMgr.executeState();
     if (*mStateMgr.getStateID() != StateID_Off) {
         for (int i = 0; i < 4; i++) {
-            if (mAnmGroups[i].isFlag2()) {
+            if (mAnmGroups[i].isEnabled()) {
                 mAnmGroups[i].play();
             }
         }
