@@ -88,28 +88,18 @@ void LightObject::CalcView(nw4r::math::MTX34 const &viewMtx) {
     if (getField0x3C() < 0 || getField0x3C() > 1) {
         switch (getField0x3C()) {
             case 3: {
-                // Halp
-                f32 scale = -1.0f;
-                mViewAt.x = 0.0f;
-                field_0x94.x = 0.0f;
-                mViewAt.y = 0.0f;
-                field_0x94.y = 0.0f;
-                field_0x94.z = -1.0f;
-                mViewAt.z = scale * mDist;
-                mViewPos.z = 0.0f;
-                mViewPos.y = 0.0f;
-                mViewPos.x = 0.0f;
+                field_0x94.x = mViewAt.x = 0.0f;
+                field_0x94.y = mViewAt.y = 0.0f;
+                field_0x94.z = mViewAt.z = -1.0f;
+                mViewAt.z *= mDist;
+                mViewPos.x = mViewPos.y = mViewPos.z = 0.0f;
                 break;
             }
             case 4: {
-                // Halp
-                f32 scale = 1.0f;
-                mViewPos.x = 0.0f;
-                field_0x94.x = 0.0f;
-                mViewPos.y = 0.0f;
-                field_0x94.y = 0.0f;
-                field_0x94.z = 1.0f;
-                mViewPos.z = scale * mDist;
+                field_0x94.x = mViewPos.x = 0.0f;
+                field_0x94.y = mViewPos.y = 0.0f;
+                field_0x94.z = mViewPos.z = 1.0f;
+                mViewPos.z *= mDist;
                 mViewAt.z = 0.0f;
                 mViewAt.y = 0.0f;
                 mViewAt.x = 0.0f;
@@ -240,7 +230,7 @@ void LightObject::CopyToG3D_View(nw4r::g3d::LightObj &g3dObj, const nw4r::math::
     }
 
     // TODO
-    if (!(mFlags & 0x800)) {
+    if (!((mFlags >> 11) & 1)) {
         nw4r::math::VEC3 dir;
         nw4r::math::VEC3 pos;
         switch (field_0x3D) {
