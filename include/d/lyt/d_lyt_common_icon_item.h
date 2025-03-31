@@ -20,7 +20,7 @@ public:
 class dLytCommonIconItemPart1_c : public dLytCommonIconItemPartBase_c {
 public:
     dLytCommonIconItemPart1_c()
-        : field_0x28C(0), mColor(0), field_0x2B4(false), mHasNumber(false), mSize(false), mBocoburinLocked(false) {}
+        : mItem(0), mColor(0), field_0x2B4(false), mHasNumber(false), mSize(false), mBocoburinLocked(false) {}
     virtual ~dLytCommonIconItemPart1_c() {}
     virtual nw4r::lyt::Pane *getPane() override {
         return mLyt.getLayout()->GetRootPane();
@@ -71,7 +71,7 @@ private:
     /* 0x258 */ dTextBox_c *mpTextBoxes[2];
     /* 0x260 */ nw4r::lyt::Bounding *mpBounding;
     /* 0x264 */ d2d::dLytStructD mStructD;
-    /* 0x28C */ u8 field_0x28C;
+    /* 0x28C */ u8 mItem;
     /* 0x28D */ u8 mColor;
     /* 0x28E */ u8 _0x28E[0x294 - 0x28E];
     /* 0x294 */ wchar_t mNumberBuf[16];

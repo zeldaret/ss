@@ -165,12 +165,12 @@ void dLytCommonIconItemPart1_c::realizeBocoburin() {
 void dLytCommonIconItemPart1_c::realizeItem(u8 item) {
     // Inline?
     if (mAnm[ITEM_PART_1_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
-        field_0x28C = 0;
+        mItem = 0;
     } else {
-        field_0x28C = item;
+        mItem = item;
     }
 
-    mAnm[ITEM_PART_1_ANIM_ICON].setFrame(field_0x28C);
+    mAnm[ITEM_PART_1_ANIM_ICON].setFrame(mItem);
     mAnm[ITEM_PART_1_ANIM_ICON].setAnimEnable(true);
     mLyt.calc();
     mAnm[ITEM_PART_1_ANIM_ICON].setAnimEnable(false);
