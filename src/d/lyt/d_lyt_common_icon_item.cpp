@@ -29,20 +29,20 @@ static const char *part1TextBoxes[] = {
 
 static const char *part1Bounding = "B_item_00";
 
-#define LYT_COMMON_ICON_PART_1_ANIM_SIZE 0
-#define LYT_COMMON_ICON_PART_1_ANIM_BOCOBURIN 1
-#define LYT_COMMON_ICON_PART_1_ANIM_NUMBERV 2
-#define LYT_COMMON_ICON_PART_1_ANIM_ICON 3
-#define LYT_COMMON_ICON_PART_1_ANIM_TEXTCOLOR 4
-#define LYT_COMMON_ICON_PART_1_ANIM_ONOFF 5
-#define LYT_COMMON_ICON_PART_1_ANIM_DECIDE 6
+#define ITEM_PART_1_ANIM_SIZE 0
+#define ITEM_PART_1_ANIM_BOCOBURIN 1
+#define ITEM_PART_1_ANIM_NUMBERV 2
+#define ITEM_PART_1_ANIM_ICON 3
+#define ITEM_PART_1_ANIM_TEXTCOLOR 4
+#define ITEM_PART_1_ANIM_ONOFF 5
+#define ITEM_PART_1_ANIM_DECIDE 6
 
-#define LYT_COMMON_ICON_PART_1_NUM_ANIMS 7
+#define ITEM_PART_1_NUM_ANIMS 7
 
 bool dLytCommonIconItemPart1_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setResAcc(resAcc);
     mLyt.build("commonIcon_02.brlyt", nullptr);
-    for (int i = 0; i < LYT_COMMON_ICON_PART_1_NUM_ANIMS; i++) {
+    for (int i = 0; i < ITEM_PART_1_NUM_ANIMS; i++) {
         mAnm[i].init(brlanMapPart1[i].mFile, resAcc, mLyt.getLayout(), brlanMapPart1[i].mName);
         mAnm[i].setDirection(false);
         mAnm[i].setRate(1.0f);
@@ -58,7 +58,7 @@ bool dLytCommonIconItemPart1_c::build(d2d::ResAccIf_c *resAcc) {
 }
 
 bool dLytCommonIconItemPart1_c::remove() {
-    for (int i = 0; i < LYT_COMMON_ICON_PART_1_NUM_ANIMS; i++) {
+    for (int i = 0; i < ITEM_PART_1_NUM_ANIMS; i++) {
         mAnm[i].unbind();
         mAnm[i].afterUnbind();
     }
@@ -66,15 +66,15 @@ bool dLytCommonIconItemPart1_c::remove() {
 }
 
 bool dLytCommonIconItemPart1_c::execute() {
-    if (mAnm[LYT_COMMON_ICON_PART_1_ANIM_ONOFF].isEnabled() && mAnm[LYT_COMMON_ICON_PART_1_ANIM_ONOFF].isStop2()) {
-        mAnm[LYT_COMMON_ICON_PART_1_ANIM_ONOFF].setAnimEnable(false);
+    if (mAnm[ITEM_PART_1_ANIM_ONOFF].isEnabled() && mAnm[ITEM_PART_1_ANIM_ONOFF].isStop2()) {
+        mAnm[ITEM_PART_1_ANIM_ONOFF].setAnimEnable(false);
     }
 
-    if (mAnm[LYT_COMMON_ICON_PART_1_ANIM_DECIDE].isEnabled() && mAnm[LYT_COMMON_ICON_PART_1_ANIM_DECIDE].isStop2()) {
-        mAnm[LYT_COMMON_ICON_PART_1_ANIM_DECIDE].setAnimEnable(false);
+    if (mAnm[ITEM_PART_1_ANIM_DECIDE].isEnabled() && mAnm[ITEM_PART_1_ANIM_DECIDE].isStop2()) {
+        mAnm[ITEM_PART_1_ANIM_DECIDE].setAnimEnable(false);
     }
 
-    for (int i = 0; i < LYT_COMMON_ICON_PART_1_NUM_ANIMS; i++) {
+    for (int i = 0; i < ITEM_PART_1_NUM_ANIMS; i++) {
         if (mAnm[i].isEnabled()) {
             mAnm[i].play();
         }
@@ -83,38 +83,38 @@ bool dLytCommonIconItemPart1_c::execute() {
 }
 
 void dLytCommonIconItemPart1_c::reset() {
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_ICON].setFrame(0.0f);
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_ICON].setAnimEnable(true);
+    mAnm[ITEM_PART_1_ANIM_ICON].setFrame(0.0f);
+    mAnm[ITEM_PART_1_ANIM_ICON].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_SIZE].setFrame(1.0f);
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_SIZE].setAnimEnable(true);
+    mAnm[ITEM_PART_1_ANIM_SIZE].setFrame(1.0f);
+    mAnm[ITEM_PART_1_ANIM_SIZE].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_BOCOBURIN].setFrame(0.0f);
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_BOCOBURIN].setAnimEnable(true);
+    mAnm[ITEM_PART_1_ANIM_BOCOBURIN].setFrame(0.0f);
+    mAnm[ITEM_PART_1_ANIM_BOCOBURIN].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_NUMBERV].setFrame(0.0f);
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_NUMBERV].setAnimEnable(true);
+    mAnm[ITEM_PART_1_ANIM_NUMBERV].setFrame(0.0f);
+    mAnm[ITEM_PART_1_ANIM_NUMBERV].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_TEXTCOLOR].setFrame(0.0f);
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_TEXTCOLOR].setAnimEnable(true);
+    mAnm[ITEM_PART_1_ANIM_TEXTCOLOR].setFrame(0.0f);
+    mAnm[ITEM_PART_1_ANIM_TEXTCOLOR].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_ONOFF].setBackwardsOnce();
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_ONOFF].setToEnd2();
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_ONOFF].setAnimEnable(true);
+    mAnm[ITEM_PART_1_ANIM_ONOFF].setBackwardsOnce();
+    mAnm[ITEM_PART_1_ANIM_ONOFF].setToEnd2();
+    mAnm[ITEM_PART_1_ANIM_ONOFF].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_DECIDE].setForwardOnce();
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_DECIDE].setToEnd2();
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_DECIDE].setAnimEnable(true);
+    mAnm[ITEM_PART_1_ANIM_DECIDE].setForwardOnce();
+    mAnm[ITEM_PART_1_ANIM_DECIDE].setToEnd2();
+    mAnm[ITEM_PART_1_ANIM_DECIDE].setAnimEnable(true);
 
     mLyt.calc();
 
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_DECIDE].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_ONOFF].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_TEXTCOLOR].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_NUMBERV].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_BOCOBURIN].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_SIZE].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_ICON].setAnimEnable(false);
+    mAnm[ITEM_PART_1_ANIM_DECIDE].setAnimEnable(false);
+    mAnm[ITEM_PART_1_ANIM_ONOFF].setAnimEnable(false);
+    mAnm[ITEM_PART_1_ANIM_TEXTCOLOR].setAnimEnable(false);
+    mAnm[ITEM_PART_1_ANIM_NUMBERV].setAnimEnable(false);
+    mAnm[ITEM_PART_1_ANIM_BOCOBURIN].setAnimEnable(false);
+    mAnm[ITEM_PART_1_ANIM_SIZE].setAnimEnable(false);
+    mAnm[ITEM_PART_1_ANIM_ICON].setAnimEnable(false);
 }
 
 void dLytCommonIconItemPart1_c::setItem(u8 item) {
@@ -131,49 +131,49 @@ void dLytCommonIconItemPart1_c::realizeUnk() {
 
 void dLytCommonIconItemPart1_c::realizeNumber() {
     if (mHasNumber) {
-        mAnm[LYT_COMMON_ICON_PART_1_ANIM_NUMBERV].setFrame(1.0f);
+        mAnm[ITEM_PART_1_ANIM_NUMBERV].setFrame(1.0f);
     } else {
-        mAnm[LYT_COMMON_ICON_PART_1_ANIM_NUMBERV].setFrame(0.0f);
+        mAnm[ITEM_PART_1_ANIM_NUMBERV].setFrame(0.0f);
     }
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_NUMBERV].setAnimEnable(true);
+    mAnm[ITEM_PART_1_ANIM_NUMBERV].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_NUMBERV].setAnimEnable(false);
+    mAnm[ITEM_PART_1_ANIM_NUMBERV].setAnimEnable(false);
 }
 
 void dLytCommonIconItemPart1_c::realizeSize() {
     if (mSize) {
-        mAnm[LYT_COMMON_ICON_PART_1_ANIM_SIZE].setFrame(0.0f);
+        mAnm[ITEM_PART_1_ANIM_SIZE].setFrame(0.0f);
     } else {
-        mAnm[LYT_COMMON_ICON_PART_1_ANIM_SIZE].setFrame(1.0f);
+        mAnm[ITEM_PART_1_ANIM_SIZE].setFrame(1.0f);
     }
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_SIZE].setAnimEnable(true);
+    mAnm[ITEM_PART_1_ANIM_SIZE].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_SIZE].setAnimEnable(false);
+    mAnm[ITEM_PART_1_ANIM_SIZE].setAnimEnable(false);
 }
 
 void dLytCommonIconItemPart1_c::realizeBocoburin() {
     if (mBocoburinLocked) {
-        mAnm[LYT_COMMON_ICON_PART_1_ANIM_BOCOBURIN].setFrame(1.0f);
+        mAnm[ITEM_PART_1_ANIM_BOCOBURIN].setFrame(1.0f);
     } else {
-        mAnm[LYT_COMMON_ICON_PART_1_ANIM_BOCOBURIN].setFrame(0.0f);
+        mAnm[ITEM_PART_1_ANIM_BOCOBURIN].setFrame(0.0f);
     }
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_BOCOBURIN].setAnimEnable(true);
+    mAnm[ITEM_PART_1_ANIM_BOCOBURIN].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_BOCOBURIN].setAnimEnable(false);
+    mAnm[ITEM_PART_1_ANIM_BOCOBURIN].setAnimEnable(false);
 }
 
 void dLytCommonIconItemPart1_c::realizeItem(u8 item) {
     // Inline?
-    if (mAnm[LYT_COMMON_ICON_PART_1_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
+    if (mAnm[ITEM_PART_1_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
         field_0x28C = 0;
     } else {
         field_0x28C = item;
     }
 
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_ICON].setFrame(field_0x28C);
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_ICON].setAnimEnable(true);
+    mAnm[ITEM_PART_1_ANIM_ICON].setFrame(field_0x28C);
+    mAnm[ITEM_PART_1_ANIM_ICON].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_ICON].setAnimEnable(false);
+    mAnm[ITEM_PART_1_ANIM_ICON].setAnimEnable(false);
     mpBounding->SetVisible(true);
 }
 
@@ -188,37 +188,37 @@ void dLytCommonIconItemPart1_c::setNumber(s32 number) {
 void dLytCommonIconItemPart1_c::setNumberColor(u8 color) {
     mColor = color;
     switch (mColor) {
-        case 0: mAnm[LYT_COMMON_ICON_PART_1_ANIM_TEXTCOLOR].setFrame(0.0f); break;
-        case 1: mAnm[LYT_COMMON_ICON_PART_1_ANIM_TEXTCOLOR].setFrame(1.0f); break;
-        case 2: mAnm[LYT_COMMON_ICON_PART_1_ANIM_TEXTCOLOR].setFrame(2.0f); break;
+        case 0: mAnm[ITEM_PART_1_ANIM_TEXTCOLOR].setFrame(0.0f); break;
+        case 1: mAnm[ITEM_PART_1_ANIM_TEXTCOLOR].setFrame(1.0f); break;
+        case 2: mAnm[ITEM_PART_1_ANIM_TEXTCOLOR].setFrame(2.0f); break;
     }
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_TEXTCOLOR].setAnimEnable(true);
+    mAnm[ITEM_PART_1_ANIM_TEXTCOLOR].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_TEXTCOLOR].setAnimEnable(false);
+    mAnm[ITEM_PART_1_ANIM_TEXTCOLOR].setAnimEnable(false);
 }
 
 void dLytCommonIconItemPart1_c::setOn() {
-    if (mAnm[LYT_COMMON_ICON_PART_1_ANIM_ONOFF].isPlayingBackwardsOnce()) {
-        mAnm[LYT_COMMON_ICON_PART_1_ANIM_ONOFF].setForwardOnce();
-        mAnm[LYT_COMMON_ICON_PART_1_ANIM_ONOFF].setAnimEnable(true);
+    if (mAnm[ITEM_PART_1_ANIM_ONOFF].isPlayingBackwardsOnce()) {
+        mAnm[ITEM_PART_1_ANIM_ONOFF].setForwardOnce();
+        mAnm[ITEM_PART_1_ANIM_ONOFF].setAnimEnable(true);
     }
 }
 
 void dLytCommonIconItemPart1_c::setOff() {
-    if (mAnm[LYT_COMMON_ICON_PART_1_ANIM_ONOFF].isPlayingForwardsOnce()) {
-        mAnm[LYT_COMMON_ICON_PART_1_ANIM_ONOFF].setBackwardsOnce();
-        mAnm[LYT_COMMON_ICON_PART_1_ANIM_ONOFF].setAnimEnable(true);
+    if (mAnm[ITEM_PART_1_ANIM_ONOFF].isPlayingForwardsOnce()) {
+        mAnm[ITEM_PART_1_ANIM_ONOFF].setBackwardsOnce();
+        mAnm[ITEM_PART_1_ANIM_ONOFF].setAnimEnable(true);
     }
 }
 
 void dLytCommonIconItemPart1_c::startDecide() {
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_DECIDE].setForwardOnce();
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_DECIDE].setToStart();
-    mAnm[LYT_COMMON_ICON_PART_1_ANIM_DECIDE].setAnimEnable(true);
+    mAnm[ITEM_PART_1_ANIM_DECIDE].setForwardOnce();
+    mAnm[ITEM_PART_1_ANIM_DECIDE].setToStart();
+    mAnm[ITEM_PART_1_ANIM_DECIDE].setAnimEnable(true);
 }
 
 bool dLytCommonIconItemPart1_c::isDoneDeciding() const {
-    return mAnm[LYT_COMMON_ICON_PART_1_ANIM_DECIDE].isStop2();
+    return mAnm[ITEM_PART_1_ANIM_DECIDE].isStop2();
 }
 
 bool dLytCommonIconItemPart1_c::isCursorOver() const {
@@ -257,23 +257,23 @@ static const char *part2TextBoxes[] = {
 
 static const char *part2Bounding = "B_poach_00";
 
-#define LYT_COMMON_ICON_PART_2_ANIM_SHIELD_ONOFF 0
-#define LYT_COMMON_ICON_PART_2_ANIM_SHIELD_TYPE 1
-#define LYT_COMMON_ICON_PART_2_ANIM_SHIELD_GAUGE 2
-#define LYT_COMMON_ICON_PART_2_ANIM_SIZE 3
-#define LYT_COMMON_ICON_PART_2_ANIM_BOCOBURIN 4
-#define LYT_COMMON_ICON_PART_2_ANIM_NUMBERV 5
-#define LYT_COMMON_ICON_PART_2_ANIM_ICON 6
-#define LYT_COMMON_ICON_PART_2_ANIM_TEXTCOLOR 7
-#define LYT_COMMON_ICON_PART_2_ANIM_ONOFF 8
-#define LYT_COMMON_ICON_PART_2_ANIM_DECIDE 9
+#define ITEM_PART_2_ANIM_SHIELD_ONOFF 0
+#define ITEM_PART_2_ANIM_SHIELD_TYPE 1
+#define ITEM_PART_2_ANIM_SHIELD_GAUGE 2
+#define ITEM_PART_2_ANIM_SIZE 3
+#define ITEM_PART_2_ANIM_BOCOBURIN 4
+#define ITEM_PART_2_ANIM_NUMBERV 5
+#define ITEM_PART_2_ANIM_ICON 6
+#define ITEM_PART_2_ANIM_TEXTCOLOR 7
+#define ITEM_PART_2_ANIM_ONOFF 8
+#define ITEM_PART_2_ANIM_DECIDE 9
 
-#define LYT_COMMON_ICON_PART_2_NUM_ANIMS 10
+#define ITEM_PART_2_NUM_ANIMS 10
 
 bool dLytCommonIconItemPart2_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setResAcc(resAcc);
     mLyt.build("commonIcon_03.brlyt", nullptr);
-    for (int i = 0; i < LYT_COMMON_ICON_PART_2_NUM_ANIMS; i++) {
+    for (int i = 0; i < ITEM_PART_2_NUM_ANIMS; i++) {
         mAnm[i].init(brlanMapPart2[i].mFile, resAcc, mLyt.getLayout(), brlanMapPart2[i].mName);
         mAnm[i].setDirection(false);
         mAnm[i].setRate(1.0f);
@@ -289,7 +289,7 @@ bool dLytCommonIconItemPart2_c::build(d2d::ResAccIf_c *resAcc) {
 }
 
 bool dLytCommonIconItemPart2_c::remove() {
-    for (int i = 0; i < LYT_COMMON_ICON_PART_2_NUM_ANIMS; i++) {
+    for (int i = 0; i < ITEM_PART_2_NUM_ANIMS; i++) {
         mAnm[i].unbind();
         mAnm[i].afterUnbind();
     }
@@ -297,15 +297,15 @@ bool dLytCommonIconItemPart2_c::remove() {
 }
 
 bool dLytCommonIconItemPart2_c::execute() {
-    if (mAnm[LYT_COMMON_ICON_PART_2_ANIM_ONOFF].isEnabled() && mAnm[LYT_COMMON_ICON_PART_2_ANIM_ONOFF].isStop2()) {
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_ONOFF].setAnimEnable(false);
+    if (mAnm[ITEM_PART_2_ANIM_ONOFF].isEnabled() && mAnm[ITEM_PART_2_ANIM_ONOFF].isStop2()) {
+        mAnm[ITEM_PART_2_ANIM_ONOFF].setAnimEnable(false);
     }
 
-    if (mAnm[LYT_COMMON_ICON_PART_2_ANIM_DECIDE].isEnabled() && mAnm[LYT_COMMON_ICON_PART_2_ANIM_DECIDE].isStop2()) {
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_DECIDE].setAnimEnable(false);
+    if (mAnm[ITEM_PART_2_ANIM_DECIDE].isEnabled() && mAnm[ITEM_PART_2_ANIM_DECIDE].isStop2()) {
+        mAnm[ITEM_PART_2_ANIM_DECIDE].setAnimEnable(false);
     }
 
-    for (int i = 0; i < LYT_COMMON_ICON_PART_2_NUM_ANIMS; i++) {
+    for (int i = 0; i < ITEM_PART_2_NUM_ANIMS; i++) {
         if (mAnm[i].isEnabled()) {
             mAnm[i].play();
         }
@@ -314,50 +314,50 @@ bool dLytCommonIconItemPart2_c::execute() {
 }
 
 void dLytCommonIconItemPart2_c::reset() {
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_ONOFF].setFrame(0.0f);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_ONOFF].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_SHIELD_ONOFF].setFrame(0.0f);
+    mAnm[ITEM_PART_2_ANIM_SHIELD_ONOFF].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_TYPE].setFrame(0.0f);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_TYPE].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_SHIELD_TYPE].setFrame(0.0f);
+    mAnm[ITEM_PART_2_ANIM_SHIELD_TYPE].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_GAUGE].setFrame(0.0f);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_GAUGE].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_SHIELD_GAUGE].setFrame(0.0f);
+    mAnm[ITEM_PART_2_ANIM_SHIELD_GAUGE].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_ICON].setFrame(0.0f);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_ICON].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_ICON].setFrame(0.0f);
+    mAnm[ITEM_PART_2_ANIM_ICON].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SIZE].setFrame(1.0f);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SIZE].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_SIZE].setFrame(1.0f);
+    mAnm[ITEM_PART_2_ANIM_SIZE].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_BOCOBURIN].setFrame(0.0f);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_BOCOBURIN].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_BOCOBURIN].setFrame(0.0f);
+    mAnm[ITEM_PART_2_ANIM_BOCOBURIN].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_NUMBERV].setFrame(0.0f);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_NUMBERV].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_NUMBERV].setFrame(0.0f);
+    mAnm[ITEM_PART_2_ANIM_NUMBERV].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_TEXTCOLOR].setFrame(0.0f);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_TEXTCOLOR].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_TEXTCOLOR].setFrame(0.0f);
+    mAnm[ITEM_PART_2_ANIM_TEXTCOLOR].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_ONOFF].setBackwardsOnce();
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_ONOFF].setToEnd2();
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_ONOFF].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_ONOFF].setBackwardsOnce();
+    mAnm[ITEM_PART_2_ANIM_ONOFF].setToEnd2();
+    mAnm[ITEM_PART_2_ANIM_ONOFF].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_DECIDE].setForwardOnce();
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_DECIDE].setToEnd2();
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_DECIDE].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_DECIDE].setForwardOnce();
+    mAnm[ITEM_PART_2_ANIM_DECIDE].setToEnd2();
+    mAnm[ITEM_PART_2_ANIM_DECIDE].setAnimEnable(true);
 
     mLyt.calc();
 
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_DECIDE].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_ONOFF].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_TEXTCOLOR].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_NUMBERV].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_BOCOBURIN].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SIZE].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_ICON].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_GAUGE].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_TYPE].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_ONOFF].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_DECIDE].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_ONOFF].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_TEXTCOLOR].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_NUMBERV].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_BOCOBURIN].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_SIZE].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_ICON].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_SHIELD_GAUGE].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_SHIELD_TYPE].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_SHIELD_ONOFF].setAnimEnable(false);
 }
 
 void dLytCommonIconItemPart2_c::setShieldOnOff(bool onOff) {
@@ -416,62 +416,62 @@ void dLytCommonIconItemPart2_c::realizeUnk() {
 
 void dLytCommonIconItemPart2_c::realizeNumber() {
     if (mHasNumber) {
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_NUMBERV].setFrame(1.0f);
+        mAnm[ITEM_PART_2_ANIM_NUMBERV].setFrame(1.0f);
     } else {
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_NUMBERV].setFrame(0.0f);
+        mAnm[ITEM_PART_2_ANIM_NUMBERV].setFrame(0.0f);
     }
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_NUMBERV].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_NUMBERV].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_NUMBERV].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_NUMBERV].setAnimEnable(false);
 }
 
 void dLytCommonIconItemPart2_c::realizeSize() {
     if (mSize) {
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_SIZE].setFrame(0.0f);
+        mAnm[ITEM_PART_2_ANIM_SIZE].setFrame(0.0f);
     } else {
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_SIZE].setFrame(1.0f);
+        mAnm[ITEM_PART_2_ANIM_SIZE].setFrame(1.0f);
     }
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SIZE].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_SIZE].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SIZE].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_SIZE].setAnimEnable(false);
 }
 
 void dLytCommonIconItemPart2_c::realizeBocoburin() {
     if (mBocoburinLocked) {
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_BOCOBURIN].setFrame(1.0f);
+        mAnm[ITEM_PART_2_ANIM_BOCOBURIN].setFrame(1.0f);
     } else {
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_BOCOBURIN].setFrame(0.0f);
+        mAnm[ITEM_PART_2_ANIM_BOCOBURIN].setFrame(0.0f);
     }
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_BOCOBURIN].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_BOCOBURIN].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_BOCOBURIN].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_BOCOBURIN].setAnimEnable(false);
 }
 
 void dLytCommonIconItemPart2_c::realizeItem(u8 item) {
     // Inline?
-    if (mAnm[LYT_COMMON_ICON_PART_2_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
+    if (mAnm[ITEM_PART_2_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
         mItem = 0;
     } else {
         mItem = item;
     }
 
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_ICON].setFrame(mItem);
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_ICON].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_ICON].setFrame(mItem);
+    mAnm[ITEM_PART_2_ANIM_ICON].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_ICON].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_ICON].setAnimEnable(false);
     mpBounding->SetVisible(true);
 }
 
 void dLytCommonIconItemPart2_c::realizeShieldOnOff(bool onOff) {
     mOnOff = onOff;
     if (onOff) {
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_ONOFF].setFrame(0.0f);
+        mAnm[ITEM_PART_2_ANIM_SHIELD_ONOFF].setFrame(0.0f);
     } else {
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_ONOFF].setFrame(1.0f);
+        mAnm[ITEM_PART_2_ANIM_SHIELD_ONOFF].setFrame(1.0f);
     }
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_ONOFF].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_SHIELD_ONOFF].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_ONOFF].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_SHIELD_ONOFF].setAnimEnable(false);
 }
 
 u8 dLytCommonIconItemPart2_c::getShieldType() const {
@@ -492,10 +492,10 @@ u8 dLytCommonIconItemPart2_c::getShieldType() const {
 
 void dLytCommonIconItemPart2_c::realizeShieldType(u8 type) {
     if (mOnOff) {
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_TYPE].setFrame(type);
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_TYPE].setAnimEnable(true);
+        mAnm[ITEM_PART_2_ANIM_SHIELD_TYPE].setFrame(type);
+        mAnm[ITEM_PART_2_ANIM_SHIELD_TYPE].setAnimEnable(true);
         mLyt.calc();
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_TYPE].setAnimEnable(false);
+        mAnm[ITEM_PART_2_ANIM_SHIELD_TYPE].setAnimEnable(false);
     }
 }
 
@@ -511,37 +511,37 @@ void dLytCommonIconItemPart2_c::setNumber(s32 number) {
 void dLytCommonIconItemPart2_c::setNumberColor(u8 color) {
     mColor = color;
     switch (mColor) {
-        case 0: mAnm[LYT_COMMON_ICON_PART_2_ANIM_TEXTCOLOR].setFrame(0.0f); break;
-        case 1: mAnm[LYT_COMMON_ICON_PART_2_ANIM_TEXTCOLOR].setFrame(1.0f); break;
-        case 2: mAnm[LYT_COMMON_ICON_PART_2_ANIM_TEXTCOLOR].setFrame(2.0f); break;
+        case 0: mAnm[ITEM_PART_2_ANIM_TEXTCOLOR].setFrame(0.0f); break;
+        case 1: mAnm[ITEM_PART_2_ANIM_TEXTCOLOR].setFrame(1.0f); break;
+        case 2: mAnm[ITEM_PART_2_ANIM_TEXTCOLOR].setFrame(2.0f); break;
     }
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_TEXTCOLOR].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_TEXTCOLOR].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_TEXTCOLOR].setAnimEnable(false);
+    mAnm[ITEM_PART_2_ANIM_TEXTCOLOR].setAnimEnable(false);
 }
 
 void dLytCommonIconItemPart2_c::setOn() {
-    if (mAnm[LYT_COMMON_ICON_PART_2_ANIM_ONOFF].isPlayingBackwardsOnce()) {
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_ONOFF].setForwardOnce();
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_ONOFF].setAnimEnable(true);
+    if (mAnm[ITEM_PART_2_ANIM_ONOFF].isPlayingBackwardsOnce()) {
+        mAnm[ITEM_PART_2_ANIM_ONOFF].setForwardOnce();
+        mAnm[ITEM_PART_2_ANIM_ONOFF].setAnimEnable(true);
     }
 }
 
 void dLytCommonIconItemPart2_c::setOff() {
-    if (mAnm[LYT_COMMON_ICON_PART_2_ANIM_ONOFF].isPlayingForwardsOnce()) {
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_ONOFF].setBackwardsOnce();
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_ONOFF].setAnimEnable(true);
+    if (mAnm[ITEM_PART_2_ANIM_ONOFF].isPlayingForwardsOnce()) {
+        mAnm[ITEM_PART_2_ANIM_ONOFF].setBackwardsOnce();
+        mAnm[ITEM_PART_2_ANIM_ONOFF].setAnimEnable(true);
     }
 }
 
 void dLytCommonIconItemPart2_c::startDecide() {
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_DECIDE].setForwardOnce();
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_DECIDE].setToStart();
-    mAnm[LYT_COMMON_ICON_PART_2_ANIM_DECIDE].setAnimEnable(true);
+    mAnm[ITEM_PART_2_ANIM_DECIDE].setForwardOnce();
+    mAnm[ITEM_PART_2_ANIM_DECIDE].setToStart();
+    mAnm[ITEM_PART_2_ANIM_DECIDE].setAnimEnable(true);
 }
 
 bool dLytCommonIconItemPart2_c::isDoneDeciding() const {
-    return mAnm[LYT_COMMON_ICON_PART_2_ANIM_DECIDE].isStop2();
+    return mAnm[ITEM_PART_2_ANIM_DECIDE].isStop2();
 }
 
 bool dLytCommonIconItemPart2_c::isCursorOver() const {
@@ -563,10 +563,10 @@ void dLytCommonIconItemPart2_c::setVisible(bool visible) {
 void dLytCommonIconItemPart2_c::setDurability(f32 durability) {
     if (mOnOff) {
         mDurability = durability;
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_GAUGE].setFrameRatio(durability);
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_GAUGE].setAnimEnable(true);
+        mAnm[ITEM_PART_2_ANIM_SHIELD_GAUGE].setFrameRatio(durability);
+        mAnm[ITEM_PART_2_ANIM_SHIELD_GAUGE].setAnimEnable(true);
         mLyt.calc();
-        mAnm[LYT_COMMON_ICON_PART_2_ANIM_SHIELD_GAUGE].setAnimEnable(false);
+        mAnm[ITEM_PART_2_ANIM_SHIELD_GAUGE].setAnimEnable(false);
     }
 }
 
@@ -578,16 +578,16 @@ static const d2d::LytBrlanMapping brlanMapPart3[] = {
 
 static const char *part3Bounding = "B_dauz_00";
 
-#define LYT_COMMON_ICON_PART_3_ANIM_SIZE 0
-#define LYT_COMMON_ICON_PART_3_ANIM_BOCOBURIN 1
-#define LYT_COMMON_ICON_PART_3_ANIM_ICON 2
+#define ITEM_PART_3_ANIM_SIZE 0
+#define ITEM_PART_3_ANIM_BOCOBURIN 1
+#define ITEM_PART_3_ANIM_ICON 2
 
-#define LYT_COMMON_ICON_PART_3_NUM_ANIMS 3
+#define ITEM_PART_3_NUM_ANIMS 3
 
 bool dLytCommonIconItemPart3_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setResAcc(resAcc);
     mLyt.build("commonIcon_04.brlyt", nullptr);
-    for (int i = 0; i < LYT_COMMON_ICON_PART_3_NUM_ANIMS; i++) {
+    for (int i = 0; i < ITEM_PART_3_NUM_ANIMS; i++) {
         mAnm[i].init(brlanMapPart3[i].mFile, resAcc, mLyt.getLayout(), brlanMapPart3[i].mName);
         mAnm[i].setDirection(false);
         mAnm[i].setRate(1.0f);
@@ -599,7 +599,7 @@ bool dLytCommonIconItemPart3_c::build(d2d::ResAccIf_c *resAcc) {
 }
 
 bool dLytCommonIconItemPart3_c::remove() {
-    for (int i = 0; i < LYT_COMMON_ICON_PART_3_NUM_ANIMS; i++) {
+    for (int i = 0; i < ITEM_PART_3_NUM_ANIMS; i++) {
         mAnm[i].unbind();
         mAnm[i].afterUnbind();
     }
@@ -607,7 +607,7 @@ bool dLytCommonIconItemPart3_c::remove() {
 }
 
 bool dLytCommonIconItemPart3_c::execute() {
-    for (int i = 0; i < LYT_COMMON_ICON_PART_3_NUM_ANIMS; i++) {
+    for (int i = 0; i < ITEM_PART_3_NUM_ANIMS; i++) {
         if (mAnm[i].isEnabled()) {
             mAnm[i].play();
         }
@@ -616,20 +616,20 @@ bool dLytCommonIconItemPart3_c::execute() {
 }
 
 void dLytCommonIconItemPart3_c::reset() {
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_ICON].setFrame(0.0f);
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_ICON].setAnimEnable(true);
+    mAnm[ITEM_PART_3_ANIM_ICON].setFrame(0.0f);
+    mAnm[ITEM_PART_3_ANIM_ICON].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_SIZE].setFrame(1.0f);
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_SIZE].setAnimEnable(true);
+    mAnm[ITEM_PART_3_ANIM_SIZE].setFrame(1.0f);
+    mAnm[ITEM_PART_3_ANIM_SIZE].setAnimEnable(true);
 
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_BOCOBURIN].setFrame(0.0f);
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_BOCOBURIN].setAnimEnable(true);
+    mAnm[ITEM_PART_3_ANIM_BOCOBURIN].setFrame(0.0f);
+    mAnm[ITEM_PART_3_ANIM_BOCOBURIN].setAnimEnable(true);
 
     mLyt.calc();
 
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_BOCOBURIN].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_SIZE].setAnimEnable(false);
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_ICON].setAnimEnable(false);
+    mAnm[ITEM_PART_3_ANIM_BOCOBURIN].setAnimEnable(false);
+    mAnm[ITEM_PART_3_ANIM_SIZE].setAnimEnable(false);
+    mAnm[ITEM_PART_3_ANIM_ICON].setAnimEnable(false);
 }
 
 void dLytCommonIconItemPart3_c::setItem(u8 item) {
@@ -640,28 +640,28 @@ void dLytCommonIconItemPart3_c::setItem(u8 item) {
 
 void dLytCommonIconItemPart3_c::realizeSize() {
     if (mSize) {
-        mAnm[LYT_COMMON_ICON_PART_3_ANIM_SIZE].setFrame(0.0f);
+        mAnm[ITEM_PART_3_ANIM_SIZE].setFrame(0.0f);
     } else {
-        mAnm[LYT_COMMON_ICON_PART_3_ANIM_SIZE].setFrame(1.0f);
+        mAnm[ITEM_PART_3_ANIM_SIZE].setFrame(1.0f);
     }
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_SIZE].setAnimEnable(true);
+    mAnm[ITEM_PART_3_ANIM_SIZE].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_SIZE].setAnimEnable(false);
+    mAnm[ITEM_PART_3_ANIM_SIZE].setAnimEnable(false);
 }
 
 void dLytCommonIconItemPart3_c::realizeBocoburin() {
     if (mBocoburinLocked) {
-        mAnm[LYT_COMMON_ICON_PART_3_ANIM_BOCOBURIN].setFrame(1.0f);
+        mAnm[ITEM_PART_3_ANIM_BOCOBURIN].setFrame(1.0f);
     } else {
-        mAnm[LYT_COMMON_ICON_PART_3_ANIM_BOCOBURIN].setFrame(0.0f);
+        mAnm[ITEM_PART_3_ANIM_BOCOBURIN].setFrame(0.0f);
     }
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_BOCOBURIN].setAnimEnable(true);
+    mAnm[ITEM_PART_3_ANIM_BOCOBURIN].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_BOCOBURIN].setAnimEnable(false);
+    mAnm[ITEM_PART_3_ANIM_BOCOBURIN].setAnimEnable(false);
 }
 
 void dLytCommonIconItemPart3_c::realizeItem(u8 item) {
-    if (mAnm[LYT_COMMON_ICON_PART_3_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
+    if (mAnm[ITEM_PART_3_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
         mItem = 0;
     } else {
         mItem = item;
@@ -669,10 +669,10 @@ void dLytCommonIconItemPart3_c::realizeItem(u8 item) {
     // @bug ignoring the check above
     mItem = item;
 
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_ICON].setFrame(mItem);
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_ICON].setAnimEnable(true);
+    mAnm[ITEM_PART_3_ANIM_ICON].setFrame(mItem);
+    mAnm[ITEM_PART_3_ANIM_ICON].setAnimEnable(true);
     mLyt.calc();
-    mAnm[LYT_COMMON_ICON_PART_3_ANIM_ICON].setAnimEnable(false);
+    mAnm[ITEM_PART_3_ANIM_ICON].setAnimEnable(false);
     mpBounding->SetVisible(true);
 }
 
