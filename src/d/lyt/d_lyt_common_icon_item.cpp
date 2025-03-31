@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_cs_base.h"
+#include "d/lyt/d_lyt_common_icon_item_maps.h"
 #include "d/lyt/d_structd.h"
 
 #include <cstring>
@@ -368,25 +369,25 @@ void dLytCommonIconItemPart2_c::setShieldOnOff(bool onOff) {
 }
 
 void dLytCommonIconItemPart2_c::setItem(u8 item) {
-    if (item == 32) {
+    if (item == LYT_CMN_32) {
         return;
     }
 
     u8 mappedItem = item;
     realizeUnk();
-    if (item == 9) {
+    if (item == LYT_CMN_PotionHealthPlusPlusFull) {
         if (mNumber == 1) {
-            mappedItem = 50;
+            mappedItem = LYT_CMN_PotionHealthPlusPlusHalf;
         } else if (mNumber == 2) {
-            mappedItem = 9;
+            mappedItem = LYT_CMN_PotionHealthPlusPlusFull;
         }
         mHasNumber = false;
         realizeNumberV();
-    } else if (item == 43) {
+    } else if (item == LYT_CMN_PotionRepairPlusPlusFull) {
         if (mNumber == 1) {
-            mappedItem = 51;
+            mappedItem = LYT_CMN_PotionRepairPlusPlusHalf;
         } else if (mNumber == 2) {
-            mappedItem = 43;
+            mappedItem = LYT_CMN_PotionRepairPlusPlusFull;
         }
         mHasNumber = false;
         realizeNumberV();
@@ -476,17 +477,27 @@ void dLytCommonIconItemPart2_c::realizeShieldOnOff(bool onOff) {
 
 u8 dLytCommonIconItemPart2_c::getShieldType() const {
     switch (mItem) {
-        case 2:
-        case 15:
-        case 16: return 0; // Wooden Shield
-        case 3:
-        case 17:
-        case 18: return 1; // Iron Shield
-        case 4:
-        case 19:
-        case 20: return 2; // Goddess Shield
-        case 5:  return 3; // Hylia's Shield
-        default: return 4;
+        case LYT_CMN_ShieldWoodA:
+        case LYT_CMN_ShieldWoodB:
+        case LYT_CMN_ShieldWoodC: {
+            return 0;
+        }
+        case LYT_CMN_ShieldIronA:
+        case LYT_CMN_ShieldIronB:
+        case LYT_CMN_ShieldIronC: {
+            return 1;
+        }
+        case LYT_CMN_ShieldHolyA:
+        case LYT_CMN_ShieldHolyB:
+        case LYT_CMN_ShieldHolyC: {
+            return 2;
+        }
+        case LYT_CMN_ShieldHylian: {
+            return 3;
+        }
+        default: {
+            return 4;
+        }
     }
 }
 
