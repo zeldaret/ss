@@ -5,7 +5,6 @@
 #include "d/lyt/d_structd.h"
 #include "d/lyt/d_lyt_common_icon_item.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dLytPauseDisp00_c {
 public:

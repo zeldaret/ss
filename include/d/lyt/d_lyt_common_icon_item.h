@@ -61,7 +61,7 @@ public:
 
 private:
     void realizeUnk();
-    void realizeNumber();
+    void realizeNumberV();
     void realizeSize();
     void realizeBocoburin();
     void realizeItem(u8 item);
@@ -137,7 +137,7 @@ public:
 
 private:
     void realizeUnk();
-    void realizeNumber();
+    void realizeNumberV();
     void realizeSize();
     void realizeBocoburin();
     void realizeItem(u8 item);

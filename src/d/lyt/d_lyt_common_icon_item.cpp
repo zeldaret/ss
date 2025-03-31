@@ -119,7 +119,7 @@ void dLytCommonIconItemPart1_c::reset() {
 
 void dLytCommonIconItemPart1_c::setItem(u8 item) {
     realizeUnk();
-    realizeNumber();
+    realizeNumberV();
     realizeSize();
     realizeBocoburin();
     realizeItem(item);
@@ -129,7 +129,7 @@ void dLytCommonIconItemPart1_c::realizeUnk() {
     // Probably related to field_0x2B4
 }
 
-void dLytCommonIconItemPart1_c::realizeNumber() {
+void dLytCommonIconItemPart1_c::realizeNumberV() {
     if (mHasNumber) {
         mAnm[ITEM_PART_1_ANIM_NUMBERV].setFrame(1.0f);
     } else {
@@ -381,7 +381,7 @@ void dLytCommonIconItemPart2_c::setItem(u8 item) {
             mappedItem = 9;
         }
         mHasNumber = false;
-        realizeNumber();
+        realizeNumberV();
     } else if (item == 43) {
         if (mNumber == 1) {
             mappedItem = 51;
@@ -389,9 +389,9 @@ void dLytCommonIconItemPart2_c::setItem(u8 item) {
             mappedItem = 43;
         }
         mHasNumber = false;
-        realizeNumber();
+        realizeNumberV();
     } else {
-        realizeNumber();
+        realizeNumberV();
     }
 
     realizeSize();
@@ -414,7 +414,7 @@ void dLytCommonIconItemPart2_c::realizeUnk() {
     // Probably related to field_0x???
 }
 
-void dLytCommonIconItemPart2_c::realizeNumber() {
+void dLytCommonIconItemPart2_c::realizeNumberV() {
     if (mHasNumber) {
         mAnm[ITEM_PART_2_ANIM_NUMBERV].setFrame(1.0f);
     } else {
