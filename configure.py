@@ -375,7 +375,7 @@ config.libs = [
             Object(Matching, "toBeSorted/counters/key_piece_counter.cpp"),
             Object(Matching, "toBeSorted/counters/extra_wallet_counter.cpp"),
             Object(NonMatching, "d/lyt/d_structd.cpp"),
-            Object(NonMatching, "d/lyt/d2d.cpp"),
+            Object(Matching, "d/lyt/d2d.cpp"),
             Object(NonMatching, "d/lyt/d_textbox.cpp"),
             Object(Matching, "d/lyt/d_window.cpp"),
             Object(Matching, "d/d_textunk.cpp"),
