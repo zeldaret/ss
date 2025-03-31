@@ -38,7 +38,8 @@ dCcD_SrcCyl dAcOtoD3StoneFigure_c::sCcSrc = {
             ~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND),
             0x1000111,
             {
-                0x06,
+                0x0,
+                0x06, 
                 0x407
             },
             0,

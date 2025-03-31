@@ -1,3 +1,6 @@
+#ifndef D_A_PLAYER_H
+#define D_A_PLAYER_H
+
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
@@ -256,6 +259,10 @@ public:
         return mCurrentAction;
     }
 
+    bool checkCurrentAction(int action) const {
+        return mCurrentAction == action;
+    }
+
     inline bool checkActionFlags(u32 mask) const {
         return (mActionFlags & mask) != 0;
     }
@@ -271,3 +278,5 @@ public:
 
     static dAcPy_c *LINK;
 };
+
+#endif

@@ -89,7 +89,7 @@ static char *const sOpenEventNames[] = {
 // TODO just copied from somewhere
 const cCcD_SrcGObj dAcTbox_c::sColSrc = {
   /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-  /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0, {0, 0x407}, 0, 0},
+  /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0, {0, 0, 0x407}, 0, 0},
   /* mObjCo */ {0xE9}
 };
 // clang-format on
