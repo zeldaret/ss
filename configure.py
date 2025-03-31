@@ -367,6 +367,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/nand_request_thread.cpp"),
             Object(Matching, "toBeSorted/save_file.cpp"),
             Object(Matching, "toBeSorted/counters/counter.cpp"),
+            Object(NonMatching, "toBeSorted/counters/counters.cpp"),
             Object(Matching, "toBeSorted/counters/rupee_counter.cpp"),
             Object(Matching, "toBeSorted/counters/arrow_counter.cpp"),
             Object(Matching, "toBeSorted/counters/bomb_counter.cpp"),

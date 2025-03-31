@@ -4,7 +4,7 @@ class ArrowCounter : public Counter {
 public:
     ArrowCounter();
     /* 8016DFA0 */ ~ArrowCounter() {}
-    /* 8016E000 */ virtual u16 getMax() override {
+    /* 8016E000 */ virtual u16 getMax() const override {
         return 20;
     };
 };

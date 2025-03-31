@@ -4,7 +4,7 @@ class SlingshotSeedCounter : public Counter {
 public:
     SlingshotSeedCounter();
     /* 8016E120 */ ~SlingshotSeedCounter() {}
-    /* 8016E180 */ virtual u16 getMax() override {
+    /* 8016E180 */ virtual u16 getMax() const override {
         return 20;
     };
 };
