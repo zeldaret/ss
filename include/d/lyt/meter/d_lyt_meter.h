@@ -29,16 +29,17 @@ public:
     virtual ~dLytMeter1Button_c() {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
-    virtual bool LytMeter0x14() override;
+    virtual bool execute() override;
     virtual nw4r::lyt::Pane *getPane() override {
         return mLyt.getLayout()->GetRootPane();
     }
     virtual d2d::LytBase_c *getLyt() override {
         return &mLyt;
     }
-    virtual const char *getName() const {
+    virtual const char *getName() const override {
         return mLyt.getName();
     }
+
 private:
     STATE_FUNC_DECLARE(dLytMeter1Button_c, Wait);
     STATE_FUNC_DECLARE(dLytMeter1Button_c, ToUse);
@@ -63,16 +64,17 @@ public:
     virtual ~dLytMeter2Button_c() {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
-    virtual bool LytMeter0x14() override;
+    virtual bool execute() override;
     virtual nw4r::lyt::Pane *getPane() override {
         return mLyt.getLayout()->GetRootPane();
     }
     virtual d2d::LytBase_c *getLyt() override {
         return &mLyt;
     }
-    virtual const char *getName() const {
+    virtual const char *getName() const override {
         return mLyt.getName();
     }
+
 private:
     STATE_FUNC_DECLARE(dLytMeter2Button_c, Wait);
     STATE_FUNC_DECLARE(dLytMeter2Button_c, ToUse);
@@ -189,12 +191,15 @@ public:
     bool remove();
     bool draw();
 
-    static dLytMeterContainer_c *sInstance;
-
     // FIXME This goes to doButton!!!
     bool isButtonFlag(u32 flag) {
         return (mMeter.field_0x13B38 & flag) == flag;
     }
+
+    static dLytMeterContainer_c *GetInstance() {
+        return sInstance;
+    }
+
 private:
     /* 0x00004 */ d2d::ResAccIf_c mResAcc;
     /* 0x00374 */ dLytMeterEventSkip_c *mpEventSkip;
@@ -203,6 +208,8 @@ private:
     /* 0x13B40 */ LytDoButtonRelated *mpDoButtonRelated;
     /* 0x13B44 */ LytBirdButtonRelated *mpBirdRelated;
     /* 0x13B48 */ bool mVisible;
+
+    static dLytMeterContainer_c *sInstance;
 };
 
 #endif

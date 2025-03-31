@@ -132,6 +132,6 @@ lbl_43_data_314 = .data:0x00000314; // type:object size:0x6C
 lbl_43_data_380 = .data:0x00000380; // type:object size:0x68
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 lbl_43_bss_8 = .bss:0x00000008; // type:object size:0xC
-lbl_43_bss_14 = .bss:0x00000014; // type:object size:0x34 data:4byte
+AcNpcTmn__STATE_WAIT = .bss:0x00000014; // type:object size:0x34 data:4byte
 lbl_43_bss_48 = .bss:0x00000048; // type:object size:0x8 data:byte
 lbl_43_bss_50 = .bss:0x00000050; // type:object size:0x10 data:float

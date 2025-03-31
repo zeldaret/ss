@@ -12,4 +12,4 @@ _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_203_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
 g_profile_TAG_STREAM = .data:0x00000000; // type:object size:0x10
 lbl_203_data_10 = .data:0x00000010; // type:object size:0x4 data:4byte
-lbl_203_data_14 = .data:0x00000014; // type:object size:0x74
+TgStream__vtable = .data:0x00000014; // type:object size:0x74

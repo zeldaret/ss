@@ -58,4 +58,4 @@ lbl_17_data_190 = .data:0x00000190; // type:object size:0x34
 lbl_17_data_1C4 = .data:0x000001C4; // type:object size:0x8
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 lbl_17_bss_8 = .bss:0x00000008; // type:object size:0x10
-lbl_17_bss_18 = .bss:0x00000018; // type:object size:0x30 data:4byte
+AcBombf__StateID_Wait = .bss:0x00000018; // type:object size:0x30 data:4byte

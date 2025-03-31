@@ -4,13 +4,13 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_utajima_main_mecha.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/d_stage.h"
 #include "f/f_base.h"
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
 #include "m/m_angle.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "s/s_Math.h"
-#include "toBeSorted/room_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_UTAJIMA_ISLAND, dAcOutajimaIsland_c, fProfile::OBJ_UTAJIMA_ISLAND, 0x1D2, 0, 6);
 
@@ -25,8 +25,8 @@ const f32 dAcOutajimaIsland_c::floats[] = {
 
 bool dAcOutajimaIsland_c::createHeap() {
     mRes = nw4r::g3d::ResFile(getOarcResFile("IslPuzIslet00"));
-    RoomManager::bindStageResToFile(&mRes);
-    RoomManager::bindSkyCmnToResFile(&mRes);
+    dStage_c::bindStageResToFile(&mRes);
+    dStage_c::bindSkyCmnToResFile(&mRes);
     nw4r::g3d::ResMdl m = mRes.GetResMdl("IslPuzIslet00");
 
     TRY_CREATE(mMdl.create(m, &heap_allocator, 0x120));

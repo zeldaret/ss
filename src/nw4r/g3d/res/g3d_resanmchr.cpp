@@ -1,6 +1,6 @@
 #pragma fp_contract on
 
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -14,8 +14,13 @@ namespace {
 inline f32 HermiteInterpolation(f32 v0, f32 t0, f32 v1, f32 t1, f32 s, f32 d) {
     f32 s_1 = s - 1.0f;
 
-    return v0 + s * (s * ((2.0f * s - 3.0f) * (v0 - v1))) +
-           d * s_1 * (s_1 * t0 + s * t1);
+    return v0 + s * (s * ((2.0f * s - 3.0f) * (v0 - v1))) + d * s_1 * (s_1 * t0 + s * t1);
+}
+
+inline f32 GetMtx34Scale(const math::MTX34 &rMtx, int col) {
+    return math::FSqrt(
+        (rMtx.m[0][col] * rMtx.m[0][col]) + (rMtx.m[1][col] * rMtx.m[1][col]) + (rMtx.m[2][col] * rMtx.m[2][col])
+    );
 }
 
 /******************************************************************************
@@ -23,12 +28,13 @@ inline f32 HermiteInterpolation(f32 v0, f32 t0, f32 v1, f32 t1, f32 s, f32 d) {
  * Animation keyframe
  *
  ******************************************************************************/
-template <typename TData, typename TDerived> class CResAnmChrFrmBase {
+template <typename TData, typename TDerived>
+class CResAnmChrFrmBase {
 protected:
-    const TData* mPtr;
+    const TData *mPtr;
 
 public:
-    CResAnmChrFrmBase(const TData* pPtr) : mPtr(pPtr) {}
+    CResAnmChrFrmBase(const TData *pPtr) : mPtr(pPtr) {}
 
     void operator++(int) {
         mPtr++;
@@ -47,10 +53,9 @@ class CResAnmChrFrm : public CResAnmChrFrmBase<T, CResAnmChrFrm<T> > {};
 
 template <>
 class CResAnmChrFrm<ResAnmChrFrm32Data>
-    : public CResAnmChrFrmBase<ResAnmChrFrm32Data,
-                               CResAnmChrFrm<ResAnmChrFrm32Data> > {
+    : public CResAnmChrFrmBase<ResAnmChrFrm32Data, CResAnmChrFrm<ResAnmChrFrm32Data> > {
 public:
-    CResAnmChrFrm(const ResAnmChrFrm32Data* pPtr) : CResAnmChrFrmBase(pPtr) {}
+    CResAnmChrFrm(const ResAnmChrFrm32Data *pPtr) : CResAnmChrFrmBase(pPtr) {}
 
     u8 GetFrame() const {
         return mPtr->fvs.frame;
@@ -60,10 +65,9 @@ public:
         return fastcast::U8_0ToF32(&mPtr->fvs.frame);
     }
 
-    f32 GetValue(const ResAnmChrFVSData* pFVSData) const {
+    f32 GetValue(const ResAnmChrFVSData *pFVSData) const {
         u16 value = (mPtr->fvsU32 & 0x00FFF000) >> 12;
-        return pFVSData->fvs32.scale * fastcast::U16_0ToF32(&value) +
-               pFVSData->fvs48.offset;
+        return pFVSData->fvs32.scale * fastcast::U16_0ToF32(&value) + pFVSData->fvs48.offset;
     }
 
     f32 GetSlope() const {
@@ -74,10 +78,9 @@ public:
 
 template <>
 class CResAnmChrFrm<ResAnmChrFrm48Data>
-    : public CResAnmChrFrmBase<ResAnmChrFrm48Data,
-                               CResAnmChrFrm<ResAnmChrFrm48Data> > {
+    : public CResAnmChrFrmBase<ResAnmChrFrm48Data, CResAnmChrFrm<ResAnmChrFrm48Data> > {
 public:
-    CResAnmChrFrm(const ResAnmChrFrm48Data* pPtr) : CResAnmChrFrmBase(pPtr) {}
+    CResAnmChrFrm(const ResAnmChrFrm48Data *pPtr) : CResAnmChrFrmBase(pPtr) {}
 
     s16 GetFrame() const {
         return mPtr->frame;
@@ -87,9 +90,8 @@ public:
         return fastcast::S10_5ToF32(&mPtr->frame);
     }
 
-    f32 GetValue(const ResAnmChrFVSData* pFVSData) const {
-        return pFVSData->fvs48.scale * fastcast::U16_0ToF32(&mPtr->value) +
-               pFVSData->fvs48.offset;
+    f32 GetValue(const ResAnmChrFVSData *pFVSData) const {
+        return pFVSData->fvs48.scale * fastcast::U16_0ToF32(&mPtr->value) + pFVSData->fvs48.offset;
     }
 
     f32 GetSlope() const {
@@ -99,10 +101,9 @@ public:
 
 template <>
 class CResAnmChrFrm<ResAnmChrFrm96Data>
-    : public CResAnmChrFrmBase<ResAnmChrFrm96Data,
-                               CResAnmChrFrm<ResAnmChrFrm96Data> > {
+    : public CResAnmChrFrmBase<ResAnmChrFrm96Data, CResAnmChrFrm<ResAnmChrFrm96Data> > {
 public:
-    CResAnmChrFrm(const ResAnmChrFrm96Data* pPtr) : CResAnmChrFrmBase(pPtr) {}
+    CResAnmChrFrm(const ResAnmChrFrm96Data *pPtr) : CResAnmChrFrmBase(pPtr) {}
 
     f32 GetFrame() const {
         return mPtr->frame;
@@ -112,7 +113,7 @@ public:
         return mPtr->frame;
     }
 
-    f32 GetValue(const ResAnmChrFVSData* /* pFVSData */) const {
+    f32 GetValue(const ResAnmChrFVSData * /* pFVSData */) const {
         return mPtr->value;
     }
 
@@ -126,16 +127,17 @@ public:
  * Animation traits
  *
  ******************************************************************************/
-template <typename T> class CAnmFmtTraits {};
+template <typename T>
+class CAnmFmtTraits {};
 
-template <> class CAnmFmtTraits<ResAnmChrFVS32Data> {
+template <>
+class CAnmFmtTraits<ResAnmChrFVS32Data> {
 public:
     typedef ResAnmChrFrm32Data TFrmData;
     typedef u8 TFrame;
 
 public:
-    static CResAnmChrFrm<TFrmData> GetKeyFrame(const ResAnmChrFVSData* pFVSData,
-                                               int index) {
+    static CResAnmChrFrm<TFrmData> GetKeyFrame(const ResAnmChrFVSData *pFVSData, int index) {
         return CResAnmChrFrm<TFrmData>(&pFVSData->fvs32.frameValues[index]);
     }
 
@@ -144,14 +146,14 @@ public:
     }
 };
 
-template <> class CAnmFmtTraits<ResAnmChrFVS48Data> {
+template <>
+class CAnmFmtTraits<ResAnmChrFVS48Data> {
 public:
     typedef ResAnmChrFrm48Data TFrmData;
     typedef s16 TFrame;
 
 public:
-    static CResAnmChrFrm<TFrmData> GetKeyFrame(const ResAnmChrFVSData* pFVSData,
-                                               int index) {
+    static CResAnmChrFrm<TFrmData> GetKeyFrame(const ResAnmChrFVSData *pFVSData, int index) {
         return CResAnmChrFrm<TFrmData>(&pFVSData->fvs48.frameValues[index]);
     }
 
@@ -160,14 +162,14 @@ public:
     }
 };
 
-template <> class CAnmFmtTraits<ResAnmChrFVS96Data> {
+template <>
+class CAnmFmtTraits<ResAnmChrFVS96Data> {
 public:
     typedef ResAnmChrFrm96Data TFrmData;
     typedef f32 TFrame;
 
 public:
-    static CResAnmChrFrm<TFrmData> GetKeyFrame(const ResAnmChrFVSData* pFVSData,
-                                               int index) {
+    static CResAnmChrFrm<TFrmData> GetKeyFrame(const ResAnmChrFVSData *pFVSData, int index) {
         return CResAnmChrFrm<TFrmData>(&pFVSData->fvs96.frameValues[index]);
     }
 
@@ -176,26 +178,29 @@ public:
     }
 };
 
-template <> class CAnmFmtTraits<ResAnmChrCV8Data> {
+template <>
+class CAnmFmtTraits<ResAnmChrCV8Data> {
 public:
-    static f32 GetAt(const ResAnmChrCVData* pCVData, u16 idx) {
-        const ResAnmChrCV8Data& rCV8 = pCVData->cv8;
+    static f32 GetAt(const ResAnmChrCVData *pCVData, u16 idx) {
+        const ResAnmChrCV8Data &rCV8 = pCVData->cv8;
         return rCV8.values[idx] * rCV8.scale + rCV8.offset;
     }
 };
 
-template <> class CAnmFmtTraits<ResAnmChrCV16Data> {
+template <>
+class CAnmFmtTraits<ResAnmChrCV16Data> {
 public:
-    static f32 GetAt(const ResAnmChrCVData* pCVData, u16 idx) {
-        const ResAnmChrCV16Data& rCV16 = pCVData->cv16;
+    static f32 GetAt(const ResAnmChrCVData *pCVData, u16 idx) {
+        const ResAnmChrCV16Data &rCV16 = pCVData->cv16;
         return rCV16.values[idx] * rCV16.scale + rCV16.offset;
     }
 };
 
-template <> class CAnmFmtTraits<ResAnmChrCV32Data> {
+template <>
+class CAnmFmtTraits<ResAnmChrCV32Data> {
 public:
-    static f32 GetAt(const ResAnmChrCVData* pCVData, u16 idx) {
-        const ResAnmChrCV32Data& rCV32 = pCVData->cv32;
+    static f32 GetAt(const ResAnmChrCVData *pCVData, u16 idx) {
+        const ResAnmChrCV32Data &rCV32 = pCVData->cv32;
         return rCV32.values[idx];
     }
 };
@@ -206,10 +211,9 @@ public:
  *
  ******************************************************************************/
 template <typename TTraits>
-f32 CalcAnimationFVS(const ResAnmChrFVSData* pFVSData, f32 frame) {
+f32 CalcAnimationFVS(const ResAnmChrFVSData *pFVSData, f32 frame) {
     CResAnmChrFrm<TTraits::TFrmData> first = TTraits::GetKeyFrame(pFVSData, 0);
-    CResAnmChrFrm<TTraits::TFrmData> last =
-        TTraits::GetKeyFrame(pFVSData, pFVSData->numFrameValues - 1);
+    CResAnmChrFrm<TTraits::TFrmData> last = TTraits::GetKeyFrame(pFVSData, pFVSData->numFrameValues - 1);
 
     if (frame <= first.GetFrameF32()) {
         return first.GetValue(pFVSData);
@@ -225,51 +229,41 @@ f32 CalcAnimationFVS(const ResAnmChrFVSData* pFVSData, f32 frame) {
     f32 f_estimatePos = frameOffset * numKeyFrame * pFVSData->invKeyFrameRange;
     u16 i_estimatePos = math::F32ToU16(f_estimatePos);
 
-    CResAnmChrFrm<TTraits::TFrmData> left =
-        TTraits::GetKeyFrame(pFVSData, i_estimatePos);
+    CResAnmChrFrm<TTraits::TFrmData> left = TTraits::GetKeyFrame(pFVSData, i_estimatePos);
 
     const TTraits::TFrame quantized = TTraits::QuantizeFrame(frame);
 
     if (quantized < left.GetFrame()) {
-        while (true) {
+        do {
             left--;
-
-            if (!(quantized < left.GetFrame())) {
-                break;
-            }
-        }
+        } while (quantized < left.GetFrame());
     } else {
-        while (true) {
+        do {
             left++;
-
-            if (!(left.GetFrame() <= quantized)) {
-                break;
-            }
-        }
+        } while (left.GetFrame() <= quantized);
 
         left--;
     }
 
     if (frame == left.GetFrameF32()) {
         return left.GetValue(pFVSData);
+    } else {
+        CResAnmChrFrm<TTraits::TFrmData> right = left + 1;
+
+        f32 v0 = left.GetValue(pFVSData);
+        f32 t0 = left.GetSlope();
+        f32 v1 = right.GetValue(pFVSData);
+        f32 t1 = right.GetSlope();
+
+        f32 f0 = left.GetFrameF32();
+        f32 f1 = right.GetFrameF32();
+
+        f32 frameDelta = frame - f0;
+        f32 keyFrameDelta = f1 - f0;
+        f32 keyFrameDeltaInv = math::FInv(keyFrameDelta);
+
+        return HermiteInterpolation(v0, t0, v1, t1, frameDelta * keyFrameDeltaInv, frameDelta);
     }
-
-    CResAnmChrFrm<TTraits::TFrmData> right = left + 1;
-
-    f32 v0 = left.GetValue(pFVSData);
-    f32 t0 = left.GetSlope();
-    f32 v1 = right.GetValue(pFVSData);
-    f32 t1 = right.GetSlope();
-
-    f32 f0 = left.GetFrameF32();
-    f32 f1 = right.GetFrameF32();
-
-    f32 frameDelta = frame - f0;
-    f32 keyFrameDelta = f1 - f0;
-    f32 keyFrameDeltaInv = math::FInv(keyFrameDelta);
-
-    return HermiteInterpolation(v0, t0, v1, t1, frameDelta * keyFrameDeltaInv,
-                                frameDelta);
 }
 
 /******************************************************************************
@@ -278,7 +272,7 @@ f32 CalcAnimationFVS(const ResAnmChrFVSData* pFVSData, f32 frame) {
  *
  ******************************************************************************/
 template <typename TTraits>
-f32 CalcAnimationCV(const ResAnmChrCVData* pCVData, u16 numFrame, f32 frame) {
+f32 CalcAnimationCV(const ResAnmChrCVData *pCVData, u16 numFrame, f32 frame) {
     u16 frame_i = math::F32ToU16(frame);
 
     if (frame <= 0.0f) {
@@ -306,37 +300,30 @@ f32 CalcAnimationCV(const ResAnmChrCVData* pCVData, u16 numFrame, f32 frame) {
  *
  ******************************************************************************/
 template <typename T>
-f32 CalcResultFVS(const ResAnmChrNodeData* pNodeData,
-                  const ResAnmChrNodeData::AnmData* pAnmData, f32 frame,
-                  bool constant) {
+f32 CalcResultFVS(
+    const ResAnmChrNodeData *pNodeData, const ResAnmChrNodeData::AnmData *pAnmData, f32 frame, bool constant
+) {
     if (constant) {
         return pAnmData->constValue;
     }
 
-    const ResAnmChrAnmData* pFVSAnmData =
-        reinterpret_cast<const ResAnmChrAnmData*>(
-            ut::AddOffsetToPtr(pNodeData, pAnmData->toResAnmChrAnmData));
+    const ResAnmChrAnmData *pFVSAnmData =
+        reinterpret_cast<const ResAnmChrAnmData *>(ut::AddOffsetToPtr(pNodeData, pAnmData->toResAnmChrAnmData));
 
     return CalcAnimationFVS<CAnmFmtTraits<T> >(&pFVSAnmData->fvs, frame);
 }
 
-inline f32 CalcResult32(const ResAnmChrNodeData* pNodeData,
-                        const ResAnmChrNodeData::AnmData* pAnmData, f32 frame,
-                        bool constant) {
-    return CalcResultFVS<ResAnmChrFVS32Data>(pNodeData, pAnmData, frame,
-                                             constant);
+inline f32
+CalcResult32(const ResAnmChrNodeData *pNodeData, const ResAnmChrNodeData::AnmData *pAnmData, f32 frame, bool constant) {
+    return CalcResultFVS<ResAnmChrFVS32Data>(pNodeData, pAnmData, frame, constant);
 }
-inline f32 CalcResult48(const ResAnmChrNodeData* pNodeData,
-                        const ResAnmChrNodeData::AnmData* pAnmData, f32 frame,
-                        bool constant) {
-    return CalcResultFVS<ResAnmChrFVS48Data>(pNodeData, pAnmData, frame,
-                                             constant);
+inline f32
+CalcResult48(const ResAnmChrNodeData *pNodeData, const ResAnmChrNodeData::AnmData *pAnmData, f32 frame, bool constant) {
+    return CalcResultFVS<ResAnmChrFVS48Data>(pNodeData, pAnmData, frame, constant);
 }
-inline f32 CalcResult96(const ResAnmChrNodeData* pNodeData,
-                        const ResAnmChrNodeData::AnmData* pAnmData, f32 frame,
-                        bool constant) {
-    return CalcResultFVS<ResAnmChrFVS96Data>(pNodeData, pAnmData, frame,
-                                             constant);
+inline f32
+CalcResult96(const ResAnmChrNodeData *pNodeData, const ResAnmChrNodeData::AnmData *pAnmData, f32 frame, bool constant) {
+    return CalcResultFVS<ResAnmChrFVS96Data>(pNodeData, pAnmData, frame, constant);
 }
 
 /******************************************************************************
@@ -345,38 +332,37 @@ inline f32 CalcResult96(const ResAnmChrNodeData* pNodeData,
  *
  ******************************************************************************/
 template <typename T>
-f32 CalcResultCV(const ResAnmChrNodeData* pNodeData,
-                 const ResAnmChrNodeData::AnmData* pAnmData, u16 numFrame,
-                 f32 frame, bool constant) {
-
+f32 CalcResultCV(
+    const ResAnmChrNodeData *pNodeData, const ResAnmChrNodeData::AnmData *pAnmData, u16 numFrame, f32 frame,
+    bool constant
+) {
     if (constant) {
         return pAnmData->constValue;
     }
 
-    const ResAnmChrAnmData* pCVAnmData =
-        reinterpret_cast<const ResAnmChrAnmData*>(
-            ut::AddOffsetToPtr(pNodeData, pAnmData->toResAnmChrAnmData));
+    const ResAnmChrAnmData *pCVAnmData =
+        reinterpret_cast<const ResAnmChrAnmData *>(ut::AddOffsetToPtr(pNodeData, pAnmData->toResAnmChrAnmData));
 
     return CalcAnimationCV<CAnmFmtTraits<T> >(&pCVAnmData->cv, numFrame, frame);
 }
 
-inline f32 CalcResultFrm8(const ResAnmChrNodeData* pNodeData,
-                          const ResAnmChrNodeData::AnmData* pAnmData,
-                          u16 numFrame, f32 frame, bool constant) {
-    return CalcResultCV<ResAnmChrCV8Data>(pNodeData, pAnmData, numFrame, frame,
-                                          constant);
+inline f32 CalcResultFrm8(
+    const ResAnmChrNodeData *pNodeData, const ResAnmChrNodeData::AnmData *pAnmData, u16 numFrame, f32 frame,
+    bool constant
+) {
+    return CalcResultCV<ResAnmChrCV8Data>(pNodeData, pAnmData, numFrame, frame, constant);
 }
-inline f32 CalcResultFrm16(const ResAnmChrNodeData* pNodeData,
-                           const ResAnmChrNodeData::AnmData* pAnmData,
-                           u16 numFrame, f32 frame, bool constant) {
-    return CalcResultCV<ResAnmChrCV16Data>(pNodeData, pAnmData, numFrame, frame,
-                                           constant);
+inline f32 CalcResultFrm16(
+    const ResAnmChrNodeData *pNodeData, const ResAnmChrNodeData::AnmData *pAnmData, u16 numFrame, f32 frame,
+    bool constant
+) {
+    return CalcResultCV<ResAnmChrCV16Data>(pNodeData, pAnmData, numFrame, frame, constant);
 }
-inline f32 CalcResultFrm32(const ResAnmChrNodeData* pNodeData,
-                           const ResAnmChrNodeData::AnmData* pAnmData,
-                           u16 numFrame, f32 frame, bool constant) {
-    return CalcResultCV<ResAnmChrCV32Data>(pNodeData, pAnmData, numFrame, frame,
-                                           constant);
+inline f32 CalcResultFrm32(
+    const ResAnmChrNodeData *pNodeData, const ResAnmChrNodeData::AnmData *pAnmData, u16 numFrame, f32 frame,
+    bool constant
+) {
+    return CalcResultCV<ResAnmChrCV32Data>(pNodeData, pAnmData, numFrame, frame, constant);
 }
 
 /******************************************************************************
@@ -384,85 +370,75 @@ inline f32 CalcResultFrm32(const ResAnmChrNodeData* pNodeData,
  * Get animation component
  *
  ******************************************************************************/
-const ResAnmChrNodeData::AnmData*
-GetAnmScale(math::VEC3* pResult, const ResAnmChrNodeData* pNodeData,
-            const ResAnmChrNodeData::AnmData* pAnmData, f32 frame) {
-
+const ResAnmChrNodeData::AnmData *GetAnmScale(
+    math::VEC3 *pResult, const ResAnmChrNodeData *pNodeData, const ResAnmChrNodeData::AnmData *pAnmData, f32 frame
+) {
     u32 flags = pNodeData->flags;
     f32 x, y, z;
 
     switch (flags & ResAnmChrNodeData::FLAG_SCALE_FMT_MASK) {
-    case 0: {
-        x = pAnmData++->constValue;
+        case 0: {
+            x = pAnmData++->constValue;
 
-        if (flags & ResAnmChrNodeData::FLAG_SCALE_UNIFORM) {
-            y = x;
-            z = x;
-        } else {
-            y = pAnmData++->constValue;
-            z = pAnmData++->constValue;
+            if (flags & ResAnmChrNodeData::FLAG_SCALE_UNIFORM) {
+                y = x;
+                z = x;
+            } else {
+                y = pAnmData++->constValue;
+                z = pAnmData++->constValue;
+            }
+
+            break;
         }
 
-        break;
-    }
+        case ResAnmChrNodeData::FLAG_SCALE_FVS32_FMT: {
+            x = CalcResult32(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_SCALE_X_CONST);
 
-    case ResAnmChrNodeData::FLAG_SCALE_FVS32_FMT: {
-        x = CalcResult32(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_SCALE_X_CONST);
+            if (flags & ResAnmChrNodeData::FLAG_SCALE_UNIFORM) {
+                y = x;
+                z = x;
+            } else {
+                y = CalcResult32(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_SCALE_Y_CONST);
+                z = CalcResult32(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_SCALE_Z_CONST);
+            }
 
-        if (flags & ResAnmChrNodeData::FLAG_SCALE_UNIFORM) {
-            y = x;
-            z = x;
-        } else {
-            y = CalcResult32(pNodeData, pAnmData++, frame,
-                             flags & ResAnmChrNodeData::FLAG_SCALE_Y_CONST);
-            z = CalcResult32(pNodeData, pAnmData++, frame,
-                             flags & ResAnmChrNodeData::FLAG_SCALE_Z_CONST);
+            break;
         }
 
-        break;
-    }
+        case ResAnmChrNodeData::FLAG_SCALE_FVS48_FMT: {
+            x = CalcResult48(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_SCALE_X_CONST);
 
-    case ResAnmChrNodeData::FLAG_SCALE_FVS48_FMT: {
-        x = CalcResult48(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_SCALE_X_CONST);
+            if (flags & ResAnmChrNodeData::FLAG_SCALE_UNIFORM) {
+                y = x;
+                z = x;
+            } else {
+                y = CalcResult48(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_SCALE_Y_CONST);
+                z = CalcResult48(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_SCALE_Z_CONST);
+            }
 
-        if (flags & ResAnmChrNodeData::FLAG_SCALE_UNIFORM) {
-            y = x;
-            z = x;
-        } else {
-            y = CalcResult48(pNodeData, pAnmData++, frame,
-                             flags & ResAnmChrNodeData::FLAG_SCALE_Y_CONST);
-            z = CalcResult48(pNodeData, pAnmData++, frame,
-                             flags & ResAnmChrNodeData::FLAG_SCALE_Z_CONST);
+            break;
         }
 
-        break;
-    }
+        case ResAnmChrNodeData::FLAG_SCALE_FVS96_FMT: {
+            x = CalcResult96(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_SCALE_X_CONST);
 
-    case ResAnmChrNodeData::FLAG_SCALE_FVS96_FMT: {
-        x = CalcResult96(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_SCALE_X_CONST);
+            if (flags & ResAnmChrNodeData::FLAG_SCALE_UNIFORM) {
+                y = x;
+                z = x;
+            } else {
+                y = CalcResult96(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_SCALE_Y_CONST);
+                z = CalcResult96(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_SCALE_Z_CONST);
+            }
 
-        if (flags & ResAnmChrNodeData::FLAG_SCALE_UNIFORM) {
-            y = x;
-            z = x;
-        } else {
-            y = CalcResult96(pNodeData, pAnmData++, frame,
-                             flags & ResAnmChrNodeData::FLAG_SCALE_Y_CONST);
-            z = CalcResult96(pNodeData, pAnmData++, frame,
-                             flags & ResAnmChrNodeData::FLAG_SCALE_Z_CONST);
+            break;
         }
 
-        break;
-    }
-
-    default: {
-        x = 0.0f;
-        y = 0.0f;
-        z = 0.0f;
-        break;
-    }
+        default: {
+            x = 0.0f;
+            y = 0.0f;
+            z = 0.0f;
+            break;
+        }
     }
 
     pResult->x = x;
@@ -472,88 +448,86 @@ GetAnmScale(math::VEC3* pResult, const ResAnmChrNodeData* pNodeData,
     return pAnmData;
 }
 
-const ResAnmChrNodeData::AnmData*
-GetAnmRotation(math::MTX34* pResult, math::VEC3* pRawResult,
-               const ResAnmChrInfoData& rInfoData,
-               const ResAnmChrNodeData* pNodeData,
-               const ResAnmChrNodeData::AnmData* pAnmData, f32 frame) {
-
+const ResAnmChrNodeData::AnmData *GetAnmRotation(
+    math::MTX34 *pResult, math::VEC3 *pRawResult, const ResAnmChrInfoData &rInfoData,
+    const ResAnmChrNodeData *pNodeData, const ResAnmChrNodeData::AnmData *pAnmData, f32 frame
+) {
     u32 flags = pNodeData->flags;
     f32 x, y, z;
 
     switch (flags & ResAnmChrNodeData::FLAG_ROT_FMT_MASK) {
-    case 0: {
-        x = pAnmData++->constValue;
-        y = pAnmData++->constValue;
-        z = pAnmData++->constValue;
-        break;
-    }
+        case 0: {
+            x = pAnmData++->constValue;
+            y = pAnmData++->constValue;
+            z = pAnmData++->constValue;
+            break;
+        }
 
-    case ResAnmChrNodeData::FLAG_ROT_FVS32_FMT: {
-        x = CalcResult32(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_ROT_X_CONST);
-        y = CalcResult32(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_ROT_Y_CONST);
-        z = CalcResult32(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_ROT_Z_CONST);
-        break;
-    }
+        case ResAnmChrNodeData::FLAG_ROT_FVS32_FMT: {
+            x = CalcResult32(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_ROT_X_CONST);
+            y = CalcResult32(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_ROT_Y_CONST);
+            z = CalcResult32(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_ROT_Z_CONST);
+            break;
+        }
 
-    case ResAnmChrNodeData::FLAG_ROT_FVS48_FMT: {
-        x = CalcResult48(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_ROT_X_CONST);
-        y = CalcResult48(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_ROT_Y_CONST);
-        z = CalcResult48(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_ROT_Z_CONST);
-        break;
-    }
+        case ResAnmChrNodeData::FLAG_ROT_FVS48_FMT: {
+            x = CalcResult48(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_ROT_X_CONST);
+            y = CalcResult48(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_ROT_Y_CONST);
+            z = CalcResult48(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_ROT_Z_CONST);
+            break;
+        }
 
-    case ResAnmChrNodeData::FLAG_ROT_FVS96_FMT: {
-        x = CalcResult96(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_ROT_X_CONST);
-        y = CalcResult96(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_ROT_Y_CONST);
-        z = CalcResult96(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_ROT_Z_CONST);
-        break;
-    }
+        case ResAnmChrNodeData::FLAG_ROT_FVS96_FMT: {
+            x = CalcResult96(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_ROT_X_CONST);
+            y = CalcResult96(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_ROT_Y_CONST);
+            z = CalcResult96(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_ROT_Z_CONST);
+            break;
+        }
 
-    case ResAnmChrNodeData::FLAG_ROT_CV8_FMT: {
-        x = CalcResultFrm8(pNodeData, pAnmData++, rInfoData.numFrame, frame,
-                           flags & ResAnmChrNodeData::FLAG_ROT_X_CONST);
-        y = CalcResultFrm8(pNodeData, pAnmData++, rInfoData.numFrame, frame,
-                           flags & ResAnmChrNodeData::FLAG_ROT_Y_CONST);
-        z = CalcResultFrm8(pNodeData, pAnmData++, rInfoData.numFrame, frame,
-                           flags & ResAnmChrNodeData::FLAG_ROT_Z_CONST);
-        break;
-    }
+        case ResAnmChrNodeData::FLAG_ROT_CV8_FMT: {
+            x = CalcResultFrm8(
+                pNodeData, pAnmData++, rInfoData.numFrame, frame, flags & ResAnmChrNodeData::FLAG_ROT_X_CONST
+            );
+            y = CalcResultFrm8(
+                pNodeData, pAnmData++, rInfoData.numFrame, frame, flags & ResAnmChrNodeData::FLAG_ROT_Y_CONST
+            );
+            z = CalcResultFrm8(
+                pNodeData, pAnmData++, rInfoData.numFrame, frame, flags & ResAnmChrNodeData::FLAG_ROT_Z_CONST
+            );
+            break;
+        }
 
-    case ResAnmChrNodeData::FLAG_ROT_CV16_FMT: {
-        x = CalcResultFrm16(pNodeData, pAnmData++, rInfoData.numFrame, frame,
-                            flags & ResAnmChrNodeData::FLAG_ROT_X_CONST);
-        y = CalcResultFrm16(pNodeData, pAnmData++, rInfoData.numFrame, frame,
-                            flags & ResAnmChrNodeData::FLAG_ROT_Y_CONST);
-        z = CalcResultFrm16(pNodeData, pAnmData++, rInfoData.numFrame, frame,
-                            flags & ResAnmChrNodeData::FLAG_ROT_Z_CONST);
-        break;
-    }
+        case ResAnmChrNodeData::FLAG_ROT_CV16_FMT: {
+            x = CalcResultFrm16(
+                pNodeData, pAnmData++, rInfoData.numFrame, frame, flags & ResAnmChrNodeData::FLAG_ROT_X_CONST
+            );
+            y = CalcResultFrm16(
+                pNodeData, pAnmData++, rInfoData.numFrame, frame, flags & ResAnmChrNodeData::FLAG_ROT_Y_CONST
+            );
+            z = CalcResultFrm16(
+                pNodeData, pAnmData++, rInfoData.numFrame, frame, flags & ResAnmChrNodeData::FLAG_ROT_Z_CONST
+            );
+            break;
+        }
 
-    case ResAnmChrNodeData::FLAG_ROT_CV32_FMT: {
-        x = CalcResultFrm32(pNodeData, pAnmData++, rInfoData.numFrame, frame,
-                            flags & ResAnmChrNodeData::FLAG_ROT_X_CONST);
-        y = CalcResultFrm32(pNodeData, pAnmData++, rInfoData.numFrame, frame,
-                            flags & ResAnmChrNodeData::FLAG_ROT_Y_CONST);
-        z = CalcResultFrm32(pNodeData, pAnmData++, rInfoData.numFrame, frame,
-                            flags & ResAnmChrNodeData::FLAG_ROT_Z_CONST);
-        break;
-    }
+        case ResAnmChrNodeData::FLAG_ROT_CV32_FMT: {
+            x = CalcResultFrm32(
+                pNodeData, pAnmData++, rInfoData.numFrame, frame, flags & ResAnmChrNodeData::FLAG_ROT_X_CONST
+            );
+            y = CalcResultFrm32(
+                pNodeData, pAnmData++, rInfoData.numFrame, frame, flags & ResAnmChrNodeData::FLAG_ROT_Y_CONST
+            );
+            z = CalcResultFrm32(
+                pNodeData, pAnmData++, rInfoData.numFrame, frame, flags & ResAnmChrNodeData::FLAG_ROT_Z_CONST
+            );
+            break;
+        }
 
-    default: {
-        x = 0.0f;
-        y = 0.0f;
-        z = 0.0f;
-    }
+        default: {
+            x = 0.0f;
+            y = 0.0f;
+            z = 0.0f;
+        }
     }
 
     math::MTX34RotXYZDeg(pResult, x, y, z);
@@ -565,56 +539,46 @@ GetAnmRotation(math::MTX34* pResult, math::VEC3* pRawResult,
     return pAnmData;
 }
 
-const ResAnmChrNodeData::AnmData*
-GetAnmTranslation(math::VEC3* pTrans, const ResAnmChrNodeData* pNodeData,
-                  const ResAnmChrNodeData::AnmData* pAnmData, f32 frame) {
-
+const ResAnmChrNodeData::AnmData *GetAnmTranslation(
+    math::VEC3 *pTrans, const ResAnmChrNodeData *pNodeData, const ResAnmChrNodeData::AnmData *pAnmData, f32 frame
+) {
     u32 flags = pNodeData->flags;
     f32 x, y, z;
 
     switch (flags & ResAnmChrNodeData::FLAG_TRANS_FMT_MASK) {
-    case 0: {
-        x = pAnmData++->constValue;
-        y = pAnmData++->constValue;
-        z = pAnmData++->constValue;
-        break;
-    }
+        case 0: {
+            x = pAnmData++->constValue;
+            y = pAnmData++->constValue;
+            z = pAnmData++->constValue;
+            break;
+        }
 
-    case ResAnmChrNodeData::FLAG_TRANS_FVS32_FMT: {
-        x = CalcResult32(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_TRANS_X_CONST);
-        y = CalcResult32(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_TRANS_Y_CONST);
-        z = CalcResult32(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_TRANS_Z_CONST);
-        break;
-    }
+        case ResAnmChrNodeData::FLAG_TRANS_FVS32_FMT: {
+            x = CalcResult32(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_TRANS_X_CONST);
+            y = CalcResult32(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_TRANS_Y_CONST);
+            z = CalcResult32(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_TRANS_Z_CONST);
+            break;
+        }
 
-    case ResAnmChrNodeData::FLAG_TRANS_FVS48_FMT: {
-        x = CalcResult48(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_TRANS_X_CONST);
-        y = CalcResult48(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_TRANS_Y_CONST);
-        z = CalcResult48(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_TRANS_Z_CONST);
-        break;
-    }
+        case ResAnmChrNodeData::FLAG_TRANS_FVS48_FMT: {
+            x = CalcResult48(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_TRANS_X_CONST);
+            y = CalcResult48(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_TRANS_Y_CONST);
+            z = CalcResult48(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_TRANS_Z_CONST);
+            break;
+        }
 
-    case ResAnmChrNodeData::FLAG_TRANS_FVS96_FMT: {
-        x = CalcResult96(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_TRANS_X_CONST);
-        y = CalcResult96(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_TRANS_Y_CONST);
-        z = CalcResult96(pNodeData, pAnmData++, frame,
-                         flags & ResAnmChrNodeData::FLAG_TRANS_Z_CONST);
-        break;
-    }
+        case ResAnmChrNodeData::FLAG_TRANS_FVS96_FMT: {
+            x = CalcResult96(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_TRANS_X_CONST);
+            y = CalcResult96(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_TRANS_Y_CONST);
+            z = CalcResult96(pNodeData, pAnmData++, frame, flags & ResAnmChrNodeData::FLAG_TRANS_Z_CONST);
+            break;
+        }
 
-    default: {
-        x = 0.0f;
-        y = 0.0f;
-        z = 0.0f;
-    }
+        default: {
+            x = 0.0f;
+            y = 0.0f;
+            z = 0.0f;
+        }
     }
 
     pTrans->x = x;
@@ -629,26 +593,34 @@ GetAnmTranslation(math::VEC3* pTrans, const ResAnmChrNodeData* pNodeData,
  * Get animation result
  *
  ******************************************************************************/
-void GetAnmResult_(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                   const ResAnmChrNodeData* pNodeData, f32 frame);
-void GetAnmResult_S(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                    const ResAnmChrNodeData* pNodeData, f32 frame);
-void GetAnmResult_R(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                    const ResAnmChrNodeData* pNodeData, f32 frame);
-void GetAnmResult_SR(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                     const ResAnmChrNodeData* pNodeData, f32 frame);
-void GetAnmResult_T(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                    const ResAnmChrNodeData* pNodeData, f32 frame);
-void GetAnmResult_ST(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                     const ResAnmChrNodeData* pNodeData, f32 frame);
-void GetAnmResult_RT(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                     const ResAnmChrNodeData* pNodeData, f32 frame);
-void GetAnmResult_SRT(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                      const ResAnmChrNodeData* pNodeData, f32 frame);
+void GetAnmResult_(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+);
+void GetAnmResult_S(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+);
+void GetAnmResult_R(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+);
+void GetAnmResult_SR(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+);
+void GetAnmResult_T(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+);
+void GetAnmResult_ST(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+);
+void GetAnmResult_RT(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+);
+void GetAnmResult_SRT(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+);
 
-typedef void (*GetAnmResultFunc)(ChrAnmResult* pResult,
-                                 const ResAnmChrInfoData& rInfoData,
-                                 const ResAnmChrNodeData* pNodeData, f32 frame);
+typedef void (*GetAnmResultFunc)(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+);
 
 const GetAnmResultFunc gGetAnmResultTable[] = {
     GetAnmResult_,   // 0 0 0
@@ -661,8 +633,9 @@ const GetAnmResultFunc gGetAnmResultTable[] = {
     GetAnmResult_SRT // 1 1 1
 };
 
-void GetAnmResult_(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                   const ResAnmChrNodeData* pNodeData, f32 frame) {
+void GetAnmResult_(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+) {
 #pragma unused(rInfoData)
 #pragma unused(pNodeData)
 #pragma unused(frame)
@@ -673,11 +646,12 @@ void GetAnmResult_(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
     math::MTX34Identity(&pResult->rt);
 }
 
-void GetAnmResult_T(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                    const ResAnmChrNodeData* pNodeData, f32 frame) {
+void GetAnmResult_T(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+) {
 #pragma unused(rInfoData)
 
-    const ResAnmChrNodeData::AnmData* pAnmData = pNodeData->anms;
+    const ResAnmChrNodeData::AnmData *pAnmData = pNodeData->anms;
     math::VEC3 t;
 
     pResult->s.x = 1.0f;
@@ -691,17 +665,16 @@ void GetAnmResult_T(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
     pResult->rt._23 = t.z;
 }
 
-void GetAnmResult_R(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                    const ResAnmChrNodeData* pNodeData, f32 frame) {
-
-    const ResAnmChrNodeData::AnmData* pAnmData = pNodeData->anms;
+void GetAnmResult_R(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+) {
+    const ResAnmChrNodeData::AnmData *pAnmData = pNodeData->anms;
 
     pResult->s.x = 1.0f;
     pResult->s.y = 1.0f;
     pResult->s.z = 1.0f;
 
-    GetAnmRotation(&pResult->rt, &pResult->rawR, rInfoData, pNodeData, pAnmData,
-                   frame);
+    GetAnmRotation(&pResult->rt, &pResult->rawR, rInfoData, pNodeData, pAnmData, frame);
 
     pResult->flags |= ChrAnmResult::FLAG_ROT_RAW_FMT;
 
@@ -710,28 +683,28 @@ void GetAnmResult_R(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
     pResult->rt._23 = 0.0f;
 }
 
-void GetAnmResult_S(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                    const ResAnmChrNodeData* pNodeData, f32 frame) {
+void GetAnmResult_S(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+) {
 #pragma unused(rInfoData)
 
-    const ResAnmChrNodeData::AnmData* pAnmData = pNodeData->anms;
+    const ResAnmChrNodeData::AnmData *pAnmData = pNodeData->anms;
 
     GetAnmScale(&pResult->s, pNodeData, pAnmData, frame);
     math::MTX34Identity(&pResult->rt);
 }
 
-void GetAnmResult_RT(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                     const ResAnmChrNodeData* pNodeData, f32 frame) {
-
-    const ResAnmChrNodeData::AnmData* pAnmData = pNodeData->anms;
+void GetAnmResult_RT(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+) {
+    const ResAnmChrNodeData::AnmData *pAnmData = pNodeData->anms;
     math::VEC3 t;
 
     pResult->s.x = 1.0f;
     pResult->s.y = 1.0f;
     pResult->s.z = 1.0f;
 
-    pAnmData = GetAnmRotation(&pResult->rt, &pResult->rawR, rInfoData,
-                              pNodeData, pAnmData, frame);
+    pAnmData = GetAnmRotation(&pResult->rt, &pResult->rawR, rInfoData, pNodeData, pAnmData, frame);
 
     pResult->flags |= ChrAnmResult::FLAG_ROT_RAW_FMT;
 
@@ -741,15 +714,14 @@ void GetAnmResult_RT(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
     pResult->rt._23 = t.z;
 }
 
-void GetAnmResult_SR(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                     const ResAnmChrNodeData* pNodeData, f32 frame) {
-
-    const ResAnmChrNodeData::AnmData* pAnmData = pNodeData->anms;
+void GetAnmResult_SR(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+) {
+    const ResAnmChrNodeData::AnmData *pAnmData = pNodeData->anms;
 
     pAnmData = GetAnmScale(&pResult->s, pNodeData, pAnmData, frame);
 
-    GetAnmRotation(&pResult->rt, &pResult->rawR, rInfoData, pNodeData, pAnmData,
-                   frame);
+    GetAnmRotation(&pResult->rt, &pResult->rawR, rInfoData, pNodeData, pAnmData, frame);
 
     pResult->flags |= ChrAnmResult::FLAG_ROT_RAW_FMT;
 
@@ -758,11 +730,12 @@ void GetAnmResult_SR(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
     pResult->rt._23 = 0.0f;
 }
 
-void GetAnmResult_ST(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                     const ResAnmChrNodeData* pNodeData, f32 frame) {
+void GetAnmResult_ST(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+) {
 #pragma unused(rInfoData)
 
-    const ResAnmChrNodeData::AnmData* pAnmData = pNodeData->anms;
+    const ResAnmChrNodeData::AnmData *pAnmData = pNodeData->anms;
     math::VEC3 t;
 
     pAnmData = GetAnmScale(&pResult->s, pNodeData, pAnmData, frame);
@@ -774,15 +747,14 @@ void GetAnmResult_ST(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
     pResult->rt._23 = t.z;
 }
 
-void GetAnmResult_SRT(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
-                      const ResAnmChrNodeData* pNodeData, f32 frame) {
-
-    const ResAnmChrNodeData::AnmData* pAnmData = pNodeData->anms;
+void GetAnmResult_SRT(
+    ChrAnmResult *pResult, const ResAnmChrInfoData &rInfoData, const ResAnmChrNodeData *pNodeData, f32 frame
+) {
+    const ResAnmChrNodeData::AnmData *pAnmData = pNodeData->anms;
     math::VEC3 t;
 
     pAnmData = GetAnmScale(&pResult->s, pNodeData, pAnmData, frame);
-    pAnmData = GetAnmRotation(&pResult->rt, &pResult->rawR, rInfoData,
-                              pNodeData, pAnmData, frame);
+    pAnmData = GetAnmRotation(&pResult->rt, &pResult->rawR, rInfoData, pNodeData, pAnmData, frame);
     pAnmData = GetAnmTranslation(&t, pNodeData, pAnmData, frame);
 
     pResult->flags |= ChrAnmResult::FLAG_ROT_RAW_FMT;
@@ -799,20 +771,17 @@ void GetAnmResult_SRT(ChrAnmResult* pResult, const ResAnmChrInfoData& rInfoData,
  * ResAnmChr
  *
  ******************************************************************************/
-void ResAnmChr::GetAnmResult(ChrAnmResult* pResult, u32 idx, f32 frame) const {
-    const ResAnmChrNodeData* pNodeData = GetNodeAnm(idx);
+void ResAnmChr::GetAnmResult(ChrAnmResult *pResult, u32 idx, f32 frame) const {
+    const ResAnmChrNodeData *pNodeData = GetNodeAnm(idx);
 
     u32 flags = pNodeData->flags;
 
     pResult->flags =
-        flags &
-        (ChrAnmResult::FLAG_ANM_EXISTS | ChrAnmResult::FLAG_MTX_IDENT |
-         ChrAnmResult::FLAG_ROT_TRANS_ZERO | ChrAnmResult::FLAG_SCALE_ONE |
-         ChrAnmResult::FLAG_SCALE_UNIFORM | ChrAnmResult::FLAG_ROT_ZERO |
-         ChrAnmResult::FLAG_TRANS_ZERO | ChrAnmResult::FLAG_PATCH_SCALE |
-         ChrAnmResult::FLAG_PATCH_ROT | ChrAnmResult::FLAG_PATCH_TRANS |
-         ChrAnmResult::FLAG_SSC_APPLY | ChrAnmResult::FLAG_SSC_PARENT |
-         ChrAnmResult::FLAG_XSI_SCALING);
+        flags & (ChrAnmResult::FLAG_ANM_EXISTS | ChrAnmResult::FLAG_MTX_IDENT | ChrAnmResult::FLAG_ROT_TRANS_ZERO |
+                 ChrAnmResult::FLAG_SCALE_ONE | ChrAnmResult::FLAG_SCALE_UNIFORM | ChrAnmResult::FLAG_ROT_ZERO |
+                 ChrAnmResult::FLAG_TRANS_ZERO | ChrAnmResult::FLAG_PATCH_SCALE | ChrAnmResult::FLAG_PATCH_ROT |
+                 ChrAnmResult::FLAG_PATCH_TRANS | ChrAnmResult::FLAG_SSC_APPLY | ChrAnmResult::FLAG_SSC_PARENT |
+                 ChrAnmResult::FLAG_XSI_SCALING);
 
     u32 index = (flags & ResAnmChrNodeData::FLAG_HAS_SRT_MASK) >> 22;
     gGetAnmResultTable[index](pResult, ref().info, pNodeData, frame);
@@ -823,7 +792,7 @@ void ResAnmChr::GetAnmResult(ChrAnmResult* pResult, u32 idx, f32 frame) const {
  * ChrAnmResult
  *
  ******************************************************************************/
-void ChrAnmResult::GetScale(math::VEC3* pScale) const {
+void ChrAnmResult::GetScale(math::VEC3 *pScale) const {
     if (flags & FLAG_SCALE_ONE) {
         pScale->x = 1.0f;
         pScale->y = 1.0f;
@@ -835,7 +804,7 @@ void ChrAnmResult::GetScale(math::VEC3* pScale) const {
     }
 }
 
-bool ChrAnmResult::GetRotateDeg(math::VEC3* pRotate) const {
+bool ChrAnmResult::GetRotateDeg(math::VEC3 *pRotate) const {
     if (flags & FLAG_ROT_ZERO) {
         pRotate->x = 0.0f;
         pRotate->y = 0.0f;
@@ -866,7 +835,7 @@ bool ChrAnmResult::GetRotateDeg(math::VEC3* pRotate) const {
     return false;
 }
 
-void ChrAnmResult::GetTranslate(math::VEC3* pTrans) const {
+void ChrAnmResult::GetTranslate(math::VEC3 *pTrans) const {
     if (flags & FLAG_TRANS_ZERO) {
         pTrans->x = 0.0f;
         pTrans->y = 0.0f;
@@ -878,7 +847,7 @@ void ChrAnmResult::GetTranslate(math::VEC3* pTrans) const {
     }
 }
 
-void ChrAnmResult::GetRotTrans(math::MTX34* pRotTrans) const {
+void ChrAnmResult::GetRotTrans(math::MTX34 *pRotTrans) const {
     if (flags & FLAG_ROT_ZERO) {
         if (flags & FLAG_TRANS_ZERO) {
             math::MTX34Identity(pRotTrans);
@@ -898,7 +867,14 @@ void ChrAnmResult::GetRotTrans(math::MTX34* pRotTrans) const {
     }
 }
 
-void ChrAnmResult::SetScale(const math::VEC3* pScale) {
+void ChrAnmResult::GetMtx(math::MTX34 *pMtx) const {
+    GetRotTrans(pMtx);
+    if (!(flags & FLAG_SCALE_ONE)) {
+        math::MTX34Scale(pMtx, pMtx, &s);
+    }
+}
+
+void ChrAnmResult::SetScale(const math::VEC3 *pScale) {
     if (pScale->x == 1.0f && pScale->y == 1.0f && pScale->z == 1.0f) {
         flags |= FLAG_SCALE_ONE | FLAG_SCALE_UNIFORM;
 
@@ -916,15 +892,68 @@ void ChrAnmResult::SetScale(const math::VEC3* pScale) {
     s = *pScale;
 }
 
-void ChrAnmResult::SetRotTrans(const math::MTX34* pRotTrans) {
-    bool rotZero = pRotTrans->_00 == 1.0f && pRotTrans->_01 == 0.0f &&
-                   pRotTrans->_02 == 0.0f && pRotTrans->_10 == 0.0f &&
-                   pRotTrans->_11 == 1.0f && pRotTrans->_12 == 0.0f &&
-                   pRotTrans->_20 == 0.0f && pRotTrans->_21 == 0.0f &&
-                   pRotTrans->_22 == 1.0f;
+void ChrAnmResult::SetRotateDeg(const math::VEC3 *pRotDeg) {
+    if (pRotDeg->x == 0.f && pRotDeg->y == 0.f && pRotDeg->z == 0.f) {
+        u32 flag = FLAG_ROT_ZERO;
+        if (flags & FLAG_TRANS_ZERO) {
+            flag |= FLAG_ROT_TRANS_ZERO;
 
-    bool transZero = pRotTrans->_03 == 0.0f && pRotTrans->_13 == 0.0f &&
-                     pRotTrans->_23 == 0.0f;
+            if (flags & FLAG_SCALE_ONE) {
+                flag |= FLAG_MTX_IDENT;
+            }
+        }
+        flags |= flag;
+
+        // clang-format off
+        rt[0][0] = 1.f; rt[0][1] = 0.f; rt[0][2] = 0.f; 
+        rt[1][0] = 0.f; rt[1][1] = 1.f; rt[1][2] = 0.f; 
+        rt[2][0] = 0.f; rt[2][1] = 0.f; rt[2][2] = 1.f;
+        // clang-format on
+
+    } else {
+        // Save Translate
+        math::VEC3 trans(rt._03, rt._13, rt._23);
+
+        // Rotate
+        math::MTX34RotXYZDeg(&rt, pRotDeg->x, pRotDeg->y, pRotDeg->z);
+
+        // Restore Translate
+        rt._03 = trans.x;
+        rt._13 = trans.y;
+        rt._23 = trans.z;
+
+        rawR = *pRotDeg;
+
+        flags &= ~(FLAG_ROT_ZERO | FLAG_MTX_IDENT | FLAG_ROT_TRANS_ZERO);
+    }
+    flags |= FLAG_ROT_RAW_FMT;
+}
+
+void ChrAnmResult::SetTranslate(const math::VEC3 *pTranslate) {
+    if (pTranslate->x == 0.f && pTranslate->y == 0.f && pTranslate->z == 0.f) {
+        u32 flag = FLAG_TRANS_ZERO;
+        if (flags & FLAG_ROT_ZERO) {
+            flag |= FLAG_ROT_TRANS_ZERO;
+            if (flags & FLAG_SCALE_ONE) {
+                flag |= FLAG_MTX_IDENT;
+            }
+        }
+        flags |= flag;
+    } else {
+        flags &= ~(FLAG_TRANS_ZERO | FLAG_MTX_IDENT | FLAG_ROT_TRANS_ZERO);
+    }
+
+    rt._03 = pTranslate->x;
+    rt._13 = pTranslate->y;
+    rt._23 = pTranslate->z;
+};
+
+void ChrAnmResult::SetRotTrans(const math::MTX34 *pRotTrans) {
+    bool rotZero = pRotTrans->_00 == 1.0f && pRotTrans->_01 == 0.0f && pRotTrans->_02 == 0.0f &&
+                   pRotTrans->_10 == 0.0f && pRotTrans->_11 == 1.0f && pRotTrans->_12 == 0.0f &&
+                   pRotTrans->_20 == 0.0f && pRotTrans->_21 == 0.0f && pRotTrans->_22 == 1.0f;
+
+    bool transZero = pRotTrans->_03 == 0.0f && pRotTrans->_13 == 0.0f && pRotTrans->_23 == 0.0f;
 
     if (rotZero) {
         if (transZero) {
@@ -941,12 +970,27 @@ void ChrAnmResult::SetRotTrans(const math::MTX34* pRotTrans) {
         flags |= FLAG_TRANS_ZERO;
         flags &= ~(FLAG_MTX_IDENT | FLAG_ROT_TRANS_ZERO | FLAG_ROT_ZERO);
     } else {
-        flags &= ~(FLAG_MTX_IDENT | FLAG_ROT_TRANS_ZERO | FLAG_ROT_ZERO |
-                   FLAG_TRANS_ZERO);
+        flags &= ~(FLAG_MTX_IDENT | FLAG_ROT_TRANS_ZERO | FLAG_ROT_ZERO | FLAG_TRANS_ZERO);
     }
 
     math::MTX34Copy(&rt, pRotTrans);
     flags &= ~FLAG_ROT_RAW_FMT;
+}
+
+void ChrAnmResult::SetMtx(const math::MTX34 *pMtx) {
+    math::VEC3 scale(GetMtx34Scale(*pMtx, 0), GetMtx34Scale(*pMtx, 1), GetMtx34Scale(*pMtx, 2));
+
+    SetScale(&scale);
+
+    if (flags & FLAG_SCALE_ONE) {
+        math::MTX34Copy(&rt, pMtx);
+    } else {
+        math::VEC3 scaleby(math::FInv(scale.x), math::FInv(scale.y), math::FInv(scale.z));
+
+        math::MTX34Scale(&rt, pMtx, &scaleby);
+    }
+
+    flags &= ~(FLAG_ROT_RAW_FMT);
 }
 
 } // namespace g3d

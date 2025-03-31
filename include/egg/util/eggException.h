@@ -21,7 +21,7 @@ public:
 
     static Exception *sException;
 
-    volatile static nw4r::db::ConsoleHandle sConsoleHandle;
+    static nw4r::db::ConsoleHandle sConsoleHandle;
     static void *sMapFileWorks;
     static u32 sMapFileNumMax;
     static u32 sCurrentMapFileNum;

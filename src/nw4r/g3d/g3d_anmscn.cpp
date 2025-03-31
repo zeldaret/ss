@@ -1,11 +1,11 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
 #include <algorithm>
 
 namespace nw4r {
 namespace g3d {
 
-void AnmScn::GetLightSetting(LightSetting* pSetting) {
+void AnmScn::GetLightSetting(LightSetting *pSetting) {
     const u32 numLightSet = GetLightSetMaxRefNumber();
     const u32 numAmbLight = GetAmbLightMaxRefNumber();
     const u32 numDiffLight = GetDiffuseLightMaxRefNumber();
@@ -21,18 +21,18 @@ void AnmScn::GetLightSetting(LightSetting* pSetting) {
     }
 
     if (numAmbLight > 0) {
-        AmbLightObj* pAmbObjArray = pSetting->GetAmbLightObjArray();
+        AmbLightObj *pAmbObjArray = pSetting->GetAmbLightObjArray();
         const u32 numAmbObj = pSetting->GetNumLightObj();
         const u32 numLoadableAmb = std::min(numAmbLight, numAmbObj);
 
         for (u32 i = 0; i < numLoadableAmb; i++) {
-            AmbLightObj* pAmbObj = &pAmbObjArray[i];
-            *reinterpret_cast<u32*>(&pAmbObj->r) = GetAmbLightColor(i);
+            AmbLightObj *pAmbObj = &pAmbObjArray[i];
+            *reinterpret_cast<u32 *>(&pAmbObj->r) = GetAmbLightColor(i);
         }
     }
 
     if (numDiffLight > 0) {
-        LightObj* pLightObjArray = pSetting->GetLightObjArray();
+        LightObj *pLightObjArray = pSetting->GetLightObjArray();
         const u32 numLightObj = pSetting->GetNumLightObj();
         const u32 numSpecLight = GetNumSpecularLight();
 
@@ -41,13 +41,13 @@ void AnmScn::GetLightSetting(LightSetting* pSetting) {
         const u32 numLoadableLight = std::min(numLight, numLightObj);
 
         for (u32 i = 0; i < numLoadableDiffLight; i++) {
-            LightObj* pObj = &pLightObjArray[i];
+            LightObj *pObj = &pLightObjArray[i];
             pObj->Disable();
         }
 
         for (u32 i = 0; i < numLoadableDiffLight; i++) {
-            LightObj* pDiffObj = &pLightObjArray[i];
-            LightObj* pSpecObj = NULL;
+            LightObj *pDiffObj = &pLightObjArray[i];
+            LightObj *pSpecObj = NULL;
 
             if (pDiffObj->IsEnable()) {
                 continue;

@@ -4,6 +4,7 @@
 #include "d/lyt/d_structd.h"
 #include "rvl/MTX/mtx.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytCommonArrow_c, None);
 STATE_DEFINE(dLytCommonArrow_c, In);
@@ -38,7 +39,7 @@ static const d2d::LytBrlanMapping brlanMap[] = {
 dLytCommonArrow_c::dLytCommonArrow_c() : mStateMgr(*this, sStateID::null) {}
 
 bool dLytCommonArrow_c::init() {
-    void *data = LayoutArcManager::sInstance->getLoadedData("CommonArrow");
+    void *data = LayoutArcManager::GetInstance()->getLoadedData("CommonArrow");
     mResAcc.attach(data, "");
     mLytBase.build("commonArrow_00.brlyt", &mResAcc);
     mLytBase.mPriority = 0x86;
@@ -47,7 +48,7 @@ bool dLytCommonArrow_c::init() {
         mAnmGroups[i].init(brlanMap[i].mFile, &mResAcc, mLytBase.getLayout(), brlanMap[i].mName);
     }
     mStructD.fn_80065E70(mLytBase.getLayout()->GetRootPane(), 1, 0, 0);
-    d2d::dLytStructDList::sInstance->appendToList2(&mStructD);
+    d2d::dLytStructDList::GetInstance()->appendToList2(&mStructD);
     mBoundingL = mLytBase.findBounding("B_arrowL_00");
     mBoundingR = mLytBase.findBounding("B_arrowR_00");
     mStateMgr.changeState(StateID_None);
@@ -56,7 +57,7 @@ bool dLytCommonArrow_c::init() {
 }
 
 bool dLytCommonArrow_c::fn_80168490() {
-    d2d::dLytStructDList::sInstance->removeFromList2(&mStructD);
+    d2d::dLytStructDList::GetInstance()->removeFromList2(&mStructD);
     mLytBase.unbindAnims();
     for (int i = 0; i < 9; i++) {
         mAnmGroups[i].afterUnbind();
@@ -150,7 +151,7 @@ void dLytCommonArrow_c::fn_80168880() {
         return;
     }
 
-    d2d::dLytStructD *thing = dCsBase_c::sInstance->getUnk();
+    d2d::dLytStructD *thing = dCsBase_c::GetInstance()->getUnk();
     if (thing != nullptr && thing->getType() == 'lyt ') {
         if (thing->field_0x24 == mBoundingL) {
             i = 0;
@@ -227,9 +228,6 @@ void dLytCommonArrow_c::initializeState_Wait() {
     mTimer = 0;
 }
 
-extern "C" void SmallSoundManager__playSound(void *, u32);
-extern "C" void *SOUND_EFFECT_SOUND_MGR;
-
 void dLytCommonArrow_c::executeState_Wait() {
     if (mOutRequested == 1) {
         mStateMgr.changeState(StateID_Out);
@@ -262,9 +260,9 @@ void dLytCommonArrow_c::executeState_Wait() {
             if (field_0x6C0 != 2) {
                 displayElement(field_0x6C0 + ANIM_DECIDE_OFFSET, 0.0f);
                 if (field_0x6C0 == 0) {
-                    SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x142D);
+                    SmallSoundManager::GetInstance()->playSound(SE_S_MENU_SELECT_TURN_PAGE_LEFT);
                 } else {
-                    SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x142E);
+                    SmallSoundManager::GetInstance()->playSound(SE_S_MENU_SELECT_TURN_PAGE_RIGHT);
                 }
                 mTimer++;
             }
@@ -287,9 +285,9 @@ void dLytCommonArrow_c::executeState_Wait() {
 
     if (field_0x6BC != field_0x6B8 && field_0x6B8 != 2) {
         if (field_0x6B8 == 0) {
-            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x142B);
+            SmallSoundManager::GetInstance()->playSound(SE_S_MENU_POINT_TURN_PAGE_LEFT);
         } else {
-            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x142C);
+            SmallSoundManager::GetInstance()->playSound(SE_S_MENU_POINT_TURN_PAGE_RIGHT);
         }
     }
 }

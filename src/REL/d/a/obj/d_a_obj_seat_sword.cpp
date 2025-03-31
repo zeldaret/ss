@@ -24,11 +24,11 @@ STATE_DEFINE(dAcOSeatSword_c, Wait);
 STATE_DEFINE(dAcOSeatSword_c, Get);
 
 dCcD_SrcCyl dAcOSeatSword_c::sCylSrc = {
-  /* mObjInf */
+    /* mObjInf */
     {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */ {0, 0x311, {0, 0x407}, 0x0, 0x0},
+     /* mObjTg */ {0, 0x311, {0, 0, 0x407}, 0x0, 0x0},
      /* mObjCo */ {0xE9}},
- /* mCylInf */
+    /* mCylInf */
     {20.f, 100.f}
 };
 
@@ -194,7 +194,7 @@ int dAcOSeatSword_c::draw() {
 
 void dAcOSeatSword_c::initializeState_Wait() {}
 void dAcOSeatSword_c::executeState_Wait() {
-    AttentionManager::sInstance->addTarget(*this, sInteractionDef, 0, nullptr);
+    AttentionManager::GetInstance()->addTarget(*this, sInteractionDef, 0, nullptr);
 
     if (checkPlayerHasSword()) {
         mbNoSword = true;

@@ -1,6 +1,9 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d/g3d_scnroot.h"
 
-#include <rvl/GX.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
+#include "nw4r/g3d/g3d_scnobj.h"
+
+#include "rvl/GX.h" // IWYU pragma: export
 
 #include <algorithm>
 #include <new>
@@ -99,7 +102,7 @@ void ScnRoot::G3dProc(u32 task, u32 param, void *pInfo) {
 }
 
 Camera ScnRoot::GetCamera(int idx) {
-    if (idx >= 0 && idx < G3DState::NUM_CAMERA) {
+    if (0 <= idx && idx < G3DState::NUM_CAMERA) {
         return Camera(&mCamera[idx]);
     }
 
@@ -115,7 +118,7 @@ void ScnRoot::SetCurrentCamera(int idx) {
 }
 
 Fog ScnRoot::GetFog(int idx) {
-    if (idx >= 0 && idx < G3DState::NUM_FOG) {
+    if (0 <= idx && idx < G3DState::NUM_FOG) {
         return Fog(&mFog[idx]);
     }
 
@@ -163,6 +166,7 @@ void ScnRoot::SetGlbSettings() {
         Fog fog(&mFog[i]);
         fog.SetNearFar(near, far);
 
+        // Enum Comparison mismatch on purpose
         if (fog.ref().type != GX_PERSPECTIVE) {
             fog.ref().type = static_cast<GXFogType>((fog.ref().type & ~(GX_ORTHOGRAPHIC << 3)) | projOrthoBit);
         }
@@ -444,6 +448,10 @@ void ScnObjGather::DrawXlu(ResMdlDrawMode *pForceMode) {
     for (u32 i = 0; i != mNumScnObjXlu;) {
         mpArrayXlu[i++]->G3dProc(G3dObj::G3DPROC_DRAW_XLU, 0, pForceMode);
     }
+}
+
+ScnObjGather::CheckStatus ScnObjGather::CheckScnObj(ScnObj *) {
+    return ScnObjGather::CHECKSTATUS_GATHER_SCNOBJ;
 }
 
 ScnObjGather::ScnObjGather(ScnObj **ppBufOpa, ScnObj **ppBufXlu, u32 capacity)

@@ -144,7 +144,7 @@ public:
     virtual ~dSubPane() {}
     virtual bool build(ResAccIf_c *resAcc) = 0;
     virtual bool remove() = 0;
-    virtual bool LytMeter0x14() = 0;
+    virtual bool execute() = 0;
     virtual nw4r::lyt::Pane *getPane() = 0;
     virtual LytBase_c *getLyt() = 0;
     virtual const char *getName() const = 0;
@@ -199,6 +199,10 @@ struct AnmGroupBase_c {
     inline void setFrame(f32 frame) {
         mpFrameCtrl->setFrame(frame);
         syncAnmFrame();
+    }
+
+    inline f32 getEndFrameRaw() const {
+        return mpFrameCtrl->getEndFrameRaw();
     }
 
     inline f32 getFrame() const {
@@ -281,6 +285,8 @@ struct AnmGroup_c : public AnmGroupBase_c {
     virtual ~AnmGroup_c() {}
     /* 0x28 */ m2d::FrameCtrl_c mFrameCtrl;
 };
+
+void pushToEnd(nw4r::lyt::Pane *);
 
 // This abstraction is apparently only ever used in CsGame
 class AnmGroups {

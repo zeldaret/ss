@@ -13,4 +13,4 @@ _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_304_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
 lbl_304_rodata_4 = .rodata:0x00000004; // type:object size:0x4 data:float
 g_profile_MEGAMI_DIVING_TAG = .data:0x00000000; // type:object size:0x10
-lbl_304_data_10 = .data:0x00000010; // type:object size:0x74
+TgMegamiDiving__vtable = .data:0x00000010; // type:object size:0x74

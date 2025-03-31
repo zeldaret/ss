@@ -2,15 +2,15 @@
 #define NW4R_G3D_ANM_TEX_SRT_H
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/g3d_anmobj.h>
-#include <nw4r/g3d/res/g3d_resanmtexsrt.h>
-#include <nw4r/g3d/res/g3d_resmat.h>
+#include "nw4r/g3d/g3d_anmobj.h"
+#include "nw4r/g3d/res/g3d_resanmtexsrt.h"
+#include "nw4r/g3d/res/g3d_resmat.h"
 
 namespace nw4r {
 namespace g3d {
 
-void ApplyTexSrtAnmResult(ResTexSrt srt, const TexSrtAnmResult *pResult);
 void ApplyTexSrtAnmResult(ResTexSrt srt, ResMatIndMtxAndScale ind, const TexSrtAnmResult *pResult);
+void ApplyTexSrtAnmResult(ResTexSrt srt, const TexSrtAnmResult *pResult) DECOMP_DONT_INLINE;
 
 /******************************************************************************
  *

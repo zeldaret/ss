@@ -2,9 +2,9 @@
 #define NW4R_G3D_RES_RES_LIGHT_SET_H
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/g3d_state.h>
-// #include <nw4r/g3d/res/g3d_resanmscn.h>
-#include <nw4r/g3d/res/g3d_rescommon.h>
+#include "nw4r/g3d/g3d_state.h"
+// #include "nw4r/g3d/res/g3d_resanmscn.h"
+#include "nw4r/g3d/res/g3d_rescommon.h"
 
 namespace nw4r {
 namespace g3d {
@@ -47,6 +47,10 @@ public:
 
     u32 GetAmbLightID() const {
         return ref().ambLightId;
+    }
+
+    u32 GetLightID(u32 index) const {
+        return ref().lightId[index];
     }
 
     u32 GetNumLight() const {

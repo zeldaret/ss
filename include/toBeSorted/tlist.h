@@ -78,6 +78,21 @@ public:
         }
     }
 
+    /**
+     * Returns an iterator representing the position of pT in this
+     * list. If pT is not in the list, the result is the end iterator.
+     *
+     * This is typically used to check if an object is contained in a
+     * list of this type.
+     */
+    Iterator GetPosition(T *pT) {
+        if (GetNodeFromPtr(pT)->mpNext == nullptr || GetNodeFromPtr(pT)->mpPrev == nullptr) {
+            return GetEndIter();
+        } else {
+            return Iterator(pT);
+        }
+    }
+
     Iterator GetEndIter() {
         return Iterator(GetPtrFromNode(&mStartEnd));
     }
@@ -122,6 +137,16 @@ public:
         node->mpPrev = nullptr;
         node->mpNext = nullptr;
         mCount--;
+    }
+
+    T *GetFirst() {
+        return GetPtrFromNode(&mStartEnd);
+    }
+
+    void RemoveFirst() {
+        if (mCount != 0) {
+            remove(GetFirst());
+        }
     }
 
     TNode mStartEnd;

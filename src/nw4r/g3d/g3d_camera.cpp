@@ -1,9 +1,9 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
-#include <nw4r/math.h>
+#include "nw4r/math.h" // IWYU pragma: export
 
-#include <rvl/GX.h>
-#include <rvl/MTX.h>
+#include "rvl/GX.h"  // IWYU pragma: export
+#include "rvl/MTX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -224,6 +224,17 @@ void Camera::SetProjectionMtxDirectly(const math::MTX44 *pMtx) {
     }
 }
 
+void Camera::SetTexMtxParam(f32 lightScaleS, f32 lightScaleT, f32 lightTransS, f32 lightTransT) {
+    if (IsValid()) {
+        CameraData &r = ref();
+
+        r.lightScaleS = lightScaleS;
+        r.lightScaleT = lightScaleT;
+        r.lightTransS = lightTransS;
+        r.lightTransT = lightTransT;
+    }
+}
+
 void Camera::SetScissor(u32 x, u32 y, u32 width, u32 height) {
     if (!IsValid()) {
         return;
@@ -303,8 +314,40 @@ void Camera::GetViewport(f32 *pX, f32 *pY, f32 *pWidth, f32 *pHeight, f32 *pNear
     }
 }
 
+void Camera::Project(math::VEC3 *pSrcPos, const math::VEC3 &worldPos) const {
+    if (pSrcPos == NULL) {
+        return;
+    }
+
+    math::MTX34 cam;
+    math::MTX44 proj;
+
+    f32 vp[GX_VIEWPORT_SZ];
+    f32 p[GX_PROJECTION_SZ];
+
+    GetCameraMtx(&cam);
+    GetProjectionMtx(&proj);
+
+    p[0] = GetProjectionType();
+    p[1] = proj._00;
+    p[3] = proj._11;
+    p[5] = proj._22;
+    p[6] = proj._23;
+
+    if (p[0] == 1.0f) {
+        p[2] = proj._03;
+        p[4] = proj._13;
+    } else {
+        p[2] = proj._02;
+        p[4] = proj._12;
+    }
+
+    GetViewport(&vp[0], &vp[1], &vp[2], &vp[3], &vp[4], &vp[5]);
+    ::GXProject(worldPos.x, worldPos.y, worldPos.z, cam, p, vp, &pSrcPos->x, &pSrcPos->y, &pSrcPos->z);
+}
+
 void Camera::GetCameraMtx(math::MTX34 *pMtx) const {
-    if (pMtx != NULL && IsValid()) {
+    if (pMtx && IsValid()) {
         const CameraData &r = ref();
 
         if (!(r.flags & CameraData::FLAG_CAM_MTX_READY)) {
@@ -316,7 +359,7 @@ void Camera::GetCameraMtx(math::MTX34 *pMtx) const {
 }
 
 void Camera::GetProjectionMtx(math::MTX44 *pMtx) const {
-    if (pMtx != NULL && IsValid()) {
+    if (pMtx && IsValid()) {
         const CameraData &r = ref();
 
         if (!(r.flags & CameraData::FLAG_PROJ_MTX_READY)) {

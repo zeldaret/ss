@@ -2,17 +2,22 @@
 #define RVL_SDK_GX_TRANSFORM_H
 #include "common.h"
 #include "rvl/GX/GXTypes.h"
-#include "rvl/MTX.h"
+
+#include "rvl/MTX.h" // IWYU pragma: export
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#define GX_PROJECTION_SZ 7
+#define GX_VIEWPORT_SZ 6
 
 typedef enum {
     GX_FIELD_EVEN,
     GX_FIELD_ODD,
 } GXInterlaceField;
 
+void GXProject(f32 x, f32 y, f32 z, f32 mtx[3][4], f32 *pm, f32 *vp, f32 *sx, f32 *sy, f32 *sz);
 void GXSetProjection(const Mtx44 proj, GXProjectionType type);
 void GXSetProjectionv(const f32 proj[7]);
 void GXGetProjectionv(f32 proj[7]);
@@ -28,7 +33,7 @@ void GXGetViewportv(f32 view[6]);
 void GXSetZScaleOffset(f32 scale, f32 offset);
 void GXSetScissor(u32 x, u32 y, u32 w, u32 h);
 void GXGetScissor(u32 *x, u32 *y, u32 *w, u32 *h);
-void GXSetScissorBoxOffset(u32 ox, u32 oy);
+void GXSetScissorBoxOffset(s32 ox, s32 oy);
 void GXSetClipMode(GXClipMode mode);
 
 void __GXSetProjection(void);

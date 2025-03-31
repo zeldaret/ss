@@ -2,6 +2,7 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/d_stage.h"
 #include "d/flag/storyflag_manager.h"
 #include "f/f_base.h"
 #include "m/m_vec.h"
@@ -10,7 +11,6 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resnode.h"
-#include "toBeSorted/room_manager.h"
 
 const f32 dAcOislandNusi_c::someFloat = 100000.0f;
 
@@ -26,8 +26,8 @@ STATE_DEFINE(dAcOislandNusi_c, NusiFight);
 
 bool dAcOislandNusi_c::createHeap() {
     mRes = nw4r::g3d::ResFile(getOarcResFile("IslNusi"));
-    RoomManager::bindStageResToFile(&mRes);
-    RoomManager::bindSkyCmnToResFile(&mRes);
+    dStage_c::bindStageResToFile(&mRes);
+    dStage_c::bindSkyCmnToResFile(&mRes);
     for (int i = 0; i < 2; i++) {
         nw4r::g3d::ResMdl mdl = mRes.GetResMdl(sMdlNames[i]);
         TRY_CREATE(mMdls[i].create(mdl, &heap_allocator, 0x160));
@@ -43,8 +43,7 @@ bool dAcOislandNusi_c::createHeap() {
     }
     TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mBgW.Lock();
-    // TODO InitMapStuff bool vs BOOL
-    return (BOOL)mBgW.InitMapStuff(&heap_allocator);
+    return mBgW.InitMapStuff(&heap_allocator);
 }
 
 int dAcOislandNusi_c::create() {

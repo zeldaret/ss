@@ -1,4 +1,4 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -45,6 +45,16 @@ ResMdl ResFile::GetResMdl(int idx) const {
 
 ResMdl ResFile::GetResMdl(u32 idx) const {
     return GetResMdl(static_cast<int>(idx));
+}
+
+u32 ResFile::GetResMdlNumEntries() const {
+    void *pResMdlDicData = ResDic(const_cast<ResDicData *>(&ref().dict.topLevel))[ResName(&ResNameData_Models)];
+
+    if (pResMdlDicData != NULL) {
+        return ResDic(pResMdlDicData).GetNumData();
+    }
+
+    return 0;
 }
 
 /******************************************************************************
@@ -337,15 +347,6 @@ ResAnmScn ResFile::GetResAnmScn(u32 idx) const {
  * Miscellaneous
  *
  ******************************************************************************/
-u32 ResFile::GetResMdlNumEntries() const {
-    void *pResMdlDicData = ResDic(const_cast<ResDicData *>(&ref().dict.topLevel))[ResName(&ResNameData_Models)];
-
-    if (pResMdlDicData != NULL) {
-        return ResDic(pResMdlDicData).GetNumData();
-    }
-
-    return 0;
-}
 
 u32 ResFile::GetResPlttNumEntries() const {
     void *pResPlttDicData = ResDic(const_cast<ResDicData *>(&ref().dict.topLevel))[ResName(&ResNameData_Pltts)];
@@ -437,6 +438,16 @@ u32 ResFile::GetResAnmScnNumEntries() const {
     }
 
     return 0;
+}
+
+void *ResFile::GetExternalData(const char *pName) const {
+    void *pExternalData = ResDic(const_cast<ResDicData *>(&ref().dict.topLevel))[ResName(&ResNameData_Ext)];
+
+    if (pExternalData != NULL) {
+        return ResDic(pExternalData)[pName];
+    }
+
+    return NULL;
 }
 
 bool ResFile::Bind(const ResFile file) {
@@ -577,8 +588,3 @@ bool ResFile::CheckRevision() const {
 
 } // namespace g3d
 } // namespace nw4r
-
-// clang-format off
-DECOMP_FORCEACTIVE(g3d_resfile_cpp,
-                   nw4r::g3d::ResNameData_Ext);
-// clang-format on

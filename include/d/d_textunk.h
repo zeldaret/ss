@@ -42,8 +42,57 @@ public:
         return 1.0f;
     }
 
+    inline static f32 getFn800B1FD0() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_800B1FD0();
+        }
+        return 1.0f;
+    }
+
     inline static f32 getFn800B1F10() {
         return sInstance->fn_800B1F10();
+    }
+
+    inline static f32 getFn800B1FF0() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_800B1FF0();
+        }
+        return 0.0f;
+    }
+
+    inline static f32 getFn800B2000() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_800B2000();
+        }
+        return 0.0f;
+    }
+
+    inline static f32 getFn800B2010() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_800B2010();
+        }
+        return 0.0f;
+    }
+
+    inline static f32 getFn800B2020() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_800B2020();
+        }
+        return 0.0f;
+    }
+
+    inline static f32 getFn800B2030() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_800B2030();
+        }
+        return 0.0f;
+    }
+
+    inline static f32 getFn800B2040() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_800B2040();
+        }
+        return 0.0f;
     }
 
 private:

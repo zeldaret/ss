@@ -45,4 +45,4 @@ lbl_459_data_2C = .data:0x0000002C; // type:object size:0x10
 lbl_459_data_3C = .data:0x0000003C; // type:object size:0x10
 lbl_459_data_4C = .data:0x0000004C; // type:object size:0x10
 lbl_459_data_5C = .data:0x0000005C; // type:object size:0x24
-lbl_459_data_80 = .data:0x00000080; // type:object size:0x80
+AcOBlockUnderground__vtable = .data:0x00000080; // type:object size:0x80

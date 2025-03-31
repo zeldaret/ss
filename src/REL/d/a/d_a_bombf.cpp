@@ -41,7 +41,8 @@ int dAcBombf_c::actorCreate() {
     boundingBox.Set(mVec3_c(-80.0, -50.0f, -80.0f), mVec3_c(80.0, 60.0f, 80.0f));
     angle = rotation;
     if (mDespawnSceneFlag < 0xFF) {
-        actor_properties = (actor_properties & ~1) | 4;
+        clearActorProperty(0x1);
+        setActorProperty(0x4);
     }
 
     return SUCCEEDED;
@@ -67,13 +68,14 @@ int dAcBombf_c::actorPostCreate() {
 
         if (dBgS::GetInstance()->ChkMoveBG(dBgS_ObjLinChk::GetInstance(), false)) {
             field_0x398.SetPolyInfo(dBgS_ObjLinChk::GetInstance());
-            actor_properties = (actor_properties & ~1) | 4;
+            clearActorProperty(0x1);
+            setActorProperty(0x4);
         }
         mLightingInfo.mLightingCode = dBgS::GetInstance()->GetLightingCode(dBgS_ObjLinChk::GetInstance());
     }
 
     if (field_0x3D2 == 0 || field_0x3D2 == 2) {
-        bool b = dTimeAreaMgr_c::sInstance->fn_800B9B60(roomid, position);
+        bool b = dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, position);
         if (b) {
             mTimeAreaStruct.field_0x00 = 1.0f;
         }
@@ -139,7 +141,7 @@ int dAcBombf_c::draw() {
 
 void dAcBombf_c::regrowBomb() {
     // These params are hell
-    s8 viewclip_idx = (actor_properties & 1) != 0 ? viewclip_index : -1;
+    s8 viewclip_idx = checkActorProperty(0x1) ? viewclip_index : -1;
     u32 actorParams1;
     actorParams1 = 1;
     if (field_0x3D0) {
@@ -153,8 +155,8 @@ void dAcBombf_c::regrowBomb() {
     if (bomb != nullptr) {
         field_0x394 = 0x3C;
         bomb->setTransformFromFlower(mWorldMtx);
-        if ((actor_properties & 1) != 0) {
-            bomb->actor_properties |= 1;
+        if (checkActorProperty(0x1)) {
+            bomb->setActorProperty(0x1);
         }
         if (field_0x3D4 == 0) {
             bomb->mField_0xA44 *= 1.5f;

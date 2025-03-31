@@ -15,4 +15,4 @@ lbl_566_rodata_0 = .rodata:0x00000000; // type:object size:0x1C data:float
 g_profile_START_TAG = .data:0x00000000; // type:object size:0x10
 lbl_566_data_10 = .data:0x00000010; // type:object size:0xC
 lbl_566_data_1C = .data:0x0000001C; // type:object size:0x24
-lbl_566_data_40 = .data:0x00000040; // type:object size:0x80
+AcDungeonStartTag__vtable = .data:0x00000040; // type:object size:0x80

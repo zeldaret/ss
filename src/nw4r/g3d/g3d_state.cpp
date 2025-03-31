@@ -1,5 +1,5 @@
 #include "common.h"
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
 #include <algorithm>
 #include <cstring>
@@ -832,12 +832,7 @@ public:
 
         static math::MTX33 m;
 
-        if (!math::MTX34InvTranspose(&m, GetViewPosMtxPtr(id))) {
-            m._00 = m._11 = m._22 = 1.0f;
-            m._20 = m._21 = 0.0f;
-            m._10 = m._12 = 0.0f;
-            m._01 = m._02 = 0.0f;
-        }
+        detail::CalcViewNrmMtx(&m, GetViewPosMtxPtr(id));
 
         return &m;
     }
@@ -1392,12 +1387,6 @@ Misc sMisc;
  * G3DState
  *
  ******************************************************************************/
-namespace {
-
-IndMtxOpStd IndMtxOpDefault;
-IndMtxOp *pG3DStateIndMtxOp = &IndMtxOpDefault;
-
-} // namespace
 
 void LoadResMatMisc(const ResMatMisc misc) {
     if (!misc.IsValid()) {
@@ -1746,6 +1735,12 @@ void SetScnDependentTexMtxFunc(u32 id, ScnDependentTexMtxFuncPtr func, ScnDepend
 bool GetScnDependentTexMtxFunc(u32 id, ScnDependentTexMtxFuncPtr *pFunc, ScnDependentTexMtxFuncType *pType) {
     return sScnDependentTexMtxFuncTable.GetFunc(id, pFunc, pType);
 }
+namespace {
+
+IndMtxOpStd IndMtxOpDefault;
+IndMtxOp *pG3DStateIndMtxOp = &IndMtxOpDefault;
+
+} // namespace
 
 IndMtxOp *GetIndMtxOp() {
     return pG3DStateIndMtxOp;
@@ -1851,7 +1846,7 @@ void Invalidate(u32 flag) {
     }
 
     if (flag & INVALIDATE_TEXMTX) {
-        // @bug Missing PreTexMtxState::Invalidate
+        sPreTexMtxState.Invalidate();
         sPostTexMtx.Invalidate();
     }
 
@@ -1892,7 +1887,7 @@ IndMtxOpStd::IndMtxOpStd() {
 void IndMtxOpStd::SetNrmMapMtx(
     GXIndTexMtxID id, const math::VEC3 *pLightVec, const math::MTX34 *pNrmMtx, ResMatMiscData::IndirectMethod method
 ) {
-    if (id >= GX_ITM_0 && id <= GX_ITM_2 && method != ResMatMiscData::WARP) {
+    if (id >= GX_ITM_0 && id <= GX_ITM_2 && method != ResMatMiscData::WARP && method != ResMatMiscData::FUR) {
         u32 i = id - GX_ITM_0;
         mIsValidMtx[i] = true;
 

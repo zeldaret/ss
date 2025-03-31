@@ -17,4 +17,4 @@ lbl_423_data_10 = .data:0x00000010; // type:object size:0x10 data:string
 lbl_423_data_20 = .data:0x00000020; // type:object size:0x10 data:string
 g_profile_OBJ_CITY_WATER = .data:0x00000030; // type:object size:0x50
 lbl_423_data_80 = .data:0x00000080; // type:object size:0x20
-lbl_423_data_A0 = .data:0x000000A0; // type:object size:0x8C
+AcOcityWater__vtable = .data:0x000000A0; // type:object size:0x8C

@@ -7,6 +7,8 @@
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/sceneflag_manager.h"
+#include "m/m_angle.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0x0151, 0, 0);
 
@@ -20,7 +22,7 @@ const f32 dTgReaction_c::sHeight = 100.0f;
 // clang-format off
 dCcD_SrcCyl dTgReaction_c::sCcSrc = {
     {{0, 0, 0, 0, 0, 0, 0, 0, 0}, 
-    {AT_TYPE_BELLOWS, 0x213, 0, 0x8, 0x8,}, 
+    {AT_TYPE_BELLOWS, 0x213, {0, 0, 0x8},0x8}, 
     {0xE8}},
     {dTgReaction_c::sRadius, dTgReaction_c::sHeight}
 };
@@ -158,9 +160,6 @@ void dTgReaction_c::executeState_Wait() {
 }
 void dTgReaction_c::finalizeState_Wait() {}
 
-extern "C" void *SOUND_EFFECT_SOUND_MGR;
-extern "C" void SmallSoundManager__playSound(void *, u16);
-
 void dTgReaction_c::checkForBonkItem() {
     if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x2000)) {
         mVec3_c diff = position - dAcPy_c::LINK->position;
@@ -181,7 +180,7 @@ void dTgReaction_c::checkForBonkItem() {
                 if (dAcObjBase_c::create(fProfile::ITEM, roomid, newItemParms, &c2, nullptr, nullptr, 0xFFFFFFFF)) {
                     field_0x4DD = 1;
                     onDelete();
-                    SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AD); // TODO (Sound ID)
+                    SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
                 }
             }
         } else {
@@ -203,7 +202,7 @@ void dTgReaction_c::checkForBonkItem() {
 
             pos.y += field_0x4E4;
             if (fn_578_DB0(pos, uVar3)) {
-                SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AE); // TODO (Sound ID)
+                SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_B);
             }
             SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
             onDelete();
@@ -237,7 +236,7 @@ void dTgReaction_c::checkForSlingBellowsItem() {
         mVec3_c spawnPos = position;
         spawnPos.y += field_0x4E4;
         if (fn_578_DB0(spawnPos, uVar3)) {
-            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AE); // TODO (Sound ID)
+            SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_B);
         }
         SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
         onDelete();
@@ -253,38 +252,39 @@ void dTgReaction_c::onDelete() {
     }
 }
 
-bool dTgReaction_c::fn_578_DB0(const mVec3_c &position, u32 arg) {}
+bool dTgReaction_c::fn_578_DB0(const mVec3_c &position, u32 arg) {
+    return true;
+}
 
-bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 arg, mAng angle) {
+static s32 SOME_ANG = -3641;
+
+bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 velocity_type, mAng angle) {
     int numHearts = params == 6 ? 3 : 1;
     mAng3_c ang(0, 0, 0);
 
     // This is annoying because we don't know which operators
     // mAng supports
-    mAng tmp1;
-    int tmp3;
-    if (arg == 6) {
-        tmp1 = angle;
-        static s32 SOME_ANG = -3641;
-        tmp3 = SOME_ANG;
+    s32 max;
+    s32 min;
+    if (velocity_type == 6) {
+        max = angle;
+        min = SOME_ANG;
     } else {
-        tmp1 = cLib::targetAngleY(dAcPy_c::LINK->position, pos);
-        tmp3 = -0x8000;
-        tmp1 = tmp1 + mAng(0x4000);
+        max = (s16)cLib::targetAngleY(dAcPy_c::LINK->position, pos) + 0x4000;
+        min = -0x8000;
     }
 
-    mAng tmp2 = tmp3;
-    s16 stepSize = tmp2 / numHearts;
-    tmp2 = stepSize / 2;
-    int step = tmp1 + tmp2;
-    tmp2 = mAng(tmp2 / 2);
+    s16 stepSize = s16(min) / numHearts;
+    mAng range = stepSize / 2;
+    s32 step = s16(max) + range;
+    mAng rndMax = range / 2;
+    mAng rndMin = -rndMax;
 
     for (int i = 0; i < numHearts; i++) {
-        mAng offset = cM::rndRange(-tmp2, tmp2);
-        ang.y = mAng(step) + offset;
-        if (arg == 5) {
+        ang.y = mAng(step) + cM::rndRange(rndMin, rndMax);
+        if (velocity_type == 5) {
             dAcItem_c::spawnItem(ITEM_HEART, roomid, pos, ang, 0xFFFFFFFF, 1);
-        } else if (arg == 6) {
+        } else if (velocity_type == 6) {
             dAcItem_c::spawnItem(ITEM_HEART, roomid, pos, ang, 0xFFFFFFFF, 0);
         } else {
             dAcItem_c::spawnDrop(ITEM_HEART, roomid, pos, ang);

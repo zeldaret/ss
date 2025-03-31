@@ -63,6 +63,8 @@ public:
     static void itemGetEventStart(dAcBase_c *);
     static void itemGetEventEnd(dAcBase_c *);
 
+    static void healLink(u32 amount, bool);
+
 private:
     /* 0x334 */ UNKTYPE *mpMdl; // Model has its own handling system
     /* 0x338 */ dShadowCircle_c mShdw;

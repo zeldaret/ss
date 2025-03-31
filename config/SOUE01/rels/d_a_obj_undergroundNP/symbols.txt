@@ -39,4 +39,4 @@ lbl_458_data_E4 = .data:0x000000E4; // type:object size:0x10
 lbl_458_data_F4 = .data:0x000000F4; // type:object size:0x14
 g_profile_OBJ_UNDERGROUND = .data:0x00000108; // type:object size:0x10
 lbl_458_data_118 = .data:0x00000118; // type:object size:0x20
-lbl_458_data_138 = .data:0x00000138; // type:object size:0x80
+AcOUnderground__vtable = .data:0x00000138; // type:object size:0x80

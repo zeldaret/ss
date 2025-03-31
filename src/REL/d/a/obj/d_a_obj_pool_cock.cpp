@@ -1,9 +1,9 @@
 #include "d/a/obj/d_a_obj_pool_cock.h"
 
 #include "d/a/obj/d_a_obj_vortex.h"
+#include "d/d_stage.h"
 #include "d/flag/sceneflag_manager.h"
 #include "s/s_Math.h"
-#include "toBeSorted/room_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_POOL_COCK, dAcOPoolCock_c, fProfile::OBJ_POOL_COCK, 0x024D, 0, 7);
 
@@ -11,7 +11,7 @@ STATE_DEFINE(dAcOPoolCock_c, Wait);
 
 bool dAcOPoolCock_c::createHeap() {
     mBrres = nw4r::g3d::ResFile(getOarcResFile("WaterD101"));
-    RoomManager::bindStageResToFile(&mBrres);
+    dStage_c::bindStageResToFile(&mBrres);
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("PoolCockD101");
     for (int i = 0; i < 2; i++) {
         TRY_CREATE(mModels[i].create(mdl, &heap_allocator, 0x120));
@@ -52,10 +52,9 @@ int dAcOPoolCock_c::actorExecute() {
     position += velocity;
     position += mStts.mCcMove;
     updateMatrix();
-    mMtx_c mdl1Transform;
-    mMtx_c mdl2Transform;
-    mdl1Transform = mWorldMtx;
-    mdl2Transform = mWorldMtx;
+
+    mMtx_c mdl1Transform(mWorldMtx);
+    mMtx_c mdl2Transform(mWorldMtx);
 
     mMtx_c tmp1;
     mMtx_c tmp2;

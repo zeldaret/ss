@@ -14,7 +14,7 @@ public:
     STATE_FUNC_DECLARE(dAcOVortex_c, Appear);
 
     void triggerActivation() {
-        actor_properties |= 0x4;
+        setActorProperty(0x4);
         field_0x870 = 1;
     }
 

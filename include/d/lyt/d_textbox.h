@@ -3,8 +3,7 @@
 
 #include "d/lyt/d2d.h"
 #include "nw4r/lyt/lyt_textBox.h"
-
-extern "C" void *lbl_805753B0;
+#include "nw4r/lyt/lyt_types.h"
 
 class dTextBox_c : public nw4r::lyt::TextBox {
     friend class dWindow_c;
@@ -18,13 +17,13 @@ public:
         mpLytBase = lytBase;
     }
 
-    void SetScale(float scale) {
-        nw4r::math::VEC2 value = GetScale();
-        value.x = GetScale().x * scale;
-        value.y = GetScale().y * scale;
+    void SetScale(f32 scale) {
+        nw4r::lyt::Size value(mTextScale);
+        value.width *= scale;
+        value.height *= scale;
         mScale = scale;
         MySetScale(value);
-        nw4r::lyt::TextBox::SetScale(value);
+        nw4r::lyt::TextBox::SetFontSize(value);
     }
 
     void set0x1F8(u8 val) {
@@ -35,28 +34,18 @@ public:
         return mScale;
     }
 
-    static inline f32 GetTranslateX1() {
-        if (lbl_805753B0 != nullptr) {
-            return GetTranslateX1_();
-        } else {
-            return 0.0f;
-        }
-    }
-
     void fn_800E0A60(const char *area, ...) {
         // TODO
     }
 
-    static f32 GetTranslateX1_();
-
     // @bug: This does not implement UT's RTTI, so casts to dTextBox_c will
     // succeed even if all you have is a lyt::TextBox
 private:
-    void MySetScale(const nw4r::math::VEC2 &value);
+    void MySetScale(const nw4r::lyt::Size &value);
 
     /* 0x104 */ d2d::LytBase_c *mpLytBase;
     /* 0x108 */ u8 field_0x108[0x118 - 0x108];
-    /* 0x118 */ nw4r::math::VEC2 mTextScale;
+    /* 0x118 */ nw4r::lyt::Size mTextScale;
     /* 0x120 */ f32 mScale;
     /* 0x124 */ u8 field_0x124[0x1F8 - 0x124];
     /* 0x1F8 */ u8 field_0x1F8;

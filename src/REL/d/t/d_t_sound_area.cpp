@@ -15,7 +15,7 @@ void float_ordering() {
 
 int dTgSndAr_c::create() {
     mScale *= 0.01f;
-    if (dTgSndMg_c::sInstance == nullptr) {
+    if (dTgSndMg_c::GetInstance() == nullptr) {
         dAcObjBase_c::createActorUnkGroup3(fProfile::SOUND_AREA_MGR, roomid, 0, nullptr, nullptr, nullptr, -1);
     }
 
@@ -59,8 +59,8 @@ int dTgSndAr_c::actorExecute() {
     }
     if (lbl_80575D58 != nullptr) {
         mVec3_c pos = lbl_80575D58->v;
-        if (checkPosInArea(pos) && dTgSndMg_c::sInstance != nullptr) {
-            dTgSndMg_c::sInstance->setBgmFlag(params & 0xFF);
+        if (checkPosInArea(pos) && dTgSndMg_c::GetInstance() != nullptr) {
+            dTgSndMg_c::GetInstance()->setBgmFlag(params & 0xFF);
         }
     }
     return SUCCEEDED;

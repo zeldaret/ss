@@ -2,15 +2,16 @@
 #define NW4R_G3D_RES_RES_MAT_H
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/res/g3d_resanmtexsrt.h>
-#include <nw4r/g3d/res/g3d_rescommon.h>
-#include <nw4r/g3d/res/g3d_respltt.h>
-#include <nw4r/g3d/res/g3d_restev.h>
-#include <nw4r/g3d/res/g3d_restex.h>
+#include "nw4r/g3d/res/g3d_resanmtexsrt.h"
+#include "nw4r/g3d/res/g3d_rescommon.h"
+#include "nw4r/g3d/res/g3d_respltt.h"
+#include "nw4r/g3d/res/g3d_restev.h"
+#include "nw4r/g3d/res/g3d_restex.h"
+#include "nw4r/g3d/res/g3d_resuser.h"
 
-#include <nw4r/math.h>
+#include "nw4r/math.h" // IWYU pragma: export
 
-#include <rvl/GX.h>
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -99,7 +100,11 @@ public:
     ResMatMisc CopyTo(void *pDst) const;
 
     GXBool GXGetZCompLoc() const;
+
+    void SetLightSetIdx(int idx);
     int GetLightSetIdx() const;
+
+    void SetFogIdx(int idx);
     int GetFogIdx() const;
 
     void GetIndirectTexMtxCalcMethod(GXIndTexMtxID id, ResMatMiscData::IndirectMethod *pMethod, s8 *pLightRef);
@@ -127,6 +132,7 @@ class ResMatTexCoordGen : public ResCommon<ResTexCoordGenDL> {
 public:
     NW4R_G3D_RESOURCE_FUNC_DEF_EX(ResMatTexCoordGen, ResTexCoordGenDL);
 
+    void Disable(GXTexCoordID coord);
     void DCStore(bool sync);
     ResMatTexCoordGen CopyTo(void *pDst) const;
 
@@ -238,6 +244,13 @@ public:
             (ref().flag >> id * TexSrt::NUM_OF_FLAGS) &
             (TexSrt::FLAG_ANM_EXISTS | TexSrt::FLAG_SCALE_ONE | TexSrt::FLAG_ROT_ZERO | TexSrt::FLAG_TRANS_ZERO)
         );
+    }
+
+    void Disable(u32 id) {
+        ref().flag =
+            ref().flag &
+            ~((TexSrt::FLAG_ANM_EXISTS | TexSrt::FLAG_SCALE_ONE | TexSrt::FLAG_ROT_ZERO | TexSrt::FLAG_TRANS_ZERO)
+              << (id * TexSrt::NUM_OF_FLAGS));
     }
 
     bool IsExist(u32 id) const {
@@ -429,6 +442,7 @@ public:
     void CallDisplayList(u8 indNum, bool sync) const;
 
     bool GXGetIndTexMtx(GXIndTexMtxID id, math::MTX34 *pMtx) const;
+    bool GXGetIndTexMtx(GXIndTexMtxID id, math::MTX34 *pMtx, s8 *pScaleExp) const;
     void GXSetIndTexMtx(GXIndTexMtxID id, const math::MTX34 &rMtx, s8 scaleExp);
 
     void EndEdit() {
@@ -487,6 +501,16 @@ public:
         return ResName(NULL);
     }
 
+    const char *GetTexName() const {
+        const ResTexPlttInfoData &r = ref();
+
+        if (r.nameTex != 0) {
+            return NW4R_G3D_OFS_TO_RESNAME(&r, r.nameTex).GetName();
+        }
+
+        return NULL;
+    }
+
     bool IsCIFmt() const {
         return ref().namePltt != 0;
     }
@@ -494,6 +518,76 @@ public:
 private:
     void BindTex_(const ResTex tex, ResTexObj texObj);
     void BindPltt_(const ResPltt pltt, ResTlutObj tlutObj);
+};
+
+/******************************************************************************
+ *
+ * ResTexPlttInfoOffsetData
+ *
+ ******************************************************************************/
+struct ResTexPlttInfoOffsetData {
+    u32 size;    // at 0x0
+    u8 _0x04[4]; // at 0x4
+    struct Unk {
+        s32 texPlltInfo;
+        u8 _0x00[4];
+    } data[1]; // at 0x8
+};
+
+class ResTexPlttInfoOffset : public ResCommon<ResTexPlttInfoOffsetData> {
+public:
+    NW4R_G3D_RESOURCE_FUNC_DEF(ResTexPlttInfoOffset);
+
+    ResTexPlttInfo GetPllt(int idx) const {
+        const ResTexPlttInfoOffsetData &r = ref();
+        return ofs_to_obj<ResTexPlttInfo>(r.data[idx].texPlltInfo);
+    }
+
+    u32 GetNumData() const {
+        const ResTexPlttInfoOffsetData &r = ref();
+        return r.size;
+    }
+};
+
+/******************************************************************************
+ *
+ * ResMatFur
+ *
+ ******************************************************************************/
+
+struct ResMatFurData {
+    enum LayerInterval {
+        UNIFORM = 0,
+        TIP = 1,
+    };
+    f32 length;                // at 0x0
+    u32 lyrSize;               // at 0x4
+    LayerInterval lyrInterval; // at 0x8
+    f32 alphaCurve;            // at 0xC
+    f32 specCurve;             // at 0x10
+};
+
+class ResMatFur : public ResCommon<ResMatFurData> {
+public:
+    NW4R_G3D_RESOURCE_FUNC_DEF(ResMatFur);
+
+    void SetLength(f32 len);
+    f32 GetLength() const;
+
+    u32 GetLyrSize() const;
+
+    void SetLytInterval(ResMatFurData::LayerInterval interval);
+    ResMatFurData::LayerInterval GetLytInterval() const;
+
+    void SetAlphaCurve(f32 curve);
+    f32 GetAlphaCurve() const;
+
+    void SetSpecCurve(f32 curve);
+    f32 GetSpecCurve() const;
+
+    f32 GetLyrRate(u32 idx) const;
+
+    ResMatFur CopyTo(void *pDst) const;
 };
 
 /******************************************************************************
@@ -533,12 +627,12 @@ public:
     NW4R_G3D_RESOURCE_FUNC_DEF(ResMat);
 
     void Init();
-
     bool Bind(const ResFile file);
     void Release();
 
     bool IsOpaque() const;
     ResMdl GetParent();
+    const ResMdl GetParent() const;
 
     u32 GetID() const {
         return ref().id;
@@ -555,6 +649,9 @@ public:
     ResTev GetResTev();
     ResTev GetResTev() const;
 
+    ResMatFur GetResMatFur();
+    ResUserData GetResUserData();
+
     u32 GetNumResTexPlttInfo() const {
         return ref().numResTexPlttInfo;
     }
@@ -563,6 +660,10 @@ public:
         ResTexPlttInfoData *pData = ofs_to_ptr<ResTexPlttInfoData>(ref().toResTexPlttInfo);
 
         return ResTexPlttInfo(&pData[id]);
+    }
+
+    const char *GetName() const {
+        return ofs_to_ptr<const char>(ref().name);
     }
 
     ResMatDLData *GetResMatDLData() {

@@ -272,12 +272,10 @@ bool dAcItemBase_c::setDungeonFlagForTear(int tearNum) {
     if (!getFlagIdxForTear(tearNum, &flag_idx)) {
         return false;
     }
-    // idk
-    int idx = DungeonflagManager::sInstance->mStageIndex;
-    const u16 *pData = FileManager::sInstance->getDungeonFlagsConst() + ((idx & 0x1FFF) * 4);
-    u32 counterMask = DungeonflagManager::sInstance->mpFlagIndex->getCounterOrFlag(flag_idx, pData, 8);
-    u32 tearMask = getTearBit(tearNum);
-    DungeonflagManager::sInstance->setToValue(flag_idx, tearMask | counterMask);
+    u16 oldVal = DungeonflagManager::sInstance->getCounterOrFlag(flag_idx, 8);
+    u16 tearBit = getTearBit(tearNum);
+    u16 newVal = tearBit | oldVal;
+    DungeonflagManager::sInstance->setToValue(flag_idx, newVal);
     return true;
 }
 

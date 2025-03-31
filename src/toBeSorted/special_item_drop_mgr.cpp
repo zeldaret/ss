@@ -367,11 +367,13 @@ const LowHealthReplacement LOW_HEALTH_REPLACEMENTS[] = {
      },
 };
 
-int SPECIAL_ITEM_ARRAY[] = {ITEM_NONE,          ITEM_HEART,        ITEM_HEART,   ITEM_GREEN_RUPEE, ITEM_BLUE_RUPEE,
-                            ITEM_RED_RUPEE,     ITEM_FARORE_TEAR,  ITEM_5_BOMBS, ITEM_10_BOMBS,    ITEM_SINGLE_ARROW,
-                            ITEM_BUNDLE_ARROWS, ITEM_5_DEKU_SEEDS, ITEM_NONE,    ITEM_NONE,        ITEM_KEY_PIECE,
-                            ITEM_ELDIN_ORE,     ITEM_UNK_58,       ITEM_UNK_59,  ITEM_UNK_183,     ITEM_UNK_184,
-                            ITEM_UNK_185,       ITEM_FAIRY,        ITEM_FAIRY,   ITEM_SMALL_KEY,   ITEM_RUPOOR};
+static const u16 SPECIAL_ITEM_ARRAY[] = {ITEM_NONE,       ITEM_HEART,        ITEM_HEART,         ITEM_GREEN_RUPEE,
+                                         ITEM_BLUE_RUPEE, ITEM_RED_RUPEE,    ITEM_FARORE_TEAR,   ITEM_5_BOMBS,
+                                         ITEM_10_BOMBS,   ITEM_SINGLE_ARROW, ITEM_BUNDLE_ARROWS, ITEM_5_DEKU_SEEDS,
+                                         ITEM_NONE,       ITEM_NONE,         ITEM_KEY_PIECE,     ITEM_ELDIN_ORE,
+                                         ITEM_UNK_58,     ITEM_UNK_59,       ITEM_UNK_183,       ITEM_UNK_184,
+                                         ITEM_UNK_185,    ITEM_FAIRY,        ITEM_FAIRY,         ITEM_SMALL_KEY,
+                                         ITEM_RUPOOR};
 
 static const u32 sNumDropEntries = 0x36;
 static const struct {
@@ -381,7 +383,7 @@ static const struct {
     0x36,
     sList,
 };
-static const int RAND_RUPEE_ARRAY[3] = {ITEM_GREEN_RUPEE, ITEM_BLUE_RUPEE, ITEM_RED_RUPEE};
+static const u16 RAND_RUPEE_ARRAY[3] = {ITEM_GREEN_RUPEE, ITEM_BLUE_RUPEE, ITEM_RED_RUPEE};
 
 extern "C" int getCurrentBowType();
 extern "C" int getCurrentSlingshotType();
@@ -481,6 +483,8 @@ int SpecialItemDropMgr::giveSpecialDropItem(
     return ret;
 }
 
+static s32 SOME_ANG = -3641;
+
 // 800c7ef0
 // Very unmatching. Just here as a starting point
 bool SpecialItemDropMgr::spawnSpecialDropItem(int specialItemId, int roomid, mVec3_c *pos, int subtype, mAng rot) {
@@ -500,29 +504,27 @@ bool SpecialItemDropMgr::spawnSpecialDropItem(int specialItemId, int roomid, mVe
         itemCount = 2;
     }
 
-    mAng currentRot;
-    mAng tempOther;
     u32 itemid = SPECIAL_ITEM_ARRAY[unk];
     mAng3_c itemRot(0, 0, 0);
 
+    s32 max;
+    s32 min;
     if (subtype == 2 || subtype == 6) {
-        currentRot = rot;
-        tempOther = -0xe39;
+        max = rot;
+        min = SOME_ANG;
     } else {
-        currentRot = cLib::targetAngleY(dAcPy_c::LINK->position, *pos);
-        tempOther = -0x8000;
-        currentRot += 0x4000;
+        max = (s16)cLib::targetAngleY(dAcPy_c::LINK->position, *pos) + 0x4000;
+        min = -0x8000;
     }
-    // This angle code is annoying. d_t_reaction has similar code
-    s32 angleDecrement = tempOther / itemCount;
-    tempOther = angleDecrement / 2;
-    currentRot += tempOther;
-    tempOther = tempOther / 2;
+
+    s16 stepSize = s16(min) / itemCount;
+    mAng range = stepSize / 2;
+    s32 step = s16(max) + range;
+    mAng rndMax = range / 2;
+    mAng rndMin = -rndMax;
 
     for (int currentItemIndex = 0; currentItemIndex < itemCount; currentItemIndex++) {
-        mAng out = cM::rndRange(tempOther, -tempOther);
-
-        itemRot.y = currentRot + out;
+        itemRot.y = mAng(step) + cM::rndRange(rndMin, rndMax);
         if (unk >= 12 && unk < 14) {
             itemid = RAND_RUPEE_ARRAY[cM::rndInt(3)];
             spawnItem1(itemid, roomid, pos, &itemRot, 0xFFFFFFFF, 0);
@@ -545,7 +547,7 @@ bool SpecialItemDropMgr::spawnSpecialDropItem(int specialItemId, int roomid, mVe
                 spawnItem9(itemid, roomid, pos, &itemRot);
             }
         }
-        currentRot.mVal -= angleDecrement;
+        step = mAng(step) - stepSize;
     }
     return true;
 }

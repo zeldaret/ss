@@ -27,6 +27,28 @@ toBeSorted/file_manager.cpp:
 toBeSorted/save_manager.cpp:
 	.text       start:0x80011730 end:0x80015310
 
+toBeSorted/d_d3d.cpp:
+	.text       start:0x80016700 end:0x80019E74
+	.ctors      start:0x804DB64C end:0x804DB650
+	.data       start:0x80500838 end:0x80500A70
+	.sdata2     start:0x80576A00 end:0x80576A68
+
+toBeSorted/d_scn_callback.cpp:
+	.text       start:0x80019E80 end:0x8001A590
+	.data       start:0x80500A70 end:0x80500AD8
+	.sbss       start:0x80575020 end:0x80575028
+	.sdata2     start:0x80576A68 end:0x80576A78
+
+toBeSorted/d_unk_proc.cpp:
+	.text       start:0x8001A590 end:0x8001BE58
+	.sdata2     start:0x80576A78 end:0x80576B08
+
+toBeSorted/blur_and_palette_manager.cpp:
+	.text       start:0x800221A0 end:0x800268AC
+	.ctors      start:0x804DB65C end:0x804DB660
+	.sdata2     start:0x80576BA0 end:0x80576C18
+	.bss        start:0x8058F210 end:0x80594FA0
+
 toBeSorted/sound_info.cpp:
 	.text       start:0x8002C250 end:0x8002C308
 
@@ -35,7 +57,7 @@ d/a/d_a_base.cpp:
 	.data       start:0x80501538 end:0x805015B8
 	.sdata      start:0x80571920 end:0x80571930
 	.sbss       start:0x80575080 end:0x80575098
-	.sdata2     start:0x80576C88 end:0x80576C8C
+	.sdata2     start:0x80576C88 end:0x80576CA0
 
 d/a/obj/d_a_obj_base.cpp:
 	.text       start:0x8002DE40 end:0x8002F300
@@ -141,11 +163,18 @@ d/d_rawarchive.cpp:
 	.data       start:0x8050DDD8 end:0x8050DDF8
 
 d/d_scene.cpp:
-	.text       start:0x800629D0 end:0x80062E40
+	.text       start:0x800629D0 end:0x80062E3C
 	.ctors      start:0x804DB690 end:0x804DB694
+	.data       start:0x8050DDF8 end:0x8050DE48
+	.sdata      start:0x80571D08 end:0x80571D10
+	.sbss       start:0x80575220 end:0x80575228
+	.bss        start:0x805A06F0 end:0x805A0720
 
-d/d_stage.cpp:
-	.text       start:0x80062E40 end:0x80064250
+d/d_stage_parse.cpp:
+	.text       start:0x80062ED0 end:0x8006424C
+	.rodata     start:0x804E0B38 end:0x804E0C98
+	.data       start:0x8050DE48 end:0x8050DE58
+	.sdata2     start:0x80577920 end:0x80577928
 
 d/d_sys.cpp:
 	.text       start:0x80064250 end:0x80064920
@@ -196,6 +225,10 @@ toBeSorted/dowsing_target.cpp:
 	.sdata2     start:0x80579640 end:0x80579670
 	.bss        start:0x805A2FB0 end:0x805A3010
 
+toBeSorted/minigame_mgr.cpp:
+	.text       start:0x800A5060 end:0x800A5608
+	.ctors      start:0x804DB6C4 end:0x804DB6C8
+
 d/lyt/d2d.cpp:
 	.text       start:0x800A9D30 end:0x800ACAB8
 	.data       start:0x8050FFC8 end:0x80510088
@@ -238,6 +271,10 @@ toBeSorted/time_area_mgr.cpp:
 	.sdata      start:0x805722E0 end:0x805722F8
 	.sbss       start:0x805753C0 end:0x805753D0
 	.sdata2     start:0x805798D0 end:0x80579928
+
+toBeSorted/nand_request_thread.cpp:
+	.text       start:0x800BC980 end:0x800BD604
+	.data       start:0x80510B30 end:0x80510B70
 
 d/flag/flag_managers.cpp:
 	.text       start:0x800BD8C0 end:0x800C0650
@@ -388,10 +425,10 @@ d/lyt/d_lyt_msg_window_select_btn.cpp:
 	.ctors      start:0x804DB73C end:0x804DB740
 
 d/lyt/d_lyt_msg_window_base.cpp:
-	.text       start:0x80120A20 end:0x80120A98
+	.text       start:0x80120A20 end:0x80121068
 
 d/lyt/d_lyt_msg_window_talk.cpp:
-	.text       start:0x80120AA0 end:0x801223C8
+	.text       start:0x80121070 end:0x801223C8
 	.ctors      start:0x804DB740 end:0x804DB744
 
 d/lyt/d_lyt_msg_window_link.cpp:
@@ -484,8 +521,11 @@ d/lyt/d_lyt_help.cpp:
 d/lyt/d_lyt_bird_gauge.cpp:
 	.text       start:0x80152FD0 end:0x801548D8
 	.ctors      start:0x804DB784 end:0x804DB788
+	.rodata     start:0x804E80F8 end:0x804E8138
 	.data       start:0x80524020 end:0x80524510
 	.sbss       start:0x805754E0 end:0x805754E8
+	.sdata2     start:0x8057A038 end:0x8057A040
+	.bss        start:0x805B0FB0 end:0x805B1230
 
 d/lyt/d_lyt_sky_gauge.cpp:
 	.text       start:0x801548E0 end:0x80155CC8
@@ -605,14 +645,92 @@ d/lyt/d_screen_fader.cpp:
 	.data       start:0x80528D68 end:0x80528D90
 	.sdata2     start:0x8057ABE0 end:0x8057AC08
 
+d/a/d_a_bird_base.cpp:
+	.text       start:0x80175FD0 end:0x80179128
+
+d/a/d_a_door_base.cpp:
+	.text       start:0x80179130 end:0x801792C4
+	.ctors      start:0x804DB7DC end:0x804DB7E0
+
+d/lyt/d_lyt_map_popup.cpp:
+	.text       start:0x801792D0 end:0x80189F9C
+
+d/a/d_a_fish_mgr_base.cpp:
+	.text       start:0x8018B880 end:0x8018BFC8
+	.ctors      start:0x804DB7E4 end:0x804DB7E8
+
+d/a/d_a_fish_base.cpp:
+	.text       start:0x8018BFD0 end:0x8018E378
+	.ctors      start:0x804DB7E8 end:0x804DB7EC
+
+toBeSorted/sword_proj_effect_list.cpp:
+	.text       start:0x8018E380 end:0x8018F188
+
 d/a/d_a_insect.cpp:
 	.text       start:0x8018F190 end:0x80190710
 	.data       start:0x8052ABD8 end:0x8052ACC0
 	.sdata2     start:0x8057ADD8 end:0x8057AE30
 
+d/a/d_a_salbage_obj.cpp:
+	.text       start:0x80190AB0 end:0x80192AF8
+	.ctors      start:0x804DB7EC end:0x804DB7F0
+
+d/a/d_a_salbage_npc.cpp:
+	.text       start:0x80192B00 end:0x80194080
+	.ctors      start:0x804DB7F0 end:0x804DB7F4
+
+d/d_stage_mgr.cpp:
+	.text       start:0x801975C0 end:0x8019CFD8
+	.ctors      start:0x804DB7FC end:0x804DB800
+	.data       start:0x8052B708 end:0x8052C128
+
+d/d_last.cpp:
+	.text       start:0x8019CFE0 end:0x8019D15C
+
+d/d_camera.cpp:
+	.text       start:0x8019D160 end:0x8019ED0C
+	.ctors      start:0x804DB800 end:0x804DB804
+
+d/d_light_obj.cpp:
+	.text       start:0x8019ED10 end:0x801A65C8
+
 d/tg/d_t_weather.cpp:
 	.text       start:0x801A65D0 end:0x801AF7D8
 	.ctors      start:0x804DB804 end:0x804DB808
+
+d/d_stage.cpp:
+	.text       start:0x801B32A0 end:0x801B5BC8
+	.ctors      start:0x804DB80C end:0x804DB810
+	.data       start:0x8052DF40 end:0x8052E080
+	.sdata      start:0x80573290 end:0x805732F8
+	.sdata2     start:0x8057B4E8 end:0x8057B528
+
+d/d_room.cpp:
+	.text       start:0x801B5C80 end:0x801B84D8
+	.ctors      start:0x804DB810 end:0x804DB814
+	.rodata     start:0x804EAB60 end:0x804EAB88
+	.data       start:0x8052E0D8 end:0x8052E358
+	.sdata      start:0x805732F8 end:0x80573348
+	.sdata2     start:0x8057B528 end:0x8057B540
+	.bss        start:0x805B36E0 end:0x805B3760
+
+d/d_sc_title.cpp:
+	.text       start:0x801B9230 end:0x801BA3A0
+	.ctors      start:0x804DB818 end:0x804DB81C
+	.data       start:0x8052E438 end:0x8052E5F8
+	.sdata      start:0x805733D0 end:0x805733E8
+	.sbss       start:0x80575780 end:0x80575788
+	.sdata2     start:0x8057B580 end:0x8057B588
+	.bss        start:0x805B3760 end:0x805B37E0
+
+d/d_sc_game.cpp:
+	.text       start:0x801BA3A0 end:0x801BC6B8
+	.ctors      start:0x804DB81C end:0x804DB820
+	.data       start:0x8052E5F8 end:0x8052E860
+	.sdata      start:0x805733E8 end:0x80573430
+	.sbss       start:0x80575788 end:0x805757A8
+	.sdata2     start:0x8057B588 end:0x8057B5A8
+	.bss        start:0x805B37E0 end:0x805B38B8
 
 d/d_cs_base.cpp:
 	.text       start:0x801BC6C0 end:0x801BD250
@@ -793,6 +911,9 @@ d/tg/d_t_genki_mgr.cpp:
 
 d/a/obj/d_a_obj_water_mark.cpp:
 	.text       start:0x802D9D60 end:0x802DA0BC
+
+s/s_FPhase.cpp:
+	.text       start:0x802DDC20 end:0x802DDDB0
 
 s/s_StateID.cpp:
 	.text       start:0x802DDDB0 end:0x802DE1F4
@@ -1355,169 +1476,262 @@ nw4r/g3d/res/g3d_resdict.cpp:
 
 nw4r/g3d/res/g3d_resfile.cpp:
 	.text       start:0x80439420 end:0x80439FC4
+	.data       start:0x8056D020 end:0x8056D180
 
 nw4r/g3d/res/g3d_resmdl.cpp:
 	.text       start:0x80439FD0 end:0x8043B244
+	.sdata      start:0x80574E30 end:0x80574E38
 
 nw4r/g3d/res/g3d_resshp.cpp:
 	.text       start:0x8043B250 end:0x8043BD48
 
 nw4r/g3d/res/g3d_restev.cpp:
 	.text       start:0x8043BD50 end:0x8043C2B8
+	.rodata     start:0x804F6FF0 end:0x804F7050
+	.data       start:0x8056D180 end:0x8056D190
 
 nw4r/g3d/res/g3d_resmat.cpp:
 	.text       start:0x8043C2C0 end:0x8043E17C
+	.data       start:0x8056D190 end:0x8056D1E4
+	.sdata2     start:0x8057EC18 end:0x8057EC4C
 
 nw4r/g3d/res/g3d_resvtx.cpp:
-	.text       start:0x8043E180 end:0x8043E5B8
+	.text       start:0x8043E180 end:0x8043E598
 
 nw4r/g3d/res/g3d_restex.cpp:
-	.text       start:0x8043E5C0 end:0x8043E74C
+	.text       start:0x8043E5A0 end:0x8043E74C
 
 nw4r/g3d/res/g3d_resnode.cpp:
 	.text       start:0x8043E750 end:0x8043EA58
+	.sdata2     start:0x8057EC50 end:0x8057EC5C
 
 nw4r/g3d/res/g3d_resanm.cpp:
 	.text       start:0x8043EA60 end:0x8043ECB8
+	.sdata2     start:0x8057EC60 end:0x8057EC74
 
 nw4r/g3d/res/g3d_resanmvis.cpp:
 	.text       start:0x8043ECC0 end:0x8043EDE0
+	.sdata2     start:0x8057EC78 end:0x8057EC88
 
 nw4r/g3d/res/g3d_resanmclr.cpp:
 	.text       start:0x8043EDE0 end:0x8043EF4C
+	.sdata2     start:0x8057EC88 end:0x8057EC98
 
 nw4r/g3d/res/g3d_resanmtexpat.cpp:
 	.text       start:0x8043EF50 end:0x8043F320
 
 nw4r/g3d/res/g3d_resanmtexsrt.cpp:
 	.text       start:0x8043F320 end:0x8043F734
+	.sdata2     start:0x8057EC98 end:0x8057ECA0
 
 nw4r/g3d/res/g3d_resanmchr.cpp:
 	.text       start:0x8043F740 end:0x804419EC
+	.rodata     start:0x804F7050 end:0x804F7070
+	.sdata2     start:0x8057ECA0 end:0x8057ECCC
 
 nw4r/g3d/res/g3d_reslightset.cpp:
 	.text       start:0x804419F0 end:0x80441B5C
 
 nw4r/g3d/res/g3d_resanmamblight.cpp:
 	.text       start:0x80441B60 end:0x80441C30
+	.sdata2     start:0x8057ECD0 end:0x8057ECE0
 
 nw4r/g3d/res/g3d_resanmlight.cpp:
 	.text       start:0x80441C30 end:0x80442018
+	.sdata2     start:0x8057ECE0 end:0x8057ECF0
 
 nw4r/g3d/res/g3d_resanmcamera.cpp:
 	.text       start:0x80442020 end:0x80442330
 
 nw4r/g3d/res/g3d_resanmscn.cpp:
 	.text       start:0x80442330 end:0x8044297C
+	.data       start:0x8056D200 end:0x8056D280
 
 nw4r/g3d/res/g3d_resanmshp.cpp:
 	.text       start:0x80442980 end:0x80442AE8
+	.sdata2     start:0x8057ECF0 end:0x8057ECF4
 
 nw4r/g3d/g3d_transform.cpp:
 	.text       start:0x80442AF0 end:0x80442DF4
+	.sdata2     start:0x8057ECF8 end:0x8057ECFC
 
 nw4r/g3d/g3d_anmvis.cpp:
 	.text       start:0x80442E00 end:0x8044358C
+	.rodata     start:0x804F7070 end:0x804F7094
+	.data       start:0x8056D280 end:0x8056D308
+	.sdata      start:0x80574E38 end:0x80574E40
+	.sdata2     start:0x8057ED00 end:0x8057ED10
 
 nw4r/g3d/g3d_anmclr.cpp:
 	.text       start:0x80443590 end:0x80444D5C
+	.rodata     start:0x804F7098 end:0x804F7100
+	.data       start:0x8056D308 end:0x8056D428
+	.sdata2     start:0x8057ED10 end:0x8057ED20
 
 nw4r/g3d/g3d_anmtexpat.cpp:
 	.text       start:0x80444D60 end:0x8044635C
+	.rodata     start:0x804F7100 end:0x804F7168
+	.data       start:0x8056D428 end:0x8056D548
+	.sdata2     start:0x8057ED20 end:0x8057ED30
 
 nw4r/g3d/g3d_anmtexsrt.cpp:
 	.text       start:0x80446360 end:0x804479AC
+	.rodata     start:0x804F7168 end:0x804F71D0
+	.data       start:0x8056D548 end:0x8056D668
+	.sdata2     start:0x8057ED30 end:0x8057ED50
 
 nw4r/g3d/g3d_anmchr.cpp:
 	.text       start:0x804479B0 end:0x804499CC
+	.rodata     start:0x804F71D0 end:0x804F721C
+	.data       start:0x8056D668 end:0x8056D7C8
+	.sdata2     start:0x8057ED50 end:0x8057ED68
 
 nw4r/g3d/g3d_anmshp.cpp:
 	.text       start:0x804499D0 end:0x8044A3BC
+	.rodata     start:0x804F7220 end:0x804F7244
+	.data       start:0x8056D7C8 end:0x8056D868
+	.sdata2     start:0x8057ED68 end:0x8057ED78
 
 nw4r/g3d/g3d_anmscn.cpp:
 	.text       start:0x8044A3C0 end:0x8044A6E8
 
 nw4r/g3d/g3d_obj.cpp:
 	.text       start:0x8044A6F0 end:0x8044A85C
+	.rodata     start:0x804F7248 end:0x804F7254
+	.data       start:0x8056D868 end:0x8056D884
 
 nw4r/g3d/g3d_anmobj.cpp:
 	.text       start:0x8044A860 end:0x8044A928
+	.rodata     start:0x804F7258 end:0x804F7264
+	.sdata      start:0x80574E40 end:0x80574E44
+	.sdata2     start:0x8057ED78 end:0x8057ED7C
 
 nw4r/g3d/platform/g3d_gpu.cpp:
 	.text       start:0x8044A930 end:0x8044AE50
+	.sdata2     start:0x8057ED80 end:0x8057ED98
 
 nw4r/g3d/platform/g3d_tmem.cpp:
 	.text       start:0x8044AE50 end:0x8044B1B0
+	.rodata     start:0x804F7268 end:0x804F79E8
+	.sbss       start:0x80576618 end:0x80576628
+	.bss        start:0x8063B560 end:0x8063B9A0
 
 nw4r/g3d/platform/g3d_cpu.cpp:
 	.text       start:0x8044B1B0 end:0x8044B35C
+	.sdata2     start:0x8057ED98 end:0x8057ED9C
 
 nw4r/g3d/g3d_state.cpp:
 	.text       start:0x8044B360 end:0x8044EAB0
 	.ctors      start:0x804DB954 end:0x804DB958
+	.rodata     start:0x804F79E8 end:0x804F7A18
+	.data       start:0x8056D888 end:0x8056D8A0
+	.sdata      start:0x80574E48 end:0x80574E50
+	.sbss       start:0x80576628 end:0x80576648
+	.sdata2     start:0x8057EDA0 end:0x8057EDC8
+	.bss        start:0x8063B9A0 end:0x80640F44
 
 nw4r/g3d/g3d_draw1mat1shp.cpp:
 	.text       start:0x8044EAB0 end:0x8044F7F4
+	.rodata     start:0x804F7A18 end:0x804F7A28
+	.sdata2     start:0x8057EDC8 end:0x8057EDE8
 
 nw4r/g3d/g3d_calcview.cpp:
 	.text       start:0x8044F800 end:0x80451A9C
+	.rodata     start:0x804F7A28 end:0x804F7A44
+	.sdata2     start:0x8057EDE8 end:0x8057EDF4
 
 nw4r/g3d/g3d_dcc.cpp:
 	.text       start:0x80451AA0 end:0x80451B84
 
 nw4r/g3d/g3d_workmem.cpp:
 	.text       start:0x80451B90 end:0x80451BDC
+	.bss        start:0x80640F80 end:0x80658F80
 
 nw4r/g3d/g3d_calcworld.cpp:
 	.text       start:0x80451BE0 end:0x8045274C
+	.data       start:0x8056D8A0 end:0x8056D8A9
+	.sdata      start:0x80574E50 end:0x80574E58
+	.sdata2     start:0x8057EDF8 end:0x8057EE00
 
 nw4r/g3d/g3d_draw.cpp:
 	.text       start:0x80452750 end:0x804545F0
+	.sdata      start:0x80574E58 end:0x80574E60
+	.sdata2     start:0x8057EE00 end:0x8057EE0C
 
 nw4r/g3d/g3d_camera.cpp:
 	.text       start:0x804545F0 end:0x804556AC
+	.sdata2     start:0x8057EE10 end:0x8057EE48
 
 nw4r/g3d/dcc/g3d_basic.cpp:
 	.text       start:0x804556B0 end:0x80455978
+	.sdata2     start:0x8057EE48 end:0x8057EE54
 
 nw4r/g3d/dcc/g3d_maya.cpp:
 	.text       start:0x80455980 end:0x80456684
+	.rodata     start:0x804F7A48 end:0x804F7A80
+	.sdata2     start:0x8057EE58 end:0x8057EE6C
 
 nw4r/g3d/dcc/g3d_xsi.cpp:
 	.text       start:0x80456690 end:0x804572A4
+	.rodata     start:0x804F7A80 end:0x804F7AB8
+	.sdata2     start:0x8057EE70 end:0x8057EE7C
 
 nw4r/g3d/dcc/g3d_3dsmax.cpp:
 	.text       start:0x804572B0 end:0x80457DCC
+	.rodata     start:0x804F7AB8 end:0x804F7AF0
+	.sdata2     start:0x8057EE80 end:0x8057EE94
 
 nw4r/g3d/g3d_scnobj.cpp:
 	.text       start:0x80457DD0 end:0x8045980C
+	.rodata     start:0x804F7AF0 end:0x804F7B20
+	.data       start:0x8056D8B0 end:0x8056D9A8
+	.sbss       start:0x80576648 end:0x8057664C
+	.sdata2     start:0x8057EE98 end:0x8057EEA0
 
 nw4r/g3d/g3d_scnroot.cpp:
 	.text       start:0x80459810 end:0x8045B1BC
+	.rodata     start:0x804F7B20 end:0x804F7B30
+	.data       start:0x8056D9A8 end:0x8056DA18
+	.sdata      start:0x80574E60 end:0x80574E70
+	.sdata2     start:0x8057EEA0 end:0x8057EEA4
 
 nw4r/g3d/g3d_scnmdlsmpl.cpp:
 	.text       start:0x8045B1C0 end:0x8045D25C
+	.rodata     start:0x804F7B30 end:0x804F7B48
+	.data       start:0x8056DA18 end:0x8056DA70
+	.sdata      start:0x80574E70 end:0x80574E88
+	.sdata2     start:0x8057EEA8 end:0x8057EEAC
 
 nw4r/g3d/g3d_scnmdl.cpp:
 	.text       start:0x8045D260 end:0x8045FDAC
+	.rodata     start:0x804F7B48 end:0x804F7B58
+	.data       start:0x8056DA70 end:0x8056DAB8
 
 nw4r/g3d/g3d_calcmaterial.cpp:
 	.text       start:0x8045FDB0 end:0x8045FFE4
 
 nw4r/g3d/g3d_init.cpp:
 	.text       start:0x8045FFF0 end:0x804600E8
+	.data       start:0x8056DAB8 end:0x8056DAFE
+	.sdata      start:0x80574E88 end:0x80574E8C
 
 nw4r/g3d/g3d_scnproc.cpp:
 	.text       start:0x804600F0 end:0x804603F0
+	.rodata     start:0x804F7B70 end:0x804F7B80
+	.data       start:0x8056DB00 end:0x8056DB34
+	.sdata2     start:0x8057EEB0 end:0x8057EEB4
 
 nw4r/g3d/g3d_fog.cpp:
 	.text       start:0x804603F0 end:0x80460560
+	.sdata2     start:0x8057EEB8 end:0x8057EEBC
 
 nw4r/g3d/g3d_light.cpp:
 	.text       start:0x80460560 end:0x80460F68
+	.sdata2     start:0x8057EEC0 end:0x8057EEEC
 
 nw4r/g3d/g3d_calcvtx.cpp:
 	.text       start:0x80460F70 end:0x804616F8
+	.sdata2     start:0x8057EEF0 end:0x8057EEF4
 
 nw4r/snd/snd_AnimSound.cpp:
 	.text       start:0x80461700 end:0x804630D4
@@ -1952,115 +2166,213 @@ egg/prim/eggAssert.cpp:
 	.bss        start:0x80674C60 end:0x80674D68
 
 egg/gfx/eggCamera.cpp:
-	.text       start:0x8049C5C0 end:0x8049CAC0
+	.text       start:0x8049C5C0 end:0x8049CAC8
+	.data       start:0x8056ED00 end:0x8056ED60
+	.sdata2     start:0x8057F3B8 end:0x8057F3C8
 
 egg/gfx/eggPalette.cpp:
 	.text       start:0x8049CAD0 end:0x8049CB44
 
 egg/gfx/eggTexture.cpp:
 	.text       start:0x8049CB50 end:0x8049CFE4
+	.sdata2     start:0x8057F3C8 end:0x8057F3E0
 
-egg/gfx/eggUnk1.cpp:
+egg/gfx/eggAnalizeDL.cpp:
 	.text       start:0x8049CFF0 end:0x8049D7C0
+	.data       start:0x8056ED60 end:0x8056ED70
+	.sdata2     start:0x8057F3E0 end:0x8057F408
 
 egg/gfx/eggCapTexture.cpp:
-	.text       start:0x8049D7C0 end:0x8049D9D0
+	.text       start:0x8049D7C0 end:0x8049DA28
+	.rodata     start:0x804FBA30 end:0x804FBA48
+	.data       start:0x8056ED70 end:0x8056ED80
+	.sdata2     start:0x8057F410 end:0x8057F418
+	.sbss2      start:0x8057FFC0 end:0x8057FFC8
 
 egg/gfx/eggCpuTexture.cpp:
 	.text       start:0x8049DA30 end:0x8049EC94
+	.data       start:0x8056ED80 end:0x8056EDA0
+	.sdata2     start:0x8057F418 end:0x8057F440
 
 egg/gfx/eggDrawGX.cpp:
 	.text       start:0x8049ECA0 end:0x804A0C24
 	.ctors      start:0x804DB998 end:0x804DB99C
+	.rodata     start:0x804FBA60 end:0x804FBC58
+	.data       start:0x8056EDA0 end:0x8056EE60
+	.sdata      start:0x80574F18 end:0x80574F20
+	.sbss       start:0x80576808 end:0x80576810
+	.sdata2     start:0x8057F440 end:0x8057F538
+	.bss        start:0x80674D68 end:0x80674E48
 
 egg/gfx/eggDrawPathBase.cpp:
 	.text       start:0x804A0C30 end:0x804A0E98
+	.data       start:0x8056EE60 end:0x8056EEB0
 
-egg/gfx/eggDrawPathUnk1.cpp:
+egg/gfx/eggDrawPathBloom.cpp:
 	.text       start:0x804A0EA0 end:0x804A29B8
+	.data       start:0x8056EEB0 end:0x8056EF28
+	.sdata2     start:0x8057F538 end:0x8057F580
 
 egg/gfx/eggDrawPathDOF.cpp:
 	.text       start:0x804A29C0 end:0x804A4BE8
+	.rodata     start:0x804FBC70 end:0x804FBC88
+	.data       start:0x8056EF28 end:0x8056EFA0
+	.sdata2     start:0x8057F580 end:0x8057F5F8
 
-egg/gfx/eggDrawPathUnk2.cpp:
+egg/gfx/eggDrawPathLightMap.cpp:
 	.text       start:0x804A4BF0 end:0x804A54E8
+	.data       start:0x8056EFA0 end:0x8056EFF0
+	.sdata2     start:0x8057F5F8 end:0x8057F608
 
 egg/gfx/eggFog.cpp:
-	.text       start:0x804A54F0 end:0x804A5F60
+	.text       start:0x804A54F0 end:0x804A5A08
+	.data       start:0x8056EFF0 end:0x8056F010
+	.sdata      start:0x80574F20 end:0x80574F28
+	.sdata2     start:0x8057F608 end:0x8057F618
+
+egg/gfx/eggFogManager.cpp:
+	.text       start:0x804A5A10 end:0x804A5F60
+	.data       start:0x8056F010 end:0x8056F030
 
 egg/gfx/eggFrustum.cpp:
 	.text       start:0x804A5F60 end:0x804A6854
 	.ctors      start:0x804DB99C end:0x804DB9A0
+	.data       start:0x8056F030 end:0x8056F048
+	.sbss       start:0x80576810 end:0x80576820
+	.sdata2     start:0x8057F618 end:0x8057F63C
 
 egg/gfx/eggG3DUtility.cpp:
 	.text       start:0x804A6860 end:0x804A75B0
 
 egg/gfx/eggGfxEngine.cpp:
 	.text       start:0x804A75B0 end:0x804A7744
+	.data       start:0x8056F048 end:0x8056F058
 
 egg/gfx/eggGlobalDrawState.cpp:
 	.text       start:0x804A7750 end:0x804A7814
 	.ctors      start:0x804DB9A0 end:0x804DB9A4
+	.sbss       start:0x80576838 end:0x80576848
+	.bss        start:0x80674E48 end:0x80674E78
 
 egg/gfx/eggGXUtility.cpp:
 	.text       start:0x804A7820 end:0x804A7BC0
+	.sdata2     start:0x8057F640 end:0x8057F678
 
 egg/gfx/eggIScnProc.cpp:
 	.text       start:0x804A7BC0 end:0x804A7F7C
+	.data       start:0x8056F058 end:0x8056F068
 
-egg/gfx/eggLight.cpp:
-	.text       start:0x804A7F80 end:0x804AB24C
+egg/gfx/eggLightManager.cpp:
+	.text       start:0x804A7F80 end:0x804A9808
+	.data       start:0x8056F068 end:0x8056F098
+	.sdata      start:0x80574F28 end:0x80574F30
+	.sdata2     start:0x8057F678 end:0x8057F690
+
+egg/gfx/eggLightObject.cpp:
+	.text       start:0x804A9810 end:0x804AB24C
+	.rodata     start:0x804FBC88 end:0x804FBC98
+	.data       start:0x8056F098 end:0x8056F0B8
+	.sdata      start:0x80574F30 end:0x80574F38
+	.sdata2     start:0x8057F690 end:0x8057F6C0
 
 egg/gfx/eggLightTexture.cpp:
 	.text       start:0x804AB250 end:0x804AD448
 	.ctors      start:0x804DB9A4 end:0x804DB9A8
+	.rodata     start:0x804FBC98 end:0x804FBD08
+	.data       start:0x8056F0B8 end:0x8056F0F0
+	.sdata      start:0x80574F38 end:0x80574F48
+	.sbss       start:0x80576848 end:0x80576860
+	.sdata2     start:0x8057F6C0 end:0x8057F708
+	.bss        start:0x80674E78 end:0x80674EF0
 
 egg/gfx/eggLightTextureMgr.cpp:
 	.text       start:0x804AD450 end:0x804AE644
+	.data       start:0x8056F0F0 end:0x8056F110
+	.sdata2     start:0x8057F708 end:0x8057F720
 
 egg/gfx/eggModelEx.cpp:
 	.text       start:0x804AE650 end:0x804AEC20
+	.rodata     start:0x804FBD08 end:0x804FBD50
+	.data       start:0x8056F110 end:0x8056F120
+	.sdata      start:0x80574F48 end:0x80574F60
 
 egg/gfx/eggPostEffectBase.cpp:
 	.text       start:0x804AEC20 end:0x804AF4B4
+	.data       start:0x8056F120 end:0x8056F170
+	.sbss       start:0x80576860 end:0x80576870
+	.sdata2     start:0x8057F720 end:0x8057F750
+	.bss        start:0x80674EF0 end:0x80674F00
 
 egg/gfx/eggPostEffectBlur.cpp:
 	.text       start:0x804AF4C0 end:0x804AFC04
+	.data       start:0x8056F170 end:0x8056F190
+	.sdata2     start:0x8057F750 end:0x8057F788
 
-egg/gfx/eggPostEffectUnk1.cpp:
+egg/gfx/eggPostEffectBlurGather.cpp:
 	.text       start:0x804AFC10 end:0x804B0098
+	.data       start:0x8056F190 end:0x8056F1AC
+	.sdata2     start:0x8057F788 end:0x8057F798
 
 egg/gfx/eggPostEffectUnk2.cpp:
 	.text       start:0x804B00A0 end:0x804B0AA4
+	.rodata     start:0x804FBD50 end:0x804FBD88
+	.data       start:0x8056F1B0 end:0x8056F1D0
+	.sdata2     start:0x8057F798 end:0x8057F7C4
 
 egg/gfx/eggPostEffectMask.cpp:
 	.text       start:0x804B0AB0 end:0x804B0F60
+	.data       start:0x8056F1D0 end:0x8056F1F0
+	.sdata2     start:0x8057F7C8 end:0x8057F7D0
 
 egg/gfx/eggPostEffectMaskDOF.cpp:
 	.text       start:0x804B0F60 end:0x804B1BE8
+	.rodata     start:0x804FBD88 end:0x804FBDA0
+	.data       start:0x8056F1F0 end:0x8056F20C
+	.sdata2     start:0x8057F7D0 end:0x8057F80C
+	.sbss2      start:0x8057FFC8 end:0x8057FFCC
 
 egg/gfx/eggPostEffectSimple.cpp:
 	.text       start:0x804B1BF0 end:0x804B1E58
+	.data       start:0x8056F210 end:0x8056F230
+	.sdata2     start:0x8057F810 end:0x8057F818
 
 egg/gfx/eggScreen.cpp:
 	.text       start:0x804B1E60 end:0x804B30B4
 	.ctors      start:0x804DB9A8 end:0x804DB9AC
+	.data       start:0x8056F230 end:0x8056F268
+	.sbss       start:0x80576870 end:0x80576898
+	.sdata2     start:0x8057F818 end:0x8057F840
+	.bss        start:0x80674F00 end:0x80674F88
 
 egg/gfx/eggScreenEffectBase.cpp:
 	.text       start:0x804B30C0 end:0x804B30EC
 	.ctors      start:0x804DB9AC end:0x804DB9B0
+	.data       start:0x8056F268 end:0x8056F278
+	.bss        start:0x80674F88 end:0x80675010
 
 egg/gfx/eggScreenEffectBlur.cpp:
 	.text       start:0x804B30F0 end:0x804B3D98
+	.data       start:0x8056F278 end:0x8056F2B0
+	.sdata2     start:0x8057F840 end:0x8057F868
 
 egg/gfx/eggStateEfb.cpp:
 	.text       start:0x804B3DA0 end:0x804B460C
+	.sdata      start:0x80574F60 end:0x80574F68
+	.sbss       start:0x80576898 end:0x805768A0
+	.sdata2     start:0x8057F868 end:0x8057F890
+	.bss        start:0x80675010 end:0x806750A0
 
 egg/gfx/eggStateGX.cpp:
 	.text       start:0x804B4610 end:0x804B53EC
+	.rodata     start:0x804FBDA0 end:0x804FBE08
+	.sbss       start:0x805768A0 end:0x805768B8
+	.sdata2     start:0x8057F890 end:0x8057F8B0
+	.bss        start:0x806750A0 end:0x80675190
 
 egg/gfx/eggTextureBuffer.cpp:
 	.text       start:0x804B53F0 end:0x804B59DC
+	.data       start:0x8056F2B0 end:0x8056F2C0
+	.sbss       start:0x805768B8 end:0x805768D8
 
 egg/audio/eggAudioArcPlayerMgr.cpp:
 	.text       start:0x804B59E0 end:0x804B641C

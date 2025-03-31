@@ -2,8 +2,8 @@
 #define NW4R_G3D_OBJ_H
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/g3d_rtti.h>
-#include <nw4r/g3d/platform/g3d_allocator.h>
+#include "nw4r/g3d/g3d_rtti.h"
+#include "nw4r/g3d/platform/g3d_allocator.h"
 
 namespace nw4r {
 namespace g3d {
@@ -114,7 +114,7 @@ public:
     }
 
     void Destroy();
-    void DetachFromParent();
+    G3dObj *DetachFromParent();
 
     static void *Alloc(MEMAllocator *pAllocator, u32 size) {
         return detail::AllocFromAllocator(pAllocator, size);
@@ -133,7 +133,7 @@ public:
         if (pObj != NULL && pObj->IsDerivedFrom(TTo::GetTypeObjStatic())) {
             return static_cast<TTo *>(pObj);
         }
-        return nullptr;
+        return NULL;
     }
 
 private:

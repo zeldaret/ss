@@ -2,9 +2,9 @@
 #define NW4R_G3D_RES_RES_TEX_H
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/res/g3d_rescommon.h>
+#include "nw4r/g3d/res/g3d_rescommon.h"
 
-#include <rvl/GX.h>
+#include "rvl/GX.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -25,7 +25,7 @@ struct ResTexData {
     union {
         GXTexFmt fmt;
         GXCITexFmt cifmt;
-    };                 // at 0x20
+    }; // at 0x20
     u32 mipmap_level;  // at 0x24
     f32 min_lod;       // at 0x28
     f32 max_lod;       // at 0x2C

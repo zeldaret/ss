@@ -10,7 +10,7 @@ extern "C" {
 #define OS_GQR_TYPE_S8 6
 #define OS_GQR_TYPE_S16 7
 
-static void OSInitFastCast(void) {
+static inline void OSInitFastCast(void) {
     // clang-format off
     asm {
         li r3, 4

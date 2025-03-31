@@ -105,6 +105,10 @@ public:
         return f >= end ? 0.0f : f;
     }
 
+    inline f32 getEndFrameRaw() const {
+        return mEndFrame;
+    }
+
 private:
     inline bool notLooping() const {
         return (mFlags & FLAG_NO_LOOP) != 0;
@@ -123,6 +127,7 @@ private:
 
 class Anm_c {
 public:
+    Anm_c() : mpTransform(nullptr), mFlags(0) {}
     virtual ~Anm_c();
 
     bool doSomething(const char *path, ResAccIf_c *acc);
@@ -148,8 +153,6 @@ private:
     void updateFrame();
     nw4r::lyt::AnimTransform *mpTransform;
     FrameCtrl_c mFrameCtrl;
-
-public:
     u8 mFlags;
 };
 
@@ -188,6 +191,10 @@ public:
 
     bool flagSet() {
         return (field_0x94 & 1) ? 1 : 0;
+    }
+
+    void setResAcc(ResAccIf_c *resAcc) {
+        mpResAcc = resAcc;
     }
 
 private:

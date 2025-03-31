@@ -1,4 +1,4 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -33,7 +33,7 @@ bool ScnRfl::SetExpression(RFLExpression expression) {
     return false;
 }
 
-bool ScnRfl::GetExpression(RFLExpression* pExpression) {
+bool ScnRfl::GetExpression(RFLExpression *pExpression) {
     if (pExpression != NULL && IsCharModelReady()) {
         *pExpression = RFLGetExpression(&mCharModel);
         return true;
@@ -42,12 +42,10 @@ bool ScnRfl::GetExpression(RFLExpression* pExpression) {
     return false;
 }
 
-bool ScnRfl::SetupCharModel(RFLDataSource src, u16 index,
-                            RFLMiddleDB* pMiddleDB) {
+bool ScnRfl::SetupCharModel(RFLDataSource src, u16 index, RFLMiddleDB *pMiddleDB) {
     ReleaseCharModel();
 
-    mRFLErrCode = RFLInitCharModel(&mCharModel, src, pMiddleDB, index,
-                                   mpNglBuffer, mResolution, mExpressionFlag);
+    mRFLErrCode = RFLInitCharModel(&mCharModel, src, pMiddleDB, index, mpNglBuffer, mResolution, mExpressionFlag);
 
     if (mRFLErrCode != RFLErrcode_Success) {
         return false;
@@ -63,10 +61,9 @@ void ScnRfl::ReleaseCharModel() {
     }
 }
 
-ScnRfl* ScnRfl::Construct(MEMAllocator* pAllocator, u32* pSize,
-                          RFLResolution resolution, u32 exprFlags,
-                          u32 userDataSize) {
-    ScnRfl* pScnRfl = NULL;
+ScnRfl *
+ScnRfl::Construct(MEMAllocator *pAllocator, u32 *pSize, RFLResolution resolution, u32 exprFlags, u32 userDataSize) {
+    ScnRfl *pScnRfl = NULL;
 
     u32 scnRflSize = sizeof(ScnRfl);
     u32 nglSize = RFLGetModelBufferSize(resolution, exprFlags);
@@ -80,7 +77,7 @@ ScnRfl* ScnRfl::Construct(MEMAllocator* pAllocator, u32* pSize,
     }
 
     if (pAllocator != NULL) {
-        u8* pBuffer = reinterpret_cast<u8*>(Alloc(pAllocator, size));
+        u8 *pBuffer = reinterpret_cast<u8 *>(Alloc(pAllocator, size));
         if (pBuffer == NULL) {
             return NULL;
         }
@@ -98,71 +95,71 @@ ScnRfl* ScnRfl::Construct(MEMAllocator* pAllocator, u32* pSize,
     return pScnRfl;
 }
 
-void ScnRfl::G3dProc(u32 task, u32 param, void* pInfo) {
+void ScnRfl::G3dProc(u32 task, u32 param, void *pInfo) {
     if (IsG3dProcDisabled(task)) {
         return;
     }
 
     switch (task) {
-    case G3DPROC_GATHER_SCNOBJ: {
-        IScnObjGather* pCollection = static_cast<IScnObjGather*>(pInfo);
-        pCollection->Add(this, true, true);
-        break;
-    }
-
-    case G3DPROC_CALC_WORLD: {
-        CheckCallback_CALC_WORLD(CALLBACK_TIMING_A, param, pInfo);
-        CalcWorldMtx(static_cast<math::MTX34*>(pInfo), &param);
-        CheckCallback_CALC_WORLD(CALLBACK_TIMING_B, param, pInfo);
-        CheckCallback_CALC_WORLD(CALLBACK_TIMING_C, param, pInfo);
-        break;
-    }
-
-    case G3DPROC_CALC_VIEW: {
-        CheckCallback_CALC_VIEW(CALLBACK_TIMING_A, param, pInfo);
-        CalcViewMtx(static_cast<math::MTX34*>(pInfo));
-        CheckCallback_CALC_VIEW(CALLBACK_TIMING_B, param, pInfo);
-
-        math::MTX34 viewMtx;
-        GetMtx(MTX_VIEW, &viewMtx);
-        RFLSetMtx(&mCharModel, viewMtx);
-
-        CheckCallback_CALC_VIEW(CALLBACK_TIMING_C, param, pInfo);
-        break;
-    }
-
-    case G3DPROC_DRAW_OPA: {
-        if (!IsCharModelReady()) {
+        case G3DPROC_GATHER_SCNOBJ: {
+            IScnObjGather *pCollection = static_cast<IScnObjGather *>(pInfo);
+            pCollection->Add(this, true, true);
             break;
         }
 
-        if (mpDrawProc == NULL) {
-            LoadDrawSetting();
-            RFLDrawOpa(&mCharModel);
-        } else {
-            CallDrawProc(true);
-        }
-        break;
-    }
-
-    case G3DPROC_DRAW_XLU: {
-        if (!IsCharModelReady()) {
+        case G3DPROC_CALC_WORLD: {
+            CheckCallback_CALC_WORLD(CALLBACK_TIMING_A, param, pInfo);
+            CalcWorldMtx(static_cast<math::MTX34 *>(pInfo), &param);
+            CheckCallback_CALC_WORLD(CALLBACK_TIMING_B, param, pInfo);
+            CheckCallback_CALC_WORLD(CALLBACK_TIMING_C, param, pInfo);
             break;
         }
 
-        if (mpDrawProc == NULL) {
-            LoadDrawSetting();
-            RFLDrawXlu(&mCharModel);
-        } else {
-            CallDrawProc(false);
-        }
-        break;
-    }
+        case G3DPROC_CALC_VIEW: {
+            CheckCallback_CALC_VIEW(CALLBACK_TIMING_A, param, pInfo);
+            CalcViewMtx(static_cast<math::MTX34 *>(pInfo));
+            CheckCallback_CALC_VIEW(CALLBACK_TIMING_B, param, pInfo);
 
-    default: {
-        DefG3dProcScnLeaf(task, param, pInfo);
-        break;
-    }
+            math::MTX34 viewMtx;
+            GetMtx(MTX_VIEW, &viewMtx);
+            RFLSetMtx(&mCharModel, viewMtx);
+
+            CheckCallback_CALC_VIEW(CALLBACK_TIMING_C, param, pInfo);
+            break;
+        }
+
+        case G3DPROC_DRAW_OPA: {
+            if (!IsCharModelReady()) {
+                break;
+            }
+
+            if (mpDrawProc == NULL) {
+                LoadDrawSetting();
+                RFLDrawOpa(&mCharModel);
+            } else {
+                CallDrawProc(true);
+            }
+            break;
+        }
+
+        case G3DPROC_DRAW_XLU: {
+            if (!IsCharModelReady()) {
+                break;
+            }
+
+            if (mpDrawProc == NULL) {
+                LoadDrawSetting();
+                RFLDrawXlu(&mCharModel);
+            } else {
+                CallDrawProc(false);
+            }
+            break;
+        }
+
+        default: {
+            DefG3dProcScnLeaf(task, param, pInfo);
+            break;
+        }
     }
 }
 
@@ -179,9 +176,7 @@ void ScnRfl::CallDrawProc(bool opa) {
     ambColor.b = 0.5f + (lobj.b * mAmbientColor.b) * (1.0f / 255.0f);
     ambColor.a = 0.5f + (lobj.a * mAmbientColor.a) * (1.0f / 255.0f);
 
-    G3DState::Invalidate(
-        G3DState::INVALIDATE_ALL &
-        ~(G3DState::INVALIDATE_FOG | G3DState::INVALIDATE_LIGHT));
+    G3DState::Invalidate(G3DState::INVALIDATE_ALL & ~(G3DState::INVALIDATE_FOG | G3DState::INVALIDATE_LIGHT));
 
     mpDrawProc(this, &mCharModel, diffMask, specMask, ambColor, opa);
 }
@@ -206,15 +201,12 @@ void ScnRfl::LoadDrawSetting() {
     setting.ambColor.b = 0.5f + ((lobj.b * mAmbientColor.b) * (1.0f / 255.0f));
     setting.ambColor.a = 0.5f + ((lobj.a * mAmbientColor.a) * (1.0f / 255.0f));
 
-    G3DState::Invalidate(
-        G3DState::INVALIDATE_ALL &
-        ~(G3DState::INVALIDATE_FOG | G3DState::INVALIDATE_LIGHT));
+    G3DState::Invalidate(G3DState::INVALIDATE_ALL & ~(G3DState::INVALIDATE_FOG | G3DState::INVALIDATE_LIGHT));
 
     RFLLoadDrawSetting(&setting);
 }
 
-ScnRfl::ScnRfl(MEMAllocator* pAllocator, void* pNglBuffer, void* pUserData,
-               RFLResolution resolution, u32 exprFlag)
+ScnRfl::ScnRfl(MEMAllocator *pAllocator, void *pNglBuffer, void *pUserData, RFLResolution resolution, u32 exprFlag)
     : ScnLeaf(pAllocator),
       mResolution(resolution),
       mExpressionFlag(exprFlag),
@@ -228,7 +220,6 @@ ScnRfl::ScnRfl(MEMAllocator* pAllocator, void* pNglBuffer, void* pUserData,
       mRFLErrCode(RFLErrcode_Success),
       mpDrawProc(NULL),
       mpUserData(pUserData) {
-
     mAmbientColor.r = mAmbientColor.g = mAmbientColor.b = 64;
     mAmbientColor.a = 255;
 }

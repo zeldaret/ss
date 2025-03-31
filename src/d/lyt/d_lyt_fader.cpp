@@ -89,7 +89,7 @@ bool dLytFader_c::init() {
     if (field_0x4DD == true) {
         return true;
     } else {
-        void *data = LayoutArcManager::sInstance->getLoadedData("System2D");
+        void *data = LayoutArcManager::GetInstance()->getLoadedData("System2D");
         if (!data) {
             return false;
         }

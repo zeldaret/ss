@@ -1,9 +1,8 @@
 #ifndef RVL_SDK_GX_HARDWARE_CP_H
 #define RVL_SDK_GX_HARDWARE_CP_H
-#include <rvl/GX/GXTypes.h>
+#include "rvl/GX/GXTypes.h"
 
 #include <common.h>
-
 
 #ifdef __cplusplus
 extern "C" {

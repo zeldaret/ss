@@ -6,14 +6,19 @@
 #include "d/flag/flag_space.h"
 
 class TBoxflagManager : public CommittableFlagManager {
-public:
+private:
     FlagSpace mFlagSpace;
     u16 mSceneIndex;
     BitwiseFlagHelper mFlagHelper;
 
     static u16 sTBoxFlags[2];
 
+public:
     static TBoxflagManager *sInstance;
+
+    u16 checkFlagOnCurrentScene(u16 flag) {
+        return checkFlag(mSceneIndex, flag);
+    }
 
     virtual void doCommit() override;
     bool checkUncommittedFlag(u16 flag);

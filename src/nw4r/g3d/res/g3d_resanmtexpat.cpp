@@ -1,7 +1,7 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
-#include <nw4r/math.h>
-#include <nw4r/ut.h>
+#include "nw4r/math.h" // IWYU pragma: export
+#include "nw4r/ut.h"   // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -12,11 +12,9 @@ ResFile ResAnmTexPat::GetParent() const {
 
 namespace {
 
-const ResAnmTexPatFrmData* SearchFrame(const ResAnmTexPatAnmData* pAnmData,
-                                       f32 frame) {
-    const ResAnmTexPatFrmData& rFirst = pAnmData->frameValues[0];
-    const ResAnmTexPatFrmData& rLast =
-        pAnmData->frameValues[pAnmData->numFrameValues - 1];
+const ResAnmTexPatFrmData *SearchFrame(const ResAnmTexPatAnmData *pAnmData, f32 frame) {
+    const ResAnmTexPatFrmData &rFirst = pAnmData->frameValues[0];
+    const ResAnmTexPatFrmData &rLast = pAnmData->frameValues[pAnmData->numFrameValues - 1];
 
     if (frame <= rFirst.frame) {
         return &rFirst;
@@ -32,7 +30,7 @@ const ResAnmTexPatFrmData* SearchFrame(const ResAnmTexPatAnmData* pAnmData,
     f32 fEstimate = frameOffset * numKeyFrame * pAnmData->invKeyFrameRange;
     u16 iEstimate = math::F32ToU16(fEstimate);
 
-    const ResAnmTexPatFrmData* pFrmData = &pAnmData->frameValues[iEstimate];
+    const ResAnmTexPatFrmData *pFrmData = &pAnmData->frameValues[iEstimate];
 
     if (frame < pFrmData->frame) {
         do {
@@ -49,31 +47,28 @@ const ResAnmTexPatFrmData* SearchFrame(const ResAnmTexPatAnmData* pAnmData,
     return pFrmData;
 }
 
-inline ResName GetResNameFromOffsetArray(s32* pStringArray, int idx) {
+inline ResName GetResNameFromOffsetArray(s32 *pStringArray, int idx) {
     s32 offset = pStringArray[idx];
     return NW4R_G3D_OFS_TO_RESNAME(pStringArray, offset);
 }
 
 } // namespace
 
-void ResAnmTexPat::GetAnmResult(TexPatAnmResult* pResult, u32 idx,
-                                f32 frame) const {
+void ResAnmTexPat::GetAnmResult(TexPatAnmResult *pResult, u32 idx, f32 frame) const {
     (void)GetParent(); // unused
 
-    const ResAnmTexPatMatData* pMatData = GetMatAnm(idx);
-    const ResAnmTexPatMatData::AnmData* pAnmDataImpl = pMatData->anms;
+    const ResAnmTexPatMatData *pMatData = GetMatAnm(idx);
+    const ResAnmTexPatMatData::AnmData *pAnmDataImpl = pMatData->anms;
     u32 flags = pMatData->flags;
 
-    const ResAnmTexPatData& r = ref();
-    const ResTex* pResTexArray = ofs_to_ptr<ResTex>(r.toResTexArray);
-    const ResPltt* pResPlttArray = ofs_to_ptr<ResPltt>(r.toResPlttArray);
+    const ResAnmTexPatData &r = ref();
+    const ResTex *pResTexArray = ofs_to_ptr<ResTex>(r.toResTexArray);
+    const ResPltt *pResPlttArray = ofs_to_ptr<ResPltt>(r.toResPlttArray);
 
     pResult->bTexExist = 0;
     pResult->bPlttExist = 0;
 
-    for (int i = 0; i < TexPatAnmResult::NUM_OF_ANMS;
-         flags >>= ResAnmTexPatMatData::NUM_OF_FLAGS, i++) {
-
+    for (int i = 0; i < TexPatAnmResult::NUM_OF_ANMS; flags >>= ResAnmTexPatMatData::NUM_OF_FLAGS, i++) {
         if (!(flags & ResAnmTexPatMatData::FLAG_ANM_EXISTS)) {
             continue;
         }
@@ -83,11 +78,11 @@ void ResAnmTexPat::GetAnmResult(TexPatAnmResult* pResult, u32 idx,
             texIndex = pAnmDataImpl->constValue.texIndex;
             plttIndex = pAnmDataImpl->constValue.plttIndex;
         } else {
-            const ResAnmTexPatAnmData* pAnmData =
-                static_cast<const ResAnmTexPatAnmData*>(ut::AddOffsetToPtr(
-                    pMatData, pAnmDataImpl->toResAnmTexPatAnmData));
+            const ResAnmTexPatAnmData *pAnmData = static_cast<const ResAnmTexPatAnmData *>(
+                ut::AddOffsetToPtr(pMatData, pAnmDataImpl->toResAnmTexPatAnmData)
+            );
 
-            const ResAnmTexPatFrmData* pFrmData = SearchFrame(pAnmData, frame);
+            const ResAnmTexPatFrmData *pFrmData = SearchFrame(pAnmData, frame);
             texIndex = pFrmData->texIndex;
             plttIndex = pFrmData->plttIndex;
         }
@@ -117,15 +112,15 @@ void ResAnmTexPat::GetAnmResult(TexPatAnmResult* pResult, u32 idx,
 }
 
 bool ResAnmTexPat::Bind(const ResFile file) {
-    const ResAnmTexPatInfoData& rInfoData = ref().info;
+    const ResAnmTexPatInfoData &rInfoData = ref().info;
     int numTexture = rInfoData.numTexture;
     int numPalette = rInfoData.numPalette;
 
-    s32* pTexNameArray = ofs_to_ptr<s32>(ref().toTexNameArray);
-    s32* pPlttNameArray = ofs_to_ptr<s32>(ref().toPlttNameArray);
+    s32 *pTexNameArray = ofs_to_ptr<s32>(ref().toTexNameArray);
+    s32 *pPlttNameArray = ofs_to_ptr<s32>(ref().toPlttNameArray);
 
-    ResTex* pResTexArray = ofs_to_ptr<ResTex>(ref().toResTexArray);
-    ResPltt* pResPlttArray = ofs_to_ptr<ResPltt>(ref().toResPlttArray);
+    ResTex *pResTexArray = ofs_to_ptr<ResTex>(ref().toResTexArray);
+    ResPltt *pResPlttArray = ofs_to_ptr<ResPltt>(ref().toResPlttArray);
 
     int numBound = 0;
 
@@ -135,8 +130,7 @@ bool ResAnmTexPat::Bind(const ResFile file) {
         if (tex.IsValid()) {
             numBound++;
         } else {
-            ResTex found =
-                file.GetResTex(GetResNameFromOffsetArray(pTexNameArray, i));
+            ResTex found = file.GetResTex(GetResNameFromOffsetArray(pTexNameArray, i));
 
             if (found.IsValid()) {
                 pResTexArray[i] = found;
@@ -151,8 +145,7 @@ bool ResAnmTexPat::Bind(const ResFile file) {
         if (pltt.IsValid()) {
             numBound++;
         } else {
-            ResPltt found =
-                file.GetResPltt(GetResNameFromOffsetArray(pPlttNameArray, i));
+            ResPltt found = file.GetResPltt(GetResNameFromOffsetArray(pPlttNameArray, i));
 
             if (found.IsValid()) {
                 pResPlttArray[i] = found;
@@ -165,12 +158,12 @@ bool ResAnmTexPat::Bind(const ResFile file) {
 }
 
 void ResAnmTexPat::Release() {
-    const ResAnmTexPatInfoData& rInfoData = ref().info;
+    const ResAnmTexPatInfoData &rInfoData = ref().info;
     int numTexture = rInfoData.numTexture;
     int numPalette = rInfoData.numPalette;
 
-    ResTex* pResTexArray = ofs_to_ptr<ResTex>(ref().toResTexArray);
-    ResPltt* pResPlttArray = ofs_to_ptr<ResPltt>(ref().toResPlttArray);
+    ResTex *pResTexArray = ofs_to_ptr<ResTex>(ref().toResTexArray);
+    ResPltt *pResPlttArray = ofs_to_ptr<ResPltt>(ref().toResPlttArray);
 
     for (int i = 0; i < numTexture; i++) {
         pResTexArray[i] = ResTex(NULL);

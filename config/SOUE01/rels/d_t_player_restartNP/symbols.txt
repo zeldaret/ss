@@ -11,4 +11,4 @@ lbl_201_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
 lbl_201_rodata_4 = .rodata:0x00000004; // type:object size:0x4 data:float
 g_profile_PL_RESTART = .data:0x00000000; // type:object size:0x10
 lbl_201_data_10 = .data:0x00000010; // type:object size:0x4 data:4byte
-lbl_201_data_14 = .data:0x00000014; // type:object size:0x74
+TgPlayerRestart__vtable = .data:0x00000014; // type:object size:0x74

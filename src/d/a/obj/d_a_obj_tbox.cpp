@@ -11,6 +11,8 @@
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_room.h"
+#include "d/d_stage.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/flag/tboxflag_manager.h"
@@ -31,7 +33,7 @@
 #include "toBeSorted/counters/goddess_chest_counter.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/room_manager.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(TBOX, dAcTbox_c, fProfile::TBOX, 0x018D, 0, 6);
 
@@ -87,7 +89,7 @@ static char *const sOpenEventNames[] = {
 // TODO just copied from somewhere
 const cCcD_SrcGObj dAcTbox_c::sColSrc = {
   /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-  /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0, {0, 0x407}, 0, 0},
+  /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0, {0, 0, 0x407}, 0, 0},
   /* mObjCo */ {0xE9}
 };
 // clang-format on
@@ -1166,7 +1168,7 @@ int dAcTbox_c::doDelete() {
         field_0x1210 = 0;
     }
     if (sCurrentObtainingItemOarcName != nullptr) {
-        OarcManager *mng = OarcManager::sInstance;
+        OarcManager *mng = OarcManager::GetInstance();
         if (!mng->ensureLoaded1(sCurrentObtainingItemOarcName)) {
             mng->decrement(sCurrentObtainingItemOarcName);
             sCurrentObtainingItemOarcName = nullptr;
@@ -1191,7 +1193,7 @@ int dAcTbox_c::actorExecute() {
         (this->*mRegisterDowsingTarget)();
     }
 
-    dRoom *r = RoomManager::m_Instance->GetRoomByIndex(roomid);
+    dRoom_c *r = dStage_c::GetInstance()->getRoom(roomid);
     bool hasFlags = r->checkFlag(0x1E);
     if (hasFlags) {
         setObjectProperty(0x200);
@@ -1327,7 +1329,7 @@ int dAcTbox_c::actorExecuteInEvent() {
         (this->*mRegisterDowsingTarget)();
     }
 
-    dRoom *r = RoomManager::m_Instance->GetRoomByIndex(roomid);
+    dRoom_c *r = dStage_c::GetInstance()->getRoom(roomid);
     bool hasFlags = r->checkFlag(0x1E);
     if (hasFlags) {
         setObjectProperty(0x200);
@@ -1752,8 +1754,6 @@ void dAcTbox_c::initializeState_DemoAppear() {
     field_0x11C0.set(0.0f, 0.0f, 0.0f);
     field_0x11CC.set(0.0f, 0.0f, 0.0f);
 }
-extern "C" void SmallSoundManager__playSound(void *, u32);
-extern "C" void *SOUND_EFFECT_SOUND_MGR;
 void dAcTbox_c::executeState_DemoAppear() {
     int val = field_0x11F8++;
     if (field_0x11F8 < 11) {
@@ -1786,7 +1786,7 @@ void dAcTbox_c::executeState_DemoAppear() {
         if (isStop && mAnmMatClr1.isStop(0) && field_0x11F8 > 0x5A) {
             mEvent.advanceNext();
             mStateMgr.changeState(StateID_WaitOpen);
-            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AD);
+            SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
         }
     }
 }
@@ -1826,7 +1826,7 @@ void dAcTbox_c::initializeState_WaitOpen() {
 }
 void dAcTbox_c::executeState_WaitOpen() {
     if ((!mDoObstructedCheck || checkIsClear()) && fn_8026D120()) {
-        AttentionManager *mgr = AttentionManager::sInstance;
+        AttentionManager *mgr = AttentionManager::GetInstance();
         mgr->addTarget(*this, getInteractionTargetDef(), 0, nullptr);
     }
 }
@@ -1857,7 +1857,7 @@ void dAcTbox_c::initializeState_GoddessWaitOn() {
 }
 void dAcTbox_c::executeState_GoddessWaitOn() {
     if (fn_8026D120()) {
-        AttentionManager *mgr = AttentionManager::sInstance;
+        AttentionManager *mgr = AttentionManager::GetInstance();
         mgr->addTarget(*this, getInteractionTargetDef(), 0, nullptr);
     }
 }
@@ -1887,7 +1887,7 @@ void dAcTbox_c::initializeState_DeleteArchive() {
 }
 void dAcTbox_c::executeState_DeleteArchive() {
     if (sCurrentObtainingItemOarcName != nullptr) {
-        OarcManager *mng = OarcManager::sInstance;
+        OarcManager *mng = OarcManager::GetInstance();
         if (!mng->ensureLoaded1(sCurrentObtainingItemOarcName)) {
             mng->decrement(sCurrentObtainingItemOarcName);
             sCurrentObtainingItemOarcName = nullptr;
@@ -1918,7 +1918,7 @@ void dAcTbox_c::initializeState_LoadArchive() {
     }
     fn_8026D140();
     sCurrentObtainingItemOarcName = sItemToArchiveName[mItemModelIdx];
-    OarcManager::sInstance->loadObjectArcFromDisk(sCurrentObtainingItemOarcName, nullptr);
+    OarcManager::GetInstance()->loadObjectArcFromDisk(sCurrentObtainingItemOarcName, nullptr);
     field_0x11C0.set(-61.0f, 0.0f, -42.0f);
     field_0x11CC.set(61.0f, 100.0f, 42.0f);
     field_0x11E8 = 1.0f;
@@ -1926,7 +1926,7 @@ void dAcTbox_c::initializeState_LoadArchive() {
     field_0x120C = 0;
 }
 void dAcTbox_c::executeState_LoadArchive() {
-    if (!OarcManager::sInstance->ensureLoaded1(sCurrentObtainingItemOarcName)) {
+    if (!OarcManager::GetInstance()->ensureLoaded1(sCurrentObtainingItemOarcName)) {
         mStateMgr.changeState(StateID_Open);
     }
 }
@@ -2271,7 +2271,7 @@ void dAcTbox_c::setTboxFlag() {
 
 bool dAcTbox_c::checkTboxFlag() const {
     if (field_0x1207 <= 0x1F) {
-        return TBoxflagManager::sInstance->checkFlag(TBoxflagManager::sInstance->mSceneIndex, field_0x1207);
+        return TBoxflagManager::sInstance->checkFlagOnCurrentScene(field_0x1207);
     }
     return false;
 }
@@ -2672,6 +2672,6 @@ void dAcTbox_c::fn_8026E630() {
     if (dBgS_ObjGndChk::CheckPos(checkPos) && &dBgS_ObjGndChk::GetInstance()) {
         cBgS_PolyInfo p = dBgS_ObjGndChk::GetInstance();
         dBgS::GetInstance()->SetLightingCode(this, p);
-        FUN_8002de30(p);
+        setPolyAttrsDupe(p);
     }
 }

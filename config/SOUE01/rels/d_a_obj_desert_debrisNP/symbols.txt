@@ -14,4 +14,4 @@ _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_428_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
 g_profile_OBJ_DESERT_DEBRIS = .data:0x00000000; // type:object size:0x70
 lbl_428_data_70 = .data:0x00000070; // type:object size:0x20 data:string
-lbl_428_data_90 = .data:0x00000090; // type:object size:0x80
+AcOdesertDebris__vtable = .data:0x00000090; // type:object size:0x80

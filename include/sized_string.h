@@ -44,21 +44,25 @@ struct SizedString {
 
     void operator+=(const char *src) {
         if (src != nullptr) {
-            size_t destLen = strlen(mChars);
-            size_t copyLen = strlen(src);
-
-            // Make sure copy length isnt more than destination length
-            if (destLen + copyLen + 1 >= Size) {
-                size_t tmpLen = Size - destLen;
-                copyLen = tmpLen - 1;
-            }
-
-            strncpy(mChars + destLen, src, copyLen);
-
-            // make sure string is null terminated
-            size_t offset = destLen + copyLen;
-            mChars[offset] = '\0';
+            append(src);
         }
+    }
+
+    void append(const char *src) {
+        size_t destLen = strlen(mChars);
+        size_t copyLen = strlen(src);
+
+        // Make sure copy length isnt more than destination length
+        if (destLen + copyLen + 1 >= Size) {
+            size_t tmpLen = Size - destLen;
+            copyLen = tmpLen - 1;
+        }
+
+        strncpy(mChars + destLen, src, copyLen);
+
+        // make sure string is null terminated
+        size_t offset = destLen + copyLen;
+        mChars[offset] = '\0';
     }
 
     bool operator==(const char *other) const {
@@ -75,6 +79,10 @@ struct SizedString {
         }
         va_end(list);
         return printed;
+    }
+
+    size_t len() const {
+        return strlen(mChars);
     }
 };
 

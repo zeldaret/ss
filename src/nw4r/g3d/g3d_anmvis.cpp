@@ -1,6 +1,6 @@
-#include <nw4r/g3d.h>
+#include "nw4r/g3d.h" // IWYU pragma: export
 
-#include <nw4r/ut.h>
+#include "nw4r/ut.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -15,11 +15,8 @@ NW4R_G3D_RTTI_DEF(AnmObjVisRes);
  * AnmObjVis
  *
  ******************************************************************************/
-AnmObjVis::AnmObjVis(MEMAllocator* pAllocator, u16* pBindingBuf, int numBinding)
-    : AnmObj(pAllocator, NULL),
-      mpBinding(pBindingBuf),
-      mNumBinding(numBinding) {
-
+AnmObjVis::AnmObjVis(MEMAllocator *pAllocator, u16 *pBindingBuf, int numBinding)
+    : AnmObj(pAllocator, NULL), mpBinding(pBindingBuf), mNumBinding(numBinding) {
     Release();
 }
 
@@ -39,14 +36,14 @@ void AnmObjVis::Release() {
     SetAnmFlag(FLAG_ANM_BOUND, false);
 }
 
-AnmObjVisRes* AnmObjVis::Attach(int idx, AnmObjVisRes* pRes) {
+AnmObjVisRes *AnmObjVis::Attach(int idx, AnmObjVisRes *pRes) {
 #pragma unused(idx)
 #pragma unused(pRes)
 
     return NULL;
 }
 
-AnmObjVisRes* AnmObjVis::Detach(int idx) {
+AnmObjVisRes *AnmObjVis::Detach(int idx) {
 #pragma unused(idx)
 
     return NULL;
@@ -58,24 +55,24 @@ void AnmObjVis::DetachAll() {
     }
 }
 
-void AnmObjVis::G3dProc(u32 task, u32 param, void* pInfo) {
+void AnmObjVis::G3dProc(u32 task, u32 param, void *pInfo) {
 #pragma unused(param)
 
     switch (task) {
-    case G3DPROC_UPDATEFRAME: {
-        SetAnmFlag(FLAG_CACHE_OBSOLETE, true);
-        break;
-    }
+        case G3DPROC_UPDATEFRAME: {
+            SetAnmFlag(FLAG_CACHE_OBSOLETE, true);
+            break;
+        }
 
-    case G3DPROC_DETACH_PARENT: {
-        SetParent(NULL);
-        break;
-    }
+        case G3DPROC_DETACH_PARENT: {
+            SetParent(NULL);
+            break;
+        }
 
-    case G3DPROC_ATTACH_PARENT: {
-        SetParent(static_cast<G3dObj*>(pInfo));
-        break;
-    }
+        case G3DPROC_ATTACH_PARENT: {
+            SetParent(static_cast<G3dObj *>(pInfo));
+            break;
+        }
     }
 }
 
@@ -84,10 +81,8 @@ void AnmObjVis::G3dProc(u32 task, u32 param, void* pInfo) {
  * AnmObjVisNode
  *
  ******************************************************************************/
-AnmObjVisNode::AnmObjVisNode(MEMAllocator* pAllocator, u16* pBindingBuf,
-                             int numBinding)
+AnmObjVisNode::AnmObjVisNode(MEMAllocator *pAllocator, u16 *pBindingBuf, int numBinding)
     : AnmObjVis(pAllocator, pBindingBuf, numBinding) {
-
     for (int i = 0; i < MAX_CHILD; i++) {
         mpChildren[i] = NULL;
     }
@@ -97,8 +92,8 @@ AnmObjVisNode::~AnmObjVisNode() {
     DetachAll();
 }
 
-AnmObjVisRes* AnmObjVisNode::Attach(int idx, AnmObjVisRes* pRes) {
-    AnmObjVisRes* pOld = Detach(idx);
+AnmObjVisRes *AnmObjVisNode::Attach(int idx, AnmObjVisRes *pRes) {
+    AnmObjVisRes *pOld = Detach(idx);
     bool hasAnm = false;
 
     for (u32 i = 0; i < mNumBinding; i++) {
@@ -119,8 +114,8 @@ AnmObjVisRes* AnmObjVisNode::Attach(int idx, AnmObjVisRes* pRes) {
     return pOld;
 }
 
-AnmObjVisRes* AnmObjVisNode::Detach(int idx) {
-    AnmObjVisRes* pOld = mpChildren[idx];
+AnmObjVisRes *AnmObjVisNode::Detach(int idx) {
+    AnmObjVisRes *pOld = mpChildren[idx];
 
     if (pOld != NULL) {
         pOld->G3dProc(G3DPROC_DETACH_PARENT, 0, this);
@@ -131,7 +126,7 @@ AnmObjVisRes* AnmObjVisNode::Detach(int idx) {
             u16 binding = BINDING_UNDEFINED;
 
             for (int j = 0; j < MAX_CHILD; j++) {
-                AnmObjVisRes* pChild = mpChildren[j];
+                AnmObjVisRes *pChild = mpChildren[j];
 
                 if (pChild == NULL || !pChild->TestDefined(i)) {
                     continue;
@@ -201,7 +196,7 @@ bool AnmObjVisNode::Bind(ResMdl mdl) {
     bool success = false;
 
     for (int i = 0; i < MAX_CHILD; i++) {
-        AnmObjVisRes* pChild = mpChildren[i];
+        AnmObjVisRes *pChild = mpChildren[i];
         if (pChild == NULL) {
             continue;
         }
@@ -230,30 +225,30 @@ void AnmObjVisNode::Release() {
     AnmObjVis::Release();
 }
 
-void AnmObjVisNode::G3dProc(u32 task, u32 param, void* pInfo) {
+void AnmObjVisNode::G3dProc(u32 task, u32 param, void *pInfo) {
 #pragma unused(param)
 
     switch (task) {
-    case G3DPROC_CHILD_DETACHED: {
-        for (int i = 0; i < MAX_CHILD; i++) {
-            if (mpChildren[i] == pInfo) {
-                Detach(i);
-                return;
+        case G3DPROC_CHILD_DETACHED: {
+            for (int i = 0; i < MAX_CHILD; i++) {
+                if (mpChildren[i] == pInfo) {
+                    Detach(i);
+                    return;
+                }
             }
+
+            break;
         }
 
-        break;
-    }
+        case G3DPROC_DETACH_PARENT: {
+            SetParent(NULL);
+            break;
+        }
 
-    case G3DPROC_DETACH_PARENT: {
-        SetParent(NULL);
-        break;
-    }
-
-    case G3DPROC_ATTACH_PARENT: {
-        SetParent(static_cast<G3dObj*>(pInfo));
-        break;
-    }
+        case G3DPROC_ATTACH_PARENT: {
+            SetParent(static_cast<G3dObj *>(pInfo));
+            break;
+        }
     }
 }
 
@@ -262,8 +257,7 @@ void AnmObjVisNode::G3dProc(u32 task, u32 param, void* pInfo) {
  * AnmObjVisOR
  *
  ******************************************************************************/
-AnmObjVisOR* AnmObjVisOR::Construct(MEMAllocator* pAllocator, u32* pSize,
-                                    ResMdl mdl) {
+AnmObjVisOR *AnmObjVisOR::Construct(MEMAllocator *pAllocator, u32 *pSize, ResMdl mdl) {
     if (!mdl.IsValid()) {
         return NULL;
     }
@@ -282,22 +276,21 @@ AnmObjVisOR* AnmObjVisOR::Construct(MEMAllocator* pAllocator, u32* pSize,
         return NULL;
     }
 
-    u8* pBuffer = reinterpret_cast<u8*>(Alloc(pAllocator, size));
+    u8 *pBuffer = reinterpret_cast<u8 *>(Alloc(pAllocator, size));
     if (pBuffer == NULL) {
         return NULL;
     }
 
-    u16* pBindingBuf = reinterpret_cast<u16*>(pBuffer + sizeof(AnmObjVisOR));
+    u16 *pBindingBuf = reinterpret_cast<u16 *>(pBuffer + sizeof(AnmObjVisOR));
 
-    AnmObjVisOR* pObjVis =
-        new (pBuffer) AnmObjVisOR(pAllocator, pBindingBuf, bindNum);
+    AnmObjVisOR *pObjVis = new (pBuffer) AnmObjVisOR(pAllocator, pBindingBuf, bindNum);
 
     return pObjVis;
 }
 
 bool AnmObjVisOR::GetResult(u32 idx) {
     for (int i = 0; i < MAX_CHILD; i++) {
-        AnmObjVisRes* pChild = mpChildren[i];
+        AnmObjVisRes *pChild = mpChildren[i];
 
         if (pChild == NULL || !pChild->TestExistence(idx)) {
             continue;
@@ -316,8 +309,7 @@ bool AnmObjVisOR::GetResult(u32 idx) {
  * AnmObjVisRes
  *
  ******************************************************************************/
-AnmObjVisRes* AnmObjVisRes::Construct(MEMAllocator* pAllocator, u32* pSize,
-                                      ResAnmVis vis, ResMdl mdl) {
+AnmObjVisRes *AnmObjVisRes::Construct(MEMAllocator *pAllocator, u32 *pSize, ResAnmVis vis, ResMdl mdl) {
     if (!vis.IsValid() || !mdl.IsValid()) {
         return NULL;
     }
@@ -336,21 +328,19 @@ AnmObjVisRes* AnmObjVisRes::Construct(MEMAllocator* pAllocator, u32* pSize,
         return NULL;
     }
 
-    u8* pBuffer = reinterpret_cast<u8*>(Alloc(pAllocator, size));
+    u8 *pBuffer = reinterpret_cast<u8 *>(Alloc(pAllocator, size));
     if (pBuffer == NULL) {
         return NULL;
     }
 
-    u16* pBindingBuf = reinterpret_cast<u16*>(pBuffer + sizeof(AnmObjVisRes));
+    u16 *pBindingBuf = reinterpret_cast<u16 *>(pBuffer + sizeof(AnmObjVisRes));
 
-    AnmObjVisRes* pObjVis =
-        new (pBuffer) AnmObjVisRes(pAllocator, vis, pBindingBuf, bindNum);
+    AnmObjVisRes *pObjVis = new (pBuffer) AnmObjVisRes(pAllocator, vis, pBindingBuf, bindNum);
 
     return pObjVis;
 }
 
-AnmObjVisRes::AnmObjVisRes(MEMAllocator* pAllocator, ResAnmVis vis,
-                           u16* pBindingBuf, int numBinding)
+AnmObjVisRes::AnmObjVisRes(MEMAllocator *pAllocator, ResAnmVis vis, u16 *pBindingBuf, int numBinding)
     : AnmObjVis(pAllocator, pBindingBuf, numBinding),
       FrameCtrl(0.0f, vis.GetNumFrame(), GetAnmPlayPolicy(vis.GetAnmPolicy())),
       mRes(vis) {}
@@ -373,8 +363,10 @@ f32 AnmObjVisRes::GetUpdateRate() const {
 }
 
 void AnmObjVisRes::UpdateFrame() {
-    UpdateFrm();
-    G3dProc(G3DPROC_UPDATEFRAME, 0, NULL);
+    if (GetRate() != 0.f) {
+        UpdateFrm();
+        G3dProc(G3DPROC_UPDATEFRAME, 0, NULL);
+    }
 }
 
 bool AnmObjVisRes::Bind(ResMdl mdl) {
@@ -382,7 +374,7 @@ bool AnmObjVisRes::Bind(ResMdl mdl) {
     bool success = false;
 
     for (u16 i = 0; i < numAnim; i++) {
-        const ResAnmVisAnmData* pData = mRes.GetNodeAnm(i);
+        const ResAnmVisAnmData *pData = mRes.GetNodeAnm(i);
 
         // Seek back from name string to start of ResName
         ResName name(ut::AddOffsetToPtr(pData, pData->name - 4));
@@ -415,7 +407,7 @@ bool AnmObjVisRes::GetResult(u32 idx) {
  * ApplyVisAnmResult
  *
  ******************************************************************************/
-void ApplyVisAnmResult(ResMdl mdl, AnmObjVis* pObj) {
+void ApplyVisAnmResult(ResMdl mdl, AnmObjVis *pObj) {
     u32 numNode = mdl.GetResNodeNumEntries();
 
     for (u32 i = 0; i < numNode; i++) {
@@ -428,7 +420,7 @@ void ApplyVisAnmResult(ResMdl mdl, AnmObjVis* pObj) {
     }
 }
 
-void ApplyVisAnmResult(u8* byteVec, ResMdl mdl, AnmObjVis* pObj) {
+void ApplyVisAnmResult(u8 *byteVec, ResMdl mdl, AnmObjVis *pObj) {
     u32 numNode = mdl.GetResNodeNumEntries();
 
     for (u32 i = 0; i < numNode; i++) {

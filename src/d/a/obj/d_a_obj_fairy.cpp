@@ -67,13 +67,13 @@ void dAcObjFairy_c::finalizeState_Wait() {}
 void dAcObjFairy_c::initializeState_Avoid() {}
 void dAcObjFairy_c::executeState_Avoid() {}
 void dAcObjFairy_c::finalizeState_Avoid() {
-    actor_properties |= 1;
+    setActorProperty(0x1);
 }
 
 void dAcObjFairy_c::initializeState_PlayerAvoid() {}
 void dAcObjFairy_c::executeState_PlayerAvoid() {}
 void dAcObjFairy_c::finalizeState_PlayerAvoid() {
-    actor_properties |= 1;
+    setActorProperty(0x1);
 }
 
 void dAcObjFairy_c::initializeState_CureStart() {}

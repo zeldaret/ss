@@ -2,9 +2,9 @@
 #define NW4R_G3D_SCN_OBJ_H
 #include <nw4r/types_nw4r.h>
 
-#include <nw4r/g3d/g3d_obj.h>
+#include "nw4r/g3d/g3d_obj.h"
 
-#include <nw4r/math.h>
+#include "nw4r/math.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
@@ -109,6 +109,7 @@ public:
     void CalcViewMtx(const math::MTX34 *pCamera);
 
     bool SetMtx(ScnObjMtxType type, const math::MTX34 *pMtx);
+    bool SetMtx(ScnObjMtxType type, const math::MTX34 &rMtx);
     bool GetMtx(ScnObjMtxType type, math::MTX34 *pMtx) const;
     const math::MTX34 *GetMtxPtr(ScnObjMtxType type) const {
         return &mMtxArray[type];
@@ -125,6 +126,7 @@ public:
     }
 
     void EnableScnObjCallbackTiming(Timing timing);
+    void DisableScnObjCallbackTiming(Timing timing);
     void EnableScnObjCallbackExecOp(ExecOp op);
 
     bool SetBoundingVolume(ScnObjBoundingVolumeType type, const math::AABB *pAABB);
@@ -175,7 +177,7 @@ protected:
     }
 
     bool IsG3dProcDisabled(u32 task) const {
-        if (task < __G3DPROC_OPTIONAL_END && ((1 << task - 1) & mScnObjFlags)) {
+        if (task < __G3DPROC_OPTIONAL_END && ((1 << (task - 1)) & mScnObjFlags)) {
             return true;
         }
 
@@ -223,6 +225,11 @@ public:
         CULLINGSTATUS_INSIDE,
         CULLINGSTATUS_OUTSIDE,
         CULLINGSTATUS_NOTEST
+    };
+
+    enum CheckStatus {
+        CHECKSTATUS_GATHER_SCNOBJ,
+        CHECKSTATUS_IGNORE_SCNOBJ
     };
 
 public:
