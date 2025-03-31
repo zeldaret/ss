@@ -3,11 +3,11 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/c/c_cc_d.h"
+#include "d/d_sc_game.h"
 #include "d/flag/storyflag_manager.h"
 #include "f/f_base.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
-#include "toBeSorted/scgame.h"
 #include "toBeSorted/time_area_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(E_SM, dAcEsm_c, fProfile::E_SM, 0xEB, 0, 4098);
@@ -15,7 +15,7 @@ SPECIAL_ACTOR_PROFILE(E_SM, dAcEsm_c, fProfile::E_SM, 0xEB, 0, 4098);
 dCcD_SrcSph dAcEsm_c::sSphSrc = {
     /* mObjInf */
     {/* mObjAt */ {AT_TYPE_DAMAGE, 0xD, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_WIND), 0x3303, {3, 0x40F}, 8, 0},
+     /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_WIND), 0x3303, {0, 3, 0x40F}, 8, 0},
      /* mObjCo */ {0xC5}},
     /* mSphInf */
     {50.f},
@@ -39,7 +39,7 @@ STATE_DEFINE(dAcEsm_c, Dead);
 int dAcEsm_c::actorCreate() {
     // Check for Batreaux being human and on Skyloft/Waterfall cave
     if (StoryflagManager::sInstance->getCounterOrFlag(360) &&
-        (ScGame::isCurrentStage("F000") || ScGame::isCurrentStage("D000"))) {
+        (dScGame_c::isCurrentStage("F000") || dScGame_c::isCurrentStage("D000"))) {
         return FAILED;
     }
 
@@ -193,7 +193,7 @@ int dAcEsm_c::actorPostCreate() {
     switch (field_0xBC6) {
         case 1: {
             field_0xA7C = 0;
-            if (dTimeAreaMgr_c::sInstance->fn_800B9B60(getRoomId(), GetPostion())) {
+            if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), GetPostion())) {
                 field_0xA74 = 1.f;
                 // ...
             } else {
@@ -203,7 +203,7 @@ int dAcEsm_c::actorPostCreate() {
         } break;
         case 2: {
             field_0xA7C = 1;
-            if (dTimeAreaMgr_c::sInstance->fn_800B9B60(getRoomId(), GetPostion())) {
+            if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), GetPostion())) {
                 field_0xA74 = 0.f;
                 // ...
             } else {
@@ -220,6 +220,7 @@ int dAcEsm_c::actorPostCreate() {
 
     if (field_0xBBF == 1 || field_0xBBF == 3) {
         clearActorProperty(1);
+        fn_800306d0();
         FUN_8002d860();
     }
 

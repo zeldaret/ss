@@ -11,7 +11,6 @@
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/effects_struct.h"
 #include "toBeSorted/stage_render_stuff.h"
 

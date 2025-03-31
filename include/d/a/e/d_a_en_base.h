@@ -19,6 +19,8 @@ public:
     /* 0x344 */ u8 _344[0x374 - 0x344];
     /* 0x374 */ dAcEnData *mpEnemyData;
 
+    void fn_800306d0();
+
 protected:
     // TODO: Make accessors for this list to auto-convert to dAcEnBase?
     static fLiMgBa_c sEnemyList;
