@@ -200,8 +200,7 @@ private:
     /* 0x004 */ d2d::dLytSub mLyt;
     /* 0x098 */ d2d::AnmGroup_c mAnm[3];
     /* 0x158 */ nw4r::lyt::Bounding *mpBounding;
-    d2d::dLytStructD structD;
-    // TODO wrong names/offsets because these are relative to main class
+    /* 0x15C */ d2d::dLytStructD structD;
     /* 0x184 */ u8 mItem;
     /* 0x185 */ bool mSize;
     /* 0x186 */ bool mBocoburinLocked;
