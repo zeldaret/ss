@@ -85,7 +85,7 @@ bool dLytSkyGaugeMain_c::execute() {
     mStateMgr.executeState();
 
     for (int i = 0; i < 2; i++) {
-        if (mAnmGroups[i].isFlag2()) {
+        if (mAnmGroups[i].isEnabled()) {
             if (mAnmGroups[i].isStop()) {
                 mAnmGroups[i].setAnimEnable(false);
                 if (i == 0) {

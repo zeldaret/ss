@@ -89,7 +89,7 @@ bool dLytAreaCaptionParts_c::update() {
     mStateMgr.executeState();
     if (*mStateMgr.getStateID() != StateID_Wait) {
         for (int i = 0; i < 4; i++) {
-            if (mAnmCtrlInUse[i] && mAnmGroups[i].isFlag2()) {
+            if (mAnmCtrlInUse[i] && mAnmGroups[i].isEnabled()) {
                 mAnmGroups[i].play();
             }
         }

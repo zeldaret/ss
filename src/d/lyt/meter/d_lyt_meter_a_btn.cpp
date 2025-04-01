@@ -26,23 +26,24 @@ void dLytMeterABtn_c::executeState_InvisibleWait() {
 void dLytMeterABtn_c::finalizeState_InvisibleWait() {}
 
 void dLytMeterABtn_c::initializeState_In() {
-    mpContainerAnmGroup1->setToEnd2();
+    mpContainerAnmGroup1->setToStart();
     mpContainerAnmGroup1->setAnimEnable(true);
-    mAnmGroups[0].playBackwardsOnce();
+    mAnmGroups[0].setBackwardsOnce();
+    mAnmGroups[0].setToStart();
 }
 void dLytMeterABtn_c::executeState_In() {
     if (mpContainerAnmGroup1->isEndReached()) {
         mpContainerAnmGroup1->setAnimEnable(false);
         mStateMgr.changeState(StateID_Wait);
     }
-    if (mpContainerAnmGroup1->isFlag2()) {
+    if (mpContainerAnmGroup1->isEnabled()) {
         mpContainerAnmGroup1->play();
     }
 }
 void dLytMeterABtn_c::finalizeState_In() {}
 
 void dLytMeterABtn_c::initializeState_Out() {
-    mpContainerAnmGroup2->setToEnd2();
+    mpContainerAnmGroup2->setToStart();
     mpContainerAnmGroup2->setAnimEnable(true);
 }
 void dLytMeterABtn_c::executeState_Out() {
@@ -50,7 +51,7 @@ void dLytMeterABtn_c::executeState_Out() {
         mpContainerAnmGroup2->setAnimEnable(false);
         mStateMgr.changeState(StateID_InvisibleWait);
     }
-    if (mpContainerAnmGroup2->isFlag2()) {
+    if (mpContainerAnmGroup2->isEnabled()) {
         mpContainerAnmGroup2->play();
     }
 }

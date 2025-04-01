@@ -137,7 +137,7 @@ bool dLytBirdGaugeMain_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytBirdGaugeMain_c::execute() {
     mStateMgr.executeState();
     for (int i = 0; i < LYT_SKY_GAUGE_MAIN_NUM_ANIMS; i++) {
-        if (mAnmGroups[i].isFlag2()) {
+        if (mAnmGroups[i].isEnabled()) {
             mAnmGroups[i].play();
         }
     }

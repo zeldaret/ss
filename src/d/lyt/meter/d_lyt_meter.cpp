@@ -37,7 +37,8 @@ void dLytMeter1Button_c::executeState_Wait() {
 void dLytMeter1Button_c::finalizeState_Wait() {}
 
 void dLytMeter1Button_c::initializeState_ToUse() {
-    mAnmGroups[0].playBackwardsOnce();
+    mAnmGroups[0].setBackwardsOnce();
+    mAnmGroups[0].setToStart();
     mAnmGroups[0].setAnimEnable(true);
 }
 void dLytMeter1Button_c::executeState_ToUse() {
@@ -45,7 +46,7 @@ void dLytMeter1Button_c::executeState_ToUse() {
         mStateMgr.changeState(StateID_Wait);
     }
 
-    if (mAnmGroups[0].isFlag2()) {
+    if (mAnmGroups[0].isEnabled()) {
         mAnmGroups[0].play();
     }
 }
@@ -54,7 +55,8 @@ void dLytMeter1Button_c::finalizeState_ToUse() {
 }
 
 void dLytMeter1Button_c::initializeState_ToUnuse() {
-    mAnmGroups[0].playLoop();
+    mAnmGroups[0].setForwardOnce();
+    mAnmGroups[0].setToStart();
     mAnmGroups[0].setAnimEnable(true);
 }
 void dLytMeter1Button_c::executeState_ToUnuse() {
@@ -62,7 +64,7 @@ void dLytMeter1Button_c::executeState_ToUnuse() {
         mStateMgr.changeState(StateID_Unuse);
     }
 
-    if (mAnmGroups[0].isFlag2()) {
+    if (mAnmGroups[0].isEnabled()) {
         mAnmGroups[0].play();
     }
 }
@@ -148,7 +150,8 @@ void dLytMeter2Button_c::executeState_Wait() {
 void dLytMeter2Button_c::finalizeState_Wait() {}
 
 void dLytMeter2Button_c::initializeState_ToUse() {
-    mAnmGroups[0].playBackwardsOnce();
+    mAnmGroups[0].setBackwardsOnce();
+    mAnmGroups[0].setToStart();
     mAnmGroups[0].setAnimEnable(true);
 }
 void dLytMeter2Button_c::executeState_ToUse() {
@@ -156,7 +159,7 @@ void dLytMeter2Button_c::executeState_ToUse() {
         mStateMgr.changeState(StateID_Wait);
     }
 
-    if (mAnmGroups[0].isFlag2()) {
+    if (mAnmGroups[0].isEnabled()) {
         mAnmGroups[0].play();
     }
 }
@@ -165,7 +168,8 @@ void dLytMeter2Button_c::finalizeState_ToUse() {
 }
 
 void dLytMeter2Button_c::initializeState_ToUnuse() {
-    mAnmGroups[0].playLoop();
+    mAnmGroups[0].setForwardOnce();
+    mAnmGroups[0].setToStart();
     mAnmGroups[0].setAnimEnable(true);
 }
 void dLytMeter2Button_c::executeState_ToUnuse() {
@@ -173,7 +177,7 @@ void dLytMeter2Button_c::executeState_ToUnuse() {
         mStateMgr.changeState(StateID_Unuse);
     }
 
-    if (mAnmGroups[0].isFlag2()) {
+    if (mAnmGroups[0].isEnabled()) {
         mAnmGroups[0].play();
     }
 }

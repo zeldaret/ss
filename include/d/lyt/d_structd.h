@@ -58,6 +58,18 @@ struct dLytStructDInArray {
     u16 field_0x0E;
 };
 
+/**
+ * This whole file setup is from the days where I had no idea how this game's UI code works
+ * and I simply started naming the structs that appeared "StructA" and so on.
+ *
+ * The classes in this file are related to cursor pointing. UI code will generally
+ * contain one or more "dLytStructD", give it an nw4r::lyt::Pane, register it in the
+ * "dLytStructDList", and then ask the dCsBase_c which "dLytStructD" it's pointing at
+ * to compare it to the own "dLytStructD".
+ *
+ * There's a base class! dLytStructD will report its type as 'lyt ' but there also
+ * is a 'cc  ' type used by the dStageMgr_c. d2d may not be a good namespace here!
+ */
 struct dLytStructD : dLytStructD_Base {
     dLytStructD()
         : field_0x18(0), field_0x1C(nullptr), field_0x20(0), field_0x22(0), field_0x23(0), field_0x24(nullptr) {}

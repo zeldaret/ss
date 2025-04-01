@@ -27,7 +27,7 @@ void dLytPauseDisp00_c::init() {
     }
 
     for (int i = 0; i < 0x18; i++) {
-        field_0x2050[i].init(nullptr, lbl_804E8898[i]);
+        field_0x2050[i].build(nullptr, lbl_804E8898[i]);
         mSubpanes.PushBack(&field_0xE11C[i]);
     }
 

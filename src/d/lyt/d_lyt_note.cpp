@@ -60,7 +60,7 @@ void dLytNote_c::executeState_In() {
         mStateMgr.changeState(StateID_Move);
     }
 
-    if (mAnmGroups[NOTE_ANIM_GET].isFlag2()) {
+    if (mAnmGroups[NOTE_ANIM_GET].isEnabled()) {
         mAnmGroups[NOTE_ANIM_GET].play();
     }
 }
@@ -129,7 +129,7 @@ void dLytNote_c::executeState_Out() {
         mStateMgr.changeState(StateID_Wait);
     }
 
-    if (mAnmGroups[mOutAnim].isFlag2()) {
+    if (mAnmGroups[mOutAnim].isEnabled()) {
         mAnmGroups[mOutAnim].play();
     }
 }

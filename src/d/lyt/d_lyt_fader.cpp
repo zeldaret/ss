@@ -39,7 +39,7 @@ void dLytFader_c::setStatus(EStatus status) {
         mLytBase.unbindAnims();
         d2d::AnmGroup_c *s = &mLytStructAs[0];
         s->setDirection(false);
-        s->setToStart();
+        s->setFrame(0.0f);
         s->setAnimEnable(true);
         mLytBase.calc();
         fn_80175BC0(2);
@@ -112,6 +112,7 @@ void dLytFader_c::fn_801758F0() {
     s->setDirection(false);
     s->setFrame(0.0f);
     s->setRate(20.0f / (mFrame - 1));
+    s->setAnimEnable(true);
     mLytBase.getLayout()->GetRootPane()->SetVisible(true);
 }
 
@@ -132,6 +133,7 @@ void dLytFader_c::fn_80175A50() {
     s->setDirection(false);
     s->setFrame(0.0f);
     s->setRate(20.0f / (mFrame - 1));
+    s->setAnimEnable(true);
     mLytBase.getLayout()->GetRootPane()->SetVisible(true);
 }
 

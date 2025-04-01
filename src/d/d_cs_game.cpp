@@ -362,7 +362,7 @@ void dCsGame_c::lytItemCursor_c::lytBowCsr_c::initializeState_AimStart() {
     mAnm[MAIN_ANIM_ARROW_ON].setFrame(0.0f);
 }
 void dCsGame_c::lytItemCursor_c::lytBowCsr_c::executeState_AimStart() {
-    if (mAnm[MAIN_ANIM_ARROW_ON].isFlag2()) {
+    if (mAnm[MAIN_ANIM_ARROW_ON].isEnabled()) {
         mAnm[MAIN_ANIM_ARROW_ON].play();
         if (mAnm[MAIN_ANIM_ARROW_ON].isEndReached()) {
             mpLyt->calc();
@@ -404,7 +404,7 @@ void dCsGame_c::lytItemCursor_c::lytBowCsr_c::initializeState_Charge() {
 }
 void dCsGame_c::lytItemCursor_c::lytBowCsr_c::executeState_Charge() {
     if (field_0x54 >= 1.0f) {
-        if (!mAnm[MAIN_ANIM_ARROW_PEAK].isFlag2()) {
+        if (!mAnm[MAIN_ANIM_ARROW_PEAK].isEnabled()) {
             mAnm[MAIN_ANIM_ARROW_PEAK].setAnimEnable(true);
             mAnm[MAIN_ANIM_ARROW_PEAK].setFrame(0.0f);
             SmallSoundManager::GetInstance()->playSound(SE_S_BW_ALIGN_SIGHT);
@@ -521,7 +521,7 @@ void dCsGame_c::lytItemCursor_c::lytPachinkoCsr_c::executeState_ChargeFull() {
     if (field_0x50) {
         if (mAnm[MAIN_ANIM_SLING_PEAK].isEndReached()) {
             mpLyt->calc();
-        } else if (mAnm[MAIN_ANIM_SLING_PEAK].isFlag2()) {
+        } else if (mAnm[MAIN_ANIM_SLING_PEAK].isEnabled()) {
             mAnm[MAIN_ANIM_SLING_PEAK].play();
         }
     } else {
@@ -555,7 +555,7 @@ void dCsGame_c::lytItemCursor_c::lytVacuumCsr_c::executeState_Normal() {
     if (field_0x5C) {
         mAnm[MAIN_ANIM_VACUUM_LOCK].setAnimEnable(true);
         mAnm[MAIN_ANIM_VACUUM_LOCK].setForward();
-        mAnm[MAIN_ANIM_VACUUM_LOCK].setToEnd2();
+        mAnm[MAIN_ANIM_VACUUM_LOCK].setToStart();
         mAnm[MAIN_ANIM_LOOP].setAnimEnable(false);
         mStateMgr.changeState(StateID_ToLock);
     } else {
@@ -583,7 +583,7 @@ void dCsGame_c::lytItemCursor_c::lytVacuumCsr_c::executeState_Lock() {
     if (!field_0x5C) {
         mAnm[MAIN_ANIM_VACUUM_LOCK].setAnimEnable(true);
         mAnm[MAIN_ANIM_VACUUM_LOCK].setBackward();
-        mAnm[MAIN_ANIM_VACUUM_LOCK].setToEnd2();
+        mAnm[MAIN_ANIM_VACUUM_LOCK].setToStart();
         mAnm[MAIN_ANIM_LOCK_LOOP].setAnimEnable(false);
         mStateMgr.changeState(StateID_ToNormal);
     } else {

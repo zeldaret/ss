@@ -410,11 +410,20 @@ d/lyt/d_lyt_do_button.cpp:
 d/lyt/d_lyt_common_icon_material.cpp:
 	.text       start:0x8010F820 end:0x80111718
 	.ctors      start:0x804DB730 end:0x804DB734
+	.rodata     start:0x804E7330 end:0x804E7390
+	.data       start:0x8051ACD8 end:0x8051B070
+	.sdata      start:0x80572530 end:0x80572558
+	.sdata2     start:0x80579DA8 end:0x80579DB8
+	.bss        start:0x805ACF88 end:0x805AD088
 
 d/lyt/d_lyt_common_icon_item.cpp:
 	.text       start:0x80111720 end:0x80113ED8
 	.ctors      start:0x804DB734 end:0x804DB738
+	.rodata     start:0x804E7390 end:0x804E7430
 	.data       start:0x8051B070 end:0x8051B5A0
+	.sdata      start:0x80572558 end:0x80572580
+	.sdata2     start:0x80579DB8 end:0x80579DD0
+	.bss        start:0x805AD088 end:0x805AD188
 
 d/lyt/d_lyt_msg_window.cpp:
 	.text       start:0x801148F0 end:0x8011C8C8
@@ -557,6 +566,7 @@ d/lyt/d_lyt_pause_disp_00.cpp:
 d/lyt/d_lyt_pause_disp_01.cpp:
 	.text       start:0x8015EDF0 end:0x80161F98
 	.ctors      start:0x804DB79C end:0x804DB7A0
+	.data       start:0x80525EE0 end:0x80526610
 
 d/lyt/d_lyt_pause_info.cpp:
 	.text       start:0x80161FA0 end:0x80163568
