@@ -5,6 +5,8 @@
 #include "nw4r/lyt/lyt_textBox.h"
 #include "nw4r/lyt/lyt_types.h"
 
+class dTagProcessor_c;
+
 class dTextBox_c : public nw4r::lyt::TextBox {
     friend class dWindow_c;
 
@@ -26,6 +28,10 @@ public:
         nw4r::lyt::TextBox::SetFontSize(value);
     }
 
+    void set0x1F6(u8 val) {
+        field_0x1F6 = val;
+    }
+
     void set0x1F8(u8 val) {
         field_0x1F8 = val;
     }
@@ -39,6 +45,7 @@ public:
     }
 
     void fn_800AF930(const wchar_t *);
+    void fn_800AF540(const wchar_t *text, dTagProcessor_c *tagProcessor, ...);
 
     // @bug: This does not implement UT's RTTI, so casts to dTextBox_c will
     // succeed even if all you have is a lyt::TextBox
@@ -49,7 +56,9 @@ private:
     /* 0x108 */ u8 field_0x108[0x118 - 0x108];
     /* 0x118 */ nw4r::lyt::Size mTextScale;
     /* 0x120 */ f32 mScale;
-    /* 0x124 */ u8 field_0x124[0x1F8 - 0x124];
+    /* 0x124 */ u8 field_0x124[0x1F6 - 0x124];
+    /* 0x1F6 */ u8 field_0x1F6;
+    /* 0x1F7 */ u8 field_0x1F7;
     /* 0x1F8 */ u8 field_0x1F8;
     /* 0x1F9 */ u8 field_0x1F9[0x204 - 0x1F9];
 };

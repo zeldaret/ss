@@ -102,7 +102,7 @@ bool dLytMeter1Button_c::build(d2d::ResAccIf_c *resAcc) {
 
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].init(btn1BrlanMap[i].mFile, resAcc, mLyt.getLayout(), btn1BrlanMap[i].mName);
-        mAnmGroups[i].setDirection(false);
+        mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
     }
     // TODO
@@ -127,7 +127,7 @@ bool dLytMeter1Button_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytMeter1Button_c::remove() {
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].unbind();
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
     return true;
 }
@@ -215,7 +215,7 @@ bool dLytMeter2Button_c::build(d2d::ResAccIf_c *resAcc) {
 
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].init(btn2BrlanMap[i].mFile, resAcc, mLyt.getLayout(), btn2BrlanMap[i].mName);
-        mAnmGroups[i].setDirection(false);
+        mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
     }
     mpWindow = mLyt.getWindow(sWindowName2);
@@ -237,7 +237,7 @@ bool dLytMeter2Button_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytMeter2Button_c::remove() {
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].unbind();
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
     return true;
 }
@@ -333,7 +333,7 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setPriority(0x8A);
     for (int i = 0; i < 34; i++) {
         mAnmGroups[i].init(meterBrlanMap[i].mFile, resAcc, mLyt.getLayout(), meterBrlanMap[i].mName);
-        mAnmGroups[i].setDirection(false);
+        mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
     }
 
@@ -460,7 +460,7 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
 
 bool dLytMeter_c::remove() {
     for (int i = 0; i < 34; i++) {
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
 
     

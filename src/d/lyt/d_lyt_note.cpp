@@ -142,7 +142,7 @@ bool dLytNote_c::build(d2d::ResAccIf_c *resAcc) {
 
     for (int i = 0; i < 6; i++) {
         mAnmGroups[i].init(brlanMap[i].mFile, resAcc, mLyt.getLayout(), brlanMap[i].mName);
-        mAnmGroups[i].setDirection(false);
+        mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
     }
 
@@ -168,7 +168,7 @@ bool dLytNote_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytNote_c::remove() {
     for (int i = 0; i < 6; i++) {
         // @bug? .unbind call is missing
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
     return true;
 }

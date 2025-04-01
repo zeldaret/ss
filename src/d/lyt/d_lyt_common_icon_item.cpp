@@ -45,7 +45,7 @@ bool dLytCommonIconItemPart1_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.build("commonIcon_02.brlyt", nullptr);
     for (int i = 0; i < ITEM_PART_1_NUM_ANIMS; i++) {
         mAnm[i].init(brlanMapPart1[i].mFile, resAcc, mLyt.getLayout(), brlanMapPart1[i].mName);
-        mAnm[i].setDirection(false);
+        mAnm[i].bind(false);
         mAnm[i].setRate(1.0f);
     }
 
@@ -61,7 +61,7 @@ bool dLytCommonIconItemPart1_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytCommonIconItemPart1_c::remove() {
     for (int i = 0; i < ITEM_PART_1_NUM_ANIMS; i++) {
         mAnm[i].unbind();
-        mAnm[i].afterUnbind();
+        mAnm[i].remove();
     }
     return true;
 }
@@ -276,7 +276,7 @@ bool dLytCommonIconItemPart2_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.build("commonIcon_03.brlyt", nullptr);
     for (int i = 0; i < ITEM_PART_2_NUM_ANIMS; i++) {
         mAnm[i].init(brlanMapPart2[i].mFile, resAcc, mLyt.getLayout(), brlanMapPart2[i].mName);
-        mAnm[i].setDirection(false);
+        mAnm[i].bind(false);
         mAnm[i].setRate(1.0f);
     }
 
@@ -292,7 +292,7 @@ bool dLytCommonIconItemPart2_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytCommonIconItemPart2_c::remove() {
     for (int i = 0; i < ITEM_PART_2_NUM_ANIMS; i++) {
         mAnm[i].unbind();
-        mAnm[i].afterUnbind();
+        mAnm[i].remove();
     }
     return true;
 }
@@ -600,7 +600,7 @@ bool dLytCommonIconItemPart3_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.build("commonIcon_04.brlyt", nullptr);
     for (int i = 0; i < ITEM_PART_3_NUM_ANIMS; i++) {
         mAnm[i].init(brlanMapPart3[i].mFile, resAcc, mLyt.getLayout(), brlanMapPart3[i].mName);
-        mAnm[i].setDirection(false);
+        mAnm[i].bind(false);
         mAnm[i].setRate(1.0f);
     }
 
@@ -612,7 +612,7 @@ bool dLytCommonIconItemPart3_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytCommonIconItemPart3_c::remove() {
     for (int i = 0; i < ITEM_PART_3_NUM_ANIMS; i++) {
         mAnm[i].unbind();
-        mAnm[i].afterUnbind();
+        mAnm[i].remove();
     }
     return true;
 }

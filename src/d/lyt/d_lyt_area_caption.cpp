@@ -43,7 +43,7 @@ bool dLytAreaCaptionParts_c::init(int first) {
                 mAnmCtrlInUse[i] = false;
             } else {
                 mAnmGroups[i].init(brlanMap1[i].mFile, &mResAcc, mLyt.getLayout(), brlanMap1[i].mName);
-                mAnmGroups[i].setDirection(false);
+                mAnmGroups[i].bind(false);
                 mAnmGroups[i].setAnimEnable(false);
                 mAnmCtrlInUse[i] = true;
             }
@@ -56,7 +56,7 @@ bool dLytAreaCaptionParts_c::init(int first) {
                 mAnmCtrlInUse[i] = false;
             } else {
                 mAnmGroups[i].init(brlanMap2[i].mFile, &mResAcc, mLyt.getLayout(), brlanMap2[i].mName);
-                mAnmGroups[i].setDirection(false);
+                mAnmGroups[i].bind(false);
                 mAnmGroups[i].setAnimEnable(false);
                 mAnmCtrlInUse[i] = true;
             }
@@ -78,7 +78,7 @@ bool dLytAreaCaptionParts_c::remove() {
     for (int i = 0; i < 4; i++) {
         if (mAnmCtrlInUse[i]) {
             mAnmGroups[i].unbind();
-            mAnmGroups[i].afterUnbind();
+            mAnmGroups[i].remove();
         }
     }
     mResAcc.detach();
