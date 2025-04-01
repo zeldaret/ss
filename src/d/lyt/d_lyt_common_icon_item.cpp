@@ -369,25 +369,25 @@ void dLytCommonIconItemPart2_c::setShieldOnOff(bool onOff) {
 }
 
 void dLytCommonIconItemPart2_c::setItem(u8 item) {
-    if (item == LYT_CMN_32) {
+    if (item == LYT_CMN_Pouch32) {
         return;
     }
 
     u8 mappedItem = item;
     realizeUnk();
-    if (item == LYT_CMN_PotionHealthPlusPlusFull) {
+    if (item == LYT_CMN_PouchPotionHealthPlusPlusFull) {
         if (mNumber == 1) {
-            mappedItem = LYT_CMN_PotionHealthPlusPlusHalf;
+            mappedItem = LYT_CMN_PouchPotionHealthPlusPlusHalf;
         } else if (mNumber == 2) {
-            mappedItem = LYT_CMN_PotionHealthPlusPlusFull;
+            mappedItem = LYT_CMN_PouchPotionHealthPlusPlusFull;
         }
         mHasNumber = false;
         realizeNumberV();
-    } else if (item == LYT_CMN_PotionRepairPlusPlusFull) {
+    } else if (item == LYT_CMN_PouchPotionRepairPlusPlusFull) {
         if (mNumber == 1) {
-            mappedItem = LYT_CMN_PotionRepairPlusPlusHalf;
+            mappedItem = LYT_CMN_PouchPotionRepairPlusPlusHalf;
         } else if (mNumber == 2) {
-            mappedItem = LYT_CMN_PotionRepairPlusPlusFull;
+            mappedItem = LYT_CMN_PouchPotionRepairPlusPlusFull;
         }
         mHasNumber = false;
         realizeNumberV();
@@ -477,22 +477,22 @@ void dLytCommonIconItemPart2_c::realizeShieldOnOff(bool onOff) {
 
 u8 dLytCommonIconItemPart2_c::getShieldType() const {
     switch (mItem) {
-        case LYT_CMN_ShieldWoodA:
-        case LYT_CMN_ShieldWoodB:
-        case LYT_CMN_ShieldWoodC: {
+        case LYT_CMN_PouchShieldWoodA:
+        case LYT_CMN_PouchShieldWoodB:
+        case LYT_CMN_PouchShieldWoodC: {
             return 0;
         }
-        case LYT_CMN_ShieldIronA:
-        case LYT_CMN_ShieldIronB:
-        case LYT_CMN_ShieldIronC: {
+        case LYT_CMN_PouchShieldIronA:
+        case LYT_CMN_PouchShieldIronB:
+        case LYT_CMN_PouchShieldIronC: {
             return 1;
         }
-        case LYT_CMN_ShieldHolyA:
-        case LYT_CMN_ShieldHolyB:
-        case LYT_CMN_ShieldHolyC: {
+        case LYT_CMN_PouchShieldHolyA:
+        case LYT_CMN_PouchShieldHolyB:
+        case LYT_CMN_PouchShieldHolyC: {
             return 2;
         }
-        case LYT_CMN_ShieldHylian: {
+        case LYT_CMN_PouchShieldHylian: {
             return 3;
         }
         default: {
