@@ -407,6 +407,12 @@ d/lyt/d_lyt_do_button.cpp:
 	.data       start:0x8051A5A8 end:0x8051AC00
 	.bss        start:0x805ACE10 end:0x805ACF78
 
+d/lyt/d_lyt_common_a_btn.cpp:
+	.text       start:0x8010EF90 end:0x8010F818
+	.rodata     start:0x804E72E0 end:0x804E7330
+	.data       start:0x8051AC18 end:0x8051ACD8
+	.sdata2     start:0x80579D98 end:0x80579DA8
+
 d/lyt/d_lyt_common_icon_material.cpp:
 	.text       start:0x8010F820 end:0x80111718
 	.ctors      start:0x804DB730 end:0x804DB734
@@ -425,46 +431,51 @@ d/lyt/d_lyt_common_icon_item.cpp:
 	.sdata2     start:0x80579DB8 end:0x80579DD0
 	.bss        start:0x805AD088 end:0x805AD188
 
-d/lyt/d_lyt_msg_window.cpp:
+d/lyt/msg_window/d_lyt_msg_window.cpp:
 	.text       start:0x801148F0 end:0x8011C8C8
 	.ctors      start:0x804DB738 end:0x804DB73C
 
-d/lyt/d_lyt_msg_window_select_btn.cpp:
+d/lyt/msg_window/d_lyt_msg_window_select_btn.cpp:
 	.text       start:0x8011C8D0 end:0x80120988
 	.ctors      start:0x804DB73C end:0x804DB740
 
-d/lyt/d_lyt_msg_window_base.cpp:
+d/lyt/msg_window/d_lyt_msg_window_base.cpp:
 	.text       start:0x80120A20 end:0x80121068
 
-d/lyt/d_lyt_msg_window_talk.cpp:
+d/lyt/msg_window/d_lyt_msg_window_talk.cpp:
 	.text       start:0x80121070 end:0x801223C8
 	.ctors      start:0x804DB740 end:0x804DB744
 
-d/lyt/d_lyt_msg_window_link.cpp:
+d/lyt/msg_window/d_lyt_msg_window_link.cpp:
 	.text       start:0x801223D0 end:0x80123738
 	.ctors      start:0x804DB744 end:0x804DB748
 
-d/lyt/d_lyt_msg_window_get.cpp:
+d/lyt/msg_window/d_lyt_msg_window_get.cpp:
 	.text       start:0x80123740 end:0x80124678
 	.ctors      start:0x804DB748 end:0x804DB74C
 
-d/lyt/d_lyt_msg_window_sword.cpp:
+d/lyt/msg_window/d_lyt_msg_window_sword.cpp:
 	.text       start:0x80124680 end:0x80125BA8
 	.ctors      start:0x804DB74C end:0x804DB750
 
-d/lyt/d_lyt_msg_window_wood.cpp:
+d/lyt/msg_window/d_lyt_msg_window_wood.cpp:
 	.text       start:0x80125BB0 end:0x801267F8
 	.ctors      start:0x804DB750 end:0x804DB754
+	.rodata     start:0x804E75C0 end:0x804E75D8
+	.data       start:0x8051D8A0 end:0x8051DB08
+	.sdata      start:0x805725E0 end:0x805725F8
+	.sdata2     start:0x80579EC0 end:0x80579EC8
+	.bss        start:0x805AEDF0 end:0x805AEEF0
 
-d/lyt/d_lyt_msg_window_stone.cpp:
+d/lyt/msg_window/d_lyt_msg_window_stone.cpp:
 	.text       start:0x80126800 end:0x80127478
 	.ctors      start:0x804DB754 end:0x804DB758
 
-d/lyt/d_lyt_msg_window_demo.cpp:
+d/lyt/msg_window/d_lyt_msg_window_demo.cpp:
 	.text       start:0x80127480 end:0x801281F8
 	.ctors      start:0x804DB758 end:0x804DB75C
 
-d/lyt/d_lyt_simple_window.cpp:
+d/lyt/msg_window/d_lyt_simple_window.cpp:
 	.text       start:0x80128200 end:0x8012B948
 	.ctors      start:0x804DB75C end:0x804DB760
 

@@ -24,7 +24,7 @@ bool dLytMeterShieldGauge_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytMeterShieldGauge_c::remove() {
     for (int i = 0; i < 8; i++) {
         mAnmGroups[i].unbind();
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
     return true;
 }

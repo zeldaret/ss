@@ -94,7 +94,7 @@ bool dLytMeterABtn_c::build(d2d::ResAccIf_c *resAcc) {
 
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].init(brlanMap[i].mFile, resAcc, mLyt.getLayout(), brlanMap[i].mName);
-        mAnmGroups[i].setDirection(false);
+        mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
     }
 
@@ -133,7 +133,7 @@ bool dLytMeterABtn_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytMeterABtn_c::remove() {
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].unbind();
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
     return true;
 }

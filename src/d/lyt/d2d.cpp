@@ -811,7 +811,7 @@ bool AnmGroupBase_c::init(
     return true;
 }
 
-bool AnmGroupBase_c::setDirection(bool b) {
+bool AnmGroupBase_c::bind(bool bDisable) {
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     if (anmTransform == nullptr) {
         return false;
@@ -823,7 +823,7 @@ bool AnmGroupBase_c::setDirection(bool b) {
 
     nw4r::lyt::BindAnimation(mpGroup, anmTransform, false, b);
     mFlags |= ANMGROUP_FLAG_BOUND;
-    if (b) {
+    if (bDisable) {
         mFlags = (mFlags & ~ANMGROUP_FLAG_ENABLE);
     } else {
         mFlags |= ANMGROUP_FLAG_ENABLE;
@@ -855,7 +855,7 @@ bool AnmGroupBase_c::unbind() {
     return true;
 }
 
-bool AnmGroupBase_c::afterUnbind() {
+bool AnmGroupBase_c::remove() {
     return true;
 }
 
@@ -905,7 +905,7 @@ bool AnmGroups::init(
 
 void AnmGroups::remove() {
     for (int i = 0; i < mNumAnmGroups; i++) {
-        mpAnmGroups[i].afterUnbind();
+        mpAnmGroups[i].remove();
     }
 }
 

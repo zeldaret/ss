@@ -41,7 +41,7 @@ bool dLytCommonIconMaterialPart1_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.build("commonIcon_00.brlyt", nullptr);
     for (int i = 0; i < MATERIAL_PART_1_NUM_ANIMS; i++) {
         mAnm[i].init(brlanMapPart1[i].mFile, resAcc, mLyt.getLayout(), brlanMapPart1[i].mName);
-        mAnm[i].setDirection(false);
+        mAnm[i].bind(false);
         mAnm[i].setRate(1.0f);
     }
 
@@ -57,7 +57,7 @@ bool dLytCommonIconMaterialPart1_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytCommonIconMaterialPart1_c::remove() {
     for (int i = 0; i < MATERIAL_PART_1_NUM_ANIMS; i++) {
         mAnm[i].unbind();
-        mAnm[i].afterUnbind();
+        mAnm[i].remove();
     }
     return true;
 }
@@ -240,7 +240,7 @@ bool dLytCommonIconMaterialPart2_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.build("commonIcon_01.brlyt", nullptr);
     for (int i = 0; i < MATERIAL_PART_2_NUM_ANIMS; i++) {
         mAnm[i].init(brlanMapPart2[i].mFile, resAcc, mLyt.getLayout(), brlanMapPart2[i].mName);
-        mAnm[i].setDirection(false);
+        mAnm[i].bind(false);
         mAnm[i].setRate(1.0f);
     }
 
@@ -256,7 +256,7 @@ bool dLytCommonIconMaterialPart2_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytCommonIconMaterialPart2_c::remove() {
     for (int i = 0; i < MATERIAL_PART_2_NUM_ANIMS; i++) {
         mAnm[i].unbind();
-        mAnm[i].afterUnbind();
+        mAnm[i].remove();
     }
     return true;
 }
