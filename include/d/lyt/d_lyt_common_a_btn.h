@@ -24,18 +24,6 @@ public:
         return mLyt.getName();
     }
 
-    void openMaybe() {
-        field_0x1B0 = 1;
-    }
-
-    void closeMaybe() {
-        field_0x1B0 = 0;
-    }
-
-    u8 shouldBeOpen() const {
-        return field_0x1B0;
-    }
-
     u8 isDoneOut() const {
         return mIsDoneOut;
     }
@@ -59,7 +47,6 @@ public:
     };
 
 private:
-
     enum OutState {
         OUT_STATE_DECIDING,
         OUT_STATE_GOTO_OUT,
@@ -70,12 +57,12 @@ private:
     void setState(ABtnState state);
 
     void runExecuteFunc();
-    
+
     void executeStateInvisible();
     void executeStateIn();
     void executeStateVisible();
     void executeStateDecideOut();
-    
+
     void gotoStateInvisible();
     void gotoStateIn();
     void goToStateVisible();
@@ -97,7 +84,6 @@ private:
     /* 0x1AD */ bool mNoDecide;
     /* 0x1AE */ u8 field_0x1AE;
     /* 0x1AF */ u8 field_0x1AF;
-    /* 0x1B0 */ u8 field_0x1B0;
 };
 
 #endif

@@ -12,10 +12,10 @@ public:
     /* vt 0x10 */ virtual bool build(void *unk, d2d::ResAccIf_c *resAcc, dTagProcessor_c *tagProcessor);
     /* vt 0x14 */ virtual bool remove();
     /* vt 0x18 */ virtual bool execute();
-    /* vt 0x1C */ virtual void vt_0x1C();
-    /* vt 0x20 */ virtual bool vt_0x20() const;
-    /* vt 0x24 */ virtual void vt_0x24();
-    /* vt 0x28 */ virtual bool vt_0x28() const;
+    /* vt 0x1C */ virtual void open();
+    /* vt 0x20 */ virtual bool isOpening() const;
+    /* vt 0x24 */ virtual void close();
+    /* vt 0x28 */ virtual bool isClosing() const;
     /* vt 0x2C */ virtual bool setText(const wchar_t *text);
     /* vt 0x30 */ virtual dTextBox_c *vt_0x30();
     /* vt 0x34 */ virtual void vt_0x34();
