@@ -16,10 +16,10 @@ public:
     /* vt 0x10 */ virtual bool build(void *unk, d2d::ResAccIf_c *resAcc, dTagProcessor_c *tagProcessor) override;
     /* vt 0x14 */ virtual bool remove() override;
     /* vt 0x18 */ virtual bool execute() override;
-    /* vt 0x1C */ virtual void vt_0x1C() override;
-    /* vt 0x20 */ virtual bool vt_0x20() const override;
-    /* vt 0x24 */ virtual void vt_0x24() override;
-    /* vt 0x28 */ virtual bool vt_0x28() const override;
+    /* vt 0x1C */ virtual void open() override;
+    /* vt 0x20 */ virtual bool isOpening() const override;
+    /* vt 0x24 */ virtual void close() override;
+    /* vt 0x28 */ virtual bool isClosing() const override;
     /* vt 0x2C */ virtual bool setText(const wchar_t *text) override;
     /* vt 0x30 */ virtual dTextBox_c *vt_0x30() override {
         return mpTextboxes[0];
@@ -50,6 +50,7 @@ private:
     /* 0x530 */ nw4r::lyt::Pane *mpPanes[2];
     /* 0x538 */ dTagProcessor_c *mpTagProcessor;
     /* 0x53C */ dLytCommonABtn_c mCommon;
+    /* 0x6EC */ bool mShouldBeOpen;
 };
 
 #endif

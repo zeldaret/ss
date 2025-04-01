@@ -110,7 +110,7 @@ void dLytMsgWindowWood_c::initializeState_Invisible() {
     mCommon.resetToInvisble();
 }
 void dLytMsgWindowWood_c::executeState_Invisible() {
-    if (mCommon.shouldBeOpen()) {
+    if (mShouldBeOpen) {
         mStateMgr.changeState(StateID_In);
     }
 }
@@ -130,7 +130,7 @@ void dLytMsgWindowWood_c::finalizeState_In() {}
 
 void dLytMsgWindowWood_c::initializeState_Visible() {}
 void dLytMsgWindowWood_c::executeState_Visible() {
-    if (!mCommon.shouldBeOpen()) {
+    if (!mShouldBeOpen) {
         mStateMgr.changeState(StateID_Out);
     }
 }
@@ -166,19 +166,19 @@ void dLytMsgWindowWood_c::draw() {
     mLyt.draw();
 }
 
-void dLytMsgWindowWood_c::vt_0x1C() {
-    mCommon.openMaybe();
+void dLytMsgWindowWood_c::open() {
+    mShouldBeOpen = true;
 }
 
-bool dLytMsgWindowWood_c::vt_0x20() const {
+bool dLytMsgWindowWood_c::isOpening() const {
     return !(*mStateMgr.getStateID() == StateID_In);
 }
 
-void dLytMsgWindowWood_c::vt_0x24() {
-    mCommon.closeMaybe();
+void dLytMsgWindowWood_c::close() {
+    mShouldBeOpen = false;
 }
 
-bool dLytMsgWindowWood_c::vt_0x28() const {
+bool dLytMsgWindowWood_c::isClosing() const {
     return !(*mStateMgr.getStateID() == StateID_Out);
 }
 
