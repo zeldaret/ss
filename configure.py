@@ -414,7 +414,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/msg_window/d_lyt_msg_window_get.cpp"),
             Object(NonMatching, "d/lyt/msg_window/d_lyt_msg_window_sword.cpp"),
             Object(Matching, "d/lyt/msg_window/d_lyt_msg_window_wood.cpp"),
-            Object(NonMatching, "d/lyt/msg_window/d_lyt_msg_window_stone.cpp"),
+            Object(Matching, "d/lyt/msg_window/d_lyt_msg_window_stone.cpp"),
             Object(NonMatching, "d/lyt/msg_window/d_lyt_msg_window_demo.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_simple_window.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_auto_caption.cpp"),
