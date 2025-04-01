@@ -189,13 +189,6 @@ struct AnmGroupBase_c {
     void setForward();
     void setBackward();
 
-    inline void setFrameAndControlThings(f32 frame) {
-        bind(false);
-        setAnimEnable(true);
-        mpFrameCtrl->setFrame(frame);
-        syncAnmFrame();
-    }
-
     inline void play() {
         mpFrameCtrl->play();
         syncAnmFrame();

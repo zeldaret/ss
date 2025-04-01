@@ -821,7 +821,7 @@ bool AnmGroupBase_c::bind(bool bDisable) {
         return false;
     }
 
-    nw4r::lyt::BindAnimation(mpGroup, anmTransform, false, b);
+    nw4r::lyt::BindAnimation(mpGroup, anmTransform, false, bDisable);
     mFlags |= ANMGROUP_FLAG_BOUND;
     if (bDisable) {
         mFlags = (mFlags & ~ANMGROUP_FLAG_ENABLE);
