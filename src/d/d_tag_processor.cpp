@@ -985,7 +985,6 @@ f32 dTagProcessor_c::fn_800B8040(s8 factor, u32 windowType) {
             case 2:
                 x = 1.1f;
                 break;
-                // @bug: No default, so uninitialized is possible
         }
         x *= UnkTextThing::getFn800B1F10();
         return x * f1;

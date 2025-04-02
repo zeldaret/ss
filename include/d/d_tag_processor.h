@@ -70,6 +70,10 @@ public:
     s32 tickPauseFrame();
     s32 tick0x830();
 
+    void setTextbox(dTextBox_c *box) {
+        field_0x004 = box;
+    }
+
     s32 getNumLinesMaybe() const {
         return mCommandInsert;
     }

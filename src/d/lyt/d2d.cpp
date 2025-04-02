@@ -455,7 +455,7 @@ void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 sca
 
     textBox->AllocStringBuffer(0x200);
     textBox->setLytBase(this);
-    textBox->fn_800B0F40();
+    textBox->loadTextFormatVars();
 
     if (posX != -9999.0f || posY != -9999.0f) {
         if (posX == -9999.0f) {
