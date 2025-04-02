@@ -44,6 +44,7 @@ public:
         // TODO
     }
 
+    s32 fn_800AF6B0(const wchar_t *, dTagProcessor_c *tagProcessor);
     void fn_800AF930(const wchar_t *);
     void fn_800AF540(const wchar_t *text, dTagProcessor_c *tagProcessor, ...);
 

@@ -487,10 +487,20 @@ d/lyt/msg_window/d_lyt_simple_window.cpp:
 d/lyt/d_lyt_auto_caption.cpp:
 	.text       start:0x8012B950 end:0x8012C568
 	.ctors      start:0x804DB760 end:0x804DB764
+	.rodata     start:0x804E7668 end:0x804E7688
+	.data       start:0x8051E548 end:0x8051E7C0
+	.sdata      start:0x80572638 end:0x80572648
+	.sdata2     start:0x80579EF8 end:0x80579F10
+	.bss        start:0x805AF1F0 end:0x805AF2F0
 
 d/lyt/d_lyt_auto_explain.cpp:
 	.text       start:0x8012C570 end:0x8012D188
 	.ctors      start:0x804DB764 end:0x804DB768
+	.rodata     start:0x804E7688 end:0x804E76A0
+	.data       start:0x8051E7C0 end:0x8051EA08
+	.sdata      start:0x80572648 end:0x80572658
+	.sdata2     start:0x80579F10 end:0x80579F28
+	.bss        start:0x805AF2F0 end:0x805AF3F0
 
 d/lyt/d_lyt_map_capture.cpp:
 	.text       start:0x8012D190 end:0x8012DC28

@@ -24,7 +24,7 @@ public:
         return mLyt.getName();
     }
 
-    u8 isDoneOut() const {
+    bool isDoneOut() const {
         return mIsDoneOut;
     }
 
