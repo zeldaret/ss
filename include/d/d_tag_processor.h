@@ -13,7 +13,9 @@ public:
     virtual ~dTagProcessor_c();
 
     void
-    eventFlowTextProcessingRelated(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen);
+    format(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen, void *unk, ...);
+    void
+    formatV(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen, void *unk, va_list list);
 
     virtual nw4r::ut::Operation Process(u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx) override;
     virtual nw4r::ut::Operation CalcRect(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx) override;
@@ -72,6 +74,26 @@ public:
         return mCommandInsert;
     }
 
+    u8 getMsgWindowSubtype() const {
+        return field_0x90C;
+    }
+
+    void setMsgWindowSubtype(u8 type) {
+        field_0x90C = type;
+    }
+
+    void setField_0xEE1(u8 val) {
+        field_0xEE1 = val;
+    }
+
+    void setField_0xEE2(u8 val) {
+        field_0xEE2 = val;
+    }
+
+    void setField_0xEE3(u8 val) {
+        field_0xEE3 = val;
+    }
+
 private:
     /* 0x004 */ dTextBox_c *field_0x004;
     /* 0x008 */ wchar_t field_0x008[4][256];
@@ -126,7 +148,7 @@ private:
     /* 0x90E */ u8 field_0x90E;
     /* 0x90F */ u8 field_0x90F[4];
     /* 0x914 */ f32 field_0x914[0x32]; // Maybe width for each individual line
-    /* 0x9DC */ s32 mCommandInsert;  // Maybe number of lines
+    /* 0x9DC */ s32 mCommandInsert;    // Maybe number of lines
     /* 0x9E0 */ wchar_t mStringArgs[8][64];
     /* 0xDE0 */ u8 field_0xDE0[0xEE0 - 0xDE0];
     /* 0xEE0 */ u8 field_0xEE0;

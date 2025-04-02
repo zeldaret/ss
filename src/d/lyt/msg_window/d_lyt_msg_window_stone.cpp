@@ -188,8 +188,8 @@ bool dLytMsgWindowStone_c::setText(const wchar_t *text) {
     mpTextboxes[0]->SetTagProcessor(mpTagProcessor);
     mpTextboxes[1]->SetTagProcessor(mpTagProcessor);
     mpTextboxes[2]->SetTagProcessor(mpTagProcessor);
-    mpTextboxes[0]->fn_800AF540(text, mpTagProcessor, 0);
-    mpTextboxes[1]->fn_800AF540(text, mpTagProcessor, 0);
-    mpTextboxes[2]->fn_800AF540(text, mpTagProcessor, 0);
+    mpTextboxes[0]->setTextWithTextProcessor(text, mpTagProcessor, 0);
+    mpTextboxes[1]->setTextWithTextProcessor(text, mpTagProcessor, 0);
+    mpTextboxes[2]->setTextWithTextProcessor(text, mpTagProcessor, 0);
     return true;
 }

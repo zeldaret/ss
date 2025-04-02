@@ -2,8 +2,12 @@
 #define D_LYT_TEXTBOX_H
 
 #include "d/lyt/d2d.h"
+#include "libms/msgfile.h"
+#include "nw4r/lyt/lyt_drawInfo.h"
 #include "nw4r/lyt/lyt_textBox.h"
 #include "nw4r/lyt/lyt_types.h"
+#include "nw4r/ut/ut_Rect.h"
+#include "nw4r/ut/ut_TextWriterBase.h"
 
 class dTagProcessor_c;
 
@@ -11,7 +15,8 @@ class dTextBox_c : public nw4r::lyt::TextBox {
     friend class dWindow_c;
 
 public:
-    dTextBox_c(const nw4r::lyt::res::TextBox *pBlock, const nw4r::lyt::ResBlockSet &ResBlockSet);
+    dTextBox_c(const nw4r::lyt::res::TextBox *pBlock, const nw4r::lyt::ResBlockSet &resBlockSet);
+    virtual void DrawSelf(const nw4r::lyt::DrawInfo &drawInfo) override; // at 0x18
 
     f32 GetLineWidth(f32 *pOutSpacing);
 
@@ -20,10 +25,10 @@ public:
     }
 
     void SetScale(f32 scale) {
-        nw4r::lyt::Size value(mTextScale);
+        nw4r::lyt::Size value(mMyTextScale);
         value.width *= scale;
         value.height *= scale;
-        mScale = scale;
+        mMyScale = scale;
         MySetScale(value);
         nw4r::lyt::TextBox::SetFontSize(value);
     }
@@ -37,31 +42,62 @@ public:
     }
 
     f32 getMyScale() const {
-        return mScale;
+        return mMyScale;
     }
 
     void fn_800E0A60(const char *area, ...) {
         // TODO
     }
 
-    s32 fn_800AF6B0(const wchar_t *, dTagProcessor_c *tagProcessor);
-    void fn_800AF930(const wchar_t *);
-    void fn_800AF540(const wchar_t *text, dTagProcessor_c *tagProcessor, ...);
+    void setTextWithGlobalTextProcessor(const wchar_t *str);
+    void setTextWithGlobalTextProcessor(const wchar_t *str, void *, ...);
+    void setMessageWithGlobalTextProcessor(const char *labelId, void *unused, void *, ...);
+    void setMessageWithGlobalTextProcessorV(const char *labelId, void *unused, void *, va_list list);
+    void setTextWithTextProcessor(const wchar_t *str, dTagProcessor_c *tagProcessor, void *, ...);
+    s32 calcTextLines(const wchar_t *src, dTagProcessor_c *tagProcessor);
+
+    void setMessageWithGlobalTextProcessorAndMsbtInfo(const MsbtInfo *info, const char *labelId, wchar_t *destBuf, u32 maxLen);
+
+    void fn_800B0F40();
 
     // @bug: This does not implement UT's RTTI, so casts to dTextBox_c will
     // succeed even if all you have is a lyt::TextBox
 private:
+    void init();
+    void MySetFontSize(const nw4r::lyt::Size &value);
     void MySetScale(const nw4r::lyt::Size &value);
 
+    void setTextWithGlobalTextProcessorV(const wchar_t *str, void *, va_list list);
+    void setTextWithTextProcessorV(const wchar_t *str, dTagProcessor_c *tagProcessor, void *, va_list list);
+
+    nw4r::ut::Rect GetMyTextDrawRect(nw4r::ut::TextWriterBase<wchar_t> *pWriter, bool *pbWideScreenUnk) const;
+
+    void fn_800AFD60(f32);
+
     /* 0x104 */ d2d::LytBase_c *mpLytBase;
-    /* 0x108 */ u8 field_0x108[0x118 - 0x108];
-    /* 0x118 */ nw4r::lyt::Size mTextScale;
-    /* 0x120 */ f32 mScale;
-    /* 0x124 */ u8 field_0x124[0x1F6 - 0x124];
+    /* 0x108 */ f32 mFixedWidth;
+    /* 0x10C */ u8 mIsWidthFixed;
+    /* 0x114 */ nw4r::lyt::Size mMyFontSize;
+    /* 0x118 */ nw4r::lyt::Size mMyTextScale;
+    /* 0x120 */ f32 mMyScale;
+    /* 0x124 */ nw4r::ut::TextWriterBase<wchar_t> mTextWriter;
+    /* 0x188 */ f32 field_0x188;
+    /* 0x18C */ f32 field_0x18C;
+    /* 0x190 */ f32 field_0x190;
+    /* 0x194 */ f32 field_0x194;
+    /* 0x198 */ u32 field_0x198[10];
+    /* 0x1C0 */ u8 mFontIdx;
+    /* 0x1C1 */ u8 mWindowSubtype;
+    /* 0x1C4 */ f32 field_0x1C4[10];
+    /* 0x1EC */ u8 field_0x1EC[10];
     /* 0x1F6 */ u8 field_0x1F6;
     /* 0x1F7 */ u8 field_0x1F7;
     /* 0x1F8 */ u8 field_0x1F8;
-    /* 0x1F9 */ u8 field_0x1F9[0x204 - 0x1F9];
+    /* 0x1F9 */ u8 field_0x1F9;
+    /* 0x1FA */ u8 field_0x1FA;
+    /* 0x1FC */ dTagProcessor_c *mpMyTagProcessor;
+    /* 0x200 */ bool mHasTextWriter;
+    /* 0x201 */ u8 field_0x201;
 };
 
 #endif

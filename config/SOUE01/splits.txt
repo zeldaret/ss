@@ -241,6 +241,10 @@ d/lyt/d_lyt_draw_mark.cpp:
 
 d/lyt/d_textbox.cpp:
 	.text       start:0x800AE960 end:0x800B1628
+	.data       start:0x80510780 end:0x80510820
+	.sdata      start:0x805722C0 end:0x805722D8
+	.sdata2     start:0x805797D0 end:0x805797F0
+	.bss        start:0x805A6370 end:0x805A6F70
 
 d/lyt/d_window.cpp:
 	.text       start:0x800B1630 end:0x800B1818

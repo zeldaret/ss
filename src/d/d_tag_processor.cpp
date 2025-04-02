@@ -212,8 +212,17 @@ struct StackThing {
     wchar_t us[4];
 };
 
-void dTagProcessor_c::eventFlowTextProcessingRelated(
-    dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen
+void dTagProcessor_c::format(
+    dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen, void *unk, ...
+) {
+    va_list l;
+    va_start(l, str);
+    formatV(textBox, src, dest, destLen, pOutLen, unk, l);
+    va_end(l);
+}
+
+void dTagProcessor_c::formatV(
+    dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen, void *unk, va_list list
 ) {
     s32 state3 = 0;
     s32 state4 = 0;
@@ -407,7 +416,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             }
         } else {
             if (textBox != nullptr) {
-                if (c == '\n') {
+                if (c == L'\n') {
                     *writePtr = c;
                     src++;
                     writePtr++;

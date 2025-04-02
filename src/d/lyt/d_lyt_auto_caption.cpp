@@ -45,14 +45,14 @@ void dLytAutoCaption_c::executeState_Invisible() {
 void dLytAutoCaption_c::finalizeState_Invisible() {}
 
 void dLytAutoCaption_c::initializeState_In() {
-    s32 unk = mpTextboxes[0]->fn_800AF6B0(mpTextboxes[0]->GetString(), mpTagProcessor);
+    s32 numTextLines = mpTextboxes[0]->calcTextLines(mpTextboxes[0]->GetString(), mpTagProcessor);
     f32 lineWidth = mpTextboxes[0]->GetLineWidth(nullptr);
     f32 frame = 0.0f;
     if (lineWidth <= 226.0f) {
-        if (unk > 1) {
+        if (numTextLines > 1) {
             frame = 1.0f;
         }
-    } else if (unk > 1) {
+    } else if (numTextLines > 1) {
         frame = 3.0f;
     } else {
         frame = 2.0f;
@@ -165,8 +165,8 @@ bool dLytAutoCaption_c::isClosing() const {
 bool dLytAutoCaption_c::setText(const wchar_t *text) {
     mpTextboxes[0]->SetTagProcessor(mpTagProcessor);
     mpTextboxes[1]->SetTagProcessor(mpTagProcessor);
-    mpTextboxes[0]->fn_800AF930(text);
-    mpTextboxes[1]->fn_800AF930(text);
+    mpTextboxes[0]->setTextWithGlobalTextProcessor(text);
+    mpTextboxes[1]->setTextWithGlobalTextProcessor(text);
     return true;
 }
 

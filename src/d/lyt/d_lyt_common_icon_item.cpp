@@ -182,7 +182,7 @@ void dLytCommonIconItemPart1_c::setNumber(s32 number) {
     std::memset(mNumberBuf, 0, sizeof(mNumberBuf));
     swprintf(mNumberBuf, ARRAY_LENGTH(mNumberBuf), L"%d", number);
     for (int i = 0; i < 2; i++) {
-        mpTextBoxes[i]->fn_800AF930(mNumberBuf);
+        mpTextBoxes[i]->setTextWithGlobalTextProcessor(mNumberBuf);
     }
 }
 
@@ -515,7 +515,7 @@ void dLytCommonIconItemPart2_c::setNumber(s32 number) {
     std::memset(mNumberBuf, 0, sizeof(mNumberBuf));
     swprintf(mNumberBuf, ARRAY_LENGTH(mNumberBuf), L"%d", number);
     for (int i = 0; i < 2; i++) {
-        mpTextBoxes[i]->fn_800AF930(mNumberBuf);
+        mpTextBoxes[i]->setTextWithGlobalTextProcessor(mNumberBuf);
     }
 }
 

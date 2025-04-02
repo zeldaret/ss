@@ -92,7 +92,7 @@ public:
     bool fn_800AB940(const char *name, int arg);
     bool fn_800AB9A0(dTextBox_c *textbox, int arg);
 
-    bool fn_800ABE50(dTextBox_c *textbox, int arg, void *unk);
+    bool fn_800ABE50(dTextBox_c *textbox, wchar_t *destBuf, u32 maxLen);
 
 private:
     void setPropertiesRecursive(nw4r::lyt::Pane *pane, f32, f32, f32, f32, f32);
@@ -101,9 +101,9 @@ private:
     bool fn_800ABB80(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg);
     bool fn_800ABCE0(const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg);
 
-    bool fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk);
+    bool fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen);
     bool fn_800AC1AC(
-        const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk
+        const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen
     );
     MsbtInfo *getMsbtInfo() const;
     bool fn_800AB930(dTextBox_c *box);
