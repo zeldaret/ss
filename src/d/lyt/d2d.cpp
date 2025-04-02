@@ -441,8 +441,7 @@ void LytBase_c::setPropertiesRecursive(nw4r::lyt::Pane *pane, f32 posX, f32 posY
     }
 }
 
-extern "C" const wchar_t *fn_801B2600(const char *);
-extern "C" void fn_800B0F40(dTextBox_c *);
+extern "C" const wchar_t *fn_801B2600(const wchar_t *);
 
 void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 scale, f32 spaceX, f32 spaceY) {
     if (pane->GetName()[0] != 'T') {
@@ -456,7 +455,7 @@ void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 sca
 
     textBox->AllocStringBuffer(0x200);
     textBox->setLytBase(this);
-    fn_800B0F40(textBox);
+    textBox->fn_800B0F40();
 
     if (posX != -9999.0f || posY != -9999.0f) {
         if (posX == -9999.0f) {
@@ -606,17 +605,16 @@ bool LytBase_c::fn_800ABCE0(
         str1.append(fmt);
     }
 
-    const char *text = LMS_GetTextByLabel(getMsbtInfo(), str1);
+    const wchar_t *text = LMS_GetTextByLabel(getMsbtInfo(), str1);
     if (text == nullptr) {
         return false;
     }
 
-    textbox1->fn_800AF930(fn_801B2600(text));
+    textbox1->setTextWithGlobalTextProcessor(fn_801B2600(text));
     return true;
 }
 
-// Now largely the same functions again, but with an additional argument
-bool LytBase_c::fn_800ABE50(dTextBox_c *textbox, int arg, void *unk) {
+bool LytBase_c::fn_800ABE50(dTextBox_c *textbox, wchar_t *destBuf, u32 maxLen) {
     if (getMsbtInfo() == nullptr) {
         return false;
     }
@@ -651,15 +649,15 @@ bool LytBase_c::fn_800ABE50(dTextBox_c *textbox, int arg, void *unk) {
     if (ty == 1) {
         dTextBox_c *otherBox = getTextBox(list->GetString());
         if (otherBox != nullptr) {
-            return fn_800AC040(textbox, otherBox, arg, unk);
+            return fn_800AC040(textbox, otherBox, destBuf, maxLen);
         }
     } else {
-        return fn_800AC1AC(list, textbox, textbox, arg, unk);
+        return fn_800AC1AC(list, textbox, textbox, destBuf, maxLen);
     }
     return false;
 }
 
-bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk) {
+bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen) {
     u16 num = textbox2->GetExtUserDataNum();
     if (num == 0) {
         return false;
@@ -679,13 +677,13 @@ bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg,
     if (found != 1) {
         return false;
     }
-    return fn_800AC1AC(list, textbox1, textbox2, arg, unk);
+    return fn_800AC1AC(list, textbox1, textbox2, destBuf, maxLen);
 }
 
 extern "C" void fn_800AF840(dTextBox_c *textbox1, MsbtInfo *, const char *, int arg, void *unk);
 
 bool LytBase_c::fn_800AC1AC(
-    const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk
+    const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen
 ) {
     s32 userDatInt = userDatum->GetInt();
     SizedString<0x40> str1;
@@ -698,7 +696,7 @@ bool LytBase_c::fn_800AC1AC(
         str1.append(fmt);
     }
 
-    fn_800AF840(textbox1, getMsbtInfo(), str1, arg, unk);
+    textbox1->setMessageWithGlobalTextProcessorAndMsbtInfo(getMsbtInfo(), str1, destBuf, maxLen);
     return true;
 }
 

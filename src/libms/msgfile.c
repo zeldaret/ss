@@ -30,7 +30,7 @@ void LMS_CloseMessage(struct MsbtInfo *info) {
     LMSi_Free(info);
 }
 
-int LMS_GetTextIndexByLabel(struct MsbtInfo *info, const char *label) {
+int LMS_GetTextIndexByLabel(const struct MsbtInfo *info, const char *label) {
     if (info->lbl1Index == -1) {
         return -2;
     } else {
@@ -38,7 +38,7 @@ int LMS_GetTextIndexByLabel(struct MsbtInfo *info, const char *label) {
     }
 }
 
-const char *LMS_GetText(struct MsbtInfo *info, int index) {
+const wchar_t *LMS_GetText(const struct MsbtInfo *info, int index) {
     if (info->txt2Index == -1) {
         return NULL;
     }
@@ -48,10 +48,10 @@ const char *LMS_GetText(struct MsbtInfo *info, int index) {
         return NULL;
     }
 
-    return &((const char *)header)[header[index + 1]];
+    return (const wchar_t*)&((const char *)header)[header[index + 1]];
 }
 
-const char *LMS_GetTextByLabel(struct MsbtInfo *info, const char *label) {
+const wchar_t *LMS_GetTextByLabel(const struct MsbtInfo *info, const char *label) {
     int index = LMS_GetTextIndexByLabel(info, label);
     if (index < 0) {
         return NULL;
@@ -60,11 +60,11 @@ const char *LMS_GetTextByLabel(struct MsbtInfo *info, const char *label) {
     }
 }
 
-const char *LMS_GetLabelByTextIndex(struct MsbtInfo *info, int index) {
+const char *LMS_GetLabelByTextIndex(const struct MsbtInfo *info, int index) {
     // TODO
 }
 
-struct MsbtAttrInfo *LMS_GetAttribute(struct MsbtInfo *info, int index) {
+struct MsbtAttrInfo *LMS_GetAttribute(const struct MsbtInfo *info, int index) {
     int *p = info->base.sectionInfos[info->atr1Index].ptr;
     return (struct MsbtAttrInfo *)&((const char *)p)[p[1] * index + 8];
 }
