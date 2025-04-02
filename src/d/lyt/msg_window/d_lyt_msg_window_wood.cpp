@@ -37,7 +37,7 @@ static const char *sTextBoxes[] = {
 
 static const char *sGroupName = "G_ref_00";
 
-bool dLytMsgWindowWood_c::build(void *unk, d2d::ResAccIf_c *resAcc, dTagProcessor_c *tagProcessor) {
+bool dLytMsgWindowWood_c::build(d2d::ResAccIf_c *resAcc1, d2d::ResAccIf_c *resAcc, dTagProcessor_c *tagProcessor) {
     mLyt.setResAcc(resAcc);
     mLyt.build("kanbanWindow_00.brlyt", nullptr);
     mLyt.setPriority(0x8A);
@@ -67,8 +67,8 @@ bool dLytMsgWindowWood_c::build(void *unk, d2d::ResAccIf_c *resAcc, dTagProcesso
     mpTextboxes[1]->set0x1F6(1);
 
     for (int i = 0; i < 1; i++) {
-        mNodes[i].mpLytPane = &mCommon;
-        mCommon.build(resAcc);
+        mNodes[i].mpLytPane = &mBtn;
+        mBtn.build(resAcc);
         mSubpaneList.PushBack(&mNodes[i]);
     }
 
@@ -99,7 +99,7 @@ bool dLytMsgWindowWood_c::remove() {
     for (int i = 0; i < 1; i++) {
         mNodes[i].mpLytPane->remove();
     }
-    mCommon.remove();
+    mBtn.remove();
     for (int i = 0; i < KANBAN_NUM_ANIMS; i++) {
         mAnm[i].remove();
     }
@@ -107,7 +107,7 @@ bool dLytMsgWindowWood_c::remove() {
 }
 
 void dLytMsgWindowWood_c::initializeState_Invisible() {
-    mCommon.resetToInvisble();
+    mBtn.resetToInvisble();
 }
 void dLytMsgWindowWood_c::executeState_Invisible() {
     if (mShouldBeOpen) {

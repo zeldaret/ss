@@ -38,7 +38,7 @@ static const char *sTextBoxes[] = {
 
 static const char *sGroupName = "G_ref_00";
 
-bool dLytMsgWindowStone_c::build(void *unk, d2d::ResAccIf_c *resAcc, dTagProcessor_c *tagProcessor) {
+bool dLytMsgWindowStone_c::build(d2d::ResAccIf_c *resAcc1, d2d::ResAccIf_c *resAcc, dTagProcessor_c *tagProcessor) {
     mLyt.setResAcc(resAcc);
     mLyt.build("sekibanWindow_00.brlyt", nullptr);
     mLyt.setPriority(0x8A);
@@ -69,8 +69,8 @@ bool dLytMsgWindowStone_c::build(void *unk, d2d::ResAccIf_c *resAcc, dTagProcess
     mpTextboxes[2]->set0x1F6(1);
 
     for (int i = 0; i < 1; i++) {
-        mNodes[i].mpLytPane = &mCommon;
-        mCommon.build(resAcc);
+        mNodes[i].mpLytPane = &mBtn;
+        mBtn.build(resAcc);
         mSubpaneList.PushBack(&mNodes[i]);
     }
 
@@ -101,7 +101,7 @@ bool dLytMsgWindowStone_c::remove() {
     for (int i = 0; i < 1; i++) {
         mNodes[i].mpLytPane->remove();
     }
-    mCommon.remove();
+    mBtn.remove();
     for (int i = 0; i < SEKIBAN_NUM_ANIMS; i++) {
         mAnm[i].remove();
     }
@@ -109,7 +109,7 @@ bool dLytMsgWindowStone_c::remove() {
 }
 
 void dLytMsgWindowStone_c::initializeState_Invisible() {
-    mCommon.resetToInvisble();
+    mBtn.resetToInvisble();
 }
 void dLytMsgWindowStone_c::executeState_Invisible() {
     if (mShouldBeOpen) {

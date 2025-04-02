@@ -45,7 +45,7 @@ public:
     u8 symbolToFontIdx(s32 s);
     void setStringArg(const wchar_t *arg, s32 index);
 
-    static s32 getNumLines(s32 arg);
+    static s32 getMaxNumLines(s32 arg);
 
     static void getTextCommand(wchar_t _0xe, const wchar_t *src, u8 *outCmdLen, s32 *outCmd, wchar_t **outEndPtr);
     static void process0xFCommand(wchar_t _0xf, const wchar_t *src, s32 *outCmd);
@@ -67,6 +67,10 @@ public:
     f32 getFloat(s32 i);
     s32 tickPauseFrame();
     s32 tick0x830();
+
+    s32 getNumLinesMaybe() const {
+        return mCommandInsert;
+    }
 
 private:
     /* 0x004 */ dTextBox_c *field_0x004;
@@ -121,8 +125,8 @@ private:
     /* 0x90D */ u8 field_0x90D;
     /* 0x90E */ u8 field_0x90E;
     /* 0x90F */ u8 field_0x90F[4];
-    /* 0x914 */ f32 field_0x914[0x32];
-    /* 0x9DC */ s32 mCommandInsert;
+    /* 0x914 */ f32 field_0x914[0x32]; // Maybe width for each individual line
+    /* 0x9DC */ s32 mCommandInsert;  // Maybe number of lines
     /* 0x9E0 */ wchar_t mStringArgs[8][64];
     /* 0xDE0 */ u8 field_0xDE0[0xEE0 - 0xDE0];
     /* 0xEE0 */ u8 field_0xEE0;

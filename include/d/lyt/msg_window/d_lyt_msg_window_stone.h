@@ -13,7 +13,8 @@ class dLytMsgWindowStone_c : public dLytMsgWindowSubtype {
 public:
     /* vt 0x08 */ virtual ~dLytMsgWindowStone_c() {}
     /* vt 0x0C */ virtual void draw() override;
-    /* vt 0x10 */ virtual bool build(void *unk, d2d::ResAccIf_c *resAcc, dTagProcessor_c *tagProcessor) override;
+    /* vt 0x10 */ virtual bool
+    build(d2d::ResAccIf_c *resAcc1, d2d::ResAccIf_c *resAcc, dTagProcessor_c *tagProcessor) override;
     /* vt 0x14 */ virtual bool remove() override;
     /* vt 0x18 */ virtual bool execute() override;
     /* vt 0x1C */ virtual void open() override;
@@ -24,14 +25,14 @@ public:
     /* vt 0x30 */ virtual dTextBox_c *vt_0x30() override {
         return mpTextboxes[0];
     }
-    /* vt 0x34 */ virtual void vt_0x34() override {
-        mCommon.requestIn();
+    /* vt 0x34 */ virtual bool vt_0x34() override {
+        return mBtn.requestIn();
     }
-    /* vt 0x38 */ virtual void vt_0x38(bool b) override {
-        mCommon.requestOut(b);
+    /* vt 0x38 */ virtual bool vt_0x38(bool b) override {
+        return mBtn.requestOut(b);
     }
-    /* vt 0x3C */ virtual u8 vt_0x3C() const override {
-        return mCommon.isDoneOut();
+    /* vt 0x3C */ virtual bool vt_0x3C() const override {
+        return mBtn.isDoneOut();
     }
 
     STATE_FUNC_DECLARE(dLytMsgWindowStone_c, Invisible);
@@ -49,7 +50,7 @@ private:
     /* 0x528 */ dTextBox_c *mpTextboxes[3];
     /* 0x530 */ nw4r::lyt::Pane *mpPanes[2];
     /* 0x538 */ dTagProcessor_c *mpTagProcessor;
-    /* 0x53C */ dLytCommonABtn_c mCommon;
+    /* 0x53C */ dLytCommonABtn_c mBtn;
     /* 0x6EC */ bool mShouldBeOpen;
 };
 

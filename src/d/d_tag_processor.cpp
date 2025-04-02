@@ -407,12 +407,12 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             }
         } else {
             if (textBox != nullptr) {
-                if (c == 10) {
+                if (c == '\n') {
                     *writePtr = c;
                     src++;
                     writePtr++;
                     mCommandInsert++;
-                    s32 i10 = getNumLines(field_0x90C);
+                    s32 i10 = getMaxNumLines(field_0x90C);
                     if (mCommandInsert % i10 == 0) {
                         float1 = fn_800B8040(0, field_0x90C);
                         float1 *= textBox->getMyScale();
@@ -628,11 +628,11 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
         int arg = ptr[0];
         nw4r::lyt::Size textBoxSize = field_0x004->GetSize();
         nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
-        int i1 = getNumLines(field_0x90C);
+        int i1 = getMaxNumLines(field_0x90C);
         if (arg % i1 == 0 && field_0x90C != 31 && field_0x90C != 8) {
             int u = 0;
             int v = 0;
-            for (int i = arg; i < arg + getNumLines(field_0x90C) && i < 0x32; i++) {
+            for (int i = arg; i < arg + getMaxNumLines(field_0x90C) && i < 0x32; i++) {
                 f32 f6 = getFloat(i);
                 if (f6 > 0.0f) {
                     v++;
@@ -650,7 +650,7 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
             // completely hidden in the Ghidra decompiler, apparently
             // because the results aren't used?
 
-            if (u < getNumLines(field_0x90C)) {
+            if (u < getMaxNumLines(field_0x90C)) {
                 f32 w1 = fontSize.width * 0.5f;
                 f32 h1 = fontSize.height * 0.5f;
                 if (!(w1 < UnkTextThing::getField0x758())) {
@@ -660,7 +660,7 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
                     h1 = UnkTextThing::getField0x758();
                 }
 
-                f32 f7 = (fontSize.height + field_0x004->GetLineSpace()) * 0.5f * (getNumLines(field_0x90C) - v);
+                f32 f7 = (fontSize.height + field_0x004->GetLineSpace()) * 0.5f * (getMaxNumLines(field_0x90C) - v);
                 field_0x814 = ctx->writer->GetCursorY();
                 field_0x818 = ctx->y;
                 field_0xEE4 = 1;
@@ -983,7 +983,7 @@ f32 dTagProcessor_c::fn_800B8040(s8 factor, u32 windowType) {
     }
 }
 
-s32 dTagProcessor_c::getNumLines(s32 arg) {
+s32 dTagProcessor_c::getMaxNumLines(s32 arg) {
     if (arg >= 6 && arg < 8) {
         return 4;
     } else if (arg == 9) {
