@@ -18,7 +18,9 @@ public:
     dTextBox_c(const nw4r::lyt::res::TextBox *pBlock, const nw4r::lyt::ResBlockSet &resBlockSet);
     virtual void DrawSelf(const nw4r::lyt::DrawInfo &drawInfo) override; // at 0x18
 
-    f32 GetLineWidth(f32 *pOutSpacing);
+    f32 GetLineWidth(f32 *pOutSpacing) const;
+    f32 GetLinesHeight() const;
+    f32 GetUnkWidthRatio() const;
 
     void setLytBase(d2d::LytBase_c *lytBase) {
         mpLytBase = lytBase;
@@ -58,7 +60,8 @@ public:
 
     void setMessageWithGlobalTextProcessorAndMsbtInfo(const MsbtInfo *info, const char *labelId, wchar_t *destBuf, u32 maxLen);
 
-    void fn_800B0F40();
+    void loadTextFormatVars();
+    void setupGX() const;
 
     // @bug: This does not implement UT's RTTI, so casts to dTextBox_c will
     // succeed even if all you have is a lyt::TextBox
@@ -72,7 +75,9 @@ private:
 
     nw4r::ut::Rect GetMyTextDrawRect(nw4r::ut::TextWriterBase<wchar_t> *pWriter, bool *pbWideScreenUnk) const;
 
-    void fn_800AFD60(f32);
+    f32 resizeTextToFit(f32 maxWidth);
+    bool hasDynamicText();
+    void someDebugCheckMaybe();
 
     /* 0x104 */ d2d::LytBase_c *mpLytBase;
     /* 0x108 */ f32 mFixedWidth;
@@ -81,19 +86,16 @@ private:
     /* 0x118 */ nw4r::lyt::Size mMyTextScale;
     /* 0x120 */ f32 mMyScale;
     /* 0x124 */ nw4r::ut::TextWriterBase<wchar_t> mTextWriter;
-    /* 0x188 */ f32 field_0x188;
-    /* 0x18C */ f32 field_0x18C;
-    /* 0x190 */ f32 field_0x190;
-    /* 0x194 */ f32 field_0x194;
+    /* 0x188 */ nw4r::ut::Rect field_0x188;
     /* 0x198 */ u32 field_0x198[10];
     /* 0x1C0 */ u8 mFontIdx;
     /* 0x1C1 */ u8 mWindowSubtype;
     /* 0x1C4 */ f32 field_0x1C4[10];
-    /* 0x1EC */ u8 field_0x1EC[10];
+    /* 0x1EC */ bool field_0x1EC[10];
     /* 0x1F6 */ u8 field_0x1F6;
     /* 0x1F7 */ u8 field_0x1F7;
     /* 0x1F8 */ u8 field_0x1F8;
-    /* 0x1F9 */ u8 field_0x1F9;
+    /* 0x1F9 */ bool field_0x1F9;
     /* 0x1FA */ u8 field_0x1FA;
     /* 0x1FC */ dTagProcessor_c *mpMyTagProcessor;
     /* 0x200 */ bool mHasTextWriter;
