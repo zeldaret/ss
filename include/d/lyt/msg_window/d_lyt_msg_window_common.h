@@ -1,6 +1,7 @@
 #ifndef D_LYT_MGS_WINDOW_COMMON_H
 #define D_LYT_MGS_WINDOW_COMMON_H
 
+#include "common.h"
 #include "d/d_tag_processor.h"
 #include "d/lyt/d2d.h"
 #include "m/m2d.h"
@@ -13,11 +14,13 @@ public:
     /* vt 0x14 */ virtual bool remove();
     /* vt 0x18 */ virtual bool execute();
     /* vt 0x1C */ virtual void open();
-    /* vt 0x20 */ virtual bool isOpening() const;
+    /* vt 0x20 */ virtual bool isDoneOpening() const;
     /* vt 0x24 */ virtual void close();
-    /* vt 0x28 */ virtual bool isClosing() const;
+    /* vt 0x28 */ virtual bool isDoneClosing() const;
     /* vt 0x2C */ virtual bool setText(const wchar_t *text);
-    /* vt 0x30 */ virtual dTextBox_c *vt_0x30();
+    /* vt 0x30 */ virtual dTextBox_c *vt_0x30() {
+        return nullptr;
+    }
     /* vt 0x34 */ virtual bool vt_0x34() {
         return true;
     }

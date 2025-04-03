@@ -4,14 +4,15 @@
 #include "d/d_tag_processor.h"
 #include "d/d_textwindow_unk.h"
 #include "d/lyt/d2d.h"
-#include "d/lyt/d_lyt_auto_caption.h"
-#include "d/lyt/d_lyt_auto_explain.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_common.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_select_btn.h"
-#include "d/lyt/msg_window/d_lyt_msg_window_stone.h"
-#include "d/lyt/msg_window/d_lyt_msg_window_wood.h"
 #include "s/s_State.hpp"
 #include "sized_string.h"
+
+class dLytMsgWindowWood_c;
+class dLytMsgWindowStone_c;
+class dLytAutoExplain_c;
+class dLytAutoCaption_c;
 
 class dLytMsgWindow_c {
 public:
@@ -22,8 +23,10 @@ public:
     bool remove();
 
 private:
-
-    void removeAllWindowSubtypes();
+    static bool isValidTextLabel(const char *name);
+    void setTextToDisplay(const wchar_t *text);
+    void createSubMsgManager(u8 type);
+    void removeSubMsgManagers();
 
     static dLytMsgWindow_c *sInstance;
 
@@ -46,7 +49,6 @@ private:
     STATE_FUNC_DECLARE(dLytMsgWindow_c, DemoIn);
     STATE_FUNC_DECLARE(dLytMsgWindow_c, DemoVisible);
     STATE_FUNC_DECLARE(dLytMsgWindow_c, DemoOut);
-
 
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMsgWindow_c);
     /* 0x040 */ d2d::ResAccIf_c mResAcc1;
@@ -76,6 +78,7 @@ private:
     /* 0x78A */ u16 mAlsoEntryPointToTrigger;
 
     /* 0x78C */ SizedString<0x40> mName;
+    /* 0x7CC */ SizedString<0x40> mNameCopy;
 
     /* 0x80C */ u8 field_0x80C;
     /* 0x80D */ u8 field_0x80D;
@@ -99,7 +102,7 @@ private:
 
     /* 0x820 */ u16 field_0x820;
     /* 0x824 */ void *field_0x824;
-    /* 0x828 */ s32 field_0x828;
+    /* 0x828 */ void *field_0x828;
 
     /* 0x82C */ u32 mTextOptionSelection;
     /* 0x830 */ u32 mSpecialFiMenuValue;

@@ -113,6 +113,18 @@ public:
         return sInstance;
     }
 
+    void reset0(const char *str) {
+        field_0x004 = str;
+    }
+
+    void reset1(const char *str) {
+        field_0x084 = str;
+    }
+
+    void reset2(const char *str) {
+        field_0x104 = str;
+    }
+
 private:
     static UnkTextThing *sInstance;
 
