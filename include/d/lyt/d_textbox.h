@@ -79,6 +79,18 @@ private:
     bool hasDynamicText();
     void someDebugCheckMaybe();
 
+    int GetStoredLineStrNum(int i, f32 *pLineWidth, bool *pbOver) const {
+        *pbOver = mbOvers[i];
+        *pLineWidth = mLineWidths[i];
+        return mLineStrNums[i];
+    }
+
+    void SetStoredLineStrNum(int i, f32 lineWidth, int lineStrNum, bool bOver) {
+        mLineWidths[i] = lineWidth;
+        mLineStrNums[i] = lineStrNum;
+        mbOvers[i] = bOver;
+    }
+
     /* 0x104 */ d2d::LytBase_c *mpLytBase;
     /* 0x108 */ f32 mFixedWidth;
     /* 0x10C */ u8 mIsWidthFixed;
@@ -87,11 +99,11 @@ private:
     /* 0x120 */ f32 mMyScale;
     /* 0x124 */ nw4r::ut::TextWriterBase<wchar_t> mTextWriter;
     /* 0x188 */ nw4r::ut::Rect field_0x188;
-    /* 0x198 */ u32 field_0x198[10];
+    /* 0x198 */ u32 mLineStrNums[10];
     /* 0x1C0 */ u8 mFontIdx;
     /* 0x1C1 */ u8 mWindowSubtype;
-    /* 0x1C4 */ f32 field_0x1C4[10];
-    /* 0x1EC */ bool field_0x1EC[10];
+    /* 0x1C4 */ f32 mLineWidths[10];
+    /* 0x1EC */ bool mbOvers[10];
     /* 0x1F6 */ u8 field_0x1F6;
     /* 0x1F7 */ u8 field_0x1F7;
     /* 0x1F8 */ u8 field_0x1F8;
@@ -99,7 +111,7 @@ private:
     /* 0x1FA */ u8 field_0x1FA;
     /* 0x1FC */ dTagProcessor_c *mpMyTagProcessor;
     /* 0x200 */ bool mHasTextWriter;
-    /* 0x201 */ u8 field_0x201;
+    /* 0x201 */ bool field_0x201;
 };
 
 #endif
