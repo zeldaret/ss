@@ -109,6 +109,10 @@ public:
         return 0.0f;
     }
 
+    static UnkTextThing *getInstance() {
+        return sInstance;
+    }
+
 private:
     static UnkTextThing *sInstance;
 

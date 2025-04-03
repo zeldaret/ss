@@ -1,6 +1,7 @@
 #include "d/d_font_manager.h"
 
 #include "d/d_heap.h"
+#include "d/d_message.h"
 #include "sized_string.h"
 
 
@@ -48,14 +49,12 @@ void dFontMng_c::setFontFile(int idx, void *fileData) {
     l_dFontMng_obj[idx].mpFileData = fileData;
 }
 
-extern "C" const char *getUsedLanguageString();
-
 const char *dFontMng_c::getFontPath(u8 idx) {
     static SizedString<128> TEMP_FONT_NAME;
     if (idx == 2) {
         TEMP_FONT_NAME.sprintf("/Font/%s", systemFonts[idx]);
     } else {
-        TEMP_FONT_NAME.sprintf("/US/Font/%s/%s", getUsedLanguageString(), systemFonts[idx]);
+        TEMP_FONT_NAME.sprintf("/US/Font/%s/%s", dMessage_c::getLanguageIdentifier(), systemFonts[idx]);
     }
     return TEMP_FONT_NAME;
 }

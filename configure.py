@@ -436,6 +436,7 @@ config.libs = [
             Object(NonMatching, "d/a/d_a_insect.cpp"),
             Object(NonMatching, "d/d_stage_mgr.cpp"),
             Object(NonMatching, "d/d_last.cpp"),
+            Object(NonMatching, "d/d_message.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
             Object(Matching, "d/d_room.cpp"),
             Object(NonMatching, "d/d_cs_base.cpp"),

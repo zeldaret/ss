@@ -1,6 +1,7 @@
 #include "d/lyt/d2d.h"
 
 #include "d/d_font_manager.h"
+#include "d/d_message.h"
 #include "d/d_textunk.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/d_window.h"
@@ -278,9 +279,6 @@ LytBase_c::~LytBase_c() {
     }
 }
 
-extern "C" const char *getUsedLanguageString();
-extern "C" nw4r::ut::TagProcessorBase<wchar_t> *GLOBAL_TEXT_MANAGER;
-
 bool LytBase_c::build(const char *name, m2d::ResAccIf_c *acc) {
     if (mLayout.GetRootPane() != nullptr) {
         return true;
@@ -332,7 +330,7 @@ bool LytBase_c::build(const char *name, m2d::ResAccIf_c *acc) {
     }
 
     SizedString<0x80> localizedName;
-    localizedName.sprintf("%s_%s", getUsedLanguageString(), fileName);
+    localizedName.sprintf("%s_%s", dMessage_c::getLanguageIdentifier(), fileName);
 
     void *data = acc->getAccessor()->GetResource(0, localizedName, nullptr);
     if (data == nullptr) {
@@ -343,7 +341,7 @@ bool LytBase_c::build(const char *name, m2d::ResAccIf_c *acc) {
 
     bool ok = mLayout.Build(resource, acc->getAccessor());
     if (ok) {
-        mLayout.SetTagProcessor(GLOBAL_TEXT_MANAGER);
+        mLayout.SetTagProcessor(dMessage_c::getGlobalTagProcessor());
         calc();
         setPropertiesRecursive(mLayout.GetRootPane(), -9999.0f, -9999.0f, -9999.0f, -9999.0f, -9999.0f);
     }

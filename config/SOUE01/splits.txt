@@ -261,6 +261,9 @@ d/d_textunk.cpp:
 	.sdata2     start:0x805797F8 end:0x80579848
 	.bss        start:0x805A6F70 end:0x805A7730
 
+d/d_textwindow_unk.cpp:
+	.text       start:0x800B20E0 end:0x800B34F0
+
 d/d_tag_processor.cpp:
 	.text       start:0x800B34F0 end:0x800B9274
 	.ctors      start:0x804DB6D4 end:0x804DB6D8
@@ -748,6 +751,14 @@ d/d_light_obj.cpp:
 d/tg/d_t_weather.cpp:
 	.text       start:0x801A65D0 end:0x801AF7D8
 	.ctors      start:0x804DB804 end:0x804DB808
+
+d/d_message.cpp:
+	.text       start:0x801AF7E0 end:0x801B329C
+	.ctors      start:0x804DB808 end:0x804DB80C
+	.data       start:0x8052C858 end:0x8052DF40
+	.sdata      start:0x80573248 end:0x80573290
+	.sbss       start:0x80575740 end:0x80575760
+	.bss        start:0x805B29E0 end:0x805B36E0
 
 d/d_stage.cpp:
 	.text       start:0x801B32A0 end:0x801B5BC8

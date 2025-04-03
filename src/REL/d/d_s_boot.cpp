@@ -5,6 +5,7 @@
 #include "d/d_dylink.h"
 #include "d/d_font_manager.h"
 #include "d/d_heap.h"
+#include "d/d_message.h"
 #include "d/d_scene.h"
 #include "d/d_sys.h"
 #include "d/lyt/d_lyt_battery.h"
@@ -42,7 +43,6 @@ sFPhaseBase::sFPhaseState dScBoot_c::executeLoadPhase() {
 
 extern "C" u8 getUsedLanguageNTSCNum();
 extern "C" const char *getEventFlowFileNameByIndex(int, int);
-extern "C" const char *getUsedLanguageString();
 extern "C" u8 fn_80054F30();
 extern "C" nw4r::ut::ResFont *lbl_805750D8;
 
@@ -54,7 +54,7 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb1() {
 
     for (int i = 0; i < 6; i++) {
         SizedString<128> str;
-        str.sprintf("%s/%s", getUsedLanguageString(), getEventFlowFileNameByIndex(i, 1));
+        str.sprintf("%s/%s", dMessage_c::getLanguageIdentifier(), getEventFlowFileNameByIndex(i, 1));
         OarcManager::GetInstance()->loadObjectArcFromDisk(str, mHeap::g_archiveHeap);
     }
     OarcManager::GetInstance()->loadObjectArcFromDisk("System", mHeap::g_archiveHeap);
