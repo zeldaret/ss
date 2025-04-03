@@ -139,7 +139,7 @@ void dLytAutoExplain_c::draw() {
     mLyt.draw();
 }
 
-void dLytAutoExplain_c::open() {
+void dLytAutoExplain_c::open(dAcObjBase_c *obj, u32 param) {
     mShouldBeOpen = true;
 }
 

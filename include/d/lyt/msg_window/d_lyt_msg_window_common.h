@@ -2,6 +2,7 @@
 #define D_LYT_MGS_WINDOW_COMMON_H
 
 #include "common.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/d_tag_processor.h"
 #include "d/lyt/d2d.h"
 #include "m/m2d.h"
@@ -13,7 +14,7 @@ public:
     /* vt 0x10 */ virtual bool build(d2d::ResAccIf_c *resAcc1, d2d::ResAccIf_c *resAcc, dTagProcessor_c *tagProcessor);
     /* vt 0x14 */ virtual bool remove();
     /* vt 0x18 */ virtual bool execute();
-    /* vt 0x1C */ virtual void open();
+    /* vt 0x1C */ virtual void open(dAcObjBase_c *obj, u32 param);
     /* vt 0x20 */ virtual bool isDoneOpening() const;
     /* vt 0x24 */ virtual void close();
     /* vt 0x28 */ virtual bool isDoneClosing() const;

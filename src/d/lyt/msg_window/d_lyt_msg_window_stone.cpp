@@ -168,7 +168,7 @@ void dLytMsgWindowStone_c::draw() {
     mLyt.draw();
 }
 
-void dLytMsgWindowStone_c::open() {
+void dLytMsgWindowStone_c::open(dAcObjBase_c *obj, u32 param) {
     mShouldBeOpen = true;
 }
 
