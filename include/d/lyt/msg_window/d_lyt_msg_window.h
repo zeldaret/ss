@@ -6,6 +6,7 @@
 #include "d/lyt/d2d.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_common.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_select_btn.h"
+#include "m/m_vec.h"
 #include "s/s_State.hpp"
 #include "sized_string.h"
 
@@ -23,10 +24,10 @@ public:
     bool remove();
 
 private:
-    static bool isValidTextLabel(const char *name);
     void setTextToDisplay(const wchar_t *text);
     void createSubMsgManager(u8 type);
     void removeSubMsgManagers();
+    bool fn_8011A5D0() const;
 
     static dLytMsgWindow_c *sInstance;
 
@@ -68,6 +69,9 @@ private:
     /* 0x748 */ dLytAutoExplain_c *mpAutoExplain;
     /* 0x74C */ dLytAutoCaption_c *mpAutoCaption;
 
+    /* 0x750 */ u8 _0x750[0x768 - 0x750];
+
+    /* 0x768 */ mVec3_c field_0x768;
     /* 0x774 */ s32 field_0x774;
     /* 0x778 */ s32 field_0x778;
     /* 0x77C */ s32 field_0x77C;

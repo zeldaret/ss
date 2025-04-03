@@ -146,7 +146,7 @@ void dLytAutoCaption_c::draw() {
     mLyt.draw();
 }
 
-void dLytAutoCaption_c::open() {
+void dLytAutoCaption_c::open(dAcObjBase_c *obj, u32 param) {
     mShouldBeOpen = true;
 }
 

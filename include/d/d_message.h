@@ -39,6 +39,7 @@ public:
         return field_0x32A;
     }
 
+    static bool isValidTextLabel(const char *name);
     static void loadTextByLabel(const char *label, dTagProcessor_c *tagProcessor, bool, u32, u32);
 
 private:

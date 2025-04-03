@@ -1,6 +1,7 @@
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
 
 #include "common.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/d_message.h"
 #include "d/d_tag_processor.h"
 #include "d/d_textunk.h"
@@ -13,9 +14,14 @@
 #include "d/lyt/d_lyt_auto_explain.h"
 #include "d/lyt/d_lyt_auto_caption.h"
 // clang-format on
+#include "f/f_base.h"
+#include "m/m_vec.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
+#include "toBeSorted/d_d3d.h"
+#include "toBeSorted/event_manager.h"
 #include "toBeSorted/global_fi_context.h"
+#include "toBeSorted/music_mgrs.h"
 
 STATE_DEFINE(dLytMsgWindow_c, Invisible);
 STATE_DEFINE(dLytMsgWindow_c, In);
@@ -129,7 +135,7 @@ void dLytMsgWindow_c::executeState_Invisible() {
         mStateMgr.changeState(StateID_WaitKeyMapClose);
     } else if (field_0x80C) {
         field_0x80C = 0;
-        if (isValidTextLabel(mName)) {
+        if (dMessage_c::isValidTextLabel(mName)) {
             mNameCopy = mName;
             dMessage_c::loadTextByLabel(mNameCopy, mpTagProcessor, true, 0, 0);
 
@@ -204,7 +210,28 @@ void dLytMsgWindow_c::executeState_Invisible() {
 }
 void dLytMsgWindow_c::finalizeState_Invisible() {}
 
-void dLytMsgWindow_c::initializeState_In() {}
+extern "C" s32 lbl_80575134;
+extern "C" s32 lbl_8057511C;
+
+void dLytMsgWindow_c::initializeState_In() {
+    dAcObjBase_c *obj = EventManager::fn_800A08F0(fBase_c::ACTOR);
+    u32 param = 0;
+    if (mpTagProcessor->getField_0x90D() == 1) {
+        param = 0;
+    } else if (mpTagProcessor->getField_0x90D() == 2) {
+        param = 2;
+    } else if (mpTagProcessor->getField_0x90D() == 3) {
+        param = 1;
+    } else if (obj != nullptr && d3d::fn_80016A90(obj->poscopy2)) {
+        d3d::fn_80016960(field_0x768, obj->poscopy2);
+        // TODO - stack and FPR problems
+        field_0x768 = mVec3_c(field_0x768.x, field_0x768.y, 0.0f);
+        if (field_0x768.y < lbl_8057511C / 3.0f + lbl_80575134) {
+            param = 2;
+        }
+    }
+    mpCurrentSubtype->open(obj, param);
+}
 void dLytMsgWindow_c::executeState_In() {
     if (mpCurrentSubtype->isDoneOpening()) {
         mStateMgr.changeState(StateID_OutputText);
@@ -221,16 +248,113 @@ void dLytMsgWindow_c::initializeState_OutputText() {
 void dLytMsgWindow_c::executeState_OutputText() {}
 void dLytMsgWindow_c::finalizeState_OutputText() {}
 
-void dLytMsgWindow_c::initializeState_WaitKeyChangePage0() {}
-void dLytMsgWindow_c::executeState_WaitKeyChangePage0() {}
+extern "C" bool checkButtonAPressed();
+void dLytMsgWindow_c::initializeState_WaitKeyChangePage0() {
+    if (field_0x811 != 0) {
+        field_0x812 = 1;
+    } else if (field_0x814 == 0) {
+        fn_8035E860(BGM_MGR);
+    }
+}
+void dLytMsgWindow_c::executeState_WaitKeyChangePage0() {
+    bool allowChange = false;
+    if (field_0x811 != 0) {
+        if (mpTagProcessor->getField_0x830() <= 0) {
+            allowChange = true;
+        }
+    } else if (field_0x814 != 0) {
+        if (field_0x813 != 0) {
+            field_0x813 = 0;
+            allowChange = true;
+        }
+    } else if (checkButtonAPressed() || fn_8011A5D0()) {
+        fn_8035E880(BGM_MGR);
+        allowChange = true;
+    }
+
+    if (!allowChange) {
+        return;
+    }
+
+    if (field_0x811 == 0) {
+        mStateMgr.changeState(StateID_WaitKeyChangePage1);
+    } else {
+        mpMsgWindowUnk->fn_800B2AA0();
+        if (mpTagProcessor->getMsgWindowSubtype() >= 6 && mpTagProcessor->getMsgWindowSubtype() < 8) {
+            mpMsgWindowUnk->textAdvancingRelated(true, true);
+        }
+        setTextToDisplay(mpMsgWindowUnk->getProcessedText());
+        field_0x818 = 1;
+        mStateMgr.changeState(StateID_OutputText);
+    }
+}
 void dLytMsgWindow_c::finalizeState_WaitKeyChangePage0() {}
 
 void dLytMsgWindow_c::initializeState_WaitKeyChangePage1() {}
-void dLytMsgWindow_c::executeState_WaitKeyChangePage1() {}
+void dLytMsgWindow_c::executeState_WaitKeyChangePage1() {
+    if (mpCurrentSubtype->vt_0x38(false)) {
+        field_0x817 = 0;
+        mpMsgWindowUnk->fn_800B2AA0();
+        if (mpTagProcessor->getMsgWindowSubtype() >= 6 && mpTagProcessor->getMsgWindowSubtype() < 8) {
+            mpMsgWindowUnk->textAdvancingRelated(true, true);
+        }
+        setTextToDisplay(mpMsgWindowUnk->getProcessedText());
+        field_0x818 = 1;
+        mStateMgr.changeState(StateID_OutputText);
+    }
+}
 void dLytMsgWindow_c::finalizeState_WaitKeyChangePage1() {}
 
-void dLytMsgWindow_c::initializeState_WaitKeyMsgEnd0() {}
-void dLytMsgWindow_c::executeState_WaitKeyMsgEnd0() {}
+void dLytMsgWindow_c::initializeState_WaitKeyMsgEnd0() {
+    if (field_0x811 != 0) {
+        field_0x812 = 1;
+    } else if (mpTagProcessor->getField_0x90E() == 0 && field_0x814 == 0) {
+        fn_8035E860(BGM_MGR);
+    }
+}
+void dLytMsgWindow_c::executeState_WaitKeyMsgEnd0() {
+    bool allowChange = false;
+    if (field_0x811 != 0) {
+        if (mpTagProcessor->getField_0x830() <= 0) {
+            allowChange = true;
+        }
+    } else if (mpTagProcessor->getField_0x90E() != 0) {
+        allowChange = true;
+    } else if (field_0x814 != 0) {
+        if (field_0x813 != 0) {
+            field_0x813 = 0;
+            allowChange = true;
+        }
+    } else if (checkButtonAPressed() || fn_8011A5D0()) {
+        fn_8035E880(BGM_MGR);
+        allowChange = true;
+    }
+
+    if (!allowChange) {
+        return;
+    }
+
+    if (field_0x811 == 0 && mpTagProcessor->getField_0x90E() == 0) {
+        mStateMgr.changeState(StateID_WaitKeyMsgEnd1);
+    } else if (field_0x810 != 0) {
+        if (dMessage_c::isValidTextLabel(mName)) {
+            mNameCopy = mName;
+            dTextBox_c *box = mpCurrentSubtype->vt_0x30();
+            mpMsgWindowUnk->fn_800B2130(mNameCopy, box, field_0x828, true);
+            setTextToDisplay(mpMsgWindowUnk->getProcessedText());
+            field_0x818 = 1;
+            mStateMgr.changeState(StateID_OutputText);
+            field_0x810 = 0;
+        }
+    } else {
+        fn_8035E820(BGM_MGR);
+        if (mpTagProcessor->getField_0x90E() != 0) {
+            mStateMgr.changeState(StateID_WaitKeySelectQuestion);
+        } else {
+            mStateMgr.changeState(StateID_Out);
+        }
+    }
+}
 void dLytMsgWindow_c::finalizeState_WaitKeyMsgEnd0() {}
 
 void dLytMsgWindow_c::initializeState_WaitKeyMsgEnd1() {}

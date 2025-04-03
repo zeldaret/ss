@@ -17,7 +17,7 @@ public:
     build(d2d::ResAccIf_c *resAcc1, d2d::ResAccIf_c *resAcc, dTagProcessor_c *tagProcessor) override;
     /* vt 0x14 */ virtual bool remove() override;
     /* vt 0x18 */ virtual bool execute() override;
-    /* vt 0x1C */ virtual void open() override;
+    /* vt 0x1C */ virtual void open(dAcObjBase_c *obj, u32 param) override;
     /* vt 0x20 */ virtual bool isDoneOpening() const override;
     /* vt 0x24 */ virtual void close() override;
     /* vt 0x28 */ virtual bool isDoneClosing() const override;

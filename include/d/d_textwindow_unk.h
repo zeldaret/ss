@@ -11,6 +11,7 @@ public:
     virtual ~TextWindowUnk() {}
 
     void fn_800B2130(const char *, dTextBox_c *, void*, bool);
+    void fn_800B2AA0();
     void textAdvancingRelated(bool, bool);
 
     const wchar_t *getProcessedText() const {

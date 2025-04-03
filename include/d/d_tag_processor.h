@@ -82,6 +82,18 @@ public:
         return field_0x90C;
     }
 
+    u8 getField_0x90D() const {
+        return field_0x90D;
+    }
+
+    u8 getField_0x90E() const {
+        return field_0x90E;
+    }
+
+    s32 getField_0x830() const {
+        return field_0x830;
+    }
+
     void setMsgWindowSubtype(u8 type) {
         field_0x90C = type;
     }
