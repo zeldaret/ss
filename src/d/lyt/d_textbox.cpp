@@ -486,9 +486,9 @@ void dTextBox_c::init() {
     mpMyTagProcessor = nullptr;
     MySetFontSize(GetFontSize());
     for (int i = 0; i < 10; i++) {
-        field_0x198[i] = 0;
-        field_0x1C4[i] = 0.0f;
-        field_0x1EC[i] = 0;
+        mLineStrNums[i] = 0;
+        mLineWidths[i] = 0.0f;
+        mbOvers[i] = 0;
     }
 
     f32 f1 = 35.0f;
@@ -506,7 +506,7 @@ void dTextBox_c::init() {
     mMyTextScale = sz;
     mMyScale = 1.0f;
     mWindowSubtype = 0x24;
-    field_0x201 = 1;
+    field_0x201 = true;
 }
 
 bool dTextBox_c::hasDynamicText() {
@@ -638,11 +638,11 @@ void dTextBox_c::DrawSelf(const nw4r::lyt::DrawInfo &drawInfo) {
         textRect.bottom -= f;
     }
 
-    nw4r::ut::Color c1 = nw4r::lyt::detail::MultipleAlpha(GetTextColor(0), GetGlobalAlpha());
-    nw4r::ut::Color c2 = nw4r::lyt::detail::MultipleAlpha(GetTextColor(2), GetGlobalAlpha());
+    nw4r::ut::Color topCol = nw4r::lyt::detail::MultipleAlpha(mTextColors[0], mGlbAlpha);
+    nw4r::ut::Color btmCol = nw4r::lyt::detail::MultipleAlpha(mTextColors[1], mGlbAlpha);
 
-    writer.SetGradationMode(c1 != c2 ? nw4r::ut::CharWriter::GRADMODE_V : nw4r::ut::CharWriter::GRADMODE_NONE);
-    writer.SetTextColor(c1, c2);
+    writer.SetGradationMode(topCol != btmCol ? nw4r::ut::CharWriter::GRADMODE_V : nw4r::ut::CharWriter::GRADMODE_NONE);
+    writer.SetTextColor(topCol, btmCol);
 
     nw4r::ut::Color minCol = GetColor(mpMaterial->GetTevColor(0));
     nw4r::ut::Color maxCol = GetColor(mpMaterial->GetTevColor(1));
@@ -681,14 +681,16 @@ void dTextBox_c::DrawSelf(const nw4r::lyt::DrawInfo &drawInfo) {
             strPos += lineStrNum;
             remain -= lineStrNum;
         }
-    } else if (!mHasTextWriter && field_0x201 == 1) {
+    } else if (!mHasTextWriter && field_0x201 == true) {
         // Taking parameters from the three arrays, instead of calculating them
         int remain = mTextLen;
         while (remain > 0 && i < 10) {
             bool bOver;
-            f32 lineWidth = field_0x1C4[i];
-            int lineStrNum = field_0x198[i];
-            bOver = field_0x1EC[i];
+            f32 lineWidth;
+            int lineStrNum = GetStoredLineStrNum(i, &lineWidth, &bOver);
+            // lineWidth = mLineWidths[i];
+            // int lineStrNum = mLineStrNums[i];
+            // bOver = mbOvers[i];
             f32 textPosX = textRect.left + hMag * (texWidth - lineWidth);
             writer.SetCursorX(textPosX);
             writer.PrintMutable(strPos, lineStrNum);
@@ -709,10 +711,11 @@ void dTextBox_c::DrawSelf(const nw4r::lyt::DrawInfo &drawInfo) {
             f32 textPosX = textRect.left + hMag * (texWidth - lineWidth);
             writer.SetCursorX(textPosX);
             writer.PrintMutable(strPos, lineStrNum);
-            if (mHasTextWriter && field_0x201 == 1 && i < 10) {
-                field_0x1C4[i] = lineWidth;
-                field_0x198[i] = lineStrNum;
-                field_0x1EC[i] = bOver;
+            if (mHasTextWriter && field_0x201 == true && i < 10) {
+                SetStoredLineStrNum(i, lineWidth, lineStrNum, bOver);
+                // mLineWidths[i] = lineWidth;
+                // mLineStrNums[i] = lineStrNum;
+                // mbOvers[i] = bOver;
             }
             if (bOver) {
                 writer.PrintMutable(L"\n", 1);
