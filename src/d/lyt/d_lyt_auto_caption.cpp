@@ -150,7 +150,7 @@ void dLytAutoCaption_c::open() {
     mShouldBeOpen = true;
 }
 
-bool dLytAutoCaption_c::isOpening() const {
+bool dLytAutoCaption_c::isDoneOpening() const {
     return !(*mStateMgr.getStateID() == StateID_In);
 }
 
@@ -158,7 +158,7 @@ void dLytAutoCaption_c::close() {
     mShouldBeOpen = false;
 }
 
-bool dLytAutoCaption_c::isClosing() const {
+bool dLytAutoCaption_c::isDoneClosing() const {
     return !(*mStateMgr.getStateID() == StateID_Out);
 }
 

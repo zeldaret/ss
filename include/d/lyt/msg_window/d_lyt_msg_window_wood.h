@@ -11,6 +11,7 @@
 
 class dLytMsgWindowWood_c : public dLytMsgWindowSubtype {
 public:
+    dLytMsgWindowWood_c() : mStateMgr(*this) {}
     /* vt 0x08 */ virtual ~dLytMsgWindowWood_c() {}
     /* vt 0x0C */ virtual void draw() override;
     /* vt 0x10 */ virtual bool
@@ -18,9 +19,9 @@ public:
     /* vt 0x14 */ virtual bool remove() override;
     /* vt 0x18 */ virtual bool execute() override;
     /* vt 0x1C */ virtual void open() override;
-    /* vt 0x20 */ virtual bool isOpening() const override;
+    /* vt 0x20 */ virtual bool isDoneOpening() const override;
     /* vt 0x24 */ virtual void close() override;
-    /* vt 0x28 */ virtual bool isClosing() const override;
+    /* vt 0x28 */ virtual bool isDoneClosing() const override;
     /* vt 0x2C */ virtual bool setText(const wchar_t *text) override;
     /* vt 0x30 */ virtual dTextBox_c *vt_0x30() override {
         return mpTextboxes[0];

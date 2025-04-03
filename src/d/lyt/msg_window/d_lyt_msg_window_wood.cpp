@@ -170,7 +170,7 @@ void dLytMsgWindowWood_c::open() {
     mShouldBeOpen = true;
 }
 
-bool dLytMsgWindowWood_c::isOpening() const {
+bool dLytMsgWindowWood_c::isDoneOpening() const {
     return !(*mStateMgr.getStateID() == StateID_In);
 }
 
@@ -178,7 +178,7 @@ void dLytMsgWindowWood_c::close() {
     mShouldBeOpen = false;
 }
 
-bool dLytMsgWindowWood_c::isClosing() const {
+bool dLytMsgWindowWood_c::isDoneClosing() const {
     return !(*mStateMgr.getStateID() == StateID_Out);
 }
 

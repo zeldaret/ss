@@ -31,6 +31,16 @@ public:
 
     void reset();
 
+    bool getField_0x329() const {
+        return field_0x329;
+    }
+
+    bool getField_0x32A() const {
+        return field_0x32A;
+    }
+
+    static void loadTextByLabel(const char *label, dTagProcessor_c *tagProcessor, bool, u32, u32);
+
 private:
     static s32 getArcIndexForFile(const char *fileName);
     static const char *getArcNameByIndex(s32 idx, bool);
@@ -51,6 +61,9 @@ private:
     /* 0x2F8 */ s32 mCurrentTextFileNumber;
 
     /* 0x2FC */ s32 field_0x2FC;
+
+    /* 0x329 */ bool field_0x329;
+    /* 0x32A */ bool field_0x32A;
 
     /* 0x334 */ u32 mMinigameResultPoints;
     /* 0x338 */ u32 mMinigameTime;
