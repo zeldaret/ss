@@ -1,5 +1,6 @@
 // clang-format off
 #include "common.h"
+#include "d/d_message.h"
 #include "d/d_sc_game.h"
 #include "d/d_sc_title.h"
 #include "d/d_stage_mgr.h"
@@ -285,8 +286,6 @@ dLytMeter_c::dLytMeter_c() {}
 
 extern "C" void fn_800D97E0(int i);
 extern "C" void fn_800D9800(int i);
-extern "C" void fn_801B2D10(void *);
-extern "C" void *GLOBAL_MESSAGE_RELATED_CONTEXT;
 
 static const d2d::LytBrlanMapping meterBrlanMap[] = {
     {          "basicPosition_00_in.brlan", "G_remoConBtn_00"},
@@ -632,7 +631,7 @@ bool dLytMeterContainer_c::build() {
 
     fn_800D97E0(0xb);
     fn_800D9800(1);
-    fn_801B2D10(GLOBAL_MESSAGE_RELATED_CONTEXT);
+    dMessage_c::getInstance()->reset();
     return true;
 }
 

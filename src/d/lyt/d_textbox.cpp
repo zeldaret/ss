@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_font_manager.h"
+#include "d/d_message.h"
 #include "d/d_tag_processor.h"
 #include "d/d_textunk.h"
 #include "libms/msgfile.h"
@@ -255,12 +256,10 @@ void dTextBox_c::setTextWithGlobalTextProcessor(const wchar_t *str, void *unk, .
     va_end(l);
 }
 
-extern "C" dTagProcessor_c *GLOBAL_TEXT_MANAGER;
-
 void dTextBox_c::setTextWithGlobalTextProcessorV(const wchar_t *str, void *unk, va_list list) {
     SetFontSize(mMyTextScale);
     mHasTextWriter = true;
-    mpMyTagProcessor = GLOBAL_TEXT_MANAGER;
+    mpMyTagProcessor = dMessage_c::getGlobalTagProcessor();
     u32 outLen = 0;
     mWindowSubtype = mpMyTagProcessor->getMsgWindowSubtype();
     mpMyTagProcessor->setField_0xEE1(field_0x1F6);
@@ -326,7 +325,7 @@ void dTextBox_c::setMessageWithGlobalTextProcessorAndMsbtInfo(
     mHasTextWriter = true;
     field_0x1FA = 1;
     u32 outLen = 0;
-    mpMyTagProcessor = GLOBAL_TEXT_MANAGER;
+    mpMyTagProcessor = dMessage_c::getGlobalTagProcessor();
     mpMyTagProcessor->setMsgWindowSubtype(0x22);
     mWindowSubtype = mpMyTagProcessor->getMsgWindowSubtype();
     mpMyTagProcessor->setField_0xEE1(field_0x1F6);

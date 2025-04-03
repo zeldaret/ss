@@ -39,9 +39,6 @@ SelectBtnHelper::SelectBtnHelper() {
 }
 SelectBtnHelper::~SelectBtnHelper() {}
 
-// STATE_DEFINE\(([A-Za-z_0-9]+), ([A-Za-z_0-9]+)\);
-// void $1::initializeState_$2() {}\nvoid $1::executeState_$2() {}\nvoid $1::finalizeState_$2() {}\n
-
 void dLytMsgWindowSelectBtnParts_c::initializeState_Wait() {}
 void dLytMsgWindowSelectBtnParts_c::executeState_Wait() {
     if (field_0x48 != 0) {

@@ -25,6 +25,8 @@ char *strcpy(char *dst, const char *src);
 int sscanf(const char *buffer, const char *format, ...);
 size_t strlen(const char *str);
 
+int atoi(const char *str);
+
 #ifdef __cplusplus
 }
 #endif
