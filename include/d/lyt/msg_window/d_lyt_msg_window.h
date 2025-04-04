@@ -20,6 +20,8 @@ class dLytMsgWindowDemo_c;
 class dLytAutoExplain_c;
 class dLytAutoCaption_c;
 
+struct dLytMsgWindowCharData;
+
 class dLytMsgWindow_c {
 public:
     dLytMsgWindow_c() : mStateMgr(*this) {}
@@ -37,12 +39,19 @@ public:
     void setCurrentEntrypointName(const char *name);
     void setCurrentFlowFilename(const char *name);
 
+    static dLytMsgWindow_c *getInstance() {
+        return sInstance;
+    }
+
+    SizedString<64> getLabel() const {
+        return mNameCopy;
+    }
+
 private:
     bool setTextToDisplay(const wchar_t *text);
     void createSubMsgManager(u8 type);
     void removeSubMsgManagers();
     bool fn_8011A5D0() const;
-
 
     static dLytMsgWindow_c *sInstance;
 
@@ -121,7 +130,7 @@ private:
 
     /* 0x820 */ u16 field_0x820;
     /* 0x824 */ s32 field_0x824;
-    /* 0x828 */ void *field_0x828;
+    /* 0x828 */ dLytMsgWindowCharData *field_0x828;
 
     /* 0x82C */ u32 mTextOptionSelection;
     /* 0x830 */ u32 mSpecialFiMenuValue;

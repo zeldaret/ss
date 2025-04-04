@@ -3,21 +3,13 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_tag_processor.h"
+#include "d/d_textwindow_unk.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_common_a_btn.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_common.h"
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
-
-struct dLytMsgWindowSwordLetterDataMaybe {
-    /* 0x00 */ f32 posX;
-    /* 0x04 */ f32 posY;
-    /* 0x08 */ f32 field_0x08;
-    /* 0x0C */ s16 field_0x0C;
-    /* 0x0E */ wchar_t character;
-    /* 0x10 */ s8 displayTimerMaybe;
-};
 
 class dLytMsgWindowSword_c : public dLytMsgWindowSubtype {
 public:
@@ -56,6 +48,10 @@ public:
         mSwordType = type;
     }
 
+    dLytMsgWindowCharData *getCharData() {
+        return mCharacterData;
+    }
+
 private:
     /* 0x0010 */ UI_STATE_MGR_DECLARE(dLytMsgWindowSword_c);
     /* 0x004C */ d2d::SubPaneList mSubpaneList;
@@ -80,7 +76,7 @@ private:
 
     /* 0x05F8 */ dLytCommonABtn_c mBtn;
 
-    /* 0x07A8 */ dLytMsgWindowSwordLetterDataMaybe mCharacterData[1023];
+    /* 0x07A8 */ dLytMsgWindowCharData mCharacterData[1023];
     /* 0x5794 */ wchar_t mTextBuf[1023];
 
     /* 0x5F94 */ dLytTextSword mSwordText;

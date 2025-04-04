@@ -50,7 +50,7 @@ public:
 
     bool build(d2d::ResAccIf_c *pResAcc, ESwordType type);
     bool remove();
-    void draw(const wchar_t *str, s8, const mVec3_c&, f32);
+    void draw(const wchar_t *str, s8, const mVec3_c &, f32);
     f32 fn_80120DB0() const;
 
 private:
@@ -59,6 +59,30 @@ private:
     /* 0xD4 */ dTextBox_c *mpTexts[3];
     /* 0xE0 */ nw4r::lyt::Pane *mpPane;
     /* 0xE4 */ ESwordType mType;
+};
+
+class dLytTextLight {
+public:
+    enum ETextType {
+        NORMAL,
+        DEMO,
+    };
+
+    dLytTextLight() {}
+    /* vt at 0x00 */
+    virtual ~dLytTextLight() {}
+
+    bool build(d2d::ResAccIf_c *pResAcc, ETextType type);
+    bool remove();
+    void draw(const wchar_t *str, s8, const mVec3_c &, f32);
+    f32 fn_80120DB0() const;
+
+private:
+    /* 0x04 */ d2d::LytBase_c mLyt;
+    // ???
+    /* 0x94 */ d2d::AnmGroup_c mAnm;
+    /* 0xD4 */ nw4r::lyt::Pane *mpPane;
+    /* 0xD8 */ ETextType mType;
 };
 
 #endif

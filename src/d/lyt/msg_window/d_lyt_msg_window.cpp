@@ -14,14 +14,13 @@
 // clang-format off
 // vtable order
 #include "d/lyt/msg_window/d_lyt_msg_window_common.h"
-#include "d/lyt/msg_window/d_lyt_msg_window_demo.h"
-#include "d/lyt/msg_window/d_lyt_msg_window_get.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_link.h"
-#include "d/lyt/msg_window/d_lyt_msg_window_sword.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_talk.h"
-
+#include "d/lyt/msg_window/d_lyt_msg_window_sword.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_wood.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_stone.h"
+#include "d/lyt/msg_window/d_lyt_msg_window_get.h"
+#include "d/lyt/msg_window/d_lyt_msg_window_demo.h"
 #include "d/lyt/d_lyt_auto_explain.h"
 #include "d/lyt/d_lyt_auto_caption.h"
 // clang-format on
@@ -217,7 +216,7 @@ void dLytMsgWindow_c::executeState_Invisible() {
                     } else if (mpTagProcessor->getMsgWindowSubtype() >= 2 &&
                                mpTagProcessor->getMsgWindowSubtype() < 5) {
                         mpCurrentSubtype = mpWindowSword;
-                        // TODO
+                        field_0x828 = mpWindowSword->getCharData();
                     } else if (mpTagProcessor->getMsgWindowSubtype() == 9) {
                         mpCurrentSubtype = mpWindowLink;
                         // TODO
@@ -226,10 +225,12 @@ void dLytMsgWindow_c::executeState_Invisible() {
                         // TODO
                     } else if (mpTagProcessor->getMsgWindowSubtype() == 30) {
                         mpCurrentSubtype = mpWindowDemo;
+                        field_0x828 = mpWindowDemo->getCharData();
                         dTextBox_c *box = mpCurrentSubtype->getTextBox();
                         mpMsgWindowUnk->fn_800B2130(mNameCopy, box, field_0x828, true);
                         mpMsgWindowUnk->textAdvancingRelated(true, true);
                         setTextToDisplay(mpMsgWindowUnk->getProcessedText());
+                        mpCurrentSubtype->setPriority(0x8A);
                         mStateMgr.changeState(StateID_DemoIn);
                         return;
                     } else {
