@@ -22,12 +22,22 @@ public:
 
     bool build();
     bool remove();
+    bool execute();
+    bool draw();
+
+    bool isVisible() const;
+    bool isOutputtingText() const;
+
+    void setCurrentLabelName(const char *name, bool storeFile);
+    void setCurrentEntrypointName(const char *name);
+    void setCurrentFlowFilename(const char *name);
 
 private:
-    void setTextToDisplay(const wchar_t *text);
+    bool setTextToDisplay(const wchar_t *text);
     void createSubMsgManager(u8 type);
     void removeSubMsgManagers();
     bool fn_8011A5D0() const;
+
 
     static dLytMsgWindow_c *sInstance;
 
@@ -69,8 +79,8 @@ private:
     /* 0x748 */ dLytAutoExplain_c *mpAutoExplain;
     /* 0x74C */ dLytAutoCaption_c *mpAutoCaption;
 
-    /* 0x750 */ u8 _0x750[0x768 - 0x750];
-
+    /* 0x750 */ u8 _0x750[0x75C - 0x750];
+    /* 0x75C */ mVec3_c field_0x75C;
     /* 0x768 */ mVec3_c field_0x768;
     /* 0x774 */ s32 field_0x774;
     /* 0x778 */ s32 field_0x778;
@@ -105,13 +115,15 @@ private:
     /* 0x81E */ u8 field_0x81E;
 
     /* 0x820 */ u16 field_0x820;
-    /* 0x824 */ void *field_0x824;
+    /* 0x824 */ s32 field_0x824;
     /* 0x828 */ void *field_0x828;
 
     /* 0x82C */ u32 mTextOptionSelection;
     /* 0x830 */ u32 mSpecialFiMenuValue;
 
     /* 0x834 */ dLytMsgWindowSelectBtn_c mSelectBtn;
+    /* 0x1208 */ SizedString<8> mCurrentEntrypointName;
+    /* 0x1210 */ SizedString<16> mCurrentFlowFileName;
     /* 0x1220 */ u8 field_0x1220;
 };
 

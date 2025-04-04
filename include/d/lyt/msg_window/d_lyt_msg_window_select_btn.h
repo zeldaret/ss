@@ -1,7 +1,9 @@
 #ifndef D_LYT_MSG_WINDOW_SELECT_BTN_H
 #define D_LYT_MSG_WINDOW_SELECT_BTN_H
 
+#include "d/d_tag_processor.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_textbox.h"
 #include "d/lyt/d_window.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "s/s_State.hpp"
@@ -71,6 +73,36 @@ public:
 
     bool draw();
 
+    s32 getField_0x9B4() const {
+        return field_0x9B4;
+    }
+
+    void setField_0x9B8(s32 value) {
+        field_0x9B8 = value;
+    }
+
+    void setField_0x9BC(s32 value) {
+        field_0x9BC = value;
+    }
+
+    void setField_0x990(s32 value) {
+        mBtnHelper.field_0x4C = value;
+    }
+
+    void setField_0x998(dTagProcessor_c *value) {
+        mpTagProcessor = value;
+    }
+
+    void fn_8011E5D0(u32, bool);
+
+    dTextBox_c *getSelectTextBox(s32 option, s32 idx) const {
+        return mpSelectTextBoxes[option][idx];
+    }
+
+    BOOL isStateWait() {
+        return *mStateMgr.getStateID() == StateID_Wait;
+    }
+
 private:
     s32 fn_8011FE50();
 
@@ -93,7 +125,7 @@ private:
     /* 0x7F0 */ dTextBox_c *mpSizeBox;
     /* 0x7F4 */ dLytMsgWindowSelectBtnParts_c mParts[4];
     /* 0x944 */ SelectBtnHelper mBtnHelper;
-    /* 0x998 */ void *field_0x998;
+    /* 0x998 */ dTagProcessor_c *mpTagProcessor;
     /* 0x99C */ s32 field_0x99C;
     /* 0x9A0 */ s32 field_0x9A0;
     /* 0x9A4 */ u8 field_0x9A4;

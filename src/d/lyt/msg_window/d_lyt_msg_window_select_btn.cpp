@@ -332,7 +332,7 @@ void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
         field_0x9B0 = mBtnHelper.field_0x50;
         mStateMgr.changeState(StateID_WaitDecide);
         // TODO
-        if (field_0x998 != nullptr) {
+        if (mpTagProcessor != nullptr) {
             SmallSoundManager::GetInstance()->playSound(SE_S_TALK_CURSOR_CANCEL);
         } else {
             SmallSoundManager::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
@@ -345,7 +345,7 @@ void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
         field_0x9D0 = 0;
         mStateMgr.changeState(StateID_WaitCancel);
         // TODO
-        if (field_0x998 != nullptr) {
+        if (mpTagProcessor != nullptr) {
             SmallSoundManager::GetInstance()->playSound(SE_S_TALK_CURSOR_CANCEL);
         } else {
             SmallSoundManager::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
@@ -473,7 +473,7 @@ bool dLytMsgWindowSelectBtn_c::build(d2d::ResAccIf_c *resAcc) {
         mpBoundings[i] = mLyt.findPane(sBoundings[i]);
     }
 
-    field_0x998 = nullptr;
+    mpTagProcessor = nullptr;
 
     for (int i = 0; i < 7; i++) {
         mpSelectPanes[i] = mLyt.findPane(sSelectPanes[i]);

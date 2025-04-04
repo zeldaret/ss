@@ -36,6 +36,10 @@ public:
         return field_0x329;
     }
 
+    void setField_0x329(bool v) {
+        field_0x329 = v;
+    }
+
     bool getField_0x32A() const {
         return field_0x32A;
     }
