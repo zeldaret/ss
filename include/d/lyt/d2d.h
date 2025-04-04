@@ -270,6 +270,10 @@ struct AnmGroupBase_c {
         syncAnmFrame();
     }
 
+    inline f32 getRatio() const {
+        return mpFrameCtrl->getRatio();
+    }
+
     inline void setBackwardsRatio(f32 ratio) {
         mpFrameCtrl->setBackwardsRatio(ratio);
         syncAnmFrame();

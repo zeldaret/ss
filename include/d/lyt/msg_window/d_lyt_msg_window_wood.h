@@ -24,16 +24,16 @@ public:
     /* vt 0x24 */ virtual void close() override;
     /* vt 0x28 */ virtual bool isDoneClosing() const override;
     /* vt 0x2C */ virtual bool setText(const wchar_t *text) override;
-    /* vt 0x30 */ virtual dTextBox_c *vt_0x30() override {
+    /* vt 0x30 */ virtual dTextBox_c *getTextBox() override {
         return mpTextboxes[0];
     }
-    /* vt 0x34 */ virtual bool vt_0x34() override {
+    /* vt 0x34 */ virtual bool startConfirm() override {
         return mBtn.requestIn();
     }
-    /* vt 0x38 */ virtual bool vt_0x38(bool b) override {
+    /* vt 0x38 */ virtual bool startDecide(bool b) override {
         return mBtn.requestOut(b);
     }
-    /* vt 0x3C */ virtual bool vt_0x3C() const override {
+    /* vt 0x3C */ virtual bool isDoneDecide() const override {
         return mBtn.isDoneOut();
     }
 

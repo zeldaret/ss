@@ -125,6 +125,10 @@ public:
         field_0x104 = str;
     }
 
+    s16 getField_0x7AE() const {
+        return field_0x7AE;
+    }
+
     bool getField_0x7B4() const {
         return field_0x7B4;
     }
