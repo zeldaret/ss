@@ -9,7 +9,7 @@ class RupeeCounter : public Counter {
 public:
     RupeeCounter();
     /* 8016DEF0 */ ~RupeeCounter() {}
-    /* 8016DF50 */ virtual u16 getMax() override {
+    /* 8016DF50 */ virtual u16 getMax() const override {
         return (getBaseCapacity() + getExtraWalletCapacity());
     }
 };
@@ -35,9 +35,6 @@ struct WalletStruct {
     }
     return 300;
 }
-
-// TODO main counters class
-extern "C" u16 getCounterByIndex(u16);
 
 /* 8016DEC0 */ static u16 getExtraWalletCapacity() {
     return 300 * getCounterByIndex(0x27); // Maybe 0x27 corresponds to item 27 -> small wallet?
