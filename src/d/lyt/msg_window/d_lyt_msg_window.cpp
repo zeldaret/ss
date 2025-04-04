@@ -3,10 +3,14 @@
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_message.h"
+#include "d/d_stage_mgr.h"
 #include "d/d_tag_processor.h"
 #include "d/d_textunk.h"
 #include "d/d_textwindow_unk.h"
+#include "d/lyt/d_lyt_control_game.h"
+#include "d/lyt/d_lyt_map.h"
 #include "d/lyt/d_textbox.h"
+
 // clang-format off
 // vtable order
 #include "d/lyt/msg_window/d_lyt_msg_window_wood.h"
@@ -15,6 +19,7 @@
 #include "d/lyt/d_lyt_auto_caption.h"
 // clang-format on
 #include "f/f_base.h"
+#include "m/m_fader_base.h"
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
@@ -22,6 +27,28 @@
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/global_fi_context.h"
 #include "toBeSorted/music_mgrs.h"
+#include "toBeSorted/small_sound_mgr.h"
+#include <cstring>
+
+class MsgWindowUnkLocalClass {
+public:
+    MsgWindowUnkLocalClass();
+    virtual ~MsgWindowUnkLocalClass();
+
+private:
+    /* 0x04 */ u32 field_0x04;
+    /* 0x08 */ u8 field_0x08;
+    /* 0x09 */ u8 field_0x09;
+};
+
+MsgWindowUnkLocalClass mUnk;
+
+MsgWindowUnkLocalClass::MsgWindowUnkLocalClass() {
+    field_0x04 = 8;
+    field_0x08 = 0;
+    field_0x09 = 0;
+}
+MsgWindowUnkLocalClass::~MsgWindowUnkLocalClass() {}
 
 STATE_DEFINE(dLytMsgWindow_c, Invisible);
 STATE_DEFINE(dLytMsgWindow_c, In);
@@ -42,6 +69,11 @@ STATE_DEFINE(dLytMsgWindow_c, ExplainOut);
 STATE_DEFINE(dLytMsgWindow_c, DemoIn);
 STATE_DEFINE(dLytMsgWindow_c, DemoVisible);
 STATE_DEFINE(dLytMsgWindow_c, DemoOut);
+
+extern "C" bool checkButtonAPressed();
+extern "C" bool checkButtonAHeld();
+extern "C" bool checkButtonBPressed();
+extern "C" bool checkButtonPlusPressed();
 
 bool dLytMsgWindow_c::build() {
     mResAcc1.attach(LayoutArcManager::GetInstance()->getLoadedData("DoButton"), "");
@@ -102,7 +134,7 @@ bool dLytMsgWindow_c::build() {
     field_0x81C = 0;
     field_0x81D = 0;
 
-    field_0x824 = nullptr;
+    field_0x824 = 0;
     field_0x820 = 0;
 
     field_0x81E = 0;
@@ -245,10 +277,55 @@ void dLytMsgWindow_c::initializeState_OutputText() {
     field_0x820 = 0;
     field_0x81E = 0;
 }
-void dLytMsgWindow_c::executeState_OutputText() {}
+void dLytMsgWindow_c::executeState_OutputText() {
+    u16 oldValue = mpMsgWindowUnk->getField_0x147A();
+    field_0x812 = 0;
+    if (mpTagProcessor->getField_0x830() != -1) {
+        field_0x811 = 1;
+    } else {
+        field_0x811 = 0;
+    }
+
+    if (field_0x815 == 0 && field_0x816 == 0) {
+        mpMsgWindowUnk->textAdvancingRelated(false, true);
+        if (field_0x811 == 0 && checkButtonAHeld() && field_0x815 == 0 && field_0x816 == 0) {
+            mpMsgWindowUnk->textAdvancingRelated(false, true);
+        }
+    }
+
+    if (mpTagProcessor->getMsgWindowSubtype() >= 2 && mpTagProcessor->getMsgWindowSubtype() < 5) {
+        // TODO
+    } else if (mpTagProcessor->getMsgWindowSubtype() < 2 && oldValue != mpMsgWindowUnk->getField_0x147A()) {
+        u16 a = mpMsgWindowUnk->getField_0x147C();
+        f32 b = (dTagProcessor_c::fn_800B8040(0, 0) * 100.0f);
+        SmallSoundManager::GetInstance()->playButtonPressSoundWhenAdvancingTextBoxes(a / b);
+    }
+
+    if (setTextToDisplay(mpMsgWindowUnk->getProcessedText())) {
+        if (field_0x81C != 0) {
+            if (field_0x811 != 0) {
+                mStateMgr.changeState(StateID_WaitKeyMsgEnd0);
+            } else if (mpTagProcessor->getField_0x90E() != 0) {
+                mStateMgr.changeState(StateID_WaitKeyMsgEnd0);
+            } else if (mpCurrentSubtype->vt_0x34()) {
+                field_0x817 = 1;
+                mStateMgr.changeState(StateID_WaitKeyMsgEnd0);
+            }
+        } else if (field_0x81D != 0) {
+            if (field_0x811 != 0) {
+                mStateMgr.changeState(StateID_WaitKeyChangePage0);
+            } else if (mpCurrentSubtype->vt_0x34()) {
+                field_0x817 = 1;
+                mStateMgr.changeState(StateID_WaitKeyChangePage0);
+            }
+        }
+    }
+
+    field_0x81C = mpMsgWindowUnk->checkEndReached();
+    field_0x81D = mpMsgWindowUnk->checkLastLineReachedMaybe();
+}
 void dLytMsgWindow_c::finalizeState_OutputText() {}
 
-extern "C" bool checkButtonAPressed();
 void dLytMsgWindow_c::initializeState_WaitKeyChangePage0() {
     if (field_0x811 != 0) {
         field_0x812 = 1;
@@ -344,8 +421,8 @@ void dLytMsgWindow_c::executeState_WaitKeyMsgEnd0() {
             setTextToDisplay(mpMsgWindowUnk->getProcessedText());
             field_0x818 = 1;
             mStateMgr.changeState(StateID_OutputText);
-            field_0x810 = 0;
         }
+        field_0x810 = 0;
     } else {
         fn_8035E820(BGM_MGR);
         if (mpTagProcessor->getField_0x90E() != 0) {
@@ -358,56 +435,307 @@ void dLytMsgWindow_c::executeState_WaitKeyMsgEnd0() {
 void dLytMsgWindow_c::finalizeState_WaitKeyMsgEnd0() {}
 
 void dLytMsgWindow_c::initializeState_WaitKeyMsgEnd1() {}
-void dLytMsgWindow_c::executeState_WaitKeyMsgEnd1() {}
+void dLytMsgWindow_c::executeState_WaitKeyMsgEnd1() {
+    if (mpCurrentSubtype->vt_0x38(false)) {
+        if (field_0x810 != 0) {
+            field_0x817 = 0;
+            if (dMessage_c::isValidTextLabel(mName)) {
+                mNameCopy = mName;
+                mpMsgWindowUnk->fn_800B2130(mNameCopy, mpCurrentSubtype->vt_0x30(), field_0x828, true);
+                setTextToDisplay(mpMsgWindowUnk->getProcessedText());
+                field_0x818 = 1;
+                mStateMgr.changeState(StateID_OutputText);
+            }
+            field_0x810 = 0;
+        } else {
+            fn_8035E820(BGM_MGR);
+            if (mpTagProcessor->getField_0x90E() != 0) {
+                mStateMgr.changeState(StateID_WaitKeySelectQuestion);
+            } else if (field_0x817 == 0) {
+                mStateMgr.changeState(StateID_Out);
+            } else {
+                field_0x817 = 0;
+                mStateMgr.changeState(StateID_WaitKeyMsgEnd2);
+            }
+        }
+    }
+}
 void dLytMsgWindow_c::finalizeState_WaitKeyMsgEnd1() {}
 
 void dLytMsgWindow_c::initializeState_WaitKeyMsgEnd2() {}
-void dLytMsgWindow_c::executeState_WaitKeyMsgEnd2() {}
+void dLytMsgWindow_c::executeState_WaitKeyMsgEnd2() {
+    if (mpCurrentSubtype->vt_0x3C()) {
+        mStateMgr.changeState(StateID_Out);
+    }
+}
 void dLytMsgWindow_c::finalizeState_WaitKeyMsgEnd2() {}
 
-void dLytMsgWindow_c::initializeState_WaitKeySelectQuestion() {}
-void dLytMsgWindow_c::executeState_WaitKeySelectQuestion() {}
+static wchar_t *sBufs[4];
+
+void dLytMsgWindow_c::initializeState_WaitKeySelectQuestion() {
+    // TODO regswaps
+    field_0x824 = mpTagProcessor->getField_0x90E();
+
+    mSelectBtn.setField_0x9B8(mpTagProcessor->getField_0x82C());
+    s32 tmp = mpTagProcessor->getField_0x828();
+    mSelectBtn.setField_0x9BC(tmp);
+    mSelectBtn.setField_0x990(tmp);
+    mSelectBtn.setField_0x998(mpTagProcessor);
+
+    wchar_t **buf = sBufs;
+
+    buf[0] = mpTagProcessor->getBuf(0);
+    buf[1] = mpTagProcessor->getBuf(1);
+    buf[2] = mpTagProcessor->getBuf(2);
+    buf[3] = mpTagProcessor->getBuf(3);
+
+    mSelectBtn.fn_8011E5D0(field_0x824, true);
+
+    for (int i = 0; i < field_0x824; i++) {
+        for (int j = 0; j < 2; j++) {
+            mSelectBtn.getSelectTextBox(i, j)->setTextWithGlobalTextProcessor(buf[i]);
+        }
+    }
+}
+void dLytMsgWindow_c::executeState_WaitKeySelectQuestion() {
+    s32 selection = mSelectBtn.getField_0x9B4();
+    if (selection >= 0) {
+        if (mSelectBtn.isStateWait()) {
+            bool doFiThing = false;
+            mpTagProcessor->setField_0x90E(0);
+            mpTagProcessor->setField_0x82C(-1);
+            mpTagProcessor->setField_0x828(-1);
+            mSelectBtn.setField_0x998(nullptr);
+            field_0x824 = 0;
+            mTextOptionSelection = selection;
+            field_0x1220 = 0;
+            if (GLOBAL_FI_CONTEXT != nullptr) {
+                doFiThing = GLOBAL_FI_CONTEXT->mDoSpecialFiMenuHandling;
+            }
+
+            if (doFiThing) {
+                switch ((int)mTextOptionSelection) {
+                    case 0: mSpecialFiMenuValue = FiContext::getGlobalFiInfo0(0); break;
+                    case 1: mSpecialFiMenuValue = FiContext::getGlobalFiInfo0(1); break;
+                    case 2: mSpecialFiMenuValue = FiContext::getGlobalFiInfo0(2); break;
+                    case 3: mSpecialFiMenuValue = 7; break;
+                }
+            }
+
+            if (field_0x1220 != 0) {
+                mStateMgr.changeState(StateID_Invisible);
+            } else {
+                mStateMgr.changeState(StateID_Out);
+            }
+        }
+    }
+}
 void dLytMsgWindow_c::finalizeState_WaitKeySelectQuestion() {}
 
 void dLytMsgWindow_c::initializeState_MapOpen() {}
-void dLytMsgWindow_c::executeState_MapOpen() {}
+void dLytMsgWindow_c::executeState_MapOpen() {
+    if ((dLytMap_c::getInstance() != nullptr && dLytMap_c::getInstance()->isOpenMaybe()) ||
+        !dLytControlGame_c::getInstance()->isInSomeMapState()) {
+        dMessage_c::getInstance()->setField_0x329(0);
+        mStateMgr.changeState(StateID_Invisible);
+    }
+}
 void dLytMsgWindow_c::finalizeState_MapOpen() {}
 
 void dLytMsgWindow_c::initializeState_WaitKeyMapClose() {}
-void dLytMsgWindow_c::executeState_WaitKeyMapClose() {}
+void dLytMsgWindow_c::executeState_WaitKeyMapClose() {
+    if ((checkButtonBPressed() || checkButtonPlusPressed()) && !dLytControlGame_c::getInstance()->isNotInStateMap()) {
+        dLytControlGame_c::getInstance()->fn_802CCD40(true);
+        mStateMgr.changeState(StateID_MapClose);
+    }
+}
 void dLytMsgWindow_c::finalizeState_WaitKeyMapClose() {}
 
 void dLytMsgWindow_c::initializeState_MapClose() {}
 void dLytMsgWindow_c::executeState_MapClose() {}
 void dLytMsgWindow_c::finalizeState_MapClose() {}
 
-void dLytMsgWindow_c::initializeState_Out() {}
-void dLytMsgWindow_c::executeState_Out() {}
+void dLytMsgWindow_c::initializeState_Out() {
+    field_0x768 = field_0x75C;
+    mpCurrentSubtype->close();
+}
+void dLytMsgWindow_c::executeState_Out() {
+    if (mpCurrentSubtype->isDoneClosing() && (field_0x817 == 0 || mpCurrentSubtype->vt_0x3C())) {
+        removeSubMsgManagers();
+        mStateMgr.changeState(StateID_Invisible);
+    }
+}
 void dLytMsgWindow_c::finalizeState_Out() {}
 
-void dLytMsgWindow_c::initializeState_ExplainIn() {}
-void dLytMsgWindow_c::executeState_ExplainIn() {}
+void dLytMsgWindow_c::initializeState_ExplainIn() {
+    mpCurrentSubtype->open(nullptr, false);
+}
+void dLytMsgWindow_c::executeState_ExplainIn() {
+    if (mpCurrentSubtype->isDoneOpening()) {
+        mpMsgWindowUnk->textAdvancingRelated(true, true);
+        if (setTextToDisplay(mpMsgWindowUnk->getProcessedText())) {
+            mStateMgr.changeState(StateID_ExplainVisible);
+        }
+    }
+}
 void dLytMsgWindow_c::finalizeState_ExplainIn() {}
 
 void dLytMsgWindow_c::initializeState_ExplainVisible() {}
-void dLytMsgWindow_c::executeState_ExplainVisible() {}
+void dLytMsgWindow_c::executeState_ExplainVisible() {
+    if ((mShowAutoMessage != 0 || (mpAutoExplain != nullptr && mpAutoExplain->checkSomethingMeter())) ||
+        ((mpAutoCaption != nullptr && mpAutoCaption->checkSomethingMeter()))) {
+        mStateMgr.changeState(StateID_ExplainOut);
+    }
+}
 void dLytMsgWindow_c::finalizeState_ExplainVisible() {}
 
-void dLytMsgWindow_c::initializeState_ExplainOut() {}
-void dLytMsgWindow_c::executeState_ExplainOut() {}
+void dLytMsgWindow_c::initializeState_ExplainOut() {
+    mpCurrentSubtype->close();
+}
+void dLytMsgWindow_c::executeState_ExplainOut() {
+    if (mpCurrentSubtype->isDoneClosing()) {
+        field_0x80D = 0;
+        mShowAutoMessage = 0;
+        removeSubMsgManagers();
+        mStateMgr.changeState(StateID_Invisible);
+    }
+}
 void dLytMsgWindow_c::finalizeState_ExplainOut() {}
 
-void dLytMsgWindow_c::initializeState_DemoIn() {}
-void dLytMsgWindow_c::executeState_DemoIn() {}
+void dLytMsgWindow_c::initializeState_DemoIn() {
+    mpCurrentSubtype->open(nullptr, 0);
+}
+void dLytMsgWindow_c::executeState_DemoIn() {
+    if (mpCurrentSubtype->isDoneOpening()) {
+        mStateMgr.changeState(StateID_DemoVisible);
+    }
+}
 void dLytMsgWindow_c::finalizeState_DemoIn() {}
 
-void dLytMsgWindow_c::initializeState_DemoVisible() {}
-void dLytMsgWindow_c::executeState_DemoVisible() {}
+void dLytMsgWindow_c::initializeState_DemoVisible() {
+    field_0x81C = 0;
+    field_0x812 = 1;
+}
+void dLytMsgWindow_c::executeState_DemoVisible() {
+    if (mpTagProcessor->getField_0x830() <= 0) {
+        mStateMgr.changeState(StateID_DemoOut);
+    }
+    field_0x81C = mpMsgWindowUnk->checkEndReached();
+}
 void dLytMsgWindow_c::finalizeState_DemoVisible() {}
 
-void dLytMsgWindow_c::initializeState_DemoOut() {}
-void dLytMsgWindow_c::executeState_DemoOut() {}
+void dLytMsgWindow_c::initializeState_DemoOut() {
+    mpCurrentSubtype->close();
+}
+void dLytMsgWindow_c::executeState_DemoOut() {
+    if (mpCurrentSubtype->isDoneClosing()) {
+        if (field_0x81C != 0) {
+            field_0x81C = 0;
+            removeSubMsgManagers();
+            mStateMgr.changeState(StateID_Invisible);
+        } else {
+            mpMsgWindowUnk->fn_800B2AA0();
+            mpMsgWindowUnk->textAdvancingRelated(true, true);
+            setTextToDisplay(mpMsgWindowUnk->getProcessedText());
+            mStateMgr.changeState(StateID_DemoIn);
+        }
+    }
+}
 void dLytMsgWindow_c::finalizeState_DemoOut() {}
+
+bool dLytMsgWindow_c::execute() {
+    field_0x818 = 0;
+    u8 old_field_0x816 = field_0x816;
+    if (*mStateMgr.getStateID() == StateID_DemoIn || *mStateMgr.getStateID() == StateID_DemoVisible ||
+        *mStateMgr.getStateID() == StateID_DemoOut) {
+        dStageMgr_c *mgr = dStageMgr_c::GetInstance();
+        // Bleh
+        bool b =
+            !(mgr->getFader()->isNotStatus(static_cast<mFaderBase_c::EStatus>(-1)) ||
+              mgr->getFader()->isNotStatus(mFaderBase_c::FADED_OUT));
+        if (!b) {
+            field_0x819 = 1;
+            field_0x81B = 1;
+        }
+    }
+
+    if (field_0x81B != 0) {
+        if (isVisible()) {
+            removeSubMsgManagers();
+            mStateMgr.changeState(StateID_Invisible);
+        }
+        mpMsgWindowUnk->checkLastLineReachedMaybe();
+        mSelectBtn.remove();
+        field_0x81B = 0;
+        // TODO boss caption
+    }
+    // TODO ActorEventFlowManagerRelated::checkEventFinished
+
+    mStateMgr.executeState();
+
+    if (isVisible()) {
+        mSelectBtn.execute();
+        if (mpCurrentSubtype != nullptr) {
+            mpCurrentSubtype->execute();
+        }
+    }
+
+    if (field_0x812 != 0) {
+        if (mpTagProcessor->getField_0x830() != -1) {
+            mpTagProcessor->tick0x830();
+        } else {
+            field_0x811 = 0;
+            field_0x812 = 0;
+        }
+    }
+
+    mpTagProcessor->execute();
+    if (field_0x816 == 1 && old_field_0x816 == 1) {
+        field_0x816 = 0;
+    }
+    return true;
+}
+
+bool dLytMsgWindow_c::draw() {
+    if (isVisible() || field_0x1220 != 0) {
+        if (mpCurrentSubtype != nullptr) {
+            // TODO tag processor
+            mpCurrentSubtype->addToDrawList();
+        }
+        mSelectBtn.draw();
+    }
+
+    return true;
+}
+
+void dLytMsgWindow_c::setCurrentLabelName(const char *name, bool storeFile) {
+    // TODO
+    mName = name;
+    !std::strcmp(name, "FR_SIREN_04");
+}
+
+bool dLytMsgWindow_c::isVisible() const {
+    return !(*mStateMgr.getStateID() == StateID_Invisible);
+}
+
+bool dLytMsgWindow_c::setTextToDisplay(const wchar_t *text) {
+    if (mpCurrentSubtype != nullptr) {
+        return mpCurrentSubtype->setText(text);
+    }
+    return false;
+}
+
+bool dLytMsgWindow_c::isOutputtingText() const {
+    return *mStateMgr.getStateID() == StateID_OutputText;
+}
+
+void dLytMsgWindow_c::setCurrentEntrypointName(const char *name) {
+    mCurrentEntrypointName = name;
+}
+
+void dLytMsgWindow_c::setCurrentFlowFilename(const char *name) {
+    mCurrentFlowFileName = name;
+}
 
 #pragma dont_inline on
 void dLytMsgWindow_c::createSubMsgManager(u8 type) {

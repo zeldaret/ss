@@ -3,6 +3,7 @@
 
 // Thanks kiwi! https://gist.github.com/kiwi515/47bb17b07ed502bdfa7faa60bc48a3c7
 
+#include "common.h"
 enum WZSound {
     /* 0x0000 */ SE_L_FLIPED,
     /* 0x0001 */ SE_L_FS_START,
@@ -6471,6 +6472,7 @@ enum WZSound {
 class SmallSoundManager {
 public:
     void playSound(WZSound id);
+    void playButtonPressSoundWhenAdvancingTextBoxes(f32);
 
     static SmallSoundManager *GetInstance() {
         return sInstance;

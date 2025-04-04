@@ -69,6 +69,7 @@ public:
     f32 getFloat(s32 i);
     s32 tickPauseFrame();
     s32 tick0x830();
+    void execute();
 
     void setTextbox(dTextBox_c *box) {
         field_0x004 = box;
@@ -90,6 +91,14 @@ public:
         return field_0x90E;
     }
 
+    s32 getField_0x828() const {
+        return field_0x828;
+    }
+
+    s32 getField_0x82C() const {
+        return field_0x82C;
+    }
+
     s32 getField_0x830() const {
         return field_0x830;
     }
@@ -98,8 +107,21 @@ public:
         field_0x90C = type;
     }
 
+    void setField_0x828(s32 val) {
+        field_0x828 = val;
+    }
+
+    void setField_0x82C(s32 val) {
+        field_0x82C = val;
+    }
+
+
     void setField_0x90D(u8 val) {
         field_0x90D = val;
+    }
+
+    void setField_0x90E(u8 val) {
+        field_0x90E = val;
     }
 
     void setField_0xEE1(u8 val) {
@@ -112,6 +134,10 @@ public:
 
     void setField_0xEE3(u8 val) {
         field_0xEE3 = val;
+    }
+
+    wchar_t *getBuf(s32 idx) {
+        return field_0x008[idx];
     }
 
 private:

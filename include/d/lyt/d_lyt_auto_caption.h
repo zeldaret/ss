@@ -31,9 +31,9 @@ public:
     STATE_FUNC_DECLARE(dLytAutoCaption_c, OutputText);
     STATE_FUNC_DECLARE(dLytAutoCaption_c, Out);
 
-private:
-    static bool checkSomethingMeter();
+    bool checkSomethingMeter();
 
+private:
     /* 0x010 */ UI_STATE_MGR_DECLARE(dLytAutoCaption_c);
     /* 0x068 */ d2d::ResAccIf_c mResAcc;
     /* 0x3C4 */ d2d::LytBase_c mLyt;

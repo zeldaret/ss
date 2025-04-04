@@ -443,6 +443,7 @@ d/lyt/msg_window/d_lyt_msg_window.cpp:
 	.text       start:0x801148F0 end:0x8011C8C8
 	.ctors      start:0x804DB738 end:0x804DB73C
 	.data       start:0x8051B6E8 end:0x8051C300
+	.bss        start:0x805AD188 end:0x805AE670
 
 d/lyt/msg_window/d_lyt_msg_window_select_btn.cpp:
 	.text       start:0x8011C8D0 end:0x80120A18
