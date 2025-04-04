@@ -5,6 +5,7 @@
 #include "d/d_base.h"
 #include "d/d_tag_processor.h"
 #include "libms/flowfile.h"
+#include "libms/msgfile.h"
 #include "sized_string.h"
 
 class dMessage_c : public dBase_c {
@@ -42,9 +43,22 @@ public:
     static bool isValidTextLabel(const char *name);
     static void loadTextByLabel(const char *label, dTagProcessor_c *tagProcessor, bool, u32, u32);
 
+    static const wchar_t *getTextMessageByLabel(const char *label, bool global, wchar_t *dstBuf, u32 maxLen);
+    static const wchar_t *
+    getTextMessageByLabel(const char *label, dTagProcessor_c *pTagProcessor, bool global, wchar_t *dstBuf, u32 maxLen);
+
+    static const wchar_t *formatText(const wchar_t *text);
+
 private:
+    const wchar_t *formatTextInternal(const wchar_t *text);
+    const wchar_t *getTextMessageByLabelInternal(
+        const char *label, dTagProcessor_c *pTagProcessor, bool global, wchar_t *dstBuf, u32 maxLen
+    );
+
     static s32 getArcIndexForFile(const char *fileName);
     static const char *getArcNameByIndex(s32 idx, bool);
+
+    bool checkIsValidTextLabel(const char *name);
 
     static void setZevFromMsbArc();
     static const char *getMsbtFileName(s32 index);
@@ -53,13 +67,18 @@ private:
     static s32 getMsbfNumberByIndex(s32 index);
     static void *getDataFromMsbArc(s32 number, const char *fileName, bool);
 
+    s32 getTextIndexForLabel(const char *label);
+    s32 getMsbtIndexForLabelInternal(const char *label);
+    static MsbtInfo *getMsbtInfoForIndex(s32 index);
+    MsbtInfo *getMsbtInfoForIndexInternal(s32 index);
+
     static dMessage_c *sInstance;
     static dTagProcessor_c *sTagProcessor;
 
     /* 0x068 */ MsbtInfo *mpMsgs[82];
     /* 0x1B0 */ MsbfInfo *mpFlows[80];
     /* 0x2F0 */ SizedString<8> mLanguage;
-    /* 0x2F8 */ s32 mCurrentTextFileNumber;
+    /* 0x2F8 */ u32 mCurrentTextFileNumber;
 
     /* 0x2FC */ s32 field_0x2FC;
 

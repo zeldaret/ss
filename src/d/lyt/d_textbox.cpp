@@ -300,8 +300,6 @@ s32 dTextBox_c::calcTextLines(const wchar_t *src, dTagProcessor_c *tagProcessor)
     return tagProcessor->getNumLinesMaybe();
 }
 
-extern "C" const wchar_t *getTextMessageByLabel(const char *labelId, int, int, int);
-
 void dTextBox_c::setMessageWithGlobalTextProcessor(const char *labelId, void *unused, void *unk, ...) {
     va_list l;
     va_start(l, str);
@@ -310,7 +308,7 @@ void dTextBox_c::setMessageWithGlobalTextProcessor(const char *labelId, void *un
 }
 
 void dTextBox_c::setMessageWithGlobalTextProcessorV(const char *labelId, void *unused, void *unk, va_list list) {
-    const wchar_t *text = getTextMessageByLabel(labelId, 1, 0, 0);
+    const wchar_t *text = dMessage_c::getTextMessageByLabel(labelId, true, nullptr, 0);
     setTextWithGlobalTextProcessorV(text, unk, list);
     if (GetFont() != nullptr) {
         resizeTextToFit(GetSize().width);

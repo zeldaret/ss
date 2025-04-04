@@ -439,8 +439,6 @@ void LytBase_c::setPropertiesRecursive(nw4r::lyt::Pane *pane, f32 posX, f32 posY
     }
 }
 
-extern "C" const wchar_t *fn_801B2600(const wchar_t *);
-
 void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 scale, f32 spaceX, f32 spaceY) {
     if (pane->GetName()[0] != 'T') {
         return;
@@ -608,7 +606,7 @@ bool LytBase_c::fn_800ABCE0(
         return false;
     }
 
-    textbox1->setTextWithGlobalTextProcessor(fn_801B2600(text));
+    textbox1->setTextWithGlobalTextProcessor(dMessage_c::formatText(text));
     return true;
 }
 
@@ -677,8 +675,6 @@ bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t 
     }
     return fn_800AC1AC(list, textbox1, textbox2, destBuf, maxLen);
 }
-
-extern "C" void fn_800AF840(dTextBox_c *textbox1, MsbtInfo *, const char *, int arg, void *unk);
 
 bool LytBase_c::fn_800AC1AC(
     const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen
