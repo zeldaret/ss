@@ -448,6 +448,7 @@ d/lyt/msg_window/d_lyt_msg_window.cpp:
 d/lyt/msg_window/d_lyt_msg_window_select_btn.cpp:
 	.text       start:0x8011C8D0 end:0x80120A18
 	.ctors      start:0x804DB73C end:0x804DB740
+	.rodata     start:0x804E7468 end:0x804E7540
 	.data       start:0x8051C300 end:0x8051CB10
 	.bss        start:0x805AE670 end:0x805AE930
 
@@ -457,18 +458,38 @@ d/lyt/msg_window/d_lyt_msg_window_base.cpp:
 d/lyt/msg_window/d_lyt_msg_window_talk.cpp:
 	.text       start:0x80121070 end:0x801223C8
 	.ctors      start:0x804DB740 end:0x804DB744
+	.rodata     start:0x804E7540 end:0x804E7560
+	.data       start:0x8051CC98 end:0x8051CFC0
+	.sdata      start:0x805725A0 end:0x805725B0
+	.sdata2     start:0x80579E68 end:0x80579E80
+	.bss        start:0x805AE930 end:0x805AEA70
 
 d/lyt/msg_window/d_lyt_msg_window_link.cpp:
 	.text       start:0x801223D0 end:0x80123738
 	.ctors      start:0x804DB744 end:0x804DB748
+	.rodata     start:0x804E7560 end:0x804E7580
+	.data       start:0x8051CFC0 end:0x8051D2D8
+	.sdata      start:0x805725B0 end:0x805725C0
+	.sdata2     start:0x80579E80 end:0x80579E98
+	.bss        start:0x805AEA70 end:0x805AEBB0
 
 d/lyt/msg_window/d_lyt_msg_window_get.cpp:
 	.text       start:0x80123740 end:0x80124678
 	.ctors      start:0x804DB748 end:0x804DB74C
+	.rodata     start:0x804E7580 end:0x804E7598
+	.data       start:0x8051D2D8 end:0x8051D578
+	.sdata      start:0x805725C0 end:0x805725D0
+	.sdata2     start:0x80579E98 end:0x80579EA8
+	.bss        start:0x805AEBB0 end:0x805AECB0
 
 d/lyt/msg_window/d_lyt_msg_window_sword.cpp:
 	.text       start:0x80124680 end:0x80125BA8
 	.ctors      start:0x804DB74C end:0x804DB750
+	.rodata     start:0x804E7598 end:0x804E75C0
+	.data       start:0x8051D578 end:0x8051D8A0
+	.sdata      start:0x805725D0 end:0x805725E0
+	.sdata2     start:0x80579EA8 end:0x80579EC0
+	.bss        start:0x805AECB0 end:0x805AEDF0
 
 d/lyt/msg_window/d_lyt_msg_window_wood.cpp:
 	.text       start:0x80125BB0 end:0x801267F8
@@ -491,10 +512,20 @@ d/lyt/msg_window/d_lyt_msg_window_stone.cpp:
 d/lyt/msg_window/d_lyt_msg_window_demo.cpp:
 	.text       start:0x80127480 end:0x801281F8
 	.ctors      start:0x804DB758 end:0x804DB75C
+	.rodata     start:0x804E75F0 end:0x804E7600
+	.data       start:0x8051DD90 end:0x8051E008
+	.sdata      start:0x80572608 end:0x80572618
+	.sdata2     start:0x80579ED0 end:0x80579EE0
+	.bss        start:0x805AEFF0 end:0x805AF0F0
 
 d/lyt/msg_window/d_lyt_simple_window.cpp:
 	.text       start:0x80128200 end:0x8012B948
 	.ctors      start:0x804DB75C end:0x804DB760
+	.rodata     start:0x804E7600 end:0x804E7668
+	.data       start:0x8051E008 end:0x8051E548
+	.sdata      start:0x80572618 end:0x80572638
+	.sdata2     start:0x80579EE0 end:0x80579EF8
+	.bss        start:0x805AF0F0 end:0x805AF1F0
 
 d/lyt/d_lyt_auto_caption.cpp:
 	.text       start:0x8012B950 end:0x8012C568

@@ -13,6 +13,13 @@
 
 // clang-format off
 // vtable order
+#include "d/lyt/msg_window/d_lyt_msg_window_common.h"
+#include "d/lyt/msg_window/d_lyt_msg_window_demo.h"
+#include "d/lyt/msg_window/d_lyt_msg_window_get.h"
+#include "d/lyt/msg_window/d_lyt_msg_window_link.h"
+#include "d/lyt/msg_window/d_lyt_msg_window_sword.h"
+#include "d/lyt/msg_window/d_lyt_msg_window_talk.h"
+
 #include "d/lyt/msg_window/d_lyt_msg_window_wood.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_stone.h"
 #include "d/lyt/d_lyt_auto_explain.h"
@@ -28,6 +35,7 @@
 #include "toBeSorted/global_fi_context.h"
 #include "toBeSorted/music_mgrs.h"
 #include "toBeSorted/small_sound_mgr.h"
+
 #include <cstring>
 
 class MsgWindowUnkLocalClass {
@@ -184,7 +192,7 @@ void dLytMsgWindow_c::executeState_Invisible() {
                     }
 
                     mpCurrentSubtype->setPriority(0x8A);
-                    dTextBox_c *box = mpCurrentSubtype->vt_0x30();
+                    dTextBox_c *box = mpCurrentSubtype->getTextBox();
                     mpMsgWindowUnk->fn_800B2130(mNameCopy, box, nullptr, true);
                     mpMsgWindowUnk->textAdvancingRelated(true, true);
                     mShowAutoMessage = false;
@@ -196,13 +204,13 @@ void dLytMsgWindow_c::executeState_Invisible() {
                     mSpecialFiMenuValue = 7;
                     if (mpTagProcessor->getMsgWindowSubtype() == 6) {
                         mpCurrentSubtype = mpWindowWood;
-                        dTextBox_c *box = mpCurrentSubtype->vt_0x30();
+                        dTextBox_c *box = mpCurrentSubtype->getTextBox();
                         mpMsgWindowUnk->fn_800B2130(mNameCopy, box, nullptr, true);
                         mpMsgWindowUnk->textAdvancingRelated(true, true);
                         setTextToDisplay(mpMsgWindowUnk->getProcessedText());
                     } else if (mpTagProcessor->getMsgWindowSubtype() == 7) {
                         mpCurrentSubtype = mpWindowStone;
-                        dTextBox_c *box = mpCurrentSubtype->vt_0x30();
+                        dTextBox_c *box = mpCurrentSubtype->getTextBox();
                         mpMsgWindowUnk->fn_800B2130(mNameCopy, box, nullptr, true);
                         mpMsgWindowUnk->textAdvancingRelated(true, true);
                         setTextToDisplay(mpMsgWindowUnk->getProcessedText());
@@ -218,7 +226,7 @@ void dLytMsgWindow_c::executeState_Invisible() {
                         // TODO
                     } else if (mpTagProcessor->getMsgWindowSubtype() == 30) {
                         mpCurrentSubtype = mpWindowDemo;
-                        dTextBox_c *box = mpCurrentSubtype->vt_0x30();
+                        dTextBox_c *box = mpCurrentSubtype->getTextBox();
                         mpMsgWindowUnk->fn_800B2130(mNameCopy, box, field_0x828, true);
                         mpMsgWindowUnk->textAdvancingRelated(true, true);
                         setTextToDisplay(mpMsgWindowUnk->getProcessedText());
@@ -229,7 +237,7 @@ void dLytMsgWindow_c::executeState_Invisible() {
                         // TODO
                     }
                     mpCurrentSubtype->setPriority(0x8A);
-                    dTextBox_c *box = mpCurrentSubtype->vt_0x30();
+                    dTextBox_c *box = mpCurrentSubtype->getTextBox();
                     mpMsgWindowUnk->fn_800B2130(mNameCopy, box, field_0x828, true);
                     setTextToDisplay(mpMsgWindowUnk->getProcessedText());
                     mStateMgr.changeState(StateID_In);
@@ -307,14 +315,14 @@ void dLytMsgWindow_c::executeState_OutputText() {
                 mStateMgr.changeState(StateID_WaitKeyMsgEnd0);
             } else if (mpTagProcessor->getField_0x90E() != 0) {
                 mStateMgr.changeState(StateID_WaitKeyMsgEnd0);
-            } else if (mpCurrentSubtype->vt_0x34()) {
+            } else if (mpCurrentSubtype->startConfirm()) {
                 field_0x817 = 1;
                 mStateMgr.changeState(StateID_WaitKeyMsgEnd0);
             }
         } else if (field_0x81D != 0) {
             if (field_0x811 != 0) {
                 mStateMgr.changeState(StateID_WaitKeyChangePage0);
-            } else if (mpCurrentSubtype->vt_0x34()) {
+            } else if (mpCurrentSubtype->startConfirm()) {
                 field_0x817 = 1;
                 mStateMgr.changeState(StateID_WaitKeyChangePage0);
             }
@@ -369,7 +377,7 @@ void dLytMsgWindow_c::finalizeState_WaitKeyChangePage0() {}
 
 void dLytMsgWindow_c::initializeState_WaitKeyChangePage1() {}
 void dLytMsgWindow_c::executeState_WaitKeyChangePage1() {
-    if (mpCurrentSubtype->vt_0x38(false)) {
+    if (mpCurrentSubtype->startDecide(false)) {
         field_0x817 = 0;
         mpMsgWindowUnk->fn_800B2AA0();
         if (mpTagProcessor->getMsgWindowSubtype() >= 6 && mpTagProcessor->getMsgWindowSubtype() < 8) {
@@ -416,7 +424,7 @@ void dLytMsgWindow_c::executeState_WaitKeyMsgEnd0() {
     } else if (field_0x810 != 0) {
         if (dMessage_c::isValidTextLabel(mName)) {
             mNameCopy = mName;
-            dTextBox_c *box = mpCurrentSubtype->vt_0x30();
+            dTextBox_c *box = mpCurrentSubtype->getTextBox();
             mpMsgWindowUnk->fn_800B2130(mNameCopy, box, field_0x828, true);
             setTextToDisplay(mpMsgWindowUnk->getProcessedText());
             field_0x818 = 1;
@@ -436,12 +444,12 @@ void dLytMsgWindow_c::finalizeState_WaitKeyMsgEnd0() {}
 
 void dLytMsgWindow_c::initializeState_WaitKeyMsgEnd1() {}
 void dLytMsgWindow_c::executeState_WaitKeyMsgEnd1() {
-    if (mpCurrentSubtype->vt_0x38(false)) {
+    if (mpCurrentSubtype->startDecide(false)) {
         if (field_0x810 != 0) {
             field_0x817 = 0;
             if (dMessage_c::isValidTextLabel(mName)) {
                 mNameCopy = mName;
-                mpMsgWindowUnk->fn_800B2130(mNameCopy, mpCurrentSubtype->vt_0x30(), field_0x828, true);
+                mpMsgWindowUnk->fn_800B2130(mNameCopy, mpCurrentSubtype->getTextBox(), field_0x828, true);
                 setTextToDisplay(mpMsgWindowUnk->getProcessedText());
                 field_0x818 = 1;
                 mStateMgr.changeState(StateID_OutputText);
@@ -464,7 +472,7 @@ void dLytMsgWindow_c::finalizeState_WaitKeyMsgEnd1() {}
 
 void dLytMsgWindow_c::initializeState_WaitKeyMsgEnd2() {}
 void dLytMsgWindow_c::executeState_WaitKeyMsgEnd2() {
-    if (mpCurrentSubtype->vt_0x3C()) {
+    if (mpCurrentSubtype->isDoneDecide()) {
         mStateMgr.changeState(StateID_Out);
     }
 }
@@ -560,7 +568,7 @@ void dLytMsgWindow_c::initializeState_Out() {
     mpCurrentSubtype->close();
 }
 void dLytMsgWindow_c::executeState_Out() {
-    if (mpCurrentSubtype->isDoneClosing() && (field_0x817 == 0 || mpCurrentSubtype->vt_0x3C())) {
+    if (mpCurrentSubtype->isDoneClosing() && (field_0x817 == 0 || mpCurrentSubtype->isDoneDecide())) {
         removeSubMsgManagers();
         mStateMgr.changeState(StateID_Invisible);
     }
@@ -749,33 +757,39 @@ void dLytMsgWindow_c::createSubMsgManager(u8 type) {
             mpWindowStone->build(&mResAcc1, &mResAcc2, mpTagProcessor);
             break;
         case 2:
-            // TODO Sword
+            mpWindowSword = new dLytMsgWindowSword_c();
+            mpWindowSword->setSwordType(dLytTextSword::FI);
+            mpWindowSword->build(&mResAcc1, &mResAcc2, mpTagProcessor);
             break;
         case 3:
-            // TODO Sword
+            mpWindowSword = new dLytMsgWindowSword_c();
+            mpWindowSword->setSwordType(dLytTextSword::GHIRAHIM);
+            mpWindowSword->build(&mResAcc1, &mResAcc2, mpTagProcessor);
             break;
         case 4:
-            // TODO Sword
-            break;
-        case 5:
-            // TODO Get
-            mpWindowGet = new dLytMsgWindowWood_c();
-            mpWindowGet->build(&mResAcc1, &mResAcc2, mpTagProcessor);
+            mpWindowSword = new dLytMsgWindowSword_c();
+            mpWindowSword->setSwordType(dLytTextSword::LASTBOSS);
+            mpWindowSword->build(&mResAcc1, &mResAcc2, mpTagProcessor);
             break;
         case 9:
             // TODO Link
-            mpWindowLink = new dLytMsgWindowWood_c();
+            mpWindowLink = new dLytMsgWindowLink_c();
             mpWindowLink->build(&mResAcc1, &mResAcc2, mpTagProcessor);
+            break;
+        case 5:
+            // TODO Get
+            mpWindowGet = new dLytMsgWindowGet_c();
+            mpWindowGet->build(&mResAcc1, &mResAcc2, mpTagProcessor);
             break;
         case 30:
             // TODO Demo
-            mpWindowDemo = new dLytMsgWindowWood_c();
+            mpWindowDemo = new dLytMsgWindowDemo_c();
             mpWindowDemo->build(&mResAcc1, &mResAcc2, mpTagProcessor);
             break;
         default:
             // TODO talk
-            mpWindowDemo = new dLytMsgWindowWood_c();
-            mpWindowDemo->build(&mResAcc1, &mResAcc2, mpTagProcessor);
+            mpWindowTalk = new dLytMsgWindowTalk_c();
+            mpWindowTalk->build(&mResAcc1, &mResAcc2, mpTagProcessor);
             break;
     }
 }

@@ -212,7 +212,7 @@ void dLytCommonIconItemPart1_c::setOff() {
     }
 }
 
-void dLytCommonIconItemPart1_c::startDecide() {
+void dLytCommonIconItemPart1_c::startConfirm() {
     mAnm[ITEM_PART_1_ANIM_DECIDE].setForwardOnce();
     mAnm[ITEM_PART_1_ANIM_DECIDE].setToStart();
     mAnm[ITEM_PART_1_ANIM_DECIDE].setAnimEnable(true);
@@ -545,7 +545,7 @@ void dLytCommonIconItemPart2_c::setOff() {
     }
 }
 
-void dLytCommonIconItemPart2_c::startDecide() {
+void dLytCommonIconItemPart2_c::startConfirm() {
     mAnm[ITEM_PART_2_ANIM_DECIDE].setForwardOnce();
     mAnm[ITEM_PART_2_ANIM_DECIDE].setToStart();
     mAnm[ITEM_PART_2_ANIM_DECIDE].setAnimEnable(true);
@@ -849,10 +849,10 @@ void dLytCommonIconItem_c::setOff() {
     }
 }
 
-void dLytCommonIconItem_c::startDecide() {
+void dLytCommonIconItem_c::startConfirm() {
     switch (mPart) {
-        case 0: mPart1.startDecide(); break;
-        case 1: mPart2.startDecide(); break;
+        case 0: mPart1.startConfirm(); break;
+        case 1: mPart2.startConfirm(); break;
         case 2: break;
     }
 }

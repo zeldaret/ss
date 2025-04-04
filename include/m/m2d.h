@@ -94,6 +94,11 @@ public:
         setFrame(actualEnd * ratio);
     }
 
+    inline f32 getRatio() const {
+        f32 actualEnd = mEndFrame - 1.0f;
+        return mCurrFrame / actualEnd;
+    }
+
     inline void setBackwardsRatio(f32 ratio) {
         f32 actualEnd = mEndFrame - 1.0f;
         setFrame(actualEnd - (ratio * actualEnd));

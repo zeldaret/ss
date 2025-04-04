@@ -10,8 +10,13 @@
 #include "s/s_State.hpp"
 #include "sized_string.h"
 
+class dLytMsgWindowTalk_c;
+class dLytMsgWindowLink_c;
+class dLytMsgWindowGet_c;
+class dLytMsgWindowSword_c;
 class dLytMsgWindowWood_c;
 class dLytMsgWindowStone_c;
+class dLytMsgWindowDemo_c;
 class dLytAutoExplain_c;
 class dLytAutoCaption_c;
 
@@ -69,13 +74,13 @@ private:
     /* 0x724 */ dTagProcessor_c *mpTagProcessor;
 
     /* 0x728 */ dLytMsgWindowSubtype *mpCurrentSubtype;
-    /* 0x72C */ dLytMsgWindowSubtype *mpWindowTalk;
-    /* 0x730 */ dLytMsgWindowSubtype *mpWindowLink;
-    /* 0x734 */ dLytMsgWindowSubtype *mpWindowSword;
+    /* 0x72C */ dLytMsgWindowTalk_c *mpWindowTalk;
+    /* 0x730 */ dLytMsgWindowLink_c *mpWindowLink;
+    /* 0x734 */ dLytMsgWindowSword_c *mpWindowSword;
     /* 0x738 */ dLytMsgWindowWood_c *mpWindowWood;
     /* 0x73C */ dLytMsgWindowStone_c *mpWindowStone;
-    /* 0x740 */ dLytMsgWindowSubtype *mpWindowGet;
-    /* 0x744 */ dLytMsgWindowSubtype *mpWindowDemo;
+    /* 0x740 */ dLytMsgWindowGet_c *mpWindowGet;
+    /* 0x744 */ dLytMsgWindowDemo_c *mpWindowDemo;
     /* 0x748 */ dLytAutoExplain_c *mpAutoExplain;
     /* 0x74C */ dLytAutoCaption_c *mpAutoCaption;
 

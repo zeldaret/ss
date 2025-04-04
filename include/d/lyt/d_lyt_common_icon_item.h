@@ -56,7 +56,7 @@ public:
     void setNumberColor(u8 color);
     void setOn();
     void setOff();
-    void startDecide();
+    void startConfirm();
     bool isDoneDeciding() const;
 
 private:
@@ -129,7 +129,7 @@ public:
     void setNumberColor(u8 color);
     void setOn();
     void setOff();
-    void startDecide();
+    void startConfirm();
     bool isDoneDeciding() const;
     void setShieldOnOff(bool onOff);
 
@@ -264,7 +264,7 @@ public:
 
     /** The "decide" animation in the scrap shop makes the selected item flash for a
     short time before showing the upgrade screen */
-    void startDecide();
+    void startConfirm();
     bool isDoneDeciding() const;
 
     void setShieldOnOff(bool onOff);
