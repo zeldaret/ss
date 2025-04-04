@@ -125,6 +125,14 @@ public:
         field_0x104 = str;
     }
 
+    bool getField_0x7B4() const {
+        return field_0x7B4;
+    }
+
+    MsbtInfo *getMsbtInfo(s32 index) const {
+        return field_buf2[index];
+    }
+
 private:
     static UnkTextThing *sInstance;
 

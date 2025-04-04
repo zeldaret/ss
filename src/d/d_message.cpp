@@ -181,6 +181,9 @@ static char *sMsbfFileNames[80] = {
     "599-Demo.msbf",
 };
 
+dMessage_c *dMessage_c::sInstance;
+dTagProcessor_c *dMessage_c::sTagProcessor;
+
 static void *msbAlloc(size_t size) {}
 
 static void msbFree(void *ptr) {}
@@ -255,6 +258,107 @@ int dMessage_c::draw() {
     return SUCCEEDED;
 }
 
+const wchar_t *dMessage_c::getTextMessageByLabel(const char *label, bool global, wchar_t *dstBuf, u32 maxLen) {
+    return sInstance->getTextMessageByLabelInternal(label, nullptr, global, dstBuf, maxLen);
+}
+
+const wchar_t *dMessage_c::getTextMessageByLabel(
+    const char *label, dTagProcessor_c *pTagProcessor, bool global, wchar_t *dstBuf, u32 maxLen
+) {
+    return sInstance->getTextMessageByLabelInternal(label, pTagProcessor, global, dstBuf, maxLen);
+}
+
+const wchar_t *dMessage_c::formatText(const wchar_t *text) {
+    return sInstance->formatTextInternal(text);
+}
+
+const wchar_t *dMessage_c::getTextMessageByLabelInternal(
+    const char *label, dTagProcessor_c *pTagProcessor, bool global, wchar_t *dstBuf, u32 maxLen
+) {
+    s32 fileIndex = mCurrentTextFileNumber;
+    MsbtInfo *info = nullptr;
+
+    if (global) {
+        fileIndex = getMsbtIndexForLabelInternal(label);
+    }
+
+    if (fileIndex >= 0) {
+        info = getMsbtInfoForIndex(fileIndex);
+    }
+
+    const wchar_t *text = LMS_GetTextByLabel(info, label);
+    if (pTagProcessor == nullptr) {
+        pTagProcessor = sTagProcessor;
+    }
+
+    u32 outLen = 0;
+    s32 textIdx = LMS_GetTextIndexByLabel(info, label);
+    MsbtAttrInfo *att = LMS_GetAttribute(info, textIdx);
+    pTagProcessor->setMsgWindowSubtype(att->c_0x00);
+    pTagProcessor->setField_0x90D(att->c_0x01);
+
+    // Strip trailing newline
+    wchar_t *end;
+    s32 i;
+
+    if (dstBuf != nullptr) {
+        pTagProcessor->format(nullptr, text, dstBuf, maxLen, &outLen, nullptr);
+        i = outLen - 1;
+        end = &dstBuf[i];
+        for (; i > 0; i--) {
+            if (*end != L'\n') {
+                break;
+            }
+            *end-- = L'\0';
+        }
+        // no return - might be intentional since dstBuf already has the result
+    } else {
+        static wchar_t sBuf[0x400] = {};
+        pTagProcessor->format(nullptr, text, sBuf, ARRAY_LENGTH(sBuf) - 1, &outLen, nullptr);
+        i = outLen - 1;
+        end = &sBuf[i];
+        for (; i > 0; i--) {
+            if (*end != L'\n') {
+                break;
+            }
+            *end = L'\0';
+            end--;
+        }
+
+        return sBuf;
+    }
+
+    return nullptr;
+}
+
+const wchar_t *dMessage_c::formatTextInternal(const wchar_t *text) {
+    u32 outLen = 0;
+    static wchar_t sBuf[0x200] = {};
+    sTagProcessor->format(nullptr, text, sBuf, ARRAY_LENGTH(sBuf), &outLen, nullptr);
+    s32 i = outLen - 1;
+    wchar_t *end = &sBuf[i];
+    for (; i > 0; i--) {
+        if (*end != L'\n') {
+            break;
+        }
+        *end = L'\0';
+        end--;
+    }
+
+    return sBuf;
+}
+
+bool dMessage_c::isValidTextLabel(const char *name) {
+    return sInstance->checkIsValidTextLabel(name);
+}
+
+bool dMessage_c::checkIsValidTextLabel(const char *name) {
+    if (name == nullptr) {
+        return false;
+    }
+    return getTextIndexForLabel(name) >= 0;
+}
+
 const char *dMessage_c::getMsbtFileName(s32 idx) {
     static SizedString<128> sPath;
 
@@ -279,6 +383,47 @@ s32 dMessage_c::getMsbtNumberByIndex(s32 index) {
 
 s32 dMessage_c::getMsbfNumberByIndex(s32 index) {
     return atoi(getMsbfFileName(index));
+}
+
+s32 dMessage_c::getTextIndexForLabel(const char *label) {
+    s32 idx = getMsbtIndexForLabelInternal(label);
+    MsbtInfo *info = nullptr;
+    if (idx >= 0) {
+        info = getMsbtInfoForIndex(idx);
+    }
+    return LMS_GetTextIndexByLabel(info, label);
+}
+
+s32 dMessage_c::getMsbtIndexForLabelInternal(const char *label) {
+    if (mCurrentTextFileNumber <= 81) {
+        MsbtInfo *info = getMsbtInfoForIndex(mCurrentTextFileNumber);
+        if (LMS_GetTextIndexByLabel(info, label) >= 0) {
+            return mCurrentTextFileNumber;
+        }
+    }
+
+    for (s32 i = 0; i < 82; i++) {
+        if (getMsbtInfoForIndex(i) != nullptr) {
+            if (LMS_GetTextIndexByLabel(getMsbtInfoForIndex(i), label) >= 0) {
+                return i;
+            }
+        }
+    }
+
+    return -1;
+}
+
+MsbtInfo *dMessage_c::getMsbtInfoForIndex(s32 index) {
+    return sInstance->getMsbtInfoForIndexInternal(index);
+}
+
+MsbtInfo *dMessage_c::getMsbtInfoForIndexInternal(s32 index) {
+    UnkTextThing *thing = UnkTextThing::getInstance();
+    MsbtInfo *overrideMsbt = thing->getMsbtInfo(index);
+    if (overrideMsbt != nullptr && thing->getField_0x7B4() == true) {
+        return overrideMsbt;
+    }
+    return mpMsgs[index];
 }
 
 extern "C" u8 fn_80054F30();

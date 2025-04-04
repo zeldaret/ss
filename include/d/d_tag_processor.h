@@ -98,6 +98,10 @@ public:
         field_0x90C = type;
     }
 
+    void setField_0x90D(u8 val) {
+        field_0x90D = val;
+    }
+
     void setField_0xEE1(u8 val) {
         field_0xEE1 = val;
     }
