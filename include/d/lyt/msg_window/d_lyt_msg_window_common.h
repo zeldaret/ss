@@ -33,7 +33,9 @@ public:
     /* vt 0x3C */ virtual bool isDoneDecide() const {
         return true;
     }
-    /* vt 0x40 */ virtual bool vt_0x40() const;
+    /* vt 0x40 */ virtual bool vt_0x40() const {
+        return true;
+    }
 };
 
 class dLytTextSword {
@@ -50,8 +52,8 @@ public:
 
     bool build(d2d::ResAccIf_c *pResAcc, ESwordType type);
     bool remove();
-    void draw(const wchar_t *str, s8, const mVec3_c &, f32);
-    f32 fn_80120DB0() const;
+    void draw(const wchar_t *str, s8 frame, mVec3_c pos, f32 scale);
+    f32 getAnimDuration() const;
 
 private:
     /* 0x04 */ d2d::LytBase_c mLyt;
@@ -74,10 +76,8 @@ public:
 
     bool build(d2d::ResAccIf_c *pResAcc, ETextType type);
     bool remove();
-    void draw(const wchar_t *str, s8, const mVec3_c &, f32);
-    void draw2(s8, const mVec3_c &, u8, f32);
-    f32 fn_80120DB0() const;
-    f32 fn_80121050() const;
+    void draw(s8 frame, mVec3_c pos, u8 alpha, f32 scale);
+    f32 getAnimDuration() const;
 
 private:
     /* 0x04 */ d2d::LytBase_c mLyt;

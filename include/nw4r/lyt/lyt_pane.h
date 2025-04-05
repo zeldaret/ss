@@ -41,8 +41,14 @@ public:
     bool IsInfluencedAlpha() const {
         return detail::TestBit<u8>(mFlag, INFLUENCED_ALPHA);
     }
+    void SetInfluencedAlpha(bool bInfluenced) {
+        detail::SetBit(&mFlag, INFLUENCED_ALPHA, bInfluenced);
+    }
     bool IsLocationAdjust() const {
         return detail::TestBit<u8>(mFlag, LOCATION_ADJUST);
+    }
+    void SetLocationAdjust(bool bAdjust) {
+        detail::SetBit(&mFlag, LOCATION_ADJUST, bAdjust);
     }
     bool IsUserAllocated() const {
         return mbUserAllocated;

@@ -158,7 +158,7 @@ void dLytCommonIconMaterialPart1_c::realizeShadow() {
 
 void dLytCommonIconMaterialPart1_c::realizeItem(u8 item) {
     // Inline?
-    if (mAnm[MATERIAL_PART_1_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
+    if (mAnm[MATERIAL_PART_1_ANIM_ICON].getAnimDuration() - 1.0f < item) {
         mItem = 0;
     } else {
         mItem = item;
@@ -357,7 +357,7 @@ void dLytCommonIconMaterialPart2_c::realizeShadow() {
 
 void dLytCommonIconMaterialPart2_c::realizeItem(u8 item) {
     // Inline?
-    if (mAnm[MATERIAL_PART_2_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
+    if (mAnm[MATERIAL_PART_2_ANIM_ICON].getAnimDuration() - 1.0f < item) {
         mItem = 0;
     } else {
         mItem = item;

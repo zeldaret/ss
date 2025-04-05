@@ -271,7 +271,7 @@ void dLytMsgWindowSword_c::draw() {
             if (!mHasDrawnThisTick) {
                 mCharacterData[i].displayTimerMaybe += 1;
             }
-            nw4r::math::VEC3 v(
+            mVec3_c v(
                 (field_0x05E4 + mCharacterData[i].posX) / get_805751A4(), field_0x05E8 + mCharacterData[i].posY, 0.0f
             );
 
@@ -280,7 +280,7 @@ void dLytMsgWindowSword_c::draw() {
             str[1] = 0;
 
             mSwordText.draw(str, mCharacterData[i].displayTimerMaybe, v, mCharacterData[i].field_0x08);
-            if (mCharacterData[i].displayTimerMaybe >= mSwordText.fn_80120DB0()) {
+            if (mCharacterData[i].displayTimerMaybe >= mSwordText.getAnimDuration()) {
                 mCharacterData[i].displayTimerMaybe = -1;
             }
         }

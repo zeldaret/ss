@@ -165,7 +165,7 @@ void dLytCommonIconItemPart1_c::realizeBocoburin() {
 
 void dLytCommonIconItemPart1_c::realizeItem(u8 item) {
     // Inline?
-    if (mAnm[ITEM_PART_1_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
+    if (mAnm[ITEM_PART_1_ANIM_ICON].getAnimDuration() - 1.0f < item) {
         mItem = 0;
     } else {
         mItem = item;
@@ -450,7 +450,7 @@ void dLytCommonIconItemPart2_c::realizeBocoburin() {
 
 void dLytCommonIconItemPart2_c::realizeItem(u8 item) {
     // Inline?
-    if (mAnm[ITEM_PART_2_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
+    if (mAnm[ITEM_PART_2_ANIM_ICON].getAnimDuration() - 1.0f < item) {
         mItem = 0;
     } else {
         mItem = item;
@@ -672,7 +672,7 @@ void dLytCommonIconItemPart3_c::realizeBocoburin() {
 }
 
 void dLytCommonIconItemPart3_c::realizeItem(u8 item) {
-    if (mAnm[ITEM_PART_3_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
+    if (mAnm[ITEM_PART_3_ANIM_ICON].getAnimDuration() - 1.0f < item) {
         mItem = 0;
     } else {
         mItem = item;
