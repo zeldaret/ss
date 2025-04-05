@@ -7,8 +7,8 @@
 #include "d/lyt/d_lyt_common_a_btn.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_common.h"
+#include "m/m_vec.h"
 #include "s/s_State.hpp"
-#include "toBeSorted/lyt_vec2f.h"
 
 class dLytMsgWindowGet_c : public dLytMsgWindowSubtype {
 public:
@@ -57,7 +57,7 @@ private:
     /* 0x0528 */ dTextBox_c *mpTextboxes[2];
     /* 0x0530 */ nw4r::lyt::Pane *mpPanes[6];
     /* 0x0548 */ dTagProcessor_c *mpTagProcessor;
-    /* 0x054C */ LytVec2f mOffset;
+    /* 0x054C */ mVec2_c mOffset;
     /* 0x0554 */ dLytCommonABtn_c mBtn;
     /* 0x06E0 */ dLytTextLight mText;
     /* 0x07C4 */ MsgWindowBlurRelated mBlurRelated;

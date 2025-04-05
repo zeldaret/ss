@@ -254,4 +254,14 @@ public:
     static mVec3_c Ez;
 };
 
+class mVec2_c : public EGG::Vector2f {
+public:
+    mVec2_c() {}
+    ~mVec2_c() {}
+
+    mVec2_c(const mVec2_c &other) {
+        set(other.x, other.y);
+    }
+};
+
 #endif

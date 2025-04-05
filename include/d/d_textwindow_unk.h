@@ -4,8 +4,8 @@
 #include "d/d_tag_processor.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_common.h"
+#include "m/m_vec.h"
 #include "sized_string.h"
-#include "toBeSorted/lyt_vec2f.h"
 
 struct dLytMsgWindowCharData {
     /* 0x00 */ f32 posX;
@@ -82,7 +82,7 @@ public:
 
     void build();
     void remove();
-    void drawTextBlur(dLytTextLight *thing, LytVec2f size, u8 alpha);
+    void drawTextBlur(dLytTextLight *thing, mVec2_c size, u8 alpha);
     void reset();
 
     dLytMsgWindowCharData *getCharData() {

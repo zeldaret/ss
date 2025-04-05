@@ -75,7 +75,7 @@ void MsgWindowBlurRelated::build() {
     }
 }
 
-void MsgWindowBlurRelated::drawTextBlur(dLytTextLight *thing, LytVec2f size, u8 alpha) {
+void MsgWindowBlurRelated::drawTextBlur(dLytTextLight *thing, mVec2_c size, u8 alpha) {
     s8 t = -1;
     for (int i = 0; i < 1023; i++) {
         if (mData[i].displayTimerMaybe >= 0) {

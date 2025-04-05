@@ -6,10 +6,10 @@
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_common.h"
+#include "m/m_vec.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "s/s_State.hpp"
 #include "sized_string.h"
-#include "toBeSorted/lyt_vec2f.h"
 
 class dLytMsgWindowDemo_c : public dLytMsgWindowSubtype {
 public:
@@ -50,7 +50,7 @@ private:
     /* 0x4CC */ nw4r::lyt::Pane *mpPane;
     /* 0x4D0 */ dTextBox_c *mpTextboxes[2];
     /* 0x4D8 */ dTagProcessor_c *mpTagProcessor;
-    /* 0x4DC */ LytVec2f mOffsets[2];
+    /* 0x4DC */ mVec2_c mOffsets[2];
     /* 0x4EC */ dLytTextLight mText;
     /* 0x5C8 */ MsgWindowBlurRelated mBlurRelated;
 
