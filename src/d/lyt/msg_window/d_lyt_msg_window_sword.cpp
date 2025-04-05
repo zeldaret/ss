@@ -11,6 +11,7 @@
 #include "nw4r/lyt/lyt_types.h"
 #include "nw4r/math/math_types.h"
 #include "s/s_State.hpp"
+#include "toBeSorted/lyt_related_floats.h"
 
 STATE_DEFINE(dLytMsgWindowSword_c, Invisible);
 STATE_DEFINE(dLytMsgWindowSword_c, In);
@@ -96,13 +97,7 @@ bool dLytMsgWindowSword_c::build(d2d::ResAccIf_c *resAcc1, d2d::ResAccIf_c *resA
     mSwordText.build(resAcc, mSwordType);
 
     for (int i = 0; i < 1023; i++) {
-        mCharacterData[i].posX = 0.0f;
-        mCharacterData[i].posY = 0.0f;
-        mCharacterData[i].field_0x08 = dTagProcessor_c::fn_800B8040(0, 0);
-        mCharacterData[i].character = L'\0';
-        mCharacterData[i].field_0x0C = 1023;
-        mCharacterData[i].displayTimerMaybe = -1;
-
+        mCharacterData[i].reset();
         mTextBuf[i] = L'\0';
     }
 
@@ -268,8 +263,6 @@ bool dLytMsgWindowSword_c::execute() {
     return true;
 }
 
-extern "C" f32 lbl_805751A4;
-
 void dLytMsgWindowSword_c::draw() {
     mLyt.draw();
 
@@ -278,16 +271,14 @@ void dLytMsgWindowSword_c::draw() {
             if (!mHasDrawnThisTick) {
                 mCharacterData[i].displayTimerMaybe += 1;
             }
-            wchar_t str[2];
-            // FPR regswaps
-            f32 x = field_0x05E4 + mCharacterData[i].posX;
-            x /= lbl_805751A4;
-            f32 y = field_0x05E8 + mCharacterData[i].posY;
+            nw4r::math::VEC3 v(
+                (field_0x05E4 + mCharacterData[i].posX) / get_805751A4(), field_0x05E8 + mCharacterData[i].posY, 0.0f
+            );
 
+            wchar_t str[2];
             str[0] = mCharacterData[i].character;
             str[1] = 0;
 
-            nw4r::math::VEC3 v(x, y, 0.0f);
             mSwordText.draw(str, mCharacterData[i].displayTimerMaybe, v, mCharacterData[i].field_0x08);
             if (mCharacterData[i].displayTimerMaybe >= mSwordText.fn_80120DB0()) {
                 mCharacterData[i].displayTimerMaybe = -1;

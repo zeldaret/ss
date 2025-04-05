@@ -47,6 +47,9 @@ public:
     static bool isValidTextLabel(const char *name);
     static void loadTextByLabel(const char *label, dTagProcessor_c *tagProcessor, bool, u32, u32);
 
+    static s32 getMsbtIndexForLabel(const char *name);
+    static const char *getMsbtFileName(s32 index);
+
     static const wchar_t *getTextMessageByLabel(const char *label, bool global, wchar_t *dstBuf, u32 maxLen);
     static const wchar_t *
     getTextMessageByLabel(const char *label, dTagProcessor_c *pTagProcessor, bool global, wchar_t *dstBuf, u32 maxLen);
@@ -65,7 +68,6 @@ private:
     bool checkIsValidTextLabel(const char *name);
 
     static void setZevFromMsbArc();
-    static const char *getMsbtFileName(s32 index);
     static s32 getMsbtNumberByIndex(s32 index);
     static const char *getMsbfFileName(s32 index);
     static s32 getMsbfNumberByIndex(s32 index);

@@ -75,7 +75,9 @@ public:
     bool build(d2d::ResAccIf_c *pResAcc, ETextType type);
     bool remove();
     void draw(const wchar_t *str, s8, const mVec3_c &, f32);
+    void draw2(s8, const mVec3_c &, u8, f32);
     f32 fn_80120DB0() const;
+    f32 fn_80121050() const;
 
 private:
     /* 0x04 */ d2d::LytBase_c mLyt;
