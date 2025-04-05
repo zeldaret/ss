@@ -146,7 +146,7 @@ bool dLytMsgWindow_c::build() {
 
     field_0x81E = 0;
 
-    field_0x828 = 0;
+    field_0x828 = nullptr;
 
     mStateMgr.changeState(StateID_Invisible);
 
@@ -199,7 +199,7 @@ void dLytMsgWindow_c::executeState_Invisible() {
                     mStateMgr.changeState(StateID_ExplainIn);
                 } else {
                     createSubMsgManager(mpTagProcessor->getMsgWindowSubtype());
-                    field_0x828 = 0;
+                    field_0x828 = nullptr;
                     mSpecialFiMenuValue = 7;
                     if (mpTagProcessor->getMsgWindowSubtype() == 6) {
                         mpCurrentSubtype = mpWindowWood;
@@ -331,7 +331,7 @@ void dLytMsgWindow_c::executeState_OutputText() {
     }
 
     field_0x81C = mpMsgWindowUnk->checkEndReached();
-    field_0x81D = mpMsgWindowUnk->checkLastLineReachedMaybe();
+    field_0x81D = mpMsgWindowUnk->reset();
 }
 void dLytMsgWindow_c::finalizeState_OutputText() {}
 
@@ -673,7 +673,7 @@ bool dLytMsgWindow_c::execute() {
             removeSubMsgManagers();
             mStateMgr.changeState(StateID_Invisible);
         }
-        mpMsgWindowUnk->checkLastLineReachedMaybe();
+        mpMsgWindowUnk->reset();
         mSelectBtn.remove();
         field_0x81B = 0;
         // TODO boss caption

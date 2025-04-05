@@ -137,6 +137,30 @@ public:
         return field_buf2[index];
     }
 
+    const char *getStr1() const {
+        return field_0x004;
+    }
+
+    const char *getStr2() const {
+        return field_0x084;
+    }
+
+    const char *getStr3() const {
+        return field_0x104;
+    }
+
+    void setStr1(const char *s) {
+        field_0x004 = s;
+    }
+
+    void setStr2(const char *s) {
+        field_0x084 = s;
+    }
+
+    void setStr3(const char *s) {
+        field_0x104 = s;
+    }
+
 private:
     static UnkTextThing *sInstance;
 

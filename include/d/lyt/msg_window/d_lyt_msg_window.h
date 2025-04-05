@@ -10,6 +10,7 @@
 #include "s/s_State.hpp"
 #include "sized_string.h"
 
+// Forward declarations required for vtable order
 class dLytMsgWindowTalk_c;
 class dLytMsgWindowLink_c;
 class dLytMsgWindowGet_c;
@@ -46,6 +47,8 @@ public:
     SizedString<64> getLabel() const {
         return mNameCopy;
     }
+
+    const char *fn_80117390(bool) const;
 
 private:
     bool setTextToDisplay(const wchar_t *text);

@@ -382,6 +382,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/d_textbox.cpp"),
             Object(Matching, "d/lyt/d_window.cpp"),
             Object(Matching, "d/d_textunk.cpp"),
+            Object(NonMatching, "d/d_textwindow_unk.cpp"),
             Object(NonMatching, "d/d_tag_processor.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_unk.cpp"),

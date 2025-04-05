@@ -19,8 +19,8 @@
 #include "rvl/GX/GXPixel.h"
 #include "rvl/GX/GXTev.h"
 #include "rvl/GX/GXTypes.h"
+#include "toBeSorted/lyt_related_floats.h"
 
-#include <cstddef>
 #include <cstring>
 
 dTextBox_c::dTextBox_c(const nw4r::lyt::res::TextBox *pBlock, const nw4r::lyt::ResBlockSet &resBlockSet)
@@ -440,10 +440,8 @@ f32 dTextBox_c::GetLinesHeight() const {
     return totalHeight;
 }
 
-extern "C" f32 lbl_805751A4;
 f32 dTextBox_c::GetUnkWidthRatio() const {
-    f32 tmp = lbl_805751A4;
-    return GetLineWidth(nullptr) / tmp;
+    return GetLineWidth(nullptr) / get_805751A4();
 }
 
 f32 dTextBox_c::resizeTextToFit(f32 maxWidth) {
