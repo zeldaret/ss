@@ -25,16 +25,16 @@ public:
     /* vt 0x28 */ virtual bool isDoneClosing() const override;
     /* vt 0x2C */ virtual bool setText(const wchar_t *text) override;
     /* vt 0x30 */ virtual dTextBox_c *getTextBox() override {
-        return nullptr;
+        return mpTextboxes[0];
     }
     /* vt 0x34 */ virtual bool startConfirm() override {
-        return true;
+        return mBtn.requestIn();
     }
     /* vt 0x38 */ virtual bool startDecide(bool b) override {
-        return true;
+        return mBtn.requestOut(b);
     }
     /* vt 0x3C */ virtual bool isDoneDecide() const override {
-        return true;
+        return mBtn.isDoneOut();
     }
 
     STATE_FUNC_DECLARE(dLytMsgWindowGet_c, Invisible);
@@ -57,9 +57,9 @@ private:
     /* 0x0528 */ dTextBox_c *mpTextboxes[2];
     /* 0x0530 */ nw4r::lyt::Pane *mpPanes[6];
     /* 0x0548 */ dTagProcessor_c *mpTagProcessor;
-    /* 0x054C */ u8 _0x054C[8];
+    /* 0x054C */ LytVec2f mOffset;
     /* 0x0554 */ dLytCommonABtn_c mBtn;
-    /* 0x06E8 */ dLytTextLight mText;
+    /* 0x06E0 */ dLytTextLight mText;
     /* 0x07C4 */ MsgWindowBlurRelated mBlurRelated;
 
     /* 0x55B8 */ bool mShouldBeOpen;
