@@ -110,7 +110,7 @@ public:
         return f >= end ? 0.0f : f;
     }
 
-    inline f32 getEndFrameRaw() const {
+    inline f32 getAnimDuration() const {
         return mEndFrame;
     }
 

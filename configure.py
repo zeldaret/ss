@@ -410,6 +410,7 @@ config.libs = [
             Object(Matching, "d/lyt/d_lyt_common_icon_item.cpp"),
             Object(NonMatching, "d/lyt/msg_window/d_lyt_msg_window.cpp"),
             Object(NonMatching, "d/lyt/msg_window/d_lyt_msg_window_select_btn.cpp"),
+            Object(Matching, "d/lyt/msg_window/d_lyt_msg_window_common.cpp"),
             Object(NonMatching, "d/lyt/msg_window/d_lyt_msg_window_talk.cpp"),
             Object(NonMatching, "d/lyt/msg_window/d_lyt_msg_window_link.cpp"),
             Object(NonMatching, "d/lyt/msg_window/d_lyt_msg_window_get.cpp"),

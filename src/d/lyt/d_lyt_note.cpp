@@ -80,7 +80,7 @@ void dLytNote_c::executeState_Move() {
         field_0x260 = 0.0f;
         mInAnim = NOTE_ANIM_LOST_LOOP;
         // Maybe an inline?
-        f32 progress = mAnmGroups[mInAnim].getEndFrameRaw();
+        f32 progress = mAnmGroups[mInAnim].getAnimDuration();
         f32 nul = 0.0f;
         if (nul >= progress) {
             field_0x260 = nul - progress;
@@ -93,7 +93,7 @@ void dLytNote_c::executeState_Move() {
             field_0x260 = 0.0f;
             mInAnim = NOTE_ANIM_GET_LOOP;
             // Maybe an inline?
-            f32 progress = mAnmGroups[mInAnim].getEndFrameRaw();
+            f32 progress = mAnmGroups[mInAnim].getAnimDuration();
             f32 nul = 0.0f;
             if (nul >= progress) {
                 field_0x260 = nul - progress;
@@ -184,7 +184,7 @@ void dLytNote_c::execute(u8 alpha) {
 
     if (mInAnim != NOTE_ANIM_INVALID) {
         field_0x260 += 1.0f;
-        f32 nextFrame = mAnmGroups[mInAnim].getEndFrameRaw();
+        f32 nextFrame = mAnmGroups[mInAnim].getAnimDuration();
         if (field_0x260 >= nextFrame) {
             field_0x260 -= nextFrame;
         }

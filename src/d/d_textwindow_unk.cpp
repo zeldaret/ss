@@ -12,7 +12,6 @@
 #include "toBeSorted/lyt_related_floats.h"
 #include "toBeSorted/other_sound_stuff.h"
 
-
 TextWindowUnk::TextWindowUnk(dTagProcessor_c *c) {
     mpTagProcessor = c;
     reset();
@@ -83,15 +82,15 @@ void MsgWindowBlurRelated::drawTextBlur(dLytTextLight *thing, LytVec2f size, u8 
             if (t == -1) {
                 mData[i].displayTimerMaybe++;
 
-                if (mData[i].displayTimerMaybe >= thing->fn_80121050()) {
+                if (mData[i].displayTimerMaybe >= thing->getAnimDuration()) {
                     mData[i].displayTimerMaybe = 0;
                 }
                 t = mData[i].displayTimerMaybe;
             } else {
                 mData[i].displayTimerMaybe = t;
             }
-            nw4r::math::VEC3 v((size.x + mData[i].posX) / get_805751A4(), size.y + mData[i].posY, 0.0f);
-            thing->draw2(mData[i].displayTimerMaybe, v, alpha, mData[i].field_0x08);
+            mVec3_c v((size.x + mData[i].posX) / get_805751A4(), size.y + mData[i].posY, 0.0f);
+            thing->draw(mData[i].displayTimerMaybe, v, alpha, mData[i].field_0x08);
         }
     }
 }

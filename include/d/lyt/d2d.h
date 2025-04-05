@@ -68,6 +68,10 @@ public:
         mpResAcc = resAcc;
     }
 
+    const nw4r::lyt::DrawInfo &getDrawInfo() {
+        return mDrawInfo;
+    }
+
 protected:
     Layout_c mLayout;
     nw4r::lyt::DrawInfo mDrawInfo;
@@ -103,7 +107,8 @@ private:
 
     bool fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen);
     bool fn_800AC1AC(
-        const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen
+        const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf,
+        u32 maxLen
     );
     MsbtInfo *getMsbtInfo() const;
     bool fn_800AB930(dTextBox_c *box);
@@ -200,12 +205,12 @@ struct AnmGroupBase_c {
     }
 
     inline void setFrameRatio(f32 frame) {
-        f32 end = getEndFrameRaw() - 1.0f;
+        f32 end = getAnimDuration() - 1.0f;
         setFrame(end * frame);
     }
 
-    inline f32 getEndFrameRaw() const {
-        return mpFrameCtrl->getEndFrameRaw();
+    inline f32 getAnimDuration() const {
+        return mpFrameCtrl->getAnimDuration();
     }
 
     inline f32 getFrame() const {
@@ -245,7 +250,7 @@ struct AnmGroupBase_c {
         return mpFrameCtrl->getFlags() == (FLAG_NO_LOOP | FLAG_BACKWARDS);
     }
 
-    inline bool isPlayingForwardsOnce() const  {
+    inline bool isPlayingForwardsOnce() const {
         return mpFrameCtrl->getFlags() == FLAG_NO_LOOP;
     }
 
