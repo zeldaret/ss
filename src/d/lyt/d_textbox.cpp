@@ -656,7 +656,7 @@ void dTextBox_c::DrawSelf(const nw4r::lyt::DrawInfo &drawInfo) {
     GXSetAlphaCompare(GX_ALWAYS, 0, GX_AOP_AND, GX_ALWAYS, 0);
 
     f32 hMag = GetTextAlignMag();
-    const wchar_t *strPos = mTextBuf;
+    const wchar_t *strPos = GetString();
     writer.SetCursor(textRect.left, -textRect.top);
     f32 texWidth = textRect.GetWidth();
 
@@ -809,23 +809,10 @@ void dTextBox_c::setupGX() const {
     GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
 
-    // TODO the logic is wrong - what it should actually look like:
-
-    /*
-    GXColorS10 c1 = mpMaterial->GetTevColor(1);
     GXColorS10 c0 = mpMaterial->GetTevColor(0);
-    GXColorS10 c2 = {-(c1.r / 2), -(c1.g / 2), -(c1.b / 2), -(c1.a / 2)};
-
-    GXSetTevColorS10(GX_TEVREG0, c0);
-    GXSetTevColorS10(GX_TEVREG1, c1);
-    GXSetTevColorS10(GX_TEVREG2, c2);
-    */
-
-    // This makes the instruction patterns match best
-
-    GXColorS10 c0 = mpMaterial->GetTevColor(1);
-    GXColorS10 c1 = mpMaterial->GetTevColor(0);
-    GXColorS10 c2 = {-(c0.r / 2), -(c0.g / 2), -(c0.b / 2), -(c0.a / 2)};
+    GXColorS10 c1 = mpMaterial->GetTevColor(1);
+    GXColorS10 c2 = c1;
+    c2.r /= -2, c2.g /= -2, c2.b /= -2, c2.a /= -2;
 
     GXSetTevColorS10(GX_TEVREG0, c0);
     GXSetTevColorS10(GX_TEVREG1, c1);
@@ -846,7 +833,7 @@ void dTextBox_c::setupGX() const {
     GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_RASA, GX_CA_ZERO);
     GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
     GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, 1, GX_TEVPREV);
-    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_CLR_RGBA, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_CLR_RGBA, GX_RGBX8, 0xf);
     GXClearVtxDesc();
