@@ -60,7 +60,7 @@ bool dLytCommonArrow_c::fn_80168490() {
     d2d::dLytStructDList::GetInstance()->removeFromList2(&mStructD);
     mLytBase.unbindAnims();
     for (int i = 0; i < 9; i++) {
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
     return true;
 }
@@ -125,7 +125,9 @@ bool dLytCommonArrow_c::fn_80168760() {
 
 void dLytCommonArrow_c::displayElement(s32 idx, f32 frame) {
     d2d::AnmGroup_c *s = &mAnmGroups[idx];
-    s->setFrameAndControlThings(frame);
+    s->bind(false);
+    s->setAnimEnable(true);
+    s->setFrame(frame);
 }
 
 void dLytCommonArrow_c::fn_80168800(s32 idx) {

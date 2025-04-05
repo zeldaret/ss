@@ -263,6 +263,8 @@ public:
 
     void build();
 
+    bool isOpenMaybe() const;
+
     STATE_FUNC_DECLARE(dLytMapMain_c, Invisible);
     STATE_FUNC_DECLARE(dLytMapMain_c, RenderingWait);
     STATE_FUNC_DECLARE(dLytMapMain_c, In);
@@ -367,6 +369,14 @@ public:
 
     static d2d::ResAccIf_c *getResAcc() {
         return &sInstance->mResAcc;
+    }
+
+    static dLytMap_c *getInstance() {
+        return sInstance;
+    }
+
+    bool isOpenMaybe() const {
+        return mMapMain.isOpenMaybe();
     }
 
     void build();

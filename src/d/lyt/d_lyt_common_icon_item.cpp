@@ -45,7 +45,7 @@ bool dLytCommonIconItemPart1_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.build("commonIcon_02.brlyt", nullptr);
     for (int i = 0; i < ITEM_PART_1_NUM_ANIMS; i++) {
         mAnm[i].init(brlanMapPart1[i].mFile, resAcc, mLyt.getLayout(), brlanMapPart1[i].mName);
-        mAnm[i].setDirection(false);
+        mAnm[i].bind(false);
         mAnm[i].setRate(1.0f);
     }
 
@@ -61,7 +61,7 @@ bool dLytCommonIconItemPart1_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytCommonIconItemPart1_c::remove() {
     for (int i = 0; i < ITEM_PART_1_NUM_ANIMS; i++) {
         mAnm[i].unbind();
-        mAnm[i].afterUnbind();
+        mAnm[i].remove();
     }
     return true;
 }
@@ -165,7 +165,7 @@ void dLytCommonIconItemPart1_c::realizeBocoburin() {
 
 void dLytCommonIconItemPart1_c::realizeItem(u8 item) {
     // Inline?
-    if (mAnm[ITEM_PART_1_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
+    if (mAnm[ITEM_PART_1_ANIM_ICON].getAnimDuration() - 1.0f < item) {
         mItem = 0;
     } else {
         mItem = item;
@@ -182,7 +182,7 @@ void dLytCommonIconItemPart1_c::setNumber(s32 number) {
     std::memset(mNumberBuf, 0, sizeof(mNumberBuf));
     swprintf(mNumberBuf, ARRAY_LENGTH(mNumberBuf), L"%d", number);
     for (int i = 0; i < 2; i++) {
-        mpTextBoxes[i]->fn_800AF930(mNumberBuf);
+        mpTextBoxes[i]->setTextWithGlobalTextProcessor(mNumberBuf);
     }
 }
 
@@ -212,7 +212,7 @@ void dLytCommonIconItemPart1_c::setOff() {
     }
 }
 
-void dLytCommonIconItemPart1_c::startDecide() {
+void dLytCommonIconItemPart1_c::startConfirm() {
     mAnm[ITEM_PART_1_ANIM_DECIDE].setForwardOnce();
     mAnm[ITEM_PART_1_ANIM_DECIDE].setToStart();
     mAnm[ITEM_PART_1_ANIM_DECIDE].setAnimEnable(true);
@@ -276,7 +276,7 @@ bool dLytCommonIconItemPart2_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.build("commonIcon_03.brlyt", nullptr);
     for (int i = 0; i < ITEM_PART_2_NUM_ANIMS; i++) {
         mAnm[i].init(brlanMapPart2[i].mFile, resAcc, mLyt.getLayout(), brlanMapPart2[i].mName);
-        mAnm[i].setDirection(false);
+        mAnm[i].bind(false);
         mAnm[i].setRate(1.0f);
     }
 
@@ -292,7 +292,7 @@ bool dLytCommonIconItemPart2_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytCommonIconItemPart2_c::remove() {
     for (int i = 0; i < ITEM_PART_2_NUM_ANIMS; i++) {
         mAnm[i].unbind();
-        mAnm[i].afterUnbind();
+        mAnm[i].remove();
     }
     return true;
 }
@@ -450,7 +450,7 @@ void dLytCommonIconItemPart2_c::realizeBocoburin() {
 
 void dLytCommonIconItemPart2_c::realizeItem(u8 item) {
     // Inline?
-    if (mAnm[ITEM_PART_2_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
+    if (mAnm[ITEM_PART_2_ANIM_ICON].getAnimDuration() - 1.0f < item) {
         mItem = 0;
     } else {
         mItem = item;
@@ -515,7 +515,7 @@ void dLytCommonIconItemPart2_c::setNumber(s32 number) {
     std::memset(mNumberBuf, 0, sizeof(mNumberBuf));
     swprintf(mNumberBuf, ARRAY_LENGTH(mNumberBuf), L"%d", number);
     for (int i = 0; i < 2; i++) {
-        mpTextBoxes[i]->fn_800AF930(mNumberBuf);
+        mpTextBoxes[i]->setTextWithGlobalTextProcessor(mNumberBuf);
     }
 }
 
@@ -545,7 +545,7 @@ void dLytCommonIconItemPart2_c::setOff() {
     }
 }
 
-void dLytCommonIconItemPart2_c::startDecide() {
+void dLytCommonIconItemPart2_c::startConfirm() {
     mAnm[ITEM_PART_2_ANIM_DECIDE].setForwardOnce();
     mAnm[ITEM_PART_2_ANIM_DECIDE].setToStart();
     mAnm[ITEM_PART_2_ANIM_DECIDE].setAnimEnable(true);
@@ -600,7 +600,7 @@ bool dLytCommonIconItemPart3_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.build("commonIcon_04.brlyt", nullptr);
     for (int i = 0; i < ITEM_PART_3_NUM_ANIMS; i++) {
         mAnm[i].init(brlanMapPart3[i].mFile, resAcc, mLyt.getLayout(), brlanMapPart3[i].mName);
-        mAnm[i].setDirection(false);
+        mAnm[i].bind(false);
         mAnm[i].setRate(1.0f);
     }
 
@@ -612,7 +612,7 @@ bool dLytCommonIconItemPart3_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytCommonIconItemPart3_c::remove() {
     for (int i = 0; i < ITEM_PART_3_NUM_ANIMS; i++) {
         mAnm[i].unbind();
-        mAnm[i].afterUnbind();
+        mAnm[i].remove();
     }
     return true;
 }
@@ -672,7 +672,7 @@ void dLytCommonIconItemPart3_c::realizeBocoburin() {
 }
 
 void dLytCommonIconItemPart3_c::realizeItem(u8 item) {
-    if (mAnm[ITEM_PART_3_ANIM_ICON].getEndFrameRaw() - 1.0f < item) {
+    if (mAnm[ITEM_PART_3_ANIM_ICON].getAnimDuration() - 1.0f < item) {
         mItem = 0;
     } else {
         mItem = item;
@@ -849,10 +849,10 @@ void dLytCommonIconItem_c::setOff() {
     }
 }
 
-void dLytCommonIconItem_c::startDecide() {
+void dLytCommonIconItem_c::startConfirm() {
     switch (mPart) {
-        case 0: mPart1.startDecide(); break;
-        case 1: mPart2.startDecide(); break;
+        case 0: mPart1.startConfirm(); break;
+        case 1: mPart2.startConfirm(); break;
         case 2: break;
     }
 }

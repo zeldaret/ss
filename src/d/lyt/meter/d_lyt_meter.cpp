@@ -1,5 +1,6 @@
 // clang-format off
 #include "common.h"
+#include "d/d_message.h"
 #include "d/d_sc_game.h"
 #include "d/d_sc_title.h"
 #include "d/d_stage_mgr.h"
@@ -102,12 +103,12 @@ bool dLytMeter1Button_c::build(d2d::ResAccIf_c *resAcc) {
 
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].init(btn1BrlanMap[i].mFile, resAcc, mLyt.getLayout(), btn1BrlanMap[i].mName);
-        mAnmGroups[i].setDirection(false);
+        mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
     }
     // TODO
-    mLyt.fn_800AB9A0(mLyt.getTextBox("T_sabBtnS_00"), nullptr);
-    mLyt.fn_800AB9A0(mLyt.getTextBox("T_sabBtn_00"), nullptr);
+    mLyt.fn_800AB9A0(mLyt.getTextBox("T_sabBtnS_00"), 0);
+    mLyt.fn_800AB9A0(mLyt.getTextBox("T_sabBtn_00"), 0);
     mpWindow = mLyt.getWindow(sWindowName1);
     mpTextbox = mLyt.getSizeBoxInWindow(sWindowName1);
     mpWindow->UpdateSize(mpTextbox, 32.0f);
@@ -127,7 +128,7 @@ bool dLytMeter1Button_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytMeter1Button_c::remove() {
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].unbind();
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
     return true;
 }
@@ -215,7 +216,7 @@ bool dLytMeter2Button_c::build(d2d::ResAccIf_c *resAcc) {
 
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].init(btn2BrlanMap[i].mFile, resAcc, mLyt.getLayout(), btn2BrlanMap[i].mName);
-        mAnmGroups[i].setDirection(false);
+        mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
     }
     mpWindow = mLyt.getWindow(sWindowName2);
@@ -237,7 +238,7 @@ bool dLytMeter2Button_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytMeter2Button_c::remove() {
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].unbind();
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
     return true;
 }
@@ -285,8 +286,6 @@ dLytMeter_c::dLytMeter_c() {}
 
 extern "C" void fn_800D97E0(int i);
 extern "C" void fn_800D9800(int i);
-extern "C" void fn_801B2D10(void *);
-extern "C" void *GLOBAL_MESSAGE_RELATED_CONTEXT;
 
 static const d2d::LytBrlanMapping meterBrlanMap[] = {
     {          "basicPosition_00_in.brlan", "G_remoConBtn_00"},
@@ -333,7 +332,7 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setPriority(0x8A);
     for (int i = 0; i < 34; i++) {
         mAnmGroups[i].init(meterBrlanMap[i].mFile, resAcc, mLyt.getLayout(), meterBrlanMap[i].mName);
-        mAnmGroups[i].setDirection(false);
+        mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
     }
 
@@ -460,7 +459,7 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
 
 bool dLytMeter_c::remove() {
     for (int i = 0; i < 34; i++) {
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
 
     
@@ -632,7 +631,7 @@ bool dLytMeterContainer_c::build() {
 
     fn_800D97E0(0xb);
     fn_800D9800(1);
-    fn_801B2D10(GLOBAL_MESSAGE_RELATED_CONTEXT);
+    dMessage_c::getInstance()->reset();
     return true;
 }
 

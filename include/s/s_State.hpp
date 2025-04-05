@@ -8,6 +8,10 @@
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
 // See include/s/README.txt for changes made
 
+// Handy search and replace regex to generate functions based on define macros
+// STATE_DEFINE\(([A-Za-z_0-9]+), ([A-Za-z_0-9]+)\);
+// void $1::initializeState_$2() {}\nvoid $1::executeState_$2() {}\nvoid $1::finalizeState_$2() {}\n
+
 #define STATE_FUNC_DECLARE(class, name)                                                                                \
     void initializeState_##name();                                                                                     \
     void executeState_##name();                                                                                        \

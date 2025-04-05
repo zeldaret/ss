@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_heap.h"
+#include "d/d_message.h"
 #include "d/d_sc_game.h"
 #include "d/d_sys.h"
 #include "f/f_base.h"
@@ -67,7 +68,6 @@ extern "C" u32 TITLE_SCREEN_CHANGE;
 extern "C" void fn_80059450();
 extern "C" void fn_80058C90(s32);
 extern "C" void fn_80015E40();
-extern "C" const char *getUsedLanguageString();
 
 static const char *const sFileSelect = "FileSelect";
 static const char *const sSkb = "SoftwareKeyboard";
@@ -98,7 +98,7 @@ int dScTitle_c::create() {
         LayoutArcManager::GetInstance()->loadLayoutArcFromDisk(sSkb, nullptr);
         mDvd_toMainRam_normal_c::create2(&mpSkbArc, "/SKB/sofkeybd.arc", 0, dHeap::work2Heap.heap);
         SizedString<128> fntPath;
-        fntPath.sprintf("/US/Font/%s/%s", getUsedLanguageString(), "normal_02.brfnt");
+        fntPath.sprintf("/US/Font/%s/%s", dMessage_c::getLanguageIdentifier(), "normal_02.brfnt");
         mDvd_toMainRam_normal_c::create2(&mpSkbFont, fntPath, 0, dHeap::work2Heap.heap);
         fn_8035E310(BGM_MGR);
     }

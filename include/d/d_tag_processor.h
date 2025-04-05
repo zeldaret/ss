@@ -5,6 +5,13 @@
 #include "nw4r/ut/ut_TagProcessorBase.h"
 #include "nw4r/ut/ut_TextWriterBase.h"
 
+struct dLytMsgWindowCharData;
+
+struct LineData {
+    f32 mLineWidths[0x32];
+    u32 mNumLines;
+};
+
 // inofficial name
 // size: 0xEF4
 class dTagProcessor_c : public nw4r::ut::TagProcessorBase<wchar_t> {
@@ -12,8 +19,9 @@ public:
     dTagProcessor_c();
     virtual ~dTagProcessor_c();
 
+    void format(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen, void *unk, ...);
     void
-    eventFlowTextProcessingRelated(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen);
+    formatV(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen, void *unk, va_list list);
 
     virtual nw4r::ut::Operation Process(u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx) override;
     virtual nw4r::ut::Operation CalcRect(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx) override;
@@ -45,7 +53,7 @@ public:
     u8 symbolToFontIdx(s32 s);
     void setStringArg(const wchar_t *arg, s32 index);
 
-    static s32 getNumLines(s32 arg);
+    static s32 getMaxNumLines(s32 arg);
 
     static void getTextCommand(wchar_t _0xe, const wchar_t *src, u8 *outCmdLen, s32 *outCmd, wchar_t **outEndPtr);
     static void process0xFCommand(wchar_t _0xf, const wchar_t *src, s32 *outCmd);
@@ -60,13 +68,97 @@ public:
     char fn_800B7880(u32);
     void fn_800B70D0(nw4r::ut::TextWriterBase<wchar_t> *, nw4r::ut::PrintContext<wchar_t> *ctx, u16 c, s32);
 
+    void
+    fn_800B4290(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, s32, u16 *, dLytMsgWindowCharData *charData);
+
     void resetSomething();
-    void resetSomeFloats();
+    void resetLineData();
     void setNumericArg0(s32 arg);
     void setNumericArgs(const s32 *args, s32 numArgs);
-    f32 getFloat(s32 i);
+    f32 getLineWidth(s32 i);
     s32 tickPauseFrame();
     s32 tick0x830();
+    void execute();
+
+    void setTextbox(dTextBox_c *box) {
+        field_0x004 = box;
+    }
+
+    s32 getNumLinesMaybe() const {
+        return mLineData.mNumLines;
+    }
+
+    u8 getMsgWindowSubtype() const {
+        return mMsgWindowSubtype;
+    }
+
+    u8 getField_0x90D() const {
+        return field_0x90D;
+    }
+
+    u8 getField_0x90E() const {
+        return field_0x90E;
+    }
+
+    s32 getField_0x824() const {
+        return field_0x824;
+    }
+
+    s32 getField_0x828() const {
+        return field_0x828;
+    }
+
+    s32 getField_0x82C() const {
+        return field_0x82C;
+    }
+
+    s32 getField_0x830() const {
+        return field_0x830;
+    }
+
+    void setMsgWindowSubtype(u8 type) {
+        mMsgWindowSubtype = type;
+    }
+
+    void setField_0x828(s32 val) {
+        field_0x828 = val;
+    }
+
+    void setField_0x82C(s32 val) {
+        field_0x82C = val;
+    }
+
+    void setField_0x90D(u8 val) {
+        field_0x90D = val;
+    }
+
+    void setField_0x90E(u8 val) {
+        field_0x90E = val;
+    }
+
+    void setField_0xEE0(u8 val) {
+        field_0xEE0 = val;
+    }
+
+    void setField_0xEE1(u8 val) {
+        field_0xEE1 = val;
+    }
+
+    void setField_0xEE2(u8 val) {
+        field_0xEE2 = val;
+    }
+
+    void setField_0xEE3(u8 val) {
+        field_0xEE3 = val;
+    }
+
+    wchar_t *getBuf(s32 idx) {
+        return field_0x008[idx];
+    }
+
+    LineData getLineData() const {
+        return mLineData;
+    }
 
 private:
     /* 0x004 */ dTextBox_c *field_0x004;
@@ -117,12 +209,11 @@ private:
     /* 0x900 */ s32 field_0x900;
     /* 0x904 */ f32 field_0x904;
     /* 0x908 */ f32 field_0x908;
-    /* 0x90C */ u8 field_0x90C;
+    /* 0x90C */ u8 mMsgWindowSubtype;
     /* 0x90D */ u8 field_0x90D;
     /* 0x90E */ u8 field_0x90E;
     /* 0x90F */ u8 field_0x90F[4];
-    /* 0x914 */ f32 field_0x914[0x32];
-    /* 0x9DC */ s32 mCommandInsert;
+    /* 0x914 */ LineData mLineData;
     /* 0x9E0 */ wchar_t mStringArgs[8][64];
     /* 0xDE0 */ u8 field_0xDE0[0xEE0 - 0xDE0];
     /* 0xEE0 */ u8 field_0xEE0;

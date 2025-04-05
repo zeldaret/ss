@@ -234,7 +234,7 @@ bool dCsGame_c::lytItemCursor_c::doInit() {
     mAnm.init(mAnmGroups.tmp.mAnmGroups, lytItemCursorMap, 0x17, mpResAcc, mLyt.getLayout());
 
     for (int i = 0; i < 0x17; i++) {
-        mAnmGroups.tmp.mAnmGroups[i].setDirection(false);
+        mAnmGroups.tmp.mAnmGroups[i].bind(false);
         mAnmGroups.tmp.mAnmGroups[i].setAnimEnable(false);
     }
 

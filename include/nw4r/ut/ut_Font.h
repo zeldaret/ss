@@ -1,5 +1,6 @@
 #ifndef NW4R_UT_FONT_H
 #define NW4R_UT_FONT_H
+#include "common.h"
 #include "nw4r/types_nw4r.h"
 #include "nw4r/ut/ut_CharStrmReader.h"
 #include "rvl/GX.h" // IWYU pragma: export
@@ -67,7 +68,11 @@ public:
 
     void InitReaderFunc(FontEncoding encode);
 
-    CharStrmReader GetCharStrmReader() const;
+    // ???
+    DECOMP_DONT_INLINE CharStrmReader GetCharStrmReader() const {
+        CharStrmReader reader(mReadFunc);
+        return reader;
+    }
 
 private:
     CharStrmReader::ReadFunc mReadFunc; // at 0x4

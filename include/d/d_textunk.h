@@ -21,6 +21,20 @@ public:
         return 0.0f;
     }
 
+    inline static f32 getField0x75C() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x75C;
+        }
+        return 0.0f;
+    }
+
+    inline static f32 getField0x760() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x760;
+        }
+        return 0.0f;
+    }
+
     inline static f32 getField0x768() {
         if (sInstance != nullptr) {
             return sInstance->field_0x768;
@@ -93,6 +107,58 @@ public:
             return sInstance->fn_800B2040();
         }
         return 0.0f;
+    }
+
+    static UnkTextThing *getInstance() {
+        return sInstance;
+    }
+
+    void reset0(const char *str) {
+        field_0x004 = str;
+    }
+
+    void reset1(const char *str) {
+        field_0x084 = str;
+    }
+
+    void reset2(const char *str) {
+        field_0x104 = str;
+    }
+
+    s16 getField_0x7AE() const {
+        return field_0x7AE;
+    }
+
+    bool getField_0x7B4() const {
+        return field_0x7B4;
+    }
+
+    MsbtInfo *getMsbtInfo(s32 index) const {
+        return field_buf2[index];
+    }
+
+    const char *getStr1() const {
+        return field_0x004;
+    }
+
+    const char *getStr2() const {
+        return field_0x084;
+    }
+
+    const char *getStr3() const {
+        return field_0x104;
+    }
+
+    void setStr1(const char *s) {
+        field_0x004 = s;
+    }
+
+    void setStr2(const char *s) {
+        field_0x084 = s;
+    }
+
+    void setStr3(const char *s) {
+        field_0x104 = s;
     }
 
 private:

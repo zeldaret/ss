@@ -1,6 +1,7 @@
 #include "d/lyt/d2d.h"
 
 #include "d/d_font_manager.h"
+#include "d/d_message.h"
 #include "d/d_textunk.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/d_window.h"
@@ -278,9 +279,6 @@ LytBase_c::~LytBase_c() {
     }
 }
 
-extern "C" const char *getUsedLanguageString();
-extern "C" nw4r::ut::TagProcessorBase<wchar_t> *GLOBAL_TEXT_MANAGER;
-
 bool LytBase_c::build(const char *name, m2d::ResAccIf_c *acc) {
     if (mLayout.GetRootPane() != nullptr) {
         return true;
@@ -332,7 +330,7 @@ bool LytBase_c::build(const char *name, m2d::ResAccIf_c *acc) {
     }
 
     SizedString<0x80> localizedName;
-    localizedName.sprintf("%s_%s", getUsedLanguageString(), fileName);
+    localizedName.sprintf("%s_%s", dMessage_c::getLanguageIdentifier(), fileName);
 
     void *data = acc->getAccessor()->GetResource(0, localizedName, nullptr);
     if (data == nullptr) {
@@ -343,7 +341,7 @@ bool LytBase_c::build(const char *name, m2d::ResAccIf_c *acc) {
 
     bool ok = mLayout.Build(resource, acc->getAccessor());
     if (ok) {
-        mLayout.SetTagProcessor(GLOBAL_TEXT_MANAGER);
+        mLayout.SetTagProcessor(dMessage_c::getGlobalTagProcessor());
         calc();
         setPropertiesRecursive(mLayout.GetRootPane(), -9999.0f, -9999.0f, -9999.0f, -9999.0f, -9999.0f);
     }
@@ -441,9 +439,6 @@ void LytBase_c::setPropertiesRecursive(nw4r::lyt::Pane *pane, f32 posX, f32 posY
     }
 }
 
-extern "C" const wchar_t *fn_801B2600(const char *);
-extern "C" void fn_800B0F40(dTextBox_c *);
-
 void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 scale, f32 spaceX, f32 spaceY) {
     if (pane->GetName()[0] != 'T') {
         return;
@@ -456,7 +451,7 @@ void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 sca
 
     textBox->AllocStringBuffer(0x200);
     textBox->setLytBase(this);
-    fn_800B0F40(textBox);
+    textBox->loadTextFormatVars();
 
     if (posX != -9999.0f || posY != -9999.0f) {
         if (posX == -9999.0f) {
@@ -606,17 +601,16 @@ bool LytBase_c::fn_800ABCE0(
         str1.append(fmt);
     }
 
-    const char *text = LMS_GetTextByLabel(getMsbtInfo(), str1);
+    const wchar_t *text = LMS_GetTextByLabel(getMsbtInfo(), str1);
     if (text == nullptr) {
         return false;
     }
 
-    textbox1->fn_800AF930(fn_801B2600(text));
+    textbox1->setTextWithGlobalTextProcessor(dMessage_c::formatText(text));
     return true;
 }
 
-// Now largely the same functions again, but with an additional argument
-bool LytBase_c::fn_800ABE50(dTextBox_c *textbox, int arg, void *unk) {
+bool LytBase_c::fn_800ABE50(dTextBox_c *textbox, wchar_t *destBuf, u32 maxLen) {
     if (getMsbtInfo() == nullptr) {
         return false;
     }
@@ -651,15 +645,15 @@ bool LytBase_c::fn_800ABE50(dTextBox_c *textbox, int arg, void *unk) {
     if (ty == 1) {
         dTextBox_c *otherBox = getTextBox(list->GetString());
         if (otherBox != nullptr) {
-            return fn_800AC040(textbox, otherBox, arg, unk);
+            return fn_800AC040(textbox, otherBox, destBuf, maxLen);
         }
     } else {
-        return fn_800AC1AC(list, textbox, textbox, arg, unk);
+        return fn_800AC1AC(list, textbox, textbox, destBuf, maxLen);
     }
     return false;
 }
 
-bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk) {
+bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen) {
     u16 num = textbox2->GetExtUserDataNum();
     if (num == 0) {
         return false;
@@ -679,13 +673,11 @@ bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg,
     if (found != 1) {
         return false;
     }
-    return fn_800AC1AC(list, textbox1, textbox2, arg, unk);
+    return fn_800AC1AC(list, textbox1, textbox2, destBuf, maxLen);
 }
 
-extern "C" void fn_800AF840(dTextBox_c *textbox1, MsbtInfo *, const char *, int arg, void *unk);
-
 bool LytBase_c::fn_800AC1AC(
-    const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk
+    const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen
 ) {
     s32 userDatInt = userDatum->GetInt();
     SizedString<0x40> str1;
@@ -698,7 +690,7 @@ bool LytBase_c::fn_800AC1AC(
         str1.append(fmt);
     }
 
-    fn_800AF840(textbox1, getMsbtInfo(), str1, arg, unk);
+    textbox1->setMessageWithGlobalTextProcessorAndMsbtInfo(getMsbtInfo(), str1, destBuf, maxLen);
     return true;
 }
 
@@ -811,7 +803,7 @@ bool AnmGroupBase_c::init(
     return true;
 }
 
-bool AnmGroupBase_c::setDirection(bool b) {
+bool AnmGroupBase_c::bind(bool bDisable) {
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     if (anmTransform == nullptr) {
         return false;
@@ -821,9 +813,9 @@ bool AnmGroupBase_c::setDirection(bool b) {
         return false;
     }
 
-    nw4r::lyt::BindAnimation(mpGroup, anmTransform, false, b);
+    nw4r::lyt::BindAnimation(mpGroup, anmTransform, false, bDisable);
     mFlags |= ANMGROUP_FLAG_BOUND;
-    if (b) {
+    if (bDisable) {
         mFlags = (mFlags & ~ANMGROUP_FLAG_ENABLE);
     } else {
         mFlags |= ANMGROUP_FLAG_ENABLE;
@@ -855,7 +847,7 @@ bool AnmGroupBase_c::unbind() {
     return true;
 }
 
-bool AnmGroupBase_c::afterUnbind() {
+bool AnmGroupBase_c::remove() {
     return true;
 }
 
@@ -905,7 +897,7 @@ bool AnmGroups::init(
 
 void AnmGroups::remove() {
     for (int i = 0; i < mNumAnmGroups; i++) {
-        mpAnmGroups[i].afterUnbind();
+        mpAnmGroups[i].remove();
     }
 }
 

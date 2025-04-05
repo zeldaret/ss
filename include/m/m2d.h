@@ -94,6 +94,11 @@ public:
         setFrame(actualEnd * ratio);
     }
 
+    inline f32 getRatio() const {
+        f32 actualEnd = mEndFrame - 1.0f;
+        return mCurrFrame / actualEnd;
+    }
+
     inline void setBackwardsRatio(f32 ratio) {
         f32 actualEnd = mEndFrame - 1.0f;
         setFrame(actualEnd - (ratio * actualEnd));
@@ -105,7 +110,7 @@ public:
         return f >= end ? 0.0f : f;
     }
 
-    inline f32 getEndFrameRaw() const {
+    inline f32 getAnimDuration() const {
         return mEndFrame;
     }
 
@@ -162,7 +167,7 @@ public:
     Base_c(u8 priority) : mPriority(priority) {}
     /* 0x00 */ nw4r::ut::Node mLink;
 
-    /* vt offset 0x04 */
+    /* vt offset 0x08 */
     /* vt 0x08 */ virtual ~Base_c();
     /* vt 0x0C */ virtual void draw();
 

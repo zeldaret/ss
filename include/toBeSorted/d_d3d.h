@@ -10,12 +10,16 @@
 #include "m/m3d/m_proc.h"
 #include "m/m_color.h"
 #include "m/m_mtx.h"
+#include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "toBeSorted/tlist.h"
 
 #include <cstddef>
 
 namespace d3d {
+
+f32 fn_80016960(const mVec3_c&, const mVec3_c& pos);
+bool fn_80016A90(const mVec3_c& pos);
 
 class AnmMdlWrapper : protected m3d::mdlAnmChr {
 public:

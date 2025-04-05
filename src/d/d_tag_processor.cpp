@@ -164,7 +164,7 @@ dTagProcessor_c::dTagProcessor_c() {
     field_0x890 = 0;
     field_0x8FC = -1;
     field_0x900 = -1;
-    resetSomeFloats();
+    resetLineData();
     field_0x81C = 0;
     field_0x820 = 0;
     setNumericArg0(0);
@@ -200,7 +200,7 @@ dTagProcessor_c::dTagProcessor_c() {
     field_0xEE3 = 0;
     field_0xEE4 = 0;
     field_0x004 = nullptr;
-    field_0x90C = 0x24;
+    mMsgWindowSubtype = 0x24;
     field_0x90D = 4;
     field_0xEF0 = 0;
     field_0xEF1 = 0;
@@ -212,8 +212,17 @@ struct StackThing {
     wchar_t us[4];
 };
 
-void dTagProcessor_c::eventFlowTextProcessingRelated(
-    dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen
+void dTagProcessor_c::format(
+    dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen, void *unk, ...
+) {
+    va_list l;
+    va_start(l, str);
+    formatV(textBox, src, dest, destLen, pOutLen, unk, l);
+    va_end(l);
+}
+
+void dTagProcessor_c::formatV(
+    dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, u32 destLen, u32 *pOutLen, void *unk, va_list list
 ) {
     s32 state3 = 0;
     s32 state4 = 0;
@@ -223,11 +232,11 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
 
     // FPR regswap between float1 and float2
     f32 float1, float2;
-    float2 = float1 = fn_800B8040(0, field_0x90C);
+    float2 = float1 = fn_800B8040(0, mMsgWindowSubtype);
 
     if (textBox != nullptr) {
         float1 *= textBox->getMyScale();
-        resetSomeFloats();
+        resetLineData();
         textBox->set0x1F8(0);
     }
 
@@ -241,7 +250,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
         dest[1] = x.us[1];
         dest[2] = x.us[2];
         dest[3] = x.us[3];
-        dest[4] = mCommandInsert;
+        dest[4] = mLineData.mNumLines;
     }
 
     StackThing yTmp;
@@ -251,7 +260,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
         wchar_t c = *src;
         if (c == nullptr) {
             if (textBox != nullptr) {
-                mCommandInsert++;
+                mLineData.mNumLines++;
             }
             *writePtr = '\0';
             goto end;
@@ -344,7 +353,7 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                 } break;
                 case 0x10008:
                     if (textBox != nullptr) {
-                        float1 = fn_800B8040(((u8 *)endPtr)[0], field_0x90C);
+                        float1 = fn_800B8040(((u8 *)endPtr)[0], mMsgWindowSubtype);
                         float1 *= textBox->getMyScale();
                     }
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
@@ -407,14 +416,14 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
             }
         } else {
             if (textBox != nullptr) {
-                if (c == 10) {
+                if (c == L'\n') {
                     *writePtr = c;
                     src++;
                     writePtr++;
-                    mCommandInsert++;
-                    s32 i10 = getNumLines(field_0x90C);
-                    if (mCommandInsert % i10 == 0) {
-                        float1 = fn_800B8040(0, field_0x90C);
+                    mLineData.mNumLines++;
+                    s32 i10 = getMaxNumLines(mMsgWindowSubtype);
+                    if (mLineData.mNumLines % i10 == 0) {
+                        float1 = fn_800B8040(0, mMsgWindowSubtype);
                         float1 *= textBox->getMyScale();
                     }
                     if (textBox != nullptr) {
@@ -423,12 +432,13 @@ void dTagProcessor_c::eventFlowTextProcessingRelated(
                         writePtr[1] = buf[1];
                         writePtr[2] = buf[2];
                         writePtr[3] = buf[3];
-                        writePtr[4] = mCommandInsert;
+                        writePtr[4] = mLineData.mNumLines;
                         writePtr += 5;
                     }
                 } else {
                     const nw4r::ut::Font *fnt = textBox->GetFont();
-                    field_0x914[mCommandInsert] += float1 * fnt->GetCharWidth(*src) + textBox->GetCharSpace();
+                    mLineData.mLineWidths[mLineData.mNumLines] +=
+                        float1 * fnt->GetCharWidth(*src) + textBox->GetCharSpace();
                     writePtr = fn_800B5FD0(*src, writePtr, nullptr);
                     src++;
                 }
@@ -624,16 +634,16 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
 }
 
 void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr) {
-    if (field_0x90C != 22 && field_0x90C != 30 && field_0xEE0 != 0) {
+    if (mMsgWindowSubtype != 22 && mMsgWindowSubtype != 30 && field_0xEE0 != 0) {
         int arg = ptr[0];
         nw4r::lyt::Size textBoxSize = field_0x004->GetSize();
         nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
-        int i1 = getNumLines(field_0x90C);
-        if (arg % i1 == 0 && field_0x90C != 31 && field_0x90C != 8) {
+        int i1 = getMaxNumLines(mMsgWindowSubtype);
+        if (arg % i1 == 0 && mMsgWindowSubtype != 31 && mMsgWindowSubtype != 8) {
             int u = 0;
             int v = 0;
-            for (int i = arg; i < arg + getNumLines(field_0x90C) && i < 0x32; i++) {
-                f32 f6 = getFloat(i);
+            for (int i = arg; i < arg + getMaxNumLines(mMsgWindowSubtype) && i < 0x32; i++) {
+                f32 f6 = getLineWidth(i);
                 if (f6 > 0.0f) {
                     v++;
                     if (u != 0) {
@@ -650,7 +660,7 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
             // completely hidden in the Ghidra decompiler, apparently
             // because the results aren't used?
 
-            if (u < getNumLines(field_0x90C)) {
+            if (u < getMaxNumLines(mMsgWindowSubtype)) {
                 f32 w1 = fontSize.width * 0.5f;
                 f32 h1 = fontSize.height * 0.5f;
                 if (!(w1 < UnkTextThing::getField0x758())) {
@@ -660,7 +670,8 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
                     h1 = UnkTextThing::getField0x758();
                 }
 
-                f32 f7 = (fontSize.height + field_0x004->GetLineSpace()) * 0.5f * (getNumLines(field_0x90C) - v);
+                f32 f7 =
+                    (fontSize.height + field_0x004->GetLineSpace()) * 0.5f * (getMaxNumLines(mMsgWindowSubtype) - v);
                 field_0x814 = ctx->writer->GetCursorY();
                 field_0x818 = ctx->y;
                 field_0xEE4 = 1;
@@ -671,13 +682,13 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
             }
         }
 
-        f32 f7 = getFloat(arg);
-        f32 f8 = (textBoxSize.width - f7) * 0.5f;
-        if ((field_0x90C < 6 || field_0x90C >= 9) && field_0x90C != 30) {
-            f8 = 0.0f;
+        f32 lineWidth = getLineWidth(arg);
+        f32 margin = (textBoxSize.width - lineWidth) * 0.5f;
+        if ((mMsgWindowSubtype < 6 || mMsgWindowSubtype >= 9) && mMsgWindowSubtype != 30) {
+            margin = 0.0f;
         }
-        if (f8 > 0.0f) {
-            ctx->writer->SetCursorX(ctx->writer->GetCursorX() + f8);
+        if (margin > 0.0f) {
+            ctx->writer->SetCursorX(ctx->writer->GetCursorX() + margin);
         }
     }
 }
@@ -685,20 +696,20 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
 void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *buf) {
     u16 cmd = buf[0];
     if (cmd == 0xFFFF) {
-        restoreColor(ctx, field_0x90C);
+        restoreColor(ctx, mMsgWindowSubtype);
         return;
     }
     nw4r::ut::Color c1 = FontColors1[cmd & 0xFFFF];
     nw4r::ut::Color c2 = FontColors2[cmd & 0xFFFF];
     if (cmd == 0) {
-        if (field_0x90C == 2) {
+        if (mMsgWindowSubtype == 2) {
             c1.r = 0xFF;
             c1.g = 0x6E;
             c1.b = 0x64;
             c2.r = 0xFF;
             c2.g = 0x6E;
             c2.b = 0x64;
-        } else if (field_0x90C == 7) {
+        } else if (mMsgWindowSubtype == 7) {
             c1.r = 0xE6;
             c1.g = 0x4B;
             c1.b = 0x32;
@@ -707,14 +718,14 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
             c2.b = 0x32;
         }
     } else if (cmd == 1) {
-        if (field_0x90C == 2) {
+        if (mMsgWindowSubtype == 2) {
             c1.r = 0xF5;
             c1.g = 0x64;
             c1.b = 0x5A;
             c2.r = 0xC8;
             c2.g = 0x64;
             c2.b = 0x5A;
-        } else if (field_0x90C == 7) {
+        } else if (mMsgWindowSubtype == 7) {
             c1.r = 0xB4;
             c1.g = 0x50;
             c1.b = 0x50;
@@ -722,7 +733,7 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
             c2.g = 0x40;
             c2.b = 0x40;
         }
-    } else if (cmd == 3 && field_0x90C >= 2 && field_0x90C < 5) {
+    } else if (cmd == 3 && mMsgWindowSubtype >= 2 && mMsgWindowSubtype < 5) {
         c1.r = 0x50;
         c1.g = 0xE6;
         c1.b = 0xFA;
@@ -824,7 +835,7 @@ void dTagProcessor_c::fn_800B61B0(u8 cmdLen, wchar_t *ptr) {
 }
 
 void dTagProcessor_c::fn_800B61D0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr) {
-    f32 scale = fn_800B8040(*(char *)ptr, field_0x90C);
+    f32 scale = fn_800B8040(*(char *)ptr, mMsgWindowSubtype);
     if (field_0x004 != nullptr) {
         scale *= field_0x004->getMyScale();
     }
@@ -973,17 +984,14 @@ f32 dTagProcessor_c::fn_800B8040(s8 factor, u32 windowType) {
             case -1: x = 0.68f; break;
             case -0: x = 0.8f; break;
             case 1:  x = 0.95f; break;
-            case 2:
-                x = 1.1f;
-                break;
-                // @bug: No default, so uninitialized is possible
+            case 2:  x = 1.1f; break;
         }
         x *= UnkTextThing::getFn800B1F10();
         return x * f1;
     }
 }
 
-s32 dTagProcessor_c::getNumLines(s32 arg) {
+s32 dTagProcessor_c::getMaxNumLines(s32 arg) {
     if (arg >= 6 && arg < 8) {
         return 4;
     } else if (arg == 9) {
@@ -1037,15 +1045,15 @@ s32 dTagProcessor_c::tickPauseFrame() {
     return mPauseFramesLeft;
 }
 
-void dTagProcessor_c::resetSomeFloats() {
+void dTagProcessor_c::resetLineData() {
     for (int i = 0; i < 0x32; i++) {
-        field_0x914[i] = 0.0f;
+        mLineData.mLineWidths[i] = 0.0f;
     }
-    mCommandInsert = 0;
+    mLineData.mNumLines = 0;
 }
 
-f32 dTagProcessor_c::getFloat(s32 i) {
-    return field_0x914[i];
+f32 dTagProcessor_c::getLineWidth(s32 i) {
+    return mLineData.mLineWidths[i];
 }
 
 void dTagProcessor_c::setNumericArg0(s32 arg) {
