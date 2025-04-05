@@ -327,7 +327,7 @@ void dLytMsgWindow_c::executeState_OutputText() {
     }
 
     field_0x81C = mpMsgWindowUnk->checkEndReached();
-    field_0x81D = mpMsgWindowUnk->reset();
+    field_0x81D = mpMsgWindowUnk->checkLastLineReached();
 }
 void dLytMsgWindow_c::finalizeState_OutputText() {}
 
