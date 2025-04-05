@@ -41,6 +41,7 @@ public:
 private:
     static SizedString<64> getTextLabel();
 
+    MSG_WINDOW_STATE_MGR_INLINE(dLytMsgWindowDemo_c)
     /* 0x010 */ UI_STATE_MGR_DECLARE(dLytMsgWindowDemo_c);
     /* 0x04C */ d2d::ResAccIf_c mResAcc;
     /* 0x3BC */ d2d::LytBase_c mLyt;

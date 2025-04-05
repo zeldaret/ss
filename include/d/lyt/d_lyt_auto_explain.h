@@ -34,6 +34,7 @@ public:
     bool checkSomethingMeter();
 
 private:
+    MSG_WINDOW_STATE_MGR_INLINE(dLytAutoExplain_c)
     /* 0x010 */ UI_STATE_MGR_DECLARE(dLytAutoExplain_c);
     /* 0x068 */ d2d::ResAccIf_c mResAcc;
     /* 0x3C4 */ d2d::LytBase_c mLyt;

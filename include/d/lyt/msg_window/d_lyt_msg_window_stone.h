@@ -42,6 +42,7 @@ public:
     STATE_FUNC_DECLARE(dLytMsgWindowStone_c, Out);
 
 private:
+    MSG_WINDOW_STATE_MGR_INLINE(dLytMsgWindowStone_c)
     /* 0x010 */ UI_STATE_MGR_DECLARE(dLytMsgWindowStone_c);
     /* 0x04C */ d2d::SubPaneList mSubpaneList;
     /* 0x05C */ d2d::SubPaneListNode mNodes[1];

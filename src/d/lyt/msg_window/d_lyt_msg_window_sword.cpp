@@ -243,7 +243,7 @@ void dLytMsgWindowSword_c::executeState_Out() {
 
     if (mAnm[SWORD_ANIM_OUT].isEndReached()) {
         mAnm[SWORD_ANIM_OUT].setAnimEnable(false);
-        mStateMgr.changeState(StateID_Visible);
+        mStateMgr.changeState(StateID_Invisible);
     }
 }
 void dLytMsgWindowSword_c::finalizeState_Out() {}

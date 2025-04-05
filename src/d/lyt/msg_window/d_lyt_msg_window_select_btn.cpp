@@ -1,9 +1,11 @@
 #include "d/lyt/msg_window/d_lyt_msg_window_select_btn.h"
 
 #include "common.h"
+#include "d/d_pad.h"
 #include "d/lyt/d2d.h"
 #include "toBeSorted/music_mgrs.h"
 #include "toBeSorted/small_sound_mgr.h"
+
 
 STATE_DEFINE(dLytMsgWindowSelectBtnParts_c, Wait);
 STATE_DEFINE(dLytMsgWindowSelectBtnParts_c, On);
@@ -305,8 +307,7 @@ void dLytMsgWindowSelectBtn_c::initializeState_WaitSelect() {
     mBtnHelper.fn_8011C970();
     mBtnHelper.field_0x48 = fn_8011FE50();
 }
-extern "C" bool checkButtonAPressed();
-extern "C" bool checkButtonBPressed();
+
 void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
     u8 v = mBtnHelper.fn_8011CAC0();
     if (v == 1) {
@@ -327,7 +328,7 @@ void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
         return;
     }
 
-    if (mBtnHelper.field_0x50 >= 0 && checkButtonAPressed()) {
+    if (mBtnHelper.field_0x50 >= 0 && dPad::checkButtonAPressed()) {
         field_0x9D0 = 0;
         field_0x9B0 = mBtnHelper.field_0x50;
         mStateMgr.changeState(StateID_WaitDecide);
@@ -338,7 +339,7 @@ void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
             SmallSoundManager::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
         }
         fn_8035E880(BGM_MGR);
-    } else if (checkButtonBPressed()) {
+    } else if (dPad::checkButtonBPressed()) {
         f32 f = mBtnHelper.fn_8011D690(field_0x9BC);
         // TODO
         field_0x9CC = field_0x9BC;

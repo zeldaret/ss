@@ -53,6 +53,7 @@ public:
     }
 
 private:
+    MSG_WINDOW_STATE_MGR_INLINE(dLytMsgWindowSword_c)
     /* 0x0010 */ UI_STATE_MGR_DECLARE(dLytMsgWindowSword_c);
     /* 0x004C */ d2d::SubPaneList mSubpaneList;
     /* 0x005C */ d2d::SubPaneListNode mNodes[1];

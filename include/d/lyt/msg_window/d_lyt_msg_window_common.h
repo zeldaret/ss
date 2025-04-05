@@ -9,6 +9,8 @@
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_pane.h"
 
+#define MSG_WINDOW_STATE_MGR_INLINE(className) void changeState(const sFStateID_c<className> &newState) { mStateMgr.changeState(newState); }
+
 class dLytMsgWindowSubtype : public m2d::Base_c {
 public:
     /* vt 0x08 */ virtual ~dLytMsgWindowSubtype() {}

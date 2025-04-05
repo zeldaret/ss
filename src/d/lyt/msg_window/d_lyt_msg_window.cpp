@@ -3,6 +3,7 @@
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_message.h"
+#include "d/d_pad.h"
 #include "d/d_stage_mgr.h"
 #include "d/d_tag_processor.h"
 #include "d/d_textunk.h"
@@ -14,8 +15,8 @@
 // clang-format off
 // vtable order
 #include "d/lyt/msg_window/d_lyt_msg_window_common.h"
-#include "d/lyt/msg_window/d_lyt_msg_window_link.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_talk.h"
+#include "d/lyt/msg_window/d_lyt_msg_window_link.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_sword.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_wood.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_stone.h"
@@ -24,6 +25,7 @@
 #include "d/lyt/d_lyt_auto_explain.h"
 #include "d/lyt/d_lyt_auto_caption.h"
 // clang-format on
+
 #include "f/f_base.h"
 #include "m/m_fader_base.h"
 #include "m/m_vec.h"
@@ -32,7 +34,9 @@
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/global_fi_context.h"
+#include "toBeSorted/lyt_related_floats.h"
 #include "toBeSorted/music_mgrs.h"
+#include "toBeSorted/other_sound_stuff.h"
 #include "toBeSorted/small_sound_mgr.h"
 
 #include <cstring>
@@ -76,11 +80,6 @@ STATE_DEFINE(dLytMsgWindow_c, ExplainOut);
 STATE_DEFINE(dLytMsgWindow_c, DemoIn);
 STATE_DEFINE(dLytMsgWindow_c, DemoVisible);
 STATE_DEFINE(dLytMsgWindow_c, DemoOut);
-
-extern "C" bool checkButtonAPressed();
-extern "C" bool checkButtonAHeld();
-extern "C" bool checkButtonBPressed();
-extern "C" bool checkButtonPlusPressed();
 
 bool dLytMsgWindow_c::build() {
     mResAcc1.attach(LayoutArcManager::GetInstance()->getLoadedData("DoButton"), "");
@@ -176,7 +175,7 @@ void dLytMsgWindow_c::executeState_Invisible() {
         field_0x80C = 0;
         if (dMessage_c::isValidTextLabel(mName)) {
             mNameCopy = mName;
-            dMessage_c::loadTextByLabel(mNameCopy, mpTagProcessor, true, 0, 0);
+            dMessage_c::getTextMessageByLabel(mNameCopy, mpTagProcessor, true, 0, 0);
 
             if (field_0x1220 == 0) {
                 if (field_0x80D != 0) {
@@ -219,10 +218,10 @@ void dLytMsgWindow_c::executeState_Invisible() {
                         field_0x828 = mpWindowSword->getCharData();
                     } else if (mpTagProcessor->getMsgWindowSubtype() == 9) {
                         mpCurrentSubtype = mpWindowLink;
-                        // TODO
+                        field_0x828 = mpWindowLink->getCharData();
                     } else if (mpTagProcessor->getMsgWindowSubtype() == 5) {
                         mpCurrentSubtype = mpWindowGet;
-                        // TODO
+                        field_0x828 = mpWindowGet->getCharData();
                     } else if (mpTagProcessor->getMsgWindowSubtype() == 30) {
                         mpCurrentSubtype = mpWindowDemo;
                         field_0x828 = mpWindowDemo->getCharData();
@@ -235,7 +234,7 @@ void dLytMsgWindow_c::executeState_Invisible() {
                         return;
                     } else {
                         mpCurrentSubtype = mpWindowTalk;
-                        // TODO
+                        field_0x828 = mpWindowTalk->getCharData();
                     }
                     mpCurrentSubtype->setPriority(0x8A);
                     dTextBox_c *box = mpCurrentSubtype->getTextBox();
@@ -251,9 +250,6 @@ void dLytMsgWindow_c::executeState_Invisible() {
 }
 void dLytMsgWindow_c::finalizeState_Invisible() {}
 
-extern "C" s32 lbl_80575134;
-extern "C" s32 lbl_8057511C;
-
 void dLytMsgWindow_c::initializeState_In() {
     dAcObjBase_c *obj = EventManager::fn_800A08F0(fBase_c::ACTOR);
     u32 param = 0;
@@ -267,7 +263,7 @@ void dLytMsgWindow_c::initializeState_In() {
         d3d::fn_80016960(field_0x768, obj->poscopy2);
         // TODO - stack and FPR problems
         field_0x768 = mVec3_c(field_0x768.x, field_0x768.y, 0.0f);
-        if (field_0x768.y < lbl_8057511C / 3.0f + lbl_80575134) {
+        if (field_0x768.y < get_8057511C() / 3.0f + get_80575134()) {
             param = 2;
         }
     }
@@ -297,14 +293,14 @@ void dLytMsgWindow_c::executeState_OutputText() {
 
     if (field_0x815 == 0 && field_0x816 == 0) {
         mpMsgWindowUnk->textAdvancingRelated(false, true);
-        if (field_0x811 == 0 && checkButtonAHeld() && field_0x815 == 0 && field_0x816 == 0) {
+        if (field_0x811 == 0 && dPad::checkButtonAHeld() && field_0x815 == 0 && field_0x816 == 0) {
             mpMsgWindowUnk->textAdvancingRelated(false, true);
         }
     }
 
     if (mpTagProcessor->getMsgWindowSubtype() >= 2 && mpTagProcessor->getMsgWindowSubtype() < 5) {
-        // TODO
-    } else if (mpTagProcessor->getMsgWindowSubtype() < 2 && oldValue != mpMsgWindowUnk->getField_0x147A()) {
+        fn_803998A0(lbl_80575DE0, mpMsgWindowUnk->getField_0x147A(), mpMsgWindowUnk->getField_0x147C());
+    } else if (mpTagProcessor->getMsgWindowSubtype() <= 1 && oldValue != mpMsgWindowUnk->getField_0x147A()) {
         u16 a = mpMsgWindowUnk->getField_0x147C();
         f32 b = (dTagProcessor_c::fn_800B8040(0, 0) * 100.0f);
         SmallSoundManager::GetInstance()->playButtonPressSoundWhenAdvancingTextBoxes(a / b);
@@ -353,7 +349,7 @@ void dLytMsgWindow_c::executeState_WaitKeyChangePage0() {
             field_0x813 = 0;
             allowChange = true;
         }
-    } else if (checkButtonAPressed() || fn_8011A5D0()) {
+    } else if (dPad::checkButtonAPressed() || fn_8011A5D0()) {
         fn_8035E880(BGM_MGR);
         allowChange = true;
     }
@@ -411,7 +407,7 @@ void dLytMsgWindow_c::executeState_WaitKeyMsgEnd0() {
             field_0x813 = 0;
             allowChange = true;
         }
-    } else if (checkButtonAPressed() || fn_8011A5D0()) {
+    } else if (dPad::checkButtonAPressed() || fn_8011A5D0()) {
         fn_8035E880(BGM_MGR);
         allowChange = true;
     }
@@ -553,7 +549,8 @@ void dLytMsgWindow_c::finalizeState_MapOpen() {}
 
 void dLytMsgWindow_c::initializeState_WaitKeyMapClose() {}
 void dLytMsgWindow_c::executeState_WaitKeyMapClose() {
-    if ((checkButtonBPressed() || checkButtonPlusPressed()) && !dLytControlGame_c::getInstance()->isNotInStateMap()) {
+    if ((dPad::checkButtonBPressed() || dPad::checkButtonPlusPressed()) &&
+        !dLytControlGame_c::getInstance()->isNotInStateMap()) {
         dLytControlGame_c::getInstance()->fn_802CCD40(true);
         mStateMgr.changeState(StateID_MapClose);
     }

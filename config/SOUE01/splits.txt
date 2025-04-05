@@ -443,6 +443,8 @@ d/lyt/msg_window/d_lyt_msg_window.cpp:
 	.text       start:0x801148F0 end:0x8011C8C8
 	.ctors      start:0x804DB738 end:0x804DB73C
 	.data       start:0x8051B6E8 end:0x8051C300
+	.sdata      start:0x80572580 end:0x80572588
+	.sdata2     start:0x80579DF0 end:0x80579E18
 	.bss        start:0x805AD188 end:0x805AE670
 
 d/lyt/msg_window/d_lyt_msg_window_select_btn.cpp:
@@ -450,6 +452,7 @@ d/lyt/msg_window/d_lyt_msg_window_select_btn.cpp:
 	.ctors      start:0x804DB73C end:0x804DB740
 	.rodata     start:0x804E7468 end:0x804E7540
 	.data       start:0x8051C300 end:0x8051CB10
+	.sdata      start:0x80572588 end:0x80572598
 	.bss        start:0x805AE670 end:0x805AE930
 
 d/lyt/msg_window/d_lyt_msg_window_common.cpp:

@@ -2,10 +2,13 @@
 #define D_LYT_MSG_WINDOW_GET_H
 
 #include "d/d_tag_processor.h"
+#include "d/d_textwindow_unk.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_common_a_btn.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_common.h"
 #include "s/s_State.hpp"
+#include "toBeSorted/lyt_vec2f.h"
 
 class dLytMsgWindowGet_c : public dLytMsgWindowSubtype {
 public:
@@ -39,8 +42,27 @@ public:
     STATE_FUNC_DECLARE(dLytMsgWindowGet_c, Visible);
     STATE_FUNC_DECLARE(dLytMsgWindowGet_c, Out);
 
+    dLytMsgWindowCharData *getCharData() {
+        return mBlurRelated.getCharData();
+    }
+
 private:
-    /* 0x010 */ UI_STATE_MGR_DECLARE(dLytMsgWindowGet_c);
+    MSG_WINDOW_STATE_MGR_INLINE(dLytMsgWindowGet_c)
+    /* 0x0010 */ UI_STATE_MGR_DECLARE(dLytMsgWindowGet_c);
+    /* 0x004C */ d2d::SubPaneList mSubpaneList;
+    /* 0x005C */ d2d::SubPaneListNode mNodes[1];
+    /* 0x0068 */ d2d::ResAccIf_c mResAcc;
+    /* 0x03D8 */ d2d::LytBase_c mLyt;
+    /* 0x0468 */ d2d::AnmGroup_c mAnm[3];
+    /* 0x0528 */ dTextBox_c *mpTextboxes[2];
+    /* 0x0530 */ nw4r::lyt::Pane *mpPanes[6];
+    /* 0x0548 */ dTagProcessor_c *mpTagProcessor;
+    /* 0x054C */ u8 _0x054C[8];
+    /* 0x0554 */ dLytCommonABtn_c mBtn;
+    /* 0x06E8 */ dLytTextLight mText;
+    /* 0x07C4 */ MsgWindowBlurRelated mBlurRelated;
+
+    /* 0x55B8 */ bool mShouldBeOpen;
 };
 
 #endif
