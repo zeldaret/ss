@@ -256,11 +256,11 @@ void dLytMsgWindowTalk_c::draw() {
     mpPanes[2]->SetVisible(false);
 
     mLyt.draw();
-    mBlurRelated.drawTextBlur(&mText, mOffset, mpPanes[5]->GetAlpha());
+    mBlurRelated.drawTextBlur(&mText, mOffset, mpPanes[3]->GetAlpha());
 
     mpPanes[0]->SetVisible(false);
-    mpPanes[3]->SetVisible(bVis[1]);
-    mpPanes[4]->SetVisible(bVis[2]);
+    mpPanes[1]->SetVisible(bVis[1]);
+    mpPanes[2]->SetVisible(bVis[2]);
 
     mLyt.draw();
 
