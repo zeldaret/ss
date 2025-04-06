@@ -57,6 +57,14 @@ public:
     static const wchar_t *formatText(const wchar_t *text);
 
 private:
+    static void *sZev0;
+    static void *sZevStage;
+
+    static void *getZev0Internal();
+    static void *getZevStageInternal();
+
+    void executeMinigame();
+
     const wchar_t *formatTextInternal(const wchar_t *text);
     const wchar_t *getTextMessageByLabelInternal(
         const char *label, dTagProcessor_c *pTagProcessor, bool global, wchar_t *dstBuf, u32 maxLen
@@ -68,6 +76,7 @@ private:
     bool checkIsValidTextLabel(const char *name);
 
     static void setZevFromMsbArc();
+    static void setStageZevFromMsbArc();
     static s32 getMsbtNumberByIndex(s32 index);
     static const char *getMsbfFileName(s32 index);
     static s32 getMsbfNumberByIndex(s32 index);
@@ -77,6 +86,11 @@ private:
     s32 getMsbtIndexForLabelInternal(const char *label);
     static MsbtInfo *getMsbtInfoForIndex(s32 index);
     MsbtInfo *getMsbtInfoForIndexInternal(s32 index);
+
+    static MsbfInfo *getMsbfInfoForIndex(s32 index);
+    MsbfInfo *getMsbfInfoForIndexInternal(s32 index);
+
+    static const char *getArcNameByIndexInternal(s32 idx, bool global);
 
     static dMessage_c *sInstance;
     static dTagProcessor_c *sTagProcessor;
@@ -93,8 +107,11 @@ private:
     /* 0x329 */ bool field_0x329;
     /* 0x32A */ bool field_0x32A;
 
+    /* 0x32B */ u8 _0x32B[0x334 - 0x32B];
+
     /* 0x334 */ u32 mMinigameResultPoints;
     /* 0x338 */ u32 mMinigameTime;
+    /* 0x33C */ u8 _0x33C[0x344 - 0x33C];
     /* 0x344 */ s32 field_0x344;
 };
 

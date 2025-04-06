@@ -1,15 +1,20 @@
 #include "d/d_message.h"
 
 #include "common.h"
+#include "d/d_sc_game.h"
 #include "d/d_tag_processor.h"
 #include "d/d_textunk.h"
+#include "egg/core/eggHeap.h"
 #include "f/f_base.h"
 #include "f/f_profile.h"
 #include "f/f_profile_name.h"
 #include "libms/libms.h"
 #include "libms/msgfile.h"
 #include "sized_string.h"
+#include "toBeSorted/arc_managers/oarc_manager.h"
+#include "toBeSorted/event_manager.h"
 #include "toBeSorted/global_fi_context.h"
+
 
 SPECIAL_BASE_PROFILE(MESSAGE, dMessage_c, fProfile::MESSAGE, 0x2A8, 0);
 
@@ -181,12 +186,28 @@ static char *sMsbfFileNames[80] = {
     "599-Demo.msbf",
 };
 
+static char *sArcNames[] = {
+    "0-Common", "1-Town", "2-Forest", "3-Mountain", "4-Desert", "5-CenterField",
+};
+
 dMessage_c *dMessage_c::sInstance;
 dTagProcessor_c *dMessage_c::sTagProcessor;
 
-static void *msbAlloc(size_t size) {}
+static void *msbAlloc(size_t size) {
+    if (UnkTextThing::getInstance()->getField_0x7B6() == false) {
+        return EGG::Heap::alloc(size, 0x20, nullptr);
+    } else {
+        return UnkTextThing::getInstance()->allocUnk(size, 0x20);
+    }
+}
 
-static void msbFree(void *ptr) {}
+static void msbFree(void *ptr) {
+    if (UnkTextThing::getInstance()->getField_0x7B6() == false) {
+        EGG::Heap::free(ptr, nullptr);
+    } else {
+        UnkTextThing::getInstance()->destroyUnk(ptr);
+    }
+}
 
 dMessage_c::dMessage_c() {
     sInstance = this;
@@ -251,6 +272,16 @@ int dMessage_c::doDelete() {
 }
 
 int dMessage_c::execute() {
+    if (field_0x2FC != 0 && !EventManager::isInEvent()) {
+        field_0x2FC = 0;
+    }
+
+    if (field_0x2FC > 0) {
+        field_0x2FC--;
+    }
+    executeMinigame();
+    sTagProcessor->execute();
+
     return SUCCEEDED;
 }
 
@@ -394,6 +425,10 @@ s32 dMessage_c::getTextIndexForLabel(const char *label) {
     return LMS_GetTextIndexByLabel(info, label);
 }
 
+s32 dMessage_c::getMsbtIndexForLabel(const char *label) {
+    return sInstance->getMsbtIndexForLabelInternal(label);
+}
+
 s32 dMessage_c::getMsbtIndexForLabelInternal(const char *label) {
     if (mCurrentTextFileNumber <= 81) {
         MsbtInfo *info = getMsbtInfoForIndex(mCurrentTextFileNumber);
@@ -426,6 +461,19 @@ MsbtInfo *dMessage_c::getMsbtInfoForIndexInternal(s32 index) {
     return mpMsgs[index];
 }
 
+MsbfInfo *dMessage_c::getMsbfInfoForIndex(s32 index) {
+    return sInstance->getMsbfInfoForIndexInternal(index);
+}
+
+MsbfInfo *dMessage_c::getMsbfInfoForIndexInternal(s32 index) {
+    UnkTextThing *thing = UnkTextThing::getInstance();
+    MsbfInfo *overrideMsbf = thing->getMsbfInfo(index);
+    if (overrideMsbf != nullptr && thing->getField_0x7B4() == true) {
+        return overrideMsbf;
+    }
+    return mpFlows[index];
+}
+
 extern "C" u8 fn_80054F30();
 
 static SizedString<8> sCurrentLanguage;
@@ -439,6 +487,68 @@ const char *dMessage_c::getLanguageIdentifier() {
         sCurrentLanguage = "en_US";
     }
     return sCurrentLanguage;
+}
+
+const char *dMessage_c::getArcNameByIndex(s32 idx, bool global) {
+    return getArcNameByIndexInternal(idx, global);
+}
+
+const char *dMessage_c::getArcNameByIndexInternal(s32 idx, bool global) {
+    return sArcNames[idx];
+}
+
+void *dMessage_c::getDataFromMsbArc(s32 number, const char *fileName, bool global) {
+    SizedString<128> path;
+    path.sprintf("%s/%s", getLanguageIdentifier(), getArcNameByIndex(number, global));
+    return OarcManager::GetInstance()->getData(path, fileName);
+}
+
+void dMessage_c::setZevFromMsbArc() {
+    SizedString<128> path;
+    path.sprintf("%s/dat/zev.dat", getArcNameByIndex(0, false));
+    sZev0 = getDataFromMsbArc(0, path, false);
+    sZevStage = nullptr;
+}
+
+void dMessage_c::setStageZevFromMsbArc() {
+    SizedString<32> stage = dScGame_c::currentSpawnInfo.stageName;
+    char buf[2];
+    buf[0] = stage[1];
+    buf[1] = '\0';
+
+    SizedString<128> path;
+
+    int i = atoi(buf) + 1;
+
+    // TODO figure out what this is
+    if (stage == "t_tkm24" || stage == "t_tkm26") {
+        i = 2;
+    } else if (i < 1 || 6 <= i) {
+        i = 0;
+    }
+    path.sprintf("%s/dat/zev.dat", getArcNameByIndex(i, false));
+    sZevStage = getDataFromMsbArc(i, path, false);
+}
+
+void *dMessage_c::sZev0;
+void *dMessage_c::sZevStage;
+
+void *dMessage_c::getZev0Internal() {
+    UnkTextThing *thing = UnkTextThing::getInstance();
+    void *overrideZev = thing->getField_0x74C();
+    if (overrideZev != nullptr && thing->getField_0x7B4() == true) {
+        return overrideZev;
+    }
+    return sZev0;
+}
+
+void *dMessage_c::getZevStageInternal() {
+    UnkTextThing *thing = UnkTextThing::getInstance();
+    void *overrideZev = thing->getField_0x750();
+    if (overrideZev != nullptr && thing->getField_0x7B4() == true) {
+        return overrideZev;
+    }
+    return sZevStage;
 }
 
 s32 dMessage_c::getArcIndexForFile(const char *fileName) {

@@ -12,7 +12,7 @@ struct MsbfInfo;
 struct MsbFlowInfo {
     /* 0x00 */ char type;
     /* 0x01 */ char subType;
-    /* 0x04 */ short params1n2;
+    /* 0x04 */ int params1n2;
     /* 0x08 */ short next;
     /* 0x0A */ short param3;
     /* 0x0C */ short param4;

@@ -133,8 +133,24 @@ public:
         return field_0x7B4;
     }
 
+    void *getField_0x74C() const {
+        return field_0x74C;
+    }
+
+    void *getField_0x750() const {
+        return field_0x750;
+    }
+
+    bool getField_0x7B6() const {
+        return field_0x7B6;
+    }
+
     MsbtInfo *getMsbtInfo(s32 index) const {
         return field_buf2[index];
+    }
+
+    MsbfInfo *getMsbfInfo(s32 index) const {
+        return field_buf3[index];
     }
 
     const char *getStr1() const {
@@ -161,11 +177,12 @@ public:
         field_0x104 = s;
     }
 
+    void *allocUnk(size_t size, int align);
+    void destroyUnk(void *thing);
+
 private:
     static UnkTextThing *sInstance;
 
-    void *allocUnk(size_t size, int align);
-    void destroyUnk(void *thing);
     void destroyFlow(MsbfInfo *flow);
     void destroyMsg(MsbtInfo *msg);
 
