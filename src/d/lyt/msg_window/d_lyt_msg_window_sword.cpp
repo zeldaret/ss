@@ -234,10 +234,9 @@ void dLytMsgWindowSword_c::executeState_Out() {
         if (mAnm[SWORD_ANIM_OUT].isEndReached()) {
             v = mTranslationFrom;
         } else {
-            // TODO - when you fix this, fix other instances of this
-            // by searching for de4663d6
-            v = mpPanes[2]->GetTranslate();
-            v += (mTranslationTo - v) / 2.0f;
+            v.copyFrom(mpPanes[2]->GetTranslate());
+            mVec3_c tmp = (mTranslationTo - v) / 2.0f;
+            v += tmp;
         }
         mpPanes[2]->SetTranslate(v);
     }

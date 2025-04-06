@@ -157,10 +157,9 @@ void dLytMsgWindowTalk_c::executeState_In() {
         if (mAnm[TALK_ANIM_IN].isEndReached()) {
             v = mTranslationTo;
         } else {
-            // TODO - when you fix this, fix other instances of this
-            // by searching for de4663d6
-            v = mpPanes[4]->GetTranslate();
-            v += (mTranslationTo - v) / 2.0f;
+            v.copyFrom(mpPanes[4]->GetTranslate());
+            mVec3_c tmp = (mTranslationTo - v) / 2.0f;
+            v += tmp;
         }
         mpPanes[4]->SetTranslate(v);
     }
