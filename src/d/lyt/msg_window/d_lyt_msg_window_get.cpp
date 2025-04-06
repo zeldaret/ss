@@ -180,15 +180,19 @@ void dLytMsgWindowGet_c::draw() {
     // The instruction patterns here are the same that EGG::StateGX::Scoped
     // generates, but there's no RAII to be found here. What's the missing
     // link that makes the compiler generate these?
-    bool bVis0 = mpPanes[0]->IsVisible();
-    bool bVis1 = mpPanes[1]->IsVisible();
-    bool bVis2 = mpPanes[2]->IsVisible();
-    bool bVis3 = mpPanes[3]->IsVisible();
-    bool bVis4 = mpPanes[4]->IsVisible();
+    // When you fix this, fix other instances of this problem
+    // by searching for 91657b77
+    bool bVis[5] = {
+        mpPanes[0]->IsVisible(),
+        mpPanes[1]->IsVisible(),
+        mpPanes[2]->IsVisible(),
+        mpPanes[3]->IsVisible(),
+        mpPanes[4]->IsVisible(),
+    };
 
-    mpPanes[0]->SetVisible(bVis0);
-    mpPanes[1]->SetVisible(bVis1);
-    mpPanes[2]->SetVisible(bVis2);
+    mpPanes[0]->SetVisible(bVis[0]);
+    mpPanes[1]->SetVisible(bVis[1]);
+    mpPanes[2]->SetVisible(bVis[2]);
     mpPanes[3]->SetVisible(false);
     mpPanes[4]->SetVisible(false);
 
@@ -198,16 +202,16 @@ void dLytMsgWindowGet_c::draw() {
     mpPanes[0]->SetVisible(false);
     mpPanes[1]->SetVisible(false);
     mpPanes[2]->SetVisible(false);
-    mpPanes[3]->SetVisible(bVis3);
-    mpPanes[4]->SetVisible(bVis4);
+    mpPanes[3]->SetVisible(bVis[3]);
+    mpPanes[4]->SetVisible(bVis[4]);
 
     mLyt.draw();
 
-    mpPanes[0]->SetVisible(bVis0);
-    mpPanes[1]->SetVisible(bVis1);
-    mpPanes[2]->SetVisible(bVis2);
-    mpPanes[3]->SetVisible(bVis3);
-    mpPanes[4]->SetVisible(bVis4);
+    mpPanes[0]->SetVisible(bVis[0]);
+    mpPanes[1]->SetVisible(bVis[1]);
+    mpPanes[2]->SetVisible(bVis[2]);
+    mpPanes[3]->SetVisible(bVis[3]);
+    mpPanes[4]->SetVisible(bVis[4]);
 }
 
 void dLytMsgWindowGet_c::open(dAcObjBase_c *obj, u32 param) {
