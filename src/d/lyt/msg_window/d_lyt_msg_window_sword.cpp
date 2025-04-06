@@ -117,9 +117,8 @@ bool dLytMsgWindowSword_c::build(d2d::ResAccIf_c *resAcc1, d2d::ResAccIf_c *resA
     mTranslationFrom.copyFrom(mpPanes[2]->GetTranslate());
 
     mParam = 0;
-    field_0x05E8 = 0.0f;
-    field_0x05E4 = 0.0f;
-    field_0x5F4 = 0;
+    mOffset.x = mOffset.y = 0.0f;
+    mWaitDelay = 0;
 
     mHasDrawnThisTick = false;
 
@@ -196,10 +195,10 @@ void dLytMsgWindowSword_c::executeState_In() {
 void dLytMsgWindowSword_c::finalizeState_In() {}
 
 void dLytMsgWindowSword_c::initializeState_Wait() {
-    field_0x5F4 = UnkTextThing::getInstance()->getField_0x7AE();
+    mWaitDelay = UnkTextThing::getInstance()->getMsgWindowWaitDelay();
 }
 void dLytMsgWindowSword_c::executeState_Wait() {
-    if (--field_0x5F4 > 0) {
+    if (--mWaitDelay > 0) {
         return;
     }
     mStateMgr.changeState(StateID_Visible);
@@ -211,8 +210,8 @@ void dLytMsgWindowSword_c::initializeState_Visible() {
     nw4r::lyt::Size fontSize = getTextBox()->GetFontSize(); // unused
     nw4r::math::MTX34 transform = getTextBox()->GetGlobalMtx();
 
-    field_0x05E4 = transform._03 - size.width / 2;
-    field_0x05E8 = transform._13 + size.height / 2;
+    mOffset.x = transform._03 - size.width / 2;
+    mOffset.y = transform._13 + size.height / 2;
 
     getTextBox()->GetTextDrawRect(); // unused
 }
@@ -272,7 +271,7 @@ void dLytMsgWindowSword_c::draw() {
                 mCharacterData[i].displayTimerMaybe += 1;
             }
             mVec3_c v(
-                (field_0x05E4 + mCharacterData[i].posX) / get_805751A4(), field_0x05E8 + mCharacterData[i].posY, 0.0f
+                (mOffset.x + mCharacterData[i].posX) / get_805751A4(), mOffset.y + mCharacterData[i].posY, 0.0f
             );
 
             wchar_t str[2];

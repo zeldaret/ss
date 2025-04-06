@@ -64,7 +64,7 @@ private:
     /* 0x05AC */ mVec2_c mOffset;
     /* 0x05B4 */ dAcObjBase_c *mpActor;
     /* 0x05B8 */ s32 mParam;
-    /* 0x05BC */ s32 field_0x05BC;
+    /* 0x05BC */ s32 mWaitDelay;
     /* 0x05C0 */ dLytCommonABtn_c mBtn;
     /* 0x0770 */ dLytTextLight mText;
     /* 0x084C */ MsgWindowBlurRelated mBlurRelated;

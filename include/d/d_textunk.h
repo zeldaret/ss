@@ -7,6 +7,13 @@
 #include "nw4r/ut/ut_Color.h"
 #include "sized_string.h"
 
+/**
+ * This class appears to be the remnant of a sort of "hot-reloading"
+ * mechanism for the game's user interface. Many of the functions
+ * affect text formatting, UI layouting, and it also has mechanisms
+ * for overriding the text and flow files being accessed. The actual
+ * implementation appears to have been stripped out though.
+ */
 class UnkTextThing {
 public:
     UnkTextThing();
@@ -113,44 +120,32 @@ public:
         return sInstance;
     }
 
-    void reset0(const char *str) {
-        field_0x004 = str;
+    s16 getMsgWindowWaitDelay() const {
+        return mMsgWindowWaitDelay;
     }
 
-    void reset1(const char *str) {
-        field_0x084 = str;
+    bool getShouldOverrideData() const {
+        return mShouldOverrideData;
     }
 
-    void reset2(const char *str) {
-        field_0x104 = str;
+    void *getOverrideZev0() const {
+        return mOverrideZev0;
     }
 
-    s16 getField_0x7AE() const {
-        return field_0x7AE;
+    void *getOverrideStageZev() const {
+        return mOverrideStageZev;
     }
 
-    bool getField_0x7B4() const {
-        return field_0x7B4;
+    bool getShouldHookAllocations() const {
+        return mShouldHookAllocations;
     }
 
-    void *getField_0x74C() const {
-        return field_0x74C;
+    MsbtInfo *getOverrideMsbtInfo(s32 index) const {
+        return mMsbts[index];
     }
 
-    void *getField_0x750() const {
-        return field_0x750;
-    }
-
-    bool getField_0x7B6() const {
-        return field_0x7B6;
-    }
-
-    MsbtInfo *getMsbtInfo(s32 index) const {
-        return field_buf2[index];
-    }
-
-    MsbfInfo *getMsbfInfo(s32 index) const {
-        return field_buf3[index];
+    MsbfInfo *getOverrideMsbfInfo(s32 index) const {
+        return mMsbfs[index];
     }
 
     const char *getStr1() const {
@@ -204,11 +199,11 @@ private:
     /* 0x184 */ void *field_buf0[82];
     /* 0x2CC */ void *field_buf4[23];
     /* 0x328 */ void *field_buf1[80];
-    /* 0x468 */ MsbtInfo *field_buf2[82];
+    /* 0x468 */ MsbtInfo *mMsbts[82];
     /* 0x5B0 */ MsbtInfo *field_buf5[23];
-    /* 0x60C */ MsbfInfo *field_buf3[80];
-    /* 0x74C */ void *field_0x74C;
-    /* 0x750 */ void *field_0x750;
+    /* 0x60C */ MsbfInfo *mMsbfs[80];
+    /* 0x74C */ void *mOverrideZev0;
+    /* 0x750 */ void *mOverrideStageZev;
     /* 0x754 */ f32 field_0x754;
     /* 0x758 */ f32 field_0x758;
     /* 0x75C */ f32 field_0x75C;
@@ -235,13 +230,13 @@ private:
     /* 0x7A8 */ s16 field_0x7A8;
     /* 0x7AA */ s16 field_0x7AA;
     /* 0x7AC */ s16 field_0x7AC;
-    /* 0x7AE */ s16 field_0x7AE;
+    /* 0x7AE */ s16 mMsgWindowWaitDelay;
     /* 0x7B0 */ s16 field_0x7B0;
     /* 0x7B2 */ bool field_0x7B2;
     /* 0x7B3 */ bool field_0x7B3;
-    /* 0x7B4 */ bool field_0x7B4;
+    /* 0x7B4 */ bool mShouldOverrideData;
     /* 0x7B5 */ bool field_0x7B5;
-    /* 0x7B6 */ bool field_0x7B6;
+    /* 0x7B6 */ bool mShouldHookAllocations;
     /* 0x7B6 */ bool field_0x7B7;
     /* 0x7B8 */ nw4r::ut::Color field_0x7B8;
     /* 0x7BC */ nw4r::ut::Color field_0x7BC;

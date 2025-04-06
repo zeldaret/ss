@@ -852,7 +852,7 @@ void dLytMsgWindow_c::removeSubMsgManagers() {
     mpCurrentSubtype = nullptr;
     field_0x1220 = 0;
 
-    UnkTextThing::getInstance()->reset1("");
-    UnkTextThing::getInstance()->reset0("");
-    UnkTextThing::getInstance()->reset2("");
+    UnkTextThing::getInstance()->setStr2("");
+    UnkTextThing::getInstance()->setStr1("");
+    UnkTextThing::getInstance()->setStr3("");
 }

@@ -67,13 +67,12 @@ private:
     /* 0x05CC */ mVec3_c mTranslationTo;
     /* 0x05D8 */ mVec3_c mTranslationFrom;
 
-    /* 0x05E4 */ f32 field_0x05E4;
-    /* 0x05E8 */ f32 field_0x05E8;
+    /* 0x05E4 */ mVec2_c mOffset;
 
     /* 0x05EC */ dAcObjBase_c *mpActor;
     /* 0x05F0 */ s32 mParam;
 
-    /* 0x05F4 */ s32 field_0x5F4;
+    /* 0x05F4 */ s32 mWaitDelay;
 
     /* 0x05F8 */ dLytCommonABtn_c mBtn;
 

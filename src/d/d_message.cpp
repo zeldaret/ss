@@ -194,7 +194,7 @@ dMessage_c *dMessage_c::sInstance;
 dTagProcessor_c *dMessage_c::sTagProcessor;
 
 static void *msbAlloc(size_t size) {
-    if (UnkTextThing::getInstance()->getField_0x7B6() == false) {
+    if (UnkTextThing::getInstance()->getShouldHookAllocations() == false) {
         return EGG::Heap::alloc(size, 0x20, nullptr);
     } else {
         return UnkTextThing::getInstance()->allocUnk(size, 0x20);
@@ -202,7 +202,7 @@ static void *msbAlloc(size_t size) {
 }
 
 static void msbFree(void *ptr) {
-    if (UnkTextThing::getInstance()->getField_0x7B6() == false) {
+    if (UnkTextThing::getInstance()->getShouldHookAllocations() == false) {
         EGG::Heap::free(ptr, nullptr);
     } else {
         UnkTextThing::getInstance()->destroyUnk(ptr);
@@ -454,8 +454,8 @@ MsbtInfo *dMessage_c::getMsbtInfoForIndex(s32 index) {
 
 MsbtInfo *dMessage_c::getMsbtInfoForIndexInternal(s32 index) {
     UnkTextThing *thing = UnkTextThing::getInstance();
-    MsbtInfo *overrideMsbt = thing->getMsbtInfo(index);
-    if (overrideMsbt != nullptr && thing->getField_0x7B4() == true) {
+    MsbtInfo *overrideMsbt = thing->getOverrideMsbtInfo(index);
+    if (overrideMsbt != nullptr && thing->getShouldOverrideData() == true) {
         return overrideMsbt;
     }
     return mpMsgs[index];
@@ -467,8 +467,8 @@ MsbfInfo *dMessage_c::getMsbfInfoForIndex(s32 index) {
 
 MsbfInfo *dMessage_c::getMsbfInfoForIndexInternal(s32 index) {
     UnkTextThing *thing = UnkTextThing::getInstance();
-    MsbfInfo *overrideMsbf = thing->getMsbfInfo(index);
-    if (overrideMsbf != nullptr && thing->getField_0x7B4() == true) {
+    MsbfInfo *overrideMsbf = thing->getOverrideMsbfInfo(index);
+    if (overrideMsbf != nullptr && thing->getShouldOverrideData() == true) {
         return overrideMsbf;
     }
     return mpFlows[index];
@@ -535,8 +535,8 @@ void *dMessage_c::sZevStage;
 
 void *dMessage_c::getZev0Internal() {
     UnkTextThing *thing = UnkTextThing::getInstance();
-    void *overrideZev = thing->getField_0x74C();
-    if (overrideZev != nullptr && thing->getField_0x7B4() == true) {
+    void *overrideZev = thing->getOverrideZev0();
+    if (overrideZev != nullptr && thing->getShouldOverrideData() == true) {
         return overrideZev;
     }
     return sZev0;
@@ -544,8 +544,8 @@ void *dMessage_c::getZev0Internal() {
 
 void *dMessage_c::getZevStageInternal() {
     UnkTextThing *thing = UnkTextThing::getInstance();
-    void *overrideZev = thing->getField_0x750();
-    if (overrideZev != nullptr && thing->getField_0x7B4() == true) {
+    void *overrideZev = thing->getOverrideStageZev();
+    if (overrideZev != nullptr && thing->getShouldOverrideData() == true) {
         return overrideZev;
     }
     return sZevStage;

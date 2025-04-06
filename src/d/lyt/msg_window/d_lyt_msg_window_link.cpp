@@ -99,7 +99,7 @@ bool dLytMsgWindowLink_c::build(d2d::ResAccIf_c *resAcc1, d2d::ResAccIf_c *resAc
 
     mOffset.x = mOffset.y = 0.0f;
     
-    field_0x05BC = 0;
+    mWaitDelay = 0;
 
     mStateMgr.changeState(StateID_Invisible);
     return true;
@@ -172,10 +172,10 @@ void dLytMsgWindowLink_c::executeState_In() {
 void dLytMsgWindowLink_c::finalizeState_In() {}
 
 void dLytMsgWindowLink_c::initializeState_Wait() {
-    field_0x05BC = UnkTextThing::getInstance()->getField_0x7AE();
+    mWaitDelay = UnkTextThing::getInstance()->getMsgWindowWaitDelay();
 }
 void dLytMsgWindowLink_c::executeState_Wait() {
-    if (--field_0x05BC > 0) {
+    if (--mWaitDelay > 0) {
         return;
     }
     mStateMgr.changeState(StateID_Visible);
