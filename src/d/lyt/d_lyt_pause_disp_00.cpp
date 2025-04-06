@@ -39,7 +39,7 @@ void dLytPauseDisp00_c::init() {
     }
 
     field_0xE29C.init(mLytBase.getLayout()->GetRootPane(), 1, 0, 0);
-    d2d::dLytStructDList::GetInstance()->appendToList2(&field_0xE29C);
+    dCsMgr_c::GetInstance()->registCursorTarget(&field_0xE29C);
     for (int i = 0; i < 0x25; i++) {
         if (i != 0x1F && i != 0x20) {
             nw4r::lyt::Bounding *b = mLytBase.findBounding(B_LIST[i]);

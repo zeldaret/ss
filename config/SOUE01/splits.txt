@@ -186,8 +186,10 @@ toBeSorted/arc_callback_handler.cpp:
 	.sdata      start:0x80571D10 end:0x80571D20
 	.sbss       start:0x80575250 end:0x80575258
 
-d/lyt/d_structd.cpp:
-	.text       start:0x80065600 end:0x80066478
+d/d_cursor_hit_check.cpp:
+	.text       start:0x80065600 end:0x800664EC
+	.data       start:0x8050DF60 end:0x8050DFA0
+	.sdata2     start:0x80577938 end:0x80577958
 
 toBeSorted/arc_managers/current_stage_arc_manager.cpp:
 	.text       start:0x80068FD0 end:0x80069910

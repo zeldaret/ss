@@ -211,7 +211,7 @@ static bool insertDowsingTarget(DowsingTarget *target) {
     if (DOWSING_LISTS[slot].GetPosition(target) != DOWSING_LISTS[slot].GetEndIter()) {
         return false;
     }
-    DOWSING_LISTS[slot].insert(target);
+    DOWSING_LISTS[slot].append(target);
     return true;
 }
 

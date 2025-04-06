@@ -2,9 +2,9 @@
 #define D_LYT_MAP_H
 
 #include "common.h"
+#include "d/d_cursor_hit_check.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_map_capture.h"
-#include "d/lyt/d_structd.h"
 #include "egg/core/eggColorFader.h"
 #include "m/m2d.h"
 #include "m/m_vec.h"
@@ -32,8 +32,15 @@ public:
     friend class dLytMapPinIconAggregate_c;
 
     dLytMapPinIcon_c()
-        : mStateMgr(*this, sStateID::null), mpBounding(nullptr), field_0x1BC(0), field_0x1C0(0.0f, 0.0f, 0.0f),
-          field_0x1CC(0), field_0x1D0(nullptr), field_0x1D4(0), mIndex(0), field_0x1DC(0) {}
+        : mStateMgr(*this, sStateID::null),
+          mpBounding(nullptr),
+          field_0x1BC(0),
+          field_0x1C0(0.0f, 0.0f, 0.0f),
+          field_0x1CC(0),
+          field_0x1D0(nullptr),
+          field_0x1D4(0),
+          mIndex(0),
+          field_0x1DC(0) {}
     virtual ~dLytMapPinIcon_c();
 
     bool build(d2d::ResAccIf_c *resAcc);
@@ -62,7 +69,7 @@ private:
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMapPinIcon_c);
     /* 0x040 */ d2d::LytBase_c mLyt;
     /* 0x0D0 */ d2d::AnmGroup_c mAnmGroups[3];
-    /* 0x190 */ d2d::dLytStructD mStructD;
+    /* 0x190 */ dCursorHitCheckLyt_c mCsHitCheck;
     /* 0x1B8 */ nw4r::lyt::Bounding *mpBounding;
     /* 0x1BC */ UNKWORD field_0x1BC;
     /* 0x1C0 */ mVec3_c field_0x1C0;
@@ -104,7 +111,12 @@ private:
 class dLytMapFloorBtn_c {
 public:
     dLytMapFloorBtn_c()
-        : mStateMgr(*this, sStateID::null), field_0x3C(0), field_0x40(0), field_0x44(0), field_0x48(0), field_0x4C(0),
+        : mStateMgr(*this, sStateID::null),
+          field_0x3C(0),
+          field_0x40(0),
+          field_0x44(0),
+          field_0x48(0),
+          field_0x4C(0),
           field_0x4D(0) {}
     ~dLytMapFloorBtn_c() {}
 
@@ -164,7 +176,7 @@ private:
     /* 0x0DC */ d2d::AnmGroup_c mAnmGroups[1];
     /* 0x11C */ LytMapFourAnimGroups mMoreGroups[4];
     /* 0x51C */ void *field_0x51C;
-    /* 0x520 */ d2d::dLytStructD mStructDs[4];
+    /* 0x520 */ dCursorHitCheckLyt_c mCsHitChecks[4];
     /* 0x5C0 */ dLytMapFloorBtn_c mFloorBtns[4];
     /* 0x700 */ UNKWORD field_0x700;
     /* 0x704 */ UNKWORD field_0x704;
@@ -322,7 +334,7 @@ private:
     /* 0x0000 */ dLytMapSavePopup_c mSavePopup;
     /* 0x807C */ dLytMapPopupInfo_c mPopupInfo;
     /* 0x828C */ mVec3_c field_0x828C[12];
-    /* 0x832C */ d2d::dLytStructD field_0x832C[33];
+    /* 0x832C */ dCursorHitCheckLyt_c field_0x832C[33];
     /* 0x8904 */ mVec3_c field_0x8904;
     /* 0x8910 */ mVec3_c field_0x8910;
     /* 0x891C */ mVec3_c field_0x891C;

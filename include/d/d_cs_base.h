@@ -3,9 +3,9 @@
 
 #include "common.h"
 #include "d/d_cs.h"
+#include "d/d_cursor_hit_check.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_cursor_stick.h"
-#include "d/lyt/d_structd.h"
 #include "m/m2d.h"
 
 class dCsBase_c : public dCs_c {
@@ -24,8 +24,8 @@ public:
         field_0x703 = val;
     }
 
-    d2d::dLytStructD *getUnk() {
-        return mStructC.field_0x14;
+    dCursorHitCheck_c *getHitCheck() {
+        return mCursorIf.getHit();
     }
 
     static dCsBase_c *GetInstance() {
@@ -40,7 +40,7 @@ private:
     /* 0x068 */ m2d::ResAccIf_c mResAcc;
     /* 0x11C */ d2d::LytBase_c mLyts[2];
     /* 0x23C */ d2d::LytBase_c *mpCurrLyt;
-    /* 0x240 */ d2d::dLytStructC mStructC;
+    /* 0x240 */ dCursorInterface_c mCursorIf;
     /* 0x254 */ dLytCursorStick_c mCursorStick;
     /* 0x6F0 */ f32 field_0x6F0;
     /* 0x6F4 */ f32 field_0x6F4;

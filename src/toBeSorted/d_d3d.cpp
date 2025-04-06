@@ -217,7 +217,7 @@ extern "C" f32 lbl_80576A0C;
 void insertNode(SomeListNode *node, f32 a, f32 b) {
     node->field_0x04 = ((a * lbl_80575150) - 0.5f) + lbl_8057514C;
     node->field_0x06 = (lbl_80575150 - 0.5f) - b;
-    sSomeList.insert(node);
+    sSomeList.append(node);
 }
 
 void clearList() {
@@ -340,7 +340,7 @@ bool UnkWithWater::init(nw4r::g3d::ResTexObj &obj, GXTexMapID mapId) {
     if (nd == nullptr) {
         return false;
     }
-    mList.insert(nd);
+    mList.append(nd);
     return true;
 }
 

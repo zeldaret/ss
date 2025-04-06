@@ -82,7 +82,7 @@ void NandRequestThread::sendMessage() {
 }
 
 void NandRequestThread::enqueueRequest(NandRequest *request) {
-    mRequestList.insert(request);
+    mRequestList.append(request);
     sendMessage();
 }
 

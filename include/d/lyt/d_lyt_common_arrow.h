@@ -2,10 +2,12 @@
 #define D_LYT_COMMON_ARROW_H
 
 #include "d/lyt/d2d.h"
-#include "d/lyt/d_structd.h"
+// clang-format off
+// vtable order
+#include "d/d_cursor_hit_check.h"
+// clang-format on
 #include "nw4r/lyt/lyt_bounding.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dLytCommonArrow_c {
 public:
@@ -38,7 +40,7 @@ private:
     /* 0x40 */ d2d::LytBase_c mLytBase;
     d2d::ResAccIf_c mResAcc;
     d2d::AnmGroup_c mAnmGroups[0x9];
-    d2d::dLytStructD mStructD;
+    dCursorHitCheckLyt_c mCsHitCheck;
     nw4r::lyt::Bounding *mBoundingL;
     nw4r::lyt::Bounding *mBoundingR;
     s32 mType;
