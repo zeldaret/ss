@@ -12,9 +12,10 @@ BOOL chase(short *value, short target, short stepSize);
 BOOL chase(int *value, int target, int stepSize);
 BOOL chase(float *value, float target, float stepSize);
 BOOL chaseAngle(short *value, short target, short stepSize);
-BOOL chaseAngle2(short *value, short target, short stepSize);
 
 // Inofficial names
+short addCalcAngle2(short *value, short target, short ratio, short maxStepSize, short minStepSize);
+BOOL chaseAngle2(short *value, short target, short stepSize);
 float extrapolate(float start, float end, float scale);
 BOOL isInRange(float val, float min, float max);
 void addCalcScaledDiff(float *value, float target, float ratio, float maxStepSize);
