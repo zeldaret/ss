@@ -21,11 +21,11 @@
     return result <= max ? 0 : (result - max);
 }
 
-/* 8016cd30 */ u16 Counter::getCommittedValue() {
+/* 8016cd30 */ u16 Counter::getCommittedValue() const {
     return ItemflagManager::sInstance->getCounterOrFlag(counterId | 0x4000);
 }
 
-/* 8016cd50 */ u16 Counter::getUncommittedValue() {
+/* 8016cd50 */ u16 Counter::getUncommittedValue() const {
     return ItemflagManager::sInstance->getUncommittedValue(counterId | 0x4000);
 }
 
