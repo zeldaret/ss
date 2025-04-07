@@ -59,7 +59,7 @@ public:
 
 private:
     /* 0x04 */ d2d::LytBase_c mLyt;
-    /* 0x90 */ d2d::AnmGroup_c mAnm;
+    /* 0x94 */ d2d::AnmGroup_c mAnm;
     /* 0xD4 */ dTextBox_c *mpTexts[3];
     /* 0xE0 */ nw4r::lyt::Pane *mpPane;
     /* 0xE4 */ ESwordType mType;
@@ -83,7 +83,6 @@ public:
 
 private:
     /* 0x04 */ d2d::LytBase_c mLyt;
-    // ???
     /* 0x94 */ d2d::AnmGroup_c mAnm;
     /* 0xD4 */ nw4r::lyt::Pane *mpPane;
     /* 0xD8 */ ETextType mType;
