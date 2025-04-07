@@ -81,7 +81,7 @@ void fLiNdBa_c::link(fBase_c *link) {
 /* 802e2830 */
 void fLiNdBa_c::unlink() {
     if (p_owner != nullptr) {
-        reinterpret_cast<fBase_c *>(p_owner)->actor_list.remove(this);
+        p_owner->actor_list.remove(this);
         p_owner = nullptr;
     }
 }

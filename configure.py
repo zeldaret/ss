@@ -588,7 +588,7 @@ config.libs = [
         "progress_category": "core",
         "host": False,
         "objects": [
-            Object(NonMatching, "f/f_base.cpp"),
+            Object(Matching, "f/f_base.cpp"),
             Object(Matching, "f/f_list.cpp"),
             Object(Matching, "f/f_manager.cpp"),
         ],

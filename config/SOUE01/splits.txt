@@ -973,7 +973,7 @@ c/c_tree.cpp:
 	.text       start:0x802E0E70 end:0x802E1140
 
 f/f_base.cpp:
-	.text       start:0x802E12F0 end:0x802E2680
+	.text       start:0x802E12F0 end:0x802E2674
 	.ctors      start:0x804DB8C0 end:0x804DB8C4
 	.data       start:0x80542278 end:0x805423A8
 	.sdata      start:0x80573FB8 end:0x80573FBC
