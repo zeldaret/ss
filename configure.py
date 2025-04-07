@@ -236,7 +236,6 @@ cflags_runtime = [
 cflags_framework = [
     *cflags_base,
     "-inline noauto",
-    "-str reuse",
     "-fp_contract off",
     "-ipa file",
 ]
@@ -274,6 +273,7 @@ def Rel(status, rel_name, cpp_name, extra_cflags=[]):
     return {
         "lib": rel_name,
         "mw_version": "Wii/1.5",
+        "scratch_preset_id": 170,
         "cflags": cflags_rel + extra_cflags,
         "progress_category": "game",
         "host": False,
@@ -287,6 +287,7 @@ def EGGLib(lib_name, objects):
     return {
         "lib": lib_name,
         "mw_version": "Wii/1.5",
+        "scratch_preset_id": 169,
         "cflags": cflags_egg,
         "progress_category": "egg",
         "host": False,
@@ -324,6 +325,7 @@ config.libs = [
         "lib": "game_code",
         "mw_version": "Wii/1.5",
         "cflags": cflags_framework,
+        "scratch_preset_id": 169,
         "progress_category": "game",
         "host": False,
         "objects": [
@@ -456,6 +458,7 @@ config.libs = [
         "lib": "collision",
         "mw_version": "Wii/1.5",
         "cflags": cflags_framework + ["-str reuse,readonly"],
+        "scratch_preset_id": 169,  # note: technically wrong due to -str
         "progress_category": "game",
         "host": False,
         "objects": [
@@ -503,8 +506,9 @@ config.libs = [
     },
     {
         "lib": "clib",
-        "mw_version": "Wii/1.6",
+        "mw_version": "Wii/1.5",
         "cflags": cflags_framework,
+        "scratch_preset_id": 169,
         "progress_category": "core",
         "host": False,
         "objects": [
@@ -518,6 +522,7 @@ config.libs = [
         "lib": "mlib",
         "mw_version": "Wii/1.5",
         "cflags": cflags_framework,
+        "scratch_preset_id": 169,
         "progress_category": "core",
         "host": False,
         "objects": [
@@ -569,6 +574,7 @@ config.libs = [
         "lib": "slib",
         "mw_version": "Wii/1.5",
         "cflags": cflags_framework,
+        "scratch_preset_id": 169,
         "progress_category": "core",
         "host": False,
         "objects": [
@@ -583,8 +589,9 @@ config.libs = [
     },
     {
         "lib": "flib",
-        "mw_version": "Wii/1.6",
+        "mw_version": "Wii/1.5",
         "cflags": cflags_framework,
+        "scratch_preset_id": 169,
         "progress_category": "core",
         "host": False,
         "objects": [
