@@ -230,9 +230,13 @@ public:
     /* vt 0x314 */ virtual void vt_0x314();
     /* vt 0x318 */ virtual void vt_0x318();
 
-    /* 0x330 */ u8 unk_0x330[0x340 - 0x330];
+    /* 0x330 */ u8 unk_0x330[0x339 - 0x330];
+    /* 0x339 */ u8 mRidingActorType;
+    /* 0x33A */ u8 unk_0x33A[0x340 - 0x33A];
     /* 0x340 */ u32 someFlags_0x340;
-    /* 0x344 */ u8 unk_0x344[0x350 - 0x344];
+    /* 0x344 */ u8 unk_0x344[0x348 - 0x344];
+    /* 0x348 */ u32 mSwordAndMoreStates;
+    /* 0x34C */ u8 unk_0x34C[0x350 - 0x34C];
     /* 0x350 */ u32 someFlags_0x350;
     u8 UNK_0x354[0x35C - 0x354];
     /* 0x35C */ u32 mForceOrPreventActionFlags;
@@ -263,11 +267,19 @@ public:
         return mCurrentAction == action;
     }
 
+    inline bool checkSwordAndMoreStates(u32 mask) const {
+        return (mSwordAndMoreStates & mask) != 0;
+    }
+
     inline bool checkActionFlags(u32 mask) const {
         return (mActionFlags & mask) != 0;
     }
     inline bool checkActionFlagsCont(u32 mask) const {
         return (mActionFlagsCont & mask) != 0;
+    }
+
+    inline u8 getRidingActorType() const {
+        return mRidingActorType;
     }
 
     static nw4r::g3d::ResFile getItemResFile(const char *name, mAllocator_c &allocator);

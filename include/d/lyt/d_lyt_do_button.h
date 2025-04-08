@@ -18,9 +18,17 @@ public:
     bool remove();
     bool draw();
 
-    static dLytDobutton_c *sInstance;
+    static dLytDobutton_c *GetInstance() {
+        return sInstance;
+    }
+
+    s32 getField0x47C() const {
+        return field_0x47C;
+    }
 
 private:
+    static dLytDobutton_c *sInstance;
+
     STATE_FUNC_DECLARE(dLytDobutton_c, InvisibleWait);
     STATE_FUNC_DECLARE(dLytDobutton_c, InvisibleTimeCnt);
     STATE_FUNC_DECLARE(dLytDobutton_c, In);

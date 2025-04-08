@@ -359,6 +359,7 @@ d/lyt/meter/d_lyt_meter_item_select.cpp:
 	.text       start:0x800E8EE0 end:0x800F35A8
 	.ctors      start:0x804DB700 end:0x804DB704
 	.data       start:0x805153A8 end:0x80516A28
+	.bss        start:0x805AACD0 end:0x805AB650
 
 d/lyt/meter/d_lyt_meter_plus_btn.cpp:
 	.text       start:0x800F35B0 end:0x800F4768
@@ -388,7 +389,10 @@ d/lyt/meter/d_lyt_meter_rupy.cpp:
 d/lyt/meter/d_lyt_meter_ganbari_gauge.cpp:
 	.text       start:0x801026B0 end:0x80105548
 	.ctors      start:0x804DB718 end:0x804DB71C
+	.rodata     start:0x804E69D8 end:0x804E6A58
 	.data       start:0x80518F00 end:0x80519578
+	.sdata2     start:0x80579C78 end:0x80579CF8
+	.bss        start:0x805AC750 end:0x805ACA90
 
 d/lyt/meter/d_lyt_meter_event_skip.cpp:
 	.text       start:0x80105550 end:0x80105F68

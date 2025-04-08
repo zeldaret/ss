@@ -21,6 +21,15 @@
 
 #define ALIGN_DECL(ALIGNMENT) __attribute__((aligned(ALIGNMENT)))
 
+// static_assert from TP
+#ifdef __MWERKS__
+    #define GLUE(a, b) a##b
+    #define GLUE2(a, b) GLUE(a, b)
+    #define STATIC_ASSERT(cond) typedef char GLUE2(static_assertion_failed, __LINE__)[(cond) ? 1 : -1]
+#else
+    #define STATIC_ASSERT(...)
+#endif
+
 // To remove some warnings
 #ifdef __MWERKS__
 #define DECL_SECTION(x) __declspec(section x)

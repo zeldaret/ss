@@ -11,10 +11,26 @@ public:
     bool build(d2d::ResAccIf_c *resAcc);
     bool remove();
 
-    static LytDoButtonRelated *sInstance;
+    static LytDoButtonRelated *GetInstance() {
+        return sInstance;
+    }
 
+    void set0x08(s32 value) {
+        field_0x08 = value;
+        field_0x35 = 1;
+    }
+
+    s32 get0x08() {
+        return field_0x08;
+    }
+    
 private:
-    u8 field_0x04[0x40 - 0x04];
+
+    static LytDoButtonRelated *sInstance;
+    /* 0x04 */ u8 field_0x04[0x08 - 0x04];
+    /* 0x08 */ s32 field_0x08;
+    /* 0x0C */ u8 _0x08[0x35 - 0x0C];
+    /* 0x35 */ u8 field_0x35;
 };
 
 // size 0x27C

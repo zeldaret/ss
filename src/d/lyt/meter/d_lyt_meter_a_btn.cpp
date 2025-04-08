@@ -1,7 +1,7 @@
-#include "d/lyt/d_textbox.h"
-#include "d/lyt/d_window.h"
 #include "d/lyt/meter/d_lyt_meter_a_btn.h"
 
+#include "d/lyt/d_textbox.h"
+#include "d/lyt/d_window.h"
 
 STATE_DEFINE(dLytMeterABtn_c, InvisibleWait);
 STATE_DEFINE(dLytMeterABtn_c, In);
@@ -105,9 +105,11 @@ bool dLytMeterABtn_c::build(d2d::ResAccIf_c *resAcc) {
         mpTextBoxes[i] = mLyt.getTextBox(sTextBoxes[i]);
     }
 
-    static const char *sWindow = "W_bg_P_00";
-    mpWindow = mLyt.getWindow(sWindow);
-    mpSizeBox = mLyt.getSizeBoxInWindow(sWindow);
+    static const char *sWindows[] = {"W_bg_P_00"};
+    for (int i = 0; i < 1; i++) {
+        mpWindow[i] = mLyt.getWindow(sWindows[i]);
+        mpSizeBox[i] = mLyt.getSizeBoxInWindow(sWindows[i]);
+    }
 
     field_0x1C4 = 0x5F;
     field_0x1B8 = 0x5F;

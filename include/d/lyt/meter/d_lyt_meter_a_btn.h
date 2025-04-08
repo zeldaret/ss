@@ -45,8 +45,8 @@ private:
     /* 0x1A0 */ nw4r::lyt::Pane *mpPane;
     /* 0x1A4 */ void *field_0x1A4;
     /* 0x1A8 */ dTextBox_c *mpTextBoxes[2];
-    /* 0x1B0 */ dWindow_c *mpWindow;
-    /* 0x1B4 */ dTextBox_c *mpSizeBox;
+    /* 0x1B0 */ dWindow_c *mpWindow[1];
+    /* 0x1B4 */ dTextBox_c *mpSizeBox[1];
     /* 0x1B8 */ u32 field_0x1B8;
     /* 0x1BC */ u32 field_0x1BC;
     /* 0x1C0 */ u32 field_0x1C0;

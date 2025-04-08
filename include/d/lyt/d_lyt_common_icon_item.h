@@ -213,6 +213,12 @@ private:
  */
 class dLytCommonIconItem_c : public d2d::dSubPane {
 public:
+    enum Variant_e {
+        B_WHEEL,
+        POUCH,
+        DOWSING,
+    };
+
     dLytCommonIconItem_c() : mStateMgr(*this, sStateID::null), mPart(3) {}
     ~dLytCommonIconItem_c() {}
 
