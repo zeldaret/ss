@@ -16,9 +16,9 @@ private:
     STATE_FUNC_DECLARE(dLytMeterCrossBtnParts_c, Active);
     STATE_FUNC_DECLARE(dLytMeterCrossBtnParts_c, Off);
     
-    UI_STATE_MGR_DECLARE(dLytMeterCrossBtnParts_c);
+    /* 0x00 */ UI_STATE_MGR_DECLARE(dLytMeterCrossBtnParts_c);
 
-    u32 padding[17];
+    /* 0x3C */ u32 padding[17];
 };
 
 class dLytMeterCrossBtn_c : public d2d::dSubPane {
@@ -32,18 +32,23 @@ public:
     virtual const char *getName() const override;
 
     virtual ~dLytMeterCrossBtn_c() {}
+
+    s32 getField_0x620() const {
+        return field_0x620;
+    }
 private:
     STATE_FUNC_DECLARE(dLytMeterCrossBtn_c, Wait);
     STATE_FUNC_DECLARE(dLytMeterCrossBtn_c, ToUse);
     STATE_FUNC_DECLARE(dLytMeterCrossBtn_c, ToUnuse);
     STATE_FUNC_DECLARE(dLytMeterCrossBtn_c, Unuse);
 
-    UI_STATE_MGR_DECLARE(dLytMeterCrossBtn_c);
-    d2d::dLytSub mLyt;
+    /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterCrossBtn_c);
+    /* 0x040 */ d2d::dLytSub mLyt;
     /* 0x0D8 */ d2d::AnmGroup_c mAnmGroups[12];
     /* 0x3D8 */ u8 field_0x3D8[0x420 - 0x3D8];
     /* 0x420 */ dLytMeterCrossBtnParts_c mParts[4];
-    /* 0x??? */ u8 padding[0x78A0 - 0x7880];
+    /* 0x620 */ s32 field_0x620;
+    /* 0x624 */ u8 padding[0x640 - 0x624];
 };
 
 #endif

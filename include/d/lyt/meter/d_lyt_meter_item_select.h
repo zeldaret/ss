@@ -21,6 +21,10 @@ public:
         mpAnm = anim;
     }
 
+    void setShouldBeSelect(u32 v) {
+        mShouldBeSelect = v;
+    }
+
 private:
     STATE_FUNC_DECLARE(dLytMeterItemSelectIcon_c, Wait);
     STATE_FUNC_DECLARE(dLytMeterItemSelectIcon_c, On);
@@ -30,7 +34,7 @@ private:
     /* 0x00 */ UI_STATE_MGR_DECLARE(dLytMeterItemSelectIcon_c);
 
     /* 0x3C */ d2d::AnmGroup_c *mpAnm;
-    /* 0x40 */ u32 padding2;
+    /* 0x40 */ u32 mShouldBeSelect;
 };
 
 class dLytMeterItemSelectBlink_c {
@@ -54,7 +58,7 @@ private:
     /* 0x00 */ UI_STATE_MGR_DECLARE(dLytMeterItemSelectBlink_c);
 
     /* 0x3C */ d2d::AnmGroup_c *mpAnm;
-    /* 0x40 */ u32 padding2;
+    /* 0x40 */ u32 mShouldBeSelect;
 };
 
 class dLytMeterItemSelectText_c {
@@ -78,7 +82,7 @@ private:
     /* 0x00 */ UI_STATE_MGR_DECLARE(dLytMeterItemSelectText_c);
 
     /* 0x3C */ d2d::AnmGroup_c *mpAnm;
-    /* 0x40 */ u32 padding2;
+    /* 0x40 */ u32 mShouldBeSelect;
 };
 
 class dLytMeterItemSelectBtn_c {
@@ -87,9 +91,12 @@ public:
     ~dLytMeterItemSelectBtn_c() {}
 
     void init(s32 i, d2d::dLytSub *lyt, nw4r::lyt::Pane *pane);
-    void fn_800E9E00(u8, u8);
-    void fn_800E9E30(u8);
+    void setVisible(bool bVisible, bool bInstant);
+    void setVisible(bool bVisible);
+    void setVisible2(bool bVisible);
     void execute();
+    
+    bool isSettled() const;
 
     void setAnm(d2d::AnmGroup_c *anim) {
         mpAnm = anim;
@@ -103,6 +110,10 @@ public:
         field_0x57 = val;
     }
 
+    bool getShouldBeVisible() const {
+        return mShouldBeVisible;
+    }
+
 private:
     STATE_FUNC_DECLARE(dLytMeterItemSelectBtn_c, Invisible);
     STATE_FUNC_DECLARE(dLytMeterItemSelectBtn_c, On);
@@ -111,9 +122,15 @@ private:
 
     /* 0x00 */ UI_STATE_MGR_DECLARE(dLytMeterItemSelectBtn_c);
 
-    /* 0x3C */ u8 _0x3C[0x40 - 0x3C];
+    /* 0x3C */ d2d::dLytSub *mpLyt;
     /* 0x40 */ d2d::AnmGroup_c *mpAnm;
-    /* 0x44 */ u8 padding[0x57 - 0x44];
+    /* 0x44 */ nw4r::lyt::Pane *mpPane1;
+    /* 0x48 */ nw4r::lyt::Pane *mpPane2;
+    /* 0x4C */ s32 mDelay;
+    /* 0x50 */ s32 mIdx;
+    /* 0x54 */ bool mShouldBeVisible;
+    /* 0x55 */ bool mInstant;
+    /* 0x56 */ u8 field_0x56;
     /* 0x57 */ u8 field_0x57;
 };
 
@@ -138,6 +155,9 @@ private:
     void fn_800EF8C0(u8);
     bool fn_800F09E0();
     void fn_800F0440(s32);
+    void fn_800F0700();
+    bool fn_800F01B0(s32);
+    bool fn_800F01E0(s32);
 
     STATE_FUNC_DECLARE(dLytMeterItemSelect_c, InitWait);
     STATE_FUNC_DECLARE(dLytMeterItemSelect_c, Wait);
@@ -194,7 +214,7 @@ private:
     /* 0x5774 */ s32 field_0x5774;
     /* 0x5778 */ f32 field_0x5778;
     /* 0x577C */ f32 field_0x577C;
-    /* 0x5780 */ s32 field_0x5780;
+    /* 0x5780 */ f32 field_0x5780;
     /* 0x5784 */ f32 field_0x5784;
     /* 0x5788 */ s32 field_0x5788;
     /* 0x578C */ s32 field_0x578C;
@@ -214,12 +234,8 @@ private:
     /* 0x57A0 */ u8 field_0x57A0;
     /* 0x57A1 */ u8 field_0x57A1;
     /* 0x57A2 */ u8 field_0x57A2;
-    /* 0x57A4 */ s32 field_0x57A4;
-    /* 0x57A8 */ s32 field_0x57A8;
-    /* 0x57AC */ s32 field_0x57AC;
-    /* 0x57B0 */ u8 field_0x57B0;
-    /* 0x57B1 */ u8 field_0x57B1;
-    /* 0x57B2 */ u8 field_0x57B2;
+    /* 0x57A3 */ u8 field_0x57A3[8];
+    /* 0x57AB */ u8 field_0x57AB[8];
     /* 0x57B3 */ u8 field_0x57B3;
     /* 0x57B4 */ u8 field_0x57B4;
     /* 0x57B5 */ u8 field_0x57B5;

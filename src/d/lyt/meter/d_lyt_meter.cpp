@@ -30,7 +30,7 @@ STATE_DEFINE(dLytMeterParts_c, Out);
 
 void dLytMeter1Button_c::initializeState_Wait() {}
 void dLytMeter1Button_c::executeState_Wait() {
-    if (dLytMeterContainer_c::GetInstance()->isButtonFlag(0x80)) {
+    if (dLytMeterContainer_c::GetInstance()->checkFlag(0x80)) {
         return;
     }
     mStateMgr.changeState(StateID_ToUnuse);
@@ -77,7 +77,7 @@ void dLytMeter1Button_c::initializeState_Unuse() {
     field_0x1A4 = 15;
 }
 void dLytMeter1Button_c::executeState_Unuse() {
-    if (dLytMeterContainer_c::GetInstance()->isButtonFlag(0x80)) {
+    if (dLytMeterContainer_c::GetInstance()->checkFlag(0x80)) {
         if (!(field_0x1A4 > 0)) {
             mStateMgr.changeState(StateID_ToUse);
             return;
@@ -143,7 +143,7 @@ bool dLytMeter1Button_c::execute() {
 
 void dLytMeter2Button_c::initializeState_Wait() {}
 void dLytMeter2Button_c::executeState_Wait() {
-    if (dLytMeterContainer_c::GetInstance()->isButtonFlag(0x100)) {
+    if (dLytMeterContainer_c::GetInstance()->checkFlag(0x100)) {
         return;
     }
     mStateMgr.changeState(StateID_ToUnuse);
@@ -190,7 +190,7 @@ void dLytMeter2Button_c::initializeState_Unuse() {
     field_0x1A4 = 15;
 }
 void dLytMeter2Button_c::executeState_Unuse() {
-    if (dLytMeterContainer_c::GetInstance()->isButtonFlag(0x100)) {
+    if (dLytMeterContainer_c::GetInstance()->checkFlag(0x100)) {
         if (!(field_0x1A4 > 0)) {
             mStateMgr.changeState(StateID_ToUse);
             return;

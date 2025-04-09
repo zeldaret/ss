@@ -25,7 +25,7 @@ private:
 
     UI_STATE_MGR_DECLARE(dLytMeterRemoconBg_c);
     d2d::dLytSub mLyt;
-    /* 0xD8 */ nw4r::lyt::Pane *mpPane;
+    /* 0xD8 */ nw4r::lyt::Pane *mpPane[1];
     /* 0xDC */ u32 field_0xDC;
     /* 0xE0 */ u32 field_0xE0;
     /* 0xE4 */ u32 field_0xE4;

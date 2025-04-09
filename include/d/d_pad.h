@@ -8,6 +8,8 @@ public:
     static bool checkButtonZPressed();
     static bool checkButtonPlusPressed();
 
+    static bool checkButtonDpadDownPressed();
+
     static bool checkButtonAHeld();
     static bool checkButtonZHeld();
 };

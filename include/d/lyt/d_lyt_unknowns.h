@@ -20,8 +20,12 @@ public:
         field_0x35 = 1;
     }
 
-    s32 get0x08() {
-        return field_0x08;
+    static s32 get0x08() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x08;
+        } else {
+            return 0x98;
+        }
     }
     
 private:

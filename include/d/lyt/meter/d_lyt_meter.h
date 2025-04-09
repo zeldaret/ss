@@ -44,6 +44,9 @@ public:
     bool remove();
     bool draw();
 
+    bool fn_800D5650();
+    bool fn_800D5680();
+
     bool isSilentRealm();
 
     /* 0x00004 */ d2d::ResAccIf_c mResAcc;
@@ -90,7 +93,7 @@ public:
     /* 0x13750 */ s32 field_0x13750;
     /* 0x13754 */ u8 field_0x13754[0x137B4 - 0x13754];
     /* 0x137B4 */ mVec3_c mPos3;
-    /* 0x13B38 */ u32 field_0x13B38;
+    /* 0x137C0 */ u32 field_0x137C0;
 };
 
 STATIC_ASSERT(offsetof(dLytMeter_c, mGanbariGauge) == 0x00C8C);
@@ -120,17 +123,28 @@ public:
     bool remove();
     bool draw();
 
-    // FIXME This goes to doButton!!!
-    bool isButtonFlag(u32 flag) {
-        return (mMeter.field_0x13B38 & flag) == flag;
+    bool checkFlag(u32 flag) {
+        return (mFlags & flag) == flag;
     }
 
     static dLytMeterContainer_c *GetInstance() {
         return sInstance;
     }
 
+    static dLytMeter_c *GetMeter() {
+        return &sInstance->mMeter;
+    }
+
     bool checkAllFlags(u32 mask) const {
         return (mFlags & mask) == mask;
+    }
+
+    static s32 getCrossBtn0x7BF8() {
+        if (sInstance != nullptr) {
+            return sInstance->mMeter.mCrossBtn.getField_0x620();
+        } else {
+            return 6;
+        }
     }
 
 private:
@@ -146,6 +160,5 @@ private:
 
     static dLytMeterContainer_c *sInstance;
 };
-
 
 #endif

@@ -208,8 +208,7 @@ private:
 
 /**
  * A common item component used in various UI screens like the item check, scrap shop,
- * pause menu wheels, B item preview in the top right HUD corner.
- * NOT used for the HUD wheels.
+ * pause menu wheels, HUD wheels, B item preview in the top right HUD corner.
  */
 class dLytCommonIconItem_c : public d2d::dSubPane {
 public:
