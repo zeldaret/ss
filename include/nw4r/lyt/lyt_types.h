@@ -31,8 +31,8 @@ inline bool TestBit(T bits, int index) {
 }
 template <typename T>
 inline void SetBit(T *bits, int pos, bool val) {
-    T mask = T(1 << pos);
-    *bits = T((*bits & ~mask)) | (val << pos);
+    T mask = ~T(1 << pos);
+    *bits = T((*bits & mask)) | (val << pos);
 }
 
 template <typename T>

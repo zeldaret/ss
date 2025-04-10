@@ -114,6 +114,10 @@ public:
     void addObjId(u16 id);
     void addActorId(u16 actorId);
 
+    dFader_c *getFader() {
+        return &mFader;
+    }
+
 private:
     static void lastExecuteCallback();
 

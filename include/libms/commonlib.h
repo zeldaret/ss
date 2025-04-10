@@ -22,8 +22,7 @@ struct MsbBlock {
     /* 0x0C */ u16 field_0x0C;
 };
 
-#pragma push
-#pragma pack(2)
+#pragma pack(push ,2)
 
 struct MsbHeader {
     /* 0x00 */ unsigned char field_0x00[0x0C - 0x00];
@@ -33,7 +32,7 @@ struct MsbHeader {
     /* 0x12 */ int fileLength;
 };
 
-#pragma pop
+#pragma pack(pop)
 
 struct MsbInfo {
     /* 0x00 */ struct MsbHeader *header;

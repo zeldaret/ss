@@ -207,7 +207,7 @@ void dLytMapPinIcon_c::finalizeState_Wait() {}
 
 void dLytMapPinIcon_c::initializeState_ToSelect() {
     d2d::AnmGroup_c *m = &mAnmGroups[1];
-    m->setDirection(false);
+    m->bind(false);
     m->setFrame(0.0f);
 }
 void dLytMapPinIcon_c::executeState_ToSelect() {
@@ -255,7 +255,7 @@ bool dLytMapPinIcon_c::build(d2d::ResAccIf_c *resAcc) {
 
     for (int i = 0; i < 3; i++) {
         pAnmGroups[i].init(sMapPinIconBrlanMap[i].mFile, resAcc, mLyt.getLayout(), sMapPinIconBrlanMap[i].mName);
-        pAnmGroups[i].setDirection(false);
+        pAnmGroups[i].bind(false);
         pAnmGroups[i].setFrame(0.0f);
     }
 
@@ -269,8 +269,8 @@ bool dLytMapPinIcon_c::build(d2d::ResAccIf_c *resAcc) {
     mStructD.fn_80065E70(mpBounding, 2, 1, 0);
     d2d::dLytStructDList::GetInstance()->appendToList2(&mStructD);
 
-    mAnmGroups[LYT_MAP_PIN_ICON_ANIM_SCALE].setDirection(false);
-    mAnmGroups[LYT_MAP_PIN_ICON_ANIM_LOOP].setDirection(false);
+    mAnmGroups[LYT_MAP_PIN_ICON_ANIM_SCALE].bind(false);
+    mAnmGroups[LYT_MAP_PIN_ICON_ANIM_LOOP].bind(false);
 
     mLyt.calc();
 
@@ -284,7 +284,7 @@ bool dLytMapPinIcon_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytMapPinIcon_c::remove() {
     d2d::dLytStructDList::GetInstance()->removeFromList2(&mStructD);
     for (int i = 0; i < 3; i++) {
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
     return true;
 }

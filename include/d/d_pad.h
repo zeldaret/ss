@@ -3,8 +3,12 @@
 
 class dPad {
 public:
-
+    static bool checkButtonAPressed();
+    static bool checkButtonBPressed();
     static bool checkButtonZPressed();
+    static bool checkButtonPlusPressed();
+
+    static bool checkButtonAHeld();
     static bool checkButtonZHeld();
 };
 

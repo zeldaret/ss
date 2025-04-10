@@ -7,6 +7,7 @@
 namespace dSys {
 
 void setFrameRate(u32);
+u8 getFrameRate();
 void setClearColor(mColor clr);
 
 } // namespace dSys_c

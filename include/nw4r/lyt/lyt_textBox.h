@@ -77,6 +77,10 @@ public:
         mpTagProcessor = pTagProcessor;
     }
 
+    const wchar_t *GetString() const {
+        return mTextBuf;
+    }
+
     virtual ~TextBox();
     NW4R_UT_RTTI_DECL(TextBox);
     virtual void DrawSelf(const DrawInfo &drawInfo);                   // at 0x18

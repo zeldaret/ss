@@ -19,14 +19,14 @@ public:
     };
 
     mFaderBase_c(const mColor &color, EStatus status);
-    virtual ~mFaderBase_c();
+    /* vt 0x08 */ virtual ~mFaderBase_c();
 
-    virtual void setStatus(EStatus status) = 0;
-    virtual EStatus getStatus() const;
-    virtual bool fadeIn();
-    virtual bool fadeOut();
-    virtual bool calc();
-    virtual void draw() = 0;
+    /* vt 0x0C */ virtual void setStatus(EStatus status) = 0;
+    /* vt 0x10 */ virtual EStatus getStatus() const;
+    /* vt 0x14 */ virtual bool fadeIn();
+    /* vt 0x18 */ virtual bool fadeOut();
+    /* vt 0x1C */ virtual bool calc();
+    /* vt 0x20 */ virtual void draw() = 0;
 
     void setFrame(u16 frame);
     void setColor(const mColor &color);
