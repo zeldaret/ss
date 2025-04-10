@@ -172,19 +172,35 @@ public:
     static bool isInSpiralChargeTutorialMinigame();
     static bool isInRollercoasterMinigame();
 
+    // This enum might be used externally too?
+    enum InternalItem_e {
+        I_BOMB_BAG,
+        I_BOW,
+        I_SAILCLOTH,
+        I_CLAWSHOTS,
+        I_BEETLE,
+        I_SLINGSHOT,
+        I_GUST_BELLOWS,
+        I_BUG_NET,
+        I_WHIP,
+        I_BOAT_CANNON,
+        I_HARP,
+
+        I_INVALID, // 11
+    };
 
     void fn_800EF580();
     void fn_800EF6B0(u8);
     void setOwnerPane(nw4r::lyt::Pane *p);
     void fn_800EF710(u8);
-    void fn_800EF720(s32);
+    void fn_800EF720(InternalItem_e item);
     void fn_800EF7A0(bool, s32);
     bool fn_800EFDF0(bool b) const;
     bool fn_800F02F0() const;
     bool fn_800F0220(s32 arg);
 
 private:
-    void setBtnItem(s32 unkId);
+    void setBtnItem(s32 internalItem);
     void realizeSelectedWheelItem();
     void fn_800EF8C0(bool);
     bool isWheelBlockedByCurrentAction();
@@ -195,7 +211,7 @@ private:
     void fn_800F0310();
     bool fn_800F0030() const;
     s32 fn_800F0170(s32) const;
-    u8 fn_800F0190(s32) const;
+    u8 getInternalBaseItemForSlot(s32) const;
 
     bool isWheelIndexLocked(s32 idx);
 
@@ -209,7 +225,7 @@ private:
     static ITEM_ID getBaseItemForBWheelSlot(s32 idx);
     ITEM_ID baseItemIdToCurrentVariant(ITEM_ID baseItem) const;
     s32 baseItemLytIndexToCurrentVariant(s32 lytIndex) const;
-    s32 getBaseItemLytIndexforUnkId(s32 idx) const;
+    s32 getBaseItemLytIndexforInternalId(s32 idx) const;
 
     STATE_FUNC_DECLARE(dLytMeterItemSelect_c, InitWait);
     STATE_FUNC_DECLARE(dLytMeterItemSelect_c, Wait);
@@ -253,19 +269,19 @@ private:
     /* 0x5688 */ d2d::SubPaneListNode mSubpanes[9];
     /* 0x5718 */ EffectsStruct mEffects;
 
-    /* 0x574C */ s32 field_0x574C;
-    /* 0x5750 */ s32 field_0x5750;
+    /* 0x574C */ InternalItem_e field_0x574C;
+    /* 0x5750 */ InternalItem_e field_0x5750;
     /* 0x5754 */ s32 field_0x5754;
     /* 0x5758 */ s32 field_0x5758;
     /* 0x575C */ s32 field_0x575C;
     /* 0x5760 */ s32 mDemoMoveTimer;
     /* 0x5764 */ s32 field_0x5764;
     /* 0x5768 */ s32 field_0x5768;
-    /* 0x576C */ s32 field_0x576C;
+    /* 0x576C */ s32 mLastDoButtonRelatedAction;
     /* 0x5770 */ s32 field_0x5770;
     /* 0x5774 */ s32 field_0x5774;
-    /* 0x5778 */ f32 field_0x5778;
-    /* 0x577C */ f32 field_0x577C;
+    /* 0x5778 */ f32 mArrowRotation;
+    /* 0x577C */ f32 mArrowLength;
     /* 0x5780 */ f32 field_0x5780;
     /* 0x5784 */ f32 field_0x5784;
     /* 0x5788 */ s32 field_0x5788;
@@ -279,10 +295,10 @@ private:
     /* 0x5799 */ u8 field_0x5799;
     /* 0x579A */ u8 field_0x579A;
     /* 0x579B */ u8 field_0x579B;
-    /* 0x579C */ u8 field_0x579C;
-    /* 0x579C */ u8 field_0x579D;
-    /* 0x579C */ u8 field_0x579E;
-    /* 0x579C */ u8 field_0x579F;
+    /* 0x579C */ u8 mStoredBowVariant;
+    /* 0x579C */ u8 mStoredSlingshotVariant;
+    /* 0x579C */ u8 mStoredBeetleVariant;
+    /* 0x579C */ u8 mStoredBugNetVariant;
     /* 0x57A0 */ u8 field_0x57A0;
     /* 0x57A1 */ u8 field_0x57A1;
     /* 0x57A2 */ u8 field_0x57A2;

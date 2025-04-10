@@ -405,6 +405,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_heart.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_shield_gauge.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_do_button.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_do_button_related.cpp"),
             Object(Matching, "d/lyt/d_lyt_common_a_btn.cpp"),
             Object(Matching, "d/lyt/d_lyt_common_icon_material.cpp"),
             Object(Matching, "d/lyt/d_lyt_common_icon_item.cpp"),

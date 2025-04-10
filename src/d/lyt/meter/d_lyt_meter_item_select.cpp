@@ -489,8 +489,8 @@ static const char *sWindowNames[] = {
 static const char *sGroupName = "G_ref_00";
 
 dLytMeterItemSelect_c::dLytMeterItemSelect_c() : mStateMgr(*this, sStateID::null) {
-    field_0x574C = 11;
-    field_0x5750 = 11;
+    field_0x574C = I_INVALID;
+    field_0x5750 = I_INVALID;
     field_0x5754 = 0;
     field_0x5758 = -1;
     field_0x575C = 0;
@@ -514,12 +514,12 @@ void dLytMeterItemSelect_c::executeState_InitWait() {
     if (field_0x57B5 == 0) {
         return;
     }
-    if (field_0x5794 == 2 || field_0x5794 == 9 || field_0x5794 == 10) {
+    if (field_0x5794 == I_SAILCLOTH || field_0x5794 == I_BOAT_CANNON || field_0x5794 == I_HARP) {
         field_0x579A = field_0x5794;
     }
 
     bool blocked = isWheelBlockedByCurrentAction();
-    if ((field_0x574C != 11 && field_0x5794 != 11 && !blocked) || field_0x579A != 11) {
+    if ((field_0x574C != I_INVALID && field_0x5794 != I_INVALID && !blocked) || field_0x579A != I_INVALID) {
         realizeSelectedWheelItem();
         fn_800EF8C0(true);
         if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10)) {
@@ -666,10 +666,10 @@ void dLytMeterItemSelect_c::initializeState_Wait() {
     }
 }
 void dLytMeterItemSelect_c::executeState_Wait() {
-    if (field_0x57B3 == 1 && (field_0x5794 == 11 || LytDoButtonRelated::get0x08() == 0x84)) {
+    if (field_0x57B3 == 1 && (field_0x5794 == I_INVALID || LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_STOP)) {
         mStateMgr.changeState(StateID_SetNone);
-    } else if (field_0x57B3 == 0 && field_0x5794 == 11 &&
-               (field_0x579A == 2 || field_0x579A == 9 || field_0x579A == 10)) {
+    } else if (field_0x57B3 == 0 && field_0x5794 == I_INVALID &&
+               (field_0x579A == I_SAILCLOTH || field_0x579A == I_BOAT_CANNON || field_0x579A == I_HARP)) {
         mStateMgr.changeState(StateID_SetNone);
     } else if (field_0x5754 == 1) {
         mStateMgr.changeState(StateID_DemoMove);
@@ -681,14 +681,14 @@ void dLytMeterItemSelect_c::executeState_Wait() {
     } else if (isWheelBlockedByCurrentAction()) {
         field_0x5768 = 0;
         mStateMgr.changeState(StateID_FrameOffIn);
-    } else if ((field_0x5794 == 2 || (field_0x5794 == 9 || field_0x5794 == 10)) && field_0x579A == 11) {
+    } else if ((field_0x5794 == I_SAILCLOTH || (field_0x5794 == I_BOAT_CANNON || field_0x5794 == I_HARP)) && field_0x579A == I_INVALID) {
         mStateMgr.changeState(StateID_SetSpecialItemIn);
     } else if (!dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10)) {
         mStateMgr.changeState(StateID_ToUnuse);
     } else if (!dLytMeterContainer_c::GetMeter()->fn_800D5650() && !dLytMeterContainer_c::GetMeter()->fn_800D5680() &&
-               LytDoButtonRelated::get0x08() != 0x85 && LytDoButtonRelated::get0x08() != 0x7F &&
-               LytDoButtonRelated::get0x08() != 0x87 && LytDoButtonRelated::get0x08() != 0x84 &&
-               (field_0x5794 != 9 && field_0x5794 != 10 && field_0x5794 != 11 && field_0x5794 != 2)) {
+               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::DO_ITEMS && LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::DO_RETURN &&
+               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::DO_DONE && LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::DO_STOP &&
+               (field_0x5794 != I_BOAT_CANNON && field_0x5794 != I_HARP && field_0x5794 != I_INVALID && field_0x5794 != I_SAILCLOTH)) {
         mStateMgr.changeState(StateID_ResetIn);
     }
 }
@@ -787,14 +787,14 @@ void dLytMeterItemSelect_c::finalizeState_SelectIn() {
 void dLytMeterItemSelect_c::initializeState_Select() {}
 void dLytMeterItemSelect_c::executeState_Select() {
     if (dLytMeterContainer_c::getCrossBtn0x7BF8() == 0 && dPad::checkButtonDpadDownPressed()) {
-        if (field_0x5794 != 11) {
+        if (field_0x5794 != I_INVALID) {
             field_0x5780 = 0.0f;
             mStateMgr.changeState(StateID_SetIn);
         } else {
             mStateMgr.changeState(StateID_SelectOut);
         }
     } else if (field_0x57A2 == 0) {
-        if (field_0x57A0 != 0 || field_0x5794 != 11) {
+        if (field_0x57A0 != 0 || field_0x5794 != I_INVALID) {
             field_0x5780 = 0.0f;
             mStateMgr.changeState(StateID_SetIn);
         } else {
@@ -891,7 +891,7 @@ void dLytMeterItemSelect_c::initializeState_SetSpecialItemIn() {
         mAnm[ITEM_SELECT_ANIM_OUT].setToStart();
     } else {
         mAnm[ITEM_SELECT_ANIM_OUT].setToEnd2();
-        if (field_0x5798 == 11) {
+        if (field_0x5798 == I_INVALID) {
             mAnm[ITEM_SELECT_ANIM_RESET].setBackwardsOnce();
             mAnm[ITEM_SELECT_ANIM_RESET].setToStart();
             mBtn[2].setVisible(false);
@@ -936,16 +936,16 @@ void dLytMeterItemSelect_c::executeState_SetSpecialItemIn() {
 void dLytMeterItemSelect_c::finalizeState_SetSpecialItemIn() {}
 
 void dLytMeterItemSelect_c::initializeState_Set() {
-    if (field_0x5794 == 10 && field_0x5790 <= 0) {
+    if (field_0x5794 == I_HARP && field_0x5790 <= 0) {
         field_0x5790 = 10;
     }
-    if (field_0x5794 == 2 || field_0x5794 == 9 || field_0x5794 == 10) {
+    if (field_0x5794 == I_SAILCLOTH || field_0x5794 == I_BOAT_CANNON || field_0x5794 == I_HARP) {
         field_0x579A = field_0x5794;
     }
 }
 void dLytMeterItemSelect_c::executeState_Set() {
     if (field_0x57A0 == 0) {
-        if (field_0x5794 == 11) {
+        if (field_0x5794 == I_INVALID) {
             mAnm[ITEM_SELECT_ANIM_IN].setAnimEnable(true);
             mAnm[ITEM_SELECT_ANIM_IN].setFrame(0.0f);
             mLyt.calc();
@@ -963,10 +963,10 @@ void dLytMeterItemSelect_c::executeState_Set() {
             mStateMgr.changeState(StateID_SetOut);
         }
     } else {
-        if ((field_0x5794 == 2 || field_0x5794 == 9 || field_0x5794 == 10) && field_0x579A != field_0x5794) {
+        if ((field_0x5794 == I_SAILCLOTH || field_0x5794 == I_BOAT_CANNON || field_0x5794 == I_HARP) && field_0x579A != field_0x5794) {
             mStateMgr.changeState(StateID_SetSpecialItemIn);
         } else if (!dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10) && field_0x5790 <= 0 &&
-                   (field_0x5794 == 9 || field_0x5794 == 10)) {
+                   (field_0x5794 == I_BOAT_CANNON || field_0x5794 == I_HARP)) {
             mStateMgr.changeState(StateID_ToUnuse);
         } else if (field_0x57A2 != 0) {
             mStateMgr.changeState(StateID_SelectIn);
@@ -983,7 +983,7 @@ void dLytMeterItemSelect_c::executeState_SetOut() {
     if (mAnm[ITEM_SELECT_ANIM_OUT].isStop2()) {
         mAnm[ITEM_SELECT_ANIM_OUT].setAnimEnable(false);
         field_0x57B3 = 0;
-        field_0x579A = 11;
+        field_0x579A = I_INVALID;
         mStateMgr.changeState(StateID_Wait);
     }
 
@@ -996,7 +996,7 @@ void dLytMeterItemSelect_c::finalizeState_SetOut() {}
 void dLytMeterItemSelect_c::initializeState_SetNone() {
     mAnm[ITEM_SELECT_ANIM_RESET].setForwardOnce();
     mAnm[ITEM_SELECT_ANIM_RESET].setAnimEnable(true);
-    if (field_0x5795 == 2 || field_0x5795 == 9 || field_0x5795 == 10) {
+    if (field_0x5795 == I_SAILCLOTH || field_0x5795 == I_BOAT_CANNON || field_0x5795 == I_HARP) {
         // "instant"
         mAnm[ITEM_SELECT_ANIM_RESET].setToEnd2();
         mBtn[0].setVisible(true, true);
@@ -1019,7 +1019,7 @@ void dLytMeterItemSelect_c::executeState_SetNone() {
         if (mAnm[ITEM_SELECT_ANIM_RESET].isStop2() && mBtn[0].isSettled()) {
             mAnm[ITEM_SELECT_ANIM_RESET].setAnimEnable(false);
             field_0x57B3 = 0;
-            field_0x579A = 11;
+            field_0x579A = I_INVALID;
             mStateMgr.changeState(StateID_Wait);
         }
 
@@ -1035,7 +1035,7 @@ void dLytMeterItemSelect_c::initializeState_SelectOut() {
     mAnm[ITEM_SELECT_ANIM_IN].setToStart();
     mAnm[ITEM_SELECT_ANIM_IN].setAnimEnable(true);
     field_0x57B3 = 0;
-    if (field_0x5796 != 11) {
+    if (field_0x5796 != I_INVALID) {
         mBtn[2].setVisible(false, false);
     } else {
         mBtn[2].setVisible(true, false);
@@ -1089,7 +1089,7 @@ void dLytMeterItemSelect_c::initializeState_ResetIn() {
     mAnm[ITEM_SELECT_ANIM_RESET].setToStart();
     mAnm[ITEM_SELECT_ANIM_RESET].setAnimEnable(true);
     mBtn[2].setVisible(true);
-    setBtnText(field_0x576C);
+    setBtnText(mLastDoButtonRelatedAction);
 }
 void dLytMeterItemSelect_c::executeState_ResetIn() {
     if (mAnm[ITEM_SELECT_ANIM_RESET].isStop2()) {
@@ -1108,17 +1108,17 @@ void dLytMeterItemSelect_c::initializeState_Reset() {}
 void dLytMeterItemSelect_c::executeState_Reset() {
     if (field_0x57A2 != 0 || field_0x5754 == 1 ||
         (field_0x57A0 != 0 &&
-         (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10) || (field_0x5794 != 10 && field_0x5794 != 9)))) {
+         (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10) || (field_0x5794 != I_HARP && field_0x5794 != I_BOAT_CANNON)))) {
         mAnm[ITEM_SELECT_ANIM_RESET].setBackwardsOnce();
         mAnm[ITEM_SELECT_ANIM_RESET].setToEnd2();
         mAnm[ITEM_SELECT_ANIM_RESET].setAnimEnable(true);
         mLyt.calc();
         mAnm[ITEM_SELECT_ANIM_RESET].setAnimEnable(false);
         fn_800F0310();
-    } else if (field_0x5794 == 2 || field_0x5794 == 9 || field_0x5794 == 10) {
+    } else if (field_0x5794 == I_SAILCLOTH || field_0x5794 == I_BOAT_CANNON || field_0x5794 == I_HARP) {
         mStateMgr.changeState(StateID_SetSpecialItemIn);
-    } else if (LytDoButtonRelated::get0x08() == 0x85 || LytDoButtonRelated::get0x08() == 0x7F ||
-               LytDoButtonRelated::get0x08() == 0x87 || LytDoButtonRelated::get0x08() == 0x84 || field_0x5794 == 11 ||
+    } else if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_ITEMS || LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_RETURN ||
+               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_DONE || LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_STOP || field_0x5794 == I_INVALID ||
                !dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10) || field_0x5754 == 1) {
         mStateMgr.changeState(StateID_ResetOut);
     }
@@ -1134,7 +1134,7 @@ void dLytMeterItemSelect_c::initializeState_ResetOut() {
 void dLytMeterItemSelect_c::executeState_ResetOut() {
     if (field_0x57A2 != 0 || field_0x5754 == 1 ||
         (field_0x57A0 != 0 &&
-         (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10) || (field_0x5794 != 10 && field_0x5794 != 9)))) {
+         (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10) || (field_0x5794 != I_HARP && field_0x5794 != I_BOAT_CANNON)))) {
         mAnm[ITEM_SELECT_ANIM_RESET].setToEnd2();
         mBtn[2].setVisible(false, true);
         mLyt.calc();
@@ -1154,7 +1154,7 @@ void dLytMeterItemSelect_c::executeState_ResetOut() {
 void dLytMeterItemSelect_c::finalizeState_ResetOut() {}
 
 void dLytMeterItemSelect_c::initializeState_ToUse() {
-    if (field_0x5796 != 11) {
+    if (field_0x5796 != I_INVALID) {
         field_0x57B4 = 0;
     }
     field_0x57C4 = 0;
@@ -1162,7 +1162,7 @@ void dLytMeterItemSelect_c::initializeState_ToUse() {
     mBtn[0].setVisible(true, false);
 
     if (field_0x57B3 == 0) {
-        if (field_0x5796 != 11) {
+        if (field_0x5796 != I_INVALID) {
             mBtn[2].setVisible(false, false);
         } else {
             mBtn[2].setVisible(true, false);
@@ -1173,7 +1173,7 @@ void dLytMeterItemSelect_c::initializeState_ToUse() {
             mAnm[ITEM_SELECT_ANIM_RESET].setToStart();
             mAnm[ITEM_SELECT_ANIM_RESET].setAnimEnable(true);
         }
-    } else if (field_0x5794 != 11 && (field_0x5795 == 9 || field_0x5795 == 10)) {
+    } else if (field_0x5794 != I_INVALID && (field_0x5795 == I_BOAT_CANNON || field_0x5795 == I_HARP)) {
         field_0x57B3 = 0;
         field_0x57C4 = 1;
         mAnm[ITEM_SELECT_ANIM_OUT].setForwardOnce();
@@ -1184,7 +1184,7 @@ void dLytMeterItemSelect_c::initializeState_ToUse() {
 void dLytMeterItemSelect_c::executeState_ToUse() {
     if (field_0x57A2 != 0 || field_0x5754 == 1 ||
         (field_0x57A0 != 0 &&
-         (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10) || (field_0x5794 != 10 && field_0x5794 != 9)))) {
+         (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10) || (field_0x5794 != I_HARP && field_0x5794 != I_BOAT_CANNON)))) {
         if (field_0x57C4 != 0 && mAnm[ITEM_SELECT_ANIM_OUT].isEnabled()) {
             mAnm[ITEM_SELECT_ANIM_OUT].setToEnd2();
             mLyt.calc();
@@ -1243,7 +1243,7 @@ void dLytMeterItemSelect_c::initializeState_ToUnuse() {
     mBtn[1].setVisible(false, false);
     mBtn[0].setVisible(false, false);
     if (field_0x57B3 == 0) {
-        if (field_0x5794 != 11) {
+        if (field_0x5794 != I_INVALID) {
             mBtn[2].setVisible(false, false);
         } else {
             mBtn[2].setVisible(true, false);
@@ -1253,18 +1253,18 @@ void dLytMeterItemSelect_c::initializeState_ToUnuse() {
     field_0x57A1 = field_0x57A0;
 }
 void dLytMeterItemSelect_c::executeState_ToUnuse() {
-    if (field_0x57B3 == 0 && field_0x5794 == 11 && (field_0x579A == 2 || field_0x579A == 9 || field_0x579A == 10)) {
+    if (field_0x57B3 == 0 && field_0x5794 == I_INVALID && (field_0x579A == I_SAILCLOTH || field_0x579A == I_BOAT_CANNON || field_0x579A == I_HARP)) {
         mStateMgr.changeState(StateID_SetNone);
     } else if (field_0x57A2 != 0 || field_0x5754 == 1 ||
                (field_0x57A0 != 0 && (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10) ||
-                                      (field_0x5794 != 10 && field_0x5794 != 9)))) {
+                                      (field_0x5794 != I_HARP && field_0x5794 != I_BOAT_CANNON)))) {
         fn_800F0310();
         return;
     }
 
     if (field_0x57A0 == 0 && field_0x57A1 != 0) {
         field_0x57A1 = field_0x57A0;
-        if (field_0x5794 == 11) {
+        if (field_0x5794 == I_INVALID) {
             mAnm[ITEM_SELECT_ANIM_IN].setAnimEnable(true);
             mAnm[ITEM_SELECT_ANIM_IN].setFrame(0.0f);
             mLyt.calc();
@@ -1287,7 +1287,7 @@ void dLytMeterItemSelect_c::executeState_ToUnuse() {
         mBtn[0].setVisible(false);
         if (field_0x57B3 == 0) {
             if (mBtn[2].isSettled()) {
-                if (field_0x5794 != 11) {
+                if (field_0x5794 != I_INVALID) {
                     mBtn[2].setVisible(false);
                 } else {
                     mBtn[2].setVisible(true);
@@ -1309,11 +1309,11 @@ void dLytMeterItemSelect_c::executeState_Unuse() {
         mStateMgr.changeState(StateID_FrameOffIn);
     } else if (field_0x57A2 != 0 || field_0x5754 == 1 ||
                (field_0x57A0 != 0 && (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10) ||
-                                      (field_0x5794 != 10 && field_0x5794 != 9)))) {
+                                      (field_0x5794 != I_HARP && field_0x5794 != I_BOAT_CANNON)))) {
         fn_800F0310();
     } else if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10) || field_0x5754 == 1) {
-        if (field_0x5794 != 11) {
-            if (field_0x5794 == 2 || field_0x5794 == 9 || field_0x5794 == 10) {
+        if (field_0x5794 != I_INVALID) {
+            if (field_0x5794 == I_SAILCLOTH || field_0x5794 == I_BOAT_CANNON || field_0x5794 == I_HARP) {
                 mStateMgr.changeState(StateID_SetSpecialItemIn);
                 return;
             }
@@ -1405,9 +1405,9 @@ void dLytMeterItemSelect_c::executeState_DemoMove() {
 
                 if (mIsBocoburinLocked[i]) {
                     mIsBocoburinLocked[i] = false;
-                    field_0x5799 = 11;
+                    field_0x5799 = I_INVALID;
                 } else {
-                    field_0x5799 = fn_800F0190(i);
+                    field_0x5799 = getInternalBaseItemForSlot(i);
                     field_0x5794 = field_0x5799;
                 }
             }
@@ -1425,7 +1425,7 @@ void dLytMeterItemSelect_c::executeState_DemoMove() {
 void dLytMeterItemSelect_c::finalizeState_DemoMove() {}
 
 void dLytMeterItemSelect_c::initializeState_DemoOut0() {
-    if (field_0x5799 != 11) {
+    if (field_0x5799 != I_INVALID) {
         mAnm[ITEM_SELECT_ANIM_DECIDE].setAnimEnable(true);
         mAnm[ITEM_SELECT_ANIM_DECIDE].setFrame(0.0f);
     } else {
@@ -1435,7 +1435,7 @@ void dLytMeterItemSelect_c::initializeState_DemoOut0() {
     }
 }
 void dLytMeterItemSelect_c::executeState_DemoOut0() {
-    if (field_0x5799 != 11) {
+    if (field_0x5799 != I_INVALID) {
         if (mAnm[ITEM_SELECT_ANIM_DECIDE].isEndReached()) {
             if (!mBtn[1].getShouldBeVisible()) {
                 mBtn[1].setVisible(true, true);
@@ -1471,7 +1471,7 @@ void dLytMeterItemSelect_c::executeState_DemoOut1() {
         mAnm[ITEM_SELECT_ANIM_OUT].setAnimEnable(false);
         field_0x57B3 = 1;
         field_0x5754 = 4;
-        field_0x5799 = 11;
+        field_0x5799 = I_INVALID;
         mStateMgr.changeState(StateID_Wait);
     }
 
@@ -1493,7 +1493,7 @@ void dLytMeterItemSelect_c::initializeState_FrameOffIn() {
     }
 
     if (field_0x57B3 == 0) {
-        if (field_0x5794 == 11) {
+        if (field_0x5794 == I_INVALID) {
             mBtn[2].setVisible(false, false);
         } else if (field_0x57B4 == 0) {
             field_0x57C2 = 1;
@@ -1501,7 +1501,7 @@ void dLytMeterItemSelect_c::initializeState_FrameOffIn() {
         }
     }
 
-    if (field_0x57B3 == 0 && field_0x5794 != 11) {
+    if (field_0x57B3 == 0 && field_0x5794 != I_INVALID) {
         mAnm[ITEM_SELECT_ANIM_RESET].setForwardOnce();
         mAnm[ITEM_SELECT_ANIM_RESET].setToStart();
         mAnm[ITEM_SELECT_ANIM_RESET].setAnimEnable(true);
@@ -1557,7 +1557,7 @@ void dLytMeterItemSelect_c::initializeState_FrameOffOut() {
         mpPanes[ITEM_SELECT_PANE_SET_BTN]->SetVisible(true);
     }
 
-    if (field_0x57B3 == 0 && field_0x5794 != 11) {
+    if (field_0x57B3 == 0 && field_0x5794 != I_INVALID) {
         if (field_0x57A0 != 0) {
             field_0x57B3 = 1;
             mAnm[ITEM_SELECT_ANIM_DECIDE].setAnimEnable(true);
@@ -1584,7 +1584,7 @@ void dLytMeterItemSelect_c::initializeState_FrameOffOut() {
         mBtn[0].setVisible(true, false);
         mBtn[1].setVisible(true, false);
         mBtn[3].setVisible(true);
-        if (field_0x5794 != 11) {
+        if (field_0x5794 != I_INVALID) {
             mBtn[2].setVisible(false, false);
         } else {
             mBtn[2].setVisible(true, false);
@@ -1626,7 +1626,7 @@ void dLytMeterItemSelect_c::executeState_FrameOffOut() {
             mBtn[0].setVisible(true);
             mBtn[1].setVisible(true);
             mBtn[3].setVisible(true);
-            if (field_0x5794 != 11) {
+            if (field_0x5794 != I_INVALID) {
                 mBtn[2].setVisible(false);
             } else {
                 mBtn[2].setVisible(true);
@@ -1719,18 +1719,18 @@ bool dLytMeterItemSelect_c::build(d2d::ResAccIf_c *resAcc) {
         mItemIcons[i].setSize(true);
     }
 
-    field_0x5794 = 11;
-    field_0x5795 = 11;
-    field_0x5796 = 11;
-    field_0x5797 = 11;
-    field_0x5798 = 11;
-    field_0x5799 = 11;
-    field_0x579A = 11;
+    field_0x5794 = I_INVALID;
+    field_0x5795 = I_INVALID;
+    field_0x5796 = I_INVALID;
+    field_0x5797 = I_INVALID;
+    field_0x5798 = I_INVALID;
+    field_0x5799 = I_INVALID;
+    field_0x579A = I_INVALID;
 
-    field_0x579C = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(1));
-    field_0x579D = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(5));
-    field_0x579E = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(4));
-    field_0x579F = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(7));
+    mStoredBowVariant = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(I_BOW));
+    mStoredSlingshotVariant = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(I_SLINGSHOT));
+    mStoredBeetleVariant = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(I_BEETLE));
+    mStoredBugNetVariant = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(I_BUG_NET));
 
     field_0x57B3 = 0;
     field_0x57B4 = 0;
@@ -1769,8 +1769,8 @@ bool dLytMeterItemSelect_c::build(d2d::ResAccIf_c *resAcc) {
 
     field_0x57A0 = 0;
     field_0x57A1 = 0;
-    field_0x5778 = 0.0f;
-    field_0x577C = 0.0f;
+    mArrowRotation = 0.0f;
+    mArrowLength = 0.0f;
     field_0x5780 = 0.0f;
 
     mpOwnerPane = nullptr;
@@ -1780,10 +1780,10 @@ bool dLytMeterItemSelect_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x57BB = 0;
     field_0x57BC = 0;
     field_0x5774 = 0;
-    field_0x576C = 0x98;
+    mLastDoButtonRelatedAction = LytDoButtonRelated::DO_NONE;
     field_0x5770 = 5;
 
-    setBtnText(0x98);
+    setBtnText(LytDoButtonRelated::DO_NONE);
 
     mStateMgr.changeState(StateID_InitWait);
 
@@ -1817,7 +1817,7 @@ bool dLytMeterItemSelect_c::remove() {
 
 bool dLytMeterItemSelect_c::execute() {
     if (StoryflagManager::sInstance->getCounterOrFlag(569) != 0) {
-        if (field_0x57A2 != 0 || (field_0x57A0 != 0 && field_0x5794 != 2 && field_0x5794 != 9 && field_0x5794 != 10)) {
+        if (field_0x57A2 != 0 || (field_0x57A0 != 0 && field_0x5794 != I_SAILCLOTH && field_0x5794 != I_BOAT_CANNON && field_0x5794 != I_HARP)) {
             field_0x57B9 = 0;
             StoryflagManager::sInstance->unsetFlag(569);
         } else {
@@ -1848,8 +1848,8 @@ bool dLytMeterItemSelect_c::execute() {
                 mAnm[ITEM_SELECT_ANIM_DECIDE].setToEnd2();
             }
 
-            if (field_0x5798 != 11) {
-                if (field_0x5794 != 11) {
+            if (field_0x5798 != I_INVALID) {
+                if (field_0x5794 != I_INVALID) {
                     mAnm[ITEM_SELECT_ANIM_OUT].setForwardOnce();
                     mAnm[ITEM_SELECT_ANIM_OUT].setAnimEnable(true);
                     mAnm[ITEM_SELECT_ANIM_OUT].setToEnd2();
@@ -1858,7 +1858,7 @@ bool dLytMeterItemSelect_c::execute() {
                     mAnm[ITEM_SELECT_ANIM_RESET].setAnimEnable(true);
                     mAnm[ITEM_SELECT_ANIM_RESET].setToEnd2();
                 }
-            } else if (field_0x5794 != 11) {
+            } else if (field_0x5794 != I_INVALID) {
                 mAnm[ITEM_SELECT_ANIM_OUT].setForwardOnce();
                 mAnm[ITEM_SELECT_ANIM_OUT].setAnimEnable(true);
                 mAnm[ITEM_SELECT_ANIM_OUT].setToEnd2();
@@ -1892,13 +1892,13 @@ bool dLytMeterItemSelect_c::execute() {
 
             field_0x57B3 = 0;
 
-            if (field_0x5798 != 11) {
-                if (field_0x5794 != 11) {
+            if (field_0x5798 != I_INVALID) {
+                if (field_0x5794 != I_INVALID) {
                     mBtn[2].setVisible(false, true);
                 } else {
                     mBtn[2].setVisible(true, true);
                 }
-            } else if (field_0x5794 != 11) {
+            } else if (field_0x5794 != I_INVALID) {
                 mBtn[2].setVisible(false, true);
             } else {
                 mBtn[2].setVisible(true, true);
@@ -1940,7 +1940,7 @@ bool dLytMeterItemSelect_c::execute() {
 
             mAnm[ITEM_SELECT_ANIM_RESET].setAnimEnable(false);
             field_0x57B3 = 0;
-            field_0x579A = 11;
+            field_0x579A = I_INVALID;
             mStateMgr.changeState(StateID_Wait);
         }
         if (*mStateMgr.getStateID() == StateID_SetSpecialItemIn) {
@@ -1967,7 +1967,7 @@ bool dLytMeterItemSelect_c::execute() {
                 mAnm[ITEM_SELECT_ANIM_RESET].setAnimEnable(false);
                 mpPanes[ITEM_SELECT_PANE_SET_BTN]->SetVisible(false);
                 field_0x57B3 = 0;
-                field_0x579A = 11;
+                field_0x579A = I_INVALID;
                 mStateMgr.changeState(StateID_Wait);
             }
         }
@@ -2003,7 +2003,7 @@ bool dLytMeterItemSelect_c::execute() {
     if (field_0x5794 != field_0x5796) {
         field_0x5796 = field_0x5794;
         a = true;
-        if (field_0x5794 != 11) {
+        if (field_0x5794 != I_INVALID) {
             field_0x5797 = field_0x5794;
             field_0x57B4 = 0;
         } else {
@@ -2011,26 +2011,28 @@ bool dLytMeterItemSelect_c::execute() {
         }
         setBtnItem(field_0x5796);
         b = true;
-    } else if (field_0x579C != baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(1))) {
-        field_0x579C = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(1));
+        // The conditions below check if you just upgraded a certain item. If the current item differs from
+        // what we recorded last, this automatically switches the item.
+    } else if (mStoredBowVariant != baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(I_BOW))) {
+        mStoredBowVariant = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(I_BOW));
         setBtnItem(field_0x5796);
         b = true;
-    } else if (field_0x579D != baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(5))) {
-        field_0x579D = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(5));
+    } else if (mStoredSlingshotVariant != baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(I_SLINGSHOT))) {
+        mStoredSlingshotVariant = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(I_SLINGSHOT));
         setBtnItem(field_0x5796);
         b = true;
-    } else if (field_0x579E != baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(4))) {
-        field_0x579E = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(4));
+    } else if (mStoredBeetleVariant != baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(I_BEETLE))) {
+        mStoredBeetleVariant = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(I_BEETLE));
         setBtnItem(field_0x5796);
         b = true;
-    } else if (field_0x579F != baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(7))) {
-        field_0x579F = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(7));
+    } else if (mStoredBugNetVariant != baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(I_BUG_NET))) {
+        mStoredBugNetVariant = baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(I_BUG_NET));
         setBtnItem(field_0x5796);
         b = true;
     }
 
-    if (field_0x5797 != 11) {
-        realizeBtnNumberForLytIndex(baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(field_0x5797)), a);
+    if (field_0x5797 != I_INVALID) {
+        realizeBtnNumberForLytIndex(baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(field_0x5797)), a);
     }
 
     if (field_0x57B6) {
@@ -2045,11 +2047,11 @@ bool dLytMeterItemSelect_c::execute() {
         if (!mAnm[ITEM_SELECT_ANIM_FULL].isEnabled()) {
             mAnm[ITEM_SELECT_ANIM_FULL].setFrame(0.0f);
             mAnm[ITEM_SELECT_ANIM_FULL].setAnimEnable(true);
-            if (field_0x5797 == 0) {
+            if (field_0x5797 == I_BOMB_BAG) {
                 SmallSoundManager::GetInstance()->playSound(SE_S_BM_MAX);
-            } else if (field_0x5797 == 1) {
+            } else if (field_0x5797 == I_BOW) {
                 SmallSoundManager::GetInstance()->playSound(SE_S_AW_MAX);
-            } else if (field_0x5797 == 5) {
+            } else if (field_0x5797 == I_SLINGSHOT) {
                 SmallSoundManager::GetInstance()->playSound(SE_S_PC_MAX);
             }
         }
@@ -2077,7 +2079,7 @@ bool dLytMeterItemSelect_c::execute() {
     }
 
     bool b2 = false;
-    if (field_0x57B9 != 0 && dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10) && field_0x576C == 0x85) {
+    if (field_0x57B9 != 0 && dLytMeterContainer_c::GetInstance()->checkAllFlags(0x10) && mLastDoButtonRelatedAction == 0x85) {
         if (field_0x57BA == 0) {
             mAnm[ITEM_SELECT_ANIM_CALL].setToEnd();
             mAnm[ITEM_SELECT_ANIM_CALL].setRate(1.0f);
@@ -2153,22 +2155,25 @@ bool dLytMeterItemSelect_c::execute() {
             mLyt.getLayout()->Animate(0);
         }
 
+        // Rotate the arrow
         mVec3_c t1(0.0f, 0.0f, 0.0f);
-        t1.z = field_0x5778;
+        t1.z = mArrowRotation;
         mpPanes[ITEM_SELECT_PANE_ITEM_ARROW]->SetRotate(t1);
+        // But rotate the button and the pointer back so that
+        // they point up
         mVec3_c t2(0.0f, 0.0f, 0.0f);
-        t2.z = -field_0x5778;
+        t2.z = -mArrowRotation;
         mpPanes[ITEM_SELECT_PANE_ARROW_HAND]->SetRotate(t2);
         mpPanes[ITEM_SELECT_PANE_N_BTN_0]->SetRotate(t2);
 
         f32 frame = mAnm[ITEM_SELECT_ANIM_ARROW].getAnimDuration();
-        if (field_0x577C < 0.0f) {
-            field_0x577C = 0.0f;
+        if (mArrowLength < 0.0f) {
+            mArrowLength = 0.0f;
         }
-        if (field_0x577C > 1.0f) {
-            field_0x577C = 1.0f;
+        if (mArrowLength > 1.0f) {
+            mArrowLength = 1.0f;
         }
-        mAnm[ITEM_SELECT_ANIM_ARROW].setFrame(frame * field_0x577C);
+        mAnm[ITEM_SELECT_ANIM_ARROW].setFrame(frame * mArrowLength);
         mAnm[ITEM_SELECT_ANIM_ARROW].setAnimEnable(true);
 
         if (mAnm[ITEM_SELECT_ANIM_SELECT_LOOP].isEnabled()) {
@@ -2197,18 +2202,18 @@ bool dLytMeterItemSelect_c::execute() {
             mSubpanes[i].mpLytPane->execute();
         }
 
-        if (field_0x5794 == 2) {
+        if (field_0x5794 == I_SAILCLOTH) {
             if (LytDoButtonRelated::GetInstance() != nullptr) {
-                LytDoButtonRelated::GetInstance()->set0x08(0x91);
+                LytDoButtonRelated::GetInstance()->set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::DO_SAILCLOTH);
             }
-        } else if (field_0x5794 == 9) {
+        } else if (field_0x5794 == I_BOAT_CANNON) {
             if (field_0x57B3 != 0) {
                 if (LytDoButtonRelated::GetInstance() != nullptr) {
-                    LytDoButtonRelated::GetInstance()->set0x08(0x90);
+                    LytDoButtonRelated::GetInstance()->set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::DO_STOW_CANNON);
                 }
             } else {
                 if (LytDoButtonRelated::GetInstance() != nullptr) {
-                    LytDoButtonRelated::GetInstance()->set0x08(0x8F);
+                    LytDoButtonRelated::GetInstance()->set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::DO_READY_CANNON);
                 }
             }
         }
@@ -2216,14 +2221,14 @@ bool dLytMeterItemSelect_c::execute() {
         if (field_0x578C <= 0 && *mStateMgr.getStateID() != StateID_SetIn &&
             *mStateMgr.getStateID() != StateID_SetOut && *mStateMgr.getStateID() != StateID_ToUnuse &&
             *mStateMgr.getStateID() != StateID_Unuse) {
-            if (field_0x576C != LytDoButtonRelated::get0x08()) {
-                field_0x576C = LytDoButtonRelated::get0x08();
-                setBtnText(field_0x576C);
+            if (mLastDoButtonRelatedAction != LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B)) {
+                mLastDoButtonRelatedAction = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B);
+                setBtnText(mLastDoButtonRelatedAction);
             }
         } else {
-            if (field_0x576C != 0x98) {
-                field_0x576C = 0x98;
-                setBtnText(field_0x576C);
+            if (mLastDoButtonRelatedAction != LytDoButtonRelated::DO_NONE) {
+                mLastDoButtonRelatedAction = LytDoButtonRelated::DO_NONE;
+                setBtnText(mLastDoButtonRelatedAction);
             }
 
             if (field_0x578C > 0) {
@@ -2232,7 +2237,7 @@ bool dLytMeterItemSelect_c::execute() {
         }
 
         if (LytDoButtonRelated::GetInstance() != nullptr) {
-            LytDoButtonRelated::GetInstance()->set0x08(0x98);
+            LytDoButtonRelated::GetInstance()->set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::DO_NONE);
         }
     }
 
@@ -2262,7 +2267,7 @@ void dLytMeterItemSelect_c::fn_800EF580() {
 }
 
 void dLytMeterItemSelect_c::fn_800EF6B0(u8 arg) {
-    if (field_0x5794 != 2 && field_0x5794 != 9 && field_0x5794 != 10) {
+    if (field_0x5794 != I_SAILCLOTH && field_0x5794 != I_BOAT_CANNON && field_0x5794 != I_HARP) {
         field_0x5798 = field_0x5794;
     }
 
@@ -2283,7 +2288,7 @@ void dLytMeterItemSelect_c::fn_800EF710(u8 arg) {
     field_0x57A0 = arg;
 }
 
-void dLytMeterItemSelect_c::fn_800EF720(s32 arg) {
+void dLytMeterItemSelect_c::fn_800EF720(InternalItem_e arg) {
     if (field_0x57B5 == 0 || *mStateMgr.getStateID() != StateID_InitWait) {
         field_0x57B5 = 1;
         field_0x574C = arg;
@@ -2379,7 +2384,7 @@ void dLytMeterItemSelect_c::realizeWheelNumberForLytIndex(s32 iconIdx, s32 lytIt
                 break;
         }
 
-        u8 color = 0;
+        s32 color = 0;
         if (num == 0) {
             color = 1;
         } else if (num == max) {
@@ -2502,16 +2507,18 @@ ITEM_ID dLytMeterItemSelect_c::getBaseItemForBWheelSlot(s32 idx) {
     return sSlotToBaseItem[idx];
 }
 
+// What is this for? This is not an internal item id...
 static s32 sUnkArray1[] = {1, 0, 3, 8, 4, 2, 6, 5};
 
 s32 dLytMeterItemSelect_c::fn_800F0170(s32 slot) const {
     return sUnkArray1[slot];
 }
 
-static s32 sUnkArray2[] = {1, 0, 4, 7, 5, 3, 8, 6};
 
-u8 dLytMeterItemSelect_c::fn_800F0190(s32 idx) const {
-    return sUnkArray2[idx];
+u8 dLytMeterItemSelect_c::getInternalBaseItemForSlot(s32 slot) const {
+    static s32 sSlotToInternalItem[] = {I_BOW, I_BOMB_BAG, I_BEETLE, I_BUG_NET, I_SLINGSHOT, I_CLAWSHOTS, I_WHIP, I_GUST_BELLOWS};
+
+    return sSlotToInternalItem[slot];
 }
 
 extern "C" s32 fn_801673B0(s32);
@@ -2536,8 +2543,8 @@ bool dLytMeterItemSelect_c::fn_800F0220(s32 arg) {
 
         field_0x5758 = arg;
         field_0x575C = 0;
-        field_0x5778 = 0.0f;
-        field_0x577C = 0.0f;
+        mArrowRotation = 0.0f;
+        mArrowLength = 0.0f;
         mpPanes[4]->SetVisible(false);
         mpPanes[5]->SetVisible(false);
         mpPanes[3]->SetVisible(false);
@@ -2593,7 +2600,7 @@ static const s32 sActIds[] = {
 
 void dLytMeterItemSelect_c::setBtnText(s32 unkId) {
     SizedString<16> id;
-    if (unkId < 0x98) {
+    if (unkId < LytDoButtonRelated::DO_NONE) {
         mpTextBoxes[8]->SetVisible(true);
         mpTextBoxes[9]->SetVisible(true);
         mpWindows[0]->SetVisible(true);
@@ -2627,15 +2634,15 @@ void dLytMeterItemSelect_c::setBtnText(s32 unkId) {
     }
 }
 
-void dLytMeterItemSelect_c::setBtnItem(s32 unkId) {
-    if (unkId == 2 || unkId == 9 || unkId == 10) {
+void dLytMeterItemSelect_c::setBtnItem(s32 item) {
+    if (item == I_SAILCLOTH || item == I_BOAT_CANNON || item == I_HARP) {
         field_0x57B8 = 1;
     } else {
         field_0x57B8 = 0;
     }
 
-    if (unkId != 11) {
-        mItemIcons[8].setItem(baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforUnkId(unkId)));
+    if (item != I_INVALID) {
+        mItemIcons[8].setItem(baseItemLytIndexToCurrentVariant(getBaseItemLytIndexforInternalId(item)));
     }
 }
 
@@ -2707,17 +2714,17 @@ ITEM_ID dLytMeterItemSelect_c::baseItemIdToCurrentVariant(ITEM_ID baseItem) cons
     return baseItem;
 }
 
-static const s32 sUnkIdItemLytIndex[] = {
+static const s32 sInternalItemToLytIndex[] = {
     LYT_CMN_ItemBombBag, LYT_CMN_ItemBow,        LYT_CMN_ItemSailcloth,   LYT_CMN_ItemClawshots,
     LYT_CMN_ItemBeetle,  LYT_CMN_ItemSlingshot,  LYT_CMN_ItemGustBellows, LYT_CMN_ItemBugnet,
     LYT_CMN_ItemWhip,    LYT_CMN_ItemBoatCannon, LYT_CMN_ItemHarp,
 };
 
-s32 dLytMeterItemSelect_c::getBaseItemLytIndexforUnkId(s32 idx) const {
+s32 dLytMeterItemSelect_c::getBaseItemLytIndexforInternalId(s32 idx) const {
     if (idx < 11) {
-        return sUnkIdItemLytIndex[idx];
-    } else if (field_0x5797 != 11) {
-        return sUnkIdItemLytIndex[field_0x5797];
+        return sInternalItemToLytIndex[idx];
+    } else if (field_0x5797 != I_INVALID) {
+        return sInternalItemToLytIndex[field_0x5797];
     }
 
     return LYT_CMN_ItemNone;

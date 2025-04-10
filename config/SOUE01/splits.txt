@@ -424,6 +424,10 @@ d/lyt/d_lyt_do_button.cpp:
 	.data       start:0x8051A5A8 end:0x8051AC00
 	.bss        start:0x805ACE10 end:0x805ACF78
 
+d/lyt/d_lyt_do_button_related.cpp:
+	.text       start:0x8010EB00 end:0x8010EF8C
+	.ctors      start:0x804DB72C end:0x804DB730
+
 d/lyt/d_lyt_common_a_btn.cpp:
 	.text       start:0x8010EF90 end:0x8010F818
 	.rodata     start:0x804E72E0 end:0x804E7330

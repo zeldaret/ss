@@ -3,7 +3,6 @@
 
 #include "d/lyt/d2d.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dLytMeterRemoconBg_c : public d2d::dSubPane {
 public:

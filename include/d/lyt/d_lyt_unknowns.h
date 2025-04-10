@@ -15,26 +15,48 @@ public:
         return sInstance;
     }
 
-    void set0x08(s32 value) {
-        field_0x08 = value;
-        field_0x35 = 1;
+    enum Action_e {
+        DO_RETURN = 0x7F,
+        DO_STOP = 0x84,
+        DO_ITEMS = 0x85,
+        DO_DONE = 0x87,
+        DO_READY_CANNON = 0x8F,
+        DO_STOW_CANNON = 0x90,
+        DO_SAILCLOTH = 0x91,
+        DO_NONE = 0x98,
+    };
+
+    enum DoButton_e {
+        DO_BUTTON_B = 1
+    };
+
+    void set(DoButton_e button, Action_e value) {
+        field_0x04[button] = value;
+        field_0x34[button] = 1;
     }
 
-    static s32 get0x08() {
+    static Action_e get(DoButton_e button) {
         if (sInstance != nullptr) {
-            return sInstance->field_0x08;
+            return sInstance->field_0x04[button];
         } else {
-            return 0x98;
+            return DO_NONE;
+        }
+    }
+
+
+    static Action_e get0x08() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x04[1];
+        } else {
+            return DO_NONE;
         }
     }
     
 private:
 
     static LytDoButtonRelated *sInstance;
-    /* 0x04 */ u8 field_0x04[0x08 - 0x04];
-    /* 0x08 */ s32 field_0x08;
-    /* 0x0C */ u8 _0x08[0x35 - 0x0C];
-    /* 0x35 */ u8 field_0x35;
+    /* 0x04 */ Action_e field_0x04[12];
+    /* 0x34 */ u8 field_0x34[12];
 };
 
 // size 0x27C
