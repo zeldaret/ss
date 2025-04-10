@@ -8,27 +8,19 @@
 #include "nw4r/lyt/lyt_bounding.h"
 #include "s/s_State.hpp"
 
-class dLytCommonIconItemPartBase_c {
-public:
-    virtual ~dLytCommonIconItemPartBase_c() {}
-    virtual nw4r::lyt::Pane *getPane() = 0;
-    virtual d2d::LytBase_c *getLyt() = 0;
-    virtual const char *getName() const = 0;
-};
-
 /** B-Wheel item */
-class dLytCommonIconItemPart1_c : public dLytCommonIconItemPartBase_c {
+class dLytCommonIconItemPart1_c {
 public:
     dLytCommonIconItemPart1_c()
         : mItem(0), mColor(0), field_0x2B4(false), mHasNumber(false), mSize(false), mBocoburinLocked(false) {}
     virtual ~dLytCommonIconItemPart1_c() {}
-    virtual nw4r::lyt::Pane *getPane() override {
+    virtual nw4r::lyt::Pane *getPane() {
         return mLyt.getLayout()->GetRootPane();
     }
-    virtual d2d::LytBase_c *getLyt() override {
+    virtual d2d::LytBase_c *getLyt() {
         return &mLyt;
     }
-    virtual const char *getName() const override {
+    virtual const char *getName() const {
         return mLyt.getName();
     }
 
@@ -82,7 +74,7 @@ private:
 };
 
 /** Pouch item */
-class dLytCommonIconItemPart2_c : public dLytCommonIconItemPartBase_c {
+class dLytCommonIconItemPart2_c  {
 public:
     dLytCommonIconItemPart2_c()
         : mItem(0),
@@ -94,13 +86,13 @@ public:
           mOnOff(true),
           mDurability(0.0f) {}
     virtual ~dLytCommonIconItemPart2_c() {}
-    virtual nw4r::lyt::Pane *getPane() override {
+    virtual nw4r::lyt::Pane *getPane() {
         return mLyt.getLayout()->GetRootPane();
     }
-    virtual d2d::LytBase_c *getLyt() override {
+    virtual d2d::LytBase_c *getLyt() {
         return &mLyt;
     }
-    virtual const char *getName() const override {
+    virtual const char *getName() const {
         return mLyt.getName();
     }
 
@@ -162,17 +154,17 @@ private:
 };
 
 /** Dowsing "item" */
-class dLytCommonIconItemPart3_c : public dLytCommonIconItemPartBase_c {
+class dLytCommonIconItemPart3_c {
 public:
     dLytCommonIconItemPart3_c() : mItem(0), mSize(false), mBocoburinLocked(false) {}
     virtual ~dLytCommonIconItemPart3_c() {}
-    virtual nw4r::lyt::Pane *getPane() override {
+    virtual nw4r::lyt::Pane *getPane() {
         return mLyt.getLayout()->GetRootPane();
     }
-    virtual d2d::LytBase_c *getLyt() override {
+    virtual d2d::LytBase_c *getLyt() {
         return &mLyt;
     }
-    virtual const char *getName() const override {
+    virtual const char *getName() const {
         return mLyt.getName();
     }
 

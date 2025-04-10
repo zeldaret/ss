@@ -1,6 +1,7 @@
 #ifndef D_LYT_TEXTBOX_H
 #define D_LYT_TEXTBOX_H
 
+#include "common.h"
 #include "d/lyt/d2d.h"
 #include "libms/msgfile.h"
 #include "nw4r/lyt/lyt_drawInfo.h"
@@ -47,8 +48,11 @@ public:
         return mMyScale;
     }
 
-    void fn_800E0A60(const char *area, ...) {
-        // TODO
+    void setMessageWithGlobalTextProcessor2(const char *message, void *unk, ...) {
+        va_list l;
+        va_start(l, str);
+        setMessageWithGlobalTextProcessorV(message, nullptr, unk, l);
+        va_end(l);
     }
 
     void setTextWithGlobalTextProcessor(const wchar_t *str);
@@ -58,7 +62,9 @@ public:
     void setTextWithTextProcessor(const wchar_t *str, dTagProcessor_c *tagProcessor, void *, ...);
     s32 calcTextLines(const wchar_t *src, dTagProcessor_c *tagProcessor);
 
-    void setMessageWithGlobalTextProcessorAndMsbtInfo(const MsbtInfo *info, const char *labelId, wchar_t *destBuf, u32 maxLen);
+    void setMessageWithGlobalTextProcessorAndMsbtInfo(
+        const MsbtInfo *info, const char *labelId, wchar_t *destBuf, u32 maxLen
+    );
 
     void loadTextFormatVars();
     void setupGX() const;

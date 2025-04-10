@@ -171,8 +171,8 @@ int dAcODungeonShip_c::doDelete() {
     return SUCCEEDED;
 }
 
-extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_682_;
-extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_683_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_682_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_683_;
 
 int dAcODungeonShip_c::actorExecute() {
     field_0x850++;

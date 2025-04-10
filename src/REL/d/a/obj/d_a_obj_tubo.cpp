@@ -449,7 +449,7 @@ void dAcOtubo_c::finalizeState_Rebirth() {
 extern "C" void fn_80027510(void *, bool);
 extern "C" void fn_80027560(void *, bool, int);
 extern "C" void *fn_800298B0(u16, mVec3_c *, mVec3_c *, u32, u32, u32, u32, u32);
-extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_109_, PARTICLE_RESOURCE_ID_MAPPING_209_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_109_, PARTICLE_RESOURCE_ID_MAPPING_209_;
 extern "C" void *ENVIRONMENT;
 extern "C" void fn_80022BE0(void *, const mVec3_c &);
 

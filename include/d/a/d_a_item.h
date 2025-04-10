@@ -51,9 +51,13 @@ public:
     void getItemFromBWheelItem();
     bool isStateWait();
 
-    static int getTotalBombCount();
-    static int getTotalArrowCount();
-    static int getTotalSeedCount();
+    static s32 getTotalBombCount();
+    static s32 getTotalArrowCount();
+    static s32 getTotalSeedCount();
+
+    static s32 getTotalBombCapacity();
+    static s32 getTotalSeedCapacity();
+    static s32 getTotalArrowCapacity();
 
     static bool isRupee(ITEM_ID item);
     static bool isKeyPiece(ITEM_ID item);

@@ -360,7 +360,8 @@ d/lyt/meter/d_lyt_meter_item_select.cpp:
 	.ctors      start:0x804DB700 end:0x804DB704
 	.rodata     start:0x804E5B28 end:0x804E5F28
 	.data       start:0x805153A8 end:0x80516A28
-	.sdata2     start:0x80579BD0 end:0x80579C08
+	.sdata      start:0x805723F0 end:0x80572400
+	.sdata2     start:0x80579BD0 end:0x80579BF8
 	.bss        start:0x805AACD0 end:0x805AB650
 
 d/lyt/meter/d_lyt_meter_plus_btn.cpp:

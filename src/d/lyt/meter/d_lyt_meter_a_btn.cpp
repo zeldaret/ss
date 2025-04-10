@@ -1,5 +1,6 @@
 #include "d/lyt/meter/d_lyt_meter_a_btn.h"
 
+#include "common.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/d_window.h"
 
@@ -138,4 +139,9 @@ bool dLytMeterABtn_c::remove() {
         mAnmGroups[i].remove();
     }
     return true;
+}
+
+void dLytMeterABtn_c::fn_800E0870(u32) {
+    // TODO, just getting this function to spawn to figure out its signature
+    mpTextBoxes[0]->setMessageWithGlobalTextProcessor2("", nullptr);
 }

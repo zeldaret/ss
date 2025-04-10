@@ -1,6 +1,7 @@
 #ifndef D_LYT_METER_ITEM_SELECT_H
 #define D_LYT_METER_ITEM_SELECT_H
 
+#include "d/a/d_a_itembase.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_common_icon_item.h"
 #include "d/lyt/d_textbox.h"
@@ -49,6 +50,10 @@ public:
         mpAnm = anim;
     }
 
+    void setShouldBeSelect(u32 v) {
+        mShouldBeSelect = v;
+    }
+
 private:
     STATE_FUNC_DECLARE(dLytMeterItemSelectBlink_c, Wait);
     STATE_FUNC_DECLARE(dLytMeterItemSelectBlink_c, On);
@@ -73,6 +78,10 @@ public:
         mpAnm = anim;
     }
 
+    void setShouldBeSelect(u32 v) {
+        mShouldBeSelect = v;
+    }
+
 private:
     STATE_FUNC_DECLARE(dLytMeterItemSelectText_c, Wait);
     STATE_FUNC_DECLARE(dLytMeterItemSelectText_c, On);
@@ -95,7 +104,7 @@ public:
     void setVisible(bool bVisible);
     void setVisible2(bool bVisible);
     void execute();
-    
+
     bool isSettled() const;
 
     void setAnm(d2d::AnmGroup_c *anim) {
@@ -112,6 +121,14 @@ public:
 
     bool getShouldBeVisible() const {
         return mShouldBeVisible;
+    }
+
+    bool getInstant() const {
+        return mInstant;
+    }
+
+    void setOwnerPane(nw4r::lyt::Pane *p) {
+        mpPane2 = p;
     }
 
 private:
@@ -140,24 +157,59 @@ public:
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
     virtual bool execute() override;
-    virtual nw4r::lyt::Pane *getPane() override;
-    virtual d2d::LytBase_c *getLyt() override;
-    virtual const char *getName() const override;
+    virtual nw4r::lyt::Pane *getPane() override {
+        return mLyt.getLayout()->GetRootPane();
+    }
+    virtual d2d::LytBase_c *getLyt() override {
+        return &mLyt;
+    }
+    virtual const char *getName() const override {
+        return mLyt.getName();
+    }
 
     virtual ~dLytMeterItemSelect_c() {}
 
+    static bool isInSpiralChargeTutorialMinigame();
+    static bool isInRollercoasterMinigame();
+
+
+    void fn_800EF580();
+    void fn_800EF6B0(u8);
+    void setOwnerPane(nw4r::lyt::Pane *p);
+    void fn_800EF710(u8);
+    void fn_800EF720(s32);
+    void fn_800EF7A0(bool, s32);
+    bool fn_800EFDF0(bool b) const;
+    bool fn_800F02F0() const;
+    bool fn_800F0220(s32 arg);
+
 private:
-    void fn_800F0680(u8);
-    s32 fn_800F0990(u8);
-    s32 fn_800F07D0(s32);
-    void fn_800EFAD0(s32, bool);
-    void fn_800EF7C0();
-    void fn_800EF8C0(u8);
-    bool fn_800F09E0();
-    void fn_800F0440(s32);
-    void fn_800F0700();
-    bool fn_800F01B0(s32);
-    bool fn_800F01E0(s32);
+    void setBtnItem(s32 unkId);
+    void realizeSelectedWheelItem();
+    void fn_800EF8C0(bool);
+    bool isWheelBlockedByCurrentAction();
+    void setBtnText(s32);
+    bool fn_800F01B0(s32) const;
+    bool fn_800F01E0(s32) const;
+    bool isSlotBocoburinLocked(s32);
+    void fn_800F0310();
+    bool fn_800F0030() const;
+    s32 fn_800F0170(s32) const;
+    u8 fn_800F0190(s32) const;
+
+    bool isWheelIndexLocked(s32 idx);
+
+    void realizeWheelItems();
+
+    void realizeWheelNumberForLytIndex(s32 iconIdx, s32 lytItemIdx);
+    void realizeBtnNumberForLytIndex(s32 iconIdx, bool);
+    void realizeWheelNumberVForLytIndex(s32 iconIdx, s32 lytItemIdx);
+
+    void setCurrentItemText(ITEM_ID item);
+    static ITEM_ID getBaseItemForBWheelSlot(s32 idx);
+    ITEM_ID baseItemIdToCurrentVariant(ITEM_ID baseItem) const;
+    s32 baseItemLytIndexToCurrentVariant(s32 lytIndex) const;
+    s32 getBaseItemLytIndexforUnkId(s32 idx) const;
 
     STATE_FUNC_DECLARE(dLytMeterItemSelect_c, InitWait);
     STATE_FUNC_DECLARE(dLytMeterItemSelect_c, Wait);
@@ -192,7 +244,7 @@ private:
 
     /* 0x0DA4 */ nw4r::lyt::Pane *mpPanes[17];
 
-    /* 0x0DE8 */ nw4r::lyt::Pane *mpSomePane;
+    /* 0x0DE8 */ nw4r::lyt::Pane *mpOwnerPane;
     /* 0x0DEC */ dTextBox_c *mpTextBoxes[10];
     /* 0x0E14 */ dWindow_c *mpWindows[4];
     /* 0x0E24 */ dTextBox_c *mpSizeBoxes[4];
@@ -206,7 +258,7 @@ private:
     /* 0x5754 */ s32 field_0x5754;
     /* 0x5758 */ s32 field_0x5758;
     /* 0x575C */ s32 field_0x575C;
-    /* 0x5760 */ s32 field_0x5760;
+    /* 0x5760 */ s32 mDemoMoveTimer;
     /* 0x5764 */ s32 field_0x5764;
     /* 0x5768 */ s32 field_0x5768;
     /* 0x576C */ s32 field_0x576C;
@@ -234,8 +286,8 @@ private:
     /* 0x57A0 */ u8 field_0x57A0;
     /* 0x57A1 */ u8 field_0x57A1;
     /* 0x57A2 */ u8 field_0x57A2;
-    /* 0x57A3 */ u8 field_0x57A3[8];
-    /* 0x57AB */ u8 field_0x57AB[8];
+    /* 0x57A3 */ bool field_0x57A3[8];
+    /* 0x57AB */ bool mIsBocoburinLocked[8];
     /* 0x57B3 */ u8 field_0x57B3;
     /* 0x57B4 */ u8 field_0x57B4;
     /* 0x57B5 */ u8 field_0x57B5;

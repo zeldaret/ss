@@ -105,9 +105,9 @@ bool dLytAreaCaptionParts_c::draw() {
 
 void dLytAreaCaptionParts_c::setTextIfWaiting(const char *text) {
     if (*mStateMgr.getStateID() == StateID_Wait) {
-        mTextBoxes[0]->fn_800E0A60(text, nullptr);
-        mTextBoxes[1]->fn_800E0A60(text, nullptr);
-        mTextBoxes[2]->fn_800E0A60(text, nullptr);
+        mTextBoxes[0]->setMessageWithGlobalTextProcessor2(text, nullptr);
+        mTextBoxes[1]->setMessageWithGlobalTextProcessor2(text, nullptr);
+        mTextBoxes[2]->setMessageWithGlobalTextProcessor2(text, nullptr);
         field_0x54C = 1;
     }
 }
@@ -120,7 +120,7 @@ void dLytAreaCaptionParts_c::check() {
 
 void dLytAreaCaptionParts_c::initializeState_Wait() {}
 void dLytAreaCaptionParts_c::executeState_Wait() {
-    mTextBoxes[0]->fn_800E0A60("N_inOut_00", nullptr);
+    mTextBoxes[0]->setMessageWithGlobalTextProcessor2("N_inOut_00", nullptr);
 }
 void dLytAreaCaptionParts_c::finalizeState_Wait() {}
 

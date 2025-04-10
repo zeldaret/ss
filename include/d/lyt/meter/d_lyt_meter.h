@@ -49,6 +49,14 @@ public:
 
     bool isSilentRealm();
 
+    u8 getField_0x13792() const {
+        return field_0x13792;
+    }
+
+    u8 getField_0x1377E() const {
+        return field_0x1377E;
+    }
+
     /* 0x00004 */ d2d::ResAccIf_c mResAcc;
     /* 0x00374 */ d2d::LytBase_c mLyt;
     /* 0x00404 */ d2d::AnmGroup_c mAnmGroups[34];
@@ -91,7 +99,13 @@ public:
     /* 0x1373C */ mVec3_c mPos2;
     /* 0x13748 */ u8 field_0x13748[0x13750 - 0x13748];
     /* 0x13750 */ s32 field_0x13750;
-    /* 0x13754 */ u8 field_0x13754[0x137B4 - 0x13754];
+    /* 0x13754 */ u8 field_0x13754[0x13770 - 0x13754];
+    /* 0x13770 */ u8 field_0x13770;
+    /* 0x13771 */ u8 field_0x13771[0x1377E - 0x13771];
+    /* 0x1377E */ u8 field_0x1377E;
+    /* 0x1377F */ u8 field_0x1375F[0x13792 - 0x1377F];
+    /* 0x13792 */ u8 field_0x13792;
+    /* 0x13793 */ u8 field_0x13793[0x137B4 - 0x13793];
     /* 0x137B4 */ mVec3_c mPos3;
     /* 0x137C0 */ u32 field_0x137C0;
 };
@@ -110,6 +124,7 @@ STATIC_ASSERT(offsetof(dLytMeter_c, mRemoCon) == 0x12350);
 STATIC_ASSERT(offsetof(dLytMeter_c, mNunBg) == 0x12440);
 STATIC_ASSERT(offsetof(dLytMeter_c, mHeart) == 0x12608);
 STATIC_ASSERT(offsetof(dLytMeter_c, mShield) == 0x12DA4);
+STATIC_ASSERT(offsetof(dLytMeter_c, field_0x137C0) == 0x137C0);
 
 // made up name
 class dLytMeterContainer_c {
@@ -123,16 +138,16 @@ public:
     bool remove();
     bool draw();
 
-    bool checkFlag(u32 flag) {
-        return (mFlags & flag) == flag;
-    }
-
     static dLytMeterContainer_c *GetInstance() {
         return sInstance;
     }
 
     static dLytMeter_c *GetMeter() {
         return &sInstance->mMeter;
+    }
+
+    u8 getMeterField_0x13770() const {
+        return mMeter.field_0x13770;
     }
 
     bool checkAllFlags(u32 mask) const {

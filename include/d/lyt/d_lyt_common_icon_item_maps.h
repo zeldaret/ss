@@ -34,6 +34,7 @@
 #define LYT_CMN_ItemBigBugnet (15)   // [14] uc_netB_00.tpl
 #define LYT_CMN_ItemBoatCannon (16)  // [ 7] uc_boatCannon_00.tpl
 #define LYT_CMN_ItemHarp (17)        // [ 0] tr_tategoto_00.tpl
+#define LYT_CMN_ItemNone (18)        // -------------------------
 
 // Pouch Items
 #define LYT_CMN_PouchPotionHealyh (0)              // [12] uc_bottleKusuriA_00.tpl

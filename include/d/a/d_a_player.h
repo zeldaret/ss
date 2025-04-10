@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/a/d_a_itembase.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
@@ -61,6 +62,7 @@ public:
     void setPosYRot(const mVec3_c &pos, mAng rot, UNKWORD, UNKWORD, UNKWORD);
     // argument is always false in existing code, true doesn't seem to make a difference
     void bonk(bool unk = false);
+    bool fn_80202D90(bool);
 
     /* vt 0x080 */ virtual UNKWORD IfCurrentActionToActor(dAcBase_c *ac, UNKWORD);
     /* vt 0x084 */ virtual void vt_0x084(dAcBase_c *ac, UNKWORD);
@@ -288,7 +290,19 @@ public:
         return LINK;
     }
 
+    static dAcPy_c *GetLink2() {
+        return LINK2;
+    }
+
     static dAcPy_c *LINK;
+    static dAcPy_c *LINK2;
+
+    static s32 getCurrentBowType();
+    static s32 getCurrentSlingshotType();
+    static s32 getCurrentBeetleType();
+    static s32 getCurrentBugNetType();
+
+    static bool isItemRestrictedByBokoBase(ITEM_ID item);
 };
 
 #endif

@@ -28,7 +28,13 @@ public:
     void fn_80029980(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
     void fn_800299F0(u16 effect, mMtx_c *mtx, void *, void *);
     void fn_80029A10(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
+    void fn_80029A70(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
     void setMtx(const mMtx_c &);
+
+    static void fn_800298C0(u16 effect, mVec3_c *pos, void*, void*, void*, void*);
+
+    void fn_80026ED0();
+    void fn_80026F10();
 
     bool checkField0x00() const {
         return field_0x00 != 0;

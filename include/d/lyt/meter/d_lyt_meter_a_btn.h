@@ -17,7 +17,7 @@ public:
     virtual d2d::LytBase_c *getLyt() override {
         return &mLyt;
     }
-    virtual const char *getName() const {
+    virtual const char *getName() const override {
         return mLyt.getName();
     }
 
