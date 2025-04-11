@@ -199,6 +199,10 @@ public:
     bool fn_800F02F0() const;
     bool fn_800F0220(s32 arg);
 
+    bool getField_0x57A2() const {
+        return field_0x57A2;
+    }
+
 private:
     void setBtnItem(s32 internalItem);
     void realizeSelectedWheelItem();
@@ -301,7 +305,7 @@ private:
     /* 0x579C */ u8 mStoredBugNetVariant;
     /* 0x57A0 */ u8 field_0x57A0;
     /* 0x57A1 */ u8 field_0x57A1;
-    /* 0x57A2 */ u8 field_0x57A2;
+    /* 0x57A2 */ bool field_0x57A2;
     /* 0x57A3 */ bool field_0x57A3[8];
     /* 0x57AB */ bool mIsBocoburinLocked[8];
     /* 0x57B3 */ u8 field_0x57B3;

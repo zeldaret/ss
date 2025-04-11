@@ -172,6 +172,14 @@ public:
         }
     }
 
+    static bool getItemSelect0x75B2() {
+        if (sInstance != nullptr) {
+            return sInstance->mMeter.mItemSelect.getField_0x57A2();
+        } else {
+            return 0;
+        }
+    }
+
 
 
 private:

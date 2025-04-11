@@ -39,7 +39,26 @@ public:
         }
     }
 
+    static s32 getFn0x8010E5E0() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_8010E5E0();
+        } else {
+            return 0x29;
+        }
+    }
+
+    static s32 getFn0x8010E5D0() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_8010E5D0();
+        } else {
+            return 0x5E;
+        }
+    }
+
 private:
+    s32 fn_8010E5D0() const;
+    s32 fn_8010E5E0() const;
+
     static dLytDobutton_c *sInstance;
 
     STATE_FUNC_DECLARE(dLytDobutton_c, InvisibleWait);

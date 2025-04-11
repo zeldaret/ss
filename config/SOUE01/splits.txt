@@ -349,6 +349,7 @@ d/lyt/meter/d_lyt_meter_remocon_bg.cpp:
 	.text       start:0x800E6AD0 end:0x800E7218
 	.ctors      start:0x804DB6F4 end:0x804DB6F8
 	.data       start:0x80514D60 end:0x80514F10
+	.sdata      start:0x805723B8 end:0x805723C0
 	.bss        start:0x805AA9D0 end:0x805AAAD0
 
 d/lyt/meter/d_lyt_meter_nunchaku_bg.cpp:
