@@ -386,7 +386,7 @@ config.libs = [
             Object(NonMatching, "d/d_tag_processor.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_unk.cpp"),
-            Object(NonMatching, "d/lyt/meter/d_lyt_meter_a_btn.cpp"),
+            Object(Matching, "d/lyt/meter/d_lyt_meter_a_btn.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_z_btn.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_key.cpp"),
             Object(Matching, "d/lyt/meter/d_lyt_meter_drink.cpp"),

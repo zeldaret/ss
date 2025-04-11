@@ -16,6 +16,7 @@ public:
     }
 
     enum Action_e {
+        DO_DASH = 0x5F,
         DO_RETURN = 0x7F,
         DO_STOP = 0x84,
         DO_ITEMS = 0x85,
@@ -27,12 +28,13 @@ public:
     };
 
     enum DoButton_e {
-        DO_BUTTON_B = 1
+        DO_BUTTON_A = 0,
+        DO_BUTTON_B = 1,
     };
 
     void set(DoButton_e button, Action_e value) {
         field_0x04[button] = value;
-        field_0x34[button] = 1;
+        field_0x34[button] = true;
     }
 
     static Action_e get(DoButton_e button) {
@@ -40,6 +42,14 @@ public:
             return sInstance->field_0x04[button];
         } else {
             return DO_NONE;
+        }
+    }
+
+    static bool getHas(DoButton_e button) {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x34[button];
+        } else {
+            return false;
         }
     }
 
@@ -51,12 +61,14 @@ public:
             return DO_NONE;
         }
     }
+
+    static Action_e convertDoButton(s32);
     
 private:
 
     static LytDoButtonRelated *sInstance;
     /* 0x04 */ Action_e field_0x04[12];
-    /* 0x34 */ u8 field_0x34[12];
+    /* 0x34 */ bool field_0x34[12];
 };
 
 // size 0x27C

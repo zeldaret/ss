@@ -1,6 +1,7 @@
 #ifndef D_LYT_DO_BUTTON_H
 #define D_LYT_DO_BUTTON_H
 
+#include "common.h"
 #include "d/lyt/d2d.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
@@ -22,8 +23,20 @@ public:
         return sInstance;
     }
 
-    s32 getField0x47C() const {
-        return field_0x47C;
+    static s32 getField0x47C() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x47C;
+        } else {
+            return 0x5E;
+        }
+    }
+
+    static s32 getField0x480() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x480;
+        } else {
+            return 0x29;
+        }
     }
 
 private:

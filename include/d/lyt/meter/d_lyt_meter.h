@@ -138,12 +138,22 @@ public:
     bool remove();
     bool draw();
 
+    bool fn_800D5670();
+
     static dLytMeterContainer_c *GetInstance() {
         return sInstance;
     }
 
     static dLytMeter_c *GetMeter() {
         return &sInstance->mMeter;
+    }
+
+    // Not all of these inlines exist on dLytMeter_c
+    // because accessing via GetMeter->get... causes
+    // different instructions sometimes
+
+    s32 getMeterField_0x13750() const {
+        return mMeter.field_0x13750;
     }
 
     u8 getMeterField_0x13770() const {
@@ -161,6 +171,8 @@ public:
             return 6;
         }
     }
+
+
 
 private:
     /* 0x00004 */ d2d::ResAccIf_c mResAcc;

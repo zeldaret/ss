@@ -1971,15 +1971,8 @@ bool dLytMeterItemSelect_c::execute() {
                 mStateMgr.changeState(StateID_Wait);
             }
         }
-        // TODO maybe an inline
-        s32 tmp;
-        if (dLytDobutton_c::GetInstance() != nullptr) {
-            tmp = dLytDobutton_c::GetInstance()->getField0x47C();
-        } else {
-            tmp = 0x5E;
-        }
 
-        if (tmp == 0x28) {
+        if (dLytDobutton_c::getField0x47C() == 0x28) {
             if (field_0x5774 == 0) {
                 SmallSoundManager::GetInstance()->playSound(SE_S_PARACHUTE_CALL);
             }
@@ -2062,15 +2055,7 @@ bool dLytMeterItemSelect_c::execute() {
     mStateMgr.executeState();
     fn_800EF8C0(false);
 
-    // TODO maybe an inline
-    s32 tmp;
-    if (dLytDobutton_c::GetInstance() != nullptr) {
-        tmp = dLytDobutton_c::GetInstance()->getField0x47C();
-    } else {
-        tmp = 0x5E;
-    }
-
-    if (tmp == 0x28) {
+    if (dLytDobutton_c::getField0x47C() == 0x28) {
         if (field_0x57C3 != 0) {
             field_0x57BB = 1;
         }

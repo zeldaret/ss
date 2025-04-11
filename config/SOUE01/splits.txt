@@ -316,7 +316,10 @@ d/lyt/meter/d_lyt_meter_unk.cpp:
 d/lyt/meter/d_lyt_meter_a_btn.cpp:
 	.text       start:0x800DFCC0 end:0x800E1188
 	.ctors      start:0x804DB6E4 end:0x804DB6E8
-	.data       start:0x80513BE8 end:0x80513F38
+	.rodata     start:0x804E5020 end:0x804E5298
+	.data       start:0x80513B70 end:0x80513F38
+	.sdata      start:0x80572380 end:0x80572398
+	.sdata2     start:0x80579B60 end:0x80579B70
 	.bss        start:0x805AA190 end:0x805AA350
 
 d/lyt/meter/d_lyt_meter_z_btn.cpp:
