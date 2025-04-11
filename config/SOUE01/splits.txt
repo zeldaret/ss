@@ -355,12 +355,20 @@ d/lyt/meter/d_lyt_meter_remocon_bg.cpp:
 d/lyt/meter/d_lyt_meter_nunchaku_bg.cpp:
 	.text       start:0x800E7220 end:0x800E8168
 	.ctors      start:0x804DB6F8 end:0x804DB6FC
+	.rodata     start:0x804E5640 end:0x804E58B8
 	.data       start:0x80514F10 end:0x80515178
+	.sdata      start:0x805723C0 end:0x805723D8
+	.sdata2     start:0x80579BB0 end:0x80579BC0
+	.bss        start:0x805AAAD0 end:0x805AABD0
 
 d/lyt/meter/d_lyt_meter_nun_stk.cpp:
 	.text       start:0x800E8170 end:0x800E8ED8
 	.ctors      start:0x804DB6FC end:0x804DB700
+	.rodata     start:0x804E58B8 end:0x804E5B28
 	.data       start:0x80515178 end:0x805153A8
+	.sdata      start:0x805723D8 end:0x805723F0
+	.sdata2     start:0x80579BC0 end:0x80579BD0
+	.bss        start:0x805AABD0 end:0x805AACD0
 
 d/lyt/meter/d_lyt_meter_item_select.cpp:
 	.text       start:0x800E8EE0 end:0x800F35A8

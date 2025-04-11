@@ -147,6 +147,8 @@ static const char *sTextBoxes[] = {
     "T_aBtnS_00",
 };
 
+static const char *sWindows[] = {"W_bgP_00"};
+
 bool dLytMeterABtn_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setResAcc(resAcc);
     mLyt.build("remoConBtn_06.brlyt", nullptr);
@@ -163,7 +165,6 @@ bool dLytMeterABtn_c::build(d2d::ResAccIf_c *resAcc) {
         mpTextBoxes[i] = mLyt.getTextBox(sTextBoxes[i]);
     }
 
-    static const char *sWindows[] = {"W_bgP_00"};
     for (int i = 0; i < 1; i++) {
         mpWindow[i] = mLyt.getWindow(sWindows[i]);
         mpSizeBox[i] = mLyt.getSizeBoxInWindow(sWindows[i]);

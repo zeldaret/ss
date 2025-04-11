@@ -113,6 +113,8 @@ static const char *sTextBoxes[] = {
     "T_zBtnS_00",
 };
 
+static const char *sWindows[] = {"W_bgP_00"};
+
 bool dLytMeterZBtn_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setResAcc(resAcc);
     mLyt.build("nunBtn_01.brlyt", nullptr);
@@ -129,7 +131,6 @@ bool dLytMeterZBtn_c::build(d2d::ResAccIf_c *resAcc) {
         mpTextBoxes[i] = mLyt.getTextBox(sTextBoxes[i]);
     }
 
-    static const char *sWindows[] = {"W_bgP_00"};
     for (int i = 0; i < 1; i++) {
         mpWindow[i] = mLyt.getWindow(sWindows[i]);
         mpSizeBox[i] = mLyt.getSizeBoxInWindow(sWindows[i]);
@@ -140,7 +141,7 @@ bool dLytMeterZBtn_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x1B4 = 0x5E;
     field_0x1C4 = false;
     field_0x1B8 = true;
-    mpOwnerPane = 0;
+    mpOwnerPane = nullptr;
 
     setMessage(0x5E);
     field_0x1C5 = 0;

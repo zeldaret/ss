@@ -377,7 +377,7 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     for (int i = 0; i < 7; i++) {
         mAnmGroups[33].setFrame(i);
         mLyt.calc();
-        mPosArray2[i] = mLyt.findPane("N_rupy_00")->GetTranslate();
+        mPosArray2[i].copyFrom(mLyt.findPane("N_rupy_00")->GetTranslate());
     }
 
     mAnmGroups[33].setAnimEnable(false);
@@ -431,16 +431,16 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
         mpKakeraKey = nullptr;
     }
 
-    if (!dStageMgr_c::GetInstance()->isAreaTypeDungeon() || dScGame_c::currentSpawnInfo.stageName == "F100_1" ||
-    dScGame_c::currentSpawnInfo.stageName == "F103_1") {
-        mpBossKey = nullptr;
-    } else {
+    if (dStageMgr_c::GetInstance()->isAreaTypeDungeon() && !(dScGame_c::currentSpawnInfo.stageName == "F100_1") &&
+        !(dScGame_c::currentSpawnInfo.stageName == "F103_1")) {
         mpBossKey = new dLytMeterBossKey_c();
         mpBossKey->build(resAcc);
+    } else {
+        mpBossKey = nullptr;
     }
 
-    if (dStageMgr_c::GetInstance()->isAreaTypeDungeon() &&
-        (!(dScGame_c::currentSpawnInfo.stageName == "F100_1") && !(dScGame_c::currentSpawnInfo.stageName == "F103_1")) ||
+    if (dStageMgr_c::GetInstance()->isAreaTypeDungeon() && (!(dScGame_c::currentSpawnInfo.stageName == "F100_1") &&
+                                                            !(dScGame_c::currentSpawnInfo.stageName == "F103_1")) ||
         dScGame_c::currentSpawnInfo.stageName == "F302" || dScGame_c::currentSpawnInfo.stageName == "F302") {
         mpSmallKey = new dLytMeterSmallKey_c();
         mpSmallKey->build(resAcc);
@@ -462,7 +462,6 @@ bool dLytMeter_c::remove() {
         mAnmGroups[i].remove();
     }
 
-    
     for (d2d::SubPaneList::Iterator it = mMeters.GetBeginIter(); it != mMeters.GetEndIter(); ++it) {
         d2d::dSubPane *m = it->mpLytPane;
         if (m != nullptr) {
@@ -547,7 +546,6 @@ bool dLytMeter_c::remove() {
         delete mpDrink;
         mpDrink = nullptr;
     }
-
 
     return true;
 }
@@ -645,7 +643,6 @@ bool dLytMeterContainer_c::remove() {
         mpDoButtonRelated->remove();
         delete mpDoButtonRelated;
         mpDoButtonRelated = nullptr;
-
     }
     mMeter.remove();
     if (mpEventSkip != nullptr) {

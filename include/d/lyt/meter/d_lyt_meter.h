@@ -57,6 +57,10 @@ public:
         return field_0x1377E;
     }
 
+    dLytMeterNunStk_c *getNunStk() {
+        return &mNunStk;
+    }
+
     /* 0x00004 */ d2d::ResAccIf_c mResAcc;
     /* 0x00374 */ d2d::LytBase_c mLyt;
     /* 0x00404 */ d2d::AnmGroup_c mAnmGroups[34];
