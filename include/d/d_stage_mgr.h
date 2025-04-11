@@ -121,6 +121,10 @@ public:
         return &mFader;
     }
 
+    bool isInLastBoss() const {
+        return mIsInLastBoss;
+    }
+
 private:
     static void lastExecuteCallback();
 
@@ -165,6 +169,12 @@ private:
 
     /* 0x88A0 */ u32 field_0x88A0;
     /* 0x88A4 */ SizedString<16> mDemoName;
+    /* 0x88B4 */ u8 _0x88B4[0x88BC - 0x88B4];
     /* 0x88BC */ bool field_0x88BC;
+    /* 0x88BD */ u8 field_0x88BD;
+    /* 0x88BE */ u8 field_0x88BE;
+    /* 0x88BF */ u8 field_0x88BF;
+    /* 0x88C0 */ u8 field_0x88C0;
+    /* 0x88C1 */ bool mIsInLastBoss;
 };
 #endif

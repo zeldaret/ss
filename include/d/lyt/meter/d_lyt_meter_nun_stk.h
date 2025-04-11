@@ -47,7 +47,7 @@ private:
     /* 0x170 */ s32 field_0x170;
     /* 0x174 */ s32 field_0x174;
     /* 0x178 */ BOOL field_0x178;
-    /* 0x17C */ s32 field_0x17C;
+    /* 0x17C */ s32 mDisplayedAction;
     /* 0x180 */ s32 mOnDelay;
     /* 0x184 */ bool field_0x184;
     /* 0x185 */ u8 field_0x185;

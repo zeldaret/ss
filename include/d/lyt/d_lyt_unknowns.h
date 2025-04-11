@@ -35,6 +35,8 @@ public:
         DO_BUTTON_NUN_STK = 4,
         DO_BUTTON_REMOCON_BG = 5,
         DO_BUTTON_NUN_BG = 6,
+
+        DO_BUTTON_PLUS = 11,
     };
 
     static void set(DoButton_e button, Action_e value) {

@@ -382,7 +382,11 @@ d/lyt/meter/d_lyt_meter_item_select.cpp:
 d/lyt/meter/d_lyt_meter_plus_btn.cpp:
 	.text       start:0x800F35B0 end:0x800F4768
 	.ctors      start:0x804DB704 end:0x804DB708
+	.rodata     start:0x804E5F28 end:0x804E61A0
 	.data       start:0x80516A28 end:0x80516C90
+	.sdata      start:0x80572400 end:0x80572418
+	.sdata2     start:0x80579BF8 end:0x80579C08
+	.bss        start:0x805AB650 end:0x805AB750
 
 d/lyt/meter/d_lyt_meter_minus_btn.cpp:
 	.text       start:0x800F4770 end:0x800F8D98
