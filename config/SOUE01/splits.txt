@@ -325,7 +325,10 @@ d/lyt/meter/d_lyt_meter_a_btn.cpp:
 d/lyt/meter/d_lyt_meter_z_btn.cpp:
 	.text       start:0x800E1190 end:0x800E2238
 	.ctors      start:0x804DB6E8 end:0x804DB6EC
+	.rodata     start:0x804E5298 end:0x804E5510
 	.data       start:0x80513F38 end:0x80514188
+	.sdata      start:0x80572398 end:0x805723B8
+	.sdata2     start:0x80579B70 end:0x80579B80
 	.bss        start:0x805AA350 end:0x805AA450
 
 d/lyt/meter/d_lyt_meter_key.cpp:

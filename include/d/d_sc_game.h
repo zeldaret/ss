@@ -6,6 +6,7 @@
 #include "d/d_dylink.h"
 #include "d/d_fader.h"
 #include "d/d_scene.h"
+#include "d/d_camera.h"
 #include "egg/gfx/eggScreen.h"
 #include "f/f_profile_name.h"
 #include "m/m2d.h"
@@ -189,6 +190,9 @@ public:
     static void setReloaderType(u8 type) {
         sReloaderType = type;
     }
+
+    static dCamera_c *getCamera(s32 idx);
+    static void setCamera(s32 idx, dCamera_c *);
 
 protected:
     static u32 sUpdateFrameCount;

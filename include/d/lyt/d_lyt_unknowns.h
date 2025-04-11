@@ -30,11 +30,16 @@ public:
     enum DoButton_e {
         DO_BUTTON_A = 0,
         DO_BUTTON_B = 1,
+
+        DO_BUTTON_Z = 3,
     };
 
-    void set(DoButton_e button, Action_e value) {
-        field_0x04[button] = value;
-        field_0x34[button] = true;
+    static void set(DoButton_e button, Action_e value) {
+        LytDoButtonRelated *b = sInstance;
+        if (b != nullptr) {
+            b->field_0x04[button] = value;
+            b->field_0x34[button] = true;
+        }
     }
 
     static Action_e get(DoButton_e button) {

@@ -209,16 +209,14 @@ bool dLytMeterABtn_c::execute() {
         if (*mStateMgr.getStateID() == StateID_Off) {
             mAnm[A_BTN_ANIM_INPUT].setToEnd2();
         }
-        if (LytDoButtonRelated::GetInstance() != nullptr) {
-            LytDoButtonRelated::GetInstance()->set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::DO_NONE);
-        }
+
+        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::DO_NONE);
+
         return true;
     }
 
     if (dLytMeterContainer_c::GetInstance()->getMeterField_0x13750() == 0) {
-        if (LytDoButtonRelated::GetInstance() != nullptr) {
-            LytDoButtonRelated::GetInstance()->set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::DO_NONE);
-        }
+        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::DO_NONE);
 
         if (field_0x1BC != LytDoButtonRelated::DO_NONE) {
             field_0x1BC = LytDoButtonRelated::DO_NONE;
@@ -233,9 +231,8 @@ bool dLytMeterABtn_c::execute() {
         dLytMeterContainer_c::GetMeter()->getField_0x1377E() == 0 && !checkIsInSkykeepPuzzle() &&
         LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_A) == LytDoButtonRelated::DO_NONE) {
         field_0x1C9 = 0;
-        if (LytDoButtonRelated::GetInstance() != nullptr) {
-            LytDoButtonRelated::GetInstance()->set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::DO_NONE);
-        }
+
+        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::DO_NONE);
     } else {
         field_0x1C9 = 1;
     }
@@ -261,9 +258,7 @@ bool dLytMeterABtn_c::execute() {
             LytDoButtonRelated::Action_e action = LytDoButtonRelated::convertDoButton(dLytDobutton_c::getField0x47C());
             if (action >= 0) {
                 state = true;
-                if (LytDoButtonRelated::GetInstance() != nullptr) {
-                    LytDoButtonRelated::GetInstance()->set(LytDoButtonRelated::DO_BUTTON_A, action);
-                }
+                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, action);
             }
             field_0x1CA = 0;
             break;
