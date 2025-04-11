@@ -65,7 +65,7 @@ public:
     ChkCameraPoint(const mVec3_c &, const mVec3_c &, mVec3_c &, dAcObjBase_c *, dAcObjBase_c *, dAcObjBase_c *, f32);
 
     bool ChkCo(const mVec3_c &, dAcObjBase_c *);
-    bool fn_80357c90(const mVec3_c &, const mVec3_c &, u32, UNKTYPE **);
+    bool fn_80357c90(const mVec3_c &, const mVec3_c &, u32, cCcD_ShapeAttr **, f32);
     void Set(cCcD_Obj *);
     void MoveAfterCheck();
     void RemoveDeadObj();

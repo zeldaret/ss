@@ -194,8 +194,8 @@ void dLytCommonIconMaterialPart1_c::setOff() {
 }
 
 bool dLytCommonIconMaterialPart1_c::isCursorOver() const {
-    d2d::dLytStructD *d = dCsBase_c::GetInstance()->getUnk();
-    if (d != nullptr && d->getType() == 'lyt ' && d->field_0x24 == mpBounding) {
+    dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
+    if (d != nullptr && d->getType() == 'lyt ' && static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBounding) {
         return true;
     }
     return false;
@@ -393,8 +393,8 @@ void dLytCommonIconMaterialPart2_c::setOff() {
 }
 
 bool dLytCommonIconMaterialPart2_c::isCursorOver() const {
-    d2d::dLytStructD *d = dCsBase_c::GetInstance()->getUnk();
-    if (d != nullptr && d->getType() == 'lyt ' && d->field_0x24 == mpBounding) {
+    dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
+    if (d != nullptr && d->getType() == 'lyt ' && static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBounding) {
         return true;
     }
     return false;

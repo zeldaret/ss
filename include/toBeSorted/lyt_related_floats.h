@@ -18,4 +18,24 @@ inline s32 get_8057511C() {
     return lbl_8057511C;
 }
 
+extern "C" f32 lbl_8057515C;
+inline f32 get_8057515C() {
+    return lbl_8057515C;
+}
+
+extern "C" f32 lbl_80575148;
+inline f32 get_80575148() {
+    return lbl_80575148;
+}
+
+extern "C" f32 lbl_8057519C;
+inline f32 get_8057519C() {
+    return lbl_8057519C;
+}
+
+extern "C" f32 lbl_80575190;
+inline f32 get_80575190() {
+    return lbl_80575190;
+}
+
 #endif

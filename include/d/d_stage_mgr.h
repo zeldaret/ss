@@ -10,6 +10,7 @@
 #include "egg/gfx/eggScreen.h"
 #include "m/m_allocator.h"
 #include "m/m_dvd.h"
+#include "nw4r/g3d/g3d_camera.h"
 #include "s/s_FPhase.h"
 #include "s/s_State.hpp"
 #include "sized_string.h"
@@ -113,6 +114,8 @@ public:
     void addStageArcn(const char *path);
     void addObjId(u16 id);
     void addActorId(u16 actorId);
+
+    nw4r::g3d::Camera getCamera(s32 idx);
 
     dFader_c *getFader() {
         return &mFader;

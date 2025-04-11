@@ -2,8 +2,8 @@
 #define D_LYT_COMMON_ICON_MATERIAL_H
 
 #include "common.h"
+#include "d/d_cursor_hit_check.h"
 #include "d/lyt/d2d.h"
-#include "d/lyt/d_structd.h"
 #include "d/lyt/d_textbox.h"
 #include "nw4r/lyt/lyt_bounding.h"
 #include "s/s_State.hpp"
@@ -68,7 +68,7 @@ private:
     /* 0x098 */ d2d::AnmGroup_c mAnm[6];
     /* 0x218 */ dTextBox_c *mpTextBoxes[2];
     /* 0x220 */ nw4r::lyt::Bounding *mpBounding;
-    /* 0x224 */ d2d::dLytStructD mCursor;
+    /* 0x224 */ dCursorHitCheckLyt_c mCursor;
     /* 0x24C */ u8 mItem;
     /* 0x24D */ u8 _0x24D[0x254 - 0x24D];
     /* 0x254 */ wchar_t mNumberBuf[16];
@@ -129,7 +129,7 @@ private:
     /* 0x098 */ d2d::AnmGroup_c mAnm[6];
     /* 0x218 */ dTextBox_c *mpTextBoxes[2];
     /* 0x220 */ nw4r::lyt::Bounding *mpBounding;
-    /* 0x224 */ d2d::dLytStructD mCursor;
+    /* 0x224 */ dCursorHitCheckLyt_c mCursor;
     /* 0x24C */ u8 mItem;
     /* 0x24D */ u8 _0x24D[0x254 - 0x24D];
     /* 0x254 */ wchar_t mNumberBuf[16];
@@ -182,7 +182,6 @@ public:
 
     bool isCursorOver() const;
     void setVisible(bool visible);
-
 
     const nw4r::lyt::Bounding *getBounding() const;
 

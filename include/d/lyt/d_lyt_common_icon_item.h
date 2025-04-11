@@ -2,8 +2,8 @@
 #define D_LYT_COMMON_ICON_ITEM_H
 
 #include "common.h"
+#include "d/d_cursor_hit_check.h"
 #include "d/lyt/d2d.h"
-#include "d/lyt/d_structd.h"
 #include "d/lyt/d_textbox.h"
 #include "nw4r/lyt/lyt_bounding.h"
 #include "s/s_State.hpp"
@@ -70,7 +70,7 @@ private:
     /* 0x098 */ d2d::AnmGroup_c mAnm[7];
     /* 0x258 */ dTextBox_c *mpTextBoxes[2];
     /* 0x260 */ nw4r::lyt::Bounding *mpBounding;
-    /* 0x264 */ d2d::dLytStructD mStructD;
+    /* 0x264 */ dCursorHitCheckLyt_c mCsHitCheck;
     /* 0x28C */ u8 mItem;
     /* 0x28D */ u8 mColor;
     /* 0x28E */ u8 _0x28E[0x294 - 0x28E];
@@ -148,7 +148,7 @@ private:
     /* 0x098 */ d2d::AnmGroup_c mAnm[10];
     /* 0x318 */ dTextBox_c *mpTextBoxes[2];
     /* 0x320 */ nw4r::lyt::Bounding *mpBounding;
-    /* 0x324 */ d2d::dLytStructD structD;
+    /* 0x324 */ dCursorHitCheckLyt_c structD;
     /* 0x34C */ u8 mItem;
     /* 0x34D */ u8 mColor;
     /* 0x350 */ u32 mNumber;
@@ -200,7 +200,7 @@ private:
     /* 0x004 */ d2d::dLytSub mLyt;
     /* 0x098 */ d2d::AnmGroup_c mAnm[3];
     /* 0x158 */ nw4r::lyt::Bounding *mpBounding;
-    /* 0x15C */ d2d::dLytStructD structD;
+    /* 0x15C */ dCursorHitCheckLyt_c structD;
     /* 0x184 */ u8 mItem;
     /* 0x185 */ bool mSize;
     /* 0x186 */ bool mBocoburinLocked;

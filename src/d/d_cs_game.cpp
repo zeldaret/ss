@@ -1,8 +1,8 @@
 #include "d/d_cs_game.h"
 
 #include "d/d_cs_base.h"
+#include "d/d_cursor_hit_check.h"
 #include "d/lyt/d2d.h"
-#include "d/lyt/d_structd.h"
 #include "f/f_base.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/small_sound_mgr.h"
@@ -148,8 +148,8 @@ int dCsGame_c::create() {
     mCursorType = 0;
 
     mCursor.setField0x9A0(0);
-    mStructC.field_0x10 = 2;
-    d2d::dLytStructDList::GetInstance()->appendToList1(&mStructC);
+    mCursorIf.setCursorMask(2);
+    dCsMgr_c::GetInstance()->registCursor(&mCursorIf);
     dCsBase_c::GetInstance()->setField703(false);
     return SUCCEEDED;
 }
@@ -158,7 +158,7 @@ int dCsGame_c::doDelete() {
     mCursor.remove();
     mLyt2.dCsGameLytBase_0x14();
     mLyt1.dCsGameLytBase_0x14();
-    d2d::dLytStructDList::GetInstance()->removeFromList1(&mStructC);
+    dCsMgr_c::GetInstance()->unregistCursor(&mCursorIf);
     mCursorResAcc.detach();
     mMain2DResAcc.detach();
     return SUCCEEDED;

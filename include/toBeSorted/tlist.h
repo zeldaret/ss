@@ -103,7 +103,7 @@ public:
     static T *GetPtrFromNode(TNode *pN) {
         return (T *)((u8 *)pN - offset);
     }
-    void insert(T *value) {
+    void append(T *value) {
         TNode *node = GetNodeFromPtr(value);
         if (GetPtrFromNode(&mStartEnd) == mStartEnd.mpNext) {
             node->mpNext = GetPtrFromNode(&mStartEnd);
@@ -118,6 +118,36 @@ public:
             mStartEnd.mpPrev = value;
             mCount++;
         }
+    }
+
+    void prepend(T *value) {
+        TNode *node = GetNodeFromPtr(value);
+        if (GetPtrFromNode(&mStartEnd) == mStartEnd.mpNext) {
+            node->mpNext = GetPtrFromNode(&mStartEnd);
+            node->mpPrev = GetPtrFromNode(&mStartEnd);
+            mStartEnd.mpNext = value;
+            mStartEnd.mpPrev = value;
+            mCount++;
+        } else {
+            node->mpPrev = GetPtrFromNode(&mStartEnd);
+            node->mpNext = mStartEnd.mpNext;
+            GetNodeFromPtr(mStartEnd.mpNext)->mpPrev = value;
+            mStartEnd.mpNext = value;
+            mCount++;
+        }
+    }
+
+    void insertBefore(T* existing, T *value) {
+        TNode *node = GetNodeFromPtr(value);
+        TNode *existingNode = GetNodeFromPtr(existing);
+
+        T* itPrev = existingNode->mpPrev;
+        node->mpPrev = itPrev;
+        node->mpNext = existing;
+        GetNodeFromPtr(itPrev)->mpNext = value;
+        existingNode->mpPrev = value;
+
+        mCount++;
     }
 
     void remove(T *value) {

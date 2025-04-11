@@ -1143,7 +1143,7 @@ void dBgS::InitMapParts() {
 }
 
 void dBgS::AppendMapSegment(MapLineSegment *pSeg) {
-    mList_0x388C.insert(pSeg);
+    mList_0x388C.append(pSeg);
 }
 
 void dBgS::RemoveMapSegment(MapLineSegment *pSeg) {

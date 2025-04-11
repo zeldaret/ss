@@ -1,7 +1,7 @@
 #include "d/lyt/d_lyt_common_arrow.h"
 
 #include "d/d_cs_base.h"
-#include "d/lyt/d_structd.h"
+#include "d/d_cursor_hit_check.h"
 #include "rvl/MTX/mtx.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/small_sound_mgr.h"
@@ -47,8 +47,8 @@ bool dLytCommonArrow_c::build() {
     for (int i = 0; i < 9; i++) {
         mAnmGroups[i].init(brlanMap[i].mFile, &mResAcc, mLytBase.getLayout(), brlanMap[i].mName);
     }
-    mStructD.fn_80065E70(mLytBase.getLayout()->GetRootPane(), 1, 0, 0);
-    d2d::dLytStructDList::GetInstance()->appendToList2(&mStructD);
+    mCsHitCheck.init(mLytBase.getLayout()->GetRootPane(), 1, 0, 0);
+    dCsMgr_c::GetInstance()->registCursorTarget(&mCsHitCheck);
     mBoundingL = mLytBase.findBounding("B_arrowL_00");
     mBoundingR = mLytBase.findBounding("B_arrowR_00");
     mStateMgr.changeState(StateID_None);
@@ -57,7 +57,7 @@ bool dLytCommonArrow_c::build() {
 }
 
 bool dLytCommonArrow_c::remove() {
-    d2d::dLytStructDList::GetInstance()->removeFromList2(&mStructD);
+    dCsMgr_c::GetInstance()->unregistCursorTarget(&mCsHitCheck);
     mLytBase.unbindAnims();
     for (int i = 0; i < 9; i++) {
         mAnmGroups[i].remove();
@@ -71,8 +71,8 @@ bool dLytCommonArrow_c::execute() {
         mAnmGroups[ANIM_LOOP].play();
     }
     mLytBase.calc();
-    mStructD.field_0x22 = 0;
-    mStructD.fn_80065F70();
+    mCsHitCheck.resetCachedHitboxes();
+    mCsHitCheck.execute();
     field_0x6BC = field_0x6B8;
     return true;
 }
@@ -153,11 +153,11 @@ void dLytCommonArrow_c::fn_80168880() {
         return;
     }
 
-    d2d::dLytStructD *thing = dCsBase_c::GetInstance()->getUnk();
-    if (thing != nullptr && thing->getType() == 'lyt ') {
-        if (thing->field_0x24 == mBoundingL) {
+    dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
+    if (d != nullptr && d->getType() == 'lyt ') {
+        if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mBoundingL) {
             i = 0;
-        } else if (thing->field_0x24 == mBoundingR) {
+        } else if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mBoundingR) {
             i = 1;
         }
     }

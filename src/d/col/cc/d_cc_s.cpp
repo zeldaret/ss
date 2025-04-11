@@ -106,7 +106,7 @@ bool dCcS::ChkCameraPoint(
 
 bool dCcS::ChkCo(const mVec3_c &, dAcObjBase_c *) {}
 
-bool dCcS::fn_80357c90(const mVec3_c &, const mVec3_c &, u32, UNKTYPE **) {}
+bool dCcS::fn_80357c90(const mVec3_c &, const mVec3_c &, u32, cCcD_ShapeAttr **, f32) {}
 
 void dCcS::Set(cCcD_Obj *) {}
 

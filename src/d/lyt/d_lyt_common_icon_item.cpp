@@ -2,8 +2,8 @@
 
 #include "common.h"
 #include "d/d_cs_base.h"
+#include "d/d_cursor_hit_check.h"
 #include "d/lyt/d_lyt_common_icon_item_maps.h"
-#include "d/lyt/d_structd.h"
 
 #include <cstring>
 
@@ -223,8 +223,8 @@ bool dLytCommonIconItemPart1_c::isDoneDeciding() const {
 }
 
 bool dLytCommonIconItemPart1_c::isCursorOver() const {
-    d2d::dLytStructD *d = dCsBase_c::GetInstance()->getUnk();
-    if (d != nullptr && d->getType() == 'lyt ' && d->field_0x24 == mpBounding) {
+    dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
+    if (d != nullptr && d->getType() == 'lyt ' && static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBounding) {
         return true;
     }
     return false;
@@ -556,8 +556,8 @@ bool dLytCommonIconItemPart2_c::isDoneDeciding() const {
 }
 
 bool dLytCommonIconItemPart2_c::isCursorOver() const {
-    d2d::dLytStructD *d = dCsBase_c::GetInstance()->getUnk();
-    if (d != nullptr && d->getType() == 'lyt ' && d->field_0x24 == mpBounding) {
+    dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
+    if (d != nullptr && d->getType() == 'lyt ' && static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBounding) {
         return true;
     }
     return false;
@@ -688,8 +688,8 @@ void dLytCommonIconItemPart3_c::realizeItem(u8 item) {
 }
 
 bool dLytCommonIconItemPart3_c::isCursorOver() const {
-    d2d::dLytStructD *d = dCsBase_c::GetInstance()->getUnk();
-    if (d != nullptr && d->getType() == 'lyt ' && d->field_0x24 == mpBounding) {
+    dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
+    if (d != nullptr && d->getType() == 'lyt ' && static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBounding) {
         return true;
     }
     return false;

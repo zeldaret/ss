@@ -1,8 +1,8 @@
 #ifndef LYT_PAUSE_DISP_00_H
 #define LYT_PAUSE_DISP_00_H
 
+#include "d/d_cursor_hit_check.h"
 #include "d/lyt/d2d.h"
-#include "d/lyt/d_structd.h"
 #include "d/lyt/d_lyt_common_icon_item.h"
 #include "s/s_State.hpp"
 
@@ -30,7 +30,7 @@ private:
     dLytCommonIconItem_c field_0x2050[0x18];
     /* 0xE110 */ d2d::SubPaneList mSubpanes;
     d2d::SubPaneListNode field_0xE11C[0x18];
-    d2d::dLytStructD field_0xE29C;
+    dCursorHitCheckLyt_c field_0xE29C;
 };
 
 #endif
