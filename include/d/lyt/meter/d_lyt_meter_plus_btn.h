@@ -37,6 +37,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterPlusBtn_c, ToUnuse);
     STATE_FUNC_DECLARE(dLytMeterPlusBtn_c, Unuse);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterPlusBtn_c);
+
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterPlusBtn_c);
     /* 0x040 */ d2d::dLytSub mLyt;
     /* 0x0D8 */ d2d::AnmGroup_c mAnm[3];

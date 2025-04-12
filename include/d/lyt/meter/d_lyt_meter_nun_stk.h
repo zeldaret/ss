@@ -35,6 +35,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterNunStk_c, Active);
     STATE_FUNC_DECLARE(dLytMeterNunStk_c, Off);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterNunStk_c);
+
     /* 0x008 */ UI_STATE_MGR_DECLARE(dLytMeterNunStk_c);
     /* 0x044 */ d2d::dLytSub mLyt;
     /* 0x0D8 */ d2d::AnmGroup_c mAnm[2];

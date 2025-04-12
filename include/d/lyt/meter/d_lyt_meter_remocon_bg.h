@@ -28,6 +28,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterRemoconBg_c, Active);
     STATE_FUNC_DECLARE(dLytMeterRemoconBg_c, Off);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterRemoconBg_c);
+
     /* 0x08 */ UI_STATE_MGR_DECLARE(dLytMeterRemoconBg_c);
     /* 0x44 */ d2d::dLytSub mLyt;
     /* 0xD8 */ nw4r::lyt::Pane *mpPane[1];

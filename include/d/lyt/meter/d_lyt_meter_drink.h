@@ -6,7 +6,6 @@
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 // Size 0x54
 class dLytMeterDrinkParts_c {
@@ -46,6 +45,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterDrinkParts_c, Visible);
     STATE_FUNC_DECLARE(dLytMeterDrinkParts_c, Out);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterDrinkParts_c);
+
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterDrinkParts_c);
     /* 0x03C */ d2d::AnmGroup_c *mAnmGroups[3];
     /* 0x048 */ s32 field_0x48;
@@ -81,6 +82,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterDrink_c, Wait);
     STATE_FUNC_DECLARE(dLytMeterDrink_c, Move);
     STATE_FUNC_DECLARE(dLytMeterDrink_c, Out);
+
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterDrink_c);
 
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterDrink_c);
     /* 0x040 */ d2d::dLytSub mLyt;

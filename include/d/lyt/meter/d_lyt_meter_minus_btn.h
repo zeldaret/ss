@@ -32,7 +32,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterMinusBtnMenuIcon_c, Select);
     STATE_FUNC_DECLARE(dLytMeterMinusBtnMenuIcon_c, Off);
 
-private:
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterMinusBtnMenuIcon_c);
+
     /* 0x04 */ UI_STATE_MGR_DECLARE(dLytMeterMinusBtnMenuIcon_c);
 
     /* 0x40 */ d2d::AnmGroup_c *mpAnm;
@@ -62,6 +63,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterMinusBtnBlink_c, Select);
     STATE_FUNC_DECLARE(dLytMeterMinusBtnBlink_c, Off);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterMinusBtnBlink_c);
+
     /* 0x00 */ UI_STATE_MGR_DECLARE(dLytMeterMinusBtnBlink_c);
 
     /* 0x3C */ d2d::AnmGroup_c *mpAnm;
@@ -90,6 +93,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterMinusBtnText_c, On);
     STATE_FUNC_DECLARE(dLytMeterMinusBtnText_c, Select);
     STATE_FUNC_DECLARE(dLytMeterMinusBtnText_c, Off);
+
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterMinusBtnText_c);
 
     /* 0x00 */ UI_STATE_MGR_DECLARE(dLytMeterMinusBtnText_c);
 
@@ -141,6 +146,9 @@ private:
     STATE_FUNC_DECLARE(dLytMeterMinusBtn_c, Unuse);
     STATE_FUNC_DECLARE(dLytMeterMinusBtn_c, DemoMove);
     STATE_FUNC_DECLARE(dLytMeterMinusBtn_c, DemoOut);
+
+    STATE_MGR_DECLARE_UTIL_ISSTATE(dLytMeterMinusBtn_c);
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterMinusBtn_c);
 
     /* 0x0008 */ dLytMeterMinusBtnMenuIcon_c mIcon[8];
     /* 0x0244 */ dLytMeterMinusBtnBlink_c mBlink;

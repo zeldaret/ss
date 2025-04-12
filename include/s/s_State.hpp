@@ -34,6 +34,16 @@
 
 #define STATE_MGR(class_name) sFStateMgr_c<class_name, sStateMethodUsr_FI_c>
 
+#define STATE_MGR_DEFINE_UTIL_CHANGESTATE(class_name)                                                                 \
+    void changeState(const sStateIDIf_c &value) {                                                                 \
+        mStateMgr.changeState(value);                                                                                  \
+    }
+
+#define STATE_MGR_DECLARE_UTIL_ISSTATE(class_name)                                                                     \
+    bool isState(const sFStateID_c<class_name> &value) const {                                                         \
+        return *mStateMgr.getStateID() == value;                                                                       \
+    }
+
 // TODO this is probably not the whole solution.
 // The problems with this approach are:
 // * You can't define the same state name for multiple files in the same TU due to baseID_ symbol clash.
