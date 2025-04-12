@@ -400,7 +400,11 @@ d/lyt/meter/d_lyt_meter_minus_btn.cpp:
 d/lyt/meter/d_lyt_meter_cross_btn.cpp:
 	.text       start:0x800F8DA0 end:0x800FAFC8
 	.ctors      start:0x804DB70C end:0x804DB710
+	.rodata     start:0x804E62A8 end:0x804E6568
 	.data       start:0x80517818 end:0x80517CE0
+	.sdata      start:0x80572480 end:0x805724A8
+	.sdata2     start:0x80579C18 end:0x80579C38
+	.bss        start:0x805ABC90 end:0x805ABE90
 
 d/lyt/meter/d_lyt_meter_dowsing.cpp:
 	.text       start:0x800FAFD0 end:0x801003E8

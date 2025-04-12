@@ -36,6 +36,10 @@ public:
         return field_0x329;
     }
 
+    s32 getField_0x32C() const {
+        return field_0x32C;
+    }
+
     void setField_0x329(bool v) {
         field_0x329 = v;
     }
@@ -107,7 +111,9 @@ private:
     /* 0x329 */ bool field_0x329;
     /* 0x32A */ bool field_0x32A;
 
-    /* 0x32B */ u8 _0x32B[0x334 - 0x32B];
+    /* 0x32B */ u8 field_0x32B;
+    /* 0x32C */ s32 field_0x32C;
+    /* 0x330 */ u8 _0x330[0x334 - 0x330];
 
     /* 0x334 */ u32 mMinigameResultPoints;
     /* 0x338 */ u32 mMinigameTime;

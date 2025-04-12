@@ -147,7 +147,7 @@ private:
     STATE_FUNC_DECLARE(dLytMeterMinusBtn_c, DemoMove);
     STATE_FUNC_DECLARE(dLytMeterMinusBtn_c, DemoOut);
 
-    STATE_MGR_DECLARE_UTIL_ISSTATE(dLytMeterMinusBtn_c);
+    STATE_MGR_DEFINE_UTIL_ISSTATE(dLytMeterMinusBtn_c);
     STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterMinusBtn_c);
 
     /* 0x0008 */ dLytMeterMinusBtnMenuIcon_c mIcon[8];

@@ -5,6 +5,7 @@
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_itembase.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "m/m3d/m_anmmatclr.h"
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
@@ -248,6 +249,12 @@ public:
     /* 0x36C */ int mCurrentAction; // TODO (Document Enum)
     /* 0x370 */ u8 _370[0x3C8 - 0x370];
     /* 0x3C8 */ nw4r::g3d::ResFile mSwordRes;
+    /* 0x3CC */ u8 _0x3CC[0x5B4 - 0x3CC];
+    /* 0x5B4 */ m3d::anmMatClr_c mAnmMatClr;
+
+    f32 getAnmMatClrFrame() const {
+        return mAnmMatClr.getFrame(0);
+    }
 
     inline bool checkFlags0x340(u32 mask) const {
         return (someFlags_0x340 & mask) != 0;

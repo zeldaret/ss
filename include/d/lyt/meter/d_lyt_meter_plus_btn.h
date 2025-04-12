@@ -39,8 +39,8 @@ private:
 
     STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterPlusBtn_c);
 
-    /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterPlusBtn_c);
-    /* 0x040 */ d2d::dLytSub mLyt;
+    /* 0x00C */ UI_STATE_MGR_DECLARE(dLytMeterPlusBtn_c);
+    /* 0x044 */ d2d::dLytSub mLyt;
     /* 0x0D8 */ d2d::AnmGroup_c mAnm[3];
     /* 0x198 */ nw4r::lyt::Pane *mpPane[1];
     /* 0x19C */ nw4r::lyt::Pane *mpOwnerPane;

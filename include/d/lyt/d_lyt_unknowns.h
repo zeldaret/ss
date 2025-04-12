@@ -36,6 +36,11 @@ public:
         DO_BUTTON_REMOCON_BG = 5,
         DO_BUTTON_NUN_BG = 6,
 
+        DO_BUTTON_CROSS_T = 7,
+        DO_BUTTON_CROSS_D = 8,
+        DO_BUTTON_CROSS_L = 9,
+        DO_BUTTON_CROSS_R = 10,
+
         DO_BUTTON_PLUS = 11,
     };
 
@@ -73,6 +78,9 @@ public:
     }
 
     static Action_e convertDoButton(s32);
+
+    static void fn_8010EC10(Action_e, bool);
+    static void fn_8010ED50(Action_e, bool);
     
 private:
 

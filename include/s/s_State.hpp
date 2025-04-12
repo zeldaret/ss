@@ -39,7 +39,7 @@
         mStateMgr.changeState(value);                                                                                  \
     }
 
-#define STATE_MGR_DECLARE_UTIL_ISSTATE(class_name)                                                                     \
+#define STATE_MGR_DEFINE_UTIL_ISSTATE(class_name)                                                                     \
     bool isState(const sFStateID_c<class_name> &value) const {                                                         \
         return *mStateMgr.getStateID() == value;                                                                       \
     }
