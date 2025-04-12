@@ -92,7 +92,6 @@ void dLytMeterItemSelectIcon_c::finalizeState_On() {}
 
 void dLytMeterItemSelectIcon_c::initializeState_Select() {}
 void dLytMeterItemSelectIcon_c::executeState_Select() {
-    // Why is this outside of the block?
     mpAnm->setBackwardsOnce();
     mpAnm->setToStart();
     mpAnm->setAnimEnable(true);

@@ -4,6 +4,7 @@
 #include "d/d_sc_game.h"
 #include "d/d_sc_title.h"
 #include "d/d_stage_mgr.h"
+#include "d/flag/storyflag_manager.h"
 #include "d/lyt/d_lyt_area_caption.h"
 #include "d/lyt/d_lyt_meter_configuration.h"
 #include "d/lyt/d_window.h"
@@ -278,6 +279,14 @@ void floats() {
 void floats2() {
     5.0f;
     3.0f;
+}
+
+void dLytMeter_c::setUiMode(u16 value) const {
+    StoryflagManager::sInstance->setFlagOrCounterToValue(840, value);
+}
+
+u8 dLytMeter_c::getUiMode() {
+    return StoryflagManager::sInstance->getFlag(840);
 }
 
 #pragma dont_inline on

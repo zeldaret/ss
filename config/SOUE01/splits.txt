@@ -391,7 +391,11 @@ d/lyt/meter/d_lyt_meter_plus_btn.cpp:
 d/lyt/meter/d_lyt_meter_minus_btn.cpp:
 	.text       start:0x800F4770 end:0x800F8D98
 	.ctors      start:0x804DB708 end:0x804DB70C
+	.rodata     start:0x804E61A0 end:0x804E62A8
 	.data       start:0x80516C90 end:0x80517818
+	.sdata      start:0x80572418 end:0x80572480
+	.sdata2     start:0x80579C08 end:0x80579C18
+	.bss        start:0x805AB750 end:0x805ABC90
 
 d/lyt/meter/d_lyt_meter_cross_btn.cpp:
 	.text       start:0x800F8DA0 end:0x800FAFC8
@@ -687,6 +691,9 @@ d/lyt/d_lyt_save_msg_window.cpp:
 	.text       start:0x80164F90 end:0x80166968
 	.ctors      start:0x804DB7A8 end:0x804DB7AC
 
+d/lyt/d_lyt_util_items.cpp:
+	.text       start:0x80166970 end:0x80167FD4
+
 d/lyt/d_lyt_common_arrow.cpp:
 	.text       start:0x80167FE0 end:0x801695E8
 	.ctors      start:0x804DB7AC end:0x804DB7B0
@@ -778,6 +785,9 @@ d/a/d_a_door_base.cpp:
 
 d/lyt/d_lyt_map_popup.cpp:
 	.text       start:0x801792D0 end:0x80189F9C
+
+d/d_pouch.cpp:
+	.text       start:0x80189FA0 end:0x8018B4A4
 
 d/a/d_a_fish_mgr_base.cpp:
 	.text       start:0x8018B880 end:0x8018BFC8

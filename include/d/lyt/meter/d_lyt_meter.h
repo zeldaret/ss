@@ -49,8 +49,15 @@ public:
 
     bool isSilentRealm();
 
+    void setUiMode(u16 value) const;
+    u8 getUiMode();
+
     u8 getField_0x13792() const {
         return field_0x13792;
+    }
+
+    u8 getField_0x13793() const {
+        return field_0x13793;
     }
 
     u8 getField_0x1377E() const {
@@ -109,7 +116,8 @@ public:
     /* 0x1377E */ u8 field_0x1377E;
     /* 0x1377F */ u8 field_0x1375F[0x13792 - 0x1377F];
     /* 0x13792 */ u8 field_0x13792;
-    /* 0x13793 */ u8 field_0x13793[0x137B4 - 0x13793];
+    /* 0x13793 */ u8 field_0x13793;
+    /* 0x13794 */ u8 field_0x13794[0x137B4 - 0x13794];
     /* 0x137B4 */ mVec3_c mPos3;
     /* 0x137C0 */ u32 field_0x137C0;
 };
@@ -166,6 +174,10 @@ public:
 
     bool checkAllFlags(u32 mask) const {
         return (mFlags & mask) == mask;
+    }
+
+    void clearFlags(u32 mask) {
+        mFlags = mFlags & ~mask;
     }
 
     static s32 getCrossBtn0x7BF8() {
