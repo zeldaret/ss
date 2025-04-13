@@ -1804,6 +1804,7 @@ bool dLytMeterItemSelect_c::remove() {
         if (!it->mpLytPane->LytMeter0x24()) {
             continue;
         }
+        // @bug checking nullptr after invoking virtual function on it
         d2d::dSubPane *subPane = it->mpLytPane;
         if (subPane != nullptr) {
             nw4r::lyt::Pane *parent = subPane->getPane()->GetParent();
@@ -2708,7 +2709,7 @@ s32 dLytMeterItemSelect_c::getBaseItemLytIndexforInternalId(s32 idx) const {
         return sInternalItemToLytIndex[field_0x5797];
     }
 
-    return LYT_CMN_ItemNone;
+    return LYT_CMN_ItemInvalid;
 }
 
 extern "C" bool checkIsInSkykeepPuzzle();

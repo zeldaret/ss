@@ -397,7 +397,7 @@ config.libs = [
             Object(Matching, "d/lyt/meter/d_lyt_meter_plus_btn.cpp"),
             Object(Matching, "d/lyt/meter/d_lyt_meter_minus_btn.cpp"),
             Object(Matching, "d/lyt/meter/d_lyt_meter_cross_btn.cpp"),
-            Object(NonMatching, "d/lyt/meter/d_lyt_meter_dowsing.cpp"),
+            Object(Matching, "d/lyt/meter/d_lyt_meter_dowsing.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_rupy.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_ganbari_gauge.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_event_skip.cpp"),

@@ -43,7 +43,8 @@ public:
     bool build(d2d::ResAccIf_c *resAcc);
     bool remove();
     bool draw();
-
+    
+    bool fn_800D5380(u8);
     bool fn_800D5650();
     bool fn_800D5680();
 
@@ -62,6 +63,10 @@ public:
 
     u8 getField_0x1377E() const {
         return field_0x1377E;
+    }
+
+    u8 getField_0x1377F() const {
+        return field_0x1377F;
     }
 
     dLytMeterNunStk_c *getNunStk() {
@@ -112,12 +117,17 @@ public:
     /* 0x13750 */ s32 field_0x13750;
     /* 0x13754 */ u8 field_0x13754[0x13770 - 0x13754];
     /* 0x13770 */ u8 field_0x13770;
-    /* 0x13771 */ u8 field_0x13771[0x1377E - 0x13771];
+    /* 0x13771 */ u8 field_0x13771[0x13774 - 0x13771];
+    /* 0x13774 */ u8 field_0x13774;
+    /* 0x13775 */ u8 field_0x13775[0x1377E - 0x13775];
     /* 0x1377E */ u8 field_0x1377E;
-    /* 0x1377F */ u8 field_0x1375F[0x13792 - 0x1377F];
+    /* 0x1377F */ u8 field_0x1377F;
+    /* 0x13780 */ u8 field_0x13780[0x13792 - 0x13780];
     /* 0x13792 */ u8 field_0x13792;
     /* 0x13793 */ u8 field_0x13793;
-    /* 0x13794 */ u8 field_0x13794[0x137B4 - 0x13794];
+    /* 0x13794 */ u8 field_0x13794[0x1379A - 0x13794];
+    /* 0x1379A */ u8 field_0x1379A;
+    /* 0x1379B */ u8 field_0x1379B[0x137B4 - 0x1379B];
     /* 0x137B4 */ mVec3_c mPos3;
     /* 0x137C0 */ u32 field_0x137C0;
 };
@@ -170,6 +180,18 @@ public:
 
     u8 getMeterField_0x13770() const {
         return mMeter.field_0x13770;
+    }
+
+    u8 getMeterField_0x13774() const {
+        return mMeter.field_0x13774;
+    }
+
+    u8 getMeterField_0x1377F() const {
+        return mMeter.field_0x1377F;
+    }
+
+    u8 getMeterField_0x1379A() const {
+        return mMeter.field_0x1379A;
     }
 
     bool checkAllFlags(u32 mask) const {

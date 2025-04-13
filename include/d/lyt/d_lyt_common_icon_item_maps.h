@@ -34,7 +34,7 @@
 #define LYT_CMN_ItemBigBugnet (15)   // [14] uc_netB_00.tpl
 #define LYT_CMN_ItemBoatCannon (16)  // [ 7] uc_boatCannon_00.tpl
 #define LYT_CMN_ItemHarp (17)        // [ 0] tr_tategoto_00.tpl
-#define LYT_CMN_ItemNone (18)        // -------------------------
+#define LYT_CMN_ItemInvalid (18)        // -------------------------
 
 // Pouch Items
 #define LYT_CMN_PouchPotionHealyh (0)              // [12] uc_bottleKusuriA_00.tpl
@@ -113,5 +113,6 @@
 #define LYT_CMN_DowsingZelda (19)              // [13] tr_dauzTarget_19.tpl
 #define LYT_CMN_DowsingTrialGate (20)          // [14] tr_dauzTarget_20.tpl
 #define LYT_CMN_DowsingNewPlantSpecies (21)    // [15] tr_dauzTarget_21.tpl
+#define LYT_CMN_DowsingInvalid         (22)    // -------------------------
 
 #endif

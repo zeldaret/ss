@@ -30,7 +30,7 @@ public:
     enum DoButton_e {
         DO_BUTTON_A = 0,
         DO_BUTTON_B = 1,
-
+        DO_BUTTON_C = 2,
         DO_BUTTON_Z = 3,
         DO_BUTTON_NUN_STK = 4,
         DO_BUTTON_REMOCON_BG = 5,

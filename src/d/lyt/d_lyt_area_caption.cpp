@@ -188,7 +188,7 @@ void dLytAreaCaption_c::set0xAAC(u8 arg) {
     }
 }
 
-u8 dLytAreaCaption_c::get0xAAC() {
+s32 dLytAreaCaption_c::get0xAAC() {
     if (sInstance != nullptr) {
         return sInstance->field_0xAAC;
     }

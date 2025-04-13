@@ -47,7 +47,7 @@ public:
     static void check();
 
     static void set0xAAC(u8 arg);
-    static u8 get0xAAC();
+    static s32 get0xAAC();
 
 private:
     dLytAreaCaption_c() {
