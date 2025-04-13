@@ -418,7 +418,10 @@ d/lyt/meter/d_lyt_meter_dowsing.cpp:
 d/lyt/meter/d_lyt_meter_rupy.cpp:
 	.text       start:0x801003F0 end:0x801026A8
 	.ctors      start:0x804DB714 end:0x804DB718
+	.rodata     start:0x804E6928 end:0x804E69D8
 	.data       start:0x80518A60 end:0x80518F00
+	.sdata2     start:0x80579C48 end:0x80579C78
+	.bss        start:0x805AC550 end:0x805AC750
 
 d/lyt/meter/d_lyt_meter_ganbari_gauge.cpp:
 	.text       start:0x801026B0 end:0x80105548
