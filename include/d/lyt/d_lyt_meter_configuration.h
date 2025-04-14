@@ -12,6 +12,23 @@ public:
         return sInstance;
     }
 
+    s32 getField_0x1D8() const {
+        return field_0x1D8;
+    }
+
+    s32 getField_0x1DC() const {
+        return field_0x1DC;
+    }
+
+    s32 getField_0x1E0() const {
+        return field_0x1E0;
+    }
+
+    s32 getField_0x1E4() const {
+        return field_0x1E4;
+    }
+
+
     static dLytMeterConfiguration_c *sInstance;
 
     /* 0x004 */ u8 field_0x004;

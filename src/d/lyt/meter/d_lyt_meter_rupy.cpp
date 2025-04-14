@@ -407,7 +407,6 @@ void dLytMeterRupy_c::setDigit(s32 index, s32 digit) {
 }
 
 bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
-    // NONMATCHING - regswaps
     s32 amount = getRupeeCounter2();
     if (amount > 9999) {
         amount = 9999;
@@ -419,10 +418,10 @@ bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
     if (amount != mDisplayedRupeeCount || suppressSound) {
         bool b = false;
         if (amount < mDisplayedRupeeCount) {
-            if (mDisplayedRupeeCount - amount >= dLytMeterConfiguration_c::GetInstance()->field_0x1DC) {
-                newNumDisplayed = mDisplayedRupeeCount - dLytMeterConfiguration_c::GetInstance()->field_0x1E4;
-            } else if (mDisplayedRupeeCount - amount >= dLytMeterConfiguration_c::GetInstance()->field_0x1D8) {
-                newNumDisplayed = mDisplayedRupeeCount - dLytMeterConfiguration_c::GetInstance()->field_0x1E0;
+            if (mDisplayedRupeeCount - amount >= dLytMeterConfiguration_c::sInstance->getField_0x1DC()) {
+                newNumDisplayed = mDisplayedRupeeCount - dLytMeterConfiguration_c::sInstance->getField_0x1E4();
+            } else if (mDisplayedRupeeCount - amount >= dLytMeterConfiguration_c::sInstance->getField_0x1D8()) {
+                newNumDisplayed = mDisplayedRupeeCount - dLytMeterConfiguration_c::sInstance->getField_0x1E0();
             } else {
                 newNumDisplayed = mDisplayedRupeeCount - 1;
             }
@@ -438,10 +437,10 @@ bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
                 field_0x8AD = 0;
             }
         } else if (amount > mDisplayedRupeeCount) {
-            if (amount - mDisplayedRupeeCount >= dLytMeterConfiguration_c::GetInstance()->field_0x1DC) {
-                newNumDisplayed = mDisplayedRupeeCount + dLytMeterConfiguration_c::GetInstance()->field_0x1E4;
-            } else if (amount - mDisplayedRupeeCount >= dLytMeterConfiguration_c::GetInstance()->field_0x1D8) {
-                newNumDisplayed = mDisplayedRupeeCount + dLytMeterConfiguration_c::GetInstance()->field_0x1E0;
+            if (amount - mDisplayedRupeeCount >= dLytMeterConfiguration_c::sInstance->getField_0x1DC()) {
+                newNumDisplayed = mDisplayedRupeeCount + dLytMeterConfiguration_c::sInstance->getField_0x1E4();
+            } else if (amount - mDisplayedRupeeCount >= dLytMeterConfiguration_c::sInstance->getField_0x1D8()) {
+                newNumDisplayed = mDisplayedRupeeCount + dLytMeterConfiguration_c::sInstance->getField_0x1E0();
             } else {
                 newNumDisplayed = mDisplayedRupeeCount + 1;
             }
@@ -464,20 +463,21 @@ bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
             newNumDisplayed = 0;
         }
 
-        // The primary problem appear to be the lines marked with "// x".
-
         s32 newNumDigits = 0;
         if (newNumDisplayed >= 1000) {
             newNumDigits = 4;
             setDigit(0, newNumDisplayed / 1000);
-            setDigit(1, (newNumDisplayed % 1000) / 100); // x
-            setDigit(2, (newNumDisplayed % 100) / 10); // x
-            setDigit(3, newNumDisplayed % 10);
+            s32 rem = (newNumDisplayed % 1000);
+            setDigit(1, rem / 100);
+            rem = rem % 100;
+            setDigit(2, rem / 10);
+            setDigit(3, rem % 10);
         } else if (newNumDisplayed >= 100) {
             newNumDigits = 3;
             setDigit(0, newNumDisplayed / 100);
-            setDigit(1, (newNumDisplayed % 100) / 10); // x
-            setDigit(2, newNumDisplayed % 10);
+            s32 rem = (newNumDisplayed % 100);
+            setDigit(1, rem / 10); // x
+            setDigit(2, rem % 10);
         } else if (newNumDisplayed >= 10) {
             newNumDigits = 2;
             setDigit(0, newNumDisplayed / 10);
