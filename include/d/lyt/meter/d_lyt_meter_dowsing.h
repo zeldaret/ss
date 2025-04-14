@@ -152,6 +152,10 @@ public:
     bool fn_800FE4B0() const;
     bool fn_800FE610();
 
+    u8 getField_0x550A() const {
+        return field_0x550A;
+    }
+
 private:
     void setItemName(s32 id);
     void setMessage(s32 id);

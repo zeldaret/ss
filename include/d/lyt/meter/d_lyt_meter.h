@@ -43,7 +43,7 @@ public:
     bool build(d2d::ResAccIf_c *resAcc);
     bool remove();
     bool draw();
-    
+
     bool fn_800D5380(u8);
     bool fn_800D5650();
     bool fn_800D5680();
@@ -218,7 +218,13 @@ public:
         }
     }
 
-
+    static u8 getDowsing0x550A() {
+        if (sInstance != nullptr) {
+            return sInstance->mMeter.mDowsing.getField_0x550A();
+        } else {
+            return 0;
+        }
+    }
 
 private:
     /* 0x00004 */ d2d::ResAccIf_c mResAcc;

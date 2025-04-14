@@ -204,7 +204,28 @@ bool dLytMeterNunchakuBg_c::execute() {
     field_0x1B4 = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_NUN_BG);
     field_0x1B8 = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_NUN_BG);
 
-    bool hasZ = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_Z);
+    bool hasNunStk = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_NUN_STK);
+    u8 val = dLytMeterContainer_c::getDowsing0x550A();
+    if (hasNunStk != field_0x1C5 || val != field_0x1C6) {
+        field_0x1C5 = hasNunStk;
+        field_0x1C6 = val;
+
+        if (hasNunStk) {
+            mAnm[NUN_BG_ANIM_ARROWV].setFrame(1.0f);
+            mAnm[NUN_BG_ANIM_ARROWV].setAnimEnable(true);
+            dLytMeterContainer_c::GetMeter()->getNunStk()->getBgPane()->SetVisible(true);
+        } else {
+            if (val) {
+                mAnm[NUN_BG_ANIM_ARROWV].setFrame(1.0f);
+                mAnm[NUN_BG_ANIM_ARROWV].setAnimEnable(true);
+            } else {
+                mAnm[NUN_BG_ANIM_ARROWV].setFrame(0.0f);
+                mAnm[NUN_BG_ANIM_ARROWV].setAnimEnable(true);
+                setMessage(field_0x1B4);
+            }
+            dLytMeterContainer_c::GetMeter()->getNunStk()->getBgPane()->SetVisible(false);
+        }
+    }
 
     mStateMgr.executeState();
     for (int i = 0; i < NUN_BG_NUM_ANIMS; i++) {
