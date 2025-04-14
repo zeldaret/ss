@@ -8,6 +8,10 @@ public:
     dLytMeterConfiguration_c();
     virtual ~dLytMeterConfiguration_c();
 
+    static const dLytMeterConfiguration_c *GetInstance() {
+        return sInstance;
+    }
+
     static dLytMeterConfiguration_c *sInstance;
 
     /* 0x004 */ u8 field_0x004;

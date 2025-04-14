@@ -2,6 +2,7 @@
 
 #include "c/c_math.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_meter_configuration.h"
 #include "nw4r/math/math_types.h"
 #include "toBeSorted/small_sound_mgr.h"
 
@@ -295,7 +296,7 @@ bool dLytMeterRupy_c::build(d2d::ResAccIf_c *resAcc) {
     for (int i = 0; i < RUPY_NUM_DIGITS; i++) {
         mJumpState[i] = 0xFF;
         mDisplayedDigits[i] = 0;
-        field_0x8A1[i] = 0;
+        mPrevDigits[i] = 0;
     }
 
     field_0x8A9 = 0;
@@ -406,6 +407,7 @@ void dLytMeterRupy_c::setDigit(s32 index, s32 digit) {
 }
 
 bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
+    // NONMATCHING - regswaps
     s32 amount = getRupeeCounter2();
     if (amount > 9999) {
         amount = 9999;
@@ -413,43 +415,157 @@ bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
         amount = 0;
     }
 
+    s32 newNumDisplayed = amount;
     if (amount != mDisplayedRupeeCount || suppressSound) {
+        bool b = false;
+        if (amount < mDisplayedRupeeCount) {
+            if (mDisplayedRupeeCount - amount >= dLytMeterConfiguration_c::GetInstance()->field_0x1DC) {
+                newNumDisplayed = mDisplayedRupeeCount - dLytMeterConfiguration_c::GetInstance()->field_0x1E4;
+            } else if (mDisplayedRupeeCount - amount >= dLytMeterConfiguration_c::GetInstance()->field_0x1D8) {
+                newNumDisplayed = mDisplayedRupeeCount - dLytMeterConfiguration_c::GetInstance()->field_0x1E0;
+            } else {
+                newNumDisplayed = mDisplayedRupeeCount - 1;
+            }
+            b = true;
+            if (field_0x8AB) {
+                if (newNumDisplayed == amount) {
+                    SmallSoundManager::GetInstance()->playSound(SE_S_RUPEE_COUNT_DOWN_END);
+                } else {
+                    SmallSoundManager::GetInstance()->playSound(SE_S_RUPEE_COUNT_DOWN);
+                }
+            }
+            if (field_0x8AD) {
+                field_0x8AD = 0;
+            }
+        } else if (amount > mDisplayedRupeeCount) {
+            if (amount - mDisplayedRupeeCount >= dLytMeterConfiguration_c::GetInstance()->field_0x1DC) {
+                newNumDisplayed = mDisplayedRupeeCount + dLytMeterConfiguration_c::GetInstance()->field_0x1E4;
+            } else if (amount - mDisplayedRupeeCount >= dLytMeterConfiguration_c::GetInstance()->field_0x1D8) {
+                newNumDisplayed = mDisplayedRupeeCount + dLytMeterConfiguration_c::GetInstance()->field_0x1E0;
+            } else {
+                newNumDisplayed = mDisplayedRupeeCount + 1;
+            }
+            b = true;
+            if (field_0x8AB) {
+                if (newNumDisplayed == amount) {
+                    SmallSoundManager::GetInstance()->playSound(SE_S_RUPEE_COUNT_UP_END);
+                    if (field_0x8AD) {
+                        field_0x890 = 0;
+                        field_0x8AD = 0;
+                    }
+                } else {
+                    SmallSoundManager::GetInstance()->playSound(SE_S_RUPEE_COUNT_UP);
+                }
+            }
+        }
+        if (newNumDisplayed > 9999) {
+            newNumDisplayed = 9999;
+        } else if (newNumDisplayed < 0) {
+            newNumDisplayed = 0;
+        }
 
-    } else if (field_0x8AD && mDisplayedRupeeCount == getCurrentWalletCapacity2()) {
+        // The primary problem appear to be the lines marked with "// x".
+
+        s32 newNumDigits = 0;
+        if (newNumDisplayed >= 1000) {
+            newNumDigits = 4;
+            setDigit(0, newNumDisplayed / 1000);
+            setDigit(1, (newNumDisplayed % 1000) / 100); // x
+            setDigit(2, (newNumDisplayed % 100) / 10); // x
+            setDigit(3, newNumDisplayed % 10);
+        } else if (newNumDisplayed >= 100) {
+            newNumDigits = 3;
+            setDigit(0, newNumDisplayed / 100);
+            setDigit(1, (newNumDisplayed % 100) / 10); // x
+            setDigit(2, newNumDisplayed % 10);
+        } else if (newNumDisplayed >= 10) {
+            newNumDigits = 2;
+            setDigit(0, newNumDisplayed / 10);
+            setDigit(1, newNumDisplayed % 10);
+        } else {
+            newNumDigits = 1;
+            setDigit(0, newNumDisplayed);
+        }
+
+        if (mNumDisplayedDigits > newNumDigits) {
+            if (mAnm[mNumDisplayedDigits - 1 + RUPY_ANIM_FLASH_OFFSET].isEnabled()) {
+                mBlinkParts[mNumDisplayedDigits - 1].cancelFlash();
+                mAnm[mNumDisplayedDigits - 1 + RUPY_ANIM_FLASH_OFFSET].setFrame(0.0f);
+                mLyt.calc();
+            }
+        }
+
+        mNumDisplayedDigits = newNumDigits;
+        mAnm[RUPY_ANIM_KETA].setAnimEnable(true);
+        mAnm[RUPY_ANIM_KETA].setFrame(mNumDisplayedDigits - 1);
+
+        if (*mStateMgr.getStateID() == StateID_Active) {
+            executeDigitJump();
+        }
+
+        if (field_0x8AB && b) {
+            executeDigitBlink(newNumDisplayed);
+        }
+
+        mDisplayedRupeeCount = newNumDisplayed;
+        mPrevDigits[0] = mDisplayedDigits[0];
+        mPrevDigits[1] = mDisplayedDigits[1];
+        mPrevDigits[2] = mDisplayedDigits[2];
+        mPrevDigits[3] = mDisplayedDigits[3];
+    } else if (field_0x8AD && amount == getCurrentWalletCapacity2()) {
         SmallSoundManager::GetInstance()->playSound(SE_S_RUPEE_MAX);
         field_0x890 = 0;
         field_0x8AD = 0;
     }
+
+    if (mDisplayedRupeeCount == amount) {
+        bool b = false;
+        for (int i = 0; i < RUPY_NUM_DIGITS; i++) {
+            if (mJumpState[i] != 0xFF) {
+                mJumpState[i] = 0xFF;
+                b = true;
+            }
+        }
+        if (b) {
+            for (int i = 0; i < RUPY_NUM_DIGITS; i++) {
+                mAnm[i + RUPY_ANIM_JUMP_OFFSET].setFrame(0.0f);
+            }
+            mBlinkDelay = cM::rndF(10.0f);
+        }
+        return false;
+    } else {
+        return true;
+    }
 }
 
 void dLytMeterRupy_c::executeDigitJump() {
-    // ???
+    // Is this not possibly out of bounds???
     s32 last = mNumDisplayedDigits + 3;
-    if (field_0x8A1[last] == 1) {
+    if (mPrevDigits[last] == 1) {
         mAnm[mNumDisplayedDigits - 1 + RUPY_ANIM_JUMP_OFFSET].setFrame(2.0f);
         s32 last = mNumDisplayedDigits + 3;
-        field_0x8A1[last] = 0;
+        mPrevDigits[last] = 0;
     } else {
         mAnm[mNumDisplayedDigits - 1 + RUPY_ANIM_JUMP_OFFSET].setFrame(1.0f);
         s32 last = mNumDisplayedDigits + 3;
-        field_0x8A1[last] = 1;
+        mPrevDigits[last] = 1;
     }
 
     if (mNumDisplayedDigits >= 4) {
         s32 last = mNumDisplayedDigits - 4;
-        if (mDisplayedDigits[last] != field_0x8A1[last] && mJumpState[last] == 0xFF) {
+        if (mDisplayedDigits[last] != mPrevDigits[last] && mJumpState[last] == 0xFF) {
             mJumpState[last] = 0;
         }
     }
     if (mNumDisplayedDigits >= 3) {
         s32 last = mNumDisplayedDigits - 3;
-        if (mDisplayedDigits[last] != field_0x8A1[last] && mJumpState[last] == 0xFF) {
+        if (mDisplayedDigits[last] != mPrevDigits[last] && mJumpState[last] == 0xFF) {
             mJumpState[last] = 0;
         }
     }
     if (mNumDisplayedDigits >= 2) {
         s32 last = mNumDisplayedDigits - 2;
-        if (mDisplayedDigits[last] != field_0x8A1[last] && mJumpState[last] == 0xFF) {
+        if (mDisplayedDigits[last] != mPrevDigits[last] && mJumpState[last] == 0xFF) {
             mJumpState[last] = 0;
         }
     }
@@ -468,7 +584,7 @@ void dLytMeterRupy_c::executeDigitJump() {
                 mAnm[i + RUPY_ANIM_JUMP_OFFSET].setFrame(0.0f);
                 mJumpState[i] = 0xFF;
             }
-        } 
+        }
     }
 }
 

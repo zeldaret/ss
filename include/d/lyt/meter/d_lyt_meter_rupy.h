@@ -118,7 +118,7 @@ private:
     /* 0x898 */ s32 mRupeeColor;
     /* 0x89C */ u8 mSize;
     /* 0x89D */ u8 mDisplayedDigits[4];
-    /* 0x8A1 */ u8 field_0x8A1[4];
+    /* 0x8A1 */ u8 mPrevDigits[4];
     /* 0x8A5 */ u8 mJumpState[4];
     /* 0x8A9 */ u8 field_0x8A9;
     /* 0x8AA */ u8 field_0x8AA;
