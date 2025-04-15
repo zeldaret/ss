@@ -59,6 +59,8 @@ public:
     static s32 getTotalSeedCapacity();
     static s32 getTotalArrowCapacity();
 
+    static bool getKeyPieceCount();
+
     static bool isRupee(ITEM_ID item);
     static bool isKeyPiece(ITEM_ID item);
     static bool isTreasure(ITEM_ID item);
@@ -67,7 +69,7 @@ public:
     static void itemGetEventStart(dAcBase_c *);
     static void itemGetEventEnd(dAcBase_c *);
 
-    static void healLink(u32 amount, bool);
+    static void healLink(u32 amount, bool); // move to dAcPy_c
 
 private:
     /* 0x334 */ UNKTYPE *mpMdl; // Model has its own handling system

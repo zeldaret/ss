@@ -10,6 +10,9 @@ s32 targetAngleY(const mVec3_c &target, const mVec3_c &source);
 s32 targetAngleX(const mVec3_c &target, const mVec3_c &source);
 f32 addCalcPosXZ(mVec3_c *src, const mVec3_c &target, f32 scale, f32 maxStep, f32 minStep);
 
+// made up name
+f32 easeOut(f32 value, f32 exponent);
+
 } // namespace cLib
 
 #endif
