@@ -6472,6 +6472,7 @@ enum WZSound {
 class SmallSoundManager {
 public:
     void playSound(WZSound id);
+    void playSoundWithPitch(WZSound id, f32 pitch);
     void playButtonPressSoundWhenAdvancingTextBoxes(f32);
 
     static SmallSoundManager *GetInstance() {

@@ -12,6 +12,22 @@ public:
         return sInstance;
     }
 
+    f32 getField_0x1CC() const {
+        return field_0x1CC;
+    }
+
+    f32 getField_0x1D0() const {
+        return field_0x1D0;
+    }
+
+    f32 getField_0x1C4() const {
+        return field_0x1C4;
+    }
+
+    s32 getField_0x1C8() const {
+        return field_0x1C8;
+    }
+
     s32 getField_0x1D8() const {
         return field_0x1D8;
     }
