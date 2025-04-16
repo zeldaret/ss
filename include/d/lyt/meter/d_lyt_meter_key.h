@@ -26,6 +26,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterKakeraKey_c, Active);
     STATE_FUNC_DECLARE(dLytMeterKakeraKey_c, Off);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterKakeraKey_c);
+
     /* 0x000 */ UI_STATE_MGR_DECLARE(dLytMeterKakeraKey_c);
     /* 0x03C */ d2d::dLytSub mLyt;
     /* 0x0D0 */ d2d::AnmGroup_c mAnm[8];
@@ -61,6 +63,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterBossKey_c, Active);
     STATE_FUNC_DECLARE(dLytMeterBossKey_c, Off);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterBossKey_c);
+
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterBossKey_c);
     /* 0x040 */ d2d::dLytSub mLyt;
     /* 0x0D4 */ d2d::AnmGroup_c mAnm[5];
@@ -93,6 +97,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterSmallKey_c, On);
     STATE_FUNC_DECLARE(dLytMeterSmallKey_c, Active);
     STATE_FUNC_DECLARE(dLytMeterSmallKey_c, Off);
+
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterSmallKey_c);
 
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytMeterSmallKey_c);
     /* 0x040 */ d2d::dLytSub mLyt;

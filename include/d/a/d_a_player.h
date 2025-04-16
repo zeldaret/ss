@@ -251,6 +251,12 @@ public:
     /* 0x3C8 */ nw4r::g3d::ResFile mSwordRes;
     /* 0x3CC */ u8 _0x3CC[0x5B4 - 0x3CC];
     /* 0x5B4 */ m3d::anmMatClr_c mAnmMatClr;
+    /* 0x5E0 */ u8 _0x5E0[0x4564 - 0x5E0];
+    /* 0x4564 */ f32 field_0x4564;
+
+    f32 getField_0x4564() const {
+        return field_0x4564;
+    }
 
     f32 getAnmMatClrFrame() const {
         return mAnmMatClr.getFrame(0);
@@ -310,6 +316,8 @@ public:
     static s32 getCurrentBugNetType();
 
     static bool isItemRestrictedByBokoBase(ITEM_ID item);
+
+    static u32 getCurrentHealthCapacity();
 };
 
 #endif

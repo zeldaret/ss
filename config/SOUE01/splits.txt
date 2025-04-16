@@ -445,7 +445,9 @@ d/lyt/meter/d_lyt_meter_timer.cpp:
 
 d/lyt/meter/d_lyt_meter_heart.cpp:
 	.text       start:0x8010AEC0 end:0x8010BD48
+	.rodata     start:0x804E6C28 end:0x804E6CF8
 	.data       start:0x80519F60 end:0x8051A320
+	.sdata2     start:0x80579D30 end:0x80579D48
 
 d/lyt/meter/d_lyt_meter_shield_gauge.cpp:
 	.text       start:0x8010BD50 end:0x8010CEC8
