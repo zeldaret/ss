@@ -54,6 +54,7 @@ public:
     s32 getSTIFunk1() const;
 
     s32 getAreaType() const;
+    s32 getMapNameId() const;
 
     static dStageMgr_c *GetInstance() {
         return sInstance;

@@ -59,7 +59,8 @@ public:
     static s32 getTotalSeedCapacity();
     static s32 getTotalArrowCapacity();
 
-    static bool getKeyPieceCount();
+    static u32 getKeyPieceCount();
+    static u32 getSmallKeyCount();
 
     static bool isRupee(ITEM_ID item);
     static bool isKeyPiece(ITEM_ID item);

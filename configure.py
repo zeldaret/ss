@@ -388,7 +388,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_unk.cpp"),
             Object(Matching, "d/lyt/meter/d_lyt_meter_a_btn.cpp"),
             Object(Matching, "d/lyt/meter/d_lyt_meter_z_btn.cpp"),
-            Object(NonMatching, "d/lyt/meter/d_lyt_meter_key.cpp"),
+            Object(Matching, "d/lyt/meter/d_lyt_meter_key.cpp"),
             Object(Matching, "d/lyt/meter/d_lyt_meter_drink.cpp"),
             Object(Matching, "d/lyt/meter/d_lyt_meter_remocon_bg.cpp"),
             Object(Matching, "d/lyt/meter/d_lyt_meter_nunchaku_bg.cpp"),
