@@ -437,7 +437,11 @@ d/lyt/meter/d_lyt_meter_ganbari_gauge.cpp:
 d/lyt/meter/d_lyt_meter_event_skip.cpp:
 	.text       start:0x80105550 end:0x80105F68
 	.ctors      start:0x804DB71C end:0x804DB720
+	.rodata     start:0x804E6A58 end:0x804E6A68
 	.data       start:0x80519578 end:0x80519748
+	.sdata      start:0x80572500 end:0x80572510
+	.sdata2     start:0x80579CF8 end:0x80579D00
+	.bss        start:0x805ACA90 end:0x805ACB90
 
 d/lyt/meter/d_lyt_meter_timer.cpp:
 	.text       start:0x80105F70 end:0x8010AEB8
