@@ -1,8 +1,15 @@
 #include "d/lyt/meter/d_lyt_meter_heart.h"
 
+#include "common.h"
 #include "d/a/d_a_player.h"
+#include "d/d_sc_game.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_game_over.h"
+#include "nw4r/math/math_types.h"
+#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 static const d2d::LytBrlanMapping brlanMap[] = {
     {     "heartAll_00_heat.brlan",     "G_heart_00"},
@@ -77,14 +84,14 @@ bool dLytMeterHeart_c::build(d2d::ResAccIf_c *resAcc) {
     mCurrentHealthCapacity = 0;
     mStoredHealth = 0;
     mStoredHealthCapacity = 0;
-    field_0x784 = 0;
-    field_0x788 = -1;
+    mHealthCapacityIncreaseDelayTimer = 0;
+    mEffectHeartIdx = -1;
     field_0x78C = 0;
     field_0x790 = 0;
     field_0x794 = 0;
     field_0x797 = 0;
-    field_0x798 = 0;
-    field_0x799 = 0;
+    mIsLoop = false;
+    mIsDanger = false;
     field_0x79A = 0;
 
     mCurrentHealth = getCurrentHealth();
@@ -113,7 +120,7 @@ bool dLytMeterHeart_c::execute() {
     }
     executeInternal();
 
-    if (field_0x798) {
+    if (mIsLoop) {
         if (!mAnm[HEART_ANIM_LOOP].isEnabled()) {
             mAnm[HEART_ANIM_LOOP].setFrame(0.0f);
             mAnm[HEART_ANIM_LOOP].setAnimEnable(true);
@@ -126,7 +133,7 @@ bool dLytMeterHeart_c::execute() {
         }
     }
 
-    if (field_0x799) {
+    if (mIsDanger) {
         if (dAcPy_c::GetLink2()->getField_0x4564() == 1.0f) {
             if (!mAnm[HEART_ANIM_DANGER].isEnabled()) {
                 mAnm[HEART_ANIM_DANGER].setAnimEnable(true);
@@ -191,7 +198,7 @@ bool dLytMeterHeart_c::execute() {
         }
     }
 
-    if (field_0x799 && mAnm[HEART_ANIM_DANGER].isEndReached()) {
+    if (mIsDanger && mAnm[HEART_ANIM_DANGER].isEndReached()) {
         mAnm[HEART_ANIM_DANGER].setToEnd();
         mAnm[HEART_ANIM_DANGER].setAnimEnable(false);
     }
@@ -210,11 +217,160 @@ s32 dLytMeterHeart_c::getDisplayedHealthCapacity() const {
 }
 
 void dLytMeterHeart_c::realizeHeartsState() {
-    // TODO
-}
+    s32 hearts = getNumDisplayedHearts();
+    (void)getDisplayedHealthCapacity();
+    s32 health = mStoredHealth;
+    s32 healthCapacity = mStoredHealthCapacity;
+    s32 numFilledHearts = health / 4;
+    s32 partialHeartFill = health % 4; // Wrong
+    s32 displayedFilledHearts = healthCapacity / 4;
+    s32 mNumTotalHeartsIncludingPartial = (getCurrentHealthCapacity() + 3) / 4;
+    if (displayedFilledHearts < mNumTotalHeartsIncludingPartial) {
+        mNumTotalHeartsIncludingPartial = displayedFilledHearts;
+    }
 
+    mIsLoop = false;
+    mIsDanger = false;
+
+    for (int i = 0; i < HEART_NUM_HEARTS; i++) {
+        if (i < mNumTotalHeartsIncludingPartial) {
+            mpHeartPanes[i]->SetVisible(true);
+            if (i < displayedFilledHearts) {
+                if (i < hearts) {
+                    if (numFilledHearts == 0 && partialHeartFill == 0) {
+                        if (i == 0) {
+                            mpMainPane->SetVisible(false);
+                        }
+                        mAnm[i + HEART_ANIM_HEAT_OFFSET].setFrame(1.0f);
+                    } else if (i < numFilledHearts) {
+                        mAnm[i + HEART_ANIM_HEAT_OFFSET].setFrame(0.0f);
+                        if (i == numFilledHearts - 1 && partialHeartFill == 0) {
+                            mAnm[i + HEART_ANIM_HEAT_OFFSET].setFrame(2.0f);
+                            mpMainPane->SetVisible(true);
+                            mpMainPane->SetTranslate(mpHeartPanes[i]->GetTranslate());
+                            mAnm[HEART_ANIM_MAIN].setFrame(4.0f);
+                            if (dAcPy_c::GetLink2() != nullptr &&
+                                dAcPy_c::GetLink2()->hasLessThanQuarterHealth(false)) {
+                                mIsDanger = true;
+                            } else {
+                                mIsLoop = true;
+                            }
+                        } else {
+                            mAnm[i + HEART_ANIM_HEAT_OFFSET].setFrame(0.0f);
+                        }
+                    } else if (i == numFilledHearts && partialHeartFill != 0) {
+                        mAnm[i + HEART_ANIM_HEAT_OFFSET].setFrame(2.0f);
+                        mpMainPane->SetVisible(true);
+                        mpMainPane->SetTranslate(mpHeartPanes[i]->GetTranslate());
+                        mAnm[HEART_ANIM_MAIN].setFrame(partialHeartFill);
+                        if (dAcPy_c::GetLink2() != nullptr && dAcPy_c::GetLink2()->hasLessThanQuarterHealth(false)) {
+                            mIsDanger = true;
+                        } else {
+                            mIsLoop = true;
+                        }
+                    } else {
+                        mAnm[i + HEART_ANIM_HEAT_OFFSET].setFrame(1.0f);
+                    }
+                } else {
+                    mAnm[i + HEART_ANIM_HEAT_OFFSET].setFrame(1.0f);
+                }
+            } else {
+                mAnm[i + HEART_ANIM_HEAT_OFFSET].setFrame(1.0f);
+            }
+        } else {
+            mpHeartPanes[i]->SetVisible(false);
+        }
+    }
+}
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_972_;
 void dLytMeterHeart_c::executeInternal() {
-    // TODO
+    if (mEffectHeartIdx >= 0) {
+        nw4r::math::MTX34 mtx = mpHeartPanes[mEffectHeartIdx]->GetGlobalMtx();
+        mVec3_c pos(mtx._03, mtx._13, 0.0f);
+        EffectsStruct::fn_800298C0(PARTICLE_RESOURCE_ID_MAPPING_972_, &pos, nullptr, nullptr, nullptr, nullptr);
+        SmallSoundManager::GetInstance()->playSound(SE_S_HEART_ADD);
+        mEffectHeartIdx = -1;
+    }
+
+    // Redundant
+    if (!field_0x794) {
+        mCurrentHealth = getCurrentHealth();
+        mCurrentHealthCapacity = getCurrentHealthCapacity();
+        field_0x794 = 1;
+    }
+
+    mCurrentHealthCapacity = getCurrentHealthCapacity();
+    mCurrentHealth = getCurrentHealth();
+
+    if (field_0x796) {
+        for (int i = 0; i < HEART_NUM_HEARTS; i++) {
+            mAnm[i + HEART_ANIM_HEAT_OFFSET].setFrame(1.0f);
+        }
+        mLyt.calc();
+        field_0x796 = 0;
+    }
+
+    bool isDanger = dAcPy_c::GetLink2()->hasLessThanQuarterHealth(0);
+    bool healthDifferent = mStoredHealth != mCurrentHealth;
+    bool healthCapacityDifferent = mStoredHealthCapacity != mCurrentHealthCapacity;
+    if (healthCapacityDifferent && field_0x790 < 20) {
+        field_0x790 = 20;
+    }
+    if (healthDifferent || field_0x797 != isDanger) {
+        s32 current = mCurrentHealth;
+        if (mStoredHealth + 1 <= current) {
+            mStoredHealth = mStoredHealth + 1;
+            if (mpAlphaPane->IsVisible() && mpAlphaPane->GetGlobalAlpha() != 0 && mStoredHealth % 4 == 0 &&
+                (!(dScGame_c::currentSpawnInfo.stageName == "F406") || dScGame_c::currentSpawnInfo.layer != 13) &&
+                dLytGameOver_c::GetInstance() == nullptr) {
+                SmallSoundManager::GetInstance()->playSound(SE_S_HP_GAUGE_UP);
+            }
+        } else {
+            if (mStoredHealth - 1 >= current) {
+                mStoredHealth = mStoredHealth - 1;
+                if (EventManager::isInEvent() && !strcmp(EventManager::getCurrentEventName(), ("MoleF202Start")) &&
+                    mStoredHealth % 4 == 0) {
+                    SmallSoundManager::GetInstance()->playSound(SE_S_HP_GAUGE_DOWN);
+                }
+            }
+        }
+        realizeHeartsState();
+        if (healthDifferent && field_0x78C < 10) {
+            field_0x78C = 10;
+        }
+        field_0x797 = isDanger;
+    } else if (healthCapacityDifferent) {
+        if (mStoredHealthCapacity + 1 <= mCurrentHealthCapacity) {
+            if ((mStoredHealthCapacity + 1) % 4 == 0) {
+                if (mHealthCapacityIncreaseDelayTimer < 15) {
+                    mHealthCapacityIncreaseDelayTimer += 1;
+                    return;
+                }
+                mHealthCapacityIncreaseDelayTimer = 0;
+            }
+            mStoredHealthCapacity++;
+            if (mStoredHealthCapacity % 4 == 0) {
+                field_0x79A = 1;
+            }
+        } else {
+            if (mStoredHealthCapacity - 1 >= mCurrentHealthCapacity) {
+                mStoredHealthCapacity = mStoredHealthCapacity - 1;
+            }
+        }
+        if (field_0x79A && mStoredHealth > mCurrentHealthCapacity - 3) {
+            s32 numDisplayed = getNumDisplayedHearts();
+            if (numDisplayed >= 1 && numDisplayed <= 20) {
+                mEffectHeartIdx = numDisplayed - 1;
+                field_0x79A = 0;
+            }
+        }
+        realizeHeartsState();
+        if (field_0x78C < 20) {
+            field_0x78C = 20;
+        }
+    } else if (field_0x79A) {
+        field_0x79A = 0;
+    }
 }
 
 u8 dLytMeterHeart_c::getCurrentHealth() const {

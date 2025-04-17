@@ -402,7 +402,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_ganbari_gauge.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_event_skip.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_timer.cpp"),
-            Object(NonMatching, "d/lyt/meter/d_lyt_meter_heart.cpp"),
+            Object(Matching, "d/lyt/meter/d_lyt_meter_heart.cpp"),
             Object(Matching, "d/lyt/meter/d_lyt_meter_shield_gauge.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_do_button.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_do_button_related.cpp"),

@@ -39,16 +39,16 @@ private:
     /* 0x778 */ s32 mCurrentHealthCapacity;
     /* 0x77C */ s32 mStoredHealth;
     /* 0x780 */ s32 mStoredHealthCapacity;
-    /* 0x784 */ s32 field_0x784;
-    /* 0x788 */ s32 field_0x788;
+    /* 0x784 */ s32 mHealthCapacityIncreaseDelayTimer;
+    /* 0x788 */ s32 mEffectHeartIdx;
     /* 0x78C */ s32 field_0x78C;
     /* 0x790 */ s32 field_0x790;
     /* 0x794 */ u8 field_0x794;
     /* 0x795 */ u8 field_0x795;
     /* 0x796 */ u8 field_0x796;
-    /* 0x797 */ u8 field_0x797;
-    /* 0x798 */ u8 field_0x798;
-    /* 0x799 */ u8 field_0x799;
+    /* 0x797 */ bool field_0x797;
+    /* 0x798 */ bool mIsLoop;
+    /* 0x799 */ bool mIsDanger;
     /* 0x79A */ u8 field_0x79A;
 };
 
