@@ -186,8 +186,7 @@ bool dLytMeterZBtn_c::execute() {
         return true;
     }
     field_0x1C4 = true;
-    dCamera_c *cam = dScGame_c::getCamera(0);
-    if ((!cam->isCurrentTrend("mogu") || AttentionManager::GetInstance()->checkLink2()) &&
+    if ((!fn_80081FE0(dScGame_c::getCamera(0)->getField_0xD98(), "mogu") || AttentionManager::GetInstance()->checkLink2()) &&
         LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_Z) == 0x67) {
         field_0x1C4 = false;
         LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::DO_NONE);

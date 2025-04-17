@@ -2,7 +2,13 @@
 
 #include "common.h"
 #include "d/a/d_a_player.h"
+#include "d/d_camera.h"
+#include "d/d_sc_game.h"
 #include "d/lyt/d_lyt_meter_configuration.h"
+#include "m/m_vec.h"
+#include "toBeSorted/d_d3d.h"
+#include "toBeSorted/event_manager.h"
+#include "toBeSorted/file_manager.h"
 
 STATE_DEFINE(dLytMeterGanbariGauge_c, InvisibleWait);
 STATE_DEFINE(dLytMeterGanbariGauge_c, In);
@@ -168,10 +174,10 @@ void dLytMeterGanbariGauge_c::finalizeState_FullGutsUse() {}
 
 void dLytMeterGanbariGauge_c::initializeState_Normal() {}
 void dLytMeterGanbariGauge_c::executeState_Normal() {
-    if (fn_801034B0(field_0x518)) {
+    if (isStaminaLow(field_0x518)) {
         mAnm[GANBARI_ANIM_CAUTION].setRate(1.0f);
         mStateMgrWheel.changeState(StateID_Caution);
-    } else if (fn_80103520(field_0x518)) {
+    } else if (isStaminaCritical(field_0x518)) {
         mAnm[GANBARI_ANIM_CAUTION].setRate(3.0f);
         mStateMgrWheel.changeState(StateID_Caution);
     } else if (field_0x518 >= 0.9999f) {
@@ -187,9 +193,9 @@ void dLytMeterGanbariGauge_c::initializeState_Caution() {
 void dLytMeterGanbariGauge_c::executeState_Caution() {
     if (field_0x518 <= 0.0001f) {
         mStateMgrWheel.changeState(StateID_ToMin);
-    } else if (fn_80103520(field_0x518)) {
+    } else if (isStaminaCritical(field_0x518)) {
         mAnm[GANBARI_ANIM_CAUTION].setRate(3.0f);
-    } else if (fn_801034B0(field_0x518)) {
+    } else if (isStaminaLow(field_0x518)) {
         mAnm[GANBARI_ANIM_CAUTION].setRate(1.0f);
     } else {
         mStateMgrWheel.changeState(StateID_Normal);
@@ -285,6 +291,22 @@ void dLytMeterGanbariGauge_c::executeState_ToMax() {
 }
 void dLytMeterGanbariGauge_c::finalizeState_ToMax() {}
 
+bool dLytMeterGanbariGauge_c::isStaminaLow(f32 arg) {
+    if (swimmingRelated()) {
+        return arg <= 0.125f;
+    } else {
+        return arg <= 0.3f;
+    }
+}
+
+bool dLytMeterGanbariGauge_c::isStaminaCritical(f32 arg) {
+    if (swimmingRelated()) {
+        return false;
+    } else {
+        return arg <= 0.1f;
+    }
+}
+
 bool dLytMeterGanbariGauge_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setResAcc(resAcc);
     mLyt.build("guts_00.brlyt", nullptr);
@@ -365,17 +387,303 @@ bool dLytMeterGanbariGauge_c::execute() {
     }
 
     if (!mpPane->IsVisible()) {
-        if (!(*mStateMgrMain.getStateID() != StateID_InvisibleWait)) {
-            return true;
+        if (*mStateMgrMain.getStateID() != StateID_InvisibleWait) {
+            mStateMgrMain.changeState(StateID_InvisibleWait);
         }
-        mStateMgrMain.changeState(StateID_InvisibleWait);
         return true;
     }
 
-    // TODO I really don't like the look of the rest of this function. Depends on a bunch
-    // of player, camera and filemanager stuff with a ton of inlines...
+    if (fn_80104710(false) || (isCrawling() && !fn_801047B0())) {
+        field_0x534 = 1;
+    } else if (dLytMeterConfiguration_c::GetInstance()->field_0x13C) {
+        field_0x534 = 0;
+    } else {
+        field_0x534 = 1;
+    }
+
+    bool b12 = false;
+    field_0x558 = 0;
+    f32 drinkFrame = 0.0f;
+    if (displayAirInsteadOfStamina()) {
+        if (FileManager::GetInstance()->hasAirPotionPlus() || FileManager::GetInstance()->hasAirPotionNormal()) {
+            b12 = true;
+            if ((FileManager::GetInstance()->hasAirPotionNormal() &&
+                 FileManager::GetInstance()->getAirPotionTimer() < 600) ||
+                (FileManager::GetInstance()->hasAirPotionPlus() &&
+                 FileManager::GetInstance()->getAirPotionPlusTimer() < 600)) {
+                field_0x558 = 1;
+            }
+            if (FileManager::GetInstance()->hasAirPotionPlus()) {
+                drinkFrame = 3.0f;
+            } else if (FileManager::GetInstance()->hasAirPotionNormal()) {
+                drinkFrame = 1.0f;
+            }
+        }
+    } else {
+        if (dAcPy_c::GetLink()->isAffectedByStaminaPotionPlus() || dAcPy_c::GetLink()->isAffectedByStaminaPotion()) {
+            b12 = true;
+            if ((dAcPy_c::GetLink()->isAffectedByStaminaPotion() &&
+                 FileManager::GetInstance()->getStaminaPotionTimer() < 600) ||
+                (dAcPy_c::GetLink()->isAffectedByStaminaPotionPlus() &&
+                 FileManager::GetInstance()->getStaminaPotionPlusTimer() < 600)) {
+                field_0x558 = 1;
+            }
+            if (dAcPy_c::GetLink()->isAffectedByStaminaPotionPlus()) {
+                drinkFrame = 2.0f;
+            } else if (dAcPy_c::GetLink()->isAffectedByStaminaPotion()) {
+                drinkFrame = 1.0f;
+            }
+        }
+    }
+
+    mVec3_c diff = dAcPy_c::GetLink()->poscopy3 - dScGame_c::getCamera(0)->getPositionMaybe();
+    f32 len = diff.mag();
+    mVec3_c v;
+    d3d::fn_80016960(v, dAcPy_c::GetLink()->poscopy3);
+    if (!EventManager::isInEvent()) {
+        field_0x524 = v;
+    }
+
+    s32 angle = 0;
+    mVec3_c v1(field_0x524);
+    mVec2_c v2(0.0f, 0.0f);
+    if (fn_80104710(true)) {
+        field_0x540 = 5;
+    } else if (field_0x540 > 0 && *mStateMgrMain.getStateID() == StateID_Wait) {
+        mStateMgrMain.changeState(StateID_CameraOut);
+    }
+
+    f32 scale;
+    if (fn_80104710(false) || (isCrawling() && !fn_801047B0())) {
+        if (dAcPy_c::GetLink()->getRidingActorType() == 3) {
+            angle = 4;
+            v1.x = 232.0f;
+            v1.y = 145.0f;
+            scale = 1.12f;
+        } else if (displayAirInsteadOfStamina()) {
+            angle = 2;
+            scale = 1.45f;
+            v1.x = 232.0f;
+            v1.y = 145.0f;
+        } else {
+            angle = 2;
+            scale = 1.3f;
+            v1.x = 232.0f;
+            v1.y = 145.0f;
+        }
+    } else if (fn_801047B0()) {
+        v2.set(-32.0f, -40.0f);
+        scale = 0.8f;
+    } else if (field_0x55B) {
+        v2.x = -44.0f;
+        v2.y = -105.0f;
+        v2.y += 46.0f;
+        scale = 1.0f;
+    } else if (dAcPy_c::GetLink()->getRidingActorType() == 3) {
+        angle = 3;
+        v2.set(-95.0f, -50.0f);
+        scale = 0.9f;
+    } else if (field_0x559 && swimmingRelated()) {
+        angle = 1;
+        v2.set(-65.0f, 0.0f);
+        scale = 1.0f;
+    } else if (field_0x534 == 0) {
+        v2.set(-44.0f, -105.0f);
+        scale = 1.0f;
+    } else {
+        v1.x = 216.0f;
+        v1.y = -60.0f;
+        scale = 1.4f;
+    }
+
+    v1.x = v1.x + v2.x;
+    v1.y = v1.y + v2.y;
+    v1.z = 0.0f;
+    mLyt.getLayout()->GetRootPane()->SetTranslate(v1);
+    mVec2_c scaleV(scale, scale);
+    mLyt.getLayout()->GetRootPane()->SetScale(scaleV);
+
+    if (!field_0x534 && len <= dLytMeterConfiguration_c::GetInstance()->field_0x138 && !fn_80104710(false) &&
+        !isCrawling()) {
+        field_0x530 = 1;
+    } else {
+        field_0x530 = 0;
+    }
+
+    for (int i = 0; i < GANBARI_NUM_ANIMS; i++) {
+        if (i != GANBARI_ANIM_ANGLE && i != GANBARI_ANIM_UPDOWN_0 && i != GANBARI_ANIM_UPDOWN_1 &&
+            i != GANBARI_ANIM_USE && i != GANBARI_ANIM_COLOR && i != GANBARI_ANIM_DRINK) {
+            if (mAnm[i].isEnabled()) {
+                mAnm[i].play();
+            }
+        }
+    }
+
+    mAnm[GANBARI_ANIM_UPDOWN_0].setFrame(field_0x518 * 100.0f);
+    mAnm[GANBARI_ANIM_ANGLE].setFrame(angle);
+
+    mStateMgrWheel.executeState();
+
+    if (field_0x544 != 0) {
+        if (field_0x518 < field_0x550 &&
+            field_0x518 < field_0x51C - dLytMeterConfiguration_c::GetInstance()->getField_0x1CC()) {
+            field_0x548 = dLytMeterConfiguration_c::GetInstance()->getField_0x1C8();
+            field_0x54C = field_0x51C;
+            field_0x550 = field_0x518;
+            mAnm[GANBARI_ANIM_UPDOWN_1].setFrame(field_0x54C * 100.0f);
+            mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(true);
+        } else {
+            if (field_0x548 > 0) {
+                field_0x548--;
+            }
+            if (field_0x548 == 0) {
+                field_0x54C -= dLytMeterConfiguration_c::GetInstance()->getField_0x1D0();
+                if (field_0x54C < field_0x518) {
+                    field_0x544 = 0;
+                    mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(true);
+                    mAnm[GANBARI_ANIM_UPDOWN_1].setFrame(0.0f);
+                    mLyt.calc();
+                    mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(false);
+                } else {
+                    f32 frame = field_0x54C * 100.0f;
+                    mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(true);
+                    mAnm[GANBARI_ANIM_UPDOWN_1].setFrame(frame);
+                }
+            }
+        }
+    } else {
+        if (field_0x518 < field_0x51C - dLytMeterConfiguration_c::GetInstance()->getField_0x1C4()) {
+            field_0x544 = 1;
+            field_0x54C = field_0x51C;
+            field_0x550 = field_0x518;
+            field_0x548 = dLytMeterConfiguration_c::GetInstance()->getField_0x1C8();
+            mAnm[GANBARI_ANIM_UPDOWN_1].setFrame(field_0x54C * 100.0f);
+            mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(true);
+        } else {
+            mAnm[GANBARI_ANIM_UPDOWN_1].setFrame(field_0x518 * 100.0f);
+            mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(true);
+        }
+    }
+
+    if (b12) {
+        if (!mAnm[GANBARI_ANIM_M_LOOP].isEnabled()) {
+            mAnm[GANBARI_ANIM_M_LOOP].setFrame(0.0f);
+            mAnm[GANBARI_ANIM_M_LOOP].setAnimEnable(true);
+        }
+    } else if (mAnm[GANBARI_ANIM_M_LOOP].getFrame() < 1.0f) {
+        mAnm[GANBARI_ANIM_M_LOOP].setFrame(0.0f);
+        mAnm[GANBARI_ANIM_M_LOOP].setAnimEnable(false);
+    }
+
+    if (b12 && field_0x558) {
+        if (!mAnm[GANBARI_ANIM_M_CAUTION].isEnabled()) {
+            mAnm[GANBARI_ANIM_M_CAUTION].setFrame(0.0f);
+            mAnm[GANBARI_ANIM_M_CAUTION].setAnimEnable(true);
+        }
+    } else if (mAnm[GANBARI_ANIM_M_CAUTION].getFrame() < 1.0f) {
+        mAnm[GANBARI_ANIM_M_CAUTION].setFrame(0.0f);
+        mAnm[GANBARI_ANIM_M_CAUTION].setAnimEnable(false);
+    }
+
+    if (!b12 && field_0x518 < field_0x51C) {
+        if (!mAnm[GANBARI_ANIM_LOOP].isEnabled()) {
+            mAnm[GANBARI_ANIM_LOOP].setFrame(0.0f);
+            mAnm[GANBARI_ANIM_LOOP].setAnimEnable(true);
+        }
+    } else if (mAnm[GANBARI_ANIM_LOOP].getFrame() < 1.0f) {
+        mAnm[GANBARI_ANIM_LOOP].setFrame(0.0f);
+        mAnm[GANBARI_ANIM_LOOP].setAnimEnable(false);
+    }
+
+    mAnm[GANBARI_ANIM_COLOR].setFrame(field_0x554);
+    mAnm[GANBARI_ANIM_COLOR].setAnimEnable(true);
+
+    mAnm[GANBARI_ANIM_DRINK].setFrame(drinkFrame);
+    mAnm[GANBARI_ANIM_DRINK].setAnimEnable(true);
+
+    if (!EventManager::isInEvent() && !dAcPy_c::GetLink()->hasvt_0x1C0() &&
+        !dAcPy_c::GetLink()->checkActionFlagsCont(0x10) &&
+        (d3d::fn_80016A90(dAcPy_c::GetLink()->poscopy3) || fn_80104710(false) || isCrawling()) &&
+        *mStateMgrWheel.getStateID() != StateID_Full && *mStateMgrMain.getStateID() == StateID_InvisibleWait &&
+        !field_0x530) {
+        mStateMgrMain.changeState(StateID_In);
+    } else if (!EventManager::isInEvent() && *mStateMgrWheel.getStateID() == StateID_Full &&
+               *mStateMgrWheel.getOldStateID() != StateID_Full && *mStateMgrMain.getStateID() == StateID_Wait) {
+        mStateMgrMain.changeState(StateID_OutWait);
+    } else if ((EventManager::isInEvent() || dAcPy_c::GetLink()->hasvt_0x1C0() ||
+                dAcPy_c::GetLink()->checkActionFlagsCont(0x10) ||
+                (!d3d::fn_80016A90(dAcPy_c::GetLink()->poscopy3) && !fn_80104710(false) && !isCrawling())) &&
+               *mStateMgrMain.getStateID() == StateID_Wait) {
+        mStateMgrMain.changeState(StateID_CameraOut);
+    } else if (field_0x530 && *mStateMgrMain.getStateID() == StateID_Wait) {
+        mStateMgrMain.changeState(StateID_CameraOut);
+    }
+
+    if (field_0x540 > 0) {
+        field_0x540--;
+    }
+
+    if (field_0x55A != swimmingRelated() && *mStateMgrMain.getStateID() == StateID_Wait) {
+        mStateMgrMain.changeState(StateID_Out);
+        field_0x55A = swimmingRelated();
+    }
+
+    mStateMgrMain.executeState();
+    field_0x51C = field_0x518;
 
     return true;
+}
+
+bool dLytMeterGanbariGauge_c::fn_80104710(bool arg) const {
+    if (dAcPy_c::GetLink() != nullptr &&
+        dAcPy_c::GetLink()->checkActionFlagsCont(0x400 | 0x100 | 0x80 | 0x40 | 0x10 | 0x4 | 0x2 | 0x1) &&
+        dAcPy_c::GetLink()->checkActionFlagsCont(0x40)) {
+        return true;
+    }
+    if (!arg && field_0x540 > 0) {
+        return true;
+    }
+    return false;
+}
+
+bool dLytMeterGanbariGauge_c::fn_80104760() const {
+    const dAcPy_c *link = dAcPy_c::GetLink();
+    if (link != nullptr &&
+        (link->checkActionFlagsCont(0x2) || link->checkActionFlagsCont(0x80) || link->checkActionFlagsCont(0x4) ||
+         link->checkActionFlagsCont(0x10) || link->checkActionFlagsCont(0x100))) {
+        return true;
+    }
+    return false;
+}
+
+bool dLytMeterGanbariGauge_c::fn_801047B0() const {
+    if (fn_80081FE0(dScGame_c::getCamera(0)->getField_0xD98(), "mogu") ||
+        fn_80081FE0(dScGame_c::getCamera(0)->getField_0xD98(), "mogu2")) {
+        return true;
+    }
+    return false;
+}
+
+bool dLytMeterGanbariGauge_c::isCrawling() const {
+    return dAcPy_c::GetLink()->checkActionFlags(dAcPy_c::FLG0_CRAWLING);
+}
+
+bool dLytMeterGanbariGauge_c::swimmingRelated() {
+    if (!dAcPy_c::GetLink()->checkFlags0x340(0x100) || dAcPy_c::GetLink()->getCurrentAction() == 0x57 ||
+        dAcPy_c::GetLink()->checkActionFlags(dAcPy_c::FLG0_IN_WATER)) {
+        return true;
+    }
+    return false;
+}
+
+bool dLytMeterGanbariGauge_c::displayAirInsteadOfStamina() {
+    if (field_0x554 == 1.0f) {
+        return true;
+    }
+    if (field_0x554 == 2.0f && swimmingRelated()) {
+        return true;
+    }
+    return false;
 }
 
 void dLytMeterGanbariGauge_c::realizeAnimState() {

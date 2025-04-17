@@ -11,6 +11,7 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
+#include "toBeSorted/file_manager.h"
 
 class dAcPy_c : public dAcObjBase_c {
     // See Below for some info
@@ -145,7 +146,7 @@ public:
     /* vt 0x1B4 */ virtual void isByte0x434eEqual7();
     /* vt 0x1B8 */ virtual void canHandleGameOver();
     /* vt 0x1BC */ virtual void vt_0x1BC();
-    /* vt 0x1C0 */ virtual void vt_0x1C0();
+    /* vt 0x1C0 */ virtual void *vt_0x1C0() const;
     /* vt 0x1C4 */ virtual void getActorInActorRef1();
     /* vt 0x1C8 */ virtual void doesActorRef1Exist();
     /* vt 0x1CC */ virtual void unlinkActorRef1();
@@ -295,6 +296,18 @@ public:
 
     inline u8 getRidingActorType() const {
         return mRidingActorType;
+    }
+
+    inline bool hasvt_0x1C0() const {
+        return vt_0x1C0() != nullptr;
+    }
+
+    inline bool isAffectedByStaminaPotion() const {
+        return FileManager::GetInstance()->hasStaminaPotionNormal() && getRidingActorType() != 3;
+    }
+
+    inline bool isAffectedByStaminaPotionPlus() const {
+        return FileManager::GetInstance()->hasStaminaPotionPlus() && getRidingActorType() != 3;
     }
 
     static nw4r::g3d::ResFile getItemResFile(const char *name, mAllocator_c &allocator);

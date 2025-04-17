@@ -430,6 +430,7 @@ d/lyt/meter/d_lyt_meter_ganbari_gauge.cpp:
 	.ctors      start:0x804DB718 end:0x804DB71C
 	.rodata     start:0x804E69D8 end:0x804E6A58
 	.data       start:0x80518F00 end:0x80519578
+	.sdata      start:0x805724F0 end:0x80572500
 	.sdata2     start:0x80579C78 end:0x80579CF8
 	.bss        start:0x805AC750 end:0x805ACA90
 

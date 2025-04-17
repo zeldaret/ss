@@ -293,6 +293,22 @@ public:
         return getGuardianPotionTimer() != 0;
     }
 
+    bool hasAirPotionPlus() const {
+        return getAirPotionPlusTimer() != 0;
+    }
+
+    bool hasAirPotionNormal() const {
+        return getAirPotionTimer() != 0;
+    }
+
+    bool hasStaminaPotionPlus() const {
+        return getStaminaPotionPlusTimer() != 0;
+    }
+
+    bool hasStaminaPotionNormal() const {
+        return getStaminaPotionTimer() != 0;
+    }
+
 private:
     static FileManager *sInstance;
 };
