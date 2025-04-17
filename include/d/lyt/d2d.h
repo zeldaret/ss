@@ -258,6 +258,10 @@ struct AnmGroupBase_c {
         mpFrameCtrl->setFlags(FLAG_NO_LOOP);
     }
 
+    inline void setForwardLoop() {
+        mpFrameCtrl->setFlags(0);
+    }
+
     inline void setToStart() {
         m2d::FrameCtrl_c &ctrl = *mpFrameCtrl;
         ctrl.setCurrFrame(ctrl.getStartFrame());

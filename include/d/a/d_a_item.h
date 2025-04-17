@@ -70,6 +70,15 @@ public:
     static void itemGetEventStart(dAcBase_c *);
     static void itemGetEventEnd(dAcBase_c *);
 
+    enum Trial_e {
+        TRIAL_SKYLOFT,
+        TRIAL_FARON,
+        TRIAL_ELDIN,
+        TRIAL_LANAYRU,
+    };
+
+    static Trial_e getCurrentTrial();
+
     static void healLink(u32 amount, bool); // move to dAcPy_c
 
 private:

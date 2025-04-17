@@ -446,7 +446,9 @@ d/lyt/meter/d_lyt_meter_event_skip.cpp:
 d/lyt/meter/d_lyt_meter_timer.cpp:
 	.text       start:0x80105F70 end:0x8010AEB8
 	.ctors      start:0x804DB720 end:0x804DB724
+	.rodata     start:0x804E6A68 end:0x804E6C28
 	.data       start:0x80519748 end:0x80519F60
+	.sdata2     start:0x80579D00 end:0x80579D30
 
 d/lyt/meter/d_lyt_meter_heart.cpp:
 	.text       start:0x8010AEC0 end:0x8010BD48
@@ -1007,6 +1009,14 @@ d/lyt/d_lyt_game_over.cpp:
 d/lyt/d_lyt_save_mgr.cpp:
 	.text       start:0x80284FB0 end:0x80286C88
 	.ctors      start:0x804DB864 end:0x804DB868
+
+d/lyt/d_lyt_drop_line.cpp:
+	.text       start:0x80286C90 end:0x802884F8
+	.ctors      start:0x804DB868 end:0x804DB86C
+
+d/lyt/d_lyt_force_line.cpp:
+	.text       start:0x80288500 end:0x8028A9F8
+	.ctors      start:0x804DB86C end:0x804DB870
 
 d/lyt/d_lyt_enemy_icon.cpp:
 	.text       start:0x8028AA00 end:0x8028BCD8
