@@ -334,7 +334,7 @@ bool dLytMeterGanbariGauge_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x558 = 0;
     field_0x559 = 0;
     field_0x55B = 0;
-    mpPane = nullptr;
+    mpOwnerPane = nullptr;
     field_0x55A = 0;
 
     field_0x554 = 0.0f;
@@ -382,11 +382,11 @@ bool dLytMeterGanbariGauge_c::remove() {
 }
 
 bool dLytMeterGanbariGauge_c::execute() {
-    if (mpPane == nullptr) {
+    if (mpOwnerPane == nullptr) {
         return true;
     }
 
-    if (!mpPane->IsVisible()) {
+    if (!mpOwnerPane->IsVisible()) {
         if (*mStateMgrMain.getStateID() != StateID_InvisibleWait) {
             mStateMgrMain.changeState(StateID_InvisibleWait);
         }

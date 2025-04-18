@@ -30,10 +30,19 @@ public:
         return sTagProcessor;
     }
 
+    void init();
     void reset();
 
     bool getField_0x329() const {
         return field_0x329;
+    }
+
+    s32 getField_0x2FC() const {
+        return field_0x2FC;
+    }
+
+    void setField_0x2FC(s32 val) {
+        field_0x2FC = val;
     }
 
     s32 getField_0x32C() const {

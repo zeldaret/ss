@@ -156,6 +156,10 @@ public:
         return field_0x550A;
     }
 
+    void setOwnerPane(nw4r::lyt::Pane *pane) {
+        mpOwnerPane = pane;
+    }
+
 private:
     void setItemName(s32 id);
     void setMessage(s32 id);

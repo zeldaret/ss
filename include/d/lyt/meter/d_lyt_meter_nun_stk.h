@@ -27,6 +27,10 @@ public:
 
     virtual ~dLytMeterNunStk_c() {}
 
+    void setOwnerPane(nw4r::lyt::Pane *pane) {
+        mpOwnerPane = pane;
+    }
+
 private:
     void setMessage(s32 id);
 

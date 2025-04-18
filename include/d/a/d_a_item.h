@@ -75,6 +75,7 @@ public:
         TRIAL_FARON,
         TRIAL_ELDIN,
         TRIAL_LANAYRU,
+        TRIAL_NONE,
     };
 
     static Trial_e getCurrentTrial();

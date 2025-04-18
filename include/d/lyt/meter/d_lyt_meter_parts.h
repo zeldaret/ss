@@ -2,6 +2,7 @@
 #define D_LYT_METER_PARTS_H
 
 #include "d/lyt/d2d.h"
+#include "nw4r/lyt/lyt_pane.h"
 #include "s/s_State.hpp"
 
 class dLytMeter1Button_c : public d2d::dSubPane {
@@ -21,6 +22,12 @@ public:
         return mLyt.getName();
     }
 
+    bool shouldCall() const;
+
+    void setOwnerPane(nw4r::lyt::Pane *pane) {
+        mpOwnerPane = pane;
+    }
+
 private:
     STATE_FUNC_DECLARE(dLytMeter1Button_c, Wait);
     STATE_FUNC_DECLARE(dLytMeter1Button_c, ToUse);
@@ -29,14 +36,14 @@ private:
 
     UI_STATE_MGR_DECLARE(dLytMeter1Button_c);
     d2d::dLytSub mLyt;
-    d2d::AnmGroup_c mAnmGroups[3];
-    /* 0x198 */ dWindow_c *mpWindow;
-    /* 0x19C */ dTextBox_c *mpTextbox;
-    /* 0x1A0 */ u32 field_0x1A0;
-    /* 0x1A4 */ s32 field_0x1A4;
-    /* 0x1A8 */ s32 field_0x1A8;
-    /* 0x1AC */ u8 field_0x1AC;
-    /* 0x1AD */ u8 field_0x1AD;
+    d2d::AnmGroup_c mAnm[3];
+    /* 0x198 */ dWindow_c *mpWindow[1];
+    /* 0x19C */ dTextBox_c *mpSizeBox[1];
+    /* 0x1A0 */ nw4r::lyt::Pane *mpOwnerPane;
+    /* 0x1A4 */ s32 mUnuseDelay;
+    /* 0x1A8 */ s32 mCallCount;
+    /* 0x1AC */ bool mShouldCall;
+    /* 0x1AD */ bool mHasInitedCall;
 };
 
 class dLytMeter2Button_c : public d2d::dSubPane {
@@ -56,6 +63,12 @@ public:
         return mLyt.getName();
     }
 
+    bool shouldCall() const;
+
+    void setOwnerPane(nw4r::lyt::Pane *pane) {
+        mpOwnerPane = pane;
+    }
+
 private:
     STATE_FUNC_DECLARE(dLytMeter2Button_c, Wait);
     STATE_FUNC_DECLARE(dLytMeter2Button_c, ToUse);
@@ -64,19 +77,27 @@ private:
 
     UI_STATE_MGR_DECLARE(dLytMeter2Button_c);
     d2d::dLytSub mLyt;
-    d2d::AnmGroup_c mAnmGroups[3];
-    /* 0x198 */ dWindow_c *mpWindow;
-    /* 0x19C */ dTextBox_c *mpTextbox;
-    /* 0x1A0 */ u32 field_0x1A0;
-    /* 0x1A4 */ s32 field_0x1A4;
-    /* 0x1A8 */ s32 field_0x1A8;
-    /* 0x1AC */ u8 field_0x1AC;
-    /* 0x1AD */ u8 field_0x1AD;
+    d2d::AnmGroup_c mAnm[3];
+    /* 0x198 */ dWindow_c *mpWindow[1];
+    /* 0x19C */ dTextBox_c *mpSizeBox[1];
+    /* 0x1A0 */ nw4r::lyt::Pane *mpOwnerPane;
+    /* 0x1A4 */ s32 mUnuseDelay;
+    /* 0x1A8 */ s32 mCallCount;
+    /* 0x1AC */ bool mShouldCall;
+    /* 0x1AD */ bool mHasInitedCall;
 };
 
 class dLytMeterParts_c {
 public:
     dLytMeterParts_c() : mStateMgr(*this, sStateID::null) {}
+
+    void build(s32 index);
+    void execute();
+
+    void setAnmGroups(d2d::AnmGroup_c *inAnm, d2d::AnmGroup_c *outAnm) {
+        mpAnm1 = inAnm;
+        mpAnm2 = outAnm;
+    }
 
 private:
     STATE_FUNC_DECLARE(dLytMeterParts_c, Invisible);
@@ -84,8 +105,11 @@ private:
     STATE_FUNC_DECLARE(dLytMeterParts_c, Visible);
     STATE_FUNC_DECLARE(dLytMeterParts_c, Out);
 
-    UI_STATE_MGR_DECLARE(dLytMeterParts_c);
-    u8 field_0x3C[0x10];
+    /* 0x00 */ UI_STATE_MGR_DECLARE(dLytMeterParts_c);
+    /* 0x3C */ d2d::AnmGroup_c *mpAnm1;
+    /* 0x40 */ d2d::AnmGroup_c *mpAnm2;
+    /* 0x44 */ s32 mIndex;
+    /* 0x48 */ u8 mShouldBeVisible;
 };
 
 #endif

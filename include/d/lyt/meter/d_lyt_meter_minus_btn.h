@@ -122,6 +122,10 @@ public:
 
     bool demoRelated(s32 arg);
 
+    void setOwnerPane(nw4r::lyt::Pane *pane) {
+        mpOwnerPane = pane;
+    }
+
 private:
     bool shouldCall() const;
     bool fn_800F75E0() const;

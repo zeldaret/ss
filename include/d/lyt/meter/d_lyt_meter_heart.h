@@ -21,6 +21,10 @@ public:
     }
 
     virtual ~dLytMeterHeart_c() {}
+    
+    s32 getField_0x78C() const {
+        return field_0x78C;
+    }
 
 private:
     u8 getCurrentHealth() const;

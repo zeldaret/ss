@@ -89,6 +89,22 @@ public:
 
     mVec3_c getLastVisibleDigitPosition();
 
+    void setField_0x8A9(u8 val) {
+        field_0x8A9 = val;
+    }
+
+    void setField_0x8AA(u8 val) {
+        field_0x8AA = val;
+    }
+
+    u8 getField_0x8AC() const {
+        return field_0x8AC;
+    }
+
+    void setField_0x8AC(u8 val) {
+        field_0x8AC = val;
+    }
+
 private:
     bool updateDisplayedAmount(bool suppressSound);
     bool hasChangeInRupees() const;

@@ -27,6 +27,10 @@ public:
     bool isCalling() const;
     void setCall(bool shouldCall);
 
+    void setOwnerPane(nw4r::lyt::Pane *pane) {
+        mpOwnerPane = pane;
+    }
+
 private:
     void setMessage(s32 id);
     bool isMapOpen() const;

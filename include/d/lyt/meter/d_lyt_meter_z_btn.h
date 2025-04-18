@@ -28,6 +28,10 @@ public:
 
     bool isCalling() const;
 
+    void setOwnerPane(nw4r::lyt::Pane *pane) {
+        mpOwnerPane = pane;
+    }
+
 private:
     void setMessage(s32 id);
 

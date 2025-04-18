@@ -27,6 +27,10 @@ public:
         mpContainerAnmGroup = g;
     }
 
+    void setOwnerPane(nw4r::lyt::Pane *pane) {
+        mpOwnerPane = pane;
+    }
+
 private:
     s32 getLytFrameForShield(s32) const;
     void setLevel(f32 level);

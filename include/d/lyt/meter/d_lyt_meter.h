@@ -32,6 +32,26 @@
 #include "d/lyt/d_lyt_bird_gauge.h"
 #include "d/lyt/d_lyt_boss_gauge.h"
 #include "d/lyt/d_lyt_sky_gauge.h"
+#include "m/m_vec.h"
+
+enum Meter_e {
+    METER_GANBARI = 0,
+    METER_RUPY = 1,
+    METER_ITEM_SELECT = 2,
+    METER_CROSS_BTN = 3,
+    METER_PLUS_BTN = 4,
+    METER_MINUS_BTN = 5,
+    METER_A_BTN = 6,
+    METER_DOWSING = 7,
+    METER_Z_BTN = 8,
+    METER_NUN_STK = 9,
+    METER_REMOCON_BG = 10,
+    METER_NUN_BG = 11,
+    METER_HEART = 12,
+    METER_SHIELD = 13,
+    METER_1_BTN = 14,
+    METER_2_BTN = 15,
+};
 
 // clang-format on
 
@@ -55,11 +75,11 @@ public:
     u8 getUiMode();
 
     u8 getField_0x13792() const {
-        return field_0x13792;
+        return field_0x13792[0];
     }
 
     u8 getField_0x13793() const {
-        return field_0x13793;
+        return field_0x13792[1];
     }
 
     u8 getField_0x1377E() const {
@@ -116,19 +136,26 @@ public:
     /* 0x1373C */ mVec3_c mPos2;
     /* 0x13748 */ u8 field_0x13748[0x13750 - 0x13748];
     /* 0x13750 */ s32 field_0x13750;
-    /* 0x13754 */ u8 field_0x13754[0x13770 - 0x13754];
+    /* 0x13754 */ s32 field_0x13754;
+    /* 0x13758 */ s32 field_0x13758;
+    /* 0x1375C */ s32 field_0x1375C;
+    /* 0x13760 */ s32 field_0x13760;
+    /* 0x13764 */ s32 field_0x13764;
+    /* 0x13768 */ s32 field_0x13768;
+    /* 0x1376C */ s32 field_0x1376C;
     /* 0x13770 */ u8 field_0x13770;
-    /* 0x13771 */ u8 field_0x13771[0x13774 - 0x13771];
+    /* 0x13771 */ u8 field_0x13771;
+    /* 0x13772 */ u8 field_0x13772;
+    /* 0x13773 */ u8 field_0x13773;
     /* 0x13774 */ u8 field_0x13774;
     /* 0x13775 */ u8 field_0x13775[0x1377E - 0x13775];
     /* 0x1377E */ u8 field_0x1377E;
     /* 0x1377F */ u8 field_0x1377F;
-    /* 0x13780 */ u8 field_0x13780[0x13792 - 0x13780];
-    /* 0x13792 */ u8 field_0x13792;
-    /* 0x13793 */ u8 field_0x13793;
-    /* 0x13794 */ u8 field_0x13794[0x1379A - 0x13794];
-    /* 0x1379A */ u8 field_0x1379A;
-    /* 0x1379B */ u8 field_0x1379B[0x137B4 - 0x1379B];
+    /* 0x13780 */ u8 field_0x13780[0x13782 - 0x13780];
+    /* 0x13782 */ u8 field_0x13782[16];
+    /* 0x13792 */ u8 field_0x13792[16];
+    /* 0x137A2 */ u8 field_0x137A2[16];
+    /* 0x137B2 */ u8 field_0x137B2;
     /* 0x137B4 */ mVec3_c mPos3;
     /* 0x137C0 */ u32 field_0x137C0;
 };
@@ -193,7 +220,7 @@ public:
     }
 
     u8 getMeterField_0x1379A() const {
-        return mMeter.field_0x1379A;
+        return mMeter.field_0x13792[8];
     }
 
     bool checkAllFlags(u32 mask) const {
@@ -220,7 +247,7 @@ public:
         }
     }
 
-    static u8 getField_0x13B63()  {
+    static u8 getField_0x13B63() {
         if (sInstance != nullptr) {
             return sInstance->field_0x13B63;
         } else {
@@ -228,18 +255,51 @@ public:
         }
     }
 
-    static void setField_0x13B61(u8 val)  {
+    static void setRupyField_0x8A9(u8 val) {
+        if (sInstance != nullptr) {
+            sInstance->mMeter.mRupy.setField_0x8A9(val);
+        }
+    }
+
+    static void setRupyField_0x8AA(u8 val) {
+        if (sInstance != nullptr) {
+            sInstance->mMeter.mRupy.setField_0x8AA(val);
+        }
+    }
+
+    static void setRupyField_0x8AC(u8 val) {
+        if (sInstance != nullptr) {
+            sInstance->mMeter.mRupy.setField_0x8AC(val);
+        }
+    }
+
+    static u8 getRupyField_0x8AC() {
+        if (sInstance != nullptr) {
+            return sInstance->mMeter.mRupy.getField_0x8AC();
+        } else {
+            return 0;
+        }
+    }
+
+    static s32 getHeartField_0x78C() {
+        if (sInstance != nullptr) {
+            return sInstance->mMeter.mHeart.getField_0x78C();
+        } else {
+            return 0;
+        }
+    }
+
+    static void setField_0x13B61(u8 val) {
         if (sInstance != nullptr) {
             sInstance->field_0x13B61 = val;
         }
     }
 
-    static void setField_0x13B64(u8 val)  {
+    static void setField_0x13B64(u8 val) {
         if (sInstance != nullptr) {
             sInstance->field_0x13B64 = val;
         }
     }
-
 
     static u8 getDowsing0x550A() {
         if (sInstance != nullptr) {
@@ -275,11 +335,15 @@ private:
     /* 0x13B48 */ bool mVisible;
     /* 0x13B49 */ u8 _0x13B49[0x13B50 - 0x13B49];
     /* 0x13B50 */ s32 mFlags;
-    /* 0x13B54 */ u8 _0x13B54[0x13B61 - 0x13B54];
+    /* 0x13B54 */ s32 field_0x13B54;
+    /* 0x13B58 */ u8 _0x13B58[0x13B60 - 0x13B58];
+    /* 0x13B60 */ u8 field_0x13B60;
     /* 0x13B61 */ u8 field_0x13B61;
     /* 0x13B62 */ u8 field_0x13B62;
     /* 0x13B63 */ u8 field_0x13B63;
     /* 0x13B64 */ u8 field_0x13B64;
+    /* 0x13B65 */ u8 field_0x13B65;
+    /* 0x13B66 */ u8 field_0x13B66;
 
     static dLytMeterContainer_c *sInstance;
 };

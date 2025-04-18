@@ -47,8 +47,12 @@ public:
     dLytMeterBossKey_c() : mStateMgr(*this, sStateID::null) {}
     ~dLytMeterBossKey_c() {}
 
-    virtual void BossKey0x8() {}
-    virtual void BossKey0xC() {}
+    virtual d2d::LytBase_c *getLyt() {
+        return &mLyt;
+    }
+    virtual const char *getName() const {
+        return mLyt.getName();
+    }
 
     bool build(d2d::ResAccIf_c *);
     bool remove();
@@ -82,8 +86,12 @@ public:
     dLytMeterSmallKey_c() : mStateMgr(*this, sStateID::null) {}
     ~dLytMeterSmallKey_c() {}
 
-    virtual void SmallKey0x8() {}
-    virtual void SmallKey0xC() {}
+    virtual d2d::LytBase_c *getLyt() {
+        return &mLyt;
+    }
+    virtual const char *getName() const {
+        return mLyt.getName();
+    }
 
     bool build(d2d::ResAccIf_c *);
     bool remove();

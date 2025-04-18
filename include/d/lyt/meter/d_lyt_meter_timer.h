@@ -1,6 +1,7 @@
 #ifndef D_LYT_METER_TIMER_H
 #define D_LYT_METER_TIMER_H
 
+#include "common.h"
 #include "d/a/d_a_item.h"
 #include "d/lyt/d2d.h"
 #include "m/m_color.h"
@@ -9,7 +10,8 @@
 
 class LytMeterTimerPart1_c : public d2d::dSubPane {
 public:
-    LytMeterTimerPart1_c() {
+    LytMeterTimerPart1_c()
+        : mActualTearCount(0), mDisplayedTearCount(0), field_0x760(0), mTrial(dAcItem_c::TRIAL_NONE), field_0x780(0) {
         sInstance = this;
     }
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
@@ -95,7 +97,7 @@ private:
 
 class LytMeterTimerPart2_c : public d2d::dSubPane {
 public:
-    LytMeterTimerPart2_c() {
+    LytMeterTimerPart2_c(): mNumPetals(0), mTrial(dAcItem_c::TRIAL_NONE), mVisible(true), mFlowerLoopFrame(0.0f) {
         sInstance = this;
     }
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
@@ -223,7 +225,22 @@ private:
 
 class dLytMeterTimer_c {
 public:
-    dLytMeterTimer_c() : mStateMgr(*this, sStateID::null) {}
+    dLytMeterTimer_c()
+        : mStateMgr(*this, sStateID::null),
+          mpPart1(nullptr),
+          mpPart2(nullptr),
+          field_0x48(0),
+          field_0x49(0),
+          mActualTime(0),
+          mLastTime(0),
+          field_0x54(0),
+          field_0x55(0),
+          field_0x56(8),
+          field_0x57(8),
+          field_0x58(0),
+          field_0x59(0),
+          field_0x5C(0),
+          field_0x60(0) {}
     virtual ~dLytMeterTimer_c() {}
     bool build();
     bool remove();
@@ -267,6 +284,7 @@ private:
     /* 0x40 */ LytMeterTimerPart1_c *mpPart1;
     /* 0x44 */ LytMeterTimerPart2_c *mpPart2;
     /* 0x48 */ u8 field_0x48;
+    /* 0x49 */ u8 field_0x49;
     /* 0x4C */ s32 mActualTime;
     /* 0x50 */ s32 mLastTime;
     /* 0x54 */ u8 field_0x54;

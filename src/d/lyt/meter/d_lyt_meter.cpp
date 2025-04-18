@@ -6,10 +6,14 @@
 #include "d/d_stage_mgr.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/lyt/d_lyt_area_caption.h"
+#include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_meter_configuration.h"
 #include "d/lyt/d_window.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "m/m_vec.h"
+#include "nw4r/lyt/lyt_group.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
+#include "toBeSorted/small_sound_mgr.h"
 // clang-format on
 
 static dLytMeterConfiguration_c sConf;
@@ -39,53 +43,53 @@ void dLytMeter1Button_c::executeState_Wait() {
 void dLytMeter1Button_c::finalizeState_Wait() {}
 
 void dLytMeter1Button_c::initializeState_ToUse() {
-    mAnmGroups[0].setBackwardsOnce();
-    mAnmGroups[0].setToStart();
-    mAnmGroups[0].setAnimEnable(true);
+    mAnm[0].setBackwardsOnce();
+    mAnm[0].setToStart();
+    mAnm[0].setAnimEnable(true);
 }
 void dLytMeter1Button_c::executeState_ToUse() {
-    if (mAnmGroups[0].isStop2()) {
+    if (mAnm[0].isStop2()) {
         mStateMgr.changeState(StateID_Wait);
     }
 
-    if (mAnmGroups[0].isEnabled()) {
-        mAnmGroups[0].play();
+    if (mAnm[0].isEnabled()) {
+        mAnm[0].play();
     }
 }
 void dLytMeter1Button_c::finalizeState_ToUse() {
-    mAnmGroups[0].setAnimEnable(false);
+    mAnm[0].setAnimEnable(false);
 }
 
 void dLytMeter1Button_c::initializeState_ToUnuse() {
-    mAnmGroups[0].setForwardOnce();
-    mAnmGroups[0].setToStart();
-    mAnmGroups[0].setAnimEnable(true);
+    mAnm[0].setForwardOnce();
+    mAnm[0].setToStart();
+    mAnm[0].setAnimEnable(true);
 }
 void dLytMeter1Button_c::executeState_ToUnuse() {
-    if (mAnmGroups[0].isStop2()) {
+    if (mAnm[0].isStop2()) {
         mStateMgr.changeState(StateID_Unuse);
     }
 
-    if (mAnmGroups[0].isEnabled()) {
-        mAnmGroups[0].play();
+    if (mAnm[0].isEnabled()) {
+        mAnm[0].play();
     }
 }
 void dLytMeter1Button_c::finalizeState_ToUnuse() {
-    mAnmGroups[0].setAnimEnable(false);
+    mAnm[0].setAnimEnable(false);
 }
 
 void dLytMeter1Button_c::initializeState_Unuse() {
-    field_0x1A4 = 15;
+    mUnuseDelay = 15;
 }
 void dLytMeter1Button_c::executeState_Unuse() {
     if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x80)) {
-        if (!(field_0x1A4 > 0)) {
+        if (!(mUnuseDelay > 0)) {
             mStateMgr.changeState(StateID_ToUse);
             return;
         }
-        field_0x1A4 -= 1;
+        mUnuseDelay -= 1;
     } else {
-        field_0x1A4 = 15;
+        mUnuseDelay = 15;
     }
 }
 void dLytMeter1Button_c::finalizeState_Unuse() {}
@@ -96,50 +100,114 @@ static const d2d::LytBrlanMapping btn1BrlanMap[] = {
     { "remoConBtn_04_loop.brlan",  "G_loop_00"},
 };
 
-static char *sWindowName1 = "W_bgP_00";
+#define BUTTON_1_ANIM_INPUT 0
+#define BUTTON_1_ANIM_CALL 1
+#define BUTTON_1_ANIM_LOOP 2
+
+#define BUTTON_1_NUM_ANIMS 3
+
+static char *sWindowName1[] = {"W_bgP_00"};
 
 bool dLytMeter1Button_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setResAcc(resAcc);
     mLyt.build("remoConBtn_04.brlyt", nullptr);
 
-    for (int i = 0; i < 3; i++) {
-        mAnmGroups[i].init(btn1BrlanMap[i].mFile, resAcc, mLyt.getLayout(), btn1BrlanMap[i].mName);
-        mAnmGroups[i].bind(false);
-        mAnmGroups[i].setAnimEnable(false);
+    for (int i = 0; i < BUTTON_1_NUM_ANIMS; i++) {
+        mAnm[i].init(btn1BrlanMap[i].mFile, resAcc, mLyt.getLayout(), btn1BrlanMap[i].mName);
+        mAnm[i].bind(false);
+        mAnm[i].setAnimEnable(false);
     }
-    // TODO
+
     mLyt.fn_800AB9A0(mLyt.getTextBox("T_sabBtnS_00"), 0);
     mLyt.fn_800AB9A0(mLyt.getTextBox("T_sabBtn_00"), 0);
-    mpWindow = mLyt.getWindow(sWindowName1);
-    mpTextbox = mLyt.getSizeBoxInWindow(sWindowName1);
-    mpWindow->UpdateSize(mpTextbox, 32.0f);
-    field_0x1A4 = 15;
-    field_0x1AC = 0;
-    field_0x1AD = 0;
-    field_0x1A8 = 0;
-    mAnmGroups[1].setToEnd();
-    mAnmGroups[1].setAnimEnable(true);
-    mAnmGroups[2].setAnimEnable(true);
+    for (int i = 0; i < 1; i++) {
+        mpWindow[i] = mLyt.getWindow(sWindowName1[i]);
+        mpSizeBox[i] = mLyt.getSizeBoxInWindow(sWindowName1[i]);
+        mpWindow[i]->UpdateSize(mpSizeBox[i], 32.0f);
+    }
+    mUnuseDelay = 15;
+    mShouldCall = false;
+    mHasInitedCall = false;
+    mCallCount = false;
+    mAnm[BUTTON_1_ANIM_CALL].setToEnd();
+    mAnm[BUTTON_1_ANIM_CALL].setAnimEnable(true);
+    mAnm[BUTTON_1_ANIM_LOOP].setAnimEnable(true);
     mLyt.calc();
-    mAnmGroups[1].setAnimEnable(false);
+    mAnm[BUTTON_1_ANIM_CALL].setAnimEnable(false);
     mStateMgr.changeState(StateID_Wait);
     return true;
 }
 
 bool dLytMeter1Button_c::remove() {
-    for (int i = 0; i < 3; i++) {
-        mAnmGroups[i].unbind();
-        mAnmGroups[i].remove();
+    for (int i = 0; i < BUTTON_1_NUM_ANIMS; i++) {
+        mAnm[i].unbind();
+        mAnm[i].remove();
     }
     return true;
 }
 
 bool dLytMeter1Button_c::execute() {
-    if (*mStateMgr.getStateID() == StateID_ToUnuse) {
-        // TODO
-    } else {
-        mStateMgr.executeState();
+    dLytMeterContainer_c *container = dLytMeterContainer_c::GetInstance();
+    if (mpOwnerPane == nullptr) {
+        return true;
     }
+
+    if (!mpOwnerPane->IsVisible()) {
+        if (*mStateMgr.getStateID() == StateID_ToUnuse) {
+            mAnm[BUTTON_1_ANIM_INPUT].setToEnd2();
+        }
+        return true;
+    }
+
+    mStateMgr.executeState();
+
+    if (dLytControlGame_c::getInstance()->isStateNormal()) {
+        if (StoryflagManager::sInstance->getCounterOrFlag(571)) {
+            mShouldCall = true;
+        }
+    } else {
+        mShouldCall = false;
+    }
+
+    if (mShouldCall && container->checkAllFlags(0x80)) {
+        if (!mHasInitedCall) {
+            mAnm[BUTTON_1_ANIM_CALL].setToEnd();
+            mAnm[BUTTON_1_ANIM_CALL].setAnimEnable(true);
+            mHasInitedCall = true;
+        }
+
+        if (mAnm[BUTTON_1_ANIM_CALL].isEnabled()) {
+            mAnm[BUTTON_1_ANIM_CALL].play();
+            if (container->checkAllFlags(0x80) && mCallCount < 3 && mAnm[BUTTON_1_ANIM_CALL].getFrame() == 1.0f) {
+                SmallSoundManager::GetInstance()->playSound(SE_S_1_BUTTON_BLINK);
+                mCallCount++;
+            }
+        }
+    } else {
+        if (mHasInitedCall == true) {
+            mAnm[BUTTON_1_ANIM_CALL].setToEnd();
+        } else if (mAnm[BUTTON_1_ANIM_CALL].isEnabled()) {
+            mAnm[BUTTON_1_ANIM_CALL].setAnimEnable(false);
+        }
+    }
+
+    if (!mShouldCall) {
+        mHasInitedCall = mShouldCall;
+    }
+
+    mShouldCall = false;
+    if (mAnm[BUTTON_1_ANIM_LOOP].isEnabled()) {
+        mAnm[BUTTON_1_ANIM_LOOP].play();
+    }
+
+    return true;
+}
+
+bool dLytMeter1Button_c::shouldCall() const {
+    if (dLytControlGame_c::getInstance()->isStateNormal() && StoryflagManager::sInstance->getCounterOrFlag(571)) {
+        return true;
+    }
+    return false;
 }
 
 void dLytMeter2Button_c::initializeState_Wait() {}
@@ -152,53 +220,53 @@ void dLytMeter2Button_c::executeState_Wait() {
 void dLytMeter2Button_c::finalizeState_Wait() {}
 
 void dLytMeter2Button_c::initializeState_ToUse() {
-    mAnmGroups[0].setBackwardsOnce();
-    mAnmGroups[0].setToStart();
-    mAnmGroups[0].setAnimEnable(true);
+    mAnm[0].setBackwardsOnce();
+    mAnm[0].setToStart();
+    mAnm[0].setAnimEnable(true);
 }
 void dLytMeter2Button_c::executeState_ToUse() {
-    if (mAnmGroups[0].isStop2()) {
+    if (mAnm[0].isStop2()) {
         mStateMgr.changeState(StateID_Wait);
     }
 
-    if (mAnmGroups[0].isEnabled()) {
-        mAnmGroups[0].play();
+    if (mAnm[0].isEnabled()) {
+        mAnm[0].play();
     }
 }
 void dLytMeter2Button_c::finalizeState_ToUse() {
-    mAnmGroups[0].setAnimEnable(false);
+    mAnm[0].setAnimEnable(false);
 }
 
 void dLytMeter2Button_c::initializeState_ToUnuse() {
-    mAnmGroups[0].setForwardOnce();
-    mAnmGroups[0].setToStart();
-    mAnmGroups[0].setAnimEnable(true);
+    mAnm[0].setForwardOnce();
+    mAnm[0].setToStart();
+    mAnm[0].setAnimEnable(true);
 }
 void dLytMeter2Button_c::executeState_ToUnuse() {
-    if (mAnmGroups[0].isStop2()) {
+    if (mAnm[0].isStop2()) {
         mStateMgr.changeState(StateID_Unuse);
     }
 
-    if (mAnmGroups[0].isEnabled()) {
-        mAnmGroups[0].play();
+    if (mAnm[0].isEnabled()) {
+        mAnm[0].play();
     }
 }
 void dLytMeter2Button_c::finalizeState_ToUnuse() {
-    mAnmGroups[0].setAnimEnable(false);
+    mAnm[0].setAnimEnable(false);
 }
 
 void dLytMeter2Button_c::initializeState_Unuse() {
-    field_0x1A4 = 15;
+    mUnuseDelay = 15;
 }
 void dLytMeter2Button_c::executeState_Unuse() {
     if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x100)) {
-        if (!(field_0x1A4 > 0)) {
+        if (!(mUnuseDelay > 0)) {
             mStateMgr.changeState(StateID_ToUse);
             return;
         }
-        field_0x1A4 -= 1;
+        mUnuseDelay -= 1;
     } else {
-        field_0x1A4 = 15;
+        mUnuseDelay = 15;
     }
 }
 void dLytMeter2Button_c::finalizeState_Unuse() {}
@@ -209,64 +277,221 @@ static const d2d::LytBrlanMapping btn2BrlanMap[] = {
     { "remoConBtn_05_loop.brlan",  "G_loop_00"},
 };
 
-static char *sWindowName2 = "W_bgP_00";
+#define BUTTON_2_ANIM_INPUT 0
+#define BUTTON_2_ANIM_CALL 1
+#define BUTTON_2_ANIM_LOOP 2
+
+#define BUTTON_2_NUM_ANIMS 3
+
+static char *sWindowName2[] = {"W_bgP_00"};
 
 bool dLytMeter2Button_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setResAcc(resAcc);
     mLyt.build("remoConBtn_05.brlyt", nullptr);
 
-    for (int i = 0; i < 3; i++) {
-        mAnmGroups[i].init(btn2BrlanMap[i].mFile, resAcc, mLyt.getLayout(), btn2BrlanMap[i].mName);
-        mAnmGroups[i].bind(false);
-        mAnmGroups[i].setAnimEnable(false);
+    for (int i = 0; i < BUTTON_2_NUM_ANIMS; i++) {
+        mAnm[i].init(btn2BrlanMap[i].mFile, resAcc, mLyt.getLayout(), btn2BrlanMap[i].mName);
+        mAnm[i].bind(false);
+        mAnm[i].setAnimEnable(false);
     }
-    mpWindow = mLyt.getWindow(sWindowName2);
-    mpTextbox = mLyt.getSizeBoxInWindow(sWindowName2);
-    mpWindow->UpdateSize(mpTextbox, 32.0f);
-    field_0x1A4 = 15;
-    field_0x1AC = 0;
-    field_0x1AD = 0;
-    field_0x1A8 = 0;
-    mAnmGroups[1].setToEnd();
-    mAnmGroups[1].setAnimEnable(true);
-    mAnmGroups[2].setAnimEnable(true);
+    for (int i = 0; i < 1; i++) {
+        mpWindow[i] = mLyt.getWindow(sWindowName2[i]);
+        mpSizeBox[i] = mLyt.getSizeBoxInWindow(sWindowName2[i]);
+        mpWindow[i]->UpdateSize(mpSizeBox[i], 32.0f);
+    }
+    mUnuseDelay = 15;
+    mShouldCall = 0;
+    mHasInitedCall = 0;
+    mCallCount = 0;
+    mAnm[BUTTON_2_ANIM_CALL].setToEnd();
+    mAnm[BUTTON_2_ANIM_CALL].setAnimEnable(true);
+    mAnm[BUTTON_2_ANIM_LOOP].setAnimEnable(true);
     mLyt.calc();
-    mAnmGroups[1].setAnimEnable(false);
+    mAnm[BUTTON_2_ANIM_CALL].setAnimEnable(false);
     mStateMgr.changeState(StateID_Wait);
     return true;
 }
 
 bool dLytMeter2Button_c::remove() {
     for (int i = 0; i < 3; i++) {
-        mAnmGroups[i].unbind();
-        mAnmGroups[i].remove();
+        mAnm[i].unbind();
+        mAnm[i].remove();
     }
     return true;
 }
 
 bool dLytMeter2Button_c::execute() {
-    if (*mStateMgr.getStateID() == StateID_ToUnuse) {
-        // TODO
-    } else {
-        mStateMgr.executeState();
+    dLytMeterContainer_c *container = dLytMeterContainer_c::GetInstance();
+    if (container->getMeterField_0x13774()) {
+        StoryflagManager::sInstance->unsetFlag(832);
     }
+    if (mpOwnerPane == nullptr) {
+        return true;
+    }
+
+    if (!mpOwnerPane->IsVisible()) {
+        if (*mStateMgr.getStateID() == StateID_ToUnuse) {
+            mAnm[BUTTON_1_ANIM_INPUT].setToEnd2();
+        }
+        return true;
+    }
+
+    mStateMgr.executeState();
+
+    if (dLytControlGame_c::getInstance()->isStateNormal()) {
+        if (StoryflagManager::sInstance->getCounterOrFlag(832)) {
+            mShouldCall = true;
+        }
+    } else {
+        mShouldCall = false;
+    }
+
+    if (mShouldCall && container->checkAllFlags(0x100)) {
+        if (!mHasInitedCall) {
+            mAnm[BUTTON_1_ANIM_CALL].setToEnd();
+            mAnm[BUTTON_1_ANIM_CALL].setAnimEnable(true);
+            mHasInitedCall = true;
+        }
+
+        if (mAnm[BUTTON_1_ANIM_CALL].isEnabled()) {
+            mAnm[BUTTON_1_ANIM_CALL].play();
+            if (container->checkAllFlags(0x100) && mCallCount < 3 && mAnm[BUTTON_1_ANIM_CALL].getFrame() == 1.0f) {
+                SmallSoundManager::GetInstance()->playSound(SE_S_2_BUTTON_BLINK);
+                mCallCount++;
+            }
+        }
+    } else {
+        if (mHasInitedCall == true) {
+            mAnm[BUTTON_1_ANIM_CALL].setToEnd();
+        } else if (mAnm[BUTTON_1_ANIM_CALL].isEnabled()) {
+            mAnm[BUTTON_1_ANIM_CALL].setAnimEnable(false);
+        }
+    }
+
+    if (!mShouldCall) {
+        mHasInitedCall = mShouldCall;
+    }
+
+    mShouldCall = false;
+    if (mAnm[BUTTON_1_ANIM_LOOP].isEnabled()) {
+        mAnm[BUTTON_1_ANIM_LOOP].play();
+    }
+
+    return true;
+}
+
+bool dLytMeter2Button_c::shouldCall() const {
+    if (dLytControlGame_c::getInstance()->isStateNormal() && StoryflagManager::sInstance->getCounterOrFlag(832)) {
+        return true;
+    }
+    return false;
 }
 
 void dLytMeterParts_c::initializeState_Invisible() {}
-void dLytMeterParts_c::executeState_Invisible() {}
+void dLytMeterParts_c::executeState_Invisible() {
+    if (mShouldBeVisible) {
+        if (mIndex == METER_SHIELD) {
+            mpAnm1->setForwardOnce();
+            if (dMessage_c::getInstance()->getField_0x2FC() != 0) {
+                mpAnm1->setToEnd();
+                dLytMeterContainer_c::setRupyField_0x8A9(1);
+            } else {
+                mpAnm1->setFrame(0.0f);
+                dLytMeterContainer_c::setRupyField_0x8A9(2);
+            }
+            mpAnm1->setAnimEnable(true);
+        } else {
+            mpAnm1->setForwardOnce();
+            mpAnm1->setFrame(0.0f);
+            mpAnm1->setAnimEnable(true);
+        }
+        mStateMgr.changeState(StateID_In);
+    }
+}
 void dLytMeterParts_c::finalizeState_Invisible() {}
 
 void dLytMeterParts_c::initializeState_In() {}
-void dLytMeterParts_c::executeState_In() {}
+void dLytMeterParts_c::executeState_In() {
+    if (mpAnm1->isEndReached()) {
+        mpAnm1->setAnimEnable(false);
+        mStateMgr.changeState(StateID_Visible);
+    }
+
+    if (mpAnm1->isEnabled()) {
+        mpAnm1->play();
+    }
+}
 void dLytMeterParts_c::finalizeState_In() {}
 
 void dLytMeterParts_c::initializeState_Visible() {}
-void dLytMeterParts_c::executeState_Visible() {}
+void dLytMeterParts_c::executeState_Visible() {
+    if (!mShouldBeVisible) {
+        if (mIndex == METER_SHIELD) {
+            mpAnm2->setForwardOnce();
+            if (dLytMeterContainer_c::getRupyField_0x8AC()) {
+                mpAnm2->setToEnd();
+                if (dLytMeterContainer_c::getHeartField_0x78C() == 0) {
+                    dLytMeterContainer_c::setRupyField_0x8AA(1);
+                } else {
+                    dLytMeterContainer_c::setRupyField_0x8AA(3);
+                }
+                dLytMeterContainer_c::setRupyField_0x8AC(0);
+            } else {
+                mpAnm2->setFrame(0.0f);
+                if (dLytMeterContainer_c::getHeartField_0x78C() == 0) {
+                    dLytMeterContainer_c::setRupyField_0x8AA(2);
+                } else {
+                    dLytMeterContainer_c::setRupyField_0x8AA(4);
+                }
+            }
+            mpAnm2->setAnimEnable(true);
+        } else {
+            mpAnm2->setForwardOnce();
+            mpAnm2->setFrame(0.0f);
+            mpAnm2->setAnimEnable(true);
+        }
+        mStateMgr.changeState(StateID_Out);
+    }
+}
 void dLytMeterParts_c::finalizeState_Visible() {}
 
 void dLytMeterParts_c::initializeState_Out() {}
-void dLytMeterParts_c::executeState_Out() {}
+void dLytMeterParts_c::executeState_Out() {
+    dLytMeterContainer_c *container = dLytMeterContainer_c::GetInstance();
+    if (mpAnm2->isEndReached()) {
+        if (mIndex == METER_SHIELD && dMessage_c::getInstance()->getField_0x2FC() == -2) {
+            dMessage_c::getInstance()->setField_0x2FC(0);
+        }
+        mpAnm2->setAnimEnable(false);
+        mStateMgr.changeState(StateID_Invisible);
+    }
+
+    if (mpAnm2->isEnabled()) {
+        mpAnm2->play();
+    }
+
+    switch (mIndex) {
+        case 1:  container->clearFlags(0x40); break;
+        case 4:  container->clearFlags(0x80); break;
+        case 3:  container->clearFlags(0x1 | 0x2 | 0x4 | 0x8); break;
+        case 5:  container->clearFlags(0x100); break;
+        case 6:  container->clearFlags(0x200); break;
+        case 8:  container->clearFlags(0x400); break;
+        case 9:  container->clearFlags(0x1000); break;
+        case 10: container->clearFlags(0x200); break;
+    }
+}
 void dLytMeterParts_c::finalizeState_Out() {}
+
+void dLytMeterParts_c::build(s32 index) {
+    mIndex = index;
+    mShouldBeVisible = false;
+    mStateMgr.changeState(StateID_Invisible);
+}
+
+void dLytMeterParts_c::execute() {
+    mStateMgr.executeState();
+}
 
 void floats() {
     32.0f;
@@ -335,11 +560,23 @@ static const d2d::LytBrlanMapping meterBrlanMap[] = {
     {"basicPosition_00_rupyPosition.brlan",   "G_rupyPosi_00"},
 };
 
+#define METER_ANIM_POSITION_IN_OFFSET 0
+#define METER_ANIM_POSITION_OUT_OFFSET 16
+#define METER_ANIM_POSITION 32
+#define METER_ANIM_RUPY_POSITION 33
+
+#define METER_NUM_ANIMS 34
+
+#define METER_NUM_PANES 16
+
+static const char *sGroupName = "G_ref_00";
+
 bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     mLyt.setResAcc(resAcc);
     mLyt.build("basicPosition_00.brlyt", nullptr);
     mLyt.setPriority(0x8A);
-    for (int i = 0; i < 34; i++) {
+
+    for (int i = 0; i < METER_NUM_ANIMS; i++) {
         mAnmGroups[i].init(meterBrlanMap[i].mFile, resAcc, mLyt.getLayout(), meterBrlanMap[i].mName);
         mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
@@ -358,41 +595,55 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
         mp2Button = nullptr;
     }
 
-    mNodes[0].mpLytPane = &mGanbariGauge;
-    mNodes[1].mpLytPane = &mRupy;
-    mNodes[2].mpLytPane = &mItemSelect;
-    mNodes[3].mpLytPane = &mCrossBtn;
-    mNodes[4].mpLytPane = &mPlusBtn;
-    mNodes[5].mpLytPane = &mMinusBtn;
-    mNodes[6].mpLytPane = &mABtn;
-    mNodes[7].mpLytPane = &mDowsing;
-    mNodes[8].mpLytPane = &mZBtn;
-    mNodes[9].mpLytPane = &mNunStk;
-    mNodes[10].mpLytPane = &mRemoCon;
-    mNodes[11].mpLytPane = &mNunBg;
-    mNodes[12].mpLytPane = &mHeart;
-    mNodes[13].mpLytPane = &mShield;
-    mNodes[14].mpLytPane = mp1Button;
-    mNodes[15].mpLytPane = mp2Button;
-    mPosArray1[0] = mLyt.findPane("N_shield_00")->GetTranslate();
-    mPosArray1[1] = mLyt.findPane("N_shield_01")->GetTranslate();
+    mNodes[METER_GANBARI].mpLytPane = &mGanbariGauge;
+    mNodes[METER_RUPY].mpLytPane = &mRupy;
+    mNodes[METER_ITEM_SELECT].mpLytPane = &mItemSelect;
+    mNodes[METER_CROSS_BTN].mpLytPane = &mCrossBtn;
+    mNodes[METER_PLUS_BTN].mpLytPane = &mPlusBtn;
+    mNodes[METER_MINUS_BTN].mpLytPane = &mMinusBtn;
+    mNodes[METER_A_BTN].mpLytPane = &mABtn;
+    mNodes[METER_DOWSING].mpLytPane = &mDowsing;
+    mNodes[METER_Z_BTN].mpLytPane = &mZBtn;
+    mNodes[METER_NUN_STK].mpLytPane = &mNunStk;
+    mNodes[METER_REMOCON_BG].mpLytPane = &mRemoCon;
+    mNodes[METER_NUN_BG].mpLytPane = &mNunBg;
+    mNodes[METER_HEART].mpLytPane = &mHeart;
+    mNodes[METER_SHIELD].mpLytPane = &mShield;
+    mNodes[METER_1_BTN].mpLytPane = mp1Button;
+    mNodes[METER_2_BTN].mpLytPane = mp2Button;
 
+    mPosArray1[0].copyFrom(mLyt.findPane("N_shield_00")->GetTranslate());
+    mPosArray1[1].copyFrom(mLyt.findPane("N_shield_01")->GetTranslate());
+
+    field_0x13758 = 0;
+    field_0x13768 = 0;
+    field_0x13764 = 0;
+    // TODO
     mPos1 = mPosArray1[0];
-    mPos2 = mPosArray1[1];
+
     mLyt.findPane("N_rupyAll_00")->SetVisible(true);
-    mAnmGroups[33].setAnimEnable(true);
+    mAnmGroups[METER_ANIM_RUPY_POSITION].setAnimEnable(true);
 
     // Advance through some anim's keyframes and store positions in mPosArray2
     for (int i = 0; i < 7; i++) {
-        mAnmGroups[33].setFrame(i);
+        mAnmGroups[METER_ANIM_RUPY_POSITION].setFrame(i);
         mLyt.calc();
         mPosArray2[i].copyFrom(mLyt.findPane("N_rupy_00")->GetTranslate());
     }
 
-    mAnmGroups[33].setAnimEnable(false);
+    mAnmGroups[METER_ANIM_RUPY_POSITION].setAnimEnable(false);
     mLyt.findPane("N_rupyAll_00")->SetVisible(false);
 
-    for (int i = 0; i < 16; i++) {
+    field_0x1375C = 0;
+    field_0x1376C = 0;
+    field_0x13760 = 0;
+
+    // TODO
+    mPos2 = mPosArray2[0];
+    mPos3.x = mPos3.y = mPos3.z = 0.0f;
+    field_0x137C0 = 0;
+
+    for (int i = 0; i < METER_NUM_PANES; i++) {
         if (mNodes[i].mpLytPane != nullptr) {
             mNodes[i].mpLytPane->build(resAcc);
             mMeters.PushBack(&mNodes[i]);
@@ -463,11 +714,70 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
         mpDrink = new dLytMeterDrink_c();
         mpDrink->build(resAcc);
     }
+
+    mItemSelect.setOwnerPane(mLyt.findPane("N_remoConBtn_00"));
+    mCrossBtn.setOwnerPane(mLyt.findPane("N_remoConBtn_03"));
+    mPlusBtn.setOwnerPane(mLyt.findPane("N_remoConBtn_02"));
+    mMinusBtn.setOwnerPane(mLyt.findPane("N_remoConBtn_01"));
+    mDowsing.setOwnerPane(mLyt.findPane("N_nunBtn_03"));
+    mABtn.setOwnerPane(mLyt.findPane("N_remoConBtn_06"));
+    mZBtn.setOwnerPane(mLyt.findPane("N_nunBtn_01"));
+    mNunStk.setOwnerPane(mLyt.findPane("N_nunBtn_02"));
+    mNunBg.setOwnerPane(mLyt.findPane("N_nunBg_00"));
+    if (mp1Button != nullptr) {
+        mp1Button->setOwnerPane(mLyt.findPane("N_remoConBtn_04"));
+    }
+    if (mp2Button != nullptr) {
+        mp2Button->setOwnerPane(mLyt.findPane("N_remoConBtn_05"));
+    }
+
+    mGanbariGauge.setOwnerPane(mLyt.findPane("N_gutsAlpha"));
+    mShield.setOwnerPane(mLyt.findPane("N_shieldAll_00"));
+
+    if (mLyt.getLayout()->GetGroupContainer() != nullptr) {
+        nw4r::lyt::Group *g = mLyt.getLayout()->GetGroupContainer()->FindGroupByName(sGroupName);
+        if (g != nullptr) {
+            d2d::dSubPane::linkMeters(g, &mMeters);
+        }
+    }
+
+    for (int i = 0; i < METER_NUM_PANES; i++) {
+        if (mNodes[i].mpLytPane != nullptr) {
+            mNodes[i].mpPane->SetVisible(false);
+        }
+    }
+
+    for (int i = 0; i < METER_NUM_PANES; i++) {
+        mAnmGroups[i + METER_ANIM_POSITION_IN_OFFSET].setAnimEnable(true);
+        mAnmGroups[i + METER_ANIM_POSITION_IN_OFFSET].setToStart();
+    }
+
+    mLyt.calc();
+
+    for (int i = 0; i < METER_NUM_PANES; i++) {
+        mAnmGroups[i + METER_ANIM_POSITION_IN_OFFSET].setAnimEnable(false);
+    }
+
+    mAnmGroups[METER_ANIM_POSITION].setAnimEnable(false);
+    field_0x13771 = 0;
+
+    for (int i = 0; i < METER_NUM_PANES; i++) {
+        mParts[i].setAnmGroups(
+            &mAnmGroups[i + METER_ANIM_POSITION_IN_OFFSET], &mAnmGroups[i + METER_ANIM_POSITION_OUT_OFFSET]
+        );
+        mParts[i].build(i);
+        field_0x13782[i] = 0;
+        field_0x13792[i] = 1;
+        field_0x137A2[i] = 0;
+    }
+
+    field_0x137B2 = 1;
+
     return true;
 }
 
 bool dLytMeter_c::remove() {
-    for (int i = 0; i < 34; i++) {
+    for (int i = 0; i < METER_NUM_ANIMS; i++) {
         mAnmGroups[i].remove();
     }
 
@@ -478,7 +788,7 @@ bool dLytMeter_c::remove() {
         }
     }
 
-    for (int i = 0; i < 16; i++) {
+    for (int i = 0; i < METER_NUM_PANES; i++) {
         if (mNodes[i].mpLytPane != nullptr) {
             mNodes[i].mpLytPane->remove();
         }
@@ -638,7 +948,16 @@ bool dLytMeterContainer_c::build() {
 
     fn_800D97E0(0xb);
     fn_800D9800(1);
-    dMessage_c::getInstance()->reset();
+    dMessage_c::getInstance()->init();
+    mFlags = 0xFFFFFFFF;
+    field_0x13B54 = 0xFFFFFFFF;
+    field_0x13B60 = 0;
+    field_0x13B61 = 0;
+    field_0x13B62 = 0;
+    field_0x13B63 = 0;
+    field_0x13B64 = 0;
+    field_0x13B65 = 0;
+    field_0x13B66 = 0;
     return true;
 }
 

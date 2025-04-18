@@ -27,6 +27,10 @@ public:
 
     bool fn_80104760() const;
 
+    void setOwnerPane(nw4r::lyt::Pane *pane) {
+        mpOwnerPane = pane;
+    }
+
 private:
     void realizeAnimState();
     static bool isStaminaLow(f32);
@@ -56,7 +60,7 @@ private:
 
     /* 0x080 */ d2d::dLytSub mLyt;
     /* 0x114 */ d2d::AnmGroup_c mAnm[16];
-    /* 0x514 */ nw4r::lyt::Pane *mpPane;
+    /* 0x514 */ nw4r::lyt::Pane *mpOwnerPane;
     /* 0x518 */ f32 field_0x518;
     /* 0x51C */ f32 field_0x51C;
     /* 0x520 */ u8 _0x520[0x524 - 0x520];
