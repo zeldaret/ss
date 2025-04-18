@@ -448,7 +448,10 @@ d/lyt/meter/d_lyt_meter_timer.cpp:
 	.ctors      start:0x804DB720 end:0x804DB724
 	.rodata     start:0x804E6A68 end:0x804E6C28
 	.data       start:0x80519748 end:0x80519F60
+	.sdata      start:0x80572510 end:0x80572518
+	.sbss       start:0x80575458 end:0x80575468
 	.sdata2     start:0x80579D00 end:0x80579D30
+	.bss        start:0x805ACB90 end:0x805ACD50
 
 d/lyt/meter/d_lyt_meter_heart.cpp:
 	.text       start:0x8010AEC0 end:0x8010BD48

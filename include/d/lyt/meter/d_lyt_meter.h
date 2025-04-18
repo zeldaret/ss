@@ -47,6 +47,7 @@ public:
     bool fn_800D5380(u8);
     bool fn_800D5650();
     bool fn_800D5680();
+    bool fn_800C9FE0();
 
     bool isSilentRealm();
 
@@ -161,6 +162,7 @@ public:
     bool draw();
 
     bool fn_800D5670();
+    bool fn_800D97A0();
 
     static dLytMeterContainer_c *GetInstance() {
         return sInstance;
@@ -218,11 +220,48 @@ public:
         }
     }
 
+    static u8 getField_0x13B63()  {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x13B63;
+        } else {
+            return 0;
+        }
+    }
+
+    static void setField_0x13B61(u8 val)  {
+        if (sInstance != nullptr) {
+            sInstance->field_0x13B61 = val;
+        }
+    }
+
+    static void setField_0x13B64(u8 val)  {
+        if (sInstance != nullptr) {
+            sInstance->field_0x13B64 = val;
+        }
+    }
+
+
     static u8 getDowsing0x550A() {
         if (sInstance != nullptr) {
             return sInstance->mMeter.mDowsing.getField_0x550A();
         } else {
             return 0;
+        }
+    }
+
+    static bool getfn_800C9FE0() {
+        if (sInstance != nullptr) {
+            return sInstance->mMeter.fn_800C9FE0();
+        } else {
+            return false;
+        }
+    }
+
+    static bool getfn_800D97A0() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_800D97A0();
+        } else {
+            return false;
         }
     }
 
@@ -236,6 +275,11 @@ private:
     /* 0x13B48 */ bool mVisible;
     /* 0x13B49 */ u8 _0x13B49[0x13B50 - 0x13B49];
     /* 0x13B50 */ s32 mFlags;
+    /* 0x13B54 */ u8 _0x13B54[0x13B61 - 0x13B54];
+    /* 0x13B61 */ u8 field_0x13B61;
+    /* 0x13B62 */ u8 field_0x13B62;
+    /* 0x13B63 */ u8 field_0x13B63;
+    /* 0x13B64 */ u8 field_0x13B64;
 
     static dLytMeterContainer_c *sInstance;
 };
