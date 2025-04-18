@@ -612,23 +612,21 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     mNodes[METER_1_BTN].mpLytPane = mp1Button;
     mNodes[METER_2_BTN].mpLytPane = mp2Button;
 
-    mPosArray1[0].copyFrom(mLyt.findPane("N_shield_00")->GetTranslate());
-    mPosArray1[1].copyFrom(mLyt.findPane("N_shield_01")->GetTranslate());
-
+    mShieldPositions[0].copyFrom(mLyt.findPane("N_shield_00")->GetTranslate());
+    mShieldPositions[1].copyFrom(mLyt.findPane("N_shield_01")->GetTranslate());
     field_0x13758 = 0;
     field_0x13768 = 0;
     field_0x13764 = 0;
-    // TODO
-    mPos1 = mPosArray1[0];
+    mShieldPos = mShieldPositions[field_0x13764];
 
     mLyt.findPane("N_rupyAll_00")->SetVisible(true);
     mAnmGroups[METER_ANIM_RUPY_POSITION].setAnimEnable(true);
 
-    // Advance through some anim's keyframes and store positions in mPosArray2
+    // Advance through some anim's keyframes and store positions in mRupyPositions
     for (int i = 0; i < 7; i++) {
         mAnmGroups[METER_ANIM_RUPY_POSITION].setFrame(i);
         mLyt.calc();
-        mPosArray2[i].copyFrom(mLyt.findPane("N_rupy_00")->GetTranslate());
+        mRupyPositions[i].copyFrom(mLyt.findPane("N_rupy_00")->GetTranslate());
     }
 
     mAnmGroups[METER_ANIM_RUPY_POSITION].setAnimEnable(false);
@@ -637,9 +635,7 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x1375C = 0;
     field_0x1376C = 0;
     field_0x13760 = 0;
-
-    // TODO
-    mPos2 = mPosArray2[0];
+    mRupyPos = mRupyPositions[field_0x13760];
     mPos3.x = mPos3.y = mPos3.z = 0.0f;
     field_0x137C0 = 0;
 
@@ -747,10 +743,62 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
         }
     }
 
+    mNodes[METER_GANBARI].mpPane->SetVisible(true);
+    mNodes[METER_HEART].mpPane->SetVisible(true);
+    mNodes[METER_RUPY].mpPane->SetVisible(true);
+    mNodes[METER_ITEM_SELECT].mpPane->SetVisible(true);
+    mNodes[METER_CROSS_BTN].mpPane->SetVisible(true);
+    mNodes[METER_PLUS_BTN].mpPane->SetVisible(true);
+    mNodes[METER_MINUS_BTN].mpPane->SetVisible(true);
+    mNodes[METER_A_BTN].mpPane->SetVisible(true);
+    mNodes[METER_DOWSING].mpPane->SetVisible(true);
+    mNodes[METER_Z_BTN].mpPane->SetVisible(true);
+    mNodes[METER_NUN_STK].mpPane->SetVisible(true);
+    mNodes[METER_REMOCON_BG].mpPane->SetVisible(true);
+    mNodes[METER_NUN_BG].mpPane->SetVisible(true);
+    mNodes[METER_SHIELD].mpPane->SetVisible(true);
+
+    if (mNodes[METER_1_BTN].mpPane != nullptr) {
+        mNodes[METER_1_BTN].mpPane->SetVisible(true);
+    }
+
+    if (mNodes[METER_2_BTN].mpPane != nullptr) {
+        mNodes[METER_2_BTN].mpPane->SetVisible(true);
+    }
+
+    mNodes[METER_SHIELD].mpPane->SetTranslate(mShieldPos);
+    mNodes[METER_RUPY].mpPane->SetTranslate(mRupyPos);
+
     for (int i = 0; i < METER_NUM_PANES; i++) {
         mAnmGroups[i + METER_ANIM_POSITION_IN_OFFSET].setAnimEnable(true);
         mAnmGroups[i + METER_ANIM_POSITION_IN_OFFSET].setToStart();
     }
+    s32 zero = 0;
+
+    field_0x1374C = 0;
+    field_0x13748 = 0;
+    field_0x13750 = 4;
+    field_0x13770 = 3;
+    field_0x13774 = 0;
+    field_0x13775 = 0;
+    field_0x13773 = 0;
+    field_0x13776 = 0;
+    field_0x13777 = 0;
+    field_0x13780 = 1;
+    field_0x13781 = 0;
+    field_0x13778 = 0;
+    field_0x13779 = 0;
+    field_0x1377A = 0;
+    field_0x1377B = 0;
+    field_0x1377C = 0;
+    field_0x1377D = 0;
+    field_0x1377E = 0;
+    field_0x1377F = 0;
+    field_0x13754 = 0;
+
+    
+    mAnmGroups[METER_ANIM_POSITION].setFrame(zero);
+    mAnmGroups[METER_ANIM_POSITION].setAnimEnable(true);
 
     mLyt.calc();
 
