@@ -292,6 +292,12 @@ struct AnmGroupBase_c {
         return mpFrameCtrl->getNextFrame();
     }
 
+#ifdef NEED_DIRECT_FRAMECTRL_ACCESS
+    m2d::FrameCtrl_c *getFrameCtrl() {
+        return mpFrameCtrl;
+    }
+#endif
+
 private:
     /* 0x04 */ void *field_0x04;
     /* 0x08 */ m2d::FrameCtrl_c *mpFrameCtrl;

@@ -114,7 +114,15 @@ public:
         return mEndFrame;
     }
 
+// There's at least 1 file where the obvious way of writing
+// it seems to require accessing some members directly, without
+// inlines. I want to discourage direct access though, so
+// putting the ability behind an explicit define. We don't
+// know either way whether inlines are used at all or
+// whether stuff even is private.
+#ifndef NEED_DIRECT_FRAMECTRL_ACCESS
 private:
+#endif
     inline bool notLooping() const {
         return (mFlags & FLAG_NO_LOOP) != 0;
     }

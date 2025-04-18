@@ -1,3 +1,5 @@
+#define NEED_DIRECT_FRAMECTRL_ACCESS 1
+
 #include "d/lyt/meter/d_lyt_meter_timer.h"
 
 #include "common.h"
@@ -612,6 +614,14 @@ void LytMeterTimerPart2_c::initOutAnim() {
     mAnm[TIMER_02_ANIM_OUT].setAnimEnable(false);
 }
 
+void LytMeterTimerPart2_c::initChangeFruitAnim() {
+    mAnm[TIMER_02_ANIM_CHANGE_FRUIT].setForwardOnce();
+    mAnm[TIMER_02_ANIM_CHANGE_FRUIT].setFrame(0.0f);
+    mAnm[TIMER_02_ANIM_CHANGE_FRUIT].setAnimEnable(true);
+    mLyt.calc();
+    mAnm[TIMER_02_ANIM_CHANGE_FRUIT].setAnimEnable(false);
+}
+
 void LytMeterTimerPart2_c::startInAnim() {
     if (dLytMeterContainer_c::GetMeter()->fn_800D5650()) {
         mAnm[TIMER_02_ANIM_MAP_POSITION].setFrame(1.0f);
@@ -624,14 +634,6 @@ void LytMeterTimerPart2_c::startInAnim() {
 
     mAnm[TIMER_02_ANIM_IN].setToStart();
     mAnm[TIMER_02_ANIM_IN].setAnimEnable(true);
-}
-
-void LytMeterTimerPart2_c::initChangeFruitAnim() {
-    mAnm[TIMER_02_ANIM_CHANGE_FRUIT].setForwardOnce();
-    mAnm[TIMER_02_ANIM_CHANGE_FRUIT].setFrame(0.0f);
-    mAnm[TIMER_02_ANIM_CHANGE_FRUIT].setAnimEnable(true);
-    mLyt.calc();
-    mAnm[TIMER_02_ANIM_CHANGE_FRUIT].setAnimEnable(false);
 }
 
 void LytMeterTimerPart2_c::enableBloomAnim() {
@@ -741,14 +743,8 @@ void LytMeterTimerPart2_c::syncTimeWithSafe() {
     if (time == 0) {
         time = 2000;
     }
-    // FPR regswap between 2000.0f and cast constant
-    // Not sure why the cast needs to be pulled out here
-
-    // This way works in other functions, but breaks instructions in this case
-    // f32 loopFrame = duration - (time / 2000.0f) * duration;
-    f32 fTime = time;
-    f32 loopFrame = duration - (fTime / 2000.0f) * duration;
-    f32 safeDuration = mAnm[TIMER_02_ANIM_SIREN_SAFE].getAnimDuration() - 1.0f;
+    f32 loopFrame = duration - (time / 2000.0f) * duration;
+    f32 safeDuration = mAnm[TIMER_02_ANIM_SIREN_SAFE].getFrameCtrl()->mEndFrame - 1.0f;
     f32 finalFrame = loopFrame;
     if (safeDuration < finalFrame) {
         finalFrame = finalFrame - safeDuration;
