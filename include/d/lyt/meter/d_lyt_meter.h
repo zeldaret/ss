@@ -64,10 +64,17 @@ public:
     bool remove();
     bool draw();
 
+    bool isNotSilentRealmOrLoftwing();
+
+    bool fn_800C9F70();
+    bool fn_800C9FE0();
+    bool fn_800CA040();
+
     bool fn_800D5380(u8);
     bool fn_800D5650();
     bool fn_800D5680();
-    bool fn_800C9FE0();
+    bool fn_800D56B0();
+    bool execute();
 
     bool isSilentRealm();
 
@@ -196,10 +203,14 @@ public:
 
     bool build();
     bool remove();
+    bool execute();
     bool draw();
 
     bool fn_800D5670();
     bool fn_800D97A0();
+
+    static void setStaminaWheelPercent(f32 percent);
+    void setStaminaWheelPercentInternal(f32 percent);
 
     static dLytMeterContainer_c *GetInstance() {
         return sInstance;
@@ -257,14 +268,6 @@ public:
         }
     }
 
-    static u8 getField_0x13B63() {
-        if (sInstance != nullptr) {
-            return sInstance->field_0x13B63;
-        } else {
-            return 0;
-        }
-    }
-
     static void setRupyField_0x8A9(u8 val) {
         if (sInstance != nullptr) {
             sInstance->mMeter.mRupy.setField_0x8A9(val);
@@ -302,6 +305,20 @@ public:
     static void setField_0x13B61(u8 val) {
         if (sInstance != nullptr) {
             sInstance->field_0x13B61 = val;
+        }
+    }
+
+    static void setField_0x13B63(u8 val) {
+        if (sInstance != nullptr) {
+            sInstance->field_0x13B63 = val;
+        }
+    }
+
+    static u8 getField_0x13B63() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x13B63;
+        } else {
+            return 0;
         }
     }
 
@@ -346,7 +363,8 @@ private:
     /* 0x13B49 */ u8 _0x13B49[0x13B50 - 0x13B49];
     /* 0x13B50 */ s32 mFlags;
     /* 0x13B54 */ s32 field_0x13B54;
-    /* 0x13B58 */ u8 _0x13B58[0x13B60 - 0x13B58];
+    /* 0x13B58 */ s32 field_0x13B58;
+    /* 0x13B5C */ s32 field_0x13B5C;
     /* 0x13B60 */ u8 field_0x13B60;
     /* 0x13B61 */ u8 field_0x13B61;
     /* 0x13B62 */ u8 field_0x13B62;

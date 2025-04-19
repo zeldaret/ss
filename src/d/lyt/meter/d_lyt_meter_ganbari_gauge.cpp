@@ -73,7 +73,7 @@ void dLytMeterGanbariGauge_c::executeState_InvisibleWait() {}
 void dLytMeterGanbariGauge_c::finalizeState_InvisibleWait() {}
 
 void dLytMeterGanbariGauge_c::initializeState_In() {
-    if (dAcPy_c::GetLink()->getRidingActorType() == 3) {
+    if (dAcPy_c::GetLink()->getRidingActorType() == dAcPy_c::RIDING_BOAT) {
         field_0x554 = 3.0f;
     } else if (swimmingRelated()) {
         field_0x554 = 1.0f;
@@ -89,7 +89,7 @@ void dLytMeterGanbariGauge_c::executeState_In() {
         realizeAnimState();
         if (*mStateMgrWheel.getStateID() == StateID_Caution || *mStateMgrWheel.getStateID() == StateID_ToMin ||
             *mStateMgrWheel.getStateID() == StateID_Recovery || *mStateMgrWheel.getStateID() == StateID_ToMax) {
-            if (field_0x518 > 0.95f) {
+            if (mStaminaPercent > 0.95f) {
                 mStateMgrWheel.changeState(StateID_Normal);
             } else {
                 mStateMgrWheel.changeState(*mStateMgrWheel.getStateID());
@@ -117,7 +117,7 @@ void dLytMeterGanbariGauge_c::initializeState_OutWait() {
 void dLytMeterGanbariGauge_c::executeState_OutWait() {
     if (--mOutWaitTimer <= 0) {
         mStateMgrMain.changeState(StateID_Out);
-    } else if (field_0x518 < 0.9999f) {
+    } else if (mStaminaPercent < 0.9999f) {
         mStateMgrMain.changeState(StateID_Wait);
     }
 }
@@ -154,7 +154,7 @@ void dLytMeterGanbariGauge_c::finalizeState_CameraOut() {
 
 void dLytMeterGanbariGauge_c::initializeState_Full() {}
 void dLytMeterGanbariGauge_c::executeState_Full() {
-    if (field_0x518 < 0.9999f) {
+    if (mStaminaPercent < 0.9999f) {
         mStateMgrWheel.changeState(StateID_Normal);
     } else if (dAcPy_c::GetLink()->checkSwordAndMoreStates(0x200 | 0x40 | 0x20) || field_0x558 != 0) {
         mStateMgrWheel.changeState(StateID_FullGutsUse);
@@ -164,7 +164,7 @@ void dLytMeterGanbariGauge_c::finalizeState_Full() {}
 
 void dLytMeterGanbariGauge_c::initializeState_FullGutsUse() {}
 void dLytMeterGanbariGauge_c::executeState_FullGutsUse() {
-    if (field_0x518 < 0.9999f) {
+    if (mStaminaPercent < 0.9999f) {
         mStateMgrWheel.changeState(StateID_Normal);
     } else if (!dAcPy_c::GetLink()->checkSwordAndMoreStates(0x200 | 0x40 | 0x20) && field_0x558 == 0) {
         mStateMgrWheel.changeState(StateID_Full);
@@ -174,13 +174,13 @@ void dLytMeterGanbariGauge_c::finalizeState_FullGutsUse() {}
 
 void dLytMeterGanbariGauge_c::initializeState_Normal() {}
 void dLytMeterGanbariGauge_c::executeState_Normal() {
-    if (isStaminaLow(field_0x518)) {
+    if (isStaminaLow(mStaminaPercent)) {
         mAnm[GANBARI_ANIM_CAUTION].setRate(1.0f);
         mStateMgrWheel.changeState(StateID_Caution);
-    } else if (isStaminaCritical(field_0x518)) {
+    } else if (isStaminaCritical(mStaminaPercent)) {
         mAnm[GANBARI_ANIM_CAUTION].setRate(3.0f);
         mStateMgrWheel.changeState(StateID_Caution);
-    } else if (field_0x518 >= 0.9999f) {
+    } else if (mStaminaPercent >= 0.9999f) {
         mStateMgrWheel.changeState(StateID_ToMax);
     }
 }
@@ -191,11 +191,11 @@ void dLytMeterGanbariGauge_c::initializeState_Caution() {
     mAnm[GANBARI_ANIM_CAUTION].setFrame(0.0f);
 }
 void dLytMeterGanbariGauge_c::executeState_Caution() {
-    if (field_0x518 <= 0.0001f) {
+    if (mStaminaPercent <= 0.0001f) {
         mStateMgrWheel.changeState(StateID_ToMin);
-    } else if (isStaminaCritical(field_0x518)) {
+    } else if (isStaminaCritical(mStaminaPercent)) {
         mAnm[GANBARI_ANIM_CAUTION].setRate(3.0f);
-    } else if (isStaminaLow(field_0x518)) {
+    } else if (isStaminaLow(mStaminaPercent)) {
         mAnm[GANBARI_ANIM_CAUTION].setRate(1.0f);
     } else {
         mStateMgrWheel.changeState(StateID_Normal);
@@ -217,7 +217,7 @@ void dLytMeterGanbariGauge_c::initializeState_ToMin() {
     mAnm[GANBARI_ANIM_TO_MIN].setToStart();
 }
 void dLytMeterGanbariGauge_c::executeState_ToMin() {
-    if (field_0x518 >= 0.9999f) {
+    if (mStaminaPercent >= 0.9999f) {
         mAnm[GANBARI_ANIM_TO_MIN].setToStart();
         mLyt.calc();
         mAnm[GANBARI_ANIM_TO_MIN].setAnimEnable(false);
@@ -237,7 +237,7 @@ void dLytMeterGanbariGauge_c::initializeState_Recovery() {
     mAnm[GANBARI_ANIM_TO_MIN_LOOP].setAnimEnable(true);
     mAnm[GANBARI_ANIM_TO_MIN_LOOP].setFrame(0.0f);
 
-    if (dAcPy_c::GetLink()->getRidingActorType() == 3) {
+    if (dAcPy_c::GetLink()->getRidingActorType() == dAcPy_c::RIDING_BOAT) {
         field_0x554 = 4.0f;
     } else if (swimmingRelated()) {
         field_0x554 = 1.0f;
@@ -247,7 +247,7 @@ void dLytMeterGanbariGauge_c::initializeState_Recovery() {
 }
 void dLytMeterGanbariGauge_c::executeState_Recovery() {
     if (swimmingRelated()) {
-        if (field_0x518 >= 0.0001f) {
+        if (mStaminaPercent >= 0.0001f) {
             mAnm[GANBARI_ANIM_TO_MIN_LOOP].setFrame(0.0f);
             mAnm[GANBARI_ANIM_TO_MAX].setAnimEnable(true);
             mAnm[GANBARI_ANIM_TO_MAX].setToEnd2();
@@ -259,7 +259,7 @@ void dLytMeterGanbariGauge_c::executeState_Recovery() {
             mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(false);
             mStateMgrWheel.changeState(StateID_Normal);
         }
-    } else if (field_0x518 >= 0.9999f) {
+    } else if (mStaminaPercent >= 0.9999f) {
         mAnm[GANBARI_ANIM_TO_MIN_LOOP].setFrame(0.0f);
         mLyt.calc();
         mAnm[GANBARI_ANIM_TO_MIN_LOOP].setAnimEnable(false);
@@ -324,7 +324,7 @@ bool dLytMeterGanbariGauge_c::build(d2d::ResAccIf_c *resAcc) {
     mAnm[GANBARI_ANIM_OUT].setAnimEnable(false);
     mAnm[GANBARI_ANIM_CAMERA_OUT].setAnimEnable(false);
 
-    field_0x518 = 1.0f;
+    mStaminaPercent = 1.0f;
     field_0x51C = 1.0f;
     field_0x54C = 1.0f;
     field_0x550 = 1.0f;
@@ -455,7 +455,7 @@ bool dLytMeterGanbariGauge_c::execute() {
 
     f32 scale;
     if (fn_80104710(false) || (isCrawling() && !fn_801047B0())) {
-        if (dAcPy_c::GetLink()->getRidingActorType() == 3) {
+        if (dAcPy_c::GetLink()->getRidingActorType() == dAcPy_c::RIDING_BOAT) {
             angle = 4;
             v1.x = 232.0f;
             v1.y = 145.0f;
@@ -479,7 +479,7 @@ bool dLytMeterGanbariGauge_c::execute() {
         v2.y = -105.0f;
         v2.y += 46.0f;
         scale = 1.0f;
-    } else if (dAcPy_c::GetLink()->getRidingActorType() == 3) {
+    } else if (dAcPy_c::GetLink()->getRidingActorType() == dAcPy_c::RIDING_BOAT) {
         angle = 3;
         v2.set(-95.0f, -50.0f);
         scale = 0.9f;
@@ -519,17 +519,17 @@ bool dLytMeterGanbariGauge_c::execute() {
         }
     }
 
-    mAnm[GANBARI_ANIM_UPDOWN_0].setFrame(field_0x518 * 100.0f);
+    mAnm[GANBARI_ANIM_UPDOWN_0].setFrame(mStaminaPercent * 100.0f);
     mAnm[GANBARI_ANIM_ANGLE].setFrame(angle);
 
     mStateMgrWheel.executeState();
 
     if (field_0x544 != 0) {
-        if (field_0x518 < field_0x550 &&
-            field_0x518 < field_0x51C - dLytMeterConfiguration_c::GetInstance()->getField_0x1CC()) {
+        if (mStaminaPercent < field_0x550 &&
+            mStaminaPercent < field_0x51C - dLytMeterConfiguration_c::GetInstance()->getField_0x1CC()) {
             field_0x548 = dLytMeterConfiguration_c::GetInstance()->getField_0x1C8();
             field_0x54C = field_0x51C;
-            field_0x550 = field_0x518;
+            field_0x550 = mStaminaPercent;
             mAnm[GANBARI_ANIM_UPDOWN_1].setFrame(field_0x54C * 100.0f);
             mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(true);
         } else {
@@ -538,7 +538,7 @@ bool dLytMeterGanbariGauge_c::execute() {
             }
             if (field_0x548 == 0) {
                 field_0x54C -= dLytMeterConfiguration_c::GetInstance()->getField_0x1D0();
-                if (field_0x54C < field_0x518) {
+                if (field_0x54C < mStaminaPercent) {
                     field_0x544 = 0;
                     mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(true);
                     mAnm[GANBARI_ANIM_UPDOWN_1].setFrame(0.0f);
@@ -552,15 +552,15 @@ bool dLytMeterGanbariGauge_c::execute() {
             }
         }
     } else {
-        if (field_0x518 < field_0x51C - dLytMeterConfiguration_c::GetInstance()->getField_0x1C4()) {
+        if (mStaminaPercent < field_0x51C - dLytMeterConfiguration_c::GetInstance()->getField_0x1C4()) {
             field_0x544 = 1;
             field_0x54C = field_0x51C;
-            field_0x550 = field_0x518;
+            field_0x550 = mStaminaPercent;
             field_0x548 = dLytMeterConfiguration_c::GetInstance()->getField_0x1C8();
             mAnm[GANBARI_ANIM_UPDOWN_1].setFrame(field_0x54C * 100.0f);
             mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(true);
         } else {
-            mAnm[GANBARI_ANIM_UPDOWN_1].setFrame(field_0x518 * 100.0f);
+            mAnm[GANBARI_ANIM_UPDOWN_1].setFrame(mStaminaPercent * 100.0f);
             mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(true);
         }
     }
@@ -585,7 +585,7 @@ bool dLytMeterGanbariGauge_c::execute() {
         mAnm[GANBARI_ANIM_M_CAUTION].setAnimEnable(false);
     }
 
-    if (!b12 && field_0x518 < field_0x51C) {
+    if (!b12 && mStaminaPercent < field_0x51C) {
         if (!mAnm[GANBARI_ANIM_LOOP].isEnabled()) {
             mAnm[GANBARI_ANIM_LOOP].setFrame(0.0f);
             mAnm[GANBARI_ANIM_LOOP].setAnimEnable(true);
@@ -629,7 +629,7 @@ bool dLytMeterGanbariGauge_c::execute() {
     }
 
     mStateMgrMain.executeState();
-    field_0x51C = field_0x518;
+    field_0x51C = mStaminaPercent;
 
     return true;
 }
@@ -716,7 +716,7 @@ void dLytMeterGanbariGauge_c::realizeAnimState() {
     mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(false);
 
     if (dAcPy_c::GetLink() != nullptr) {
-        if (dAcPy_c::GetLink()->getRidingActorType() == 3) {
+        if (dAcPy_c::GetLink()->getRidingActorType() == dAcPy_c::RIDING_BOAT) {
             field_0x554 = 3.0f;
         } else if (swimmingRelated()) {
             field_0x554 = 1.0f;

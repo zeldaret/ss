@@ -57,6 +57,13 @@ public:
                    FLG0_HANGING_ITEM | FLG0_HANGING_LEDGE | FLG0_UNK_0x10 | FLG0_IN_AIR,
     };
 
+    enum dAcPy_RidingActor {
+        RIDING_NONE = 0,
+        RIDING_TRUCK_MINECART = 1,
+        RIDING_LOFTWING = 2,
+        RIDING_BOAT = 3,
+    };
+
     dAcPy_c();
     virtual ~dAcPy_c();
 
@@ -303,11 +310,11 @@ public:
     }
 
     inline bool isAffectedByStaminaPotion() const {
-        return FileManager::GetInstance()->hasStaminaPotionNormal() && getRidingActorType() != 3;
+        return FileManager::GetInstance()->hasStaminaPotionNormal() && getRidingActorType() != RIDING_BOAT;
     }
 
     inline bool isAffectedByStaminaPotionPlus() const {
-        return FileManager::GetInstance()->hasStaminaPotionPlus() && getRidingActorType() != 3;
+        return FileManager::GetInstance()->hasStaminaPotionPlus() && getRidingActorType() != RIDING_BOAT;
     }
 
     static nw4r::g3d::ResFile getItemResFile(const char *name, mAllocator_c &allocator);

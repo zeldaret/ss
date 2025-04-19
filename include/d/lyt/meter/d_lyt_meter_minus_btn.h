@@ -126,6 +126,10 @@ public:
         mpOwnerPane = pane;
     }
 
+    void setField_0x4E80(s32 value) {
+        field_0x4E80 = value;
+    }
+
 private:
     bool shouldCall() const;
     bool fn_800F75E0() const;

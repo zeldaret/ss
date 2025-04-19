@@ -31,6 +31,10 @@ public:
         mpOwnerPane = pane;
     }
 
+    void setStaminaPercent(f32 value) {
+        mStaminaPercent = value;
+    }
+
 private:
     void realizeAnimState();
     static bool isStaminaLow(f32);
@@ -61,7 +65,7 @@ private:
     /* 0x080 */ d2d::dLytSub mLyt;
     /* 0x114 */ d2d::AnmGroup_c mAnm[16];
     /* 0x514 */ nw4r::lyt::Pane *mpOwnerPane;
-    /* 0x518 */ f32 field_0x518;
+    /* 0x518 */ f32 mStaminaPercent;
     /* 0x51C */ f32 field_0x51C;
     /* 0x520 */ u8 _0x520[0x524 - 0x520];
     /* 0x524 */ mVec3_c field_0x524;

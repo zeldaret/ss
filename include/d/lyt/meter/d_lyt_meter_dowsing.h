@@ -160,6 +160,10 @@ public:
         mpOwnerPane = pane;
     }
 
+    void setField_0x54E0(s32 value) {
+        field_0x54E0 = value;
+    }
+
 private:
     void setItemName(s32 id);
     void setMessage(s32 id);

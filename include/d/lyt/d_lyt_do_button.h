@@ -4,7 +4,6 @@
 #include "common.h"
 #include "d/lyt/d2d.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dLytDobutton_c {
 public:
@@ -17,6 +16,7 @@ public:
 
     bool init(m2d::ResAccIf_c *resAcc);
     bool remove();
+    bool execute();
     bool draw();
 
     static dLytDobutton_c *GetInstance() {

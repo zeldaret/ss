@@ -2715,8 +2715,9 @@ s32 dLytMeterItemSelect_c::getBaseItemLytIndexforInternalId(s32 idx) const {
 extern "C" bool checkIsInSkykeepPuzzle();
 
 bool dLytMeterItemSelect_c::isWheelBlockedByCurrentAction() {
-    if (dAcPy_c::LINK->getRidingActorType() == 2 || dAcPy_c::LINK->checkActionFlags(dAcPy_c::FLG0_SWING_ROPE) ||
-        dAcPy_c::LINK->checkCurrentAction(0x9C) || dAcPy_c::LINK->getRidingActorType() == 1 ||
+    if (dAcPy_c::LINK->getRidingActorType() == dAcPy_c::RIDING_LOFTWING ||
+        dAcPy_c::LINK->checkActionFlags(dAcPy_c::FLG0_SWING_ROPE) || dAcPy_c::LINK->checkCurrentAction(0x9C) ||
+        dAcPy_c::LINK->getRidingActorType() == dAcPy_c::RIDING_TRUCK_MINECART ||
         dAcPy_c::LINK->checkCurrentAction(0x95) || isInSpiralChargeTutorialMinigame() || isInRollercoasterMinigame() ||
         dAcPy_c::LINK->checkCurrentAction(0x8C) || dLytMeterContainer_c::GetMeter()->getField_0x1377E() != 0 ||
         checkIsInSkykeepPuzzle() || dLytMeterContainer_c::GetInstance()->getMeterField_0x13770() == 0) {

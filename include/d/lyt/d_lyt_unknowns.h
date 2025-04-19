@@ -7,7 +7,9 @@
 class LytDoButtonRelated {
 public:
     LytDoButtonRelated();
-    virtual ~LytDoButtonRelated();
+    virtual ~LytDoButtonRelated() {
+        sInstance = nullptr;
+    }
     bool build(d2d::ResAccIf_c *resAcc);
     bool remove();
 
@@ -100,6 +102,7 @@ public:
     }
     bool build(d2d::ResAccIf_c *resAcc);
     bool remove();
+    bool execute();
     bool draw();
 
     static LytBirdButtonRelated *sInstance;

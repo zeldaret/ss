@@ -1,5 +1,6 @@
 // clang-format off
 #include "common.h"
+#include "d/a/d_a_player.h"
 #include "d/d_message.h"
 #include "d/d_sc_game.h"
 #include "d/d_sc_title.h"
@@ -13,6 +14,7 @@
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_group.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
+#include "toBeSorted/event_manager.h"
 #include "toBeSorted/small_sound_mgr.h"
 // clang-format on
 
@@ -493,6 +495,34 @@ void dLytMeterParts_c::execute() {
     mStateMgr.executeState();
 }
 
+bool dLytMeter_c::isNotSilentRealmOrLoftwing() {
+    if (isSilentRealm() || dAcPy_c::GetLink()->getRidingActorType() == dAcPy_c::RIDING_LOFTWING) {
+        return false;
+    }
+    return true;
+}
+
+bool dLytMeter_c::fn_800C9F70() {
+    if ((fn_800D56B0() && !field_0x13775) || fn_800D5650() || fn_800D5680()) {
+        return true;
+    }
+    return false;
+}
+
+bool dLytMeter_c::fn_800C9FE0() {
+    if (fn_800D56B0() || !field_0x13750 || fn_800D5680()) {
+        return true;
+    }
+    return false;
+}
+
+bool dLytMeter_c::fn_800CA040() {
+    if (field_0x13774 || fn_800D5650() || fn_800D5680()) {
+        return true;
+    }
+    return false;
+}
+
 void floats() {
     32.0f;
     1.0f;
@@ -637,7 +667,7 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x13760 = 0;
     mRupyPos = mRupyPositions[field_0x13760];
     mPos3.x = mPos3.y = mPos3.z = 0.0f;
-    field_0x137C0 = 0;
+    field_0x137C0 = 0x3C;
 
     for (int i = 0; i < METER_NUM_PANES; i++) {
         if (mNodes[i].mpLytPane != nullptr) {
@@ -697,7 +727,7 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
 
     if (dStageMgr_c::GetInstance()->isAreaTypeDungeon() && (!(dScGame_c::currentSpawnInfo.stageName == "F100_1") &&
                                                             !(dScGame_c::currentSpawnInfo.stageName == "F103_1")) ||
-        dScGame_c::currentSpawnInfo.stageName == "F302" || dScGame_c::currentSpawnInfo.stageName == "F302") {
+        dScGame_c::currentSpawnInfo.stageName == "F302" || dScGame_c::currentSpawnInfo.stageName == "F303") {
         mpSmallKey = new dLytMeterSmallKey_c();
         mpSmallKey->build(resAcc);
     } else {
@@ -796,7 +826,6 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x1377F = 0;
     field_0x13754 = 0;
 
-    
     mAnmGroups[METER_ANIM_POSITION].setFrame(zero);
     mAnmGroups[METER_ANIM_POSITION].setAnimEnable(true);
 
@@ -1036,6 +1065,46 @@ bool dLytMeterContainer_c::remove() {
     return true;
 }
 
+bool dLytMeterContainer_c::execute() {
+    mMeter.mMinusBtn.setField_0x4E80(field_0x13B58);
+    mMeter.mDowsing.setField_0x54E0(field_0x13B5C);
+    if (mpEventSkip != nullptr) {
+        mpEventSkip->execute();
+    }
+
+    dLytAreaCaption_c::update();
+    mMeter.execute();
+    if (mpDoButton != nullptr) {
+        mpDoButton->execute();
+    }
+
+    if (mpBirdRelated != nullptr) {
+        mpBirdRelated->execute();
+    }
+
+    if (field_0x13B61 || (!EventManager::isInEvent() && field_0x13B62)) {
+        field_0x13B60 = 0;
+        field_0x13B61 = 0;
+        field_0x13B62 = 0;
+    }
+
+    if (fn_800D97A0() && EventManager::isInEvent()) {
+        field_0x13B62 = 1;
+    }
+
+    if (field_0x13B64 || (!EventManager::isInEvent() && field_0x13B65)) {
+        dLytMeterContainer_c::setField_0x13B63(0);
+        field_0x13B64 = 0;
+        field_0x13B65 = 0;
+    }
+
+    if (dLytMeterContainer_c::getField_0x13B63() && EventManager::isInEvent()) {
+        field_0x13B65 = 1;
+    }
+
+    return true;
+}
+
 bool dLytMeterContainer_c::draw() {
     if (mVisible) {
         mMeter.draw();
@@ -1054,4 +1123,14 @@ bool dLytMeterContainer_c::draw() {
     }
 
     return true;
+}
+
+void dLytMeterContainer_c::setStaminaWheelPercentInternal(f32 percent) {
+    mMeter.mGanbariGauge.setStaminaPercent(percent);
+}
+
+void dLytMeterContainer_c::setStaminaWheelPercent(f32 percent) {
+    if (sInstance != nullptr) {
+        sInstance->setStaminaWheelPercentInternal(percent);
+    }
 }
