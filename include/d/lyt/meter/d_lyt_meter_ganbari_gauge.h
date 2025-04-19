@@ -35,6 +35,10 @@ public:
         mStaminaPercent = value;
     }
 
+    void setField_0x539(bool v) {
+        field_0x539 = v;
+    }
+
 private:
     void realizeAnimState();
     static bool isStaminaLow(f32);
@@ -59,6 +63,10 @@ private:
     STATE_FUNC_DECLARE(dLytMeterGanbariGauge_c, Recovery);
     STATE_FUNC_DECLARE(dLytMeterGanbariGauge_c, ToMax);
 
+    void changeState(const sStateIDIf_c &value) {                                                                 \
+        mStateMgrMain.changeState(value);                                                                                  \
+    }
+
     STATE_MGR(dLytMeterGanbariGauge_c) mStateMgrMain;
     STATE_MGR(dLytMeterGanbariGauge_c) mStateMgrWheel;
 
@@ -71,7 +79,8 @@ private:
     /* 0x524 */ mVec3_c field_0x524;
     /* 0x530 */ u8 field_0x530;
     /* 0x534 */ s32 field_0x534;
-    /* 0x538 */ s32 field_0x538;
+    /* 0x538 */ u8 field_0x538;
+    /* 0x539 */ u8 field_0x539;
     /* 0x53C */ s32 mOutWaitTimer;
     /* 0x540 */ s32 field_0x540;
     /* 0x544 */ s32 field_0x544;

@@ -149,6 +149,7 @@ public:
         return sInstance;
     }
 
+
     bool setReloadTrigger(fProfile::PROFILE_NAME_e reloadTrigger);
     void setRespawnInfo(const mVec3_c &linkPos, const mAng3_c &linkRot, bool unk);
     void setSpawnInfo(u8 roomid, const mVec3_c &pos, mAng rot);
@@ -193,6 +194,10 @@ public:
 
     static dCamera_c *getCamera(s32 idx);
     static void setCamera(s32 idx, dCamera_c *);
+
+    bool isFaderSettled() const {
+        return mFader.isSettled();
+    }
 
 protected:
     static u32 sUpdateFrameCount;

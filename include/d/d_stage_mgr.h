@@ -57,6 +57,8 @@ public:
     s32 getAreaType() const;
     s32 getMapNameId() const;
 
+    bool fn_80199250();
+
     static dStageMgr_c *GetInstance() {
         return sInstance;
     }
@@ -121,6 +123,10 @@ public:
 
     dFader_c *getFader() {
         return &mFader;
+    }
+
+    bool isFaderSettled() const {
+        return mFader.isSettled();
     }
 
     bool isInLastBoss() const {

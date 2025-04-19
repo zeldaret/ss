@@ -4,6 +4,7 @@
 // clang-format off
 #include "common.h"
 #include "d/lyt/d2d.h"
+#include "d/d_cursor_hit_check.h"
 #include "d/lyt/d_lyt_do_button.h"
 #include "d/lyt/meter/d_lyt_meter_shield_gauge.h"
 #include "d/lyt/d_lyt_common_icon_item.h"
@@ -23,15 +24,9 @@
 #include "d/lyt/meter/d_lyt_meter_item_select.h"
 
 #include "d/lyt/meter/d_lyt_meter_parts.h"
-
-#include "d/lyt/meter/d_lyt_meter_key.h"
 #include "d/lyt/d_lyt_unknowns.h"
 
-#include "d/lyt/meter/d_lyt_meter_drink.h"
-#include "d/lyt/meter/d_lyt_meter_timer.h"
-#include "d/lyt/d_lyt_bird_gauge.h"
-#include "d/lyt/d_lyt_boss_gauge.h"
-#include "d/lyt/d_lyt_sky_gauge.h"
+
 #include "m/m_vec.h"
 
 enum Meter_e {
@@ -55,6 +50,19 @@ enum Meter_e {
 
 // clang-format on
 
+class dLytMeter1Button_c;
+class dLytMeter2Button_c;
+class dLytMeterTimer_c;
+class LytMeterTimerPart1_c;
+class LytMeterTimerPart2_c;
+class dLytMeterKakeraKey_c;
+class dLytMeterBossKey_c;
+class dLytMeterSmallKey_c;
+class dLytMeterDrink_c;
+class dLytSkyGauge_c;
+class dLytBirdGauge_c;
+class dLytBossGauge_c;
+
 class dLytMeter_c {
 public:
     dLytMeter_c();
@@ -70,9 +78,11 @@ public:
     bool fn_800C9FE0();
     bool fn_800CA040();
 
+    bool fn_800D5350();
     bool fn_800D5380(u8);
-    bool fn_800D5290();
+    void fn_800D5290();
     bool fn_800D5590();
+    void fn_800D5630();
     bool fn_800D5650();
     bool fn_800D5680();
     bool fn_800D56B0();
@@ -87,19 +97,19 @@ public:
     void setUiMode(u16 value) const;
     u8 getUiMode();
 
-    u8 getField_0x13792() const {
+    bool getField_0x13792() const {
         return field_0x13792[0];
     }
 
-    u8 getField_0x13793() const {
+    bool getField_0x13793() const {
         return field_0x13792[1];
     }
 
-    u8 getField_0x1377E() const {
+    bool getField_0x1377E() const {
         return field_0x1377E;
     }
 
-    u8 getField_0x1377F() const {
+    bool getField_0x1377F() const {
         return field_0x1377F;
     }
 
@@ -158,27 +168,27 @@ public:
     /* 0x13768 */ s32 mOldShieldPosIndex;
     /* 0x1376C */ s32 mOldRupyPosIndex;
     /* 0x13770 */ u8 field_0x13770;
-    /* 0x13771 */ u8 field_0x13771;
-    /* 0x13772 */ u8 field_0x13772;
-    /* 0x13773 */ u8 field_0x13773;
-    /* 0x13774 */ u8 field_0x13774;
-    /* 0x13775 */ u8 field_0x13775;
-    /* 0x13776 */ u8 field_0x13776;
-    /* 0x13777 */ u8 field_0x13777;
-    /* 0x13778 */ u8 field_0x13778;
-    /* 0x13779 */ u8 field_0x13779;
-    /* 0x1377A */ u8 field_0x1377A;
-    /* 0x1377B */ u8 field_0x1377B;
-    /* 0x1377C */ u8 field_0x1377C;
-    /* 0x1377D */ u8 field_0x1377D;
-    /* 0x1377E */ u8 field_0x1377E;
-    /* 0x1377F */ u8 field_0x1377F;
-    /* 0x13780 */ u8 field_0x13780;
-    /* 0x13781 */ u8 field_0x13781;
-    /* 0x13782 */ u8 field_0x13782[16];
-    /* 0x13792 */ u8 field_0x13792[16];
-    /* 0x137A2 */ u8 field_0x137A2[16];
-    /* 0x137B2 */ u8 field_0x137B2;
+    /* 0x13771 */ bool field_0x13771;
+    /* 0x13772 */ bool field_0x13772;
+    /* 0x13773 */ bool field_0x13773;
+    /* 0x13774 */ bool field_0x13774;
+    /* 0x13775 */ bool field_0x13775;
+    /* 0x13776 */ bool field_0x13776;
+    /* 0x13777 */ bool field_0x13777;
+    /* 0x13778 */ bool field_0x13778;
+    /* 0x13779 */ bool field_0x13779;
+    /* 0x1377A */ bool field_0x1377A;
+    /* 0x1377B */ bool field_0x1377B;
+    /* 0x1377C */ bool field_0x1377C;
+    /* 0x1377D */ bool field_0x1377D;
+    /* 0x1377E */ bool field_0x1377E;
+    /* 0x1377F */ bool field_0x1377F;
+    /* 0x13780 */ bool field_0x13780;
+    /* 0x13781 */ bool field_0x13781;
+    /* 0x13782 */ bool field_0x13782[16];
+    /* 0x13792 */ bool field_0x13792[16];
+    /* 0x137A2 */ bool field_0x137A2[16];
+    /* 0x137B2 */ bool field_0x137B2;
     /* 0x137B4 */ mVec3_c mPos3;
     /* 0x137C0 */ u32 field_0x137C0;
 };
@@ -213,7 +223,14 @@ public:
     bool draw();
 
     bool fn_800D5670();
+    bool fn_800D56F0();
     bool fn_800D97A0();
+    void fn_800D9680(bool val);
+    void fn_800D9710();
+    void fn_800D9730(u8 val);
+    void fn_800D9780(bool val);
+    static void fn_800D97E0(u8);
+    static void setVisible(bool);
 
     static void setStaminaWheelPercent(f32 percent);
     void setStaminaWheelPercentInternal(f32 percent);
@@ -238,15 +255,15 @@ public:
         return mMeter.field_0x13770;
     }
 
-    u8 getMeterField_0x13774() const {
+    bool getMeterField_0x13774() const {
         return mMeter.field_0x13774;
     }
 
-    u8 getMeterField_0x1377F() const {
+    bool getMeterField_0x1377F() const {
         return mMeter.field_0x1377F;
     }
 
-    u8 getMeterField_0x1379A() const {
+    bool getMeterField_0x1379A() const {
         return mMeter.field_0x13792[8];
     }
 
@@ -256,6 +273,10 @@ public:
 
     void clearFlags(u32 mask) {
         mFlags = mFlags & ~mask;
+    }
+
+    void setFlags(u32 mask) {
+        mFlags = mFlags | mask;
     }
 
     void resetFlags() {
@@ -383,13 +404,13 @@ private:
     /* 0x13B54 */ s32 field_0x13B54;
     /* 0x13B58 */ s32 field_0x13B58;
     /* 0x13B5C */ s32 field_0x13B5C;
-    /* 0x13B60 */ u8 field_0x13B60;
-    /* 0x13B61 */ u8 field_0x13B61;
-    /* 0x13B62 */ u8 field_0x13B62;
-    /* 0x13B63 */ u8 field_0x13B63;
-    /* 0x13B64 */ u8 field_0x13B64;
-    /* 0x13B65 */ u8 field_0x13B65;
-    /* 0x13B66 */ u8 field_0x13B66;
+    /* 0x13B60 */ bool field_0x13B60;
+    /* 0x13B61 */ bool field_0x13B61;
+    /* 0x13B62 */ bool field_0x13B62;
+    /* 0x13B63 */ bool field_0x13B63;
+    /* 0x13B64 */ bool field_0x13B64;
+    /* 0x13B65 */ bool field_0x13B65;
+    /* 0x13B66 */ bool field_0x13B66;
 
     static dLytMeterContainer_c *sInstance;
 };

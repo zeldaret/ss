@@ -267,6 +267,7 @@ private:
 };
 
 class dLytMapMain_c : public m2d::Base_c {
+    friend class dLytMap_c;
 public:
     dLytMapMain_c();
     virtual ~dLytMapMain_c();
@@ -276,6 +277,7 @@ public:
     void build();
 
     bool isOpenMaybe() const;
+    bool fn_80139EA0() const;
 
     STATE_FUNC_DECLARE(dLytMapMain_c, Invisible);
     STATE_FUNC_DECLARE(dLytMapMain_c, RenderingWait);
@@ -338,10 +340,16 @@ private:
     /* 0x8904 */ mVec3_c field_0x8904;
     /* 0x8910 */ mVec3_c field_0x8910;
     /* 0x891C */ mVec3_c field_0x891C;
-    // ???
+    
+    /* 0x8928 */ u8 _0x8928[0x8930 - 0x8928];
+
     /* 0x8930 */ mVec3_c field_0x8930;
     /* 0x893C */ mVec3_c field_0x893C;
-    // ???
+
+    /* 0x8948 */ u8 idkfixmelater[0x4BC0];
+    /* 0x8C94 */ s32 field_0x8C94;
+    
+    // ...
 
     /* 0x8CC4 */ mVec3_c field_0x8CC4;
     /* 0x8CD0 */ mVec3_c field_0x8CD0;
@@ -391,7 +399,23 @@ public:
         return mMapMain.isOpenMaybe();
     }
 
+    bool getFn_80139EA0() const {
+        return mMapMain.fn_80139EA0();
+    }
+
     void build();
+
+    static bool isValid(s32 val) {
+        if (val >= 2 && val < 7) {
+            return true;
+        }
+        return false;
+    }
+
+    bool unkMeterCheck() const {
+        s32 val = mMapMain.field_0x8C94;
+        return isValid(val) && ((1 << (val - 2)) & 0x1D);
+    }
 
 private:
     /* 0x0004 */ d2d::ResAccIf_c mResAcc;

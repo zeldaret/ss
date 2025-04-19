@@ -52,6 +52,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterShieldGauge_c, Use);
     STATE_FUNC_DECLARE(dLytMeterShieldGauge_c, ToMax);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterShieldGauge_c);
+
     /* 0x008 */ UI_STATE_MGR_DECLARE(dLytMeterShieldGauge_c);
     /* 0x044 */ d2d::dLytSub mLyt;
     /* 0x0D8 */ d2d::AnmGroup_c mAnm[8];

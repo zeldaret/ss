@@ -248,6 +248,10 @@ public:
     bool startIn2();
     bool startOut2();
 
+    bool getField_0x54() const {
+        return field_0x54;
+    }
+
 private:
     void startIn();
     void gotoChangeSiren();
@@ -287,7 +291,7 @@ private:
     /* 0x49 */ u8 field_0x49;
     /* 0x4C */ s32 mActualTime;
     /* 0x50 */ s32 mLastTime;
-    /* 0x54 */ u8 field_0x54;
+    /* 0x54 */ bool field_0x54;
     /* 0x55 */ u8 field_0x55;
     /* 0x56 */ u8 field_0x56;
     /* 0x57 */ u8 field_0x57;

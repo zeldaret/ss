@@ -33,6 +33,10 @@ public:
     void init();
     void reset();
 
+    bool getField_0x328() const {
+        return field_0x328;
+    }
+
     bool getField_0x329() const {
         return field_0x329;
     }
@@ -115,8 +119,9 @@ private:
 
     /* 0x2FC */ s32 field_0x2FC;
 
-    /* 0x300 */ u8 _0x300[0x329 - 0x300];
+    /* 0x300 */ u8 _0x300[0x328 - 0x300];
 
+    /* 0x328 */ bool field_0x328;
     /* 0x329 */ bool field_0x329;
     /* 0x32A */ bool field_0x32A;
 

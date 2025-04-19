@@ -1,4 +1,6 @@
 // clang-format off
+#include "d/lyt/d2d.h"
+#include "d/d_cursor_hit_check.h"
 #include "c/c_lib.h"
 #include "common.h"
 #include "d/a/d_a_bird.h"
@@ -7,6 +9,7 @@
 #include "d/d_message.h"
 #include "d/d_sc_game.h"
 #include "d/d_sc_title.h"
+#include "d/d_stage.h"
 #include "d/d_stage_mgr.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/flag/dungeonflag_manager.h"
@@ -14,10 +17,18 @@
 #include "d/lyt/d_lyt_area_caption.h"
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_do_button.h"
+#include "d/lyt/d_lyt_map.h"
 #include "d/lyt/d_lyt_meter_configuration.h"
+#include "d/lyt/d_lyt_save_mgr.h"
 #include "d/lyt/d_lyt_unknowns.h"
 #include "d/lyt/d_window.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "d/lyt/meter/d_lyt_meter_key.h"
+#include "d/lyt/meter/d_lyt_meter_drink.h"
+#include "d/lyt/meter/d_lyt_meter_timer.h"
+#include "d/lyt/d_lyt_bird_gauge.h"
+#include "d/lyt/d_lyt_boss_gauge.h"
+#include "d/lyt/d_lyt_sky_gauge.h"
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
 #include "d/lyt/msg_window/d_lyt_simple_window.h"
 #include "f/f_manager.h"
@@ -561,9 +572,6 @@ u8 dLytMeter_c::getUiMode() {
 dLytMeter_c::dLytMeter_c() {}
 #pragma dont_inline reset
 
-extern "C" void fn_800D97E0(int i);
-extern "C" void fn_800D9800(int i);
-
 static const d2d::LytBrlanMapping meterBrlanMap[] = {
     {          "basicPosition_00_in.brlan", "G_remoConBtn_00"},
     {          "basicPosition_00_in.brlan", "G_remoConBtn_01"},
@@ -959,30 +967,138 @@ bool dLytMeter_c::remove() {
     return true;
 }
 
+void dLytMeter_c::fn_800D5290() {
+    dLytMeterContainer_c *container = dLytMeterContainer_c::GetInstance();
+
+    if (dLytMap_c::getInstance() != nullptr && !dLytMap_c::getInstance()->unkMeterCheck()) {
+        container->setFlags(0x20);
+    }
+
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_PLUS, LytDoButtonRelated::DO_0x74);
+    container->clearFlags(0x100 | 0x80 | 0x40);
+    if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::DO_NONE) {
+        container->clearFlags(0x400);
+    }
+}
+
+bool dLytMeter_c::fn_800D5350() {
+    if (field_0x13748 == 1 && dMessage_c::getInstance()->getField_0x328()) {
+        return true;
+    }
+    return false;
+}
+
+bool dLytMeter_c::fn_800D5380(u8 arg) {
+    if (dAcPy_c::GetLink() != nullptr &&
+        (dAcPy_c::GetLink()->checkActionFlagsCont(0x400 | 0x100 | 0x80 | 0x40 | 0x10 | 0x4 | 0x2 | 0x1) &&
+         (dAcPy_c::GetLink()->checkActionFlagsCont(0x40) || (arg && mItemSelect.getField_0x5794() == 1)))) {
+        return true;
+    }
+    return false;
+}
+
+extern "C" bool checkIsInSkykeepPuzzle();
+bool dLytMeter_c::fn_800D53D0() {
+    if (checkIsInSkykeepPuzzle() && !field_0x13774) {
+        return true;
+    }
+    return false;
+}
+
+bool dLytMeter_c::fn_800D5420() {
+    if (!fn_800D5650()) {
+        if (!dStageMgr_c::GetInstance()->isFaderSettled() || !dScGame_c::GetInstance()->isFaderSettled() ||
+            !dStageMgr_c::GetInstance()->fn_80199250() || !dStage_c::GetInstance()->fn_801B3EE0()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool dLytMeter_c::isSilentRealm() {
+    if (dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL && !dScGame_c::isCurrentStage("D003_8")) {
+        return true;
+    }
+    return false;
+}
+
+bool dLytMeter_c::fn_800D5590() {
+    if (dLytMeterContainer_c::getfn_800D97A0() && !dLytMeterContainer_c::GetInstance()->fn_800D56F0()) {
+        return true;
+    }
+
+    if (dLytMeterContainer_c::getField_0x13B63()) {
+        return true;
+    }
+    return field_0x13773;
+}
+
+void dLytMeter_c::fn_800D5630() {
+    if (mpBossGauge != nullptr) {
+        mpBossGauge->fn_80158940();
+    }
+}
+
+bool dLytMeter_c::fn_800D5650() {
+    if (field_0x13750 >= 0 && field_0x13750 <= 1) {
+        return true;
+    }
+    return false;
+}
+
+bool dLytMeter_c::fn_800D5680() {
+    if (field_0x13750 >= 2 && field_0x13750 <= 3) {
+        return true;
+    }
+    return false;
+}
+
+bool dLytMeter_c::fn_800D56B0() {
+    if (dLytSaveMgr_c::GetInstance() != nullptr && dLytSaveMgr_c::GetInstance()->fn_80285650()) {
+        return true;
+    }
+
+    if (fn_800D5350()) {
+        return true;
+    }
+
+    if ((EventManager::isInEvent() && field_0x1377E == 0 && dAcPy_c::GetLink()->getCurrentAction() != 0x8C &&
+         dMessage_c::getInstance()->getField_0x32C() == 0xC) ||
+        field_0x13774) {
+        return true;
+    }
+
+    if (dLytMap_c::getInstance() != nullptr && !dLytMap_c::getInstance()->getFn_80139EA0()) {
+        return true;
+    }
+
+    return false;
+}
+
 void dLytMeter_c::fn_800D57B0() {
-    u8 old0x13776 = field_0x13776;
-    u8 old0x13777 = field_0x13777;
-    u8 old0x13778 = field_0x13778;
-    u8 old0x13779 = field_0x13779;
-    u8 old0x1377A = field_0x1377A;
-    u8 old0x1377B = field_0x1377B;
-    u8 old0x1377C = field_0x1377C;
-    u8 old0x1377D = field_0x1377D;
+    bool old0x13776 = field_0x13776;
+    bool old0x13777 = field_0x13777;
+    bool old0x13778 = field_0x13778;
+    bool old0x13779 = field_0x13779;
+    bool old0x1377A = field_0x1377A;
+    bool old0x1377B = field_0x1377B;
+    bool old0x1377C = field_0x1377C;
+    bool old0x1377D = field_0x1377D;
 
     dBird_c *bird = nullptr;
     if (dAcPy_c::GetLink()->getRidingActorType() == dAcPy_c::RIDING_LOFTWING) {
         bird = static_cast<dBird_c *>(fManager_c::searchBaseByProfName(fProfile::BIRD, nullptr));
     }
 
-    field_0x13776 = 1;
-    field_0x13777 = 1;
-    field_0x13778 = 1;
-    field_0x13779 = 1;
-    field_0x1377A = 1;
-    field_0x1377B = 1;
-    field_0x1377C = 1;
-    field_0x1377D = 1;
-    field_0x1377E = 0;
+    field_0x13776 = true;
+    field_0x13777 = true;
+    field_0x13778 = true;
+    field_0x13779 = true;
+    field_0x1377A = true;
+    field_0x1377B = true;
+    field_0x1377C = true;
+    field_0x1377D = true;
+    field_0x1377E = false;
 
     if (EventManager::getCurrentEventName() != nullptr) {
         const char *name = EventManager::getCurrentEventName();
@@ -1036,13 +1152,13 @@ void dLytMeter_c::fn_800D57B0() {
             LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE) ||
         (dLytMeterContainer_c::getField_0x13B66() || (fn_800D56B0() && !mItemSelect.fn_800F02F0() && !fn_800D53D0()) ||
          fn_800D5650() || fn_800D5680())) {
-        field_0x13782[0] = 0;
+        field_0x13782[0] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0() && !mMinusBtn.fn_800F75E0())
 
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())) {
-        field_0x13782[1] = 0;
+        field_0x13782[1] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1050,7 +1166,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() > 1 && !mPlusBtn.getField_0x1C0() && !mPlusBtn.isCalling())) {
-        field_0x13782[2] = 0;
+        field_0x13782[2] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1058,7 +1174,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() > 1 && !mCrossBtn.fn_800FA730())) {
-        field_0x13782[3] = 0;
+        field_0x13782[3] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1066,7 +1182,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0 && !mp1Button->shouldCall())) {
-        field_0x13782[4] = 0;
+        field_0x13782[4] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1074,7 +1190,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0 && !mp2Button->shouldCall())) {
-        field_0x13782[5] = 0;
+        field_0x13782[5] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1082,7 +1198,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() > 1)) {
-        field_0x13782[6] = 0;
+        field_0x13782[6] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1090,7 +1206,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0)) {
-        field_0x13782[7] = 0;
+        field_0x13782[7] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0() && !mDowsing.fn_800FE490())
@@ -1098,7 +1214,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0 && !fn_800D5380(true) && !mDowsing.shouldCall() && !mDowsing.fn_800FE490())) {
-        field_0x13782[8] = 0;
+        field_0x13782[8] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1106,7 +1222,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0 && !fn_800D5380(true) && !mZBtn.isCalling())) {
-        field_0x13782[9] = 0;
+        field_0x13782[9] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1114,7 +1230,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0)) {
-        field_0x13782[10] = 0;
+        field_0x13782[10] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1122,7 +1238,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0)) {
-        field_0x13782[11] = 0;
+        field_0x13782[11] = false;
     }
 
     if ((!isNotSilentRealmOrLoftwing() || (mShield.getGaugePercentMaybe() == 0.0f && mShield.getField_0x31D()) ||
@@ -1138,7 +1254,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() ||
             (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->fn_8012B000()) ||
             fn_800D5650() || fn_800D5680())) {
-        field_0x13782[12] = 0;
+        field_0x13782[12] = false;
     }
 
     if ((isSilentRealm() || fn_800D5380(false) || field_0x13770 != 3 ||
@@ -1163,7 +1279,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() ||
             (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->fn_8012B000()) ||
             fn_800D5650() || fn_800D5680())) {
-        field_0x13782[13] = 0;
+        field_0x13782[13] = false;
     }
 
     if (dMessage_c::getInstance()->getField_0x2FC() != 0) {
@@ -1190,13 +1306,13 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() ||
             (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->fn_8012B000()) ||
             fn_800D5650() || fn_800D5680())) {
-        field_0x13782[14] = 0;
+        field_0x13782[14] = false;
     }
 
     if (!isSilentRealm() || (fn_800D56B0() && !fn_800D5590())
 
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())) {
-        field_0x13776 = 0;
+        field_0x13776 = false;
     }
 
     if (mpTimer != nullptr && field_0x13776 != old0x13776) {
@@ -1217,7 +1333,7 @@ void dLytMeter_c::fn_800D57B0() {
          MinigameManager::isInMinigameState(MinigameManager::ROLLERCOASTER))
 
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() || fn_800D5680())) {
-        field_0x13782[15] = 0;
+        field_0x13782[15] = false;
     }
 
     if ((dAcPy_c::GetLink()->getRidingActorType() != dAcPy_c::RIDING_LOFTWING || fn_800D56B0()) ||
@@ -1239,7 +1355,7 @@ void dLytMeter_c::fn_800D57B0() {
 
         (dLytDobutton_c::getFn0x8010E5D0() != 0x5E || fn_800D56B0() || dLytMeterContainer_c::getField_0x13B66() ||
          fn_800D5420() || fn_800D5650() || fn_800D5680())) {
-        field_0x13777 = 0;
+        field_0x13777 = false;
     }
 
     if (mpBirdGauge != nullptr) {
@@ -1638,7 +1754,7 @@ bool dLytMeterContainer_c::build() {
     }
 
     fn_800D97E0(0xb);
-    fn_800D9800(1);
+    setVisible(true);
     dMessage_c::getInstance()->init();
     mFlags = 0xFFFFFFFF;
     field_0x13B54 = 0xFFFFFFFF;
@@ -1739,12 +1855,65 @@ bool dLytMeterContainer_c::draw() {
     return true;
 }
 
+bool dLytMeterContainer_c::fn_800D5670() {
+    return mMeter.fn_800D5350();
+}
+
+void dLytMeterContainer_c::fn_800D9680(bool val) {
+    for (int i = 0; i < METER_NUM_PANES; i++) {
+        mMeter.field_0x13792[i] = val;
+    }
+    mMeter.field_0x137B2 = val;
+}
+
+bool dLytMeterContainer_c::fn_800D56F0() {
+    if (mMeter.mpTimer != nullptr) {
+        return mMeter.mpTimer->getField_0x54();
+    }
+
+    return false;
+}
+
+void dLytMeterContainer_c::fn_800D9710() {
+    field_0x13B5C = 8;
+}
+
 void dLytMeterContainer_c::setStaminaWheelPercentInternal(f32 percent) {
     mMeter.mGanbariGauge.setStaminaPercent(percent);
+}
+
+void dLytMeterContainer_c::fn_800D9730(u8 val) {
+    mMeter.mItemSelect.fn_800EF6B0(val);
+    mMeter.mGanbariGauge.setField_0x539(val != 0);
+}
+
+void dLytMeterContainer_c::fn_800D9780(bool val) {
+    if (!field_0x13B61) {
+        field_0x13B60 = val;
+    }
+}
+
+bool dLytMeterContainer_c::fn_800D97A0() {
+    if (field_0x13B61) {
+        return false;
+    }
+    return field_0x13B60;
 }
 
 void dLytMeterContainer_c::setStaminaWheelPercent(f32 percent) {
     if (sInstance != nullptr) {
         sInstance->setStaminaWheelPercentInternal(percent);
+    }
+}
+
+void dLytMeterContainer_c::fn_800D97E0(u8 arg) {
+    if (sInstance != nullptr) {
+        sInstance->fn_800D9730(arg);
+    }
+}
+
+void dLytMeterContainer_c::setVisible(bool b) {
+    if (sInstance != nullptr) {
+        sInstance->mVisible = b;
     }
 }

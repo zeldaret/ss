@@ -19,6 +19,9 @@ public:
 
     enum Action_e {
         DO_DASH = 0x5F,
+
+        DO_0x74 = 0x74,
+
         DO_RETURN = 0x7F,
         DO_STOP = 0x84,
         DO_ITEMS = 0x85,

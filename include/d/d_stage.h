@@ -132,6 +132,8 @@ public:
         return curr_room_id;
     }
 
+    bool fn_801B3EE0();
+
 private:
     dRoom_c *createRoom(int roomid, bool flag0x40);
     void createLytSeekerStone();

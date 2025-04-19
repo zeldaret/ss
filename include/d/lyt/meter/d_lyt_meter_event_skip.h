@@ -23,6 +23,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterEventSkip_c, Visible);
     STATE_FUNC_DECLARE(dLytMeterEventSkip_c, Out);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytMeterEventSkip_c);
+
     /* 0x000 */ UI_STATE_MGR_DECLARE(dLytMeterEventSkip_c);
     /* 0x03C */ d2d::LytBase_c mLyt;
     /* 0x0D0 */ d2d::AnmGroup_c mAnm[2];

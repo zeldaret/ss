@@ -81,6 +81,8 @@ private:
     STATE_FUNC_DECLARE(dLytSkyGauge_c, Move);
     STATE_FUNC_DECLARE(dLytSkyGauge_c, Out);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytSkyGauge_c);
+
     /* 0x008 */ UI_STATE_MGR_DECLARE(dLytSkyGauge_c);
     /* 0x008 */ d2d::ResAccIf_c mResAcc;
     /* 0x3B4 */ dLytSkyGaugeMain_c mMain;

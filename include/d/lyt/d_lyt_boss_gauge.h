@@ -16,6 +16,8 @@ public:
 
     void setMode(s32 mode);
 
+    void fn_80158940();
+
     void setField_0x545(bool value) {
         field_0x545 = value;
     }
@@ -26,12 +28,15 @@ private:
     STATE_FUNC_DECLARE(dLytBossGauge_c, Move);
     STATE_FUNC_DECLARE(dLytBossGauge_c, Out);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytBossGauge_c);
+
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytBossGauge_c);
     /* 0x040 */ d2d::ResAccIf_c mResAcc;
     /* 0x3B0 */ d2d::dLytSub mLyt;
     /* 0x444 */ d2d::AnmGroup_c mAnmGroups[4];
     /* 0x544 */ u8 field_0x544;
     /* 0x545 */ bool field_0x545;
+    /* 0x546 */ u8 _0x546[0x550 - 0x546];
 };
 
 #endif

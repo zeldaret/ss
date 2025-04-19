@@ -273,6 +273,9 @@ private:
     STATE_FUNC_DECLARE(dLytCommonIconItem_c, Wait);
     STATE_FUNC_DECLARE(dLytCommonIconItem_c, Out);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytCommonIconItem_c);
+    STATE_MGR_DEFINE_UTIL_ISSTATE(dLytCommonIconItem_c);
+
     /* 0x008 */ UI_STATE_MGR_DECLARE(dLytCommonIconItem_c);
     /* 0x044 */ u8 mPart;
     /* 0x048 */ dLytCommonIconItemPart1_c mPart1;

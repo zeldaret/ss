@@ -82,6 +82,8 @@ private:
     STATE_FUNC_DECLARE(dLytDobutton_c, Wait);
     STATE_FUNC_DECLARE(dLytDobutton_c, Out);
 
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytDobutton_c);
+
     UI_STATE_MGR_DECLARE(dLytDobutton_c);
     /* 0x040 */ d2d::dLytSub mLyt;
     /* 0x0D4 */ d2d::AnmGroup_c mAnmGroups[12];
