@@ -129,10 +129,11 @@ public:
     void setField_0x4E80(s32 value) {
         field_0x4E80 = value;
     }
+    
+    bool fn_800F75E0() const;
 
 private:
     bool shouldCall() const;
-    bool fn_800F75E0() const;
     void fn_800F7300();
     bool fn_800F7600() const;
     bool fn_800F7760() const;

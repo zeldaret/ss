@@ -39,6 +39,14 @@ public:
         }
     }
 
+    static s32 getNextActionToShow() {
+        if (sInstance != nullptr) {
+            return sInstance->mNextDoActionToShow;
+        } else {
+            return 0x29;
+        }
+    }
+
     static s32 getFn0x8010E5E0() {
         if (sInstance != nullptr) {
             return sInstance->fn_8010E5E0();
@@ -54,8 +62,15 @@ public:
             return 0x5E;
         }
     }
-
+    
+    static void setActionTextStuff(s32 p1, s32 p2, bool p3) {
+        if (sInstance != nullptr) {
+            sInstance->setActionTextStuffInternal(p1, p2, p3);
+        }
+    }
+    
 private:
+    void setActionTextStuffInternal(s32, s32, bool);
     s32 fn_8010E5D0() const;
     s32 fn_8010E5E0() const;
 

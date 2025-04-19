@@ -245,10 +245,10 @@ public:
     bool build();
     bool remove();
     bool execute();
-
-private:
     bool startIn2();
     bool startOut2();
+
+private:
     void startIn();
     void gotoChangeSiren();
     void gotoSiren();

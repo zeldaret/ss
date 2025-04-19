@@ -47,8 +47,8 @@ public:
     };
 
     static void set(DoButton_e button, Action_e value) {
-        LytDoButtonRelated *b = sInstance;
-        if (b != nullptr) {
+        if (sInstance != nullptr) {
+            LytDoButtonRelated *b = sInstance;
             b->field_0x04[button] = value;
             b->field_0x34[button] = true;
         }

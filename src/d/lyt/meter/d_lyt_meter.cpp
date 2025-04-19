@@ -1,23 +1,33 @@
 // clang-format off
 #include "c/c_lib.h"
 #include "common.h"
+#include "d/a/d_a_bird.h"
+#include "d/a/d_a_item.h"
 #include "d/a/d_a_player.h"
 #include "d/d_message.h"
 #include "d/d_sc_game.h"
 #include "d/d_sc_title.h"
 #include "d/d_stage_mgr.h"
 #include "d/flag/storyflag_manager.h"
+#include "d/flag/dungeonflag_manager.h"
+#include "d/flag/sceneflag_manager.h"
 #include "d/lyt/d_lyt_area_caption.h"
 #include "d/lyt/d_lyt_control_game.h"
+#include "d/lyt/d_lyt_do_button.h"
 #include "d/lyt/d_lyt_meter_configuration.h"
 #include "d/lyt/d_lyt_unknowns.h"
 #include "d/lyt/d_window.h"
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
+#include "d/lyt/msg_window/d_lyt_simple_window.h"
+#include "f/f_manager.h"
+#include "f/f_profile_name.h"
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_group.h"
+#include "sized_string.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/event_manager.h"
+#include "toBeSorted/minigame_mgr.h"
 #include "toBeSorted/small_sound_mgr.h"
 // clang-format on
 
@@ -947,6 +957,410 @@ bool dLytMeter_c::remove() {
     }
 
     return true;
+}
+
+void dLytMeter_c::fn_800D57B0() {
+    u8 old0x13776 = field_0x13776;
+    u8 old0x13777 = field_0x13777;
+    u8 old0x13778 = field_0x13778;
+    u8 old0x13779 = field_0x13779;
+    u8 old0x1377A = field_0x1377A;
+    u8 old0x1377B = field_0x1377B;
+    u8 old0x1377C = field_0x1377C;
+    u8 old0x1377D = field_0x1377D;
+
+    dBird_c *bird = nullptr;
+    if (dAcPy_c::GetLink()->getRidingActorType() == dAcPy_c::RIDING_LOFTWING) {
+        bird = static_cast<dBird_c *>(fManager_c::searchBaseByProfName(fProfile::BIRD, nullptr));
+    }
+
+    field_0x13776 = 1;
+    field_0x13777 = 1;
+    field_0x13778 = 1;
+    field_0x13779 = 1;
+    field_0x1377A = 1;
+    field_0x1377B = 1;
+    field_0x1377C = 1;
+    field_0x1377D = 1;
+    field_0x1377E = 0;
+
+    if (EventManager::getCurrentEventName() != nullptr) {
+        const char *name = EventManager::getCurrentEventName();
+        if (strequals(name, "SwordDraw") || strequals(name, "SwordDrawDoorNew")) {
+            field_0x1377E = 1;
+            if (dLytDobutton_c::getNextActionToShow() != 0x12) {
+                dLytDobutton_c::setActionTextStuff(0x29, 0x5E, true);
+            }
+            if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_A) != 0x12) {
+                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::DO_NONE);
+            }
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::DO_NONE);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::DO_NONE);
+        }
+    }
+
+    for (int i = 0; i < METER_NUM_PANES; i++) {
+        field_0x13782[i] = 1;
+    }
+
+    if (dAcPy_c::GetLink2()->canDowseProbably() && !fn_800D5650() && !fn_800D5680()) {
+        if (!field_0x1377F) {
+            field_0x1377F = true;
+        }
+    } else {
+        if (field_0x1377F) {
+            field_0x1377F = false;
+        }
+    }
+
+    if ((!StoryflagManager::sInstance->getCounterOrFlag(58) &&
+         ((LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE &&
+           mItemSelect.getField_0x5794() != 2 &&
+           (!EventManager::isInEvent() || !EventManager::isCurrentEvent("ItemGetGorgeous")))))
+
+        || (dStageMgr_c::GetInstance()->isAreaTypeHouse() &&
+            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE &&
+            !MinigameManager::isInMinigameState(MinigameManager::HOUSE_CLEANING) && !mItemSelect.fn_800F02F0())
+
+        ||
+        (isSilentRealm() && LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE &&
+         !mItemSelect.fn_800F02F0())
+
+        || ((dAcPy_c::GetLink()->checkActionFlagsCont(0x400000) || fn_800D5420() ||
+             dAcPy_c::GetLink()->checkActionFlags(dAcPy_c::FLG0_CRAWLING) || fn_800D5380(0) ||
+             MinigameManager::isInMinigameState(MinigameManager::FUN_FUN_ISLAND) ||
+             MinigameManager::isInMinigameState(MinigameManager::THRILL_DIGGER) ||
+             MinigameManager::isInMinigameState(MinigameManager::BAMBOO_CUTTING)))
+
+        || (MinigameManager::isInMinigameState(MinigameManager::TRIAL_TIME_ATTACK) &&
+            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE) ||
+        (dLytMeterContainer_c::getField_0x13B66() || (fn_800D56B0() && !mItemSelect.fn_800F02F0() && !fn_800D53D0()) ||
+         fn_800D5650() || fn_800D5680())) {
+        field_0x13782[0] = 0;
+    }
+
+    if ((fn_800D56B0() && !fn_800D53D0() && !mMinusBtn.fn_800F75E0())
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())) {
+        field_0x13782[1] = 0;
+    }
+
+    if ((fn_800D56B0() && !fn_800D53D0())
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
+
+        || (getUiMode() > 1 && !mPlusBtn.getField_0x1C0() && !mPlusBtn.isCalling())) {
+        field_0x13782[2] = 0;
+    }
+
+    if ((fn_800D56B0() && !fn_800D53D0())
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
+
+        || (getUiMode() > 1 && !mCrossBtn.fn_800FA730())) {
+        field_0x13782[3] = 0;
+    }
+
+    if ((fn_800D56B0() && !fn_800D53D0())
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
+
+        || (getUiMode() != 0 && !mp1Button->shouldCall())) {
+        field_0x13782[4] = 0;
+    }
+
+    if ((fn_800D56B0() && !fn_800D53D0())
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
+
+        || (getUiMode() != 0 && !mp2Button->shouldCall())) {
+        field_0x13782[5] = 0;
+    }
+
+    if ((fn_800D56B0() && !fn_800D53D0())
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
+
+        || (getUiMode() > 1)) {
+        field_0x13782[6] = 0;
+    }
+
+    if ((fn_800D56B0() && !fn_800D53D0())
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
+
+        || (getUiMode() != 0)) {
+        field_0x13782[7] = 0;
+    }
+
+    if ((fn_800D56B0() && !fn_800D53D0() && !mDowsing.fn_800FE490())
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
+
+        || (getUiMode() != 0 && !fn_800D5380(true) && !mDowsing.shouldCall() && !mDowsing.fn_800FE490())) {
+        field_0x13782[8] = 0;
+    }
+
+    if ((fn_800D56B0() && !fn_800D53D0())
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
+
+        || (getUiMode() != 0 && !fn_800D5380(true) && !mZBtn.isCalling())) {
+        field_0x13782[9] = 0;
+    }
+
+    if ((fn_800D56B0() && !fn_800D53D0())
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
+
+        || (getUiMode() != 0)) {
+        field_0x13782[10] = 0;
+    }
+
+    if ((fn_800D56B0() && !fn_800D53D0())
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
+
+        || (getUiMode() != 0)) {
+        field_0x13782[11] = 0;
+    }
+
+    if ((!isNotSilentRealmOrLoftwing() || (mShield.getGaugePercentMaybe() == 0.0f && mShield.getField_0x31D()) ||
+         dAcPy_c::GetLink()->getCurrentAction() == 0x8C || fn_800D5380(false) || field_0x13770 != 3 ||
+         MinigameManager::isInMinigameState(MinigameManager::FUN_FUN_ISLAND) ||
+         MinigameManager::isInMinigameState(MinigameManager::THRILL_DIGGER) ||
+         MinigameManager::isInMinigameState(MinigameManager::BAMBOO_CUTTING) ||
+         MinigameManager::isInMinigameState(MinigameManager::TRIAL_TIME_ATTACK) ||
+         MinigameManager::isInMinigameState(MinigameManager::PUMPKIN_ARCHERY) ||
+         MinigameManager::isInMinigameState(MinigameManager::SPIRAL_CHARGE_TUTORIAL) ||
+         MinigameManager::isInMinigameState(MinigameManager::ROLLERCOASTER) || fn_800D56B0() || field_0x1377E)
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() ||
+            (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->fn_8012B000()) ||
+            fn_800D5650() || fn_800D5680())) {
+        field_0x13782[12] = 0;
+    }
+
+    if ((isSilentRealm() || fn_800D5380(false) || field_0x13770 != 3 ||
+         dAcPy_c::GetLink()->getCurrentAction() == 0x8C ||
+
+         MinigameManager::isInMinigameState(MinigameManager::FUN_FUN_ISLAND) ||
+         MinigameManager::isInMinigameState(MinigameManager::THRILL_DIGGER) ||
+         MinigameManager::isInMinigameState(MinigameManager::BAMBOO_CUTTING) ||
+         MinigameManager::isInMinigameState(MinigameManager::TRIAL_TIME_ATTACK) ||
+         MinigameManager::isInMinigameState(MinigameManager::PUMPKIN_ARCHERY) ||
+         MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE) ||
+         MinigameManager::isInMinigameState(MinigameManager::SPIRAL_CHARGE_TUTORIAL) ||
+         MinigameManager::isInMinigameState(MinigameManager::ROLLERCOASTER))
+
+        ||
+        (dMessage_c::getInstance()->getField_0x2FC() && mHeart.getField_0x78C() && !dAcPy_c::LINK->isSittingOrUnk0xAE())
+
+        || (fn_800D56B0() &&
+            (dMessage_c::getInstance()->getField_0x2FC() == 0 || dMessage_c::getInstance()->getField_0x2FC() == -2)) ||
+        field_0x1377E
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() ||
+            (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->fn_8012B000()) ||
+            fn_800D5650() || fn_800D5680())) {
+        field_0x13782[13] = 0;
+    }
+
+    if (dMessage_c::getInstance()->getField_0x2FC() != 0) {
+        mRupy.setSize(0);
+    } else {
+        mRupy.setSize(1);
+    }
+
+    if ((isSilentRealm() || field_0x13770 != 3 || dAcPy_c::GetLink()->getCurrentAction() == 0x8C ||
+
+         MinigameManager::isInMinigameState(MinigameManager::FUN_FUN_ISLAND) ||
+         MinigameManager::isInMinigameState(MinigameManager::BAMBOO_CUTTING) ||
+         MinigameManager::isInMinigameState(MinigameManager::TRIAL_TIME_ATTACK) ||
+         MinigameManager::isInMinigameState(MinigameManager::PUMPKIN_ARCHERY) ||
+         MinigameManager::isInMinigameState(MinigameManager::SPIRAL_CHARGE_TUTORIAL) ||
+         MinigameManager::isInMinigameState(MinigameManager::ROLLERCOASTER))
+
+        || (fn_800D56B0() && mHeart.getField_0x78C() == 0)
+
+        || (dScGame_c::currentSpawnInfo.stageName == "F406" && dScGame_c::currentSpawnInfo.layer == 13)
+
+        || (field_0x1377E != 0)
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() ||
+            (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->fn_8012B000()) ||
+            fn_800D5650() || fn_800D5680())) {
+        field_0x13782[14] = 0;
+    }
+
+    if (!isSilentRealm() || (fn_800D56B0() && !fn_800D5590())
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())) {
+        field_0x13776 = 0;
+    }
+
+    if (mpTimer != nullptr && field_0x13776 != old0x13776) {
+        if (field_0x13776) {
+            mpTimer->startIn2();
+        } else {
+            mpTimer->startOut2();
+        }
+    }
+
+    if ((dAcPy_c::GetLink()->hasvt_0x1C0() || dAcPy_c::GetLink()->checkActionFlagsCont(0x10) ||
+         (fn_800D56B0() && !field_0x13774) || mGanbariGauge.fn_80104760() ||
+
+         MinigameManager::isInMinigameState(MinigameManager::FUN_FUN_ISLAND) ||
+         MinigameManager::isInMinigameState(MinigameManager::THRILL_DIGGER) ||
+         MinigameManager::isInMinigameState(MinigameManager::PUMPKIN_ARCHERY) ||
+         MinigameManager::isInMinigameState(MinigameManager::SPIRAL_CHARGE_TUTORIAL) ||
+         MinigameManager::isInMinigameState(MinigameManager::ROLLERCOASTER))
+
+        || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() || fn_800D5680())) {
+        field_0x13782[15] = 0;
+    }
+
+    if ((dAcPy_c::GetLink()->getRidingActorType() != dAcPy_c::RIDING_LOFTWING || fn_800D56B0()) ||
+        (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() || fn_800D5680())) {
+        field_0x13778 = 0;
+    } else if (bird != nullptr && mpSkyGauge != nullptr) {
+        mpSkyGauge->setHeight(dAcPy_c::GetLink()->vt_0x260());
+    }
+
+    if (mpSkyGauge != nullptr && field_0x13778 != old0x13778) {
+        if (field_0x13778) {
+            mpSkyGauge->setWantsIn();
+        } else {
+            mpSkyGauge->setWantsOut();
+        }
+    }
+
+    if (dAcPy_c::GetLink()->getRidingActorType() != dAcPy_c::RIDING_LOFTWING || !field_0x13780 ||
+
+        (dLytDobutton_c::getFn0x8010E5D0() != 0x5E || fn_800D56B0() || dLytMeterContainer_c::getField_0x13B66() ||
+         fn_800D5420() || fn_800D5650() || fn_800D5680())) {
+        field_0x13777 = 0;
+    }
+
+    if (mpBirdGauge != nullptr) {
+        if (bird != nullptr) {
+            mpBirdGauge->setNumDashes(bird->getNumDashes());
+        }
+        if (field_0x13777 != old0x13777) {
+            if (field_0x13777) {
+                if (mpBirdGauge->getField_0x693()) {
+                    mpBirdGauge->setField_0x690(1);
+                } else {
+                    field_0x13777 = false;
+                }
+            } else {
+                if (mpBirdGauge->getField_0x692()) {
+                    mpBirdGauge->hide();
+                } else {
+                    field_0x13777 = true;
+                }
+            }
+        }
+    }
+
+    if (!field_0x13781 || fn_800D56B0() ||
+
+        (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() || fn_800D5680())) {
+        field_0x13779 = false;
+    }
+
+    if (field_0x13779 != old0x13779) {
+        if (field_0x13779) {
+            if (mpBossGauge != nullptr) {
+                s32 mode = 0;
+                if (dScGame_c::currentSpawnInfo.layer == 3) {
+                    mode = 1;
+                } else if (dScGame_c::currentSpawnInfo.layer == 4) {
+                    mode = 2;
+                }
+                mpBossGauge->setMode(mode);
+            }
+        } else {
+            if (mpBossGauge != nullptr) {
+                mpBossGauge->setField_0x545(true);
+            }
+        }
+    }
+
+    if (mpKakeraKey != nullptr) {
+        if (dAcItem_c::getKeyPieceCount() == 0 || dLytAreaCaption_c::get0xAAC() || fn_800D5380(false) ||
+            SceneflagManager::sInstance->checkSceneflagGlobal(4, 0x21) || MinigameManager::isInAnyMinigame()
+
+            || (dLytMeterContainer_c::getField_0x13B66() || fn_800D56B0() || field_0x1377E || fn_800D5420() ||
+                fn_800D5650() || fn_800D5680())) {
+            field_0x1377A = false;
+        }
+        if (field_0x1377A != old0x1377A) {
+            if (field_0x1377A) {
+                mpKakeraKey->setShouldBeVisible(true);
+            } else {
+                mpKakeraKey->setShouldBeVisible(false);
+            }
+        }
+    }
+
+    if (mpBossKey != nullptr) {
+        if (DungeonflagManager::sInstance->getCounterOrFlag(12, 8) == 0
+
+            || DungeonflagManager::sInstance->getCounterOrFlag(16, 8) != 0 ||
+            dAcPy_c::GetLink()->getCurrentAction() == 0x8C || dLytAreaCaption_c::get0xAAC() || fn_800D5380(false) ||
+            MinigameManager::isInAnyMinigame() || fn_800D56B0() || field_0x1377E
+
+            || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() || fn_800D5680())) {
+            field_0x1377B = false;
+        }
+
+        if (field_0x1377B != old0x1377B) {
+            if (field_0x1377B) {
+                mpBossKey->setShouldBeVisible(true);
+            } else {
+                mpBossKey->setShouldBeVisible(false);
+            }
+        }
+    }
+
+    if (mpSmallKey != nullptr) {
+        if (dAcItem_c::getSmallKeyCount() == 0 || dLytAreaCaption_c::get0xAAC() || fn_800D5380(false) ||
+            MinigameManager::isInAnyMinigame() || fn_800D56B0() || field_0x1377E
+
+            || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() || fn_800D5680())) {
+            field_0x1377C = false;
+        }
+
+        if (field_0x1377C != old0x1377C) {
+            if (field_0x1377C) {
+                mpSmallKey->setShouldBeVisible(true);
+            } else {
+                mpSmallKey->setShouldBeVisible(false);
+            }
+        }
+    }
+
+    if (mpDrink != nullptr) {
+        if (!field_0x137B2 || dLytAreaCaption_c::get0xAAC() || fn_800D5380(false) ||
+            MinigameManager::isInAnyMinigame() || field_0x1377E
+
+            || fn_800D56B0() || dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() ||
+            fn_800D5680()) {
+            field_0x1377D = false;
+        }
+
+        if (field_0x1377D != old0x1377D) {
+            if (field_0x1377D) {
+                mpDrink->setShouldBeVisible(true);
+            } else {
+                mpDrink->setShouldBeVisible(false);
+            }
+        }
+
+        mVec3_c pos = mRupy.getLastVisibleDigitPosition();
+        mpDrink->setField_0x6E0(pos);
+    }
 }
 
 bool dLytMeter_c::execute() {

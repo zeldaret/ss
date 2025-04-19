@@ -138,7 +138,7 @@ u16 SceneflagManager::checkFlag(u16 roomId, u16 flag) {
         return checkTempOrSceneflag(flag);
     }
 }
-bool SceneflagManager::checkSceneflagGlobal(u16 sceneIdx, u16 flag) {
+u16 SceneflagManager::checkSceneflagGlobal(u16 sceneIdx, u16 flag) {
     u16 *pData = FileManager::GetInstance()->getSceneFlagsConst();
     return mFlagHelper.checkFlag(getSceneflagSlotGlobal(sceneIdx, flag), flag % 16, pData, 0x800);
 }

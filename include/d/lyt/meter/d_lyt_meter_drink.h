@@ -72,6 +72,14 @@ public:
     bool draw();
     bool execute();
 
+    void setShouldBeVisible(bool v) {
+        field_0x6F4 = v;
+    }
+
+    void setField_0x6E0(const mVec3_c &v) {
+        field_0x6E0 = v;
+    }
+
 private:
     bool fn_800E5C40(int);
     int getPartForDrinkType(dLytMeterDrinkParts_c::DrinkType_e ty) const;

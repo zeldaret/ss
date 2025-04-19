@@ -31,6 +31,10 @@ public:
         mpOwnerPane = pane;
     }
 
+    bool getField_0x1C0() const {
+        return field_0x1C0;
+    }
+
 private:
     void setMessage(s32 id);
     bool isMapOpen() const;

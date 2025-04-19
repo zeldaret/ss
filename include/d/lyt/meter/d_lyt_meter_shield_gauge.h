@@ -39,6 +39,10 @@ public:
         field_0x318 = v;
     }
 
+    u8 getField_0x31D() const {
+        return field_0x31D;
+    }
+
 private:
     s32 getLytFrameForShield(s32) const;
     void setLevel(f32 level);

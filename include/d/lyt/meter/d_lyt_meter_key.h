@@ -19,6 +19,10 @@ public:
 
     void setPosition(s32 position);
 
+    void setShouldBeVisible(bool v) {
+        mShouldBeVisible = v;
+    }
+
 private:
     STATE_FUNC_DECLARE(dLytMeterKakeraKey_c, Wait);
     STATE_FUNC_DECLARE(dLytMeterKakeraKey_c, On);
@@ -61,6 +65,10 @@ public:
 
     void setPosition(s32 position);
 
+    void setShouldBeVisible(bool v) {
+        mShouldBeVisible = v;
+    }
+
 private:
     STATE_FUNC_DECLARE(dLytMeterBossKey_c, Wait);
     STATE_FUNC_DECLARE(dLytMeterBossKey_c, On);
@@ -99,6 +107,10 @@ public:
     bool draw();
 
     void setPosition(s32 position);
+
+    void setShouldBeVisible(bool v) {
+        mShouldBeVisible = v;
+    }
 
 private:
     STATE_FUNC_DECLARE(dLytMeterSmallKey_c, Wait);

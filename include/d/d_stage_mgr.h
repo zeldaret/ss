@@ -49,6 +49,7 @@ public:
 public:
     bool isAreaTypeDungeon() const;
     bool isAreaTypeSky() const;
+    bool isAreaTypeHouse() const;
     bool isAreaTypeDungeonOrBoss() const;
     bool isAreaTypeOverworldOrSkyloft() const;
     s32 getSTIFunk1() const;

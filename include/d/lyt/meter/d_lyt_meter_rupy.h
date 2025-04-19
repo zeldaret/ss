@@ -109,6 +109,10 @@ public:
         field_0x8AC = val;
     }
 
+    void setSize(u8 size) {
+        mSize = size;
+    }
+
 private:
     bool updateDisplayedAmount(bool suppressSound);
     bool hasChangeInRupees() const;

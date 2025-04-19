@@ -193,7 +193,7 @@ public:
     /* vt 0x254 */ virtual void isAttackingUnderground();
     /* vt 0x258 */ virtual void vt_0x258();
     /* vt 0x25C */ virtual void vt_0x25C();
-    /* vt 0x260 */ virtual void vt_0x260();
+    /* vt 0x260 */ virtual f32 vt_0x260() const;
     /* vt 0x264 */ virtual void getGroosenatorIfIn();
     /* vt 0x268 */ virtual void setActorRef11();
     /* vt 0x26C */ virtual void doesGameOver();
@@ -290,6 +290,10 @@ public:
         return mCurrentAction == action;
     }
 
+    bool isSittingOrUnk0xAE() const {
+        return mCurrentAction == 0xAD || mCurrentAction == 0xAE;
+    }
+
     inline bool checkSwordAndMoreStates(u32 mask) const {
         return (mSwordAndMoreStates & mask) != 0;
     }
@@ -338,6 +342,8 @@ public:
     static bool isItemRestrictedByBokoBase(ITEM_ID item);
 
     static u32 getCurrentHealthCapacity();
+
+    bool canDowseProbably() const;
 };
 
 #endif

@@ -68,6 +68,12 @@ public:
     void setHeight(f32 height);
 
     static dLytSkyGauge_c *sInstance;
+    void setWantsIn() {
+        mWantsIn = true;
+    }
+    void setWantsOut() {
+        mWantsOut = true;
+    }
 
 private:
     STATE_FUNC_DECLARE(dLytSkyGauge_c, None);

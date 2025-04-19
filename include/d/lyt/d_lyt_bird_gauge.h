@@ -71,6 +71,22 @@ public:
 
     void hide();
 
+    void setNumDashes(s32 num) {
+        mGameStateDashes = num;
+    }
+
+    void setField_0x690(bool val) {
+        field_0x690 = val;
+    }
+
+    bool getField_0x692() const {
+        return field_0x692;
+    }
+
+    bool getField_0x693() const {
+        return field_0x693;
+    }
+
 private:
     static dLytBirdGauge_c *sInstance;
 

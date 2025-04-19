@@ -203,6 +203,10 @@ public:
         return field_0x57A2;
     }
 
+    u8 getField_0x5794() const {
+        return field_0x5794;
+    }
+
 private:
     void setBtnItem(s32 internalItem);
     void realizeSelectedWheelItem();

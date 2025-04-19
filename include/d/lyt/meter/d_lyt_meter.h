@@ -72,13 +72,17 @@ public:
 
     bool fn_800D5380(u8);
     bool fn_800D5290();
+    bool fn_800D5590();
     bool fn_800D5650();
     bool fn_800D5680();
     bool fn_800D56B0();
-    bool fn_800D57B0();
+    void fn_800D57B0();
     bool execute();
 
     bool isSilentRealm();
+
+    bool fn_800D53D0();
+    bool fn_800D5420();
 
     void setUiMode(u16 value) const;
     u8 getUiMode();
@@ -331,6 +335,14 @@ public:
     static void setField_0x13B64(u8 val) {
         if (sInstance != nullptr) {
             sInstance->field_0x13B64 = val;
+        }
+    }
+
+    static u8 getField_0x13B66() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x13B66;
+        } else {
+            return 0;
         }
     }
 
