@@ -1,4 +1,5 @@
 // clang-format off
+#include "c/c_lib.h"
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/d_message.h"
@@ -9,8 +10,10 @@
 #include "d/lyt/d_lyt_area_caption.h"
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_meter_configuration.h"
+#include "d/lyt/d_lyt_unknowns.h"
 #include "d/lyt/d_window.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "d/lyt/msg_window/d_lyt_msg_window.h"
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_group.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
@@ -644,10 +647,10 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
 
     mShieldPositions[0].copyFrom(mLyt.findPane("N_shield_00")->GetTranslate());
     mShieldPositions[1].copyFrom(mLyt.findPane("N_shield_01")->GetTranslate());
-    field_0x13758 = 0;
-    field_0x13768 = 0;
-    field_0x13764 = 0;
-    mShieldPos = mShieldPositions[field_0x13764];
+    mShieldPosIndex = 0;
+    mOldShieldPosIndex = 0;
+    mShieldPosInterpFrame = 0;
+    mShieldPos = mShieldPositions[mShieldPosIndex];
 
     mLyt.findPane("N_rupyAll_00")->SetVisible(true);
     mAnmGroups[METER_ANIM_RUPY_POSITION].setAnimEnable(true);
@@ -662,10 +665,10 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     mAnmGroups[METER_ANIM_RUPY_POSITION].setAnimEnable(false);
     mLyt.findPane("N_rupyAll_00")->SetVisible(false);
 
-    field_0x1375C = 0;
-    field_0x1376C = 0;
-    field_0x13760 = 0;
-    mRupyPos = mRupyPositions[field_0x13760];
+    mRupyPosIndex = 0;
+    mOldRupyPosIndex = 0;
+    mRupyPosInterpFrame = 0;
+    mRupyPos = mRupyPositions[mRupyPosIndex];
     mPos3.x = mPos3.y = mPos3.z = 0.0f;
     field_0x137C0 = 0x3C;
 
@@ -941,6 +944,203 @@ bool dLytMeter_c::remove() {
         mpDrink->remove();
         delete mpDrink;
         mpDrink = nullptr;
+    }
+
+    return true;
+}
+
+bool dLytMeter_c::execute() {
+    dLytMeterContainer_c *container = dLytMeterContainer_c::GetInstance();
+    if (field_0x13775 && !EventManager::isInEvent()) {
+        field_0x13775 = 0;
+    }
+
+    if (isSilentRealm()) {
+        container->clearFlags(0x40);
+        container->clearFlags(0xF);
+    }
+
+    if (dStageMgr_c::GetInstance()->isInLastBoss()) {
+        container->clearFlags(0x20);
+    }
+
+    if (field_0x13750 != 0 && field_0x13748 == 1) {
+        fn_800D5290();
+    }
+
+    fn_800D57B0();
+
+    s32 heartsHeight;
+    s32 rupeePos;
+    s32 kakeraKeyPos;
+    s32 bossKeyPos;
+    s32 smallKeyPos;
+
+    if (mHeart.getCurrentHealthCapacity() / 4 <= 10) {
+        heartsHeight = 0;
+        if (mShield.getGaugePercentMaybe() > 0.0f &&
+            (mLyt.findPane("N_shieldAll_00")->IsVisible() || isNotSilentRealmOrLoftwing())) {
+            rupeePos = 0;
+            kakeraKeyPos = 1;
+            bossKeyPos = 1;
+            smallKeyPos = 1;
+        } else {
+            rupeePos = 2;
+            kakeraKeyPos = 0;
+            bossKeyPos = 0;
+            smallKeyPos = 0;
+        }
+    } else {
+        heartsHeight = 1;
+        if (mShield.getGaugePercentMaybe() > 0.0f &&
+            (mLyt.findPane("N_shieldAll_00")->IsVisible() || isNotSilentRealmOrLoftwing())) {
+            rupeePos = 1;
+            kakeraKeyPos = 1;
+            bossKeyPos = 3;
+            smallKeyPos = 3;
+        } else {
+            rupeePos = 4;
+            kakeraKeyPos = 0;
+            bossKeyPos = 2;
+            smallKeyPos = 2;
+        }
+    }
+
+    if (dMessage_c::getInstance()->getField_0x2FC() != 0) {
+        rupeePos = 3;
+        if (dLytMsgWindow_c::getInstance() != nullptr && (dLytMsgWindow_c::getInstance()->fn_800D7B40() == 0x9E02 ||
+                                                          dLytMsgWindow_c::getInstance()->fn_800D7B40() == 0x768C)) {
+            s32 off = -(mHeart.getCurrentHealthCapacity() / 4 <= 10);
+            rupeePos = 6 + off;
+        }
+    }
+
+    if (mShieldPosIndex != heartsHeight) {
+        mOldShieldPosIndex = mShieldPosIndex;
+        mShieldPosIndex = heartsHeight;
+        mShieldPosInterpFrame = 0;
+    }
+
+    if (mRupyPosIndex != rupeePos) {
+        mOldRupyPosIndex = mRupyPosIndex;
+        mRupyPosIndex = rupeePos;
+        mRupyPosInterpFrame = 0;
+    }
+
+    if (mpKakeraKey != nullptr) {
+        mpKakeraKey->setPosition(kakeraKeyPos);
+    }
+
+    if (mpBossKey != nullptr) {
+        mpBossKey->setPosition(bossKeyPos);
+    }
+
+    if (mpSmallKey != nullptr) {
+        mpSmallKey->setPosition(smallKeyPos);
+    }
+
+    if (mShieldPos != mShieldPositions[mShieldPosIndex]) {
+        if (mShieldPosInterpFrame < 5) {
+            mVec3_c diff = mShieldPositions[mShieldPosIndex] - mShieldPositions[mOldShieldPosIndex];
+            mShieldPos =
+                diff * cLib::easeOut(++mShieldPosInterpFrame / 5.0f, 3.0f) + mShieldPositions[mOldShieldPosIndex];
+        } else {
+            mShieldPosInterpFrame = 0;
+            mShieldPos = mShieldPositions[mShieldPosIndex];
+        }
+        mNodes[METER_SHIELD].mpPane->SetTranslate(mShieldPos);
+    }
+
+    if (field_0x13748 != field_0x1374C) {
+        field_0x1374C = field_0x13748;
+        mAnmGroups[METER_ANIM_POSITION].setFrame(field_0x13748);
+        mAnmGroups[METER_ANIM_POSITION].setAnimEnable(true);
+    }
+
+    for (int i = 0; i < METER_NUM_PANES; i++) {
+        bool visible = true;
+        if (!field_0x137A2[i]) {
+            bool b = field_0x13782[i] && field_0x13792[i];
+            if (!b) {
+                visible = false;
+            }
+        }
+        mParts[i].setShouldBeVisible(visible);
+        mParts[i].execute();
+    }
+
+    if (mRupyPos != mRupyPositions[mRupyPosIndex]) {
+        mShield.setfield_0x318(2);
+        if (mRupy.getField_0x8A9() == 1) {
+            mRupyPosInterpFrame = 5;
+        }
+        if (mRupyPosInterpFrame < 5) {
+            mVec3_c diff = mRupyPositions[mRupyPosIndex] - mRupyPositions[mOldRupyPosIndex];
+            mRupyPos = diff * cLib::easeOut(++mRupyPosInterpFrame / 5.0f, 3.0f) + mRupyPositions[mOldRupyPosIndex];
+        } else {
+            mRupyPosInterpFrame = 0;
+            mRupyPos = mRupyPositions[mRupyPosIndex];
+        }
+        mNodes[METER_RUPY].mpPane->SetTranslate(mRupyPos);
+    }
+
+    for (int i = 0; i < METER_NUM_PANES; i++) {
+        if (mNodes[i].mpLytPane != nullptr) {
+            mNodes[i].mpLytPane->execute();
+        }
+    }
+
+    mLyt.calc();
+    mItemSelect.fn_800EF580();
+
+    if (mAnmGroups[METER_ANIM_POSITION].isEnabled()) {
+        mAnmGroups[METER_ANIM_POSITION].setAnimEnable(false);
+    }
+
+    container->resetFlags();
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::DO_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::DO_NONE);
+
+    LytDoButtonRelated::fn_8010EC10(LytDoButtonRelated::DO_NONE, true);
+    LytDoButtonRelated::fn_8010ED50(LytDoButtonRelated::DO_NONE, true);
+
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::DO_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_R, LytDoButtonRelated::DO_NONE);
+
+    LytDoButtonRelated::reset(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::DO_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::DO_NONE);
+    LytDoButtonRelated::reset(LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::DO_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_BG, LytDoButtonRelated::DO_NONE);
+
+    if (mpTimer != nullptr) {
+        mpTimer->execute();
+    }
+    if (mpTimerPart1 != nullptr) {
+        mpTimerPart1->execute();
+    }
+    if (mpTimerPart2 != nullptr) {
+        mpTimerPart2->execute();
+    }
+    if (mpSkyGauge != nullptr) {
+        mpSkyGauge->execute();
+    }
+    if (mpBirdGauge != nullptr) {
+        mpBirdGauge->execute();
+    }
+    if (mpBossGauge != nullptr) {
+        mpBossGauge->execute();
+    }
+    if (mpKakeraKey != nullptr) {
+        mpKakeraKey->execute();
+    }
+    if (mpBossKey != nullptr) {
+        mpBossKey->execute();
+    }
+    if (mpSmallKey != nullptr) {
+        mpSmallKey->execute();
+    }
+    if (mpDrink != nullptr) {
+        mpDrink->execute();
     }
 
     return true;

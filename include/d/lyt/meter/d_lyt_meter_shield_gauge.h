@@ -31,6 +31,14 @@ public:
         mpOwnerPane = pane;
     }
 
+    f32 getGaugePercentMaybe() const {
+        return field_0x2E0;
+    }
+
+    void setfield_0x318(s32 v) {
+        field_0x318 = v;
+    }
+
 private:
     s32 getLytFrameForShield(s32) const;
     void setLevel(f32 level);

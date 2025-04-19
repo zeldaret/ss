@@ -173,9 +173,8 @@ bool dLytMeterKakeraKey_c::execute() {
     mStateMgr.executeState();
     if (mPosition != mPanePositions[mPosititionIndex]) {
         if (mMovementFrame < 5) {
-            mPosition = (mPanePositions[mPosititionIndex] - mPanePositions[mOldPosititionIndex]) *
-                            cLib::easeOut(++mMovementFrame / 5.0f, 3.0f) +
-                        mPanePositions[mOldPosititionIndex];
+            mVec3_c diff = mPanePositions[mPosititionIndex] - mPanePositions[mOldPosititionIndex];
+            mPosition = diff * cLib::easeOut(++mMovementFrame / 5.0f, 3.0f) + mPanePositions[mOldPosititionIndex];
         } else {
             mMovementFrame = 0;
             mPosition = mPanePositions[mPosititionIndex];
@@ -337,9 +336,8 @@ bool dLytMeterBossKey_c::execute() {
 
     if (mPosition != mPanePositions[mPosititionIndex]) {
         if (mMovementFrame < 5) {
-            mPosition = (mPanePositions[mPosititionIndex] - mPanePositions[mOldPosititionIndex]) *
-                            cLib::easeOut(++mMovementFrame / 5.0f, 3.0f) +
-                        mPanePositions[mOldPosititionIndex];
+            mVec3_c diff = mPanePositions[mPosititionIndex] - mPanePositions[mOldPosititionIndex];
+            mPosition = diff * cLib::easeOut(++mMovementFrame / 5.0f, 3.0f) + mPanePositions[mOldPosititionIndex];
         } else {
             mMovementFrame = 0;
             mPosition = mPanePositions[mPosititionIndex];
@@ -494,9 +492,8 @@ bool dLytMeterSmallKey_c::execute() {
 
     if (mPosition != mPanePositions[mPosititionIndex]) {
         if (mMovementFrame < 5) {
-            mPosition = (mPanePositions[mPosititionIndex] - mPanePositions[mOldPosititionIndex]) *
-                            cLib::easeOut(++mMovementFrame / 5.0f, 3.0f) +
-                        mPanePositions[mOldPosititionIndex];
+            mVec3_c diff = mPanePositions[mPosititionIndex] - mPanePositions[mOldPosititionIndex];
+            mPosition = diff * cLib::easeOut(++mMovementFrame / 5.0f, 3.0f) + mPanePositions[mOldPosititionIndex];
         } else {
             mMovementFrame = 0;
             mPosition = mPanePositions[mPosititionIndex];

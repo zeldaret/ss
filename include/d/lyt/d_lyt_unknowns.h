@@ -54,6 +54,14 @@ public:
         }
     }
 
+    static void reset(DoButton_e button, Action_e value) {
+        LytDoButtonRelated *b = sInstance;
+        if (b != nullptr) {
+            b->field_0x04[button] = value;
+            b->field_0x34[button] = false;
+        }
+    }
+
     static Action_e get(DoButton_e button) {
         if (sInstance != nullptr) {
             return sInstance->field_0x04[button];

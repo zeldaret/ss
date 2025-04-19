@@ -71,9 +71,11 @@ public:
     bool fn_800CA040();
 
     bool fn_800D5380(u8);
+    bool fn_800D5290();
     bool fn_800D5650();
     bool fn_800D5680();
     bool fn_800D56B0();
+    bool fn_800D57B0();
     bool execute();
 
     bool isSilentRealm();
@@ -145,12 +147,12 @@ public:
     /* 0x1374C */ s32 field_0x1374C;
     /* 0x13750 */ s32 field_0x13750;
     /* 0x13754 */ s32 field_0x13754;
-    /* 0x13758 */ s32 field_0x13758;
-    /* 0x1375C */ s32 field_0x1375C;
-    /* 0x13760 */ s32 field_0x13760;
-    /* 0x13764 */ s32 field_0x13764;
-    /* 0x13768 */ s32 field_0x13768;
-    /* 0x1376C */ s32 field_0x1376C;
+    /* 0x13758 */ s32 mShieldPosIndex;
+    /* 0x1375C */ s32 mRupyPosIndex;
+    /* 0x13760 */ s32 mRupyPosInterpFrame;
+    /* 0x13764 */ s32 mShieldPosInterpFrame;
+    /* 0x13768 */ s32 mOldShieldPosIndex;
+    /* 0x1376C */ s32 mOldRupyPosIndex;
     /* 0x13770 */ u8 field_0x13770;
     /* 0x13771 */ u8 field_0x13771;
     /* 0x13772 */ u8 field_0x13772;
@@ -250,6 +252,10 @@ public:
 
     void clearFlags(u32 mask) {
         mFlags = mFlags & ~mask;
+    }
+
+    void resetFlags() {
+        mFlags = 0xFFFFFFFF;
     }
 
     static s32 getCrossBtn0x7BF8() {

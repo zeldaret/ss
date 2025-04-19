@@ -26,9 +26,10 @@ public:
         return field_0x78C;
     }
 
+    u8 getCurrentHealthCapacity() const;
+
 private:
     u8 getCurrentHealth() const;
-    u8 getCurrentHealthCapacity() const;
     void realizeHeartsState();
     void executeInternal();
     s32 getNumDisplayedHearts() const;

@@ -99,6 +99,10 @@ public:
         mpAnm2 = outAnm;
     }
 
+    void setShouldBeVisible(bool val) {
+        mShouldBeVisible = val;
+    }
+
 private:
     STATE_FUNC_DECLARE(dLytMeterParts_c, Invisible);
     STATE_FUNC_DECLARE(dLytMeterParts_c, In);
@@ -109,7 +113,7 @@ private:
     /* 0x3C */ d2d::AnmGroup_c *mpAnm1;
     /* 0x40 */ d2d::AnmGroup_c *mpAnm2;
     /* 0x44 */ s32 mIndex;
-    /* 0x48 */ u8 mShouldBeVisible;
+    /* 0x48 */ bool mShouldBeVisible;
 };
 
 #endif

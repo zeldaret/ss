@@ -93,6 +93,10 @@ public:
         field_0x8A9 = val;
     }
 
+    u8 getField_0x8A9() const {
+        return field_0x8A9;
+    }
+
     void setField_0x8AA(u8 val) {
         field_0x8AA = val;
     }

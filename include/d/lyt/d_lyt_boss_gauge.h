@@ -12,6 +12,7 @@ public:
 
     bool build();
     bool remove();
+    bool execute();
     bool draw();
 
 private:
