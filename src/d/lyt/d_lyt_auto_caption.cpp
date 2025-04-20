@@ -3,8 +3,11 @@
 #include "common.h"
 #include "d/d_tag_processor.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_textbox.h"
+#include "d/lyt/meter/d_lyt_meter.h"
 #include "s/s_State.hpp"
+#include "toBeSorted/event_manager.h"
 
 STATE_DEFINE(dLytAutoCaption_c, Invisible);
 STATE_DEFINE(dLytAutoCaption_c, In);
@@ -171,6 +174,10 @@ bool dLytAutoCaption_c::setText(const wchar_t *text) {
 }
 
 bool dLytAutoCaption_c::checkSomethingMeter() {
-    // TODO - too many dependencies on dLytMeter
+    if (EventManager::isInEvent() || !dLytControlGame_c::getInstance()->isStateNormal() ||
+        dLytMeterContainer_c::getItemSelect0x75A2() || dLytMeterContainer_c::getMinusBtnFn800F7600() ||
+        dLytMeterContainer_c::getDowsingFn800FE4B0()) {
+        return true;
+    }
     return false;
 }

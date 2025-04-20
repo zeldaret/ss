@@ -131,11 +131,11 @@ public:
     }
     
     bool fn_800F75E0() const;
+    bool fn_800F7600() const;
 
 private:
     bool shouldCall() const;
     void fn_800F7300();
-    bool fn_800F7600() const;
     bool fn_800F7760() const;
     void realizeShieldDurability();
     bool isUnequippable(s32 num) const;

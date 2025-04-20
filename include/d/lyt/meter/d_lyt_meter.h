@@ -397,6 +397,22 @@ public:
         }
     }
 
+    static bool getMinusBtnFn800F7600() {
+        if (sInstance != nullptr) {
+            return sInstance->mMeter.mMinusBtn.fn_800F7600();
+        } else {
+            return false;
+        }
+    }
+
+    static bool getDowsingFn800FE4B0() {
+        if (sInstance != nullptr) {
+            return sInstance->mMeter.mDowsing.fn_800FE4B0();
+        } else {
+            return false;
+        }
+    }
+
 private:
     /* 0x00004 */ d2d::ResAccIf_c mResAcc;
     /* 0x00374 */ dLytMeterEventSkip_c *mpEventSkip;
