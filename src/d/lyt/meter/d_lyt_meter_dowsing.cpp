@@ -1174,7 +1174,7 @@ bool dLytMeterDowsing_c::fn_800FE4B0() const {
 }
 
 bool dLytMeterDowsing_c::fn_800FE610() {
-    if ((!dLytMeterContainer_c::GetInstance()->getMeterField_0x1379A() && dLytAreaCaption_c::get0xAAC() == 0) ||
+    if ((!dLytMeterContainer_c::GetMeter()->getDowsingNotHiddenByAreaCaption() && !dLytAreaCaption_c::getVisible()) ||
         !getPane()->IsVisible() || dLytMeterContainer_c::GetMeter()->fn_800D5680()) {
         return false;
     }

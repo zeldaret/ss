@@ -182,15 +182,15 @@ void dLytAreaCaption_c::check() {
     }
 }
 
-void dLytAreaCaption_c::set0xAAC(u8 arg) {
+void dLytAreaCaption_c::setVisible(bool arg) {
     if (sInstance != nullptr) {
-        sInstance->field_0xAAC = arg;
+        sInstance->mVisible = arg;
     }
 }
 
-s32 dLytAreaCaption_c::get0xAAC() {
+bool dLytAreaCaption_c::getVisible() {
     if (sInstance != nullptr) {
-        return sInstance->field_0xAAC;
+        return sInstance->mVisible;
     }
     return 0;
 }
@@ -202,7 +202,7 @@ bool dLytAreaCaption_c::init() {
         first = 0;
     }
     mPartToDraw = 0;
-    field_0xAAC = 0;
+    mVisible = false;
     return true;
 }
 

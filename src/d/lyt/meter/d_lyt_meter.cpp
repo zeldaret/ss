@@ -611,6 +611,23 @@ static const d2d::LytBrlanMapping meterBrlanMap[] = {
     {"basicPosition_00_rupyPosition.brlan",   "G_rupyPosi_00"},
 };
 
+#define METER_ANIM_ITEM_SELECT 0
+#define METER_ANIM_MINUS_BTN 1
+#define METER_ANIM_PLUS_BTN 2
+#define METER_ANIM_CROSS_BTN 3
+#define METER_ANIM_1_BTN 4
+#define METER_ANIM_2_BTN 5
+#define METER_ANIM_A_BTN 6
+#define METER_ANIM_REMOCON_BG 7
+#define METER_ANIM_DOWSING 8
+#define METER_ANIM_Z_BTN 9
+#define METER_ANIM_NUN_STK 10
+#define METER_ANIM_NUN_BG 11
+#define METER_ANIM_RUPY 12
+#define METER_ANIM_SHIELD 13
+#define METER_ANIM_HEART 14
+#define METER_ANIM_GANBARI_GAUGE 15
+
 #define METER_ANIM_POSITION_IN_OFFSET 0
 #define METER_ANIM_POSITION_OUT_OFFSET 16
 #define METER_ANIM_POSITION 32
@@ -833,16 +850,16 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x13774 = 0;
     field_0x13775 = 0;
     field_0x13773 = 0;
-    field_0x13776 = 0;
-    field_0x13777 = 0;
+    mTimerVisible = false;
+    mBirdGaugeVisible = false;
     field_0x13780 = 1;
     field_0x13781 = 0;
-    field_0x13778 = 0;
-    field_0x13779 = 0;
-    field_0x1377A = 0;
-    field_0x1377B = 0;
-    field_0x1377C = 0;
-    field_0x1377D = 0;
+    mSkyGaugeVisible = false;
+    mBossGaugeVisible = false;
+    mKakeraKeyVisible = false;
+    mBossKeyVisible = false;
+    mSmallKeyVisible = false;
+    mDrinkVisible = false;
     field_0x1377E = 0;
     field_0x1377F = 0;
     field_0x13754 = 0;
@@ -864,9 +881,9 @@ bool dLytMeter_c::build(d2d::ResAccIf_c *resAcc) {
             &mAnmGroups[i + METER_ANIM_POSITION_IN_OFFSET], &mAnmGroups[i + METER_ANIM_POSITION_OUT_OFFSET]
         );
         mParts[i].build(i);
-        field_0x13782[i] = 0;
-        field_0x13792[i] = 1;
-        field_0x137A2[i] = 0;
+        mPanesVisible[i] = false;
+        mPanesNotHiddenByAreaCaption[i] = true;
+        mPanesForceShown[i] = false;
     }
 
     field_0x137B2 = 1;
@@ -1075,35 +1092,38 @@ bool dLytMeter_c::fn_800D56B0() {
     return false;
 }
 
-void dLytMeter_c::fn_800D57B0() {
-    bool old0x13776 = field_0x13776;
-    bool old0x13777 = field_0x13777;
-    bool old0x13778 = field_0x13778;
-    bool old0x13779 = field_0x13779;
-    bool old0x1377A = field_0x1377A;
-    bool old0x1377B = field_0x1377B;
-    bool old0x1377C = field_0x1377C;
-    bool old0x1377D = field_0x1377D;
+void dLytMeter_c::checkPaneVisibility() {
+    bool oldTimerVisible = mTimerVisible;
+    bool oldBirdGaugeVisible = mBirdGaugeVisible;
+    bool oldSkyGaugeVisible = mSkyGaugeVisible;
+    bool oldBossGaugeVisible = mBossGaugeVisible;
+    bool oldKakeraKeyVisible = mKakeraKeyVisible;
+    bool oldBossKeyVisible = mBossKeyVisible;
+    bool oldSmallKeyVisible = mSmallKeyVisible;
+    bool oldDrinkVisible = mDrinkVisible;
 
     dBird_c *bird = nullptr;
     if (dAcPy_c::GetLink()->getRidingActorType() == dAcPy_c::RIDING_LOFTWING) {
         bird = static_cast<dBird_c *>(fManager_c::searchBaseByProfName(fProfile::BIRD, nullptr));
     }
 
-    field_0x13776 = true;
-    field_0x13777 = true;
-    field_0x13778 = true;
-    field_0x13779 = true;
-    field_0x1377A = true;
-    field_0x1377B = true;
-    field_0x1377C = true;
-    field_0x1377D = true;
+    // Set all panes to visible, then go through
+    // them one by one to 
+
+    mTimerVisible = true;
+    mBirdGaugeVisible = true;
+    mSkyGaugeVisible = true;
+    mBossGaugeVisible = true;
+    mKakeraKeyVisible = true;
+    mBossKeyVisible = true;
+    mSmallKeyVisible = true;
+    mDrinkVisible = true;
     field_0x1377E = false;
 
     if (EventManager::getCurrentEventName() != nullptr) {
         const char *name = EventManager::getCurrentEventName();
         if (strequals(name, "SwordDraw") || strequals(name, "SwordDrawDoorNew")) {
-            field_0x1377E = 1;
+            field_0x1377E = true;
             if (dLytDobutton_c::getNextActionToShow() != 0x12) {
                 dLytDobutton_c::setActionTextStuff(0x29, 0x5E, true);
             }
@@ -1116,7 +1136,7 @@ void dLytMeter_c::fn_800D57B0() {
     }
 
     for (int i = 0; i < METER_NUM_PANES; i++) {
-        field_0x13782[i] = 1;
+        mPanesVisible[i] = true;
     }
 
     if (dAcPy_c::GetLink2()->canDowseProbably() && !fn_800D5650() && !fn_800D5680()) {
@@ -1152,13 +1172,13 @@ void dLytMeter_c::fn_800D57B0() {
             LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE) ||
         (dLytMeterContainer_c::getField_0x13B66() || (fn_800D56B0() && !mItemSelect.fn_800F02F0() && !fn_800D53D0()) ||
          fn_800D5650() || fn_800D5680())) {
-        field_0x13782[0] = false;
+        mPanesVisible[METER_ANIM_ITEM_SELECT] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0() && !mMinusBtn.fn_800F75E0())
 
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())) {
-        field_0x13782[1] = false;
+        mPanesVisible[METER_ANIM_MINUS_BTN] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1166,7 +1186,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() > 1 && !mPlusBtn.getField_0x1C0() && !mPlusBtn.isCalling())) {
-        field_0x13782[2] = false;
+        mPanesVisible[METER_ANIM_PLUS_BTN] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1174,7 +1194,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() > 1 && !mCrossBtn.fn_800FA730())) {
-        field_0x13782[3] = false;
+        mPanesVisible[METER_ANIM_CROSS_BTN] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1182,7 +1202,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0 && !mp1Button->shouldCall())) {
-        field_0x13782[4] = false;
+        mPanesVisible[METER_ANIM_1_BTN] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1190,7 +1210,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0 && !mp2Button->shouldCall())) {
-        field_0x13782[5] = false;
+        mPanesVisible[METER_ANIM_2_BTN] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1198,7 +1218,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() > 1)) {
-        field_0x13782[6] = false;
+        mPanesVisible[METER_ANIM_A_BTN] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1206,7 +1226,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0)) {
-        field_0x13782[7] = false;
+        mPanesVisible[METER_ANIM_REMOCON_BG] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0() && !mDowsing.fn_800FE490())
@@ -1214,7 +1234,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0 && !fn_800D5380(true) && !mDowsing.shouldCall() && !mDowsing.fn_800FE490())) {
-        field_0x13782[8] = false;
+        mPanesVisible[METER_ANIM_DOWSING] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1222,7 +1242,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0 && !fn_800D5380(true) && !mZBtn.isCalling())) {
-        field_0x13782[9] = false;
+        mPanesVisible[METER_ANIM_Z_BTN] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1230,7 +1250,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0)) {
-        field_0x13782[10] = false;
+        mPanesVisible[METER_ANIM_NUN_STK] = false;
     }
 
     if ((fn_800D56B0() && !fn_800D53D0())
@@ -1238,7 +1258,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())
 
         || (getUiMode() != 0)) {
-        field_0x13782[11] = false;
+        mPanesVisible[METER_ANIM_NUN_BG] = false;
     }
 
     if ((!isNotSilentRealmOrLoftwing() || (mShield.getGaugePercentMaybe() == 0.0f && mShield.getField_0x31D()) ||
@@ -1254,7 +1274,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() ||
             (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->fn_8012B000()) ||
             fn_800D5650() || fn_800D5680())) {
-        field_0x13782[12] = false;
+        mPanesVisible[METER_ANIM_RUPY] = false;
     }
 
     if ((isSilentRealm() || fn_800D5380(false) || field_0x13770 != 3 ||
@@ -1279,7 +1299,7 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() ||
             (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->fn_8012B000()) ||
             fn_800D5650() || fn_800D5680())) {
-        field_0x13782[13] = false;
+        mPanesVisible[METER_ANIM_SHIELD] = false;
     }
 
     if (dMessage_c::getInstance()->getField_0x2FC() != 0) {
@@ -1306,17 +1326,17 @@ void dLytMeter_c::fn_800D57B0() {
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() ||
             (dLytSimpleWindow_c::getInstance() != nullptr && dLytSimpleWindow_c::getInstance()->fn_8012B000()) ||
             fn_800D5650() || fn_800D5680())) {
-        field_0x13782[14] = false;
+        mPanesVisible[METER_ANIM_HEART] = false;
     }
 
     if (!isSilentRealm() || (fn_800D56B0() && !fn_800D5590())
 
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || field_0x13750 == 0 || fn_800D5680())) {
-        field_0x13776 = false;
+        mTimerVisible = false;
     }
 
-    if (mpTimer != nullptr && field_0x13776 != old0x13776) {
-        if (field_0x13776) {
+    if (mpTimer != nullptr && mTimerVisible != oldTimerVisible) {
+        if (mTimerVisible) {
             mpTimer->startIn2();
         } else {
             mpTimer->startOut2();
@@ -1333,18 +1353,18 @@ void dLytMeter_c::fn_800D57B0() {
          MinigameManager::isInMinigameState(MinigameManager::ROLLERCOASTER))
 
         || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() || fn_800D5680())) {
-        field_0x13782[15] = false;
+        mPanesVisible[METER_ANIM_GANBARI_GAUGE] = false;
     }
 
     if ((dAcPy_c::GetLink()->getRidingActorType() != dAcPy_c::RIDING_LOFTWING || fn_800D56B0()) ||
         (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() || fn_800D5680())) {
-        field_0x13778 = 0;
+        mSkyGaugeVisible = false;
     } else if (bird != nullptr && mpSkyGauge != nullptr) {
         mpSkyGauge->setHeight(dAcPy_c::GetLink()->vt_0x260());
     }
 
-    if (mpSkyGauge != nullptr && field_0x13778 != old0x13778) {
-        if (field_0x13778) {
+    if (mpSkyGauge != nullptr && mSkyGaugeVisible != oldSkyGaugeVisible) {
+        if (mSkyGaugeVisible) {
             mpSkyGauge->setWantsIn();
         } else {
             mpSkyGauge->setWantsOut();
@@ -1355,25 +1375,25 @@ void dLytMeter_c::fn_800D57B0() {
 
         (dLytDobutton_c::getFn0x8010E5D0() != 0x5E || fn_800D56B0() || dLytMeterContainer_c::getField_0x13B66() ||
          fn_800D5420() || fn_800D5650() || fn_800D5680())) {
-        field_0x13777 = false;
+        mBirdGaugeVisible = false;
     }
 
     if (mpBirdGauge != nullptr) {
         if (bird != nullptr) {
             mpBirdGauge->setNumDashes(bird->getNumDashes());
         }
-        if (field_0x13777 != old0x13777) {
-            if (field_0x13777) {
+        if (mBirdGaugeVisible != oldBirdGaugeVisible) {
+            if (mBirdGaugeVisible) {
                 if (mpBirdGauge->getField_0x693()) {
                     mpBirdGauge->setField_0x690(1);
                 } else {
-                    field_0x13777 = false;
+                    mBirdGaugeVisible = false;
                 }
             } else {
                 if (mpBirdGauge->getField_0x692()) {
                     mpBirdGauge->hide();
                 } else {
-                    field_0x13777 = true;
+                    mBirdGaugeVisible = true;
                 }
             }
         }
@@ -1382,11 +1402,11 @@ void dLytMeter_c::fn_800D57B0() {
     if (!field_0x13781 || fn_800D56B0() ||
 
         (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() || fn_800D5680())) {
-        field_0x13779 = false;
+        mBossGaugeVisible = false;
     }
 
-    if (field_0x13779 != old0x13779) {
-        if (field_0x13779) {
+    if (mBossGaugeVisible != oldBossGaugeVisible) {
+        if (mBossGaugeVisible) {
             if (mpBossGauge != nullptr) {
                 s32 mode = 0;
                 if (dScGame_c::currentSpawnInfo.layer == 3) {
@@ -1404,15 +1424,15 @@ void dLytMeter_c::fn_800D57B0() {
     }
 
     if (mpKakeraKey != nullptr) {
-        if (dAcItem_c::getKeyPieceCount() == 0 || dLytAreaCaption_c::get0xAAC() || fn_800D5380(false) ||
+        if (dAcItem_c::getKeyPieceCount() == 0 || dLytAreaCaption_c::getVisible() || fn_800D5380(false) ||
             SceneflagManager::sInstance->checkSceneflagGlobal(4, 0x21) || MinigameManager::isInAnyMinigame()
 
             || (dLytMeterContainer_c::getField_0x13B66() || fn_800D56B0() || field_0x1377E || fn_800D5420() ||
                 fn_800D5650() || fn_800D5680())) {
-            field_0x1377A = false;
+            mKakeraKeyVisible = false;
         }
-        if (field_0x1377A != old0x1377A) {
-            if (field_0x1377A) {
+        if (mKakeraKeyVisible != oldKakeraKeyVisible) {
+            if (mKakeraKeyVisible) {
                 mpKakeraKey->setShouldBeVisible(true);
             } else {
                 mpKakeraKey->setShouldBeVisible(false);
@@ -1424,15 +1444,15 @@ void dLytMeter_c::fn_800D57B0() {
         if (DungeonflagManager::sInstance->getCounterOrFlag(12, 8) == 0
 
             || DungeonflagManager::sInstance->getCounterOrFlag(16, 8) != 0 ||
-            dAcPy_c::GetLink()->getCurrentAction() == 0x8C || dLytAreaCaption_c::get0xAAC() || fn_800D5380(false) ||
+            dAcPy_c::GetLink()->getCurrentAction() == 0x8C || dLytAreaCaption_c::getVisible() || fn_800D5380(false) ||
             MinigameManager::isInAnyMinigame() || fn_800D56B0() || field_0x1377E
 
             || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() || fn_800D5680())) {
-            field_0x1377B = false;
+            mBossKeyVisible = false;
         }
 
-        if (field_0x1377B != old0x1377B) {
-            if (field_0x1377B) {
+        if (mBossKeyVisible != oldBossKeyVisible) {
+            if (mBossKeyVisible) {
                 mpBossKey->setShouldBeVisible(true);
             } else {
                 mpBossKey->setShouldBeVisible(false);
@@ -1441,15 +1461,15 @@ void dLytMeter_c::fn_800D57B0() {
     }
 
     if (mpSmallKey != nullptr) {
-        if (dAcItem_c::getSmallKeyCount() == 0 || dLytAreaCaption_c::get0xAAC() || fn_800D5380(false) ||
+        if (dAcItem_c::getSmallKeyCount() == 0 || dLytAreaCaption_c::getVisible() || fn_800D5380(false) ||
             MinigameManager::isInAnyMinigame() || fn_800D56B0() || field_0x1377E
 
             || (dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() || fn_800D5680())) {
-            field_0x1377C = false;
+            mSmallKeyVisible = false;
         }
 
-        if (field_0x1377C != old0x1377C) {
-            if (field_0x1377C) {
+        if (mSmallKeyVisible != oldSmallKeyVisible) {
+            if (mSmallKeyVisible) {
                 mpSmallKey->setShouldBeVisible(true);
             } else {
                 mpSmallKey->setShouldBeVisible(false);
@@ -1458,16 +1478,16 @@ void dLytMeter_c::fn_800D57B0() {
     }
 
     if (mpDrink != nullptr) {
-        if (!field_0x137B2 || dLytAreaCaption_c::get0xAAC() || fn_800D5380(false) ||
+        if (!field_0x137B2 || dLytAreaCaption_c::getVisible() || fn_800D5380(false) ||
             MinigameManager::isInAnyMinigame() || field_0x1377E
 
             || fn_800D56B0() || dLytMeterContainer_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() ||
             fn_800D5680()) {
-            field_0x1377D = false;
+            mDrinkVisible = false;
         }
 
-        if (field_0x1377D != old0x1377D) {
-            if (field_0x1377D) {
+        if (mDrinkVisible != oldDrinkVisible) {
+            if (mDrinkVisible) {
                 mpDrink->setShouldBeVisible(true);
             } else {
                 mpDrink->setShouldBeVisible(false);
@@ -1498,7 +1518,7 @@ bool dLytMeter_c::execute() {
         fn_800D5290();
     }
 
-    fn_800D57B0();
+    checkPaneVisibility();
 
     s32 heartsHeight;
     s32 rupeePos;
@@ -1589,8 +1609,8 @@ bool dLytMeter_c::execute() {
 
     for (int i = 0; i < METER_NUM_PANES; i++) {
         bool visible = true;
-        if (!field_0x137A2[i]) {
-            bool b = field_0x13782[i] && field_0x13792[i];
+        if (!mPanesForceShown[i]) {
+            bool b = mPanesVisible[i] && mPanesNotHiddenByAreaCaption[i];
             if (!b) {
                 visible = false;
             }
@@ -1859,11 +1879,11 @@ bool dLytMeterContainer_c::fn_800D5670() {
     return mMeter.fn_800D5350();
 }
 
-void dLytMeterContainer_c::fn_800D9680(bool val) {
+void dLytMeterContainer_c::setAreaCaptionOverrideVisibility(bool visible) {
     for (int i = 0; i < METER_NUM_PANES; i++) {
-        mMeter.field_0x13792[i] = val;
+        mMeter.mPanesNotHiddenByAreaCaption[i] = visible;
     }
-    mMeter.field_0x137B2 = val;
+    mMeter.field_0x137B2 = visible;
 }
 
 bool dLytMeterContainer_c::fn_800D56F0() {

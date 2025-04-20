@@ -2482,7 +2482,7 @@ bool dLytMeterItemSelect_c::fn_800F0030() const {
             !(EventManager::isInEvent() && EventManager::isCurrentEvent("ItemGetGorgeous")) ||
         (mpOwnerPane == nullptr || !mpOwnerPane->IsVisible() || dLytMeterContainer_c::GetMeter()->fn_800D5650() ||
          dLytMeterContainer_c::GetMeter()->fn_800D5680() ||
-         dLytMeterContainer_c::GetMeter()->getField_0x13792() == 0)) {
+         !dLytMeterContainer_c::GetMeter()->getItemSelectNotHiddenByAreaCaption())) {
         // If we don't have a B-Wheel and we're not currently in the ItemGetGorgeous event,
         // or (random other conditions), return false
         return false;

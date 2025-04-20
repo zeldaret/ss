@@ -86,7 +86,7 @@ public:
     bool fn_800D5650();
     bool fn_800D5680();
     bool fn_800D56B0();
-    void fn_800D57B0();
+    void checkPaneVisibility();
     bool execute();
 
     bool isSilentRealm();
@@ -97,12 +97,16 @@ public:
     void setUiMode(u16 value) const;
     u8 getUiMode();
 
-    bool getField_0x13792() const {
-        return field_0x13792[0];
+    bool getItemSelectNotHiddenByAreaCaption() const {
+        return mPanesNotHiddenByAreaCaption[0];
     }
 
-    bool getField_0x13793() const {
-        return field_0x13792[1];
+    bool getMinusBtnNotHiddenByAreaCaption() const {
+        return mPanesNotHiddenByAreaCaption[1];
+    }
+
+    bool getDowsingNotHiddenByAreaCaption() const {
+        return mPanesNotHiddenByAreaCaption[8];
     }
 
     bool getField_0x1377E() const {
@@ -173,21 +177,21 @@ public:
     /* 0x13773 */ bool field_0x13773;
     /* 0x13774 */ bool field_0x13774;
     /* 0x13775 */ bool field_0x13775;
-    /* 0x13776 */ bool field_0x13776;
-    /* 0x13777 */ bool field_0x13777;
-    /* 0x13778 */ bool field_0x13778;
-    /* 0x13779 */ bool field_0x13779;
-    /* 0x1377A */ bool field_0x1377A;
-    /* 0x1377B */ bool field_0x1377B;
-    /* 0x1377C */ bool field_0x1377C;
-    /* 0x1377D */ bool field_0x1377D;
+    /* 0x13776 */ bool mTimerVisible;
+    /* 0x13777 */ bool mBirdGaugeVisible;
+    /* 0x13778 */ bool mSkyGaugeVisible;
+    /* 0x13779 */ bool mBossGaugeVisible;
+    /* 0x1377A */ bool mKakeraKeyVisible;
+    /* 0x1377B */ bool mBossKeyVisible;
+    /* 0x1377C */ bool mSmallKeyVisible;
+    /* 0x1377D */ bool mDrinkVisible;
     /* 0x1377E */ bool field_0x1377E;
     /* 0x1377F */ bool field_0x1377F;
     /* 0x13780 */ bool field_0x13780;
     /* 0x13781 */ bool field_0x13781;
-    /* 0x13782 */ bool field_0x13782[16];
-    /* 0x13792 */ bool field_0x13792[16];
-    /* 0x137A2 */ bool field_0x137A2[16];
+    /* 0x13782 */ bool mPanesVisible[16];
+    /* 0x13792 */ bool mPanesNotHiddenByAreaCaption[16];
+    /* 0x137A2 */ bool mPanesForceShown[16];
     /* 0x137B2 */ bool field_0x137B2;
     /* 0x137B4 */ mVec3_c mPos3;
     /* 0x137C0 */ u32 field_0x137C0;
@@ -225,7 +229,9 @@ public:
     bool fn_800D5670();
     bool fn_800D56F0();
     bool fn_800D97A0();
-    void fn_800D9680(bool val);
+    /** Running out of good names for this function, but this allows
+        the area caption to temporarily hide the main HUD. */
+    void setAreaCaptionOverrideVisibility(bool visible);
     void fn_800D9710();
     void fn_800D9730(u8 val);
     void fn_800D9780(bool val);
@@ -261,10 +267,6 @@ public:
 
     bool getMeterField_0x1377F() const {
         return mMeter.field_0x1377F;
-    }
-
-    bool getMeterField_0x1379A() const {
-        return mMeter.field_0x13792[8];
     }
 
     bool checkAllFlags(u32 mask) const {

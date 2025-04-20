@@ -46,8 +46,8 @@ public:
     static void setArea(int id);
     static void check();
 
-    static void set0xAAC(u8 arg);
-    static s32 get0xAAC();
+    static void setVisible(bool arg);
+    static bool getVisible();
 
 private:
     dLytAreaCaption_c() {
@@ -66,7 +66,7 @@ private:
     dLytAreaCaptionParts_c mParts[2];
 
     s32 mPartToDraw;
-    u8 field_0xAAC;
+    bool mVisible;
 };
 
 #endif

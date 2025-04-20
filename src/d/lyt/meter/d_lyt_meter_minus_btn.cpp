@@ -1039,7 +1039,7 @@ bool dLytMeterMinusBtn_c::fn_800F7760() const {
     if (!StoryflagManager::sInstance->getCounterOrFlag(30) ||
         (mpOwnerPane == nullptr || !mpOwnerPane->IsVisible() || dLytMeterContainer_c::GetMeter()->fn_800D5650() ||
          dLytMeterContainer_c::GetMeter()->fn_800D5680() ||
-         dLytMeterContainer_c::GetMeter()->getField_0x13793() == 0)) {
+         !dLytMeterContainer_c::GetMeter()->getMinusBtnNotHiddenByAreaCaption())) {
         return false;
     }
 
