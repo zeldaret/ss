@@ -54,6 +54,17 @@ public:
     bool isAreaTypeOverworldOrSkyloft() const;
     s32 getSTIFunk1() const;
 
+    s32 getSTIFbyte4() const;
+    bool isSTIFbyte4_2or3or4() const;
+    bool isSTIFbyte4_5or6() const;
+    bool isSTIFbyte4_7or8or9or10or11() const;
+    bool isSTIFbyte4_1() const {
+        return getSTIFbyte4() == 1;
+    }
+    bool isSTIFbyte4_0() const {
+        return getSTIFbyte4() == 0;
+    }
+
     s32 getAreaType() const;
     s32 getMapNameId() const;
 

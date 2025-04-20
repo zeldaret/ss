@@ -1,8 +1,13 @@
 #include "d/lyt/d_lyt_area_caption.h"
 
+#include "d/d_message.h"
+#include "d/d_pad.h"
+#include "d/d_sc_game.h"
+#include "d/d_stage_mgr.h"
 #include "d/lyt/d_textbox.h"
+#include "d/lyt/meter/d_lyt_meter.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
-
+#include "toBeSorted/event_manager.h"
 
 STATE_DEFINE(dLytAreaCaptionParts_c, Wait);
 STATE_DEFINE(dLytAreaCaptionParts_c, Start);
@@ -22,6 +27,13 @@ static const d2d::LytBrlanMapping brlanMap2[] = {
     {     "areaCaption_01_out.brlan",    "G_inOut_00"},
 };
 
+#define AREA_CAPTION_ANIM_START 0
+#define AREA_CAPTION_ANIM_TYPE 1
+#define AREA_CAPTION_ANIM_TEXTLINE 2
+#define AREA_CAPTION_ANIM_OUT 3
+
+#define AREA_CAPTION_NUM_ANIMS 4
+
 static const char *captionBoxes[] = {
     "T_caption_00",
     "T_captionS_00",
@@ -38,7 +50,7 @@ bool dLytAreaCaptionParts_c::init(int first) {
     mFirst = first;
     if (mFirst != 0) {
         mLyt.build("areaCaption_00.brlyt", nullptr);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < AREA_CAPTION_NUM_ANIMS; i++) {
             if (brlanMap1[i].mFile[0] == '\0') {
                 mAnmCtrlInUse[i] = false;
             } else {
@@ -51,7 +63,7 @@ bool dLytAreaCaptionParts_c::init(int first) {
     } else {
         mLyt.build("areaCaption_01.brlyt", nullptr);
         mLyt.setPriority(0x8A);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < AREA_CAPTION_NUM_ANIMS; i++) {
             if (brlanMap2[i].mFile[0] == '\0') {
                 mAnmCtrlInUse[i] = false;
             } else {
@@ -67,15 +79,15 @@ bool dLytAreaCaptionParts_c::init(int first) {
         mTextBoxes[i] = mLyt.getTextBox(captionBoxes[i]);
     }
 
-    field_0x54C = 0;
-    field_0x54D = 0;
+    field_0x54C = false;
+    field_0x54D = false;
     mStateMgr.changeState(StateID_Wait);
     mLyt.calc();
     return true;
 }
 
 bool dLytAreaCaptionParts_c::remove() {
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < AREA_CAPTION_NUM_ANIMS; i++) {
         if (mAnmCtrlInUse[i]) {
             mAnmGroups[i].unbind();
             mAnmGroups[i].remove();
@@ -88,7 +100,7 @@ bool dLytAreaCaptionParts_c::remove() {
 bool dLytAreaCaptionParts_c::update() {
     mStateMgr.executeState();
     if (*mStateMgr.getStateID() != StateID_Wait) {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < AREA_CAPTION_NUM_ANIMS; i++) {
             if (mAnmCtrlInUse[i] && mAnmGroups[i].isEnabled()) {
                 mAnmGroups[i].play();
             }
@@ -108,29 +120,164 @@ void dLytAreaCaptionParts_c::setTextIfWaiting(const char *text) {
         mTextBoxes[0]->setMessageWithGlobalTextProcessor2(text, nullptr);
         mTextBoxes[1]->setMessageWithGlobalTextProcessor2(text, nullptr);
         mTextBoxes[2]->setMessageWithGlobalTextProcessor2(text, nullptr);
-        field_0x54C = 1;
+        field_0x54C = true;
     }
 }
 
 void dLytAreaCaptionParts_c::check() {
     if (*mStateMgr.getStateID() == StateID_Start) {
-        field_0x54D = 1;
+        field_0x54D = true;
     }
 }
 
 void dLytAreaCaptionParts_c::initializeState_Wait() {}
 void dLytAreaCaptionParts_c::executeState_Wait() {
-    mTextBoxes[0]->setMessageWithGlobalTextProcessor2("N_inOut_00", nullptr);
+    if (field_0x54C) {
+        field_0x54C = false;
+        s32 typeFrame = 0;
+        if (dStageMgr_c::GetInstance()->isSTIFbyte4_2or3or4()) {
+            typeFrame = 1;
+        } else if (dStageMgr_c::GetInstance()->isSTIFbyte4_5or6()) {
+            typeFrame = 2;
+        } else if (dStageMgr_c::GetInstance()->isSTIFbyte4_7or8or9or10or11()) {
+            typeFrame = 3;
+        } else if (dStageMgr_c::GetInstance()->isSTIFbyte4_1()) {
+            typeFrame = 4;
+        } else if (dStageMgr_c::GetInstance()->isSTIFbyte4_0()) {
+            typeFrame = 5;
+        }
+
+        if (!mFirst && dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL) {
+            typeFrame = 6;
+        }
+
+        s32 numLines = mTextBoxes[0]->calcTextLines(mTextBoxes[0]->GetString(), dMessage_c::getGlobalTagProcessor());
+        f32 textFrame = 0.0f;
+        if (numLines > 1) {
+            textFrame = 1.0f;
+        }
+
+        if (!mFirst) {
+            mLyt.findPane("N_inOut_00")->SetVisible(true);
+        }
+
+        mAnmGroups[AREA_CAPTION_ANIM_TYPE].setFrame(typeFrame);
+        mAnmGroups[AREA_CAPTION_ANIM_TYPE].setAnimEnable(true);
+        mAnmGroups[AREA_CAPTION_ANIM_TEXTLINE].setAnimEnable(true);
+        mAnmGroups[AREA_CAPTION_ANIM_TEXTLINE].setFrame(textFrame);
+        mLyt.calc();
+        mAnmGroups[AREA_CAPTION_ANIM_TYPE].setAnimEnable(false);
+        mAnmGroups[AREA_CAPTION_ANIM_TEXTLINE].setAnimEnable(false);
+        mAnmGroups[AREA_CAPTION_ANIM_START].setAnimEnable(true);
+        mAnmGroups[AREA_CAPTION_ANIM_START].setFrame(0.0f);
+        mStateMgr.changeState(StateID_Start);
+    }
 }
 void dLytAreaCaptionParts_c::finalizeState_Wait() {}
 
-void dLytAreaCaptionParts_c::initializeState_Start() {}
-void dLytAreaCaptionParts_c::executeState_Start() {}
+void dLytAreaCaptionParts_c::initializeState_Start() {
+    if (mFirst == 0) {
+        dLytAreaCaption_c::setVisible(true);
+        dLytMeterContainer_c::GetInstance()->setAreaCaptionOverrideVisibility(false);
+        dLytMeterContainer_c::GetMeter()->setGanbariGaugeHiddenByAreaCaption(true);
+    }
+}
+void dLytAreaCaptionParts_c::executeState_Start() {
+    if (mAnmGroups[AREA_CAPTION_ANIM_START].isEndReached()) {
+        mAnmGroups[AREA_CAPTION_ANIM_START].setAnimEnable(false);
+        if (!mFirst) {
+            dLytAreaCaption_c::setVisible(false);
+            dLytMeterContainer_c::GetInstance()->setAreaCaptionOverrideVisibility(true);
+        }
+        mStateMgr.changeState(StateID_Wait);
+    } else {
+        if (shouldImmediatelyDismiss()) {
+            field_0x54D = false;
+            if (mFirst) {
+                mAnmGroups[AREA_CAPTION_ANIM_START].setFrame(0.0f);
+                mLyt.calc();
+                mAnmGroups[AREA_CAPTION_ANIM_START].setAnimEnable(false);
+                mStateMgr.changeState(StateID_Wait);
+            } else {
+                mAnmGroups[AREA_CAPTION_ANIM_OUT].setAnimEnable(true);
+                mAnmGroups[AREA_CAPTION_ANIM_OUT].setFrame(0.0f);
+                mStateMgr.changeState(StateID_Out);
+                dLytAreaCaption_c::setVisible(false);
+                dLytMeterContainer_c::GetInstance()->setAreaCaptionOverrideVisibility(true);
+            }
+        }
+    }
+}
 void dLytAreaCaptionParts_c::finalizeState_Start() {}
 
 void dLytAreaCaptionParts_c::initializeState_Out() {}
-void dLytAreaCaptionParts_c::executeState_Out() {}
+void dLytAreaCaptionParts_c::executeState_Out() {
+    if (mAnmGroups[AREA_CAPTION_ANIM_OUT].isEndReached()) {
+        mAnmGroups[AREA_CAPTION_ANIM_OUT].setAnimEnable(false);
+        if (!mFirst) {
+            dLytAreaCaption_c::setVisible(false);
+            dLytMeterContainer_c::GetInstance()->setAreaCaptionOverrideVisibility(true);
+        }
+        mStateMgr.changeState(StateID_Wait);
+    }
+}
 void dLytAreaCaptionParts_c::finalizeState_Out() {}
+
+bool dLytAreaCaptionParts_c::shouldImmediatelyDismiss() const {
+    if (mFirst) {
+        return field_0x54D;
+    }
+
+    if (field_0x54D) {
+        return true;
+    }
+
+    if (dPad::checkButtonBPressed()) {
+        return true;
+    }
+
+    if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x400) && dPad::checkButtonCPressed()) {
+        return true;
+    }
+
+    if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x20) && dPad::checkButtonPlusPressed()) {
+        return true;
+    }
+
+    if (dPad::checkButtonMinusPressed()) {
+        return true;
+    }
+
+    if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x80) && dPad::checkButton1Pressed()) {
+        return true;
+    }
+
+    if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x100) && dPad::checkButton2Pressed()) {
+        return true;
+    }
+
+    if (dPad::checkButtonDpadUpPressed()) {
+        return true;
+    }
+
+    if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x2) && dPad::checkButtonDpadDownPressed()) {
+        return true;
+    }
+
+    if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x4) && dPad::checkButtonDpadLeftPressed()) {
+        return true;
+    }
+
+    if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x8) && dPad::checkButtonDpadRightPressed()) {
+        return true;
+    }
+
+    if (EventManager::eventRelatedStateFlags_shift0x11_1()) {
+        return true;
+    }
+
+    return false;
+}
 
 bool dLytAreaCaption_c::create() {
     new dLytAreaCaption_c();

@@ -654,6 +654,7 @@ d/lyt/d_lyt_area_caption.cpp:
 	.data       start:0x80522B00 end:0x80522E80
 	.sdata      start:0x80572878 end:0x80572880
 	.sbss       start:0x805754C0 end:0x805754C8
+	.sdata2     start:0x80579FD0 end:0x80579FE0
 	.bss        start:0x805B0A70 end:0x805B0B30
 
 d/lyt/d_lyt_wipe.cpp:

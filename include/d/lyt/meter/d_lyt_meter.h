@@ -109,6 +109,10 @@ public:
         return mPanesNotHiddenByAreaCaption[8];
     }
 
+    void setGanbariGaugeHiddenByAreaCaption(bool visible) {
+        mPanesNotHiddenByAreaCaption[15] = visible;
+    }
+
     bool getField_0x1377E() const {
         return field_0x1377E;
     }

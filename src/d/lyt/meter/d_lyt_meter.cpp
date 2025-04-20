@@ -547,19 +547,6 @@ bool dLytMeter_c::fn_800CA040() {
     return false;
 }
 
-void floats() {
-    32.0f;
-    1.0f;
-    0.0f;
-    int x = 0;
-    f32 f = x;
-}
-
-void floats2() {
-    5.0f;
-    3.0f;
-}
-
 void dLytMeter_c::setUiMode(u16 value) const {
     StoryflagManager::sInstance->setFlagOrCounterToValue(840, value);
 }
