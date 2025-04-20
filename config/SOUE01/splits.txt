@@ -660,7 +660,11 @@ d/lyt/d_lyt_area_caption.cpp:
 d/lyt/d_lyt_wipe.cpp:
 	.text       start:0x8014C6C0 end:0x8014E008
 	.ctors      start:0x804DB77C end:0x804DB780
+	.data       start:0x80522E80 end:0x805231E8
+	.sdata      start:0x80572880 end:0x80572888
 	.sbss       start:0x805754C8 end:0x805754D0
+	.sdata2     start:0x80579FE0 end:0x80579FF0
+	.bss        start:0x805B0B30 end:0x805B0D30
 
 d/lyt/d_lyt_help.cpp:
 	.text       start:0x8014E010 end:0x80150428
@@ -1052,6 +1056,7 @@ d/lyt/d_lyt_end_roll.cpp:
 d/lyt/d_lyt_control_game.cpp:
 	.text       start:0x802CC7B0 end:0x802D16A8
 	.ctors      start:0x804DB8A0 end:0x804DB8A4
+	.data       start:0x805403F8 end:0x80540C88
 
 d/lyt/d_lyt_control_title.cpp:
 	.text       start:0x802D16B0 end:0x802D17BC

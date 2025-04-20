@@ -8,6 +8,7 @@
 #include "egg/gfx/eggPostEffectBlur.h"
 #include "egg/gfx/eggScreenEffectBlur.h"
 #include "m/m_allocator.h"
+#include "m/m_fader_base.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "s/s_FPhase.h"
@@ -126,6 +127,14 @@ public:
 
     static dStage_c *GetInstance() {
         return sInstance;
+    }
+
+    bool isFadedOut() const {
+        return mFader.isStatus(mFaderBase_c::FADED_OUT);
+    }
+
+    bool isFadedIn() const {
+        return mFader.isStatus(mFaderBase_c::FADED_IN);
     }
 
     u8 getCurrRoomId() const {
