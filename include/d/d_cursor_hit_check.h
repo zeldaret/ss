@@ -99,12 +99,12 @@ private:
     void countBoundings(nw4r::lyt::Pane *);
     void gatherBoundings(dCsCheckLyt_BoundingData **pEnd, nw4r::lyt::Pane *);
 
-    nw4r::lyt::Pane *mpRootPane;
-    dCsCheckLyt_BoundingData *mpBoundingData;
-    u16 mNumBoundings;
-    bool mHasCalculatedBoundingData;
-    u8 field_0x23;
-    nw4r::lyt::Pane *mpHitPane;
+    /* 0x18 */ nw4r::lyt::Pane *mpRootPane;
+    /* 0x1C */ dCsCheckLyt_BoundingData *mpBoundingData;
+    /* 0x20 */ u16 mNumBoundings;
+    /* 0x22 */ bool mHasCalculatedBoundingData;
+    /* 0x23 */ u8 field_0x23;
+    /* 0x24 */ nw4r::lyt::Pane *mpHitPane;
 };
 
 /** The basic cursor position getter. */
@@ -138,7 +138,7 @@ public:
     virtual mVec2_c &getCursorPos();
 
 private:
-    u8 _0x14[8];
+    /* 0x14 */ u8 _0x14[8];
 };
 
 /**
