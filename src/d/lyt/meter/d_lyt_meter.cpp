@@ -1114,7 +1114,8 @@ void dLytMeterMain_c::checkPaneVisibility() {
     }
 
     // Set all panes to visible, then go through
-    // them one by one to
+    // them one by one to find reasons they should
+    // be hidden.
 
     mTimerVisible = true;
     mBirdGaugeVisible = true;
