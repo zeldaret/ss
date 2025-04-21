@@ -201,7 +201,7 @@ void LytMeterTimerPart1_c::initOutAnim() {
 }
 
 void LytMeterTimerPart1_c::startInAnim() {
-    if (dLytMeterContainer_c::GetMeter()->fn_800D5650()) {
+    if (dLytMeter_c::GetMain()->fn_800D5650()) {
         mAnm[TIMER_01_ANIM_MAP_POSITION].setFrame(1.0f);
     } else {
         mAnm[TIMER_01_ANIM_MAP_POSITION].setFrame(0.0f);
@@ -326,7 +326,7 @@ bool LytMeterTimerPart1_c::incrementTearCount() {
     mActualTearCount = ItemflagManager::sInstance->getFlagDirect(500);
     if (mDisplayedTearCount < mActualTearCount && dLytDropLine_c::finishPartMaybe()) {
         startNextFruitAnim();
-        if (!dLytMeterContainer_c::getfn_800C9FE0()) {
+        if (!dLytMeter_c::getfn_800C9FE0()) {
             createEffect(mActualTearCount - 1);
             SmallSoundManager::GetInstance()->playSound(SE_S_SIREN_SHIZUKU_GET_IN);
         }
@@ -623,7 +623,7 @@ void LytMeterTimerPart2_c::initChangeFruitAnim() {
 }
 
 void LytMeterTimerPart2_c::startInAnim() {
-    if (dLytMeterContainer_c::GetMeter()->fn_800D5650()) {
+    if (dLytMeter_c::GetMain()->fn_800D5650()) {
         mAnm[TIMER_02_ANIM_MAP_POSITION].setFrame(1.0f);
     } else {
         mAnm[TIMER_02_ANIM_MAP_POSITION].setFrame(0.0f);
@@ -1039,7 +1039,7 @@ void dLytMeterTimer_c::executeState_ChangeSiren() {
         }
     }
 
-    if (dLytMeterContainer_c::getfn_800D97A0() && !field_0x54) {
+    if (dLytMeter_c::getfn_800D97A0() && !field_0x54) {
         mpPart2->setVisible(true);
     }
 
@@ -1053,7 +1053,7 @@ void dLytMeterTimer_c::executeState_ChangeSiren() {
             break;
         case 1:
             if (mpPart2->isFirstFallOutAnimFinished()) {
-                dLytMeterContainer_c::setField_0x13B61(1);
+                dLytMeter_c::setField_0x13B61(1);
                 field_0x57 = 2;
             }
             break;
@@ -1260,7 +1260,7 @@ void dLytMeterTimer_c::executeState_ChangeFruits() {
                     mpPart2->stopSirenSafeAnim();
                     mpPart2->stopChangeFruitAnim();
                     mpPart2->resetSingleAnim(TIMER_02_ANIM_CHANGE_FRUIT);
-                    dLytMeterContainer_c::setField_0x13B64(1);
+                    dLytMeter_c::setField_0x13B64(1);
                     gotoFruits();
                 } else {
                     field_0x60--;
@@ -1320,7 +1320,7 @@ bool dLytMeterTimer_c::execute() {
             gotoChangeSafeBloom();
         }
 
-        if (mpPart1->getActualTearCount() == TIMER_01_NUM_TEARS && dLytMeterContainer_c::getField_0x13B63()) {
+        if (mpPart1->getActualTearCount() == TIMER_01_NUM_TEARS && dLytMeter_c::getField_0x13B63()) {
             if (!field_0x55) {
                 field_0x60 = 20;
             }
@@ -1369,7 +1369,7 @@ void dLytMeterTimer_c::startIn() {
     mpPart2->stopOutAnim();
     mpPart1->startInAnim();
     mpPart2->startInAnim();
-    if (dLytMeterContainer_c::GetMeter()->fn_800D5650()) {
+    if (dLytMeter_c::GetMain()->fn_800D5650()) {
         if (mStateMgr.isState(StateID_ChangeSiren)) {
             mpPart2->stopFlowerLoopAnim();
             mpPart2->resetFlowerLoopAnim();

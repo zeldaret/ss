@@ -396,14 +396,14 @@ void dLytMeterDowsing_c::executeState_Wait() {
     } else if (field_0x5505 != 0) {
         mStateMgr.changeState(StateID_MenuSelectingIn);
     } else if (field_0x550A != 0 &&
-               (!dLytMeterContainer_c::GetMeter()->fn_800D5380(0) || dLytMeterContainer_c::GetMeter()->fn_800D5650() ||
-                dLytMeterContainer_c::GetMeter()->fn_800D5680())) {
+               (!dLytMeter_c::GetMain()->fn_800D5380(0) || dLytMeter_c::GetMain()->fn_800D5650() ||
+                dLytMeter_c::GetMain()->fn_800D5680())) {
         mStateMgr.changeState(StateID_Reset);
-    } else if (!dLytMeterContainer_c::GetInstance()->checkAllFlags(0x400)) {
+    } else if (!dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_C)) {
         mStateMgr.changeState(StateID_ToUnuse);
-    } else if (dLytMeterContainer_c::GetInstance()->getMeterField_0x1377F() != 0 && field_0x550A == 0 &&
-               dLytMeterContainer_c::GetMeter()->fn_800D5380(0) && !dLytMeterContainer_c::GetMeter()->fn_800D5650() &&
-               !dLytMeterContainer_c::GetMeter()->fn_800D5680() &&
+    } else if (dLytMeter_c::GetInstance()->getMeterField_0x1377F() != 0 && field_0x550A == 0 &&
+               dLytMeter_c::GetMain()->fn_800D5380(0) && !dLytMeter_c::GetMain()->fn_800D5650() &&
+               !dLytMeter_c::GetMain()->fn_800D5680() &&
                getSelectedDowsingSlot() != DowsingTarget::SLOT_LOOK &&
                getSelectedDowsingSlot() != DowsingTarget::SLOT_NONE &&
                LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52) {
@@ -554,8 +554,8 @@ void dLytMeterDowsing_c::initializeState_ToUse() {
 
     if (FileManager::GetInstance()->getDowsingSlotIdx() != 8 &&
         LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52 &&
-        dLytMeterContainer_c::GetMeter()->fn_800D5380(0) && !dLytMeterContainer_c::GetMeter()->fn_800D5650() &&
-        !dLytMeterContainer_c::GetMeter()->fn_800D5680()) {
+        dLytMeter_c::GetMain()->fn_800D5380(0) && !dLytMeter_c::GetMain()->fn_800D5650() &&
+        !dLytMeter_c::GetMain()->fn_800D5680()) {
         mAnm[DOWSING_ANIM_RESET].setAnimEnable(true);
         mAnm[DOWSING_ANIM_RESET].setBackwardsOnce();
         mAnm[DOWSING_ANIM_RESET].setToStart();
@@ -564,8 +564,8 @@ void dLytMeterDowsing_c::initializeState_ToUse() {
 void dLytMeterDowsing_c::executeState_ToUse() {
     if (FileManager::GetInstance()->getDowsingSlotIdx() != 8 &&
         LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52 &&
-        dLytMeterContainer_c::GetMeter()->fn_800D5380(0) && !dLytMeterContainer_c::GetMeter()->fn_800D5650() &&
-        !dLytMeterContainer_c::GetMeter()->fn_800D5680()) {
+        dLytMeter_c::GetMain()->fn_800D5380(0) && !dLytMeter_c::GetMain()->fn_800D5650() &&
+        !dLytMeter_c::GetMain()->fn_800D5680()) {
         if (mAnm[DOWSING_ANIM_INPUT_0].isStop2()) {
             if (!mAnm[DOWSING_ANIM_RESET].isEnabled() || mAnm[DOWSING_ANIM_RESET].isStop2()) {
                 mStateMgr.changeState(StateID_Wait);
@@ -590,7 +590,7 @@ void dLytMeterDowsing_c::finalizeState_ToUse() {
 
 void dLytMeterDowsing_c::initializeState_ToUnuse() {
     mAnm[DOWSING_ANIM_INPUT_0].setForwardOnce();
-    if (dLytMeterContainer_c::GetMeter()->fn_800D5650()) {
+    if (dLytMeter_c::GetMain()->fn_800D5650()) {
         mAnm[DOWSING_ANIM_INPUT_0].setToEnd2();
     } else {
         mAnm[DOWSING_ANIM_INPUT_0].setToStart();
@@ -599,8 +599,8 @@ void dLytMeterDowsing_c::initializeState_ToUnuse() {
 
     if (FileManager::GetInstance()->getDowsingSlotIdx() != 8 &&
         LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52 &&
-        dLytMeterContainer_c::GetMeter()->fn_800D5380(0) && !dLytMeterContainer_c::GetMeter()->fn_800D5650() &&
-        !dLytMeterContainer_c::GetMeter()->fn_800D5680()) {
+        dLytMeter_c::GetMain()->fn_800D5380(0) && !dLytMeter_c::GetMain()->fn_800D5650() &&
+        !dLytMeter_c::GetMain()->fn_800D5680()) {
         mAnm[DOWSING_ANIM_RESET].setAnimEnable(true);
         mAnm[DOWSING_ANIM_RESET].setForwardOnce();
         mAnm[DOWSING_ANIM_RESET].setToStart();
@@ -636,9 +636,9 @@ void dLytMeterDowsing_c::executeState_Unuse() {
         mLyt.calc();
         mAnm[DOWSING_ANIM_INPUT_0].setAnimEnable(false);
         mStateMgr.changeState(StateID_DemoMove);
-    } else if (!dLytMeterContainer_c::GetMeter()->fn_800D5680() &&
-               dLytMeterContainer_c::GetInstance()->getMeterField_0x13774() == 0 &&
-               dLytMeterContainer_c::GetInstance()->checkAllFlags(0x400)) {
+    } else if (!dLytMeter_c::GetMain()->fn_800D5680() &&
+               dLytMeter_c::GetInstance()->getMeterField_0x13774() == 0 &&
+               dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_C)) {
         if (field_0x54D8 <= 0) {
             mStateMgr.changeState(StateID_ToUse);
         } else {
@@ -902,7 +902,7 @@ bool dLytMeterDowsing_c::execute() {
     if (dLytControlGame_c::getInstance()->isStateNormal()) {
         if (StoryflagManager::sInstance->getCounterOrFlag(566) &&
             LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) != LytDoButtonRelated::DO_NONE) {
-            if (dLytMeterContainer_c::GetMeter()->fn_800D5380(0)) {
+            if (dLytMeter_c::GetMain()->fn_800D5380(0)) {
                 field_0x5508 = 0;
                 StoryflagManager::sInstance->unsetFlag(566);
                 if (getSelectedDowsingSlot() != DowsingTarget::SLOT_NONE) {
@@ -979,9 +979,9 @@ bool dLytMeterDowsing_c::execute() {
     }
     field_0x54E8 = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C);
     field_0x54EC = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_C) &&
-                   dLytMeterContainer_c::GetInstance()->checkAllFlags(0x400);
+                   dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_C);
     if (*mStateMgr.getStateID() != StateID_ToUnuse &&
-        (dLytMeterContainer_c::GetMeter()->getUiMode() == 0 || field_0x54E8 != 0x51)) {
+        (dLytMeter_c::GetMain()->getUiMode() == 0 || field_0x54E8 != 0x51)) {
         if (field_0x54E8 != field_0x54E4) {
             if (field_0x5500 != 0) {
                 field_0x54E4 = field_0x54E8;
@@ -1015,7 +1015,7 @@ bool dLytMeterDowsing_c::execute() {
         }
         if (mAnm[DOWSING_ANIM_CALL].isEnabled()) {
             mAnm[DOWSING_ANIM_CALL].play();
-            if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x400) &&
+            if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_C) &&
                 mAnm[DOWSING_ANIM_CALL].getFrame() == 1.0f) {
                 SmallSoundManager::GetInstance()->playSound(SE_S_C_BUTTON_BLINK);
             }
@@ -1110,7 +1110,7 @@ void dLytMeterDowsing_c::fn_800FE110() {
         mText[0].setShouldBeSelect(false);
     }
 
-    if (dLytMeterContainer_c::GetInstance()->getMeterField_0x1377F() != 0 && field_0x550A == 0) {
+    if (dLytMeter_c::GetInstance()->getMeterField_0x1377F() != 0 && field_0x550A == 0) {
         mInput.setShouldBeSelect(true);
     } else {
         mInput.setShouldBeSelect(false);
@@ -1120,8 +1120,8 @@ void dLytMeterDowsing_c::fn_800FE110() {
 void dLytMeterDowsing_c::fn_800FE220() {
     if (getSelectedDowsingSlot() != DowsingTarget::SLOT_NONE &&
         LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52 &&
-        dLytMeterContainer_c::GetMeter()->fn_800D5380(0) && !dLytMeterContainer_c::GetMeter()->fn_800D5650() &&
-        !dLytMeterContainer_c::GetMeter()->fn_800D5680()) {
+        dLytMeter_c::GetMain()->fn_800D5380(0) && !dLytMeter_c::GetMain()->fn_800D5650() &&
+        !dLytMeter_c::GetMain()->fn_800D5680()) {
         mAnm[DOWSING_ANIM_RESET].setAnimEnable(true);
         mAnm[DOWSING_ANIM_RESET].setForwardOnce();
         mAnm[DOWSING_ANIM_RESET].setToStart();
@@ -1174,8 +1174,8 @@ bool dLytMeterDowsing_c::fn_800FE4B0() const {
 }
 
 bool dLytMeterDowsing_c::fn_800FE610() {
-    if ((!dLytMeterContainer_c::GetMeter()->getDowsingNotHiddenByAreaCaption() && !dLytAreaCaption_c::getVisible()) ||
-        !getPane()->IsVisible() || dLytMeterContainer_c::GetMeter()->fn_800D5680()) {
+    if ((!dLytMeter_c::GetMain()->getDowsingNotHiddenByAreaCaption() && !dLytAreaCaption_c::getVisible()) ||
+        !getPane()->IsVisible() || dLytMeter_c::GetMain()->fn_800D5680()) {
         return false;
     }
     return true;
@@ -1202,7 +1202,7 @@ s32 dLytMeterDowsing_c::convertToLytIndex(s32 slot) const {
 }
 
 u8 dLytMeterDowsing_c::getSelectedDowsingSlot() const {
-    if (dLytMeterContainer_c::GetMeter()->fn_800D5650()) {
+    if (dLytMeter_c::GetMain()->fn_800D5650()) {
         return DowsingTarget::SLOT_NONE;
     } else {
         return FileManager::GetInstance()->getDowsingSlotIdx();

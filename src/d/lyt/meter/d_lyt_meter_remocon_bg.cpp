@@ -48,7 +48,7 @@ bool dLytMeterRemoconBg_c::remove() {
 }
 
 bool dLytMeterRemoconBg_c::execute() {
-    if (EventManager::isInEvent() || dLytMeterContainer_c::getItemSelect0x75A2() != 0) {
+    if (EventManager::isInEvent() || dLytMeter_c::getItemSelect0x75A2() != 0) {
         field_0xEC = 0;
         LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_REMOCON_BG, LytDoButtonRelated::DO_NONE);
     } else {

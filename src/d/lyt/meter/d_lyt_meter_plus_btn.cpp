@@ -34,7 +34,7 @@ static const d2d::LytBrlanMapping brlanMap[] = {
 
 void dLytMeterPlusBtn_c::initializeState_Wait() {}
 void dLytMeterPlusBtn_c::executeState_Wait() {
-    if (!dLytMeterContainer_c::GetInstance()->checkAllFlags(0x20)) {
+    if (!dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_PLUS)) {
         mStateMgr.changeState(StateID_ToUnuse);
     }
 }
@@ -76,7 +76,7 @@ void dLytMeterPlusBtn_c::finalizeState_ToUnuse() {
 
 void dLytMeterPlusBtn_c::initializeState_Unuse() {}
 void dLytMeterPlusBtn_c::executeState_Unuse() {
-    if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x20)) {
+    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_PLUS)) {
         if (field_0x1BC <= 0) {
             mStateMgr.changeState(StateID_ToUse);
         } else {
@@ -172,7 +172,7 @@ bool dLytMeterPlusBtn_c::execute() {
 
     // Better double check if the map is open!
     if (hasSpecificMapMark() && DungeonflagManager::sInstance->getCounterOrFlag(2, 8) && !isMapOpen() &&
-        dLytMeterContainer_c::GetInstance()->checkAllFlags(0x20) && !isMapOpen()) {
+        dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_PLUS) && !isMapOpen()) {
         mShouldCall = true;
     } else {
         if (dLytControlGame_c::getInstance()->isStateNormal()) {
@@ -186,7 +186,7 @@ bool dLytMeterPlusBtn_c::execute() {
         }
     }
 
-    if (mShouldCall && dLytMeterContainer_c::GetInstance()->checkAllFlags(0x20)) {
+    if (mShouldCall && dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_PLUS)) {
         if (!field_0x1C3) {
             mAnm[PLUS_BTN_ANIM_CALL].setToEnd();
             mAnm[PLUS_BTN_ANIM_CALL].setAnimEnable(true);
@@ -194,7 +194,7 @@ bool dLytMeterPlusBtn_c::execute() {
         }
         if (mAnm[PLUS_BTN_ANIM_CALL].isEnabled()) {
             mAnm[PLUS_BTN_ANIM_CALL].play();
-            if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x20) &&
+            if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_PLUS) &&
                 mAnm[PLUS_BTN_ANIM_CALL].getFrame() == 1.0f && mCallCount < 3) {
                 SmallSoundManager::GetInstance()->playSound(SE_S_PLUS_BUTTON_BLINK);
                 mCallCount++;

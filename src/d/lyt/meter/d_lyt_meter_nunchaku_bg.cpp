@@ -142,7 +142,7 @@ bool dLytMeterNunchakuBg_c::build(d2d::ResAccIf_c *resAcc) {
     mpOwnerPane = nullptr;
     mOnDelay = 15;
 
-    dLytMeterContainer_c::GetMeter()->getNunStk()->getBgPane()->SetVisible(false);
+    dLytMeter_c::GetMain()->getNunStk()->getBgPane()->SetVisible(false);
 
     setMessage(field_0x1B0);
 
@@ -205,7 +205,7 @@ bool dLytMeterNunchakuBg_c::execute() {
     field_0x1B8 = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_NUN_BG);
 
     bool hasNunStk = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_NUN_STK);
-    u8 val = dLytMeterContainer_c::getDowsing0x550A();
+    u8 val = dLytMeter_c::getDowsing0x550A();
     if (hasNunStk != field_0x1C5 || val != field_0x1C6) {
         field_0x1C5 = hasNunStk;
         field_0x1C6 = val;
@@ -213,7 +213,7 @@ bool dLytMeterNunchakuBg_c::execute() {
         if (hasNunStk) {
             mAnm[NUN_BG_ANIM_ARROWV].setFrame(1.0f);
             mAnm[NUN_BG_ANIM_ARROWV].setAnimEnable(true);
-            dLytMeterContainer_c::GetMeter()->getNunStk()->getBgPane()->SetVisible(true);
+            dLytMeter_c::GetMain()->getNunStk()->getBgPane()->SetVisible(true);
         } else {
             if (val) {
                 mAnm[NUN_BG_ANIM_ARROWV].setFrame(1.0f);
@@ -223,7 +223,7 @@ bool dLytMeterNunchakuBg_c::execute() {
                 mAnm[NUN_BG_ANIM_ARROWV].setAnimEnable(true);
                 setMessage(field_0x1B4);
             }
-            dLytMeterContainer_c::GetMeter()->getNunStk()->getBgPane()->SetVisible(false);
+            dLytMeter_c::GetMain()->getNunStk()->getBgPane()->SetVisible(false);
         }
     }
 

@@ -193,7 +193,7 @@ bool dLytMeterZBtn_c::execute() {
     }
     field_0x1B4 = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_Z);
     field_0x1B8 = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_Z) &&
-                  dLytMeterContainer_c::GetInstance()->checkAllFlags(0x800);
+                  dLytMeter_c::GetInstance()->checkAllFlags(0x800);
     mStateMgr.executeState();
 
     for (int i = 0; i < Z_BTN_NUM_ANIMS; i++) {
@@ -215,7 +215,7 @@ bool dLytMeterZBtn_c::execute() {
         field_0x1C5 = 0;
     }
 
-    if (field_0x1C5 != 0 && dLytMeterContainer_c::GetInstance()->checkAllFlags(0x800)) {
+    if (field_0x1C5 != 0 && dLytMeter_c::GetInstance()->checkAllFlags(0x800)) {
         if (field_0x1C6 == 0) {
             mAnm[Z_BTN_ANIM_CALL].setToEnd();
             mAnm[Z_BTN_ANIM_CALL].setAnimEnable(true);
@@ -223,7 +223,7 @@ bool dLytMeterZBtn_c::execute() {
         }
         if (mAnm[Z_BTN_ANIM_CALL].isEnabled()) {
             mAnm[Z_BTN_ANIM_CALL].play();
-            if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x800) && mAnm[Z_BTN_ANIM_CALL].getFrame() == 1.0f) {
+            if (dLytMeter_c::GetInstance()->checkAllFlags(0x800) && mAnm[Z_BTN_ANIM_CALL].getFrame() == 1.0f) {
                 SmallSoundManager::GetInstance()->playSound(SE_S_Z_BUTTON_BLINK);
             }
         }

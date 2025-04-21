@@ -95,8 +95,8 @@ public:
     void execute();
 
     void setAnmGroups(d2d::AnmGroup_c *inAnm, d2d::AnmGroup_c *outAnm) {
-        mpAnm1 = inAnm;
-        mpAnm2 = outAnm;
+        mpAnmIn = inAnm;
+        mpAnmOut = outAnm;
     }
 
     void setShouldBeVisible(bool val) {
@@ -110,8 +110,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterParts_c, Out);
 
     /* 0x00 */ UI_STATE_MGR_DECLARE(dLytMeterParts_c);
-    /* 0x3C */ d2d::AnmGroup_c *mpAnm1;
-    /* 0x40 */ d2d::AnmGroup_c *mpAnm2;
+    /* 0x3C */ d2d::AnmGroup_c *mpAnmIn;
+    /* 0x40 */ d2d::AnmGroup_c *mpAnmOut;
     /* 0x44 */ s32 mIndex;
     /* 0x48 */ bool mShouldBeVisible;
 };

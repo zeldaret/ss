@@ -300,7 +300,7 @@ void dLytMeterMinusBtn_c::executeState_Wait() {
         mStateMgr.changeState(StateID_DemoMove);
     } else if (field_0x4EB8 != 0) {
         mStateMgr.changeState(StateID_MenuSelectingIn);
-    } else if (!dLytMeterContainer_c::GetInstance()->checkAllFlags(0x40)) {
+    } else if (!dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_MINUS)) {
         mStateMgr.changeState(StateID_ToUnuse);
     }
 }
@@ -508,7 +508,7 @@ void dLytMeterMinusBtn_c::executeState_Unuse() {
         mAnm[MINUS_BTN_ANIM_INPUT].setAnimEnable(false);
         mStateMgr.changeState(StateID_MenuSelectingIn);
     } else {
-        if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x40)) {
+        if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_MINUS)) {
             if (field_0x4E84 <= 0) {
                 mStateMgr.changeState(StateID_ToUse);
             } else {
@@ -830,7 +830,7 @@ bool dLytMeterMinusBtn_c::remove() {
 
 bool dLytMeterMinusBtn_c::execute() {
     bool btnShown = true;
-    if (dLytMeterContainer_c::GetMeter()->getUiMode() > 1 && !shouldCall() && !fn_800F75E0()) {
+    if (dLytMeter_c::GetMain()->getUiMode() > 1 && !shouldCall() && !fn_800F75E0()) {
         btnShown = false;
     }
 
@@ -879,14 +879,14 @@ bool dLytMeterMinusBtn_c::execute() {
     }
 
     if (!StoryflagManager::sInstance->getCounterOrFlag(30)) {
-        dLytMeterContainer_c::GetInstance()->clearFlags(0x40);
+        dLytMeter_c::GetInstance()->clearFlags(METER_BTN_MINUS);
     }
 
     fn_800F7300();
 
     mStateMgr.executeState();
 
-    if (field_0x4EB9 != 0 && dLytMeterContainer_c::GetInstance()->checkAllFlags(0x40)) {
+    if (field_0x4EB9 != 0 && dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_MINUS)) {
         if (field_0x4EBA == 0) {
             mAnm[MINUS_BTN_ANIM_CALL].setToEnd();
             mAnm[MINUS_BTN_ANIM_CALL].setAnimEnable(true);
@@ -895,7 +895,7 @@ bool dLytMeterMinusBtn_c::execute() {
 
         if (mAnm[MINUS_BTN_ANIM_CALL].isEnabled()) {
             mAnm[MINUS_BTN_ANIM_CALL].play();
-            if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x40) &&
+            if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_MINUS) &&
                 mAnm[MINUS_BTN_ANIM_CALL].getFrame() == 1.0f) {
                 SmallSoundManager::GetInstance()->playSound(SE_S_MINUS_BUTTON_BLINK);
             }
@@ -1037,9 +1037,9 @@ bool dLytMeterMinusBtn_c::fn_800F7600() const {
 
 bool dLytMeterMinusBtn_c::fn_800F7760() const {
     if (!StoryflagManager::sInstance->getCounterOrFlag(30) ||
-        (mpOwnerPane == nullptr || !mpOwnerPane->IsVisible() || dLytMeterContainer_c::GetMeter()->fn_800D5650() ||
-         dLytMeterContainer_c::GetMeter()->fn_800D5680() ||
-         !dLytMeterContainer_c::GetMeter()->getMinusBtnNotHiddenByAreaCaption())) {
+        (mpOwnerPane == nullptr || !mpOwnerPane->IsVisible() || dLytMeter_c::GetMain()->fn_800D5650() ||
+         dLytMeter_c::GetMain()->fn_800D5680() ||
+         !dLytMeter_c::GetMain()->getMinusBtnNotHiddenByAreaCaption())) {
         return false;
     }
 

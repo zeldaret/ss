@@ -175,8 +175,8 @@ bool dLytAutoCaption_c::setText(const wchar_t *text) {
 
 bool dLytAutoCaption_c::checkSomethingMeter() {
     if (EventManager::isInEvent() || !dLytControlGame_c::getInstance()->isStateNormal() ||
-        dLytMeterContainer_c::getItemSelect0x75A2() || dLytMeterContainer_c::getMinusBtnFn800F7600() ||
-        dLytMeterContainer_c::getDowsingFn800FE4B0()) {
+        dLytMeter_c::getItemSelect0x75A2() || dLytMeter_c::getMinusBtnFn800F7600() ||
+        dLytMeter_c::getDowsingFn800FE4B0()) {
         return true;
     }
     return false;

@@ -1,8 +1,9 @@
 #ifndef D_LYT_METER_H
 #define D_LYT_METER_H
-// TODO sort includes for vtable order
+
 // clang-format off
 #include "common.h"
+
 #include "d/lyt/d2d.h"
 #include "d/d_cursor_hit_check.h"
 #include "d/lyt/d_lyt_do_button.h"
@@ -22,32 +23,10 @@
 #include "d/lyt/meter/d_lyt_meter_ganbari_gauge.h"
 #include "d/lyt/meter/d_lyt_meter_event_skip.h"
 #include "d/lyt/meter/d_lyt_meter_item_select.h"
-
 #include "d/lyt/meter/d_lyt_meter_parts.h"
 #include "d/lyt/d_lyt_unknowns.h"
 
-
 #include "m/m_vec.h"
-
-enum Meter_e {
-    METER_GANBARI = 0,
-    METER_RUPY = 1,
-    METER_ITEM_SELECT = 2,
-    METER_CROSS_BTN = 3,
-    METER_PLUS_BTN = 4,
-    METER_MINUS_BTN = 5,
-    METER_A_BTN = 6,
-    METER_DOWSING = 7,
-    METER_Z_BTN = 8,
-    METER_NUN_STK = 9,
-    METER_REMOCON_BG = 10,
-    METER_NUN_BG = 11,
-    METER_HEART = 12,
-    METER_SHIELD = 13,
-    METER_1_BTN = 14,
-    METER_2_BTN = 15,
-};
-
 // clang-format on
 
 class dLytMeter1Button_c;
@@ -63,10 +42,33 @@ class dLytSkyGauge_c;
 class dLytBirdGauge_c;
 class dLytBossGauge_c;
 
-class dLytMeter_c {
+// apart from dLytMeterParts_c the names here are made up
+
+enum MeterFlag_e {
+    METER_BTN_CROSS_UP = 0x1,
+    METER_BTN_CROSS_DOWN = 0x2,
+    METER_BTN_CROSS_LEFT = 0x4,
+    METER_BTN_CROSS_RIGHT = 0x8,
+    METER_BTN_B = 0x10,
+    METER_BTN_PLUS = 0x20,
+    METER_BTN_MINUS = 0x40,
+    METER_BTN_1 = 0x80,
+    METER_BTN_2 = 0x100,
+    METER_BTN_NUN_STK = 0x200,
+    METER_BTN_C = 0x400,
+    METER_BTN_Z = 0x800,
+    METER_BTN_0x1000 = 0x1000,
+
+
+    METER_BTN_CROSS = METER_BTN_CROSS_UP | METER_BTN_CROSS_DOWN | METER_BTN_CROSS_LEFT | METER_BTN_CROSS_RIGHT,
+};
+
+class dLytMeterMain_c {
+    friend class dLytMeter_c;
+
 public:
-    dLytMeter_c();
-    virtual ~dLytMeter_c() {}
+    dLytMeterMain_c();
+    virtual ~dLytMeterMain_c() {}
 
     bool build(d2d::ResAccIf_c *resAcc);
     bool remove();
@@ -125,10 +127,11 @@ public:
         return &mNunStk;
     }
 
+private:
     /* 0x00004 */ d2d::ResAccIf_c mResAcc;
     /* 0x00374 */ d2d::LytBase_c mLyt;
     /* 0x00404 */ d2d::AnmGroup_c mAnmGroups[34];
-    u8 field_0x00C84[0x00C8C - 0x00C84];
+    /* 0x00C84 */ u8 _0x00C84[0x00C8C - 0x00C84];
     /* 0x00C8C */ dLytMeterGanbariGauge_c mGanbariGauge;
     /* 0x011E8 */ dLytMeterRupy_c mRupy;
     /* 0x01A98 */ dLytMeterItemSelect_c mItemSelect;
@@ -158,7 +161,7 @@ public:
     /* 0x130F4 */ d2d::SubPaneList mMeters;
 
     /* 0x13100 */ d2d::SubPaneListNode mNodes[16];
-    /* 0x13200 */ u8 field_0x13200[0x13204 - 0x13200];
+    /* 0x13200 */ u8 _0x13200[0x13204 - 0x13200];
     /* 0x13204 */ dLytMeterParts_c mParts[16];
 
     /* 0x136C4 */ mVec3_c mShieldPositions[2];
@@ -201,27 +204,10 @@ public:
     /* 0x137C0 */ u32 field_0x137C0;
 };
 
-STATIC_ASSERT(offsetof(dLytMeter_c, mGanbariGauge) == 0x00C8C);
-STATIC_ASSERT(offsetof(dLytMeter_c, mRupy) == 0x011E8);
-STATIC_ASSERT(offsetof(dLytMeter_c, mItemSelect) == 0x01A98);
-STATIC_ASSERT(offsetof(dLytMeter_c, mCrossBtn) == 0x07260);
-STATIC_ASSERT(offsetof(dLytMeter_c, mPlusBtn) == 0x078A0);
-STATIC_ASSERT(offsetof(dLytMeter_c, mMinusBtn) == 0x07A64);
-STATIC_ASSERT(offsetof(dLytMeter_c, mDowsing) == 0x0C928);
-STATIC_ASSERT(offsetof(dLytMeter_c, mABtn) == 0x11E34);
-STATIC_ASSERT(offsetof(dLytMeter_c, mZBtn) == 0x12000);
-STATIC_ASSERT(offsetof(dLytMeter_c, mNunStk) == 0x121C8);
-STATIC_ASSERT(offsetof(dLytMeter_c, mRemoCon) == 0x12350);
-STATIC_ASSERT(offsetof(dLytMeter_c, mNunBg) == 0x12440);
-STATIC_ASSERT(offsetof(dLytMeter_c, mHeart) == 0x12608);
-STATIC_ASSERT(offsetof(dLytMeter_c, mShield) == 0x12DA4);
-STATIC_ASSERT(offsetof(dLytMeter_c, field_0x137C0) == 0x137C0);
-
-// made up name
-class dLytMeterContainer_c {
+class dLytMeter_c {
 public:
-    dLytMeterContainer_c();
-    virtual ~dLytMeterContainer_c() {
+    dLytMeter_c();
+    virtual ~dLytMeter_c() {
         sInstance = nullptr;
     }
 
@@ -245,32 +231,32 @@ public:
     static void setStaminaWheelPercent(f32 percent);
     void setStaminaWheelPercentInternal(f32 percent);
 
-    static dLytMeterContainer_c *GetInstance() {
+    static dLytMeter_c *GetInstance() {
         return sInstance;
     }
 
-    static dLytMeter_c *GetMeter() {
-        return &sInstance->mMeter;
+    static dLytMeterMain_c *GetMain() {
+        return &sInstance->mMain;
     }
 
-    // Not all of these inlines exist on dLytMeter_c
+    // Not all of these inlines exist on dLytMeterMain_c
     // because accessing via GetMeter->get... causes
     // different instructions sometimes
 
     s32 getMeterField_0x13750() const {
-        return mMeter.field_0x13750;
+        return mMain.field_0x13750;
     }
 
     u8 getMeterField_0x13770() const {
-        return mMeter.field_0x13770;
+        return mMain.field_0x13770;
     }
 
     bool getMeterField_0x13774() const {
-        return mMeter.field_0x13774;
+        return mMain.field_0x13774;
     }
 
     bool getMeterField_0x1377F() const {
-        return mMeter.field_0x1377F;
+        return mMain.field_0x1377F;
     }
 
     bool checkAllFlags(u32 mask) const {
@@ -291,7 +277,7 @@ public:
 
     static s32 getCrossBtn0x7BF8() {
         if (sInstance != nullptr) {
-            return sInstance->mMeter.mCrossBtn.getField_0x620();
+            return sInstance->mMain.mCrossBtn.getField_0x620();
         } else {
             return 6;
         }
@@ -299,7 +285,7 @@ public:
 
     static bool getItemSelect0x75A2() {
         if (sInstance != nullptr) {
-            return sInstance->mMeter.mItemSelect.getField_0x57A2();
+            return sInstance->mMain.mItemSelect.getField_0x57A2();
         } else {
             return 0;
         }
@@ -307,25 +293,25 @@ public:
 
     static void setRupyField_0x8A9(u8 val) {
         if (sInstance != nullptr) {
-            sInstance->mMeter.mRupy.setField_0x8A9(val);
+            sInstance->mMain.mRupy.setField_0x8A9(val);
         }
     }
 
     static void setRupyField_0x8AA(u8 val) {
         if (sInstance != nullptr) {
-            sInstance->mMeter.mRupy.setField_0x8AA(val);
+            sInstance->mMain.mRupy.setField_0x8AA(val);
         }
     }
 
     static void setRupyField_0x8AC(u8 val) {
         if (sInstance != nullptr) {
-            sInstance->mMeter.mRupy.setField_0x8AC(val);
+            sInstance->mMain.mRupy.setField_0x8AC(val);
         }
     }
 
     static u8 getRupyField_0x8AC() {
         if (sInstance != nullptr) {
-            return sInstance->mMeter.mRupy.getField_0x8AC();
+            return sInstance->mMain.mRupy.getField_0x8AC();
         } else {
             return 0;
         }
@@ -333,7 +319,7 @@ public:
 
     static s32 getHeartField_0x78C() {
         if (sInstance != nullptr) {
-            return sInstance->mMeter.mHeart.getField_0x78C();
+            return sInstance->mMain.mHeart.getField_0x78C();
         } else {
             return 0;
         }
@@ -375,7 +361,7 @@ public:
 
     static u8 getDowsing0x550A() {
         if (sInstance != nullptr) {
-            return sInstance->mMeter.mDowsing.getField_0x550A();
+            return sInstance->mMain.mDowsing.getField_0x550A();
         } else {
             return 0;
         }
@@ -383,7 +369,7 @@ public:
 
     static bool getfn_800C9FE0() {
         if (sInstance != nullptr) {
-            return sInstance->mMeter.fn_800C9FE0();
+            return sInstance->mMain.fn_800C9FE0();
         } else {
             return false;
         }
@@ -399,7 +385,7 @@ public:
 
     static bool getMinusBtnFn800F7600() {
         if (sInstance != nullptr) {
-            return sInstance->mMeter.mMinusBtn.fn_800F7600();
+            return sInstance->mMain.mMinusBtn.fn_800F7600();
         } else {
             return false;
         }
@@ -407,7 +393,7 @@ public:
 
     static bool getDowsingFn800FE4B0() {
         if (sInstance != nullptr) {
-            return sInstance->mMeter.mDowsing.fn_800FE4B0();
+            return sInstance->mMain.mDowsing.fn_800FE4B0();
         } else {
             return false;
         }
@@ -416,7 +402,7 @@ public:
 private:
     /* 0x00004 */ d2d::ResAccIf_c mResAcc;
     /* 0x00374 */ dLytMeterEventSkip_c *mpEventSkip;
-    /* 0x00378 */ dLytMeter_c mMeter;
+    /* 0x00378 */ dLytMeterMain_c mMain;
     /* 0x13B3C */ dLytDobutton_c *mpDoButton;
     /* 0x13B40 */ LytDoButtonRelated *mpDoButtonRelated;
     /* 0x13B44 */ LytBirdButtonRelated *mpBirdRelated;
@@ -434,7 +420,7 @@ private:
     /* 0x13B65 */ bool field_0x13B65;
     /* 0x13B66 */ bool field_0x13B66;
 
-    static dLytMeterContainer_c *sInstance;
+    static dLytMeter_c *sInstance;
 };
 
 #endif

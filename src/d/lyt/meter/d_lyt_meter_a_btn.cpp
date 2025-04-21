@@ -216,7 +216,7 @@ bool dLytMeterABtn_c::execute() {
         return true;
     }
 
-    if (dLytMeterContainer_c::GetInstance()->getMeterField_0x13750() == 0) {
+    if (dLytMeter_c::GetInstance()->getMeterField_0x13750() == 0) {
         LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::DO_NONE);
 
         if (field_0x1BC != LytDoButtonRelated::DO_NONE) {
@@ -228,8 +228,8 @@ bool dLytMeterABtn_c::execute() {
 
     bool state = false;
 
-    if (EventManager::isInEvent() && !dLytMeterContainer_c::GetInstance()->fn_800D5670() &&
-        dLytMeterContainer_c::GetMeter()->getField_0x1377E() == 0 && !checkIsInSkykeepPuzzle() &&
+    if (EventManager::isInEvent() && !dLytMeter_c::GetInstance()->fn_800D5670() &&
+        dLytMeter_c::GetMain()->getField_0x1377E() == 0 && !checkIsInSkykeepPuzzle() &&
         LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_A) == LytDoButtonRelated::DO_NONE) {
         field_0x1C9 = 0;
 

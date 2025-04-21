@@ -24,7 +24,7 @@ void dLytMeterCrossBtnParts_c::initializeState_Wait() {
     mOnDelay = 15;
 }
 void dLytMeterCrossBtnParts_c::executeState_Wait() {
-    if (dLytMeterContainer_c::GetMeter()->fn_800D5650()) {
+    if (dLytMeter_c::GetMain()->fn_800D5650()) {
         mOnDelay = 0;
     }
 
@@ -139,7 +139,7 @@ void dLytMeterCrossBtnParts_c::execute(bool bIsVisible) {
         return;
     }
 
-    if (dLytMeterContainer_c::GetInstance()->getMeterField_0x13750() == 0) {
+    if (dLytMeter_c::GetInstance()->getMeterField_0x13750() == 0) {
         if (mIndex == 0) {
             LytDoButtonRelated::fn_8010EC10(LytDoButtonRelated::DO_NONE, true);
         } else if (mIndex == 1) {
@@ -163,8 +163,8 @@ void dLytMeterCrossBtnParts_c::execute(bool bIsVisible) {
     }
 
     if ((EventManager::isInEvent() && dMessage_c::getInstance()->getField_0x32C() == 12 && !checkIsInSkykeepPuzzle() &&
-         !dLytMeterContainer_c::GetInstance()->fn_800D5670()) ||
-        ((dLytMeterContainer_c::getItemSelect0x75A2() && (mIndex != 1 || field_0x74 != 0)) || !bIsVisible)) {
+         !dLytMeter_c::GetInstance()->fn_800D5670()) ||
+        ((dLytMeter_c::getItemSelect0x75A2() && (mIndex != 1 || field_0x74 != 0)) || !bIsVisible)) {
         field_0x7C = 0;
 
         if (mIndex == 0) {
@@ -354,7 +354,7 @@ void dLytMeterCrossBtn_c::finalizeState_ToUnuse() {
 
 void dLytMeterCrossBtn_c::initializeState_Unuse() {}
 void dLytMeterCrossBtn_c::executeState_Unuse() {
-    if (dLytMeterContainer_c::GetInstance()->checkAllFlags(0x1)) {
+    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_CROSS_UP)) {
         mStateMgr.changeState(StateID_ToUse);
     }
 }
