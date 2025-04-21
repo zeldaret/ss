@@ -63,8 +63,8 @@ private:
     STATE_FUNC_DECLARE(dLytMeterGanbariGauge_c, Recovery);
     STATE_FUNC_DECLARE(dLytMeterGanbariGauge_c, ToMax);
 
-    void changeState(const sStateIDIf_c &value) {                                                                 \
-        mStateMgrMain.changeState(value);                                                                                  \
+    void changeState(const sStateIDIf_c &value) {
+        mStateMgrMain.changeState(value);
     }
 
     STATE_MGR(dLytMeterGanbariGauge_c) mStateMgrMain;
