@@ -54,6 +54,8 @@ public:
         return mbUserAllocated;
     }
 
+    typedef ut::LinkList<Pane, 4> ChildList;
+
     ut::LinkList<Pane, 4> *GetChildList() {
         return &mChildList;
     }
@@ -92,6 +94,13 @@ public:
 
     u8 GetGlobalAlpha() const {
         return mGlbAlpha;
+    }
+
+    u8 GetPositionH() const {
+        return detail::GetHorizontalPosition(mBasePosition);
+    }
+    u8 GetPositionV() const {
+        return detail::GetVerticalPosition(mBasePosition);
     }
 
     const Size &GetSize() const {
