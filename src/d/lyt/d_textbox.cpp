@@ -316,7 +316,7 @@ void dTextBox_c::setMessageWithGlobalTextProcessorV(const char *labelId, void *u
 }
 
 void dTextBox_c::setMessageWithGlobalTextProcessorAndMsbtInfo(
-    const MsbtInfo *info, const char *labelId, wchar_t *destBuf, u32 maxLen
+    MsbtInfo *info, const char *labelId, wchar_t *destBuf, u32 maxLen
 ) {
     const wchar_t *src = LMS_GetTextByLabel(info, labelId);
     SetFontSize(mMyTextScale);

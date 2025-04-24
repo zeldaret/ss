@@ -28,10 +28,10 @@ int LMSi_MemCmp(const char *p1, const char *p2, int n) {
 }
 
 void LMSi_MemCopy(char *p1, const char *p2, int n) {
-    // TODO register usage too optimal
+    // https://decomp.me/scratch/JOWiM
+    // NONMATCHING - register usage too optimal
+    // Look, how difficult can an unrolled memcopy be to match
     for (int i = 0; i < n; i++) {
-        *p1 = *p2;
-        p1++;
-        p2++;
+        *(p1++) = *(p2++);
     }
 }
