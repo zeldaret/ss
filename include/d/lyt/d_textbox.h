@@ -58,7 +58,9 @@ public:
     void setTextWithTextProcessor(const wchar_t *str, dTagProcessor_c *tagProcessor, void *, ...);
     s32 calcTextLines(const wchar_t *src, dTagProcessor_c *tagProcessor);
 
-    void setMessageWithGlobalTextProcessorAndMsbtInfo(const MsbtInfo *info, const char *labelId, wchar_t *destBuf, u32 maxLen);
+    void setMessageWithGlobalTextProcessorAndMsbtInfo(
+        MsbtInfo *info, const char *labelId, wchar_t *destBuf, u32 maxLen
+    );
 
     void loadTextFormatVars();
     void setupGX() const;

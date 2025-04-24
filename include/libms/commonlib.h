@@ -48,6 +48,8 @@ void LMSi_AnalyzeMessageBinary(struct MsbInfo *info, const char *type);
 int LMSi_SearchBlockByName(struct MsbInfo *info, const char *name);
 int LMSi_GetHashTableIndexFromLabel(const char *label, int tableSize);
 
+#define LMS_OFS_TO_PTR(ty, ptr, offset) (ty *)((char *)(ptr) + (offset))
+
 #ifdef __cplusplus
 }
 #endif
