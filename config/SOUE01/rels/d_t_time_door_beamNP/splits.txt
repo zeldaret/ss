@@ -7,9 +7,9 @@ Sections:
 	.bss        type:bss align:8
 
 REL/executor.c:
-	.text       start:0x00000000 end:0x00000064
+	.text       start:0x00000000 end:0x00000064 align:16
 
 REL/d/t/d_t_time_door_beam.cpp:
-	.text       start:0x00000070 end:0x000001CC
+	.text       start:0x00000070 end:0x000001CC align:16
 	.rodata     start:0x00000000 end:0x00000004
 	.data       start:0x00000000 end:0x00000084

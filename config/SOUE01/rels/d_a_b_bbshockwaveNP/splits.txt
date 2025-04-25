@@ -7,7 +7,7 @@ Sections:
 	.bss        type:bss align:8
 
 REL/executor.c:
-	.text       start:0x00000000 end:0x00000064
+	.text       start:0x00000000 end:0x00000064 align:16
 
 REL/d/a/b/d_a_b_bbshockwave.cpp:
-	.text       start:0x00000070 end:0x000006B8
+	.text       start:0x00000070 end:0x000006B8 align:16

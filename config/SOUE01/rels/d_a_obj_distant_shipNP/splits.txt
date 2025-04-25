@@ -7,7 +7,7 @@ Sections:
 	.bss        type:bss align:8
 
 REL/executor.c:
-	.text       start:0x00000000 end:0x00000064
+	.text       start:0x00000000 end:0x00000064 align:16
 
 REL/d/a/obj/d_a_obj_distant_ship.cpp:
-	.text       start:0x00000070 end:0x00000368
+	.text       start:0x00000070 end:0x00000368 align:16
