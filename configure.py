@@ -570,10 +570,10 @@ config.libs = [
         "progress_category": "core",
         "host": False,
         "objects": [
-            Object(NonMatching, "libms/commonlib.c"),
-            Object(NonMatching, "libms/flowfile.c"),
+            Object(Matching, "libms/commonlib.c"),
+            Object(Matching, "libms/flowfile.c"),
             Object(NonMatching, "libms/libms.c"),
-            Object(NonMatching, "libms/msgfile.c"),
+            Object(Matching, "libms/msgfile.c"),
         ],
     },
     {
