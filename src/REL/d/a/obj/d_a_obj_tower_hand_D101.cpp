@@ -593,7 +593,7 @@ void dAcOTowerHandD101_c::executeState_RemainOpen() {
 }
 void dAcOTowerHandD101_c::finalizeState_RemainOpen() {}
 
-extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_573;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_573;
 void dAcOTowerHandD101_c::initializeState_Close() {
     mMdl.getAnm().setPlayState(m3d::PLAY_MODE_1);
     mMdl.setRate(getCloseRate());

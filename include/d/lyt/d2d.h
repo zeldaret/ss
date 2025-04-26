@@ -46,7 +46,7 @@ public:
     virtual ~Multi_c() {}
     /* vt 0x0C */ virtual void draw() override;
     /* vt 0x10 */ virtual void animate();
-    /* vt 0x18 */ virtual void calc();
+    /* vt 0x14 */ virtual void calc();
     /* vt 0x18 */ virtual bool build(const char *name, m2d::ResAccIf_c *acc);
 
     void calcBefore();
@@ -258,6 +258,10 @@ struct AnmGroupBase_c {
         mpFrameCtrl->setFlags(FLAG_NO_LOOP);
     }
 
+    inline void setForwardLoop() {
+        mpFrameCtrl->setFlags(0);
+    }
+
     inline void setToStart() {
         m2d::FrameCtrl_c &ctrl = *mpFrameCtrl;
         ctrl.setCurrFrame(ctrl.getStartFrame());
@@ -287,6 +291,12 @@ struct AnmGroupBase_c {
     inline f32 getNextFrame() const {
         return mpFrameCtrl->getNextFrame();
     }
+
+#ifdef NEED_DIRECT_FRAMECTRL_ACCESS
+    m2d::FrameCtrl_c *getFrameCtrl() {
+        return mpFrameCtrl;
+    }
+#endif
 
 private:
     /* 0x04 */ void *field_0x04;

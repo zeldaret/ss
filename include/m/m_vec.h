@@ -262,6 +262,10 @@ public:
     mVec2_c(const mVec2_c &other) {
         set(other.x, other.y);
     }
+
+    mVec2_c(f32 fx, f32 fy) {
+        set(fx, fy);
+    }
 };
 
 #endif

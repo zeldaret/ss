@@ -8,6 +8,7 @@
 #include "egg/gfx/eggPostEffectBlur.h"
 #include "egg/gfx/eggScreenEffectBlur.h"
 #include "m/m_allocator.h"
+#include "m/m_fader_base.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "s/s_FPhase.h"
@@ -128,9 +129,19 @@ public:
         return sInstance;
     }
 
+    bool isFadedOut() const {
+        return mFader.isStatus(mFaderBase_c::FADED_OUT);
+    }
+
+    bool isFadedIn() const {
+        return mFader.isStatus(mFaderBase_c::FADED_IN);
+    }
+
     u8 getCurrRoomId() const {
         return curr_room_id;
     }
+
+    bool fn_801B3EE0();
 
 private:
     dRoom_c *createRoom(int roomid, bool flag0x40);

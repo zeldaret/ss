@@ -50,6 +50,14 @@ public:
 
     const char *fn_80117390(bool) const;
 
+    // This function appears to be related to a compiler quirk.
+    // 0x800D7B40 is in d_lyt_meter, but calling a static method
+    // on an instance via dLytMsgWindow_c::getInstance()->fn_800D7B40()
+    // causes the method to be emitted there.
+    static u16 fn_800D7B40() {
+        return sInstance->mEntryPointToTrigger;
+    }
+
 private:
     bool setTextToDisplay(const wchar_t *text);
     void createSubMsgManager(u8 type);

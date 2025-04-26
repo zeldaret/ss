@@ -3,8 +3,11 @@
 #include "common.h"
 #include "d/d_tag_processor.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_textbox.h"
+#include "d/lyt/meter/d_lyt_meter.h"
 #include "s/s_State.hpp"
+#include "toBeSorted/event_manager.h"
 
 STATE_DEFINE(dLytAutoExplain_c, Invisible);
 STATE_DEFINE(dLytAutoExplain_c, In);
@@ -164,6 +167,11 @@ bool dLytAutoExplain_c::setText(const wchar_t *text) {
 }
 
 bool dLytAutoExplain_c::checkSomethingMeter() {
-    // TODO - too many dependencies on dLytMeter
+    if (EventManager::isInEvent() || !dLytControlGame_c::getInstance()->isStateNormal() ||
+        dLytMeter_c::getItemSelect0x75A2() || dLytMeter_c::getMinusBtnFn800F7600() ||
+        dLytMeter_c::getDowsingFn800FE4B0()) {
+        return true;
+    }
+
     return false;
 }

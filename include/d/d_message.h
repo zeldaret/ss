@@ -30,10 +30,27 @@ public:
         return sTagProcessor;
     }
 
+    void init();
     void reset();
+
+    bool getField_0x328() const {
+        return field_0x328;
+    }
 
     bool getField_0x329() const {
         return field_0x329;
+    }
+
+    s32 getField_0x2FC() const {
+        return field_0x2FC;
+    }
+
+    void setField_0x2FC(s32 val) {
+        field_0x2FC = val;
+    }
+
+    s32 getField_0x32C() const {
+        return field_0x32C;
     }
 
     void setField_0x329(bool v) {
@@ -102,12 +119,15 @@ private:
 
     /* 0x2FC */ s32 field_0x2FC;
 
-    /* 0x300 */ u8 _0x300[0x329 - 0x300];
+    /* 0x300 */ u8 _0x300[0x328 - 0x300];
 
+    /* 0x328 */ bool field_0x328;
     /* 0x329 */ bool field_0x329;
     /* 0x32A */ bool field_0x32A;
 
-    /* 0x32B */ u8 _0x32B[0x334 - 0x32B];
+    /* 0x32B */ u8 field_0x32B;
+    /* 0x32C */ s32 field_0x32C;
+    /* 0x330 */ u8 _0x330[0x334 - 0x330];
 
     /* 0x334 */ u32 mMinigameResultPoints;
     /* 0x338 */ u32 mMinigameTime;

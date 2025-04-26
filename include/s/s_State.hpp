@@ -2,8 +2,8 @@
 #define S_STATE_H
 
 #include "s/s_FStateMgr.hpp"
-#include "s/s_StateMethodUsr_FI.hpp"
 #include "s/s_FStateVirtualID.hpp"
+#include "s/s_StateMethodUsr_FI.hpp"
 
 // Note: Ported from https://github.com/NSMBW-Community/NSMBW-Decomp/tree/master/include/dol/sLib
 // See include/s/README.txt for changes made
@@ -33,6 +33,16 @@
 #define UI_STATE_MGR_DECLARE(class_name) sFStateMgr_c<class_name, sStateMethodUsr_FI_c> mStateMgr;
 
 #define STATE_MGR(class_name) sFStateMgr_c<class_name, sStateMethodUsr_FI_c>
+
+#define STATE_MGR_DEFINE_UTIL_CHANGESTATE(class_name)                                                                  \
+    void changeState(const sStateIDIf_c &value) {                                                                      \
+        mStateMgr.changeState(value);                                                                                  \
+    }
+
+#define STATE_MGR_DEFINE_UTIL_ISSTATE(class_name)                                                                      \
+    bool isState(const sFStateID_c<class_name> &value) const {                                                         \
+        return *mStateMgr.getStateID() == value;                                                                       \
+    }
 
 // TODO this is probably not the whole solution.
 // The problems with this approach are:

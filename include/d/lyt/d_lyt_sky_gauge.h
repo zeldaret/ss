@@ -68,12 +68,20 @@ public:
     void setHeight(f32 height);
 
     static dLytSkyGauge_c *sInstance;
+    void setWantsIn() {
+        mWantsIn = true;
+    }
+    void setWantsOut() {
+        mWantsOut = true;
+    }
 
 private:
     STATE_FUNC_DECLARE(dLytSkyGauge_c, None);
     STATE_FUNC_DECLARE(dLytSkyGauge_c, In);
     STATE_FUNC_DECLARE(dLytSkyGauge_c, Move);
     STATE_FUNC_DECLARE(dLytSkyGauge_c, Out);
+
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytSkyGauge_c);
 
     /* 0x008 */ UI_STATE_MGR_DECLARE(dLytSkyGauge_c);
     /* 0x008 */ d2d::ResAccIf_c mResAcc;
