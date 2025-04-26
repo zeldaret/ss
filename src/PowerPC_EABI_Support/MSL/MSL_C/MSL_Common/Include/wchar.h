@@ -1,13 +1,12 @@
 #ifndef MSL_WCHAR_H
 #define MSL_WCHAR_H
-#include "common.h"
-#include "limits.h"
-#include "mbstring.h"
-#include "wprintf.h"
-#include "wstring.h"
 
 #ifdef __cplusplus
 extern "C" {
+#endif
+
+#ifndef __cplusplus
+typedef unsigned short wchar_t;
 #endif
 
 #define WCHAR_MIN SHRT_MIN

@@ -109,10 +109,6 @@ typedef int BOOL;
 
 typedef unsigned char byte_t;
 
-#ifdef __CWCC__
-typedef unsigned long size_t;
-#endif
-
 typedef u8 undefined1;
 typedef u16 undefined2;
 typedef u32 undefined4;

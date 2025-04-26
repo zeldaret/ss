@@ -3,7 +3,7 @@
  * Description:
  */
 
-#include "dolphin/os.h"
+#include "RVL/OS.h"
 
 inline static void InitDefaultHeap(void) {
 	void* arenaLo;
@@ -18,8 +18,8 @@ inline static void InitDefaultHeap(void) {
 	arenaLo = OSInitAlloc(arenaLo, arenaHi, 1);
 	OSSetArenaLo(arenaLo);
 
-	arenaLo = OSRoundUpPtr(arenaLo, 0x20);
-	arenaHi = OSRoundDownPtr(arenaHi, 0x20);
+	arenaLo = (void*)OSRoundUp32B(arenaLo);
+	arenaHi = (void*)OSRoundDown32B(arenaHi);
 
 	OSSetCurrentHeap(OSCreateHeap(arenaLo, arenaHi));
 	OSSetArenaLo(arenaLo = arenaHi);

@@ -38,7 +38,7 @@ void* __va_arg(_va_list_struct* list, int type) {
     } else {
         *reg = 8;
         addr = list->input_arg_area;
-        addr = (char*)(((u32)(addr) + ((size)-1)) & ~((size)-1));
+        addr = (char*)(((unsigned int)(addr) + ((size)-1)) & ~((size)-1));
         list->input_arg_area = addr + size;
     }
 

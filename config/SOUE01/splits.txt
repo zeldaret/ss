@@ -1013,9 +1013,6 @@ toBeSorted/d_underground.cpp:
 	.text       start:0x8018B800 end:0x8018B874 align:16
 	.ctors      start:0x804DB7E0 end:0x804DB7E4
 
-d/d_pouch.cpp:
-	.text       start:0x80189FA0 end:0x8018B4A4
-
 d/a/d_a_fish_mgr_base.cpp:
 	.text       start:0x8018B880 end:0x8018BFC8 align:16
 	.ctors      start:0x804DB7E4 end:0x804DB7E8
@@ -1398,7 +1395,7 @@ s/s_Math.cpp:
 s/s_Phase.cpp:
 	.text       start:0x802DEEB0 end:0x802DEF74 align:16
 
-toBeSorted/print.cpp:
+s/s_Print.cpp:
 	.text       start:0x802DEF80 end:0x802DF0E4 align:16
 
 c/c_counter.cpp:
@@ -2010,7 +2007,7 @@ d/col/cc/d_cc_d.cpp:
 	.text       start:0x80353B50 end:0x80354298 align:16
 	.data       start:0x80548340 end:0x80548580
 
-d/col/cc/d_cc_list.cpp:
+toBeSorted/col/cc/d_cc_list.cpp:
 	.text       start:0x803542A0 end:0x803543C8 align:16
 
 toBeSorted/col/cc/unk_flag_check.cpp:
