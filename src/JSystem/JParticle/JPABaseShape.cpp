@@ -1298,11 +1298,15 @@ static void makeColorTable(GXColor** o_color_table, JPAClrAnmKeyData const* i_da
             a = i_data[j].color.a;
             j++;
             if (j < param_2) {
+                f32 r_r = i_data[j].color.r;
+                f32 r_g = i_data[j].color.g;
+                f32 r_b = i_data[j].color.b;
+                f32 r_a = i_data[j].color.a;
                 f32 base_step = 1.0f / (i_data[j].index - i_data[j - 1].index);
-                r_step = base_step * (i_data[j].color.r - r);
-                g_step = base_step * (i_data[j].color.g - g);
-                b_step = base_step * (i_data[j].color.b - b);
-                a_step = base_step * (i_data[j].color.a - a);
+                r_step = base_step * (r_r - r);
+                g_step = base_step * (r_g - g);
+                b_step = base_step * (r_b - b);
+                a_step = base_step * (r_a - a);
             } else {
                 r_step = g_step = b_step = a_step = 0.0f;
             }
@@ -1356,10 +1360,11 @@ JPABaseShape::JPABaseShape(u8 const* pData, EGG::Heap* pHeap) {
 }
 
 /* 803C4360-803C436C 021480 000C+00 0/1 0/0 0/0 .data            st_bm__12JPABaseShape */
-GXBlendMode JPABaseShape::st_bm[3] = {
+GXBlendMode JPABaseShape::st_bm[4] = {
     GX_BM_NONE,
     GX_BM_BLEND,
     GX_BM_LOGIC,
+    GX_BM_SUBTRACT,
 };
 
 /* 803C436C-803C4394 02148C 0028+00 0/1 0/0 0/0 .data            st_bf__12JPABaseShape */
@@ -1451,7 +1456,7 @@ JPABaseShapeAlphaArg JPABaseShape::st_aa[5] = {
         GX_CA_A0,
         GX_CA_ZERO,
         GX_CA_ZERO,
-        GX_CA_A0,
+        GX_CA_TEXA,
         GX_TEV_SUB,
         GX_CS_SCALE_1,
     },
@@ -1459,7 +1464,7 @@ JPABaseShapeAlphaArg JPABaseShape::st_aa[5] = {
         GX_CA_A0,
         GX_CA_ZERO,
         GX_CA_ZERO,
-        GX_CA_A0,
+        GX_CA_TEXA,
         GX_TEV_SUB,
         GX_CS_SCALE_2,
     },

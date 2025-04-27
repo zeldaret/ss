@@ -56,7 +56,7 @@ public:
     JPABaseShape(u8 const*, EGG::Heap*);
     void setGX(JPAEmitterWorkData*) const;
 
-    static GXBlendMode st_bm[3];
+    static GXBlendMode st_bm[4];
     static GXBlendFactor st_bf[10];
     static GXLogicOp st_lo[16];
     static GXCompare st_c[8];
