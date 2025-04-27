@@ -43,12 +43,12 @@ bool JPAResourceManager::checkUserIndexDuplication(u16 usrIdx) const {
 
 /* 80273EEC-80273F8C 26E82C 00A0+00 0/0 2/2 0/0 .text
  * swapTexture__18JPAResourceManagerFPC7ResTIMGPCc              */
-const ResTIMG* JPAResourceManager::swapTexture(ResTIMG const* img, char const* swapName) {
-    const ResTIMG* ret = NULL;
+const EGG::ResTIMG* JPAResourceManager::swapTexture(EGG::ResTIMG const* img, char const* swapName) {
+    const EGG::ResTIMG* ret = NULL;
 
     for (s32 i = 0; i < mTexNum; i++) {
         if (strcmp(swapName, mpTexArr[i]->getName()) == 0) {
-            JUTTexture* tex = mpTexArr[i]->getJUTTexture();
+            EGG::Texture* tex = mpTexArr[i]->getJUTTexture();
             ret = tex->getTexInfo();
             tex->storeTIMG(img, (u8)0);
             break;

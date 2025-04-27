@@ -1208,7 +1208,7 @@ config.libs = [
     JSystemLib(
         "JParticle",
         [
-            Object(NonMatching, "JSystem/JParticle/JPAResourceManager.cpp"),
+            Object(Matching, "JSystem/JParticle/JPAResourceManager.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAResource.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPABaseShape.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAExtraShape.cpp"),

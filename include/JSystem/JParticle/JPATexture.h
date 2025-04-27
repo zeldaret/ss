@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "rvl/GX.h"
-#include "JSystem/JUtility/JUTTexture.h"
+#include "egg/gfx/eggTexture.h"
 
 /**
  * @ingroup jsystem-jparticle
@@ -13,7 +13,7 @@ struct JPATextureData {
     // Probably magic / size / flags up top here, but they're unused.
     /* 0x00 */ char field_0x00[0x0C];
     /* 0x0C */ char mName[0x14];
-    /* 0x20 */ ResTIMG mResTIMG;
+    /* 0x20 */ EGG::ResTIMG mResTIMG;
 };
 
 /**
@@ -27,11 +27,11 @@ public:
 
     void load(GXTexMapID texMapID) { mTexture.load(texMapID); }
 
-    JUTTexture* getJUTTexture() { return &mTexture; }
+    EGG::Texture* getJUTTexture() { return &mTexture; }
     const char* getName() const { return mpData->mName; }
 
 public:
-    JUTTexture mTexture;
+    EGG::Texture mTexture;
     const JPATextureData* mpData;
 };
 
