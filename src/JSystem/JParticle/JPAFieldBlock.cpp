@@ -137,7 +137,8 @@ void JPAFieldVortex::prepare(JPAEmitterWorkData* work, JPAFieldBlock* block) {
  * calc__14JPAFieldVortexFP18JPAEmitterWorkDataP13JPAFieldBlockP15JPABaseParticle */
 void JPAFieldVortex::calc(JPAEmitterWorkData* work, JPAFieldBlock* block, JPABaseParticle* ptcl) {
     EGG::Vector3f vec;
-    vec = ptcl->mLocalPosition - field_0x10.dot(ptcl->mLocalPosition) * field_0x10;
+    vec = field_0x10.dot(ptcl->mLocalPosition) * field_0x10;
+    vec = ptcl->mLocalPosition - vec;
     f32 mag = vec.squaredLength();
     if (mag > field_0x1c) {
         mag = block->getMagRndm();

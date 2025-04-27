@@ -1216,7 +1216,7 @@ config.libs = [
             Object(Matching, "JSystem/JParticle/JPAChildShape.cpp"),
             Object(Matching, "JSystem/JParticle/JPAExTexShape.cpp"),
             Object(Matching, "JSystem/JParticle/JPADynamicsBlock.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPAFieldBlock.cpp"),
+            Object(Matching, "JSystem/JParticle/JPAFieldBlock.cpp"),
             Object(Matching, "JSystem/JParticle/JPAKeyBlock.cpp"),
             Object(Matching, "JSystem/JParticle/JPATexture.cpp"),
             Object(Matching, "JSystem/JParticle/JPAResourceLoader.cpp"),
