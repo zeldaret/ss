@@ -561,8 +561,8 @@ void JPADrawRotBillboard(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
     if (param_1->checkStatus(8) == 0) {
         EGG::Vector3f local_48;
         MTXMultVec(work->mPosCamMtx, param_1->mPosition, local_48);
-        f32 sinRot = nw4r::math::SinIdx(param_1->mRotateAngle);
-        f32 cosRot = nw4r::math::CosIdx(param_1->mRotateAngle);
+        f32 sinRot = nw4r::math::SinIdx((s16)param_1->mRotateAngle);
+        f32 cosRot = nw4r::math::CosIdx((s16)param_1->mRotateAngle);
         f32 particleX = work->mGlobalPtclScl.x * param_1->mParticleScaleX;
         f32 particleY = work->mGlobalPtclScl.y * param_1->mParticleScaleY;
         
@@ -618,8 +618,8 @@ void JPADrawRotYBillboard(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
     if (param_1->checkStatus(8) == 0) {
         EGG::Vector3f local_48;
         MTXMultVec(work->mPosCamMtx, param_1->mPosition, local_48);
-        f32 sinRot = nw4r::math::SinIdx(param_1->mRotateAngle);
-        f32 cosRot = nw4r::math::CosIdx(param_1->mRotateAngle);
+        f32 sinRot = nw4r::math::SinIdx((s16)param_1->mRotateAngle);
+        f32 cosRot = nw4r::math::CosIdx((s16)param_1->mRotateAngle);
         Mtx local_38;
         f32 particleX = work->mGlobalPtclScl.x * param_1->mParticleScaleX;
         f32 particleY = work->mGlobalPtclScl.y * param_1->mParticleScaleY;
@@ -878,8 +878,8 @@ void JPADrawDirection(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
  * JPADrawRotDirection__FP18JPAEmitterWorkDataP15JPABaseParticle */
 void JPADrawRotDirection(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
     if (param_1->checkStatus(8) == 0) {
-        f32 sinRot = nw4r::math::SinIdx(param_1->mRotateAngle);
-        f32 cosRot = nw4r::math::CosIdx(param_1->mRotateAngle);
+        f32 sinRot = nw4r::math::SinIdx((s16)param_1->mRotateAngle);
+        f32 cosRot = nw4r::math::CosIdx((s16)param_1->mRotateAngle);
         EGG::Vector3f local_6c;
         EGG::Vector3f local_78;
         p_direction[param_0->mDirType](param_0, param_1, &local_6c);
@@ -959,8 +959,8 @@ void JPADrawDBillboard(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
  * JPADrawRotation__FP18JPAEmitterWorkDataP15JPABaseParticle    */
 void JPADrawRotation(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
     if (param_1->checkStatus(8) == 0) {
-        f32 sinRot = nw4r::math::SinIdx(param_1->mRotateAngle);
-        f32 cosRot = nw4r::math::CosIdx(param_1->mRotateAngle);
+        f32 sinRot = nw4r::math::SinIdx((s16)param_1->mRotateAngle);
+        f32 cosRot = nw4r::math::CosIdx((s16)param_1->mRotateAngle);
         f32 particleX = param_0->mGlobalPtclScl.x * param_1->mParticleScaleX;
         f32 particleY = param_0->mGlobalPtclScl.y * param_1->mParticleScaleY;
         Mtx auStack_88;
@@ -1073,8 +1073,8 @@ void JPADrawStripe(JPAEmitterWorkData* param_0) {
         param_0->mpCurNode = node;
         JPABaseParticle* particle = node->getObject();
         local_ec.set(particle->mPosition);
-        dVar11 = nw4r::math::SinIdx(particle->mRotateAngle);
-        dVar12 = nw4r::math::CosIdx(particle->mRotateAngle);
+        dVar11 = nw4r::math::SinIdx((s16)particle->mRotateAngle);
+        dVar12 = nw4r::math::CosIdx((s16)particle->mRotateAngle);
         local_e0[0].set(-particle->mParticleScaleX * dVar14, 0.0f, 0.0f);
         local_e0[0].set(local_e0[0].x * dVar12, 0.0f, local_e0[0].x * dVar11);
         local_e0[1].set(particle->mParticleScaleX * dVar13, 0.0f, 0.0f);
@@ -1163,8 +1163,8 @@ void JPADrawStripeX(JPAEmitterWorkData* param_0) {
         param_0->mpCurNode = node;
         JPABaseParticle* particle = node->getObject();
         local_b4.set(particle->mPosition);
-        dVar11 = nw4r::math::SinIdx(particle->mRotateAngle);
-        dVar12 = nw4r::math::CosIdx(particle->mRotateAngle);
+        dVar11 = nw4r::math::SinIdx((s16)particle->mRotateAngle);
+        dVar12 = nw4r::math::CosIdx((s16)particle->mRotateAngle);
         local_a8[0].set(-particle->mParticleScaleX * local_154, 0.0f, 0.0f);
         local_a8[0].set(local_a8[0].x * dVar12, 0.0f, local_a8[0].x * dVar11);
         local_a8[1].set(particle->mParticleScaleX * local_158, 0.0f, 0.0f);
@@ -1213,8 +1213,8 @@ void JPADrawStripeX(JPAEmitterWorkData* param_0) {
         param_0->mpCurNode = node;
         JPABaseParticle* particle = node->getObject();
         local_b4.set(particle->mPosition);
-        dVar11 = nw4r::math::CosIdx(particle->mRotateAngle);
-        dVar12 = -nw4r::math::SinIdx(particle->mRotateAngle);
+        dVar11 = nw4r::math::CosIdx((s16)particle->mRotateAngle);
+        dVar12 = -nw4r::math::SinIdx((s16)particle->mRotateAngle);
         local_a8[0].set(-particle->mParticleScaleY * local_15c, 0.0f, 0.0f);
         local_a8[0].set(local_a8[0].x * dVar12, 0.0f, local_a8[0].x * dVar11);
         local_a8[1].set(particle->mParticleScaleY * local_160, 0.0f, 0.0f);

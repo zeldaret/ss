@@ -6,6 +6,7 @@
 #include "JSystem/JParticle/JPAExTexShape.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JParticle/JPAEmitter.h"
+#include "nw4r/math/math_triangular.h"
 #include "rvl/MTX.h"
 #include "rvl/GX.h"
 
@@ -38,6 +39,37 @@ JPAExTexShape::JPAExTexShape(u8 const* data) {
     mpData = (const JPAExTexShapeData*)data;
 }
 
-void JPAExTexShape::fn_8031DE80(JPABaseShape* shp, f32) {
-    // TODO
+void JPAExTexShape::fn_8031DE80(const JPABaseShape *shp, f32 f) const {
+    f32 _0x38_x_0x24 = f * mpData->field_0x38 + mpData->field_0x24;
+    f32 _0x3C_x_0x28 = f * mpData->field_0x3C + mpData->field_0x28;
+    f32 _0x40_x_0x2C = f * mpData->field_0x40 + mpData->field_0x2C;
+    f32 _0x44_x_0x30 = f * mpData->field_0x44 + mpData->field_0x30;
+
+    f32 tilingS = 0.5f * (shp->getTilingS() + 1.0f);
+    f32 tilingT = 0.5f * (shp->getTilingT() + 1.0f);
+    
+    s16 v = f * mpData->field_0x48 * 32768.0f + mpData->field_0x34 * 32768.0f;
+    f32 sin = nw4r::math::SinIdx(v);
+    f32 cos = nw4r::math::CosIdx(v);
+
+    f32 fS2 = tilingS + _0x38_x_0x24;
+    f32 fT2 = tilingT + _0x3C_x_0x28;
+
+    Mtx texMtx;
+
+    texMtx[0][0] = _0x40_x_0x2C * cos;
+    texMtx[0][1] = -_0x40_x_0x2C * sin;
+    texMtx[0][2] = 0.0f;
+    texMtx[0][3] = tilingS + _0x40_x_0x2C * (sin * fT2 - cos * fS2);
+
+    texMtx[1][0] = _0x44_x_0x30 * sin;
+    texMtx[1][1] = _0x44_x_0x30 * cos;
+    texMtx[1][2] = 0.0f;
+    texMtx[1][3] = tilingT + (-_0x44_x_0x30) * (sin * fS2 + cos * fT2);
+
+    texMtx[2][0] = 0.0f;
+    texMtx[2][1] = 0.0f;
+    texMtx[2][2] = 0.0f;
+    texMtx[2][3] = 1.0f;
+    GXLoadTexMtxImm(texMtx, 0x24, GX_MTX2x4);
 }

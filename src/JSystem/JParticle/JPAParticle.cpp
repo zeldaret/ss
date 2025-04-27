@@ -155,8 +155,8 @@ void JPABaseParticle::init_c(JPAEmitterWorkData* work, JPABaseParticle* parent) 
     f32 base_speed = csp->getBaseVel() * (csp->getBaseVelRndm() * emtr->get_r_zp() + 1.0f);
     EGG::Vector3f base_vel(emtr->get_r_zp(), emtr->get_r_zp(), emtr->get_r_zp());
     base_vel.setLength(base_speed);
-    mVelType1 = csp->getVelInhRate() * parent->mVelType1 + base_vel;
-    mVelType0 = csp->getVelInhRate() * parent->mVelType2;
+    mVelType1 = parent->mVelType1 * csp->getVelInhRate() + base_vel;
+    mVelType0 = parent->mVelType2 * csp->getVelInhRate();
     
     mMoment = parent->mMoment;
     if (csp->isFieldAffected()) {

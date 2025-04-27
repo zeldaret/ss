@@ -17,7 +17,16 @@ struct JPAExTexShapeData {
 
     /* 0x08 */ u32 mFlags;
     /* 0x0C */ f32 mIndTexMtx[2][3];
-    /* 0x24 */ u8 _0x24[0x4C - 0x24];
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2C;
+    /* 0x30 */ f32 field_0x30;
+    /* 0x34 */ f32 field_0x34;
+    /* 0x38 */ f32 field_0x38;
+    /* 0x3C */ f32 field_0x3C;
+    /* 0x40 */ f32 field_0x40;
+    /* 0x44 */ f32 field_0x44;
+    /* 0x48 */ f32 field_0x48;
     /* 0x4C */ u8 field_0x4C;
     /* 0x4D */ s8 mExpScale;
     /* 0x4E */ s8 mIndTexIdx;
@@ -42,7 +51,7 @@ public:
 
 public:
     const JPAExTexShapeData* mpData;
-    void fn_8031DE80(JPABaseShape *bsp, f32);
+    void fn_8031DE80(const JPABaseShape *bsp, f32) const;
 };
 
 void JPALoadExTex(JPAEmitterWorkData*);

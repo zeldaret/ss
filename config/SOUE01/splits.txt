@@ -1778,6 +1778,7 @@ JSystem/JParticle/JPAChildShape.cpp:
 
 JSystem/JParticle/JPAExTexShape.cpp:
 	.text       start:0x8031DD50 end:0x8031E094 align:16
+	.sdata2     start:0x8057CEB8 end:0x8057CED8
 
 JSystem/JParticle/JPADynamicsBlock.cpp:
 	.text       start:0x8031E0A0 end:0x8031F020 align:16
