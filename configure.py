@@ -260,6 +260,25 @@ cflags_egg = [
 # nw4r flags
 cflags_nw4r = [*cflags_base, "-ipa file", "-fp_contract off", ""]
 
+cflags_hbm = [
+    # TODO
+    *cflags_base,
+]
+
+# TRK flags, copied from TP
+cflags_trk = [
+    *cflags_base,
+    "-use_lmw_stmw on",
+    "-rostr",
+    "-str reuse",
+    "-gccinc",
+    "-common off",
+    "-inline deferred,auto",
+    "-char signed",
+    "-sdata 0",
+    "-sdata2 0",
+]
+
 # REL flags
 cflags_rel = [
     *cflags_framework,
@@ -306,6 +325,26 @@ def nw4rLib(lib_name, objects, extra_cflags=[]):
     }
 
 
+def JSystemLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
+    return {
+        "lib": lib_name,
+        # probably?
+        "mw_version": "Wii/1.5",
+        "cflags": cflags_framework,
+        "progress_category": "jsystem",
+        "host": False,
+        "objects": objects,
+    }
+
+
+# RVL SDK flags
+cflags_rvl = [
+    *cflags_base,
+    "-enc SJIS",
+    "-fp_contract off",
+    "-ipa file",
+]
+
 Matching = True
 NonMatching = False
 Equivalent = (
@@ -318,7 +357,7 @@ def MatchingFor(*versions):
     return config.version in versions
 
 
-config.warn_missing_config = False
+config.warn_missing_config = True
 config.warn_missing_source = False
 config.libs = [
     {
@@ -329,8 +368,36 @@ config.libs = [
         "progress_category": "game",
         "host": False,
         "objects": [
-            Object(Matching, "d/flag/flag_managers.cpp"),
-            Object(NonMatching, "toBeSorted/special_item_drop_mgr.cpp"),
+            Object(NonMatching, "toBeSorted/d_lib.cpp"),
+            Object(NonMatching, "toBeSorted/unk_sorajima_list.cpp"),
+            Object(NonMatching, "toBeSorted/mpls.cpp"),
+            Object(NonMatching, "toBeSorted/mdl_base.cpp"),
+            Object(NonMatching, "toBeSorted/d_assert.cpp"),
+            Object(NonMatching, "toBeSorted/d_jstudio.cpp"),
+            Object(Matching, "toBeSorted/save_file.cpp"),
+            Object(NonMatching, "toBeSorted/file_manager.cpp"),
+            Object(NonMatching, "toBeSorted/save_manager.cpp"),
+            Object(NonMatching, "toBeSorted/save_requests.cpp"),
+            Object(NonMatching, "toBeSorted/d_d2d.cpp"),
+            Object(NonMatching, "toBeSorted/d_d3d.cpp"),
+            Object(
+                Matching, "toBeSorted/d_scn_callback.cpp", extra_cflags=["-opt noloop"]
+            ),
+            Object(NonMatching, "toBeSorted/d_unk_proc.cpp"),
+            Object(NonMatching, "toBeSorted/d_shadow.cpp"),
+            Object(NonMatching, "toBeSorted/d_unk_mdl_stuff_1.cpp"),
+            Object(NonMatching, "toBeSorted/d_unk_mdl_stuff_2.cpp"),
+            Object(NonMatching, "toBeSorted/blur_and_palette_manager.cpp"),
+            Object(NonMatching, "toBeSorted/d_effects_1.cpp"),
+            Object(NonMatching, "toBeSorted/d_effects_2.cpp"),
+            Object(NonMatching, "toBeSorted/sound_info.cpp"),
+            Object(NonMatching, "d/a/d_a_base.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_base.cpp"),
+            Object(NonMatching, "d/a/e/d_a_e_base.cpp"),
+            Object(NonMatching, "d/a/npc/d_a_npc.cpp"),
+            Object(NonMatching, "toBeSorted/d_npc_common.cpp"),
+            Object(NonMatching, "d/a/npc/d_a_ordinary_npc.cpp"),
+            Object(NonMatching, "d/d_ac_npc_kyui.cpp"),
             Object(Matching, "d/d_base.cpp"),
             Object(NonMatching, "d/d_carry.cpp"),
             Object(Matching, "d/d_cc.cpp"),
@@ -339,51 +406,68 @@ config.libs = [
             Object(NonMatching, "d/d_dylink.cpp"),
             Object(Matching, "d/d_fader.cpp"),
             Object(Matching, "d/d_font_manager.cpp"),
+            Object(NonMatching, "d/d_gfx.cpp"),
             Object(Matching, "d/d_heap.cpp"),
+            Object(NonMatching, "d/d_main.cpp"),
+            Object(NonMatching, "d/d_pad.cpp"),
+            Object(NonMatching, "d/d_pad_player.cpp"),
+            Object(NonMatching, "d/d_player.cpp"),
             Object(Matching, "d/d_rawarchive.cpp"),
             Object(Matching, "d/d_scene.cpp"),
+            Object(NonMatching, "d/d_state.cpp"),
             Object(Matching, "d/d_stage_parse.cpp"),
             Object(NonMatching, "d/d_sys.cpp"),
-            Object(NonMatching, "toBeSorted/sound_info.cpp"),
+            Object(NonMatching, "d/d_sys_init.cpp"),
             Object(Matching, "toBeSorted/arc_callback_handler.cpp"),
-            Object(NonMatching, "d/a/d_a_base.cpp"),
-            Object(NonMatching, "d/a/d_a_item.cpp"),
-            Object(NonMatching, "d/a/obj/d_a_obj_base.cpp"),
-            Object(NonMatching, "d/a/npc/d_a_npc.cpp"),
-            Object(NonMatching, "d/a/npc/d_a_ordinary_npc.cpp"),
-            Object(NonMatching, "d/a/obj/d_a_obj_bomb.cpp"),
-            Object(NonMatching, "d/a/obj/d_a_obj_arrow.cpp"),
-            Object(NonMatching, "d/a/obj/d_a_obj_boomerang.cpp"),
-            Object(NonMatching, "d/a/obj/d_a_obj_fairy.cpp"),
-            Object(NonMatching, "d/a/obj/d_a_obj_tbox.cpp"),
-            Object(NonMatching, "d/a/obj/d_a_obj_time_area.cpp"),
-            Object(Matching, "d/a/obj/d_a_obj_switch.cpp"),
-            Object(Matching, "d/a/obj/d_a_obj_water_spout.cpp"),
-            Object(Matching, "d/tg/d_t_switch.cpp"),
+            Object(NonMatching, "d/d_video.cpp"),
+            Object(NonMatching, "d/d_cursor_hit_check.cpp"),
+            Object(NonMatching, "toBeSorted/d_rumble.cpp"),
+            Object(NonMatching, "toBeSorted/string_util.cpp"),
+            Object(NonMatching, "toBeSorted/cx_util.cpp"),
+            Object(NonMatching, "toBeSorted/area_math.cpp"),
+            Object(NonMatching, "toBeSorted/deg_angle_util.cpp"),
+            Object(NonMatching, "toBeSorted/reload_color_fader.cpp"),
             Object(Matching, "toBeSorted/arc_managers/current_stage_arc_manager.cpp"),
             Object(Matching, "toBeSorted/arc_managers/oarc_manager.cpp"),
+            Object(NonMatching, "toBeSorted/arc_managers/oarc_control.cpp"),
             Object(Matching, "toBeSorted/arc_managers/layout_arc_manager.cpp"),
+            Object(NonMatching, "toBeSorted/arc_managers/layout_arc_control.cpp"),
+            Object(NonMatching, "toBeSorted/base_tables.cpp"),
+            Object(NonMatching, "toBeSorted/unk_vec_math.cpp"),
+            Object(NonMatching, "toBeSorted/unk_mdl_cc.cpp"),
+            Object(NonMatching, "toBeSorted/d_camera.cpp"),
+            Object(NonMatching, "toBeSorted/d_event_1.cpp"),
+            Object(NonMatching, "toBeSorted/unk_map_cam.cpp"),
+            Object(NonMatching, "toBeSorted/unk_vec_math_event.cpp"),
             Object(NonMatching, "toBeSorted/attention.cpp"),
+            Object(NonMatching, "toBeSorted/d_t_camera.cpp"),
             Object(Matching, "toBeSorted/dowsing_target.cpp"),
-            Object(NonMatching, "toBeSorted/time_area_mgr.cpp"),
-            Object(NonMatching, "toBeSorted/nand_request_thread.cpp"),
-            Object(Matching, "toBeSorted/save_file.cpp"),
-            Object(Matching, "toBeSorted/counters/counter.cpp"),
-            Object(NonMatching, "toBeSorted/counters/counters.cpp"),
-            Object(Matching, "toBeSorted/counters/rupee_counter.cpp"),
-            Object(Matching, "toBeSorted/counters/arrow_counter.cpp"),
-            Object(Matching, "toBeSorted/counters/bomb_counter.cpp"),
-            Object(Matching, "toBeSorted/counters/tear_counter.cpp"),
-            Object(Matching, "toBeSorted/counters/slingshot_seed_counter.cpp"),
-            Object(Matching, "toBeSorted/counters/key_piece_counter.cpp"),
-            Object(Matching, "toBeSorted/counters/extra_wallet_counter.cpp"),
-            Object(NonMatching, "d/d_cursor_hit_check.cpp"),
+            Object(NonMatching, "toBeSorted/d_event_2.cpp"),
+            Object(NonMatching, "toBeSorted/d_event_director.cpp"),
+            Object(NonMatching, "toBeSorted/minigame_mgr.cpp"),
+            Object(NonMatching, "toBeSorted/salvage_mgr.cpp"),
+            Object(NonMatching, "toBeSorted/d_path.cpp"),
+            Object(NonMatching, "toBeSorted/d_area.cpp"),
             Object(Matching, "d/lyt/d2d.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_draw_mark.cpp"),
             Object(NonMatching, "d/lyt/d_textbox.cpp"),
             Object(Matching, "d/lyt/d_window.cpp"),
             Object(Matching, "d/d_textunk.cpp"),
             Object(NonMatching, "d/d_textwindow_unk.cpp"),
             Object(NonMatching, "d/d_tag_processor.cpp"),
+            Object(NonMatching, "toBeSorted/time_area_mgr.cpp"),
+            Object(NonMatching, "toBeSorted/nand_request_thread.cpp"),
+            Object(NonMatching, "toBeSorted/unk_gfx.cpp"),
+            Object(Matching, "d/flag/flag_managers.cpp"),
+            Object(NonMatching, "toBeSorted/bigboss_model_math_stuff.cpp"),
+            Object(NonMatching, "toBeSorted/actor_event_flow_manager_related.cpp"),
+            Object(NonMatching, "d/d_lyt_base.cpp"),
+            Object(NonMatching, "toBeSorted/unk_npc_path_stuff_1.cpp"),
+            Object(NonMatching, "toBeSorted/unk_npc_path_stuff_2.cpp"),
+            Object(NonMatching, "toBeSorted/unk_bird_stuff.cpp"),
+            Object(NonMatching, "toBeSorted/timekeeper.cpp"),
+            Object(NonMatching, "toBeSorted/special_item_drop_mgr.cpp"),
+            Object(NonMatching, "toBeSorted/d_particle.cpp"),
             Object(Matching, "d/lyt/meter/d_lyt_meter.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_unk.cpp"),
             Object(Matching, "d/lyt/meter/d_lyt_meter_a_btn.cpp"),
@@ -409,6 +493,7 @@ config.libs = [
             Object(Matching, "d/lyt/d_lyt_common_a_btn.cpp"),
             Object(Matching, "d/lyt/d_lyt_common_icon_material.cpp"),
             Object(Matching, "d/lyt/d_lyt_common_icon_item.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_target_bird.cpp"),
             Object(NonMatching, "d/lyt/msg_window/d_lyt_msg_window.cpp"),
             Object(NonMatching, "d/lyt/msg_window/d_lyt_msg_window_select_btn.cpp"),
             Object(Matching, "d/lyt/msg_window/d_lyt_msg_window_common.cpp"),
@@ -419,7 +504,7 @@ config.libs = [
             Object(Matching, "d/lyt/msg_window/d_lyt_msg_window_wood.cpp"),
             Object(Matching, "d/lyt/msg_window/d_lyt_msg_window_stone.cpp"),
             Object(Matching, "d/lyt/msg_window/d_lyt_msg_window_demo.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_simple_window.cpp"),
+            Object(NonMatching, "d/lyt/msg_window/d_lyt_simple_window.cpp"),
             Object(Matching, "d/lyt/d_lyt_auto_caption.cpp"),
             Object(Matching, "d/lyt/d_lyt_auto_explain.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_map_capture.cpp"),
@@ -429,35 +514,125 @@ config.libs = [
             Object(Matching, "d/lyt/d_lyt_area_caption.cpp"),
             Object(Matching, "d/lyt/d_lyt_wipe.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_help.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_system_window.cpp"),
             Object(Matching, "d/lyt/d_lyt_bird_gauge.cpp"),
             Object(Matching, "d/lyt/d_lyt_sky_gauge.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_deposit_stock.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_deposit_box.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_boss_gauge.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_pause_back.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_pause_disp_00.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_pause_disp_01.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_pause_info.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_pause_text.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_save_msg_window.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_util_items.cpp"),
+            Object(Matching, "d/lyt/d_lyt_common_arrow.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_common_title.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_cursor_stick.cpp"),
+            Object(NonMatching, "toBeSorted/fi_context.cpp"),
+            Object(NonMatching, "toBeSorted/item_mdl_name.cpp"),
+            Object(Matching, "toBeSorted/counters/counter.cpp"),
+            Object(NonMatching, "toBeSorted/counters/counters.cpp"),
+            Object(Matching, "toBeSorted/counters/rupee_counter.cpp"),
+            Object(Matching, "toBeSorted/counters/arrow_counter.cpp"),
+            Object(Matching, "toBeSorted/counters/bomb_counter.cpp"),
+            Object(Matching, "toBeSorted/counters/tear_counter.cpp"),
+            Object(Matching, "toBeSorted/counters/slingshot_seed_counter.cpp"),
+            Object(Matching, "toBeSorted/counters/key_piece_counter.cpp"),
+            Object(Matching, "toBeSorted/counters/extra_wallet_counter.cpp"),
+            Object(NonMatching, "toBeSorted/item_mdl.cpp"),
+            Object(NonMatching, "toBeSorted/unk_screen_effect.cpp"),
+            Object(NonMatching, "toBeSorted/revision_info.cpp"),
+            Object(NonMatching, "d/a/d_a_bullet_base.cpp"),
             Object(Matching, "d/lyt/d_lyt_fader.cpp"),
             Object(Matching, "d/lyt/d_screen_fader.cpp"),
+            Object(NonMatching, "d/a/d_a_bird_base.cpp"),
+            Object(NonMatching, "d/a/d_a_door_base.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_map_popup.cpp"),
+            Object(NonMatching, "d/d_pouch.cpp"),
+            Object(NonMatching, "toBeSorted/d_beacon.cpp"),
+            Object(NonMatching, "toBeSorted/d_underground.cpp"),
+            Object(NonMatching, "d/a/d_a_fish_mgr_base.cpp"),
+            Object(NonMatching, "d/a/d_a_fish_base.cpp"),
+            Object(NonMatching, "toBeSorted/sword_proj_effect_list.cpp"),
             Object(NonMatching, "d/a/d_a_insect.cpp"),
+            Object(NonMatching, "toBeSorted/unk_save_time.cpp"),
+            Object(NonMatching, "d/a/d_a_salbage_obj.cpp"),
+            Object(NonMatching, "d/a/d_a_salbage_npc.cpp"),
+            Object(NonMatching, "toBeSorted/d_unk_pad.cpp"),
+            Object(NonMatching, "toBeSorted/goddess_chest_counter.cpp"),
+            Object(NonMatching, "toBeSorted/misc_actor.cpp"),
+            Object(NonMatching, "toBeSorted/d_hbm"),
             Object(NonMatching, "d/d_stage_mgr.cpp"),
             Object(NonMatching, "d/d_last.cpp"),
+            Object(NonMatching, "d/d_camera.cpp"),
+            Object(NonMatching, "d/d_light_obj.cpp"),
+            Object(NonMatching, "d/tg/d_t_weather.cpp"),
             Object(NonMatching, "d/d_message.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
+            Object(NonMatching, "d/d_stage_select.cpp"),
             Object(Matching, "d/d_room.cpp"),
-            Object(NonMatching, "d/d_cs_base.cpp"),
-            Object(NonMatching, "d/d_cs_game.cpp"),
+            Object(NonMatching, "d/tg/d_t_vr_box.cpp"),
             Object(Matching, "d/d_sc_title.cpp"),
             Object(NonMatching, "d/d_sc_game.cpp"),
-            Object(Matching, "d/lyt/d_lyt_common_arrow.cpp"),
-            Object(NonMatching, "toBeSorted/file_manager.cpp"),
-            Object(NonMatching, "toBeSorted/save_manager.cpp"),
-            Object(NonMatching, "toBeSorted/d_d3d.cpp"),
-            Object(
-                Matching,
-                "toBeSorted/d_scn_callback.cpp",
-                extra_cflags=["-opt noloop"],
-            ),
-            Object(NonMatching, "toBeSorted/d_unk_proc.cpp"),
-            Object(NonMatching, "toBeSorted/blur_and_palette_manager.cpp"),
+            Object(NonMatching, "d/d_cs_base.cpp"),
+            Object(NonMatching, "d/d_cs_game.cpp"),
+            Object(NonMatching, "d/a/d_a_player.cpp"),
+            Object(NonMatching, "d/a/d_a_item.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_bomb.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_arrow.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_boomerang.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_fairy.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_tbox.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_time_area.cpp"),
+            Object(Matching, "d/a/obj/d_a_obj_switch.cpp"),
+            Object(NonMatching, "d/d_thp_player.cpp"),
+            Object(NonMatching, "d/tg/d_t_alldie.cpp"),
+            Object(NonMatching, "d/tg/d_t_view_clip.cpp"),
+            Object(Matching, "d/tg/d_t_switch.cpp"),
+            Object(NonMatching, "d/tg/d_t_mass_object.cpp"),
+            Object(NonMatching, "d/tg/d_t_camera.cpp"),
+            Object(NonMatching, "d/tg/d_t_event.cpp"),
+            Object(NonMatching, "d/tg/d_t_event_f.cpp"),
+            Object(NonMatching, "d/tg/d_tk_event.cpp"),
+            Object(NonMatching, "toBeSorted/d_a_npc_inv.cpp"),
+            Object(NonMatching, "toBeSorted/d_a_npc_tke.cpp"),
+            Object(NonMatching, "toBeSorted/d_a_npc_str.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_pause.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_game_over.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_save_mgr.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_drop_line.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_force_line.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_enemy_icon.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_mini_game.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_meter_suiryu_score.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_meter_suiryu_score_comp.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_boss_caption.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_demo_dowsing.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_shop.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_deposit.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_demo_title.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_end_roll.cpp"),
+            Object(NonMatching, "toBeSorted/d_a_bullet.cpp"),
+            Object(NonMatching, "toBeSorted/d_a_npc_ken_talk.cpp"),
+            Object(NonMatching, "toBeSorted/d_a_jstudio_act.cpp"),
+            Object(NonMatching, "toBeSorted/d_a_jstudio_sys.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_control_game.cpp"),
+            Object(NonMatching, "d/lyt/d_lyt_control_title.cpp"),
+            Object(NonMatching, "d/tg/d_t_map_area.cpp"),
+            Object(NonMatching, "d/tg/d_t_truck_rails.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_force_sign.cpp"),
+            Object(NonMatching, "d/tg/d_t_force_get_flag.cpp"),
+            Object(Matching, "d/a/obj/d_a_obj_water_spout.cpp"),
+            Object(NonMatching, "d/tg/d_t_siren_tag.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_spore.cpp"),
+            Object(NonMatching, "d/tg/d_t_genki_mgr.cpp"),
+            Object(NonMatching, "d/a/obj/d_a_obj_water_mark.cpp"),
+            Object(NonMatching, "toBeSorted/d_sc_e3_title.cpp"),
+            Object(NonMatching, "toBeSorted/d_sc_e3_game_end.cpp"),
             Object(Matching, "DynamicLink.cpp"),
+            Object(NonMatching, "toBeSorted/d_thp.cpp"),
         ],
     },
     {
@@ -506,8 +681,41 @@ config.libs = [
             Object(Matching, "d/col/bg/d_bg_w_sv.cpp"),
             Object(NonMatching, "d/col/bg/d_bg_w_time.cpp"),
             Object(Matching, "d/col/cc/d_cc_d.cpp"),
+            Object(NonMatching, "toBeSorted/col/cc/d_cc_list.cpp"),
+            Object(NonMatching, "toBeSorted/col/cc/unk_flag_check.cpp"),
             Object(Matching, "d/col/cc/d_cc_mass_s.cpp"),
             Object(NonMatching, "d/col/cc/d_cc_s.cpp"),
+            Object(NonMatching, "toBeSorted/col/cc/misc_unks.cpp"),
+        ],
+    },
+    {
+        "lib": "sound",
+        "mw_version": "Wii/1.5",
+        "cflags": cflags_framework,
+        "scratch_preset_id": 169,
+        "progress_category": "game",
+        "host": False,
+        "objects": [
+            # These are very low quality splits since nobody has figured
+            # out enough detail. Need to look into nw4r::snd first
+            Object(NonMatching, "d/snd/d_snd.cpp"),
+            Object(NonMatching, "d/snd/d_snd_actor.cpp"),
+            Object(NonMatching, "d/snd/d_snd_engine.cpp"),
+            Object(NonMatching, "d/snd/d_snd_unk_component_1.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_bgm.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk1.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk3.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_enemy.cpp"),
+            Object(NonMatching, "d/snd/d_snd_unk_component_2.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_effect.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk_5.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk_6.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk_7.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk_8.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk_9.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk_10.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk_11.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk_12.cpp"),
         ],
     },
     {
@@ -518,6 +726,9 @@ config.libs = [
         "progress_category": "core",
         "host": False,
         "objects": [
+            Object(NonMatching, "c/c_counter.cpp"),
+            Object(NonMatching, "c/c_mem.cpp"),
+            Object(NonMatching, "c/c_lib.cpp"),
             Object(Matching, "c/c_list.cpp"),
             Object(NonMatching, "c/c_math.cpp"),
             Object(NonMatching, "c/c_rand.cpp"),
@@ -547,20 +758,89 @@ config.libs = [
             Object(NonMatching, "m/m3d/m_bmdl.cpp"),
             Object(Matching, "m/m3d/m_calc_ratio.cpp"),
             Object(Matching, "m/m3d/m_fanm.cpp"),
+            Object(NonMatching, "m/m3d/m_global.cpp"),
             Object(Matching, "m/m3d/m_mdl.cpp"),
             Object(NonMatching, "m/m3d/m_shadow.cpp"),
             Object(Matching, "m/m3d/m_scnleaf.cpp"),
             Object(Matching, "m/m3d/m_smdl.cpp"),
+            Object(NonMatching, "m/m3d/m_state.cpp"),
             Object(Matching, "m/m2d.cpp"),
             Object(Matching, "m/m_allocator.cpp"),
             Object(Matching, "m/m_angle.cpp"),
+            Object(NonMatching, "m/m_color.cpp"),
             Object(Matching, "m/m_color_fader.cpp"),
             Object(Matching, "m/m_dvd.cpp"),
             Object(Matching, "m/m_fader.cpp"),
             Object(Matching, "m/m_fader_base.cpp"),
+            Object(NonMatching, "m/m_frustum.cpp"),
             Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
             Object(Matching, "m/m_pad.cpp"),
+            Object(NonMatching, "m/m_quat.cpp"),
+            Object(NonMatching, "m/m_thread.cpp"),
+            Object(NonMatching, "m/m_vec.cpp"),
+        ],
+    },
+    {
+        "lib": "hbm",
+        # no idea
+        "mw_version": "Wii/1.0",
+        "cflags": cflags_hbm,
+        "progress_category": "hbm",
+        "host": False,
+        "objects": [
+            Object(NonMatching, "hbm/homebutton/HBMFrameController.cpp"),
+            Object(NonMatching, "hbm/homebutton/HBMAnmController.cpp"),
+            Object(NonMatching, "hbm/homebutton/HBMGUIManager.cpp"),
+            Object(NonMatching, "hbm/homebutton/HBMController.cpp"),
+            Object(NonMatching, "hbm/homebutton/HBMRemoteSpk.cpp"),
+            Object(NonMatching, "hbm/homebutton/HBMAxSound.cpp"),
+            Object(NonMatching, "hbm/homebutton/HBMCommon.cpp"),
+            Object(NonMatching, "hbm/homebutton/HBMBase.cpp"),
+            Object(NonMatching, "hbm/sound/mix.cpp"),
+            Object(NonMatching, "hbm/sound/syn.cpp"),
+            Object(NonMatching, "hbm/sound/synctrl.cpp"),
+            Object(NonMatching, "hbm/sound/synenv.cpp"),
+            Object(NonMatching, "hbm/sound/synmix.cpp"),
+            Object(NonMatching, "hbm/sound/synpitch.cpp"),
+            Object(NonMatching, "hbm/sound/synsample.cpp"),
+            Object(NonMatching, "hbm/sound/synvoice.cpp"),
+            Object(NonMatching, "hbm/sound/seq.cpp"),
+        ],
+    },
+    {
+        # TODO: Split up further
+        "lib": "hbm",
+        # no idea
+        "mw_version": "Wii/1.0",
+        "cflags": cflags_nw4r,
+        "progress_category": "nw4r",
+        "host": False,
+        "objects": [
+            Object(NonMatching, "hbm/nw4hbm/lyt/lyt_animation.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/lyt/lyt_arcResourceAccessor.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/lyt/lyt_bounding.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/lyt/lyt_common.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/lyt/lyt_drawInfo.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/lyt/lyt_group.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/lyt/lyt_layout.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/lyt/lyt_material.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/lyt/lyt_pane.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/lyt/lyt_picture.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/lyt/lyt_resourceAccessor.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/lyt/lyt_textBox.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/lyt/lyt_window.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/math/math_triangular.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/ut/ut_binaryFileFormat.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/ut/ut_CharStrmReader.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/ut/ut_CharWriter.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/ut/ut_Font.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/ut/ut_LinkList.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/ut/ut_list.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/ut/ut_ResFont.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/ut/ut_ResFontBase.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/ut/ut_TagProcessorBase.cpp"),
+            Object(NonMatching, "hbm/nw4hbm/ut/ut_TextWriterBase.cpp"),
         ],
     },
     {
@@ -584,6 +864,7 @@ config.libs = [
         "progress_category": "core",
         "host": False,
         "objects": [
+            Object(NonMatching, "s/s_Assert.cpp"),
             Object(Matching, "s/s_Crc.cpp"),
             Object(Matching, "s/s_Math.cpp"),
             Object(Matching, "s/s_FPhase.cpp"),
@@ -591,6 +872,7 @@ config.libs = [
             Object(Matching, "s/s_StateMethod.cpp"),
             Object(Matching, "s/s_StateMethodUsr_FI.cpp"),
             Object(Matching, "s/s_Phase.cpp"),
+            Object(NonMatching, "s/s_Print.cpp"),
         ],
     },
     {
@@ -601,24 +883,11 @@ config.libs = [
         "progress_category": "core",
         "host": False,
         "objects": [
+            Object(NonMatching, "f/f_ba_helper.cpp"),
             Object(Matching, "f/f_base.cpp"),
             Object(Matching, "f/f_list.cpp"),
             Object(Matching, "f/f_manager.cpp"),
-        ],
-    },
-    {
-        "lib": "Runtime.PPCEABI.H",
-        "mw_version": "Wii/1.6",
-        "cflags": cflags_runtime,
-        "progress_category": "core",
-        "host": False,
-        "objects": [
-            Object(
-                Matching, "PowerPC_EABI_Support/Runtime/Src/global_destructor_chain.c"
-            ),
-            Object(
-                Matching, "PowerPC_EABI_Support/Runtime/Src/__init_cpp_exceptions.cpp"
-            ),
+            Object(NonMatching, "f/f_tree.cpp"),
         ],
     },
     # NW4R
@@ -936,28 +1205,374 @@ config.libs = [
             Object(Matching, "egg/util/eggException.cpp"),
         ],
     ),
-    # {
-    #     "lib": "MSL_C",
-    #     "mw_version": "GC/1.3.2",
-    #     "cflags": cflags_runtime,
-    #     "host": False,
-    #     "objects": [
-    #     ],
-    # },
-    # {
-    #     "lib": "TRK_MINNOW_DOLPHIN",
-    #     "mw_version": "GC/1.3.2",
-    #     "cflags": cflags_runtime,
-    #     "host": False,
-    #     "objects": [
-    #     ],
-    # },
+    JSystemLib(
+        "JParticle",
+        [
+            Object(NonMatching, "JSystem/JParticle/JPAResourceManager.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPAResource.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPABaseShape.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPAExtraShape.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPAChildShape.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPAExTexShape.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPADynamicsBlock.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPAFieldBlock.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPAKeyBlock.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPATexture.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPAResourceLoader.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPAEmitterManager.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPAEmitter.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPAParticle.cpp"),
+            Object(NonMatching, "JSystem/JParticle/JPAMath.cpp"),
+            Object(NonMatching, "JSystem/JSupport/JSUList.cpp"),
+        ],
+    ),
+    JSystemLib(
+        "JGadget",
+        [
+            Object(NonMatching, "JSystem/JGadget/binary.cpp"),
+            Object(NonMatching, "JSystem/JGadget/linklist.cpp"),
+            Object(NonMatching, "JSystem/JGadget/std-vector.cpp"),
+        ],
+    ),
+    JSystemLib(
+        "JStudio",
+        [
+            Object(NonMatching, "JSystem/JStudio/JStudio/ctb.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio/functionvalue.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio/fvb.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio/fvb-data-parse.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-control.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-math.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio/jstudio-object.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio/object-id.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio/stb.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio/stb-data-parse.cpp"),
+        ],
+    ),
+    JSystemLib(
+        "JStudio_JStage",
+        [
+            Object(NonMatching, "JSystem/JStudio/JStudio_JStage/control.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio_JStage/object-actor.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio_JStage/object-camera.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio_JStage/object-light.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio_JStage/object-message.cpp"),
+            # this one is hard to identify
+            Object(NonMatching, "toBeSorted/JSystem/unk_jstage_maybe.cpp"),
+        ],
+    ),
+    JSystemLib(
+        "JStudio_JParticle",
+        [
+            Object(NonMatching, "JSystem/JStudio/JStudio_JParticle/control.cpp"),
+            Object(
+                NonMatching, "JSystem/JStudio/JStudio_JParticle/object-particle.cpp"
+            ),
+        ],
+    ),
+    JSystemLib(
+        "JStudio_JAudio2",
+        [
+            Object(NonMatching, "JSystem/JStudio/JStudio_JAudio2/control.cpp"),
+            Object(NonMatching, "JSystem/JStudio/JStudio_JAudio2/object-sound.cpp"),
+        ],
+    ),
+    {
+        "lib": "RVL_SDK",
+        "mw_version": "Wii/1.0",
+        "cflags": cflags_rvl,
+        "progress_category": "sdk",
+        "host": False,
+        "objects": [
+            Object(NonMatching, "RVL_SDK/thp/THPDec.c"),
+            Object(NonMatching, "RVL_SDK/thp/THPAudio.c"),
+            Object(NonMatching, "RVL_SDK/kpr/KPR.c"),
+            Object(NonMatching, "RVL_SDK/ai/AI.c"),
+            Object(NonMatching, "RVL_SDK/arc/ARC.c"),
+            Object(NonMatching, "RVL_SDK/ax/AX.c"),
+            Object(NonMatching, "RVL_SDK/os/OS.c"),
+            Object(NonMatching, "RVL_SDK/exi/EXI.c"),
+            Object(NonMatching, "RVL_SDK/si/SI.c"),
+            Object(NonMatching, "RVL_SDK/vi/VI.c"),
+            Object(NonMatching, "RVL_SDK/mtx/MTX.c"),
+            Object(NonMatching, "RVL_SDK/gx/GX.c"),
+            Object(NonMatching, "RVL_SDK/dvd/DVD.c"),
+            Object(NonMatching, "RVL_SDK/mem/MEM.c"),
+            Object(NonMatching, "RVL_SDK/dsp/DSP.c"),
+            Object(NonMatching, "RVL_SDK/es/ES.c"),
+            Object(NonMatching, "RVL_SDK/cx/CX.c"),
+            Object(NonMatching, "RVL_SDK/nand/NAND.c"),
+            Object(NonMatching, "RVL_SDK/sc/SC.c"),
+            Object(NonMatching, "RVL_SDK/wpad/WPAD.c"),
+            Object(NonMatching, "RVL_SDK/kpad/KPAD.c"),
+            Object(NonMatching, "RVL_SDK/usb/USB.c"),
+            Object(NonMatching, "RVL_SDK/bte/BTE.c"),
+            Object(NonMatching, "RVL_SDK/ipc/IPC.c"),
+            Object(NonMatching, "RVL_SDK/fs/FS.c"),
+            Object(NonMatching, "RVL_SDK/euart/EUART.c"),
+            Object(NonMatching, "RVL_SDK/wenc/WENC.c"),
+            Object(NonMatching, "RVL_SDK/tpl/TPL.c"),
+            Object(NonMatching, "NdevExi2A/DebuggerDriver.c"),
+            Object(NonMatching, "NdevExi2A/exi2.c"),
+        ],
+    },
+    {
+        "lib": "Runtime.PPCEABI.H",
+        # no idea
+        "mw_version": "Wii/1.5",
+        "cflags": cflags_runtime,
+        "progress_category": "runtime",
+        "host": False,
+        "objects": [
+            Object(NonMatching, "PowerPC_EABI_Support/Runtime/Src/__mem.c"),
+            Object(NonMatching, "PowerPC_EABI_Support/Runtime/Src/__va_arg.c"),
+            Object(
+                Matching, "PowerPC_EABI_Support/Runtime/Src/global_destructor_chain.c"
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/Runtime/Src/NMWException.cp",
+                extra_cflags=["-Cpp_exceptions on"],
+            ),
+            Object(NonMatching, "PowerPC_EABI_Support/Runtime/Src/ptmf.c"),
+            Object(NonMatching, "PowerPC_EABI_Support/Runtime/Src/runtime.c"),
+            Object(
+                Matching, "PowerPC_EABI_Support/Runtime/Src/__init_cpp_exceptions.cpp"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/Runtime/Src/Gecko_ExceptionPPC.cp"
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/Runtime/Src/GCN_Mem_Alloc.c",
+                extra_cflags=["-str reuse,nopool,readonly"],
+            ),
+        ],
+    },
+    {
+        "lib": "MSL_C",
+        # no idea
+        "mw_version": "Wii/1.5",
+        "cflags": cflags_runtime,
+        "progress_category": "runtime",
+        "host": False,
+        "objects": [
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/ansi_files.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Src/ansi_fp.c",
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/arith.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/buffer_io.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/direct_io.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/file_io.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/FILE_POS.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mbstring.c"
+            ),
+            Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mem.c"),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mem_funcs.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/float.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/misc_io.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/printf.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/scanf.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/string.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/strtoul.c"
+            ),
+            Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wmem.c"),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wprintf.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wstring.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wchar_io.c"
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/Src/uart_console_io_gcn.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/secure_error.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Src/math_sun.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_acos.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_asin.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_atan2.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_fmod.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_log.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_log10.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_pow.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_rem_pio2.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_cos.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_rem_pio2.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_sin.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/k_tan.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_atan.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_ceil.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_copysign.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_cos.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_floor.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_frexp.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_ldexp.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_modf.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_sin.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/s_tan.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_acos.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_asin.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_atan2.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_fmod.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_log10.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_pow.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/e_sqrt.c",
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/Src/math_ppc.c"
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Math/Double_precision/w_sqrt.c",
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/extras.c"
+            ),
+        ],
+    },
+    {
+        "lib": "TRK_MINNOW_DOLPHIN",
+        # no idea
+        "mw_version": "Wii/1.5",
+        "cflags": cflags_trk,
+        "progress_category": "runtime",
+        "host": False,
+        "objects": [
+            # TODO, just here for progress tracking, split further
+            Object(NonMatching, "toBeSorted/TRK.c"),
+        ],
+    },
     # Begin RELs
     {
         "lib": "REL",
-        "mw_version": "Wii/1.6",
+        "mw_version": "Wii/1.5",
         "cflags": cflags_rel,
-        "progress_category": "core",
+        "progress_category": "runtime",
         "host": False,
         "objects": [
             Object(Matching, "REL/executor.c"),
@@ -1942,7 +2557,10 @@ config.progress_categories = [
     ProgressCategory("game", "SS Game Code"),
     ProgressCategory("egg", "EGG Code"),
     ProgressCategory("nw4r", "NW4R Code"),
-    ProgressCategory("rvl", "Wii Specific Code"),
+    ProgressCategory("runtime", "Compiler Runtime and Library"),
+    ProgressCategory("sdk", "Revolution SDK"),
+    ProgressCategory("jsystem", "JSystem"),
+    ProgressCategory("hbm", "Home Button Menu"),
 ]
 config.progress_each_module = args.verbose
 

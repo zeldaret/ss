@@ -110,7 +110,7 @@
  * to produce the hexadecimal values shown.
  */
 
-#include "types.h"
+#include "common.h"
 #include "errno.h"
 #include "math.h"
 

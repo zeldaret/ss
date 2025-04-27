@@ -1,7 +1,13 @@
 #include "d/d_textunk.h"
 
 #include "common.h"
+#include "nw4r/lyt/lyt_arcResourceAccessor.h"
 #include "nw4r/ut/ut_Color.h"
+
+void dummy_ArcResourceAccessor(nw4r::lyt::ArcResourceAccessor *arg) {
+    // instantiate dtor here
+    delete arg;
+}
 
 UnkTextThing textThing;
 UnkTextThing *UnkTextThing::sInstance;

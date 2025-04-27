@@ -7,7 +7,7 @@ Sections:
 	.bss        type:bss align:8
 
 REL/executor.c:
-	.text       start:0x00000000 end:0x00000064
+	.text       start:0x00000000 end:0x00000064 align:16
 
 REL/d/a/e/d_a_e_cactus.cpp:
-	.text       start:0x00000070 end:0x00002658
+	.text       start:0x00000070 end:0x00002658 align:16

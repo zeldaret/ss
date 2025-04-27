@@ -17,6 +17,10 @@ ArcCallbackHandler ArcCallbackHandler::sInstance;
 #define NAME_OARC 'oarc'
 #define NAME_RARC 'rarc'
 
+u32 ArcCallbackHandlerCreate(u32) {
+    return 0;
+}
+
 void BindSystemModelsAndLighting(nw4r::g3d::ResFile file) {
     nw4r::g3d::ResFile sysFile(OarcManager::GetInstance()->getMdlFromArc2("System"));
     if (sysFile.IsValid()) {

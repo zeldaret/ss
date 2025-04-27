@@ -2,6 +2,7 @@
 #define _MSL_COMMON_ANSI_FILES_H
 
 #include "stddef.h"
+#include "wchar.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,9 +14,6 @@ extern "C" {
 
 typedef unsigned long __file_handle;
 typedef unsigned long fpos_t;
-#ifndef __cplusplus
-typedef unsigned short wchar_t;
-#endif
 
 #define set_error(file)                                                                            \
     do {                                                                                           \

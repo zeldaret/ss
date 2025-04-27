@@ -7,10 +7,10 @@ Sections:
 	.bss        type:bss align:8
 
 REL/executor.c:
-	.text       start:0x00000000 end:0x00000064
+	.text       start:0x00000000 end:0x00000064 align:16
 
 REL/d/a/obj/d_a_obj_flying_clawshot_target.cpp:
-	.text       start:0x00000070 end:0x000009B4
+	.text       start:0x00000070 end:0x000009B4 align:16
 	.rodata     start:0x00000000 end:0x00000068
 	.data       start:0x00000000 end:0x000000D8
 	.bss        start:0x00000008 end:0x00000018
