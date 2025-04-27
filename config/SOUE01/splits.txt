@@ -1778,14 +1778,16 @@ JSystem/JParticle/JPADynamicsBlock.cpp:
 
 JSystem/JParticle/JPAFieldBlock.cpp:
 	.text       start:0x8031F020 end:0x80320410 align:16
-	.data       start:0x80547180 end:0x80547268
+	.data       start:0x80547180 end:0x80547258
 	.sdata2     start:0x8057CF00 end:0x8057CF10
 
 JSystem/JParticle/JPAKeyBlock.cpp:
 	.text       start:0x80320410 end:0x803204B4 align:16
+	.sdata2     start:0x8057CF10 end:0x8057CF18
 
 JSystem/JParticle/JPATexture.cpp:
 	.text       start:0x803204C0 end:0x8032057C align:16
+	.data       start:0x80547258 end:0x80547268
 
 JSystem/JParticle/JPAResourceLoader.cpp:
 	.text       start:0x80320580 end:0x80320980 align:16
