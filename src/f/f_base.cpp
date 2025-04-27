@@ -55,10 +55,14 @@ fBase_c::fBase_c()
 
 /* 802e1480 */
 fBase_c::~fBase_c() {
-    fLiNdBa_c *node = actor_list.getFirst();
+    // Is this static_cast fake? Maybe. But if actor_list is of type fLiMgBa_c,
+    // that causes a weak destructor to spawn that actually needs to be in f_manager.
+    // And it's not like any of fLiMgBa_c's methods are accessed via actor_list,
+    // so who can tell? Maybe there's yet another type?
+    fLiNdBa_c *node = static_cast<fLiNdBa_c*>(actor_list.getFirst());
     while (node != nullptr) {
         node->unlink();
-        node = actor_list.getFirst();
+        node = static_cast<fLiNdBa_c*>(actor_list.getFirst());
     }
 }
 

@@ -213,12 +213,13 @@ public:
     void addReadTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20, f32 field_0x24);
     void addReadTarget2(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x20, f32 field_0x24);
 
+    bool checkLink2() const;
+
 private:
     bool isInNormalGameState() const;
     bool checkZButtonPressed() const;
     bool checkZButtonHeld() const;
     bool checkLink1() const;
-    bool checkLink2() const;
     bool switchTarget(s32 target);
     bool playTargetAnim(s32 target);
 

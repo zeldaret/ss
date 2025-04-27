@@ -109,7 +109,7 @@ bool dLytBirdGaugeMain_c::build(d2d::ResAccIf_c *resAcc) {
 
     for (int i = 0; i < LYT_SKY_GAUGE_MAIN_NUM_ANIMS; i++) {
         mAnmGroups[i].init(brlanMap[i].mFile, resAcc, mLyt.getLayout(), brlanMap[i].mName);
-        mAnmGroups[i].setDirection(false);
+        mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
     }
 
@@ -137,7 +137,7 @@ bool dLytBirdGaugeMain_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytBirdGaugeMain_c::execute() {
     mStateMgr.executeState();
     for (int i = 0; i < LYT_SKY_GAUGE_MAIN_NUM_ANIMS; i++) {
-        if (mAnmGroups[i].isFlag2()) {
+        if (mAnmGroups[i].isEnabled()) {
             mAnmGroups[i].play();
         }
     }
@@ -148,7 +148,7 @@ bool dLytBirdGaugeMain_c::execute() {
 bool dLytBirdGaugeMain_c::remove() {
     mLyt.unbindAnims();
     for (int i = 0; i < LYT_SKY_GAUGE_MAIN_NUM_ANIMS; i++) {
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
     return true;
 }

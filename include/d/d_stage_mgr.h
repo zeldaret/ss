@@ -10,6 +10,7 @@
 #include "egg/gfx/eggScreen.h"
 #include "m/m_allocator.h"
 #include "m/m_dvd.h"
+#include "nw4r/g3d/g3d_camera.h"
 #include "s/s_FPhase.h"
 #include "s/s_State.hpp"
 #include "sized_string.h"
@@ -48,11 +49,26 @@ public:
 public:
     bool isAreaTypeDungeon() const;
     bool isAreaTypeSky() const;
+    bool isAreaTypeHouse() const;
     bool isAreaTypeDungeonOrBoss() const;
     bool isAreaTypeOverworldOrSkyloft() const;
     s32 getSTIFunk1() const;
 
+    s32 getSTIFbyte4() const;
+    bool isSTIFbyte4_2or3or4() const;
+    bool isSTIFbyte4_5or6() const;
+    bool isSTIFbyte4_7or8or9or10or11() const;
+    bool isSTIFbyte4_1() const {
+        return getSTIFbyte4() == 1;
+    }
+    bool isSTIFbyte4_0() const {
+        return getSTIFbyte4() == 0;
+    }
+
     s32 getAreaType() const;
+    s32 getMapNameId() const;
+
+    bool fn_80199250();
 
     static dStageMgr_c *GetInstance() {
         return sInstance;
@@ -114,6 +130,20 @@ public:
     void addObjId(u16 id);
     void addActorId(u16 actorId);
 
+    nw4r::g3d::Camera getCamera(s32 idx);
+
+    dFader_c *getFader() {
+        return &mFader;
+    }
+
+    bool isFaderSettled() const {
+        return mFader.isSettled();
+    }
+
+    bool isInLastBoss() const {
+        return mIsInLastBoss;
+    }
+
 private:
     static void lastExecuteCallback();
 
@@ -158,6 +188,12 @@ private:
 
     /* 0x88A0 */ u32 field_0x88A0;
     /* 0x88A4 */ SizedString<16> mDemoName;
+    /* 0x88B4 */ u8 _0x88B4[0x88BC - 0x88B4];
     /* 0x88BC */ bool field_0x88BC;
+    /* 0x88BD */ u8 field_0x88BD;
+    /* 0x88BE */ u8 field_0x88BE;
+    /* 0x88BF */ u8 field_0x88BF;
+    /* 0x88C0 */ u8 field_0x88C0;
+    /* 0x88C1 */ bool mIsInLastBoss;
 };
 #endif

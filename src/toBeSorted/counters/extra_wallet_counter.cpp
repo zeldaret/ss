@@ -4,7 +4,7 @@ class ExtraWalletCounter : public Counter {
 public:
     ExtraWalletCounter();
     /* 8016E220 */ ~ExtraWalletCounter() {}
-    /* 8016E280 */ virtual u16 getMax() override {
+    /* 8016E280 */ virtual u16 getMax() const override {
         return 3;
     }
 };

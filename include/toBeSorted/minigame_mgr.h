@@ -19,6 +19,7 @@ public:
         HARP_PLAYING,
     };
     static bool isInMinigameState(Minigame game);
+    static bool isInAnyMinigame();
 
     static void create();
     static void destroy();

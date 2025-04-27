@@ -1933,8 +1933,8 @@ void dAcTbox_c::executeState_LoadArchive() {
 void dAcTbox_c::finalizeState_LoadArchive() {}
 
 extern "C" void fn_800298B0(u16 effectIndex, mVec3_c *, mAng3_c *, mVec3_c *, void *, void *, void *, void *);
-extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_209_;
-extern "C" bool isPouchItem(u16);
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_209_;
+extern "C" const bool isPouchItem(u16);
 extern "C" u8 adventurePouchFindItemSlot(ITEM_ID item);
 extern "C" u16 findItemInItemCheck(ITEM_ID item);
 extern "C" dAcItem_c *giveItem3(u16 item, s32);

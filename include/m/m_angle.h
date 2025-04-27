@@ -140,6 +140,10 @@ public:
         z = fz;
     }
 
+    void setR(const s32 &f) {
+        x = y = z = f;
+    }
+
     mAng x, y, z;
 
     static mAng3_c Zero;

@@ -2,6 +2,7 @@
 #define LIBMS_MSGFILE_H
 
 #include "common.h"
+#include <wchar.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -17,9 +18,9 @@ struct MsbtAttrInfo {
 struct MsbtInfo *LMS_InitMessage(void *data);
 void LMS_CloseMessage(struct MsbtInfo *info);
 int LMS_GetTextIndexByLabel(struct MsbtInfo *info, const char *label);
-const char *LMS_GetText(struct MsbtInfo *info, int index);
-const char *LMS_GetTextByLabel(struct MsbtInfo *info, const char *label);
-const char *LMS_GetLabelByTextIndex(struct MsbtInfo *info, int index);
+const wchar_t *LMS_GetText(struct MsbtInfo *info, int index);
+const wchar_t *LMS_GetTextByLabel(struct MsbtInfo *info, const char *label);
+int LMS_GetLabelByTextIndex(struct MsbtInfo *info, int index, char *outLabel);
 struct MsbtAttrInfo *LMS_GetAttribute(struct MsbtInfo *info, int index);
 
 #ifdef __cplusplus

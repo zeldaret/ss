@@ -53,8 +53,8 @@ public:
 
     bool isStop() const;
     bool isStop2() const;
+    f32 getStartFrame() const;
     f32 getEndFrame() const;
-    f32 getEndFrame2() const;
 
     inline f32 getFrame() const {
         return mCurrFrame;
@@ -68,8 +68,8 @@ public:
         mFlags = flags;
     }
 
-    inline void setToStart() {
-        setFrame(0.0f);
+    inline u8 getFlags() const {
+        return mFlags;
     }
 
     inline bool isEndReached() const {
@@ -94,6 +94,11 @@ public:
         setFrame(actualEnd * ratio);
     }
 
+    inline f32 getRatio() const {
+        f32 actualEnd = mEndFrame - 1.0f;
+        return mCurrFrame / actualEnd;
+    }
+
     inline void setBackwardsRatio(f32 ratio) {
         f32 actualEnd = mEndFrame - 1.0f;
         setFrame(actualEnd - (ratio * actualEnd));
@@ -105,11 +110,19 @@ public:
         return f >= end ? 0.0f : f;
     }
 
-    inline f32 getEndFrameRaw() const {
+    inline f32 getAnimDuration() const {
         return mEndFrame;
     }
 
+// There's at least 1 file where the obvious way of writing
+// it seems to require accessing some members directly, without
+// inlines. I want to discourage direct access though, so
+// putting the ability behind an explicit define. We don't
+// know either way whether inlines are used at all or
+// whether stuff even is private.
+#ifndef NEED_DIRECT_FRAMECTRL_ACCESS
 private:
+#endif
     inline bool notLooping() const {
         return (mFlags & FLAG_NO_LOOP) != 0;
     }
@@ -162,7 +175,7 @@ public:
     Base_c(u8 priority) : mPriority(priority) {}
     /* 0x00 */ nw4r::ut::Node mLink;
 
-    /* vt offset 0x04 */
+    /* vt offset 0x08 */
     /* vt 0x08 */ virtual ~Base_c();
     /* vt 0x0C */ virtual void draw();
 

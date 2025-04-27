@@ -3,6 +3,7 @@
 #include "c/c_math.h"
 #include "d/flag/itemflag_manager.h"
 #include "d/flag/storyflag_manager.h"
+#include "d/lyt/d_lyt_common_icon_item_maps.h"
 #include "m/m_mtx.h"
 #include "toBeSorted/tlist.h"
 
@@ -211,7 +212,7 @@ static bool insertDowsingTarget(DowsingTarget *target) {
     if (DOWSING_LISTS[slot].GetPosition(target) != DOWSING_LISTS[slot].GetEndIter()) {
         return false;
     }
-    DOWSING_LISTS[slot].insert(target);
+    DOWSING_LISTS[slot].append(target);
     return true;
 }
 
@@ -228,40 +229,40 @@ static bool removeDowsingTarget(DowsingTarget *target) {
     return false;
 }
 
-u8 DowsingTarget::getTopDowsingIcon() {
+s32 DowsingTarget::getTopDowsingIcon() {
     if (hasZeldaDowsing()) {
-        return 19;
+        return LYT_CMN_DowsingZelda;
     } else if (hasAnyTrialDowsing()) {
-        return 20;
+        return LYT_CMN_DowsingTrialGate;
     } else if (hasSacredWaterDowsing()) {
-        return 5;
+        return LYT_CMN_DowsingHolyWater;
     } else if (hasSandshipDowsing()) {
-        return 18;
+        return LYT_CMN_DowsingSandship;
     } else if (hasTadtoneDowsing()) {
-        return 17;
+        return LYT_CMN_DowsingTadtones;
     } else if (hasPropellerDowsing()) {
-        return 10;
+        return LYT_CMN_DowsingWindmillPropeller;
     } else if (hasWaterBasinDowsing()) {
-        return 14;
+        return LYT_CMN_DowsingWaterBasin;
     }
-    return 19;
+    return LYT_CMN_DowsingZelda;
 }
 
-u8 DowsingTarget::getLeftDowsingIcon() {
+s32 DowsingTarget::getLeftDowsingIcon() {
     if (hasCrystalBallDowsing()) {
-        return 15;
+        return LYT_CMN_DowsingCrystalBall;
     } else if (hasPumpkinDowsing()) {
-        return 12;
+        return LYT_CMN_DowsingPumpkinPatchPlower;
     } else if (hasNewPlantSpeciesDowsing()) {
-        return 21;
+        return LYT_CMN_DowsingNewPlantSpecies;
     } else if (hasPartyWheelDowsing()) {
-        return 13;
+        return LYT_CMN_DowsingPartyWheel;
     } else if (hasKikwiDowsing()) {
-        return 8;
+        return LYT_CMN_DowsingKikwi;
     } else if (hasKeyPieceDowsing()) {
-        return 11;
+        return LYT_CMN_DowsingEarthTempleKey;
     } else if (hasDesertNodeDowsing()) {
-        return 7;
+        return LYT_CMN_DowsingPowerGenerators;
     }
-    return 15;
+    return LYT_CMN_DowsingCrystalBall;
 }

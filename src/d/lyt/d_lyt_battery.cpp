@@ -48,7 +48,7 @@ bool dLytBattery_c::init() {
 
     for (int i = 0; i < 4; i++) {
         mAnmGroups[i].init(brlanMap[i].mFile, &mResAcc, mLyt.getLayout(), brlanMap[i].mName);
-        mAnmGroups[i].setDirection(false);
+        mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
     }
 
@@ -65,7 +65,7 @@ bool dLytBattery_c::doDraw() {
     mStateMgr.executeState();
     if (*mStateMgr.getStateID() != StateID_Off) {
         for (int i = 0; i < 4; i++) {
-            if (mAnmGroups[i].isFlag2()) {
+            if (mAnmGroups[i].isEnabled()) {
                 mAnmGroups[i].play();
             }
         }

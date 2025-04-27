@@ -385,8 +385,6 @@ static const struct {
 };
 static const u16 RAND_RUPEE_ARRAY[3] = {ITEM_GREEN_RUPEE, ITEM_BLUE_RUPEE, ITEM_RED_RUPEE};
 
-extern "C" int getCurrentBowType();
-extern "C" int getCurrentSlingshotType();
 extern "C" bool isHeroMode();
 
 // 800c7bb0
@@ -402,12 +400,12 @@ int SpecialItemDropMgr::fn_800C7BB0(int specialItemId) {
         int weight = e->mDropChance;
 
         if (entryIdx == 9 || entryIdx == 10) {
-            if (getCurrentBowType() == 0) {
+            if (dAcPy_c::getCurrentBowType() == 0) {
                 // No arrows until you get the Bow
                 weight = 0;
             }
         } else if (entryIdx == 11) {
-            if (getCurrentSlingshotType() == 0) {
+            if (dAcPy_c::getCurrentSlingshotType() == 0) {
                 // No seeds until you get the Slingshot
                 weight = 0;
             }

@@ -3,10 +3,10 @@
 #define EVENT_MANAGER_H
 
 #include "common.h"
+#include "d/a/obj/d_a_obj_base.h"
+#include "f/f_base.h"
 #include "sized_string.h"
 #include "toBeSorted/event.h"
-
-#include <cstring>
 
 class dAcBase_c;
 
@@ -16,6 +16,8 @@ public:
     static bool finishEvent(dAcBase_c *actor, const char *eventName);
     static void changeOwnEvent(dAcBase_c *actor1, dAcBase_c *actor2, Event *event, UNKWORD);
     static bool alsoSetAsCurrentEvent(dAcBase_c *actor, Event *event, void *unknown);
+    static dAcObjBase_c *fn_800A08F0(fBase_c::GROUP_TYPE_e);
+    static bool canSkipCurrentEvent();
 
     static EventManager *sInstance;
 
@@ -38,6 +40,8 @@ public:
     static bool isCurrentEvent(const char *name) {
         return strequals(getCurrentEventName(), name);
     }
+
+    static bool eventRelatedStateFlags_shift0x11_1();
 
     // Something like isActorInEvent maybe?
     static bool FUN_800a0570(dAcBase_c *actor);

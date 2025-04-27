@@ -60,7 +60,7 @@ void dLytNote_c::executeState_In() {
         mStateMgr.changeState(StateID_Move);
     }
 
-    if (mAnmGroups[NOTE_ANIM_GET].isFlag2()) {
+    if (mAnmGroups[NOTE_ANIM_GET].isEnabled()) {
         mAnmGroups[NOTE_ANIM_GET].play();
     }
 }
@@ -80,7 +80,7 @@ void dLytNote_c::executeState_Move() {
         field_0x260 = 0.0f;
         mInAnim = NOTE_ANIM_LOST_LOOP;
         // Maybe an inline?
-        f32 progress = mAnmGroups[mInAnim].getEndFrameRaw();
+        f32 progress = mAnmGroups[mInAnim].getAnimDuration();
         f32 nul = 0.0f;
         if (nul >= progress) {
             field_0x260 = nul - progress;
@@ -93,7 +93,7 @@ void dLytNote_c::executeState_Move() {
             field_0x260 = 0.0f;
             mInAnim = NOTE_ANIM_GET_LOOP;
             // Maybe an inline?
-            f32 progress = mAnmGroups[mInAnim].getEndFrameRaw();
+            f32 progress = mAnmGroups[mInAnim].getAnimDuration();
             f32 nul = 0.0f;
             if (nul >= progress) {
                 field_0x260 = nul - progress;
@@ -129,7 +129,7 @@ void dLytNote_c::executeState_Out() {
         mStateMgr.changeState(StateID_Wait);
     }
 
-    if (mAnmGroups[mOutAnim].isFlag2()) {
+    if (mAnmGroups[mOutAnim].isEnabled()) {
         mAnmGroups[mOutAnim].play();
     }
 }
@@ -142,7 +142,7 @@ bool dLytNote_c::build(d2d::ResAccIf_c *resAcc) {
 
     for (int i = 0; i < 6; i++) {
         mAnmGroups[i].init(brlanMap[i].mFile, resAcc, mLyt.getLayout(), brlanMap[i].mName);
-        mAnmGroups[i].setDirection(false);
+        mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
     }
 
@@ -168,7 +168,7 @@ bool dLytNote_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytNote_c::remove() {
     for (int i = 0; i < 6; i++) {
         // @bug? .unbind call is missing
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
     return true;
 }
@@ -184,7 +184,7 @@ void dLytNote_c::execute(u8 alpha) {
 
     if (mInAnim != NOTE_ANIM_INVALID) {
         field_0x260 += 1.0f;
-        f32 nextFrame = mAnmGroups[mInAnim].getEndFrameRaw();
+        f32 nextFrame = mAnmGroups[mInAnim].getAnimDuration();
         if (field_0x260 >= nextFrame) {
             field_0x260 -= nextFrame;
         }

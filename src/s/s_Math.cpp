@@ -2,7 +2,6 @@
 
 #include "math.h"
 
-
 namespace sLib {
 
 float extrapolate(float start, float end, float scale) {
@@ -80,7 +79,6 @@ T addCalcAngleT(T *value, T target, T ratio, T maxStepSize, T minStepSize) {
     T diff = target - *value;
     if (*value != target) {
         T step = diff / ratio;
-        // TODO this is simpler in the original assembly
         if (step > minStepSize || step < -minStepSize) {
             if (step > maxStepSize) {
                 step = maxStepSize;
@@ -129,8 +127,52 @@ void addCalcAngle(short *value, short target, short ratio, short maxStepSize) {
     return addCalcAngleT(value, target, ratio, maxStepSize);
 }
 
-extern "C" s16 fn_802DEA10(s16 *pValue, s16 target, s16 scale, s16 maxStep, s16 minStep) {
-    // NYI
+short addCalcAngle2(short *value, short target, short ratio, short maxStepSize, short minStepSize) {
+    s16 oldValue = *value;
+    if (oldValue != target) {
+        s32 unclampedStep;
+        if (ratio > 0) {
+            if (target < oldValue) {
+                unclampedStep = 0x10000 - (oldValue - target);
+            } else {
+                unclampedStep = target - oldValue;
+            }
+        } else if (ratio < 0) {
+            if (target < oldValue) {
+                unclampedStep = oldValue - target;
+            } else {
+                unclampedStep = 0xFFFF - (target - oldValue);
+            }
+        } else {
+            return (s16)(target - oldValue);
+        }
+
+        s32 scaledStep = labs(unclampedStep / ratio);
+        s16 clampedStep = 0x7FFF;
+        if (scaledStep <= 0x7FFF) {
+            clampedStep = scaledStep;
+        }
+        if (clampedStep > minStepSize) {
+            if (clampedStep > maxStepSize) {
+                clampedStep = maxStepSize;
+            }
+            if (ratio < 0) {
+                clampedStep = -clampedStep;
+            }
+            *value += clampedStep;
+        } else if (ratio >= 0) {
+            *value += minStepSize;
+            if (((s16)(target - oldValue) > 0) && ((s16)(target - *value) <= 0)) {
+                *value = target;
+            }
+        } else {
+            *value -= minStepSize;
+            if (((s16)(target - oldValue) < 0) && ((s16)(target - *value) >= 0)) {
+                *value = target;
+            }
+        }
+    }
+    return (s16)(target - *value);
 }
 
 // Is the same as cLib_chaseUC
@@ -192,7 +234,6 @@ BOOL chase(int *value, int target, int stepSize) {
 }
 
 BOOL chase(float *value, float target, float stepSize) {
-    // TODO the != 0 comparison in the instantiated function has swapped regs for some reason
     return chaseT(value, target, stepSize);
 }
 
@@ -231,8 +272,7 @@ BOOL chaseAngle(short *value, short target, short stepSize) {
     return 0;
 }
 
-// Found in NSMBW (0x801618c0), but no symbol name found yet
-extern "C" BOOL fn_802DEE10(short *value, short target, short stepSize) {
+BOOL chaseAngle2(short *value, short target, short stepSize) {
     if (*value == target) {
         return TRUE;
     }

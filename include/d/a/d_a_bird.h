@@ -26,8 +26,14 @@ public:
     STATE_FUNC_DECLARE(dBird_c, MiniGameEnd);
     STATE_FUNC_DECLARE(dBird_c, MiniGameLevelUpDemo);
 
+    s16 getNumDashes() const {
+        return mNumDashes;
+    }
+
 private:
     /* 0x??? */ STATE_MGR_DECLARE(dBird_c);
+    u8 _0x36C[0xF8E - 0x36C];
+    /* 0xF8E */ s16 mNumDashes;
 };
 
 #endif

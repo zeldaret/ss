@@ -4,7 +4,7 @@ class BombCounter : public Counter {
 public:
     BombCounter();
     /* 8016E020 */ ~BombCounter() {}
-    /* 8016E080 */ virtual u16 getMax() override {
+    /* 8016E080 */ virtual u16 getMax() const override {
         return 10;
     }
 };

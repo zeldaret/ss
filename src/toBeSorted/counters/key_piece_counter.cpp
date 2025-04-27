@@ -4,7 +4,7 @@ class KeyPieceCounter : public Counter {
 public:
     KeyPieceCounter();
     /* 8016E1A0 */ ~KeyPieceCounter() {}
-    /* 8016E200 */ virtual u16 getMax() override {
+    /* 8016E200 */ virtual u16 getMax() const override {
         return 5;
     }
 };

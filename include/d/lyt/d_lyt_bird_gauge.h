@@ -71,6 +71,22 @@ public:
 
     void hide();
 
+    void setNumDashes(s32 num) {
+        mGameStateDashes = num;
+    }
+
+    void setField_0x690(bool val) {
+        field_0x690 = val;
+    }
+
+    bool getField_0x692() const {
+        return field_0x692;
+    }
+
+    bool getField_0x693() const {
+        return field_0x693;
+    }
+
 private:
     static dLytBirdGauge_c *sInstance;
 
@@ -79,6 +95,8 @@ private:
     STATE_FUNC_DECLARE(dLytBirdGauge_c, Dash);
     STATE_FUNC_DECLARE(dLytBirdGauge_c, Recovery);
     STATE_FUNC_DECLARE(dLytBirdGauge_c, Out);
+
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytBirdGauge_c);
 
     /* 0x008 */ UI_STATE_MGR_DECLARE(dLytBirdGauge_c);
     /* 0x008 */ d2d::ResAccIf_c mResAcc;

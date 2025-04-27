@@ -3,12 +3,15 @@
 
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/a/d_a_itembase.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "m/m3d/m_anmmatclr.h"
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
+#include "toBeSorted/file_manager.h"
 
 class dAcPy_c : public dAcObjBase_c {
     // See Below for some info
@@ -54,6 +57,13 @@ public:
                    FLG0_HANGING_ITEM | FLG0_HANGING_LEDGE | FLG0_UNK_0x10 | FLG0_IN_AIR,
     };
 
+    enum dAcPy_RidingActor {
+        RIDING_NONE = 0,
+        RIDING_TRUCK_MINECART = 1,
+        RIDING_LOFTWING = 2,
+        RIDING_BOAT = 3,
+    };
+
     dAcPy_c();
     virtual ~dAcPy_c();
 
@@ -61,6 +71,7 @@ public:
     void setPosYRot(const mVec3_c &pos, mAng rot, UNKWORD, UNKWORD, UNKWORD);
     // argument is always false in existing code, true doesn't seem to make a difference
     void bonk(bool unk = false);
+    bool fn_80202D90(bool);
 
     /* vt 0x080 */ virtual UNKWORD IfCurrentActionToActor(dAcBase_c *ac, UNKWORD);
     /* vt 0x084 */ virtual void vt_0x084(dAcBase_c *ac, UNKWORD);
@@ -142,7 +153,7 @@ public:
     /* vt 0x1B4 */ virtual void isByte0x434eEqual7();
     /* vt 0x1B8 */ virtual void canHandleGameOver();
     /* vt 0x1BC */ virtual void vt_0x1BC();
-    /* vt 0x1C0 */ virtual void vt_0x1C0();
+    /* vt 0x1C0 */ virtual void *vt_0x1C0() const;
     /* vt 0x1C4 */ virtual void getActorInActorRef1();
     /* vt 0x1C8 */ virtual void doesActorRef1Exist();
     /* vt 0x1CC */ virtual void unlinkActorRef1();
@@ -182,7 +193,7 @@ public:
     /* vt 0x254 */ virtual void isAttackingUnderground();
     /* vt 0x258 */ virtual void vt_0x258();
     /* vt 0x25C */ virtual void vt_0x25C();
-    /* vt 0x260 */ virtual void vt_0x260();
+    /* vt 0x260 */ virtual f32 vt_0x260() const;
     /* vt 0x264 */ virtual void getGroosenatorIfIn();
     /* vt 0x268 */ virtual void setActorRef11();
     /* vt 0x26C */ virtual void doesGameOver();
@@ -230,9 +241,13 @@ public:
     /* vt 0x314 */ virtual void vt_0x314();
     /* vt 0x318 */ virtual void vt_0x318();
 
-    /* 0x330 */ u8 unk_0x330[0x340 - 0x330];
+    /* 0x330 */ u8 unk_0x330[0x339 - 0x330];
+    /* 0x339 */ u8 mRidingActorType;
+    /* 0x33A */ u8 unk_0x33A[0x340 - 0x33A];
     /* 0x340 */ u32 someFlags_0x340;
-    /* 0x344 */ u8 unk_0x344[0x350 - 0x344];
+    /* 0x344 */ u8 unk_0x344[0x348 - 0x344];
+    /* 0x348 */ u32 mSwordAndMoreStates;
+    /* 0x34C */ u8 unk_0x34C[0x350 - 0x34C];
     /* 0x350 */ u32 someFlags_0x350;
     u8 UNK_0x354[0x35C - 0x354];
     /* 0x35C */ u32 mForceOrPreventActionFlags;
@@ -242,6 +257,18 @@ public:
     /* 0x36C */ int mCurrentAction; // TODO (Document Enum)
     /* 0x370 */ u8 _370[0x3C8 - 0x370];
     /* 0x3C8 */ nw4r::g3d::ResFile mSwordRes;
+    /* 0x3CC */ u8 _0x3CC[0x5B4 - 0x3CC];
+    /* 0x5B4 */ m3d::anmMatClr_c mAnmMatClr;
+    /* 0x5E0 */ u8 _0x5E0[0x4564 - 0x5E0];
+    /* 0x4564 */ f32 field_0x4564;
+
+    f32 getField_0x4564() const {
+        return field_0x4564;
+    }
+
+    f32 getAnmMatClrFrame() const {
+        return mAnmMatClr.getFrame(0);
+    }
 
     inline bool checkFlags0x340(u32 mask) const {
         return (someFlags_0x340 & mask) != 0;
@@ -263,11 +290,35 @@ public:
         return mCurrentAction == action;
     }
 
+    bool isSittingOrUnk0xAE() const {
+        return mCurrentAction == 0xAD || mCurrentAction == 0xAE;
+    }
+
+    inline bool checkSwordAndMoreStates(u32 mask) const {
+        return (mSwordAndMoreStates & mask) != 0;
+    }
+
     inline bool checkActionFlags(u32 mask) const {
         return (mActionFlags & mask) != 0;
     }
     inline bool checkActionFlagsCont(u32 mask) const {
         return (mActionFlagsCont & mask) != 0;
+    }
+
+    inline u8 getRidingActorType() const {
+        return mRidingActorType;
+    }
+
+    inline bool hasvt_0x1C0() const {
+        return vt_0x1C0() != nullptr;
+    }
+
+    inline bool isAffectedByStaminaPotion() const {
+        return FileManager::GetInstance()->hasStaminaPotionNormal() && getRidingActorType() != RIDING_BOAT;
+    }
+
+    inline bool isAffectedByStaminaPotionPlus() const {
+        return FileManager::GetInstance()->hasStaminaPotionPlus() && getRidingActorType() != RIDING_BOAT;
     }
 
     static nw4r::g3d::ResFile getItemResFile(const char *name, mAllocator_c &allocator);
@@ -276,7 +327,23 @@ public:
         return LINK;
     }
 
+    static dAcPy_c *GetLink2() {
+        return LINK2;
+    }
+
     static dAcPy_c *LINK;
+    static dAcPy_c *LINK2;
+
+    static s32 getCurrentBowType();
+    static s32 getCurrentSlingshotType();
+    static s32 getCurrentBeetleType();
+    static s32 getCurrentBugNetType();
+
+    static bool isItemRestrictedByBokoBase(ITEM_ID item);
+
+    static u32 getCurrentHealthCapacity();
+
+    bool canDowseProbably() const;
 };
 
 #endif

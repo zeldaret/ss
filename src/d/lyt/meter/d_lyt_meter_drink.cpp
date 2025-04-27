@@ -19,10 +19,10 @@ STATE_DEFINE(dLytMeterDrink_c, Out);
 
 void dLytMeterDrinkParts_c::initializeState_Invisible() {
     if (field_0x51) {
-        if (mAnmGroups[2]->isFlag2()) {
+        if (mAnmGroups[2]->isEnabled()) {
             mAnmGroups[2]->setAnimEnable(false);
         }
-        if (!mAnmGroups[0]->isFlag2()) {
+        if (!mAnmGroups[0]->isEnabled()) {
             mAnmGroups[0]->setAnimEnable(true);
         }
         mAnmGroups[0]->setFrame(0.0f);
@@ -32,7 +32,7 @@ void dLytMeterDrinkParts_c::initializeState_Invisible() {
     }
 }
 void dLytMeterDrinkParts_c::executeState_Invisible() {
-    if (mAnmGroups[0]->isFlag2()) {
+    if (mAnmGroups[0]->isEnabled()) {
         mAnmGroups[0]->setAnimEnable(false);
     }
     if (field_0x50) {
@@ -43,7 +43,7 @@ void dLytMeterDrinkParts_c::finalizeState_Invisible() {}
 
 void dLytMeterDrinkParts_c::initializeState_In() {
     if (field_0x51) {
-        if (mAnmGroups[2]->isFlag2()) {
+        if (mAnmGroups[2]->isEnabled()) {
             mAnmGroups[2]->setAnimEnable(false);
         }
         mAnmGroups[0]->setToEnd();
@@ -59,7 +59,7 @@ void dLytMeterDrinkParts_c::executeState_In() {
         mStateMgr.changeState(StateID_Visible);
     }
 
-    if (mAnmGroups[0]->isFlag2()) {
+    if (mAnmGroups[0]->isEnabled()) {
         mAnmGroups[0]->play();
     }
 }
@@ -67,7 +67,7 @@ void dLytMeterDrinkParts_c::finalizeState_In() {}
 
 void dLytMeterDrinkParts_c::initializeState_Visible() {
     if (field_0x51) {
-        if (mAnmGroups[2]->isFlag2()) {
+        if (mAnmGroups[2]->isEnabled()) {
             mAnmGroups[2]->setAnimEnable(false);
         }
         mAnmGroups[0]->setAnimEnable(true);
@@ -77,7 +77,7 @@ void dLytMeterDrinkParts_c::initializeState_Visible() {
 }
 
 void dLytMeterDrinkParts_c::executeState_Visible() {
-    if (mAnmGroups[0]->isFlag2()) {
+    if (mAnmGroups[0]->isEnabled()) {
         mAnmGroups[0]->setAnimEnable(false);
     }
 
@@ -89,7 +89,7 @@ void dLytMeterDrinkParts_c::finalizeState_Visible() {}
 
 void dLytMeterDrinkParts_c::initializeState_Out() {
     if (field_0x51) {
-        if (mAnmGroups[0]->isFlag2()) {
+        if (mAnmGroups[0]->isEnabled()) {
             mAnmGroups[0]->setAnimEnable(false);
         }
         mAnmGroups[2]->setToEnd();
@@ -108,7 +108,7 @@ void dLytMeterDrinkParts_c::executeState_Out() {
         field_0x50 = 0;
         mStateMgr.changeState(StateID_Invisible);
     }
-    if (mAnmGroups[2]->isFlag2()) {
+    if (mAnmGroups[2]->isEnabled()) {
         mAnmGroups[2]->play();
     }
 }
@@ -255,7 +255,7 @@ void dLytMeterDrink_c::executeState_In() {
         mAnmGroups[0].setAnimEnable(false);
         mStateMgr.changeState(StateID_Wait);
     }
-    if (mAnmGroups[0].isFlag2()) {
+    if (mAnmGroups[0].isEnabled()) {
         mAnmGroups[0].play();
     }
 }
@@ -336,7 +336,7 @@ void dLytMeterDrink_c::executeState_Move() {
         mLyt.calc();
 
         for (int i = 0; i < 3; i++) {
-            if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_MOVE + i].isFlag2()) {
+            if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_MOVE + i].isEnabled()) {
                 mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_MOVE + i].setAnimEnable(false);
             }
         }
@@ -344,7 +344,7 @@ void dLytMeterDrink_c::executeState_Move() {
     }
 
     for (int i = 0; i < 3; i++) {
-        if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_MOVE + i].isFlag2()) {
+        if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_MOVE + i].isEnabled()) {
             mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_MOVE + i].play();
         }
     }
@@ -360,7 +360,7 @@ void dLytMeterDrink_c::executeState_Out() {
         mAnmGroups[LYT_METER_DRINK_ANIM_DEMO_OUT].setAnimEnable(false);
         mStateMgr.changeState(StateID_Invisible);
     }
-    if (mAnmGroups[LYT_METER_DRINK_ANIM_DEMO_OUT].isFlag2()) {
+    if (mAnmGroups[LYT_METER_DRINK_ANIM_DEMO_OUT].isEnabled()) {
         mAnmGroups[LYT_METER_DRINK_ANIM_DEMO_OUT].play();
     }
 }
@@ -375,7 +375,7 @@ bool dLytMeterDrink_c::build(d2d::ResAccIf_c *resAcc) {
 
     for (int i = 0; i < 20; i++) {
         mAnmGroups[i].init(brlanMap[i].mFile, resAcc, mLyt.getLayout(), brlanMap[i].mName);
-        mAnmGroups[i].setDirection(false);
+        mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
     }
 
@@ -409,7 +409,7 @@ bool dLytMeterDrink_c::build(d2d::ResAccIf_c *resAcc) {
 bool dLytMeterDrink_c::remove() {
     for (int i = 0; i < 20; i++) {
         mAnmGroups[i].unbind();
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
 
     return true;
@@ -474,13 +474,13 @@ void dLytMeterDrink_c::executeInternal() {
         if (!mParts[i].isDrinkAboutToExpire()) {
             drinksLast[i] = true;
             bHasNotSoonExpiringDrink = true;
-            if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].isFlag2()) {
+            if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].isEnabled()) {
                 frameLoop = mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].getNextFrame();
             }
         } else {
             drinksLast[i] = false;
             bHasSoonExpiringDrink = true;
-            if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].isFlag2()) {
+            if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].isEnabled()) {
                 frameCaution = mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].getNextFrame();
             }
         }
@@ -489,14 +489,14 @@ void dLytMeterDrink_c::executeInternal() {
     if (bHasNotSoonExpiringDrink) {
         for (int i = 0; i < 3; i++) {
             if (drinksLast[i] == true) {
-                if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].isFlag2()) {
+                if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].isEnabled()) {
                     mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].play();
                 } else {
                     mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].setAnimEnable(true);
                     mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].setFrame(frameLoop);
                 }
 
-                if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].isFlag2()) {
+                if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].isEnabled()) {
                     bool oldVisible = mpPartPanes[i]->IsVisible();
                     mpPartPanes[i]->SetVisible(true);
                     mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].setFrame(0.0f);
@@ -508,7 +508,7 @@ void dLytMeterDrink_c::executeInternal() {
         }
     } else {
         for (int i = 0; i < 3; i++) {
-            if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].isFlag2()) {
+            if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].isEnabled()) {
                 bool oldVisible = mpPartPanes[i]->IsVisible();
                 mpPartPanes[i]->SetVisible(true);
                 mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].setFrame(0.0f);
@@ -522,14 +522,14 @@ void dLytMeterDrink_c::executeInternal() {
     if (bHasSoonExpiringDrink) {
         for (int i = 0; i < 3; i++) {
             if (drinksLast[i] == false) {
-                if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].isFlag2()) {
+                if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].isEnabled()) {
                     mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].play();
                 } else {
                     mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].setAnimEnable(true);
                     mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].setFrame(frameCaution);
                 }
 
-                if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].isFlag2()) {
+                if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].isEnabled()) {
                     bool oldVisible = mpPartPanes[i]->IsVisible();
                     mpPartPanes[i]->SetVisible(true);
                     mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_LOOP + i].setFrame(0.0f);
@@ -541,7 +541,7 @@ void dLytMeterDrink_c::executeInternal() {
         }
     } else {
         for (int i = 0; i < 3; i++) {
-            if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].isFlag2()) {
+            if (mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].isEnabled()) {
                 bool oldVisible = mpPartPanes[i]->IsVisible();
                 mpPartPanes[i]->SetVisible(true);
                 mAnmGroups[LYT_METER_DRINK_OFFSET_ANIM_CAUTION + i].setFrame(0.0f);

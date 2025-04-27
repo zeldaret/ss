@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "d/lyt/d2d.h"
-#include "d/lyt/d_structd.h"
+#include "d/d_cursor_hit_check.h"
 #include "egg/core/eggColorFader.h"
 #include "m/m_video.h"
 #include "sized_string.h"
@@ -207,7 +207,7 @@ void dLytMapPinIcon_c::finalizeState_Wait() {}
 
 void dLytMapPinIcon_c::initializeState_ToSelect() {
     d2d::AnmGroup_c *m = &mAnmGroups[1];
-    m->setDirection(false);
+    m->bind(false);
     m->setFrame(0.0f);
 }
 void dLytMapPinIcon_c::executeState_ToSelect() {
@@ -236,8 +236,8 @@ void dLytMapPinIcon_c::executeState_Remove() {
 void dLytMapPinIcon_c::finalizeState_Remove() {}
 
 dLytMapPinIcon_c::~dLytMapPinIcon_c() {
-    if (d2d::dLytStructDList::GetInstance()->fn_80065A30(&mStructD)) {
-        d2d::dLytStructDList::GetInstance()->removeFromList2(&mStructD);
+    if (dCsMgr_c::GetInstance()->isRegist(&mCsHitCheck)) {
+        dCsMgr_c::GetInstance()->unregistCursorTarget(&mCsHitCheck);
     }
 }
 
@@ -255,7 +255,7 @@ bool dLytMapPinIcon_c::build(d2d::ResAccIf_c *resAcc) {
 
     for (int i = 0; i < 3; i++) {
         pAnmGroups[i].init(sMapPinIconBrlanMap[i].mFile, resAcc, mLyt.getLayout(), sMapPinIconBrlanMap[i].mName);
-        pAnmGroups[i].setDirection(false);
+        pAnmGroups[i].bind(false);
         pAnmGroups[i].setFrame(0.0f);
     }
 
@@ -266,11 +266,11 @@ bool dLytMapPinIcon_c::build(d2d::ResAccIf_c *resAcc) {
     }
 
     mpBounding = mLyt.findBounding("B_mark_00");
-    mStructD.fn_80065E70(mpBounding, 2, 1, 0);
-    d2d::dLytStructDList::GetInstance()->appendToList2(&mStructD);
+    mCsHitCheck.init(mpBounding, 2, 1, 0);
+    dCsMgr_c::GetInstance()->registCursorTarget(&mCsHitCheck);
 
-    mAnmGroups[LYT_MAP_PIN_ICON_ANIM_SCALE].setDirection(false);
-    mAnmGroups[LYT_MAP_PIN_ICON_ANIM_LOOP].setDirection(false);
+    mAnmGroups[LYT_MAP_PIN_ICON_ANIM_SCALE].bind(false);
+    mAnmGroups[LYT_MAP_PIN_ICON_ANIM_LOOP].bind(false);
 
     mLyt.calc();
 
@@ -282,9 +282,9 @@ bool dLytMapPinIcon_c::build(d2d::ResAccIf_c *resAcc) {
 }
 
 bool dLytMapPinIcon_c::remove() {
-    d2d::dLytStructDList::GetInstance()->removeFromList2(&mStructD);
+    dCsMgr_c::GetInstance()->unregistCursorTarget(&mCsHitCheck);
     for (int i = 0; i < 3; i++) {
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
     return true;
 }
@@ -296,8 +296,8 @@ bool dLytMapPinIcon_c::execute() {
     mAnmGroups[2].setFrame(field_0x1DC);
     // TODO something MapCapture
     mLyt.calc();
-    mStructD.field_0x22 = 0;
-    mStructD.fn_80065F70();
+    mCsHitCheck.resetCachedHitboxes();
+    mCsHitCheck.execute();
     return true;
 }
 
@@ -398,8 +398,8 @@ void dLytMapFloorBtnMgr_c::finalizeState_Wait() {}
 extern "C" void fn_801942F0(int, int);
 dLytMapFloorBtnMgr_c::~dLytMapFloorBtnMgr_c() {
     for (int i = 0; i < 4; i++) {
-        if (d2d::dLytStructDList::GetInstance()->fn_80065A30(&mStructDs[i])) {
-            d2d::dLytStructDList::GetInstance()->removeFromList2(&mStructDs[i]);
+        if (dCsMgr_c::GetInstance()->isRegist(&mCsHitChecks[i])) {
+            dCsMgr_c::GetInstance()->unregistCursorTarget(&mCsHitChecks[i]);
         }
     }
     fn_801942F0(0, 0);

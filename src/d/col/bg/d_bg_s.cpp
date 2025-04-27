@@ -11,6 +11,7 @@
 #include "d/col/c/c_m3d.h"
 #include "d/col/c/c_partition.h"
 #include "d/d_sc_game.h"
+#include "d/lyt/d_lyt_map.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 
 const char *MAP_SOLID_MATERIAL_NAMES[31] = {
@@ -1022,9 +1023,8 @@ void dBgS::SetupMapMaterial(int matIdx, bool, s32 roomId) {
     // TODO
 }
 
-extern "C" UNKTYPE *lbl_805754B0;
 UNKTYPE *dBgS::GetMapAccessor() {
-    return lbl_805754B0;
+    return dLytMap_c::getInstance();
 }
 
 void dBgS::DrawMap(int roomId, mMtx_c *, bool bColor, int) {
@@ -1143,7 +1143,7 @@ void dBgS::InitMapParts() {
 }
 
 void dBgS::AppendMapSegment(MapLineSegment *pSeg) {
-    mList_0x388C.insert(pSeg);
+    mList_0x388C.append(pSeg);
 }
 
 void dBgS::RemoveMapSegment(MapLineSegment *pSeg) {

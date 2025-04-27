@@ -136,6 +136,11 @@ public:
     static const Vector2f ex;
     static const Vector2f ey;
 
+    void set(f32 fx, f32 fy) {
+        x = fx;
+        y = fy;
+    }
+
     Vector2f operator-(const Vector2f &v) {
         return Vector2f(x - v.x, y - v.y);
     }

@@ -189,7 +189,7 @@ struct STIF {
     /* 0x0F */ u8 field_0x0F;
     /* 0x10 */ u8 field_0x10;
     /* 0x11 */ u8 field_0x11;
-    /* 0x12 */ u8 mapNameId;
+    /* 0x12 */ s8 mapNameId;
     /* 0x13 */ u8 field_0x13;
 };
 
