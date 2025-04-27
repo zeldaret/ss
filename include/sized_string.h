@@ -4,6 +4,7 @@
 #include "__va_arg.h"
 #include "common.h"
 #include "string.h"
+#include "wstring.h"
 
 extern "C" bool strequals(const char *a, const char *b);
 

@@ -7,7 +7,7 @@ Sections:
 	.bss        type:bss align:8
 
 REL/executor.c:
-	.text       start:0x00000000 end:0x00000064
+	.text       start:0x00000000 end:0x00000064 align:16
 
 REL/d/t/d_t_plight.cpp:
-	.text       start:0x00000070 end:0x000002AC
+	.text       start:0x00000070 end:0x000002AC align:16

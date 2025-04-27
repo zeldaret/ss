@@ -6,7 +6,7 @@ Sections:
 	.bss        type:bss align:8
 
 REL/executor.c:
-	.text       start:0x00000000 end:0x00000064
+	.text       start:0x00000000 end:0x00000064 align:16
 
 REL/d/a/obj/d_a_obj_bird_statue.cpp:
-	.text       start:0x00000070 end:0x000002B8
+	.text       start:0x00000070 end:0x000002B8 align:16

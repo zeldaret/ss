@@ -4,13 +4,12 @@
 #include "__va_arg.h"
 #include "common.h"
 
+#include "RVL/OS/OSContext.h"
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-// Forward declarations
-typedef struct OSContext OSContext;
 
 #define OSError(...) OSPanic(__FILE__, __LINE__, __VA_ARGS__)
 #define OSAssert(exp, ...)                                                                                             \

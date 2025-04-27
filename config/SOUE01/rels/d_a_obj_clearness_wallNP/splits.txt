@@ -6,7 +6,7 @@ Sections:
 	.bss        type:bss align:8
 
 REL/executor.c:
-	.text       start:0x00000000 end:0x00000064
+	.text       start:0x00000000 end:0x00000064 align:16
 
 REL/d/a/obj/d_a_obj_clearness_wall.cpp:
-	.text       start:0x00000070 end:0x000005C8
+	.text       start:0x00000070 end:0x000005C8 align:16

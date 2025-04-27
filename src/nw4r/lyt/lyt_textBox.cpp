@@ -4,6 +4,7 @@
 #include "nw4r/lyt/lyt_layout.h"
 #include "nw4r/lyt/lyt_material.h"
 #include "nw4r/ut.h" // IWYU pragma: export
+#include "wstring.h"
 
 namespace nw4r {
 namespace lyt {
