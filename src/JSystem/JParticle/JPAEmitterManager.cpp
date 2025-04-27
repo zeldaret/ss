@@ -3,6 +3,8 @@
 // Translation Unit: JPAEmitterManager
 //
 
+#include "JSystem/JParticle/JPAList.h"
+#include "JSystem/JSupport/JSUList.h"
 #include "egg/core/eggHeap.h"
 #include "JSystem/JParticle/JPAEmitterManager.h"
 #include "JSystem/JParticle/JPAEmitter.h"
@@ -10,6 +12,8 @@
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JUtility/JUTAssert.h"
 #include "egg/math/eggVector.h"
+#include "rvl/GX/GXTransform.h"
+#include "rvl/GX/GXTypes.h"
 #include "rvl/GX.h"
 
 /* 8027DCA0-8027DEBC 2785E0 021C+00 0/0 1/1 0/0 .text __ct__17JPAEmitterManagerFUlUlP7EGG::HeapUcUc
@@ -23,25 +27,25 @@ JPAEmitterManager::JPAEmitterManager(u32 i_ptclNum, u32 i_emtrNum, EGG::Heap* pH
 
     JUT_ASSERT(40, emtrNum && ptclNum && gidMax && ridMax);
 
-    JPABaseEmitter* p_emtr_link = new (pHeap, 0) JPABaseEmitter[emtrNum];
+    JPABaseEmitter* p_emtr_link = new (pHeap, 4) JPABaseEmitter[emtrNum];
     JUT_ASSERT(44, p_emtr_link);
     for (u32 i = 0; i < emtrNum; i++)
         mFreeEmtrList.prepend(&p_emtr_link[i].mLink);
 
-    JPANode<JPABaseParticle>* p_ptcl_node = new (pHeap, 0) JPANode<JPABaseParticle>[ptclNum];
+    JPANode<JPABaseParticle>* p_ptcl_node = new (pHeap, 4) JPANode<JPABaseParticle>[ptclNum];
     JUT_ASSERT(51, p_ptcl_node);
     for (u32 i = 0; i < ptclNum; i++)
         mPtclPool.push_back(&p_ptcl_node[i]);
 
-    pEmtrUseList = new (pHeap, 0) JSUList<JPABaseEmitter>[gidMax];
+    pEmtrUseList = new (pHeap, 4) JSUList<JPABaseEmitter>[gidMax];
     JUT_ASSERT(58, pEmtrUseList);
-    pResMgrAry = new (pHeap, 0) JPAResourceManager*[ridMax];
+    pResMgrAry = new (pHeap, 4) JPAResourceManager*[ridMax];
     JUT_ASSERT(62, pResMgrAry)
     for (int i = 0; i < ridMax; i++) {
         pResMgrAry[i] = NULL;
     }
 
-    pWd = new (pHeap, 0) JPAEmitterWorkData();
+    pWd = new (pHeap, 4) JPAEmitterWorkData();
     JUT_ASSERT(67, pWd);
 }
 
@@ -77,6 +81,41 @@ JPABaseEmitter* JPAEmitterManager::createSimpleEmitterID(EGG::Vector3f const& po
     }
 
     return NULL;
+}
+
+// SS addition
+void JPAEmitterManager::fn_80320E20(u8 group_id, f32 of_x, f32 of_z) {
+    JSULink<JPABaseEmitter> *pNext = NULL;
+    for (JSULink<JPABaseEmitter> *pLink = pEmtrUseList[group_id].getFirst(); pLink != pEmtrUseList[group_id].getEnd();
+         pLink = pNext) {
+        pNext = pLink->getNext();
+        JPABaseEmitter *pEmit = pLink->getObject();
+
+        EGG::Vector3f offset;
+        JPANode<JPABaseParticle> *pNextBase = NULL;
+
+        for (JPANode<JPABaseParticle> *baseLink = pEmit->mAlivePtclBase.getFirst();
+             baseLink != pEmit->mAlivePtclBase.getEnd(); baseLink = pNextBase) {
+            pNextBase = baseLink->getNext();
+        
+            JPABaseParticle *o = baseLink->getObject();
+            o->getOffsetPosition(offset);
+            offset.x += of_x;
+            offset.z += of_z;
+            o->setOffsetPosition(offset);
+        }
+
+        for (JPANode<JPABaseParticle> *childLink = pEmit->mAlivePtclChld.getFirst();
+             childLink != pEmit->mAlivePtclChld.getEnd(); childLink = pNextBase) {
+            pNextBase = childLink->getNext();
+
+            JPABaseParticle *o = childLink->getObject();
+            o->getOffsetPosition(offset);
+            offset.x += of_x;
+            offset.z += of_z;
+            o->setOffsetPosition(offset);
+        }
+    }
 }
 
 /* 8027DFA0-8027E028 2788E0 0088+00 0/0 3/3 0/0 .text            calc__17JPAEmitterManagerFUc */
@@ -130,6 +169,8 @@ void JPAEmitterManager::draw(JPADrawInfo const* drawInfo, u8 group_id) {
             emtr->mpRes->draw(pWd, emtr);
         }
     }
+
+    GXSetClipMode(GX_CLIP_ENABLE);
 }
 
 /* 8027E220-8027E278 278B60 0058+00 0/0 1/1 0/0 .text forceDeleteAllEmitter__17JPAEmitterManagerFv

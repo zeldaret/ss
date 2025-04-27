@@ -4,10 +4,9 @@
 //
 
 #include "JSystem/JParticle/JPAExtraShape.h"
-#include "JSystem/JMath/JMATrigonometric.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAEmitter.h"
-#include "rvl/OS.h"
+#include "nw4r/math/math_triangular.h"
 
 /* 8027A918-8027A990 275258 0078+00 0/0 1/1 0/0 .text
  * JPACalcScaleX__FP18JPAEmitterWorkDataP15JPABaseParticle      */
@@ -116,7 +115,7 @@ void JPACalcAlphaFlickAnm(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
         alpha = esp->getAlphaBaseValue();
     }
     s32 theta = ptcl->mAlphaWaveRandom * ptcl->mAge * 16384.0f * (1.0f - esp->getAlphaFreq());
-    f32 wave = JMASSin(theta);
+    f32 wave = nw4r::math::SinIdx(theta);
     alpha *= (1.0f + esp->getAlphaAmp() * (wave - 1.0f) * 0.5f) * 255.0f;
     OSf32tou8(&alpha, &ptcl->mPrmColorAlphaAnm);
 }

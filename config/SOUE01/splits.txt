@@ -1766,6 +1766,7 @@ JSystem/JParticle/JPABaseShape.cpp:
 
 JSystem/JParticle/JPAExtraShape.cpp:
 	.text       start:0x8031D540 end:0x8031DB98 align:16
+	.sdata2     start:0x8057CE88 end:0x8057CEB0
 
 JSystem/JParticle/JPAChildShape.cpp:
 	.text       start:0x8031DBA0 end:0x8031DD48 align:16
@@ -1775,6 +1776,7 @@ JSystem/JParticle/JPAExTexShape.cpp:
 
 JSystem/JParticle/JPADynamicsBlock.cpp:
 	.text       start:0x8031E0A0 end:0x8031F020 align:16
+	.sdata2     start:0x8057CED8 end:0x8057CF00
 
 JSystem/JParticle/JPAFieldBlock.cpp:
 	.text       start:0x8031F020 end:0x80320410 align:16
@@ -1794,6 +1796,7 @@ JSystem/JParticle/JPAResourceLoader.cpp:
 
 JSystem/JParticle/JPAEmitterManager.cpp:
 	.text       start:0x80320980 end:0x80321444 align:16
+	.sdata2     start:0x8057CF18 end:0x8057CF20
 
 JSystem/JParticle/JPAEmitter.cpp:
 	.text       start:0x80321450 end:0x80321C74 align:16

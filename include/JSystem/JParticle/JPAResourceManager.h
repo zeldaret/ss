@@ -14,13 +14,13 @@ class JPAResource;
  */
 class JPAResourceManager {
 public:
-    /* 80273E10 */ JPAResourceManager(void const*, EGG::Heap*);
-    /* 80273E68 */ JPAResource* getResource(u16) const;
-    /* 80273EA8 */ bool checkUserIndexDuplication(u16) const;
-    /* 80273EEC */ const EGG::ResTIMG* swapTexture(EGG::ResTIMG const*, char const*);
-    /* 80273F8C */ void registRes(JPAResource*);
-    /* 80273FAC */ void registTex(JPATexture*);
-    /* 80273FCC */ u32 getResUserWork(u16) const;
+    JPAResourceManager(void const*, EGG::Heap*);
+    JPAResource* getResource(u16) const;
+    bool checkUserIndexDuplication(u16) const;
+    const EGG::ResTIMG* swapTexture(EGG::ResTIMG const*, char const*);
+    void registRes(JPAResource*);
+    void registTex(JPATexture*);
+    u32 getResUserWork(u16) const;
 
     void load(u16 idx, GXTexMapID texMapID) { mpTexArr[idx]->load(texMapID); }
 

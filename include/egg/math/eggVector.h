@@ -48,7 +48,7 @@ struct Vector3f : public nw4r::math::VEC3 {
         return Vector3f(-x, -y, -z);
     }
 
-    Vector3f operator-(const Vector3f &v) {
+    Vector3f operator-(const Vector3f &v) const {
         return Vector3f(x - v.x, y - v.y, z - v.z);
     }
 

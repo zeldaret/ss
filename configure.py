@@ -1219,7 +1219,7 @@ config.libs = [
             Object(Matching, "JSystem/JParticle/JPAKeyBlock.cpp"),
             Object(Matching, "JSystem/JParticle/JPATexture.cpp"),
             Object(Matching, "JSystem/JParticle/JPAResourceLoader.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPAEmitterManager.cpp"),
+            Object(Matching, "JSystem/JParticle/JPAEmitterManager.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAEmitter.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAParticle.cpp"),
             Object(Matching, "JSystem/JParticle/JPAMath.cpp"),

@@ -53,8 +53,8 @@ struct JPABaseShapeAlphaArg {
  */
 struct JPABaseShape {
 public:
-    /* 8027A6DC */ JPABaseShape(u8 const*, EGG::Heap*);
-    /* 8027A7E8 */ void setGX(JPAEmitterWorkData*) const;
+    JPABaseShape(u8 const*, EGG::Heap*);
+    void setGX(JPAEmitterWorkData*) const;
 
     static GXBlendMode st_bm[3];
     static GXBlendFactor st_bf[10];
