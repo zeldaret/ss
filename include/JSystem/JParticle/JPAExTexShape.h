@@ -49,6 +49,17 @@ public:
     bool isUseIndirect() const { return !!(mpData->mFlags & 0x01); }
     BOOL isUseSecTex() const { return (mpData->mFlags & 0x0100); }
 
+    f32 getField_0x24() const { return mpData->field_0x24; }
+    f32 getField_0x28() const { return mpData->field_0x28; }
+    f32 getField_0x2C() const { return mpData->field_0x2C; }
+    f32 getField_0x30() const { return mpData->field_0x30; }
+    f32 getField_0x34() const { return mpData->field_0x34; }
+    f32 getField_0x38() const { return mpData->field_0x38; }
+    f32 getField_0x3C() const { return mpData->field_0x3C; }
+    f32 getField_0x40() const { return mpData->field_0x40; }
+    f32 getField_0x44() const { return mpData->field_0x44; }
+    f32 getField_0x48() const { return mpData->field_0x48; }
+
 public:
     const JPAExTexShapeData* mpData;
     void fn_8031DE80(const JPABaseShape *bsp, f32) const;

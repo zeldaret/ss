@@ -331,6 +331,7 @@ def JSystemLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
         # probably?
         "mw_version": "Wii/1.5",
         "cflags": cflags_framework,
+        "scratch_preset_id": 169,
         "progress_category": "jsystem",
         "host": False,
         "objects": objects,
@@ -1213,7 +1214,7 @@ config.libs = [
             Object(NonMatching, "JSystem/JParticle/JPABaseShape.cpp"),
             Object(Matching, "JSystem/JParticle/JPAExtraShape.cpp"),
             Object(Matching, "JSystem/JParticle/JPAChildShape.cpp"),
-            Object(NonMatching, "JSystem/JParticle/JPAExTexShape.cpp"),
+            Object(Matching, "JSystem/JParticle/JPAExTexShape.cpp"),
             Object(Matching, "JSystem/JParticle/JPADynamicsBlock.cpp"),
             Object(NonMatching, "JSystem/JParticle/JPAFieldBlock.cpp"),
             Object(Matching, "JSystem/JParticle/JPAKeyBlock.cpp"),
