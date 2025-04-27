@@ -9,6 +9,7 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAEmitterManager.h"
 #include "JSystem/JParticle/JPAExtraShape.h"
+#include "egg/math/eggVector.h"
 
 /* 8027EFA4-8027EFEC 2798E4 0048+00 0/0 11/11 1/1 .text            __dt__19JPAParticleCallBackFv */
 JPAParticleCallBack::~JPAParticleCallBack() {
@@ -155,7 +156,8 @@ void JPABaseParticle::init_c(JPAEmitterWorkData* work, JPABaseParticle* parent) 
     f32 base_speed = csp->getBaseVel() * (csp->getBaseVelRndm() * emtr->get_r_zp() + 1.0f);
     EGG::Vector3f base_vel(emtr->get_r_zp(), emtr->get_r_zp(), emtr->get_r_zp());
     base_vel.setLength(base_speed);
-    mVelType1 = parent->mVelType1 * csp->getVelInhRate() + base_vel;
+    EGG::Vector3f v = parent->mVelType1 * csp->getVelInhRate();
+    mVelType1 = v + base_vel;
     mVelType0 = parent->mVelType2 * csp->getVelInhRate();
     
     mMoment = parent->mMoment;
