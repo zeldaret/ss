@@ -7,8 +7,15 @@
 extern "C" {
 #endif
 
-void PSMTXMultVec(const Mtx, const Vec *, Vec *);
-void PSMTXMultVecSR(const Mtx, const Vec *, Vec *);
+#define MTXMultVec        PSMTXMultVec
+#define MTXMultVecArray   PSMTXMultVecArray
+#define MTXMultVecSR      PSMTXMultVecSR
+#define MTXMultVecArraySR PSMTXMultVecArraySR
+
+void PSMTXMultVec(const Mtx m, const Vec* src, Vec* dst);
+void PSMTXMultVecArray(const Mtx m, const Vec* srcBase, Vec* dstBase, u32 count);
+void PSMTXMultVecSR(const Mtx m, const Vec* src, Vec* dst);
+void PSMTXMultVecArraySR(const Mtx m, const Vec* srcBase, Vec* dstBase, u32 count);
 
 #ifdef __cplusplus
 }

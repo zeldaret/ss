@@ -47,6 +47,14 @@ public:
         setCaptureFlag(false);
     }
 
+    void store(const ResTIMG *p_timg) {
+        mTexInfo = nullptr;
+        mEmbPalette = nullptr;
+        mFlags = 0;
+        field_0x3c = nullptr;
+        storeTIMG(p_timg, (u8)0);
+    }
+
     Texture(int, int, GXTexFmt, Heap *);
     ~Texture();
 

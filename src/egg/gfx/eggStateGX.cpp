@@ -172,7 +172,7 @@ void StateGX::resetTexGen() {
     GXSetNumTexGens(1);
 
     for (u32 i = 0; i < 10; i++) {
-        GXLoadTexMtxImm(identity, i * 3 + 0x1E, GX_MTX_3x4);
+        GXLoadTexMtxImm(identity, i * 3 + 0x1E, GX_MTX3x4);
     }
 
     for (u32 i = 0; i < GX_MAX_TEXCOORD; i++) {

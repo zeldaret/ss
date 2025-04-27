@@ -334,7 +334,7 @@ void LightTexture::fn_804AC0E0(int i, const GXColor &color, bool b) {
     mtx._13 = sDrawHeight - (h + sTexHeight);
 
     GXLoadPosMtxImm(mtx, 0);
-    GXLoadTexMtxImm(sIdentityMtx, 0x1E, GX_MTX_2x4);
+    GXLoadTexMtxImm(sIdentityMtx, 0x1E, GX_MTX2x4);
 
     GXColor c;
     if ((field_0x36 & 1) != 0) {
@@ -474,7 +474,7 @@ void LightTexture::draw(int i) {
     mtx._13 = sDrawHeight - (h + sTexHeight);
 
     GXLoadPosMtxImm(mtx, 0);
-    GXLoadTexMtxImm(sIdentityMtx, 0x1E, GX_MTX_2x4);
+    GXLoadTexMtxImm(sIdentityMtx, 0x1E, GX_MTX2x4);
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 
     GXPosition1x8(0);
@@ -520,7 +520,7 @@ void LightTexture::debugDraw(int i) {
     mtx._13 = sDrawHeight - (u2 + sTexHeight);
 
     GXLoadPosMtxImm(mtx, 0);
-    GXLoadTexMtxImm(sIdentityMtx, 0x1E, GX_MTX_2x4);
+    GXLoadTexMtxImm(sIdentityMtx, 0x1E, GX_MTX2x4);
 
     GXBegin(GX_QUADS, GX_VTXFMT0, 4);
 

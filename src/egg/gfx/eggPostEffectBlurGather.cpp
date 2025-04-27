@@ -36,7 +36,7 @@ void PostEffectBlurGather::setMaterialInternal() {
         } else {
             loadTextureInternal();
         }
-        GXLoadTexMtxImm(mtx, texMtxIdx, GX_MTX_2x4);
+        GXLoadTexMtxImm(mtx, texMtxIdx, GX_MTX2x4);
     }
 
     f32 v = field_0x30 * 255.0f;

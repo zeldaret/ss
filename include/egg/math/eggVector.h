@@ -36,6 +36,15 @@ struct Vector3f : public nw4r::math::VEC3 {
         return *this;
     }
 
+    void mul(const Vector3f &v, const Vector3f &w) {
+        set(v.x * w.x, v.y * w.y, v.z * w.z);
+    }
+
+    Vector3f &operator*=(const Vector3f &v) {
+        set(x * v.x, y * v.y, z * v.z);
+        return *this;
+    }
+
     Vector3f operator-() const {
         f32 z = this->z;
         f32 y = this->y;
@@ -43,7 +52,7 @@ struct Vector3f : public nw4r::math::VEC3 {
         return Vector3f(-x, -y, -z);
     }
 
-    Vector3f operator-(const Vector3f &v) {
+    Vector3f operator-(const Vector3f &v) const {
         return Vector3f(x - v.x, y - v.y, z - v.z);
     }
 
@@ -108,6 +117,22 @@ struct Vector3f : public nw4r::math::VEC3 {
         y = fy;
         z = fz;
     }
+
+    Vector3f negated() {
+        return Vector3f(-x, -y, -z);
+    }
+
+    void set(const EGG::Vector3f& other) {
+        x = other.x;
+        y = other.y;
+        z = other.z;
+    }
+
+    bool isZero() const {
+        return squaredLength() <= Math<f32>::epsilon();
+    }
+
+    void setZero() { x = y = z = 0.0f; };
 
     f32 normalise();
 

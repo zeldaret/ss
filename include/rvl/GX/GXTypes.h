@@ -44,6 +44,12 @@ extern "C" {
 // Real name! (from patent)
 typedef unsigned char GXBool;
 
+#define GX_FALSE ((GXBool)0)
+#define GX_TRUE ((GXBool)1)
+
+#define GX_ENABLE ((GXBool)1)
+#define GX_DISABLE ((GXBool)0)
+
 /**
  * Common structs
  */
@@ -549,6 +555,30 @@ typedef enum _GXTevOp {
     GX_TEV_COMP_A8_EQ = GX_TEV_COMP_RGB8_EQ
 } GXTevOp;
 
+typedef enum _GXPTTexMtx {
+    GX_PTTEXMTX0 = 64,
+    GX_PTTEXMTX1 = 67,
+    GX_PTTEXMTX2 = 70,
+    GX_PTTEXMTX3 = 73,
+    GX_PTTEXMTX4 = 76,
+    GX_PTTEXMTX5 = 79,
+    GX_PTTEXMTX6 = 82,
+    GX_PTTEXMTX7 = 85,
+    GX_PTTEXMTX8 = 88,
+    GX_PTTEXMTX9 = 91,
+    GX_PTTEXMTX10 = 94,
+    GX_PTTEXMTX11 = 97,
+    GX_PTTEXMTX12 = 100,
+    GX_PTTEXMTX13 = 103,
+    GX_PTTEXMTX14 = 106,
+    GX_PTTEXMTX15 = 109,
+    GX_PTTEXMTX16 = 112,
+    GX_PTTEXMTX17 = 115,
+    GX_PTTEXMTX18 = 118,
+    GX_PTTEXMTX19 = 121,
+    GX_PTIDENTITY = 125,
+} GXPTTexMtx;
+
 typedef enum _GXTevRegID {
     GX_TEVPREV,
     GX_TEVREG0,
@@ -684,6 +714,11 @@ typedef enum _GXTevMode {
     GX_BLEND
 } GXTevMode;
 
+typedef enum _GXTexMtxType {
+    GX_MTX3x4,
+    GX_MTX2x4,
+} GXTexMtxType;
+
 typedef enum _GXTexCoordID {
     GX_TEXCOORD0,
     GX_TEXCOORD1,
@@ -806,7 +841,7 @@ typedef enum _GXTexMtx {
     GX_TEXMTX7 = 51,
     GX_TEXMTX8 = 54,
     GX_TEXMTX9 = 57,
-    GX_TEXMTX_IDENT = 60,
+    GX_IDENTITY = 60,
 
     // 3x4 matrices (in dual-tex XF matrix memory)
     // Enum represents base row of matrix
@@ -900,6 +935,23 @@ typedef enum _GXZTexOp {
 
     GX_MAX_ZTEXOP
 } GXZTexOp;
+
+typedef enum _GXMiscToken {
+    GX_MT_XF_FLUSH = 1,
+    GX_MT_DL_SAVE_CONTEXT = 2,
+    GX_MT_ABORT_WAIT_COPYOUT = 3,
+    GX_MT_NULL = 0,
+} GXMiscToken;
+
+typedef enum _GXTexOffset {
+    GX_TO_ZERO,
+    GX_TO_SIXTEENTH,
+    GX_TO_EIGHTH,
+    GX_TO_FOURTH,
+    GX_TO_HALF,
+    GX_TO_ONE,
+    GX_MAX_TEXOFFSET,
+} GXTexOffset;
 
 #ifdef __cplusplus
 }
