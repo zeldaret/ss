@@ -238,14 +238,14 @@ void JPAFieldSpin::calc(JPAEmitterWorkData* work, JPAFieldBlock* block, JPABaseP
     calcAffect(block, ptcl);
 }
 
-/* 8027D088-8027D0C0 2779C8 0038+00 0/0 1/1 0/0 .text            __ct__13JPAFieldBlockFPCUcP7EGG::Heap
+/* 8027D088-8027D0C0 2779C8 0038+00 0/0 1/1 0/0 .text            __ct__13JPAFieldBlockFPCUcP7JKRHeap
  */
 JPAFieldBlock::JPAFieldBlock(u8 const* data, EGG::Heap* heap)
     : mpData((const JPAFieldBlockData*)data) {
     init(heap);
 }
 
-/* 8027D0C0-8027D3AC 277A00 02EC+00 2/1 0/0 0/0 .text            init__13JPAFieldBlockFP7EGG::Heap */
+/* 8027D0C0-8027D3AC 277A00 02EC+00 2/1 0/0 0/0 .text            init__13JPAFieldBlockFP7JKRHeap */
 void JPAFieldBlock::init(EGG::Heap* heap) {
     mFadeInRate = getFadeInTime() - getEnTime();
     if (mFadeInRate == 0.0f) {

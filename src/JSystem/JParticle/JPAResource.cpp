@@ -77,7 +77,7 @@ static u8 jpa_crd[32] ALIGN_DECL(32) = {
     0x00, 0x00, 0x01, 0x00, 0x01, 0x02, 0x00, 0x02, 0x00, 0x00, 0x02, 0x00, 0x02, 0x02, 0x00, 0x02,
 };
 
-/* 80274080-802755E8 26E9C0 1568+00 2/0 1/1 0/0 .text            init__11JPAResourceFP7EGG::Heap */
+/* 80274080-802755E8 26E9C0 1568+00 2/0 1/1 0/0 .text            init__11JPAResourceFP7JKRHeap */
 void JPAResource::init(EGG::Heap* heap) {
     // The s32s here are probably fake but fixes the regswaps
     s32 is_glbl_clr_anm = mpBaseShape->isGlblClrAnm();

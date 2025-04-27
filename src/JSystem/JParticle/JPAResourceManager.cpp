@@ -12,7 +12,7 @@ struct JPAResourceLoader {
     /* 8027D8A0 */ JPAResourceLoader(u8 const*, JPAResourceManager*);
 };
 
-/* 80273E10-80273E68 26E750 0058+00 0/0 2/2 0/0 .text __ct__18JPAResourceManagerFPCvP7EGG::Heap */
+/* 80273E10-80273E68 26E750 0058+00 0/0 2/2 0/0 .text __ct__18JPAResourceManagerFPCvP7JKRHeap */
 JPAResourceManager::JPAResourceManager(void const* pData, EGG::Heap* pHeap) {
     mpResArr = NULL;
     mpTexArr = NULL;

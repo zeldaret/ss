@@ -1278,7 +1278,7 @@ void JPADrawParticleCallBack(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
 }
 
 /* 8027A454-8027A6DC 274D94 0288+00 1/1 0/0 0/0 .text
- * makeColorTable__FPP8_GXColorPC16JPAClrAnmKeyDataUcsP7EGG::Heap */
+ * makeColorTable__FPP8_GXColorPC16JPAClrAnmKeyDataUcsP7JKRHeap */
 static void makeColorTable(GXColor** o_color_table, JPAClrAnmKeyData const* i_data, u8 param_2,
                            s16 i_size, EGG::Heap* i_heap) {
     // The TP code didn't match, the MKDD version helps here
@@ -1331,7 +1331,7 @@ static void makeColorTable(GXColor** o_color_table, JPAClrAnmKeyData const* i_da
     *o_color_table = color_table;
 }
 
-/* 8027A6DC-8027A7E8 27501C 010C+00 0/0 1/1 0/0 .text            __ct__12JPABaseShapeFPCUcP7EGG::Heap
+/* 8027A6DC-8027A7E8 27501C 010C+00 0/0 1/1 0/0 .text            __ct__12JPABaseShapeFPCUcP7JKRHeap
  */
 JPABaseShape::JPABaseShape(u8 const* pData, EGG::Heap* pHeap) {
     mpData = (const JPABaseShapeData*)pData;
