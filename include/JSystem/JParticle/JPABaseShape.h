@@ -91,13 +91,13 @@ public:
     u32 getTilingT() const { return (mpData->mFlags >> 28) & 0x01; } // was 26
     BOOL isGlblClrAnm() const { return mpData->mFlags & 0x00001000; }
     BOOL isGlblTexAnm() const { return mpData->mFlags & 0x00004000; }
-    BOOL isPrjTex() const { return mpData->mFlags & 0x00100000; }
-    bool isDrawFwdAhead() const { return !!(mpData->mFlags & 0x00200000); }
-    bool isDrawPrntAhead() const { return !!(mpData->mFlags & 0x00400000); }
-    bool isClipOn() const { return !!(mpData->mFlags & 0x00800000); }
-    BOOL isTexCrdAnm() const { return mpData->mFlags & 0x01000000; }
-    bool isNoDrawParent() const { return !!(mpData->mFlags & 0x08000000); }
-    bool isNoDrawChild() const { return !!(mpData->mFlags & 0x10000000); }
+    BOOL isPrjTex() const { return mpData->mFlags & 0x00400000; } // was 0x00100000
+    bool isDrawFwdAhead() const { return !!(mpData->mFlags & 0x00800000); } // was 0x00200000
+    bool isDrawPrntAhead() const { return !!(mpData->mFlags & 0x01000000); } // was 0x00400000
+    BOOL isClipOn() const { return (mpData->mFlags & 0x02000000); } // was 0x00800000
+    BOOL isTexCrdAnm() const { return mpData->mFlags & 0x04000000; } // was 0x01000000
+    bool isNoDrawParent() const { return !!((mpData->mFlags >> 29) & 1); } // was 0x08000000
+    bool isNoDrawChild() const { return !!((mpData->mFlags >> 30) & 1); } // was 0x10000000
 
     BOOL isPrmAnm() const { return mpData->mClrFlg & 0x02; }
     BOOL isEnvAnm() const { return mpData->mClrFlg & 0x08; }
@@ -177,6 +177,8 @@ void JPACalcClrIdxMerge(JPAEmitterWorkData*, JPABaseParticle*);
 void JPACalcClrIdxRandom(JPAEmitterWorkData*, JPABaseParticle*);
 void JPACalcColorCopy(JPAEmitterWorkData*, JPABaseParticle*);
 
+// SS addition
+void fn_8031C2C0(JPAEmitterWorkData*);
 void JPADrawStripe(JPAEmitterWorkData*);
 void JPADrawStripeX(JPAEmitterWorkData*);
 void JPADrawEmitterCallBackB(JPAEmitterWorkData*);
@@ -208,6 +210,8 @@ void JPALoadTexAnm(JPAEmitterWorkData*, JPABaseParticle*);
 void JPASetPointSize(JPAEmitterWorkData*, JPABaseParticle*);
 void JPASetLineWidth(JPAEmitterWorkData*, JPABaseParticle*);
 void JPALoadCalcTexCrdMtxAnm(JPAEmitterWorkData*, JPABaseParticle*);
+// SS addition
+void fn_8031A8C0(JPAEmitterWorkData*, JPABaseParticle*);
 void JPARegistAlpha(JPAEmitterWorkData*, JPABaseParticle*);
 void JPARegistEnv(JPAEmitterWorkData*, JPABaseParticle*);
 void JPARegistAlphaEnv(JPAEmitterWorkData*, JPABaseParticle*);

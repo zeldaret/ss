@@ -102,8 +102,10 @@ static void JPAVolumeSphere(JPAEmitterWorkData* work) {
     f32 rad = work->mVolumeSize * (work->mVolumeMinRad + rnd * (1.0f - work->mVolumeMinRad));
     work->mVolumeCalcData.mVolumePos.set(rad * nw4r::math::CosIdx(phi) * nw4r::math::SinIdx(theta), -rad * nw4r::math::SinIdx(phi),
                                          rad * nw4r::math::CosIdx(phi) * nw4r::math::CosIdx(theta));
-    work->mVolumeCalcData.mVelOmni = work->mVolumeCalcData.mVolumePos;
-    work->mVolumeCalcData.mVelOmni *= work->mGlobalScl;
+    work->mVolumeCalcData.mVelOmni.set(
+        work->mVolumeCalcData.mVolumePos.x * work->mGlobalScl.x,
+        work->mVolumeCalcData.mVolumePos.y * work->mGlobalScl.y, work->mVolumeCalcData.mVolumePos.z * work->mGlobalScl.z
+    );
     work->mVolumeCalcData.mVelAxis.set(work->mVolumeCalcData.mVolumePos.x, 0.0f,
                                        work->mVolumeCalcData.mVolumePos.z);
 }
@@ -118,8 +120,10 @@ static void JPAVolumeCylinder(JPAEmitterWorkData* work) {
     f32 rad = work->mVolumeSize * (work->mVolumeMinRad + rnd * (1.0f - work->mVolumeMinRad));
     work->mVolumeCalcData.mVolumePos.set(
         rad * nw4r::math::SinIdx(theta), work->mVolumeSize * work->mpEmtr->get_r_zp(), rad * nw4r::math::CosIdx(theta));
-    work->mVolumeCalcData.mVelOmni = work->mVolumeCalcData.mVolumePos;
-    work->mVolumeCalcData.mVelOmni *= work->mGlobalScl;
+    work->mVolumeCalcData.mVelOmni.set(
+        work->mVolumeCalcData.mVolumePos.x * work->mGlobalScl.x,
+        work->mVolumeCalcData.mVolumePos.y * work->mGlobalScl.y, work->mVolumeCalcData.mVolumePos.z * work->mGlobalScl.z
+    );
     work->mVolumeCalcData.mVelAxis.set(work->mVolumeCalcData.mVolumePos.x, 0.0f,
                                        work->mVolumeCalcData.mVolumePos.z);
 }
@@ -135,8 +139,10 @@ static void JPAVolumeTorus(JPAEmitterWorkData* work) {
         work->mVolumeCalcData.mVelAxis.x + work->mVolumeSize * nw4r::math::SinIdx(theta),
         work->mVolumeCalcData.mVelAxis.y,
         work->mVolumeCalcData.mVelAxis.z + work->mVolumeSize * nw4r::math::CosIdx(theta));
-    work->mVolumeCalcData.mVelOmni = work->mVolumeCalcData.mVolumePos;
-    work->mVolumeCalcData.mVelOmni *= work->mGlobalScl;
+    work->mVolumeCalcData.mVelOmni.set(
+        work->mVolumeCalcData.mVolumePos.x * work->mGlobalScl.x,
+        work->mVolumeCalcData.mVolumePos.y * work->mGlobalScl.y, work->mVolumeCalcData.mVolumePos.z * work->mGlobalScl.z
+    );
 }
 
 /* 8027BB18-8027BB4C 276458 0034+00 0/0 1/1 0/0 .text            __ct__16JPADynamicsBlockFPCUc */

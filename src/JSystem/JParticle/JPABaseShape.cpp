@@ -3,6 +3,7 @@
 // Translation Unit: JPABaseShape
 //
 
+#include "JSystem/JParticle/JPAExTexShape.h"
 #include "egg/core/eggHeap.h"
 #include "JSystem/JParticle/JPABaseShape.h"
 #include "JSystem/JParticle/JPAParticle.h"
@@ -161,13 +162,11 @@ void JPACalcClrIdxNormal(JPAEmitterWorkData* work) {
  * JPACalcClrIdxNormal__FP18JPAEmitterWorkDataP15JPABaseParticle */
 void JPACalcClrIdxNormal(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
     JPABaseShape* shape = work->mpRes->getBsp();
-    s16 age = param_1->mAge;
-    s16 maxFrm = shape->getClrAnmMaxFrm();
     s16 keyFrame;
-    if (age < maxFrm) {
-        keyFrame = age;
+    if (param_1->mAge < shape->getClrAnmMaxFrm()) {
+        keyFrame = param_1->mAge;
     } else {
-        keyFrame = maxFrm;
+        keyFrame = shape->getClrAnmMaxFrm();
     }
     work->mClrKeyFrame = keyFrame;
 }
@@ -183,8 +182,7 @@ void JPACalcClrIdxRepeat(JPAEmitterWorkData* work) {
  * JPACalcClrIdxRepeat__FP18JPAEmitterWorkDataP15JPABaseParticle */
 void JPACalcClrIdxRepeat(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
     JPABaseShape* shape = work->mpRes->getBsp();
-    s32 tick = shape->getClrLoopOfst(param_1->mAnmRandom);
-    tick = param_1->mAge + tick;
+    s32 tick = param_1->mAge + shape->getClrLoopOfst(param_1->mAnmRandom);
     work->mClrKeyFrame = tick % (shape->getClrAnmMaxFrm() + 1);
 }
 
@@ -355,6 +353,10 @@ void JPALoadCalcTexCrdMtxAnm(JPAEmitterWorkData* work, JPABaseParticle* param_1)
     GXLoadTexMtxImm(local_108, 0x1e, GX_MTX2x4);
 }
 
+void fn_8031A8C0(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
+    work->mpRes->getEts()->fn_8031DE80(work->mpRes->getBsp(), ptcl->getAge());
+}
+
 /* 802778EC-80277940 27222C 0054+00 0/0 1/1 0/0 .text            JPALoadTex__FP18JPAEmitterWorkData
  */
 void JPALoadTex(JPAEmitterWorkData* work) {
@@ -508,13 +510,13 @@ static void loadPrjAnm(JPAEmitterWorkData const* work, const Mtx srt) {
 }
 
 /* 803C42E0-803C4300 021400 0020+00 10/9 0/0 0/0 .data            jpa_dl */
-static u8 jpa_dl[32] = {
+static u8 ALIGN_DECL(32) jpa_dl[32] = {
     0x80, 0x00, 0x04, 0x00, 0x00, 0x01, 0x01, 0x02, 0x02, 0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
 
 /* 803C4300-803C4320 021420 0020+00 1/0 0/0 0/0 .data            jpa_dl_x */
-static u8 jpa_dl_x[32] = {
+static u8 ALIGN_DECL(32) jpa_dl_x[32] = {
     0x80, 0x00, 0x08, 0x00, 0x00, 0x01, 0x01, 0x02, 0x02, 0x03, 0x03, 0x48, 0x00, 0x49, 0x01, 0x4A,
     0x02, 0x4B, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 };
@@ -616,8 +618,8 @@ void JPADrawRotYBillboard(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
     if (param_1->checkStatus(8) == 0) {
         EGG::Vector3f local_48;
         MTXMultVec(work->mPosCamMtx, param_1->mPosition, local_48);
-        f32 sinRot = nw4r::math::SinIdx((s16)param_1->mRotateAngle);
-        f32 cosRot = nw4r::math::CosIdx((s16)param_1->mRotateAngle);
+        f32 sinRot = nw4r::math::SinIdx(param_1->mRotateAngle);
+        f32 cosRot = nw4r::math::CosIdx(param_1->mRotateAngle);
         Mtx local_38;
         f32 particleX = work->mGlobalPtclScl.x * param_1->mParticleScaleX;
         f32 particleY = work->mGlobalPtclScl.y * param_1->mParticleScaleY;
@@ -742,12 +744,15 @@ static void rotTypeZ(f32 param_0, f32 param_1, Mtx& param_2) {
 static void rotTypeXYZ(f32 param_0, f32 param_1, Mtx& param_2) {
     f32 f3;
     f32 fVar1;
-    f32 f4;
     f32 fVar2;
+    f32 f4;
+    f32 tmp;
+
     
     f3 = 0.33333298563957214f * (1.0f - param_1);
-    f4 = f3 + 0.5773500204086304f * param_0;
-    fVar1 =  f3 - 0.5773500204086304f * param_0;
+    tmp = 0.5773500204086304f * param_0;
+    f4 = f3 + tmp;
+    fVar1 =  f3 - tmp;
     fVar2 = f3 + param_1;
     param_2[0][0] = fVar2;
     param_2[0][1] = fVar1;
@@ -838,12 +843,12 @@ void JPADrawDirection(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
         EGG::Vector3f local_78;
         p_direction[param_0->mDirType](param_0, param_1, &local_6c);
         if (!local_6c.isZero()) {
-            local_6c.normalize();
+            local_6c.normalise();
             local_78 = param_1->mBaseAxis.cross(local_6c);
             if (!local_78.isZero()) {
-                local_78.normalize();
+                local_78.normalise();
                 param_1->mBaseAxis = local_6c.cross(local_78);
-                param_1->mBaseAxis.normalize();
+                param_1->mBaseAxis.normalise();
                 Mtx local_60;
                 f32 fVar1 = param_0->mGlobalPtclScl.x * param_1->mParticleScaleX;
                 f32 fVar2 = param_0->mGlobalPtclScl.y * param_1->mParticleScaleY;
@@ -879,12 +884,12 @@ void JPADrawRotDirection(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) 
         EGG::Vector3f local_78;
         p_direction[param_0->mDirType](param_0, param_1, &local_6c);
         if (!local_6c.isZero()) {
-            local_6c.normalize();
+            local_6c.normalise();
             local_78 = param_1->mBaseAxis.cross(local_6c);
             if (!local_78.isZero()) {
-                local_78.normalize();
+                local_78.normalise();
                 param_1->mBaseAxis = local_6c.cross(local_78);
-                param_1->mBaseAxis.normalize();
+                param_1->mBaseAxis.normalise();
                 f32 particleX = param_0->mGlobalPtclScl.x * param_1->mParticleScaleX;
                 f32 particleY = param_0->mGlobalPtclScl.y * param_1->mParticleScaleY;
                 Mtx auStack_80;
@@ -924,7 +929,7 @@ void JPADrawDBillboard(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
             param_0->mPosCamMtx[2][2]);
         local_70 = local_70.cross(aTStack_7c);
         if (!local_70.isZero()) {
-            local_70.normalize();
+            local_70.normalise();
             MTXMultVecSR(param_0->mPosCamMtx, local_70, local_70);
             EGG::Vector3f local_88;
             MTXMultVec(param_0->mPosCamMtx, param_1->mPosition, local_88);
@@ -1023,6 +1028,10 @@ JPANode<JPABaseParticle>* getPrev(JPANode<JPABaseParticle>* param_0) {
 
 typedef JPANode<JPABaseParticle>* (*getNodeFunc)(JPANode<JPABaseParticle>*);
 
+void fn_8031C2C0(JPAEmitterWorkData* work) {
+    work->mpRes->getEts()->fn_8031DE80(work->mpRes->getBsp(), work->mpEmtr->getAge());
+}
+
 /* 80279374-8027996C 273CB4 05F8+00 0/0 1/1 0/0 .text JPADrawStripe__FP18JPAEmitterWorkData */
 void JPADrawStripe(JPAEmitterWorkData* param_0) {
     JPABaseShape* shape = param_0->mpRes->getBsp();
@@ -1074,16 +1083,16 @@ void JPADrawStripe(JPAEmitterWorkData* param_0) {
         if (local_f8.isZero()) {
             local_f8.set(0.0f, 1.0f, 0.0f);
         } else {
-            local_f8.normalize();
+            local_f8.normalise();
         }
         local_104 = particle->mBaseAxis.cross(local_f8);
         if (local_104.isZero()) {
             local_104.set(1.0f, 0.0f, 0.0f);
         } else {
-            local_104.normalize();
+            local_104.normalise();
         }
         particle->mBaseAxis = local_f8.cross( local_104);
-        particle->mBaseAxis.normalize();
+        particle->mBaseAxis.normalise();
         
         local_c8[0][0] = local_104.x;
         local_c8[0][1] = local_f8.x;
@@ -1164,16 +1173,16 @@ void JPADrawStripeX(JPAEmitterWorkData* param_0) {
         if (local_c0.isZero()) {
             local_c0.set(0.0f, 1.0f, 0.0f);
         } else {
-            local_c0.normalize();
+            local_c0.normalise();
         }
         local_cc = particle->mBaseAxis.cross(local_c0);
         if (local_cc.isZero()) {
             local_cc.set(1.0f, 0.0f, 0.0f);
         } else {
-            local_cc.normalize();
+            local_cc.normalise();
         }
         particle->mBaseAxis = local_c0.cross( local_cc);
-        particle->mBaseAxis.normalize();
+        particle->mBaseAxis.normalise();
         
         local_90[0][0] = local_cc.x;
         local_90[0][1] = local_c0.x;
@@ -1214,16 +1223,16 @@ void JPADrawStripeX(JPAEmitterWorkData* param_0) {
         if (local_c0.isZero()) {
             local_c0.set(0.0f, 1.0f, 0.0f);
         } else {
-            local_c0.normalize();
+            local_c0.normalise();
         }
         local_cc = particle->mBaseAxis.cross(local_c0);
         if (local_cc.isZero()) {
             local_cc.set(1.0f, 0.0f, 0.0f);
         } else {
-            local_cc.normalize();
+            local_cc.normalise();
         }
         particle->mBaseAxis = local_c0.cross( local_cc);
-        particle->mBaseAxis.normalize();
+        particle->mBaseAxis.normalise();
         
         local_90[0][0] = local_cc.x;
         local_90[0][1] = local_c0.x;
@@ -1290,10 +1299,10 @@ static void makeColorTable(GXColor** o_color_table, JPAClrAnmKeyData const* i_da
             j++;
             if (j < param_2) {
                 f32 base_step = 1.0f / (i_data[j].index - i_data[j - 1].index);
-                r_step = base_step * ((f32)i_data[j].color.r - r);
-                g_step = base_step * ((f32)i_data[j].color.g - g);
-                b_step = base_step * ((f32)i_data[j].color.b - b);
-                a_step = base_step * ((f32)i_data[j].color.a - a);
+                r_step = base_step * (i_data[j].color.r - r);
+                g_step = base_step * (i_data[j].color.g - g);
+                b_step = base_step * (i_data[j].color.b - b);
+                a_step = base_step * (i_data[j].color.a - a);
             } else {
                 r_step = g_step = b_step = a_step = 0.0f;
             }

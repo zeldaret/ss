@@ -36,6 +36,10 @@ struct Vector3f : public nw4r::math::VEC3 {
         return *this;
     }
 
+    void mul(const Vector3f &v, const Vector3f &w) {
+        set(v.x * w.x, v.y * w.y, v.z * w.z);
+    }
+
     Vector3f &operator*=(const Vector3f &v) {
         set(x * v.x, y * v.y, z * v.z);
         return *this;

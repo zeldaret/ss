@@ -79,8 +79,9 @@ static u8 jpa_crd[32] ALIGN_DECL(32) = {
 
 /* 80274080-802755E8 26E9C0 1568+00 2/0 1/1 0/0 .text            init__11JPAResourceFP7EGG::Heap */
 void JPAResource::init(EGG::Heap* heap) {
-    BOOL is_glbl_clr_anm = mpBaseShape->isGlblClrAnm();
-    BOOL is_glbl_tex_anm = mpBaseShape->isGlblTexAnm();
+    // The s32s here are probably fake but fixes the regswaps
+    s32 is_glbl_clr_anm = mpBaseShape->isGlblClrAnm();
+    s32 is_glbl_tex_anm = mpBaseShape->isGlblTexAnm();
     BOOL is_prm_anm = mpBaseShape->isPrmAnm();
     BOOL is_env_anm = mpBaseShape->isEnvAnm();
     BOOL is_tex_anm = mpBaseShape->isTexAnm();
@@ -354,6 +355,9 @@ void JPAResource::init(EGG::Heap* heap) {
 
     if (is_draw_parent && base_type_5_6) {
         mpDrawEmitterFuncListNum++;
+        if (mpExTexShape != NULL && mpExTexShape->isUseIndirect() && mpExTexShape->getfield_0x4C()) {
+            mpDrawEmitterFuncListNum++;
+        }
     }
 
     mpDrawEmitterFuncListNum++;
@@ -393,6 +397,10 @@ void JPAResource::init(EGG::Heap* heap) {
             func_no++;
         } else {
             mpDrawEmitterFuncList[func_no] = &JPADrawStripeX;
+            func_no++;
+        }
+        if (mpExTexShape != NULL && mpExTexShape->isUseIndirect() && mpExTexShape->getfield_0x4C()) {
+            mpDrawEmitterFuncList[func_no] = &fn_8031C2C0;
             func_no++;
         }
     }
@@ -473,8 +481,8 @@ void JPAResource::init(EGG::Heap* heap) {
         mpDrawEmitterChildFuncListNum++;
     }
 
-    if (mpChildShape != NULL && !mpChildShape->isAlphaOutOn() && !mpChildShape->isAlphaInherited()
-                             && !mpChildShape->isColorInherited()) {
+    if (mpChildShape != NULL && ((!mpChildShape->isAlphaOutOn() && !mpChildShape->isAlphaInherited()
+                             && !mpChildShape->isColorInherited()) || is_draw_child && child_type_5_6)) {
         mpDrawEmitterChildFuncListNum++;
     }
 
@@ -503,9 +511,12 @@ void JPAResource::init(EGG::Heap* heap) {
         func_no++;
     }
 
-    if (mpChildShape != NULL && !mpChildShape->isAlphaOutOn() && !mpChildShape->isAlphaInherited()
-                             && !mpChildShape->isColorInherited()) {
-        mpDrawEmitterChildFuncList[func_no] = &JPARegistChildPrmEnv;
+    if (mpChildShape != NULL) {
+        if (!mpChildShape->isAlphaOutOn() && !mpChildShape->isAlphaInherited() && !mpChildShape->isColorInherited()) {
+            mpDrawEmitterChildFuncList[func_no] = &JPARegistChildPrmEnv;
+        } else if (is_draw_child && child_type_5_6) {
+            mpDrawEmitterChildFuncList[func_no] = &fn_8031DBA0;
+        }
     }
 
     if (is_draw_parent && !base_type_5_6) {
@@ -517,9 +528,16 @@ void JPAResource::init(EGG::Heap* heap) {
     if (!is_glbl_tex_anm && is_tex_anm) {
         mpDrawParticleFuncListNum++;
     }
-
-    if ((base_type_0_1 && is_enable_scale_anm) || (is_tex_crd_anm && !is_prj_tex)) {
+    
+    if (base_type_0_1 && is_enable_scale_anm) {
         mpDrawParticleFuncListNum++;
+    } else {
+        if (is_tex_crd_anm && !is_prj_tex) {
+            mpDrawParticleFuncListNum++;
+        }
+        if (mpExTexShape != NULL && mpExTexShape->isUseIndirect() && mpExTexShape->getfield_0x4C()) {
+            mpDrawParticleFuncListNum++;
+        }
     }
 
     if ((!is_glbl_clr_anm && (is_prm_anm || is_env_anm || is_enable_alpha_anm))
@@ -591,9 +609,16 @@ void JPAResource::init(EGG::Heap* heap) {
             mpDrawParticleFuncList[func_no] = &JPASetLineWidth;
             func_no++;
         }
-    } else if (is_tex_crd_anm && !is_prj_tex) {
-        mpDrawParticleFuncList[func_no] = &JPALoadCalcTexCrdMtxAnm;
-        func_no++;
+    } else {
+        if (is_tex_crd_anm && !is_prj_tex) {
+            mpDrawParticleFuncList[func_no] = &JPALoadCalcTexCrdMtxAnm;
+            func_no++;
+        }
+
+        if (mpExTexShape != NULL && mpExTexShape->isUseIndirect() && mpExTexShape->getfield_0x4C()) {
+            mpDrawParticleFuncList[func_no] = &fn_8031A8C0;
+            func_no++;
+        }
     }
 
     if (!is_glbl_clr_anm) {
@@ -997,7 +1022,7 @@ void JPAResource::setCTev(JPAEmitterWorkData* work) {
     GXSetArray(GX_VA_POS, jpa_pos + pos_offset, 3);
     GXSetArray(GX_VA_TEX0, jpa_crd, 2);
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP1, GX_COLOR_NULL);
-    GXSetTexCoordGen(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x3C, GX_FALSE, 0x7D);
     GXSetTevDirect(GX_TEVSTAGE0);
     GXSetNumTevStages(1);
     GXSetNumIndStages(0);
@@ -1101,7 +1126,8 @@ void JPAResource::calcWorkData_c(JPAEmitterWorkData* work) {
     MTXConcat(work->mRotationMtx, local_rot_mtx, work->mGlobalRot);
     MTXConcat(work->mGlobalRot, local_scl_mtx, work->mGlobalSR);
     work->mEmitterPos.set(work->mpEmtr->mLocalTrs);
-    work->mGlobalScl *= work->mpEmtr->mLocalScl;
+    work->mGlobalScl.mul(work->mpEmtr->mGlobalScl, work->mpEmtr->mLocalScl);
+    
     JPAGetDirMtx(work->mpEmtr->mLocalDir, work->mDirectionMtx);
     work->mPublicScale.set(work->mpEmtr->mGlobalScl);
     MTXMultVec(global_mtx, work->mpEmtr->mLocalTrs, work->mGlobalPos);
@@ -1116,8 +1142,9 @@ void JPAResource::calcWorkData_d(JPAEmitterWorkData* work) {
     MTXConcat(work->mpEmtr->mGlobalRot, mtx, work->mGlobalRot);
     MTXMultVecSR(work->mGlobalRot, work->mpEmtr->mLocalDir, work->mGlobalEmtrDir);
 }
-
+/*
 #pragma push
 #pragma force_active on
 static u8 jpa_resource_padding[28] = {0};
 #pragma pop
+*/

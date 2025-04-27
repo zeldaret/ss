@@ -31,7 +31,7 @@ public:
     void setOffsetPosition(const EGG::Vector3f& pos) { mOffsetPosition.set(pos); }
     void setOffsetPosition(f32 x, f32 y, f32 z) { mOffsetPosition.set(x, y, z); }
     void getOffsetPosition(EGG::Vector3f& pos) { pos.set(mOffsetPosition); }
-    u16 getRotateAngle() const { return mRotateAngle; }
+    s16 getRotateAngle() const { return mRotateAngle; }
     void getGlobalPosition(EGG::Vector3f& pos) const { pos.set(mPosition); }
     f32 getParticleScaleX() const { return mParticleScaleX; }
     f32 getParticleScaleY() const { return mParticleScaleY; }

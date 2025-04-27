@@ -1759,9 +1759,13 @@ JSystem/JParticle/JPAResourceManager.cpp:
 
 JSystem/JParticle/JPAResource.cpp:
 	.text       start:0x80316C10 end:0x803198A0 align:16
+	.data       start:0x80546D60 end:0x80546F80
+	.sdata2     start:0x8057CE38 end:0x8057CE50
 
 JSystem/JParticle/JPABaseShape.cpp:
 	.text       start:0x803198A0 end:0x8031D53C align:16
+	.data       start:0x80546F80 end:0x80547180
+	.sdata      start:0x80574008 end:0x80574010
 	.sdata2     start:0x8057CE50 end:0x8057CE88
 
 JSystem/JParticle/JPAExtraShape.cpp:

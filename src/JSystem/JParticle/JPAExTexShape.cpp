@@ -37,3 +37,7 @@ void JPALoadExTex(JPAEmitterWorkData* work) {
 JPAExTexShape::JPAExTexShape(u8 const* data) {
     mpData = (const JPAExTexShapeData*)data;
 }
+
+void JPAExTexShape::fn_8031DE80(JPABaseShape* shp, f32) {
+    // TODO
+}
