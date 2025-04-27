@@ -1281,13 +1281,19 @@ void JPADrawParticleCallBack(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
  * makeColorTable__FPP8_GXColorPC16JPAClrAnmKeyDataUcsP7EGG::Heap */
 static void makeColorTable(GXColor** o_color_table, JPAClrAnmKeyData const* i_data, u8 param_2,
                            s16 i_size, EGG::Heap* i_heap) {
-    GXColor* color_table = (GXColor*)i_heap->alloc((i_size + 1) * 4, 4);
+    // The TP code didn't match, the MKDD version helps here
+    void* p_clr_tbl = i_heap->alloc((i_size + 1) * 4, 4);
+#define color_table ((GXColor *)p_clr_tbl)
     f32 r_step, g_step, b_step, a_step;
     r_step = g_step = b_step = a_step = 0.0f;
-    f32 r = i_data[0].color.r;
-    f32 g = i_data[0].color.g;
-    f32 b = i_data[0].color.b;
-    f32 a = i_data[0].color.a;
+
+    f32 diff_r, diff_g, diff_b, diff_a;
+    f32 r, g, b, a;
+    diff_r = r = i_data[0].color.r;
+    diff_g = g = i_data[0].color.g;
+    diff_b = b = i_data[0].color.b;
+    diff_a = a = i_data[0].color.a;
+    f32 base_step = 0.0f;
     int j = 0;
     for (s16 i = 0; i < i_size + 1; i++) {
         if (i == i_data[j].index) {
@@ -1298,15 +1304,16 @@ static void makeColorTable(GXColor** o_color_table, JPAClrAnmKeyData const* i_da
             a = i_data[j].color.a;
             j++;
             if (j < param_2) {
-                f32 r_r = i_data[j].color.r;
-                f32 r_g = i_data[j].color.g;
-                f32 r_b = i_data[j].color.b;
-                f32 r_a = i_data[j].color.a;
-                f32 base_step = 1.0f / (i_data[j].index - i_data[j - 1].index);
-                r_step = base_step * (r_r - r);
-                g_step = base_step * (r_g - g);
-                b_step = base_step * (r_b - b);
-                a_step = base_step * (r_a - a);
+                diff_r = i_data[j].color.r;
+                diff_g = i_data[j].color.g;
+                diff_b = i_data[j].color.b;
+                diff_a = i_data[j].color.a;
+                base_step = 1.0f / (i_data[j].index - i_data[j - 1].index);
+
+                r_step = base_step * (diff_r - r);
+                g_step = base_step * (diff_g - g);
+                b_step = base_step * (diff_b - b);
+                a_step = base_step * (diff_a - a);
             } else {
                 r_step = g_step = b_step = a_step = 0.0f;
             }
