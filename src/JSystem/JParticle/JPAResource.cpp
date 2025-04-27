@@ -1101,10 +1101,10 @@ void JPAResource::calcWorkData_c(JPAEmitterWorkData* work) {
     MTXConcat(work->mRotationMtx, local_rot_mtx, work->mGlobalRot);
     MTXConcat(work->mGlobalRot, local_scl_mtx, work->mGlobalSR);
     work->mEmitterPos.set(work->mpEmtr->mLocalTrs);
-    work->mGlobalScl.mul(work->mpEmtr->mGlobalScl, work->mpEmtr->mLocalScl);
+    work->mGlobalScl *= work->mpEmtr->mLocalScl;
     JPAGetDirMtx(work->mpEmtr->mLocalDir, work->mDirectionMtx);
     work->mPublicScale.set(work->mpEmtr->mGlobalScl);
-    MTXMultVec(global_mtx, &work->mpEmtr->mLocalTrs, &work->mGlobalPos);
+    MTXMultVec(global_mtx, work->mpEmtr->mLocalTrs, work->mGlobalPos);
 }
 
 /* 80276A0C-80276A8C 27134C 0080+00 1/1 0/0 0/0 .text
@@ -1114,7 +1114,7 @@ void JPAResource::calcWorkData_d(JPAEmitterWorkData* work) {
     JPAGetXYZRotateMtx(work->mpEmtr->mLocalRot.x * 0xB6, work->mpEmtr->mLocalRot.y * 0xB6,
                        work->mpEmtr->mLocalRot.z * 0xB6, mtx);
     MTXConcat(work->mpEmtr->mGlobalRot, mtx, work->mGlobalRot);
-    MTXMultVecSR(work->mGlobalRot, &work->mpEmtr->mLocalDir, &work->mGlobalEmtrDir);
+    MTXMultVecSR(work->mGlobalRot, work->mpEmtr->mLocalDir, work->mGlobalEmtrDir);
 }
 
 #pragma push

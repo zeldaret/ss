@@ -22,7 +22,7 @@ struct JPAEmitterWorkData;
 class JPAEmitterManager {
 public:
     /* 8027DCA0 */ JPAEmitterManager(u32, u32, EGG::Heap*, u8, u8);
-    /* 8027DEBC */ JPABaseEmitter* createSimpleEmitterID(JGeometry::TVec3<f32> const&, u16, u8, u8,
+    /* 8027DEBC */ JPABaseEmitter* createSimpleEmitterID(EGG::Vector3f const&, u16, u8, u8,
                                                          JPAEmitterCallBack*, JPAParticleCallBack*);
     /* 8027DFA0 */ void calc(u8);
     /* 8027E028 */ void draw(JPADrawInfo const*, u8);

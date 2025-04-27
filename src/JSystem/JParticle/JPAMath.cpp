@@ -4,24 +4,24 @@
 //
 
 #include "JSystem/JParticle/JPAMath.h"
-#include "JSystem/JMath/JMATrigonometric.h"
 
-/* ############################################################################################## */
-// Probably some local function needed to change float literal order
-static f32 floatDummyFunc() {
-    return 1.0f;
-}
+#include "JSystem/JMath/JMath.h"
+#include "egg/math/eggMath.h"
+#include "egg/math/eggVector.h"
+#include "nw4r/math/math_triangular.h"
 
 /* 80280588-802806C0 27AEC8 0138+00 0/0 1/1 0/0 .text JPAGetDirMtx__FRCQ29JGeometry8TVec3<f>PA4_f
  */
-void JPAGetDirMtx(JGeometry::TVec3<f32> const& param_0, f32 (*param_1)[4]) {
-    JGeometry::TVec3<float> local_78(param_0.y, -param_0.x, 0.0f);
+void JPAGetDirMtx(EGG::Vector3f const& param_0, f32 (*param_1)[4]) {
+    1.0f; // probably some dummy function
+
+    EGG::Vector3f local_78(param_0.y, -param_0.x, 0.0f);
     f32 len = local_78.length();
 
-    if (len <= JGeometry::TUtil<f32>::epsilon()) {
-        local_78.zero();
+    if (len <= EGG::Math<f32>::epsilon()) {
+        local_78.setZero();
     } else {
-        local_78.scale(1.0f / len);
+        local_78 *= (1.0f / len);
     }
     f32 xsquared = local_78.x * local_78.x;
     f32 ysquared = local_78.y * local_78.y;
@@ -44,10 +44,10 @@ void JPAGetDirMtx(JGeometry::TVec3<f32> const& param_0, f32 (*param_1)[4]) {
 
 /* 802806C0-80280734 27B000 0074+00 0/0 1/1 0/0 .text            JPAGetYZRotateMtx__FssPA4_f */
 void JPAGetYZRotateMtx(s16 angleY, s16 angleZ, f32 (*param_2)[4]) {
-    f32 cosy = JMASCos(angleY);
-    f32 cosz = JMASCos(angleZ);
-    f32 siny = JMASSin(angleY);
-    f32 sinz = JMASSin(angleZ);
+    f32 cosy = nw4r::math::CosIdx(angleY);
+    f32 cosz = nw4r::math::CosIdx(angleZ);
+    f32 siny = nw4r::math::SinIdx(angleY);
+    f32 sinz = nw4r::math::SinIdx(angleZ);
     param_2[0][0] = (cosy * cosz);
     param_2[0][1] = -sinz;
     param_2[0][2] = (siny * cosz);
@@ -64,23 +64,27 @@ void JPAGetYZRotateMtx(s16 angleY, s16 angleZ, f32 (*param_2)[4]) {
 
 /* 80280734-802807E0 27B074 00AC+00 0/0 6/6 11/11 .text            JPAGetXYZRotateMtx__FsssPA4_f */
 void JPAGetXYZRotateMtx(s16 x, s16 y, s16 z, Mtx mtx) {
-    f32 cosx = JMASCos(x);
-    f32 cosy = JMASCos(y);
-    f32 cosz = JMASCos(z);
-    f32 sinx = JMASSin(x);
-    f32 siny = JMASSin(y);
-    f32 sinz = JMASSin(z);
+    f32 cosx = nw4r::math::CosIdx(x);
+    f32 cosy = nw4r::math::CosIdx(y);
+    f32 cosz = nw4r::math::CosIdx(z);
+    f32 sinx = nw4r::math::SinIdx(x);
+    f32 siny = nw4r::math::SinIdx(y);
+    f32 sinz = nw4r::math::SinIdx(z);
     mtx[0][0] = cosy * cosz;
     mtx[1][0] = cosy * sinz;
     mtx[2][0] = -siny;
     mtx[2][1] = sinx * cosy;
     mtx[2][2] = cosx * cosy;
-    f32 cosxsinz = cosx * sinz;
-    f32 sinxcosz = sinx * cosz;
+    f32 sinxsinz;
+    f32 cosxcosz;
+    f32 cosxsinz;
+    f32 sinxcosz;
+    cosxsinz = cosx * sinz;
+    sinxcosz = sinx * cosz;
     mtx[0][1] = sinxcosz * siny - cosxsinz;
     mtx[1][2] = cosxsinz * siny - sinxcosz;
-    f32 sinxsinz = sinx * sinz;
-    f32 cosxcosz = cosx * cosz;
+    sinxsinz = sinx * sinz;
+    cosxcosz = cosx * cosz;
     mtx[0][2] = sinxsinz + cosxcosz * siny;
     mtx[1][1] = cosxcosz + sinxsinz * siny;
     mtx[2][3] = 0.0f;
@@ -90,17 +94,17 @@ void JPAGetXYZRotateMtx(s16 x, s16 y, s16 z, Mtx mtx) {
 
 /* 802807E0-80280808 27B120 0028+00 0/0 11/11 71/71 .text
  * JPASetRMtxTVecfromMtx__FPA4_CfPA4_fPQ29JGeometry8TVec3<f>    */
-void JPASetRMtxTVecfromMtx(f32 const (*param_0)[4], f32 (*param_1)[4],
-                               JGeometry::TVec3<f32>* param_2) {
-    JGeometry::TVec3<f32> dummy;
+void JPASetRMtxTVecfromMtx(f32 const (*param_0)[4], f32 (*param_1)[4], EGG::Vector3f *param_2) {
+    EGG::Vector3f dummy;
     JPASetRMtxSTVecfromMtx(param_0, param_1, &dummy, param_2);
 }
 
 /* 80280808-80280984 27B148 017C+00 1/1 1/1 53/53 .text
  * JPASetRMtxSTVecfromMtx__FPA4_CfPA4_fPQ29JGeometry8TVec3<f>PQ29JGeometry8TVec3<f> */
-void JPASetRMtxSTVecfromMtx(f32 const (*param_0)[4], f32 (*param_1)[4],
-                                JGeometry::TVec3<f32>* param_2, JGeometry::TVec3<f32>* param_3) {
-    JGeometry::TVec3<float> aTStack_54;
+void JPASetRMtxSTVecfromMtx(
+    f32 const (*param_0)[4], f32 (*param_1)[4], EGG::Vector3f *param_2, EGG::Vector3f *param_3
+) {
+    EGG::Vector3f aTStack_54;
     aTStack_54.set(param_0[0][0], param_0[1][0], param_0[2][0]);
     param_2->x = aTStack_54.length();
     aTStack_54.set(param_0[0][1], param_0[1][1], param_0[2][1]);
@@ -136,7 +140,7 @@ f32 JPACalcKeyAnmValue(f32 param_0, u16 param_1, f32 const* param_2) {
     }
     int ind = param_1 - 1;
     if (param_2[ind * 4] <= param_0) {
-        return param_2[ind * 4 + 1];
+        return (&param_2[ind * 4])[1];
     }
     int x = param_1;
     while (x > 1) {

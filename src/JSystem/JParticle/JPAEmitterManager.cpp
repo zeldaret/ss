@@ -9,6 +9,7 @@
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#include "egg/math/eggVector.h"
 #include "rvl/GX.h"
 
 /* 8027DCA0-8027DEBC 2785E0 021C+00 0/0 1/1 0/0 .text __ct__17JPAEmitterManagerFUlUlP7EGG::HeapUcUc
@@ -47,7 +48,7 @@ JPAEmitterManager::JPAEmitterManager(u32 i_ptclNum, u32 i_emtrNum, EGG::Heap* pH
 /* 8027DEBC-8027DFA0 2787FC 00E4+00 0/0 3/3 0/0 .text
  * createSimpleEmitterID__17JPAEmitterManagerFRCQ29JGeometry8TVec3<f>UsUcUcP18JPAEmitterCallBackP19JPAParticleCallBack
  */
-JPABaseEmitter* JPAEmitterManager::createSimpleEmitterID(JGeometry::TVec3<f32> const& pos,
+JPABaseEmitter* JPAEmitterManager::createSimpleEmitterID(EGG::Vector3f const& pos,
                                                          u16 resID, u8 group_id, u8 res_mgr_id,
                                                          JPAEmitterCallBack* emtrCB,
                                                          JPAParticleCallBack* ptclCB) {
@@ -185,9 +186,9 @@ void JPAEmitterManager::clearResourceManager(u8 res_mgr_id) {
 /* 8027E3F4-8027E51C 278D34 0128+00 1/1 0/0 0/0 .text            calcYBBCam__17JPAEmitterManagerFv
  */
 void JPAEmitterManager::calcYBBCam() {
-    JGeometry::TVec3<float> v(0.0f, pWd->mPosCamMtx[1][1], pWd->mPosCamMtx[2][1]);
+    EGG::Vector3f v(0.0f, pWd->mPosCamMtx[1][1], pWd->mPosCamMtx[2][1]);
     JUT_ASSERT(367, !v.isZero());
-    v.normalize();
+    v.normalise();
     pWd->mYBBCamMtx[0][0] = 1.0f;
     pWd->mYBBCamMtx[0][1] = 0.0f;
     pWd->mYBBCamMtx[0][2] = 0.0f;

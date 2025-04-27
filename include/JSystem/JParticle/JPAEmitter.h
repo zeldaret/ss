@@ -21,9 +21,9 @@ class JPAParticleCallBack;
  */
 struct JPAEmitterWorkData {
     struct JPAVolumeCalcData {
-        /* 0x00 */ JGeometry::TVec3<f32> mVolumePos;
-        /* 0x0C */ JGeometry::TVec3<f32> mVelOmni;
-        /* 0x18 */ JGeometry::TVec3<f32> mVelAxis;
+        /* 0x00 */ EGG::Vector3f mVolumePos;
+        /* 0x0C */ EGG::Vector3f mVelOmni;
+        /* 0x18 */ EGG::Vector3f mVelAxis;
     };
 
     JPAEmitterWorkData() : mRndm(0) {}
@@ -42,11 +42,11 @@ struct JPAEmitterWorkData {
     /* 0x78 */ Mtx mRotationMtx;
     /* 0xA8 */ Mtx mGlobalRot;
     /* 0xD8 */ Mtx mGlobalSR;
-    /* 0x108 */ JGeometry::TVec3<f32> mEmitterPos;
-    /* 0x114 */ JGeometry::TVec3<f32> mGlobalScl;
-    /* 0x120 */ JGeometry::TVec3<f32> mGlobalEmtrDir;
-    /* 0x12C */ JGeometry::TVec3<f32> mPublicScale;
-    /* 0x138 */ JGeometry::TVec3<f32> mGlobalPos;
+    /* 0x108 */ EGG::Vector3f mEmitterPos;
+    /* 0x114 */ EGG::Vector3f mGlobalScl;
+    /* 0x120 */ EGG::Vector3f mGlobalEmtrDir;
+    /* 0x12C */ EGG::Vector3f mPublicScale;
+    /* 0x138 */ EGG::Vector3f mGlobalPos;
     /* 0x144 */ JGeometry::TVec2<f32> mGlobalPtclScl;
     /* 0x14C */ JGeometry::TVec2<f32> mPivot;
     /* 0x154 */ Mtx mYBBCamMtx;
@@ -105,7 +105,7 @@ public:
     /* 8027E6EC */ void init(JPAEmitterManager*, JPAResource*);
     /* 8027EDD4 */ bool processTillStartFrame();
     /* 8027EE14 */ bool processTermination();
-    /* 8027EEB0 */ void calcEmitterGlobalPosition(JGeometry::TVec3<f32>*) const;
+    /* 8027EEB0 */ void calcEmitterGlobalPosition(EGG::Vector3f*) const;
     /* 8027EC60 */ void deleteAllParticle();
     /* 8027EB60 */ JPABaseParticle* createChild(JPABaseParticle*);
     /* 8027EA40 */ JPABaseParticle* createParticle();
@@ -134,13 +134,13 @@ public:
         mGlobalPScl.y = mGlobalScl.y;
     }
     void setGlobalTranslation(f32 x, f32 y, f32 z) { mGlobalTrs.set(x, y, z); }
-    void setGlobalTranslation(const JGeometry::TVec3<f32>& trs) { mGlobalTrs.set(trs); }
-    void getLocalTranslation(JGeometry::TVec3<f32>& vec) { vec.set(mLocalTrs); }
+    void setGlobalTranslation(const EGG::Vector3f& trs) { mGlobalTrs.set(trs); }
+    void getLocalTranslation(EGG::Vector3f& vec) { vec.set(mLocalTrs); }
     void setGlobalRotation(const JGeometry::TVec3<s16>& rot) {
         JPAGetXYZRotateMtx(rot.x, rot.y, rot.z, mGlobalRot); 
     }
-    void getGlobalTranslation(JGeometry::TVec3<f32>* out) const { out->set(mGlobalTrs); }
-    void setGlobalDynamicsScale(const JGeometry::TVec3<f32>& i_scale) { mGlobalScl.set(i_scale); }
+    void getGlobalTranslation(EGG::Vector3f* out) const { out->set(mGlobalTrs); }
+    void setGlobalDynamicsScale(const EGG::Vector3f& i_scale) { mGlobalScl.set(i_scale); }
     void setGlobalAlpha(u8 alpha) { mGlobalPrmClr.a = alpha; }
     u8 getGlobalAlpha() { return mGlobalPrmClr.a; }
     void getGlobalPrmColor(GXColor& color) { color = mGlobalPrmClr; }
@@ -151,23 +151,23 @@ public:
     void setAwayFromCenterSpeed(f32 i_speed) { mAwayFromCenterSpeed = i_speed; }
     void setAwayFromAxisSpeed(f32 i_speed) { mAwayFromAxisSpeed = i_speed; }
     void setSpread(f32 i_spread) { mSpread = i_spread; }
-    void setLocalTranslation(const JGeometry::TVec3<f32>& i_trans) { mLocalTrs.set(i_trans); }
+    void setLocalTranslation(const EGG::Vector3f& i_trans) { mLocalTrs.set(i_trans); }
     void setLocalRotation(const JGeometry::TVec3<s16>& i_rot) { mLocalRot.set(i_rot.x * 0.005493248f, i_rot.y * 0.005493248f, i_rot.z * 0.005493248f); }
     void setRateStep(u8 i_step) { mRateStep = i_step; }
 
     void setGlobalParticleHeightScale(f32 height) {
         mGlobalPScl.y = height;
     }
-    void setGlobalParticleScale(const JGeometry::TVec3<f32>& scale) {
+    void setGlobalParticleScale(const EGG::Vector3f& scale) {
         mGlobalPScl.set(scale.x, scale.y);
     }
     void setGlobalParticleScale(f32 scaleX, f32 scaleY) {
         mGlobalPScl.set(scaleX, scaleY);
     }
-    void getGlobalParticleScale(JGeometry::TVec3<f32>& scale) {
+    void getGlobalParticleScale(EGG::Vector3f& scale) {
         scale.set(mGlobalPScl.x, mGlobalPScl.y, 1.0f);
     }
-    void setGlobalScale(const JGeometry::TVec3<f32>& scale) {
+    void setGlobalScale(const EGG::Vector3f& scale) {
         mGlobalScl.set(scale);
         mGlobalPScl.set(scale.x ,scale.y);
     }
@@ -175,11 +175,11 @@ public:
         JPASetRMtxSTVecfromMtx(matrix, mGlobalRot, &mGlobalScl, &mGlobalTrs);
         mGlobalPScl.set(mGlobalScl.x, mGlobalScl.y);
     }
-    void setDirection(const JGeometry::TVec3<f32>& direction) {
+    void setDirection(const EGG::Vector3f& direction) {
         mLocalDir.set(direction);
     }
 
-    void setLocalScale(const JGeometry::TVec3<f32>& scale) {
+    void setLocalScale(const EGG::Vector3f& scale) {
         mLocalScl.set(scale);
     }
 
@@ -219,9 +219,9 @@ public:
     u32 getAge() const { return mTick; }
 
 public:
-    /* 0x00 */ JGeometry::TVec3<f32> mLocalScl;
-    /* 0x0C */ JGeometry::TVec3<f32> mLocalTrs;
-    /* 0x18 */ JGeometry::TVec3<f32> mLocalDir;
+    /* 0x00 */ EGG::Vector3f mLocalScl;
+    /* 0x0C */ EGG::Vector3f mLocalTrs;
+    /* 0x18 */ EGG::Vector3f mLocalDir;
     /* 0x24 */ s32 mMaxFrame;
     /* 0x28 */ f32 mRate;
     /* 0x2C */ f32 mVolumeSweep;
@@ -238,8 +238,8 @@ public:
     /* 0x56 */ u8 mRateStep;
     /* 0x58 */ JSULink<JPABaseEmitter> mLink;
     /* 0x68 */ Mtx mGlobalRot;
-    /* 0x98 */ JGeometry::TVec3<f32> mGlobalScl;
-    /* 0xA4 */ JGeometry::TVec3<f32> mGlobalTrs;
+    /* 0x98 */ EGG::Vector3f mGlobalScl;
+    /* 0xA4 */ EGG::Vector3f mGlobalTrs;
     /* 0xB0 */ JGeometry::TVec2<f32> mGlobalPScl;
     /* 0xB8 */ GXColor mGlobalPrmClr;
     /* 0xBC */ GXColor mGlobalEnvClr;

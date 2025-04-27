@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "rvl/GX.h"
-#include "JSystem/JGeometry.h"
+#include "egg/math/eggVector.h"
 
 class JPABaseEmitter;
 class JPABaseParticle;
@@ -28,11 +28,11 @@ public:
     /* 80280548 */ f32 getWidth(JPABaseEmitter const*) const;
     /* 80280568 */ f32 getHeight(JPABaseEmitter const*) const;
     int getAge() { return mAge; }
-    void setOffsetPosition(const JGeometry::TVec3<f32>& pos) { mOffsetPosition.set(pos); }
+    void setOffsetPosition(const EGG::Vector3f& pos) { mOffsetPosition.set(pos); }
     void setOffsetPosition(f32 x, f32 y, f32 z) { mOffsetPosition.set(x, y, z); }
-    void getOffsetPosition(JGeometry::TVec3<f32>& pos) { pos.set(mOffsetPosition); }
+    void getOffsetPosition(EGG::Vector3f& pos) { pos.set(mOffsetPosition); }
     u16 getRotateAngle() const { return mRotateAngle; }
-    void getGlobalPosition(JGeometry::TVec3<f32>& pos) const { pos.set(mPosition); }
+    void getGlobalPosition(EGG::Vector3f& pos) const { pos.set(mPosition); }
     f32 getParticleScaleX() const { return mParticleScaleX; }
     f32 getParticleScaleY() const { return mParticleScaleY; }
     void setStatus(u32 flag) { mStatus |= flag; }
@@ -40,19 +40,19 @@ public:
     void initStatus(u32 status) { mStatus = status; }
     void setInvisibleParticleFlag() { setStatus(8); }
     void setDeleteParticleFlag() { setStatus(2); }
-    void getVelVec(JGeometry::TVec3<f32>& vec) const { vec.set(mVelocity); }
-    void getLocalPosition(JGeometry::TVec3<f32>& vec) const { vec.set(mLocalPosition); }
-    void getBaseAxis(JGeometry::TVec3<f32>& vec) const { vec.set(mBaseAxis); }
+    void getVelVec(EGG::Vector3f& vec) const { vec.set(mVelocity); }
+    void getLocalPosition(EGG::Vector3f& vec) const { vec.set(mLocalPosition); }
+    void getBaseAxis(EGG::Vector3f& vec) const { vec.set(mBaseAxis); }
 
 public:
-    /* 0x00 */ JGeometry::TVec3<f32> mPosition;
-    /* 0x0C */ JGeometry::TVec3<f32> mLocalPosition;
-    /* 0x18 */ JGeometry::TVec3<f32> mOffsetPosition;
-    /* 0x24 */ JGeometry::TVec3<f32> mVelocity;
-    /* 0x30 */ JGeometry::TVec3<f32> mVelType1;
-    /* 0x3C */ JGeometry::TVec3<f32> mVelType0;
-    /* 0x48 */ JGeometry::TVec3<f32> mVelType2;
-    /* 0x54 */ JGeometry::TVec3<f32> mBaseAxis;
+    /* 0x00 */ EGG::Vector3f mPosition;
+    /* 0x0C */ EGG::Vector3f mLocalPosition;
+    /* 0x18 */ EGG::Vector3f mOffsetPosition;
+    /* 0x24 */ EGG::Vector3f mVelocity;
+    /* 0x30 */ EGG::Vector3f mVelType1;
+    /* 0x3C */ EGG::Vector3f mVelType0;
+    /* 0x48 */ EGG::Vector3f mVelType2;
+    /* 0x54 */ EGG::Vector3f mBaseAxis;
     /* 0x60 */ f32 mParticleScaleX;
     /* 0x64 */ f32 mParticleScaleY;
     /* 0x68 */ f32 mScaleOut;

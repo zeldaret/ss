@@ -3,7 +3,7 @@
 
 #include "common.h"
 #include "egg/egg_types.h"
-#include "JSystem/JGeometry.h"
+#include "egg/math/eggVector.h"
 
 class JPAEmitterWorkData;
 class JPABaseParticle;
@@ -18,7 +18,7 @@ public:
     /* 80276A8C */ virtual void prepare(JPAEmitterWorkData*, JPAFieldBlock*) {}
     virtual void calc(JPAEmitterWorkData*, JPAFieldBlock*, JPABaseParticle*) = 0;
 
-    /* 0x04 */ JGeometry::TVec3<f32> mAccel;
+    /* 0x04 */ EGG::Vector3f mAccel;
 };
 
 class JPAFieldVortex : public JPAFieldBase {
@@ -27,7 +27,7 @@ public:
     /* 8027C674 */ void calc(JPAEmitterWorkData*, JPAFieldBlock*, JPABaseParticle*);
     /* 8027D564 */ ~JPAFieldVortex() {}
 
-    /* 0x10 */ JGeometry::TVec3<f32> field_0x10;
+    /* 0x10 */ EGG::Vector3f field_0x10;
     /* 0x1C */ f32 field_0x1c;
     /* 0x20 */ f32 field_0x20;
 };
@@ -38,9 +38,9 @@ public:
     /* 8027CFA8 */ void calc(JPAEmitterWorkData*, JPAFieldBlock*, JPABaseParticle*);
     /* 8027D3F4 */ ~JPAFieldSpin() {}
 
-    /* 0x10 */ JGeometry::TVec3<f32> field_0x10;
-    /* 0x1C */ JGeometry::TVec3<f32> field_0x1c;
-    /* 0x28 */ JGeometry::TVec3<f32> field_0x28;
+    /* 0x10 */ EGG::Vector3f field_0x10;
+    /* 0x1C */ EGG::Vector3f field_0x1c;
+    /* 0x28 */ EGG::Vector3f field_0x28;
 };
 
 class JPAFieldRandom : public JPAFieldBase {
@@ -55,7 +55,7 @@ public:
     /* 8027C3E0 */ void calc(JPAEmitterWorkData*, JPAFieldBlock*, JPABaseParticle*);
     /* 8027D5C0 */ ~JPAFieldNewton() {}
 
-    /* 0x10 */ JGeometry::TVec3<f32> mDir;
+    /* 0x10 */ EGG::Vector3f mDir;
     /* 0x1C */ f32 mCutoff;
 };
 
@@ -65,7 +65,7 @@ public:
     /* 8027C29C */ void calc(JPAEmitterWorkData*, JPAFieldBlock*, JPABaseParticle*);
     /* 8027D61C */ ~JPAFieldMagnet() {}
 
-    /* 0x10 */ JGeometry::TVec3<f32> mDir;
+    /* 0x10 */ EGG::Vector3f mDir;
 };
 
 class JPAFieldGravity : public JPAFieldBase {
@@ -87,9 +87,9 @@ public:
     /* 8027CA94 */ void calc(JPAEmitterWorkData*, JPAFieldBlock*, JPABaseParticle*);
     /* 8027D508 */ ~JPAFieldConvection() {}
 
-    /* 0x10 */ JGeometry::TVec3<f32> field_0x10;
-    /* 0x1C */ JGeometry::TVec3<f32> field_0x1c;
-    /* 0x28 */ JGeometry::TVec3<f32> field_0x28;
+    /* 0x10 */ EGG::Vector3f field_0x10;
+    /* 0x1C */ EGG::Vector3f field_0x1c;
+    /* 0x28 */ EGG::Vector3f field_0x28;
 };
 
 class JPAFieldAir : public JPAFieldBase {
@@ -105,8 +105,8 @@ public:
     /* 0x00 */ u8 mMagic[4];
     /* 0x04 */ u32 mSize;
     /* 0x08 */ u32 mFlags;
-    /* 0x0C */ JGeometry::TVec3<f32> mPos;
-    /* 0x18 */ JGeometry::TVec3<f32> mDir;
+    /* 0x0C */ EGG::Vector3f mPos;
+    /* 0x18 */ EGG::Vector3f mDir;
     /* 0x24 */ f32 mMag;
     /* 0x28 */ f32 mMagRndm;
     /* 0x2C */ f32 mVal1;
@@ -135,11 +135,11 @@ public:
     u8 getCycle() { return mpData->mCycle; }
     f32 getFadeInRate() { return mFadeInRate; }
     f32 getFadeOutRate() { return mFadeOutRate; }
-    JGeometry::TVec3<f32>& getPos() { return mPos; }
-    JGeometry::TVec3<f32>& getDir() { return mDir; }
+    EGG::Vector3f& getPos() { return mPos; }
+    EGG::Vector3f& getDir() { return mDir; }
     f32 getMag() const { return mMag; }
-    void getPosOrig(JGeometry::TVec3<f32>* pos) { pos->set(mpData->mPos); }
-    void getDirOrig(JGeometry::TVec3<f32>* dir) { dir->set(mpData->mDir); }
+    void getPosOrig(EGG::Vector3f* pos) { pos->set(mpData->mPos); }
+    void getDirOrig(EGG::Vector3f* dir) { dir->set(mpData->mDir); }
     f32 getMagOrig() { return mpData->mMag; }
     void initOpParam() {
         getPosOrig(&mPos);
@@ -154,8 +154,8 @@ private:
     /* 0x04 */ JPAFieldBase* mpField;
     /* 0x08 */ f32 mFadeInRate;
     /* 0x0C */ f32 mFadeOutRate;
-    /* 0x10 */ JGeometry::TVec3<f32> mPos;
-    /* 0x1C */ JGeometry::TVec3<f32> mDir;
+    /* 0x10 */ EGG::Vector3f mPos;
+    /* 0x1C */ EGG::Vector3f mDir;
     /* 0x28 */ f32 mMag;
 
     enum Type {

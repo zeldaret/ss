@@ -9,7 +9,7 @@
 
 /* 8027B144-8027B220 275A84 00DC+00 1/1 0/0 0/0 .text JPAVolumePoint__FP18JPAEmitterWorkData */
 void JPAVolumePoint(JPAEmitterWorkData* work) {
-    work->mVolumeCalcData.mVolumePos.zero();
+    work->mVolumeCalcData.mVolumePos.setZero();
     work->mVolumeCalcData.mVelOmni.set(work->mpEmtr->get_r_zh(), work->mpEmtr->get_r_zh(),
                                        work->mpEmtr->get_r_zh());
     work->mVolumeCalcData.mVelAxis.set(work->mVolumeCalcData.mVelOmni.x, 0.0f,
@@ -55,7 +55,7 @@ void JPAVolumeCircle(JPAEmitterWorkData* work) {
     distance = work->mVolumeSize * (work->mVolumeMinRad + distance * (1.0f - work->mVolumeMinRad));
     work->mVolumeCalcData.mVolumePos.set(distance * JMASSin(theta), 0.0f,
                                          distance * JMASCos(theta));
-    work->mVolumeCalcData.mVelOmni.mul(work->mVolumeCalcData.mVolumePos, work->mGlobalScl);
+    // work->mVolumeCalcData.mVelOmni.mul(work->mVolumeCalcData.mVolumePos, work->mGlobalScl);
     work->mVolumeCalcData.mVelAxis.set(work->mVolumeCalcData.mVolumePos.x, 0.0f,
                                        work->mVolumeCalcData.mVolumePos.z);
 }
@@ -65,7 +65,7 @@ void JPAVolumeCube(JPAEmitterWorkData* work) {
     work->mVolumeCalcData.mVolumePos.set(work->mpEmtr->get_r_zh() * work->mVolumeSize,
                          work->mpEmtr->get_r_zh() * work->mVolumeSize,
                          work->mpEmtr->get_r_zh() * work->mVolumeSize);
-    work->mVolumeCalcData.mVelOmni.mul(work->mVolumeCalcData.mVolumePos, work->mGlobalScl);
+    // work->mVolumeCalcData.mVelOmni.mul(work->mVolumeCalcData.mVolumePos, work->mGlobalScl);
     work->mVolumeCalcData.mVelAxis.set(work->mVolumeCalcData.mVolumePos.x, 0.0f, work->mVolumeCalcData.mVolumePos.z);
 }
 
@@ -99,7 +99,7 @@ static void JPAVolumeSphere(JPAEmitterWorkData* work) {
     f32 rad = work->mVolumeSize * (work->mVolumeMinRad + rnd * (1.0f - work->mVolumeMinRad));
     work->mVolumeCalcData.mVolumePos.set(rad * JMASCos(phi) * JMASSin(theta), -rad * JMASSin(phi),
                                          rad * JMASCos(phi) * JMASCos(theta));
-    work->mVolumeCalcData.mVelOmni.mul(work->mVolumeCalcData.mVolumePos, work->mGlobalScl);
+    // work->mVolumeCalcData.mVelOmni.mul(work->mVolumeCalcData.mVolumePos, work->mGlobalScl);
     work->mVolumeCalcData.mVelAxis.set(work->mVolumeCalcData.mVolumePos.x, 0.0f,
                                        work->mVolumeCalcData.mVolumePos.z);
 }
@@ -114,7 +114,7 @@ static void JPAVolumeCylinder(JPAEmitterWorkData* work) {
     f32 rad = work->mVolumeSize * (work->mVolumeMinRad + rnd * (1.0f - work->mVolumeMinRad));
     work->mVolumeCalcData.mVolumePos.set(
         rad * JMASSin(theta), work->mVolumeSize * work->mpEmtr->get_r_zp(), rad * JMASCos(theta));
-    work->mVolumeCalcData.mVelOmni.mul(work->mVolumeCalcData.mVolumePos, work->mGlobalScl);
+    // work->mVolumeCalcData.mVelOmni.mul(work->mVolumeCalcData.mVolumePos, work->mGlobalScl);
     work->mVolumeCalcData.mVelAxis.set(work->mVolumeCalcData.mVolumePos.x, 0.0f,
                                        work->mVolumeCalcData.mVolumePos.z);
 }
@@ -130,7 +130,7 @@ static void JPAVolumeTorus(JPAEmitterWorkData* work) {
         work->mVolumeCalcData.mVelAxis.x + work->mVolumeSize * JMASSin(theta),
         work->mVolumeCalcData.mVelAxis.y,
         work->mVolumeCalcData.mVelAxis.z + work->mVolumeSize * JMASCos(theta));
-    work->mVolumeCalcData.mVelOmni.mul(work->mVolumeCalcData.mVolumePos, work->mGlobalScl);
+    // work->mVolumeCalcData.mVelOmni.mul(work->mVolumeCalcData.mVolumePos, work->mGlobalScl);
 }
 
 /* 8027BB18-8027BB4C 276458 0034+00 0/0 1/1 0/0 .text            __ct__16JPADynamicsBlockFPCUc */

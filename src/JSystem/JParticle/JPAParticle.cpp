@@ -28,7 +28,7 @@ void JPABaseParticle::init_p(JPAEmitterWorkData* work) {
     mTime = 0.0f;
 
     initStatus(0);
-    MTXMultVecSR(work->mGlobalSR, &work->mVolumeCalcData.mVolumePos, &mLocalPosition);
+    MTXMultVecSR(work->mGlobalSR, work->mVolumeCalcData.mVolumePos, mLocalPosition);
     if (emtr->checkFlag(8)) {
         setStatus(0x20);
     }
@@ -38,21 +38,21 @@ void JPABaseParticle::init_p(JPAEmitterWorkData* work) {
                   mOffsetPosition.y + mLocalPosition.y * work->mPublicScale.y,
                   mOffsetPosition.z + mLocalPosition.z * work->mPublicScale.z);
 
-    JGeometry::TVec3<f32> velOmni; 
+    EGG::Vector3f velOmni; 
     if (emtr->mAwayFromCenterSpeed) {
         velOmni.setLength(work->mVolumeCalcData.mVelOmni, emtr->mAwayFromCenterSpeed);
     } else {
-        velOmni.zero();
+        velOmni.setZero();
     }
 
-    JGeometry::TVec3<f32> velAxis;
+    EGG::Vector3f velAxis;
     if (emtr->mAwayFromAxisSpeed) {
         velAxis.setLength(work->mVolumeCalcData.mVelAxis, emtr->mAwayFromAxisSpeed);
     } else {
-        velAxis.zero();
+        velAxis.setZero();
     }
 
-    JGeometry::TVec3<f32> velDir;
+    EGG::Vector3f velDir;
     if (emtr->mDirSpeed) {
         Mtx mtx;
         JPAGetYZRotateMtx(emtr->get_r_zp() * 0x8000 * emtr->mSpread, emtr->get_r_ss(), mtx);
@@ -61,16 +61,16 @@ void JPABaseParticle::init_p(JPAEmitterWorkData* work) {
                    emtr->mDirSpeed * mtx[1][2],
                    emtr->mDirSpeed * mtx[2][2]);
     } else {
-        velDir.zero();
+        velDir.setZero();
     }
 
-    JGeometry::TVec3<f32> velRndm;
+    EGG::Vector3f velRndm;
     if (emtr->mRndmDirSpeed) {
         velRndm.set(emtr->mRndmDirSpeed * emtr->get_r_zh(),
                     emtr->mRndmDirSpeed * emtr->get_r_zh(),
                     emtr->mRndmDirSpeed * emtr->get_r_zh());
     } else {
-        velRndm.zero();
+        velRndm.setZero();
     }
 
     f32 ratio = emtr->get_r_zp() * dyn->getInitVelRatio() + 1.0f;
@@ -79,11 +79,11 @@ void JPABaseParticle::init_p(JPAEmitterWorkData* work) {
                   ratio * (velOmni.z + velAxis.z + velDir.z + velRndm.z));
     
     if (emtr->checkFlag(4)) {
-        mVelType1.mul(emtr->mLocalScl);
+        mVelType1 *= emtr->mLocalScl;
     }
-    MTXMultVecSR(work->mGlobalRot, &mVelType1, &mVelType1);
+    MTXMultVecSR(work->mGlobalRot, mVelType1, mVelType1);
 
-    mVelType0.zero();
+    mVelType0.setZero();
 
     mMoment = 1.0f - dyn->getMomentRndm() * emtr->get_r_f();
     mDrag = 1.0f;
@@ -141,9 +141,9 @@ void JPABaseParticle::init_c(JPAEmitterWorkData* work, JPABaseParticle* parent) 
 
     f32 pos_rndm = csp->getPosRndm();
     if (pos_rndm != 0.0f) {
-        JGeometry::TVec3<f32> rnd(emtr->get_r_zh(), emtr->get_r_zh(), emtr->get_r_zh());
+        EGG::Vector3f rnd(emtr->get_r_zh(), emtr->get_r_zh(), emtr->get_r_zh());
         rnd.setLength(pos_rndm * emtr->get_r_f());
-        mLocalPosition.add(rnd);
+        mLocalPosition += rnd;
     }
 
     if (emtr->checkFlag(0x10)) {
@@ -153,10 +153,10 @@ void JPABaseParticle::init_c(JPAEmitterWorkData* work, JPABaseParticle* parent) 
     mOffsetPosition.set(parent->mOffsetPosition);
 
     f32 base_speed = csp->getBaseVel() * (csp->getBaseVelRndm() * emtr->get_r_zp() + 1.0f);
-    JGeometry::TVec3<f32> base_vel(emtr->get_r_zp(), emtr->get_r_zp(), emtr->get_r_zp());
+    EGG::Vector3f base_vel(emtr->get_r_zp(), emtr->get_r_zp(), emtr->get_r_zp());
     base_vel.setLength(base_speed);
-    mVelType1.scaleAdd(csp->getVelInhRate(), parent->mVelType1, base_vel);
-    mVelType0.scale(csp->getVelInhRate(), parent->mVelType2);
+    mVelType1 = csp->getVelInhRate() * parent->mVelType1 + base_vel;
+    mVelType0 = csp->getVelInhRate() * parent->mVelType2;
     
     mMoment = parent->mMoment;
     if (csp->isFieldAffected()) {
@@ -224,12 +224,12 @@ bool JPABaseParticle::calc_p(JPAEmitterWorkData* work) {
         mOffsetPosition.set(work->mGlobalPos);
     }
 
-    mVelType2.zero();
+    mVelType2.setZero();
     if (!checkStatus(0x40)) {
         work->mpRes->calcField(work, this);
     }
-    mVelType2.add(mVelType0);
-    mVelType1.scale(work->mpEmtr->mAirResist);
+    mVelType2 += mVelType0;
+    mVelType1 *= work->mpEmtr->mAirResist;
     f32 ratio = mMoment * mDrag;
     mVelocity.set(ratio * (mVelType1.x + mVelType2.x),
                   ratio * (mVelType1.y + mVelType2.y),
@@ -252,7 +252,7 @@ bool JPABaseParticle::calc_p(JPAEmitterWorkData* work) {
         }
     }
 
-    mLocalPosition.add(mVelocity);
+    mLocalPosition += mVelocity;
     mPosition.set(mOffsetPosition.x + mLocalPosition.x * work->mPublicScale.x,
                   mOffsetPosition.y + mLocalPosition.y * work->mPublicScale.y,
                   mOffsetPosition.z + mLocalPosition.z * work->mPublicScale.z);
@@ -274,12 +274,12 @@ bool JPABaseParticle::calc_c(JPAEmitterWorkData* work) {
         }
 
         mVelType1.y -= work->mpRes->getCsp()->getGravity();
-        mVelType2.zero();
+        mVelType2.setZero();
         if (!checkStatus(0x40)) {
             work->mpRes->calcField(work, this);
         }
-        mVelType2.add(mVelType0);
-        mVelType1.scale(work->mpEmtr->mAirResist);
+        mVelType2 += mVelType0;
+        mVelType1 *= work->mpEmtr->mAirResist;
         f32 ratio = mMoment * mDrag;
         mVelocity.set(ratio * (mVelType1.x + mVelType2.x),
                     ratio * (mVelType1.y + mVelType2.y),
@@ -296,7 +296,7 @@ bool JPABaseParticle::calc_c(JPAEmitterWorkData* work) {
 
     work->mpRes->calc_c(work, this);
     mRotateAngle += mRotateSpeed;
-    mLocalPosition.add(mVelocity);
+    mLocalPosition += mVelocity;
     mPosition.set(mOffsetPosition.x + mLocalPosition.x * work->mPublicScale.x,
                   mOffsetPosition.y + mLocalPosition.y * work->mPublicScale.y,
                   mOffsetPosition.z + mLocalPosition.z * work->mPublicScale.z);

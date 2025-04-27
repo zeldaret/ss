@@ -41,6 +41,12 @@ struct JPABaseShapeData {
     /* 0x30 */ u8 mTexAnmRndmMask;
 };
 
+struct JPABaseShapeAlphaArg {
+    GXTevAlphaArg mArg[4];
+    GXTevOp mOp;
+    GXTevScale mScale;
+};
+
 /**
  * @ingroup jsystem-jparticle
  * 
@@ -56,7 +62,7 @@ public:
     static GXCompare st_c[8];
     static GXAlphaOp st_ao[4];
     static GXTevColorArg st_ca[6][4];
-    static GXTevAlphaArg st_aa[2][4];
+    static JPABaseShapeAlphaArg st_aa[5];
 
     GXBlendMode getBlendMode() const { return st_bm[mpData->mBlendModeCfg & 0x03]; }
     GXBlendFactor getBlendSrc() const { return st_bf[(mpData->mBlendModeCfg >> 2) & 0x0F]; }
@@ -75,14 +81,14 @@ public:
     u8 getAlphaRef1() const { return mpData->mAlphaRef1; }
 
     const GXTevColorArg* getTevColorArg() const { return st_ca[(mpData->mFlags >> 0x0F) & 0x07]; }
-    const GXTevAlphaArg* getTevAlphaArg() const { return st_aa[(mpData->mFlags >> 0x12) & 0x01]; }
+    const JPABaseShapeAlphaArg* getTevAlphaArg() const { return &st_aa[(mpData->mFlags >> 0x12) & 0x07]; }
 
     u32 getType() const { return (mpData->mFlags >> 0) & 0x0F; }
     u32 getDirType() const { return (mpData->mFlags >> 4) & 0x07; }
     u32 getRotType() const { return (mpData->mFlags >> 7) & 0x07; }
     u32 getBasePlaneType() const { return (mpData->mFlags >> 10) & 0x01; }
-    u32 getTilingS() const { return (mpData->mFlags >> 25) & 0x01; }
-    u32 getTilingT() const { return (mpData->mFlags >> 26) & 0x01; }
+    u32 getTilingS() const { return (mpData->mFlags >> 27) & 0x01; } // was 25
+    u32 getTilingT() const { return (mpData->mFlags >> 28) & 0x01; } // was 26
     BOOL isGlblClrAnm() const { return mpData->mFlags & 0x00001000; }
     BOOL isGlblTexAnm() const { return mpData->mFlags & 0x00004000; }
     BOOL isPrjTex() const { return mpData->mFlags & 0x00100000; }

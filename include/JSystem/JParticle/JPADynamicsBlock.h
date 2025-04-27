@@ -4,6 +4,7 @@
 #include "common.h"
 
 #include "JSystem/JGeometry.h"
+#include "egg/math/eggVector.h"
 
 
 class JPAEmitterWorkData;
@@ -19,9 +20,9 @@ struct JPADynamicsBlockData {
 
     /* 0x08 */ u32 mFlags;
     /* 0x0C */ u32 mResUserWork;
-    /* 0x10 */ JGeometry::TVec3<f32> mEmitterScl;
-    /* 0x1C */ JGeometry::TVec3<f32> mEmitterTrs;
-    /* 0x28 */ JGeometry::TVec3<f32> mEmitterDir;
+    /* 0x10 */ EGG::Vector3f mEmitterScl;
+    /* 0x1C */ EGG::Vector3f mEmitterTrs;
+    /* 0x28 */ EGG::Vector3f mEmitterDir;
     /* 0x34 */ f32 mInitialVelOmni;
     /* 0x38 */ f32 mInitialVelAxis;
     /* 0x3C */ f32 mInitialVelRndm;
@@ -73,13 +74,13 @@ public:
     u32 getVolumeType() const { return (mpData->mFlags >> 8) & 0x07; }
     u16 getDivNumber() const { return mpData->mDivNumber; }
     f32 getRateRndm() const { return mpData->mRateRndm; }
-    void getEmitterScl(JGeometry::TVec3<f32>* vec) const { 
+    void getEmitterScl(EGG::Vector3f* vec) const { 
         vec->set(mpData->mEmitterScl.x, mpData->mEmitterScl.y, mpData->mEmitterScl.z); 
     }
-    void getEmitterTrs(JGeometry::TVec3<f32>* vec) const { 
+    void getEmitterTrs(EGG::Vector3f* vec) const { 
         vec->set(mpData->mEmitterTrs.x, mpData->mEmitterTrs.y, mpData->mEmitterTrs.z); 
     }
-    void getEmitterDir(JGeometry::TVec3<f32>* vec) const { 
+    void getEmitterDir(EGG::Vector3f* vec) const { 
         vec->set(mpData->mEmitterDir.x, mpData->mEmitterDir.y, mpData->mEmitterDir.z); 
     }
     void getEmitterRot(JGeometry::TVec3<s16>* vec) const { 

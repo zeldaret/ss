@@ -8,6 +8,7 @@
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JParticle/JPABaseShape.h"
+#include "egg/math/eggVector.h"
 
 //
 // Types:
@@ -37,7 +38,7 @@ void JPABaseEmitter::init(JPAEmitterManager* param_0, JPAResource* param_1) {
     mpRes->getDyn()->getEmitterScl(&mLocalScl);
     mpRes->getDyn()->getEmitterTrs(&mLocalTrs);
     mpRes->getDyn()->getEmitterDir(&mLocalDir);
-    mLocalDir.normalize();
+    mLocalDir.normalise();
     mpRes->getDyn()->getEmitterRot(&mLocalRot);
     mMaxFrame = mpRes->getDyn()->getMaxFrame();
     mLifeTime = mpRes->getDyn()->getLifetime();
@@ -55,7 +56,7 @@ void JPABaseEmitter::init(JPAEmitterManager* param_0, JPAResource* param_1) {
     mRndm.set_seed(mpEmtrMgr->pWd->mRndm.get_rndm_u());
     MTXIdentity(mGlobalRot);
     mGlobalScl.set(1.0f, 1.0f, 1.0f);
-    mGlobalTrs.zero();
+    mGlobalTrs.setZero();
     mGlobalPScl.set(1.0f, 1.0f);
     mGlobalEnvClr.a = 0xff;
     mGlobalEnvClr.b = 0xff;
@@ -143,7 +144,7 @@ bool JPABaseEmitter::processTermination() {
     if (mTick >= mMaxFrame) {
         setStatus(8);
         if (checkStatus(0x40)) {
-            return 0;
+            return false;
         }
         return getParticleNumber() == 0;
     }
@@ -152,7 +153,7 @@ bool JPABaseEmitter::processTermination() {
 
 /* 8027EEB0-8027EF30 2797F0 0080+00 0/0 1/1 0/0 .text
  * calcEmitterGlobalPosition__14JPABaseEmitterCFPQ29JGeometry8TVec3<f> */
-void JPABaseEmitter::calcEmitterGlobalPosition(JGeometry::TVec3<f32>* dst) const {
+void JPABaseEmitter::calcEmitterGlobalPosition(EGG::Vector3f* dst) const {
     Mtx mtx;
     MTXScale(mtx, mGlobalScl.x, mGlobalScl.y, mGlobalScl.z);
     MTXConcat(mGlobalRot, mtx, mtx);

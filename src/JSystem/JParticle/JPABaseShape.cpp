@@ -8,7 +8,7 @@
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
-#include "JSystem/JMath/JMATrigonometric.h"
+#include "nw4r/math/math_triangular.h"
 #include "rvl/MTX.h"
 #include "rvl/GX.h"
 
@@ -302,8 +302,8 @@ void JPAGenCalcTexCrdMtxAnm(JPAEmitterWorkData* work) {
     f32 dVar13 = (dVar16 * shape->getIncScaleX()) + shape->getInitScaleX();
     f32 dVar12 = (dVar16 * shape->getIncScaleY()) + shape->getInitScaleY();
     s32 local_c0 = (dVar16 * shape->getIncRot()) + shape->getInitRot();
-    f32 dVar8 = JMASSin(local_c0);
-    f32 dVar9 = JMASCos(local_c0);
+    f32 dVar8 = nw4r::math::SinIdx(local_c0);
+    f32 dVar9 = nw4r::math::CosIdx(local_c0);
     Mtx local_108;
     local_108[0][0] = dVar13 * dVar9;
     local_108[0][1] = -dVar13 * dVar8;
@@ -335,8 +335,8 @@ void JPALoadCalcTexCrdMtxAnm(JPAEmitterWorkData* work, JPABaseParticle* param_1)
     f32 dVar13 = (dVar16 * shape->getIncScaleX()) + shape->getInitScaleX();
     f32 dVar12 = (dVar16 * shape->getIncScaleY()) + shape->getInitScaleY();
     s32 local_c0 = (dVar16 * shape->getIncRot()) + shape->getInitRot();
-    f32 dVar8 = JMASSin(local_c0);
-    f32 dVar9 = JMASCos(local_c0);
+    f32 dVar8 = nw4r::math::SinIdx(local_c0);
+    f32 dVar9 = nw4r::math::CosIdx(local_c0);
     Mtx local_108;
     local_108[0][0] = dVar13 * dVar9;
     local_108[0][1] = -dVar13 * dVar8;
@@ -485,8 +485,8 @@ static void loadPrjAnm(JPAEmitterWorkData const* work, const Mtx srt) {
     f32 dVar13 = (dVar16 * shape->getIncScaleX()) + shape->getInitScaleX();
     f32 dVar12 = (dVar16 * shape->getIncScaleY()) + shape->getInitScaleY();
     s32 local_c0 = (dVar16 * shape->getIncRot()) + shape->getInitRot();
-    f32 dVar8 = JMASSin(local_c0);
-    f32 dVar9 = JMASCos(local_c0);
+    f32 dVar8 = nw4r::math::SinIdx(local_c0);
+    f32 dVar9 = nw4r::math::CosIdx(local_c0);
     Mtx local_108;
     local_108[0][0] = dVar13 * dVar9;
     local_108[0][1] = -dVar13 * dVar8;
@@ -532,7 +532,7 @@ static projectionFunc p_prj[3] = {
  * JPADrawBillboard__FP18JPAEmitterWorkDataP15JPABaseParticle   */
 void JPADrawBillboard(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
     if (param_1->checkStatus(8) == 0) {
-        JGeometry::TVec3<f32> local_48;
+        EGG::Vector3f local_48;
         MTXMultVec(work->mPosCamMtx, param_1->mPosition, local_48);
         Mtx local_38;
         local_38[0][0] = work->mGlobalPtclScl.x * param_1->mParticleScaleX;
@@ -557,10 +557,10 @@ void JPADrawBillboard(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
  * JPADrawRotBillboard__FP18JPAEmitterWorkDataP15JPABaseParticle */
 void JPADrawRotBillboard(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
     if (param_1->checkStatus(8) == 0) {
-        JGeometry::TVec3<f32> local_48;
+        EGG::Vector3f local_48;
         MTXMultVec(work->mPosCamMtx, param_1->mPosition, local_48);
-        f32 sinRot = JMASSin(param_1->mRotateAngle);
-        f32 cosRot = JMASCos(param_1->mRotateAngle);
+        f32 sinRot = nw4r::math::SinIdx(param_1->mRotateAngle);
+        f32 cosRot = nw4r::math::CosIdx(param_1->mRotateAngle);
         f32 particleX = work->mGlobalPtclScl.x * param_1->mParticleScaleX;
         f32 particleY = work->mGlobalPtclScl.y * param_1->mParticleScaleY;
         
@@ -587,11 +587,12 @@ void JPADrawRotBillboard(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
  * JPADrawYBillboard__FP18JPAEmitterWorkDataP15JPABaseParticle  */
 void JPADrawYBillboard(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
      if (param_1->checkStatus(8) == 0) {
-        JGeometry::TVec3<f32> local_48;
+        EGG::Vector3f local_48;
         MTXMultVec(work->mPosCamMtx, param_1->mPosition, local_48);
         Mtx local_38;
+        f32 particleX = work->mGlobalPtclScl.x * param_1->mParticleScaleX;
         f32 particleY = work->mGlobalPtclScl.y * param_1->mParticleScaleY;
-        local_38[0][0] = work->mGlobalPtclScl.x * param_1->mParticleScaleX;
+        local_38[0][0] = particleX;
         local_38[0][3] = local_48.x;
         local_38[1][1] = work->mYBBCamMtx[1][1] * particleY;
         local_38[1][2] = work->mYBBCamMtx[1][2];
@@ -613,10 +614,10 @@ void JPADrawYBillboard(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
  * JPADrawRotYBillboard__FP18JPAEmitterWorkDataP15JPABaseParticle */
 void JPADrawRotYBillboard(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
     if (param_1->checkStatus(8) == 0) {
-        JGeometry::TVec3<f32> local_48;
+        EGG::Vector3f local_48;
         MTXMultVec(work->mPosCamMtx, param_1->mPosition, local_48);
-        f32 sinRot = JMASSin(param_1->mRotateAngle);
-        f32 cosRot = JMASCos(param_1->mRotateAngle);
+        f32 sinRot = nw4r::math::SinIdx((s16)param_1->mRotateAngle);
+        f32 cosRot = nw4r::math::CosIdx((s16)param_1->mRotateAngle);
         Mtx local_38;
         f32 particleX = work->mGlobalPtclScl.x * param_1->mParticleScaleX;
         f32 particleY = work->mGlobalPtclScl.y * param_1->mParticleScaleY;
@@ -645,37 +646,37 @@ void JPADrawRotYBillboard(JPAEmitterWorkData* work, JPABaseParticle* param_1) {
 /* 802782B4-802782D0 272BF4 001C+00 1/0 0/0 0/0 .text
  * dirTypeVel__FPC18JPAEmitterWorkDataPC15JPABaseParticlePQ29JGeometry8TVec3<f> */
 void dirTypeVel(JPAEmitterWorkData const* work, JPABaseParticle const* param_1,
-                    JGeometry::TVec3<f32>* param_2) {
+                    EGG::Vector3f* param_2) {
     param_1->getVelVec(*param_2);
 }
 
 /* 802782D0-802782EC 272C10 001C+00 1/0 0/0 0/0 .text
  * dirTypePos__FPC18JPAEmitterWorkDataPC15JPABaseParticlePQ29JGeometry8TVec3<f> */
 void dirTypePos(JPAEmitterWorkData const* work, JPABaseParticle const* param_1,
-                    JGeometry::TVec3<f32>* param_2) {
+                    EGG::Vector3f* param_2) {
     param_1->getLocalPosition(*param_2);
 }
 
 /* 802782EC-80278320 272C2C 0034+00 1/0 0/0 0/0 .text
  * dirTypePosInv__FPC18JPAEmitterWorkDataPC15JPABaseParticlePQ29JGeometry8TVec3<f> */
 void dirTypePosInv(JPAEmitterWorkData const* work, JPABaseParticle const* param_1,
-                    JGeometry::TVec3<f32>* param_2) {
+                    EGG::Vector3f* param_2) {
     param_1->getLocalPosition(*param_2);
-    param_2->negate();
+    *param_2 = param_2->negated();
 }
 
 /* 80278320-8027833C 272C60 001C+00 1/0 0/0 0/0 .text
  * dirTypeEmtrDir__FPC18JPAEmitterWorkDataPC15JPABaseParticlePQ29JGeometry8TVec3<f> */
 void dirTypeEmtrDir(JPAEmitterWorkData const* work, JPABaseParticle const* param_1,
-                    JGeometry::TVec3<f32>* param_2) {
+                    EGG::Vector3f* param_2) {
     param_2->set(work->mGlobalEmtrDir);
 }
 
 /* 8027833C-802783D4 272C7C 0098+00 1/0 0/0 0/0 .text
  * dirTypePrevPtcl__FPC18JPAEmitterWorkDataPC15JPABaseParticlePQ29JGeometry8TVec3<f> */
 void dirTypePrevPtcl(JPAEmitterWorkData const* work, JPABaseParticle const* param_1,
-                    JGeometry::TVec3<f32>* param_2) {
-    JGeometry::TVec3<f32> aTStack_24;
+                    EGG::Vector3f* param_2) {
+    EGG::Vector3f aTStack_24;
     param_1->getGlobalPosition(aTStack_24);
     JPANode<JPABaseParticle>* end = work->mpAlivePtcl->getEnd();
     JPANode<JPABaseParticle>* prev = work->mpCurNode->getPrev();
@@ -686,7 +687,7 @@ void dirTypePrevPtcl(JPAEmitterWorkData const* work, JPABaseParticle const* para
     } else {
         work->mpEmtr->calcEmitterGlobalPosition(param_2);
     }
-    param_2->sub(aTStack_24);
+    *param_2 -= aTStack_24;
 }
 
 /* 802783D4-80278414 272D14 0040+00 1/0 0/0 0/0 .text            rotTypeY__FffRA3_A4_f */
@@ -739,23 +740,26 @@ static void rotTypeZ(f32 param_0, f32 param_1, Mtx& param_2) {
 
 /* 80278494-802784F0 272DD4 005C+00 1/0 0/0 0/0 .text            rotTypeXYZ__FffRA3_A4_f */
 static void rotTypeXYZ(f32 param_0, f32 param_1, Mtx& param_2) {
-    f32 f3 = 0.33333298563957214f * (1.0f - param_1);
+    f32 f3;
     f32 fVar1;
     f32 f4;
+    f32 fVar2;
+    
+    f3 = 0.33333298563957214f * (1.0f - param_1);
     f4 = f3 + 0.5773500204086304f * param_0;
     fVar1 =  f3 - 0.5773500204086304f * param_0;
-    f3 += param_1;
-    param_2[0][0] = f3;
+    fVar2 = f3 + param_1;
+    param_2[0][0] = fVar2;
     param_2[0][1] = fVar1;
     param_2[0][2] = f4;
     param_2[0][3] = 0.0f;
     param_2[1][0] = f4;
-    param_2[1][1] = f3;
+    param_2[1][1] = fVar2;
     param_2[1][2] = fVar1;
     param_2[1][3] = 0.0f;
     param_2[2][0] = fVar1;
     param_2[2][1] = f4;
-    param_2[2][2] = f3;
+    param_2[2][2] = fVar2;
     param_2[2][3] = 0.0f;
 }
 
@@ -794,7 +798,7 @@ static void basePlaneTypeX(MtxP param_0, f32 param_1, f32 param_2) {
 
 /* 803C432C-803C4340 -00001 0014+00 2/5 0/0 0/0 .data            p_direction */
 typedef void (*dirTypeFunc)(JPAEmitterWorkData const*, JPABaseParticle const*,
-                            JGeometry::TVec3<f32>*);
+                            EGG::Vector3f*);
 static dirTypeFunc p_direction[5] = {
     dirTypeVel, dirTypePos, dirTypePosInv,
     dirTypeEmtrDir, dirTypePrevPtcl,
@@ -830,15 +834,15 @@ static u8* p_dl[2] = {
  * JPADrawDirection__FP18JPAEmitterWorkDataP15JPABaseParticle   */
 void JPADrawDirection(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
     if (param_1->checkStatus(8) == 0) {
-        JGeometry::TVec3<f32> local_6c;
-        JGeometry::TVec3<f32> local_78;
+        EGG::Vector3f local_6c;
+        EGG::Vector3f local_78;
         p_direction[param_0->mDirType](param_0, param_1, &local_6c);
         if (!local_6c.isZero()) {
             local_6c.normalize();
-            local_78.cross(param_1->mBaseAxis, local_6c);
+            local_78 = param_1->mBaseAxis.cross(local_6c);
             if (!local_78.isZero()) {
                 local_78.normalize();
-                param_1->mBaseAxis.cross(local_6c, local_78);
+                param_1->mBaseAxis = local_6c.cross(local_78);
                 param_1->mBaseAxis.normalize();
                 Mtx local_60;
                 f32 fVar1 = param_0->mGlobalPtclScl.x * param_1->mParticleScaleX;
@@ -869,17 +873,17 @@ void JPADrawDirection(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
  * JPADrawRotDirection__FP18JPAEmitterWorkDataP15JPABaseParticle */
 void JPADrawRotDirection(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
     if (param_1->checkStatus(8) == 0) {
-        f32 sinRot = JMASSin(param_1->mRotateAngle);
-        f32 cosRot = JMASCos(param_1->mRotateAngle);
-        JGeometry::TVec3<f32> local_6c;
-        JGeometry::TVec3<f32> local_78;
+        f32 sinRot = nw4r::math::SinIdx(param_1->mRotateAngle);
+        f32 cosRot = nw4r::math::CosIdx(param_1->mRotateAngle);
+        EGG::Vector3f local_6c;
+        EGG::Vector3f local_78;
         p_direction[param_0->mDirType](param_0, param_1, &local_6c);
         if (!local_6c.isZero()) {
             local_6c.normalize();
-            local_78.cross(param_1->mBaseAxis, local_6c);
+            local_78 = param_1->mBaseAxis.cross(local_6c);
             if (!local_78.isZero()) {
                 local_78.normalize();
-                param_1->mBaseAxis.cross(local_6c, local_78);
+                param_1->mBaseAxis = local_6c.cross(local_78);
                 param_1->mBaseAxis.normalize();
                 f32 particleX = param_0->mGlobalPtclScl.x * param_1->mParticleScaleX;
                 f32 particleY = param_0->mGlobalPtclScl.y * param_1->mParticleScaleY;
@@ -913,16 +917,16 @@ void JPADrawRotDirection(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) 
  * JPADrawDBillboard__FP18JPAEmitterWorkDataP15JPABaseParticle  */
 void JPADrawDBillboard(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
     if (param_1->checkStatus(8) == 0) {
-        JGeometry::TVec3<f32> local_70;
+        EGG::Vector3f local_70;
         p_direction[param_0->mDirType](param_0, param_1, &local_70);
-        JGeometry::TVec3<f32> aTStack_7c;
+        EGG::Vector3f aTStack_7c;
         aTStack_7c.set(param_0->mPosCamMtx[2][0], param_0->mPosCamMtx[2][1],
             param_0->mPosCamMtx[2][2]);
-        local_70.cross(local_70, aTStack_7c);
+        local_70 = local_70.cross(aTStack_7c);
         if (!local_70.isZero()) {
             local_70.normalize();
             MTXMultVecSR(param_0->mPosCamMtx, local_70, local_70);
-            JGeometry::TVec3<f32> local_88;
+            EGG::Vector3f local_88;
             MTXMultVec(param_0->mPosCamMtx, param_1->mPosition, local_88);
             f32 particleX = param_0->mGlobalPtclScl.x * param_1->mParticleScaleX;
             f32 particleY = param_0->mGlobalPtclScl.y * param_1->mParticleScaleY;
@@ -950,8 +954,8 @@ void JPADrawDBillboard(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
  * JPADrawRotation__FP18JPAEmitterWorkDataP15JPABaseParticle    */
 void JPADrawRotation(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
     if (param_1->checkStatus(8) == 0) {
-        f32 sinRot = JMASSin(param_1->mRotateAngle);
-        f32 cosRot = JMASCos(param_1->mRotateAngle);
+        f32 sinRot = nw4r::math::SinIdx(param_1->mRotateAngle);
+        f32 cosRot = nw4r::math::CosIdx(param_1->mRotateAngle);
         f32 particleX = param_0->mGlobalPtclScl.x * param_1->mParticleScaleX;
         f32 particleY = param_0->mGlobalPtclScl.y * param_1->mParticleScaleY;
         Mtx auStack_88;
@@ -987,13 +991,12 @@ void JPADrawPoint(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
  * JPADrawLine__FP18JPAEmitterWorkDataP15JPABaseParticle        */
 void JPADrawLine(JPAEmitterWorkData* param_0, JPABaseParticle* param_1) {
     if (param_1->checkStatus(8) == 0) {
-        JGeometry::TVec3<f32> local_1c;
-        JGeometry::setTVec3f(&param_1->mPosition.x, &local_1c.x);
-        JGeometry::TVec3<f32> local_28;
+        EGG::Vector3f local_1c = param_1->mPosition;
+        EGG::Vector3f local_28;
         param_1->getVelVec(local_28);
         if (!local_28.isZero()) {
             local_28.setLength(param_0->mGlobalPtclScl.y * (25.0f * param_1->mParticleScaleY));
-            local_28.sub(local_1c, local_28);
+            local_28 = local_1c - local_28;
             GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
             GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
             GXBegin(GX_LINES, GX_VTXFMT1, 2);
@@ -1035,10 +1038,10 @@ void JPADrawStripe(JPAEmitterWorkData* param_0) {
     Mtx local_c8;
     f32 dVar11;
     f32 dVar12;
-    JGeometry::TVec3<f32> local_ec;
-    JGeometry::TVec3<f32> local_e0[2];
-    JGeometry::TVec3<f32> local_f8;
-    JGeometry::TVec3<f32> local_104;
+    EGG::Vector3f local_ec;
+    EGG::Vector3f local_e0[2];
+    EGG::Vector3f local_f8;
+    EGG::Vector3f local_104;
     getNodeFunc node_func;
     JPANode<JPABaseParticle>* startNode;
     if (shape->isDrawFwdAhead()) {
@@ -1061,8 +1064,8 @@ void JPADrawStripe(JPAEmitterWorkData* param_0) {
         param_0->mpCurNode = node;
         JPABaseParticle* particle = node->getObject();
         local_ec.set(particle->mPosition);
-        dVar11 = JMASSin(particle->mRotateAngle);
-        dVar12 = JMASCos(particle->mRotateAngle);
+        dVar11 = nw4r::math::SinIdx(particle->mRotateAngle);
+        dVar12 = nw4r::math::CosIdx(particle->mRotateAngle);
         local_e0[0].set(-particle->mParticleScaleX * dVar14, 0.0f, 0.0f);
         local_e0[0].set(local_e0[0].x * dVar12, 0.0f, local_e0[0].x * dVar11);
         local_e0[1].set(particle->mParticleScaleX * dVar13, 0.0f, 0.0f);
@@ -1073,13 +1076,13 @@ void JPADrawStripe(JPAEmitterWorkData* param_0) {
         } else {
             local_f8.normalize();
         }
-        local_104.cross(particle->mBaseAxis, local_f8);
+        local_104 = particle->mBaseAxis.cross(local_f8);
         if (local_104.isZero()) {
             local_104.set(1.0f, 0.0f, 0.0f);
         } else {
             local_104.normalize();
         }
-        particle->mBaseAxis.cross(local_f8, local_104);
+        particle->mBaseAxis = local_f8.cross( local_104);
         particle->mBaseAxis.normalize();
         
         local_c8[0][0] = local_104.x;
@@ -1125,10 +1128,10 @@ void JPADrawStripeX(JPAEmitterWorkData* param_0) {
     Mtx local_90;
     f32 dVar11;
     f32 dVar12;
-    JGeometry::TVec3<f32> local_b4;
-    JGeometry::TVec3<f32> local_a8[2];
-    JGeometry::TVec3<f32> local_c0;
-    JGeometry::TVec3<f32> local_cc;
+    EGG::Vector3f local_b4;
+    EGG::Vector3f local_a8[2];
+    EGG::Vector3f local_c0;
+    EGG::Vector3f local_cc;
     JPANode<JPABaseParticle>* startNode;
     getNodeFunc node_func;
     if (shape->isDrawFwdAhead()) {
@@ -1151,8 +1154,8 @@ void JPADrawStripeX(JPAEmitterWorkData* param_0) {
         param_0->mpCurNode = node;
         JPABaseParticle* particle = node->getObject();
         local_b4.set(particle->mPosition);
-        dVar11 = JMASSin(particle->mRotateAngle);
-        dVar12 = JMASCos(particle->mRotateAngle);
+        dVar11 = nw4r::math::SinIdx(particle->mRotateAngle);
+        dVar12 = nw4r::math::CosIdx(particle->mRotateAngle);
         local_a8[0].set(-particle->mParticleScaleX * local_154, 0.0f, 0.0f);
         local_a8[0].set(local_a8[0].x * dVar12, 0.0f, local_a8[0].x * dVar11);
         local_a8[1].set(particle->mParticleScaleX * local_158, 0.0f, 0.0f);
@@ -1163,13 +1166,13 @@ void JPADrawStripeX(JPAEmitterWorkData* param_0) {
         } else {
             local_c0.normalize();
         }
-        local_cc.cross(particle->mBaseAxis, local_c0);
+        local_cc = particle->mBaseAxis.cross(local_c0);
         if (local_cc.isZero()) {
             local_cc.set(1.0f, 0.0f, 0.0f);
         } else {
             local_cc.normalize();
         }
-        particle->mBaseAxis.cross(local_c0, local_cc);
+        particle->mBaseAxis = local_c0.cross( local_cc);
         particle->mBaseAxis.normalize();
         
         local_90[0][0] = local_cc.x;
@@ -1201,8 +1204,8 @@ void JPADrawStripeX(JPAEmitterWorkData* param_0) {
         param_0->mpCurNode = node;
         JPABaseParticle* particle = node->getObject();
         local_b4.set(particle->mPosition);
-        dVar11 = JMASCos(particle->mRotateAngle);
-        dVar12 = -JMASSin(particle->mRotateAngle);
+        dVar11 = nw4r::math::CosIdx(particle->mRotateAngle);
+        dVar12 = -nw4r::math::SinIdx(particle->mRotateAngle);
         local_a8[0].set(-particle->mParticleScaleY * local_15c, 0.0f, 0.0f);
         local_a8[0].set(local_a8[0].x * dVar12, 0.0f, local_a8[0].x * dVar11);
         local_a8[1].set(particle->mParticleScaleY * local_160, 0.0f, 0.0f);
@@ -1213,13 +1216,13 @@ void JPADrawStripeX(JPAEmitterWorkData* param_0) {
         } else {
             local_c0.normalize();
         }
-        local_cc.cross(particle->mBaseAxis, local_c0);
+        local_cc = particle->mBaseAxis.cross(local_c0);
         if (local_cc.isZero()) {
             local_cc.set(1.0f, 0.0f, 0.0f);
         } else {
             local_cc.normalize();
         }
-        particle->mBaseAxis.cross(local_c0, local_cc);
+        particle->mBaseAxis = local_c0.cross( local_cc);
         particle->mBaseAxis.normalize();
         
         local_90[0][0] = local_cc.x;
@@ -1418,18 +1421,46 @@ GXTevColorArg JPABaseShape::st_ca[6][4] = {
 };
 
 /* 803C4464-803C4488 021584 0020+04 0/1 0/0 0/0 .data            st_aa__12JPABaseShape */
-GXTevAlphaArg JPABaseShape::st_aa[2][4] = {
+JPABaseShapeAlphaArg JPABaseShape::st_aa[5] = {
     {
         GX_CA_ZERO,
         GX_CA_TEXA,
         GX_CA_A0,
         GX_CA_ZERO,
+        GX_TEV_ADD,
+        GX_CS_SCALE_1,
     },
     {
         GX_CA_ZERO,
         GX_CA_ZERO,
         GX_CA_ZERO,
         GX_CA_A0,
+        GX_TEV_ADD,
+        GX_CS_SCALE_1,
+    },
+    {
+        GX_CA_A0,
+        GX_CA_ZERO,
+        GX_CA_ZERO,
+        GX_CA_A0,
+        GX_TEV_SUB,
+        GX_CS_SCALE_1,
+    },
+    {
+        GX_CA_A0,
+        GX_CA_ZERO,
+        GX_CA_ZERO,
+        GX_CA_A0,
+        GX_TEV_SUB,
+        GX_CS_SCALE_2,
+    },
+    {
+        GX_CA_ZERO,
+        GX_CA_TEXA,
+        GX_CA_A0,
+        GX_CA_ZERO,
+        GX_TEV_ADD,
+        GX_CS_SCALE_2,
     },
 };
 
@@ -1437,12 +1468,13 @@ GXTevAlphaArg JPABaseShape::st_aa[2][4] = {
  */
 void JPABaseShape::setGX(JPAEmitterWorkData* work) const {
     const GXTevColorArg* colorArg = getTevColorArg();
-    const GXTevAlphaArg* alphaArg = getTevAlphaArg();
+    const JPABaseShapeAlphaArg* alphaArg = getTevAlphaArg();
     GXSetBlendMode(getBlendMode(), getBlendSrc(), getBlendDst(), getLogicOp());
     GXSetZMode(getZEnable(), getZCmp(), getZUpd());
     GXSetAlphaCompare(getAlphaCmp0(), getAlphaRef0(), getAlphaOp(), getAlphaCmp1(), getAlphaRef1());
     GXSetTevColorIn(GX_TEVSTAGE0, colorArg[0], colorArg[1], colorArg[2], colorArg[3]);
-    GXSetTevAlphaIn(GX_TEVSTAGE0, alphaArg[0], alphaArg[1], alphaArg[2], alphaArg[3]);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, alphaArg->mArg[0], alphaArg->mArg[1], alphaArg->mArg[2], alphaArg->mArg[3]);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, alphaArg->mOp, GX_TB_ZERO, alphaArg->mScale, true, GX_TEVPREV);
     GXSetTevDirect(GX_TEVSTAGE0);
     GXSetTevDirect(GX_TEVSTAGE1);
     GXSetZCompLoc(getZCompLoc());
