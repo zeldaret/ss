@@ -12,6 +12,7 @@ struct dAcEnData {
 // non-official name
 class dAcEnBase_c : public dAcObjBase_c {
 public:
+    dAcEnBase_c();
     /* 0x330 */ dAcRef_c<dAcEnBase_c> mEnemyLink;
     /* 0x33C */ u32 mInteractionFlags;
     /* 0x340 */ u16 field_0x338;

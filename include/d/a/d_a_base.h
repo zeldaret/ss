@@ -16,11 +16,11 @@ struct SoundSource {
     virtual ~SoundSource() {}
     // TODO
 
-    virtual bool shutdown(); // 0x48
-    virtual bool isReadyMaybe(); // 0x100
+    virtual bool shutdown();                         // 0x48
+    virtual bool isReadyMaybe();                     // 0x100
     virtual bool load(void *data, const char *name); // 0x100
-    virtual void setFrame(f32 frame); // 0x108
-    virtual void setRate(f32 frame); // 0x10C
+    virtual void setFrame(f32 frame);                // 0x108
+    virtual void setRate(f32 frame);                 // 0x10C
 };
 
 struct SoundInfo {

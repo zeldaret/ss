@@ -32,7 +32,7 @@ public:
     void fn_80029A70(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
     void setMtx(const mMtx_c &);
 
-    static void fn_800298C0(u16 effect, mVec3_c *pos, void*, void*, void*, void*);
+    static void fn_800298C0(u16 effect, mVec3_c *pos, void *, void *, void *, void *);
 
     void fn_80026ED0();
     void fn_80026F10();
@@ -42,9 +42,9 @@ public:
     }
 
 private:
-    u8 field_0x20[0x28 - 0x20];
+    /* 0x20 */ u8 field_0x20[0x28 - 0x20];
     /* 0x28 */ dBase_c *mpOwner;
-    u8 field_0x2C[0x34 - 0x2C];
+    /* 0x2C */ u8 field_0x2C[0x34 - 0x2C];
 };
 
 // Not sure if these belongs here, but it uses EffectsStruct

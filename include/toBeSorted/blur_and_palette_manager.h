@@ -178,7 +178,6 @@ struct PaletteEAF_big_entry {
     u8 field_0x10;
 };
 
-
 struct PaletteEAF_big {
     ~PaletteEAF_big() {}
     PaletteEAF_big_entry field_0x00[8];
@@ -231,6 +230,7 @@ public:
     }
     void fn_800223A0(void *);
     void fn_80022440(void *);
+    void fn_800225F0(void *);
 
     u8 get0x2DE8() const {
         return field_0x2DE0[8];
