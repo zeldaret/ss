@@ -71,23 +71,24 @@ void JPACalcScaleAnmRepeatY(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
  * JPACalcScaleAnmReverseX__FP18JPAEmitterWorkDataP15JPABaseParticle */
 void JPACalcScaleAnmReverseX(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
     JPAExtraShape* esp = work->mpRes->getEsp();
-    s32 cycle = ptcl->mAge / esp->getScaleAnmCycleX();
+    f32 cycle = ptcl->mAge / esp->getScaleAnmCycleX() & 1;
     f32 base = (ptcl->mAge % esp->getScaleAnmCycleX()) / (f32)esp->getScaleAnmCycleX();
-    work->mScaleAnm = base + ((cycle & 1) * (1.0f - base * 2.0f));
+    work->mScaleAnm = base + (cycle * (1.0f - base * 2.0f));
 }
 
 /* 8027AB7C-8027AC10 2754BC 0094+00 0/0 1/1 0/0 .text
  * JPACalcScaleAnmReverseY__FP18JPAEmitterWorkDataP15JPABaseParticle */
 void JPACalcScaleAnmReverseY(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
     JPAExtraShape* esp = work->mpRes->getEsp();
-    s32 cycle = ptcl->mAge / esp->getScaleAnmCycleY();
+    f32 cycle = ptcl->mAge / esp->getScaleAnmCycleY() & 1;
     f32 base = (ptcl->mAge % esp->getScaleAnmCycleY()) / (f32)esp->getScaleAnmCycleY();
-    work->mScaleAnm = base + ((cycle & 1) * (1.0f - base * 2.0f));
+    work->mScaleAnm = base + (cycle * (1.0f - base * 2.0f));
 }
 
 /* 8027AC10-8027AC98 275550 0088+00 0/0 1/1 0/0 .text
  * JPACalcAlphaAnm__FP18JPAEmitterWorkDataP15JPABaseParticle    */
 void JPACalcAlphaAnm(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
+    0.0f; // float order
     JPAExtraShape* esp = work->mpRes->getEsp();
     f32 alpha;
     if (ptcl->mTime < esp->getAlphaInTiming()) {

@@ -7,7 +7,13 @@
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "rvl/GX.h"
-#include "rvl/OS.h"
+
+// SS addition
+void fn_8031DBA0(JPAEmitterWorkData* work) {
+    if (work->mpEmtr->mAlivePtclBase.getNum() == 0) {
+        work->mpEmtr->deleteAllParticle();
+    }
+}
 
 /* 8027AEBC-8027AFDC 2757FC 0120+00 0/0 1/1 0/0 .text JPARegistChildPrmEnv__FP18JPAEmitterWorkData
  */

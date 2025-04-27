@@ -17,8 +17,9 @@ struct JPAExTexShapeData {
     /* 0x08 */ u32 mFlags;
     /* 0x0C */ f32 mIndTexMtx[2][3];
     /* 0x24 */ s8 mExpScale;
-    /* 0x25 */ s8 mIndTexIdx;
-    /* 0x26 */ s8 mSecTexIdx;
+    /* 0x25 */ u8 _0x25[0x4E - 0x25];
+    /* 0x4E */ s8 mIndTexIdx;
+    /* 0x4F */ s8 mSecTexIdx;
 };
 
 /**

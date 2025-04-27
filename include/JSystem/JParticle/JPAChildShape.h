@@ -82,6 +82,7 @@ public:
     /* 0x00 */ const JPAChildShapeData* mpData;
 };
 
+void fn_8031DBA0(JPAEmitterWorkData*);
 void JPARegistChildPrmEnv(JPAEmitterWorkData*);
 
 void JPACalcChildAlphaOut(JPAEmitterWorkData*, JPABaseParticle*);
