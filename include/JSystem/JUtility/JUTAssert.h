@@ -1,7 +1,7 @@
 #ifndef JUTASSERT_H
 #define JUTASSERT_H
 
-#include "dolphin/os.h"
+#include "rvl/OS.h"
 
 #ifdef DEBUG
 #define JUT_ASSERT(LINE, COND) \

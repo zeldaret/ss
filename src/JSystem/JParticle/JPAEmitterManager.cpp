@@ -3,17 +3,17 @@
 // Translation Unit: JPAEmitterManager
 //
 
+#include "egg/core/eggHeap.h"
 #include "JSystem/JParticle/JPAEmitterManager.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JUtility/JUTAssert.h"
-#include "dolphin/gx.h"
+#include "rvl/GX.h"
 
-/* 8027DCA0-8027DEBC 2785E0 021C+00 0/0 1/1 0/0 .text __ct__17JPAEmitterManagerFUlUlP7JKRHeapUcUc
+/* 8027DCA0-8027DEBC 2785E0 021C+00 0/0 1/1 0/0 .text __ct__17JPAEmitterManagerFUlUlP7EGG::HeapUcUc
  */
-JPAEmitterManager::JPAEmitterManager(u32 i_ptclNum, u32 i_emtrNum, JKRHeap* pHeap, u8 i_gidMax,
+JPAEmitterManager::JPAEmitterManager(u32 i_ptclNum, u32 i_emtrNum, EGG::Heap* pHeap, u8 i_gidMax,
                                      u8 i_ridMax) {
     emtrNum = i_emtrNum;
     ptclNum = i_ptclNum;

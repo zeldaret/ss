@@ -1,7 +1,8 @@
 #ifndef JPADRAWINFO_H
 #define JPADRAWINFO_H
 
-#include "dolphin/mtx.h"
+#include "common.h"
+#include "rvl/MTX.h"
 
 /**
  * @ingroup jsystem-jparticle

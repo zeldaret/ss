@@ -1,9 +1,11 @@
 #ifndef JPARESOURCEMANAGER_H
 #define JPARESOURCEMANAGER_H
 
+#include "common.h"
+#include "egg/egg_types.h"
+#include "rvl/GX.h"
 #include "JSystem/JParticle/JPATexture.h"
 
-class JKRHeap;
 class JPAResource;
 struct ResTIMG;
 
@@ -13,7 +15,7 @@ struct ResTIMG;
  */
 class JPAResourceManager {
 public:
-    /* 80273E10 */ JPAResourceManager(void const*, JKRHeap*);
+    /* 80273E10 */ JPAResourceManager(void const*, EGG::Heap*);
     /* 80273E68 */ JPAResource* getResource(u16) const;
     /* 80273EA8 */ bool checkUserIndexDuplication(u16) const;
     /* 80273EEC */ const ResTIMG* swapTexture(ResTIMG const*, char const*);
@@ -24,7 +26,7 @@ public:
     void load(u16 idx, GXTexMapID texMapID) { mpTexArr[idx]->load(texMapID); }
 
 public:
-    /* 0x00 */ JKRHeap* mpHeap;
+    /* 0x00 */ EGG::Heap* mpHeap;
     /* 0x04 */ JPAResource** mpResArr;
     /* 0x08 */ JPATexture** mpTexArr;
     /* 0x0C */ u16 mResMax;

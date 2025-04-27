@@ -729,7 +729,7 @@ public:
                 idArray[i] = GX_PNMTX0;
                 allIdent = false;
             } else {
-                idArray[i] = GX_TEXMTX_IDENT;
+                idArray[i] = GX_IDENTITY;
             }
         }
 
@@ -1653,11 +1653,11 @@ void LoadResTexSrt(const ResTexSrt srt) {
                     sPostTexMtx.SetIdentity(i);
                     math::MTX34Identity(&identMtx);
 
-                    GXLoadTexMtxImm(identMtx, i * 3 + GX_DUALMTX0, GX_MTX_3x4);
+                    GXLoadTexMtxImm(identMtx, i * 3 + GX_DUALMTX0, GX_MTX3x4);
                 }
             } else {
                 sPostTexMtx.ResetIdentity(i);
-                GXLoadTexMtxImm(mtx, i * 3 + GX_DUALMTX0, GX_MTX_3x4);
+                GXLoadTexMtxImm(mtx, i * 3 + GX_DUALMTX0, GX_MTX3x4);
             }
 
         } else {

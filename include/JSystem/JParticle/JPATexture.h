@@ -1,6 +1,8 @@
 #ifndef JPATEXTURE_H
 #define JPATEXTURE_H
 
+#include "common.h"
+#include "rvl/GX.h"
 #include "JSystem/JUtility/JUTTexture.h"
 
 /**

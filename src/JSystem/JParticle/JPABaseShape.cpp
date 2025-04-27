@@ -3,14 +3,14 @@
 // Translation Unit: JPABaseShape
 //
 
+#include "egg/core/eggHeap.h"
 #include "JSystem/JParticle/JPABaseShape.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
 #include "JSystem/JMath/JMATrigonometric.h"
-#include "dolphin/mtx.h"
-#include "dolphin/gx.h"
+#include "rvl/MTX.h"
+#include "rvl/GX.h"
 
 /* 80276A90-80276ACC 2713D0 003C+00 0/0 1/1 0/0 .text JPASetPointSize__FP18JPAEmitterWorkData */
 void JPASetPointSize(JPAEmitterWorkData* work) {
@@ -1266,10 +1266,10 @@ void JPADrawParticleCallBack(JPAEmitterWorkData* work, JPABaseParticle* ptcl) {
 }
 
 /* 8027A454-8027A6DC 274D94 0288+00 1/1 0/0 0/0 .text
- * makeColorTable__FPP8_GXColorPC16JPAClrAnmKeyDataUcsP7JKRHeap */
+ * makeColorTable__FPP8_GXColorPC16JPAClrAnmKeyDataUcsP7EGG::Heap */
 static void makeColorTable(GXColor** o_color_table, JPAClrAnmKeyData const* i_data, u8 param_2,
-                           s16 i_size, JKRHeap* i_heap) {
-    GXColor* color_table = (GXColor*)JKRAllocFromHeap(i_heap, (i_size + 1) * 4, 4);
+                           s16 i_size, EGG::Heap* i_heap) {
+    GXColor* color_table = (GXColor*)i_heap->alloc((i_size + 1) * 4, 4);
     f32 r_step, g_step, b_step, a_step;
     r_step = g_step = b_step = a_step = 0.0f;
     f32 r = i_data[0].color.r;
@@ -1308,9 +1308,9 @@ static void makeColorTable(GXColor** o_color_table, JPAClrAnmKeyData const* i_da
     *o_color_table = color_table;
 }
 
-/* 8027A6DC-8027A7E8 27501C 010C+00 0/0 1/1 0/0 .text            __ct__12JPABaseShapeFPCUcP7JKRHeap
+/* 8027A6DC-8027A7E8 27501C 010C+00 0/0 1/1 0/0 .text            __ct__12JPABaseShapeFPCUcP7EGG::Heap
  */
-JPABaseShape::JPABaseShape(u8 const* pData, JKRHeap* pHeap) {
+JPABaseShape::JPABaseShape(u8 const* pData, EGG::Heap* pHeap) {
     mpData = (const JPABaseShapeData*)pData;
 
     if (isTexCrdAnm()) {

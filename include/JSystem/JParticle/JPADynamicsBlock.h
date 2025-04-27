@@ -1,9 +1,10 @@
 #ifndef JPADYNAMICSBLOCK_H
 #define JPADYNAMICSBLOCK_H
 
+#include "common.h"
+
 #include "JSystem/JGeometry.h"
 
-#include "dolphin/types.h"
 
 class JPAEmitterWorkData;
 

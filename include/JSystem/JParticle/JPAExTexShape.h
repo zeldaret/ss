@@ -1,7 +1,7 @@
 #ifndef JPAEXTEXSHAPE_H
 #define JPAEXTEXSHAPE_H
 
-#include "dolphin/types.h"
+#include "common.h"
 
 class JPAEmitterWorkData;
 

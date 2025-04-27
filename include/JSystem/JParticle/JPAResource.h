@@ -1,9 +1,9 @@
 #ifndef JPARESOURCE_H
 #define JPARESOURCE_H
 
-#include "dolphin/types.h"
+#include "common.h"
+#include "egg/egg_types.h"
 
-class JKRHeap;
 class JPAEmitterWorkData;
 class JPABaseEmitter;
 class JPABaseParticle;
@@ -23,7 +23,7 @@ class JPAKeyBlock;
 class JPAResource {
 public:
     /* 80274010 */ JPAResource();
-    /* 80274080 */ void init(JKRHeap*);
+    /* 80274080 */ void init(EGG::Heap*);
     /* 802755E8 */ bool calc(JPAEmitterWorkData*, JPABaseEmitter*);
     /* 80275A94 */ void draw(JPAEmitterWorkData*, JPABaseEmitter*);
     /* 80275B74 */ void drawP(JPAEmitterWorkData*);

@@ -1,7 +1,7 @@
 #ifndef JSUPPORT_H
 #define JSUPPORT_H
 
-#include <dolphin.h>
+#include "common.h"
 
 /**
 * @ingroup jsystem-jsupport

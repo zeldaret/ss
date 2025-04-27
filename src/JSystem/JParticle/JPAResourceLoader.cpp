@@ -3,8 +3,8 @@
 // Translation Unit: JPAResourceLoader
 //
 
+#include "egg/core/eggHeap.h"
 #include "JSystem/JParticle/JPAResourceLoader.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JParticle/JPABaseShape.h"
 #include "JSystem/JParticle/JPAChildShape.h"
 #include "JSystem/JParticle/JPADynamicsBlock.h"
@@ -34,7 +34,7 @@ struct JPAResourceHeader {
 /* 8027D8E0-8027DCA0 278220 03C0+00 1/1 0/0 0/0 .text
  * load_jpc__17JPAResourceLoaderFPCUcP18JPAResourceManager      */
 void JPAResourceLoader::load_jpc(u8 const* data, JPAResourceManager* mgr) {
-    JKRHeap* heap = mgr->mpHeap;
+    EGG::Heap* heap = mgr->mpHeap;
     mgr->mResMax = *(u16*)(data + 8);
     mgr->mTexMax = *(u16*)(data + 0xA);
     mgr->mpResArr = new (heap, 0) JPAResource*[mgr->mResMax];

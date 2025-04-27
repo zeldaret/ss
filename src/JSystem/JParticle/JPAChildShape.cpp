@@ -6,8 +6,8 @@
 #include "JSystem/JParticle/JPAChildShape.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAEmitter.h"
-#include "dolphin/gx.h"
-#include "dolphin/os.h"
+#include "rvl/GX.h"
+#include "rvl/OS.h"
 
 /* 8027AEBC-8027AFDC 2757FC 0120+00 0/0 1/1 0/0 .text JPARegistChildPrmEnv__FP18JPAEmitterWorkData
  */

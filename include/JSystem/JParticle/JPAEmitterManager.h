@@ -1,7 +1,8 @@
 #ifndef JPAEMITTERMANAGER_H
 #define JPAEMITTERMANAGER_H
 
-#include "dolphin/types.h"
+#include "common.h"
+#include "egg/egg_types.h"
 #include "JSystem/JParticle/JPAList.h"
 #include "JSystem/JParticle/JPADrawInfo.h"
 #include "JSystem/JSupport/JSUList.h"
@@ -12,7 +13,6 @@ class JPAParticleCallBack;
 class JPABaseEmitter;
 class JPAResourceManager;
 class JPABaseParticle;
-class JKRHeap;
 struct JPAEmitterWorkData;
 
 /**
@@ -21,7 +21,7 @@ struct JPAEmitterWorkData;
  */
 class JPAEmitterManager {
 public:
-    /* 8027DCA0 */ JPAEmitterManager(u32, u32, JKRHeap*, u8, u8);
+    /* 8027DCA0 */ JPAEmitterManager(u32, u32, EGG::Heap*, u8, u8);
     /* 8027DEBC */ JPABaseEmitter* createSimpleEmitterID(JGeometry::TVec3<f32> const&, u16, u8, u8,
                                                          JPAEmitterCallBack*, JPAParticleCallBack*);
     /* 8027DFA0 */ void calc(u8);

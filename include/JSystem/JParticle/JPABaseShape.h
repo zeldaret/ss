@@ -1,11 +1,12 @@
 #ifndef JPABASESHAPE_H
 #define JPABASESHAPE_H
 
-#include <dolphin/gx.h>
+#include "common.h"
+#include "egg/egg_types.h"
+#include "rvl/GX.h"
 
 class JPAEmitterWorkData;
 class JPABaseParticle;
-class JKRHeap;
 
 /**
  * @ingroup jsystem-jparticle
@@ -46,7 +47,7 @@ struct JPABaseShapeData {
  */
 struct JPABaseShape {
 public:
-    /* 8027A6DC */ JPABaseShape(u8 const*, JKRHeap*);
+    /* 8027A6DC */ JPABaseShape(u8 const*, EGG::Heap*);
     /* 8027A7E8 */ void setGX(JPAEmitterWorkData*) const;
 
     static GXBlendMode st_bm[3];

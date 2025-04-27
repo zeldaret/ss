@@ -1,10 +1,10 @@
 #ifndef JPAPARTICLE_H
 #define JPAPARTICLE_H
 
-#include <dolphin/gx.h>
+#include "common.h"
+#include "rvl/GX.h"
 #include "JSystem/JGeometry.h"
 
-class JKRHeap;
 class JPABaseEmitter;
 class JPABaseParticle;
 class JPAEmitterCallBack;

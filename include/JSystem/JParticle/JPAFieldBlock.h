@@ -1,10 +1,10 @@
 #ifndef JPAFIELDBLOCK_H
 #define JPAFIELDBLOCK_H
 
+#include "common.h"
+#include "egg/egg_types.h"
 #include "JSystem/JGeometry.h"
-#include "dolphin/types.h"
 
-class JKRHeap;
 class JPAEmitterWorkData;
 class JPABaseParticle;
 class JPAFieldBlock;
@@ -119,8 +119,8 @@ public:
 
 class JPAFieldBlock {
 public:
-    /* 8027D088 */ JPAFieldBlock(u8 const*, JKRHeap*);
-    /* 8027D0C0 */ void init(JKRHeap*);
+    /* 8027D088 */ JPAFieldBlock(u8 const*, EGG::Heap*);
+    /* 8027D0C0 */ void init(EGG::Heap*);
 
     u32 getType() { return mpData->mFlags & 0xF; }
     u32 getAddType() { return (mpData->mFlags >> 8) & 3; }

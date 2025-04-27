@@ -271,7 +271,7 @@ static void drawSub2(void *data, u8 i) {
         GXSetTexCoordGen2((GXTexCoordID)id, GX_TG_MTX2x4, GX_TG_TEX0, idx, FALSE, GX_DUALMTX_IDENT);
         sTexMtx[0][3] = 0.01f * nw4r::math::CosIdx(ang);
         sTexMtx[1][3] = 0.01f * nw4r::math::SinIdx(ang);
-        GXLoadTexMtxImm(sTexMtx, idx, GX_MTX_2x4);
+        GXLoadTexMtxImm(sTexMtx, idx, GX_MTX2x4);
     }
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_A0, GX_CC_ZERO);
@@ -596,7 +596,7 @@ void mShadowChild_c::draw() {
     Mtx mtx;
     C_MTXLightOrtho(mtx, field_0x13C, -field_0x13C, -field_0x13C, field_0x13C, 0.5f, -0.5f, 0.5f, 0.5f);
     PSMTXConcat(mtx, mFrustum.mView.m, mtx);
-    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX_3x4);
+    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX3x4);
     mShadow_c::GetInstance()->draw(mFrustum.mView, field_0x154);
     GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
 }

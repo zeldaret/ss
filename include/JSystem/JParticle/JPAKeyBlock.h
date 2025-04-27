@@ -1,7 +1,7 @@
 #ifndef JPAKEYBLOCK_H
 #define JPAKEYBLOCK_H
 
-#include "dolphin/types.h"
+#include "common.h"
 
 /**
  * @ingroup jsystem-jparticle

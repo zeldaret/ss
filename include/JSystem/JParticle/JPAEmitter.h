@@ -1,7 +1,8 @@
 #ifndef JPAEMITTER_H
 #define JPAEMITTER_H
 
-#include <dolphin/gx.h>
+#include "common.h"
+#include "rvl/GX.h"
 #include "JSystem/JParticle/JPAResource.h"
 #include "JSystem/JParticle/JPAList.h"
 #include "JSystem/JParticle/JPARandom.h"

@@ -3,8 +3,8 @@
 // Translation Unit: JPAResource
 //
 
+#include "egg/core/eggHeap.h"
 #include "JSystem/JParticle/JPAResource.h"
-#include "JSystem/JKernel/JKRHeap.h"
 #include "JSystem/JParticle/JPABaseShape.h"
 #include "JSystem/JParticle/JPAChildShape.h"
 #include "JSystem/JParticle/JPAEmitter.h"
@@ -14,8 +14,7 @@
 #include "JSystem/JParticle/JPAKeyBlock.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "JSystem/JParticle/JPAResourceManager.h"
-#include "dolphin/gx.h"
-#include "global.h"
+#include "rvl/GX.h"
 
 /* 80274010-80274080 26E950 0070+00 0/0 1/1 0/0 .text            __ct__11JPAResourceFv */
 JPAResource::JPAResource() {
@@ -78,8 +77,8 @@ static u8 jpa_crd[32] ALIGN_DECL(32) = {
     0x00, 0x00, 0x01, 0x00, 0x01, 0x02, 0x00, 0x02, 0x00, 0x00, 0x02, 0x00, 0x02, 0x02, 0x00, 0x02,
 };
 
-/* 80274080-802755E8 26E9C0 1568+00 2/0 1/1 0/0 .text            init__11JPAResourceFP7JKRHeap */
-void JPAResource::init(JKRHeap* heap) {
+/* 80274080-802755E8 26E9C0 1568+00 2/0 1/1 0/0 .text            init__11JPAResourceFP7EGG::Heap */
+void JPAResource::init(EGG::Heap* heap) {
     BOOL is_glbl_clr_anm = mpBaseShape->isGlblClrAnm();
     BOOL is_glbl_tex_anm = mpBaseShape->isGlblTexAnm();
     BOOL is_prm_anm = mpBaseShape->isPrmAnm();
@@ -123,7 +122,7 @@ void JPAResource::init(JKRHeap* heap) {
 
     if (mpCalcEmitterFuncListNum != 0) {
         mpCalcEmitterFuncList =
-            (EmitterFunc*)JKRAllocFromHeap(heap, mpCalcEmitterFuncListNum * 4, 4);
+            (EmitterFunc*)heap->alloc(mpCalcEmitterFuncListNum * 4, 4);
     }
 
     int func_no = 0;
@@ -220,7 +219,7 @@ void JPAResource::init(JKRHeap* heap) {
 
     if (mpCalcParticleFuncListNum != 0) {
         mpCalcParticleFuncList =
-            (ParticleFunc*)JKRAllocFromHeap(heap, mpCalcParticleFuncListNum * 4, 4);
+            (ParticleFunc*)heap->alloc(mpCalcParticleFuncListNum * 4, 4);
     }
 
     func_no = 0;
@@ -339,7 +338,7 @@ void JPAResource::init(JKRHeap* heap) {
 
     if (mpCalcParticleChildFuncListNum != 0) {
         mpCalcParticleChildFuncList =
-            (ParticleFunc*)JKRAllocFromHeap(heap, mpCalcParticleChildFuncListNum * 4, 4);
+            (ParticleFunc*)heap->alloc(mpCalcParticleChildFuncListNum * 4, 4);
     }
 
     func_no = 0;
@@ -383,7 +382,7 @@ void JPAResource::init(JKRHeap* heap) {
 
     if (mpDrawEmitterFuncListNum != 0) {
         mpDrawEmitterFuncList =
-            (EmitterFunc*)JKRAllocFromHeap(heap, mpDrawEmitterFuncListNum * 4, 4);
+            (EmitterFunc*)heap->alloc(mpDrawEmitterFuncListNum * 4, 4);
     }
 
     func_no = 0;
@@ -481,7 +480,7 @@ void JPAResource::init(JKRHeap* heap) {
 
     if (mpDrawEmitterChildFuncListNum != 0) {
         mpDrawEmitterChildFuncList =
-            (EmitterFunc*)JKRAllocFromHeap(heap, mpDrawEmitterChildFuncListNum * 4, 4);
+            (EmitterFunc*)heap->alloc(mpDrawEmitterChildFuncListNum * 4, 4);
     }
 
     func_no = 0;
@@ -530,7 +529,7 @@ void JPAResource::init(JKRHeap* heap) {
 
     if (mpDrawParticleFuncListNum != 0) {
         mpDrawParticleFuncList =
-            (ParticleFunc*)JKRAllocFromHeap(heap, mpDrawParticleFuncListNum * 4, 4);
+            (ParticleFunc*)heap->alloc(mpDrawParticleFuncListNum * 4, 4);
     }
 
     func_no = 0;
@@ -634,7 +633,7 @@ void JPAResource::init(JKRHeap* heap) {
 
     if (mpDrawParticleChildFuncListNum != 0) {
         mpDrawParticleChildFuncList =
-            (ParticleFunc*)JKRAllocFromHeap(heap, mpDrawParticleChildFuncListNum * 4, 4);
+            (ParticleFunc*)heap->alloc(mpDrawParticleChildFuncListNum * 4, 4);
     }
 
     func_no = 0;

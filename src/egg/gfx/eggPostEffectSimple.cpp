@@ -20,7 +20,7 @@ void PostEffectSimple::setMaterialInternal() {
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, 0x1e, 0, 0x7d);
     nw4r::math::MTX34 mtx;
     getBaseTexMtx(&mtx);
-    GXLoadTexMtxImm(mtx, 0x1e, GX_MTX_2x4);
+    GXLoadTexMtxImm(mtx, 0x1e, GX_MTX2x4);
     setMatInd();
     GXSetNumTevStages(1);
     GXSetTevDirect(GX_TEVSTAGE0);
