@@ -941,9 +941,6 @@ bool dAcTbox_c::createHeap() {
         fn_8026B380(fxPos);
         mMtx_c fxTransform;
         fxTransform.transS(fxPos);
-        // TODO address calculations here, otherwise this function
-        // matches surprisingly well
-
         fxTransform.ZXYrotM(GetRotation());
         mOpenFxMdl.setLocalMtx(fxTransform);
         mOpenFxMdl.setScale(fn_8026B3C0());
