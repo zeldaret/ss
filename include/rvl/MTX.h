@@ -4,11 +4,13 @@
 extern "C" {
 #endif
 
-#include "rvl/MTX/mtx.h"
+// IWYU pragma: begin_exports
+#include "rvl/MTX/mtx.h" 
 #include "rvl/MTX/mtx44.h"
 #include "rvl/MTX/mtxvec.h"
 #include "rvl/MTX/quat.h"
 #include "rvl/MTX/vec.h"
+// IWYU pragma: end_exports
 
 #ifdef __cplusplus
 }

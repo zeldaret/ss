@@ -1759,45 +1759,62 @@ JSystem/JParticle/JPAResourceManager.cpp:
 
 JSystem/JParticle/JPAResource.cpp:
 	.text       start:0x80316C10 end:0x803198A0 align:16
+	.data       start:0x80546D60 end:0x80546F80
+	.sdata2     start:0x8057CE38 end:0x8057CE50
 
 JSystem/JParticle/JPABaseShape.cpp:
 	.text       start:0x803198A0 end:0x8031D53C align:16
+	.data       start:0x80546F80 end:0x80547180
+	.sdata      start:0x80574008 end:0x80574010
+	.sdata2     start:0x8057CE50 end:0x8057CE88
 
 JSystem/JParticle/JPAExtraShape.cpp:
 	.text       start:0x8031D540 end:0x8031DB98 align:16
+	.sdata2     start:0x8057CE88 end:0x8057CEB0
 
 JSystem/JParticle/JPAChildShape.cpp:
 	.text       start:0x8031DBA0 end:0x8031DD48 align:16
+	.sdata2     start:0x8057CEB0 end:0x8057CEB8
 
 JSystem/JParticle/JPAExTexShape.cpp:
 	.text       start:0x8031DD50 end:0x8031E094 align:16
+	.sdata2     start:0x8057CEB8 end:0x8057CED8
 
 JSystem/JParticle/JPADynamicsBlock.cpp:
 	.text       start:0x8031E0A0 end:0x8031F020 align:16
+	.sdata2     start:0x8057CED8 end:0x8057CF00
 
 JSystem/JParticle/JPAFieldBlock.cpp:
 	.text       start:0x8031F020 end:0x80320410 align:16
+	.data       start:0x80547180 end:0x80547258
+	.sdata2     start:0x8057CF00 end:0x8057CF10
 
 JSystem/JParticle/JPAKeyBlock.cpp:
 	.text       start:0x80320410 end:0x803204B4 align:16
+	.sdata2     start:0x8057CF10 end:0x8057CF18
 
 JSystem/JParticle/JPATexture.cpp:
 	.text       start:0x803204C0 end:0x8032057C align:16
+	.data       start:0x80547258 end:0x80547268
 
 JSystem/JParticle/JPAResourceLoader.cpp:
 	.text       start:0x80320580 end:0x80320980 align:16
 
 JSystem/JParticle/JPAEmitterManager.cpp:
 	.text       start:0x80320980 end:0x80321444 align:16
+	.sdata2     start:0x8057CF18 end:0x8057CF20
 
 JSystem/JParticle/JPAEmitter.cpp:
 	.text       start:0x80321450 end:0x80321C74 align:16
+	.sdata2     start:0x8057CF20 end:0x8057CF28
 
 JSystem/JParticle/JPAParticle.cpp:
 	.text       start:0x80321C80 end:0x80323050 align:16
+	.sdata2     start:0x8057CF28 end:0x8057CF48
 
 JSystem/JParticle/JPAMath.cpp:
 	.text       start:0x80323050 end:0x80323704 align:16
+	.sdata2     start:0x8057CF48 end:0x8057CF58
 
 JSystem/JSupport/JSUList.cpp:
 	.text       start:0x80323710 end:0x80323A6C align:16

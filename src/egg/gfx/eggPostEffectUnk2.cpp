@@ -94,7 +94,7 @@ void PostEffectUnk2::draw(f32 width, f32 height) {
 
             mtx[1][3] = 0.f;
             mtx[0][3] = 0.f;
-            GXLoadTexMtxImm(mtx, GXUtility::getTexMtxID(j), GX_MTX_2x4);
+            GXLoadTexMtxImm(mtx, GXUtility::getTexMtxID(j), GX_MTX2x4);
         }
         if (i == 1 && field_0x2C <= 1) {
             GXSetBlendMode(GX_BM_LOGIC, GX_BL_ZERO, GX_BL_ZERO, GX_LO_OR);

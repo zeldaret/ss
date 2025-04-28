@@ -118,10 +118,10 @@ void PostEffectMaskDOF::setMaterialInternal() {
     setMatColorChannel();
     GXSetNumTexGens(2);
     GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX0, false, GX_DUALMTX_IDENT);
-    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, GX_TEXMTX_IDENT, false, GX_DUALMTX_IDENT);
+    GXSetTexCoordGen2(GX_TEXCOORD1, GX_TG_MTX2x4, GX_TG_TEX1, GX_IDENTITY, false, GX_DUALMTX_IDENT);
     nw4r::math::MTX34 baseTexMtx;
     getBaseTexMtx(&baseTexMtx);
-    GXLoadTexMtxImm(baseTexMtx, GX_TEXMTX0, GX_MTX_2x4);
+    GXLoadTexMtxImm(baseTexMtx, GX_TEXMTX0, GX_MTX2x4);
     GXSetNumIndStages(1);
     GXSetIndTexOrder(GX_INDTEXSTAGE0, GX_TEXCOORD0, mTex1.mTexMapID);
     GXSetIndTexCoordScale(GX_INDTEXSTAGE0, GX_ITS_1, GX_ITS_1);

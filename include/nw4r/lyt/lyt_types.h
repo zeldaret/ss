@@ -135,7 +135,7 @@ struct TexCoordGen {
     // __ct__Q34nw4r3lyt11TexCoordGenFv
     TexCoordGen() {
         reserve = 0;
-        Set(GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX_IDENT);
+        Set(GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     }
 
     // Set__Q34nw4r3lyt11TexCoordGenF13_GXTexGenType12_GXTexGenSrcUl
