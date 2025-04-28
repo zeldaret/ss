@@ -4,6 +4,7 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/e/d_a_en_base.h"
+#include "d/a/obj/d_a_obj_bomb.h"
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_shadow.h"
@@ -11,16 +12,15 @@
 #include "m/m3d/m_anmtexpat.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
-#include "nw4r/ut/ut_Color.h"
-#include "rvl/GX/GXTypes.h"
 #include "s/s_State.hpp"
+#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/effects_struct.h"
 #include "toBeSorted/stage_render_stuff.h"
 
 class dAcEsm_c : public dAcEnBase_c {
 public:
-    enum SmColor {
+    enum SmColor_e {
         SM_RED,
         SM_GREEN,
         SM_YELLOW,
@@ -28,6 +28,13 @@ public:
         SM_GREEN_ALT,
         SM_YELLOW_ALT,
         SM_BLUE
+    };
+
+    enum SmSize_e {
+        SM_SMALL = 1,
+        SM_LARGE = 2,
+        SM_MASSIVE = 3,
+        SM_TINY = 4
     };
 
 public:
@@ -79,9 +86,11 @@ public:
 
 public:
     void fn_187_5D0();
+    bool fn_187_4B50();
     UNKTYPE fn_187_4CB0(u8);
     UNKTYPE fn_187_6C20(u8);
     UNKTYPE fn_187_44C0();
+    bool checkSize(SmSize_e) const; // fn_187_5670
 
 private:
     void updateBoundingBox();
@@ -109,7 +118,7 @@ private:
     /* 0x5A4 */ dBgS_AcchCir mAcchCir;
     /* 0x600 */ dBgS_ObjAcch mObjAcch;
     /* 0x9B0 */ STATE_MGR_DECLARE(dAcEsm_c);
-    /* 0x9EC */ dAcRef_c<dAcEsm_c> mSmRef;
+    /* 0x9EC */ dAcRef_c<dAcBomb_c> mBombRef;
     /* 0x9F8 */ todoStruct00 field_0x9f8;
     /* 0xA0C */ EffectsStruct mEffArr[2];
     /* 0xA74 */ f32 field_0xA74;
@@ -129,7 +138,10 @@ private:
     /* 0xB3E */ mAng mOrigRotZ;
     /* 0xB40 */ u8 _B40[0xB58 - 0xB40];
     /* 0xB58 */ f32 field_0xB58;
-    /* 0xB5C */ u8 _B5C[0xB70 - 0xB5C];
+    /* 0xB5C */ u8 _B5C[0xB65 - 0xB5C];
+    /* 0xB65 */ u8 field_0xB65;
+    /* 0xB66 */ u8 _B66[0xB6C - 0xB66];
+    /* 0xB6C */ f32 field_0xB6C;
     /* 0xB70 */ f32 field_0xB70;
     /* 0xB74 */ f32 field_0xB74;
     /* 0xB78 */ f32 field_0xB78;
@@ -137,13 +149,15 @@ private:
     /* 0xB80 */ u32 field_0xB80;
     /* 0xB84 */ u32 field_0xB84;
     /* 0xB88 */ u32 field_0xB88;
-    /* 0xB8C */ u32 field_0xB8C;
+    /* 0xB8C */ f32 field_0xB8C;
     /* 0xB90 */ s32 field_0xB90;
     /* 0xB94 */ u8 _B94[0xB98 - 0xB94];
     /* 0xB98 */ u32 field_0xB98;
     /* 0xB9C */ u8 _B9C[0xBA6 - 0xB9C];
     /* 0xBA6 */ s16 field_0xBA6;
-    /* 0xBA8 */ u8 _BA8[0xBBE - 0xBA8];
+    /* 0xBA8 */ u8 _BA8[0xBAE - 0xBA8];
+    /* 0xBAE */ s16 timer_0xBAE;
+    /* 0xBAC */ u8 _BAC[0xBBE - 0xBAC];
     /* 0xBBE */ u8 mType;
     /* 0xBBF */ u8 field_0xBBF;
     /* 0xBC0 */ u8 _BC0[0xBC3 - 0xBC0];
@@ -158,10 +172,7 @@ private:
     /* 0xBCB */ u8 field_0xBCB;
     /* 0xBCC */ u8 field_0xBCC;
     /* 0xBCD */ u8 _BCD[0xBD0 - 0xBCD];
-    /* 0xBD0 */ u8 field_0xBD0;
-    /* 0xBD1 */ u8 _BD1[0xBDC - 0xBD1];
-    /* 0xBDC */ nw4r::ut::Color field_0xBDC;
-    /* 0xBE0 */ f32 field_0xBE0;
+    /* 0xBD0 */ LightParams mLightInfo;
 
     static bool sSomeArrayInit;
     static bool sSomeArray[9];

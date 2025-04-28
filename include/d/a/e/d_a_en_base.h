@@ -21,6 +21,7 @@ public:
     /* 0x374 */ dAcEnData *mpEnemyData;
 
     void fn_800306d0();
+    void fn_80030700();
 
 protected:
     // TODO: Make accessors for this list to auto-convert to dAcEnBase?

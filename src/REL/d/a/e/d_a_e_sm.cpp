@@ -1,19 +1,25 @@
 #include "d/a/e/d_a_e_sm.h"
 
+#include "c/c_lib.h"
 #include "common.h"
+#include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/d_sc_game.h"
+#include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "f/f_base.h"
+#include "m/m3d/m_fanm.h"
 #include "m/m_angle.h"
+#include "m/m_color.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resanmclr.h"
 #include "nw4r/g3d/res/g3d_resanmtexpat.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "rvl/GX/GXTypes.h"
+#include "s/s_Math.h"
 #include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/time_area_mgr.h"
 
@@ -119,30 +125,25 @@ int dAcEsm_c::actorCreate() {
 
     rotation.z = angle.z = anotherAngleZ;
 
-    mSmRef.unlink();
+    mBombRef.unlink();
 
     setActorProperty(0x1);
-    f32 s;
     // Ignore these bounding box sets. `fixBoundBox` completely overwrites them with the scale
     switch ((int)mScale.x) {
-        // Small
         default:
-        case 1:  {
+        case SM_SMALL: {
             boundingBox.Set(mVec3_c(-250.f, -250.f, -250.f), mVec3_c(250.f, 375.f, 250.f));
             mScale.set(0.8f, 0.8f, 0.8f);
         } break;
-        // Large
-        case 2: {
+        case SM_LARGE: {
             boundingBox.Set(mVec3_c(-500.f, -500.f, -500.f), mVec3_c(500.f, 750.f, 500.f));
             mScale.set(0.4f, 0.4f, 0.4f);
         } break;
-        // Largest
-        case 3: {
+        case SM_MASSIVE: {
             boundingBox.Set(mVec3_c(-800.f, -800.f, -800.f), mVec3_c(800.f, 1200.f, 800.f));
             mScale.set(0.25f, 0.25f, 0.25f);
         } break;
-        // Smallest
-        case 4: {
+        case SM_TINY: {
             boundingBox.Set(mVec3_c(-150.f, -150.f, -150.f), mVec3_c(150.f, 225.f, 150.f));
             mScale.set(1.2f, 1.2f, 1.2f);
         } break;
@@ -150,8 +151,8 @@ int dAcEsm_c::actorCreate() {
 
     updateBoundingBox();
 
-    mScaleCopy1 = mScale;
-    mScaleCopy2 = mScale;
+    mScale.CopyTo(mScaleCopy1);
+    mScale.CopyTo(mScaleCopy2);
 
     mObjAcch.Set(this, 1, &mAcchCir);
     mAcchCir.SetWall(mScaleCopy1.y * 100.f, mScaleCopy1.x * 100.f);
@@ -165,12 +166,16 @@ int dAcEsm_c::actorCreate() {
 
     mSph.SetStts(mStts);
 
-    poscopy2 = position;
-    mPosCopy1 = position;
-    poscopy3 = position;
+    position.CopyTo(poscopy2);
+    position.CopyTo(mPosCopy1);
+    position.CopyTo(poscopy3);
     poscopy3.y += 50.f;
 
-    mRotCopy = rotation;
+    // Fake ??
+    const s16 rotz = rotation.z;
+    const s16 roty = rotation.y;
+    const s16 rotx = rotation.x;
+    mRotCopy.set(rotx, roty, rotz);
 
     field_0xB98 = 0;
     field_0xB58 = 1.f;
@@ -193,10 +198,10 @@ int dAcEsm_c::actorCreate() {
 
     field_0x9f8.Set(this, &data1, &mMdl.getModel(), 1);
 
-    field_0xBDC.Set(0xCC, 0xFF, 0xFF, 0xFF);
-    field_0xBE0 = 0.f;
+    mLightInfo.SetColor(mColor(0xCC, 0xFF, 0xFF, 0xFF));
+    mLightInfo.SetScale(0.f);
 
-    BlurAndPaletteManager::GetInstance().fn_800225F0(&field_0xBD0);
+    BlurAndPaletteManager::GetPInstance()->fn_800225F0(&mLightInfo);
     if (field_0xBBF == 1) {
         static u32 anglex = {0x8000};
         rotation.x = anglex;
@@ -279,20 +284,24 @@ int dAcEsm_c::actorPostCreate() {
             field_0xA7C = 0;
             if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), GetPostion())) {
                 field_0xA74 = 1.f;
-                // ...
+                field_0xB8C = 1.f;
+                fn_80030700();
             } else {
                 field_0xA74 = 0.f;
-                // ...
+                field_0xB8C = 0.f;
+                fn_800306d0();
             }
         } break;
         case 2: {
             field_0xA7C = 1;
             if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), GetPostion())) {
+                field_0xB8C = 0.f;
                 field_0xA74 = 0.f;
-                // ...
+                fn_800306d0();
             } else {
+                field_0xB8C = 1.f;
                 field_0xA74 = 1.f;
-                // ...
+                fn_80030700();
             }
         } break;
     }
@@ -305,10 +314,44 @@ int dAcEsm_c::actorPostCreate() {
     if (field_0xBBF == 1 || field_0xBBF == 3) {
         clearActorProperty(1);
         fn_800306d0();
-        FUN_8002d860();
+        FUN_8002d860(0);
     }
 
     return SUCCEEDED;
+}
+
+int dAcEsm_c::doDelete() {
+    BlurAndPaletteManager::GetPInstance()->fn_800223A0(&mLightInfo);
+    return SUCCEEDED;
+}
+
+int dAcEsm_c::actorExecute() {
+    mLightInfo.SetScale(0.f);
+    if (SceneflagManager::sInstance->checkFlag(getRoomId(), shift8_0xFF)) {
+        return SUCCEEDED;
+    }
+
+    if (dAcPy_c::GetLink()->checkActionFlagsCont(0x400000)) {
+        return SUCCEEDED;
+    }
+
+    dAcBomb_c *pObj = mBombRef.get();
+    if (mBombRef.isLinked() && pObj != nullptr) {
+        mVec3_c target = GetPostion();
+        if (!checkSize(SM_MASSIVE) && !checkSize(SM_LARGE)) {
+            target.y += 60.f + mScaleCopy1.y;
+        }
+        cLib::addCalcPos2(&position, target, 0.8f, 20.f + 1.5f * forwardSpeed);
+
+        field_0xB6C = 0.5f;
+
+        if (field_0xB65 != 2) {
+            mMdl.setAnm("attack", m3d::PLAY_MODE_4, 4.f);
+            field_0xB65 = 2;
+        }
+
+        if (0 == sLib::calcTimer(&timer_0xBAE)) {}
+    }
 }
 
 void dAcEsm_c::initializeState_BaseMother() {}
@@ -354,6 +397,39 @@ void dAcEsm_c::finalizeState_Fusion() {}
 void dAcEsm_c::initializeState_Dead() {}
 void dAcEsm_c::executeState_Dead() {}
 void dAcEsm_c::finalizeState_Dead() {}
+
+// . . .
+
+bool dAcEsm_c::checkSize(dAcEsm_c::SmSize_e size) const {
+    bool ret = false;
+
+    switch (size) {
+        default:
+        case SM_SMALL: {
+            if (mScaleCopy1.x > 0.4f && mScaleCopy1.x <= 0.8f) {
+                ret = true;
+            }
+        } break;
+        case SM_LARGE: {
+            if (mScaleCopy1.x > 0.25f && mScaleCopy1.x <= 0.4f) {
+                ret = true;
+            }
+        } break;
+        case SM_MASSIVE: {
+            if (mScaleCopy1.x <= 0.25f) {
+                ret = true;
+            }
+        } break;
+        case SM_TINY: {
+            if (mScaleCopy1.x > 0.8f && mScaleCopy1.x <= 1.2f) {
+                ret = true;
+            }
+        } break;
+    }
+    return ret;
+}
+
+// . . .
 
 void dAcEsm_c::updateBoundingBox() {
     f32 min = -200.f / mScale.x;

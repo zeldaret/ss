@@ -2,6 +2,7 @@
 #define D_A_BASE_H
 
 #include "UnknownTypeBelongings.h"
+#include "common.h"
 #include "d/d_base.h"
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
@@ -21,6 +22,7 @@ struct SoundSource {
     virtual bool load(void *data, const char *name); // 0x100
     virtual void setFrame(f32 frame);                // 0x108
     virtual void setRate(f32 frame);                 // 0x10C
+    virtual void set_0x164(UNKWORD val);             // 0x114
 };
 
 struct SoundInfo {
@@ -236,7 +238,7 @@ public:
     /* 8002d7f0 */ void FUN_8002d7f0();
     /* 8002d810 */ void FUN_8002d810();
     /* 8002d830 */ void FUN_8002d830();
-    /* 8002d860 */ void FUN_8002d860();
+    /* 8002d860 */ void FUN_8002d860(UNKWORD val);
     /* 8002d880 */ SoundSource *getSoundSource();
     // End of SoundSource stuff
 

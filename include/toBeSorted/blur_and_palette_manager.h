@@ -2,8 +2,10 @@
 #define BLUR_AND_PALETTE_MANAGER_H
 
 #include "common.h"
+#include "egg/math/eggVector.h"
 #include "m/m_color.h"
 #include "m/m_vec.h"
+#include "rvl/GX/GXTypes.h"
 #include "toBeSorted/tlist.h"
 
 struct UnkBlurPaletteListNode {
@@ -212,6 +214,20 @@ struct Bpm9 {
     ~Bpm9() {}
 };
 
+struct LightParams {
+    void SetColor(mColor clr) {
+        mClr = clr;
+    }
+    void SetScale(f32 scale) {
+        mScale = scale;
+    }
+
+    /* 0x00 */ EGG::Vector3f mPos;
+    /* 0x0C */ mColor mClr;
+    /* 0x10 */ f32 mScale;
+    /* 0x14 */ s32 mIdx;
+};
+
 class BlurAndPaletteManager {
 public:
     BlurAndPaletteManager();
@@ -222,15 +238,18 @@ public:
     static BlurAndPaletteManager &GetInstance() {
         return sInstance;
     }
+    static BlurAndPaletteManager *GetPInstance() {
+        return sPInstance;
+    }
 
     void fn_800247D0(mVec3_c, f32);
     void fn_80022AF0(f32);
     void setField_0x2F20(f32 arg) {
         field_0x2F20 = arg;
     }
-    void fn_800223A0(void *);
-    void fn_80022440(void *);
-    void fn_800225F0(void *);
+    void fn_800223A0(LightParams *);
+    void fn_80022440(LightParams *);
+    void fn_800225F0(LightParams *);
 
     u8 get0x2DE8() const {
         return field_0x2DE0[8];
@@ -267,6 +286,8 @@ private:
     /* 0x2F10 */ u8 field_0x2F10;
     /* 0x2F11 */ u8 field_0x2F11[0x2F20 - 0x2F11];
     /* 0x2F20 */ f32 field_0x2F20;
+    /* 0x2F24 */ u8 field_0x2F24[4];
+    /* 0x2F28 */ LightParams *field_0x2F28[200];
     /* 0x357C */ Bpm1 field_0x357C;
     /* 0x35A0 */ Bpm2 field_0x35A0;
     /* 0x35B4 */ Bpm7 field_0x35B4[8];
