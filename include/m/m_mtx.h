@@ -17,7 +17,7 @@ class mMtx_c : public EGG::Matrix34f {
     typedef const f32 (*MtxRefConst)[4];
 
 public:
-    mMtx_c(){};
+    mMtx_c() {};
     mMtx_c(f32 xx, f32 xy, f32 xz, f32 xw, f32 yx, f32 yy, f32 yz, f32 yw, f32 zx, f32 zy, f32 zz, f32 zw);
 
     operator MtxRef() {
@@ -57,6 +57,10 @@ public:
         const mAng &xRot, const mAng &yRot,
         const mAng &zRot
     ); ///< Rotates the matrix on the Z, Y and X axes by the given angles.
+
+    void ZXYrotM(const mAng3_c &ang) {
+        ZXYrotM(ang.x, ang.y, ang.z);
+    }
 
     void toRot(mAng3_c &out) const; ///< Converts the matrix to a rotation vector.
 

@@ -513,7 +513,7 @@ void dAcBase_c::FUN_8002d7d0() {}
 void dAcBase_c::FUN_8002d7f0() {}
 void dAcBase_c::FUN_8002d810() {}
 void dAcBase_c::FUN_8002d830() {}
-void dAcBase_c::FUN_8002d860() {}
+void dAcBase_c::FUN_8002d860(UNKWORD) {}
 
 // 8002d880
 SoundSource *dAcBase_c::getSoundSource() {

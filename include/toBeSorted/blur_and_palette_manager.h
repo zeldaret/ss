@@ -221,11 +221,15 @@ struct LightParams {
     void SetScale(f32 scale) {
         mScale = scale;
     }
+    void SetPosition(const mVec3_c &pos) {
+        mPos = pos;
+    }
 
     /* 0x00 */ EGG::Vector3f mPos;
     /* 0x0C */ mColor mClr;
     /* 0x10 */ f32 mScale;
     /* 0x14 */ s32 mIdx;
+    /* 0x18 */ s32 field_0x18;
 };
 
 class BlurAndPaletteManager {

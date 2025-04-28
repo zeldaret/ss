@@ -17,10 +17,10 @@
 #include "m/m3d/m_scnleaf.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_vec.h"
-#include "nw4r/ut/ut_Color.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/attention.h"
+#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/stage_render_stuff.h"
 
@@ -139,14 +139,7 @@ private:
     /* 0x049C */ m3d::anmTexPat_c mAnmGoddessPat;
     /* 0x04C8 */ dScnCallback_c mScnCallback;
     /* 0x04D4 */ dShadowCircle_c mShadowCircle;
-
-    // Could be part of an aggregate structure
-    mVec3_c field_0x4DC;
-    nw4r::ut::Color field_0x4E8;
-    f32 field_0x4EC;
-    s32 field_0x4F0;
-    s32 field_0x4F4;
-
+    /* 0x04DC */ LightParams mLightInfo;
     /* 0x04F8 */ dBgW mBgWs[2];
     /* 0x0918 */ dCcD_Linked_Unk mCcD1;
     /* 0x0B30 */ dCcD_Linked_Unk mCcD2;
