@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_font_manager.h"
+#include "d/d_message.h"
 #include "d/d_textunk.h"
 #include "d/d_textwindow_unk.h"
 #include "nw4r/lyt/lyt_types.h"
@@ -235,11 +236,11 @@ void dTagProcessor_c::formatV(
     s32 state1 = -1;
     s32 state2 = -1;
 
-    f32 float1, float2;
-    float2 = float1 = fn_800B8040(0, mMsgWindowSubtype);
+    f32 currScale, backupScale;
+    backupScale = currScale = fn_800B8040(0, mMsgWindowSubtype);
 
     if (textBox != nullptr) {
-        float1 *= textBox->getMyScale();
+        currScale *= textBox->getMyScale();
         resetLineData();
         textBox->set0x1F8(0);
     }
@@ -355,23 +356,23 @@ void dTagProcessor_c::formatV(
                 } break;
                 case 0x10008:
                     if (textBox != nullptr) {
-                        float1 = fn_800B8040(((u8 *)endPtr)[0], mMsgWindowSubtype);
-                        float1 *= textBox->getMyScale();
+                        currScale = fn_800B8040(((u8 *)endPtr)[0], mMsgWindowSubtype);
+                        currScale *= textBox->getMyScale();
                     }
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                     break;
                 case 0x30000: {
                     if (textBox != nullptr) {
-                        float2 = float1;
-                        float1 *= UnkTextThing::getField0x768();
-                        float1 *= textBox->getMyScale();
+                        backupScale = currScale;
+                        currScale *= UnkTextThing::getField0x768();
+                        currScale *= textBox->getMyScale();
                     }
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                 } break;
                 case 0x10010: fn_800B5520(endPtr); break;
                 case 0x20004:
                     if (textBox != nullptr) {
-                        writeIcon(textBox, endPtr, float1);
+                        writeIcon(textBox, endPtr, currScale);
                     }
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                     break;
@@ -401,7 +402,7 @@ void dTagProcessor_c::formatV(
             s32 tmp = 0;
             process0xFCommand(c, src + 1, &tmp);
             if (tmp == 0x30000) {
-                float1 = float2;
+                currScale = backupScale;
             }
             writePtr[0] = src[0];
             writePtr[1] = src[1];
@@ -422,8 +423,8 @@ void dTagProcessor_c::formatV(
                     mLineData.mNumLines++;
                     s32 i10 = getMaxNumLines(mMsgWindowSubtype);
                     if (mLineData.mNumLines % i10 == 0) {
-                        float1 = fn_800B8040(0, mMsgWindowSubtype);
-                        float1 *= textBox->getMyScale();
+                        currScale = fn_800B8040(0, mMsgWindowSubtype);
+                        currScale *= textBox->getMyScale();
                     }
                     if (textBox != nullptr) {
                         wchar_t *buf = (wchar_t *)&x;
@@ -437,7 +438,7 @@ void dTagProcessor_c::formatV(
                 } else {
                     const nw4r::ut::Font *fnt = textBox->GetFont();
                     mLineData.mLineWidths[mLineData.mNumLines] +=
-                        float1 * fnt->GetCharWidth(*src) + textBox->GetCharSpace();
+                        currScale * fnt->GetCharWidth(*src) + textBox->GetCharSpace();
                     writePtr = fn_800B5FD0(*src, writePtr, nullptr);
                     src++;
                 }
@@ -457,61 +458,69 @@ end:
     }
 }
 
-void dTagProcessor_c::fn_800B4290(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, s32 unkArg, u16 *pOutLen, dLytMsgWindowCharData *charData) {
-    bool b1 = false;
-    int int1 = 0;
-    bool b2 = false;
+void dTagProcessor_c::fn_800B4290(
+    dTextBox_c *textBox, const wchar_t *src_, wchar_t *dest, s32 unkArg, u16 *pOutLen, dLytMsgWindowCharData *charData
+) {
+    const wchar_t *src = src_;
     wchar_t *writePtr = dest;
+    bool b1 = false;
+    s32 lineNum = 0;
+    bool b2 = false;
+    s32 charDataIdx;
 
-    f32 float1, float2;
-    float2 = float1 = fn_800B8040(0, mMsgWindowSubtype);
-    f32 float3 = 0.0f;
-    f32 float4 = 0.0f;
-    int int2 = 0;
+    f32 currScale = fn_800B8040(0, mMsgWindowSubtype);
+    f32 backupScale = currScale;
 
+    charDataIdx = 0;
+
+    f32 posX = 0.0f;
+    f32 posY = 0.0f;
 
     if (textBox != nullptr) {
-        float1 *= textBox->getMyScale();
+        currScale *= textBox->getMyScale();
     }
 
-    while (b1) {
+beginning:
+    bool r22 = !b1;
+    while (!b1) {
         wchar_t c = *src;
-        if (c == nullptr) {
+        if (c == '\0') {
             *writePtr = '\0';
-            goto end;
-        }
-        if (c == 0xE) {
+            break;
+        } else if (c == 0xE) {
             u8 cmdLen = 0;
             s32 cmd = 0;
             wchar_t *endPtr = nullptr;
             getTextCommand(c, src + 1, &cmdLen, &cmd, &endPtr);
             switch (cmd) {
                 case 0x0F0F0F0F: {
-                    if (int1 / getMaxNumLines(mMsgWindowSubtype) == unkArg) {
+                    if (lineNum / getMaxNumLines(mMsgWindowSubtype) == unkArg) {
                         nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
-                        float4 = fn_800B8560(int1);
+                        posX = fn_800B8560(lineNum);
                         if ((mMsgWindowSubtype < 6 || mMsgWindowSubtype >= 10) && mMsgWindowSubtype != 30) {
-                            float4 = 0.0f;
+                            posX = 0.0f;
                         }
+
+                        f32 tmp3;
                         f32 tmp = fn_800B8040(0, mMsgWindowSubtype);
+
                         if (textBox != nullptr) {
                             tmp *= textBox->getMyScale();
                         }
 
-                        if (int1 % getMaxNumLines(mMsgWindowSubtype) == 0) {
-                            float1 = fn_800B8040(0, mMsgWindowSubtype);
+                        if (lineNum % getMaxNumLines(mMsgWindowSubtype) == 0) {
+                            currScale = fn_800B8040(0, mMsgWindowSubtype);
                             if (textBox != nullptr) {
-                                float1 *= textBox->getMyScale();
+                                currScale *= textBox->getMyScale();
                             }
-                            f32 tmp3;
                             if (mMsgWindowSubtype == 30) {
                                 tmp3 = -2.0f;
                             } else {
                                 tmp3 = 3.0f;
                             }
-                            float3 = (fn_800B85C0(int1) - (fontSize.height * (float1 / tmp) * 0.5f)) - tmp3;
+                            posY = (fn_800B85C0(lineNum) - (fontSize.height * (currScale / tmp) / 2.0f)) - tmp3;
                         } else {
-                            float3 = (float3 - (fontSize.height * (float1 / tmp) + field_0x004->GetLineSpace()));
+                            posY = (posY - (fontSize.height * (currScale / tmp) + field_0x004->GetLineSpace()));
                         }
                         if (!b2) {
                             b2 = true;
@@ -520,7 +529,7 @@ void dTagProcessor_c::fn_800B4290(dTextBox_c *textBox, const wchar_t *src, wchar
                         b2 = false;
                         b1 = true;
                     }
-                    int1++;
+                    lineNum++;
                 } break;
                 case 0x10000:
                 case 0x10001:
@@ -528,29 +537,30 @@ void dTagProcessor_c::fn_800B4290(dTextBox_c *textBox, const wchar_t *src, wchar
                 case 0x10003: b1 = true; break;
                 case 0x10008: {
                     if (b2) {
-                        f32 tmp1 = fn_800B8040(*(u8 *)endPtr, mMsgWindowSubtype);
-                        f32 tmp2 = fn_800B8040(0, mMsgWindowSubtype);
+                        f32 newScale = fn_800B8040(*(u8 *)endPtr, mMsgWindowSubtype);
+                        f32 baseScale = fn_800B8040(0, mMsgWindowSubtype);
                         if (textBox != nullptr) {
-                            tmp1 *= textBox->getMyScale();
-                            tmp2 *= textBox->getMyScale();
+                            newScale *= textBox->getMyScale();
+                            baseScale *= textBox->getMyScale();
                         }
-                        if (float1 != tmp1) {
+                        if (currScale != newScale) {
                             nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
-                            float3 -= fontSize.height * ((float1 - tmp1) / tmp2) * 0.5f * UnkTextThing::getField0x788();
-                            float1 = tmp1;
+                            posY -= (fontSize.height * ((currScale - newScale) / baseScale) / 2.0f) *
+                                    UnkTextThing::getField0x788();
+                            currScale = newScale;
                         }
                     }
                 } break;
                 case 0x30000: {
                     if (b2) {
-                        float2 = float1;
-                        f32 tmp = float1 * UnkTextThing::getField0x768();
+                        backupScale = currScale;
+                        f32 tmp = backupScale * UnkTextThing::getField0x768();
                         if (textBox != nullptr) {
                             tmp *= textBox->getMyScale();
                         }
-                        if (float1 != tmp) {
+                        if (currScale != tmp) {
                             nw4r::lyt::Size _size = field_0x004->GetFontSize();
-                            float1 = tmp;
+                            currScale = tmp;
                         }
                     }
                 } break;
@@ -560,11 +570,11 @@ void dTagProcessor_c::fn_800B4290(dTextBox_c *textBox, const wchar_t *src, wchar
                         const nw4r::ut::Font *fnt = dFontMng_c::getFont(4);
                         wchar_t c = fn_800B7880(*(u8 *)endPtr);
                         f32 tmp = UnkTextThing::getField0x764();
-                        f32 wid = tmp / fnt->GetWidth() * float1;
+                        f32 wid = tmp / fnt->GetWidth() * currScale;
                         f32 charSpace = textBox->GetCharSpace();
-                        f32 charWidth = fnt->GetCharWidth(c);
+                        f32 charWidth = wid * fnt->GetCharWidth(c);
+                        posX += charWidth + charSpace;
                         writePtr++;
-                        float4 += (wid * charWidth + charSpace);
                     }
                     break;
                 case 0x10012:
@@ -574,33 +584,39 @@ void dTagProcessor_c::fn_800B4290(dTextBox_c *textBox, const wchar_t *src, wchar
                     break;
             }
             src += cmdLen / 2 + 1;
-            // For some reason the compiler believes that this branch affects the strength
-            // reduction for charData and branches to a re-calculation of the normally pointer
+            // For some reason the compiler believes that this branch affects something about
+            // charData/charDataIdx and branches to a re-calculation of the strength-reduced
+            // pointer, which means the compiler keepts charDataIdx actually around while still
+            // incrementing the strength-reduced charData pointer by 0x14. Very weird!
+            // This charDataIdx++, charDataIdx-- causes this behavior, not sure what the real match would be.
+            charDataIdx++;
+            charDataIdx--;
+            goto beginning;
         } else if (c == 0xF) {
             s32 cmd = 0;
             process0xFCommand(c, &src[1], &cmd);
             if (cmd == 0x30000) {
-                float2 = float1;
+                currScale = backupScale;
             }
             src += 3;
         } else {
             if (b2) {
                 *writePtr = c;
                 const nw4r::ut::Font *fnt = textBox->GetFont();
-                f32 tmp = float1 * fnt->GetCharWidth(*src) * 0.5f;
-                f32 tmp2 = float4 + tmp;
+                f32 tmp = currScale * fnt->GetCharWidth(*src) * 0.5f;
+                posX += tmp;
                 if (charData != nullptr) {
                     wchar_t s = *writePtr;
                     if (s != 10 && s != 0x20 && s != 0x3000) {
-                        charData[int2].posX = tmp2;
-                        charData[int2].posY = float2;
-                        charData[int2].field_0x08 = float1;
-                        charData[int2].character = *writePtr;
-                        int2++;
+                        charData[charDataIdx].posX = posX;
+                        charData[charDataIdx].posY = posY;
+                        charData[charDataIdx].field_0x08 = currScale;
+                        charData[charDataIdx].character = *writePtr;
+                        charDataIdx++;
                     }
                 }
                 writePtr++;
-                float4 = float2 + (tmp + textBox->GetCharSpace());
+                posX += (tmp + textBox->GetCharSpace());
             }
             src++;
         }
@@ -953,8 +969,6 @@ wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
     return dest;
 }
 
-extern "C" MsbtInfo *getMsbtInfoForIndex(int);
-
 wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
     int itemIndex = *src;
     wchar_t c;
@@ -963,7 +977,7 @@ wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s3
     int i = 0;
     SizedString<16> mName;
     mName.sprintf("NAME_ITEM_%03d", itemIndex);
-    MsbtInfo *info = getMsbtInfoForIndex(3);
+    MsbtInfo *info = dMessage_c::getMsbtInfoForIndex(/* ItemGet */ 3);
     const wchar_t *text = LMS_GetTextByLabel(info, mName);
 
     while (readPtr = &text[i], (c = text[i]) != 0) {

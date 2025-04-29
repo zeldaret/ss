@@ -65,7 +65,7 @@ public:
     }
 
     inline static f32 getField0x788() {
-        return sInstance->field_0x76C;
+        return sInstance->field_0x788;
     }
 
     inline static f32 getFn800B1F70() {
