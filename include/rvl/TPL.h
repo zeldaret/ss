@@ -4,7 +4,7 @@
 extern "C" {
 #endif
 
-#include "rvl/TPL/TPL.h"
+#include "rvl/TPL/TPL.h" // IWYU pragma: export
 
 #ifdef __cplusplus
 }

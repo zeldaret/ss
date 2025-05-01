@@ -6,7 +6,9 @@
 #include "egg/core/eggHeap.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
+#include "toBeSorted/nand_request_thread.h"
 #include "toBeSorted/save_file.h"
+#include "toBeSorted/save_manager.h"
 
 enum SAVE_ITEM_ID {
 };
@@ -65,8 +67,8 @@ public:
     /* 80009EE0 */                // mVec3();
 
     /* 80009EF0 */ static FileManager *create(EGG::Heap *);
-    /* 80009F30 */ bool loadSaveData(void *out, char *name, bool isSkipData);
-    /* 80009F70 */ void saveSaveData(void *unk, bool isSkipData);
+    /* 80009F30 */ bool loadSaveData(NandRequestWriteHolder *out, const char *name, bool isSkipData);
+    /* 80009F70 */ void saveSaveData(NandRequestLoadSaveFileHolder *request, bool isSkipData);
     /* 8000A000 */ void refreshSaveFileData();
     /* 8000A260 */ wchar_t *getFileHeroname(int fileNum);
     /* 8000A280 */ s64 getFileSaveTime(int fileNum);
@@ -256,7 +258,7 @@ public:
     /* 80010160 */ void initSkipData();
 
     /* 800101F0 */ void unsetFileANewFile();
-    /* 80010220 */ void saveT1SaveInfo(u8 entranceT1LoadFlag);
+    /* 80010220 */ void saveT1SaveInfo(bool entranceT1LoadFlag);
     /* 80010350 */ void copyFileSkipData(int fileNum);
     /* 80010440 */ void clearTempFileData();
     /* 800104A0 */ void saveAfterCredits();
@@ -272,7 +274,7 @@ public:
     /* 800112D0 */ void updateEmptyFileFlags();
     /* 80011370 */ bool isFileEmpty(u8 fileNum);
     /* 80011390 */ bool isFileDirty(int fileNum);
-    /* 800113B0 */ u8 get_0xA84C();
+    /* 800113B0 */ u32 get_0xA84C();
     /* 800113C0 */ bool checkRegionCode();
     /* 80011440 */ bool checkFileCRC(u8 fileNum);
     /* 80011490 */ bool isFileInactive() const;
@@ -307,6 +309,51 @@ public:
 
     bool hasStaminaPotionNormal() const {
         return getStaminaPotionTimer() != 0;
+    }
+
+    u8 isFileInvalid() const {
+        return mIsFileInvalid[2];
+    }
+
+    void setField0xA840(u8 val) {
+        mIsFileUnk1[0] = val;
+    }
+
+    void setField0xA841(u8 val) {
+        mIsFileUnk1[1] = val;
+    }
+
+    void setField0xA842(u8 val) {
+        mIsFileUnk1[2] = val;
+    }
+
+    void setField_0xA843(u8 val) {
+        mIsFileInvalid[1] = val;
+    }
+
+    u8 getField_0xA841() const {
+        return mIsFileUnk1[1];
+    }
+
+    u8 getField_0xA842() const {
+        return mIsFileUnk1[2];
+    }
+
+    u8 getField_0xA843() const {
+        return mIsFileInvalid[1];
+    }
+
+
+    void setField0xA84C(u8 val) {
+        m_0xA84C = val;
+    }
+
+    void setField0xA84D(u8 val) {
+        m_0xA84D = val;
+    }
+
+    void setSelectedFileNum(u8 val) {
+        mSelectedFile = val;
     }
 
 private:

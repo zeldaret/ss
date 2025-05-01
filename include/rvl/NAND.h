@@ -4,10 +4,12 @@
 extern "C" {
 #endif
 
+// IWYU pragma: begin_exports
 #include "rvl/NAND/NANDCheck.h"
 #include "rvl/NAND/NANDCore.h"
 #include "rvl/NAND/NANDOpenClose.h"
 #include "rvl/NAND/nand.h"
+// IWYU pragma: end_exports
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,6 @@
 #include "d/lyt/d_lyt_fader.h"
 
+#include "d/d_d2d.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 
 
@@ -60,11 +61,9 @@ bool dLytFader_c::calc() {
     }
 }
 
-extern "C" void fn_80016200();
-
 void dLytFader_c::draw() {
     if (field_0x4DD) {
-        fn_80016200();
+        d2d::defaultSet();
         mLytBase.draw();
     }
 }

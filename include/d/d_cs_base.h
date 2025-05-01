@@ -24,6 +24,10 @@ public:
         field_0x703 = val;
     }
 
+    void setField704(bool val) {
+        field_0x704 = val;
+    }
+
     dCursorHitCheck_c *getHitCheck() {
         return mCursorIf.getHit();
     }

@@ -20,9 +20,12 @@ public:
     STATE_FUNC_DECLARE(dScBoot_c, Connect);
     STATE_FUNC_DECLARE(dScBoot_c, Save);
 
-    static dScBoot_c *sInstance;
+    static dScBoot_c *GetInstance() {
+        return sInstance;
+    }
 
 private:
+    static dScBoot_c *sInstance;
     class strap_c {
     public:
         strap_c();
