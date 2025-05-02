@@ -51,7 +51,7 @@ toBeSorted/save_manager.cpp:
 	.bss        start:0x80580080 end:0x8058F120
 
 toBeSorted/save_related.cpp:
-	.text       start:0x80015DE0 end:0x800161F4
+	.text       start:0x80015DE0 end:0x800161F4 align:16
 	.rodata     start:0x804DBC38 end:0x804DBC78
 
 toBeSorted/d_d2d.cpp:
