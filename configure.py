@@ -468,7 +468,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/unk_bird_stuff.cpp"),
             Object(NonMatching, "toBeSorted/timekeeper.cpp"),
             Object(NonMatching, "toBeSorted/special_item_drop_mgr.cpp"),
-            Object(NonMatching, "toBeSorted/d_particle.cpp"),
+            Object(Matching, "toBeSorted/d_particle.cpp"),
             Object(Matching, "d/lyt/meter/d_lyt_meter.cpp"),
             Object(NonMatching, "d/lyt/meter/d_lyt_meter_unk.cpp"),
             Object(Matching, "d/lyt/meter/d_lyt_meter_a_btn.cpp"),

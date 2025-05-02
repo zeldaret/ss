@@ -18,6 +18,7 @@
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/d_d3d.h"
+#include "toBeSorted/d_particle.h"
 #include "toBeSorted/time_area_mgr.h"
 
 class RelObjCtrl {
@@ -161,8 +162,10 @@ private:
     /* 0x0580 */ LayoutArcControl mLayoutArcCtrl2;
     /* 0x058C */ dBgS mBg;
     // ...
-    u8 _0x00001[0x7D0];
+    u8 _0x00001[0x778];
     /* 0x3E40 */ dCcS mCc;
+    // ...
+    /* 0x7814 */ dParticle::tex_c mParticleTex[2];
     // ...
     /* 0x7930 */ dFader_c mFader;
     

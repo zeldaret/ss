@@ -454,6 +454,9 @@ toBeSorted/special_item_drop_mgr.cpp:
 
 toBeSorted/d_particle.cpp:
 	.text       start:0x800C82B0 end:0x800C8948 align:16
+	.data       start:0x80511C60 end:0x80511C80
+	.sdata      start:0x80572310 end:0x80572318
+	.sbss       start:0x80575440 end:0x80575448
 
 d/lyt/meter/d_lyt_meter.cpp:
 	.text       start:0x800C8950 end:0x800DF8A8 align:16
