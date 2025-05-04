@@ -14,7 +14,7 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "toBeSorted/attention.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 #include "toBeSorted/small_sound_mgr.h"
 
 extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_394_;

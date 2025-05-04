@@ -9,7 +9,7 @@
 #include "s/s_FStateID.hpp"
 #include "s/s_State.hpp"
 #include "s/s_StateID.hpp"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 struct CsGameConfigMaybe {
     CsGameConfigMaybe();

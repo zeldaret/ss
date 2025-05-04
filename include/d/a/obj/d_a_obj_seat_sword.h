@@ -17,7 +17,7 @@
 #include "s/s_StateMgr.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/attention.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 class dAcOSeatSword_c : public dAcObjBase_c {
 public:

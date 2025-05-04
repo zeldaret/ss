@@ -7,7 +7,7 @@
 #include "d/lyt/d_window.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "s/s_State.hpp"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 // At 0x8, [8], size 0x48
 class dLytMeterMinusBtnMenuIcon_c {

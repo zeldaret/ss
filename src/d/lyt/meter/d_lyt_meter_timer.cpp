@@ -14,7 +14,7 @@
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "nw4r/math/math_types.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/small_sound_mgr.h"
 

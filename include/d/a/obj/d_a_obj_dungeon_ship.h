@@ -13,7 +13,7 @@
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/actor_on_rail.h"
 #include "toBeSorted/dowsing_target.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 #include "toBeSorted/time_proc.h"
 
 class dAcODungeonShip_c : public dAcObjBase_c {

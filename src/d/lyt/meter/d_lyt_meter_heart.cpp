@@ -6,7 +6,7 @@
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_game_over.h"
 #include "nw4r/math/math_types.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/small_sound_mgr.h"

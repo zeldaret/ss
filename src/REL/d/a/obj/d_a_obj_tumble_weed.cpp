@@ -19,7 +19,7 @@
 #include "s/s_Math.h"
 #include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/dowsing_target.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 #include "toBeSorted/small_sound_mgr.h"
 
 void float_ordering() {

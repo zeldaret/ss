@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "d/a/d_a_player.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 const f32 dAcTWoodArea_c::scaleX = 100.0f;
 const f32 dAcTWoodArea_c::scaleY = 100.0f;

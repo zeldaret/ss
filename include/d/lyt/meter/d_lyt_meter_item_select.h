@@ -8,7 +8,7 @@
 #include "d/lyt/d_window.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "s/s_State.hpp"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 class dLytMeterItemSelectIcon_c {
 public:

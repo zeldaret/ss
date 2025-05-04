@@ -2,8 +2,11 @@
 // vtable order
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAParticle.h"
+#include "rvl/GX/GXTypes.h"
 #include "toBeSorted/d_d3d.h"
 // clang-format on
+
+#include "toBeSorted/d_emitter.h"
 
 #include "JSystem/JParticle/JPADrawInfo.h"
 #include "JSystem/JParticle/JPAEmitter.h"
@@ -36,7 +39,6 @@
 #include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/d_particle.h"
-#include "toBeSorted/effects_struct.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/lyt_related_floats.h"
 
@@ -129,7 +131,9 @@ bool dEmitterBase_c::createEmitters(
     JPABaseEmitter *head = nullptr;
     JPABaseEmitter *last;
     for (; iter != 0xFFFF; iter = dParticle::mgr_c::GetInstance()->getJpnData(iter)) {
-        last = dParticle::mgr_c::GetInstance()->createEmitter(iter, getGroupId(iter), position, rot, scale);
+        last = dParticle::mgr_c::GetInstance()->createEmitter(
+            iter, dJEffManager_c::getGroupId(iter), position, rot, scale
+        );
         if (last != nullptr) {
             if (head != nullptr) {
                 head->setUserWork(reinterpret_cast<u32>(last));
@@ -375,7 +379,7 @@ void EffectsStruct::execute() {
     if (mpOwner != nullptr && (mpOwner->delete_request || mpOwner->lifecycle_state == fBase_c::TO_BE_DELETED)) {
         mpOwner = nullptr;
     }
-    if (shouldBePaused(mpOwner)) {
+    if (dJEffManager_c::shouldBePaused(mpOwner)) {
         if (!checkFlag(EMITTER_0x10)) {
             stopCalcEmitters();
             if (mpOwner != nullptr && !mpOwner->isBasePropertyFlag(0x100)) {
@@ -484,7 +488,95 @@ void dEffect2D_c::create(u32 groupId, u8 prio) {
     setPriority(prio);
 }
 
-void dMassObjEmitterCallback_c::executeAfter(JPABaseEmitter *) {}
+bool dMassObjEmitterCallback_c::start(const mVec3_c &v1, dAcObjBase_c *owner) {
+    if (field_0x658 >= 50) {
+        return false;
+    }
+
+    field_0x010[field_0x658] = v1;
+    field_0x4C0[field_0x658] = owner;
+
+    field_0x658++;
+    return true;
+}
+
+void dMassObjEmitterCallback_c::executeAfter(JPABaseEmitter *emitter) {
+    s32 createNumber = emitter->getCurrentCreateNumber();
+    if (createNumber > 0) {
+        s32 i = 0;
+        mVec3_c translate;
+        emitter->getLocalTranslation(translate);
+        if (field_0x654 != 0) {
+            for (; i < field_0x654; i++) {
+                mVec3_c newTranslate = mVec3_c(field_0x268[i] + translate);
+                emitter->setGlobalTranslation(newTranslate);
+                for (s32 j = 0; j < createNumber; j++) {
+                    JPABaseParticle *p = emitter->createParticle();
+                    if (p != nullptr) {
+                        p->setOffsetPosition(newTranslate);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void dMassObjEmitterCallback_c::execute() {
+    for (s32 i = field_0x654 - 1; i >= 0; i--) {
+        if (field_0x588[i] != nullptr) {
+            if (!dJEffManager_c::shouldBePaused(field_0x588[i]) || field_0x588[i]->delete_request ||
+                field_0x588[i]->lifecycle_state == fBase_c::TO_BE_DELETED) {
+                if (field_0x654 != 0 && i != field_0x654 - 1) {
+                    field_0x588[i] = field_0x588[field_0x654 - 1];
+                    field_0x268[i] = field_0x268[field_0x654 - 1];
+                } else {
+                    field_0x588[i] = nullptr;
+                }
+                field_0x654--;
+            }
+        } else {
+            field_0x654--;
+        }
+    }
+    if (field_0x658 + field_0x654 > 50) {
+        field_0x658 = 50 - field_0x654;
+    }
+
+    for (u32 i = 0; i < field_0x658; i++) {
+        field_0x588[field_0x654] = field_0x4C0[i];
+        field_0x268[field_0x654] = field_0x010[i];
+        field_0x654++;
+    }
+    field_0x658 = 0;
+}
+
+#pragma opt_unroll_loops off
+void dMassObjEmitterCallback_c::clear() {
+    // TODO: this unrolls the entire loops,
+    // but the original code uses an unroll
+    // factor of 10 (5 iterations). 2D arrays
+    // work here but are probably fake.
+    field_0x654 = 0;
+    for (u32 i = 0; i < 50; i++) {
+        field_0x588[i] = nullptr;
+    }
+    field_0x658 = 0;
+    for (u32 i = 0; i < 50; i++) {
+        field_0x4C0[i] = nullptr;
+    }
+}
+#pragma opt_unroll_loops reset
+
+void dMassObjEmitter_c::create(u16 resourceId) {
+    setEmitterCallback(&mCallback);
+    if (createEmitters(resourceId, mVec3_c::Zero, nullptr, nullptr, nullptr, nullptr, 0, 0)) {
+        for (JPABaseEmitter *emitter = mpEmitterHead; emitter != nullptr; emitter = GetNextEmitter(emitter)) {
+            emitter->setStatus(JPAEmtrStts_Immortal);
+            emitter->setStatus(JPAEmtrStts_StopEmit);
+        }
+        mCallback.clear();
+    }
+}
 
 void dShpEmitterProc::doDraw() {
     mMtx_c viewMtx;
@@ -611,16 +703,45 @@ void dMassObjEmitter_c::remove() {
     mpEmitterHead = nullptr;
 }
 
-extern "C" u32 sNumberOfMgrs; // should be const?
+extern "C" u32 sNumMassObjEmitters; // should be const?
 extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_119_;
 extern "C" dMassObjEmitter_c *CURRENT_EFFECT_MANAGER_INIT;
+
+s32 dJEffManager_c::getGroupId(u16 resourceId) {
+    u32 mask = dParticle::mgr_c::GetInstance()->getResUserWork(resourceId);
+    s32 bit = 1;
+    for (int i = 0; i < 10; i++) {
+        if ((mask & (1 << i)) != 0) {
+            bit = i;
+            break;
+        }
+    }
+
+    int i = sInts[bit];
+    // TODO explain this
+    if ((mask & 0x8000) != 0) {
+        if (i == 3) {
+            i = 2;
+        } else if (i == 5) {
+            i = 4;
+        } else if (i == 7) {
+            i = 6;
+        } else if (i == 1) {
+            i = 0;
+        } else if (i == 11) {
+            i = 10;
+        }
+    }
+
+    return i;
+}
 
 // various grasses being cut
 extern const u16 sEffectResourceIds[];
 
 void dJEffManager_c::setupEffects() {
-    for (s32 idx = 0; idx < sNumberOfMgrs; idx++) {
-        sManagers[idx].create(sEffectResourceIds[idx]);
+    for (s32 idx = 0; idx < sNumMassObjEmitters; idx++) {
+        sMassObjEmitters[idx].create(sEffectResourceIds[idx]);
     }
 
     sShpEmitters[TsuboA].init("FX_TsuboA", "Tubo", false);
@@ -672,9 +793,12 @@ void dJEffManager_c::setupEffects() {
     sShpEmitters[BWallF210].init("FX_BWallF210", "BWallF210", true);
 }
 
+u32 dJEffManager_c::sInts[] = {0x28, 0x29, 0x87, 0x88, 0x89, 0x8A, 0x8C, 0x8D, 0x91, 0x86, 0x1, 0x2};
+u32 dJEffManager_c::sInts2[] = {0x2, 0x87, 0x8B};
+
 void dJEffManager_c::removeEffManagers() {
-    for (s32 i = 0; i < sNumberOfMgrs; i++) {
-        sManagers[i].remove();
+    for (s32 i = 0; i < sNumMassObjEmitters; i++) {
+        sMassObjEmitters[i].remove();
     }
 
     // TODO
@@ -706,39 +830,6 @@ void dJEffManager_c::doCustomSkywardSwordThing(f32 x, f32 y) {
     }
 }
 
-// TODO explain this
-static u32 sInts[] = {0x28, 0x29, 0x87, 0x88, 0x89, 0x8A, 0x8C, 0x8D, 0x91, 0x86, 0x1, 0x2};
-static u32 sInts2[] = {0x2, 0x87, 0x8B};
-
-s32 dEmitterBase_c::getGroupId(u16 resourceId) {
-    u32 mask = dParticle::mgr_c::GetInstance()->getResUserWork(resourceId);
-    s32 bit = 1;
-    for (int i = 0; i < 10; i++) {
-        if ((mask & (1 << i)) != 0) {
-            bit = i;
-            break;
-        }
-    }
-
-    int i = sInts[bit];
-    // TODO explain this
-    if ((mask & 0x8000) != 0) {
-        if (i == 3) {
-            i = 2;
-        } else if (i == 5) {
-            i = 4;
-        } else if (i == 7) {
-            i = 6;
-        } else if (i == 1) {
-            i = 0;
-        } else if (i == 11) {
-            i = 10;
-        }
-    }
-
-    return i;
-}
-
 void dJEffManager_c::execute() {
     for (EffectsList::Iterator it = sPlayingEffectsList.GetBeginIter(); it != sPlayingEffectsList.GetEndIter();) {
         EffectsList::Iterator itNext = it;
@@ -763,10 +854,10 @@ void dJEffManager_c::execute() {
         CURRENT_EFFECT_MANAGER_INIT->setGlobalAlpha(dStageMgr_c::GetInstance()->getGlobalAlpha());
     }
 
-    for (s32 i = 0; i < sNumberOfMgrs; i++) {
-        mColor c = sManagers[i].getField_0x67C();
-        sManagers[i].loadColors(&c, nullptr, 0, 0);
-        sManagers[i].execute();
+    for (s32 i = 0; i < sNumMassObjEmitters; i++) {
+        mColor c = sMassObjEmitters[i].getField_0x67C();
+        sMassObjEmitters[i].loadColors(&c, nullptr, 0, 0);
+        sMassObjEmitters[i].execute();
     }
 
     if ((dBase_c::s_ExecuteControlFlags & 0x6F9) == 0) {
@@ -796,22 +887,26 @@ void dJEffManager_c::draw() {
     }
 }
 
-bool EffectsStruct::shouldBePaused(dBase_c *owner) {
+bool dJEffManager_c::shouldBePaused(dBase_c *owner) {
     return owner != nullptr && !owner->isBasePropertyFlag(dBase_c::BASE_PROP_0x4) &&
            (EventManager::isInEvent() || owner->isProcControlFlag(fBase_c::DISABLE_EXECUTE) ||
             // TODO execute control flags
             (owner->s_ExecuteControlFlags & 0x6fb));
 }
 
+void dJEffManager_c::draw(const JPADrawInfo *info, u32 groupId) {
+    dParticle::mgr_c::GetInstance()->draw(info, groupId);
+}
+
 bool dJEffManager_c::createEffManagers() {
     EGG::Heap *heap = dHeap::work1Heap.heap;
     ms_allocator = new (heap, 4) mHeapAllocator_c();
-    sManagers = new (heap, 4) dMassObjEmitter_c[sNumberOfMgrs];
+    sMassObjEmitters = new (heap, 4) dMassObjEmitter_c[sNumMassObjEmitters];
 
-    for (s32 idx = 0; idx < sNumberOfMgrs; idx++) {
+    for (s32 idx = 0; idx < sNumMassObjEmitters; idx++) {
         // TODO explain this
         if (sEffectResourceIds[idx] == PARTICLE_RESOURCE_ID_MAPPING_119_) {
-            CURRENT_EFFECT_MANAGER_INIT = &sManagers[idx];
+            CURRENT_EFFECT_MANAGER_INIT = &sMassObjEmitters[idx];
             break;
         }
     }
@@ -880,11 +975,15 @@ dEmitterBase_c *dJEffManager_c::spawnEffect(
     return spawnEffectInternal(effectResourceId, transform, c1, c2, idx1, idx2);
 }
 
-bool EffectsStruct::createEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2) {
+bool EffectsStruct::createEffect(
+    u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2
+) {
     return createEffect(true, resourceId, pos, rot, scale, c1, c2);
 }
 
-bool EffectsStruct::createUIEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2) {
+bool EffectsStruct::createUIEffect(
+    u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2
+) {
     mVec3_c adjustedPosition(pos.x * getlbl_80571C50(), pos.y, pos.z);
     return createEffect(true, resourceId, adjustedPosition, rot, scale, c1, c2);
 }
@@ -893,17 +992,40 @@ bool EffectsStruct::createEffect(u16 resourceId, const mMtx_c &transform, const 
     return createEffect(true, resourceId, transform, c1, c2);
 }
 
-bool EffectsStruct::createContinuousEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2) {
+bool EffectsStruct::createContinuousEffect(
+    u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2
+) {
     return createEffect(false, resourceId, pos, rot, scale, c1, c2);
 }
 
-bool EffectsStruct::createContinuousUIEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2) {
+bool EffectsStruct::createContinuousUIEffect(
+    u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2
+) {
     mVec3_c adjustedPosition(pos.x * getlbl_80571C50(), pos.y, pos.z);
     return createEffect(false, resourceId, adjustedPosition, rot, scale, c1, c2);
 }
 
-bool EffectsStruct::createContinuousEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2) {
+bool EffectsStruct::createContinuousEffect(
+    u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2
+) {
     return createEffect(false, resourceId, transform, c1, c2);
+}
+
+bool dJEffManager_c::createMassObjEffect(
+    u16 effectResourceId, const mVec3_c &v1, dAcObjBase_c *owner, const mColor *color
+) {
+    for (s32 i = 0; i < sNumMassObjEmitters; i++) {
+        if (effectResourceId == sEffectResourceIds[i]) {
+            if (color != nullptr) {
+                sMassObjEmitters[i].setField_0x67C(*color);
+            } else {
+                sMassObjEmitters[i].setField_0x67C(mColor(0xFF, 0xFF, 0xFF, 0xFF));
+            }
+            return sMassObjEmitters[i].start(v1, owner);
+        }
+    }
+
+    return false;
 }
 
 void dEmitterBase_c::loadColors(
@@ -1096,10 +1218,10 @@ void dWaterEffect_c::execute(f32 water, f32 ground) {
     }
 
     if (mIsInWater && getActorCeilPos(ac) > water) {
-        // Spawn effect upon leaving water
+        // Spawn effect while in water
         mVec3_c pos(ac->position.x, water, ac->position.z);
         mVec3_c scale(mScale, mScale, mScale);
-        mEff.createEffect(PARTICLE_RESOURCE_ID_MAPPING_127_, pos, nullptr, &scale, nullptr, nullptr);
+        mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_127_, pos, nullptr, &scale, nullptr, nullptr);
         f32 rate = nw4r::math::FAbs(ac->forwardSpeed) * 0.02f;
         rate = rate > 0.95f ? 0.95f : rate;
         mEff.setRate(rate + 0.05f);

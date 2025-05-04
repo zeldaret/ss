@@ -13,6 +13,7 @@
 #include "m/m_color.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
+#include "rvl/GX/GXTypes.h"
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/d_unk_mdl_stuff_2.h"
 #include "toBeSorted/tlist.h"
@@ -43,7 +44,6 @@ protected:
     void deactivateEmitters();
     void stopCalcEmitters();
     void playCalcEmitters();
-    static s32 getGroupId(u16);
     static void loadColors(JPABaseEmitter *emitter, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2);
 
     void setEmitterCallback(dEmitterCallback_c *cb);
@@ -114,12 +114,24 @@ public:
 
     // TODO maybe reconsider the naming here - the observation here is that a "continous" effect
     // is typically called every frame, while the others are one-shot calls
-    bool createContinuousEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2);
-    bool createContinuousUIEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2);
+    bool createContinuousEffect(
+        u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+        const GXColor *c2
+    );
+    bool createContinuousUIEffect(
+        u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+        const GXColor *c2
+    );
     bool createContinuousEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2);
 
-    bool createEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2);
-    bool createUIEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2);
+    bool createEffect(
+        u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+        const GXColor *c2
+    );
+    bool createUIEffect(
+        u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+        const GXColor *c2
+    );
     bool createEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2);
 
     bool hasEmitters() const {
@@ -155,8 +167,6 @@ protected:
         const GXColor *c2
     );
     bool createEffect(bool bFlags, u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2);
-
-    static bool shouldBePaused(dBase_c *owner);
     bool getOwnerPolyAttrs(s32 *pOut1, s32 *pOut2);
 
 public:
@@ -335,10 +345,17 @@ public:
     virtual void executeAfter(JPABaseEmitter *) override;
 
     void execute();
+    void clear();
+    bool start(const mVec3_c &v1, dAcObjBase_c *owner);
 
-    /* 0x010 */ mVec3_c field_0x010[0x32];
-    /* 0x268 */ mVec3_c field_0x268[0x32];
-    /* 0x4C0 */ u8 _0x4C0[0x650 - 0x4C0];
+private:
+    /* 0x010 */ mVec3_c field_0x010[50];
+    /* 0x268 */ mVec3_c field_0x268[50];
+    /* 0x4C0 */ dAcObjBase_c *field_0x4C0[50];
+    /* 0x588 */ dAcObjBase_c *field_0x588[50];
+    /* 0x650 */ mColor field_0x650;
+    /* 0x654 */ u32 field_0x654;
+    /* 0x658 */ u32 field_0x658;
     // TODO unclear structure boundary
 };
 
@@ -350,10 +367,28 @@ public:
     }
 
     void create(u16 resourceId);
+    bool start(const mVec3_c &v1, dAcObjBase_c *owner) {
+        return mCallback.start(v1, owner);
+    }
     void remove();
 
     mColor getField_0x67C() const {
         return field_0x67C;
+    }
+
+    void setField_0x67C(GXColor clr) {
+        field_0x67C.r = clr.r;
+        field_0x67C.g = clr.g;
+        field_0x67C.b = clr.b;
+        field_0x67C.a = clr.a;
+    }
+
+
+    void setField_0x67C(mColor clr) {
+        field_0x67C.r = clr.r;
+        field_0x67C.g = clr.g;
+        field_0x67C.b = clr.b;
+        field_0x67C.a = clr.a;
     }
 
     void execute() {
@@ -362,8 +397,6 @@ public:
 
 private:
     /* 0x020 */ dMassObjEmitterCallback_c mCallback;
-    /* 0x670 */ mColor field_0x670;
-    /* 0x674 */ u8 _0x674[0x67C - 0x674];
     /* 0x67C */ mColor field_0x67C;
 };
 
@@ -387,6 +420,12 @@ public:
     static dEmitterBase_c *spawnEffect(
         u16 effectResourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2
     );
+
+    // "mass obj" = grass, fire
+    static bool createMassObjEffect(u16 effectResourceId, const mVec3_c &v1, dAcObjBase_c *owner, const mColor *color);
+
+    static s32 getGroupId(u16);
+    static bool shouldBePaused(dBase_c *owner);
 
     enum Fx_e {
         TsuboA,
@@ -456,7 +495,9 @@ private:
     );
 
     static mHeapAllocator_c *ms_allocator;
-    static dMassObjEmitter_c *sManagers;
+    static dMassObjEmitter_c *sMassObjEmitters;
+    static u32 sInts[];
+    static u32 sInts2[];
 };
 
 #endif

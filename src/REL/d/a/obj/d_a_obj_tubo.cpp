@@ -31,7 +31,7 @@
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/blur_and_palette_manager.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/small_sound_mgr.h"
 #include "toBeSorted/special_item_drop_mgr.h"

@@ -15,7 +15,7 @@
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 class dAcOtubo_c : public dAcObjBase_c {
 public:
