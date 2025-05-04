@@ -213,14 +213,12 @@ int dAcOtubo_c::draw() {
     return SUCCEEDED;
 }
 
-extern "C" void fn_8002A450(const mVec3_c &, u8, u8, const mVec3_c &, int, f32, f32);
-
 void dAcOtubo_c::initializeState_Wait() {}
 void dAcOtubo_c::executeState_Wait() {
     if (mObjAcch.ChkGroundLanding()) {
         if (!mbField_0x9EF || !EventManager::isInEvent()) {
             if (mField_0x9F6 == 2) {
-                fn_8002A450(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+                dJEffManager_c::spawnGroundEffect(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
             }
             if (mbField_0x9F3) {
                 playSound(SE_Tubo_PUT);
@@ -228,7 +226,9 @@ void dAcOtubo_c::executeState_Wait() {
             }
             if (checkOnLava()) {
                 if (mField_0x9F6 != 2) {
-                    fn_8002A450(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+                    dJEffManager_c::spawnGroundEffect(
+                        position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0
+                    );
                 }
                 playSound(SE_O_FALL_LAVA_S);
             }
@@ -366,7 +366,7 @@ void dAcOtubo_c::initializeState_Slope() {
 }
 void dAcOtubo_c::executeState_Slope() {
     if (mObjAcch.ChkGroundLanding()) {
-        fn_8002A450(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+        dJEffManager_c::spawnGroundEffect(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
     } else if (mObjAcch.ChkGndHit()) {
         mField_0x9DC = 0.f;
         addPickupTarget();
@@ -464,11 +464,15 @@ void dAcOtubo_c::destroy() {
     fn_80022BE0(BlurAndPaletteManager::GetPInstance(), position);
     mActorCarryInfo.fn_80050EA0(this);
 
-    dEmitterBase_c *fx_thing = dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_209_, poscopy2, nullptr, nullptr, nullptr, nullptr, 0, 0);
+    dEmitterBase_c *fx_thing = dJEffManager_c::spawnEffect(
+        PARTICLE_RESOURCE_ID_MAPPING_209_, poscopy2, nullptr, nullptr, nullptr, nullptr, 0, 0
+    );
     if (fx_thing) {
         fx_thing->attachEmitterCallbackId(mSubtype != 0 ? dJEffManager_c::TsuboB : dJEffManager_c::TsuboA);
     }
-    fx_thing = dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_109_, position, nullptr, nullptr, nullptr, nullptr, 0, 0);
+    fx_thing = dJEffManager_c::spawnEffect(
+        PARTICLE_RESOURCE_ID_MAPPING_109_, position, nullptr, nullptr, nullptr, nullptr, 0, 0
+    );
     if (fx_thing) {
         fx_thing->bindShpEmitter(mSubtype != 0 ? dJEffManager_c::TsuboB : dJEffManager_c::TsuboA, false);
     }

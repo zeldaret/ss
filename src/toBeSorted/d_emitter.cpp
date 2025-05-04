@@ -1186,6 +1186,77 @@ bool EffectsStruct::createEffect(
     return hasEmitters();
 }
 
+s32 dJEffManager_c::polyAttrsToGroundEffectIdx(s32 polyAttr0, s32 polyAttr1) {
+    if (polyAttr0 == 0 || (polyAttr0 == 4 && polyAttr1 == 1) || (polyAttr0 == 9) ||
+        (polyAttr0 == 10 && polyAttr1 == 1) || (polyAttr0 == 12) || (polyAttr0 == 17 && polyAttr1 != 1) ||
+        (polyAttr0 == 13 && (polyAttr1 == 1 || polyAttr1 == 3)) || polyAttr0 == 18) {
+        return 6;
+    } else if (polyAttr0 == 17) {
+        return 5;
+    } else if (polyAttr0 == 6) {
+        return 2;
+    } else if (polyAttr0 == 4) {
+        return 1;
+    } else if (polyAttr0 == 3 || polyAttr0 == 15) {
+        return 3;
+    }
+    // ???
+    s32 result = 0;
+    if (polyAttr0 == 11) {
+        result = 4;
+    }
+    return result;
+}
+
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_89_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_90_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_87_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_88_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_429_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_416_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_417_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_418_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_419_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_893_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_894_;
+
+dEmitterBase_c *dJEffManager_c::spawnGroundEffect(
+    const mVec3_c &pos, u8 polyAttr0, u8 polyAttr1, const mVec3_c &v1, s32 unk, f32 scale, f32 groundHeightMaybe
+) {
+    static const u16 sEffArray[6][2] = {
+        { PARTICLE_RESOURCE_ID_MAPPING_89_,  PARTICLE_RESOURCE_ID_MAPPING_90_},
+        { PARTICLE_RESOURCE_ID_MAPPING_87_,  PARTICLE_RESOURCE_ID_MAPPING_88_},
+        {PARTICLE_RESOURCE_ID_MAPPING_429_, PARTICLE_RESOURCE_ID_MAPPING_429_},
+        {PARTICLE_RESOURCE_ID_MAPPING_416_, PARTICLE_RESOURCE_ID_MAPPING_417_},
+        {PARTICLE_RESOURCE_ID_MAPPING_418_, PARTICLE_RESOURCE_ID_MAPPING_419_},
+        {PARTICLE_RESOURCE_ID_MAPPING_893_, PARTICLE_RESOURCE_ID_MAPPING_894_},
+    };
+
+    if (pos.y < groundHeightMaybe) {
+        return nullptr;
+    }
+
+    s32 idx = polyAttrsToGroundEffectIdx(polyAttr0, polyAttr1);
+    if (idx == 6) {
+        return nullptr;
+    }
+    if (idx == 2 && unk == 0) {
+        scale *= 1.5f;
+    }
+    mMtx_c mtx;
+    mtx.makeRotationFromVecs(mVec3_c::Ey, v1, 1.0f);
+    mAng rot(cM::rndF(65536.0f));
+    mtx.YrotM(rot);
+    mtx.m[0][3] = pos.x;
+    mtx.m[1][3] = pos.y;
+    mtx.m[2][3] = pos.z;
+    mMtx_c scaleMtx;
+    MTXScale(scaleMtx, scale, scale, scale);
+    MTXConcat(mtx, scaleMtx, mtx);
+    u16 eff = sEffArray[idx][unk];
+    return spawnEffect(eff, mtx, nullptr, nullptr, polyAttr0, polyAttr1);
+}
+
 void dWaterEffect_c::init(dAcObjBase_c *base, f32 height, f32 scale, f32 f3) {
     mEff.init(base);
     mHeight = height;

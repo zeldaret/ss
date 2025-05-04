@@ -420,6 +420,7 @@ public:
     static dEmitterBase_c *spawnEffect(
         u16 effectResourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2
     );
+    static dEmitterBase_c *spawnGroundEffect(const mVec3_c &pos, u8 polyAttr0, u8 polyAttr1, const mVec3_c &, s32 unk, f32 scale, f32 groundHeightMaybe);
 
     // "mass obj" = grass, fire
     static bool createMassObjEffect(u16 effectResourceId, const mVec3_c &v1, dAcObjBase_c *owner, const mColor *color);
@@ -493,6 +494,8 @@ private:
     static dEmitterBase_c *spawnEffectInternal(
         u16 effectResourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2
     );
+
+    static s32 polyAttrsToGroundEffectIdx(s32 polyAttr0, s32 polyAttr1);
 
     static mHeapAllocator_c *ms_allocator;
     static dMassObjEmitter_c *sMassObjEmitters;
