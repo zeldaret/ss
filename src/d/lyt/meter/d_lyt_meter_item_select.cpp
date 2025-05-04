@@ -702,8 +702,8 @@ void dLytMeterItemSelect_c::initializeState_SelectIn() {
     if (dAcPy_c::GetLink()->checkFlags0x340(0x400)) {
         field_0x57BD = 1;
         field_0x5788 = 0;
-        field_0x579B = 0;
-        mEffects.fn_80027320(0);
+        mEffectAlpha = 0;
+        mEffects.setGlobalAlpha(0);
         mpPanes[ITEM_SELECT_PANE_ICON_OFFSET + 2]->SetInfluencedAlpha(true);
         mpPanes[ITEM_SELECT_PANE_ICON_OFFSET + 2]->SetAlpha(64);
     }
@@ -759,16 +759,16 @@ void dLytMeterItemSelect_c::executeState_SelectIn() {
             bAllAnimsSettled = false;
         } else {
             field_0x57BE = 1;
-            bool settled0x57BE = true;
-            bool settled0x5784 = true;
-            if (field_0x579B != 0xFF) {
-                settled0x57BE = sLib::chaseUC(&field_0x579B, 0xFF, 0x55);
+            bool settledAnimAlpha = true;
+            bool settledAnimScale = true;
+            if (mEffectAlpha != 0xFF) {
+                settledAnimAlpha = sLib::chaseUC(&mEffectAlpha, 0xFF, 0x55);
             }
-            if (field_0x5784 != 1.0f) {
-                settled0x5784 = sLib::chase(&field_0x5784, 1.0f, 0.06666666f);
+            if (mEffectScale != 1.0f) {
+                settledAnimScale = sLib::chase(&mEffectScale, 1.0f, 0.06666666f);
             }
-            mEffects.fn_80027320(field_0x579B);
-            if (!settled0x57BE || !settled0x5784) {
+            mEffects.setGlobalAlpha(mEffectAlpha);
+            if (!settledAnimAlpha || !settledAnimScale) {
                 bAllAnimsSettled = false;
             }
         }
@@ -840,13 +840,13 @@ void dLytMeterItemSelect_c::executeState_SetIn() {
         } else {
             bool settled0x57BE = true;
             bool settled0x5784 = true;
-            if (field_0x579B != 0) {
-                settled0x57BE = sLib::chaseUC(&field_0x579B, 0, 0x55);
+            if (mEffectAlpha != 0) {
+                settled0x57BE = sLib::chaseUC(&mEffectAlpha, 0, 0x55);
             }
-            if (field_0x5784 != 0.8f) {
-                settled0x5784 = sLib::chase(&field_0x5784, 0.8f, 0.06666666f);
+            if (mEffectScale != 0.8f) {
+                settled0x5784 = sLib::chase(&mEffectScale, 0.8f, 0.06666666f);
             }
-            mEffects.fn_80027320(field_0x579B);
+            mEffects.setGlobalAlpha(mEffectAlpha);
             if (settled0x57BE && settled0x5784) {
                 field_0x57BD = 0;
                 field_0x57BE = 0;
@@ -1058,13 +1058,13 @@ void dLytMeterItemSelect_c::executeState_SelectOut() {
         } else {
             bool settled0x57BE = true;
             bool settled0x5784 = true;
-            if (field_0x579B != 0) {
-                settled0x57BE = sLib::chaseUC(&field_0x579B, 0, 0x55);
+            if (mEffectAlpha != 0) {
+                settled0x57BE = sLib::chaseUC(&mEffectAlpha, 0, 0x55);
             }
-            if (field_0x5784 != 0.8f) {
-                settled0x5784 = sLib::chase(&field_0x5784, 0.8f, 0.06666666f);
+            if (mEffectScale != 0.8f) {
+                settled0x5784 = sLib::chase(&mEffectScale, 0.8f, 0.06666666f);
             }
-            mEffects.fn_80027320(field_0x579B);
+            mEffects.setGlobalAlpha(mEffectAlpha);
             if (settled0x57BE && settled0x5784) {
                 field_0x57BD = 0;
                 field_0x57BE = 0;
@@ -1674,9 +1674,9 @@ bool dLytMeterItemSelect_c::build(d2d::ResAccIf_c *resAcc) {
 
     field_0x578C = 0;
     field_0x5790 = 0;
-    field_0x5784 = 0.8f;
+    mEffectScale = 0.8f;
     field_0x5788 = 0;
-    field_0x579B = 0;
+    mEffectAlpha = 0;
     field_0x57BD = 0;
     field_0x57BE = 0;
     field_0x57BF = 0;
@@ -1922,9 +1922,9 @@ bool dLytMeterItemSelect_c::execute() {
             }
 
             if (field_0x57BD != 0) {
-                field_0x579B = 0;
-                field_0x5784 = 0.8f;
-                mEffects.fn_80027320(0);
+                mEffectAlpha = 0;
+                mEffectScale = 0.8f;
+                mEffects.setGlobalAlpha(0);
                 field_0x57BD = 0;
                 field_0x57BE = 0;
                 mpPanes[ITEM_SELECT_PANE_ICON_OFFSET + 2]->SetAlpha(0xFF);
@@ -2241,18 +2241,18 @@ extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_717_;
 void dLytMeterItemSelect_c::fn_800EF580() {
     nw4r::math::MTX34 mtx = mpPanes[11]->GetGlobalMtx();
     mVec3_c pos(mtx._03, mtx._13, 0.0f);
-    mVec3_c scale(field_0x5784, field_0x5784, field_0x5784);
+    mVec3_c scale(mEffectScale, mEffectScale, mEffectScale);
     mEffects.fn_80029A70(PARTICLE_RESOURCE_ID_MAPPING_717_, &pos, nullptr, &scale, nullptr, nullptr);
 
     if (field_0x57C0 != 0) {
-        mEffects.fn_80026ED0();
+        mEffects.stopDrawParticles();
         field_0x57C0 = 0;
     } else {
         if (field_0x57BE != field_0x57BF) {
             if (field_0x57BE != 0) {
-                mEffects.fn_80026F10();
+                mEffects.playDrawParticles();
             } else {
-                mEffects.fn_80026ED0();
+                mEffects.stopDrawParticles();
             }
         }
     }

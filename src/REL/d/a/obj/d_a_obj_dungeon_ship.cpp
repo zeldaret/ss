@@ -202,8 +202,8 @@ int dAcODungeonShip_c::actorExecute() {
     if (field_0x8D9) {
         mMtx_c tmpMtx;
         mMdl.getNodeWorldMtx(0, tmpMtx);
-        if (mEffects[1].checkField0x00()) {
-            mEffects[1].setMtx(tmpMtx);
+        if (mEffects[1].hasEmitters()) {
+            mEffects[1].setTransform(tmpMtx);
         } else if (field_0x8DA == 0) {
             mEffects[1].fn_800299F0(PARTICLE_RESOURCE_ID_MAPPING_683_, &tmpMtx, nullptr, nullptr);
             field_0x8DA = 1;

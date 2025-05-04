@@ -5,7 +5,7 @@
 BlurAndPaletteManager BlurAndPaletteManager::sInstance;
 BlurAndPaletteManager *BlurAndPaletteManager::sPInstance;
 
-TList<UnkBlurPaletteListNode, offsetof(UnkBlurPaletteListNode, mNode)> sList;
+TList<UnkBlurPaletteListNode, offsetof(UnkBlurPaletteListNode, mNode)> sPlayingEffectsList;
 
 mColor BlurAndPaletteManager::combineColors(const mColor &c1, const mColor &c2, f32 ratio) {
     mColor result;
@@ -178,7 +178,7 @@ BlurAndPaletteManager::BlurAndPaletteManager() {
     }
 
 
-    field_0x5CE4.MA06_kColor3 = mColor(0xff, 0xff, 0xff, 0xff);
+    field_0x5CE4.MA00_kColor3 = mColor(0xff, 0xff, 0xff, 0xff);
     field_0x5CE4.MA01_tevReg1 = mColor(0xff, 0xff, 0xff, 0xff);
     field_0x5CE4.MA01_kColor2 = mColor(0xff, 0xff, 0xff, 0xff);
     field_0x5CE4.MA02_tevReg1 = mColor(0xff, 0xff, 0xff, 0xff);

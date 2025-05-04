@@ -120,6 +120,7 @@ public:
     void clearStatus(u32 status) { mStatus &= ~status; }
     u32 checkStatus(u32 status) const { return (mStatus & status); }
     bool checkFlag(u32 flag) const { return !!(mpRes->getDyn()->getFlag() & flag); }
+    u32 getDynResUserWork() const { return mpRes->getDyn()->getResUserWork(); }
     u8 getResourceManagerID() const { return mResMgrID; }
     u8 getGroupID() const { return mGroupID; }
     u8 getDrawTimes() const { return mDrawTimes; }
@@ -131,9 +132,8 @@ public:
     void setGlobalSRTMatrix(const Mtx m) { 
         JPASetRMtxSTVecfromMtx(m, mGlobalRot, &mGlobalScl, &mGlobalTrs);
 
-        // set is actually used here in debug
-        mGlobalPScl.x = mGlobalScl.x;
-        mGlobalPScl.y = mGlobalScl.y;
+        // "set is used in TP debug"
+        mGlobalPScl.set(mGlobalScl.x, mGlobalScl.y);
     }
     void setGlobalTranslation(f32 x, f32 y, f32 z) { mGlobalTrs.set(x, y, z); }
     void setGlobalTranslation(const EGG::Vector3f& trs) { mGlobalTrs.set(trs); }
@@ -183,6 +183,14 @@ public:
 
     void setLocalScale(const EGG::Vector3f& scale) {
         mLocalScl.set(scale);
+    }
+
+    f32 getGlobalParticleScaleX() const {
+        return mGlobalPScl.x;
+    }
+
+    f32 getGlobalParticleScaleY() const {
+        return mGlobalPScl.y;
     }
 
     f32 get_r_f() { return mRndm.get_rndm_f(); }

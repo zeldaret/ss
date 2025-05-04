@@ -676,7 +676,7 @@ void dLytMeterMinusBtn_c::executeState_DemoMove() {
                 mEffectsRot[i].z += demoRotIncrement;
                 nw4r::math::MTX34 mtx = getPaneByIndex(slot + MINUS_BTN_PANE_ITEM_OFFSET)->GetGlobalMtx();
                 mVec3_c pos(mtx._03, mtx._13, 0.0f);
-                mEffects[i].fn_800271E0(&pos, &mEffectsRot[i], nullptr);
+                mEffects[i].setPosRotScaleWithScreenScale(pos, &mEffectsRot[i], nullptr);
             }
         }
     }

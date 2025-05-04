@@ -91,6 +91,10 @@ toBeSorted/blur_and_palette_manager.cpp:
 toBeSorted/d_effects_1.cpp:
 	.text       start:0x800268B0 end:0x8002B99C align:16
 	.ctors      start:0x804DB660 end:0x804DB664
+	.data       start:0x80500E98 end:0x80501500
+	.sdata      start:0x805718A8 end:0x80571920
+	.sdata2     start:0x80576C18 end:0x80576C68
+	.bss        start:0x80594FA0 end:0x80597020
 
 toBeSorted/d_effects_2.cpp:
 	.text       start:0x8002B9A0 end:0x8002C128 align:16
