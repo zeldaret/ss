@@ -722,7 +722,7 @@ void dLytMeterDowsing_c::executeState_DemoMove() {
             idx = i + DOWSING_PANE_ITEM_OFFSET;
             nw4r::math::MTX34 mtx = mpPanes[idx]->GetGlobalMtx();
             mVec3_c pos(mtx._03, mtx._13, 0.0f);
-            EffectsStruct::fn_800298C0(PARTICLE_RESOURCE_ID_MAPPING_970_, &pos, nullptr, nullptr, nullptr, nullptr);
+            dJEffManager_c::spawnUIEffect(PARTICLE_RESOURCE_ID_MAPPING_970_, pos, nullptr, nullptr, nullptr, nullptr);
             SmallSoundManager::GetInstance()->playSound(SE_S_DOWSING_ADD);
         }
     } else if (mDemoFrame == 16) {

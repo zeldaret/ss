@@ -27,14 +27,14 @@ public:
     /* 800509e0 */ static void initLoader();
     /* 80050a00 */ static dBase_c *createBase(ProfileName, dBase_c *, u32, u8);
     /* 80050a10 */ static dBase_c *createRoot(ProfileName, u32, u8);
-
+    
+    inline bool isBasePropertyFlag(u32 flag) const {
+        return (baseProperties & flag) != 0;
+    }
 private:
     /* 800509c0 */ static int loadAsyncCallback();
     /* 800509d0 */ static void unloadCallback();
 
-    inline bool isProcControlFlag(u32 flag) const {
-        return (baseProperties & flag) != 0;
-    }
 
 public:
     /* 805750c0 */ static u32 s_ExecuteControlFlags;

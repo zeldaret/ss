@@ -9,6 +9,7 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "s/s_State.hpp"
+#include "toBeSorted/effects_struct.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_WATER_SPOUT, dAcOwaterSpout_c, fProfile::OBJ_WATER_SPOUT, 0x1DA, 0, 6);
 
@@ -59,14 +60,13 @@ int dAcOwaterSpout_c::draw() {
     return SUCCEEDED;
 }
 
-extern "C" void fn_800298B0(u16, mVec3_c *, mVec3_c *, mVec3_c *, u32, u32, u32, u32);
 extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_213_;
 
 void dAcOwaterSpout_c::initializeState_Wait() {
     if (params == 1) {
         return;
     }
-    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_213_, &position, nullptr, &mScale, 0, 0, 0, 0);
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_213_, position, nullptr, &mScale, nullptr, nullptr, 0, 0);
 }
 void dAcOwaterSpout_c::executeState_Wait() {
     if (mMdl.getAnm().isStop()) {

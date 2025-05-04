@@ -1,6 +1,8 @@
 #include "d/a/d_a_t_wood_area.h"
 
+#include "common.h"
 #include "d/a/d_a_player.h"
+#include "toBeSorted/effects_struct.h"
 
 const f32 dAcTWoodArea_c::scaleX = 100.0f;
 const f32 dAcTWoodArea_c::scaleY = 100.0f;
@@ -48,8 +50,7 @@ void dAcTWoodArea_c::executeState_Init() {
 }
 void dAcTWoodArea_c::finalizeState_Init() {}
 
-extern "C" void fn_800298B0(u16, mVec3_c *, mAng3_c *, u32, u32, u32, u32, u32);
-extern u16 PARTICLE_RESOURCE_ID_MAPPING[];
+extern const u16 PARTICLE_RESOURCE_ID_MAPPING_8_;
 
 void dAcTWoodArea_c::initializeState_Wait() {}
 
@@ -63,7 +64,9 @@ void dAcTWoodArea_c::executeState_Wait() {
             bool someEffectThing = subtype != 1 ? (params & 0xF) != 0 ? false : true : true;
             if (someEffectThing) {
                 mVec3_c tmp(position.x, position.y + getAttachHeight(), position.z);
-                fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING[8], &tmp, nullptr, 0, 0, 0, 0, 0);
+                dJEffManager_c::spawnEffect(
+                    PARTICLE_RESOURCE_ID_MAPPING_8_, tmp, nullptr, nullptr, nullptr, nullptr, 0, 0
+                );
             }
             dropItems();
         }

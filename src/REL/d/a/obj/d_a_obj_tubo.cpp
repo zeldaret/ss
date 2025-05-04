@@ -449,7 +449,6 @@ void dAcOtubo_c::finalizeState_Rebirth() {
     setActorProperty(0x1);
 }
 
-extern "C" dEmitterBase_c *fn_800298B0(u16, mVec3_c *, mVec3_c *, u32, u32, u32, u32, u32);
 extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_109_, PARTICLE_RESOURCE_ID_MAPPING_209_;
 extern "C" void fn_80022BE0(void *, const mVec3_c &);
 
@@ -465,11 +464,11 @@ void dAcOtubo_c::destroy() {
     fn_80022BE0(BlurAndPaletteManager::GetPInstance(), position);
     mActorCarryInfo.fn_80050EA0(this);
 
-    dEmitterBase_c *fx_thing = fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_209_, &poscopy2, nullptr, 0, 0, 0, 0, 0);
+    dEmitterBase_c *fx_thing = dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_209_, poscopy2, nullptr, nullptr, nullptr, nullptr, 0, 0);
     if (fx_thing) {
         fx_thing->attachEmitterCallbackId(mSubtype != 0 ? dJEffManager_c::TsuboB : dJEffManager_c::TsuboA);
     }
-    fx_thing = fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_109_, &position, nullptr, 0, 0, 0, 0, 0);
+    fx_thing = dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_109_, position, nullptr, nullptr, nullptr, nullptr, 0, 0);
     if (fx_thing) {
         fx_thing->bindShpEmitter(mSubtype != 0 ? dJEffManager_c::TsuboB : dJEffManager_c::TsuboA, false);
     }

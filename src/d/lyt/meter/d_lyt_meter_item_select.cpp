@@ -1410,7 +1410,7 @@ void dLytMeterItemSelect_c::executeState_DemoMove() {
 
                 nw4r::math::MTX34 mtx = mpPanes[i + ITEM_SELECT_PANE_ICON_OFFSET]->GetGlobalMtx();
                 mVec3_c pos(mtx._03, mtx._13, 0.0f);
-                EffectsStruct::fn_800298C0(PARTICLE_RESOURCE_ID_MAPPING_740_, &pos, nullptr, nullptr, nullptr, nullptr);
+                dJEffManager_c::spawnUIEffect(PARTICLE_RESOURCE_ID_MAPPING_740_, pos, nullptr, nullptr, nullptr, nullptr);
 
                 if (mIsBocoburinLocked[i]) {
                     mIsBocoburinLocked[i] = false;

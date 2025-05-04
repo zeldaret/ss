@@ -6,6 +6,8 @@
 #include "d/flag/sceneflag_manager.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_Math.h"
+#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SW, dAcOsw_c, fProfile::OBJ_SW, 0x12B, 0, 0x1002);
 
@@ -144,7 +146,6 @@ int dAcOsw_c::doDelete() {
 }
 
 extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_754_;
-extern "C" void fn_800298B0(u16, mVec3_c *, mAng3_c *, u32, u32, u32, u32, u32);
 
 int dAcOsw_c::actorExecute() {
     mStateMgr.executeState();
@@ -153,8 +154,8 @@ int dAcOsw_c::actorExecute() {
         if (field_0x5A0.field_0x00 <= 0.0f) {
             if (mScale.x >= 1.0f) {
                 if (!mHidden) {
-                    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_754_, &position, &rotation, 0, 0, 0, 0, 0);
-                    playSound(0xC0B);
+                    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_754_, position, &rotation, nullptr, nullptr, nullptr, 0, 0);
+                    playSound(SE_TIMESLIP_TIMESLIP_REV);
                     mHidden = true;
                 }
             } else {
@@ -166,8 +167,8 @@ int dAcOsw_c::actorExecute() {
         } else {
             if (mScale.x <= 0.0f) {
                 if (!mShown) {
-                    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_754_, &position, &rotation, 0, 0, 0, 0, 0);
-                    playSound(0xC0A);
+                    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_754_, position, &rotation, nullptr, nullptr, nullptr, 0, 0);
+                    playSound(SE_TIMESLIP_TIMESLIP);
                     mShown = true;
                 }
             } else {

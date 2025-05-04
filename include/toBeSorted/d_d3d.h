@@ -177,6 +177,8 @@ private:
 
 class UnkProc : public m3d::proc_c {
 public:
+    bool create(int prioOpa, int prioXlu, mAllocator_c *alloc);
+    bool createXlu(int prioXlu, mAllocator_c *alloc);
 private:
 };
 
@@ -188,8 +190,6 @@ public:
     }
 
     virtual int entry() override;
-    bool create(int prioOpa, int prioXlu, mAllocator_c *alloc);
-    bool createXlu(int prioXlu, mAllocator_c *alloc);
 
     virtual void drawOpa() override {
         doDraw();

@@ -7,9 +7,9 @@
 #include "common.h"
 #include "d/d_base.h"
 #include "m/m2d.h"
-#include "m/m3d/m_proc.h"
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
+#include "m/m_color.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "toBeSorted/d_d3d.h"
@@ -29,14 +29,16 @@ class dEmitterBase_c {
 public:
     dEmitterBase_c() : mpEmitterHead(nullptr), mpEmitterCallback(nullptr), mpParticleCallback(nullptr) {}
 
+    bool createEmitters(
+        u16 effectResourceId, const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+        const GXColor *c2, s32 idx1, s32 idx2
+    );
+
 protected:
     void deactivateEmitters();
     void stopCalcEmitters();
     void playCalcEmitters();
-    bool createEmitters(
-        u16 effectResourceId, const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2
-    );
-    static u16 fn_80028900(u16);
+    static s32 getGroupId(u16);
     static void loadColors(JPABaseEmitter *emitter, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2);
 
     void setEmitterCallback(dEmitterCallback_c *cb);
@@ -53,6 +55,7 @@ protected:
     /* 0x14 */ TListNode<dEmitterBase_c> mParticleCallbackNode;
 
 public:
+    // vtable at 0x1C
     virtual ~dEmitterBase_c();
 
     void stopDrawParticles();
@@ -68,13 +71,22 @@ public:
     void setAwayFromCenterSpeed(f32 speed);
     void setVolumeSize(u16 size);
     void setLifeTime(s16 lifetime);
-    void attachEmitterCallbackId(s32 id);               // corresponds to setup at 80028a80
+    void attachEmitterCallbackId(s32 id);     // corresponds to setup at 80028a80
     void bindShpEmitter(s32 id, bool unused); // corresponds to setup at 8002b6b0
 };
 
 // Suggested name: dEmitter_c
 class EffectsStruct : public dEmitterBase_c {
 public:
+    enum Flags_e {
+        EMITTER_0x1 = 0x1,
+        EMITTER_0x2 = 0x2,
+        EMITTER_0x4 = 0x4,
+        EMITTER_Fading = 0x8,
+        EMITTER_0x10 = 0x10,
+        EMITTER_0x20 = 0x20,
+    };
+
     // vt at 0x1C
     EffectsStruct();
     EffectsStruct(dBase_c *);
@@ -86,6 +98,8 @@ public:
 
     void addToActiveEmittersList(u16 resourceId, bool bFlags);
     void removeFromActiveEmittersList();
+    void execute();
+    void setFading(u8 lifetime);
 
     void remove(bool bForceDeleteEmitters);
     void fn_80029920(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
@@ -94,22 +108,46 @@ public:
     void fn_80029A10(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
     void fn_80029A70(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
 
-    static void fn_800298C0(u16 effect, mVec3_c *pos, void *, void *, void *, void *);
-
     bool hasEmitters() const {
         return mpEmitterHead != 0;
     }
 
-protected:
+    bool checkFlag(u32 flag) const {
+        return mFlags & flag;
+    }
+
+    void onFlag(u32 flag) {
+        mFlags |= flag;
+    }
+
+    void offFlag(u32 flag) {
+        mFlags &= ~flag;
+    }
+
+    void realizeAlpha();
     bool areAllEmittersDone();
+
+protected:
+    bool canReuse(u16 resourceId) const {
+        return hasEmitters() && !checkFlag(EMITTER_0x2) && mEffect == resourceId;
+    }
+
+    bool createEffect(
+        bool bFlags, u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+        const GXColor *c2
+    );
+
+    static bool shouldBePaused(dBase_c *owner);
+    bool getOwnerPolyAttrs(s32 *pOut1, s32 *pOut2);
 
 public:
     /* 0x24 */ TListNode<EffectsStruct> mNode;
 
 protected:
     /* 0x28 */ dBase_c *mpOwner;
-    /* 0x2C */ u8 field_0x2C;
-    /* 0x2D */ u8 _0x2D[0x30 - 0x2D];
+    /* 0x2C */ u8 mFadeTimer;
+    /* 0x2D */ u8 mFadeDuration;
+    /* 0x2E */ u8 _0x2D[0x30 - 0x2E];
     /* 0x30 */ u16 mFlags;
     /* 0x32 */ u16 mEffect;
 };
@@ -171,7 +209,7 @@ public:
     /* 0x04 */ ParticleCallbackList mEmitterList;
 };
 
-class dParticleFogProc_c : public d3d::EggTextureProc {
+class dParticleFogProc_c : public d3d::UnkProc {
 public:
     virtual ~dParticleFogProc_c() {}
     virtual void drawOpa() override {
@@ -189,7 +227,7 @@ private:
     /* 0x1C */ bool field_0x1C;
 };
 
-class dEffect2D_c : m2d::Base_c {
+class dEffect2D_c : public m2d::Base_c {
 public:
     dEffect2D_c() : m2d::Base_c(0x80) {}
     /* vt 0x08 */ virtual ~dEffect2D_c() {}
@@ -201,10 +239,12 @@ private:
     /* 0x10 */ u32 mGroupId;
 };
 
-class dJEffEmitterCallback_c : public dEmitterCallback_c {
+class dMassObjEmitterCallback_c : public dEmitterCallback_c {
 public:
-    virtual ~dJEffEmitterCallback_c() {}
+    virtual ~dMassObjEmitterCallback_c() {}
     virtual void executeAfter(JPABaseParticle *);
+
+    void execute();
 
     /* 0x010 */ mVec3_c field_0x010[0x32];
     /* 0x268 */ mVec3_c field_0x268[0x32];
@@ -265,23 +305,59 @@ public:
     void init(const char *mdlName, const char *arcName, bool priority);
     void clear();
     void remove();
+    void draw() {
+        mProc.entry();
+    }
 
 private:
     /* 0x04 */ dShpEmitterProc mProc;
     /* 0xA0 */ s32 field_0xA0;
 };
 
-class dJEffManager_c : public dEmitterBase_c {
+class dMassObjEmitter_c : public dEmitterBase_c {
 public:
-    dJEffManager_c() : field_0x670(-1), field_0x67C(-1) {}
-    virtual ~dJEffManager_c() {
+    dMassObjEmitter_c() {}
+    virtual ~dMassObjEmitter_c() {
         remove();
     }
 
+    void create(u16 resourceId);
+    void remove();
+
+    mColor getField_0x67C() const {
+        return field_0x67C;
+    }
+
+    void execute() {
+        mCallback.execute();
+    }
+
+private:
+    /* 0x020 */ dMassObjEmitterCallback_c mCallback;
+    /* 0x670 */ mColor field_0x670;
+    /* 0x674 */ u8 _0x674[0x67C - 0x674];
+    /* 0x67C */ mColor field_0x67C;
+};
+
+class dJEffManager_c {
+public:
     static bool createEffManagers();
     static void removeEffManagers();
     static void draw(const JPADrawInfo *info, u32 groupId);
+    static void draw();
+    static void execute();
     static void setupEffects();
+    static dEmitterBase_c *spawnEffect(
+        u16 effectResourceId, const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+        const GXColor *c2, s32 idx1, s32 idx2
+    );
+    static dEmitterBase_c *spawnUIEffect(
+        u16 effectResourceId, const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+        const GXColor *c2
+    );
+    static dEmitterBase_c *spawnEffect(
+        u16 effectResourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2
+    );
 
     enum Fx_e {
         TsuboA,
@@ -334,16 +410,16 @@ public:
     };
 
 private:
-    void create(u16 resourceId);
-    void remove();
+    static dEmitterBase_c *spawnEffectInternal(
+        u16 effectResourceId, const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+        const GXColor *c2, s32 idx1, s32 idx2
+    );
+    static dEmitterBase_c *spawnEffectInternal(
+        u16 effectResourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2
+    );
 
     static mHeapAllocator_c *ms_allocator;
-    static dJEffManager_c *sManagers;
-
-    /* 0x01C */ dJEffEmitterCallback_c mCallback;
-    /* 0x670 */ s32 field_0x670;
-    /* 0x674 */ u8 _0x674[0x67C - 0x674];
-    /* 0x674 */ s32 field_0x67C;
+    static dMassObjEmitter_c *sManagers;
 };
 
 #endif

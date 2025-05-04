@@ -14,14 +14,14 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "toBeSorted/attention.h"
+#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/small_sound_mgr.h"
 
-extern "C" void fn_800298B0(u16, mVec3_c *, mVec3_c *, u32, u32, u32, u32, u32);
 extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_394_;
 
 void dAcOInsect_c::kill() {
-    // Small Ordering issue between loading particle id and position
-    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_394_, &position, nullptr, 0, 0, 0, 0, 0);
-    playSound(0x1236); // TODO (Sound ID)
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_394_, position, nullptr, nullptr, nullptr, nullptr, 0, 0);
+    playSound(SE_Insect_DISAPPEAR); // TODO (Sound ID)
     deleteRequest();
 }
 

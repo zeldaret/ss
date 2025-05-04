@@ -2,10 +2,13 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "c/c_math.h"
 #include "common.h"
+#include "d/a/d_a_base.h"
 #include "d/d_base.h"
 #include "d/d_heap.h"
 #include "d/d_stage.h"
+#include "d/d_stage_mgr.h"
 #include "egg/core/eggHeap.h"
+#include "f/f_base.h"
 #include "m/m_allocator.h"
 #include "m/m_color.h"
 #include "m/m_mtx.h"
@@ -21,10 +24,27 @@
 #include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/d_particle.h"
 #include "toBeSorted/effects_struct.h"
+#include "toBeSorted/event_manager.h"
 #include "toBeSorted/lyt_related_floats.h"
 
 #include "rvl/GX.h"
 #include "rvl/MTX.h"
+
+void float_ordering_1(s32 a) {
+    (f32) a;
+}
+
+void float_ordering_2() {
+    255.0f;
+}
+
+void float_ordering_3(u32 a) {
+    (f32) a;
+}
+
+void float_ordering_4() {
+    0.0f;
+}
 
 typedef TList<EffectsStruct, offsetof(EffectsStruct, mNode)> EffectsList;
 EffectsList sPlayingEffectsList;
@@ -86,13 +106,14 @@ JPABaseEmitter *dEmitterBase_c::GetNextEmitter(JPABaseEmitter *head) {
 }
 
 bool dEmitterBase_c::createEmitters(
-    u16 effectResourceId, const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2
+    u16 effectResourceId, const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+    const GXColor *c2, s32 idx1, s32 idx2
 ) {
     u16 iter = effectResourceId;
     JPABaseEmitter *head = nullptr;
     JPABaseEmitter *last;
     for (; iter != 0xFFFF; iter = dParticle::mgr_c::GetInstance()->getJpnData(iter)) {
-        last = dParticle::mgr_c::GetInstance()->createEmitter(iter, fn_80028900(iter), position, rot, scale);
+        last = dParticle::mgr_c::GetInstance()->createEmitter(iter, getGroupId(iter), position, rot, scale);
         if (last != nullptr) {
             if (head != nullptr) {
                 head->setUserWork(reinterpret_cast<u32>(last));
@@ -290,7 +311,7 @@ EffectsStruct::~EffectsStruct() {
 }
 
 void EffectsStruct::remove(bool bForceDeleteEmitters) {
-    mFlags &= ~0x1;
+    offFlag(EMITTER_0x1);
     JPABaseEmitter *emitter = bForceDeleteEmitters ? mpEmitterHead : nullptr;
     deactivateEmitters();
     for (; emitter != nullptr; emitter = GetNextEmitter(emitter)) {
@@ -304,12 +325,12 @@ void EffectsStruct::addToActiveEmittersList(u16 resourceId, bool bFlags) {
     mFlags = 0;
     setImmortal();
     sPlayingEffectsList.append(this);
-    mFlags |= 1;
+    onFlag(EMITTER_0x1);
     if (bFlags) {
-        mFlags |= 4;
+        onFlag(EMITTER_0x4);
     }
     if (dParticle::mgr_c::GetInstance()->getResUserWork(resourceId) & 0x4000) {
-        mFlags |= 0x10;
+        onFlag(EMITTER_0x10);
     }
 }
 
@@ -317,7 +338,7 @@ bool EffectsStruct::areAllEmittersDone() {
     bool allDone = true;
 
     if (mpEmitterHead != nullptr) {
-        if ((mFlags & 0x8) != 0 && field_0x2C != 0) {
+        if (checkFlag(EMITTER_Fading) && mFadeTimer != 0) {
             return false;
         }
         for (JPABaseEmitter *emitter = mpEmitterHead; emitter != nullptr; emitter = GetNextEmitter(emitter)) {
@@ -332,6 +353,63 @@ bool EffectsStruct::areAllEmittersDone() {
     }
 
     return allDone;
+}
+
+void EffectsStruct::execute() {
+    if (mpOwner != nullptr && (mpOwner->delete_request || mpOwner->lifecycle_state == fBase_c::TO_BE_DELETED)) {
+        mpOwner = nullptr;
+    }
+    if (shouldBePaused(mpOwner)) {
+        if (!checkFlag(EMITTER_0x10)) {
+            stopCalcEmitters();
+            if (mpOwner != nullptr && !mpOwner->isBasePropertyFlag(0x100)) {
+                if (!mpEmitterHead->checkStatus(JPAEmtrStts_StopDraw)) {
+                    onFlag(EMITTER_0x20);
+                    stopDrawParticles();
+                }
+            } else {
+                if (checkFlag(EMITTER_0x20)) {
+                    offFlag(EMITTER_0x20);
+                    playDrawParticles();
+                }
+            }
+        }
+        onFlag(EMITTER_0x1);
+    } else {
+        playCalcEmitters();
+        if (checkFlag(EMITTER_0x20)) {
+            offFlag(EMITTER_0x20);
+            playDrawParticles();
+        }
+        if (checkFlag(EMITTER_Fading) && mFadeTimer != 0) {
+            mFadeTimer--;
+        }
+    }
+}
+
+bool EffectsStruct::getOwnerPolyAttrs(s32 *pOut1, s32 *pOut2) {
+    if (mpOwner != nullptr && mpOwner->group_type == fBase_c::ACTOR) {
+        dAcBase_c *actor = static_cast<dAcBase_c *>(mpOwner);
+        *pOut1 = actor->polyAttr0;
+        *pOut2 = actor->polyAttr1;
+        return true;
+    } else {
+        *pOut1 = 0;
+        *pOut2 = 0;
+        return false;
+    }
+}
+
+void EffectsStruct::realizeAlpha() {
+    setGlobalAlpha(mFadeTimer * (255.0f / mFadeDuration));
+}
+
+void EffectsStruct::setFading(u8 lifetime) {
+    if (!checkFlag(EMITTER_Fading)) {
+        mFadeTimer = lifetime;
+        onFlag(EMITTER_Fading);
+        mFadeDuration = lifetime;
+    }
 }
 
 extern "C" bool fn_80054AD0();
@@ -360,7 +438,7 @@ void dEffect2D_c::create(u32 groupId, u8 prio) {
     setPriority(prio);
 }
 
-void dJEffEmitterCallback_c::executeAfter(JPABaseParticle *) {}
+void dMassObjEmitterCallback_c::executeAfter(JPABaseParticle *) {}
 
 void dShpEmitterProc::doDraw() {
     mMtx_c viewMtx;
@@ -478,14 +556,14 @@ void dShpEmitter_c::draw(JPABaseEmitter *emitter, JPABaseParticle *particle) {
     particle->setInvisibleParticleFlag();
 }
 
-void dJEffManager_c::remove() {
+void dMassObjEmitter_c::remove() {
     setEmitterCallback(nullptr);
     mpEmitterHead = nullptr;
 }
 
 extern "C" u32 sNumberOfMgrs; // should be const?
 extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_119_;
-extern "C" dJEffManager_c *CURRENT_EFFECT_MANAGER_INIT;
+extern "C" dMassObjEmitter_c *CURRENT_EFFECT_MANAGER_INIT;
 
 // various grasses being cut
 extern const u16 sEffectResourceIds[];
@@ -568,10 +646,103 @@ void dJEffManager_c::removeEffManagers() {
 static u32 sInts[] = {0x28, 0x29, 0x87, 0x88, 0x89, 0x8A, 0x8C, 0x8D, 0x91, 0x86, 0x1, 0x2};
 static u32 sInts2[] = {0x2, 0x87, 0x8B};
 
+s32 dEmitterBase_c::getGroupId(u16 resourceId) {
+    u32 mask = dParticle::mgr_c::GetInstance()->getResUserWork(resourceId);
+    s32 bit = 1;
+    for (int i = 0; i < 10; i++) {
+        if ((mask & (1 << i)) != 0) {
+            bit = i;
+            break;
+        }
+    }
+
+    int i = sInts[bit];
+    // TODO explain this
+    if ((mask & 0x8000) != 0) {
+        if (i == 3) {
+            i = 2;
+        } else if (i == 5) {
+            i = 4;
+        } else if (i == 7) {
+            i = 6;
+        } else if (i == 1) {
+            i = 0;
+        } else if (i == 11) {
+            i = 10;
+        }
+    }
+
+    return i;
+}
+
+void dJEffManager_c::execute() {
+    for (EffectsList::Iterator it = sPlayingEffectsList.GetBeginIter(); it != sPlayingEffectsList.GetEndIter();) {
+        EffectsList::Iterator itNext = it;
+        ++itNext;
+        it->execute();
+        if (it->checkFlag(EffectsStruct::EMITTER_Fading)) {
+            it->realizeAlpha();
+        }
+        if (it->checkFlag(EffectsStruct::EMITTER_0x1)) {
+            it->offFlag(EffectsStruct::EMITTER_0x1);
+        } else {
+            if (it->areAllEmittersDone()) {
+                it->remove(false);
+            } else {
+                it->onFlag(EffectsStruct::EMITTER_0x2);
+            }
+        }
+        it = itNext;
+    }
+
+    if (dStageMgr_c::GetInstance() != nullptr) {
+        CURRENT_EFFECT_MANAGER_INIT->setGlobalAlpha(dStageMgr_c::GetInstance()->getGlobalAlpha());
+    }
+
+    for (s32 i = 0; i < sNumberOfMgrs; i++) {
+        mColor c = sManagers[i].getField_0x67C();
+        sManagers[i].loadColors(&c, nullptr, 0, 0);
+        sManagers[i].execute();
+    }
+
+    if ((dBase_c::s_ExecuteControlFlags & 0x6F9) == 0) {
+        for (int i = 0; i < 12; i++) {
+            dParticle::mgr_c::GetInstance()->calc(i);
+        }
+    } else {
+        dParticle::mgr_c::GetInstance()->calc(9);
+    }
+
+    dParticle::mgr_c::GetInstance()->calc(12);
+    dParticle::mgr_c::GetInstance()->calc(13);
+    dParticle::mgr_c::GetInstance()->calc(14);
+}
+
+void dJEffManager_c::draw() {
+    for (s32 i = 0; i < 12; i++) {
+        sFogProcs[i].entry();
+    }
+
+    s2DEffects[0].addToDrawList();
+    s2DEffects[1].addToDrawList();
+    s2DEffects[2].addToDrawList();
+
+    for (s32 i = 0; i < 47; i++) {
+        sShpEmitters[i].draw();
+    }
+}
+
+bool EffectsStruct::shouldBePaused(dBase_c *owner) {
+    return owner != nullptr && !owner->isBasePropertyFlag(dBase_c::BASE_PROP_0x4) &&
+           (EventManager::isInEvent() || owner->isProcControlFlag(fBase_c::DISABLE_EXECUTE) ||
+            // TODO execute control flags
+            (owner->s_ExecuteControlFlags & 0x6fb));
+}
+
 bool dJEffManager_c::createEffManagers() {
     EGG::Heap *heap = dHeap::work1Heap.heap;
     ms_allocator = new (heap, 4) mHeapAllocator_c();
-    sManagers = new (heap, 4) dJEffManager_c[sNumberOfMgrs];
+    sManagers = new (heap, 4) dMassObjEmitter_c[sNumberOfMgrs];
 
     for (s32 idx = 0; idx < sNumberOfMgrs; idx++) {
         // TODO explain this
@@ -604,7 +775,50 @@ bool dJEffManager_c::createEffManagers() {
     return true;
 }
 
-void dEmitterBase_c::loadColors(JPABaseEmitter *emitter, const GXColor *color1, const GXColor *color2, s32 plltIdx1, s32 plltIdx2) {
+dEmitterBase_c *dJEffManager_c::spawnEffectInternal(
+    u16 effectResourceId, const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+    const GXColor *c2, s32 idx1, s32 idx2
+) {
+    if (!sEmitter.createEmitters(effectResourceId, position, rot, scale, c1, c2, idx1, idx2)) {
+        return nullptr;
+    }
+    return &sEmitter;
+}
+
+dEmitterBase_c *dJEffManager_c::spawnEffectInternal(
+    u16 effectResourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2
+) {
+    dEmitterBase_c *e = spawnEffectInternal(effectResourceId, mVec3_c::Zero, nullptr, nullptr, c1, c2, idx1, idx2);
+    if (e != nullptr) {
+        e->setTransform(transform);
+    }
+    return e;
+}
+
+dEmitterBase_c *dJEffManager_c::spawnEffect(
+    u16 effectResourceId, const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+    const GXColor *c2, s32 idx1, s32 idx2
+) {
+    return spawnEffectInternal(effectResourceId, position, rot, scale, c1, c2, idx1, idx2);
+}
+
+dEmitterBase_c *dJEffManager_c::spawnUIEffect(
+    u16 effectResourceId, const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+    const GXColor *c2
+) {
+    mVec3_c adjustedPosition(position.x * getlbl_80571C50(), position.y, position.z);
+    return spawnEffectInternal(effectResourceId, adjustedPosition, rot, scale, c1, c2, 0, 0);
+}
+
+dEmitterBase_c *dJEffManager_c::spawnEffect(
+    u16 effectResourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2
+) {
+    return spawnEffectInternal(effectResourceId, transform, c1, c2, idx1, idx2);
+}
+
+void dEmitterBase_c::loadColors(
+    JPABaseEmitter *emitter, const GXColor *color1, const GXColor *color2, s32 plltIdx1, s32 plltIdx2
+) {
     BlurAndPaletteManager &mgr = BlurAndPaletteManager::GetInstance();
     u8 r1 = 0xFF;
     u8 g1 = 0xFF;
@@ -710,4 +924,28 @@ void EffectsStruct::removeFromActiveEmittersList() {
     if (sPlayingEffectsList.GetPosition(this) != sPlayingEffectsList.GetEndIter()) {
         sPlayingEffectsList.remove(this);
     }
+}
+
+bool EffectsStruct::createEffect(
+    bool bFlags, u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
+    const GXColor *c2
+) {
+    if (!bFlags && canReuse(resourceId)) {
+        setPosRotScale(pos, rot, scale);
+        s32 idx1 = 0;
+        s32 idx2 = 0;
+        getOwnerPolyAttrs(&idx1, &idx2);
+        loadColors(c1, c2, idx1, idx2);
+        onFlag(EMITTER_0x1);
+    } else {
+        remove(false);
+        s32 idx1 = 0;
+        s32 idx2 = 0;
+        getOwnerPolyAttrs(&idx1, &idx2);
+        if (createEmitters(resourceId, pos, rot, scale, c1, c2, idx1, idx2)) {
+            addToActiveEmittersList(resourceId, bFlags);
+        }
+    }
+
+    return hasEmitters();
 }
