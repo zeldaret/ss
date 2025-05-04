@@ -5,7 +5,6 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "common.h"
-#include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_base.h"
 #include "m/m2d.h"
@@ -35,6 +34,10 @@ public:
         u16 effectResourceId, const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
         const GXColor *c2, s32 idx1, s32 idx2
     );
+
+    dEmitterCallback_c *getEmitterCallback() const {
+        return mpEmitterCallback;
+    }
 
 protected:
     void deactivateEmitters();
@@ -108,14 +111,23 @@ public:
     void setFading(u8 lifetime);
 
     void remove(bool bForceDeleteEmitters);
-    void fn_80029920(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
-    void fn_80029980(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
-    void fn_800299F0(u16 effect, mMtx_c *mtx, void *, void *);
-    void fn_80029A10(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
-    void fn_80029A70(u16 effect, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, void *, void *);
+
+    // TODO maybe reconsider the naming here - the observation here is that a "continous" effect
+    // is typically called every frame, while the others are one-shot calls
+    bool createContinuousEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2);
+    bool createContinuousUIEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2);
+    bool createContinuousEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2);
+
+    bool createEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2);
+    bool createUIEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2);
+    bool createEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2);
 
     bool hasEmitters() const {
         return mpEmitterHead != 0;
+    }
+
+    u8 getGroupId() const {
+        return mpEmitterHead->getGroupID();
     }
 
     bool checkFlag(u32 flag) const {
@@ -201,7 +213,7 @@ class dEmitterCallback_c : public JPAEmitterCallBack {
 public:
     virtual ~dEmitterCallback_c();
     virtual void create(JPABaseEmitter *) {}
-    virtual void vt_0x20(JPABaseEmitter *) {}
+    virtual void vt_0x20(f32, f32) {}
 
     void remove(dEmitterBase_c *emitter);
 
@@ -225,6 +237,7 @@ public:
 
 class dParticleFogProc_c : public d3d::UnkProc {
 public:
+    dParticleFogProc_c() {}
     virtual ~dParticleFogProc_c() {}
     virtual void drawOpa() override {
         doDraw();
@@ -361,6 +374,7 @@ public:
     static void draw(const JPADrawInfo *info, u32 groupId);
     static void draw();
     static void execute();
+    static void doCustomSkywardSwordThing(f32 x, f32 y);
     static void setupEffects();
     static dEmitterBase_c *spawnEffect(
         u16 effectResourceId, const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,

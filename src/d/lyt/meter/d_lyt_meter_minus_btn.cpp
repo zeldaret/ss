@@ -626,8 +626,8 @@ void dLytMeterMinusBtn_c::initializeState_DemoMove() {
             nw4r::math::MTX34 mtx = mpPanes[i + MINUS_BTN_PANE_ITEM_OFFSET]->GetGlobalMtx();
             mVec3_c pos(mtx._03, mtx._13, 0.0f);
             mSlotForEffect[numPlayingEffects] = i;
-            mEffects[numPlayingEffects].fn_80029980(
-                PARTICLE_RESOURCE_ID_MAPPING_971_, &pos, &mEffectsRot[numPlayingEffects], nullptr, nullptr, nullptr
+            mEffects[numPlayingEffects].createUIEffect(
+                PARTICLE_RESOURCE_ID_MAPPING_971_, pos, &mEffectsRot[numPlayingEffects], nullptr, nullptr, nullptr
             );
             numPlayingEffects++;
         }
@@ -665,8 +665,8 @@ void dLytMeterMinusBtn_c::executeState_DemoMove() {
             nw4r::math::MTX34 mtx = getPaneByIndex(mSlotToDemo + MINUS_BTN_PANE_ITEM_OFFSET)->GetGlobalMtx();
             mVec3_c pos(mtx._03, mtx._13, 0.0f);
             mSlotForEffect[0] = mSlotToDemo;
-            mEffects[0].fn_80029980(
-                PARTICLE_RESOURCE_ID_MAPPING_971_, &pos, &mEffectsRot[0], nullptr, nullptr, nullptr
+            mEffects[0].createUIEffect(
+                PARTICLE_RESOURCE_ID_MAPPING_971_, pos, &mEffectsRot[0], nullptr, nullptr, nullptr
             );
         }
     } else if (mDemoFrame > 0) {

@@ -1,3 +1,10 @@
+// clang-format off
+// vtable order
+#include "JSystem/JParticle/JPAEmitter.h"
+#include "JSystem/JParticle/JPAParticle.h"
+#include "toBeSorted/d_d3d.h"
+// clang-format on
+
 #include "JSystem/JParticle/JPADrawInfo.h"
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "c/c_math.h"
@@ -36,8 +43,9 @@
 #include "rvl/GX.h"
 #include "rvl/MTX.h"
 
-// TODO: This file suffers from vtable and weak function order problems, big time.
-// Some of what we think are weak functions may not be weak functions?
+// There's a data gap at 0x805013b4 (right after dParticleFogProc_c's vtable)
+// so maybe that's a data split. Unsure how to get all those vtables to appear
+// there though...
 
 void float_ordering_1(s32 a) {
     (f32) a;
@@ -684,6 +692,20 @@ void dJEffManager_c::removeEffManagers() {
     }
 }
 
+void dJEffManager_c::doCustomSkywardSwordThing(f32 x, f32 y) {
+    EffectsList::Iterator it = sPlayingEffectsList.GetBeginIter();
+    while (it != sPlayingEffectsList.GetEndIter()) {
+        if (it->getEmitterCallback() != nullptr && it->hasEmitters() && it->getGroupId() < 12) {
+            it->getEmitterCallback()->vt_0x20(x, y);
+        }
+        ++it;
+    }
+
+    for (s32 i = 0; i < 12; i++) {
+        dParticle::mgr_c::GetInstance()->doCustomSkywardSwordThing(i, x, y);
+    }
+}
+
 // TODO explain this
 static u32 sInts[] = {0x28, 0x29, 0x87, 0x88, 0x89, 0x8A, 0x8C, 0x8D, 0x91, 0x86, 0x1, 0x2};
 static u32 sInts2[] = {0x2, 0x87, 0x8B};
@@ -856,6 +878,32 @@ dEmitterBase_c *dJEffManager_c::spawnEffect(
     u16 effectResourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2
 ) {
     return spawnEffectInternal(effectResourceId, transform, c1, c2, idx1, idx2);
+}
+
+bool EffectsStruct::createEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2) {
+    return createEffect(true, resourceId, pos, rot, scale, c1, c2);
+}
+
+bool EffectsStruct::createUIEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2) {
+    mVec3_c adjustedPosition(pos.x * getlbl_80571C50(), pos.y, pos.z);
+    return createEffect(true, resourceId, adjustedPosition, rot, scale, c1, c2);
+}
+
+bool EffectsStruct::createEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2) {
+    return createEffect(true, resourceId, transform, c1, c2);
+}
+
+bool EffectsStruct::createContinuousEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2) {
+    return createEffect(false, resourceId, pos, rot, scale, c1, c2);
+}
+
+bool EffectsStruct::createContinuousUIEffect(u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2) {
+    mVec3_c adjustedPosition(pos.x * getlbl_80571C50(), pos.y, pos.z);
+    return createEffect(false, resourceId, adjustedPosition, rot, scale, c1, c2);
+}
+
+bool EffectsStruct::createContinuousEffect(u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2) {
+    return createEffect(false, resourceId, transform, c1, c2);
 }
 
 void dEmitterBase_c::loadColors(
@@ -1051,7 +1099,7 @@ void dWaterEffect_c::execute(f32 water, f32 ground) {
         // Spawn effect upon leaving water
         mVec3_c pos(ac->position.x, water, ac->position.z);
         mVec3_c scale(mScale, mScale, mScale);
-        mEff.fn_80029A10(PARTICLE_RESOURCE_ID_MAPPING_127_, &pos, nullptr, &scale, nullptr, nullptr);
+        mEff.createEffect(PARTICLE_RESOURCE_ID_MAPPING_127_, pos, nullptr, &scale, nullptr, nullptr);
         f32 rate = nw4r::math::FAbs(ac->forwardSpeed) * 0.02f;
         rate = rate > 0.95f ? 0.95f : rate;
         mEff.setRate(rate + 0.05f);

@@ -597,7 +597,7 @@ extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_573;
 void dAcOTowerHandD101_c::initializeState_Close() {
     mMdl.getAnm().setPlayState(m3d::PLAY_MODE_1);
     mMdl.setRate(getCloseRate());
-    mEffects.fn_80029920(PARTICLE_RESOURCE_ID_MAPPING_573, &position, nullptr, nullptr, nullptr, nullptr);
+    mEffects.createEffect(PARTICLE_RESOURCE_ID_MAPPING_573, position, nullptr, nullptr, nullptr, nullptr);
     playSound(0xC0C);
 }
 void dAcOTowerHandD101_c::executeState_Close() {

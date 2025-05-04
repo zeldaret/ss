@@ -196,7 +196,7 @@ int dAcODungeonShip_c::actorExecute() {
     mAnmMatClr.play();
     mMdl.calc(false);
     if (field_0x8D8) {
-        mEffects[0].fn_80029A10(PARTICLE_RESOURCE_ID_MAPPING_682_, &position, &rotation, nullptr, nullptr, nullptr);
+        mEffects[0].createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_682_, position, &rotation, nullptr, nullptr, nullptr);
     }
 
     if (field_0x8D9) {
@@ -205,7 +205,7 @@ int dAcODungeonShip_c::actorExecute() {
         if (mEffects[1].hasEmitters()) {
             mEffects[1].setTransform(tmpMtx);
         } else if (field_0x8DA == 0) {
-            mEffects[1].fn_800299F0(PARTICLE_RESOURCE_ID_MAPPING_683_, &tmpMtx, nullptr, nullptr);
+            mEffects[1].createEffect(PARTICLE_RESOURCE_ID_MAPPING_683_, tmpMtx, nullptr, nullptr);
             field_0x8DA = 1;
         }
     }
