@@ -69,7 +69,7 @@ public:
     const mQuat_c &GetQuat() const {
         return mQuat;
     }
-    const mVec3_c &GetPostion() const {
+    const mVec3_c &GetPosition() const {
         return mPositionMaybe;
     }
     const f32 GetOffset() const {

@@ -5,6 +5,8 @@
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAParticle.h"
 #include "common.h"
+#include "d/a/d_a_base.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/d_base.h"
 #include "m/m2d.h"
 #include "m/m_allocator.h"
@@ -96,6 +98,10 @@ public:
         mpOwner = owner;
     }
 
+    inline dBase_c *getOwner() const {
+        return mpOwner;
+    }
+
     void addToActiveEmittersList(u16 resourceId, bool bFlags);
     void removeFromActiveEmittersList();
     void execute();
@@ -136,6 +142,7 @@ protected:
         bool bFlags, u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
         const GXColor *c2
     );
+    bool createEffect(bool bFlags, u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2);
 
     static bool shouldBePaused(dBase_c *owner);
     bool getOwnerPolyAttrs(s32 *pOut1, s32 *pOut2);
@@ -152,30 +159,37 @@ protected:
     /* 0x32 */ u16 mEffect;
 };
 
-// Not sure if these belongs here, but it uses EffectsStruct
-// Related Functions in the 8002B100 area
-class EffectsStruct_Ext {
-public:
-    EffectsStruct_Ext() : mField_0x00(1), mField_0x01(0) {}
-
-    void init(dBase_c *, f32, f32, f32);
-
-    void setField_0x00(u8 val) {
-        mField_0x00 = val;
-    }
-    void setField_0x01(u8 val) {
-        mField_0x01 = val;
-    }
-
-    void fn_8002B120(f32, f32);
-
-    /* 0x00 */ u8 mField_0x00;
-    /* 0x01 */ u8 mField_0x01;
-    /* 0x04 */ f32 mField_0x04;
-    /* 0x08 */ f32 mField_0x08;
-    /* 0x0C */ f32 mField_0x0C;
+class dWaterEffect_c {
+private:
+    /* 0x00 */ bool mIsInWater;
+    /* 0x01 */ bool mIsSmall;
+    /* 0x04 */ f32 mHeight;
+    /* 0x08 */ f32 mDepth;
+    /* 0x0C */ f32 mScale;
     /* 0x10 */ EffectsStruct mEff;
-    virtual ~EffectsStruct_Ext() {}
+
+    dAcObjBase_c *getActor() const {
+        return static_cast<dAcObjBase_c *>(mEff.getOwner());
+    }
+
+    f32 getActorGroundPos(dAcObjBase_c *obj) const {
+        return obj->position.y + mDepth;
+    }
+
+    f32 getActorCeilPos(dAcObjBase_c *obj) const {
+        return obj->position.y + mHeight;
+    }
+
+public:
+    dWaterEffect_c() : mIsInWater(1), mIsSmall(false) {}
+    virtual ~dWaterEffect_c() {}
+
+    void init(dAcObjBase_c *, f32 height, f32 scale, f32 depth);
+    void execute(f32 water, f32 ground);
+
+    void setIsSmall(bool val) {
+        mIsSmall = val;
+    }
 };
 
 /** An emitter callback can be part of multiple emitters. */
@@ -219,11 +233,11 @@ public:
         doDraw();
     }
 
-    void create(s32 idx, s32 unk, s32 unk2, mHeapAllocator_c *alloc);
+    bool create(u32 idx, s32 prioOpa, s32 prioXlu, mHeapAllocator_c *alloc);
 
 private:
     void doDraw();
-    /* 0x18 */ u8 _0x18[0x1C - 0x18];
+    /* 0x18 */ u32 mIdx;
     /* 0x1C */ bool field_0x1C;
 };
 
@@ -239,38 +253,13 @@ private:
     /* 0x10 */ u32 mGroupId;
 };
 
-class dMassObjEmitterCallback_c : public dEmitterCallback_c {
-public:
-    virtual ~dMassObjEmitterCallback_c() {}
-    virtual void executeAfter(JPABaseParticle *);
-
-    void execute();
-
-    /* 0x010 */ mVec3_c field_0x010[0x32];
-    /* 0x268 */ mVec3_c field_0x268[0x32];
-    /* 0x4C0 */ u8 _0x4C0[0x650 - 0x4C0];
-    // TODO unclear structure boundary
-};
-
-class CommonEmitterCallback : public JPAEmitterCallBack {
-public:
-    CommonEmitterCallback() : field_0x04(0) {}
-    virtual ~CommonEmitterCallback() {}
-    virtual void executeAfter(JPABaseEmitter *) override;
-    void init(s32 v) {
-        field_0x04 = v;
-    }
-
-private:
-    /* 0x04 */ s32 field_0x04;
-};
-
 class dShpEmitter_c;
 
 class dShpEmitterProc : public dShpProc1_c {
 public:
+    dShpEmitterProc() : mpOwner(nullptr) {}
     virtual ~dShpEmitterProc() {
-        mpTransforms = nullptr;
+        mpOwner = nullptr;
     }
     virtual void drawOpa() override {
         doDraw();
@@ -293,7 +282,7 @@ private:
     // TODO: This is read from JParticle as alpha, but used as the nw4r::g3d lightSetId.
     // Is this a creative use of the particle color value, given that particles themselves
     // are never drawn?
-    /* 0x3C */ u8 mAlpha[100];
+    /* 0x38 */ u8 mAlpha[100];
 };
 
 class dShpEmitter_c : public JPAParticleCallBack {
@@ -312,6 +301,32 @@ public:
 private:
     /* 0x04 */ dShpEmitterProc mProc;
     /* 0xA0 */ s32 field_0xA0;
+};
+
+class CommonEmitterCallback : public JPAEmitterCallBack {
+public:
+    CommonEmitterCallback() : field_0x04(0) {}
+    virtual ~CommonEmitterCallback() {}
+    virtual void draw(JPABaseEmitter *) override;
+    void init(s32 v) {
+        field_0x04 = v;
+    }
+
+private:
+    /* 0x04 */ s32 field_0x04;
+};
+
+class dMassObjEmitterCallback_c : public dEmitterCallback_c {
+public:
+    virtual ~dMassObjEmitterCallback_c() {}
+    virtual void executeAfter(JPABaseEmitter *) override;
+
+    void execute();
+
+    /* 0x010 */ mVec3_c field_0x010[0x32];
+    /* 0x268 */ mVec3_c field_0x268[0x32];
+    /* 0x4C0 */ u8 _0x4C0[0x650 - 0x4C0];
+    // TODO unclear structure boundary
 };
 
 class dMassObjEmitter_c : public dEmitterBase_c {
@@ -408,6 +423,14 @@ public:
         BWallBF200,
         BWallF210,
     };
+
+    typedef TList<EffectsStruct, offsetof(EffectsStruct, mNode)> EffectsList;
+    static EffectsList sPlayingEffectsList;
+    static CommonEmitterCallback sCommonEmitterCallbacks[2];
+    static dShpEmitter_c sShpEmitters[47];
+    static dEmitterBase_c sEmitter;
+    static dParticleFogProc_c sFogProcs[12];
+    static dEffect2D_c s2DEffects[3];
 
 private:
     static dEmitterBase_c *spawnEffectInternal(

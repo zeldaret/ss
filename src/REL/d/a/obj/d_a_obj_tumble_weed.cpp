@@ -348,7 +348,7 @@ void dAcOTumbleWeed_c::tumbleBounceMaybe() {
 }
 
 void dAcOTumbleWeed_c::adjustTimeScale() {
-    mTimeArea.check(getRoomId(), GetPostion(), 0, 30.f, 0.1f);
+    mTimeArea.check(getRoomId(), GetPosition(), 0, 30.f, 0.1f);
     if (0.f < mTimeArea.getDistMaybe()) {
         sLib::chase(&mScale.y, 0.f, 0.07f);
         mScale.z = mScale.y;

@@ -3,25 +3,31 @@
 #include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/d_base.h"
 #include "d/d_heap.h"
 #include "d/d_stage.h"
 #include "d/d_stage_mgr.h"
 #include "egg/core/eggHeap.h"
 #include "f/f_base.h"
+#include "f/f_profile_name.h"
+#include "m/m3d/m3d.h"
 #include "m/m_allocator.h"
+#include "m/m_angle.h"
 #include "m/m_color.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
+#include "nw4r/g3d/g3d_camera.h"
+#include "nw4r/g3d/g3d_state.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmat.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resshp.h"
-#include "rvl/MTX/mtx.h"
-#include "rvl/MTX/mtxvec.h"
+#include "nw4r/math/math_arithmetic.h"
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/blur_and_palette_manager.h"
+#include "toBeSorted/d_d3d.h"
 #include "toBeSorted/d_particle.h"
 #include "toBeSorted/effects_struct.h"
 #include "toBeSorted/event_manager.h"
@@ -29,6 +35,9 @@
 
 #include "rvl/GX.h"
 #include "rvl/MTX.h"
+
+// TODO: This file suffers from vtable and weak function order problems, big time.
+// Some of what we think are weak functions may not be weak functions?
 
 void float_ordering_1(s32 a) {
     (f32) a;
@@ -46,13 +55,12 @@ void float_ordering_4() {
     0.0f;
 }
 
-typedef TList<EffectsStruct, offsetof(EffectsStruct, mNode)> EffectsList;
-EffectsList sPlayingEffectsList;
-CommonEmitterCallback sCommonEmitterCallbacks[2];
-dShpEmitter_c sShpEmitters[47];
-dEmitterBase_c sEmitter;
-dParticleFogProc_c sFogProcs[12];
-dEffect2D_c s2DEffects[3];
+dJEffManager_c::EffectsList dJEffManager_c::sPlayingEffectsList;
+CommonEmitterCallback dJEffManager_c::sCommonEmitterCallbacks[2];
+dShpEmitter_c dJEffManager_c::sShpEmitters[47];
+dEmitterBase_c dJEffManager_c::sEmitter;
+dParticleFogProc_c dJEffManager_c::sFogProcs[12];
+dEffect2D_c dJEffManager_c::s2DEffects[3];
 
 // broken by -ipa file - reconsider splits?
 dEmitterCallback_c::~dEmitterCallback_c() {
@@ -290,13 +298,13 @@ void dEmitterBase_c::setLifeTime(s16 lifetime) {
 
 void dEmitterBase_c::attachEmitterCallbackId(s32 id) {
     for (JPABaseEmitter *emitter = mpEmitterHead; emitter != nullptr; emitter = GetNextEmitter(emitter)) {
-        emitter->setEmitterCallBackPtr(&sCommonEmitterCallbacks[id]);
+        emitter->setEmitterCallBackPtr(&dJEffManager_c::sCommonEmitterCallbacks[id]);
     }
 }
 
 void dEmitterBase_c::bindShpEmitter(s32 id, bool unused) {
     for (JPABaseEmitter *emitter = mpEmitterHead; emitter != nullptr; emitter = GetNextEmitter(emitter)) {
-        emitter->setParticleCallBackPtr(&sShpEmitters[id]);
+        emitter->setParticleCallBackPtr(&dJEffManager_c::sShpEmitters[id]);
         emitter->setGlobalAlpha(0);
     }
 }
@@ -324,7 +332,7 @@ void EffectsStruct::addToActiveEmittersList(u16 resourceId, bool bFlags) {
     mEffect = resourceId;
     mFlags = 0;
     setImmortal();
-    sPlayingEffectsList.append(this);
+    dJEffManager_c::sPlayingEffectsList.append(this);
     onFlag(EMITTER_0x1);
     if (bFlags) {
         onFlag(EMITTER_0x4);
@@ -412,6 +420,36 @@ void EffectsStruct::setFading(u8 lifetime) {
     }
 }
 
+bool dParticleFogProc_c::create(u32 idx, s32 prioOpa, s32 prioXlu, mHeapAllocator_c *alloc) {
+    if (!d3d::UnkProc::create(prioOpa, prioXlu, alloc)) {
+        return false;
+    }
+    mIdx = idx;
+    // idxes 0, 2, 4, 6, 10
+    field_0x1C = idx <= 10 && ((1 << idx) & 0b10001010101) != 0;
+    return true;
+}
+
+void dParticleFogProc_c::doDraw() {
+    nw4r::g3d::Camera c = m3d::getCurrentCamera();
+    mMtx_c camMtx, texProjMtx;
+    c.GetCameraMtx(camMtx);
+    c.GetProjectionTexMtx(texProjMtx);
+    JPADrawInfo info;
+    MTXCopy(camMtx, info.mCamMtx);
+    MTXCopy(texProjMtx, info.mPrjMtx);
+    if (field_0x1C) {
+        m3d::getFogMgr(0); // ignored, maybe an inline on FogMgr?
+        nw4r::g3d::G3DState::LoadFog(0);
+    } else {
+        mColor c(0);
+        GXSetFog(GX_FOG_NONE, c, 0.0f, 0.0f, 0.0f, 0.0f);
+        GXSetFogRangeAdj(GX_FALSE, 0, nullptr);
+    }
+    GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
+    dJEffManager_c::draw(&info, mIdx);
+}
+
 extern "C" bool fn_80054AD0();
 void dEffect2D_c::draw() {
     f32 proj[GX_PROJECTION_SZ];
@@ -438,7 +476,7 @@ void dEffect2D_c::create(u32 groupId, u8 prio) {
     setPriority(prio);
 }
 
-void dMassObjEmitterCallback_c::executeAfter(JPABaseParticle *) {}
+void dMassObjEmitterCallback_c::executeAfter(JPABaseEmitter *) {}
 
 void dShpEmitterProc::doDraw() {
     mMtx_c viewMtx;
@@ -556,6 +594,10 @@ void dShpEmitter_c::draw(JPABaseEmitter *emitter, JPABaseParticle *particle) {
     particle->setInvisibleParticleFlag();
 }
 
+void CommonEmitterCallback::draw(JPABaseEmitter *emitter) {
+    emitter->loadTexture(field_0x04, GX_TEXMAP0);
+}
+
 void dMassObjEmitter_c::remove() {
     setEmitterCallback(nullptr);
     mpEmitterHead = nullptr;
@@ -575,8 +617,8 @@ void dJEffManager_c::setupEffects() {
 
     sShpEmitters[TsuboA].init("FX_TsuboA", "Tubo", false);
     sShpEmitters[TsuboB].init("FX_TsuboB", "Tubo", false);
-    sShpEmitters[BRockA].init("FX_BRockA", "FXBRockA", false);
-    sShpEmitters[FruitA].init("FX_FruitA", "FruitA", true);
+    sShpEmitters[BRockA].init("FX_BRockA", "FXBRockA", true);
+    sShpEmitters[FruitA].init("FX_FruitA", "FruitA", false);
     sShpEmitters[GrassCoil].init("FX_GrassCoil", "GrassCoilPiece", false);
     sShpEmitters[BRockB].init("FX_BRockB", "RockFace", true);
     sShpEmitters[Beehive].init("FX_Beehive", "Bee", false);
@@ -921,8 +963,8 @@ void dEmitterBase_c::loadColors(
 }
 
 void EffectsStruct::removeFromActiveEmittersList() {
-    if (sPlayingEffectsList.GetPosition(this) != sPlayingEffectsList.GetEndIter()) {
-        sPlayingEffectsList.remove(this);
+    if (dJEffManager_c::sPlayingEffectsList.GetPosition(this) != dJEffManager_c::sPlayingEffectsList.GetEndIter()) {
+        dJEffManager_c::sPlayingEffectsList.remove(this);
     }
 }
 
@@ -948,4 +990,70 @@ bool EffectsStruct::createEffect(
     }
 
     return hasEmitters();
+}
+
+bool EffectsStruct::createEffect(
+    bool bFlags, u16 resourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2
+) {
+    if (!bFlags && canReuse(resourceId)) {
+        s32 idx1 = 0;
+        s32 idx2 = 0;
+        getOwnerPolyAttrs(&idx1, &idx2);
+        loadColors(c1, c2, idx1, idx2);
+        onFlag(EMITTER_0x1);
+    } else {
+        remove(false);
+        s32 idx1 = 0;
+        s32 idx2 = 0;
+        getOwnerPolyAttrs(&idx1, &idx2);
+        if (createEmitters(resourceId, mVec3_c::Zero, nullptr, nullptr, c1, c2, idx1, idx2)) {
+            addToActiveEmittersList(resourceId, bFlags);
+        }
+    }
+    setTransform(transform);
+    return hasEmitters();
+}
+
+void dWaterEffect_c::init(dAcObjBase_c *base, f32 height, f32 scale, f32 f3) {
+    mEff.init(base);
+    mHeight = height;
+    mScale = scale;
+    mDepth = f3;
+}
+
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_91_;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_127_;
+void dWaterEffect_c::execute(f32 water, f32 ground) {
+    dAcObjBase_c *ac = getActor();
+    bool b = getActorGroundPos(ac) < water && ground < water;
+    if (b) {
+        if (!mIsInWater) {
+            mIsInWater = true;
+            mVec3_c pos(ac->position.x, water, ac->position.z);
+            mVec3_c scale(mScale, mScale, mScale);
+            if (mIsSmall || water - ground < 50.0f) {
+                // For small objects or shallow water, create a
+                // particle FX upon entering water
+                mAng3_c rot(0, cM::rndF(65536.0f), 0);
+                dJEffManager_c::spawnEffect(
+                    PARTICLE_RESOURCE_ID_MAPPING_91_, pos, &rot, &scale, nullptr, nullptr, 0, 0
+                );
+            } else {
+                // Otherwise spawn a "water spout" with a 3d model
+                dAcObjBase_c::create(fProfile::OBJ_WATER_SPOUT, -1, 0, &pos, nullptr, &scale, -1);
+            }
+        }
+    } else if (getActorGroundPos(ac) - 5.0f > water) {
+        mIsInWater = false;
+    }
+
+    if (mIsInWater && getActorCeilPos(ac) > water) {
+        // Spawn effect upon leaving water
+        mVec3_c pos(ac->position.x, water, ac->position.z);
+        mVec3_c scale(mScale, mScale, mScale);
+        mEff.fn_80029A10(PARTICLE_RESOURCE_ID_MAPPING_127_, &pos, nullptr, &scale, nullptr, nullptr);
+        f32 rate = nw4r::math::FAbs(ac->forwardSpeed) * 0.02f;
+        rate = rate > 0.95f ? 0.95f : rate;
+        mEff.setRate(rate + 0.05f);
+    }
 }

@@ -74,7 +74,7 @@ int dAcOtubo_c::actorCreate() {
     mObjAcch.Set(this, 1, &mAcchCir);
     mAcchCir.SetWall(20.f, 30.f);
     mEff_0x91C.init(this, 60.f, mScale.x, 0.f);
-    mEff_0x91C.setField_0x01(1);
+    mEff_0x91C.setIsSmall(true);
     int unkParam = getParams_0x3000();
     if (unkParam != 1 && unkParam != 2) {
         fn_8002EA30(-60.f, -20.f, 2.f, 1.f, 4.f, &mObjAcch);
@@ -604,7 +604,7 @@ void dAcOtubo_c::fn_272_2670() {
     f32 groundH = mObjAcch.GetGroundH();
     f32 waterH = mObjAcch.GetWtrGroundH();
     bool noSound = mbSubmerged;
-    mEff_0x91C.fn_8002B120(waterH, groundH);
+    mEff_0x91C.execute(waterH, groundH);
 
     if (checkSubmerged()) {
         forwardAccel = -0.8f;

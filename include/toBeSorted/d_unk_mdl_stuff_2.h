@@ -1,6 +1,7 @@
 #ifndef D_UNK_MDL_STUFF_2_H
 #define D_UNK_MDL_STUFF_2_H
 
+#include "common.h"
 #include "m/m3d/m_proc.h"
 #include "m/m_allocator.h"
 #include "m/m_mtx.h"
@@ -11,6 +12,7 @@
 /** a process for drawing shapes directly */
 class dShpProcBase_c : public m3d::proc_c {
 public:
+    dShpProcBase_c(): mLightSetId(1) {}
     virtual ~dShpProcBase_c() {}
 
     void setResMat(nw4r::g3d::ResMat mat);
@@ -45,6 +47,12 @@ protected:
 class dShpProc1_c : public dShpProcBase_c {
 public:
     virtual ~dShpProc1_c() {}
+    /* vt 0x18 */ virtual void drawOpa() override {
+        draw();
+    }
+    /* vt 0x1C */ virtual void drawXlu() override {
+        draw();
+    };
 
     void clearTransforms() {
         mpTransforms = nullptr;
