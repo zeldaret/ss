@@ -497,6 +497,7 @@ private:
     static mHeapAllocator_c *ms_allocator;
     static dMassObjEmitter_c *sMassObjEmitters;
     static u32 sInts[];
+    static const u32 moreInts[];
     static u32 sInts2[];
 };
 

@@ -707,6 +707,8 @@ extern "C" u32 sNumMassObjEmitters; // should be const?
 extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_119_;
 extern "C" dMassObjEmitter_c *CURRENT_EFFECT_MANAGER_INIT;
 
+const u32 dJEffManager_c::moreInts[] = {3, 5, 7, 8, 12, 13, 14, 1, 9, 11};
+
 s32 dJEffManager_c::getGroupId(u16 resourceId) {
     u32 mask = dParticle::mgr_c::GetInstance()->getResUserWork(resourceId);
     s32 bit = 1;
@@ -717,7 +719,7 @@ s32 dJEffManager_c::getGroupId(u16 resourceId) {
         }
     }
 
-    int i = sInts[bit];
+    int i = moreInts[bit];
     // TODO explain this
     if ((mask & 0x8000) != 0) {
         if (i == 3) {

@@ -91,6 +91,7 @@ toBeSorted/blur_and_palette_manager.cpp:
 toBeSorted/d_emitter.cpp:
 	.text       start:0x800268B0 end:0x8002B99C align:16
 	.ctors      start:0x804DB660 end:0x804DB664
+	.rodata     start:0x804DBD18 end:0x804DBE80
 	.data       start:0x80500E98 end:0x805014C0
 	.sdata      start:0x805718A8 end:0x80571920
 	.sdata2     start:0x80576C18 end:0x80576C68
