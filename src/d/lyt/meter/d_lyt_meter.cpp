@@ -1564,8 +1564,8 @@ bool dLytMeterMain_c::execute() {
 
     if (dMessage_c::getInstance()->getField_0x2FC() != 0) {
         rupeePos = 3;
-        if (dLytMsgWindow_c::getInstance() != nullptr && (dLytMsgWindow_c::getInstance()->fn_800D7B40() == 0x9E02 ||
-                                                          dLytMsgWindow_c::getInstance()->fn_800D7B40() == 0x768C)) {
+        if (dLytMsgWindow_c::getInstance() != nullptr && (dLytMsgWindow_c::getInstance()->fn_800D7B40() == 40450 ||
+                                                          dLytMsgWindow_c::getInstance()->fn_800D7B40() == 30348)) {
             s32 off = -(mHeart.getCurrentHealthCapacity() / 4 <= 10);
             rupeePos = 6 + off;
         }

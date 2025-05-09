@@ -6,6 +6,7 @@
 #include "d/a/d_a_item.h"
 #include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
+#include "d/d_pouch.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 
@@ -443,8 +444,6 @@ bool SpecialItemDropMgr::shouldTryExtraHearts(int specialItemId) {
 bool SpecialItemDropMgr::shouldTryExtraRupees(int specialItemId) {
     return sDropTable.mList[specialItemId].mFlags & FLAG_EXTRA_RUPEES;
 }
-
-extern "C" bool adventurePouchCountItem(u32 itemId);
 
 // 800c7d40
 int SpecialItemDropMgr::giveSpecialDropItem(

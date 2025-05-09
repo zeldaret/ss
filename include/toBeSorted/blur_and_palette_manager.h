@@ -231,6 +231,8 @@ public:
     }
     void fn_800223A0(void *);
     void fn_80022440(void *);
+    // light pillar related
+    void fn_80024240(s16, s16, s16);
 
     u8 get0x2DE8() const {
         return field_0x2DE0[8];

@@ -570,7 +570,7 @@ config.libs = [
             Object(NonMatching, "d/d_camera.cpp"),
             Object(NonMatching, "d/d_light_obj.cpp"),
             Object(NonMatching, "d/tg/d_t_weather.cpp"),
-            Object(NonMatching, "d/d_message.cpp"),
+            Object(Matching, "d/d_message.cpp"),
             Object(NonMatching, "d/d_stage.cpp"),
             Object(NonMatching, "d/d_stage_select.cpp"),
             Object(Matching, "d/d_room.cpp"),

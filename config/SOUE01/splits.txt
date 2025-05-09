@@ -1086,9 +1086,11 @@ d/tg/d_t_weather.cpp:
 d/d_message.cpp:
 	.text       start:0x801AF7E0 end:0x801B329C align:16
 	.ctors      start:0x804DB808 end:0x804DB80C
+	.rodata     start:0x804EA950 end:0x804EAB60
 	.data       start:0x8052C858 end:0x8052DF40
 	.sdata      start:0x80573248 end:0x80573290
 	.sbss       start:0x80575740 end:0x80575760
+	.sdata2     start:0x8057B4D8 end:0x8057B4E8
 	.bss        start:0x805B29E0 end:0x805B36E0
 
 d/d_stage.cpp:
@@ -1288,6 +1290,7 @@ d/lyt/d_lyt_boss_caption.cpp:
 d/lyt/d_lyt_demo_dowsing.cpp:
 	.text       start:0x802A0B10 end:0x802A17C8 align:16
 	.ctors      start:0x804DB880 end:0x804DB884
+	.data       start:0x8053BD00 end:0x8053BF50
 
 d/lyt/d_lyt_shop.cpp:
 	.text       start:0x802A17D0 end:0x802A7FD8 align:16

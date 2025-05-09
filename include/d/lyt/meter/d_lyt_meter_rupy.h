@@ -109,6 +109,10 @@ public:
         field_0x8AC = val;
     }
 
+    void setField_0x8AD(u8 val) {
+        field_0x8AD = val;
+    }
+
     void setSize(u8 size) {
         mSize = size;
     }

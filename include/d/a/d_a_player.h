@@ -149,7 +149,7 @@ public:
     /* vt 0x1A4 */ virtual void vt_0x1A4();
     /* vt 0x1A8 */ virtual void vt_0x1A8();
     /* vt 0x1AC */ virtual void vt_0x1AC();
-    /* vt 0x1B0 */ virtual void isItemFairyFromBugnet();
+    /* vt 0x1B0 */ virtual bool isItemFairyFromBugnet();
     /* vt 0x1B4 */ virtual void isByte0x434eEqual7();
     /* vt 0x1B8 */ virtual void canHandleGameOver();
     /* vt 0x1BC */ virtual void vt_0x1BC();
@@ -338,6 +338,7 @@ public:
     static s32 getCurrentSlingshotType();
     static s32 getCurrentBeetleType();
     static s32 getCurrentBugNetType();
+    static s32 getCurrentlyEquippedShieldType();
 
     static bool isItemRestrictedByBokoBase(ITEM_ID item);
 
