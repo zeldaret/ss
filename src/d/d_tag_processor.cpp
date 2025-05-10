@@ -2,7 +2,9 @@
 
 #include "common.h"
 #include "d/d_font_manager.h"
+#include "d/d_message.h"
 #include "d/d_textunk.h"
+#include "d/d_textwindow_unk.h"
 #include "nw4r/lyt/lyt_types.h"
 #include "nw4r/ut/ut_CharWriter.h"
 #include "nw4r/ut/ut_Color.h"
@@ -119,6 +121,10 @@ nw4r::ut::Color FontColors2[] = {
     nw4r::ut::Color(),
 };
 
+extern const u16 flags[2050] = {
+    0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800,
+};
+
 dTagProcessor_c::dTagProcessor_c() {
     field_0x82C = -1;
     field_0x828 = -1;
@@ -230,12 +236,11 @@ void dTagProcessor_c::formatV(
     s32 state1 = -1;
     s32 state2 = -1;
 
-    // FPR regswap between float1 and float2
-    f32 float1, float2;
-    float2 = float1 = fn_800B8040(0, mMsgWindowSubtype);
+    f32 currScale, backupScale;
+    backupScale = currScale = fn_800B8040(0, mMsgWindowSubtype);
 
     if (textBox != nullptr) {
-        float1 *= textBox->getMyScale();
+        currScale *= textBox->getMyScale();
         resetLineData();
         textBox->set0x1F8(0);
     }
@@ -278,10 +283,8 @@ void dTagProcessor_c::formatV(
                         const wchar_t *t = src;
                         u32 len = (cmdLen / 2) + 1;
                         for (int i = 0; i < len; i++) {
-                            field_0x008[field_0x90E - 1][local_b4] = *(t++);
-                            if (field_0x90E - 1 < 4) {
-                                field_0x808[field_0x90E - 1]++;
-                            }
+                            getTmpBuffer()[local_b4] = *(t++);
+                            onWriteTmpBuffer();
                             local_b4++;
                         }
                     } else {
@@ -353,23 +356,23 @@ void dTagProcessor_c::formatV(
                 } break;
                 case 0x10008:
                     if (textBox != nullptr) {
-                        float1 = fn_800B8040(((u8 *)endPtr)[0], mMsgWindowSubtype);
-                        float1 *= textBox->getMyScale();
+                        currScale = fn_800B8040(((u8 *)endPtr)[0], mMsgWindowSubtype);
+                        currScale *= textBox->getMyScale();
                     }
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                     break;
                 case 0x30000: {
                     if (textBox != nullptr) {
-                        float2 = float1;
-                        float1 *= UnkTextThing::getField0x768();
-                        float1 *= textBox->getMyScale();
+                        backupScale = currScale;
+                        currScale *= UnkTextThing::getField0x768();
+                        currScale *= textBox->getMyScale();
                     }
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                 } break;
                 case 0x10010: fn_800B5520(endPtr); break;
                 case 0x20004:
                     if (textBox != nullptr) {
-                        writeIcon(textBox, endPtr, float1);
+                        writeIcon(textBox, endPtr, currScale);
                     }
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                     break;
@@ -399,7 +402,7 @@ void dTagProcessor_c::formatV(
             s32 tmp = 0;
             process0xFCommand(c, src + 1, &tmp);
             if (tmp == 0x30000) {
-                float1 = float2;
+                currScale = backupScale;
             }
             writePtr[0] = src[0];
             writePtr[1] = src[1];
@@ -408,12 +411,9 @@ void dTagProcessor_c::formatV(
             src += 3;
         } else if (state4 != 0 && field_0x90E != 0) {
             // Note: Return ignored here
-            fn_800B5FD0(c, &field_0x008[field_0x90E - 1][local_b4], &local_b4);
+            fn_800B5FD0(c, &getTmpBuffer()[local_b4], &local_b4);
             src++;
-            // This looks like an inline tbh
-            if (field_0x90E - 1 < 4) {
-                field_0x808[field_0x90E - 1]++;
-            }
+            onWriteTmpBuffer();
         } else {
             if (textBox != nullptr) {
                 if (c == L'\n') {
@@ -423,8 +423,8 @@ void dTagProcessor_c::formatV(
                     mLineData.mNumLines++;
                     s32 i10 = getMaxNumLines(mMsgWindowSubtype);
                     if (mLineData.mNumLines % i10 == 0) {
-                        float1 = fn_800B8040(0, mMsgWindowSubtype);
-                        float1 *= textBox->getMyScale();
+                        currScale = fn_800B8040(0, mMsgWindowSubtype);
+                        currScale *= textBox->getMyScale();
                     }
                     if (textBox != nullptr) {
                         wchar_t *buf = (wchar_t *)&x;
@@ -438,7 +438,7 @@ void dTagProcessor_c::formatV(
                 } else {
                     const nw4r::ut::Font *fnt = textBox->GetFont();
                     mLineData.mLineWidths[mLineData.mNumLines] +=
-                        float1 * fnt->GetCharWidth(*src) + textBox->GetCharSpace();
+                        currScale * fnt->GetCharWidth(*src) + textBox->GetCharSpace();
                     writePtr = fn_800B5FD0(*src, writePtr, nullptr);
                     src++;
                 }
@@ -452,6 +452,176 @@ void dTagProcessor_c::formatV(
     } while (destLen > writePtr - dest);
 
     dest[destLen - 1] = 0;
+end:
+    if (pOutLen != nullptr) {
+        *pOutLen = writePtr - dest;
+    }
+}
+
+void dTagProcessor_c::fn_800B4290(
+    dTextBox_c *textBox, const wchar_t *src_, wchar_t *dest, s32 unkArg, u16 *pOutLen, dLytMsgWindowCharData *charData
+) {
+    const wchar_t *src = src_;
+    wchar_t *writePtr = dest;
+    bool b1 = false;
+    s32 lineNum = 0;
+    bool b2 = false;
+    s32 charDataIdx;
+
+    f32 currScale = fn_800B8040(0, mMsgWindowSubtype);
+    f32 backupScale = currScale;
+
+    charDataIdx = 0;
+
+    f32 posX = 0.0f;
+    f32 posY = 0.0f;
+
+    if (textBox != nullptr) {
+        currScale *= textBox->getMyScale();
+    }
+
+beginning:
+    bool r22 = !b1;
+    while (!b1) {
+        wchar_t c = *src;
+        if (c == '\0') {
+            *writePtr = '\0';
+            break;
+        } else if (c == 0xE) {
+            u8 cmdLen = 0;
+            s32 cmd = 0;
+            wchar_t *endPtr = nullptr;
+            getTextCommand(c, src + 1, &cmdLen, &cmd, &endPtr);
+            switch (cmd) {
+                case 0x0F0F0F0F: {
+                    if (lineNum / getMaxNumLines(mMsgWindowSubtype) == unkArg) {
+                        nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
+                        posX = fn_800B8560(lineNum);
+                        if ((mMsgWindowSubtype < 6 || mMsgWindowSubtype >= 10) && mMsgWindowSubtype != 30) {
+                            posX = 0.0f;
+                        }
+
+                        f32 tmp3;
+                        f32 tmp = fn_800B8040(0, mMsgWindowSubtype);
+
+                        if (textBox != nullptr) {
+                            tmp *= textBox->getMyScale();
+                        }
+
+                        if (lineNum % getMaxNumLines(mMsgWindowSubtype) == 0) {
+                            currScale = fn_800B8040(0, mMsgWindowSubtype);
+                            if (textBox != nullptr) {
+                                currScale *= textBox->getMyScale();
+                            }
+                            if (mMsgWindowSubtype == 30) {
+                                tmp3 = -2.0f;
+                            } else {
+                                tmp3 = 3.0f;
+                            }
+                            posY = (fn_800B85C0(lineNum) - (fontSize.height * (currScale / tmp) / 2.0f)) - tmp3;
+                        } else {
+                            posY = (posY - (fontSize.height * (currScale / tmp) + field_0x004->GetLineSpace()));
+                        }
+                        if (!b2) {
+                            b2 = true;
+                        }
+                    } else if (b2) {
+                        b2 = false;
+                        b1 = true;
+                    }
+                    lineNum++;
+                } break;
+                case 0x10000:
+                case 0x10001:
+                case 0x10002:
+                case 0x10003: b1 = true; break;
+                case 0x10008: {
+                    if (b2) {
+                        f32 newScale = fn_800B8040(*(u8 *)endPtr, mMsgWindowSubtype);
+                        f32 baseScale = fn_800B8040(0, mMsgWindowSubtype);
+                        if (textBox != nullptr) {
+                            newScale *= textBox->getMyScale();
+                            baseScale *= textBox->getMyScale();
+                        }
+                        if (currScale != newScale) {
+                            nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
+                            posY -= (fontSize.height * ((currScale - newScale) / baseScale) / 2.0f) *
+                                    UnkTextThing::getField0x788();
+                            currScale = newScale;
+                        }
+                    }
+                } break;
+                case 0x30000: {
+                    if (b2) {
+                        backupScale = currScale;
+                        f32 tmp = backupScale * UnkTextThing::getField0x768();
+                        if (textBox != nullptr) {
+                            tmp *= textBox->getMyScale();
+                        }
+                        if (currScale != tmp) {
+                            nw4r::lyt::Size _size = field_0x004->GetFontSize();
+                            currScale = tmp;
+                        }
+                    }
+                } break;
+                case 0x20004:
+                    if (b2) {
+                        *writePtr = -1;
+                        const nw4r::ut::Font *fnt = dFontMng_c::getFont(4);
+                        wchar_t c = fn_800B7880(*(u8 *)endPtr);
+                        f32 tmp = UnkTextThing::getField0x764();
+                        f32 wid = tmp / fnt->GetWidth() * currScale;
+                        f32 charSpace = textBox->GetCharSpace();
+                        f32 charWidth = wid * fnt->GetCharWidth(c);
+                        posX += charWidth + charSpace;
+                        writePtr++;
+                    }
+                    break;
+                case 0x10012:
+                    if (b2) {
+                        somethingWithScrapperAndMusic(endPtr);
+                    }
+                    break;
+            }
+            src += cmdLen / 2 + 1;
+            // For some reason the compiler believes that this branch affects something about
+            // charData/charDataIdx and branches to a re-calculation of the strength-reduced
+            // pointer, which means the compiler keepts charDataIdx actually around while still
+            // incrementing the strength-reduced charData pointer by 0x14. Very weird!
+            // This charDataIdx++, charDataIdx-- causes this behavior, not sure what the real match would be.
+            charDataIdx++;
+            charDataIdx--;
+            goto beginning;
+        } else if (c == 0xF) {
+            s32 cmd = 0;
+            process0xFCommand(c, &src[1], &cmd);
+            if (cmd == 0x30000) {
+                currScale = backupScale;
+            }
+            src += 3;
+        } else {
+            if (b2) {
+                *writePtr = c;
+                const nw4r::ut::Font *fnt = textBox->GetFont();
+                f32 tmp = currScale * fnt->GetCharWidth(*src) * 0.5f;
+                posX += tmp;
+                if (charData != nullptr) {
+                    wchar_t s = *writePtr;
+                    if (s != 10 && s != 0x20 && s != 0x3000) {
+                        charData[charDataIdx].posX = posX;
+                        charData[charDataIdx].posY = posY;
+                        charData[charDataIdx].field_0x08 = currScale;
+                        charData[charDataIdx].character = *writePtr;
+                        charDataIdx++;
+                    }
+                }
+                writePtr++;
+                posX += (tmp + textBox->GetCharSpace());
+            }
+            src++;
+        }
+    }
+
 end:
     if (pOutLen != nullptr) {
         *pOutLen = writePtr - dest;
@@ -785,15 +955,143 @@ wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
     if (FileManager::GetInstance()->getHeroname()[0] != '\0') {
         for (int i = 0; FileManager::GetInstance()->getHeroname()[i] != '\0'; i++) {
             if (arg != 0 && field_0x90E != 0) {
-                wchar_t c = FileManager::GetInstance()->getHeroname()[i];
-                fn_800B5FD0(c, &field_0x008[field_0x90E - 1][*outArg], outArg);
+                wchar_t *heroName = FileManager::GetInstance()->getHeroname();
+                fn_800B5FD0(heroName[i], &getTmpBuffer()[*outArg], outArg);
                 if (field_0x90E - 1 < 4) {
                     field_0x808[field_0x90E - 1]++;
                 }
             } else {
-                dest = fn_800B5FD0(FileManager::GetInstance()->getHeroname()[i], dest, nullptr);
+                wchar_t *heroName = FileManager::GetInstance()->getHeroname();
+                dest = fn_800B5FD0(heroName[i], dest, nullptr);
             }
         }
+    }
+    return dest;
+}
+
+wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
+    int itemIndex = *src;
+    wchar_t c;
+    const wchar_t *readPtr;
+
+    int i = 0;
+    SizedString<16> mName;
+    mName.sprintf("NAME_ITEM_%03d", itemIndex);
+    MsbtInfo *info = dMessage_c::getMsbtInfoForIndex(/* ItemGet */ 3);
+    const wchar_t *text = LMS_GetTextByLabel(info, mName);
+
+    while (readPtr = &text[i], (c = text[i]) != 0) {
+        if (c == 0xE) {
+            int len = ((readPtr[3] / 2) & 0x7F) + 4;
+            if (arg != 0 && field_0x90E != 0) {
+                for (int j = 0; j < len; j++) {
+                    fn_800B5FD0(*readPtr, &getTmpBuffer()[*outArg], outArg);
+                    onWriteTmpBuffer();
+                    readPtr++;
+                    i++;
+                }
+            } else {
+                for (int j = 0; j < len; j++) {
+                    dest = fn_800B5FD0(*readPtr, dest, nullptr);
+                    readPtr++;
+                    i++;
+                }
+            }
+        } else {
+            if (arg != 0 && field_0x90E != 0) {
+                fn_800B5FD0(c, &getTmpBuffer()[*outArg], outArg);
+                onWriteTmpBuffer();
+            } else {
+                dest = fn_800B5FD0(c, dest, nullptr);
+            }
+            i++;
+        }
+    }
+
+    return dest;
+}
+
+wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
+    int numZeroDigits = ((u8 *)src)[4];
+    bool writeZeroDigits = false;
+    s32 argIdx = *((s32 *)src);
+    s32 numberArg = mNumericArgs[argIdx];
+    mNumericArgsCopy[0] = numberArg;
+
+    // This could potentially be an unrolled loop
+
+    s32 digit = numberArg / 10000;
+    s32 number = numberArg % 10000;
+
+    if (!writeZeroDigits && numZeroDigits == 5) {
+        writeZeroDigits = true;
+    }
+    if (digit > 0 || writeZeroDigits) {
+        if (arg != 0 && field_0x90E != 0) {
+            getTmpBuffer()[*outArg] = '0' + digit;
+            onWriteTmpBuffer();
+            (*outArg)++;
+        } else {
+            *(dest++) = '0' + digit;
+        }
+        writeZeroDigits = true;
+    }
+
+    digit = number / 1000;
+    number = number % 1000;
+    if (!writeZeroDigits && numZeroDigits == 4) {
+        writeZeroDigits = true;
+    }
+    if (digit > 0 || writeZeroDigits) {
+        if (arg != 0 && field_0x90E != 0) {
+            getTmpBuffer()[*outArg] = '0' + digit;
+            onWriteTmpBuffer();
+            (*outArg)++;
+        } else {
+            *(dest++) = '0' + digit;
+        }
+        writeZeroDigits = true;
+    }
+
+    digit = number / 100;
+    number = number % 100;
+    if (!writeZeroDigits && numZeroDigits == 3) {
+        writeZeroDigits = true;
+    }
+    if (digit > 0 || writeZeroDigits) {
+        if (arg != 0 && field_0x90E != 0) {
+            getTmpBuffer()[*outArg] = '0' + digit;
+            onWriteTmpBuffer();
+            (*outArg)++;
+        } else {
+            *(dest++) = '0' + digit;
+        }
+        writeZeroDigits = true;
+    }
+
+    digit = number / 10;
+    number = number % 10;
+    if (!writeZeroDigits && numZeroDigits == 2) {
+        writeZeroDigits = true;
+    }
+    if (digit > 0 || writeZeroDigits) {
+        if (arg != 0 && field_0x90E != 0) {
+            getTmpBuffer()[*outArg] = '0' + digit;
+            onWriteTmpBuffer();
+            (*outArg)++;
+        } else {
+            *(dest++) = '0' + digit;
+        }
+        writeZeroDigits = true;
+    }
+
+    digit = number;
+    if (arg != 0 && field_0x90E != 0) {
+        getTmpBuffer()[*outArg] = '0' + digit;
+        onWriteTmpBuffer();
+        (*outArg)++;
+    } else {
+        *(dest++) = '0' + digit;
     }
     return dest;
 }
@@ -858,6 +1156,14 @@ void dTagProcessor_c::changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
 
     ctx->writer->SetCursorY(posY);
     ctx->writer->SetScale(scale, scale);
+}
+
+void dTagProcessor_c::writeIcon(dTextBox_c *textBox, wchar_t *cmd, f32 arg) {
+    nw4r::ut::Font *f = dFontMng_c::getFont(4);
+    u32 c3 = fn_800B7880(*(u8 *)cmd);
+    arg = UnkTextThing::getField0x764() / f->GetWidth() * arg;
+
+    mLineData.mLineWidths[mLineData.mNumLines] += arg * f->GetCharWidth(c3) + textBox->GetCharSpace();
 }
 
 void dTagProcessor_c::makeSpaceForIconMaybe(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr) {
@@ -929,10 +1235,8 @@ void dTagProcessor_c::restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 wind
 wchar_t *dTagProcessor_c::writeTextNormal(const wchar_t *src, wchar_t *dest, s32 *pArg, u8 cmdLen, s32 arg) {
     if (arg != 0 && field_0x90E != 0) {
         for (u32 i = 0; i < (cmdLen / 2 + 1); i++) {
-            field_0x008[field_0x90E - 1][*pArg] = *(src++);
-            if (field_0x90E - 1 < 4) {
-                field_0x808[field_0x90E - 1]++;
-            }
+            getTmpBuffer()[*pArg] = *(src++);
+            onWriteTmpBuffer();
             (*pArg)++;
         }
     } else {

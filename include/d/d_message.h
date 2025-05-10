@@ -73,6 +73,10 @@ public:
 
     static const wchar_t *formatText(const wchar_t *text);
 
+    static MsbtInfo *getMsbtInfoForIndex(s32 index);
+    static MsbfInfo *getMsbfInfoForIndex(s32 index);
+    static const char *getArcNameByIndex(s32 idx, bool);
+
 private:
     static void *sZev0;
     static void *sZevStage;
@@ -88,7 +92,6 @@ private:
     );
 
     static s32 getArcIndexForFile(const char *fileName);
-    static const char *getArcNameByIndex(s32 idx, bool);
 
     bool checkIsValidTextLabel(const char *name);
 
@@ -101,10 +104,8 @@ private:
 
     s32 getTextIndexForLabel(const char *label);
     s32 getMsbtIndexForLabelInternal(const char *label);
-    static MsbtInfo *getMsbtInfoForIndex(s32 index);
     MsbtInfo *getMsbtInfoForIndexInternal(s32 index);
 
-    static MsbfInfo *getMsbfInfoForIndex(s32 index);
     MsbfInfo *getMsbfInfoForIndexInternal(s32 index);
 
     static const char *getArcNameByIndexInternal(s32 idx, bool global);
