@@ -17,7 +17,7 @@ class mMtx_c : public EGG::Matrix34f {
     typedef const f32 (*MtxRefConst)[4];
 
 public:
-    mMtx_c(){};
+    mMtx_c() {};
     mMtx_c(f32 xx, f32 xy, f32 xz, f32 xw, f32 yx, f32 yy, f32 yz, f32 yw, f32 zx, f32 zy, f32 zz, f32 zw);
 
     operator MtxRef() {
@@ -78,9 +78,19 @@ public:
         return ret;
     }
 
+    void multVec(const mVec3_c &in, mVec3_c &out) const {
+        PSMTXMultVec(*this, in, out);
+    }
+
     mMtx_c &operator+=(const mMtx_c &rhs) {
         PSMTXConcat(*this, rhs, *this);
         return *this;
+    }
+
+    mVec3_c operator*(const mVec3_c &rhs) {
+        mVec3_c out;
+        PSMTXMultVec(*this, rhs, out);
+        return out;
     }
 
     void applyQuat(mQuat_c &quat) {
@@ -88,7 +98,7 @@ public:
     }
 
     void fn_802F1C40(s32, s32);
-    void makeRotationFromVecs(const mVec3_c&, const mVec3_c&, f32);
+    void makeRotationFromVecs(const mVec3_c &, const mVec3_c &, f32);
 
 public:
     static mMtx_c Identity;

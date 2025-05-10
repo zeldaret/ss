@@ -98,7 +98,7 @@ public:
     /* vt 0x0D8 */ virtual void getItemFromClawshotsMaybe();
     /* vt 0x0DC */ virtual void vt_0x0DC(dAcBase_c *, mVec3_c &);
     /* vt 0x0E0 */ virtual void isUsingBomb();
-    /* vt 0x0E4 */ virtual void vt_0x0E4();
+    /* vt 0x0E4 */ virtual mVec3_c &getCenterTranslation() const;
     /* vt 0x0E8 */ virtual void vt_0x0E8();
     /* vt 0x0EC */ virtual void vt_0x0EC();
     /* vt 0x0F0 */ virtual void vt_0x0F0();

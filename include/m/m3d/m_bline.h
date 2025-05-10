@@ -1,9 +1,11 @@
 #ifndef M3D_BLINE_H
 #define M3D_BLINE_H
 
+#include "common.h"
 #include "egg/gfx/eggTexture.h"
 #include "m/m3d/m_proc.h"
 #include "m/m_math.h"
+#include "m/m_vec.h"
 #include "nw4r/ut/ut_Color.h"
 
 namespace m3d {
@@ -11,26 +13,20 @@ namespace m3d {
 // The Actual line
 class bline_c {
 public:
-    bline_c() : mpPathArr(0), mpVtxPosArr(0), mpVtxNrmArr(0), mpVtxTexArr(0), mFlags(0) {}
+    bline_c() : mpPathArr(nullptr), mpVtxPosArr(nullptr), mpVtxNrmArr(nullptr), mpVtxTexArr(nullptr), mFlags(0) {}
     // This is mainly a Guess, When the array is created, it has both a ctor/dtor
     struct VtxPos {
         mVec3_c pos1;
         mVec3_c pos2;
     };
     struct Vec3u8 {
+        Vec3u8() {}
         u8 x, y, z;
     };
     // This is mainly a Guess, When the array is created, it has only a ctor
     struct VtxNrm {
-#pragma warning off(10402)
-        union {
-            struct {
-                Vec3u8 nrm1;
-                Vec3u8 nrm2;
-            };
-            EGG::Vector3s nrm_u16; // There is a short by short copy later
-        };
-#pragma warning on(10402)
+        Vec3u8 nrm1;
+        Vec3u8 nrm2;
     };
     // This is mainly a Guess, When the array is created, it doesnt use the array alloc
     struct VtxTex {
@@ -43,6 +39,10 @@ public:
     void update(mVec3_c *startPos);
     void remove();
     void draw();
+
+    mVec3_c &getPathPoint(u16 idx) {
+        return mpPathArr[idx];
+    }
 
     // vt at 0x08
     virtual ~bline_c();
@@ -63,6 +63,7 @@ public:
 
 class blineMat_c : public proc_c {
 public:
+    blineMat_c() : mpLineArr(nullptr) {}
     virtual ~blineMat_c();
     virtual void remove() override;
     virtual void drawOpa() override;
