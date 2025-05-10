@@ -1,13 +1,11 @@
 #include "d/lyt/meter/d_lyt_meter_rupy.h"
 
 #include "c/c_math.h"
+#include "d/a/d_a_item.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_meter_configuration.h"
 #include "nw4r/math/math_types.h"
 #include "toBeSorted/small_sound_mgr.h"
-
-extern "C" s32 getRupeeCounter2();
-extern "C" u32 getCurrentWalletCapacity2();
 
 STATE_DEFINE(dLytMeterRupyStart_c, Wait);
 STATE_DEFINE(dLytMeterRupyStart_c, Start);
@@ -239,7 +237,7 @@ void dLytMeterRupy_c::executeState_Out() {
         field_0x8AB = 0;
 
         if (field_0x8AE == 0 && hasChangeInRupees()) {
-            mDisplayedRupeeCount = getRupeeCounter2();
+            mDisplayedRupeeCount = dAcItem_c::getRupeeCounter();
             updateDisplayedAmount(true);
         }
 
@@ -290,7 +288,7 @@ bool dLytMeterRupy_c::build(d2d::ResAccIf_c *resAcc) {
     mAnm[RUPY_ANIM_IN].setAnimEnable(false);
 
     field_0x8AB = 0;
-    mDisplayedRupeeCount = getRupeeCounter2();
+    mDisplayedRupeeCount = dAcItem_c::getRupeeCounter();
     field_0x890 = -1;
     mBlinkDelay = cM::rndF(10.0f);
     for (int i = 0; i < RUPY_NUM_DIGITS; i++) {
@@ -362,7 +360,7 @@ bool dLytMeterRupy_c::execute() {
 
     bool isMax = false;
     u32 current = mDisplayedRupeeCount;
-    u32 capacity = getCurrentWalletCapacity2();
+    u32 capacity = dAcItem_c::getCurrentWalletCapacity();
     if (current != 0 && capacity == current) {
         isMax = true;
     };
@@ -375,7 +373,7 @@ bool dLytMeterRupy_c::execute() {
 }
 
 bool dLytMeterRupy_c::hasChangeInRupees() const {
-    s32 amount = getRupeeCounter2();
+    s32 amount = dAcItem_c::getRupeeCounter();
     if (amount > 9999) {
         amount = 9999;
     } else if (amount < 0) {
@@ -385,7 +383,7 @@ bool dLytMeterRupy_c::hasChangeInRupees() const {
 }
 
 s32 dLytMeterRupy_c::getRupeeDifference() const {
-    return getRupeeCounter2() - mDisplayedRupeeCount;
+    return dAcItem_c::getRupeeCounter() - mDisplayedRupeeCount;
 }
 
 mVec3_c dLytMeterRupy_c::getLastVisibleDigitPosition() {
@@ -407,7 +405,7 @@ void dLytMeterRupy_c::setDigit(s32 index, s32 digit) {
 }
 
 bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
-    s32 amount = getRupeeCounter2();
+    s32 amount = dAcItem_c::getRupeeCounter();
     if (amount > 9999) {
         amount = 9999;
     } else if (amount < 0) {
@@ -512,7 +510,7 @@ bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
         mPrevDigits[1] = mDisplayedDigits[1];
         mPrevDigits[2] = mDisplayedDigits[2];
         mPrevDigits[3] = mDisplayedDigits[3];
-    } else if (field_0x8AD && amount == getCurrentWalletCapacity2()) {
+    } else if (field_0x8AD && amount == dAcItem_c::getCurrentWalletCapacity()) {
         SmallSoundManager::GetInstance()->playSound(SE_S_RUPEE_MAX);
         field_0x890 = 0;
         field_0x8AD = 0;

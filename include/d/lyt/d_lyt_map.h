@@ -278,6 +278,7 @@ public:
 
     bool isOpenMaybe() const;
     bool fn_80139EA0() const;
+    void lightPillarRelated(s32, s32, s32);
 
     STATE_FUNC_DECLARE(dLytMapMain_c, Invisible);
     STATE_FUNC_DECLARE(dLytMapMain_c, RenderingWait);
@@ -415,6 +416,10 @@ public:
     bool unkMeterCheck() const {
         s32 val = mMapMain.field_0x8C94;
         return isValid(val) && ((1 << (val - 2)) & 0x1D);
+    }
+
+    void lightPillarRelated(s32 p1, s32 p2, s32 p3) {
+        mMapMain.lightPillarRelated(p1, p2, p3);
     }
 
 private:

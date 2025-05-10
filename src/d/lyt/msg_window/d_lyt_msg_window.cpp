@@ -33,7 +33,7 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/global_fi_context.h"
+#include "toBeSorted/fi_context.h"
 #include "toBeSorted/lyt_related_floats.h"
 #include "toBeSorted/music_mgrs.h"
 #include "toBeSorted/other_sound_stuff.h"
@@ -89,8 +89,8 @@ bool dLytMsgWindow_c::build() {
     mpTagProcessor = new dTagProcessor_c();
     mpMsgWindowUnk = new TextWindowUnk(mpTagProcessor);
 
-    if (GLOBAL_FI_CONTEXT != nullptr) {
-        fn_8016C9F0(GLOBAL_FI_CONTEXT);
+    if (FiContext::GetInstance() != nullptr) {
+        FiContext::GetInstance()->resetField_0x3C();
     }
 
     mpWindowTalk = nullptr;
@@ -514,8 +514,8 @@ void dLytMsgWindow_c::executeState_WaitKeySelectQuestion() {
             field_0x824 = 0;
             mTextOptionSelection = selection;
             field_0x1220 = 0;
-            if (GLOBAL_FI_CONTEXT != nullptr) {
-                doFiThing = GLOBAL_FI_CONTEXT->mDoSpecialFiMenuHandling;
+            if (FiContext::GetInstance() != nullptr) {
+                doFiThing = FiContext::GetInstance()->getDoSpecialFiMenuHandling();
             }
 
             if (doFiThing) {
@@ -714,10 +714,10 @@ bool dLytMsgWindow_c::draw() {
     return true;
 }
 
-void dLytMsgWindow_c::setCurrentLabelName(const char *name, bool storeFile) {
+bool dLytMsgWindow_c::setCurrentLabelName(const char *name, bool storeFile) {
     // TODO
     mName = name;
-    !std::strcmp(name, "FR_SIREN_04");
+    return !std::strcmp(name, "FR_SIREN_04");
 }
 
 bool dLytMsgWindow_c::isVisible() const {

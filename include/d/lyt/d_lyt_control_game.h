@@ -11,6 +11,9 @@ public:
 
     bool isInSomeMapState() const;
     bool isNotInStateMap() const;
+    void openCollectionScreenDemo();
+    bool isStateNormalOrNotInEvent() const;
+    void somehowRelatedToEnteringLightPillars(s32, s32, s32);
 
     void fn_802CCD40(bool);
 

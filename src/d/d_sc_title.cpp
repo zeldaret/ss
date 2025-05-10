@@ -16,6 +16,7 @@
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/music_mgrs.h"
 #include "toBeSorted/reload_color_fader.h"
+#include "toBeSorted/unk_save_time.h"
 
 SPECIAL_BASE_PROFILE(TITLE, dScTitle_c, fProfile::TITLE, 0, 0);
 
@@ -39,14 +40,14 @@ static const char *sLayoutArcsToLoad[] = {
 STATE_VIRTUAL_DEFINE(dScTitle_c, Stanby);
 STATE_VIRTUAL_DEFINE(dScTitle_c, Action);
 
-extern "C" void *lbl_80575688;
-extern "C" void fn_801907F0(void *);
+extern "C" void *lbl_805750D8;
+extern "C" void fn_80052D50(void *);
 
 dScTitle_c::dScTitle_c() {
     sInstance = this;
     mRelCtrl.set(sModulesToLoad, ARRAY_LENGTH(sModulesToLoad));
     mLayoutCtrl.set(sLayoutArcsToLoad, ARRAY_LENGTH(sLayoutArcsToLoad));
-    fn_801907F0(lbl_80575688);
+    SaveTimeRelated::GetInstance()->fn_801907F0();
     if (checkAllSaveFilesEmpty() == true) {
         actuallyTriggerEntrance("F000", 0, 26, 55, 0, 0, 0, 15, -1);
     } else {

@@ -48,6 +48,7 @@ public:
     STATE_FUNC_DECLARE(dStageMgr_c, RestartScene);
 
 public:
+    bool isAreaTypeNormal() const;
     bool isAreaTypeDungeon() const;
     bool isAreaTypeSky() const;
     bool isAreaTypeHouse() const;

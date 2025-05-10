@@ -137,7 +137,7 @@ public:
         return mFader.isStatus(mFaderBase_c::FADED_IN);
     }
 
-    u8 getCurrRoomId() const {
+    s8 getCurrRoomId() const {
         return curr_room_id;
     }
 
@@ -158,7 +158,7 @@ private:
     /* 0x01A0 */ MapRelated mapRelated;
     /* 0x0394 */ u8 _0x394[0x39C - 0x394];
     /* 0x039C */ u32 loaded_entities[2047];
-    /* 0x2398 */ u8 curr_room_id;
+    /* 0x2398 */ s8 curr_room_id;
 
     /* 80575760 */ static dStage_c *sInstance;
 };

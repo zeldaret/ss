@@ -132,6 +132,19 @@ public:
         field_0x82C = val;
     }
 
+    void setFields_0x8FC_0x900(s32 v1, s32 v2) {
+        field_0x8FC = v1;
+        field_0x900 = v2;
+    }
+
+    s32 getField_0x8FC() const {
+        return field_0x8FC;
+    }
+
+    s32 getField_0x900() const {
+        return field_0x900;
+    }
+
     void setField_0x90D(u8 val) {
         field_0x90D = val;
     }

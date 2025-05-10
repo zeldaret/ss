@@ -9,6 +9,8 @@ class ItemflagManager : public ItemStoryManagerBase {
 private:
     FlagSpace mItemFlags;
 
+    static const u32 MASK = 0x4000;
+
 public:
     ItemflagManager();
     virtual ~ItemflagManager() {}
@@ -27,22 +29,22 @@ public:
         FileManager::GetInstance()->setItemFlags(flags, 0, sz);
     }
     /** 0x20 */ virtual void setFlag(u16 flag) override {
-        ItemStoryManagerBase::setFlag(flag & ~0x4000);
+        ItemStoryManagerBase::setFlag(flag & ~MASK);
     }
     /** 0x24 */ virtual void unsetFlag(u16 flag) override {
-        ItemStoryManagerBase::unsetFlag(flag & ~0x4000);
+        ItemStoryManagerBase::unsetFlag(flag & ~MASK);
     }
     /** 0x28 */ virtual void setFlagOrCounterToValue(u16 flag, u16 value) override {
-        ItemStoryManagerBase::setFlagOrCounterToValue(flag & ~0x4000, value);
+        ItemStoryManagerBase::setFlagOrCounterToValue(flag & ~MASK, value);
     }
     /** 0x2C */ virtual u16 getCounterOrFlag(u16 flag) const override {
-        return ItemStoryManagerBase::getCounterOrFlag(flag & ~0x4000);
+        return ItemStoryManagerBase::getCounterOrFlag(flag & ~MASK);
     }
-    /** 0x30 */ virtual u16 getUncommittedValue(u16 flag) override {
-        return ItemStoryManagerBase::getUncommittedValue(flag & ~0x4000);
+    /** 0x30 */ virtual u16 getUncommittedValue(u16 flag) const override {
+        return ItemStoryManagerBase::getUncommittedValue(flag & ~MASK);
     }
     /** 0x34 */ virtual u16 unk3(u16 arg) override {
-        return ItemStoryManagerBase::unk3(arg & ~0x4000);
+        return ItemStoryManagerBase::unk3(arg & ~MASK);
     }
     /** 0x38 */ virtual const u16 *getSaveFlagSpace() const override {
         return FileManager::GetInstance()->getItemFlagsConst();
@@ -53,6 +55,26 @@ public:
     }
 
     static ItemflagManager *sInstance;
+
+    void setItemflag(u16 flag) {
+        setFlag(flag | MASK);
+    }
+
+    u16 getItemCounterOrFlag(u16 flag) const {
+        return getCounterOrFlag(flag | MASK);
+    }
+
+    void setItemFlag(u16 flag) {
+        setFlag(flag | MASK);
+    }
+
+    void setItemFlagOrCounterToValue(u16 flag, u16 value) {
+        setFlagOrCounterToValue(flag | MASK, value);
+    }
+
+    u16 getUncommittedItemValue(u16 flag) const {
+        return getUncommittedValue(flag | MASK);
+    }
 
 private:
     static u16 sFlags[0x40];

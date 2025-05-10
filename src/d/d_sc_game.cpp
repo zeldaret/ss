@@ -16,6 +16,7 @@
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
 #include "toBeSorted/music_mgrs.h"
+#include "toBeSorted/unk_save_time.h"
 
 #include <cstring>
 
@@ -232,7 +233,7 @@ void dScGame_c::clearSpawnInfo() {
 }
 
 extern "C" void processEventFlags();
-void dScGame_c::triggerExit(s32 room, u8 exitIndex, s32 forcedNight, s32 forcedTrial) {
+void dScGame_c::triggerExit(s32 room, u16 exitIndex, s32 forcedNight, s32 forcedTrial) {
     processEventFlags();
     // TODO
 }
@@ -261,8 +262,6 @@ bool dScGame_c::isCurrentStage(const char *stage) {
 }
 
 extern "C" void fn_801BB9C0();
-extern "C" void *lbl_80575688;
-extern "C" void fn_801909A0(void *);
 extern "C" void maybeResetSkykeepPuzzle(bool);
 
 void dScGame_c::copySpawnNextToCurrent() {
@@ -271,7 +270,7 @@ void dScGame_c::copySpawnNextToCurrent() {
         sDoSomethingWithFileAOnTransition = false;
     }
     if (std::strncmp(currentSpawnInfo.stageName, nextSpawnInfo.stageName, 2)) {
-        fn_801909A0(lbl_80575688);
+        SaveTimeRelated::GetInstance()->fn_801909A0();
     }
     currentSpawnInfo = nextSpawnInfo;
     sCurrentLayer = currentSpawnInfo.layer;
@@ -283,13 +282,13 @@ void dScGame_c::actuallyTriggerEntrance(
     u16 transitionFadeFrames, s8 field0x28
 ) {
     s32 trial, night;
-    if (forcedTrial == 2) {
+    if (forcedTrial == SpawnInfo::RETAIN_TRIAL) {
         trial = currentSpawnInfo.trial;
     } else {
         trial = forcedTrial;
     }
 
-    if (forcedNight == 2) {
+    if (forcedNight == SpawnInfo::RETAIN_TOD) {
         night = currentSpawnInfo.night;
     } else {
         night = forcedNight;

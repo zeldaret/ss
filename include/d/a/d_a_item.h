@@ -47,6 +47,8 @@ public:
     static void spawnItem(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot, u32 params, u32 arg);
     static void spawnDrop(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot);
     static u32 checkFlag(u32 flag);
+    static void setFlag(s32 id);
+
     void setItemPosition(const mVec3_c &);
     void getItemFromBWheelItem();
     bool isStateWait();
@@ -59,6 +61,9 @@ public:
     static s32 getTotalSeedCapacity();
     static s32 getTotalArrowCapacity();
 
+    static s32 getRupeeCounter();
+    static u32 getCurrentWalletCapacity();
+
     static u32 getKeyPieceCount();
     static u32 getSmallKeyCount();
 
@@ -69,6 +74,8 @@ public:
     static bool getItemGetEventName(u16 item, const char **outName);
     static void itemGetEventStart(dAcBase_c *);
     static void itemGetEventEnd(dAcBase_c *);
+
+    static void addRupees(s32 amount);
 
     enum Trial_e {
         TRIAL_SKYLOFT,
