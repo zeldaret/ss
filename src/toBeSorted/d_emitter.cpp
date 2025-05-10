@@ -45,10 +45,6 @@
 #include "rvl/GX.h"
 #include "rvl/MTX.h"
 
-// There's a data gap at 0x805013b4 (right after dParticleFogProc_c's vtable)
-// so maybe that's a data split. Unsure how to get all those vtables to appear
-// there though...
-
 void float_ordering_1(s32 a) {
     (f32) a;
 }
@@ -72,7 +68,7 @@ dEmitterBase_c dJEffManager_c::sEmitter;
 dParticleFogProc_c dJEffManager_c::sFogProcs[12];
 dEffect2D_c dJEffManager_c::s2DEffects[3];
 
-// broken by -ipa file - reconsider splits?
+// broken by -ipa file - probably TList nonsense?
 dEmitterCallback_c::~dEmitterCallback_c() {
     for (EmitterCallbackList::Iterator it = mEmitterList.GetBeginIter(); it != mEmitterList.GetEndIter();) {
         EmitterCallbackList::Iterator itCopy = it;
@@ -89,7 +85,7 @@ void dEmitterCallback_c::remove(dEmitterBase_c *emitter) {
     mEmitterList.remove(emitter);
 }
 
-// broken by -ipa file - reconsider splits?
+// broken by -ipa file - probably TList nonsense?
 dParticleCallback_c::~dParticleCallback_c() {
     for (ParticleCallbackList::Iterator it = mEmitterList.GetBeginIter(); it != mEmitterList.GetEndIter();) {
         ParticleCallbackList::Iterator itCopy = it;
