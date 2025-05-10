@@ -1181,6 +1181,7 @@ bool EffectsStruct::createEffect(
     return hasEmitters();
 }
 
+// TODO: Document PolyAttrs
 s32 dJEffManager_c::polyAttrsToGroundEffectIdx(s32 polyAttr0, s32 polyAttr1) {
     if (polyAttr0 == 0 || (polyAttr0 == 4 && polyAttr1 == 1) || (polyAttr0 == 9) ||
         (polyAttr0 == 10 && polyAttr1 == 1) || (polyAttr0 == 12) || (polyAttr0 == 17 && polyAttr1 != 1) ||
