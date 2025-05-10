@@ -937,9 +937,6 @@ public:
     void SetTgInfo_0x2(u16 val) {
         mTg.SetInfo_0x2(val);
     }
-    void SetTgInfo_0x1(u8 val) {
-        mTg.SetInfo_0x1(val);
-    }
     void SetTg_0x40000000() {
         mTg.OnSPrm(0x40000000);
     }

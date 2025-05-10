@@ -44,7 +44,7 @@ InteractionTargetDef dAcOivyRope_c::sInteraction = {
 };
 
 dCcD_SrcCps dAcOivyRope_c::sCpsSrc = {
-  /* mObjInf */
+    /* mObjInf */
     {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
      /* mObjTg */
      {AT_TYPE_0x800000 | AT_TYPE_BEETLE | AT_TYPE_CLAWSHOT | AT_TYPE_ARROW | AT_TYPE_WHIP | AT_TYPE_SLINGSHOT |
@@ -54,27 +54,27 @@ dCcD_SrcCps dAcOivyRope_c::sCpsSrc = {
       0,
       0},
      /* mObjCo */ {0x4029}},
- /* mCpsInf */
+    /* mCpsInf */
     {10.f}
 };
 
 dCcD_SrcSph dAcOivyRope_c::sSphSrc = {
-  /* mObjInf */
+    /* mObjInf */
     {/* mObjAt */ {AT_TYPE_DAMAGE, 0x11, {0, 0, 0}, 1, 0, 0, 0, 0, 0},
      /* mObjTg */
      {~AT_TYPE_COMMON0, 0x111, {0, 0, 0x407}, 0, 0},
      /* mObjCo */ {0x29}},
- /* mSphInf */
+    /* mSphInf */
     {100.f}
 };
 
 dCcD_SrcCyl dAcOivyRope_c::sCylSrc = {
-  /* mObjInf */
+    /* mObjInf */
     {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
      /* mObjTg */
      {AT_TYPE_BELLOWS, 0x311, {0, 0, 8}, 8, 0},
      /* mObjCo */ {0x109}},
- /* mCylInf */
+    /* mCylInf */
     {10.f, 750.f}
 };
 
@@ -714,7 +714,7 @@ void dAcOivyRope_c::fn_256_C960() {
 void dAcOivyRope_c::fn_256_C980(f32 f0, f32 f1) {
     sInteraction.field_0x24 = mDistance + f1;
     sInteraction.field_0x14 = f0;
-    AttentionManager::sInstance->addTarget(*this, sInteraction, 0, nullptr);
+    AttentionManager::GetInstance()->addTarget(*this, sInteraction, 0, nullptr);
 }
 
 UNKTYPE dAcOivyRope_c::fn_256_C9B0(UNKTYPE) {}
