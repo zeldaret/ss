@@ -8,7 +8,7 @@
 #include "d/lyt/d_window.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "s/s_State.hpp"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 class dLytMeterItemSelectIcon_c {
 public:
@@ -291,7 +291,7 @@ private:
     /* 0x5778 */ f32 mArrowRotation;
     /* 0x577C */ f32 mArrowLength;
     /* 0x5780 */ f32 field_0x5780;
-    /* 0x5784 */ f32 field_0x5784;
+    /* 0x5784 */ f32 mEffectScale;
     /* 0x5788 */ s32 field_0x5788;
     /* 0x578C */ s32 field_0x578C;
     /* 0x5790 */ s32 field_0x5790;
@@ -302,7 +302,7 @@ private:
     /* 0x5798 */ u8 field_0x5798;
     /* 0x5799 */ u8 field_0x5799;
     /* 0x579A */ u8 field_0x579A;
-    /* 0x579B */ u8 field_0x579B;
+    /* 0x579B */ u8 mEffectAlpha;
     /* 0x579C */ u8 mStoredBowVariant;
     /* 0x579C */ u8 mStoredSlingshotVariant;
     /* 0x579C */ u8 mStoredBeetleVariant;

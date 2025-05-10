@@ -11,6 +11,7 @@
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_pouch.h"
 #include "d/d_room.h"
 #include "d/d_stage.h"
 #include "d/flag/sceneflag_manager.h"
@@ -1925,16 +1926,13 @@ void dAcTbox_c::executeState_LoadArchive() {
 }
 void dAcTbox_c::finalizeState_LoadArchive() {}
 
-extern "C" void fn_800298B0(u16 effectIndex, mVec3_c *, mAng3_c *, mVec3_c *, void *, void *, void *, void *);
 extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_209_;
 extern "C" const bool isPouchItem(u16);
-extern "C" u8 adventurePouchFindItemSlot(ITEM_ID item);
-extern "C" u16 findItemInItemCheck(ITEM_ID item);
 extern "C" dAcItem_c *giveItem3(u16 item, s32);
 
 void dAcTbox_c::initializeState_Open() {
     mScale.set(1.0f, 1.0f, 1.0f);
-    playSound(0xA36);
+    playSound(SE_TBox_OPEN_A);
     clearActorProperty(0x100);
     if (mVariant == NORMAL) {
         mAnmMatClr1.setFrame(mAnmMatClr1.getFrameMax(0), 0);
@@ -1951,11 +1949,12 @@ void dAcTbox_c::initializeState_Open() {
         mVec3_c pos;
         fn_8026B380(pos);
         mVec3_c p2 = fn_8026B3C0();
-        fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_209_, &pos, &rotation, &p2, nullptr, nullptr, nullptr, nullptr);
+        dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_209_, pos, &rotation, &p2, nullptr, nullptr, 0, 0);
     }
     fn_8026D140();
     ITEM_ID itemId = mItemId != 0 ? (ITEM_ID)mItemId : ITEM_GODDESS_HARP;
-    if (isPouchItem(itemId) && adventurePouchFindItemSlot(ITEM_NONE) == 8 && findItemInItemCheck(ITEM_NONE) == 0x3C) {
+    if (isPouchItem(itemId) && adventurePouchFindItemSlot(ITEM_NONE) == POUCH_SLOT_NONE &&
+        itemCheckFindItemSlot(ITEM_NONE) == ITEM_CHECK_SLOT_NONE) {
         setShouldCloseFlag();
     }
     dAcItem_c *item = giveItem3(itemId, -1);
@@ -2370,7 +2369,7 @@ void dAcTbox_c::unregisterDowsing() {
 extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_208_;
 
 void dAcTbox_c::spawnAppearEffect() {
-    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_208_, &position, &rotation, nullptr, nullptr, nullptr, nullptr, nullptr);
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_208_, position, &rotation, nullptr, nullptr, nullptr, 0, 0);
 }
 
 bool dAcTbox_c::checkIsClear() const {

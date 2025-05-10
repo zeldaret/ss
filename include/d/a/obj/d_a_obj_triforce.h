@@ -8,7 +8,7 @@
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 class dAcOtriforce_c : public dAcObjBase_c {
 public:

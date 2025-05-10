@@ -239,6 +239,18 @@ public:
         return &sInstance->mMain;
     }
 
+    bool itemSelectDemoRelated(s32 arg) {
+        return mMain.mItemSelect.fn_800F0220(arg);
+    }
+
+    bool dowsingDemoRelated(s32 arg) {
+        return mMain.mDowsing.fn_800FE3C0(arg);
+    }
+
+    bool minusBtnDemoRelated(s32 arg) {
+        return mMain.mMinusBtn.demoRelated(arg);
+    }
+
     // Not all of these inlines exist on dLytMeterMain_c
     // because accessing via GetMeter->get... causes
     // different instructions sometimes
@@ -253,6 +265,10 @@ public:
 
     bool getMeterField_0x13774() const {
         return mMain.field_0x13774;
+    }
+
+    void setMeterField_0x13775(bool val) {
+        mMain.field_0x13775 = val;
     }
 
     bool getMeterField_0x1377F() const {
@@ -306,6 +322,12 @@ public:
     static void setRupyField_0x8AC(u8 val) {
         if (sInstance != nullptr) {
             sInstance->mMain.mRupy.setField_0x8AC(val);
+        }
+    }
+
+    static void setRupyField_0x8AD(u8 val) {
+        if (sInstance != nullptr) {
+            sInstance->mMain.mRupy.setField_0x8AD(val);
         }
     }
 

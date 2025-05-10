@@ -43,6 +43,13 @@ struct SizedString {
         }
     }
 
+    void set(const char *src) {
+        if (src != mChars) {
+            mChars[0] = '\0';
+            append(src);
+        }
+    }
+
     void operator+=(const char *src) {
         if (src != nullptr) {
             append(src);

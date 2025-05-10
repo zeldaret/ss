@@ -62,8 +62,8 @@ struct NandRequestHolderBase {
     NandRequest *mpRequest;
 
     bool isCompleted() const;
-    NANDResult getStatus() const;
-    bool runToCompletion();
+    NANDResult getResult() const;
+    bool finish();
 };
 
 struct NandRequestCheckHolder : public NandRequestHolderBase {

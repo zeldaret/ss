@@ -13,7 +13,7 @@
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 #include "toBeSorted/actor_event.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 
 class dAcOTowerHandD101_c : public dAcObjBase_c {

@@ -376,7 +376,7 @@ void EggTextureProc::doDraw() {}
 
 void EggTextureProc::doRemove() {}
 
-bool EggTextureProc::create(int prioOpa, int prioXlu, mAllocator_c *alloc) {
+bool UnkProc::create(int prioOpa, int prioXlu, mAllocator_c *alloc) {
     if (!m3d::proc_c::create(alloc, nullptr)) {
         return false;
     }
@@ -390,7 +390,7 @@ bool EggTextureProc::create(int prioOpa, int prioXlu, mAllocator_c *alloc) {
     return true;
 }
 
-bool EggTextureProc::createXlu(int prioXlu, mAllocator_c *alloc) {
+bool UnkProc::createXlu(int prioXlu, mAllocator_c *alloc) {
     if (!m3d::proc_c::create(alloc, nullptr)) {
         return false;
     }

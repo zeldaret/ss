@@ -6,7 +6,7 @@
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_game_over.h"
 #include "nw4r/math/math_types.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/small_sound_mgr.h"
@@ -287,7 +287,7 @@ void dLytMeterHeart_c::executeInternal() {
     if (mEffectHeartIdx >= 0) {
         nw4r::math::MTX34 mtx = mpHeartPanes[mEffectHeartIdx]->GetGlobalMtx();
         mVec3_c pos(mtx._03, mtx._13, 0.0f);
-        EffectsStruct::fn_800298C0(PARTICLE_RESOURCE_ID_MAPPING_972_, &pos, nullptr, nullptr, nullptr, nullptr);
+        dJEffManager_c::spawnUIEffect(PARTICLE_RESOURCE_ID_MAPPING_972_, pos, nullptr, nullptr, nullptr, nullptr);
         SmallSoundManager::GetInstance()->playSound(SE_S_HEART_ADD);
         mEffectHeartIdx = -1;
     }

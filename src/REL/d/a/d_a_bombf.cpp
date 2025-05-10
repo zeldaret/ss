@@ -7,6 +7,7 @@
 #include "d/flag/sceneflag_manager.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
+#include "toBeSorted/small_sound_mgr.h"
 #include "toBeSorted/time_area_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(BOMBF, dAcBombf_c, fProfile::BOMBF, 0x129, 0, 4099);
@@ -166,7 +167,6 @@ void dAcBombf_c::regrowBomb() {
 
 void dAcBombf_c::initializeState_Wait() {}
 
-extern "C" void fn_800298B0(u16, mVec3_c *, mVec3_c *, u32, u32, u32, u32, u32);
 extern "C" u16 lbl_8057A750;
 
 void dAcBombf_c::executeState_Wait() {
@@ -191,11 +191,11 @@ void dAcBombf_c::executeState_Wait() {
 
         if (mTimeAreaStruct.check(roomid, m3, 0, 30.0f, 0.1f) && field_0x3D4 != 1) {
             if (mTimeAreaStruct.field_0x04 == 1) {
-                playSound(0xC0A);
+                playSound(SE_TIMESLIP_TIMESLIP);
             } else {
-                playSound(0xC0B);
+                playSound(SE_TIMESLIP_TIMESLIP_REV);
             }
-            fn_800298B0(lbl_8057A750, &position, nullptr, 0, 0, 0, 0, 0);
+            dJEffManager_c::spawnEffect(lbl_8057A750, position, nullptr, nullptr, nullptr, nullptr, 0, 0);
         }
 
         scaleFactor *= mTimeAreaStruct.field_0x00;

@@ -145,7 +145,7 @@ public:
         rot_copy = rotation;
     }
 
-    mVec3_c &GetPostion() {
+    mVec3_c &GetPosition() {
         return position;
     }
     mAng3_c &GetRotation() {

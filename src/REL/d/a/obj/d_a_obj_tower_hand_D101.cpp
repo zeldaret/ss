@@ -248,11 +248,11 @@ int dAcOTowerHandD101_c::actorExecute() {
     PSMTXConcat(tmpMtx3, tmpMtx4, tmpMtx3);
     mLoc2Mtx.copyFrom(tmpMtx3);
 
-    if (mEffects.checkField0x00()) {
+    if (mEffects.hasEmitters()) {
         if (direction == 1) {
             tmpMtx3.YrotM(-0x8000);
         }
-        mEffects.setMtx(tmpMtx3);
+        mEffects.setTransform(tmpMtx3);
     }
     for (int i = 0; i <= 2; i++) {
         dBgW *bgW = nullptr;
@@ -300,11 +300,11 @@ int dAcOTowerHandD101_c::actorExecuteInEvent() {
             PSMTXConcat(tmpMtx3, tmpMtx4, tmpMtx3);
             mLoc2Mtx.copyFrom(tmpMtx3);
 
-            if (mEffects.checkField0x00()) {
+            if (mEffects.hasEmitters()) {
                 if (direction == 1) {
                     tmpMtx3.YrotM(-0x8000);
                 }
-                mEffects.setMtx(tmpMtx3);
+                mEffects.setTransform(tmpMtx3);
             }
             for (int i = 0; i <= 2; i++) {
                 dBgW *bgW = nullptr;
@@ -597,7 +597,7 @@ extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_573;
 void dAcOTowerHandD101_c::initializeState_Close() {
     mMdl.getAnm().setPlayState(m3d::PLAY_MODE_1);
     mMdl.setRate(getCloseRate());
-    mEffects.fn_80029920(PARTICLE_RESOURCE_ID_MAPPING_573, &position, nullptr, nullptr, nullptr, nullptr);
+    mEffects.createEffect(PARTICLE_RESOURCE_ID_MAPPING_573, position, nullptr, nullptr, nullptr, nullptr);
     playSound(0xC0C);
 }
 void dAcOTowerHandD101_c::executeState_Close() {

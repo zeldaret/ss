@@ -157,9 +157,6 @@ const char *splitComponent(const char *inPath, char *outPath, size_t size) {
     return inPath + 1;
 }
 
-extern "C" NANDResult NANDChangeDir(const char *path);
-extern "C" NANDResult NANDCreateDir(const char *path, u8 perm, u8 attr);
-
 bool NandRequestCreate::execute() {
     char homeDir[64];
     char pathComponent[64];
@@ -210,10 +207,6 @@ NandRequestWrite::NandRequestWrite(const char *someString, void *data, size_t da
     mFilePath = someString;
 }
 
-extern "C" NANDResult NANDSimpleSafeOpen(const char *path, NANDFileInfo *outInfo, int, void *buf, size_t bufLen);
-extern "C" NANDResult NANDSimpleSafeCancel(NANDFileInfo *info);
-extern "C" NANDResult NANDSimpleSafeClose(NANDFileInfo *info);
-
 bool NandRequestWrite::execute() {
     NANDFileInfo info;
     mStatus = NANDSimpleSafeOpen(
@@ -253,14 +246,14 @@ bool NandRequestHolderBase::isCompleted() const {
     return true;
 }
 
-NANDResult NandRequestHolderBase::getStatus() const {
+NANDResult NandRequestHolderBase::getResult() const {
     if (mpRequest != nullptr) {
         return mpRequest->getStatus();
     }
     return NAND_RESULT_BUSY;
 }
 
-bool NandRequestHolderBase::runToCompletion() {
+bool NandRequestHolderBase::finish() {
     if (mpRequest == nullptr) {
         return true;
     }

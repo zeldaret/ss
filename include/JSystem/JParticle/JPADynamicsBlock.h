@@ -3,8 +3,8 @@
 
 #include "common.h"
 
-#include "JSystem/JGeometry.h"
 #include "egg/math/eggVector.h"
+#include "m/m_angle.h"
 
 
 class JPAEmitterWorkData;
@@ -36,7 +36,7 @@ struct JPADynamicsBlockData {
     /* 0x5C */ f32 mVolumeMinRad;
     /* 0x60 */ f32 mAirResist;
     /* 0x64 */ f32 mMoment;
-    /* 0x68 */ JGeometry::TVec3<s16> mEmitterRot;
+    /* 0x68 */ mAng3_c mEmitterRot;
     /* 0x6E */ s16 mMaxFrame;
     /* 0x70 */ s16 mStartFrame;
     /* 0x72 */ s16 mLifeTime;
@@ -83,7 +83,7 @@ public:
     void getEmitterDir(EGG::Vector3f* vec) const { 
         vec->set(mpData->mEmitterDir.x, mpData->mEmitterDir.y, mpData->mEmitterDir.z); 
     }
-    void getEmitterRot(JGeometry::TVec3<s16>* vec) const { 
+    void getEmitterRot(mAng3_c* vec) const { 
         vec->set(mpData->mEmitterRot.x, mpData->mEmitterRot.y, mpData->mEmitterRot.z); 
     } 
     s16 getMaxFrame() { return mpData->mMaxFrame; }

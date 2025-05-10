@@ -28,6 +28,10 @@ public:
 
     nw4r::ut::Operation ProcessTags(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx);
 
+    f32 fn_800B8560(s32);
+    f32 fn_800B85C0(s32);
+    void somethingWithScrapperAndMusic(wchar_t* src);
+
     void changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, bool);
     wchar_t *writeItem(wchar_t *dest, wchar_t *src, s32 *, s32);
     wchar_t *writeStringArg(wchar_t *dest, wchar_t *src, s32 *, s32);
@@ -128,6 +132,19 @@ public:
         field_0x82C = val;
     }
 
+    void setFields_0x8FC_0x900(s32 v1, s32 v2) {
+        field_0x8FC = v1;
+        field_0x900 = v2;
+    }
+
+    s32 getField_0x8FC() const {
+        return field_0x8FC;
+    }
+
+    s32 getField_0x900() const {
+        return field_0x900;
+    }
+
     void setField_0x90D(u8 val) {
         field_0x90D = val;
     }
@@ -161,6 +178,16 @@ public:
     }
 
 private:
+    wchar_t *getTmpBuffer() {
+        return field_0x008[field_0x90E - 1];
+    }
+
+    void onWriteTmpBuffer() {
+        if (field_0x90E - 1 < 4) {
+            field_0x808[field_0x90E - 1]++;
+        }
+    }
+
     /* 0x004 */ dTextBox_c *field_0x004;
     /* 0x008 */ wchar_t field_0x008[4][256];
     /* 0x808 */ wchar_t field_0x808[4];

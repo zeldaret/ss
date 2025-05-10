@@ -36,9 +36,12 @@ public:
     bool isVisible() const;
     bool isOutputtingText() const;
 
-    void setCurrentLabelName(const char *name, bool storeFile);
+    bool setCurrentLabelName(const char *name, bool storeFile);
     void setCurrentEntrypointName(const char *name);
     void setCurrentFlowFilename(const char *name);
+
+    void setNumericArg0(s32 arg);
+    void setNumericArgs(s32 *arg, s32 argCount);
 
     static dLytMsgWindow_c *getInstance() {
         return sInstance;
@@ -56,6 +59,22 @@ public:
     // causes the method to be emitted there.
     static u16 fn_800D7B40() {
         return sInstance->mEntryPointToTrigger;
+    }
+
+    dTagProcessor_c *getTagProcessor() const {
+        return mpTagProcessor;
+    }
+
+    u8 getField_0x80D() const {
+        return field_0x80D;
+    }
+
+    u8 getField_0x815() const {
+        return field_0x815;
+    }
+
+    s32 getTextOptionSelection() const {
+        return mTextOptionSelection;
     }
 
 private:

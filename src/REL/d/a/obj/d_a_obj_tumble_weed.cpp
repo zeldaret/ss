@@ -19,6 +19,8 @@
 #include "s/s_Math.h"
 #include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/dowsing_target.h"
+#include "toBeSorted/d_emitter.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 void float_ordering() {
     const f32 arr[] = {5.f, 15.f, 7.f, 0.5f, 0.1f};
@@ -260,12 +262,11 @@ bool dAcOTumbleWeed_c::checkInvalidGround() const {
 }
 
 extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_743_;
-extern "C" void fn_800298B0(u16, mVec3_c *, mAng3_c *, u32, u32, u32, u32, u32);
 
 void dAcOTumbleWeed_c::doBreak() {
-    playSound(0xC2D); // TODO(Sound Id)
+    playSound(SE_TWeed_CUT);
     mVec3_c pos = getPosition();
-    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_743_, &pos, nullptr, 0, 0, 0, 0, 0);
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_743_, pos, nullptr, nullptr, nullptr, nullptr, 0, 0);
     deleteRequest();
 }
 
@@ -347,7 +348,7 @@ void dAcOTumbleWeed_c::tumbleBounceMaybe() {
 }
 
 void dAcOTumbleWeed_c::adjustTimeScale() {
-    mTimeArea.check(getRoomId(), GetPostion(), 0, 30.f, 0.1f);
+    mTimeArea.check(getRoomId(), GetPosition(), 0, 30.f, 0.1f);
     if (0.f < mTimeArea.getDistMaybe()) {
         sLib::chase(&mScale.y, 0.f, 0.07f);
         mScale.z = mScale.y;

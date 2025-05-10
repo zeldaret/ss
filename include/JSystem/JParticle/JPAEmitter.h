@@ -9,6 +9,8 @@
 #include "JSystem/JParticle/JPAMath.h"
 #include "JSystem/JParticle/JPADynamicsBlock.h"
 #include "JSystem/JSupport/JSUList.h"
+#include "egg/math/eggVector.h"
+#include "m/m_angle.h"
 
 class JPAResourceManager;
 class JPABaseEmitter;
@@ -47,8 +49,8 @@ struct JPAEmitterWorkData {
     /* 0x120 */ EGG::Vector3f mGlobalEmtrDir;
     /* 0x12C */ EGG::Vector3f mPublicScale;
     /* 0x138 */ EGG::Vector3f mGlobalPos;
-    /* 0x144 */ JGeometry::TVec2<f32> mGlobalPtclScl;
-    /* 0x14C */ JGeometry::TVec2<f32> mPivot;
+    /* 0x144 */ EGG::Vector2f mGlobalPtclScl;
+    /* 0x14C */ EGG::Vector2f mPivot;
     /* 0x154 */ Mtx mYBBCamMtx;
     /* 0x184 */ Mtx mPosCamMtx;
     /* 0x1B4 */ Mtx mPrjMtx;
@@ -118,6 +120,7 @@ public:
     void clearStatus(u32 status) { mStatus &= ~status; }
     u32 checkStatus(u32 status) const { return (mStatus & status); }
     bool checkFlag(u32 flag) const { return !!(mpRes->getDyn()->getFlag() & flag); }
+    u32 getDynResUserWork() const { return mpRes->getDyn()->getResUserWork(); }
     u8 getResourceManagerID() const { return mResMgrID; }
     u8 getGroupID() const { return mGroupID; }
     u8 getDrawTimes() const { return mDrawTimes; }
@@ -129,14 +132,13 @@ public:
     void setGlobalSRTMatrix(const Mtx m) { 
         JPASetRMtxSTVecfromMtx(m, mGlobalRot, &mGlobalScl, &mGlobalTrs);
 
-        // set is actually used here in debug
-        mGlobalPScl.x = mGlobalScl.x;
-        mGlobalPScl.y = mGlobalScl.y;
+        // "set is used in TP debug"
+        mGlobalPScl.set(mGlobalScl.x, mGlobalScl.y);
     }
     void setGlobalTranslation(f32 x, f32 y, f32 z) { mGlobalTrs.set(x, y, z); }
     void setGlobalTranslation(const EGG::Vector3f& trs) { mGlobalTrs.set(trs); }
     void getLocalTranslation(EGG::Vector3f& vec) { vec.set(mLocalTrs); }
-    void setGlobalRotation(const JGeometry::TVec3<s16>& rot) {
+    void setGlobalRotation(const mAng3_c& rot) {
         JPAGetXYZRotateMtx(rot.x, rot.y, rot.z, mGlobalRot); 
     }
     void getGlobalTranslation(EGG::Vector3f* out) const { out->set(mGlobalTrs); }
@@ -152,7 +154,7 @@ public:
     void setAwayFromAxisSpeed(f32 i_speed) { mAwayFromAxisSpeed = i_speed; }
     void setSpread(f32 i_spread) { mSpread = i_spread; }
     void setLocalTranslation(const EGG::Vector3f& i_trans) { mLocalTrs.set(i_trans); }
-    void setLocalRotation(const JGeometry::TVec3<s16>& i_rot) { mLocalRot.set(i_rot.x * 0.005493248f, i_rot.y * 0.005493248f, i_rot.z * 0.005493248f); }
+    void setLocalRotation(const mAng3_c& i_rot) { mLocalRot.set(i_rot.x * 0.005493248f, i_rot.y * 0.005493248f, i_rot.z * 0.005493248f); }
     void setRateStep(u8 i_step) { mRateStep = i_step; }
 
     void setGlobalParticleHeightScale(f32 height) {
@@ -181,6 +183,14 @@ public:
 
     void setLocalScale(const EGG::Vector3f& scale) {
         mLocalScl.set(scale);
+    }
+
+    f32 getGlobalParticleScaleX() const {
+        return mGlobalPScl.x;
+    }
+
+    f32 getGlobalParticleScaleY() const {
+        return mGlobalPScl.y;
     }
 
     f32 get_r_f() { return mRndm.get_rndm_f(); }
@@ -232,7 +242,7 @@ public:
     /* 0x40 */ f32 mSpread;
     /* 0x44 */ f32 mRndmDirSpeed;
     /* 0x48 */ f32 mAirResist;
-    /* 0x4C */ JGeometry::TVec3<s16> mLocalRot;
+    /* 0x4C */ mAng3_c mLocalRot;
     /* 0x52 */ s16 mLifeTime;
     /* 0x54 */ u16 mVolumeSize;
     /* 0x56 */ u8 mRateStep;
@@ -240,7 +250,7 @@ public:
     /* 0x68 */ Mtx mGlobalRot;
     /* 0x98 */ EGG::Vector3f mGlobalScl;
     /* 0xA4 */ EGG::Vector3f mGlobalTrs;
-    /* 0xB0 */ JGeometry::TVec2<f32> mGlobalPScl;
+    /* 0xB0 */ EGG::Vector2f mGlobalPScl;
     /* 0xB8 */ GXColor mGlobalPrmClr;
     /* 0xBC */ GXColor mGlobalEnvClr;
     /* 0xC0 */ s32 mpUserWork;

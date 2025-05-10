@@ -14,7 +14,7 @@
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "nw4r/math/math_types.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/small_sound_mgr.h"
 
@@ -391,16 +391,16 @@ void LytMeterTimerPart1_c::createEffect(s32 fruitIndex) {
     pos.x = mtx._03;
     pos.y = mtx._13;
     pos.z = 0.0f;
-    EffectsStruct::fn_800298C0(
-        PARTICLE_RESOURCE_ID_MAPPING_135_, &pos, nullptr, nullptr, &mColors1[TIMER_01_COLOR_00_CIRCLE],
+    dJEffManager_c::spawnUIEffect(
+        PARTICLE_RESOURCE_ID_MAPPING_135_, pos, nullptr, nullptr, &mColors1[TIMER_01_COLOR_00_CIRCLE],
         &mColors2[TIMER_01_COLOR_01_CIRCLE]
     );
-    EffectsStruct::fn_800298C0(
-        PARTICLE_RESOURCE_ID_MAPPING_136_, &pos, nullptr, nullptr, &mColors1[TIMER_01_COLOR_00_SHADOW],
+    dJEffManager_c::spawnUIEffect(
+        PARTICLE_RESOURCE_ID_MAPPING_136_, pos, nullptr, nullptr, &mColors1[TIMER_01_COLOR_00_SHADOW],
         &mColors2[TIMER_01_COLOR_01_SHADOW]
     );
-    EffectsStruct::fn_800298C0(
-        PARTICLE_RESOURCE_ID_MAPPING_137_, &pos, nullptr, nullptr, &mColors1[TIMER_01_COLOR_00_RAINBOW_CIRCLE],
+    dJEffManager_c::spawnUIEffect(
+        PARTICLE_RESOURCE_ID_MAPPING_137_, pos, nullptr, nullptr, &mColors1[TIMER_01_COLOR_00_RAINBOW_CIRCLE],
         &mColors2[TIMER_01_COLOR_01_RAINBOW_CIRCLE]
     );
 }
@@ -1000,8 +1000,8 @@ void LytMeterTimerPart2_c::createSingleFruitEffect() {
     pos.x = mtx._03;
     pos.y = mtx._13;
     pos.z = 0.0f;
-    EffectsStruct::fn_800298C0(
-        PARTICLE_RESOURCE_ID_MAPPING_174_, &pos, nullptr, nullptr, &mColors1[TIMER_02_COLOR_00_00],
+    dJEffManager_c::spawnUIEffect(
+        PARTICLE_RESOURCE_ID_MAPPING_174_, pos, nullptr, nullptr, &mColors1[TIMER_02_COLOR_00_00],
         &mColors2[TIMER_02_COLOR_01_00]
     );
 }
@@ -1012,8 +1012,8 @@ void LytMeterTimerPart2_c::createFruitCompleteEffect() {
     pos.x = mtx._03;
     pos.y = mtx._13;
     pos.z = 0.0f;
-    EffectsStruct::fn_800298C0(
-        PARTICLE_RESOURCE_ID_MAPPING_206_, &pos, nullptr, nullptr, &mColors1[TIMER_02_COLOR_00_01],
+    dJEffManager_c::spawnUIEffect(
+        PARTICLE_RESOURCE_ID_MAPPING_206_, pos, nullptr, nullptr, &mColors1[TIMER_02_COLOR_00_01],
         &mColors2[TIMER_02_COLOR_01_01]
     );
 }

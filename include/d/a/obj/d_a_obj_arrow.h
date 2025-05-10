@@ -9,7 +9,7 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
 #include "s/s_StateID.hpp"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 class dAcArrow_c : public dAcObjBase_c {
 public:

@@ -39,7 +39,7 @@ private:
     m3d::smdl_c mMdl;
     STATE_MGR_DECLARE(dAcOtoD3StoneFigure_c);
     dCcD_Cyl mCollision;
-    s8 mExitId;
+    u8 mExitId;
     bool mIsSkyKeepAlreadyOpen;
 };
 

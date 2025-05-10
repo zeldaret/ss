@@ -9,6 +9,12 @@
 // * Entirely in headers
 // * Swapped node and count members
 // Used in DowsingTarget, maybe also in dAcBase_c.soundStuff
+//
+// The current implementation has various unexplained behaviors
+// * Constructor doesn't match if offset != 0 https://decomp.me/scratch/YqOCh
+// * Many loops based on these iterators don't match in general, but probably not worth
+//   messing with until the ctor is fixed
+// * -ipa file optimizes things that shouldn't be optimized https://decomp.me/scratch/lqM6i
 template <typename T>
 class TListNode {
 public:

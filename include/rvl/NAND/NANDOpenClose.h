@@ -24,6 +24,13 @@ NANDResult NANDPrivateSafeOpenAsync(
 );
 NANDResult NANDSafeCloseAsync(NANDFileInfo *info, NANDAsyncCallback callback, NANDCommandBlock *block);
 
+NANDResult NANDChangeDir(const char *path);
+NANDResult NANDCreateDir(const char *path, u8 perm, u8 attr);
+NANDResult NANDSimpleSafeOpen(const char *path, NANDFileInfo *outInfo, int, void *buf, size_t bufLen);
+NANDResult NANDSimpleSafeCancel(NANDFileInfo *info);
+NANDResult NANDSimpleSafeClose(NANDFileInfo *info);
+
+
 #ifdef __cplusplus
 }
 #endif

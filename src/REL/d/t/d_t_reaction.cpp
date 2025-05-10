@@ -6,6 +6,7 @@
 #include "d/a/d_a_player.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_pouch.h"
 #include "d/flag/sceneflag_manager.h"
 #include "m/m_angle.h"
 #include "toBeSorted/small_sound_mgr.h"
@@ -37,7 +38,6 @@ bool dTgReaction_c::createHeap() {
 }
 
 extern "C" bool isHeroMode();
-extern "C" u32 adventurePouchCountItem(u32 itemId);
 
 int dTgReaction_c::create() {
     // Note the double _c here

@@ -1,20 +1,1167 @@
 #include "d/d_message.h"
 
+#include "c/c_math.h"
 #include "common.h"
+#include "d/a/d_a_item.h"
+#include "d/a/d_a_itembase.h"
+#include "d/a/d_a_player.h"
+#include "d/d_base.h"
+#include "d/d_player.h"
+#include "d/d_pouch.h"
 #include "d/d_sc_game.h"
+#include "d/d_stage.h"
+#include "d/d_stage_mgr.h"
 #include "d/d_tag_processor.h"
 #include "d/d_textunk.h"
+#include "d/flag/itemflag_manager.h"
+#include "d/flag/sceneflag_manager.h"
+#include "d/flag/storyflag_manager.h"
+#include "d/lyt/d_lyt_control_game.h"
+#include "d/lyt/d_lyt_demo_dowsing.h"
+#include "d/lyt/d_lyt_map.h"
+#include "d/lyt/d_lyt_mini_game.h"
+#include "d/lyt/meter/d_lyt_meter.h"
+#include "d/lyt/msg_window/d_lyt_msg_window.h"
 #include "egg/core/eggHeap.h"
 #include "f/f_base.h"
 #include "f/f_profile.h"
 #include "f/f_profile_name.h"
+#include "libms/flowfile.h"
 #include "libms/libms.h"
 #include "libms/msgfile.h"
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
+#include "toBeSorted/blur_and_palette_manager.h"
+#include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/global_fi_context.h"
+#include "toBeSorted/fi_context.h"
+#include "toBeSorted/file_manager.h"
+#include "toBeSorted/minigame_mgr.h"
+#include "toBeSorted/music_mgrs.h"
+#include "toBeSorted/small_sound_mgr.h"
+#include "toBeSorted/unk_save_time.h"
 
+#include "rvl/OS.h"
+
+#include <cstring>
+#include <stdio.h>
+
+s32 dFlow_c::sExitId = -1;
+
+dFlow_c::dFlow_c() {
+    field_0x14 = 0;
+    mpMsbf = nullptr;
+    mCurrentFlowIndex = -1;
+    field_0x0E = 0;
+    field_0x0F = 0;
+    field_0x10 = 1;
+    field_0x3C = 0;
+    field_0x40 = -1;
+    field_0x44 = -1;
+    field_0x46 = -1;
+    mDelayTimer = 0;
+    field_0x5C = -1;
+}
+
+dFlow_c::~dFlow_c() {}
+
+u16 dFlow_c::findEntryPoint(u16 labelPart1, u16 labelPart2) {
+    char buf[8];
+    for (int i = 0; i < 8; i++) {
+        buf[i] = '\0';
+    }
+    u16 ret = 0xFFFF;
+    if (labelPart1 < 100) {
+        sprintf(buf, "%03d_%03d", labelPart1, labelPart2);
+    } else {
+        sprintf(buf, "%03d_%02d", labelPart1, labelPart2);
+    }
+    for (int i = 0; i < 80; i++) {
+        if (dMessage_c::getMsbfInfoForIndex(i) != nullptr) {
+            int entry = LMS_GetEntrypoint(dMessage_c::getMsbfInfoForIndex(i), buf);
+            if (entry >= 0) {
+                mpMsbf = dMessage_c::getMsbfInfoForIndex(i);
+                s32 fileNumber = dMessage_c::getMsbtIndexForMsbfIndex(i);
+                ret = entry;
+                dMessage_c::getInstance()->setCurrentTextFileNumber(fileNumber);
+            }
+        }
+    }
+
+    const char *arcName = dMessage_c::getArcNameByIndex(labelPart1 / 100, true);
+    dLytMsgWindow_c::getInstance()->setCurrentFlowFilename(arcName);
+    dLytMsgWindow_c::getInstance()->setCurrentEntrypointName(buf);
+    return ret;
+}
+
+u16 dFlow_c::findEntryPoint(const char *label) {
+    u16 ret = 0xFFFF;
+    for (int i = 0; i < 80; i++) {
+        if (dMessage_c::getMsbfInfoForIndex(i) != nullptr) {
+            int entry = LMS_GetEntrypoint(dMessage_c::getMsbfInfoForIndex(i), label);
+            if (entry >= 0) {
+                mpMsbf = dMessage_c::getMsbfInfoForIndex(i);
+                s32 fileNumber = dMessage_c::getMsbtIndexForMsbfIndex(i);
+                ret = entry;
+                dMessage_c::getInstance()->setCurrentTextFileNumber(fileNumber);
+            }
+        }
+    }
+
+    const char *arcName = dMessage_c::getArcNameByIndex(dLytMsgWindow_c::fn_800D7B40() / 10000, true);
+    dLytMsgWindow_c::getInstance()->setCurrentFlowFilename(arcName);
+    dLytMsgWindow_c::getInstance()->setCurrentEntrypointName(label);
+    return ret;
+}
+
+void dFlow_c::setNext(u16 next) {
+    if (next != 0xFFFF) {
+        if (mCurrentFlowIndex != next) {
+            mCurrentFlowIndex = next;
+        } else {
+            clear();
+        }
+    } else {
+        clear();
+    }
+}
+
+void dFlow_c::advanceFlow() {
+    bool keepGoing = true;
+
+    if (dLytMsgWindow_c::getInstance()->getTagProcessor()->getField_0x8FC() >= 0 &&
+        dLytMsgWindow_c::getInstance()->getTagProcessor()->getField_0x900() >= 0) {
+        triggerEntryPoint(
+            dLytMsgWindow_c::getInstance()->getTagProcessor()->getField_0x8FC(),
+            dLytMsgWindow_c::getInstance()->getTagProcessor()->getField_0x900()
+        );
+        field_0x0F = 1;
+        dLytMsgWindow_c::getInstance()->getTagProcessor()->setFields_0x8FC_0x900(-1, -1);
+    } else {
+        while (keepGoing && !vt_0x18() && !dLytMsgWindow_c::getInstance()->getField_0x815() && !checkField0x3C()) {
+            MsbFlowInfo *element = LMS_GetFlowElement(mpMsbf, mCurrentFlowIndex);
+            s32 prevIdx = mCurrentFlowIndex;
+            s32 type = element->type;
+            mCurrentTextLabelName = "";
+            switch (type) {
+                case FLOW_MESSAGE: keepGoing = handleMessage(); break;
+                case FLOW_BRANCH:  keepGoing = handleBranch(); break;
+                case FLOW_EVENT:
+                    handleEvent();
+                    keepGoing = false;
+                    break;
+                case FLOW_ENTRY: keepGoing = handleEntry(); break;
+                case FLOW_JUMP:  keepGoing = handleJump(); break;
+            }
+            field_0x10 = prevIdx != mCurrentFlowIndex;
+            if (field_0x10) {
+                memcpy(&mFlowInfo, element, sizeof(MsbFlowInfo));
+            }
+        }
+    }
+}
+
+bool dFlow_c::advanceUntilEvent(s32 searchParam3, s32 *pOutParams1n2) {
+    return advanceUntil(FLOW_EVENT, searchParam3, pOutParams1n2) == true;
+}
+
+bool dFlow_c::vt_0x18() const {
+    bool ret = false;
+    if (field_0x0E && dLytMsgWindow_c::getInstance()->getField_0x815() == false) {
+        ret = true;
+    }
+    return ret;
+}
+
+struct FlowSoundDef {
+    /* 0x00 */ u32 mParams;
+    /* 0x04 */ u32 mSoundMgr;
+    /* 0x08 */ WZSound mSoundId;
+};
+
+static const FlowSoundDef sSoundDefs[] = {
+    { 1, 0,        FAN_ITEM_GET_MINI},
+    { 2, 0,             FAN_ITEM_GET},
+    { 3, 0,            FAN_HEART_GET},
+    { 4, 1,       SE_S_MSG_IMPORTANT},
+    { 5, 1,            SE_S_REACTION},
+    { 6, 1,            SE_S_MSG_GOOD},
+    { 7, 1,         SE_S_MSG_PRESAGE},
+    { 8, 0, FAN_TRANSITION_IMPACT_01},
+    { 9, 1,       SE_S_READ_RIDDLE_A},
+    {10, 1,       SE_S_READ_RIDDLE_B},
+};
+
+void dFlow_c::playSound(u32 params) {
+    if (params >= 1000) {
+        fn_80364FD0(ENEMY_SOUND_MGR, params);
+        return;
+    }
+    if (params >= 100) {
+        fn_803858D0(ENEMY_BGM_RELATED_MGR);
+        return;
+    }
+
+    s32 idx = -1;
+    for (int i = 0; i < 10; i++) {
+        if (sSoundDefs[i].mParams == params) {
+            idx = i;
+            break;
+        }
+    }
+
+    if (idx < 0) {
+        return;
+    }
+
+    switch (sSoundDefs[idx].mSoundMgr) {
+        case 0: AnotherSoundMgr__playSound(FANFARE_SOUND_MGR, sSoundDefs[idx].mSoundId); break;
+        case 1: SmallSoundManager::GetInstance()->playSound(sSoundDefs[idx].mSoundId); break;
+    }
+}
+
+bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
+    u32 params1n2 = element->params1n2;
+    switch (element->param3) {
+        case EVENT_SET_STORYFLAG:
+            StoryflagManager::sInstance->setFlag(params1n2);
+            if (params1n2 == 0x52) {
+                dLytMeter_c::GetInstance()->setMeterField_0x13775(true);
+            }
+            if (dLytMsgWindow_c::fn_800D7B40() != 50013 && dLytMsgWindow_c::fn_800D7B40() != 20061) {
+                if (params1n2 == 100 || params1n2 == 64 || params1n2 == 271 || params1n2 == 81 || params1n2 == 668 ||
+                    params1n2 == 669) {
+                    FileManager::GetInstance()->setDowsingSlotIdx(DowsingTarget::SLOT_STORY_EVENT);
+                } else if (params1n2 == 106 || params1n2 == 107) {
+                    FileManager::GetInstance()->setDowsingSlotIdx(DowsingTarget::SLOT_QUEST);
+                }
+            }
+            break;
+        case EVENT_UNSET_STORYFLAG: StoryflagManager::sInstance->unsetFlag(params1n2); break;
+        case EVENT_SET_SCENEFLAG:
+            dStageMgr_c::GetInstance()->getFlagIndex();
+            SceneflagManager::sInstance->setFlag(0x3F, (params1n2 >> 16) & 0xFFFF);
+            break;
+        case EVENT_UNSET_SCENEFLAG:
+            dStageMgr_c::GetInstance()->getFlagIndex();
+            SceneflagManager::sInstance->unsetFlag(0x3F, (params1n2 >> 16) & 0xFFFF);
+            break;
+        case EVENT_SET_ZONEFLAG:
+            dStageMgr_c::GetInstance()->getFlagIndex();
+            SceneflagManager::sInstance->setZoneflag_i(
+                dStage_c::GetInstance()->getCurrRoomId(), (params1n2 >> 16) & 0xFFFF
+            );
+            break;
+        case EVENT_UNSET_ZONEFLAG:
+            dStageMgr_c::GetInstance()->getFlagIndex();
+            SceneflagManager::sInstance->unsetZoneflag_i(
+                dStage_c::GetInstance()->getCurrRoomId(), (params1n2 >> 16) & 0xFFFF
+            );
+            break;
+        case EVENT_DELAY:
+            mDelayTimer++;
+            if (mDelayTimer < params1n2) {
+                return false;
+            }
+            mDelayTimer = 0;
+            break;
+        case EVENT_07:
+            if (params1n2 == -1) {
+                s32 hi, lo;
+                s32 selectedOption = dLytMsgWindow_c::getInstance()->getTextOptionSelection();
+                mFiInfo0 = FiContext::getGlobalFiInfo0(selectedOption);
+                switch (mFiInfo0) {
+                    case 0: {
+                        hi = 6;
+                        lo = 1;
+                        field_0x5C = FiContext::getNaviTableProgressSummary();
+                        break;
+                    }
+                    case 11:
+                        hi = 6;
+                        lo = 100;
+                        field_0x5C = FiContext::getFiAdviceHintEntry();
+                        break;
+                    case 2: {
+                        hi = 6;
+                        lo = 200;
+                        field_0x5C = FiContext::getUnkObjectiveValue();
+                        break;
+                    }
+                    case 3: {
+                        FiAnalysisHandle handle = FiContext::getNaviTableEquipmentCheckEntry();
+                        if (handle.isValid()) {
+                            hi = 6;
+                            lo = 300;
+                        } else {
+                            hi = 6;
+                            lo = 301;
+                        }
+                        field_0x5C = 5;
+                        break;
+                    }
+                    case 4:
+                        hi = 6;
+                        lo = 800;
+                        break;
+                    case 9:
+                        hi = 6;
+                        lo = 802;
+                        break;
+                    case 1: {
+                        hi = 6;
+                        lo = 100;
+                        field_0x5C = FiContext::getFiAdviceHintEntry();
+                        break;
+                    }
+                    case 5:
+                        hi = 6;
+                        lo = 900;
+                        break;
+                }
+                FiContext::do_fn_8016CB00(FiContext::getGlobalFiInfo0(selectedOption));
+                field_0x46 = lo + hi * 1000;
+            } else {
+                triggerEntryPoint((params1n2 >> 16) & 0xFFFF, params1n2 & 0xFFFF);
+                field_0x0F = 1;
+            }
+            break;
+        case EVENT_RUPEES:
+            if (dMessage_c::getInstance()->getField_0x2FC() != -1) {
+                dMessage_c::getInstance()->setField_0x2FC(0x3C);
+            }
+            dAcItem_c::addRupees(params1n2);
+            if ((s32)params1n2 > 0) {
+                dLytMeter_c::setRupyField_0x8AD(1);
+            }
+            break;
+        case EVENT_SET_ITEM: {
+            u16 flag = params1n2 & 0xFFFF;
+            ItemflagManager::sInstance->setItemFlag(flag);
+            switch (params1n2) {
+                case ITEM_FARORES_COURAGE:
+                case ITEM_NAYRUS_WISDOM:
+                case ITEM_DINS_POWER:
+                case ITEM_SOTH:            FileManager::GetInstance()->setDowsingSlotIdx(DowsingTarget::SLOT_STORY_EVENT); break;
+            }
+            break;
+        }
+        case EVENT_EXIT: {
+            u16 id = (params1n2 >> 16) & 0xFFFF;
+            sExitId = id;
+            if ((params1n2 & 0xFFFF) == 1) {
+                dScGame_c::GetInstance()->triggerExit(
+                    dStage_c::GetInstance()->getCurrRoomId(), id, SpawnInfo::RETAIN_TOD, SpawnInfo::NO_TRIAL
+                );
+            } else {
+                dScGame_c::GetInstance()->triggerExit(
+                    dStage_c::GetInstance()->getCurrRoomId(), id, SpawnInfo::RETAIN_TOD, SpawnInfo::RETAIN_TRIAL
+                );
+            }
+            return 0;
+        }
+        case EVENT_12:
+            if (params1n2 == 1) {
+                dMessage_c::getInstance()->setField_0x2FC(-1);
+            } else {
+                dLytMeter_c::setRupyField_0x8AC(1);
+                dMessage_c::getInstance()->setField_0x2FC(0);
+            }
+            break;
+        case EVENT_COUNTER_THRESHOLD: {
+            u16 counter = (params1n2 >> 16) & 0xFFFF;
+            u16 threshold = (params1n2 & 0xFFFF);
+            if (counter == 0x1F5) {
+                counter = dAcItem_c::getRupeeCounter();
+            } else if (counter == 0x1ED) {
+                counter = dAcItem_c::getTotalSeedCount();
+            } else if (counter == 0x1F2) {
+                counter = dAcItem_c::getTotalArrowCount();
+            } else if (counter == 0x1F3) {
+                counter = dAcItem_c::getTotalBombCount();
+            } else {
+                counter = ItemflagManager::sInstance->getItemCounterOrFlag(counter);
+            }
+
+            if (counter >= threshold) {
+                mResultFromCounterCheck = 0;
+            } else {
+                mResultFromCounterCheck = 1;
+            }
+            break;
+        }
+        case EVENT_PLAY_SOUND: playSound(params1n2); break;
+        case EVENT_ADD_ITEM:   {
+            u16 flag = (params1n2 >> 16) & 0xFFFF;
+            s16 change = (s16)(params1n2 & 0xFFFF);
+            s32 value = ItemflagManager::sInstance->getItemCounterOrFlag(flag);
+            value += change;
+            if (value < 0) {
+                value = 0;
+            } else if (value > 0x8000) {
+                value = 0x7FFF;
+            }
+            ItemflagManager::sInstance->setItemFlagOrCounterToValue(flag, value);
+            break;
+        }
+        case EVENT_SET_TEMPFLAG:
+            dStageMgr_c::GetInstance()->getFlagIndex();
+            SceneflagManager::sInstance->setTempflag_i(0x3F, (params1n2 >> 16) & 0xFFFF);
+            break;
+        case EVENT_UNSET_TEMPFLAG:
+            dStageMgr_c::GetInstance()->getFlagIndex();
+            SceneflagManager::sInstance->unsetTempflag_i(0x3F, (params1n2 >> 16) & 0xFFFF);
+            break;
+        case EVENT_LIGHT_PILLAR_30: {
+            s8 p4 = (params1n2 >> 24) & 0xFF;
+            s8 p1 = params1n2 & 0xFF;
+            s8 p3 = (params1n2 >> 16) & 0xFF;
+            s8 p2 = (params1n2 >> 8) & 0xFF;
+            s32 val = 1;
+            switch (p1) {
+                case 1: val = 4; break;
+                case 2: val = 3; break;
+                case 3: val = 5; break;
+                case 5: val = 7; break;
+                case 6: val = 8; break;
+                case 7: val = 9; break;
+            }
+            dMessage_c::getInstance()->setField_0x32C(val);
+            dMessage_c::getInstance()->setField_0x329(true);
+            if (dMessage_c::getInstance()->getField_0x328() == 0) {
+                dMessage_c::getInstance()->setField_0x328(1);
+                dMessage_c::getInstance()->clearLightPillarRelatedArgs();
+                if (dLytControlGame_c::getInstance()->isStateNormalOrNotInEvent()) {
+                    dLytControlGame_c::getInstance()->somehowRelatedToEnteringLightPillars(val, p3, p2);
+                }
+            } else {
+                dLytMap_c::getInstance()->lightPillarRelated(val, p3, p2);
+            }
+            dMessage_c::getInstance()->storeLightPillarRelatedArg(p4);
+            break;
+        }
+        case EVENT_LIGHT_PILLAR_34: {
+            if (params1n2 == 1) {
+                if (!dLytControlGame_c::getInstance()->isNotInStateMap()) {
+                    dLytControlGame_c::getInstance()->fn_802CCD40(true);
+                }
+            } else if (params1n2 == 2) {
+                dMessage_c::getInstance()->setField_0x330(1);
+                if (dMessage_c::getInstance()->getField_0x32C() != 4 &&
+                    dMessage_c::getInstance()->getField_0x32C() != 12) {
+                    dMessage_c::getInstance()->setField_0x32A(1);
+                }
+            } else {
+                if (dMessage_c::getInstance()->getField_0x32C() != 4 &&
+                    dMessage_c::getInstance()->getField_0x32C() != 12) {
+                    dMessage_c::getInstance()->setField_0x32A(1);
+                }
+            }
+            dMessage_c::getInstance()->setField_0x328(0);
+            break;
+        }
+        case EVENT_SET_STORYFLAG_217:
+            StoryflagManager::sInstance->setFlagOrCounterToValue(
+                217, dLytMsgWindow_c::getInstance()->getTextOptionSelection()
+            );
+            break;
+        case EVENT_DEMO_METER_ITEM_SELECT: return dLytMeter_c::GetInstance()->itemSelectDemoRelated(params1n2);
+        case EVENT_CAMERA_42:              {
+            s32 p1 = (params1n2 >> 16) & 0xFFFF;
+            s32 p2 = params1n2 & 0xFFFF;
+            dScGame_c::getCamera(0)->doFn_800918E0(p1, p2);
+            break;
+        }
+        case EVENT_LYT_MINI_GAME: {
+            if (dMessage_c::getInstance()->getField_0x340() != 0) {
+                // cancel something minigame related if running
+                clearMinigame();
+            }
+            // start something minigame related
+            dMessage_c::getInstance()->setMiniGameVariant(params1n2);
+            createLytMiniGame();
+            break;
+        }
+        case EVENT_LYT_MINI_GAME_END:
+            // cancel something minigame related
+            clearMinigame();
+            break;
+        case EVENT_46:              dMessage_c::getInstance()->setField_0x344(params1n2); break;
+        case EVENT_RESET_STORYFLAG: StoryflagManager::sInstance->setFlagOrCounterToValue(params1n2 & 0xFFFF, 0); break;
+        case EVENT_SET_ITEMFLAG:    dAcItem_c::setFlag(params1n2 & 0xFFFF); break;
+        case EVENT_PALETTE:         {
+            s16 p1 = (params1n2 >> 16) & 0xFFFF;
+            s16 p2 = params1n2 & 0xFFFF;
+            if (&BlurAndPaletteManager::GetInstance() != nullptr) {
+                BlurAndPaletteManager::GetInstance().fn_80024240(-1, p1, p2);
+            }
+            break;
+        }
+        case EVENT_DEMO_DOWSING:
+            if (dLytDemoDowsing_c::GetInstance() != nullptr) {
+                dLytDemoDowsing_c::GetInstance()->start();
+            }
+            break;
+        case EVENT_DEMO_METER_DOWSING:   return dLytMeter_c::GetInstance()->dowsingDemoRelated(params1n2); break;
+        case EVENT_DEMO_METER_MINUS_BTN: return dLytMeter_c::GetInstance()->minusBtnDemoRelated(params1n2); break;
+        case EVENT_SELECT_STORY_DOWSING:
+            FileManager::GetInstance()->setDowsingSlotIdx(DowsingTarget::SLOT_STORY_EVENT);
+            break;
+        case EVENT_DEMO_COLLECTION_SCREEN:
+            if (!MinigameManager::isInMinigameState(MinigameManager::INSECT_CAPTURE)) {
+                dLytControlGame_c::getInstance()->openCollectionScreenDemo();
+            }
+            break;
+    }
+
+    return true;
+}
+
+bool dFlow_c::handleEvent() {
+    MsbFlowInfo *element = LMS_GetFlowElement(mpMsbf, mCurrentFlowIndex);
+    u16 next = element->next;
+    if (handleEventInternal(element)) {
+        if (next != 0xFFFF) {
+            setNext(next);
+            if (checkField0x3C()) {
+                field_0x40 = mCurrentFlowIndex;
+                field_0x44 = dLytMsgWindow_c::fn_800D7B40();
+            }
+        } else if (field_0x0F != 0) {
+            field_0x0F = 0;
+        } else {
+            clear();
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool dFlow_c::handleMessage() {
+    char label[40];
+    MsbFlowInfo *flow = LMS_GetFlowElement(mpMsbf, mCurrentFlowIndex);
+    int hasLabel = LMS_GetLabelByTextIndex(
+        dMessage_c::getMsbtInfoForIndex(dMessage_c::getInstance()->getCurrentTextFileNumber()), flow->param4, label
+    );
+    mCurrentTextLabelName.set(label);
+    u16 next = flow->next;
+    // Does this make sense? Result is unused...
+    LMS_GetAttribute(dMessage_c::getMsbtInfoForIndex(dMessage_c::getInstance()->getCurrentTextFileNumber()), hasLabel);
+    if (mCurrentTextLabelName == "KEN0_08") {
+        if (field_0x5C < 0) {
+            field_0x5C = 8;
+        }
+        mCurrentTextLabelName.sprintf("KEN0_%02d", field_0x5C);
+    } else if (mCurrentTextLabelName == "KEN1_000") {
+        if (field_0x5C < 0) {
+            field_0x5C = 0;
+        }
+        mCurrentTextLabelName.sprintf("KEN1_%03d", field_0x5C);
+    } else if (mCurrentTextLabelName == "KEN2_000") {
+        if (field_0x5C < 0) {
+            field_0x5C = 2;
+        }
+        mCurrentTextLabelName.sprintf("KEN2_%03d", field_0x5C);
+    } else if (mCurrentTextLabelName == "KEN3_500") {
+        FiAnalysisHandle analysis = FiContext::getNaviTableEquipmentCheckEntry();
+        SizedString<16> label;
+        label.sprintf("KEN3_%03d", analysis.getEquipmentFocus());
+        dLytMsgWindow_c::getInstance()->getTagProcessor()->setStringArg(
+            dMessage_c::getTextMessageByLabel(label, true, nullptr, nullptr), 0
+        );
+    } else if (mCurrentTextLabelName == "KEN3_000") {
+        FiAnalysisHandle analysis = FiContext::getNaviTableEquipmentCheckEntry();
+        s16 value = analysis.getAreaIndexForFiAreaName();
+        if (value < 0) {
+            value = 0;
+        }
+        mCurrentTextLabelName.sprintf("KEN3_%03d", value);
+    } else if (mCurrentTextLabelName == "KEN3_501") {
+        FiAnalysisHandle analysis = FiContext::getNaviTableEquipmentCheckEntry();
+        s32 arg = analysis.getSuitabilityArg();
+        dLytMsgWindow_c::getInstance()->setNumericArg0(arg);
+    } else if (mCurrentTextLabelName == "KEN3_100") {
+        FiAnalysisHandle analysis = FiContext::getNaviTableEquipmentCheckEntry();
+        s16 value = analysis.getSuitabilityLabel();
+        if (value < 0) {
+            value = 0;
+        }
+        mCurrentTextLabelName.sprintf("KEN3_%03d", value);
+    } else if (mCurrentTextLabelName == "KEN3_200") {
+        FiAnalysisHandle analysis = FiContext::getNaviTableEquipmentCheckEntry();
+        s16 value = analysis.getShieldMessage();
+        if (value < 0) {
+            value = 0;
+        }
+        mCurrentTextLabelName.sprintf("KEN3_%03d", value);
+    } else if (mCurrentTextLabelName == "KEN4_000") {
+        s32 fiHelpIndex = FiContext::getHelpIndex();
+        if (fiHelpIndex < 0) {
+            fiHelpIndex = 0;
+        }
+        if (fiHelpIndex == 5) {
+            StoryflagManager::sInstance->setFlag(727);
+        }
+        mCurrentTextLabelName.sprintf("KEN4_%03d", fiHelpIndex);
+    } else if (mCurrentTextLabelName == "KEN5_000") {
+        s32 targetActorId = FiContext::getTargetActorId();
+        if (targetActorId < 0) {
+            targetActorId = 0;
+        }
+        if (targetActorId <= 480) {
+            mCurrentTextLabelName.sprintf("KEN5_%03d", targetActorId);
+        } else {
+            mCurrentTextLabelName.sprintf("KEN7_000");
+        }
+    } else if (mCurrentTextLabelName == "KEN6_000") {
+        s32 targetActorId = FiContext::getTargetActorId();
+        if (targetActorId < 0) {
+            targetActorId = 0;
+        }
+        if (targetActorId <= 91) {
+            mCurrentTextLabelName.sprintf("KEN6_%03d", targetActorId);
+        } else {
+            mCurrentTextLabelName.sprintf("KEN7_000");
+        }
+    } else if (mCurrentTextLabelName == "KEN6_107") {
+        s32 targetActorId = FiContext::getTargetActorId();
+        if (targetActorId < 0) {
+            targetActorId = 0;
+        }
+        u16 killCount = FileManager::GetInstance()->getEnemyKillCount(targetActorId);
+        u8 performance = FiContext::rateBattlePerformance(targetActorId);
+        if (performance == 0xFF) {
+            dLytMsgWindow_c::getInstance()->setNumericArg0(killCount);
+            mCurrentTextLabelName.sprintf("KEN6_108");
+        } else {
+            dLytMsgWindow_c::getInstance()->setNumericArg0(killCount);
+            SizedString<16> tmpLabel;
+            tmpLabel.sprintf("KEN6_1%02d", performance);
+            dLytMsgWindow_c::getInstance()->getTagProcessor()->setStringArg(
+                dMessage_c::getTextMessageByLabel(tmpLabel, true, nullptr, nullptr), 0
+            );
+        }
+    } else if (mCurrentTextLabelName == "KEN7_000") {
+        s32 targetActorId = FiContext::getTargetActorId();
+        if (targetActorId < 0) {
+            targetActorId = 0;
+        }
+        if (targetActorId <= 561) {
+            mCurrentTextLabelName.sprintf("KEN7_%03d", targetActorId);
+        } else {
+            mCurrentTextLabelName.sprintf("KEN7_000");
+        }
+    } else if (mCurrentTextLabelName == "KEN8_000" || mCurrentTextLabelName == "KEN2_096") {
+        s32 seconds = OS_TICKS_TO_SEC(SaveTimeRelated::GetInstance()->getField_0x08());
+        s32 minutes_ = seconds / 60;
+        s32 minutes = minutes_ % 60;
+        s32 hours = seconds / 3600;
+        if (hours > 99) {
+            hours = 99;
+            minutes = 59;
+        }
+        s32 seconds1 = OS_TICKS_TO_SEC(SaveTimeRelated::GetInstance()->fn_801907D0());
+        s32 minutes1_ = seconds1 / 60;
+        s32 minutes1 = minutes1_ % 60;
+        s32 hours1 = seconds1 / 3600;
+        if (hours1 > 999) {
+            hours1 = 999;
+            minutes1 = 59;
+        }
+        s32 time[4] = {hours, minutes, hours1, minutes1};
+        dLytMsgWindow_c::getInstance()->setNumericArgs(time, 4);
+    } else if (mCurrentTextLabelName == "KEN9_000") {
+        s32 v;
+        if (StoryflagManager::sInstance->getCounterOrFlag(530)) {
+            v = 200;
+        } else if (dStageMgr_c::GetInstance()->getSTIFbyte4() == 0) {
+            v = cM::rndInt(30);
+        } else {
+            v = cM::rndInt(30) + 30;
+        }
+        mCurrentTextLabelName.sprintf("KEN9_%03d", v);
+    }
+
+    if (dLytMsgWindow_c::getInstance()->setCurrentLabelName(mCurrentTextLabelName, false) == true) {
+        if (!dLytMsgWindow_c::getInstance()->getField_0x80D()) {
+            field_0x14 = 1;
+        }
+        if (next != 0xFFFF) {
+            setNext(next);
+        } else {
+            clear();
+        }
+    }
+
+    return false;
+}
+
+u16 dFlow_c::getSwitchChoice(const MsbFlowInfo *element, u16 param) const {
+    u16 result = 0;
+    if (param < 14 || param > 16) {
+        result = (this->*(sBranchHandlers[param]))(element);
+    }
+    return result;
+}
+
+inline void setTagProcessorFiArgument(s32 a1, s32 a2) {
+    dTagProcessor_c *p = dLytMsgWindow_c::getInstance()->getTagProcessor();
+    p->setStringArg(FiContext::getMessageForFiInfo(a1), a2);
+}
+
+inline void setTagProcessorArgument(s32 a1, s32 a2) {
+    dTagProcessor_c *p = dLytMsgWindow_c::getInstance()->getTagProcessor();
+    p->setStringArg(FiContext::getTextMessage(a1), a2);
+}
+
+u16 dFlow_c::branchHandler00(const MsbFlowInfo *element) const {
+    return dLytMsgWindow_c::getInstance()->getTextOptionSelection();
+}
+
+u16 dFlow_c::branchHandler01(const MsbFlowInfo *element) const {
+    return dLytMsgWindow_c::getInstance()->getTextOptionSelection();
+}
+
+u16 dFlow_c::branchHandler02(const MsbFlowInfo *element) const {
+    if (FiContext::getDoSpecialFiMenuHandlingChecked()) {
+        if (dLytMsgWindow_c::getInstance()->getTextOptionSelection() == 0 && FiContext::getGlobalFiInfo0(0) == 9) {
+            FiContext::do_fn_8016CB20();
+            setTagProcessorFiArgument(0, 0);
+            setTagProcessorFiArgument(1, 1);
+            setTagProcessorFiArgument(2, 2);
+        } else {
+            FiContext::setDoSpecialFiMenuHandling(false);
+        }
+    }
+    return dLytMsgWindow_c::getInstance()->getTextOptionSelection();
+}
+
+u16 dFlow_c::branchHandler03(const MsbFlowInfo *element) const {
+    return !StoryflagManager::sInstance->getCounterOrFlag(element->params1n2);
+}
+
+u16 dFlow_c::branchHandler04(const MsbFlowInfo *element) const {
+    return 0;
+}
+
+u16 dFlow_c::branchHandler05(const MsbFlowInfo *element) const {
+    return !SceneflagManager::sInstance->checkZoneflag_i(
+        dStage_c::GetInstance()->getCurrRoomId(), element->params1n2 & 0xFFFF
+    );
+}
+
+u16 dFlow_c::branchHandler06(const MsbFlowInfo *element) const {
+    return !SceneflagManager::sInstance->checkFlag(0x3F, (element->params1n2 & 0xFFFF));
+}
+
+u16 dFlow_c::branchHandler07(const MsbFlowInfo *element) const {
+    return mResultFromCounterCheck != 0;
+}
+
+u16 dFlow_c::branchHandler08(const MsbFlowInfo *element) const {
+    return mResultFromCounterCheck != 0;
+}
+
+u16 dFlow_c::branchHandler09(const MsbFlowInfo *element) const {
+    return !SceneflagManager::sInstance->checkTempflag_i(0x3F, element->params1n2 & 0xFFFF);
+}
+
+u16 dFlow_c::branchHandler10(const MsbFlowInfo *element) const {
+    u16 threshold = element->params1n2 & 0xFFFF;
+    return threshold > dAcItem_c::getRupeeCounter();
+}
+
+u16 dFlow_c::branchHandler11(const MsbFlowInfo *element) const {
+    return (s32)(cM::rnd() * 2.0f);
+}
+
+u16 dFlow_c::branchHandler12(const MsbFlowInfo *element) const {
+    return (s32)(cM::rnd() * 3.0f);
+}
+
+u16 dFlow_c::branchHandler13(const MsbFlowInfo *element) const {
+    return (s32)(cM::rnd() * 4.0f);
+}
+
+u16 dFlow_c::branchHandler14(const MsbFlowInfo *element) const {
+    return 0;
+}
+
+u16 dFlow_c::branchHandler15(const MsbFlowInfo *element) const {
+    return 0;
+}
+
+u16 dFlow_c::branchHandler16(const MsbFlowInfo *element) const {
+    return 0;
+}
+
+u16 dFlow_c::branchHandler17(const MsbFlowInfo *element) const {
+    bool ret = false;
+    if (adventurePouchFindItemSlot(ITEM_NONE) != POUCH_SLOT_NONE) {
+        ret = true;
+    }
+    return ret;
+}
+
+u16 dFlow_c::branchHandler18(const MsbFlowInfo *element) const {
+    bool ret = false;
+    if (!getLinkPtr()->isItemFairyFromBugnet()) {
+        ret = true;
+    }
+    return ret;
+}
+
+u16 dFlow_c::branchHandler19(const MsbFlowInfo *element) const {
+    u16 ret = 1;
+    switch (element->params1n2 & 0xFFFF) {
+        case 0:
+            if (dAcPy_c::getCurrentlyEquippedShieldType() != 4) {
+                ret = 0;
+            }
+            break;
+        case 1:
+            if (adventurePouchFindItemSlot(ITEM_BOTTLE) != POUCH_SLOT_NONE) {
+                ret = 0;
+            }
+            break;
+        case 2:
+            if (adventurePouchFindItemSlot(ITEM_HOT_SOUP) != POUCH_SLOT_NONE) {
+                ret = 0;
+            }
+            break;
+        case 3:
+            if (adventurePouchFindItemSlot(ITEM_COLD_SOUP) != POUCH_SLOT_NONE) {
+                ret = 0;
+            }
+            break;
+        case 4:
+            if (adventurePouchFindItemSlot(ITEM_STAMINA_POTION) != POUCH_SLOT_NONE ||
+                adventurePouchFindItemSlot(ITEM_STAMINA_POTION_PLUS) != POUCH_SLOT_NONE) {
+                ret = 0;
+            }
+            break;
+        case 5:
+            if (adventurePouchFindItemSlot(ITEM_MUSHROOM_SPORES) != POUCH_SLOT_NONE ||
+                adventurePouchFindItemSlot(ITEM_GLITTERING_SPORES) != POUCH_SLOT_NONE) {
+                ret = 0;
+            }
+            break;
+        case 6: {
+            FiAnalysisHandle handle = FiContext::getNaviTableEquipmentCheckEntry();
+            switch (handle.shieldRelated()) {
+                case 0:
+                    if (dAcPy_c::getCurrentlyEquippedShieldType() == 0) {
+                        ret = 0;
+                    }
+                    break;
+                case 1:
+                    if (dAcPy_c::getCurrentlyEquippedShieldType() == 1) {
+                        ret = 0;
+                    }
+                    break;
+            }
+            break;
+        }
+        case 7:
+            if (adventurePouchFindItemSlot(ITEM_SACRED_WATER) != POUCH_SLOT_NONE) {
+                ret = 0;
+            }
+            break;
+        case 8:
+            if (adventurePouchCountItem(ITEM_HEART_MEDAL) != 0) {
+                ret = 0;
+            }
+            break;
+        case 9:
+            if (hasAnyShields()) {
+                ret = 0;
+            }
+            break;
+    }
+    return ret;
+}
+
+u16 dFlow_c::branchHandler20(const MsbFlowInfo *element) const {
+    u16 ret = 0;
+    if (itemCheckFindItemSlot(ITEM_NONE) != ITEM_CHECK_SLOT_NONE) {
+        ret = 1;
+    }
+    return ret;
+}
+
+u16 dFlow_c::branchHandler21(const MsbFlowInfo *element) const {
+    u16 ret = 0;
+    if (shouldActorShowKillCount(FiContext::getTargetActorId())) {
+        ret = 1;
+    }
+    return ret;
+}
+
+u16 dFlow_c::branchHandler22(const MsbFlowInfo *element) const {
+    u16 ret = StoryflagManager::sInstance->getCounterOrFlag(692);
+    if (ret > 3) {
+        ret = 3;
+    }
+    return ret;
+}
+
+dFlow_c::BranchHandler dFlow_c::sBranchHandlers[] = {
+    &dFlow_c::branchHandler00, &dFlow_c::branchHandler01, &dFlow_c::branchHandler02, &dFlow_c::branchHandler03,
+    &dFlow_c::branchHandler04, &dFlow_c::branchHandler05, &dFlow_c::branchHandler06, &dFlow_c::branchHandler07,
+    &dFlow_c::branchHandler08, &dFlow_c::branchHandler09, &dFlow_c::branchHandler10, &dFlow_c::branchHandler11,
+    &dFlow_c::branchHandler12, &dFlow_c::branchHandler13, &dFlow_c::branchHandler14, &dFlow_c::branchHandler15,
+    &dFlow_c::branchHandler16, &dFlow_c::branchHandler17, &dFlow_c::branchHandler18, &dFlow_c::branchHandler19,
+    &dFlow_c::branchHandler20, &dFlow_c::branchHandler21, &dFlow_c::branchHandler22,
+};
+
+bool dFlow_c::handleBranch() {
+    MsbFlowInfo *info = LMS_GetFlowElement(mpMsbf, mCurrentFlowIndex);
+    u16 next = getSwitchChoice(info, info->param3);
+    u16 *branchPoints = LMS_GetBranchPoints(mpMsbf, mCurrentFlowIndex);
+    if (info->param5 != 0xFFFF) {
+        setNext(branchPoints[next]);
+    } else {
+        clear();
+    }
+    return true;
+}
+
+bool dFlow_c::handleEntry() {
+    MsbFlowInfo *element = LMS_GetFlowElement(mpMsbf, mCurrentFlowIndex);
+    setNext(element->next);
+    return true;
+}
+
+bool dFlow_c::handleJump() {
+    // unimplemented
+    return true;
+}
+
+void dFlow_c::triggerEntryPoint(s32 labelPart1, s32 labelPart2) {
+    if (labelPart1 == 6) {
+        // "Your hearts have decreased quite dramatically..."
+        // 400 -> may introduce heart dowsing
+        // 401 -> no heart dowsing introduction
+        if (labelPart2 == 400) {
+            FiContext::setField_0x48(true);
+            labelPart2 = 401;
+        } else if (labelPart2 == 401) {
+            StoryflagManager::sInstance->setFlag(808);
+            // Don't introduce heart dowsing in areas where you might
+            // not be able to dowse
+            if (dStageMgr_c::GetInstance()->isAreaTypeNormal()) {
+                labelPart2 = 400;
+            } else {
+                labelPart2 = 401;
+            }
+        } else if (labelPart2 == 402 && (dLytMsgWindow_c::getInstance()->getTagProcessor()->getField_0x8FC() < 0 ||
+                                         dLytMsgWindow_c::getInstance()->getTagProcessor()->getField_0x900() < 0)) {
+            // "You have elected to engage Hero Mode..."
+            FiContext::setField_0x4A(true);
+            labelPart2 = 401;
+        }
+    }
+
+    if (labelPart1 == 6 && labelPart2 == 801) {
+        // "You called for me, Master?"
+        FiContext::do_fn_8016CA00();
+        FiContext::setDoSpecialFiMenuHandling(true);
+        FiContext::do_fn_8016CB40();
+        setTagProcessorFiArgument(0, 0);
+        setTagProcessorFiArgument(1, 1);
+        setTagProcessorFiArgument(2, 2);
+        setTagProcessorArgument(7, 3);
+    } else if (labelPart1 == 6 && labelPart2 == 802) {
+        // Doesn't seem to exist in the files
+        FiContext::setDoSpecialFiMenuHandling(true);
+        setTagProcessorFiArgument(0, 0);
+        setTagProcessorFiArgument(1, 1);
+        setTagProcessorFiArgument(2, 2);
+        setTagProcessorArgument(7, 3);
+    }
+    u16 entry = findEntryPoint(labelPart1, labelPart2);
+    start(entry);
+}
+
+void dFlow_c::triggerEntryPoint(const char *label) {
+    u16 entry = findEntryPoint(label);
+    start(entry);
+}
+
+u16 dFlow_c::getField_0x44() const {
+    return field_0x44;
+}
+
+u16 dFlow_c::getField_0x46() const {
+    return field_0x46;
+}
+
+bool dFlow_c::triggerEntryPointChecked(s32 labelPart1, s32 labelPart2) {
+    if (checkField0x3C()) {
+        s32 old = field_0x40;
+        dFlow_c::triggerEntryPoint(labelPart1, labelPart2);
+        setNext(old);
+        return true;
+    }
+    return false;
+}
+
+void dFlow_c::setField0x3C() {
+    field_0x3C = 1;
+}
+
+bool dFlow_c::checkField0x3C() const {
+    return field_0x3C == 1;
+}
+
+extern "C" dFlow_c *CURRENT_ACTOR_EVENT_FLOW_MANAGER;
+void dFlow_c::start(u16 entry) {
+    field_0x0E = 0;
+    field_0x0F = 0;
+    field_0x3C = 0;
+    field_0x40 = -1;
+    field_0x44 = -1;
+    field_0x46 = -1;
+    mDelayTimer = 0;
+    std::memset(&mFlowInfo, 0, sizeof(MsbFlowInfo));
+    CURRENT_ACTOR_EVENT_FLOW_MANAGER = this;
+    field_0x0C = 0xFFFF;
+    mCurrentFlowIndex = -1;
+    field_0x10 = 1;
+    setNext(entry);
+}
+
+bool dFlow_c::advanceUntil(s32 searchType, s32 searchParam3, s32 *pOutParams1n2) {
+    bool keepGoing = true;
+    while (keepGoing && !vt_0x18()) {
+        MsbFlowInfo *element = LMS_GetFlowElement(mpMsbf, mCurrentFlowIndex);
+        s32 type = element->type;
+        if (searchType == type) {
+            if (element->type == FLOW_EVENT) {
+                if (element->param3 == searchParam3) {
+                    if (pOutParams1n2 != nullptr) {
+                        *pOutParams1n2 = element->params1n2;
+                    }
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        }
+        switch (type) {
+            case FLOW_MESSAGE:
+                // Skip text processing, simply advance
+                setNext(element->next);
+                keepGoing = true;
+                break;
+            case FLOW_BRANCH:
+                if (element->param3 <= 2) {
+                    keepGoing = false;
+                } else {
+                    keepGoing = handleBranch();
+                }
+                break;
+            case FLOW_EVENT:
+                switch (element->param3) {
+                    case 7:
+                    case 23:
+                    case 27: keepGoing = handleEvent(); continue;
+                    case 34:
+                        if (element->params1n2 == 2) {
+                            keepGoing = false;
+                            continue;
+                        }
+                        // fall-through
+                    default:
+                        setNext(element->next);
+                        keepGoing = true;
+                        break;
+                }
+                break;
+            case FLOW_ENTRY: keepGoing = handleEntry(); break;
+            case FLOW_JUMP:  keepGoing = handleJump(); break;
+        }
+    }
+    return 0;
+}
+
+// TODO: Where are these IDs from?
+static const s32 sActorsWithKillCount[] = {0,  1,  10, 46, 47, 48, 49, 50, 51, 52, 53,
+                                           54, 55, 65, 67, 77, 81, 87, 88, 89, 90, -1};
+
+bool dFlow_c::shouldActorShowKillCount(s32 id) const {
+    for (s32 i = 0; sActorsWithKillCount[i] >= 0; i++) {
+        if (sActorsWithKillCount[i] == id) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void dFlow_c::clear() {
+    mCurrentFlowIndex = -1;
+    field_0x0E = 1;
+    field_0x3C = 0;
+    field_0x40 = -1;
+    field_0x44 = -1;
+}
+
+void dFlow_c::createLytMiniGame() {
+    if (dLytMiniGame_c::GetInstance() == nullptr) {
+        switch (dMessage_c::getInstance()->getMiniGameVariant()) {
+            case 0:
+                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 11, fBase_c::OTHER);
+                break;
+            case 1:
+                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 10, fBase_c::OTHER);
+                break;
+            case 2:
+                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 12, fBase_c::OTHER);
+                break;
+            case 3:
+                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 14, fBase_c::OTHER);
+                break;
+            case 4:
+                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 13, fBase_c::OTHER);
+                break;
+            case 5:
+                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 2, fBase_c::OTHER);
+                break;
+            case 6:
+                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 16, fBase_c::OTHER);
+                break;
+            case 7:
+                dBase_c::createBase(fProfile::LYT_MINI_GAME, dLytControlGame_c::getInstance(), 15, fBase_c::OTHER);
+                break;
+        }
+    }
+}
+
+void dFlow_c::clearMinigame() {
+    if (dMessage_c::getInstance()->getField_0x340()) {
+        switch (dMessage_c::getInstance()->getMiniGameVariant()) {
+            case 0:
+            case 1:
+            case 4:
+            case 5:
+                if (dLytMiniGame_c::GetInstance() != nullptr) {
+                    dLytMiniGame_c::GetInstance()->scoreRelated();
+                }
+                break;
+            case 2:
+            case 3:
+            case 6:
+            case 7:
+                if (dLytMiniGame_c::GetInstance() != nullptr) {
+                    dLytMiniGame_c::GetInstance()->timeRelated();
+                }
+                break;
+        }
+    }
+    dMessage_c::getInstance()->setField_0x340(0);
+    dMessage_c::getInstance()->setMiniGameVariant(8);
+}
 
 SPECIAL_BASE_PROFILE(MESSAGE, dMessage_c, fProfile::MESSAGE, 0x2A8, 0);
 
@@ -186,10 +1333,6 @@ static char *sMsbfFileNames[80] = {
     "599-Demo.msbf",
 };
 
-static char *sArcNames[] = {
-    "0-Common", "1-Town", "2-Forest", "3-Mountain", "4-Desert", "5-CenterField",
-};
-
 dMessage_c *dMessage_c::sInstance;
 dTagProcessor_c *dMessage_c::sTagProcessor;
 
@@ -245,7 +1388,7 @@ int dMessage_c::create() {
     }
 
     sTagProcessor = new dTagProcessor_c();
-    createGlobalFiContext();
+    FiContext::create();
     reset();
     return SUCCEEDED;
 }
@@ -416,6 +1559,17 @@ s32 dMessage_c::getMsbfNumberByIndex(s32 index) {
     return atoi(getMsbfFileName(index));
 }
 
+// Skipping 007-MapText.msbt and word.msbt
+static const s32 sMsbfToMsbt[] = {
+    0,  1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 17, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28,
+    29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55,
+    56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81,
+};
+
+s32 dMessage_c::getMsbtIndexForMsbfIndex(s32 index) {
+    return sMsbfToMsbt[index];
+}
+
 s32 dMessage_c::getTextIndexForLabel(const char *label) {
     s32 idx = getMsbtIndexForLabelInternal(label);
     MsbtInfo *info = nullptr;
@@ -474,8 +1628,74 @@ MsbfInfo *dMessage_c::getMsbfInfoForIndexInternal(s32 index) {
     return mpFlows[index];
 }
 
-extern "C" u8 fn_80054F30();
+u32 dMessage_c::getLightPillarRelatedArg(s32 arg) {
+    return field_0x300[arg];
+}
 
+void dMessage_c::storeLightPillarRelatedArg(u32 arg) {
+    for (s32 i = 0; i < ARRAY_LENGTH(field_0x300); i++) {
+        if (field_0x300[i] == 0xFFFFFFFF) {
+            field_0x300[i] = arg;
+            return;
+        }
+    }
+}
+
+void dMessage_c::clearLightPillarRelatedArgs() {
+    for (s32 i = 0; i < ARRAY_LENGTH(field_0x300); i++) {
+        field_0x300[i] = 0xFFFFFFFF;
+    }
+}
+
+void dMessage_c::executeMinigame() {
+    if (mMiniGameVariant == 8) {
+        return;
+    }
+    if (!dMessage_c::getInstance()->getField_0x340()) {
+        switch (mMiniGameVariant) {
+            case 0:
+            case 1:
+            case 4:
+            case 5:
+                if (dLytMiniGame_c::GetInstance() != nullptr) {
+                    dLytMiniGame_c::GetInstance()->scoreRelatedExecute();
+                    dLytMiniGame_c::GetInstance()->setDisplayedPoints(mMinigameResultPoints);
+                    sInstance->field_0x340 = 1;
+                }
+                break;
+            case 2:
+            case 3:
+            case 6:
+            case 7:
+                if (dLytMiniGame_c::GetInstance() != nullptr) {
+                    dLytMiniGame_c::GetInstance()->timeRelatedExecute();
+                    dLytMiniGame_c::GetInstance()->setDisplayedTime(mMinigameTime);
+                    sInstance->field_0x340 = 1;
+                }
+                break;
+        }
+    }
+}
+
+void dMessage_c::init() {
+    clearLightPillarRelatedArgs();
+    // Probably inlines
+    field_0x328 = 0;
+    field_0x329 = 0;
+    field_0x32A = 0;
+    sInstance->setField_0x32C(12);
+    field_0x330 = 0;
+}
+
+void dMessage_c::reset() {
+    init();
+    mMiniGameVariant = 8;
+    field_0x340 = 0;
+    mMinigameResultPoints = 0;
+    mMinigameTime = 0;
+}
+
+extern "C" u8 fn_80054F30();
 static SizedString<8> sCurrentLanguage;
 const char *dMessage_c::getLanguageIdentifier() {
     u8 lang = fn_80054F30();
@@ -489,9 +1709,39 @@ const char *dMessage_c::getLanguageIdentifier() {
     return sCurrentLanguage;
 }
 
+const char *sLytMsbts_Unused[] = {
+    "basic/remoConBtn_00.msbt",
+    "basic/remoConBtn_01.msbt",
+    "basic/remoConBtn_03.msbt",
+    "basic/remoConBtn_04.msbt",
+    "basic/remoConBtn_05.msbt",
+    "basic/nunBtn_03.msbt",
+    "common/commonTitle_00.msbt",
+    "endroll/endScroll_00.msbt",
+    "fileSelect/fileSelect_00.msbt",
+    "information/skip_00.msbt",
+    "map/map_00.msbt",
+    "messageWindow/messageBtn_00.msbt",
+    "miniGame/start_00.msbt",
+    "miniGameScore/miniGameScore_00.msbt",
+    "miniGameTime/miniGameTime_00.msbt",
+    "pause/pauseInfo_00.msbt",
+    "pause/pause_00.msbt",
+    "shop/depositBox_00.msbt",
+    "shop/itemSelect_00.msbt",
+    "shop/materialCheck_00.msbt",
+    "softwareKeyboard/toolbarBtn_00.msbt",
+    "systemWindow/systemWindow_00.msbt",
+    "title/titleBG_00.msbt",
+};
+
 const char *dMessage_c::getArcNameByIndex(s32 idx, bool global) {
     return getArcNameByIndexInternal(idx, global);
 }
+
+static char *sArcNames[] = {
+    "0-Common", "1-Town", "2-Forest", "3-Mountain", "4-Desert", "5-CenterField",
+};
 
 const char *dMessage_c::getArcNameByIndexInternal(s32 idx, bool global) {
     return sArcNames[idx];

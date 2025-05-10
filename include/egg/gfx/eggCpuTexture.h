@@ -90,6 +90,13 @@ public:
         mWrapT = wrap;
     }
 
+    GXTexWrapMode getWrapS() const {
+        return (GXTexWrapMode)mWrapS;
+    }
+    GXTexWrapMode getWrapT() const {
+        return (GXTexWrapMode)mWrapT;
+    }
+
     void setWrap(GXTexWrapMode wrapS, GXTexWrapMode wrapT) {
         mWrapS = wrapS;
         mWrapT = wrapT;
@@ -105,6 +112,13 @@ public:
     }
     void setMagFilt(GXTexFilter filt) {
         mMagFilt = filt;
+    }
+
+    GXTexFilter getMinFilt() const {
+        return (GXTexFilter)mMinFilt;
+    }
+    GXTexFilter getMagFilt() const {
+        return (GXTexFilter)mMagFilt;
     }
 
     ResTIMG *getHeader() const {

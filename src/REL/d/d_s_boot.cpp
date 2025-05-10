@@ -2,8 +2,10 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "d/d_dvd_unk.h"
 #include "d/d_dylink.h"
 #include "d/d_font_manager.h"
+#include "d/d_gfx.h"
 #include "d/d_heap.h"
 #include "d/d_message.h"
 #include "d/d_scene.h"
@@ -24,7 +26,6 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/hbm.h"
-#include "toBeSorted/some_gxf_thing.h"
 #include "toBeSorted/reload_color_fader.h"
 
 sFPhase<dScBoot_c>::phaseCallback dScBoot_c::sCallbacks[] = {&dScBoot_c::cb1, &dScBoot_c::cb2, &dScBoot_c::cb3,
@@ -42,9 +43,7 @@ sFPhaseBase::sFPhaseState dScBoot_c::executeLoadPhase() {
 }
 
 extern "C" u8 getUsedLanguageNTSCNum();
-extern "C" const char *getEventFlowFileNameByIndex(int, int);
 extern "C" u8 fn_80054F30();
-extern "C" nw4r::ut::ResFont *lbl_805750D8;
 
 sFPhaseBase::sFPhaseState dScBoot_c::cb1() {
     LayoutArcManager::GetInstance()->loadLayoutArcFromDisk("cursor", mHeap::g_archiveHeap);
@@ -54,7 +53,7 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb1() {
 
     for (int i = 0; i < 6; i++) {
         SizedString<128> str;
-        str.sprintf("%s/%s", dMessage_c::getLanguageIdentifier(), getEventFlowFileNameByIndex(i, 1));
+        str.sprintf("%s/%s", dMessage_c::getLanguageIdentifier(), dMessage_c::getArcNameByIndex(i, true));
         OarcManager::GetInstance()->loadObjectArcFromDisk(str, mHeap::g_archiveHeap);
     }
     OarcManager::GetInstance()->loadObjectArcFromDisk("System", mHeap::g_archiveHeap);
@@ -235,9 +234,7 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb6() {
         }
     }
 
-    // TODO we think this is a ResFont but
-    // the offset is larger than ResFont...
-    ((u8 *)lbl_805750D8)[0x2C] = 1;
+    dDvdUnk::FontUnk::GetInstance()->setField_0x2C(1);
     field_0x5DF = 1;
     return sFPhaseBase::PHASE_NEXT;
 }
@@ -520,7 +517,7 @@ void dScBoot_c::executeState_Strap() {
 
 void dScBoot_c::finalizeState_Strap() {
     // TODO
-    SomeGfxThing::setField0x09(1);
+    dGfx_c::GetInstance()->setField0x09(1);
 }
 
 void dScBoot_c::initializeState_Connect() {

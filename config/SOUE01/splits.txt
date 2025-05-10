@@ -44,10 +44,15 @@ toBeSorted/file_manager.cpp:
 	.bss        start:0x80580070 end:0x80580080
 
 toBeSorted/save_manager.cpp:
-	.text       start:0x80011730 end:0x80015310 align:16
+	.text       start:0x80011730 end:0x80015DD4 align:16
+	.rodata     start:0x804DBB60 end:0x804DBC38
+	.data       start:0x80500410 end:0x80500828
+	.sbss       start:0x80575000 end:0x80575008
+	.bss        start:0x80580080 end:0x8058F120
 
-toBeSorted/save_requests.cpp:
-	.text       start:0x80015310 end:0x800161F4 align:16
+toBeSorted/save_related.cpp:
+	.text       start:0x80015DE0 end:0x800161F4 align:16
+	.rodata     start:0x804DBC38 end:0x804DBC78
 
 toBeSorted/d_d2d.cpp:
 	.text       start:0x80016200 end:0x800166F8 align:16
@@ -64,13 +69,10 @@ toBeSorted/d_scn_callback.cpp:
 	.sbss       start:0x80575020 end:0x80575028
 	.sdata2     start:0x80576A68 end:0x80576A78
 
-toBeSorted/d_unk_proc.cpp:
-	.text       start:0x8001A590 end:0x8001BE58 align:16
-	.sdata2     start:0x80576A78 end:0x80576B08
-
 toBeSorted/d_shadow.cpp:
-	.text       start:0x8001BE60 end:0x8001BF94 align:16
+	.text       start:0x8001A590 end:0x8001BF94 align:16
 	.ctors      start:0x804DB650 end:0x804DB654
+	.sdata2     start:0x80576A78 end:0x80576B08
 
 toBeSorted/d_unk_mdl_stuff_1.cpp:
 	.text       start:0x8001BFA0 end:0x8001E444 align:16
@@ -86,9 +88,15 @@ toBeSorted/blur_and_palette_manager.cpp:
 	.sdata2     start:0x80576BA0 end:0x80576C18
 	.bss        start:0x8058F210 end:0x80594FA0
 
-toBeSorted/d_effects_1.cpp:
+toBeSorted/d_emitter.cpp:
 	.text       start:0x800268B0 end:0x8002B99C align:16
 	.ctors      start:0x804DB660 end:0x804DB664
+	.rodata     start:0x804DBD18 end:0x804DBE80
+	.data       start:0x80500E98 end:0x805014C0
+	.sdata      start:0x805718A8 end:0x80571920
+	.sbss       start:0x80575070 end:0x80575080
+	.sdata2     start:0x80576C18 end:0x80576C68
+	.bss        start:0x80594FA0 end:0x80597020
 
 toBeSorted/d_effects_2.cpp:
 	.text       start:0x8002B9A0 end:0x8002C128 align:16
@@ -414,7 +422,7 @@ toBeSorted/nand_request_thread.cpp:
 	.text       start:0x800BC980 end:0x800BD604 align:16
 	.data       start:0x80510B30 end:0x80510B70
 
-toBeSorted/unk_gfx.cpp:
+toBeSorted/nand_result_tracker.cpp:
 	.text       start:0x800BD610 end:0x800BD8C0 align:16
 
 d/flag/flag_managers.cpp:
@@ -454,6 +462,9 @@ toBeSorted/special_item_drop_mgr.cpp:
 
 toBeSorted/d_particle.cpp:
 	.text       start:0x800C82B0 end:0x800C8948 align:16
+	.data       start:0x80511C60 end:0x80511C80
+	.sdata      start:0x80572310 end:0x80572318
+	.sbss       start:0x80575440 end:0x80575448
 
 d/lyt/meter/d_lyt_meter.cpp:
 	.text       start:0x800C8950 end:0x800DF8A8 align:16
@@ -888,6 +899,11 @@ d/lyt/d_lyt_pause_text.cpp:
 d/lyt/d_lyt_save_msg_window.cpp:
 	.text       start:0x80164F90 end:0x80166968 align:16
 	.ctors      start:0x804DB7A8 end:0x804DB7AC
+	.rodata     start:0x804E8B60 end:0x804E8BB8
+	.data       start:0x80526D10 end:0x80527210
+	.sdata      start:0x805729C8 end:0x805729D0
+	.sdata2     start:0x8057A108 end:0x8057A118
+	.bss        start:0x805B1BB0 end:0x805B1CB0
 
 d/lyt/d_lyt_util_items.cpp:
 	.text       start:0x80166970 end:0x80167FD4 align:16
@@ -1076,9 +1092,11 @@ d/tg/d_t_weather.cpp:
 d/d_message.cpp:
 	.text       start:0x801AF7E0 end:0x801B329C align:16
 	.ctors      start:0x804DB808 end:0x804DB80C
+	.rodata     start:0x804EA950 end:0x804EAB60
 	.data       start:0x8052C858 end:0x8052DF40
 	.sdata      start:0x80573248 end:0x80573290
 	.sbss       start:0x80575740 end:0x80575760
+	.sdata2     start:0x8057B4D8 end:0x8057B4E8
 	.bss        start:0x805B29E0 end:0x805B36E0
 
 d/d_stage.cpp:
@@ -1278,6 +1296,7 @@ d/lyt/d_lyt_boss_caption.cpp:
 d/lyt/d_lyt_demo_dowsing.cpp:
 	.text       start:0x802A0B10 end:0x802A17C8 align:16
 	.ctors      start:0x804DB880 end:0x804DB884
+	.data       start:0x8053BD00 end:0x8053BF50
 
 d/lyt/d_lyt_shop.cpp:
 	.text       start:0x802A17D0 end:0x802A7FD8 align:16
@@ -2273,7 +2292,7 @@ nw4r/ut/ut_TextWriterBase.cpp:
 
 nw4r/db/db_directPrint.cpp:
 	.text       start:0x804342A0 end:0x80434E9C align:16
-	.rodata     start:0x804F5D28 end:0x804F5FDC
+	.rodata     start:0x804F5D28 end:0x804F5FE0
 	.data       start:0x8056C000 end:0x8056C010
 	.sbss       start:0x805765E8 end:0x805765EC
 	.bss        start:0x80636B80 end:0x80636BA4
@@ -2290,13 +2309,13 @@ nw4r/db/db_exception.cpp:
 	.data       start:0x8056C038 end:0x8056C5F0
 	.sdata      start:0x80574DD0 end:0x80574E10
 	.sbss       start:0x805765F8 end:0x80576600
-	.sdata2     start:0x8057EBA8 end:0x8057EBAC
+	.sdata2     start:0x8057EBA8 end:0x8057EBB0
 	.bss        start:0x80636FC0 end:0x8063B320
 
 nw4r/db/db_mapFile.cpp:
 	.text       start:0x80436A50 end:0x804373B4 align:16
 	.data       start:0x8056C5F0 end:0x8056C600
-	.sdata      start:0x80574E10 end:0x80574E24
+	.sdata      start:0x80574E10 end:0x80574E28
 	.sbss       start:0x80576600 end:0x8057660C
 	.bss        start:0x8063B320 end:0x8063B560
 
@@ -2306,15 +2325,23 @@ nw4r/db/db_assert.cpp:
 
 nw4r/math/math_arithmetic.cpp:
 	.text       start:0x804373D0 end:0x804375AC align:16
+	.data       start:0x8056C600 end:0x8056CF10
+	.sdata2     start:0x8057EBB0 end:0x8057EBD0
 
 nw4r/math/math_triangular.cpp:
 	.text       start:0x804375B0 end:0x804378D0 align:16
+	.rodata     start:0x804F5FE0 end:0x804F6FF0
+	.data       start:0x8056CF10 end:0x8056D020
+	.sdata2     start:0x8057EBD0 end:0x8057EBF0
 
 nw4r/math/math_types.cpp:
 	.text       start:0x804378D0 end:0x80437D34 align:16
+	.sdata2     start:0x8057EBF0 end:0x8057EC00
 
 nw4r/math/math_geometry.cpp:
 	.text       start:0x80437D40 end:0x80438F4C align:16
+	.sdata      start:0x80574E28 end:0x80574E30
+	.sdata2     start:0x8057EC00 end:0x8057EC18
 
 nw4r/g3d/res/g3d_rescommon.cpp:
 	.text       start:0x80438F50 end:0x804390F4 align:16
@@ -2340,7 +2367,7 @@ nw4r/g3d/res/g3d_restev.cpp:
 
 nw4r/g3d/res/g3d_resmat.cpp:
 	.text       start:0x8043C2C0 end:0x8043E17C align:16
-	.data       start:0x8056D190 end:0x8056D1E4
+	.data       start:0x8056D190 end:0x8056D200
 	.sdata2     start:0x8057EC18 end:0x8057EC4C
 
 nw4r/g3d/res/g3d_resvtx.cpp:
@@ -2476,7 +2503,7 @@ nw4r/g3d/g3d_state.cpp:
 	.sdata      start:0x80574E48 end:0x80574E50
 	.sbss       start:0x80576628 end:0x80576648
 	.sdata2     start:0x8057EDA0 end:0x8057EDC8
-	.bss        start:0x8063B9A0 end:0x80640F44
+	.bss        start:0x8063B9A0 end:0x80640F80
 
 nw4r/g3d/g3d_draw1mat1shp.cpp:
 	.text       start:0x8044EAB0 end:0x8044F7F4 align:16

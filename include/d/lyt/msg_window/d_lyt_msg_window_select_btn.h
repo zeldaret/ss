@@ -36,6 +36,7 @@ class dLytMsgWindowSelectBtnParts_c {
 
 public:
     dLytMsgWindowSelectBtnParts_c() : mStateMgr(*this) {}
+    ~dLytMsgWindowSelectBtnParts_c() {}
 
     void init();
     void execute();
@@ -73,6 +74,14 @@ public:
 
     bool draw();
 
+    u8 getField_0x9A4() const {
+        return field_0x9A4;
+    }
+
+    s32 getField_0x9B0() const {
+        return field_0x9B0;
+    }
+
     s32 getField_0x9B4() const {
         return field_0x9B4;
     }
@@ -85,12 +94,24 @@ public:
         field_0x9BC = value;
     }
 
+    void setField_0x9C4(s32 value) {
+        field_0x9C4 = value;
+    }
+
     void setField_0x990(s32 value) {
         mBtnHelper.field_0x4C = value;
     }
 
-    void setField_0x998(dTagProcessor_c *value) {
+    void setField_0x9A0(s32 value) {
+        field_0x9A0 = value;
+    }
+
+    void setTagProcessor(dTagProcessor_c *value) {
         mpTagProcessor = value;
+    }
+
+    void setField_0x99C(s32 value) {
+        field_0x99C = value;
     }
 
     void fn_8011E5D0(u32, bool);
@@ -136,7 +157,7 @@ private:
     /* 0x9B8 */ s32 field_0x9B8;
     /* 0x9BC */ s32 field_0x9BC;
     /* 0x9C0 */ s32 field_0x9C0;
-    /* 0x9C4 */ void *field_0x9C4;
+    /* 0x9C4 */ s32 field_0x9C4;
     /* 0x9C8 */ s32 field_0x9C8;
     /* 0x9CC */ s8 field_0x9CC;
     /* 0x9CD */ u8 field_0x9CD;
