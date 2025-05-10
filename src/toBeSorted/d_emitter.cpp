@@ -433,8 +433,7 @@ bool dParticleFogProc_c::create(u32 idx, s32 prioOpa, s32 prioXlu, mHeapAllocato
         return false;
     }
     mIdx = idx;
-    // idxes 0, 2, 4, 6, 10
-    field_0x1C = idx <= 10 && ((1 << idx) & 0b10001010101) != 0;
+    field_0x1C = idx == 0 || idx == 2 || idx == 4 || idx == 6 || idx == 10;
     return true;
 }
 
