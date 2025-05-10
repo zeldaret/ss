@@ -515,7 +515,7 @@ bool mShadowChild_c::setGeom(const GXTexObj *texObj, const mMtx_c &mtx, const mQ
 
 void mShadowChild_c::updateMtx() {
     const mQuat_c &q = GetQuat();
-    const mVec3_c &pos = GetPostion();
+    const mVec3_c &pos = GetPosition();
 
     Set0x13C(q.w);
 

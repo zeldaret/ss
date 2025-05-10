@@ -10,6 +10,7 @@
 #include "f/f_profile_name.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TOWER_GEAR_D101, dAcOTowerGearD101_c, fProfile::OBJ_TOWER_GEAR_D101, 0x17E, 0, 7);
 
@@ -92,9 +93,9 @@ void dAcOTowerGearD101_c::executeState_Wait() {
         mAng newRotation = diff * scale5 / 2400.0f;
         if (newRotation != mCurrRotation) {
             if (mPreviousTurnSpeed == 0) {
-                playSound(0xBF8);
+                playSound(SE_TGrD101_ROLL_START);
             } else {
-                playSoundEffect1(0xBF9);
+                playSoundEffect1(SE_TGrD101_ROLL_LV);
                 playVisualEffect();
             }
         }
@@ -128,5 +129,5 @@ void dAcOTowerGearD101_c::initTransform() {
 
 extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_585_;
 void dAcOTowerGearD101_c::playVisualEffect() {
-    mEffects.fn_80029A10(PARTICLE_RESOURCE_ID_MAPPING_585_, &field_0x3F4, &rotation, nullptr, nullptr, nullptr);
+    mEffects.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_585_, field_0x3F4, &rotation, nullptr, nullptr, nullptr);
 }

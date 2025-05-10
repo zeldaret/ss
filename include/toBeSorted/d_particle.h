@@ -73,8 +73,8 @@ public:
 
     void createResource(EGG::Heap *heap, s32 mgrIndex, void *jpc, void *jpn);
     void disposeResource(s32 mgrIndex);
-    s32 getResUserWork(u16 handle) const;
-    u16 getJpnData(u16 handle) const;
+    s32 getResUserWork(u16 particleResId) const;
+    u16 getJpnData(u16 particleResId) const;
     // Invokes the JParticle 11 extension
     void doCustomSkywardSwordThing(u8 groupId, f32 x, f32 y);
     void calc(u8 groupId);

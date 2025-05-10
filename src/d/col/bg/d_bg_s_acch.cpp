@@ -85,7 +85,7 @@ void dBgS_Acch::Set(dAcObjBase_c *pObj, int tblSize, dBgS_AcchCir *pAcchCir) {
     mpAcchCir = pAcchCir;
     mpMyObj = pObj;
     mActorId = pObj->getID();
-    mpPos = &pObj->GetPostion();
+    mpPos = &pObj->GetPosition();
     mpOldPos = &pObj->GetOldPosition();
     mpSpeed = &pObj->GetVelocity();
     if (mpSpeed) {

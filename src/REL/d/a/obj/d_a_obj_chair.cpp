@@ -136,7 +136,7 @@ int dAcOChair_c::actorExecute() {
     // Calculate the HealCooldown (Heal link if needed)
     if (!checkObjectProperty(0x8000)) {
         if (!isBench()) {
-            mCyl.SetC(GetPostion());
+            mCyl.SetC(GetPosition());
             dCcS::GetInstance()->Set(&mCyl);
         }
         mHealTimer = FIRST_HEAL_COOLDOWN;

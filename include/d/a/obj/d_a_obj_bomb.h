@@ -13,7 +13,7 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
 #include "s/s_StateID.hpp"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 // This may need its own file and could be independent of a bomb
 class UnkBombColInfo : public cBgS_PolyInfo {

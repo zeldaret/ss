@@ -10,6 +10,7 @@
  */
 class JPADrawInfo {
 public:
+    JPADrawInfo() {}
     JPADrawInfo(Mtx param_0, f32 fovY, f32 aspect) {
         MTXCopy(param_0, mCamMtx);
         C_MTXLightPerspective(mPrjMtx, fovY, aspect, 0.5f, -0.5f, 0.5f, 0.5f);

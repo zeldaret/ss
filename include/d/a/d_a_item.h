@@ -17,7 +17,7 @@
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/dowsing_target.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 class dAcItem_0xB34 {
 public:

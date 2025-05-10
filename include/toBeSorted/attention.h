@@ -8,7 +8,7 @@
 #include "m/m3d/m_anmtexpat.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_allocator.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 #include "toBeSorted/raii_ptr.h"
 
 static const u32 OFF = 'off ';

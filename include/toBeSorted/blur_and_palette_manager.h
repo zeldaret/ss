@@ -152,6 +152,9 @@ struct Bpm1 {
 struct Bpm2 {
     Bpm2() {}
     ~Bpm2() {}
+
+    // maybe
+    u8 _0x00[0x14 - 0x00];
 };
 
 struct PaletteEAF_smol_entry {
@@ -184,6 +187,7 @@ struct PaletteEAF_big {
     PaletteEAF_big_entry field_0x00[8];
 };
 
+// Apparently particle color related
 struct Bpm3 {
     Bpm3() {}
     ~Bpm3() {}
@@ -201,16 +205,22 @@ struct Bpm4 {
 struct Bpm7 {
     Bpm7() {}
     ~Bpm7() {}
+
+    u8 _0x00[0x14 - 0x00];
 };
 
 struct Bpm8 {
     Bpm8() {}
     ~Bpm8() {}
+
+    u8 _0x00[0x14 - 0x00];
 };
 
 struct Bpm9 {
     Bpm9() {}
     ~Bpm9() {}
+
+    u8 _0x00[0x14 - 0x00];
 };
 
 class BlurAndPaletteManager {
@@ -222,6 +232,10 @@ public:
 
     static BlurAndPaletteManager &GetInstance() {
         return sInstance;
+    }
+
+    static BlurAndPaletteManager *GetPInstance() {
+        return sPInstance;
     }
 
     void fn_800247D0(mVec3_c, f32);
@@ -241,6 +255,29 @@ public:
     const PaletteDefaultMCF &GetCurrentDefaultMcf() const {
         return field_0x5CE4;
     }
+
+    const Spf &GetCurrentSph() const {
+        return currentSpf;
+    }
+
+    const PaletteEAF_smol_entry& getSmallEAF(s32 idx1, s32 idx2) {
+        return field_0x38E4.field_0x00[idx1].field_0x00[idx2];
+    }
+
+    f32 getfield_0x2F14() const {
+        return field_0x2F14;
+    }
+
+    f32 getfield_0x2F18() const {
+        return field_0x2F18;
+    }
+
+    f32 getfield_0x2F1C() const {
+        return field_0x2F1C;
+    }
+
+    static mColor &getLightColor1();
+    static mColor &getLightColor2();
 
 private:
     mColor combineColors(const mColor &c1, const mColor &c2, f32 ratio);
@@ -267,15 +304,22 @@ private:
     /* 0x2F0C */ s16 field_0x2F0C;
     /* 0x2F0E */ s16 field_0x2F0E;
     /* 0x2F10 */ u8 field_0x2F10;
-    /* 0x2F11 */ u8 field_0x2F11[0x2F20 - 0x2F11];
+    /* 0x2F14 */ f32 field_0x2F14;
+    /* 0x2F18 */ f32 field_0x2F18;
+    /* 0x2F1C */ f32 field_0x2F1C;
     /* 0x2F20 */ f32 field_0x2F20;
+    /* 0x2F24 */ u8 _0x2F24[0x357C - 0x2F24];
     /* 0x357C */ Bpm1 field_0x357C;
+    /* 0x3594 */ u8 _0x3594[0x35A0 - 0x3594];
     /* 0x35A0 */ Bpm2 field_0x35A0;
     /* 0x35B4 */ Bpm7 field_0x35B4[8];
     /* 0x3654 */ Bpm8 field_0x3654[10];
     /* 0x371C */ Bpm9 field_0x371C[20];
+    /* 0x38AC */ u8 _0x38AC[0x38B4 - 0x38AC];
     /* 0x38B4 */ mVec3_c field_0x38B4;
+    /* 0x38C0 */ u8 _0x38C0[0x38C8 - 0x38C0];
     /* 0x38C8 */ mVec3_c field_0x38C8;
+    /* 0x38D4 */ u8 _0x38D4[0x38E4 - 0x38D4];
     /* 0x38E4 */ Bpm3 field_0x38E4;
     /* 0x48E4 */ Bpm4 field_0x48E4;
     /* 0x5CE4 */ PaletteDefaultMCF field_0x5CE4;

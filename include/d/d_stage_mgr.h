@@ -4,9 +4,9 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_base.h"
+#include "d/d_bzs_types.h"
 #include "d/d_dylink.h"
 #include "d/d_fader.h"
-#include "d/d_bzs_types.h"
 #include "egg/gfx/eggScreen.h"
 #include "m/m_allocator.h"
 #include "m/m_dvd.h"
@@ -48,6 +48,8 @@ public:
     STATE_FUNC_DECLARE(dStageMgr_c, RestartScene);
 
 public:
+    u8 getGlobalAlpha() const;
+
     bool isAreaTypeNormal() const;
     bool isAreaTypeDungeon() const;
     bool isAreaTypeSky() const;
@@ -119,7 +121,7 @@ public:
     void setStif(const STIF *stif);
     s16 getFlagIndex() const;
 
-    void setDemoName(const SizedString<16>& name) {
+    void setDemoName(const SizedString<16> &name) {
         mDemoName = name;
     }
 
@@ -169,16 +171,16 @@ private:
     /* 0x7814 */ dParticle::tex_c mParticleTex[2];
     // ...
     /* 0x7930 */ dFader_c mFader;
-    
+
     /* 0x7954 */ u16 mPcamCount;
     /* 0x7956 */ u16 mLyseCount;
     /* 0x7958 */ u16 mRmplCount;
-    
+
     /* 0x795C */ const PCAM *mpPcam;
     /* 0x7960 */ const LYSE *mpLyse;
     /* 0x7964 */ const STIF *mpStif;
     /* 0x7968 */ const RMPL *mpRmpl;
-    
+
     /* 0x799C */ mDvd_callback_c *mpDvdCallback;
     /* 0x79A0 */ mDvd_callback_c *mpDvdCallback2;
 
