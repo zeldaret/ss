@@ -16,7 +16,6 @@ STATE_DEFINE(dAcArrow_c, Bound);
 // clang-format off
 
 cCcD_SrcGObj dAcArrow_c::sCcSrcInf = {
-
     {AT_TYPE_ARROW, 0x8BB, {0x15,0, 0}, 0, 0, 0, 0, 0, 0}, 
     {
         ~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_ARROW | AT_TYPE_0x100 | AT_TYPE_WIND | AT_TYPE_SLINGSHOT),

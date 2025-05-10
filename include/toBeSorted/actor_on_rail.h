@@ -73,4 +73,13 @@ private:
     mVec3_c mPosition;
 };
 
+class ActorOnRail3 {
+    ActorOnRail mPath;
+    u16 mSomePntIdx;
+    u32 mFlags;
+
+public:
+    ActorOnRail3() : mSomePntIdx(0), mFlags(0) {}
+};
+
 #endif

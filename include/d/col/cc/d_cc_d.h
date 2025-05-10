@@ -2,7 +2,6 @@
 #define D_CC_D_H
 
 #include "d/col/c/c_cc_d.h"
-#include "d/col/c/c_m3d.h"
 #include "m/m_vec.h"
 
 struct dCcD_SrcCps {
