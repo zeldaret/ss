@@ -18,6 +18,28 @@
 class dAcObjBase_c;
 class dBgS_Acch;
 
+// This is found in dAcObamboo, dAcPy, and dAcEsm
+// Since they have object in common, it will reside here
+// until further notice.
+#include "m/m3d/m_mdl.h"
+struct todoStruct00 {
+    struct InternalData {
+        u16 field_0x00;
+        f32 field_0x04;
+        InternalData *pNextData;
+    };
+
+    todoStruct00();
+
+    void Set(dAcObjBase_c *pActor, InternalData *pData, m3d::mdl_c *pMdl, u32);
+
+    /* 0x00 */ InternalData *field_0x00;
+    /* 0x04 */ m3d::mdl_c *mpMdl;
+    /* 0x08 */ dAcObjBase_c *mpActor;
+    /* 0x0C */ u32 mCount; // Guess
+    /* 0x10 */ u32 field_0x10;
+};
+
 // Size: 0xA8
 struct ActorCarryStruct {
     /* 0x00 */ dAcRefBase_c actorLink;
@@ -182,12 +204,12 @@ public:
 
 public:
     /* 8002e630 */ static dAcObjBase_c *create(
-        fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
-        u32 params2
+        fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot,
+        const mVec3_c *scale, u32 params2
     );
     /* 8002e6d0 */ static dAcObjBase_c *create(
-        const char *name, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale, u32 params2, u16 id,
-        s8 viewclipId
+        const char *name, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
+        u32 params2, u16 id, s8 viewclipId
     );
     /* 8002e770 */ static dAcObjBase_c *
     findObject(fProfile::PROFILE_NAME_e actorId, fLiNdBa_c *refList, dAcObjBase_c *parent);

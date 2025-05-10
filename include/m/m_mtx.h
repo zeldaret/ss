@@ -58,6 +58,10 @@ public:
         const mAng &zRot
     ); ///< Rotates the matrix on the Z, Y and X axes by the given angles.
 
+    void ZXYrotM(const mAng3_c &ang) {
+        ZXYrotM(ang.x, ang.y, ang.z);
+    }
+
     void toRot(mAng3_c &out) const; ///< Converts the matrix to a rotation vector.
 
     void multVecZero(nw4r::math::VEC3 &out) const; ///< Converts the matrix to a vector.

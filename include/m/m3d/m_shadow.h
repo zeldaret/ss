@@ -116,7 +116,7 @@ public:
     virtual ~mShadowCircle_c();
 
 private:
-    mShadowChild_c *mpChild;
+    /* 0x04 */ mShadowChild_c *mpChild;
 };
 
 /**
