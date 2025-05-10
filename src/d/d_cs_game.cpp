@@ -1,10 +1,11 @@
 #include "d/d_cs_game.h"
 
 #include "d/d_cs_base.h"
+#include "d/d_cursor_hit_check.h"
 #include "d/lyt/d2d.h"
-#include "d/lyt/d_structd.h"
 #include "f/f_base.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_BASE_PROFILE(C_GAME, dCsGame_c, fProfile::C_GAME, 0x2BF, 0x06F9);
 
@@ -131,9 +132,9 @@ dCsGame_c::~dCsGame_c() {
 }
 
 int dCsGame_c::create() {
-    void *csData = LayoutArcManager::sInstance->getLoadedData("cursor");
+    void *csData = LayoutArcManager::GetInstance()->getLoadedData("cursor");
     mCursorResAcc.attach(csData, "arc");
-    void *mainData = LayoutArcManager::sInstance->getLoadedData("Main2D");
+    void *mainData = LayoutArcManager::GetInstance()->getLoadedData("Main2D");
     mMain2DResAcc.attach(mainData, "");
 
     mLyt1.setResAcc(&mCursorResAcc);
@@ -147,9 +148,9 @@ int dCsGame_c::create() {
     mCursorType = 0;
 
     mCursor.setField0x9A0(0);
-    mStructC.field_0x10 = 2;
-    d2d::dLytStructDList::sInstance->appendToList1(&mStructC);
-    dCsBase_c::sInstance->setField703(false);
+    mCursorIf.setCursorMask(2);
+    dCsMgr_c::GetInstance()->registCursor(&mCursorIf);
+    dCsBase_c::GetInstance()->setField703(false);
     return SUCCEEDED;
 }
 
@@ -157,7 +158,7 @@ int dCsGame_c::doDelete() {
     mCursor.remove();
     mLyt2.dCsGameLytBase_0x14();
     mLyt1.dCsGameLytBase_0x14();
-    d2d::dLytStructDList::sInstance->removeFromList1(&mStructC);
+    dCsMgr_c::GetInstance()->unregistCursor(&mCursorIf);
     mCursorResAcc.detach();
     mMain2DResAcc.detach();
     return SUCCEEDED;
@@ -233,7 +234,7 @@ bool dCsGame_c::lytItemCursor_c::doInit() {
     mAnm.init(mAnmGroups.tmp.mAnmGroups, lytItemCursorMap, 0x17, mpResAcc, mLyt.getLayout());
 
     for (int i = 0; i < 0x17; i++) {
-        mAnmGroups.tmp.mAnmGroups[i].setDirection(false);
+        mAnmGroups.tmp.mAnmGroups[i].bind(false);
         mAnmGroups.tmp.mAnmGroups[i].setAnimEnable(false);
     }
 
@@ -361,7 +362,7 @@ void dCsGame_c::lytItemCursor_c::lytBowCsr_c::initializeState_AimStart() {
     mAnm[MAIN_ANIM_ARROW_ON].setFrame(0.0f);
 }
 void dCsGame_c::lytItemCursor_c::lytBowCsr_c::executeState_AimStart() {
-    if (mAnm[MAIN_ANIM_ARROW_ON].isFlag2()) {
+    if (mAnm[MAIN_ANIM_ARROW_ON].isEnabled()) {
         mAnm[MAIN_ANIM_ARROW_ON].play();
         if (mAnm[MAIN_ANIM_ARROW_ON].isEndReached()) {
             mpLyt->calc();
@@ -401,14 +402,12 @@ void dCsGame_c::lytItemCursor_c::lytBowCsr_c::initializeState_Charge() {
     mAnm[MAIN_ANIM_ARROW_EFFECT].setAnimEnable(true);
     mAnm[MAIN_ANIM_ARROW_EFFECT].setFrame(0.0f);
 }
-extern "C" void *SOUND_EFFECT_SOUND_MGR;
-extern "C" void SmallSoundManager__playSound(void *, s32);
 void dCsGame_c::lytItemCursor_c::lytBowCsr_c::executeState_Charge() {
     if (field_0x54 >= 1.0f) {
-        if (!mAnm[MAIN_ANIM_ARROW_PEAK].isFlag2()) {
+        if (!mAnm[MAIN_ANIM_ARROW_PEAK].isEnabled()) {
             mAnm[MAIN_ANIM_ARROW_PEAK].setAnimEnable(true);
             mAnm[MAIN_ANIM_ARROW_PEAK].setFrame(0.0f);
-            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x148D);
+            SmallSoundManager::GetInstance()->playSound(SE_S_BW_ALIGN_SIGHT);
         }
         mAnm[MAIN_ANIM_ARROW_KEEP].setAnimEnable(false);
     } else {
@@ -522,7 +521,7 @@ void dCsGame_c::lytItemCursor_c::lytPachinkoCsr_c::executeState_ChargeFull() {
     if (field_0x50) {
         if (mAnm[MAIN_ANIM_SLING_PEAK].isEndReached()) {
             mpLyt->calc();
-        } else if (mAnm[MAIN_ANIM_SLING_PEAK].isFlag2()) {
+        } else if (mAnm[MAIN_ANIM_SLING_PEAK].isEnabled()) {
             mAnm[MAIN_ANIM_SLING_PEAK].play();
         }
     } else {
@@ -556,7 +555,7 @@ void dCsGame_c::lytItemCursor_c::lytVacuumCsr_c::executeState_Normal() {
     if (field_0x5C) {
         mAnm[MAIN_ANIM_VACUUM_LOCK].setAnimEnable(true);
         mAnm[MAIN_ANIM_VACUUM_LOCK].setForward();
-        mAnm[MAIN_ANIM_VACUUM_LOCK].setToEnd2();
+        mAnm[MAIN_ANIM_VACUUM_LOCK].setToStart();
         mAnm[MAIN_ANIM_LOOP].setAnimEnable(false);
         mStateMgr.changeState(StateID_ToLock);
     } else {
@@ -584,7 +583,7 @@ void dCsGame_c::lytItemCursor_c::lytVacuumCsr_c::executeState_Lock() {
     if (!field_0x5C) {
         mAnm[MAIN_ANIM_VACUUM_LOCK].setAnimEnable(true);
         mAnm[MAIN_ANIM_VACUUM_LOCK].setBackward();
-        mAnm[MAIN_ANIM_VACUUM_LOCK].setToEnd2();
+        mAnm[MAIN_ANIM_VACUUM_LOCK].setToStart();
         mAnm[MAIN_ANIM_LOCK_LOOP].setAnimEnable(false);
         mStateMgr.changeState(StateID_ToNormal);
     } else {

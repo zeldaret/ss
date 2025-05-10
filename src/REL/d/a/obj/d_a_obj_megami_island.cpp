@@ -3,12 +3,12 @@
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/d_stage.h"
 #include "d/flag/storyflag_manager.h"
 #include "f/f_base.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resanmtexsrt.h"
-#include "nw4r/g3d/g3d_resmdl.h"
-#include "toBeSorted/room_manager.h"
+#include "nw4r/g3d/res/g3d_resanmtexsrt.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 
 static const char *const sResFiles[] = {
     "F000Megami",
@@ -45,9 +45,9 @@ SPECIAL_ACTOR_PROFILE(OBJ_MEGAMI_ISLAND, dAcOmegamiIsland_c, fProfile::OBJ_MEGAM
 bool dAcOmegamiIsland_c::createHeap() {
     mVariant = getVariant();
 
-    mRes = getOarcResFile(sResFiles[mVariant]);
-    RoomManager::bindStageResToFile(&mRes);
-    RoomManager::bindSkyCmnToResFile(&mRes);
+    mRes = nw4r::g3d::ResFile(getOarcResFile(sResFiles[mVariant]));
+    dStage_c::bindStageResToFile(&mRes);
+    dStage_c::bindSkyCmnToResFile(&mRes);
 
     nw4r::g3d::ResMdl mdl1 = mRes.GetResMdl(sMdl1[mVariant]);
     TRY_CREATE(mMdls[0].create(mdl1, &heap_allocator, 0x120));
@@ -73,7 +73,7 @@ bool dAcOmegamiIsland_c::createHeap() {
         mBgW.OnFlag0x20();
     }
 
-    return (BOOL)mBgW.InitMapStuff(&heap_allocator);
+    return mBgW.InitMapStuff(&heap_allocator);
 }
 
 int dAcOmegamiIsland_c::create() {

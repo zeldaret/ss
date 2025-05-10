@@ -16,7 +16,7 @@ STATE_DEFINE(dAcOsmoke_c, Wait);
 
 bool dAcOsmoke_c::createHeap() {
     mType = params & 3;
-    mBrres = getOarcResFile(sSmokeNames1[mType]);
+    mBrres = nw4r::g3d::ResFile(getOarcResFile(sSmokeNames1[mType]));
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl(sSmokeNames2[mType]);
     TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x324));
     nw4r::g3d::ResAnmTexSrt srt = mBrres.GetResAnmTexSrt(sSmokeNames1[mType]);

@@ -65,8 +65,8 @@ public:
     static void init();
     static void execute();
 
-    static u8 getTopDowsingIcon();
-    static u8 getLeftDowsingIcon();
+    static s32 getTopDowsingIcon();
+    static s32 getLeftDowsingIcon();
 };
 
 #endif

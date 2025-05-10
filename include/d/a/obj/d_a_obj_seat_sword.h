@@ -10,14 +10,14 @@
 #include "m/m3d/m_smdl.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/math/math_types.h"
 #include "rvl/MTX/mtx.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/attention.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 class dAcOSeatSword_c : public dAcObjBase_c {
 public:

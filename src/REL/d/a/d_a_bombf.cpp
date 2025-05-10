@@ -7,6 +7,7 @@
 #include "d/flag/sceneflag_manager.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
+#include "toBeSorted/small_sound_mgr.h"
 #include "toBeSorted/time_area_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(BOMBF, dAcBombf_c, fProfile::BOMBF, 0x129, 0, 4099);
@@ -14,7 +15,7 @@ SPECIAL_ACTOR_PROFILE(BOMBF, dAcBombf_c, fProfile::BOMBF, 0x129, 0, 4099);
 STATE_DEFINE(dAcBombf_c, Wait);
 
 bool dAcBombf_c::createHeap() {
-    nw4r::g3d::ResFile resFile = getOarcResFile("FlowerBomb");
+    nw4r::g3d::ResFile resFile(getOarcResFile("FlowerBomb"));
     nw4r::g3d::ResMdl resMdl = resFile.GetResMdl("LeafBomb");
     return mModel.create(resMdl, &heap_allocator, 0x120, 1, nullptr);
 }
@@ -41,7 +42,8 @@ int dAcBombf_c::actorCreate() {
     boundingBox.Set(mVec3_c(-80.0, -50.0f, -80.0f), mVec3_c(80.0, 60.0f, 80.0f));
     angle = rotation;
     if (mDespawnSceneFlag < 0xFF) {
-        actor_properties = (actor_properties & ~1) | 4;
+        clearActorProperty(0x1);
+        setActorProperty(0x4);
     }
 
     return SUCCEEDED;
@@ -67,13 +69,14 @@ int dAcBombf_c::actorPostCreate() {
 
         if (dBgS::GetInstance()->ChkMoveBG(dBgS_ObjLinChk::GetInstance(), false)) {
             field_0x398.SetPolyInfo(dBgS_ObjLinChk::GetInstance());
-            actor_properties = (actor_properties & ~1) | 4;
+            clearActorProperty(0x1);
+            setActorProperty(0x4);
         }
         mLightingInfo.mLightingCode = dBgS::GetInstance()->GetLightingCode(dBgS_ObjLinChk::GetInstance());
     }
 
     if (field_0x3D2 == 0 || field_0x3D2 == 2) {
-        bool b = dTimeAreaMgr_c::sInstance->fn_800B9B60(roomid, position);
+        bool b = dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, position);
         if (b) {
             mTimeAreaStruct.field_0x00 = 1.0f;
         }
@@ -139,7 +142,7 @@ int dAcBombf_c::draw() {
 
 void dAcBombf_c::regrowBomb() {
     // These params are hell
-    s8 viewclip_idx = (actor_properties & 1) != 0 ? viewclip_index : -1;
+    s8 viewclip_idx = checkActorProperty(0x1) ? viewclip_index : -1;
     u32 actorParams1;
     actorParams1 = 1;
     if (field_0x3D0) {
@@ -153,8 +156,8 @@ void dAcBombf_c::regrowBomb() {
     if (bomb != nullptr) {
         field_0x394 = 0x3C;
         bomb->setTransformFromFlower(mWorldMtx);
-        if ((actor_properties & 1) != 0) {
-            bomb->actor_properties |= 1;
+        if (checkActorProperty(0x1)) {
+            bomb->setActorProperty(0x1);
         }
         if (field_0x3D4 == 0) {
             bomb->mField_0xA44 *= 1.5f;
@@ -164,7 +167,6 @@ void dAcBombf_c::regrowBomb() {
 
 void dAcBombf_c::initializeState_Wait() {}
 
-extern "C" void fn_800298B0(u16, mVec3_c *, mVec3_c *, u32, u32, u32, u32, u32);
 extern "C" u16 lbl_8057A750;
 
 void dAcBombf_c::executeState_Wait() {
@@ -189,11 +191,11 @@ void dAcBombf_c::executeState_Wait() {
 
         if (mTimeAreaStruct.check(roomid, m3, 0, 30.0f, 0.1f) && field_0x3D4 != 1) {
             if (mTimeAreaStruct.field_0x04 == 1) {
-                playSound(0xC0A);
+                playSound(SE_TIMESLIP_TIMESLIP);
             } else {
-                playSound(0xC0B);
+                playSound(SE_TIMESLIP_TIMESLIP_REV);
             }
-            fn_800298B0(lbl_8057A750, &position, nullptr, 0, 0, 0, 0, 0);
+            dJEffManager_c::spawnEffect(lbl_8057A750, position, nullptr, nullptr, nullptr, nullptr, 0, 0);
         }
 
         scaleFactor *= mTimeAreaStruct.field_0x00;

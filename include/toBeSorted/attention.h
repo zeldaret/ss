@@ -8,8 +8,8 @@
 #include "m/m3d/m_anmtexpat.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_allocator.h"
-#include "toBeSorted/effects_struct.h"
-
+#include "toBeSorted/d_emitter.h"
+#include "toBeSorted/raii_ptr.h"
 
 static const u32 OFF = 'off ';
 static const u32 NONE = 'none';
@@ -18,25 +18,12 @@ static const u32 NEXT = 'next';
 static const u32 ON = 'on  ';
 static const u32 AWAY = 'away';
 
-class UniquePtrLike {
-public:
-    m3d::anmChr_c *mPtr;
-
-    UniquePtrLike() : mPtr(nullptr) {}
-    ~UniquePtrLike() {
-        if (mPtr != nullptr) {
-            delete mPtr;
-            mPtr = nullptr;
-        }
-    }
-};
-
 class InteractionMdl {
 public:
     m3d::smdl_c mMdl;
     m3d::anmMatClr_c mAnmClr;
     m3d::anmTexPat_c mAnmTex;
-    UniquePtrLike mAnmChr;
+    RaiiPtr<m3d::anmChr_c> mAnmChr;
     u8 field_0x78;
     u8 field_0x79;
 
@@ -95,7 +82,9 @@ public:
     );
 
     dAcObjBase_c *getActor(s32 i) {
-        return i < mNumUsedRefs && mInfos[i].mActorIdx != 0xFF ? mRefs[mInfos[i].mActorIdx].get() : nullptr;
+        // This only matches if the comparision is always true
+        // Logic is hard sometimes I guess xD
+        return i < mNumUsedRefs && mInfos[i].mActorIdx != -1 ? mRefs[mInfos[i].mActorIdx].get() : nullptr;
     }
 
     void clear() {
@@ -174,8 +163,14 @@ public:
     AttentionManager();
     /* vt at 0xBDC */ virtual ~AttentionManager();
 
+    static AttentionManager *GetInstance() {
+        return sInstance;
+    }
+
 private:
     /* 0xBDC */ u8 field_0xBDC;
+
+    static AttentionManager *sInstance;
 
 public:
     bool create();
@@ -218,14 +213,13 @@ public:
     void addReadTarget(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 ignored, f32 field_0x20, f32 field_0x24);
     void addReadTarget2(dAcObjBase_c &actor, u32 flags, f32 field_0x14, f32 field_0x20, f32 field_0x24);
 
-    static AttentionManager *sInstance;
+    bool checkLink2() const;
 
 private:
     bool isInNormalGameState() const;
     bool checkZButtonPressed() const;
     bool checkZButtonHeld() const;
     bool checkLink1() const;
-    bool checkLink2() const;
     bool switchTarget(s32 target);
     bool playTargetAnim(s32 target);
 

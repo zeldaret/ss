@@ -62,5 +62,5 @@ __vt__27sFState_c<14dAcTWoodArea_c> = .data:0x00000108; // type:object size:0x18
 __vt__29sFStateID_c<14dAcTWoodArea_c> = .data:0x000001A8; // type:object size:0x34
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 lbl_329_bss_8 = .bss:0x00000008; // type:object size:0x10 data:4byte
-lbl_329_bss_18 = .bss:0x00000018; // type:object size:0x40 data:4byte
-lbl_329_bss_58 = .bss:0x00000058; // type:object size:0x30 data:4byte
+AcTWoodArea__STATE_INIT = .bss:0x00000018; // type:object size:0x40 data:4byte
+AcTWoodArea__STATE_WAIT = .bss:0x00000058; // type:object size:0x30 data:4byte

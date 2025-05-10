@@ -6,8 +6,8 @@ Sections:
 	.bss        type:bss align:8
 
 REL/executor.c:
-	.text       start:0x00000000 end:0x00000064
+	.text       start:0x00000000 end:0x00000064 align:16
 
 REL/d/t/d_t_sound_area_mgr.cpp:
-	.text       start:0x00000070 end:0x000001D8
+	.text       start:0x00000070 end:0x000001D8 align:16
 	.data       start:0x00000000 end:0x00000084

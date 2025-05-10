@@ -41,12 +41,20 @@ public:
     bool IsInfluencedAlpha() const {
         return detail::TestBit<u8>(mFlag, INFLUENCED_ALPHA);
     }
+    void SetInfluencedAlpha(bool bInfluenced) {
+        detail::SetBit(&mFlag, INFLUENCED_ALPHA, bInfluenced);
+    }
     bool IsLocationAdjust() const {
         return detail::TestBit<u8>(mFlag, LOCATION_ADJUST);
+    }
+    void SetLocationAdjust(bool bAdjust) {
+        detail::SetBit(&mFlag, LOCATION_ADJUST, bAdjust);
     }
     bool IsUserAllocated() const {
         return mbUserAllocated;
     }
+
+    typedef ut::LinkList<Pane, 4> ChildList;
 
     ut::LinkList<Pane, 4> *GetChildList() {
         return &mChildList;
@@ -61,6 +69,10 @@ public:
 
     void SetTranslate(const nw4r::math::VEC3 &value) {
         mTranslate = value;
+    }
+
+    void SetRotate(const nw4r::math::VEC3 &value) {
+        mRotate = value;
     }
 
     const math::MTX34 &GetGlobalMtx() const {
@@ -86,6 +98,13 @@ public:
 
     u8 GetGlobalAlpha() const {
         return mGlbAlpha;
+    }
+
+    u8 GetPositionH() const {
+        return detail::GetHorizontalPosition(mBasePosition);
+    }
+    u8 GetPositionV() const {
+        return detail::GetVerticalPosition(mBasePosition);
     }
 
     const Size &GetSize() const {
@@ -160,7 +179,7 @@ public:
 protected:
     Pane *mpParent;                                // at 0x0C
     ut::LinkList<Pane, 4> mChildList;              // at 0x10
-    ut::LinkList<AnimationLink, 0> mAnimList;      // at 0x1C;
+    ut::LinkList<AnimationLink, 0> mAnimList;      // at 0x1C
     Material *mpMaterial;                          // at 0x28
     math::VEC3 mTranslate;                         // at 0x2C
     math::VEC3 mRotate;                            // at 0x38

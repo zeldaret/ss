@@ -4,7 +4,6 @@
 #include "m/m3d/m3d.h"
 #include "m/m_heap.h"
 
-
 namespace m3d {
 
 anmMatClr_c::child_c::~child_c() {}

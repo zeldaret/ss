@@ -10,8 +10,8 @@
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "rvl/MTX/mtxvec.h"
 
 SPECIAL_ACTOR_PROFILE(
@@ -25,8 +25,8 @@ bool dAcOFlyingClawshotTarget_c::createHeap() {
         return false;
     }
 
-    nw4r::g3d::ResFile file = data;
-    if (!file.mFile.IsValid()) {
+    nw4r::g3d::ResFile file(data);
+    if (!file.IsValid()) {
         return false;
     }
     nw4r::g3d::ResMdl mdl = file.GetResMdl("BirdObjD3_S");
@@ -40,7 +40,7 @@ bool dAcOFlyingClawshotTarget_c::createHeap() {
 // clang-format off
 const cCcD_SrcGObj dAcOFlyingClawshotTarget_c::sColSrc = {
   /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-  /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x1080111, {0,6, 0x407}, 0, 0},
+  /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x1080111, {0, 6, 0x407}, 0, 0},
   /* mObjCo */ {0x0}
 };
 // clang-format on

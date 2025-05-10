@@ -3,6 +3,7 @@
 #include "c/c_math.h"
 #include "d/a/d_a_player.h"
 #include "d/col/c/c_cc_d.h"
+#include "nw4r/types_nw4r.h"
 
 SPECIAL_ACTOR_PROFILE(ARROW, dAcArrow_c, fProfile::ARROW, 0x126, 0, 0x80);
 
@@ -18,7 +19,7 @@ cCcD_SrcGObj dAcArrow_c::sCcSrcInf = {
     {AT_TYPE_ARROW, 0x8BB, {0x15,0, 0}, 0, 0, 0, 0, 0, 0}, 
     {
         ~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_ARROW | AT_TYPE_0x100 | AT_TYPE_WIND | AT_TYPE_SLINGSHOT),
-             0x210,  0, 0, 0x407, 0, 0
+             0x210,  {0, 0, 0x407}, 0, 0
             }, 
     {0},
 };
@@ -30,7 +31,7 @@ dCcD_SrcCps dAcArrow_c::sCc1 = {
 
 const dCcD_SrcSph dAcArrow_c::sCc2 = {
     {{0x0, 0x0, 0x0, 0, 0, 0, 0, 0, 0}, 
-    {AT_TYPE_SWORD, 0x211, 0, 0, 0x407, 0, 0}, 
+    {AT_TYPE_SWORD, 0x211, {0, 0, 0x407}, 0, 0}, 
     {0xC28}},
     {100.0f},
 };
@@ -43,7 +44,7 @@ bool hitCallback(dAcObjBase_c *i_actorA, cCcD_Obj *i_objInfA, dAcObjBase_c *i_ac
 }
 
 bool dAcArrow_c::createHeap() {
-    mResFile = getOarcResFile("Alink");
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("Alink"));
     nw4r::g3d::ResMdl mdl(nullptr);
     if ((mSubType & 0x10) != 0) {
         mdl = mResFile.GetResMdl("EquipPachinkoBullet");

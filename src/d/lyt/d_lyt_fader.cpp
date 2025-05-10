@@ -1,5 +1,6 @@
 #include "d/lyt/d_lyt_fader.h"
 
+#include "d/d_d2d.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 
 
@@ -16,7 +17,7 @@ dLytFader_c::~dLytFader_c() {
 
     if (field_0x4DD == true) {
         for (int i = 0; i < 3; i++) {
-            mLytStructAs[i].afterUnbind();
+            mLytStructAs[i].remove();
         }
         mResAcc.detach();
     }
@@ -27,7 +28,7 @@ void dLytFader_c::setStatus(EStatus status) {
         mStatus = FADED_OUT;
         mLytBase.unbindAnims();
         d2d::AnmGroup_c *s = &mLytStructAs[0];
-        s->setDirection(false);
+        s->bind(false);
         s->setToEnd();
         s->setAnimEnable(true);
         s->play();
@@ -38,8 +39,8 @@ void dLytFader_c::setStatus(EStatus status) {
         mStatus = FADED_IN;
         mLytBase.unbindAnims();
         d2d::AnmGroup_c *s = &mLytStructAs[0];
-        s->setDirection(false);
-        s->setToStart();
+        s->bind(false);
+        s->setFrame(0.0f);
         s->setAnimEnable(true);
         mLytBase.calc();
         fn_80175BC0(2);
@@ -60,11 +61,9 @@ bool dLytFader_c::calc() {
     }
 }
 
-extern "C" void fn_80016200();
-
 void dLytFader_c::draw() {
     if (field_0x4DD) {
-        fn_80016200();
+        d2d::defaultSet();
         mLytBase.draw();
     }
 }
@@ -89,7 +88,7 @@ bool dLytFader_c::init() {
     if (field_0x4DD == true) {
         return true;
     } else {
-        void *data = LayoutArcManager::sInstance->getLoadedData("System2D");
+        void *data = LayoutArcManager::GetInstance()->getLoadedData("System2D");
         if (!data) {
             return false;
         }
@@ -109,9 +108,10 @@ void dLytFader_c::fn_801758F0() {
     fn_80175BC0(0);
     mLytBase.unbindAnims();
     d2d::AnmGroup_c *s = &mLytStructAs[0];
-    s->setDirection(false);
+    s->bind(false);
     s->setFrame(0.0f);
     s->setRate(20.0f / (mFrame - 1));
+    s->setAnimEnable(true);
     mLytBase.getLayout()->GetRootPane()->SetVisible(true);
 }
 
@@ -129,9 +129,10 @@ void dLytFader_c::fn_80175A50() {
     fn_80175BC0(1);
     mLytBase.unbindAnims();
     d2d::AnmGroup_c *s = &mLytStructAs[1];
-    s->setDirection(false);
+    s->bind(false);
     s->setFrame(0.0f);
     s->setRate(20.0f / (mFrame - 1));
+    s->setAnimEnable(true);
     mLytBase.getLayout()->GetRootPane()->SetVisible(true);
 }
 

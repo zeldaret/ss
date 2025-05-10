@@ -2,17 +2,19 @@
 #define D_LYT_COMMON_ARROW_H
 
 #include "d/lyt/d2d.h"
-#include "d/lyt/d_structd.h"
+// clang-format off
+// vtable order
+#include "d/d_cursor_hit_check.h"
+// clang-format on
 #include "nw4r/lyt/lyt_bounding.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dLytCommonArrow_c {
 public:
     dLytCommonArrow_c();
     virtual ~dLytCommonArrow_c() {}
 
-    bool init();
+    bool build();
 
     STATE_FUNC_DECLARE(dLytCommonArrow_c, None);
     STATE_FUNC_DECLARE(dLytCommonArrow_c, In);
@@ -20,25 +22,25 @@ public:
     STATE_FUNC_DECLARE(dLytCommonArrow_c, Out);
 
     void setState(s32 state);
-    bool addToDrawList();
+    bool draw();
 
-    bool fn_80168490();
-    bool fn_80168500();
-    void setTranslate(const Vec *);
+    bool remove();
+    bool execute();
     bool requestIn();
     bool requestOut();
-    bool fn_80168760();
-    void displayElement(s32, f32);
-    void fn_80168800(s32);
-    void fn_80168810(d2d::AnmGroup_c *);
-    void fn_80168880();
 
 private:
+    void setTranslate(const Vec *);
+    bool fn_80168760();
+    void displayElement(s32, f32);
+    void unbindAt(s32);
+    void tickDown(d2d::AnmGroup_c *);
+    void fn_80168880();
     UI_STATE_MGR_DECLARE(dLytCommonArrow_c);
     /* 0x40 */ d2d::LytBase_c mLytBase;
     d2d::ResAccIf_c mResAcc;
     d2d::AnmGroup_c mAnmGroups[0x9];
-    d2d::dLytStructD mStructD;
+    dCursorHitCheckLyt_c mCsHitCheck;
     nw4r::lyt::Bounding *mBoundingL;
     nw4r::lyt::Bounding *mBoundingR;
     s32 mType;

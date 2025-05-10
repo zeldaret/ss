@@ -18,13 +18,14 @@ public:
     UnkClass() {}
 };
 
+// Note: Due to multiple inheritance, vtable offsets are shifted by 8
 class scnLeaf_c : UnkClass, EGG::Disposer {
 public:
     scnLeaf_c();
-    virtual ~scnLeaf_c();
-    virtual int getType() const = 0;
-    virtual void remove();
-    virtual int entry();
+    /* vt 0x08 */ virtual ~scnLeaf_c();
+    /* vt 0x0C */ virtual int getType() const = 0;
+    /* vt 0x10 */ virtual void remove();
+    /* vt 0x14 */ virtual int entry();
 
     void setOption(u32 flag, u32 set);
     void setScale(f32, f32, f32);
@@ -50,6 +51,10 @@ public:
     void setPriorityDraw(int, int);
 
     inline nw4r::g3d::ScnLeaf *getG3dObject() {
+        return mpScnLeaf;
+    }
+
+    inline const nw4r::g3d::ScnLeaf *getG3dObject() const {
         return mpScnLeaf;
     }
 

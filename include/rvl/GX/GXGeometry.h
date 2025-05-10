@@ -8,7 +8,10 @@ extern "C" {
 #endif
 
 void GXBegin(GXPrimitive prim, GXVtxFmt fmt, u16 verts);
+
 static void GXEnd(void);
+
+#define GXEnd()
 
 void GXSetLineWidth(u8 width, u32 offset);
 void GXSetPointSize(u8 size, u32 offset);

@@ -1,14 +1,14 @@
 #include "d/a/obj/d_a_obj_ring.h"
 
 #include "d/a/d_a_player.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_RING, dAcOring_c, fProfile::OBJ_RING, 0x00f2, 0, 0x103);
 
 STATE_DEFINE(dAcOring_c, Move);
 
 bool dAcOring_c::createHeap() {
-    nw4r::g3d::ResFile f = getOarcResFile("PRing");
+    nw4r::g3d::ResFile f(getOarcResFile("PRing"));
     nw4r::g3d::ResMdl mdl = f.GetResMdl("PeehatRing");
     // This matches but in a really weird way. Maybe an inline function?
     TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x20, 1, nullptr));

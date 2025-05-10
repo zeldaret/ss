@@ -3,7 +3,6 @@
 #include "m/m3d/m3d.h"
 #include "nw4r/g3d/g3d_scnmdl.h"
 
-
 namespace m3d {
 
 bmdl_c::~bmdl_c() {
@@ -24,7 +23,7 @@ int bmdl_c::getNodeID(const char *name) const {
 
 bool bmdl_c::getNodeWorldMtx(u32 p1, nw4r::math::MTX34 *out) const {
     return nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdlSimple>(mpScnLeaf)->GetScnMtxPos(
-        out, nw4r::g3d::ScnObj::MTX_TYPE_WORLD, p1
+        out, nw4r::g3d::ScnObj::MTX_WORLD, p1
     );
 }
 
@@ -50,17 +49,17 @@ bool bmdl_c::getNodeWorldMtxMultVec(u32 p1, nw4r::math::VEC3 &in, nw4r::math::VE
     }
 }
 
-void bmdl_c::setAnm(banm_c &anm) {
+bool bmdl_c::setAnm(banm_c &anm) {
     nw4r::g3d::ScnMdlSimple *mdl;
     if (anm.getType() == nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_SHP) {
         mdl = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdl>(mpScnLeaf);
-        mdl->SetAnmObj(anm.getAnimObj(), nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_NOT_SPECIFIED);
+        return mdl->SetAnmObj(anm.getAnimObj(), nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_NOT_SPECIFIED);
     } else {
         mdl = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdlSimple>(mpScnLeaf);
         if (anm.getType() == nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_CHR) {
             mpCurrentAnm = &anm;
         }
-        mdl->SetAnmObj(anm.getAnimObj(), nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_NOT_SPECIFIED);
+        return mdl->SetAnmObj(anm.getAnimObj(), nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_NOT_SPECIFIED);
     }
 }
 
@@ -220,7 +219,7 @@ int bmdl_c::setMatTexture(char *name, GXTexObj *texObj, bool copy, void *unk, in
     // TODO
 }
 
-bool bmdl_c::getBounds(mVec3_c *min, mVec3_c *max) {
+bool bmdl_c::getBounds(mVec3_c *min, mVec3_c *max) const {
     // TODO
 }
 

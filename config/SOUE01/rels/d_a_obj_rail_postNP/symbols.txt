@@ -15,4 +15,4 @@ lbl_524_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
 g_profile_OBJ_RAIL_POST = .data:0x00000000; // type:object size:0x10
 lbl_524_data_10 = .data:0x00000010; // type:object size:0xC
 lbl_524_data_1C = .data:0x0000001C; // type:object size:0x1C
-lbl_524_data_38 = .data:0x00000038; // type:object size:0x80
+AcORailPost__vtable = .data:0x00000038; // type:object size:0x80

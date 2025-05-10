@@ -23,19 +23,20 @@ public:
     /** 0x1C */ virtual void doCommit() override {
         u16 sz = mFlagCount;
         u16 *flags = mpFlagSpace->getFlagPtrUnchecked();
-        FileManager::sInstance->setStoryFlags(flags, 0, sz);
+        FileManager::GetInstance()->setStoryFlags(flags, 0, sz);
     }
     /** 0x24 */ virtual void unsetFlag(u16 flag) override;
     /** 0x38 */ virtual const u16 *getSaveFlagSpace() const override {
-        return FileManager::sInstance->getStoryFlagsConst();
+        return FileManager::GetInstance()->getStoryFlagsConst();
     };
 
     u16 getFlag(u16 flag) const {
         return getCounterOrFlag(flag);
     }
 
-public:
     static StoryflagManager *sInstance;
+
+private:
     static u16 sFlags[0x80];
 };
 

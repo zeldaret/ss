@@ -4,7 +4,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "m/m3d/m_shadow.h"
 #include "m/m3d/m_smdl.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
 
 class dMyShadowCircle_c : public m3d::mShadowCircle_c {};

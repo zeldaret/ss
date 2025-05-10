@@ -1,9 +1,9 @@
 #ifndef D_LYT_DO_BUTTON_H
 #define D_LYT_DO_BUTTON_H
 
+#include "common.h"
 #include "d/lyt/d2d.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dLytDobutton_c {
 public:
@@ -16,16 +16,73 @@ public:
 
     bool init(m2d::ResAccIf_c *resAcc);
     bool remove();
+    bool execute();
     bool draw();
+
+    static dLytDobutton_c *GetInstance() {
+        return sInstance;
+    }
+
+    static s32 getField0x47C() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x47C;
+        } else {
+            return 0x5E;
+        }
+    }
+
+    static s32 getField0x480() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x480;
+        } else {
+            return 0x29;
+        }
+    }
+
+    static s32 getNextActionToShow() {
+        if (sInstance != nullptr) {
+            return sInstance->mNextDoActionToShow;
+        } else {
+            return 0x29;
+        }
+    }
+
+    static s32 getFn0x8010E5E0() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_8010E5E0();
+        } else {
+            return 0x29;
+        }
+    }
+
+    static s32 getFn0x8010E5D0() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_8010E5D0();
+        } else {
+            return 0x5E;
+        }
+    }
+    
+    static void setActionTextStuff(s32 p1, s32 p2, bool p3) {
+        if (sInstance != nullptr) {
+            sInstance->setActionTextStuffInternal(p1, p2, p3);
+        }
+    }
+    
+private:
+    void setActionTextStuffInternal(s32, s32, bool);
+    s32 fn_8010E5D0() const;
+    s32 fn_8010E5E0() const;
 
     static dLytDobutton_c *sInstance;
 
-private:
     STATE_FUNC_DECLARE(dLytDobutton_c, InvisibleWait);
     STATE_FUNC_DECLARE(dLytDobutton_c, InvisibleTimeCnt);
     STATE_FUNC_DECLARE(dLytDobutton_c, In);
     STATE_FUNC_DECLARE(dLytDobutton_c, Wait);
     STATE_FUNC_DECLARE(dLytDobutton_c, Out);
+
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytDobutton_c);
 
     UI_STATE_MGR_DECLARE(dLytDobutton_c);
     /* 0x040 */ d2d::dLytSub mLyt;

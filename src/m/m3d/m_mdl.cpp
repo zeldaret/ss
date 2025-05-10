@@ -2,7 +2,7 @@
 
 #include "m/m3d/m3d.h"
 #include "nw4r/g3d/g3d_scnmdlsmpl.h"
-
+#include "nw4r/g3d/g3d_scnobj.h"
 
 namespace m3d {
 
@@ -17,34 +17,34 @@ mdl_c::mdlCallback_c::~mdlCallback_c() {}
 void mdl_c::mdlCallback_c::ExecCallbackA(
     nw4r::g3d::ChrAnmResult *result, nw4r::g3d::ResMdl mdl, nw4r::g3d::FuncObjCalcWorld *o
 ) {
-    u16 nodeId = o->GetNodeId();
+    u16 nodeId = o->GetCallbackNodeID();
     nw4r::g3d::ChrAnmResult *resPtr = &mpNodes[nodeId];
     if (mCalcRatio.is0x18() && !mCalcRatio.isEnd()) {
         if (!mCalcRatio.is0x19()) {
             *result = *resPtr;
         } else {
-            u32 flags = result->mFlags;
+            u32 flags = result->flags;
             f32 f2 = mCalcRatio.get0x10();
             f32 f1 = mCalcRatio.get0x14();
 
             // TODO clean up this code, what does it even do, why do operators
             // break
             if ((flags & 8) == 0) {
-                result->VEC3_0x4.x = (result->VEC3_0x4.x * f1 + resPtr->VEC3_0x4.x * f2);
-                result->VEC3_0x4.y = (result->VEC3_0x4.y * f1 + resPtr->VEC3_0x4.y * f2);
-                result->VEC3_0x4.z = (result->VEC3_0x4.z * f1 + resPtr->VEC3_0x4.z * f2);
+                result->s.x = (result->s.x * f1 + resPtr->s.x * f2);
+                result->s.y = (result->s.y * f1 + resPtr->s.y * f2);
+                result->s.z = (result->s.z * f1 + resPtr->s.z * f2);
             } else {
-                result->VEC3_0x4.x = (f1 + resPtr->VEC3_0x4.x * f2);
-                result->VEC3_0x4.y = (f1 + resPtr->VEC3_0x4.y * f2);
-                result->VEC3_0x4.z = (f1 + resPtr->VEC3_0x4.z * f2);
+                result->s.x = (f1 + resPtr->s.x * f2);
+                result->s.y = (f1 + resPtr->s.y * f2);
+                result->s.z = (f1 + resPtr->s.z * f2);
             }
 
             nw4r::math::QUAT q1;
             nw4r::math::QUAT q2;
 
-            C_QUATMtx(q1, resPtr->mMtx);
+            C_QUATMtx(q1, resPtr->rt);
             if ((flags & 0x20) == 0) {
-                C_QUATMtx(q2, result->mMtx);
+                C_QUATMtx(q2, result->rt);
             } else {
                 q2.x = 0.0f;
                 q2.y = 0.0f;
@@ -54,22 +54,22 @@ void mdl_c::mdlCallback_c::ExecCallbackA(
 
             C_QUATSlerp(q1, q2, q1, f1);
             nw4r::math::VEC3 tmp;
-            tmp.x = result->mMtx._03;
-            tmp.y = result->mMtx._13;
-            tmp.z = result->mMtx._23;
-            PSMTXQuat(result->mMtx, q1);
-            result->mMtx._03 = tmp.x;
-            result->mMtx._13 = tmp.y;
-            result->mMtx._23 = tmp.z;
+            tmp.x = result->rt._03;
+            tmp.y = result->rt._13;
+            tmp.z = result->rt._23;
+            PSMTXQuat(result->rt, q1);
+            result->rt._03 = tmp.x;
+            result->rt._13 = tmp.y;
+            result->rt._23 = tmp.z;
             if ((flags & 0x40) == 0) {
-                result->mMtx._03 = tmp.x * f1;
-                result->mMtx._13 = tmp.y * f1;
-                result->mMtx._23 = tmp.z * f1;
+                result->rt._03 = tmp.x * f1;
+                result->rt._13 = tmp.y * f1;
+                result->rt._23 = tmp.z * f1;
             }
-            result->mMtx._03 += resPtr->mMtx._03 * f2;
-            result->mMtx._13 += resPtr->mMtx._13 * f2;
-            result->mMtx._23 += resPtr->mMtx._23 * f2;
-            result->mFlags = result->mFlags & ~(0x80000000 | 0x00000040 | 0x00000020 | 0x00000008);
+            result->rt._03 += resPtr->rt._03 * f2;
+            result->rt._13 += resPtr->rt._13 * f2;
+            result->rt._23 += resPtr->rt._23 * f2;
+            result->flags = result->flags & ~(0x80000000 | 0x00000040 | 0x00000020 | 0x00000008);
             *resPtr = *result;
         }
     } else {
@@ -84,11 +84,11 @@ void mdl_c::mdlCallback_c::ExecCallbackA(
 void mdl_c::mdlCallback_c::ExecCallbackB(
     nw4r::g3d::WorldMtxManip *m, nw4r::g3d::ResMdl mdl, nw4r::g3d::FuncObjCalcWorld *o
 ) {
-    u16 nodeId = o->GetNodeId();
+    u16 nodeId = o->GetCallbackNodeID();
     if (mpBaseCallback != nullptr) {
         mpBaseCallback->timingB(nodeId, m, mdl);
     }
-    o->SetNodeId((nodeId + 1) % mdl.GetResNodeNumEntries());
+    o->SetCallbackNodeID((nodeId + 1) % mdl.GetResNodeNumEntries());
 }
 
 void mdl_c::mdlCallback_c::ExecCallbackC(nw4r::math::MTX34 *mat, nw4r::g3d::ResMdl mdl, nw4r::g3d::FuncObjCalcWorld *) {
@@ -118,10 +118,10 @@ bool mdl_c::mdlCallback_c::create(nw4r::g3d::ResMdl mdl, mAllocator_c *alloc, u3
     *pSize = ROUND_UP(bufSize + ROUND_UP(*pSize, 0x04), 0x04);
     nw4r::g3d::ChrAnmResult *node = mpNodes;
     for (int i = 0; i < mNumNode; i++) {
-        node->VEC3_0x4.x = 1.0f;
-        node->VEC3_0x4.y = 1.0f;
-        node->VEC3_0x4.z = 1.0f;
-        PSMTXIdentity(node->mMtx);
+        node->s.x = 1.0f;
+        node->s.y = 1.0f;
+        node->s.z = 1.0f;
+        PSMTXIdentity(node->rt);
         node++;
     }
 
@@ -199,8 +199,8 @@ bool mdl_c::create(
     }
     nw4r::g3d::ScnMdlSimple *sMdl;
     sMdl = nw4r::g3d::G3dObj::DynamicCast<nw4r::g3d::ScnMdlSimple>(mpScnLeaf);
-    sMdl->SetCalcWorldCallback(mpCallback);
-    sMdl->EnableScnMdlCallbackTiming(nw4r::g3d::ScnObj::TIMING_ALL);
+    sMdl->SetScnMdlCallback(mpCallback);
+    sMdl->EnableScnMdlCallbackTiming(nw4r::g3d::ScnObj::Timing(0x7));
     setCallback(nullptr);
     return true;
 }
@@ -217,8 +217,8 @@ void mdl_c::remove() {
     bmdl_c::remove();
 }
 
-void mdl_c::setAnm(m3d::banm_c &anm) {
-    setAnm(anm, 0.0f);
+bool mdl_c::setAnm(m3d::banm_c &anm) {
+    return setAnm(anm, 0.0f);
 }
 
 void mdl_c::play() {
@@ -226,11 +226,11 @@ void mdl_c::play() {
     mpCallback->calcBlend();
 }
 
-void mdl_c::setAnm(m3d::banm_c &anm, f32 f) {
+bool mdl_c::setAnm(m3d::banm_c &anm, f32 f) {
     if (anm.getType() == nw4r::g3d::ScnMdlSimple::ANMOBJTYPE_CHR) {
         mpCallback->setBlendFrame(f);
     }
-    bmdl_c::setAnm(anm);
+    return bmdl_c::setAnm(anm);
 }
 
 void mdl_c::setCallback(callback_c *cb) {

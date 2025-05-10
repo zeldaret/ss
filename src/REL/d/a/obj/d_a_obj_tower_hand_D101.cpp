@@ -5,19 +5,19 @@
 #include "d/a/d_a_player.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_w.h"
+#include "d/d_stage.h"
 #include "d/flag/sceneflag_manager.h"
 #include "f/f_base.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "rvl/MTX/mtx.h"
 #include "rvl/MTX/vec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/room_manager.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TOWER_HAND_D101, dAcOTowerHandD101_c, fProfile::OBJ_TOWER_HAND_D101, 0x180, 0, 6);
 
@@ -104,11 +104,11 @@ bool dAcOTowerHandD101_c::createHeap() {
     if (!isValidDirectionParam(direction)) {
         return false;
     }
-    nw4r::g3d::ResFile res = resP;
-    if (!res.mFile.IsValid()) {
+    nw4r::g3d::ResFile res(resP);
+    if (!res.IsValid()) {
         return false;
     }
-    RoomManager::bindStageResToFile(&res);
+    dStage_c::bindStageResToFile(&res);
     if (direction == 1) {
         mMdl.getModel().setCullModeAll(GX_CULL_FRONT, false);
     }
@@ -248,11 +248,11 @@ int dAcOTowerHandD101_c::actorExecute() {
     PSMTXConcat(tmpMtx3, tmpMtx4, tmpMtx3);
     mLoc2Mtx.copyFrom(tmpMtx3);
 
-    if (mEffects.checkField0x00()) {
+    if (mEffects.hasEmitters()) {
         if (direction == 1) {
             tmpMtx3.YrotM(-0x8000);
         }
-        mEffects.setMtx(tmpMtx3);
+        mEffects.setTransform(tmpMtx3);
     }
     for (int i = 0; i <= 2; i++) {
         dBgW *bgW = nullptr;
@@ -300,11 +300,11 @@ int dAcOTowerHandD101_c::actorExecuteInEvent() {
             PSMTXConcat(tmpMtx3, tmpMtx4, tmpMtx3);
             mLoc2Mtx.copyFrom(tmpMtx3);
 
-            if (mEffects.checkField0x00()) {
+            if (mEffects.hasEmitters()) {
                 if (direction == 1) {
                     tmpMtx3.YrotM(-0x8000);
                 }
-                mEffects.setMtx(tmpMtx3);
+                mEffects.setTransform(tmpMtx3);
             }
             for (int i = 0; i <= 2; i++) {
                 dBgW *bgW = nullptr;
@@ -593,11 +593,11 @@ void dAcOTowerHandD101_c::executeState_RemainOpen() {
 }
 void dAcOTowerHandD101_c::finalizeState_RemainOpen() {}
 
-extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_573;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_573;
 void dAcOTowerHandD101_c::initializeState_Close() {
     mMdl.getAnm().setPlayState(m3d::PLAY_MODE_1);
     mMdl.setRate(getCloseRate());
-    mEffects.fn_80029920(PARTICLE_RESOURCE_ID_MAPPING_573, &position, nullptr, nullptr, nullptr, nullptr);
+    mEffects.createEffect(PARTICLE_RESOURCE_ID_MAPPING_573, position, nullptr, nullptr, nullptr, nullptr);
     playSound(0xC0C);
 }
 void dAcOTowerHandD101_c::executeState_Close() {

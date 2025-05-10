@@ -2,9 +2,8 @@
 
 #include "m/m3d/m3d.h"
 #include "nw4r/g3d/g3d_anmvis.h"
-#include "nw4r/g3d/g3d_resanmvis.h"
-#include "nw4r/g3d/g3d_resmdl.h"
-
+#include "nw4r/g3d/res/g3d_resanmvis.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 
 namespace m3d {
 

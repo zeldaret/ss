@@ -176,7 +176,7 @@ u32 dCcMassS_Mng::Chk(mVec3_c *p_xyz, dAcObjBase_c **p_actor, dCcMassS_HitInf *p
 
                 if (field_0x3A8 & 0x10) {
                     mVec3_c vec;
-                    PSVECSubtract((*p_actor)->GetPostion(), *p_xyz, vec);
+                    PSVECSubtract((*p_actor)->GetPosition(), *p_xyz, vec);
                     vec.y = 0;
                     f32 vecMag = PSVECMag(vec);
                     if (cM3d_IsZero(vecMag)) {

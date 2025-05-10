@@ -24,8 +24,7 @@ AllowShortLoopsOnASingleLine: False
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: True
 AlwaysBreakTemplateDeclarations: Yes
-BinPackArguments: True
-BinPackParameters: True
+BinPackArguments: True 
 BitFieldColonSpacing: Both
 BreakBeforeBraces: Custom
 BraceWrapping:
@@ -44,13 +43,16 @@ BreakBeforeBinaryOperators: None
 BreakBeforeTernaryOperators: False
 BreakStringLiterals: True
 ColumnLimit: 120
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ContinuationIndentWidth: 4
+FixNamespaceComments: true
 IncludeBlocks: Regroup
 IndentAccessModifiers: False
 IndentCaseLabels: True
 IndentGotoLabels: True
 IndentWidth: 4
 InsertBraces: True
+InsertNewlineAtEOF: true
 KeepEmptyLinesAtTheStartOfBlocks: False
 MaxEmptyLinesToKeep: 1
 Language: Cpp
@@ -74,3 +76,37 @@ SpacesInLineCommentPrefix:
 SpacesInParentheses: False
 SpacesInSquareBrackets: False
 UseTab: Never
+WhitespaceSensitiveMacros: [
+  NW4R_UT_LINKLIST_FOREACH, 
+  NW4R_UT_LINKLIST_FOREACH_SAFE,
+  NW4R_UT_LIST_FOREACH,
+  NW4R_UT_LIST_FOREACH_SAFE,
+  NW4R_EF_LIST_FOREACH,
+  NW4R_EF_LIST_FOREACH_SAFE
+]
+AttributeMacros: [DECOMP_INLINE, DECOMP_DONT_INLINE]
+
+# Taken from ogws :)
+IncludeCategories:
+  - Regex:           '^<(nw4r|egg|Pack)?(\/)?types'     # "Types" headers
+    Priority:        0
+    CaseSensitive:   true
+
+  - Regex:           '"egg\/[[:lower:].]+h"' # EGG public headers
+    Priority:        2
+    CaseSensitive:   true
+
+  - Regex:           '"nw4r\/[[:lower:].]+h"' # NW4R public headers
+    Priority:        3
+    CaseSensitive:   true
+
+  - Regex:           '^"rvl\/[[:upper:].]+h"' # RVL SDK public headers
+    Priority:        4
+    CaseSensitive:   true
+
+  - Regex:           '<[[:alnum:].]+>' # STL headers
+    Priority:        5                 # Priority 0 is header mapped to src file
+    CaseSensitive:   true
+
+  - Regex:           '.*' # All other headers
+    Priority:        1

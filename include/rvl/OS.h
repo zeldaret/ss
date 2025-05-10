@@ -6,7 +6,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+// IWYU pragma: begin_exports
 #include "rvl/OS/OS.h"
 #include "rvl/OS/OSAddress.h"
 #include "rvl/OS/OSAlarm.h"
@@ -39,6 +39,7 @@ extern "C" {
 #include "rvl/OS/OSTime.h"
 #include "rvl/OS/OSUtf.h"
 #include "rvl/OS/__ppc_eabi_init.h"
+// IWYU pragma: end_exports
 
 #ifdef __cplusplus
 }

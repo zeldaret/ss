@@ -14,14 +14,14 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "toBeSorted/attention.h"
+#include "toBeSorted/d_emitter.h"
+#include "toBeSorted/small_sound_mgr.h"
 
-extern "C" void fn_800298B0(u16, mVec3_c *, mVec3_c *, u32, u32, u32, u32, u32);
 extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_394_;
 
 void dAcOInsect_c::kill() {
-    // Small Ordering issue between loading particle id and position
-    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_394_, &position, nullptr, 0, 0, 0, 0, 0);
-    playSound(0x1236); // TODO (Sound ID)
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_394_, position, nullptr, nullptr, nullptr, nullptr, 0, 0);
+    playSound(SE_Insect_DISAPPEAR);
     deleteRequest();
 }
 
@@ -131,7 +131,7 @@ void dAcOInsect_c::addAttentionTarget() {
     preAttention();
     static InteractionTargetDef tmpTarget = {1, 0, 0, UNK_18, 0x2, 150.0f, 0.0f, 0.0f, -300.0f, 100.0f, 50.0f, 1.0f};
     if (shouldAddAttentionTarget()) {
-        AttentionManager *attn = AttentionManager::sInstance;
+        AttentionManager *attn = AttentionManager::GetInstance();
         if (attn != nullptr) {
             attn->addCatchTarget(*this, 0x1, 400.0f, -200.0f, 200.0f);
             tmpTarget.field_0x14 = getAttentionField();

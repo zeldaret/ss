@@ -7,7 +7,7 @@ extern "C" bool fn_8002C250(SoundInfo *p1, int someNum, char *name, mVec3_c *pos
     if (!p1->sound_source) {
         return false;
     }
-    p1->actor->sound_list.insert(p1);
+    p1->actor->sound_list.append(p1);
     p1->obj_pos = position;
     return true;
 }

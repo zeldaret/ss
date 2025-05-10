@@ -3,13 +3,13 @@
 
 #include "common.h"
 #include "d/d_cs.h"
+#include "d/d_cursor_hit_check.h"
 #include "d/lyt/d2d.h"
-#include "d/lyt/d_structd.h"
 #include "m/m2d.h"
 #include "s/s_FStateID.hpp"
 #include "s/s_State.hpp"
 #include "s/s_StateID.hpp"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 struct CsGameConfigMaybe {
     CsGameConfigMaybe();
@@ -135,7 +135,6 @@ public:
         friend class dCsGame_c;
 
     public:
-
         enum CursorType_e {
             BOW = 6,
         };
@@ -204,8 +203,12 @@ public:
         class lytPachinkoCsr_c {
         public:
             lytPachinkoCsr_c(dCsGameAnmGroups_c &g, d2d::LytBase_c *lyt)
-                : mAnm(g.tmp.mAnmGroups, 0x17), mpLyt(lyt), mStateMgr(*this, sStateID::null), field_0x50(0),
-                  field_0x54(0.0f), field_0x58(0.0f) {}
+                : mAnm(g.tmp.mAnmGroups, 0x17),
+                  mpLyt(lyt),
+                  mStateMgr(*this, sStateID::null),
+                  field_0x50(0),
+                  field_0x54(0.0f),
+                  field_0x58(0.0f) {}
             virtual ~lytPachinkoCsr_c() {}
 
             void init();
@@ -279,8 +282,12 @@ public:
 
     public:
         lytItemCursor_c()
-            : mStateMgr(*this, sStateID::null), mAnm(mAnmGroups.tmp.mAnmGroups, 0x17), mBow(mAnmGroups, &mLyt),
-              mDowsing(mAnmGroups, &mLyt), mPachinko(mAnmGroups, &mLyt), mCrawShot(mAnmGroups, &mLyt),
+            : mStateMgr(*this, sStateID::null),
+              mAnm(mAnmGroups.tmp.mAnmGroups, 0x17),
+              mBow(mAnmGroups, &mLyt),
+              mDowsing(mAnmGroups, &mLyt),
+              mPachinko(mAnmGroups, &mLyt),
+              mCrawShot(mAnmGroups, &mLyt),
               mVacuum(mAnmGroups, &mLyt) {}
         virtual ~lytItemCursor_c() {}
         virtual void lytItemCursor0x0C();
@@ -314,7 +321,6 @@ public:
         STATE_FUNC_DECLARE(lytItemCursor_c, HookShot);
         STATE_FUNC_DECLARE(lytItemCursor_c, PlayerCam);
 
-
         /* 0x004 */ f32 field_0x004;
         /* 0x008 */ f32 field_0x008;
         /* 0x00C */ UI_STATE_MGR_DECLARE(lytItemCursor_c);
@@ -341,7 +347,7 @@ public:
 
     /* 0x068 */ m2d::ResAccIf_c mCursorResAcc;
     /* 0x11C */ m2d::ResAccIf_c mMain2DResAcc;
-    /* 0x1D0 */ d2d::dLytStructCSub mStructC;
+    /* 0x1D0 */ dCursorInterfaceGame_c mCursorIf;
     /* 0x1EC */ s32 mCursorType;
     /* 0x1F0 */ dCsGameLyt1_c mLyt1;
     /* 0x290 */ dCsGameLyt2_c mLyt2;

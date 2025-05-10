@@ -1,15 +1,16 @@
 #include "d/lyt/d2d.h"
 
 #include "d/d_font_manager.h"
+#include "d/d_message.h"
+#include "d/d_textunk.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/d_window.h"
 #include "egg/gfx/eggScreen.h"
 #include "nw4r/lyt/lyt_bounding.h"
 #include "nw4r/lyt/lyt_group.h"
+#include "nw4r/lyt/lyt_pane.h"
 #include "nw4r/lyt/lyt_picture.h"
-#include "nw4r/lyt/lyt_textBox.h"
 #include "nw4r/lyt/lyt_utils.h"
-#include "nw4r/lyt/lyt_window.h"
 #include "sized_string.h"
 
 using namespace nw4r::lyt;
@@ -164,7 +165,7 @@ nw4r::lyt::AnimTransform *Layout_c::CreateAnimTransform(const void *animResBuf, 
 
 Multi_c::Multi_c() : Base_c(0x80), mLayout(), mDrawInfo(), mpResAcc(nullptr), mFlags(0) {
     mDrawInfo.SetLocationAdjustScale(nw4r::math::VEC2(
-        (f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_1) / (f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_2),
+        (f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_4_3) / (f32)EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_16_9),
         1.0f
     ));
     mDrawInfo.SetLocationAdjust(true);
@@ -200,15 +201,15 @@ void Multi_c::calcAfter() {
 
 extern "C" bool NeedsScreenAdjustment();
 
-// Largerly copied from m2d::Simple_c::draw
+// Largely copied from m2d::Simple_c::draw
 void Multi_c::draw() {
     nw4r::ut::Rect r = mLayout.GetLayoutRect();
     f32 near = 0.0f;
     f32 far = 500.0f;
     EGG::Screen s;
     bool needsAdjust = NeedsScreenAdjustment();
-    f32 f1 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_2);
-    f32 f2 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_1);
+    f32 f1 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_16_9);
+    f32 f2 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_4_3);
 
     f32 left = needsAdjust ? f1 * r.left / f2 : r.left;
     f32 right = needsAdjust ? f1 * r.right / f2 : r.right;
@@ -278,9 +279,6 @@ LytBase_c::~LytBase_c() {
     }
 }
 
-extern "C" const char *getUsedLanguageString();
-extern "C" nw4r::ut::TagProcessorBase<wchar_t> *GLOBAL_TEXT_MANAGER;
-
 bool LytBase_c::build(const char *name, m2d::ResAccIf_c *acc) {
     if (mLayout.GetRootPane() != nullptr) {
         return true;
@@ -332,7 +330,7 @@ bool LytBase_c::build(const char *name, m2d::ResAccIf_c *acc) {
     }
 
     SizedString<0x80> localizedName;
-    localizedName.sprintf("%s_%s", getUsedLanguageString(), fileName);
+    localizedName.sprintf("%s_%s", dMessage_c::getLanguageIdentifier(), fileName);
 
     void *data = acc->getAccessor()->GetResource(0, localizedName, nullptr);
     if (data == nullptr) {
@@ -343,7 +341,7 @@ bool LytBase_c::build(const char *name, m2d::ResAccIf_c *acc) {
 
     bool ok = mLayout.Build(resource, acc->getAccessor());
     if (ok) {
-        mLayout.SetTagProcessor(GLOBAL_TEXT_MANAGER);
+        mLayout.SetTagProcessor(dMessage_c::getGlobalTagProcessor());
         calc();
         setPropertiesRecursive(mLayout.GetRootPane(), -9999.0f, -9999.0f, -9999.0f, -9999.0f, -9999.0f);
     }
@@ -441,12 +439,6 @@ void LytBase_c::setPropertiesRecursive(nw4r::lyt::Pane *pane, f32 posX, f32 posY
     }
 }
 
-extern "C" const char *fn_801B2600(const char *);
-extern "C" void fn_800AF930(dTextBox_c *, const char *);
-extern "C" void fn_800B0F40(dTextBox_c *);
-
-// NOTE: This function uses `textBox->GetTranslateX1()` as a general placeholder to figure
-// out the details first. In reality these are all different functions!
 void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 scale, f32 spaceX, f32 spaceY) {
     if (pane->GetName()[0] != 'T') {
         return;
@@ -459,7 +451,7 @@ void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 sca
 
     textBox->AllocStringBuffer(0x200);
     textBox->setLytBase(this);
-    fn_800B0F40(textBox);
+    textBox->loadTextFormatVars();
 
     if (posX != -9999.0f || posY != -9999.0f) {
         if (posX == -9999.0f) {
@@ -475,41 +467,40 @@ void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 sca
     }
 
     nw4r::math::VEC3 t2 = textBox->GetTranslate();
-    t2.x += textBox->GetTranslateX1();
-    t2.y += textBox->GetTranslateX1();
+    t2.x += UnkTextThing::getFn800B2030();
+    t2.y += UnkTextThing::getFn800B2040();
     textBox->SetTranslate(t2);
 
     if (scale != -9999.0f) {
         const nw4r::ut::Font *f = textBox->GetFont();
         if (f != nullptr) {
-            // VEC2 internally copied via GPRs here, should be FPRs
-            textBox->SetScale(scale * 0.01f);
+            scale *= 0.01f;
+            textBox->SetScale(scale);
         }
     } else {
         const nw4r::ut::Font *f = textBox->GetFont();
         if (f != nullptr) {
-            // VEC2 internally copied via GPRs here, should be FPRs
-            textBox->SetScale(textBox->GetTranslateX1());
+            textBox->SetScale(UnkTextThing::getFn800B1FD0());
         }
     }
 
-    f32 f4 = 0.0f;
     f32 f6 = 0.0f;
+    f32 f4 = 0.0f;
 
     if (spaceX != -9999.0f) {
         textBox->SetCharSpace(spaceX);
     } else {
-        f6 = textBox->GetTranslateX1();
+        f6 = UnkTextThing::getFn800B2010();
     }
 
     if (spaceY != -9999.0f) {
         textBox->SetLineSpace(spaceY);
     } else {
-        f4 = textBox->GetTranslateX1();
+        f4 = UnkTextThing::getFn800B1FF0();
     }
 
-    textBox->SetCharSpace(f6 + textBox->GetCharSpace() + textBox->GetTranslateX1());
-    textBox->SetLineSpace(f4 + textBox->GetLineSpace() + textBox->GetTranslateX1());
+    textBox->SetCharSpace(textBox->GetCharSpace() + UnkTextThing::getFn800B2020() + f6);
+    textBox->SetLineSpace(textBox->GetLineSpace() + UnkTextThing::getFn800B2000() + f4);
     fn_800AB930(textBox);
 }
 
@@ -595,7 +586,7 @@ bool LytBase_c::fn_800ABB80(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg)
 bool LytBase_c::fn_800ABCE0(
     const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg
 ) {
-    int userDatInt = userDatum->GetInt();
+    s32 userDatInt = userDatum->GetInt();
     SizedString<0x40> str1;
     SizedString<0x40> str2;
 
@@ -605,24 +596,21 @@ bool LytBase_c::fn_800ABCE0(
         if (arg != -1) {
             userDatInt = arg;
         }
-        str2.sprintf(":%02d", userDatInt);
-        // TODO this operator is not behaving correctly here - there's
-        // an additional null check, and the source string address is
-        // computed twice via stack instead of once.
-        str1 += str2;
+        SizedString<0x40> &fmt = str2;
+        fmt.sprintf(":%02d", userDatInt);
+        str1.append(fmt);
     }
 
-    const char *text = LMS_GetTextByLabel(getMsbtInfo(), str1);
+    const wchar_t *text = LMS_GetTextByLabel(getMsbtInfo(), str1);
     if (text == nullptr) {
         return false;
     }
 
-    fn_800AF930(textbox1, fn_801B2600(text));
+    textbox1->setTextWithGlobalTextProcessor(dMessage_c::formatText(text));
     return true;
 }
 
-// Now largely the same functions again, but with an additional argument
-bool LytBase_c::fn_800ABE50(dTextBox_c *textbox, int arg, void *unk) {
+bool LytBase_c::fn_800ABE50(dTextBox_c *textbox, wchar_t *destBuf, u32 maxLen) {
     if (getMsbtInfo() == nullptr) {
         return false;
     }
@@ -657,15 +645,15 @@ bool LytBase_c::fn_800ABE50(dTextBox_c *textbox, int arg, void *unk) {
     if (ty == 1) {
         dTextBox_c *otherBox = getTextBox(list->GetString());
         if (otherBox != nullptr) {
-            return fn_800AC040(textbox, otherBox, arg, unk);
+            return fn_800AC040(textbox, otherBox, destBuf, maxLen);
         }
     } else {
-        return fn_800AC1AC(list, textbox, textbox, arg, unk);
+        return fn_800AC1AC(list, textbox, textbox, destBuf, maxLen);
     }
     return false;
 }
 
-bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk) {
+bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen) {
     u16 num = textbox2->GetExtUserDataNum();
     if (num == 0) {
         return false;
@@ -685,28 +673,24 @@ bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg,
     if (found != 1) {
         return false;
     }
-    return fn_800AC1AC(list, textbox1, textbox2, arg, unk);
+    return fn_800AC1AC(list, textbox1, textbox2, destBuf, maxLen);
 }
 
-extern "C" void fn_800AF840(dTextBox_c *textbox1, MsbtInfo *, const char *, int arg, void *unk);
-
 bool LytBase_c::fn_800AC1AC(
-    const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg, void *unk
+    const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen
 ) {
-    int userDatInt = userDatum->GetInt();
+    s32 userDatInt = userDatum->GetInt();
     SizedString<0x40> str1;
     SizedString<0x40> str2;
 
     str1 = textbox2->GetName();
     if (userDatInt != 0) {
-        str2.sprintf(":%02d", 0);
-        // TODO this operator is not behaving correctly here - there's
-        // an additional null check, and the source string address is
-        // computed twice via stack instead of once.
-        str1 += str2;
+        SizedString<0x40> &fmt = str2;
+        fmt.sprintf(":%02d", 0);
+        str1.append(fmt);
     }
 
-    fn_800AF840(textbox1, getMsbtInfo(), str1, arg, unk);
+    textbox1->setMessageWithGlobalTextProcessorAndMsbtInfo(getMsbtInfo(), str1, destBuf, maxLen);
     return true;
 }
 
@@ -754,18 +738,17 @@ bool hasSameBaseName(const char *left, const char *right) {
 char *sRef = "ref";
 
 void dSubPane::linkMeters(nw4r::lyt::Group *group, d2d::SubPaneList *meterGroup) {
-    // single regswap
-    nw4r::ut::LinkList<d2d::SubPaneListNode, 0>::Iterator beginIt = meterGroup->GetBeginIter();
-    nw4r::ut::LinkList<d2d::SubPaneListNode, 0>::Iterator endIt = meterGroup->GetEndIter();
+    SubPaneList::Iterator beginIt = meterGroup->GetBeginIter();
+    SubPaneList::Iterator endIt = meterGroup->GetEndIter();
 
-    for (nw4r::lyt::PaneList::Iterator paneIt = group->GetPaneList()->GetBeginIter();
-         paneIt != group->GetPaneList()->GetEndIter(); ++paneIt) {
+    nw4r::lyt::PaneList::Iterator paneEndIt = group->GetPaneList()->GetEndIter();
+
+    for (nw4r::lyt::PaneList::Iterator paneIt = group->GetPaneList()->GetBeginIter(); paneIt != paneEndIt; ++paneIt) {
         nw4r::lyt::Pane *pane = paneIt->mTarget;
-        int num = pane->GetExtUserDataNum();
-        if (num != 0) {
+        if (pane->GetExtUserDataNum()) {
             const nw4r::lyt::res::ExtUserData *dat = pane->FindExtUserDataByName(sRef);
             if (dat != nullptr && dat->GetType() == nw4r::lyt::res::TYPE_STRING) {
-                for (nw4r::ut::LinkList<d2d::SubPaneListNode, 0>::Iterator it = beginIt; it != endIt; ++it) {
+                for (SubPaneList::Iterator it = beginIt; it != endIt; ++it) {
                     d2d::dSubPane *meter = it->mpLytPane;
                     if (!meter->LytMeter0x24()) {
                         if (hasSameBaseName(dat->GetString(), meter->getName())) {
@@ -820,7 +803,7 @@ bool AnmGroupBase_c::init(
     return true;
 }
 
-bool AnmGroupBase_c::setDirection(bool b) {
+bool AnmGroupBase_c::bind(bool bDisable) {
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     if (anmTransform == nullptr) {
         return false;
@@ -830,12 +813,12 @@ bool AnmGroupBase_c::setDirection(bool b) {
         return false;
     }
 
-    nw4r::lyt::BindAnimation(mpGroup, anmTransform, false, b);
-    mFlags |= 1;
-    if (b) {
-        mFlags = (mFlags & ~2);
+    nw4r::lyt::BindAnimation(mpGroup, anmTransform, false, bDisable);
+    mFlags |= ANMGROUP_FLAG_BOUND;
+    if (bDisable) {
+        mFlags = (mFlags & ~ANMGROUP_FLAG_ENABLE);
     } else {
-        mFlags |= 2;
+        mFlags |= ANMGROUP_FLAG_ENABLE;
     }
 
     u32 flags = 1;
@@ -860,11 +843,11 @@ bool AnmGroupBase_c::unbind() {
     }
 
     nw4r::lyt::UnbindAnimation(group, anmTransform, mAnmResource.IsDescendingBind());
-    mFlags = (mFlags & ~1);
+    mFlags = (mFlags & ~ANMGROUP_FLAG_BOUND);
     return true;
 }
 
-bool AnmGroupBase_c::afterUnbind() {
+bool AnmGroupBase_c::remove() {
     return true;
 }
 
@@ -873,9 +856,9 @@ void AnmGroupBase_c::setAnimEnable(bool b) {
     nw4r::lyt::AnimTransform *anmTransform = mpAnmTransform;
     nw4r::lyt::SetAnimationEnable(group, anmTransform, b, mAnmResource.IsDescendingBind());
     if (b) {
-        mFlags |= 2;
+        mFlags |= ANMGROUP_FLAG_ENABLE;
     } else {
-        mFlags = mFlags & ~2;
+        mFlags = mFlags & ~ANMGROUP_FLAG_ENABLE;
     }
 }
 
@@ -895,6 +878,12 @@ void AnmGroupBase_c::setBackward() {
     mpFrameCtrl->setBackward();
 }
 
+void pushToEnd(nw4r::lyt::Pane *pane) {
+    nw4r::lyt::Pane *parent = pane->GetParent();
+    parent->RemoveChild(pane);
+    parent->AppendChild(pane);
+}
+
 bool AnmGroups::init(
     d2d::AnmGroup_c *pGroups, const LytBrlanMapping *mappings, u32 num, m2d::ResAccIf_c *acc, d2d::Layout_c *layout
 ) {
@@ -908,7 +897,7 @@ bool AnmGroups::init(
 
 void AnmGroups::remove() {
     for (int i = 0; i < mNumAnmGroups; i++) {
-        mpAnmGroups[i].afterUnbind();
+        mpAnmGroups[i].remove();
     }
 }
 

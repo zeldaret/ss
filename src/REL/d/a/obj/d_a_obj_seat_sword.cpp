@@ -11,7 +11,7 @@
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "rvl/MTX/mtx.h"
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
@@ -24,11 +24,11 @@ STATE_DEFINE(dAcOSeatSword_c, Wait);
 STATE_DEFINE(dAcOSeatSword_c, Get);
 
 dCcD_SrcCyl dAcOSeatSword_c::sCylSrc = {
-  /* mObjInf */
+    /* mObjInf */
     {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
      /* mObjTg */ {0, 0x311, {0, 0, 0x407}, 0x0, 0x0},
      /* mObjCo */ {0xE9}},
- /* mCylInf */
+    /* mCylInf */
     {20.f, 100.f}
 };
 
@@ -55,7 +55,7 @@ bool dAcOSeatSword_c::createHeap() {
         TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(sword_name), &heap_allocator, 0x120, 1, nullptr));
     }
 
-    nw4r::g3d::ResFile mPedRes = getOarcResFile(SwordSeatNames[mSubtype]);
+    nw4r::g3d::ResFile mPedRes(getOarcResFile(SwordSeatNames[mSubtype]));
     TRY_CREATE(mPedestalMdl.create(mPedRes.GetResMdl(SwordSeatNames[mSubtype]), &heap_allocator, 0x120, 1, nullptr));
     void *dzb = getOarcDZB(SwordSeatNames[mSubtype], SwordSeatNames[mSubtype]);
     void *plc = getOarcPLC(SwordSeatNames[mSubtype], SwordSeatNames[mSubtype]);
@@ -194,7 +194,7 @@ int dAcOSeatSword_c::draw() {
 
 void dAcOSeatSword_c::initializeState_Wait() {}
 void dAcOSeatSword_c::executeState_Wait() {
-    AttentionManager::sInstance->addTarget(*this, sInteractionDef, 0, nullptr);
+    AttentionManager::GetInstance()->addTarget(*this, sInteractionDef, 0, nullptr);
 
     if (checkPlayerHasSword()) {
         mbNoSword = true;
@@ -231,8 +231,8 @@ void dAcOSeatSword_c::actorExecuteCommon() {
     mEffPos += player->position;
     mEffPos.y = position.y;
 
-    mEff.fn_80029A10(PARTICLE_RESOURCE_ID_MAPPING_76_, &mEffPos, &rotation, &mScale, nullptr, nullptr);
-    mEff.fn_80027320(mField_0x7E4);
+    mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_76_, mEffPos, &rotation, &mScale, nullptr, nullptr);
+    mEff.setGlobalAlpha(mField_0x7E4);
 }
 
 void dAcOSeatSword_c::updateSwordMdl() {

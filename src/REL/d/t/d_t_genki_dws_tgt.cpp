@@ -1,16 +1,16 @@
 #include "d/t/d_t_genki_dws_tgt.h"
 
-#include "toBeSorted/room_manager.h"
+#include "d/d_room.h"
+#include "d/d_sc_game.h"
+#include "d/d_stage.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
-#include "toBeSorted/scgame.h"
-
 
 SPECIAL_ACTOR_PROFILE(TAG_GENKI_DOWSING_TARGET, dTgGenkiDwsTgt_c, fProfile::TAG_GENKI_DOWSING_TARGET, 0x02A5, 0, 0);
 
 int dTgGenkiDwsTgt_c::create() {
     u16 batQuestActivated = StoryflagManager::sInstance->getCounterOrFlag(304);
-    if (batQuestActivated == 0 || !ScGame::sInstance->currentSpawnInfo.isNight()) {
+    if (batQuestActivated == 0 || !dScGame_c::GetInstance()->currentSpawnInfo.isNight()) {
         return FAILED;
     }
 
@@ -50,11 +50,10 @@ int dTgGenkiDwsTgt_c::actorExecute() {
     if (flag) {
         deleteRequest();
     } else {
-        RoomManager *mgr = RoomManager::m_Instance;
-        if (mgr != nullptr) {
-            dRoom *room = RoomManager::m_Instance->GetRoomByIndex(roomid);
+        if (dStage_c::GetInstance() != nullptr) {
+            dRoom_c *room = dStage_c::GetInstance()->getRoom(roomid);
             if (room != nullptr) {
-                if (room->flags & 8) {
+                if (room->checkFlag(8)) {
                     mDowsingTarget.doRegister();
                 } else {
                     mDowsingTarget.doUnregister();

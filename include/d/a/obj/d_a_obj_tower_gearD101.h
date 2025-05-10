@@ -7,9 +7,9 @@
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 /**
  * A callback implementation that controls the button node in the switch model.
@@ -31,8 +31,10 @@ public:
 class dAcOTowerGearD101_c : public dAcObjBase_c {
 public:
     dAcOTowerGearD101_c()
-        : mStateMgr(*this, sStateID::null), field_0x3A0(mVec3_c::Zero.x, mVec3_c::Zero.y, mVec3_c::Zero.z),
-          field_0x3AC(mVec3_c::Zero.x, mVec3_c::Zero.y, mVec3_c::Zero.z), field_0x3B8(mAng3_c::Zero) {}
+        : mStateMgr(*this, sStateID::null),
+          field_0x3A0(mVec3_c::Zero.x, mVec3_c::Zero.y, mVec3_c::Zero.z),
+          field_0x3AC(mVec3_c::Zero.x, mVec3_c::Zero.y, mVec3_c::Zero.z),
+          field_0x3B8(mAng3_c::Zero) {}
     virtual ~dAcOTowerGearD101_c() {}
 
     STATE_FUNC_DECLARE(dAcOTowerGearD101_c, Wait);

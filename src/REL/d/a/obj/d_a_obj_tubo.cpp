@@ -30,7 +30,10 @@
 #include "rvl/MTX/mtxvec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
+#include "toBeSorted/blur_and_palette_manager.h"
+#include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
+#include "toBeSorted/small_sound_mgr.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 
 void float_ordering() {
@@ -51,16 +54,16 @@ STATE_DEFINE(dAcOtubo_c, Slope);
 STATE_DEFINE(dAcOtubo_c, Rebirth);
 
 dCcD_SrcSph dAcOtubo_c::sSphSrc = {
-  /* mObjInf */
+    /* mObjInf */
     {/* mObjAt */ {AT_TYPE_PHYSICS, 0x12, {0, 0, 0}, 2, 0, 0, 0, 0, 0},
      /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_0x80000 | AT_TYPE_0x8000), 0x801111, {0, 0xA, 0x40F}, 8, 0},
      /* mObjCo */ {0x1E9}},
- /* mSphInf */
+    /* mSphInf */
     {30.f},
 };
 
 bool dAcOtubo_c::createHeap() {
-    mRes = getOarcResFile("Tubo");
+    mRes = nw4r::g3d::ResFile(getOarcResFile("Tubo"));
     const char *subtype = getSubtype() == 0 ? "Tubo00" : "Tubo01";
     TRY_CREATE(mMdl.create(mRes.GetResMdl(subtype), &heap_allocator, 0x120, 1, nullptr));
     return true;
@@ -71,7 +74,7 @@ int dAcOtubo_c::actorCreate() {
     mObjAcch.Set(this, 1, &mAcchCir);
     mAcchCir.SetWall(20.f, 30.f);
     mEff_0x91C.init(this, 60.f, mScale.x, 0.f);
-    mEff_0x91C.setField_0x01(1);
+    mEff_0x91C.setIsSmall(true);
     int unkParam = getParams_0x3000();
     if (unkParam != 1 && unkParam != 2) {
         fn_8002EA30(-60.f, -20.f, 2.f, 1.f, 4.f, &mObjAcch);
@@ -122,7 +125,8 @@ int dAcOtubo_c::actorPostCreate() {
         if (DungeonflagManager::sInstance->getCounterOrFlag(3, 8) != 0) {
             return FAILED;
         }
-        actor_properties |= 4; // TODO ( actor_properties )
+
+        setActorProperty(0x4);
 
         if (dBgS_ObjGndChk ::CheckPos(position + mVec3_c::Ey * 50.f)) {
             position.y = dBgS_ObjGndChk::GetGroundHeight();
@@ -209,24 +213,24 @@ int dAcOtubo_c::draw() {
     return SUCCEEDED;
 }
 
-extern "C" void fn_8002A450(const mVec3_c &, u8, u8, const mVec3_c &, int, f32, f32);
-
 void dAcOtubo_c::initializeState_Wait() {}
 void dAcOtubo_c::executeState_Wait() {
     if (mObjAcch.ChkGroundLanding()) {
         if (!mbField_0x9EF || !EventManager::isInEvent()) {
             if (mField_0x9F6 == 2) {
-                fn_8002A450(position, field_0xEE, field_0xEF, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+                dJEffManager_c::spawnGroundEffect(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
             }
             if (mbField_0x9F3) {
-                playSound(0xA46);
+                playSound(SE_Tubo_PUT);
                 mbField_0x9F3 = false;
             }
             if (checkOnLava()) {
                 if (mField_0x9F6 != 2) {
-                    fn_8002A450(position, field_0xEE, field_0xEF, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+                    dJEffManager_c::spawnGroundEffect(
+                        position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0
+                    );
                 }
-                playSound(0x9A3);
+                playSound(SE_O_FALL_LAVA_S);
             }
         }
     } else if (mObjAcch.ChkGndHit()) {
@@ -362,7 +366,7 @@ void dAcOtubo_c::initializeState_Slope() {
 }
 void dAcOtubo_c::executeState_Slope() {
     if (mObjAcch.ChkGroundLanding()) {
-        fn_8002A450(position, field_0xEE, field_0xEF, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+        dJEffManager_c::spawnGroundEffect(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
     } else if (mObjAcch.ChkGndHit()) {
         mField_0x9DC = 0.f;
         addPickupTarget();
@@ -392,7 +396,7 @@ void dAcOtubo_c::executeState_Slope() {
 void dAcOtubo_c::finalizeState_Slope() {}
 
 void dAcOtubo_c::initializeState_Rebirth() {
-    SpecialItemDropMgr *mgr = SpecialItemDropMgr::sInstance;
+    SpecialItemDropMgr *mgr = SpecialItemDropMgr::GetInstance();
     mgr->giveSpecialDropItem(getParams2UpperByte(), roomid, &position, 0, rotation.y, -1);
     mField_0x9AC = position;
     obj_pos = &mField_0x9AC;
@@ -445,11 +449,7 @@ void dAcOtubo_c::finalizeState_Rebirth() {
     setActorProperty(0x1);
 }
 
-extern "C" void fn_80027510(void *, bool);
-extern "C" void fn_80027560(void *, bool, int);
-extern "C" void *fn_800298B0(u16, mVec3_c *, mVec3_c *, u32, u32, u32, u32, u32);
-extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_109_, PARTICLE_RESOURCE_ID_MAPPING_209_;
-extern "C" void *ENVIRONMENT;
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_109_, PARTICLE_RESOURCE_ID_MAPPING_209_;
 extern "C" void fn_80022BE0(void *, const mVec3_c &);
 
 void dAcOtubo_c::destroy() {
@@ -461,19 +461,23 @@ void dAcOtubo_c::destroy() {
     if (!boolParam) {
         return;
     }
-    fn_80022BE0(ENVIRONMENT, position);
+    fn_80022BE0(BlurAndPaletteManager::GetPInstance(), position);
     mActorCarryInfo.fn_80050EA0(this);
 
-    void *fx_thing = fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_209_, &poscopy2, nullptr, 0, 0, 0, 0, 0);
+    dEmitterBase_c *fx_thing = dJEffManager_c::spawnEffect(
+        PARTICLE_RESOURCE_ID_MAPPING_209_, poscopy2, nullptr, nullptr, nullptr, nullptr, 0, 0
+    );
     if (fx_thing) {
-        fn_80027510(fx_thing, mSubtype != 0);
+        fx_thing->attachEmitterCallbackId(mSubtype != 0 ? dJEffManager_c::TsuboB : dJEffManager_c::TsuboA);
     }
-    fx_thing = fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_109_, &position, nullptr, 0, 0, 0, 0, 0);
+    fx_thing = dJEffManager_c::spawnEffect(
+        PARTICLE_RESOURCE_ID_MAPPING_109_, position, nullptr, nullptr, nullptr, nullptr, 0, 0
+    );
     if (fx_thing) {
-        fn_80027560(fx_thing, mSubtype != 0, 0);
+        fx_thing->bindShpEmitter(mSubtype != 0 ? dJEffManager_c::TsuboB : dJEffManager_c::TsuboA, false);
     }
 
-    playSound(0xA47); // TODO (Sound ID)
+    playSound(SE_Tubo_BREAK);
 
     if (mSceneflag < 0xFF && !checkSceneflag()) {
         SceneflagManager::sInstance->setFlag(roomid, mSceneflag);
@@ -604,7 +608,7 @@ void dAcOtubo_c::fn_272_2670() {
     f32 groundH = mObjAcch.GetGroundH();
     f32 waterH = mObjAcch.GetWtrGroundH();
     bool noSound = mbSubmerged;
-    mEff_0x91C.fn_8002B120(waterH, groundH);
+    mEff_0x91C.execute(waterH, groundH);
 
     if (checkSubmerged()) {
         forwardAccel = -0.8f;
@@ -613,7 +617,7 @@ void dAcOtubo_c::fn_272_2670() {
         cLib::addCalcPosXZ(&velocity, mVec3_c::Zero, 0.05f, 1.0f, 0.2f);
         forwardSpeed = EGG::Math<f32>::sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
         if (!noSound) {
-            playSound(0x9A0); // TODO (Sound ID) - Fall Water S
+            playSound(SE_O_FALL_WATER_S);
         }
         mbSubmerged = true;
     } else {
@@ -671,7 +675,7 @@ void dAcOtubo_c::attemptDestroy() {
     if (mObjAcch.ChkRoofHit()) {
         destroy();
     } else if (!mbField_0x9EF && checkYOffsetField_0x100() && getParams_0x3000() != 1) {
-        FUN_8002dcd0();
+        killNoItemDrop();
     } else if (fn_272_38A0()) {
         destroy();
     }
@@ -733,7 +737,7 @@ void dAcOtubo_c::fn_272_3020() {
 
 void dAcOtubo_c::addPickupTarget() {
     if (cM::isZero(forwardSpeed)) {
-        AttentionManager *ins = AttentionManager::sInstance;
+        AttentionManager *ins = AttentionManager::GetInstance();
         ins->addPickUpTarget(*this, 120.f);
         ins->addUnk3Target(*this, 1, 500.f, -200.f, 200.f);
     }
@@ -859,7 +863,7 @@ void dAcOtubo_c::playRollSound() {
         return;
     }
 
-    FUN_8002d770(0xA48, forwardSpeed);
+    FUN_8002d770(SE_Tubo_ROLL_LV, forwardSpeed);
 }
 
 void float_order() {

@@ -11,6 +11,9 @@
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_pouch.h"
+#include "d/d_room.h"
+#include "d/d_stage.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/flag/tboxflag_manager.h"
@@ -18,11 +21,11 @@
 #include "m/m3d/m_scnleaf.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resanmchr.h"
-#include "nw4r/g3d/g3d_resanmtexpat.h"
-#include "nw4r/g3d/g3d_resanmtexsrt.h"
-#include "nw4r/g3d/g3d_resfile.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resanmchr.h"
+#include "nw4r/g3d/res/g3d_resanmtexpat.h"
+#include "nw4r/g3d/res/g3d_resanmtexsrt.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "rvl/MTX/mtxvec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
@@ -31,7 +34,7 @@
 #include "toBeSorted/counters/goddess_chest_counter.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/room_manager.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(TBOX, dAcTbox_c, fProfile::TBOX, 0x018D, 0, 6);
 
@@ -87,7 +90,7 @@ static char *const sOpenEventNames[] = {
 // TODO just copied from somewhere
 const cCcD_SrcGObj dAcTbox_c::sColSrc = {
   /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-  /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0, {0, 0x407}, 0, 0},
+  /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0, {0, 0, 0x407}, 0, 0},
   /* mObjCo */ {0xE9}
 };
 // clang-format on
@@ -811,8 +814,12 @@ bool dAcTbox_c::isBelowGroundAtPos(f32 height, const mVec3_c &pos) {
 }
 
 dAcTbox_c::dAcTbox_c()
-    : mStateMgr(*this, sStateID::null), mScnCallback(this), mEvent(*this, nullptr), mTboxListNode(this),
-      mDowsingTarget(this, DowsingTarget::SLOT_NONE), mGoddessDowsingTarget(this, DowsingTarget::SLOT_NONE) {
+    : mStateMgr(*this, sStateID::null),
+      mScnCallback(this),
+      mEvent(*this, nullptr),
+      mTboxListNode(this),
+      mDowsingTarget(this, DowsingTarget::SLOT_NONE),
+      mGoddessDowsingTarget(this, DowsingTarget::SLOT_NONE) {
     field_0x120B = 0;
     field_0x120E = 0;
     mDoObstructedCheck = false;
@@ -842,8 +849,8 @@ bool dAcTbox_c::createHeap() {
     }
 
     if (mVariant == GODDESS) {
-        nw4r::g3d::ResFile res = data;
-        if (!res.mFile.IsValid()) {
+        nw4r::g3d::ResFile res(data);
+        if (!res.IsValid()) {
             return false;
         }
         nw4r::g3d::ResMdl mdl = mMdl1.getModel().getResMdl();
@@ -851,7 +858,7 @@ bool dAcTbox_c::createHeap() {
             return false;
         }
         nw4r::g3d::ResAnmTexPat anmTexPat = res.GetResAnmTexPat("GoddessTBox");
-        if (!anmTexPat.mAnmTexPat.IsValid()) {
+        if (!anmTexPat.IsValid()) {
             return false;
         }
         if (!mAnmGoddessPat.create(mdl, anmTexPat, &heap_allocator, nullptr, 1)) {
@@ -861,7 +868,7 @@ bool dAcTbox_c::createHeap() {
         u16 goddessTBoxActive = getParams2Lower();
         if (StoryflagManager::sInstance->getCounterOrFlag(goddessTBoxActive) && !mHasBeenOpened) {
             nw4r::g3d::ResAnmTexSrt anmTexSrt = res.GetResAnmTexSrt("GoddessTBox");
-            if (!anmTexSrt.mAnmTexSrt.IsValid()) {
+            if (!anmTexSrt.IsValid()) {
                 return false;
             }
             if (!mAnmGoddessTexSrt.create(mdl, anmTexSrt, &heap_allocator, nullptr, 1)) {
@@ -870,12 +877,12 @@ bool dAcTbox_c::createHeap() {
             mMdl1.getModel().setAnm(mAnmGoddessTexSrt);
         }
     } else if (mVariant == NORMAL) {
-        nw4r::g3d::ResFile res = data;
-        if (!res.mFile.IsValid()) {
+        nw4r::g3d::ResFile res(data);
+        if (!res.IsValid()) {
             return false;
         }
         nw4r::g3d::ResAnmClr anmClr = res.GetResAnmClr("TBoxNormalTAppear");
-        if (!anmClr.mAnmClr.IsValid()) {
+        if (!anmClr.IsValid()) {
             return false;
         }
         nw4r::g3d::ResMdl mdl = mMdl1.getModel().getResMdl();
@@ -894,8 +901,8 @@ bool dAcTbox_c::createHeap() {
         if (fxData == nullptr) {
             return false;
         }
-        nw4r::g3d::ResFile fxRes = fxData;
-        if (!fxRes.mFile.IsValid()) {
+        nw4r::g3d::ResFile fxRes(fxData);
+        if (!fxRes.IsValid()) {
             return false;
         }
 
@@ -909,7 +916,7 @@ bool dAcTbox_c::createHeap() {
         mOpenFxMdl.setPriorityDraw(0x7F, 0x86);
 
         nw4r::g3d::ResAnmChr openAnm = fxRes.GetResAnmChr(sOpenAnmChrName);
-        if (!openAnm.mAnmChr.IsValid()) {
+        if (!openAnm.IsValid()) {
             return false;
         }
         if (!mAnmChr.create(openMdl, openAnm, &heap_allocator, nullptr)) {
@@ -918,7 +925,7 @@ bool dAcTbox_c::createHeap() {
         mOpenFxMdl.setAnm(mAnmChr);
 
         nw4r::g3d::ResAnmTexSrt anmTexSrt = fxRes.GetResAnmTexSrt(sOpenAnmTexSrtName);
-        if (!anmTexSrt.mAnmTexSrt.IsValid()) {
+        if (!anmTexSrt.IsValid()) {
             return false;
         }
         if (!mAnmTexSrt1.create(openMdl, anmTexSrt, &heap_allocator, nullptr, 1)) {
@@ -927,7 +934,7 @@ bool dAcTbox_c::createHeap() {
         mOpenFxMdl.setAnm(mAnmTexSrt1);
 
         nw4r::g3d::ResAnmClr anmClr = fxRes.GetResAnmClr(sOpenAnmClrName);
-        if (!anmClr.mAnmClr.IsValid()) {
+        if (!anmClr.IsValid()) {
             return false;
         }
         if (!mAnmMatClr2.create(openMdl, anmClr, &heap_allocator, nullptr, 1)) {
@@ -1162,7 +1169,7 @@ int dAcTbox_c::doDelete() {
         field_0x1210 = 0;
     }
     if (sCurrentObtainingItemOarcName != nullptr) {
-        OarcManager *mng = OarcManager::sInstance;
+        OarcManager *mng = OarcManager::GetInstance();
         if (!mng->ensureLoaded1(sCurrentObtainingItemOarcName)) {
             mng->decrement(sCurrentObtainingItemOarcName);
             sCurrentObtainingItemOarcName = nullptr;
@@ -1187,7 +1194,7 @@ int dAcTbox_c::actorExecute() {
         (this->*mRegisterDowsingTarget)();
     }
 
-    dRoom *r = RoomManager::m_Instance->GetRoomByIndex(roomid);
+    dRoom_c *r = dStage_c::GetInstance()->getRoom(roomid);
     bool hasFlags = r->checkFlag(0x1E);
     if (hasFlags) {
         setObjectProperty(0x200);
@@ -1323,7 +1330,7 @@ int dAcTbox_c::actorExecuteInEvent() {
         (this->*mRegisterDowsingTarget)();
     }
 
-    dRoom *r = RoomManager::m_Instance->GetRoomByIndex(roomid);
+    dRoom_c *r = dStage_c::GetInstance()->getRoom(roomid);
     bool hasFlags = r->checkFlag(0x1E);
     if (hasFlags) {
         setObjectProperty(0x200);
@@ -1748,8 +1755,6 @@ void dAcTbox_c::initializeState_DemoAppear() {
     field_0x11C0.set(0.0f, 0.0f, 0.0f);
     field_0x11CC.set(0.0f, 0.0f, 0.0f);
 }
-extern "C" void SmallSoundManager__playSound(void *, u32);
-extern "C" void *SOUND_EFFECT_SOUND_MGR;
 void dAcTbox_c::executeState_DemoAppear() {
     int val = field_0x11F8++;
     if (field_0x11F8 < 11) {
@@ -1782,7 +1787,7 @@ void dAcTbox_c::executeState_DemoAppear() {
         if (isStop && mAnmMatClr1.isStop(0) && field_0x11F8 > 0x5A) {
             mEvent.advanceNext();
             mStateMgr.changeState(StateID_WaitOpen);
-            SmallSoundManager__playSound(SOUND_EFFECT_SOUND_MGR, 0x13AD);
+            SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
         }
     }
 }
@@ -1822,7 +1827,7 @@ void dAcTbox_c::initializeState_WaitOpen() {
 }
 void dAcTbox_c::executeState_WaitOpen() {
     if ((!mDoObstructedCheck || checkIsClear()) && fn_8026D120()) {
-        AttentionManager *mgr = AttentionManager::sInstance;
+        AttentionManager *mgr = AttentionManager::GetInstance();
         mgr->addTarget(*this, getInteractionTargetDef(), 0, nullptr);
     }
 }
@@ -1853,7 +1858,7 @@ void dAcTbox_c::initializeState_GoddessWaitOn() {
 }
 void dAcTbox_c::executeState_GoddessWaitOn() {
     if (fn_8026D120()) {
-        AttentionManager *mgr = AttentionManager::sInstance;
+        AttentionManager *mgr = AttentionManager::GetInstance();
         mgr->addTarget(*this, getInteractionTargetDef(), 0, nullptr);
     }
 }
@@ -1883,7 +1888,7 @@ void dAcTbox_c::initializeState_DeleteArchive() {
 }
 void dAcTbox_c::executeState_DeleteArchive() {
     if (sCurrentObtainingItemOarcName != nullptr) {
-        OarcManager *mng = OarcManager::sInstance;
+        OarcManager *mng = OarcManager::GetInstance();
         if (!mng->ensureLoaded1(sCurrentObtainingItemOarcName)) {
             mng->decrement(sCurrentObtainingItemOarcName);
             sCurrentObtainingItemOarcName = nullptr;
@@ -1914,7 +1919,7 @@ void dAcTbox_c::initializeState_LoadArchive() {
     }
     fn_8026D140();
     sCurrentObtainingItemOarcName = sItemToArchiveName[mItemModelIdx];
-    OarcManager::sInstance->loadObjectArcFromDisk(sCurrentObtainingItemOarcName, nullptr);
+    OarcManager::GetInstance()->loadObjectArcFromDisk(sCurrentObtainingItemOarcName, nullptr);
     field_0x11C0.set(-61.0f, 0.0f, -42.0f);
     field_0x11CC.set(61.0f, 100.0f, 42.0f);
     field_0x11E8 = 1.0f;
@@ -1922,22 +1927,19 @@ void dAcTbox_c::initializeState_LoadArchive() {
     field_0x120C = 0;
 }
 void dAcTbox_c::executeState_LoadArchive() {
-    if (!OarcManager::sInstance->ensureLoaded1(sCurrentObtainingItemOarcName)) {
+    if (!OarcManager::GetInstance()->ensureLoaded1(sCurrentObtainingItemOarcName)) {
         mStateMgr.changeState(StateID_Open);
     }
 }
 void dAcTbox_c::finalizeState_LoadArchive() {}
 
-extern "C" void fn_800298B0(u16 effectIndex, mVec3_c *, mAng3_c *, mVec3_c *, void *, void *, void *, void *);
-extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_209_;
-extern "C" bool isPouchItem(u16);
-extern "C" u8 adventurePouchFindItemSlot(ITEM_ID item);
-extern "C" u16 findItemInItemCheck(ITEM_ID item);
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_209_;
+extern "C" const bool isPouchItem(u16);
 extern "C" dAcItem_c *giveItem3(u16 item, s32);
 
 void dAcTbox_c::initializeState_Open() {
     mScale.set(1.0f, 1.0f, 1.0f);
-    playSound(0xA36);
+    playSound(SE_TBox_OPEN_A);
     clearActorProperty(0x100);
     if (mVariant == NORMAL) {
         mAnmMatClr1.setFrame(mAnmMatClr1.getFrameMax(0), 0);
@@ -1954,11 +1956,12 @@ void dAcTbox_c::initializeState_Open() {
         mVec3_c pos;
         fn_8026B380(pos);
         mVec3_c p2 = fn_8026B3C0();
-        fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_209_, &pos, &rotation, &p2, nullptr, nullptr, nullptr, nullptr);
+        dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_209_, pos, &rotation, &p2, nullptr, nullptr, 0, 0);
     }
     fn_8026D140();
     ITEM_ID itemId = mItemId != 0 ? (ITEM_ID)mItemId : ITEM_GODDESS_HARP;
-    if (isPouchItem(itemId) && adventurePouchFindItemSlot(ITEM_NONE) == 8 && findItemInItemCheck(ITEM_NONE) == 0x3C) {
+    if (isPouchItem(itemId) && adventurePouchFindItemSlot(ITEM_NONE) == POUCH_SLOT_NONE &&
+        itemCheckFindItemSlot(ITEM_NONE) == ITEM_CHECK_SLOT_NONE) {
         setShouldCloseFlag();
     }
     dAcItem_c *item = giveItem3(itemId, -1);
@@ -2267,7 +2270,7 @@ void dAcTbox_c::setTboxFlag() {
 
 bool dAcTbox_c::checkTboxFlag() const {
     if (field_0x1207 <= 0x1F) {
-        return TBoxflagManager::sInstance->checkFlag(TBoxflagManager::sInstance->mSceneIndex, field_0x1207);
+        return TBoxflagManager::sInstance->checkFlagOnCurrentScene(field_0x1207);
     }
     return false;
 }
@@ -2373,7 +2376,7 @@ void dAcTbox_c::unregisterDowsing() {
 extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_208_;
 
 void dAcTbox_c::spawnAppearEffect() {
-    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_208_, &position, &rotation, nullptr, nullptr, nullptr, nullptr, nullptr);
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_208_, position, &rotation, nullptr, nullptr, nullptr, 0, 0);
 }
 
 bool dAcTbox_c::checkIsClear() const {
@@ -2668,6 +2671,6 @@ void dAcTbox_c::fn_8026E630() {
     if (dBgS_ObjGndChk::CheckPos(checkPos) && &dBgS_ObjGndChk::GetInstance()) {
         cBgS_PolyInfo p = dBgS_ObjGndChk::GetInstance();
         dBgS::GetInstance()->SetLightingCode(this, p);
-        FUN_8002de30(p);
+        setPolyAttrsDupe(p);
     }
 }

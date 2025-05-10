@@ -3,7 +3,6 @@
 
 #include "d/lyt/d2d.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 
 class dLytSkyGauge_c;
 
@@ -53,7 +52,7 @@ public:
     dLytSkyGauge_c() : mStateMgr(*this, sStateID::null) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
-    virtual bool LytMeter0x14() override;
+    virtual bool execute() override;
     virtual nw4r::lyt::Pane *getPane() override {
         return mMain.getLyt().getLayout()->GetRootPane();
     }
@@ -69,12 +68,20 @@ public:
     void setHeight(f32 height);
 
     static dLytSkyGauge_c *sInstance;
+    void setWantsIn() {
+        mWantsIn = true;
+    }
+    void setWantsOut() {
+        mWantsOut = true;
+    }
 
 private:
     STATE_FUNC_DECLARE(dLytSkyGauge_c, None);
     STATE_FUNC_DECLARE(dLytSkyGauge_c, In);
     STATE_FUNC_DECLARE(dLytSkyGauge_c, Move);
     STATE_FUNC_DECLARE(dLytSkyGauge_c, Out);
+
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytSkyGauge_c);
 
     /* 0x008 */ UI_STATE_MGR_DECLARE(dLytSkyGauge_c);
     /* 0x008 */ d2d::ResAccIf_c mResAcc;

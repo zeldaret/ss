@@ -1,5 +1,6 @@
 #include "d/lyt/d_screen_fader.h"
 
+#include "d/d_d2d.h"
 #include "egg/gfx/eggDrawGX.h"
 #include "egg/gfx/eggScreen.h"
 #include "m/m_mtx.h"
@@ -37,10 +38,8 @@ bool dScreenFader_c::calc() {
     return res;
 }
 
-extern "C" void fn_80016200();
-
 void dScreenFader_c::draw() {
-    fn_80016200();
+    d2d::defaultSet();
     EGG::DrawGX::BeginDrawScreen(false, false, true);
     f32 scaleX = EGG::Screen::GetSizeXMax();
     f32 scaleY = EGG::Screen::GetSizeYMax();

@@ -1,98 +1,174 @@
-#ifndef NW4R_G3D_ANMSHP_H
-#define NW4R_G3D_ANMSHP_H
-#include "common.h"
-#include "nw4r/g3d/g3d_anmobj.h"
-#include "nw4r/g3d/g3d_resanmshp.h"
+#ifndef NW4R_G3D_ANM_SHP_H
+#define NW4R_G3D_ANM_SHP_H
+#include <nw4r/types_nw4r.h>
 
-// This header is based on the SS ghidra, the TypeNames in the binary,
-// and an assumed symmetry to AnmObjVis. Everything about it could be wrong.
+#include "nw4r/g3d/g3d_anmobj.h"
+#include "nw4r/g3d/res/g3d_resanmshp.h"
 
 namespace nw4r {
 namespace g3d {
 
+/******************************************************************************
+ *
+ * AnmObjShp
+ *
+ ******************************************************************************/
+// Forward declarations
 class AnmObjShpRes;
 
 class AnmObjShp : public AnmObj {
 public:
-    AnmObjShp(MEMAllocator *, u16 *, int);
-    virtual bool IsDerivedFrom(TypeObj other) const // at 0x8
-    {
-        return (other == GetTypeObjStatic()) ? true : AnmObj::IsDerivedFrom(other);
-    }
-    virtual void G3dProc(u32, u32, void *);  // at 0xC
-    virtual ~AnmObjShp() {}                  // at 0x10
-    virtual const TypeObj GetTypeObj() const // at 0x14
-    {
-        return TypeObj(TYPE_NAME);
-    }
-    virtual const char *GetTypeName() const // at 0x18
-    {
-        return GetTypeObj().GetTypeName();
-    }
-    virtual void SetFrame(f32) = 0;                    // at 0x1C
-    virtual f32 GetFrame() const = 0;                  // at 0x20
-    virtual void UpdateFrame() = 0;                    // at 0x24
-    virtual void SetUpdateRate(f32) = 0;               // at 0x28
-    virtual f32 GetUpdateRate() const = 0;             // at 0x2C
-    virtual bool Bind(ResMdl) = 0;                     // at 0x30
-    virtual void Release();                            // at 0x34
-    virtual bool GetResult(u32) = 0;                   // at 0x38
-    virtual AnmObjShpRes *Attach(int, AnmObjShpRes *); // at 0x3C
-    virtual AnmObjShpRes *Detach(int);                 // at 0x40
+    AnmObjShp(MEMAllocator *pAllocator, u16 *pBindingBuf, int numBinding);
+    virtual void G3dProc(u32 task, u32 param, void *pInfo) = 0; // at 0xC
+    virtual ~AnmObjShp() {}                                     // at 0x10
 
-    static const TypeObj GetTypeObjStatic() {
-        return TypeObj(TYPE_NAME);
-    }
+    virtual void SetFrame(f32 frame) = 0; // at 0x1C
+    virtual f32 GetFrame() const = 0;     // at 0x20
+    virtual void UpdateFrame() = 0;       // at 0x24
 
-    bool TestDefined(u32 idx) const;
+    virtual void SetUpdateRate(f32 rate) = 0; // at 0x28
+    virtual f32 GetUpdateRate() const = 0;    // at 0x2C
+
+    virtual bool Bind(const ResMdl mdl) = 0; // at 0x30
+    virtual void Release();                  // at 0x34
+
+    virtual const ShpAnmResult *GetResult(ShpAnmResult *pResult,
+                                          u32 idx) = 0; // at 0x38
+
+    virtual AnmObjShpRes *Attach(int idx, AnmObjShpRes *pRes); // at 0x3C
+    virtual AnmObjShpRes *Detach(int idx);                     // at 0x40
+    virtual void DetachAll();                                  // at 0x44
+
+    virtual void SetWeight(int idx, f32 weight); // at 0x48
+    virtual f32 GetWeight(int idx) const;        // at 0x4C
+
     bool TestExistence(u32 idx) const;
-    void DetachAll();
+    bool TestDefined(u32 idx) const;
 
 protected:
-    static const int MAX_RESOURCES = 4;
+    enum BindingFlag {
+        BINDING_ID_MASK = (1 << 14) - 1,
+        BINDING_INVALID = (1 << 14),
+        BINDING_UNDEFINED = (1 << 15),
+    };
 
-    int mNumBinds; // at 0x10
-    u16 *mBinds;   // at 0x14
+protected:
+    static const int DEFAULT_MAX_CHILDREN = 4;
 
-    NW4R_G3D_TYPE_OBJ_DECL(AnmObjShp);
+protected:
+    int mNumBinding;      // at 0x10
+    u16 *const mpBinding; // at 0x14
+
+    NW4R_G3D_RTTI_DECL_DERIVED(AnmObjShp, AnmObj);
 };
 
-class AnmObjShpRes : public AnmObjShp, public FrameCtrl {
+/******************************************************************************
+ *
+ * AnmObjShpNode
+ *
+ ******************************************************************************/
+class AnmObjShpNode : public AnmObjShp {
 public:
-    AnmObjShpRes(MEMAllocator *, ResAnmShp, u16 *, int);
+    AnmObjShpNode(
+        MEMAllocator *pAllocator, u16 *pBindingBuf, int numBinding, AnmObjShpRes **ppChildrenBuf, int numChildren
+    );
+    virtual void G3dProc(u32 task, u32 param, void *pInfo); // at 0xC
+    virtual ~AnmObjShpNode();                               // at 0x10
 
-    virtual bool IsDerivedFrom(TypeObj other) const // at 0x8
-    {
-        return (other == GetTypeObjStatic()) ? true : AnmObjShp::IsDerivedFrom(other);
-    }
-    virtual ~AnmObjShpRes() {}               // at 0x10
-    virtual const TypeObj GetTypeObj() const // at 0x14
-    {
-        return TypeObj(TYPE_NAME);
-    }
-    virtual const char *GetTypeName() const // at 0x18
-    {
-        return GetTypeObj().GetTypeName();
-    }
-    virtual void SetFrame(f32);        // at 0x1C
-    virtual f32 GetFrame() const;      // at 0x20
-    virtual void UpdateFrame();        // at 0x24
-    virtual void SetUpdateRate(f32);   // at 0x28
-    virtual f32 GetUpdateRate() const; // at 0x2C
-    virtual bool Bind(ResMdl);         // at 0x30
-    virtual bool GetResult(u32);       // at 0x38
+    virtual void SetFrame(f32 frame); // at 0x1C
+    virtual f32 GetFrame() const;     // at 0x20
+    virtual void UpdateFrame();       // at 0x24
 
-    static const TypeObj GetTypeObjStatic() {
-        return TypeObj(TYPE_NAME);
-    }
+    virtual void SetUpdateRate(f32 rate); // at 0x28
+    virtual f32 GetUpdateRate() const;    // at 0x2C
 
-    static AnmObjShpRes *Construct(MEMAllocator *, u32 *, ResAnmShp, ResMdl, bool);
+    virtual bool Bind(const ResMdl mdl); // at 0x30
+    virtual void Release();              // at 0x34
+
+    virtual AnmObjShpRes *Attach(int idx, AnmObjShpRes *pRes); // at 0x3C
+    virtual AnmObjShpRes *Detach(int idx);                     // at 0x40
+    virtual void DetachAll();                                  // at 0x44
+
+protected:
+    int mChildrenArraySize;         // at 0x18
+    AnmObjShpRes **mpChildrenArray; // at 0x1C
+
+    NW4R_G3D_RTTI_DECL_DERIVED(AnmObjShpNode, AnmObjShp);
+};
+
+/******************************************************************************
+ *
+ * AnmObjShpBlend
+ *
+ ******************************************************************************/
+class AnmObjShpBlend : public AnmObjShpNode {
+    static AnmObjShpBlend *Construct(MEMAllocator *pAllocator, u32 *pSize, ResMdl mdl, int numChildren);
+
+    AnmObjShpBlend(
+        MEMAllocator *pAllocator, u16 *pBindingBuf, int numBinding, AnmObjShpRes **ppChildrenBuf, int numChildren,
+        f32 *pWeightBuf
+    );
+
+    virtual ~AnmObjShpBlend() {} // at 0x10
+
+    virtual const ShpAnmResult *GetResult(ShpAnmResult *pResult,
+                                          u32 idx); // at 0x38
+
+    virtual void SetWeight(int idx, f32 weight); // at 0x48
+    virtual f32 GetWeight(int idx) const;        // at 0x4C
 
 private:
-    ResAnmShp mResAnmShp; // at 0x2C
+    f32 *mpWeightArray; // at 0x20
 
-    NW4R_G3D_TYPE_OBJ_DECL(AnmObjShpRes);
+    NW4R_G3D_RTTI_DECL_DERIVED(AnmObjShpBlend, AnmObjShpNode);
 };
+
+/******************************************************************************
+ *
+ * AnmObjShpRes
+ *
+ ******************************************************************************/
+class AnmObjShpRes : public AnmObjShp, protected FrameCtrl {
+public:
+    static AnmObjShpRes *Construct(MEMAllocator *pAllocator, u32 *pSize, ResAnmShp shp, ResMdl mdl, bool cache);
+
+    AnmObjShpRes(
+        MEMAllocator *pAllocator, ResAnmShp shp, u16 *pBindingBuf, ShpAnmVtxSet *pVtxSetBuf, int numBinding,
+        ShpAnmResult *pCacheBuf
+    );
+    virtual void G3dProc(u32 task, u32 param, void *pInfo); // at 0xC
+    virtual ~AnmObjShpRes() {}                              // at 0x10
+
+    virtual void SetFrame(f32 frame); // at 0x1C
+    virtual f32 GetFrame() const;     // at 0x20
+    virtual void UpdateFrame();       // at 0x24
+
+    virtual void SetUpdateRate(f32 rate); // at 0x28
+    virtual f32 GetUpdateRate() const;    // at 0x2C
+
+    virtual bool Bind(const ResMdl mdl); // at 0x30
+
+    virtual const ShpAnmResult *GetResult(ShpAnmResult *pResult,
+                                          u32 idx); // at 0x38
+
+    void UpdateCache();
+
+    ResAnmShp GetResAnm() {
+        return mRes;
+    }
+
+    void SetPlayPolicy(PlayPolicyFunc pFunc) {
+        FrameCtrl::SetPlayPolicy(pFunc);
+    }
+
+private:
+    ResAnmShp mRes;                    // at 0x2C
+    ShpAnmVtxSet *const mpVtxSetArray; // at 0x30
+    ShpAnmResult *const mpResultCache; // at 0x34
+
+    NW4R_G3D_RTTI_DECL_DERIVED(AnmObjShpRes, AnmObjShp);
+};
+
 } // namespace g3d
 } // namespace nw4r
 

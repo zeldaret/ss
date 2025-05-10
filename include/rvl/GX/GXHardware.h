@@ -1,15 +1,5 @@
-#ifndef RVL_SDK_GX_HARDWARE_H
-#define RVL_SDK_GX_HARDWARE_H
-#include "common.h"
-#include "rvl/GX/GXTypes.h"
-
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**
- * Documentation from:
+ * For more details, see:
  * https://www.gc-forever.com/yagcd/chap8.html#sec8
  * https://www.gc-forever.com/yagcd/chap5.html#sec5
  * https://github.com/dolphin-emu/dolphin/blob/master/Source/Core/VideoCommon/BPMemory.h
@@ -20,6 +10,16 @@ extern "C" {
  * https://patents.google.com/patent/US7002591
  * https://patents.google.com/patent/US6697074
  */
+
+#ifndef RVL_SDK_GX_HARDWARE_H
+#define RVL_SDK_GX_HARDWARE_H
+#include "rvl/GX/GXTypes.h"
+
+#include <common.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /************************************************************
  *
@@ -107,6 +107,9 @@ typedef enum {
  */
 #define GX_BP_SET_OPCODE(cmd, opcode) (cmd) = GX_BITSET(cmd, 0, 8, (opcode))
 
+#define GX_BP_OPCODE_SHIFT 24
+#define GX_BP_CMD_SZ (sizeof(u8) + sizeof(u32))
+
 /************************************************************
  *
  *
@@ -122,6 +125,8 @@ typedef enum {
     WGPIPE.c = GX_FIFO_CMD_LOAD_CP_REG;                                                                                \
     WGPIPE.c = (addr);                                                                                                 \
     WGPIPE.i = (data);
+
+#define GX_CP_CMD_SZ (sizeof(u8) + sizeof(u8) + sizeof(u32))
 
 /************************************************************
  *
@@ -155,6 +160,8 @@ typedef enum {
     GX_XF_LOAD_REG_HDR(addr);                                                                                          \
     WGPIPE.i = (data);
 
+#define GX_XF_CMD_SZ (sizeof(u8) + sizeof(u32) + sizeof(u32))
+
 /**
  * Load immediate values into multiple XF registers
  */
@@ -170,23 +177,43 @@ typedef enum {
  * Enums for Tex0-Tex7 register fields
  */
 typedef enum {
-    GX_XF_TEX_PROJ_ST, //! (s,t): texmul is 2x4
-    GX_XF_TEX_PROJ_STQ //! (s,t,q): texmul is 3x4
+    GX_XF_TEX_PROJ_ST, // (s,t): texmul is 2x4
+    GX_XF_TEX_PROJ_STQ // (s,t,q): texmul is 3x4
 } GXXfTexProj;
 
 typedef enum {
-    GX_XF_TEX_FORM_AB11, //! (A, B, 1.0, 1.0) (used for regular texture source)
-    GX_XF_TEX_FORM_ABC1  //! (A, B, C, 1.0) (used for geometry or normal source)
+    GX_XF_TEX_FORM_AB11, // (A, B, 1.0, 1.0) (used for regular texture source)
+    GX_XF_TEX_FORM_ABC1  // (A, B, C, 1.0) (used for geometry or normal source)
 } GXXfTexForm;
 
 typedef enum {
-    GX_XF_TG_REGULAR, //! Regular transformation (transform incoming data)
-    GX_XF_TG_BUMP,    //! Texgen bump mapping
-    GX_XF_TG_CLR0,    //! Color texgen: (s,t)=(r,g:b) (g and b are concatenated),
-                      //! color0
-    GX_XF_TG_CLR1     //! Color texgen: (s,t)=(r,g:b) (g and b are concatenated),
-                      //! color 1
+    GX_XF_TG_REGULAR, // Regular transformation (transform incoming data)
+    GX_XF_TG_BUMP,    // Texgen bump mapping
+
+    GX_XF_TG_CLR0, // Color texgen: (s,t)=(r,g:b) (g and b are concatenated),
+                   // color0
+
+    GX_XF_TG_CLR1 // Color texgen: (s,t)=(r,g:b) (g and b are concatenated),
+                  // color1
 } GXXfTexGen;
+
+/**
+ * Misc. hardware enums
+ */
+typedef enum {
+    GX_RAS_COLOR0A0,
+    GX_RAS_COLOR1A1,
+    GX_RAS_ALPHA_BUMP = 5,
+    GX_RAS_ALPHA_BUMPN,
+    GX_RAS_COLOR_ZERO,
+
+    GX_RAS_MAX_CHANNEL
+} GXRasChannelID;
+
+typedef enum {
+    GX_TEVREG_COLOR,
+    GX_TEVREG_KONST,
+} GXTevRegType;
 
 #ifdef __cplusplus
 }

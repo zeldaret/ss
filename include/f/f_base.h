@@ -5,6 +5,7 @@
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/include/dol/framework/f_base.hpp and the Skyward Sword
 // Ghidra database. Comments and docs can be seen above. stripped in this file for easier looking
 
+#include "c/c_list.h"
 #include "common.h"
 #include "egg/core/eggExpHeap.h"
 #include "egg/core/eggFrmHeap.h"
@@ -31,7 +32,7 @@ public:
     /* 0x0F */ u8 proc_control;
     /* 0x10 */ fManager_c manager;
     /* 0x50 */ fBaHelper_c *p_helper;
-    /* 0x54 */ fLiMgBa_c actor_list;
+    /* 0x54 */ cListMg_c actor_list;
     /* 0x5C */ EGG::FrmHeap *p_heap;
     /* 0x60 */ // vtable
 public:
@@ -81,10 +82,6 @@ public:
     }
     void clearProcControlFlag(u8 flag) {
         proc_control &= ~flag;
-    }
-
-    fManager_c *getManager() {
-        return &manager;
     }
 
     void setParams() {

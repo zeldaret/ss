@@ -27,12 +27,12 @@ struct BitGXNums {
 template <typename T>
 inline bool TestBit(T bits, int index) {
     T mask = 1 << index;
-    return bits & mask;
+    return (bits & mask) != 0;
 }
 template <typename T>
 inline void SetBit(T *bits, int pos, bool val) {
-    T mask = T(1 << pos);
-    *bits = T((*bits & ~mask)) | (val << pos);
+    T mask = ~T(1 << pos);
+    *bits = T((*bits & mask)) | (val << pos);
 }
 
 template <typename T>
@@ -135,7 +135,7 @@ struct TexCoordGen {
     // __ct__Q34nw4r3lyt11TexCoordGenFv
     TexCoordGen() {
         reserve = 0;
-        Set(GX_TG_MTX2x4, GX_TG_TEX0, GX_TEXMTX_IDENT);
+        Set(GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY);
     }
 
     // Set__Q34nw4r3lyt11TexCoordGenF13_GXTexGenType12_GXTexGenSrcUl

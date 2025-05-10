@@ -2,11 +2,11 @@
 
 #include "d/a/d_a_item.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_sc_game.h"
 #include "d/flag/storyflag_manager.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/scgame.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TOD3_STONE, dAcOtoD3StoneFigure_c, fProfile::OBJ_TOD3_STONE, 0x1B3, 0, 0);
 
@@ -17,22 +17,19 @@ f32 dAcOtoD3StoneFigure_c::sRadius = 85.0f;
 f32 dAcOtoD3StoneFigure_c::sHeight = 290.0f;
 
 dCcD_SrcCyl dAcOtoD3StoneFigure_c::sCcSrc = {
-  /* mObjInf */
-    {/* mObjAt*/ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-     /* mObjTg*/
+    {{0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
      {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND),
       0x1000111,
       {0, 0x06, 0x407},
       0,
       0},
-     /* mObjCo*/ {0xE9}},
- /* mCylInf */
+     {0xE9}},
     {dAcOtoD3StoneFigure_c::sRadius, dAcOtoD3StoneFigure_c::sHeight}
 };
 
 bool dAcOtoD3StoneFigure_c::createHeap() {
     const char *modelName = getModelName();
-    mResFile = getOarcResFile("BirdObjD3");
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("BirdObjD3"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(modelName);
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
     return true;
@@ -92,14 +89,14 @@ int dAcOtoD3StoneFigure_c::actorExecute() {
 }
 
 int dAcOtoD3StoneFigure_c::draw() {
-    if (ScGame::currentSpawnInfo.layer != 0x12) {
+    if (dScGame_c::currentSpawnInfo.layer != 0x12) {
         drawModelType1(&mMdl);
     }
     return SUCCEEDED;
 }
 
 void dAcOtoD3StoneFigure_c::initializeState_OneEye() {
-    if (ScGame::currentSpawnInfo.night == 1) {
+    if (dScGame_c::currentSpawnInfo.getTimeOfDay() == SpawnInfo::NIGHT) {
         rotation.y.mVal += -0x8000;
         updateMatrix();
         mMdl.setLocalMtx(mWorldMtx);
@@ -108,13 +105,13 @@ void dAcOtoD3StoneFigure_c::initializeState_OneEye() {
 
 void dAcOtoD3StoneFigure_c::executeState_OneEye() {
     if (EventManager::isInEvent(this, "D3OpenStart")) {
-        ScGame::sInstance->triggerExit(roomid, mExitId);
+        dScGame_c::GetInstance()->triggerExit(roomid, mExitId);
     } else {
-        if (hasStoneOfTrials() && ScGame::currentSpawnInfo.night != 1) {
+        if (hasStoneOfTrials() && dScGame_c::currentSpawnInfo.getTimeOfDay() != SpawnInfo::NIGHT) {
             // These are interaction related
             -0.0f;
-            AttentionManager::sInstance->addExamineTalkTarget(*this, 1, 300.0f, 50.0f, -100.0f, 100.0f);
-            AttentionManager::sInstance->addExamineTalkTarget(*this, 1, 200.0f, -100.0f, 100.0f);
+            AttentionManager::GetInstance()->addExamineTalkTarget(*this, 1, 300.0f, 50.0f, -100.0f, 100.0f);
+            AttentionManager::GetInstance()->addExamineTalkTarget(*this, 1, 200.0f, -100.0f, 100.0f);
         }
     }
 }

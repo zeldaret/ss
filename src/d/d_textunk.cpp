@@ -1,7 +1,13 @@
 #include "d/d_textunk.h"
 
 #include "common.h"
+#include "nw4r/lyt/lyt_arcResourceAccessor.h"
 #include "nw4r/ut/ut_Color.h"
+
+void dummy_ArcResourceAccessor(nw4r::lyt::ArcResourceAccessor *arg) {
+    // instantiate dtor here
+    delete arg;
+}
 
 UnkTextThing textThing;
 UnkTextThing *UnkTextThing::sInstance;
@@ -36,7 +42,7 @@ UnkTextThing::UnkTextThing() {
 
     for (int i = 0; i < 82; i++) {
         field_buf0[i] = 0;
-        field_buf2[i] = 0;
+        mMsbts[i] = 0;
     }
 
     for (int i = 0; i < 23; i++) {
@@ -46,25 +52,25 @@ UnkTextThing::UnkTextThing() {
 
     for (int i = 0; i < 80; i++) {
         field_buf1[i] = 0;
-        field_buf3[i] = 0;
+        mMsbfs[i] = 0;
     }
 
-    field_0x74C = 0;
-    field_0x750 = 0;
+    mOverrideZev0 = nullptr;
+    mOverrideStageZev = nullptr;
 
-    field_0x7B4 = false;
+    mShouldOverrideData = false;
     field_0x7B5 = false;
 
     field_0x004 = "";
     field_0x084 = "";
     field_0x104 = "";
 
-    field_0x7B6 = 0;
+    mShouldHookAllocations = false;
 
     field_0x7A8 = 0;
     field_0x788 = 0.45;
     field_0x78C = -5.0f;
-    field_0x7AE = 4;
+    mMsgWindowWaitDelay = 4;
     field_0x7B7 = 0;
     field_0x7AA = 5;
     field_0x7AC = 15;
@@ -72,14 +78,8 @@ UnkTextThing::UnkTextThing() {
     field_0x7B2 = false;
 
     // Weird init order
-    field_0x7B8.a = 0;
-    field_0x7B8.b = 0;
-    field_0x7B8.g = 0;
-    field_0x7B8.r = 0;
-    field_0x7BC.a = 0;
-    field_0x7BC.b = 0;
-    field_0x7BC.g = 0;
-    field_0x7BC.r = 0;
+    field_0x7B8.r = field_0x7B8.g = field_0x7B8.b = field_0x7B8.a = 0;
+    field_0x7BC.r = field_0x7BC.g = field_0x7BC.b = field_0x7BC.a = 0;
 
     field_0x790 = -1.0f;
     field_0x794 = 100.0f;
@@ -92,9 +92,9 @@ void UnkTextThing::destroy() {
             field_buf0[i] = nullptr;
         }
 
-        if (field_buf2[i] != nullptr) {
-            destroyMsg(field_buf2[i]);
-            field_buf2[i] = nullptr;
+        if (mMsbts[i] != nullptr) {
+            destroyMsg(mMsbts[i]);
+            mMsbts[i] = nullptr;
         }
     }
 
@@ -116,20 +116,20 @@ void UnkTextThing::destroy() {
             field_buf1[i] = nullptr;
         }
 
-        if (field_buf3[i] != nullptr) {
-            destroyFlow(field_buf3[i]);
-            field_buf3[i] = nullptr;
+        if (mMsbfs[i] != nullptr) {
+            destroyFlow(mMsbfs[i]);
+            mMsbfs[i] = nullptr;
         }
     }
 
-    if (field_0x74C != nullptr) {
-        destroyUnk(field_0x74C);
-        field_0x74C = nullptr;
+    if (mOverrideZev0 != nullptr) {
+        destroyUnk(mOverrideZev0);
+        mOverrideZev0 = nullptr;
     }
 
-    if (field_0x750 != nullptr) {
-        destroyUnk(field_0x750);
-        field_0x750 = nullptr;
+    if (mOverrideStageZev != nullptr) {
+        destroyUnk(mOverrideStageZev);
+        mOverrideStageZev = nullptr;
     }
 }
 
@@ -176,13 +176,13 @@ f32 UnkTextThing::fn_800B2040() {
 }
 
 void UnkTextThing::destroyMsg(MsbtInfo *msg) {
-    field_0x7B6 = true;
+    mShouldHookAllocations = true;
     LMS_CloseMessage(msg);
-    field_0x7B6 = false;
+    mShouldHookAllocations = false;
 }
 
 void UnkTextThing::destroyFlow(MsbfInfo *flow) {
-    field_0x7B6 = true;
+    mShouldHookAllocations = true;
     LMS_CloseFlow(flow);
-    field_0x7B6 = false;
+    mShouldHookAllocations = false;
 }

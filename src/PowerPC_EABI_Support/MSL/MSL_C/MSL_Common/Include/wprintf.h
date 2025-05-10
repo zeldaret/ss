@@ -4,6 +4,8 @@
 #include "__va_arg.h"
 #include "common.h"
 
+#include "wchar.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

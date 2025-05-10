@@ -1,6 +1,7 @@
 #ifndef RVL_SDK_NAND_H
 #define RVL_SDK_NAND_H
 #include "common.h"
+
 #include "rvl/FS.h"
 
 #ifdef __cplusplus
@@ -9,6 +10,8 @@ extern "C" {
 
 #define NAND_BANNER_TITLE_MAX 32
 #define NAND_BANNER_ICON_MAX_FRAME 8
+#define NAND_BANNER_TEXTURE_SIZE 0x6000
+#define NAND_BANNER_ICON_TEXTURE_SIZE 0x1200
 
 // Forward declarations
 typedef struct NANDCommandBlock;
@@ -127,15 +130,19 @@ typedef struct NANDCommandBlock {
     int simpleFlag;             //
 } NANDCommandBlock;
 
+// via spm
+#define NAND_SET_ICON_SPEED(banner, icon, speed)                                                                       \
+    (banner)->iconSpeed = (u16)(((banner)->iconSpeed & ~(3 << 2 * (icon))) | ((speed) << 2 * (icon)))
+
 typedef struct NANDBanner {
-    u32 magic;                                          // at 0x0
-    u32 flags;                                          // at 0x4
-    u16 iconSpeed;                                      // at 0x8
-    u8 reserved[0x20 - 0xA];                            // at 0xA
-    wchar_t title[NAND_BANNER_TITLE_MAX];               // at 0x20
-    wchar_t subtitle[NAND_BANNER_TITLE_MAX];            // at 0x60
-    u8 bannerTexture[0x6000];                           // at 0xA0
-    u8 iconTexture[0x1200][NAND_BANNER_ICON_MAX_FRAME]; // at 0x60A0
+    u32 magic;                                                                 // at 0x0
+    u32 flags;                                                                 // at 0x4
+    u16 iconSpeed;                                                             // at 0x8
+    u8 reserved[0x20 - 0xA];                                                   // at 0xA
+    wchar_t title[NAND_BANNER_TITLE_MAX];                                      // at 0x20
+    wchar_t subtitle[NAND_BANNER_TITLE_MAX];                                   // at 0x60
+    u8 bannerTexture[NAND_BANNER_TEXTURE_SIZE];                                // at 0xA0
+    u8 iconTexture[NAND_BANNER_ICON_MAX_FRAME][NAND_BANNER_ICON_TEXTURE_SIZE]; // at 0x60A0
 } NANDBanner;
 
 NANDResult NANDCreate(const char *path, u8 perm, u8 attr);

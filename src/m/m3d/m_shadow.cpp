@@ -1,14 +1,18 @@
 #include "m/m3d/m_shadow.h"
 
+#include "c/c_math.h"
+#include "m/m_mtx.h"
+#include "m/m_quat.h"
+#include "m/m_vec.h"
 #include "nw4r/g3d/g3d_calcview.h"
 #include "nw4r/g3d/g3d_draw.h"
 #include "nw4r/g3d/g3d_draw1mat1shp.h"
-#include "nw4r/g3d/g3d_resmat.h"
-#include "nw4r/g3d/g3d_resmdl.h"
-#include "nw4r/g3d/g3d_resshp.h"
 #include "nw4r/g3d/g3d_scnmdl.h"
 #include "nw4r/g3d/g3d_scnmdlsmpl.h"
 #include "nw4r/g3d/g3d_state.h"
+#include "nw4r/g3d/res/g3d_resmat.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resshp.h"
 
 // All of this is completely made up, as we don't have symbols for this TU
 // (contrary to the rest of m3d and most of nw4r::g3d)
@@ -267,7 +271,7 @@ static void drawSub2(void *data, u8 i) {
         GXSetTexCoordGen2((GXTexCoordID)id, GX_TG_MTX2x4, GX_TG_TEX0, idx, FALSE, GX_DUALMTX_IDENT);
         sTexMtx[0][3] = 0.01f * nw4r::math::CosIdx(ang);
         sTexMtx[1][3] = 0.01f * nw4r::math::SinIdx(ang);
-        GXLoadTexMtxImm(sTexMtx, idx, GX_MTX_2x4);
+        GXLoadTexMtxImm(sTexMtx, idx, GX_MTX2x4);
     }
     GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_TEXC, GX_CC_A0, GX_CC_ZERO);
@@ -410,7 +414,7 @@ void mShadow_c::drawAllShadows() {
 
 void mShadow_c::create(const mShadowCircleConfig *config, nw4r::g3d::ResMdl mdl, EGG::Heap *heap) {
     mShadow_c::sInstance = new (heap, 0x04) mShadow_c(heap);
-    mShadow_c::sInstance->create(
+    mShadow_c::GetInstance()->create(
         config->count, config->unk1, config->unk2, config->texBufferSize, config->drawOpaPriority, mdl, config->heapSize
     );
 }
@@ -441,7 +445,7 @@ void mShadow_c::swapHeaps() {
 
 void mShadow_c::destroy() {
     if (mShadow_c::sInstance != nullptr) {
-        mShadow_c::sInstance->remove();
+        mShadow_c::GetInstance()->remove();
         delete mShadow_c::sInstance;
         mShadow_c::sInstance = nullptr;
     }
@@ -486,9 +490,8 @@ bool mShadowChild_c::addMdl(scnLeaf_c &mdl, const mQuat_c &quat) {
         mtx.copyFrom(static_cast<mCustomShadow_c &>(mdl).mMtx);
     }
 
-    // TODO this copy is a bit weird (reads members in a different order)
     mQuat_c q = quat;
-    PSMTXMultVec(mtx.m, q.v, q.v);
+    mtx.applyQuat(q);
 
     if (mNumLeaves == 0) {
         mQuat = q;
@@ -511,20 +514,34 @@ bool mShadowChild_c::setGeom(const GXTexObj *texObj, const mMtx_c &mtx, const mQ
 }
 
 void mShadowChild_c::updateMtx() {
-    // TODO all of this is broken
-    mVec3_c a = *(mVec3_c *)(&mQuat) + mPositionMaybe * mOffsetMaybe;
-    mVec3_c b = *(mVec3_c *)(&mQuat) - mPositionMaybe * field_0x13C;
+    const mQuat_c &q = GetQuat();
+    const mVec3_c &pos = GetPosition();
+
+    Set0x13C(q.w);
+
+    mVec3_c a(q.v);
+
+    a += pos * GetOffset();
+
+    mVec3_c b(q.v);
+    b -= pos * Get0x13C();
+
+    const mVec3_c *up;
+    if (cM::isZero((a - b).squareMagXZ())) {
+        up = &mVec3_c::Ez;
+    } else {
+        up = &mVec3_c::Ey;
+    }
+
     mMtx_c mtx;
-    C_MTXLookAt(
-        mtx.m, b,
-        *(fabsf((a.x - b.x) * (a.x - b.x) + (a.z - b.z) * (a.z - b.z)) <= FLT_EPSILON ? &mVec3_c::Ez : &mVec3_c::Ey), a
-    );
-    f32 f = field_0x13C;
-    mFrustum.set(f, -f, -f, f, f, f + mOffsetMaybe, mtx, true);
+    C_MTXLookAt(mtx.m, a, *up, b);
+
+    const f32 f = Get0x13C();
+    mFrustum.set(f, -f, -f, f, f, f + GetOffset(), mtx, true);
 }
 
 void mShadowChild_c::drawMdl() {
-    // TODO maybe roughly equivalent
+    // Equivalent, but stack problems and regswaps
     using namespace nw4r;
     mMtx_c mtx;
     GXSetTevColor(GX_TEVREG0, sColors[mColorChanIdx]);
@@ -532,33 +549,35 @@ void mShadowChild_c::drawMdl() {
     GXSetProjection(mtx.m, GX_ORTHOGRAPHIC);
     g3d::G3DState::Invalidate(0x7FF);
 
+    mMtx_c &viewMtx = mFrustum.mView;
+
     for (scnLeaf_c **leaf = &mpLeaves[mNumLeaves - 1]; leaf >= &mpLeaves[0]; leaf--) {
-        scnLeaf_c *lf = *leaf;
-        if (lf->getType() == 0 /* Model */) {
-            g3d::ScnMdlSimple *mdl = g3d::G3dObj::DynamicCast<g3d::ScnMdlSimple>(lf->getG3dObject());
+        if ((*leaf)->getType() == 0 /* Model */) {
+            g3d::ScnMdlSimple *mdl = g3d::G3dObj::DynamicCast<g3d::ScnMdlSimple>((*leaf)->getG3dObject());
 
             u32 bufSize = mdl->GetNumViewMtx() * sizeof(math::MTX34);
-            math::MTX34 *viewPosArray = static_cast<math::MTX34 *>(mShadow_c::sInstance->mpHeap->alloc(bufSize, 0x20));
+            math::MTX34 *viewPosArray =
+                static_cast<math::MTX34 *>(mShadow_c::GetInstance()->mpCurrentHeap->alloc(bufSize, 0x20));
 
+            g3d::ResMdl resMdl = mdl->GetResMdl();
             g3d::CalcView(
                 viewPosArray, nullptr, mdl->GetWldMtxArray(), mdl->GetWldMtxAttribArray(), mdl->GetNumViewMtx(),
-                mFrustum.mView, mdl->GetResMdl(), nullptr
+                viewMtx, resMdl, nullptr
             );
             DCStoreRange(viewPosArray, bufSize);
 
-            g3d::ScnMdl *mdl2 = g3d::G3dObj::DynamicCast<g3d::ScnMdl>(lf->getG3dObject());
+            g3d::ScnMdl *mdl2 = g3d::G3dObj::DynamicCast<g3d::ScnMdl>((*leaf)->getG3dObject());
 
-            g3d::DrawResMdlReplacement *pRep = mdl2 ? mdl2->GetDrawResMdlReplacement() : nullptr;
+            g3d::DrawResMdlReplacement *pRep = mdl2 ? &mdl2->GetDrawResMdlReplacement() : nullptr;
 
             g3d::DrawResMdlDirectly(
-                mdl->GetResMdl(), viewPosArray, nullptr, nullptr,
-                mdl2->GetByteCode(g3d::ScnMdlSimple::BYTE_CODE_DRAW_OPA), nullptr, pRep,
-                g3d::RESMDL_DRAWMODE_FORCE_LIGHTOFF | g3d::RESMDL_DRAWMODE_IGNORE_MATERIAL
+                resMdl, viewPosArray, nullptr, nullptr, mdl2->GetByteCode(g3d::ScnMdlSimple::BYTE_CODE_DRAW_OPA),
+                nullptr, pRep, g3d::RESMDL_DRAWMODE_FORCE_LIGHTOFF | g3d::RESMDL_DRAWMODE_IGNORE_MATERIAL
             );
             GXInvalidateVtxCache();
         } else {
             // this happens with bomb bag, and goes to 0x802EDC90 (mCustomShadow_c::draw)
-            static_cast<mCustomShadow_c *>(lf)->draw(mFrustum.mView);
+            static_cast<mCustomShadow_c *>(*leaf)->draw(viewMtx);
         }
     }
 }
@@ -577,13 +596,13 @@ void mShadowChild_c::draw() {
     Mtx mtx;
     C_MTXLightOrtho(mtx, field_0x13C, -field_0x13C, -field_0x13C, field_0x13C, 0.5f, -0.5f, 0.5f, 0.5f);
     PSMTXConcat(mtx, mFrustum.mView.m, mtx);
-    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX_3x4);
-    mShadow_c::sInstance->draw(mFrustum.mView, field_0x154);
+    GXLoadTexMtxImm(mtx, GX_TEXMTX0, GX_MTX3x4);
+    mShadow_c::GetInstance()->draw(mFrustum.mView, field_0x154);
     GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
 }
 
 mShadowCircle_c::~mShadowCircle_c() {
-    mShadow_c::sInstance->removeCircle(this);
+    mShadow_c::GetInstance()->removeCircle(this);
 }
 
 mCustomShadow_c::~mCustomShadow_c() {}
@@ -609,13 +628,10 @@ void mCustomShadow_c::draw(const mMtx_c &arg) {
     GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_C0);
 }
 
-void mCustomShadow_c::calc(mMtx_c mtx, mMtx_c &mtx2) {
-    // TODO some shuffles
-
+void mCustomShadow_c::calc(mMtx_c mtx, mMtx_c &mtx2) const {
     mVec3_c trans;
     mtx2.copyFrom(mMtx);
-    mVec3_c offset(0.0f, 0.0f, 0.0f);
-    offset.y = field_0x48;
+    mVec3_c offset(0.0f, field_0x48, 0.0f);
     PSMTXMultVec(mtx2, offset, trans);
     PSMTXMultVec(mtx, trans, trans);
 

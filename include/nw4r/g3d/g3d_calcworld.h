@@ -1,36 +1,75 @@
 #ifndef NW4R_G3D_CALC_WORLD_H
 #define NW4R_G3D_CALC_WORLD_H
-#include "common.h"
-#include "nw4r/math.h"
+#include <nw4r/types_nw4r.h>
+
+#include "nw4r/g3d/g3d_scnobj.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
+
+#include "nw4r/math.h" // IWYU pragma: export
 
 namespace nw4r {
 namespace g3d {
 
-struct FuncObjCalcWorld {
-private:
-    u8 UNK_0x00[0x06];
-    /** 0x06 */ u16 mNodeId;
+// Forward declarations
+class AnmObjChr;
+struct ChrAnmResult;
+class FuncObjCalcWorld;
+class WorldMtxManip;
 
+/******************************************************************************
+ *
+ * Functions
+ *
+ ******************************************************************************/
+void CalcWorld(
+    math::MTX34 *pModelMtxArray, u32 *pModelMtxAttribArray, const u8 *pByteCode, const math::MTX34 *pBaseMtx,
+    ResMdl mdl, AnmObjChr *pAnmChr, FuncObjCalcWorld *pFuncObj, u32 rootAttrib
+);
+
+void CalcWorld(
+    math::MTX34 *pModelMtxArray, u32 *pModelMtxAttribArray, const u8 *pByteCode, const math::MTX34 *pBaseMtx,
+    ResMdl mdl, AnmObjChr *pAnmChr, FuncObjCalcWorld *pFuncObj
+);
+
+void CalcSkinning(math::MTX34 *pModelMtxArray, u32 *pModelMtxAttribArray, const ResMdl mdl, const u8 *pByteCode);
+
+/******************************************************************************
+ *
+ * ICalcWorldCallback
+ *
+ ******************************************************************************/
+class ICalcWorldCallback {
 public:
-    u32 GetNodeId() const {
-        return mNodeId;
-    }
+    virtual ~ICalcWorldCallback() {}; // at 0x8
 
-    void SetNodeId(u32 n) {
-        mNodeId = n;
-    }
+    virtual void ExecCallbackA(ChrAnmResult *pResult, ResMdl mdl,
+                               FuncObjCalcWorld *pFuncObj) = 0; // at 0xC
+
+    virtual void ExecCallbackB(WorldMtxManip *pManip, ResMdl mdl,
+                               FuncObjCalcWorld *pFuncObj) = 0; // at 0x10
+
+    virtual void ExecCallbackC(math::MTX34 *pMtxArray, ResMdl mdl,
+                               FuncObjCalcWorld *pFuncObj) = 0; // at 0x14
 };
 
+/******************************************************************************
+ *
+ * WorldMtxManip
+ *
+ ******************************************************************************/
 class WorldMtxManip {
 public:
+    WorldMtxManip(math::MTX34 *pM, math::VEC3 *pS, u32 *pWMAttr) : mpM(pM), mpS(pS), mpWMAttr(pWMAttr) {}
+
+    void SetScale(f32 x, f32 y, f32 z);
     void GetMtx(nw4r::math::MTX34 *out) {
-        if (out != nullptr) {
+        if (out != NULL) {
             PSMTXCopy(*mpM, *out);
         }
     }
 
     void SetMtx(const nw4r::math::MTX34 *arg) {
-        if (arg != nullptr) {
+        if (arg != NULL) {
             PSMTXCopy(*arg, *mpM);
         } else {
             PSMTXIdentity(*mpM);
@@ -38,27 +77,57 @@ public:
     }
 
 private:
-    nw4r::math::MTX34 *mpM;
-    nw4r::math::VEC3 *mpS;
-    u32 *mpWMAttr;
+    math::MTX34 *mpM; // at 0x0
+    math::VEC3 *mpS;  // at 0x4
+    u32 *mpWMAttr;    // at 0x8
 };
 
-// Name from ketteiban
-class ICalcWorldCallback {
+/******************************************************************************
+ *
+ * FuncObjCalcWorld
+ *
+ ******************************************************************************/
+class FuncObjCalcWorld {
 public:
-    virtual ~ICalcWorldCallback() {}
+    FuncObjCalcWorld(ICalcWorldCallback *pCallback, u32 timing, u32 nodeID)
+        : mpCallback(pCallback), mTiming(timing), mNodeID(nodeID) {}
 
-    virtual void ExecCallbackA(nw4r::g3d::ChrAnmResult *, nw4r::g3d::ResMdl, nw4r::g3d::FuncObjCalcWorld *) {}
-    virtual void ExecCallbackB(nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl, nw4r::g3d::FuncObjCalcWorld *) {}
-    virtual void ExecCallbackC(nw4r::math::MTX34 *, nw4r::g3d::ResMdl, nw4r::g3d::FuncObjCalcWorld *) {}
+    ~FuncObjCalcWorld() {}
+
+    u16 GetCallbackNodeID() const {
+        return mNodeID;
+    }
+
+    void SetCallbackNodeID(u16 id) {
+        mNodeID = id;
+    }
+
+    void CheckCallbackA(u32 nodeID, ChrAnmResult *pResult, ResMdl mdl) {
+        if (nodeID == mNodeID && (mTiming & ScnObj::CALLBACK_TIMING_A)) {
+            mpCallback->ExecCallbackA(pResult, mdl, this);
+        }
+    }
+
+    void CheckCallbackB(u32 nodeID, math::MTX34 *pM, math::VEC3 *pS, u32 *pWMAttr, ResMdl mdl) {
+        if (nodeID == mNodeID && (mTiming & ScnObj::CALLBACK_TIMING_B)) {
+            WorldMtxManip manip(pM, pS, pWMAttr);
+            mpCallback->ExecCallbackB(&manip, mdl, this);
+        }
+    }
+
+    void CheckCallbackC(math::MTX34 *pMtxArray, ResMdl mdl) {
+        if (mTiming & ScnObj::CALLBACK_TIMING_C) {
+            mpCallback->ExecCallbackC(pMtxArray, mdl, this);
+        }
+    }
+
+private:
+    ICalcWorldCallback *mpCallback; // at 0x0
+    u8 mTiming;                     // at 0x4
+    u8 PADDING_0x5;                 // at 0x5
+    u16 mNodeID;                    // at 0x6
 };
 
-
-void CalcWorld(math::MTX34 *, u32 *, const u8 *, const math::MTX34 *, ResMdl, AnmObjChr *, FuncObjCalcWorld *, u32);
-
-void CalcWorld(math::MTX34 *, u32 *, const u8 *, const math::MTX34 *, ResMdl, AnmObjChr *, FuncObjCalcWorld *);
-
-void CalcSkinning(math::MTX34 *, u32 *, ResMdl, const u8 *);
 } // namespace g3d
 } // namespace nw4r
 

@@ -6,7 +6,7 @@
 #include "m/m3d/m_smdl.h"
 #include "nw4r/g3d/g3d_anmchr.h"
 #include "nw4r/g3d/g3d_calcworld.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 
 namespace m3d {
 
@@ -57,12 +57,12 @@ public:
     bool create(nw4r::g3d::ResMdl, mAllocator_c *, u32, int, u32 *);
     bool create(nw4r::g3d::ResMdl, mdlCallback_c *cb, mAllocator_c *, u32, int, u32 *);
 
-    virtual void remove();
+    virtual void remove() override;
 
     void setCallback(callback_c *cb);
-    void play();
-    void setAnm(banm_c &);
-    void setAnm(banm_c &, f32);
+    virtual void play() override;
+    virtual bool setAnm(banm_c &) override;
+    bool setAnm(banm_c &, f32);
 
 private:
     /** If we allocated the callback ourselves, this is what we need to free */

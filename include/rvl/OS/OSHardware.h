@@ -4,14 +4,13 @@
 // #include "rvl/OS/OSAddress.h"
 #include "common.h"
 #include "rvl/OS/OSThread.h"
+#include "rvl/OS/OSContext.h"
+#include "rvl/OS/OSExec.h"
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef struct OSContext OSContext;
-typedef struct OSExecParams OSExecParams;
 
 /**
  * For more details, see:

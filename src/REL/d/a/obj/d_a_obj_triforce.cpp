@@ -3,13 +3,14 @@
 #include "c/c_math.h"
 #include "d/col/cc/d_cc_s.h"
 #include "m/m_vec.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_TRIFORCE, dAcOtriforce_c, fProfile::OBJ_TRIFORCE, 0x15D, 0, 4);
 
 // clang-format off
 dCcD_SrcSph dAcOtriforce_c::sCcSrc = {
     {{0, 0, 0, 0, 0, 0, 0, 0, 0}, 
-    {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, {0, 0x6, 0x407}, 0, 0}, 
+    {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x111, 0x0, 0x06, 0x407, 0, 0}, 
     {0xE9}},
     {150.0f}};
 // clang-format on
@@ -21,7 +22,7 @@ const u32 dAcOtriforce_c::sStartingOffsetRange = 0x10000;
 // const f32 dAcOtriforce_c::sAmpPos = 23.0f;
 
 bool dAcOtriforce_c::createHeap() {
-    mResFile = getOarcResFile("TriForce");
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("TriForce"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("TriForce");
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x324));
     nw4r::g3d::ResAnmTexSrt anm = mResFile.GetResAnmTexSrt("TriForce");
@@ -55,7 +56,6 @@ int dAcOtriforce_c::doDelete() {
 }
 
 extern const u16 PARTICLE_RESOURCE_ID_MAPPING_967_;
-extern "C" void fn_80029AE0(EffectsStruct *, u16, mMtx_c *, void *, void *);
 
 int dAcOtriforce_c::actorExecute() {
     int zero = 0;
@@ -72,7 +72,7 @@ int dAcOtriforce_c::actorExecute() {
     PSMTXConcat(mWorldMtx.m, m, mWorldMtx.m);
     mMdl.setLocalMtx(mWorldMtx);
     mAnm.play();
-    fn_80029AE0(&mEffects, PARTICLE_RESOURCE_ID_MAPPING_967_, &mWorldMtx, nullptr, nullptr);
+    mEffects.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_967_, mWorldMtx, nullptr, nullptr);
     return 1;
 }
 

@@ -2,6 +2,7 @@
 #define D_A_OBJ_BASE_H
 
 #include "c/c_math.h"
+#include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
@@ -9,6 +10,7 @@
 #include "m/m3d/m_shadow.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_angle.h"
+#include "m/m_color.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
@@ -60,9 +62,29 @@ struct ActorCarryStruct {
 
 // Ghidra has it as `unk_ActorObjectBase`
 struct LightingInfo {
-    /* 0x00 */ u8 mField_0x00[0x60 - 0x00];
+    /* 0x00 */ u8 mField_0x00[0x40 - 0x00];
+    /* 0x40 */ mColor mTev0Color;
+    /* 0x44 */ mColor mTev1Color;
+    /* 0x48 */ mColor mTev2Color;
+    /* 0x4C */ mColor mTevPrevColor;
+    /* 0x50 */ mColor mTevK0Color;
+    /* 0x54 */ mColor mTevK1Color;
+    /* 0x58 */ mColor mTevK2Color;
+    /* 0x5C */ mColor mTevK3Color;
     /* 0x60 */ u8 mLightingCode;
-    /* 0x61 */ u8 mField_0x61[0x70 - 0x61];
+    /* 0x61 */ u8 _0x61;
+    /* 0x62 */ u8 _0x62;
+    /* 0x63 */ u8 _0x63;
+    /* 0x64 */ u8 _0x64;
+    /* 0x65 */ bool mUseTev0;
+    /* 0x66 */ bool mUseTev1;
+    /* 0x67 */ bool mUseTev2;
+    /* 0x68 */ bool mUseTevPrev;
+    /* 0x69 */ bool mUseTevK0;
+    /* 0x6A */ bool mUseTevK1;
+    /* 0x6B */ bool mUseTevK2;
+    /* 0x6C */ bool mUseTevK3;
+    /* 0x6D */ u8 mField_0x69[0x70 - 0x6D];
 };
 
 // Ghidra: ActorObjectBase
@@ -160,11 +182,11 @@ public:
 
 public:
     /* 8002e630 */ static dAcObjBase_c *create(
-        fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale,
+        fProfile::PROFILE_NAME_e actorId, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
         u32 params2
     );
     /* 8002e6d0 */ static dAcObjBase_c *create(
-        char *name, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, u16 id,
+        const char *name, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale, u32 params2, u16 id,
         s8 viewclipId
     );
     /* 8002e770 */ static dAcObjBase_c *
@@ -208,8 +230,8 @@ public:
         u32 params2
     );
     /* 8002f260 */ static dAcBase_c *createActorUnkGroup3(
-        char *name, u32 roomId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2, u16 id,
-        u8 viewclipId
+        const char *name, u32 roomId, u32 params1, const mVec3_c *pos, const mAng3_c *rot, const mVec3_c *scale,
+        u32 params2, u16 id, s8 viewclipId
     );
 };
 

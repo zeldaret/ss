@@ -6,13 +6,21 @@
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
+#include "toBeSorted/raii_ptr.h"
 #include "toBeSorted/tlist.h"
 
 class dAcBase_c;
 struct cBgS_PolyInfo;
 
 struct SoundSource {
+    virtual ~SoundSource() {}
     // TODO
+
+    virtual bool shutdown(); // 0x48
+    virtual bool isReadyMaybe(); // 0x100
+    virtual bool load(void *data, const char *name); // 0x100
+    virtual void setFrame(f32 frame); // 0x108
+    virtual void setRate(f32 frame); // 0x10C
 };
 
 struct SoundInfo {
@@ -71,7 +79,7 @@ public:
     /* 0x68 */ mHeapAllocator_c heap_allocator;
     /* 0x84 */ ObjInfo *obj_info;
     /* 0x88 */ TList<SoundInfo, 12> sound_list;
-    /* 0x94 */ SoundSource *sound_source;
+    /* 0x94 */ RaiiPtr<SoundSource> sound_source;
     /* 0x98 */ mVec3_c *obj_pos;
     /* 0x9C */ mVec3_c pos_copy;
     /* 0xA8 */ u32 params2;
@@ -88,13 +96,13 @@ public:
     /* 0xE8 */ u32 field_0xe8;
     /* 0xEC */ s8 roomid;
     /* 0xED */ u8 actor_subtype;
-    /* 0xEE */ u8 field_0xEE;
-    /* 0xEF */ u8 field_0xEF;
+    /* 0xEE */ u8 polyAttr0;
+    /* 0xEF */ u8 polyAttr1;
     /* 0xF0 */ u32 JStudio_actor;
     /* 0xF4 */ char someStr[4];
     /* 0xF8 */ char field_0xf8[0xfc - 0xf8];
 
-protected:
+public:
     /* 80501544 */ // vtable
     /* 0x08 | 8002c880 */ virtual int create();
     /* 0x10 | 8002c8f0 */ virtual void postCreate(MAIN_STATE_e state);
@@ -135,7 +143,7 @@ public:
         rot_copy = rotation;
     }
 
-    mVec3_c &GetPostion() {
+    mVec3_c &GetPosition() {
         return position;
     }
     mAng3_c &GetRotation() {
@@ -176,8 +184,8 @@ public:
 public:
     // funcs found in TU
     /* 8002c650 */ static void setTempCreateParams(
-        mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2, dAcBase_c *parent, u8 subtype, s16 unkFlag,
-        u8 viewClipIdx, ObjInfo *objInfo
+        mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2, dAcBase_c *parent, u8 subtype, u16 unkFlag,
+        s8 viewClipIdx, ObjInfo *objInfo
     );
 
     /* 8002c690 */ SoundSource *FUN_8002c690();
@@ -232,7 +240,7 @@ public:
     /* 8002d880 */ SoundSource *getSoundSource();
     // End of SoundSource stuff
 
-    /* 8002d890 */ void FUN_8002d890();
+    /* 8002d890 */ void removeSoundInfo(SoundInfo *);
     /* 8002d920 */ void setActorRef(dAcBase_c *);
     // next three funcs are related
     /* 8002d930 */ void setEnemyDefeatFlag();
@@ -249,14 +257,14 @@ public:
         dBase_c *ref
     );
 
-    /* 8002dc20 */ void FUN_8002dc20(s16 *, s16 *);
+    /* 8002dc20 */ static void roundAngleToNearest90(s16 *, s16 *);
     /* 8002dc50 */ void incrementKillCounter();
-    /* 8002dcd0 */ void FUN_8002dcd0();
-    /* 8002dd10 */ void FUN_8002dd10();
-    /* 8002dd50 */ void FUN_8002dd50();
-    /* 8002dd90 */ void FUN_8002dd90();
-    /* 8002ddd0 */ void FUN_8002ddd0();
-    /* 8002de30 */ void FUN_8002de30(cBgS_PolyInfo &p);
+    /* 8002dcd0 */ void killNoItemDrop();
+    /* 8002dd10 */ void killWithFlag();
+    /* 8002dd50 */ void killWithFlagNoItemDrop();
+    /* 8002dd90 */ void deleteWithFlagNoItemDrop();
+    /* 8002ddd0 */ void setPolyAttrs(cBgS_PolyInfo &p);
+    /* 8002de30 */ void setPolyAttrsDupe(cBgS_PolyInfo &p);
 
 public:
     /* 80571920 */ static u32 s_Create_RoomId;

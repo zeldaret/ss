@@ -4,8 +4,10 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_w.h"
 #include "d/flag/sceneflag_manager.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_Math.h"
+#include "toBeSorted/d_emitter.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_SW, dAcOsw_c, fProfile::OBJ_SW, 0x12B, 0, 0x1002);
 
@@ -63,12 +65,12 @@ void dAcOsw_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *in
 }
 
 bool dAcOsw_c::createHeap() {
-    nw4r::g3d::ResFile resFile = getOarcResFile(SWITCH_TYPES[mSwitchType]);
-    nw4r::g3d::ResMdl resMdl = resFile.GetResMdl(SWITCH_TYPES[mSwitchType]);
+    nw4r::g3d::ResFile resFile(getOarcResFile(SWITCH_TYPES[mSwitchType]));
+    nw4r::g3d::ResMdl resMdl(resFile.GetResMdl(SWITCH_TYPES[mSwitchType]));
     TRY_CREATE(mModel.create(resMdl, &heap_allocator, 0x20, 1, nullptr));
 
-    field_0x5E8 = mScale.x * (resMdl.GetResNode("base").mNode.ref().VEC3_0x50.x -
-                              resMdl.GetResNode("base").mNode.ref().VEC3_0x44.x);
+    field_0x5E8 =
+        mScale.x * (resMdl.GetResNode("base").ref().volume_max.x - resMdl.GetResNode("base").ref().volume_min.x);
     cBgD_t *dbzData = (cBgD_t *)getOarcDZB(SWITCH_TYPES[mSwitchType], SWITCH_TYPES[mSwitchType]);
     PLC *plcData = (PLC *)getOarcPLC(SWITCH_TYPES[mSwitchType], SWITCH_TYPES[mSwitchType]);
     mScale.set(1.0f, 0.8f, 1.0f);
@@ -144,7 +146,6 @@ int dAcOsw_c::doDelete() {
 }
 
 extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_754_;
-extern "C" void fn_800298B0(u16, mVec3_c *, mAng3_c *, u32, u32, u32, u32, u32);
 
 int dAcOsw_c::actorExecute() {
     mStateMgr.executeState();
@@ -153,8 +154,8 @@ int dAcOsw_c::actorExecute() {
         if (field_0x5A0.field_0x00 <= 0.0f) {
             if (mScale.x >= 1.0f) {
                 if (!mHidden) {
-                    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_754_, &position, &rotation, 0, 0, 0, 0, 0);
-                    playSound(0xC0B);
+                    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_754_, position, &rotation, nullptr, nullptr, nullptr, 0, 0);
+                    playSound(SE_TIMESLIP_TIMESLIP_REV);
                     mHidden = true;
                 }
             } else {
@@ -166,8 +167,8 @@ int dAcOsw_c::actorExecute() {
         } else {
             if (mScale.x <= 0.0f) {
                 if (!mShown) {
-                    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_754_, &position, &rotation, 0, 0, 0, 0, 0);
-                    playSound(0xC0A);
+                    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_754_, position, &rotation, nullptr, nullptr, nullptr, 0, 0);
+                    playSound(SE_TIMESLIP_TIMESLIP);
                     mShown = true;
                 }
             } else {

@@ -4,5 +4,24 @@ CompileFlags:
     "-Wno-c++11-compat-deprecated-writable-strings",
     "-Wno-trigraphs",
     "-fno-trigraphs",
-    "-Wno-c++11-extensions"
+    "-Wno-c++11-extensions",
+    "-Wno-shadow",
+    "-Wno-register"
+  ]
+
+---
+# Fragment for suppressing some warning generated in rvl
+If:
+  PathMatch: [
+    ".*/rvl/.*",
+    ".*/g3d/platform/.*",
+    ".*/math/.*",
+  ]
+   
+Diagnostics:
+  Suppress: [
+    "unknown_typename",
+    "expected_unqualified_id",
+    "expected_semi_declaration",
+    "undeclared_var_use",
   ]

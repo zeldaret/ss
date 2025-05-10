@@ -7,6 +7,14 @@
 extern "C" {
 #endif
 
+// made up
+enum LMS_Error {
+    LMS_NOT_FOUND = -1,
+    LMS_MISSING_LBL1_DATA = -2,
+    LMS_MISSING_FLW3_DATA = -4,
+    LMS_MISSING_FEN1_DATA = -10,
+};
+
 void LMS_SetMemFuncs(void *(*alloc)(size_t size), void (*free)(void *ptr));
 
 // internal

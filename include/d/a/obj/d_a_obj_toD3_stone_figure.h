@@ -5,7 +5,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/cc/d_cc_d.h"
 #include "m/m3d/m_smdl.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 
@@ -39,7 +39,7 @@ private:
     m3d::smdl_c mMdl;
     STATE_MGR_DECLARE(dAcOtoD3StoneFigure_c);
     dCcD_Cyl mCollision;
-    s8 mExitId;
+    u8 mExitId;
     bool mIsSkyKeepAlreadyOpen;
 };
 

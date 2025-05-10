@@ -129,8 +129,8 @@ void DynamicModuleControl::initialize(EGG::ExpHeap *heap) {
     sTotalFreeSize = heap->getTotalFreeSize();
 }
 
-u32 DynamicModuleControl::callback(void *arg) {
-    return static_cast<DynamicModuleControl *>(arg)->do_load();
+void *DynamicModuleControl::callback(void *arg) {
+    return reinterpret_cast<void *>(static_cast<DynamicModuleControl *>(arg)->do_load());
 }
 
 void DynamicModuleControl::checkHeapStatus() {
@@ -159,9 +159,9 @@ bool DynamicModuleControl::do_load() {
     snprintf(buf, sizeof(buf), "%s/%sNP.rel", sRelsDir, mName);
     if (mModule == nullptr) {
         if (sArchive != nullptr) {
-            sDvdFile = mDvd_toMainRam_arc_c::createOrFail(sArchive, buf, 1, mHeap);
+            sDvdFile = mDvd_toMainRam_arc_c::createOrDie(sArchive, buf, 1, mHeap);
         } else {
-            sDvdFile = mDvd_toMainRam_normal_c::createOrFail(buf, 1, mHeap);
+            sDvdFile = mDvd_toMainRam_normal_c::createOrDie(buf, 1, mHeap);
         }
 
         if (sDvdFile != nullptr) {

@@ -3,18 +3,19 @@
 
 #include "d/d_rawarchive.h"
 #include "egg/core/eggHeap.h"
-#include "sized_string.h"
 
 class OarcManager {
 public:
     OarcManager();
     virtual ~OarcManager();
 
-    static OarcManager *sInstance;
-
     static bool create(EGG::Heap *heap);
 
     void init(EGG::Heap *heap);
+
+    inline int ensureAllEntriesLoaded() {
+        return mArcTable.ensureAllEntriesLoaded();
+    }
 
     bool checkIfObjectArcExistsOnDisk(const char *object);
     bool loadObjectArcFromDisk(const char *object, EGG::Heap *heap);
@@ -31,8 +32,26 @@ public:
     void *getPlcFromArc(const char *oarcName, const char *fileName);
     void *getSubEntryData(const char *oarcName, const char *fileName);
 
+    static OarcManager *GetInstance() {
+        return sInstance;
+    }
+
 private:
+    static OarcManager *sInstance;
     dRawArcTable_c mArcTable;
+};
+
+class ObjectArcControl {
+public:
+    ObjectArcControl() : mObjectArcs(nullptr), mNumArcs(0) {}
+    virtual ~ObjectArcControl();
+    void set(const char *const *objectArcs, s32 numArcs);
+    void load(EGG::Heap *heap);
+    void release();
+
+private:
+    const char **mObjectArcs;
+    s32 mNumArcs;
 };
 
 #endif

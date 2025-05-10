@@ -153,7 +153,7 @@ bool FrameCtrl_c::isStop() const {
     }
 }
 
-f32 FrameCtrl_c::getEndFrame() const {
+f32 FrameCtrl_c::getStartFrame() const {
     if (isBackwards()) {
         if (notLooping()) {
             return mEndFrame - 1.0f;
@@ -164,7 +164,7 @@ f32 FrameCtrl_c::getEndFrame() const {
     return 0.0f;
 }
 
-f32 FrameCtrl_c::getEndFrame2() const {
+f32 FrameCtrl_c::getEndFrame() const {
     if (isBackwards()) {
         return 0.0f;
     }
@@ -295,9 +295,9 @@ void Simple_c::draw() {
     f32 near = 0.0f;
     f32 far = 500.0f;
     EGG::Screen s;
-    bool needsAdjust = EGG::Screen::GetTVMode() == EGG::Screen::TV_MODE_2;
-    f32 f1 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_2);
-    f32 f2 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_1);
+    bool needsAdjust = EGG::Screen::GetTVMode() == EGG::Screen::TV_MODE_16_9;
+    f32 f1 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_16_9);
+    f32 f2 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_4_3);
 
     f32 left = needsAdjust ? f1 * r.left / f2 : r.left;
     f32 right = needsAdjust ? f1 * r.right / f2 : r.right;

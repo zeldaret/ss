@@ -68,7 +68,7 @@ bool dLytSkyGaugeMain_c::build(d2d::ResAccIf_c *resAcc) {
 
     for (int i = 0; i < 3; i++) {
         mAnmGroups[i].init(brlanMap[i].mFile, resAcc, mLyt.getLayout(), brlanMap[i].mName);
-        mAnmGroups[i].setDirection(false);
+        mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
     }
 
@@ -85,7 +85,7 @@ bool dLytSkyGaugeMain_c::execute() {
     mStateMgr.executeState();
 
     for (int i = 0; i < 2; i++) {
-        if (mAnmGroups[i].isFlag2()) {
+        if (mAnmGroups[i].isEnabled()) {
             if (mAnmGroups[i].isStop()) {
                 mAnmGroups[i].setAnimEnable(false);
                 if (i == 0) {
@@ -104,7 +104,7 @@ bool dLytSkyGaugeMain_c::execute() {
 bool dLytSkyGaugeMain_c::remove() {
     mLyt.unbindAnims();
     for (int i = 0; i < 3; i++) {
-        mAnmGroups[i].afterUnbind();
+        mAnmGroups[i].remove();
     }
 
     return true;
@@ -188,11 +188,13 @@ bool dLytSkyGauge_c::build(d2d::ResAccIf_c *resAcc) {
     mStateMgr.changeState(StateID_None);
     return true;
 }
-bool dLytSkyGauge_c::LytMeter0x14() {
+
+bool dLytSkyGauge_c::execute() {
     mMain.execute();
     mStateMgr.executeState();
     return true;
 }
+
 bool dLytSkyGauge_c::remove() {
     mMain.remove();
     return true;

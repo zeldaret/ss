@@ -11,4 +11,4 @@ _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_617_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
 g_profile_TAG_RESTART_TIME_STONE = .data:0x00000000; // type:object size:0x10
-lbl_617_data_10 = .data:0x00000010; // type:object size:0x74
+TgRestartTimeStone__vtable = .data:0x00000010; // type:object size:0x74

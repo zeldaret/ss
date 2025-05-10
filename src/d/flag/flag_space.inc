@@ -26,7 +26,7 @@ void FlagSpace::copyFromSaveFile(const u16 *pSaved, u16 offset, u16 flagCount) {
     checkedMemcpy(mpFlags + offset, (u16)(mCount * 2), pSaved, (u16)(flagCount * 2));
 }
 void FlagSpace::filemanagerCheck() const {
-    if (FileManager::sInstance->mIsFileUnk1[0]) {
+    if (FileManager::GetInstance()->mIsFileUnk1[0]) {
         return;
     }
     while (true) {}

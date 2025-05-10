@@ -16,10 +16,11 @@
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
-#include "rvl/MTX/vec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/dowsing_target.h"
+#include "toBeSorted/d_emitter.h"
+#include "toBeSorted/small_sound_mgr.h"
 
 void float_ordering() {
     const f32 arr[] = {5.f, 15.f, 7.f, 0.5f, 0.1f};
@@ -31,16 +32,16 @@ STATE_DEFINE(dAcOTumbleWeed_c, Wait);
 STATE_DEFINE(dAcOTumbleWeed_c, Slope);
 
 dCcD_SrcSph dAcOTumbleWeed_c::sSphSrc = {
-  /* mObjInf */
+    /* mObjInf */
     {/* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
      /* mObjTg */ {~(AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000), 0x111, {0, 8, 0x40F}, 0, 0},
      /* mObjCo */ {0xE9}},
- /* mSphInf */
+    /* mSphInf */
     {60.f},
 };
 
 bool dAcOTumbleWeed_c::createHeap() {
-    mResFile = getOarcResFile("GrassRollDry");
+    mResFile = nw4r::g3d::ResFile(getOarcResFile("GrassRollDry"));
     TRY_CREATE(mMdl.create(mResFile.GetResMdl("GrassRollDry"), &heap_allocator, 0x120, 1, nullptr));
     return true;
 }
@@ -92,7 +93,6 @@ int dAcOTumbleWeed_c::doDelete() {
     return SUCCEEDED;
 }
 
-
 int dAcOTumbleWeed_c::actorExecute() {
     if (!mField_0x98C && !isStopped()) {
         mField_0x968 = velocity;
@@ -115,7 +115,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     mField_0x974 += position.y - mOldPosition.y;
     if (checkCollect()) {
         dAcPy_c::LINK->bugNetCollectTreasure(ITEM_TUMBLE_WEED);
-        FUN_8002dcd0();
+        killNoItemDrop();
         return SUCCEEDED;
     }
     if (checkBreak()) {
@@ -133,7 +133,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     if (checkObjectProperty(0x2)) {
         // Weak function not being placed right
         if (sLib::calcTimer(&mTumbleTimer) == 0) {
-            FUN_8002dcd0();
+            killNoItemDrop();
             return SUCCEEDED;
         }
     } else {
@@ -261,13 +261,12 @@ bool dAcOTumbleWeed_c::checkInvalidGround() const {
            code == POLY_ATTR_SAND_DEEP_SLOW;
 }
 
-extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_743_;
-extern "C" void fn_800298B0(u16, mVec3_c *, mAng3_c *, u32, u32, u32, u32, u32);
+extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_743_;
 
 void dAcOTumbleWeed_c::doBreak() {
-    playSound(0xC2D); // TODO(Sound Id)
+    playSound(SE_TWeed_CUT);
     mVec3_c pos = getPosition();
-    fn_800298B0(PARTICLE_RESOURCE_ID_MAPPING_743_, &pos, nullptr, 0, 0, 0, 0, 0);
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_743_, pos, nullptr, nullptr, nullptr, nullptr, 0, 0);
     deleteRequest();
 }
 
@@ -349,7 +348,7 @@ void dAcOTumbleWeed_c::tumbleBounceMaybe() {
 }
 
 void dAcOTumbleWeed_c::adjustTimeScale() {
-    mTimeArea.check(getRoomId(), GetPostion(), 0, 30.f, 0.1f);
+    mTimeArea.check(getRoomId(), GetPosition(), 0, 30.f, 0.1f);
     if (0.f < mTimeArea.getDistMaybe()) {
         sLib::chase(&mScale.y, 0.f, 0.07f);
         mScale.z = mScale.y;

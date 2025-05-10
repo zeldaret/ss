@@ -80,15 +80,20 @@ struct VEC3 : _VEC3 {
         y = fy;
         z = fz;
     }
-    VEC3(const Vec &vec) {
-        x = vec.x;
-        y = vec.y;
-        z = vec.z;
+    VEC3(const _VEC3 &rVec) {
+        x = rVec.x;
+        y = rVec.y;
+        z = rVec.z;
     }
-    VEC3(const f32 *p) {
-        x = p[0];
-        y = p[1];
-        z = p[2];
+    VEC3(const Vec &rVec) {
+        x = rVec.x;
+        y = rVec.y;
+        z = rVec.z;
+    }
+    VEC3(const f32 *pData) {
+        x = pData[0];
+        y = pData[1];
+        z = pData[2];
     }
 
     operator Vec *() {
@@ -171,6 +176,15 @@ struct _MTX33 {
 
 struct MTX33 : _MTX33 {
     MTX33() {}
+    // clang-format off
+    MTX33(f32 f00, f32 f01, f32 f02,
+        f32 f10, f32 f11, f32 f12,
+        f32 f20, f32 f21, f32 f22) {
+        _00 = f00; _01 = f01; _02 = f02;
+        _10 = f10; _11 = f11; _12 = f12;
+        _20 = f20; _21 = f21; _22 = f22;
+    }
+    // clang-format on
 };
 
 /******************************************************************************
@@ -401,7 +415,7 @@ inline VEC3 *VEC3Scale(register VEC3 *out, register const VEC3 *in, register f32
         ps_muls0 work1, work0, scale
         psq_st   work1, VEC3.x(out), 0, 0
 
-        // Scale Z
+        // Scale Z 
         psq_l    work0, VEC3.z(in),  1, 0
         ps_muls0 work1, work0, scale
         psq_st   work1, VEC3.z(out), 1, 0
@@ -491,9 +505,12 @@ inline MTX34 *MTX34Identity(MTX34 *mtx) {
     return mtx;
 }
 
-inline MTX34 *MTX34Inv(MTX34 *out, const MTX34 *in) {
-    PSMTXInverse(*in, *out);
-    return out;
+inline u32 MTX34Inv(MTX34 *out, const MTX34 *in) {
+    return PSMTXInverse(*in, *out);
+}
+
+inline u32 MTX34InvTranspose(MTX34 *pOut, const MTX34 *pIn) {
+    return PSMTXInvXpose(*pIn, *pOut);
 }
 
 inline MTX34 *MTX34LookAt(MTX34 *mtx, const VEC3 *pos, const VEC3 *up, const VEC3 *target) {

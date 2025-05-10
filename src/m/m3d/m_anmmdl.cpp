@@ -1,5 +1,7 @@
 #include "m/m3d/m_anmmdl.h"
 
+#include "nw4r/g3d/res/g3d_resfile.h"
+
 namespace m3d {
 
 mdlAnmChr::~mdlAnmChr() {}
@@ -12,8 +14,8 @@ void mdlAnmChr::setFrame(f32 f) {
     mAnm.setFrameOnly(f);
 }
 
-void mdlAnmChr::setAnm(const char *name, playMode_e mode) {
-    setAnm(name, mode, 0.0f);
+bool mdlAnmChr::setAnm(const char *name, playMode_e mode) {
+    return setAnm(name, mode, 0.0f);
 }
 
 void mdlAnmChr::setRate(f32 rate) {
@@ -38,8 +40,8 @@ bool mdlAnmChr::create(
     void *mdlFile, void *anmFile, const char *mdlName, const char *anmName, mdl_c::mdlCallback_c *callback,
     mAllocator_c *alloc, u32 bufferOption, int nView, u32 *pSize
 ) {
-    mMdlFile = mdlFile;
-    mAnmFile = anmFile;
+    mMdlFile = nw4r::g3d::ResFile(mdlFile);
+    mAnmFile = nw4r::g3d::ResFile(anmFile);
 
     nw4r::g3d::ResMdl resMdl = mMdlFile.GetResMdl(mdlName);
     if (!mMdl.create(resMdl, callback, alloc, bufferOption, nView, pSize)) {
@@ -47,7 +49,7 @@ bool mdlAnmChr::create(
     }
 
     nw4r::g3d::ResAnmChr resAnm = mAnmFile.GetResAnmChr(anmName);
-    if (!resAnm.mAnmChr.IsValid()) {
+    if (!resAnm.IsValid()) {
         resAnm = mMdlFile.GetResAnmChr(anmName);
     }
     u32 oldSize;
@@ -73,13 +75,13 @@ bool mdlAnmChr::create(
     return create(resFile, resFile, mdlName, anmName, nullptr, alloc, bufferOption, nView, pSize);
 }
 
-void mdlAnmChr::setAnm(const char *name, playMode_e mode, f32 blend) {
+bool mdlAnmChr::setAnm(const char *name, playMode_e mode, f32 blend) {
     nw4r::g3d::ResAnmChr anm = mAnmFile.GetResAnmChr(name);
-    if (!anm.mAnmChr.IsValid()) {
+    if (!anm.IsValid()) {
         anm = mMdlFile.GetResAnmChr(name);
     }
     mAnm.setAnm(mMdl, anm, mode);
-    mMdl.setAnm(mAnm, blend);
+    return mMdl.setAnm(mAnm, blend);
 }
 
 } // namespace m3d

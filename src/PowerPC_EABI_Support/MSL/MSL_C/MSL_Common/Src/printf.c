@@ -15,9 +15,6 @@
 #define TARGET_FLOAT_MANT_BITS (TARGET_FLOAT_MANT_DIG - TARGET_FLOAT_IMPLICIT_J_BIT)
 #define TARGET_FLOAT_EXP_BITS (TARGET_FLOAT_BITS - TARGET_FLOAT_MANT_BITS - 1)
 
-#define PTRDIFF __typeof__((char*)0 - (char*)0)
-typedef PTRDIFF ptrdiff_t;
-
 enum justification_options { left_justification, right_justification, zero_fill };
 
 enum sign_options { only_minus, sign_always, space_holder };
@@ -1007,7 +1004,7 @@ static int __pformatter(void* (*WriteProc)(void*, const char*, size_t), void* Wr
             if (format.argument_options == long_double_argument) {
                 long_double_num = va_arg(arg, long double);
             } else {
-                long_double_num = va_arg(arg, f64);
+                long_double_num = va_arg(arg, double);
             }
 
             if (!(buff_ptr = float2str(long_double_num, buff + 512, format))) {
@@ -1022,7 +1019,7 @@ static int __pformatter(void* (*WriteProc)(void*, const char*, size_t), void* Wr
             if (format.argument_options == long_double_argument) {
                 long_double_num = va_arg(arg, long double);
             } else {
-                long_double_num = va_arg(arg, f64);
+                long_double_num = va_arg(arg, double);
             }
 
             if (!(buff_ptr = double2hex(long_double_num, buff + 512, format))) {

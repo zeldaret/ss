@@ -5,7 +5,7 @@
 #include "d/col/bg/d_bg_w.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 
 class dAcOutajima_c : public dAcObjBase_c {
 public:
@@ -19,7 +19,6 @@ public:
     virtual int draw() override;
 
 private:
-
     static void rideCallback(dBgW *, dAcObjBase_c *, dAcObjBase_c *);
 
     m3d::smdl_c mMdls[2];

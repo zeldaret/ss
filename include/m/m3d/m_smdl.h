@@ -3,7 +3,7 @@
 
 #include "m/m3d/m_bmdl.h"
 #include "m/m3d/m_scnleaf.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d.h" // IWYU pragma: export
 
 class UnkClass2 {};
 

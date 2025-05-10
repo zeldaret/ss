@@ -53,4 +53,4 @@ lbl_528_data_158 = .data:0x00000158; // type:object size:0x60
 lbl_528_data_1B8 = .data:0x000001B8; // type:object size:0x34
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 lbl_528_bss_8 = .bss:0x00000008; // type:object size:0x10
-lbl_528_bss_18 = .bss:0x00000018; // type:object size:0x30 data:4byte
+AcOTruckRailCol__STATE_WAIT = .bss:0x00000018; // type:object size:0x30 data:4byte

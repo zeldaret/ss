@@ -4,9 +4,10 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "m/m_color.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resanmclr.h"
-#include "nw4r/g3d/g3d_resmdl.h"
-#include "nw4r/g3d/g3d_resnode.h"
+#include "nw4r/g3d/res/g3d_resanmclr.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resnode.h"
 #include "nw4r/math/math_types.h"
 #include "rvl/GX/GXTypes.h"
 #include "s/s_Math.h"
@@ -26,12 +27,12 @@ static const char *sMdl2Names[] = {
 STATE_DEFINE(dAcOTimeStageBg_c, Wait);
 
 bool dAcOTimeStageBg_c::createHeap() {
-    mRes = CurrentStageArcManager::sInstance->getData("g3d/stage.brres");
+    mRes = nw4r::g3d::ResFile(CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres"));
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl(sMdlNames[mSubType]);
     TRY_CREATE(mMdl1.create(mdl, &heap_allocator, 0x128));
     nw4r::g3d::ResNode nd = mdl.GetResNode(sMdlNames[mSubType]);
 
-    field_0x3EC.copyFrom((nd.mNode.ref().VEC3_0x44 + nd.mNode.ref().VEC3_0x50) * 0.5f);
+    field_0x3EC.copyFrom((nd.GetBoundsMin() + nd.GetBoundsMax()) * 0.5f);
     if (mSubType == 4) {
         nw4r::g3d::ResAnmClr a = mRes.GetResAnmClr("Teniobj_0");
         TRY_CREATE(mAnm.create(mdl, a, &heap_allocator, nullptr, 1));
@@ -79,7 +80,7 @@ int dAcOTimeStageBg_c::actorCreate() {
 
 int dAcOTimeStageBg_c::actorPostCreate() {
     mTimeArea.check(roomid, field_0x3EC, 0, 30.0f, 0.1f);
-    if (dTimeAreaMgr_c::sInstance->fn_800B9B60(roomid, field_0x3EC)) {
+    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, field_0x3EC)) {
         field_0x3F8 = 255.0f;
     } else {
         field_0x3F8 = 0.0f;
@@ -116,7 +117,7 @@ void dAcOTimeStageBg_c::initializeState_Wait() {}
 void dAcOTimeStageBg_c::executeState_Wait() {
     f32 target = 0.0f;
     mTimeArea.check(roomid, field_0x3EC, 0, 30.0f, 0.1f);
-    if (dTimeAreaMgr_c::sInstance->fn_800B9B60(roomid, field_0x3EC)) {
+    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, field_0x3EC)) {
         if (mTimeArea.getDistMaybe() == 1.0f) {
             target = 255.0f;
         }

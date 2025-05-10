@@ -5,7 +5,7 @@
 
 class dDynamicModuleControl {
 public:
-    dDynamicModuleControl() {}
+    dDynamicModuleControl(): mPtr(nullptr) {}
     virtual ~dDynamicModuleControl();
 
     void set(u16 *ptr, int count);
@@ -16,5 +16,14 @@ private:
     u16 *mPtr;
     int mCount;
 };
+
+namespace dDyl {
+
+void initRelsArc();
+bool destroy();
+bool isLinked(u16 relId);
+int tryLink(u16 relId);
+
+} // namespace dDyl
 
 #endif

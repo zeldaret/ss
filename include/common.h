@@ -6,11 +6,11 @@
 
 #define CLAMP(low, high, x) ((x) > (high) ? (high) : ((x) < (low) ? (low) : (x)))
 
-#define ROUND_UP(x, align) (((x) + (align)-1) & (-(align)))
-#define ROUND_UP_PTR(x, align) ((void *)((((u32)(x)) + (align)-1) & (~((align)-1))))
+#define ROUND_UP(x, align) (((x) + (align) - 1) & (-(align)))
+#define ROUND_UP_PTR(x, align) ((void *)((((u32)(x)) + (align) - 1) & (~((align) - 1))))
 
 #define ROUND_DOWN(x, align) ((x) & (-(align)))
-#define ROUND_DOWN_PTR(x, align) ((void *)(((u32)(x)) & (~((align)-1))))
+#define ROUND_DOWN_PTR(x, align) ((void *)(((u32)(x)) & (~((align) - 1))))
 
 #define ARRAY_LENGTH(x) (sizeof((x)) / sizeof((x)[0]))
 
@@ -20,6 +20,15 @@
     (((u32)ptr[offset] << 24) | ((u32)ptr[offset + 1] << 16) | ((u32)ptr[offset + 2] << 8) | (u32)ptr[offset + 3]);
 
 #define ALIGN_DECL(ALIGNMENT) __attribute__((aligned(ALIGNMENT)))
+
+// static_assert from TP
+#ifdef __MWERKS__
+    #define GLUE(a, b) a##b
+    #define GLUE2(a, b) GLUE(a, b)
+    #define STATIC_ASSERT(cond) typedef char GLUE2(static_assertion_failed, __LINE__)[(cond) ? 1 : -1]
+#else
+    #define STATIC_ASSERT(...)
+#endif
 
 // To remove some warnings
 #ifdef __MWERKS__
@@ -44,6 +53,8 @@
 #define DECOMP_FORCEACTIVE(module, ...)
 #define DECOMP_FORCELITERAL(module, x)
 #define DECOMP_FORCEDTOR(module, cls)
+#define DECOMP_INLINE
+#define DECOMP_DONT_INLINE
 #else
 // Force reference specific data
 #define __CONCAT(x, y) x##y
@@ -69,6 +80,8 @@
         cls dummy;                                                                                                     \
         dummy.~cls();                                                                                                  \
     }
+#define DECOMP_INLINE inline
+#define DECOMP_DONT_INLINE __attribute__((never_inline))
 #endif
 
 #include "stddef.h"
@@ -95,10 +108,6 @@ enum {
 typedef int BOOL;
 
 typedef unsigned char byte_t;
-
-#ifdef __CWCC__
-typedef unsigned long size_t;
-#endif
 
 typedef u8 undefined1;
 typedef u16 undefined2;

@@ -10,7 +10,7 @@ bool dAcEhb_leaf_c::createHeap() {
     // but only ever a single pointer.
     void *fp = getOarcResFile("Degubaba");
     TRY_CREATE(mModel.create(fp, "degubaba_leaf", "shake2", &heap_allocator, 0x123));
-    nw4r::g3d::ResFile f = fp;
+    nw4r::g3d::ResFile f(fp);
     nw4r::g3d::ResMdl mdl = f.GetResMdl("degubaba_leaf");
     nw4r::g3d::ResAnmTexPat anm = f.GetResAnmTexPat("degubaba_leaf");
     TRY_CREATE(mAnm.create(mdl, anm, &heap_allocator, nullptr, 1));
@@ -52,7 +52,7 @@ int dAcEhb_leaf_c::create() {
     }
 
     if (mType != 0) {
-        actor_properties &= ~1;
+        clearActorProperty(0x1);
     }
 
     mStartingPos = position;

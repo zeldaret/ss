@@ -13,7 +13,7 @@ public:
     ExecCallback_CALC_MAT(nw4r::g3d::ScnObj::Timing, nw4r::g3d::ScnObj *, u32, void *) override;
 
     /* 0x04 */ dAcObjBase_c *mpActor;
-    /* 0x08 */ UNKWORD field_0x08;
+    /* 0x08 */ bool field_0x08;
 
     /* 8001a230 */ void attach(m3d::scnLeaf_c &);
 };

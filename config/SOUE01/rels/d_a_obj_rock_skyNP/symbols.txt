@@ -29,5 +29,5 @@ lbl_414_data_A8 = .data:0x000000A8; // type:object size:0x14
 lbl_414_data_BC = .data:0x000000BC; // type:object size:0x14
 g_profile_OBJ_ROCK_SKY = .data:0x000000D0; // type:object size:0x10
 lbl_414_data_E0 = .data:0x000000E0; // type:object size:0x20
-lbl_414_data_100 = .data:0x00000100; // type:object size:0x80
+AcOrockSky__vtable = .data:0x00000100; // type:object size:0x80
 lbl_414_bss_8 = .bss:0x00000008; // type:object size:0xC data:float

@@ -7,6 +7,8 @@
 // clang-format off
 #include "sized_string.h"
 #include "toBeSorted/dowsing_target.h"
+#include "toBeSorted/nand_request_thread.h"
+#include "toBeSorted/save_manager.h"
 // clang-format on
 
 // This class here makes no sense and the name might
@@ -58,8 +60,8 @@ extern "C" {
 /* 80009EF0 */ FileManager *FileManager::create(EGG::Heap *heap) {
     return new (heap, 0x04) FileManager();
 }
-/* 80009F30 */ bool FileManager::loadSaveData(void *out, char *name, bool isSkipData) {}
-/* 80009F70 */ void FileManager::saveSaveData(void *unk, bool isSkipData) {}
+/* 80009F30 */ bool FileManager::loadSaveData(NandRequestWriteHolder *out, const char *name, bool isSkipData) {}
+/* 80009F70 */ void FileManager::saveSaveData(NandRequestLoadSaveFileHolder *unk, bool isSkipData) {}
 /* 8000A000 */ void FileManager::refreshSaveFileData() {}
 /* 8000A260 */ wchar_t *FileManager::getFileHeroname(int fileNum) {}
 /* 8000A280 */ s64 FileManager::getFileSaveTime(int fileNum) {}
@@ -174,17 +176,17 @@ u16 *FileManager::getStoryFlagsMut() {
 /* 8000B6A0 */ u8 FileManager::getShieldPouchSlot() {}
 
 /* 8000B6F0 */ void FileManager::setAirPotionTimer(u16 time) {}
-/* 8000B720 */ u16 FileManager::getAirPotionTimer() {}
+/* 8000B720 */ u16 FileManager::getAirPotionTimer() const {}
 /* 8000B770 */ void FileManager::setAirPotionPlusTimer(u16 time) {}
-/* 8000B7A0 */ u16 FileManager::getAirPotionPlusTimer() {}
+/* 8000B7A0 */ u16 FileManager::getAirPotionPlusTimer() const {}
 /* 8000B7F0 */ void FileManager::setStaminaPotionTimer(u16 time) {}
-/* 8000B820 */ u16 FileManager::getStaminaPotionTimer() {}
+/* 8000B820 */ u16 FileManager::getStaminaPotionTimer() const {}
 /* 8000B870 */ void FileManager::setStaminaPotionPlusTimer(u16 time) {}
-/* 8000B8A0 */ u16 FileManager::getStaminaPotionPlusTimer() {}
+/* 8000B8A0 */ u16 FileManager::getStaminaPotionPlusTimer() const {}
 /* 8000B8F0 */ void FileManager::setGuardianPotionTimer(u16 time) {}
-/* 8000B920 */ u16 FileManager::getGuardianPotionTimer() {}
+/* 8000B920 */ u16 FileManager::getGuardianPotionTimer() const {}
 /* 8000B970 */ void FileManager::setGuardianPotionPlusTimer(u16 time) {}
-/* 8000B9A0 */ u16 FileManager::getGuardianPotionPlusTimer() {}
+/* 8000B9A0 */ u16 FileManager::getGuardianPotionPlusTimer() const {}
 
 /* 8000B9F0 */ void FileManager::setDowsingSlotIdx(u8 idx) {}
 /* 8000BA20 */ u8 FileManager::getDowsingSlotIdx() {}
@@ -235,12 +237,12 @@ u16 *FileManager::getStoryFlagsMut() {
 
 /* 8000CAD0 */ bool FileManager::isNew_FileA() {}
 
-/* 8000CB00 */ void FileManager::setSceneFlagIndex(u16 idx) {}
+/* 8000CB00 */ void FileManager::setSceneFlagIndex(s16 idx) {}
 /* 8000CB30 */ u32 FileManager::getSceneFlagIndex() {}
 /* 8000CB80 */ s32 FileManager::getFileAreaIndex() {}
 
 /* 8000CBD0 */ void FileManager::fn_8000CBD0(u8) {}
-/* 8000CC00 */ void FileManager::fn_8000CC00() {}
+/* 8000CC00 */ u8 FileManager::fn_8000CC00() {}
 
 /* 8000CC50 */ void FileManager::setFileTimes() {}
 /* 8000CCB0 */ void FileManager::setPlayTime(s64 time) {}
@@ -344,7 +346,7 @@ u16 *FileManager::getStoryFlagsMut() {
 }
 
 /* 80010000 */ void FileManager::initBlankSaveFiles() {
-    memset(mpSavedSaveFiles, 0, 0xfbe0);
+    memset(mpSavedSaveFiles, 0, sizeof(SavedSaveFiles));
     mSelectedFile = 0;
     memset(mIsFileEmpty, 0, 3);
     SkipData *data;
@@ -409,7 +411,7 @@ u16 *FileManager::getStoryFlagsMut() {
 }
 
 /* 800101F0 */ void FileManager::unsetFileANewFile() {}
-/* 80010220 */ void FileManager::saveT1SaveInfo(u8 entranceT1LoadFlag) {}
+/* 80010220 */ void FileManager::saveT1SaveInfo(bool entranceT1LoadFlag) {}
 /* 80010350 */ void FileManager::copyFileSkipData(int fileNum) {}
 extern "C" void fn_800C01F0(); // todo flag managers
 /* 80010440 */ void FileManager::clearTempFileData() {
@@ -447,9 +449,9 @@ extern "C" void fn_800C01F0(); // todo flag managers
         }
     }
 }
-/* 80011370 */ bool FileManager::isFileEmpty(int fileNum) {}
+/* 80011370 */ bool FileManager::isFileEmpty(u8 fileNum) {}
 /* 80011390 */ bool FileManager::isFileDirty(int fileNum) {}
-/* 800113B0 */ u8 FileManager::get_0xA84C() {}
+/* 800113B0 */ u32 FileManager::get_0xA84C() {}
 /* 800113C0 */ bool FileManager::checkRegionCode() {}
 /* 80011440 */ bool FileManager::checkFileCRC(u8 fileNum) {}
 /* 80011490 */
@@ -464,5 +466,5 @@ bool FileManager::isFileInactive() const {
     return false;
 }
 /* 80011500 */ void FileManager::setPlayerInfoFileA() {}
-/* 800115E0 */ void FileManager::setT3Info(mVec3_c *pos, mAng3_c *rot) {}
+/* 800115E0 */ void FileManager::setT3Info(const mVec3_c &pos, const mAng3_c &rot) {}
 /* 800116C0 */ void FileManager::getRegionVersion(char *out) {}

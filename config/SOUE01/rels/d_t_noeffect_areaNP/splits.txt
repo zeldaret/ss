@@ -7,10 +7,10 @@ Sections:
 	.bss        type:bss align:8
 
 REL/executor.c:
-	.text       start:0x00000000 end:0x00000064
+	.text       start:0x00000000 end:0x00000064 align:16
 
 REL/d/t/d_t_noeffect_area.cpp:
-	.text       start:0x00000070 end:0x00000268
+	.text       start:0x00000070 end:0x00000268 align:16
 	.ctors      start:0x00000000 end:0x00000004
 	.rodata     start:0x00000000 end:0x0000000C
 	.data       start:0x00000000 end:0x00000084

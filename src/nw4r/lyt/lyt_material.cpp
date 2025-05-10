@@ -681,7 +681,7 @@ bool Material::SetupGX(bool bModVtxCol, u8 alpha) {
             if (bUseTexMtx[i]) {
                 math::MTX34 texMtx;
                 CalcTextureMtx(&texMtx, texSRTs[i]);
-                GXLoadTexMtxImm(texMtx, GetTexMtx(i), GX_MTX_2x4);
+                GXLoadTexMtxImm(texMtx, GetTexMtx(i), GX_MTX2x4);
             }
         }
     }

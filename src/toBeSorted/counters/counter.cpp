@@ -21,14 +21,14 @@
     return result <= max ? 0 : (result - max);
 }
 
-/* 8016cd30 */ u16 Counter::getCommittedValue() {
-    return ItemflagManager::sInstance->getCounterOrFlag(counterId | 0x4000);
+/* 8016cd30 */ u16 Counter::getCommittedValue() const {
+    return ItemflagManager::sInstance->getItemCounterOrFlag(counterId);
 }
 
-/* 8016cd50 */ u16 Counter::getUncommittedValue() {
-    return ItemflagManager::sInstance->getUncommittedValue(counterId | 0x4000);
+/* 8016cd50 */ u16 Counter::getUncommittedValue() const {
+    return ItemflagManager::sInstance->getUncommittedItemValue(counterId);
 }
 
 /* 8016cd70 */ void Counter::setValue(u16 num) {
-    ItemflagManager::sInstance->setFlagOrCounterToValue(counterId | 0x4000, num);
+    ItemflagManager::sInstance->setItemFlagOrCounterToValue(counterId, num);
 }

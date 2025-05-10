@@ -64,19 +64,15 @@ inline f32 FMod(f32 x, f32 y) {
 }
 
 inline f32 FModf(f32 x, f32 *y) {
-    return fmodff(x, y);
+    return modff(x, y);
 }
 
 inline f32 FSqrt(f32 x) {
-    if (x <= 0.0f) {
-        return 0.0f;
-    }
-
-    return x * FrSqrt(x);
+    return (x <= 0.0f) ? 0.0f : x * FrSqrt(x);
 }
 
 inline f32 FLog(f32 x) {
-    if (x >= 0.0f) {
+    if (x > 0.0f) {
         return detail::FLog(x);
     }
 

@@ -345,7 +345,7 @@ mDvd_callback_c *mDvd_callback_c::create(dvdReadCallback cb, void *cbData) {
 }
 
 /** 802ef650 */
-mDvd_callback_c *mDvd_callback_c::createOrFail(dvdReadCallback cb, void *cbData) {
+mDvd_callback_c *mDvd_callback_c::createOrDie(dvdReadCallback cb, void *cbData) {
     mDvd_callback_c *cmd = mDvd_callback_c::create(cb, cbData);
     while (!cmd) {}
     return cmd;
@@ -573,7 +573,7 @@ mDvd_toMainRam_arc_c::create(EGG::Archive *arc, const char *path, int mountDirec
 
 /** 802efe90 */
 mDvd_toMainRam_arc_c *
-mDvd_toMainRam_arc_c::createOrFail(EGG::Archive *arc, const char *path, int mountDirection, EGG::Heap *heap) {
+mDvd_toMainRam_arc_c::createOrDie(EGG::Archive *arc, const char *path, int mountDirection, EGG::Heap *heap) {
     mDvd_toMainRam_arc_c *cmd = mDvd_toMainRam_arc_c::create(arc, path, mountDirection, heap);
     while (!cmd) {}
     return cmd;
@@ -613,7 +613,7 @@ mDvd_toMainRam_normal_c *mDvd_toMainRam_normal_c::create(const char *path, int m
 }
 
 /** 802f0030 */
-mDvd_toMainRam_normal_c *mDvd_toMainRam_normal_c::createOrFail(const char *path, int mountDirection, EGG::Heap *heap) {
+mDvd_toMainRam_normal_c *mDvd_toMainRam_normal_c::createOrDie(const char *path, int mountDirection, EGG::Heap *heap) {
     mDvd_toMainRam_normal_c *cmd = mDvd_toMainRam_normal_c::create(path, mountDirection, heap);
     while (!cmd) {}
     return cmd;

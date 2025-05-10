@@ -4,7 +4,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_w.h"
 #include "m/m3d/m_smdl.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
 #include "s/s_StateMgr.hpp"
 

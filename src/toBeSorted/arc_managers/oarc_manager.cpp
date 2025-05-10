@@ -2,7 +2,6 @@
 
 #include "d/d_heap.h"
 
-
 OarcManager *OarcManager::sInstance;
 
 OarcManager::OarcManager() {
@@ -84,9 +83,9 @@ void *OarcManager::getSubEntryData(const char *oarcName, const char *fileName) {
 bool OarcManager::create(EGG::Heap *heap) {
     new (heap, 0x04) OarcManager();
 
-    if (OarcManager::sInstance == nullptr) {
+    if (GetInstance() == nullptr) {
         return false;
     }
-    OarcManager::sInstance->init(heap);
+    GetInstance()->init(heap);
     return true;
 }

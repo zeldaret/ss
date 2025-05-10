@@ -9,6 +9,12 @@
 // * Entirely in headers
 // * Swapped node and count members
 // Used in DowsingTarget, maybe also in dAcBase_c.soundStuff
+//
+// The current implementation has various unexplained behaviors
+// * Constructor doesn't match if offset != 0 https://decomp.me/scratch/YqOCh
+// * Many loops based on these iterators don't match in general, but probably not worth
+//   messing with until the ctor is fixed
+// * -ipa file optimizes things that shouldn't be optimized https://decomp.me/scratch/lqM6i
 template <typename T>
 class TListNode {
 public:
@@ -78,6 +84,21 @@ public:
         }
     }
 
+    /**
+     * Returns an iterator representing the position of pT in this
+     * list. If pT is not in the list, the result is the end iterator.
+     *
+     * This is typically used to check if an object is contained in a
+     * list of this type.
+     */
+    Iterator GetPosition(T *pT) {
+        if (GetNodeFromPtr(pT)->mpNext == nullptr || GetNodeFromPtr(pT)->mpPrev == nullptr) {
+            return GetEndIter();
+        } else {
+            return Iterator(pT);
+        }
+    }
+
     Iterator GetEndIter() {
         return Iterator(GetPtrFromNode(&mStartEnd));
     }
@@ -88,7 +109,7 @@ public:
     static T *GetPtrFromNode(TNode *pN) {
         return (T *)((u8 *)pN - offset);
     }
-    void insert(T *value) {
+    void append(T *value) {
         TNode *node = GetNodeFromPtr(value);
         if (GetPtrFromNode(&mStartEnd) == mStartEnd.mpNext) {
             node->mpNext = GetPtrFromNode(&mStartEnd);
@@ -103,6 +124,36 @@ public:
             mStartEnd.mpPrev = value;
             mCount++;
         }
+    }
+
+    void prepend(T *value) {
+        TNode *node = GetNodeFromPtr(value);
+        if (GetPtrFromNode(&mStartEnd) == mStartEnd.mpNext) {
+            node->mpNext = GetPtrFromNode(&mStartEnd);
+            node->mpPrev = GetPtrFromNode(&mStartEnd);
+            mStartEnd.mpNext = value;
+            mStartEnd.mpPrev = value;
+            mCount++;
+        } else {
+            node->mpPrev = GetPtrFromNode(&mStartEnd);
+            node->mpNext = mStartEnd.mpNext;
+            GetNodeFromPtr(mStartEnd.mpNext)->mpPrev = value;
+            mStartEnd.mpNext = value;
+            mCount++;
+        }
+    }
+
+    void insertBefore(T* existing, T *value) {
+        TNode *node = GetNodeFromPtr(value);
+        TNode *existingNode = GetNodeFromPtr(existing);
+
+        T* itPrev = existingNode->mpPrev;
+        node->mpPrev = itPrev;
+        node->mpNext = existing;
+        GetNodeFromPtr(itPrev)->mpNext = value;
+        existingNode->mpPrev = value;
+
+        mCount++;
     }
 
     void remove(T *value) {
@@ -122,6 +173,16 @@ public:
         node->mpPrev = nullptr;
         node->mpNext = nullptr;
         mCount--;
+    }
+
+    T *GetFirst() {
+        return GetPtrFromNode(&mStartEnd);
+    }
+
+    void RemoveFirst() {
+        if (mCount != 0) {
+            remove(GetFirst());
+        }
     }
 
     TNode mStartEnd;

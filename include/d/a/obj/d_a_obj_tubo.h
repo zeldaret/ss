@@ -13,9 +13,9 @@
 #include "m/m3d/m_smdl.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 class dAcOtubo_c : public dAcObjBase_c {
 public:
@@ -90,7 +90,7 @@ private:
     /* 0x764 */ dCcD_Sph mSph;
     /* 0x8B4 */ STATE_MGR_DECLARE(dAcOtubo_c);
     /* 0x8F0 */ dAcObjRef_unk mField_0x8F0;
-    /* 0x91C */ EffectsStruct_Ext mEff_0x91C;
+    /* 0x91C */ dWaterEffect_c mEff_0x91C;
     /* 0x964 */ dAcRef_c<dAcNpcCeLady_c> mCeLady;
     /* 0x970 */ dAcRef_c<dAcNpcCeFriend_c> mCeFriend;
     /* 0x97C */ mQuat_c mQuat_0x97C;

@@ -319,7 +319,7 @@ public:
 
 struct cCcD_SrcGObjTgInfo {
     /* 0x00 */ u8 mField_0x0;
-    /* 0x00 */ u8 mField_0x1;
+    /* 0x01 */ u8 mField_0x1;
     /* 0x02 */ u16 mField_0x2;
 };
 
@@ -636,6 +636,7 @@ public:
     void Set_0x4B(u8 val) {
         mField_0x4B = val;
     }
+
     void SetInfo_0x1(u8 val) {
         mSrc.mInfo.mField_0x1 = val;
     }
@@ -929,6 +930,9 @@ public:
 
     void SetTg_0x4B(u8 val) {
         mTg.Set_0x4B(val);
+    }
+    void SetTgInfo_0x1(u8 val) {
+        mTg.SetInfo_0x1(val);
     }
     void SetTgInfo_0x2(u16 val) {
         mTg.SetInfo_0x2(val);

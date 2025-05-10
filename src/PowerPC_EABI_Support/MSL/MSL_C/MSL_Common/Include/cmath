@@ -1,0 +1,58 @@
+#ifndef MSL_CPP_CMATH_H
+#define MSL_CPP_CMATH_H
+#include <math.h>
+#ifdef __cplusplus
+
+// Remove C macro
+#undef fabs
+
+namespace std {
+using ::acos;
+using ::acosf;
+using ::asin;
+// using ::asinf;
+using ::atan;
+using ::atan2;
+using ::atan2f;
+using ::ceil;
+using ::ceilf;
+using ::copysign;
+using ::cos;
+using ::cosf;
+using ::fabsf;
+using ::floor;
+using ::floorf;
+using ::fmod;
+using ::fmodf;
+using ::frexp;
+using ::ldexp;
+// using ::ldexpf;
+using ::modf;
+using ::modff;
+// using ::nan;
+using ::pow;
+using ::scalbn;
+using ::sin;
+using ::sinf;
+using ::sqrt;
+using ::sqrtf;
+using ::tan;
+using ::tanf;
+
+inline float sqrt(float x) {
+    return ::sqrtf(x);
+}
+
+// TODO: Very fake!
+// inline double fabs_wrapper(double x) {
+//     return __fabs(x);
+// }
+
+// inline float fabs(float x) {
+//     return fabs_wrapper(x);
+// }
+
+} // namespace std
+
+#endif
+#endif

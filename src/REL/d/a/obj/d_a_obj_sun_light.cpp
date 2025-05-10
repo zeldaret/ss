@@ -1,18 +1,18 @@
 #include "d/a/obj/d_a_obj_sun_light.h"
 
+#include "d/d_sc_game.h"
+#include "d/d_stage.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "toBeSorted/arc_managers/current_stage_arc_manager.h"
-#include "toBeSorted/room_manager.h"
-#include "toBeSorted/scgame.h"
-
 
 SPECIAL_ACTOR_PROFILE(OBJ_SUN_LIGHT, dAcOsunLight_c, fProfile::OBJ_SUN_LIGHT, 0x0219, 0, 3);
 
 STATE_DEFINE(dAcOsunLight_c, Wait);
 
 bool dAcOsunLight_c::createHeap() {
-    mBrres = CurrentStageArcManager::sInstance->getData("g3d/stage.brres");
-    RoomManager::bindStageResToFile(&mBrres);
-    RoomManager::bindSkyCmnToResFile(&mBrres);
+    mBrres = nw4r::g3d::ResFile(CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres"));
+    dStage_c::bindStageResToFile(&mBrres);
+    dStage_c::bindSkyCmnToResFile(&mBrres);
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("StageF000Light");
     TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
     nw4r::g3d::ResAnmTexSrt srt = mBrres.GetResAnmTexSrt("StageF000Light");
@@ -58,7 +58,5 @@ void dAcOsunLight_c::executeState_Wait() {}
 void dAcOsunLight_c::finalizeState_Wait() {}
 
 bool dAcOsunLight_c::isDay() {
-    // return !ScGame::currentSpawnInfo.isNight();
-    // TODO TempFix?
-    return !(u8)ScGame::currentSpawnInfo.night;
+    return dScGame_c::currentSpawnInfo.getTimeOfDay() == SpawnInfo::DAY;
 }

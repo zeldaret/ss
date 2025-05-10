@@ -33,7 +33,7 @@ int dCsBase_c::sfield0x700Init = 0;
 #pragma explicit_zero_data off
 
 int dCsBase_c::create() {
-    void *data = LayoutArcManager::sInstance->getLoadedData("cursor");
+    void *data = LayoutArcManager::GetInstance()->getLoadedData("cursor");
     mResAcc.attach(data, "arc");
 
     for (int i = 0; i < 2; i++) {
@@ -43,8 +43,8 @@ int dCsBase_c::create() {
         mLyts[i].calc();
     }
     setCurrentLyt(0);
-    mStructC.field_0x10 = 1;
-    d2d::dLytStructDList::sInstance->appendToList1(&mStructC);
+    mCursorIf.setCursorMask(1);
+    dCsMgr_c::GetInstance()->registCursor(&mCursorIf);
     fn_8016B2B0();
     field_0x6F0 = 0.0f;
     field_0x6F4 = 0.0f;
@@ -59,7 +59,7 @@ int dCsBase_c::create() {
 }
 
 int dCsBase_c::doDelete() {
-    d2d::dLytStructDList::sInstance->removeFromList1(&mStructC);
+    dCsMgr_c::GetInstance()->unregistCursor(&mCursorIf);
     fn_8016B2E0();
     mResAcc.detach();
     return SUCCEEDED;

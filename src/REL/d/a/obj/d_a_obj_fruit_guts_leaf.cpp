@@ -4,8 +4,8 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "f/f_base.h"
 #include "m/m_vec.h"
-#include "nw4r/g3d/g3d_resfile.h"
-#include "nw4r/g3d/g3d_resmdl.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
+#include "nw4r/g3d/res/g3d_resmdl.h"
 #include "s/s_Math.h"
 #include "toBeSorted/time_area_mgr.h"
 
@@ -22,14 +22,14 @@ bool dAcOFruitGutsLeaf_c::createHeap() {
     if (data == nullptr) {
         return false;
     }
-    nw4r::g3d::ResFile f = data;
-    if (!f.mFile.IsValid()) {
+    nw4r::g3d::ResFile f(data);
+    if (!f.IsValid()) {
         return false;
     }
 
     nw4r::g3d::ResMdl m = f.GetResMdl(mdlName);
 
-    if (!m.mMdl.IsValid()) {
+    if (!m.IsValid()) {
         return false;
     }
 
@@ -55,7 +55,7 @@ int dAcOFruitGutsLeaf_c::actorCreate() {
 }
 
 int dAcOFruitGutsLeaf_c::actorPostCreate() {
-    if (hideInPast() && !dTimeAreaMgr_c::sInstance->fn_800B9B60(roomid, position)) {
+    if (hideInPast() && !dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, position)) {
         mScale.x = 0.0f;
         mScale.y = 0.0f;
         mScale.z = 0.0f;
@@ -69,7 +69,7 @@ int dAcOFruitGutsLeaf_c::actorPostCreate() {
 }
 int dAcOFruitGutsLeaf_c::actorExecute() {
     if (hideInPast()) {
-        if (dTimeAreaMgr_c::sInstance->fn_800B9B60(roomid, position)) {
+        if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, position)) {
             if (mScale.x != 1.0f) {
                 sLib::chase(&mScale.x, 1.0f, 0.05f);
                 mScale.z = mScale.x;

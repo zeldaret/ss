@@ -6,7 +6,9 @@
 #include "egg/core/eggHeap.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
+#include "toBeSorted/nand_request_thread.h"
 #include "toBeSorted/save_file.h"
+#include "toBeSorted/save_manager.h"
 
 enum SAVE_ITEM_ID {
 };
@@ -65,8 +67,8 @@ public:
     /* 80009EE0 */                // mVec3();
 
     /* 80009EF0 */ static FileManager *create(EGG::Heap *);
-    /* 80009F30 */ bool loadSaveData(void *out, char *name, bool isSkipData);
-    /* 80009F70 */ void saveSaveData(void *unk, bool isSkipData);
+    /* 80009F30 */ bool loadSaveData(NandRequestWriteHolder *out, const char *name, bool isSkipData);
+    /* 80009F70 */ void saveSaveData(NandRequestLoadSaveFileHolder *request, bool isSkipData);
     /* 8000A000 */ void refreshSaveFileData();
     /* 8000A260 */ wchar_t *getFileHeroname(int fileNum);
     /* 8000A280 */ s64 getFileSaveTime(int fileNum);
@@ -149,17 +151,17 @@ public:
     /* 8000B6A0 */ u8 getShieldPouchSlot();
 
     /* 8000B6F0 */ void setAirPotionTimer(u16 time);
-    /* 8000B720 */ u16 getAirPotionTimer();
+    /* 8000B720 */ u16 getAirPotionTimer() const;
     /* 8000B770 */ void setAirPotionPlusTimer(u16 time);
-    /* 8000B7A0 */ u16 getAirPotionPlusTimer();
+    /* 8000B7A0 */ u16 getAirPotionPlusTimer() const;
     /* 8000B7F0 */ void setStaminaPotionTimer(u16 time);
-    /* 8000B820 */ u16 getStaminaPotionTimer();
+    /* 8000B820 */ u16 getStaminaPotionTimer() const;
     /* 8000B870 */ void setStaminaPotionPlusTimer(u16 time);
-    /* 8000B8A0 */ u16 getStaminaPotionPlusTimer();
+    /* 8000B8A0 */ u16 getStaminaPotionPlusTimer() const;
     /* 8000B8F0 */ void setGuardianPotionTimer(u16 time);
-    /* 8000B920 */ u16 getGuardianPotionTimer();
+    /* 8000B920 */ u16 getGuardianPotionTimer() const;
     /* 8000B970 */ void setGuardianPotionPlusTimer(u16 time);
-    /* 8000B9A0 */ u16 getGuardianPotionPlusTimer();
+    /* 8000B9A0 */ u16 getGuardianPotionPlusTimer() const;
 
     /* 8000B9F0 */ void setDowsingSlotIdx(u8 idx);
     /* 8000BA20 */ u8 getDowsingSlotIdx();
@@ -210,12 +212,12 @@ public:
 
     /* 8000CAD0 */ bool isNew_FileA();
 
-    /* 8000CB00 */ void setSceneFlagIndex(u16 idx);
+    /* 8000CB00 */ void setSceneFlagIndex(s16 idx);
     /* 8000CB30 */ u32 getSceneFlagIndex();
     /* 8000CB80 */ s32 getFileAreaIndex();
 
     /* 8000CBD0 */ void fn_8000CBD0(u8);
-    /* 8000CC00 */ void fn_8000CC00();
+    /* 8000CC00 */ u8 fn_8000CC00();
 
     /* 8000CC50 */ void setFileTimes();
     /* 8000CCB0 */ void setPlayTime(s64 time);
@@ -256,7 +258,7 @@ public:
     /* 80010160 */ void initSkipData();
 
     /* 800101F0 */ void unsetFileANewFile();
-    /* 80010220 */ void saveT1SaveInfo(u8 entranceT1LoadFlag);
+    /* 80010220 */ void saveT1SaveInfo(bool entranceT1LoadFlag);
     /* 80010350 */ void copyFileSkipData(int fileNum);
     /* 80010440 */ void clearTempFileData();
     /* 800104A0 */ void saveAfterCredits();
@@ -270,20 +272,91 @@ public:
     /* 80011280 */ u32 calcFileCRC(const void *data, u32 length);
     /* 80011290 */ void updateEmptyFiles();
     /* 800112D0 */ void updateEmptyFileFlags();
-    /* 80011370 */ bool isFileEmpty(int fileNum);
+    /* 80011370 */ bool isFileEmpty(u8 fileNum);
     /* 80011390 */ bool isFileDirty(int fileNum);
-    /* 800113B0 */ u8 get_0xA84C();
+    /* 800113B0 */ u32 get_0xA84C();
     /* 800113C0 */ bool checkRegionCode();
     /* 80011440 */ bool checkFileCRC(u8 fileNum);
     /* 80011490 */ bool isFileInactive() const;
     /* 80011500 */ void setPlayerInfoFileA();
-    /* 800115E0 */ void setT3Info(mVec3_c *pos, mAng3_c *rot);
+    /* 800115E0 */ void setT3Info(const mVec3_c &pos, const mAng3_c &rot);
     /* 800116C0 */ static void getRegionVersion(char *out);
     // /* 800116F0 */ void sinit();
 
-    static FileManager *getInstance() {
+    static FileManager *GetInstance() {
         return sInstance;
     }
+
+    bool hasGuardianPotionPlus() const {
+        return getGuardianPotionPlusTimer() != 0;
+    }
+
+    bool hasGuardianPotionNormal() const {
+        return getGuardianPotionTimer() != 0;
+    }
+
+    bool hasAirPotionPlus() const {
+        return getAirPotionPlusTimer() != 0;
+    }
+
+    bool hasAirPotionNormal() const {
+        return getAirPotionTimer() != 0;
+    }
+
+    bool hasStaminaPotionPlus() const {
+        return getStaminaPotionPlusTimer() != 0;
+    }
+
+    bool hasStaminaPotionNormal() const {
+        return getStaminaPotionTimer() != 0;
+    }
+
+    u8 isFileInvalid() const {
+        return mIsFileInvalid[2];
+    }
+
+    void setField0xA840(u8 val) {
+        mIsFileUnk1[0] = val;
+    }
+
+    void setField0xA841(u8 val) {
+        mIsFileUnk1[1] = val;
+    }
+
+    void setField0xA842(u8 val) {
+        mIsFileUnk1[2] = val;
+    }
+
+    void setField_0xA843(u8 val) {
+        mIsFileInvalid[1] = val;
+    }
+
+    u8 getField_0xA841() const {
+        return mIsFileUnk1[1];
+    }
+
+    u8 getField_0xA842() const {
+        return mIsFileUnk1[2];
+    }
+
+    u8 getField_0xA843() const {
+        return mIsFileInvalid[1];
+    }
+
+
+    void setField0xA84C(u8 val) {
+        m_0xA84C = val;
+    }
+
+    void setField0xA84D(u8 val) {
+        m_0xA84D = val;
+    }
+
+    void setSelectedFileNum(u8 val) {
+        mSelectedFile = val;
+    }
+
+private:
     static FileManager *sInstance;
 };
 

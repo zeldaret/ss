@@ -17,7 +17,7 @@
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/dowsing_target.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 
 class dAcItem_0xB34 {
 public:
@@ -47,13 +47,25 @@ public:
     static void spawnItem(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot, u32 params, u32 arg);
     static void spawnDrop(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot);
     static u32 checkFlag(u32 flag);
+    static void setFlag(s32 id);
+
     void setItemPosition(const mVec3_c &);
     void getItemFromBWheelItem();
     bool isStateWait();
 
-    static int getTotalBombCount();
-    static int getTotalArrowCount();
-    static int getTotalSeedCount();
+    static s32 getTotalBombCount();
+    static s32 getTotalArrowCount();
+    static s32 getTotalSeedCount();
+
+    static s32 getTotalBombCapacity();
+    static s32 getTotalSeedCapacity();
+    static s32 getTotalArrowCapacity();
+
+    static s32 getRupeeCounter();
+    static u32 getCurrentWalletCapacity();
+
+    static u32 getKeyPieceCount();
+    static u32 getSmallKeyCount();
 
     static bool isRupee(ITEM_ID item);
     static bool isKeyPiece(ITEM_ID item);
@@ -62,6 +74,20 @@ public:
     static bool getItemGetEventName(u16 item, const char **outName);
     static void itemGetEventStart(dAcBase_c *);
     static void itemGetEventEnd(dAcBase_c *);
+
+    static void addRupees(s32 amount);
+
+    enum Trial_e {
+        TRIAL_SKYLOFT,
+        TRIAL_FARON,
+        TRIAL_ELDIN,
+        TRIAL_LANAYRU,
+        TRIAL_NONE,
+    };
+
+    static Trial_e getCurrentTrial();
+
+    static void healLink(u32 amount, bool); // move to dAcPy_c
 
 private:
     /* 0x334 */ UNKTYPE *mpMdl; // Model has its own handling system

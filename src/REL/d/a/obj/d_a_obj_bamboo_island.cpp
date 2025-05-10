@@ -1,8 +1,9 @@
 #include "d/a/obj/d_a_obj_bamboo_island.h"
 
 #include "d/col/bg/d_bg_s.h"
+#include "d/d_stage.h"
 #include "d/flag/storyflag_manager.h"
-#include "toBeSorted/room_manager.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 
 const f32 dAcObambooIsland_c::unusedFloat1 = 100000.0f;
 const f32 dAcObambooIsland_c::unusedFloat2 = 0.0f;
@@ -21,9 +22,9 @@ void dAcObambooIsland_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObj
 }
 
 bool dAcObambooIsland_c::createHeap() {
-    mBrres = getOarcResFile("IslBamb");
-    RoomManager::bindStageResToFile(&mBrres);
-    RoomManager::bindSkyCmnToResFile(&mBrres);
+    mBrres = nw4r::g3d::ResFile(getOarcResFile("IslBamb"));
+    dStage_c::bindStageResToFile(&mBrres);
+    dStage_c::bindSkyCmnToResFile(&mBrres);
     for (int i = 0; i < 2; i++) {
         nw4r::g3d::ResMdl mdl = mBrres.GetResMdl(sBambooIslandNames[i]);
         TRY_CREATE(mModels[i].create(mdl, &heap_allocator, 0x120));

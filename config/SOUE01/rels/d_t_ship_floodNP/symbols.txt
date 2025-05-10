@@ -62,5 +62,5 @@ lbl_441_data_108 = .data:0x00000108; // type:object size:0x114
 lbl_441_data_21C = .data:0x0000021C; // type:object size:0x34
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 lbl_441_bss_8 = .bss:0x00000008; // type:object size:0x10 data:4byte
-lbl_441_bss_18 = .bss:0x00000018; // type:object size:0x40 data:4byte
-lbl_441_bss_58 = .bss:0x00000058; // type:object size:0x30 data:4byte
+TgShipFlood__StateID_Wait = .bss:0x00000018; // type:object size:0x40 data:4byte
+TgShipFlood__StateID_Stop = .bss:0x00000058; // type:object size:0x30 data:4byte

@@ -22,7 +22,7 @@ int dBase_c::preExecute() {
     if (fBase_c::preExecute() == 0) {
         return NOT_READY;
     }
-    if (s_ExecuteControlFlags && !isProcControlFlag(s_ExecuteControlFlags)) {
+    if (s_ExecuteControlFlags && !isBasePropertyFlag(s_ExecuteControlFlags)) {
         return NOT_READY;
     }
     return SUCCEEDED;
@@ -41,7 +41,7 @@ int dBase_c::preDraw() {
     if (fBase_c::preDraw() == NOT_READY) {
         return NOT_READY;
     }
-    if (s_DrawControlFlags && !isProcControlFlag(s_DrawControlFlags)) {
+    if (s_DrawControlFlags && !isBasePropertyFlag(s_DrawControlFlags)) {
         return NOT_READY;
     }
     return SUCCEEDED;
