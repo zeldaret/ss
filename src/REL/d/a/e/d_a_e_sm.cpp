@@ -18,7 +18,6 @@
 #include "nw4r/g3d/res/g3d_resanmtexpat.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
-#include "rvl/GX/GXTypes.h"
 #include "s/s_Math.h"
 #include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/time_area_mgr.h"
@@ -264,7 +263,7 @@ int dAcEsm_c::actorCreate() {
 
     if (field_0xBBF != 6) {
         mEffExt.init(this, 100.f, mScaleCopy1.x * 2.f, 0.f);
-        mEffExt.mField_0x01 = 1;
+        mEffExt.setIsSmall(1);
     }
 
     mAnmTexPat.setFrame(anim_frame, 0);
@@ -282,7 +281,7 @@ int dAcEsm_c::actorPostCreate() {
     switch ((u32)field_0xBC6) {
         case 1: {
             field_0xA7C = 0;
-            if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), GetPostion())) {
+            if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), GetPosition())) {
                 field_0xA74 = 1.f;
                 field_0xB8C = 1.f;
                 fn_80030700();
@@ -294,7 +293,7 @@ int dAcEsm_c::actorPostCreate() {
         } break;
         case 2: {
             field_0xA7C = 1;
-            if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), GetPostion())) {
+            if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), GetPosition())) {
                 field_0xB8C = 0.f;
                 field_0xA74 = 0.f;
                 fn_800306d0();
@@ -337,7 +336,7 @@ int dAcEsm_c::actorExecute() {
 
     dAcBomb_c *pObj = mBombRef.get();
     if (mBombRef.isLinked() && pObj != nullptr) {
-        mVec3_c target = GetPostion();
+        mVec3_c target = GetPosition();
         if (!checkSize(SM_MASSIVE) && !checkSize(SM_LARGE)) {
             target.y += 60.f + mScaleCopy1.y;
         }

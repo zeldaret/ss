@@ -15,7 +15,7 @@
 #include "s/s_State.hpp"
 #include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/d_d3d.h"
-#include "toBeSorted/effects_struct.h"
+#include "toBeSorted/d_emitter.h"
 #include "toBeSorted/stage_render_stuff.h"
 
 class dAcEsm_c : public dAcEnBase_c {
@@ -131,7 +131,7 @@ private:
     /* 0xAA4 */ u8 _AA4[0xAC8 - 0xAA4];
     /* 0xAC8 */ mVec3_c mHomePos1;
     /* 0xAD4 */ mVec3_c mHomePos2;
-    /* 0xAE0 */ EffectsStruct_Ext mEffExt;
+    /* 0xAE0 */ dWaterEffect_c mEffExt;
     /* 0xB28 */ mAng3_c mRotUnk;
     /* 0xB2E */ u8 _B2E[0xB38 - 0xB2E];
     /* 0xB38 */ mAng3_c mRotCopy;
