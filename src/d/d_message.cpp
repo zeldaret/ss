@@ -248,14 +248,14 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
             break;
         case EVENT_SET_ZONEFLAG:
             dStageMgr_c::GetInstance()->getFlagIndex();
-            SceneflagManager::sInstance->setFlag(
-                dStage_c::GetInstance()->getCurrRoomId(), ((params1n2 >> 16) & 0xFFFF) + 0xC0
+            SceneflagManager::sInstance->setZoneflag_i(
+                dStage_c::GetInstance()->getCurrRoomId(), (params1n2 >> 16) & 0xFFFF
             );
             break;
         case EVENT_UNSET_ZONEFLAG:
             dStageMgr_c::GetInstance()->getFlagIndex();
-            SceneflagManager::sInstance->unsetFlag(
-                dStage_c::GetInstance()->getCurrRoomId(), ((params1n2 >> 16) & 0xFFFF) + 0xC0
+            SceneflagManager::sInstance->unsetZoneflag_i(
+                dStage_c::GetInstance()->getCurrRoomId(), (params1n2 >> 16) & 0xFFFF
             );
             break;
         case EVENT_DELAY:
@@ -337,7 +337,7 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
             break;
         case EVENT_SET_ITEM: {
             u16 flag = params1n2 & 0xFFFF;
-            ItemflagManager::sInstance->setFlag(flag | 0x4000);
+            ItemflagManager::sInstance->setItemFlag(flag);
             switch (params1n2) {
                 case ITEM_FARORES_COURAGE:
                 case ITEM_NAYRUS_WISDOM:
@@ -380,7 +380,7 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
             } else if (counter == 0x1F3) {
                 counter = dAcItem_c::getTotalBombCount();
             } else {
-                counter = ItemflagManager::sInstance->getCounterOrFlag(counter | 0x4000);
+                counter = ItemflagManager::sInstance->getItemCounterOrFlag(counter);
             }
 
             if (counter >= threshold) {
@@ -394,23 +394,23 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
         case EVENT_ADD_ITEM:   {
             u16 flag = (params1n2 >> 16) & 0xFFFF;
             s16 change = (s16)(params1n2 & 0xFFFF);
-            s32 value = ItemflagManager::sInstance->getCounterOrFlag(flag | 0x4000);
+            s32 value = ItemflagManager::sInstance->getItemCounterOrFlag(flag);
             value += change;
             if (value < 0) {
                 value = 0;
             } else if (value > 0x8000) {
                 value = 0x7FFF;
             }
-            ItemflagManager::sInstance->setFlagOrCounterToValue(flag | 0x4000, value);
+            ItemflagManager::sInstance->setItemFlagOrCounterToValue(flag, value);
             break;
         }
         case EVENT_SET_TEMPFLAG:
             dStageMgr_c::GetInstance()->getFlagIndex();
-            SceneflagManager::sInstance->setFlag(0x3F, ((params1n2 >> 16) & 0xFFFF) + 0x80);
+            SceneflagManager::sInstance->setTempflag_i(0x3F, (params1n2 >> 16) & 0xFFFF);
             break;
         case EVENT_UNSET_TEMPFLAG:
             dStageMgr_c::GetInstance()->getFlagIndex();
-            SceneflagManager::sInstance->unsetFlag(0x3F, ((params1n2 >> 16) & 0xFFFF) + 0x80);
+            SceneflagManager::sInstance->unsetTempflag_i(0x3F, (params1n2 >> 16) & 0xFFFF);
             break;
         case EVENT_LIGHT_PILLAR_30: {
             s8 p4 = (params1n2 >> 24) & 0xFF;
@@ -746,8 +746,8 @@ u16 dFlow_c::branchHandler04(const MsbFlowInfo *element) const {
 }
 
 u16 dFlow_c::branchHandler05(const MsbFlowInfo *element) const {
-    return !SceneflagManager::sInstance->checkFlag(
-        dStage_c::GetInstance()->getCurrRoomId(), (element->params1n2 & 0xFFFF) + 0xC0
+    return !SceneflagManager::sInstance->checkZoneflag_i(
+        dStage_c::GetInstance()->getCurrRoomId(), element->params1n2 & 0xFFFF
     );
 }
 
@@ -764,7 +764,7 @@ u16 dFlow_c::branchHandler08(const MsbFlowInfo *element) const {
 }
 
 u16 dFlow_c::branchHandler09(const MsbFlowInfo *element) const {
-    return !SceneflagManager::sInstance->checkFlag(0x3F, (element->params1n2 & 0xFFFF) + 0x80);
+    return !SceneflagManager::sInstance->checkTempflag_i(0x3F, element->params1n2 & 0xFFFF);
 }
 
 u16 dFlow_c::branchHandler10(const MsbFlowInfo *element) const {
@@ -892,7 +892,7 @@ u16 dFlow_c::branchHandler20(const MsbFlowInfo *element) const {
 
 u16 dFlow_c::branchHandler21(const MsbFlowInfo *element) const {
     u16 ret = 0;
-    if (matchesUnknownActorCategory(FiContext::getTargetActorId())) {
+    if (shouldActorShowKillCount(FiContext::getTargetActorId())) {
         ret = 1;
     }
     return ret;
@@ -1086,12 +1086,13 @@ bool dFlow_c::advanceUntil(s32 searchType, s32 searchParam3, s32 *pOutParams1n2)
     return 0;
 }
 
-static const s32 sTargetActorIds[] = {0,  1,  10, 46, 47, 48, 49, 50, 51, 52, 53,
-                                      54, 55, 65, 67, 77, 81, 87, 88, 89, 90, -1};
+// TODO: Where are these IDs from?
+static const s32 sActorsWithKillCount[] = {0,  1,  10, 46, 47, 48, 49, 50, 51, 52, 53,
+                                           54, 55, 65, 67, 77, 81, 87, 88, 89, 90, -1};
 
-bool dFlow_c::matchesUnknownActorCategory(s32 id) const {
-    for (s32 i = 0; sTargetActorIds[i] >= 0; i++) {
-        if (sTargetActorIds[i] == id) {
+bool dFlow_c::shouldActorShowKillCount(s32 id) const {
+    for (s32 i = 0; sActorsWithKillCount[i] >= 0; i++) {
+        if (sActorsWithKillCount[i] == id) {
             return true;
         }
     }

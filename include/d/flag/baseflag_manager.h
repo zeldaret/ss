@@ -18,7 +18,7 @@ public:
     /** 0x24 */ virtual void unsetFlag(u16 flag);
     /** 0x28 */ virtual void setFlagOrCounterToValue(u16 flag, u16 value);
     /** 0x2C */ virtual u16 getCounterOrFlag(u16 flag) const;
-    /** 0x30 */ virtual u16 getUncommittedValue(u16 flag);
+    /** 0x30 */ virtual u16 getUncommittedValue(u16 flag) const;
     /** 0x34 */ virtual u16 unk3(u16 arg);
     /** 0x38 */ virtual const u16 *getSaveFlagSpace() const = 0;
 
@@ -33,7 +33,7 @@ public:
     u16 getMaskForFlag(u16 flag);
     void postCommit();
 
-    u16 getUncommittedValue_Priv(u16 flag);
+    u16 getUncommittedValue_Priv(u16 flag) const;
 
 protected:
 

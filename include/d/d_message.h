@@ -59,7 +59,7 @@ class dFlow_c : dFlowBase_c {
         BRANCH_18,
         BRANCH_19,
         BRANCH_FREE_SPACE_IN_ITEM_CHECK,
-        BRANCH_21,
+        BRANCH_TARGET_ACTOR_HAS_KILL_COUNT,
         BRANCH_22,
     };
 
@@ -171,7 +171,7 @@ protected:
     void setNext(u16 next);
     void setField0x3C();
     bool checkField0x3C() const;
-    bool matchesUnknownActorCategory(s32 id) const;
+    bool shouldActorShowKillCount(s32 id) const;
     static void playSound(u32);
     void createLytMiniGame();
     void clearMinigame();

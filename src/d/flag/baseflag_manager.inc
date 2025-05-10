@@ -46,7 +46,7 @@ u16 ItemStoryManagerBase::getFlag(u16 flag) const {
 }
 
 /** 800bf4e0 */
-u16 ItemStoryManagerBase::getUncommittedValue_Priv(u16 flag) {
+u16 ItemStoryManagerBase::getUncommittedValue_Priv(u16 flag) const {
     u16 *data = mpFlagSpace->getFlagPtrUnchecked();
     return mpFlagIndex->getCounterOrFlag(flag, data, mFlagCount);
 }
@@ -80,7 +80,7 @@ u16 ItemStoryManagerBase::getCounterOrFlag(u16 flag) const {
 }
 
 /** 800bf5f0 */
-u16 ItemStoryManagerBase::getUncommittedValue(u16 flag) {
+u16 ItemStoryManagerBase::getUncommittedValue(u16 flag) const {
     return getUncommittedValue_Priv(flag);
 }
 
