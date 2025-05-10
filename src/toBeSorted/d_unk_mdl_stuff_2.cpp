@@ -127,6 +127,7 @@ void dShpProc1_c::draw() {
             mtx.copyFrom(*pTransforms);
             MTXConcat(viewMtx, mtx, mtx);
             mMtx_c mtx2;
+            // Regswaps that can be fixed with a copy inline that uses array indexing...
             mtx2.copyFrom(mtx);
             mtx2.fn_802F1C40(0, 1);
             nw4r::math::MTX33 mtx3;

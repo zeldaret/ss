@@ -62,7 +62,7 @@ public:
     void transposeTo(Matrix34f &to) const;
     void copyFrom(const Matrix34f &other) {
         for (int i = 0; i < 12; i++) {
-            arr[i] = other.arr[i];
+            (*this)(i) = other(i);
         }
     }
     void setBase(int idx, const Vector3f &b) {
