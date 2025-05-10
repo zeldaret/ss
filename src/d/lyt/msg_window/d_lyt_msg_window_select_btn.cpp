@@ -490,7 +490,7 @@ bool dLytMsgWindowSelectBtn_c::build(d2d::ResAccIf_c *resAcc) {
     mBtnHelper.panes[7] = mpBoundings[2];
     mBtnHelper.panes[8] = mpBoundings[3];
 
-    field_0x9C4 = nullptr;
+    field_0x9C4 = 0;
 
     mLyt.findPane("N_arrowIn_00")->SetVisible(true);
 

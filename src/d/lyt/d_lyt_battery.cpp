@@ -1,5 +1,6 @@
 #include "d/lyt/d_lyt_battery.h"
 
+#include "d/d_d2d.h"
 #include "egg/core/eggController.h"
 #include "m/m_pad.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
@@ -59,8 +60,6 @@ bool dLytBattery_c::init() {
     return true;
 }
 
-extern "C" void fn_80016200();
-
 bool dLytBattery_c::doDraw() {
     mStateMgr.executeState();
     if (*mStateMgr.getStateID() != StateID_Off) {
@@ -71,7 +70,7 @@ bool dLytBattery_c::doDraw() {
         }
 
         mLyt.calc();
-        fn_80016200();
+        d2d::defaultSet();
         mLyt.draw();
     }
 

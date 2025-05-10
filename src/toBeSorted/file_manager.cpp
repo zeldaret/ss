@@ -7,6 +7,8 @@
 // clang-format off
 #include "sized_string.h"
 #include "toBeSorted/dowsing_target.h"
+#include "toBeSorted/nand_request_thread.h"
+#include "toBeSorted/save_manager.h"
 // clang-format on
 
 // This class here makes no sense and the name might
@@ -58,8 +60,8 @@ extern "C" {
 /* 80009EF0 */ FileManager *FileManager::create(EGG::Heap *heap) {
     return new (heap, 0x04) FileManager();
 }
-/* 80009F30 */ bool FileManager::loadSaveData(void *out, char *name, bool isSkipData) {}
-/* 80009F70 */ void FileManager::saveSaveData(void *unk, bool isSkipData) {}
+/* 80009F30 */ bool FileManager::loadSaveData(NandRequestWriteHolder *out, const char *name, bool isSkipData) {}
+/* 80009F70 */ void FileManager::saveSaveData(NandRequestLoadSaveFileHolder *unk, bool isSkipData) {}
 /* 8000A000 */ void FileManager::refreshSaveFileData() {}
 /* 8000A260 */ wchar_t *FileManager::getFileHeroname(int fileNum) {}
 /* 8000A280 */ s64 FileManager::getFileSaveTime(int fileNum) {}
@@ -344,7 +346,7 @@ u16 *FileManager::getStoryFlagsMut() {
 }
 
 /* 80010000 */ void FileManager::initBlankSaveFiles() {
-    memset(mpSavedSaveFiles, 0, 0xfbe0);
+    memset(mpSavedSaveFiles, 0, sizeof(SavedSaveFiles));
     mSelectedFile = 0;
     memset(mIsFileEmpty, 0, 3);
     SkipData *data;
@@ -409,7 +411,7 @@ u16 *FileManager::getStoryFlagsMut() {
 }
 
 /* 800101F0 */ void FileManager::unsetFileANewFile() {}
-/* 80010220 */ void FileManager::saveT1SaveInfo(u8 entranceT1LoadFlag) {}
+/* 80010220 */ void FileManager::saveT1SaveInfo(bool entranceT1LoadFlag) {}
 /* 80010350 */ void FileManager::copyFileSkipData(int fileNum) {}
 extern "C" void fn_800C01F0(); // todo flag managers
 /* 80010440 */ void FileManager::clearTempFileData() {
@@ -449,7 +451,7 @@ extern "C" void fn_800C01F0(); // todo flag managers
 }
 /* 80011370 */ bool FileManager::isFileEmpty(u8 fileNum) {}
 /* 80011390 */ bool FileManager::isFileDirty(int fileNum) {}
-/* 800113B0 */ u8 FileManager::get_0xA84C() {}
+/* 800113B0 */ u32 FileManager::get_0xA84C() {}
 /* 800113C0 */ bool FileManager::checkRegionCode() {}
 /* 80011440 */ bool FileManager::checkFileCRC(u8 fileNum) {}
 /* 80011490 */

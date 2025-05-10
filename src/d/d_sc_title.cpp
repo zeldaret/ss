@@ -1,6 +1,7 @@
 #include "d/d_sc_title.h"
 
 #include "common.h"
+#include "d/d_dvd_unk.h"
 #include "d/d_heap.h"
 #include "d/d_message.h"
 #include "d/d_sc_game.h"
@@ -40,8 +41,6 @@ STATE_VIRTUAL_DEFINE(dScTitle_c, Action);
 
 extern "C" void *lbl_80575688;
 extern "C" void fn_801907F0(void *);
-extern "C" void *lbl_805750D8;
-extern "C" void fn_80052D50(void *);
 
 dScTitle_c::dScTitle_c() {
     sInstance = this;
@@ -55,7 +54,7 @@ dScTitle_c::dScTitle_c() {
     }
     FileManager::GetInstance()->clearTempFileData();
     FileManager::GetInstance()->initFile(1);
-    fn_80052D50(lbl_805750D8);
+    dDvdUnk::FontUnk::GetInstance()->fn_80052D50();
     lbl_80575787 = 0;
     field_0x2AC = 0;
 }

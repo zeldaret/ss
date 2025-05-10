@@ -485,7 +485,7 @@ void dLytMsgWindow_c::initializeState_WaitKeySelectQuestion() {
     s32 tmp = mpTagProcessor->getField_0x828();
     mSelectBtn.setField_0x9BC(tmp);
     mSelectBtn.setField_0x990(tmp);
-    mSelectBtn.setField_0x998(mpTagProcessor);
+    mSelectBtn.setTagProcessor(mpTagProcessor);
 
     wchar_t **buf = sBufs;
 
@@ -510,7 +510,7 @@ void dLytMsgWindow_c::executeState_WaitKeySelectQuestion() {
             mpTagProcessor->setField_0x90E(0);
             mpTagProcessor->setField_0x82C(-1);
             mpTagProcessor->setField_0x828(-1);
-            mSelectBtn.setField_0x998(nullptr);
+            mSelectBtn.setTagProcessor(nullptr);
             field_0x824 = 0;
             mTextOptionSelection = selection;
             field_0x1220 = 0;

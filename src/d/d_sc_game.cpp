@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "d/d_gfx.h"
 #include "d/d_stage_mgr.h"
 #include "d/flag/storyflag_manager.h"
 #include "f/f_base.h"
@@ -15,7 +16,6 @@
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
 #include "toBeSorted/music_mgrs.h"
-#include "toBeSorted/some_gxf_thing.h"
 
 #include <cstring>
 
@@ -69,7 +69,7 @@ int dScGame_c::create() {
         return NOT_READY;
     }
 
-    SomeGfxThing::setDrawCallback(someGfxThingCallback);
+    dGfx_c::GetInstance()->setDrawCallback(someGfxThingCallback);
     return SUCCEEDED;
 }
 
@@ -97,7 +97,7 @@ int dScGame_c::draw() {
 }
 
 void dScGame_c::deleteReady() {
-    SomeGfxThing::setDrawCallback(nullptr);
+    dGfx_c::GetInstance()->setDrawCallback(nullptr);
 }
 
 sFPhaseBase::sFPhaseState dScGame_c::cb1() {
