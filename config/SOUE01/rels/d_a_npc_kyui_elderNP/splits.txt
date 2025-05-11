@@ -17,3 +17,6 @@ REL/global_destructor_chain.c:
 REL/d/a/npc/d_a_npc_kyui_elder.cpp:
 	.text       start:0x000000F0 end:0x00003FB0 align:16
 	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x0000040C
+	.data       start:0x00000000 end:0x00000798
+	.bss        start:0x00000008 end:0x00000088

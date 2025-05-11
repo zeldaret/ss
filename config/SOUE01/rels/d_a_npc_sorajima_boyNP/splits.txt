@@ -17,3 +17,6 @@ REL/global_destructor_chain.c:
 REL/d/a/npc/d_a_npc_sorajima_boy.cpp:
 	.text       start:0x000000F0 end:0x00004100 align:16
 	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x000008D0
+	.data       start:0x00000000 end:0x00000A70
+	.bss        start:0x00000008 end:0x000002E0
