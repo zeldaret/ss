@@ -43,6 +43,7 @@
 // clang-format on
 
 static dLytMeterConfiguration_c sConf;
+dLytMeter_c *dLytMeter_c::sInstance;
 
 STATE_DEFINE(dLytMeter1Button_c, Wait);
 STATE_DEFINE(dLytMeter1Button_c, ToUse);
