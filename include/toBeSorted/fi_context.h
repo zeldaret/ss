@@ -12,8 +12,8 @@ public:
     s16 getAreaIndexForFiAreaName() const;
     s32 getSuitabilityPercentageArg() const;
     s16 getEquipmentRecommendation() const;
-    s16 getShieldMessage();
-    s16 getThreatenedShield();
+    s16 getShieldMessage() const;
+    s16 getThreatenedShield() const;
 
     bool isValid() const;
 

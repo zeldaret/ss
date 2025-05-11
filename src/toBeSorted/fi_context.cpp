@@ -111,7 +111,7 @@ s16 FiAnalysisHandle::getEquipmentRecommendation() const {
     }
 }
 
-s16 FiAnalysisHandle::getThreatenedShield() {
+s16 FiAnalysisHandle::getThreatenedShield() const {
     if (isValid()) {
         return mpEntry->area_shield_danger;
     } else {
@@ -119,7 +119,7 @@ s16 FiAnalysisHandle::getThreatenedShield() {
     }
 }
 
-s16 FiAnalysisHandle::getShieldMessage() {
+s16 FiAnalysisHandle::getShieldMessage() const {
     if (isValid()) {
         return mpEntry->KEN3_shield_entry_num;
     } else {
