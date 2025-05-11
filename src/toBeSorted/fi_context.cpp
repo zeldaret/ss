@@ -204,13 +204,14 @@ s16 FiContext::getObjective() {
         }
 
         if (!StoryflagManager::sInstance->getCounterOrFlag(21)) {
-            if (ItemflagManager::sInstance->getFlagDirect(0xC5) && !ItemflagManager::sInstance->getFlagDirect(0xC6)) {
+            if (ItemflagManager::sInstance->getFlagDirect(ITEM_LIFE_TREE_SEED) &&
+                !ItemflagManager::sInstance->getFlagDirect(ITEM_LIFE_TREE_FRUIT)) {
                 // "I project that the soil in Lanayru Province will not provide enough nourishment for the Life Tree
                 // Seedling..."
                 return 90;
             }
 
-            if (ItemflagManager::sInstance->getFlagDirect(0xC6)) {
+            if (ItemflagManager::sInstance->getFlagDirect(ITEM_LIFE_TREE_FRUIT)) {
                 // "Master, I recommend you take the Life Tree Fruit to the Thunder Dragon..."
                 return 91;
             }
