@@ -17,3 +17,6 @@ REL/global_destructor_chain.c:
 REL/d/a/e/d_a_e_po.cpp:
 	.text       start:0x000000F0 end:0x00003228 align:16
 	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x000000C8
+	.data       start:0x00000000 end:0x00000454
+	.bss        start:0x00000008 end:0x00000208

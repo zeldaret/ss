@@ -11,3 +11,5 @@ REL/executor.c:
 
 REL/d/a/obj/d_a_obj_rotation_light.cpp:
 	.text       start:0x00000070 end:0x000003C4 align:16
+	.rodata     start:0x00000000 end:0x00000018
+	.data       start:0x00000000 end:0x000000D4

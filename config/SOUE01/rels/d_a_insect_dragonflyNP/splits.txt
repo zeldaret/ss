@@ -17,3 +17,6 @@ REL/global_destructor_chain.c:
 REL/d/a/d_a_insect_dragonfly.cpp:
 	.text       start:0x000000F0 end:0x00002CD8 align:16
 	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x000000F4
+	.data       start:0x00000000 end:0x000003D8
+	.bss        start:0x00000008 end:0x00000190

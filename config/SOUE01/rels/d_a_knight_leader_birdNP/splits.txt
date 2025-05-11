@@ -17,3 +17,6 @@ REL/global_destructor_chain.c:
 REL/d/a/d_a_knight_leader_bird.cpp:
 	.text       start:0x000000F0 end:0x00000DE8 align:16
 	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x0000001C
+	.data       start:0x00000000 end:0x00000250
+	.bss        start:0x00000008 end:0x00000048

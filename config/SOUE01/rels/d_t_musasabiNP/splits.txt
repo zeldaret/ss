@@ -11,3 +11,5 @@ REL/executor.c:
 
 REL/d/t/d_t_musasabi.cpp:
 	.text       start:0x00000070 end:0x000004BC align:16
+	.rodata     start:0x00000000 end:0x00000038
+	.data       start:0x00000000 end:0x00000084

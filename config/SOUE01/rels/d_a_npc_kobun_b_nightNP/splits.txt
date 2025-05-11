@@ -11,3 +11,6 @@ REL/executor.c:
 
 REL/d/a/npc/d_a_npc_kobun_b_night.cpp:
 	.text       start:0x00000070 end:0x00001D38 align:16
+	.rodata     start:0x00000000 end:0x00000830
+	.data       start:0x00000000 end:0x000006F0
+	.bss        start:0x00000008 end:0x00000020
