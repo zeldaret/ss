@@ -1926,7 +1926,6 @@ void dAcTbox_c::executeState_LoadArchive() {
 }
 void dAcTbox_c::finalizeState_LoadArchive() {}
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_209_;
 extern "C" const bool isPouchItem(u16);
 extern "C" dAcItem_c *giveItem3(u16 item, s32);
 
@@ -2366,10 +2365,10 @@ void dAcTbox_c::unregisterDowsing() {
     }
 }
 
-extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_208_;
-
 void dAcTbox_c::spawnAppearEffect() {
-    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_208_, position, &rotation, nullptr, nullptr, nullptr, 0, 0);
+    dJEffManager_c::spawnEffect(
+        PARTICLE_RESOURCE_ID_MAPPING_208_, position, &rotation, nullptr, nullptr, nullptr, 0, 0
+    );
 }
 
 bool dAcTbox_c::checkIsClear() const {

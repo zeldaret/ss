@@ -265,6 +265,7 @@ public:
     void fn_800223A0(LightParams *);
     void fn_80022440(LightParams *);
     void fn_800225F0(LightParams *);
+    void fn_800226E0(LightParams *);
     // light pillar related
     void fn_80024240(s16, s16, s16);
 

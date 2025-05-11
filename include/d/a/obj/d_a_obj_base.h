@@ -73,6 +73,9 @@ struct ActorCarryStruct {
     void fn_80051190(dAcObjBase_c *);
     void fn_80050EB0(dAcObjBase_c *);
 
+    // This will attach pObj onto pOwner, returning if it could attach
+    bool tryAttachWithRef(dAcObjBase_c *pObj, dAcObjBase_c *pOwner, dAcRefBase_c *pRefLink, int, bool);
+
     bool testCarryFlag(u32 flag) {
         return (carryFlags & flag) != 0;
     }
@@ -157,6 +160,10 @@ public:
 
     f32 getVelocityMag() const {
         return fabsf(nw4r::math::VEC3LenSq(velocity));
+    }
+
+    f32 GetSpeed() const {
+        return forwardSpeed;
     }
 
     bool isStopped() const {

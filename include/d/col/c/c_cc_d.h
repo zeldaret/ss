@@ -951,6 +951,9 @@ public:
     u32 ChkTgShieldFrontRange() const {
         return mTg.MskSPrm(0x400);
     }
+    u32 ChkTgElectric() const {
+        return mTg.MskSPrm(0x40000);
+    }
 
     void OnTg_0x200000() {
         mTg.OnSPrm(0x200000);

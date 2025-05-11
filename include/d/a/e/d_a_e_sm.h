@@ -8,6 +8,7 @@
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_shadow.h"
+#include "d/flag/sceneflag_manager.h"
 #include "m/m3d/m_anmmatclr.h"
 #include "m/m3d/m_anmtexpat.h"
 #include "m/m_angle.h"
@@ -17,6 +18,7 @@
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/stage_render_stuff.h"
+#include "toBeSorted/time_area_mgr.h"
 
 class dAcEsm_c : public dAcEnBase_c {
 public:
@@ -38,7 +40,7 @@ public:
     };
 
 public:
-    dAcEsm_c() : mScnCallback(this), mStateMgr(*this, sStateID::null), field_0xA74(0.f), field_0xA7C(0) {}
+    dAcEsm_c() : mScnCallback(this), mStateMgr(*this, sStateID::null) {}
     virtual ~dAcEsm_c() {}
     virtual int doDelete();
     virtual int draw();
@@ -86,11 +88,20 @@ public:
 
 public:
     void fn_187_5D0();
+    void fn_187_3F60();
+    void fn_187_44C0();
+    void fn_187_4540(int);
     bool fn_187_4B50();
+    bool fn_187_4C50();
     UNKTYPE fn_187_4CB0(u8);
-    UNKTYPE fn_187_6C20(u8);
-    UNKTYPE fn_187_44C0();
+    void fn_187_4CC0();
+    u32 fn_187_52A0();
+    void fn_187_5390();
     bool checkSize(SmSize_e) const; // fn_187_5670
+    void fn_187_5730();
+    void fn_187_5940();
+    void fn_187_61B0(int);
+    UNKTYPE fn_187_6C20(u8);
 
 private:
     void updateBoundingBox();
@@ -121,17 +132,15 @@ private:
     /* 0x9EC */ dAcRef_c<dAcBomb_c> mBombRef;
     /* 0x9F8 */ todoStruct00 field_0x9f8;
     /* 0xA0C */ EffectsStruct mEffArr[2];
-    /* 0xA74 */ f32 field_0xA74;
-    /* 0xA78 */ u8 _0xA78[4];
-    /* 0xA7C */ u8 field_0xA7C;
-    /* 0xA7D */ u8 _A7D[0xA80 - 0xA7D];
+    /* 0xA74 */ TimeAreaStruct mTimeArea;
     /* 0xA80 */ mVec3_c mPosCopy1;
-    /* 0xA8C */ mVec3_c mScaleCopy1;
+    /* 0xA8C */ mVec3_c mScaleTarget;
     /* 0xA98 */ mVec3_c mScaleCopy2;
-    /* 0xAA4 */ u8 _AA4[0xAC8 - 0xAA4];
+    /* 0xAA4 */ mVec3_c mHitPos;
+    /* 0xAB0 */ u8 _AB0[0xAC8 - 0xAB0];
     /* 0xAC8 */ mVec3_c mHomePos1;
-    /* 0xAD4 */ mVec3_c mHomePos2;
-    /* 0xAE0 */ dWaterEffect_c mEffExt;
+    /* 0xAD4 */ mVec3_c mEffPos;
+    /* 0xAE0 */ dWaterEffect_c mSplashFx;
     /* 0xB28 */ mAng3_c mRotUnk;
     /* 0xB2E */ u8 _B2E[0xB38 - 0xB2E];
     /* 0xB38 */ mAng3_c mRotCopy;
@@ -140,29 +149,38 @@ private:
     /* 0xB58 */ f32 field_0xB58;
     /* 0xB5C */ u8 _B5C[0xB65 - 0xB5C];
     /* 0xB65 */ u8 field_0xB65;
-    /* 0xB66 */ u8 _B66[0xB6C - 0xB66];
+    /* 0xB66 */ u8 _B66[0xB68 - 0xB66];
+    /* 0xB68 */ f32 field_0xB68;
     /* 0xB6C */ f32 field_0xB6C;
     /* 0xB70 */ f32 field_0xB70;
     /* 0xB74 */ f32 field_0xB74;
     /* 0xB78 */ f32 field_0xB78;
     /* 0xB7C */ u32 field_0xB7C;
-    /* 0xB80 */ u32 field_0xB80;
+    /* 0xB80 */ f32 field_0xB80;
     /* 0xB84 */ u32 field_0xB84;
     /* 0xB88 */ u32 field_0xB88;
     /* 0xB8C */ f32 field_0xB8C;
     /* 0xB90 */ s32 field_0xB90;
-    /* 0xB94 */ u8 _B94[0xB98 - 0xB94];
-    /* 0xB98 */ u32 field_0xB98;
-    /* 0xB9C */ u8 _B9C[0xBA6 - 0xB9C];
+    /* 0xB94 */ s32 field_0xB94;
+    /* 0xB98 */ s32 field_0xB98;
+    /* 0xB9C */ u8 _B9C[0xBA0 - 0xB9C];
+    /* 0xBA0 */ u32 field_0xBA0;
+    /* 0xBA4 */ u8 _BA4[0xBA6 - 0xBA4];
     /* 0xBA6 */ s16 field_0xBA6;
     /* 0xBA8 */ u8 _BA8[0xBAE - 0xBA8];
-    /* 0xBAE */ s16 timer_0xBAE;
-    /* 0xBAC */ u8 _BAC[0xBBE - 0xBAC];
+    /* 0xBAE */ u16 mTimer_0xBAE;
+    /* 0xBB0 */ u8 _BB0[0xBB4 - 0xBB0];
+    /* 0xBB4 */ u16 mDamageTimer;
+    /* 0xBB6 */ u16 field_0xBB6;
+    /* 0xBB8 */ u16 field_0xBB8;
+    /* 0xBB9 */ u8 _BB9[0xBBE - 0xBBA];
     /* 0xBBE */ u8 mType;
     /* 0xBBF */ u8 field_0xBBF;
-    /* 0xBC0 */ u8 _BC0[0xBC3 - 0xBC0];
+    /* 0xBC0 */ u8 field_0xBC0;
+    /* 0xBC1 */ u8 field_0xBC1;
+    /* 0xBC2 */ u8 field_0xBC2;
     /* 0xBC3 */ u8 shift8_0xFF;
-    /* 0xBC4 */ u8 field_0xBC4;
+    /* 0xBC4 */ u8 mTimer_0xBC4;
     /* 0xBC5 */ u8 field_0xBC5;
     /* 0xBC6 */ u8 field_0xBC6;
     /* 0xBC7 */ u8 field_0xBC7;

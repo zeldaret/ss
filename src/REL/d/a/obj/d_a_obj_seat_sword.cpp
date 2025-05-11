@@ -212,7 +212,6 @@ void dAcOSeatSword_c::initializeState_Get() {
 void dAcOSeatSword_c::executeState_Get() {}
 void dAcOSeatSword_c::finalizeState_Get() {}
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_76_;
 void dAcOSeatSword_c::actorExecuteCommon() {
     if (checkPlayerHasSword()) {
         return;

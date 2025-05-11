@@ -60,8 +60,6 @@ int dAcOwaterSpout_c::draw() {
     return SUCCEEDED;
 }
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_213_;
-
 void dAcOwaterSpout_c::initializeState_Wait() {
     if (params == 1) {
         return;

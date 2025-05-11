@@ -699,7 +699,6 @@ void dMassObjEmitter_c::remove() {
 }
 
 extern "C" u32 sNumMassObjEmitters; // should be const?
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_119_;
 extern "C" dMassObjEmitter_c *CURRENT_EFFECT_MANAGER_INIT;
 
 const u32 dJEffManager_c::moreInts[] = {3, 5, 7, 8, 12, 13, 14, 1, 9, 11};
@@ -1204,18 +1203,6 @@ s32 dJEffManager_c::polyAttrsToGroundEffectIdx(s32 polyAttr0, s32 polyAttr1) {
     return result;
 }
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_89_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_90_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_87_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_88_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_429_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_416_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_417_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_418_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_419_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_893_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_894_;
-
 dEmitterBase_c *dJEffManager_c::spawnGroundEffect(
     const mVec3_c &pos, u8 polyAttr0, u8 polyAttr1, const mVec3_c &v1, s32 unk, f32 scale, f32 groundHeightMaybe
 ) {
@@ -1260,8 +1247,6 @@ void dWaterEffect_c::init(dAcObjBase_c *base, f32 height, f32 scale, f32 f3) {
     mDepth = f3;
 }
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_91_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_127_;
 void dWaterEffect_c::execute(f32 water, f32 ground) {
     dAcObjBase_c *ac = getActor();
     bool b = getActorGroundPos(ac) < water && ground < water;

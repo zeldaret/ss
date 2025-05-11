@@ -145,8 +145,6 @@ int dAcOsw_c::doDelete() {
     return SUCCEEDED;
 }
 
-extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_754_;
-
 int dAcOsw_c::actorExecute() {
     mStateMgr.executeState();
     if (mCanBeSeen) {
@@ -154,7 +152,9 @@ int dAcOsw_c::actorExecute() {
         if (field_0x5A0.field_0x00 <= 0.0f) {
             if (mScale.x >= 1.0f) {
                 if (!mHidden) {
-                    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_754_, position, &rotation, nullptr, nullptr, nullptr, 0, 0);
+                    dJEffManager_c::spawnEffect(
+                        PARTICLE_RESOURCE_ID_MAPPING_754_, position, &rotation, nullptr, nullptr, nullptr, 0, 0
+                    );
                     playSound(SE_TIMESLIP_TIMESLIP_REV);
                     mHidden = true;
                 }
@@ -167,7 +167,9 @@ int dAcOsw_c::actorExecute() {
         } else {
             if (mScale.x <= 0.0f) {
                 if (!mShown) {
-                    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_754_, position, &rotation, nullptr, nullptr, nullptr, 0, 0);
+                    dJEffManager_c::spawnEffect(
+                        PARTICLE_RESOURCE_ID_MAPPING_754_, position, &rotation, nullptr, nullptr, nullptr, 0, 0
+                    );
                     playSound(SE_TIMESLIP_TIMESLIP);
                     mShown = true;
                 }

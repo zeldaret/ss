@@ -520,7 +520,7 @@ void dLytMeterMinusBtn_c::executeState_Unuse() {
     }
 }
 void dLytMeterMinusBtn_c::finalizeState_Unuse() {}
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_971_;
+
 void dLytMeterMinusBtn_c::initializeState_DemoMove() {
     mDemoFrame = 0;
     mSlotToDemo = -1;
@@ -1038,8 +1038,7 @@ bool dLytMeterMinusBtn_c::fn_800F7600() const {
 bool dLytMeterMinusBtn_c::fn_800F7760() const {
     if (!StoryflagManager::sInstance->getCounterOrFlag(30) ||
         (mpOwnerPane == nullptr || !mpOwnerPane->IsVisible() || dLytMeter_c::GetMain()->fn_800D5650() ||
-         dLytMeter_c::GetMain()->fn_800D5680() ||
-         !dLytMeter_c::GetMain()->getMinusBtnNotHiddenByAreaCaption())) {
+         dLytMeter_c::GetMain()->fn_800D5680() || !dLytMeter_c::GetMain()->getMinusBtnNotHiddenByAreaCaption())) {
         return false;
     }
 
