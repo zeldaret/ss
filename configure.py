@@ -780,6 +780,7 @@ config.libs = [
             Object(NonMatching, "m/m_quat.cpp"),
             Object(NonMatching, "m/m_thread.cpp"),
             Object(NonMatching, "m/m_vec.cpp"),
+            Object(NonMatching, "m/m_video.cpp"),
         ],
     },
     {
@@ -888,6 +889,7 @@ config.libs = [
             Object(Matching, "f/f_base.cpp"),
             Object(Matching, "f/f_list.cpp"),
             Object(Matching, "f/f_manager.cpp"),
+            Object(NonMatching, "f/f_profile.cpp"),
             Object(NonMatching, "f/f_tree.cpp"),
         ],
     },
