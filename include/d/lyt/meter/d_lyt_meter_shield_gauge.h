@@ -43,6 +43,10 @@ public:
         return field_0x31D;
     }
 
+    f32 getLevel() const {
+        return field_0x2F0;
+    }
+
 private:
     s32 getLytFrameForShield(s32) const;
     void setLevel(f32 level);

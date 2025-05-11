@@ -285,7 +285,7 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
                     case 2: {
                         hi = 6;
                         lo = 200;
-                        field_0x5C = FiContext::getUnkObjectiveValue();
+                        field_0x5C = FiContext::getObjective();
                         break;
                     }
                     case 3: {
@@ -319,7 +319,7 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
                         lo = 900;
                         break;
                 }
-                FiContext::do_fn_8016CB00(FiContext::getGlobalFiInfo0(selectedOption));
+                FiContext::do_setAdviceOptions(FiContext::getGlobalFiInfo0(selectedOption));
                 field_0x46 = lo + hi * 1000;
             } else {
                 triggerEntryPoint((params1n2 >> 16) & 0xFFFF, params1n2 & 0xFFFF);
@@ -549,21 +549,29 @@ bool dFlow_c::handleMessage() {
     // Does this make sense? Result is unused...
     LMS_GetAttribute(dMessage_c::getMsbtInfoForIndex(dMessage_c::getInstance()->getCurrentTextFileNumber()), hasLabel);
     if (mCurrentTextLabelName == "KEN0_08") {
+        // "After winning the race in the Wing Ceremony..."
+        // Current objective - use value from FiContext::getObjective?
         if (field_0x5C < 0) {
             field_0x5C = 8;
         }
         mCurrentTextLabelName.sprintf("KEN0_%02d", field_0x5C);
     } else if (mCurrentTextLabelName == "KEN1_000") {
+        // "This is Skyloft..."
+        // Area analysis - use value from FiContext::???
         if (field_0x5C < 0) {
             field_0x5C = 0;
         }
         mCurrentTextLabelName.sprintf("KEN1_%03d", field_0x5C);
     } else if (mCurrentTextLabelName == "KEN2_000") {
+        // "To search for Zelda..."
+        // Hint - use value from FiContext::getFiAdviceHintEntry?
         if (field_0x5C < 0) {
             field_0x5C = 2;
         }
         mCurrentTextLabelName.sprintf("KEN2_%03d", field_0x5C);
     } else if (mCurrentTextLabelName == "KEN3_500") {
+        // "Master, your current selection of pouch items is..."
+        // Equipment focus
         FiAnalysisHandle analysis = FiContext::getNaviTableEquipmentCheckEntry();
         SizedString<16> label;
         label.sprintf("KEN3_%03d", analysis.getEquipmentFocus());
@@ -571,6 +579,8 @@ bool dFlow_c::handleMessage() {
             dMessage_c::getTextMessageByLabel(label, true, nullptr, nullptr), 0
         );
     } else if (mCurrentTextLabelName == "KEN3_000") {
+        // "You are located in the Sealed Grounds..."
+        // Threat assessment
         FiAnalysisHandle analysis = FiContext::getNaviTableEquipmentCheckEntry();
         s16 value = analysis.getAreaIndexForFiAreaName();
         if (value < 0) {
@@ -578,17 +588,23 @@ bool dFlow_c::handleMessage() {
         }
         mCurrentTextLabelName.sprintf("KEN3_%03d", value);
     } else if (mCurrentTextLabelName == "KEN3_501") {
+        // "Suitability to current location is..."
+        // Suitability analysis
         FiAnalysisHandle analysis = FiContext::getNaviTableEquipmentCheckEntry();
-        s32 arg = analysis.getSuitabilityArg();
+        s32 arg = analysis.getSuitabilityPercentageArg();
         dLytMsgWindow_c::getInstance()->setNumericArg0(arg);
     } else if (mCurrentTextLabelName == "KEN3_100") {
+        // "My projections indicate that equipping..."
+        // Equipment recommendation
         FiAnalysisHandle analysis = FiContext::getNaviTableEquipmentCheckEntry();
-        s16 value = analysis.getSuitabilityLabel();
+        s16 value = analysis.getEquipmentRecommendation();
         if (value < 0) {
             value = 0;
         }
         mCurrentTextLabelName.sprintf("KEN3_%03d", value);
     } else if (mCurrentTextLabelName == "KEN3_200") {
+        // "To make matters worse, your Wooden Shield..."
+        // Shield danger (wooden vs fire, iron vs electrical)
         FiAnalysisHandle analysis = FiContext::getNaviTableEquipmentCheckEntry();
         s16 value = analysis.getShieldMessage();
         if (value < 0) {
@@ -596,6 +612,7 @@ bool dFlow_c::handleMessage() {
         }
         mCurrentTextLabelName.sprintf("KEN3_%03d", value);
     } else if (mCurrentTextLabelName == "KEN4_000") {
+        // Your hearts have decreased quite dramatically...
         s32 fiHelpIndex = FiContext::getHelpIndex();
         if (fiHelpIndex < 0) {
             fiHelpIndex = 0;
@@ -605,6 +622,7 @@ bool dFlow_c::handleMessage() {
         }
         mCurrentTextLabelName.sprintf("KEN4_%03d", fiHelpIndex);
     } else if (mCurrentTextLabelName == "KEN5_000") {
+        // This is...
         s32 targetActorId = FiContext::getTargetActorId();
         if (targetActorId < 0) {
             targetActorId = 0;
@@ -612,9 +630,12 @@ bool dFlow_c::handleMessage() {
         if (targetActorId <= 480) {
             mCurrentTextLabelName.sprintf("KEN5_%03d", targetActorId);
         } else {
+            // "My apologies. I have no relevant information on the subject in my sizable memory."
+            // FiHead
             mCurrentTextLabelName.sprintf("KEN7_000");
         }
     } else if (mCurrentTextLabelName == "KEN6_000") {
+        // "Target lock: ..."
         s32 targetActorId = FiContext::getTargetActorId();
         if (targetActorId < 0) {
             targetActorId = 0;
@@ -625,6 +646,7 @@ bool dFlow_c::handleMessage() {
             mCurrentTextLabelName.sprintf("KEN7_000");
         }
     } else if (mCurrentTextLabelName == "KEN6_107") {
+        // "You have defeated <X> of this type of enemy. My analysis shows that your battle performance..."
         s32 targetActorId = FiContext::getTargetActorId();
         if (targetActorId < 0) {
             targetActorId = 0;
@@ -633,26 +655,31 @@ bool dFlow_c::handleMessage() {
         u8 performance = FiContext::rateBattlePerformance(targetActorId);
         if (performance == 0xFF) {
             dLytMsgWindow_c::getInstance()->setNumericArg0(killCount);
+            // "You have defeated <X> of this enemy type. I am unable to analyze your battle performance..."
             mCurrentTextLabelName.sprintf("KEN6_108");
         } else {
             dLytMsgWindow_c::getInstance()->setNumericArg0(killCount);
             SizedString<16> tmpLabel;
+            // "very strong, ..., very weak"
             tmpLabel.sprintf("KEN6_1%02d", performance);
             dLytMsgWindow_c::getInstance()->getTagProcessor()->setStringArg(
                 dMessage_c::getTextMessageByLabel(tmpLabel, true, nullptr, nullptr), 0
             );
         }
     } else if (mCurrentTextLabelName == "KEN7_000") {
+        // "My apologies. I have no relevant information on the subject in my sizable memory."
         s32 targetActorId = FiContext::getTargetActorId();
         if (targetActorId < 0) {
             targetActorId = 0;
         }
         if (targetActorId <= 561) {
+            // object info
             mCurrentTextLabelName.sprintf("KEN7_%03d", targetActorId);
         } else {
             mCurrentTextLabelName.sprintf("KEN7_000");
         }
     } else if (mCurrentTextLabelName == "KEN8_000" || mCurrentTextLabelName == "KEN2_096") {
+        // "Current Session Play Time: ... Total Play Time: ..."
         s32 seconds = OS_TICKS_TO_SEC(SaveTimeRelated::GetInstance()->getField_0x08());
         s32 minutes_ = seconds / 60;
         s32 minutes = minutes_ % 60;
@@ -672,12 +699,16 @@ bool dFlow_c::handleMessage() {
         s32 time[4] = {hours, minutes, hours1, minutes1};
         dLytMsgWindow_c::getInstance()->setNumericArgs(time, 4);
     } else if (mCurrentTextLabelName == "KEN9_000") {
+        // Random hint
         s32 v;
         if (StoryflagManager::sInstance->getCounterOrFlag(530)) {
+            // "When you require my analysis..."
             v = 200;
         } else if (dStageMgr_c::GetInstance()->getSTIFbyte4() == 0) {
+            // Sky rumor
             v = cM::rndInt(30);
         } else {
+            // Elsewhere rumor
             v = cM::rndInt(30) + 30;
         }
         mCurrentTextLabelName.sprintf("KEN9_%03d", v);
@@ -705,14 +736,14 @@ u16 dFlow_c::getSwitchChoice(const MsbFlowInfo *element, u16 param) const {
     return result;
 }
 
-inline void setTagProcessorFiArgument(s32 a1, s32 a2) {
+inline void setTagProcessorFiArgument(s32 argIdx, s32 btnIdx) {
     dTagProcessor_c *p = dLytMsgWindow_c::getInstance()->getTagProcessor();
-    p->setStringArg(FiContext::getMessageForFiInfo(a1), a2);
+    p->setStringArg(FiContext::getMessageForFiInfo(argIdx), btnIdx);
 }
 
-inline void setTagProcessorArgument(s32 a1, s32 a2) {
+inline void setTagProcessorArgument(s32 textLabel, s32 btnIdx) {
     dTagProcessor_c *p = dLytMsgWindow_c::getInstance()->getTagProcessor();
-    p->setStringArg(FiContext::getTextMessage(a1), a2);
+    p->setStringArg(FiContext::getButtonText(textLabel), btnIdx);
 }
 
 u16 dFlow_c::branchHandler00(const MsbFlowInfo *element) const {
@@ -726,7 +757,7 @@ u16 dFlow_c::branchHandler01(const MsbFlowInfo *element) const {
 u16 dFlow_c::branchHandler02(const MsbFlowInfo *element) const {
     if (FiContext::getDoSpecialFiMenuHandlingChecked()) {
         if (dLytMsgWindow_c::getInstance()->getTextOptionSelection() == 0 && FiContext::getGlobalFiInfo0(0) == 9) {
-            FiContext::do_fn_8016CB20();
+            FiContext::do_resetAdviceOptions();
             setTagProcessorFiArgument(0, 0);
             setTagProcessorFiArgument(1, 1);
             setTagProcessorFiArgument(2, 2);
@@ -849,7 +880,7 @@ u16 dFlow_c::branchHandler19(const MsbFlowInfo *element) const {
             break;
         case 6: {
             FiAnalysisHandle handle = FiContext::getNaviTableEquipmentCheckEntry();
-            switch (handle.shieldRelated()) {
+            switch (handle.getThreatenedShield()) {
                 case 0:
                     if (dAcPy_c::getCurrentlyEquippedShieldType() == 0) {
                         ret = 0;
@@ -892,7 +923,7 @@ u16 dFlow_c::branchHandler20(const MsbFlowInfo *element) const {
 
 u16 dFlow_c::branchHandler21(const MsbFlowInfo *element) const {
     u16 ret = 0;
-    if (shouldActorShowKillCount(FiContext::getTargetActorId())) {
+    if (shouldHideKillCountForActor(FiContext::getTargetActorId())) {
         ret = 1;
     }
     return ret;
@@ -965,20 +996,20 @@ void dFlow_c::triggerEntryPoint(s32 labelPart1, s32 labelPart2) {
 
     if (labelPart1 == 6 && labelPart2 == 801) {
         // "You called for me, Master?"
-        FiContext::do_fn_8016CA00();
+        FiContext::do_prepareFiCallOptions();
         FiContext::setDoSpecialFiMenuHandling(true);
         FiContext::do_fn_8016CB40();
         setTagProcessorFiArgument(0, 0);
         setTagProcessorFiArgument(1, 1);
         setTagProcessorFiArgument(2, 2);
-        setTagProcessorArgument(7, 3);
+        setTagProcessorArgument(FiContext::KEN8_Nevermind, 3);
     } else if (labelPart1 == 6 && labelPart2 == 802) {
         // Doesn't seem to exist in the files
         FiContext::setDoSpecialFiMenuHandling(true);
         setTagProcessorFiArgument(0, 0);
         setTagProcessorFiArgument(1, 1);
         setTagProcessorFiArgument(2, 2);
-        setTagProcessorArgument(7, 3);
+        setTagProcessorArgument(FiContext::KEN8_Nevermind, 3);
     }
     u16 entry = findEntryPoint(labelPart1, labelPart2);
     start(entry);
@@ -1086,13 +1117,35 @@ bool dFlow_c::advanceUntil(s32 searchType, s32 searchParam3, s32 *pOutParams1n2)
     return 0;
 }
 
-// TODO: Where are these IDs from?
-static const s32 sActorsWithKillCount[] = {0,  1,  10, 46, 47, 48, 49, 50, 51, 52, 53,
-                                           54, 55, 65, 67, 77, 81, 87, 88, 89, 90, -1};
+// TODO: Used KEN6 as reference, will be set from dAcBase_c::targetFiTextId (0x114)
+static const s32 sActorsWithoutKillCount[] = {
+    0,  // Remlit (Day)
+    1,  // Remlit (Night)
+    10, // Moldarach
+    46, // Stalmaster
+    47, // LD-002S Scervo
+    48, // Koloktos
+    49, // Ghirahim (G1)
+    50, // Ghirahim (G2)
+    51, // Ghirahim (G3.1)
+    52, // The Imprisoned
+    53, // The Imprisoned
+    54, // The Imprisoned
+    55, // Demise
+    65, // Scaldera
+    67, // <?>
+    77, // Tentalus
+    81, // Peahat
+    87, // Sentrobe Bomb
+    88, // LD-003D Dreadfuse
+    89, // Ghirahim (G3.2)
+    90, // Ghirahim (G3.3)
+    -1  // <end of array>
+};
 
-bool dFlow_c::shouldActorShowKillCount(s32 id) const {
-    for (s32 i = 0; sActorsWithKillCount[i] >= 0; i++) {
-        if (sActorsWithKillCount[i] == id) {
+bool dFlow_c::shouldHideKillCountForActor(s32 id) const {
+    for (s32 i = 0; sActorsWithoutKillCount[i] >= 0; i++) {
+        if (sActorsWithoutKillCount[i] == id) {
             return true;
         }
     }

@@ -95,7 +95,7 @@ private:
     /* 0x420 */ dLytMeterCrossBtnParts_c mParts[4];
     /* 0x620 */ s32 field_0x620;
     /* 0x624 */ s32 field_0x624;
-    /* 0x628 */ u16 field_0x628;
+    /* 0x628 */ u16 mSavedFiFlow;
     /* 0x62C */ s32 mCallCount0;
     /* 0x630 */ s32 mCallCount1;
     /* 0x634 */ u8 field_0x634;

@@ -1010,7 +1010,9 @@ d/lyt/d_lyt_cursor_stick.cpp:
 toBeSorted/fi_context.cpp:
 	.text       start:0x8016BCE0 end:0x8016CBD8 align:16
 	.data       start:0x80527BC0 end:0x80527BD0
+	.sdata      start:0x80572A08 end:0x80572A10
 	.sbss       start:0x80575500 end:0x80575508
+	.sdata2     start:0x8057A1A8 end:0x8057A1D8
 
 toBeSorted/item_mdl_name.cpp:
 	.text       start:0x8016CBE0 end:0x8016CC34 align:16

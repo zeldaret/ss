@@ -278,7 +278,7 @@ bool dLytMeterShieldGauge_c::execute() {
     }
 
     if (mAnm[SHIELD_ANIM_BREAK].isEnabled()) {
-        if (field_0x318 == 0 && field_0x2E0 > 0) {
+        if (field_0x318 == 0 && field_0x2E0 > 0.0f) {
             mAnm[SHIELD_ANIM_BREAK].setFrame(0.0f);
             mAnm[SHIELD_ANIM_BREAK].setAnimEnable(true); // redundant?
             field_0x30C = 0;

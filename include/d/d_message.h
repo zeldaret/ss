@@ -171,7 +171,7 @@ protected:
     void setNext(u16 next);
     void setField0x3C();
     bool checkField0x3C() const;
-    bool shouldActorShowKillCount(s32 id) const;
+    bool shouldHideKillCountForActor(s32 id) const;
     static void playSound(u32);
     void createLytMiniGame();
     void clearMinigame();

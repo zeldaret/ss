@@ -421,6 +421,22 @@ public:
         }
     }
 
+    static f32 getShieldLevel() {
+        if (sInstance != nullptr) {
+            return sInstance->mMain.mShield.getLevel();
+        } else {
+            return 0.0f;
+        }
+    }
+
+    static f32 getShieldGaugePercentMaybe() {
+        if (sInstance != nullptr) {
+            return sInstance->mMain.mShield.getGaugePercentMaybe();
+        } else {
+            return 0.0f;
+        }
+    }
+
 private:
     /* 0x00004 */ d2d::ResAccIf_c mResAcc;
     /* 0x00374 */ dLytMeterEventSkip_c *mpEventSkip;
