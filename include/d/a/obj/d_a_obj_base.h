@@ -14,6 +14,7 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
+#include "rvl/MTX/mtx.h"
 
 class dAcObjBase_c;
 class dBgS_Acch;

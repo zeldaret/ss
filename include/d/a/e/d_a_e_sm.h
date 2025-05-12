@@ -38,6 +38,12 @@ public:
         SM_MASSIVE = 3,
         SM_TINY = 4
     };
+    struct SmData_c {
+        mAng field_0x00;
+        mAng field_0x02;
+        mVec3_c field_0x04;
+        mVec3_c field_0x10;
+    };
 
 public:
     dAcEsm_c() : mScnCallback(this), mStateMgr(*this, sStateID::null) {}
@@ -89,18 +95,25 @@ public:
 public:
     void fn_187_5D0();
     void fn_187_3F60();
+    bool fn_187_42C0();
+    void fn_187_4450(); // fn_187_4450
     void fn_187_44C0();
     void fn_187_4540(int);
     bool fn_187_4B50();
     bool fn_187_4C50();
-    UNKTYPE fn_187_4CB0(u8);
+    void Set_0xBBC(u8 v);
     void fn_187_4CC0();
+    mAng fn_187_5150(bool);
+    mAng fn_187_51F0(bool);
     u32 fn_187_52A0();
     void fn_187_5390();
     bool checkSize(SmSize_e) const; // fn_187_5670
     void fn_187_5730();
+    void fn_187_5810();
     void fn_187_5940();
+    bool fn_187_5AC0() const;
     void fn_187_61B0(int);
+    bool fn_187_6B10();
     UNKTYPE fn_187_6C20(u8);
 
 private:
@@ -142,12 +155,20 @@ private:
     /* 0xAD4 */ mVec3_c mEffPos;
     /* 0xAE0 */ dWaterEffect_c mSplashFx;
     /* 0xB28 */ mAng3_c mRotUnk;
-    /* 0xB2E */ u8 _B2E[0xB38 - 0xB2E];
+    /* 0xB2E */ mAng mTargetRotX;
+    /* 0xB30 */ mAng mTargetRotZ;
+    /* 0xB32 */ u8 _B32[0xB38 - 0xB32];
     /* 0xB38 */ mAng3_c mRotCopy;
     /* 0xB3E */ mAng mOrigRotZ;
-    /* 0xB40 */ u8 _B40[0xB58 - 0xB40];
+    /* 0xB40 */ f32 field_0xB40;
+    /* 0xB44 */ f32 field_0xB44;
+    /* 0xB48 */ f32 field_0xB48;
+    /* 0xB4C */ f32 field_0xB4C;
+    /* 0xB50 */ f32 field_0xB50;
+    /* 0xB54 */ f32 field_0xB54;
     /* 0xB58 */ f32 field_0xB58;
-    /* 0xB5C */ u8 _B5C[0xB65 - 0xB5C];
+    /* 0xB5C */ f32 field_0xB5C;
+    /* 0xB60 */ u8 _B60[0xB65 - 0xB60];
     /* 0xB65 */ u8 field_0xB65;
     /* 0xB66 */ u8 _B66[0xB68 - 0xB66];
     /* 0xB68 */ f32 field_0xB68;
@@ -157,7 +178,7 @@ private:
     /* 0xB78 */ f32 field_0xB78;
     /* 0xB7C */ u32 field_0xB7C;
     /* 0xB80 */ f32 field_0xB80;
-    /* 0xB84 */ u32 field_0xB84;
+    /* 0xB84 */ f32 field_0xB84;
     /* 0xB88 */ u32 field_0xB88;
     /* 0xB8C */ f32 field_0xB8C;
     /* 0xB90 */ s32 field_0xB90;
@@ -167,13 +188,18 @@ private:
     /* 0xBA0 */ u32 field_0xBA0;
     /* 0xBA4 */ u8 _BA4[0xBA6 - 0xBA4];
     /* 0xBA6 */ s16 field_0xBA6;
-    /* 0xBA8 */ u8 _BA8[0xBAE - 0xBA8];
+    /* 0xBA8 */ u16 field_0xBA8;
+    /* 0xBAA */ u16 field_0xBAA;
+    /* 0xBAC */ u16 field_0xBAC;
     /* 0xBAE */ u16 mTimer_0xBAE;
-    /* 0xBB0 */ u8 _BB0[0xBB4 - 0xBB0];
+    /* 0xBB0 */ u16 field_0xBB0;
+    /* 0xBB2 */ u16 field_0xBB2;
     /* 0xBB4 */ u16 mDamageTimer;
     /* 0xBB6 */ u16 field_0xBB6;
     /* 0xBB8 */ u16 field_0xBB8;
-    /* 0xBB9 */ u8 _BB9[0xBBE - 0xBBA];
+    /* 0xBB9 */ u8 _BB9[0xBBC - 0xBBA];
+    /* 0xBBC */ u8 field_0xBBC;
+    /* 0xBBD */ u8 field_0xBBD;
     /* 0xBBE */ u8 mType;
     /* 0xBBF */ u8 field_0xBBF;
     /* 0xBC0 */ u8 field_0xBC0;
@@ -189,11 +215,15 @@ private:
     /* 0xBCA */ u8 field_0xBCA;
     /* 0xBCB */ u8 field_0xBCB;
     /* 0xBCC */ u8 field_0xBCC;
-    /* 0xBCD */ u8 _BCD[0xBD0 - 0xBCD];
+    /* 0xBCD */ u8 field_0xBCD;
+    /* 0xBCE */ u8 field_0xBCE;
     /* 0xBD0 */ LightParams mLightInfo;
 
     static bool sSomeArrayInit;
     static bool sSomeArray[9];
+
+    static const u16 sEmitterResArr[8];
+    static const SmData_c sSmDataArr[8];
 };
 
 #endif

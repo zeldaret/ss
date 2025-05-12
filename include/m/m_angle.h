@@ -140,6 +140,10 @@ public:
         z = fz;
     }
 
+    void set(const mAng3_c &ang) {
+        set(ang.x, ang.y, ang.z);
+    }
+
     void setR(const s32 &f) {
         x = y = z = f;
     }

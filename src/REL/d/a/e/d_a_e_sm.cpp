@@ -1,12 +1,15 @@
 #include "d/a/e/d_a_e_sm.h"
 
 #include "c/c_lib.h"
+#include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_bomb.h"
+#include "d/col/bg/d_bg_pc.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
@@ -19,12 +22,14 @@
 #include "m/m_angle.h"
 #include "m/m_color.h"
 #include "m/m_mtx.h"
+#include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resanmclr.h"
 #include "nw4r/g3d/res/g3d_resanmtexpat.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resnode.h"
+#include "rvl/MTX/mtx.h"
 #include "rvl/MTX/mtxvec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/blur_and_palette_manager.h"
@@ -180,11 +185,7 @@ int dAcEsm_c::actorCreate() {
     position.CopyTo(poscopy3);
     poscopy3.y += 50.f;
 
-    // Fake ??
-    const s16 rotz = rotation.z;
-    const s16 roty = rotation.y;
-    const s16 rotx = rotation.x;
-    mRotCopy.set(rotx, roty, rotz);
+    mRotCopy.set(rotation);
 
     field_0xB98 = 0;
     field_0xB58 = 1.f;
@@ -194,14 +195,9 @@ int dAcEsm_c::actorCreate() {
     if (!sSomeArrayInit) {
         sSomeArrayInit = true;
         bool *parr = getArray();
-        *parr++ = false;
-        *parr++ = false;
-        *parr++ = false;
-        *parr++ = false;
-        *parr++ = false;
-        *parr++ = false;
-        *parr++ = false;
-        *parr++ = false;
+        for (int i = 0; i < 8; i++) {
+            *parr++ = false;
+        }
         *parr++ = false;
     }
 
@@ -240,7 +236,7 @@ int dAcEsm_c::actorCreate() {
     position += mStts.GetCcMove();
 
     mObjAcch.CrrPos(*dBgS::GetInstance());
-    updateMatrix();
+    fn_187_4CC0();
 
     f32 anim_frame;
     switch (mType) {
@@ -248,7 +244,7 @@ int dAcEsm_c::actorCreate() {
         default: {
             targetFiTextId = 59;
             anim_frame = 0.f;
-            mSph.SetAtModifier(1);
+            mSph.SetAtModifier(AT_MOD_FIRE);
             mType = 0;
         } break;
         case SM_GREEN_ALT:
@@ -261,7 +257,7 @@ int dAcEsm_c::actorCreate() {
         case SM_YELLOW:     {
             targetFiTextId = 61;
             anim_frame = 2.f;
-            mSph.SetAtModifier(4);
+            mSph.SetAtModifier(AT_MOD_ELECTRIC);
             mType = 2;
         } break;
 
@@ -278,7 +274,7 @@ int dAcEsm_c::actorCreate() {
 
     mAnmTexPat.setFrame(anim_frame, 0);
 
-    mInteractionFlags |= 0x40;
+    setInteractionFlags(0x40);
 
     fn_187_44C0();
 
@@ -712,23 +708,120 @@ int dAcEsm_c::actorExecute() {
     return SUCCEEDED;
 }
 
+int dAcEsm_c::draw() {
+    if (fn_187_5AC0()) {
+        return SUCCEEDED;
+    }
+    if (dAcPy_c::GetLink()->checkActionFlagsCont(0x400000)) {
+        return SUCCEEDED;
+    }
+    if (mScale.squareMagXZ() < 0.0004f) {
+        return SUCCEEDED;
+    }
+    if (shift8_0xFF != 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, shift8_0xFF)) {
+        return SUCCEEDED;
+    }
+
+    if (field_0xBBF == 3) {
+        return SUCCEEDED;
+    }
+
+    drawModelType1(&mMdl.getModel());
+
+    if (mHealth == 0) {
+        return SUCCEEDED;
+    }
+
+    // Wtf is this ordering...
+    s8 var = 0;
+    f32 y = 50.f;
+    f32 x = 0.f;
+    f32 z = 0.f;
+    mQuat_c q(x, y, z, mScale.x * (var + 240.f));
+    drawShadow(mShadowCircle, nullptr, mWorldMtx, &q, -1, -1, -1, -1, -1, position.y - mObjAcch.GetGroundH());
+    return SUCCEEDED;
+}
+
 void dAcEsm_c::initializeState_BaseMother() {}
 void dAcEsm_c::executeState_BaseMother() {}
 void dAcEsm_c::finalizeState_BaseMother() {}
 
 void dAcEsm_c::initializeState_Wait() {
-    fn_187_4CB0(1);
+    Set_0xBBC(1);
 }
 void dAcEsm_c::executeState_Wait() {
     field_0xBA6 += (s16)(1000.f + field_0xB70 / mScaleTarget.x);
 }
 void dAcEsm_c::finalizeState_Wait() {}
 
-void dAcEsm_c::initializeState_Walk() {}
-void dAcEsm_c::executeState_Walk() {}
+#pragma explicit_zero_data on
+static u32 rotx = 0;
+#pragma explicit_zero_data off
+
+void dAcEsm_c::initializeState_Walk() {
+    if (field_0xBC5 != 2) {
+        mMdl.setAnm("awa", m3d::PLAY_MODE_4, 4.f);
+        field_0xBC5 = 0;
+        mMdl.setFrame(cM::rndF(mMdl.getAnm().getEndFrame() - 1.f));
+    }
+
+    mVec3_c endPos;
+    mStartingPos.CopyTo(mPosCopy1);
+    mStartingPos.CopyTo(endPos);
+
+    endPos.y += 10.f;
+    if (dBgS_ObjLinChk::LineCross(&mHomePos1, &endPos, nullptr)) {
+        mStartingPos.set(position.x, position.y, position.z);
+    }
+
+    if (mType == SM_YELLOW) {
+        field_0xBC1 = 60.f + cM::rndF(60.f);
+    } else {
+        field_0xBC1 = 30.f + cM::rndF(30.f);
+    }
+
+    field_0xBB8 = 0;
+    field_0xB98 = 0;
+    rotation.x = rotx;
+
+    Set_0xBBC(2);
+    field_0xBAA = angle.y;
+    field_0xBA8 = 0;
+    field_0xBCB = 0;
+    forwardAccel = -3.f;
+}
+void dAcEsm_c::executeState_Walk() {
+    field_0xBA6 += (s16)(1000.f + field_0xB70 / mScaleTarget.x);
+    if (sLib::calcTimer(&field_0xBB6)) {
+        return;
+    }
+    if (fn_187_42C0()) {
+        return;
+    }
+    fn_187_5810();
+    mMdl.setRate(1.f);
+    field_0xBCB = 0;
+
+    if (field_0xB78 == 0.f) {
+    } else {
+    }
+}
 void dAcEsm_c::finalizeState_Walk() {}
 
-void dAcEsm_c::initializeState_BirthJump() {}
+void dAcEsm_c::initializeState_BirthJump() {
+    clearActorProperty(1);
+    field_0xBA6 = 0;
+    field_0xB54 = 0.1f;
+    field_0xB68 = 0.f;
+
+    forwardSpeed = 0.f;
+    field_0xBB8 = 3;
+    field_0xB90 = -1;
+
+    if (field_0xBCE == 0 && mTimer_0xBC4 == 0 && mType == SM_YELLOW) {
+        fn_187_4450();
+    }
+}
 void dAcEsm_c::executeState_BirthJump() {}
 void dAcEsm_c::finalizeState_BirthJump() {}
 
@@ -756,6 +849,268 @@ void dAcEsm_c::initializeState_Dead() {}
 void dAcEsm_c::executeState_Dead() {}
 void dAcEsm_c::finalizeState_Dead() {}
 
+// . . .
+
+void dAcEsm_c::fn_187_4450() {
+    if (mType == SM_YELLOW) {
+        mSph.OnTgElectric();
+        mAnmMatClr.setRate(1.f, 0);
+    }
+    mSph.OffAt_0x40();
+    mSph.OnAtSet();
+}
+
+void dAcEsm_c::fn_187_44C0() {
+    if (mType == SM_YELLOW) {
+        mSph.ClrTgElectric();
+        mAnmMatClr.setRate(0.f, 0);
+        mAnmMatClr.setFrame(0.f, 0);
+    }
+    mSph.OnAt_0x40();
+}
+
+void dAcEsm_c::fn_187_4540(int param0) {
+    const dAcPy_c *player = dAcPy_c::GetLink();
+    mAng3_c rot = angle;
+
+    fn_187_44C0();
+    if (mStateMgr.isState(StateID_Dead)) {
+        return;
+    }
+
+    if ((param0 != 0 && mScaleTarget.x <= 0.25f) || mHealth == 0) {
+        if (param0 != 0 && param0 != 6 && param0 != 2 && param0 != 7) {
+            mHealth = 0;
+        }
+
+        // NOTE: Unused Return Value
+        mStateMgr.isState(StateID_Absorption);
+
+        fn_187_61B0(0);
+        mStateMgr.changeState(StateID_Dead);
+        return;
+    }
+
+    if (param0 != 0) {
+        if (mScaleTarget.x == 1.2f) {
+            mScaleTarget.set(1.6f, 1.6f, 1.6f);
+        }
+        mScaleTarget *= 0.5f;
+        mScale *= 0.5f;
+
+        f32 rnd = cM::rndFX(1024.f);
+        mAng tgt = cLib::targetAngleY(position, player->position);
+        rot.y = rnd + tgt;
+
+        if (field_0xB98 != 2) {
+            rot.y = fn_187_5150(false);
+        }
+        rot.y = mOrigRotZ;
+
+        mVec3_c spawnPos;
+        mHitPos.CopyTo(spawnPos);
+        if (field_0xB98 == 1 || field_0xB98 == 2) {
+            position.CopyTo(spawnPos);
+        }
+        dAcEsm_c *pChild = static_cast<dAcEsm_c *>(
+            create(fProfile::E_SM, roomid, (params & ~0xFF) | mType, &spawnPos, &rot, nullptr, 0)
+        );
+        if (pChild == nullptr) {
+            return;
+        }
+
+        if (field_0xB98 == 2) {
+            mVec3_c temp0 = mScaleTarget;
+            mVec3_c temp1 = mScale;
+            temp0 *= 0.9999f;
+            temp1 *= 0.9999f;
+            temp0.CopyTo(pChild->mScaleTarget);
+            temp1.CopyTo(pChild->mScale);
+
+        } else {
+            mScaleTarget.CopyTo(pChild->mScaleTarget);
+            mScale.CopyTo(pChild->mScale);
+        }
+        pChild->mStartingPos = mStartingPos;
+        pChild->mDamageTimer = 8;
+        pChild->field_0xBB2 = 8;
+        pChild->field_0xB98 = field_0xB98;
+        pChild->field_0xBCE = 1;
+        pChild->mStateMgr.changeState(StateID_BirthJump);
+
+        if (field_0xB98 == 0) {
+            rot.y -= cM::rndFX(4096.f) + 16384.f;
+        } else {
+            rot.y = fn_187_51F0(true);
+            pChild->velocity.y = sSmDataArr[field_0xB98].field_0x04.y;
+            if (pChild->velocity.y != 0.f) {
+                pChild->velocity.y *= mScaleTarget.y;
+                if (field_0xB98 == 2) {
+                    if (pChild->velocity.y < 30.f) {
+                        pChild->velocity.y = 30.f;
+                    }
+                } else if (pChild->velocity.y < 20.f) {
+                    pChild->velocity.y = 20.f;
+                }
+            }
+            pChild->field_0xB84 = pChild->velocity.y;
+            pChild->forwardSpeed = mScaleTarget.x * sSmDataArr[field_0xB98].field_0x04.x;
+            if (pChild->forwardSpeed != 0 && pChild->forwardSpeed < 10.f) {
+                pChild->forwardSpeed = 10.f;
+            }
+            pChild->field_0xBB8 = 0;
+        }
+    }
+    mSph.OnCoSet();
+    if (field_0xB98 != 2) {
+        angle.y = rot.y;
+    }
+    if (field_0xB98 != 0) {
+        field_0xBCE = 1;
+        mDamageTimer = 8;
+        field_0xBB2 = 8;
+    }
+    fn_187_6C20(1);
+    if (field_0xB98 != 0) {
+        f32 f = sSmDataArr[field_0xB98].field_0x10.y;
+        if (f != 0.f) {
+            f *= mScaleTarget.y;
+            velocity.y = f;
+            if (field_0xB98 == 2) {
+                if (velocity.y < 30.f) {
+                    velocity.y = 30.f;
+                }
+            } else if (velocity.y < 20.f) {
+                velocity.y = 20.f;
+            }
+        }
+
+        field_0xB84 = velocity.y;
+        f = mScaleTarget.x * sSmDataArr[field_0xB98].field_0x10.y;
+        forwardSpeed = f;
+        if (f != 0.f && f < 10.f) {
+            forwardSpeed = 10.f;
+        }
+        field_0xBB8 = 0;
+        if (field_0xB98 == 2) {
+            mTimer_0xBC4 = 20;
+        }
+        playSound(SE_ESm_JUMP);
+    }
+}
+
+bool dAcEsm_c::fn_187_4B50() {
+    if (mStateMgr.isState(StateID_Dead)) {
+        return false;
+    }
+
+    if (mBombRef.isLinked()) {
+        dAcBomb_c *pBomb = mBombRef.get();
+        if (pBomb) {
+            pBomb->On_0xA3C(0x4);
+            pBomb->Off_0xA3C(0x800000);
+            mBombRef.unlink();
+        }
+
+        if (mStateMgr.isState(StateID_Absorption)) {
+            fn_187_5730();
+        }
+        mStateMgr.changeState(StateID_Dead);
+        return true;
+    }
+
+    return false;
+}
+
+bool dAcEsm_c::fn_187_4C50() {
+    int attr = dBgS::GetInstance()->GetSpecialCode(mObjAcch.GetGnd());
+
+    return (attr == POLY_ATTR_LAVA || attr == POLY_ATTR_SAND_DEEP_INSTANT || attr == POLY_ATTR_SAND_DEEP_SLOW);
+}
+
+void dAcEsm_c::Set_0xBBC(u8 val) {
+    field_0xBBC = val;
+}
+
+void dAcEsm_c::fn_187_4CC0() {
+    mVec3_c scale = mScale;
+    if (field_0xBC6 == 1 || field_0xBC6 == 2) {
+        field_0xB8C = mTimeArea.getDistMaybe();
+        scale.multScalar(field_0xB8C);
+    }
+
+    if (mObjAcch.ChkWallHit(nullptr)) {
+        sLib::addCalcAngle(angle.y.ref(), mAcchCir.GetWallAngleY(), 4, 0x200);
+    }
+    sLib::addCalcAngle(rotation.y.ref(), angle.y, 2, 0x800);
+    sLib::addCalcAngle(mRotUnk.x.ref(), mTargetRotX, 4, 0x800);
+    sLib::addCalcAngle(mRotUnk.z.ref(), mTargetRotZ, 4, 0x800);
+
+    mWorldMtx.transS(position.x, position.y, position.z);
+    mWorldMtx.XrotM(mRotUnk.x);
+    mWorldMtx.ZrotM(mRotUnk.z);
+    mWorldMtx.ZXYrotM(rotation.x, rotation.y, rotation.z);
+
+    f32 s = 1.f - 0.2f * field_0xB5C;
+    f32 z = 150.f * mScaleTarget.x;
+#define _WORLD_MTX_TRANS(x, y, z)                                                                                      \
+    {                                                                                                                  \
+        const f32 _x = x;                                                                                              \
+        const f32 _z = z;                                                                                              \
+        const f32 _y = y;                                                                                              \
+        mMtx_c m;                                                                                                      \
+        MTXTrans(m, _x, _y, _z);                                                                                       \
+        mWorldMtx += m;                                                                                                \
+    }
+#define _WORLD_MTX_SCALE(x, y, z)                                                                                      \
+    {                                                                                                                  \
+        const f32 _x = x;                                                                                              \
+        const f32 _z = z;                                                                                              \
+        const f32 _y = y;                                                                                              \
+        mMtx_c m;                                                                                                      \
+        MTXScale(m, _x, _y, _z);                                                                                       \
+        mWorldMtx += m;                                                                                                \
+    }
+
+    _WORLD_MTX_TRANS(0.f, 0.f, z);
+    _WORLD_MTX_SCALE(s, s - field_0xB5C, 1.f + field_0xB5C);
+    _WORLD_MTX_TRANS(0.f, 0.f, -z);
+    _WORLD_MTX_TRANS(0.f, 0.f, field_0xB48);
+    _WORLD_MTX_SCALE(scale.y / field_0xB58, scale.x * field_0xB58, scale.y / field_0xB58);
+    _WORLD_MTX_TRANS(0.f, 0.f, -field_0xB48);
+    mRotCopy.z = field_0xBA6;
+    _WORLD_MTX_TRANS(20.f, 0.f, 20.f);
+    mWorldMtx.ZrotM(mRotCopy.z);
+    mWorldMtx.XrotM(mRotCopy.z);
+    _WORLD_MTX_SCALE(1.f - field_0xB50, 1.f + field_0xB50, 1.f - field_0xB50);
+    mWorldMtx.XrotM(-mRotCopy.z);
+    mWorldMtx.ZrotM(-mRotCopy.z);
+    _WORLD_MTX_TRANS(-20.f, -0.f, -20.f);
+    _WORLD_MTX_TRANS(20.f, 0.f, -20.f);
+    mWorldMtx.ZrotM(mRotCopy.z);
+    mWorldMtx.YrotM(mRotCopy.z);
+    _WORLD_MTX_SCALE(1.f - field_0xB50, 1.f + field_0xB50, 1.f - field_0xB50);
+    mWorldMtx.YrotM(-mRotCopy.z);
+    mWorldMtx.ZrotM(-mRotCopy.z);
+    _WORLD_MTX_TRANS(-20.f, -0.f, 20.f);
+    _WORLD_MTX_TRANS(-20.f, 0.f, 20.f);
+    mWorldMtx.ZrotM(mRotCopy.z);
+    _WORLD_MTX_SCALE(1.f - field_0xB50, 1.f + field_0xB50, 1.f - field_0xB50);
+    mWorldMtx.ZrotM(-mRotCopy.z);
+    _WORLD_MTX_TRANS(20.f, -0.f, -20.f);
+    _WORLD_MTX_TRANS(-20.f, 0.f, -20.f);
+    mWorldMtx.XrotM(mRotCopy.z);
+    _WORLD_MTX_SCALE(1.f - field_0xB50, 1.f + field_0xB50, 1.f - field_0xB50);
+    mWorldMtx.XrotM(-mRotCopy.z);
+#undef _WORLD_MTX_TRANS
+#undef _WORLD_MTX_SCALE
+
+    mMdl.play();
+    mMdl.getModel().setLocalMtx(mWorldMtx);
+    mMdl.getModel().calc(false);
+    mWorldMtx.getTranslation(mEffPos);
+    updateBoundingBox();
+}
 // . . .
 
 bool dAcEsm_c::checkSize(dAcEsm_c::SmSize_e size) const {
@@ -794,3 +1149,19 @@ void dAcEsm_c::updateBoundingBox() {
     f32 max = 200.f / mScale.x;
     boundingBox.Set(mVec3_c(min, min, min), mVec3_c(max, 250.f / mScale.x, max));
 }
+
+const u16 dAcEsm_c::sEmitterResArr[8] = {PARTICLE_RESOURCE_ID_MAPPING_283_, PARTICLE_RESOURCE_ID_MAPPING_284_,
+                                         PARTICLE_RESOURCE_ID_MAPPING_285_, PARTICLE_RESOURCE_ID_MAPPING_278_,
+                                         PARTICLE_RESOURCE_ID_MAPPING_281_, PARTICLE_RESOURCE_ID_MAPPING_282_,
+                                         PARTICLE_RESOURCE_ID_MAPPING_280_, PARTICLE_RESOURCE_ID_MAPPING_279_};
+
+const dAcEsm_c::SmData_c dAcEsm_c::sSmDataArr[8] = {
+    {     0,      0,  mVec3_c(0.f,  0.f, 0.f),  mVec3_c(0.f,  0.f, 0.f)},
+    {0x4000, 0xC000, mVec3_c(25.f, 30.f, 0.f), mVec3_c(25.f, 30.f, 0.f)},
+    {     0,      0,  mVec3_c(0.f, 40.f, 0.f),  mVec3_c(0.f,  0.f, 0.f)},
+    {0x4000, 0xC000, mVec3_c(20.f, 35.f, 0.f), mVec3_c(10.f, 25.f, 0.f)},
+    {0xC000, 0x4000, mVec3_c(20.f, 35.f, 0.f), mVec3_c(10.f, 25.f, 0.f)},
+    {0x4000, 0xC000, mVec3_c(20.f, 35.f, 0.f), mVec3_c(10.f, 25.f, 0.f)},
+    {0xC000, 0x4000, mVec3_c(20.f, 35.f, 0.f), mVec3_c(10.f, 25.f, 0.f)},
+    {     0,      0,  mVec3_c(0.f, 40.f, 0.f),  mVec3_c(0.f,  0.f, 0.f)},
+};

@@ -22,8 +22,14 @@ public:
     /* 0x344 */ u8 _344[0x374 - 0x344];
     /* 0x374 */ dAcEnData *mpEnemyData;
 
-    bool checkInteractionFlags(u8 mask) {
+    bool checkInteractionFlags(u32 mask) {
         return mInteractionFlags & mask;
+    }
+    void setInteractionFlags(u32 flag) {
+        mInteractionFlags |= flag;
+    }
+    void resetInteractionFlags(u32 flag) {
+        mInteractionFlags &= ~flag;
     }
 
     dAcBomb_c *getBombWithinRadius(f32 radius); // fn_8002f700

@@ -926,6 +926,13 @@ public:
         return mAt.MskSPrm(0x40000000);
     }
 
+    void OffAt_0x40() {
+        mAt.OffSPrm(0x40);
+    }
+    void OnAt_0x40() {
+        mAt.OnSPrm(0x40);
+    }
+
 
     void SetAtDamage(u8 amount) {
         mAt.SetAtDamage(amount);
@@ -953,6 +960,12 @@ public:
     }
     u32 ChkTgElectric() const {
         return mTg.MskSPrm(0x40000);
+    }
+    void OnTgElectric() {
+        return mTg.OnSPrm(0x40000);
+    }
+    void ClrTgElectric() {
+        return mTg.OffSPrm(0x40000);
     }
 
     void OnTg_0x200000() {
