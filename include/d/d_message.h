@@ -38,11 +38,11 @@ public:
 // Ghidra: ActorEventFlowManager
 class dFlow_c : dFlowBase_c {
     enum BranchValue_e {
-        BRANCH_00,
-        BRANCH_01,
-        BRANCH_02,
+        BRANCH_SELECTED_OPTION_0,
+        BRANCH_SELECTED_OPTION_1,
+        BRANCH_SELECTED_OPTION_FI,
         BRANCH_STORYFLAG,
-        BRANCH_04,
+        BRANCH_NONE,
         BRANCH_ZONEFLAG,
         BRANCH_SCENEFLAG,
         BRANCH_EVENT_COUNTER_THRESHOLD_1,
@@ -52,9 +52,9 @@ class dFlow_c : dFlowBase_c {
         BRANCH_RAND_2,
         BRANCH_RAND_3,
         BRANCH_RAND_4,
-        BRANCH_14,
-        BRANCH_15,
-        BRANCH_16,
+        BRANCH_14, // skipped
+        BRANCH_15, // skipped
+        BRANCH_16, // skipped
         BRANCH_FREE_SPACE_IN_POUCH,
         BRANCH_18,
         BRANCH_19,
@@ -71,7 +71,7 @@ class dFlow_c : dFlowBase_c {
         EVENT_SET_ZONEFLAG = 4,
         EVENT_UNSET_ZONEFLAG = 5,
         EVENT_DELAY = 6,
-        EVENT_07 = 7,
+        EVENT_LOAD_FI_FLOW = 7,
         EVENT_RUPEES = 8,
         EVENT_SET_ITEM = 9,
         EVENT_EXIT = 10,
@@ -129,11 +129,15 @@ public:
     /* vt 0x3C */ virtual u16 getSwitchChoice(const MsbFlowInfo *element, u16 param) const;
     /* vt 0x40 */ virtual bool triggerEntryPointChecked(s32 labelPart1, s32 labelPart2);
 
+    /**
+     * "Speculatively" evaluate a flow until a given event gets hit, and write
+     * its parameters into the provided pointer. Probably has no side effects.
+     */
     bool advanceUntilEvent(s32 searchParam3, s32 *pOutParams1n2);
     bool advanceUntil(s32 searchType, s32 searchParam3, s32 *pOutParams1n2);
 
     u16 getField_0x44() const;
-    u16 getField_0x46() const;
+    u16 getNextFiFlow() const;
 
 protected:
     static s32 sExitId;
@@ -188,10 +192,10 @@ protected:
     /* 0x3C */ u8 field_0x3C;
     /* 0x40 */ s32 field_0x40;
     /* 0x44 */ u16 field_0x44;
-    /* 0x46 */ u16 field_0x46;
+    /* 0x46 */ u16 mNextFiFlow;
     /* 0x48 */ s32 mDelayTimer;
     /* 0x4C */ MsbFlowInfo mFlowInfo;
-    /* 0x5C */ s32 field_0x5C;
+    /* 0x5C */ s32 mFiSpeechArgument;
     /* 0x60 */ s32 mFiInfo0;
 };
 

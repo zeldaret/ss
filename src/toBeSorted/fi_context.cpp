@@ -380,7 +380,7 @@ void FiContext::reset() {
 
     mTargetActorId = -1;
     mFiHelpIndex = -1;
-    mDoSpecialFiMenuHandling = false;
+    mIsInFiMainMenu = false;
 }
 
 void FiContext::resetSaveTimeRelated() {

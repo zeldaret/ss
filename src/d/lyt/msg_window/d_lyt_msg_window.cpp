@@ -515,7 +515,7 @@ void dLytMsgWindow_c::executeState_WaitKeySelectQuestion() {
             mTextOptionSelection = selection;
             field_0x1220 = 0;
             if (FiContext::GetInstance() != nullptr) {
-                doFiThing = FiContext::GetInstance()->getDoSpecialFiMenuHandling();
+                doFiThing = FiContext::GetInstance()->getIsInFiMainMenu();
             }
 
             if (doFiThing) {

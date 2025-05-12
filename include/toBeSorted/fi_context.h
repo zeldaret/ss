@@ -63,21 +63,21 @@ public:
 
     static u16 prepareFiHelpIndex();
 
-    bool getDoSpecialFiMenuHandling() const {
-        return mDoSpecialFiMenuHandling;
+    bool getIsInFiMainMenu() const {
+        return mIsInFiMainMenu;
     }
 
-    static bool getDoSpecialFiMenuHandlingChecked() {
+    static bool getIsInFiMainMenuChecked() {
         if (sInstance != nullptr) {
-            return sInstance->getDoSpecialFiMenuHandling();
+            return sInstance->getIsInFiMainMenu();
         } else {
             return false;
         }
     }
 
-    static void setDoSpecialFiMenuHandling(bool val) {
+    static void setIsInFiMainMenu(bool val) {
         if (sInstance != nullptr) {
-            sInstance->mDoSpecialFiMenuHandling = val;
+            sInstance->mIsInFiMainMenu = val;
         }
     }
 
@@ -203,7 +203,7 @@ private:
     /* 0x48 */ bool field_0x48;
     /* 0x49 */ bool field_0x49;
     /* 0x4A */ bool field_0x4A;
-    /* 0x4B */ bool mDoSpecialFiMenuHandling;
+    /* 0x4B */ bool mIsInFiMainMenu;
 };
 
 #endif
