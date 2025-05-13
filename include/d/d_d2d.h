@@ -4,6 +4,7 @@
 namespace d2d {
 
 void defaultSet();
+void draw();
 
 } // namespace d2d
 

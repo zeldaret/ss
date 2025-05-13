@@ -1,43 +1,23 @@
 #include "d/d_dvd_unk.h"
 
+#include "d/d_dvd_drive_error.h"
 #include "egg/core/eggHeap.h"
-#include "nw4r/ut/ut_ResFont.h"
+#include "toBeSorted/nand_result_tracker.h"
 
+
+#include "d/dol_backup_error_font.inc"
 
 namespace dDvdUnk {
 
-/** 805750d0 */
-static unkstruct_c *singleton;
-
-static nw4r::ut::ResFont *fontPtr;
-
-/** 80052300 */
-unkstruct_c *unkstruct_c::create(EGG::Heap *heap) {
-    singleton = new (heap, 0x04) unkstruct_c();
-    singleton->init();
-}
-
-/** 80052340 */
-char unkstruct_c::getUnk() {
-    return field_0x4;
-}
-
-/** 80052350 */
-void unkstruct_c::draw() {
-    // EGG::
-}
-
-/** 800526b0 */
-void unkstruct_c::execute() {}
-
-/** 80052750 */
-void unkstruct_c::init() {
-    field_0x0 = 0;
-    field_0x4 = 0;
-}
-
-void unkstruct_c::createFont(EGG::Heap *heap) {
-    fontPtr = new (heap, 0x04) nw4r::ut::ResFont();
+FontUnk *FontUnk::sInstance;
+extern "C" void fn_80059D10(EGG::Heap *heap);
+void FontUnk::create(EGG::Heap *heap) {
+    sInstance = new (heap, 0x04) FontUnk();
+    sInstance->init();
+    dDvdDriveError_c::create(heap);
+    NandResultTracker::create(heap);
+    fn_80059D10(heap);
+    sInstance->field_0x2C = 0;
 }
 
 } // namespace dDvdUnk

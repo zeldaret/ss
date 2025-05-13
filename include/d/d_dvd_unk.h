@@ -10,32 +10,21 @@
 
 namespace dDvdUnk {
 
-class unkstruct_c {
-public:
-    static unkstruct_c *create(EGG::Heap *heap);
-    void draw();
-    void execute();
-    void init();
-    char getUnk();
-
-    static void createFont(EGG::Heap *heap);
-
-private:
-    UNKWORD field_0x0;
-    char field_0x4;
-};
-
 class FontUnk {
 public:
-    FontUnk() {}
+    FontUnk() : field_0x2D(0) {}
 
     static FontUnk *GetInstance() {
         return sInstance;
     }
 
+    static void create(EGG::Heap *heap);
+    void init();
+
     void fn_80052D00(bool);
     void fn_80052D50();
     void fn_80052C90();
+    void fn_80052C60();
 
     s32 getField_0x24() const {
         return field_0x24;
@@ -51,6 +40,10 @@ public:
 
     void setField_0x2C(u8 val) {
         field_0x2C = val;
+    }
+
+    const nw4r::ut::ResFont &getFont() const {
+        return mFont;
     }
 
 private:

@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "d/d_d2d.h"
 #include "d/d_dvd_unk.h"
 #include "d/d_dylink.h"
 #include "d/d_font_manager.h"
@@ -11,6 +12,7 @@
 #include "d/d_scene.h"
 #include "d/d_sys.h"
 #include "d/lyt/d_lyt_battery.h"
+#include "d/lyt/d_lyt_system_window.h"
 #include "f/f_base.h"
 #include "f/f_profile.h"
 #include "f/f_profile_name.h"
@@ -19,14 +21,17 @@
 #include "m/m_fader_base.h"
 #include "m/m_heap.h"
 #include "m/m_pad.h"
-#include "nw4r/ut/ut_ResFont.h"
 #include "rvl/TPL/TPL.h"
 #include "s/s_FPhase.h"
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
-#include "toBeSorted/hbm.h"
+#include "toBeSorted/d_d3d.h"
+#include "toBeSorted/d_hbm.h"
 #include "toBeSorted/reload_color_fader.h"
+#include "toBeSorted/save_manager.h"
+#include "toBeSorted/save_related.h"
+#include "toBeSorted/special_item_drop_mgr.h"
 
 sFPhase<dScBoot_c>::phaseCallback dScBoot_c::sCallbacks[] = {&dScBoot_c::cb1, &dScBoot_c::cb2, &dScBoot_c::cb3,
                                                              &dScBoot_c::cb4, &dScBoot_c::cb5, &dScBoot_c::cb9,
@@ -80,7 +85,7 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb3() {
 }
 
 sFPhaseBase::sFPhaseState dScBoot_c::cb4() {
-    if (!fn_801967D0(getHBM())) {
+    if (!dHbm_c::GetInstance()->fn_801967D0()) {
         return sFPhaseBase::PHASE_RETRY;
     }
     dHeap::HBMHeap.heap->disableAllocation();
@@ -245,11 +250,11 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb7() {
     }
 
     static u16 profilesToLoad[] = {
-        // ??? not sure what these correspond to
-        0x278,
-        0x279,
-        0x1B0,
-        0x1A9,
+        // TODO: Why these in particular?
+        fProfile::PL_RESTART,
+        fProfile::SW_AREA_TAG,
+        fProfile::OBJ_SWHIT,
+        fProfile::BOMBF,
     };
 
     bool allOk = true;
@@ -282,11 +287,13 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb7() {
 sFPhaseBase::sFPhaseState dScBoot_c::cb8() {
     return sFPhaseBase::PHASE_NEXT;
 }
-
+extern "C" void fn_80059E90();
 sFPhaseBase::sFPhaseState dScBoot_c::cb9() {
     dBase_c::createRoot(fProfile::MESSAGE, 0, dBase_c::OTHER);
     dBase_c::createRoot(fProfile::C_BASE, 0, dBase_c::OTHER);
-
+    dLytSystemWindow_c::create();
+    SaveMgr::GetInstance()->createSaveMsgWindow();
+    fn_80059E90();
     dLytBattery_c::create();
     return sFPhaseBase::PHASE_NEXT;
 }
@@ -298,12 +305,19 @@ STATE_DEFINE(dScBoot_c, Strap);
 STATE_DEFINE(dScBoot_c, Connect);
 STATE_DEFINE(dScBoot_c, Save);
 
+void dScBoot_c::drawCallback() {
+    d2d::draw();
+    if (sInstance != nullptr) {
+        sInstance->mFader.draw();
+    }
+}
+
 dScBoot_c::strap_c::strap_c() {
     SizedString<8> str;
     u8 langNum = getUsedLanguageNTSCNum();
     mArcName.mChars[0] = '\0';
-    mStr2.mChars[0] = '\0';
-    mStr3.mChars[0] = '\0';
+    mLytFileName.mChars[0] = '\0';
+    mAnimFileName.mChars[0] = '\0';
     if (langNum == 3) {
         str = "F";
     } else if (langNum == 4) {
@@ -313,8 +327,8 @@ dScBoot_c::strap_c::strap_c() {
     }
     // UB: Cannot pass object of non-POD type 'SizedString<8>' through variadic method
     mArcName.sprintf("strap%s", str);
-    mStr2.sprintf("strap_00_%s.brlyt", str);
-    mStr3.sprintf("strap_00_%s_loop.brlan", str);
+    mLytFileName.sprintf("strap_00_%s.brlyt", str);
+    mAnimFileName.sprintf("strap_00_%s_loop.brlan", str);
     LayoutArcManager::GetInstance()->loadLayoutArcFromDisk(mArcName, dHeap::work2Heap.heap);
     field_0x4EC = 0;
 }
@@ -330,8 +344,8 @@ bool dScBoot_c::strap_c::create() {
         // want to undo shadowing...
         ((m2d::ResAccIf_c *)&mResAcc)->attach(data, "");
         mLyt.setResAcc(&mResAcc);
-        mLyt.build(mStr2, nullptr);
-        mAnm.doSomething(mStr3, &mResAcc);
+        mLyt.build(mLytFileName, nullptr);
+        mAnm.doSomething(mAnimFileName, &mResAcc);
         mLyt.bind(&mAnm);
         field_0x4EC = 1;
         field_0x4EE = 0;
@@ -389,7 +403,7 @@ dScBoot_c::dScBoot_c() : mStateMgr(*this, sStateID::null), mPhases(this, sCallba
 }
 
 dScBoot_c::~dScBoot_c() {
-    fn_80197560(getHBM(), 0);
+    dHbm_c::GetInstance()->fn_80197560(0);
     sInstance = nullptr;
 }
 
@@ -400,10 +414,10 @@ int dScBoot_c::create() {
 
     mFader.create();
     mFader.setFadeInFrame(1);
-    // TODO
+    dGfx_c::GetInstance()->setDrawCallback(&drawCallback);
     dSys::setFrameRate(1);
     mStateMgr.changeState(StateID_Init);
-
+    SaveRelated::create();
     return SUCCEEDED;
 }
 
@@ -413,7 +427,14 @@ int dScBoot_c::doDelete() {
     if (!removed || phaseState != sFPhaseBase::PHASE_ALL_DONE) {
         return NOT_READY;
     }
-    // TODO
+    SaveRelated::remove();
+    dBase_c::createRoot(fProfile::LAST, 0, 0);
+    d3d::createLightTextures();
+    SpecialItemDropMgr::create();
+    dHbm_c::GetInstance()->offFlags(8);
+    dGfx_c::GetInstance()->setDrawCallback(nullptr);
+    ReloadColorFader::GetInstance()->fn_80067DD0(true);
+    return SUCCEEDED;
 }
 
 int dScBoot_c::execute() {
@@ -440,7 +461,7 @@ void dScBoot_c::deleteReady() {
 }
 
 void dScBoot_c::initializeState_Init() {
-    field_0x5D4 = 0;
+    mProgressStage = 0;
     field_0x5D8 = 0;
     field_0x5DC = 0;
     field_0x5DD = 0;
@@ -455,7 +476,7 @@ void dScBoot_c::executeState_Init() {
 void dScBoot_c::finalizeState_Init() {}
 
 void dScBoot_c::initializeState_Strap() {
-    field_0x5D4 = 0;
+    mProgressStage = 0;
     field_0x5E1 = 1;
     mFader.fadeIn();
     mFader.resetFrames();
@@ -463,10 +484,10 @@ void dScBoot_c::initializeState_Strap() {
 
 void dScBoot_c::executeState_Strap() {
     if (dScene_c::sFader.isStatus(mFaderBase_c::FADED_IN)) {
-        switch (field_0x5D4) {
+        switch (mProgressStage) {
             case 0:
                 if (!checkDone() && mFader.isNotStatus(mFaderBase_c::FADING_IN)) {
-                    field_0x5D4 = 1;
+                    mProgressStage = 1;
                 }
                 break;
             case 1:
@@ -479,7 +500,7 @@ void dScBoot_c::executeState_Strap() {
                     if (ok) {
                         field_0x5DC = 1;
                         if (mFader.fadeOut() == true) {
-                            field_0x5D4 = 2;
+                            mProgressStage = 2;
                         }
                     }
                 }
@@ -487,7 +508,7 @@ void dScBoot_c::executeState_Strap() {
             case 2:
                 if (!checkDone() && mFader.isNotStatus(mFaderBase_c::FADING_OUT)) {
                     if (mFader.fadeIn() == true) {
-                        field_0x5D4 = 3;
+                        mProgressStage = 3;
                         field_0x5E1 = 0;
                     }
                 }
@@ -505,10 +526,10 @@ void dScBoot_c::executeState_Strap() {
                         field_0x5E1 = 0;
                         mStateMgr.changeState(StateID_Connect);
                     } else {
-                        field_0x5D4 = 0;
+                        mProgressStage = 0;
                         mStrapScreen.init();
                     }
-                    fn_80197560(getHBM(), 0);
+                    dHbm_c::GetInstance()->fn_80197560(0);
                 }
                 break;
         }
@@ -521,7 +542,7 @@ void dScBoot_c::finalizeState_Strap() {
 }
 
 void dScBoot_c::initializeState_Connect() {
-    field_0x5D4 = 0;
+    mProgressStage = 0;
     dSys::setFrameRate(2);
 }
 
@@ -532,9 +553,9 @@ void dScBoot_c::executeState_Connect() {
 void dScBoot_c::finalizeState_Connect() {}
 
 void dScBoot_c::initializeState_Save() {
-    field_0x5D4 = 0;
+    mProgressStage = 0;
     field_0x5D8 = 0;
-    // TODO
+    SaveRelated::GetInstance()->fn_80015F40();
 }
 
 void dScBoot_c::executeState_Save() {
@@ -546,7 +567,7 @@ void dScBoot_c::finalizeState_Save() {}
 bool dScBoot_c::checkDone() {
     if (field_0x5E3 == 1) {
         field_0x5E3 = 0;
-        field_0x5D4 = 4;
+        mProgressStage = 4;
         return 1;
     }
     return 0;

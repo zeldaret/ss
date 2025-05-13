@@ -403,6 +403,7 @@ config.libs = [
             Object(NonMatching, "d/d_carry.cpp"),
             Object(Matching, "d/d_cc.cpp"),
             Object(Matching, "d/d_dvd.cpp"),
+            Object(Matching, "d/d_dvd_drive_error.cpp"),
             Object(NonMatching, "d/d_dvd_unk.cpp"),
             Object(NonMatching, "d/d_dylink.cpp"),
             Object(Matching, "d/d_fader.cpp"),

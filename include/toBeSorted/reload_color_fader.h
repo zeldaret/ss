@@ -12,6 +12,11 @@ public:
     void fn_80067FE0();
     bool fn_80068E80();
     bool fn_80067F60();
+    void fn_80067DD0(bool);
+
+    bool is1Or5() const {
+        return field_0x0C == 1 || field_0x0C == 5;
+    }
 
     u8 field_0x00[0x0C - 0x00];
     s32 field_0x0C;

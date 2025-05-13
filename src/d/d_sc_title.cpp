@@ -16,6 +16,7 @@
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/music_mgrs.h"
 #include "toBeSorted/reload_color_fader.h"
+#include "toBeSorted/save_related.h"
 #include "toBeSorted/unk_save_time.h"
 
 SPECIAL_BASE_PROFILE(TITLE, dScTitle_c, fProfile::TITLE, 0, 0);
@@ -67,7 +68,6 @@ dScTitle_c::~dScTitle_c() {
 extern "C" u32 TITLE_SCREEN_CHANGE;
 extern "C" void fn_80059450();
 extern "C" void fn_80058C90(s32);
-extern "C" void fn_80015E40();
 
 static const char *const sFileSelect = "FileSelect";
 static const char *const sSkb = "SoftwareKeyboard";
@@ -92,7 +92,7 @@ int dScTitle_c::create() {
         dSys::setClearColor(mColor(0x00000000));
         fn_80059450();
         fn_80058C90(0);
-        fn_80015E40();
+        SaveRelated::create();
         field_0x2AD = 0;
         LayoutArcManager::GetInstance()->loadLayoutArcFromDisk(sFileSelect, nullptr);
         LayoutArcManager::GetInstance()->loadLayoutArcFromDisk(sSkb, nullptr);
@@ -111,8 +111,6 @@ int dScTitle_c::execute() {
     mStateMgr.executeState();
     return SUCCEEDED;
 }
-
-extern "C" void fn_80015E80();
 
 int dScTitle_c::doDelete() {
     // TODO return codes
@@ -147,7 +145,7 @@ int dScTitle_c::doDelete() {
     }
 
     dScGame_c::doDelete();
-    fn_80015E80();
+    SaveRelated::remove();
     return SUCCEEDED;
 }
 
