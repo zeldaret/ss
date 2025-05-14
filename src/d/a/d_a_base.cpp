@@ -14,6 +14,7 @@
 #include "egg/core/eggAllocator.h"
 #include "f/f_base.h"
 #include "f/f_list_nd.h"
+#include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
@@ -359,13 +360,15 @@ dAcBase_c *dAcBase_c::findActor(char *objName, dAcBase_c *parent) {
 // searches for actor based on groupType
 // 8002d0a0
 FORCE_INLINE dAcBase_c *findActor(dAcBase_c *parent) {
+    dAcBase_c *foundActor;
     if (!parent) {
-        return (dAcBase_c *)fManager_c::searchBaseByGroupType(2, nullptr);
+        foundActor = (dAcBase_c *)fManager_c::searchBaseByGroupType(dBase_c::ACTOR, nullptr);
+    } else if (parent->group_type == 2) {
+        foundActor = (dAcBase_c *)fManager_c::searchBaseByGroupType(dBase_c::ACTOR, parent);
+    } else {
+        foundActor = nullptr;
     }
-    if (parent->group_type == 2) {
-        return (dAcBase_c *)fManager_c::searchBaseByGroupType(2, parent);
-    }
-    return nullptr;
+    return foundActor;
 }
 
 // control flow sucks ;-;
@@ -374,11 +377,7 @@ FORCE_INLINE dAcBase_c *findActor(dAcBase_c *parent) {
 dAcBase_c *dAcBase_c::searchActor(dAcBase_c *parent) {
     dAcBase_c *foundActor = ::findActor(parent);
 
-    if (!foundActor) {
-        return (dAcBase_c *)fManager_c::searchBaseByGroupType(STAGE, parent);
-    }
-
-    return foundActor;
+    return foundActor ? foundActor : (dAcBase_c *)fManager_c::searchBaseByGroupType(STAGE, parent);
 }
 
 // 8002d130
@@ -421,7 +420,7 @@ bool dAcBase_c::getDistanceAndAngleToActor(
     dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX
 ) {
     f32 distSquared = 3.402823e+38f;
-    s32 angleToActorY, angleToActorX;
+    mAng angleToActorY, angleToActorX;
     bool isWithinRange = false;
 
     angleToActorY = 0;
@@ -432,9 +431,9 @@ bool dAcBase_c::getDistanceAndAngleToActor(
         angleToActorY = cLib::targetAngleY(position, actor->position);
         angleToActorX = cLib::targetAngleX(position, actor->position);
 
-        // These casts are nuts wild ^^'
-        if ((distSquared <= distThresh * distThresh) && (labs(s16(rotation.y.mVal - (s16)angleToActorY)) <= yAngle) &&
-            (labs(s16(rotation.x.mVal - (s16)angleToActorX)) <= xAngle)) {
+        // Changing the `labs` call to take a short fixes this...
+        if ((distSquared <= distThresh * distThresh) && (labs(mAng((int)(rotation.y - angleToActorY))) <= yAngle) &&
+            (labs(mAng((int)(rotation.x - angleToActorX))) <= xAngle)) {
             isWithinRange = true;
         }
     }
