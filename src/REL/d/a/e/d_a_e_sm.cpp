@@ -9,6 +9,7 @@
 #include "d/a/obj/d_a_obj_bomb.h"
 #include "d/col/bg/d_bg_pc.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_d.h"
@@ -851,6 +852,95 @@ void dAcEsm_c::finalizeState_Dead() {}
 
 // . . .
 
+void dAcEsm_c::fn_187_3F60() {
+    f32 sin = field_0xBA4.sin();
+    f32 f1 = 3000.f / mScaleTarget.x;
+    field_0xBA4 = mAng(f1) + field_0xBA4;
+    f32 target = sin * field_0xB6C;
+
+    sLib::addCalcScaledDiff(&field_0xB5C, field_0xB68, 0.3f, 1.f);
+
+    if (mHealth != 0) {
+        sLib::addCalcScaledDiff(&field_0xB58, 1.f + target, 0.1f, 3.f);
+    } else {
+        sLib::addCalcScaled(&field_0xB58, 0.1f, 3.f);
+    }
+
+    sLib::addCalcScaledDiff(&field_0xB50, 0.015f + field_0xB54, 0.5f, 0.5f);
+    sLib::addCalcScaled(&field_0xB70, 0.01f, 1000.0f);
+    sLib::addCalcScaled(&field_0xB6C, 0.1f, 0.1f);
+    sLib::addCalcScaled(&field_0xB54, 0.03f, 0.03f);
+}
+
+bool dAcEsm_c::fn_187_4090() {
+    mVec3_c pos(position.x, position.y + 20.f, position.z);
+    if (velocity.y <= 0.f && dBgS_ObjGndChk::CheckPos(pos) && dBgS_ObjGndChk::GetGroundHeight() + 5.f > position.y) {
+        forwardSpeed = 0.f;
+        field_0xB6C = 1.5f;
+        if (field_0xB84) {
+            field_0xB6C = field_0xB84 * 0.1f + 0.7f;
+        }
+        field_0xB84 = 0.f;
+        field_0xBA4 = 0xC180;
+        field_0xB54 = 0.f;
+        field_0xB50 = 0.f;
+        field_0xB70 = 0.f;
+
+        playSound(SE_ESm_LAND);
+
+        if (field_0xBA0 == 0) {
+            if (fn_800301b0(position, rotation.y, true, 10.f) == 3 /* TODO: Enum?*/) {
+                int code = dBgS::GetInstance()->GetSpecialCode(dBgS_ObjGndChk::GetInstance());
+                if (code != POLY_ATTR_SAND_SHALLOW && code != POLY_ATTR_SAND_MED) {
+                    mHealth = 0;
+                    fn_187_4540(2);
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+    return false;
+}
+
+void dAcEsm_c::fn_187_4200() {
+    if (mType == SM_BLUE || field_0xBCC != 0 | field_0xBA0 != 0) {
+        return;
+    }
+    mVec3_c pos(position.x, position.y + 20.f, position.z);
+
+    if (dBgS_ObjGndChk::CheckPos(pos) && position.y - dBgS_ObjGndChk::GetGroundHeight() >= 700.f) {
+        if (field_0xBA0 == 0) {
+            field_0xBA0 = 1;
+        }
+    }
+}
+
+bool dAcEsm_c::fn_187_42C0() {
+    if (sLib::calcTimer(&field_0xBAC)) {
+        return false;
+    }
+
+    if (mSph.ChkAtHit() && mSph.GetAtActor()->profile_name == fProfile::PLAYER) {
+        if (fn_187_4B50()) {
+            return true;
+        }
+
+        if (sValueFromPlayer > 30) {
+            sValueFromPlayer = 0;
+        }
+
+        if (mHealth != 0 && !fn_187_6B10() && !ChkCrossPlayer(0.f) && !mStateMgr.isState(StateID_Absorption) &&
+            !mStateMgr.isState(StateID_BirthJump)) {
+            mStateMgr.changeState(StateID_Absorption);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void dAcEsm_c::fn_187_4450() {
     if (mType == SM_YELLOW) {
         mSph.OnTgElectric();
@@ -871,7 +961,7 @@ void dAcEsm_c::fn_187_44C0() {
 
 void dAcEsm_c::fn_187_4540(int param0) {
     const dAcPy_c *player = dAcPy_c::GetLink();
-    mAng3_c rot = angle;
+    mAng3_c rot = GetAngle();
 
     fn_187_44C0();
     if (mStateMgr.isState(StateID_Dead)) {
@@ -898,9 +988,7 @@ void dAcEsm_c::fn_187_4540(int param0) {
         mScaleTarget *= 0.5f;
         mScale *= 0.5f;
 
-        f32 rnd = cM::rndFX(1024.f);
-        mAng tgt = cLib::targetAngleY(position, player->position);
-        rot.y = rnd + tgt;
+        rot.y = (s16)cLib::targetAngleY(position, player->position) + cM::rndFX(1024.f);
 
         if (field_0xB98 != 2) {
             rot.y = fn_187_5150(false);
@@ -912,6 +1000,17 @@ void dAcEsm_c::fn_187_4540(int param0) {
         if (field_0xB98 == 1 || field_0xB98 == 2) {
             position.CopyTo(spawnPos);
         }
+
+        f32 scale = 0.9999f;
+        f32 upper = 30.f;
+        f32 lower = 20.f;
+        f32 v = 0.f;
+        f32 lowest = 10.f;
+        u8 timer = 8;
+        u8 bce = 1;
+        u8 bb8 = 0;
+        f32 f = 16384.f;
+
         dAcEsm_c *pChild = static_cast<dAcEsm_c *>(
             create(fProfile::E_SM, roomid, (params & ~0xFF) | mType, &spawnPos, &rot, nullptr, 0)
         );
@@ -922,45 +1021,51 @@ void dAcEsm_c::fn_187_4540(int param0) {
         if (field_0xB98 == 2) {
             mVec3_c temp0 = mScaleTarget;
             mVec3_c temp1 = mScale;
-            temp0 *= 0.9999f;
-            temp1 *= 0.9999f;
+            temp0 *= scale;
+            temp1 *= scale;
             temp0.CopyTo(pChild->mScaleTarget);
             temp1.CopyTo(pChild->mScale);
-
         } else {
             mScaleTarget.CopyTo(pChild->mScaleTarget);
-            mScale.CopyTo(pChild->mScale);
+            pChild->mScale.set(mScale.x, mScale.y, mScale.z);
         }
-        pChild->mStartingPos = mStartingPos;
-        pChild->mDamageTimer = 8;
-        pChild->field_0xBB2 = 8;
+        pChild->mStartingPos.set(mStartingPos.x, mStartingPos.y, mStartingPos.z);
+        pChild->mDamageTimer = timer;
+        pChild->field_0xBB2 = timer;
         pChild->field_0xB98 = field_0xB98;
-        pChild->field_0xBCE = 1;
+        pChild->field_0xBCE = bce;
         pChild->mStateMgr.changeState(StateID_BirthJump);
 
         if (field_0xB98 == 0) {
-            rot.y -= cM::rndFX(4096.f) + 16384.f;
+            mAng ang = (f + cM::rndFX(4096.f));
+            rot.y -= mAng(ang);
         } else {
             rot.y = fn_187_51F0(true);
-            pChild->velocity.y = sSmDataArr[field_0xB98].field_0x04.y;
-            if (pChild->velocity.y != 0.f) {
+            const f32 y = sSmDataArr[field_0xB98].field_0x04.y;
+            if (y != v) {
+                pChild->velocity.y = y;
+
                 pChild->velocity.y *= mScaleTarget.y;
-                if (field_0xB98 == 2) {
-                    if (pChild->velocity.y < 30.f) {
-                        pChild->velocity.y = 30.f;
+                if (field_0xB98 != 2) {
+                    if (pChild->velocity.y < lower) {
+                        pChild->velocity.y = lower;
                     }
-                } else if (pChild->velocity.y < 20.f) {
-                    pChild->velocity.y = 20.f;
+                } else {
+                    if (pChild->velocity.y < upper) {
+                        pChild->velocity.y = upper;
+                    }
                 }
             }
+
             pChild->field_0xB84 = pChild->velocity.y;
             pChild->forwardSpeed = mScaleTarget.x * sSmDataArr[field_0xB98].field_0x04.x;
-            if (pChild->forwardSpeed != 0 && pChild->forwardSpeed < 10.f) {
-                pChild->forwardSpeed = 10.f;
+            if (pChild->forwardSpeed != v && pChild->forwardSpeed < lowest) {
+                pChild->forwardSpeed = lowest;
             }
-            pChild->field_0xBB8 = 0;
+            pChild->field_0xBB8 = bb8;
         }
     }
+
     mSph.OnCoSet();
     if (field_0xB98 != 2) {
         angle.y = rot.y;
@@ -972,23 +1077,23 @@ void dAcEsm_c::fn_187_4540(int param0) {
     }
     fn_187_6C20(1);
     if (field_0xB98 != 0) {
-        f32 f = sSmDataArr[field_0xB98].field_0x10.y;
-        if (f != 0.f) {
-            f *= mScaleTarget.y;
-            velocity.y = f;
-            if (field_0xB98 == 2) {
+        if (sSmDataArr[field_0xB98].field_0x10.y) {
+            velocity.y = sSmDataArr[field_0xB98].field_0x10.y;
+            velocity.y *= mScaleTarget.y;
+            if (field_0xB98 != 2) {
+                if (velocity.y < 20.f) {
+                    velocity.y = 20.f;
+                }
+            } else {
                 if (velocity.y < 30.f) {
                     velocity.y = 30.f;
                 }
-            } else if (velocity.y < 20.f) {
-                velocity.y = 20.f;
             }
         }
 
         field_0xB84 = velocity.y;
-        f = mScaleTarget.x * sSmDataArr[field_0xB98].field_0x10.y;
-        forwardSpeed = f;
-        if (f != 0.f && f < 10.f) {
+        forwardSpeed = sSmDataArr[field_0xB98].field_0x10.y * mScaleTarget.x;
+        if (forwardSpeed && forwardSpeed < 10.f) {
             forwardSpeed = 10.f;
         }
         field_0xBB8 = 0;

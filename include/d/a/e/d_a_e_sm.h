@@ -95,6 +95,8 @@ public:
 public:
     void fn_187_5D0();
     void fn_187_3F60();
+    bool fn_187_4090();
+    void fn_187_4200();
     bool fn_187_42C0();
     void fn_187_4450(); // fn_187_4450
     void fn_187_44C0();
@@ -186,7 +188,7 @@ private:
     /* 0xB98 */ s32 field_0xB98;
     /* 0xB9C */ u8 _B9C[0xBA0 - 0xB9C];
     /* 0xBA0 */ u32 field_0xBA0;
-    /* 0xBA4 */ u8 _BA4[0xBA6 - 0xBA4];
+    /* 0xBA4 */ mAng field_0xBA4;
     /* 0xBA6 */ s16 field_0xBA6;
     /* 0xBA8 */ u16 field_0xBA8;
     /* 0xBAA */ u16 field_0xBAA;
@@ -224,6 +226,8 @@ private:
 
     static const u16 sEmitterResArr[8];
     static const SmData_c sSmDataArr[8];
+
+    static s32 sValueFromPlayer;
 };
 
 #endif

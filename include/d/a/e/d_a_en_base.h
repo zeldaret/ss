@@ -3,6 +3,8 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_bomb.h"
+#include "m/m_angle.h"
+#include "m/m_vec.h"
 
 struct dAcEnData {
     // Unknown Size yet
@@ -37,9 +39,15 @@ public:
     // Deals with dealing damage to Enemy
     // Returns a value 0-13 (similar to mStts rank?)
     int fn_8002fde0(cCcD_Obj &mCc, u16 *pTgOut);
+
+    // Returns 0-3 based on collision
+    // 2
+    int fn_800301b0(const mVec3_c &pos, mAng ang, bool, f32);
     void fn_800306d0();
     void fn_80030700();
     void fn_80030c20(u32 flags, f32, f32, f32, f32);
+
+    bool ChkCrossPlayer(f32 height);
 
 protected:
     // TODO: Make accessors for this list to auto-convert to dAcEnBase?
