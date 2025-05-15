@@ -14,6 +14,7 @@
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_camera.h"
 #include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
@@ -851,12 +852,9 @@ void dAcEsm_c::executeState_Dead() {}
 void dAcEsm_c::finalizeState_Dead() {}
 
 // . . .
-
 void dAcEsm_c::fn_187_3F60() {
-    f32 sin = field_0xBA4.sin();
-    f32 f1 = 3000.f / mScaleTarget.x;
-    field_0xBA4 = mAng(f1) + field_0xBA4;
-    f32 target = sin * field_0xB6C;
+    f32 target = nw4r::math::SinIdx(field_0xBA4) * field_0xB6C;
+    field_0xBA4 += (s16)(3000.f / mScaleTarget.x);
 
     sLib::addCalcScaledDiff(&field_0xB5C, field_0xB68, 0.3f, 1.f);
 
@@ -1253,6 +1251,42 @@ void dAcEsm_c::updateBoundingBox() {
     f32 min = -200.f / mScale.x;
     f32 max = 200.f / mScale.x;
     boundingBox.Set(mVec3_c(min, min, min), mVec3_c(max, 250.f / mScale.x, max));
+}
+
+bool dAcEsm_c::fn_187_6B10() {
+    const dAcPy_c *player = dAcPy_c::GetLink();
+    if (mStateMgr.isState(StateID_Dead)) {
+        return true;
+    }
+    if (fn_187_5AC0() || player->getRidingMinecartActor() ||
+        player->getRidingActorType() == dAcPy_c::RIDING_TRUCK_MINECART || player->isRecovering() ||
+        player->isRidingBall() || player->checkActionFlags(0x1000000) || player->checkActionFlags(0x40)) {
+        return true;
+    }
+
+    return false;
+}
+
+void dAcEsm_c::fn_187_6C20(bool param0) {
+    fn_187_5730();
+    if (!param0) {
+        fn_187_4540(0);
+    }
+
+    mSph.SetAtFlagsUpper(0);
+    sTimer = 0;
+    setInteractionFlags(4);
+    fn_187_44C0();
+    field_0xBAC = 60;
+
+    if (!param0) {
+        dCamera_c *cam = dScGame_c::getCamera(0);
+        angle.y = cLib::targetAngleY(cam->getPositionMaybe(), cam->getField_0x78());
+        angle.y += cM::rndFX(16384.f);
+    }
+
+    field_0xBCE = 1;
+    mStateMgr.changeState(StateID_BirthJump);
 }
 
 const u16 dAcEsm_c::sEmitterResArr[8] = {PARTICLE_RESOURCE_ID_MAPPING_283_, PARTICLE_RESOURCE_ID_MAPPING_284_,

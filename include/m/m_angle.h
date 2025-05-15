@@ -144,6 +144,12 @@ public:
         set(ang.x, ang.y, ang.z);
     }
 
+    void setR(const s32 &fx, const s32 &fy, const s32 &fz) {
+        x = fx;
+        y = fy;
+        z = fz;
+    }
+
     void setR(const s32 &f) {
         x = y = z = f;
     }

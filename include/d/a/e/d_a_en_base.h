@@ -1,6 +1,7 @@
 #ifndef D_A_EN_BASE_H
 #define D_A_EN_BASE_H
 
+#include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_bomb.h"
 #include "m/m_angle.h"
@@ -17,6 +18,20 @@ class dAcEnBase_c : public dAcObjBase_c {
 public:
     dAcEnBase_c();
     virtual ~dAcEnBase_c();
+
+    virtual void *getObjectListEntry() override {
+        return &mEnemyLink;
+    }
+
+    virtual void vt_0x80() {
+        return;
+    }
+    virtual void vt_0x84() {
+        return;
+    }
+    virtual UNKWORD vt_0x88(UNKWORD a) {
+        return a;
+    };
     /* 0x330 */ dAcRef_c<dAcEnBase_c> mEnemyLink;
     /* 0x33C */ u32 mInteractionFlags;
     /* 0x340 */ u16 field_0x338;

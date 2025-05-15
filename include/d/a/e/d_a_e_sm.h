@@ -55,7 +55,6 @@ public:
     virtual int actorPostCreate();
     virtual int actorExecute();
     virtual void registerInEvent();
-    virtual void *getObjectListEntry();
 
     STATE_FUNC_DECLARE(dAcEsm_c, BaseMother);
     STATE_FUNC_DECLARE(dAcEsm_c, Wait);
@@ -116,7 +115,7 @@ public:
     bool fn_187_5AC0() const;
     void fn_187_61B0(int);
     bool fn_187_6B10();
-    UNKTYPE fn_187_6C20(u8);
+    void fn_187_6C20(bool);
 
 private:
     void updateBoundingBox();
@@ -188,7 +187,7 @@ private:
     /* 0xB98 */ s32 field_0xB98;
     /* 0xB9C */ u8 _B9C[0xBA0 - 0xB9C];
     /* 0xBA0 */ u32 field_0xBA0;
-    /* 0xBA4 */ mAng field_0xBA4;
+    /* 0xBA4 */ s16 field_0xBA4;
     /* 0xBA6 */ s16 field_0xBA6;
     /* 0xBA8 */ u16 field_0xBA8;
     /* 0xBAA */ u16 field_0xBAA;
@@ -228,6 +227,7 @@ private:
     static const SmData_c sSmDataArr[8];
 
     static s32 sValueFromPlayer;
+    static s32 sTimer;
 };
 
 #endif
