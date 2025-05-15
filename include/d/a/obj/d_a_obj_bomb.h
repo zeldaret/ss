@@ -46,6 +46,13 @@ public:
 
     void setTransformFromFlower(const mMtx_c &);
 
+    void Off_0xA3C(u32 mask) {
+        field_0xA3C &= ~mask;
+    }
+    void On_0xA3C(u32 mask) {
+        field_0xA3C |= mask;
+    }
+
 public:
     /* 0x330 */ nw4r::g3d::ResFile mBrres;
     /* 0x334 */ m3d::smdl_c mMdl;
@@ -56,12 +63,13 @@ public:
     /* 0x8B4 */ mMtx_c mMtx;
     /* 0x8E4 */ dBgS_BombLinChk mLinChk;
     /* 0x97C */ UnkBombColInfo mUnkInfo;
-    /* 0x9B4 */ u8 _0[0x9B8 - 0x9B4];
+    /* 0x9B4 */ u8 _9B4[0x9B8 - 0x9B4];
     /* 0x9B8 */ dAcBomb_c *mSelfRef;
-    /* 0x9BC */ u8 _1[0x9D4 - 0x9BC];
+    /* 0x9BC */ u8 _9BC[0x9D4 - 0x9BC];
     /* 0x9D4 */ EffectsStruct mEffect1;
     /* 0xA08 */ EffectsStruct mEffect2;
-    /* 0xA3C */ u8 _2[0xA44 - 0xA3C];
+    /* 0xA3C */ u32 field_0xA3C;
+    /* 0xA40 */ u32 field_0xA40;
     /* 0xA44 */ s16 mField_0xA44;
     /* 0xA46 */ u8 _3[0xA50 - 0xA46];
     /* 0xA50 */ f32 mField_0xA50;

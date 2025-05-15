@@ -282,7 +282,7 @@ void dLytMeterHeart_c::realizeHeartsState() {
         }
     }
 }
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_972_;
+
 void dLytMeterHeart_c::executeInternal() {
     if (mEffectHeartIdx >= 0) {
         nw4r::math::MTX34 mtx = mpHeartPanes[mEffectHeartIdx]->GetGlobalMtx();

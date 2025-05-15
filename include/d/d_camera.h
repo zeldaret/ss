@@ -20,6 +20,9 @@ public:
     const mVec3_c &getPositionMaybe() const {
         return mPositionMaybe;
     }
+    const mVec3_c &getField_0x78() const {
+        return field_0x78;
+    }
 
     bool doFn_800918E0(s32 a1, s16 a2) {
         return fn_800918E0(field_0xDA0, a1, a2);
@@ -28,7 +31,8 @@ public:
 private:
     /* 0x068 */ u8 _0x068[0x6C - 0x068];
     /* 0x06C */ mVec3_c mPositionMaybe;
-    /* 0x078 */ u8 _0x078[0xD98 - 0x078];
+    /* 0x078 */ mVec3_c field_0x78;
+    /* 0x084 */ u8 _0x084[0xD98 - 0x084];
     /* 0xD98 */ void *field_0xD98;
     /* 0xD9C */ u8 _0xD9C[0xDA0 - 0xD9C];
     /* 0xDA0 */ void *field_0xDA0;

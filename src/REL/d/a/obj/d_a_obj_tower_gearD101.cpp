@@ -127,7 +127,8 @@ void dAcOTowerGearD101_c::initTransform() {
     mMdl.setLocalMtx(field_0x3C4);
 }
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_585_;
 void dAcOTowerGearD101_c::playVisualEffect() {
-    mEffects.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_585_, field_0x3F4, &rotation, nullptr, nullptr, nullptr);
+    mEffects.createContinuousEffect(
+        PARTICLE_RESOURCE_ID_MAPPING_572_, field_0x3F4, &rotation, nullptr, nullptr, nullptr
+    );
 }

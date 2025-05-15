@@ -45,7 +45,18 @@ struct TimeAreaStruct {
         return field_0x00;
     }
 
-    bool check(int, const mVec3_c &, u32, f32, f32);
+    void setField0x00(f32 v) {
+        field_0x00 = v;
+    }
+    void setField0x08(u8 v) {
+        field_0x08 = v;
+    }
+
+    // Return Values:
+    //   -1 SE_TIMESLIP_TIMESLIP_REV
+    //    0 No change ?
+    //    1 SE_TIMESLIP_TIMESLIP
+    int check(int, const mVec3_c &, u32, f32, f32);
 };
 
 class dTimeAreaMgr_c {

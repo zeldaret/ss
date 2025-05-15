@@ -18,9 +18,10 @@
 #include "m/m_vec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/blur_and_palette_manager.h"
-#include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/d_emitter.h"
+#include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/small_sound_mgr.h"
+
 
 void float_ordering() {
     const f32 arr[] = {5.f, 15.f, 7.f, 0.5f, 0.1f};
@@ -260,8 +261,6 @@ bool dAcOTumbleWeed_c::checkInvalidGround() const {
     return code == POLY_ATTR_LAVA || code == POLY_ATTR_SAND_MED || code == POLY_ATTR_SAND_DEEP_INSTANT ||
            code == POLY_ATTR_SAND_DEEP_SLOW;
 }
-
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_743_;
 
 void dAcOTumbleWeed_c::doBreak() {
     playSound(SE_TWeed_CUT);

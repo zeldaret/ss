@@ -234,7 +234,7 @@ public:
     void rotY(const mAng &angle);
     void rotZ(const mAng &angle);
 
-    void CopyTo(nw4r::math::VEC3 *p) {
+    void CopyTo(nw4r::math::VEC3 *p) const {
         p->x = x;
         p->y = y;
         p->z = z;

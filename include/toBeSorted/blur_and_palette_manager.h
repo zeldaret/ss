@@ -2,8 +2,10 @@
 #define BLUR_AND_PALETTE_MANAGER_H
 
 #include "common.h"
+#include "egg/math/eggVector.h"
 #include "m/m_color.h"
 #include "m/m_vec.h"
+#include "rvl/GX/GXTypes.h"
 #include "toBeSorted/tlist.h"
 
 struct UnkBlurPaletteListNode {
@@ -181,7 +183,6 @@ struct PaletteEAF_big_entry {
     u8 field_0x10;
 };
 
-
 struct PaletteEAF_big {
     ~PaletteEAF_big() {}
     PaletteEAF_big_entry field_0x00[8];
@@ -223,6 +224,24 @@ struct Bpm9 {
     u8 _0x00[0x14 - 0x00];
 };
 
+struct LightParams {
+    void SetColor(mColor clr) {
+        mClr = clr;
+    }
+    void SetScale(f32 scale) {
+        mScale = scale;
+    }
+    void SetPosition(const mVec3_c &pos) {
+        mPos = pos;
+    }
+
+    /* 0x00 */ EGG::Vector3f mPos;
+    /* 0x0C */ mColor mClr;
+    /* 0x10 */ f32 mScale;
+    /* 0x14 */ s32 mIdx;
+    /* 0x18 */ s32 field_0x18;
+};
+
 class BlurAndPaletteManager {
 public:
     BlurAndPaletteManager();
@@ -243,8 +262,10 @@ public:
     void setField_0x2F20(f32 arg) {
         field_0x2F20 = arg;
     }
-    void fn_800223A0(void *);
-    void fn_80022440(void *);
+    void fn_800223A0(LightParams *);
+    void fn_80022440(LightParams *);
+    void fn_800225F0(LightParams *);
+    void fn_800226E0(LightParams *);
     // light pillar related
     void fn_80024240(s16, s16, s16);
 
@@ -260,7 +281,7 @@ public:
         return currentSpf;
     }
 
-    const PaletteEAF_smol_entry& getSmallEAF(s32 idx1, s32 idx2) {
+    const PaletteEAF_smol_entry &getSmallEAF(s32 idx1, s32 idx2) {
         return field_0x38E4.field_0x00[idx1].field_0x00[idx2];
     }
 
@@ -308,7 +329,10 @@ private:
     /* 0x2F18 */ f32 field_0x2F18;
     /* 0x2F1C */ f32 field_0x2F1C;
     /* 0x2F20 */ f32 field_0x2F20;
-    /* 0x2F24 */ u8 _0x2F24[0x357C - 0x2F24];
+    /* 0x2F24 */ u8 field_0x2F24[4];
+    /* 0x2F28 */ LightParams *field_0x2F28[5];
+    /* 0x2F3C */ LightParams *field_0x2F3C[200];
+    /* 0x325C */ u8 field_0x325C[0x357C - 0x325C];
     /* 0x357C */ Bpm1 field_0x357C;
     /* 0x3594 */ u8 _0x3594[0x35A0 - 0x3594];
     /* 0x35A0 */ Bpm2 field_0x35A0;

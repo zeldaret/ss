@@ -171,9 +171,6 @@ int dAcODungeonShip_c::doDelete() {
     return SUCCEEDED;
 }
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_682_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_683_;
-
 int dAcODungeonShip_c::actorExecute() {
     field_0x850++;
     field_0x86C++;
@@ -196,7 +193,9 @@ int dAcODungeonShip_c::actorExecute() {
     mAnmMatClr.play();
     mMdl.calc(false);
     if (field_0x8D8) {
-        mEffects[0].createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_682_, position, &rotation, nullptr, nullptr, nullptr);
+        mEffects[0].createContinuousEffect(
+            PARTICLE_RESOURCE_ID_MAPPING_682_, position, &rotation, nullptr, nullptr, nullptr
+        );
     }
 
     if (field_0x8D9) {

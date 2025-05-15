@@ -6,6 +6,7 @@
 #include "JSystem/JParticle/JPAParticle.h"
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/col/c/c_cc_d.h"
 #include "d/d_base.h"
 #include "m/m2d.h"
 #include "m/m_allocator.h"
@@ -23,6 +24,8 @@
 class dEmitterBase_c;
 class dEmitterCallback_c;
 class dParticleCallback_c;
+
+#include "toBeSorted/d_emmitter_resource_map.inc"
 
 class dEmitterBase_c {
     friend class dEmitterCallback_c;
@@ -383,7 +386,6 @@ public:
         field_0x67C.a = clr.a;
     }
 
-
     void setField_0x67C(mColor clr) {
         field_0x67C.r = clr.r;
         field_0x67C.g = clr.g;
@@ -420,8 +422,11 @@ public:
     static dEmitterBase_c *spawnEffect(
         u16 effectResourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2
     );
-    static dEmitterBase_c *spawnGroundEffect(const mVec3_c &pos, u8 polyAttr0, u8 polyAttr1, const mVec3_c &, s32 unk, f32 scale, f32 groundHeightMaybe);
+    static dEmitterBase_c *spawnGroundEffect(
+        const mVec3_c &pos, u8 polyAttr0, u8 polyAttr1, const mVec3_c &, s32 unk, f32 scale, f32 groundHeightMaybe
+    );
 
+    static void spawnHitMarkEffect(int type, cCcD_Obj &collider, const mVec3_c *pVec, bool);
     // "mass obj" = grass, fire
     static bool createMassObjEffect(u16 effectResourceId, const mVec3_c &v1, dAcObjBase_c *owner, const mColor *color);
 

@@ -24,9 +24,16 @@ public:
         return sInstance->mTimekeeper.getTime();
     }
 
+    static bool hasCollectedAllTears() {
+        if (sInstance == nullptr) {
+            return false;
+        }
+        return sInstance->_hasCollectedAllTears();
+    }
+
 private:
     bool outOfTime() const;
-
+    bool _hasCollectedAllTears();
     static dTgSiren_c *sInstance;
 
     /* 0x0FC */ u8 _0x0FC[0x2C0 - 0x0FC];

@@ -449,7 +449,6 @@ void dAcOtubo_c::finalizeState_Rebirth() {
     setActorProperty(0x1);
 }
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_109_, PARTICLE_RESOURCE_ID_MAPPING_209_;
 extern "C" void fn_80022BE0(void *, const mVec3_c &);
 
 void dAcOtubo_c::destroy() {
