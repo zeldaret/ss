@@ -117,6 +117,7 @@ public:
 };
 
 class SaveMgr {
+public:
     static void create(EGG::Heap *heap);
 
     static SaveMgr *GetInstance() {

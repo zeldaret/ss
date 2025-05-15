@@ -743,7 +743,6 @@ void dLytMsgWindow_c::setCurrentFlowFilename(const char *name) {
     mCurrentFlowFileName = name;
 }
 
-#pragma dont_inline on
 void dLytMsgWindow_c::createSubMsgManager(u8 type) {
     switch (type) {
         case 6:
@@ -791,8 +790,6 @@ void dLytMsgWindow_c::createSubMsgManager(u8 type) {
             break;
     }
 }
-
-#pragma dont_inline off
 
 void dLytMsgWindow_c::removeSubMsgManagers() {
     if (mpWindowTalk != nullptr) {

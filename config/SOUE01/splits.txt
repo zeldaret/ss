@@ -180,9 +180,17 @@ d/d_dvd.cpp:
 	.data       start:0x805033F0 end:0x80503400
 	.sdata      start:0x80571C10 end:0x80571C20
 
+d/d_dvd_drive_error.cpp:
+	.text       start:0x80052300 end:0x80052760 align:16
+	.rodata     start:0x804DC6B0 end:0x804DCBF0
+	.data       start:0x80503400 end:0x80503440
+	.sbss       start:0x805750D0 end:0x805750D8
+	.sdata2     start:0x80576F20 end:0x80576F38
+
 d/d_dvd_unk.cpp:
-	.text       start:0x80052300 end:0x80052E00 align:16
-	.sbss       start:0x805750D0 end:0x805750E0
+	.text       start:0x80052760 end:0x80052E00 align:16
+	.data       start:0x80503440 end:0x8050A238
+	.sbss       start:0x805750D8 end:0x805750E0
 
 d/d_dylink.cpp:
 	.text       start:0x80052E00 end:0x80053A30 align:16

@@ -592,9 +592,7 @@ u8 dLytMeterMain_c::getUiMode() {
     return StoryflagManager::sInstance->getFlag(840);
 }
 
-#pragma dont_inline on
 dLytMeterMain_c::dLytMeterMain_c() {}
-#pragma dont_inline reset
 
 static const d2d::LytBrlanMapping meterBrlanMap[] = {
     {          "basicPosition_00_in.brlan", "G_remoConBtn_00"},
