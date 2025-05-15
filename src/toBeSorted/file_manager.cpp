@@ -133,9 +133,9 @@ u16 *FileManager::getStoryFlagsMut() {
 }
 
 /* 8000ABD0 */ void FileManager::setCurrentHealthCapacity(s16 health) {}
-/* 8000AC00 */ s16 FileManager::getCurrentHealthCapacity() {}
+/* 8000AC00 */ u16 FileManager::getCurrentHealthCapacity() {}
 /* 8000AC50 */ void FileManager::setCurrentHealth(s16 health) {}
-/* 8000AC80 */ s16 FileManager::getCurrentHealth() {}
+/* 8000AC80 */ u16 FileManager::getCurrentHealth() {}
 
 /* 8000ACD0 */ u16 FileManager::getLoadRoomT1() {}
 /* 8000AD20 */ u16 FileManager::getLoadRoomT2() {}

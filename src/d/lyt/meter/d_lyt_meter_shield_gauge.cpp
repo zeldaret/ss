@@ -1,6 +1,7 @@
 #include "d/lyt/meter/d_lyt_meter_shield_gauge.h"
 
 #include "common.h"
+#include "d/a/d_a_itembase.h"
 #include "d/d_pouch.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_meter_configuration.h"
@@ -58,16 +59,16 @@ bool dLytMeterShieldGauge_c::build(d2d::ResAccIf_c *resAcc) {
 
     mpOwnerPane = nullptr;
     field_0x31D = 1;
-    field_0x2E0 = 0.0f;
+    mCurrentDurability = 0.0f;
     field_0x2E4 = 0.0f;
-    field_0x2E8 = 0.0f;
-    field_0x2EC = 0.0f;
+    mSavedDurability = 0.0f;
+    mAnimatingDurability = 0.0f;
 
-    field_0x308 = convertFilePouchSlot(FileManager::GetInstance()->getShieldPouchSlot());
-    field_0x300 = field_0x2EC;
-    field_0x304 = field_0x2E0;
+    mCurrentShieldPouchSlot = convertFilePouchSlot(FileManager::GetInstance()->getShieldPouchSlot());
+    field_0x300 = mAnimatingDurability;
+    field_0x304 = mCurrentDurability;
     field_0x2FC = dLytMeterConfiguration_c::GetInstance()->getField_0x1C8();
-    field_0x2F0 = 80.0f;
+    mMaxDurability = 80.0f;
     field_0x2F4 = 80.0f;
 
     field_0x2F8 = mAnm[SHIELD_ANIM_USE].getAnimDuration() - 1.0f;
@@ -77,15 +78,15 @@ bool dLytMeterShieldGauge_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x31F = 0;
     field_0x31E = 0;
     field_0x318 = 0;
-    field_0x310 = 0;
-    field_0x314 = -1;
+    mShieldType = 0;
+    mSavedShieldType = -1;
 
-    mAnm[SHIELD_ANIM_UPDOWN].setFrame(field_0x2E0);
+    mAnm[SHIELD_ANIM_UPDOWN].setFrame(mCurrentDurability);
     mAnm[SHIELD_ANIM_UPDOWN].setAnimEnable(true);
-    field_0x2E4 = calcUpdownRatio(field_0x2E0);
+    field_0x2E4 = calcUpdownRatio(mCurrentDurability);
     mAnm[SHIELD_ANIM_USE].setFrame(field_0x2F8 - field_0x2E4);
     mAnm[SHIELD_ANIM_USE].setAnimEnable(true);
-    setLevel(field_0x2F0);
+    setLevel(mMaxDurability);
     mAnm[SHIELD_ANIM_LEVEL].setAnimEnable(true);
     mAnm[SHIELD_ANIM_TYPE].setFrame(getLytFrameForShield(0));
     mAnm[SHIELD_ANIM_TYPE].setAnimEnable(true);
@@ -124,83 +125,87 @@ bool dLytMeterShieldGauge_c::execute() {
         return true;
     }
 
-    if (field_0x2E0 == 0.0f) {
+    if (mCurrentDurability == 0.0f) {
         field_0x318 = 2;
     }
 
-    bool b1 = false;
+    bool bIsAnimatingDurability = false;
     bool b2 = true;
     bool b3 = false;
     bool b4 = false;
 
-    if (field_0x310 != field_0x314 ||
-        field_0x308 != convertFilePouchSlot(FileManager::GetInstance()->getShieldPouchSlot())) {
+    if (mShieldType != mSavedShieldType ||
+        mCurrentShieldPouchSlot != convertFilePouchSlot(FileManager::GetInstance()->getShieldPouchSlot())) {
         mLyt.findPane("N_alpha_00")->SetVisible(true);
-        field_0x314 = field_0x310;
-        mAnm[SHIELD_ANIM_TYPE].setFrame(getLytFrameForShield(field_0x310));
+        mSavedShieldType = mShieldType;
+        mAnm[SHIELD_ANIM_TYPE].setFrame(getLytFrameForShield(mShieldType));
         mAnm[SHIELD_ANIM_TYPE].setAnimEnable(true);
         mAnm[SHIELD_ANIM_LOOP_0].setFrame(0.0f);
         field_0x31D = 1;
         b2 = false;
         b3 = true;
-        field_0x2E8 = field_0x2E0;
-        field_0x308 = convertFilePouchSlot(FileManager::GetInstance()->getShieldPouchSlot());
+        mSavedDurability = mCurrentDurability;
+        mCurrentShieldPouchSlot = convertFilePouchSlot(FileManager::GetInstance()->getShieldPouchSlot());
     }
 
-    if (field_0x2E0 != field_0x2E8 || field_0x31D) {
-        if (field_0x2E0 < field_0x2E8) {
-            f32 f = calcUpdownRatio(field_0x2E0);
-            field_0x2E8 = field_0x2E0;
+    if (mCurrentDurability != mSavedDurability || field_0x31D) {
+        if (mCurrentDurability < mSavedDurability) {
+            f32 f = calcUpdownRatio(mCurrentDurability);
+            mSavedDurability = mCurrentDurability;
             mAnm[SHIELD_ANIM_UPDOWN].setFrame(f);
             mAnm[SHIELD_ANIM_UPDOWN].setAnimEnable(true);
-            b1 = true;
+            bIsAnimatingDurability = true;
             if (field_0x31F && field_0x31D) {
                 field_0x31F = 0;
-                b1 = false;
+                bIsAnimatingDurability = false;
             }
             field_0x31E = 0;
             b4 = true;
         } else {
-            b1 = true;
-            field_0x2EC += 1.0f;
+            bIsAnimatingDurability = true;
+            mAnimatingDurability += 1.0f;
             if (field_0x31F && field_0x31D) {
                 field_0x31F = 0;
-                b1 = false;
+                bIsAnimatingDurability = false;
             }
-            if (field_0x2EC >= field_0x2E0 || field_0x31D) {
-                field_0x2EC = field_0x2E0;
+            if (mAnimatingDurability >= mCurrentDurability || field_0x31D) {
+                mAnimatingDurability = mCurrentDurability;
             }
-            if (field_0x2E0 < field_0x2EC) {
+            if (mCurrentDurability < mAnimatingDurability) {
+                // @bug (?) Unreachable: `mCurrentDurability < mAnimatingDurability` => `mAnimatingDurability >= mCurrentDurability`,
+                // so the above block sets `mAnimatingDurability = mCurrentDurability` and this condition will never be hit.
                 field_0x31E = 1;
             }
 
             if (!field_0x31D) {
-                if (field_0x2E0 >= field_0x2F0) {
+                if (mCurrentDurability >= mMaxDurability) {
                     if (field_0x31E) {
+                        // Unreachable?
                         SmallSoundManager::GetInstance()->playSoundWithPitch(SE_S_GAUGE_SHIELD_UP_LV, 1.0f);
                     }
                     SmallSoundManager::GetInstance()->playSound(SE_S_GAUGE_SHIELD_UP_MAX);
                 } else {
                     if (field_0x31E) {
+                        // Unreachable?
                         SmallSoundManager::GetInstance()->playSoundWithPitch(
-                            SE_S_GAUGE_SHIELD_UP_LV, field_0x2E0 / field_0x2F0
+                            SE_S_GAUGE_SHIELD_UP_LV, mCurrentDurability / mMaxDurability
                         );
                     }
                 }
             }
-            f32 tmp = calcUpdownRatio(field_0x2EC);
+            f32 tmp = calcUpdownRatio(mAnimatingDurability);
             field_0x2E4 = tmp;
             if (!field_0x31F) {
                 mAnm[SHIELD_ANIM_USE].setFrame(field_0x2F8 - field_0x2E4);
                 mAnm[SHIELD_ANIM_USE].setAnimEnable(true);
             }
-            field_0x2E8 = field_0x2EC;
+            mSavedDurability = mAnimatingDurability;
             mAnm[SHIELD_ANIM_UPDOWN].setFrame(tmp);
             mAnm[SHIELD_ANIM_UPDOWN].setAnimEnable(true);
         }
 
         if (FileManager::GetInstance()->getShieldPouchSlot() == 8) {
-            if (field_0x2E0 <= 0.0f && b4) {
+            if (mCurrentDurability <= 0.0f && b4) {
                 mAnm[SHIELD_ANIM_BREAK].setFrame(0.0f);
                 mAnm[SHIELD_ANIM_BREAK].setAnimEnable(true);
                 field_0x30D = 1;
@@ -212,11 +217,11 @@ bool dLytMeterShieldGauge_c::execute() {
                 field_0x30C = 1;
             }
         } else {
-            if (field_0x2E0 <= 0.0f && b4) {
+            if (mCurrentDurability <= 0.0f && b4) {
                 mAnm[SHIELD_ANIM_BREAK].setFrame(0.0f);
                 mAnm[SHIELD_ANIM_BREAK].setAnimEnable(true);
                 field_0x30D = 1;
-            } else if (b2 && field_0x2E0 >= field_0x2F0) {
+            } else if (b2 && mCurrentDurability >= mMaxDurability) {
                 mAnm[SHIELD_ANIM_TO_MAX].setFrame(0.0f);
                 mAnm[SHIELD_ANIM_TO_MAX].setAnimEnable(true);
                 field_0x30E = 1;
@@ -228,14 +233,14 @@ bool dLytMeterShieldGauge_c::execute() {
     f32 f2 = dLytMeterConfiguration_c::GetInstance()->getField_0x1D0() * 40.0f / 4.0f;
     f32 f3 = dLytMeterConfiguration_c::GetInstance()->getField_0x1C4() * 40.0f / 4.0f;
 
-    (void)calcUpdownRatio(field_0x2E0);
+    (void)calcUpdownRatio(mCurrentDurability);
 
     if (field_0x31F) {
-        if (field_0x2E0 < field_0x304 && field_0x2E0 < field_0x2EC - f1) {
+        if (mCurrentDurability < field_0x304 && mCurrentDurability < mAnimatingDurability - f1) {
             field_0x2FC = dLytMeterConfiguration_c::GetInstance()->getField_0x1C8();
-            field_0x300 = field_0x2EC;
-            field_0x304 = field_0x2E0;
-            field_0x2E4 = calcUpdownRatio(field_0x2EC);
+            field_0x300 = mAnimatingDurability;
+            field_0x304 = mCurrentDurability;
+            field_0x2E4 = calcUpdownRatio(mAnimatingDurability);
             mAnm[SHIELD_ANIM_USE].setFrame(field_0x2F8 - field_0x2E4);
             mAnm[SHIELD_ANIM_USE].setAnimEnable(true);
         } else {
@@ -244,41 +249,41 @@ bool dLytMeterShieldGauge_c::execute() {
             }
             if (field_0x2FC == 0) {
                 field_0x300 = field_0x300 - f2;
-                if (field_0x300 < field_0x2E0) {
+                if (field_0x300 < mCurrentDurability) {
                     field_0x31F = 0;
-                    field_0x300 = field_0x2E0;
+                    field_0x300 = mCurrentDurability;
                 }
                 mAnm[SHIELD_ANIM_USE].setAnimEnable(true);
                 field_0x2E4 = calcUpdownRatio(field_0x300);
                 mAnm[SHIELD_ANIM_USE].setFrame(field_0x2F8 - field_0x2E4);
             }
         }
-    } else if (!field_0x31D && field_0x2E0 < field_0x2EC - f3) {
+    } else if (!field_0x31D && mCurrentDurability < mAnimatingDurability - f3) {
         field_0x31F = 1;
-        field_0x300 = field_0x2EC;
-        field_0x304 = field_0x2E0;
+        field_0x300 = mAnimatingDurability;
+        field_0x304 = mCurrentDurability;
         field_0x2FC = dLytMeterConfiguration_c::GetInstance()->getField_0x1C8();
-        field_0x2E4 = calcUpdownRatio(field_0x2EC);
+        field_0x2E4 = calcUpdownRatio(mAnimatingDurability);
         mAnm[SHIELD_ANIM_USE].setFrame(field_0x2F8 - field_0x2E4);
         mAnm[SHIELD_ANIM_USE].setAnimEnable(true);
-    } else if (!b1) {
-        field_0x2E4 = calcUpdownRatio(field_0x2EC);
+    } else if (!bIsAnimatingDurability) {
+        field_0x2E4 = calcUpdownRatio(mAnimatingDurability);
         mAnm[SHIELD_ANIM_USE].setFrame(field_0x2F8 - field_0x2E4);
         mAnm[SHIELD_ANIM_USE].setAnimEnable(true);
     }
 
-    if (!b1) {
-        field_0x2EC = field_0x2E0;
+    if (!bIsAnimatingDurability) {
+        mAnimatingDurability = mCurrentDurability;
     }
     field_0x31D = 0;
-    if (field_0x2F0 != field_0x2F4 || b3) {
-        setLevel(field_0x2F0);
+    if (mMaxDurability != field_0x2F4 || b3) {
+        setLevel(mMaxDurability);
         mAnm[SHIELD_ANIM_LEVEL].setAnimEnable(true);
-        field_0x2F4 = field_0x2F0;
+        field_0x2F4 = mMaxDurability;
     }
 
     if (mAnm[SHIELD_ANIM_BREAK].isEnabled()) {
-        if (field_0x318 == 0 && field_0x2E0 > 0) {
+        if (field_0x318 == 0 && mCurrentDurability > 0.0f) {
             mAnm[SHIELD_ANIM_BREAK].setFrame(0.0f);
             mAnm[SHIELD_ANIM_BREAK].setAnimEnable(true); // redundant?
             field_0x30C = 0;
@@ -290,7 +295,7 @@ bool dLytMeterShieldGauge_c::execute() {
         } else {
             mAnm[SHIELD_ANIM_BREAK].play();
         }
-    } else if (field_0x30C && !field_0x318 && field_0x2E0 > 0.0f) {
+    } else if (field_0x30C && !field_0x318 && mCurrentDurability > 0.0f) {
         mAnm[SHIELD_ANIM_BREAK].setFrame(0.0f);
         mAnm[SHIELD_ANIM_BREAK].setAnimEnable(true);
         field_0x30C = 0;
@@ -308,8 +313,9 @@ bool dLytMeterShieldGauge_c::execute() {
 
     mStateMgr.executeState();
 
-    if ((field_0x314 == 6 || field_0x314 == 7 || field_0x314 == 8) && mAnm[SHIELD_ANIM_USE].getFrame() == 0.0f &&
-        mAnm[SHIELD_ANIM_LOOP_0].getFrame() == 0.0f) {
+    if ((mSavedShieldType == SHIELD_SACRED_SHIELD || mSavedShieldType == SHIELD_DIVINE_SHIELD ||
+         mSavedShieldType == SHIELD_GODDESS_SHIELD) &&
+        mAnm[SHIELD_ANIM_USE].getFrame() == 0.0f && mAnm[SHIELD_ANIM_LOOP_0].getFrame() == 0.0f) {
         if (mAnm[SHIELD_ANIM_LOOP_0].isEnabled()) {
             mAnm[SHIELD_ANIM_LOOP_0].setAnimEnable(false);
         }
@@ -364,7 +370,7 @@ void dLytMeterShieldGauge_c::setLevel(f32 lv) {
 
 s32 dLytMeterShieldGauge_c::getLytFrameForShield(s32 shield) const {
     static const int table[] = {0, 4, 7, 1, 5, 8, 2, 6, 9, 3};
-    if (shield == 10) {
+    if (shield == SHIELD_NONE) {
         shield = 0;
     }
     return table[shield];
@@ -373,6 +379,6 @@ s32 dLytMeterShieldGauge_c::getLytFrameForShield(s32 shield) const {
 f32 dLytMeterShieldGauge_c::calcUpdownRatio(f32 f) const {
     f32 duration = mAnm[SHIELD_ANIM_UPDOWN].getAnimDuration() - 1.0f;
     f32 bound = 0.0f;
-    f32 b = (field_0x2F0 > bound ? f / field_0x2F0 : bound);
+    f32 b = (mMaxDurability > bound ? f / mMaxDurability : bound);
     return b * duration;
 }

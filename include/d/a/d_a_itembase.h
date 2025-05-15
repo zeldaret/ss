@@ -2,6 +2,7 @@
 #define D_A_ITEMBASE_H
 
 #include "d/a/obj/d_a_obj_base.h"
+#include "m/m_vec.h"
 
 enum ITEM_ID {
     /* 0x000 */ ITEM_NONE = 0,
@@ -208,6 +209,20 @@ enum ITEM_ID {
     /* 0x18D */ ITEM_LIFE_MEDAL_AGAIN = 397,              // ?? Prob doesnt exist
     /* 0x18E */ ITEM_POUCH_EXPANSION_GODDESS_CHEST = 398, // ?? Prob doesnt exist
     /* 0x1FF */ MAX_ITEM_ID = 511
+};
+
+enum SHIELD_TYPE_e {
+    /* 0x00 */ SHIELD_WOODEN_SHIELD = 0,
+    /* 0x01 */ SHIELD_BANDED_SHIELD = 1,
+    /* 0x02 */ SHIELD_BRACED_SHIELD = 2,
+    /* 0x03 */ SHIELD_IRON_SHIELD = 3,
+    /* 0x04 */ SHIELD_REINFORCED_SHIELD = 4,
+    /* 0x05 */ SHIELD_FORTIFIED_SHIELD = 5,
+    /* 0x06 */ SHIELD_SACRED_SHIELD = 6,
+    /* 0x07 */ SHIELD_DIVINE_SHIELD = 7,
+    /* 0x08 */ SHIELD_GODDESS_SHIELD = 8,
+    /* 0x09 */ SHIELD_HYLIAN_SHIELD = 9,
+    /* 0x0A */ SHIELD_NONE = 10,
 };
 
 struct ItemFlagStruct {

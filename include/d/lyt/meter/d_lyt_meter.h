@@ -421,6 +421,22 @@ public:
         }
     }
 
+    static f32 getShieldMaxDurability() {
+        if (sInstance != nullptr) {
+            return sInstance->mMain.mShield.getMaxDurability();
+        } else {
+            return 0.0f;
+        }
+    }
+
+    static f32 getShieldCurrentDurability() {
+        if (sInstance != nullptr) {
+            return sInstance->mMain.mShield.getCurrentDurability();
+        } else {
+            return 0.0f;
+        }
+    }
+
 private:
     /* 0x00004 */ d2d::ResAccIf_c mResAcc;
     /* 0x00374 */ dLytMeterEventSkip_c *mpEventSkip;

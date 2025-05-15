@@ -1267,7 +1267,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         mPanesVisible[METER_ANIM_NUN_BG] = false;
     }
 
-    if ((!isNotSilentRealmOrLoftwing() || (mShield.getGaugePercentMaybe() == 0.0f && mShield.getField_0x31D()) ||
+    if ((!isNotSilentRealmOrLoftwing() || (mShield.getCurrentDurability() == 0.0f && mShield.getField_0x31D()) ||
          dAcPy_c::GetLink()->getCurrentAction() == 0x8C || fn_800D5380(false) || field_0x13770 != 3 ||
          MinigameManager::isInMinigameState(MinigameManager::FUN_FUN_ISLAND) ||
          MinigameManager::isInMinigameState(MinigameManager::THRILL_DIGGER) ||
@@ -1533,7 +1533,7 @@ bool dLytMeterMain_c::execute() {
 
     if (mHeart.getCurrentHealthCapacity() / 4 <= 10) {
         heartsHeight = 0;
-        if (mShield.getGaugePercentMaybe() > 0.0f &&
+        if (mShield.getCurrentDurability() > 0.0f &&
             (mLyt.findPane("N_shieldAll_00")->IsVisible() || isNotSilentRealmOrLoftwing())) {
             rupeePos = 0;
             kakeraKeyPos = 1;
@@ -1547,7 +1547,7 @@ bool dLytMeterMain_c::execute() {
         }
     } else {
         heartsHeight = 1;
-        if (mShield.getGaugePercentMaybe() > 0.0f &&
+        if (mShield.getCurrentDurability() > 0.0f &&
             (mLyt.findPane("N_shieldAll_00")->IsVisible() || isNotSilentRealmOrLoftwing())) {
             rupeePos = 1;
             kakeraKeyPos = 1;

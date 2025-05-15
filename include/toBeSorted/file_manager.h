@@ -108,9 +108,9 @@ public:
     /* 8000AAA0 */ void initFile(int fileNum);
 
     /* 8000ABD0 */ void setCurrentHealthCapacity(s16 health);
-    /* 8000AC00 */ s16 getCurrentHealthCapacity();
+    /* 8000AC00 */ u16 getCurrentHealthCapacity();
     /* 8000AC50 */ void setCurrentHealth(s16 health);
-    /* 8000AC80 */ s16 getCurrentHealth();
+    /* 8000AC80 */ u16 getCurrentHealth();
 
     /* 8000ACD0 */ u16 getLoadRoomT1();
     /* 8000AD20 */ u16 getLoadRoomT2();

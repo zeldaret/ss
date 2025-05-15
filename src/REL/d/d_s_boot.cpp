@@ -28,6 +28,9 @@
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/d_hbm.h"
+#include "toBeSorted/d_emitter.h"
+#include "toBeSorted/d_particle.h"
+#include "toBeSorted/fi_context.h"
 #include "toBeSorted/reload_color_fader.h"
 #include "toBeSorted/save_manager.h"
 #include "toBeSorted/save_related.h"
@@ -276,10 +279,13 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb7() {
         return sFPhaseBase::PHASE_RETRY;
     }
 
-    // TODO JParticle monkaS
-    OarcManager::GetInstance()->getData("System", "dat/navi_table.dat");
-    OarcManager::GetInstance()->getData("JpaCommon", "dat/Common.jpc");
-    OarcManager::GetInstance()->getData("JpaCommon", "dat/Common.jpn");
+    void *naviDat = OarcManager::GetInstance()->getData("System", "dat/navi_table.dat");
+    FiContext::initialize(naviDat);
+    dParticle::mgr_c::create(dHeap::work1Heap.heap, 0xBB8, 0xFA, 0xF);
+    dJEffManager_c::createEffManagers();
+    void *jpc = OarcManager::GetInstance()->getData("JpaCommon", "dat/Common.jpc");
+    void *jpn = OarcManager::GetInstance()->getData("JpaCommon", "dat/Common.jpn");
+    dParticle::mgr_c::GetInstance()->createResource(dHeap::workExHeap.heap, 0, jpc, jpn);
 
     return sFPhaseBase::PHASE_NEXT;
 }
