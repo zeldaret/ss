@@ -9,6 +9,58 @@
 
 class dLytDobutton_c {
 public:
+    // TODO: figure out that these mean. The two pane arrays in d_lyt_do_button.cpp might help
+    enum Icon_e {
+        ICON_0 = 0,
+        ICON_1 = 1,
+        ICON_2 = 2,
+        ICON_3 = 3,
+        ICON_4 = 4,
+        ICON_5 = 5,
+        ICON_6 = 6,
+        ICON_7 = 7,
+        ICON_8 = 8,
+        ICON_9 = 9,
+        ICON_10 = 10,
+        ICON_11 = 11,
+        ICON_12 = 12,
+        ICON_13 = 13,
+        ICON_14 = 14,
+        ICON_15 = 15,
+        ICON_16 = 16,
+        ICON_17 = 17,
+        ICON_18 = 18,
+        ICON_19 = 19,
+        ICON_20 = 20,
+        ICON_21 = 21,
+        ICON_22 = 22,
+        ICON_23 = 23,
+        ICON_24 = 24,
+        ICON_25 = 25,
+        ICON_26 = 26,
+        ICON_27 = 27,
+        ICON_28 = 28,
+        ICON_29 = 29,
+        ICON_30 = 30,
+        ICON_31 = 31,
+        ICON_32 = 32,
+        ICON_33 = 33,
+        ICON_34 = 34,
+        ICON_35 = 35,
+        ICON_36 = 36,
+        ICON_37 = 37,
+        ICON_38 = 38,
+        ICON_39 = 39,
+        ICON_40 = 40,
+
+        ICON_NONE = 41,
+    };
+
+    // 001-Action.msbt - Enum for ACT_DO
+    // This is actually just the first part of ACT_INFO, but
+    // LytDoButtonRelated has a full conversion table
+    // from Act_IE_e -> Act_Do_e
+
     enum Act_Do_e {
         ACT_DO_CLIMB_UP = 0,
         ACT_DO_JUMP = 1,
@@ -104,6 +156,7 @@ public:
         ACT_DO_LEAN = 91,
         ACT_DO_PRESS = 92,
 
+        // why two of them?
         ACT_DO_NONE = 93,
         ACT_DO_INVALID = 94,
     };
@@ -136,7 +189,7 @@ public:
         if (sInstance != nullptr) {
             return sInstance->field_0x480;
         } else {
-            return 0x29;
+            return ICON_NONE;
         }
     }
 
@@ -144,7 +197,8 @@ public:
         if (sInstance != nullptr) {
             return sInstance->mNextDoActionToShow;
         } else {
-            return 0x29;
+            // @bug (?) should this be ACT_DO_INVALID?
+            return ICON_NONE;
         }
     }
 
@@ -152,7 +206,7 @@ public:
         if (sInstance != nullptr) {
             return sInstance->fn_8010E5E0();
         } else {
-            return 0x29;
+            return ICON_NONE;
         }
     }
 
@@ -177,6 +231,11 @@ private:
     void fn_8010E3D0(bool);
     void realize();
 
+    void set_0x47C_0x480(s32 v1, s32 v2) {
+        field_0x47C = v1;
+        field_0x480 = v2;
+    }
+
     static dLytDobutton_c *sInstance;
 
     STATE_FUNC_DECLARE(dLytDobutton_c, InvisibleWait);
@@ -187,7 +246,7 @@ private:
 
     STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytDobutton_c);
 
-    UI_STATE_MGR_DECLARE(dLytDobutton_c);
+    /* 0x000 */ UI_STATE_MGR_DECLARE(dLytDobutton_c);
     /* 0x040 */ d2d::dLytSub mLyt;
     /* 0x0D4 */ d2d::AnmGroup_c mAnmGroups[12];
     /* 0x3D4 */ nw4r::lyt::Pane *mpPanes[37];
@@ -202,7 +261,7 @@ private:
     /* 0x48C */ s32 field_0x48C;
     /* 0x490 */ u8 field_0x490;
     /* 0x491 */ u8 field_0x491;
-    /* 0x492 */ u8 field_0x492;
+    /* 0x492 */ bool mSavedIsInEvent;
 };
 
 #endif

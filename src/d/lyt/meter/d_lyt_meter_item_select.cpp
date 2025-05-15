@@ -1410,7 +1410,9 @@ void dLytMeterItemSelect_c::executeState_DemoMove() {
 
                 nw4r::math::MTX34 mtx = mpPanes[i + ITEM_SELECT_PANE_ICON_OFFSET]->GetGlobalMtx();
                 mVec3_c pos(mtx._03, mtx._13, 0.0f);
-                dJEffManager_c::spawnUIEffect(PARTICLE_RESOURCE_ID_MAPPING_740_, pos, nullptr, nullptr, nullptr, nullptr);
+                dJEffManager_c::spawnUIEffect(
+                    PARTICLE_RESOURCE_ID_MAPPING_740_, pos, nullptr, nullptr, nullptr, nullptr
+                );
 
                 if (mIsBocoburinLocked[i]) {
                     mIsBocoburinLocked[i] = false;
@@ -1983,7 +1985,7 @@ bool dLytMeterItemSelect_c::execute() {
             }
         }
 
-        if (dLytDobutton_c::getField0x47C() == 0x28) {
+        if (dLytDobutton_c::getField0x47C() == dLytDobutton_c::ACT_DO_SAILCLOTH) {
             if (field_0x5774 == 0) {
                 SmallSoundManager::GetInstance()->playSound(SE_S_PARACHUTE_CALL);
             }
@@ -2069,7 +2071,7 @@ bool dLytMeterItemSelect_c::execute() {
     mStateMgr.executeState();
     fn_800EF8C0(false);
 
-    if (dLytDobutton_c::getField0x47C() == 0x28) {
+    if (dLytDobutton_c::getField0x47C() == dLytDobutton_c::ACT_DO_SAILCLOTH) {
         if (field_0x57C3 != 0) {
             field_0x57BB = 1;
         }
@@ -2481,8 +2483,7 @@ bool dLytMeterItemSelect_c::fn_800F0030() const {
     if (!StoryflagManager::sInstance->getCounterOrFlag(58) &&
             !(EventManager::isInEvent() && EventManager::isCurrentEvent("ItemGetGorgeous")) ||
         (mpOwnerPane == nullptr || !mpOwnerPane->IsVisible() || dLytMeter_c::GetMain()->fn_800D5650() ||
-         dLytMeter_c::GetMain()->fn_800D5680() ||
-         !dLytMeter_c::GetMain()->getItemSelectNotHiddenByAreaCaption())) {
+         dLytMeter_c::GetMain()->fn_800D5680() || !dLytMeter_c::GetMain()->getItemSelectNotHiddenByAreaCaption())) {
         // If we don't have a B-Wheel and we're not currently in the ItemGetGorgeous event,
         // or (random other conditions), return false
         return false;

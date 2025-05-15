@@ -17,6 +17,7 @@ public:
         return sInstance;
     }
 
+    // 001-Action.msbt - Unified enum for ACT_INFO and ACT_ETC
     enum Act_IE_e {
         ACT_IE_INFO_CLIMB_UP = 0,
         ACT_IE_INFO_JUMP = 1,

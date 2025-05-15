@@ -1130,10 +1130,10 @@ void dLytMeterMain_c::checkPaneVisibility() {
         const char *name = EventManager::getCurrentEventName();
         if (strequals(name, "SwordDraw") || strequals(name, "SwordDrawDoorNew")) {
             field_0x1377E = true;
-            if (dLytDobutton_c::getNextActionToShow() != 0x12) {
-                dLytDobutton_c::setActionTextStuff(0x29, 0x5E, true);
+            if (dLytDobutton_c::getNextActionToShow() != dLytDobutton_c::ACT_DO_DRAW) {
+                dLytDobutton_c::setActionTextStuff(dLytDobutton_c::ICON_NONE, dLytDobutton_c::ACT_DO_INVALID, true);
             }
-            if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_A) != 0x12) {
+            if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_A) != LytDoButtonRelated::ACT_IE_INFO_DRAW) {
                 LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_NONE);
             }
             LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::ACT_IE_NONE);
@@ -1164,9 +1164,9 @@ void dLytMeterMain_c::checkPaneVisibility() {
             LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE &&
             !MinigameManager::isInMinigameState(MinigameManager::HOUSE_CLEANING) && !mItemSelect.fn_800F02F0())
 
-        ||
-        (isSilentRealm() && LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE &&
-         !mItemSelect.fn_800F02F0())
+        || (isSilentRealm() &&
+            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE &&
+            !mItemSelect.fn_800F02F0())
 
         || ((dAcPy_c::GetLink()->checkActionFlagsCont(0x400000) || fn_800D5420() ||
              dAcPy_c::GetLink()->checkActionFlags(dAcPy_c::FLG0_CRAWLING) || fn_800D5380(0) ||
@@ -1379,8 +1379,8 @@ void dLytMeterMain_c::checkPaneVisibility() {
 
     if (dAcPy_c::GetLink()->getRidingActorType() != dAcPy_c::RIDING_LOFTWING || !field_0x13780 ||
 
-        (dLytDobutton_c::getAction() != dLytDobutton_c::ACT_DO_INVALID || fn_800D56B0() || dLytMeter_c::getField_0x13B66() ||
-         fn_800D5420() || fn_800D5650() || fn_800D5680())) {
+        (dLytDobutton_c::getAction() != dLytDobutton_c::ACT_DO_INVALID || fn_800D56B0() ||
+         dLytMeter_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() || fn_800D5680())) {
         mBirdGaugeVisible = false;
     }
 

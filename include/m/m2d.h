@@ -61,6 +61,10 @@ public:
         return mCurrFrame;
     }
 
+    inline f32 getRate() const {
+        return mRate;
+    }
+
     inline void setCurrFrame(f32 arg) {
         mCurrFrame = arg;
     }

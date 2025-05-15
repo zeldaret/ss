@@ -693,6 +693,7 @@ d/lyt/d_lyt_do_button.cpp:
 	.data       start:0x8051A5A8 end:0x8051AC00
 	.sdata      start:0x80572520 end:0x80572530
 	.sbss       start:0x80575468 end:0x80575470
+	.sdata2     start:0x80579D70 end:0x80579D98
 	.bss        start:0x805ACE10 end:0x805ACF78
 
 d/lyt/d_lyt_do_button_related.cpp:

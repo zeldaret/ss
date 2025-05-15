@@ -1,7 +1,13 @@
 #include "d/lyt/d_lyt_do_button.h"
 
 #include "common.h"
+#include "d/a/d_a_player.h"
+#include "d/lyt/meter/d_lyt_meter.h"
+#include "nw4r/lyt/lyt_pane.h"
+#include "nw4r/lyt/lyt_types.h"
+#include "nw4r/math/math_types.h"
 #include "sized_string.h"
+#include "toBeSorted/event_manager.h"
 #include "toBeSorted/small_sound_mgr.h"
 
 struct DoButtonClass {
@@ -36,6 +42,8 @@ DoButtonClass::DoButtonClass() {
 }
 DoButtonClass::~DoButtonClass() {}
 
+dLytDobutton_c *dLytDobutton_c::sInstance;
+
 STATE_DEFINE(dLytDobutton_c, InvisibleWait);
 STATE_DEFINE(dLytDobutton_c, InvisibleTimeCnt);
 STATE_DEFINE(dLytDobutton_c, In);
@@ -43,7 +51,7 @@ STATE_DEFINE(dLytDobutton_c, Wait);
 STATE_DEFINE(dLytDobutton_c, Out);
 
 #define DO_BUTTON_ANIM_IN 0
-#define DO_BUTTON_ANIM 1
+#define DO_BUTTON_ANIM_BASIC_INFO 1
 #define DO_BUTTON_ANIM_LOOP_BTN 2
 #define DO_BUTTON_ANIM_LOOP_BTN_Z 3
 #define DO_BUTTON_ANIM_LOOP_NUN 4
@@ -55,7 +63,7 @@ STATE_DEFINE(dLytDobutton_c, Out);
 #define DO_BUTTON_ANIM_MOVE_OUT 10
 #define DO_BUTTON_ANIM_LOOP_BG 11
 
-#define DO_BUTTON_NUM_ANIM 12
+#define DO_BUTTON_NUM_ANIMS 12
 
 static const d2d::LytBrlanMapping brlanMap[] = {
     {         "basicInfo_00_in.brlan",       "G_inOut_00"},
@@ -81,6 +89,45 @@ static const char *sPaneNames[] = {
     "N_upSwing_01",  "N_aBtnDown_02",
 };
 
+#define DO_BUTTON_PANE_INFOALL_00 0
+#define DO_BUTTON_PANE_INFOALL_01 1
+#define DO_BUTTON_PANE_BG_00 2
+#define DO_BUTTON_PANE_W_BGP_00 3
+#define DO_BUTTON_PANE_W_BGP_01 4
+#define DO_BUTTON_PANE_INFOTEXT_00 5
+#define DO_BUTTON_PANE_A_BTN_00 6
+#define DO_BUTTON_PANE_A_BTN_01 7
+#define DO_BUTTON_PANE_B_BTN_00 8
+#define DO_BUTTON_PANE_C_BTN_00 9
+#define DO_BUTTON_PANE_C_BTN_01 10
+#define DO_BUTTON_PANE_NUNCHAKU_01 11
+#define DO_BUTTON_PANE_NUNCHAKU_02 12
+#define DO_BUTTON_PANE_NUNCHAKU_03 13
+#define DO_BUTTON_PANE_UP_SWING_00 14
+#define DO_BUTTON_PANE_DOWN_SWING_00 15
+#define DO_BUTTON_PANE_SWING_00 16
+#define DO_BUTTON_PANE_ROTATE_00 17
+#define DO_BUTTON_PANE_NUN_RIMO_00 18
+#define DO_BUTTON_PANE_NUN_DRAG_00 19
+#define DO_BUTTON_PANE_A_BTN_DOWN_00 20
+#define DO_BUTTON_PANE_A_BTN_DOWN_01 21
+#define DO_BUTTON_PANE_DRAW_00 22
+#define DO_BUTTON_PANE_PLAY_00 23
+#define DO_BUTTON_PANE_SWING_01 24
+#define DO_BUTTON_PANE_SWING_03 25
+#define DO_BUTTON_PANE_UPSET_00 26
+#define DO_BUTTON_PANE_STAB_00 27
+#define DO_BUTTON_PANE_PULL_OUT_01 28
+#define DO_BUTTON_PANE_B_BTN_01 29
+#define DO_BUTTON_PANE_TWIST_00 30
+#define DO_BUTTON_PANE_ZBTN_00 31
+#define DO_BUTTON_PANE_ZBTN_01 32
+#define DO_BUTTON_PANE_CROSS_BTN_00 33
+#define DO_BUTTON_PANE_PLUS_ALL_00 34
+#define DO_BUTTON_PANE_UP_SWING_01 35
+#define DO_BUTTON_PANE_A_BTN_DOWN_02 36
+
+#define DO_BUTTON_PANE_NONE 37
 #define DO_BUTTON_NUM_PANES 37
 
 static const char *sTextBoxNames[] = {
@@ -99,11 +146,11 @@ void dLytDobutton_c::executeState_InvisibleWait() {
     field_0x478 = field_0x474;
     field_0x474 = field_0x488;
     mDoActionToShow = mNextDoActionToShow;
-    if (field_0x488 == 0x29) {
+    if (field_0x488 == ICON_NONE) {
         return;
     }
 
-    if (mNextDoActionToShow == 0x5E) {
+    if (mNextDoActionToShow == ACT_DO_INVALID) {
         return;
     }
     mStateMgr.changeState(StateID_InvisibleTimeCnt);
@@ -114,14 +161,12 @@ void dLytDobutton_c::initializeState_InvisibleTimeCnt() {
     field_0x48C = 0;
 }
 
-extern "C" void fn_8010DF00(dLytDobutton_c *);
-
 void dLytDobutton_c::executeState_InvisibleTimeCnt() {
     if (field_0x488 != field_0x474 || mNextDoActionToShow != mDoActionToShow) {
         field_0x478 = field_0x474;
         field_0x474 = field_0x488;
         mDoActionToShow = mNextDoActionToShow;
-        if (field_0x488 == 0x29 || mNextDoActionToShow == 0x5E) {
+        if (field_0x488 == ICON_NONE || mNextDoActionToShow == ACT_DO_INVALID) {
             mStateMgr.changeState(StateID_InvisibleWait);
         } else {
             field_0x48C = 0;
@@ -130,7 +175,7 @@ void dLytDobutton_c::executeState_InvisibleTimeCnt() {
         if (field_0x48C < sDoButtonClass.field_0x15) {
             field_0x48C++;
         } else {
-            fn_8010DF00(this);
+            realize();
             mStateMgr.changeState(StateID_In);
         }
     }
@@ -147,7 +192,7 @@ void dLytDobutton_c::initializeState_In() {
     mAnmGroups[DO_BUTTON_ANIM_IN].setFrame(0.0f);
 }
 void dLytDobutton_c::executeState_In() {
-    if (field_0x488 == 0x29 || mNextDoActionToShow == 0x5E) {
+    if (field_0x488 == ICON_NONE || mNextDoActionToShow == ACT_DO_INVALID) {
         mAnmGroups[DO_BUTTON_ANIM_IN].setFrame(0.0f);
         mAnmGroups[DO_BUTTON_ANIM_MOVE_OUT].setAnimEnable(true);
         mAnmGroups[DO_BUTTON_ANIM_MOVE_OUT].setToEnd();
@@ -168,11 +213,11 @@ void dLytDobutton_c::executeState_Wait() {
         field_0x478 = field_0x474;
         field_0x474 = field_0x488;
         mDoActionToShow = mNextDoActionToShow;
-        if (field_0x488 == 0x29 || mNextDoActionToShow == 0x5E) {
+        if (field_0x488 == ICON_NONE || mNextDoActionToShow == ACT_DO_INVALID) {
             mStateMgr.changeState(StateID_Out);
             field_0x48C = 0;
         } else {
-            fn_8010DF00(this);
+            realize();
         }
     }
 }
@@ -191,7 +236,7 @@ void dLytDobutton_c::executeState_Out() {
     if (mAnmGroups[DO_BUTTON_ANIM_MOVE_OUT].isEndReached()) {
         mLyt.calc();
         mAnmGroups[DO_BUTTON_ANIM_MOVE_OUT].setAnimEnable(false);
-        mStateMgr.changeState(StateID_InvisibleTimeCnt);
+        mStateMgr.changeState(StateID_InvisibleWait);
     }
 }
 void dLytDobutton_c::finalizeState_Out() {}
@@ -201,7 +246,7 @@ bool dLytDobutton_c::build(m2d::ResAccIf_c *resAcc) {
     mLyt.build("basicInfo_00.brlyt", nullptr);
     mLyt.setPriority(0x8A);
 
-    for (int i = 0; i < DO_BUTTON_NUM_ANIM; i++) {
+    for (int i = 0; i < DO_BUTTON_NUM_ANIMS; i++) {
         mAnmGroups[i].init(brlanMap[i].mFile, resAcc, mLyt.getLayout(), brlanMap[i].mName);
         mAnmGroups[i].bind(false);
         mAnmGroups[i].setAnimEnable(false);
@@ -215,16 +260,16 @@ bool dLytDobutton_c::build(m2d::ResAccIf_c *resAcc) {
         mpTextBoxes[i] = mLyt.getTextBox(sTextBoxNames[i]);
     }
 
-    mDoActionToShow = 0x5E;
-    field_0x474 = 0x29;
-    field_0x478 = 0x29;
-    mNextDoActionToShow = 0x5E;
-    field_0x488 = 0x29;
+    mDoActionToShow = ACT_DO_INVALID;
+    field_0x474 = ICON_NONE;
+    field_0x478 = ICON_NONE;
+    mNextDoActionToShow = ACT_DO_INVALID;
+    field_0x488 = ICON_NONE;
     field_0x490 = 0;
-    field_0x47C = 0x5E;
-    field_0x480 = 0x29;
+    field_0x47C = ACT_DO_INVALID;
+    field_0x480 = ICON_NONE;
     field_0x491 = 0;
-    field_0x492 = 0;
+    mSavedIsInEvent = false;
 
     mAnmGroups[DO_BUTTON_ANIM_LOOP_NUN].setAnimEnable(true);
     mAnmGroups[DO_BUTTON_ANIM_LOOP_BG].setAnimEnable(true);
@@ -240,9 +285,186 @@ bool dLytDobutton_c::build(m2d::ResAccIf_c *resAcc) {
 }
 
 bool dLytDobutton_c::remove() {
-    for (int i = 0; i < DO_BUTTON_NUM_ANIM; i++) {
+    for (int i = 0; i < DO_BUTTON_NUM_ANIMS; i++) {
         mAnmGroups[i].remove();
     }
+    return true;
+}
+
+bool dLytDobutton_c::execute() {
+    bool isInEvent = EventManager::isInEvent();
+    bool b1 = true;
+    if (dAcPy_c::isInBambooCuttingMinigame()) {
+        setActionTextStuff(ICON_12, ACT_DO_70, false);
+    }
+    if (field_0x490 == 0) {
+        if (isInEvent != mSavedIsInEvent) {
+            if (isInEvent && field_0x488 == field_0x480 && mNextDoActionToShow == field_0x47C) {
+                setActionTextStuff(ICON_NONE, ACT_DO_INVALID, false);
+                b1 = false;
+            }
+            mSavedIsInEvent = isInEvent;
+        } else if (isInEvent && field_0x490 == 0 && field_0x488 == field_0x480 && mNextDoActionToShow == field_0x47C) {
+            setActionTextStuff(ICON_NONE, ACT_DO_INVALID, false);
+            b1 = false;
+        }
+    }
+
+    if (b1) {
+        set_0x47C_0x480(mNextDoActionToShow, field_0x488);
+    }
+
+    if ((isInEvent && !field_0x490) || dLytMeter_c::getItemSelect0x75A2() != 0 ||
+        dLytMeter_c::getMinusBtnFn800F7600()) {
+        setActionTextStuffInternal(41, ACT_DO_INVALID, false);
+    }
+
+    for (int i = 0; i < DO_BUTTON_NUM_ANIMS; i++) {
+        if (i != DO_BUTTON_ANIM_BASIC_INFO && i != DO_BUTTON_ANIM_LOOP_MOVE_INFO && i != DO_BUTTON_ANIM_MOVE_ALPHA) {
+            if (mAnmGroups[i].isEnabled()) {
+                mAnmGroups[i].play();
+            }
+        }
+    }
+
+    if (mAnmGroups[DO_BUTTON_ANIM_LOOP_MOVE_INFO].isEnabled() || mAnmGroups[DO_BUTTON_ANIM_MOVE_ALPHA].isEnabled()) {
+        bool b2 = false;
+        if (mAnmGroups[DO_BUTTON_ANIM_LOOP_MOVE_INFO].isStop2()) {
+            if (((field_0x478 == 26 && field_0x474 == 11) || (field_0x478 == 27 && field_0x474 == 11) ||
+                 (field_0x478 == 28 && field_0x474 == 11) || (field_0x478 == 29 && field_0x474 == 11) ||
+                 (field_0x478 == 30 && field_0x474 == 8) || (field_0x478 == 31 && field_0x474 == 11) ||
+                 (field_0x478 == 32 && field_0x474 == 36) || (field_0x478 == 33 && field_0x474 == 11) ||
+                 (field_0x478 == 34 && field_0x474 == 11) || (field_0x478 == 35 && field_0x474 == 11)) &&
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_MOVE_INFO].getFrame() == 0.0f) {
+                mAnmGroups[DO_BUTTON_ANIM_BASIC_INFO].setAnimEnable(true);
+                mAnmGroups[DO_BUTTON_ANIM_BASIC_INFO].setFrame(field_0x474);
+            }
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_MOVE_INFO].setAnimEnable(false);
+        } else {
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_MOVE_INFO].play();
+            b2 = true;
+        }
+        if (mAnmGroups[DO_BUTTON_ANIM_MOVE_ALPHA].isStop2()) {
+            mAnmGroups[DO_BUTTON_ANIM_MOVE_ALPHA].setAnimEnable(false);
+        } else {
+            mAnmGroups[DO_BUTTON_ANIM_MOVE_ALPHA].play();
+            b2 = true;
+        }
+
+        if (b2) {
+            mLyt.calc();
+        }
+        fn_8010E3D0(mDoActionToShow != ACT_DO_NONE);
+    }
+
+    mStateMgr.executeState();
+
+    if (((field_0x474 == 1 && mDoActionToShow == ACT_DO_27) ||
+         (field_0x474 == 1 && mDoActionToShow == ACT_DO_BREAK_FREE)) &&
+        field_0x491) {
+        if (!mAnmGroups[DO_BUTTON_ANIM_LOOP_RECOVER].isEnabled()) {
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_RECOVER].setFrame(0.0f);
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_RECOVER].setRate(3.0f);
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_RECOVER].setAnimEnable(true);
+        }
+        if (mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].isEnabled()) {
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].setRate(1.0f);
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].setAnimEnable(false);
+        }
+        if (mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].isEnabled()) {
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].setRate(1.0f);
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].setAnimEnable(false);
+        }
+    } else if ((field_0x474 == 6 && field_0x491) || (field_0x478 == 6 && *mStateMgr.getStateID() == StateID_Out)) {
+        // Same code as above, copypasted
+        if (!mAnmGroups[DO_BUTTON_ANIM_LOOP_RECOVER].isEnabled()) {
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_RECOVER].setFrame(0.0f);
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_RECOVER].setRate(3.0f);
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_RECOVER].setAnimEnable(true);
+        }
+        if (mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].isEnabled()) {
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].setRate(1.0f);
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].setAnimEnable(false);
+        }
+        if (mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].isEnabled()) {
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].setRate(1.0f);
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].setAnimEnable(false);
+        }
+    } else {
+        if (mAnmGroups[DO_BUTTON_ANIM_LOOP_RECOVER].isEnabled()) {
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_RECOVER].setRate(1.0f);
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_RECOVER].setAnimEnable(false);
+        }
+
+        if (field_0x474 == 4 || field_0x474 == 28 || field_0x474 == 29) {
+            if (mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].isEnabled()) {
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].setRate(1.0f);
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].setAnimEnable(false);
+            }
+            if (!mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].isEnabled()) {
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].setFrame(0.0f);
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].setRate(1.0f);
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].setAnimEnable(true);
+            }
+        } else if (field_0x474 == 12 && mDoActionToShow == ACT_DO_70) {
+            if (!mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].isEnabled()) {
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].setFrame(0.0f);
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].setAnimEnable(true);
+            }
+
+            if (mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].getRate() != 2.0f) {
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].setRate(2.0f);
+            }
+
+            if (mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].isEnabled()) {
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].setRate(1.0f);
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].setAnimEnable(false);
+            }
+        } else {
+            if (!mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].isEnabled()) {
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].setFrame(0.0f);
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].setAnimEnable(true);
+            }
+            if (mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].getRate() != 1.0f) {
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_REMO_CON].setRate(1.0f);
+            }
+            if (mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].isEnabled()) {
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].setRate(1.0f);
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_ROTATE].setAnimEnable(false);
+            }
+        }
+    }
+
+    mLyt.calc();
+
+    if (field_0x474 >= 26 && field_0x474 < 36) {
+        if (!mAnmGroups[DO_BUTTON_ANIM_LOOP_MOVE_INFO].isEnabled()) {
+            if (mAnmGroups[DO_BUTTON_ANIM_LOOP_BTN].isEnabled()) {
+                if (mAnmGroups[DO_BUTTON_ANIM_LOOP_BTN].getFrame() == 0.0f) {
+                    mAnmGroups[DO_BUTTON_ANIM_LOOP_BTN].setAnimEnable(false);
+                }
+            }
+            if (mAnmGroups[DO_BUTTON_ANIM_LOOP_BTN_Z].isEnabled()) {
+                if (mAnmGroups[DO_BUTTON_ANIM_LOOP_BTN_Z].getFrame() == 0.0f) {
+                    mAnmGroups[DO_BUTTON_ANIM_LOOP_BTN_Z].setAnimEnable(false);
+                }
+            }
+        }
+    } else {
+        if (!mAnmGroups[DO_BUTTON_ANIM_LOOP_BTN].isEnabled()) {
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_BTN].setAnimEnable(true);
+        }
+
+        if (!mAnmGroups[DO_BUTTON_ANIM_LOOP_BTN_Z].isEnabled()) {
+            mAnmGroups[DO_BUTTON_ANIM_LOOP_BTN_Z].setAnimEnable(true);
+        }
+    }
+
+    if (mAnmGroups[DO_BUTTON_ANIM_BASIC_INFO].isEnabled()) {
+        mAnmGroups[DO_BUTTON_ANIM_BASIC_INFO].setAnimEnable(false);
+    }
+
+    setActionTextStuffInternal(41, ACT_DO_INVALID, false);
     return true;
 }
 
@@ -345,6 +567,7 @@ static const s32 sActDoIds[] = {
     91, // ACT_DO_CHARGE
     92, // ACT_DO_LEAN
     93, // ACT_DO_PRESS
+    -1,
 };
 
 void dLytDobutton_c::realize() {
@@ -399,8 +622,8 @@ void dLytDobutton_c::realize() {
         mAnmGroups[DO_BUTTON_ANIM_MOVE_ALPHA].setToEnd2();
     }
 
-    mAnmGroups[DO_BUTTON_ANIM].setAnimEnable(true);
-    mAnmGroups[DO_BUTTON_ANIM].setFrame(i2);
+    mAnmGroups[DO_BUTTON_ANIM_BASIC_INFO].setAnimEnable(true);
+    mAnmGroups[DO_BUTTON_ANIM_BASIC_INFO].setFrame(i2);
     if (mDoActionToShow != ACT_DO_NONE) {
         SizedString<16> buf;
         buf.sprintf("ACT_DO_%03d", sActDoIds[mDoActionToShow]);
@@ -420,6 +643,163 @@ void dLytDobutton_c::realize() {
     }
 }
 
+static const s32 sPaneIdxes1[] = {
+    DO_BUTTON_PANE_A_BTN_00,      // ICON_0
+    DO_BUTTON_PANE_SWING_00,      // ICON_1
+    DO_BUTTON_PANE_UP_SWING_00,   // ICON_2
+    DO_BUTTON_PANE_DOWN_SWING_00, // ICON_3
+    DO_BUTTON_PANE_ROTATE_00,     // ICON_4
+    DO_BUTTON_PANE_NONE,          // ICON_5
+    DO_BUTTON_PANE_NUN_RIMO_00,   // ICON_6
+    DO_BUTTON_PANE_A_BTN_00,      // ICON_7
+    DO_BUTTON_PANE_C_BTN_00,      // ICON_8
+    DO_BUTTON_PANE_NUN_DRAG_00,   // ICON_9
+    DO_BUTTON_PANE_C_BTN_01,      // ICON_10
+    DO_BUTTON_PANE_A_BTN_DOWN_00, // ICON_11
+    DO_BUTTON_PANE_SWING_01,      // ICON_12
+    DO_BUTTON_PANE_DRAW_00,       // ICON_13
+    DO_BUTTON_PANE_PLAY_00,       // ICON_14
+    DO_BUTTON_PANE_NONE,          // ICON_15
+    DO_BUTTON_PANE_NUNCHAKU_01,   // ICON_16
+    DO_BUTTON_PANE_UPSET_00,      // ICON_17
+    DO_BUTTON_PANE_STAB_00,       // ICON_18
+    DO_BUTTON_PANE_NONE,          // ICON_19
+    DO_BUTTON_PANE_PULL_OUT_01,   // ICON_20
+    DO_BUTTON_PANE_A_BTN_01,      // ICON_21
+    DO_BUTTON_PANE_SWING_03,      // ICON_22
+    DO_BUTTON_PANE_B_BTN_00,      // ICON_23
+    DO_BUTTON_PANE_B_BTN_01,      // ICON_24
+    DO_BUTTON_PANE_TWIST_00,      // ICON_25
+    DO_BUTTON_PANE_A_BTN_DOWN_00, // ICON_26
+    DO_BUTTON_PANE_A_BTN_DOWN_00, // ICON_27
+    DO_BUTTON_PANE_A_BTN_DOWN_01, // ICON_28
+    DO_BUTTON_PANE_A_BTN_DOWN_01, // ICON_29
+    DO_BUTTON_PANE_C_BTN_00,      // ICON_30
+    DO_BUTTON_PANE_ZBTN_00,       // ICON_31
+    DO_BUTTON_PANE_ZBTN_01,       // ICON_32
+    DO_BUTTON_PANE_A_BTN_DOWN_01, // ICON_33
+    DO_BUTTON_PANE_A_BTN_DOWN_00, // ICON_34
+    DO_BUTTON_PANE_A_BTN_DOWN_00, // ICON_35
+    DO_BUTTON_PANE_ZBTN_00,       // ICON_36
+    DO_BUTTON_PANE_CROSS_BTN_00,  // ICON_37
+    DO_BUTTON_PANE_UP_SWING_01,   // ICON_38
+    DO_BUTTON_PANE_A_BTN_DOWN_02, // ICON_39
+    DO_BUTTON_PANE_A_BTN_DOWN_02, // ICON_40
+
+};
+
+static const s32 sPaneIdxes2[] = {
+    DO_BUTTON_PANE_NONE,        // ICON_0
+    DO_BUTTON_PANE_NONE,        // ICON_1
+    DO_BUTTON_PANE_NONE,        // ICON_2
+    DO_BUTTON_PANE_NONE,        // ICON_3
+    DO_BUTTON_PANE_NONE,        // ICON_4
+    DO_BUTTON_PANE_NONE,        // ICON_5
+    DO_BUTTON_PANE_NONE,        // ICON_6
+    DO_BUTTON_PANE_NONE,        // ICON_7
+    DO_BUTTON_PANE_NONE,        // ICON_8
+    DO_BUTTON_PANE_NONE,        // ICON_9
+    DO_BUTTON_PANE_NONE,        // ICON_10
+    DO_BUTTON_PANE_NONE,        // ICON_11
+    DO_BUTTON_PANE_NONE,        // ICON_12
+    DO_BUTTON_PANE_NONE,        // ICON_13
+    DO_BUTTON_PANE_NONE,        // ICON_14
+    DO_BUTTON_PANE_NONE,        // ICON_15
+    DO_BUTTON_PANE_NONE,        // ICON_16
+    DO_BUTTON_PANE_NONE,        // ICON_17
+    DO_BUTTON_PANE_NONE,        // ICON_18
+    DO_BUTTON_PANE_NONE,        // ICON_19
+    DO_BUTTON_PANE_NONE,        // ICON_20
+    DO_BUTTON_PANE_NONE,        // ICON_21
+    DO_BUTTON_PANE_NONE,        // ICON_22
+    DO_BUTTON_PANE_NONE,        // ICON_23
+    DO_BUTTON_PANE_NONE,        // ICON_24
+    DO_BUTTON_PANE_NONE,        // ICON_25
+    DO_BUTTON_PANE_NUNCHAKU_02, // ICON_26
+    DO_BUTTON_PANE_NUNCHAKU_03, // ICON_27
+    DO_BUTTON_PANE_ROTATE_00,   // ICON_28
+    DO_BUTTON_PANE_ROTATE_00,   // ICON_29
+    DO_BUTTON_PANE_NUN_DRAG_00, // ICON_30
+    DO_BUTTON_PANE_A_BTN_00,    // ICON_31
+    DO_BUTTON_PANE_UP_SWING_00, // ICON_32
+    DO_BUTTON_PANE_PLAY_00,     // ICON_33
+    DO_BUTTON_PANE_PULL_OUT_01, // ICON_34
+    DO_BUTTON_PANE_STAB_00,     // ICON_35
+    DO_BUTTON_PANE_NONE,        // ICON_36
+    DO_BUTTON_PANE_NONE,        // ICON_37
+    DO_BUTTON_PANE_NONE,        // ICON_38
+    DO_BUTTON_PANE_STAB_00,     // ICON_39
+    DO_BUTTON_PANE_PULL_OUT_01, // ICON_40
+
+};
+
+void dLytDobutton_c::fn_8010E3D0(bool b) {
+    s32 i1 = field_0x474;
+    if (mAnmGroups[DO_BUTTON_ANIM_LOOP_MOVE_INFO].isEnabled()) {
+        if (mAnmGroups[DO_BUTTON_ANIM_LOOP_MOVE_INFO].isPlayingForwardsOnce()) {
+            if (mAnmGroups[DO_BUTTON_ANIM_LOOP_MOVE_INFO].getFrame() <
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_MOVE_INFO].getAnimDuration() * 0.5f) {
+                i1 = field_0x478;
+            }
+        } else {
+            if (mAnmGroups[DO_BUTTON_ANIM_LOOP_MOVE_INFO].getFrame() >
+                mAnmGroups[DO_BUTTON_ANIM_LOOP_MOVE_INFO].getAnimDuration() * 0.5f) {
+                i1 = field_0x478;
+            }
+        }
+    }
+
+    s32 idx1 = sPaneIdxes1[i1];
+    f32 w1 = mpPanes[idx1]->GetSize().width;
+    f32 x1 = mpPanes[idx1]->GetTranslate().x;
+    f32 left = x1 - w1 / 2.0f;
+    f32 right = x1 + w1 / 2.0f;
+    f32 xBase = mpPanes[5]->GetTranslate().x;
+
+    s32 idx2 = sPaneIdxes2[i1];
+    if (idx2 != 37) {
+        f32 x2 = mpPanes[idx2]->GetTranslate().x;
+        f32 w2 = mpPanes[idx2]->GetSize().width;
+        f32 left2 = x2 - w2 / 2.0f;
+        f32 right2 = x2 + w2 / 2.0f;
+        if (left > left2) {
+            left = left2;
+        }
+        if (right < right2) {
+            right = right2;
+        }
+        w1 = right - left;
+    }
+
+    nw4r::lyt::Size sz3 = mpPanes[3]->GetSize();
+    nw4r::lyt::Size sz4 = mpPanes[4]->GetSize();
+    if (b) {
+        f32 tmp = (xBase - left);
+        w1 = mpTextBoxes[0]->GetLineWidth(nullptr) + tmp;
+    }
+    f32 w = w1 + sDoButtonClass.field_0x10;
+    sz3.width = w;
+    sz4.width = w;
+    mpPanes[3]->SetSize(sz3);
+    mpPanes[4]->SetSize(sz4);
+    nw4r::math::VEC3 v = mpPanes[1]->GetTranslate();
+    v.x = -left - w1 / 2.0f;
+    mpPanes[1]->SetTranslate(v);
+}
+
+void dLytDobutton_c::setActionTextStuffInternal(s32 a1, s32 a2, bool b) {
+    field_0x488 = a1;
+    mNextDoActionToShow = a2;
+    field_0x490 = b;
+}
+
 s32 dLytDobutton_c::getActionInternal() const {
     return mDoActionToShow;
+}
+
+s32 dLytDobutton_c::fn_8010E5E0() const {
+    if (mDoActionToShow != ACT_DO_INVALID) {
+        return field_0x474;
+    }
+    return ICON_NONE;
 }
