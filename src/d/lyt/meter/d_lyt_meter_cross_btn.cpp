@@ -33,7 +33,7 @@ void dLytMeterCrossBtnParts_c::executeState_Wait() {
     if (field_0x7C) {
         if (field_0x68) {
             bool bDoUpdate = true;
-            if (field_0x64 != LytDoButtonRelated::DO_NONE || field_0x70 != field_0x74) {
+            if (field_0x64 != LytDoButtonRelated::ACT_IE_NONE || field_0x70 != field_0x74) {
                 if (timer <= 0) {
                     mStateMgr.changeState(StateID_On);
                     setMessage(field_0x64);
@@ -47,7 +47,7 @@ void dLytMeterCrossBtnParts_c::executeState_Wait() {
                 field_0x70 = field_0x74;
             }
         } else {
-            if (field_0x64 != LytDoButtonRelated::DO_NONE || field_0x70 != field_0x74) {
+            if (field_0x64 != LytDoButtonRelated::ACT_IE_NONE || field_0x70 != field_0x74) {
                 setMessage(field_0x64);
             }
             field_0x60 = field_0x64;
@@ -77,7 +77,7 @@ void dLytMeterCrossBtnParts_c::finalizeState_On() {}
 void dLytMeterCrossBtnParts_c::initializeState_Active() {}
 void dLytMeterCrossBtnParts_c::executeState_Active() {
     if (field_0x64 != field_0x60 || !field_0x68 || field_0x70 != field_0x74) {
-        if ((field_0x64 == LytDoButtonRelated::DO_NONE && field_0x74 == 6) || !field_0x68) {
+        if ((field_0x64 == LytDoButtonRelated::ACT_IE_NONE && field_0x74 == 6) || !field_0x68) {
             if (field_0x60 != field_0x6C) {
                 field_0x64 = field_0x6C;
             }
@@ -87,7 +87,7 @@ void dLytMeterCrossBtnParts_c::executeState_Active() {
         }
         field_0x60 = field_0x64;
         field_0x70 = field_0x74;
-    } else if (field_0x60 == LytDoButtonRelated::DO_NONE && field_0x74 == 6) {
+    } else if (field_0x60 == LytDoButtonRelated::ACT_IE_NONE && field_0x74 == 6) {
         mStateMgr.changeState(StateID_Off);
     }
 }
@@ -107,15 +107,15 @@ void dLytMeterCrossBtnParts_c::executeState_Off() {
 void dLytMeterCrossBtnParts_c::finalizeState_Off() {}
 
 void dLytMeterCrossBtnParts_c::init() {
-    field_0x6C = LytDoButtonRelated::DO_NONE;
-    field_0x60 = LytDoButtonRelated::DO_NONE;
-    field_0x64 = LytDoButtonRelated::DO_NONE;
+    field_0x6C = LytDoButtonRelated::ACT_IE_NONE;
+    field_0x60 = LytDoButtonRelated::ACT_IE_NONE;
+    field_0x64 = LytDoButtonRelated::ACT_IE_NONE;
     field_0x7C = false;
     field_0x70 = 6;
     field_0x68 = 1;
     mOnDelay = 15;
     mpOwnerPane = 0;
-    setMessage(LytDoButtonRelated::DO_NONE);
+    setMessage(LytDoButtonRelated::ACT_IE_NONE);
     mStateMgr.changeState(StateID_Wait);
 }
 
@@ -142,18 +142,18 @@ void dLytMeterCrossBtnParts_c::execute(bool bIsVisible) {
 
     if (dLytMeter_c::GetInstance()->getMeterField_0x13750() == 0) {
         if (mIndex == 0) {
-            LytDoButtonRelated::fn_8010EC10(LytDoButtonRelated::DO_NONE, true);
+            LytDoButtonRelated::fn_8010EC10(LytDoButtonRelated::ACT_IE_NONE, true);
         } else if (mIndex == 1) {
-            LytDoButtonRelated::fn_8010ED50(LytDoButtonRelated::DO_NONE, true);
+            LytDoButtonRelated::fn_8010ED50(LytDoButtonRelated::ACT_IE_NONE, true);
         } else if (mIndex == 2) {
-            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::DO_NONE);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::ACT_IE_NONE);
         } else if (mIndex == 3) {
-            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_R, LytDoButtonRelated::DO_NONE);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_R, LytDoButtonRelated::ACT_IE_NONE);
         }
 
-        if (field_0x64 != LytDoButtonRelated::DO_NONE) {
-            field_0x64 = LytDoButtonRelated::DO_NONE;
-            field_0x60 = LytDoButtonRelated::DO_NONE;
+        if (field_0x64 != LytDoButtonRelated::ACT_IE_NONE) {
+            field_0x64 = LytDoButtonRelated::ACT_IE_NONE;
+            field_0x60 = LytDoButtonRelated::ACT_IE_NONE;
         }
         setMessage(field_0x64);
     }
@@ -169,13 +169,13 @@ void dLytMeterCrossBtnParts_c::execute(bool bIsVisible) {
         field_0x7C = 0;
 
         if (mIndex == 0) {
-            LytDoButtonRelated::fn_8010EC10(LytDoButtonRelated::DO_NONE, true);
+            LytDoButtonRelated::fn_8010EC10(LytDoButtonRelated::ACT_IE_NONE, true);
         } else if (mIndex == 1) {
-            LytDoButtonRelated::fn_8010ED50(LytDoButtonRelated::DO_NONE, true);
+            LytDoButtonRelated::fn_8010ED50(LytDoButtonRelated::ACT_IE_NONE, true);
         } else if (mIndex == 2) {
-            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::DO_NONE);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::ACT_IE_NONE);
         } else if (mIndex == 3) {
-            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_R, LytDoButtonRelated::DO_NONE);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_R, LytDoButtonRelated::ACT_IE_NONE);
         }
     } else {
         field_0x7C = 1;
@@ -258,11 +258,11 @@ void dLytMeterCrossBtnParts_c::setMessage(s32 id) {
         mpLyt->getLayout()->Animate(0);
         mpLyt->calc();
         mpAnm[1]->setAnimEnable(false);
-    } else if (id < LytDoButtonRelated::DO_NONE) {
-        if (id < 0x5D) {
+    } else if (id < LytDoButtonRelated::ACT_IE_NONE) {
+        if (id < LytDoButtonRelated::ACT_IE_SEPARATOR) {
             sprintf(buf, "ACT_INFO_%03d", sActIds[id]);
         } else {
-            s32 id2 = id - 0x5E;
+            s32 id2 = id - LytDoButtonRelated::ACT_IE_SEPARATOR - 1;
             sprintf(buf, "ACT_ETC_%03d", sActIds[id2]);
         }
 

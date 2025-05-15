@@ -666,7 +666,7 @@ void dLytMeterItemSelect_c::initializeState_Wait() {
 }
 void dLytMeterItemSelect_c::executeState_Wait() {
     if (field_0x57B3 == 1 && (field_0x5794 == I_INVALID || LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) ==
-                                                               LytDoButtonRelated::DO_STOP)) {
+                                                               LytDoButtonRelated::ACT_IE_ETC_STOP)) {
         mStateMgr.changeState(StateID_SetNone);
     } else if (field_0x57B3 == 0 && field_0x5794 == I_INVALID &&
                (field_0x579A == I_SAILCLOTH || field_0x579A == I_BOAT_CANNON || field_0x579A == I_HARP)) {
@@ -687,10 +687,10 @@ void dLytMeterItemSelect_c::executeState_Wait() {
     } else if (!dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_B)) {
         mStateMgr.changeState(StateID_ToUnuse);
     } else if (!dLytMeter_c::GetMain()->fn_800D5650() && !dLytMeter_c::GetMain()->fn_800D5680() &&
-               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::DO_ITEMS &&
-               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::DO_RETURN &&
-               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::DO_DONE &&
-               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::DO_STOP &&
+               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::ACT_IE_ETC_ITEMS &&
+               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::ACT_IE_ETC_RETURN &&
+               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::ACT_IE_ETC_DONE &&
+               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) != LytDoButtonRelated::ACT_IE_ETC_STOP &&
                (field_0x5794 != I_BOAT_CANNON && field_0x5794 != I_HARP && field_0x5794 != I_INVALID &&
                 field_0x5794 != I_SAILCLOTH)) {
         mStateMgr.changeState(StateID_ResetIn);
@@ -1122,10 +1122,10 @@ void dLytMeterItemSelect_c::executeState_Reset() {
         fn_800F0310();
     } else if (field_0x5794 == I_SAILCLOTH || field_0x5794 == I_BOAT_CANNON || field_0x5794 == I_HARP) {
         mStateMgr.changeState(StateID_SetSpecialItemIn);
-    } else if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_ITEMS ||
-               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_RETURN ||
-               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_DONE ||
-               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_STOP ||
+    } else if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_ETC_ITEMS ||
+               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_ETC_RETURN ||
+               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_ETC_DONE ||
+               LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_ETC_STOP ||
                field_0x5794 == I_INVALID || !dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_B) ||
                field_0x5754 == 1) {
         mStateMgr.changeState(StateID_ResetOut);
@@ -1789,10 +1789,10 @@ bool dLytMeterItemSelect_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x57BB = 0;
     field_0x57BC = 0;
     field_0x5774 = 0;
-    mLastDoButtonRelatedAction = LytDoButtonRelated::DO_NONE;
+    mLastDoButtonRelatedAction = LytDoButtonRelated::ACT_IE_NONE;
     field_0x5770 = 5;
 
-    setBtnText(LytDoButtonRelated::DO_NONE);
+    setBtnText(LytDoButtonRelated::ACT_IE_NONE);
 
     mStateMgr.changeState(StateID_InitWait);
 
@@ -2203,12 +2203,12 @@ bool dLytMeterItemSelect_c::execute() {
         }
 
         if (field_0x5794 == I_SAILCLOTH) {
-            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::DO_SAILCLOTH);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::ACT_IE_ETC_SAILCLOTH);
         } else if (field_0x5794 == I_BOAT_CANNON) {
             if (field_0x57B3 != 0) {
-                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::DO_STOW_CANNON);
+                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::ACT_IE_ETC_STOW_CANNON);
             } else {
-                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::DO_READY_CANNON);
+                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::ACT_IE_ETC_READY_CANNON);
             }
         }
 
@@ -2220,8 +2220,8 @@ bool dLytMeterItemSelect_c::execute() {
                 setBtnText(mLastDoButtonRelatedAction);
             }
         } else {
-            if (mLastDoButtonRelatedAction != LytDoButtonRelated::DO_NONE) {
-                mLastDoButtonRelatedAction = LytDoButtonRelated::DO_NONE;
+            if (mLastDoButtonRelatedAction != LytDoButtonRelated::ACT_IE_NONE) {
+                mLastDoButtonRelatedAction = LytDoButtonRelated::ACT_IE_NONE;
                 setBtnText(mLastDoButtonRelatedAction);
             }
 
@@ -2230,7 +2230,7 @@ bool dLytMeterItemSelect_c::execute() {
             }
         }
 
-        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::DO_NONE);
+        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::ACT_IE_NONE);
     }
 
     field_0x57C1 = isWheelBlockedByCurrentAction();
@@ -2580,26 +2580,26 @@ void dLytMeterItemSelect_c::fn_800F0310() {
 
 #include "d/lyt/meter/d_lyt_meter_action_table.inc"
 
-void dLytMeterItemSelect_c::setBtnText(s32 unkId) {
-    SizedString<16> id;
-    if (unkId < LytDoButtonRelated::DO_NONE) {
+void dLytMeterItemSelect_c::setBtnText(s32 id) {
+    SizedString<16> buf;
+    if (id < LytDoButtonRelated::ACT_IE_NONE) {
         mpTextBoxes[8]->SetVisible(true);
         mpTextBoxes[9]->SetVisible(true);
         mpWindows[0]->SetVisible(true);
         mpTextBoxes[4]->SetVisible(true);
         mpTextBoxes[5]->SetVisible(true);
         mpWindows[3]->SetVisible(true);
-        if (unkId < 0x5D) {
-            id.sprintf("ACT_INFO_%03d", sActIds[unkId]);
+        if (id < LytDoButtonRelated::ACT_IE_SEPARATOR) {
+            buf.sprintf("ACT_INFO_%03d", sActIds[id]);
         } else {
-            unkId -= 0x5E;
-            id.sprintf("ACT_ETC_%03d", sActIds[unkId]);
+            s32 tempId = id - LytDoButtonRelated::ACT_IE_SEPARATOR - 1;
+            buf.sprintf("ACT_ETC_%03d", sActIds[tempId]);
         }
-        mpTextBoxes[8]->setMessageWithGlobalTextProcessor2(id, nullptr);
-        mpTextBoxes[9]->setMessageWithGlobalTextProcessor2(id, nullptr);
+        mpTextBoxes[8]->setMessageWithGlobalTextProcessor2(buf, nullptr);
+        mpTextBoxes[9]->setMessageWithGlobalTextProcessor2(buf, nullptr);
         mpWindows[0]->UpdateSize(mpSizeBoxes[0], 32.0f);
-        mpTextBoxes[4]->setMessageWithGlobalTextProcessor2(id, nullptr);
-        mpTextBoxes[5]->setMessageWithGlobalTextProcessor2(id, nullptr);
+        mpTextBoxes[4]->setMessageWithGlobalTextProcessor2(buf, nullptr);
+        mpTextBoxes[5]->setMessageWithGlobalTextProcessor2(buf, nullptr);
         mpWindows[3]->UpdateSize(mpSizeBoxes[3], 32.0f);
     } else {
         const wchar_t *empty = L"";

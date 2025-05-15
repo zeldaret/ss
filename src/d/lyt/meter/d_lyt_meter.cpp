@@ -996,9 +996,9 @@ void dLytMeterMain_c::fn_800D5290() {
         meter->setFlags(METER_BTN_PLUS);
     }
 
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_PLUS, LytDoButtonRelated::DO_0x74);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_PLUS, LytDoButtonRelated::ACT_IE_ETC_BACK_2);
     meter->clearFlags(METER_BTN_MINUS | METER_BTN_1 | METER_BTN_2);
-    if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::DO_NONE) {
+    if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::ACT_IE_NONE) {
         meter->clearFlags(METER_BTN_C);
     }
 }
@@ -1134,10 +1134,10 @@ void dLytMeterMain_c::checkPaneVisibility() {
                 dLytDobutton_c::setActionTextStuff(0x29, 0x5E, true);
             }
             if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_A) != 0x12) {
-                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::DO_NONE);
+                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_NONE);
             }
-            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::DO_NONE);
-            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::DO_NONE);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::ACT_IE_NONE);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::ACT_IE_NONE);
         }
     }
 
@@ -1156,16 +1156,16 @@ void dLytMeterMain_c::checkPaneVisibility() {
     }
 
     if ((!StoryflagManager::sInstance->getCounterOrFlag(58) &&
-         ((LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE &&
+         ((LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE &&
            mItemSelect.getField_0x5794() != 2 &&
            (!EventManager::isInEvent() || !EventManager::isCurrentEvent("ItemGetGorgeous")))))
 
         || (dStageMgr_c::GetInstance()->isAreaTypeHouse() &&
-            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE &&
+            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE &&
             !MinigameManager::isInMinigameState(MinigameManager::HOUSE_CLEANING) && !mItemSelect.fn_800F02F0())
 
         ||
-        (isSilentRealm() && LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE &&
+        (isSilentRealm() && LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE &&
          !mItemSelect.fn_800F02F0())
 
         || ((dAcPy_c::GetLink()->checkActionFlagsCont(0x400000) || fn_800D5420() ||
@@ -1175,7 +1175,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
              MinigameManager::isInMinigameState(MinigameManager::BAMBOO_CUTTING)))
 
         || (MinigameManager::isInMinigameState(MinigameManager::TRIAL_TIME_ATTACK) &&
-            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE) ||
+            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE) ||
         (dLytMeter_c::getField_0x13B66() || (fn_800D56B0() && !mItemSelect.fn_800F02F0() && !fn_800D53D0()) ||
          fn_800D5650() || fn_800D5680())) {
         mPanesVisible[METER_ANIM_ITEM_SELECT] = false;
@@ -1379,7 +1379,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
 
     if (dAcPy_c::GetLink()->getRidingActorType() != dAcPy_c::RIDING_LOFTWING || !field_0x13780 ||
 
-        (dLytDobutton_c::getFn0x8010E5D0() != 0x5E || fn_800D56B0() || dLytMeter_c::getField_0x13B66() ||
+        (dLytDobutton_c::getAction() != dLytDobutton_c::ACT_DO_INVALID || fn_800D56B0() || dLytMeter_c::getField_0x13B66() ||
          fn_800D5420() || fn_800D5650() || fn_800D5680())) {
         mBirdGaugeVisible = false;
     }
@@ -1653,19 +1653,19 @@ bool dLytMeterMain_c::execute() {
     }
 
     meter->resetFlags();
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::DO_NONE);
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::DO_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::ACT_IE_NONE);
 
-    LytDoButtonRelated::fn_8010EC10(LytDoButtonRelated::DO_NONE, true);
-    LytDoButtonRelated::fn_8010ED50(LytDoButtonRelated::DO_NONE, true);
+    LytDoButtonRelated::fn_8010EC10(LytDoButtonRelated::ACT_IE_NONE, true);
+    LytDoButtonRelated::fn_8010ED50(LytDoButtonRelated::ACT_IE_NONE, true);
 
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::DO_NONE);
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_R, LytDoButtonRelated::DO_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_R, LytDoButtonRelated::ACT_IE_NONE);
 
-    LytDoButtonRelated::reset(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::DO_NONE);
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::DO_NONE);
-    LytDoButtonRelated::reset(LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::DO_NONE);
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_BG, LytDoButtonRelated::DO_NONE);
+    LytDoButtonRelated::reset(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::reset(LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_BG, LytDoButtonRelated::ACT_IE_NONE);
 
     if (mpTimer != nullptr) {
         mpTimer->execute();
@@ -1769,7 +1769,7 @@ bool dLytMeter_c::build() {
     }
 
     if (mpDoButton != nullptr) {
-        mpDoButton->init(&mResAcc);
+        mpDoButton->build(&mResAcc);
     }
     if (mpDoButtonRelated != nullptr) {
         mpDoButtonRelated->build(&mResAcc);
