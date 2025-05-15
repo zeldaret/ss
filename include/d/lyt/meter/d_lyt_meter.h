@@ -421,17 +421,17 @@ public:
         }
     }
 
-    static f32 getShieldLevel() {
+    static f32 getShieldMaxDurability() {
         if (sInstance != nullptr) {
-            return sInstance->mMain.mShield.getLevel();
+            return sInstance->mMain.mShield.getMaxDurability();
         } else {
             return 0.0f;
         }
     }
 
-    static f32 getShieldGaugePercentMaybe() {
+    static f32 getShieldCurrentDurability() {
         if (sInstance != nullptr) {
-            return sInstance->mMain.mShield.getGaugePercentMaybe();
+            return sInstance->mMain.mShield.getCurrentDurability();
         } else {
             return 0.0f;
         }

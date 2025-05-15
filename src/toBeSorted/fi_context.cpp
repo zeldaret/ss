@@ -297,8 +297,8 @@ u16 FiContext::prepareFiHelpIndex() {
     u16 ret = 0xFFFF;
     setHelpIndex(-1);
 
-    if (dLytMeter_c::getShieldLevel() > 0.0f && dLytMeter_c::getShieldGaugePercentMaybe() > 0.0f) {
-        if (dLytMeter_c::getShieldGaugePercentMaybe() <= 6.0f) {
+    if (dLytMeter_c::getShieldMaxDurability() > 0.0f && dLytMeter_c::getShieldCurrentDurability() > 0.0f) {
+        if (dLytMeter_c::getShieldCurrentDurability() <= 6.0f) {
             if (!getField_0x4A()) {
                 ret = 6402;
                 // "The integrity of your shield has weakened..."

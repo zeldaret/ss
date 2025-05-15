@@ -31,8 +31,8 @@ public:
         mpOwnerPane = pane;
     }
 
-    f32 getGaugePercentMaybe() const {
-        return field_0x2E0;
+    f32 getCurrentDurability() const {
+        return mCurrentDurability;
     }
 
     void setfield_0x318(s32 v) {
@@ -43,8 +43,8 @@ public:
         return field_0x31D;
     }
 
-    f32 getLevel() const {
-        return field_0x2F0;
+    f32 getMaxDurability() const {
+        return mMaxDurability;
     }
 
 private:
@@ -63,22 +63,22 @@ private:
     /* 0x0D8 */ d2d::AnmGroup_c mAnm[8];
     /* 0x2D8 */ d2d::AnmGroup_c *mpContainerAnmGroup;
     /* 0x2DC */ nw4r::lyt::Pane *mpOwnerPane;
-    /* 0x2E0 */ f32 field_0x2E0;
+    /* 0x2E0 */ f32 mCurrentDurability;
     /* 0x2E4 */ f32 field_0x2E4;
-    /* 0x2E8 */ f32 field_0x2E8;
-    /* 0x2EC */ f32 field_0x2EC;
-    /* 0x2F0 */ f32 field_0x2F0;
+    /* 0x2E8 */ f32 mSavedDurability;
+    /* 0x2EC */ f32 mAnimatingDurability;
+    /* 0x2F0 */ f32 mMaxDurability;
     /* 0x2F4 */ f32 field_0x2F4;
     /* 0x2F8 */ f32 field_0x2F8;
     /* 0x2FC */ s32 field_0x2FC;
     /* 0x300 */ f32 field_0x300;
     /* 0x304 */ f32 field_0x304;
-    /* 0x308 */ s32 field_0x308;
+    /* 0x308 */ s32 mCurrentShieldPouchSlot;
     /* 0x30C */ u8 field_0x30C;
     /* 0x30D */ u8 field_0x30D;
     /* 0x30E */ u8 field_0x30E;
-    /* 0x310 */ s32 field_0x310;
-    /* 0x314 */ s32 field_0x314;
+    /* 0x310 */ s32 mShieldType;
+    /* 0x314 */ s32 mSavedShieldType;
     /* 0x318 */ s32 field_0x318;
     /* 0x31C */ u8 field_0x31C;
     /* 0x31D */ u8 field_0x31D;
