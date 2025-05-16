@@ -25,6 +25,34 @@ struct dLytMsgWindowCharData;
 
 class dLytMsgWindow_c {
 public:
+    enum MsgWindow_e {
+        MSG_WINDOW_0 = 0,
+        MSG_WINDOW_1 = 1,
+
+        MSG_WINDOW_SWORD_FI = 2,
+        MSG_WINDOW_SWORD_GHIRAHIM = 3,
+        MSG_WINDOW_SWORD_LASTBOSS = 4,
+        MSG_WINDOW_GET = 5,
+        MSG_WINDOW_WOOD = 6,
+        MSG_WINDOW_STONE = 7,
+
+        MSG_WINDOW_8 = 8,
+
+        MSG_WINDOW_LINK = 9,
+
+        MSG_WINDOW_10 = 10,
+
+        MSG_WINDOW_22 = 22,
+
+        MSG_WINDOW_DEMO = 30,
+        MSG_WINDOW_31 = 31,
+
+        MSG_WINDOW_34 = 34,
+
+        // Maybe none
+        MSG_WINDOW_36 = 36,
+    };
+
     dLytMsgWindow_c() : mStateMgr(*this) {}
     virtual ~dLytMsgWindow_c() {}
 

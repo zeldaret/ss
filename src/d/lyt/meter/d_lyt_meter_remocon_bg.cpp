@@ -50,13 +50,13 @@ bool dLytMeterRemoconBg_c::remove() {
 bool dLytMeterRemoconBg_c::execute() {
     if (EventManager::isInEvent() || dLytMeter_c::getItemSelect0x75A2() != 0) {
         field_0xEC = 0;
-        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_REMOCON_BG, LytDoButtonRelated::DO_NONE);
+        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_REMOCON_BG, LytDoButtonRelated::ACT_IE_NONE);
     } else {
         field_0xEC = 1;
     }
     s32 d = dLytDobutton_c::getFn0x8010E5E0();
     if (d == 1 || d == 2 || d == 3 || d == 4 || d == 12 || d == 13 || d == 14 || d == 6) {
-        LytDoButtonRelated::Action_e a = LytDoButtonRelated::convertDoButton(dLytDobutton_c::getFn0x8010E5D0());
+        LytDoButtonRelated::Act_IE_e a = LytDoButtonRelated::convertDoButton(dLytDobutton_c::getAction());
         if (a >= 0) {
             LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_REMOCON_BG, a);
         }
@@ -65,6 +65,6 @@ bool dLytMeterRemoconBg_c::execute() {
     field_0xE0 = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_REMOCON_BG);
     field_0xE4 = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_REMOCON_BG);
     mStateMgr.executeState();
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_REMOCON_BG, LytDoButtonRelated::DO_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_REMOCON_BG, LytDoButtonRelated::ACT_IE_NONE);
     return true;
 }

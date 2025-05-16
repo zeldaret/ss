@@ -20,7 +20,7 @@ dLytPauseDisp00_c::dLytPauseDisp00_c() : mStateMgr(*this, sStateID::null) {}
 
 void dLytPauseDisp00_c::init() {
     mLytBase.build("pause_00.brlyt", nullptr);
-    mLytBase.mPriority = 0x86;
+    mLytBase.setPriority(0x86);
 
     for (int i = 0; i < 0x7E; i++) {
         field_0x00D0[i].init(S_MAPPINGS[i].mFile, nullptr, mLytBase.getLayout(), S_MAPPINGS[i].mName);

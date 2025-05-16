@@ -121,10 +121,10 @@ bool dLytMeterPlusBtn_c::build(d2d::ResAccIf_c *resAcc) {
         mpWindow[i]->UpdateSize(mpSizeBox[i], 32.0f);
     }
 
-    field_0x1B0 = LytDoButtonRelated::DO_NONE;
-    field_0x1B4 = LytDoButtonRelated::DO_NONE;
+    field_0x1B0 = LytDoButtonRelated::ACT_IE_NONE;
+    field_0x1B4 = LytDoButtonRelated::ACT_IE_NONE;
 
-    setMessage(LytDoButtonRelated::DO_NONE);
+    setMessage(LytDoButtonRelated::ACT_IE_NONE);
 
     field_0x1C0 = 0;
     field_0x1C1 = StoryflagManager::sInstance->getCounterOrFlag(212);
@@ -218,7 +218,7 @@ bool dLytMeterPlusBtn_c::execute() {
 
     mStateMgr.executeState();
 
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_PLUS, LytDoButtonRelated::DO_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_PLUS, LytDoButtonRelated::ACT_IE_NONE);
 
     if (mAnm[PLUS_BTN_ANIM_LOOP].isEnabled()) {
         mAnm[PLUS_BTN_ANIM_LOOP].play();
@@ -313,11 +313,11 @@ void dLytMeterPlusBtn_c::setMessage(s32 id) {
         buf[i] = 0;
     }
 
-    if (id < LytDoButtonRelated::DO_NONE) {
-        if (id < 0x5D) {
+    if (id < LytDoButtonRelated::ACT_IE_NONE) {
+        if (id < LytDoButtonRelated::ACT_IE_SEPARATOR) {
             sprintf(buf, "ACT_INFO_%03d", sActIds[id]);
         } else {
-            s32 id2 = id - 0x5E;
+            s32 id2 = id - LytDoButtonRelated::ACT_IE_SEPARATOR - 1;
             sprintf(buf, "ACT_ETC_%03d", sActIds[id2]);
         }
 

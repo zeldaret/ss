@@ -46,7 +46,7 @@ void defaultSet() {
 void draw(u8 priority) {
     for (Base_c *base = static_cast<Base_c *>(nw4r::ut::List_GetFirst(&l_list)); base != nullptr;
          base = static_cast<Base_c *>(nw4r::ut::List_GetNext(&l_list, base))) {
-        if (base->mPriority >= priority) {
+        if (base->getPriority() >= priority) {
             break;
         }
         base->draw();
@@ -56,7 +56,7 @@ void draw(u8 priority) {
 void drawBefore(u8 priority) {
     for (Base_c *base = static_cast<Base_c *>(nw4r::ut::List_GetFirst(&l_list)); base != nullptr;
          base = static_cast<Base_c *>(nw4r::ut::List_GetNext(&l_list, base))) {
-        if (base->mPriority > priority) {
+        if (base->getPriority() > priority) {
             base->draw();
         }
     }

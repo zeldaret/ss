@@ -39,6 +39,7 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/minigame_mgr.h"
+#include "toBeSorted/misc_actor.h"
 #include "toBeSorted/small_sound_mgr.h"
 // clang-format on
 
@@ -848,8 +849,8 @@ bool dLytMeterMain_c::build(d2d::ResAccIf_c *resAcc) {
     }
     s32 zero = 0;
 
-    field_0x1374C = 0;
-    field_0x13748 = 0;
+    mSavedBasicPosition = 0;
+    mBasicPosition = POSITION_NORMAL;
     field_0x13750 = 4;
     field_0x13770 = 3;
     field_0x13774 = 0;
@@ -996,15 +997,15 @@ void dLytMeterMain_c::fn_800D5290() {
         meter->setFlags(METER_BTN_PLUS);
     }
 
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_PLUS, LytDoButtonRelated::DO_0x74);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_PLUS, LytDoButtonRelated::ACT_IE_ETC_BACK_2);
     meter->clearFlags(METER_BTN_MINUS | METER_BTN_1 | METER_BTN_2);
-    if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::DO_NONE) {
+    if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::ACT_IE_NONE) {
         meter->clearFlags(METER_BTN_C);
     }
 }
 
 bool dLytMeterMain_c::fn_800D5350() {
-    if (field_0x13748 == 1 && dMessage_c::getInstance()->getField_0x328()) {
+    if (mBasicPosition == POSITION_MAP && dMessage_c::getInstance()->getField_0x328()) {
         return true;
     }
     return false;
@@ -1019,7 +1020,6 @@ bool dLytMeterMain_c::fn_800D5380(u8 arg) {
     return false;
 }
 
-extern "C" bool checkIsInSkykeepPuzzle();
 bool dLytMeterMain_c::fn_800D53D0() {
     if (checkIsInSkykeepPuzzle() && !field_0x13774) {
         return true;
@@ -1130,14 +1130,14 @@ void dLytMeterMain_c::checkPaneVisibility() {
         const char *name = EventManager::getCurrentEventName();
         if (strequals(name, "SwordDraw") || strequals(name, "SwordDrawDoorNew")) {
             field_0x1377E = true;
-            if (dLytDobutton_c::getNextActionToShow() != 0x12) {
-                dLytDobutton_c::setActionTextStuff(0x29, 0x5E, true);
+            if (dLytDobutton_c::getNextActionToShow() != dLytDobutton_c::ACT_DO_DRAW) {
+                dLytDobutton_c::setActionTextStuff(dLytDobutton_c::ICON_NONE, dLytDobutton_c::ACT_DO_INVALID, true);
             }
-            if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_A) != 0x12) {
-                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::DO_NONE);
+            if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_A) != LytDoButtonRelated::ACT_IE_INFO_DRAW) {
+                LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_NONE);
             }
-            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::DO_NONE);
-            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::DO_NONE);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::ACT_IE_NONE);
+            LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::ACT_IE_NONE);
         }
     }
 
@@ -1156,17 +1156,17 @@ void dLytMeterMain_c::checkPaneVisibility() {
     }
 
     if ((!StoryflagManager::sInstance->getCounterOrFlag(58) &&
-         ((LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE &&
+         ((LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE &&
            mItemSelect.getField_0x5794() != 2 &&
            (!EventManager::isInEvent() || !EventManager::isCurrentEvent("ItemGetGorgeous")))))
 
         || (dStageMgr_c::GetInstance()->isAreaTypeHouse() &&
-            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE &&
+            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE &&
             !MinigameManager::isInMinigameState(MinigameManager::HOUSE_CLEANING) && !mItemSelect.fn_800F02F0())
 
-        ||
-        (isSilentRealm() && LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE &&
-         !mItemSelect.fn_800F02F0())
+        || (isSilentRealm() &&
+            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE &&
+            !mItemSelect.fn_800F02F0())
 
         || ((dAcPy_c::GetLink()->checkActionFlagsCont(0x400000) || fn_800D5420() ||
              dAcPy_c::GetLink()->checkActionFlags(dAcPy_c::FLG0_CRAWLING) || fn_800D5380(0) ||
@@ -1175,7 +1175,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
              MinigameManager::isInMinigameState(MinigameManager::BAMBOO_CUTTING)))
 
         || (MinigameManager::isInMinigameState(MinigameManager::TRIAL_TIME_ATTACK) &&
-            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::DO_NONE) ||
+            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE) ||
         (dLytMeter_c::getField_0x13B66() || (fn_800D56B0() && !mItemSelect.fn_800F02F0() && !fn_800D53D0()) ||
          fn_800D5650() || fn_800D5680())) {
         mPanesVisible[METER_ANIM_ITEM_SELECT] = false;
@@ -1379,8 +1379,8 @@ void dLytMeterMain_c::checkPaneVisibility() {
 
     if (dAcPy_c::GetLink()->getRidingActorType() != dAcPy_c::RIDING_LOFTWING || !field_0x13780 ||
 
-        (dLytDobutton_c::getFn0x8010E5D0() != 0x5E || fn_800D56B0() || dLytMeter_c::getField_0x13B66() ||
-         fn_800D5420() || fn_800D5650() || fn_800D5680())) {
+        (dLytDobutton_c::getAction() != dLytDobutton_c::ACT_DO_INVALID || fn_800D56B0() ||
+         dLytMeter_c::getField_0x13B66() || fn_800D5420() || fn_800D5650() || fn_800D5680())) {
         mBirdGaugeVisible = false;
     }
 
@@ -1519,7 +1519,7 @@ bool dLytMeterMain_c::execute() {
         meter->clearFlags(METER_BTN_PLUS);
     }
 
-    if (field_0x13750 != 0 && field_0x13748 == 1) {
+    if (field_0x13750 != 0 && mBasicPosition == POSITION_MAP) {
         fn_800D5290();
     }
 
@@ -1606,9 +1606,9 @@ bool dLytMeterMain_c::execute() {
         mNodes[METER_SHIELD].mpPane->SetTranslate(mShieldPos);
     }
 
-    if (field_0x13748 != field_0x1374C) {
-        field_0x1374C = field_0x13748;
-        mAnmGroups[METER_ANIM_POSITION].setFrame(field_0x13748);
+    if (mBasicPosition != mSavedBasicPosition) {
+        mSavedBasicPosition = mBasicPosition;
+        mAnmGroups[METER_ANIM_POSITION].setFrame(mBasicPosition);
         mAnmGroups[METER_ANIM_POSITION].setAnimEnable(true);
     }
 
@@ -1653,19 +1653,19 @@ bool dLytMeterMain_c::execute() {
     }
 
     meter->resetFlags();
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::DO_NONE);
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::DO_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::ACT_IE_NONE);
 
-    LytDoButtonRelated::fn_8010EC10(LytDoButtonRelated::DO_NONE, true);
-    LytDoButtonRelated::fn_8010ED50(LytDoButtonRelated::DO_NONE, true);
+    LytDoButtonRelated::setCrossTop(LytDoButtonRelated::ACT_IE_NONE, true);
+    LytDoButtonRelated::setCrossDown(LytDoButtonRelated::ACT_IE_NONE, true);
 
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::DO_NONE);
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_R, LytDoButtonRelated::DO_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_R, LytDoButtonRelated::ACT_IE_NONE);
 
-    LytDoButtonRelated::reset(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::DO_NONE);
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::DO_NONE);
-    LytDoButtonRelated::reset(LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::DO_NONE);
-    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_BG, LytDoButtonRelated::DO_NONE);
+    LytDoButtonRelated::reset(LytDoButtonRelated::DO_BUTTON_C, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::reset(LytDoButtonRelated::DO_BUTTON_NUN_STK, LytDoButtonRelated::ACT_IE_NONE);
+    LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_BG, LytDoButtonRelated::ACT_IE_NONE);
 
     if (mpTimer != nullptr) {
         mpTimer->execute();
@@ -1761,21 +1761,21 @@ bool dLytMeter_c::build() {
     if (dScTitle_c::sInstance != nullptr) {
         mpDoButton = nullptr;
         mpDoButtonRelated = nullptr;
-        mpBirdRelated = nullptr;
+        mpTargetBird = nullptr;
     } else {
         mpDoButton = new dLytDobutton_c();
         mpDoButtonRelated = new LytDoButtonRelated();
-        mpBirdRelated = new LytBirdButtonRelated();
+        mpTargetBird = new dLytTargetBird_c();
     }
 
     if (mpDoButton != nullptr) {
-        mpDoButton->init(&mResAcc);
+        mpDoButton->build(&mResAcc);
     }
     if (mpDoButtonRelated != nullptr) {
         mpDoButtonRelated->build(&mResAcc);
     }
-    if (mpBirdRelated != nullptr) {
-        mpBirdRelated->build(&mResAcc);
+    if (mpTargetBird != nullptr) {
+        mpTargetBird->build(&mResAcc);
     }
 
     fn_800D97E0(0xb);
@@ -1810,10 +1810,10 @@ bool dLytMeter_c::remove() {
         delete mpEventSkip;
         mpEventSkip = nullptr;
     }
-    if (mpBirdRelated != nullptr) {
-        mpBirdRelated->remove();
-        delete mpBirdRelated;
-        mpBirdRelated = nullptr;
+    if (mpTargetBird != nullptr) {
+        mpTargetBird->remove();
+        delete mpTargetBird;
+        mpTargetBird = nullptr;
     }
     dLytAreaCaption_c::remove();
     mResAcc.detach();
@@ -1833,8 +1833,8 @@ bool dLytMeter_c::execute() {
         mpDoButton->execute();
     }
 
-    if (mpBirdRelated != nullptr) {
-        mpBirdRelated->execute();
+    if (mpTargetBird != nullptr) {
+        mpTargetBird->execute();
     }
 
     if (field_0x13B61 || (!EventManager::isInEvent() && field_0x13B62)) {
@@ -1871,8 +1871,8 @@ bool dLytMeter_c::draw() {
             if (mpDoButton != nullptr) {
                 mpDoButton->draw();
             }
-            if (mpBirdRelated != nullptr) {
-                mpBirdRelated->draw();
+            if (mpTargetBird != nullptr) {
+                mpTargetBird->draw();
             }
         }
     }

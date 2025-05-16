@@ -124,7 +124,7 @@ public:
         return *mStateMgr.getStateID() == StateID_Wait;
     }
 
-private:
+protected:
     s32 fn_8011FE50();
 
     STATE_FUNC_DECLARE(dLytMsgWindowSelectBtn_c, Wait);

@@ -340,6 +340,8 @@ public:
     static s32 getCurrentBugNetType();
     static s32 getCurrentlyEquippedShieldType();
 
+    static bool isInBambooCuttingMinigame();
+
     static bool isItemRestrictedByBokoBase(ITEM_ID item);
 
     static u32 getCurrentHealthCapacity();

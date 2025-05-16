@@ -30,7 +30,7 @@ void dLytMeterNunchakuBg_c::executeState_Wait() {
     if (field_0x1C4) {
         if (field_0x1B8) {
             bool bDoUpdate = true;
-            if (field_0x1B4 != LytDoButtonRelated::DO_NONE) {
+            if (field_0x1B4 != LytDoButtonRelated::ACT_IE_NONE) {
                 if (timer <= 0) {
                     mAnm[NUN_BG_ANIM_INPUT].setBackwardsOnce();
                     mAnm[NUN_BG_ANIM_INPUT].setToStart();
@@ -46,7 +46,7 @@ void dLytMeterNunchakuBg_c::executeState_Wait() {
                 field_0x1B0 = field_0x1B4;
             }
         } else {
-            if (field_0x1B4 != LytDoButtonRelated::DO_NONE) {
+            if (field_0x1B4 != LytDoButtonRelated::ACT_IE_NONE) {
                 setMessage(field_0x1B4);
             }
             field_0x1B0 = field_0x1B4;
@@ -71,7 +71,7 @@ void dLytMeterNunchakuBg_c::finalizeState_On() {}
 void dLytMeterNunchakuBg_c::initializeState_Active() {}
 void dLytMeterNunchakuBg_c::executeState_Active() {
     if (field_0x1B4 != field_0x1B0 || !field_0x1B8) {
-        if (field_0x1B4 == LytDoButtonRelated::DO_NONE || !field_0x1B8) {
+        if (field_0x1B4 == LytDoButtonRelated::ACT_IE_NONE || !field_0x1B8) {
             mAnm[NUN_BG_ANIM_INPUT].setForwardOnce();
             mAnm[NUN_BG_ANIM_INPUT].setFrame(0.0f);
             mAnm[NUN_BG_ANIM_INPUT].setAnimEnable(true);
@@ -83,7 +83,7 @@ void dLytMeterNunchakuBg_c::executeState_Active() {
             setMessage(field_0x1B4);
         }
         field_0x1B0 = field_0x1B4;
-    } else if (field_0x1B0 == LytDoButtonRelated::DO_NONE) {
+    } else if (field_0x1B0 == LytDoButtonRelated::ACT_IE_NONE) {
         mAnm[NUN_BG_ANIM_INPUT].setForwardOnce();
         mAnm[NUN_BG_ANIM_INPUT].setFrame(0.0f);
         mAnm[NUN_BG_ANIM_INPUT].setAnimEnable(true);
@@ -180,7 +180,7 @@ bool dLytMeterNunchakuBg_c::execute() {
             mAnm[NUN_BG_ANIM_INPUT].setAnimEnable(false);
             mStateMgr.changeState(StateID_Wait);
         }
-        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_BG, LytDoButtonRelated::DO_NONE);
+        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_BG, LytDoButtonRelated::ACT_IE_NONE);
         field_0x1B4 = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_NUN_STK);
         setMessage(field_0x1B4);
         return true;
@@ -188,14 +188,14 @@ bool dLytMeterNunchakuBg_c::execute() {
 
     if (EventManager::isInEvent()) {
         field_0x1C4 = false;
-        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_BG, LytDoButtonRelated::DO_NONE);
+        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_BG, LytDoButtonRelated::ACT_IE_NONE);
     } else {
         field_0x1C4 = true;
     }
 
     s32 d = dLytDobutton_c::getFn0x8010E5E0();
     if (d == 6 || d == 9) {
-        LytDoButtonRelated::Action_e a = LytDoButtonRelated::convertDoButton(dLytDobutton_c::getFn0x8010E5D0());
+        LytDoButtonRelated::Act_IE_e a = LytDoButtonRelated::convertDoButton(dLytDobutton_c::getAction());
         if (a >= 0) {
             LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_NUN_BG, a);
         }
@@ -245,11 +245,11 @@ void dLytMeterNunchakuBg_c::setMessage(s32 id) {
         buf[i] = 0;
     }
 
-    if (id < LytDoButtonRelated::DO_NONE) {
-        if (id < 0x5D) {
+    if (id < LytDoButtonRelated::ACT_IE_NONE) {
+        if (id < LytDoButtonRelated::ACT_IE_SEPARATOR) {
             sprintf(buf, "ACT_INFO_%03d", sActIds[id]);
         } else {
-            s32 id2 = id - 0x5E;
+            s32 id2 = id - LytDoButtonRelated::ACT_IE_SEPARATOR - 1;
             sprintf(buf, "ACT_ETC_%03d", sActIds[id2]);
         }
 

@@ -830,9 +830,9 @@ bool dLytMeterDowsing_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x54F8 = -1;
     mDemoFrame = 0;
     field_0x5500 = 0;
-    field_0x54F0 = LytDoButtonRelated::DO_NONE;
-    field_0x54E4 = LytDoButtonRelated::DO_NONE;
-    field_0x54E8 = LytDoButtonRelated::DO_NONE;
+    field_0x54F0 = LytDoButtonRelated::ACT_IE_NONE;
+    field_0x54E4 = LytDoButtonRelated::ACT_IE_NONE;
+    field_0x54E8 = LytDoButtonRelated::ACT_IE_NONE;
     field_0x54D8 = 15;
     field_0x5505 = 0;
     field_0x54EC = 1;
@@ -901,7 +901,7 @@ bool dLytMeterDowsing_c::remove() {
 bool dLytMeterDowsing_c::execute() {
     if (dLytControlGame_c::getInstance()->isStateNormal()) {
         if (StoryflagManager::sInstance->getCounterOrFlag(566) &&
-            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) != LytDoButtonRelated::DO_NONE) {
+            LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) != LytDoButtonRelated::ACT_IE_NONE) {
             if (dLytMeter_c::GetMain()->fn_800D5380(0)) {
                 field_0x5508 = 0;
                 StoryflagManager::sInstance->unsetFlag(566);
@@ -971,7 +971,7 @@ bool dLytMeterDowsing_c::execute() {
     bool state = false;
     s32 action = dLytDobutton_c::getFn0x8010E5E0();
     if (action == 8 || action == 10 || action == 30) {
-        LytDoButtonRelated::Action_e action = LytDoButtonRelated::convertDoButton(dLytDobutton_c::getFn0x8010E5D0());
+        LytDoButtonRelated::Act_IE_e action = LytDoButtonRelated::convertDoButton(dLytDobutton_c::getAction());
         if (action >= 0) {
             state = true;
             LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_C, action);
@@ -1230,11 +1230,11 @@ void dLytMeterDowsing_c::setMessage(s32 id) {
         buf[i] = 0;
     }
 
-    if (id < LytDoButtonRelated::DO_NONE) {
-        if (id < 0x5D) {
+    if (id < LytDoButtonRelated::ACT_IE_NONE) {
+        if (id < LytDoButtonRelated::ACT_IE_SEPARATOR) {
             sprintf(buf, "ACT_INFO_%03d", sActIds[id]);
         } else {
-            s32 id2 = id - 0x5E;
+            s32 id2 = id - LytDoButtonRelated::ACT_IE_SEPARATOR - 1;
             sprintf(buf, "ACT_ETC_%03d", sActIds[id2]);
         }
 
@@ -1269,7 +1269,7 @@ s32 dLytMeterDowsing_c::fn_800FE9C0(s32 unkId) const {
 bool dLytMeterDowsing_c::shouldCall() const {
     if (dLytControlGame_c::getInstance()->isStateNormal() &&
         ((StoryflagManager::sInstance->getCounterOrFlag(566) &&
-          LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) != LytDoButtonRelated::DO_NONE) ||
+          LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) != LytDoButtonRelated::ACT_IE_NONE) ||
          (StoryflagManager::sInstance->getCounterOrFlag(818) &&
           LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52))) {
         return true;

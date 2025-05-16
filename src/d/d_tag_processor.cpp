@@ -5,6 +5,7 @@
 #include "d/d_message.h"
 #include "d/d_textunk.h"
 #include "d/d_textwindow_unk.h"
+#include "d/lyt/msg_window/d_lyt_msg_window.h"
 #include "nw4r/lyt/lyt_types.h"
 #include "nw4r/ut/ut_CharWriter.h"
 #include "nw4r/ut/ut_Color.h"
@@ -206,7 +207,7 @@ dTagProcessor_c::dTagProcessor_c() {
     field_0xEE3 = 0;
     field_0xEE4 = 0;
     field_0x004 = nullptr;
-    mMsgWindowSubtype = 0x24;
+    mMsgWindowSubtype = dLytMsgWindow_c::MSG_WINDOW_36;
     field_0x90D = 4;
     field_0xEF0 = 0;
     field_0xEF1 = 0;
@@ -497,7 +498,9 @@ beginning:
                     if (lineNum / getMaxNumLines(mMsgWindowSubtype) == unkArg) {
                         nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
                         posX = fn_800B8560(lineNum);
-                        if ((mMsgWindowSubtype < 6 || mMsgWindowSubtype >= 10) && mMsgWindowSubtype != 30) {
+                        if ((mMsgWindowSubtype < dLytMsgWindow_c::MSG_WINDOW_WOOD ||
+                             mMsgWindowSubtype >= dLytMsgWindow_c::MSG_WINDOW_10) &&
+                            mMsgWindowSubtype != dLytMsgWindow_c::MSG_WINDOW_DEMO) {
                             posX = 0.0f;
                         }
 
@@ -513,7 +516,7 @@ beginning:
                             if (textBox != nullptr) {
                                 currScale *= textBox->getMyScale();
                             }
-                            if (mMsgWindowSubtype == 30) {
+                            if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_DEMO) {
                                 tmp3 = -2.0f;
                             } else {
                                 tmp3 = 3.0f;
@@ -804,12 +807,14 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
 }
 
 void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr) {
-    if (mMsgWindowSubtype != 22 && mMsgWindowSubtype != 30 && field_0xEE0 != 0) {
+    if (mMsgWindowSubtype != dLytMsgWindow_c::MSG_WINDOW_22 && mMsgWindowSubtype != dLytMsgWindow_c::MSG_WINDOW_DEMO &&
+        field_0xEE0 != 0) {
         int arg = ptr[0];
         nw4r::lyt::Size textBoxSize = field_0x004->GetSize();
         nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
         int i1 = getMaxNumLines(mMsgWindowSubtype);
-        if (arg % i1 == 0 && mMsgWindowSubtype != 31 && mMsgWindowSubtype != 8) {
+        if (arg % i1 == 0 && mMsgWindowSubtype != dLytMsgWindow_c::MSG_WINDOW_31 &&
+            mMsgWindowSubtype != dLytMsgWindow_c::MSG_WINDOW_8) {
             int u = 0;
             int v = 0;
             for (int i = arg; i < arg + getMaxNumLines(mMsgWindowSubtype) && i < 0x32; i++) {
@@ -854,7 +859,9 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
 
         f32 lineWidth = getLineWidth(arg);
         f32 margin = (textBoxSize.width - lineWidth) * 0.5f;
-        if ((mMsgWindowSubtype < 6 || mMsgWindowSubtype >= 9) && mMsgWindowSubtype != 30) {
+        if ((mMsgWindowSubtype < dLytMsgWindow_c::MSG_WINDOW_WOOD ||
+             mMsgWindowSubtype >= dLytMsgWindow_c::MSG_WINDOW_LINK) &&
+            mMsgWindowSubtype != 30) {
             margin = 0.0f;
         }
         if (margin > 0.0f) {
@@ -872,14 +879,14 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
     nw4r::ut::Color c1 = FontColors1[cmd & 0xFFFF];
     nw4r::ut::Color c2 = FontColors2[cmd & 0xFFFF];
     if (cmd == 0) {
-        if (mMsgWindowSubtype == 2) {
+        if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_SWORD_FI) {
             c1.r = 0xFF;
             c1.g = 0x6E;
             c1.b = 0x64;
             c2.r = 0xFF;
             c2.g = 0x6E;
             c2.b = 0x64;
-        } else if (mMsgWindowSubtype == 7) {
+        } else if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_STONE) {
             c1.r = 0xE6;
             c1.g = 0x4B;
             c1.b = 0x32;
@@ -888,14 +895,14 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
             c2.b = 0x32;
         }
     } else if (cmd == 1) {
-        if (mMsgWindowSubtype == 2) {
+        if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_SWORD_FI) {
             c1.r = 0xF5;
             c1.g = 0x64;
             c1.b = 0x5A;
             c2.r = 0xC8;
             c2.g = 0x64;
             c2.b = 0x5A;
-        } else if (mMsgWindowSubtype == 7) {
+        } else if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_STONE) {
             c1.r = 0xB4;
             c1.g = 0x50;
             c1.b = 0x50;
@@ -903,7 +910,8 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
             c2.g = 0x40;
             c2.b = 0x40;
         }
-    } else if (cmd == 3 && mMsgWindowSubtype >= 2 && mMsgWindowSubtype < 5) {
+    } else if (cmd == 3 && mMsgWindowSubtype >= dLytMsgWindow_c::MSG_WINDOW_SWORD_FI &&
+               mMsgWindowSubtype < dLytMsgWindow_c::MSG_WINDOW_SWORD_FI + 3) {
         c1.r = 0x50;
         c1.g = 0xE6;
         c1.b = 0xFA;
@@ -1261,23 +1269,23 @@ void dTagProcessor_c::setStringArg(const wchar_t *arg, s32 index) {
 f32 dTagProcessor_c::fn_800B8040(s8 factor, u32 windowType) {
     // Fun little recursion here
     f32 f1 = UnkTextThing::getFn800B1F70();
-    if (windowType == 6) {
+    if (windowType == dLytMsgWindow_c::MSG_WINDOW_WOOD) {
         f32 f2 = fn_800B8040(0, 0);
         f32 f3 = fn_800B8040(factor, 0);
         return f1 * ((f3 / f2) * 0.93f);
-    } else if (windowType == 7) {
+    } else if (windowType == dLytMsgWindow_c::MSG_WINDOW_STONE) {
         f32 f2 = fn_800B8040(0, 0);
         f32 f3 = fn_800B8040(factor, 0);
         return f1 * ((f3 / f2) * 0.9f);
-    } else if (windowType == 9) {
+    } else if (windowType == dLytMsgWindow_c::MSG_WINDOW_LINK) {
         f32 f2 = fn_800B8040(0, 0);
         f32 f3 = fn_800B8040(factor, 0);
         return f1 * ((f3 / f2) * 0.68f);
-    } else if (windowType == 30) {
+    } else if (windowType == dLytMsgWindow_c::MSG_WINDOW_DEMO) {
         f32 f2 = fn_800B8040(0, 0);
         f32 f3 = fn_800B8040(factor, 0);
         return f1 * ((f3 / f2) * 0.9f);
-    } else if (windowType == 34) {
+    } else if (windowType == dLytMsgWindow_c::MSG_WINDOW_34) {
         f32 f2 = fn_800B8040(0, 0);
         f32 f3 = fn_800B8040(factor, 0);
         return f1 * ((f3 / f2) * 0.86f);
@@ -1296,11 +1304,11 @@ f32 dTagProcessor_c::fn_800B8040(s8 factor, u32 windowType) {
 }
 
 s32 dTagProcessor_c::getMaxNumLines(s32 arg) {
-    if (arg >= 6 && arg < 8) {
+    if (arg >= dLytMsgWindow_c::MSG_WINDOW_WOOD && arg < dLytMsgWindow_c::MSG_WINDOW_WOOD + 2) {
         return 4;
-    } else if (arg == 9) {
+    } else if (arg == dLytMsgWindow_c::MSG_WINDOW_LINK) {
         return 2;
-    } else if (arg == 30) {
+    } else if (arg == dLytMsgWindow_c::MSG_WINDOW_DEMO) {
         return 2;
     }
     return 4;
