@@ -60,7 +60,6 @@ enum MeterFlag_e {
     METER_BTN_Z = 0x800,
     METER_BTN_0x1000 = 0x1000,
 
-
     METER_BTN_CROSS = METER_BTN_CROSS_UP | METER_BTN_CROSS_DOWN | METER_BTN_CROSS_LEFT | METER_BTN_CROSS_RIGHT,
 };
 
@@ -68,6 +67,11 @@ class dLytMeterMain_c {
     friend class dLytMeter_c;
 
 public:
+    enum BasicPosition_e {
+        POSITION_NORMAL = 0,
+        POSITION_MAP = 1,
+    };
+
     dLytMeterMain_c();
     virtual ~dLytMeterMain_c() {}
 
@@ -169,8 +173,8 @@ private:
     /* 0x136DC */ mVec3_c mRupyPositions[7];
     /* 0x13730 */ mVec3_c mShieldPos;
     /* 0x1373C */ mVec3_c mRupyPos;
-    /* 0x13748 */ s32 field_0x13748;
-    /* 0x1374C */ s32 field_0x1374C;
+    /* 0x13748 */ s32 mBasicPosition;
+    /* 0x1374C */ s32 mSavedBasicPosition;
     /* 0x13750 */ s32 field_0x13750;
     /* 0x13754 */ s32 field_0x13754;
     /* 0x13758 */ s32 mShieldPosIndex;
@@ -262,6 +266,14 @@ public:
 
     u8 getMeterField_0x13770() const {
         return mMain.field_0x13770;
+    }
+
+    bool getMeterField_0x13773() const {
+        return mMain.field_0x13773;
+    }
+
+    void setMeterField_0x13773(bool value) {
+        mMain.field_0x13773 = value;
     }
 
     bool getMeterField_0x13774() const {
@@ -448,6 +460,14 @@ public:
         } else {
             return 0.0f;
         }
+    }
+
+    dLytMeterMain_c::BasicPosition_e getBasicPosition() const {
+        return (dLytMeterMain_c::BasicPosition_e)mMain.mBasicPosition;
+    }
+
+    void setBasicPosition(dLytMeterMain_c::BasicPosition_e pos) {
+        mMain.mBasicPosition = pos;
     }
 
 private:

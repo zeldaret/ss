@@ -849,8 +849,8 @@ bool dLytMeterMain_c::build(d2d::ResAccIf_c *resAcc) {
     }
     s32 zero = 0;
 
-    field_0x1374C = 0;
-    field_0x13748 = 0;
+    mSavedBasicPosition = 0;
+    mBasicPosition = POSITION_NORMAL;
     field_0x13750 = 4;
     field_0x13770 = 3;
     field_0x13774 = 0;
@@ -1005,7 +1005,7 @@ void dLytMeterMain_c::fn_800D5290() {
 }
 
 bool dLytMeterMain_c::fn_800D5350() {
-    if (field_0x13748 == 1 && dMessage_c::getInstance()->getField_0x328()) {
+    if (mBasicPosition == POSITION_MAP && dMessage_c::getInstance()->getField_0x328()) {
         return true;
     }
     return false;
@@ -1519,7 +1519,7 @@ bool dLytMeterMain_c::execute() {
         meter->clearFlags(METER_BTN_PLUS);
     }
 
-    if (field_0x13750 != 0 && field_0x13748 == 1) {
+    if (field_0x13750 != 0 && mBasicPosition == POSITION_MAP) {
         fn_800D5290();
     }
 
@@ -1606,9 +1606,9 @@ bool dLytMeterMain_c::execute() {
         mNodes[METER_SHIELD].mpPane->SetTranslate(mShieldPos);
     }
 
-    if (field_0x13748 != field_0x1374C) {
-        field_0x1374C = field_0x13748;
-        mAnmGroups[METER_ANIM_POSITION].setFrame(field_0x13748);
+    if (mBasicPosition != mSavedBasicPosition) {
+        mSavedBasicPosition = mBasicPosition;
+        mAnmGroups[METER_ANIM_POSITION].setFrame(mBasicPosition);
         mAnmGroups[METER_ANIM_POSITION].setAnimEnable(true);
     }
 
