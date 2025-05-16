@@ -1,5 +1,5 @@
 // 001-Action.msbt
-static const s32 sActIds[] = {
+static const s32 sActIds[LytDoButtonRelated::ACT_IE_NONE] = {
     1,  // ACT_IE_INFO_CLIMB_UP
     2,  // ACT_IE_INFO_JUMP
     3,  // ACT_IE_INFO_DROP_DOWN
@@ -147,5 +147,4 @@ static const s32 sActIds[] = {
     51, // ACT_IE_ETC_STOW_CANNON
     52, // ACT_IE_ETC_SAILCLOTH
     53, // ACT_IE_ETC_RETURN_2
-    0,  0, 0, 0, 0,
 };

@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_do_button.h"
 
 class LytDoButtonRelated {
 public:
@@ -167,6 +168,12 @@ public:
         ACT_IE_ETC_SAILCLOTH = 145,
         ACT_IE_ETC_RETURN_2 = 146,
 
+        ACT_IE_147 = 147,
+        ACT_IE_148 = 148,
+        ACT_IE_149 = 149,
+        ACT_IE_150 = 150,
+        ACT_IE_151 = 151,
+
         ACT_IE_NONE = 152,
     };
 
@@ -220,37 +227,15 @@ public:
     }
 
 
-    static Act_IE_e convertDoButton(s32);
+    static Act_IE_e convertDoButton(dLytDobutton_c::Act_Do_e);
 
-    static void fn_8010EC10(Act_IE_e, bool);
-    static void fn_8010ED50(Act_IE_e, bool);
+    static void setCrossTop(Act_IE_e, bool);
+    static void setCrossDown(Act_IE_e, bool);
 
 private:
     static LytDoButtonRelated *sInstance;
     /* 0x04 */ Act_IE_e field_0x04[12];
     /* 0x34 */ bool field_0x34[12];
-};
-
-// size 0x27C
-class LytBirdButtonRelated {
-public:
-    LytBirdButtonRelated() {
-        sInstance = this;
-    }
-    ~LytBirdButtonRelated() {
-        sInstance = nullptr;
-    }
-    bool build(d2d::ResAccIf_c *resAcc);
-    bool remove();
-    bool execute();
-    bool draw();
-
-    static LytBirdButtonRelated *sInstance;
-
-private:
-    d2d::LytBase_c mLyt;
-    d2d::AnmGroup_c mAnmGroups[7];
-    /* 0x250 */ u8 field_0x250[0x27C - 0x250];
 };
 
 #endif

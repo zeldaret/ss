@@ -21,6 +21,7 @@
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/minigame_mgr.h"
+#include "toBeSorted/misc_actor.h"
 #include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytMeterItemSelectIcon_c, Wait);
@@ -790,7 +791,7 @@ void dLytMeterItemSelect_c::finalizeState_SelectIn() {
 
 void dLytMeterItemSelect_c::initializeState_Select() {}
 void dLytMeterItemSelect_c::executeState_Select() {
-    if (dLytMeter_c::getCrossBtn0x7BF8() == 0 && dPad::checkButtonDpadDownPressed()) {
+    if (dLytMeter_c::getCrossIconDown() == 0 && dPad::checkButtonDpadDownPressed()) {
         if (field_0x5794 != I_INVALID) {
             field_0x5780 = 0.0f;
             mStateMgr.changeState(StateID_SetIn);
@@ -2712,8 +2713,6 @@ s32 dLytMeterItemSelect_c::getBaseItemLytIndexforInternalId(s32 idx) const {
 
     return LYT_CMN_ItemInvalid;
 }
-
-extern "C" bool checkIsInSkykeepPuzzle();
 
 bool dLytMeterItemSelect_c::isWheelBlockedByCurrentAction() {
     if (dAcPy_c::LINK->getRidingActorType() == dAcPy_c::RIDING_LOFTWING ||

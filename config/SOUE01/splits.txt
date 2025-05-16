@@ -702,6 +702,7 @@ d/lyt/d_lyt_do_button_related.cpp:
 	.rodata     start:0x804E7080 end:0x804E72E0
 	.data       start:0x8051AC00 end:0x8051AC18
 	.sbss       start:0x80575470 end:0x80575480
+	.bss        start:0x805ACF78 end:0x805ACF88
 
 d/lyt/d_lyt_common_a_btn.cpp:
 	.text       start:0x8010EF90 end:0x8010F818 align:16

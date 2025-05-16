@@ -9,6 +9,7 @@
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/fi_context.h"
+#include "toBeSorted/misc_actor.h"
 #include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytMeterCrossBtnParts_c, Wait);
@@ -20,6 +21,13 @@ STATE_DEFINE(dLytMeterCrossBtn_c, Wait);
 STATE_DEFINE(dLytMeterCrossBtn_c, ToUse);
 STATE_DEFINE(dLytMeterCrossBtn_c, ToUnuse);
 STATE_DEFINE(dLytMeterCrossBtn_c, Unuse);
+
+#define CROSS_BTN_PART_TOP 0
+#define CROSS_BTN_PART_DOWN 1
+#define CROSS_BTN_PART_LEFT 2
+#define CROSS_BTN_PART_RIGHT 3
+
+#define CROSS_BTN_NUM_PARTS 4
 
 void dLytMeterCrossBtnParts_c::initializeState_Wait() {
     mOnDelay = 15;
@@ -33,25 +41,25 @@ void dLytMeterCrossBtnParts_c::executeState_Wait() {
     if (field_0x7C) {
         if (field_0x68) {
             bool bDoUpdate = true;
-            if (field_0x64 != LytDoButtonRelated::ACT_IE_NONE || field_0x70 != field_0x74) {
+            if (mMessage != LytDoButtonRelated::ACT_IE_NONE || mSavedIcon != mCurrentIcon) {
                 if (timer <= 0) {
                     mStateMgr.changeState(StateID_On);
-                    setMessage(field_0x64);
+                    setMessage(mMessage);
                 } else {
                     bDoUpdate = false;
                     mOnDelay -= 1;
                 }
             }
             if (bDoUpdate) {
-                field_0x60 = field_0x64;
-                field_0x70 = field_0x74;
+                mSavedMessage = mMessage;
+                mSavedIcon = mCurrentIcon;
             }
         } else {
-            if (field_0x64 != LytDoButtonRelated::ACT_IE_NONE || field_0x70 != field_0x74) {
-                setMessage(field_0x64);
+            if (mMessage != LytDoButtonRelated::ACT_IE_NONE || mSavedIcon != mCurrentIcon) {
+                setMessage(mMessage);
             }
-            field_0x60 = field_0x64;
-            field_0x70 = field_0x74;
+            mSavedMessage = mMessage;
+            mSavedIcon = mCurrentIcon;
         }
     }
 
@@ -76,18 +84,20 @@ void dLytMeterCrossBtnParts_c::finalizeState_On() {}
 
 void dLytMeterCrossBtnParts_c::initializeState_Active() {}
 void dLytMeterCrossBtnParts_c::executeState_Active() {
-    if (field_0x64 != field_0x60 || !field_0x68 || field_0x70 != field_0x74) {
-        if ((field_0x64 == LytDoButtonRelated::ACT_IE_NONE && field_0x74 == 6) || !field_0x68) {
-            if (field_0x60 != field_0x6C) {
-                field_0x64 = field_0x6C;
+    if (mMessage != mSavedMessage || !field_0x68 || mSavedIcon != mCurrentIcon) {
+        if ((mMessage == LytDoButtonRelated::ACT_IE_NONE && mCurrentIcon == dLytMeterCrossBtn_c::CROSS_ICON_NONE) ||
+            !field_0x68) {
+            if (mSavedMessage != field_0x6C) {
+                mMessage = field_0x6C;
             }
             mStateMgr.changeState(StateID_Off);
         } else {
-            setMessage(field_0x64);
+            setMessage(mMessage);
         }
-        field_0x60 = field_0x64;
-        field_0x70 = field_0x74;
-    } else if (field_0x60 == LytDoButtonRelated::ACT_IE_NONE && field_0x74 == 6) {
+        mSavedMessage = mMessage;
+        mSavedIcon = mCurrentIcon;
+    } else if (mSavedMessage == LytDoButtonRelated::ACT_IE_NONE &&
+               mCurrentIcon == dLytMeterCrossBtn_c::CROSS_ICON_NONE) {
         mStateMgr.changeState(StateID_Off);
     }
 }
@@ -108,10 +118,10 @@ void dLytMeterCrossBtnParts_c::finalizeState_Off() {}
 
 void dLytMeterCrossBtnParts_c::init() {
     field_0x6C = LytDoButtonRelated::ACT_IE_NONE;
-    field_0x60 = LytDoButtonRelated::ACT_IE_NONE;
-    field_0x64 = LytDoButtonRelated::ACT_IE_NONE;
+    mSavedMessage = LytDoButtonRelated::ACT_IE_NONE;
+    mMessage = LytDoButtonRelated::ACT_IE_NONE;
     field_0x7C = false;
-    field_0x70 = 6;
+    mSavedIcon = dLytMeterCrossBtn_c::CROSS_ICON_NONE;
     field_0x68 = 1;
     mOnDelay = 15;
     mpOwnerPane = 0;
@@ -119,7 +129,6 @@ void dLytMeterCrossBtnParts_c::init() {
     mStateMgr.changeState(StateID_Wait);
 }
 
-extern "C" bool checkIsInSkykeepPuzzle();
 void dLytMeterCrossBtnParts_c::execute(bool bIsVisible) {
     if (mpOwnerPane == nullptr) {
         return;
@@ -129,7 +138,7 @@ void dLytMeterCrossBtnParts_c::execute(bool bIsVisible) {
         if (!(*mStateMgr.getStateID() == StateID_On)) {
             return;
         }
-        field_0x70 = 6;
+        mSavedIcon = dLytMeterCrossBtn_c::CROSS_ICON_NONE;
         mpAnm[0]->setForwardOnce();
         mpAnm[0]->setToEnd2();
         mpAnm[0]->setAnimEnable(true);
@@ -141,21 +150,21 @@ void dLytMeterCrossBtnParts_c::execute(bool bIsVisible) {
     }
 
     if (dLytMeter_c::GetInstance()->getMeterField_0x13750() == 0) {
-        if (mIndex == 0) {
-            LytDoButtonRelated::fn_8010EC10(LytDoButtonRelated::ACT_IE_NONE, true);
-        } else if (mIndex == 1) {
-            LytDoButtonRelated::fn_8010ED50(LytDoButtonRelated::ACT_IE_NONE, true);
-        } else if (mIndex == 2) {
+        if (mIndex == CROSS_BTN_PART_TOP) {
+            LytDoButtonRelated::setCrossTop(LytDoButtonRelated::ACT_IE_NONE, true);
+        } else if (mIndex == CROSS_BTN_PART_DOWN) {
+            LytDoButtonRelated::setCrossDown(LytDoButtonRelated::ACT_IE_NONE, true);
+        } else if (mIndex == CROSS_BTN_PART_LEFT) {
             LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::ACT_IE_NONE);
-        } else if (mIndex == 3) {
+        } else if (mIndex == CROSS_BTN_PART_RIGHT) {
             LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_R, LytDoButtonRelated::ACT_IE_NONE);
         }
 
-        if (field_0x64 != LytDoButtonRelated::ACT_IE_NONE) {
-            field_0x64 = LytDoButtonRelated::ACT_IE_NONE;
-            field_0x60 = LytDoButtonRelated::ACT_IE_NONE;
+        if (mMessage != LytDoButtonRelated::ACT_IE_NONE) {
+            mMessage = LytDoButtonRelated::ACT_IE_NONE;
+            mSavedMessage = LytDoButtonRelated::ACT_IE_NONE;
         }
-        setMessage(field_0x64);
+        setMessage(mMessage);
     }
 
     if (!bIsVisible && *mStateMgr.getStateID() == StateID_Off) {
@@ -165,13 +174,13 @@ void dLytMeterCrossBtnParts_c::execute(bool bIsVisible) {
 
     if ((EventManager::isInEvent() && dMessage_c::getInstance()->getField_0x32C() == 12 && !checkIsInSkykeepPuzzle() &&
          !dLytMeter_c::GetInstance()->fn_800D5670()) ||
-        ((dLytMeter_c::getItemSelect0x75A2() && (mIndex != 1 || field_0x74 != 0)) || !bIsVisible)) {
+        ((dLytMeter_c::getItemSelect0x75A2() && (mIndex != 1 || mCurrentIcon != 0)) || !bIsVisible)) {
         field_0x7C = 0;
 
         if (mIndex == 0) {
-            LytDoButtonRelated::fn_8010EC10(LytDoButtonRelated::ACT_IE_NONE, true);
+            LytDoButtonRelated::setCrossTop(LytDoButtonRelated::ACT_IE_NONE, true);
         } else if (mIndex == 1) {
-            LytDoButtonRelated::fn_8010ED50(LytDoButtonRelated::ACT_IE_NONE, true);
+            LytDoButtonRelated::setCrossDown(LytDoButtonRelated::ACT_IE_NONE, true);
         } else if (mIndex == 2) {
             LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::ACT_IE_NONE);
         } else if (mIndex == 3) {
@@ -182,16 +191,16 @@ void dLytMeterCrossBtnParts_c::execute(bool bIsVisible) {
     }
 
     if (mIndex == 0) {
-        field_0x64 = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_CROSS_T);
+        mMessage = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_CROSS_T);
         field_0x68 = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_CROSS_T);
     } else if (mIndex == 1) {
-        field_0x64 = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_CROSS_D);
+        mMessage = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_CROSS_D);
         field_0x68 = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_CROSS_D);
     } else if (mIndex == 2) {
-        field_0x64 = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_CROSS_L);
+        mMessage = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_CROSS_L);
         field_0x68 = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_CROSS_L);
     } else if (mIndex == 3) {
-        field_0x64 = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_CROSS_R);
+        mMessage = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_CROSS_R);
         field_0x68 = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_CROSS_R);
     }
 
@@ -213,7 +222,7 @@ void dLytMeterCrossBtnParts_c::setMessage(s32 id) {
     }
 
     // If only there was an easier way to write this
-    if (field_0x74 == 0 || field_0x74 == 1) {
+    if (mCurrentIcon == 0 || mCurrentIcon == 1) {
         mpWindow->SetVisible(false);
         mpAnm[1]->setFrame(0.0f);
         mpAnm[1]->setAnimEnable(true);
@@ -222,7 +231,7 @@ void dLytMeterCrossBtnParts_c::setMessage(s32 id) {
         mpLyt->getLayout()->Animate(0);
         mpLyt->calc();
         mpAnm[1]->setAnimEnable(false);
-    } else if (field_0x74 == 2) {
+    } else if (mCurrentIcon == 2) {
         mpWindow->SetVisible(false);
         mpAnm[1]->setFrame(2.0f);
         mpAnm[1]->setAnimEnable(true);
@@ -231,7 +240,7 @@ void dLytMeterCrossBtnParts_c::setMessage(s32 id) {
         mpLyt->getLayout()->Animate(0);
         mpLyt->calc();
         mpAnm[1]->setAnimEnable(false);
-    } else if (field_0x74 == 3) {
+    } else if (mCurrentIcon == 3) {
         mpWindow->SetVisible(false);
         mpAnm[1]->setFrame(3.0f);
         mpAnm[1]->setAnimEnable(true);
@@ -240,7 +249,7 @@ void dLytMeterCrossBtnParts_c::setMessage(s32 id) {
         mpLyt->getLayout()->Animate(0);
         mpLyt->calc();
         mpAnm[1]->setAnimEnable(false);
-    } else if (field_0x74 == 4) {
+    } else if (mCurrentIcon == 4) {
         mpWindow->SetVisible(false);
         mpAnm[1]->setFrame(4.0f);
         mpAnm[1]->setAnimEnable(true);
@@ -249,7 +258,7 @@ void dLytMeterCrossBtnParts_c::setMessage(s32 id) {
         mpLyt->getLayout()->Animate(0);
         mpLyt->calc();
         mpAnm[1]->setAnimEnable(false);
-    } else if (field_0x74 == 5) {
+    } else if (mCurrentIcon == 5) {
         mpWindow->SetVisible(false);
         mpAnm[1]->setFrame(5.0f);
         mpAnm[1]->setAnimEnable(true);
@@ -385,21 +394,21 @@ bool dLytMeterCrossBtn_c::build(d2d::ResAccIf_c *resAcc) {
         mpTextboxes[i] = mLyt.getTextBox(sTextBoxes[i]);
     }
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < CROSS_BTN_NUM_PARTS; i++) {
         mpWindows[i] = mLyt.getWindow(sWindows[i]);
         mpSizeBoxes[i] = mLyt.getSizeBoxInWindow(sWindows[i]);
     }
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < CROSS_BTN_NUM_PARTS; i++) {
         mParts[i].mIndex = i;
         mParts[i].mpLyt = &mLyt;
         mParts[i].mpAnm[0] = &mAnm[i + CROSS_BTN_ANIM_INPUT_OFFSET];
         mParts[i].mpAnm[1] = &mAnm[i + CROSS_BTN_ANIM_PATTERN_OFFSET];
         mParts[i].mpTextBoxes[0] = mpTextboxes[i];
-        mParts[i].mpTextBoxes[1] = mpTextboxes[i + 4];
+        mParts[i].mpTextBoxes[1] = mpTextboxes[i + CROSS_BTN_NUM_PARTS];
         mParts[i].mpWindow = mpWindows[i];
         mParts[i].mpSizeBox = mpSizeBoxes[i];
-        mParts[i].field_0x74 = 6;
+        mParts[i].mCurrentIcon = dLytMeterCrossBtn_c::CROSS_ICON_NONE;
         mParts[i].init();
     }
 
@@ -410,8 +419,8 @@ bool dLytMeterCrossBtn_c::build(d2d::ResAccIf_c *resAcc) {
     mSavedFiFlow = 0xFFFF;
     mCallCount0 = 0;
     mCallCount1 = 0;
-    field_0x620 = 6;
-    field_0x624 = 6;
+    mIconDown = CROSS_ICON_NONE;
+    mIconTop = CROSS_ICON_NONE;
 
     field_0x637 = 0;
     field_0x638 = 0;
@@ -422,7 +431,7 @@ bool dLytMeterCrossBtn_c::build(d2d::ResAccIf_c *resAcc) {
 
     mpOwnerPane = nullptr;
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < CROSS_BTN_NUM_PARTS; i++) {
         mAnm[i + CROSS_BTN_ANIM_INPUT_OFFSET].setToEnd();
         mAnm[i + CROSS_BTN_ANIM_INPUT_OFFSET].setAnimEnable(true);
     }
@@ -436,7 +445,7 @@ bool dLytMeterCrossBtn_c::build(d2d::ResAccIf_c *resAcc) {
 
     mLyt.calc();
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < CROSS_BTN_NUM_PARTS; i++) {
         mAnm[i + CROSS_BTN_ANIM_INPUT_OFFSET].setAnimEnable(false);
     }
 
@@ -465,11 +474,11 @@ bool dLytMeterCrossBtn_c::execute() {
         mCallCount0 = 0;
     }
 
-    mParts[0].field_0x74 = field_0x624;
-    mParts[1].field_0x74 = field_0x620;
+    mParts[CROSS_BTN_PART_TOP].mCurrentIcon = mIconTop;
+    mParts[CROSS_BTN_PART_DOWN].mCurrentIcon = mIconDown;
 
     if (mpOwnerPane != nullptr) {
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < CROSS_BTN_NUM_PARTS; i++) {
             mParts[i].execute(mpOwnerPane->IsVisible());
         }
     }
@@ -481,7 +490,7 @@ bool dLytMeterCrossBtn_c::execute() {
     }
 
     if (field_0x637 != 0) {
-        if (field_0x620 == 0) {
+        if (mIconDown == 0) {
             f32 frame = dAcPy_c::GetLink2()->getAnmMatClrFrame();
             if (frame == 0.0f) {
                 mAnm[CROSS_BTN_ANIM_CALL_0].setToEnd();
@@ -492,7 +501,8 @@ bool dLytMeterCrossBtn_c::execute() {
 
             if (mAnm[CROSS_BTN_ANIM_CALL_0].isEnabled()) {
                 mAnm[CROSS_BTN_ANIM_CALL_0].play();
-                if (mParts[1].isActive() && mCallCount0 < 3 && mAnm[CROSS_BTN_ANIM_CALL_0].getFrame() == 1.0f) {
+                if (mParts[CROSS_BTN_PART_DOWN].isActive() && mCallCount0 < 3 &&
+                    mAnm[CROSS_BTN_ANIM_CALL_0].getFrame() == 1.0f) {
                     SmallSoundManager::GetInstance()->playSound(SE_S_SG_CALL);
                     mCallCount0++;
                 }
@@ -505,14 +515,15 @@ bool dLytMeterCrossBtn_c::execute() {
     }
 
     if (field_0x639 != 0) {
-        if (field_0x624 == 3) {
+        if (mIconTop == 3) {
             if (field_0x63A == 0) {
                 mAnm[CROSS_BTN_ANIM_CALL_1].setToEnd();
                 mAnm[CROSS_BTN_ANIM_CALL_1].setAnimEnable(true);
             }
             if (mAnm[CROSS_BTN_ANIM_CALL_1].isEnabled()) {
                 mAnm[CROSS_BTN_ANIM_CALL_1].play();
-                if (mParts[0].isActive() && mCallCount1 < 3 && mAnm[CROSS_BTN_ANIM_CALL_1].getFrame() == 1.0f) {
+                if (mParts[CROSS_BTN_PART_TOP].isActive() && mCallCount1 < 3 &&
+                    mAnm[CROSS_BTN_ANIM_CALL_1].getFrame() == 1.0f) {
                     SmallSoundManager::GetInstance()->playSound(SE_S_CATAPULT_READY);
                     mCallCount1++;
                 }
@@ -525,7 +536,7 @@ bool dLytMeterCrossBtn_c::execute() {
     }
 
     if (field_0x63B != 0) {
-        if (field_0x620 == 2) {
+        if (mIconDown == 2) {
             if (field_0x63C == 0) {
                 mAnm[CROSS_BTN_ANIM_CALL_2].setToEnd();
                 mAnm[CROSS_BTN_ANIM_CALL_2].setRate(2.0f);
@@ -533,7 +544,7 @@ bool dLytMeterCrossBtn_c::execute() {
             }
             if (mAnm[CROSS_BTN_ANIM_CALL_2].isEnabled()) {
                 mAnm[CROSS_BTN_ANIM_CALL_2].play();
-                if (mParts[1].isActive() && mAnm[CROSS_BTN_ANIM_CALL_2].getFrame() == 1.0f) {
+                if (mParts[CROSS_BTN_PART_DOWN].isActive() && mAnm[CROSS_BTN_ANIM_CALL_2].getFrame() == 1.0f) {
                     SmallSoundManager::GetInstance()->playSound(SE_S_BIRD_CALL);
                 }
             }
@@ -548,8 +559,8 @@ bool dLytMeterCrossBtn_c::execute() {
         mAnm[CROSS_BTN_ANIM_LOOP].play();
     }
 
-    field_0x620 = 6;
-    field_0x624 = 6;
+    mIconDown = CROSS_ICON_NONE;
+    mIconTop = CROSS_ICON_NONE;
     // Might be arrays
     field_0x638 = field_0x637;
     field_0x637 = 0;
@@ -563,13 +574,13 @@ bool dLytMeterCrossBtn_c::execute() {
 
 void dLytMeterCrossBtn_c::setOwnerPane(nw4r::lyt::Pane *pane) {
     mpOwnerPane = pane;
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < CROSS_BTN_NUM_PARTS; i++) {
         mParts[i].mpOwnerPane = pane;
     }
 }
 
 bool dLytMeterCrossBtn_c::fn_800FA730() const {
-    if (field_0x620 == 2) {
+    if (mIconDown == 2) {
         return true;
     }
 

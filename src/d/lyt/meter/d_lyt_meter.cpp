@@ -39,6 +39,7 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/minigame_mgr.h"
+#include "toBeSorted/misc_actor.h"
 #include "toBeSorted/small_sound_mgr.h"
 // clang-format on
 
@@ -1019,7 +1020,6 @@ bool dLytMeterMain_c::fn_800D5380(u8 arg) {
     return false;
 }
 
-extern "C" bool checkIsInSkykeepPuzzle();
 bool dLytMeterMain_c::fn_800D53D0() {
     if (checkIsInSkykeepPuzzle() && !field_0x13774) {
         return true;
@@ -1656,8 +1656,8 @@ bool dLytMeterMain_c::execute() {
     LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_A, LytDoButtonRelated::ACT_IE_NONE);
     LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_B, LytDoButtonRelated::ACT_IE_NONE);
 
-    LytDoButtonRelated::fn_8010EC10(LytDoButtonRelated::ACT_IE_NONE, true);
-    LytDoButtonRelated::fn_8010ED50(LytDoButtonRelated::ACT_IE_NONE, true);
+    LytDoButtonRelated::setCrossTop(LytDoButtonRelated::ACT_IE_NONE, true);
+    LytDoButtonRelated::setCrossDown(LytDoButtonRelated::ACT_IE_NONE, true);
 
     LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_L, LytDoButtonRelated::ACT_IE_NONE);
     LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_CROSS_R, LytDoButtonRelated::ACT_IE_NONE);
@@ -1761,11 +1761,11 @@ bool dLytMeter_c::build() {
     if (dScTitle_c::sInstance != nullptr) {
         mpDoButton = nullptr;
         mpDoButtonRelated = nullptr;
-        mpBirdRelated = nullptr;
+        mpTargetBird = nullptr;
     } else {
         mpDoButton = new dLytDobutton_c();
         mpDoButtonRelated = new LytDoButtonRelated();
-        mpBirdRelated = new LytBirdButtonRelated();
+        mpTargetBird = new dLytTargetBird_c();
     }
 
     if (mpDoButton != nullptr) {
@@ -1774,8 +1774,8 @@ bool dLytMeter_c::build() {
     if (mpDoButtonRelated != nullptr) {
         mpDoButtonRelated->build(&mResAcc);
     }
-    if (mpBirdRelated != nullptr) {
-        mpBirdRelated->build(&mResAcc);
+    if (mpTargetBird != nullptr) {
+        mpTargetBird->build(&mResAcc);
     }
 
     fn_800D97E0(0xb);
@@ -1810,10 +1810,10 @@ bool dLytMeter_c::remove() {
         delete mpEventSkip;
         mpEventSkip = nullptr;
     }
-    if (mpBirdRelated != nullptr) {
-        mpBirdRelated->remove();
-        delete mpBirdRelated;
-        mpBirdRelated = nullptr;
+    if (mpTargetBird != nullptr) {
+        mpTargetBird->remove();
+        delete mpTargetBird;
+        mpTargetBird = nullptr;
     }
     dLytAreaCaption_c::remove();
     mResAcc.detach();
@@ -1833,8 +1833,8 @@ bool dLytMeter_c::execute() {
         mpDoButton->execute();
     }
 
-    if (mpBirdRelated != nullptr) {
-        mpBirdRelated->execute();
+    if (mpTargetBird != nullptr) {
+        mpTargetBird->execute();
     }
 
     if (field_0x13B61 || (!EventManager::isInEvent() && field_0x13B62)) {
@@ -1871,8 +1871,8 @@ bool dLytMeter_c::draw() {
             if (mpDoButton != nullptr) {
                 mpDoButton->draw();
             }
-            if (mpBirdRelated != nullptr) {
-                mpBirdRelated->draw();
+            if (mpTargetBird != nullptr) {
+                mpTargetBird->draw();
             }
         }
     }

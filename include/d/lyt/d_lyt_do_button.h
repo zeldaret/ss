@@ -177,7 +177,7 @@ public:
         return sInstance;
     }
 
-    static s32 getField0x47C() {
+    static Act_Do_e getField0x47C() {
         if (sInstance != nullptr) {
             return sInstance->field_0x47C;
         } else {
@@ -193,12 +193,12 @@ public:
         }
     }
 
-    static s32 getNextActionToShow() {
+    static Act_Do_e getNextActionToShow() {
         if (sInstance != nullptr) {
             return sInstance->mNextDoActionToShow;
         } else {
             // @bug (?) should this be ACT_DO_INVALID?
-            return ICON_NONE;
+            return (Act_Do_e)ICON_NONE;
         }
     }
 
@@ -210,7 +210,7 @@ public:
         }
     }
 
-    static s32 getAction() {
+    static Act_Do_e getAction() {
         if (sInstance != nullptr) {
             return sInstance->getActionInternal();
         } else {
@@ -218,20 +218,20 @@ public:
         }
     }
 
-    static void setActionTextStuff(s32 p1, s32 p2, bool p3) {
+    static void setActionTextStuff(s32 p1, Act_Do_e p2, bool p3) {
         if (sInstance != nullptr) {
             sInstance->setActionTextStuffInternal(p1, p2, p3);
         }
     }
 
 private:
-    void setActionTextStuffInternal(s32, s32, bool);
-    s32 getActionInternal() const;
+    void setActionTextStuffInternal(s32, Act_Do_e, bool);
+    Act_Do_e getActionInternal() const;
     s32 fn_8010E5E0() const;
     void fn_8010E3D0(bool);
     void realize();
 
-    void set_0x47C_0x480(s32 v1, s32 v2) {
+    void set_0x47C_0x480(Act_Do_e v1, s32 v2) {
         field_0x47C = v1;
         field_0x480 = v2;
     }
@@ -251,12 +251,12 @@ private:
     /* 0x0D4 */ d2d::AnmGroup_c mAnmGroups[12];
     /* 0x3D4 */ nw4r::lyt::Pane *mpPanes[37];
     /* 0x468 */ dTextBox_c *mpTextBoxes[2];
-    /* 0x470 */ s32 mDoActionToShow;
+    /* 0x470 */ Act_Do_e mDoActionToShow;
     /* 0x474 */ s32 field_0x474;
     /* 0x478 */ s32 field_0x478;
-    /* 0x47C */ s32 field_0x47C;
+    /* 0x47C */ Act_Do_e field_0x47C;
     /* 0x480 */ s32 field_0x480;
-    /* 0x484 */ s32 mNextDoActionToShow;
+    /* 0x484 */ Act_Do_e mNextDoActionToShow;
     /* 0x488 */ s32 field_0x488;
     /* 0x48C */ s32 field_0x48C;
     /* 0x490 */ u8 field_0x490;

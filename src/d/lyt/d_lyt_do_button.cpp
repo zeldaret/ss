@@ -787,13 +787,13 @@ void dLytDobutton_c::fn_8010E3D0(bool b) {
     mpPanes[1]->SetTranslate(v);
 }
 
-void dLytDobutton_c::setActionTextStuffInternal(s32 a1, s32 a2, bool b) {
+void dLytDobutton_c::setActionTextStuffInternal(s32 a1, Act_Do_e a2, bool b) {
     field_0x488 = a1;
-    mNextDoActionToShow = a2;
+    mNextDoActionToShow = (Act_Do_e)a2;
     field_0x490 = b;
 }
 
-s32 dLytDobutton_c::getActionInternal() const {
+dLytDobutton_c::Act_Do_e dLytDobutton_c::getActionInternal() const {
     return mDoActionToShow;
 }
 

@@ -7,6 +7,7 @@
 #include "d/lyt/d_window.h"
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "toBeSorted/event_manager.h"
+#include "toBeSorted/misc_actor.h"
 
 STATE_DEFINE(dLytMeterABtn_c, InvisibleWait);
 STATE_DEFINE(dLytMeterABtn_c, In);
@@ -198,8 +199,6 @@ bool dLytMeterABtn_c::remove() {
     }
     return true;
 }
-
-extern "C" bool checkIsInSkykeepPuzzle();
 
 bool dLytMeterABtn_c::execute() {
     if (mpOwnerPane == nullptr) {

@@ -41,18 +41,30 @@ private:
     /* 0x54 */ dTextBox_c *mpSizeBox;
     /* 0x58 */ nw4r::lyt::Pane *mpOwnerPane;
     /* 0x5C */ s32 mIndex;
-    /* 0x60 */ s32 field_0x60;
-    /* 0x64 */ s32 field_0x64;
+    /* 0x60 */ s32 mSavedMessage;
+    /* 0x64 */ s32 mMessage;
     /* 0x68 */ s32 field_0x68;
     /* 0x6C */ s32 field_0x6C;
-    /* 0x70 */ s32 field_0x70;
-    /* 0x74 */ s32 field_0x74;
+    /* 0x70 */ s32 mSavedIcon;
+    /* 0x74 */ s32 mCurrentIcon;
     /* 0x78 */ s32 mOnDelay;
     /* 0x7C */ u8 field_0x7C;
 };
 
 class dLytMeterCrossBtn_c : public d2d::dSubPane {
 public:
+    enum CrossIcon_e {
+        CROSS_ICON_TOP_1 = 1,
+        CROSS_ICON_TOP_3 = 3,
+        CROSS_ICON_TOP_4 = 4,
+
+        CROSS_ICON_DOWN_0 = 0,
+        CROSS_ICON_DOWN_2 = 2,
+        CROSS_ICON_DOWN_5 = 5,
+
+        CROSS_ICON_NONE = 6, 
+    };
+
     dLytMeterCrossBtn_c() : mStateMgr(*this, sStateID::null) {}
     virtual bool build(d2d::ResAccIf_c *resAcc) override;
     virtual bool remove() override;
@@ -69,8 +81,16 @@ public:
 
     virtual ~dLytMeterCrossBtn_c() {}
 
-    s32 getField_0x620() const {
-        return field_0x620;
+    CrossIcon_e getIconDown() const {
+        return mIconDown;
+    }
+
+    void setIconDown(CrossIcon_e icon) {
+        mIconDown = icon;
+    }
+
+    void setIconTop(CrossIcon_e icon) {
+        mIconTop = icon;
     }
 
     void setOwnerPane(nw4r::lyt::Pane *pane);
@@ -93,8 +113,8 @@ private:
     /* 0x400 */ dWindow_c *mpWindows[4];
     /* 0x410 */ dTextBox_c *mpSizeBoxes[4];
     /* 0x420 */ dLytMeterCrossBtnParts_c mParts[4];
-    /* 0x620 */ s32 field_0x620;
-    /* 0x624 */ s32 field_0x624;
+    /* 0x620 */ CrossIcon_e mIconDown;
+    /* 0x624 */ CrossIcon_e mIconTop;
     /* 0x628 */ u16 mSavedFiFlow;
     /* 0x62C */ s32 mCallCount0;
     /* 0x630 */ s32 mCallCount1;
