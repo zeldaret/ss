@@ -43,13 +43,13 @@ public:
     virtual ~ICalcWorldCallback() {}; // at 0x8
 
     virtual void ExecCallbackA(ChrAnmResult *pResult, ResMdl mdl,
-                               FuncObjCalcWorld *pFuncObj) = 0; // at 0xC
+                               FuncObjCalcWorld *pFuncObj) {}; // at 0xC
 
     virtual void ExecCallbackB(WorldMtxManip *pManip, ResMdl mdl,
-                               FuncObjCalcWorld *pFuncObj) = 0; // at 0x10
+                               FuncObjCalcWorld *pFuncObj) {}; // at 0x10
 
     virtual void ExecCallbackC(math::MTX34 *pMtxArray, ResMdl mdl,
-                               FuncObjCalcWorld *pFuncObj) = 0; // at 0x14
+                               FuncObjCalcWorld *pFuncObj) {}; // at 0x14
 };
 
 /******************************************************************************

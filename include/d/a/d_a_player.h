@@ -49,10 +49,16 @@ public:
     virtual ~daPlBase_c() {}
 };
 
-class daPlBaseCallback1_c : m3d::callback_c {};
-class daPlBaseCallback2_c : m3d::callback_c {};
+class daPlBaseCallback1_c : m3d::callback_c {
+    u8 _0x__[4];
+};
+class daPlBaseCallback2_c : m3d::callback_c {
+    u8 _0x__[4];
+};
 
-class daPlBaseMdlCallback_c : m3d::mdl_c::mdlCallback_c {};
+class daPlBaseMdlCallback_c : m3d::mdl_c::mdlCallback_c {
+    u8 _0x__[8];
+};
 
 class daPlBaseAnmChr_c : m3d::anmChr_c {
 public:
@@ -74,22 +80,14 @@ private:
 
 class daPlBaseCalcWorldCallback_c : public nw4r::g3d::ICalcWorldCallback {
 public:
-    virtual void ExecCallbackA(
-        nw4r::g3d::ChrAnmResult *pResult, nw4r::g3d::ResMdl mdl,
-        nw4r::g3d::FuncObjCalcWorld *pFuncObj
-    ) override; // at 0xC
-
-    virtual void ExecCallbackB(
-        nw4r::g3d::WorldMtxManip *pManip, nw4r::g3d::ResMdl mdl,
-        nw4r::g3d::FuncObjCalcWorld *pFuncObj
-    ) override; // at 0x10
-
     virtual void ExecCallbackC(
         nw4r::math::MTX34 *pMtxArray, nw4r::g3d::ResMdl mdl,
         nw4r::g3d::FuncObjCalcWorld *pFuncObj
     ) override; // at 0x14
 };
-class daPlBaseScnObjCallback_c : public nw4r::g3d::IScnObjCallback {};
+class daPlBaseScnObjCallback_c : public nw4r::g3d::IScnObjCallback {
+    u8 _0x__[0x10];
+};
 
 class UnkPlayerClass {
 public:
@@ -654,19 +652,72 @@ public:
                    FLG0_HANGING_ITEM | FLG0_HANGING_LEDGE | FLG0_UNK_0x10 | FLG0_IN_AIR,
     };
 
-    // overriddes omitted
-    /* vt 0x2E0 */ virtual void vt_0x2E0();
-    /* vt 0x2E4 */ virtual void someDivingHrabbingStuff();
-    /* vt 0x2E8 */ virtual void vt_0x2E8();
-    /* vt 0x2EC */ virtual void isOnClawTargetMaybe();
-    /* vt 0x2F0 */ virtual void isMPPose();
-    /* vt 0x2F4 */ virtual void isOnTightRope();
-    /* vt 0x2F8 */ virtual void isOnVines();
-    /* vt 0x2FC */ virtual void alwaysRet0();
-    /* vt 0x300 */ virtual void canBlockAttack();
-    /* vt 0x304 */ virtual void vt_0x304();
-    /* vt 0x308 */ virtual void vt_0x308();
-    /* vt 0x30C */ virtual void vt_0x30C();
+    void fn_8005ED60();
+    void fn_8005EAC0();
+    void fn_8005F890();
+    void fn_80061410();
+
+    /* vt 0x114 */ virtual void somethingWithCarriedActorFlags() override {
+        // TODO
+    }
+    /* vt 0x118 */ virtual dAcObjBase_c *getCurrentCarriedActor() override {
+        // TODO
+        return nullptr;
+    }
+
+    /* vt 0x0E4 */ virtual const mVec3_c &getCenterTranslation() const override {
+        // TODO
+        return mVec3_c::Zero;
+    }
+    /* vt 0x0E8 */ virtual const mVec3_c &vt_0x0E8() const override {
+        return field_0x12F4;
+    }
+    /* vt 0x0EC */ virtual const mVec3_c &vt_0x0EC() const override {
+        // TODO
+        return mVec3_c::Zero;
+    }
+    /* vt 0x0F0 */ virtual const mVec3_c &vt_0x0F0() const override {
+        // TODO
+        return mVec3_c::Zero;
+    }
+    /* vt 0x0F4 */ virtual const mVec3_c &vt_0x0F4() const override {
+        // TODO
+        return mVec3_c::Zero;
+    }
+
+    /* vt 0x2E0 */ virtual void vt_0x2E0() {}
+    /* vt 0x2E4 */ virtual void someDivingHrabbingStuff() {}
+    /* vt 0x2E8 */ virtual bool vt_0x2E8() {
+        return true;
+    }
+    /* vt 0x2EC */ virtual void isOnClawTargetMaybe(UNKWORD, mAng &a1, mAng &a2) {
+        a1.setR(0);
+        a2.setR(0);
+    }
+    /* vt 0x2F0 */ virtual bool isMPPose() {
+        return false;
+    }
+    /* vt 0x2F4 */ virtual bool isOnTightRope() {
+        return false;
+    }
+    /* vt 0x2F8 */ virtual bool isOnVines() {
+        return false;
+    }
+    /* vt 0x2FC */ virtual bool alwaysRet0() {
+        return 0;
+    }
+    /* vt 0x300 */ virtual bool canBlockAttack() {
+        return false;
+    }
+    /* vt 0x304 */ virtual const mVec3_c &vt_0x304() const {
+        return mVec3_c::Zero;
+    }
+    /* vt 0x308 */ virtual mAng vt_0x308() {
+        return 0;
+    }
+    /* vt 0x30C */ virtual void vt_0x30C(mVec3_c &res) {
+        res = mVec3_c::Ex;
+    }
 
 protected:
     /* 0x370 */ mHeapAllocator_c mModelAllocator;
@@ -685,8 +736,11 @@ protected:
     /* 0x46C */ daPlBaseCallback2_c mCallback2;
     /* 0x474 */ m3d::smdl_c mFaceMdl;
     /* 0x490 */ m3d::anmChr_c mFaceAnmChr;
+    /* 0x4C8 */ u8 _0x4C8[4];
     /* 0x4CC */ m3d::anmTexPat_c mFaceTexPat;
+    /* 0x4F8 */ u8 _0x4F8[4];
     /* 0x4FC */ m3d::anmTexSrt_c mFaceTexSrt;
+    /* 0x528 */ u8 _0x528[4];
     /* 0x52C */ m3d::anmChr_c mHeadAnmChr;
     /* 0x564 */ m3d::smdl_c mHandsMdl;
     /* 0x580 */ daPlBaseCalcWorldCallback_c mCalcWorldCallback;
@@ -709,9 +763,11 @@ protected:
     /* 0x878 */ dCcD_Cyl mCcCyls[3];
     /* 0xC68 */ dCcD_Cps mCcCpss[3];
     /* 0x10B8 */ dCcD_Cyl mCcCyl;
+    /* 0x1208 */ u8 _0x1208[0xA4];
     /* 0x12AC */ mVec3_c mTranslationHand[2];
     /* 0x12C4 */ mVec3_c mTranslationWeapon[2];
     /* 0x12DC */ mVec3_c mToeTranslation[2];
+    /* 0x12F4 */ mVec3_c field_0x12F4;
     /* 0x1300 */ UnkPlayerClass mUnk_0x1300[4];
     /* 0x1340 */ mQuat_c mQuat1;
     /* 0x1350 */ mQuat_c mQuat2;

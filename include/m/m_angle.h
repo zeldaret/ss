@@ -36,6 +36,10 @@ struct mAng {
         return &mVal;
     }
 
+    void setR(const u32 &v) {
+        mVal = v;
+    }
+
     mAng operator-() {
         return mAng(-mVal);
     }
