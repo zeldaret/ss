@@ -16,5 +16,6 @@ sBambooIslandNames = .rodata:0x00000008; // type:object size:0x20 scope:local da
 lbl_404_data_0 = .data:0x00000000; // type:object size:0x8 scope:local data:string
 lbl_404_data_8 = .data:0x00000008; // type:object size:0x10 scope:local
 g_profile_OBJ_BAMBOO_ISLAND = .data:0x00000018; // type:object size:0x10
+lbl_404_data_28 = .data:0x00000028; // type:object size:0x28
 lbl_404_data_50 = .data:0x00000050; // type:object size:0x20 scope:local data:string
 __vt__18dAcObambooIsland_c = .data:0x00000070; // type:object size:0x80

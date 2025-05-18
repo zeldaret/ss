@@ -11,6 +11,6 @@ __dt__13dTgMusasabi_cFv = .text:0x00000460; // type:function size:0x5C
 _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_438_rodata_0 = .rodata:0x00000000; // type:object size:0x18 data:double
-lbl_438_rodata_18 = .rodata:0x00000018; // type:object size:0x20 data:float
+lbl_438_rodata_18 = .rodata:0x00000018; // type:object size:0x20 align:4 data:float
 g_profile_TAG_MUSASABI = .data:0x00000000; // type:object size:0x10
 lbl_438_data_10 = .data:0x00000010; // type:object size:0x74

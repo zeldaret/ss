@@ -23,5 +23,6 @@ __dt__10dTgTimer_cFv = .text:0x00000470; // type:function size:0x5C
 _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 g_profile_TAG_TIMER = .data:0x00000000; // type:object size:0x10 data:4byte
+lbl_506_data_10 = .data:0x00000010; // type:object size:0x24
 __vt__10dTgTimer_c = .data:0x00000034; // type:object size:0x74
 __vt__5dTg_c = .data:0x000000A8; // type:object size:0x74

@@ -35,9 +35,9 @@ getOldStateID__81sStateMgr_c<12dAcFishMgr_c,20sStateMethodUsr_FI_c,12sFStateFct_
 _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_315_rodata_0 = .rodata:0x00000000; // type:object size:0x4 data:float
-lbl_315_rodata_4 = .rodata:0x00000004; // type:object size:0x4 data:float
-lbl_315_rodata_8 = .rodata:0x00000008; // type:object size:0x8 data:double
-lbl_315_rodata_10 = .rodata:0x00000010; // type:object size:0x20 data:float
+lbl_315_rodata_4 = .rodata:0x00000004; // type:object size:0x4 align:4 data:float
+lbl_315_rodata_8 = .rodata:0x00000008; // type:object size:0x8 align:8 data:double
+lbl_315_rodata_10 = .rodata:0x00000010; // type:object size:0x20 align:4 data:float
 g_profile_FISH_MGR = .data:0x00000000; // type:object size:0x10
 lbl_315_data_10 = .data:0x00000010; // type:object size:0x8
 lbl_315_data_18 = .data:0x00000018; // type:object size:0x4 data:string

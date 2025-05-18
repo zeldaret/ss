@@ -47,6 +47,7 @@ __vt__86sStateMgr_c<17dTgMoleProhibit_c,20sStateMethodUsr_FI_c,12sFStateFct_c,13
 __vt__33sFStateFct_c<17dTgMoleProhibit_c> = .data:0x000000E8; // type:object size:0x14
 __vt__30sFState_c<17dTgMoleProhibit_c> = .data:0x00000100; // type:object size:0x18
 __vt__5dTg_c = .data:0x00000118; // type:object size:0x74
+lbl_207_data_18C = .data:0x0000018C; // type:object size:0x44
 __vt__32sFStateID_c<17dTgMoleProhibit_c> = .data:0x000001D0; // type:object size:0x34
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 lbl_207_bss_8 = .bss:0x00000008; // type:object size:0xC scope:local

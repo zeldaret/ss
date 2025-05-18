@@ -54,6 +54,7 @@ __vt__49sFStateMgr_c<10dAcOring_c,20sStateMethodUsr_FI_c> = .data:0x000000C8; //
 __vt__79sStateMgr_c<10dAcOring_c,20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c> = .data:0x000000F8; // type:object size:0x30
 __vt__26sFStateFct_c<10dAcOring_c> = .data:0x00000128; // type:object size:0x14
 __vt__23sFState_c<10dAcOring_c> = .data:0x00000140; // type:object size:0x18
+lbl_193_data_158 = .data:0x00000158; // type:object size:0x40
 __vt__25sFStateID_c<10dAcOring_c> = .data:0x00000198; // type:object size:0x34
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 lbl_193_bss_8 = .bss:0x00000008; // type:object size:0x10 scope:local

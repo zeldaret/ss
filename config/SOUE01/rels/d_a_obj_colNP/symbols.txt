@@ -12,6 +12,6 @@ _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_286_rodata_0 = .rodata:0x00000000; // type:object size:0x1C data:float
 g_profile_OBJ_COL = .data:0x00000000; // type:object size:0x10
-lbl_286_data_10 = .data:0x00000010; // type:object size:0x30 data:float
+lbl_286_data_10 = .data:0x00000010; // type:object size:0x30 align:4 data:float
 lbl_286_data_40 = .data:0x00000040; // type:object size:0x40
 lbl_286_data_80 = .data:0x00000080; // type:object size:0x80

@@ -59,4 +59,4 @@ __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:globa
 lbl_291_bss_8 = .bss:0x00000008; // type:object size:0x10
 AcOStepTimeSlip__STATE_WAIT = .bss:0x00000018; // type:object size:0x30 data:4byte
 lbl_291_bss_48 = .bss:0x00000048; // type:object size:0x8 data:byte
-lbl_291_bss_50 = .bss:0x00000050; // type:object size:0x18 data:float
+lbl_291_bss_50 = .bss:0x00000050; // type:object size:0x18 align:4 data:float
