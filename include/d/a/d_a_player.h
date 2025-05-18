@@ -28,6 +28,7 @@
 #include "nw4r/g3d/res/g3d_resanmtexsrt.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
+#include "nw4r/math/math_types.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/stage_render_stuff.h"
 
@@ -104,6 +105,10 @@ public:
     );
     void setBlendNodeRange(u16, u16, f32);
 
+    nw4r::g3d::ChrAnmResult *getNodeResult(u16 node) {
+        return mCallback.getNodeResult(node);
+    }
+
 private:
     /* 0x24 */ daPlBaseMdlCallback_c mCallback;
     /* 0x58 */ u8 field_0x58;
@@ -137,7 +142,7 @@ private:
     /* 0x36 */ u8 field_0x36;
 };
 
-class daPlBaseCalcWorldCallback_c : public nw4r::g3d::ICalcWorldCallback {
+class daPlBaseHandsCallback_c : public nw4r::g3d::ICalcWorldCallback {
 public:
     virtual void ExecCallbackC(
         nw4r::math::MTX34 *pMtxArray, nw4r::g3d::ResMdl mdl,
@@ -826,13 +831,20 @@ public:
         PLAYER_MAIN_NODE_BACKBONE_2 = 2,
         PLAYER_MAIN_NODE_HEAD = 4,
         PLAYER_MAIN_NODE_POD = 5,
+        PLAYER_MAIN_NODE_SHOULDER_L = 6,
         PLAYER_MAIN_NODE_ARM_L1 = 7,
         PLAYER_MAIN_NODE_ARM_L2 = 8,
         PLAYER_MAIN_NODE_HAND_L = 9,
+        PLAYER_MAIN_NODE_WEAPON_L = 10,
+        PLAYER_MAIN_NODE_SHOULDER_R = 11,
         PLAYER_MAIN_NODE_ARM_R1 = 12,
         PLAYER_MAIN_NODE_ARM_R2 = 13,
         PLAYER_MAIN_NODE_HAND_R = 14,
+        PLAYER_MAIN_NODE_WEAPON_R = 15,
         PLAYER_MAIN_NODE_WAIST = 16,
+
+        PLAYER_MAIN_NODE_TOE_L = 21,
+        PLAYER_MAIN_NODE_TOE_R = 26,
 
         PLAYER_MAIN_NODE_FSKIRT_L1 = 27,
         PLAYER_MAIN_NODE_FSKIRT_R1 = 29,
@@ -843,7 +855,23 @@ public:
         PLAYER_MAIN_NODE_RSKIRT_R2 = 34,
     };
 
-    void fn_8005F890();
+    // Alink.arc > g3d > model.brres > 3DModels(NW4R) > al_head > Bones > ...
+    enum PlayerHeadModelNode_e {
+        PLAYER_HEAD_NODE_HAIR_L = 1,
+        PLAYER_HEAD_NODE_HAIR_R1 = 2,
+        PLAYER_HEAD_NODE_HAIR_R2 = 3,
+        PLAYER_HEAD_NODE_MOMI_L = 4,
+        PLAYER_HEAD_NODE_MOMI_R = 5,
+        PLAYER_HEAD_NODE_MOMI_Z_CAP_1 = 6,
+    };
+
+    // Alink.arc > g3d > model.brres > 3DModels(NW4R) > al_hands > Bones > ...
+    enum PlayerHandsModelNode_e {
+        PLAYER_HANDS_NODE_HAND_L = 1,
+        PLAYER_HANDS_NODE_HAND_R = 2,
+    };
+
+    void fn_8005F890(nw4r::math::MTX34 *);
     void fn_80061410();
 
     static void freeFrmHeap(mHeapAllocator_c *allocator);
@@ -879,10 +907,10 @@ public:
 
     /* vt 0x2E0 */ virtual void transformBackbone1(nw4r::g3d::WorldMtxManip *) {}
     /* vt 0x2E4 */ virtual void transformModelCenter(mMtx_c *) {}
-    /* vt 0x2E8 */ virtual bool vt_0x2E8() {
+    /* vt 0x2E8 */ virtual bool vt_0x2E8(nw4r::math::MTX34 *, const u16 *, bool) {
         return true;
     }
-    /* vt 0x2EC */ virtual void isOnClawTargetMaybe(UNKWORD, mAng &a1, mAng &a2) {
+    /* vt 0x2EC */ virtual void isOnClawTargetMaybe(s32 arm, mAng &a1, mAng &a2) {
         a1.setR(0);
         a2.setR(0);
     }
@@ -921,7 +949,7 @@ public:
         return field_0x12F4;
     }
     /* vt 0x0EC */ virtual const mVec3_c &vt_0x0EC() const override {
-        return field_0x1294;
+        return mHeadTranslation;
     }
     /* vt 0x0F0 */ virtual const mVec3_c &vt_0x0F0() const override {
         return mTranslationHand[1];
@@ -963,6 +991,9 @@ public:
         mSwordAndMoreStates &= ~mask;
     }
 
+    void updateModelColliders();
+    void updateCachedPositions();
+
     // Model callbacks - dropping the mdl argument, apparently
     void mainModelTimingA(u32 nodeId, nw4r::g3d::ChrAnmResult *result);
     void adjustMainModelChrAnm(PlayerMainModelNode_e nodeId, nw4r::g3d::ChrAnmResult *result);
@@ -971,9 +1002,15 @@ public:
     void adjustMainModelWorldMtx(PlayerMainModelNode_e nodeId, nw4r::g3d::WorldMtxManip *result);
 
     void mainModelTimingC(nw4r::math::MTX34 *result);
+    void headModelTimingB(u32 nodeId, nw4r::g3d::WorldMtxManip *result);
 
-    void fn_8005E900(mMtx_c *, mAng, mAng, mAng, mVec3_c *, bool);
-    void fn_8005EA20(nw4r::g3d::WorldMtxManip*, mAng, mAng, mAng, mVec3_c *, bool);
+    void handsCallbackC(nw4r::math::MTX34 *pMtxArray, nw4r::g3d::ResMdl mdl, nw4r::g3d::FuncObjCalcWorld *pFuncObj);
+
+    void updateBlendWeights(PlayerMainModelNode_e nodeId);
+    void updateMainBlend1(f32 blend);
+    void updateMainBlend2(f32 blend, bool save);
+    void applyWorldRotationMaybe(nw4r::math::MTX34 *result, mAng x, mAng y, mAng z, mVec3_c *off, bool order);
+    void applyWorldRotationMaybe(nw4r::g3d::WorldMtxManip *result, mAng x, mAng y, mAng z, mVec3_c *off, bool order);
 
     static const PlayerAnimation sAnimations[443];
     static const u8 sShieldDurabilities[10];
@@ -993,7 +1030,7 @@ protected:
     /* 0x3E0 */ daPlBaseMdl_c mMainMdl;
     /* 0x440 */ daPlBaseMainCallback_c mMainBodyCallback;
     /* 0x448 */ m3d::mdl_c mHeadMdl;
-    /* 0x46C */ daPlBaseHeadCallback_c mheadCallback;
+    /* 0x46C */ daPlBaseHeadCallback_c mHeadCallback;
     /* 0x474 */ m3d::smdl_c mFaceMdl;
     /* 0x490 */ m3d::anmChr_c mFaceAnmChr;
     /* 0x4C8 */ void *mpAnmCharBuffer;
@@ -1003,7 +1040,7 @@ protected:
     /* 0x528 */ void *mpTexSrtBuffer;
     /* 0x52C */ m3d::anmChr_c mHeadAnmChr;
     /* 0x564 */ m3d::smdl_c mHandsMdl;
-    /* 0x580 */ daPlBaseCalcWorldCallback_c mCalcWorldCallback;
+    /* 0x580 */ daPlBaseHandsCallback_c mCalcWorldCallback;
     /* 0x588 */ daPlBaseScnObjCallback_c mScnObjCallback;
     /* 0x598 */ m3d::smdl_c mSwordMdl;
     /* 0x5B4 */ m3d::anmMatClr_c mSwordAnmMatClr;
@@ -1039,6 +1076,7 @@ protected:
     /* 0x1216 */ s8 mCapMatId;
     /* 0x1217 */ s8 mSkinMatId;
     /* 0x1218 */ u8 mSkywardStrikeChargeDuration;
+    /* 0x1219 */ u8 field_0x1219;
     /* 0x121A */ u16 mAnimations[6];
     /* 0x1226 */ u16 mFaceAnmChrIdx1;
     /* 0x1228 */ u16 mFaceAnmChrIdx2;
@@ -1049,7 +1087,12 @@ protected:
     /* 0x1232 */ u16 mBreakingEffect;
     /* 0x1234 */ mAng mWaistZRot;
     /* 0x1236 */ mAng mWaistYRot;
-    /* 0x1238 */ u8 _0x1238[0x125C - 0x1238];
+    /* 0x1238 */ mAng field_0x1238[5];
+    /* 0x1242 */ mAng field_0x1242[5];
+    /* 0x124C */ u8 _0x124C[0x1256 - 0x124C];
+    /* 0x1256 */ mAng field_0x1256;
+    /* 0x1258 */ mAng field_0x1258;
+    /* 0x125A */ mAng field_0x125A;
     /* 0x125C */ mAng mRSkirtR1Rot;
     /* 0x125E */ mAng mRSkirtL1Rot;
     /* 0x1260 */ mAng mRightHandRotation;
@@ -1059,26 +1102,26 @@ protected:
     /* 0x1268 */ mAng field_0x1268;
     /* 0x126A */ mAng field_0x126A;
     /* 0x126C */ mAng field_0x126C;
-    /* 0x126E */ u8 _0x126C[0x1278 - 0x126E];
+    /* 0x1270 */ f32 field_0x1270;
+    /* 0x1274 */ f32 field_0x1274;
     /* 0x1278 */ f32 field_0x1278;
     /* 0x127C */ mVec3_c field_0x127C;
     /* 0x1288 */ mVec3_c mCenterTranslation;
-    /* 0x1294 */ mVec3_c field_0x1294;
-    /* 0x12A0 */ mVec3_c field_0x12A0;
+    /* 0x1294 */ mVec3_c mHeadTranslation;
+    /* 0x12A0 */ mVec3_c mPositionAboveLink;
     /* 0x12AC */ mVec3_c mTranslationHand[2];
     /* 0x12C4 */ mVec3_c mTranslationWeapon[2];
     /* 0x12DC */ mVec3_c mToeTranslation[2];
     /* 0x12F4 */ mVec3_c field_0x12F4;
-    /* 0x1300 */ UnkPlayerClass mUnk_0x1300[4];
+    /* 0x1300 */ mQuat_c field_0x1300[4];
     /* 0x1340 */ mQuat_c mQuat1;
     /* 0x1350 */ mQuat_c mQuat2;
     /* 0x1360 */ dAcRef_c<dAcObjBase_c> mRef; // not sure about the class
     /* 0x136C */ mAng *field_0x136C;
     /* 0x1370 */ mAng *field_0x1370;
+    /* 0x1374 */ mAng *field_0x1374; // x3
+    /* 0x1378 */ mAng *field_0x1378; // x3
 };
-
-// The split between daPlBase_c and dAcPy_c is somewhere after
-// member offset 0x1368 and before 0x137C
 
 class dAcPy_c : public daPlayerModelBase_c {
 public:
@@ -1095,7 +1138,7 @@ public:
     /* vt 0x318 */ virtual void vt_0x318();
 
 protected:
-    /* 0x1372 */ u8 _0x1374[0x4564 - 0x1374];
+    /* 0x137C */ u8 _0x137C[0x4564 - 0x137C];
     /* 0x4564 */ f32 field_0x4564;
 
 public:

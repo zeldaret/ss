@@ -514,17 +514,14 @@ bool mShadowChild_c::setGeom(const GXTexObj *texObj, const mMtx_c &mtx, const mQ
 }
 
 void mShadowChild_c::updateMtx() {
-    const mQuat_c &q = GetQuat();
-    const mVec3_c &pos = GetPosition();
+    // NONMATCHING
+    field_0x13C = mQuat.w;
 
-    Set0x13C(q.w);
-
-    mVec3_c a(q.v);
-
-    a += pos * GetOffset();
-
-    mVec3_c b(q.v);
-    b -= pos * Get0x13C();
+    mVec3_c a(mQuat.v.x, mQuat.v.y, mQuat.v.z);
+    a += mPositionMaybe * GetOffset();
+    
+    mVec3_c b(mQuat.v.x, mQuat.v.y, mQuat.v.z);
+    b -= mPositionMaybe * field_0x13C;
 
     const mVec3_c *up;
     if (cM::isZero((a - b).squareMagXZ())) {
@@ -536,17 +533,16 @@ void mShadowChild_c::updateMtx() {
     mMtx_c mtx;
     C_MTXLookAt(mtx.m, a, *up, b);
 
-    const f32 f = Get0x13C();
+    f32 f = field_0x13C;
     mFrustum.set(f, -f, -f, f, f, f + GetOffset(), mtx, true);
 }
 
 void mShadowChild_c::drawMdl() {
-    // Equivalent, but stack problems and regswaps
     using namespace nw4r;
-    mMtx_c mtx;
+    Mtx44 mtx;
     GXSetTevColor(GX_TEVREG0, sColors[mColorChanIdx]);
-    C_MTXOrtho(mtx.m, field_0x13C, -field_0x13C, -field_0x13C, field_0x13C, 0.0f, 100.0f + (-mFrustum.mFar));
-    GXSetProjection(mtx.m, GX_ORTHOGRAPHIC);
+    C_MTXOrtho(mtx, field_0x13C, -field_0x13C, -field_0x13C, field_0x13C, 0.0f, 100.0f + (-mFrustum.mFar));
+    GXSetProjection(mtx, GX_ORTHOGRAPHIC);
     g3d::G3DState::Invalidate(0x7FF);
 
     mMtx_c &viewMtx = mFrustum.mView;
@@ -571,7 +567,7 @@ void mShadowChild_c::drawMdl() {
             g3d::DrawResMdlReplacement *pRep = mdl2 ? &mdl2->GetDrawResMdlReplacement() : nullptr;
 
             g3d::DrawResMdlDirectly(
-                resMdl, viewPosArray, nullptr, nullptr, mdl2->GetByteCode(g3d::ScnMdlSimple::BYTE_CODE_DRAW_OPA),
+                resMdl, viewPosArray, nullptr, nullptr, mdl->GetByteCode(g3d::ScnMdlSimple::BYTE_CODE_DRAW_OPA),
                 nullptr, pRep, g3d::RESMDL_DRAWMODE_FORCE_LIGHTOFF | g3d::RESMDL_DRAWMODE_IGNORE_MATERIAL
             );
             GXInvalidateVtxCache();

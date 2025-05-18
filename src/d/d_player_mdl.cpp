@@ -25,8 +25,10 @@
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resshp.h"
 #include "nw4r/math/math_arithmetic.h"
+#include "nw4r/math/math_types.h"
 #include "rvl/CX/cx.h"
 #include "rvl/GX/GXTypes.h"
+#include "rvl/MTX/mtxvec.h"
 #include "sized_string.h"
 #include "toBeSorted/cx_util.h"
 #include "toBeSorted/file_manager.h"
@@ -230,11 +232,15 @@ bool daPlBaseAnmChr_c::isFinished() {
     return false;
 }
 
-void daPlBaseHeadCallback_c::timingB(u32, nw4r::g3d::WorldMtxManip *, nw4r::g3d::ResMdl) {}
+void daPlBaseHeadCallback_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip *result, nw4r::g3d::ResMdl) {
+    mpPlayer->headModelTimingB(nodeId, result);
+}
 
-void daPlBaseCalcWorldCallback_c::ExecCallbackC(
+void daPlBaseHandsCallback_c::ExecCallbackC(
     nw4r::math::MTX34 *pMtxArray, nw4r::g3d::ResMdl mdl, nw4r::g3d::FuncObjCalcWorld *pFuncObj
-) {}
+) {
+    mpPlayer->handsCallbackC(pMtxArray, mdl, pFuncObj);
+}
 
 void daPlayerModelBase_c::freeFrmHeap(mHeapAllocator_c *allocator) {
     EGG::Heap::toFrmHeap(allocator->getHeap())->free(0x1 | 0x2);
@@ -309,8 +315,8 @@ void daPlayerModelBase_c::loadBodyModels() {
 
     mMainMdl.setCallback(&mMainBodyCallback);
     mMainBodyCallback.setPlayer(this);
-    mHeadMdl.setCallback(&mheadCallback);
-    mheadCallback.setPlayer(this);
+    mHeadMdl.setCallback(&mHeadCallback);
+    mHeadCallback.setPlayer(this);
 
     mScnCallback1.attach(mMainMdl);
     mScnCallback2.attach(mHeadMdl);
@@ -491,11 +497,11 @@ void daPlayerModelBase_c::initSwordModel() {
     const char *pod = sSwordPods[sCurrentSword];
 
     nw4r::g3d::ResMdl sheathMdl = mSwordRes.GetResMdl(pod);
-    createGenericSmdl(sheathMdl, mSheathMdl, &heap_allocator, 0x800);
+    createGenericSmdl(sheathMdl, mSheathMdl, &mSwordAllocator, 0x800);
     mScnCallback4.attach(mSheathMdl);
 
     nw4r::g3d::ResMdl swordMdl = mSwordRes.GetResMdl(swordName);
-    createGenericSmdl(swordMdl, mSwordMdl, &heap_allocator, 0x810);
+    createGenericSmdl(swordMdl, mSwordMdl, &mSwordAllocator, 0x810);
     mSwordMdl.setPriorityDraw(0x84, 0x7F);
     nw4r::g3d::ResAnmClr swordAnmClr = mAlinkRes.GetResAnmClr("appearance");
     nw4r::g3d::ResMdl swordResMdl = mSwordMdl.getResMdl();
@@ -623,6 +629,41 @@ bool daPlayerModelBase_c::createGenericMdl(
     return ok;
 }
 
+void daPlayerModelBase_c::applyWorldRotationMaybe(
+    nw4r::math::MTX34 *result, mAng x, mAng y, mAng z, mVec3_c *off, bool order
+) {
+    mVec3_c v;
+    v.x = result->_03;
+    v.y = result->_13;
+    v.z = result->_23;
+    mMtx_c work;
+    if (off != nullptr) {
+        MTXTrans(work, off->x, off->y, off->z);
+    } else {
+        MTXTrans(work, v.x, v.y, v.z);
+    }
+    work.YrotM(rotation.y);
+    if (order) {
+        work.ZYXrotM(x, y, z);
+    } else {
+        work.ZXYrotM(x, y, z);
+    }
+    work.YrotM(-rotation.y);
+    mMtx_c translateBack;
+    translateBack.transS(-v.x, -v.y, -v.z);
+    MTXConcat(work, translateBack, work);
+    MTXConcat(work, *result, *result);
+}
+
+void daPlayerModelBase_c::applyWorldRotationMaybe(
+    nw4r::g3d::WorldMtxManip *result, mAng x, mAng y, mAng z, mVec3_c *off, bool order
+) {
+    mMtx_c mtx;
+    result->GetMtx(mtx);
+    applyWorldRotationMaybe(mtx, x, y, z, off, order);
+    result->SetMtxUnchecked(mtx);
+}
+
 void daPlayerModelBase_c::adjustMainModelChrAnm(PlayerMainModelNode_e nodeId, nw4r::g3d::ChrAnmResult *result) {
     mMtx_c mtx;
     result->GetMtx(mtx);
@@ -674,17 +715,16 @@ void daPlayerModelBase_c::adjustMainModelWorldMtx(PlayerMainModelNode_e nodeId, 
         mtx.YrotM(-rotation.y);
         mMtx_c mtx2;
         mtx2.YrotS(rotation.y);
-        mtx += mtx2;
+        MTXConcat(mtx2, mtx, mtx);
 
         mMtx_c orig;
         result->GetMtx(orig);
-        mVec3_c origTrans(orig.m[0][3], orig.m[1][3], orig.m[2][3]);
-        orig += mtx;
-        orig.m[0][3] = origTrans.x;
-        orig.m[1][3] = origTrans.y;
-        orig.m[2][3] = origTrans.z;
+        mVec3_c origTrans;
+        orig.getTranslation(origTrans);
+        MTXConcat(mtx, orig, orig);
+        orig.setTranslation(origTrans);
         if (nodeId == PLAYER_MAIN_NODE_ARM_R1) {
-            fn_8005E900(&orig, 1500, 0, 0, nullptr, false);
+            applyWorldRotationMaybe(orig, 1500, 0, 0, nullptr, false);
         }
         result->SetMtxUnchecked(orig);
     } else if (mAnimations[3] == 0xE0 && nodeId == PLAYER_MAIN_NODE_ARM_R2) {
@@ -693,72 +733,291 @@ void daPlayerModelBase_c::adjustMainModelWorldMtx(PlayerMainModelNode_e nodeId, 
         mtx.YrotM(-rotation.y);
         mMtx_c mtx2;
         mtx2.YrotS(rotation.y);
-        mtx += mtx2;
+        MTXConcat(mtx2, mtx, mtx);
 
         mMtx_c orig;
         result->GetMtx(orig);
-        mVec3_c origTrans(orig.m[0][3], orig.m[1][3], orig.m[2][3]);
-        orig += mtx;
-        orig.m[0][3] = origTrans.x;
-        orig.m[1][3] = origTrans.y;
-        orig.m[2][3] = origTrans.z;
+        mVec3_c origTrans;
+        orig.getTranslation(origTrans);
+        MTXConcat(mtx, orig, orig);
+        orig.setTranslation(origTrans);
         result->SetMtxUnchecked(orig);
     } else if (nodeId == PLAYER_MAIN_NODE_BACKBONE_1) {
         transformBackbone1(result);
-        fn_8005EA20(result, field_0x1268 >> 1, field_0x126A * 0.4f + getArmZRot(2), field_0x126C, nullptr, false);
+        applyWorldRotationMaybe(
+            result, field_0x1268 >> 1, field_0x126A * 0.4f + getArmZRot(2), field_0x126C, nullptr, false
+        );
     } else if (nodeId == PLAYER_MAIN_NODE_BACKBONE_2) {
-        fn_8005EA20(result, field_0x1268 >> 1, field_0x126A * 0.6f + getArmZRot(2), 0, nullptr, false);
+        applyWorldRotationMaybe(result, field_0x1268 >> 1, field_0x126A * 0.6f + getArmZRot(2), 0, nullptr, false);
     } else if (nodeId == PLAYER_MAIN_NODE_FSKIRT_L1 && *field_0x136C != 0) {
         mVec3_c v;
         vt_0x30C(v);
         if (*field_0x136C < 0) {
             v.z *= -1.0f;
-
         }
-        fn_8005EA20(result, v.x * *field_0x136C, 0, v.z * *field_0x136C, nullptr, true);
-    } else if (nodeId == PLAYER_MAIN_NODE_FSKIRT_R1 && field_0x1370) {
+        applyWorldRotationMaybe(result, v.x * *field_0x136C, 0, v.z * *field_0x136C, nullptr, true);
+    } else if (nodeId == PLAYER_MAIN_NODE_FSKIRT_R1 && *field_0x1370) {
         mVec3_c v;
         vt_0x30C(v);
         if (*field_0x1370 > 0) {
             v.z *= -1.0f;
-
         }
-        fn_8005EA20(result, v.x * *field_0x1370, 0, v.z * *field_0x1370, nullptr, true);
+        applyWorldRotationMaybe(result, v.x * *field_0x1370, 0, v.z * *field_0x1370, nullptr, true);
     } else if (nodeId == PLAYER_MAIN_NODE_POD) {
-        mAng a1 = 0;
-        mAng a2 = getArmZRot(2);
-
-        fn_8005EA20(result, field_0x1268 / 2, field_0x126A * 0.6f + a1, a1, nullptr, false);
+        if (field_0x1258 != 0) {
+            mMtx_c mtx;
+            mtx.YrotS(field_0x125A);
+            mtx.XrotM(field_0x1258);
+            mtx.YrotM(-field_0x125A);
+            mMtx_c orig;
+            result->GetMtx(orig);
+            mVec3_c origTrans;
+            orig.getTranslation(origTrans);
+            MTXConcat(mtx, orig, orig);
+            orig.setTranslation(origTrans);
+            result->SetMtxUnchecked(orig);
+        }
+        if (field_0x1268 < 0) {
+            applyWorldRotationMaybe(result, -(field_0x1268 >> 1), 0, 0, nullptr, false);
+        }
     } else if ((nodeId == PLAYER_MAIN_NODE_ARM_R2 || nodeId == PLAYER_MAIN_NODE_HAND_R) && isMPPose()) {
-        mAng a1 = 0;
-        mAng a2 = getArmZRot(2);
+        mMtx_c mtx;
+        mtx.makeQ(mQuat2);
+        mtx.YrotM(-rotation.y);
+        mMtx_c mtx2;
+        mtx2.YrotS(rotation.y);
+        MTXConcat(mtx2, mtx, mtx);
 
-        fn_8005EA20(result, field_0x1268 / 2, field_0x126A * 0.6f + a1, a1, nullptr, false);
+        mMtx_c orig;
+        result->GetMtx(orig);
+        mVec3_c origTrans;
+        orig.getTranslation(origTrans);
+        MTXConcat(mtx, orig, orig);
+        orig.setTranslation(origTrans);
+        result->SetMtxUnchecked(orig);
+    } else if (nodeId == PLAYER_MAIN_NODE_HAND_R || nodeId == PLAYER_MAIN_NODE_HAND_L) {
+        if (isOnTightRope()) {
+            // TODO: I'd like this to be a neat ternary...
+            // nodeId == PLAYER_MAIN_NODE_HAND_R ? -5461 : -7282;
+            mAng rot;
+            rot.setR(-7282);
+            if (nodeId == PLAYER_MAIN_NODE_HAND_R) {
+                rot.setR(-5461);
+            }
+            applyWorldRotationMaybe(result, rot, 0, 0, nullptr, false);
+        } else if (isOnVines()) {
+            // TODO what even is this
+            mAng v1 = -3277;
+            mAng v2 = 910;
+            if (nodeId == PLAYER_MAIN_NODE_HAND_R) {
+                v1 *= -1;
+                v2 *= -1;
+            }
+            applyWorldRotationMaybe(result, 0xec17, v1, v2, nullptr, true);
+        }
     }
-
-    // Just getting weak functions to appear here
-    mVec3_c v;
-    vt_0x30C(v);
-    isMPPose();
-    isOnTightRope();
-    isOnVines();
 }
 
-void daPlayerModelBase_c::fn_8005F890() {
-    // Just getting weak functions to appear here
-    vt_0x2E8();
-    vt_0x304();
-    mAng a1, a2;
-    isOnClawTargetMaybe(0, a1, a2);
+void daPlayerModelBase_c::updateMainBlend1(f32 blend) {
+    // TODO document numbers
+    mAnmChrBlend.setWeight(1, (1.0f - blend) * (1.0f - field_0x1274));
+    mAnmChrBlend.setWeight(3, (1.0f - blend) * field_0x1274);
+    mAnmChrBlend.setWeight(5, blend);
+}
+
+void daPlayerModelBase_c::updateMainBlend2(f32 blend, bool save) {
+    // TODO document numbers
+    f32 blend4 = 1.0f - mAnmChrBlend.getWeight(4);
+    mAnmChrBlend.setWeight(0, blend4 * (1.0f - blend));
+    mAnmChrBlend.setWeight(2, blend4 * blend);
+    f32 blend5 = 1.0f - mAnmChrBlend.getWeight(5);
+    mAnmChrBlend.setWeight(1, blend5 * (1.0f - blend));
+    mAnmChrBlend.setWeight(3, blend5 * blend);
+    if (save) {
+        field_0x1274 = blend;
+    }
+}
+
+void daPlayerModelBase_c::updateBlendWeights(PlayerMainModelNode_e nodeId) {
+    switch (field_0x1219) {
+        case 9:
+            if (nodeId == PLAYER_MAIN_NODE_CENTER) {
+                updateMainBlend2(field_0x1274, false);
+            } else if (nodeId == PLAYER_MAIN_NODE_WEAPON_R) {
+                if (field_0x1274 < 0.5f) {
+                    updateMainBlend2(0.0f, false);
+                } else {
+                    updateMainBlend2(1.0f, false);
+                }
+            }
+            break;
+        case 1:
+            if (nodeId == PLAYER_MAIN_NODE_CENTER) {
+                updateMainBlend1(0.0f);
+            } else if (nodeId == PLAYER_MAIN_NODE_POD) {
+                updateMainBlend1(field_0x1270);
+            }
+            break;
+        case 4:
+            if (nodeId == PLAYER_MAIN_NODE_CENTER) {
+                updateMainBlend1(0.0f);
+            } else if (nodeId == PLAYER_MAIN_NODE_WEAPON_L) {
+                updateMainBlend1(field_0x1270);
+            }
+            break;
+        case 2:
+            if (nodeId == PLAYER_MAIN_NODE_WEAPON_L) {
+                updateMainBlend1(0.0f);
+            } else if (nodeId == PLAYER_MAIN_NODE_WEAPON_R) {
+                updateMainBlend1(field_0x1270);
+            }
+            break;
+        case 3:
+            if (nodeId == PLAYER_MAIN_NODE_POD) {
+                updateMainBlend1(0.0f);
+            } else if (nodeId == PLAYER_MAIN_NODE_WEAPON_L) {
+                updateMainBlend1(field_0x1270);
+            }
+            break;
+        case 5:
+            if (nodeId == PLAYER_MAIN_NODE_HEAD) {
+                updateMainBlend1(0.0f);
+            } else if (nodeId == PLAYER_MAIN_NODE_POD) {
+                updateMainBlend1(field_0x1270);
+            }
+            break;
+        case 7:
+            if (nodeId == PLAYER_MAIN_NODE_CENTER) {
+                updateMainBlend1(0.0f);
+            } else if (nodeId == PLAYER_MAIN_NODE_HEAD) {
+                updateMainBlend1(1.0f);
+            } else if (nodeId == PLAYER_MAIN_NODE_POD) {
+                updateMainBlend1(0.0f);
+            } else if (nodeId == PLAYER_MAIN_NODE_WEAPON_R) {
+                updateMainBlend1(1.0f);
+            }
+            break;
+        case 6:
+            if (nodeId == PLAYER_MAIN_NODE_HEAD) {
+                updateMainBlend2(0.0f, false);
+            } else if (nodeId == PLAYER_MAIN_NODE_POD) {
+                updateMainBlend2(0.0f, false);
+            }
+            break;
+        case 8:
+            if (nodeId == PLAYER_MAIN_NODE_HEAD) {
+                updateMainBlend1(0.0f);
+            } else if (nodeId == PLAYER_MAIN_NODE_POD) {
+                updateMainBlend1(field_0x1270);
+            }
+            break;
+    }
+}
+
+void daPlayerModelBase_c::fn_8005F890(nw4r::math::MTX34 *result) {
+    // Probably related to IK?
+    static const u16 sNodeIdsArms1[] = {PLAYER_MAIN_NODE_ARM_L1, PLAYER_MAIN_NODE_ARM_R1};
+    static const Vec sArmVecs[] = {
+        {29.0f, 0.0f, 0.0f},
+        {26.5f, 0.0f, 0.0f},
+        { 0.0f, 0.0f, 0.0f}
+    };
+
+    nw4r::g3d::ResMdl mdl = mMainMdl.getResMdl();
+
+    if (vt_0x2E8(result, sNodeIdsArms1, false)) {
+        mVec3_c swordOffset;
+        if (checkCurrentAction(/* SWORD_IN_DIAL */ 0x86) || checkCurrentAction(/* ON_BIRD */ 0x8A)) {
+            swordOffset = vt_0x304() * 0.5f;
+        } else {
+            swordOffset = mVec3_c::Zero;
+        }
+
+        mVec3_c dstVec;
+        // (1) For some reason the compiler sets up pointers to stack vars here...
+        for (s32 arm = 0; arm < 2; arm++) {
+            mAng rot1;
+            mAng rot2;
+            isOnClawTargetMaybe(arm, rot1, rot2);
+            u16 armNode = sNodeIdsArms1[arm];
+            mVec3_c *dst = nullptr;
+            mAng *angs;
+            if (arm == 0) {
+                angs = field_0x1374;
+            } else {
+                angs = field_0x1378;
+            }
+            nw4r::math::MTX34 *targetMtx;
+            // Walk down the arm bones and transform the whole thing again?
+            for (s32 i = 0; i < 3; i++) {
+                u32 mtxId = mdl.GetResNode(armNode).GetMtxID();
+                targetMtx = &result[mtxId];
+                applyWorldRotationMaybe(targetMtx, rot1, rot2, angs[i], dst, false);
+                mVec3_c v;
+                v.x = sArmVecs[i].x;
+                v.y = sArmVecs[i].y;
+                v.z = sArmVecs[i].z;
+                MTXMultVec(*targetMtx, v, dstVec);
+                if (i != 2 && arm == 1) {
+                    // sword hand
+                    dstVec -= swordOffset;
+                }
+                dst = &dstVec;
+                armNode++;
+            }
+            mVec3_c translate;
+            mMainMdl.getNodeResult(armNode)->GetTranslate(translate);
+            MTXMultVec(*targetMtx, translate, *dst);
+            // (2) ... here it stores the passed-by-value angles to the stack,
+            // then calls GetResNode and uses the previously set up pointers as arguments?
+            applyWorldRotationMaybe(&result[mdl.GetResNode(armNode).GetMtxID()], rot1, rot2, angs[2], &dstVec, false);
+        }
+    }
 }
 
 void daPlayerModelBase_c::mainModelTimingA(u32 nodeId, nw4r::g3d::ChrAnmResult *result) {
     adjustMainModelChrAnm((PlayerMainModelNode_e)nodeId, result);
 }
 
-void daPlayerModelBase_c::mainModelTimingB(u32 nodeId, nw4r::g3d::WorldMtxManip *result) {}
+void daPlayerModelBase_c::mainModelTimingB(u32 nodeId, nw4r::g3d::WorldMtxManip *result) {
+    adjustMainModelWorldMtx((PlayerMainModelNode_e)nodeId, result);
+    if (field_0x1219 != 0) {
+        if (nodeId == PLAYER_MAIN_NODE_CENTER || nodeId == PLAYER_MAIN_NODE_POD ||
+            nodeId == PLAYER_MAIN_NODE_WEAPON_L || nodeId == PLAYER_MAIN_NODE_HEAD ||
+            nodeId == PLAYER_MAIN_NODE_WEAPON_R) {
+            updateBlendWeights((PlayerMainModelNode_e)nodeId);
+        }
+    }
+}
 
 void daPlayerModelBase_c::mainModelTimingC(nw4r::math::MTX34 *result) {}
+
+void daPlayerModelBase_c::handsCallbackC(
+    nw4r::math::MTX34 *pMtxArray, nw4r::g3d::ResMdl mdl, nw4r::g3d::FuncObjCalcWorld *pFuncObj
+) {
+    mMainMdl.getNodeWorldMtx(PLAYER_MAIN_NODE_HAND_L, &pMtxArray[mdl.GetResNode(PLAYER_HANDS_NODE_HAND_L).GetMtxID()]);
+    mMainMdl.getNodeWorldMtx(PLAYER_MAIN_NODE_HAND_R, &pMtxArray[mdl.GetResNode(PLAYER_HANDS_NODE_HAND_R).GetMtxID()]);
+}
+
+void daPlayerModelBase_c::headModelTimingB(u32 nodeId, nw4r::g3d::WorldMtxManip *result) {
+    if (nodeId >= PLAYER_HEAD_NODE_MOMI_Z_CAP_1) {
+        mMtx_c mtx;
+        result->GetMtx(mtx);
+        mVec3_c v;
+        mtx.getTranslation(v);
+        mMtx_c rot;
+        rot.makeQ(field_0x1300[nodeId - 6]);
+        MTXConcat(rot, mtx, mtx);
+        mtx.setTranslation(v);
+        result->SetMtxUnchecked(mtx);
+    } else if (nodeId >= PLAYER_HEAD_NODE_HAIR_L) {
+        mAng oldYRot = rotation.y;
+        rotation.y = field_0x1256;
+        u32 idx = nodeId - 1;
+        applyWorldRotationMaybe(result, field_0x1238[idx], 0, field_0x1242[idx], nullptr, false);
+        rotation.y = oldYRot;
+    }
+}
 
 void daPlayerModelBase_c::setTransformAndCalc(m3d::scnLeaf_c &lf, const mMtx_c *mtx) {
     if (mtx != nullptr) {
@@ -833,6 +1092,80 @@ nw4r::g3d::ResAnmTexSrt daPlayerModelBase_c::getExternalAnmTexSrt(const char *na
     nw4r::g3d::ResFile file = getExternalCompressedFile(name, "rtsaC", dest, maxSize);
     result = file.GetResAnmTexSrt(name);
     return result;
+}
+
+void daPlayerModelBase_c::updateModelColliders() {
+    mVec3_c bodyTranslation;
+    mMainMdl.getNodeWorldMtxMultVecZero(PLAYER_MAIN_NODE_CENTER, bodyTranslation);
+
+    mVec3_c bottom;
+    bottom = ((mToeTranslation[0] + mToeTranslation[1]) * 0.5f + bodyTranslation) * 0.5f;
+    f32 f = mToeTranslation[0].y > mToeTranslation[1].y ? mToeTranslation[1].y : mToeTranslation[0].y;
+    f32 height;
+    if (bodyTranslation.y > f) {
+        height = bodyTranslation.y - f;
+        bottom.y = f;
+    } else {
+        bottom.y = bodyTranslation.y;
+        height = f - bodyTranslation.y;
+    }
+
+    if (height < 60.0f) {
+        bottom.y -= (60.0f - height) * 0.5f;
+        height = 60.0f;
+    }
+    mCcCyls[0].SetC(bottom);
+    mCcCyls[0].SetH(height);
+
+    if (!checkActionFlagsCont(0x20000)) {
+        bottom = (bodyTranslation + mHeadTranslation) * 0.5f;
+    }
+
+    if (bodyTranslation.y > mHeadTranslation.y) {
+        height = bodyTranslation.y - mHeadTranslation.y;
+        bottom.y = mHeadTranslation.y;
+    } else {
+        bottom.y = bodyTranslation.y;
+        height = mHeadTranslation.y - bodyTranslation.y;
+    }
+
+    if (height < 60.0f) {
+        bottom.y -= (60.0f - height) * 0.5f;
+        height = 60.0f;
+    }
+
+    mCcCyls[2].SetC(bottom);
+    mCcCyls[2].SetH(height);
+
+    bottom = (mCcCyls[0].GetC() + mCcCyls[2].GetC()) * 0.5f;
+    f32 midH = (mCcCyls[0].GetH() + mCcCyls[2].GetH()) * 0.5f;
+
+    mCcCyls[1].SetC(bottom);
+    mCcCyls[1].SetH(midH);
+}
+
+void daPlayerModelBase_c::updateCachedPositions() {
+    static const Vec sPos1 = {12.0f, -8.0f, 0.0f};
+    mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sPos1, poscopy2);
+    static const Vec sPosAboveLink = {0.0f, -8.0f, 0.0f};
+    mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sPosAboveLink, mPositionAboveLink);
+    static const Vec sHeadPos = {0.0f, -28.0f, 0.0f};
+    mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sHeadPos, mHeadTranslation);
+
+    mMainMdl.getNodeWorldMtxMultVecZero(PLAYER_MAIN_NODE_TOE_L, mToeTranslation[0]);
+    mMainMdl.getNodeWorldMtxMultVecZero(PLAYER_MAIN_NODE_TOE_R, mToeTranslation[1]);
+    mMainMdl.getNodeWorldMtxMultVecZero(PLAYER_MAIN_NODE_HAND_L, mTranslationHand[0]);
+    mMainMdl.getNodeWorldMtxMultVecZero(PLAYER_MAIN_NODE_HAND_R, mTranslationHand[1]);
+    mMainMdl.getNodeWorldMtxMultVecZero(PLAYER_MAIN_NODE_WEAPON_L, mTranslationWeapon[0]);
+    mMainMdl.getNodeWorldMtxMultVecZero(PLAYER_MAIN_NODE_WEAPON_R, mTranslationWeapon[1]);
+    mMainMdl.getNodeWorldMtxMultVecZero(PLAYER_MAIN_NODE_CENTER, mCenterTranslation);
+
+    if (checkCurrentAction(/* DOWSE_LOOK */ 0x68)) {
+        mVec3_c v(0.0f, 18.0f, 0.0f);
+        v.rotX(field_0x1268);
+        v.rotY(rotation.y + field_0x126A);
+        poscopy2 += v;
+    }
 }
 
 void daPlayerModelBase_c::fn_80061410() {

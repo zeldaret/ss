@@ -39,7 +39,7 @@ bool bmdl_c::getNodeWorldMtxMultVecZero(u32 p1, nw4r::math::VEC3 &out) const {
     }
 }
 
-bool bmdl_c::getNodeWorldMtxMultVec(u32 p1, nw4r::math::VEC3 &in, nw4r::math::VEC3 &out) const {
+bool bmdl_c::getNodeWorldMtxMultVec(u32 p1, const nw4r::math::VEC3 &in, nw4r::math::VEC3 &out) const {
     nw4r::math::MTX34 mtx;
     if (!getNodeWorldMtx(p1, &mtx)) {
         return false;

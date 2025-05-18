@@ -22,7 +22,7 @@ public:
     int getNodeID(const char *name) const;
     bool getNodeWorldMtx(u32 p1, nw4r::math::MTX34 *out) const;
     bool getNodeWorldMtxMultVecZero(u32 p1, nw4r::math::VEC3 &out) const;
-    bool getNodeWorldMtxMultVec(u32, nw4r::math::VEC3 &, nw4r::math::VEC3 &) const;
+    bool getNodeWorldMtxMultVec(u32, const nw4r::math::VEC3 &, nw4r::math::VEC3 &) const;
     nw4r::g3d::ResMdl getResMdl() const;
     nw4r::g3d::ResMat getResMat(u32 index) const;
 
@@ -40,7 +40,7 @@ public:
     bool getBounds(mVec3_c *min, mVec3_c *max) const;
 
 private:
-    banm_c *mpCurrentAnm;
+    /* 0x18 */ banm_c *mpCurrentAnm;
 };
 
 } // namespace m3d

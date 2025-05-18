@@ -43,6 +43,10 @@ public:
             mpBaseCallback = cb;
         }
 
+        nw4r::g3d::ChrAnmResult *getNodeResult(u16 node) {
+            return &mpNodes[node];
+        }
+
     protected:
         /* 0x04 */ calcRatio_c mCalcRatio;
         /* 0x20 */ int mNumNode;
@@ -66,9 +70,9 @@ public:
 
 private:
     /** If we allocated the callback ourselves, this is what we need to free */
-    mdlCallback_c *mpOwnedCallback;
+    /* 0x1C */ mdlCallback_c *mpOwnedCallback;
     /** The actual callback to use */
-    mdlCallback_c *mpCallback;
+    /* 0x20 */ mdlCallback_c *mpCallback;
 };
 
 } // namespace m3d
