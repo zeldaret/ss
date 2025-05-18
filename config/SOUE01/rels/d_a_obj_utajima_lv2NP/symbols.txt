@@ -12,5 +12,6 @@ _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 dAcOutajimaLv2_c__someFloat = .rodata:0x00000000; // type:object size:0x20 scope:local data:float
 g_profile_OBJ_UTAJIMA_LV2 = .data:0x00000000; // type:object size:0x10
+lbl_403_data_10 = .data:0x00000010; // type:object size:0x28
 lbl_403_data_38 = .data:0x00000038; // type:object size:0x20 scope:local
 __vt__16dAcOutajimaLv2_c = .data:0x00000058; // type:object size:0x80

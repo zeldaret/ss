@@ -13,4 +13,4 @@ lbl_632_rodata_0 = .rodata:0x00000000; // type:object size:0xC scope:local data:
 g_profile_TAG_GENKI_DOWSING_TARGET = .data:0x00000000; // type:object size:0x10
 __vt__16dTgGenkiDwsTgt_c = .data:0x00000010; // type:object size:0x74
 @GUARD@create__16dTgGenkiDwsTgt_cFv@offset = .bss:0x00000008; // type:object size:0x1 scope:local data:byte
-@LOCAL@create__16dTgGenkiDwsTgt_cFv@offset = .bss:0x0000000C; // type:object size:0xC scope:local data:float
+@LOCAL@create__16dTgGenkiDwsTgt_cFv@offset = .bss:0x0000000C; // type:object size:0xC scope:local align:4 data:float

@@ -57,4 +57,4 @@ __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:globa
 lbl_114_bss_8 = .bss:0x00000008; // type:object size:0x10
 lbl_114_bss_18 = .bss:0x00000018; // type:object size:0x30 data:4byte
 lbl_114_bss_48 = .bss:0x00000048; // type:object size:0x8 data:byte
-lbl_114_bss_50 = .bss:0x00000050; // type:object size:0x10 data:float
+lbl_114_bss_50 = .bss:0x00000050; // type:object size:0x10 align:4 data:float

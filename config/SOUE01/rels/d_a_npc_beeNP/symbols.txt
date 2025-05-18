@@ -44,4 +44,4 @@ AcNpcBee__vtable = .data:0x0000009C; // type:object size:0x8C
 lbl_14_data_128 = .data:0x00000128; // type:object size:0x70
 lbl_14_data_198 = .data:0x00000198; // type:object size:0x58
 lbl_14_bss_8 = .bss:0x00000008; // type:object size:0x1 data:byte
-lbl_14_bss_C = .bss:0x0000000C; // type:object size:0xC data:float
+lbl_14_bss_C = .bss:0x0000000C; // type:object size:0xC align:4 data:float

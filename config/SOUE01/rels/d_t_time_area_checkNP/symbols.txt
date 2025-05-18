@@ -10,6 +10,6 @@ __dt__18dTgTimeAreaCheck_cFv = .text:0x000002B0; // type:function size:0x5C
 _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 lbl_597_rodata_0 = .rodata:0x00000000; // type:object size:0x4 scope:local data:float
-lbl_597_rodata_4 = .rodata:0x00000004; // type:object size:0x4 scope:local data:float
+lbl_597_rodata_4 = .rodata:0x00000004; // type:object size:0x4 scope:local align:4 data:float
 g_profile_TAG_TIME_AREA_CHECK = .data:0x00000000; // type:object size:0x10
 __vt__18dTgTimeAreaCheck_c = .data:0x00000010; // type:object size:0x74

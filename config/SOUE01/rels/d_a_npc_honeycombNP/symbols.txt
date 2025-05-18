@@ -29,4 +29,4 @@ lbl_15_data_60 = .data:0x00000060; // type:object size:0xC data:4byte
 AcNpcHc__vtable = .data:0x0000006C; // type:object size:0x8C
 lbl_15_data_F8 = .data:0x000000F8; // type:object size:0x70
 lbl_15_bss_8 = .bss:0x00000008; // type:object size:0x1 data:byte
-lbl_15_bss_C = .bss:0x0000000C; // type:object size:0xC data:float
+lbl_15_bss_C = .bss:0x0000000C; // type:object size:0xC align:4 data:float

@@ -62,6 +62,7 @@ __vt__60sFStateMgr_c<21dAcOtoD3StoneFigure_c,20sStateMethodUsr_FI_c> = .data:0x0
 __vt__90sStateMgr_c<21dAcOtoD3StoneFigure_c,20sStateMethodUsr_FI_c,12sFStateFct_c,13sStateIDChk_c> = .data:0x00000150; // type:object size:0x30
 __vt__37sFStateFct_c<21dAcOtoD3StoneFigure_c> = .data:0x00000180; // type:object size:0x14
 __vt__34sFState_c<21dAcOtoD3StoneFigure_c> = .data:0x00000198; // type:object size:0x18
+lbl_609_data_1B0 = .data:0x000001B0; // type:object size:0x94
 __vt__36sFStateID_c<21dAcOtoD3StoneFigure_c> = .data:0x00000244; // type:object size:0x34
 __global_destructor_chain = .bss:0x00000000; // type:object size:0x4 scope:global
 lbl_609_bss_8 = .bss:0x00000008; // type:object size:0x10 scope:local data:4byte
