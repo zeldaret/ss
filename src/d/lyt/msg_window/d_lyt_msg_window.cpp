@@ -90,7 +90,7 @@ bool dLytMsgWindow_c::build() {
     mpMsgWindowUnk = new TextWindowUnk(mpTagProcessor);
 
     if (FiContext::GetInstance() != nullptr) {
-        FiContext::GetInstance()->resetField_0x3C();
+        FiContext::GetInstance()->resetSaveTimeRelated();
     }
 
     mpWindowTalk = nullptr;
@@ -105,7 +105,7 @@ bool dLytMsgWindow_c::build() {
     mpCurrentSubtype = nullptr;
 
     mTextOptionSelection = 0;
-    mSpecialFiMenuValue = 7;
+    mSpecialFiMenuValue = FiContext::KEN8_Nevermind;
 
     field_0x1220 = 0;
 
@@ -199,7 +199,7 @@ void dLytMsgWindow_c::executeState_Invisible() {
                 } else {
                     createSubMsgManager(mpTagProcessor->getMsgWindowSubtype());
                     field_0x828 = nullptr;
-                    mSpecialFiMenuValue = 7;
+                    mSpecialFiMenuValue = FiContext::KEN8_Nevermind;
                     if (mpTagProcessor->getMsgWindowSubtype() == 6) {
                         mpCurrentSubtype = mpWindowWood;
                         dTextBox_c *box = mpCurrentSubtype->getTextBox();
@@ -515,7 +515,7 @@ void dLytMsgWindow_c::executeState_WaitKeySelectQuestion() {
             mTextOptionSelection = selection;
             field_0x1220 = 0;
             if (FiContext::GetInstance() != nullptr) {
-                doFiThing = FiContext::GetInstance()->getDoSpecialFiMenuHandling();
+                doFiThing = FiContext::GetInstance()->getIsInFiMainMenu();
             }
 
             if (doFiThing) {
@@ -523,7 +523,7 @@ void dLytMsgWindow_c::executeState_WaitKeySelectQuestion() {
                     case 0: mSpecialFiMenuValue = FiContext::getGlobalFiInfo0(0); break;
                     case 1: mSpecialFiMenuValue = FiContext::getGlobalFiInfo0(1); break;
                     case 2: mSpecialFiMenuValue = FiContext::getGlobalFiInfo0(2); break;
-                    case 3: mSpecialFiMenuValue = 7; break;
+                    case 3: mSpecialFiMenuValue = FiContext::KEN8_Nevermind; break;
                 }
             }
 
@@ -743,7 +743,6 @@ void dLytMsgWindow_c::setCurrentFlowFilename(const char *name) {
     mCurrentFlowFileName = name;
 }
 
-#pragma dont_inline on
 void dLytMsgWindow_c::createSubMsgManager(u8 type) {
     switch (type) {
         case 6:
@@ -791,8 +790,6 @@ void dLytMsgWindow_c::createSubMsgManager(u8 type) {
             break;
     }
 }
-
-#pragma dont_inline off
 
 void dLytMsgWindow_c::removeSubMsgManagers() {
     if (mpWindowTalk != nullptr) {

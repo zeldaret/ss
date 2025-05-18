@@ -8,6 +8,7 @@
 #include "d/lyt/d_lyt_unknowns.h"
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "toBeSorted/event_manager.h"
+#include "toBeSorted/fi_context.h"
 #include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytMeterCrossBtnParts_c, Wait);
@@ -406,7 +407,7 @@ bool dLytMeterCrossBtn_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x635 = 0;
     field_0x636 = 0;
 
-    field_0x628 = 0xFFFF;
+    mSavedFiFlow = 0xFFFF;
     mCallCount0 = 0;
     mCallCount1 = 0;
     field_0x620 = 6;
@@ -457,11 +458,10 @@ bool dLytMeterCrossBtn_c::remove() {
     return true;
 }
 
-extern "C" u16 prepareFiHelpIndex();
 bool dLytMeterCrossBtn_c::execute() {
-    u16 newFiValue = prepareFiHelpIndex();
-    if (newFiValue != field_0x628) {
-        field_0x628 = newFiValue;
+    u16 newFiFlow = FiContext::prepareFiHelpIndex();
+    if (newFiFlow != mSavedFiFlow) {
+        mSavedFiFlow = newFiFlow;
         mCallCount0 = 0;
     }
 

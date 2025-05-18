@@ -15,22 +15,31 @@ Sections:
 
 toBeSorted/d_lib.cpp:
 	.text       start:0x80006C20 end:0x80006CC0 align:16
+	.sbss       start:0x80574FA0 end:0x80574FA8
 
 toBeSorted/unk_sorajima_list.cpp:
 	.text       start:0x80006CC0 end:0x80006CE0 align:16
 
 toBeSorted/mpls.cpp:
 	.text       start:0x80006CE0 end:0x80006E08 align:16
+	.data       start:0x804FD060 end:0x804FD0B8
+	.sbss       start:0x80574FA8 end:0x80574FB0
 
 toBeSorted/mdl_base.cpp:
 	.text       start:0x80006E10 end:0x80006EA8 align:16
+	.data       start:0x804FD0B8 end:0x804FD0C8
 
 toBeSorted/d_assert.cpp:
 	.text       start:0x80006EB0 end:0x8000742C align:16
+	.data       start:0x804FD0C8 end:0x804FD180
+	.sbss       start:0x80574FB0 end:0x80574FB8
+	.bss        start:0x80580000 end:0x80580038
 
 toBeSorted/d_jstudio.cpp:
 	.text       start:0x80007430 end:0x800099A4 align:16
 	.ctors      start:0x804DB644 end:0x804DB648
+	.sbss       start:0x80574FB8 end:0x80574FF8
+	.bss        start:0x80580038 end:0x80580070
 
 toBeSorted/save_file.cpp:
 	.text       start:0x800099B0 end:0x80009D28 align:16
@@ -53,14 +62,17 @@ toBeSorted/save_manager.cpp:
 toBeSorted/save_related.cpp:
 	.text       start:0x80015DE0 end:0x800161F4 align:16
 	.rodata     start:0x804DBC38 end:0x804DBC78
+	.sbss       start:0x80575008 end:0x80575010
 
 toBeSorted/d_d2d.cpp:
 	.text       start:0x80016200 end:0x800166F8 align:16
+	.sbss       start:0x80575010 end:0x80575018
 
 toBeSorted/d_d3d.cpp:
 	.text       start:0x80016700 end:0x80019E74 align:16
 	.ctors      start:0x804DB64C end:0x804DB650
 	.data       start:0x80500838 end:0x80500A70
+	.sbss       start:0x80575018 end:0x80575020
 	.sdata2     start:0x80576A00 end:0x80576A68
 
 toBeSorted/d_scn_callback.cpp:
@@ -72,19 +84,24 @@ toBeSorted/d_scn_callback.cpp:
 toBeSorted/d_shadow.cpp:
 	.text       start:0x8001A590 end:0x8001BF94 align:16
 	.ctors      start:0x804DB650 end:0x804DB654
+	.data       start:0x80500AD8 end:0x80500AF0
+	.sbss       start:0x80575028 end:0x80575038
 	.sdata2     start:0x80576A78 end:0x80576B08
 
 toBeSorted/d_unk_mdl_stuff_1.cpp:
 	.text       start:0x8001BFA0 end:0x8001E444 align:16
 	.ctors      start:0x804DB654 end:0x804DB658
+	.sbss       start:0x80575038 end:0x80575058
 
 toBeSorted/d_unk_mdl_stuff_2.cpp:
 	.text       start:0x8001E450 end:0x800221A0 align:16
 	.ctors      start:0x804DB658 end:0x804DB65C
+	.sbss       start:0x80575058 end:0x80575068
 
 toBeSorted/blur_and_palette_manager.cpp:
 	.text       start:0x800221A0 end:0x800268AC align:16
 	.ctors      start:0x804DB65C end:0x804DB660
+	.sbss       start:0x80575068 end:0x80575070
 	.sdata2     start:0x80576BA0 end:0x80576C18
 	.bss        start:0x8058F210 end:0x80594FA0
 
@@ -126,7 +143,7 @@ d/a/npc/d_a_npc.cpp:
 	.text       start:0x80030CB0 end:0x8003F718 align:16
 	.ctors      start:0x804DB668 end:0x804DB66C
 	.data       start:0x805016E0 end:0x80502050
-	.sbss       start:0x805750A0 end:0x805750A8
+	.sbss       start:0x805750A0 end:0x805750B0
 	.bss        start:0x80597030 end:0x805972E0
 
 toBeSorted/d_npc_common.cpp:
@@ -136,11 +153,13 @@ d/a/npc/d_a_ordinary_npc.cpp:
 	.text       start:0x800462D0 end:0x8004D810 align:16
 	.ctors      start:0x804DB66C end:0x804DB670
 	.data       start:0x80502528 end:0x80502C08
+	.sbss       start:0x805750B0 end:0x805750B8
 	.bss        start:0x805972E0 end:0x80597520
 
 d/d_ac_npc_kyui.cpp:
 	.text       start:0x8004D810 end:0x80050800 align:16
 	.ctors      start:0x804DB670 end:0x804DB674
+	.sbss       start:0x805750B8 end:0x805750C0
 
 d/d_base.cpp:
 	.text       start:0x80050800 end:0x80050A14 align:16
@@ -161,9 +180,17 @@ d/d_dvd.cpp:
 	.data       start:0x805033F0 end:0x80503400
 	.sdata      start:0x80571C10 end:0x80571C20
 
-d/d_dvd_unk.cpp:
-	.text       start:0x80052300 end:0x80052E00 align:16
+d/d_dvd_drive_error.cpp:
+	.text       start:0x80052300 end:0x80052760 align:16
+	.rodata     start:0x804DC6B0 end:0x804DCBF0
+	.data       start:0x80503400 end:0x80503440
 	.sbss       start:0x805750D0 end:0x805750D8
+	.sdata2     start:0x80576F20 end:0x80576F38
+
+d/d_dvd_unk.cpp:
+	.text       start:0x80052760 end:0x80052E00 align:16
+	.data       start:0x80503440 end:0x8050A238
+	.sbss       start:0x805750D8 end:0x805750E0
 
 d/d_dylink.cpp:
 	.text       start:0x80052E00 end:0x80053A30 align:16
@@ -190,17 +217,19 @@ d/d_font_manager.cpp:
 
 d/d_gfx.cpp:
 	.text       start:0x800541F0 end:0x80054B00 align:16
+	.sbss       start:0x80575110 end:0x805751A8
 
 d/d_heap.cpp:
 	.text       start:0x80054B00 end:0x80054F30 align:16
 	.ctors      start:0x804DB680 end:0x804DB684
 	.rodata     start:0x804DE008 end:0x804DE188
 	.data       start:0x8050D440 end:0x8050D458
-	.sbss       start:0x805751A8 end:0x805751CC
+	.sbss       start:0x805751A8 end:0x805751D0
 	.bss        start:0x80597740 end:0x80597758
 
 d/d_main.cpp:
 	.text       start:0x80054F30 end:0x80055170 align:16
+	.sbss       start:0x805751D0 end:0x805751E0
 
 d/d_pad.cpp:
 	.text       start:0x80055170 end:0x80059CE0 align:16
@@ -237,10 +266,12 @@ d/d_stage_parse.cpp:
 d/d_sys.cpp:
 	.text       start:0x80064250 end:0x80064F28 align:16
 	.ctors      start:0x804DB694 end:0x804DB698
+	.sbss       start:0x80575228 end:0x80575248
 
 d/d_sys_init.cpp:
 	.text       start:0x80064F30 end:0x80065034 align:16
 	.ctors      start:0x804DB698 end:0x804DB69C
+	.sbss       start:0x80575248 end:0x80575250
 
 toBeSorted/arc_callback_handler.cpp:
 	.text       start:0x80065040 end:0x80065590 align:16
@@ -251,15 +282,18 @@ toBeSorted/arc_callback_handler.cpp:
 
 d/d_video.cpp:
 	.text       start:0x80065590 end:0x800655F4 align:16
+	.sbss       start:0x80575258 end:0x80575260
 
 d/d_cursor_hit_check.cpp:
 	.text       start:0x80065600 end:0x800664EC align:16
 	.data       start:0x8050DF60 end:0x8050DFA0
+	.sbss       start:0x80575260 end:0x80575268
 	.sdata2     start:0x80577938 end:0x80577958
 
 toBeSorted/d_rumble.cpp:
 	.text       start:0x800664F0 end:0x80066F58 align:16
 	.ctors      start:0x804DB6A0 end:0x804DB6A4
+	.sbss       start:0x80575268 end:0x80575270
 
 toBeSorted/string_util.cpp:
 	.text       start:0x80066F60 end:0x80066FB0 align:16
@@ -276,6 +310,7 @@ toBeSorted/deg_angle_util.cpp:
 toBeSorted/reload_color_fader.cpp:
 	.text       start:0x80067B20 end:0x80068FD0 align:16
 	.ctors      start:0x804DB6A4 end:0x804DB6A8
+	.sbss       start:0x80575270 end:0x80575278
 
 toBeSorted/arc_managers/current_stage_arc_manager.cpp:
 	.text       start:0x80068FD0 end:0x80069910 align:16
@@ -315,6 +350,7 @@ toBeSorted/unk_mdl_cc.cpp:
 toBeSorted/d_camera.cpp:
 	.text       start:0x8006BBE0 end:0x80083370 align:16
 	.ctors      start:0x804DB6AC end:0x804DB6B0
+	.sbss       start:0x80575290 end:0x80575370
 
 toBeSorted/d_event_1.cpp:
 	.text       start:0x80083370 end:0x800928F0 align:16
@@ -332,6 +368,7 @@ toBeSorted/attention.cpp:
 	.ctors      start:0x804DB6B8 end:0x804DB6BC
 	.rodata     start:0x804E3560 end:0x804E3580
 	.data       start:0x8050F1C8 end:0x8050F540
+	.sbss       start:0x80575370 end:0x80575378
 	.sdata2     start:0x80579600 end:0x80579638
 	.bss        start:0x805A2F58 end:0x805A2FB0
 
@@ -349,17 +386,21 @@ toBeSorted/dowsing_target.cpp:
 toBeSorted/d_event_2.cpp:
 	.text       start:0x80098580 end:0x800A17DC align:16
 	.ctors      start:0x804DB6C0 end:0x804DB6C4
+	.sbss       start:0x80575378 end:0x80575388
 
 toBeSorted/d_event_director.cpp:
 	.text       start:0x800A17E0 end:0x800A505C align:16
+	.sbss       start:0x80575388 end:0x80575390
 
 toBeSorted/minigame_mgr.cpp:
 	.text       start:0x800A5060 end:0x800A5608 align:16
 	.ctors      start:0x804DB6C4 end:0x804DB6C8
+	.sbss       start:0x80575390 end:0x805753A0
 
 toBeSorted/salvage_mgr.cpp:
 	.text       start:0x800A5610 end:0x800A668C align:16
 	.ctors      start:0x804DB6C8 end:0x804DB6CC
+	.sbss       start:0x805753A0 end:0x805753A8
 
 toBeSorted/d_path.cpp:
 	.text       start:0x800A6690 end:0x800A9B00 align:16
@@ -407,6 +448,7 @@ d/d_tag_processor.cpp:
 	.ctors      start:0x804DB6D4 end:0x804DB6D8
 	.rodata     start:0x804E39E0 end:0x804E4C50
 	.data       start:0x805108E8 end:0x805109A0
+	.sbss       start:0x805753B8 end:0x805753C0
 	.sdata2     start:0x80579868 end:0x805798D0
 	.bss        start:0x805A7730 end:0x805A78B8
 
@@ -421,9 +463,12 @@ toBeSorted/time_area_mgr.cpp:
 toBeSorted/nand_request_thread.cpp:
 	.text       start:0x800BC980 end:0x800BD604 align:16
 	.data       start:0x80510B30 end:0x80510B70
+	.sbss       start:0x805753D0 end:0x805753D8
 
 toBeSorted/nand_result_tracker.cpp:
 	.text       start:0x800BD610 end:0x800BD8C0 align:16
+	.rodata     start:0x804E4C50 end:0x804E4C90
+	.sbss       start:0x805753D8 end:0x805753E0
 
 d/flag/flag_managers.cpp:
 	.text       start:0x800BD8C0 end:0x800C0650 align:16
@@ -433,6 +478,8 @@ d/flag/flag_managers.cpp:
 
 toBeSorted/bigboss_model_math_stuff.cpp:
 	.text       start:0x800C0650 end:0x800C38F8 align:16
+	.rodata     start:0x804E4C90 end:0x804E4CC8
+	.sbss       start:0x80575410 end:0x80575418
 
 toBeSorted/actor_event_flow_manager_related.cpp:
 	.text       start:0x800C3900 end:0x800C447C align:16
@@ -443,9 +490,11 @@ d/d_lyt_base.cpp:
 toBeSorted/unk_npc_path_stuff_1.cpp:
 	.text       start:0x800C4690 end:0x800C731C align:16
 	.ctors      start:0x804DB6DC end:0x804DB6E0
+	.sbss       start:0x80575418 end:0x80575428
 
 toBeSorted/unk_npc_path_stuff_2.cpp:
 	.text       start:0x800C7320 end:0x800C7704 align:16
+	.sbss       start:0x80575428 end:0x80575438
 
 toBeSorted/unk_bird_stuff.cpp:
 	.text       start:0x800C7710 end:0x800C7874 align:16
@@ -472,12 +521,14 @@ d/lyt/meter/d_lyt_meter.cpp:
 	.rodata     start:0x804E4EE0 end:0x804E5020
 	.data       start:0x80511C80 end:0x80513B60
 	.sdata      start:0x80572318 end:0x80572380
+	.sbss       start:0x80575448 end:0x80575450
 	.sdata2     start:0x80579AD0 end:0x80579AF0
 	.bss        start:0x805A9C98 end:0x805AA190
 
 d/lyt/meter/d_lyt_meter_unk.cpp:
 	.text       start:0x800DF8B0 end:0x800DFCB8 align:16
 	.data       start:0x80513B60 end:0x80513B70
+	.sbss       start:0x80575450 end:0x80575458
 	.sdata2     start:0x80579AF0 end:0x80579B60
 
 d/lyt/meter/d_lyt_meter_a_btn.cpp:
@@ -640,11 +691,15 @@ d/lyt/d_lyt_do_button.cpp:
 	.ctors      start:0x804DB728 end:0x804DB72C
 	.rodata     start:0x804E6D60 end:0x804E7080
 	.data       start:0x8051A5A8 end:0x8051AC00
+	.sbss       start:0x80575468 end:0x80575470
 	.bss        start:0x805ACE10 end:0x805ACF78
 
 d/lyt/d_lyt_do_button_related.cpp:
 	.text       start:0x8010EB00 end:0x8010EF8C align:16
 	.ctors      start:0x804DB72C end:0x804DB730
+	.rodata     start:0x804E7080 end:0x804E72E0
+	.data       start:0x8051AC00 end:0x8051AC18
+	.sbss       start:0x80575470 end:0x80575480
 
 d/lyt/d_lyt_common_a_btn.cpp:
 	.text       start:0x8010EF90 end:0x8010F818 align:16
@@ -672,12 +727,16 @@ d/lyt/d_lyt_common_icon_item.cpp:
 
 d/lyt/d_lyt_target_bird.cpp:
 	.text       start:0x80113EE0 end:0x801148EC align:16
+	.rodata     start:0x804E7430 end:0x804E7468
+	.data       start:0x8051B5A0 end:0x8051B6E8
+	.sbss       start:0x80575480 end:0x80575488
 
 d/lyt/msg_window/d_lyt_msg_window.cpp:
 	.text       start:0x801148F0 end:0x8011C8C8 align:16
 	.ctors      start:0x804DB738 end:0x804DB73C
 	.data       start:0x8051B6E8 end:0x8051C300
 	.sdata      start:0x80572580 end:0x80572588
+	.sbss       start:0x80575488 end:0x80575498
 	.sdata2     start:0x80579DF0 end:0x80579E18
 	.bss        start:0x805AD188 end:0x805AE670
 
@@ -764,6 +823,7 @@ d/lyt/msg_window/d_lyt_simple_window.cpp:
 	.rodata     start:0x804E7600 end:0x804E7668
 	.data       start:0x8051E008 end:0x8051E548
 	.sdata      start:0x80572618 end:0x80572638
+	.sbss       start:0x80575498 end:0x805754A0
 	.sdata2     start:0x80579EE0 end:0x80579EF8
 	.bss        start:0x805AF0F0 end:0x805AF1F0
 
@@ -788,6 +848,8 @@ d/lyt/d_lyt_auto_explain.cpp:
 d/lyt/d_lyt_map_capture.cpp:
 	.text       start:0x8012D190 end:0x8012DC28 align:16
 	.ctors      start:0x804DB768 end:0x804DB76C
+	.data       start:0x8051EA08 end:0x8051EAE0
+	.sbss       start:0x805754A0 end:0x805754A8
 
 d/lyt/d_lyt_map.cpp:
 	.text       start:0x8012DC30 end:0x80148DE8 align:16
@@ -839,10 +901,15 @@ d/lyt/d_lyt_wipe.cpp:
 d/lyt/d_lyt_help.cpp:
 	.text       start:0x8014E010 end:0x80150428 align:16
 	.ctors      start:0x804DB780 end:0x804DB784
+	.rodata     start:0x804E7FE0 end:0x804E7FF8
+	.data       start:0x805231E8 end:0x80523A58
 	.sbss       start:0x805754D0 end:0x805754D8
 
 d/lyt/d_lyt_system_window.cpp:
 	.text       start:0x80150430 end:0x80152FC8 align:16
+	.rodata     start:0x804E7FF8 end:0x804E80F8
+	.data       start:0x80523A58 end:0x80524020
+	.sbss       start:0x805754D8 end:0x805754E0
 
 d/lyt/d_lyt_bird_gauge.cpp:
 	.text       start:0x80152FD0 end:0x801548D8 align:16
@@ -865,36 +932,45 @@ d/lyt/d_lyt_sky_gauge.cpp:
 d/lyt/d_lyt_deposit_stock.cpp:
 	.text       start:0x80155CD0 end:0x801578A8 align:16
 	.ctors      start:0x804DB78C end:0x804DB790
+	.rodata     start:0x804E8150 end:0x804E8218
 
 d/lyt/d_lyt_deposit_box.cpp:
 	.text       start:0x801578B0 end:0x80158288 align:16
+	.rodata     start:0x804E8218 end:0x804E8258
 
 d/lyt/d_lyt_boss_gauge.cpp:
 	.text       start:0x80158290 end:0x80158E78 align:16
 	.ctors      start:0x804DB790 end:0x804DB794
 	.data       start:0x80524CD0 end:0x80524ED0
+	.sbss       start:0x805754F0 end:0x805754F8
 
 d/lyt/d_lyt_pause_back.cpp:
 	.text       start:0x80158E80 end:0x80159E78 align:16
 	.ctors      start:0x804DB794 end:0x804DB798
+	.data       start:0x80524ED0 end:0x80525138
 
 d/lyt/d_lyt_pause_disp_00.cpp:
 	.text       start:0x80159E80 end:0x8015EDE8 align:16
 	.ctors      start:0x804DB798 end:0x804DB79C
+	.rodata     start:0x804E8258 end:0x804E8918
 	.data       start:0x80525138 end:0x80525EE0
 
 d/lyt/d_lyt_pause_disp_01.cpp:
 	.text       start:0x8015EDF0 end:0x80161F98 align:16
 	.ctors      start:0x804DB79C end:0x804DB7A0
+	.rodata     start:0x804E8918 end:0x804E8B30
 	.data       start:0x80525EE0 end:0x80526610
 
 d/lyt/d_lyt_pause_info.cpp:
 	.text       start:0x80161FA0 end:0x80163568 align:16
 	.ctors      start:0x804DB7A0 end:0x804DB7A4
+	.rodata     start:0x804E8B30 end:0x804E8B60
+	.data       start:0x80526610 end:0x80526880
 
 d/lyt/d_lyt_pause_text.cpp:
 	.text       start:0x80163570 end:0x80164F88 align:16
 	.ctors      start:0x804DB7A4 end:0x804DB7A8
+	.data       start:0x80526880 end:0x80526D10
 
 d/lyt/d_lyt_save_msg_window.cpp:
 	.text       start:0x80164F90 end:0x80166968 align:16
@@ -907,6 +983,8 @@ d/lyt/d_lyt_save_msg_window.cpp:
 
 d/lyt/d_lyt_util_items.cpp:
 	.text       start:0x80166970 end:0x80167FD4 align:16
+	.rodata     start:0x804E8BB8 end:0x804E8D28
+	.data       start:0x80527210 end:0x80527298
 
 d/lyt/d_lyt_common_arrow.cpp:
 	.text       start:0x80167FE0 end:0x801695E8 align:16
@@ -920,16 +998,25 @@ d/lyt/d_lyt_common_arrow.cpp:
 d/lyt/d_lyt_common_title.cpp:
 	.text       start:0x801695F0 end:0x8016B2A8 align:16
 	.ctors      start:0x804DB7B0 end:0x804DB7B4
+	.rodata     start:0x804E8D70 end:0x804E8DB0
+	.data       start:0x80527600 end:0x80527A98
 
 d/lyt/d_lyt_cursor_stick.cpp:
 	.text       start:0x8016B2B0 end:0x8016BCD8 align:16
 	.ctors      start:0x804DB7B4 end:0x804DB7B8
+	.data       start:0x80527A98 end:0x80527BC0
+	.sbss       start:0x805754F8 end:0x80575500
 
 toBeSorted/fi_context.cpp:
 	.text       start:0x8016BCE0 end:0x8016CBD8 align:16
+	.data       start:0x80527BC0 end:0x80527BD0
+	.sdata      start:0x80572A08 end:0x80572A10
+	.sbss       start:0x80575500 end:0x80575508
+	.sdata2     start:0x8057A1A8 end:0x8057A1D8
 
 toBeSorted/item_mdl_name.cpp:
 	.text       start:0x8016CBE0 end:0x8016CC34 align:16
+	.rodata     start:0x804E8DB0 end:0x804E91B0
 
 toBeSorted/counters/counter.cpp:
 	.text       start:0x8016CC40 end:0x8016CD94 align:16
@@ -986,16 +1073,25 @@ toBeSorted/counters/extra_wallet_counter.cpp:
 
 toBeSorted/item_mdl.cpp:
 	.text       start:0x8016E2A0 end:0x80171AA8 align:16
+	.rodata     start:0x804E91D0 end:0x804E9A80
+	.data       start:0x805280D0 end:0x80528B20
 
 toBeSorted/unk_screen_effect.cpp:
 	.text       start:0x80171AB0 end:0x801749D8 align:16
 	.ctors      start:0x804DB7D8 end:0x804DB7DC
+	.data       start:0x80528B20 end:0x80528BB8
+	.sbss       start:0x80575648 end:0x80575650
 
 toBeSorted/revision_info.cpp:
 	.text       start:0x801749E0 end:0x80174CD8 align:16
+	.rodata     start:0x804E9A98 end:0x804E9AB8
+	.data       start:0x80528BB8 end:0x80528C10
+	.sbss       start:0x80575650 end:0x80575660
 
 d/a/d_a_bullet_base.cpp:
 	.text       start:0x80174CE0 end:0x801753A0 align:16
+	.data       start:0x80528C10 end:0x80528CC8
+	.sbss       start:0x80575660 end:0x80575668
 
 d/lyt/d_lyt_fader.cpp:
 	.text       start:0x801753A0 end:0x80175BD0 align:16
@@ -1011,16 +1107,24 @@ d/lyt/d_screen_fader.cpp:
 
 d/a/d_a_bird_base.cpp:
 	.text       start:0x80175FD0 end:0x80179128 align:16
+	.data       start:0x80528D90 end:0x80528F20
 
 d/a/d_a_door_base.cpp:
 	.text       start:0x80179130 end:0x801792C4 align:16
 	.ctors      start:0x804DB7DC end:0x804DB7E0
+	.data       start:0x80528F20 end:0x80528FB0
+	.sbss       start:0x80575668 end:0x80575670
 
 d/lyt/d_lyt_map_popup.cpp:
 	.text       start:0x801792D0 end:0x80189F9C align:16
+	.rodata     start:0x804E9AD0 end:0x804E9CB0
+	.data       start:0x80528FB0 end:0x8052A880
+	.sbss       start:0x80575670 end:0x80575678
 
 d/d_pouch.cpp:
 	.text       start:0x80189FA0 end:0x8018B4A4 align:16
+	.rodata     start:0x804E9CB0 end:0x804E9CD8
+	.data       start:0x8052A880 end:0x8052A890
 
 toBeSorted/d_beacon.cpp:
 	.text       start:0x8018B4B0 end:0x8018B800 align:16
@@ -1028,17 +1132,21 @@ toBeSorted/d_beacon.cpp:
 toBeSorted/d_underground.cpp:
 	.text       start:0x8018B800 end:0x8018B874 align:16
 	.ctors      start:0x804DB7E0 end:0x804DB7E4
+	.sbss       start:0x80575678 end:0x80575680
 
 d/a/d_a_fish_mgr_base.cpp:
 	.text       start:0x8018B880 end:0x8018BFC8 align:16
 	.ctors      start:0x804DB7E4 end:0x804DB7E8
+	.data       start:0x8052A890 end:0x8052A9C0
 
 d/a/d_a_fish_base.cpp:
 	.text       start:0x8018BFD0 end:0x8018E378 align:16
 	.ctors      start:0x804DB7E8 end:0x804DB7EC
+	.data       start:0x8052A9C0 end:0x8052ABD8
 
 toBeSorted/sword_proj_effect_list.cpp:
 	.text       start:0x8018E380 end:0x8018F188 align:16
+	.sbss       start:0x80575680 end:0x80575688
 
 d/a/d_a_insect.cpp:
 	.text       start:0x8018F190 end:0x80190710 align:16
@@ -1047,47 +1155,71 @@ d/a/d_a_insect.cpp:
 
 toBeSorted/unk_save_time.cpp:
 	.text       start:0x80190710 end:0x80190AA4 align:16
+	.data       start:0x8052ACC0 end:0x8052ACD0
+	.sbss       start:0x80575688 end:0x80575690
 
 d/a/d_a_salbage_obj.cpp:
 	.text       start:0x80190AB0 end:0x80192AF8 align:16
 	.ctors      start:0x804DB7EC end:0x804DB7F0
+	.rodata     start:0x804E9CD8 end:0x804E9E28
+	.data       start:0x8052ACD0 end:0x8052B078
 
 d/a/d_a_salbage_npc.cpp:
 	.text       start:0x80192B00 end:0x80194080 align:16
 	.ctors      start:0x804DB7F0 end:0x804DB7F4
+	.data       start:0x8052B078 end:0x8052B618
 
 toBeSorted/d_unk_pad.cpp:
 	.text       start:0x80194080 end:0x801946F4 align:16
+	.sbss       start:0x80575690 end:0x805756A8
 
 toBeSorted/goddess_chest_counter.cpp:
 	.text       start:0x80194700 end:0x8019486C align:16
 	.ctors      start:0x804DB7F4 end:0x804DB7F8
+	.data       start:0x8052B618 end:0x8052B638
+	.sbss       start:0x805756A8 end:0x805756B0
 
 toBeSorted/misc_actor.cpp:
 	.text       start:0x80194870 end:0x80196648 align:16
 	.ctors      start:0x804DB7F8 end:0x804DB7FC
+	.rodata     start:0x804E9E28 end:0x804EA810
+	.data       start:0x8052B638 end:0x8052B678
+	.sbss       start:0x805756B0 end:0x805756F0
 
 toBeSorted/d_hbm:
 	.text       start:0x80196650 end:0x801975B8 align:16
+	.rodata     start:0x804EA810 end:0x804EA868
+	.data       start:0x8052B678 end:0x8052B708
+	.sbss       start:0x805756F0 end:0x805756F8
 
 d/d_stage_mgr.cpp:
 	.text       start:0x801975C0 end:0x8019CFD8 align:16
 	.ctors      start:0x804DB7FC end:0x804DB800
+	.rodata     start:0x804EA868 end:0x804EA918
 	.data       start:0x8052B708 end:0x8052C128
+	.sbss       start:0x805756F8 end:0x80575700
 
 d/d_last.cpp:
 	.text       start:0x8019CFE0 end:0x8019D15C align:16
+	.data       start:0x8052C128 end:0x8052C180
+	.sbss       start:0x80575700 end:0x80575708
 
 d/d_camera.cpp:
 	.text       start:0x8019D160 end:0x8019ED0C align:16
 	.ctors      start:0x804DB800 end:0x804DB804
+	.data       start:0x8052C180 end:0x8052C230
+	.sbss       start:0x80575708 end:0x80575710
 
 d/d_light_obj.cpp:
 	.text       start:0x8019ED10 end:0x801A65C8 align:16
+	.data       start:0x8052C230 end:0x8052C430
+	.sbss       start:0x80575710 end:0x80575740
 
 d/tg/d_t_weather.cpp:
 	.text       start:0x801A65D0 end:0x801AF7D8 align:16
 	.ctors      start:0x804DB804 end:0x804DB808
+	.rodata     start:0x804EA918 end:0x804EA950
+	.data       start:0x8052C430 end:0x8052C858
 
 d/d_message.cpp:
 	.text       start:0x801AF7E0 end:0x801B329C align:16
@@ -1104,10 +1236,12 @@ d/d_stage.cpp:
 	.ctors      start:0x804DB80C end:0x804DB810
 	.data       start:0x8052DF40 end:0x8052E080
 	.sdata      start:0x80573290 end:0x805732F8
+	.sbss       start:0x80575760 end:0x80575770
 	.sdata2     start:0x8057B4E8 end:0x8057B528
 
 d/d_stage_select.cpp:
 	.text       start:0x801B5BD0 end:0x801B5C7C align:16
+	.data       start:0x8052E080 end:0x8052E0D8
 
 d/d_room.cpp:
 	.text       start:0x801B5C80 end:0x801B84D8 align:16
@@ -1121,6 +1255,8 @@ d/d_room.cpp:
 d/tg/d_t_vr_box.cpp:
 	.text       start:0x801B84E0 end:0x801B922C align:16
 	.ctors      start:0x804DB814 end:0x804DB818
+	.data       start:0x8052E358 end:0x8052E438
+	.sbss       start:0x80575770 end:0x80575780
 
 d/d_sc_title.cpp:
 	.text       start:0x801B9230 end:0x801BA3A0 align:16
@@ -1134,6 +1270,7 @@ d/d_sc_title.cpp:
 d/d_sc_game.cpp:
 	.text       start:0x801BA3A0 end:0x801BC6B8 align:16
 	.ctors      start:0x804DB81C end:0x804DB820
+	.rodata     start:0x804EAB88 end:0x804EAC38
 	.data       start:0x8052E5F8 end:0x8052E860
 	.sdata      start:0x805733E8 end:0x80573430
 	.sbss       start:0x80575788 end:0x805757A8
@@ -1144,47 +1281,60 @@ d/d_cs_base.cpp:
 	.text       start:0x801BC6C0 end:0x801BD250 align:16
 	.data       start:0x8052E860 end:0x8052E968
 	.sdata      start:0x80573430 end:0x80573448
+	.sbss       start:0x805757A8 end:0x805757B0
 	.sdata2     start:0x8057B5A8 end:0x8057B5C0
 
 d/d_cs_game.cpp:
 	.text       start:0x801BD250 end:0x801C5C28 align:16
 	.ctors      start:0x804DB820 end:0x804DB824
+	.rodata     start:0x804EAC38 end:0x804EACF0
 	.data       start:0x8052E968 end:0x80530170
+	.sbss       start:0x805757B0 end:0x805757B8
 	.sdata2     start:0x8057B5C0 end:0x8057B650
 	.bss        start:0x805B38B8 end:0x805B4178
 
 d/a/d_a_player.cpp:
 	.text       start:0x801C5C30 end:0x802471F8 align:16
 	.ctors      start:0x804DB824 end:0x804DB828
+	.rodata     start:0x804EACF0 end:0x804EBBB0
+	.data       start:0x80530170 end:0x80533268
+	.sbss       start:0x805757B8 end:0x805758B8
 
 d/a/d_a_item.cpp:
 	.text       start:0x80247200 end:0x80258E58 align:16
 	.ctors      start:0x804DB828 end:0x804DB82C
-	.rodata     start:0x804EBBB0 end:0x804ED33C
+	.rodata     start:0x804EBBB0 end:0x804ED340
 	.data       start:0x80533268 end:0x80534490
 	.sbss       start:0x805758B8 end:0x805758E0
-	.sdata2     start:0x8057BD88 end:0x8057BF7C
+	.sdata2     start:0x8057BD88 end:0x8057BF80
 	.bss        start:0x805B4490 end:0x805B48A8
 
 d/a/obj/d_a_obj_bomb.cpp:
 	.text       start:0x80258E60 end:0x8025D5D8 align:16
 	.ctors      start:0x804DB82C end:0x804DB830
+	.rodata     start:0x804ED340 end:0x804ED350
 	.data       start:0x80534490 end:0x805347A8
+	.sbss       start:0x805758E0 end:0x805758F0
 
 d/a/obj/d_a_obj_arrow.cpp:
 	.text       start:0x8025D5E0 end:0x80260D38 align:16
 	.ctors      start:0x804DB830 end:0x804DB834
+	.rodata     start:0x804ED350 end:0x804ED380
 	.data       start:0x805347A8 end:0x80534AD0
+	.sbss       start:0x805758F0 end:0x80575900
 
 d/a/obj/d_a_obj_boomerang.cpp:
 	.text       start:0x80260D40 end:0x80265618 align:16
 	.ctors      start:0x804DB834 end:0x804DB838
+	.rodata     start:0x804ED380 end:0x804ED3B0
 	.data       start:0x80534AD0 end:0x80534E78
+	.sbss       start:0x80575900 end:0x80575908
 
 d/a/obj/d_a_obj_fairy.cpp:
 	.text       start:0x80265620 end:0x80268598 align:16
 	.ctors      start:0x804DB838 end:0x804DB83C
 	.data       start:0x80534E78 end:0x80535270
+	.sbss       start:0x80575908 end:0x80575910
 	.bss        start:0x805B4DD8 end:0x805B4FA8
 
 d/a/obj/d_a_obj_tbox.cpp:
@@ -1200,6 +1350,9 @@ d/a/obj/d_a_obj_tbox.cpp:
 d/a/obj/d_a_obj_time_area.cpp:
 	.text       start:0x8026F490 end:0x80271888 align:16
 	.ctors      start:0x804DB840 end:0x804DB844
+	.rodata     start:0x804EE548 end:0x804EE5A8
+	.data       start:0x80535A18 end:0x80535CD8
+	.sbss       start:0x80575928 end:0x80575930
 
 d/a/obj/d_a_obj_switch.cpp:
 	.text       start:0x80271890 end:0x80273368 align:16
@@ -1211,12 +1364,15 @@ d/a/obj/d_a_obj_switch.cpp:
 
 d/d_thp_player.cpp:
 	.text       start:0x80273370 end:0x80273BB8 align:16
+	.data       start:0x80535FB8 end:0x805360A0
 
 d/tg/d_t_alldie.cpp:
 	.text       start:0x80273BC0 end:0x8027405C align:16
+	.data       start:0x805360A0 end:0x80536128
 
 d/tg/d_t_view_clip.cpp:
 	.text       start:0x80274060 end:0x802743DC align:16
+	.data       start:0x80536128 end:0x805361B0
 
 d/tg/d_t_switch.cpp:
 	.text       start:0x802743E0 end:0x802756D8 align:16
@@ -1228,128 +1384,194 @@ d/tg/d_t_switch.cpp:
 
 d/tg/d_t_mass_object.cpp:
 	.text       start:0x802756E0 end:0x8027A0A4 align:16
+	.rodata     start:0x804EE5A8 end:0x804EE6C0
+	.data       start:0x80536478 end:0x80536608
+	.sbss       start:0x80575930 end:0x80575938
 
 d/tg/d_t_camera.cpp:
 	.text       start:0x8027A0B0 end:0x8027A370 align:16
+	.data       start:0x80536608 end:0x80536718
 
 d/tg/d_t_event.cpp:
 	.text       start:0x8027A370 end:0x8027A740 align:16
+	.data       start:0x80536718 end:0x805367A0
 
 d/tg/d_t_event_f.cpp:
 	.text       start:0x8027A740 end:0x8027AB30 align:16
+	.data       start:0x805367A0 end:0x80536828
 
 d/tg/d_tk_event.cpp:
 	.text       start:0x8027AB30 end:0x8027B408 align:16
 	.ctors      start:0x804DB84C end:0x804DB850
+	.data       start:0x80536828 end:0x80536A28
 
 toBeSorted/d_a_npc_inv.cpp:
 	.text       start:0x8027B410 end:0x8027BE48 align:16
 	.ctors      start:0x804DB850 end:0x804DB854
+	.data       start:0x80536A28 end:0x80536BC0
 
 toBeSorted/d_a_npc_tke.cpp:
 	.text       start:0x8027BE50 end:0x8027DA90 align:16
 	.ctors      start:0x804DB854 end:0x804DB858
+	.rodata     start:0x804EE6C0 end:0x804EE700
+	.data       start:0x80536BC0 end:0x80536FE8
 
 toBeSorted/d_a_npc_str.cpp:
 	.text       start:0x8027DA90 end:0x8027E9E0 align:16
 	.ctors      start:0x804DB858 end:0x804DB85C
+	.data       start:0x80536FE8 end:0x80537310
 
 d/lyt/d_lyt_pause.cpp:
 	.text       start:0x8027E9E0 end:0x80282678 align:16
 	.ctors      start:0x804DB85C end:0x804DB860
+	.data       start:0x80537310 end:0x80537970
+	.sbss       start:0x80575938 end:0x80575948
 
 d/lyt/d_lyt_game_over.cpp:
 	.text       start:0x80282680 end:0x80284FA8 align:16
 	.ctors      start:0x804DB860 end:0x804DB864
+	.rodata     start:0x804EE700 end:0x804EE778
+	.data       start:0x80537970 end:0x80538160
+	.sbss       start:0x80575948 end:0x80575950
 
 d/lyt/d_lyt_save_mgr.cpp:
 	.text       start:0x80284FB0 end:0x80286C88 align:16
 	.ctors      start:0x804DB864 end:0x804DB868
+	.rodata     start:0x804EE778 end:0x804EE790
+	.data       start:0x80538160 end:0x80538498
+	.sbss       start:0x80575950 end:0x80575958
 
 d/lyt/d_lyt_drop_line.cpp:
 	.text       start:0x80286C90 end:0x802884F8 align:16
 	.ctors      start:0x804DB868 end:0x804DB86C
+	.data       start:0x80538498 end:0x80538658
+	.sbss       start:0x80575958 end:0x80575960
 
 d/lyt/d_lyt_force_line.cpp:
 	.text       start:0x80288500 end:0x8028A9F8 align:16
 	.ctors      start:0x804DB86C end:0x804DB870
+	.data       start:0x80538658 end:0x80538CE8
+	.sbss       start:0x80575960 end:0x80575968
 
 d/lyt/d_lyt_enemy_icon.cpp:
 	.text       start:0x8028AA00 end:0x8028BCD8 align:16
 	.ctors      start:0x804DB870 end:0x804DB874
+	.data       start:0x80538CE8 end:0x80538E58
+	.sbss       start:0x80575968 end:0x80575970
 
 d/lyt/d_lyt_mini_game.cpp:
 	.text       start:0x8028BCE0 end:0x802969E0 align:16
+	.rodata     start:0x804EE790 end:0x804EEB68
+	.data       start:0x80538E58 end:0x80539B68
+	.sbss       start:0x80575970 end:0x80575990
 
 d/lyt/d_lyt_meter_suiryu_score.cpp:
 	.text       start:0x802969E0 end:0x8029C2C8 align:16
 	.ctors      start:0x804DB874 end:0x804DB878
+	.rodata     start:0x804EEB68 end:0x804EEF98
+	.data       start:0x80539B68 end:0x8053AAC8
+	.sbss       start:0x80575990 end:0x80575998
 
 d/lyt/d_lyt_meter_suiryu_score_comp.cpp:
 	.text       start:0x8029C2D0 end:0x8029F278 align:16
 	.ctors      start:0x804DB878 end:0x804DB87C
+	.rodata     start:0x804EEF98 end:0x804EF100
+	.data       start:0x8053AAC8 end:0x8053B968
+	.sbss       start:0x80575998 end:0x805759A0
 
 d/lyt/d_lyt_boss_caption.cpp:
 	.text       start:0x8029F280 end:0x802A0B08 align:16
 	.ctors      start:0x804DB87C end:0x804DB880
+	.rodata     start:0x804EF100 end:0x804EF120
+	.data       start:0x8053B968 end:0x8053BD00
+	.sbss       start:0x805759A0 end:0x805759A8
 
 d/lyt/d_lyt_demo_dowsing.cpp:
 	.text       start:0x802A0B10 end:0x802A17C8 align:16
 	.ctors      start:0x804DB880 end:0x804DB884
+	.rodata     start:0x804EF120 end:0x804EF130
 	.data       start:0x8053BD00 end:0x8053BF50
+	.sbss       start:0x805759A8 end:0x805759B0
 
 d/lyt/d_lyt_shop.cpp:
 	.text       start:0x802A17D0 end:0x802A7FD8 align:16
 	.ctors      start:0x804DB884 end:0x804DB888
+	.rodata     start:0x804EF130 end:0x804EF970
+	.data       start:0x8053BF50 end:0x8053CFC8
+	.sbss       start:0x805759B0 end:0x805759B8
 
 d/lyt/d_lyt_deposit.cpp:
 	.text       start:0x802A7FE0 end:0x802B02C8 align:16
 	.ctors      start:0x804DB888 end:0x804DB88C
+	.rodata     start:0x804EF970 end:0x804EFA90
+	.data       start:0x8053CFC8 end:0x8053DFC8
+	.sbss       start:0x805759B8 end:0x805759D0
 
 d/lyt/d_lyt_demo_title.cpp:
 	.text       start:0x802B02D0 end:0x802B22E8 align:16
 	.ctors      start:0x804DB88C end:0x804DB890
+	.rodata     start:0x804EFA90 end:0x804EFAB8
+	.data       start:0x8053DFC8 end:0x8053E510
+	.sbss       start:0x805759D0 end:0x805759D8
 
 d/lyt/d_lyt_end_roll.cpp:
 	.text       start:0x802B22F0 end:0x802B6B98 align:16
 	.ctors      start:0x804DB890 end:0x804DB894
+	.rodata     start:0x804EFAB8 end:0x804EFAE0
+	.data       start:0x8053E510 end:0x8053F0F8
+	.sbss       start:0x805759D8 end:0x805759E0
 
 toBeSorted/d_a_bullet.cpp:
 	.text       start:0x802B6BA0 end:0x802B7A48 align:16
 	.ctors      start:0x804DB894 end:0x804DB898
+	.data       start:0x8053F0F8 end:0x8053F2C0
 
 toBeSorted/d_a_npc_ken_talk.cpp:
 	.text       start:0x802B7A50 end:0x802C7770 align:16
 	.ctors      start:0x804DB898 end:0x804DB89C
+	.rodata     start:0x804EFAE0 end:0x804F0330
+	.data       start:0x8053F2C0 end:0x8053FE98
+	.sbss       start:0x805759E0 end:0x805759E8
 
 toBeSorted/d_a_jstudio_act.cpp:
 	.text       start:0x802C7770 end:0x802CBC18 align:16
 	.ctors      start:0x804DB89C end:0x804DB8A0
+	.rodata     start:0x804F0330 end:0x804F0460
+	.data       start:0x8053FE98 end:0x805402D8
 
 toBeSorted/d_a_jstudio_sys.cpp:
 	.text       start:0x802CBC20 end:0x802CC7A8 align:16
+	.data       start:0x805402D8 end:0x805403F8
 
 d/lyt/d_lyt_control_game.cpp:
 	.text       start:0x802CC7B0 end:0x802D16A8 align:16
 	.ctors      start:0x804DB8A0 end:0x804DB8A4
 	.data       start:0x805403F8 end:0x80540C88
+	.sbss       start:0x80575A00 end:0x80575A18
 
 d/lyt/d_lyt_control_title.cpp:
 	.text       start:0x802D16B0 end:0x802D17BC align:16
+	.data       start:0x80540C88 end:0x80540CE0
 
 d/tg/d_t_map_area.cpp:
 	.text       start:0x802D17C0 end:0x802D18EC align:16
+	.data       start:0x80540CE0 end:0x80540D68
 
 d/tg/d_t_truck_rails.cpp:
 	.text       start:0x802D18F0 end:0x802D4FD8 align:16
+	.rodata     start:0x804F0460 end:0x804F04E0
+	.data       start:0x80540D68 end:0x80540E88
 
 d/a/obj/d_a_obj_force_sign.cpp:
 	.text       start:0x802D4FE0 end:0x802D58D0 align:16
 	.ctors      start:0x804DB8A4 end:0x804DB8A8
+	.data       start:0x80540E88 end:0x80540F58
 
 d/tg/d_t_force_get_flag.cpp:
 	.text       start:0x802D58D0 end:0x802D5BF4 align:16
 	.ctors      start:0x804DB8A8 end:0x804DB8AC
+	.data       start:0x80540F58 end:0x80540FE0
+	.sbss       start:0x80575A20 end:0x80575A30
 
 d/a/obj/d_a_obj_water_spout.cpp:
 	.text       start:0x802D5C00 end:0x802D67F8 align:16
@@ -1361,25 +1583,36 @@ d/a/obj/d_a_obj_water_spout.cpp:
 d/tg/d_t_siren_tag.cpp:
 	.text       start:0x802D6800 end:0x802D84F8 align:16
 	.ctors      start:0x804DB8B0 end:0x804DB8B4
+	.data       start:0x805411A8 end:0x805414F8
 
 d/a/obj/d_a_obj_spore.cpp:
 	.text       start:0x802D8500 end:0x802D9408 align:16
 	.ctors      start:0x804DB8B4 end:0x804DB8B8
+	.data       start:0x805414F8 end:0x805416D8
+	.sbss       start:0x80575A30 end:0x80575A38
 
 d/tg/d_t_genki_mgr.cpp:
 	.text       start:0x802D9410 end:0x802D9D60 align:16
+	.data       start:0x805416D8 end:0x80541770
+	.sbss       start:0x80575A38 end:0x80575A40
 
 d/a/obj/d_a_obj_water_mark.cpp:
 	.text       start:0x802D9D60 end:0x802DA0BC align:16
+	.data       start:0x80541770 end:0x80541838
 
 toBeSorted/d_sc_e3_title.cpp:
 	.text       start:0x802DA0C0 end:0x802DA170 align:16
+	.data       start:0x80541838 end:0x80541890
 
 toBeSorted/d_sc_e3_game_end.cpp:
 	.text       start:0x802DA170 end:0x802DA220 align:16
+	.data       start:0x80541890 end:0x805418E8
 
 RVL_SDK/thp/THPDec.c:
 	.text       start:0x802DA220 end:0x802DD6AC align:16
+	.rodata     start:0x804F04E0 end:0x804F0570
+	.data       start:0x805418E8 end:0x80541930
+	.sbss       start:0x80575A40 end:0x80575B68
 
 RVL_SDK/thp/THPAudio.c:
 	.text       start:0x802DD6B0 end:0x802DDC18 align:16
@@ -1406,6 +1639,7 @@ s/s_Crc.cpp:
 
 s/s_Assert.cpp:
 	.text       start:0x802DE700 end:0x802DE73C align:16
+	.sbss       start:0x80575B70 end:0x80575B78
 
 s/s_Math.cpp:
 	.text       start:0x802DE740 end:0x802DEEB0 align:16
@@ -1419,6 +1653,7 @@ s/s_Print.cpp:
 
 c/c_counter.cpp:
 	.text       start:0x802DF0F0 end:0x802DF100 align:16
+	.sbss       start:0x80575B78 end:0x80575B80
 
 DynamicLink.cpp:
 	.text       start:0x802DF100 end:0x802DFD74 align:16
@@ -1444,6 +1679,7 @@ c/c_rand.cpp:
 	.text       start:0x802E0D00 end:0x802E0E64 align:16
 	.ctors      start:0x804DB8BC end:0x804DB8C0
 	.sdata      start:0x80573FB0 end:0x80573FB8
+	.sbss       start:0x80575BA0 end:0x80575BA8
 	.sdata2     start:0x8057CC80 end:0x8057CC98
 
 c/c_tree.cpp:
@@ -1471,6 +1707,9 @@ f/f_manager.cpp:
 	.sbss       start:0x80575BB8 end:0x80575BC0
 	.bss        start:0x805B84D8 end:0x805B8588
 
+f/f_profile.cpp:
+	.sbss       start:0x80575BC0 end:0x80575BC8
+
 f/f_tree.cpp:
 	.text       start:0x802E2C10 end:0x802E2D78 align:16
 
@@ -1483,7 +1722,7 @@ m/m2d.cpp:
 
 m/m3d/m3d.cpp:
 	.text       start:0x802E3E50 end:0x802E4714 align:16
-	.sbss       start:0x80575BD0 end:0x80575BEC
+	.sbss       start:0x80575BD0 end:0x80575BF0
 	.sdata2     start:0x8057CCB8 end:0x8057CCBC
 
 m/m3d/m_proc.cpp:
@@ -1535,7 +1774,7 @@ m/m3d/m_banm.cpp:
 
 m/m3d/m_bline.cpp:
 	.text       start:0x802E7FA0 end:0x802E926C align:16
-	.data       start:0x80542628 end:0x80542664
+	.data       start:0x80542628 end:0x80542668
 	.sdata2     start:0x8057CD28 end:0x8057CD48
 
 m/m3d/m_bmdl.cpp:
@@ -1569,7 +1808,7 @@ m/m3d/m_shadow.cpp:
 	.ctors      start:0x804DB8C8 end:0x804DB8CC
 	.data       start:0x80542730 end:0x805427EC
 	.sdata      start:0x80573FC8 end:0x80573FCC
-	.sbss       start:0x80575BF0 end:0x80575C04
+	.sbss       start:0x80575BF0 end:0x80575C08
 	.sdata2     start:0x8057CD68 end:0x8057CD90
 
 m/m3d/m_smdl.cpp:
@@ -1620,7 +1859,7 @@ m/m_heap.cpp:
 	.rodata     start:0x804F0570 end:0x804F0580
 	.data       start:0x80542990 end:0x80542AA8
 	.sdata      start:0x80573FF8 end:0x80574000
-	.sbss       start:0x80575C38 end:0x80575C4C
+	.sbss       start:0x80575C38 end:0x80575C50
 	.bss        start:0x805CB078 end:0x805CB088
 
 m/m_mtx.cpp:
@@ -1643,6 +1882,10 @@ m/m_thread.cpp:
 m/m_vec.cpp:
 	.text       start:0x802F2970 end:0x802F2F08 align:16
 	.ctors      start:0x804DB8DC end:0x804DB8E0
+	.sbss       start:0x80575C70 end:0x80575C88
+
+m/m_video.cpp:
+	.sbss       start:0x80575C88 end:0x80575C90
 
 hbm/homebutton/HBMFrameController.cpp:
 	.text       start:0x802F2F10 end:0x802F30BC align:16
@@ -1865,14 +2108,16 @@ toBeSorted/d_thp.cpp:
 	extab       start:0x80006780 end:0x800068D8
 	extabindex  start:0x800069B0 end:0x80006BB4
 	.text       start:0x80324440 end:0x80327134 align:16
+	.data       start:0x80547288 end:0x80547388
+	.sbss       start:0x80575C98 end:0x80575CD0
 
 d/col/c/c_bg_s_chk.cpp:
 	.text       start:0x80327140 end:0x8032721C align:16
-	.data       start:0x80547388 end:0x80547394
+	.data       start:0x80547388 end:0x80547398
 
 d/col/c/c_bg_s_gnd_chk.cpp:
 	.text       start:0x80327220 end:0x8032734C align:16
-	.data       start:0x80547398 end:0x805473A4
+	.data       start:0x80547398 end:0x805473A8
 
 d/col/c/c_bg_s_lin_chk.cpp:
 	.text       start:0x80327350 end:0x80327504 align:16
@@ -1883,26 +2128,28 @@ d/col/c/c_bg_s_poly_info.cpp:
 
 d/col/c/c_bg_s_shdw_draw.cpp:
 	.text       start:0x80327670 end:0x80328064 align:16
-	.data       start:0x805473B8 end:0x805473C4
+	.data       start:0x805473B8 end:0x805473C8
 
 d/col/c/c_bg_w.cpp:
 	.text       start:0x80328070 end:0x80328114 align:16
-	.data       start:0x805473C8 end:0x805473D4
+	.data       start:0x805473C8 end:0x805473D8
 
 d/col/c/c_cc_d.cpp:
 	.text       start:0x80328120 end:0x8032BC78 align:16
 	.ctors      start:0x804DB8F8 end:0x804DB8FC
 	.rodata     start:0x804F0AF0 end:0x804F0B80
 	.data       start:0x805473D8 end:0x80547668
-	.sdata2     start:0x8057CF98 end:0x8057CFBC
-	.bss        start:0x805D0128 end:0x805D0134
+	.sdata2     start:0x8057CF98 end:0x8057CFC0
+	.bss        start:0x805D0128 end:0x805D0138
 
 d/col/c/c_m2d.cpp:
 	.text       start:0x8032BC80 end:0x8032BEB8 align:16
+	.sdata2     start:0x8057CFC0 end:0x8057CFD0
 
 d/col/c/c_m3d.cpp:
 	.text       start:0x8032BEC0 end:0x80337B58 align:16
-	.data       start:0x80547668 end:0x80547674
+	.data       start:0x80547668 end:0x80547678
+	.sdata2     start:0x8057CFD0 end:0x8057D030
 
 d/col/c/c_m3d_g_aab.cpp:
 	.text       start:0x80337B60 end:0x80337E94 align:16
@@ -1938,6 +2185,7 @@ d/col/c/c_partition.cpp:
 	.text       start:0x80338F50 end:0x80339BAC align:16
 	.ctors      start:0x804DB8FC end:0x804DB900
 	.data       start:0x80547688 end:0x80547694
+	.sbss       start:0x80575CD0 end:0x80575CF0
 
 d/col/bg/d_bg_pc.cpp:
 	.text       start:0x80339BB0 end:0x80339BC8 align:16
@@ -1950,6 +2198,7 @@ d/col/bg/d_bg_s.cpp:
 	.rodata     start:0x804F0C00 end:0x804F0D00
 	.data       start:0x80547698 end:0x805477C0
 	.sdata      start:0x80574060 end:0x80574070
+	.sbss       start:0x80575CF0 end:0x80575CF8
 	.sdata2     start:0x8057D068 end:0x8057D0FC
 
 d/col/bg/d_bg_s_acch.cpp:
@@ -1965,7 +2214,7 @@ d/col/bg/d_bg_s_gnd_chk.cpp:
 	.text       start:0x80341490 end:0x80341D68 align:16
 	.ctors      start:0x804DB900 end:0x804DB904
 	.data       start:0x80547898 end:0x80547994
-	.sbss       start:0x80575CF8 end:0x80575CFC
+	.sbss       start:0x80575CF8 end:0x80575D00
 	.sdata2     start:0x8057D140 end:0x8057D144
 	.bss        start:0x805D01C8 end:0x805D0268
 
@@ -1988,7 +2237,7 @@ d/col/bg/d_bg_s_roof_chk.cpp:
 	.text       start:0x80342D70 end:0x803431A8 align:16
 	.ctors      start:0x804DB908 end:0x804DB90C
 	.data       start:0x80547B98 end:0x80547C28
-	.sbss       start:0x80575D00 end:0x80575D04
+	.sbss       start:0x80575D00 end:0x80575D08
 	.sdata2     start:0x8057D150 end:0x8057D158
 	.bss        start:0x805D03B8 end:0x805D0458
 
@@ -2006,7 +2255,7 @@ d/col/bg/d_bg_s_wtr_chk.cpp:
 	.text       start:0x803435D0 end:0x80343818 align:16
 	.ctors      start:0x804DB90C end:0x804DB910
 	.data       start:0x80547CB8 end:0x80547CE8
-	.sbss       start:0x80575D08 end:0x80575D0C
+	.sbss       start:0x80575D08 end:0x80575D10
 	.bss        start:0x805D0458 end:0x805D0500
 
 d/col/bg/d_bg_w.cpp:
@@ -2037,7 +2286,7 @@ d/col/bg/d_bg_w_time.cpp:
 	.text       start:0x80352920 end:0x80353B44 align:16
 	.data       start:0x80548238 end:0x80548340
 	.sdata2     start:0x8057D230 end:0x8057D240
-	.bss        start:0x805D0F90 end:0x805D0FB4
+	.bss        start:0x805D0F90 end:0x805D0FB8
 
 d/col/cc/d_cc_d.cpp:
 	.text       start:0x80353B50 end:0x80354298 align:16
@@ -2051,16 +2300,18 @@ toBeSorted/col/cc/unk_flag_check.cpp:
 
 d/col/cc/d_cc_mass_s.cpp:
 	.text       start:0x803543F0 end:0x80355080 align:16
-	.data       start:0x80548580 end:0x805485A4
-	.sdata2     start:0x8057D240 end:0x8057D254
+	.data       start:0x80548580 end:0x805485A8
+	.sdata2     start:0x8057D240 end:0x8057D258
 
 d/col/cc/d_cc_s.cpp:
 	.text       start:0x80355080 end:0x80358654 align:16
-	.data       start:0x805485A8 end:0x805485B4
-	.sbss       start:0x80575D20 end:0x80575D24
+	.data       start:0x805485A8 end:0x805485B8
+	.sbss       start:0x80575D20 end:0x80575D28
+	.sdata2     start:0x8057D258 end:0x8057D298
 
 toBeSorted/col/cc/misc_unks.cpp:
 	.text       start:0x80358660 end:0x80359D20 align:16
+	.sbss       start:0x80575D28 end:0x80575D30
 
 d/snd/d_snd.cpp:
 	.text       start:0x80359D20 end:0x8035A558 align:16
@@ -2560,7 +2811,7 @@ nw4r/g3d/g3d_scnobj.cpp:
 	.text       start:0x80457DD0 end:0x8045980C align:16
 	.rodata     start:0x804F7AF0 end:0x804F7B20
 	.data       start:0x8056D8B0 end:0x8056D9A8
-	.sbss       start:0x80576648 end:0x8057664C
+	.sbss       start:0x80576648 end:0x80576650
 	.sdata2     start:0x8057EE98 end:0x8057EEA0
 
 nw4r/g3d/g3d_scnroot.cpp:
@@ -2588,12 +2839,12 @@ nw4r/g3d/g3d_calcmaterial.cpp:
 nw4r/g3d/g3d_init.cpp:
 	.text       start:0x8045FFF0 end:0x804600E8 align:16
 	.data       start:0x8056DAB8 end:0x8056DAFE
-	.sdata      start:0x80574E88 end:0x80574E8C
+	.sdata      start:0x80574E88 end:0x80574E90
 
 nw4r/g3d/g3d_scnproc.cpp:
 	.text       start:0x804600F0 end:0x804603F0 align:16
 	.rodata     start:0x804F7B70 end:0x804F7B80
-	.data       start:0x8056DB00 end:0x8056DB34
+	.data       start:0x8056DB00 end:0x8056DB38
 	.sdata2     start:0x8057EEB0 end:0x8057EEB4
 
 nw4r/g3d/g3d_fog.cpp:
@@ -2606,7 +2857,7 @@ nw4r/g3d/g3d_light.cpp:
 
 nw4r/g3d/g3d_calcvtx.cpp:
 	.text       start:0x80460F70 end:0x804616F8 align:16
-	.sdata2     start:0x8057EEF0 end:0x8057EEF4
+	.sdata2     start:0x8057EEF0 end:0x8057EEF8
 
 nw4r/snd/snd_AnimSound.cpp:
 	.text       start:0x80461700 end:0x804630D4 align:16
@@ -3387,7 +3638,7 @@ PowerPC_EABI_Support/Runtime/Src/__init_cpp_exceptions.cpp:
 	.ctors      start:0x804DB640 end:0x804DB644 rename:.ctors$10
 	.dtors      start:0x804DB9E0 end:0x804DB9E4 rename:.dtors$10
 	.dtors      start:0x804DB9E4 end:0x804DB9E8 rename:.dtors$15
-	.sdata      start:0x80574F78 end:0x80574F7C
+	.sdata      start:0x80574F78 end:0x80574F80
 
 PowerPC_EABI_Support/Runtime/Src/Gecko_ExceptionPPC.cp:
 	.text       start:0x804C7218 end:0x804C728C

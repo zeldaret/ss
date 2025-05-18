@@ -38,8 +38,8 @@ private:
 
     private:
         /* 0x000 */ SizedString<64> mArcName;
-        /* 0x040 */ SizedString<64> mStr2;
-        /* 0x080 */ SizedString<64> mStr3;
+        /* 0x040 */ SizedString<64> mLytFileName;
+        /* 0x080 */ SizedString<64> mAnimFileName;
         /* 0x0C0 */ d2d::ResAccIf_c mResAcc;
         /* 0x430 */ m2d::Simple_c mLyt;
         /* 0x4C8 */ m2d::Anm_c mAnm;
@@ -57,6 +57,8 @@ private:
     virtual void deleteReady() override;
 
     bool checkDone();
+
+    static void drawCallback();
 
     sFPhaseBase::sFPhaseState cb1();
     sFPhaseBase::sFPhaseState cb2();
@@ -77,7 +79,7 @@ private:
     /* 0x570 */ mDvd_callback_c *mpDvdCallback;
     /* 0x574 */ STATE_MGR_DECLARE(dScBoot_c);
     /* 0x5B4 */ dFader_c mFader;
-    /* 0x5D4 */ s32 field_0x5D4;
+    /* 0x5D4 */ s32 mProgressStage;
     /* 0x5D8 */ u32 field_0x5D8;
     /* 0x5DC */ u8 field_0x5DC;
     /* 0x5DD */ u8 field_0x5DD;

@@ -17,3 +17,6 @@ REL/global_destructor_chain.c:
 REL/d/a/e/d_a_e_liza_tail.cpp:
 	.text       start:0x000000F0 end:0x00001D58 align:16
 	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x00000090
+	.data       start:0x00000000 end:0x00000474
+	.bss        start:0x00000008 end:0x00000160

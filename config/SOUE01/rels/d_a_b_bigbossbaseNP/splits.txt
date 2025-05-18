@@ -11,3 +11,6 @@ REL/executor.c:
 
 REL/d/a/b/d_a_b_bigbossbase.cpp:
 	.text       start:0x00000070 end:0x0000DED4 align:16
+	.rodata     start:0x00000000 end:0x000001DC
+	.data       start:0x00000000 end:0x00000348
+	.bss        start:0x00000008 end:0x0000000C

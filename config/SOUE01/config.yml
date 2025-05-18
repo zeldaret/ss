@@ -29,6 +29,10 @@ force_active: [
   "ModuleConstructorsX",
   "ModuleDestructorsX",
 ]
+extract:
+  - symbol: DOL_BACKUP_FONT
+    header: d/dol_backup_error_font.inc
+
 modules:
 - object: orig/SOUE01/files/rels.arc:rels/d_a_asura_bulletNP.rel
   splits: config/SOUE01/rels/d_a_asura_bulletNP/splits.txt

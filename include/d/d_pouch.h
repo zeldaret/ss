@@ -4,6 +4,8 @@
 #include "common.h"
 #include "d/a/d_a_itembase.h"
 
+s32 summarizePouchContents(s32 *, s32 *, s32 *);
+
 u32 convertFilePouchSlot(s32 fileSlot);
 s32 convertLytPouchSlot(s32 fileSlot);
 s32 getPouchSlotCount(bool unk);

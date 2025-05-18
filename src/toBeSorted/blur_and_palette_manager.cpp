@@ -21,7 +21,6 @@ Spf::Spf() {}
 
 Sff::Sff() {}
 
-#pragma dont_inline on
 BlurAndPaletteManager::BlurAndPaletteManager() {
     mColor grey_aaaaaa = mColor(0xaa, 0xaa, 0xaa, 0xff);
     mColor white_ffffff = mColor(0xff, 0xff, 0xff, 0xff);
@@ -188,4 +187,3 @@ BlurAndPaletteManager::BlurAndPaletteManager() {
     field_0x5D04.field_0x00 = field_0x5CE4;
     field_0x5D04.field_0x20 = field_0x5CE4;
 }
-#pragma dont_inline reset

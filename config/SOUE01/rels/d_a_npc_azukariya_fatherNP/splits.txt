@@ -11,3 +11,6 @@ REL/executor.c:
 
 REL/d/a/npc/d_a_npc_azukariya_father.cpp:
 	.text       start:0x00000070 end:0x000017D8 align:16
+	.rodata     start:0x00000000 end:0x000009A8
+	.data       start:0x00000000 end:0x00000798
+	.bss        start:0x00000008 end:0x00000020

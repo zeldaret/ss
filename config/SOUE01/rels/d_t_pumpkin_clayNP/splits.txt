@@ -17,3 +17,6 @@ REL/global_destructor_chain.c:
 REL/d/t/d_t_pumpkin_clay.cpp:
 	.text       start:0x000000F0 end:0x00000EE8 align:16
 	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x00000078
+	.data       start:0x00000000 end:0x00000204
+	.bss        start:0x00000008 end:0x00000048

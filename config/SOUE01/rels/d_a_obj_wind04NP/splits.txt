@@ -17,3 +17,6 @@ REL/global_destructor_chain.c:
 REL/d/a/obj/d_a_obj_wind04.cpp:
 	.text       start:0x000000F0 end:0x00001DF8 align:16
 	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x00000070
+	.data       start:0x00000000 end:0x0000032C
+	.bss        start:0x00000008 end:0x0000011C

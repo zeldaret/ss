@@ -11,6 +11,8 @@ public:
         return sInstance;
     }
 
+    static bool create();
+
     bool setProperties(const char *label, bool, const wchar_t *);
     void showMaybe();
     void showMaybe(s32 arg);
