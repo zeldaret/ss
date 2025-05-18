@@ -39,15 +39,9 @@
 #include "toBeSorted/small_sound_mgr.h"
 #include "toBeSorted/time_area_mgr.h"
 
-#pragma explicit_zero_data on
-int dAcEsm_c::sDefaultRotX(0);
-int dAcEsm_c::sDefaultRotY(0);
-int dAcEsm_c::sDefaultRotZ(0);
-#pragma explicit_zero_data off
-
 SPECIAL_ACTOR_PROFILE(E_SM, dAcEsm_c, fProfile::E_SM, 0xEB, 0, 4098);
 
-dCcD_SrcSph dAcEsm_c::sSphSrc = {
+static dCcD_SrcSph sSphSrc = {
     /* mObjInf */
     {/* mObjAt */ {AT_TYPE_DAMAGE, 0xD, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
      /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x8000 | AT_TYPE_WIND), 0x3303, {0, 3, 0x40F}, 8, 0},
@@ -96,16 +90,8 @@ STATE_DEFINE(dAcEsm_c, Absorption);
 STATE_DEFINE(dAcEsm_c, Fusion);
 STATE_DEFINE(dAcEsm_c, Dead);
 
-#pragma explicit_zero_data on
-static int anotherAngleZ = 0;
-#pragma explicit_zero_data off
-
 bool dAcEsm_c::sSomeArrayInit = false;
 bool dAcEsm_c::sSomeArray[9];
-
-// Complete Guess
-todoStruct00::InternalData data0 = {0, 100.f, nullptr};
-todoStruct00::InternalData data1 = {1, 130.f, &data0};
 
 int dAcEsm_c::actorCreate() {
     // Check for Batreaux being human and on Skyloft/Waterfall cave
@@ -139,7 +125,8 @@ int dAcEsm_c::actorCreate() {
 
     CREATE_ALLOCATOR(dAcEsm_c);
 
-    rotation.z = angle.z = anotherAngleZ;
+    angle.setZ(0);
+    rotation.setZ(angle.z);
 
     mBombRef.unlink();
 
@@ -203,6 +190,8 @@ int dAcEsm_c::actorCreate() {
         *parr++ = false;
     }
 
+    static todoStruct00::InternalData data0 = {0, 100.f, nullptr};
+    static todoStruct00::InternalData data1 = {1, 130.f, &data0};
     field_0x9f8.Set(this, &data1, &mMdl.getModel(), 1);
 
     mLightInfo.SetColor(mColor(0xCC, 0xFF, 0xFF, 0xFF));
@@ -210,14 +199,11 @@ int dAcEsm_c::actorCreate() {
 
     BlurAndPaletteManager::GetPInstance()->fn_800225F0(&mLightInfo);
     if (field_0xBBF == 1) {
-        static u32 anglex = {0x8000};
-        rotation.x = anglex;
+        rotation.setX(0x8000);
         field_0xBCC = 1;
     }
 
-    mRotUnk.x = sDefaultRotX;
-    mRotUnk.y = sDefaultRotY;
-    mRotUnk.z = sDefaultRotZ;
+    mRotUnk.setR();
 
     mEffArr[0].init(this);
     mEffArr[1].init(this);
@@ -700,7 +686,7 @@ int dAcEsm_c::actorExecute() {
     }
 
     if (field_0xBC8 == 0 && !mStateMgr.isState(StateID_Absorption)) {
-        fn_80030c20(3, 700., 50.f, -200.f, 200.f);
+        fn_80030c20(3, 700.f, 50.f, -200.f, 200.f);
     }
 
     if (field_0xBBF != 3 && mScaleTarget.z != mScale.z) {
@@ -756,10 +742,6 @@ void dAcEsm_c::executeState_Wait() {
 }
 void dAcEsm_c::finalizeState_Wait() {}
 
-#pragma explicit_zero_data on
-static u32 rotx = 0;
-#pragma explicit_zero_data off
-
 void dAcEsm_c::initializeState_Walk() {
     if (field_0xBC5 != 2) {
         mMdl.setAnm("awa", m3d::PLAY_MODE_4, 4.f);
@@ -784,7 +766,7 @@ void dAcEsm_c::initializeState_Walk() {
 
     field_0xBB8 = 0;
     field_0xB98 = 0;
-    rotation.x = rotx;
+    rotation.setX(0);
 
     Set_0xBBC(2);
     field_0xBAA = angle.y;
@@ -840,7 +822,9 @@ void dAcEsm_c::executeState_Electrical() {}
 void dAcEsm_c::finalizeState_Electrical() {}
 
 void dAcEsm_c::initializeState_Absorption() {}
-void dAcEsm_c::executeState_Absorption() {}
+void dAcEsm_c::executeState_Absorption() {
+    mMdl.getModel().getResMdl().GetResNode("mouth_ue");
+}
 void dAcEsm_c::finalizeState_Absorption() {}
 
 void dAcEsm_c::initializeState_Fusion() {}
@@ -1246,11 +1230,183 @@ bool dAcEsm_c::checkSize(dAcEsm_c::SmSize_e size) const {
 }
 
 // . . .
-
+void dAcEsm_c::fn_187_5940() {
+    mMdl.getModel().getResMdl().GetResNode("center");
+}
 void dAcEsm_c::updateBoundingBox() {
     f32 min = -200.f / mScale.x;
     f32 max = 200.f / mScale.x;
     boundingBox.Set(mVec3_c(min, min, min), mVec3_c(max, 250.f / mScale.x, max));
+}
+
+void dAcEsm_c::fn_187_61B0(u8 param0) {
+    if (param0 == 0 && field_0xB98 == 0) {
+        return;
+    }
+
+    const dAcPy_c *player = dAcPy_c::GetLink();
+
+    // Yellowish
+    mColor clr1(0xFF, 0xC8, 0x32, 0xFF);
+    // Redish
+    mColor clr2(0xC8, 0x32, 0x00, 0xFF);
+
+    mAng3_c ang(0, 0, 0);
+    mMtx_c mtx_trans = mWorldMtx;
+    mVec3_c scale;
+
+    if (mType == SM_BLUE) {
+        // Blue/purple
+        clr1 = mColor(0x64, 0x64, 0xFF, 0xFF);
+        // Purple
+        clr2 = mColor(0x50, 0x50, 0x96, 0xFF);
+    } else if (mType == SM_YELLOW) {
+        // Yellow
+        clr1 = mColor(0xFF, 0xFF, 0x00, 0xFF);
+        // Darker Yellow
+        clr2 = mColor(0x96, 0x96, 0x00, 0xFF);
+    } else if (mType == SM_GREEN) {
+        // Light Green
+        clr1 = mColor(0x00, 0xBE, 0x73, 0xFF);
+        // Darker Blue-Green
+        clr2 = mColor(0x00, 0x73, 0x69, 0xFF);
+    }
+
+    switch (param0) {
+        case 0: {
+            mMtx_c mtx_scale;
+            ang.setR(0, 0, 0);
+            ang.z += player->vt_0x258();
+            MTXTrans(mtx_trans, mHitPos.x, mHitPos.y, mHitPos.z);
+            mtx_trans.YrotM(rotation.y);
+            mtx_trans.ZYXrotM(ang);
+            MTXScale(mtx_scale, mScaleTarget.x, mScaleTarget.x, mScaleTarget.x);
+
+            mtx_trans += mtx_scale;
+            for (int i = 0; i <= 2; ++i) {
+                dEmitterBase_c *emitter =
+                    dJEffManager_c::spawnEffect(sEmitterResArr[param0 + i], mtx_trans, &clr1, &clr2, 0, 0);
+                if (emitter == nullptr) {
+                    continue;
+                }
+                switch (i) {
+                    case 0: {
+                        if (checkSize(SM_LARGE)) {
+                            emitter->setRate(20.0f);
+                            scale.set(2.f, 2.f, 2.f);
+                            scale *= mScaleTarget.x;
+                            emitter->setParticleScale(scale);
+                        } else if (checkSize(SM_MASSIVE)) {
+                            emitter->setRate(15.0f);
+                            scale.set(2.5f, 2.5f, 2.5f);
+                            scale *= mScaleTarget.x;
+                            emitter->setParticleScale(scale);
+                        }
+                    } break;
+                    case 1: {
+                        if (checkSize(SM_LARGE)) {
+                            scale.set(1.14f, 1.3f, 1.14f);
+                            scale *= mScaleTarget.x;
+                            emitter->setParticleScale(scale);
+                        } else if (checkSize(SM_MASSIVE)) {
+                            scale.set(1.43f, 2.67f, 1.43f);
+                            scale *= mScaleTarget.x;
+                            emitter->setParticleScale(scale);
+                        }
+                    } break;
+                    case 2: {
+                        if (checkSize(SM_LARGE)) {
+                            scale.set(1.12f, 1.12f, 1.12f);
+                            scale *= mScaleTarget.x;
+                            emitter->setParticleScale(scale);
+                        } else if (checkSize(SM_MASSIVE)) {
+                            scale.set(1.22f, 1.22f, 1.22f);
+                            scale *= mScaleTarget.x;
+                            emitter->setParticleScale(scale);
+                        }
+                    } break;
+                }
+            }
+        } break;
+        case 3: {
+            mMtx_c mtx_scale;
+            MTXTrans(mtx_trans, position.x, position.y, position.z);
+            MTXScale(mtx_scale, mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
+            mtx_trans += mtx_scale;
+
+            if (mEffArr[0].createEffect(sEmitterResArr[3], mtx_trans, &clr1, &clr2)) {
+                if (checkSize(SM_LARGE)) {
+                    mEffArr[0].setRate(12.0f);
+                    scale.set(1.7f, 1.7f, 1.7f);
+                    scale *= mScaleTarget.x;
+                    mEffArr[0].setParticleScale(scale);
+                } else if (checkSize(SM_MASSIVE)) {
+                    mEffArr[0].setRate(7.0f);
+                    scale.set(2.5f, 2.5f, 2.5f);
+                    scale *= mScaleTarget.x;
+                    mEffArr[0].setParticleScale(scale);
+                }
+            }
+
+        } break;
+        case 4: {
+            mMtx_c mtx_scale;
+            MTXTrans(mtx_trans, position.x, position.y, position.z);
+            mtx_trans.YrotM(rotation.y);
+            MTXScale(mtx_scale, mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
+            mtx_trans += mtx_scale;
+            dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_280_, mtx_trans, &clr1, &clr2, 0, 0);
+
+            for (int i = 4; i <= 5; ++i) {
+                dEmitterBase_c *emitter = dJEffManager_c::spawnEffect(sEmitterResArr[i], mtx_trans, &clr1, &clr2, 0, 0);
+                if (emitter == nullptr) {
+                    continue;
+                }
+                switch (i) {
+                    case 4: {
+                        if (checkSize(SM_LARGE)) {
+                            emitter->setRate(5.0f);
+                            scale.set(1.17f, 1.17f, 1.17f);
+                            scale *= mScaleTarget.x;
+                            emitter->setParticleScale(scale);
+                        } else if (checkSize(SM_MASSIVE)) {
+                            emitter->setRate(3.0f);
+                            scale.set(1.25f, 1.25f, 1.25f);
+                            scale *= mScaleTarget.x;
+                            emitter->setParticleScale(scale);
+                        }
+                    } break;
+                    case 5: {
+                        if (checkSize(SM_LARGE)) {
+                            emitter->setRate(20.0f);
+                            scale.set(1.5f, 1.5f, 1.5f);
+                            scale *= mScaleTarget.x;
+                            emitter->setParticleScale(scale);
+                        } else if (checkSize(SM_MASSIVE)) {
+                            emitter->setRate(15.0f);
+                            scale.set(2.f, 2.f, 2.f);
+                            scale *= mScaleTarget.x;
+                            emitter->setParticleScale(scale);
+                        }
+                    } break;
+                }
+            }
+        } break;
+        case 7: {
+            mScaleTarget.CopyTo(scale);
+            if (checkSize(SM_LARGE) || checkSize(SM_MASSIVE)) {
+                scale *= 2.f;
+            }
+            mMtx_c mtx_scale;
+            MTXTrans(mtx_trans, mHitPos.x, mHitPos.y, mHitPos.z);
+            mtx_trans.YrotM(rotation.y);
+            MTXScale(mtx_scale, scale.x, scale.y, scale.z);
+            mtx_trans += mtx_scale;
+            dJEffManager_c::spawnEffect(sEmitterResArr[param0], mtx_trans, &clr1, &clr2, 0, 0);
+        } break;
+    }
+
+    return;
 }
 
 bool dAcEsm_c::fn_187_6B10() {
@@ -1281,7 +1437,7 @@ void dAcEsm_c::fn_187_6C20(bool param0) {
 
     if (!param0) {
         dCamera_c *cam = dScGame_c::getCamera(0);
-        angle.y = cLib::targetAngleY(cam->getPositionMaybe(), cam->getField_0x78());
+        angle.setY(cLib::targetAngleY(cam->getPositionMaybe(), cam->getField_0x78()));
         angle.y += cM::rndFX(16384.f);
     }
 

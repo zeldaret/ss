@@ -3,7 +3,7 @@
 #include "math.h"
 
 /** 80575c08 */
-mAng3_c mAng3_c::Zero = mAng3_c(0, 0, 0);
+mAng3_c mAng3_c::Zero(0, 0, 0);
 
 const f32 mAng::sHalfCircleDeg = 360.0f / 2;
 const f32 mAng::sAngToDeg = 360.0f / (1 << 16);

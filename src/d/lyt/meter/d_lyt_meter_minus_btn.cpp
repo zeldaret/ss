@@ -767,7 +767,7 @@ bool dLytMeterMinusBtn_c::build(d2d::ResAccIf_c *resAcc) {
     }
 
     for (s32 i = 0; i < 4; i++) {
-        mEffectsRot[i].setR(0);
+        mEffectsRot[i].set(0);
         mSlotForEffect[i] = -1;
         mEffects[i].init(dLytControlGame_c::getInstance());
     }
@@ -1004,7 +1004,7 @@ bool dLytMeterMinusBtn_c::demoRelated(s32 arg) {
         field_0x4E8C = arg;
         mDemoFrame = 0;
         for (s32 i = 0; i < 4; i++) {
-            mEffectsRot[i].setR(0);
+            mEffectsRot[i].set(0);
             mSlotForEffect[i] = -1;
         }
         mArrowRotation = 0.0f;

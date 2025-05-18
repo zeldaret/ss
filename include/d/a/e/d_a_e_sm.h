@@ -23,13 +23,13 @@
 class dAcEsm_c : public dAcEnBase_c {
 public:
     enum SmColor_e {
-        SM_RED,
-        SM_GREEN,
-        SM_YELLOW,
-        SM_RED_ALT,
-        SM_GREEN_ALT,
-        SM_YELLOW_ALT,
-        SM_BLUE
+        SM_RED = 0,
+        SM_GREEN = 1,
+        SM_YELLOW = 2,
+        SM_RED_ALT = 3,
+        SM_GREEN_ALT = 4,
+        SM_YELLOW_ALT = 5,
+        SM_BLUE = 6
     };
 
     enum SmSize_e {
@@ -113,18 +113,13 @@ public:
     void fn_187_5810();
     void fn_187_5940();
     bool fn_187_5AC0() const;
-    void fn_187_61B0(int);
+    void fn_187_61B0(u8);
     bool fn_187_6B10();
     void fn_187_6C20(bool);
 
 private:
     void updateBoundingBox();
     void updateMatrix();
-
-    static int sDefaultRotX;
-    static int sDefaultRotY;
-    static int sDefaultRotZ;
-    static dCcD_SrcSph sSphSrc;
 
     bool *getArray() {
         return sSomeArray;

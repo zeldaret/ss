@@ -58,11 +58,19 @@ public:
         const mAng &zRot
     ); ///< Rotates the matrix on the Z, Y and X axes by the given angles.
 
+    void ZYXrotM(
+        const mAng &xRot, const mAng &yRot,
+        const mAng &zRot
+    ); ///< Rotates the matrix on the Z, Y and X axes by the given angles.
+
     void XYZrotM(const mAng3_c &ang) {
         XYZrotM(ang.x, ang.y, ang.z);
     }
     void ZXYrotM(const mAng3_c &ang) {
         ZXYrotM(ang.x, ang.y, ang.z);
+    }
+    void ZYXrotM(const mAng3_c &ang) {
+        ZYXrotM(ang.x, ang.y, ang.z);
     }
 
     void toRot(mAng3_c &out) const; ///< Converts the matrix to a rotation vector.

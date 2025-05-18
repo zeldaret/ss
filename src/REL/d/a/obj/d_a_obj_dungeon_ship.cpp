@@ -106,10 +106,6 @@ ok:
     return true;
 }
 
-#pragma explicit_zero_data on
-static u32 rotX_init = 0;
-#pragma explicit_zero_data off
-
 int dAcODungeonShip_c::create() {
     if (!StoryflagManager::sInstance->getCounterOrFlag(271)) {
         return FAILED;
@@ -158,7 +154,7 @@ int dAcODungeonShip_c::create() {
     clearActorProperty(0x1);
     mAppearEventFromParam = (params >> 0x18);
     field_0x849 = rotation.x;
-    rotation.x = rotX_init;
+    rotation.setX(0);
     updateMatrix();
     mBg.Move();
     return SUCCEEDED;

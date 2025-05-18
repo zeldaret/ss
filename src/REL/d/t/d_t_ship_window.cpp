@@ -1,20 +1,12 @@
 #include "d/t/d_t_ship_window.h"
 
-#include "toBeSorted/event_manager.h"
 #include "d/flag/sceneflag_manager.h"
-
+#include "toBeSorted/event_manager.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_SHIP_WINDOW, dTgShipWindow_c, fProfile::TAG_SHIP_WINDOW, 0x0228, 0, 0);
 
 STATE_DEFINE(dTgShipWindow_c, On);
 STATE_DEFINE(dTgShipWindow_c, Off);
-
-// sDefaultRotX got placed in .data despite being zero.
-// There is a handy pragma for this but it's probably not
-// the correct solution.
-#pragma explicit_zero_data on
-u32 dTgShipWindow_c::sDefaultRotX = 0;
-#pragma explicit_zero_data off
 
 int dTgShipWindow_c::create() {
     mInitialStateFlag = params & 0xFF;
@@ -22,7 +14,7 @@ int dTgShipWindow_c::create() {
     mOffEventId = (params >> 16) & 0xFF;
     mOnEventId = (params >> 24) & 0xFF;
     mAlwaysPlayEvent = rotation.x & 1;
-    rotation.x = sDefaultRotX;
+    rotation.setX(0);
     if (SceneflagManager::sInstance->checkBoolFlag(roomid, mInitialStateFlag)) {
         SceneflagManager::sInstance->setFlag(roomid, mOutputStateFlagBase);
         mStateMgr.changeState(StateID_On);
@@ -75,8 +67,8 @@ void dTgShipWindow_c::executeState_Off() {
     }
 
     if ((mHasPlayedOffEvent == 0 || mAlwaysPlayEvent == 0) &&
-        (mOutputStateFlagBase >= 0xFF || !SceneflagManager::sInstance->checkBoolFlag(roomid, mOutputStateFlagBase + 1)
-        )) {
+        (mOutputStateFlagBase >= 0xFF ||
+         !SceneflagManager::sInstance->checkBoolFlag(roomid, mOutputStateFlagBase + 1))) {
         if (mOffEventId != 0xFF) {
             {
                 // this works but I don't like it
@@ -115,8 +107,8 @@ void dTgShipWindow_c::executeState_On() {
     }
 
     if ((mHasPlayedOnEvent == 0 || mAlwaysPlayEvent == 0) &&
-        (mOutputStateFlagBase >= 0xFF || !SceneflagManager::sInstance->checkBoolFlag(roomid, mOutputStateFlagBase + 2)
-        )) {
+        (mOutputStateFlagBase >= 0xFF ||
+         !SceneflagManager::sInstance->checkBoolFlag(roomid, mOutputStateFlagBase + 2))) {
         if (mOnEventId != 0xFF) {
             {
                 // this works but I don't like it

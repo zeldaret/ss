@@ -14,9 +14,6 @@
 SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0x0151, 0, 0);
 
 STATE_DEFINE(dTgReaction_c, Wait);
-#pragma explicit_zero_data on
-const u32 fZero = 0;
-#pragma explicit_zero_data off
 const f32 dTgReaction_c::sRadius = 100.0f;
 const f32 dTgReaction_c::sHeight = 100.0f;
 
@@ -28,10 +25,6 @@ dCcD_SrcCyl dTgReaction_c::sCcSrc = {
     {dTgReaction_c::sRadius, dTgReaction_c::sHeight}
 };
 // clang-format on
-
-#pragma explicit_zero_data on
-static u32 initialRotX = 0;
-#pragma explicit_zero_data off
 
 bool dTgReaction_c::createHeap() {
     return true;
@@ -55,8 +48,8 @@ int dTgReaction_c::create() {
     }
 
     field_0x4E0 = rotation.x & 0xFF;
-    angle.x = initialRotX;
-    rotation.x = angle.x;
+    angle.setX(0);
+    rotation.setX(angle.x);
     if (field_0x4E0 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, field_0x4E0)) {
         return FAILED;
     }

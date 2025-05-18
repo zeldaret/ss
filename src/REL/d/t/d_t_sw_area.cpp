@@ -1,18 +1,11 @@
 #include "d/t/d_t_sw_area.h"
+
 #include "d/a/d_a_player.h"
-#include "toBeSorted/area_math.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
+#include "toBeSorted/area_math.h"
 
 SPECIAL_ACTOR_PROFILE(SW_AREA_TAG, dTgSwArea_c, fProfile::SW_AREA_TAG, 0x292, 0, 0);
-
-// sDefaultRotX got placed in .data despite being zero.
-// There is a handy pragma for this but it's probably not
-// the correct solution.
-#pragma explicit_zero_data on
-u32 dTgSwArea_c::sDefaultRotX = 0;
-u32 dTgSwArea_c::sDefaultRotZ = 0;
-#pragma explicit_zero_data off
 
 int dTgSwArea_c::create() {
     setSceneflag = getSetSceneflag();
@@ -21,8 +14,8 @@ int dTgSwArea_c::create() {
 
     setStoryflag = getSetStoryflag();
     unsetStoryflag = getUnsetStoryflag();
-    rotation.x = sDefaultRotX;
-    rotation.z = sDefaultRotZ;
+    rotation.setX(0);
+    rotation.setZ(0);
 
     matrixCreateFromPosRotYScale(area, position, rotation.y, mScale, nullptr, 0.0f);
     return SUCCEEDED;

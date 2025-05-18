@@ -191,7 +191,7 @@ public:
     /* vt 0x24C */ virtual void vt_0x24C();
     /* vt 0x250 */ virtual void vt_0x250();
     /* vt 0x254 */ virtual void isAttackingUnderground();
-    /* vt 0x258 */ virtual void vt_0x258();
+    /* vt 0x258 */ virtual mAng vt_0x258() const;
     /* vt 0x25C */ virtual void vt_0x25C();
     /* vt 0x260 */ virtual f32 vt_0x260() const;
     /* vt 0x264 */ virtual void getGroosenatorIfIn();

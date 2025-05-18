@@ -8,6 +8,8 @@
 #include "m/m_angle.h"
 #include "s/s_Math.h"
 
+// This one is tricky. In other applications, the load order was X,Y,Z
+// however, for this file it was Z,Y,X ???
 #pragma explicit_zero_data on
 static u32 initialRotX = 0;
 static u32 initialRotY = 0;

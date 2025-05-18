@@ -104,6 +104,10 @@ struct mAng {
         return rad * (65536.0f / (2.f * M_PI));
     }
 
+    void set(const int &v = 0) {
+        mVal = v;
+    }
+
     s16 mVal;
 
 private:
@@ -144,14 +148,24 @@ public:
         set(ang.x, ang.y, ang.z);
     }
 
-    void setR(const s32 &fx, const s32 &fy, const s32 &fz) {
+    void set(const s32 &f) {
+        x = y = z = f;
+    }
+
+    void setR(const s32 &fx = 0, const s32 &fy = 0, const s32 &fz = 0) {
         x = fx;
         y = fy;
         z = fz;
     }
 
-    void setR(const s32 &f) {
-        x = y = z = f;
+    void setX(const s32 &fx) {
+        x = fx;
+    }
+    void setY(const s32 &fy) {
+        y = fy;
+    }
+    void setZ(const s32 &fz) {
+        z = fz;
     }
 
     mAng x, y, z;
