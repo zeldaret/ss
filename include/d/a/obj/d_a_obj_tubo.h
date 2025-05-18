@@ -38,7 +38,7 @@ public:
     void attemptDestroy();
     void fn_272_2670();
     mVec3_c getCenter() const;
-    void attemptDestroyOnWall(u32 *, const u8 *);
+    void attemptDestroyOnWall(const u32 &param0 = 0, const bool &param1 = true);
     void fn_272_2E60(const mVec3_c &);
     void fn_272_3020();
     void addPickupTarget();
@@ -128,8 +128,6 @@ private:
     /* 0x9F9 */ u8 mSubtype;
     /* 0x9FC */ int mField_0x9FC;
 
-    static u8 sUnk0;
-    static u32 sUnk1;
     static dCcD_SrcSph sSphSrc;
 };
 

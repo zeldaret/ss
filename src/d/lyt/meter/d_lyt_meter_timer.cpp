@@ -382,9 +382,6 @@ void LytMeterTimerPart1_c::initColors() {
     }
 }
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_135_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_136_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_137_;
 void LytMeterTimerPart1_c::createEffect(s32 fruitIndex) {
     nw4r::math::MTX34 mtx = mpPanes[fruitIndex]->GetGlobalMtx();
     mVec3_c pos;
@@ -993,7 +990,6 @@ void LytMeterTimerPart2_c::initColors() {
     }
 }
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_174_;
 void LytMeterTimerPart2_c::createSingleFruitEffect() {
     nw4r::math::MTX34 mtx = mpPane->GetGlobalMtx();
     mVec3_c pos;
@@ -1005,7 +1001,7 @@ void LytMeterTimerPart2_c::createSingleFruitEffect() {
         &mColors2[TIMER_02_COLOR_01_00]
     );
 }
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_206_;
+
 void LytMeterTimerPart2_c::createFruitCompleteEffect() {
     nw4r::math::MTX34 mtx = mpPane->GetGlobalMtx();
     mVec3_c pos;

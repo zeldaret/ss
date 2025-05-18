@@ -3,7 +3,6 @@
 
 #include "d/t/d_tg.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/actor_event.h"
 
 class dTgShipWindow_c : public dTg_c {
@@ -20,7 +19,6 @@ public:
     STATE_FUNC_DECLARE(dTgShipWindow_c, Off);
 
 private:
-    static u32 sDefaultRotX;
     STATE_MGR_DECLARE(dTgShipWindow_c);
     ActorEventRelated mEvent;
     u8 mInitialStateFlag;

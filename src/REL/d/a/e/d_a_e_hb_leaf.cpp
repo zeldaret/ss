@@ -33,7 +33,7 @@ int dAcEhb_leaf_c::create() {
         case 2:  mType = 2; break;
         case 3:
         case 4:
-        case 5:  rotation.z = -0x8000; break;
+        case 5:  rotation.z.set(-0x8000); break;
         default: break;
     }
 

@@ -8,12 +8,6 @@
 #include "m/m_angle.h"
 #include "s/s_Math.h"
 
-#pragma explicit_zero_data on
-static u32 initialRotX = 0;
-static u32 initialRotY = 0;
-static u32 initialRotZ = 0;
-#pragma explicit_zero_data off
-
 SPECIAL_ACTOR_PROFILE(GEKO_TAG, dTgGekoTag, fProfile::GEKO_TAG, 0xEE, 0, 0);
 
 STATE_DEFINE(dTgGekoTag, Wait);
@@ -74,7 +68,8 @@ void dTgGekoTag::doExecute() {
     gekoParmTmp = (gekoParmTmp & 0xFFFF00FF) | (params & 0xFF00);
     u32 gekoParm = gekoParmTmp | ((mGekoParam != 0 ? 3 : 1) << 16);
 
-    mAng3_c gekoRot = mAng3_c(initialRotX, initialRotY, initialRotZ);
+    mAng3_c gekoRot;
+    gekoRot.clear();
     gekoRot.y = cM::rndF(65535.0f);
     int numFullGekoRefs = 0;
     for (int i = 0; i < mNumGeko; i++) {

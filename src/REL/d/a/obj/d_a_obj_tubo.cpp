@@ -40,11 +40,6 @@ void float_ordering() {
     f32 f[] = {15.f, .4f, .4f, 5.f};
 }
 
-#pragma explicit_zero_data on
-u8 dAcOtubo_c::sUnk0 = 1;
-u32 dAcOtubo_c::sUnk1 = 0;
-#pragma explicit_zero_data off
-
 SPECIAL_ACTOR_PROFILE(OBJ_TUBO, dAcOtubo_c, fProfile::OBJ_TUBO, 0x194, 0, 130);
 
 STATE_DEFINE(dAcOtubo_c, Wait);
@@ -449,7 +444,6 @@ void dAcOtubo_c::finalizeState_Rebirth() {
     setActorProperty(0x1);
 }
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_109_, PARTICLE_RESOURCE_ID_MAPPING_209_;
 extern "C" void fn_80022BE0(void *, const mVec3_c &);
 
 void dAcOtubo_c::destroy() {
@@ -637,7 +631,7 @@ void dAcOtubo_c::attemptDestroy() {
     }
 
     if (mObjAcch.ChkWallHit(nullptr) && sLib::absDiff(mAcchCir.GetWallAngleY(), angle.y) > mAng::deg2short(70.f)) {
-        attemptDestroyOnWall(&sUnk1, &sUnk0);
+        attemptDestroyOnWall();
         angle.y = mAcchCir.GetWallAngleY();
         forwardSpeed *= 0.5f;
         return;
@@ -681,8 +675,8 @@ void dAcOtubo_c::attemptDestroy() {
     }
 }
 
-void dAcOtubo_c::attemptDestroyOnWall(u32 *, const u8 *unk) {
-    if (*unk && sLib::absDiff(mAcchCir.GetWallAngleY(), angle.y) > mAng::deg2short(70.f) && 15.f < forwardSpeed) {
+void dAcOtubo_c::attemptDestroyOnWall(const u32 &param0, const bool &param1) {
+    if (param1 && sLib::absDiff(mAcchCir.GetWallAngleY(), angle.y) > mAng::deg2short(70.f) && 15.f < forwardSpeed) {
         destroy();
     }
 }

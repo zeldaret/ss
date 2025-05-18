@@ -18,12 +18,12 @@
 
 namespace d3d {
 
-f32 fn_80016960(mVec3_c&, const mVec3_c& pos);
-bool fn_80016A90(const mVec3_c& pos);
-void fn_80016B60(mVec3_c&, const mVec3_c& pos);
+f32 fn_80016960(mVec3_c &, const mVec3_c &pos);
+bool fn_80016A90(const mVec3_c &pos);
+void fn_80016B60(mVec3_c &, const mVec3_c &pos);
 void createLightTextures();
 
-class AnmMdlWrapper : protected m3d::mdlAnmChr {
+class AnmMdlWrapper : public m3d::mdlAnmChr {
 public:
     AnmMdlWrapper();
     virtual ~AnmMdlWrapper();
@@ -180,6 +180,7 @@ class UnkProc : public m3d::proc_c {
 public:
     bool create(int prioOpa, int prioXlu, mAllocator_c *alloc);
     bool createXlu(int prioXlu, mAllocator_c *alloc);
+
 private:
 };
 

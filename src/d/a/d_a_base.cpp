@@ -12,8 +12,10 @@
 #include "d/d_stage.h"
 #include "d/flag/enemyflag_manager.h"
 #include "egg/core/eggAllocator.h"
+#include "egg/math/eggMath.h"
 #include "f/f_base.h"
 #include "f/f_list_nd.h"
+#include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
@@ -359,13 +361,15 @@ dAcBase_c *dAcBase_c::findActor(char *objName, dAcBase_c *parent) {
 // searches for actor based on groupType
 // 8002d0a0
 FORCE_INLINE dAcBase_c *findActor(dAcBase_c *parent) {
+    dAcBase_c *foundActor;
     if (!parent) {
-        return (dAcBase_c *)fManager_c::searchBaseByGroupType(2, nullptr);
+        foundActor = (dAcBase_c *)fManager_c::searchBaseByGroupType(dBase_c::ACTOR, nullptr);
+    } else if (parent->group_type == 2) {
+        foundActor = (dAcBase_c *)fManager_c::searchBaseByGroupType(dBase_c::ACTOR, parent);
+    } else {
+        foundActor = nullptr;
     }
-    if (parent->group_type == 2) {
-        return (dAcBase_c *)fManager_c::searchBaseByGroupType(2, parent);
-    }
-    return nullptr;
+    return foundActor;
 }
 
 // control flow sucks ;-;
@@ -374,11 +378,7 @@ FORCE_INLINE dAcBase_c *findActor(dAcBase_c *parent) {
 dAcBase_c *dAcBase_c::searchActor(dAcBase_c *parent) {
     dAcBase_c *foundActor = ::findActor(parent);
 
-    if (!foundActor) {
-        return (dAcBase_c *)fManager_c::searchBaseByGroupType(STAGE, parent);
-    }
-
-    return foundActor;
+    return foundActor ? foundActor : (dAcBase_c *)fManager_c::searchBaseByGroupType(STAGE, parent);
 }
 
 // 8002d130
@@ -420,22 +420,21 @@ bool dAcBase_c::getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDis
 bool dAcBase_c::getDistanceAndAngleToActor(
     dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX
 ) {
-    f32 distSquared = 3.402823e+38f;
-    s32 angleToActorY, angleToActorX;
+    f32 distSquared = EGG::Math<f32>::epsilon();
     bool isWithinRange = false;
 
-    angleToActorY = 0;
-    angleToActorX = 0;
+    mAng angleToActorY(0), angleToActorX(0);
 
     if (actor != nullptr) {
         distSquared = PSVECSquareDistance(position, actor->position);
-        angleToActorY = cLib::targetAngleY(position, actor->position);
-        angleToActorX = cLib::targetAngleX(position, actor->position);
+        angleToActorY.set(cLib::targetAngleY(position, actor->position));
+        angleToActorX.set(cLib::targetAngleX(position, actor->position));
 
-        // These casts are nuts wild ^^'
-        if ((distSquared <= distThresh * distThresh) && (labs(s16(rotation.y.mVal - (s16)angleToActorY)) <= yAngle) &&
-            (labs(s16(rotation.x.mVal - (s16)angleToActorX)) <= xAngle)) {
-            isWithinRange = true;
+        if ((distSquared <= distThresh * distThresh)) {
+            if ((labs(mAng(rotation.y.diff(angleToActorY))) <= yAngle) &&
+                (labs(mAng(rotation.x.diff(angleToActorX))) <= xAngle)) {
+                isWithinRange = true;
+            }
         }
     }
 
@@ -513,7 +512,7 @@ void dAcBase_c::FUN_8002d7d0() {}
 void dAcBase_c::FUN_8002d7f0() {}
 void dAcBase_c::FUN_8002d810() {}
 void dAcBase_c::FUN_8002d830() {}
-void dAcBase_c::FUN_8002d860() {}
+void dAcBase_c::FUN_8002d860(UNKWORD) {}
 
 // 8002d880
 SoundSource *dAcBase_c::getSoundSource() {

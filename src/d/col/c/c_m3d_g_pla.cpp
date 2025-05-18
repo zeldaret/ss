@@ -30,10 +30,7 @@ bool cM3dGPla::getCrossYLessD(const mVec3_c &point, f32 *out) const {
 
 mAng cM3dGPla::GetAngle(mAng ang) const {
     mAng angleY = GetAngleY();
-
-    angleY = angleY - ang;
-
-    return cM::atan2s(GetXZDist() * angleY.cos(), mNormal.y);
+    return cM::atan2s(GetXZDist() * mAng(angleY - ang).cos(), mNormal.y);
 }
 
 mAng cM3dGPla::GetNegativeAngle(mAng ang) const {

@@ -7,6 +7,7 @@
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_util_items.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "m/m_angle.h"
 #include "nw4r/lyt/lyt_group.h"
 #include "nw4r/math/math_types.h"
 #include "sized_string.h"
@@ -520,7 +521,7 @@ void dLytMeterMinusBtn_c::executeState_Unuse() {
     }
 }
 void dLytMeterMinusBtn_c::finalizeState_Unuse() {}
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_971_;
+
 void dLytMeterMinusBtn_c::initializeState_DemoMove() {
     mDemoFrame = 0;
     mSlotToDemo = -1;
@@ -767,7 +768,7 @@ bool dLytMeterMinusBtn_c::build(d2d::ResAccIf_c *resAcc) {
     }
 
     for (s32 i = 0; i < 4; i++) {
-        mEffectsRot[i].setR(0);
+        mEffectsRot[i] = 0;
         mSlotForEffect[i] = -1;
         mEffects[i].init(dLytControlGame_c::getInstance());
     }
@@ -1004,7 +1005,7 @@ bool dLytMeterMinusBtn_c::demoRelated(s32 arg) {
         field_0x4E8C = arg;
         mDemoFrame = 0;
         for (s32 i = 0; i < 4; i++) {
-            mEffectsRot[i].setR(0);
+            mEffectsRot[i].set(0);
             mSlotForEffect[i] = -1;
         }
         mArrowRotation = 0.0f;
@@ -1038,8 +1039,7 @@ bool dLytMeterMinusBtn_c::fn_800F7600() const {
 bool dLytMeterMinusBtn_c::fn_800F7760() const {
     if (!StoryflagManager::sInstance->getCounterOrFlag(30) ||
         (mpOwnerPane == nullptr || !mpOwnerPane->IsVisible() || dLytMeter_c::GetMain()->fn_800D5650() ||
-         dLytMeter_c::GetMain()->fn_800D5680() ||
-         !dLytMeter_c::GetMain()->getMinusBtnNotHiddenByAreaCaption())) {
+         dLytMeter_c::GetMain()->fn_800D5680() || !dLytMeter_c::GetMain()->getMinusBtnNotHiddenByAreaCaption())) {
         return false;
     }
 

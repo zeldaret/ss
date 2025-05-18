@@ -9,8 +9,16 @@
 SPECIAL_BASE_PROFILE(C_BASE, dCsBase_c, fProfile::C_BASE, 0x2C0, 0x06F9);
 
 dCsBase_c::dCsBase_c()
-    : mpCurrLyt(nullptr), field_0x6F0(0.0f), field_0x6F4(0.0f), field_0x6F8(0.0f), field_0x6FC(0.0f), field_0x700(0),
-      field_0x702(0), field_0x703(0), field_0x704(0), field_0x705(0) {
+    : mpCurrLyt(nullptr),
+      field_0x6F0(0.0f),
+      field_0x6F4(0.0f),
+      field_0x6F8(0.0f),
+      field_0x6FC(0.0f),
+      field_0x700(0),
+      field_0x702(0),
+      field_0x703(0),
+      field_0x704(0),
+      field_0x705(0) {
     sInstance = this;
 }
 
@@ -27,10 +35,6 @@ static const char *sLytNames[] = {
     "P1_Def.brlyt",
     "P1_Cat.brlyt",
 };
-
-#pragma explicit_zero_data on
-int dCsBase_c::sfield0x700Init = 0;
-#pragma explicit_zero_data off
 
 int dCsBase_c::create() {
     void *data = LayoutArcManager::GetInstance()->getLoadedData("cursor");
@@ -51,7 +55,7 @@ int dCsBase_c::create() {
     field_0x6F8 = 0.0f;
     field_0x6FC = 0.0f;
 
-    field_0x700 = sfield0x700Init;
+    field_0x700 = 0;
     field_0x702 = 0;
     field_0x703 = 0;
 

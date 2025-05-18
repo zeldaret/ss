@@ -17,6 +17,7 @@
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/flag/tboxflag_manager.h"
+#include "d/t/d_t_siren.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m3d/m_scnleaf.h"
 #include "m/m_mtx.h"
@@ -785,13 +786,9 @@ f32 dAcTbox_c::getSomeRate() {
 bool dAcTbox_c::isValidGroupIndex(int idx) {
     return 0 <= idx && idx < 15;
 }
-extern "C" void *SIREN_TAG;
-extern "C" bool hasCollectedAllTears(void *SIREN_TAG);
+
 bool dAcTbox_c::hasCollectedAllTears() {
-    if (SIREN_TAG == nullptr) {
-        return false;
-    }
-    return ::hasCollectedAllTears(SIREN_TAG);
+    return dTgSiren_c::hasCollectedAllTears();
 }
 
 bool dAcTbox_c::getGroundHeight(f32 *height, const mVec3_c &pos) {
@@ -945,9 +942,7 @@ bool dAcTbox_c::createHeap() {
         fn_8026B380(fxPos);
         mMtx_c fxTransform;
         fxTransform.transS(fxPos);
-        // TODO address calculations here, otherwise this function
-        // matches surprisingly well
-        fxTransform.ZXYrotM(rotation.x, rotation.y, rotation.z);
+        fxTransform.ZXYrotM(GetRotation());
         mOpenFxMdl.setLocalMtx(fxTransform);
         mOpenFxMdl.setScale(fn_8026B3C0());
     }
@@ -988,8 +983,8 @@ int dAcTbox_c::create() {
         case 3:  field_0x120A = 3; break;
         default: field_0x120A = 3; break;
     }
-    rotation.z = 0;
-    rotation.x = 0;
+    rotation.z.set(0);
+    rotation.x.set(0);
 
     // This part of the code checks if there's another chest with similar properties
     // and only keeps one of them.
@@ -1102,7 +1097,6 @@ int dAcTbox_c::create() {
         field_0x0D48.addCc(mCcD2, s4);
     }
     field_0x0D48.SetStts(mStts);
-    // TODO figure out the right fields
     mCcD1.SetTg_0x4C(-1);
     mCcD2.SetTg_0x4C(-1);
     mMdl1.setAnm(sAnmNames[mVariant], m3d::PLAY_MODE_4);
@@ -1151,14 +1145,13 @@ int dAcTbox_c::create() {
     field_0x11EC = 1.0f;
     field_0x11FC = 0;
 
-    field_0x4E8.r = 0;
-    field_0x4E8.g = 0;
-    field_0x4E8.b = 0;
+    mLightInfo.mClr.r = 0;
+    mLightInfo.mClr.g = 0;
+    mLightInfo.mClr.b = 0;
 
-    field_0x4EC = 0.0f;
-    field_0x4DC.x = position.x;
-    field_0x4DC.z = position.z;
-    field_0x4DC.y = position.y + 100.0f;
+    mLightInfo.SetScale(0.f);
+    mLightInfo.SetPosition(position);
+    mLightInfo.mPos.y += 100.0f;
 
     return SUCCEEDED;
 }
@@ -1933,7 +1926,6 @@ void dAcTbox_c::executeState_LoadArchive() {
 }
 void dAcTbox_c::finalizeState_LoadArchive() {}
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_209_;
 extern "C" const bool isPouchItem(u16);
 extern "C" dAcItem_c *giveItem3(u16 item, s32);
 
@@ -2239,22 +2231,22 @@ void dAcTbox_c::unsetShouldCloseFlag() {
 void dAcTbox_c::fn_8026D370() {
     if (isNotSmall()) {
         field_0x11F0 = 1;
-        BlurAndPaletteManager::GetInstance().fn_800223A0(&field_0x4DC);
+        BlurAndPaletteManager::GetInstance().fn_800223A0(&mLightInfo);
     }
 }
 
 void dAcTbox_c::fn_8026D3C0() {
     if (mAnmChr.isStop() && mAnmTexSrt1.isStop(0) && mAnmMatClr2.isStop(0)) {
         field_0x11F0 = 0;
-        BlurAndPaletteManager::GetInstance().fn_80022440(&field_0x4DC);
+        BlurAndPaletteManager::GetInstance().fn_80022440(&mLightInfo);
     } else {
         mAnmChr.play();
         mAnmTexSrt1.play();
         mAnmMatClr2.play();
-        field_0x4E8.r = 0xAA;
-        field_0x4E8.g = 0x96;
-        field_0x4E8.b = 0x96;
-        field_0x4EC = 125.0f;
+        mLightInfo.mClr.r = 0xAA;
+        mLightInfo.mClr.g = 0x96;
+        mLightInfo.mClr.b = 0x96;
+        mLightInfo.SetScale(125.0f);
     }
 }
 
@@ -2373,10 +2365,10 @@ void dAcTbox_c::unregisterDowsing() {
     }
 }
 
-extern "C" u16 PARTICLE_RESOURCE_ID_MAPPING_208_;
-
 void dAcTbox_c::spawnAppearEffect() {
-    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_208_, position, &rotation, nullptr, nullptr, nullptr, 0, 0);
+    dJEffManager_c::spawnEffect(
+        PARTICLE_RESOURCE_ID_MAPPING_208_, position, &rotation, nullptr, nullptr, nullptr, 0, 0
+    );
 }
 
 bool dAcTbox_c::checkIsClear() const {
@@ -2393,17 +2385,26 @@ bool dAcTbox_c::checkIsClear() const {
         mVec3_c(-50.0f, 500.0f, -50.0f),
     };
     mVec3_c points[4];
+
+    mVec3_c *offs = offsets;
+    mVec3_c *pnt = points;
     for (u32 i = 0; i <= 3; i++) {
-        fn_8026DAD0(&offsets[i], &points[i]);
+        fn_8026DAD0(offs, pnt);
+        offs++;
+        pnt++;
     }
     static const int fsIdxes[] = {0, 0, 1, 1};
+
     bool isClear = true;
-    for (u32 i = 0; isClear && i <= 3;) {
+    u32 i = 0;
+    const int *idx = fsIdxes;
+    while (isClear && i <= 3) {
         // @bug should this be points[i] instead?
-        if (isBelowGroundAtPos(fs[fsIdxes[i]], points[0])) {
+        if (isBelowGroundAtPos(fs[*idx], points[0])) {
             isClear = false;
         } else {
             i++;
+            idx++;
         }
     }
 

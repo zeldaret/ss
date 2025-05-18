@@ -178,8 +178,8 @@ public:
     /* vt 0x218 */ virtual void isinMpPosePower();
     /* vt 0x21C */ virtual void isPushingBlock();
     /* vt 0x220 */ virtual void getRidingActor();
-    /* vt 0x224 */ virtual void isRidingBall();
-    /* vt 0x228 */ virtual void getRidingMinecartActor();
+    /* vt 0x224 */ virtual bool isRidingBall() const;
+    /* vt 0x228 */ virtual dAcObjBase_c *getRidingMinecartActor() const;
     /* vt 0x22C */ virtual void getTurnableSwitch();
     /* vt 0x230 */ virtual void vt_0x230();
     /* vt 0x234 */ virtual void vt_0x234();
@@ -191,7 +191,7 @@ public:
     /* vt 0x24C */ virtual void vt_0x24C();
     /* vt 0x250 */ virtual void vt_0x250();
     /* vt 0x254 */ virtual void isAttackingUnderground();
-    /* vt 0x258 */ virtual void vt_0x258();
+    /* vt 0x258 */ virtual mAng vt_0x258() const;
     /* vt 0x25C */ virtual void vt_0x25C();
     /* vt 0x260 */ virtual f32 vt_0x260() const;
     /* vt 0x264 */ virtual void getGroosenatorIfIn();
@@ -219,7 +219,7 @@ public:
     /* vt 0x2BC */ virtual void unlinkActorRef9();
     /* vt 0x2C0 */ virtual void vt_0x2C0();
     /* vt 0x2C4 */ virtual void vt_0x2C4();
-    /* vt 0x2C8 */ virtual void isRecovering();
+    /* vt 0x2C8 */ virtual bool isRecovering() const;
     /* vt 0x2CC */ virtual void isDrinkingPotion();
     /* vt 0x2D0 */ virtual void isHealingShield();
     /* vt 0x2D4 */ virtual void isBottleOut();

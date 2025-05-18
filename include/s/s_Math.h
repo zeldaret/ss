@@ -8,6 +8,7 @@ namespace sLib {
 // Names from NSMBW
 float addCalc(float *value, float target, float ratio, float maxStepSize, float minStepSize);
 short addCalcAngle(short *value, short target, short ratio, short maxStepSize, short minStepSize);
+void addCalcAngle(short *value, short target, short ratio, short maxStepSize);
 BOOL chase(short *value, short target, short stepSize);
 BOOL chase(int *value, int target, int stepSize);
 BOOL chase(float *value, float target, float stepSize);

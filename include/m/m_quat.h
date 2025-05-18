@@ -9,6 +9,7 @@ public:
     mQuat_c() {}
     mQuat_c(f32 x, f32 y, f32 z, f32 w) : EGG::Quatf(w, x, y, z) {}
     mQuat_c(const mQuat_c &other) : EGG::Quatf(other.w, other.v) {}
+    mQuat_c(const mVec3_c &v, f32 w) : EGG::Quatf(w, v) {}
 
     mQuat_c &operator=(const EGG::Quatf &rhs) {
         v = rhs.v;

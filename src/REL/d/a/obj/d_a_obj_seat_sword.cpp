@@ -174,7 +174,7 @@ void dAcOSeatSword_c::registerInEvent() {
         vec.rotY(rotation.y);
         vec += position;
         player->setPosRot(vec, ang, 0, 1, 0);
-        mField_0x7E8 = 0;
+        mField_0x7E8.set(0);
         updateSwordMdl();
     }
 }
@@ -212,7 +212,6 @@ void dAcOSeatSword_c::initializeState_Get() {
 void dAcOSeatSword_c::executeState_Get() {}
 void dAcOSeatSword_c::finalizeState_Get() {}
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_76_;
 void dAcOSeatSword_c::actorExecuteCommon() {
     if (checkPlayerHasSword()) {
         return;

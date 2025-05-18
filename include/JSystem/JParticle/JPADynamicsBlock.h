@@ -84,7 +84,7 @@ public:
         vec->set(mpData->mEmitterDir.x, mpData->mEmitterDir.y, mpData->mEmitterDir.z); 
     }
     void getEmitterRot(mAng3_c* vec) const { 
-        vec->set(mpData->mEmitterRot.x, mpData->mEmitterRot.y, mpData->mEmitterRot.z); 
+        vec->set(mpData->mEmitterRot); 
     } 
     s16 getMaxFrame() { return mpData->mMaxFrame; }
     s16 getLifetime() { return mpData->mLifeTime; }

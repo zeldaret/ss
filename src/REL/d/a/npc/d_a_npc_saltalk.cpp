@@ -16,12 +16,6 @@ SPECIAL_ACTOR_PROFILE(NPC_SLTK, dAcNpcSltk_c, fProfile::NPC_SLTK, 0x63, 0, 0);
 
 STATE_VIRTUAL_DEFINE(dAcNpcSltk_c, Wait);
 
-#pragma explicit_zero_data on
-int rot0 = 0;
-int rot1 = 0;
-int rot2 = 0;
-#pragma explicit_zero_data off
-
 int dAcNpcSltk_c::create() {
     return dAcBase_c::create();
 }
@@ -50,9 +44,7 @@ int dAcNpcSltk_c::actorCreate() {
         }
     }
 
-    rotation.x = rot0;
-    rotation.y = rot1;
-    rotation.z = rot2;
+    rotation.set(0, 0, 0);
 
     field_0x758 = getParam2() * 100;
     field_0x75C = getParam3() * 100;
