@@ -232,20 +232,20 @@ int dAcEsm_c::actorCreate() {
             targetFiTextId = 59;
             anim_frame = 0.f;
             mSph.SetAtModifier(AT_MOD_FIRE);
-            mType = 0;
+            mType = SM_RED;
         } break;
         case SM_GREEN_ALT:
         case SM_GREEN:     {
             targetFiTextId = 62;
             anim_frame = 3.f;
-            mType = 1;
+            mType = SM_GREEN;
         } break;
         case SM_YELLOW_ALT:
         case SM_YELLOW:     {
             targetFiTextId = 61;
             anim_frame = 2.f;
             mSph.SetAtModifier(AT_MOD_ELECTRIC);
-            mType = 2;
+            mType = SM_YELLOW;
         } break;
 
         case SM_BLUE: {
