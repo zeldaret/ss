@@ -7,6 +7,7 @@
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_cursor_stick.h"
 #include "m/m2d.h"
+#include "m/m_angle.h"
 
 class dCsBase_c : public dCs_c {
 public:
@@ -38,7 +39,6 @@ public:
 
 private:
     static dCsBase_c *sInstance;
-    static int sfield0x700Init;
     void setCurrentLyt(int lyt);
 
     /* 0x068 */ m2d::ResAccIf_c mResAcc;
@@ -50,7 +50,7 @@ private:
     /* 0x6F4 */ f32 field_0x6F4;
     /* 0x6F8 */ f32 field_0x6F8;
     /* 0x6FC */ f32 field_0x6FC;
-    /* 0x700 */ u16 field_0x700;
+    /* 0x700 */ mAng field_0x700;
     /* 0x702 */ u8 field_0x702;
     /* 0x703 */ u8 field_0x703;
     /* 0x704 */ u8 field_0x704;
