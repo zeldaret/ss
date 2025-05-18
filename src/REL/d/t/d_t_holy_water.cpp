@@ -21,7 +21,7 @@ int dTgHolyWater_c::actorExecute() {
         mDowsingTarget.doUnregister();
     }
     if (isLinkNearby()) {
-        dAcPy_c::LINK->mForceOrPreventActionFlags |= 0x10000000;
+        dAcPy_c::LINK->onForceOrPreventActionFlags(0x10000000);
     }
     return SUCCEEDED;
 }

@@ -50,7 +50,7 @@ bool dAcOSeatSword_c::createHeap() {
         mRes = dAcPy_c::getItemResFile(goddess_sword, heap_allocator);
         TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(goddess_sword), &heap_allocator, 0x120, 1, nullptr));
     } else if (mSubtype == 1) {
-        mRes = dAcPy_c::LINK->mSwordRes;
+        mRes = dAcPy_c::GetLink()->getSwordResFile();
         const char *sword_name = getSwordName(EQUIPPED_SWORD);
         TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(sword_name), &heap_allocator, 0x120, 1, nullptr));
     }
@@ -173,7 +173,7 @@ void dAcOSeatSword_c::registerInEvent() {
         ang.y += someAng;
         vec.rotY(rotation.y);
         vec += position;
-        player->setPosRot(vec, ang, 0, 1, 0);
+        player->setPosRot(&vec, &ang, 0, 1, 0);
         mField_0x7E8.set(0);
         updateSwordMdl();
     }

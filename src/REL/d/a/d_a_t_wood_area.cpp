@@ -55,7 +55,7 @@ extern const u16 PARTICLE_RESOURCE_ID_MAPPING_8_;
 void dAcTWoodArea_c::initializeState_Wait() {}
 
 void dAcTWoodArea_c::executeState_Wait() {
-    if (dAcPy_c::LINK != nullptr && (dAcPy_c::LINK->someFlags_0x350 & 0x2000)) {
+    if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x2000)) {
         // This is a bit messed up
         mVec3_c dist = position - dAcPy_c::LINK->position;
         f32 attachRadius = getAttachRadius();

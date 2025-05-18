@@ -28,9 +28,9 @@ public:
     }
 
 protected:
-    nw4r::g3d::AnmObj *mpAnmObj;
-    EGG::FrmHeap *mpFrameHeap;
-    mAllocator_c mAllocator;
+    /* 0x04 */ nw4r::g3d::AnmObj *mpAnmObj;
+    /* 0x08 */ EGG::FrmHeap *mpFrameHeap;
+    /* 0x0C */ mAllocator_c mAllocator;
 };
 
 } // namespace m3d
