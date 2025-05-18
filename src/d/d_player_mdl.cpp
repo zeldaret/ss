@@ -1173,6 +1173,8 @@ void daPlayerModelBase_c::fn_80061410() {
     alwaysRet0();
 }
 
+// I believe this is the only strong virtual function of daPlayerModelBase_c,
+// and this causes the vtable and all other weak functions to be here
 /* vt 0x114 */ void daPlayerModelBase_c::somethingWithCarriedActorFlags() {
     // TODO
 }
