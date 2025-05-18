@@ -911,8 +911,8 @@ public:
         return true;
     }
     /* vt 0x2EC */ virtual void isOnClawTargetMaybe(s32 arm, mAng &a1, mAng &a2) {
-        a1.setR(0);
-        a2.setR(0);
+        a1 = 0;
+        a2 = 0;
     }
     /* vt 0x2F0 */ virtual bool isMPPose() {
         return false;

@@ -800,9 +800,9 @@ void daPlayerModelBase_c::adjustMainModelWorldMtx(PlayerMainModelNode_e nodeId, 
             // TODO: I'd like this to be a neat ternary...
             // nodeId == PLAYER_MAIN_NODE_HAND_R ? -5461 : -7282;
             mAng rot;
-            rot.setR(-7282);
+            rot = -7282;
             if (nodeId == PLAYER_MAIN_NODE_HAND_R) {
-                rot.setR(-5461);
+                rot = -5461;
             }
             applyWorldRotationMaybe(result, rot, 0, 0, nullptr, false);
         } else if (isOnVines()) {
