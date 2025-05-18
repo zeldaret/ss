@@ -719,12 +719,8 @@ int dAcEsm_c::draw() {
         return SUCCEEDED;
     }
 
-    // Wtf is this ordering...
     s8 var = 0;
-    f32 y = 50.f;
-    f32 x = 0.f;
-    f32 z = 0.f;
-    mQuat_c q(x, y, z, mScale.x * (var + 240.f));
+    mQuat_c q(mVec3_c(0.f, 50.f, 0.f), mScale.x * (var + 240.f));
     drawShadow(mShadowCircle, nullptr, mWorldMtx, &q, -1, -1, -1, -1, -1, position.y - mObjAcch.GetGroundH());
     return SUCCEEDED;
 }
