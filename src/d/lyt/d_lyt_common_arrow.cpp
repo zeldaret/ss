@@ -42,7 +42,7 @@ bool dLytCommonArrow_c::build() {
     void *data = LayoutArcManager::GetInstance()->getLoadedData("CommonArrow");
     mResAcc.attach(data, "");
     mLytBase.build("commonArrow_00.brlyt", &mResAcc);
-    mLytBase.mPriority = 0x86;
+    mLytBase.setPriority(0x86);
 
     for (int i = 0; i < 9; i++) {
         mAnmGroups[i].init(brlanMap[i].mFile, &mResAcc, mLytBase.getLayout(), brlanMap[i].mName);
@@ -87,9 +87,9 @@ bool dLytCommonArrow_c::draw() {
 void dLytCommonArrow_c::setState(s32 state) {
     mType = state;
     if (state == 0) {
-        mLytBase.mPriority = 0x86;
+        mLytBase.setPriority(0x86);
     } else {
-        mLytBase.mPriority = 0x80;
+        mLytBase.setPriority(0x80);
     }
 }
 

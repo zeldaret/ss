@@ -25,6 +25,7 @@
 #include "d/lyt/meter/d_lyt_meter_item_select.h"
 #include "d/lyt/meter/d_lyt_meter_parts.h"
 #include "d/lyt/d_lyt_unknowns.h"
+#include "d/lyt/d_lyt_target_bird.h"
 
 #include "m/m_vec.h"
 // clang-format on
@@ -59,7 +60,6 @@ enum MeterFlag_e {
     METER_BTN_Z = 0x800,
     METER_BTN_0x1000 = 0x1000,
 
-
     METER_BTN_CROSS = METER_BTN_CROSS_UP | METER_BTN_CROSS_DOWN | METER_BTN_CROSS_LEFT | METER_BTN_CROSS_RIGHT,
 };
 
@@ -67,6 +67,11 @@ class dLytMeterMain_c {
     friend class dLytMeter_c;
 
 public:
+    enum BasicPosition_e {
+        POSITION_NORMAL = 0,
+        POSITION_MAP = 1,
+    };
+
     dLytMeterMain_c();
     virtual ~dLytMeterMain_c() {}
 
@@ -168,8 +173,8 @@ private:
     /* 0x136DC */ mVec3_c mRupyPositions[7];
     /* 0x13730 */ mVec3_c mShieldPos;
     /* 0x1373C */ mVec3_c mRupyPos;
-    /* 0x13748 */ s32 field_0x13748;
-    /* 0x1374C */ s32 field_0x1374C;
+    /* 0x13748 */ s32 mBasicPosition;
+    /* 0x1374C */ s32 mSavedBasicPosition;
     /* 0x13750 */ s32 field_0x13750;
     /* 0x13754 */ s32 field_0x13754;
     /* 0x13758 */ s32 mShieldPosIndex;
@@ -263,6 +268,14 @@ public:
         return mMain.field_0x13770;
     }
 
+    bool getMeterField_0x13773() const {
+        return mMain.field_0x13773;
+    }
+
+    void setMeterField_0x13773(bool value) {
+        mMain.field_0x13773 = value;
+    }
+
     bool getMeterField_0x13774() const {
         return mMain.field_0x13774;
     }
@@ -291,11 +304,23 @@ public:
         mFlags = 0xFFFFFFFF;
     }
 
-    static s32 getCrossBtn0x7BF8() {
+    static dLytMeterCrossBtn_c::CrossIcon_e getCrossIconDown() {
         if (sInstance != nullptr) {
-            return sInstance->mMain.mCrossBtn.getField_0x620();
+            return sInstance->mMain.mCrossBtn.getIconDown();
         } else {
-            return 6;
+            return dLytMeterCrossBtn_c::CROSS_ICON_NONE;
+        }
+    }
+
+    static void setCrossIconDown(dLytMeterCrossBtn_c::CrossIcon_e icon) {
+        if (sInstance != nullptr) {
+            sInstance->mMain.mCrossBtn.setIconDown(icon);
+        }
+    }
+
+    static void setCrossIconTop(dLytMeterCrossBtn_c::CrossIcon_e icon) {
+        if (sInstance != nullptr) {
+            sInstance->mMain.mCrossBtn.setIconTop(icon);
         }
     }
 
@@ -437,13 +462,21 @@ public:
         }
     }
 
+    dLytMeterMain_c::BasicPosition_e getBasicPosition() const {
+        return (dLytMeterMain_c::BasicPosition_e)mMain.mBasicPosition;
+    }
+
+    void setBasicPosition(dLytMeterMain_c::BasicPosition_e pos) {
+        mMain.mBasicPosition = pos;
+    }
+
 private:
     /* 0x00004 */ d2d::ResAccIf_c mResAcc;
     /* 0x00374 */ dLytMeterEventSkip_c *mpEventSkip;
     /* 0x00378 */ dLytMeterMain_c mMain;
     /* 0x13B3C */ dLytDobutton_c *mpDoButton;
     /* 0x13B40 */ LytDoButtonRelated *mpDoButtonRelated;
-    /* 0x13B44 */ LytBirdButtonRelated *mpBirdRelated;
+    /* 0x13B44 */ dLytTargetBird_c *mpTargetBird;
     /* 0x13B48 */ bool mVisible;
     /* 0x13B49 */ u8 _0x13B49[0x13B50 - 0x13B49];
     /* 0x13B50 */ s32 mFlags;

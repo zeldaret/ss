@@ -6,6 +6,7 @@
 #include "nw4r/lyt/lyt_arcResourceAccessor.h"
 #include "nw4r/lyt/lyt_drawInfo.h"
 #include "nw4r/lyt/lyt_layout.h"
+
 #include "nw4r/ut.h" // IWYU pragma: export
 
 namespace m2d {
@@ -58,6 +59,10 @@ public:
 
     inline f32 getFrame() const {
         return mCurrFrame;
+    }
+
+    inline f32 getRate() const {
+        return mRate;
     }
 
     inline void setCurrFrame(f32 arg) {
@@ -183,9 +188,14 @@ public:
         mPriority = p;
     }
 
-    /* 0x0C */ u8 mPriority;
+    u8 getPriority() const {
+        return mPriority;
+    }
 
     void addToDrawList();
+
+protected:
+    /* 0x0C */ u8 mPriority;
 };
 
 class Simple_c : public Base_c {
@@ -217,7 +227,6 @@ private:
     mVec3_c mVec;
     u32 field_0x94;
 };
-
 
 void getAllocator();
 

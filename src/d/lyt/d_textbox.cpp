@@ -5,6 +5,7 @@
 #include "d/d_message.h"
 #include "d/d_tag_processor.h"
 #include "d/d_textunk.h"
+#include "d/lyt/msg_window/d_lyt_msg_window.h"
 #include "libms/msgfile.h"
 #include "m/m_color.h"
 #include "nw4r/lyt/lyt_common.h"
@@ -500,7 +501,7 @@ void dTextBox_c::init() {
     SetFontSize(sz);
     mMyTextScale = sz;
     mMyScale = 1.0f;
-    mWindowSubtype = 0x24;
+    mWindowSubtype = dLytMsgWindow_c::MSG_WINDOW_36;
     field_0x201 = true;
 }
 

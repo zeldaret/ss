@@ -230,6 +230,10 @@ struct AnmGroupBase_c {
         mpFrameCtrl->setRate(rate);
     }
 
+    inline f32 getRate() const {
+        return mpFrameCtrl->getRate();
+    }
+
     inline bool isEnabled() const {
         return (mFlags & ANMGROUP_FLAG_ENABLE) != 0;
     }

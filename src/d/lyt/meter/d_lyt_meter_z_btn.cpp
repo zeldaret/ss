@@ -35,7 +35,7 @@ void dLytMeterZBtn_c::executeState_Wait() {
     if (field_0x1C4) {
         if (field_0x1B8) {
             bool bDoUpdate = true;
-            if (field_0x1B4 != LytDoButtonRelated::DO_NONE) {
+            if (field_0x1B4 != LytDoButtonRelated::ACT_IE_NONE) {
                 if (timer <= 0) {
                     mAnm[Z_BTN_ANIM_INPUT].setBackwardsOnce();
                     mAnm[Z_BTN_ANIM_INPUT].setToStart();
@@ -51,7 +51,7 @@ void dLytMeterZBtn_c::executeState_Wait() {
                 field_0x1B0 = field_0x1B4;
             }
         } else {
-            if (field_0x1B4 != LytDoButtonRelated::DO_NONE) {
+            if (field_0x1B4 != LytDoButtonRelated::ACT_IE_NONE) {
                 setMessage(field_0x1B4);
             }
             field_0x1B0 = field_0x1B4;
@@ -76,7 +76,7 @@ void dLytMeterZBtn_c::finalizeState_On() {}
 void dLytMeterZBtn_c::initializeState_Active() {}
 void dLytMeterZBtn_c::executeState_Active() {
     if (field_0x1B4 != field_0x1B0 || !field_0x1B8) {
-        if (field_0x1B4 == LytDoButtonRelated::DO_NONE || !field_0x1B8) {
+        if (field_0x1B4 == LytDoButtonRelated::ACT_IE_NONE || !field_0x1B8) {
             mAnm[Z_BTN_ANIM_INPUT].setForwardOnce();
             mAnm[Z_BTN_ANIM_INPUT].setFrame(0.0f);
             mAnm[Z_BTN_ANIM_INPUT].setAnimEnable(true);
@@ -88,7 +88,7 @@ void dLytMeterZBtn_c::executeState_Active() {
             setMessage(field_0x1B4);
         }
         field_0x1B0 = field_0x1B4;
-    } else if (field_0x1B0 == LytDoButtonRelated::DO_NONE) {
+    } else if (field_0x1B0 == LytDoButtonRelated::ACT_IE_NONE) {
         mAnm[Z_BTN_ANIM_INPUT].setForwardOnce();
         mAnm[Z_BTN_ANIM_INPUT].setFrame(0.0f);
         mAnm[Z_BTN_ANIM_INPUT].setAnimEnable(true);
@@ -182,14 +182,14 @@ bool dLytMeterZBtn_c::execute() {
             mAnm[Z_BTN_ANIM_INPUT].setAnimEnable(true);
             mStateMgr.changeState(StateID_Off);
         }
-        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::DO_NONE);
+        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::ACT_IE_NONE);
         return true;
     }
     field_0x1C4 = true;
     if ((!fn_80081FE0(dScGame_c::getCamera(0)->getField_0xD98(), "mogu") || AttentionManager::GetInstance()->checkLink2()) &&
         LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_Z) == 0x67) {
         field_0x1C4 = false;
-        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::DO_NONE);
+        LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::ACT_IE_NONE);
     }
     field_0x1B4 = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_Z);
     field_0x1B8 = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_Z) &&
@@ -249,11 +249,11 @@ void dLytMeterZBtn_c::setMessage(s32 id) {
         buf[i] = 0;
     }
 
-    if (id < LytDoButtonRelated::DO_NONE) {
-        if (id < 0x5D) {
+    if (id < LytDoButtonRelated::ACT_IE_NONE) {
+        if (id < LytDoButtonRelated::ACT_IE_SEPARATOR) {
             sprintf(buf, "ACT_INFO_%03d", sActIds[id]);
         } else {
-            s32 id2 = id - 0x5E;
+            s32 id2 = id - LytDoButtonRelated::ACT_IE_SEPARATOR - 1;
             sprintf(buf, "ACT_ETC_%03d", sActIds[id2]);
         }
 
