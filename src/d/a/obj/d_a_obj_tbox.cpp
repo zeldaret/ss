@@ -983,8 +983,8 @@ int dAcTbox_c::create() {
         case 3:  field_0x120A = 3; break;
         default: field_0x120A = 3; break;
     }
-    rotation.z = 0;
-    rotation.x = 0;
+    rotation.z.set(0);
+    rotation.x.set(0);
 
     // This part of the code checks if there's another chest with similar properties
     // and only keeps one of them.

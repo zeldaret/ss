@@ -12,6 +12,7 @@
 #include "d/d_stage.h"
 #include "d/flag/enemyflag_manager.h"
 #include "egg/core/eggAllocator.h"
+#include "egg/math/eggMath.h"
 #include "f/f_base.h"
 #include "f/f_list_nd.h"
 #include "m/m_angle.h"
@@ -419,22 +420,21 @@ bool dAcBase_c::getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDis
 bool dAcBase_c::getDistanceAndAngleToActor(
     dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX
 ) {
-    f32 distSquared = 3.402823e+38f;
-    mAng angleToActorY, angleToActorX;
+    f32 distSquared = EGG::Math<f32>::epsilon();
     bool isWithinRange = false;
 
-    angleToActorY = 0;
-    angleToActorX = 0;
+    mAng angleToActorY(0), angleToActorX(0);
 
     if (actor != nullptr) {
         distSquared = PSVECSquareDistance(position, actor->position);
-        angleToActorY = cLib::targetAngleY(position, actor->position);
-        angleToActorX = cLib::targetAngleX(position, actor->position);
+        angleToActorY.set(cLib::targetAngleY(position, actor->position));
+        angleToActorX.set(cLib::targetAngleX(position, actor->position));
 
-        // Changing the `labs` call to take a short fixes this...
-        if ((distSquared <= distThresh * distThresh) && (labs(mAng((int)(rotation.y - angleToActorY))) <= yAngle) &&
-            (labs(mAng((int)(rotation.x - angleToActorX))) <= xAngle)) {
-            isWithinRange = true;
+        if ((distSquared <= distThresh * distThresh)) {
+            if ((labs(mAng(rotation.y.diff(angleToActorY))) <= yAngle) &&
+                (labs(mAng(rotation.x.diff(angleToActorX))) <= xAngle)) {
+                isWithinRange = true;
+            }
         }
     }
 

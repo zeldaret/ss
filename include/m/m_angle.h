@@ -113,6 +113,11 @@ struct mAng {
         return rad * (65536.0f / (2.f * M_PI));
     }
 
+    // Try not to use
+    s32 diff(const mAng &other) {
+        return mVal - other.mVal;
+    }
+
     s16 mVal;
 
 private:
