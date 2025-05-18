@@ -76,6 +76,11 @@ public:
         }
     }
 
+    // Not sure
+    void SetMtxUnchecked(const nw4r::math::MTX34 *arg) {
+        PSMTXCopy(*arg, *mpM);
+    }
+
 private:
     math::MTX34 *mpM; // at 0x0
     math::VEC3 *mpS;  // at 0x4

@@ -491,7 +491,8 @@ bool dLytMeterCrossBtn_c::execute() {
 
     if (field_0x637 != 0) {
         if (mIconDown == 0) {
-            f32 frame = dAcPy_c::GetLink2()->getAnmMatClrFrame();
+            // Start UI animation together with sword animation on Link's back
+            f32 frame = dAcPy_c::GetLink2()->getSwordAnmFrame();
             if (frame == 0.0f) {
                 mAnm[CROSS_BTN_ANIM_CALL_0].setToEnd();
                 if (!mAnm[CROSS_BTN_ANIM_CALL_0].isEnabled()) {

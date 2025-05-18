@@ -148,6 +148,15 @@ public:
         return !(ref().flag & ResShpData::FLAG_INVISIBLE);
     }
 
+    // Not sure, copied from ResNode
+    void SetVisibility(bool visible) {
+        if (visible) {
+            ptr()->flag &= ~ResShpData::FLAG_INVISIBLE;
+        } else {
+            ptr()->flag |= ResShpData::FLAG_INVISIBLE;
+        }
+    }
+
     void DCStore(bool sync);
 };
 

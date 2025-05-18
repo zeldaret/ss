@@ -47,6 +47,14 @@ public:
         return mMaxDurability;
     }
 
+    void setMaxDurability(f32 durability) {
+        mMaxDurability = durability;
+    }
+
+    void setShieldId(s32 id) {
+        mShieldId = id;
+    }
+
 private:
     s32 getLytFrameForShield(s32) const;
     void setLevel(f32 level);
@@ -77,7 +85,7 @@ private:
     /* 0x30C */ u8 field_0x30C;
     /* 0x30D */ u8 field_0x30D;
     /* 0x30E */ u8 field_0x30E;
-    /* 0x310 */ s32 mShieldType;
+    /* 0x310 */ s32 mShieldId;
     /* 0x314 */ s32 mSavedShieldType;
     /* 0x318 */ s32 field_0x318;
     /* 0x31C */ u8 field_0x31C;

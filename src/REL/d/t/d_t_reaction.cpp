@@ -7,6 +7,7 @@
 #include "d/col/c/c_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_pouch.h"
+#include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
 #include "m/m_angle.h"
 #include "toBeSorted/small_sound_mgr.h"
@@ -30,8 +31,6 @@ bool dTgReaction_c::createHeap() {
     return true;
 }
 
-extern "C" bool isHeroMode();
-
 int dTgReaction_c::create() {
     // Note the double _c here
     if (!initAllocatorWork1Heap(0x1000, "dTgReaction_c_c::m_allocator", 0x20)) {
@@ -54,7 +53,7 @@ int dTgReaction_c::create() {
         return FAILED;
     }
 
-    if (isHeroMode()) {
+    if (dScGame_c::isHeroMode()) {
         if (getParam0x10() == 1) {
             field_0x4DE = 1;
         }

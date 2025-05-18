@@ -136,6 +136,7 @@ public:
     STATE_VIRTUAL_FUNC_DECLARE(dScGame_c, Stanby); // sic
     STATE_VIRTUAL_FUNC_DECLARE(dScGame_c, Action);
 
+    static bool isHeroMode();
     static bool isCurrentStage(const char *stageName);
     static bool isStageSkyloftLayer20();
     static bool isInCredits();

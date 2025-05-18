@@ -21,6 +21,11 @@ public:
     inline MEMAllocator *getHandle() {
         return static_cast<MEMAllocator *>(this);
     }
+
+    Heap *getHeap() {
+        return mHeap;
+    }
+
     /* 0x14 */ Heap *mHeap;
     /* 0x18 */ s32 align;
 };

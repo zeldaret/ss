@@ -5,7 +5,6 @@
 #include "m/m3d/m_scnleaf.h"
 #include "nw4r/g3d/g3d_scnobj.h"
 
-
 class dScnCallback_c : public nw4r::g3d::IScnObjCallback {
 public:
     dScnCallback_c(dAcObjBase_c *arg) : mpActor(arg) {}

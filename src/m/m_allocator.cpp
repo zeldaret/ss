@@ -63,19 +63,12 @@ void mHeapAllocator_c::destroyHeap() {
     }
 }
 
-inline EGG::Heap *getHeapOfKind(EGG::Heap *heap, EGG::Heap::eHeapKind kind) {
-    if (heap != nullptr && heap->getHeapKind() == kind) {
-        return heap;
-    }
-    return nullptr;
-}
-
 s32 mHeapAllocator_c::adjustFrmHeap() {
     EGG::Heap *heap = mHeap;
     if (heap == mHeap::g_assertHeap) {
         return 0;
     }
-    return mHeap::adjustFrmHeap(static_cast<EGG::FrmHeap *>(getHeapOfKind(heap, EGG::Heap::HEAP_KIND_FRAME)));
+    return mHeap::adjustFrmHeap(EGG::Heap::toFrmHeap(heap));
 }
 
 s32 mHeapAllocator_c::adjustExpHeap() {
@@ -83,7 +76,7 @@ s32 mHeapAllocator_c::adjustExpHeap() {
     if (heap == mHeap::g_assertHeap) {
         return 0;
     }
-    return mHeap::adjustExpHeap(static_cast<EGG::ExpHeap *>(getHeapOfKind(heap, EGG::Heap::HEAP_KIND_EXPANDED)));
+    return mHeap::adjustExpHeap(EGG::Heap::toExpHeap(heap));
 }
 
 bool mHeapAllocator_c::createNewTempFrmHeap(s32 size, EGG::Heap *newHeap, char *heapName, s32 align, u32 attrs) {
@@ -98,7 +91,7 @@ bool mHeapAllocator_c::createNewTempFrmHeap(s32 size, EGG::Heap *newHeap, char *
 void mHeapAllocator_c::adjustFrmHeapRestoreCurrent() {
     mHeap::restoreCurrentHeap();
     EGG::Heap *heap = mHeap;
-    mHeap::adjustFrmHeap(static_cast<EGG::FrmHeap *>(getHeapOfKind(heap, EGG::Heap::HEAP_KIND_FRAME)));
+    mHeap::adjustFrmHeap(EGG::Heap::toFrmHeap(heap));
 }
 
 void *operator new[](size_t size, mAllocator_c *allocator) {

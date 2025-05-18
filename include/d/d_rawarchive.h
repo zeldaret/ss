@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "m/m_dvd.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "sized_string.h"
 
 class ArcCallbackHandlerBase {
@@ -22,6 +23,8 @@ public:
     ArcCallbackHandler() {}
     static ArcCallbackHandler sInstance;
 };
+
+void BindSystemModelsAndLighting(nw4r::g3d::ResFile);
 
 // TODO: loading status could be an enum (-2/-1/0/+1)
 

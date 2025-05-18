@@ -43,7 +43,7 @@ public:
             mpBaseCallback = cb;
         }
 
-    private:
+    protected:
         /* 0x04 */ calcRatio_c mCalcRatio;
         /* 0x20 */ int mNumNode;
         /* 0x24 */ nw4r::g3d::ChrAnmResult *mpNodes;

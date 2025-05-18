@@ -32,6 +32,12 @@ public:
     operator nw4r::math::MTX34 &() {
         return *(nw4r::math::MTX34 *)(this);
     }
+    operator const nw4r::math::MTX34 *() const {
+        return (nw4r::math::MTX34 *)(this);
+    }
+    operator const  nw4r::math::MTX34 &() const {
+        return *(nw4r::math::MTX34 *)(this);
+    }
 
     void XrotS(const mAng &angle); ///< Generates a rotation matrix for the X axis with the given angle.
     void XrotM(const mAng &angle); ///< Rotates the matrix on the X axis by the given angle.
