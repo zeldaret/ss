@@ -44,7 +44,7 @@ int dAcNpcSltk_c::actorCreate() {
         }
     }
 
-    rotation.setR(0, 0, 0);
+    rotation.set(0, 0, 0);
 
     field_0x758 = getParam2() * 100;
     field_0x75C = getParam3() * 100;

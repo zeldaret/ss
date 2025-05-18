@@ -125,8 +125,7 @@ int dAcEsm_c::actorCreate() {
 
     CREATE_ALLOCATOR(dAcEsm_c);
 
-    angle.setZ(0);
-    rotation.setZ(angle.z);
+    rotation.z = angle.x = 0;
 
     mBombRef.unlink();
 
@@ -199,11 +198,11 @@ int dAcEsm_c::actorCreate() {
 
     BlurAndPaletteManager::GetPInstance()->fn_800225F0(&mLightInfo);
     if (field_0xBBF == 1) {
-        rotation.setX(0x8000);
+        rotation.x = 0x8000;
         field_0xBCC = 1;
     }
 
-    mRotUnk.setR();
+    mRotUnk.clear();
 
     mEffArr[0].init(this);
     mEffArr[1].init(this);
@@ -766,7 +765,7 @@ void dAcEsm_c::initializeState_Walk() {
 
     field_0xBB8 = 0;
     field_0xB98 = 0;
-    rotation.setX(0);
+    rotation.x = 0;
 
     Set_0xBBC(2);
     field_0xBAA = angle.y;
@@ -1275,7 +1274,7 @@ void dAcEsm_c::fn_187_61B0(u8 param0) {
     switch (param0) {
         case 0: {
             mMtx_c mtx_scale;
-            ang.setR(0, 0, 0);
+            ang.set(0, 0, 0);
             ang.z += player->vt_0x258();
             MTXTrans(mtx_trans, mHitPos.x, mHitPos.y, mHitPos.z);
             mtx_trans.YrotM(rotation.y);
@@ -1437,8 +1436,8 @@ void dAcEsm_c::fn_187_6C20(bool param0) {
 
     if (!param0) {
         dCamera_c *cam = dScGame_c::getCamera(0);
-        angle.setY(cLib::targetAngleY(cam->getPositionMaybe(), cam->getField_0x78()));
-        angle.y += cM::rndFX(16384.f);
+        angle.y = cLib::targetAngleY(cam->getPositionMaybe(), cam->getField_0x78());
+        angle.addY(cM::rndFX(16384.f));
     }
 
     field_0xBCE = 1;

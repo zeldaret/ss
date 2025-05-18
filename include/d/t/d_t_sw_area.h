@@ -40,9 +40,6 @@ private:
     f32 scale;
     u16 setStoryflag;
     u16 unsetStoryflag;
-
-    static u32 sDefaultRotX;
-    static u32 sDefaultRotZ;
 };
 
 #endif

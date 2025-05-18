@@ -174,7 +174,7 @@ void dAcOSeatSword_c::registerInEvent() {
         vec.rotY(rotation.y);
         vec += position;
         player->setPosRot(vec, ang, 0, 1, 0);
-        mField_0x7E8 = 0;
+        mField_0x7E8.set(0);
         updateSwordMdl();
     }
 }

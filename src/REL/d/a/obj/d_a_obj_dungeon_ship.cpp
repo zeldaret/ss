@@ -154,7 +154,7 @@ int dAcODungeonShip_c::create() {
     clearActorProperty(0x1);
     mAppearEventFromParam = (params >> 0x18);
     field_0x849 = rotation.x;
-    rotation.setX(0);
+    rotation.x = 0;
     updateMatrix();
     mBg.Move();
     return SUCCEEDED;

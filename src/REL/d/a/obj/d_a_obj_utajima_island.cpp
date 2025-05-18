@@ -48,8 +48,7 @@ int dAcOutajimaIsland_c::actorCreate() {
     s32 v = getParm2() * 30;
     field_0x5BC = mAng::fromDeg(v);
     field_0x5BE.x = field_0x5BC;
-    field_0x5BE.z = 0x88;
-    field_0x5BE.y = 0x88;
+    field_0x5BE.y = field_0x5BE.z = mAng(0x88);
 
     movePlatforms();
     CREATE_ALLOCATOR(dAcOutajimaIsland_c);

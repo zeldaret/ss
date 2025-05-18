@@ -155,7 +155,7 @@ UNKTYPE dAcOivyRope_c::fn_256_4C80(UNKTYPE) {}
 UNKTYPE dAcOivyRope_c::fn_256_4CA0(UNKTYPE) {}
 
 int dAcOivyRope_c::createBase() {
-    rotation.set(0, 0, 0);
+    rotation = 0;
     f32 temp = 2000.f - 750.f;
     mDistance = 2000.f;
     mOldDistance = 2000.f;

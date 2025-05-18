@@ -7,6 +7,7 @@
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_util_items.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "m/m_angle.h"
 #include "nw4r/lyt/lyt_group.h"
 #include "nw4r/math/math_types.h"
 #include "sized_string.h"
@@ -767,7 +768,7 @@ bool dLytMeterMinusBtn_c::build(d2d::ResAccIf_c *resAcc) {
     }
 
     for (s32 i = 0; i < 4; i++) {
-        mEffectsRot[i].set(0);
+        mEffectsRot[i] = 0;
         mSlotForEffect[i] = -1;
         mEffects[i].init(dLytControlGame_c::getInstance());
     }

@@ -14,7 +14,7 @@ int dTgShipWindow_c::create() {
     mOffEventId = (params >> 16) & 0xFF;
     mOnEventId = (params >> 24) & 0xFF;
     mAlwaysPlayEvent = rotation.x & 1;
-    rotation.setX(0);
+    rotation.x = 0;
     if (SceneflagManager::sInstance->checkBoolFlag(roomid, mInitialStateFlag)) {
         SceneflagManager::sInstance->setFlag(roomid, mOutputStateFlagBase);
         mStateMgr.changeState(StateID_On);

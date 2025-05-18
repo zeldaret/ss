@@ -48,8 +48,8 @@ int dTgReaction_c::create() {
     }
 
     field_0x4E0 = rotation.x & 0xFF;
-    angle.setX(0);
-    rotation.setX(angle.x);
+    rotation.x = angle.x = 0;
+
     if (field_0x4E0 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, field_0x4E0)) {
         return FAILED;
     }

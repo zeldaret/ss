@@ -14,8 +14,8 @@ int dTgSwArea_c::create() {
 
     setStoryflag = getSetStoryflag();
     unsetStoryflag = getUnsetStoryflag();
-    rotation.setX(0);
-    rotation.setZ(0);
+    rotation.x = 0;
+    rotation.z = 0;
 
     matrixCreateFromPosRotYScale(area, position, rotation.y, mScale, nullptr, 0.0f);
     return SUCCEEDED;
