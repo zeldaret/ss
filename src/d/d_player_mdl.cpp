@@ -35,13 +35,6 @@
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/stage_render_stuff.h"
 
-// TODO: This file contains the vtable and a bunch of weak functions
-// for daPlayerModelBase_c. How do we generate the vtable here though?
-// All virtual methods of daPlayerModelBase_c seem to be inline, so
-// there's not much opportunity to get the vtable to be emitted here.
-// An explicit constructor seems unlikely given that we assume that the vtable
-// of the base class is at 80533128, much later in the binary.
-
 static u8 sSavedHandMats[2] = {};
 static u8 sHandMats[14] = {};
 
@@ -559,7 +552,7 @@ static const char *sShieldModelsBase[] = {
 
 static const char *sShieldModelsBroken[] = {
     "EquipShieldWoodBroken", "EquipShieldIronBroken", "EquipShieldHolyBroken",
-    "EquipShieldHylia", "EquipShieldWoodBroken",
+    "EquipShieldHylia",      "EquipShieldWoodBroken",
 };
 
 extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_529_;
@@ -1038,7 +1031,7 @@ void daPlayerModelBase_c::setShieldTransform(bool inHand) {
     } else {
         mMainMdl.getNodeWorldMtx(PLAYER_MAIN_NODE_POD, targetTransform);
         mMtx_c mtx2;
-        MTXTrans(mtx2, 4.2f, 4.4f, 20.0f);
+        MTXTrans(mtx2, 4.2f, -4.4f, 20.0f);
         MTXConcat(targetTransform, mtx2, targetTransform);
         targetTransform.ZYXrotM(mAng::fromDeg(91.0f), mAng::fromDeg(-123.0f), 0);
     }
@@ -1131,7 +1124,7 @@ void daPlayerModelBase_c::syncSoundWithAnim() {
     getSoundSource()->setFrame(frame);
 }
 
-void daPlayerModelBase_c::registMassObj(cCcD_Obj* obj, u8 priority) {
+void daPlayerModelBase_c::registMassObj(cCcD_Obj *obj, u8 priority) {
     dCcS::GetInstance()->Set(obj);
     dCcS::GetInstance()->GetMassMng().SetObj(obj, priority);
 }
@@ -1187,12 +1180,18 @@ void daPlayerModelBase_c::updateModelColliders() {
 }
 
 void daPlayerModelBase_c::updateCachedPositions() {
-    static const Vec sPos1 = {12.0f, -8.0f, 0.0f};
-    mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sPos1, poscopy2);
     static const Vec sPosAboveLink = {0.0f, -8.0f, 0.0f};
-    mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sPosAboveLink, mPositionAboveLink);
+    static const Vec sPos1 = {12.0f, -8.0f, 0.0f};
     static const Vec sHeadPos = {0.0f, -28.0f, 0.0f};
+
+    mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sPos1, poscopy2);
+    mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sPosAboveLink, mPositionAboveLink);
     mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sHeadPos, mHeadTranslation);
+
+    static const Vec sUnusedVec1 = {0.0f, 55.75f, 15.0f};
+    static const Vec sUnusedVec2 = {9.5f, 47.0f, 24.5f};
+    static const Vec sUnusedVec3 = {1.75f, 55.0f, 25.5f};
+    static const Vec sUnusedVec4 = {0.0f, 55.0f, 25.0f};
 
     mMainMdl.getNodeWorldMtxMultVecZero(PLAYER_MAIN_NODE_TOE_L, mToeTranslation[0]);
     mMainMdl.getNodeWorldMtxMultVecZero(PLAYER_MAIN_NODE_TOE_R, mToeTranslation[1]);
