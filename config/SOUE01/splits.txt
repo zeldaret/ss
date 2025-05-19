@@ -238,9 +238,24 @@ d/d_pad.cpp:
 d/d_pad_player.cpp:
 	.text       start:0x80059CE0 end:0x8005B6E0 align:16
 
-d/d_player.cpp:
-	.text       start:0x8005B6E0 end:0x80061B10 align:16
-	.ctors      start:0x804DB688 end:0x804DB690
+d/d_player_act.cpp:
+	.text       start:0x8005B6E0 end:0x8005CE8C align:16
+	.ctors      start:0x804DB688 end:0x804DB68C
+	.data       start:0x8050D620 end:0x8050D690
+	.sdata      start:0x80571C70 end:0x80571C80
+	.sbss       start:0x805751F0 end:0x80575208
+	.sdata2     start:0x80577010 end:0x80577020
+	.bss        start:0x805A06B0 end:0x805A06C8
+
+d/d_player_mdl.cpp:
+	.text       start:0x8005CE90 end:0x80061B10 align:16
+	.ctors      start:0x804DB68C end:0x804DB690
+	.rodata     start:0x804DE1E8 end:0x804E0B38
+	.data       start:0x8050D690 end:0x8050DDD8
+	.sdata      start:0x80571C80 end:0x80571D08
+	.sbss       start:0x80575208 end:0x80575220
+	.sdata2     start:0x80577020 end:0x80577680
+	.bss        start:0x805A06C8 end:0x805A06F0
 
 d/d_rawarchive.cpp:
 	.text       start:0x80061B10 end:0x800629D0 align:16
