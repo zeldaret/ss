@@ -459,13 +459,13 @@ void dAcOtubo_c::destroy() {
     mActorCarryInfo.fn_80050EA0(this);
 
     dEmitterBase_c *fx_thing = dJEffManager_c::spawnEffect(
-        PARTICLE_RESOURCE_ID_MAPPING_209_, poscopy2, nullptr, nullptr, nullptr, nullptr, 0, 0
+        PARTICLE_RESOURCE_ID_MAPPING_211_, poscopy2, nullptr, nullptr, nullptr, nullptr, 0, 0
     );
     if (fx_thing) {
         fx_thing->attachEmitterCallbackId(mSubtype != 0 ? dJEffManager_c::TsuboB : dJEffManager_c::TsuboA);
     }
     fx_thing = dJEffManager_c::spawnEffect(
-        PARTICLE_RESOURCE_ID_MAPPING_109_, position, nullptr, nullptr, nullptr, nullptr, 0, 0
+        PARTICLE_RESOURCE_ID_MAPPING_116_, position, nullptr, nullptr, nullptr, nullptr, 0, 0
     );
     if (fx_thing) {
         fx_thing->bindShpEmitter(mSubtype != 0 ? dJEffManager_c::TsuboB : dJEffManager_c::TsuboA, false);
@@ -573,7 +573,7 @@ void dAcOtubo_c::fn_272_2670() {
         static const s16 unk = {0}; // needed for rodata ordering
         if (!cM::isZero(mField_0x9CA)) {
             angle.y = (*(s16 *)((u8 *)this + 0x9CA)); // HACK to force load again
-            mField_0x9CA = 0;
+            mField_0x9CA.set(0);
         } else {
             mQuat_c q;
             q.set(1.f, 0.f, 0.f, 0.f);

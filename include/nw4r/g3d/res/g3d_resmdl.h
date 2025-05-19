@@ -220,6 +220,11 @@ public:
         u32 GetShpID() const;
         u32 GetNodeID() const;
     };
+
+    // Not sure, but d_player_mdl has these strings at the end of .data (inlines) and in reverse order (in the same inline)
+    DrawEnumerator ConstructDrawEnumerator() const {
+        return DrawEnumerator(GetResByteCode("DrawOpa"), GetResByteCode("DrawXlu"));
+    }
 };
 
 } // namespace g3d

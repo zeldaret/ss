@@ -19,7 +19,7 @@ struct SoundSource {
 
     virtual bool shutdown();                         // 0x48
     virtual bool isReadyMaybe();                     // 0x100
-    virtual bool load(void *data, const char *name); // 0x100
+    virtual bool load(void *data, const char *name); // 0x104
     virtual void setFrame(f32 frame);                // 0x108
     virtual void setRate(f32 frame);                 // 0x10C
     virtual void set_0x164(UNKWORD val);             // 0x114

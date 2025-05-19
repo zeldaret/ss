@@ -1,6 +1,7 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_player.h"
+#include "d/col/cc/d_cc_s.h"
 #include "d/d_heap.h"
 #include "d/d_pouch.h"
 #include "d/d_rawarchive.h"
@@ -46,7 +47,7 @@ static u8 sHandMats[14] = {};
 
 #pragma push
 #pragma readonly_strings on
-const char *sFaceResNames[] = {
+static const char *sFaceResNames[] = {
     "F_Default",
     "Fmaba01",
     "F_M",
@@ -179,7 +180,7 @@ bool daPlBaseMdl_c::create(
 
     setBlendNodeRange(0, 0xFFFF, 0.0f);
     field_0x58 = 0;
-    field_0x5C = 0;
+    mpSoundData = nullptr;
     field_0x5A = 0xFFFF;
     SoundSource *sound = player->getSoundSource();
     if (sound->isReadyMaybe()) {
@@ -240,6 +241,11 @@ void daPlBaseHandsCallback_c::ExecCallbackC(
     nw4r::math::MTX34 *pMtxArray, nw4r::g3d::ResMdl mdl, nw4r::g3d::FuncObjCalcWorld *pFuncObj
 ) {
     mpPlayer->handsCallbackC(pMtxArray, mdl, pFuncObj);
+}
+
+// TODO explain
+bool daPlayerModelBase_c::isBodyAnmPart_0_2_4(s32 part) {
+    return part == 0 || part == 2 || part == 4;
 }
 
 void daPlayerModelBase_c::freeFrmHeap(mHeapAllocator_c *allocator) {
@@ -381,10 +387,10 @@ void daPlayerModelBase_c::loadBody() {
         animObj = static_cast<nw4r::g3d::AnmObjChr *>(anms->getAnimObj());
         animObj->Release();
         if (isBodyAnmPart_0_2_4(i)) {
-            animObj->Bind(bodyMdl, 16, nw4r::g3d::AnmObjChr::BIND_PARTIAL);
-            animObj->Bind(bodyMdl, 0, nw4r::g3d::AnmObjChr::BIND_ONE);
+            animObj->Bind(bodyMdl, PLAYER_MAIN_NODE_WAIST, nw4r::g3d::AnmObjChr::BIND_PARTIAL);
+            animObj->Bind(bodyMdl, PLAYER_MAIN_NODE_CENTER, nw4r::g3d::AnmObjChr::BIND_ONE);
         } else {
-            animObj->Bind(bodyMdl, 1, nw4r::g3d::AnmObjChr::BIND_PARTIAL);
+            animObj->Bind(bodyMdl, PLAYER_MAIN_NODE_BACKBONE_1, nw4r::g3d::AnmObjChr::BIND_PARTIAL);
         }
         mAnmChrBlend.attach(i, anms, f);
         anms++;
@@ -447,7 +453,7 @@ void daPlayerModelBase_c::loadHandsModels() {
     sSavedHandMats[0] = 7;
     sSavedHandMats[1] = 0;
 
-    nw4r::g3d::ResMdl::DrawEnumerator drawEnumerator(mdl.GetResByteCode("DrawOpa"), mdl.GetResByteCode("DrawXlu"));
+    nw4r::g3d::ResMdl::DrawEnumerator drawEnumerator = mdl.ConstructDrawEnumerator();
     while (drawEnumerator.IsValid()) {
         for (int j = 0; j < 14; j++) {
             if (ids[j] == drawEnumerator.GetMatID()) {
@@ -552,8 +558,8 @@ static const char *sShieldModelsBase[] = {
 };
 
 static const char *sShieldModelsBroken[] = {
-    "EquipShieldWoodBroken",  "EquipShieldIronBroken", "EquipShieldHolyBroken",
-    "EquipShieldHyliaBroken", "EquipShieldWoodBroken",
+    "EquipShieldWoodBroken", "EquipShieldIronBroken", "EquipShieldHolyBroken",
+    "EquipShieldHylia", "EquipShieldWoodBroken",
 };
 
 extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_529_;
@@ -797,12 +803,11 @@ void daPlayerModelBase_c::adjustMainModelWorldMtx(PlayerMainModelNode_e nodeId, 
         result->SetMtxUnchecked(orig);
     } else if (nodeId == PLAYER_MAIN_NODE_HAND_R || nodeId == PLAYER_MAIN_NODE_HAND_L) {
         if (isOnTightRope()) {
-            // TODO: I'd like this to be a neat ternary...
-            // nodeId == PLAYER_MAIN_NODE_HAND_R ? -5461 : -7282;
             mAng rot;
-            rot = -7282;
             if (nodeId == PLAYER_MAIN_NODE_HAND_R) {
                 rot = -5461;
+            } else {
+                rot = -7282;
             }
             applyWorldRotationMaybe(result, rot, 0, 0, nullptr, false);
         } else if (isOnVines()) {
@@ -899,7 +904,7 @@ void daPlayerModelBase_c::updateBlendWeights(PlayerMainModelNode_e nodeId) {
             break;
         case 6:
             if (nodeId == PLAYER_MAIN_NODE_HEAD) {
-                updateMainBlend2(0.0f, false);
+                updateMainBlend2(1.0f, false);
             } else if (nodeId == PLAYER_MAIN_NODE_POD) {
                 updateMainBlend2(0.0f, false);
             }
@@ -1026,6 +1031,20 @@ void daPlayerModelBase_c::setTransformAndCalc(m3d::scnLeaf_c &lf, const mMtx_c *
     lf.calc(false);
 }
 
+void daPlayerModelBase_c::setShieldTransform(bool inHand) {
+    mMtx_c targetTransform;
+    if (inHand) {
+        mMainMdl.getNodeWorldMtx(PLAYER_MAIN_NODE_WEAPON_L, targetTransform);
+    } else {
+        mMainMdl.getNodeWorldMtx(PLAYER_MAIN_NODE_POD, targetTransform);
+        mMtx_c mtx2;
+        MTXTrans(mtx2, 4.2f, 4.4f, 20.0f);
+        MTXConcat(targetTransform, mtx2, targetTransform);
+        targetTransform.ZYXrotM(mAng::fromDeg(91.0f), mAng::fromDeg(-123.0f), 0);
+    }
+    setTransformAndCalc(mShieldMdl, &targetTransform);
+}
+
 nw4r::g3d::ResFile daPlayerModelBase_c::getItemResFile(const char *name, mAllocator_c &allocator) {
     SizedString<64> buf;
     buf.sprintf("dat/%s.brresC", name);
@@ -1092,6 +1111,29 @@ nw4r::g3d::ResAnmTexSrt daPlayerModelBase_c::getExternalAnmTexSrt(const char *na
     nw4r::g3d::ResFile file = getExternalCompressedFile(name, "rtsaC", dest, maxSize);
     result = file.GetResAnmTexSrt(name);
     return result;
+}
+
+void daPlayerModelBase_c::loadSound(nw4r::g3d::ResFile file, const char *name, s32 animIdx) {
+    SoundSource *s = getSoundSource();
+    mCurrentAnmChrIdx = animIdx;
+    SizedString<64> path;
+    path.sprintf("%s.brasd", name);
+    void *dat = file.GetExternalData(path);
+    if (dat == nullptr && file == mCurrentRes) {
+        dat = mPlCommonSoundRes.GetExternalData(path);
+    }
+    mMainMdl.setSoundRelated(mAnimations[animIdx], dat);
+    s->load(dat, name);
+}
+
+void daPlayerModelBase_c::syncSoundWithAnim() {
+    f32 frame = mAnmChrs[mCurrentAnmChrIdx].getFrame();
+    getSoundSource()->setFrame(frame);
+}
+
+void daPlayerModelBase_c::registMassObj(cCcD_Obj* obj, u8 priority) {
+    dCcS::GetInstance()->Set(obj);
+    dCcS::GetInstance()->GetMassMng().SetObj(obj, priority);
 }
 
 void daPlayerModelBase_c::updateModelColliders() {
@@ -1178,3 +1220,6 @@ void daPlayerModelBase_c::fn_80061410() {
 /* vt 0x114 */ void daPlayerModelBase_c::somethingWithCarriedActorFlags() {
     // TODO
 }
+mColor daPlayerModelBase_c::sGuideColor1(0x00, 0x82, 0xDC, 0xFF);
+mColor daPlayerModelBase_c::sGuideColor2(0x64, 0xFF, 0xFF, 0xFF);
+mColor daPlayerModelBase_c::sGuideColor3(0x46, 0xC8, 0xFF, 0xFF);

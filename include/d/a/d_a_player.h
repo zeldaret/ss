@@ -95,7 +95,7 @@ private:
 
 class daPlBaseMdl_c : public m3d::mdl_c {
 public:
-    daPlBaseMdl_c() : field_0x5C(0) {}
+    daPlBaseMdl_c() : mpSoundData(nullptr) {}
 
     virtual bool setAnm(m3d::banm_c &anm) override;
     virtual void remove() override;
@@ -109,11 +109,16 @@ public:
         return mCallback.getNodeResult(node);
     }
 
+    void setSoundRelated(u16 id, void *data) {
+        field_0x5A = id;
+        mpSoundData = data;
+    }
+
 private:
     /* 0x24 */ daPlBaseMdlCallback_c mCallback;
     /* 0x58 */ u8 field_0x58;
     /* 0x5A */ u16 field_0x5A;
-    /* 0x5C */ u32 field_0x5C;
+    /* 0x5C */ void *mpSoundData;
 };
 
 class daPlBaseMainCallback_c : public m3d::callback_c {
@@ -884,6 +889,7 @@ public:
     static bool createGenericMdl(nw4r::g3d::ResMdl resMdl, m3d::mdl_c &mdl, mAllocator_c *alloc, u32 bufferOption);
     static bool createGenericSmdl(nw4r::g3d::ResMdl resMdl, m3d::smdl_c &mdl, mAllocator_c *alloc, u32 bufferOption);
     static void setTransformAndCalc(m3d::scnLeaf_c &lf, const mMtx_c *mtx);
+    void setShieldTransform(bool inHand);
 
     static nw4r::g3d::ResFile getItemResFile(const char *name, mAllocator_c &allocator);
     nw4r::g3d::ResFile getExternalCompressedFile(const char *name, const char *extension, void *dest, u32 maxSize);
@@ -967,10 +973,10 @@ public:
         mMainMdl.getNodeWorldMtx(boneIdx, *out_mtx);
     }
     /* vt 0x190 */ virtual void getSheathModelMatrix(mMtx_c *out_mtx) override {
-        mSheathMdl.getLocalMtx();
+        mSheathMdl.getLocalMtx(*out_mtx);
     }
     /* vt 0x194 */ virtual void getSwordModelMatrix(mMtx_c *out_mtx) override {
-        mSwordMdl.getLocalMtx();
+        mSwordMdl.getLocalMtx(*out_mtx);
     }
     /* vt 0x198 */ virtual mAng vt_0x198() override {
         return field_0x1268;
@@ -991,6 +997,10 @@ public:
         mSwordAndMoreStates &= ~mask;
     }
 
+    void loadSound(nw4r::g3d::ResFile file, const char *name, s32 animIdx);
+
+    void syncSoundWithAnim();
+    static void registMassObj(cCcD_Obj* obj, u8 priority);
     void updateModelColliders();
     void updateCachedPositions();
 
@@ -1015,6 +1025,9 @@ public:
     static const PlayerAnimation sAnimations[443];
     static const u8 sShieldDurabilities[10];
     static const u8 sShieldRegenTimes[10];
+    static mColor sGuideColor1;
+    static mColor sGuideColor2;
+    static mColor sGuideColor3;
 
 protected:
     /* 0x370 */ mHeapAllocator_c mModelAllocator;
@@ -1063,7 +1076,7 @@ protected:
     /* 0x1208 */ u8 field_0x1208[2];
     /* 0x120A */ u8 field_0x120A;
     /* 0x120B */ u8 mTunicType;
-    /* 0x120C */ u8 field_0x120C;
+    /* 0x120C */ u8 mCurrentAnmChrIdx;
     /* 0x120D */ u8 mShieldPouchSlot;
     /* 0x120E */ s8 mPouchMatId;
     /* 0x120F */ s8 mBeltMatId;

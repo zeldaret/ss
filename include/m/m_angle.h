@@ -71,7 +71,7 @@ struct mAng {
         return (360.0f / 65536.0f) * mVal;
     }
 
-    static mAng fromDeg(f32 deg) {
+    static s16 fromDeg(f32 deg) {
         return deg * sDegToAng;
     }
     f32 degree2() const {
