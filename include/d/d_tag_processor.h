@@ -9,7 +9,7 @@ struct dLytMsgWindowCharData;
 
 struct LineData {
     f32 mLineWidths[0x32];
-    u32 mNumLines;
+    s32 mNumLines;
 };
 
 // inofficial name
@@ -28,7 +28,12 @@ public:
 
     nw4r::ut::Operation ProcessTags(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx);
 
-    f32 fn_800B8560(s32);
+    u8 fn_800B7A90(u8 arg);
+    u8 symbolToFontIdx(s32 s);
+    u8 fn_800B7880(u8);
+
+    u8 fn_800B7B30(u8 arg);
+    f32 getMarginForCenteredLine(s32);
     f32 fn_800B85C0(s32);
     void somethingWithScrapperAndMusic(wchar_t* src);
 
@@ -54,7 +59,10 @@ public:
     void restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 windowType);
     void setScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
 
-    u8 symbolToFontIdx(s32 s);
+    void SetupGXCommon();
+    void SetupGXWithColorMapping(nw4r::ut::Color min, nw4r::ut::Color max);
+    void SetupVertexFormat();
+
     void setStringArg(const wchar_t *arg, s32 index);
 
     static s32 getMaxNumLines(s32 arg);
@@ -63,17 +71,17 @@ public:
     static void process0xFCommand(wchar_t _0xf, const wchar_t *src, s32 *outCmd);
 
     static f32 fn_800B8040(s8, u32);
-    wchar_t *fn_800B5FD0(u32, wchar_t *, s32 *);
+    wchar_t *writeSingleCharacter(wchar_t, wchar_t *, s32 *);
     wchar_t *writeTextNormal(const wchar_t *src, wchar_t *dest, s32 *, u8 cmdLen, s32);
     wchar_t *writeHeroname(wchar_t *dest, s32 *, s32);
-    wchar_t *fn_800B5DD0(wchar_t *dest, wchar_t *src, s32 *, s32);
+    wchar_t *writeSingularOrPluralWord(wchar_t *dest, wchar_t *src, s32 *, s32);
     void fn_800B5520(wchar_t *src);
     void writeIcon(dTextBox_c *textBox, wchar_t *cmd, f32);
-    char fn_800B7880(u32);
     void fn_800B70D0(nw4r::ut::TextWriterBase<wchar_t> *, nw4r::ut::PrintContext<wchar_t> *ctx, u16 c, s32);
+    void fn_800B6790(nw4r::ut::CharWriter *w, nw4r::ut::PrintContext<wchar_t> *ctx, u16, u8);
 
     void
-    fn_800B4290(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, s32, u16 *, dLytMsgWindowCharData *charData);
+    computeCharacterPlacement(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, s32, u16 *, dLytMsgWindowCharData *charData);
 
     void resetSomething();
     void resetLineData();
@@ -82,10 +90,17 @@ public:
     f32 getLineWidth(s32 i);
     s32 tickPauseFrame();
     s32 tick0x830();
+
+    void tick0x8C8();
+    void tick0x8CC();
     void execute();
 
     void setTextbox(dTextBox_c *box) {
-        field_0x004 = box;
+        mpTextBox = box;
+    }
+
+    dTextBox_c *getTextBox() const {
+        return mpTextBox;
     }
 
     s32 getNumLinesMaybe() const {
@@ -188,7 +203,7 @@ private:
         }
     }
 
-    /* 0x004 */ dTextBox_c *field_0x004;
+    /* 0x004 */ dTextBox_c *mpTextBox;
     /* 0x008 */ wchar_t field_0x008[4][256];
     /* 0x808 */ wchar_t field_0x808[4];
     /* 0x810 */ f32 field_0x810;
@@ -196,7 +211,7 @@ private:
     /* 0x818 */ f32 field_0x818;
     /* 0x81C */ s32 field_0x81C;
     /* 0x820 */ s32 field_0x820;
-    /* 0x824 */ s32 field_0x824;
+    /* 0x824 */ u32 field_0x824;
     /* 0x828 */ s32 field_0x828;
     /* 0x82C */ s32 field_0x82C;
     /* 0x830 */ s32 field_0x830;
@@ -227,7 +242,7 @@ private:
     /* 0x894 */ s32 field_0x894;
     /* 0x898 */ s32 field_0x898;
     /* 0x89C */ s32 mNumericArgs[10];
-    /* 0x8C4 */ s32 mNumericArgsCopy[10];
+    /* 0x8C4 */ s32 mNumericArgsCopy[10]; // probably not an array
     /* 0x8EC */ s32 field_0x8EC;
     /* 0x8EC */ s32 field_0x8F0;
     /* 0x8F4 */ s32 field_0x8F4;

@@ -1,11 +1,18 @@
 #include "d/d_tag_processor.h"
 
 #include "common.h"
+#include "d/a/d_a_base.h"
 #include "d/d_font_manager.h"
 #include "d/d_message.h"
 #include "d/d_textunk.h"
 #include "d/d_textwindow_unk.h"
+#include "d/lyt/d_lyt_util_items.h"
+#include "d/lyt/d_textbox.h"
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
+#include "f/f_base.h"
+#include "f/f_manager.h"
+#include "f/f_profile_name.h"
+#include "m/m_color.h"
 #include "nw4r/lyt/lyt_types.h"
 #include "nw4r/ut/ut_CharWriter.h"
 #include "nw4r/ut/ut_Color.h"
@@ -15,55 +22,56 @@
 #include "nw4r/ut/ut_TextWriterBase.h"
 #include "sized_string.h"
 #include "toBeSorted/file_manager.h"
+#include "toBeSorted/music_mgrs.h"
 
 #include <libc.h>
 
 nw4r::ut::Color FontColors1[] = {
-    nw4r::ut::Color(0xff, 0x4b, 0x32, 0xff),
-    nw4r::ut::Color(0xff, 0x4b, 0x32, 0xff),
-    nw4r::ut::Color(0xfa, 0xaf, 0x05, 0xff),
-    nw4r::ut::Color(0xdc, 0xf5, 0xfa, 0xff),
-    nw4r::ut::Color(0x91, 0xff, 0x6e, 0xff),
-    nw4r::ut::Color(0xff, 0xbe, 0x1e, 0xff),
-    nw4r::ut::Color(0xeb, 0xc8, 0xff, 0xff),
-    nw4r::ut::Color(0x14, 0xd7, 0x46, 0xff),
-    nw4r::ut::Color(0x19, 0xa5, 0xeb, 0xff),
-    nw4r::ut::Color(0xf0, 0x3c, 0x1e, 0xff),
-    nw4r::ut::Color(0xc8, 0xc8, 0xc8, 0xff),
-    nw4r::ut::Color(0xfa, 0xaf, 0x05, 0xff),
-    nw4r::ut::Color(0x32, 0x23, 0x46, 0xff),
+    nw4r::ut::Color(0xff, 0x4b, 0x32, 0xff), // #ff4b32ff
+    nw4r::ut::Color(0xff, 0x4b, 0x32, 0xff), // #ff4b32ff
+    nw4r::ut::Color(0xfa, 0xaf, 0x05, 0xff), // #faaf05ff
+    nw4r::ut::Color(0xdc, 0xf5, 0xfa, 0xff), // #dcf5faff
+    nw4r::ut::Color(0x91, 0xff, 0x6e, 0xff), // #91ff6eff
+    nw4r::ut::Color(0xff, 0xbe, 0x1e, 0xff), // #ffbe1eff
+    nw4r::ut::Color(0xeb, 0xc8, 0xff, 0xff), // #ebc8ffff
+    nw4r::ut::Color(0x14, 0xd7, 0x46, 0xff), // #14d746ff
+    nw4r::ut::Color(0x19, 0xa5, 0xeb, 0xff), // #19a5ebff
+    nw4r::ut::Color(0xf0, 0x3c, 0x1e, 0xff), // #f03c1eff
+    nw4r::ut::Color(0xc8, 0xc8, 0xc8, 0xff), // #c8c8c8ff
+    nw4r::ut::Color(0xfa, 0xaf, 0x05, 0xff), // #faaf05ff
+    nw4r::ut::Color(0x32, 0x23, 0x46, 0xff), // #322346ff
     nw4r::ut::Color(),
-    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff),
-    nw4r::ut::Color(0xf6, 0xf6, 0xde, 0xff),
-    nw4r::ut::Color(0xe6, 0xe6, 0xa0, 0xff),
-    nw4r::ut::Color(0xe8, 0xad, 0x55, 0xff),
-    nw4r::ut::Color(0xff, 0xfa, 0xe6, 0xff),
-    nw4r::ut::Color(0xf5, 0xf2, 0xeb, 0xff),
-    nw4r::ut::Color(0x64, 0x5f, 0x69, 0xff),
-    nw4r::ut::Color(0x5e, 0x51, 0x46, 0xff),
-    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff),
+    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff), // #ede2d0ff
+    nw4r::ut::Color(0xf6, 0xf6, 0xde, 0xff), // #f6f6deff
+    nw4r::ut::Color(0xe6, 0xe6, 0xa0, 0xff), // #e6e6a0ff
+    nw4r::ut::Color(0xe8, 0xad, 0x55, 0xff), // #e8ad55ff
+    nw4r::ut::Color(0xff, 0xfa, 0xe6, 0xff), // #fffae6ff
+    nw4r::ut::Color(0xf5, 0xf2, 0xeb, 0xff), // #f5f2ebff
+    nw4r::ut::Color(0x64, 0x5f, 0x69, 0xff), // #645f69ff
+    nw4r::ut::Color(0x5e, 0x51, 0x46, 0xff), // #5e5146ff
+    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff), // #ede2d0ff
     nw4r::ut::Color(),
-    nw4r::ut::Color(0xfa, 0xf6, 0xe7, 0xff),
-    nw4r::ut::Color(0xff, 0xff, 0xff, 0xff),
-    nw4r::ut::Color(0x4c, 0x32, 0x0f, 0xff),
-    nw4r::ut::Color(),
-    nw4r::ut::Color(),
-    nw4r::ut::Color(),
-    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff),
-    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff),
-    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff),
-    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff),
-    nw4r::ut::Color(),
-    nw4r::ut::Color(0xf6, 0xf2, 0xea, 0xff),
-    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff),
-    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff),
+    nw4r::ut::Color(0xfa, 0xf6, 0xe7, 0xff), // #faf6e7ff
+    nw4r::ut::Color(0xff, 0xff, 0xff, 0xff), // #ffffffff
+    nw4r::ut::Color(0x4c, 0x32, 0x0f, 0xff), // #4c320fff
     nw4r::ut::Color(),
     nw4r::ut::Color(),
-    nw4r::ut::Color(0xff, 0xff, 0xff, 0xff),
     nw4r::ut::Color(),
-    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff),
-    nw4r::ut::Color(0x20, 0x20, 0x20, 0xff),
-    nw4r::ut::Color(0x74, 0x6d, 0x5c, 0xff),
+    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff), // #ede2d0ff
+    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff), // #ede2d0ff
+    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff), // #ede2d0ff
+    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff), // #ede2d0ff
+    nw4r::ut::Color(),
+    nw4r::ut::Color(0xf6, 0xf2, 0xea, 0xff), // #f6f2eaff
+    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff), // #ede2d0ff
+    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff), // #ede2d0ff
+    nw4r::ut::Color(),
+    nw4r::ut::Color(),
+    nw4r::ut::Color(0xff, 0xff, 0xff, 0xff), // #ffffffff
+    nw4r::ut::Color(),
+    nw4r::ut::Color(0xed, 0xe2, 0xd0, 0xff), // #ede2d0ff
+    nw4r::ut::Color(0x20, 0x20, 0x20, 0xff), // #202020ff
+    nw4r::ut::Color(0x74, 0x6d, 0x5c, 0xff), // #746d5cff
     nw4r::ut::Color(),
     nw4r::ut::Color(),
     nw4r::ut::Color(),
@@ -71,58 +79,136 @@ nw4r::ut::Color FontColors1[] = {
 };
 
 nw4r::ut::Color FontColors2[] = {
-    nw4r::ut::Color(0xff, 0x4b, 0x32, 0xff),
-    nw4r::ut::Color(0xcd, 0x4b, 0x32, 0xff),
-    nw4r::ut::Color(0xff, 0xe6, 0x8c, 0xff),
-    nw4r::ut::Color(0x7d, 0xc3, 0xff, 0xff),
-    nw4r::ut::Color(0x64, 0xc8, 0x41, 0xff),
-    nw4r::ut::Color(0xff, 0xbe, 0x1e, 0xff),
-    nw4r::ut::Color(0x91, 0x5f, 0xff, 0xff),
-    nw4r::ut::Color(0xaf, 0xe6, 0x2d, 0xff),
-    nw4r::ut::Color(0xb4, 0xe6, 0xff, 0xff),
-    nw4r::ut::Color(0xff, 0x91, 0x78, 0xff),
-    nw4r::ut::Color(0xe6, 0xe6, 0xc8, 0xff),
-    nw4r::ut::Color(0xff, 0xe6, 0x8c, 0xff),
-    nw4r::ut::Color(0x50, 0x4b, 0x5f, 0xff),
+    nw4r::ut::Color(0xff, 0x4b, 0x32, 0xff), // #ff4b32ff
+    nw4r::ut::Color(0xcd, 0x4b, 0x32, 0xff), // #cd4b32ff
+    nw4r::ut::Color(0xff, 0xe6, 0x8c, 0xff), // #ffe68cff
+    nw4r::ut::Color(0x7d, 0xc3, 0xff, 0xff), // #7dc3ffff
+    nw4r::ut::Color(0x64, 0xc8, 0x41, 0xff), // #64c841ff
+    nw4r::ut::Color(0xff, 0xbe, 0x1e, 0xff), // #ffbe1eff
+    nw4r::ut::Color(0x91, 0x5f, 0xff, 0xff), // #915fffff
+    nw4r::ut::Color(0xaf, 0xe6, 0x2d, 0xff), // #afe62dff
+    nw4r::ut::Color(0xb4, 0xe6, 0xff, 0xff), // #b4e6ffff
+    nw4r::ut::Color(0xff, 0x91, 0x78, 0xff), // #ff9178ff
+    nw4r::ut::Color(0xe6, 0xe6, 0xc8, 0xff), // #e6e6c8ff
+    nw4r::ut::Color(0xff, 0xe6, 0x8c, 0xff), // #ffe68cff
+    nw4r::ut::Color(0x50, 0x4b, 0x5f, 0xff), // #504b5fff
     nw4r::ut::Color(),
-    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff),
-    nw4r::ut::Color(0xe7, 0xd7, 0xed, 0xff),
-    nw4r::ut::Color(0xa5, 0x96, 0x6e, 0xff),
-    nw4r::ut::Color(0xb5, 0x52, 0x2e, 0xff),
-    nw4r::ut::Color(0xff, 0xfa, 0xe6, 0xff),
-    nw4r::ut::Color(0xe1, 0xc8, 0x9b, 0xff),
-    nw4r::ut::Color(0x55, 0x50, 0x5a, 0xff),
-    nw4r::ut::Color(0x35, 0x2d, 0x27, 0xff),
-    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff),
+    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff), // #caaf81ff
+    nw4r::ut::Color(0xe7, 0xd7, 0xed, 0xff), // #e7d7edff
+    nw4r::ut::Color(0xa5, 0x96, 0x6e, 0xff), // #a5966eff
+    nw4r::ut::Color(0xb5, 0x52, 0x2e, 0xff), // #b5522eff
+    nw4r::ut::Color(0xff, 0xfa, 0xe6, 0xff), // #fffae6ff
+    nw4r::ut::Color(0xe1, 0xc8, 0x9b, 0xff), // #e1c89bff
+    nw4r::ut::Color(0x55, 0x50, 0x5a, 0xff), // #55505aff
+    nw4r::ut::Color(0x35, 0x2d, 0x27, 0xff), // #352d27ff
+    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff), // #caaf81ff
     nw4r::ut::Color(),
-    nw4r::ut::Color(0xe3, 0xcc, 0x8f, 0xff),
-    nw4r::ut::Color(0xff, 0xff, 0xff, 0xff),
-    nw4r::ut::Color(0x3a, 0x25, 0x09, 0xff),
-    nw4r::ut::Color(),
-    nw4r::ut::Color(),
-    nw4r::ut::Color(),
-    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff),
-    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff),
-    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff),
-    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff),
-    nw4r::ut::Color(),
-    nw4r::ut::Color(0xe1, 0xc7, 0x9b, 0xff),
-    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff),
-    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff),
+    nw4r::ut::Color(0xe3, 0xcc, 0x8f, 0xff), // #e3cc8fff
+    nw4r::ut::Color(0xff, 0xff, 0xff, 0xff), // #ffffffff
+    nw4r::ut::Color(0x3a, 0x25, 0x09, 0xff), // #3a2509ff
     nw4r::ut::Color(),
     nw4r::ut::Color(),
-    nw4r::ut::Color(0xff, 0xff, 0xff, 0xff),
     nw4r::ut::Color(),
-    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff),
-    nw4r::ut::Color(0x20, 0x20, 0x20, 0xff),
-    nw4r::ut::Color(0x4b, 0x47, 0x3f, 0xff),
+    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff), // #caaf81ff
+    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff), // #caaf81ff
+    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff), // #caaf81ff
+    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff), // #caaf81ff
+    nw4r::ut::Color(),
+    nw4r::ut::Color(0xe1, 0xc7, 0x9b, 0xff), // #e1c79bff
+    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff), // #caaf81ff
+    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff), // #caaf81ff
+    nw4r::ut::Color(),
+    nw4r::ut::Color(),
+    nw4r::ut::Color(0xff, 0xff, 0xff, 0xff), // #ffffffff
+    nw4r::ut::Color(),
+    nw4r::ut::Color(0xca, 0xaf, 0x81, 0xff), // #caaf81ff
+    nw4r::ut::Color(0x20, 0x20, 0x20, 0xff), // #202020ff
+    nw4r::ut::Color(0x4b, 0x47, 0x3f, 0xff), // #4b473fff
     nw4r::ut::Color(),
     nw4r::ut::Color(),
     nw4r::ut::Color(),
     nw4r::ut::Color(),
 };
 
-extern const u16 flags[2050] = {
+static const wchar_t replacementSeq0xDF[] = {0x53, 0x53};
+
+struct ReplacementSequence {
+    /* 0x00 */ wchar_t origChar;
+    /* 0x02 */ u8 replacementSequenceLen;
+    /* 0x04 */ const wchar_t *replacementSequence;
+};
+
+static const ReplacementSequence sReplacementSequences[] = {
+    {0xDF, 2, replacementSeq0xDF},
+    {   0, 0,            nullptr}
+};
+
+static const wchar_t sUpperCaseChars[] = {
+    L'A',   L'B',   L'C',   L'D',   L'E',   L'F',   L'G',   L'H',   L'I',   L'J',   L'K',   L'L',   L'M',   L'N',
+    L'O',   L'P',   L'Q',   L'R',   L'S',   L'T',   L'U',   L'V',   L'W',   L'X',   L'Y',   L'Z',   0x0000, 0x0000,
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    0x0000, 0x00C0, 0x00C1, 0x00C2, 0x00C3, 0x00C4, 0x00C5, 0x00C6, 0x00C7, 0x00C8, 0x00C9, 0x00CA, 0x00CB, 0x00CC,
+    0x00CD, 0x00CE, 0x00CF, 0x00D0, 0x00D1, 0x00D2, 0x00D3, 0x00D4, 0x00D5, 0x00D6, 0x0000, 0x00D8, 0x00D9, 0x00DA,
+    0x00DB, 0x00DC, 0x00DD, 0x00DE, 0x0178, 0x0000, 0x0100, 0x0000, 0x0102, 0x0000, 0x0104, 0x0000, 0x0106, 0x0000,
+    0x0108, 0x0000, 0x010A, 0x0000, 0x010C, 0x0000, 0x010E, 0x0000, 0x0110, 0x0000, 0x0112, 0x0000, 0x0114, 0x0000,
+    0x0116, 0x0000, 0x0118, 0x0000, 0x011A, 0x0000, 0x011C, 0x0000, 0x011E, 0x0000, 0x0120, 0x0000, 0x0122, 0x0000,
+    0x0124, 0x0000, 0x0126, 0x0000, 0x0128, 0x0000, 0x012A, 0x0000, 0x012C, 0x0000, 0x012E, 0x0000, 0x0049, 0x0000,
+    0x0132, 0x0000, 0x0134, 0x0000, 0x0136, 0x0000, 0x0000, 0x0139, 0x0000, 0x013B, 0x0000, 0x013D, 0x0000, 0x013F,
+    0x0000, 0x0141, 0x0000, 0x0143, 0x0000, 0x0145, 0x0000, 0x0147, 0x0000, 0x0000, 0x014A, 0x0000, 0x014C, 0x0000,
+    0x014E, 0x0000, 0x0150, 0x0000, 0x0152, 0x0000, 0x0154, 0x0000, 0x0156, 0x0000, 0x0158, 0x0000, 0x015A, 0x0000,
+    0x015C, 0x0000, 0x015E, 0x0000, 0x0160, 0x0000, 0x0162, 0x0000, 0x0164, 0x0000, 0x0166, 0x0000, 0x0168, 0x0000,
+    0x016A, 0x0000, 0x016C, 0x0000, 0x016E, 0x0000, 0x0170, 0x0000, 0x0172, 0x0000, 0x0174, 0x0000, 0x0176, 0x0000,
+    0x0000, 0x0179, 0x0000, 0x017B, 0x0000, 0x017D, 0x0053, 0x0000,
+};
+
+s32 toUpperCase(wchar_t orig, wchar_t *out, u32 maxLen) {
+    if (maxLen < 3) {
+        return -1;
+    }
+
+    if (orig >= L'a' && orig <= 383) {
+        const ReplacementSequence *seq = sReplacementSequences;
+        s32 len = seq->replacementSequenceLen;
+        while (true) {
+            if (seq->replacementSequenceLen == 0) {
+                break;
+            }
+            if (seq->origChar == orig) {
+                s32 len = seq->replacementSequenceLen;
+                const wchar_t *r = seq->replacementSequence;
+                s32 i = seq->replacementSequenceLen;
+                do {
+                    *out = *r;
+                    out++;
+                    r++;
+                } while (--i);
+                *out = L'\0';
+                return len;
+            }
+            seq++;
+        }
+        u32 ret = 1;
+        wchar_t replacement = sUpperCaseChars[orig - L'a'];
+        if (replacement == L'\0') {
+            replacement = orig;
+            ret = 0;
+        }
+        out[0] = replacement;
+        out[1] = L'\0';
+        return ret;
+    }
+    out[0] = orig;
+    out[1] = L'\0';
+    return 0;
+}
+
+const u16 sMsgWindowFlags[2050] = {
     0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080, 0x0100, 0x0200, 0x0400, 0x0800,
 };
 
@@ -206,7 +292,7 @@ dTagProcessor_c::dTagProcessor_c() {
     field_0xEE2 = 0;
     field_0xEE3 = 0;
     field_0xEE4 = 0;
-    field_0x004 = nullptr;
+    mpTextBox = nullptr;
     mMsgWindowSubtype = dLytMsgWindow_c::MSG_WINDOW_36;
     field_0x90D = 4;
     field_0xEF0 = 0;
@@ -382,7 +468,7 @@ void dTagProcessor_c::formatV(
                 case 0x20002: writePtr = writeStringArg(writePtr, endPtr, &local_b4, state4); break;
                 case 0x20003: writePtr = writeNumericArg(writePtr, endPtr, &local_b4, state4); break;
 
-                case 0x30004: writePtr = fn_800B5DD0(writePtr, endPtr, &local_b4, state4); break;
+                case 0x30004: writePtr = writeSingularOrPluralWord(writePtr, endPtr, &local_b4, state4); break;
                 case 0x30001:
                     field_0xEF1 = 1;
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
@@ -412,7 +498,7 @@ void dTagProcessor_c::formatV(
             src += 3;
         } else if (state4 != 0 && field_0x90E != 0) {
             // Note: Return ignored here
-            fn_800B5FD0(c, &getTmpBuffer()[local_b4], &local_b4);
+            writeSingleCharacter(c, &getTmpBuffer()[local_b4], &local_b4);
             src++;
             onWriteTmpBuffer();
         } else {
@@ -440,12 +526,12 @@ void dTagProcessor_c::formatV(
                     const nw4r::ut::Font *fnt = textBox->GetFont();
                     mLineData.mLineWidths[mLineData.mNumLines] +=
                         currScale * fnt->GetCharWidth(*src) + textBox->GetCharSpace();
-                    writePtr = fn_800B5FD0(*src, writePtr, nullptr);
+                    writePtr = writeSingleCharacter(*src, writePtr, nullptr);
                     src++;
                 }
 
             } else {
-                writePtr = fn_800B5FD0(c, writePtr, nullptr);
+                writePtr = writeSingleCharacter(c, writePtr, nullptr);
                 src++;
             }
         }
@@ -459,7 +545,7 @@ end:
     }
 }
 
-void dTagProcessor_c::fn_800B4290(
+void dTagProcessor_c::computeCharacterPlacement(
     dTextBox_c *textBox, const wchar_t *src_, wchar_t *dest, s32 unkArg, u16 *pOutLen, dLytMsgWindowCharData *charData
 ) {
     const wchar_t *src = src_;
@@ -476,6 +562,9 @@ void dTagProcessor_c::fn_800B4290(
 
     f32 posX = 0.0f;
     f32 posY = 0.0f;
+
+    // Float order
+    1.0f;
 
     if (textBox != nullptr) {
         currScale *= textBox->getMyScale();
@@ -496,10 +585,10 @@ beginning:
             switch (cmd) {
                 case 0x0F0F0F0F: {
                     if (lineNum / getMaxNumLines(mMsgWindowSubtype) == unkArg) {
-                        nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
-                        posX = fn_800B8560(lineNum);
+                        nw4r::lyt::Size fontSize = getTextBox()->GetFontSize();
+                        posX = getMarginForCenteredLine(lineNum);
                         if ((mMsgWindowSubtype < dLytMsgWindow_c::MSG_WINDOW_WOOD ||
-                             mMsgWindowSubtype >= dLytMsgWindow_c::MSG_WINDOW_10) &&
+                             mMsgWindowSubtype >= dLytMsgWindow_c::MSG_WINDOW_LINK + 1) &&
                             mMsgWindowSubtype != dLytMsgWindow_c::MSG_WINDOW_DEMO) {
                             posX = 0.0f;
                         }
@@ -523,7 +612,7 @@ beginning:
                             }
                             posY = (fn_800B85C0(lineNum) - (fontSize.height * (currScale / tmp) / 2.0f)) - tmp3;
                         } else {
-                            posY = (posY - (fontSize.height * (currScale / tmp) + field_0x004->GetLineSpace()));
+                            posY = (posY - (fontSize.height * (currScale / tmp) + getTextBox()->GetLineSpace()));
                         }
                         if (!b2) {
                             b2 = true;
@@ -547,7 +636,7 @@ beginning:
                             baseScale *= textBox->getMyScale();
                         }
                         if (currScale != newScale) {
-                            nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
+                            nw4r::lyt::Size fontSize = mpTextBox->GetFontSize();
                             posY -= (fontSize.height * ((currScale - newScale) / baseScale) / 2.0f) *
                                     UnkTextThing::getField0x788();
                             currScale = newScale;
@@ -562,7 +651,7 @@ beginning:
                             tmp *= textBox->getMyScale();
                         }
                         if (currScale != tmp) {
-                            nw4r::lyt::Size _size = field_0x004->GetFontSize();
+                            nw4r::lyt::Size _size = mpTextBox->GetFontSize();
                             currScale = tmp;
                         }
                     }
@@ -571,7 +660,7 @@ beginning:
                     if (b2) {
                         *writePtr = -1;
                         const nw4r::ut::Font *fnt = dFontMng_c::getFont(4);
-                        wchar_t c = fn_800B7880(*(u8 *)endPtr);
+                        s8 c = fn_800B7880(*(u8 *)endPtr);
                         f32 tmp = UnkTextThing::getField0x764();
                         f32 wid = tmp / fnt->GetWidth() * currScale;
                         f32 charSpace = textBox->GetCharSpace();
@@ -807,16 +896,19 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
 }
 
 void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr) {
-    if (mMsgWindowSubtype != dLytMsgWindow_c::MSG_WINDOW_22 && mMsgWindowSubtype != dLytMsgWindow_c::MSG_WINDOW_DEMO &&
-        field_0xEE0 != 0) {
+    if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_22 || mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_DEMO) {
+        return;
+    }
+
+    if (field_0xEE0 != 0) {
         int arg = ptr[0];
-        nw4r::lyt::Size textBoxSize = field_0x004->GetSize();
-        nw4r::lyt::Size fontSize = field_0x004->GetFontSize();
-        int i1 = getMaxNumLines(mMsgWindowSubtype);
-        if (arg % i1 == 0 && mMsgWindowSubtype != dLytMsgWindow_c::MSG_WINDOW_31 &&
+        nw4r::lyt::Size textBoxSize = getTextBox()->GetSize();
+        nw4r::lyt::Size fontSize = getTextBox()->GetFontSize();
+        if (arg % getMaxNumLines(mMsgWindowSubtype) == 0 && mMsgWindowSubtype != dLytMsgWindow_c::MSG_WINDOW_31 &&
             mMsgWindowSubtype != dLytMsgWindow_c::MSG_WINDOW_8) {
-            int u = 0;
             int v = 0;
+            int u = 0;
+            // similar code in fn_800B85C0
             for (int i = arg; i < arg + getMaxNumLines(mMsgWindowSubtype) && i < 0x32; i++) {
                 f32 f6 = getLineWidth(i);
                 if (f6 > 0.0f) {
@@ -830,42 +922,42 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
                 }
             }
 
-            // Unfortunately, the code then proceeds to access
-            // some global text stuff at 0x805753b0, which is
-            // completely hidden in the Ghidra decompiler, apparently
-            // because the results aren't used?
-
             if (u < getMaxNumLines(mMsgWindowSubtype)) {
+                // Begin unused code - the results here are unused and disappear
+                // in any decompiler
                 f32 w1 = fontSize.width * 0.5f;
                 f32 h1 = fontSize.height * 0.5f;
-                if (!(w1 < UnkTextThing::getField0x758())) {
-                    w1 = UnkTextThing::getField0x758();
+                if (w1 < UnkTextThing::getField0x758() || h1 < UnkTextThing::getField0x758()) {
+                    if (w1 < h1) {
+                        f32 tmp = UnkTextThing::getField0x758();
+                    } else {
+                        f32 tmp2 = UnkTextThing::getField0x758();
+                    }
                 }
-                if (!(h1 < UnkTextThing::getField0x758())) {
-                    h1 = UnkTextThing::getField0x758();
-                }
+                f32 tmp3 = UnkTextThing::getField0x758();
+                // End unused code
 
-                f32 f7 =
-                    (fontSize.height + field_0x004->GetLineSpace()) * 0.5f * (getMaxNumLines(mMsgWindowSubtype) - v);
+                f32 f7 = (fontSize.height + getTextBox()->GetLineSpace()) / 2.0f;
+                f32 f8 = f7 * (getMaxNumLines(mMsgWindowSubtype) - v);
                 field_0x814 = ctx->writer->GetCursorY();
                 field_0x818 = ctx->y;
                 field_0xEE4 = 1;
-                if (f7 > 0.0f) {
-                    ctx->writer->SetCursorY(ctx->writer->GetCursorY() + f7);
-                    field_0x810 = f7;
+                if (f8 > 0.0f) {
+                    ctx->writer->MoveCursorY(f8);
+                    field_0x810 = f8;
                 }
             }
         }
 
         f32 lineWidth = getLineWidth(arg);
-        f32 margin = (textBoxSize.width - lineWidth) * 0.5f;
+        f32 margin = (textBoxSize.width - lineWidth) / 2.0f;
         if ((mMsgWindowSubtype < dLytMsgWindow_c::MSG_WINDOW_WOOD ||
-             mMsgWindowSubtype >= dLytMsgWindow_c::MSG_WINDOW_LINK) &&
-            mMsgWindowSubtype != 30) {
+             mMsgWindowSubtype > dLytMsgWindow_c::MSG_WINDOW_LINK) &&
+            mMsgWindowSubtype != dLytMsgWindow_c::MSG_WINDOW_DEMO) {
             margin = 0.0f;
         }
         if (margin > 0.0f) {
-            ctx->writer->SetCursorX(ctx->writer->GetCursorX() + margin);
+            ctx->writer->MoveCursorX(margin);
         }
     }
 }
@@ -880,6 +972,7 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
     nw4r::ut::Color c2 = FontColors2[cmd & 0xFFFF];
     if (cmd == 0) {
         if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_SWORD_FI) {
+            // #FF6E54, #FF6E54
             c1.r = 0xFF;
             c1.g = 0x6E;
             c1.b = 0x64;
@@ -887,6 +980,7 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
             c2.g = 0x6E;
             c2.b = 0x64;
         } else if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_STONE) {
+            // #E64B32, #E64B32
             c1.r = 0xE6;
             c1.g = 0x4B;
             c1.b = 0x32;
@@ -896,6 +990,7 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
         }
     } else if (cmd == 1) {
         if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_SWORD_FI) {
+            // #F5645A, #C8645A
             c1.r = 0xF5;
             c1.g = 0x64;
             c1.b = 0x5A;
@@ -903,6 +998,7 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
             c2.g = 0x64;
             c2.b = 0x5A;
         } else if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_STONE) {
+            // #B45050, #8C4040
             c1.r = 0xB4;
             c1.g = 0x50;
             c1.b = 0x50;
@@ -912,6 +1008,7 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
         }
     } else if (cmd == 3 && mMsgWindowSubtype >= dLytMsgWindow_c::MSG_WINDOW_SWORD_FI &&
                mMsgWindowSubtype < dLytMsgWindow_c::MSG_WINDOW_SWORD_FI + 3) {
+        // #50E6FA, #C8E6F5
         c1.r = 0x50;
         c1.g = 0xE6;
         c1.b = 0xFA;
@@ -921,8 +1018,8 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
     }
 
     u8 u5 = 0xFF;
-    if (field_0x004 != nullptr) {
-        u5 = field_0x004->GetGlobalAlpha();
+    if (getTextBox() != nullptr) {
+        u5 = getTextBox()->GetGlobalAlpha();
     }
 
     c2.a = u5;
@@ -959,18 +1056,20 @@ void dTagProcessor_c::fn_800B5520(wchar_t *src) {
     field_0x820 = ((u32 *)src)[1];
 }
 
+void dTagProcessor_c::fn_800B5540(wchar_t *src) {
+    dLytMsgWindow_c::getInstance()->onFlag0x820(sMsgWindowFlags[*(u8 *)src]);
+}
+
 wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
     if (FileManager::GetInstance()->getHeroname()[0] != '\0') {
         for (int i = 0; FileManager::GetInstance()->getHeroname()[i] != '\0'; i++) {
             if (arg != 0 && field_0x90E != 0) {
                 wchar_t *heroName = FileManager::GetInstance()->getHeroname();
-                fn_800B5FD0(heroName[i], &getTmpBuffer()[*outArg], outArg);
-                if (field_0x90E - 1 < 4) {
-                    field_0x808[field_0x90E - 1]++;
-                }
+                writeSingleCharacter(heroName[i], &getTmpBuffer()[*outArg], outArg);
+                onWriteTmpBuffer();
             } else {
                 wchar_t *heroName = FileManager::GetInstance()->getHeroname();
-                dest = fn_800B5FD0(heroName[i], dest, nullptr);
+                dest = writeSingleCharacter(heroName[i], dest, nullptr);
             }
         }
     }
@@ -980,7 +1079,6 @@ wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
 wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
     int itemIndex = *src;
     wchar_t c;
-    const wchar_t *readPtr;
 
     int i = 0;
     SizedString<16> mName;
@@ -988,31 +1086,66 @@ wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s3
     MsbtInfo *info = dMessage_c::getMsbtInfoForIndex(/* ItemGet */ 3);
     const wchar_t *text = LMS_GetTextByLabel(info, mName);
 
-    while (readPtr = &text[i], (c = text[i]) != 0) {
+    while ((c = text[i]) != 0) {
         if (c == 0xE) {
-            int len = ((readPtr[3] / 2) & 0x7F) + 4;
+            int len = ((text[i + 3] / 2) & 0x7F) + 4;
             if (arg != 0 && field_0x90E != 0) {
                 for (int j = 0; j < len; j++) {
-                    fn_800B5FD0(*readPtr, &getTmpBuffer()[*outArg], outArg);
+                    writeSingleCharacter(text[i], &getTmpBuffer()[*outArg], outArg);
                     onWriteTmpBuffer();
-                    readPtr++;
                     i++;
                 }
             } else {
                 for (int j = 0; j < len; j++) {
-                    dest = fn_800B5FD0(*readPtr, dest, nullptr);
-                    readPtr++;
+                    dest = writeSingleCharacter(text[i], dest, nullptr);
                     i++;
                 }
             }
         } else {
             if (arg != 0 && field_0x90E != 0) {
-                fn_800B5FD0(c, &getTmpBuffer()[*outArg], outArg);
+                writeSingleCharacter(c, &getTmpBuffer()[*outArg], outArg);
                 onWriteTmpBuffer();
             } else {
-                dest = fn_800B5FD0(c, dest, nullptr);
+                dest = writeSingleCharacter(c, dest, nullptr);
             }
             i++;
+        }
+    }
+
+    return dest;
+}
+
+wchar_t *dTagProcessor_c::writeStringArg(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
+    s32 argIdx = *(u32 *)src;
+    wchar_t c;
+    int i = 0;
+    while ((c = mStringArgs[argIdx][i]) != 0) {
+        if (c == 0xE) {
+            int len = ((mStringArgs[argIdx][i + 3] / 2) & 0x7F) + 4;
+            if (arg != 0 && field_0x90E != 0) {
+                for (int j = 0; j < len; j++) {
+                    writeSingleCharacter(mStringArgs[argIdx][i], &getTmpBuffer()[*outArg], outArg);
+                    onWriteTmpBuffer();
+                    i++;
+                }
+            } else {
+                for (int j = 0; j < len; j++) {
+                    dest = writeSingleCharacter(mStringArgs[argIdx][i], dest, nullptr);
+                    i++;
+                }
+            }
+        } else {
+            if (arg != 0 && field_0x90E != 0) {
+                writeSingleCharacter(c, &getTmpBuffer()[*outArg], outArg);
+                onWriteTmpBuffer();
+            } else {
+                dest = writeSingleCharacter(c, dest, nullptr);
+            }
+            i++;
+        }
+
+        if (i >= 0x40) {
+            break;
         }
     }
 
@@ -1104,10 +1237,73 @@ wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outA
     return dest;
 }
 
-void dTagProcessorDataStuff() {
-    SizedString<32> s;
-    s.sprintf("NAME_ITEM_%03d");
-    s.sprintf("lang:word:%03d:%02d");
+wchar_t *dTagProcessor_c::writeSingularOrPluralWord(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
+    int itemIndex = *(u8 *)src;
+    wchar_t c;
+
+    int i = 0;
+    SizedString<32> mName;
+    s32 amount = 2;
+    if (shouldUseSingular(mNumericArgsCopy[0])) {
+        amount = 1;
+    }
+    mName.sprintf("lang:word:%03d:%02d", itemIndex, amount);
+    MsbtInfo *info = dMessage_c::getMsbtInfoForIndex(/* word */ 18);
+    const wchar_t *text = LMS_GetTextByLabel(info, mName);
+
+    while ((c = text[i]) != 0) {
+        if (c == 0xE) {
+            int len = ((text[i + 3] / 2) & 0x7F) + 4;
+            if (arg != 0 && field_0x90E != 0) {
+                for (int j = 0; j < len; j++) {
+                    writeSingleCharacter(text[i], &getTmpBuffer()[*outArg], outArg);
+                    onWriteTmpBuffer();
+                    i++;
+                }
+            } else {
+                for (int j = 0; j < len; j++) {
+                    dest = writeSingleCharacter(text[i], dest, nullptr);
+                    i++;
+                }
+            }
+        } else {
+            if (arg != 0 && field_0x90E != 0) {
+                writeSingleCharacter(c, &getTmpBuffer()[*outArg], outArg);
+                onWriteTmpBuffer();
+            } else {
+                dest = writeSingleCharacter(c, dest, nullptr);
+            }
+            i++;
+        }
+    }
+
+    return dest;
+}
+
+wchar_t *dTagProcessor_c::writeSingleCharacter(wchar_t character, wchar_t *dst, s32 *pOutLen) {
+    if (field_0xEF1) {
+        field_0xEF1 = 0;
+        wchar_t replacementSequence[3];
+        toUpperCase(character, replacementSequence, 3);
+        wchar_t *ret = dst;
+        for (s32 i = 0; i < 3; i++) {
+            if (replacementSequence[i] == L'\0') {
+                return dst;
+            }
+            *dst = replacementSequence[i];
+            dst++;
+            if (pOutLen != nullptr) {
+                (*pOutLen)++;
+            }
+        }
+        return dst;
+    } else {
+        *dst = character;
+        if (pOutLen != nullptr) {
+            (*pOutLen)++;
+        }
+        return dst + 1;
+    }
 }
 
 void dTagProcessor_c::fn_800B60E0(u8 cmdLen, wchar_t *ptr) {
@@ -1126,7 +1322,9 @@ void dTagProcessor_c::fn_800B6140(u8 cmdLen, wchar_t *ptr) {
     field_0x864 = ptr[0];
     field_0x868 = ptr[1];
 }
-void dTagProcessor_c::playSound(u8 cmdLen, wchar_t *ptr) {}
+void dTagProcessor_c::playSound(u8 cmdLen, wchar_t *ptr) {
+    dFlow_c::playSound(*(u32 *)ptr);
+}
 void dTagProcessor_c::fn_800B6170(u8 cmdLen, wchar_t *ptr) {
     field_0x8FC = ptr[0];
     field_0x900 = ptr[1];
@@ -1142,8 +1340,8 @@ void dTagProcessor_c::fn_800B61B0(u8 cmdLen, wchar_t *ptr) {
 
 void dTagProcessor_c::fn_800B61D0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr) {
     f32 scale = fn_800B8040(*(char *)ptr, mMsgWindowSubtype);
-    if (field_0x004 != nullptr) {
-        scale *= field_0x004->getMyScale();
+    if (getTextBox() != nullptr) {
+        scale *= getTextBox()->getMyScale();
     }
     ctx->writer->SetScale(scale, scale);
 }
@@ -1168,15 +1366,116 @@ void dTagProcessor_c::changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
 
 void dTagProcessor_c::writeIcon(dTextBox_c *textBox, wchar_t *cmd, f32 arg) {
     nw4r::ut::Font *f = dFontMng_c::getFont(4);
-    u32 c3 = fn_800B7880(*(u8 *)cmd);
+    s8 c3 = fn_800B7880(*(u8 *)cmd);
     arg = UnkTextThing::getField0x764() / f->GetWidth() * arg;
 
     mLineData.mLineWidths[mLineData.mNumLines] += arg * f->GetCharWidth(c3) + textBox->GetCharSpace();
 }
 
+void dTagProcessor_c::fn_800B6450(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr) {
+    s8 c = fn_800B7A90(*(u8 *)ptr);
+    u8 alpha = 0xFF;
+    if (getTextBox() != nullptr) {
+        alpha = mpTextBox->GetGlobalAlpha();
+    }
+    s32 x1 = alpha / 255.0f * fn_800B7B30(*(u8 *)ptr);
+    s32 x2 = alpha / 255.0f * (255 - fn_800B7B30(*(u8 *)ptr));
+
+    nw4r::ut::TextWriterBase<wchar_t> w = *ctx->writer;
+    fn_800B6790(&w, ctx, (u32)c, x1);
+    if (*(u8 *)ptr >= 9 && *(u8 *)ptr < 15) {
+        nw4r::ut::TextWriterBase<wchar_t> w2 = *ctx->writer;
+        s8 c = symbolToFontIdx(8);
+        fn_800B6790(&w2, ctx, c, x2);
+    }
+    ctx->writer->SetCursorX(w.GetCursorX());
+    ctx->writer->SetupGX();
+    if (mpTextBox != nullptr) {
+        mpTextBox->setupGX();
+    }
+}
+
+void dTagProcessor_c::fn_800B6790(nw4r::ut::CharWriter *w, nw4r::ut::PrintContext<wchar_t> *ctx, u16 arg, u8 alpha) {
+    nw4r::ut::Font *font = dFontMng_c::getFont(4);
+
+    f32 f1 = UnkTextThing::getField0x764() * w->GetScaleV() / UnkTextThing::getFn800B1FC0();
+    f32 f3 = UnkTextThing::getFn800B1FC0();
+    f32 f4 = UnkTextThing::getField0x764();
+    f32 f5 = UnkTextThing::getFn800B1FC0();
+    f32 scaleY2 = w->GetScaleV();
+
+    s32 fontHeight = w->GetFont()->GetHeight();
+    f32 f6 = (scaleY2 * (fontHeight * f3 - f4)) / f5 / 2.0f;
+
+    w->SetFont(*font);
+    // #000000, #FFFFFF
+    w->ResetColorMapping();
+
+    s32 x = 0;
+    w->SetFontSize((s32)(f1 + 1.0f + x));
+    if (field_0xEE4) {
+        w->SetCursorY(f6 + field_0x818 - (field_0x814 - ctx->writer->GetCursorY()));
+    } else {
+        w->SetCursorY(ctx->y + f6);
+    }
+    w->SetGradationMode(nw4r::ut::CharWriter::GRADMODE_V);
+    if (arg == 0x38) {
+        // #FFFFFF, #FFFFFF
+        mColor c1(0xFF, 0xFF, 0xFF, alpha);
+        mColor c2(0xFF, 0xFF, 0xFF, alpha);
+        w->SetTextColor(c1, c2);
+        // #FFAB7F, #DD4809
+        mColor c3(0xFF, 0xAB, 0x7F, 0);
+        mColor c4(0xDD, 0x48, 0x09, 0xFF);
+        w->SetColorMapping(c3, c4);
+    } else if (arg == 0x39) {
+        // #FFFFFF, #FFFFFF
+        mColor c1(0xFF, 0xFF, 0xFF, alpha);
+        mColor c2(0xFF, 0xFF, 0xFF, alpha);
+        w->SetTextColor(c1, c2);
+        // #24D49F, #FFF8A4
+        mColor c3(0x24, 0xD4, 0x9F, 0);
+        mColor c4(0xFF, 0xF8, 0xA4, 0xFF);
+        w->SetColorMapping(c3, c4);
+    } else if (arg >= 0x33 && arg < 0x37) {
+        if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_WOOD) {
+            // #F2DABC, #F2DABC
+            mColor c1(0xF2, 0xDA, 0xBC, alpha);
+            mColor c2(0xF2, 0xDA, 0xBC, alpha);
+            w->SetTextColor(c1, c2);
+        } else if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_STONE) {
+            // #6E6973, #6E6973
+            mColor c1(0x6E, 0x69, 0x73, alpha);
+            mColor c2(0x6E, 0x69, 0x73, alpha);
+            w->SetTextColor(c1, c2);
+        } else {
+            // #FFFCEE, #F3EFE1
+            mColor c1(0xFF, 0xFC, 0xEE, alpha);
+            mColor c2(0xF3, 0xEF, 0xE1, alpha);
+            w->SetTextColor(c1, c2);
+        }
+    } else {
+        // #FFFCEE, #F3EFE1
+        mColor c1(0xFF, 0xFC, 0xEE, alpha);
+        mColor c2(0xF3, 0xEF, 0xE1, alpha);
+        w->SetTextColor(c1, c2);
+    }
+    if (field_0xEE1 != 0) {
+        // #505050
+        mColor c1(0x50, 0x50, 0x50, 0);
+        mColor c2(0x50, 0x50, 0x50, 0x50);
+        SetupGXCommon();
+        SetupGXWithColorMapping(c1, c2);
+        SetupVertexFormat();
+    } else {
+        w->SetupGX();
+    }
+    w->Print(arg);
+}
+
 void dTagProcessor_c::makeSpaceForIconMaybe(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr) {
     nw4r::ut::Font *f = dFontMng_c::getFont(4);
-    u32 c3 = fn_800B7880(*(u8 *)ptr);
+    s8 c3 = fn_800B7880(*(u8 *)ptr);
     nw4r::ut::TextWriterBase<wchar_t> copy = *ctx->writer;
     f32 charWidth = f->GetCharWidth(c3);
     fn_800B70D0(&copy, ctx, c3, 0xFF);
@@ -1185,6 +1484,64 @@ void dTagProcessor_c::makeSpaceForIconMaybe(nw4r::ut::Rect *rect, nw4r::ut::Prin
     f32 cursorX = ctx->writer->GetCursorX();
     rect->left = rect->left > cursorX ? cursorX : rect->left;
     rect->right = rect->right < cursorX ? cursorX : rect->right;
+}
+
+void dTagProcessor_c::fn_800B70D0(
+    nw4r::ut::TextWriterBase<wchar_t> *w, nw4r::ut::PrintContext<wchar_t> *ctx, u16 arg, s32 alpha
+) {
+    nw4r::ut::Font *font = dFontMng_c::getFont(4);
+
+    f32 f1 = UnkTextThing::getField0x764() * ctx->writer->GetScaleV() / UnkTextThing::getFn800B1FC0();
+    w->SetFont(*font);
+    w->SetFontSize(f1);
+    w->SetGradationMode(nw4r::ut::CharWriter::GRADMODE_V);
+    if (arg == 0x38) {
+        // #F26E36, #F26E36
+        mColor c1(0xF2, 0x6E, 0x36, alpha);
+        mColor c2(0xF2, 0x6E, 0x36, alpha);
+        w->SetTextColor(c1, c2);
+    } else if (arg >= 0x33 && arg < 0x37) {
+        if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_WOOD) {
+            // #F2DABC, #F2DABC
+            mColor c1(0xF2, 0xDA, 0xBC, alpha);
+            mColor c2(0xF2, 0xDA, 0xBC, alpha);
+            w->SetTextColor(c1, c2);
+        } else if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_STONE) {
+            // #6E6973, #6E6973
+            mColor c1(0x6E, 0x69, 0x73, alpha);
+            mColor c2(0x6E, 0x69, 0x73, alpha);
+            w->SetTextColor(c1, c2);
+        } else {
+            // #FFFCEE, #F3EFE1
+            mColor c1(0xFF, 0xFC, 0xEE, alpha);
+            mColor c2(0xF3, 0xEF, 0xE1, alpha);
+            w->SetTextColor(c1, c2);
+        }
+    } else {
+        // #FFFCEE, #F3EFE1
+        mColor c1(0xFF, 0xFC, 0xEE, alpha);
+        mColor c2(0xF3, 0xEF, 0xE1, alpha);
+        w->SetTextColor(c1, c2);
+    }
+}
+
+void dTagProcessor_c::somethingWithScrapperAndMusic(wchar_t *src) {
+    field_0x824 = *(u32 *)src;
+    if (field_0x824 == 100) {
+        dAcBase_c *ac = nullptr;
+        dAcBase_c *parent = nullptr;
+        while ((parent = ac = static_cast<dAcBase_c *>(fManager_c::searchBaseByGroupType(fBase_c::ACTOR, parent))) !=
+               nullptr) {
+            if ((ac->profile_name >= fProfile::NPC_SLFB && ac->profile_name <= fProfile::NPC_SLFL) ||
+                (ac->profile_name >= fProfile::NPC_SLB && ac->profile_name <= fProfile::FLY_SLB) ||
+                ac->profile_name == fProfile::NPC_SLB2 || ac->profile_name == fProfile::NPC_DRBC) {
+                fn_8035E790(BGM_MGR, dLytMsgWindow_c::getInstance()->getField_0x784(), ac);
+                return;
+            }
+        }
+    } else if (field_0x824 == 101) {
+        fn_8035E790(BGM_MGR, dLytMsgWindow_c::getInstance()->getField_0x784(), nullptr);
+    }
 }
 
 void dTagProcessor_c::restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 windowType) {
@@ -1196,25 +1553,25 @@ void dTagProcessor_c::restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 wind
         case 2:  colorIndex = 15; break;
         case 3:  colorIndex = 16; break;
         case 4:  colorIndex = 17; break;
-        case 5:  colorIndex = 19; break;
-        case 6:  colorIndex = 20; break;
-        case 7:  colorIndex = 21; break;
-        case 8:  colorIndex = 22; break;
-        case 9:  colorIndex = 24; break;
-        case 11: colorIndex = 25; break;
-        case 12: colorIndex = 26; break;
-        case 13: colorIndex = 30; break;
-        case 17: colorIndex = 31; break;
-        case 18: colorIndex = 32; break;
-        case 19: colorIndex = 43; break;
+        case 6:  colorIndex = 19; break;
+        case 7:  colorIndex = 20; break;
+        case 8:  colorIndex = 21; break;
+        case 9:  colorIndex = 22; break;
+        case 11: colorIndex = 24; break;
+        case 12: colorIndex = 25; break;
+        case 13: colorIndex = 26; break;
+        case 17: colorIndex = 30; break;
+        case 18: colorIndex = 31; break;
+        case 19: colorIndex = 32; break;
+        case 30: colorIndex = 43; break;
         case 20: colorIndex = 33; break;
         case 22: colorIndex = 35; break;
         case 23: colorIndex = 36; break;
         case 24: colorIndex = 37; break;
         case 27: colorIndex = 40; break;
         case 29: colorIndex = 42; break;
-        case 30: colorIndex = 44; break;
-        case 31: colorIndex = 18; break;
+        case 31: colorIndex = 44; break;
+        case 5:  colorIndex = 18; break;
         default: colorIndex = 14; break;
     }
 
@@ -1230,8 +1587,8 @@ void dTagProcessor_c::restoreColor(nw4r::ut::PrintContext<wchar_t> *ctx, u8 wind
     }
 
     u8 u5 = 0xFF;
-    if (field_0x004 != nullptr) {
-        u5 = field_0x004->GetGlobalAlpha();
+    if (getTextBox() != nullptr) {
+        u5 = getTextBox()->GetGlobalAlpha();
     }
 
     c1.a = c1.a * u5 / 255.0f;
@@ -1256,8 +1613,108 @@ wchar_t *dTagProcessor_c::writeTextNormal(const wchar_t *src, wchar_t *dest, s32
 }
 
 u8 dTagProcessor_c::symbolToFontIdx(s32 s) {
-    static const u8 alphabet[] = " !\"#$%&\'()*+,)+-/0123456789";
-    return alphabet[s];
+    static const s8 index[] = " !\"#$%&\'()*+,)+-/0123456789";
+    return index[s];
+}
+
+
+u8 dTagProcessor_c::fn_800B7880(u8 arg) {
+    if (arg >= 9 && arg < 13) {
+        if (mNumericArgsCopy[1] >= UnkTextThing::getField_0x7AA_plus_0x7AC()) {
+            return symbolToFontIdx(8);
+        }
+    } else if (arg >= 16 && arg < 20) {
+        if (mNumericArgsCopy[1] >= UnkTextThing::getField_0x7AA_plus_0x7AC()) {
+            return '.';
+        }
+    } else if (arg == 13) {
+        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC()) {
+            return symbolToFontIdx(9);
+        }
+
+        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
+            return symbolToFontIdx(8);
+        }
+
+        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 3) {
+            return symbolToFontIdx(10);
+        }
+        return symbolToFontIdx(8);
+    } else if (arg == 14) {
+        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC()) {
+            return symbolToFontIdx(11);
+        }
+
+        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
+            return symbolToFontIdx(8);
+        }
+
+        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 3) {
+            return symbolToFontIdx(12);
+        }
+        return symbolToFontIdx(8);
+    }
+
+    return symbolToFontIdx(arg);
+}
+
+u8 dTagProcessor_c::fn_800B7A90(u8 arg) {
+    if (arg == 13) {
+        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
+            return symbolToFontIdx(9);
+        } else {
+            return symbolToFontIdx(10);
+        }
+    } else if (arg == 14) {
+        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
+            return symbolToFontIdx(11);
+        } else {
+            return symbolToFontIdx(12);
+        }
+    }
+    return symbolToFontIdx(arg);
+}
+
+u8 dTagProcessor_c::fn_800B7B30(u8 arg) {
+    f32 ret = 255.0f;
+    f32 f = UnkTextThing::getField_0x7AA();
+    if (arg >= 9 && arg < 13) {
+        if (mNumericArgsCopy[1] < UnkTextThing::getField_0x7AA()) {
+            ret = (mNumericArgsCopy[1] / f) * ret;
+        } else if (mNumericArgsCopy[1] < UnkTextThing::getField_0x7AA_plus_0x7AC()) {
+            ret = 255.0f;
+        } else if (mNumericArgsCopy[1] < UnkTextThing::getField_0x7AA_plus_0x7AC() + UnkTextThing::getField_0x7AA()) {
+            ret = (UnkTextThing::getField_0x7AA_plus_0x7AC() + UnkTextThing::getField_0x7AA() - mNumericArgsCopy[1]) /
+                  f * ret;
+        } else {
+            ret = 0.0f;
+        }
+    } else if (arg >= 13 && arg < 15) {
+        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA()) {
+            ret = (mNumericArgsCopy[2] / f) * ret;
+        } else if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC()) {
+            ret = 255.0f;
+        } else if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() + UnkTextThing::getField_0x7AA()) {
+            ret = (UnkTextThing::getField_0x7AA_plus_0x7AC() + UnkTextThing::getField_0x7AA() - mNumericArgsCopy[2]) /
+                  f * ret;
+        } else if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
+            ret = 0.0f;
+        } else if (mNumericArgsCopy[2] <
+                   UnkTextThing::getField_0x7AA() + UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
+            ret = (mNumericArgsCopy[2] - 2 * UnkTextThing::getField_0x7AA_plus_0x7AC()) / f * ret;
+        } else if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 3) {
+            ret = 255.0f;
+        } else if (mNumericArgsCopy[2] <
+                   UnkTextThing::getField_0x7AA() + UnkTextThing::getField_0x7AA_plus_0x7AC() * 3) {
+            ret = ((UnkTextThing::getField_0x7AA() + 3 * UnkTextThing::getField_0x7AA_plus_0x7AC()) -
+                   mNumericArgsCopy[2]) /
+                  f * ret;
+        } else {
+            ret = 0.0f;
+        }
+    }
+
+    return ret;
 }
 
 void dTagProcessor_c::setStringArg(const wchar_t *arg, s32 index) {
@@ -1303,12 +1760,133 @@ f32 dTagProcessor_c::fn_800B8040(s8 factor, u32 windowType) {
     }
 }
 
-s32 dTagProcessor_c::getMaxNumLines(s32 arg) {
-    if (arg >= dLytMsgWindow_c::MSG_WINDOW_WOOD && arg < dLytMsgWindow_c::MSG_WINDOW_WOOD + 2) {
+// Copied exactly from nw4r::ut::CharWriter
+void dTagProcessor_c::SetupGXCommon() {
+    static const nw4r::ut::Color fog = 0;
+
+    GXSetFog(GX_FOG_NONE, fog, 0.0f, 0.0f, 0.0f, 0.0f);
+    GXSetTevSwapModeTable(GX_TEV_SWAP0, GX_CH_RED, GX_CH_GREEN, GX_CH_BLUE, GX_CH_ALPHA);
+    GXSetZTexture(GX_ZT_DISABLE, GX_TF_Z8, 0);
+    GXSetNumChans(1);
+    GXSetChanCtrl(GX_COLOR0A0, FALSE, GX_SRC_REG, GX_SRC_VTX, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+    GXSetChanCtrl(GX_COLOR1A1, FALSE, GX_SRC_REG, GX_SRC_REG, GX_LIGHT_NULL, GX_DF_NONE, GX_AF_NONE);
+    GXSetNumTexGens(1);
+    GXSetTexCoordGen2(GX_TEXCOORD0, GX_TG_MTX2x4, GX_TG_TEX0, GX_IDENTITY, FALSE, GX_DUALMTX_IDENT);
+    GXSetNumIndStages(0);
+    GXSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_SET);
+}
+
+// Copied from nw4r::ut::CharWriter with one modification
+void dTagProcessor_c::SetupGXWithColorMapping(nw4r::ut::Color min, nw4r::ut::Color max) {
+    GXSetNumTevStages(2);
+    GXSetTevDirect(GX_TEVSTAGE0);
+    GXSetTevDirect(GX_TEVSTAGE1);
+
+    GXSetTevSwapMode(GX_TEVSTAGE0, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevSwapMode(GX_TEVSTAGE1, GX_TEV_SWAP0, GX_TEV_SWAP0);
+    GXSetTevOrder(GX_TEVSTAGE0, GX_TEXCOORD0, GX_TEXMAP0, GX_COLOR_NULL);
+
+    GXSetTevColor(GX_TEVREG0, min);
+    GXSetTevColor(GX_TEVREG1, max);
+
+    // GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_C0, GX_CC_C1, GX_CC_TEXC, GX_CC_ZERO);
+    GXSetTevColorIn(GX_TEVSTAGE0, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE0, GX_CA_A0, GX_CA_A1, GX_CA_TEXA, GX_CA_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE0, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, TRUE, GX_TEVPREV);
+
+    GXSetTevOrder(GX_TEVSTAGE1, GX_TEXCOORD_NULL, GX_TEXMAP_NULL, GX_COLOR0A0);
+    GXSetTevColorIn(GX_TEVSTAGE1, GX_CC_ZERO, GX_CC_CPREV, GX_CC_RASC, GX_CC_ZERO);
+    GXSetTevAlphaIn(GX_TEVSTAGE1, GX_CA_ZERO, GX_CA_APREV, GX_CA_RASA, GX_CA_ZERO);
+    GXSetTevColorOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, TRUE, GX_TEVPREV);
+    GXSetTevAlphaOp(GX_TEVSTAGE1, GX_TEV_ADD, GX_TB_ZERO, GX_CS_SCALE_1, TRUE, GX_TEVPREV);
+}
+
+// Copied exactly from nw4r::ut::CharWriter
+void dTagProcessor_c::SetupVertexFormat() {
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
+    GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_U16, 15);
+
+    GXClearVtxDesc();
+    GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
+    GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
+}
+
+f32 dTagProcessor_c::getMarginForCenteredLine(s32 lineIdx) {
+    nw4r::lyt::Size size = mpTextBox->GetSize();
+    f32 margin = (size.width - getLineWidth(lineIdx)) / 2.0f;
+    if (margin < 0.0f) {
+        margin = 0.0f;
+    }
+    return margin;
+}
+
+f32 dTagProcessor_c::fn_800B85C0(s32 lineIdx) {
+    nw4r::lyt::Size size = mpTextBox->GetSize();
+    nw4r::lyt::Size fontSize = mpTextBox->GetFontSize();
+
+    s32 v = 0;
+    s32 u = 0;
+
+    s32 numLines = getMaxNumLines(mMsgWindowSubtype);
+    s32 rem = lineIdx % numLines;
+    if (rem != 0) {
+        lineIdx -= rem;
+    }
+    // similar code in fn_800B4FF0
+    for (s32 i = lineIdx; i < getMaxNumLines(mMsgWindowSubtype) + lineIdx && i < 0x32; i++) {
+        if (getLineWidth(i) > 0.0f) {
+            v++;
+            if (u != 0) {
+                v += u;
+                u = 0;
+            }
+        } else {
+            u++;
+        }
+    }
+
+    f32 ret = 0.0f;
+    if (u < getMaxNumLines(mMsgWindowSubtype)) {
+        // Begin unused code - the results here are unused and disappear
+        // in any decompiler
+        f32 w1 = fontSize.width * 0.5f;
+        f32 h1 = fontSize.height * 0.5f;
+        if (w1 < UnkTextThing::getField0x758() || h1 < UnkTextThing::getField0x758()) {
+            if (w1 < h1) {
+                f32 tmp = UnkTextThing::getField0x758();
+            } else {
+                f32 tmp2 = UnkTextThing::getField0x758();
+            }
+        }
+        f32 tmp3 = UnkTextThing::getField0x758();
+        // End unused code
+
+        f32 f7 = (fontSize.height + getTextBox()->GetLineSpace()) / 2.0f;
+        ret = -(f7 * (getMaxNumLines(mMsgWindowSubtype) - v));
+        if (getTextBox()->GetTextPositionV() == 2) {
+            ret -=
+                (size.height - (fontSize.height * getMaxNumLines(mMsgWindowSubtype) +
+                                (mpTextBox->GetLineSpace() * (getMaxNumLines(mMsgWindowSubtype) - 1))));
+        }
+        if (ret > 0.0f) {
+            ret = 0.0f;
+        }
+    }
+    if (rem > 0) {
+        ret -= rem * (fontSize.height + getTextBox()->GetLineSpace());
+    }
+    return ret;
+}
+
+s32 dTagProcessor_c::getMaxNumLines(s32 windowType) {
+    if (windowType >= dLytMsgWindow_c::MSG_WINDOW_WOOD && windowType < dLytMsgWindow_c::MSG_WINDOW_WOOD + 2) {
         return 4;
-    } else if (arg == dLytMsgWindow_c::MSG_WINDOW_LINK) {
+    } else if (windowType == dLytMsgWindow_c::MSG_WINDOW_LINK) {
         return 2;
-    } else if (arg == dLytMsgWindow_c::MSG_WINDOW_DEMO) {
+    } else if (windowType == dLytMsgWindow_c::MSG_WINDOW_DEMO) {
         return 2;
     }
     return 4;
@@ -1378,4 +1956,23 @@ void dTagProcessor_c::setNumericArgs(const s32 *args, s32 numArgs) {
     for (int i = 0; i < numArgs; i++) {
         mNumericArgs[i] = args[i];
     }
+}
+
+void dTagProcessor_c::tick0x8C8() {
+    mNumericArgsCopy[1]++;
+    if (mNumericArgsCopy[1] >= UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
+        mNumericArgsCopy[1] = 0;
+    }
+}
+
+void dTagProcessor_c::tick0x8CC() {
+    mNumericArgsCopy[2]++;
+    if (mNumericArgsCopy[2] >= UnkTextThing::getField_0x7AA_plus_0x7AC() * 4) {
+        mNumericArgsCopy[2] = 0;
+    }
+}
+
+void dTagProcessor_c::execute() {
+    tick0x8C8();
+    tick0x8CC();
 }

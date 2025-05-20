@@ -93,6 +93,10 @@ public:
         return mpTagProcessor;
     }
 
+    s32 getField_0x784() const {
+        return field_0x784;
+    }
+
     u8 getField_0x80D() const {
         return field_0x80D;
     }
@@ -103,6 +107,10 @@ public:
 
     s32 getTextOptionSelection() const {
         return mTextOptionSelection;
+    }
+
+    void onFlag0x820(u16 flag) {
+        field_0x820 |= flag;
     }
 
 private:

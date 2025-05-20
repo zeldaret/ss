@@ -136,6 +136,8 @@ public:
     bool advanceUntilEvent(s32 searchParam3, s32 *pOutParams1n2);
     bool advanceUntil(s32 searchType, s32 searchParam3, s32 *pOutParams1n2);
 
+    static void playSound(u32);
+
     u16 getField_0x44() const;
     u16 getNextFiFlow() const;
 
@@ -176,7 +178,6 @@ protected:
     void setField0x3C();
     bool checkField0x3C() const;
     bool shouldHideKillCountForActor(s32 id) const;
-    static void playSound(u32);
     void createLytMiniGame();
     void clearMinigame();
 

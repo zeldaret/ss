@@ -75,6 +75,13 @@ public:
         return 1.0f;
     }
 
+    inline static f32 getFn800B1FC0() {
+        if (sInstance != nullptr) {
+            return sInstance->fn_800B1FC0();
+        }
+        return 1.0f;
+    }
+
     inline static f32 getFn800B1FD0() {
         if (sInstance != nullptr) {
             return sInstance->fn_800B1FD0();
@@ -126,6 +133,20 @@ public:
             return sInstance->fn_800B2040();
         }
         return 0.0f;
+    }
+
+    inline static s16 getField_0x7AA() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x7AA;
+        }
+        return 0;
+    }
+
+    inline static s16 getField_0x7AA_plus_0x7AC() {
+        if (sInstance != nullptr) {
+            return sInstance->field_0x7AA + sInstance->field_0x7AC;
+        }
+        return 0;
     }
 
     static UnkTextThing *getInstance() {

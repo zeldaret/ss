@@ -41,7 +41,7 @@ bool TextWindowUnk::fn_800B2130(const char *label, dTextBox_c *textBox, dLytMsgW
     mLineWidths = mpTagProcessor->getLineData();
 
     if (mpCharacterData != nullptr) {
-        mpTagProcessor->fn_800B4290(
+        mpTagProcessor->computeCharacterPlacement(
             mpTextBox, mRawTextBuffer, mUnkBuffer, field_0x1458, &field_0x1478, mpCharacterData
         );
         if (mpTagProcessor->getMsgWindowSubtype() == 2) {
