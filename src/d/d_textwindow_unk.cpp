@@ -44,7 +44,7 @@ bool TextWindowUnk::fn_800B2130(const char *label, dTextBox_c *textBox, dLytMsgW
         mpTagProcessor->computeCharacterPlacement(
             mpTextBox, mRawTextBuffer, mUnkBuffer, field_0x1458, &field_0x1478, mpCharacterData
         );
-        if (mpTagProcessor->getMsgWindowSubtype() == 2) {
+        if (mpTagProcessor->getMsgWindowSubtype() == dLytMsgWindow_c::MSG_WINDOW_SWORD_FI) {
             fn_803996B0(lbl_80575DE0, field_0x1402, field_0x1478, mpTagProcessor->getField_0x824());
         }
     }

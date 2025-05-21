@@ -135,14 +135,14 @@ public:
         return 0.0f;
     }
 
-    inline static s16 getField_0x7AA() {
+    inline static s16 getAnimBtnTransitionDuration() {
         if (sInstance != nullptr) {
             return sInstance->field_0x7AA;
         }
         return 0;
     }
 
-    inline static s16 getField_0x7AA_plus_0x7AC() {
+    inline static s16 getAnimBtnTotalDuration() {
         if (sInstance != nullptr) {
             return sInstance->field_0x7AA + sInstance->field_0x7AC;
         }

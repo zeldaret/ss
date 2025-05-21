@@ -28,11 +28,11 @@ public:
 
     nw4r::ut::Operation ProcessTags(nw4r::ut::Rect *rect, u16 ch, nw4r::ut::PrintContext<wchar_t> *ctx);
 
-    u8 fn_800B7A90(u8 arg);
+    u8 getAnimatedWiggleIconReplacement(u8 arg);
     u8 symbolToFontIdx(s32 s);
-    u8 fn_800B7880(u8);
+    u8 getAnimatedIconReplacement(u8);
 
-    u8 fn_800B7B30(u8 arg);
+    u8 getAlphaForAnimatedIcon(u8 arg);
     f32 getMarginForCenteredLine(s32);
     f32 fn_800B85C0(s32);
     void somethingWithScrapperAndMusic(wchar_t* src);
@@ -42,8 +42,8 @@ public:
     wchar_t *writeStringArg(wchar_t *dest, wchar_t *src, s32 *, s32);
     wchar_t *writeNumericArg(wchar_t *dest, wchar_t *src, s32 *, s32);
     void fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
-    void fn_800B6450(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
-    void makeSpaceForIconMaybe(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr);
+    void drawIcon(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
+    void calcRectIcon(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr);
     void fn_800B61D0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void setFramesLeftOnPause(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr);
     void fn_800B5500(u8 cmdLen, wchar_t *ptr);
@@ -76,9 +76,9 @@ public:
     wchar_t *writeHeroname(wchar_t *dest, s32 *, s32);
     wchar_t *writeSingularOrPluralWord(wchar_t *dest, wchar_t *src, s32 *, s32);
     void fn_800B5520(wchar_t *src);
-    void writeIcon(dTextBox_c *textBox, wchar_t *cmd, f32);
-    void fn_800B70D0(nw4r::ut::TextWriterBase<wchar_t> *, nw4r::ut::PrintContext<wchar_t> *ctx, u16 c, s32);
-    void fn_800B6790(nw4r::ut::CharWriter *w, nw4r::ut::PrintContext<wchar_t> *ctx, u16, u8);
+    void saveIconWidth(dTextBox_c *textBox, wchar_t *cmd, f32);
+    void configureWriterForIcon(nw4r::ut::TextWriterBase<wchar_t> *, nw4r::ut::PrintContext<wchar_t> *ctx, u16 c, s32);
+    void drawPicture(nw4r::ut::CharWriter *w, nw4r::ut::PrintContext<wchar_t> *ctx, u16, u8);
 
     void
     computeCharacterPlacement(dTextBox_c *textBox, const wchar_t *src, wchar_t *dest, s32, u16 *, dLytMsgWindowCharData *charData);
@@ -91,8 +91,8 @@ public:
     s32 tickPauseFrame();
     s32 tick0x830();
 
-    void tick0x8C8();
-    void tick0x8CC();
+    void executeBtnPressTimer();
+    void executeBtnWiggleTimer();
     void execute();
 
     void setTextbox(dTextBox_c *box) {
@@ -242,11 +242,10 @@ private:
     /* 0x894 */ s32 field_0x894;
     /* 0x898 */ s32 field_0x898;
     /* 0x89C */ s32 mNumericArgs[10];
-    /* 0x8C4 */ s32 mNumericArgsCopy[10]; // probably not an array
-    /* 0x8EC */ s32 field_0x8EC;
-    /* 0x8EC */ s32 field_0x8F0;
-    /* 0x8F4 */ s32 field_0x8F4;
-    /* 0x8F8 */ s32 field_0x8F8;
+    /* 0x8C4 */ s32 mFirstNumericArg; // For pluralization
+    /* 0x8C8 */ s32 mButtonPressAnimTimer;
+    /* 0x8CC */ s32 mButtonWiggleAnimTimer;
+    /* 0x8D0 */ s32 mNumericArgsCopy[11]; // probably not an array
     /* 0x8FC */ s32 field_0x8FC;
     /* 0x900 */ s32 field_0x900;
     /* 0x904 */ f32 field_0x904;

@@ -26,6 +26,43 @@
 
 #include <libc.h>
 
+#define READ_U8(src, off) (*((const u8 *)((const u8 *)src + off)))
+#define READ_S8(src, off) (*((const s8 *)((const u8 *)src + off)))
+#define READ_U16(src, off) (*((const u16 *)((const u8 *)src + off)))
+#define READ_S16(src, off) (*((const s16 *)((const u8 *)src + off)))
+#define READ_U32(src, off) (*((const u32 *)((const u8 *)src + off)))
+
+// picture_00.brfnt
+enum PictureFontIdx {
+    FONT_BTN_A = 0,
+    FONT_BTN_B = 1,
+    FONT_BTN_MINUS = 2,
+    FONT_BTN_PLUS = 3,
+    FONT_BTN_1 = 4,
+    FONT_BTN_2 = 5,
+    FONT_BTN_C = 6,
+    FONT_BTN_Z = 7,
+    FONT_BTN_NUN_STK = 8,
+    FONT_BTN_NUN_STK_UP = 9,
+    FONT_BTN_NUN_STK_DOWN = 10,
+    FONT_BTN_NUN_STK_LEFT = 11,
+    FONT_BTN_NUN_STK_RIGHT = 12,
+    FONT_BTN_NUN_STK_WIGGLE_VERTICAL = 13,
+    FONT_BTN_NUN_STK_WIGGLE_HORIZONTAL = 14,
+    FONT_BTN_CROSS_FULL = 15,
+    FONT_BTN_CROSS_UP = 16,
+    FONT_BTN_CROSS_DOWN = 17,
+    FONT_BTN_CORSS_LEFT = 18,
+    FONT_BTN_CROSS_RIGHT = 19,
+    FONT_ARROW_UP = 20,
+    FONT_ARROW_DOWN = 21,
+    FONT_ARROW_LEFT = 22,
+    FONT_ARROW_RIGHT = 23,
+    FONT_CURSOR = 24,
+    FONT_X = 25,
+    FONT_HOLE = 26,
+};
+
 nw4r::ut::Color FontColors1[] = {
     nw4r::ut::Color(0xff, 0x4b, 0x32, 0xff), // #ff4b32ff
     nw4r::ut::Color(0xff, 0x4b, 0x32, 0xff), // #ff4b32ff
@@ -261,9 +298,13 @@ dTagProcessor_c::dTagProcessor_c() {
     field_0x81C = 0;
     field_0x820 = 0;
     setNumericArg0(0);
+    mButtonPressAnimTimer = 0;
+    mButtonWiggleAnimTimer = 0;
+    mFirstNumericArg = 0;
+
+    mNumericArgsCopy[0] = 0;
     mNumericArgsCopy[1] = 0;
     mNumericArgsCopy[2] = 0;
-    mNumericArgsCopy[0] = 0;
     mNumericArgsCopy[3] = 0;
     mNumericArgsCopy[4] = 0;
     mNumericArgsCopy[5] = 0;
@@ -271,10 +312,7 @@ dTagProcessor_c::dTagProcessor_c() {
     mNumericArgsCopy[7] = 0;
     mNumericArgsCopy[8] = 0;
     mNumericArgsCopy[9] = 0;
-    field_0x8EC = 0;
-    field_0x8F0 = 0;
-    field_0x8F4 = 0;
-    field_0x8F8 = 0;
+    mNumericArgsCopy[10] = 0;
 
     field_0xEE5 = 0;
     field_0xEE6 = 0;
@@ -383,9 +421,8 @@ void dTagProcessor_c::formatV(
                     }
                     break;
                 case 0x10000: {
-                    const u8 *endPtrU8 = (const u8 *)endPtr;
-                    u8 a = endPtrU8[0];
-                    u8 b = endPtrU8[1];
+                    u8 a = READ_U8(endPtr, 0);
+                    u8 b = READ_U8(endPtr, 1);
                     switch (a) {
                         case 0: state2 = 0; break;
                         case 1: state1 = 0; break;
@@ -406,9 +443,8 @@ void dTagProcessor_c::formatV(
                     bVar3 = true;
                 } break;
                 case 0x10001: {
-                    const u8 *endPtrU8 = (const u8 *)endPtr;
-                    u8 a = endPtrU8[0];
-                    u8 b = endPtrU8[1];
+                    u8 a = READ_U8(endPtr, 0);
+                    u8 b = READ_U8(endPtr, 1);
                     switch (a) {
                         case 0: state2 = 1; break;
                         case 1: state1 = 1; break;
@@ -418,9 +454,8 @@ void dTagProcessor_c::formatV(
                     bVar3 = true;
                 } break;
                 case 0x10002: {
-                    const u8 *endPtrU8 = (const u8 *)endPtr;
-                    u8 a = endPtrU8[0];
-                    u8 b = endPtrU8[1];
+                    u8 a = READ_U8(endPtr, 0);
+                    u8 b = READ_U8(endPtr, 1);
                     switch (a) {
                         case 0: state2 = 2; break;
                         case 1: state1 = 2; break;
@@ -430,9 +465,8 @@ void dTagProcessor_c::formatV(
                     bVar3 = true;
                 } break;
                 case 0x10003: {
-                    const u8 *endPtrU8 = (const u8 *)endPtr;
-                    u8 a = endPtrU8[0];
-                    u8 b = endPtrU8[1];
+                    u8 a = READ_U8(endPtr, 0);
+                    u8 b = READ_U8(endPtr, 1);
                     switch (a) {
                         case 0: state2 = 3; break;
                         case 1: state1 = 3; break;
@@ -443,7 +477,7 @@ void dTagProcessor_c::formatV(
                 } break;
                 case 0x10008:
                     if (textBox != nullptr) {
-                        currScale = fn_800B8040(((u8 *)endPtr)[0], mMsgWindowSubtype);
+                        currScale = fn_800B8040(READ_U8(endPtr, 0), mMsgWindowSubtype);
                         currScale *= textBox->getMyScale();
                     }
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
@@ -459,7 +493,7 @@ void dTagProcessor_c::formatV(
                 case 0x10010: fn_800B5520(endPtr); break;
                 case 0x20004:
                     if (textBox != nullptr) {
-                        writeIcon(textBox, endPtr, currScale);
+                        saveIconWidth(textBox, endPtr, currScale);
                     }
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
                     break;
@@ -629,7 +663,7 @@ beginning:
                 case 0x10003: b1 = true; break;
                 case 0x10008: {
                     if (b2) {
-                        f32 newScale = fn_800B8040(*(u8 *)endPtr, mMsgWindowSubtype);
+                        f32 newScale = fn_800B8040(READ_U8(endPtr, 0), mMsgWindowSubtype);
                         f32 baseScale = fn_800B8040(0, mMsgWindowSubtype);
                         if (textBox != nullptr) {
                             newScale *= textBox->getMyScale();
@@ -659,8 +693,8 @@ beginning:
                 case 0x20004:
                     if (b2) {
                         *writePtr = -1;
-                        const nw4r::ut::Font *fnt = dFontMng_c::getFont(4);
-                        s8 c = fn_800B7880(*(u8 *)endPtr);
+                        const nw4r::ut::Font *fnt = dFontMng_c::getFont(dFontMng_c::PICTURE);
+                        s8 c = getAnimatedIconReplacement(READ_U8(endPtr, 0));
                         f32 tmp = UnkTextThing::getField0x764();
                         f32 wid = tmp / fnt->GetWidth() * currScale;
                         f32 charSpace = textBox->GetCharSpace();
@@ -695,7 +729,7 @@ beginning:
             if (b2) {
                 *writePtr = c;
                 const nw4r::ut::Font *fnt = textBox->GetFont();
-                f32 tmp = currScale * fnt->GetCharWidth(*src) * 0.5f;
+                f32 tmp = currScale * fnt->GetCharWidth(READ_U16(src, 0)) * 0.5f;
                 posX += tmp;
                 if (charData != nullptr) {
                     wchar_t s = *writePtr;
@@ -779,115 +813,115 @@ nw4r::ut::Operation dTagProcessor_c::ProcessTags(nw4r::ut::Rect *rect, u16 ch, n
         case 0x10004:
             // Pause
             if (rect == nullptr && field_0xEE1 == 0) {
-                if (field_0xEED == 0 && field_0x8F0 == field_0x838) {
+                if (field_0xEED == 0 && mNumericArgsCopy[8] == field_0x838) {
                     setFramesLeftOnPause(rect, ctx, cmdLen, endPtr);
                     field_0xEED = 1;
                     field_0x838++;
                 }
-                field_0x8F0++;
+                mNumericArgsCopy[8]++;
             }
             break;
         case 0x10005:
             if (rect == nullptr && field_0xEE1 == 0) {
-                if (field_0xEEE == 0 && field_0x8F4 == field_0x83C) {
+                if (field_0xEEE == 0 && mNumericArgsCopy[9] == field_0x83C) {
                     fn_800B5500(cmdLen, endPtr);
                     field_0xEEE = 1;
                     field_0x83C++;
                 }
-                field_0x8F4++;
+                mNumericArgsCopy[9]++;
             }
             break;
         case 0x10007:
             if (rect == nullptr && field_0xEE1 == 0) {
-                if (field_0xEE5 == 0 && mNumericArgsCopy[3] == field_0x87C) {
+                if (field_0xEE5 == 0 && mNumericArgsCopy[0] == field_0x87C) {
                     fn_800B60E0(cmdLen, endPtr);
                     field_0xEE5 = 1;
                     field_0x87C++;
                 }
-                mNumericArgsCopy[3]++;
+                mNumericArgsCopy[0]++;
             }
             break;
         case 0x10008: fn_800B61D0(rect, ctx, cmdLen, endPtr); break;
         case 0x30000: changeScale(rect, ctx, false); break;
         case 0x10009:
             if (rect == nullptr && field_0xEE1 == 0) {
-                if (field_0xEE6 == 0 && mNumericArgsCopy[4] == field_0x880) {
+                if (field_0xEE6 == 0 && mNumericArgsCopy[1] == field_0x880) {
                     fn_800B6110(cmdLen, endPtr);
                     field_0xEE6 = 1;
                     field_0x880++;
                 }
-                mNumericArgsCopy[4]++;
+                mNumericArgsCopy[1]++;
             }
             break;
         case 0x1000A:
             if (rect == nullptr && field_0xEE1 == 0) {
-                if (field_0xEE7 == 0 && mNumericArgsCopy[5] == field_0x884) {
+                if (field_0xEE7 == 0 && mNumericArgsCopy[2] == field_0x884) {
                     fn_800B6140(cmdLen, endPtr);
                     field_0xEE7 = 1;
                     field_0x884++;
                 }
-                mNumericArgsCopy[5]++;
+                mNumericArgsCopy[2]++;
             }
             break;
         case 0x1000B:
             // Sound
             if (rect == nullptr && field_0xEE1 == 0) {
-                if (field_0xEE8 == 0 && mNumericArgsCopy[6] == field_0x888) {
+                if (field_0xEE8 == 0 && mNumericArgsCopy[3] == field_0x888) {
                     playSound(cmdLen, endPtr);
                     field_0xEE8 = 1;
                     field_0x888++;
                 }
-                mNumericArgsCopy[6]++;
+                mNumericArgsCopy[3]++;
             }
             break;
         case 0x1000C:
             // "entrypoint"
             if (rect == nullptr && field_0xEE1 == 0) {
-                if (field_0xEEA == 0 && mNumericArgsCopy[8] == field_0x890) {
+                if (field_0xEEA == 0 && mNumericArgsCopy[5] == field_0x890) {
                     fn_800B6170(cmdLen, endPtr);
                     field_0xEEA = 1;
                     field_0x890++;
                 }
-                mNumericArgsCopy[8]++;
+                mNumericArgsCopy[5]++;
             }
             break;
         case 0x1000D:
             if (rect == nullptr && field_0xEE1 == 0) {
-                if (field_0xEEB == 0 && mNumericArgsCopy[9] == field_0x894) {
+                if (field_0xEEB == 0 && mNumericArgsCopy[6] == field_0x894) {
                     fn_800B6190(cmdLen, endPtr);
                     field_0xEEB = 1;
                     field_0x894++;
                 }
-                mNumericArgsCopy[9]++;
+                mNumericArgsCopy[6]++;
             }
             break;
         case 0x1000E:
             if (rect == nullptr && field_0xEE1 == 0) {
-                if (field_0xEEC == 0 && field_0x8EC == field_0x898) {
+                if (field_0xEEC == 0 && mNumericArgsCopy[7] == field_0x898) {
                     fn_800B61B0(cmdLen, endPtr);
                     field_0xEEC = 1;
                     field_0x898++;
                 }
-                field_0x8EC++;
+                mNumericArgsCopy[7]++;
             }
             break;
         case 0x20004:
             if (field_0xEE3 != 0) {
                 if (rect == nullptr) {
-                    fn_800B6450(rect, ctx, cmdLen, endPtr);
+                    drawIcon(rect, ctx, cmdLen, endPtr);
                 } else {
-                    makeSpaceForIconMaybe(rect, ctx, endPtr);
+                    calcRectIcon(rect, ctx, endPtr);
                 }
             }
             break;
         case 0x10011:
             if (rect == nullptr && field_0xEE1 == 0) {
-                if (field_0xEEF == 0 && field_0x8F8 == field_0x840) {
+                if (field_0xEEF == 0 && mNumericArgsCopy[10] == field_0x840) {
                     fn_800B5540(endPtr);
                     field_0xEEF = 1;
                     field_0x840++;
                 }
-                field_0x8F8++;
+                mNumericArgsCopy[10]++;
             }
             break;
     }
@@ -924,7 +958,8 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
 
             if (u < getMaxNumLines(mMsgWindowSubtype)) {
                 // Begin unused code - the results here are unused and disappear
-                // in any decompiler
+                // in the assembly, so we don't know which fields are accessed in
+                // the tmp vars, but control flow from the inlines remains
                 f32 w1 = fontSize.width * 0.5f;
                 f32 h1 = fontSize.height * 0.5f;
                 if (w1 < UnkTextThing::getField0x758() || h1 < UnkTextThing::getField0x758()) {
@@ -1029,7 +1064,7 @@ void dTagProcessor_c::setColor(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
 }
 
 void dTagProcessor_c::setScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *buf) {
-    u16 scale = buf[0];
+    u16 scale = READ_U16(buf, 0);
     if (scale == 0) {
         scale = 50;
     }
@@ -1041,23 +1076,23 @@ void dTagProcessor_c::setScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wcha
 void dTagProcessor_c::setFramesLeftOnPause(
     nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr
 ) {
-    mPauseFramesLeft = ptr[0];
+    mPauseFramesLeft = READ_U16(ptr, 0);
 }
 
 void dTagProcessor_c::fn_800B5500(u8 cmdLen, wchar_t *ptr) {
-    u16 val = ptr[0];
+    u16 val = READ_U16(ptr, 0);
     if (field_0x830 == -1) {
         field_0x830 = val;
     }
 }
 
 void dTagProcessor_c::fn_800B5520(wchar_t *src) {
-    field_0x81C = ((u32 *)src)[0];
-    field_0x820 = ((u32 *)src)[1];
+    field_0x81C = READ_U32(src, 0);
+    field_0x820 = READ_U32(src, 4);
 }
 
 void dTagProcessor_c::fn_800B5540(wchar_t *src) {
-    dLytMsgWindow_c::getInstance()->onFlag0x820(sMsgWindowFlags[*(u8 *)src]);
+    dLytMsgWindow_c::getInstance()->onFlag0x820(sMsgWindowFlags[READ_U8(src, 0)]);
 }
 
 wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
@@ -1077,7 +1112,7 @@ wchar_t *dTagProcessor_c::writeHeroname(wchar_t *dest, s32 *outArg, s32 arg) {
 }
 
 wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
-    int itemIndex = *src;
+    int itemIndex = READ_U16(src, 0);
     wchar_t c;
 
     int i = 0;
@@ -1116,7 +1151,7 @@ wchar_t *dTagProcessor_c::writeItem(wchar_t *dest, wchar_t *src, s32 *outArg, s3
 }
 
 wchar_t *dTagProcessor_c::writeStringArg(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
-    s32 argIdx = *(u32 *)src;
+    s32 argIdx = READ_U32(src, 0);
     wchar_t c;
     int i = 0;
     while ((c = mStringArgs[argIdx][i]) != 0) {
@@ -1153,11 +1188,11 @@ wchar_t *dTagProcessor_c::writeStringArg(wchar_t *dest, wchar_t *src, s32 *outAr
 }
 
 wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
-    int numZeroDigits = ((u8 *)src)[4];
+    int numZeroDigits = READ_U8(src, 4);
     bool writeZeroDigits = false;
-    s32 argIdx = *((s32 *)src);
+    s32 argIdx = READ_U32(src, 0);
     s32 numberArg = mNumericArgs[argIdx];
-    mNumericArgsCopy[0] = numberArg;
+    mFirstNumericArg = numberArg;
 
     // This could potentially be an unrolled loop
 
@@ -1238,13 +1273,13 @@ wchar_t *dTagProcessor_c::writeNumericArg(wchar_t *dest, wchar_t *src, s32 *outA
 }
 
 wchar_t *dTagProcessor_c::writeSingularOrPluralWord(wchar_t *dest, wchar_t *src, s32 *outArg, s32 arg) {
-    int itemIndex = *(u8 *)src;
+    int itemIndex = READ_U8(src, 0);
     wchar_t c;
 
     int i = 0;
     SizedString<32> mName;
     s32 amount = 2;
-    if (shouldUseSingular(mNumericArgsCopy[0])) {
+    if (shouldUseSingular(mFirstNumericArg)) {
         amount = 1;
     }
     mName.sprintf("lang:word:%03d:%02d", itemIndex, amount);
@@ -1307,39 +1342,39 @@ wchar_t *dTagProcessor_c::writeSingleCharacter(wchar_t character, wchar_t *dst, 
 }
 
 void dTagProcessor_c::fn_800B60E0(u8 cmdLen, wchar_t *ptr) {
-    field_0x844 = *((u8 *)ptr);
-    field_0x848 = *((u8 *)ptr + 1);
-    field_0x84C = *((u8 *)ptr + 2);
-    field_0x850 = *((u8 *)ptr + 3);
+    field_0x844 = READ_U8(ptr, 0);
+    field_0x848 = READ_U8(ptr, 1);
+    field_0x84C = READ_U8(ptr, 2);
+    field_0x850 = READ_U8(ptr, 3);
 }
 void dTagProcessor_c::fn_800B6110(u8 cmdLen, wchar_t *ptr) {
-    field_0x854 = *((u8 *)ptr);
-    field_0x858 = *((u8 *)ptr + 1);
-    field_0x85C = *((u8 *)ptr + 2);
-    field_0x860 = *((u8 *)ptr + 3);
+    field_0x854 = READ_U8(ptr, 0);
+    field_0x858 = READ_U8(ptr, 1);
+    field_0x85C = READ_U8(ptr, 2);
+    field_0x860 = READ_U8(ptr, 3);
 }
 void dTagProcessor_c::fn_800B6140(u8 cmdLen, wchar_t *ptr) {
-    field_0x864 = ptr[0];
-    field_0x868 = ptr[1];
+    field_0x864 = READ_U16(ptr, 0);
+    field_0x868 = READ_U16(ptr, 2);
 }
 void dTagProcessor_c::playSound(u8 cmdLen, wchar_t *ptr) {
-    dFlow_c::playSound(*(u32 *)ptr);
+    dFlow_c::playSound(READ_U32(ptr, 0));
 }
 void dTagProcessor_c::fn_800B6170(u8 cmdLen, wchar_t *ptr) {
-    field_0x8FC = ptr[0];
-    field_0x900 = ptr[1];
+    field_0x8FC = READ_U16(ptr, 0);
+    field_0x900 = READ_U16(ptr, 2);
 }
 void dTagProcessor_c::fn_800B6190(u8 cmdLen, wchar_t *ptr) {
-    field_0x86C = *((char *)ptr);
-    field_0x870 = *((char *)ptr + 1);
+    field_0x86C = READ_S8(ptr, 0);
+    field_0x870 = READ_S8(ptr, 1);
 }
 void dTagProcessor_c::fn_800B61B0(u8 cmdLen, wchar_t *ptr) {
-    field_0x874 = *((char *)ptr);
-    field_0x878 = *((s16 *)((char *)ptr + 1));
+    field_0x874 = READ_S8(ptr, 0);
+    field_0x878 = READ_S16(ptr, 1);
 }
 
 void dTagProcessor_c::fn_800B61D0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr) {
-    f32 scale = fn_800B8040(*(char *)ptr, mMsgWindowSubtype);
+    f32 scale = fn_800B8040(READ_S8(ptr, 0), mMsgWindowSubtype);
     if (getTextBox() != nullptr) {
         scale *= getTextBox()->getMyScale();
     }
@@ -1364,29 +1399,29 @@ void dTagProcessor_c::changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
     ctx->writer->SetScale(scale, scale);
 }
 
-void dTagProcessor_c::writeIcon(dTextBox_c *textBox, wchar_t *cmd, f32 arg) {
-    nw4r::ut::Font *f = dFontMng_c::getFont(4);
-    s8 c3 = fn_800B7880(*(u8 *)cmd);
+void dTagProcessor_c::saveIconWidth(dTextBox_c *textBox, wchar_t *cmd, f32 arg) {
+    nw4r::ut::Font *f = dFontMng_c::getFont(dFontMng_c::PICTURE);
+    s8 c3 = getAnimatedIconReplacement(READ_U8(cmd, 0));
     arg = UnkTextThing::getField0x764() / f->GetWidth() * arg;
 
     mLineData.mLineWidths[mLineData.mNumLines] += arg * f->GetCharWidth(c3) + textBox->GetCharSpace();
 }
 
-void dTagProcessor_c::fn_800B6450(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr) {
-    s8 c = fn_800B7A90(*(u8 *)ptr);
+void dTagProcessor_c::drawIcon(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, u8 cmdLen, wchar_t *ptr) {
+    s8 c = getAnimatedWiggleIconReplacement(READ_U8(ptr, 0));
     u8 alpha = 0xFF;
     if (getTextBox() != nullptr) {
         alpha = mpTextBox->GetGlobalAlpha();
     }
-    s32 x1 = alpha / 255.0f * fn_800B7B30(*(u8 *)ptr);
-    s32 x2 = alpha / 255.0f * (255 - fn_800B7B30(*(u8 *)ptr));
+    s32 x1 = alpha / 255.0f * getAlphaForAnimatedIcon(READ_U8(ptr, 0));
+    s32 x2 = alpha / 255.0f * (255 - getAlphaForAnimatedIcon(READ_U8(ptr, 0)));
 
     nw4r::ut::TextWriterBase<wchar_t> w = *ctx->writer;
-    fn_800B6790(&w, ctx, (u32)c, x1);
-    if (*(u8 *)ptr >= 9 && *(u8 *)ptr < 15) {
+    drawPicture(&w, ctx, (u32)c, x1);
+    if (READ_U8(ptr, 0) >= FONT_BTN_NUN_STK_UP && READ_U8(ptr, 0) <= FONT_BTN_NUN_STK_WIGGLE_HORIZONTAL) {
         nw4r::ut::TextWriterBase<wchar_t> w2 = *ctx->writer;
-        s8 c = symbolToFontIdx(8);
-        fn_800B6790(&w2, ctx, c, x2);
+        s8 c = symbolToFontIdx(FONT_BTN_NUN_STK);
+        drawPicture(&w2, ctx, c, x2);
     }
     ctx->writer->SetCursorX(w.GetCursorX());
     ctx->writer->SetupGX();
@@ -1395,8 +1430,10 @@ void dTagProcessor_c::fn_800B6450(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
     }
 }
 
-void dTagProcessor_c::fn_800B6790(nw4r::ut::CharWriter *w, nw4r::ut::PrintContext<wchar_t> *ctx, u16 arg, u8 alpha) {
-    nw4r::ut::Font *font = dFontMng_c::getFont(4);
+void dTagProcessor_c::drawPicture(
+    nw4r::ut::CharWriter *w, nw4r::ut::PrintContext<wchar_t> *ctx, u16 character, u8 alpha
+) {
+    nw4r::ut::Font *font = dFontMng_c::getFont(dFontMng_c::PICTURE);
 
     f32 f1 = UnkTextThing::getField0x764() * w->GetScaleV() / UnkTextThing::getFn800B1FC0();
     f32 f3 = UnkTextThing::getFn800B1FC0();
@@ -1419,7 +1456,7 @@ void dTagProcessor_c::fn_800B6790(nw4r::ut::CharWriter *w, nw4r::ut::PrintContex
         w->SetCursorY(ctx->y + f6);
     }
     w->SetGradationMode(nw4r::ut::CharWriter::GRADMODE_V);
-    if (arg == 0x38) {
+    if (character == /* FONT_X */ 0x38) {
         // #FFFFFF, #FFFFFF
         mColor c1(0xFF, 0xFF, 0xFF, alpha);
         mColor c2(0xFF, 0xFF, 0xFF, alpha);
@@ -1428,7 +1465,7 @@ void dTagProcessor_c::fn_800B6790(nw4r::ut::CharWriter *w, nw4r::ut::PrintContex
         mColor c3(0xFF, 0xAB, 0x7F, 0);
         mColor c4(0xDD, 0x48, 0x09, 0xFF);
         w->SetColorMapping(c3, c4);
-    } else if (arg == 0x39) {
+    } else if (character == /* FONT_HOLE */ 0x39) {
         // #FFFFFF, #FFFFFF
         mColor c1(0xFF, 0xFF, 0xFF, alpha);
         mColor c2(0xFF, 0xFF, 0xFF, alpha);
@@ -1437,7 +1474,7 @@ void dTagProcessor_c::fn_800B6790(nw4r::ut::CharWriter *w, nw4r::ut::PrintContex
         mColor c3(0x24, 0xD4, 0x9F, 0);
         mColor c4(0xFF, 0xF8, 0xA4, 0xFF);
         w->SetColorMapping(c3, c4);
-    } else if (arg >= 0x33 && arg < 0x37) {
+    } else if (character >= /* FONT_ARROW_UP */ 0x33 && character <= /* FONT_ARROW_RIGHT */ 0x36) {
         if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_WOOD) {
             // #F2DABC, #F2DABC
             mColor c1(0xF2, 0xDA, 0xBC, alpha);
@@ -1470,15 +1507,15 @@ void dTagProcessor_c::fn_800B6790(nw4r::ut::CharWriter *w, nw4r::ut::PrintContex
     } else {
         w->SetupGX();
     }
-    w->Print(arg);
+    w->Print(character);
 }
 
-void dTagProcessor_c::makeSpaceForIconMaybe(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr) {
-    nw4r::ut::Font *f = dFontMng_c::getFont(4);
-    s8 c3 = fn_800B7880(*(u8 *)ptr);
+void dTagProcessor_c::calcRectIcon(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<wchar_t> *ctx, wchar_t *ptr) {
+    nw4r::ut::Font *f = dFontMng_c::getFont(dFontMng_c::PICTURE);
+    s8 c3 = getAnimatedIconReplacement(READ_U8(ptr, 0));
     nw4r::ut::TextWriterBase<wchar_t> copy = *ctx->writer;
     f32 charWidth = f->GetCharWidth(c3);
-    fn_800B70D0(&copy, ctx, c3, 0xFF);
+    configureWriterForIcon(&copy, ctx, c3, 0xFF);
     ctx->writer->MoveCursorX(charWidth * copy.GetScaleH());
 
     f32 cursorX = ctx->writer->GetCursorX();
@@ -1486,21 +1523,21 @@ void dTagProcessor_c::makeSpaceForIconMaybe(nw4r::ut::Rect *rect, nw4r::ut::Prin
     rect->right = rect->right < cursorX ? cursorX : rect->right;
 }
 
-void dTagProcessor_c::fn_800B70D0(
+void dTagProcessor_c::configureWriterForIcon(
     nw4r::ut::TextWriterBase<wchar_t> *w, nw4r::ut::PrintContext<wchar_t> *ctx, u16 arg, s32 alpha
 ) {
-    nw4r::ut::Font *font = dFontMng_c::getFont(4);
+    nw4r::ut::Font *font = dFontMng_c::getFont(dFontMng_c::PICTURE);
 
     f32 f1 = UnkTextThing::getField0x764() * ctx->writer->GetScaleV() / UnkTextThing::getFn800B1FC0();
     w->SetFont(*font);
     w->SetFontSize(f1);
     w->SetGradationMode(nw4r::ut::CharWriter::GRADMODE_V);
-    if (arg == 0x38) {
+    if (arg == /* FONT_X */ 0x38) {
         // #F26E36, #F26E36
         mColor c1(0xF2, 0x6E, 0x36, alpha);
         mColor c2(0xF2, 0x6E, 0x36, alpha);
         w->SetTextColor(c1, c2);
-    } else if (arg >= 0x33 && arg < 0x37) {
+    } else if (arg >= /* FONT_ARROW_UP */ 0x33 && arg < /* FONT_ARROW_DOWN */ 0x37) {
         if (mMsgWindowSubtype == dLytMsgWindow_c::MSG_WINDOW_WOOD) {
             // #F2DABC, #F2DABC
             mColor c1(0xF2, 0xDA, 0xBC, alpha);
@@ -1526,7 +1563,7 @@ void dTagProcessor_c::fn_800B70D0(
 }
 
 void dTagProcessor_c::somethingWithScrapperAndMusic(wchar_t *src) {
-    field_0x824 = *(u32 *)src;
+    field_0x824 = READ_U32(src, 0);
     if (field_0x824 == 100) {
         dAcBase_c *ac = nullptr;
         dAcBase_c *parent = nullptr;
@@ -1617,99 +1654,117 @@ u8 dTagProcessor_c::symbolToFontIdx(s32 s) {
     return index[s];
 }
 
-
-u8 dTagProcessor_c::fn_800B7880(u8 arg) {
-    if (arg >= 9 && arg < 13) {
-        if (mNumericArgsCopy[1] >= UnkTextThing::getField_0x7AA_plus_0x7AC()) {
-            return symbolToFontIdx(8);
+u8 dTagProcessor_c::getAnimatedIconReplacement(u8 arg) {
+    if (arg >= FONT_BTN_NUN_STK_UP && arg <= FONT_BTN_NUN_STK_RIGHT) {
+        if (mButtonPressAnimTimer >= UnkTextThing::getAnimBtnTotalDuration()) {
+            // Show base instead
+            return symbolToFontIdx(FONT_BTN_NUN_STK);
         }
-    } else if (arg >= 16 && arg < 20) {
-        if (mNumericArgsCopy[1] >= UnkTextThing::getField_0x7AA_plus_0x7AC()) {
+    } else if (arg >= FONT_BTN_CROSS_UP && arg <= FONT_BTN_CROSS_RIGHT) {
+        if (mButtonPressAnimTimer >= UnkTextThing::getAnimBtnTotalDuration()) {
+            // Show base instead
+            // Empty Cross Btn
             return '.';
         }
-    } else if (arg == 13) {
-        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC()) {
-            return symbolToFontIdx(9);
+    } else if (arg == FONT_BTN_NUN_STK_WIGGLE_VERTICAL) {
+        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration()) {
+            return symbolToFontIdx(FONT_BTN_NUN_STK_UP);
         }
 
-        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
-            return symbolToFontIdx(8);
+        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 2) {
+            return symbolToFontIdx(FONT_BTN_NUN_STK);
         }
 
-        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 3) {
-            return symbolToFontIdx(10);
+        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 3) {
+            return symbolToFontIdx(FONT_BTN_NUN_STK_DOWN);
         }
-        return symbolToFontIdx(8);
-    } else if (arg == 14) {
-        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC()) {
-            return symbolToFontIdx(11);
-        }
-
-        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
-            return symbolToFontIdx(8);
+        return symbolToFontIdx(FONT_BTN_NUN_STK);
+    } else if (arg == FONT_BTN_NUN_STK_WIGGLE_HORIZONTAL) {
+        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration()) {
+            return symbolToFontIdx(FONT_BTN_NUN_STK_LEFT);
         }
 
-        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 3) {
-            return symbolToFontIdx(12);
+        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 2) {
+            return symbolToFontIdx(FONT_BTN_NUN_STK);
         }
-        return symbolToFontIdx(8);
+
+        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 3) {
+            return symbolToFontIdx(FONT_BTN_NUN_STK_RIGHT);
+        }
+        return symbolToFontIdx(FONT_BTN_NUN_STK);
     }
 
     return symbolToFontIdx(arg);
 }
 
-u8 dTagProcessor_c::fn_800B7A90(u8 arg) {
-    if (arg == 13) {
-        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
-            return symbolToFontIdx(9);
+u8 dTagProcessor_c::getAnimatedWiggleIconReplacement(u8 arg) {
+    if (arg == FONT_BTN_NUN_STK_WIGGLE_VERTICAL) {
+        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 2) {
+            return symbolToFontIdx(FONT_BTN_NUN_STK_UP);
         } else {
-            return symbolToFontIdx(10);
+            return symbolToFontIdx(FONT_BTN_NUN_STK_DOWN);
         }
-    } else if (arg == 14) {
-        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
-            return symbolToFontIdx(11);
+    } else if (arg == FONT_BTN_NUN_STK_WIGGLE_HORIZONTAL) {
+        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 2) {
+            return symbolToFontIdx(FONT_BTN_NUN_STK_LEFT);
         } else {
-            return symbolToFontIdx(12);
+            return symbolToFontIdx(FONT_BTN_NUN_STK_RIGHT);
         }
     }
     return symbolToFontIdx(arg);
 }
 
-u8 dTagProcessor_c::fn_800B7B30(u8 arg) {
+u8 dTagProcessor_c::getAlphaForAnimatedIcon(u8 arg) {
     f32 ret = 255.0f;
-    f32 f = UnkTextThing::getField_0x7AA();
-    if (arg >= 9 && arg < 13) {
-        if (mNumericArgsCopy[1] < UnkTextThing::getField_0x7AA()) {
-            ret = (mNumericArgsCopy[1] / f) * ret;
-        } else if (mNumericArgsCopy[1] < UnkTextThing::getField_0x7AA_plus_0x7AC()) {
+    f32 duration = UnkTextThing::getAnimBtnTransitionDuration();
+    if (arg >= FONT_BTN_NUN_STK_UP && arg <= FONT_BTN_NUN_STK_RIGHT) {
+        if (mButtonPressAnimTimer < UnkTextThing::getAnimBtnTransitionDuration()) {
+            // Ramp-up, become visible
+            ret = (mButtonPressAnimTimer / duration) * ret;
+        } else if (mButtonPressAnimTimer < UnkTextThing::getAnimBtnTotalDuration()) {
+            // Fully visible
             ret = 255.0f;
-        } else if (mNumericArgsCopy[1] < UnkTextThing::getField_0x7AA_plus_0x7AC() + UnkTextThing::getField_0x7AA()) {
-            ret = (UnkTextThing::getField_0x7AA_plus_0x7AC() + UnkTextThing::getField_0x7AA() - mNumericArgsCopy[1]) /
-                  f * ret;
+        } else if (mButtonPressAnimTimer <
+                   UnkTextThing::getAnimBtnTotalDuration() + UnkTextThing::getAnimBtnTransitionDuration()) {
+            // Ramp-down, become invisible
+            ret = (UnkTextThing::getAnimBtnTotalDuration() + UnkTextThing::getAnimBtnTransitionDuration() -
+                   mButtonPressAnimTimer) /
+                  duration * ret;
         } else {
+            // Invisible
             ret = 0.0f;
         }
-    } else if (arg >= 13 && arg < 15) {
-        if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA()) {
-            ret = (mNumericArgsCopy[2] / f) * ret;
-        } else if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC()) {
+    } else if (arg >= FONT_BTN_NUN_STK_WIGGLE_VERTICAL && arg <= FONT_BTN_NUN_STK_WIGGLE_HORIZONTAL) {
+        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTransitionDuration()) {
+            // Ramp-up direction variant, become visible
+            ret = (mButtonWiggleAnimTimer / duration) * ret;
+        } else if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration()) {
+            // Direction fully visible
             ret = 255.0f;
-        } else if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() + UnkTextThing::getField_0x7AA()) {
-            ret = (UnkTextThing::getField_0x7AA_plus_0x7AC() + UnkTextThing::getField_0x7AA() - mNumericArgsCopy[2]) /
-                  f * ret;
-        } else if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
+        } else if (mButtonWiggleAnimTimer <
+                   UnkTextThing::getAnimBtnTotalDuration() + UnkTextThing::getAnimBtnTransitionDuration()) {
+            // Ramp-down direction variant, become invisible
+            ret = (UnkTextThing::getAnimBtnTotalDuration() + UnkTextThing::getAnimBtnTransitionDuration() -
+                   mButtonWiggleAnimTimer) /
+                  duration * ret;
+        } else if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 2) {
+            // Invisible
             ret = 0.0f;
-        } else if (mNumericArgsCopy[2] <
-                   UnkTextThing::getField_0x7AA() + UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
-            ret = (mNumericArgsCopy[2] - 2 * UnkTextThing::getField_0x7AA_plus_0x7AC()) / f * ret;
-        } else if (mNumericArgsCopy[2] < UnkTextThing::getField_0x7AA_plus_0x7AC() * 3) {
+        } else if (mButtonWiggleAnimTimer <
+                   UnkTextThing::getAnimBtnTransitionDuration() + UnkTextThing::getAnimBtnTotalDuration() * 2) {
+            // Ramp-up base variant, become visible
+            ret = (mButtonWiggleAnimTimer - 2 * UnkTextThing::getAnimBtnTotalDuration()) / duration * ret;
+        } else if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 3) {
+            // Base variant fully visible
             ret = 255.0f;
-        } else if (mNumericArgsCopy[2] <
-                   UnkTextThing::getField_0x7AA() + UnkTextThing::getField_0x7AA_plus_0x7AC() * 3) {
-            ret = ((UnkTextThing::getField_0x7AA() + 3 * UnkTextThing::getField_0x7AA_plus_0x7AC()) -
-                   mNumericArgsCopy[2]) /
-                  f * ret;
+        } else if (mButtonWiggleAnimTimer <
+                   UnkTextThing::getAnimBtnTransitionDuration() + UnkTextThing::getAnimBtnTotalDuration() * 3) {
+            // Ramp-down base variant, become invisible
+            ret = ((UnkTextThing::getAnimBtnTransitionDuration() + 3 * UnkTextThing::getAnimBtnTotalDuration()) -
+                   mButtonWiggleAnimTimer) /
+                  duration * ret;
         } else {
+            // Invisible
             ret = 0.0f;
         }
     }
@@ -1851,7 +1906,8 @@ f32 dTagProcessor_c::fn_800B85C0(s32 lineIdx) {
     f32 ret = 0.0f;
     if (u < getMaxNumLines(mMsgWindowSubtype)) {
         // Begin unused code - the results here are unused and disappear
-        // in any decompiler
+        // in the assembly, so we don't know which fields are accessed in
+        // the tmp vars, but control flow from the inlines remains
         f32 w1 = fontSize.width * 0.5f;
         f32 h1 = fontSize.height * 0.5f;
         if (w1 < UnkTextThing::getField0x758() || h1 < UnkTextThing::getField0x758()) {
@@ -1895,8 +1951,8 @@ s32 dTagProcessor_c::getMaxNumLines(s32 windowType) {
 void dTagProcessor_c::getTextCommand(
     wchar_t _0xe, const wchar_t *src, u8 *outCmdLen, s32 *outCmd, wchar_t **outEndPtr
 ) {
-    *outCmdLen = src[2] + 6;
-    *outCmd = *(s32 *)src;
+    *outCmdLen = READ_U16(src, 4) + 6;
+    *outCmd = READ_U32(src, 0);
     if (*outCmdLen > 6) {
         *outEndPtr = (wchar_t *)src + 3;
     } else {
@@ -1905,7 +1961,7 @@ void dTagProcessor_c::getTextCommand(
 }
 
 void dTagProcessor_c::process0xFCommand(wchar_t _0xf, const wchar_t *src, s32 *outCmd) {
-    *outCmd = *(s32 *)src;
+    *outCmd = READ_U32(src, 0);
 }
 
 s32 dTagProcessor_c::tick0x830() {
@@ -1948,7 +2004,7 @@ f32 dTagProcessor_c::getLineWidth(s32 i) {
 
 void dTagProcessor_c::setNumericArg0(s32 arg) {
     mNumericArgs[0] = arg;
-    mNumericArgsCopy[0] = arg;
+    mFirstNumericArg = arg;
 }
 
 void dTagProcessor_c::setNumericArgs(const s32 *args, s32 numArgs) {
@@ -1958,21 +2014,21 @@ void dTagProcessor_c::setNumericArgs(const s32 *args, s32 numArgs) {
     }
 }
 
-void dTagProcessor_c::tick0x8C8() {
-    mNumericArgsCopy[1]++;
-    if (mNumericArgsCopy[1] >= UnkTextThing::getField_0x7AA_plus_0x7AC() * 2) {
-        mNumericArgsCopy[1] = 0;
+void dTagProcessor_c::executeBtnPressTimer() {
+    mButtonPressAnimTimer++;
+    if (mButtonPressAnimTimer >= UnkTextThing::getAnimBtnTotalDuration() * 2) {
+        mButtonPressAnimTimer = 0;
     }
 }
 
-void dTagProcessor_c::tick0x8CC() {
-    mNumericArgsCopy[2]++;
-    if (mNumericArgsCopy[2] >= UnkTextThing::getField_0x7AA_plus_0x7AC() * 4) {
-        mNumericArgsCopy[2] = 0;
+void dTagProcessor_c::executeBtnWiggleTimer() {
+    mButtonWiggleAnimTimer++;
+    if (mButtonWiggleAnimTimer >= UnkTextThing::getAnimBtnTotalDuration() * 4) {
+        mButtonWiggleAnimTimer = 0;
     }
 }
 
 void dTagProcessor_c::execute() {
-    tick0x8C8();
-    tick0x8CC();
+    executeBtnPressTimer();
+    executeBtnWiggleTimer();
 }
