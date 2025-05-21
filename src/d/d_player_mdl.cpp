@@ -1804,6 +1804,7 @@ void daPlayerModelBase_c::setPosCopy3() {
         poscopy3 = position;
         poscopy3.y -= 100.0f;
     } else if (checkActionFlags(FLG0_HANGING_LEDGE) || (getCurrentAction() >= 0x82 && getCurrentAction() <= 0x84)) {
+        // TODO this control flow is weird
         const nw4r::math::MTX34 *c = mHeadMdl.getLocalMtx();
         poscopy3.x = c->_03;
         poscopy3.y = c->_13;
@@ -1827,8 +1828,10 @@ void daPlayerModelBase_c::setPosCopy3() {
             }
             f = mtx.m[1][3];
         }
-        poscopy3.set(v->x + position.x, v->y, v->z + position.z);
+        poscopy3.copyFrom(v);
+        poscopy3.x += position.x;
         poscopy3.y += f;
+        poscopy3.z += position.z;
     }
 }
 
