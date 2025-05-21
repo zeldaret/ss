@@ -21,6 +21,7 @@
 #include "nw4r/g3d/g3d_scnobj.h"
 #include "nw4r/g3d/res/g3d_resanmchr.h"
 #include "nw4r/g3d/res/g3d_resanmclr.h"
+#include "nw4r/g3d/res/g3d_resanmtexpat.h"
 #include "nw4r/g3d/res/g3d_resanmtexsrt.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
@@ -102,7 +103,455 @@ static const char *sFaceResNames[] = {
     // and this whole array is part of the .data pool
     "",
 };
+
+const PlayerAnimation daPlayerModelBase_c::sAnimations[] = {
+    {                "atrFW",  13,   6,  1,  0,  0},
+    {              "atrFW_R",   7,   0,  1,  0,  0},
+    {                "atrFD",  13,   6,  1,  0,  0},
+    {              "atrFD_R",   7,   0,  1,  0,  0},
+    {                "atrbW",  13,   6,  1,  0,  0},
+    {              "atrbW_R",   7,   0,  1,  0,  0},
+    {                "atrbD",  13,   6,  1,  0,  0},
+    {              "atrbD_R",   7,   0,  1,  0,  0},
+    {               "atrsWL",  13,   6,  1,  0,  0},
+    {               "atrsDL",  13,   6,  1,  0,  0},
+    {               "atrsWR",  13,   6,  1,  0,  0},
+    {               "atrsDR",  13,   6,  1,  0,  0},
+    {                "atsWL",  13,   6,  1,  0,  0},
+    {                "atsDL",  13,   6,  1,  0,  0},
+    {                "atsWR",  13,   6,  1,  0,  0},
+    {                "atsDR",  13,   6,  1,  0,  0},
+    {          "atsWL_right",  13,   6,  1,  0,  0},
+    {          "atsDL_right",  13,   6,  1,  0,  0},
+    {                  "atL",   9,   2,  1,  0,  0},
+    {                  "atR",   9,   2,  1,  0,  0},
+    {                "dashA",  13,  56,  1,  0,  0},
+    {                "dashS",  13,  56,  1,  0,  0},
+    {               "atrbWH",   7,   0,  1,  0,  0},
+    {                 "atbW",  13,   6,  1,  0,  0},
+    {                 "atbD",  13,   6,  1,  0,  0},
+    {                "walkH",   7,  50,  1,  0,  0},
+    {                "waitS",  13,  56,  1,  0,  0},
+    {                "walkS",  13,  56,  1,  0,  0},
+    {                "stepL",  13,  56,  1,  0,  0},
+    {                "stepR",  13,  56,  1,  0,  0},
+    {              "atsJLSt",   7,  50,  1,  0,  2},
+    {              "atsJLEd",   9,  52,  1,  0,  2},
+    {              "atsJRSt",   7,  50,  1,  0,  2},
+    {              "atsJREd",   9,  52,  1,  0,  2},
+    {              "atsJFSt",  13,  56,  1,  0,  2},
+    {              "atsJFEd",   9,  52,  1,  0,  2},
+    {              "rollBSt",  13,  56,  1,  0,  2},
+    {              "rollBEd",   9,  52,  1,  0,  2},
+    {                "waitB",   9,  52,  1,  0,  2},
+    {             "waitBtoA",   9,  52,  1,  0,  0},
+    {               "sjmpSt",   7,  50,  1,  0,  0},
+    {               "sjmpEd",   7,  50,  1,  0,  0},
+    {                "rollF",   7,  50,  1,  0,  2},
+    {             "rollFmis",   7,   0, 17,  0, 17},
+    {               "jumpSt",   7,  50,  1,  0,  2},
+    {              "jumpSEd",   7,  50,  1,  0,  2},
+    {                 "vjmp",   7,  50,  1,  0,  2},
+    {              "vjmpChA",   7,  50,  1,  0,  2},
+    {              "vjmpChB",   7,  50,  1,  0,  2},
+    {               "vjmpCl",   7,  50,  1,  0,  2},
+    {                "hangL",   7,  50,  1,  0,  2},
+    {                "hangR",   7,  50,  1,  0,  2},
+    {                 "Hang",   7,  50,  1,  0,  2},
+    {            "climbHang",  12,  55,  1,  0,  2},
+    {          "climbSlideL",  12,  55,  1,  0,  2},
+    {          "climbSlideR",  12,  55,  1,  0,  2},
+    {        "climbHangmiss",  12,  55,  1,  0,  2},
+    {        "climbStruggle",  12,   5, 11,  0, 11},
+    {         "ClimbIvyHang",  12,   5,  1,  0,  2},
+    {            "ClimbIvyL",  12,   5,  1,  0,  2},
+    {            "ClimbIvyR",  12,   5,  1,  0,  2},
+    {         "ClimbIvyL_St",  12,   5,  1,  0,  2},
+    {         "ClimbIvyR_St",  12,   5,  1,  0,  2},
+    {       "ClimbIvySlideL",  12,   5,  1,  0,  2},
+    {       "ClimbIvySlideR",  12,   5,  1,  0,  2},
+    {   "ClimbIvySlantLU_RD",  12,   5,  1,  0,  2},
+    {   "ClimbIvySlideRU_LD",  12,   5,  1,  0,  2},
+    {              "ladUpSt",  13,   6,  1,  0,  0},
+    {             "ladUpEdL",  13,   6,  1,  0,  0},
+    {             "ladUpEdR",  13,   6,  1,  0,  0},
+    {              "ladDwSt",  13,   6,  1,  0,  0},
+    {             "ladDWEdL",  13,   6,  1,  0,  0},
+    {             "ladDWEdR",  13,   6,  1,  0,  0},
+    {              "ladRtoL",  13,   6,  1,  0,  0},
+    {              "ladLtoR",  13,   6,  1,  0,  0},
+    {          "LadJumpUpSt",  13,   6,  1,  0,  0},
+    {        "LadJumpDownSt",  13,   6,  1,  0,  0},
+    {          "LadJumpUpEd",  13,   6,  1,  0,  0},
+    {        "LadJumpDownEd",  13,   6,  1,  0,  0},
+    {                 "cutT",  13, 100,  1,  0,  2},
+    {                "cutTB",  13,   4,  1,  0,  2},
+    {                "cutTL",  13,   4,  1,  0,  2},
+    {               "cutTLB",  13,   4,  1,  0,  2},
+    {               "cutJSt",  13,   4,  1,  0,  2},
+    {               "cutJEd",  13,   4,  1,  0,  2},
+    {                 "damF",  13,  56,  6,  0,  6},
+    {                 "damB",  13,  56,  6,  0,  6},
+    {                 "damL",  13,  56,  6,  0,  6},
+    {                 "damR",  13,  56,  6,  0,  6},
+    {         "DamageMFront",  13,  56,  6,  0,  6},
+    {          "DamageMBack",  13,  56,  6,  0,  6},
+    {          "DamageMLeft",  13,  56,  6,  0,  6},
+    {         "DamageMRight",  13,  56,  6,  0,  6},
+    {                "damFF",  13,  56,  7,  0,  7},
+    {                "damFB",  13,  56,  7,  0,  7},
+    {                "damFL",  13,  56,  7,  0,  7},
+    {                "damFR",  13,  56,  7,  0,  7},
+    {              "damFFup",   7,  50, 17,  0, 17},
+    {              "damFBup",   7,  50, 17,  0, 17},
+    {              "damFLup",   7,  50, 17,  0, 17},
+    {              "damFRup",   7,  50, 17,  0, 17},
+    {    "DamageLFrontSlide",   7,  50, 12,  0, 12},
+    {     "DamageLBackSlide",   7,  50, 12,  0, 12},
+    {     "DamageLLeftSlide",   7,  50, 12,  0, 12},
+    {    "DamageLRightSlide",   7,  50, 12,  0, 12},
+    {                  "dam",  13,  56,  6,  0,  6},
+    {             "landDamA",   7,  50, 56,  0, 56},
+    {           "landDamAst",  13,  50, 17,  0, 17},
+    {                "cutST",   9,  52, 11,  0, 11},
+    {              "atDefNG",   9,  52,  6,  0,  6},
+    {                  "die",  13,  56,  8,  8,  8},
+    {  "DieLargeDamageFront",   7,   0,  9,  9,  9},
+    {   "DieLargeDamageBack",   7,   0,  9,  9,  9},
+    {   "DieLargeDamageLeft",   7,   0,  9,  9,  9},
+    {  "DieLargeDamageRight",   7,   0,  9,  9,  9},
+    {             "swimwait",   7,   0,  1,  0,  0},
+    {             "swimingA",   7,   0,  1,  0,  0},
+    {                "swimP",   7,   0, 30, 30, 30},
+    {               "atsSwL",   7,   0,  1,  0,  0},
+    {               "atsSwR",   7,   0,  1,  0,  0},
+    {                "atbSw",   7,   0,  1,  0,  0},
+    {             "swimDive",   7,   0,  1,  0,  0},
+    {            "swimingSt",   7,   0,  1,  0,  0},
+    {             "swimingB",   7,   0,  1,  0,  0},
+    {             "swimingC",   7,   0,  1,  0,  2},
+    {       "SwimAttackMiss",   7,   0, 17,  0, 17},
+    {               "damSwF",  13,   6,  6,  0,  6},
+    {               "damSwB",  13,   6,  6,  0,  6},
+    {               "damSwL",  13,   6,  6,  0,  6},
+    {               "damSwR",  13,   6,  6,  0,  6},
+    {               "damSwW",  13,   6,  6,  0,  6},
+    {             "swimDieA",  13,   6, 25, 25, 25},
+    {             "swimDieP",   7,   0, 12,  8, 12},
+    {             "DieMagma",   7,   0, 10, 10, 10},
+    {               "slideF",   7,  50, 12,  0, 12},
+    {               "slideB",   7,  50, 12,  0, 12},
+    {             "slideFEd",   7,  50,  1,  0,  0},
+    {             "slideBEd",   7,  50,  1,  0,  0},
+    {               "HSjmpL",   8,   1,  1,  0,  2},
+    {               "HSjmpR",   8,   1,  1,  0,  2},
+    {              "HSshoot",   8,   1,  1,  0,  2},
+    {            "HShangEdL",   8,   1,  1,  0,  2},
+    {            "HShangEdR",   8,   1,  1,  0,  2},
+    {              "HShangL",   8,   1,  1,  0,  2},
+    {              "HShangR",   8,   1,  1,  0,  2},
+    {          "HShangwaitL",   8,   1,  1,  0,  2},
+    {          "HShangwaitR",   8,   1,  1,  0,  2},
+    {         "HShangshootL",   8,   1,  1,  0,  2},
+    {         "HShangshootR",   8,   1,  1,  0,  2},
+    {            "HSwallEdL",   8,   1,  1,  0,  2},
+    {            "HSwallEdR",   8,   1,  1,  0,  2},
+    {              "HSwallL",   8,   1,  1,  0,  2},
+    {              "HSwallR",   8,   1,  1,  0,  2},
+    {          "HSwallwaitL",   8,   1,  1,  0,  2},
+    {          "HSwallwaitR",   8,   1,  1,  0,  2},
+    {         "HSwallshootL",   8,   1,  1,  0,  2},
+    {         "HSwallshootR",   8,   1,  1,  0,  2},
+    {                  "lie",   7,   0,  1,  0,  0},
+    {                 "lieF",   7,   0,  1,  0,  0},
+    {               "waitST",   9,   2, 11,  0, 11},
+    {   "WaitStruggleDamage",   9,   2,  6,  0,  6},
+    {               "waitPP",   7,   0,  1,  0,  0},
+    {                "pushW",   7,   0,  1,  0,  2},
+    {                "pullW",   8,   1,  1,  0,  2},
+    {              "jumpBSt",   7,   0,  1,  0,  3},
+    {                "jumpB",   7,   0,  1,  0,  2},
+    {                "waitD",  13,  56, 56,  0, 56},
+    {             "waitAtoD",  13,  56,  1,  0,  0},
+    {         "WaitServiceA",  13,   6, 26, 26, 26},
+    {      "WaitServiceHotA",  13,   6, 27, 27, 27},
+    {              "dashUpL",   9,  52,  1,  0,  2},
+    {              "dashUpR",   9,  52,  1,  0,  2},
+    {         "climbjumpUSt",  12,   5,  1,  0,  2},
+    {         "climbjumpDSt",  12,   5,  1,  0,  2},
+    {         "climbjumpLSt",  12,  55,  1,  0,  2},
+    {         "climbjumpRSt",  12,  55,  1,  0,  2},
+    {         "climbjumpUEd",  12,   5,  1,  0,  2},
+    {         "climbjumpDEd",  12,   5,  1,  0,  2},
+    {         "climbjumpLEd",  12,   5,  1,  0,  2},
+    {         "climbjumpREd",  12,   5,  1,  0,  2},
+    {          "hangjumpLSt",   7,  50,  1,  0,  2},
+    {          "hangjumpRSt",   7,  50,  1,  0,  2},
+    {          "hangjumpLEd",   7,  50,  1,  0,  2},
+    {          "hangjumpREd",   7,  50,  1,  0,  2},
+    {         "DoorKnobPull",  13,   6,  1,  0,  0},
+    {         "DoorKnobPush",  13,   6,  1,  0,  0},
+    {     "DoorKnobPullLock",  13,   5,  1,  0,  0},
+    {     "DoorKnobPushLock",  13,   5,  1,  0,  0},
+    {              "DoorOpD",   7,   0,  1,  0,  2},
+    {                "dashB",  13,   6,  1,  0,  2},
+    {                "MgDig",  13,   6,  1,  0,  0},
+    {               "MPCutU",  13,   4,  1,  0,  2},
+    {            "MPCutU_Re",  13,   4,  1,  0,  2},
+    {              "MPCutLU",  13,   4,  1,  0,  2},
+    {           "MPCutLU_Re",  13,   4,  1,  0,  2},
+    {               "MPCutL",  13,   4,  1,  0,  2},
+    {            "MPCutL_Re",  13,   4,  1,  0,  2},
+    {              "MPCutLD",  13,   4,  1,  0,  2},
+    {           "MPCutLD_Re",  13,   4,  1,  0,  2},
+    {              "MPCutRD",  13,   4,  1,  0,  2},
+    {           "MPCutRD_Re",  13,   4,  1,  0,  2},
+    {               "MPCutR",  13,   4,  1,  0,  2},
+    {            "MPCutR_Re",  13,   4,  1,  0,  2},
+    {              "MPCutRU",  13,   4,  1,  0,  2},
+    {           "MPCutRU_Re",  13,   4,  1,  0,  2},
+    {         "MPCutD_right",  13,   4,  1,  0,  2},
+    {      "MPCutD_right_Re",  13,   4,  1,  0,  2},
+    {          "MPCutD_left",  13,   4,  1,  0,  2},
+    {       "MPCutD_left_Re",  13,   4,  1,  0,  2},
+    {              "CutPush",  13,   4,  1,  0,  2},
+    {           "CutPush_Re",  13,   4,  1,  0,  2},
+    {       "EnemyGuardJust",  13, 100,  6,  0,  6},
+    {         "LiftB_Before",   7,   0,  1,  0,  0},
+    {         "LiftM_Before",   7,   0,  1,  0,  0},
+    {                "LiftB",   7,   0,  1,  0,  0},
+    {                "LiftS",   7,   0,  1,  0,  0},
+    {                "LiftM",   7,   0,  1,  0,  0},
+    {                "LiftL",   7,   0,  1,  0,  2},
+    {              "ThrowBU",   7,   0,  1,  0,  2},
+    {              "ThrowSU",   7,   0,  1,  0,  2},
+    {              "ThrowMU",   7,   0,  1,  0,  2},
+    {              "ThrowLU",   7,   0,  1,  0,  2},
+    {              "ThrowBD",   7,   0,  1,  0,  2},
+    {              "ThrowSD",   7,   0,  1,  0,  2},
+    {        "MPGuardShield",   7,   2,  4,  0,  4},
+    { "MPGuardShield_Impact",   7,   2,  1,  0,  2},
+    { "MPGuardShield_Normal",   7,   2,  1,  0,  2},
+    {              "vjmpChA",   8,   1,  1,  0,  2},
+    {         "RopeHoldWait",   8,   1,  1,  0,  2},
+    {           "RopeClimbL",   8,   1,  1,  0,  2},
+    {         "RopeHoldWait",   8,   1,  1,  0,  2},
+    {             "RopePull",   8,   1,  1,  0,  2},
+    {        "RopeTightHold",   8,   1,  1,  0,  2},
+    {            "RopeFront",   8,   1,  1,  0,  2},
+    {             "RopeBack",   8,   1,  1,  0,  2},
+    {         "RopeStruggle",   8,   1, 11,  0, 11},
+    {               "DiveSt",   7,   0,  1,  0,  2},
+    {                 "Dive",   7,   0,  1,  0,  2},
+    {            "StoleLand",  13,   6,  1,  0,  2},
+    {             "DiveDrop",   7,   0,  1,  0,  2},
+    {                "Float",   9,   2,  1,  0,  0},
+    {            "FloatAway",   9,   2, 12,  0, 12},
+    {          "DiveToFloat",   9,   2,  1,  0,  2},
+    {    "RocketBeetle_Wait",   9,   2,  1,  0,  0},
+    {   "RocketBeetle_Shoot",   9,   2,  1,  0,  0},
+    {   "RocketBeetle_Reset",   9,   2,  1,  0,  0},
+    {    "RocketBeetle_Back",   9,   2,  1,  0,  0},
+    {                "WhipU",   8,   4,  1,  0,  2},
+    {               "WhipLU",   8,   4,  1,  0,  2},
+    {                "WhipL",   8,   4,  1,  0,  2},
+    {               "WhipLD",   8,   4,  1,  0,  2},
+    {               "WhipRD",   8,   4,  1,  0,  2},
+    {                "WhipR",   8,   4,  1,  0,  2},
+    {               "WhipRU",   8,   4,  1,  0,  2},
+    {           "WhipBackRD",   7,   0,  1,  0,  2},
+    {            "WhipBackR",   7,   0,  1,  0,  2},
+    {           "WhipBackRU",   7,   0,  1,  0,  2},
+    {            "WhipBackU",   7,   0,  1,  0,  2},
+    {           "WhipBackLU",   7,   0,  1,  0,  2},
+    {            "WhipBackL",   7,   0,  1,  0,  2},
+    {           "WhipBackLD",   7,   0,  1,  0,  2},
+    {             "turnBack",  13,   6,  1,  0,  2},
+    {               "atLtoR",   7,   0,  1,  0,  0},
+    {               "atRtoL",   7,   0,  1,  0,  0},
+    {       "ChuchuStruggle",   9,  52, 11,  0, 11},
+    {   "ChuchuStruggle_big",   9,  52, 11,  0, 11},
+    {   "ChuchuStruggle_act",   9,  52,  1,  0,  2},
+    {"ChuchuStruggle_Escape",   9,  52,  1,  0,  2},
+    {             "Surprise",  13,  56, 12,  0, 12},
+    {               "Danger",   9,  52, 23, 23, 23},
+    {             "RockRide",   9,  52, 12,  0, 12},
+    {               "Notice",  13,  56, 29, 29, 29},
+    {           "waitinsect",   9,  52, 11,  0, 11},
+    {                "numbA",  12,  55,  7,  0,  7},
+    {                "numbB",  12,   5,  7,  0,  7},
+    {               "damFEF",   7,  50,  7,  0,  7},
+    {               "damFEB",   7,  50,  7,  0,  7},
+    {               "damFEL",   7,  50,  7,  0,  7},
+    {               "damFER",   7,  50,  7,  0,  7},
+    {                 "getA",   7,   0,  1,  0,  0},
+    {             "getAwait",   7,   0,  1, 21, 21},
+    {               "GetBig",   7,   0,  1,  0,  0},
+    {           "GetBigWait",   7,   0,  1, 20, 20},
+    {           "BoxOpSmall",   7,   0,  1,  0,  0},
+    {                "BoxOp",   7,   0,  1, 28, 28},
+    {               "cutUSt",   7, 100,  1,  0,  2},
+    {                 "cutU",   7, 100,  1,  0,  2},
+    {               "cutUEd",   9, 100,  1,  0,  2},
+    {               "cutUNG",   9, 100,  1,  0,  2},
+    {        "WaitLookRound",  13,  56,  1, 22, 22},
+    {             "entrance",  13,   6, 18, 18, 18},
+    {          "MPPosePower",  13, 255,  1,  0,  2},
+    {         "MPPosePowerL",  13, 255,  1,  0,  2},
+    {            "BinswingS",  13,   5,  1,  0,  0},
+    {            "BinswingU",  13,   5,  1,  0,  0},
+    {               "Binout",  13,   5, 19, 19, 19},
+    {                "Drift",   7,   0,  7,  0,  7},
+    {       "swimDieARevive",  13,   6, 17,  0, 17},
+    {         "MgLieFRevive",   7,   0, 17,  0, 17},
+    {               "CatchL",  13,   6,  1,  0,  0},
+    {               "CatchR",  13,   6,  1,  0,  0},
+    {          "BattleReady",   9,  52,  1,  0,  2},
+    {             "RollJump",  13,   6,  1,  0,  2},
+    {            "TansuOpen",  13,   6,  1,  0,  0},
+    {           "TansuClose",  13,   6,  1,  0,  0},
+    {            "BedSleepL",  13,   6, 31, 31, 31},
+    {             "BedSleep",  13,   6, 31, 31, 31},
+    {             "BedAwake",   8,   1, 32, 32, 32},
+    {           "Bird_Glide",   8,   1,  1,  0,  0},
+    {     "Bird_GlideAround",   8,   1,  1,  0,  0},
+    {           "Bird_Reach",   8,   5, 40, 40, 40},
+    {         "Bird_GetWait",   8,   0, 41, 41, 41},
+    {           "Bird_Accel",   8,   1,  4,  0,  4},
+    {          "Bird_Damage",   8,   1,  6,  0,  6},
+    {     "Bird_DamageSmall",   8,   1,  6,  0,  6},
+    {   "Bird_DamageTornado",   8,   1,  7,  0,  7},
+    {            "Bird_Call",  10,   3,  1,  0, 55},
+    {          "SwordPullSt",  13,   6, 33, 33, 33},
+    {        "SwordPullWait",   8,   1,  1,  0, 34},
+    {            "SwordPull",   8,   1, 35, 35, 35},
+    {         "SwordSirenSt",  13,   1, 36, 36, 36},
+    {     "SwordSirenStWait",   8,   1, 36, 36, 36},
+    {      "SwordSirenRaise",   8,   1, 37, 37, 37},
+    {  "SwordSirenRaiseWait",   8,   1, 37, 37, 37},
+    {      "SwordSirenStick",   8,   1, 38, 38, 38},
+    {      "SwordSirenAfter",   8, 100, 39, 39, 39},
+    {        "SwitchDial_st",   9,   4,  1,  0,  2},
+    {       "SwitchDial_stL",   9,   4,  1,  0,  2},
+    {      "SwitchDial_LtoR",   9,   4,  1,  0,  2},
+    {      "SwitchDial_push",   9,   4,  1,  0,  2},
+    {            "TruckLtoR",  12,   5,  1,  0,  2},
+    {     "TruckFrontToBack",  12,   5,  1,  0,  2},
+    {          "TruckJumpSt",  12,   5,  1,  0,  2},
+    {            "TruckJump",  12,   5,  1,  0,  2},
+    {         "TruckJumpEnd",  12,   5, 12,  0, 12},
+    {           "TruckBrake",  12,   5, 11,  0, 11},
+    {              "TruckIn",  13,   6,  1,  0,  0},
+    {             "TruckOut",  13,   6,  1,  0,  0},
+    {             "DieTruck",  13,  56, 42, 42, 42},
+    {       "DieTruckRevive",  13,  56, 17,  0, 17},
+    {              "MgDigIn",   7,   0,  1,  0,  2},
+    {             "MgDigOut",   7,   0,  1,  0,  2},
+    {             "MgLieF_L",   7,   0,  1,  0,  0},
+    {             "MgLieF_R",   7,   0,  1,  0,  0},
+    {            "MgAttackL",   7,   0,  4,  0,  4},
+    {            "MgAttackR",   7,   0,  4,  0,  4},
+    {              "MgDashL",   7,   0,  1,  0,  2},
+    {              "MgDashR",   7,   0,  1,  0,  2},
+    {             "MgDamage",   7,   0,  6,  0,  6},
+    {         "MgWaitBreath",   7,   0, 16,  0, 16},
+    {              "MgLieUp",   7,   0,  1,  0,  2},
+    {            "LiftRemly",  13,   6,  1, 21, 21},
+    {         "ThrowRemlyUp",  13,   6,  1, 21, 21},
+    {        "LiftRemlyUtoM",  13,   6,  1, 21, 21},
+    {   "Bird_FestivalStart",   9,   2, 43, 43, 43},
+    {          "GetSurprise",  13,   6, 44, 44, 44},
+    {       "GirahimGrapple",   9,   2,  1,  0,  2},
+    {          "GirahimPull",   9,   2,  1,  0,  2},
+    {        "GirahimPullUp",   9,   2,  1,  0,  2},
+    {        "GirahimChange",  13, 100, 12,  0, 12},
+    {             "RopeWalk",   7,   0,  1,  0,  2},
+    {             "RopeBend",   9,   2,  1,  0,  2},
+    {         "RopeHangBend",  12,   5,  1,  0,  0},
+    {           "RopeHangUp",  12,   5,  1,  0,  0},
+    {          "RopeBalance", 255, 255, 12, 57, 12},
+    {          "SetSekibanA",  13,   6,  1,  0,  0},
+    {          "SetSekibanB",  13,   6,  1,  0,  0},
+    {          "SetSekibanC",  13,   6,  1,  0,  0},
+    {            "pushTSWst",   7,   0,  1,  0,  2},
+    {              "pushTSW",   7,   0,  1,  0,  2},
+    {              "PushLog",   7,   0,  1,  0,  2},
+    {        "AsuraCutRight",  12,   5, 45,  0, 45},
+    {         "AsuraCutLeft",  12,   5, 45,  0, 45},
+    {           "AsuraCutUp",  12,   5, 45,  0, 45},
+    {      "AsuraCutRightSt",  12,   5, 46,  0, 46},
+    {       "AsuraCutLeftSt",  12,   5, 46,  0, 46},
+    {         "AsuraCutUpSt",  12,   5, 46,  0, 46},
+    {      "AsuraCutRightEd",  12,   5, 47,  0, 47},
+    {       "AsuraCutLeftEd",  12,   5, 47,  0, 47},
+    {         "AsuraCutUpEd",  12,   5, 47,  0, 47},
+    {       "AsuraSwordWait",  12,   5,  1,  0,  2},
+    {       "AsuraSwordLift",  12,   5,  1,  0,  2},
+    {             "BinScoop",  13,   5,  1,  0,  0},
+    {                 "Fire",   9,   2,  1,  0,  2},
+    {               "crouch",  13,   6,  1,  0,  2},
+    {           "CannonWait",  13,   6, 48, 48, 48},
+    {                 "Seal",  13,   6,  1,  0,  2},
+    {             "SealLoop",  13,   6,  1,  0,  2},
+    {           "SealFinish",  13,   6,  1,  0,  2},
+    {             "FinishEd",  13, 100,  1,  0,  2},
+    {              "SitDown",  13,   6,  1,  0,  0},
+    {              "SitWait",  13,   6,  1,  0,  0},
+    {      "SitWaitServiceA",  13,   6, 52, 52, 52},
+    {             "roofwait",  12,   5,  1,  0,  0},
+    {             "roofhang",  12,   5,  1,  0,  0},
+    {           "MgStruggle",   9,  52, 11,  0, 11},
+    {       "MgStruggle_act",   9,  52,  1,  0,  2},
+    {    "MgStruggle_Escape",   9,  52,  1,  0,  2},
+    {     "KrakenAppearance",   9,   2, 49, 49, 49},
+    {               "MgBury",   7,   0,  1,  0,  0},
+    {            "GetFlower",   7,   0, 50, 50, 50},
+    {        "DoorLargeOpen",  13,   6,  1,  0,  0},
+    {       "DoorLargeClose",   7,   0,  1,  0,  0},
+    {       "HarpPlayFinish",   7,   0,  1,  0,  0},
+    {           "LightningL",  13,   4, 53, 53, 53},
+    {           "LightningR",  13,   4, 53, 53, 53},
+    {           "LastAttack",   8, 100, 54, 54, 54},
+    {                   "at", 255, 255, 57, 57,  2},
+    {                 "take", 255, 255, 57, 57, 57},
+    {                "takeL", 255, 255, 57, 57, 57},
+    {                "takeR", 255, 255, 57, 57, 57},
+    {                "Take2", 255, 255, 57, 57, 57},
+    {             "waitAtoS",   9,   1, 57, 57,  2},
+    {                 "damD", 255,  56,  6, 57,  6},
+    {           "Ashootwait",  13,   1, 57, 57,  2},
+    {              "Arelord",   8,   3, 57, 57,  2},
+    {               "Ashoot",   8,   3, 57, 57,  2},
+    {          "ArelordTame",   8,   3, 57, 57,  2},
+    {           "Ashootwait",  13,   1, 57, 57,  2},
+    {              "Arelord",   8,   3, 57, 57,  2},
+    {               "Ashoot",   8,   3, 57, 57,  2},
+    {                "damSw",  13,   6,  6, 57,  6},
+    {               "HSwait",   8,   1, 57, 57,  2},
+    {           "VacuumWait",  12,   5, 57, 57, 57},
+    {          "MPPoseFront",  13, 255, 57, 57,  2},
+    {         "MPPoseAround",  13, 255, 57, 57, 57},
+    {     "MPPoseAroundBack",  13, 255, 57, 57,  2},
+    {      "MPPoseDashFront",  13, 255, 57, 57,  2},
+    {     "MPPoseDashAround",  13, 255, 57, 57, 57},
+    { "MPPoseDashAroundBack",  13, 255, 57, 57,  2},
+    {           "LiftB_UtoD",   7,   0, 57, 57,  2},
+    {           "LiftS_UtoD",   7,   0, 57, 57, 57},
+    {            "LiftLWalk",   7,   0, 57, 57,  2},
+    {          "MPGuardPose", 255, 255, 57, 57, 57},
+    {             "RockRide", 255,  56, 12, 57, 12},
+    {           "BinDrinkSt", 255,   5, 13, 13, 13},
+    {             "BinDrink", 255,   5, 14, 57, 14},
+    {           "BinDrinkEd", 255,   5, 15, 57, 15},
+    {             "HarpPose",   7,   6,  1,  0,  0},
+    {           "HarpPlayGo",   7,   1,  1,  0,  0},
+    {         "HarpPlayCome",   7,   0,  1,  0,  0},
+    {              "BinHold", 255,   5, 57, 57, 57},
+    {            "BinShield",   9,   5, 24, 24, 24},
+};
 #pragma pop
+
+const s32 daPlayerModelBase_c::sUnkDuration = 0x2400;
 
 const u8 daPlayerModelBase_c::sShieldDurabilities[10] = {16, 24, 32, 24, 36, 48, 12, 16, 20, 48};
 const u8 daPlayerModelBase_c::sShieldRegenTimes[10] = {0, 0, 0, 0, 0, 0, 90, 90, 90, 0};
@@ -253,7 +702,7 @@ void daPlayerModelBase_c::allocFrmHeap(mHeapAllocator_c *allocator, u32 size, co
 }
 
 void daPlayerModelBase_c::allocExternalDataBuffers() {
-    mpExternalAnmCharBuffer = heap_allocator.alloc(0xD800);
+    mpExternalAnmCharBuffer = heap_allocator.alloc(0x2400 * 6);
     mpAnmCharBuffer = heap_allocator.alloc(0x1000);
     mpTexPatBuffer = heap_allocator.alloc(0x1000);
     mpTexSrtBuffer = heap_allocator.alloc(0x1000);
@@ -973,6 +1422,16 @@ void daPlayerModelBase_c::fn_8005F890(nw4r::math::MTX34 *result) {
     }
 }
 
+void daPlayerModelBase_c::fn_8005FB90(nw4r::math::MTX34 *result) {
+    // Will suffer from the same problem as above, so not too interested rn
+    static const u16 sNodeIdsLegs1[] = {PLAYER_MAIN_NODE_LEG_L1, PLAYER_MAIN_NODE_LEG_R1};
+    static const Vec sLegVecs[] = {
+        {   30.0f, 0.0f, 0.0f},
+        {39.3635f, 0.0f, 0.0f},
+        {  14.18f, 0.0f, 0.0f}
+    };
+}
+
 void daPlayerModelBase_c::mainModelTimingA(u32 nodeId, nw4r::g3d::ChrAnmResult *result) {
     adjustMainModelChrAnm((PlayerMainModelNode_e)nodeId, result);
 }
@@ -988,7 +1447,11 @@ void daPlayerModelBase_c::mainModelTimingB(u32 nodeId, nw4r::g3d::WorldMtxManip 
     }
 }
 
-void daPlayerModelBase_c::mainModelTimingC(nw4r::math::MTX34 *result) {}
+void daPlayerModelBase_c::mainModelTimingC(nw4r::math::MTX34 *result) {
+    fn_8005FB90(result);
+    fn_8005F890(result);
+    mMainMdl.setField_0x58(1);
+}
 
 void daPlayerModelBase_c::handsCallbackC(
     nw4r::math::MTX34 *pMtxArray, nw4r::g3d::ResMdl mdl, nw4r::g3d::FuncObjCalcWorld *pFuncObj
@@ -1036,6 +1499,37 @@ void daPlayerModelBase_c::setShieldTransform(bool inHand) {
         targetTransform.ZYXrotM(mAng::fromDeg(91.0f), mAng::fromDeg(-123.0f), 0);
     }
     setTransformAndCalc(mShieldMdl, &targetTransform);
+}
+
+void daPlayerModelBase_c::loadTwoAnmChrs(s32 childIdx, s32 animIdx, s32 animIdx2, bool b) {
+    void *data = (u8 *)mpExternalAnmCharBuffer + childIdx * 0x2400;
+    u32 size1;
+    void *data2;
+    u32 size2;
+
+    s32 otherChildIdx = 3;
+
+    if (childIdx == 0) {
+        otherChildIdx = 1;
+    }
+
+    if (animIdx == animIdx2) {
+        size1 = 0x2400 * 2;
+        if (b) {
+            size1 *= 2;
+        }
+        size2 = 0;
+        data2 = data;
+    } else {
+        size1 = 0x2400;
+        if (b) {
+            size1 *= 2;
+        }
+        size2 = size1;
+        data2 = (u8 *)data + size1;
+    }
+    loadAnmChr(childIdx, animIdx, data, size1);
+    loadAnmChr(otherChildIdx, animIdx2, data2, size2);
 }
 
 nw4r::g3d::ResFile daPlayerModelBase_c::getItemResFile(const char *name, mAllocator_c &allocator) {
@@ -1106,17 +1600,101 @@ nw4r::g3d::ResAnmTexSrt daPlayerModelBase_c::getExternalAnmTexSrt(const char *na
     return result;
 }
 
-void daPlayerModelBase_c::loadSound(nw4r::g3d::ResFile file, const char *name, s32 animIdx) {
+bool daPlayerModelBase_c::canStart(bool force, u16 faceIdx, u16 invalidValue, u16 *out1, u16 *out2) const {
+    if (force) {
+        *out2 = faceIdx;
+    } else {
+        *out1 = faceIdx;
+        if (*out2 != invalidValue) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void daPlayerModelBase_c::setFaceTexPat(s32 faceIdx, bool force) {
+    // TODO branching
+    if ((force || ((mFaceAnmTexPatIdx1 != faceIdx || mFaceAnmTexPatIdx1 != 1) &&
+                   (!checkFaceUpdateFlags(0x40000000) || (faceIdx != 1)))) &&
+        faceIdx != 0x38) {
+        offFaceUpdateFlags(0x40000000);
+        if (canStart(force, faceIdx, 0x39, &mFaceAnmTexPatIdx1, &mFaceAnmTexPatIdx2)) {
+            nw4r::g3d::ResAnmTexPat anm = getExternalAnmTexPat(sFaceResNames[faceIdx], mpTexPatBuffer, 0x1000);
+            mFaceTexPat.setAnm(mFaceMdl, anm, 0, m3d::PLAY_MODE_4);
+            mFaceTexPat.setFrame(0.0f, 0);
+        }
+    }
+}
+
+void daPlayerModelBase_c::setFaceTexSrt(s32 faceIdx, bool force) {
+    offFaceUpdateFlags(0x80000000);
+    if (canStart(force, faceIdx, 0x39, &mFaceAnmTexSrtIdx1, &mFaceAnmTexSrtIdx2)) {
+        nw4r::g3d::ResAnmTexSrt anm = getExternalAnmTexSrt(sFaceResNames[faceIdx], mpTexSrtBuffer, 0x1000);
+        mFaceTexSrt.setAnm(mFaceMdl, anm, 0, m3d::PLAY_MODE_4);
+        mFaceTexSrt.setFrame(0.0f, 0);
+    }
+}
+
+void daPlayerModelBase_c::setFaceAnmChr(s32 faceIdx, bool force) {
+    // TODO branching
+    if (faceIdx != 0x38 && (force || (!checkFaceUpdateFlags(0x20000000) || (faceIdx != 0 && faceIdx != 2)))) {
+        offFaceUpdateFlags(0x20000000);
+        if (canStart(force, faceIdx, 0x39, &mFaceAnmChrIdx1, &mFaceAnmChrIdx2)) {
+            nw4r::g3d::ResAnmChr anm = getExternalAnmChr(sFaceResNames[faceIdx], mpAnmCharBuffer, 0x1000);
+            mFaceAnmChr.setAnm(mFaceMdl, anm, m3d::PLAY_MODE_4);
+            mFaceAnmChr.setFrameOnly(0.0f);
+            mFaceMdl.setAnm(mFaceAnmChr);
+        }
+    }
+}
+
+void daPlayerModelBase_c::loadAnmChr(s32 childIdx, s32 animIdx, void *dest, u32 maxSize) {
+    nw4r::g3d::ResAnmChr anm = getExternalAnmChr(sAnimations[animIdx].animName, dest, maxSize);
+    mAnmChrs[childIdx].setAnm(mMainMdl, anm, m3d::PLAY_MODE_4);
+    nw4r::g3d::AnmObjChr *animObj = static_cast<nw4r::g3d::AnmObjChr *>(mAnmChrs[childIdx].getAnimObj());
+    animObj->Release();
+    nw4r::g3d::ResMdl bodyMdl = mMainMdl.getResMdl();
+    if (isBodyAnmPart_0_2_4(childIdx)) {
+        animObj->Bind(bodyMdl, PLAYER_MAIN_NODE_WAIST, nw4r::g3d::AnmObjChr::BIND_PARTIAL);
+        animObj->Bind(bodyMdl, PLAYER_MAIN_NODE_CENTER, nw4r::g3d::AnmObjChr::BIND_ONE);
+    } else {
+        animObj->Bind(bodyMdl, PLAYER_MAIN_NODE_BACKBONE_1, nw4r::g3d::AnmObjChr::BIND_PARTIAL);
+    }
+    mAnmChrBlend.attach(childIdx, &mAnmChrs[childIdx], 1.0f);
+    mMainMdl.setAnm(mAnmChrBlend);
+    mAnimations[childIdx] = animIdx;
+    mAnmChrs[childIdx].setField_0x35(0);
+}
+
+void daPlayerModelBase_c::removeAnmChr(s32 childIdx) {
+    mAnmChrs[childIdx].getAnimObj()->Release();
+    mAnmChrBlend.detach(childIdx);
+    mAnimations[childIdx] = 443;
+}
+
+void daPlayerModelBase_c::loadSound(nw4r::g3d::ResFile &file, const char *name, s32 childIdx) {
     SoundSource *s = getSoundSource();
-    mCurrentAnmChrIdx = animIdx;
+    mCurrentAnmChrIdx = childIdx;
     SizedString<64> path;
     path.sprintf("%s.brasd", name);
     void *dat = file.GetExternalData(path);
     if (dat == nullptr && file == mCurrentRes) {
         dat = mPlCommonSoundRes.GetExternalData(path);
     }
-    mMainMdl.setSoundRelated(mAnimations[animIdx], dat);
+    mMainMdl.setSoundRelated(mAnimations[childIdx], dat);
     s->load(dat, name);
+}
+
+void daPlayerModelBase_c::loadSoundForAnim(s32 childIdx) {
+    SoundSource *s = getSoundSource();
+    s32 anim = mAnimations[childIdx];
+    mCurrentAnmChrIdx = childIdx;
+    if (anim != mMainMdl.getField_0x5A()) {
+        loadSound(mCurrentRes.IsValid() ? mCurrentRes : mPlCommonSoundRes, sAnimations[anim].animName, childIdx);
+    } else {
+        s->load(mMainMdl.getSoundData(), sAnimations[anim].animName);
+    }
+    s->setRate(mAnmChrs[childIdx].getRate());
 }
 
 void daPlayerModelBase_c::syncSoundWithAnim() {
@@ -1206,6 +1784,51 @@ void daPlayerModelBase_c::updateCachedPositions() {
         v.rotX(field_0x1268);
         v.rotY(rotation.y + field_0x126A);
         poscopy2 += v;
+    }
+}
+
+void daPlayerModelBase_c::setPosCopy3() {
+    static const Vec posCopy3v0 = {0.0f, 150.0f, 0.0f};
+    static const Vec posCopy3v1 = {0.0f, 40.0f, 0.0f};
+    static const Vec posCopy3v2 = {0.0f, 95.0f, 0.0f};
+    static const Vec posCopy3v3 = {0.0f, 14.0f, 0.0f};
+    if (checkCurrentAction(/* FREE_FALL*/ 0x13) || checkCurrentAction(/* WALKING_ON_TIGHTROPE */ 0x81)) {
+        poscopy3 = position;
+        poscopy3.y += 180.0f;
+    } else if (checkCurrentAction(/* BEING_PULLED_BY_CLAWS */ 0x5A)) {
+        poscopy3 = poscopy2;
+    } else if (checkActionFlags(FLG0_SWING_ROPE)) {
+        poscopy3 = position;
+    } else if (checkActionFlagsCont(0x20000000) || checkCurrentAction(0x70) ||
+               checkCurrentAction(/* HANG_ON_ZIP */ 0x85)) {
+        poscopy3 = position;
+        poscopy3.y -= 100.0f;
+    } else if (checkActionFlags(FLG0_HANGING_LEDGE) || (getCurrentAction() >= 0x82 && getCurrentAction() <= 0x84)) {
+        const nw4r::math::MTX34 *c = mHeadMdl.getLocalMtx();
+        poscopy3.x = c->_03;
+        poscopy3.y = c->_13;
+        poscopy3.z = c->_23;
+    } else if (checkCurrentAction(/* SLIDING */ 0x09)) {
+        poscopy3 = position + mVec3_c(posCopy3v2);
+    } else {
+        mMtx_c mtx;
+        mMainMdl.getLocalMtx(mtx);
+
+        f32 f;
+        const Vec *v;
+        if (checkActionFlags(FLG0_IN_WATER) || checkCurrentAction(/* SWIM_DASH_INFO_AIR */ 0x57)) {
+            v = &posCopy3v3;
+            f = position.y;
+        } else {
+            if (checkCurrentAction(/* VOID_SAND */ 0x4C)) {
+                v = &posCopy3v3;
+            } else {
+                v = checkActionFlags(FLG0_CRAWLING) ? &posCopy3v1 : &posCopy3v0;
+            }
+            f = mtx.m[1][3];
+        }
+        poscopy3.set(v->x + position.x, v->y, v->z + position.z);
+        poscopy3.y += f;
     }
 }
 

@@ -114,6 +114,18 @@ public:
         mpSoundData = data;
     }
 
+    void setField_0x58(u8 val) {
+        field_0x58 = val;
+    }
+
+    u16 getField_0x5A() const {
+        return field_0x5A;
+    }
+
+    void *getSoundData() const {
+        return mpSoundData;
+    }
+
 private:
     /* 0x24 */ daPlBaseMdlCallback_c mCallback;
     /* 0x58 */ u8 field_0x58;
@@ -141,6 +153,10 @@ public:
 
     void play() override;
     bool isFinished();
+
+    void setField_0x35(u8 value) {
+        field_0x35 = value;
+    }
 
 private:
     /* 0x35 */ u8 field_0x35;
@@ -726,6 +742,18 @@ public:
         mForceOrPreventActionFlags |= mask;
     }
 
+    inline void onFaceUpdateFlags(u32 mask) {
+        mFaceUpdateFlags |= mask;
+    }
+
+    inline void offFaceUpdateFlags(u32 mask) {
+        mFaceUpdateFlags &= ~mask;
+    }
+
+    inline bool checkFaceUpdateFlags(u32 mask) const {
+        return (mFaceUpdateFlags & mask) != 0;
+    }
+
     bool CheckPlayerFly() const {
         return mActionFlags & FLG0_FLY;
     }
@@ -791,7 +819,7 @@ protected:
     /* 0x339 */ u8 mRidingActorType;
     /* 0x33A */ u8 unk_0x33A[0x340 - 0x33A];
     /* 0x340 */ u32 someFlags_0x340;
-    /* 0x344 */ u8 unk_0x344[0x348 - 0x344];
+    /* 0x344 */ u32 mFaceUpdateFlags;
     /* 0x348 */ u32 mSwordAndMoreStates;
     /* 0x34C */ u32 mModelUpdateFlags;
     /* 0x350 */ u32 someFlags_0x350;
@@ -842,7 +870,7 @@ public:
         PLAYER_MAIN_NODE_ARM_L2 = 8,
         PLAYER_MAIN_NODE_HAND_L = 9,
         PLAYER_MAIN_NODE_WEAPON_L = 10,
-        
+
         PLAYER_MAIN_NODE_SHOULDER_R = 11,
         PLAYER_MAIN_NODE_ARM_R1 = 12,
         PLAYER_MAIN_NODE_ARM_R2 = 13,
@@ -891,6 +919,7 @@ public:
     };
 
     void fn_8005F890(nw4r::math::MTX34 *);
+    void fn_8005FB90(nw4r::math::MTX34 *);
     void fn_80061410();
 
     static void freeFrmHeap(mHeapAllocator_c *allocator);
@@ -1011,10 +1040,21 @@ public:
         mSwordAndMoreStates &= ~mask;
     }
 
-    void loadSound(nw4r::g3d::ResFile file, const char *name, s32 animIdx);
+    bool canStart(bool force, u16 newIdx, u16 invalidValue, u16 *out1, u16 *out2) const;
+    void setFaceTexPat(s32 faceIdx, bool force);
+    void setFaceTexSrt(s32 faceIdx, bool force);
+    void setFaceAnmChr(s32 faceIdx, bool force);
+
+    void setPosCopy3();
+
+    void loadTwoAnmChrs(s32 childIdx, s32 animIdx, s32 animIdx2, bool b);
+    void loadAnmChr(s32 childIdx, s32 animIdx, void *dest, u32 maxSize);
+    void removeAnmChr(s32 childIdx);
+    void loadSound(nw4r::g3d::ResFile &file, const char *name, s32 childIdx);
+    void loadSoundForAnim(s32 childIdx);
 
     void syncSoundWithAnim();
-    static void registMassObj(cCcD_Obj* obj, u8 priority);
+    static void registMassObj(cCcD_Obj *obj, u8 priority);
     void updateModelColliders();
     void updateCachedPositions();
 
@@ -1037,6 +1077,7 @@ public:
     void applyWorldRotationMaybe(nw4r::g3d::WorldMtxManip *result, mAng x, mAng y, mAng z, mVec3_c *off, bool order);
 
     static const PlayerAnimation sAnimations[443];
+    static const s32 sUnkDuration;
     static const u8 sShieldDurabilities[10];
     static const u8 sShieldRegenTimes[10];
     static mColor sGuideColor1;
