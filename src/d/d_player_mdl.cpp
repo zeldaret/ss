@@ -1397,38 +1397,35 @@ void daPlayerModelBase_c::fn_8005F890(nw4r::math::MTX34 *result) {
     nw4r::g3d::ResMdl mdl = mMainMdl.getResMdl();
 
     if (vt_0x2E8(result, sNodeIdsArms1, false)) {
+        mVec3_c dstVec;
         mVec3_c swordOffset;
+        mVec3_c translate;
         if (checkCurrentAction(/* SWORD_IN_DIAL */ 0x86) || checkCurrentAction(/* ON_BIRD */ 0x8A)) {
             swordOffset = vt_0x304() * 0.5f;
         } else {
             swordOffset = mVec3_c::Zero;
         }
 
-        mVec3_c dstVec;
-        // (1) For some reason the compiler sets up pointers to stack vars here...
+        nw4r::math::MTX34 *targetMtx;
         for (s32 arm = 0; arm < 2; arm++) {
             mAng rot1;
             mAng rot2;
+            // TODO maybe there's a more natural order
+            s32 i;
             isOnClawTargetMaybe(arm, rot1, rot2);
             u16 armNode = sNodeIdsArms1[arm];
-            mVec3_c *dst = nullptr;
             mAng *angs;
+            mVec3_c *dst = nullptr;
             if (arm == 0) {
                 angs = field_0x1374;
             } else {
                 angs = field_0x1378;
             }
-            nw4r::math::MTX34 *targetMtx;
             // Walk down the arm bones and transform the whole thing again?
-            for (s32 i = 0; i < 3; i++) {
-                u32 mtxId = mdl.GetResNode(armNode).GetMtxID();
-                targetMtx = &result[mtxId];
+            for (i = 0; i < 3; i++) {
+                targetMtx = &result[mdl.GetResNode(armNode).GetMtxID()];
                 applyWorldRotationMaybe(targetMtx, rot1, rot2, angs[i], dst, false);
-                mVec3_c v;
-                v.x = sArmVecs[i].x;
-                v.y = sArmVecs[i].y;
-                v.z = sArmVecs[i].z;
-                MTXMultVec(*targetMtx, v, dstVec);
+                MTXMultVec(*targetMtx, mVec3_c(sArmVecs[i]), dstVec);
                 if (i != 2 && arm == 1) {
                     // sword hand
                     dstVec -= swordOffset;
@@ -1436,11 +1433,8 @@ void daPlayerModelBase_c::fn_8005F890(nw4r::math::MTX34 *result) {
                 dst = &dstVec;
                 armNode++;
             }
-            mVec3_c translate;
             mMainMdl.getNodeResult(armNode)->GetTranslate(translate);
             MTXMultVec(*targetMtx, translate, *dst);
-            // (2) ... here it stores the passed-by-value angles to the stack,
-            // then calls GetResNode and uses the previously set up pointers as arguments?
             applyWorldRotationMaybe(&result[mdl.GetResNode(armNode).GetMtxID()], rot1, rot2, angs[2], &dstVec, false);
         }
     }
@@ -1458,39 +1452,33 @@ void daPlayerModelBase_c::fn_8005FB90(nw4r::math::MTX34 *result) {
     nw4r::g3d::ResMdl mdl = mMainMdl.getResMdl();
 
     if (vt_0x2E8(result, sNodeIdsLegs1, true)) {
+        mVec3_c dstVec;
         mVec3_c legOffset = vt_0x304() * 0.5f;
 
-        mVec3_c dstVec;
-        // (1) For some reason the compiler sets up pointers to stack vars here...
         for (s32 leg = 0; leg < 2; leg++) {
-            u16 legNode = sNodeIdsLegs1[leg];
+            // TODO maybe there's a more natural order
             mVec3_c *dst = nullptr;
+            s32 i;
+            u16 legNode = sNodeIdsLegs1[leg];
             mAng *angs;
             if (leg == 0) {
                 angs = field_0x136C;
             } else {
                 angs = field_0x1370;
             }
-            nw4r::math::MTX34 *targetMtx;
-            // Walk down the arm bones and transform the whole thing again?
-            for (s32 i = 0; i < 3; i++) {
+            // Walk down the leg bones and transform the whole thing again?
+            for (i = 0; i < 3; i++) {
                 u32 mtxId = mdl.GetResNode(legNode).GetMtxID();
-                targetMtx = &result[mtxId];
+                nw4r::math::MTX34 *targetMtx = &result[mtxId];
                 applyWorldRotationMaybe(targetMtx, angs[i], 0, 0, dst, false);
-                mVec3_c v;
-                v.x = sLegVecs[i].x;
-                v.y = sLegVecs[i].y;
-                v.z = sLegVecs[i].z;
-                MTXMultVec(*targetMtx, v, dstVec);
+                MTXMultVec(*targetMtx, mVec3_c(sLegVecs[i]), dstVec);
                 if (i != 2) {
                     dstVec -= legOffset;
                 }
                 dst = &dstVec;
                 legNode++;
             }
-            // (2) ... here it stores the passed-by-value angles to the stack,
-            // then calls GetResNode and uses the previously set up pointers as arguments?
-            applyWorldRotationMaybe(&result[mdl.GetResNode(legNode).GetMtxID()], 0, 0, angs[2], &dstVec, false);
+            applyWorldRotationMaybe(&result[mdl.GetResNode(legNode).GetMtxID()], angs[2], 0, 0, &dstVec, false);
         }
     }
 }
@@ -1967,6 +1955,3 @@ bool daPlayerModelBase_c::fn_80061410() {
         mCarriedActorRef.get()->mObjectActorFlags |= 0x200;
     }
 }
-mColor daPlayerModelBase_c::sGuideColor1(0x00, 0x82, 0xDC, 0xFF);
-mColor daPlayerModelBase_c::sGuideColor2(0x64, 0xFF, 0xFF, 0xFF);
-mColor daPlayerModelBase_c::sGuideColor3(0x46, 0xC8, 0xFF, 0xFF);

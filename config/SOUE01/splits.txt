@@ -249,7 +249,7 @@ d/d_player_act.cpp:
 
 d/d_player_mdl.cpp:
 	.text       start:0x8005CE90 end:0x80061AA4 align:16
-	.rodata     start:0x804DE1E8 end:0x804E0B38
+	.rodata     start:0x804DE1E8 end:0x804E0918
 	.data       start:0x8050D690 end:0x8050DDD8
 	.sdata      start:0x80571C80 end:0x80571D08
 	.sbss       start:0x80575208 end:0x80575210

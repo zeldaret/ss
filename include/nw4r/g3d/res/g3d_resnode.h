@@ -109,11 +109,7 @@ public:
     }
 
     u32 GetMtxID() const {
-        if (IsValid()) {
-            return ptr()->mtxID;
-        }
-
-        return 0;
+        return IsValid() ? ptr()->mtxID : 0;
     }
 
     bool IsVisible() const {
