@@ -11,7 +11,7 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
-#include "toBeSorted/actor_on_rail.h"
+#include "toBeSorted/d_path.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/time_proc.h"

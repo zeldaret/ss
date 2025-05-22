@@ -149,14 +149,38 @@ public:
         mpPath = path;
     }
 
+    const PATH *getPath(s32 off) const {
+        return mpPath + off;
+    }
+
+    const u16 getPathCount() const {
+        return mPathCount;
+    }
+
+    const SPTH *getSpth(s32 off) const {
+        return mpSpth + off;
+    }
+
+    const u16 getSpthCount() const {
+        return mSpthCount;
+    }
+
     void setPnt(const PNT *pnt, u16 count) {
         mPntCount = count;
         mpPnt = pnt;
     }
 
+    const PNT *getPnt(s32 off) const {
+        return mpPnt + off;
+    }
+
     void setBpnt(const BPNT *bpnt, u16 count) {
         mBpntCount = count;
         mpBpnt = bpnt;
+    }
+
+    const BPNT *getBpnt(s32 off) const {
+        return mpBpnt + off;
     }
 
     void setSpth(const SPTH *spth, u16 count) {
@@ -169,14 +193,22 @@ public:
         mpSpnt = spnt;
     }
 
+    const SPNT *getSpnt(s32 off) const {
+        return mpSpnt + off;
+    }
+
     void setSbpt(const SBPT *sbpt, u16 count) {
         mSbptCount = count;
         mpSbpt = sbpt;
     }
 
-    void setArea(const AREA *path, u16 count) {
+    const SBPT *getSbpt(s32 off) const {
+        return mpSbpt + off;
+    }
+
+    void setArea(const AREA *area, u16 count) {
         mAreaCount = count;
-        mpArea = path;
+        mpArea = area;
     }
 
     void setPly(const PLY *ply, u16 count) {

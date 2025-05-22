@@ -15,6 +15,7 @@ f32 PSVECMag(const Vec *);
 f32 PSVECDotProduct(const Vec *, const Vec *);
 void PSVECCrossProduct(const Vec *, const Vec *, Vec *);
 f32 PSVECSquareDistance(const Vec *, const Vec *);
+f32 PSVECDistance(const Vec *, const Vec *);
 
 #define VECAdd            PSVECAdd
 #define VECSubtract       PSVECSubtract
