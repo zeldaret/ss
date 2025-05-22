@@ -1907,35 +1907,52 @@ void daPlayerModelBase_c::setPosCopy3() {
                checkCurrentAction(/* HANG_ON_ZIP */ 0x85)) {
         poscopy3 = position;
         poscopy3.y -= 100.0f;
-    } else if (checkActionFlags(FLG0_HANGING_LEDGE) || (getCurrentAction() >= 0x82 && getCurrentAction() <= 0x84)) {
-        // TODO this control flow is weird
-        const nw4r::math::MTX34 *c = mHeadMdl.getLocalMtx();
-        poscopy3.x = c->_03;
-        poscopy3.y = c->_13;
-        poscopy3.z = c->_23;
-    } else if (checkCurrentAction(/* SLIDING */ 0x09)) {
-        poscopy3 = position + mVec3_c(posCopy3v2);
     } else {
-        mMtx_c mtx;
-        mMainMdl.getLocalMtx(mtx);
-
-        f32 f;
-        const Vec *v;
-        if (checkActionFlags(FLG0_IN_WATER) || checkCurrentAction(/* SWIM_DASH_INFO_AIR */ 0x57)) {
-            v = &posCopy3v3;
-            f = position.y;
-        } else {
-            if (checkCurrentAction(/* VOID_SAND */ 0x4C)) {
-                v = &posCopy3v3;
-            } else {
-                v = checkActionFlags(FLG0_CRAWLING) ? &posCopy3v1 : &posCopy3v0;
-            }
-            f = mtx.m[1][3];
+        // TODO maybe fakematch, is there a way to avoid this goto?
+        if (checkActionFlags(FLG0_HANGING_LEDGE)) {
+            goto label;
         }
-        poscopy3.copyFrom(v);
-        poscopy3.x += position.x;
-        poscopy3.y += f;
-        poscopy3.z += position.z;
+
+        switch (getCurrentAction()) {
+            case 0x82:
+            case 0x83:
+            case 0x84: {
+            label:
+                const nw4r::math::MTX34 *c = mHeadMdl.getLocalMtx();
+                poscopy3.x = c->_03;
+                poscopy3.y = c->_13;
+                poscopy3.z = c->_23;
+                break;
+            }
+            case 0x09: {
+                // SLIDING
+                poscopy3 = position + mVec3_c(posCopy3v2);
+                break;
+            }
+            default: {
+                mMtx_c mtx;
+                mMainMdl.getLocalMtx(mtx);
+
+                f32 f;
+                const Vec *v;
+                if (checkActionFlags(FLG0_IN_WATER) || checkCurrentAction(/* SWIM_DASH_INFO_AIR */ 0x57)) {
+                    v = &posCopy3v3;
+                    f = position.y;
+                } else {
+                    if (checkCurrentAction(/* VOID_SAND */ 0x4C)) {
+                        v = &posCopy3v3;
+                    } else {
+                        v = checkActionFlags(FLG0_CRAWLING) ? &posCopy3v1 : &posCopy3v0;
+                    }
+                    f = mtx.m[1][3];
+                }
+                poscopy3.copyFrom(v);
+                poscopy3.x += position.x;
+                poscopy3.y += f;
+                poscopy3.z += position.z;
+                break;
+            }
+        }
     }
 }
 
