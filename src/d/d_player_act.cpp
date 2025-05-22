@@ -1,8 +1,8 @@
-#include "d/a/d_a_item.h"
-#include "d/a/d_a_itembase.h"
-#include "d/d_player.h"
+#include "d/d_player_act.h"
 
 #include "common.h"
+#include "d/a/d_a_item.h"
+#include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "m/m_angle.h"

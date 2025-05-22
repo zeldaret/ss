@@ -1,3 +1,5 @@
+#include "d/d_player_mdl.h"
+
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/a/d_a_itembase.h"
