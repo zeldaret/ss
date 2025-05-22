@@ -294,7 +294,7 @@ bool dLytDobutton_c::remove() {
 bool dLytDobutton_c::execute() {
     bool isInEvent = EventManager::isInEvent();
     bool b1 = true;
-    if (dAcPy_c::isInBambooCuttingMinigame()) {
+    if (dAcPy_c::GetLink()->isInBambooCuttingMinigame()) {
         setActionTextStuff(ICON_12, ACT_DO_70, false);
     }
     if (field_0x490 == 0) {

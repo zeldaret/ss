@@ -17,6 +17,11 @@ public:
     bool create(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmChr anm, mAllocator_c *alloc) {
         return create(mdl, anm, alloc, nullptr);
     }
+    // Not sure about this overload but it fixes stack alloc in some cases and other files
+    // definitely have similar overloads with seemingly identical argument types
+    bool create2(nw4r::g3d::ResMdl mdl, nw4r::g3d::ResAnmChr anm, mAllocator_c *alloc) {
+        return create(mdl, anm, alloc);
+    }
     bool create(nw4r::g3d::ResMdl, nw4r::g3d::ResAnmChr, mAllocator_c *, u32 *);
     void setAnm(bmdl_c &, nw4r::g3d::ResAnmChr, playMode_e);
     void setAnmAfter(bmdl_c &, nw4r::g3d::ResAnmChr, playMode_e);

@@ -30,6 +30,7 @@
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/math/math_types.h"
 #include "toBeSorted/file_manager.h"
+#include "toBeSorted/minigame_mgr.h"
 #include "toBeSorted/stage_render_stuff.h"
 
 // See Below for some info
@@ -58,7 +59,7 @@ struct PlayerAnimation {
  */
 
 // Vtable at 80533128, no differences to dAcObjBase_c?
-
+// Name unknown, though this name exists in NSMBW
 class daPlBase_c : public dAcObjBase_c {
 public:
     virtual ~daPlBase_c() {}
@@ -190,16 +191,8 @@ private:
     daPlayerModelBase_c *mpPlayer;
 };
 
-class UnkPlayerClass {
-public:
-    UnkPlayerClass() {}
-    ~UnkPlayerClass() {}
-
-private:
-    /* 0x00 */ u8 _0x00[0x10 - 0x00];
-};
-
 // Does this one have a vtable?
+// Name unknown
 class daPlayerActBase_c : public daPlBase_c {
 public:
     daPlayerActBase_c() : field_0x334(120.0f), mCurrentAction(187) {}
@@ -800,8 +793,6 @@ public:
     static s32 getCurrentSwordType();
     static const char *getSwordName(s32);
     static s32 getCurrentlyEquippedShieldType();
-    static s32 getCurrentlyEquippedShieldId();
-    static u32 getCurrentShieldPouchSlot();
 
     static const mColor &getEarringsColor();
 
@@ -833,7 +824,7 @@ protected:
 };
 
 // Vtable at 8050da00, dtor reveals two superclasses
-// until dAcObjBase_c
+// until dAcObjBase_c. Name unknown
 class daPlayerModelBase_c : public daPlayerActBase_c {
 public:
     daPlayerModelBase_c()
@@ -920,7 +911,7 @@ public:
 
     void fn_8005F890(nw4r::math::MTX34 *);
     void fn_8005FB90(nw4r::math::MTX34 *);
-    void fn_80061410();
+    bool fn_80061410();
 
     static void freeFrmHeap(mHeapAllocator_c *allocator);
     static void allocFrmHeap(mHeapAllocator_c *allocator, u32 size, const char *name);
@@ -941,6 +932,10 @@ public:
     nw4r::g3d::ResAnmTexSrt getExternalAnmTexSrt(const char *name, void *dest, u32 maxSize);
 
     static bool isBodyAnmPart_0_2_4(s32 part);
+
+    static u32 getCurrentShieldPouchSlot();
+    static s32 getShieldType(s32 item);
+    static s32 getCurrentlyEquippedShieldId();
 
     void updateEarringsColor();
     void loadBodyModels();
@@ -1009,7 +1004,7 @@ public:
 
     /* vt 0x114 */ virtual void somethingWithCarriedActorFlags() override;
     /* vt 0x118 */ virtual dAcObjBase_c *getCurrentCarriedActor() override {
-        return mRef.get();
+        return mCarriedActorRef.get();
     }
 
     /* vt 0x18C */ virtual void getBodyMtx(mMtx_c *out_mtx, int boneIdx) override {
@@ -1042,8 +1037,11 @@ public:
 
     bool canStart(bool force, u16 newIdx, u16 invalidValue, u16 *out1, u16 *out2) const;
     void setFaceTexPat(s32 faceIdx, bool force);
+    void checkFaceTexPat();
     void setFaceTexSrt(s32 faceIdx, bool force);
+    void checkFaceTexSrt();
     void setFaceAnmChr(s32 faceIdx, bool force);
+    void checkFaceAnmChr();
 
     void setPosCopy3();
 
@@ -1184,7 +1182,7 @@ protected:
     /* 0x1300 */ mQuat_c field_0x1300[4];
     /* 0x1340 */ mQuat_c mQuat1;
     /* 0x1350 */ mQuat_c mQuat2;
-    /* 0x1360 */ dAcRef_c<dAcObjBase_c> mRef; // not sure about the class
+    /* 0x1360 */ dAcRef_c<dAcObjBase_c> mCarriedActorRef; // not sure about the class
     /* 0x136C */ mAng *field_0x136C;
     /* 0x1370 */ mAng *field_0x1370;
     /* 0x1374 */ mAng *field_0x1374; // x3
@@ -1252,8 +1250,9 @@ public:
     static s32 getCurrentBeetleType();
     static s32 getCurrentBugNetType();
 
-    static bool isInBambooCuttingMinigame();
-
+    static bool isInBambooCuttingMinigame() {
+        return MinigameManager::isInMinigameState(MinigameManager::BAMBOO_CUTTING);
+    }
     static bool isItemRestrictedByBokoBase(ITEM_ID item);
 
     static u32 getCurrentHealthCapacity();

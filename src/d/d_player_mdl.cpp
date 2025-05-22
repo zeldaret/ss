@@ -1,5 +1,6 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_heap.h"
@@ -817,8 +818,7 @@ void daPlayerModelBase_c::loadBody() {
     nw4r::g3d::ResAnmChr resAnmChr26 = getExternalAnmChr(sAnimations[26].animName, mpExternalAnmCharBuffer, 0x2400);
     nw4r::g3d::AnmObjChr *animObj;
     for (s32 i = 0; i < 6; i++) {
-        // TODO: stack swap, need to mess with inlines more
-        anms->create(bodyMdl, resAnmChr26, &heap_allocator);
+        anms->create2(bodyMdl, resAnmChr26, &heap_allocator);
         anms->setAnm(mMainMdl, resAnmChr26, m3d::PLAY_MODE_0);
         f32 f;
         switch (i) {
@@ -929,10 +929,10 @@ static const f32 sSwordRelatedUnk[] = {73.0f, 80.0f, 100.0f, 100.0f, 120.0f, 120
 static const f32 sSwordRelatedZ[] = {0.7f, 0.7f, 0.9f, 0.9f, 1.0f, 1.0f, 0.7f};
 static const f32 sSwordRelatedY[] = {0.7f, 0.8f, 0.9f, 0.9f, 1.0f, 1.0f, 0.7f};
 
-static const char *sSwordPods[] = {"EquipPodA", "EquipPodB",      "EquipPodC", "EquipPodD",
-                                   "EquipPodE", "EquipPodMaster", "EquipPodA"};
-
 void daPlayerModelBase_c::initSwordModel() {
+    static const char *sSwordPods[] = {"EquipPodA", "EquipPodB",      "EquipPodC", "EquipPodD",
+                                       "EquipPodE", "EquipPodMaster", "EquipPodA"};
+
     updateCurrentSword();
     freeFrmHeap(&mSwordAllocator);
     const char *swordName = getSwordName(sCurrentSword);
@@ -941,10 +941,8 @@ void daPlayerModelBase_c::initSwordModel() {
     field_0x127C.x = sSwordRelatedX[sCurrentSword];
     field_0x127C.y = sSwordRelatedY[sCurrentSword];
     field_0x127C.z = sSwordRelatedZ[sCurrentSword];
-    // TODO instruction order
-    const char *pod = sSwordPods[sCurrentSword];
 
-    nw4r::g3d::ResMdl sheathMdl = mSwordRes.GetResMdl(pod);
+    nw4r::g3d::ResMdl sheathMdl = mSwordRes.GetResMdl(sSwordPods[sCurrentSword]);
     createGenericSmdl(sheathMdl, mSheathMdl, &mSwordAllocator, 0x800);
     mScnCallback4.attach(mSheathMdl);
 
@@ -995,6 +993,35 @@ void daPlayerModelBase_c::updateSwordModel() {
     mModelUpdateFlags &= ~UPDATE_MODEL_SWORD;
 }
 
+u32 daPlayerModelBase_c::getCurrentShieldPouchSlot() {
+    // Compiler quirk, inline function not inlined due to GetLink call
+    if (dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL || dAcPy_c::GetLink()->isInBambooCuttingMinigame()) {
+        return POUCH_SLOT_NONE;
+    }
+    return FileManager::GetInstance()->getShieldPouchSlot();
+}
+
+s32 daPlayerModelBase_c::getCurrentlyEquippedShieldId() {
+    s32 id;
+    u32 slot = getCurrentShieldPouchSlot();
+    if (slot < POUCH_SLOT_NONE) {
+        id = getShieldType(FileManager::GetInstance()->getPouchItem(slot));
+    } else {
+        id = 10;
+    }
+    if (id >= 11) {
+        id = 10;
+    }
+    return id;
+}
+
+s32 daPlayerModelBase_c::getShieldType(s32 item) {
+    if (!isItemShield(item)) {
+        item = ITEM_WOODEN_SHIELD;
+    }
+    return item - ITEM_WOODEN_SHIELD;
+}
+
 static const char *sShieldModelsBase[] = {
     "EquipShieldWood", "EquipShieldIron", "EquipShieldHoly", "EquipShieldHylia", "EquipShieldWood",
 };
@@ -1004,9 +1031,6 @@ static const char *sShieldModelsBroken[] = {
     "EquipShieldHylia",      "EquipShieldWoodBroken",
 };
 
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_529_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_535_;
-extern "C" const u16 PARTICLE_RESOURCE_ID_MAPPING_537_;
 void daPlayerModelBase_c::initShieldModel() {
     static const u16 shieldEffects[] = {
         PARTICLE_RESOURCE_ID_MAPPING_537_, PARTICLE_RESOURCE_ID_MAPPING_535_, PARTICLE_RESOURCE_ID_MAPPING_529_,
@@ -1423,13 +1447,52 @@ void daPlayerModelBase_c::fn_8005F890(nw4r::math::MTX34 *result) {
 }
 
 void daPlayerModelBase_c::fn_8005FB90(nw4r::math::MTX34 *result) {
-    // Will suffer from the same problem as above, so not too interested rn
+    // Suffer from the same problem as above
     static const u16 sNodeIdsLegs1[] = {PLAYER_MAIN_NODE_LEG_L1, PLAYER_MAIN_NODE_LEG_R1};
     static const Vec sLegVecs[] = {
         {   30.0f, 0.0f, 0.0f},
         {39.3635f, 0.0f, 0.0f},
         {  14.18f, 0.0f, 0.0f}
     };
+
+    nw4r::g3d::ResMdl mdl = mMainMdl.getResMdl();
+
+    if (vt_0x2E8(result, sNodeIdsLegs1, true)) {
+        mVec3_c legOffset = vt_0x304() * 0.5f;
+
+        mVec3_c dstVec;
+        // (1) For some reason the compiler sets up pointers to stack vars here...
+        for (s32 leg = 0; leg < 2; leg++) {
+            u16 legNode = sNodeIdsLegs1[leg];
+            mVec3_c *dst = nullptr;
+            mAng *angs;
+            if (leg == 0) {
+                angs = field_0x136C;
+            } else {
+                angs = field_0x1370;
+            }
+            nw4r::math::MTX34 *targetMtx;
+            // Walk down the arm bones and transform the whole thing again?
+            for (s32 i = 0; i < 3; i++) {
+                u32 mtxId = mdl.GetResNode(legNode).GetMtxID();
+                targetMtx = &result[mtxId];
+                applyWorldRotationMaybe(targetMtx, angs[i], 0, 0, dst, false);
+                mVec3_c v;
+                v.x = sLegVecs[i].x;
+                v.y = sLegVecs[i].y;
+                v.z = sLegVecs[i].z;
+                MTXMultVec(*targetMtx, v, dstVec);
+                if (i != 2) {
+                    dstVec -= legOffset;
+                }
+                dst = &dstVec;
+                legNode++;
+            }
+            // (2) ... here it stores the passed-by-value angles to the stack,
+            // then calls GetResNode and uses the previously set up pointers as arguments?
+            applyWorldRotationMaybe(&result[mdl.GetResNode(legNode).GetMtxID()], 0, 0, angs[2], &dstVec, false);
+        }
+    }
 }
 
 void daPlayerModelBase_c::mainModelTimingA(u32 nodeId, nw4r::g3d::ChrAnmResult *result) {
@@ -1626,6 +1689,19 @@ void daPlayerModelBase_c::setFaceTexPat(s32 faceIdx, bool force) {
     }
 }
 
+void daPlayerModelBase_c::checkFaceTexPat() {
+    if (mFaceAnmTexPatIdx2 == 0x39) {
+        return;
+    }
+    s32 prev = mFaceAnmTexPatIdx1;
+    mFaceAnmTexPatIdx2 = 0x39;
+    if (prev >= 0x1F) {
+        prev = 1;
+    }
+    mFaceAnmTexPatIdx1 = 0x39;
+    setFaceTexPat(prev, false);
+}
+
 void daPlayerModelBase_c::setFaceTexSrt(s32 faceIdx, bool force) {
     offFaceUpdateFlags(0x80000000);
     if (canStart(force, faceIdx, 0x39, &mFaceAnmTexSrtIdx1, &mFaceAnmTexSrtIdx2)) {
@@ -1633,6 +1709,19 @@ void daPlayerModelBase_c::setFaceTexSrt(s32 faceIdx, bool force) {
         mFaceTexSrt.setAnm(mFaceMdl, anm, 0, m3d::PLAY_MODE_4);
         mFaceTexSrt.setFrame(0.0f, 0);
     }
+}
+
+void daPlayerModelBase_c::checkFaceTexSrt() {
+    if (mFaceAnmTexSrtIdx2 == 0x39) {
+        return;
+    }
+    s32 prev = mFaceAnmTexSrtIdx1;
+    mFaceAnmTexSrtIdx2 = 0x39;
+    if (prev >= 0x1F) {
+        prev = 0;
+    }
+    mFaceAnmTexSrtIdx1 = 0x39;
+    setFaceTexSrt(prev, false);
 }
 
 void daPlayerModelBase_c::setFaceAnmChr(s32 faceIdx, bool force) {
@@ -1646,6 +1735,19 @@ void daPlayerModelBase_c::setFaceAnmChr(s32 faceIdx, bool force) {
             mFaceMdl.setAnm(mFaceAnmChr);
         }
     }
+}
+
+void daPlayerModelBase_c::checkFaceAnmChr() {
+    if (mFaceAnmChrIdx2 == 0x39) {
+        return;
+    }
+    s32 prev = mFaceAnmChrIdx1;
+    mFaceAnmChrIdx2 = 0x39;
+    if (prev >= 0x1F) {
+        prev = 0;
+    }
+    mFaceAnmChrIdx1 = 0x39;
+    setFaceAnmChr(prev, false);
 }
 
 void daPlayerModelBase_c::loadAnmChr(s32 childIdx, s32 animIdx, void *dest, u32 maxSize) {
@@ -1835,15 +1937,16 @@ void daPlayerModelBase_c::setPosCopy3() {
     }
 }
 
-void daPlayerModelBase_c::fn_80061410() {
-    // Just getting weak functions to appear here
-    alwaysRet0();
+bool daPlayerModelBase_c::fn_80061410() {
+    return (field_0x120A || alwaysRet0()) && !(someFlags_0x354 & 0x800);
 }
 
 // I believe this is the only strong virtual function of daPlayerModelBase_c,
 // and this causes the vtable and all other weak functions to be here
 /* vt 0x114 */ void daPlayerModelBase_c::somethingWithCarriedActorFlags() {
-    // TODO
+    if (mCarriedActorRef.get() != nullptr) {
+        mCarriedActorRef.get()->mObjectActorFlags |= 0x200;
+    }
 }
 mColor daPlayerModelBase_c::sGuideColor1(0x00, 0x82, 0xDC, 0xFF);
 mColor daPlayerModelBase_c::sGuideColor2(0x64, 0xFF, 0xFF, 0xFF);
