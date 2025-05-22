@@ -1676,10 +1676,12 @@ bool daPlayerModelBase_c::canStart(bool force, u16 faceIdx, u16 invalidValue, u1
 }
 
 void daPlayerModelBase_c::setFaceTexPat(s32 faceIdx, bool force) {
-    // TODO branching
-    if ((force || ((mFaceAnmTexPatIdx1 != faceIdx || mFaceAnmTexPatIdx1 != 1) &&
-                   (!checkFaceUpdateFlags(0x40000000) || (faceIdx != 1)))) &&
-        faceIdx != 0x38) {
+    if ((!force && ((mFaceAnmTexPatIdx1 == faceIdx && mFaceAnmTexPatIdx1 == 1) ||
+                    (checkFaceUpdateFlags(0x40000000) && (faceIdx == 1))))) {
+        return;
+    }
+
+    if (faceIdx != 0x38) {
         offFaceUpdateFlags(0x40000000);
         if (canStart(force, faceIdx, 0x39, &mFaceAnmTexPatIdx1, &mFaceAnmTexPatIdx2)) {
             nw4r::g3d::ResAnmTexPat anm = getExternalAnmTexPat(sFaceResNames[faceIdx], mpTexPatBuffer, 0x1000);
@@ -1725,15 +1727,15 @@ void daPlayerModelBase_c::checkFaceTexSrt() {
 }
 
 void daPlayerModelBase_c::setFaceAnmChr(s32 faceIdx, bool force) {
-    // TODO branching
-    if (faceIdx != 0x38 && (force || (!checkFaceUpdateFlags(0x20000000) || (faceIdx != 0 && faceIdx != 2)))) {
-        offFaceUpdateFlags(0x20000000);
-        if (canStart(force, faceIdx, 0x39, &mFaceAnmChrIdx1, &mFaceAnmChrIdx2)) {
-            nw4r::g3d::ResAnmChr anm = getExternalAnmChr(sFaceResNames[faceIdx], mpAnmCharBuffer, 0x1000);
-            mFaceAnmChr.setAnm(mFaceMdl, anm, m3d::PLAY_MODE_4);
-            mFaceAnmChr.setFrameOnly(0.0f);
-            mFaceMdl.setAnm(mFaceAnmChr);
-        }
+    if (faceIdx == 0x38 || (!force && (checkFaceUpdateFlags(0x20000000) && (faceIdx == 0 || faceIdx == 2)))) {
+        return;
+    }
+    offFaceUpdateFlags(0x20000000);
+    if (canStart(force, faceIdx, 0x39, &mFaceAnmChrIdx1, &mFaceAnmChrIdx2)) {
+        nw4r::g3d::ResAnmChr anm = getExternalAnmChr(sFaceResNames[faceIdx], mpAnmCharBuffer, 0x1000);
+        mFaceAnmChr.setAnm(mFaceMdl, anm, m3d::PLAY_MODE_4);
+        mFaceAnmChr.setFrameOnly(0.0f);
+        mFaceMdl.setAnm(mFaceAnmChr);
     }
 }
 
