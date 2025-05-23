@@ -96,9 +96,7 @@ void daPlayerActBase_c::setPosYRot(const mVec3_c &pos, mAng rot, bool force, UNK
 
 void daPlayerActBase_c::setTransform(const mMtx_c &mtx, bool force, UNKWORD a4, UNKWORD a5) {
     mVec3_c translate;
-    translate.x = mtx.m[0][3];
-    translate.y = mtx.m[1][3];
-    translate.z = mtx.m[2][3];
+    mtx.getTranslation(translate);
     mAng3_c rot;
     mtx.toRot(rot);
     setPosRot(&translate, &rot, force, a4, a5);

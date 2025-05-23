@@ -573,7 +573,7 @@ void daPlBaseScnObjCallback_c::ExecCallback_DRAW_OPA(
         for (int i = 0; i < 2; i++) {
             u8 defaultMat = sSavedHandMats[i];
             // TODO: Is there a way to avoid this cast?
-            u8 playerHandMat = static_cast<daPlayerModelBase_c *>(field_0x0C)->getHandMat(i);
+            u8 playerHandMat = static_cast<daPlayerModelBase_c *>(mpPlayer)->getHandMat(i);
             if (playerHandMat != defaultMat) {
                 if (defaultMat != 0xFE) {
                     shp = mdl.GetResShp(sHandMats[defaultMat]);
@@ -604,8 +604,10 @@ void daPlBaseMdlCallback_c::ExecCallbackA(
     nw4r::g3d::ChrAnmResult *result, nw4r::g3d::ResMdl mdl, nw4r::g3d::FuncObjCalcWorld *calcWorld
 ) {
     u16 nodeId = calcWorld->GetCallbackNodeID();
-    // Only run the full callback for certain specified nodes - TODO which ones?
-    if ((nodeId >= mNodeIdMin && nodeId < mNodeIdMax) || (mNodeIdMin == 16 && nodeId == 0)) {
+    // Only run the full callback for certain specified nodes - but under which conditions is
+    // mNodeIdMin == daPlayerModelBase_c::PLAYER_MAIN_NODE_WAIST?
+    if ((nodeId >= mNodeIdMin && nodeId < mNodeIdMax) || (mNodeIdMin == daPlayerModelBase_c::PLAYER_MAIN_NODE_WAIST &&
+                                                          nodeId == daPlayerModelBase_c::PLAYER_MAIN_NODE_CENTER)) {
         m3d::mdl_c::mdlCallback_c::ExecCallbackA(result, mdl, calcWorld);
         return;
     }
@@ -1667,13 +1669,13 @@ bool daPlayerModelBase_c::canStart(bool force, u16 faceIdx, u16 invalidValue, u1
 
 void daPlayerModelBase_c::setFaceTexPat(s32 faceIdx, bool force) {
     if ((!force && ((mFaceAnmTexPatIdx1 == faceIdx && mFaceAnmTexPatIdx1 == 1) ||
-                    (checkFaceUpdateFlags(0x40000000) && (faceIdx == 1))))) {
+                    (checkFaceUpdateFlags(0x40000000) && (faceIdx == PLAYER_FACEMABA01))))) {
         return;
     }
 
     if (faceIdx != 0x38) {
         offFaceUpdateFlags(0x40000000);
-        if (canStart(force, faceIdx, 0x39, &mFaceAnmTexPatIdx1, &mFaceAnmTexPatIdx2)) {
+        if (canStart(force, faceIdx, PLAYER_FACE_MAX, &mFaceAnmTexPatIdx1, &mFaceAnmTexPatIdx2)) {
             nw4r::g3d::ResAnmTexPat anm = getExternalAnmTexPat(sFaceResNames[faceIdx], mpTexPatBuffer, 0x1000);
             mFaceTexPat.setAnm(mFaceMdl, anm, 0, m3d::PLAY_MODE_4);
             mFaceTexPat.setFrame(0.0f, 0);
@@ -1682,21 +1684,21 @@ void daPlayerModelBase_c::setFaceTexPat(s32 faceIdx, bool force) {
 }
 
 void daPlayerModelBase_c::checkFaceTexPat() {
-    if (mFaceAnmTexPatIdx2 == 0x39) {
+    if (mFaceAnmTexPatIdx2 == PLAYER_FACE_MAX) {
         return;
     }
     s32 prev = mFaceAnmTexPatIdx1;
-    mFaceAnmTexPatIdx2 = 0x39;
-    if (prev >= 0x1F) {
+    mFaceAnmTexPatIdx2 = PLAYER_FACE_MAX;
+    if (prev >= PLAYER_FACE_BEDSLEEP) {
         prev = 1;
     }
-    mFaceAnmTexPatIdx1 = 0x39;
+    mFaceAnmTexPatIdx1 = PLAYER_FACE_MAX;
     setFaceTexPat(prev, false);
 }
 
 void daPlayerModelBase_c::setFaceTexSrt(s32 faceIdx, bool force) {
     offFaceUpdateFlags(0x80000000);
-    if (canStart(force, faceIdx, 0x39, &mFaceAnmTexSrtIdx1, &mFaceAnmTexSrtIdx2)) {
+    if (canStart(force, faceIdx, PLAYER_FACE_MAX, &mFaceAnmTexSrtIdx1, &mFaceAnmTexSrtIdx2)) {
         nw4r::g3d::ResAnmTexSrt anm = getExternalAnmTexSrt(sFaceResNames[faceIdx], mpTexSrtBuffer, 0x1000);
         mFaceTexSrt.setAnm(mFaceMdl, anm, 0, m3d::PLAY_MODE_4);
         mFaceTexSrt.setFrame(0.0f, 0);
@@ -1704,24 +1706,25 @@ void daPlayerModelBase_c::setFaceTexSrt(s32 faceIdx, bool force) {
 }
 
 void daPlayerModelBase_c::checkFaceTexSrt() {
-    if (mFaceAnmTexSrtIdx2 == 0x39) {
+    if (mFaceAnmTexSrtIdx2 == PLAYER_FACE_MAX) {
         return;
     }
     s32 prev = mFaceAnmTexSrtIdx1;
-    mFaceAnmTexSrtIdx2 = 0x39;
-    if (prev >= 0x1F) {
+    mFaceAnmTexSrtIdx2 = PLAYER_FACE_MAX;
+    if (prev >= PLAYER_FACE_BEDSLEEP) {
         prev = 0;
     }
-    mFaceAnmTexSrtIdx1 = 0x39;
+    mFaceAnmTexSrtIdx1 = PLAYER_FACE_MAX;
     setFaceTexSrt(prev, false);
 }
 
 void daPlayerModelBase_c::setFaceAnmChr(s32 faceIdx, bool force) {
-    if (faceIdx == 0x38 || (!force && (checkFaceUpdateFlags(0x20000000) && (faceIdx == 0 || faceIdx == 2)))) {
+    if (faceIdx == PLAYER_FACE_NONE || (!force && (checkFaceUpdateFlags(0x20000000) &&
+                                                   (faceIdx == PLAYER_FACE_DEFAULT || faceIdx == PLAYER_FACE_M)))) {
         return;
     }
     offFaceUpdateFlags(0x20000000);
-    if (canStart(force, faceIdx, 0x39, &mFaceAnmChrIdx1, &mFaceAnmChrIdx2)) {
+    if (canStart(force, faceIdx, PLAYER_FACE_MAX, &mFaceAnmChrIdx1, &mFaceAnmChrIdx2)) {
         nw4r::g3d::ResAnmChr anm = getExternalAnmChr(sFaceResNames[faceIdx], mpAnmCharBuffer, 0x1000);
         mFaceAnmChr.setAnm(mFaceMdl, anm, m3d::PLAY_MODE_4);
         mFaceAnmChr.setFrameOnly(0.0f);
@@ -1730,15 +1733,15 @@ void daPlayerModelBase_c::setFaceAnmChr(s32 faceIdx, bool force) {
 }
 
 void daPlayerModelBase_c::checkFaceAnmChr() {
-    if (mFaceAnmChrIdx2 == 0x39) {
+    if (mFaceAnmChrIdx2 == PLAYER_FACE_MAX) {
         return;
     }
     s32 prev = mFaceAnmChrIdx1;
-    mFaceAnmChrIdx2 = 0x39;
-    if (prev >= 0x1F) {
+    mFaceAnmChrIdx2 = PLAYER_FACE_MAX;
+    if (prev >= PLAYER_FACE_BEDSLEEP) {
         prev = 0;
     }
-    mFaceAnmChrIdx1 = 0x39;
+    mFaceAnmChrIdx1 = PLAYER_FACE_MAX;
     setFaceAnmChr(prev, false);
 }
 
@@ -1763,7 +1766,7 @@ void daPlayerModelBase_c::loadAnmChr(s32 childIdx, s32 animIdx, void *dest, u32 
 void daPlayerModelBase_c::removeAnmChr(s32 childIdx) {
     mAnmChrs[childIdx].getAnimObj()->Release();
     mAnmChrBlend.detach(childIdx);
-    mAnimations[childIdx] = 443;
+    mAnimations[childIdx] = PLAYER_ANIM_MAX;
 }
 
 void daPlayerModelBase_c::loadSound(nw4r::g3d::ResFile &file, const char *name, s32 childIdx) {
@@ -1906,7 +1909,7 @@ void daPlayerModelBase_c::setPosCopy3() {
         switch (getCurrentAction()) {
             case 0x82:
             case 0x83:
-            case 0x84: {
+            case 0x84: /* CLIMBING_ONTO_TIGHTROPE */ {
             label:
                 const nw4r::math::MTX34 *c = mHeadMdl.getLocalMtx();
                 poscopy3.x = c->_03;
@@ -1954,6 +1957,6 @@ bool daPlayerModelBase_c::fn_80061410() {
 // and this causes the vtable and all other weak functions to be here
 /* vt 0x114 */ void daPlayerModelBase_c::somethingWithCarriedActorFlags() {
     if (mCarriedActorRef.get() != nullptr) {
-        mCarriedActorRef.get()->mObjectActorFlags |= 0x200;
+        mCarriedActorRef.get()->setObjectProperty(0x200);
     }
 }
