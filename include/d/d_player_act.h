@@ -131,10 +131,10 @@ public:
         // unused; overridden by daPlayerModelBase_c
         return nullptr;
     }
-    /* vt 0x11C */ virtual UNKWORD checkBeetleActorReferences() {
-        return 0;
+    /* vt 0x11C */ virtual dAcObjBase_c *checkBeetleActorReferences(s32) {
+        return nullptr;
     }
-    /* vt 0x120 */ virtual UNKWORD getBeetleActorReferencesSize() {
+    /* vt 0x120 */ virtual s32 getBeetleActorReferencesSize() {
         return 0;
     }
     /* vt 0x124 */ virtual UNKWORD vt_0x124() {
@@ -539,6 +539,13 @@ public:
 
     inline bool checkFlags0x350(u32 mask) const {
         return (someFlags_0x350 & mask) != 0;
+    }
+
+    inline void onFlags_0x358(u32 mask) {
+        someFlags_0x358 |= mask;
+    }
+    inline void offFlags_0x358(u32 mask) {
+        someFlags_0x358 &= ~mask;
     }
 
     inline void onFlags_0x360(u32 mask) {

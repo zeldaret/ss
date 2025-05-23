@@ -15,8 +15,8 @@ struct cBgS_PolyInfo;
 
 struct SoundSource {
     virtual ~SoundSource() {}
-    // TODO there's probably multiple inheritance involved and stuff
-    #define SOUNDSOURCE_VIRTUAL(offset) virtual void vt_##offset();
+// TODO there's probably multiple inheritance involved and stuff
+#define SOUNDSOURCE_VIRTUAL(offset) virtual void vt_##offset();
 
     SOUNDSOURCE_VIRTUAL(0x0C);
     SOUNDSOURCE_VIRTUAL(0x10);
@@ -33,7 +33,7 @@ struct SoundSource {
     SOUNDSOURCE_VIRTUAL(0x3C);
     SOUNDSOURCE_VIRTUAL(0x40);
     SOUNDSOURCE_VIRTUAL(0x44);
-    virtual bool shutdown();                         // 0x48
+    virtual bool shutdown(); // 0x48
     SOUNDSOURCE_VIRTUAL(0x4C);
     SOUNDSOURCE_VIRTUAL(0x50);
     SOUNDSOURCE_VIRTUAL(0x54);
@@ -79,7 +79,6 @@ struct SoundSource {
     SOUNDSOURCE_VIRTUAL(0xF4);
     SOUNDSOURCE_VIRTUAL(0xF8);
     SOUNDSOURCE_VIRTUAL(0xFC);
-
 
     virtual bool isReadyMaybe();                     // 0x100
     virtual bool load(void *data, const char *name); // 0x104
