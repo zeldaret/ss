@@ -683,10 +683,7 @@ void dTextBox_c::DrawSelf(const nw4r::lyt::DrawInfo &drawInfo) {
         while (remain > 0 && i < 10) {
             bool bOver;
             f32 lineWidth;
-            int lineStrNum = GetStoredLineStrNum(i, &lineWidth, &bOver);
-            // lineWidth = mLineWidths[i];
-            // int lineStrNum = mLineStrNums[i];
-            // bOver = mbOvers[i];
+            s32 lineStrNum = GetStoredLineStrNum(i, &lineWidth, &bOver);
             f32 textPosX = textRect.left + hMag * (texWidth - lineWidth);
             writer.SetCursorX(textPosX);
             writer.PrintMutable(strPos, lineStrNum);
@@ -703,15 +700,12 @@ void dTextBox_c::DrawSelf(const nw4r::lyt::DrawInfo &drawInfo) {
         while (remain > 0 && i < 10) {
             bool bOver;
             f32 lineWidth;
-            int lineStrNum = CalcLineStrNum(&lineWidth, &writer, strPos, remain, mSize.width, &bOver);
+            s32 lineStrNum = CalcLineStrNum(&lineWidth, &writer, strPos, remain, mSize.width, &bOver);
             f32 textPosX = textRect.left + hMag * (texWidth - lineWidth);
             writer.SetCursorX(textPosX);
             writer.PrintMutable(strPos, lineStrNum);
             if (mHasTextWriter && field_0x201 == true && i < 10) {
                 SetStoredLineStrNum(i, lineWidth, lineStrNum, bOver);
-                // mLineWidths[i] = lineWidth;
-                // mLineStrNums[i] = lineStrNum;
-                // mbOvers[i] = bOver;
             }
             if (bOver) {
                 writer.PrintMutable(L"\n", 1);
@@ -722,28 +716,19 @@ void dTextBox_c::DrawSelf(const nw4r::lyt::DrawInfo &drawInfo) {
         }
     }
 
-    /*
-        const wchar_t *strPos = mTextBuf;
-        writer.SetCursor(textRect.left, -textRect.top);
-        f32 texWidth = textRect.GetWidth();
-        int remain = mTextLen;
-
-        while (remain > 0) {
-            bool bOver;
-            f32 lineWidth;
-            int lineStrNum = CalcLineStrNum(&lineWidth, &writer, strPos, remain, mSize.width, &bOver);
-            f32 textPosX = textRect.left + hMag * (texWidth - lineWidth);
-            writer.SetCursorX(textPosX);
-            writer.PrintMutable(strPos, lineStrNum);
-            if (bOver) {
-                writer.PrintMutable(L"\n", 1);
-            }
-            strPos += lineStrNum;
-            remain -= lineStrNum;
-        }
-    */
-
     mHasTextWriter = false;
+}
+
+static int CalcLineStrNum(
+    f32 *pWidth, nw4r::ut::TextWriterBase<wchar_t> *pTextWriter, const wchar_t *str, int length, f32 maxWidth,
+    bool *pbOver
+) {
+    nw4r::ut::Rect rect;
+    nw4r::ut::TextWriterBase<wchar_t> writerCpy(*pTextWriter);
+    writerCpy.SetCursor(0.0f, 0.0f);
+    int ret = CalcLineRectImpl(&rect, &writerCpy, str, length, maxWidth, pbOver, nullptr);
+    *pWidth = rect.right - rect.left;
+    return ret;
 }
 
 void dTextBox_c::loadTextFormatVars() {
@@ -839,18 +824,6 @@ void dTextBox_c::setupGX() const {
     GXSetVtxDesc(GX_VA_POS, GX_DIRECT);
     GXSetVtxDesc(GX_VA_CLR0, GX_DIRECT);
     GXSetVtxDesc(GX_VA_TEX0, GX_DIRECT);
-}
-
-static int CalcLineStrNum(
-    f32 *pWidth, nw4r::ut::TextWriterBase<wchar_t> *pTextWriter, const wchar_t *str, int length, f32 maxWidth,
-    bool *pbOver
-) {
-    nw4r::ut::Rect rect;
-    nw4r::ut::TextWriterBase<wchar_t> writerCpy(*pTextWriter);
-    writerCpy.SetCursor(0.0f, 0.0f);
-    int ret = CalcLineRectImpl(&rect, &writerCpy, str, length, maxWidth, pbOver, nullptr);
-    *pWidth = rect.right - rect.left;
-    return ret;
 }
 
 void dTextBox_c::MySetFontSize(const nw4r::lyt::Size &value) {
