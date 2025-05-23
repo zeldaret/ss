@@ -16,4 +16,10 @@ DowsingTarget::DowsingSlot dowsingSlotForIndex(s32 index);
 s32 getLytIndexForDowsingIndex(s32 index);
 u16 getDowsingItemIdForIndex(s32 index);
 
+/**
+ * FR: -1, 0, 1 singular, else plural
+ * Otherwise: -1, 1 singular, else plural
+ */
+bool shouldUseSingular(s32 amount);
+
 #endif

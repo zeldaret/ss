@@ -325,7 +325,7 @@ void dTextBox_c::setMessageWithGlobalTextProcessorAndMsbtInfo(
     field_0x1FA = 1;
     u32 outLen = 0;
     mpMyTagProcessor = dMessage_c::getGlobalTagProcessor();
-    mpMyTagProcessor->setMsgWindowSubtype(0x22);
+    mpMyTagProcessor->setMsgWindowSubtype(dLytMsgWindow_c::MSG_WINDOW_34);
     mWindowSubtype = mpMyTagProcessor->getMsgWindowSubtype();
     mpMyTagProcessor->setField_0xEE1(field_0x1F6);
     mpMyTagProcessor->setField_0xEE2(0);

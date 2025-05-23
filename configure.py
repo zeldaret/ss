@@ -456,7 +456,7 @@ config.libs = [
             Object(Matching, "d/lyt/d_window.cpp"),
             Object(Matching, "d/d_textunk.cpp"),
             Object(NonMatching, "d/d_textwindow_unk.cpp"),
-            Object(NonMatching, "d/d_tag_processor.cpp"),
+            Object(Matching, "d/d_tag_processor.cpp"),
             Object(NonMatching, "toBeSorted/time_area_mgr.cpp"),
             Object(NonMatching, "toBeSorted/nand_request_thread.cpp"),
             Object(NonMatching, "toBeSorted/nand_result_tracker.cpp"),

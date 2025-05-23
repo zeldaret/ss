@@ -3,12 +3,15 @@
 
 #include "common.h"
 
-extern "C" void *BGM_MGR;
+class BgmMgr;
+
+extern "C" BgmMgr *BGM_MGR;
 extern "C" void fn_8035E000();
-extern "C" void fn_8035E860(void *);
-extern "C" void fn_8035E310(void *);
-extern "C" void fn_8035E820(void *);
-extern "C" void fn_8035E880(void *);
+extern "C" void fn_8035E860(BgmMgr *);
+extern "C" void fn_8035E310(BgmMgr *);
+extern "C" void fn_8035E820(BgmMgr *);
+extern "C" void fn_8035E880(BgmMgr *);
+extern "C" void fn_8035E790(BgmMgr *, UNKWORD, void *);
 
 extern "C" void *ENEMY_SOUND_MGR;
 extern "C" void fn_80362150(void *, u16);

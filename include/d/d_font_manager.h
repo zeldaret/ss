@@ -6,6 +6,14 @@
 
 class dFontMng_c {
 public:
+    enum FontType_e {
+        NORMAL_0,
+        NORMAL_1,
+        SPECIAL_0,
+        SPECIAL_1,
+        PICTURE,
+    };
+
     dFontMng_c();
     ~dFontMng_c();
 
