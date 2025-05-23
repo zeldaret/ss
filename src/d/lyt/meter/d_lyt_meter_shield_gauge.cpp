@@ -78,7 +78,7 @@ bool dLytMeterShieldGauge_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x31F = 0;
     field_0x31E = 0;
     field_0x318 = 0;
-    mShieldType = 0;
+    mShieldId = 0;
     mSavedShieldType = -1;
 
     mAnm[SHIELD_ANIM_UPDOWN].setFrame(mCurrentDurability);
@@ -134,11 +134,11 @@ bool dLytMeterShieldGauge_c::execute() {
     bool b3 = false;
     bool b4 = false;
 
-    if (mShieldType != mSavedShieldType ||
+    if (mShieldId != mSavedShieldType ||
         mCurrentShieldPouchSlot != convertFilePouchSlot(FileManager::GetInstance()->getShieldPouchSlot())) {
         mLyt.findPane("N_alpha_00")->SetVisible(true);
-        mSavedShieldType = mShieldType;
-        mAnm[SHIELD_ANIM_TYPE].setFrame(getLytFrameForShield(mShieldType));
+        mSavedShieldType = mShieldId;
+        mAnm[SHIELD_ANIM_TYPE].setFrame(getLytFrameForShield(mShieldId));
         mAnm[SHIELD_ANIM_TYPE].setAnimEnable(true);
         mAnm[SHIELD_ANIM_LOOP_0].setFrame(0.0f);
         field_0x31D = 1;

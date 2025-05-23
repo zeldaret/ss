@@ -42,16 +42,14 @@ const InteractionTargetDef dAcOSeatSword_c::sInteractionDef = {
 
 const Vec dAcOSeatSword_c::sEffectPos = {-20.f, 260.f, 30.f};
 
-extern "C" const char *getSwordName(int);
-extern "C" u8 EQUIPPED_SWORD;
 bool dAcOSeatSword_c::createHeap() {
     if (mSubtype == 0) {
-        const char *goddess_sword = getSwordName(1);
+        const char *goddess_sword = daPlayerActBase_c::getSwordName(1);
         mRes = dAcPy_c::getItemResFile(goddess_sword, heap_allocator);
         TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(goddess_sword), &heap_allocator, 0x120, 1, nullptr));
     } else if (mSubtype == 1) {
-        mRes = dAcPy_c::LINK->mSwordRes;
-        const char *sword_name = getSwordName(EQUIPPED_SWORD);
+        mRes = dAcPy_c::GetLink()->getSwordResFile();
+        const char *sword_name = daPlayerActBase_c::getSwordName(daPlayerActBase_c::sCurrentSword);
         TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(sword_name), &heap_allocator, 0x120, 1, nullptr));
     }
 
@@ -173,7 +171,7 @@ void dAcOSeatSword_c::registerInEvent() {
         ang.y += someAng;
         vec.rotY(rotation.y);
         vec += position;
-        player->setPosRot(vec, ang, 0, 1, 0);
+        player->setPosRot(&vec, &ang, 0, 1, 0);
         mField_0x7E8.set(0);
         updateSwordMdl();
     }

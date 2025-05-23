@@ -5,12 +5,13 @@
 
 #include "common.h"
 #include "egg/core/eggDisposer.h"
-#include "egg/core/eggThread.h"
+#include "egg/egg_types.h"
 #include "egg/prim/eggBitFlag.h"
+
 #include "nw4r/ut.h"
+
 #include "rvl/MEM.h"
 #include "rvl/OS.h"
-
 
 namespace EGG {
 
@@ -77,6 +78,20 @@ public:
     // inline Heap* getParentHeap() { return mParentHeap; } // not part of ss
     inline void *getStartAddress() {
         return this;
+    }
+
+    static inline EGG::FrmHeap *toFrmHeap(EGG::Heap *heap) {
+        if (heap != nullptr && heap->getHeapKind() == HEAP_KIND_FRAME) {
+            return (FrmHeap *)heap;
+        }
+        return nullptr;
+    }
+
+    static inline EGG::ExpHeap *toExpHeap(EGG::Heap *heap) {
+        if (heap != nullptr && heap->getHeapKind() == HEAP_KIND_EXPANDED) {
+            return (ExpHeap *)heap;
+        }
+        return nullptr;
     }
 
 public:

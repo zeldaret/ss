@@ -47,10 +47,10 @@ public:
     }
 
 private:
-    f32 mEndFrame;
-    f32 mStartFrame;
-    f32 mCurrentFrame;
-    u8 mPlayState;
+    /* 0x28 */ f32 mEndFrame;
+    /* 0x2C */ f32 mStartFrame;
+    /* 0x30 */ f32 mCurrentFrame;
+    /* 0x34 */ u8 mPlayState;
 };
 
 } // namespace m3d

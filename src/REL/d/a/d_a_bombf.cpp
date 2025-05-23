@@ -133,7 +133,7 @@ int dAcBombf_c::actorExecute() {
 }
 
 int dAcBombf_c::draw() {
-    if (field_0x3D0 != 0 && (dAcPy_c::LINK->mActionFlagsCont & 0x400000) == 0) {
+    if (field_0x3D0 != 0 && !dAcPy_c::LINK->checkActionFlagsCont(0x400000)) {
         return SUCCEEDED;
     }
     drawModelType1(&mModel);
@@ -170,7 +170,6 @@ void dAcBombf_c::initializeState_Wait() {}
 extern "C" u16 lbl_8057A750;
 
 void dAcBombf_c::executeState_Wait() {
-    // Stack problems
     if (SceneflagManager::sInstance->checkBoolFlag(roomid, mDespawnSceneFlag)) {
         deleteRequest();
         dAcBomb_c *bomb = mBombRef.get();
@@ -184,12 +183,12 @@ void dAcBombf_c::executeState_Wait() {
 
     f32 scaleFactor = mScale.x;
     if (field_0x3D2 == 0 || field_0x3D2 == 2) {
-        mVec3_c m;
-        PSMTXMultVecSR(mWorldMtx, mVec3_c::Ey, m);
+        mVec3_c up;
+        PSMTXMultVecSR(mWorldMtx, mVec3_c::Ey, up);
+        mVec3_c upScaled = up * 30.0f;
+        mVec3_c checkPos = position + upScaled;
 
-        mVec3_c m3 = position + (m * 30.0f);
-
-        if (mTimeAreaStruct.check(roomid, m3, 0, 30.0f, 0.1f) && field_0x3D4 != 1) {
+        if (mTimeAreaStruct.check(roomid, checkPos, 0, 30.0f, 0.1f) && field_0x3D4 != 1) {
             if (mTimeAreaStruct.field_0x04 == 1) {
                 playSound(SE_TIMESLIP_TIMESLIP);
             } else {

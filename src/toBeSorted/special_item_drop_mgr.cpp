@@ -7,6 +7,7 @@
 #include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
 #include "d/d_pouch.h"
+#include "d/d_sc_game.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 
@@ -386,8 +387,6 @@ static const struct {
 };
 static const u16 RAND_RUPEE_ARRAY[3] = {ITEM_GREEN_RUPEE, ITEM_BLUE_RUPEE, ITEM_RED_RUPEE};
 
-extern "C" bool isHeroMode();
-
 // 800c7bb0
 int SpecialItemDropMgr::fn_800C7BB0(int specialItemId) {
     const DropList *list = &sDropTable.mList[specialItemId];
@@ -410,8 +409,8 @@ int SpecialItemDropMgr::fn_800C7BB0(int specialItemId) {
                 // No seeds until you get the Slingshot
                 weight = 0;
             }
-        } else if (specialItemId != 0x27 && (entryIdx == 1 || entryIdx == 2) && isHeroMode()) {
-            // Hearts generally don't drop on Hero Mode unless it's a special kind of heart (which?)
+        } else if (specialItemId != 0x27 && (entryIdx == 1 || entryIdx == 2) && dScGame_c::isHeroMode()) {
+            // Hearts generally don't drop on Hero Mode unless it's a special kind of heart (TODO which?)
             weight = 0;
         } else if ((entryIdx == 7 || entryIdx == 8) && !dAcItem_c::checkFlag(ITEM_BOMB_BAG)) {
             // Bombs won't drop until you get the Bomb Bag

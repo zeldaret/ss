@@ -43,20 +43,20 @@ void dAcOsw_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *in
     dAcOsw_c *sw = static_cast<dAcOsw_c *>(actor);
 
     // halp
-    if (!(link == nullptr || ((link->mActionFlags & 0x40000) == 0 &&
-                              (((link->someFlags_0x340 & 0x800000) == 0 ||
+    if (!(link == nullptr || (!link->checkActionFlags(dAcPy_c::FLG0_IN_WATER) &&
+                              ((!link->checkFlags0x340(0x800000) ||
                                 ((link->getCurrentCarriedActor() != nullptr &&
                                   link->getCurrentCarriedActor()->mActorCarryInfo.testCarryFlag(0x04)))))))) {
         return;
     }
     if (interactor->mActorCarryInfo.isCarried != 1) {
-        if (link == nullptr || (link->mActionFlags & 0xC70852) == 0) {
+        if (link == nullptr || (link->checkActionFlags(0xC70852)) == 0) {
             if (!sw->someInteractCheck(link != nullptr)) {
                 bool needsOnFlag = sw->mOnSceneFlag < 0xFF &&
                                    !SceneflagManager::sInstance->checkBoolFlag(sw->roomid, sw->mOnSceneFlag);
                 if (!needsOnFlag && sw->mObjRef.get() == nullptr && link != nullptr && sw->field_0x5F1 == 0 &&
                     sw->mStateMgr.isState(StateID_On)) {
-                    link->field_0x360 |= 0x8000;
+                    link->onFlags_0x360(0x8000);
                 }
             }
         }
@@ -136,7 +136,7 @@ int dAcOsw_c::actorPostCreate() {
 int dAcOsw_c::doDelete() {
     dAcPy_c *link = dAcPy_c::LINK;
     if (mSwitchType != 1 && field_0x5F2 == 0) {
-        if ((link == nullptr || (link->someFlags_0x340 & 0x200) != 0) && (link == nullptr || link->roomid == roomid)) {
+        if ((link == nullptr || link->checkFlags0x340(0x200)) && (link == nullptr || link->roomid == roomid)) {
             if (mOffSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mOffSceneFlag)) {
                 SceneflagManager::sInstance->unsetFlag(roomid, mOffSceneFlag);
             }

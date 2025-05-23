@@ -446,6 +446,18 @@ public:
         }
     }
 
+    static void setShieldMaxDurability(f32 durability) {
+        if (sInstance != nullptr) {
+            sInstance->mMain.mShield.setMaxDurability(durability);
+        }
+    }
+
+    static void setShieldId(s32 type) {
+        if (sInstance != nullptr) {
+            sInstance->mMain.mShield.setShieldId(type);
+        }
+    }
+
     static f32 getShieldMaxDurability() {
         if (sInstance != nullptr) {
             return sInstance->mMain.mShield.getMaxDurability();

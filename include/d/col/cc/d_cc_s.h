@@ -38,6 +38,10 @@ public:
     // This is a remnant of cCcS, which dCcS::Ct calls. Idk the correct layout
     void Ct_cCcS();
 
+    dCcMassS_Mng &GetMassMng() {
+        return mMassMng;
+    }
+
     void Ct();
     void Dt();
 

@@ -12,6 +12,7 @@ s32 getPouchSlotCount(bool unk);
 bool isItemExtraAmmo(s32 item);
 bool isItemMedal(s32 item);
 bool hasAnyShields();
+bool isItemShield(s32 item);
 
 #define POUCH_SLOT_NONE 8
 

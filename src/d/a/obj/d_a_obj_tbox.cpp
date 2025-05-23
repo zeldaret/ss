@@ -96,6 +96,7 @@ const cCcD_SrcGObj dAcTbox_c::sColSrc = {
 };
 // clang-format on
 
+// TODO: pragma readonly_strings on?
 static const char sGetTriForce[] = "GetTriForce";
 static const char sGetSwordA[] = "GetSwordA";
 static const char sGetHarp[] = "GetHarp";

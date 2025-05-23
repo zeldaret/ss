@@ -248,14 +248,18 @@ d/d_player_act.cpp:
 	.bss        start:0x805A06B0 end:0x805A06C8
 
 d/d_player_mdl.cpp:
-	.text       start:0x8005CE90 end:0x80061B10 align:16
-	.ctors      start:0x804DB68C end:0x804DB690
-	.rodata     start:0x804DE1E8 end:0x804E0B38
+	.text       start:0x8005CE90 end:0x80061AA4 align:16
+	.rodata     start:0x804DE1E8 end:0x804E0918
 	.data       start:0x8050D690 end:0x8050DDD8
 	.sdata      start:0x80571C80 end:0x80571D08
-	.sbss       start:0x80575208 end:0x80575220
+	.sbss       start:0x80575208 end:0x80575210
 	.sdata2     start:0x80577020 end:0x80577680
 	.bss        start:0x805A06C8 end:0x805A06F0
+
+d/d_player_guide_colors.cpp:
+	.text       start:0x80061AB0 end:0x80061B0C align:16
+	.ctors      start:0x804DB68C end:0x804DB690
+	.sbss       start:0x80575210 end:0x80575220
 
 d/d_rawarchive.cpp:
 	.text       start:0x80061B10 end:0x800629D0 align:16
