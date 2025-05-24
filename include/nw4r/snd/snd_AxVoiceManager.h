@@ -1,49 +1,62 @@
 #ifndef NW4R_SND_AX_VOICE_MANAGER_H
 #define NW4R_SND_AX_VOICE_MANAGER_H
-#include "nw4r/snd/snd_AxVoice.h"
-#include "nw4r/types_nw4r.h"
 
+/*******************************************************************************
+ * headers
+ */
 
-namespace nw4r {
-namespace snd {
-namespace detail {
+#include <types.h> // u32
 
-class AxVoiceManager {
-public:
-    static const int VOICE_MARGIN = 16;
-    static const int VOICE_MAX = AX_VOICE_MAX + VOICE_MARGIN;
-    static const int WORK_SIZE_MAX = VOICE_MAX * sizeof(AxVoice);
+#include "AxVoice.h"
 
-public:
-    static AxVoiceManager &GetInstance();
+/*******************************************************************************
+ * classes and functions
+ */
 
-    u32 GetRequiredMemSize();
-    void Setup(void *pBuffer, u32 size);
-    void Shutdown();
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2adb3b
+	class AxVoiceManager
+	{
+	// methods
+	public:
+		// instance accessors
+		static AxVoiceManager &GetInstance();
 
-    AxVoice *AcquireAxVoice(u32 priority, AxVoice::AxVoiceCallback pCallback, void *pArg);
-    void FreeAxVoice(AxVoice *pVoice);
+		// methods
+		void Setup(void *mem, u32 memSize);
+		void Shutdown();
 
-    void ReserveForFreeAxVoice(AxVoice *pVoice);
-    void FreeAllReservedAxVoice();
+		u32 GetRequiredMemSize(int axVoiceCount);
 
-private:
-    AxVoiceManager();
+		AxVoice *AcquireAxVoice(u32 priority, AxVoice::Callback *callback,
+		                        void *callbackData);
+		void ReserveForFreeAxVoice(AxVoice *voice);
+		void FreeAxVoice(AxVoice *voice);
+		void FreeAllReservedAxVoice();
 
-    AxVoice *Alloc();
-    void Free(AxVoice *pVoice);
-    void ReserveForFree(AxVoice *pVoice);
+	private:
+		// cdtors
+		AxVoiceManager();
 
-private:
-    AxVoiceList mActiveVoiceList;       // at 0x0
-    AxVoiceList mFreeVoiceList;         // at 0xC
-    AxVoiceList mFreeReservedVoiceList; // at 0x18
-    bool mInitialized;                  // at 0x24
-    int mVoiceCount;                    // at 0x28
-};
+		// methods
+		AxVoice *Alloc();
+		void ReserveForFree(AxVoice *voice);
+		void Free(AxVoice *voice);
 
-} // namespace detail
-} // namespace snd
-} // namespace nw4r
+	// static members
+	public:
+		static int const VOICE_COUNT_MARGIN = 16;
 
-#endif
+	// members
+	private:
+		AxVoice::LinkList	mActiveVoiceList;		// size 0x0c, offset 0x00
+		AxVoice::LinkList	mFreeVoiceList;			// size 0x0c, offset 0x0c
+		AxVoice::LinkList	mFreeReservedVoiceList;	// size 0x0c, offset 0x18
+		bool				mInitialized;			// size 0x01, offset 0x24
+		/* 3 bytes padding */
+		int					mVoiceCount;			// size 0x04, offset 0x28
+	}; // size 0x2c
+}}} // namespace nw4r::snd::detail
+
+#endif // NW4R_SND_AX_VOICE_MANAGER_H

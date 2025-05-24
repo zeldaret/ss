@@ -1,35 +1,53 @@
 #ifndef NW4R_SND_BANK_H
 #define NW4R_SND_BANK_H
-#include "nw4r/snd/snd_BankFile.h"
-#include "nw4r/snd/snd_NoteOnCallback.h"
-#include "nw4r/types_nw4r.h"
 
+/*******************************************************************************
+ * headers
+ */
 
-namespace nw4r {
-namespace snd {
-namespace detail {
+#include "BankFile.h" // BankFileReader
 
-// Forward declarations
-class Channel;
+#include "nw4r/NW4RAssert.hpp"
 
-class Bank {
-public:
-    explicit Bank(const void *pBankBin);
-    ~Bank();
+/*******************************************************************************
+ * types
+ */
 
-    Channel *NoteOn(const NoteOnInfo &rInfo) const;
+// forward declarations
+namespace nw4r { namespace snd { namespace detail { class Channel; }}}
+namespace nw4r { namespace snd { namespace detail { struct NoteOnInfo; }}}
 
-    void SetWaveDataAddress(const void *pData) {
-        mWaveDataAddress = pData;
-    }
+/*******************************************************************************
+ * classes and functions
+ */
 
-private:
-    BankFileReader mBankReader;   // at 0x0
-    const void *mWaveDataAddress; // at 0xC
-};
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2b0af4
+	class Bank
+	{
+	// methods
+	public:
+		// cdtors
+		Bank(void const *bankData);
+		~Bank();
 
-} // namespace detail
-} // namespace snd
-} // namespace nw4r
+		// methods
+		void SetWaveDataAddress(void const *waveData)
+		{
+			// specifically not the header variant
+			NW4RAssertPointerNonnull_Line(50, waveData);
 
-#endif
+			mWaveDataAddress = waveData;
+		}
+
+		Channel *NoteOn(NoteOnInfo const &noteOnInfo) const;
+
+	// members
+	private:
+		BankFileReader	mBankReader;				// size 0x0c, offset 0x00
+		void			const *mWaveDataAddress;	// size 0x04, offset 0x0c
+	}; // size 0x10
+}}} // namespace nw4r::snd::detail
+
+#endif // NW4R_SND_BANK_H

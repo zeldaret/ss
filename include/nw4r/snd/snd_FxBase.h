@@ -1,41 +1,49 @@
 #ifndef NW4R_SND_FX_BASE_H
 #define NW4R_SND_FX_BASE_H
-#include "nw4r/snd/snd_Common.h"
-#include "nw4r/types_nw4r.h"
-#include "nw4r/ut.h" // IWYU pragma: export
 
-namespace nw4r {
-namespace snd {
+/*******************************************************************************
+ * headers
+ */
 
-enum SampleFormat {
-    SAMPLE_FORMAT_PCM_S32,
-    SAMPLE_FORMAT_PCM_S16,
-    SAMPLE_FORMAT_PCM_S8,
-    SAMPLE_FORMAT_DSP_ADPCM
-};
+#include <types.h>
 
-class FxBase : private ut::NonCopyable {
-public:
-    virtual ~FxBase() {} // at 0x8
+#include "global.h"
 
-    virtual bool StartUp() {
-        return true;
-    } // at 0xC
+#include "../ut/inlines.h" // NonCopyable
+#include "../ut/LinkList.h"
 
-    virtual void Shutdown() {} // at 0x10
+/*******************************************************************************
+ * classes and functions
+ */
 
-    virtual void UpdateBuffer(
-        int /* channels */, void ** /* ppBuffer */, u32 /* size */, SampleFormat /* format */, f32 /* sampleRate */,
-        OutputMode /* mode */
-    ) {}           // at 0x14
+namespace nw4r { namespace snd
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x20f98
+	class FxBase : private ut::NonCopyable
+	{
+	// typedefs
+	public:
+		typedef ut::LinkList<FxBase, 0x04> LinkList;
 
-public:
-    NW4R_UT_LIST_NODE_DECL(); // at 0x4
-};
+	// methods
+	public:
+		// cdtors
+		virtual ~FxBase() {}
 
-NW4R_UT_LIST_TYPEDEF_DECL(FxBase);
+		// virtual function ordering
+		// vtable FxBase
+		virtual bool StartUp();
+		virtual void Shutdown();
+		virtual void UpdateBuffer(int, void *, u32, SampleFormat, f32,
+		                          OutputMode);
+		virtual void OnChangeOutputMode();
 
-} // namespace snd
-} // namespace nw4r
+	private:
+		/* base ut::NonCopyable */		// size 0x00, offset 0x00
+		/* vtable */					// size 0x04, offset 0x00
+	public:
+		ut::LinkListNode	mFxLink;	// size 0x08, offset 0x04
+	}; // size 0x0c
+}} // namespace nw4r::snd
 
-#endif
+#endif // NW4R_SND_FX_BASE_H

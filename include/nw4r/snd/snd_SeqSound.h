@@ -1,123 +1,156 @@
 #ifndef NW4R_SND_SEQ_SOUND_H
 #define NW4R_SND_SEQ_SOUND_H
-#include "nw4r/snd/snd_BasicSound.h"
-#include "nw4r/snd/snd_SeqPlayer.h"
-#include "nw4r/snd/snd_Task.h"
-#include "nw4r/types_nw4r.h"
-#include "nw4r/ut.h" // IWYU pragma: export
-#include "rvl/OS.h"  // IWYU pragma: export
 
-namespace nw4r {
-namespace snd {
+/*******************************************************************************
+ * headers
+ */
 
-// Forward declarations
-class SeqSoundHandle;
+#include <types.h>
 
-namespace detail {
+#include "BasicSound.h"
+#include "debug.h"
+#include "SeqPlayer.h"
+#include "Task.h"
 
-// Forward declarations
-template <typename T>
-class SoundInstanceManager;
+#include "../ut/LinkList.h"
 
-class SeqSound : public BasicSound {
-    friend class SeqSoundHandle;
+/*******************************************************************************
+ * types
+ */
 
-public:
-    NW4R_UT_RTTI_DECL(SeqSound);
+// forward declarations
+namespace nw4r { namespace snd { namespace detail { class NoteOnCallback; }}}
+namespace nw4r { namespace snd { namespace detail { class SeqTrackAllocator; }}}
+namespace nw4r { namespace snd { namespace detail { template <class> class SoundInstanceManager; }}}
+namespace nw4r { namespace snd { class SeqSoundHandle; }}
 
-public:
-    explicit SeqSound(SoundInstanceManager<SeqSound> *pManager);
+namespace nw4r { namespace ut { namespace detail { class RuntimeTypeInfo; }}}
+namespace nw4r { namespace ut { class FileStream; }}
 
-    virtual void Shutdown(); // at 0x28
-    virtual bool IsPrepared() const {
-        return mPreparedFlag;
-    } // at 0x2C
+/*******************************************************************************
+ * classes and functions
+ */
 
-    virtual void SetPlayerPriority(int priority); // at 0x4C
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2ed0a
+	class SeqSound : public BasicSound
+	{
+	// typedefs
+	public:
+		/* redeclare with this class instead of BasicSound for
+		 * SoundInstanceManager
+		 */
+		typedef ut::LinkList<SeqSound, 0xe0> PriorityLinkList;
 
-    virtual bool IsAttachedTempSpecialHandle(); // at 0x5C
-    virtual void DetachTempSpecialHandle();     // at 0x60
+	// nested types
+	public:
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2eb5e
+		class SeqLoadTask : public Task
+		{
+		// typedefs
+		public:
+			typedef void Callback(bool result, void const *seqBase,
+			                      void *userData);
 
-    virtual void InitParam(); // at 0x64
+		// methods
+		public:
+			// cdtors
+			SeqLoadTask();
 
-    virtual BasicPlayer &GetBasicPlayer() {
-        return mSeqPlayer;
-    } // at 0x68
-    virtual const BasicPlayer &GetBasicPlayer() const {
-        return mSeqPlayer;
-    } // at 0x6C
+			// virtual function ordering
+			// vtable Task
+			virtual void Execute();
+			virtual void Cancel();
+			virtual void OnCancel();
 
-    SeqPlayer::SetupResult
-    Setup(SeqTrackAllocator *pAllocator, u32 allocTrackFlags, int voices, NoteOnCallback *pCallback);
+		// members
+		public:
+			/* base Task */					// size 0x10, offset 0x00
+			ut::FileStream	*mFileStream;	// size 0x04, offset 0x10
+			void			*mBuffer;		// size 0x04, offset 0x14
+			int				mBufferSize;	// size 0x04, offset 0x18
+			Callback		*mCallback;		// size 0x04, offset 0x1c
+			void			*mCallbackData;	// size 0x04, offset 0x20
+		}; // size 0x24
 
-    void Prepare(const void *pBase, s32 seqOffset, SeqPlayer::OffsetType startType, int startOffset);
+	// methods
+	public:
+		// cdtors
+		SeqSound(SoundInstanceManager<SeqSound> *manager, int priority,
+		         int ambientPriority);
 
-    void Prepare(ut::FileStream *pStream, s32 seqOffset, SeqPlayer::OffsetType startType, int startOffset);
+		// virtual function ordering
+		// vtable BasicSound
+		virtual ut::detail::RuntimeTypeInfo const *GetRuntimeTypeInfo() const
+		{
+			return &typeInfo;
+		}
+		virtual void Shutdown();
+		virtual bool IsPrepared() const { return mPreparedFlag; }
+		virtual bool IsAttachedTempSpecialHandle();
+		virtual void DetachTempSpecialHandle();
+		virtual void InitParam();
+		virtual BasicPlayer &GetBasicPlayer() { return mSeqPlayer; }
+		virtual BasicPlayer const &GetBasicPlayer() const { return mSeqPlayer; }
+		virtual void OnUpdatePlayerPriority();
 
-    void Skip(SeqPlayer::OffsetType offsetType, int offset);
+		// methods
+		SeqPlayer::SetupResult Setup(SeqTrackAllocator *trackAllocator,
+		                             u32 allocTracks,
+		                             NoteOnCallback *callback);
+		void Prepare(void const *seqBase, s32 seqOffset,
+		             SeqPlayer::OffsetType startOffsetType, int startOffset);
+		void Prepare(ut::FileStream *fileStream, s32 seqOffset,
+		             SeqPlayer::OffsetType startOffsetType, int startOffset);
 
-    void SetTempoRatio(f32 tempo);
-    void SetChannelPriority(int priority);
-    void SetReleasePriorityFix(bool flag);
+		void *GetFileStreamBuffer() { return mFileStreamBuffer; }
+		s32 GetFileStreamBufferSize() { return sizeof mFileStreamBuffer; }
 
-    void SetTrackVolume(u32 trackFlags, f32 volume);
-    void SetTrackPitch(u32 trackFlags, f32 pitch);
+		void SetReleasePriorityFix(bool fix);
+		void SetChannelPriority(int priority);
+		void SetSeqUserprocCallback(SeqPlayer::SeqUserprocCallback *callback,
+		                            void *arg);
 
-    bool WriteVariable(int i, s16 value);
-    static bool WriteGlobalVariable(int i, s16 value);
+		void Skip(SeqPlayer::OffsetType offsetType, int offset);
 
-    void *GetFileStreamBuffer() {
-        return mFileStreamBuffer;
-    }
-    s32 GetFileStreamBufferSize() {
-        return sizeof(mFileStreamBuffer);
-    }
+		bool LoadData(SeqLoadTask::Callback *callback,
+		              void *callbackArg);
 
-private:
-    typedef void (*SeqLoadCallback)(bool success, const void *pBase, void *pCallbackArg);
+		static void NotifyLoadAsyncEndSeqData(bool result, void const *seqBase,
+		                                      void *userData);
 
-    struct SeqLoadTask : public Task {
-        SeqLoadTask();
+		static DebugSoundType GetSoundType()
+		{
+			return DEBUG_SOUND_TYPE_SEQSOUND;
+		}
 
-        virtual void Execute();  // at 0xC
-        virtual void Cancel();   // at 0x10
-        virtual void OnCancel(); // at 0x14
+	// static members
+	public:
+		static int const FILE_STREAM_BUFFER_SIZE = 128;
 
-        ut::FileStream *fileStream; // at 0x10
-        void *buffer;               // at 0x14
-        int bufferSize;             // at 0x18
-        SeqLoadCallback callback;   // at 0x1C
-        SeqSound *callbackData;     // at 0x20
-    };
+		static ut::detail::RuntimeTypeInfo const typeInfo;
 
-    static const int FILE_STREAM_BUFFER_SIZE = 512;
+	// members
+	private:
+		/* base BasicSound */														// size 0x100, offset 0x000
+		SeqPlayer						mSeqPlayer;									// size 0x154, offset 0x100
+		SeqSoundHandle					*mTempSpecialHandle;						// size 0x004, offset 0x254
+		SoundInstanceManager<SeqSound>	*mManager;									// size 0x004, offset 0x258
+		s32								mSeqOffset;									// size 0x004, offset 0x25c
+		SeqPlayer::OffsetType			mStartOffsetType;							// size 0x004, offset 0x260
+		int								mStartOffset;								// size 0x004, offset 0x264
+		bool							volatile mLoadingFlag;						// size 0x001, offset 0x268
+		bool							volatile mPreparedFlag;						// size 0x001, offset 0x269
+		/* 2 bytes padding */
+		ut::FileStream					*mFileStream;								// size 0x004, offset 0x26c
+		int								mFileStreamBuffer[FILE_STREAM_BUFFER_SIZE];	// size 0x200, offset 0x2a0
+		SeqLoadTask						mSeqLoadTask;								// size 0x024, offset 0x4a0
 
-private:
-    bool LoadData(SeqLoadCallback pCalllback, void *pCallbackArg);
+	// friends
+	private:
+		friend class snd::SeqSoundHandle;
+	}; // size 0x4c4
+}}} // namespace nw4r::snd::detail
 
-    static void NotifyLoadAsyncEndSeqData(bool success, const void *pBase, void *pCallbackArg);
-
-private:
-    SeqPlayer mSeqPlayer;                     // at 0xD8
-    SeqSoundHandle *mTempSpecialHandle;       // at 0x1F4
-    SoundInstanceManager<SeqSound> *mManager; // at 0x1F8
-
-    s32 mSeqOffset;                         // at 0x1FC
-    SeqPlayer::OffsetType mStartOffsetType; // at 0x200
-    int mStartOffset;                       // at 0x204
-
-    bool mLoadingFlag;           // at 0x208
-    volatile bool mPreparedFlag; // at 0x209
-
-    ut::FileStream *mFileStream;                     // at 0x20C
-    char mFileStreamBuffer[FILE_STREAM_BUFFER_SIZE]; // at 0x210
-
-    SeqLoadTask mSeqLoadTask; // at 0x410
-    mutable OSMutex mMutex;   // at 0x434
-};
-
-} // namespace detail
-} // namespace snd
-} // namespace nw4r
-
-#endif
+#endif // NW4R_SND_SEQ_SOUND_H

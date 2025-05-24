@@ -1,48 +1,108 @@
 #ifndef NW4R_SND_SEQ_FILE_H
 #define NW4R_SND_SEQ_FILE_H
-#include "nw4r/types_nw4r.h"
-#include "nw4r/ut.h"
 
+/*******************************************************************************
+ * headers
+ */
 
-namespace nw4r {
-namespace snd {
-namespace detail {
-namespace SeqFile {
+#include <macros.h>
+#include <types.h>
 
-struct Header {
-    ut::BinaryFileHeader fileHeader; // at 0x0
-    u32 dataBlockOffset;             // at 0x10
-    u32 dataBlockSize;               // at 0x14
-    u32 labelBlockOffset;            // at 0x18
-    u32 labelBlockSize;              // at 0x1C
-};
+#include "Util.h" // Util::Table
 
-struct DataBlock {
-    ut::BinaryBlockHeader blockHeader; // at 0x0
-    u32 baseOffset;                    // at 0x8
-};
+#include "../ut/binaryFileFormat.h"
 
-} // namespace SeqFile
+/*******************************************************************************
+ * types
+ */
 
-class SeqFileReader {
-public:
-    static const u32 SIGNATURE = 'RSEQ';
-    static const int VERSION = NW4R_VERSION(1, 0);
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2d23df (yes, really!)
+	struct SeqFile
+	{
+		/* Header */
 
-public:
-    explicit SeqFileReader(const void *pSeqBin);
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2ce38c
+		struct Header
+		{
+			ut::BinaryFileHeader	fileHeader;			// size 0x10, offset 0x00
+			u32						dataBlockOffset;	// size 0x04, offset 0x10
+			u32						dataBlockSize;		// size 0x04, offset 0x14
+			u32						labelBlockOffset;	// size 0x04, offset 0x18
+			u32						labelBlockSize;		// size 0x04, offset 0x1c
+		}; // size 0x20
 
-    bool IsValidFileHeader(const void *pSeqBin);
+		/* LabelBlock */
 
-    const void *GetBaseAddress() const;
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2ce87c
+		struct LabelInfo
+		{
+			u32		offset;		// size 0x04, offset 0x00
+			u32		nameLen;	// size 0x04, offset 0x04
+			char	name[1];	// size 0x01, offset 0x08
+			/* 3 bytes padding */
+		}; // size 0x0c
 
-private:
-    const SeqFile::Header *mHeader;       // at 0x0
-    const SeqFile::DataBlock *mDataBlock; // at 0x4
-};
+		static byte4_t const SIGNATURE_LABEL_BLOCK;
 
-} // namespace detail
-} // namespace snd
-} // namespace nw4r
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2ce7dc
+		struct LabelBlock
+		{
+			ut::BinaryBlockHeader	blockHeader;	// size 0x08, offset 0x00
+			Util::Table<u32>		labelInfoTable;	// size 0x08, offset 0x08
+		}; // size 0x10
 
-#endif
+		/* DataBlock */
+
+		static byte4_t const SIGNATURE_DATA_BLOCK =
+			NW4R_FOUR_BYTE('D', 'A', 'T', 'A');
+
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2ce491
+		struct DataBlock
+		{
+			ut::BinaryBlockHeader	blockHeader;	// size 0x08, offset 0x00
+			u32						baseOffset;		// size 0x04, offset 0x08
+		}; // size 0x0c
+
+		/* SeqFile */
+
+		static byte4_t const SIGNATURE_FILE =
+			NW4R_FOUR_BYTE('R', 'S', 'E', 'Q');
+		static int const FILE_VERSION = NW4R_FILE_VERSION(1, 2);
+	}; // "namespace" SeqFile
+}}} // namespace nw4r::snd::detail
+
+/*******************************************************************************
+ * classes and functions
+ */
+
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2ce50a
+	class SeqFileReader
+	{
+	// methods
+	public:
+		// cdtors
+		SeqFileReader(void const *seqData);
+
+		// methods
+		void const *GetBaseAddress() const;
+
+		bool IsValidFileHeader(void const *seqData);
+
+		bool ReadOffsetByLabel(char const *labelName, u32 *offsetPtr) const;
+
+	// static members
+	public:
+		static u16 const SUPPORTED_FILE_VERSION = NW4R_FILE_VERSION(1, 0);
+
+	// members
+	private:
+		SeqFile::Header		const *mHeader;		// size 0x04, offset 0x00
+		SeqFile::DataBlock	const *mDataBlock;	// size 0x04, offset 0x04
+	}; // size 0x08
+}}} // namespace nw4r::snd::detail
+
+#endif // NW4R_SND_SEQ_FILE_H

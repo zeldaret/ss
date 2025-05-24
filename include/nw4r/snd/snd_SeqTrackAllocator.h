@@ -1,26 +1,39 @@
 #ifndef NW4R_SND_SEQ_TRACK_ALLOCATOR_H
 #define NW4R_SND_SEQ_TRACK_ALLOCATOR_H
-#include "nw4r/types_nw4r.h"
 
-namespace nw4r {
-namespace snd {
-namespace detail {
+/*******************************************************************************
+ * types
+ */
 
-// Forward declarations
-class SeqPlayer;
-class SeqTrack;
+// forward declarations
+namespace nw4r { namespace snd { namespace detail { class SeqPlayer; }}}
+namespace nw4r { namespace snd { namespace detail { class SeqTrack; }}}
 
-class SeqTrackAllocator {
-public:
-    virtual ~SeqTrackAllocator() {} // at 0x8
+/*******************************************************************************
+ * classes and functions
+ */
 
-    virtual SeqTrack *AllocTrack(SeqPlayer *pPlayer) = 0; // at 0xC
-    virtual void FreeTrack(SeqTrack *pTrack) = 0;         // at 0x10
-    virtual int GetAllocatableTrackCount() const = 0;     // at 0x14
-};
+namespace nw4r { namespace snd { namespace detail
+{
+// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2db61
 
-} // namespace detail
-} // namespace snd
-} // namespace nw4r
+	class SeqTrackAllocator
+	{
+	// methods
+	public:
+		// cdtors
+		virtual ~SeqTrackAllocator() {}
 
-#endif
+		// virtual function ordering
+		// vtable SeqTrackAllocator
+		virtual SeqTrack *AllocTrack(SeqPlayer *player) = 0;
+		virtual void FreeTrack(SeqTrack *track) = 0;
+		virtual int GetAllocatableTrackCount() const = 0;
+
+	// members
+	private:
+		/* vtable */	// size 0x04, offset 0x00
+	}; // size 0x04
+}}} // namespace nw4r::snd::detail
+
+#endif // NW4R_SND_SEQ_TRACK_ALLOCATOR_H

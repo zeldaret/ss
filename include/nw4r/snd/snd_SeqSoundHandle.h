@@ -1,52 +1,42 @@
 #ifndef NW4R_SND_SEQ_SOUND_HANDLE_H
 #define NW4R_SND_SEQ_SOUND_HANDLE_H
-#include "nw4r/snd/snd_SeqSound.h"
-#include "nw4r/types_nw4r.h"
-#include "nw4r/ut.h"
 
+/*******************************************************************************
+ * headers
+ */
 
-namespace nw4r {
-namespace snd {
+#include <types.h> // nullptr
 
-// Forward declarations
-class SoundHandle;
+#include "../ut/inlines.h" // ut::NonCopyable
 
-class SeqSoundHandle : private ut::NonCopyable {
-public:
-    explicit SeqSoundHandle(SoundHandle *pHandle);
-    ~SeqSoundHandle() {
-        DetachSound();
-    }
+/*******************************************************************************
+ * types
+ */
 
-    bool IsAttachedSound() const {
-        return mSound != NULL;
-    }
+// forward declarations
+namespace nw4r { namespace snd { namespace detail { class SeqSound; }}}
 
-    void DetachSound();
+/*******************************************************************************
+ * classes and functions
+ */
 
-    void SetTempoRatio(f32 tempo) {
-        if (IsAttachedSound()) {
-            mSound->SetTempoRatio(tempo);
-        }
-    }
+namespace nw4r { namespace snd
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2e9b6
+	class SeqSoundHandle : private ut::NonCopyable
+	{
+	// methods
+	public:
+		// methods
+		bool IsAttachedSound() const { return mSound != nullptr; }
 
-    void SetTrackVolume(u32 trackFlags, f32 volume) {
-        if (IsAttachedSound()) {
-            mSound->SetTrackVolume(trackFlags, volume);
-        }
-    }
+		void DetachSound();
 
-    void WriteVariable(int i, s16 value) {
-        if (IsAttachedSound()) {
-            mSound->WriteVariable(i, value);
-        }
-    }
+	// members
+	private:
+		/* base ut::NonCopyable */		// size 0x00, offset 0x00
+		detail::SeqSound	*mSound;	// size 0x04, offset 0x00
+	}; // size 0x04
+}} // namespace nw4r::snd
 
-private:
-    detail::SeqSound *mSound; // at 0x0
-};
-
-} // namespace snd
-} // namespace nw4r
-
-#endif
+#endif // NW4R_SND_SEQ_SOUND_HANDLE_H

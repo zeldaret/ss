@@ -1,34 +1,50 @@
 #ifndef NW4R_SND_TASK_THREAD_H
 #define NW4R_SND_TASK_THREAD_H
 
-#include "rvl/OS.h" // IWYU pragma: export
+/*******************************************************************************
+ * headers
+ */
 
-namespace nw4r {
-namespace snd {
-namespace detail {
+#include <types.h>
 
-class TaskThread {
-public:
-    TaskThread();
-    ~TaskThread();
-
-    bool Create(s32 priority, void *pStack, u32 stackSize);
-    void Destroy();
-
-private:
-    static void *ThreadFunc(void *pArg);
-    void ThreadProc();
-
-private:
-    OSThread mThread; // at 0x0
-    u32 *mStackEnd;   // at 0x318
-
-    volatile bool mFinishFlag; // at 0x31C
-    bool mCreateFlag;          // at 0x31D
-};
-
-} // namespace detail
-} // namespace snd
-} // namespace nw4r
-
+#if 0
+#include <revolution/OS/OSThread.h>
+#else
+#include <context_rvl.h>
 #endif
+
+/*******************************************************************************
+ * classes and functions
+ */
+
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x4b348
+	class TaskThread
+	{
+	// methods
+	public:
+		// cdtors
+		TaskThread();
+		~TaskThread();
+
+		// methods
+		bool Create(s32 priority, void *stack, u32 stackSize);
+		void Destroy();
+
+	private:
+		// fibers, callbacks, and procedures
+		static void *ThreadFunc(void *arg);
+		void ThreadProc();
+
+	// members
+	private:
+		OSThread	mThread;		// size 0x318, offset 0x000
+		byte4_t		*mStackEnd;		// size 0x004, offset 0x318
+		bool		mFinishFlag;	// size 0x001, offset 0x31c // TODO: volatile? (see ThreadProc)
+		bool		mCreateFlag;	// size 0x001, offset 0x31d
+		/* 2 bytes padding */
+	}; // size 0x320
+}}} // namespace nw4r::snd::detail
+
+#endif // NW4R_SND_TASK_THREAD_H

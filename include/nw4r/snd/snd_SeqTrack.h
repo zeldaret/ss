@@ -1,166 +1,211 @@
 #ifndef NW4R_SND_SEQ_TRACK_H
 #define NW4R_SND_SEQ_TRACK_H
 
-#include "nw4r/snd/snd_Channel.h"
-#include "nw4r/snd/snd_Lfo.h"
-#include "nw4r/types_nw4r.h"
-#include "rvl/WPAD.h" // IWYU pragma: export
+/*******************************************************************************
+ * headers
+ */
 
-namespace nw4r {
-namespace snd {
+#include <types.h>
 
-enum SeqMute {
-    MUTE_OFF,
-    MUTE_NO_STOP,
-    MUTE_RELEASE,
-    MUTE_STOP
-};
+#include "Channel.h"
+#include "global.h" // AUX_BUS_NUM
+#include "Lfo.h" // LfoParam
+#include "MoveValue.h"
 
-enum ParseResult {
-    PARSE_RESULT_CONTINUE,
-    PARSE_RESULT_FINISH
-};
+/*******************************************************************************
+ * types
+ */
 
-namespace detail {
+// forward declarations
+namespace nw4r { namespace snd { namespace detail { class SeqPlayer; }}}
 
-class SeqTrack {
-public:
-    static const int VARIABLE_NUM = 16;
-    static const int PRGNO_MAX = 0xFFFF;
+namespace nw4r { namespace snd
+{
+	// why is this not attacked to SeqTrack or something?
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2d764
+	enum SeqMute
+	{
+		MUTE_OFF,
+		MUTE_NO_STOP,
+		MUTE_RELEASE,
+		MUTE_STOP,
+	};
+}} // namespace nw4r::snd
 
-    struct ParserTrackParam {
-        const u8 *baseAddr;    // at 0x0
-        const u8 *currentAddr; // at 0x4
-        s32 wait;              // at 0x8
+/*******************************************************************************
+ * classes and functions
+ */
 
-        bool muteFlag;       // at 0xC
-        bool silenceFlag;    // at 0xD
-        bool noteFinishWait; // at 0xE
-        bool portaFlag;      // at 0xF
-        bool damperFlag;     // at 0x10
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2d7c3
+	class SeqTrack
+	{
+	// early constants
+	public:
+		static int const CALL_STACK_DEPTH = 3;
 
-        int bankNo; // at 0x14
-        int prgNo;  // at 0x18
+	// enums
+	public:
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2d70c
+		enum ParseResult
+		{
+			PARSE_RESULT_CONTINUE,
+			PARSE_RESULT_FINISH,
+		};
 
-        LfoParam lfoParam; // at 0x1C
+	// nested types
+	public:
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2cdd6
+		struct CallStack
+		{
+			bool	loopFlag;		// size 0x01, offset 0x00
+			u8		loopCount;		// size 0x01, offset 0x01
+			/* 2 bytes padding */
+			byte_t	const *address;	// size 0x04, offset 0x04
+		}; // size 0x08
 
-        u8 lfoTarget;   // at 0x2C
-        f32 sweepPitch; // at 0x30
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2d032
+		struct ParserTrackParam
+		{
+			byte_t				const *baseAddr;				// size 0x04, offset 0x00
+			byte_t				const *currentAddr;				// size 0x04, offset 0x04
+			bool				cmpFlag;						// size 0x01, offset 0x08
+			bool				noteWaitFlag;					// size 0x01, offset 0x09
+			bool				tieFlag;						// size 0x01, offset 0x0a
+			bool				monophonicFlag;					// size 0x01, offset 0x0b
+			CallStack			callStack[CALL_STACK_DEPTH];	// size 0x18, offset 0x0c
+			u8					callStackDepth;					// size 0x01, offset 0x24
+			/* 3 bytes padding */
+			s32					wait;							// size 0x04, offset 0x28
+			bool				muteFlag;						// size 0x01, offset 0x2c
+			bool				silenceFlag;					// size 0x01, offset 0x2d
+			bool				noteFinishWait;					// size 0x01, offset 0x2e
+			bool				portaFlag;						// size 0x01, offset 0x2f
+			bool				damperFlag;						// size 0x01, offset 0x30
+			/* 3 bytes padding */
+			int					bankNo;							// size 0x04, offset 0x34
+			int					prgNo;							// size 0x04, offset 0x38
+			LfoParam			lfoParam;						// size 0x10, offset 0x3c
+			u8					lfoTarget;						// size 0x01, offset 0x4c
+			/* 3 bytes padding */
+			f32					sweepPitch;						// size 0x04, offset 0x50
+			MoveValue<u8, s16>	volume;							// size 0x06, offset 0x54
+			MoveValue<s8, s16>	pan;							// size 0x06, offset 0x5a
+			MoveValue<s8, s16>	surroundPan;					// size 0x06, offset 0x60
+			u8					volume2;						// size 0x01, offset 0x66
+			u8					velocityRange;					// size 0x01, offset 0x67
+			s8					pitchBend;						// size 0x01, offset 0x68
+			u8					bendRange;						// size 0x01, offset 0x69
+			s8					initPan;						// size 0x01, offset 0x6a
+			s8					transpose;						// size 0x01, offset 0x6b
+			u8					priority;						// size 0x01, offset 0x6c
+			u8					portaKey;						// size 0x01, offset 0x6d
+			u8					portaTime;						// size 0x01, offset 0x6e
+			u8					attack;							// size 0x01, offset 0x6f
+			u8					decay;							// size 0x01, offset 0x70
+			u8					sustain;						// size 0x01, offset 0x71
+			u8					release;						// size 0x01, offset 0x72
+			/* 1 byte padding */
+			s16					envHold;						// size 0x02, offset 0x74
+			u8					mainSend;						// size 0x01, offset 0x76
+			u8					fxSend[AUX_BUS_NUM];			// size 0x03, offset 0x77
+			u8					biquadType;						// size 0x01, offset 0x7a
+			/* 1 byte padding */
+			f32					lpfFreq;						// size 0x04, offset 0x7c
+			f32					biquadValue;					// size 0x04, offset 0x80
+		}; // size 0x84
 
-        u8 volume;  // at 0x34
-        u8 volume2; // at 0x35
+	// methods
+	public:
+		// cdtors
+		SeqTrack();
+		virtual ~SeqTrack();
 
-        s8 pitchBend; // at 0x36
-        u8 bendRange; // at 0x37
+		// virtual function ordering
+		// vtable SeqTrack
+		virtual ParseResult Parse(bool doNoteOn) = 0;
 
-        s8 pan;         // at 0x38
-        s8 initPan;     // at 0x39
-        s8 surroundPan; // at 0x3A
+		// methods
+		void InitParam();
+		void SetSeqData(void const *seqBase, s32 seqOffset);
+		void Open();
+		void Close();
 
-        s8 transpose; // at 0x3B
-        u8 priority;  // at 0x3C
+		u8 GetPlayerTrackNo() const { return mPlayerTrackNo; }
+		bool IsOpened() const { return mOpenFlag; }
+		ParserTrackParam &GetParserTrackParam() { return mParserTrackParam; }
+		s16 volatile *GetVariablePtr(int varNo);
+		SeqPlayer *GetSeqPlayer() { return mSeqPlayer; }
+		Channel *GetLastChannel() const { return mChannelList; }
 
-        u8 portaKey;  // at 0x3D
-        u8 portaTime; // at 0x3E
+		void SetPlayerTrackNo(int playerTrackNo);
+		void SetVolume(f32);
+		void SetPitch(f32);
+		void SetPan(f32);
+		void SetSurroundPan(f32);
+		void SetPanRange(f32);
+		void SetMute(SeqMute mute);
+		void SetSilence(bool, int);
+		void SetModDepth(f32);
+		void SetModSpeed(f32);
+		void SetBiquadFilter(int, f32);
+		void SetLpfFreq(f32);
+		void SetSeqPlayer(SeqPlayer *player) { mSeqPlayer = player; }
 
-        u8 attack;  // at 0x3F
-        u8 decay;   // at 0x40
-        u8 sustain; // at 0x41
-        u8 release; // at 0x42
+		void AddChannel(Channel *channel);
 
-        u8 mainSend;            // at 0x43
-        u8 fxSend[AUX_BUS_NUM]; // at 0x44
-        u8 lpfFreq;             // at 0x47
-    };
+		void UpdateChannelLength();
+		void UpdateChannelParam();
+		void UpdateChannelRelease(Channel *channel);
 
-public:
-    SeqTrack();
-    virtual ~SeqTrack(); // at 0x8
+		void ReleaseAllChannel(int release);
+		void PauseAllChannel(bool flag);
+		void StopAllChannel();
+		void FreeAllChannel();
 
-    virtual ParseResult Parse(bool doNoteOn) = 0; // at 0xC
+		Channel *NoteOn(int key, int velocity, s32 length, bool tieFlag);
 
-    bool IsOpened() const {
-        return mOpenFlag;
-    }
+		int ParseNextTick(bool doNoteOn);
 
-    void SetPlayerTrackNo(int no);
-    u8 GetPlayerTrackNo() const {
-        return mPlayerTrackNo;
-    }
+		static void ChannelCallbackFunc(Channel *dropChannel,
+		                                Channel::ChannelCallbackStatus status,
+		                                register_t userData);
 
-    void InitParam();
-    void SetSeqData(const void *pBase, s32 offset);
+	// static members
+	public:
+		static int const MUTE_RELEASE_VALUE = -1; // maybe?
+		static int const PAUSE_RELEASE_VALUE;
 
-    void Open();
-    void Close();
+		static int const TRACK_VARIABLE_NUM = 16;
 
-    void UpdateChannelLength();
-    void UpdateChannelRelease(Channel *pChannel);
+		static int const PARSER_PARAM_SIZE; // sizeof(ParserTrackParam) probably
 
-    int ParseNextTick(bool doNoteOn);
+		static int const MAX_ENVELOPE_VALUE = 127;
+		static int const INVALID_ENVELOPE = 255;
 
-    void StopAllChannel();
-    void ReleaseAllChannel(int release);
-    void PauseAllChannel(bool flag);
-    void AddChannel(Channel *pChannel);
-    void UpdateChannelParam();
-    void FreeAllChannel();
+		static int const DEFAULT_PORTA_KEY = 60;
+		static int const DEFAULT_BENDRANGE = 2;
+		static int const DEFAULT_PRIORITY = 64;
 
-    void SetMute(SeqMute mute);
-    void SetVolume(f32 volume);
-    void SetPitch(f32 pitch);
+		/* static int const CALL_STACK_DEPTH = 3; */ // see above
 
-    ParserTrackParam &GetParserTrackParam() {
-        return mParserTrackParam;
-    }
+	// members
+	private:
+		/* vtable */														// size 0x04, offset 0x00
+		u8					mPlayerTrackNo;									// size 0x01, offset 0x04
+		bool				mOpenFlag;										// size 0x01, offset 0x05
+		/* 2 bytes padding */
+		f32					mExtVolume;										// size 0x04, offset 0x08
+		f32					mExtPitch;										// size 0x04, offset 0x0c
+		f32					mExtPan;										// size 0x04, offset 0x10
+		f32					mExtSurroundPan;								// size 0x04, offset 0x14
+		f32					mPanRange;										// size 0x04, offset 0x18
+		ParserTrackParam	mParserTrackParam;								// size 0x84, offset 0x1c
+		s16					volatile mTrackVariable[TRACK_VARIABLE_NUM];	// size 0x20, offset 0xa0
+		SeqPlayer			*mSeqPlayer;									// size 0x04, offset 0xc0
+		Channel				*mChannelList;									// size 0x04, offset 0xc4
+	}; // size 0xc8
+}}} // namespace nw4r::snd::detail
 
-    volatile s16 *GetVariablePtr(int i);
-
-    SeqPlayer *GetSeqPlayer() {
-        return mPlayer;
-    }
-    void SetSeqPlayer(SeqPlayer *pPlayer) {
-        mPlayer = pPlayer;
-    }
-
-    Channel *GetLastChannel() const {
-        return mChannelList;
-    }
-
-    Channel *NoteOn(int key, int velocity, s32 length, bool tie);
-
-private:
-    static const int DEFAULT_PRIORITY = 64;
-    static const int DEFAULT_BENDRANGE = 2;
-    static const int DEFAULT_PORTA_KEY = 60;
-    static const int DEFAULT_VARIABLE_VALUE = -1;
-
-private:
-    static void ChannelCallbackFunc(Channel *pDropChannel, Channel::ChannelCallbackStatus status, u32 callbackArg);
-
-private:
-    u8 mPlayerTrackNo; // at 0x4
-    bool mOpenFlag;    // at 0x5
-
-    f32 mExtVolume;                             // at 0x8
-    f32 mExtPitch;                              // at 0xC
-    f32 mExtPan;                                // at 0x10
-    f32 mExtSurroundPan;                        // at 0x14
-    f32 mPanRange;                              // at 0x18
-    f32 mExtLpfFreq;                            // at 0x1C
-    f32 mExtMainSend;                           // at 0x20
-    f32 mExtFxSend[AUX_BUS_NUM];                // at 0x24
-    f32 mExtRemoteSend[WPAD_MAX_CONTROLLERS];   // at 0x30
-    f32 mExtRemoteFxSend[WPAD_MAX_CONTROLLERS]; // at 0x40
-
-    ParserTrackParam mParserTrackParam;        // at 0x50
-    volatile s16 mTrackVariable[VARIABLE_NUM]; // at 0x98
-    SeqPlayer *mPlayer;                        // at 0xB8
-    Channel *mChannelList;                     // at 0xBC
-};
-
-} // namespace detail
-} // namespace snd
-} // namespace nw4r
-
-#endif
+#endif // NW4R_SND_SEQ_TRACK_H
