@@ -2448,7 +2448,7 @@ config.libs = [
     Rel(NonMatching, "d_SoftwareKeyboard", "REL/d/d_SoftwareKeyboard.cpp"),
     Rel(NonMatching, "d_s_boot", "REL/d/d_s_boot.cpp"),
     Rel(NonMatching, "d_title_manager", "REL/d/d_title_manager.cpp"),
-    Rel(NonMatching, "d_t_action", "REL/d/t/d_t_action.cpp"),
+    Rel(Matching, "d_t_action", "REL/d/t/d_t_action.cpp"),
     Rel(NonMatching, "d_t_at0", "REL/d/t/d_t_at0.cpp"),
     Rel(NonMatching, "d_t_auto_message", "REL/d/t/d_t_auto_message.cpp"),
     Rel(NonMatching, "d_t_barrel", "REL/d/t/d_t_barrel.cpp"),

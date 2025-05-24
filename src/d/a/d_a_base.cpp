@@ -431,8 +431,8 @@ bool dAcBase_c::getDistanceAndAngleToActor(
         angleToActorX.set(cLib::targetAngleX(position, actor->position));
 
         if ((distSquared <= distThresh * distThresh)) {
-            if ((labs(mAng(rotation.y.diff(angleToActorY))) <= yAngle) &&
-                (labs(mAng(rotation.x.diff(angleToActorX))) <= xAngle)) {
+            if (mAng::abs((s32)(rotation.y - angleToActorY)) <= yAngle &&
+                mAng::abs((s32)(rotation.x - angleToActorX)) <= xAngle) {
                 isWithinRange = true;
             }
         }

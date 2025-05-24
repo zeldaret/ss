@@ -57,6 +57,10 @@ struct mAng {
         return *this;
     }
 
+    static s32 abs(const mAng b) {
+        return labs(b);
+    }
+
     s32 step(s16 target, s32 steps, s16 max, s16 min);
 
     f32 sin() const {
@@ -115,11 +119,6 @@ struct mAng {
     }
     static s16 rad2short(f32 rad) {
         return rad * (65536.0f / (2.f * M_PI));
-    }
-
-    // Try not to use
-    s32 diff(const mAng &other) {
-        return mVal - other.mVal;
     }
 
     s16 mVal;
