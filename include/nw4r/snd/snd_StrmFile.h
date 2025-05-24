@@ -5,14 +5,13 @@
  * headers
  */
 
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "adpcm.h"
-#include "global.h" // SampleFormat
-#include "Util.h" // Util::DataRef
+#include "nw4r/snd/snd_adpcm.h"
+#include "nw4r/snd/snd_global.h" // SampleFormat
+#include "nw4r/snd/snd_Util.h" // Util::DataRef
 
-#include "../ut/binaryFileFormat.h"
+#include "nw4r/ut/ut_binaryFileFormat.h"
 
 /*******************************************************************************
  * types
@@ -75,8 +74,8 @@ namespace nw4r { namespace snd { namespace detail
 		{
 			u8		volume;					// size 0x01, offset 0x00
 			u8		pan;					// size 0x01, offset 0x01
-			byte1_t	padding[2];
-			byte4_t	reserved;
+			u8	padding[2];
+			u32	reserved;
 			u8		channelCount;			// size 0x01, offset 0x08
 			u8		channelIndexTable[];	// flexible,  offset 0x09 (unit size 0x01)
 			/* 3 bytes padding */
@@ -87,7 +86,7 @@ namespace nw4r { namespace snd { namespace detail
 		{
 			u8										trackCount;			// size 0x01, offset 0x00
 			u8										trackDataType;		// size 0x01, offset 0x01
-			byte1_t									padding[2];
+			u8									padding[2];
 			Util::DataRef<TrackInfo, TrackInfoEx>	refTrackHeader[];	// flexible,  offset 0x04 (unit size 0x08)
 		}; // size 0x04
 
@@ -108,11 +107,11 @@ namespace nw4r { namespace snd { namespace detail
 		struct ChannelTable
 		{
 			u8							channelCount;		// size 0x01, offset 0x00
-			byte1_t						padding[3];
+			u8						padding[3];
 			Util::DataRef<ChannelInfo>	refChannelHeader[];	// flexible,  offset 0x04 (unit size 0x08)
 		}; // size 0x04
 
-		static byte4_t const SIGNATURE_HEAD_BLOCK =
+		static u32 const SIGNATURE_HEAD_BLOCK =
 			NW4R_FOUR_BYTE('H', 'E', 'A', 'D');
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2f2ab0
@@ -126,7 +125,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		/* StrmFile */
 
-		static byte4_t const SIGNATURE_FILE =
+		static u32 const SIGNATURE_FILE =
 			NW4R_FOUR_BYTE('R', 'S', 'T', 'M');
 		static int const FILE_VERSION = NW4R_FILE_VERSION(1, 0);
 	}; // "namespace" StrmFile

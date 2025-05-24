@@ -1,4 +1,4 @@
-#include "nw4r/snd/AxManager.h"
+#include "nw4r/snd/snd_AxManager.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -11,28 +11,23 @@
 
 #include <cstring> // std::memset
 
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/BiquadFilterPreset.h"
-#include "nw4r/snd/FxBase.h"
-#include "nw4r/snd/global.h"
-#include "nw4r/snd/MoveValue.h"
-#include "nw4r/snd/Voice.h"
-#include "nw4r/snd/VoiceManager.h"
+#include "nw4r/snd/snd_BiquadFilterPreset.h"
+#include "nw4r/snd/snd_FxBase.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_MoveValue.h"
+#include "nw4r/snd/snd_Voice.h"
+#include "nw4r/snd/snd_VoiceManager.h"
 
-#include "nw4r/ut/inlines.h" // ut::Clamp
-#include "nw4r/ut/Lock.h" // ut::AutoInterruptLock
+#include "nw4r/ut/ut_algorithm.h" // ut::Clamp
+#include "nw4r/ut/ut_Lock.h" // ut::AutoInterruptLock
 
-#if 0
-#include <revolution/OS/OSCache.h> // DCFlushRange
-#include <revolution/AI/ai.h> // AICheckInit
-#include <revolution/AX/AXAux.h>
-#include <revolution/AX/AXCL.h>
-#include <revolution/AX/AXOut.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/OS/OSCache.h> // DCFlushRange
+#include <rvl/AI/ai.h> // AICheckInit
+#include <rvl/AX/AXAux.h>
+#include <rvl/AX/AXCL.h>
+#include <rvl/AX/AXOut.h>
 
 #include "nw4r/NW4RAssert.hpp"
 

@@ -1,4 +1,4 @@
-#include "nw4r/snd/SoundStartable.h"
+#include "nw4r/snd/snd_SoundStartable.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,10 +9,10 @@
  * headers
  */
 
-#include <types.h> // u32
+#include "common.h" // u32
 
-#include "nw4r/snd/BasicSound.h"
-#include "nw4r/snd/SoundHandle.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_SoundHandle.h"
 
 /*******************************************************************************
  * functions
@@ -21,7 +21,7 @@
 namespace nw4r { namespace snd {
 
 SoundStartable::StartResult SoundStartable::detail_StartSound(
-	SoundHandle *handle, u32 soundId, StartInfo const *startInfo)
+	SoundHandle *handle, u32 soundId, const StartInfo *startInfo)
 {
 	StartResult result = detail_SetupSound(handle, soundId, false, startInfo);
 	if (result != START_SUCCESS)

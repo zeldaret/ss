@@ -1,4 +1,4 @@
-#include "nw4r/snd/BasicPlayer.h"
+#include "nw4r/snd/snd_BasicPlayer.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,11 +9,10 @@
  * headers
  */
 
-#include <macros.h> // ARRAY_LENGTH
-#include <types.h> // f32
+#include "common.h" // f32
 
-#include "nw4r/snd/BasicSound.h"
-#include "nw4r/snd/global.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_global.h"
 
 #include "nw4r/NW4RAssert.hpp"
 

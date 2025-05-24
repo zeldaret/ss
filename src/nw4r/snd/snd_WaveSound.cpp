@@ -1,4 +1,4 @@
-#include "nw4r/snd/WaveSound.h"
+#include "nw4r/snd/snd_WaveSound.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,14 +9,14 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/BasicSound.h"
-#include "nw4r/snd/SoundInstanceManager.h"
-#include "nw4r/snd/WaveSoundHandle.h"
-#include "nw4r/snd/WsdPlayer.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_SoundInstanceManager.h"
+#include "nw4r/snd/snd_WaveSoundHandle.h"
+#include "nw4r/snd/snd_WsdPlayer.h"
 
-#include "nw4r/ut/RuntimeTypeInfo.h"
+#include "nw4r/ut/ut_RuntimeTypeInfo.h"
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -49,7 +49,7 @@ WaveSound::WaveSound(SoundInstanceManager<WaveSound> *manager, int priority,
 bool WaveSound::Prepare(void const *waveSoundBase, s32 waveSoundOffset,
                         WsdPlayer::StartOffsetType startOffsetType, s32 offset,
                         WsdPlayer::WsdCallback const *callback,
-                        register_t callbackData)
+                        u32 callbackData)
 {
 	NW4RAssertPointerNonnull_Line(74, waveSoundBase);
 	NW4RAssertPointerNonnull_Line(75, callback);

@@ -1,4 +1,4 @@
-#include "nw4r/snd/PlayerHeap.h"
+#include "nw4r/snd/snd_PlayerHeap.h"
 
 /*******************************************************************************
  * headers
@@ -6,12 +6,12 @@
 
 #include <cstddef> // NULL
 
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/DisposeCallbackManager.h"
-#include "nw4r/snd/SoundThread.h" // SoundThread::AutoLock
+#include "nw4r/snd/snd_DisposeCallbackManager.h"
+#include "nw4r/snd/snd_SoundThread.h" // SoundThread::AutoLock
 
-#include "nw4r/ut/inlines.h"
+#include "nw4r/ut/ut_algorithm.h"
 
 #include "nw4r/NW4RAssert.hpp"
 

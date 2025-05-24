@@ -5,9 +5,9 @@
  * headers
  */
 
-#include <types.h> // register_t
+#include "common.h" // u32
 
-#include "Channel.h"
+#include "nw4r/snd/snd_Channel.h"
 
 /*******************************************************************************
  * types
@@ -29,7 +29,7 @@ namespace nw4r { namespace snd { namespace detail
 		int					priority;				// size 0x04, offset 0x14
 		int					voiceOutCount;			// size 0x04, offset 0x18
 		Channel::Callback	*channelCallback;		// size 0x04, offset 0x1c
-		register_t			channelCallbackData;	// size 0x04, offset 0x20
+		u32			channelCallbackData;	// size 0x04, offset 0x20
 	}; // size 0x24
 }}} // namespace nw4r::snd::detail
 

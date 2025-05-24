@@ -1,4 +1,4 @@
-#include "nw4r/snd/TaskManager.h"
+#include "nw4r/snd/snd_TaskManager.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -10,18 +10,14 @@
  */
 
 #include <decomp.h>
-#include <macros.h> // NW4R_RANGE_FOR_NO_AUTO_INC
-#include <types.h> // nullptr
+#include "common.h" // nullptr
 
-#include "nw4r/snd/Task.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_Task.h"
 
-#include "nw4r/ut/Lock.h" // ut::AutoInterruptLock
+#include "nw4r/ut/ut_Lock.h" // ut::AutoInterruptLock
 
-#if 0
-#include <revolution/OS/OSThread.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/OS/OSThread.h>
 
 #include "nw4r/NW4RAssert.hpp"
 

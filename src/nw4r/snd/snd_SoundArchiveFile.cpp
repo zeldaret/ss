@@ -1,4 +1,4 @@
-#include "nw4r/snd/SoundArchiveFile.h"
+#include "nw4r/snd/snd_SoundArchiveFile.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -12,15 +12,14 @@
 #include <cstring>
 
 #include <decomp.h>
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/global.h"
-#include "nw4r/snd/SoundArchive.h"
-#include "nw4r/snd/Util.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_SoundArchive.h"
+#include "nw4r/snd/snd_Util.h"
 
-#include "nw4r/ut/binaryFileFormat.h" // ut::BinaryFileHeader
-#include "nw4r/ut/inlines.h" // ut::AddOffsetToPtr
+#include "nw4r/ut/ut_binaryFileFormat.h" // ut::BinaryFileHeader
+#include "nw4r/ut/ut_algorithm.h" // ut::AddOffsetToPtr
 
 #include <nw4r/NW4RAssert.hpp>
 
@@ -247,7 +246,7 @@ bool SoundArchiveFileReader::ReadStrmSoundInfo(
 		info->allocChannelCount = 0;
 
 		// is this meant to be src->allocTrackFlag?
-		for (byte2_t bitflag = src->allocChannelCount; bitflag; bitflag >>= 1)
+		for (u16 bitflag = src->allocChannelCount; bitflag; bitflag >>= 1)
 		{
 			if (bitflag & 1)
 				info->allocChannelCount++;

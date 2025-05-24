@@ -1,4 +1,4 @@
-#include "nw4r/snd/AxVoiceManager.h"
+#include "nw4r/snd/snd_AxVoiceManager.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -11,18 +11,14 @@
 
 #include <new>
 
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/AxVoice.h"
+#include "nw4r/snd/snd_AxVoice.h"
 
-#include "nw4r/ut/Lock.h" // ut::AutoInterruptLock
+#include "nw4r/ut/ut_Lock.h" // ut::AutoInterruptLock
 
-#if 0
-#include <revolution/AX/AXAlloc.h>
-#include <revolution/AX/AXVPB.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/AX/AXAlloc.h>
+#include <rvl/AX/AXVPB.h>
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -179,7 +175,7 @@ AxVoice *AxVoiceManager::AcquireAxVoice(u32 priority,
 		return nullptr;
 
 	AXVPB *vpb = AXAcquireVoice(priority, &AxVoice::VoiceCallback,
-	                            reinterpret_cast<register_t>(voice));
+	                            reinterpret_cast<u32>(voice));
 	if (!vpb)
 	{
 		Free(voice);

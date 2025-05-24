@@ -1,4 +1,4 @@
-#include "nw4r/snd/MmlSeqTrack.h"
+#include "nw4r/snd/snd_MmlSeqTrack.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,7 +9,7 @@
  * headers
  */
 
-#include "nw4r/snd/MmlParser.h"
+#include "nw4r/snd/snd_MmlParser.h"
 
 /*******************************************************************************
  * functions

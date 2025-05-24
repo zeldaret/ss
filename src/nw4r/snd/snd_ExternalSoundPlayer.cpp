@@ -1,4 +1,4 @@
-#include "nw4r/snd/ExternalSoundPlayer.h"
+#include "nw4r/snd/snd_ExternalSoundPlayer.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -10,11 +10,10 @@
  */
 
 #include <decomp.h>
-#include <macros.h> // NW4R_RANGE_FOR
-#include <types.h> // nullptr
+#include "common.h" // nullptr
 
-#include "nw4r/snd/BasicSound.h"
-#include "nw4r/snd/SoundThread.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_SoundThread.h"
 
 #include "nw4r/NW4RAssert.hpp"
 

@@ -5,16 +5,16 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
 // WARNING: DO NOT REORDER these #include directives, data pooling depends on it
 
 // clang-format off
-#include "../ut/FileStream.h" // This needs to be
-#include "SoundArchive.h" // before this
+#include "nw4r/ut/ut_FileStream.h" // This needs to be
+#include "nw4r/snd/snd_SoundArchive.h" // before this
 // clang-format on
 
-#include "SoundArchiveFile.h"
+#include "nw4r/snd/snd_SoundArchiveFile.h"
 
 /*******************************************************************************
  * classes and functions

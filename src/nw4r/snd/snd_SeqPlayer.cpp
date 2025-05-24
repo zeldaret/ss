@@ -1,4 +1,4 @@
-#include "nw4r/snd/SeqPlayer.h"
+#include "nw4r/snd/snd_SeqPlayer.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -10,16 +10,16 @@
  */
 
 #include <decomp.h>
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/BasicPlayer.h"
-#include "nw4r/snd/DisposeCallbackManager.h"
-#include "nw4r/snd/NoteOnCallback.h"
-#include "nw4r/snd/SeqTrack.h"
-#include "nw4r/snd/SeqTrackAllocator.h"
-#include "nw4r/snd/SoundThread.h"
+#include "nw4r/snd/snd_BasicPlayer.h"
+#include "nw4r/snd/snd_DisposeCallbackManager.h"
+#include "nw4r/snd/snd_NoteOnCallback.h"
+#include "nw4r/snd/snd_SeqTrack.h"
+#include "nw4r/snd/snd_SeqTrackAllocator.h"
+#include "nw4r/snd/snd_SoundThread.h"
 
-#include "nw4r/ut/Lock.h" // ut::AutoInterruptLock
+#include "nw4r/ut/ut_Lock.h" // ut::AutoInterruptLock
 
 #include "nw4r/NW4RAssert.hpp"
 

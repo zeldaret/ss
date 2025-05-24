@@ -1,4 +1,4 @@
-#include "nw4r/snd/StrmSoundHandle.h"
+#include "nw4r/snd/snd_StrmSoundHandle.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,9 +9,9 @@
  * headers
  */
 
-#include <types.h> // nullptr
+#include "common.h" // nullptr
 
-#include "nw4r/snd/StrmSound.h"
+#include "nw4r/snd/snd_StrmSound.h"
 
 /*******************************************************************************
  * functions

@@ -1,4 +1,4 @@
-#include "nw4r/snd/WaveSoundHandle.h"
+#include "nw4r/snd/snd_WaveSoundHandle.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,13 +9,13 @@
  * headers
  */
 
-#include <types.h> // nullptr
+#include "common.h" // nullptr
 
-#include "nw4r/snd/BasicSound.h"
-#include "nw4r/snd/SoundHandle.h"
-#include "nw4r/snd/WaveSound.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_SoundHandle.h"
+#include "nw4r/snd/snd_WaveSound.h"
 
-#include "nw4r/ut/RuntimeTypeInfo.h" // ut::DynamicCast
+#include "nw4r/ut/ut_RuntimeTypeInfo.h" // ut::DynamicCast
 
 #include "nw4r/NW4RAssert.hpp"
 

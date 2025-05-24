@@ -7,10 +7,9 @@
 
 #include <climits> // CHAR_BIT
 
-#include <macros.h> // ROUND_UP
-#include <types.h>
+#include "common.h"
 
-#include "adpcm.h"
+#include "nw4r/snd/snd_adpcm.h"
 
 /*******************************************************************************
  * types

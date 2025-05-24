@@ -1,4 +1,4 @@
-#include "nw4r/snd/StrmPlayer.h"
+#include "nw4r/snd/snd_StrmPlayer.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -13,36 +13,31 @@
 #include <cstring> // std::memcpy
 
 #include <decomp.h>
-#include <macros.h> // ATTR_UNUSED
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/StrmSound.h"
-#include "nw4r/snd/adpcm.h"
-#include "nw4r/snd/AxVoice.h"
-#include "nw4r/snd/BasicPlayer.h"
-#include "nw4r/snd/Channel.h"
-#include "nw4r/snd/global.h"
-#include "nw4r/snd/InstancePool.h"
-#include "nw4r/snd/SoundThread.h"
-#include "nw4r/snd/StrmChannel.h"
-#include "nw4r/snd/StrmFile.h"
-#include "nw4r/snd/TaskManager.h"
-#include "nw4r/snd/Voice.h"
-#include "nw4r/snd/VoiceManager.h"
-#include "nw4r/snd/WaveFile.h"
+#include "nw4r/snd/snd_StrmSound.h"
+#include "nw4r/snd/snd_adpcm.h"
+#include "nw4r/snd/snd_AxVoice.h"
+#include "nw4r/snd/snd_BasicPlayer.h"
+#include "nw4r/snd/snd_Channel.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_InstancePool.h"
+#include "nw4r/snd/snd_SoundThread.h"
+#include "nw4r/snd/snd_StrmChannel.h"
+#include "nw4r/snd/snd_StrmFile.h"
+#include "nw4r/snd/snd_TaskManager.h"
+#include "nw4r/snd/snd_Voice.h"
+#include "nw4r/snd/snd_VoiceManager.h"
+#include "nw4r/snd/snd_WaveFile.h"
 
-#include "nw4r/ut/DvdFileStream.h"
-#include "nw4r/ut/FileStream.h"
-#include "nw4r/ut/inlines.h"
-#include "nw4r/ut/Lock.h"
-#include "nw4r/ut/RuntimeTypeInfo.h"
+#include "nw4r/ut/ut_DvdFileStream.h"
+#include "nw4r/ut/ut_FileStream.h"
+#include "nw4r/ut/ut_algorithm.h"
+#include "nw4r/ut/ut_Lock.h"
+#include "nw4r/ut/ut_RuntimeTypeInfo.h"
 
-#if 0
-#include <revolution/OS/OSCache.h>
-#include <revolution/DVD/dvd.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/OS/OSCache.h>
+#include <rvl/DVD/dvd.h>
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -90,7 +85,7 @@ StrmPlayer::~StrmPlayer()
 
 StrmPlayer::SetupResult StrmPlayer::Setup(StrmBufferPool *bufferPool,
                                           int allocChannelCount,
-                                          byte2_t allocTrackFlag,
+                                          u16 allocTrackFlag,
                                           int voiceOutCount)
 {
 	SoundThread::AutoLock lock;
@@ -103,7 +98,7 @@ StrmPlayer::SetupResult StrmPlayer::Setup(StrmBufferPool *bufferPool,
 	InitParam();
 	mChannelCount = ut::Min(allocChannelCount, STRM_CHANNEL_NUM);
 
-	byte4_t bitMask = allocTrackFlag;
+	u32 bitMask = allocTrackFlag;
 
 	int trackIndex;
 	for (trackIndex = 0; bitMask; bitMask >>= 1, trackIndex++)
@@ -285,7 +280,7 @@ bool StrmPlayer::Start()
 	return true;
 }
 
-u32 StrmPlayer::GetSampleByByte(byte4_t byte, SampleFormat format)
+u32 StrmPlayer::GetSampleByByte(u32 byte, SampleFormat format)
 {
 	u32 samples = 0;
 
@@ -1344,7 +1339,7 @@ StrmChannel *StrmPlayer::GetTrackChannel(StrmTrack const &track,
 	return &mChannels[index];
 }
 
-void StrmPlayer::SetTrackVolume(byte4_t trackBitFlag, f32 volume)
+void StrmPlayer::SetTrackVolume(u32 trackBitFlag, f32 volume)
 {
 	ut::AutoInterruptLock lock;
 

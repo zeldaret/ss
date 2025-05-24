@@ -5,11 +5,11 @@
  * headers
  */
 
-#include <types.h> // nullptr
+#include "common.h" // nullptr
 
-#include "BasicSound.h"
-#include "ExternalSoundPlayer.h"
-#include "SoundStartable.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_ExternalSoundPlayer.h"
+#include "nw4r/snd/snd_SoundStartable.h"
 
 /*******************************************************************************
  * types

@@ -5,12 +5,12 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "Channel.h"
-#include "global.h" // AUX_BUS_NUM
-#include "Lfo.h" // LfoParam
-#include "MoveValue.h"
+#include "nw4r/snd/snd_Channel.h"
+#include "nw4r/snd/snd_global.h" // AUX_BUS_NUM
+#include "nw4r/snd/snd_Lfo.h" // LfoParam
+#include "nw4r/snd/snd_MoveValue.h"
 
 /*******************************************************************************
  * types
@@ -170,7 +170,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		static void ChannelCallbackFunc(Channel *dropChannel,
 		                                Channel::ChannelCallbackStatus status,
-		                                register_t userData);
+		                                u32 userData);
 
 	// static members
 	public:

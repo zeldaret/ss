@@ -1,4 +1,4 @@
-#include "nw4r/snd/SeqSound.h"
+#include "nw4r/snd/snd_SeqSound.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -10,24 +10,20 @@
  */
 
 #include <decomp.h>
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/BasicSound.h"
-#include "nw4r/snd/PlayerHeap.h"
-#include "nw4r/snd/SeqFile.h"
-#include "nw4r/snd/SeqPlayer.h"
-#include "nw4r/snd/SeqSoundHandle.h"
-#include "nw4r/snd/SoundInstanceManager.h"
-#include "nw4r/snd/TaskManager.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_PlayerHeap.h"
+#include "nw4r/snd/snd_SeqFile.h"
+#include "nw4r/snd/snd_SeqPlayer.h"
+#include "nw4r/snd/snd_SeqSoundHandle.h"
+#include "nw4r/snd/snd_SoundInstanceManager.h"
+#include "nw4r/snd/snd_TaskManager.h"
 
-#include "nw4r/ut/FileStream.h"
-#include "nw4r/ut/RuntimeTypeInfo.h"
+#include "nw4r/ut/ut_FileStream.h"
+#include "nw4r/ut/ut_RuntimeTypeInfo.h"
 
-#if 0
-#include <revolution/DVD/dvd.h> // DVD_ECANCELED
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/DVD/dvd.h> // DVD_ECANCELED
 
 #include "nw4r/NW4RAssert.hpp"
 

@@ -1,4 +1,4 @@
-#include "nw4r/snd/TaskThread.h"
+#include "nw4r/snd/snd_TaskThread.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,15 +9,11 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/TaskManager.h"
+#include "nw4r/snd/snd_TaskManager.h"
 
-#if 0
-#include <revolution/OS/OSThread.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/OS/OSThread.h>
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -54,7 +50,7 @@ bool TaskThread::Create(s32 priority, void *stack, u32 stackSize)
 	if (!result)
 		return false;
 
-	mStackEnd	= static_cast<byte4_t *>(stack);
+	mStackEnd	= static_cast<u32 *>(stack);
 	mFinishFlag	= false;
 	mCreateFlag	= true;
 

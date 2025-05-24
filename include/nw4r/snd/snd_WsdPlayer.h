@@ -5,14 +5,14 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "BasicPlayer.h"
-#include "Channel.h"
-#include "DisposeCallbackManager.h" // DisposeCallback
-#include "Lfo.h" // LfoParam
-#include "SoundThread.h"
-#include "WaveFile.h"
+#include "nw4r/snd/snd_BasicPlayer.h"
+#include "nw4r/snd/snd_Channel.h"
+#include "nw4r/snd/snd_DisposeCallbackManager.h" // DisposeCallback
+#include "nw4r/snd/snd_Lfo.h" // LfoParam
+#include "nw4r/snd/snd_SoundThread.h"
+#include "nw4r/snd/snd_WaveFile.h"
 
 /*******************************************************************************
  * classes and functions
@@ -51,7 +51,7 @@ namespace nw4r { namespace snd { namespace detail
 			                              WaveInfo *waveData,
 			                              void const *waveSoundData, int index,
 			                              int noteIndex,
-			                              register_t userData) const = 0;
+			                              u32 userData) const = 0;
 
 		// members
 		private:
@@ -84,7 +84,7 @@ namespace nw4r { namespace snd { namespace detail
 		bool Prepare(void const *waveSoundBase, int index,
 		             StartOffsetType startOffsetType, int startOffset,
 		             int voiceOutCount, WsdCallback const *callback,
-		             register_t callbackData);
+		             u32 callbackData);
 
 		f32 GetPanRange() const { return mPanRange; }
 		int GetVoiceOutCount() const { return mVoiceOutCount; }
@@ -103,14 +103,14 @@ namespace nw4r { namespace snd { namespace detail
 	private:
 		static void ChannelCallbackFunc(Channel *dropChannel,
 		                                Channel::ChannelCallbackStatus status,
-		                                register_t userData);
+		                                u32 userData);
 
 		void InitParam(int voiceOutCount, WsdCallback const *callback,
-		               register_t callbackData);
+		               u32 callbackData);
 
 		void Update();
 
-		bool StartChannel(WsdCallback const *callback, register_t callbackData);
+		bool StartChannel(WsdCallback const *callback, u32 callbackData);
 		void UpdateChannel();
 		void CloseChannel();
 
@@ -138,7 +138,7 @@ namespace nw4r { namespace snd { namespace detail
 		u8				mPriority;					// size 0x001, offset 0x0cc
 		/* 3 bytes padding */
 		WsdCallback		const *mCallback;			// size 0x004, offset 0x0d0
-		register_t		mCallbackData;				// size 0x004, offset 0x0d4
+		u32		mCallbackData;				// size 0x004, offset 0x0d4
 		void			const *mWsdData;			// size 0x004, offset 0x0d8
 		int				mWsdIndex;					// size 0x004, offset 0x0dc
 		StartOffsetType	mStartOffsetType;			// size 0x004, offset 0x0e0

@@ -1,4 +1,4 @@
-#include "nw4r/snd/WsdFile.h"
+#include "nw4r/snd/snd_WsdFile.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,15 +9,14 @@
  * headers
  */
 
-#include <macros.h> // NW4R_FILE_VERSION
-#include <types.h> // nullptr
+#include "common.h" // nullptr
 
-#include "nw4r/snd/Util.h" // Util::GetDataRefAddress0
-#include "nw4r/snd/WaveFile.h"
-#include "nw4r/snd/WaveArchive.h" // WaveArchiveReader
+#include "nw4r/snd/snd_Util.h" // Util::GetDataRefAddress0
+#include "nw4r/snd/snd_WaveFile.h"
+#include "nw4r/snd/snd_WaveArchive.h" // WaveArchiveReader
 
-#include "nw4r/ut/binaryFileFormat.h" // ut::BinaryFileHeader
-#include "nw4r/ut/inlines.h" // ut::AddOffsetToPtr
+#include "nw4r/ut/ut_binaryFileFormat.h" // ut::BinaryFileHeader
+#include "nw4r/ut/ut_algorithm.h" // ut::AddOffsetToPtr
 
 #include "nw4r/NW4RAssert.hpp"
 

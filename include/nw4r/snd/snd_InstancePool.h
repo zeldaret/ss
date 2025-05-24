@@ -7,7 +7,7 @@
 
 #include <new>
 
-#include <types.h>
+#include "common.h"
 
 /*******************************************************************************
  * classes and functions

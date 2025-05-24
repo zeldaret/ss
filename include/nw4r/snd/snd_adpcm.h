@@ -5,20 +5,16 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#if 0
-#include <revolution/AX/AXVPB.h> // AXPBADPCM
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/AX/AXVPB.h> // AXPBADPCM
 
 /*******************************************************************************
  * types
  */
 
-namespace nw4r { namespace snd { namespace detail
-{
+namespace nw4r { namespace snd { // namespace detail
+// {
 	// Why are these just the AX types
 
 	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x291b3
@@ -30,7 +26,8 @@ namespace nw4r { namespace snd { namespace detail
 		u16	yn1;			// size 0x02, offset 0x24
 		u16	yn2;			// size 0x02, offset 0x26
 	}; // size 0x28
-
+namespace detail
+{
 	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x29290
 	struct AdpcmLoopParam // AXPBADPCMLOOP
 	{
@@ -38,7 +35,8 @@ namespace nw4r { namespace snd { namespace detail
 		u16	loop_yn1;			// size 0x02, offset 0x02
 		u16	loop_yn2;			// size 0x02, offset 0x04
 	}; // size 0x06
-}}} // namespace nw4r::snd::detail
+}
+}} // namespace nw4r::snd // ::detail
 
 /*******************************************************************************
  * classes and functions

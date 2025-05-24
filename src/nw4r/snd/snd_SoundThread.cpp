@@ -1,4 +1,4 @@
-#include "nw4r/snd/SoundThread.h"
+#include "nw4r/snd/snd_SoundThread.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -10,25 +10,20 @@
  */
 
 #include <decomp.h>
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/AxManager.h"
-#include "nw4r/snd/AxVoiceManager.h"
-#include "nw4r/snd/Channel.h" // ChannelManager
-#include "nw4r/snd/Util.h" // Util::CalcRandom
-#include "nw4r/snd/VoiceManager.h"
+#include "nw4r/snd/snd_AxManager.h"
+#include "nw4r/snd/snd_AxVoiceManager.h"
+#include "nw4r/snd/snd_Channel.h" // ChannelManager
+#include "nw4r/snd/snd_Util.h" // Util::CalcRandom
+#include "nw4r/snd/snd_VoiceManager.h"
 
-#include "nw4r/ut/Lock.h" // ut::detail::AutoLock
+#include "nw4r/ut/ut_Lock.h" // ut::detail::AutoLock
 
-#if 0
-#include <revolution/OS/OSMessage.h>
-#include <revolution/OS/OSMutex.h>
-#include <revolution/OS/OSThread.h>
-#include <revolution/OS/OSTime.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/OS/OSMessage.h>
+#include <rvl/OS/OSMutex.h>
+#include <rvl/OS/OSThread.h>
+#include <rvl/OS/OSTime.h>
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -65,7 +60,7 @@ bool SoundThread::Create(s32 priority, void *stack, u32 stackSize)
 		return true;
 
 	mCreateFlag = true;
-	mStackEnd = static_cast<byte4_t *>(stack);
+	mStackEnd = static_cast<u32 *>(stack);
 
 	BOOL result = OSCreateThread(&mThread, &SoundThreadFunc, &GetInstance(),
 	                             static_cast<byte_t *>(stack) + stackSize,
@@ -162,7 +157,7 @@ void SoundThread::SoundThreadProc()
 	{
 		OSReceiveMessage(&mMsgQueue, &message, OS_MESSAGE_FLAG_PERSISTENT);
 
-		if (reinterpret_cast<register_t>(message) == MESSAGE_AX_CALLBACK)
+		if (reinterpret_cast<u32>(message) == MESSAGE_AX_CALLBACK)
 		{
 			ut::detail::AutoLock<OSMutex> lock(mMutex);
 
@@ -201,7 +196,7 @@ void SoundThread::SoundThreadProc()
 				curItr->at_0x10();
 			}
 		}
-		else if (reinterpret_cast<register_t>(message) == MESSAGE_SHUTDOWN)
+		else if (reinterpret_cast<u32>(message) == MESSAGE_SHUTDOWN)
 		{
 			break;
 		}

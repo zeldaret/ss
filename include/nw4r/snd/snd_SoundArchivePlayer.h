@@ -5,27 +5,28 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
 // WARNING: DO NOT REORDER these #include directives, data pooling depends on it
 
 // clang-format off
-#include "BasicSound.h"
-#include "DisposeCallbackManager.h" // detail::DisposeCallback
-#include "MmlParser.h"
-#include "NoteOnCallback.h" // This needs to be
-#include "MmlSeqTrackAllocator.h" // before this
-#include "SeqPlayer.h"
-#include "SeqSound.h"
-#include "SoundArchive.h"
-#include "SoundInstanceManager.h"
-#include "WsdPlayer.h" // and this needs to be
-#include "SoundStartable.h" // before this
-#include "StrmChannel.h" // detail::StrmBufferPool
-#include "StrmSound.h"
-#include "Util.h" // Util::Table
-#include "WaveFile.h"
-#include "WaveSound.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_DisposeCallbackManager.h" // detail::DisposeCallback
+#include "nw4r/snd/snd_MmlParser.h"
+#include "nw4r/snd/snd_NoteOnCallback.h" // This needs to be
+#include "nw4r/snd/snd_MmlSeqTrackAllocator.h" // before this
+#include "nw4r/snd/snd_SeqPlayer.h"
+#include "nw4r/snd/snd_SeqSound.h"
+#include "nw4r/snd/snd_SoundArchive.h"
+#include "nw4r/snd/snd_SoundInstanceManager.h"
+#include "nw4r/snd/snd_SoundMemoryAllocatable.h"
+#include "nw4r/snd/snd_WsdPlayer.h" // and this needs to be
+#include "nw4r/snd/snd_SoundStartable.h" // before this
+#include "nw4r/snd/snd_StrmChannel.h" // detail::StrmBufferPool
+#include "nw4r/snd/snd_StrmSound.h"
+#include "nw4r/snd/snd_Util.h" // Util::Table
+#include "nw4r/snd/snd_WaveFile.h"
+#include "nw4r/snd/snd_WaveSound.h"
 // clang-format on
 
 #include <nw4r/NW4RAssert.hpp>
@@ -128,7 +129,7 @@ namespace nw4r { namespace snd
 			                              detail::WaveInfo *waveData,
 			                              void const *waveSoundData, int index,
 			                              int noteIndex,
-			                              register_t userData) const;
+			                              u32 userData) const;
 
 		// members
 		private:
@@ -164,6 +165,16 @@ namespace nw4r { namespace snd
 		bool Setup(SoundArchive const *arc, void *buffer, u32 size,
 		           void *strmBuffer, u32 strmBufferSize);
 		void Shutdown();
+
+		bool LoadGroup(u32 id, SoundMemoryAllocatable *pAllocatable, u32 blockSize);
+		bool LoadGroup(const char *pLabel, SoundMemoryAllocatable *pAllocatable, u32 blockSize);
+
+		bool LoadGroup(int id, SoundMemoryAllocatable *pAllocatable, u32 blockSize) {
+			return LoadGroup(static_cast<u32>(id), pAllocatable, blockSize);
+		}
+		bool LoadGroup(unsigned int id, SoundMemoryAllocatable *pAllocatable, u32 blockSize) {
+			return LoadGroup(static_cast<u32>(id), pAllocatable, blockSize);
+		}
 
 		SoundArchive const &GetSoundArchive() const;
 		u32 GetSoundPlayerCount() const { return mSoundPlayerCount; }

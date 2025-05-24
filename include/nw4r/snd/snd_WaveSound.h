@@ -5,13 +5,13 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "BasicSound.h"
-#include "debug.h"
-#include "WsdPlayer.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_debug.h"
+#include "nw4r/snd/snd_WsdPlayer.h"
 
-#include "../ut/LinkList.h"
+#include "nw4r/ut/ut_LinkList.h"
 
 /*******************************************************************************
  * types
@@ -64,7 +64,7 @@ namespace nw4r { namespace snd { namespace detail
 		bool Prepare(void const *waveSoundBase, s32 waveSoundOffset,
 		             WsdPlayer::StartOffsetType startOffsetType, s32 offset,
 		             WsdPlayer::WsdCallback const *callback,
-		             register_t callbackData);
+		             u32 callbackData);
 
 		void SetChannelPriority(int priority);
 		void SetReleasePriorityFix(bool flag);

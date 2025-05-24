@@ -5,12 +5,11 @@
  * headers
  */
 
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "Util.h"
+#include "nw4r/snd/snd_Util.h"
 
-#include "../ut/binaryFileFormat.h"
+#include "nw4r/ut/ut_binaryFileFormat.h"
 
 /*******************************************************************************
  * types
@@ -49,11 +48,11 @@ namespace nw4r { namespace snd { namespace detail
 			u8					fxSendB;			// size 0x01, offset 0x07
 			u8					fxSendC;			// size 0x01, offset 0x08
 			u8					mainSend;			// size 0x01, offset 0x09
-			byte1_t				padding[2];
+			u8				padding[2];
 			// TODO: template parameters
 			Util::DataRef<void>	graphEnvTablevRef;	// size 0x08, offset 0x0c
 			Util::DataRef<void>	randomizerTableRef;	// size 0x08, offset 0x14
-			byte4_t				reserved;
+			u32				reserved;
 		}; // size 0x20
 
 		struct TrackInfo;
@@ -69,7 +68,7 @@ namespace nw4r { namespace snd { namespace detail
 			u8					sustain;			// size 0x01, offset 0x06
 			u8					release;			// size 0x01, offset 0x07
 			u8					hold;				// size 0x01, offset 0x08
-			byte1_t				padding[3];
+			u8				padding[3];
 			u8					originalKey;		// size 0x01, offset 0x0c
 			u8					volume;				// size 0x01, offset 0x0d
 			u8					pan;				// size 0x01, offset 0x0e
@@ -79,7 +78,7 @@ namespace nw4r { namespace snd { namespace detail
 			Util::DataRef<void>	lfoTableRef;		// size 0x08, offset 0x14
 			Util::DataRef<void>	graphEnvTablevRef;	// size 0x08, offset 0x1c
 			Util::DataRef<void>	randomizerTableRef;	// size 0x08, offset 0x24
-			byte4_t				reserved;
+			u32				reserved;
 		}; // size 0x30
 
 		typedef Util::Table<Util::DataRef<NoteInfo> > NoteInfoTable;
@@ -92,7 +91,7 @@ namespace nw4r { namespace snd { namespace detail
 			Util::DataRef<NoteInfoTable>	refNoteTable;	// size 0x08, offset 0x10
 		}; // size 0x18
 
-		static byte4_t const SIGNATURE_DATA_BLOCK =
+		static u32 const SIGNATURE_DATA_BLOCK =
 			NW4R_FOUR_BYTE('D', 'A', 'T', 'A');
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2e4ec8
@@ -105,7 +104,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		/* WaveBlock */
 
-		static byte4_t const SIGNATURE_WAVE_BLOCK =
+		static u32 const SIGNATURE_WAVE_BLOCK =
 			NW4R_FOUR_BYTE('W', 'A', 'V', 'E');
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2e4f87
@@ -128,7 +127,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		/* WsdFile */
 
-		static byte4_t const SIGNATURE_FILE =
+		static u32 const SIGNATURE_FILE =
 			NW4R_FOUR_BYTE('R', 'W', 'S', 'D');
 		static int const FILE_VERSION = NW4R_FILE_VERSION(1, 3);
 	}; // "namespace" WsdFile

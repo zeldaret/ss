@@ -5,7 +5,7 @@
  * headers
  */
 
-#include "SeqTrack.h"
+#include "nw4r/snd/snd_SeqTrack.h"
 
 /*******************************************************************************
  * classes and functions

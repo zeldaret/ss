@@ -11,11 +11,13 @@ extern "C" {
 // Each command takes up two bytes
 #define AX_CL_SIZE (AX_CL_MAX_CMD * sizeof(u16))
 
-typedef enum {
-    AX_OUTPUT_STEREO,
-    AX_OUTPUT_SURROUND,
-    AX_OUTPUT_DPL2
-} AXOutputMode;
+typedef u32 AXCLMode;
+enum AXCLMode_et
+{
+	AX_CL_MODE_STEREO,
+	AX_CL_MODE_SURROUND,
+	AX_CL_MODE_DPL2,
+};
 
 extern u32 __AXClMode;
 

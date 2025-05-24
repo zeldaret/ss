@@ -5,9 +5,9 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "MmlSeqTrack.h"
+#include "nw4r/snd/snd_MmlSeqTrack.h"
 
 /*******************************************************************************
  * classes and functions
@@ -165,12 +165,12 @@ namespace nw4r { namespace snd { namespace detail
 		}
 
 		static u32 ParseAllocTrack(void const *baseAddress, u32 seqOffset,
-		                           byte4_t *allocTrack);
+		                           u32 *allocTrack);
 
 	private:
-		byte1_t ReadByte(byte_t const **ptr) const { return *(*ptr)++; }
-		byte2_t Read16(byte_t const **ptr) const;
-		byte4_t Read24(byte_t const **ptr) const;
+		u8 ReadByte(byte_t const **ptr) const { return *(*ptr)++; }
+		u16 Read16(byte_t const **ptr) const;
+		u32 Read24(byte_t const **ptr) const;
 		s32 ReadVar(byte_t const **ptr) const;
 		s32 ReadArg(byte_t const **ptr, SeqPlayer *player, SeqTrack *track,
 		            SeqArgType argType) const;

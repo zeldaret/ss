@@ -5,13 +5,9 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#if 0
-#include <revolution/OS/OSThread.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/OS/OSThread.h>
 
 /*******************************************************************************
  * classes and functions
@@ -40,7 +36,7 @@ namespace nw4r { namespace snd { namespace detail
 	// members
 	private:
 		OSThread	mThread;		// size 0x318, offset 0x000
-		byte4_t		*mStackEnd;		// size 0x004, offset 0x318
+		u32		*mStackEnd;		// size 0x004, offset 0x318
 		bool		mFinishFlag;	// size 0x001, offset 0x31c // TODO: volatile? (see ThreadProc)
 		bool		mCreateFlag;	// size 0x001, offset 0x31d
 		/* 2 bytes padding */

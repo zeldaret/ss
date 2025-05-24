@@ -1,4 +1,4 @@
-#include "nw4r/snd/AxVoice.h"
+#include "nw4r/snd/snd_AxVoice.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -12,26 +12,22 @@
 #include <cstdarg>
 #include <cstring>
 
-#include <macros.h> // BOOLIFY_TERNARY
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/adpcm.h" // DecodeDspAdpcm
-#include "nw4r/snd/AxManager.h"
-#include "nw4r/snd/AxVoiceManager.h"
-#include "nw4r/snd/BiquadFilterCallback.h"
-#include "nw4r/snd/global.h"
-#include "nw4r/snd/Util.h" // Util::GetRemoteFilterCoefs
+#include "nw4r/snd/snd_adpcm.h" // DecodeDspAdpcm
+#include "nw4r/snd/snd_AxManager.h"
+#include "nw4r/snd/snd_AxVoiceManager.h"
+#include "nw4r/snd/snd_BiquadFilterCallback.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_Util.h" // Util::GetRemoteFilterCoefs
 
-#include "nw4r/ut/inlines.h"
-#include "nw4r/ut/Lock.h" // ut::AutoInterruptLock
+#include "nw4r/ut/ut_algorithm.h"
+#include "nw4r/ut/ut_Lock.h" // ut::AutoInterruptLock
 
-#if 0
-#include <revolution/AX/AX.h>
-#include <revolution/AX/AXVPB.h>
-#include <revolution/OS/OSAddress.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/AX/AX.h>
+#include <rvl/AX/AXCL.h>
+#include <rvl/AX/AXVPB.h>
+#include <rvl/OS/OSAddress.h>
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -871,14 +867,14 @@ void AxVoice::CalcOffsetAdpcmParam(u16 *outPredScale, u16 *outYn1, u16 *outYn2,
 		if (currentPos % AX_ADPCM_NIBBLES_PER_FRAME == 0)
 		{
 			byte_t byte = *static_cast<byte_t *>(OSPhysicalToCached(
-				reinterpret_cast<void *>(currentPos / sizeof(u16))));
+				currentPos / sizeof(u16)));
 
 			adpcm.pred_scale = byte;
 			currentPos += sizeof(u16);
 		}
 
 		byte_t byte = *static_cast<byte_t *>(OSPhysicalToCached(
-			reinterpret_cast<void *>(currentPos / sizeof(u16))));
+			currentPos / sizeof(u16)));
 
 		u8 nibble;
 		if (currentPos % sizeof(u16) != 0)
@@ -1016,7 +1012,7 @@ void AxVoiceParamBlock::SetVoiceMix(AXPBMIX const &mix, bool immediatelySync)
 	u16 *src = const_cast<u16 *>(reinterpret_cast<u16 const *>(&mix));
 	u16 *dst = reinterpret_cast<u16 *>(&mVpb->pb.mix);
 
-	byte4_t mixerCtrl = 0;
+	u32 mixerCtrl = 0;
 
 	if ((*dst++ = *src++)) // vL
 		mixerCtrl |= AX_MIXER_CTRL_L;

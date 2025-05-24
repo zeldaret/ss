@@ -5,7 +5,7 @@
  * headers
  */
 
-#include "SeqPlayer.h"
+#include "nw4r/snd/snd_SeqPlayer.h"
 
 /*******************************************************************************
  * classes and functions

@@ -5,14 +5,13 @@
  * headers
  */
 
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "WaveFile.h"
+#include "nw4r/snd/snd_WaveFile.h"
 
-#include "Util.h"
+#include "nw4r/snd/snd_Util.h"
 
-#include "../ut/binaryFileFormat.h"
+#include "nw4r/ut/ut_binaryFileFormat.h"
 
 /*******************************************************************************
  * types
@@ -57,13 +56,13 @@ namespace nw4r { namespace snd { namespace detail
 			u8					originalKey;			// size 0x01, offset 0x0c
 			u8					volume;					// size 0x01, offset 0x0d
 			u8					pan;					// size 0x01, offset 0x0e
-			byte1_t				padding2; // 2?
+			u8				padding2; // 2?
 			f32					tune;					// size 0x04, offset 0x10
 			// TODO: template parameters
 			Util::DataRef<void>	lfoTableRef;			// size 0x08, offset 0x14
 			Util::DataRef<void>	graphEnvTablevRef;		// size 0x08, offset 0x1c
 			Util::DataRef<void>	randomizerTableRef;		// size 0x08, offset 0x24
-			byte4_t				reserved;
+			u32				reserved;
 		}; // size 0x30
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2b2114
@@ -78,14 +77,14 @@ namespace nw4r { namespace snd { namespace detail
 		{
 			u8		min;		// size 0x01, offset 0x00
 			u8		max;		// size 0x01, offset 0x01
-			byte2_t	reserved;
+			u16	reserved;
 			byte_t	ref[];		// flexible,  offset 0x04 (unit size 0x01)
 		}; // size 0x04
 
 		typedef Util::DataRef<void, InstParam, RangeTable, IndexTable>
 			DataRegion;
 
-		static byte4_t const SIGNATURE_DATA_BLOCK =
+		static u32 const SIGNATURE_DATA_BLOCK =
 			NW4R_FOUR_BYTE('D', 'A', 'T', 'A');
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2b006b
@@ -97,7 +96,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		/* WaveBlock */
 
-		static byte4_t const SIGNATURE_WAVE_BLOCK =
+		static u32 const SIGNATURE_WAVE_BLOCK =
 			NW4R_FOUR_BYTE('W', 'A', 'V', 'E');
 		typedef Util::DataRef<WaveFile::WaveInfo> WaveRegion;
 
@@ -110,7 +109,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		/* BankFile */
 
-		static byte4_t const SIGNATURE_FILE =
+		static u32 const SIGNATURE_FILE =
 			NW4R_FOUR_BYTE('R', 'B', 'N', 'K');
 		static int const FILE_VERSION = NW4R_FILE_VERSION(1, 2);
 	}; // "namespace" BankFile

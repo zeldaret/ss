@@ -1,4 +1,4 @@
-#include "nw4r/snd/StrmSound.h"
+#include "nw4r/snd/snd_StrmSound.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,16 +9,15 @@
  * headers
  */
 
-#include <macros.h> // ARRAY_LENGTH
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/BasicSound.h"
-#include "nw4r/snd/SoundInstanceManager.h"
-#include "nw4r/snd/StrmPlayer.h"
-#include "nw4r/snd/StrmSoundHandle.h"
-#include "nw4r/snd/MoveValue.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_SoundInstanceManager.h"
+#include "nw4r/snd/snd_StrmPlayer.h"
+#include "nw4r/snd/snd_StrmSoundHandle.h"
+#include "nw4r/snd/snd_MoveValue.h"
 
-#include "nw4r/ut/RuntimeTypeInfo.h"
+#include "nw4r/ut/ut_RuntimeTypeInfo.h"
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -69,7 +68,7 @@ void StrmSound::InitParam()
 
 StrmPlayer::SetupResult StrmSound::Setup(StrmBufferPool *bufferPool,
                                          int allocChannelCount,
-                                         byte2_t allocTrackFlag)
+                                         u16 allocTrackFlag)
 {
 	NW4RAssertPointerNonnull_Line(90, bufferPool);
 

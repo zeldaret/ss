@@ -5,8 +5,8 @@
  * headers
  */
 
-#include "../ut/inlines.h" // ut::NonCopyable
-#include "../ut/LinkList.h"
+#include "nw4r/ut/ut_algorithm.h" // ut::NonCopyable
+#include "nw4r/ut/ut_LinkList.h"
 
 /*******************************************************************************
  * classes and functions

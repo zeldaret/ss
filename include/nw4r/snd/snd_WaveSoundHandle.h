@@ -5,9 +5,9 @@
  * headers
  */
 
-#include <types.h> // nullptr
+#include "common.h" // nullptr
 
-#include "nw4r/ut/inlines.h" // ut::NonCopyable
+#include "nw4r/ut/ut_NonCopyable.h" // ut::NonCopyable
 
 /*******************************************************************************
  * types

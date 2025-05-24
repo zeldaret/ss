@@ -1,16 +1,16 @@
-#include "nw4r/snd/WaveArchive.h"
+#include "nw4r/snd/snd_WaveArchive.h"
 
 /*******************************************************************************
  * headers
  */
 
-#include <types.h> // nullptr
+#include "common.h" // nullptr
 
-#include "nw4r/snd/Util.h"
-#include "nw4r/snd/WaveFile.h"
+#include "nw4r/snd/snd_Util.h"
+#include "nw4r/snd/snd_WaveFile.h"
 
 #include "nw4r/ut/binaryFileFormat.h" // ut::BinaryFileHeader
-#include "nw4r/ut/inlines.h" // ut::AddOffsetToPtr
+#include "nw4r/ut/ut_algorithm.h" // ut::AddOffsetToPtr
 
 #include <nw4r/NW4RAssert.hpp>
 

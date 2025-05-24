@@ -1,4 +1,4 @@
-#include "nw4r/snd/MmlSeqTrackAllocator.h"
+#include "nw4r/snd/snd_MmlSeqTrackAllocator.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,11 +9,11 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/InstancePool.h"
-#include "nw4r/snd/MmlSeqTrack.h"
-#include "nw4r/snd/SeqTrack.h"
+#include "nw4r/snd/snd_InstancePool.h"
+#include "nw4r/snd/snd_MmlSeqTrack.h"
+#include "nw4r/snd/snd_SeqTrack.h"
 
 #include <nw4r/NW4RAssert.hpp>
 

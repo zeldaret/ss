@@ -5,7 +5,7 @@
  * headers
  */
 
-#include "BankFile.h" // BankFileReader
+#include "nw4r/snd/snd_BankFile.h" // BankFileReader
 
 #include "nw4r/NW4RAssert.hpp"
 

@@ -5,12 +5,11 @@
  * headers
  */
 
-#include <macros.h> // ATTR_UNUSED
-#include <types.h>
+#include "common.h"
 
-#include "BasicPlayer.h"
-#include "DisposeCallbackManager.h" // DisposeCallback
-#include "SoundThread.h"
+#include "nw4r/snd/snd_BasicPlayer.h"
+#include "nw4r/snd/snd_DisposeCallbackManager.h" // DisposeCallback
+#include "nw4r/snd/snd_SoundThread.h"
 
 /*******************************************************************************
  * types

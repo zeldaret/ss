@@ -5,11 +5,26 @@
  * headers
  */
 
-#include <types.h> // f32
+#include "common.h" // f32
 
 /*******************************************************************************
  * types
  */
+
+#if defined(__cplusplus)
+
+// Macro for for loops using NW4R iterators
+# define NW4R_RANGE_FOR(it_, list_)	\
+	for (decltype((list_).GetBeginIter()) (it_) = (list_).GetBeginIter(); (it_) != (list_).GetEndIter(); ++(it_))
+
+/* This macro specifically is for the for loops which declare an
+ * Iterator currIt = it++; in the body, so that it does not get incremented
+ * twice.
+ */
+# define NW4R_RANGE_FOR_NO_AUTO_INC(it_, list_)	\
+	for (decltype((list_).GetBeginIter()) (it_) = (list_).GetBeginIter(); (it_) != (list_).GetEndIter();)
+
+#endif // defined(__cplusplus)
 
 namespace nw4r { namespace snd
 {

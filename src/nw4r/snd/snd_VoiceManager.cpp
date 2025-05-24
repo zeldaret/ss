@@ -1,4 +1,4 @@
-#include "nw4r/snd/VoiceManager.h"
+#include "nw4r/snd/snd_VoiceManager.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -11,13 +11,12 @@
 
 #include <new>
 
-#include <macros.h> // NW4R_RANGE_FOR_NO_AUTO_INC
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/DisposeCallbackManager.h"
-#include "nw4r/snd/Voice.h"
+#include "nw4r/snd/snd_DisposeCallbackManager.h"
+#include "nw4r/snd/snd_Voice.h"
 
-#include "nw4r/ut/Lock.h" // ut::AutoInterruptLock
+#include "nw4r/ut/ut_Lock.h" // ut::AutoInterruptLock
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -225,7 +224,7 @@ void VoiceManager::UpdateEachVoicePriority(
 	}
 }
 
-void VoiceManager::UpdateAllVoicesSync(byte4_t syncFlag)
+void VoiceManager::UpdateAllVoicesSync(u32 syncFlag)
 {
 	ut::AutoInterruptLock lock;
 

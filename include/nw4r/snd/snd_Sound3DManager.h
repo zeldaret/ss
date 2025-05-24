@@ -10,12 +10,12 @@
 namespace nw4r {
 namespace snd {
 
-class Sound3DManager : public detail::BasicSound::AmbientParamUpdateCallback,
-                       public detail::BasicSound::AmbientArgAllocaterCallback {
+class Sound3DManager : public detail::BasicSound::AmbientInfo::AmbientParamUpdateCallback,
+                       public detail::BasicSound::AmbientInfo::AmbientArgAllocaterCallback {
 public:
     struct Sound3DActorParam {
         u32 userParam;                         // at 0x0
-        SoundArchive::Sound3DParam soundParam; // at 0x4
+        SoundParam soundParam; // at 0x4
         math::VEC3 position;                   // at 0xC
 
         Sound3DActorParam();

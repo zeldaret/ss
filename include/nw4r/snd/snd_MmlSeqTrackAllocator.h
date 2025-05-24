@@ -5,10 +5,10 @@
  * headers
  */
 
-#include <types.h> // u32
+#include "common.h" // u32
 
-#include "InstancePool.h"
-#include "SeqTrackAllocator.h"
+#include "nw4r/snd/snd_InstancePool.h"
+#include "nw4r/snd/snd_SeqTrackAllocator.h"
 
 /*******************************************************************************
  * classes and functions

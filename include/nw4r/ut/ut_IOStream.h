@@ -10,6 +10,7 @@ class IOStream {
 public:
     NW4R_UT_RTTI_DECL(IOStream);
 
+    typedef void StreamCallback(s32 result, IOStream *stream, void *arg);
     typedef void (*AsyncCallback)(s32 result, IOStream *stream, void *arg);
 
     IOStream() : mIsOpen(false), mCallback(NULL), mCallbackArg(NULL) {}

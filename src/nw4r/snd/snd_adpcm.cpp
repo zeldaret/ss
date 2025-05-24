@@ -1,4 +1,4 @@
-#include "nw4r/snd/adpcm.h"
+#include "nw4r/snd/snd_adpcm.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -11,13 +11,9 @@
 
 #include <climits>
 
-#include <types.h>
+#include "common.h"
 
-#if 0
-#include <revolution/AX/AXVPB.h> // AXPBADPCM
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/AX/AXVPB.h> // AXPBADPCM
 
 /*******************************************************************************
  * functions

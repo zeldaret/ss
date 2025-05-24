@@ -1,4 +1,4 @@
-#include "nw4r/snd/InstancePool.h"
+#include "nw4r/snd/snd_InstancePool.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,10 +9,10 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/ut/Lock.h" // ut::AutoInterruptLock
-#include "nw4r/ut/inlines.h" // ut::RoundUp
+#include "nw4r/ut/ut_Lock.h" // ut::AutoInterruptLock
+#include "nw4r/ut/ut_algorithm.h" // ut::RoundUp
 
 #include "nw4r/NW4RAssert.hpp"
 

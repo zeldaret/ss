@@ -5,14 +5,14 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "adpcm.h" // AdpcmLoopParam
-#include "AxVoice.h"
-#include "global.h"
-#include "DisposeCallbackManager.h" // DisposeCallback
+#include "nw4r/snd/snd_adpcm.h" // AdpcmLoopParam
+#include "nw4r/snd/snd_AxVoice.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_DisposeCallbackManager.h" // DisposeCallback
 
-#include "../ut/LinkList.h"
+#include "nw4r/ut/ut_LinkList.h"
 
 /*******************************************************************************
  * types
@@ -204,7 +204,7 @@ namespace nw4r { namespace snd { namespace detail
 		bool				mPauseFlag;						// size 0x01, offset 0x9f
 		bool				mPausingFlag;					// size 0x01, offset 0xa0
 		bool				mVoiceOutParamPitchDisableFlag;	// size 0x01, offset 0xa1
-		byte2_t				mSyncFlag;						// size 0x02, offset 0xa2
+		u16				mSyncFlag;						// size 0x02, offset 0xa2
 		u8					mRemoteFilter;					// size 0x01, offset 0xa4
 		u8					mBiquadType;					// size 0x01, offset 0xa5
 		/* 2 bytes padding */

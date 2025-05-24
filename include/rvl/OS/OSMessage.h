@@ -11,9 +11,13 @@ extern "C" {
 // General-purpose typedef
 typedef void *OSMessage;
 
-typedef enum {
-    OS_MSG_PERSISTENT = (1 << 0)
-} OSMessageFlags;
+typedef u32 OSMessageFlags;
+enum OSMessageFlags_et
+{
+	OS_MESSAGE_NO_FLAGS			= 0,
+
+	OS_MESSAGE_FLAG_PERSISTENT	= 1 << 0,
+};
 
 typedef struct OSMessageQueue {
     OSThreadQueue sendQueue; // at 0x0

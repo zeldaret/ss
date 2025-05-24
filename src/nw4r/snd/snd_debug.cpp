@@ -1,10 +1,10 @@
-#include "nw4r/snd/debug.h"
+#include "nw4r/snd/snd_debug.h"
 
 /*******************************************************************************
  * headers
  */
 
-#include <types.h> // byte4_t
+#include "common.h" // u32
 
 #include <nw4r/NW4RAssert.hpp>
 
@@ -40,7 +40,7 @@ namespace nw4r { namespace snd { namespace
 
 namespace nw4r { namespace snd { namespace
 {
-	byte4_t GetWarningBitFlag(DebugWarningFlag warning);
+	u32 GetWarningBitFlag(DebugWarningFlag warning);
 }}} // namespace nw4r::snd::(unnamed)
 
 /*******************************************************************************
@@ -49,7 +49,7 @@ namespace nw4r { namespace snd { namespace
 
 namespace nw4r { namespace snd { namespace
 {
-	byte4_t gWarningFlag = DEBUG_WARNING_BIT_FLAG_NOT_ENOUGH_INSTANCE;
+	u32 gWarningFlag = DEBUG_WARNING_BIT_FLAG_NOT_ENOUGH_INSTANCE;
 }}} // namespace nw4r::snd::(unnamed)
 
 /*******************************************************************************
@@ -62,7 +62,7 @@ namespace detail {
 
 bool Debug_GetWarningFlag(DebugWarningFlag warning)
 {
-	byte4_t bitFlag = GetWarningBitFlag(warning);
+	u32 bitFlag = GetWarningBitFlag(warning);
 
 	return (gWarningFlag & bitFlag) == bitFlag;
 }
@@ -109,9 +109,9 @@ char const *Debug_GetSoundTypeString(DebugSoundType type)
 
 namespace {
 
-byte4_t GetWarningBitFlag(DebugWarningFlag warning)
+u32 GetWarningBitFlag(DebugWarningFlag warning)
 {
-	byte4_t bitFlag = 0;
+	u32 bitFlag = 0;
 
 	switch (warning)
 	{

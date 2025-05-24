@@ -7,19 +7,14 @@
 
 #include <new>
 
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "InstancePool.h"
+#include "nw4r/snd/snd_InstancePool.h"
 
-#include "../ut/Lock.h"
-#include "../ut/inlines.h"
+#include "nw4r/ut/ut_Lock.h"
+#include "nw4r/ut/ut_algorithm.h"
 
-#if 0
-#include <revolution/OS/OSMutex.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/OS/OSMutex.h>
 
 #include "nw4r/NW4RAssert.hpp"
 

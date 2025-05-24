@@ -234,7 +234,7 @@ void dCursorHitCheckLyt_c::countBoundings(nw4r::lyt::Pane *pane) {
         mNumBoundings++;
     }
 
-    for (nw4r::lyt::Pane::ChildList::RevIterator it = pane->GetChildList()->GetEndReverseIter();
+    for (nw4r::lyt::Pane::ChildList::ReverseIterator it = pane->GetChildList()->GetEndReverseIter();
          it != pane->GetChildList()->GetBeginIter(); ++it) {
         countBoundings(&*it);
     }
@@ -247,7 +247,7 @@ void dCursorHitCheckLyt_c::gatherBoundings(dCsCheckLyt_BoundingData **pEnd, nw4r
         (*pEnd)->mpPane = pane;
     }
 
-    for (nw4r::lyt::Pane::ChildList::RevIterator it = pane->GetChildList()->GetEndReverseIter();
+    for (nw4r::lyt::Pane::ChildList::ReverseIterator it = pane->GetChildList()->GetEndReverseIter();
          it != pane->GetChildList()->GetBeginIter(); ++it) {
         gatherBoundings(pEnd, &*it);
     }

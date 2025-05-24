@@ -1,4 +1,4 @@
-#include "nw4r/snd/StrmFile.h"
+#include "nw4r/snd/snd_StrmFile.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,17 +9,16 @@
  * headers
  */
 
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/adpcm.h"
-#include "nw4r/snd/global.h"
-#include "nw4r/snd/Util.h"
-#include "nw4r/snd/WaveFile.h"
+#include "nw4r/snd/snd_adpcm.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_Util.h"
+#include "nw4r/snd/snd_WaveFile.h"
 
-#include "nw4r/ut/binaryFileFormat.h"
-#include "nw4r/ut/FileStream.h"
-#include "nw4r/ut/inlines.h"
+#include "nw4r/ut/ut_binaryFileFormat.h"
+#include "nw4r/ut/ut_FileStream.h"
+#include "nw4r/ut/ut_algorithm.h"
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -342,7 +341,7 @@ bool StrmFileLoader::ReadAdpcBlockData(u16 *yn1, u16 *yn2, int blockIndex,
 	u32 readDataSize = channelCount * (sizeof(u16) * 2);
 	NW4RAssert_Line(499, readDataSize <= 32);
 
-	alignas(32) u16 buffer[2 * 8];
+	ALIGN_DECL(32) u16 buffer[2 * 8];
 
 	int readSize = mStream.Read(buffer, sizeof buffer);
 	if (readSize != 32u)

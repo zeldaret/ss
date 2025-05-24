@@ -5,14 +5,13 @@
  * headers
  */
 
-#include <macros.h> // NW4R_FOUR_BYTE
-#include <types.h>
+#include "common.h"
 
-#include "Channel.h"
-#include "global.h" // SampleFormat
-#include "adpcm.h"
+#include "nw4r/snd/snd_Channel.h"
+#include "nw4r/snd/snd_global.h" // SampleFormat
+#include "nw4r/snd/snd_adpcm.h"
 
-#include "../ut/binaryFileFormat.h"
+#include "nw4r/ut/ut_binaryFileFormat.h"
 
 /*******************************************************************************
  * types
@@ -45,12 +44,12 @@ namespace nw4r { namespace snd { namespace detail
 			u8		sampleRate24;			// size 0x01, offset 0x03
 			u16		sampleRate;				// size 0x02, offset 0x04
 			u8		dataLocationType;		// size 0x01, offset 0x06
-			byte1_t	padding;
+			u8	padding;
 			u32		loopStart;				// size 0x04, offset 0x08
 			u32		loopEnd;				// size 0x04, offset 0x0c
 			u32		channelInfoTableOffset;	// size 0x04, offset 0x10
 			u32		dataLocation;			// size 0x04, offset 0x14
-			byte4_t	reserved;
+			u32	reserved;
 		}; // size 0x1c
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2b2c9d
@@ -65,7 +64,7 @@ namespace nw4r { namespace snd { namespace detail
 			u32	reserved;
 		}; // size 0x1c
 
-		static byte4_t const SIGNATURE_INFO_BLOCK =
+		static u32 const SIGNATURE_INFO_BLOCK =
 			NW4R_FOUR_BYTE('I', 'N', 'F', 'O');
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x3087c5
@@ -86,7 +85,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		/* WaveFile */
 
-		static byte4_t const SIGNATURE_FILE =
+		static u32 const SIGNATURE_FILE =
 			NW4R_FOUR_BYTE('R', 'W', 'A', 'V');
 		static int const FILE_VERSION; // does it even have one?
 	}; // "namespace" WaveFile

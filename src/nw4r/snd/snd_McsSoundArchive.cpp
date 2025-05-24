@@ -2,7 +2,7 @@
  * inline functions and data sections.
  */
 
-#include "nw4r/snd/McsSoundArchive.h"
+#include "nw4r/snd/snd_McsSoundArchive.h"
 
 nw4r::snd::McsSoundArchive::McsSoundArchive() {}
 nw4r::snd::McsSoundArchive::McsFileStream::McsFileStream() {}

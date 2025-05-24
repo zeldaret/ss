@@ -5,9 +5,9 @@
  * headers
  */
 
-#include <types.h> // u32
+#include "common.h" // u32
 
-#include "AxVoice.h"
+#include "nw4r/snd/snd_AxVoice.h"
 
 /*******************************************************************************
  * classes and functions

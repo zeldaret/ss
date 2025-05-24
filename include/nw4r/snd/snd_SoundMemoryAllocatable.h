@@ -5,7 +5,7 @@
  * headers
  */
 
-#include <types.h> // u32
+#include "common.h" // u32
 
 /*******************************************************************************
  * classes and functions

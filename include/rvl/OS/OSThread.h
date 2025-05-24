@@ -20,9 +20,13 @@ typedef enum {
     OS_THREAD_STATE_MORIBUND = 8
 } OSThreadState;
 
-typedef enum {
-    OS_THREAD_DETACHED = (1 << 0)
-} OSThreadFlag;
+typedef u16 OSThreadFlags;
+enum OSThreadFlags_et
+{
+	OS_THREAD_NO_FLAGS	= 0,
+
+	OS_THREAD_DETACHED	= 1 << 0,
+};
 
 typedef struct OSThreadQueue {
     struct OSThread *head; // at 0x0
@@ -58,6 +62,15 @@ typedef struct OSThread {
 
 typedef void (*OSSwitchThreadCallback)(OSThread *currThread, OSThread *newThread);
 typedef void *(*OSThreadFunc)(void *arg);
+
+#define OSSendMessageAny(msgQueue_, msg_, flags_)	\
+	OSSendMessage(msgQueue_, (OSMessage)(msg_), flags_)
+
+#define OSReceiveMessageAny(msgQueue_, msgOut_, flags_)	\
+	OSReceiveMessage(msgQueue_, (OSMessage *)(msgOut_), flags_)
+
+#define OSJamMessageAny(msgQueue_, msg_, flags_)	\
+	OSJamMessage(msgQueue_, (OSMessage)(msg_), flags_)
 
 OSSwitchThreadCallback OSSetSwitchThreadCallback(OSSwitchThreadCallback callback);
 void __OSThreadInit(void);

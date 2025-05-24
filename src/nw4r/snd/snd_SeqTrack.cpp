@@ -1,4 +1,4 @@
-#include "nw4r/snd/SeqTrack.h"
+#include "nw4r/snd/snd_SeqTrack.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -10,17 +10,17 @@
  */
 
 #include <decomp.h>
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/Channel.h"
-#include "nw4r/snd/global.h"
-#include "nw4r/snd/Lfo.h"
-#include "nw4r/snd/MoveValue.h"
-#include "nw4r/snd/NoteOnCallback.h"
-#include "nw4r/snd/SeqPlayer.h"
-#include "nw4r/snd/SoundThread.h"
+#include "nw4r/snd/snd_Channel.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_Lfo.h"
+#include "nw4r/snd/snd_MoveValue.h"
+#include "nw4r/snd/snd_NoteOnCallback.h"
+#include "nw4r/snd/snd_SeqPlayer.h"
+#include "nw4r/snd/snd_SoundThread.h"
 
-#include "nw4r/ut/inlines.h"
+#include "nw4r/ut/ut_algorithm.h"
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -370,7 +370,7 @@ void SeqTrack::FreeAllChannel()
 
 void SeqTrack::ChannelCallbackFunc(Channel *dropChannel,
                                    Channel::ChannelCallbackStatus status,
-                                   register_t userData)
+                                   u32 userData)
 {
 	SoundThread::AutoLock lock;
 
@@ -571,7 +571,7 @@ Channel *SeqTrack::NoteOn(int key, int velocity, s32 length, bool tieFlag)
 			playerParam.priority + GetParserTrackParam().priority,
 			mSeqPlayer->GetVoiceOutCount(),
 			&ChannelCallbackFunc,
-			reinterpret_cast<register_t>(this)
+			reinterpret_cast<u32>(this)
 		};
 
 		channel = mSeqPlayer->NoteOn(mParserTrackParam.bankNo, info);

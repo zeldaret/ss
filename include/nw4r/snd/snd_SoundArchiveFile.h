@@ -5,14 +5,13 @@
  * headers
  */
 
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "SoundArchive.h"
-#include "Util.h"
+#include "nw4r/snd/snd_SoundArchive.h"
+#include "nw4r/snd/snd_Util.h"
 
-#include "../ut/binaryFileFormat.h"
-#include "../ut/inlines.h"
+#include "nw4r/ut/ut_binaryFileFormat.h"
+#include "nw4r/ut/ut_algorithm.h"
 
 /*******************************************************************************
  * types
@@ -41,8 +40,8 @@ namespace nw4r { namespace snd { namespace detail
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x24881
 		struct StringTreeNode
 		{
-			byte2_t	flags;		// size 0x02, offset 0x00
-			byte2_t	bit;		// size 0x02, offset 0x02
+			u16	flags;		// size 0x02, offset 0x00
+			u16	bit;		// size 0x02, offset 0x02
 			u32		leftIdx;	// size 0x04, offset 0x04
 			u32		rightIdx;	// size 0x04, offset 0x08
 			u32		strIdx;		// size 0x04, offset 0x0c
@@ -77,7 +76,7 @@ namespace nw4r { namespace snd { namespace detail
 			StringChunk	stringChunk;	// size 0x14
 		}; // size 0x14
 
-		static byte4_t const SIGNATURE_SYMB_BLOCK =
+		static u32 const SIGNATURE_SYMB_BLOCK =
 			NW4R_FOUR_BYTE('S', 'Y', 'M', 'B');
 
 		struct SymbolBlock
@@ -108,8 +107,8 @@ namespace nw4r { namespace snd { namespace detail
 			u32		allocTrack;			// size 0x04, offset 0x08
 			u8		channelPriority;	// size 0x01, offset 0x0c
 			u8		releasePriorityFix;	// size 0x01, offset 0x0d
-			byte1_t	padding[2];
-			byte4_t	reserved;
+			u8	padding[2];
+			u32	reserved;
 		}; // size 0x14
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x25089
@@ -117,8 +116,8 @@ namespace nw4r { namespace snd { namespace detail
 		{
 			u32		startPosition;		// size 0x04, offset 0x00
 			u16		allocChannelCount;	// size 0x02, offset 0x04
-			byte2_t	allocTrackFlag;		// size 0x02, offset 0x06
-			byte4_t	reserved;
+			u16	allocTrackFlag;		// size 0x02, offset 0x06
+			u32	reserved;
 		}; // size 0x0c
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x24f62
@@ -128,8 +127,8 @@ namespace nw4r { namespace snd { namespace detail
 			u32		allocTrack;			// size 0x04, offset 0x04
 			u8		channelPriority;	// size 0x01, offset 0x08
 			u8		releasePriorityFix;	// size 0x01, offset 0x09
-			byte1_t	padding[2];
-			byte4_t	reserved;
+			u8	padding[2];
+			u32	reserved;
 		}; // size 0x10
 
 		typedef Util::DataRef<void, SeqSoundInfo, StrmSoundInfo, WaveSoundInfo>
@@ -147,11 +146,11 @@ namespace nw4r { namespace snd { namespace detail
 			u8							soundType;		// size 0x01, offset 0x16
 			u8							remoteFilter;	// size 0x01, offset 0x17
 			SoundInfoRef				soundInfoRef;	// size 0x08, offset 0x18
-			register_t					userParam[2];	// size 0x08, offset 0x20
+			u32					userParam[2];	// size 0x08, offset 0x20
 			u8							panMode;		// size 0x01, offset 0x28
 			u8							panCurve;		// size 0x01, offset 0x29
 			u8							actorPlayerId;	// size 0x01, offset 0x2a
-			byte1_t						reserved;
+			u8						reserved;
 		}; // size 0x2c
 
 		typedef Util::Table<Util::DataRef<SoundCommonInfo> >
@@ -167,8 +166,8 @@ namespace nw4r { namespace snd { namespace detail
 			u16		strmChannelCount;	// size 0x02, offset 0x08
 			u16		waveSoundCount;		// size 0x02, offset 0x0a
 			u16		waveTrackCount;		// size 0x02, offset 0x0c
-			byte2_t	padding;
-			byte4_t	reserved;
+			u16	padding;
+			u32	reserved;
 		}; // size 0x14
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x24eab
@@ -176,7 +175,7 @@ namespace nw4r { namespace snd { namespace detail
 		{
 			u32		stringId;	// size 0x04, offset 0x00
 			u32		fileId;		// size 0x04, offset 0x04
-			byte4_t	reserved;
+			u32	reserved;
 		}; // size 0x0c
 
 		typedef Util::Table<Util::DataRef<BankInfo> > BankInfoTable;
@@ -186,10 +185,10 @@ namespace nw4r { namespace snd { namespace detail
 		{
 			u32		stringId;			// size 0x04, offset 0x00
 			u8		playableSoundCount;	// size 0x01, offset 0x04
-			byte1_t	padding;
-			byte2_t	padding2;
+			u8	padding;
+			u16	padding2;
 			u32		heapSize;			// size 0x04, offset 0x08
-			byte4_t	reserved;
+			u32	reserved;
 		}; // size 0x10
 
 		typedef Util::Table<Util::DataRef<PlayerInfo> > PlayerInfoTable;
@@ -202,7 +201,7 @@ namespace nw4r { namespace snd { namespace detail
 			u32		size;			// size 0x04, offset 0x08
 			u32		waveDataOffset;	// size 0x04, offset 0x0c
 			u32		waveDataSize;	// size 0x04, offset 0x10
-			byte4_t	reserved;
+			u32	reserved;
 		}; // size 0x18
 
 		typedef Util::Table<Util::DataRef<GroupItemInfo> > GroupItemInfoTable;
@@ -247,7 +246,7 @@ namespace nw4r { namespace snd { namespace detail
 			Util::DataRef<SoundArchivePlayerInfo>	soundArchivePlayerInfoRef;	// size 0x08, offset 0x28
 		}; // size 0x30
 
-		static byte4_t const SIGNATURE_INFO_BLOCK =
+		static u32 const SIGNATURE_INFO_BLOCK =
 			NW4R_FOUR_BYTE('I', 'N', 'F', 'O');
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2da76d
@@ -259,7 +258,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		/* SoundArchiveFile */
 
-		static byte4_t const SIGNATURE_FILE =
+		static u32 const SIGNATURE_FILE =
 			NW4R_FOUR_BYTE('R', 'S', 'A', 'R');
 		static int const FILE_VERSION = NW4R_FILE_VERSION(1, 4);
 	}; // "namespace" SoundArchiveFile

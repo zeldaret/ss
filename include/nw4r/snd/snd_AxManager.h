@@ -5,22 +5,20 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "global.h"
-#include "FxBase.h"
-#include "MoveValue.h"
+#include "nw4r/snd/snd_global.h"
 
-#include "../ut/LinkList.h"
+#include "nw4r/snd/snd_FxBase.h"
+#include "nw4r/snd/snd_MoveValue.h"
 
-#if 0
-#include <revolution/AI/ai.h> // AIDMACallback
-#include <revolution/AX/AX.h // AX_MAX_VOLUME
-#include <revolution/AX/AXAux.h> // AXAuxCallback
-#include <revolution/AX/AXOut.h> // AXFrameCallback
-#else
-#include <context_rvl.h>
-#endif
+#include "nw4r/ut/ut_LinkList.h"
+
+#include <rvl/AI/ai.h> // AIDMACallback
+#include <rvl/AX/AX.h>
+#include <rvl/AX/AXCL.h> // AX_MAX_VOLUME
+#include <rvl/AX/AXAux.h> // AXAuxCallback
+#include <rvl/AX/AXOut.h> // AXFrameCallback
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -94,7 +92,15 @@ namespace nw4r { namespace snd { namespace detail
 		                      AXFrameCallback *callback);
 		void UnregisterCallback(CallbackListNode *node);
 
+		bool AppendEffect(AuxBus bus, FxBase *pFx);
+		void ClearEffect(AuxBus bus, int frame);
 		void ShutdownEffect(AuxBus bus);
+
+		f32 GetMasterVolume() const {
+			return mMasterVolume.GetValue();
+		}
+		void SetMasterVolume(f32 volume, int frame);
+		void PrepareReset();
 
 	private:
 		// cdtors
@@ -139,7 +145,7 @@ namespace nw4r { namespace snd { namespace detail
 		MoveValue<f32, int>			mAuxFadeVolume[AUX_BUS_NUM];			// size 0x30, offset 0x54
 		MoveValue<f32, int>			mAuxUserVolume[AUX_BUS_NUM];			// size 0x30, offset 0x84
 		FxBase::LinkList			mFxList[AUX_BUS_NUM];					// size 0x24, offset 0xb4
-		AXAuxCallback				*mAuxCallback[AUX_BUS_NUM];				// size 0x0c, offset 0xd8
+		AXAuxCallback				mAuxCallback[AUX_BUS_NUM];				// size 0x0c, offset 0xd8
 		void						*mAuxCallbackContext[AUX_BUS_NUM];		// size 0x0c, offset 0xe4
 		u8							mAuxCallbackWaitCounter[AUX_BUS_NUM];	// size 0x03, offset 0xf0
 		/* 1 byte padding */

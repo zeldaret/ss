@@ -1,4 +1,4 @@
-#include "nw4r/snd/WaveFile.h"
+#include "nw4r/snd/snd_WaveFile.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,14 +9,14 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/AxVoice.h"
-#include "nw4r/snd/Channel.h"
-#include "nw4r/snd/global.h"
+#include "nw4r/snd/snd_AxVoice.h"
+#include "nw4r/snd/snd_Channel.h"
+#include "nw4r/snd/snd_global.h"
 
-#include "nw4r/ut/inlines.h" // ut::AddOffsetToPtr
-#include "nw4r/ut/binaryFileFormat.h"
+#include "nw4r/ut/ut_algorithm.h" // ut::AddOffsetToPtr
+#include "nw4r/ut/ut_binaryFileFormat.h"
 
 #include "nw4r/NW4RAssert.hpp"
 

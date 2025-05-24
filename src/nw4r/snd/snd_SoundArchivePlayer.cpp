@@ -1,4 +1,4 @@
-#include "nw4r/snd/SoundArchivePlayer.h"
+#include "nw4r/snd/snd_SoundArchivePlayer.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -12,39 +12,38 @@
 #include <new>
 
 #include <decomp.h>
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/Bank.h"
-#include "nw4r/snd/BasicSound.h"
-#include "nw4r/snd/debug.h"
-#include "nw4r/snd/DisposeCallbackManager.h"
-#include "nw4r/snd/ExternalSoundPlayer.h"
-#include "nw4r/snd/MmlParser.h"
-#include "nw4r/snd/MmlSeqTrack.h"
-#include "nw4r/snd/MmlSeqTrackAllocator.h"
-#include "nw4r/snd/PlayerHeap.h"
-#include "nw4r/snd/SeqFile.h"
-#include "nw4r/snd/SeqPlayer.h"
-#include "nw4r/snd/SeqSound.h"
-#include "nw4r/snd/SoundActor.h"
-#include "nw4r/snd/SoundArchive.h"
-#include "nw4r/snd/SoundHandle.h"
-#include "nw4r/snd/SoundInstanceManager.h"
-#include "nw4r/snd/SoundPlayer.h"
-#include "nw4r/snd/SoundStartable.h"
-#include "nw4r/snd/SoundSystem.h"
-#include "nw4r/snd/SoundThread.h"
-#include "nw4r/snd/StrmChannel.h"
-#include "nw4r/snd/StrmPlayer.h"
-#include "nw4r/snd/StrmSound.h"
-#include "nw4r/snd/WaveFile.h"
-#include "nw4r/snd/WaveSound.h"
-#include "nw4r/snd/WsdFile.h"
-#include "nw4r/snd/WsdPlayer.h"
+#include "nw4r/snd/snd_Bank.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_debug.h"
+#include "nw4r/snd/snd_DisposeCallbackManager.h"
+#include "nw4r/snd/snd_ExternalSoundPlayer.h"
+#include "nw4r/snd/snd_MmlParser.h"
+#include "nw4r/snd/snd_MmlSeqTrack.h"
+#include "nw4r/snd/snd_MmlSeqTrackAllocator.h"
+#include "nw4r/snd/snd_PlayerHeap.h"
+#include "nw4r/snd/snd_SeqFile.h"
+#include "nw4r/snd/snd_SeqPlayer.h"
+#include "nw4r/snd/snd_SeqSound.h"
+#include "nw4r/snd/snd_SoundActor.h"
+#include "nw4r/snd/snd_SoundArchive.h"
+#include "nw4r/snd/snd_SoundHandle.h"
+#include "nw4r/snd/snd_SoundInstanceManager.h"
+#include "nw4r/snd/snd_SoundPlayer.h"
+#include "nw4r/snd/snd_SoundStartable.h"
+#include "nw4r/snd/snd_SoundSystem.h"
+#include "nw4r/snd/snd_SoundThread.h"
+#include "nw4r/snd/snd_StrmChannel.h"
+#include "nw4r/snd/snd_StrmPlayer.h"
+#include "nw4r/snd/snd_StrmSound.h"
+#include "nw4r/snd/snd_WaveFile.h"
+#include "nw4r/snd/snd_WaveSound.h"
+#include "nw4r/snd/snd_WsdFile.h"
+#include "nw4r/snd/snd_WsdPlayer.h"
 
-#include "nw4r/ut/FileStream.h"
-#include "nw4r/ut/inlines.h"
+#include "nw4r/ut/ut_FileStream.h"
+#include "nw4r/ut/ut_algorithm.h"
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -1417,7 +1416,7 @@ detail::Channel *SoundArchivePlayer::SeqNoteOnCallback::NoteOn(
 bool SoundArchivePlayer::WsdCallback::GetWaveSoundData(
 	detail::WaveSoundInfo *info, detail::WaveSoundNoteInfo *noteInfo,
 	detail::WaveInfo *waveData, void const *waveSoundData, int index,
-	int noteIndex, register_t userData) const
+	int noteIndex, u32 userData) const
 {
 	u32 fileID = userData;
 

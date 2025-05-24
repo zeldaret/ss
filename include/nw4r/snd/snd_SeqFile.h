@@ -5,12 +5,11 @@
  * headers
  */
 
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "Util.h" // Util::Table
+#include "nw4r/snd/snd_Util.h" // Util::Table
 
-#include "../ut/binaryFileFormat.h"
+#include "nw4r/ut/ut_binaryFileFormat.h"
 
 /*******************************************************************************
  * types
@@ -44,7 +43,7 @@ namespace nw4r { namespace snd { namespace detail
 			/* 3 bytes padding */
 		}; // size 0x0c
 
-		static byte4_t const SIGNATURE_LABEL_BLOCK;
+		static u32 const SIGNATURE_LABEL_BLOCK;
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2ce7dc
 		struct LabelBlock
@@ -55,7 +54,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		/* DataBlock */
 
-		static byte4_t const SIGNATURE_DATA_BLOCK =
+		static u32 const SIGNATURE_DATA_BLOCK =
 			NW4R_FOUR_BYTE('D', 'A', 'T', 'A');
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2ce491
@@ -67,7 +66,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		/* SeqFile */
 
-		static byte4_t const SIGNATURE_FILE =
+		static u32 const SIGNATURE_FILE =
 			NW4R_FOUR_BYTE('R', 'S', 'E', 'Q');
 		static int const FILE_VERSION = NW4R_FILE_VERSION(1, 2);
 	}; // "namespace" SeqFile

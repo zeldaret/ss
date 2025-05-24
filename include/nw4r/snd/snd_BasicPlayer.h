@@ -5,9 +5,9 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "global.h"
+#include "nw4r/snd/snd_global.h"
 
 /*******************************************************************************
  * types

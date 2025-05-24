@@ -5,7 +5,10 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
+#include "nw4r/snd/snd_AxManager.h"
+#include "nw4r/snd/snd_RemoteSpeaker.h"
+#include "nw4r/snd/snd_RemoteSpeakerManager.h"
 
 /*******************************************************************************
  * classes and functions
@@ -55,13 +58,45 @@ namespace nw4r { namespace snd
 
 	// methods
 	public:
+		static void InitSoundSystem(s32 sndThreadPriority, s32 dvdThreadPriority);
 		static void InitSoundSystem(SoundSystemParam const &param,
 		                            void *workMem, u32 workMemSize);
 		static void ShutdownSoundSystem();
+		static void WaitForResetReady();
 
 		static bool IsInitializedSoundSystem();
 
 		static u32 GetRequiredMemSize(SoundSystemParam const &param);
+
+		static void PrepareReset() {
+			detail::AxManager::GetInstance().PrepareReset();
+		}
+
+
+		static void SetOutputMode(OutputMode mode) {
+			detail::AxManager::GetInstance().SetOutputMode(mode);
+		}
+
+
+		static f32 GetMasterVolume() {
+			return detail::AxManager::GetInstance().GetMasterVolume();
+		}
+		static void SetMasterVolume(f32 volume, int frame) {
+			detail::AxManager::GetInstance().SetMasterVolume(volume, frame);
+		}
+
+
+		static RemoteSpeaker &GetRemoteSpeaker(int i) {
+			return detail::RemoteSpeakerManager::GetInstance().GetRemoteSpeaker(i);
+		}
+
+
+		static void AppendEffect(AuxBus bus, FxBase *pFx) {
+			detail::AxManager::GetInstance().AppendEffect(bus, pFx);
+		}
+		static void ClearEffect(AuxBus bus, int frame) {
+			detail::AxManager::GetInstance().ClearEffect(bus, frame);
+		}
 	}; // size 0x01 (0x00 for inheritance)
 }} // namespace nw4r::snd
 

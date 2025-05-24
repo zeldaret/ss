@@ -2,11 +2,11 @@
  * inline functions and data sections.
  */
 
-#include "nw4r/snd/SoundActor.h"
+#include "nw4r/snd/snd_SoundActor.h"
 
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/SoundArchivePlayer.h"
+#include "nw4r/snd/snd_SoundArchivePlayer.h"
 
 nw4r::snd::SoundActor::SoundActor() :
 	mSoundArchivePlayer	(*new SoundArchivePlayer)

@@ -1,4 +1,4 @@
-#include "nw4r/snd/SoundSystem.h"
+#include "nw4r/snd/snd_SoundSystem.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -10,27 +10,22 @@
  */
 
 #include <decomp.h>
-#include <macros.h> // STR
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/AxVoiceManager.h"
-#include "nw4r/snd/AxManager.h"
-#include "nw4r/snd/Channel.h" // ChannelManager
-#include "nw4r/snd/global.h"
-#include "nw4r/snd/SeqPlayer.h"
-#include "nw4r/snd/SoundThread.h"
-#include "nw4r/snd/TaskManager.h"
-#include "nw4r/snd/TaskThread.h"
-#include "nw4r/snd/VoiceManager.h"
+#include "nw4r/snd/snd_AxVoiceManager.h"
+#include "nw4r/snd/snd_AxManager.h"
+#include "nw4r/snd/snd_Channel.h" // ChannelManager
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_SeqPlayer.h"
+#include "nw4r/snd/snd_SoundThread.h"
+#include "nw4r/snd/snd_TaskManager.h"
+#include "nw4r/snd/snd_TaskThread.h"
+#include "nw4r/snd/snd_VoiceManager.h"
 
-#if 0
-#include <revolution/OS/OS.h> // OSRegisterVersion
-#include <revolution/AX/AXVPB.h> // AXGetMaxVoices
-#include <revolution/SC/scsystem.h>
-#include <revolution/SC/scapi.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/OS/OS.h> // OSRegisterVersion
+#include <rvl/AX/AXVPB.h> // AXGetMaxVoices
+#include <rvl/SC/scsystem.h>
+#include <rvl/SC/scapi.h>
 
 #include "nw4r/NW4RAssert.hpp"
 

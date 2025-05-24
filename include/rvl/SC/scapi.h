@@ -33,11 +33,13 @@ typedef enum {
     SC_LANG_KR,
 } SCLanguage;
 
-typedef enum {
-    SC_SND_MONO,
-    SC_SND_STEREO,
-    SC_SND_SURROUND
-} SCSoundMode;
+typedef u8 SCSoundMode;
+enum SCSoundMode_et
+{
+	SC_SND_MONO,
+	SC_SND_STEREO,
+	SC_SND_SURROUND
+};
 
 typedef enum {
     SC_SENSOR_BAR_BOTTOM,
@@ -67,7 +69,7 @@ void SCGetIdleMode(SCIdleMode *mode);
 u8 SCGetLanguage(void);
 u8 SCGetProgressiveMode(void);
 u8 SCGetScreenSaverMode(void);
-u8 SCGetSoundMode(void);
+SCSoundMode SCGetSoundMode(void);
 u32 SCGetCounterBias(void);
 void SCGetBtDeviceInfoArray(SCBtDeviceInfoArray *info);
 void SCSetBtDeviceInfoArray(const SCBtDeviceInfoArray *info);

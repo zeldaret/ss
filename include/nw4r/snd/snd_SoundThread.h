@@ -5,20 +5,16 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "AxManager.h"
+#include "nw4r/snd/snd_AxManager.h"
 
-#include "../ut/inlines.h" // ut::NonCopyable
-#include "../ut/LinkList.h"
+#include "nw4r/ut/ut_algorithm.h" // ut::NonCopyable
+#include "nw4r/ut/ut_LinkList.h"
 
-#if 0
-#include <revolution/OS/OSMessage.h>
-#include <revolution/OS/OSMutex.h>
-#include <revolution/OS/OSThread.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/OS/OSMessage.h>
+#include <rvl/OS/OSMutex.h>
+#include <rvl/OS/OSThread.h>
 
 /*******************************************************************************
  * classes
@@ -118,7 +114,7 @@ namespace nw4r { namespace snd { namespace detail
 		OSThreadQueue					mThreadQueue;						// size 0x008, offset 0x318
 		OSMessageQueue					mMsgQueue;							// size 0x020, offset 0x320
 		OSMessage						mMsgBuffer[THREAD_MESSAGE_BUFSIZE];	// size 0x010, offset 0x340
-		byte4_t							*mStackEnd;							// size 0x004, offset 0x350
+		u32							*mStackEnd;							// size 0x004, offset 0x350
 		OSMutex							mMutex;								// size 0x018, offset 0x354
 		AxManager::CallbackListNode		mAxCallbackNode;					// size 0x00c, offset 0x36c
 		SoundFrameCallback::LinkList	mSoundFrameCallbackList;			// size 0x00c, offset 0x378

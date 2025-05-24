@@ -1,4 +1,4 @@
-#include "nw4r/snd/SoundHandle.h"
+#include "nw4r/snd/snd_SoundHandle.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,9 +9,9 @@
  * headers
  */
 
-#include <types.h> // nullptr
+#include "common.h" // nullptr
 
-#include "nw4r/snd/BasicSound.h"
+#include "nw4r/snd/snd_BasicSound.h"
 
 #include "nw4r/NW4RAssert.hpp"
 

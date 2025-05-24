@@ -1,4 +1,4 @@
-#include "nw4r/snd/StrmChannel.h"
+#include "nw4r/snd/snd_StrmChannel.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -11,10 +11,10 @@
 
 #include <cstring> // std::memset
 
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/ut/inlines.h"
-#include "nw4r/ut/Lock.h" // ut::AutoInterruptLock
+#include "nw4r/ut/ut_algorithm.h"
+#include "nw4r/ut/ut_Lock.h" // ut::AutoInterruptLock
 
 #include "nw4r/NW4RAssert.hpp"
 

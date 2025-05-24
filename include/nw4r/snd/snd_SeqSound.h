@@ -5,14 +5,14 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "BasicSound.h"
-#include "debug.h"
-#include "SeqPlayer.h"
-#include "Task.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_debug.h"
+#include "nw4r/snd/snd_SeqPlayer.h"
+#include "nw4r/snd/snd_Task.h"
 
-#include "../ut/LinkList.h"
+#include "nw4r/ut/ut_LinkList.h"
 
 /*******************************************************************************
  * types

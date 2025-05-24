@@ -5,8 +5,7 @@
  * headers
  */
 
-#include <macros.h> // static_assert
-#include <types.h>
+#include "common.h"
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -41,7 +40,7 @@ namespace nw4r { namespace snd { namespace detail
 		{
 			u8		refType;	// size 0x01, offset 0x00
 			u8		dataType;	// size 0x01, offset 0x01
-			byte2_t	reserved;
+			u16		reserved;
 			u32		value;		// size 0x04, offset 0x04
 		}; // size 0x08
 
@@ -74,7 +73,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		static u16 CalcRandom();
 
-		static void const *GetDataRefAddressImpl(RefType refType, byte4_t value,
+		static void const *GetDataRefAddressImpl(RefType refType, u32 value,
 		                                         void const *baseAddress);
 
 // The only way these asserts happen one line after the other is with macros
@@ -89,7 +88,7 @@ namespace nw4r { namespace snd { namespace detail
 		return static_cast<T ## index_ const *>(GetDataRefAddressImpl(		\
 			static_cast<RefType>(ref.refType), ref.value, baseAddress));	\
 	}																		\
-	static_assert(true, "") // swallow semicolon
+	STATIC_ASSERT(true) // swallow semicolon
 
 		DEF_GET_DATA_REF_ADDRESS_(141, 0);
 		DEF_GET_DATA_REF_ADDRESS_(142, 1);
@@ -98,12 +97,12 @@ namespace nw4r { namespace snd { namespace detail
 
 #undef DEF_GET_DATA_REF_ADDRESS_
 
-		static inline byte2_t ReadBigEndian(byte2_t x)
+		static inline u16 ReadBigEndian(u16 x)
 		{
 			return x;
 		}
 
-		static inline byte4_t ReadBigEndian(byte4_t x)
+		static inline u32 ReadBigEndian(u32 x)
 		{
 			return x;
 		}

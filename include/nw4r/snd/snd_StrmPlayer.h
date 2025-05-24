@@ -5,24 +5,20 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "BasicPlayer.h"
-#include "global.h"
-#include "InstancePool.h"
-#include "Task.h"
-#include "SoundThread.h"
-#include "StrmChannel.h"
-#include "StrmFile.h"
-#include "Voice.h"
+#include "nw4r/snd/snd_BasicPlayer.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_InstancePool.h"
+#include "nw4r/snd/snd_Task.h"
+#include "nw4r/snd/snd_SoundThread.h"
+#include "nw4r/snd/snd_StrmChannel.h"
+#include "nw4r/snd/snd_StrmFile.h"
+#include "nw4r/snd/snd_Voice.h"
 
-#include "../ut/LinkList.h"
+#include "nw4r/ut/ut_LinkList.h"
 
-#if 0
-#include <revolution/OS/OSMutex.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/OS/OSMutex.h>
 
 /*******************************************************************************
  * types
@@ -147,7 +143,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		// methods
 		SetupResult Setup(StrmBufferPool *bufferPool, int allocChannelCount,
-		                  byte2_t allocTrackFlag, int voiceOutCount);
+		                  u16 allocTrackFlag, int voiceOutCount);
 		void Update();
 		void Shutdown();
 
@@ -165,7 +161,7 @@ namespace nw4r { namespace snd { namespace detail
 		bool CheckDiskDriveError() const;
 
 		void SetAdpcmLoopContext(int channelNum, u16 *predScale);
-		void SetTrackVolume(byte4_t trackBitFlag, f32 volume);
+		void SetTrackVolume(u32 trackBitFlag, f32 volume);
 
 		void InitParam();
 		bool SetupPlayer();
@@ -198,7 +194,7 @@ namespace nw4r { namespace snd { namespace detail
 		void UpdateDataLoopAddress(s32 endBlockBufferIndex);
 		void UpdateVoiceParams(StrmTrack *track);
 
-		static u32 GetSampleByByte(byte4_t byte, SampleFormat format);
+		static u32 GetSampleByByte(u32 byte, SampleFormat format);
 
 	private:
 		static void VoiceCallbackFunc(Voice *voice,

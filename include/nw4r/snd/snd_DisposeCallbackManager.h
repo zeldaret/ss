@@ -5,9 +5,9 @@
  * headers
  */
 
-#include <types.h> // u32
+#include "common.h" // u32
 
-#include "../ut/LinkList.h"
+#include "nw4r/ut/ut_LinkList.h"
 
 /*******************************************************************************
  * classes and functions

@@ -5,13 +5,13 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "global.h"
-#include "MoveValue.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_MoveValue.h"
 
-#include "../ut/inlines.h" // ut::Clamp
-#include "../ut/LinkList.h"
+#include "nw4r/ut/ut_algorithm.h" // ut::Clamp
+#include "nw4r/ut/ut_LinkList.h"
 
 /*******************************************************************************
  * types

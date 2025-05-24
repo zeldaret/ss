@@ -1,4 +1,4 @@
-#include "nw4r/snd/SoundArchive.h"
+#include "nw4r/snd/snd_SoundArchive.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -11,9 +11,9 @@
 
 #include <cstring>
 
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/SoundArchiveFile.h" // detail::SoundArchiveFileReader
+#include "nw4r/snd/snd_SoundArchiveFile.h" // detail::SoundArchiveFileReader
 
 #include "nw4r/NW4RAssert.hpp"
 

@@ -1,4 +1,4 @@
-#include "nw4r/snd/SeqSoundHandle.h"
+#include "nw4r/snd/snd_SeqSoundHandle.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,9 +9,9 @@
  * headers
  */
 
-#include <types.h> // nullptr
+#include "common.h" // nullptr
 
-#include "nw4r/snd/SeqSound.h"
+#include "nw4r/snd/snd_SeqSound.h"
 
 /*******************************************************************************
  * functions

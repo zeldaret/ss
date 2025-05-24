@@ -1,4 +1,4 @@
-#include "nw4r/snd/Voice.h"
+#include "nw4r/snd/snd_Voice.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -10,26 +10,21 @@
  */
 
 #include <decomp.h>
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/AxManager.h"
-#include "nw4r/snd/AxVoiceManager.h"
-#include "nw4r/snd/AxVoice.h"
-#include "nw4r/snd/adpcm.h"
-#include "nw4r/snd/global.h"
-#include "nw4r/snd/Util.h"
-#include "nw4r/snd/VoiceManager.h"
-#include "nw4r/snd/WaveFile.h"
+#include "nw4r/snd/snd_AxManager.h"
+#include "nw4r/snd/snd_AxVoiceManager.h"
+#include "nw4r/snd/snd_AxVoice.h"
+#include "nw4r/snd/snd_adpcm.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_Util.h"
+#include "nw4r/snd/snd_VoiceManager.h"
+#include "nw4r/snd/snd_WaveFile.h"
 
-#include "nw4r/ut/inlines.h"
-#include "nw4r/ut/Lock.h"
+#include "nw4r/ut/ut_algorithm.h"
+#include "nw4r/ut/ut_Lock.h"
 
-#if 0
-#include <revolution/AX/AXAlloc.h> // AX_MAX_VOLUME
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/AX/AXAlloc.h> // AX_MAX_VOLUME
 
 #include "nw4r/NW4RAssert.hpp"
 

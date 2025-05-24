@@ -1,4 +1,4 @@
-#include "nw4r/snd/MmlParser.h"
+#include "nw4r/snd/snd_MmlParser.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,24 +9,19 @@
  * headers
  */
 
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/global.h"
-#include "nw4r/snd/Lfo.h" // LfoParam
-#include "nw4r/snd/MmlSeqTrack.h"
-#include "nw4r/snd/MoveValue.h"
-#include "nw4r/snd/SeqPlayer.h"
-#include "nw4r/snd/SeqTrack.h"
-#include "nw4r/snd/Util.h" // Util::CalcRandom
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_Lfo.h" // LfoParam
+#include "nw4r/snd/snd_MmlSeqTrack.h"
+#include "nw4r/snd/snd_MoveValue.h"
+#include "nw4r/snd/snd_SeqPlayer.h"
+#include "nw4r/snd/snd_SeqTrack.h"
+#include "nw4r/snd/snd_Util.h" // Util::CalcRandom
 
-#include "nw4r/ut/inlines.h"
+#include "nw4r/ut/ut_algorithm.h"
 
-#if 0
-#include <revolution/OS/OSReport.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/OS/OSError.h>
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -846,9 +841,9 @@ Channel *MmlParser::NoteOnCommandProc(MmlSeqTrack *track, int key, int velocity,
 	return track->NoteOn(key, velocity, length, tieFlag);
 }
 
-byte2_t MmlParser::Read16(byte_t const **ptr) const
+u16 MmlParser::Read16(byte_t const **ptr) const
 {
-	byte2_t ret = ReadByte(ptr);
+	u16 ret = ReadByte(ptr);
 
 	ret <<= 8;
 	ret |= ReadByte(ptr);
@@ -856,9 +851,9 @@ byte2_t MmlParser::Read16(byte_t const **ptr) const
 	return ret;
 }
 
-byte4_t MmlParser::Read24(byte_t const **ptr) const
+u32 MmlParser::Read24(byte_t const **ptr) const
 {
-	byte4_t ret = ReadByte(ptr);
+	u32 ret = ReadByte(ptr);
 
 	ret <<= 8;
 	ret |= ReadByte(ptr);
@@ -955,7 +950,7 @@ s16 volatile *MmlParser::GetVariablePtr(SeqPlayer *player, SeqTrack *track,
 }
 
 u32 MmlParser::ParseAllocTrack(void const *baseAddress, u32 seqOffset,
-                               byte4_t *allocTrack)
+                               u32 *allocTrack)
 {
 	NW4RAssertPointerNonnull_Line(1051, baseAddress);
 	NW4RAssertPointerNonnull_Line(1052, allocTrack);

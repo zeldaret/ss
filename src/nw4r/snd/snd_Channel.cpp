@@ -1,4 +1,4 @@
-#include "nw4r/snd/Channel.h"
+#include "nw4r/snd/snd_Channel.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,20 +9,19 @@
  * headers
  */
 
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/EnvGenerator.h"
-#include "nw4r/snd/global.h"
-#include "nw4r/snd/InstancePool.h"
-#include "nw4r/snd/Lfo.h"
-#include "nw4r/snd/MoveValue.h"
-#include "nw4r/snd/Util.h"
-#include "nw4r/snd/Voice.h"
-#include "nw4r/snd/VoiceManager.h"
-#include "nw4r/snd/WaveFile.h"
+#include "nw4r/snd/snd_EnvGenerator.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_InstancePool.h"
+#include "nw4r/snd/snd_Lfo.h"
+#include "nw4r/snd/snd_MoveValue.h"
+#include "nw4r/snd/snd_Util.h"
+#include "nw4r/snd/snd_Voice.h"
+#include "nw4r/snd/snd_VoiceManager.h"
+#include "nw4r/snd/snd_WaveFile.h"
 
-#include "nw4r/ut/Lock.h"
+#include "nw4r/ut/ut_Lock.h"
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -117,7 +116,7 @@ Channel::Channel() :
 
 Channel::~Channel() {}
 
-void Channel::InitParam(Callback *callback, register_t callbackData)
+void Channel::InitParam(Callback *callback, u32 callbackData)
 {
 	mNextLink					= nullptr;
 	mCallback					= callback;
@@ -433,7 +432,7 @@ void Channel::VoiceCallbackFunc(Voice *voice, Voice::VoiceCallbackStatus status,
 
 Channel *Channel::AllocChannel(int voiceChannelCount, int voiceOutCount,
                                int priority, Callback *callback,
-                               register_t callbackData)
+                               u32 callbackData)
 {
 	NW4RAssertHeaderClampedLRValue_Line(606, priority, 0, 255);
 

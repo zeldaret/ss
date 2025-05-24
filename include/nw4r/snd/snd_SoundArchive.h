@@ -5,9 +5,9 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "global.h"
+#include "nw4r/snd/snd_global.h"
 
 /*******************************************************************************
  * types
@@ -107,7 +107,7 @@ namespace nw4r { namespace snd
 		{
 			u32		startPosition;		// size 0x04, offset 0x00
 			u16		allocChannelCount;	// size 0x02, offset 0x04
-			byte2_t	allocTrackFlag;		// size 0x02, offset 0x06
+			u16	allocTrackFlag;		// size 0x02, offset 0x06
 		}; // size 0x08
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x25c5f

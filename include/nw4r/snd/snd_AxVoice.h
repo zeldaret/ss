@@ -5,20 +5,17 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "adpcm.h"
-#include "global.h" // SampleFormat
+#include "nw4r/snd/snd_adpcm.h"
+#include "nw4r/snd/snd_global.h" // SampleFormat
 
-#include "../ut/LinkList.h"
+#include "nw4r/ut/ut_LinkList.h"
 
-#if 0
-#include <revolution/AX/AX.h>
-#include <revolution/AX/AXAlloc.h> // AXSetVoicePriority
-#include <revolution/AX/AXVPB.h>
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/AX/AX.h>
+#include <rvl/AX/AXCL.h>
+#include <rvl/AX/AXAlloc.h> // AXSetVoicePriority
+#include <rvl/AX/AXVPB.h>
 
 /*******************************************************************************
  * classes and functions
@@ -139,7 +136,7 @@ namespace nw4r { namespace snd { namespace detail
 	// members
 	private:
 		AXVPB	*mVpb;						// size 0x04, offset 0x00
-		byte4_t	mSync;						// size 0x04, offset 0x04
+		u32	mSync;						// size 0x04, offset 0x04
 		AXPBVE	volatile mPrevVeSetting;	// size 0x04, offset 0x08
 		bool	mFirstVeUpdateFlag;			// size 0x01, offset 0x0c
 		/* 1 byte padding */

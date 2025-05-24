@@ -16,6 +16,12 @@ public:
         SEEKORG_END
     };
 
+    enum SeekOrigin_ {
+        SEEK_ORIGIN_SET,
+        SEEK_ORIGIN_CUR,
+        SEEK_ORIGIN_END
+    };
+
     class FilePosition {
     public:
         FilePosition() : mFileSize(0), mFileOffset(0) {}

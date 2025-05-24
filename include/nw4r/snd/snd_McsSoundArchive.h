@@ -5,11 +5,11 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
 #include "SoundArchive.h"
 
-#include "../ut/FileStream.h"
+#include "nw4r/ut/ut_FileStream.h"
 
 /*******************************************************************************
  * classes and functions

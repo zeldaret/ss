@@ -1,4 +1,4 @@
-#include "nw4r/snd/DisposeCallbackManager.h"
+#include "nw4r/snd/snd_DisposeCallbackManager.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,12 +9,11 @@
  * headers
  */
 
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/SoundThread.h"
+#include "nw4r/snd/snd_SoundThread.h"
 
-#include "nw4r/ut/Lock.h" // ut::AutoInterruptLock
+#include "nw4r/ut/ut_Lock.h" // ut::AutoInterruptLock
 
 /*******************************************************************************
  * functions

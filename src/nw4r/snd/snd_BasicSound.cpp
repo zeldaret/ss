@@ -1,4 +1,4 @@
-#include "nw4r/snd/BasicSound.h"
+#include "nw4r/snd/snd_BasicSound.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -12,19 +12,18 @@
 #include <climits> // ULONG_MAX
 #include <cstring>
 
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/BasicPlayer.h"
-#include "nw4r/snd/ExternalSoundPlayer.h"
-#include "nw4r/snd/global.h"
-#include "nw4r/snd/MoveValue.h"
-#include "nw4r/snd/SoundActor.h"
-#include "nw4r/snd/SoundHandle.h"
-#include "nw4r/snd/SoundPlayer.h"
+#include "nw4r/snd/snd_BasicPlayer.h"
+#include "nw4r/snd/snd_ExternalSoundPlayer.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_MoveValue.h"
+#include "nw4r/snd/snd_SoundActor.h"
+#include "nw4r/snd/snd_SoundHandle.h"
+#include "nw4r/snd/snd_SoundPlayer.h"
 
-#include "nw4r/ut/inlines.h" // ut::Clamp
-#include "nw4r/ut/RuntimeTypeInfo.h"
+#include "nw4r/ut/ut_algorithm.h" // ut::Clamp
+#include "nw4r/ut/ut_RuntimeTypeInfo.h"
 
 #include "nw4r/NW4RAssert.hpp"
 

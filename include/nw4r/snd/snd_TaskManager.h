@@ -5,13 +5,9 @@
  * headers
  */
 
-#include "Task.h"
+#include "nw4r/snd/snd_Task.h"
 
-#if 0
-#include <revolution/OS/OSThread.h> // OSThreadQueue
-#else
-#include <context_rvl.h>
-#endif
+#include <rvl/OS/OSThread.h> // OSThreadQueue
 
 /*******************************************************************************
  * classes and functions

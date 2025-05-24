@@ -1,4 +1,4 @@
-#include "nw4r/snd/Lfo.h"
+#include "nw4r/snd/snd_Lfo.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,7 +9,7 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
 #include "nw4r/NW4RAssert.hpp"
 

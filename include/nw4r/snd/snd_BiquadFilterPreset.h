@@ -5,9 +5,9 @@
  * headers
  */
 
-#include <types.h> // f32
+#include "common.h" // f32
 
-#include "BiquadFilterCallback.h"
+#include "nw4r/snd/snd_BiquadFilterCallback.h"
 
 /*******************************************************************************
  * classes and functions

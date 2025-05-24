@@ -1,4 +1,4 @@
-#include "nw4r/snd/MemorySoundArchive.h"
+#include "nw4r/snd/snd_MemorySoundArchive.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -12,14 +12,14 @@
 #include <cstring> // std::memcpy
 #include <new>
 
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/SoundArchive.h"
-#include "nw4r/snd/SoundArchiveFile.h" // SoundArchiveFileReader
+#include "nw4r/snd/snd_SoundArchive.h"
+#include "nw4r/snd/snd_SoundArchiveFile.h" // SoundArchiveFileReader
 
-#include "nw4r/ut/FileStream.h"
-#include "nw4r/ut/inlines.h"
-#include "nw4r/ut/RuntimeTypeInfo.h" // IWYU pragma: keep (need the complete type)
+#include "nw4r/ut/ut_FileStream.h"
+#include "nw4r/ut/ut_algorithm.h"
+#include "nw4r/ut/ut_RuntimeTypeInfo.h" // IWYU pragma: keep (need the complete type)
 
 #include "nw4r/NW4RAssert.hpp"
 

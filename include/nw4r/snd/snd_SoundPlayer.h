@@ -5,11 +5,11 @@
  * headers
  */
 
-#include <types.h> // f32
+#include "common.h" // f32
 
-#include "BasicSound.h"
-#include "global.h" // AUX_BUS_NUM
-#include "PlayerHeap.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_global.h" // AUX_BUS_NUM
+#include "nw4r/snd/snd_PlayerHeap.h"
 
 /*******************************************************************************
  * classes

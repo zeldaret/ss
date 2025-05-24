@@ -5,12 +5,12 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "global.h"
+#include "nw4r/snd/snd_global.h"
 
-#include "../ut/inlines.h" // NonCopyable
-#include "../ut/LinkList.h"
+#include "nw4r/ut/ut_NonCopyable.h" // NonCopyable
+#include "nw4r/ut/ut_LinkList.h"
 
 /*******************************************************************************
  * classes and functions

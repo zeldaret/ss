@@ -1,6 +1,7 @@
 
 #ifndef NW4R_SND_SOUND_3D_ACTOR_H
 #define NW4R_SND_SOUND_3D_ACTOR_H
+
 #include "nw4r/math.h"
 #include "nw4r/snd/snd_BasicSound.h"
 #include "nw4r/snd/snd_SoundActor.h"
@@ -10,13 +11,13 @@
 namespace nw4r {
 namespace snd {
 
-class Sound3DActor : public detail::SoundActor, public detail::BasicSound::AmbientArgUpdateCallback {
+class Sound3DActor : public SoundActor, public detail::BasicSound::AmbientInfo::AmbientArgUpdateCallback {
 public:
     Sound3DActor(SoundArchivePlayer &rPlayer, Sound3DManager &rManager);
     virtual ~Sound3DActor(); // at 0x8
 
     virtual StartResult detail_SetupSound(
-        SoundHandle *pHandle, u32 id, detail::BasicSound::AmbientArgInfo *pArgInfo,
+        SoundHandle *pHandle, u32 id, detail::BasicSound::AmbientInfo *pArgInfo,
         detail::ExternalSoundPlayer *pPlayer, bool hold,
         const StartInfo *pStartInfo
     ); // at 0xC

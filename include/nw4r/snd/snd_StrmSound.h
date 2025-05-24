@@ -5,14 +5,14 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "BasicSound.h"
-#include "debug.h"
-#include "MoveValue.h"
-#include "StrmPlayer.h"
+#include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_debug.h"
+#include "nw4r/snd/snd_MoveValue.h"
+#include "nw4r/snd/snd_StrmPlayer.h"
 
-#include "../ut/LinkList.h"
+#include "nw4r/ut/ut_LinkList.h"
 
 /*******************************************************************************
  * types
@@ -73,7 +73,7 @@ namespace nw4r { namespace snd { namespace detail
 		// methods
 		StrmPlayer::SetupResult Setup(StrmBufferPool *bufferPool,
 		                              int allocChannelCount,
-		                              byte2_t allocTrackFlag);
+		                              u16 allocTrackFlag);
 
 		void *GetFileStreamBuffer() { return mFileStreamBuffer; }
 		s32 GetFileStreamBufferSize() { return sizeof mFileStreamBuffer; }

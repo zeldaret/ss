@@ -5,9 +5,9 @@
  * headers
  */
 
-#include <types.h> // u32
+#include "common.h" // u32
 
-#include "Voice.h"
+#include "nw4r/snd/snd_Voice.h"
 
 /*******************************************************************************
  * classes and functions
@@ -40,7 +40,7 @@ namespace nw4r { namespace snd { namespace detail
 		void ChangeVoicePriority(Voice *voice);
 
 		void UpdateAllVoices();
-		void UpdateAllVoicesSync(byte4_t syncFlag);
+		void UpdateAllVoicesSync(u32 syncFlag);
 
 		void NotifyVoiceUpdate();
 

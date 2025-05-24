@@ -5,11 +5,11 @@
  * headers
  */
 
-#include <types.h> // u32
+#include "common.h" // u32
 
-#include "SoundMemoryAllocatable.h"
+#include "nw4r/snd/snd_SoundMemoryAllocatable.h"
 
-#include "../ut/LinkList.h"
+#include "nw4r/ut/ut_LinkList.h"
 
 /*******************************************************************************
  * types

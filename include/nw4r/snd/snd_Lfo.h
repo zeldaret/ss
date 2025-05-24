@@ -5,7 +5,7 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
 /*******************************************************************************
  * classes and functions
@@ -30,7 +30,7 @@ namespace nw4r { namespace snd { namespace detail
 		f32		speed;		// size 0x04, offset 0x04
 		u32		delay;		// size 0x04, offset 0x08
 		u8		range;		// size 0x01, offset 0x0c
-		byte1_t	padding[3];
+		u8	padding[3];
 	}; // size 0x10
 
 	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x28ea0

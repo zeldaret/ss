@@ -1,4 +1,4 @@
-#include "nw4r/snd/Bank.h"
+#include "nw4r/snd/snd_Bank.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,14 +9,14 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/BankFile.h" // InstInfo
-#include "nw4r/snd/Channel.h"
-#include "nw4r/snd/NoteOnCallback.h" // NoteOnInfo
-#include "nw4r/snd/WaveFile.h" // WaveInfo
+#include "nw4r/snd/snd_BankFile.h" // InstInfo
+#include "nw4r/snd/snd_Channel.h"
+#include "nw4r/snd/snd_NoteOnCallback.h" // NoteOnInfo
+#include "nw4r/snd/snd_WaveFile.h" // WaveInfo
 
-#include "nw4r/ut/inlines.h" // ut::Min
+#include "nw4r/ut/ut_algorithm.h" // ut::Min
 
 /*******************************************************************************
  * functions

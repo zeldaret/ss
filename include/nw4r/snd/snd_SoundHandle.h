@@ -5,11 +5,11 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "BasicSound.h"
+#include "nw4r/snd/snd_BasicSound.h"
 
-#include "../ut/inlines.h" // ut::NonCopyable
+#include "nw4r/ut/ut_algorithm.h" // ut::NonCopyable
 
 /*******************************************************************************
  * classes and functions

@@ -5,13 +5,12 @@
  * headers
  */
 
-#include <macros.h>
-#include <types.h>
+#include "common.h"
 
-#include "Util.h"
-#include "WaveFile.h"
+#include "nw4r/snd/snd_Util.h"
+#include "nw4r/snd/snd_WaveFile.h"
 
-#include "../ut/binaryFileFormat.h"
+#include "nw4r/ut/ut_binaryFileFormat.h"
 
 /*******************************************************************************
  * types
@@ -42,7 +41,7 @@ namespace nw4r { namespace snd { namespace detail
 			u32									waveFileSize;	// size 0x04, offset 0x08
 		}; // size 0x0c
 
-		static byte4_t const SIGNATURE_TABLE_BLOCK =
+		static u32 const SIGNATURE_TABLE_BLOCK =
 			NW4R_FOUR_BYTE('T', 'A', 'B', 'L');
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2b29a1
@@ -54,7 +53,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		/* DataBlock */
 
-		static byte4_t const SIGNATURE_DATA_BLOCK =
+		static u32 const SIGNATURE_DATA_BLOCK =
 			NW4R_FOUR_BYTE('D', 'A', 'T', 'A');
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2b2a3c
@@ -67,7 +66,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		/* WaveArchive */
 
-		static byte4_t const SIGNATURE_FILE =
+		static u32 const SIGNATURE_FILE =
 			NW4R_FOUR_BYTE('R', 'W', 'A', 'R');
 		static int const FILE_VERSION = NW4R_FILE_VERSION(1, 0);
 	}; // "namespace" WaveArchive

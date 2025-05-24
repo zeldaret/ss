@@ -1,4 +1,4 @@
-#include "nw4r/snd/Util.h"
+#include "nw4r/snd/snd_Util.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,10 +9,9 @@
  * headers
  */
 
-#include <macros.h> // ARRAY_LENGTH
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/ut/inlines.h"
+#include "nw4r/ut/ut_algorithm.h"
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -607,9 +606,9 @@ namespace nw4r { namespace snd { namespace detail
 	// clang-format off
 	f32 const *Util::PanTableTable[PAN_CURVE_NUM] =
 	{
-		[PAN_CURVE_SQRT]	= Pan2RatioTableSqrt,
-		[PAN_CURVE_SINCOS]	= Pan2RatioTableSinCos,
-		[PAN_CURVE_LINEAR]	= Pan2RatioTableLinear,
+		/*[PAN_CURVE_SQRT]	= */Pan2RatioTableSqrt,
+		/*[PAN_CURVE_SINCOS]	=*/ Pan2RatioTableSinCos,
+		/*[PAN_CURVE_LINEAR]	=*/ Pan2RatioTableLinear,
 	};
 	// clang-format on
 }}} // namespace nw4r::snd::detail
@@ -745,7 +744,7 @@ u16 Util::CalcRandom()
 	return u >> 16;
 }
 
-void const *Util::GetDataRefAddressImpl(RefType refType, byte4_t value,
+void const *Util::GetDataRefAddressImpl(RefType refType, u32 value,
                                         void const *baseAddress)
 {
 	if (refType == REFTYPE_OFFSET)

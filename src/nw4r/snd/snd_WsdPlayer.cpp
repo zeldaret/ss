@@ -1,4 +1,4 @@
-#include "nw4r/snd/WsdPlayer.h"
+#include "nw4r/snd/snd_WsdPlayer.h"
 
 /* Original source:
  * kiwi515/ogws
@@ -9,17 +9,17 @@
  * headers
  */
 
-#include <types.h>
+#include "common.h"
 
-#include "nw4r/snd/BasicPlayer.h"
-#include "nw4r/snd/Channel.h"
-#include "nw4r/snd/DisposeCallbackManager.h"
-#include "nw4r/snd/global.h"
-#include "nw4r/snd/Voice.h"
-#include "nw4r/snd/SoundThread.h"
-#include "nw4r/snd/WaveFile.h"
+#include "nw4r/snd/snd_BasicPlayer.h"
+#include "nw4r/snd/snd_Channel.h"
+#include "nw4r/snd/snd_DisposeCallbackManager.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_Voice.h"
+#include "nw4r/snd/snd_SoundThread.h"
+#include "nw4r/snd/snd_WaveFile.h"
 
-#include "nw4r/ut/inlines.h" // ut::Min
+#include "nw4r/ut/ut_algorithm.h" // ut::Min
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -35,7 +35,7 @@ WsdPlayer::WsdPlayer() :
 }
 
 void WsdPlayer::InitParam(int voiceOutCount, WsdCallback const *callback,
-                          register_t callbackData)
+                          u32 callbackData)
 {
 	BasicPlayer::InitParam();
 
@@ -66,7 +66,7 @@ void WsdPlayer::InitParam(int voiceOutCount, WsdCallback const *callback,
 bool WsdPlayer::Prepare(void const *waveSoundBase, int index,
                         StartOffsetType startOffsetType, int startOffset,
                         int voiceOutCount, WsdCallback const *callback,
-                        register_t callbackData)
+                        u32 callbackData)
 {
 	SoundThread::AutoLock lock;
 
@@ -202,7 +202,7 @@ void WsdPlayer::Update()
 }
 
 bool WsdPlayer::StartChannel(WsdCallback const *callback,
-                             register_t callbackData)
+                             u32 callbackData)
 {
 	SoundThread::AutoLock lock;
 
@@ -234,7 +234,7 @@ bool WsdPlayer::StartChannel(WsdCallback const *callback,
 
 	Channel *channel = Channel::AllocChannel(
 		ut::Min(waveData.numChannels, Channel::CHANNEL_MAX), GetVoiceOutCount(),
-		priority, ChannelCallbackFunc, reinterpret_cast<register_t>(this));
+		priority, ChannelCallbackFunc, reinterpret_cast<u32>(this));
 	if (!channel)
 		return false;
 
@@ -357,7 +357,7 @@ void WsdPlayer::UpdateChannel()
 
 void WsdPlayer::ChannelCallbackFunc(Channel *dropChannel,
                                     Channel::ChannelCallbackStatus status,
-                                    register_t userData)
+                                    u32 userData)
 {
 	SoundThread::AutoLock lock;
 

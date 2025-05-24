@@ -7,16 +7,16 @@
 
 #include <climits> // USHRT_MAX
 
-#include <types.h>
+#include "common.h"
 
-#include "EnvGenerator.h"
-#include "InstancePool.h"
-#include "global.h"
-#include "Lfo.h"
-#include "MoveValue.h"
-#include "Voice.h"
+#include "nw4r/snd/snd_EnvGenerator.h"
+#include "nw4r/snd/snd_InstancePool.h"
+#include "nw4r/snd/snd_global.h"
+#include "nw4r/snd/snd_Lfo.h"
+#include "nw4r/snd/snd_MoveValue.h"
+#include "nw4r/snd/snd_Voice.h"
 
-#include "../ut/LinkList.h"
+#include "nw4r/ut/ut_LinkList.h"
 
 #include "nw4r/NW4RAssert.hpp"
 
@@ -61,7 +61,7 @@ namespace nw4r { namespace snd { namespace detail
 	public:
 		typedef void Callback(Channel *dropChannel,
 		                      ChannelCallbackStatus status,
-		                      register_t userData);
+		                      u32 userData);
 
 		typedef ut::LinkList<Channel, 0xc8> LinkList;
 
@@ -70,12 +70,12 @@ namespace nw4r { namespace snd { namespace detail
 		// instance managers
 		static Channel *AllocChannel(int voiceChannelCount, int voiceOutCount,
 		                             int priority, Callback *callback,
-		                             register_t callbackData);
+		                             u32 callbackData);
 
 		static void FreeChannel(Channel *channel);
 
 		// methods
-		void InitParam(Callback *callback, register_t callbackData);
+		void InitParam(Callback *callback, u32 callbackData);
 		void Start(WaveInfo const &waveParam, int length, u32 startOffset);
 		void Pause(bool flag)
 		{
@@ -225,7 +225,7 @@ namespace nw4r { namespace snd { namespace detail
 		PanCurve					mPanCurve;					// size 0x04, offset 0xa8
 		int							mAlternateAssign;			// size 0x04, offset 0xac
 		Callback					*mCallback;					// size 0x04, offset 0xb0
-		register_t					mCallbackData;				// size 0x04, offset 0xb4
+		u32							mCallbackData;				// size 0x04, offset 0xb4
 		WaveDataLocationCallback	*mWaveDataLocationCallback;	// size 0x04, offset 0xb8
 		WaveInfo					const *mWaveInfo;			// size 0x04, offset 0xbc
 		Voice						*mVoice;					// size 0x04, offset 0xc0
