@@ -12,5 +12,10 @@
                 "isDefault": true
             }
         },
+        {
+            "label": "Apply Objdiff Mappings",
+            "type": "shell",
+            "command": "python ${workspaceFolder}/tools/custom/apply_objdiff_mappings.py",
+        },
     ]
 }

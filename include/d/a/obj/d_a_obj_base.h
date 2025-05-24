@@ -1,11 +1,12 @@
 #ifndef D_A_OBJ_BASE_H
 #define D_A_OBJ_BASE_H
 
-#include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
+#include "d/col/c/c_m3d_g_lin.h"
+#include "d/d_jnt_col.h"
 #include "egg/math/eggMath.h"
 #include "m/m3d/m_shadow.h"
 #include "m/m3d/m_smdl.h"
@@ -14,32 +15,9 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
-#include "rvl/MTX/mtx.h"
 
 class dAcObjBase_c;
 class dBgS_Acch;
-
-// This is found in dAcObamboo, dAcPy, and dAcEsm
-// Since they have object in common, it will reside here
-// until further notice.
-#include "m/m3d/m_mdl.h"
-struct todoStruct00 {
-    struct InternalData {
-        u16 field_0x00;
-        f32 field_0x04;
-        InternalData *pNextData;
-    };
-
-    todoStruct00();
-
-    void Set(dAcObjBase_c *pActor, InternalData *pData, m3d::mdl_c *pMdl, u32);
-
-    /* 0x00 */ InternalData *field_0x00;
-    /* 0x04 */ m3d::mdl_c *mpMdl;
-    /* 0x08 */ dAcObjBase_c *mpActor;
-    /* 0x0C */ u32 mCount; // Guess
-    /* 0x10 */ u32 field_0x10;
-};
 
 // Size: 0xA8
 struct ActorCarryStruct {
@@ -61,7 +39,7 @@ struct ActorCarryStruct {
     ActorCarryStruct();
     /* vt 0x9C */
     virtual ~ActorCarryStruct();
-    /* 0xA0 */ u32 field_0xA0;
+    /* 0xA0 */ dJntCol_c *field_0xA0;
     /* 0xA4 */ u32 field_0xA4;
 
     void set(u32 flags, f32 x, f32 y, f32 z, void *unk);
@@ -187,6 +165,10 @@ public:
     }
     bool checkObjectProperty(u32 property) const {
         return mObjectActorFlags & property;
+    }
+
+    void SetJntCol(dJntCol_c *pCol) {
+        mActorCarryInfo.field_0xA0 = pCol;
     }
 
     // could be their own thing?
