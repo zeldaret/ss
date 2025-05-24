@@ -35,7 +35,7 @@ public:
     operator const nw4r::math::MTX34 *() const {
         return (nw4r::math::MTX34 *)(this);
     }
-    operator const  nw4r::math::MTX34 &() const {
+    operator const nw4r::math::MTX34 &() const {
         return *(nw4r::math::MTX34 *)(this);
     }
 
@@ -78,9 +78,15 @@ public:
     void ZYXrotM(const mAng3_c &ang) {
         ZYXrotM(ang.x, ang.y, ang.z);
     }
+    void ZXYrotS(const mAng3_c &ang) {
+        ZXYrotS(ang.x, ang.y, ang.z);
+    }
 
     void toRot(mAng3_c &out) const; ///< Converts the matrix to a rotation vector.
 
+    void inverse() {
+        MTXInverse(*this, *this);
+    }
     void multVecZero(nw4r::math::VEC3 &out) const; ///< Converts the matrix to a vector.
     void zero();                                   ///< Zeroes out the matrix.
 
@@ -88,34 +94,57 @@ public:
     bool quatRelated();
 
     void transS(const mVec3_c &v) {
-        PSMTXTrans(*this, v.x, v.y, v.z);
+        MTXTrans(*this, v.x, v.y, v.z);
     }
     void transS(f32 x, f32 y, f32 z) {
-        PSMTXTrans(*this, x, y, z);
+        MTXTrans(*this, x, y, z);
     }
-    mVec3_c multVec(const mVec3_c &v) const {
-        mVec3_c ret = v;
-        PSMTXMultVec(*this, ret, ret);
-        return ret;
+    void transM(const mVec3_c &v) {
+        mMtx_c m;
+        MTXTrans(m, v.x, v.y, v.z);
+        *this += m;
+    }
+    void transM(f32 x, f32 y, f32 z) {
+        mMtx_c m;
+        MTXTrans(m, x, y, z);
+        *this += m;
     }
 
     void multVec(const mVec3_c &in, mVec3_c &out) const {
-        PSMTXMultVec(*this, in, out);
+        MTXMultVec(*this, in, out);
+    }
+    mVec3_c multVec(const mVec3_c &v) const {
+        mVec3_c ret = v;
+        MTXMultVec(*this, ret, ret);
+        return ret;
+    }
+
+    void multVecSR(const mVec3_c &in, mVec3_c &out) const {
+        MTXMultVecSR(*this, in, out);
+    }
+    mVec3_c multVecSR(const mVec3_c &v) const {
+        mVec3_c ret = v;
+        MTXMultVecSR(*this, ret, ret);
+        return ret;
     }
 
     mMtx_c &operator+=(const mMtx_c &rhs) {
-        PSMTXConcat(*this, rhs, *this);
+        MTXConcat(*this, rhs, *this);
         return *this;
     }
 
     mVec3_c operator*(const mVec3_c &rhs) {
         mVec3_c out;
-        PSMTXMultVec(*this, rhs, out);
+        MTXMultVec(*this, rhs, out);
         return out;
     }
 
     void applyQuat(mQuat_c &quat) {
-        PSMTXMultVec(m, quat.v, quat.v);
+        MTXMultVec(m, quat.v, quat.v);
+    }
+
+    f32 baseLen(int i) const {
+        return m[0][i] * m[0][i] + m[1][i] * m[1][i] + m[2][i] * m[2][i];
     }
 
     void fn_802F1C40(s32, s32);

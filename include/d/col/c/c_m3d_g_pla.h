@@ -5,6 +5,7 @@
 #include "d/col/c/c_m3d.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
+#include "rvl/MTX/vec.h"
 
 // Plane with a normal
 class cM3dGPla {
@@ -22,8 +23,13 @@ public:
     mAng GetAngle(mAng) const;
     mAng GetNegativeAngle(mAng) const;
 
+    void SetupNP0(const mVec3_c &normal, const mVec3_c &point) {
+        mNormal = normal;
+        VECNormalize(mNormal, mNormal);
+        mD = -VECDotProduct(mNormal, point);
+    }
+
     // Unused
-    // void SetupNP0(const mVec3_c &, const mVec3_c &);
     // void SetupNP(const mVec3_c &, const mVec3_c &);
     // bool getCrossY(const mVec3_c &, f32 *) const;
     // void Set(const cM3dGPla *);

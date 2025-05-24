@@ -15,6 +15,7 @@
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_camera.h"
+#include "d/d_jnt_col.h"
 #include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
@@ -189,9 +190,9 @@ int dAcEsm_c::actorCreate() {
         *parr++ = false;
     }
 
-    static todoStruct00::InternalData data0 = {0, 100.f, nullptr};
-    static todoStruct00::InternalData data1 = {1, 130.f, &data0};
-    field_0x9f8.Set(this, &data1, &mMdl.getModel(), 1);
+    static Vec data0 = {0.f, 100.f, 0.f};
+    static dJntColData_c data1 = {0, 1, 0, 130.f, &data0};
+    mJntCol.init(this, &data1, &mMdl.getModel(), 1);
 
     mLightInfo.SetColor(mColor(0xCC, 0xFF, 0xFF, 0xFF));
     mLightInfo.SetScale(0.f);

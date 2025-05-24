@@ -7,8 +7,8 @@
 #include "d/a/obj/d_a_obj_bomb.h"
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/cc/d_cc_d.h"
+#include "d/d_jnt_col.h"
 #include "d/d_shadow.h"
-#include "d/flag/sceneflag_manager.h"
 #include "m/m3d/m_anmmatclr.h"
 #include "m/m3d/m_anmtexpat.h"
 #include "m/m_angle.h"
@@ -139,7 +139,7 @@ private:
     /* 0x600 */ dBgS_ObjAcch mObjAcch;
     /* 0x9B0 */ STATE_MGR_DECLARE(dAcEsm_c);
     /* 0x9EC */ dAcRef_c<dAcBomb_c> mBombRef;
-    /* 0x9F8 */ todoStruct00 field_0x9f8;
+    /* 0x9F8 */ dJntCol_c mJntCol;
     /* 0xA0C */ EffectsStruct mEffArr[2];
     /* 0xA74 */ TimeAreaStruct mTimeArea;
     /* 0xA80 */ mVec3_c mPosCopy1;

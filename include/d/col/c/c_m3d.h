@@ -3,8 +3,9 @@
 
 #include "common.h"
 #include "math.h"
-#include "nw4r/math.h" // IWYU pragma: export
 #include "nw4r/types_nw4r.h"
+
+#include "nw4r/math.h" // IWYU pragma: export
 
 class cM3dGAab;
 class cM3dGCps;
@@ -21,18 +22,24 @@ extern const f32 G_CM3D_F_ABS_MIN;
 
 bool cM3d_Len2dSqPntAndSegLine(f32, f32, f32, f32, f32, f32, f32 *, f32 *, f32 *);
 bool cM3d_Len3dSqPntAndSegLine(const cM3dGLin &, const nw4r::math::VEC3 &, nw4r::math::VEC3 *, f32 *, f32 *);
-f32 cM3d_SignedLenPlaAndPos(const cM3dGPla &, const nw4r::math::VEC3 *);
-void cM3d_CalcPla(const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, nw4r::math::VEC3 *, f32 *);
+f32 cM3d_SignedLenPlaAndPos(const cM3dGPla *, const nw4r::math::VEC3 *);
+void cM3d_CalcPla(
+    const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, nw4r::math::VEC3 *, f32 *
+);
 int cM3d_Check_LinLin(const cM3dGLin &, const cM3dGLin *, f32 *, f32 *);
 bool cM3d_Cross_LinPla(const cM3dGLin &, const cM3dGPla *, nw4r::math::VEC3 *, bool, bool);
-bool cM3d_Cross_MinMaxBoxLine(const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, const nw4r::math::VEC3 *);
+bool cM3d_Cross_MinMaxBoxLine(
+    const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, const nw4r::math::VEC3 *
+);
 bool cM3d_InclusionCheckPosIn3PosBox3d(
     const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, const nw4r::math::VEC3 *, f32
 );
 bool cM3d_CrossX_Tri(const cM3dGTri &, const nw4r::math::VEC3 *, f32);
 bool cM3d_CrossX_Tri(const cM3dGTri &, const nw4r::math::VEC3 *);
 bool cM3d_CrossY_Tri(const cM3dGTri &, const nw4r::math::VEC3 *);
-bool cM3d_CrossY_Tri_Front(const nw4r::math::VEC3 &, const nw4r::math::VEC3 &, const nw4r::math::VEC3 &, const nw4r::math::VEC3 *);
+bool cM3d_CrossY_Tri_Front(
+    const nw4r::math::VEC3 &, const nw4r::math::VEC3 &, const nw4r::math::VEC3 &, const nw4r::math::VEC3 *
+);
 bool cM3d_CrossY_Tri(const cM3dGTri &, const nw4r::math::VEC3 *, f32 *);
 bool cM3d_CrossY_Tri(const cM3dGTri &, const nw4r::math::VEC3 *, f32);
 bool cM3d_CrossY_Tri(const cM3dGTri &, const nw4r::math::VEC3 *, const cM3d_Range *, f32 *);
@@ -59,7 +66,9 @@ bool cM3d_Cross_CylCyl(const cM3dGCyl &, const cM3dGCyl &, f32 *);
 bool cM3d_Cross_CylCyl(const cM3dGCyl &, const cM3dGCyl &, nw4r::math::VEC3 *);
 bool cM3d_Cross_CylTri(const cM3dGCyl &, const cM3dGTri &, nw4r::math::VEC3 *);
 int cM3d_Cross_CylLin(const cM3dGCyl &, const cM3dGLin &, nw4r::math::VEC3 *, nw4r::math::VEC3 *);
-int cM3d_Cross_CylPntPnt(const cM3dGCyl &, const nw4r::math::VEC3 &, const nw4r::math::VEC3 &, nw4r::math::VEC3 *, nw4r::math::VEC3 *);
+int cM3d_Cross_CylPntPnt(
+    const cM3dGCyl &, const nw4r::math::VEC3 &, const nw4r::math::VEC3 &, nw4r::math::VEC3 *, nw4r::math::VEC3 *
+);
 bool cM3d_Cross_CylPnt(const cM3dGCyl &, const nw4r::math::VEC3 &);
 bool cM3d_Cross_CpsCps(const cM3dGCps &, const cM3dGCps &, nw4r::math::VEC3 *, f32 *, f32 *);
 bool cM3d_Cross_CpsCyl(const cM3dGCps &, const cM3dGCyl &, nw4r::math::VEC3 *);
@@ -72,7 +81,9 @@ void cM3d_PlaneCrossLineProcWork(f32, f32, f32, f32, f32, f32, f32, f32 *, f32 *
 int cM3d_2PlaneCrossLine(const cM3dGPla &, const cM3dGPla &, cM3dGLin *);
 bool cM3d_3PlaneCrossPos(const cM3dGPla &, const cM3dGPla &, const cM3dGPla &, nw4r::math::VEC3 *);
 f32 cM3d_lineVsPosSuisenCross(const cM3dGLin &, const nw4r::math::VEC3 &, nw4r::math::VEC3 *);
-f32 cM3d_lineVsPosSuisenCross(const nw4r::math::VEC3 &, const nw4r::math::VEC3 &, const nw4r::math::VEC3 &, nw4r::math::VEC3 *);
+f32 cM3d_lineVsPosSuisenCross(
+    const nw4r::math::VEC3 &, const nw4r::math::VEC3 &, const nw4r::math::VEC3 &, nw4r::math::VEC3 *
+);
 
 bool cM3d_Cross_UnkTri(const cM3dGUnk &, cM3dGTri &, nw4r::math::VEC3 *);
 bool cM3d_Cross_CylUnk(const cM3dGCyl &, cM3dGUnk &, nw4r::math::VEC3 *);

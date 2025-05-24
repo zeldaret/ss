@@ -5,6 +5,7 @@
 #include "common.h"
 #include "egg/math/eggMath.h"
 #include "egg/math/eggVector.h"
+#include "nw4r/math/math_arithmetic.h"
 #include "nw4r/math/math_types.h"
 #include "nw4r/types_nw4r.h"
 #include "rvl/MTX/vec.h"
@@ -246,6 +247,18 @@ public:
 
     f32 inprodXZ(const mVec3_c &other) const {
         return x * other.x + z * other.z;
+    }
+    f32 getSquareMag() const {
+        return VEC3LenSq(*this);
+    }
+    f32 absXZ() const {
+        return EGG::Math<f32>::sqrt(squareMagXZ());
+    }
+    s16 atan2sX_Z() const {
+        return cM::atan2s(x, z);
+    }
+    s16 atan2sY_XZ() const {
+        return cM::atan2s(-y, absXZ());
     }
 
     static mVec3_c Zero;
