@@ -12,7 +12,7 @@
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
-#include "toBeSorted/actor_on_rail.h"
+#include "toBeSorted/d_path.h"
 #include "toBeSorted/attention.h"
 
 class dAcOivyRope_c : public dAcObjBase_c {

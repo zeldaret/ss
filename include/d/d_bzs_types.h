@@ -24,10 +24,10 @@ struct AREA {
 // TODO: double check, copied from ss-tools
 // Size 0x28
 struct BPNT {
-    /* 0x00 */ mVec3_c position1;
-    /* 0x0C */ mVec3_c position2;
-    /* 0x18 */ mVec3_c position3;
-    /* 0x24 */ u8 _0x24[4];
+    /* 0x00 */ Vec position;
+    /* 0x0C */ Vec control1;
+    /* 0x18 */ Vec control2;
+    /* 0x24 */ u8 params[4];
 };
 
 // TODO: double check, copied from ss-tools
@@ -99,15 +99,24 @@ struct OBJN {
     /* 0x00 */ u16 offset;
 };
 
+#define PATH_FLAG_WRAP_AROUND 1
+// 0 = spnt, pnt. 1 = bpnt, sbpt
+#define PATH_FLAG_SPLINE 2
+
 // Size 0xC
 struct PATH {
     /* 0x00 */ u8 field_0x00;
-    /* 0x01 */ u8 field_0x01;
+    /* 0x01 */ u8 pathId;
     /* 0x02 */ u16 pointStartIndex;
     /* 0x04 */ u16 pointCount;
-    /* 0x06 */ u8 _0x06[4];
-    /* 0x0A */ u8 firstBitIsWrapAround;
+    /* 0x06 */ u16 nextPath;
+    /* 0x08 */ u8 _0x08[2];
+    /* 0x0A */ u8 flags;
     /* 0x0B */ u8 _0x0B[1];
+
+    u8 getNextId() const {
+        return nextPath;
+    }
 };
 
 // Size 0x24
@@ -135,8 +144,8 @@ struct PLY {
 
 // Size 0x10
 struct PNT {
-    /* 0x00 */ mVec3_c position;
-    /* 0x0C */ u8 _0x0C[4];
+    /* 0x00 */ Vec position;
+    /* 0x0C */ u8 params[4];
 };
 
 // Size 0x4
@@ -170,14 +179,12 @@ struct SOBJ {
     /* 0x28 */ char name[8];
 };
 
-// Size 0x???
-struct SBPT {
-    // ???
-};
 
 // Parsed the same way in ss-tools
 typedef PNT SPNT;
 typedef PATH SPTH;
+// Similarly accessed
+typedef BPNT SBPT;
 
 // Size 0x14
 struct STIF {

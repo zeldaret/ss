@@ -4,7 +4,7 @@
 #include "d/t/d_tg.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "toBeSorted/actor_on_rail.h"
+#include "toBeSorted/d_path.h"
 
 class dTgSndAr_c : public dTg_c {
 public:
@@ -27,7 +27,7 @@ private:
     bool checkAlg3(const mVec3_c &pos);
 
     mMtx_c mtx;
-    ActorOnRail mRail;
+    dPath_c mRail;
 };
 
 #endif
