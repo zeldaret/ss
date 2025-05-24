@@ -16,8 +16,8 @@ public:
     virtual int actorExecute() override;
 
 private:
-    mMtx_c matrix;
-    u8 mInverted;
+    /* 0x0FC */ mMtx_c matrix;
+    /* 0x12C */ u8 mInverted;
 };
 
 #endif
