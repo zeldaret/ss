@@ -2333,7 +2333,7 @@ d/col/cc/d_cc_s.cpp:
 
 d/d_jnt_col.cpp:
 	.text       start:0x80358660 end:0x803598C4 align:16
-	.sdata      start:0x80574088 end:0x80574090
+	.sdata      start:0x80574088 end:0x8057408C
 	.sdata2     start:0x8057D298 end:0x8057D2B8
 
 toBeSorted/col/cc/misc_unks.cpp:

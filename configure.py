@@ -688,7 +688,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/col/cc/unk_flag_check.cpp"),
             Object(Matching, "d/col/cc/d_cc_mass_s.cpp"),
             Object(NonMatching, "d/col/cc/d_cc_s.cpp"),
-            Object(NonMatching, "d/d_jnt_col.cpp"),
+            Object(Matching, "d/d_jnt_col.cpp"),
             Object(NonMatching, "toBeSorted/col/cc/misc_unks.cpp"),
         ],
     },

@@ -59,13 +59,13 @@ int dJntCol_c::searchNearPos(cM3dGLin const *param_1, mVec3_c const *param_2, mV
     mVec3_c local_1b4, local_1c0;
     mVec3_c local_1cc, local_1d8;
     mVec3_c local_1e4, local_1f0;
-    f32 dVar17, dVar18;
+    f32 mag;
 
     bool bVar5 = false;
     int rv = -1;
 
-    dVar18 = EGG::Math<f32>::maxNumber();
-    dVar17 = -10000000.0f;
+    f32 max = EGG::Math<f32>::maxNumber();
+    f32 min = -10000000.0f;
     for (int i = 0; i < field_0xC; i++, pcVar12++) {
         if (checkPassNum(i) == 0 && (param_4 & (1 << pcVar12->mType))) {
             getAnmMtx(pcVar12->mJntNum, &mtx);
@@ -128,8 +128,8 @@ int dJntCol_c::searchNearPos(cM3dGLin const *param_1, mVec3_c const *param_2, mV
                     line.Set(local_1cc, local_1d8);
                     f32 dVar15 = cM3d_lineVsPosSuisenCross(line, *param_2, local_1b4);
                     local_1a8 = *param_2 - local_1b4;
-                    f32 dVar16 = local_1a8.getSquareMag();
-                    if (dVar16 < 1e-04f) {
+                    mag = local_1a8.getSquareMag();
+                    if (mag < 1e-04f) {
                         local_1b4 = line.GetStart() - line.GetEnd();
                         local_1c0 = param_1->GetStart() - param_1->GetEnd();
                         f32 inprod = local_1b4.dot(local_1c0);
@@ -144,7 +144,7 @@ int dJntCol_c::searchNearPos(cM3dGLin const *param_1, mVec3_c const *param_2, mV
                         }
                     } else {
                         if (dVar15 >= 0.0f && dVar15 <= 1.0f) {
-                            local_19c = local_1b4 + (local_1a8 / nw4r::math::FSqrt(dVar16)) * radius;
+                            local_19c = local_1b4 + (local_1a8 / nw4r::math::FSqrt(mag)) * radius;
                         } else {
                             local_1b4 = line.GetStart() - line.GetEnd();
                             local_1c0 = param_1->GetStart() - param_1->GetEnd();
@@ -162,7 +162,7 @@ int dJntCol_c::searchNearPos(cM3dGLin const *param_1, mVec3_c const *param_2, mV
                                     }
                                 }
                             }
-                            local_19c = local_1b4 + (local_1a8 / nw4r::math::FSqrt(dVar16)) * radius;
+                            local_19c = local_1b4 + (local_1a8 / nw4r::math::FSqrt(mag)) * radius;
                         }
                     }
                 }
@@ -176,7 +176,7 @@ int dJntCol_c::searchNearPos(cM3dGLin const *param_1, mVec3_c const *param_2, mV
                         local_19c = local_1cc + local_1a8 * radius;
                     }
                 } else {
-                    f32 pla = cM3d_SignedLenPlaAndPos(plane, param_2);
+                    f32 pla = cM3d_SignedLenPlaAndPos(&plane, param_2);
                     local_1a8.normalize();
                     local_19c = *param_2 - local_1a8 * pla;
                 }
@@ -184,15 +184,15 @@ int dJntCol_c::searchNearPos(cM3dGLin const *param_1, mVec3_c const *param_2, mV
             f32 cross = cM3d_lineVsPosSuisenCross(*param_1, local_19c, &local_1b4);
             f32 dVar16 = local_19c.squareDistance(local_1b4);
             if (dVar16 < 1e-04f) {
-                if (!bVar5 || dVar17 < cross) {
-                    dVar17 = cross;
+                if (!bVar5 || min < cross) {
+                    min = cross;
                     *param_3 = local_19c;
                     rv = i;
                     bVar5 = TRUE;
                 }
             } else {
-                if (!bVar5 && (dVar18 >= dVar16)) {
-                    dVar18 = dVar16;
+                if (!bVar5 && (max >= dVar16)) {
+                    max = dVar16;
                     *param_3 = local_19c;
                     rv = i;
                 }
