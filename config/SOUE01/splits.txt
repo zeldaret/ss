@@ -2935,6 +2935,9 @@ nw4r/snd/snd_BiquadFilterPreset.cpp:
 
 nw4r/snd/snd_Channel.cpp:
 	.text       start:0x8046A7B0 end:0x8046B7C8 align:16
+	.sbss       start:0x80576680 end:0x80576688
+	.sdata2     start:0x8057EFA8 end:0x8057EFD0
+	.bss        start:0x806593C8 end:0x806593F8
 
 nw4r/snd/snd_DisposeCallbackManager.cpp:
 	.text       start:0x8046B7D0 end:0x8046BB5C align:16

@@ -247,18 +247,18 @@ void Channel::Update(bool doPeriodicProc)
 
 	f32 mainSend = 0.0f;
 	mainSend += mMainSend;
-	
-	f32 remoteOutVolume[4];
-	for (int i = 0; i < 4; i++) {
-		remoteOutVolume[i] = 1.0f;
-		remoteOutVolume[i] *= mRemoteOutVolume[i];
-	}
 
 	f32 fxSend[AUX_BUS_NUM];
 	for (int i = 0; i < AUX_BUS_NUM; i++)
 	{
 		fxSend[i] = 0.0f;
 		fxSend[i] += mFxSend[i];
+	}
+
+	f32 remoteOutVolume[4];
+	for (int i = 0; i < 4; i++) {
+		remoteOutVolume[i] = 1.0f;
+		remoteOutVolume[i] *= mRemoteOutVolume[i];
 	}
 
 	if (doPeriodicProc)
@@ -294,12 +294,12 @@ void Channel::Update(bool doPeriodicProc)
 		mVoice->SetMainOutVolume(mainOutVolume);
 		mVoice->SetMainSend(mainSend);
 
+		for (int i = 0; i < AUX_BUS_NUM; i++)
+			mVoice->SetFxSend(static_cast<AuxBus>(i), fxSend[i]);
+		
 		for (int i = 0; i < 4; i++) {
 			mVoice->SetRemoteOutVolume(i, remoteOutVolume[i]);
 		}
-
-		for (int i = 0; i < AUX_BUS_NUM; i++)
-			mVoice->SetFxSend(static_cast<AuxBus>(i), fxSend[i]);
 	}
 }
 
