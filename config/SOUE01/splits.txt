@@ -3109,6 +3109,7 @@ nw4r/snd/snd_WaveSoundHandle.cpp:
 
 nw4r/snd/snd_WsdFile.cpp:
 	.text       start:0x80485460 end:0x80485824 align:16
+	.sdata2     start:0x8057F1F0 end:0x8057F1F8
 
 nw4r/snd/snd_WsdPlayer.cpp:
 	.text       start:0x80485830 end:0x804869D8 align:16
