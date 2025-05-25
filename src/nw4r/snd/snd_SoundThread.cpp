@@ -35,7 +35,8 @@ namespace nw4r { namespace snd { namespace detail {
 
 SoundThread::SoundThread() :
 	mStackEnd	(nullptr),
-	mCreateFlag	(false)
+	mCreateFlag	(false),
+	field_0x395 (false)
 {
 	OSInitMessageQueue(&mMsgQueue, mMsgBuffer, THREAD_MESSAGE_BUFSIZE);
 	OSInitThreadQueue(&mThreadQueue);
@@ -96,8 +97,10 @@ void SoundThread::AxCallbackFunc()
 
 void SoundThread::AxCallbackProc()
 {
-	BOOL result ATTR_UNUSED =
-		OSSendMessageAny(&mMsgQueue, MESSAGE_AX_CALLBACK, OS_MESSAGE_NO_FLAGS);
+	if (!field_0x395) {
+		BOOL result ATTR_UNUSED =
+			OSSendMessageAny(&mMsgQueue, MESSAGE_AX_CALLBACK, OS_MESSAGE_NO_FLAGS);
+	}
 
 	NW4R_RANGE_FOR_NO_AUTO_INC(itr, mPlayerCallbackList)
 	{
@@ -123,6 +126,7 @@ void *SoundThread::SoundThreadFunc(void *arg)
 	return nullptr;
 }
 
+#ifdef DEBUG
 /* SoundThread::RegisterSoundFrameCallback
  * ([R89JEL]:/bin/RVL/Debug/mainD.MAP:14509)
  */
@@ -134,6 +138,7 @@ DECOMP_FORCE_CLASS_METHOD(SoundThread::SoundFrameCallback::LinkList,
  */
 DECOMP_FORCE_CLASS_METHOD(SoundThread::SoundFrameCallback::LinkList,
                           Erase(nullptr));
+#endif
 
 void SoundThread::RegisterPlayerCallback(PlayerCallback *callback)
 {
@@ -159,42 +164,7 @@ void SoundThread::SoundThreadProc()
 
 		if (reinterpret_cast<u32>(message) == MESSAGE_AX_CALLBACK)
 		{
-			ut::detail::AutoLock<OSMutex> lock(mMutex);
-
-			NW4R_RANGE_FOR_NO_AUTO_INC(itr, mSoundFrameCallbackList)
-			{
-				decltype(itr) curItr = itr++;
-
-				curItr->at_0x0c();
-			}
-
-			OSTick tick = OSGetTick();
-
-			{
-				// Sound frame
-				AxVoiceManager::GetInstance().FreeAllReservedAxVoice();
-				AxManager::GetInstance().Update();
-
-				NW4R_RANGE_FOR_NO_AUTO_INC(itr, mPlayerCallbackList)
-				{
-					decltype(itr) curItr = itr++;
-
-					curItr->OnUpdateFrameSoundThread();
-				}
-
-				ChannelManager::GetInstance().UpdateAllChannel();
-				(void)Util::CalcRandom(); // ?
-				VoiceManager::GetInstance().UpdateAllVoices();
-			}
-
-			mProcessTick = OSGetTick() - tick;
-
-			NW4R_RANGE_FOR_NO_AUTO_INC(itr, mSoundFrameCallbackList)
-			{
-				decltype(itr) curItr = itr++;
-
-				curItr->at_0x10();
-			}
+			FrameProcess();
 		}
 		else if (reinterpret_cast<u32>(message) == MESSAGE_SHUTDOWN)
 		{
@@ -209,6 +179,46 @@ void SoundThread::SoundThreadProc()
 		decltype(itr) curItr = itr++;
 
 		curItr->OnShutdownSoundThread();
+	}
+}
+
+void SoundThread::FrameProcess()
+{
+	ut::detail::AutoLock<OSMutex> lock(mMutex);
+
+	NW4R_RANGE_FOR_NO_AUTO_INC(itr, mSoundFrameCallbackList)
+	{
+		decltype(itr) curItr = itr++;
+
+		curItr->at_0x0c();
+	}
+
+	OSTick tick = OSGetTick();
+
+	{
+		// Sound frame
+		AxVoiceManager::GetInstance().FreeAllReservedAxVoice();
+		AxManager::GetInstance().Update();
+
+		NW4R_RANGE_FOR_NO_AUTO_INC(itr, mPlayerCallbackList)
+		{
+			decltype(itr) curItr = itr++;
+
+			curItr->OnUpdateFrameSoundThread();
+		}
+
+		ChannelManager::GetInstance().UpdateAllChannel();
+		(void)Util::CalcRandom(); // ?
+		VoiceManager::GetInstance().UpdateAllVoices();
+	}
+
+	mProcessTick = OSGetTick() - tick;
+
+	NW4R_RANGE_FOR_NO_AUTO_INC(itr, mSoundFrameCallbackList)
+	{
+		decltype(itr) curItr = itr++;
+
+		curItr->at_0x10();
 	}
 }
 
