@@ -63,7 +63,7 @@ namespace nw4r { namespace snd { namespace detail
 		                      ChannelCallbackStatus status,
 		                      u32 userData);
 
-		typedef ut::LinkList<Channel, 0xc8> LinkList;
+		typedef ut::LinkList<Channel, 0xd8> LinkList;
 
 	// methods
 	public:
@@ -208,6 +208,7 @@ namespace nw4r { namespace snd { namespace detail
 		f32							mMainOutVolume;				// size 0x04, offset 0x5c
 		f32							mMainSend;					// size 0x04, offset 0x60
 		f32							mFxSend[AUX_BUS_NUM];		// size 0x0c, offset 0x64
+		f32							mRemoteOutVolume[4];
 		f32							mUserPitch;					// size 0x04, offset 0x70
 		f32							mSweepPitch;				// size 0x04, offset 0x74
 		s32							mSweepCounter;				// size 0x04, offset 0x78

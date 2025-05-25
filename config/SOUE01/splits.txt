@@ -3002,6 +3002,9 @@ nw4r/snd/snd_SeqFile.cpp:
 
 nw4r/snd/snd_SeqPlayer.cpp:
 	.text       start:0x80471020 end:0x804727F8 align:16
+	.data       start:0x8056E024 end:0x8056E088
+	.sdata2     start:0x8057F068 end:0x8057F080
+	.bss        start:0x806596E8 end:0x80659708
 
 nw4r/snd/snd_SeqSound.cpp:
 	.text       start:0x80472800 end:0x8047316C align:16

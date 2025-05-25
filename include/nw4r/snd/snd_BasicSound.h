@@ -308,6 +308,7 @@ namespace nw4r { namespace snd { namespace detail
 		ExternalSoundPlayer	*mExtSoundPlayer;			// size 0x04, offset 0x18
 		AmbientInfo			mAmbientInfo;				// size 0x14, offset 0x1c
 		SoundParam			mAmbientParam;				// size 0x24, offset 0x30
+		UNKWORD				field_0x54;
 		SoundActorParam		mActorParam;				// size 0x0c, offset 0x54
 		MoveValue<f32, int>	mFadeVolume;				// size 0x10, offset 0x60
 		MoveValue<f32, int>	mPauseFadeVolume;			// size 0x10, offset 0x70
@@ -336,8 +337,7 @@ namespace nw4r { namespace snd { namespace detail
 		f32					mMainOutVolume;				// size 0x04, offset 0xc8
 		f32					mMainSend;					// size 0x04, offset 0xcc
 		f32					mFxSend[AUX_BUS_NUM];		// size 0x0c, offset 0xd0
-		// NOTE: Name is not from DWARF; derived from usage and other nearby names
-		u32					mPauseNestCounter;			// size 0x04, offset 0xdc
+		f32					mRemoteOutVolume[4];		// size 0x10, offset 0xdc
 	public:
 		ut::LinkListNode	mPriorityLink;				// size 0x08, offset 0xe0
 		ut::LinkListNode	mSoundPlayerPlayLink;		// size 0x08, offset 0xe8

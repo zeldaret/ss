@@ -92,6 +92,7 @@ namespace nw4r { namespace snd { namespace detail
 		void SetMainOutVolume(f32 volume);
 		void SetMainSend(f32 send);
 		void SetFxSend(AuxBus bus, f32 send);
+		void SetRemoteOutVolume(int remote, f32 volume);
 		void SetPitch(f32 pitch);
 		void SetVolume(f32 volume);
 		void SetVeVolume(f32 targetVolume, f32 initVolume);

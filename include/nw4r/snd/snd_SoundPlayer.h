@@ -39,6 +39,7 @@ namespace nw4r { namespace snd
 		f32 GetFxSend(int index) const { return mFxSend[index]; }
 
 		void SetPlayableSoundCount(int count);
+		f32 GetRemoteOutVolume(int remote) const;
 
 		int GetPlayingSoundCount() const { return mSoundList.GetSize(); }
 		detail::BasicSound *GetLowestPrioritySound()

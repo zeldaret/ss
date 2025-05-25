@@ -238,8 +238,10 @@ void SeqPlayer::Skip(OffsetType offsetType, int offset)
 	}
 }
 
+#if 0
 // SeqPlayer::SetTempoRatio ([R89JEL]:/bin/RVL/Debug/mainD.MAP:13781)
 DECOMP_FORCE(NW4RAssert_String(tempoRatio >= 0.0f));
+#endif
 
 void SeqPlayer::SetTempoRatio(f32 tempo) {
     mTempoRatio = tempo;
@@ -284,6 +286,7 @@ void SeqPlayer::CallSeqUserprocCallback(u16 procId, SeqTrack *track)
 	trackParam.cmpFlag = param.cmpFlag;
 }
 
+#if 0
 // SeqPlayer::GetLocalVariable? maybe all of them?
 DECOMP_FORCE(NW4RAssertHeaderClampedLValue_String(varNo));
 
@@ -321,6 +324,7 @@ DECOMP_FORCE(&SeqTrack::SetModDepth);
 
 // SeqPlayer::SetTrackModSpeed ([R89JEL]:/bin/RVL/Debug/mainD.MAP:13801)
 DECOMP_FORCE(&SeqTrack::SetModSpeed);
+#endif
 
 void SeqPlayer::InvalidateData(void const *start, void const *end)
 {

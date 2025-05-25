@@ -126,7 +126,7 @@ void *SoundThread::SoundThreadFunc(void *arg)
 	return nullptr;
 }
 
-#ifdef DEBUG
+#if 0
 /* SoundThread::RegisterSoundFrameCallback
  * ([R89JEL]:/bin/RVL/Debug/mainD.MAP:14509)
  */

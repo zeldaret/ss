@@ -921,10 +921,10 @@ void AxVoiceParamBlock::Sync()
 		mVpb->pb.ve.currentDelta =
 			-mPrevVeSetting.currentVolume / AX_SAMPLES_PER_FRAME;
 	}
-	else if (nextVolume > 32767)
+	else if (nextVolume > 65535)
 	{
 		mVpb->pb.ve.currentDelta =
-			(32767 - mPrevVeSetting.currentVolume) / AX_SAMPLES_PER_FRAME;
+			(65535 - mPrevVeSetting.currentVolume) / AX_SAMPLES_PER_FRAME;
 	}
 
 	if (mVpb->pb.ve.currentDelta == 0 && mPrevVeSetting.currentDelta == 0)

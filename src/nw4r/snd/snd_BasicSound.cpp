@@ -54,10 +54,11 @@ BasicSound::BasicSound(int priority, int ambientPriority) :
 	mGeneralHandle		(nullptr),
 	mTempGeneralHandle	(nullptr),
 	mSoundPlayer		(nullptr),
+	field_0x54			(0),
 	mSoundActor			(nullptr),
 	mExtSoundPlayer		(nullptr),
-	mId					(INVALID_ID),
-	mPauseNestCounter	(0)
+	mId					(INVALID_ID)
+	// mPauseNestCounter	(0)
 {
 	// specifically not the source variant
 	NW4RAssertHeaderClampedLRValue_Line(53, priority, PRIORITY_MIN,
@@ -108,6 +109,9 @@ void BasicSound::InitParam()
 	for (int i = 0; i < AUX_BUS_NUM; i++)
 		mFxSend[i] = 0.0f;
 
+	for (int i = 0; i < 4; i++)
+		mRemoteOutVolume[i] = 1.0f;
+
 	mAmbientParam.volume			= 1.0f;
 	mAmbientParam.pitch				= 1.0f;
 	mAmbientParam.pan				= 0.0f;
@@ -118,7 +122,7 @@ void BasicSound::InitParam()
 	mAmbientParam.biquadFilterType	= 0;
 	mAmbientParam.priority			= 0;
 
-	mPauseNestCounter = 0;
+	// mPauseNestCounter = 0;
 }
 
 void BasicSound::StartPrepared()
@@ -155,7 +159,7 @@ void BasicSound::Pause(bool flag, int fadeFrames)
 
 	if (flag)
 	{
-		mPauseNestCounter++;
+		// mPauseNestCounter++;
 
 		switch (mPauseState)
 		{
@@ -183,8 +187,8 @@ void BasicSound::Pause(bool flag, int fadeFrames)
 	}
 	else
 	{
-		if (mPauseNestCounter && --mPauseNestCounter)
-			return;
+//		if (mPauseNestCounter && --mPauseNestCounter)
+//			return;
 
 		switch (mPauseState)
 		{
@@ -410,6 +414,13 @@ void BasicSound::UpdateParam()
 	mainOutVolume *= mMainOutVolume;
 	mainOutVolume *= GetSoundPlayer()->GetMainOutVolume();
 
+	f32 remoteOutVolume[4];
+	for (int i = 0; i < 4; i++) {
+		remoteOutVolume[i] = 1.0f;
+		remoteOutVolume[i] *= GetSoundPlayer()->GetRemoteOutVolume(i);
+		remoteOutVolume[i] *= mRemoteOutVolume[i];
+	}
+
 	f32 mainSend = 0.0f;
 	mainSend += mMainSend;
 	mainSend += GetSoundPlayer()->GetMainSend();
@@ -433,6 +444,10 @@ void BasicSound::UpdateParam()
 	basicPlayer.SetBiquadFilter(biquadFilterType, biquadFilterValue);
 	basicPlayer.SetOutputLine(outputLineFlag);
 	basicPlayer.SetMainOutVolume(mainOutVolume);
+
+	for (int i = 0; i < 4; i++) {
+		basicPlayer.SetRemoteOutVolume(i, remoteOutVolume[i]);
+	}
 
 	basicPlayer.SetMainSend(mainSend);
 
@@ -569,15 +584,21 @@ void BasicSound::SetPlayerPriority(int priority)
 void BasicSound::SetInitialVolume(f32 volume)
 {
 	NW4RAssert_Line(818, volume >= 0.0f);
+	if (volume < 0.0f) {
+		volume = 0.0f;
+	}
 
-	mInitVolume = ut::Clamp(volume, 0.0f, 1.0f);
+	mInitVolume = mInitVolume = volume;
 }
 
 void BasicSound::SetVolume(f32 volume, int frames)
 {
 	NW4RAssert_Line(833, volume >= 0.0f);
+	if (volume < 0.0f) {
+		volume = 0.0f;
+	}
 
-	mExtMoveVolume.SetTarget(ut::Clamp(volume, 0.0f, 1.0f), frames);
+	mExtMoveVolume.SetTarget(volume, frames);
 }
 
 void BasicSound::SetPitch(f32 pitch)
