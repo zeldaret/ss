@@ -2470,7 +2470,7 @@ config.libs = [
     Rel(NonMatching, "d_t_effect_gen", "REL/d/t/d_t_effect_gen.cpp"),
     Rel(Matching, "d_t_fairytag", "REL/d/t/d_t_fairytag.cpp"),
     Rel(NonMatching, "d_t_fence_synchronizer", "REL/d/t/d_t_fence_synchronizer.cpp"),
-    Rel(NonMatching, "d_t_gate_to_ground", "REL/d/t/d_t_gate_to_ground.cpp"),
+    Rel(Matching, "d_t_gate_to_ground", "REL/d/t/d_t_gate_to_ground.cpp"),
     Rel(Matching, "d_t_gekotag", "REL/d/t/d_t_gekotag.cpp"),
     Rel(Matching, "d_t_genki_dws_tgt", "REL/d/t/d_t_genki_dws_tgt.cpp"),
     Rel(NonMatching, "d_t_group_summon", "REL/d/t/d_t_group_summon.cpp"),
