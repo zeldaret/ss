@@ -1,7 +1,6 @@
 #include "d/a/obj/d_a_obj_arrow.h"
 
 #include "c/c_math.h"
-#include "d/a/d_a_player.h"
 #include "d/col/c/c_cc_d.h"
 #include "nw4r/types_nw4r.h"
 
@@ -38,7 +37,7 @@ const dCcD_SrcSph dAcArrow_c::sCc2 = {
 
 // clang-format on
 
-bool hitCallback(dAcObjBase_c *i_actorA, cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfB) {
+bool dAcArrow_atHitCallback(dAcObjBase_c *i_actorA, cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfB) {
     static_cast<dAcArrow_c *>(i_actorA)->hitCallback(i_objInfA, i_actorB, i_objInfB);
     return true;
 }
@@ -70,7 +69,7 @@ int dAcArrow_c::create() {
     mCcCps.Set(sCc1);
     mCcCps.SetStts(mStts);
     mCcCps.SetAtFlag(0x2000);
-    mCcCps.SetAtCallback(::hitCallback);
+    mCcCps.SetAtCallback(dAcArrow_atHitCallback);
     mCcSph.Set(sCc2);
     mCcSph.SetStts(mStts);
 

@@ -2,6 +2,8 @@
 #define D_A_PLAYER_H
 
 #include "common.h"
+#include "d/a/d_a_item.h"
+#include "d/col/c/c_bg_s_poly_info.h"
 #include "d/d_player_mdl.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
@@ -17,6 +19,9 @@ public:
     // argument is always false in existing code, true doesn't seem to make a difference
     void bonk(bool unk = false);
     bool fn_80202D90(bool);
+    void fn_80202E00(cBgS_PolyInfo *, f32, f32);
+
+    dAcItem_c *getWhippedItem();
 
     /* overrides omitted */
     /* vt 0x310 */ virtual void vt_0x310();

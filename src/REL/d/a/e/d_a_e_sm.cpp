@@ -16,6 +16,7 @@
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_camera.h"
 #include "d/d_jnt_col.h"
+#include "d/d_linkage.h"
 #include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
@@ -629,7 +630,7 @@ int dAcEsm_c::actorExecute() {
                     dAcBomb_c *bomb = getBombWithinRadius(lookRadius);
 
                     if (bomb != nullptr && std::abs(bomb->GetPosition().y - mHomePos1.y) < 0.7f * lookRadius) {
-                        if (bomb->mActorCarryInfo.tryAttachWithRef(bomb, this, &mBombRef, 1, false)) {
+                        if (bomb->GetLinkage().tryAttach(bomb, this, &mBombRef, dLinkage_c::CONNECTION_1, false)) {
                             mTimer_0xBAE = 160;
                             playSound(SE_ESm_BRING_IN);
                             clearActorProperty(1);

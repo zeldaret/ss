@@ -17,6 +17,7 @@
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_pla.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_linkage.h"
 #include "d/flag/dungeonflag_manager.h"
 #include "d/flag/sceneflag_manager.h"
 #include "egg/math/eggMath.h"
@@ -104,11 +105,11 @@ int dAcOtubo_c::actorCreate() {
 
     mStateMgr.changeState(StateID_Wait);
     boundingBox.Set(mVec3_c(-100.f, -40.f, -100.f), mVec3_c(100.f, 80.f, 100.f));
-    mActorCarryInfo.set(0xC8A0, 28.f, 50.f, 28.f, nullptr); // TODO (ActorCarry Flags)
-    mActorCarryInfo.field_0x8C = 26.f;
-    mActorCarryInfo.field_0x90 = 46.f;
-    mActorCarryInfo.field_0x94 = 28.f;
-    mActorCarryInfo.field_0x98 = 0.f;
+    GetLinkage().set(0xC8A0, 28.f, 50.f, 28.f, nullptr); // TODO (ActorCarry Flags)
+    GetLinkage().field_0x8C = 26.f;
+    GetLinkage().field_0x90 = 46.f;
+    GetLinkage().field_0x94 = 28.f;
+    GetLinkage().field_0x98 = 0.f;
 
     return SUCCEEDED;
 }
@@ -166,7 +167,7 @@ int dAcOtubo_c::actorExecute() {
             mField_0x9DC += position.y - mOldPosition.y;
             adjustRoll();
         }
-        mActorCarryInfo.bushTpFunc(mObjAcch);
+        GetLinkage().bushTpFunc(mObjAcch);
     }
 
     if (mStateMgr.isState(StateID_Wait) || mStateMgr.isState(StateID_Slope)) {
@@ -175,7 +176,7 @@ int dAcOtubo_c::actorExecute() {
     mSph.SetC(getCenter());
     dCcS::GetInstance()->Set(&mSph);
 
-    mActorCarryInfo.fn_800511E0(this);
+    GetLinkage().fn_800511E0(this);
     mField_0x8F0.modifyMtx();
     calcRoll();
 
@@ -283,28 +284,23 @@ void dAcOtubo_c::executeState_Grab() {
         dAcNpcCeLady_c *lady = mCeLady.get();
         dAcNpcCeFriend_c *ceFriend = mCeFriend.get();
         if (ceFriend && ceFriend->fn_11_17C0(this)) {
-            mActorCarryInfo.fn_80050EA0(this);
+            GetLinkage().fn_80050EA0(this);
         } else if (lady && lady->fn_12_1C20(this)) {
-            mActorCarryInfo.fn_80050EA0(this);
+            GetLinkage().fn_80050EA0(this);
         }
     }
 
-    if (mActorCarryInfo.checkCarryType(5) && sLib::calcTimer(&mTimer_0x9F5) == 0 &&
+    if (GetLinkage().checkConnection(dLinkage_c::CONNECTION_5) && sLib::calcTimer(&mTimer_0x9F5) == 0 &&
         (mObjAcch.ChkGndHit() || mObjAcch.ChkWallHit(nullptr) || mObjAcch.ChkRoofHit())) {
         destroy();
-    } else if (dAcPy_c::LINK->getCurrentAction() == 66 /* Put Down Medium */) { // TODO (Link Action ID)
+    } else if (dAcPy_c::GetLink()->getCurrentAction() == 66 /* Put Down Medium */) { // TODO (Link Action ID)
         mStateMgr.changeState(StateID_Put);
     } else {
-        if (mActorCarryInfo.isCarried != 4) {
-            bool isCarried = false;
-            if (mActorCarryInfo.isCarried == 1 && mActorCarryInfo.carryType == 5) {
-                isCarried = true;
-            }
-
-            if (isCarried) {
-                mField_0x9F6 = 0;
+        if (!GetLinkage().checkState(dLinkage_c::STATE_DELETE)) {
+            if (GetLinkage().checkConnection(dLinkage_c::CONNECTION_5)) {
+                mField_0x9F6 = dLinkage_c::STATE_0;
             } else {
-                mField_0x9F6 = mActorCarryInfo.isCarried;
+                mField_0x9F6 = GetLinkage().getState();
             }
         }
 
@@ -320,7 +316,7 @@ void dAcOtubo_c::finalizeState_Grab() {
     }
     mField_0x9D4 = cM::rndF(40.f);
     mSph.ClrCo_0x400();
-    if ((u8)mActorCarryInfo.isCarried == 2) {
+    if ((u8)GetLinkage().mState == 2) {
         mSph.OnAtSet();
     }
     mObjAcch.ClrRoofNone();
@@ -407,7 +403,7 @@ void dAcOtubo_c::initializeState_Rebirth() {
     mSph.ClrCoSet();
     mSph.ClrTgSet();
     setObjectProperty(0x200);
-    mActorCarryInfo.fn_80050EA0(this);
+    GetLinkage().fn_80050EA0(this);
 
     int item_drop_table = getParams2UpperByte();
     switch (item_drop_table) {
@@ -456,7 +452,7 @@ void dAcOtubo_c::destroy() {
         return;
     }
     fn_80022BE0(BlurAndPaletteManager::GetPInstance(), position);
-    mActorCarryInfo.fn_80050EA0(this);
+    GetLinkage().fn_80050EA0(this);
 
     dEmitterBase_c *fx_thing = dJEffManager_c::spawnEffect(
         PARTICLE_RESOURCE_ID_MAPPING_211_, poscopy2, nullptr, nullptr, nullptr, nullptr, 0, 0
@@ -651,7 +647,7 @@ void dAcOtubo_c::attemptDestroy() {
         mField_0x9DC = 0.f;
     }
     if (!mObjAcch.ChkGndHit() && mSph.ChkCoHit()) {
-        if (mActorCarryInfo.isCarried != 1 && forwardSpeed > 0.f) {
+        if (GetLinkage().mState != 1 && forwardSpeed > 0.f) {
             if (mSph.GetCoActor()->unkByteTargetFiRelated == 4) {
                 destroy();
                 return;
@@ -807,7 +803,9 @@ bool dAcOtubo_c::checkOnLava() {
 }
 
 bool dAcOtubo_c::checkCarryType() const {
-    return mActorCarryInfo.checkCarryType(1) || mActorCarryInfo.checkCarryType(7) || mActorCarryInfo.checkCarryType(5);
+    const dLinkage_c &linkage = GetLinkage();
+    return linkage.checkConnection(dLinkage_c::CONNECTION_1) || linkage.checkConnection(dLinkage_c::CONNECTION_7) ||
+           linkage.checkConnection(dLinkage_c::CONNECTION_5);
 }
 
 bool dAcOtubo_c::checkSubmerged() {

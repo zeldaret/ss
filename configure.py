@@ -399,7 +399,7 @@ config.libs = [
             Object(NonMatching, "d/a/npc/d_a_ordinary_npc.cpp"),
             Object(NonMatching, "d/d_ac_npc_kyui.cpp"),
             Object(Matching, "d/d_base.cpp"),
-            Object(NonMatching, "d/d_carry.cpp"),
+            Object(NonMatching, "d/d_linkage.cpp"),
             Object(Matching, "d/d_cc.cpp"),
             Object(Matching, "d/d_dvd.cpp"),
             Object(Matching, "d/d_dvd_drive_error.cpp"),

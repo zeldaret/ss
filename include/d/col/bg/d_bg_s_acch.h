@@ -292,7 +292,7 @@ public:
     bool ChkLineCheckNone() {
         return mFlags & LINE_CHECK_NONE;
     }
-    bool ChkLineCheck() {
+    bool ChkLineCheck() const {
         return mFlags & LINE_CHECK;
     }
     bool Chk_0x4000000() const {
