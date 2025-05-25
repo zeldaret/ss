@@ -2895,6 +2895,9 @@ nw4r/snd/snd_AnimSound.cpp:
 nw4r/snd/snd_AxManager.cpp:
 	.text       start:0x804630E0 end:0x80464880 align:16
 	.ctors      start:0x804DB958 end:0x804DB95C
+	.sbss       start:0x80576650 end:0x80576668
+	.sdata2     start:0x8057EF18 end:0x8057EF30
+	.bss        start:0x80658F80 end:0x80659390
 
 nw4r/snd/snd_AxVoice.cpp:
 	.text       start:0x80464880 end:0x80467634 align:16
@@ -2913,6 +2916,8 @@ nw4r/snd/snd_BankFile.cpp:
 
 nw4r/snd/snd_BasicPlayer.cpp:
 	.text       start:0x80468910 end:0x80468B50 align:16
+	.data       start:0x8056DB38 end:0x8056DB60
+	.sdata2     start:0x8057EF80 end:0x8057EF88
 
 nw4r/snd/snd_BasicSound.cpp:
 	.text       start:0x80468B50 end:0x8046A36C align:16

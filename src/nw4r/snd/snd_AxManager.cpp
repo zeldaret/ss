@@ -68,7 +68,8 @@ AxManager::AxManager() :
 	mInitialized			(false),
 	mUpdateVoicePrioFlag	(true),
 	mOldAidCallback			(nullptr),
-	mResetReadyCounter		(-1)
+	mResetReadyCounter		(-1),
+	field_0x100(5)
 {
 	mMainOutVolume.InitValue(1.0f);
 	mMasterVolume.InitValue(1.0f);
@@ -307,7 +308,10 @@ OutputMode AxManager::GetOutputMode()
 }
 
 void AxManager::SetMasterVolume(f32 volume, int frame) {
-    mMasterVolume.SetTarget(ut::Clamp(volume, 0.0f, 1.0f), (frame + 2) / 3);
+	if (volume < 0.0f) {
+		volume = 0.0f;
+	}
+    mMasterVolume.SetTarget(volume, (frame + 2) / 3);
 
     if (frame == 0) {
         VoiceManager::GetInstance().UpdateAllVoicesSync(Voice::SYNC_AX_VE);
@@ -395,6 +399,9 @@ bool AxManager::AppendEffect(AuxBus bus, FxBase* pFx) {
 void AxManager::ClearEffect(AuxBus bus, int frame) {
     if (frame == 0) {
         ShutdownEffect(bus);
+        if (!mAuxFadeVolume[bus].IsFinished()) {
+            mAuxFadeVolume[bus].SetTarget(0.0f, 0);
+        }
         return;
     }
 
@@ -447,6 +454,8 @@ void AxManager::AuxCallbackFunc(void* pChans, void* pContext) {
     void** ppChans = static_cast<void**>(pChans);
     AuxBus bus = static_cast<AuxBus>(reinterpret_cast<u32>(pContext));
 
+	int tick = OSGetTick();
+
     if (GetInstance().GetOutputMode() == OUTPUT_MODE_DPL2) {
         num = AX_DPL2_MAX;
 
@@ -468,10 +477,12 @@ void AxManager::AuxCallbackFunc(void* pChans, void* pContext) {
         for (int i = 0; i < num; i++) {
             std::memset(buffer[i], 0, FX_BUFFER_SIZE);
         }
+		GetInstance().mEffectProcessTick[bus] = OSGetTick() - tick;
     } else if (GetInstance().GetEffectList(bus).IsEmpty()) {
         for (int i = 0; i < num; i++) {
             std::memset(buffer[i], 0, FX_BUFFER_SIZE);
         }
+		GetInstance().mEffectProcessTick[bus] = OSGetTick() - tick;
     } else {
         for (FxBase::LinkList::Iterator it =
                  GetInstance().GetEffectList(bus).GetBeginIter();
@@ -480,6 +491,7 @@ void AxManager::AuxCallbackFunc(void* pChans, void* pContext) {
             it->UpdateBuffer(num, buffer, FX_BUFFER_SIZE, FX_SAMPLE_FORMAT,
                              FX_SAMPLE_RATE, GetInstance().GetOutputMode());
         }
+		GetInstance().mEffectProcessTick[bus] = OSGetTick() - tick;
     }
 }
 
