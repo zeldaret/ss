@@ -15,12 +15,14 @@ extern "C" {
  * https://wiibrew.org/wiki//shared2/sys/SYSCONF
  */
 
-typedef enum {
-    SC_STATUS_0,
-    SC_STATUS_1,
-    SC_STATUS_2,
-    SC_STATUS_3,
-} SCStatus;
+typedef u32 SCStatus;
+enum SCStatus_et
+{
+	SC_STATUS_OK,	/* name known from asserts */
+	SC_STATUS_BUSY,
+	SC_STATUS_FATAL,
+	SC_STATUS_PARSE,
+};
 
 typedef enum {
     SC_CONF_FILE_SYSTEM,  //!< SYSCONF
@@ -112,7 +114,7 @@ typedef struct SCControl {
 } SCControl;
 
 void SCInit(void);
-u32 SCCheckStatus(void);
+SCStatus SCCheckStatus(void);
 
 BOOL SCFindByteArrayItem(void *dst, u32 len, SCItemID id);
 BOOL SCReplaceByteArrayItem(const void *src, u32 len, SCItemID id);

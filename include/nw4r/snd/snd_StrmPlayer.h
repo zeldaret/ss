@@ -1,219 +1,271 @@
 #ifndef NW4R_SND_STRM_PLAYER_H
 #define NW4R_SND_STRM_PLAYER_H
+
+/*******************************************************************************
+ * headers
+ */
+
 #include "common.h"
+
 #include "nw4r/snd/snd_BasicPlayer.h"
+#include "nw4r/snd/snd_global.h"
 #include "nw4r/snd/snd_InstancePool.h"
+#include "nw4r/snd/snd_Task.h"
 #include "nw4r/snd/snd_SoundThread.h"
 #include "nw4r/snd/snd_StrmChannel.h"
 #include "nw4r/snd/snd_StrmFile.h"
-#include "nw4r/snd/snd_Task.h"
 #include "nw4r/snd/snd_Voice.h"
-#include "nw4r/types_nw4r.h"
-#include "nw4r/ut.h" // IWYU pragma: export
-#include "rvl/OS.h"  // IWYU pragma: export
 
-namespace nw4r {
-namespace snd {
-namespace detail {
+#include "nw4r/ut/ut_LinkList.h"
 
-class StrmPlayer : public BasicPlayer, public SoundThread::PlayerCallback {
-    friend class StrmHeaderLoadTask;
-    friend class StrmDataLoadTask;
+#include <rvl/OS/OSMutex.h>
 
-public:
-    enum StartOffsetType {
-        START_OFFSET_TYPE_SAMPLE,
-        START_OFFSET_TYPE_MILLISEC
-    };
+/*******************************************************************************
+ * types
+ */
 
-    struct StrmHeader {
-        // TODO: Why 8 if the player only supports 2???
-        static const int STRM_CHANNEL_MAX = 8;
+// forward declarations
+namespace nw4r { namespace ut { class FileStream; }}
 
-        StrmInfo strmInfo;                     // at 0x0
-        AdpcmInfo adpcmInfo[STRM_CHANNEL_MAX]; // at 0x38
-        u16 loopYn1[STRM_CHANNEL_MAX];         // at 0x1B8
-        u16 loopYn2[STRM_CHANNEL_MAX];         // at 0x1D8
-    };
+/*******************************************************************************
+ * classes and functions
+ */
 
-public:
-    StrmPlayer();
-    virtual ~StrmPlayer(); // at 0x8
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2fcda
+	class StrmPlayer : public BasicPlayer, public SoundThread::PlayerCallback
+	{
+	// enums
+	public:
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2f3ca
+		enum StartOffsetType
+		{
+			START_OFFSET_TYPE_SAMPLE,
+			START_OFFSET_TYPE_MILLISEC,
+		};
 
-    virtual bool Start();          // at 0xc
-    virtual void Stop();           // at 0x10
-    virtual void Pause(bool flag); // at 0x14
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2fc67
+		enum SetupResult
+		{
+			SETUP_SUCCESS,
 
-    virtual bool IsActive() const {
-        return mActiveFlag;
-    } // at 0x18
-    virtual bool IsStarted() const {
-        return mStartedFlag;
-    } // at 0x1c
-    virtual bool IsPause() const {
-        return mPauseFlag;
-    }; // at 0x20
+			SETUP_ERR_CANNOT_ALLOCATE_BUFFER,
 
-    virtual void OnUpdateFrameSoundThread() {
-        Update();
-    } // at 0xc
-    virtual void OnUpdateVoiceSoundThread() {
-        UpdateBuffer();
-    } // at 0x10
-    virtual void OnShutdownSoundThread() {
-        Stop();
-    } // at 0x14
+			SETUP_ERR_UNKNOWN
+		};
 
-    bool IsPrepared() const {
-        return mPreparedFlag;
-    }
+	// nested types
+	public:
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2fb36
+		struct StrmTrack
+		{
+			bool							mActiveFlag;	// size 0x01, offset 0x00
+			Voice							*mVoice;		// size 0x04, offset 0x04
+			StrmFileReader::StrmTrackInfo	mTrackInfo;		// size 0x28, offset 0x08
+			f32								mVolume;		// size 0x04, offset 0x30
+			f32								mPan;			// size 0x04, offset 0x34
+		}; // size 0x38
 
-    void SetTaskErrorFlag() {
-        mTaskErrorFlag = true;
-    }
-    void SetTaskCancelFlag() {
-        mTaskCancelFlag = true;
-    }
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2f430
+		class StrmHeaderLoadTask : public Task
+		{
+		// methods
+		public:
+			// cdtors
+			StrmHeaderLoadTask();
 
-    bool Setup(StrmBufferPool *pBufferPool);
-    void Shutdown();
+			// virtual function ordering
+			// vtable Task
+			virtual void Execute();
+			virtual void Cancel();
+			virtual void OnCancel();
 
-    bool Prepare(ut::FileStream *pFileStream, int voices, StartOffsetType offsetType, int offset);
-    void InitParam();
+		// members
+		public:
+			/* base Task */						// size 0x10, offset 0x00
+			StrmPlayer		*player;			// size 0x04, offset 0x10
+			ut::FileStream	*fileStream;		// size 0x04, offset 0x14
+			StartOffsetType	startOffsetType;	// size 0x04, offset 0x18
+			s32				startOffset;		// size 0x04, offset 0x1c
+		}; // size 0x20
 
-    void Update();
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2f537
+		class StrmDataLoadTask : public Task
+		{
+		// typedefs
+		public:
+			typedef ut::LinkList<StrmDataLoadTask, 0x2c> LinkList;
 
-private:
-    struct StrmHeaderLoadTask : public Task {
-        StrmHeaderLoadTask();
+		// methods
+		public:
+			// cdtors
+			StrmDataLoadTask();
 
-        virtual void Execute();  // at 0xC
-        virtual void Cancel();   // at 0x10
-        virtual void OnCancel(); // at 0x14
+			// virtual function ordering
+			// vtable Task
+			virtual void Execute();
+			virtual void Cancel();
+			virtual void OnCancel();
 
-        StrmPlayer *strmPlayer;          // at 0x10
-        ut::FileStream *fileStream;      // at 0x14
-        StartOffsetType startOffsetType; // at 0x18
-        s32 startOffset;                 // at 0x1C
-    };
+		// members
+		public:
+			/* base Task */								// size 0x10, offset 0x00
+			StrmPlayer			*mStrmPlayer;			// size 0x04, offset 0x10
+			ut::FileStream		*fileStream;			// size 0x04, offset 0x14
+			u32					mSize;					// size 0x04, offset 0x18
+			s32					mOffset;				// size 0x04, offset 0x1c
+			u32					mBlockSize;				// size 0x04, offset 0x20
+			s32					mBufferBlockIndex;		// size 0x04, offset 0x24
+			bool				mNeedUpdateAdpcmLoop;	// size 0x01, offset 0x28
+			/* 3 bytes padding */
+			ut::LinkListNode	link;					// size 0x08, offset 0x2c
+		}; // size 0x34
 
-    struct StrmDataLoadTask : public Task {
-        StrmDataLoadTask();
+	// methods
+	public:
+		StrmPlayer();
+		virtual ~StrmPlayer();
 
-        virtual void Execute();  // at 0xC
-        virtual void Cancel();   // at 0x10
-        virtual void OnCancel(); // at 0x14
+		// virtual function ordering
+		// vtable BasicPlayer
+		virtual bool Start();
+		virtual void Stop();
+		virtual void Pause(bool flag);
+		virtual bool IsActive() const { return mActiveFlag; }
+		virtual bool IsStarted() const { return mStartedFlag; }
+		virtual bool IsPause() const { return mPauseFlag; }
 
-        StrmPlayer *strmPlayer;     // at 0x10
-        ut::FileStream *fileStream; // at 0x14
-        u32 size;                   // at 0x18
-        s32 offset;                 // at 0x1C
-        u32 blockSize;              // at 0x20
-        s32 bufferBlockIndex;       // at 0x24
-        bool needUpdateAdpcmLoop;   // at 0x28
+		// vtable SoundThread::PlayerCallback
+		virtual void OnUpdateFrameSoundThread() { Update(); }
+		virtual void OnUpdateVoiceSoundThread() { UpdateBuffer(); }
+		virtual void OnShutdownSoundThread() { Stop(); }
 
-        NW4R_UT_LIST_NODE_DECL(); // at 0x2C
-    };
+		// methods
+		SetupResult Setup(StrmBufferPool *bufferPool, int allocChannelCount,
+		                  u16 allocTrackFlag, int voiceOutCount);
+		void Update();
+		void Shutdown();
 
-    NW4R_UT_LIST_TYPEDEF_DECL(StrmDataLoadTask);
+		bool IsPrepared() const { return mPreparedFlag; }
+		StrmChannel *GetTrackChannel(StrmTrack const &track, int channelIndex);
+		StrmTrack *GetPlayerTrack(int trackNo);
 
-    static const int DATA_BLOCK_COUNT_MIN = 4;
-    static const int DATA_BLOCK_COUNT_MAX = 32;
-    static const int DATA_BLOCK_SIZE_MAX = 0x2000;
+		void SetTaskErrorFlag() { mTaskErrorFlag = true; }
+		void SetTaskCancelFlag() { mTaskCancelFlag = true; }
 
-    // TODO: How is this calculated?
-    static const int LOAD_BUFFER_SIZE = 0x4000 + 32;
+		bool IsAdpcm() const
+		{
+			return mStrmInfo.sampleFormat == SAMPLE_FORMAT_DSP_ADPCM;
+		}
+		bool CheckDiskDriveError() const;
 
-private:
-    bool LoadHeader(ut::FileStream *pFileStream, StartOffsetType offsetType, int offset);
-    bool LoadStreamData(
-        ut::FileStream *pFileStream, int offset, u32 size, u32 blockSize, int blockIndex, bool needUpdateAdpcmLoop
-    );
+		void SetAdpcmLoopContext(int channelNum, u16 *predScale);
+		void SetTrackVolume(u32 trackBitFlag, f32 volume);
 
-    bool SetupPlayer(const StrmHeader *pStrmHeader);
+		void InitParam();
+		bool SetupPlayer();
+		bool Prepare(ut::FileStream *fileStream,
+		             StartOffsetType startOffsetType, int startOffset);
 
-    bool AllocChannels(int channels, int voices);
-    void FreeChannels();
+		bool LoadHeader(ut::FileStream *fileStream,
+		                StartOffsetType startOffsetType, int startOffset);
+		bool LoadStreamData(ut::FileStream *fileStream, int offset, u32 size,
+		                    u32 blockSize, int bufferBlockIndex,
+		                    bool needUpdateAdpcmLoop);
 
-    void UpdateBuffer();
-    void UpdateLoopAddress(u32 startSample, u32 endSample);
-    void UpdatePlayingBlockIndex();
-    void UpdateDataLoopAddress(s32 endBlock);
-    void SetLoopEndToZeroBuffer(int endBlock);
-    void UpdateLoadingBlockIndex();
-    void UpdatePauseStatus();
+		bool AllocStrmBuffers();
+		void FreeStrmBuffers();
 
-    int CalcLoadingBufferBlockCount() const;
-    bool CalcStartOffset(s32 *pBlockIndex, u32 *pBlockOffset, s32 *pLoopCount);
+		bool AllocVoices(int voiceOutCount);
+		void FreeVoices();
 
-    static void VoiceCallbackFunc(Voice *pDropVoice, Voice::VoiceCallbackStatus status, void *pCallbackArg);
+		int CalcLoadingBufferBlockCount() const;
+		bool CalcStartOffset(s32 *startBlockIndex, u32 *startBlockOffset,
+		                     s32 *loopCount);
 
-    void SetAdpcmLoopContext(int channels, u16 *pPredScale);
+		void SetLoopEndToZeroBuffer(int endBufferBlockIndex);
 
-private:
-    StrmInfo mStrmInfo; // at 0x80
+		void UpdateBuffer();
+		void UpdatePauseStatus();
+		void UpdateLoadingBlockIndex();
+		void UpdatePlayingBlockIndex();
+		void UpdateLoopAddress(u32 loopStartSamples, u32 loopEndSamples);
+		void UpdateDataLoopAddress(s32 endBlockBufferIndex);
+		void UpdateVoiceParams(StrmTrack *track);
 
-    bool mSetupFlag;           // at 0xB8
-    bool mActiveFlag;          // at 0xB9
-    bool mStartedFlag;         // at 0xBA
-    bool mPreparedFlag;        // at 0xBB
-    bool mTaskErrorFlag;       // at 0xBC
-    bool mTaskCancelFlag;      // at 0xBD
-    bool mLoadingDelayFlag;    // at 0xBE
-    bool mPauseFlag;           // at 0xBF
-    bool mPauseStatus;         // at 0xC0
-    bool mLoadWaitFlag;        // at 0xC1
-    bool mNoRealtimeLoadFlag;  // at 0xC2
-    bool mSkipUpdateAdpcmLoop; // at 0xC3
-    bool mValidAdpcmLoop;      // at 0xC4
-    bool mPlayFinishFlag;      // at 0xC5
-    bool mLoadFinishFlag;      // at 0xC6
+		static u32 GetSampleByByte(u32 byte, SampleFormat format);
 
-    s32 mLoopCounter;    // at 0xC8
-    int mPrepareCounter; // at 0xCC
+	private:
+		static void VoiceCallbackFunc(Voice *voice,
+		                              Voice::VoiceCallbackStatus status,
+		                              void *arg);
 
-    int mChangeNumBlocks;      // at 0xD0
-    int mDataBlockSize;        // at 0xD4
-    int mBufferBlockCount;     // at 0xD8
-    int mBufferBlockCountBase; // at 0xDC
+	// static members
+	public:
+		static int const LOAD_BUFFER_SIZE = 0x4000;
+		static int const LOAD_BUFFER_CHANNEL_NUM;
+		static int const BUFFER_BLOCK_COUNT_MAX = 32;
+		static int const STRM_CHANNEL_NUM_PER_TRACK;
+		static int const STRM_CHANNEL_NUM = 16;
+		static int const DATA_BLOCK_SIZE_MAX = 0x2000;
+		static int const STRM_TRACK_NUM = 8;
 
-    int mLoadingBufferBlockCount; // at 0xE0
-    int mLoadingBufferBlockIndex; // at 0xE4
-    int mLoadingDataBlockIndex;   // at 0xE8
+	private:
+		static bool sStaticInitFlag;
+		static OSMutex sLoadBufferMutex;
+		static byte_t sLoadBuffer[LOAD_BUFFER_SIZE];
 
-    int mPlayingBufferBlockCount; // at 0xEC
-    int mPlayingBufferBlockIndex; // at 0xF0
-    int mPlayingDataBlockIndex;   // at 0xF4
-    int mLoopStartBlockIndex;     // at 0xF8
-    int mLastBlockIndex;          // at 0xFC
+	// members
+	private:
+		/* base BasicPlayer */															// size 0x0a4, offset 0x000
+		/* base SoundThread::PlayerCallback */											// size 0x00c, offset 0x0a4
+		StrmFileReader::StrmInfo		mStrmInfo;										// size 0x040, offset 0x0b0
+		bool							mSetupFlag;										// size 0x001, offset 0x0f0
+		bool							volatile mActiveFlag;							// size 0x001, offset 0x0f1
+		bool							mStartedFlag;									// size 0x001, offset 0x0f2
+		bool							mPreparedFlag;									// size 0x001, offset 0x0f3
+		bool							mTaskErrorFlag;									// size 0x001, offset 0x0f4
+		bool							mTaskCancelFlag;								// size 0x001, offset 0x0f5
+		bool							mLoadingDelayFlag;								// size 0x001, offset 0x0f6
+		bool							mPauseFlag;										// size 0x001, offset 0x0f7
+		bool							mPauseStatus;									// size 0x001, offset 0x0f8
+		bool							mLoadWaitFlag;									// size 0x001, offset 0x0f9
+		bool							mNoRealtimeLoadFlag;							// size 0x001, offset 0x0fa
+		bool							mSkipUpdateAdpcmLoop;							// size 0x001, offset 0x0fb
+		bool							mValidAdpcmLoop;								// size 0x001, offset 0x0fc
+		bool							mPlayFinishFlag;								// size 0x001, offset 0x0fd
+		bool							mLoadFinishFlag;								// size 0x001, offset 0x0fe
+		bool							mAllocStrmBufferFlag;							// size 0x001, offset 0x0ff
+		s32								mLoopCounter;									// size 0x004, offset 0x100
+		int								mPrepareCounter;								// size 0x004, offset 0x104
+		int								mChangeNumBlocks;								// size 0x004, offset 0x108
+		int								mDataBlockSize;									// size 0x004, offset 0x10c
+		int								mBufferBlockCount;								// size 0x004, offset 0x110
+		int								mBufferBlockCountBase;							// size 0x004, offset 0x114
+		int								mLoadingBufferBlockCount;						// size 0x004, offset 0x118
+		int								mLoadingBufferBlockIndex;						// size 0x004, offset 0x11c
+		int								mLoadingDataBlockIndex;							// size 0x004, offset 0x120
+		int								mPlayingBufferBlockCount;						// size 0x004, offset 0x124
+		int								mPlayingBufferBlockIndex;						// size 0x004, offset 0x128
+		int								mPlayingDataBlockIndex;							// size 0x004, offset 0x12c
+		int								mLoopStartBlockIndex;							// size 0x004, offset 0x130
+		int								mLastBlockIndex;								// size 0x004, offset 0x134
+		int								mLoadWaitCount;									// size 0x004, offset 0x138
+		StartOffsetType					mStartOffsetType;								// size 0x004, offset 0x13c
+		int								mStartOffset;									// size 0x004, offset 0x140
+		StrmHeaderLoadTask				mStrmHeaderLoadTask;							// size 0x020, offset 0x144
+		StrmDataLoadTask::LinkList		mStrmDataLoadTaskList;							// size 0x00c, offset 0x164
+		InstancePool<StrmDataLoadTask>	mStrmDataLoadTaskPool;							// size 0x004, offset 0x170
+		StrmDataLoadTask				mStrmDataLoadTaskArea[BUFFER_BLOCK_COUNT_MAX];	// size 0x680, offset 0x174
+		StrmBufferPool					*mBufferPool;									// size 0x004, offset 0x7f4
+		ut::FileStream					*mFileStream;									// size 0x004, offset 0x7f8
+		s32								mTrackCount;									// size 0x004, offset 0x7fc
+		s32								mChannelCount;									// size 0x004, offset 0x800
+		s32								mVoiceOutCount;									// size 0x004, offset 0x804
+		StrmChannel						mChannels[STRM_CHANNEL_NUM];					// size 0x340, offset 0x808
+		StrmTrack						mTracks[STRM_TRACK_NUM];						// size 0x1c0, offset 0xb48
+	}; // size 0xd08
+}}} // namespace nw4r::snd::detail
 
-    StartOffsetType mStartOffsetType; // at 0x100
-    int mStartOffset;                 // at 0x104
-
-    StrmHeaderLoadTask mStrmHeaderLoadTask;                       // at 0x108
-    StrmDataLoadTaskList mStrmDataLoadTaskList;                   // at 0x128
-    InstancePool<StrmDataLoadTask> mStrmDataLoadTaskPool;         // at 0x134
-    StrmDataLoadTask mStrmDataLoadTaskArea[DATA_BLOCK_COUNT_MAX]; // at 0x138
-
-    StrmBufferPool *mBufferPool; // at 0x7B8
-    ut::FileStream *mFileStream; // at 0x7BC
-    Voice *mVoice;               // at 0x7C0
-    s32 mChannelCount;           // at 0x7C4
-    s32 mVoiceOutCount;          // at 0x7C8
-
-    StrmChannel mChannels[CHANNEL_MAX];   // at 0x7CC
-    u16 mAdpcmLoopPredScale[CHANNEL_MAX]; // at 0x83C
-    u16 mAdpcmLoopYn1[CHANNEL_MAX];       // at 0x840
-    u16 mAdpcmLoopYn2[CHANNEL_MAX];       // at 0x844
-
-    static u8 sLoadBuffer[LOAD_BUFFER_SIZE] ALIGN_DECL(32);
-    static OSMutex sLoadBufferMutex;
-
-    static bool sStaticInitFlag;
-};
-
-} // namespace detail
-} // namespace snd
-} // namespace nw4r
-
-#endif
+#endif // NW4R_SND_STRM_PLAYER_H

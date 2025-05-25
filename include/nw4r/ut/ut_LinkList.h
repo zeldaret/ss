@@ -317,8 +317,8 @@ public:
 
 public:
     // Shorthand names for reverse iterator types
-    typedef detail::ReverseIterator<Iterator> RevIterator;
-    typedef detail::ReverseIterator<ConstIterator> RevConstIterator;
+    typedef detail::ReverseIterator<Iterator> ReverseIterator;
+    typedef detail::ReverseIterator<ConstIterator> ReverseConstIterator;
 
 public:
     LinkList() {}

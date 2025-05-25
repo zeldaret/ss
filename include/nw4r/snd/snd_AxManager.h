@@ -1,109 +1,162 @@
 #ifndef NW4R_SND_AX_MANAGER_H
 #define NW4R_SND_AX_MANAGER_H
-#include "nw4r/snd/snd_Common.h"
+
+/*******************************************************************************
+ * headers
+ */
+
+#include "common.h"
+
+#include "nw4r/snd/snd_global.h"
+
 #include "nw4r/snd/snd_FxBase.h"
 #include "nw4r/snd/snd_MoveValue.h"
-#include "nw4r/types_nw4r.h"
-#include "nw4r/ut.h" // IWYU pragma: export
-#include "rvl/AI.h"  // IWYU pragma: export
-#include "rvl/AX.h"  // IWYU pragma: export
 
-namespace nw4r {
-namespace snd {
-namespace detail {
+#include "nw4r/ut/ut_LinkList.h"
 
-class AxManager {
-public:
-    struct CallbackListNode {
-        NW4R_UT_LIST_NODE_DECL(); // at 0x0
-        AXOutCallback callback;   // at 0x8
-    };
+#include <rvl/AI/ai.h> // AIDMACallback
+#include <rvl/AX/AX.h>
+#include <rvl/AX/AXCL.h> // AX_MAX_VOLUME
+#include <rvl/AX/AXAux.h> // AXAuxCallback
+#include <rvl/AX/AXOut.h> // AXFrameCallback
 
-    NW4R_UT_LIST_TYPEDEF_DECL(CallbackListNode);
+#include "nw4r/NW4RAssert.hpp"
 
-public:
-    static AxManager &GetInstance();
+/*******************************************************************************
+ * types
+ */
 
-    void Init();
-    void Shutdown();
-    void Update();
-    void PrepareReset();
+// forward declarations
+namespace nw4r { namespace snd { namespace detail { class BiquadFilterLpf; }}}
+namespace nw4r { namespace snd { namespace detail { class BiquadFilterHpf; }}}
+namespace nw4r { namespace snd { namespace detail { class BiquadFilterBpf512; }}}
+namespace nw4r { namespace snd { namespace detail { class BiquadFilterBpf1024; }}}
+namespace nw4r { namespace snd { namespace detail { class BiquadFilterBpf2048; }}}
+namespace nw4r { namespace snd { class BiquadFilterCallback; }}
 
-    bool CheckInit() {
-        return mInitialized;
-    }
+/*******************************************************************************
+ * classes and functions
+ */
 
-    bool IsDiskError() const {
-        return mDiskError;
-    }
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2a5afe
+	class AxManager
+	{
+	// nested types
+	public:
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2a6808
+		struct CallbackListNode
+		{
+		// typedefs
+		public:
+			typedef ut::LinkList<CallbackListNode, 0x00> LinkList;
 
-    bool IsResetReady() const {
-        return mResetReadyCounter == 0;
-    }
+		// members
+		public:
+			ut::LinkListNode	node;		// size 0x08, offset 0x00
+			AXFrameCallback		*callback;	// size 0x04, offset 0x08
+		}; // size 0x0c
 
-    f32 GetOutputVolume() const;
-    void *GetZeroBufferAddress();
+	// methods
+	public:
+		// instance accessors
+		static AxManager &GetInstance();
 
-    void RegisterCallback(CallbackListNode *pNode, AXOutCallback pCallback);
-    void UnregisterCallback(CallbackListNode *pNode);
+		// methods
+		void Init();
+		void Update();
+		void Shutdown();
 
-    void SetOutputMode(OutputMode mode);
-    OutputMode GetOutputMode();
+		OutputMode GetOutputMode();
+		void const *GetZeroBufferAddress();
+		bool CheckInit() { return mInitialized; }
+		f32 GetOutputVolume() const;
+		FxBase::LinkList &GetEffectList(AuxBus bus)
+		{
+			NW4RAssertHeaderClampedLValue_Line(173, bus, AUX_A, AUX_BUS_NUM);
 
-    f32 GetMasterVolume() const {
-        return mMasterVolume.GetValue();
-    }
-    void SetMasterVolume(f32 volume, int frame);
+			return mFxList[bus];
+		}
+		BiquadFilterCallback const *GetBiquadFilterCallback(int index)
+		{
+			return sBiquadFilterCallbackTable[static_cast<u8>(index)];
+		}
 
-    bool AppendEffect(AuxBus bus, FxBase *pFx);
-    void ClearEffect(AuxBus bus, int frame);
-    void ShutdownEffect(AuxBus bus);
+		void SetOutputMode(OutputMode mode);
+		void SetMainOutVolume(f32 volume, int frames);
+		void SetBiquadFilterCallback(int type,
+		                             BiquadFilterCallback const *callback);
 
-    FxBaseList &GetEffectList(AuxBus bus) {
-        return mFxList[bus];
-    }
+		void RegisterCallback(CallbackListNode *node,
+		                      AXFrameCallback *callback);
+		void UnregisterCallback(CallbackListNode *node);
 
-private:
-    static const u8 AUX_CALLBACK_WAIT_FRAME = 6;
+		bool AppendEffect(AuxBus bus, FxBase *pFx);
+		void ClearEffect(AuxBus bus, int frame);
+		void ShutdownEffect(AuxBus bus);
 
-    static const int FX_SAMPLE_RATE = AX_SAMPLE_RATE;
-    static const SampleFormat FX_SAMPLE_FORMAT = SAMPLE_FORMAT_PCM_S32;
-    static const int FX_BUFFER_SIZE = AX_FRAME_SIZE;
+		f32 GetMasterVolume() const {
+			return mMasterVolume.GetValue();
+		}
+		void SetMasterVolume(f32 volume, int frame);
+		void PrepareReset();
 
-    static const int ZERO_BUFFER_SIZE = 256;
+		bool IsResetReady() const {
+			return mResetReadyCounter == 0;
+		}
 
-private:
-    AxManager();
+	private:
+		// cdtors
+		AxManager();
 
-    static void AxCallbackFunc();
-    static void AuxCallbackFunc(void *pChans, void *pContext);
-    static void AiDmaCallbackFunc();
+		// callbacks
+		static void AxCallbackFunc();
+		static void AuxCallbackFunc(void* pChans, void* pContext);
+		static void AiDmaCallbackFunc();
 
-private:
-    OutputMode mOutputMode;                          // at 0x0
-    void *mZeroBufferAddress;                        // at 0x4
-    CallbackListNodeList mCallbackList;              // at 0x8
-    AXOutCallback mNextAxRegisterCallback;           // at 0x14
-    bool mInitialized;                               // at 0x18
-    bool mUpdateVoicePrioFlag;                       // at 0x19
-    bool mDiskError;                                 // at 0x1A
-    MoveValue<f32, int> mMasterVolume;               // at 0x1C
-    MoveValue<f32, int> mMainOutVolume;              // at 0x2C
-    MoveValue<f32, int> mVolumeForReset;             // at 0x3C
-    AIDMACallback mOldAidCallback;                   // at 0x4C
-    volatile s32 mResetReadyCounter;                 // at 0x50
-    MoveValue<f32, int> mAuxFadeVolume[AUX_BUS_NUM]; // at 0x54
-    MoveValue<f32, int> mAuxUserVolume[AUX_BUS_NUM]; // at 0x84
-    FxBaseList mFxList[AUX_BUS_NUM];                 // at 0xB4
-    AXAuxCallback mAuxCallback[AUX_BUS_NUM];         // at 0xD8
-    void *mAuxCallbackContext[AUX_BUS_NUM];          // at 0xE4
-    u8 mAuxCallbackWaitCounter[AUX_BUS_NUM];         // at 0xF0
+	// static members
+	private:
+		static u8 const AUX_CALLBACK_WAIT_FRAME;
+		static u16 const AUX_RETURN_VOLUME_MAX = AX_MAX_VOLUME;
+		static int const FX_SAMPLE_RATE;
+		static SampleFormat const FX_SAMPLE_FORMAT;
+		static int const FX_BUFFER_SIZE;
+		static int const ZERO_BUFFER_SIZE = 256;
+		static int const SAMPLES_PAR_AUDIO_FRAME;
+		static int const AUDIO_FRAME_INTERVAL;
 
-    static u8 sZeroBuffer[ZERO_BUFFER_SIZE];
-};
+		static byte_t sZeroBuffer[ZERO_BUFFER_SIZE];
+		static BiquadFilterCallback const *sBiquadFilterCallbackTable[128];
+		static BiquadFilterLpf sBiquadFilterLpf;
+		static BiquadFilterHpf sBiquadFilterHpf;
+		static BiquadFilterBpf512 sBiquadFilterBpf512;
+		static BiquadFilterBpf1024 sBiquadFilterBpf1024;
+		static BiquadFilterBpf2048 sBiquadFilterBpf2048;
 
-} // namespace detail
-} // namespace snd
-} // namespace nw4r
+	// members
+	private:
+		OutputMode					mOutputMode;							// size 0x04, offset 0x00
+		void						*mZeroBufferAddress;					// size 0x04, offset 0x04
+		CallbackListNode::LinkList	mCallbackList;							// size 0x0c, offset 0x08
+		AXFrameCallback				*mNextAxRegisterCallback;				// size 0x04, offset 0x14
+		bool						mInitialized;							// size 0x01, offset 0x18
+		bool						mUpdateVoicePrioFlag;					// size 0x01, offset 0x19
+		/* 2 bytes padding */
+		MoveValue<f32, int>			mMasterVolume;							// size 0x10, offset 0x1c
+		MoveValue<f32, int>			mMainOutVolume;							// size 0x10, offset 0x2c
+		MoveValue<f32, int>			mVolumeForReset;						// size 0x10, offset 0x3c
+		AIDMACallback				mOldAidCallback;						// size 0x04, offset 0x4c
+		s32							mResetReadyCounter;						// size 0x04, offset 0x50
+		MoveValue<f32, int>			mAuxFadeVolume[AUX_BUS_NUM];			// size 0x30, offset 0x54
+		MoveValue<f32, int>			mAuxUserVolume[AUX_BUS_NUM];			// size 0x30, offset 0x84
+		FxBase::LinkList			mFxList[AUX_BUS_NUM];					// size 0x24, offset 0xb4
+		AXAuxCallback				mAuxCallback[AUX_BUS_NUM];				// size 0x0c, offset 0xd8
+		void						*mAuxCallbackContext[AUX_BUS_NUM];		// size 0x0c, offset 0xe4
+		u8							mAuxCallbackWaitCounter[AUX_BUS_NUM];	// size 0x03, offset 0xf0
+		/* 1 byte padding */
+		u32							mEffectProcessTick[AUX_BUS_NUM];		// size 0x0c, offset 0xf4
+	}; // size 0x100
+}}} // namespace nw4r::snd::detail
 
-#endif
+#endif // NW4R_SND_AX_MANAGER_H

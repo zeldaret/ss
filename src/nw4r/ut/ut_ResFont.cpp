@@ -34,7 +34,7 @@ bool ResFont::SetResource(void *buffer) {
         return false;
     }
 
-    if (header->magic == MAGIC_UNPACKED) {
+    if (header->signature == MAGIC_UNPACKED) {
         BinaryBlockHeader *block =
             reinterpret_cast<BinaryBlockHeader *>(reinterpret_cast<char *>(header) + header->headerSize);
 
@@ -115,7 +115,7 @@ FontInformation *ResFont::Rebuild(BinaryFileHeader *header) {
         block = reinterpret_cast<BinaryBlockHeader *>(reinterpret_cast<char *>(block) + block->length);
     }
 
-    header->magic = MAGIC_UNPACKED;
+    header->signature = MAGIC_UNPACKED;
     return info;
 }
 

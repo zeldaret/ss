@@ -1,105 +1,149 @@
 #ifndef NW4R_SND_UTIL_H
 #define NW4R_SND_UTIL_H
-#include "nw4r/snd/snd_Common.h"
-#include "nw4r/types_nw4r.h"
 
+/*******************************************************************************
+ * headers
+ */
 
-namespace nw4r {
-namespace snd {
-namespace detail {
-namespace Util {
+#include "common.h"
 
-enum PanCurve {
-    PAN_CURVE_SQRT,
-    PAN_CURVE_SINCOS,
-    PAN_CURVE_LINEAR,
-};
+#include "nw4r/NW4RAssert.hpp"
 
-struct PanInfo {
-    PanCurve curve;  // at 0x0
-    bool centerZero; // at 0x4
-    bool zeroClamp;  // at 0x5
+/*******************************************************************************
+ * classes and functions
+ */
 
-    PanInfo() : curve(PAN_CURVE_SQRT), centerZero(false), zeroClamp(false) {}
-};
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2a4bc2
+	class Util
+	{
+	public:
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2a4932
+		enum RefType
+		{
+			REFTYPE_ADDRESS,
+			REFTYPE_OFFSET,
+		};
 
-enum RefType {
-    REFTYPE_ADDRESS,
-    REFTYPE_OFFSET,
-};
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2a497b
+		enum PanCurve
+		{
+			PAN_CURVE_SQRT,
+			PAN_CURVE_SINCOS,
+			PAN_CURVE_LINEAR,
+		};
 
-enum DataType {
-    DATATYPE_T0,
-    DATATYPE_T1,
-    DATATYPE_T2,
-    DATATYPE_T3,
-    DATATYPE_INVALID
-};
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x241fd, 0x242b9...
+		template <typename, typename = void, typename = void, typename = void>
+		struct DataRef
+		{
+			u8		refType;	// size 0x01, offset 0x00
+			u8		dataType;	// size 0x01, offset 0x01
+			u16		reserved;
+			u32		value;		// size 0x04, offset 0x04
+		}; // size 0x08
 
-template <typename T0, typename T1 = void, typename T2 = void, typename T3 = void>
-struct DataRef {
-    u8 refType;   // at 0x0
-    u8 dataType;  // at 0x1
-    u16 reserved; // at 0x2
-    u32 value;    // at 0x4
-};
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x247c7, 0x249c5...
+		template <typename T>
+		struct Table
+		{
+			u32	count;		// size 0x04, offset 0x00
+			T	item[1];	// size T,    offset 0x04
+		}; // size 0x04 + T
 
-template <typename T>
-struct Table {
-    u32 count;  // at 0x0
-    T items[1]; // at 0x4
-};
+		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2a49db
+		struct PanInfo
+		{
+			PanCurve	curve;			// size 0x04, offset 0x00
+			bool		centerZeroFlag;	// size 0x01, offset 0x04
+			bool		zeroClampFlag;	// size 0x01, offset 0x05
+			/* 2 bytes padding */
+		}; // size 0x08
 
-template <typename T0, typename T1, typename T2, typename T3>
-inline const T0 *GetDataRefAddress0(const DataRef<T0, T1, T2, T3> &rRef, const void *pBase) {
-    return static_cast<const T0 *>(GetDataRefAddressImpl(static_cast<RefType>(rRef.refType), rRef.value, pBase));
-}
+		static f32 CalcPitchRatio(int pitch);
+		static f32 CalcVolumeRatio(f32 dB);
+		static f32 CalcPanRatio(f32 pan, PanInfo const &info);
+		static f32 CalcSurroundPanRatio(f32 pan, PanInfo const &info);
 
-template <typename T0, typename T1, typename T2, typename T3>
-inline const T1 *GetDataRefAddress1(const DataRef<T0, T1, T2, T3> &rRef, const void *pBase) {
-    return static_cast<const T1 *>(GetDataRefAddressImpl(static_cast<RefType>(rRef.refType), rRef.value, pBase));
-}
+		static u16 CalcLpfFreq(f32 scale);
 
-template <typename T0, typename T1, typename T2, typename T3>
-inline const T2 *GetDataRefAddress2(const DataRef<T0, T1, T2, T3> &rRef, const void *pBase) {
-    return static_cast<const T2 *>(GetDataRefAddressImpl(static_cast<RefType>(rRef.refType), rRef.value, pBase));
-}
+		static void GetRemoteFilterCoefs(int filter, u16 *b0, u16 *b1, u16 *b2,
+		                                 u16 *a1, u16 *a2);
 
-template <typename T0, typename T1, typename T2, typename T3>
-inline const T3 *GetDataRefAddress3(const DataRef<T0, T1, T2, T3> &rRef, const void *pBase) {
-    return static_cast<const T3 *>(GetDataRefAddressImpl(static_cast<RefType>(rRef.refType), rRef.value, pBase));
-}
+		static u16 CalcRandom();
 
-#ifdef NW4R_LITLE_ENDIAN
-inline u16 ReadBigEndian(u16 x) {
-    return x >> 8 | x << 8;
-}
+		static void const *GetDataRefAddressImpl(RefType refType, u32 value,
+		                                         void const *baseAddress);
 
-inline u32 ReadBigEndian(u32 x) {
-    return (x >> 24) & 0x000000FF | (x >> 8) & 0x0000FF00 | (x << 8) & 0x00FF0000 | (x << 24) & 0xFF000000;
-}
-#else
-inline u16 ReadBigEndian(u16 x) {
-    return x;
-}
+// The only way these asserts happen one line after the other is with macros
+#define DEF_GET_DATA_REF_ADDRESS_(line_, index_)							\
+	template <typename T0, typename T1, typename T2, typename T3>			\
+	static inline T ## index_ const *GetDataRefAddress ## index_(			\
+		Util::DataRef<T0, T1, T2, T3> const &ref, void const *baseAddress)	\
+	{																		\
+		/* specifically not the header variant */							\
+		NW4RAssert_Line(line_, ref.dataType == index_);						\
+																			\
+		return static_cast<T ## index_ const *>(GetDataRefAddressImpl(		\
+			static_cast<RefType>(ref.refType), ref.value, baseAddress));	\
+	}																		\
+	STATIC_ASSERT(true) // swallow semicolon
 
-inline u32 ReadBigEndian(u32 x) {
-    return x;
-}
-#endif
+		DEF_GET_DATA_REF_ADDRESS_(141, 0);
+		DEF_GET_DATA_REF_ADDRESS_(142, 1);
+		DEF_GET_DATA_REF_ADDRESS_(143, 2);
+		DEF_GET_DATA_REF_ADDRESS_(144, 3);
 
-f32 CalcPitchRatio(int pitch);
-f32 CalcVolumeRatio(f32 db);
-f32 CalcPanRatio(f32 pan, const PanInfo &rInfo);
-f32 CalcSurroundPanRatio(f32 pan, const PanInfo &rInfo);
-int CalcLpfFreq(f32 scale);
-void GetRemoteFilterCoefs(int filter, u16 *pB0, u16 *pB1, u16 *pB2, u16 *pA1, u16 *pA2);
-u16 CalcRandom();
-const void *GetDataRefAddressImpl(RefType type, u32 value, const void *pBase);
+#undef DEF_GET_DATA_REF_ADDRESS_
 
-} // namespace Util
-} // namespace detail
-} // namespace snd
-} // namespace nw4r
+		static inline u16 ReadBigEndian(u16 x)
+		{
+			return x;
+		}
 
-#endif
+		static inline u32 ReadBigEndian(u32 x)
+		{
+			return x;
+		}
+
+		static f32 const CALC_LPF_FREQ_INTERCEPT;
+		static int const CALC_LPF_FREQ_TABLE_SIZE = 3 * 8;
+		static int const BIQUAD_COEF_COUNT = 5;
+		static int const IIR_COEF_COUNT;
+		static int const COEF_TABLE_SIZE = 128;
+		static int const COEF_TABLE_MAX = 127;
+		static int const COEF_TABLE_MIN = 0;
+		static int const PAN_TABLE_SIZE = 256 + 1;
+		static int const PAN_TABLE_CENTER = 128;
+		static int const PAN_TABLE_MIN = 0;
+		static int const PAN_TABLE_MAX = 256;
+		static int const DECIBEL_SQUARE_TABLE_SIZE;
+		static int const DECIBEL_TABLE_SIZE = 964 + 1;
+		static int const VOLUME_TABLE_SIZE;
+		static int const OCTAVE_DIVISION = 12; // ? makes sense to me
+		static int const PAN_CURVE_NUM = 3;
+		static int const CALC_DECIBEL_SCALE_MAX;
+		static int const PITCH_DIVISION_RANGE = 256; // ? maybe makes sense?
+		static int const PITCH_DIVISION_BIT;
+		static int const PAN_CENTER;
+		static int const PAN_MAX;
+		static int const PAN_MIN;
+		static int const VOLUME_DB_MAX = 60;
+		static int const VOLUME_DB_MIN = -904;
+		static u16 const VOLUME_MAX;
+		static u16 const VOLUME_MIN;
+
+		static u16 const CalcLpfFreqTable[CALC_LPF_FREQ_TABLE_SIZE];
+		static u16 const RemoteFilterCoefTable[COEF_TABLE_SIZE][BIQUAD_COEF_COUNT];
+		static f32 const Pan2RatioTableLinear[PAN_TABLE_SIZE];
+		static f32 const Pan2RatioTableSinCos[PAN_TABLE_SIZE];
+		static f32 const Pan2RatioTableSqrt[PAN_TABLE_SIZE];
+		static f32 const *PanTableTable[PAN_CURVE_NUM];
+		static f32 const Decibel2RatioTable[DECIBEL_TABLE_SIZE];
+		static f32 const PitchTable[PITCH_DIVISION_RANGE];
+		static f32 const NoteTable[OCTAVE_DIVISION];
+	}; // "namespace" Util
+}}} // namespace nw4r::snd::detail
+
+#endif // NW4R_SND_UTIL_H

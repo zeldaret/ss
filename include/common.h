@@ -13,6 +13,7 @@
 #define ROUND_DOWN_PTR(x, align) ((void *)(((u32)(x)) & (~((align) - 1))))
 
 #define ARRAY_LENGTH(x) (sizeof((x)) / sizeof((x)[0]))
+#define BOOLIFY_TERNARY(expr_)	((expr_) ? 1 : 0)
 
 #define CLEAR_PATH(x) __memclr((x), sizeof((x)))
 
@@ -49,6 +50,10 @@
 #define __alloca(x) ((void *)x)
 #endif
 
+#define ATTR_FALLTHROUGH
+#define ATTR_UNUSED
+#define ATTR_MAYBE_UNUSED
+
 #ifdef NON_MATCHING
 #define DECOMP_FORCEACTIVE(module, ...)
 #define DECOMP_FORCELITERAL(module, x)
@@ -59,6 +64,25 @@
 // Force reference specific data
 #define __CONCAT(x, y) x##y
 #define CONCAT(x, y) __CONCAT(x, y)
+
+#define STR_(x)					#x
+#define STR(x)					STR_(x)
+
+#ifndef alignas
+# define alignas				ATTR_ALIGN
+#endif
+
+#ifndef decltype
+# define decltype				__decltype__
+#endif
+
+#ifndef static_assert
+# define static_assert			__static_assert
+#endif
+
+#ifndef typeof
+# define typeof					__typeof__
+#endif
 
 #define DECOMP_FORCEACTIVE(module, ...)                                                                                \
     void fake_function(...);                                                                                           \

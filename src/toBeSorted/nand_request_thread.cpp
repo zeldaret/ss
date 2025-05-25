@@ -74,7 +74,7 @@ NandRequestWrite *NandRequestThread::writeRequest(const char *filePath, void *da
 }
 
 bool NandRequestThread::waitForMessage() {
-    return OSReceiveMessage(&mMessageQueue, nullptr, OS_MSG_PERSISTENT);
+    return OSReceiveMessage(&mMessageQueue, nullptr, OS_MESSAGE_FLAG_PERSISTENT);
 }
 
 void NandRequestThread::sendMessage() {

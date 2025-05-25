@@ -1,0 +1,11 @@
+#ifndef MSL_CPP_CSTDARG_H
+#define MSL_CPP_CSTDARG_H
+#include <__va_arg.h>
+#ifdef __cplusplus
+
+namespace std {
+using ::va_list;
+} // namespace std
+
+#endif
+#endif

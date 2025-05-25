@@ -1,38 +1,61 @@
 #ifndef NW4R_SND_NOTE_ON_CALLBACK_H
 #define NW4R_SND_NOTE_ON_CALLBACK_H
+
+/*******************************************************************************
+ * headers
+ */
+
+#include "common.h" // u32
+
 #include "nw4r/snd/snd_Channel.h"
-#include "nw4r/types_nw4r.h"
 
+/*******************************************************************************
+ * types
+ */
 
-namespace nw4r {
-namespace snd {
-namespace detail {
+// forward declarations
+namespace nw4r { namespace snd { namespace detail { class SeqPlayer; }}}
 
-// Forward declarations
-class SeqPlayer;
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2dd4c
+	struct NoteOnInfo
+	{
+		int					prgNo;					// size 0x04, offset 0x00
+		int					key;					// size 0x04, offset 0x04
+		int					velocity;				// size 0x04, offset 0x08
+		int					length;					// size 0x04, offset 0x0c
+		int					initPan;				// size 0x04, offset 0x10
+		int					priority;				// size 0x04, offset 0x14
+		int					voiceOutCount;			// size 0x04, offset 0x18
+		Channel::Callback	*channelCallback;		// size 0x04, offset 0x1c
+		u32			channelCallbackData;	// size 0x04, offset 0x20
+	}; // size 0x24
+}}} // namespace nw4r::snd::detail
 
-struct NoteOnInfo {
-    int prgNo;                                // at 0x0
-    int key;                                  // at 0x4
-    int velocity;                             // at 0x8
-    int length;                               // at 0xC
-    int initPan;                              // at 0x10
-    int priority;                             // at 0x14
-    int voiceOutCount;                        // at 0x18
-    Channel::ChannelCallback channelCallback; // at 0x1C
-    u32 channelCallbackData;                  // at 0x20
-};
+/*******************************************************************************
+ * classes and functions
+ */
 
-class NoteOnCallback {
-public:
-    virtual ~NoteOnCallback() {} // at 0x8
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2e4ab
+	class NoteOnCallback
+	{
+	// methods
+	public:
+		// cdtors
+		virtual ~NoteOnCallback() {}
 
-    virtual Channel *NoteOn(SeqPlayer *pPlayer, int bankNo,
-                            const NoteOnInfo &rInfo) = 0; // at 0xC
-};
+		// virtual function ordering
+		// vtable NoteOnCallback
+		virtual Channel *NoteOn(SeqPlayer *seqPlayer, int bankNo,
+		                        NoteOnInfo const &noteOnInfo) = 0;
 
-} // namespace detail
-} // namespace snd
-} // namespace nw4r
+	// members
+	private:
+		/* vtable */	// size 0x04, offset 0x00
+	}; // size 0x04
+}}} // namespace nw4r::snd::detail
 
-#endif
+#endif // NW4R_SND_NOTE_ON_CALLBACK_H

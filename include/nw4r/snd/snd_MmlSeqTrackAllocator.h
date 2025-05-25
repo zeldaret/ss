@@ -1,40 +1,52 @@
 #ifndef NW4R_SND_MML_SEQ_TRACK_ALLOCATOR_H
 #define NW4R_SND_MML_SEQ_TRACK_ALLOCATOR_H
+
+/*******************************************************************************
+ * headers
+ */
+
+#include "common.h" // u32
+
 #include "nw4r/snd/snd_InstancePool.h"
 #include "nw4r/snd/snd_SeqTrackAllocator.h"
-#include "nw4r/types_nw4r.h"
 
+/*******************************************************************************
+ * classes and functions
+ */
 
-namespace nw4r {
-namespace snd {
-namespace detail {
+// forward declarations
+namespace nw4r { namespace snd { namespace detail { class MmlParser; }}}
+namespace nw4r { namespace snd { namespace detail { class MmlSeqTrack; }}}
 
-// Forward declarations
-class MmlParser;
-class SeqPlayer;
-class SeqTrack;
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x314e0
+	class MmlSeqTrackAllocator : public SeqTrackAllocator
+	{
+	// methods
+	public:
+		// cdtors
+		MmlSeqTrackAllocator(MmlParser *parser) : mParser(parser) {}
 
-class MmlSeqTrackAllocator : public SeqTrackAllocator {
-public:
-    MmlSeqTrackAllocator(MmlParser *pParser) : mParser(pParser) {}
+		// virtual function ordering
+		// vtable SeqTrackAllocator
+		virtual SeqTrack *AllocTrack(SeqPlayer *player);
+		virtual void FreeTrack(SeqTrack *track);
+		virtual int GetAllocatableTrackCount() const
+		{
+			return mTrackPool.Count();
+		}
 
-    virtual SeqTrack *AllocTrack(SeqPlayer *pPlayer); // at 0xC
-    virtual void FreeTrack(SeqTrack *pTrack);         // at 0x10
+		// methods
+		u32 Create(void *buffer, u32 size);
+		void Destroy(void *buffer, u32 size);
 
-    virtual int GetAllocatableTrackCount() const {
-        return mTrackPool.Count();
-    } // at 0x14
+	// members
+	private:
+		/* base SeqTrackAllocator */			// size 0x04, offset 0x00
+		MmlParser					*mParser;	// size 0x04, offset 0x04
+		InstancePool<MmlSeqTrack>	mTrackPool;	// size 0x04, offset 0x08
+	}; // size 0x0c
+}}} // namespace nw4r::snd::detail
 
-    u32 Create(void *pBuffer, u32 size);
-    void Destroy(void *pBuffer, u32 size);
-
-private:
-    MmlParser *mParser;                   // at 0x4
-    InstancePool<MmlSeqTrack> mTrackPool; // at 0x8
-};
-
-} // namespace detail
-} // namespace snd
-} // namespace nw4r
-
-#endif
+#endif // NW4R_SND_MML_SEQ_TRACK_ALLOCATOR_H

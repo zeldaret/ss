@@ -1,2 +1,4 @@
 # Ignore JSystem Files - Copied From TP
 **/JSystem/**
+# Ignore SND Files - Copied from https://github.com/muff1n1634/nw4r_snd_mid2010, https://github.com/kiwi515/ogws
+**/nw4r/snd/**

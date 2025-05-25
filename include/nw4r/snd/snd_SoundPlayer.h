@@ -1,117 +1,86 @@
 #ifndef NW4R_SND_SOUND_PLAYER_H
 #define NW4R_SND_SOUND_PLAYER_H
+
+/*******************************************************************************
+ * headers
+ */
+
+#include "common.h" // f32
+
 #include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_global.h" // AUX_BUS_NUM
 #include "nw4r/snd/snd_PlayerHeap.h"
-#include "nw4r/types_nw4r.h"
-#include "rvl/OS.h"   // IWYU pragma: export
-#include "rvl/WPAD.h" // IWYU pragma: export
 
-namespace nw4r {
-namespace snd {
+/*******************************************************************************
+ * classes
+ */
 
-// Forward declarations
-namespace detail {
-class ExternalSoundPlayer;
-class SeqSound;
-class StrmSound;
-class WaveSound;
-template <typename T>
-class SoundInstanceManager;
-} // namespace detail
+namespace nw4r { namespace snd
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x26c0f
+	// NOTE: different from ketteiban: no remote fields
+	class SoundPlayer
+	{
+	// methods
+	public:
+		// cdtors
+		SoundPlayer();
+		~SoundPlayer();
 
-class SoundPlayer {
-public:
-    SoundPlayer();
-    ~SoundPlayer();
+		// methods
+		int GetPlayableSoundCount() const { return mPlayableCount; }
+		f32 GetVolume() const { return mVolume; }
+		f32 GetLpfFreq() const { return mLpfFreq; }
+		int GetDefaultOutputLine() const { return mOutputLineFlag; }
+		f32 GetMainOutVolume() const { return mMainOutVolume; }
+		int GetBiquadFilterType() const { return mBiquadType; }
+		f32 GetBiquadFilterValue() const { return mBiquadValue; }
+		f32 GetMainSend() const { return mMainSend; }
+		f32 GetFxSend(int index) const { return mFxSend[index]; }
 
-    void InitParam();
-    void Update();
+		void SetPlayableSoundCount(int count);
 
-    void StopAllSound(int frames);
-    void PauseAllSound(bool flag, int frames);
+		int GetPlayingSoundCount() const { return mSoundList.GetSize(); }
+		detail::BasicSound *GetLowestPrioritySound()
+		{
+			return &mPriorityList.GetFront();
+		}
 
-    void SetVolume(f32 volume);
+		void Update();
+		void PauseAllSound(bool flag, int fadeFrames);
+		void StopAllSound(int fadeFrames);
 
-    int detail_GetOutputLine() const;
-    bool detail_IsEnabledOutputLine() const;
+		void RemoveSoundList(detail::BasicSound *sound);
+		bool detail_AppendSound(detail::BasicSound *sound);
+		void detail_RemoveSound(detail::BasicSound *sound);
+		void detail_SetPlayableSoundLimit(int limit);
+		bool detail_CanPlaySound(int startPriority);
 
-    f32 detail_GetRemoteOutVolume(int i) const;
+		void InsertPriorityList(detail::BasicSound *sound);
+		void RemovePriorityList(detail::BasicSound *sound);
+		void detail_SortPriorityList(detail::BasicSound *sound);
+		void detail_SortPriorityList();
 
-    void detail_InsertSoundList(detail::BasicSound *pSound);
-    void detail_RemoveSoundList(detail::BasicSound *pSound);
+		detail::PlayerHeap *detail_AllocPlayerHeap(detail::BasicSound *sound);
+		void detail_FreePlayerHeap(detail::BasicSound *sound);
+		void detail_AppendPlayerHeap(detail::PlayerHeap *heap);
 
-    void detail_InsertPriorityList(detail::BasicSound *pSound);
-    void detail_RemovePriorityList(detail::BasicSound *pSound);
+	// members
+	private:
+		detail::BasicSound::SoundPlayerPlayLinkList		mSoundList;				// size 0x0c, offset 0x00
+		detail::BasicSound::SoundPlayerPriorityLinkList	mPriorityList;			// size 0x0c, offset 0x0c
+		detail::PlayerHeap::LinkList					mHeapList;				// size 0x0c, offset 0x18
+		int												mPlayableCount;			// size 0x04, offset 0x24
+		int												mPlayableLimit;			// size 0x04, offset 0x28
+		f32												mVolume;				// size 0x04, offset 0x2c
+		f32												mLpfFreq;				// size 0x04, offset 0x30
+		int												mOutputLineFlag;		// size 0x04, offset 0x34
+		f32												mMainOutVolume;			// size 0x04, offset 0x38
+		int												mBiquadType;			// size 0x04, offset 0x3c
+		f32												mBiquadValue;			// size 0x04, offset 0x40
+		f32												mMainSend;				// size 0x04, offset 0x44
+		f32												mFxSend[AUX_BUS_NUM];	// size 0x0c, offset 0x48
+	}; // size 0x54
+}} // namespace nw4r::snd
 
-    void detail_SortPriorityList();
-
-    detail::SeqSound *detail_AllocSeqSound(
-        int priority, int startPriority, detail::BasicSound::AmbientArgInfo *pArgInfo,
-        detail::ExternalSoundPlayer *pExtPlayer, u32 id, detail::SoundInstanceManager<detail::SeqSound> *pManager
-    );
-
-    detail::StrmSound *detail_AllocStrmSound(
-        int priority, int startPriority, detail::BasicSound::AmbientArgInfo *pArgInfo,
-        detail::ExternalSoundPlayer *pExtPlayer, u32 id, detail::SoundInstanceManager<detail::StrmSound> *pManager
-    );
-
-    detail::WaveSound *detail_AllocWaveSound(
-        int priority, int startPriority, detail::BasicSound::AmbientArgInfo *pArgInfo,
-        detail::ExternalSoundPlayer *pExtPlayer, u32 id, detail::SoundInstanceManager<detail::WaveSound> *pManager
-    );
-
-    int CalcPriorityReduction(detail::BasicSound::AmbientArgInfo *pArgInfo, u32 id);
-
-    void InitAmbientArg(detail::BasicSound *pSound, detail::BasicSound::AmbientArgInfo *pArgInfo);
-
-    void SetPlayableSoundCount(int count);
-    void detail_SetPlayableSoundLimit(int limit);
-
-    bool CheckPlayableSoundCount(int startPriority, detail::ExternalSoundPlayer *pExtPlayer);
-
-    void detail_AppendPlayerHeap(detail::PlayerHeap *pHeap);
-    detail::PlayerHeap *detail_AllocPlayerHeap(detail::BasicSound *pSound);
-    void detail_FreePlayerHeap(detail::BasicSound *pSound);
-
-    int GetPlayingSoundCount() const {
-        return mSoundList.GetSize();
-    }
-    int GetPlayableSoundCount() const {
-        return mPlayableCount;
-    }
-
-    f32 GetVolume() const {
-        return mVolume;
-    }
-
-    detail::BasicSound *detail_GetLowestPrioritySound() {
-        // @bug UB when the list is empty
-        return &mPriorityList.GetFront();
-    }
-
-    f32 detail_GetMainOutVolume() const {
-        return mMainOutVolume;
-    }
-
-private:
-    detail::BasicSoundPlayerPlayList mSoundList;    // at 0x0
-    detail::BasicSoundPlayerPrioList mPriorityList; // at 0xC
-    detail::PlayerHeapList mHeapList;               // at 0x18
-
-    u16 mPlayableCount; // at 0x24
-    u16 mPlayableLimit; // at 0x26
-
-    f32 mVolume;                                // at 0x28
-    bool mOutputLineFlagEnable;                 // at 0x2C
-    bool mUsePlayerHeap;                        // at 0x2D
-    int mOutputLineFlag;                        // at 0x30
-    f32 mMainOutVolume;                         // at 0x34
-    f32 mRemoteOutVolume[WPAD_MAX_CONTROLLERS]; // at 0x38
-
-    mutable OSMutex mMutex; // at 0x48
-};
-
-} // namespace snd
-} // namespace nw4r
-
-#endif
+#endif // NW4R_SND_SOUND_PLAYER_H

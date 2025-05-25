@@ -2931,10 +2931,10 @@ nw4r/snd/snd_DvdSoundArchive.cpp:
 	.text       start:0x8046BB60 end:0x8046C1C8 align:16
 
 nw4r/snd/snd_EnvGenerator.cpp:
-	.text       start:0x8046C1D0 end:0x8046C5C0 align:16
+	.text       start:0x8046C1D0 end:0x8046C5A0 align:16
 
 nw4r/snd/snd_ExternalSoundPlayer.cpp:
-	.text       start:0x8046C5C0 end:0x8046CB18 align:16
+	.text       start:0x8046C5A0 end:0x8046CB18 align:16
 
 nw4r/snd/snd_FrameHeap.cpp:
 	.text       start:0x8046CB20 end:0x8046D2E0 align:16

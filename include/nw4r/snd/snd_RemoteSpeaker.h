@@ -76,17 +76,17 @@ private:
     bool mFirstEncodeFlag;   // at 0x3
     bool mValidCallbackFlag; // at 0x4
     bool mCommandBusyFlag;   // at 0x5
-    bool mForceResumeFlag;   // at 0x6
-    bool mContinueFlag;      // at 0x7
     // TODO commenting out a random flag to make eggAudioRmtSpeakerMgr match
     // TODO offsets are wrong as a result
-    // volatile bool mIntervalFlag;     // at 0x8
+    // bool mForceResumeFlag;   // at 0x6
+    bool mContinueFlag;      // at 0x7
+    volatile bool mIntervalFlag;     // at 0x8
     SpeakerState mState;             // at 0xC
     SpeakerCommand mUserCommand;     // at 0x10
     SpeakerCommand mInternalCommand; // at 0x14
     WENCInfo mEncodeInfo;            // at 0x18
     int mChannelIndex;               // at 0x38
-    WPADCallback mWpadCallback;      // at 0x3C
+    WPADCallback *mWpadCallback;     // at 0x3C
     OSAlarm mContinueAlarm;          // at 0x40
     OSAlarm mIntervalAlarm;          // at 0x70
     s64 mContinueBeginTime;          // at 0xA0

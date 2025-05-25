@@ -1,47 +1,41 @@
 #ifndef NW4R_SND_MML_SEQ_TRACK_H
 #define NW4R_SND_MML_SEQ_TRACK_H
-#include "nw4r/snd/snd_MmlParser.h"
+
+/*******************************************************************************
+ * headers
+ */
+
 #include "nw4r/snd/snd_SeqTrack.h"
-#include "nw4r/types_nw4r.h"
 
+/*******************************************************************************
+ * classes and functions
+ */
 
-namespace nw4r {
-namespace snd {
-namespace detail {
+// forward declarations
+namespace nw4r { namespace snd { namespace detail { class MmlParser; }}}
 
-// Forward declarations
-class MmlParser;
+namespace nw4r { namespace snd { namespace detail
+{
+	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x31308
+	class MmlSeqTrack : public SeqTrack
+	{
+	// methods
+	public:
+		// cdtors
+		MmlSeqTrack();
 
-class MmlSeqTrack : public SeqTrack {
-public:
-    struct MmlParserParam {
-        bool cmpFlag;                                         // at 0x0
-        bool noteWaitFlag;                                    // at 0x1
-        bool tieFlag;                                         // at 0x2
-        u8 loopCount[MmlParser::CALL_STACK_MAX_DEPTH];        // at 0x3
-        u8 callStackDepth;                                    // at 0x6
-        const u8 *callStack[MmlParser::CALL_STACK_MAX_DEPTH]; // at 0x8
-    };
+		// virtual function ordering
+		// vtable SeqTrack
+		virtual ParseResult Parse(bool doNoteOn);
 
-public:
-    MmlSeqTrack();
-    virtual ParseResult Parse(bool doNoteOn); // at 0xC
+		// methods
+		void SetMmlParser(MmlParser const *parser) { mParser = parser; }
 
-    void SetMmlParser(const MmlParser *pParser) {
-        mParser = pParser;
-    }
+	// members
+	private:
+		/* base SeqTrack */			// size 0xc8, offset 0x00
+		MmlParser	const *mParser;	// size 0x04, offset 0xc8
+	}; // size 0xcc
+}}} // namespace nw4r::snd::detail
 
-    MmlParserParam &GetMmlParserParam() {
-        return mMmlParserParam;
-    }
-
-private:
-    const MmlParser *mParser;       // at 0xC0
-    MmlParserParam mMmlParserParam; // at 0xC4
-};
-
-} // namespace detail
-} // namespace snd
-} // namespace nw4r
-
-#endif
+#endif // NW4R_SND_MML_SEQ_TRACK_H
