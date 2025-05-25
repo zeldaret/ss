@@ -222,7 +222,7 @@ namespace nw4r { namespace snd { namespace detail
 		/* base SoundThread::PlayerCallback */											// size 0x00c, offset 0x0a4
 		StrmFileReader::StrmInfo		mStrmInfo;										// size 0x040, offset 0x0b0
 		bool							mSetupFlag;										// size 0x001, offset 0x0f0
-		bool							volatile mActiveFlag;							// size 0x001, offset 0x0f1
+		bool							mActiveFlag;									// size 0x001, offset 0x0f1
 		bool							mStartedFlag;									// size 0x001, offset 0x0f2
 		bool							mPreparedFlag;									// size 0x001, offset 0x0f3
 		bool							mTaskErrorFlag;									// size 0x001, offset 0x0f4

@@ -47,8 +47,12 @@ inline TDerived DynamicCast(TBase *ptr) {
     // Derived type info
     const detail::RuntimeTypeInfo *derivedTypeInfo = detail::GetTypeInfoFromPtr_(static_cast<TDerived>(NULL));
     // Downcast if possible
-    if (ptr && ptr->GetRuntimeTypeInfo()->IsDerivedFrom(derivedTypeInfo)) {
-        return static_cast<TDerived>(ptr);
+    // NB Wii/1.6 used in SND seems to be very sensitive to the way this
+    // is structured while Wii/1.5 and below don't seem to care at all
+    if (ptr) {
+        if (ptr->GetRuntimeTypeInfo()->IsDerivedFrom(derivedTypeInfo)) {
+            return static_cast<TDerived>(ptr);
+        }
     }
 
     return NULL;
