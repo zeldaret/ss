@@ -141,10 +141,10 @@ namespace nw4r { namespace snd { namespace detail
 
 	// typedefs
 	public:
-		typedef ut::LinkList<BasicSound, 0xe0> PriorityLinkList;
-		typedef ut::LinkList<BasicSound, 0xe8> SoundPlayerPlayLinkList;
-		typedef ut::LinkList<BasicSound, 0xf0> SoundPlayerPriorityLinkList;
-		typedef ut::LinkList<BasicSound, 0xf8> ExtSoundPlayerPlayLinkList;
+		typedef ut::LinkList<BasicSound, 0xf0> PriorityLinkList;
+		typedef ut::LinkList<BasicSound, 0xf8> SoundPlayerPlayLinkList;
+		typedef ut::LinkList<BasicSound, 0x100> SoundPlayerPriorityLinkList;
+		typedef ut::LinkList<BasicSound, 0x108> ExtSoundPlayerPlayLinkList;
 
 	// nested types
 	public:

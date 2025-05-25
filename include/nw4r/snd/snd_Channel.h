@@ -115,6 +115,10 @@ namespace nw4r { namespace snd { namespace detail
 		{
 			mUserSurroundPan = surroundPan;
 		}
+		void SetRemoteOutVolume(int channel, f32 volume)
+		{
+			mRemoteOutVolume[channel] = volume;
+		}
 		void SetUserLpfFreq(f32 lpfFreq) { mUserLpfFreq = lpfFreq; }
 		void SetOutputLine(int lineFlag) { mOutputLineFlag = lineFlag; }
 		void SetMainOutVolume(f32 volume) { mMainOutVolume = volume; }

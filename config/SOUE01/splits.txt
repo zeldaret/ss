@@ -3019,6 +3019,9 @@ nw4r/snd/snd_SeqSoundHandle.cpp:
 
 nw4r/snd/snd_SeqTrack.cpp:
 	.text       start:0x804732B0 end:0x80474818 align:16
+	.rodata     start:0x804F92E0 end:0x804F9308
+	.data       start:0x8056E0D8 end:0x8056E0E8
+	.sdata2     start:0x8057F080 end:0x8057F0B0
 
 nw4r/snd/snd_Sound3DActor.cpp:
 	.text       start:0x80474820 end:0x80474BD8 align:16
