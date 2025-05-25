@@ -1028,7 +1028,7 @@ config.libs = [
             Object(Matching, "nw4r/snd/snd_DvdSoundArchive.cpp"),
             Object(Matching, "nw4r/snd/snd_EnvGenerator.cpp"),
             Object(NonMatching, "nw4r/snd/snd_ExternalSoundPlayer.cpp"),
-            Object(NonMatching, "nw4r/snd/snd_FrameHeap.cpp"),
+            Object(Matching, "nw4r/snd/snd_FrameHeap.cpp"),
             Object(NonMatching, "nw4r/snd/snd_FxBase.cpp"),
             Object(NonMatching, "nw4r/snd/snd_FxChorus.cpp"),
             Object(NonMatching, "nw4r/snd/snd_FxDelay.cpp"),
