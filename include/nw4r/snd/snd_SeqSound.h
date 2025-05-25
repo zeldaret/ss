@@ -108,6 +108,7 @@ namespace nw4r { namespace snd { namespace detail
 		s32 GetFileStreamBufferSize() { return sizeof mFileStreamBuffer; }
 
 		void SetReleasePriorityFix(bool fix);
+		void SetTempoRatio(f32 tempo);
 		void SetChannelPriority(int priority);
 		void SetSeqUserprocCallback(SeqPlayer::SeqUserprocCallback *callback,
 		                            void *arg);

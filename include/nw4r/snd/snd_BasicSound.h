@@ -156,6 +156,13 @@ namespace nw4r { namespace snd { namespace detail
 			// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x276d8
 			class AmbientParamUpdateCallback
 			{
+			public:
+				enum ParamUpdateFlags {
+					PARAM_UPDATE_VOLUME = (1 << 0),
+					PARAM_UPDATE_PAN = (1 << 1),
+					PARAM_UPDATE_SURROUND_PAN = (1 << 2),
+					PARAM_UPDATE_PRIORITY = (1 << 3),
+				};
 			// methods
 			public:
 				virtual void at_0x08();

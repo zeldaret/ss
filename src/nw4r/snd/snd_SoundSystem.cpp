@@ -78,6 +78,27 @@ namespace nw4r { namespace snd
 
 namespace nw4r { namespace snd {
 
+void SoundSystem::InitSoundSystem(s32 soundThreadPriority,
+                                  s32 dvdThreadPriority) {
+    const int defaultWorkSize = DEFAULT_SOUND_THREAD_STACK_SIZE +
+                                DEFAULT_DVD_THREAD_STACK_SIZE +
+                                detail::AxVoiceManager::WORK_SIZE_MAX +
+                                detail::VoiceManager::WORK_SIZE_MAX +
+                                detail::ChannelManager::WORK_SIZE_MAX;
+
+    static u8 defaultSoundSystemWork[defaultWorkSize] ALIGN_DECL(32);
+
+    // OSRegisterVersion(NW4R_SND_Version_);
+
+    SoundSystemParam param;
+    param.soundThreadPriority = soundThreadPriority;
+    param.dvdThreadPriority = dvdThreadPriority;
+
+    // @bug This function ignores the specified buffer size
+    InitSoundSystem(param, defaultSoundSystemWork,
+                    sizeof(defaultSoundSystemWork));
+}
+
 u32 SoundSystem::GetRequiredMemSize(SoundSystemParam const &param)
 {
 	// could have just used align assert? idk
@@ -210,6 +231,20 @@ bool SoundSystem::IsInitializedSoundSystem()
 	return sInitialized;
 }
 
+
+void SoundSystem::WaitForResetReady() {
+    if (!sInitialized) {
+        return;
+    }
+
+    u32 start = OSGetTick();
+
+    while (!detail::AxManager::GetInstance().IsResetReady()) {
+        if (OS_TICKS_TO_SEC(OSGetTick() - start) > 0) {
+            break;
+        }
+    }
+}
 // SoundSystem::WaitForResetReady ([R89JEL]:/bin/RVL/Debug/mainD.MAP:14493)
 DECOMP_FORCE("SoundSystem::WaitForResetReady is TIME OUT.\n");
 

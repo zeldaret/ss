@@ -27,6 +27,7 @@ namespace nw4r { namespace snd
 		~SoundHandle() { DetachSound(); }
 
 		// methods
+		void detail_AttachSoundAsTempHandle(detail::BasicSound* pSound);
 		void detail_AttachSound(detail::BasicSound *sound);
 		bool IsAttachedSound() const { return mSound != nullptr; }
 		detail::BasicSound *detail_GetAttachedSound() { return mSound; }

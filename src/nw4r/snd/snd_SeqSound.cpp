@@ -169,6 +169,10 @@ void SeqSound::Shutdown()
 // SeqSound::SetTempoRatio ([R89JEL]:/bin/RVL/Debug/mainD.MAP:13849)
 DECOMP_FORCE(NW4RAssert_String(tempoRatio >= 0.0f));
 
+void SeqSound::SetTempoRatio(f32 tempo) {
+    mSeqPlayer.SetTempoRatio(tempo);
+}
+
 void SeqSound::SetChannelPriority(int priority)
 {
 	// specifically not the source variant

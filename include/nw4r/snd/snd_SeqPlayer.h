@@ -128,6 +128,7 @@ namespace nw4r { namespace snd { namespace detail
 		SeqTrack *GetPlayerTrack(int trackNo);
 		s16 volatile *GetVariablePtr(int varNo);
 
+		void SetTempoRatio(f32 tempo);
 		void SetReleasePriorityFix(bool fix);
 		void SetChannelPriority(int priority);
 		void SetSeqUserprocCallback(SeqUserprocCallback *callback, void *arg);

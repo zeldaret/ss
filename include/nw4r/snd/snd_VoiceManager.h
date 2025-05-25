@@ -18,6 +18,9 @@ namespace nw4r { namespace snd { namespace detail
 	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2ffb36
 	class VoiceManager
 	{
+	public:
+		static const int VOICE_MAX = AX_VOICE_MAX;
+		static const int WORK_SIZE_MAX = VOICE_MAX * sizeof(Voice);
 	// methods
 	public:
 		// instance accessors

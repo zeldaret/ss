@@ -16,6 +16,7 @@
 
 #include "nw4r/snd/snd_Bank.h"
 #include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_SoundArchiveLoader.h"
 #include "nw4r/snd/snd_debug.h"
 #include "nw4r/snd/snd_DisposeCallbackManager.h"
 #include "nw4r/snd/snd_ExternalSoundPlayer.h"
@@ -1326,6 +1327,51 @@ void SoundArchivePlayer::UpdateCommonSoundParam(
  * ([R89JEL]:/bin/RVL/Debug/mainD.MAP:14234)
  */
 DECOMP_FORCE(NW4RAssertAligned_String(loadBlockSize, 32));
+
+bool SoundArchivePlayer::LoadGroup(u32 id, SoundMemoryAllocatable* pAllocatable,
+                                   u32 blockSize) {
+    if (!IsAvailable()) {
+        return false;
+    }
+
+    if (id >= mSoundArchive->GetGroupCount()) {
+        return false;
+    }
+
+    if (GetGroupAddress(id) != NULL) {
+        return true;
+    }
+
+    if (pAllocatable == NULL) {
+        return false;
+    }
+
+    detail::SoundArchiveLoader loader(*mSoundArchive);
+
+    void* pWaveBuffer;
+    const void* pGroup =
+        loader.LoadGroup(id, pAllocatable, &pWaveBuffer, blockSize);
+
+    if (pGroup == NULL) {
+        return NULL;
+    }
+
+    SetGroupAddress(id, pGroup);
+    SetGroupWaveDataAddress(id, pWaveBuffer);
+
+    return true;
+}
+
+bool SoundArchivePlayer::LoadGroup(const char* pLabel,
+                                   SoundMemoryAllocatable* pAllocatable,
+                                   u32 blockSize) {
+    u32 id = mSoundArchive->ConvertLabelStringToGroupId(pLabel);
+    if (id == SoundArchive::INVALID_ID) {
+        return false;
+    }
+
+    return LoadGroup(id, pAllocatable, blockSize);
+}
 
 void SoundArchivePlayer::InvalidateData(void const *start, void const *end)
 {

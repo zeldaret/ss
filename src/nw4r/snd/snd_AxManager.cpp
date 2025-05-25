@@ -306,6 +306,14 @@ OutputMode AxManager::GetOutputMode()
 	return mOutputMode;
 }
 
+void AxManager::SetMasterVolume(f32 volume, int frame) {
+    mMasterVolume.SetTarget(ut::Clamp(volume, 0.0f, 1.0f), (frame + 2) / 3);
+
+    if (frame == 0) {
+        VoiceManager::GetInstance().UpdateAllVoicesSync(Voice::SYNC_AX_VE);
+    }
+}
+
 void AxManager::SetMainOutVolume(f32 volume, int frames)
 {
 	volume = ut::Clamp(volume, 0.0f, 1.0f);
@@ -324,6 +332,73 @@ void AxManager::AxCallbackFunc()
 
 	if (GetInstance().mNextAxRegisterCallback)
 		(*GetInstance().mNextAxRegisterCallback)();
+}
+
+bool AxManager::AppendEffect(AuxBus bus, FxBase* pFx) {
+    if (!mAuxFadeVolume[bus].IsFinished()) {
+        ShutdownEffect(bus);
+    }
+
+    mAuxFadeVolume[bus].SetTarget(1.0f, 0);
+
+    switch (bus) {
+    case AUX_A: {
+        AXSetAuxAReturnVolume(AX_MAX_VOLUME);
+        break;
+    }
+
+    case AUX_B: {
+        AXSetAuxBReturnVolume(AX_MAX_VOLUME);
+        break;
+    }
+
+    case AUX_C: {
+        AXSetAuxCReturnVolume(AX_MAX_VOLUME);
+        break;
+    }
+    }
+
+    if (!pFx->StartUp()) {
+        return false;
+    }
+
+    ut::AutoInterruptLock lock;
+
+    if (GetEffectList(bus).IsEmpty()) {
+        switch (bus) {
+        case AUX_A: {
+            AXRegisterAuxACallback(AuxCallbackFunc,
+                                   reinterpret_cast<void*>(bus));
+            break;
+        }
+
+        case AUX_B: {
+            AXRegisterAuxBCallback(AuxCallbackFunc,
+                                   reinterpret_cast<void*>(bus));
+            break;
+        }
+
+        case AUX_C: {
+            AXRegisterAuxCCallback(AuxCallbackFunc,
+                                   reinterpret_cast<void*>(bus));
+            break;
+        }
+        }
+
+        mAuxCallbackWaitCounter[bus] = 2;
+    }
+
+    GetEffectList(bus).PushBack(pFx);
+    return true;
+}
+
+void AxManager::ClearEffect(AuxBus bus, int frame) {
+    if (frame == 0) {
+        ShutdownEffect(bus);
+        return;
+    }
+
+    mAuxFadeVolume[bus].SetTarget(0.0f, (frame + 2) / 3);
 }
 
 void AxManager::ShutdownEffect(AuxBus bus)
@@ -363,6 +438,79 @@ void AxManager::SetBiquadFilterCallback(int type,
                                         BiquadFilterCallback const *biquad)
 {
 	sBiquadFilterCallbackTable[type] = biquad;
+}
+
+void AxManager::AuxCallbackFunc(void* pChans, void* pContext) {
+    int num;
+    void* buffer[AX_DPL2_MAX];
+
+    void** ppChans = static_cast<void**>(pChans);
+    AuxBus bus = static_cast<AuxBus>(reinterpret_cast<u32>(pContext));
+
+    if (GetInstance().GetOutputMode() == OUTPUT_MODE_DPL2) {
+        num = AX_DPL2_MAX;
+
+        buffer[AX_DPL2_L] = ppChans[AX_DPL2_L];
+        buffer[AX_DPL2_R] = ppChans[AX_DPL2_R];
+        buffer[AX_DPL2_LS] = ppChans[AX_DPL2_LS];
+        buffer[AX_DPL2_RS] = ppChans[AX_DPL2_RS];
+    } else {
+        num = AX_STEREO_MAX;
+
+        buffer[AX_STEREO_L] = ppChans[AX_STEREO_L];
+        buffer[AX_STEREO_R] = ppChans[AX_STEREO_R];
+        buffer[AX_STEREO_S] = ppChans[AX_STEREO_S];
+    }
+
+    if (GetInstance().mAuxCallbackWaitCounter[bus] > 0) {
+        GetInstance().mAuxCallbackWaitCounter[bus]--;
+
+        for (int i = 0; i < num; i++) {
+            std::memset(buffer[i], 0, FX_BUFFER_SIZE);
+        }
+    } else if (GetInstance().GetEffectList(bus).IsEmpty()) {
+        for (int i = 0; i < num; i++) {
+            std::memset(buffer[i], 0, FX_BUFFER_SIZE);
+        }
+    } else {
+        for (FxBase::LinkList::Iterator it =
+                 GetInstance().GetEffectList(bus).GetBeginIter();
+             it != GetInstance().GetEffectList(bus).GetEndIter(); ++it) {
+
+            it->UpdateBuffer(num, buffer, FX_BUFFER_SIZE, FX_SAMPLE_FORMAT,
+                             FX_SAMPLE_RATE, GetInstance().GetOutputMode());
+        }
+    }
+}
+
+void AxManager::PrepareReset() {
+    if (mOldAidCallback != NULL) {
+        return;
+    }
+
+    mVolumeForReset.SetTarget(0.0f, 3);
+    mResetReadyCounter = -1;
+    mOldAidCallback = AIRegisterDMACallback(AiDmaCallbackFunc);
+}
+
+void AxManager::AiDmaCallbackFunc() {
+    static bool finishedFlag = false;
+
+    AxManager& r = GetInstance();
+    r.mOldAidCallback();
+
+    if (finishedFlag) {
+        if (r.mResetReadyCounter < 0) {
+            AXSetMaxDspCycles(0);
+            r.mResetReadyCounter = AUX_CALLBACK_WAIT_FRAME;
+        }
+    } else if (r.mVolumeForReset.GetValue() == 0.0f) {
+        finishedFlag = true;
+    }
+
+    if (r.mResetReadyCounter > 0) {
+        r.mResetReadyCounter--;
+    }
 }
 
 }}} // namespace nw4r::snd::detail

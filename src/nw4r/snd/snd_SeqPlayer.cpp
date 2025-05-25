@@ -241,6 +241,10 @@ void SeqPlayer::Skip(OffsetType offsetType, int offset)
 // SeqPlayer::SetTempoRatio ([R89JEL]:/bin/RVL/Debug/mainD.MAP:13781)
 DECOMP_FORCE(NW4RAssert_String(tempoRatio >= 0.0f));
 
+void SeqPlayer::SetTempoRatio(f32 tempo) {
+    mTempoRatio = tempo;
+}
+
 void SeqPlayer::SetChannelPriority(int priority)
 {
 	// specifically not the source variant

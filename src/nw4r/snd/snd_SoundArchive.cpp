@@ -72,9 +72,25 @@ u32 SoundArchive::GetGroupCount() const
 	return mFileReader->GetGroupCount();
 }
 
+const char* SoundArchive::GetSoundLabelString(u32 id) const {
+    return mFileReader->GetSoundLabelString(id);
+}
+
 u32 SoundArchive::ConvertLabelStringToSoundId(char const *label) const
 {
 	return mFileReader->ConvertLabelStringToSoundId(label);
+}
+
+u32 SoundArchive::ConvertLabelStringToPlayerId(const char* pLabel) const {
+    return mFileReader->ConvertLabelStringToPlayerId(pLabel);
+}
+
+u32 SoundArchive::ConvertLabelStringToGroupId(const char* pLabel) const {
+    return mFileReader->ConvertLabelStringToGroupId(pLabel);
+}
+
+u32 SoundArchive::GetSoundUserParam(u32 id) const {
+    return mFileReader->GetSoundUserParam(id);
 }
 
 SoundArchive::SoundType SoundArchive::GetSoundType(u32 soundId) const
@@ -224,6 +240,54 @@ ut::FileStream *SoundArchive::OpenExtStreamImpl(void *buffer, int size,
 	}
 
 	return OpenExtStream(buffer, size, fullPath, begin, length);
+}
+
+ut::FileStream* SoundArchive::detail_OpenGroupStream(u32 id, void* pBuffer,
+                                                     int bufferSize) const {
+    GroupInfo groupInfo;
+    if (!detail_ReadGroupInfo(id, &groupInfo)) {
+        return NULL;
+    }
+
+    if (groupInfo.extFilePath != NULL) {
+        return OpenExtStreamImpl(pBuffer, bufferSize, groupInfo.extFilePath,
+                                 groupInfo.offset, groupInfo.size);
+    }
+
+    return OpenStream(pBuffer, bufferSize, groupInfo.offset, groupInfo.size);
+}
+
+ut::FileStream*
+SoundArchive::detail_OpenGroupWaveDataStream(u32 id, void* pBuffer,
+                                             int bufferSize) const {
+    GroupInfo groupInfo;
+    if (!detail_ReadGroupInfo(id, &groupInfo)) {
+        return NULL;
+    }
+
+    if (groupInfo.extFilePath != NULL) {
+        return OpenExtStreamImpl(pBuffer, bufferSize, groupInfo.extFilePath,
+                                 groupInfo.waveDataOffset,
+                                 groupInfo.waveDataSize);
+    }
+
+    return OpenStream(pBuffer, bufferSize, groupInfo.waveDataOffset,
+                      groupInfo.waveDataSize);
+}
+
+void SoundArchive::SetExternalFileRoot(const char* pExtFileRoot) {
+    u32 len = std::strlen(pExtFileRoot);
+    u32 nullPos = len;
+
+    if (pExtFileRoot[len - 1] != '/') {
+        mExtFileRoot[len] = '/';
+        nullPos++;
+    }
+
+    mExtFileRoot[nullPos] = '\0';
+
+    // @bug Long path can overflow mExtFileRoot buffer
+    std::strncpy(mExtFileRoot, pExtFileRoot, len);
 }
 
 }} // namespace nw4r::snd

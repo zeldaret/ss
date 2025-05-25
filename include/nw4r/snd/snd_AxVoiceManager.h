@@ -47,6 +47,9 @@ namespace nw4r { namespace snd { namespace detail
 	// static members
 	public:
 		static int const VOICE_COUNT_MARGIN = 16;
+		static const int VOICE_MARGIN = 16;
+		static const int VOICE_MAX = AX_VOICE_MAX + VOICE_MARGIN;
+		static const int WORK_SIZE_MAX = VOICE_MAX * sizeof(AxVoice);
 
 	// members
 	private:

@@ -42,6 +42,17 @@ namespace nw4r { namespace snd { namespace detail
 			CALLBACK_STATUS_DROP_DSP,
 		};
 
+		enum VoiceSyncFlag {
+			SYNC_AX_SRC_INITIAL = (1 << 0),
+			SYNC_AX_VOICE = (1 << 1),
+			SYNC_AX_SRC = (1 << 2),
+			SYNC_AX_VE = (1 << 3),
+			SYNC_AX_MIX = (1 << 4),
+			SYNC_AX_LPF = (1 << 5),
+			SYNC_AX_REMOTE = (1 << 7),
+			SYNC_AX_BIQUAD = (1 << 8),
+		};
+
 	// typedefs
 	public:
 		typedef ut::LinkList<Voice, 0xec> LinkList;

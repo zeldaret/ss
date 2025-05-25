@@ -15,7 +15,7 @@ class Sound3DManager : public detail::BasicSound::AmbientInfo::AmbientParamUpdat
 public:
     struct Sound3DActorParam {
         u32 userParam;                         // at 0x0
-        SoundParam soundParam; // at 0x4
+        SoundArchive::Sound3DParam soundParam; // at 0x4
         math::VEC3 position;                   // at 0xC
 
         Sound3DActorParam();

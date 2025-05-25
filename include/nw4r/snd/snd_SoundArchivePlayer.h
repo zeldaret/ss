@@ -184,7 +184,9 @@ namespace nw4r { namespace snd
 		u32 GetRequiredMemSize(SoundArchive const *arc);
 		u32 GetRequiredStrmBufferSize(SoundArchive const *arc);
 		void const *GetGroupAddress(u32 groupId) const;
+		void SetGroupAddress(u32 id, const void* pAddr);
 		void const *GetGroupWaveDataAddress(u32 groupId) const;
+		void SetGroupWaveDataAddress(u32 id, const void* pAddr);
 		void const *GetFileAddress(u32 fileId) const;
 		void const *GetFileWaveDataAddress(u32 fileId) const;
 		void const *detail_GetFileAddress(u32 fileId) const;

@@ -21,6 +21,20 @@
 
 namespace nw4r { namespace snd {
 
+void SoundHandle::detail_AttachSoundAsTempHandle(detail::BasicSound* pSound) {
+    mSound = pSound;
+
+    if (pSound->IsAttachedTempGeneralHandle()) {
+        mSound->DetachTempGeneralHandle();
+    }
+
+    if (mSound->IsAttachedTempSpecialHandle()) {
+        mSound->DetachTempSpecialHandle();
+    }
+
+    mSound->mTempGeneralHandle = this;
+}
+
 void SoundHandle::detail_AttachSound(detail::BasicSound *sound)
 {
 	NW4RAssertPointerNonnull_Line(81, sound);

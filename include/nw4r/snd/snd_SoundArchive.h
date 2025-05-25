@@ -119,6 +119,12 @@ namespace nw4r { namespace snd
 			/* 3 bytes padding */
 		}; // size 0x0c
 
+		struct Sound3DParam {
+			u32 flags;     // at 0x0
+			u8 decayCurve; // at 0x4
+			u8 decayRatio; // at 0x5
+		};
+
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x256dc
 		struct SoundArchivePlayerInfo
 		{
@@ -170,7 +176,11 @@ namespace nw4r { namespace snd
 		bool IsAvailable() const;
 		SoundType GetSoundType(u32 soundId) const;
 
+		const char* GetSoundLabelString(u32 id) const;
 		u32 ConvertLabelStringToSoundId(char const *label) const;
+		u32 ConvertLabelStringToPlayerId(const char* pLabel) const;
+		u32 ConvertLabelStringToGroupId(const char* pLabel) const;
+		u32 GetSoundUserParam(u32 id) const;
 
 		bool ReadSoundInfo(u32 soundId, SoundInfo *info) const;
 		bool ReadSeqSoundInfo(u32 soundId, SeqSoundInfo *info) const;
@@ -192,6 +202,12 @@ namespace nw4r { namespace snd
 
 		ut::FileStream *detail_OpenFileStream(u32 fileId, void *buffer,
 		                                      int size) const;
+		ut::FileStream* detail_OpenGroupStream(u32 id, void* pBuffer,
+												int bufferSize) const;
+		ut::FileStream* detail_OpenGroupWaveDataStream(u32 id, void* pBuffer,
+														int bufferSize) const;
+
+		void SetExternalFileRoot(const char* pExtFileRoot);
 
 	private:
 		ut::FileStream *OpenExtStreamImpl(void *buffer, int size,

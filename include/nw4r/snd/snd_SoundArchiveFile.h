@@ -35,6 +35,8 @@ namespace nw4r { namespace snd { namespace detail
 			u32						fileImageSize;		// size 0x04, offset 0x24
 		}; // size 0x28
 
+		static const int HEADER_AREA_SIZE = ROUND_UP(sizeof(Header), 32) + 40;
+
 		/* SymbolBlock */
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x24881
@@ -332,9 +334,17 @@ namespace nw4r { namespace snd { namespace detail
 
 		u32 ConvertLabelStringToId(SoundArchiveFile::StringTree const *tree,
 		                           char const *str) const;
-		u32 ConvertLabelStringToSoundId(char const *label) const
-		{
-			return ConvertLabelStringToId(mStringTreeSound, label);
+		const char* GetSoundLabelString(u32 id) const;
+		u32 GetSoundUserParam(u32 id) const;
+
+		u32 ConvertLabelStringToSoundId(const char* pLabel) const {
+			return ConvertLabelStringToId(mStringTreeSound, pLabel);
+		}
+		u32 ConvertLabelStringToPlayerId(const char* pLabel) const {
+			return ConvertLabelStringToId(mStringTreePlayer, pLabel);
+		}
+		u32 ConvertLabelStringToGroupId(const char* pLabel) const {
+			return ConvertLabelStringToId(mStringTreeGroup, pLabel);
 		}
 
 	private:

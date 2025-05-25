@@ -16,6 +16,7 @@
 #include "nw4r/snd/snd_SoundThread.h"
 
 #include "nw4r/NW4RAssert.hpp"
+#include "nw4r/snd/snd_global.h"
 
 /*******************************************************************************
  * types
@@ -29,6 +30,17 @@ namespace nw4r { namespace ut { struct LinkListNode; }}
  */
 
 namespace nw4r { namespace snd { namespace detail {
+
+ExternalSoundPlayer::ExternalSoundPlayer() : mPlayableCount(1) {}
+
+ExternalSoundPlayer::~ExternalSoundPlayer() {
+	NW4R_RANGE_FOR_NO_AUTO_INC(it, mSoundList)
+	{
+		decltype(it) curItr = it++;
+
+		curItr->DetachExternalSoundPlayer(this);
+	}
+}
 
 // not sure which one uses this exactly, maybe StopAllSound?
 DECOMP_FORCE_CLASS_METHOD(
@@ -62,6 +74,14 @@ bool ExternalSoundPlayer::AppendSound(BasicSound *sound)
 	sound->AttachExternalSoundPlayer(this);
 
 	return true;
+}
+
+void ExternalSoundPlayer::SetPlayableSoundCount(int count) {
+    mPlayableCount = count;
+
+    while (GetPlayingSoundCount() > GetPlayableSoundCount()) {
+        GetLowestPrioritySound()->Shutdown();
+    }
 }
 
 void ExternalSoundPlayer::RemoveSound(BasicSound *sound)

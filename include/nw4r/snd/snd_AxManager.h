@@ -102,12 +102,18 @@ namespace nw4r { namespace snd { namespace detail
 		void SetMasterVolume(f32 volume, int frame);
 		void PrepareReset();
 
+		bool IsResetReady() const {
+			return mResetReadyCounter == 0;
+		}
+
 	private:
 		// cdtors
 		AxManager();
 
 		// callbacks
 		static void AxCallbackFunc();
+		static void AuxCallbackFunc(void* pChans, void* pContext);
+		static void AiDmaCallbackFunc();
 
 	// static members
 	private:
@@ -140,7 +146,7 @@ namespace nw4r { namespace snd { namespace detail
 		MoveValue<f32, int>			mMasterVolume;							// size 0x10, offset 0x1c
 		MoveValue<f32, int>			mMainOutVolume;							// size 0x10, offset 0x2c
 		MoveValue<f32, int>			mVolumeForReset;						// size 0x10, offset 0x3c
-		AIDMACallback				*mOldAidCallback;						// size 0x04, offset 0x4c
+		AIDMACallback				mOldAidCallback;						// size 0x04, offset 0x4c
 		s32							mResetReadyCounter;						// size 0x04, offset 0x50
 		MoveValue<f32, int>			mAuxFadeVolume[AUX_BUS_NUM];			// size 0x30, offset 0x54
 		MoveValue<f32, int>			mAuxUserVolume[AUX_BUS_NUM];			// size 0x30, offset 0x84

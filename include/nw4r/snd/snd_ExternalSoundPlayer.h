@@ -19,8 +19,11 @@ namespace nw4r { namespace snd { namespace detail
 	// methods
 	public:
 		// methods
+		ExternalSoundPlayer();
+		~ExternalSoundPlayer();
 		int GetPlayingSoundCount() const { return mSoundList.GetSize(); }
 		int GetPlayableSoundCount() const { return mPlayableCount; }
+		void SetPlayableSoundCount(int count);
 
 		bool AppendSound(BasicSound *sound);
 		void RemoveSound(BasicSound *sound);
