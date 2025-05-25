@@ -20,7 +20,7 @@ public:
 private:
     /* 0xfc  */ ActorEventRelated mEventRelated;
     /* 0x14c */ mMtx_c matrix;
-    /* 0x17c */ int delayFrames;
+    /* 0x17c */ s32 delayFrames;
     /* 0x180 */ s16 params_FF_FF_00_00;
     /* 0x182 */ s8 params_00_00_FF_00;
     /* 0x183 */ s8 params_00_00_00_FF;
