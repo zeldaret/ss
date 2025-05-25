@@ -2960,6 +2960,8 @@ nw4r/snd/snd_InstancePool.cpp:
 
 nw4r/snd/snd_Lfo.cpp:
 	.text       start:0x8046DD00 end:0x8046DF08 align:16
+	.rodata     start:0x804F92B8 end:0x804F92E0
+	.sdata2     start:0x8057F018 end:0x8057F048
 
 nw4r/snd/snd_MemorySoundArchive.cpp:
 	.text       start:0x8046DF10 end:0x8046E3B0 align:16
