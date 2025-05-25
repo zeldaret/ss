@@ -294,35 +294,28 @@ f32 dPath_c::getDistanceMovedOnSegment(s32 pointIndex, s32 resolution, f32 time)
         return 0.0f;
     }
 
-    // TODO: Oh no
-    /*
-      z1 = -currPos.z + nextPos.z + (currControl.z - nextControl.z) * 3.0;
-      y1 = -currPos.y + nextPos.y + (currControl.y - nextControl.y) * 3.0;
-      x1 = -currPos.x + nextPos.x + (currControl.x - nextControl.x) * 3.0;
-      z2 = (currPos.z + nextControl.z) * 3.0 - currControl.z * 6.0;
-      y2 = (currPos.y + nextControl.y) * 3.0 - currControl.y * 6.0;
-      x3 = (currControl.x - currPos.x) * 3.0;
-      x2 = (currPos.x + nextControl.x) * 3.0 - currControl.x * 6.0;
-      y3 = (currControl.y - currPos.y) * 3.0;
-      z3 = (currControl.z - currPos.z) * 3.0;
-    */
-    mVec3_c v1 = -currPos + nextPos + (currControl - nextControl) * 3.0f;
-    mVec3_c v2 = (currPos + nextControl) * 3.0f - currControl * 6.0f;
-    mVec3_c v3 = (currControl - currPos) * 3.0f;
+    mVec3_c v1, v2, v3;
+    v1 = -currPos + nextPos + 3.f * (currControl - nextControl);
+    v2 = 3.f * (currPos + nextControl) - 6.f * currControl;
+    v3 = 3.f * (currControl - currPos);
 
+    f32 v1Sq = v1.dot(v1);
     f32 v1Dotv2 = v1.dot(v2);
     f32 v1Dotv3 = v1.dot(v3);
+    f32 v2Sq = v2.dot(v2);
     f32 v2Dotv3 = v2.dot(v3);
-    f32 v1Sq = v1.squaredLength();
-    f32 v2Sq = v2.squaredLength();
-    f32 v3Sq = v3.squaredLength();
+    f32 v3Sq = v3.dot(v3);
 
+    f32 a = v1Sq * 9.f;                  // t4
+    f32 b = v1Dotv2 * 12.f;              // t3
+    f32 c = v1Dotv3 * 6.0f + v2Sq * 4.f; // t2
+    f32 d = v2Dotv3 * 4.0f;              // t1
+    f32 e = v3Sq;                        // t0
+
+    f32 t = 0.0f;
     f32 f4 = 0.0f;
-    f32 f5 = 0.0f;
-    // TODO the cast constant appears after all other floats in this function
-    f32 fNumIterations = numIterations;
-    f32 f9 = time / fNumIterations;
-    for (s32 i = 0; i < numIterations + 1; i++) {
+    f32 dt = time / numIterations;
+    for (s32 i = 0; i < numIterations + 1; i++, t += dt) {
         f32 factor;
         if (i == 0 || i == numIterations) {
             factor = 1.0f;
@@ -342,18 +335,14 @@ f32 dPath_c::getDistanceMovedOnSegment(s32 pointIndex, s32 resolution, f32 time)
                 (z1 * z1 + x1 * x1 + y1 * y1) * 9.0 * fVar6 * fVar5 +
                 (z1 * z2 + x1 * x2 + y1 * y2) * 12.0 * fVar6;
         */
-
-        f32 f5Sq = f5 * f5;
-        f32 f5Cube = f5Sq * f5;
-        f32 f5Pow4 = f5Cube * f5;
-        f32 f = v3Sq + (v2Dotv3 * 4.0f * f5) + ((v1Dotv3 * 6.0f + v2Sq * 4.0f) * f5Sq) + (v1Sq * 9.0f * f5Pow4) +
-                (v1Dotv2 * 12.0f * f5Cube);
+        f32 f = (a * (t * t * t * t)) + (b * (t * t * t)) + (c * (t * t)) + (d * (t)) + e;
+        // f32 f = v3Sq + (v2Dotv3 * 4.0f * t) + ((v1Dotv3 * 6.0f + v2Sq * 4.0f) * f5Sq) + (v1Sq * 9.0f * f5Pow4) +
+        //         (v1Dotv2 * 12.0f * f5Cube);
         if (f > 0.0f) {
             f4 += factor * nw4r::math::FSqrt(f);
         }
-        f5 += f9;
     }
-    f4 *= (f9 / 3.0f);
+    f4 *= (dt / 3.0f);
     return f4;
 }
 
@@ -415,13 +404,15 @@ bool dPath_c::getDirection(s32 pointIndex, f32 time, mVec3_c &out) const {
             out = nextPos - currPos;
         } else {
             // TODO: Oh no
-            mVec3_c v3 = ((currPos + nextControl) * 3.0 - currControl * 6.0) * (2.0 * time);
-            mVec3_c v2 = (-currPos + nextPos + (currControl - nextControl) * 3.0f) * (3.0f * time * time);
-            mVec3_c v1 = (currControl - currPos) * 3.0f;
-            out = v1 + v2 + v3;
+            mVec3_c a, b, c;
+            a = -currPos + nextPos + 3.f * (currControl - nextControl);
+            b = 3.f * (currPos + nextControl) - 6.f * currControl;
+            c = 3.f * (currControl - currPos);
+
+            out = a * (time * time * 3.f) + b * (time * 2.f);
         }
 
-        f32 mag = VECMag(out);
+        f32 mag = out.mag();
         if (cM3d_IsZero(mag)) {
             out.x = 0.0f;
             out.y = 0.0f;
@@ -604,10 +595,7 @@ s32 ActorOnRail_Ext::getClosestXZPoint(const mVec3_c &pos) const {
     mVec3_c c;
     for (s32 i = 0; i < mPath.getNumPoints(); i++) {
         const Vec *point = mPath.getPoint(i);
-        f32 z = point->z - pos.z;
-        f32 y = point->y - pos.y;
-        f32 x = point->x - pos.x;
-        c = mVec3_c(x, y, z);
+        c = *reinterpret_cast<const mVec3_c *>(point) - pos;
         f32 dist = c.squareMagXZ();
         if (max > dist) {
             best = i;
