@@ -2943,6 +2943,8 @@ nw4r/snd/snd_DvdSoundArchive.cpp:
 
 nw4r/snd/snd_EnvGenerator.cpp:
 	.text       start:0x8046C1D0 end:0x8046C5A0 align:16
+	.rodata     start:0x804F8FB8 end:0x804F92B8
+	.sdata2     start:0x8057EFD0 end:0x8057F000
 
 nw4r/snd/snd_ExternalSoundPlayer.cpp:
 	.text       start:0x8046C5A0 end:0x8046CB18 align:16
