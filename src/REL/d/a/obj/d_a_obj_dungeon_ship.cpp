@@ -295,7 +295,7 @@ void dAcODungeonShip_c::executeState_Transparency() {
 
             u16 idx = fn_485_1900();
             if (idx != 0xFFFF) {
-                mPath.setSegment(idx, 1.0f - mPath.getSegmentFraction());
+                mPath.setSegment(idx, 1.0f - mPath.getSegmentTime());
                 field_0x868 = 900;
             }
         }
@@ -424,11 +424,12 @@ void dAcODungeonShip_c::eventEnd() {
 }
 
 void dAcODungeonShip_c::fn_485_1660() {
-    f32 arg = 0.0f;
-    f32 arg2 = 0.0001f;
+    f32 time = 0.0f;
+    f32 speed = 0.0f;
+    f32 unk = 0.0001f;
     field_0x856 = 1;
-    if (mPath.initExt(mPathIdx, roomid, 0, 0, 0, arg, arg, arg2)) {
-        mPath.setSegment(0, arg);
+    if (mPath.init(mPathIdx, roomid, 0, 0, false, time, speed, unk)) {
+        mPath.setSegment(0, time);
         position = mPath.getPosition();
         mOldPosition = mPath.getPosition();
     }
@@ -439,12 +440,12 @@ static u32 rot_4000 = 0x4000;
 
 void dAcODungeonShip_c::fn_485_1720() {
     mPath.setSpeed(forwardSpeed);
-    mPath.fn_800A9650();
+    mPath.execute();
     // TODO
     position = mPath.getPosition();
 
     mVec3_c tmp;
-    mPath.fn_800A7C80(mPath.getSegmentIndex(), tmp, mPath.getSegmentFraction());
+    mPath.getDirection(tmp);
     rotation.y = cM::atan2s(tmp.x, tmp.z);
     if (mPath.CheckFlag(0x40000000)) {
         rotation.y += rot_7fff;
@@ -480,10 +481,9 @@ u32 dAcODungeonShip_c::fn_485_1960() {
     mVec3_c dist = link->position - position;
     dist.y = 0.0f;
     dist.normalizeRS();
-    s32 a1 = cLib::targetAngleY(mVec3_c::Zero, v);
-    s32 a2 = cLib::targetAngleY(mVec3_c::Zero, dist);
-    // okay
-    return labs(mAng(mAng(a1) - mAng(a2)));
+    s16 a1 = cLib::targetAngleY(mVec3_c::Zero, v);
+    s16 a2 = cLib::targetAngleY(mVec3_c::Zero, dist);
+    return mAng::abs((s32)(a1 - a2));
 }
 
 f32 dAcODungeonShip_c::fn_485_1A50() {

@@ -196,6 +196,10 @@ public:
         return mVec3_c(x * f, y * f, z * f);
     }
 
+    friend mVec3_c operator*(f32 f, const mVec3_c &v) {
+        return mVec3_c(v.x * f, v.y * f, v.z * f);
+    }
+
     /// @brief Scalar division operator.
     mVec3_c operator/(f32 f) const {
         f32 r = 1.0f / f;

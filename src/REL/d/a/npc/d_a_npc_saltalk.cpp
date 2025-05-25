@@ -134,7 +134,6 @@ bool dAcNpcSltk_c::checkSomething(mVec3_c pos) const {
     } else {
         mVec3_c dist = pos - position;
         if (dist.squareMagXZ() <= field_0x758 * field_0x758) {
-            // TODO reload from position.y here
             f32 fDist = field_0x75C + position.y;
             f32 fDist2 = position.y;
             if (fDist <= fDist2) {

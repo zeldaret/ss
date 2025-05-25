@@ -13,7 +13,7 @@ struct Rotation {
         mRot = other.mRot;
     }
     Rotation &operator=(const Rotation &other) {
-        mRot = val;
+        mRot = other.mRot;
         return *this;
     }
     Rotation &operator=(T val) {

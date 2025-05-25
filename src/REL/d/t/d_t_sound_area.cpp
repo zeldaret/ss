@@ -25,7 +25,7 @@ int dTgSndAr_c::create() {
             mtx.YrotM(rotation.y);
             PSMTXInverse(mtx.m, mtx.m);
             break;
-        case 3: mRail.init(params >> 8 & 0xFF, roomid, 0); break;
+        case 3: mRail.initWithPathIndex(params >> 8 & 0xFF, roomid, 0); break;
     }
 
     fBase_c *base = nullptr;
@@ -144,8 +144,10 @@ bool dTgSndAr_c::checkAlg3(const mVec3_c &pos) {
     cM3dGCps unk;
 
     // Line between b and c
-    mVec3_c b = *mRail.getPntPosForIndex(0);
-    mVec3_c c = *mRail.getPntPosForIndex(1);
+    mVec3_c b;
+    b.copyFrom(mRail.getPoint(0));
+    mVec3_c c;
+    c.copyFrom(mRail.getPoint(1));
 
     unk.Set(b, c, mScale.x * 100.0f);
     f32 d;
