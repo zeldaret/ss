@@ -313,10 +313,10 @@ def EGGLib(lib_name, objects):
     }
 
 
-def nw4rLib(lib_name, objects, extra_cflags=[]):
+def nw4rLib(lib_name, objects, extra_cflags=[], mw_version=None):
     return {
         "lib": lib_name,
-        "mw_version": "Wii/1.3",  # most seem to be around 1.2, snd is 1.6
+        "mw_version": mw_version or "Wii/1.3",  # most seem to be around 1.2, snd is 1.6
         "cflags": cflags_nw4r + extra_cflags,
         "progress_category": "nw4r",
         "host": False,
@@ -1038,7 +1038,7 @@ config.libs = [
             Object(NonMatching, "nw4r/snd/snd_FxReverbStdDpl2.cpp"),
             Object(Matching, "nw4r/snd/snd_InstancePool.cpp"),
             Object(Matching, "nw4r/snd/snd_Lfo.cpp"),
-            Object(NonMatching, "nw4r/snd/snd_MemorySoundArchive.cpp"),
+            Object(Matching, "nw4r/snd/snd_MemorySoundArchive.cpp"),
             Object(NonMatching, "nw4r/snd/snd_MidiSeqPlayer.cpp"),
             Object(NonMatching, "nw4r/snd/snd_MmlParser.cpp"),
             Object(NonMatching, "nw4r/snd/snd_MmlSeqTrack.cpp"),
@@ -1087,6 +1087,7 @@ config.libs = [
             Object(NonMatching, "nw4r/snd/snd_WsdPlayer.cpp"),
             Object(NonMatching, "nw4r/snd/snd_adpcm.cpp"),
         ],
+        mw_version="Wii/1.6",
     ),
     nw4rLib(
         "lyt",
