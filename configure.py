@@ -1062,7 +1062,7 @@ config.libs = [
             Object(NonMatching, "nw4r/snd/snd_SoundArchiveFile.cpp"),
             Object(NonMatching, "nw4r/snd/snd_SoundArchiveLoader.cpp"),
             Object(NonMatching, "nw4r/snd/snd_SoundArchivePlayer.cpp"),
-            Object(NonMatching, "nw4r/snd/snd_SoundHandle.cpp"),
+            Object(Matching, "nw4r/snd/snd_SoundHandle.cpp"),
             Object(NonMatching, "nw4r/snd/snd_SoundHeap.cpp"),
             Object(NonMatching, "nw4r/snd/snd_SoundPlayer.cpp"),
             Object(NonMatching, "nw4r/snd/snd_SoundStartable.cpp"),
