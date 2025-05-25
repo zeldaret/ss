@@ -2915,6 +2915,7 @@ nw4r/snd/snd_Bank.cpp:
 
 nw4r/snd/snd_BankFile.cpp:
 	.text       start:0x80468250 end:0x8046890C align:16
+	.sdata2     start:0x8057EF78 end:0x8057EF80
 
 nw4r/snd/snd_BasicPlayer.cpp:
 	.text       start:0x80468910 end:0x80468B50 align:16
