@@ -1023,7 +1023,7 @@ config.libs = [
             Object(NonMatching, "nw4r/snd/snd_BasicSound.cpp"),
             Object(Matching, "nw4r/snd/snd_BiquadFilterPreset.cpp"),
             Object(NonMatching, "nw4r/snd/snd_Channel.cpp"),
-            Object(NonMatching, "nw4r/snd/snd_DisposeCallbackManager.cpp"),
+            Object(Matching, "nw4r/snd/snd_DisposeCallbackManager.cpp"),
             Object(NonMatching, "nw4r/snd/snd_debug.cpp"),
             Object(NonMatching, "nw4r/snd/snd_DvdSoundArchive.cpp"),
             Object(NonMatching, "nw4r/snd/snd_EnvGenerator.cpp"),

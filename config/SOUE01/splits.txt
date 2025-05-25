@@ -2934,6 +2934,8 @@ nw4r/snd/snd_Channel.cpp:
 
 nw4r/snd/snd_DisposeCallbackManager.cpp:
 	.text       start:0x8046B7D0 end:0x8046BB5C align:16
+	.sbss       start:0x80576688 end:0x80576690
+	.bss        start:0x806593F8 end:0x80659410
 
 nw4r/snd/snd_DvdSoundArchive.cpp:
 	.text       start:0x8046BB60 end:0x8046C1C8 align:16
