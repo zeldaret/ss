@@ -3,7 +3,6 @@
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/d_camera.h"
-#include "d/d_player_act.h"
 #include "d/d_sc_game.h"
 #include "d/flag/storyflag_manager.h"
 #include "f/f_base.h"
@@ -40,27 +39,33 @@ int dTgGateToGround_c::doDelete() {
 
 int dTgGateToGround_c::actorExecute() {
     dAcPy_c *player;
-    dCamera_c *camera;
+    dCamera_c *cam;
 
-    if (params_FF_FF_00_00 == -1 || StoryflagManager::sInstance->getCounterOrFlag(params_FF_FF_00_00) != 0) {
-        player = dAcPy_c::LINK;
-        if (checkIfVec3fInMatrix(matrix, player->position)) {
-            if (player->getRidingActorType() == dAcPy_c::RIDING_LOFTWING) {
-                if (params_00_00_00_FF != -1) {
-                    camera = dScGame_c::getCamera(0);
-                    fn_80080960(camera->getField_0xD98(), params_00_00_00_FF, 0, roomid, 0);
-                }
-                delayFrames = 0;
-            } else if (delayFrames < 16) {
-                ++delayFrames;
-            } else {
-                Event e = Event("CloudHole", 100, 0, 0, 0);
+    if (params_FF_FF_00_00 != -1 && StoryflagManager::sInstance->getCounterOrFlag(params_FF_FF_00_00) == 0) {
+        return SUCCEEDED;
+    }
+
+    player = dAcPy_c::LINK;
+
+    if (checkIfVec3fInMatrix(matrix, player->position)) {
+        if (player->getRidingActorType() != dAcPy_c::RIDING_LOFTWING) {
+            if (delayFrames > 15) {
+                Event e("CloudHole", 100, 0, nullptr, nullptr);
                 mEventRelated.scheduleEvent(e, 0);
+            } else {
+                delayFrames++;
             }
         } else {
+            if ((s8)params_00_00_00_FF != -1) {
+                cam = dScGame_c::getCamera(0);
+                fn_80080960(cam->getField_0xD98(), (s8)params_00_00_00_FF, 0, (s8)roomid, 0);
+            }
             delayFrames = 0;
         }
+    } else {
+        delayFrames = 0;
     }
+
     return SUCCEEDED;
 }
 
