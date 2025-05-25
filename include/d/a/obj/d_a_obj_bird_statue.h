@@ -6,9 +6,14 @@
 class dAcOBirdStatue_c : public dAcObjBase_c {
 public:
     dAcOBirdStatue_c() {}
-    virtual ~dAcOBirdStatue_c() {}
+    virtual ~dAcOBirdStatue_c()   {}
+
+    virtual bool createHeap() override;
+    virtual int create() override;
+    virtual int draw() override;
 
 private:
+    /* 0x330 */ m3d::smdl_c mMdl;
 };
 
 #endif
