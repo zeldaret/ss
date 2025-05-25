@@ -3085,6 +3085,8 @@ nw4r/snd/snd_Task.cpp:
 
 nw4r/snd/snd_TaskManager.cpp:
 	.text       start:0x80480F10 end:0x804815D0 align:16
+	.sbss       start:0x805766D8 end:0x805766E0
+	.bss        start:0x80673A38 end:0x80673A80
 
 nw4r/snd/snd_TaskThread.cpp:
 	.text       start:0x804815D0 end:0x80481798 align:16
