@@ -58,8 +58,8 @@ bool RemoteSpeaker::Setup(WPADCallback pCallback) {
         mValidCallbackFlag = false;
     }
 
-    mWpadCallback = pCallback;
     mUserCommand = COMMAND_SPEAKER_ON;
+    mWpadCallback = pCallback;
     mInitFlag = true;
 
     return true;
@@ -357,7 +357,7 @@ void RemoteSpeaker::ContinueAlarmHandler(OSAlarm* pAlarm, OSContext* pCtx) {
     RemoteSpeaker* p = static_cast<RemoteSpeaker*>(OSGetAlarmUserData(pAlarm));
 
     // p->mForceResumeFlag = true;
-    p->mContinueFlag = false;
+    // p->mContinueFlag = false;
 }
 
 void RemoteSpeaker::IntervalAlarmHandler(OSAlarm* pAlarm, OSContext* pCtx) {
