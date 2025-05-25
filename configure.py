@@ -1085,7 +1085,7 @@ config.libs = [
             Object(NonMatching, "nw4r/snd/snd_WaveSoundHandle.cpp"),
             Object(NonMatching, "nw4r/snd/snd_WsdFile.cpp"),
             Object(NonMatching, "nw4r/snd/snd_WsdPlayer.cpp"),
-            Object(NonMatching, "nw4r/snd/snd_adpcm.cpp"),
+            Object(Matching, "nw4r/snd/snd_adpcm.cpp"),
         ],
         mw_version="Wii/1.6",
     ),
