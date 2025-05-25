@@ -13,7 +13,7 @@ public:
     virtual int draw() override;
 
 private:
-    m3d::smdl_c mMdl;
+    /* 0x330 */ m3d::smdl_c mMdl;
 };
 
 #endif
