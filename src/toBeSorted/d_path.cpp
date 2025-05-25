@@ -25,8 +25,7 @@ void dPath_c::clear() {
 }
 
 const PNT *dPath_c::getPathPoint(s32 pointIndex) const {
-    if (mpPathPtr == nullptr || pointIndex < 0 ||
-        (pointIndex >= mpPathPtr->pointCount || !isLinear())) {
+    if (mpPathPtr == nullptr || pointIndex < 0 || (pointIndex >= mpPathPtr->pointCount || !isLinear())) {
         return nullptr;
     }
     dRoom_c *room = dStage_c::GetInstance()->getRoom(mRoomIndex);
@@ -37,8 +36,7 @@ const PNT *dPath_c::getPathPoint(s32 pointIndex) const {
 }
 
 const BPNT *dPath_c::getPathBpoint(s32 pointIndex) const {
-    if (mpPathPtr == nullptr || pointIndex < 0 ||
-        (pointIndex >= mpPathPtr->pointCount || isLinear())) {
+    if (mpPathPtr == nullptr || pointIndex < 0 || (pointIndex >= mpPathPtr->pointCount || isLinear())) {
         return nullptr;
     }
     dRoom_c *room = dStage_c::GetInstance()->getRoom(mRoomIndex);
@@ -462,9 +460,23 @@ bool dPath_c::extractControlPoints(
     return true;
 }
 
-bool dPath_c::getVelocity(s32 segmentIndex, f32 time, mVec3_c &result) const {
-    // TODO
-    return false;
+bool dPath_c::getVelocity(s32 segmentIndex, f32 t, mVec3_c &result) const {
+    if (isLinear()) {
+        return false;
+    }
+    mVec3_c p0, p1, p2, p3;
+    if (!extractControlPoints(segmentIndex, p0, p1, p2, p3)) {
+        return false;
+    }
+
+    // First Derivative Cubic Bezier
+    // [3t^2 *(-p0 + p3 * 3(p1 - p2))] + [2t(3(p0 + p2) - 6p1)] + [3(p1 - p0)]
+    mVec3_c a, b, c;
+    a = (-p0 + p3) + 3.f * (p1 - p2);
+    b = 3.f * (p0 + p2) - 6.f * p1;
+    c = 3.f * (p1 - p0);
+    result = a * (t * t * 3.f) + b * (t * 2.f) + c;
+    return true;
 }
 
 ActorOnRail_Ext::ActorOnRail_Ext() {
@@ -592,8 +604,10 @@ s32 ActorOnRail_Ext::getClosestXZPoint(const mVec3_c &pos) const {
     mVec3_c c;
     for (s32 i = 0; i < mPath.getNumPoints(); i++) {
         const Vec *point = mPath.getPoint(i);
-        // TODO regswap
-        c = mVec3_c(point->x - pos.x, point->y - pos.y, point->z - pos.z);
+        f32 z = point->z - pos.z;
+        f32 y = point->y - pos.y;
+        f32 x = point->x - pos.x;
+        c = mVec3_c(x, y, z);
         f32 dist = c.squareMagXZ();
         if (max > dist) {
             best = i;
