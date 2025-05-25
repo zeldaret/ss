@@ -6,7 +6,7 @@
 
 extern "C" bool fn_80081FE0(void *, const char *);
 extern "C" bool fn_800918E0(void *, s32, s16);
-extern "C" void fn_80080960(void *, int, int, int, int);
+extern "C" void fn_80080960(void *, s32, s32, s8, s32);
 
 class dCamera_c : public dBase_c {
 public:
