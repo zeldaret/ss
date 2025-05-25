@@ -1958,7 +1958,7 @@ config.libs = [
         NonMatching, "d_a_obj_bigbomb_flower", "REL/d/a/obj/d_a_obj_bigbomb_flower.cpp"
     ),
     Rel(NonMatching, "d_a_obj_bird_sp", "REL/d/a/obj/d_a_obj_bird_sp.cpp"),
-    Rel(NonMatching, "d_a_obj_bird_statue", "REL/d/a/obj/d_a_obj_bird_statue.cpp"),
+    Rel(Matching, "d_a_obj_bird_statue", "REL/d/a/obj/d_a_obj_bird_statue.cpp"),
     Rel(NonMatching, "d_a_obj_blade", "REL/d/a/obj/d_a_obj_blade.cpp"),
     Rel(NonMatching, "d_a_obj_blast_rock", "REL/d/a/obj/d_a_obj_blast_rock.cpp"),
     Rel(NonMatching, "d_a_obj_block_rope", "REL/d/a/obj/d_a_obj_block_rope.cpp"),
@@ -2470,7 +2470,7 @@ config.libs = [
     Rel(NonMatching, "d_t_effect_gen", "REL/d/t/d_t_effect_gen.cpp"),
     Rel(Matching, "d_t_fairytag", "REL/d/t/d_t_fairytag.cpp"),
     Rel(NonMatching, "d_t_fence_synchronizer", "REL/d/t/d_t_fence_synchronizer.cpp"),
-    Rel(NonMatching, "d_t_gate_to_ground", "REL/d/t/d_t_gate_to_ground.cpp"),
+    Rel(Matching, "d_t_gate_to_ground", "REL/d/t/d_t_gate_to_ground.cpp"),
     Rel(Matching, "d_t_gekotag", "REL/d/t/d_t_gekotag.cpp"),
     Rel(Matching, "d_t_genki_dws_tgt", "REL/d/t/d_t_genki_dws_tgt.cpp"),
     Rel(NonMatching, "d_t_group_summon", "REL/d/t/d_t_group_summon.cpp"),
