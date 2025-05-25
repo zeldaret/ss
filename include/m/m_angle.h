@@ -179,6 +179,10 @@ public:
         y.mVal += (s16)val;
     }
 
+    void addX(const s32 &fx) {
+        x += fx;
+    }
+
     mAng x, y, z;
 
     static mAng3_c Zero;

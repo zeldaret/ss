@@ -3,6 +3,7 @@
 #include "d/a/d_a_player.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_w.h"
+#include "d/d_linkage.h"
 #include "d/flag/sceneflag_manager.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_Math.h"
@@ -42,26 +43,29 @@ void dAcOsw_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *in
     dAcPy_c *link = interactor->isActorPlayer() ? static_cast<dAcPy_c *>(interactor) : nullptr;
     dAcOsw_c *sw = static_cast<dAcOsw_c *>(actor);
 
-    // halp
-    if (!(link == nullptr || (!link->checkActionFlags(dAcPy_c::FLG0_IN_WATER) &&
-                              ((!link->checkFlags0x340(0x800000) ||
-                                ((link->getCurrentCarriedActor() != nullptr &&
-                                  link->getCurrentCarriedActor()->mActorCarryInfo.testCarryFlag(0x04)))))))) {
+    if (link != nullptr) {
+        if (link->checkActionFlags(dAcPy_c::FLG0_IN_WATER)) {
+            return;
+        }
+        if (link->checkFlags0x340(0x800000) &&
+            !(link->getCurrentCarriedActor() && link->getCurrentCarriedActor()->GetLinkage().checkFlag(0x04))) {
+            return;
+        }
+    }
+
+    if (interactor->GetLinkage().checkState(dLinkage_c::STATE_ACTIVE)) {
         return;
     }
-    if (interactor->mActorCarryInfo.isCarried != 1) {
-        if (link == nullptr || (link->checkActionFlags(0xC70852)) == 0) {
-            if (!sw->someInteractCheck(link != nullptr)) {
-                bool needsOnFlag = sw->mOnSceneFlag < 0xFF &&
-                                   !SceneflagManager::sInstance->checkBoolFlag(sw->roomid, sw->mOnSceneFlag);
-                if (!needsOnFlag && sw->mObjRef.get() == nullptr && link != nullptr && sw->field_0x5F1 == 0 &&
-                    sw->mStateMgr.isState(StateID_On)) {
-                    link->onFlags_0x360(0x8000);
-                }
+
+    if (!(link && link->checkActionFlags(0xC70852))) {
+        if (!sw->someInteractCheck(link != nullptr)) {
+            if (!sw->checkOnFlag() && sw->mObjRef.get() == nullptr && link != nullptr && sw->field_0x5F1 == 0 &&
+                sw->mStateMgr.isState(StateID_On)) {
+                link->onFlags_0x360(0x8000);
             }
         }
-        interactor->setObjectProperty(0x40);
     }
+    interactor->setObjectProperty(0x40);
 }
 
 bool dAcOsw_c::createHeap() {

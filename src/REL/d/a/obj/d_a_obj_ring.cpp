@@ -1,6 +1,8 @@
 #include "d/a/obj/d_a_obj_ring.h"
 
 #include "d/a/d_a_player.h"
+#include "d/d_linkage.h"
+#include "m/m_angle.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 
 SPECIAL_ACTOR_PROFILE(OBJ_RING, dAcOring_c, fProfile::OBJ_RING, 0x00f2, 0, 0x103);
@@ -10,7 +12,6 @@ STATE_DEFINE(dAcOring_c, Move);
 bool dAcOring_c::createHeap() {
     nw4r::g3d::ResFile f(getOarcResFile("PRing"));
     nw4r::g3d::ResMdl mdl = f.GetResMdl("PeehatRing");
-    // This matches but in a really weird way. Maybe an inline function?
     TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x20, 1, nullptr));
     return true;
 }
@@ -52,18 +53,11 @@ int dAcOring_c::draw() {
 
 void dAcOring_c::initializeState_Move() {}
 
-u32 dAcOring_c::ROT_PER_TICK = 0x1000;
-
 void dAcOring_c::executeState_Move() {
-    bool isCarried = false;
-    if (mActorCarryInfo.isCarried == 1 && mActorCarryInfo.carryType == 7) {
-        isCarried = true;
-    }
-
-    if (isCarried) {
+    if (GetLinkage().checkConnection(dLinkage_c::CONNECTION_7)) {
         return;
     }
-    rotation.x.mVal += ROT_PER_TICK;
+    rotation.addX(0x1000);
     if (field_0x38C >= position.y) {
         deleteRequest();
     }

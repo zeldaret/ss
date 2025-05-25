@@ -1,12 +1,13 @@
 #ifndef D_A_OBJ_BASE_H
 #define D_A_OBJ_BASE_H
 
+#include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
-#include "d/col/c/c_m3d_g_lin.h"
 #include "d/d_jnt_col.h"
+#include "d/d_linkage.h"
 #include "egg/math/eggMath.h"
 #include "m/m3d/m_shadow.h"
 #include "m/m3d/m_smdl.h"
@@ -15,54 +16,6 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
-
-class dAcObjBase_c;
-class dBgS_Acch;
-
-// Size: 0xA8
-struct ActorCarryStruct {
-    /* 0x00 */ dAcRefBase_c actorLink;
-    /* 0x0C */ fLiNdBa_c *carriedActor;
-    /* 0x10 */ u32 carryFlags;
-    /* 0x14 */ int carryType;
-    /* 0x18 */ u16 field_0x18;
-    /* 0x1A */ u16 field_0x1A;
-    /* 0x1C */ mVec3_c field_0x1C;
-    /* 0x28 */ mMtx_c carryTransMtx;
-    /* 0x58 */ mMtx_c field_0x58;
-    /* 0x88 */ s32 isCarried;
-    /* 0x8C */ f32 field_0x8C;
-    /* 0x90 */ f32 field_0x90;
-    /* 0x94 */ f32 field_0x94;
-    /* 0x98 */ f32 field_0x98;
-
-    ActorCarryStruct();
-    /* vt 0x9C */
-    virtual ~ActorCarryStruct();
-    /* 0xA0 */ dJntCol_c *field_0xA0;
-    /* 0xA4 */ u32 field_0xA4;
-
-    void set(u32 flags, f32 x, f32 y, f32 z, void *unk);
-
-    // not real name, but sure
-    void bushTpFunc(dBgS_Acch &);
-
-    void fn_80050EA0(dAcObjBase_c *);
-    void fn_800511E0(dAcObjBase_c *);
-    void fn_80051190(dAcObjBase_c *);
-    void fn_80050EB0(dAcObjBase_c *);
-
-    // This will attach pObj onto pOwner, returning if it could attach
-    bool tryAttachWithRef(dAcObjBase_c *pObj, dAcObjBase_c *pOwner, dAcRefBase_c *pRefLink, int, bool);
-
-    bool testCarryFlag(u32 flag) {
-        return (carryFlags & flag) != 0;
-    }
-
-    bool checkCarryType(int type) const {
-        return (isCarried == 1 && carryType == type);
-    }
-};
 
 // Ghidra has it as `unk_ActorObjectBase`
 struct LightingInfo {
@@ -121,7 +74,7 @@ public:
     /* 0x1C0 */ cCcD_Stts mStts;
     /* 0x1FC */ mVec3_c mStartingPos;
     /* 0x208 */ mAng3_c mStartingRot;
-    /* 0x210 */ ActorCarryStruct mActorCarryInfo;
+    /* 0x210 */ dLinkage_c mLinkage;
     /* 0x2B8 */ u32 mField_0x2B8;
     /* 0x2BC */ LightingInfo mLightingInfo;
     /* 0x32C */ u32 mField_0x32C;
@@ -143,6 +96,10 @@ public:
 
     f32 GetSpeed() const {
         return forwardSpeed;
+    }
+
+    f32 GetYOffset() const {
+        return yoffset;
     }
 
     bool isStopped() const {
@@ -167,8 +124,15 @@ public:
         return mObjectActorFlags & property;
     }
 
+    dLinkage_c &GetLinkage() {
+        return mLinkage;
+    }
+    const dLinkage_c &GetLinkage() const {
+        return mLinkage;
+    }
+
     void SetJntCol(dJntCol_c *pCol) {
-        mActorCarryInfo.field_0xA0 = pCol;
+        mLinkage.field_0xA0 = pCol;
     }
 
     // could be their own thing?

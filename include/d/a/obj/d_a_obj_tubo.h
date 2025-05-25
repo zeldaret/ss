@@ -11,6 +11,7 @@
 #include "d/d_shadow.h"
 #include "d/flag/sceneflag_manager.h"
 #include "m/m3d/m_smdl.h"
+#include "m/m_angle.h"
 #include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"

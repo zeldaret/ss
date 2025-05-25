@@ -3,9 +3,9 @@
 
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_w.h"
+#include "d/flag/sceneflag_manager.h"
 #include "m/m3d/m_mdl.h"
 #include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
 #include "toBeSorted/time_area_mgr.h"
 
 // OBJ_VSD?
@@ -62,6 +62,10 @@ public:
     STATE_FUNC_DECLARE(dAcOsw_c, None);
 
     static void rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *interactor);
+
+    bool checkOnFlag() {
+        return mOnSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mOnSceneFlag);
+    }
 
 private:
     /* 0x330 */ m3d::mdl_c mModel;

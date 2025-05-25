@@ -166,7 +166,7 @@ d/d_base.cpp:
 	.data       start:0x80503380 end:0x805033D0
 	.sbss       start:0x805750C0 end:0x805750CC
 
-d/d_carry.cpp:
+d/d_linkage.cpp:
 	.text       start:0x80050A20 end:0x80051BF8 align:16
 	.data       start:0x805033D0 end:0x805033E0
 	.sdata2     start:0x80576ED8 end:0x80576F20
