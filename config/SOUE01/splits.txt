@@ -2984,6 +2984,7 @@ nw4r/snd/snd_NandSoundArchive.cpp:
 
 nw4r/snd/snd_PlayerHeap.cpp:
 	.text       start:0x804700C0 end:0x804702DC align:16
+	.data       start:0x8056DFF0 end:0x8056E000
 
 nw4r/snd/snd_RemoteSpeaker.cpp:
 	.text       start:0x804702E0 end:0x80470C90 align:16
