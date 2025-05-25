@@ -409,7 +409,7 @@ bool dPath_c::getDirection(s32 pointIndex, f32 time, mVec3_c &out) const {
             b = 3.f * (currPos + nextControl) - 6.f * currControl;
             c = 3.f * (currControl - currPos);
 
-            out = a * (time * time * 3.f) + b * (time * 2.f);
+            out = a * (time * time * 3.f) + b * (time * 2.f) + c;
         }
 
         f32 mag = out.mag();
