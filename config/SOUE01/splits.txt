@@ -2912,6 +2912,7 @@ nw4r/snd/snd_AxfxImpl.cpp:
 
 nw4r/snd/snd_Bank.cpp:
 	.text       start:0x80467FD0 end:0x80468248 align:16
+	.sdata2     start:0x8057EF58 end:0x8057EF78
 
 nw4r/snd/snd_BankFile.cpp:
 	.text       start:0x80468250 end:0x8046890C align:16
