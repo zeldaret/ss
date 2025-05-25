@@ -2939,6 +2939,7 @@ nw4r/snd/snd_DisposeCallbackManager.cpp:
 
 nw4r/snd/snd_DvdSoundArchive.cpp:
 	.text       start:0x8046BB60 end:0x8046C1C8 align:16
+	.data       start:0x8056DBE8 end:0x8056DC70
 
 nw4r/snd/snd_EnvGenerator.cpp:
 	.text       start:0x8046C1D0 end:0x8046C5A0 align:16
