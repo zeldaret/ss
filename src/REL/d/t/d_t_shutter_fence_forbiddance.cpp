@@ -18,9 +18,10 @@ dTgShutterFenceForbiddance_c::dTgShutterFenceForbiddance_c() {
 dTgShutterFenceForbiddance_c::~dTgShutterFenceForbiddance_c() {}
 
 int dTgShutterFenceForbiddance_c::create() {
-    return SUCCEEDED + ((reinterpret_cast<u32>(FIRST_PTR) - reinterpret_cast<u32>(this) |
-                         reinterpret_cast<u32>(this) - reinterpret_cast<u32>(FIRST_PTR)) >>
-                        31);
+    if (this != FIRST_PTR) {
+        return FAILED;
+    }
+    return SUCCEEDED;
 }
 
 int dTgShutterFenceForbiddance_c::actorExecute() {
