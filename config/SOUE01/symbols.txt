@@ -25297,7 +25297,7 @@ ReadArg__Q44nw4r3snd6detail9MmlParserCFPPCUcPQ44nw4r3snd6detail9SeqPlayerPQ44nw4
 ParseAllocTrack__Q44nw4r3snd6detail9MmlParserFPCvUlPUl = .text:0x8046F600; // type:function size:0x3C
 __ct__Q44nw4r3snd6detail11MmlSeqTrackFv = .text:0x8046F640; // type:function size:0x3C
 Parse__Q44nw4r3snd6detail11MmlSeqTrackFb = .text:0x8046F680; // type:function size:0x14
-__dt__Q44nw4r3snd6detail11MmlSeqTrackFv = .text:0x8046F6A0; // type:function size:0x58
+__dt__Q44nw4r3snd6detail11MmlSeqTrackFv = .text:0x8046F6A0; // type:function size:0x58 scope:weak
 AllocTrack__Q44nw4r3snd6detail20MmlSeqTrackAllocatorFPQ44nw4r3snd6detail9SeqPlayer = .text:0x8046F700; // type:function size:0x68
 FreeTrack__Q44nw4r3snd6detail20MmlSeqTrackAllocatorFPQ44nw4r3snd6detail8SeqTrack = .text:0x8046F770; // type:function size:0x68
 Create__Q44nw4r3snd6detail20MmlSeqTrackAllocatorFPvUl = .text:0x8046F7E0; // type:function size:0xC
@@ -38597,7 +38597,7 @@ __vt__Q34nw4r3snd18MemorySoundArchive = .data:0x8056DCF8; // type:object size:0x
 @3186 = .data:0x8056DD18; // type:object size:0x27 scope:local data:string
 @3190 = .data:0x8056DD40; // type:object size:0x1F4 scope:local
 __vt__Q44nw4r3snd6detail9MmlParser = .data:0x8056DF38; // type:object size:0x10
-lbl_8056DF48 = .data:0x8056DF48; // type:object size:0x10
+__vt__Q44nw4r3snd6detail11MmlSeqTrack = .data:0x8056DF48; // type:object size:0x10
 lbl_8056DF58 = .data:0x8056DF58; // type:object size:0x18
 lbl_8056DF70 = .data:0x8056DF70; // type:object size:0x60
 lbl_8056DFD0 = .data:0x8056DFD0; // type:object size:0x20

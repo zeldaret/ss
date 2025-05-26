@@ -2986,6 +2986,7 @@ nw4r/snd/snd_MmlParser.cpp:
 
 nw4r/snd/snd_MmlSeqTrack.cpp:
 	.text       start:0x8046F640 end:0x8046F6F8 align:16
+	.data       start:0x8056DF48 end:0x8056DF58
 
 nw4r/snd/snd_MmlSeqTrackAllocator.cpp:
 	.text       start:0x8046F700 end:0x8046F850 align:16
