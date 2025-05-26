@@ -323,6 +323,7 @@ namespace nw4r { namespace snd { namespace detail
 		bool ReadBankInfo(u32 bankId, SoundArchive::BankInfo *info) const;
 
 		bool ReadPlayerInfo(u32 playerId, SoundArchive::PlayerInfo *info) const;
+		bool ReadSound3DParam(u32 soundId, nw4r::snd::SoundArchive::Sound3DParam* info) const;
 
 		bool ReadGroupItemInfo(u32 groupId, u32 index,
 		                       SoundArchive::GroupItemInfo *info) const;
@@ -345,6 +346,9 @@ namespace nw4r { namespace snd { namespace detail
 		}
 		u32 ConvertLabelStringToGroupId(const char* pLabel) const {
 			return ConvertLabelStringToId(mStringTreeGroup, pLabel);
+		}
+		u32 ConvertLabelStringToBankId(const char* pLabel) const {
+			return ConvertLabelStringToId(mStringTreeBank, pLabel);
 		}
 
 	private:

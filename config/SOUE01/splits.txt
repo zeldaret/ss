@@ -3046,10 +3046,11 @@ nw4r/snd/snd_Sound3DManager.cpp:
 	.ctors      start:0x804DB964 end:0x804DB968
 
 nw4r/snd/snd_SoundActor.cpp:
-	.text       start:0x80475F80 end:0x80476264 align:16
+	.text       start:0x80475F80 end:0x80476278 align:16
 
 nw4r/snd/snd_SoundArchive.cpp:
-	.text       start:0x80476270 end:0x8047697C align:16
+	.text       start:0x80476280 end:0x8047697C align:16
+	.data       start:0x8056E190 end:0x8056E1B0
 
 nw4r/snd/snd_SoundArchiveFile.cpp:
 	.text       start:0x80476980 end:0x80477C90 align:16
