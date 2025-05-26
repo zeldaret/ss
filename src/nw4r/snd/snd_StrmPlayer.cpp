@@ -48,7 +48,7 @@
 namespace nw4r { namespace snd { namespace detail
 {
 	// .bss
-	byte_t StrmPlayer::sLoadBuffer[LOAD_BUFFER_SIZE];
+	byte_t ALIGN_DECL(32) StrmPlayer::sLoadBuffer[LOAD_BUFFER_SIZE];
 	OSMutex StrmPlayer::sLoadBufferMutex;
 
 	// .sbss
@@ -375,10 +375,61 @@ void StrmPlayer::Pause(bool flag)
 	UpdatePauseStatus();
 }
 
+void float_order_snd_StrmPlayer() {
+	0.0f;
+	int zero = 0;
+	unsigned uzero = 0;
+	f32 z = zero;
+	z = uzero;
+}
+#if 0
 // Some functions in between idk
 DECOMP_FORCE(0.0f);
 DECOMP_FORCE(SI2D_CONSTANT);
 DECOMP_FORCE(UI2D_CONSTANT);
+#endif
+
+bool StrmPlayer::ReadStrmDataInfo(StrmDataInfo* info) const
+{
+	SoundThread::AutoLock lock;
+
+	if (!mPreparedFlag)
+		return false;
+
+	info->loopFlag = mStrmInfo.loopFlag != 0;
+	info->sampleRate = mStrmInfo.sampleRate;
+	info->loopStart = mStrmInfo.loopStart;
+	info->loopEnd = mStrmInfo.loopEnd;
+
+	return true;
+}
+
+u32 StrmPlayer::GetPlaySamplePosition() const
+{
+	SoundThread::AutoLock lock;
+
+	if (!mActiveFlag)
+		return -1;
+
+	if (!mTracks[0].mActiveFlag)
+		return -1;
+
+	if (!mPreparedFlag)
+		return 0;
+
+	u32 sample = 0;
+	u32 t1;
+	{
+		ut::AutoInterruptLock lock2;
+
+		if (mTracks[0].mVoice)
+			sample = mTracks[0].mVoice->GetCurrentPlayingSample();
+
+		t1 = mPlayingDataBlockIndex - mPlayingBufferBlockIndex;
+	}
+	u32 t2 = t1 * mStrmInfo.blockSamples;
+	return t2 + sample;
+}
 
 void StrmPlayer::InitParam()
 {
@@ -836,6 +887,10 @@ void StrmPlayer::UpdateVoiceParams(StrmTrack *track)
 		fxsend[i] += GetFxSend(static_cast<AuxBus>(i));
 	}
 
+	f32 remoteOutVolume[4];
+	for (int i = 0; i < 4; i++)
+		remoteOutVolume[i] = GetRemoteOutVolume(i);
+
 	ut::AutoInterruptLock lock;
 
 	if (Voice *voice = track->mVoice)
@@ -856,6 +911,9 @@ void StrmPlayer::UpdateVoiceParams(StrmTrack *track)
 			AuxBus bus = static_cast<AuxBus>(i);
 			voice->SetFxSend(bus, fxsend[i]);
 		}
+
+		for (int i = 0; i < 4; i++)
+			voice->SetRemoteOutVolume(i, remoteOutVolume[i]);
 
 		for (int i = 0; i < mVoiceOutCount; i++)
 			voice->SetVoiceOutParam(i, GetVoiceOutParam(i));
@@ -891,6 +949,9 @@ void StrmPlayer::UpdateBuffer()
 
 	Voice *voice = mTracks[0].mVoice;
 	if (!voice)
+		return;
+
+	if (!voice->IsRun())
 		return;
 
 	if (CheckDiskDriveError())

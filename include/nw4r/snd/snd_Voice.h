@@ -104,6 +104,10 @@ namespace nw4r { namespace snd { namespace detail
 		{
 			return IsActive() && mAxVoice[0][0]->IsPlayFinished();
 		}
+		bool IsRun() const
+		{
+			return IsActive() && mAxVoice[0][0]->IsRun();
+		}
 		SampleFormat GetFormat() const;
 		u32 GetCurrentPlayingSample() const;
 		int GetPhysicalVoiceCount() const
