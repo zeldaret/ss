@@ -47,9 +47,7 @@ bool dAcOTarzanPole_c::createHeap() {
 }
 
 int dAcOTarzanPole_c::create() {
-    if (!initAllocatorWork1Heap(0xFFFFFFFF, "dAcOTarzanPole_c::m_allocator", 0x20)) {
-        return FAILED;
-    }
+    CREATE_ALLOCATOR(dAcOTarzanPole_c);
 
     dBgS::GetInstance()->Regist(&mBgCollider, this);
 
@@ -81,13 +79,10 @@ int dAcOTarzanPole_c::actorExecute() {
     mMdl.setLocalMtx(mWorldMtx);
     mMdl.calc(false);
 
-    dAcPy_c *player = dAcPy_c::LINK;
+    const dAcPy_c *player = dAcPy_c::GetLink();
     bool bVar = false;
-    if (mCollider.mTg.MskRPrm(1) && mCollider.mTg.GetActor() != nullptr) {
-        bVar = true;
-    }
-    if (bVar && mCollider.ChkTgAtHitType(0x800)) {
-        mObjectActorFlags = mObjectActorFlags | 0x1000;
+    if (mCollider.ChkTgHit() && mCollider.ChkTgAtHitType(AT_TYPE_WHIP)) {
+        setObjectProperty(0x1000);
     }
 
     mVec = mVec3_c::Ex * sXOffset + mVec3_c::Ey * sYOffset;
@@ -95,8 +90,9 @@ int dAcOTarzanPole_c::actorExecute() {
     poscopy2 = position + mVec;
     poscopy3 = poscopy2 + mVec3_c::Ey * 20.0f;
 
+    // 0x400000 corresponds to dAcPy_FLG0::FLG0_SWING_ROPE
     if (player != nullptr && !player->checkActionFlags(0x400000) && dAcItem_c::checkFlag(ITEM_WHIP)) {
-        AttentionManager::GetInstance()->addUnk7Target((dAcObjBase_c &)*this, 1, 1000.0f, 10.0f, -600.0, 200);
+        AttentionManager::GetInstance()->addUnk7Target(*this, 1, 1000.0f, 10.0f, -600.0, 200);
     }
 
     mCollider.SetC(poscopy2);

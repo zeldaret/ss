@@ -29,8 +29,8 @@ private:
     /* 0x334 */ m3d::smdl_c mMdl;
     /* 0x350 */ dBgW mBgCollider;
     /* 0x560 */ dCcD_Sph mCollider;
-    /* 0x6b0 */ mVec3_c mVec; // TODO: Find better name, and figure out it's purpose
-    /* 0x6bc */ float mFloat; // TODO: No usage found yet
+    /* 0x6b0 */ mVec3_c mVec; // TODO: Find better name, once we've figured out it's purpose
+    /* 0x6bc */ f32 mFloat;   // TODO: No usage found yet
 };
 
 #endif
