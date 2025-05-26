@@ -25,6 +25,7 @@ dCcD_SrcSph dAcOTarzanPole_c::sCcSrc = {
 // clang-format on
 
 bool dAcOTarzanPole_c::createHeap() {
+    320.0f; // To fix .rodata
     // Get Res File
     void *resFile = getOarcResFile("WhipBar");
     mBrres = nw4r::g3d::ResFile(resFile);
@@ -44,6 +45,7 @@ bool dAcOTarzanPole_c::createHeap() {
     return true;
 }
 
+const f32 dAcOTarzanPole_c::sUnusedFloat = 0.0f;
 int dAcOTarzanPole_c::create() {
     if (!initAllocatorWork1Heap(0xFFFFFFFF, "dAcOTarzanPole_c::m_allocator", 0x20)) {
         return FAILED;
@@ -74,13 +76,12 @@ int dAcOTarzanPole_c::doDelete() {
     return SUCCEEDED;
 }
 
+const f32 dAcOTarzanPole_c::sUnusedFloat2 = 320.0f;
 int dAcOTarzanPole_c::actorExecute() {
-    // Update matrix
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     mMdl.calc(false);
 
-    // IDK Player?
     dAcPy_c *player = dAcPy_c::LINK;
     bool bVar = false;
     if (mCollider.mTg.MskRPrm(1) && mCollider.mTg.GetActor() != nullptr) {
@@ -96,7 +97,7 @@ int dAcOTarzanPole_c::actorExecute() {
     poscopy3 = poscopy2 + mVec3_c::Ey * 20;
 
     if (player != nullptr && !player->checkActionFlags(0x400000) && dAcItem_c::checkFlag(ITEM_WHIP)) {
-        AttentionManager::GetInstance()->addUnk7Target((dAcObjBase_c &)*this, 1000, 0, 10, -600.0, 200);
+        AttentionManager::GetInstance()->addUnk7Target((dAcObjBase_c &)*this, 1, 1000.0f, 10.0f, -600.0, 200);
     }
 
     mCollider.SetC(poscopy2);
