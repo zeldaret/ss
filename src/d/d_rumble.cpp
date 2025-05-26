@@ -26,7 +26,7 @@ dRumble_c::~dRumble_c() {
     spInstance = nullptr;
 }
 
-void dRumble_c::init() {
+void dRumble_c::create() {
     spInstance = new dRumble_c();
 
     spInstance->mRumbleData[0].mBitsLeft = 0;
@@ -35,7 +35,7 @@ void dRumble_c::init() {
     spInstance->mRumbleData[3].mBitsLeft = 0;
 }
 
-void dRumble_c::play() {
+void dRumble_c::execute() {
     // If the game is not being controlled, do not do anything
     if (dLytControlGame_c::getInstance()) {
         if (!dLytControlGame_c::getInstance()->isStateNormal()) {
@@ -50,6 +50,8 @@ void dRumble_c::play() {
         return;
     }
 
+    // These structs are only used here.
+    // No need to make them global
     struct Entry {
         u32 bits;
         s32 length;
@@ -57,9 +59,9 @@ void dRumble_c::play() {
     } entries[2] = {};
     struct Info {
         u32 mBits;
-        f32 intensites[4];
+        f32 intensities[4];
         s32 combinedLength;
-        s32 mBitsLeft;
+        s32 _unused;
     } info = {};
 
     for (s32 i = 0; i < 4; ++i) {
@@ -72,15 +74,15 @@ void dRumble_c::play() {
         if (data.mFlags & FLAG_ACTIVE) {
             info.mBits |= data.mRumbleBits << bit;
             if (data.mFlags & FLAG_INITIALIZE) {
-                info.intensites[i] = data.mIntensity;
+                info.intensities[i] = data.mIntensity;
             } else {
-                info.intensites[i] = data.mIntensity * ((f32)data.mBitsLeft / data.mLength);
+                info.intensities[i] = data.mIntensity * ((f32)data.mBitsLeft / data.mLength);
             }
             if (info.combinedLength < data.mBitsLeft) {
                 info.combinedLength = data.mBitsLeft;
             }
         } else {
-            info.intensites[i] = 0.f;
+            info.intensities[i] = 0.f;
         }
 
         if (data.mFlags & FLAG_SLOT0) {
@@ -118,8 +120,8 @@ void dRumble_c::play() {
             f32 shake;
         } s = {0, 0.1f};
         for (s32 i = 0; i < 4; i++) {
-            if (s.shake < info.intensites[i]) {
-                s.shake = info.intensites[i];
+            if (s.shake < info.intensities[i]) {
+                s.shake = info.intensities[i];
                 s.slot = i;
             }
         }
@@ -127,9 +129,9 @@ void dRumble_c::play() {
         f32 shake = 0.f;
         for (s32 i = 0; i < 4; i++) {
             if (i == s.slot) {
-                shake += info.intensites[i];
+                shake += info.intensities[i];
             } else {
-                f32 tmp = info.intensites[i];
+                f32 tmp = info.intensities[i];
                 shake += tmp * (tmp / s.shake);
             }
         }
@@ -165,7 +167,7 @@ void dRumble_c::play() {
     }
 }
 
-void dRumble_c::deinit() {
+void dRumble_c::remove() {
     if (spInstance != nullptr) {
         spInstance->mRumbleData[0].mBitsLeft = 0;
         spInstance->mRumbleData[1].mBitsLeft = 0;

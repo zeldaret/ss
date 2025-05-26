@@ -7,7 +7,7 @@ class dRumbleEntry_c {
     friend class dRumble_c;
 
 public:
-    dRumbleEntry_c(s32 length, u32 bits, f32 instesity);
+    dRumbleEntry_c(s32 length, u32 bits, f32 intensity);
 
 private:
     /* 0x00 */ s32 mLength;
@@ -23,6 +23,8 @@ public:
 
     /* Queues the entry into the Rumble Manager */
     bool start(const dRumbleEntry_c &entry, u32 flags);
+
+    /* Removes the entry from the Rumble Manager*/
     void stop();
 
     bool isActive() const {
@@ -61,21 +63,23 @@ public:
     };
 
 public:
-    /** Generates the instance */
-    static void init();
-    /** Deletes the instance */
-    static void deinit();
+    /** Generates the single instance */
+    static void create();
+
+    /** Deletes the single instance */
+    static void remove();
 
     /** Runs the rumble instances */
-    static void play();
+    static void execute();
 
-    /** inserts a rumble isntance into the manger. returns the index */
+    /** inserts a rumble instance into the manager. returns the index */
     static s32 start(const dRumbleEntry_c &entry, u32 flags);
-    /** Stops one of the data instances (sets lenght to 0)/ -1 means to stop all */
+
+    /** Stops one of the data instances (sets length to 0). -1 means to stop all */
     static void stop(s32 idx);
 
     virtual ~dRumble_c();
-    // 80066e50
+
     /** Rumble Presets */
     static dRumbleEntry_c sRumblePreset0;
     static dRumbleEntry_c sRumblePreset1;
