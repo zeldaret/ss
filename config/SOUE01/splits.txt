@@ -3116,6 +3116,8 @@ nw4r/snd/snd_Voice.cpp:
 
 nw4r/snd/snd_VoiceManager.cpp:
 	.text       start:0x80484040 end:0x804846F4 align:16
+	.sbss       start:0x805766E0 end:0x805766E8
+	.bss        start:0x80673A80 end:0x80673AA8
 
 nw4r/snd/snd_Util.cpp:
 	.text       start:0x80484700 end:0x80484BD4 align:16
