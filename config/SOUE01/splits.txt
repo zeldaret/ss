@@ -3140,6 +3140,8 @@ nw4r/snd/snd_WsdFile.cpp:
 
 nw4r/snd/snd_WsdPlayer.cpp:
 	.text       start:0x80485830 end:0x804869D8 align:16
+	.data       start:0x8056E388 end:0x8056E3E8
+	.sdata2     start:0x8057F1F8 end:0x8057F220
 
 nw4r/snd/snd_adpcm.cpp:
 	.text       start:0x804869E0 end:0x80486A6C align:16
