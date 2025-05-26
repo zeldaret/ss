@@ -517,16 +517,18 @@ SoundPlayer &SoundArchivePlayer::GetSoundPlayer(u32 playerId)
 	return mSoundPlayers[playerId];
 }
 
+#if 0
 /* SoundArchivePlayer::GetSoundPlayer(char const *)
  * ([R89JEL]:/bin/RVL/Debug/mainD.MAP:14216)
  */
 DECOMP_FORCE(NW4RAssertPointerNonnull_String(mSoundArchive));
+#endif
 
 void const *SoundArchivePlayer::detail_GetFileAddress(u32 fileId) const
 {
 	if (mFileManager)
 	{
-		if (void const *addr = mFileManager->at_0x08(fileId))
+		if (void const *addr = mFileManager->GetFileAddress(fileId))
 			return addr;
 	}
 
@@ -567,7 +569,7 @@ void const *SoundArchivePlayer::detail_GetFileWaveDataAddress(u32 fileId) const
 {
 	if (mFileManager)
 	{
-		if (void const *addr = mFileManager->at_0x0c(fileId))
+		if (void const *addr = mFileManager->GetFileWaveDataAddress(fileId))
 			return addr;
 	}
 
@@ -621,9 +623,19 @@ void const *SoundArchivePlayer::GetGroupAddress(u32 groupId) const
 	return mGroupTable->item[groupId].address;
 }
 
+#if 0
 // SoundArchivePlayer::SetGroupAddress ([R89JEL]:/bin/RVL/Debug/mainD.MAP:14220)
 DECOMP_FORCE("Failed to SoundArchivePlayer::SetGroupAddress because group "
              "table is not allocated.\n");
+#endif
+
+void SoundArchivePlayer::SetGroupAddress(u32 id, const void* pAddr)
+{
+	if (mGroupTable == NULL)
+		return;
+
+	mGroupTable->item[id].address = pAddr;
+}
 
 void const *SoundArchivePlayer::GetGroupWaveDataAddress(u32 groupId) const
 {
@@ -643,6 +655,15 @@ void const *SoundArchivePlayer::GetGroupWaveDataAddress(u32 groupId) const
 	return mGroupTable->item[groupId].waveDataAddress;
 }
 
+void SoundArchivePlayer::SetGroupWaveDataAddress(u32 id, const void* pAddr)
+{
+	if (mGroupTable == NULL)
+		return;
+
+	mGroupTable->item[id].waveDataAddress = pAddr;
+}
+
+#if 0
 /* SoundArchivePlayer::SetGroupWaveDataAddress
  * ([R89JEL]:/bin/RVL/Debug/mainD.MAP:14222)
  */
@@ -660,6 +681,7 @@ DECOMP_FORCE("Failed to SoundArchivePlayer::SetFileAddress because file table "
 DECOMP_FORCE(NW4RAssertHeaderClampedLValue_String(fileId));
 DECOMP_FORCE("Failed to SoundArchivePlayer::SetFileWaveDataAddress because "
              "file table is not allocated.\n");
+#endif
 
 void const *SoundArchivePlayer::GetFileAddress(u32 fileId) const
 {
@@ -1323,10 +1345,12 @@ void SoundArchivePlayer::UpdateCommonSoundParam(
 	sound->SetPanCurve(commonInfo->panCurve);
 }
 
+#if 0
 /* SoundArchivePlayer::LoadGroup(u32, SoundMemoryAllocatable *, u32)
  * ([R89JEL]:/bin/RVL/Debug/mainD.MAP:14234)
  */
 DECOMP_FORCE(NW4RAssertAligned_String(loadBlockSize, 32));
+#endif
 
 bool SoundArchivePlayer::LoadGroup(u32 id, SoundMemoryAllocatable* pAllocatable,
                                    u32 blockSize) {
@@ -1371,6 +1395,12 @@ bool SoundArchivePlayer::LoadGroup(const char* pLabel,
     }
 
     return LoadGroup(id, pAllocatable, blockSize);
+}
+
+bool SoundArchivePlayer::IsLoadedGroup(u32 groupId) const
+{
+	void const *groupAddress = GetGroupAddress(groupId);
+	return groupAddress != NULL;
 }
 
 void SoundArchivePlayer::InvalidateData(void const *start, void const *end)

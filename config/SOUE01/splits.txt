@@ -3060,6 +3060,8 @@ nw4r/snd/snd_SoundArchiveLoader.cpp:
 
 nw4r/snd/snd_SoundArchivePlayer.cpp:
 	.text       start:0x80478560 end:0x8047B018 align:16
+	.data       start:0x8056E1B0 end:0x8056E200
+	.sdata2     start:0x8057F138 end:0x8057F148
 
 nw4r/snd/snd_SoundHandle.cpp:
 	.text       start:0x8047B020 end:0x8047B110 align:16

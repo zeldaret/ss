@@ -55,8 +55,8 @@ namespace nw4r { namespace snd
 	public:
 		// virtual function ordering
 		// vtable SoundArchivePlayer_FileManager
-		virtual void const *at_0x08(int) = 0;
-		virtual void const *at_0x0c(int) = 0;
+		virtual void const *GetFileAddress(u32) = 0;
+		virtual void const *GetFileWaveDataAddress(u32) = 0;
 
 	// members
 	private:
@@ -97,6 +97,8 @@ namespace nw4r { namespace snd
 				mSoundArchivePlayer(player)
 			{
 			}
+
+			virtual ~SeqNoteOnCallback() {}
 
 			// virtual function ordering
 			// vtable NoteOnCallback
@@ -175,6 +177,8 @@ namespace nw4r { namespace snd
 		bool LoadGroup(unsigned int id, SoundMemoryAllocatable *pAllocatable, u32 blockSize) {
 			return LoadGroup(static_cast<u32>(id), pAllocatable, blockSize);
 		}
+
+		bool IsLoadedGroup(u32 groupId) const;
 
 		SoundArchive const &GetSoundArchive() const;
 		u32 GetSoundPlayerCount() const { return mSoundPlayerCount; }
