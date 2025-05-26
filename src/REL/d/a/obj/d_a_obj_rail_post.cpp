@@ -1,4 +1,5 @@
 #include "d/a/obj/d_a_obj_rail_post.h"
+
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
@@ -10,19 +11,23 @@ dAcORailPost::~dAcORailPost() {}
 
 bool dAcORailPost::createHeap() {
     void *resFilePtr = getOarcResFile("RailPost");
-    if(resFilePtr == nullptr)
+    if (resFilePtr == nullptr) {
         return false;
+    }
 
     nw4r::g3d::ResFile res(resFilePtr);
-    if(res.IsValid() == false)
+    if (res.IsValid() == false) {
         return false;
+    }
 
     nw4r::g3d::ResMdl mdl = res.GetResMdl("RailPost");
-    if(mdl.IsValid() == false)
+    if (mdl.IsValid() == false) {
         return false;
+    }
 
-    if(!mMdl.create(mdl, &heap_allocator, 0x20, 1, nullptr))
+    if (!mMdl.create(mdl, &heap_allocator, 0x20, 1, nullptr)) {
         return false;
+    }
 
     mMdl.setLocalMtx(mWorldMtx);
     void *dzb = getOarcDZB("RailPost", "RailPost");
@@ -34,7 +39,7 @@ bool dAcORailPost::createHeap() {
     return true;
 }
 
-int dAcORailPost::create() { 
+int dAcORailPost::create() {
     mVec3_c boundsMin;
     mVec3_c boundsMax;
     updateMatrix();
