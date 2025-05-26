@@ -3076,6 +3076,10 @@ nw4r/snd/snd_SoundStartable.cpp:
 nw4r/snd/snd_SoundSystem.cpp:
 	.text       start:0x8047C3B0 end:0x8047C708 align:16
 	.ctors      start:0x804DB968 end:0x804DB96C
+	.data       start:0x8056E210 end:0x8056E258
+	.sdata      start:0x80574EA0 end:0x80574EA8
+	.sbss       start:0x805766B8 end:0x805766C0
+	.bss        start:0x80659D40 end:0x8066F660
 
 nw4r/snd/snd_SoundThread.cpp:
 	.text       start:0x8047C710 end:0x8047CD10 align:16
