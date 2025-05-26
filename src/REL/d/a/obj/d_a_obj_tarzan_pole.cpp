@@ -17,7 +17,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_TARZAN_POLE, dAcOTarzanPole_c, fProfile::OBJ_TARZAN_PO
 dCcD_SrcSph dAcOTarzanPole_c::sCcSrc = {
     /* mObjInf */ {
         /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-        /* mObjTg */ {0xA00, 0x800311, {0, 0, 0x407}, 0x0000, 0x0000},
+        /* mObjTg */ {(AT_TYPE_WHIP | AT_TYPE_WIND), 0x800311, {0, 0, 0x407}, 0x0000, 0x0000},
         /* mObjCo */ {0x00000000}},
      /* mSphInf */ {10.0f}
 };
