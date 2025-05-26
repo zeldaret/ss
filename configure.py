@@ -17,8 +17,14 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List
 
-from tools.project import (Object, ProgressCategory, ProjectConfig,
-                           calculate_progress, generate_build, is_windows)
+from tools.project import (
+    Object,
+    ProjectConfig,
+    ProgressCategory,
+    calculate_progress,
+    generate_build,
+    is_windows,
+)
 
 # Game versions
 DEFAULT_VERSION = 0
@@ -2287,7 +2293,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_syako_shutter", "REL/d/a/obj/d_a_obj_syako_shutter.cpp"),
     Rel(NonMatching, "d_a_obj_tableware", "REL/d/a/obj/d_a_obj_tableware.cpp"),
     Rel(NonMatching, "d_a_obj_tackle", "REL/d/a/obj/d_a_obj_tackle.cpp"),
-    Rel(Matching, "d_a_obj_tarzan_pole", "REL/d/a/obj/d_a_obj_tarzan_pole.cpp"),
+    Rel(NonMatching, "d_a_obj_tarzan_pole", "REL/d/a/obj/d_a_obj_tarzan_pole.cpp"),
     Rel(NonMatching, "d_a_obj_tenijima", "REL/d/a/obj/d_a_obj_tenijima.cpp"),
     Rel(NonMatching, "d_a_obj_teni_rail", "REL/d/a/obj/d_a_obj_teni_rail.cpp"),
     Rel(

@@ -14,7 +14,6 @@
 SPECIAL_ACTOR_PROFILE(OBJ_TARZAN_POLE, dAcOTarzanPole_c, fProfile::OBJ_TARZAN_POLE, 0x235, 0, 3);
 
 // clang-format off
-// TODO: FIX: INCORRECT DATA!
 dCcD_SrcSph dAcOTarzanPole_c::sCcSrc = {
     /* mObjInf */ {
         /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
