@@ -1,7 +1,6 @@
 #include "d/t/d_t_shutter_fence_forbiddance.h"
 
 #include "common.h"
-#include "d/a/d_a_base.h"
 #include "f/f_base.h"
 
 SPECIAL_ACTOR_PROFILE(
@@ -15,7 +14,11 @@ dTgShutterFenceForbiddance_c::dTgShutterFenceForbiddance_c() {
         FIRST_PTR = this;
     }
 }
-dTgShutterFenceForbiddance_c::~dTgShutterFenceForbiddance_c() {}
+dTgShutterFenceForbiddance_c::~dTgShutterFenceForbiddance_c() {
+    if (this == FIRST_PTR) {
+        FIRST_PTR = nullptr;
+    }
+}
 
 int dTgShutterFenceForbiddance_c::create() {
     if (this != FIRST_PTR) {
@@ -24,6 +27,7 @@ int dTgShutterFenceForbiddance_c::create() {
     return SUCCEEDED;
 }
 
+// TODO after finding out more about d_a_obj_door_base
 int dTgShutterFenceForbiddance_c::actorExecute() {
     return SUCCEEDED;
 }
