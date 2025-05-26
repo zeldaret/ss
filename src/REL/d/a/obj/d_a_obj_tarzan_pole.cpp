@@ -17,9 +17,9 @@ SPECIAL_ACTOR_PROFILE(OBJ_TARZAN_POLE, dAcOTarzanPole_c, fProfile::OBJ_TARZAN_PO
 // TODO: FIX: INCORRECT DATA!
 dCcD_SrcSph dAcOTarzanPole_c::sCcSrc = {
     /* mObjInf */ {
-        /* mObjAt */ {0,0,0,0,0,0,0,0},
-        /* mObjTg */ {~(AT_TYPE_BUGNET | AT_TYPE_0x80000 | AT_TYPE_0x8000), 0x801111, {0, 0xA, 0x40F}, 8, 0},
-        /* mObjCo */ {0x1E9}},
+        /* mObjAt */ {0, 0, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
+        /* mObjTg */ {0xA00, 0x800311, {0, 0, 0x407}, 0x0000, 0x0000},
+        /* mObjCo */ {0x00000000}},
      /* mSphInf */ {10.0f}
 };
 // clang-format on
@@ -58,11 +58,14 @@ int dAcOTarzanPole_c::create() {
     forwardAccel = 0;
     forwardMaxSpeed = -40;
 
-    mFloat = (double)params;
+    mFloat = (s32)(params & 0xFF) * 10.0f;
+    if ((s32)(params & 0xFF) == 0xFF) {
+        mFloat = 0.0f;
+    }
 
     mVec = mVec3_c::Ex * 400;
     mVec.rotY(rotation.y);
-    boundingBox.Set(mVec3_c(-0, -120, -110), mVec3_c(500, 140, 110));
+    boundingBox.Set(mVec3_c(-0.0f, -120.0f, -110.0f), mVec3_c(500.0f, 140.0f, 110.0f));
 
     return SUCCEEDED;
 }
