@@ -424,7 +424,7 @@ config.libs = [
             Object(Matching, "toBeSorted/arc_callback_handler.cpp"),
             Object(NonMatching, "d/d_video.cpp"),
             Object(NonMatching, "d/d_cursor_hit_check.cpp"),
-            Object(NonMatching, "toBeSorted/d_rumble.cpp"),
+            Object(Matching, "d/d_rumble.cpp"),
             Object(NonMatching, "toBeSorted/string_util.cpp"),
             Object(NonMatching, "toBeSorted/cx_util.cpp"),
             Object(NonMatching, "toBeSorted/area_math.cpp"),

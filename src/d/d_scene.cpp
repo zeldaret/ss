@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "d/d_rumble.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
 #include "m/m_fader_base.h"
@@ -14,7 +15,6 @@ static bool gameStateIsActive = true;
 extern "C" u32 lbl_80574FA0;
 extern "C" u32 lbl_80574FA4;
 extern "C" void fn_801942F0(int, int);
-extern "C" void fn_80066D30(int);
 
 dFader_c dScene_c::sFader;
 
@@ -49,7 +49,7 @@ int dScene_c::preExecute() {
         } else if (sFader.isStatus(mFaderBase_c::FADED_OUT)) {
             deleteRequest();
             resetFlags();
-            fn_80066D30(-1);
+            dRumble_c::stop(-1);
         }
         return NOT_READY;
     } else {

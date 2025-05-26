@@ -29,6 +29,10 @@ public:
         return fn_800918E0(field_0xDA0, a1, a2);
     }
 
+    void setScreenShakeIntensity(f32 val) {
+        mScreenShakeIntensity = val;
+    }
+
 private:
     /* 0x068 */ u8 _0x068[0x6C - 0x068];
     /* 0x06C */ mVec3_c mPositionMaybe;
@@ -37,6 +41,8 @@ private:
     /* 0xD98 */ void *field_0xD98;
     /* 0xD9C */ u8 _0xD9C[0xDA0 - 0xD9C];
     /* 0xDA0 */ void *field_0xDA0;
+    /* 0xDA4 */ u8 _0xDA4[0xDB0 - 0xDA4];
+    /* 0xDB0 */ f32 mScreenShakeIntensity;
 };
 
 #endif
