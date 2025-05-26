@@ -3128,6 +3128,8 @@ nw4r/snd/snd_WaveFile.cpp:
 nw4r/snd/snd_WaveSound.cpp:
 	.text       start:0x80484F60 end:0x8048531C align:16
 	.ctors      start:0x804DB970 end:0x804DB974
+	.data       start:0x8056E350 end:0x8056E388
+	.sbss       start:0x805766E8 end:0x805766F0
 
 nw4r/snd/snd_WaveSoundHandle.cpp:
 	.text       start:0x80485320 end:0x80485458 align:16
