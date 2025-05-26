@@ -40,8 +40,12 @@ SoundPlayer::SoundPlayer() :
 	mBiquadValue		(0.0f),
 	mMainSend			(0.0f)
 {
+	for (int i = 0; i < 4; i++)
+		mRemoteOutVolume[i] = 1.0f;
+
 	for (int i = 0; i < AUX_BUS_NUM; i++)
 		mFxSend[i] = 0.0f;
+
 }
 
 SoundPlayer::~SoundPlayer()
@@ -87,6 +91,30 @@ void SoundPlayer::PauseAllSound(bool flag, int fadeFrames)
 	}
 }
 
+void SoundPlayer::SetVolume(f32 volume)
+{
+	if (volume < 0.0f)
+		volume = 0.0f;
+
+	mVolume = volume;
+}
+
+void SoundPlayer::SetLpfFreq(f32 freq)
+{
+	mLpfFreq = freq;
+}
+
+f32 SoundPlayer::GetRemoteOutVolume(int remote) const
+{
+	return mRemoteOutVolume[remote];
+}
+
+void SoundPlayer::SetFxSend(AuxBus bus, f32 send)
+{
+	mFxSend[bus] = send;
+}
+
+#if 0
 // SoundPlayer::SetVolume ([R89JEL]:/bin/RVL/Debug/mainD.MAP:14397)
 /* also __FILE__ because this is the first assert in the file so it needs to
  * reference that first as well
@@ -96,6 +124,7 @@ DECOMP_FORCE(NW4RAssert_String(volume >= 0.0f));
 
 // SoundPlayer::SetFxSend ([R89JEL]:/bin/RVL/Debug/mainD.MAP:14405)
 DECOMP_FORCE(NW4RAssertHeaderClampedLValue_String(bus));
+#endif
 
 void SoundPlayer::RemoveSoundList(detail::BasicSound *sound)
 {

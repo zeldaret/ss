@@ -30,13 +30,16 @@ namespace nw4r { namespace snd
 		// methods
 		int GetPlayableSoundCount() const { return mPlayableCount; }
 		f32 GetVolume() const { return mVolume; }
+		void SetVolume(f32 volume);
 		f32 GetLpfFreq() const { return mLpfFreq; }
+		void SetLpfFreq(f32 freq);
 		int GetDefaultOutputLine() const { return mOutputLineFlag; }
 		f32 GetMainOutVolume() const { return mMainOutVolume; }
 		int GetBiquadFilterType() const { return mBiquadType; }
 		f32 GetBiquadFilterValue() const { return mBiquadValue; }
 		f32 GetMainSend() const { return mMainSend; }
 		f32 GetFxSend(int index) const { return mFxSend[index]; }
+		void SetFxSend(AuxBus, f32);
 
 		void SetPlayableSoundCount(int count);
 		f32 GetRemoteOutVolume(int remote) const;
@@ -79,6 +82,7 @@ namespace nw4r { namespace snd
 		f32												mMainOutVolume;			// size 0x04, offset 0x38
 		int												mBiquadType;			// size 0x04, offset 0x3c
 		f32												mBiquadValue;			// size 0x04, offset 0x40
+		f32												mRemoteOutVolume[4];
 		f32												mMainSend;				// size 0x04, offset 0x44
 		f32												mFxSend[AUX_BUS_NUM];	// size 0x0c, offset 0x48
 	}; // size 0x54
