@@ -2293,7 +2293,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_syako_shutter", "REL/d/a/obj/d_a_obj_syako_shutter.cpp"),
     Rel(NonMatching, "d_a_obj_tableware", "REL/d/a/obj/d_a_obj_tableware.cpp"),
     Rel(NonMatching, "d_a_obj_tackle", "REL/d/a/obj/d_a_obj_tackle.cpp"),
-    Rel(NonMatching, "d_a_obj_tarzan_pole", "REL/d/a/obj/d_a_obj_tarzan_pole.cpp"),
+    Rel(Matching, "d_a_obj_tarzan_pole", "REL/d/a/obj/d_a_obj_tarzan_pole.cpp"),
     Rel(NonMatching, "d_a_obj_tenijima", "REL/d/a/obj/d_a_obj_tenijima.cpp"),
     Rel(NonMatching, "d_a_obj_teni_rail", "REL/d/a/obj/d_a_obj_teni_rail.cpp"),
     Rel(
