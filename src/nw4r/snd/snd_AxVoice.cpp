@@ -847,7 +847,7 @@ void AxVoice::SetRemoteFilter(u8 filter)
 }
 
 void AxVoice::CalcOffsetAdpcmParam(u16 *outPredScale, u16 *outYn1, u16 *outYn2,
-                                   u32 offset, void *dataAddr,
+                                   u32 offset, const void *dataAddr,
                                    AdpcmParam const &adpcmParam)
 {
 	AXPBADPCM adpcm;

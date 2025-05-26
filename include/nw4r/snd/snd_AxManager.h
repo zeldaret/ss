@@ -7,6 +7,7 @@
 
 #include "common.h"
 
+#include "nw4r/snd/snd_AxVoice.h"
 #include "nw4r/snd/snd_global.h"
 
 #include "nw4r/snd/snd_FxBase.h"
@@ -106,6 +107,10 @@ namespace nw4r { namespace snd { namespace detail
 			return mResetReadyCounter == 0;
 		}
 
+		AxVoice::SrcType GetSrcType() const {
+			return mSrcType;
+		}
+
 	private:
 		// cdtors
 		AxManager();
@@ -156,7 +161,7 @@ namespace nw4r { namespace snd { namespace detail
 		u8							mAuxCallbackWaitCounter[AUX_BUS_NUM];	// size 0x03, offset 0xf0
 		/* 1 byte padding */
 		u32							mEffectProcessTick[AUX_BUS_NUM];		// size 0x0c, offset 0xf4
-		u32							field_0x100;
+		AxVoice::SrcType			mSrcType;
 	}; // size 0x104
 }}} // namespace nw4r::snd::detail
 

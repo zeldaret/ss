@@ -3111,6 +3111,8 @@ nw4r/snd/snd_TaskThread.cpp:
 
 nw4r/snd/snd_Voice.cpp:
 	.text       start:0x804817A0 end:0x80484034 align:16
+	.data       start:0x8056E308 end:0x8056E340
+	.sdata2     start:0x8057F188 end:0x8057F1C0
 
 nw4r/snd/snd_VoiceManager.cpp:
 	.text       start:0x80484040 end:0x804846F4 align:16

@@ -69,7 +69,7 @@ AxManager::AxManager() :
 	mUpdateVoicePrioFlag	(true),
 	mOldAidCallback			(nullptr),
 	mResetReadyCounter		(-1),
-	field_0x100(5)
+	mSrcType(AxVoice::SRC_4TAP_AUTO)
 {
 	mMainOutVolume.InitValue(1.0f);
 	mMasterVolume.InitValue(1.0f);
