@@ -23,8 +23,10 @@ dCcD_SrcSph dAcOTarzanPole_c::sCcSrc = {
 };
 // clang-format on
 
+const f32 dAcOTarzanPole_c::sXOffset = 320.0f;
+const f32 dAcOTarzanPole_c::sYOffset = 0.0f;
+
 bool dAcOTarzanPole_c::createHeap() {
-    320.0f; // To fix .rodata
     // Get Res File
     void *resFile = getOarcResFile("WhipBar");
     mBrres = nw4r::g3d::ResFile(resFile);
@@ -44,7 +46,6 @@ bool dAcOTarzanPole_c::createHeap() {
     return true;
 }
 
-const f32 dAcOTarzanPole_c::sUnusedFloat = 0.0f;
 int dAcOTarzanPole_c::create() {
     if (!initAllocatorWork1Heap(0xFFFFFFFF, "dAcOTarzanPole_c::m_allocator", 0x20)) {
         return FAILED;
@@ -56,15 +57,15 @@ int dAcOTarzanPole_c::create() {
     mCollider.Set(sCcSrc);
     mCollider.SetStts(mStts);
 
-    forwardAccel = 0;
-    forwardMaxSpeed = -40;
+    forwardAccel = 0.0f;
+    forwardMaxSpeed = -40.0f;
 
     mFloat = (s32)(params & 0xFF) * 10.0f;
     if ((s32)(params & 0xFF) == 0xFF) {
         mFloat = 0.0f;
     }
 
-    mVec = mVec3_c::Ex * 400;
+    mVec = mVec3_c::Ex * 400.0f;
     mVec.rotY(rotation.y);
     boundingBox.Set(mVec3_c(-0.0f, -120.0f, -110.0f), mVec3_c(500.0f, 140.0f, 110.0f));
 
@@ -75,7 +76,6 @@ int dAcOTarzanPole_c::doDelete() {
     return SUCCEEDED;
 }
 
-const f32 dAcOTarzanPole_c::sUnusedFloat2 = 320.0f;
 int dAcOTarzanPole_c::actorExecute() {
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
@@ -90,10 +90,10 @@ int dAcOTarzanPole_c::actorExecute() {
         mObjectActorFlags = mObjectActorFlags | 0x1000;
     }
 
-    mVec = mVec3_c::Ex * 320.0f + mVec3_c::Ey * 0;
+    mVec = mVec3_c::Ex * sXOffset + mVec3_c::Ey * sYOffset;
     mVec.rotY(rotation.y);
     poscopy2 = position + mVec;
-    poscopy3 = poscopy2 + mVec3_c::Ey * 20;
+    poscopy3 = poscopy2 + mVec3_c::Ey * 20.0f;
 
     if (player != nullptr && !player->checkActionFlags(0x400000) && dAcItem_c::checkFlag(ITEM_WHIP)) {
         AttentionManager::GetInstance()->addUnk7Target((dAcObjBase_c &)*this, 1, 1000.0f, 10.0f, -600.0, 200);

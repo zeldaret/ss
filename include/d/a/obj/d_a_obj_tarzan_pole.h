@@ -21,8 +21,9 @@ public:
 
 private:
     static dCcD_SrcSph sCcSrc;
-    static const f32 sUnusedFloat;
-    static const f32 sUnusedFloat2;
+
+    static const f32 sXOffset;
+    static const f32 sYOffset;
 
     /* 0x330 */ nw4r::g3d::ResFile mBrres;
     /* 0x334 */ m3d::smdl_c mMdl;
