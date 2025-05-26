@@ -1016,7 +1016,7 @@ config.libs = [
             Object(Matching, "nw4r/snd/snd_AxManager.cpp"),
             Object(NonMatching, "nw4r/snd/snd_AxVoice.cpp"),
             Object(Matching, "nw4r/snd/snd_AxVoiceManager.cpp"),
-            Object(NonMatching, "nw4r/snd/snd_AxfxImpl.cpp"),
+            Object(Matching, "nw4r/snd/snd_AxfxImpl.cpp"),
             Object(Matching, "nw4r/snd/snd_Bank.cpp"),
             Object(Matching, "nw4r/snd/snd_BankFile.cpp"),
             Object(Matching, "nw4r/snd/snd_BasicPlayer.cpp"),

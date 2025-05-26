@@ -2909,6 +2909,7 @@ nw4r/snd/snd_AxVoiceManager.cpp:
 
 nw4r/snd/snd_AxfxImpl.cpp:
 	.text       start:0x80467DD0 end:0x80467FC8 align:16
+	.sbss       start:0x80576670 end:0x80576678
 
 nw4r/snd/snd_Bank.cpp:
 	.text       start:0x80467FD0 end:0x80468248 align:16
