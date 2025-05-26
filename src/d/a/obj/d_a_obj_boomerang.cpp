@@ -47,8 +47,17 @@ void dAcBoomerang_c::atHitCallback(cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, 
                 setChrAnimation(RB_HOLD);
                 mAnmChr[0].setRate(0.f);
                 mAnmChr[0].setFrameOnly(i_actorB->GetLinkage().field_0x24);
+                return;
             }
         }
+    }
+
+    if (mStateMgr.isState(StateID_MoveCancelWait)) {
+        return;
+    }
+
+    if (i_objInfB->ChkTgBit23()) {
+        setChrAnimation(RB_CUT);
     }
 }
 

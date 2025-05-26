@@ -4,6 +4,7 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_w.h"
 #include "d/d_linkage.h"
+#include "d/d_rumble.h"
 #include "d/flag/sceneflag_manager.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "s/s_Math.h"
@@ -257,11 +258,9 @@ void dAcOsw_c::executeState_On() {
     }
 }
 
-extern char lbl_805A0790[];
-extern "C" void fn_80066B00(void *, bool);
 void dAcOsw_c::finalizeState_On() {
     playSound(0xA18);
-    fn_80066B00(lbl_805A0790, true);
+    dRumble_c::start(dRumble_c::sRumblePreset2, 0x1);
 }
 
 void dAcOsw_c::initializeState_OffWait() {
