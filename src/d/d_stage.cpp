@@ -5,6 +5,7 @@
 #include "d/d_base.h"
 #include "d/d_bzs_types.h"
 #include "d/d_room.h"
+#include "d/d_rumble.h"
 #include "d/d_sc_game.h"
 #include "d/d_sc_title.h"
 #include "d/d_stage_mgr.h"
@@ -54,7 +55,6 @@ extern "C" void ScrapperPickupMgr__update(void *);
 extern "C" void ScrapperPickupMgr__dtor();
 extern "C" void fn_80028A80();
 extern "C" void fn_80028EC0();
-extern "C" void fn_80066D30(s32);
 extern "C" void setPCAMpos2(const PCAM *);
 
 int dStage_c::create() {
@@ -100,7 +100,7 @@ int dStage_c::create() {
 
 int dStage_c::doDelete() {
     fn_80028EC0();
-    fn_80066D30(-1);
+    dRumble_c::stop(-1);
     ScrapperPickupMgr__dtor();
     return SUCCEEDED;
 }
