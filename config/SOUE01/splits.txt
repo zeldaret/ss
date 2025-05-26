@@ -2927,6 +2927,9 @@ nw4r/snd/snd_BasicPlayer.cpp:
 nw4r/snd/snd_BasicSound.cpp:
 	.text       start:0x80468B50 end:0x8046A36C align:16
 	.ctors      start:0x804DB95C end:0x804DB960
+	.data       start:0x8056DB60 end:0x8056DB98
+	.sbss       start:0x80576678 end:0x80576680
+	.sdata2     start:0x8057EF88 end:0x8057EF98
 
 nw4r/snd/snd_BiquadFilterPreset.cpp:
 	.text       start:0x8046A370 end:0x8046A7B0 align:16

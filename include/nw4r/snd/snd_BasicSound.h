@@ -44,7 +44,8 @@ namespace nw4r { namespace snd
 			lpf					(0.0f),
 			biquadFilterValue	(0.0f),
 			biquadFilterType	(0),
-			priority			(0)
+			priority			(0),
+			field_0x24			(0)
 		{
 		}
 
@@ -59,6 +60,7 @@ namespace nw4r { namespace snd
 		f32	biquadFilterValue;	// size 0x04, offset 0x18
 		int	biquadFilterType;	// size 0x04, offset 0x1c
 		int	priority;			// size 0x04, offset 0x20
+		UNKWORD field_0x24;
 	}; // size 0x24
 
 	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x27514
@@ -76,7 +78,8 @@ namespace nw4r { namespace snd
 			lpf					(0.0f),
 			biquadFilterValue	(0.0f),
 			biquadFilterType	(0),
-			priority			(0)
+			priority			(0),
+			field_0x24			(0)
 		{
 		}
 
@@ -91,6 +94,7 @@ namespace nw4r { namespace snd
 		f32				biquadFilterValue;	// size 0x04, offset 0x18
 		int				biquadFilterType;	// size 0x04, offset 0x1c
 		int				priority;			// size 0x04, offset 0x20
+		UNKWORD         field_0x24;
 		VoiceOutParam	voiceOutParam[4];	// size 0x60, offset 0x24
 	}; // size 0x84
 
@@ -244,9 +248,10 @@ namespace nw4r { namespace snd { namespace detail
 		void StartPrepared();
 		void Update();
 		void Pause(bool flag, int fadeFrames);
-		bool IsPaused() const;
+		bool IsPause() const;
 		void Stop(int fadeFrames);
 		void SetAutoStopCounter(int count);
+		void FadeIn(int fadeFrames);
 
 		u32 GetId() const { return mId; }
 		PlayerHeap *GetPlayerHeap() { return mPlayerHeap; }
@@ -257,12 +262,16 @@ namespace nw4r { namespace snd { namespace detail
 		void SetInitialVolume(f32 volume);
 		void SetVolume(f32 volume, int frames);
 		void SetPitch(f32 pitch);
+		void SetPan(f32 pan);
+		void SetSurroundPan(f32 pan);
+		void SetLpfFreq(f32 freq);
 		void SetFxSend(AuxBus bus, f32 send);
 		void SetRemoteFilter(int filter);
 		void SetPanMode(PanMode mode);
 		void SetPanCurve(PanCurve curve);
 		void SetAmbientInfo(AmbientInfo const &ambientArgInfo);
 		void SetId(u32 id);
+		void SetOutputLineFlag(int flag);
 
 		void AttachPlayerHeap(PlayerHeap *heap);
 		void AttachSoundPlayer(SoundPlayer *player);
@@ -278,6 +287,8 @@ namespace nw4r { namespace snd { namespace detail
 		void DetachExternalSoundPlayer(ExternalSoundPlayer *extPlayer);
 		void DetachGeneralHandle();
 		void DetachTempGeneralHandle();
+
+		int GetRemainingFadeFrames() const;
 
 		int CalcCurrentPlayerPriority() const
 		{
@@ -308,7 +319,6 @@ namespace nw4r { namespace snd { namespace detail
 		ExternalSoundPlayer	*mExtSoundPlayer;			// size 0x04, offset 0x18
 		AmbientInfo			mAmbientInfo;				// size 0x14, offset 0x1c
 		SoundParam			mAmbientParam;				// size 0x24, offset 0x30
-		UNKWORD				field_0x54;
 		SoundActorParam		mActorParam;				// size 0x0c, offset 0x54
 		MoveValue<f32, int>	mFadeVolume;				// size 0x10, offset 0x60
 		MoveValue<f32, int>	mPauseFadeVolume;			// size 0x10, offset 0x70

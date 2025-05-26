@@ -41,6 +41,10 @@ namespace nw4r { namespace snd { namespace detail
 
 		bool IsFinished() const { return mCounter >= mFrame; }
 
+		TTime GetRemainingTime() const {
+			return IsFinished() ? 0 : mFrame - mCounter;
+		}
+
 		void InitValue(TValue value)
 		{
 			mOrigin		= value;
