@@ -20,11 +20,10 @@ int dAcOdistantShip_c::create() {
     // Sure, why not
     mIsVisible = false;
     u32 p = params;
-    u16 r = (s32)roomid;
+    u16 r = getRoomId();
     mSubtype = (p >> 8) & 0xF;
 
-    bool flag = SceneflagManager::sInstance->checkFlag(r, p & 0xFF);
-    if (flag) {
+    if (SceneflagManager::sInstance->checkBoolFlag(r, p & 0xFF)) {
         mIsVisible = true;
     }
 
