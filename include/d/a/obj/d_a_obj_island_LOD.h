@@ -18,9 +18,9 @@ private:
     static const char* const resFilenames[5];
     static const char* const resMdlNames[5];
     
-    /* 0x330 */ nw4r::g3d::ResFile resFile;
+    /* 0x330 */ nw4r::g3d::ResFile mResFile;
     /* 0x334 */ m3d::smdl_c mMdl;
-    /* 0x350 */ u8 lodModelIndex;
+    /* 0x350 */ u8 mMdlLodIdx;
 };
 
 #endif

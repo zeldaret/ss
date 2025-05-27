@@ -24,12 +24,12 @@ const char* const dAcOislandLOD_c::resMdlNames[5] = {
 SPECIAL_ACTOR_PROFILE(OBJ_ISLAND_LOD, dAcOislandLOD_c, fProfile::OBJ_ISLAND_LOD, 0x211, 0, 3);
 
 bool dAcOislandLOD_c::createHeap() {
-    lodModelIndex = params & 0xf;
-    void* data = getOarcResFile(dAcOislandLOD_c::resFilenames[lodModelIndex]);
-    resFile = nw4r::g3d::ResFile(data);
-    dStage_c::bindStageResToFile(&resFile);
-    dStage_c::bindSkyCmnToResFile(&resFile);
-    nw4r::g3d::ResMdl mdl = resFile.GetResMdl(dAcOislandLOD_c::resMdlNames[lodModelIndex]);
+    mMdlLodIdx = params & 0xf;
+    void* data = getOarcResFile(dAcOislandLOD_c::resFilenames[mMdlLodIdx]);
+    mResFile = nw4r::g3d::ResFile(data);
+    dStage_c::bindStageResToFile(&mResFile);
+    dStage_c::bindSkyCmnToResFile(&mResFile);
+    nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(dAcOislandLOD_c::resMdlNames[mMdlLodIdx]);
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr));
     return true;
 }
