@@ -9,7 +9,9 @@
 
 #include "nw4r/snd/snd_BasicPlayer.h"
 #include "nw4r/snd/snd_DisposeCallbackManager.h" // DisposeCallback
+#include "nw4r/snd/snd_SeqTrack.h"
 #include "nw4r/snd/snd_SoundThread.h"
+#include "nw4r/ut/ut_Lock.h"
 
 /*******************************************************************************
  * types
@@ -128,6 +130,10 @@ namespace nw4r { namespace snd { namespace detail
 		SeqTrack *GetPlayerTrack(int trackNo);
 		s16 volatile *GetVariablePtr(int varNo);
 
+		s16 GetLocalVariable(int varNo) const;
+		void SetLocalVariable(int varNo, s16 value);
+		static void SetGlobalVariable(int varNo, s16 value);
+
 		void SetTempoRatio(f32 tempo);
 		void SetReleasePriorityFix(bool fix);
 		void SetChannelPriority(int priority);
@@ -148,6 +154,10 @@ namespace nw4r { namespace snd { namespace detail
 		void CallSeqUserprocCallback(u16 procId, SeqTrack *track);
 		Channel *NoteOn(int bankNo, NoteOnInfo const &noteOnInfo);
 
+		void SetTrackMute(u32 trackFlags, SeqMute mute);
+		void SetTrackSilence(u32 trackFlags, bool silence, int fadeFrames);
+		void SetTrackVolume(u32 trackFlags, f32 volume);
+
 		static void InitSeqPlayer();
 
 	private:
@@ -162,6 +172,40 @@ namespace nw4r { namespace snd { namespace detail
 		void UpdateTick(int msec);
 		void SkipTick();
 
+		template <typename T>
+		void SetTrackParam(u32 trackFlags, void (SeqTrack::*pSetter)(T), T param) {
+			ut::AutoInterruptLock lock;
+
+			for (int i = 0; i < TRACK_NUM && trackFlags != 0;
+				trackFlags >>= 1, i++) {
+
+				if (trackFlags & 1) {
+					SeqTrack* pTrack = GetPlayerTrack(i);
+
+					if (pTrack != NULL) {
+						(pTrack->*pSetter)(param);
+					}
+				}
+			}
+		}
+
+		template <typename T, typename U>
+		void SetTrackParam(u32 trackFlags, void (SeqTrack::*pSetter)(T, U), T param, U param2) {
+			ut::AutoInterruptLock lock;
+
+			for (int i = 0; i < TRACK_NUM && trackFlags != 0;
+				trackFlags >>= 1, i++) {
+
+				if (trackFlags & 1) {
+					SeqTrack* pTrack = GetPlayerTrack(i);
+
+					if (pTrack != NULL) {
+						(pTrack->*pSetter)(param, param2);
+					}
+				}
+			}
+		}
+
 	// static members
 	public:
 		static int const MAX_SKIP_TICK_PER_FRAME = 768;
@@ -171,6 +215,8 @@ namespace nw4r { namespace snd { namespace detail
 		static int const TRACK_NUM_PER_PLAYER = 16;
 		static int const GLOBAL_VARIABLE_NUM = 16;
 		static int const PLAYER_VARIABLE_NUM = 16;
+
+		static const int TRACK_NUM = 16;
 
 	private:
 		static s16 mGlobalVariable[GLOBAL_VARIABLE_NUM];

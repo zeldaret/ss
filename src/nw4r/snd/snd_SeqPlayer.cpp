@@ -286,6 +286,30 @@ void SeqPlayer::CallSeqUserprocCallback(u16 procId, SeqTrack *track)
 	trackParam.cmpFlag = param.cmpFlag;
 }
 
+s16 SeqPlayer::GetLocalVariable(int varNo) const {
+	return mLocalVariable[varNo];
+}
+
+void SeqPlayer::SetLocalVariable(int varNo, s16 value) {
+	mLocalVariable[varNo] = value;
+}
+
+void SeqPlayer::SetGlobalVariable(int varNo, s16 value) {
+	mGlobalVariable[varNo] = value;
+}
+
+void SeqPlayer::SetTrackMute(u32 trackFlags, SeqMute mute) {
+	SetTrackParam<SeqMute>(trackFlags, &SeqTrack::SetMute, mute);
+}
+
+void SeqPlayer::SetTrackSilence(u32 trackFlags, bool silence, int fadeFrames) {
+	SetTrackParam<bool, int>(trackFlags, &SeqTrack::SetSilence, silence, fadeFrames);
+}
+
+void SeqPlayer::SetTrackVolume(u32 trackFlags, f32 volume) {
+    SetTrackParam<f32>(trackFlags, &SeqTrack::SetVolume, volume);
+}
+
 #if 0
 // SeqPlayer::GetLocalVariable? maybe all of them?
 DECOMP_FORCE(NW4RAssertHeaderClampedLValue_String(varNo));
