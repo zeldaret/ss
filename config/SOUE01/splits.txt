@@ -3170,8 +3170,11 @@ nw4r/snd/snd_Util.cpp:
 	.sdata      start:0x80574EA8 end:0x80574EB0
 	.sdata2     start:0x8057F1C0 end:0x8057F1F0
 
+nw4r/snd/snd_WaveArchive.cpp:
+	.text       start:0x80484BE0 end:0x80484CE8 align:16
+
 nw4r/snd/snd_WaveFile.cpp:
-	.text       start:0x80484BE0 end:0x80484F54 align:16
+	.text       start:0x80484CF0 end:0x80484F54 align:16
 
 nw4r/snd/snd_WaveSound.cpp:
 	.text       start:0x80484F60 end:0x8048531C align:16
