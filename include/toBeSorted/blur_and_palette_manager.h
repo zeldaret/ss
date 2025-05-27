@@ -268,6 +268,8 @@ public:
     void fn_800226E0(LightParams *);
     // light pillar related
     void fn_80024240(s16, s16, s16);
+    bool fn_80024770(int);
+    bool fn_800247A0(int);
 
     u8 get0x2DE8() const {
         return field_0x2DE0[8];
