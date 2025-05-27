@@ -360,6 +360,10 @@ enum dCcD_ObjAtType {
     /* 0x 0200 0000 */ AT_TYPE_0x2000000 = (1 << 25),
     /* 0x 0400 0000 */ AT_TYPE_KOLOKTOS_SWORD = (1 << 26),
     /* 0x 0800 0000 */ AT_TYPE_0x8000000 = (1 << 27),
+    /* 0x 1000 0000 */ AT_TYPE_0x10000000 = (1 << 28),
+    /* 0x 2000 0000 */ AT_TYPE_0x20000000 = (1 << 29),
+    /* 0x 4000 0000 */ AT_TYPE_0x40000000 = (1 << 30),
+    /* 0x 8000 0000 */ AT_TYPE_0x80000000 = (1 << 31),
     /* 0x 0148 8200 */ AT_TYPE_COMMON0 =
         AT_TYPE_BUGNET | AT_TYPE_BEETLE | AT_TYPE_0x80000 | AT_TYPE_0x8000 | AT_TYPE_WIND,
 };

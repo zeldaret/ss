@@ -10,7 +10,35 @@
 dCcD_SrcSph dAcObjBirdSp_c::sCcSrc = {
     /* mObjInf */ {
         /* mObjAt */ {0, 2, {0, 0, 0}, 0, 0, 0, 0, 0, 0},
-        /* mObjTg */ {0xfeb77fff, 0x00000105, {0, 00, 0x407}, 0, 0},
+        /* mObjTg */ {(AT_TYPE_0x1 |
+    AT_TYPE_SWORD |
+    AT_TYPE_0x4 |
+    AT_TYPE_PHYSICS |
+    AT_TYPE_0x10 |
+    AT_TYPE_BOMB |
+    AT_TYPE_0x40 |
+    AT_TYPE_SLINGSHOT |
+    AT_TYPE_0x100 |
+    AT_TYPE_WIND |
+    AT_TYPE_DAMAGE |
+    AT_TYPE_WHIP |
+    AT_TYPE_0x1000 |
+    AT_TYPE_ARROW |
+    AT_TYPE_CLAWSHOT |
+    AT_TYPE_BELLOWS |
+    AT_TYPE_0x20000 |
+    AT_TYPE_0x40000 |
+    AT_TYPE_BUBBLE |
+    AT_TYPE_0x200000 |
+    AT_TYPE_0x800000 |
+    AT_TYPE_0x2000000 |
+    AT_TYPE_KOLOKTOS_SWORD |
+    AT_TYPE_0x8000000 |
+    AT_TYPE_0x10000000 |
+    AT_TYPE_0x20000000 |
+    AT_TYPE_0x40000000 |
+    AT_TYPE_0x80000000
+        ), 0x00000105, {0, 00, 0x407}, 0, 0},
         /* mObjCo */ {0x00004029}},
      /* mSphInf */ {1000.0f}
 };
