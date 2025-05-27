@@ -46,11 +46,11 @@ bool dAcOstreamLava_c::createHeap() {
     TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x32C));
 
     anmSrtWait = mResFile.GetResAnmTexSrt("Wait");
-    TRY_CREATE(mAnmTexSrtWait.create(mdl, anmSrtWait, &heap_allocator, 0x0, 1));
+    TRY_CREATE(mAnmTexSrtWait.create(mdl, anmSrtWait, &heap_allocator, nullptr, 1));
     mModel.setAnm(mAnmTexSrtWait);
 
     anmClr = mResFile.GetResAnmClr(AcOstreamLava__AnmClrNames[mSubtype]);
-    TRY_CREATE(mAnmMatClr.create(mdl, anmClr, &heap_allocator, 0x0, 1));
+    TRY_CREATE(mAnmMatClr.create(mdl, anmClr, &heap_allocator, nullptr, 1));
 
     void *dzb = getOarcFile(AcOstreamLava__OarcNames[mSubtype], AcOstreamLava__DbzNames[mSubtype]);
     void *plc = getOarcFile(AcOstreamLava__OarcNames[mSubtype], AcOstreamLava__PlcNames[mSubtype]);
@@ -109,10 +109,10 @@ int dAcOstreamLava_c::actorExecute() {
     dRoom_c *currentRoom = dStage_c::GetInstance()->getRoom(roomid);
 
     if (currentRoom->checkFlag(2)) {
-        mObjectActorFlags |= 0x200;
+        setObjectProperty(0x200);
         return SUCCEEDED;
     } else {
-        mObjectActorFlags &= ~0x200;
+        clearObjectProperty(0x200);
         return SUCCEEDED;
     }
 }

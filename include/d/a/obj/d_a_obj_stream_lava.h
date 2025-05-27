@@ -13,7 +13,7 @@
 
 class dAcOstreamLava_c : public dAcObjBase_c {
 public:
-    dAcOstreamLava_c() : mStateMgr(*this, sStateID::null), mEvent(*this, nullptr), mScnCallback(nullptr) {}
+    dAcOstreamLava_c() : mStateMgr(*this, sStateID::null), mEvent(*this, nullptr), mScnCallback(this) {}
     virtual int create() override;
     virtual int doDelete() override;
     virtual int draw() override;
@@ -28,11 +28,6 @@ private:
     const static f32 unkFloat0;
     static u32 eventFlags1;
     static u32 eventFlags2;
-
-    static void eventIn_Wrapper(void *arg);
-    void eventIn();
-    static void eventEnd_Wrapper(void *arg);
-    void eventEnd();
 
     /* 0x330 */ nw4r::g3d::ResFile mResFile;
     /* 0x334 */ m3d::smdl_c mModel;
