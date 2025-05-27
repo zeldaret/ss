@@ -27,7 +27,7 @@ public:
     STATE_FUNC_DECLARE(dBird_c, MiniGameLevelUpDemo);
 
     // fn_129_8DD0, only referenced by d_a_obj_bird_sp
-    void speedUpAccel(mVec3_c &param);
+    void accelerateTowards(mVec3_c &targetDirection);
 
     s16 getNumDashes() const {
         return mNumDashes;

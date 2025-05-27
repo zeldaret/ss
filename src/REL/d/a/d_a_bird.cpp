@@ -66,4 +66,4 @@ void dBird_c::initializeState_MiniGameLevelUpDemo() {}
 void dBird_c::executeState_MiniGameLevelUpDemo() {}
 void dBird_c::finalizeState_MiniGameLevelUpDemo() {}
 
-void speedUpAccel(mVec3_c &param) {}
+void dBird_c::accelerateTowards(mVec3_c &targetDirection) {}
