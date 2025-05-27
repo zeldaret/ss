@@ -27,6 +27,7 @@ namespace nw4r { namespace snd
 	{
 	// methods
 	public:
+		SeqSoundHandle(SoundHandle*);
 		// methods
 		bool IsAttachedSound() const { return mSound != nullptr; }
 
