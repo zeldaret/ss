@@ -1,6 +1,7 @@
 #ifndef M3D_M_MDL_H
 #define M3D_M_MDL_H
 
+#include "common.h"
 #include "m/m3d/m_banm.h"
 #include "m/m3d/m_calc_ratio.h"
 #include "m/m3d/m_smdl.h"
@@ -59,6 +60,9 @@ public:
     virtual ~mdl_c();
 
     bool create(nw4r::g3d::ResMdl, mAllocator_c *, u32, int, u32 *);
+    bool create(nw4r::g3d::ResMdl mdl, mAllocator_c *alloc, u32 flag, int num) {
+        return create(mdl, alloc, flag, num, nullptr);
+    }
     bool create(nw4r::g3d::ResMdl, mdlCallback_c *cb, mAllocator_c *, u32, int, u32 *);
 
     virtual void remove() override;

@@ -28,9 +28,16 @@ public:
         mpFader->setStatus(status);
     }
 
+    void fadeIn() {
+        mpFader->fadeIn();
+    }
     bool calc() {
         return mpFader->calc();
     }
+    void setFrame(u16 frame) {
+        mpFader->setFrame(frame);
+    }
+
 protected:
     mFaderBase_c *mpFader;
 };

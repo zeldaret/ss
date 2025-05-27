@@ -338,7 +338,7 @@ enum dCcD_ObjAtType {
     /* 0x 0000 0008 */ AT_TYPE_PHYSICS = (1 << 3),
     /* 0x 0000 0010 */ AT_TYPE_0x10 = (1 << 4),
     /* 0x 0000 0020 */ AT_TYPE_BOMB = (1 << 5),
-    /* 0x 0000 0040 */ AT_TYPE_0x40 = (1 << 6),
+    /* 0x 0000 0040 */ AT_TYPE_0x40 = (1 << 6), // Used in Beetle
     /* 0x 0000 0080 */ AT_TYPE_SLINGSHOT = (1 << 7),
     /* 0x 0000 0100 */ AT_TYPE_0x100 = (1 << 8),
     /* 0x 0000 0200 */ AT_TYPE_WIND = (1 << 9),
@@ -686,7 +686,7 @@ public:
     cCcD_ObjCo();
     virtual ~cCcD_ObjCo();
     void Set(const cCcD_SrcGObjCo &);
-    void SetCoFlag(u32);
+    void SetGrp(u32);
     void AdjustHitPos(f32, f32);
 
     void ClrSet() {
@@ -815,6 +815,9 @@ public:
         mCo.OnSPrm(f);
     }
 
+    void SetAtType(u32 type) {
+        mAt.SetType(type);
+    }
     void SetTgType(u32 type) {
         mTg.SetType(type);
     }
@@ -932,6 +935,11 @@ public:
     void OnAt_0x40() {
         mAt.OnSPrm(0x40);
     }
+    // Related to Beetle (no hook)
+    void OnAt_0x4000() {
+        mAt.OnSPrm(0x4000);
+    }
+
 
 
     void SetAtDamage(u8 amount) {
@@ -967,6 +975,9 @@ public:
     void ClrTgElectric() {
         return mTg.OffSPrm(0x40000);
     }
+    u32 ChkTgBonk() const {
+        return mTg.MskSPrm(0x200000);
+    }
 
     void OnTg_0x200000() {
         mTg.OnSPrm(0x200000);
@@ -990,6 +1001,9 @@ public:
 
     // Co
 
+    void SetCoGrp(u32 grp) {
+        mCo.SetGrp(grp << 4);
+    }
     void OnCoSet() {
         mCo.OnSPrm(1);
     }
