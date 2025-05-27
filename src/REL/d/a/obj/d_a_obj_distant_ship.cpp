@@ -17,15 +17,11 @@ bool dAcOdistantShip_c::createHeap() {
 }
 
 int dAcOdistantShip_c::create() {
-    // Sure, why not
-    // Scratch for anyone who wants to look for a better solution:
-    // https://decomp.me/scratch/0qPPj
     mIsVisible = false;
-    u32 p = params;
-    u16 r = getRoomId();
-    mSubtype = (p >> 8) & 0xF;
+    u8 flag = getFromParams(0, 0xFF);
+    mSubtype = getFromParams(8, 0xF);
 
-    if (SceneflagManager::sInstance->checkBoolFlag(r, p & 0xFF)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(roomid, flag)) {
         mIsVisible = true;
     }
 
