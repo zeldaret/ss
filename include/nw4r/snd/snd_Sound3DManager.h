@@ -10,6 +10,19 @@
 namespace nw4r {
 namespace snd {
 
+struct Sound3DParam
+{
+    /* 0x00 */ u8 _0x00[0x18];
+    /* 0x18 */ UNKWORD field_0x18;
+    /* 0x1C */ u8 field_0x1C;
+    /* 0x1D */ u8 field_0x1D;
+    /* 0x1E */ u8 field_0x1E;
+    /* 0x20 */ UNKWORD field_0x20;
+    /* 0x24 */ UNKWORD field_0x24;
+
+    Sound3DParam();
+};
+
 class Sound3DManager : public detail::BasicSound::AmbientInfo::AmbientParamUpdateCallback,
                        public detail::BasicSound::AmbientInfo::AmbientArgAllocaterCallback {
 public:
@@ -51,10 +64,6 @@ public:
         mMaxPriorityReduction = max;
     }
 
-    f32 GetPanRange() const {
-        return mPanRange;
-    }
-
 private:
     enum ParamDecayCurve {
         DECAY_CURVE_NONE,
@@ -63,16 +72,10 @@ private:
     };
 
 private:
-    detail::InstancePool<Sound3DActorParam> mParamPool; // at 0x8
+    detail::InstancePool<Sound3DParam> mParamPool; // at 0x8
     Sound3DListener *mListener;                         // at 0xC
-    s32 mMaxPriorityReduction;                          // at 0x10
-
-    f32 mSpeakerAngleStereo;    // at 0x14
-    f32 mFrontSpeakerAngleDpl2; // at 0x18
-    f32 mRearSpeakerAngleDpl2;  // at 0x1C
-
-    f32 mInitPan;  // at 0x20
-    f32 mPanRange; // at 0x24
+    u8 _0x10[0x1C - 0x10];
+    s32 mMaxPriorityReduction;                          // at 0x1C
 };
 
 } // namespace snd

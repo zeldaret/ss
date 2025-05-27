@@ -36,12 +36,7 @@ inline f32 SolveLinerFunction(f32 x, f32 dAngle, f32 cAngle, f32 dFactor,
 } // namespace
 
 Sound3DManager::Sound3DManager()
-    : mMaxPriorityReduction(32),
-      mSpeakerAngleStereo(NW4R_MATH_PI / 4),
-      mFrontSpeakerAngleDpl2(NW4R_MATH_PI / 6),
-      mRearSpeakerAngleDpl2(2 * NW4R_MATH_PI / 3),
-      mInitPan(0.0f),
-      mPanRange(0.9f) {}
+     {}
 
 u32 Sound3DManager::GetRequiredMemSize(const SoundArchive* pArchive) {
     u32 numParam = 0;
@@ -53,7 +48,7 @@ u32 Sound3DManager::GetRequiredMemSize(const SoundArchive* pArchive) {
         numParam += playerInfo.waveSoundCount;
     }
 
-    return numParam * sizeof(Sound3DActorParam);
+    return numParam * sizeof(Sound3DParam);
 }
 
 bool Sound3DManager::Setup(const SoundArchive* pArchive, void* pBuffer,
@@ -83,7 +78,7 @@ void Sound3DManager::Update(SoundParam* pParam, u32 id, SoundHandle* pHandle,
     f32 angle;
     f32 panLR, panFR;
     f32 pan, surroundPan;
-
+#if 0
     const Sound3DActorParam* pActorParam =
         static_cast<const Sound3DActorParam*>(pArg);
 
@@ -267,10 +262,11 @@ void Sound3DManager::Update(SoundParam* pParam, u32 id, SoundHandle* pHandle,
         pParam->priority =
             -static_cast<int>((1.0f - volume) * GetMaxPriorityReduction());
     }
+#endif
 }
 
 void* Sound3DManager::detail_AllocAmbientArg(u32 size) {
-    if (size != sizeof(Sound3DActorParam)) {
+    if (size != sizeof(Sound3DParam)) {
         return NULL;
     }
 
@@ -281,7 +277,17 @@ void Sound3DManager::detail_FreeAmbientArg(void* pArg,
                                            const detail::BasicSound* pSound) {
 #pragma unused(pSound)
 
-    mParamPool.Free(static_cast<Sound3DActorParam*>(pArg));
+    mParamPool.Free(static_cast<Sound3DParam*>(pArg));
+}
+
+Sound3DParam::Sound3DParam()
+{
+    field_0x18 = 0;
+    field_0x1C = 1;
+    field_0x1D = 0x80;
+    field_0x1E = 0;
+    field_0x20 = 0;
+    field_0x24 = 0;
 }
 
 Sound3DManager::Sound3DActorParam::Sound3DActorParam() : userParam(-1) {
