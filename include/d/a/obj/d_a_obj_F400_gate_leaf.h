@@ -8,7 +8,14 @@ public:
     dAcOF400GateLeaf_c() {}
     virtual ~dAcOF400GateLeaf_c() {}
 
+    virtual bool createHeap() override;
+    virtual int create() override;
+    virtual int draw() override;
+
+    u16 getStoryflag();
+
 private:
+    /* 0x330 */ m3d::smdl_c mMdl;
 };
 
 #endif

@@ -2044,7 +2044,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_evil_field", "REL/d/a/obj/d_a_obj_evil_field.cpp"),
     Rel(NonMatching, "d_a_obj_F302_light", "REL/d/a/obj/d_a_obj_F302_light.cpp"),
     Rel(
-        NonMatching, "d_a_obj_F400_gate_leaf", "REL/d/a/obj/d_a_obj_F400_gate_leaf.cpp"
+        Matching, "d_a_obj_F400_gate_leaf", "REL/d/a/obj/d_a_obj_F400_gate_leaf.cpp"
     ),
     Rel(
         NonMatching, "d_a_obj_F400_gate_seal", "REL/d/a/obj/d_a_obj_F400_gate_seal.cpp"
