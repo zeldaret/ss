@@ -1957,7 +1957,7 @@ config.libs = [
     Rel(
         NonMatching, "d_a_obj_bigbomb_flower", "REL/d/a/obj/d_a_obj_bigbomb_flower.cpp"
     ),
-    Rel(NonMatching, "d_a_obj_bird_sp", "REL/d/a/obj/d_a_obj_bird_sp.cpp"),
+    Rel(Matching, "d_a_obj_bird_sp", "REL/d/a/obj/d_a_obj_bird_sp.cpp"),
     Rel(Matching, "d_a_obj_bird_statue", "REL/d/a/obj/d_a_obj_bird_statue.cpp"),
     Rel(NonMatching, "d_a_obj_blade", "REL/d/a/obj/d_a_obj_blade.cpp"),
     Rel(NonMatching, "d_a_obj_blast_rock", "REL/d/a/obj/d_a_obj_blast_rock.cpp"),
