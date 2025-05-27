@@ -30,8 +30,17 @@ namespace nw4r { namespace snd
 	// methods
 	public:
 		// cdtors
-		SoundActor();
+		SoundActor(SoundArchivePlayer &player);
+		virtual ~SoundActor();
 
+		virtual u32 detail_ConvertLabelStringToSoundId(const char* label) override;
+		virtual StartResult detail_SetupSound(SoundHandle *pHandle, u32 soundId, bool holdFlag, const StartInfo *pStartInfo) override;
+		
+		
+		virtual StartResult SetupSound(SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void*);
+		virtual StartResult detail_SetupSoundWithAmbientInfo(SoundHandle*, u32, const StartInfo*, detail::BasicSound::AmbientInfo*, void*);
+
+		
 		// methods
 		detail::ExternalSoundPlayer *detail_GetActorPlayer(int actorPlayerId)
 		{
@@ -45,6 +54,10 @@ namespace nw4r { namespace snd
 		{
 			return mActorParam;
 		}
+
+		void StopAllSound(int fadeFrames);
+		void PauseAllSound(bool flag, int fadeFrames);
+		int GetPlayingSoundCount(int playerId) const;
 
 	// static members
 	public:

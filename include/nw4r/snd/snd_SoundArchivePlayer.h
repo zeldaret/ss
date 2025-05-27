@@ -222,6 +222,11 @@ namespace nw4r { namespace snd
 		void UpdateCommonSoundParam(detail::BasicSound *sound,
 		                            SoundArchive::SoundInfo const *commonInfo);
 
+		SoundStartable::StartResult detail_SetupSoundImpl(
+			SoundHandle *handle, u32 soundId,
+			detail::BasicSound::AmbientInfo *ambientArgInfo, SoundActor *actor,
+			bool holdFlag, SoundStartable::StartInfo const *startInfo);
+
 	private:
 		template <typename Sound>
 		Sound *AllocSound(
@@ -229,10 +234,6 @@ namespace nw4r { namespace snd
 			int priority, int ambientPriority,
 			detail::BasicSound::AmbientInfo *ambientArgInfo);
 
-		SoundStartable::StartResult detail_SetupSoundImpl(
-			SoundHandle *handle, u32 soundId,
-			detail::BasicSound::AmbientInfo *ambientArgInfo, SoundActor *actor,
-			bool holdFlag, SoundStartable::StartInfo const *startInfo);
 		SoundStartable::StartResult PrepareSeqImpl(
 			detail::SeqSound *sound, SoundArchive::SoundInfo const *commonInfo,
 			SoundArchive::SeqSoundInfo const *info,
