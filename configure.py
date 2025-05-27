@@ -999,7 +999,7 @@ config.libs = [
             Object(Matching, "nw4r/g3d/g3d_scnmdl.cpp"),
             # Object(NonMatching, "nw4r/g3d/g3d_scnchoice.cpp"),
             # Object(NonMatching, "nw4r/g3d/g3d_scngroupex.cpp"),
-            # Object(NonMatching, "nw4r/g3d/g3d_scnmdl1mat1shp.cpp"),
+            Object(Matching, "nw4r/g3d/g3d_scnmdl1mat1shp.cpp"),
             # Object(NonMatching, "nw4r/g3d/g3d_scnmdlexpand.cpp"),
             Object(Matching, "nw4r/g3d/g3d_calcmaterial.cpp"),
             Object(Matching, "nw4r/g3d/g3d_init.cpp"),
