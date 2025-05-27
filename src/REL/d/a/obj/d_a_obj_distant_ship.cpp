@@ -18,6 +18,8 @@ bool dAcOdistantShip_c::createHeap() {
 
 int dAcOdistantShip_c::create() {
     // Sure, why not
+    // Scratch for anyone who wants to look for a better solution:
+    // https://decomp.me/scratch/0qPPj
     mIsVisible = false;
     u32 p = params;
     u16 r = getRoomId();
