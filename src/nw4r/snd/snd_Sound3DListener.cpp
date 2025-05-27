@@ -3,22 +3,16 @@
 namespace nw4r {
 namespace snd {
 
-Sound3DListener::Sound3DListener() {
-    mPosition.x = 0.0f;
-    mPosition.y = 0.0f;
-    mPosition.z = 0.0f;
-    mVelocity.x = 0.0f;
-    mVelocity.y = 0.0f;
-    mVelocity.z = 0.0f;
-    mInteriorSize = 1.0f;
-    mMaxVolumeDistance = 1.0f;
-    mUnitDistance = 1.0f;
-    field_0x54 = 0;
-    mSkipVelocityUpdate = 1;
-    mUnitBiquadFilterValue = 0.5f;
-    mUnitBiquadFilterMax = 1.0f;
-    field_0x64 = 0;
-    field_0x68 = 0;
+Sound3DListener::Sound3DListener()
+    : mPosition(0.0f, 0.0f, 0.0f),
+      mVelocity(0.0f, 0.0f, 0.0f),
+      mInteriorSize(1.0f),
+      mMaxVolumeDistance(1.0f),
+      mUnitDistance(1.0f),
+      field_0x54(0),
+      mSkipVelocityUpdate(1),
+      mUnitBiquadFilterValue(0.5f),
+      mUnitBiquadFilterMax(1.0f) {
     math::MTX34Zero(&mMtx);
 }
 

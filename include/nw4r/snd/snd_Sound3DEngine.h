@@ -4,6 +4,7 @@
 #include "nw4r/math.h"
 #include "nw4r/types_nw4r.h"
 #include "nw4r/snd/snd_Sound3DManager.h"
+#include "nw4r/snd/snd_Sound3DCalculator.h"
 
 
 namespace nw4r {
@@ -17,15 +18,12 @@ public:
     virtual ~Sound3DEngine() {}
 
     virtual void UpdateAmbientParam(const Sound3DManager*, const Sound3DParam*, u32, int, SoundAmbientParam*);
-    virtual void GetAmbientPriority(const Sound3DManager*, const Sound3DParam*, u32);
+    virtual s32 GetAmbientPriority(const Sound3DManager*, const Sound3DParam*, u32);
     virtual s32 GetRequiredVoiceOutCount(const Sound3DManager*, const Sound3DParam*, u32);
     virtual void UpdateAmbientParam(const Sound3DManager*, const Sound3DParam*, u32, u32, SoundAmbientParam*);
 
 private:
-    f32 mSpeakerAngleStereo;    // at 0x04
-    f32 mFrontSpeakerAngleDpl2; // at 0x08
-    f32 mRearSpeakerAngleDpl2;  // at 0x0C
-    f32 mInitPan;  // at 0x10
+    Sound3DCalculator::CalcPanParam mPanParam; // at 0x04
 };
 
 } // namespace snd

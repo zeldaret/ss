@@ -2,6 +2,7 @@
 #define NW4R_SND_SOUND_3D_LISTENER_H
 #include "common.h"
 #include "nw4r/types_nw4r.h"
+#include "nw4r/ut/ut_LinkList.h"
 
 #include "nw4r/math.h"
 
@@ -47,8 +48,7 @@ private:
     u8 mSkipVelocityUpdate;     // at 0x58
     f32 mUnitBiquadFilterValue; // at 0x5C
     f32 mUnitBiquadFilterMax;   // at 0x60
-    UNKWORD field_0x64;         // at 0x64
-    UNKWORD field_0x68;         // at 0x68
+    ut::LinkListNode mNode;     // at 0x64
 };
 
 } // namespace snd
