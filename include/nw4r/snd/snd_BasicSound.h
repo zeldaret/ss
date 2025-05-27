@@ -253,6 +253,7 @@ namespace nw4r { namespace snd { namespace detail
 		void SetAutoStopCounter(int count);
 		void FadeIn(int fadeFrames);
 
+		bool GetStartedFlag() const { return mStartedFlag; }
 		u32 GetId() const { return mId; }
 		PlayerHeap *GetPlayerHeap() { return mPlayerHeap; }
 		SoundPlayer *GetSoundPlayer() { return mSoundPlayer; }

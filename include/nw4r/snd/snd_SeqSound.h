@@ -121,6 +121,15 @@ namespace nw4r { namespace snd { namespace detail
 		static void NotifyLoadAsyncEndSeqData(bool result, void const *seqBase,
 		                                      void *userData);
 
+		void SetTrackMute(u32 trackFlags, SeqMute mute);
+		void SetTrackSilence(u32 trackFlags, bool silence, int fadeFrames);
+		void SetTrackVolume(u32 trackFlags, f32 volume);
+		bool ReadVariable(int varNo, s16 *value) const;
+		bool WriteVariable(int varNo, s16 value);
+		static bool WriteGlobalVariable(int varNo, s16 value);
+		bool WriteTrackVariable(int trackNo, int varNo, s16 value);
+		u32 GetTick() const;
+
 		static DebugSoundType GetSoundType()
 		{
 			return DEBUG_SOUND_TYPE_SEQSOUND;

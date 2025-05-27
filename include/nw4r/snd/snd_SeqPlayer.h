@@ -149,6 +149,10 @@ namespace nw4r { namespace snd { namespace detail
 			return mParserParam.timebase * mParserParam.tempo * mTempoRatio;
 		}
 
+		u32 GetTickCounter() const {
+			return mTickCounter;
+		}
+
 		void SetSeqData(void const *seqBase, s32 seqOffset);
 
 		void CallSeqUserprocCallback(u16 procId, SeqTrack *track);
