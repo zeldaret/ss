@@ -18,6 +18,8 @@ STATE_DEFINE(dBird_c, MiniGameMove);
 STATE_DEFINE(dBird_c, MiniGameEnd);
 STATE_DEFINE(dBird_c, MiniGameLevelUpDemo);
 
+dBird_c *dBird_c::spInstance;
+
 void dBird_c::initializeState_Wait() {}
 void dBird_c::executeState_Wait() {}
 void dBird_c::finalizeState_Wait() {}
@@ -63,3 +65,5 @@ void dBird_c::finalizeState_MiniGameEnd() {}
 void dBird_c::initializeState_MiniGameLevelUpDemo() {}
 void dBird_c::executeState_MiniGameLevelUpDemo() {}
 void dBird_c::finalizeState_MiniGameLevelUpDemo() {}
+
+void speedUpAccel(mVec3_c &param) {}
