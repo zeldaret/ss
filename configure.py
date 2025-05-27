@@ -2108,7 +2108,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_insect_island", "REL/d/a/obj/d_a_obj_insect_island.cpp"),
     Rel(NonMatching, "d_a_obj_into_hole", "REL/d/a/obj/d_a_obj_into_hole.cpp"),
     Rel(Matching, "d_a_obj_iron_stage", "REL/d/a/obj/d_a_obj_iron_stage.cpp"),
-    Rel(NonMatching, "d_a_obj_island_LOD", "REL/d/a/obj/d_a_obj_island_LOD.cpp"),
+    Rel(Matching, "d_a_obj_island_LOD", "REL/d/a/obj/d_a_obj_island_LOD.cpp"),
     Rel(Matching, "d_a_obj_island_nusi", "REL/d/a/obj/d_a_obj_island_nusi.cpp"),
     Rel(
         NonMatching,
