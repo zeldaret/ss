@@ -2901,6 +2901,7 @@ nw4r/snd/snd_AxManager.cpp:
 
 nw4r/snd/snd_AxVoice.cpp:
 	.text       start:0x80464880 end:0x80467634 align:16
+	.sdata2     start:0x8057EF30 end:0x8057EF58
 
 nw4r/snd/snd_AxVoiceManager.cpp:
 	.text       start:0x80467640 end:0x80467DC8 align:16

@@ -121,6 +121,8 @@ namespace nw4r { namespace snd { namespace detail
 		void SetVoiceBiquad(AXPBBIQUAD const &biquad);
 		void SetVoiceBiquadCoefs(u16 b0, u16 b1, u16 b2, u16 a1, u16 a2);
 		void SetVoiceRmtIIR(__AXPBRMTIIR const &iir);
+		void SetVoiceRmtOn(u16 on);
+		void SetVoiceRmtMix(_AXPBRMTMIX const &iir);
 		void SetVoiceRmtIIRCoefs(u16 type, ...);
 
 		void Set(AXVPB *vpb);
@@ -243,7 +245,7 @@ namespace nw4r { namespace snd { namespace detail
 		void SetAdpcm(AdpcmParam const *param);
 		void SetAdpcmLoop(AdpcmLoopParam const *param);
 		bool SetMix(MixParam const &param);
-		bool SetRmtMix(const RemoteMixParam &param);
+		void SetRmtMix(const RemoteMixParam &param);
 		void SetSrc(f32 ratio, bool initialUpdate);
 		void SetVe(f32 volume, f32 initVolume);
 		void SetLpf(u16 freq);

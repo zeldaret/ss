@@ -1014,7 +1014,7 @@ config.libs = [
         [
             Object(NonMatching, "nw4r/snd/snd_AnimSound.cpp"),
             Object(Matching, "nw4r/snd/snd_AxManager.cpp"),
-            Object(NonMatching, "nw4r/snd/snd_AxVoice.cpp"),
+            Object(Matching, "nw4r/snd/snd_AxVoice.cpp"),
             Object(Matching, "nw4r/snd/snd_AxVoiceManager.cpp"),
             Object(Matching, "nw4r/snd/snd_AxfxImpl.cpp"),
             Object(Matching, "nw4r/snd/snd_Bank.cpp"),
