@@ -11,6 +11,8 @@
  * classes and functions
  */
 
+namespace nw4r { namespace snd { class SoundActor; }}
+
 namespace nw4r { namespace snd { namespace detail
 {
 	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x27049
@@ -24,6 +26,9 @@ namespace nw4r { namespace snd { namespace detail
 		int GetPlayingSoundCount() const { return mSoundList.GetSize(); }
 		int GetPlayableSoundCount() const { return mPlayableCount; }
 		void SetPlayableSoundCount(int count);
+		void StopAllSound(int fadeFrames);
+		void PauseAllSound(bool flag, int fadeFrames);
+		void DetachSoundActorAll(SoundActor *sound);
 
 		bool AppendSound(BasicSound *sound);
 		void RemoveSound(BasicSound *sound);
