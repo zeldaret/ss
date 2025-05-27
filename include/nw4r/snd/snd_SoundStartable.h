@@ -108,6 +108,11 @@ namespace nw4r { namespace snd
 			SoundHandle *pHandle, u32 id, const StartInfo *pStartInfo
 		);
 		StartResult detail_StartSound(
+			SoundHandle *pHandle, const char *label, const StartInfo *pStartInfo
+		);
+
+		// TODO: Remove
+		StartResult detail_StartSound(
 			SoundHandle *pHandle, u32 id, detail::BasicSound::AmbientInfo *pArgInfo,
 			detail::ExternalSoundPlayer *pPlayer, const StartInfo *pStartInfo
 		);
@@ -115,17 +120,31 @@ namespace nw4r { namespace snd
 		StartResult detail_HoldSound(
 			SoundHandle *pHandle, u32 id, const StartInfo *pStartInfo
 		);
+		StartResult detail_HoldSound(
+			SoundHandle *pHandle, const char *label, const StartInfo *pStartInfo
+		);
 
+		// TODO: Remove
 		StartResult detail_HoldSound(
 			SoundHandle *pHandle, u32 id, detail::BasicSound::AmbientInfo *pArgInfo,
 			detail::ExternalSoundPlayer *pPlayer, const StartInfo *pStartInfo
 		);
 
+		// TODO: Remove
 		StartResult detail_PrepareSound(
 			SoundHandle *pHandle, u32 id, detail::BasicSound::AmbientInfo *pArgInfo,
 			detail::ExternalSoundPlayer *pPlayer, const StartInfo *pStartInfo
 		);
 
+		StartResult detail_PrepareSound(
+			SoundHandle *pHandle, u32 id, const StartInfo *pStartInfo
+		);
+		StartResult detail_PrepareSound(
+			SoundHandle *pHandle, const char *label,
+			const StartInfo *pStartInfo
+		);
+
+		// TODO: Fix after removal of above functions
 		bool StartSound(SoundHandle *pHandle, u32 id) {
 			return detail_StartSound(pHandle, id, NULL, NULL, NULL) == START_SUCCESS;
 		}
