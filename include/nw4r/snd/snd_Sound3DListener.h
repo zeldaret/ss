@@ -17,6 +17,14 @@ public:
         return mMtx;
     }
 
+    const math::VEC3 &GetPosition() const {
+        return mPosition;
+    }
+    
+    const math::VEC3 &GetVelocity() const {
+        return mVelocity;
+    }
+
     void SetMatrix(const math::MTX34 &mtx);
 
     f32 GetInteriorSize() const {
@@ -34,7 +42,14 @@ public:
     }
     void SetUnitDistance(f32 distance);
 
+    f32 GetUnitBiquadFilterValue() const {
+        return mUnitBiquadFilterValue;
+    }
     void SetUnitBiquadFilterValue(f32 value);
+
+    f32 GetUnitBiquadFilterMax() const {
+        return mUnitBiquadFilterMax;
+    }
     void SetUnitBiquadFilterMax(f32 value);
 
 private:

@@ -2,6 +2,7 @@
 #define NW4R_SND_SOUND_3D_MANAGER_H
 #include "nw4r/snd/snd_BasicSound.h"
 #include "nw4r/snd/snd_InstancePool.h"
+#include "nw4r/snd/snd_Sound3DEngine.h"
 #include "nw4r/snd/snd_SoundArchive.h"
 #include "nw4r/types_nw4r.h"
 #include "nw4r/ut/ut_LinkList.h"
@@ -12,10 +13,11 @@ namespace nw4r {
 namespace snd {
 
 struct Sound3DParam {
-    /* 0x00 */ u8 _0x00[0x18];
+    /* 0x00 */ math::VEC3 position;
+    /* 0x0C */ math::VEC3 field_0x0C;
     /* 0x18 */ UNKWORD field_0x18;
-    /* 0x1C */ u8 field_0x1C;
-    /* 0x1D */ u8 field_0x1D;
+    /* 0x1C */ u8 decayCurve;
+    /* 0x1D */ u8 decayRatio;
     /* 0x1E */ u8 field_0x1E;
     /* 0x20 */ UNKWORD field_0x20;
     /* 0x24 */ UNKWORD field_0x24;
@@ -25,15 +27,6 @@ struct Sound3DParam {
 
 class Sound3DManager : public detail::BasicSound::AmbientInfo::AmbientParamUpdateCallback,
                        public detail::BasicSound::AmbientInfo::AmbientArgAllocaterCallback {
-public:
-    struct Sound3DActorParam {
-        u32 userParam;                         // at 0x0
-        SoundArchive::Sound3DParam soundParam; // at 0x4
-        math::VEC3 position;                   // at 0xC
-
-        Sound3DActorParam();
-    };
-
 public:
     typedef ut::LinkList<Sound3DListener, 0x64> ListenerList;
 
@@ -74,7 +67,14 @@ public:
         return biquadFilterType;
     }
 
-private:
+    f32 GetField0x20() const {
+        return field_0x20;
+    }
+
+    f32 GetField0x24() const {
+        return field_0x24;
+    }
+
     enum ParamDecayCurve {
         DECAY_CURVE_NONE,
         DECAY_CURVE_LOGARITHMIC,
@@ -84,10 +84,11 @@ private:
 private:
     detail::InstancePool<Sound3DParam> mParamPool; // at 0x8
     ListenerList mListenerList;                    // at 0x0C
-    u8 _0x18[0x1C - 0x18];
-    s32 mMaxPriorityReduction; // at 0x1C
-    u8 _0x1C[0x28 - 0x20];
-    int biquadFilterType; // at 0x28
+    Sound3DEngine *mpEngine;                       // at 0x18
+    s32 mMaxPriorityReduction;                     // at 0x1C
+    f32 field_0x20;                                // at 0x20
+    f32 field_0x24;                                // at 0x24
+    int biquadFilterType;                          // at 0x28
 };
 
 } // namespace snd

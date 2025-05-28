@@ -1,9 +1,7 @@
 #ifndef NW4R_SND_SOUND_3D_ENGINE_H
 #define NW4R_SND_SOUND_3D_ENGINE_H
 
-#include "nw4r/math.h"
 #include "nw4r/types_nw4r.h"
-#include "nw4r/snd/snd_Sound3DManager.h"
 #include "nw4r/snd/snd_Sound3DCalculator.h"
 
 
@@ -11,6 +9,7 @@ namespace nw4r {
 namespace snd {
 
 class Sound3DManager;
+class SoundAmbientParam;
 
 class Sound3DEngine {
 public:

@@ -18,7 +18,7 @@ using ::ceil;
 using ::ceilf;
 using ::copysign;
 using ::cos;
-using ::cosf;
+// using ::cosf;
 using ::fabsf;
 using ::floor;
 using ::floorf;
@@ -41,6 +41,10 @@ using ::tanf;
 
 inline float sqrt(float x) {
     return ::sqrtf(x);
+}
+
+inline float cosf(float x) {
+    return cos(x);
 }
 
 // TODO: Very fake!

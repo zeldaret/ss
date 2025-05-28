@@ -1,5 +1,7 @@
 #include "nw4r/snd/snd_Sound3DManager.h"
+
 #include "nw4r/snd/snd_AxManager.h"
+#include "nw4r/snd/snd_Sound3DEngine.h"
 #include "nw4r/snd/snd_Sound3DListener.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 
@@ -10,6 +12,8 @@
 namespace nw4r {
 namespace snd {
 namespace {
+
+static Sound3DEngine sEngine;
 
 /**
  * Solves the linear equation:
@@ -29,16 +33,14 @@ inline f32 SolveLinerFunction(f32 x, f32 dAngle, f32 cAngle, f32 dFactor,
 
     f32 b = dAngle - cAngle;
 
-    return x * (cFactor - dFactor) / b +
-           (dAngle * dFactor - cAngle * cFactor) / b;
+    return x * (cFactor - dFactor) / b + (dAngle * dFactor - cAngle * cFactor) / b;
 }
 
 } // namespace
 
-Sound3DManager::Sound3DManager()
-     {}
+Sound3DManager::Sound3DManager() : mpEngine(&sEngine), mMaxPriorityReduction(32), field_0x20(0.9f), field_0x24(0.0f), biquadFilterType(0) {}
 
-u32 Sound3DManager::GetRequiredMemSize(const SoundArchive* pArchive) {
+u32 Sound3DManager::GetRequiredMemSize(const SoundArchive *pArchive) {
     u32 numParam = 0;
 
     SoundArchive::SoundArchivePlayerInfo playerInfo;
@@ -51,17 +53,16 @@ u32 Sound3DManager::GetRequiredMemSize(const SoundArchive* pArchive) {
     return numParam * sizeof(Sound3DParam);
 }
 
-bool Sound3DManager::Setup(const SoundArchive* pArchive, void* pBuffer,
-                           u32 size) {
+bool Sound3DManager::Setup(const SoundArchive *pArchive, void *pBuffer, u32 size) {
 #pragma unused(pArchive)
 
     mParamPool.Create(pBuffer, size);
     return true;
 }
 
-void Sound3DManager::detail_Update(SoundParam* pParam, u32 id,
-                                   detail::BasicSound* pSound, const void* pArg,
-                                   u32 flags) {
+void Sound3DManager::detail_Update(
+    SoundParam *pParam, u32 id, detail::BasicSound *pSound, const void *pArg, u32 flags
+) {
     SoundHandle handle;
     if (pSound != NULL) {
         handle.detail_AttachSoundAsTempHandle(pSound);
@@ -70,8 +71,7 @@ void Sound3DManager::detail_Update(SoundParam* pParam, u32 id,
     Update(pParam, id, pSound != NULL ? &handle : NULL, pArg, flags);
 }
 
-void Sound3DManager::Update(SoundParam* pParam, u32 id, SoundHandle* pHandle,
-                            const void* pArg, u32 flags) {
+void Sound3DManager::Update(SoundParam *pParam, u32 id, SoundHandle *pHandle, const void *pArg, u32 flags) {
 #pragma unused(id)
 #pragma unused(pHandle)
 
@@ -265,7 +265,7 @@ void Sound3DManager::Update(SoundParam* pParam, u32 id, SoundHandle* pHandle,
 #endif
 }
 
-void* Sound3DManager::detail_AllocAmbientArg(u32 size) {
+void *Sound3DManager::detail_AllocAmbientArg(u32 size) {
     if (size != sizeof(Sound3DParam)) {
         return NULL;
     }
@@ -273,27 +273,19 @@ void* Sound3DManager::detail_AllocAmbientArg(u32 size) {
     return mParamPool.Alloc();
 }
 
-void Sound3DManager::detail_FreeAmbientArg(void* pArg,
-                                           const detail::BasicSound* pSound) {
+void Sound3DManager::detail_FreeAmbientArg(void *pArg, const detail::BasicSound *pSound) {
 #pragma unused(pSound)
 
-    mParamPool.Free(static_cast<Sound3DParam*>(pArg));
+    mParamPool.Free(static_cast<Sound3DParam *>(pArg));
 }
 
-Sound3DParam::Sound3DParam()
-{
+Sound3DParam::Sound3DParam() {
     field_0x18 = 0;
-    field_0x1C = 1;
-    field_0x1D = 0x80;
+    decayCurve = Sound3DManager::DECAY_CURVE_LOGARITHMIC;
+    decayRatio = 128;
     field_0x1E = 0;
     field_0x20 = 0;
     field_0x24 = 0;
-}
-
-Sound3DManager::Sound3DActorParam::Sound3DActorParam() : userParam(-1) {
-    soundParam.flags = 0;
-    soundParam.decayCurve = DECAY_CURVE_LOGARITHMIC;
-    soundParam.decayRatio = 128;
 }
 
 } // namespace snd

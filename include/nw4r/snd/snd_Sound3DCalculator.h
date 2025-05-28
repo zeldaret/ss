@@ -1,36 +1,36 @@
 #ifndef NW4R_SND_SOUND_3D_CALCULATOR_H
 #define NW4R_SND_SOUND_3D_CALCULATOR_H
 
-#include "nw4r/snd/snd_Sound3DManager.h"
+#include "common.h"
+#include "nw4r/math/math_triangular.h"
 
 namespace nw4r {
 namespace snd {
 
+class Sound3DManager;
+class Sound3DParam;
+
 class Sound3DCalculator {
 public:
     struct CalcPanParam {
-#if 0
-        f32 mSpeakerAngleStereo;    // at 0x04
-        f32 mFrontSpeakerAngleDpl2; // at 0x08
-        f32 mRearSpeakerAngleDpl2;  // at 0x0C
-        f32 mInitPan;  // at 0x10
-#endif
-        f32 field_0x00;
-        f32 field_0x04;
-        f32 field_0x08;
-        f32 field_0x0C;
+        f32 speakerAngleStereo;    // at 0x00
+        f32 frontSpeakerAngleDpl2; // at 0x04
+        f32 rearSpeakerAngleDpl2;  // at 0x08
+        f32 initPan;               // at 0x0C
 
         CalcPanParam()
-            : field_0x00(NW4R_MATH_PI / 4),
-              field_0x04(NW4R_MATH_PI / 6),
-              field_0x08(2 * NW4R_MATH_PI / 3),
-              field_0x0C(0.0f) {}
+            : speakerAngleStereo(NW4R_MATH_PI / 4),
+              frontSpeakerAngleDpl2(NW4R_MATH_PI / 6),
+              rearSpeakerAngleDpl2(2 * NW4R_MATH_PI / 3),
+              initPan(0.0f) {}
     };
 
     static void
     CalcVolumeAndPriority(const Sound3DManager &, const Sound3DListener &, const Sound3DParam &, float *, int *);
-    static void
-    CalcPan(const Sound3DManager &, const Sound3DListener &, const Sound3DParam &, const Sound3DCalculator::CalcPanParam &, float *pan, float *surroundPan);
+    static void CalcPan(
+        const Sound3DManager &, const Sound3DListener &, const Sound3DParam &, const Sound3DCalculator::CalcPanParam &,
+        float *pan, float *surroundPan
+    );
     static void CalcPitch(const Sound3DManager &, const Sound3DListener &, const Sound3DParam &, float *);
     static void CalcBiquadFilterValue(const Sound3DManager &, const Sound3DListener &, const Sound3DParam &, float *);
     static void CalcPanDpl2(const nw4r::math::VEC3 &, float, float, float, float, float, float, float *, float *);
