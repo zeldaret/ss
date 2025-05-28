@@ -8,6 +8,8 @@ public:
     dAcOMapparts_c() {}
     virtual ~dAcOMapparts_c() {}
 
+    virtual int create() override;
+
 private:
 };
 
