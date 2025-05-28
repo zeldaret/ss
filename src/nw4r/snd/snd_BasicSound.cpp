@@ -322,7 +322,7 @@ void BasicSound::Update()
 		for (int i = 0; i < mVoiceOutCount; i++)
 			ambientParam.voiceOutParam[i] = basicPlayer.GetVoiceOutParam(i);
 
-		mAmbientInfo.paramUpdateCallback->at_0x0c(
+		mAmbientInfo.paramUpdateCallback->detail_UpdateAmbientParam(
 			mAmbientInfo.arg, mId, mVoiceOutCount, &ambientParam);
 
 		mAmbientParam.volume			= ambientParam.volume;
@@ -519,7 +519,7 @@ void BasicSound::Shutdown()
 
 	if (mAmbientInfo.argAllocaterCallback)
 	{
-		mAmbientInfo.argAllocaterCallback->at_0x10(mAmbientInfo.arg, this);
+		mAmbientInfo.argAllocaterCallback->detail_FreeAmbientArg(mAmbientInfo.arg, this);
 
 		mAmbientInfo.arg = nullptr;
 	}
@@ -691,7 +691,7 @@ void BasicSound::SetAmbientInfo(AmbientInfo const &ambientArgInfo)
 	NW4RAssertPointerNonnull_Line(1090, ambientArgInfo.argAllocaterCallback);
 
 	void *ambientArg =
-		ambientArgInfo.argAllocaterCallback->at_0x0c(ambientArgInfo.argSize);
+		ambientArgInfo.argAllocaterCallback->detail_AllocAmbientArg(ambientArgInfo.argSize);
 	if (!ambientArg)
 	{
 		NW4RCheckMessage_Line(1093, ambientArg, "Failed to alloc AmbientArg.");
@@ -705,7 +705,7 @@ void BasicSound::SetAmbientInfo(AmbientInfo const &ambientArgInfo)
 	if (ambientArgInfo.paramUpdateCallback)
 	{
 		int voiceOutCount =
-			mAmbientInfo.paramUpdateCallback->at_0x14(mAmbientInfo.arg, mId);
+			mAmbientInfo.paramUpdateCallback->detail_GetRequiredVoiceOutCount(mAmbientInfo.arg, mId);
 
 		if (voiceOutCount > 4)
 			voiceOutCount = 4;
@@ -720,7 +720,7 @@ int BasicSound::GetAmbientPriority(AmbientInfo const &ambientInfo, u32 soundId)
 		return PRIORITY_MIN;
 
 	int priority =
-		ambientInfo.paramUpdateCallback->at_0x10(ambientInfo.arg, soundId);
+		ambientInfo.paramUpdateCallback->detail_GetAmbientPriority(ambientInfo.arg, soundId);
 
 	return priority;
 }

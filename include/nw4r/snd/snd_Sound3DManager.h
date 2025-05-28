@@ -32,18 +32,14 @@ public:
 
     Sound3DManager();
 
-    virtual void detail_Update(
-        SoundParam *pParam, u32 id, detail::BasicSound *pSound, const void *pArg,
-        u32 flags
-    ); // at 0x8
+    virtual void detail_UpdateAmbientParam(const void*, u32, int, SoundAmbientParam*) override;
+    virtual int detail_GetAmbientPriority(const void*, u32) override;
+    virtual int detail_GetRequiredVoiceOutCount(const void*, u32) override;
 
-    virtual void Update(SoundParam *pParam, u32 id, SoundHandle *pHandle, const void *pArg,
-                        u32 flags); // at 0x10
-
-    virtual void *detail_AllocAmbientArg(u32 size); // at 0x14
+    virtual void *detail_AllocAmbientArg(u32 size) override;
 
     virtual void detail_FreeAmbientArg(void *pArg,
-                                       const detail::BasicSound *pSound); // at 0x18
+                                       const detail::BasicSound *pSound) override;
 
     u32 GetRequiredMemSize(const SoundArchive *pArchive);
     bool Setup(const SoundArchive *pArchive, void *pBuffer, u32 size);
@@ -64,8 +60,9 @@ public:
     }
 
     int GetBiquadFilterType() const {
-        return biquadFilterType;
+        return mBiquadFilterType;
     }
+    void SetBiquadFilterType(int type);
 
     f32 GetField0x20() const {
         return field_0x20;
@@ -74,6 +71,8 @@ public:
     f32 GetField0x24() const {
         return field_0x24;
     }
+
+    void SetEngine(Sound3DEngine *engine);
 
     enum ParamDecayCurve {
         DECAY_CURVE_NONE,
@@ -88,7 +87,7 @@ private:
     s32 mMaxPriorityReduction;                     // at 0x1C
     f32 field_0x20;                                // at 0x20
     f32 field_0x24;                                // at 0x24
-    int biquadFilterType;                          // at 0x28
+    int mBiquadFilterType;                          // at 0x28
 };
 
 } // namespace snd

@@ -169,10 +169,10 @@ namespace nw4r { namespace snd { namespace detail
 				};
 			// methods
 			public:
-				virtual void at_0x08();
-				virtual void at_0x0c(void *, int, int, void *);
-				virtual int at_0x10(void *, int);
-				virtual int at_0x14(void *, int);
+				virtual ~AmbientParamUpdateCallback() {}
+				virtual void detail_UpdateAmbientParam(const void*, u32, int, SoundAmbientParam*);
+				virtual int detail_GetAmbientPriority(const void*, u32);
+				virtual int detail_GetRequiredVoiceOutCount(const void*, u32);
 
 			// members
 			private:
@@ -202,9 +202,11 @@ namespace nw4r { namespace snd { namespace detail
 			public:
 				// virtual function ordering
 				// vtable AmbientArgAllocaterCallback
-				virtual void at_0x08();
-				virtual void *at_0x0c(int);
-				virtual void at_0x10(void *, void *);
+				virtual ~AmbientArgAllocaterCallback() {}
+				virtual void *detail_AllocAmbientArg(u32 size); // at 0x8
+
+    			virtual void detail_FreeAmbientArg(void *pArg,
+                                       const detail::BasicSound *pSound); // at 0xC
 
 			// members
 			private:
