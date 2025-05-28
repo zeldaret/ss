@@ -35,6 +35,10 @@ public:
 
     u16 getUncommittedValue_Priv(u16 flag) const;
 
+    u32 checkFlagValid(u16 counterIdx) const {
+        return mpFlagIndex->checkFlagValid(counterIdx, mFlagCount);
+    }
+
 protected:
 
     void setFlagSizes(u16 flagCount, u16 flagSizeBytes);
