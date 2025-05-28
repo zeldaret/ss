@@ -14,6 +14,16 @@ SPECIAL_ACTOR_PROFILE(OBJ_GIRAHIM_FOOT, dAcOgirahimFoot_c, fProfile::OBJ_GIRAHIM
 STATE_DEFINE(dAcOgirahimFoot_c, Wait);
 STATE_DEFINE(dAcOgirahimFoot_c, Appear);
 
+bool dAcOgirahimFoot_c::createHeap() {
+    mRes = nw4r::g3d::ResFile(getOarcResFile("Girahim_Foot"));
+
+    nw4r::g3d::ResMdl resMdl = mRes.GetResMdl("Girahim_Foot");
+
+    TRY_CREATE(mMdl.create(resMdl, &heap_allocator, 0x120, 1, nullptr));
+
+    return true;
+}
+
 int dAcOgirahimFoot_c::create() {
     CREATE_ALLOCATOR(dAcOgirahimFoot_c);
 
@@ -47,16 +57,6 @@ int dAcOgirahimFoot_c::draw() {
     return SUCCEEDED;
 }
 
-bool dAcOgirahimFoot_c::createHeap() {
-    mRes = nw4r::g3d::ResFile(getOarcResFile("Girahim_Foot"));
-
-    nw4r::g3d::ResMdl resMdl = mRes.GetResMdl("Girahim_Foot");
-
-    TRY_CREATE(mMdl.create(resMdl, &heap_allocator, 0x120, 1, nullptr));
-
-    return true;
-}
-
 int dAcOgirahimFoot_c::actorExecute() {
     mStateMgr.executeState();
     return SUCCEEDED;
@@ -80,14 +80,15 @@ void dAcOgirahimFoot_c::initializeState_Appear() {
 }
 
 void dAcOgirahimFoot_c::executeState_Appear() {
-    if (!field_0x394) {
-        dJEffManager_c::spawnEffect(
-            PARTICLE_RESOURCE_ID_MAPPING_77_, position, (mAng3_c *)0x0, &mScale, nullptr, nullptr, 0, 0
-        );
-        fBase_c::deleteRequest();
+    if (field_0x394) {
+        return;
     }
 
-    return;
+    dJEffManager_c::spawnEffect(
+        PARTICLE_RESOURCE_ID_MAPPING_77_, position, (mAng3_c *)0x0, &mScale, nullptr, nullptr, 0, 0
+    );
+
+    deleteRequest();
 }
 
 void dAcOgirahimFoot_c::finalizeState_Appear() {}
