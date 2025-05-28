@@ -47,22 +47,48 @@ bool NandSoundArchive::Open(const char* pPath) {
         return false;
     }
 
-    char currentDir[64];
-    NANDGetCurrentDir(currentDir);
-    u32 currDirLen = std::strlen(currentDir);
-
     char extRoot[FILE_PATH_MAX];
-    std::strncpy(extRoot, currentDir, currDirLen + 1);
-
-    for (int i = std::strlen(pPath) - 1; i >= 0; i--) {
-        if (pPath[i] == '/' || pPath[i] == '\\') {
-            // @bug Long path can overflow extRoot buffer
-            std::strncat(extRoot, pPath, i);
-            extRoot[currDirLen + i] = '\0';
-            break;
+    char *pExtRoot = extRoot;
+    // UB: (?) Array index 256 is past the end of the array
+    char *pEnd = &extRoot[FILE_PATH_MAX + 1];
+    if (pPath[0] != '/' && pPath[0] != '\\') {
+        char currentDir[64];
+        if (NANDGetCurrentDir(currentDir) != NAND_RESULT_OK) {
+            return false;
         }
+        
+        char *pCurrentDir = currentDir;
+        while (*pCurrentDir != '\0') {
+            if (pExtRoot >= pEnd) {
+                return false;
+            }
+            *pExtRoot++ = *pCurrentDir++;
+        }
+        if (pExtRoot >= pEnd) {
+            return false;
+        }
+        *pExtRoot++ = '/';
     }
 
+    const char *pPath2 = pPath;
+    const char *p3 = pPath;
+    while (*pPath2 != '\0') {
+        if (*pPath2 == '/' || *pPath2 == '\\') {
+            while (p3 < pPath2) {
+                if (pExtRoot >= pEnd) {
+                    return false;
+                }
+                *pExtRoot++ = *p3++;
+            }
+        }
+        pPath2++;
+    }
+
+
+    if (pExtRoot >= pEnd) {
+        return false;
+    }
+    *pExtRoot = '\0';
     SetExternalFileRoot(extRoot);
     return true;
 }
