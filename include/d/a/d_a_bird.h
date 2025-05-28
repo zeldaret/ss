@@ -26,11 +26,19 @@ public:
     STATE_FUNC_DECLARE(dBird_c, MiniGameEnd);
     STATE_FUNC_DECLARE(dBird_c, MiniGameLevelUpDemo);
 
+    // fn_129_8DD0, only referenced by d_a_obj_bird_sp
+    void accelerateTowards(mVec3_c &targetDirection);
+
     s16 getNumDashes() const {
         return mNumDashes;
     }
 
+    static dBird_c *getInstance() {
+        return spInstance;
+    }
+
 private:
+    static dBird_c *spInstance;
     /* 0x??? */ STATE_MGR_DECLARE(dBird_c);
     u8 _0x36C[0xF8E - 0x36C];
     /* 0xF8E */ s16 mNumDashes;
