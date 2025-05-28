@@ -8,6 +8,8 @@ public:
     dAcOdoor_c() {}
     virtual ~dAcOdoor_c() {}
 
+    bool isLocked();
+
 private:
 };
 
