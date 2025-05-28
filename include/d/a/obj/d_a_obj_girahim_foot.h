@@ -22,10 +22,11 @@ public:
     STATE_FUNC_DECLARE(dAcOgirahimFoot_c, Appear);
 
 private:
-    /*  */ nw4r::g3d::ResFile mRes;
-    /*  */ m3d::smdl_c mMdl;
+    /* 0x330 */ nw4r::g3d::ResFile mRes;
+    /* 0x334 */ m3d::smdl_c mMdl;
     /* 0x350 */ m3d::mShadowCircle_c mShadow;
-    /* 0x??? */ STATE_MGR_DECLARE(dAcOgirahimFoot_c);
+    /* 0x358 */ STATE_MGR_DECLARE(dAcOgirahimFoot_c);
+    bool field_0x394;
 };
 
 #endif
