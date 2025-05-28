@@ -6,6 +6,8 @@
  */
 
 #include "nw4r/snd/snd_BasicSound.h"
+#include "nw4r/snd/snd_SoundHandle.h"
+#include "nw4r/snd/snd_global.h"
 
 /*******************************************************************************
  * classes and functions
@@ -34,6 +36,34 @@ namespace nw4r { namespace snd { namespace detail
 		void RemoveSound(BasicSound *sound);
 
 		bool detail_CanPlaySound(int startPriority);
+
+		template <typename TForEachFunc>
+		TForEachFunc ForEachSound(TForEachFunc pFunc, bool reverse) {
+			if (reverse) {
+				detail::BasicSound::ExtSoundPlayerPlayLinkList::ReverseIterator it = mSoundList.GetBeginReverseIter();
+
+				while (it != mSoundList.GetEndReverseIter()) {
+					detail::BasicSound::ExtSoundPlayerPlayLinkList::ReverseIterator curr = it;
+
+					SoundHandle handle;
+					handle.detail_AttachSoundAsTempHandle(&*curr);
+					pFunc(handle);
+
+					if (handle.IsAttachedSound()) {
+						++it;
+					}
+				}
+			} else {
+				NW4R_RANGE_FOR_NO_AUTO_INC(it, mSoundList) {
+					decltype(it) curItr = it++;
+					SoundHandle handle;
+					handle.detail_AttachSoundAsTempHandle(&*curItr);
+					pFunc(handle);
+				}
+			}
+
+			return pFunc;
+		}
 
 	private:
 		BasicSound *GetLowestPrioritySound();

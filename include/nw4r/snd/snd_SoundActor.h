@@ -50,6 +50,16 @@ namespace nw4r { namespace snd
 			return &mActorPlayer[actorPlayerId];
 		}
 
+
+		template <typename TForEachFunc>
+		TForEachFunc ForEachSound(TForEachFunc pFunc, bool reverse) {
+			for (int i = 0; i < ACTOR_PLAYER_COUNT; i++) {
+				mActorPlayer[i].ForEachSound(pFunc, reverse);
+			}
+
+			return pFunc;
+		}
+
 		detail::SoundActorParam const &detail_GetActorParam() const
 		{
 			return mActorParam;

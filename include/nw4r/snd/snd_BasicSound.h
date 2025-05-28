@@ -186,8 +186,8 @@ namespace nw4r { namespace snd { namespace detail
 			public:
 				// virtual function ordering
 				// vtable AmbientArgUpdateCallback
-				virtual void at_0x08();
-				virtual void at_0x0c(void *, void *);
+				virtual ~AmbientArgUpdateCallback() {}
+				virtual void at_0x0c(void *, BasicSound *);
 
 			// members
 			private:
@@ -297,6 +297,10 @@ namespace nw4r { namespace snd { namespace detail
 		{
 			return ut::Clamp(mPriority + mAmbientParam.priority, PRIORITY_MIN,
 		                     PRIORITY_MAX);
+		}
+
+		void ClearAmbientArgUpdateCallback() {
+			mAmbientInfo.argUpdateCallback = NULL;
 		}
 
 		static int GetAmbientPriority(AmbientInfo const &ambientInfo,

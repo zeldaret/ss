@@ -94,7 +94,7 @@ Sound3DParam::Sound3DParam() {
     decayCurve = Sound3DManager::DECAY_CURVE_LOGARITHMIC;
     decayRatio = 128;
     field_0x1E = 0;
-    field_0x20 = 0;
+    userParam = 0;
     field_0x24 = 0;
 }
 

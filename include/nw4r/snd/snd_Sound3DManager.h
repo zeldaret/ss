@@ -14,12 +14,12 @@ namespace snd {
 
 struct Sound3DParam {
     /* 0x00 */ math::VEC3 position;
-    /* 0x0C */ math::VEC3 field_0x0C;
+    /* 0x0C */ math::VEC3 velocity;
     /* 0x18 */ UNKWORD field_0x18;
     /* 0x1C */ u8 decayCurve;
     /* 0x1D */ u8 decayRatio;
     /* 0x1E */ u8 field_0x1E;
-    /* 0x20 */ UNKWORD field_0x20;
+    /* 0x20 */ u32 userParam;
     /* 0x24 */ UNKWORD field_0x24;
 
     Sound3DParam();

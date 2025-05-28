@@ -131,10 +131,10 @@ void Sound3DCalculator::CalcPitch(
     f32 f3 = param.field_0x1E / 32.0f;
     f32 f1, f2;
     if (distance > 0.0f) {
-        f1 = -math::VEC3Dot(&relativePos, &param.field_0x0C);
+        f1 = -math::VEC3Dot(&relativePos, &param.velocity);
         f2 = -math::VEC3Dot(&relativePos, &listener.GetVelocity());
     } else {
-        f1 = -math::VEC3Len(&param.field_0x0C);
+        f1 = -math::VEC3Len(&param.velocity);
         f2 = math::VEC3Len(&listener.GetVelocity());
     }
     f32 pitch;

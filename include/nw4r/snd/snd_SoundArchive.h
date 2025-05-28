@@ -123,6 +123,7 @@ namespace nw4r { namespace snd
 			u32 flags;     // at 0x0
 			u8 decayCurve; // at 0x4
 			u8 decayRatio; // at 0x5
+			u8 field_0x06; // at 0x6
 		};
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x256dc
