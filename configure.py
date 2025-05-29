@@ -1957,7 +1957,7 @@ config.libs = [
     Rel(
         NonMatching, "d_a_obj_bigbomb_flower", "REL/d/a/obj/d_a_obj_bigbomb_flower.cpp"
     ),
-    Rel(NonMatching, "d_a_obj_bird_sp", "REL/d/a/obj/d_a_obj_bird_sp.cpp"),
+    Rel(Matching, "d_a_obj_bird_sp", "REL/d/a/obj/d_a_obj_bird_sp.cpp"),
     Rel(Matching, "d_a_obj_bird_statue", "REL/d/a/obj/d_a_obj_bird_statue.cpp"),
     Rel(NonMatching, "d_a_obj_blade", "REL/d/a/obj/d_a_obj_blade.cpp"),
     Rel(NonMatching, "d_a_obj_blast_rock", "REL/d/a/obj/d_a_obj_blast_rock.cpp"),
@@ -2044,10 +2044,10 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_evil_field", "REL/d/a/obj/d_a_obj_evil_field.cpp"),
     Rel(NonMatching, "d_a_obj_F302_light", "REL/d/a/obj/d_a_obj_F302_light.cpp"),
     Rel(
-        NonMatching, "d_a_obj_F400_gate_leaf", "REL/d/a/obj/d_a_obj_F400_gate_leaf.cpp"
+        Matching, "d_a_obj_F400_gate_leaf", "REL/d/a/obj/d_a_obj_F400_gate_leaf.cpp"
     ),
     Rel(
-        NonMatching, "d_a_obj_F400_gate_seal", "REL/d/a/obj/d_a_obj_F400_gate_seal.cpp"
+        Matching, "d_a_obj_F400_gate_seal", "REL/d/a/obj/d_a_obj_F400_gate_seal.cpp"
     ),
     Rel(NonMatching, "d_a_obj_farmland", "REL/d/a/obj/d_a_obj_farmland.cpp"),
     Rel(NonMatching, "d_a_obj_fence", "REL/d/a/obj/d_a_obj_fence.cpp"),
@@ -2147,7 +2147,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_lotus", "REL/d/a/obj/d_a_obj_lotus.cpp"),
     Rel(NonMatching, "d_a_obj_lotus_flower", "REL/d/a/obj/d_a_obj_lotus_flower.cpp"),
     Rel(NonMatching, "d_a_obj_lotus_seed", "REL/d/a/obj/d_a_obj_lotus_seed.cpp"),
-    Rel(NonMatching, "d_a_obj_mapparts", "REL/d/a/obj/d_a_obj_mapparts.cpp"),
+    Rel(Matching, "d_a_obj_mapparts", "REL/d/a/obj/d_a_obj_mapparts.cpp"),
     Rel(Matching, "d_a_obj_megami_island", "REL/d/a/obj/d_a_obj_megami_island.cpp"),
     Rel(NonMatching, "d_a_obj_mg_pumpkin", "REL/d/a/obj/d_a_obj_mg_pumpkin.cpp"),
     Rel(NonMatching, "d_a_obj_mole_cover", "REL/d/a/obj/d_a_obj_mole_cover.cpp"),
