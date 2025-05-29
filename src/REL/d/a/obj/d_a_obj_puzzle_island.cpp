@@ -30,7 +30,7 @@ bool dAcOpuzzleIsland_c::createHeap() {
     updateMatrix();
     mMdl.setScale(mScale);
     mMdl.setLocalMtx(mWorldMtx);
-    TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, 1, &mWorldMtx, &mScale));
+    TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mBgW.Lock();
     return true;
 }
@@ -39,11 +39,11 @@ int dAcOpuzzleIsland_c::create() {
     CREATE_ALLOCATOR(dAcOpuzzleIsland_c);
     mBgW.SetCrrFunc(dBgS_MoveBGProc_Typical);
     dBgS::GetInstance()->Regist(&mBgW, this);
-    mMdl.setPriorityDraw(0x1c, 9);
+    mMdl.setPriorityDraw(0x1C, 9);
     mVec3_c min, max;
     mMdl.getBounds(&min, &max);
     boundingBox.Set(min, max);
-    mCullingDistance = 500000.0;
+    mCullingDistance = 500000.0f;
     mBgW.SetRideCallback(rideCallback);
     return SUCCEEDED;
 }
