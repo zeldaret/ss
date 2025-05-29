@@ -2893,8 +2893,11 @@ nw4r/g3d/g3d_calcvtx.cpp:
 	.sdata2     start:0x8057EEF0 end:0x8057EEF8
 
 nw4r/snd/snd_AnimSound.cpp:
-	.text       start:0x80461700 end:0x804630D4 align:16
+	.text       start:0x80461700 end:0x80462F18 align:16
 	.sdata2     start:0x8057EEF8 end:0x8057EF18
+
+nw4r/snd/snd_AnimSoundReader.cpp:
+	.text       start:0x80462F20 end:0x804630D4 align:16
 
 nw4r/snd/snd_AxManager.cpp:
 	.text       start:0x804630E0 end:0x80464880 align:16
