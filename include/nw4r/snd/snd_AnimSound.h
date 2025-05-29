@@ -39,10 +39,6 @@ public:
         return mIsRunning;
     }
 
-    void SetRunning(bool running) {
-        mIsRunning = running;
-    }
-
     void UpdateFrame() {
         if (!mHandle.IsAttachedSound()) {
             mpEvent = 0;
@@ -74,8 +70,8 @@ public:
         }
     }
 
-    bool StartSound(const AnimEvent *event, SoundStartable *startable, bool b);
-    bool HoldSound(const AnimEvent *event, SoundStartable *startable, bool b);
+    void StartSound(const AnimEvent *event, SoundStartable *startable, bool b);
+    void HoldSound(const AnimEvent *event, SoundStartable *startable, bool b);
     void SetVolumePitch(const AnimEvent *event, bool b);
     void SetVariable(const AnimEvent *event, u32 varNo, f32 f);
 

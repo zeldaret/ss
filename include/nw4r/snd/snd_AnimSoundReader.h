@@ -6,7 +6,7 @@ namespace snd {
 namespace detail {
 
 struct AnimEvent {
-    u32 flags_0x00;                                  // at 0x00
+    u32 flags;                                       // at 0x00
     u32 soundId;                                     // at 0x04
     detail::Util::DataRef<const char> soundLabelRef; // at 0x08
     u8 volume;                                       // at 0x10
@@ -17,7 +17,7 @@ struct AnimEvent {
     UNKWORD field_0x1C;                              // at 0x1C
 
     bool ShouldPreventStart() const {
-        return flags_0x00 & 1;
+        return flags & 1;
     }
 
     const char *GetSoundLabel() const {
@@ -25,15 +25,11 @@ struct AnimEvent {
     }
 
     bool GetVarNo(u32 *var) const {
-        if (ShouldSetVariable()) {
+        if (flags & 2) {
             *var = varNo;
             return true;
         }
         return false;
-    }
-
-    bool ShouldSetVariable() const {
-        return flags_0x00 & 2;
     }
 
     bool MatchesDirection(int playDirection) const {
@@ -49,7 +45,7 @@ struct AnimEvent {
 struct AnimEventRef {
     int field_0x00;                 // at 0x08
     int field_0x04;                 // at 0x04
-    u8 flags_0x08;                  // at 0x08
+    u8 flags;                       // at 0x08
     s8 field_0x09;                  // at 0x09
     u8 field_0x0A;                  // at 0x0A
     Util::DataRef<AnimEvent> event; // at 0x0C
