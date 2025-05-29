@@ -79,14 +79,13 @@ void dAcOgirahimFoot_c::initializeState_Appear() {
     field_0x394 = true;
 }
 
+// Not matching by one instruction
 void dAcOgirahimFoot_c::executeState_Appear() {
     if (field_0x394) {
         return;
     }
 
-    dJEffManager_c::spawnEffect(
-        PARTICLE_RESOURCE_ID_MAPPING_77_, position, (mAng3_c *)0x0, &mScale, nullptr, nullptr, 0, 0
-    );
+    dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_77_, position, nullptr, &mScale, nullptr, nullptr, 0, 0);
 
     deleteRequest();
 }

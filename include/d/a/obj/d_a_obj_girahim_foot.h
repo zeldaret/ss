@@ -13,11 +13,11 @@ public:
     dAcOgirahimFoot_c() : mStateMgr(*this, sStateID::null) {}
     virtual ~dAcOgirahimFoot_c() {}
 
-    virtual int create() override;       // fn_425_4C0
-    virtual int doDelete() override;     // fn_425_5C0
-    virtual int draw() override;         // fn_425_610
-    virtual bool createHeap() override;  // fn_425_440
-    virtual int actorExecute() override; // fn_425_5D0
+    virtual int create() override;
+    virtual int doDelete() override;
+    virtual int draw() override;
+    virtual bool createHeap() override;
+    virtual int actorExecute() override;
 
     STATE_FUNC_DECLARE(dAcOgirahimFoot_c, Wait);
     STATE_FUNC_DECLARE(dAcOgirahimFoot_c, Appear);
@@ -27,7 +27,7 @@ private:
     /* 0x334 */ m3d::smdl_c mMdl;
     /* 0x350 */ dShadowCircle_c mShadow;
     /* 0x358 */ STATE_MGR_DECLARE(dAcOgirahimFoot_c);
-    bool field_0x394;
+    /* 0x394 */ bool field_0x394;
 };
 
 #endif
