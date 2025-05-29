@@ -260,6 +260,7 @@ namespace nw4r { namespace snd { namespace detail
 		PlayerHeap *GetPlayerHeap() { return mPlayerHeap; }
 		SoundPlayer *GetSoundPlayer() { return mSoundPlayer; }
 		int GetVoiceOutCount() const;
+		int GetPriority() const { return mPriority; }
 
 		void SetPlayerPriority(int priority);
 		void SetInitialVolume(f32 volume);

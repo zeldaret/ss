@@ -7,6 +7,7 @@
 
 #include "common.h" // nullptr
 
+#include "nw4r/snd/snd_SeqSound.h"
 #include "nw4r/ut/ut_NonCopyable.h" // ut::NonCopyable
 
 /*******************************************************************************
@@ -32,6 +33,11 @@ namespace nw4r { namespace snd
 		bool IsAttachedSound() const { return mSound != nullptr; }
 
 		void DetachSound();
+
+		void WriteVariable(int varNo, s16 value) {
+			if (IsAttachedSound())
+				mSound->WriteVariable(varNo, value);
+		}
 
 	// members
 	private:

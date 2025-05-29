@@ -58,7 +58,7 @@ const AnimSoundFile::EventTable *AnimSoundFileReader::GetEventTable() const {
     if (mpBlock == NULL) {
         return NULL;
     }
-    return Util::GetDataRefAddress0(mpBlock->eventTable, &mpBlock->_0x08);
+    return Util::GetDataRefAddress0(mpBlock->eventTable, &mpBlock->duration);
 }
 
 const AnimEvent *AnimSoundFileReader::GetEvent(const AnimEventRef *ref) const {
@@ -66,7 +66,7 @@ const AnimEvent *AnimSoundFileReader::GetEvent(const AnimEventRef *ref) const {
         return NULL;
     }
     const AnimSoundFile::EventTable *event = GetEventTable(); // unused
-    return Util::GetDataRefAddress0(ref->event, &mpBlock->_0x08);
+    return Util::GetDataRefAddress0(ref->event, &mpBlock->duration);
 }
 
 } // namespace detail

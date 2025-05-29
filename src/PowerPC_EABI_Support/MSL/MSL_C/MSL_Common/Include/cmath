@@ -15,13 +15,13 @@ using ::atan;
 using ::atan2;
 using ::atan2f;
 using ::ceil;
-using ::ceilf;
+// using ::ceilf;
 using ::copysign;
 using ::cos;
 // using ::cosf;
-using ::fabsf;
+// using ::fabsf;
 using ::floor;
-using ::floorf;
+// using ::floorf;
 using ::fmod;
 using ::fmodf;
 using ::frexp;
@@ -35,16 +35,24 @@ using ::scalbn;
 using ::sin;
 using ::sinf;
 using ::sqrt;
-using ::sqrtf;
+// using ::sqrtf;
 using ::tan;
 using ::tanf;
 
-inline float sqrt(float x) {
-    return ::sqrtf(x);
+inline float ceilf(float x) {
+    return ::ceil(x);
+}
+
+inline float floorf(float x) {
+    return ::floor(x);
 }
 
 inline float cosf(float x) {
     return cos(x);
+}
+
+inline float sqrtf(float x) {
+    return ::sqrtf(x);
 }
 
 // TODO: Very fake!

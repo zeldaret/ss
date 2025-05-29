@@ -1012,7 +1012,7 @@ config.libs = [
     nw4rLib(
         "snd",
         [
-            Object(NonMatching, "nw4r/snd/snd_AnimSound.cpp"),
+            Object(Matching, "nw4r/snd/snd_AnimSound.cpp"),
             Object(Matching, "nw4r/snd/snd_AnimSoundReader.cpp"),
             Object(Matching, "nw4r/snd/snd_AxManager.cpp"),
             Object(Matching, "nw4r/snd/snd_AxVoice.cpp"),
