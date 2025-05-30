@@ -16,7 +16,9 @@ struct LIGHT_INFLUENCE {
         mScale = scale;
     }
     void SetPosition(const mVec3_c &pos) {
-        mPos = pos;
+        mPos.x = pos.x;
+        mPos.y = pos.y;
+        mPos.z = pos.z;
     }
 
     /* 0x00 */ mVec3_c mPos;
