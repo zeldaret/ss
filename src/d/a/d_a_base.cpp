@@ -39,7 +39,7 @@ u8 dAcBase_c::s_Create_Subtype;
 extern "C" ObjInfo *getObjByActorIdAndSubtype_unkNamespace(ProfileName, u8);
 extern "C" ObjInfo *getObjByActorName_unkNamespace(char *name);
 extern "C" char *getObjectName_8006a730(ObjInfo *);
-extern "C" SoundSource *soundForActorInitRelated_803889c0(s8, fBase_c *, char *, u8);
+extern "C" dSoundSourceIf_c *soundForActorInitRelated_803889c0(s8, fBase_c *, char *, u8);
 
 bool dAcBase_c::createHeap() {
     return true;
@@ -113,7 +113,7 @@ void dAcBase_c::setTempCreateParams(
 }
 
 // has regswap
-SoundSource *dAcBase_c::FUN_8002c690() {
+dSoundSourceIf_c *dAcBase_c::FUN_8002c690() {
     if (obj_info == nullptr) {
         return nullptr;
     }
@@ -515,7 +515,7 @@ void dAcBase_c::FUN_8002d830() {}
 void dAcBase_c::FUN_8002d860(UNKWORD) {}
 
 // 8002d880
-SoundSource *dAcBase_c::getSoundSource() {
+dSoundSourceIf_c *dAcBase_c::getSoundSource() {
     return sound_source.get();
 }
 // End of SoundSource stuff

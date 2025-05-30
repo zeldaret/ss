@@ -2,16 +2,18 @@
 #define MUSIC_MGRS_H
 
 #include "common.h"
+#include "d/snd/d_snd_player_mgr.h"
 
-class BgmMgr;
+class dSndPlayerMgr_c;
 
-extern "C" BgmMgr *BGM_MGR;
+#define BGM_MGR (dSndPlayerMgr_c::GetInstance())
 extern "C" void fn_8035E000();
-extern "C" void fn_8035E860(BgmMgr *);
-extern "C" void fn_8035E310(BgmMgr *);
-extern "C" void fn_8035E820(BgmMgr *);
-extern "C" void fn_8035E880(BgmMgr *);
-extern "C" void fn_8035E790(BgmMgr *, UNKWORD, void *);
+extern "C" void fn_8035E860(dSndPlayerMgr_c *);
+extern "C" void fn_8035E310(dSndPlayerMgr_c *);
+extern "C" void fn_8035E820(dSndPlayerMgr_c *);
+extern "C" void fn_8035E880(dSndPlayerMgr_c *);
+extern "C" void fn_8035E790(dSndPlayerMgr_c *, UNKWORD, void *);
+extern "C" bool fn_8035ED90(dSndPlayerMgr_c *, u8);
 
 extern "C" void *ENEMY_SOUND_MGR;
 extern "C" void fn_80362150(void *, u16);
@@ -21,6 +23,8 @@ extern "C" void fn_80362730(void *);
 extern "C" void fn_80365D20(void *);
 extern "C" void fn_803624F0(void *);
 extern "C" void fn_80364FD0(void *, s32);
+extern "C" bool fn_80364DA0(void *);
+extern "C" void fn_80364D00(void*, s32);
 
 extern "C" void *ENEMY_BGM_RELATED_MGR;
 extern "C" void fn_80384570(void *, bool);
@@ -28,5 +32,10 @@ extern "C" void fn_803858D0(void *);
 
 extern "C" void *FANFARE_SOUND_MGR;
 extern "C" void AnotherSoundMgr__playSound(void *, s32);
+extern "C" bool fn_803721F0(void *, u32);
+extern "C" bool fn_803720E0(void *, u32);
+extern "C" bool fn_80372070(void *, u32);
+extern "C" bool fn_803734C0(void *, u32);
+extern "C" bool fn_80373550(void *, u32);
 
 #endif
