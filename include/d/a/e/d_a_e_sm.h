@@ -213,7 +213,7 @@ private:
     /* 0xBCC */ u8 field_0xBCC;
     /* 0xBCD */ u8 field_0xBCD;
     /* 0xBCE */ u8 field_0xBCE;
-    /* 0xBD0 */ LightParams mLightInfo;
+    /* 0xBD0 */ LIGHT_INFLUENCE mLightInfo;
 
     static bool sSomeArrayInit;
     static bool sSomeArray[9];
