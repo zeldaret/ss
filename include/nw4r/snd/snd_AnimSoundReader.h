@@ -5,6 +5,15 @@ namespace nw4r {
 namespace snd {
 namespace detail {
 
+// Type and name revealed by BBA
+struct AnimEventFrameInfo {
+    int field_0x00; // at 0x00
+    int field_0x04; // at 0x04
+    u8 flags;       // at 0x08
+    s8 field_0x09;  // at 0x09
+    u8 field_0x0A;  // at 0x0A
+};
+
 struct AnimEvent {
     u32 flags;                                       // at 0x00
     u32 soundId;                                     // at 0x04
@@ -42,15 +51,13 @@ struct AnimEvent {
     }
 };
 
+// Name from Inazuma, BBA
 struct AnimEventRef {
-    int field_0x00;                 // at 0x08
-    int field_0x04;                 // at 0x04
-    u8 flags;                       // at 0x08
-    s8 field_0x09;                  // at 0x09
-    u8 field_0x0A;                  // at 0x0A
+    AnimEventFrameInfo mInfo;       // at 0x00
     Util::DataRef<AnimEvent> event; // at 0x0C
 };
 
+// Names unknown
 struct AnimSoundFile {
     static u32 const SIGNATURE_FILE = NW4R_FOUR_BYTE('R', 'A', 'S', 'D');
     static int const FILE_VERSION = NW4R_FILE_VERSION(1, 0);
@@ -71,6 +78,7 @@ struct AnimSoundFile {
     };
 };
 
+// Name from Inazuma
 class AnimSoundFileReader {
 public:
     AnimSoundFileReader();

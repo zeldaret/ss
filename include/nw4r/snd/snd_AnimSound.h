@@ -5,7 +5,8 @@
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 
-// Class and non-inline function names from InazumaWii, everything else made up
+// Class and non-inlined function names from InazumaWii
+// Names of automatically inlined functions from BBA
 
 namespace nw4r {
 namespace snd {
@@ -39,22 +40,13 @@ public:
         return mIsRunning;
     }
 
-    void UpdateFrame() {
-        if (!mHandle.IsAttachedSound()) {
-            mpEvent = 0;
-        }
-    }
+    void UpdateFrame();
 
-    void Stop() {
-        if (IsAttachedSound()) {
-            mHandle.detail_GetAttachedSound()->Stop(0);
-        }
-        mpEvent = 0;
-    }
+    void ForceStop();
 
     void StopEvent(const AnimEvent *event) {
         if (mpEvent == event) {
-            Stop();
+            ForceStop();
         }
     }
 
@@ -70,8 +62,14 @@ public:
         }
     }
 
-    void StartSound(const AnimEvent *event, SoundStartable *startable, bool b);
-    void HoldSound(const AnimEvent *event, SoundStartable *startable, bool b);
+    void StartEvent(const AnimEvent *event, SoundStartable *startable, bool b);
+    void HoldEvent(const AnimEvent *event, SoundStartable *startable, bool b);
+
+    // Not sure about these, this could be related to
+    // InitParam__Q44nw4r3snd6detail15AnimEventPlayerFPCQ44nw4r3snd6detail9AnimEventb
+    // from BBA, but SetVariable is almost certainly an inline (duplicated code)
+    // but the float argument is read from AnimSoundImpl so something seems to have
+    // changed.
     void SetVolumePitch(const AnimEvent *event, bool b);
     void SetVariable(const AnimEvent *event, u32 varNo, f32 f);
 
@@ -97,19 +95,16 @@ public:
     void UpdateFrame(f32 frame, PlayDirection dir);
     void UpdateForward(f32 frame);
     void UpdateBackward(f32 frame);
+    void UpdateOneFrame(s32 duration, PlayDirection direction);
     void UpdateTrigger(const AnimEventRef *, s32, PlayDirection);
     void UpdateForwardRange(const AnimEventRef *, s32);
     void UpdateBackwardRange(const AnimEventRef *, s32);
 
     void StartEvent(const AnimEvent *, bool);
     void HoldEvent(const AnimEvent *, bool);
-    // StartEvent is not inlined, but there seems to be
-    // a corresponding StopEvent function that got inlined
     void StopEvent(const AnimEvent *);
+    bool IsPlayableLoopCount(const nw4r::snd::detail::AnimEventFrameInfo&);
 
-    // Made up inlines
-    bool ShouldPlayEvent(const AnimEventRef *ref) const;
-    void UpdateEvents(s32 duration, PlayDirection direction);
 
     typedef void (*Callback)(int, s32, const char *, UNKWORD, UNKWORD);
 

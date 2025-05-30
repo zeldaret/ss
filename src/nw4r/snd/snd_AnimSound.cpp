@@ -89,49 +89,6 @@ void AnimSoundImpl::UpdateFrame(f32 frame, PlayDirection dir) {
     field_0x1A = false;
 }
 
-bool AnimSoundImpl::ShouldPlayEvent(const AnimEventRef *ref) const {
-    if (!(ref->flags & 1) && (ref->flags & 4 || ref->flags & 2)) {
-        return true;
-    }
-    int i1 = ut::Max((int)ref->field_0x09, 0);
-    int i2 = ut::Abs(field_0x1C);
-    if (ref->field_0x0A == 0) {
-        if (i2 < i1) {
-            return false;
-        }
-    } else {
-        if (i2 < i1) {
-            return false;
-        }
-        if ((i2 - i1) % ref->field_0x0A != 0) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-void AnimSoundImpl::UpdateEvents(s32 duration, PlayDirection direction) {
-    for (u32 eventIdx = 0; eventIdx < mReader.GetEventCount(); eventIdx++) {
-        const AnimEventRef *ref = mReader.GetEventRef(eventIdx);
-        if (ref == NULL) {
-            continue;
-        }
-        if (ShouldPlayEvent(ref)) {
-            // HACK/Fakematch: Force a reload
-            if ((((AnimEventRef *)ref)->flags) & 1) {
-                UpdateTrigger(ref, duration, direction);
-            } else {
-                if (direction == FORWARD) {
-                    UpdateForwardRange(ref, duration);
-                } else {
-                    UpdateBackwardRange(ref, duration);
-                }
-            }
-        }
-    }
-}
-
 void AnimSoundImpl::UpdateForward(f32 frame) {
     s32 duration = std::floorf(field_0x0C);
     s32 iFrame = std::floorf(frame);
@@ -151,7 +108,7 @@ void AnimSoundImpl::UpdateForward(f32 frame) {
             field_0x1C++;
         }
 
-        UpdateEvents(loopFrame, FORWARD);
+        UpdateOneFrame(loopFrame, FORWARD);
 
         if (loopFrame == iFrame) {
             break;
@@ -187,12 +144,32 @@ void AnimSoundImpl::UpdateBackward(f32 frame) {
             field_0x1C--;
         }
 
-        UpdateEvents(loopFrame, BACKWARD);
+        UpdateOneFrame(loopFrame, BACKWARD);
 
         if (loopFrame == iFrame) {
             break;
         }
         loopFrame--;
+    }
+}
+
+void AnimSoundImpl::UpdateOneFrame(s32 duration, PlayDirection direction) {
+    for (u32 eventIdx = 0; eventIdx < mReader.GetEventCount(); eventIdx++) {
+        const AnimEventRef *ref = mReader.GetEventRef(eventIdx);
+        if (ref == NULL) {
+            continue;
+        }
+        if (IsPlayableLoopCount(ref->mInfo)) {
+            if ((ref->mInfo.flags) & 1) {
+                UpdateTrigger(ref, duration, direction);
+            } else {
+                if (direction == FORWARD) {
+                    UpdateForwardRange(ref, duration);
+                } else {
+                    UpdateBackwardRange(ref, duration);
+                }
+            }
+        }
     }
 }
 
@@ -202,7 +179,7 @@ void AnimSoundImpl::UpdateTrigger(const AnimEventRef *ref, s32 frame, PlayDirect
         return;
     }
 
-    if (ref->flags & 4) {
+    if (ref->mInfo.flags & 4) {
         return;
     }
 
@@ -210,8 +187,8 @@ void AnimSoundImpl::UpdateTrigger(const AnimEventRef *ref, s32 frame, PlayDirect
         return;
     }
 
-    if ((ref->flags & 2)) {
-        if (ref->field_0x00 == frame) {
+    if ((ref->mInfo.flags & 2)) {
+        if (ref->mInfo.field_0x00 == frame) {
             StopEvent(event);
             if (mCallback != NULL) {
                 (mCallback)(0, frame, event->GetSoundLabel(), event->field_0x1C, field_0x24);
@@ -219,7 +196,7 @@ void AnimSoundImpl::UpdateTrigger(const AnimEventRef *ref, s32 frame, PlayDirect
             StartEvent(event, true);
         }
     } else {
-        if (ref->field_0x00 == frame) {
+        if (ref->mInfo.field_0x00 == frame) {
             StopEvent(event);
             if (mCallback != NULL) {
                 (mCallback)(0, frame, event->GetSoundLabel(), event->field_0x1C, field_0x24);
@@ -229,9 +206,9 @@ void AnimSoundImpl::UpdateTrigger(const AnimEventRef *ref, s32 frame, PlayDirect
 
         s32 u;
         if (direction == FORWARD) {
-            u = ref->field_0x04;
+            u = ref->mInfo.field_0x04;
         } else {
-            u = ut::Max(ref->field_0x00 * 2 - ref->field_0x04, 0);
+            u = ut::Max(ref->mInfo.field_0x00 * 2 - ref->mInfo.field_0x04, 0);
         }
 
         if (u == frame) {
@@ -249,41 +226,41 @@ void AnimSoundImpl::UpdateForwardRange(const AnimEventRef *ref, s32 frame) {
         return;
     }
 
-    if (ref->flags & 4 && ref->flags & 2) {
+    if (ref->mInfo.flags & 4 && ref->mInfo.flags & 2) {
         HoldEvent(event, true);
         return;
     }
 
-    if (ref->flags & 4) {
-        if (ref->field_0x04 == frame && mCallback != NULL) {
+    if (ref->mInfo.flags & 4) {
+        if (ref->mInfo.field_0x04 == frame && mCallback != NULL) {
             (mCallback)(3, frame, event->GetSoundLabel(), event->field_0x1C, field_0x24);
         }
-        if (field_0x1C < ref->field_0x09) {
+        if (field_0x1C < ref->mInfo.field_0x09) {
             HoldEvent(event, true);
-        } else if (field_0x1C == ref->field_0x09) {
-            if (frame < ref->field_0x04) {
+        } else if (field_0x1C == ref->mInfo.field_0x09) {
+            if (frame < ref->mInfo.field_0x04) {
                 HoldEvent(event, true);
             } else {
                 StopEvent(event);
             }
         }
-    } else if ((ref->flags & 2)) {
-        if (ref->field_0x00 == frame && mCallback != NULL) {
+    } else if ((ref->mInfo.flags & 2)) {
+        if (ref->mInfo.field_0x00 == frame && mCallback != NULL) {
             (mCallback)(2, frame, event->GetSoundLabel(), event->field_0x1C, field_0x24);
         }
-        if (field_0x1C > ref->field_0x09) {
+        if (field_0x1C > ref->mInfo.field_0x09) {
             HoldEvent(event, true);
-        } else if (field_0x1C == ref->field_0x09 && ref->field_0x00 <= frame) {
+        } else if (field_0x1C == ref->mInfo.field_0x09 && ref->mInfo.field_0x00 <= frame) {
             HoldEvent(event, true);
         }
     } else {
-        if (ref->field_0x00 == frame && mCallback != NULL) {
+        if (ref->mInfo.field_0x00 == frame && mCallback != NULL) {
             (mCallback)(2, frame, event->GetSoundLabel(), event->field_0x1C, field_0x24);
         }
-        if (ref->field_0x04 == frame && mCallback != NULL) {
+        if (ref->mInfo.field_0x04 == frame && mCallback != NULL) {
             (mCallback)(3, frame, event->GetSoundLabel(), event->field_0x1C, field_0x24);
         }
-        if (ref->field_0x00 <= frame && frame < ref->field_0x04) {
+        if (ref->mInfo.field_0x00 <= frame && frame < ref->mInfo.field_0x04) {
             HoldEvent(event, true);
         } else {
             StopEvent(event);
@@ -297,41 +274,41 @@ void AnimSoundImpl::UpdateBackwardRange(const AnimEventRef *ref, s32 frame) {
         return;
     }
 
-    if (ref->flags & 4 && ref->flags & 2) {
+    if (ref->mInfo.flags & 4 && ref->mInfo.flags & 2) {
         HoldEvent(event, true);
         return;
     }
 
-    if (ref->flags & 4) {
-        if (ref->field_0x04 == frame && mCallback != NULL) {
+    if (ref->mInfo.flags & 4) {
+        if (ref->mInfo.field_0x04 == frame && mCallback != NULL) {
             (mCallback)(2, frame, event->GetSoundLabel(), event->field_0x1C, field_0x24);
         }
-        if (field_0x1C < ref->field_0x09) {
+        if (field_0x1C < ref->mInfo.field_0x09) {
             HoldEvent(event, true);
-        } else if (field_0x1C == ref->field_0x09 && frame <= ref->field_0x04) {
+        } else if (field_0x1C == ref->mInfo.field_0x09 && frame <= ref->mInfo.field_0x04) {
             HoldEvent(event, true);
         }
-    } else if ((ref->flags & 2)) {
-        if (ref->field_0x00 == frame && mCallback != NULL) {
+    } else if ((ref->mInfo.flags & 2)) {
+        if (ref->mInfo.field_0x00 == frame && mCallback != NULL) {
             (mCallback)(3, frame, event->GetSoundLabel(), event->field_0x1C, field_0x24);
         }
-        if (field_0x1C > ref->field_0x09) {
+        if (field_0x1C > ref->mInfo.field_0x09) {
             HoldEvent(event, true);
-        } else if (field_0x1C == ref->field_0x09) {
-            if (ref->field_0x00 < frame) {
+        } else if (field_0x1C == ref->mInfo.field_0x09) {
+            if (ref->mInfo.field_0x00 < frame) {
                 HoldEvent(event, true);
             } else {
                 StopEvent(event);
             }
         }
     } else {
-        if (ref->field_0x00 == frame && mCallback != NULL) {
+        if (ref->mInfo.field_0x00 == frame && mCallback != NULL) {
             (mCallback)(3, frame, event->GetSoundLabel(), event->field_0x1C, field_0x24);
         }
-        if (ref->field_0x04 == frame && mCallback != NULL) {
+        if (ref->mInfo.field_0x04 == frame && mCallback != NULL) {
             (mCallback)(2, frame, event->GetSoundLabel(), event->field_0x1C, field_0x24);
         }
-        if (ref->field_0x00 < frame && frame <= ref->field_0x04) {
+        if (ref->mInfo.field_0x00 < frame && frame <= ref->mInfo.field_0x04) {
             HoldEvent(event, true);
         } else {
             StopEvent(event);
@@ -355,11 +332,11 @@ void AnimSoundImpl::StartEvent(const AnimEvent *event, bool b) {
     }
 
     if (i == mNumSounds) {
-        mpSounds[leastPriorityIdx].Stop();
+        mpSounds[leastPriorityIdx].ForceStop();
         i = leastPriorityIdx;
     }
 
-    mpSounds[i].StartSound(event, &mStartable, b);
+    mpSounds[i].StartEvent(event, &mStartable, b);
 
     u32 varNo = 0;
     if (event->GetVarNo(&varNo)) {
@@ -388,11 +365,11 @@ void AnimSoundImpl::HoldEvent(const AnimEvent *event, bool b) {
     }
 
     if (i == mNumSounds) {
-        mpSounds[leastPriorityIdx].Stop();
+        mpSounds[leastPriorityIdx].ForceStop();
         i = leastPriorityIdx;
     }
 
-    mpSounds[i].HoldSound(event, &mStartable, b);
+    mpSounds[i].HoldEvent(event, &mStartable, b);
 
     u32 varNo = 0;
     if (event->GetVarNo(&varNo)) {
@@ -406,33 +383,26 @@ void AnimSoundImpl::StopEvent(const AnimEvent *event) {
     }
 }
 
-void AnimEventPlayer::StartSound(const AnimEvent *event, SoundStartable *startable, bool b) {
-    if (event->soundId == 0xFFFFFFFF) {
-        if (!startable->StartSound(GetHandle(), event->GetSoundLabel())) {
-            return;
+bool AnimSoundImpl::IsPlayableLoopCount(const nw4r::snd::detail::AnimEventFrameInfo &ref) {
+    if (!(ref.flags & 1) && (ref.flags & 4 || ref.flags & 2)) {
+        return true;
+    }
+    int i1 = ut::Max((int)ref.field_0x09, 0);
+    int i2 = ut::Abs(field_0x1C);
+    if (ref.field_0x0A == 0) {
+        if (i2 < i1) {
+            return false;
         }
     } else {
-        if (!startable->StartSound(GetHandle(), event->soundId)) {
-            return;
+        if (i2 < i1) {
+            return false;
+        }
+        if ((i2 - i1) % ref.field_0x0A != 0) {
+            return false;
         }
     }
 
-    SetVolumePitch(event, b);
-}
-
-void AnimEventPlayer::HoldSound(const AnimEvent *event, SoundStartable *startable, bool b) {
-    if (event->soundId == 0xFFFFFFFF) {
-        if (!startable->HoldSound(GetHandle(), event->GetSoundLabel())) {
-            return;
-        }
-    } else {
-        if (!startable->HoldSound(GetHandle(), event->soundId)) {
-            return;
-        }
-    }
-
-    GetHandle()->detail_GetAttachedSound()->SetAutoStopCounter(0);
-    SetVolumePitch(event, b);
+    return true;
 }
 
 void AnimEventPlayer::SetVolumePitch(const AnimEvent *event, bool b) {
@@ -469,6 +439,48 @@ AnimEventPlayer::AnimEventPlayer() : mpEvent(NULL), mIsRunning(false) {}
 AnimEventPlayer::~AnimEventPlayer() {
     if (mHandle.IsAttachedSound() && IsRunning()) {
         mHandle.Stop();
+    }
+}
+
+void AnimEventPlayer::StartEvent(const AnimEvent *event, SoundStartable *startable, bool b) {
+    if (event->soundId == 0xFFFFFFFF) {
+        if (!startable->StartSound(GetHandle(), event->GetSoundLabel())) {
+            return;
+        }
+    } else {
+        if (!startable->StartSound(GetHandle(), event->soundId)) {
+            return;
+        }
+    }
+
+    SetVolumePitch(event, b);
+}
+
+void AnimEventPlayer::HoldEvent(const AnimEvent *event, SoundStartable *startable, bool b) {
+    if (event->soundId == 0xFFFFFFFF) {
+        if (!startable->HoldSound(GetHandle(), event->GetSoundLabel())) {
+            return;
+        }
+    } else {
+        if (!startable->HoldSound(GetHandle(), event->soundId)) {
+            return;
+        }
+    }
+
+    GetHandle()->detail_GetAttachedSound()->SetAutoStopCounter(0);
+    SetVolumePitch(event, b);
+}
+
+void AnimEventPlayer::ForceStop() {
+    if (IsAttachedSound()) {
+        mHandle.detail_GetAttachedSound()->Stop(0);
+    }
+    mpEvent = 0;
+}
+
+void AnimEventPlayer::UpdateFrame() {
+    if (!mHandle.IsAttachedSound()) {
+        mpEvent = 0;
     }
 }
 
