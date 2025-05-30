@@ -8,6 +8,24 @@
 #include "rvl/GX/GXTypes.h"
 #include "toBeSorted/tlist.h"
 
+struct LIGHT_INFLUENCE {
+    void SetColor(mColor clr) {
+        mClr = clr;
+    }
+    void SetScale(f32 scale) {
+        mScale = scale;
+    }
+    void SetPosition(const mVec3_c &pos) {
+        mPos = pos;
+    }
+
+    /* 0x00 */ mVec3_c mPos;
+    /* 0x0C */ mColor mClr;
+    /* 0x10 */ f32 mScale;
+    /* 0x14 */ s32 mIdx;
+    /* 0x18 */ bool field_0x18;
+};
+
 struct UnkBlurPaletteListNode {
     TListNode<UnkBlurPaletteListNode> mNode;
 };
@@ -143,20 +161,23 @@ struct Sff {
     SffSub field_0x00[3];
 };
 
-struct Bpm1 {
-    Bpm1() {}
-    ~Bpm1() {}
+struct EFLIGHT_PROC {
+    EFLIGHT_PROC() {}
+    ~EFLIGHT_PROC() {}
 
-    u8 field_0x00[0x14 - 0x00];
-    mColor field_0x14;
+    /* 0x00 */ u8 mState;
+    /* 0x01 */ u8 mFrame;
+    /* 0x04 */ int mLightType;
+    /* 0x08 */ LIGHT_INFLUENCE field_0x8;
 };
 
 struct Bpm2 {
     Bpm2() {}
     ~Bpm2() {}
 
-    // maybe
-    u8 _0x00[0x14 - 0x00];
+    /* 0x00 */ mVec3_c mPosition;
+    /* 0x0C */ u32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
 };
 
 struct PaletteEAF_smol_entry {
@@ -203,18 +224,21 @@ struct Bpm4 {
     PaletteEAF_big field_0x00[0x20];
 };
 
-struct Bpm7 {
-    Bpm7() {}
-    ~Bpm7() {}
+struct SHADOW_INFLUENCE {
+    SHADOW_INFLUENCE() {}
+    ~SHADOW_INFLUENCE() {}
 
-    u8 _0x00[0x14 - 0x00];
+    /* 0x00 */ mVec3_c mPos;
+    /* 0x0C */ f32 mRadius;
+    /* 0x10 */ s16 mIdx;
 };
-
 struct Bpm8 {
     Bpm8() {}
     ~Bpm8() {}
 
-    u8 _0x00[0x14 - 0x00];
+    /* 0x00 */ mVec3_c mPos;
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ s32 field_0x10;
 };
 
 struct Bpm9 {
@@ -222,24 +246,6 @@ struct Bpm9 {
     ~Bpm9() {}
 
     u8 _0x00[0x14 - 0x00];
-};
-
-struct LightParams {
-    void SetColor(mColor clr) {
-        mClr = clr;
-    }
-    void SetScale(f32 scale) {
-        mScale = scale;
-    }
-    void SetPosition(const mVec3_c &pos) {
-        mPos = pos;
-    }
-
-    /* 0x00 */ EGG::Vector3f mPos;
-    /* 0x0C */ mColor mClr;
-    /* 0x10 */ f32 mScale;
-    /* 0x14 */ s32 mIdx;
-    /* 0x18 */ s32 field_0x18;
 };
 
 class BlurAndPaletteManager {
@@ -257,15 +263,32 @@ public:
         return sPInstance;
     }
 
+    void get_vectle_calc(const mVec3_c *, const mVec3_c *, mVec3_c *);
+    void sphere_to_cartesian(f32 ang_y, f32 ang_xz, mVec3_c *);
+
+    void efplight_set(LIGHT_INFLUENCE *pLightInfo);
+    void efplight_cut(LIGHT_INFLUENCE *pLightInfo);
+    LIGHT_INFLUENCE *eflight_influence(const mVec3_c *);
+
+    void SordFlush_set(const mVec3_c *pPos, s32 lightType); // Name is guess based on closest func in tp
+
+    void plight_set(LIGHT_INFLUENCE *pLightInfo);
+    void plight_cut(LIGHT_INFLUENCE *pLightInfo);
+    LIGHT_INFLUENCE *light_influence(const mVec3_c *, bool param2);
+    LIGHT_INFLUENCE *light_influence2(const mVec3_c *, bool param2);
+
+    void shadow_set(SHADOW_INFLUENCE *pShadowInfo);
+    void shadow_cut(SHADOW_INFLUENCE *pShadowInfo);
+    SHADOW_INFLUENCE *shadow_influence(const mVec3_c *);
+
+    void setLightFilter(f32 ratio);
+    void set0x35B0(f32 f);
+
     void fn_800247D0(mVec3_c, f32);
-    void fn_80022AF0(f32);
     void setField_0x2F20(f32 arg) {
         field_0x2F20 = arg;
     }
-    void fn_800223A0(LightParams *);
-    void fn_80022440(LightParams *);
-    void fn_800225F0(LightParams *);
-    void fn_800226E0(LightParams *);
+
     // light pillar related
     void fn_80024240(s16, s16, s16);
     bool fn_80024770(int);
@@ -314,7 +337,7 @@ private:
     /* 0x2DE0 */ u8 field_0x2DE0[0x2DEC - 0x2DE0];
     /* 0x2DEC */ mColor field_0x2DEC;
     /* 0x2DF0 */ u8 field_0x2DF0[0x2DF4 - 0x2DF0];
-    /* 0x2DF4 */ mColor field_0x2DF4;
+    /* 0x2DF4 */ mColor field_0x2DF4; // Controls Light filtering
     /* 0x2DF8 */ mVec3_c field_0x2DF8;
     /* 0x2E04 */ u8 field_0x2E04[0x2E08 - 0x2E04];
     /* 0x2E08 */ mVec3_c field_0x2E08[5];
@@ -332,13 +355,12 @@ private:
     /* 0x2F1C */ f32 field_0x2F1C;
     /* 0x2F20 */ f32 field_0x2F20;
     /* 0x2F24 */ u8 field_0x2F24[4];
-    /* 0x2F28 */ LightParams *field_0x2F28[5];
-    /* 0x2F3C */ LightParams *field_0x2F3C[200];
-    /* 0x325C */ u8 field_0x325C[0x357C - 0x325C];
-    /* 0x357C */ Bpm1 field_0x357C;
-    /* 0x3594 */ u8 _0x3594[0x35A0 - 0x3594];
+    /* 0x2F28 */ LIGHT_INFLUENCE *efplight[5];
+    /* 0x2F3C */ LIGHT_INFLUENCE *pointlight[200];
+    /* 0x325C */ SHADOW_INFLUENCE *pshadow[200];
+    /* 0x357C */ EFLIGHT_PROC eflight;
     /* 0x35A0 */ Bpm2 field_0x35A0;
-    /* 0x35B4 */ Bpm7 field_0x35B4[8];
+    /* 0x35B4 */ SHADOW_INFLUENCE field_0x35B4[8];
     /* 0x3654 */ Bpm8 field_0x3654[10];
     /* 0x371C */ Bpm9 field_0x371C[20];
     /* 0x38AC */ u8 _0x38AC[0x38B4 - 0x38AC];

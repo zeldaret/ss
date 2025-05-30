@@ -198,7 +198,7 @@ int dAcEsm_c::actorCreate() {
     mLightInfo.SetColor(mColor(0xCC, 0xFF, 0xFF, 0xFF));
     mLightInfo.SetScale(0.f);
 
-    BlurAndPaletteManager::GetPInstance()->fn_800225F0(&mLightInfo);
+    BlurAndPaletteManager::GetPInstance()->plight_set(&mLightInfo);
     if (field_0xBBF == 1) {
         rotation.x = 0x8000;
         field_0xBCC = 1;
@@ -315,7 +315,7 @@ int dAcEsm_c::actorPostCreate() {
 }
 
 int dAcEsm_c::doDelete() {
-    BlurAndPaletteManager::GetPInstance()->fn_800226E0(&mLightInfo);
+    BlurAndPaletteManager::GetPInstance()->plight_cut(&mLightInfo);
     return SUCCEEDED;
 }
 
