@@ -7,6 +7,7 @@
 
 #include "common.h" // nullptr
 
+#include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/ut/ut_NonCopyable.h" // ut::NonCopyable
 
 /*******************************************************************************
@@ -28,6 +29,7 @@ namespace nw4r { namespace snd
 	// methods
 	public:
 		// methods
+		StrmSoundHandle(SoundHandle*);
 		bool IsAttachedSound() const { return mSound != nullptr; }
 
 		void DetachSound();

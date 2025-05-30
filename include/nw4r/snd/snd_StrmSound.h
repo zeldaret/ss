@@ -40,7 +40,7 @@ namespace nw4r { namespace snd { namespace detail
 		/* redeclare with this class instead of BasicSound for
 		 * SoundInstanceManager
 		 */
-		typedef ut::LinkList<StrmSound, 0xe0> PriorityLinkList;
+		typedef ut::LinkList<StrmSound, 0xf0> PriorityLinkList;
 
 	// methods
 	public:
@@ -80,6 +80,8 @@ namespace nw4r { namespace snd { namespace detail
 
 		bool Prepare(StrmPlayer::StartOffsetType startOffsetType, s32 offset,
 		             ut::FileStream *fileStream);
+		
+		void SetTrackVolume(u32 trackFlags, f32 volume, int fadeFrames);
 
 		static DebugSoundType GetSoundType()
 		{

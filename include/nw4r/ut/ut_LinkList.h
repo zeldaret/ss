@@ -328,7 +328,7 @@ public:
         return Iterator(LinkListImpl::GetBeginIter());
     }
     ConstIterator GetBeginIter() const {
-        return ConstIterator(GetBeginIter());
+        return const_cast<LinkList *>(this)->LinkListImpl::GetBeginIter();
     }
     detail::ReverseIterator<Iterator> GetBeginReverseIter() {
         return detail::ReverseIterator<Iterator>(GetBeginIter());
@@ -338,7 +338,7 @@ public:
         return Iterator(LinkListImpl::GetEndIter());
     }
     ConstIterator GetEndIter() const {
-        return ConstIterator(GetEndIter());
+        return const_cast<LinkList *>(this)->LinkListImpl::GetEndIter();
     }
     detail::ReverseIterator<Iterator> GetEndReverseIter() {
         return detail::ReverseIterator<Iterator>(GetEndIter());

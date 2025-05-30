@@ -302,6 +302,10 @@ void AxVoice::SetVoiceType(VoiceType type)
 	mVpb.SetVoiceType(type);
 }
 
+void AxVoice::EnableRemote(bool enable) {
+    mVpb.SetVoiceRmtOn(enable);
+}
+
 void AxVoice::ResetDelta()
 {
 	ut::AutoInterruptLock lock;
@@ -674,6 +678,37 @@ bool AxVoice::SetMix(MixParam const &param)
 	return needUpdateFlag;
 }
 
+void AxVoice::SetRmtMix(const RemoteMixParam& rParam) {
+    AXPBRMTMIX mix;
+
+    mix.vMain0 = rParam.vMain0;
+    mix.vDeltaMain0 = 0;
+
+    mix.vAux0 = rParam.vAux0;
+    mix.vDeltaAux0 = 0;
+
+    mix.vMain1 = rParam.vMain1;
+    mix.vDeltaMain1 = 0;
+
+    mix.vAux1 = rParam.vAux1;
+    mix.vDeltaAux1 = 0;
+
+    mix.vMain2 = rParam.vMain2;
+    mix.vDeltaMain2 = 0;
+
+    mix.vAux2 = rParam.vAux2;
+    mix.vDeltaAux2 = 0;
+
+    mix.vMain3 = rParam.vMain3;
+    mix.vDeltaMain3 = 0;
+
+    mix.vAux3 = rParam.vAux3;
+    mix.vDeltaAux3 = 0;
+
+    mVpb.SetVoiceRmtMix(mix);
+}
+
+
 void AxVoice::SetSrc(f32 ratio, bool initialUpdate)
 {
 	ut::AutoInterruptLock lock;
@@ -713,8 +748,12 @@ void AxVoice::SetVe(f32 volume, f32 initVolume)
 	if (!mVpb.IsAvailable())
 		return;
 
-	mVpb.SetVoiceVe(volume * (AX_MAX_VOLUME - 1),
-	                initVolume * (AX_MAX_VOLUME - 1));
+	int v = volume * (AX_MAX_VOLUME - 1);
+	int iv = initVolume * (AX_MAX_VOLUME - 1);
+	v = ut::Clamp(v, 0, 0xFFFF);
+	iv = ut::Clamp(iv, 0, 0xFFFF);
+
+	mVpb.SetVoiceVe(v, iv);
 }
 
 void AxVoice::SetLpf(u16 freq)
@@ -847,7 +886,7 @@ void AxVoice::SetRemoteFilter(u8 filter)
 }
 
 void AxVoice::CalcOffsetAdpcmParam(u16 *outPredScale, u16 *outYn1, u16 *outYn2,
-                                   u32 offset, void *dataAddr,
+                                   u32 offset, const void *dataAddr,
                                    AdpcmParam const &adpcmParam)
 {
 	AXPBADPCM adpcm;
@@ -921,10 +960,10 @@ void AxVoiceParamBlock::Sync()
 		mVpb->pb.ve.currentDelta =
 			-mPrevVeSetting.currentVolume / AX_SAMPLES_PER_FRAME;
 	}
-	else if (nextVolume > 32767)
+	else if (nextVolume > 65535)
 	{
 		mVpb->pb.ve.currentDelta =
-			(32767 - mPrevVeSetting.currentVolume) / AX_SAMPLES_PER_FRAME;
+			(65535 - mPrevVeSetting.currentVolume) / AX_SAMPLES_PER_FRAME;
 	}
 
 	if (mVpb->pb.ve.currentDelta == 0 && mPrevVeSetting.currentDelta == 0)
@@ -1275,6 +1314,102 @@ void AxVoiceParamBlock::SetVoiceBiquadCoefs(u16 b0, u16 b1, u16 b2, u16 a1,
 	mVpb->pb.biquad.a2 = a2;
 
 	mSync |= AX_VPB_SYNC_FLAG_BIQUAD_COEFS;
+}
+
+void AxVoiceParamBlock::SetVoiceRmtOn(u16 on) {
+    ut::AutoInterruptLock lock;
+
+    if (!IsAvailable()) {
+        return;
+    }
+
+    mVpb->pb.remote = on;
+    mSync |= AX_VPB_SYNC_FLAG_RMT_ON;
+}
+
+void AxVoiceParamBlock::SetVoiceRmtMix(_AXPBRMTMIX const &rMix)
+{
+    ut::AutoInterruptLock lock;
+
+    if (!IsAvailable()) {
+        return;
+    }
+
+    u16* pDst = reinterpret_cast<u16*>(&mVpb->pb.rmtMix);
+    const u16* pSrc = reinterpret_cast<const u16*>(&rMix);
+
+    u16 ctrl = 0;
+
+    // vMain0
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_M0;
+    }
+    // vDeltaMain0
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_DELTA_M0;
+    }
+    // vAux0
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_A0;
+    }
+    // vDeltaAux0
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_DELTA_A0;
+    }
+
+    // vMain1
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_M1;
+    }
+    // vDeltaMain1
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_DELTA_M1;
+    }
+    // vAux1
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_A1;
+    }
+    // vDeltaAux1
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_DELTA_A1;
+    }
+
+    // vMain2
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_M2;
+    }
+    // vDeltaMain2
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_DELTA_M2;
+    }
+    // vAux2
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_A2;
+    }
+    // vDeltaAux2
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_DELTA_A2;
+    }
+
+    // vMain3
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_M3;
+    }
+    // vDeltaMain3
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_DELTA_M3;
+    }
+    // vAux3
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_A3;
+    }
+    // vDeltaAux3
+    if ((*pDst++ = *pSrc++) != 0) {
+        ctrl |= AX_MIXER_CTRL_RMT_DELTA_A3;
+    }
+
+    mVpb->pb.rmtMixerCtrl = ctrl;
+    mSync |= AX_VPB_SYNC_FLAG_RMT_MIXER_CTRL | AX_VPB_SYNC_FLAG_RMT_MIX;
 }
 
 void AxVoiceParamBlock::SetVoiceRmtIIR(__AXPBRMTIIR const &iir)

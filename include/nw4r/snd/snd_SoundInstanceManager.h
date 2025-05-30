@@ -179,7 +179,7 @@ namespace nw4r { namespace snd { namespace detail
 	private:
 		MemoryPool<Sound>					mPool;			// size 0x04, offset 0x00
 		typename Sound::PriorityLinkList	mPriorityList;	// size 0x0c, offset 0x04
-		mutable OSMutex						mMutex;			// size 0x18, offset 0x10
+		OSMutex								mMutex;			// size 0x18, offset 0x10
 	}; // size 0x28
 }}} // namespace nw4r::snd::detail
 

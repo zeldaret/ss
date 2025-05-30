@@ -136,6 +136,9 @@ void Voice::InitParam(int channelCount, int voiceOutCount, Callback *callback,
 	for (int i = 0; i < AUX_BUS_NUM; i++)
 		mFxSend[i] = 0.0f;
 
+	for (int i = 0; i < 4; i++)
+		mRemoteOutVolume[i] = 1.0f;
+
 	mPitch							= 1.0f;
 	mRemoteFilter					= 0;
 	mPanMode						= PAN_MODE_DUAL;
@@ -417,7 +420,7 @@ void Voice::Setup(WaveInfo const &waveParam, u32 startOffset)
 					&waveParam.channelParam[channelIndex].adpcmLoopParam);
 			}
 
-			axVoice->SetSrcType(AxVoice::SRC_4TAP_AUTO, mPitch);
+			axVoice->SetSrcType(AxManager::GetInstance().GetSrcType(), mPitch);
 			axVoice->SetVoiceType(AxVoice::VOICE_TYPE_NORMAL);
 		}
 	}
@@ -486,7 +489,8 @@ SampleFormat Voice::GetFormat() const
 
 void Voice::SetVolume(f32 volume)
 {
-	volume = ut::Clamp(volume, VOLUME_MIN, VOLUME_MAX);
+	if (volume < 0.0f)
+		volume = 0.0f;
 
 	if (volume != mVolume)
 	{
@@ -498,8 +502,10 @@ void Voice::SetVolume(f32 volume)
 
 void Voice::SetVeVolume(f32 targetVolume, f32 initVolume)
 {
-	targetVolume = ut::Clamp(targetVolume, VOLUME_MIN, VOLUME_MAX);
-	initVolume = ut::Clamp(initVolume, VOLUME_MIN, VOLUME_MAX);
+	if (targetVolume < 0.0f)
+		targetVolume = 0.0f;
+	if (initVolume < 0.0f)
+		initVolume = 0.0f;
 
 	if (initVolume < 0.0f)
 	{
@@ -632,7 +638,8 @@ void Voice::SetOutputLine(int lineFlag)
 
 void Voice::SetMainOutVolume(f32 volume)
 {
-	volume = ut::Clamp(volume, VOLUME_MIN, VOLUME_MAX);
+	if (volume < 0.0f)
+		volume = 0.0f;
 
 	if (volume != mMainOutVolume)
 	{
@@ -645,7 +652,8 @@ void Voice::SetMainOutVolume(f32 volume)
 void Voice::SetMainSend(f32 send)
 {
 	send += 1.0f;
-	send = ut::Clamp(send, SEND_MIN, SEND_MAX);
+	if (send < SEND_MIN)
+		send = SEND_MIN;
 
 	if (send != mMainSend)
 	{
@@ -660,7 +668,8 @@ void Voice::SetFxSend(AuxBus bus, f32 send)
 	// specifically not the source variant
 	NW4RAssertHeaderClampedLValue_Line(748, bus, 0, AUX_BUS_NUM);
 
-	send = ut::Clamp(send, SEND_MIN, SEND_MAX);
+	if (send < SEND_MIN)
+		send = SEND_MIN;
 
 	if (send != mFxSend[bus])
 	{
@@ -668,6 +677,18 @@ void Voice::SetFxSend(AuxBus bus, f32 send)
 
 		mSyncFlag |= UPDATE_MIX;
 	}
+}
+
+void Voice::SetRemoteOutVolume(int remote, f32 volume)
+{
+	if (volume < 0.0f)
+		volume = 0.0f;
+
+	if (mRemoteOutVolume[remote] == volume)
+		return;
+
+	mRemoteOutVolume[remote] = volume;
+	mSyncFlag |= UPDATE_MIX;
 }
 
 void Voice::SetVoiceOutParam(int voiceOutIndex,
@@ -719,9 +740,10 @@ void Voice::UpdateVoicesPriority()
 		}
 	}
 }
-
+#if 0
 // Voice::GetAxVoice ([R89JEL]:/bin/RVL/Debug/mainD.MAP:14824)
 DECOMP_FORCE(NW4RAssert_String(channelIndex < CHANNEL_MAX));
+#endif
 
 void Voice::SetAdpcmLoop(int channelIndex, AdpcmLoopParam const *param)
 {
@@ -839,7 +861,7 @@ bool Voice::CalcAxMix()
 	/* The address is taken and the members are set, but the members aren't used
 	 * after that
 	 */
-	AxVoice::RemoteMixParam rmtmix ATTR_UNUSED;
+	AxVoice::RemoteMixParam rmtmix;
 
 	for (int channelIndex = 0; channelIndex < mChannelCount; channelIndex++)
 	{
@@ -851,6 +873,12 @@ bool Voice::CalcAxMix()
 				CalcMixParam(channelIndex, voiceOutIndex, &mix, &rmtmix);
 
 				nextUpdateFlag |= axVoice->SetMix(mix);
+				if (mOutputLineFlag == 0 || mOutputLineFlag == 1) {
+					axVoice->EnableRemote(false);
+				} else {
+					axVoice->EnableRemote(true);
+					axVoice->SetRmtMix(rmtmix);
+				}
 			}
 		}
 	}
@@ -1054,17 +1082,31 @@ void Voice::CalcMixParam(int channelIndex, int voiceOutIndex,
 		mainVolume = mMainOutVolume;
 		mainSend = mMainSend;
 
-		fxSendA =
-			ut::Clamp(mFxSend[AUX_A] + mVoiceOutParam[voiceOutIndex].fxSend,
-		              SEND_MIN, SEND_MAX);
+		fxSendA = mFxSend[AUX_A] + mVoiceOutParam[voiceOutIndex].fxSend;
+		if (fxSendA < SEND_MIN) {
+			fxSendA = SEND_MIN;
+		}
 		fxSendB = mFxSend[AUX_B];
 		fxSendC = mFxSend[AUX_C];
 	}
 
-	f32 main = mainVolume * mainSend;
-	f32 fx_a = mainVolume * fxSendA;
-	f32 fx_b = mainVolume * fxSendB;
-	f32 fx_c = mainVolume * fxSendC;
+	f32 main = mainVolume * nw4r::ut::Clamp(mainSend, 0.0f, 1.0f);
+	f32 fx_a = mainVolume * nw4r::ut::Clamp(fxSendA, 0.0f, 1.0f);
+	f32 fx_b = mainVolume * nw4r::ut::Clamp(fxSendB, 0.0f, 1.0f);
+	f32 fx_c = mainVolume * nw4r::ut::Clamp(fxSendC, 0.0f, 1.0f);
+
+	f32 remoteOutVolumeOrig[4];
+	for (int i = 0; i < 4; i++)
+	{
+		if (mOutputLineFlag & (2 << i))
+		{
+			remoteOutVolumeOrig[i] = mRemoteOutVolume[i];
+		}
+		else
+		{
+			remoteOutVolumeOrig[i] = 0.0f;
+		}
+	}
 
 	f32 left, right, surround, lrMixed;
 	f32 front, rear;
@@ -1302,6 +1344,10 @@ void Voice::CalcMixParam(int channelIndex, int voiceOutIndex,
 		break;
 	}
 
+	f32 remoteOutVolume[4];
+	for (int i = 0; i < 4; i++)
+		remoteOutVolume[i] = lrMixed * remoteOutVolumeOrig[i];
+
 	mix->vL			= CalcMixVolume(m_l);
 	mix->vR			= CalcMixVolume(m_r);
 	mix->vS			= CalcMixVolume(m_s);
@@ -1315,13 +1361,13 @@ void Voice::CalcMixParam(int channelIndex, int voiceOutIndex,
 	mix->vAuxCR		= CalcMixVolume(c_r);
 	mix->vAuxCS		= CalcMixVolume(c_s);
 
-	rmtmix->vMain0	= 0;
+	rmtmix->vMain0	= CalcMixVolume(remoteOutVolume[0]);
 	rmtmix->vAux0	= 0;
-	rmtmix->vMain1	= 0;
+	rmtmix->vMain1	= CalcMixVolume(remoteOutVolume[1]);
 	rmtmix->vAux1	= 0;
-	rmtmix->vMain2	= 0;
+	rmtmix->vMain2	= CalcMixVolume(remoteOutVolume[2]);
 	rmtmix->vAux2	= 0;
-	rmtmix->vMain3	= 0;
+	rmtmix->vMain3	= CalcMixVolume(remoteOutVolume[3]);
 	rmtmix->vAux3	= 0;
 }
 

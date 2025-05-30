@@ -121,6 +121,8 @@ namespace nw4r { namespace snd { namespace detail
 		void SetVoiceBiquad(AXPBBIQUAD const &biquad);
 		void SetVoiceBiquadCoefs(u16 b0, u16 b1, u16 b2, u16 a1, u16 a2);
 		void SetVoiceRmtIIR(__AXPBRMTIIR const &iir);
+		void SetVoiceRmtOn(u16 on);
+		void SetVoiceRmtMix(_AXPBRMTMIX const &iir);
 		void SetVoiceRmtIIRCoefs(u16 type, ...);
 
 		void Set(AXVPB *vpb);
@@ -235,6 +237,7 @@ namespace nw4r { namespace snd { namespace detail
 		void SetLoopFlag(bool loopFlag);
 		void SetPriority(u32 priority);
 		void SetVoiceType(VoiceType type);
+		void EnableRemote(bool enable);
 		void ResetDelta();
 		void SetAddr(bool loopFlag, void const *waveAddr, u32 startOffset,
 		             u32 loopStart, u32 loopEnd);
@@ -242,6 +245,7 @@ namespace nw4r { namespace snd { namespace detail
 		void SetAdpcm(AdpcmParam const *param);
 		void SetAdpcmLoop(AdpcmLoopParam const *param);
 		bool SetMix(MixParam const &param);
+		void SetRmtMix(const RemoteMixParam &param);
 		void SetSrc(f32 ratio, bool initialUpdate);
 		void SetVe(f32 volume, f32 initVolume);
 		void SetLpf(u16 freq);
@@ -269,7 +273,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		static void CalcOffsetAdpcmParam(u16 *outPredScale, u16 *outYn1,
 		                                 u16 *outYn2, u32 offset,
-		                                 void *dataAddr,
+		                                 const void *dataAddr,
 		                                 AdpcmParam const &adpcmParam);
 
 	private:

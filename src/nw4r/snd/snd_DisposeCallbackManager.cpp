@@ -55,8 +55,7 @@ void DisposeCallbackManager::Dispose(void *mem, u32 size, void *arg ATTR_UNUSED)
 	{
 		decltype(itr) curItr = itr++;
 
-		// the post-increment is in ketteiban
-		curItr++->InvalidateData(start, end);
+		curItr->InvalidateData(start, end);
 	}
 }
 
@@ -73,7 +72,7 @@ void DisposeCallbackManager::DisposeWave(void *mem, u32 size,
 	{
 		decltype(itr) curItr = itr++;
 
-		curItr++->InvalidateWaveData(start, end);
+		curItr->InvalidateWaveData(start, end);
 	}
 }
 

@@ -7,6 +7,7 @@
 
 #include "common.h"
 
+#include "nw4r/snd/snd_AxVoice.h"
 #include "nw4r/snd/snd_global.h"
 
 #include "nw4r/snd/snd_FxBase.h"
@@ -106,6 +107,10 @@ namespace nw4r { namespace snd { namespace detail
 			return mResetReadyCounter == 0;
 		}
 
+		AxVoice::SrcType GetSrcType() const {
+			return mSrcType;
+		}
+
 	private:
 		// cdtors
 		AxManager();
@@ -117,11 +122,11 @@ namespace nw4r { namespace snd { namespace detail
 
 	// static members
 	private:
-		static u8 const AUX_CALLBACK_WAIT_FRAME;
+		static u8 const AUX_CALLBACK_WAIT_FRAME = 6;
 		static u16 const AUX_RETURN_VOLUME_MAX = AX_MAX_VOLUME;
-		static int const FX_SAMPLE_RATE;
-		static SampleFormat const FX_SAMPLE_FORMAT;
-		static int const FX_BUFFER_SIZE;
+		static int const FX_SAMPLE_RATE = 32000;
+		static SampleFormat const FX_SAMPLE_FORMAT = SAMPLE_FORMAT_PCM_S32;
+		static int const FX_BUFFER_SIZE = 0x180;
 		static int const ZERO_BUFFER_SIZE = 256;
 		static int const SAMPLES_PAR_AUDIO_FRAME;
 		static int const AUDIO_FRAME_INTERVAL;
@@ -147,7 +152,7 @@ namespace nw4r { namespace snd { namespace detail
 		MoveValue<f32, int>			mMainOutVolume;							// size 0x10, offset 0x2c
 		MoveValue<f32, int>			mVolumeForReset;						// size 0x10, offset 0x3c
 		AIDMACallback				mOldAidCallback;						// size 0x04, offset 0x4c
-		s32							mResetReadyCounter;						// size 0x04, offset 0x50
+		volatile s32				mResetReadyCounter;						// size 0x04, offset 0x50
 		MoveValue<f32, int>			mAuxFadeVolume[AUX_BUS_NUM];			// size 0x30, offset 0x54
 		MoveValue<f32, int>			mAuxUserVolume[AUX_BUS_NUM];			// size 0x30, offset 0x84
 		FxBase::LinkList			mFxList[AUX_BUS_NUM];					// size 0x24, offset 0xb4
@@ -156,7 +161,8 @@ namespace nw4r { namespace snd { namespace detail
 		u8							mAuxCallbackWaitCounter[AUX_BUS_NUM];	// size 0x03, offset 0xf0
 		/* 1 byte padding */
 		u32							mEffectProcessTick[AUX_BUS_NUM];		// size 0x0c, offset 0xf4
-	}; // size 0x100
+		AxVoice::SrcType			mSrcType;
+	}; // size 0x104
 }}} // namespace nw4r::snd::detail
 
 #endif // NW4R_SND_AX_MANAGER_H

@@ -41,7 +41,7 @@ namespace nw4r { namespace snd { namespace detail
 		/* redeclare with this class instead of BasicSound for
 		 * SoundInstanceManager
 		 */
-		typedef ut::LinkList<SeqSound, 0xe0> PriorityLinkList;
+		typedef ut::LinkList<SeqSound, 0xf0> PriorityLinkList;
 
 	// nested types
 	public:
@@ -120,6 +120,15 @@ namespace nw4r { namespace snd { namespace detail
 
 		static void NotifyLoadAsyncEndSeqData(bool result, void const *seqBase,
 		                                      void *userData);
+
+		void SetTrackMute(u32 trackFlags, SeqMute mute);
+		void SetTrackSilence(u32 trackFlags, bool silence, int fadeFrames);
+		void SetTrackVolume(u32 trackFlags, f32 volume);
+		bool ReadVariable(int varNo, s16 *value) const;
+		bool WriteVariable(int varNo, s16 value);
+		static bool WriteGlobalVariable(int varNo, s16 value);
+		bool WriteTrackVariable(int trackNo, int varNo, s16 value);
+		u32 GetTick() const;
 
 		static DebugSoundType GetSoundType()
 		{

@@ -17,6 +17,7 @@
 #include "nw4r/snd/snd_SeqFile.h"
 #include "nw4r/snd/snd_SeqPlayer.h"
 #include "nw4r/snd/snd_SeqSoundHandle.h"
+#include "nw4r/snd/snd_SeqTrack.h"
 #include "nw4r/snd/snd_SoundInstanceManager.h"
 #include "nw4r/snd/snd_TaskManager.h"
 
@@ -165,9 +166,10 @@ void SeqSound::Shutdown()
 	BasicSound::Shutdown();
 	mManager->Free(this);
 }
-
+#if 0
 // SeqSound::SetTempoRatio ([R89JEL]:/bin/RVL/Debug/mainD.MAP:13849)
 DECOMP_FORCE(NW4RAssert_String(tempoRatio >= 0.0f));
+#endif
 
 void SeqSound::SetTempoRatio(f32 tempo) {
     mSeqPlayer.SetTempoRatio(tempo);
@@ -197,6 +199,60 @@ void SeqSound::OnUpdatePlayerPriority()
 	mManager->UpdatePriority(this, CalcCurrentPlayerPriority());
 }
 
+void SeqSound::SetTrackMute(u32 trackFlags, SeqMute mute)
+{
+	mSeqPlayer.SetTrackMute(trackFlags, mute);
+}
+
+void SeqSound::SetTrackSilence(u32 trackFlags, bool silence, int fadeFrames)
+{
+	mSeqPlayer.SetTrackSilence(trackFlags, silence, fadeFrames);
+}
+
+void SeqSound::SetTrackVolume(u32 trackFlags, f32 volume)
+{
+	mSeqPlayer.SetTrackVolume(trackFlags, volume);
+}
+
+bool SeqSound::ReadVariable(int varNo, s16 *value) const
+{
+	if (!GetStartedFlag()) {
+		*value = -1;
+	} else {
+		*value = mSeqPlayer.GetLocalVariable(varNo);
+	}
+	return true;
+}
+
+bool SeqSound::WriteVariable(int varNo, s16 value)
+{
+	mSeqPlayer.SetLocalVariable(varNo, value);
+	return true;
+}
+
+bool SeqSound::WriteGlobalVariable(int varNo, s16 value)
+{
+	SeqPlayer::SetGlobalVariable(varNo, value);
+	return true;
+}
+
+bool SeqSound::WriteTrackVariable(int trackNo, int varNo, s16 value)
+{
+	SeqTrack *track = mSeqPlayer.GetPlayerTrack(trackNo);
+	if (track == NULL)
+		return false;
+
+	track->SetTrackVariable(varNo, value);
+	return true;
+}
+
+u32 SeqSound::GetTick() const
+{
+	return !GetStartedFlag() ? 0 : mSeqPlayer.GetTickCounter();
+}
+
+
+#if 0
 // SeqSound::SetTrackVolume ([R89JEL]:/bin/RVL/Debug/mainD.MAP:13857)
 DECOMP_FORCE(NW4RAssert_String(volume >= 0.0f));
 
@@ -211,7 +267,7 @@ DECOMP_FORCE(NW4RAssertHeaderClampedLValue_String(varNo));
 
 // SeqSound::ReadTrackVariable? maybe both of them?
 DECOMP_FORCE(NW4RAssertHeaderClampedLValue_String(trackNo));
-
+#endif
 bool SeqSound::IsAttachedTempSpecialHandle()
 {
 	return mTempSpecialHandle != nullptr;
