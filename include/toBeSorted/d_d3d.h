@@ -91,14 +91,14 @@ public:
         return create2(ac, mdlFile, mdlName, anmName, callback, bufferOption);
     }
 
-    void setSoundSource(SoundSource *pSource);
+    void setSoundSource(dSoundSourceIf_c *pSource);
 
 protected:
     bool loadSounds(const char *name);
     void syncAnmFrame();
     void setSoundRate(f32 rate);
 
-    /* 0x68 */ SoundSource *mpSoundSource;
+    /* 0x68 */ dSoundSourceIf_c *mpSoundSource;
     /* 0x6C */ void *mpSoundData;
 };
 

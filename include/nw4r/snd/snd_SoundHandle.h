@@ -39,6 +39,10 @@ namespace nw4r { namespace snd
 				mSound->Stop(0);
 		}
 
+		bool IsPause() const {
+			return IsAttachedSound() && mSound->IsPause();
+		}
+
 		u32 GetId() const
 		{
 			if (IsAttachedSound())

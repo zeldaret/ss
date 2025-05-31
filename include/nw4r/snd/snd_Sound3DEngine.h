@@ -19,7 +19,7 @@ public:
     virtual void UpdateAmbientParam(const Sound3DManager*, const Sound3DParam*, u32, int, SoundAmbientParam*);
     virtual s32 GetAmbientPriority(const Sound3DManager*, const Sound3DParam*, u32);
     virtual s32 GetRequiredVoiceOutCount(const Sound3DManager*, const Sound3DParam*, u32);
-    virtual void UpdateAmbientParam(const Sound3DManager*, const Sound3DParam*, u32, u32, SoundAmbientParam*);
+    virtual void UpdateAmbientParam(const Sound3DManager*, const Sound3DParam*, u32, u32 flags, SoundAmbientParam*);
 
 private:
     Sound3DCalculator::CalcPanParam mPanParam; // at 0x04

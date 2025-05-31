@@ -2346,27 +2346,40 @@ toBeSorted/col/cc/misc_unks.cpp:
 	.text       start:0x803598D0 end:0x80359D20 align:16
 	.sbss       start:0x80575D28 end:0x80575D30
 
-d/snd/d_snd.cpp:
+d/snd/d_snd_mgr.cpp:
 	.text       start:0x80359D20 end:0x8035A558 align:16
+	.data       start:0x805485D0 end:0x80548678
+	.sbss       start:0x80575D30 end:0x80575D38
 
 d/snd/d_snd_actor.cpp:
-	.text       start:0x8035A560 end:0x8035BB78 align:16
+	.text       start:0x8035A560 end:0x8035A898 align:16
+	.data       start:0x80548678 end:0x805486A0
 
-d/snd/d_snd_engine.cpp:
+d/snd/d_snd_3d_actor.cpp:
+	.text       start:0x8035A8A0 end:0x8035BB78 align:16
+	.data       start:0x805486B0 end:0x80548710
+	.sdata2     start:0x8057D2C0 end:0x8057D308
+
+d/snd/d_snd_3d_engine.cpp:
 	.text       start:0x8035BB80 end:0x8035C3F0 align:16
+	.data       start:0x80548710 end:0x80548730
+	.sdata2     start:0x8057D308 end:0x8057D368
 
 d/snd/d_snd_unk_component_1.cpp:
 	.text       start:0x8035C3F0 end:0x8035DA88 align:16
 
-d/snd/mgr/d_snd_mgr_bgm.cpp:
+d/snd/d_snd_player_mgr.cpp:
 	.text       start:0x8035DA90 end:0x8035F010 align:16
+	.data       start:0x80548758 end:0x805487A0
 
 d/snd/mgr/d_snd_mgr_unk1.cpp:
 	.text       start:0x8035F010 end:0x80360C28 align:16
 	.ctors      start:0x804DB914 end:0x804DB918
 
-d/snd/mgr/d_snd_mgr_unk3.cpp:
+d/snd/d_snd_3d_manager.cpp:
 	.text       start:0x80360C30 end:0x8036145C align:16
+	.data       start:0x805487D0 end:0x805487E0
+	.sdata2     start:0x8057D3B8 end:0x8057D3F8
 
 d/snd/mgr/d_snd_mgr_enemy.cpp:
 	.text       start:0x80361460 end:0x8036642C align:16
@@ -2382,9 +2395,14 @@ d/snd/mgr/d_snd_mgr_unk_5.cpp:
 	.text       start:0x8037F8C0 end:0x803864C8 align:16
 	.ctors      start:0x804DB91C end:0x804DB920
 
-d/snd/mgr/d_snd_mgr_unk_6.cpp:
-	.text       start:0x803864D0 end:0x8038C408 align:16
+d/snd/mgr/d_snd_mgr_unk_13.cpp:
+	.text       start:0x803864D0 end:0x803889BC align:16
+	.data       start:0x8054A680 end:0x8054A7D0
+
+d/snd/d_snd_source.cpp:
+	.text       start:0x803889C0 end:0x8038C408 align:16
 	.ctors      start:0x804DB920 end:0x804DB924
+	.data       start:0x8054A7D0 end:0x8054AAE8
 
 d/snd/mgr/d_snd_mgr_unk_7.cpp:
 	.text       start:0x8038C410 end:0x8038EBF0 align:16

@@ -26,10 +26,18 @@ public:
     void stopAllSound();
 
     u32 changeNameToId(const char *name) {
-        return mOpenSndArchive->ConvertLabelStringToSoundId(name);
+        u32 id = -1;
+        if (mOpenSndArchive != nullptr) {
+            id = mOpenSndArchive->ConvertLabelStringToSoundId(name);
+        }
+        return id;
     }
     nw4r::snd::SoundArchivePlayer *getPlayer() {
         return mActiveSndArchivePlayer;
+    }
+
+    nw4r::snd::SoundArchive *getArchive() {
+        return mOpenSndArchive;
     }
 
     void setLoadStringLabels(bool bLoad) {
@@ -65,12 +73,7 @@ public:
 
     virtual bool startSound(nw4r::snd::SoundHandle *handle, const char *name) // at 0x40
     {
-        u32 id = -1;
-        if (mOpenSndArchive) {
-            id = changeNameToId(name);
-        }
-
-        return ArcPlayer::startSound(handle, id);
+        return ArcPlayer::startSound(handle, changeNameToId(name));
     }
 
     virtual bool prepareSound(nw4r::snd::SoundHandle *handle, u32 id) // at 0x44
@@ -85,12 +88,7 @@ public:
 
     virtual bool prepareSound(nw4r::snd::SoundHandle *handle, const char *name) // at 0x4C
     {
-        u32 id = -1;
-        if (mOpenSndArchive) {
-            id = changeNameToId(name);
-        }
-
-        return ArcPlayer::prepareSound(handle, id);
+        return ArcPlayer::prepareSound(handle, changeNameToId(name));
     }
 
     virtual bool holdSound(nw4r::snd::SoundHandle *handle, u32 id) // at 0x50
@@ -105,12 +103,7 @@ public:
 
     virtual bool holdSound(nw4r::snd::SoundHandle *handle, const char *name) // at 0x58
     {
-        u32 id = -1;
-        if (mOpenSndArchive) {
-            id = changeNameToId(name);
-        }
-
-        return ArcPlayer::holdSound(handle, id);
+        return ArcPlayer::holdSound(handle, changeNameToId(name));
     }
 
 private:

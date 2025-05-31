@@ -631,7 +631,7 @@ bool daPlBaseMdl_c::create(
     field_0x58 = 0;
     mpSoundData = nullptr;
     field_0x5A = 0xFFFF;
-    SoundSource *sound = player->getSoundSource();
+    dSoundSourceIf_c *sound = player->getSoundSource();
     if (sound->isReadyMaybe()) {
         sound->load(nullptr, "");
     }
@@ -1772,7 +1772,7 @@ void daPlayerModelBase_c::removeAnmChr(s32 childIdx) {
 }
 
 void daPlayerModelBase_c::loadSound(nw4r::g3d::ResFile &file, const char *name, s32 childIdx) {
-    SoundSource *s = getSoundSource();
+    dSoundSourceIf_c *s = getSoundSource();
     mCurrentAnmChrIdx = childIdx;
     SizedString<64> path;
     path.sprintf("%s.brasd", name);
@@ -1785,7 +1785,7 @@ void daPlayerModelBase_c::loadSound(nw4r::g3d::ResFile &file, const char *name, 
 }
 
 void daPlayerModelBase_c::loadSoundForAnim(s32 childIdx) {
-    SoundSource *s = getSoundSource();
+    dSoundSourceIf_c *s = getSoundSource();
     s32 anim = mAnimations[childIdx];
     mCurrentAnmChrIdx = childIdx;
     if (anim != mMainMdl.getField_0x5A()) {

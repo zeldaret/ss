@@ -2,11 +2,11 @@
 #define NW4R_LYT_LAYOUT_H
 
 #include "common.h"
-#include "new.h"
 #include "nw4r/lyt/lyt_animation.h"
 #include "nw4r/lyt/lyt_types.h"
 #include "rvl/MEM/mem_allocator.h"
 
+#include <new>
 
 namespace nw4r {
 namespace lyt {

@@ -4,6 +4,7 @@
 #include "common.h"
 #include "egg/math/eggQuat.h"
 #include "egg/math/eggVector.h"
+#include "nw4r/math/math_types.h"
 
 namespace EGG {
 
@@ -54,6 +55,14 @@ struct Matrix34f {
     void loadNrmMtx(u32 nrmMtxId);
     void multiplyTo(const Matrix34f &m2, Matrix34f &to) const;
     void dump();
+
+    operator nw4r::math::MTX34 *() {
+        return (nw4r::math::MTX34 *)this;
+    }
+
+    operator const nw4r::math::MTX34 *() const {
+        return (nw4r::math::MTX34 *)this;
+    }
 
 public:
     void concat(const Matrix34f &, Matrix34f &) const;
