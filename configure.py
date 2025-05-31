@@ -2019,7 +2019,7 @@ config.libs = [
         "d_a_obj_display_only_nbs",
         "REL/d/a/obj/d_a_obj_display_only_nbs.cpp",
     ),
-    Rel(NonMatching, "d_a_obj_distant_ship", "REL/d/a/obj/d_a_obj_distant_ship.cpp"),
+    Rel(Matching, "d_a_obj_distant_ship", "REL/d/a/obj/d_a_obj_distant_ship.cpp"),
     Rel(
         NonMatching,
         "d_a_obj_diviner_crystal",
