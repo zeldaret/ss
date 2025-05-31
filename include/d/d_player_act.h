@@ -584,6 +584,13 @@ public:
         return mCurrentAction == 0xAD || mCurrentAction == 0xAE;
     }
 
+    void onModelUpdateFlag(u32 mask) {
+        mModelUpdateFlags |= mask;
+    }
+    void offModelUpdateFlag(u32 mask) {
+        mModelUpdateFlags &= ~mask;
+    }
+
     inline bool checkActionFlags(u32 mask) const {
         return (mActionFlags & mask) != 0;
     }

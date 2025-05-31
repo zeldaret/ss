@@ -216,7 +216,7 @@ public:
         return x != v.x || y != v.y || z != v.z;
     }
 
-    void normalize();
+    f32 normalize();
     bool normalizeRS();
 
     static mVec3_c createProjectionXZ(const mAng3_c &ang, f32 scalar);
