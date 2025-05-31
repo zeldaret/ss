@@ -14,7 +14,7 @@ public:
     virtual int draw() override;
     virtual bool createHeap() override;
     virtual int actorExecute() override;
-    char *getModelName();
+    const char *getModelName();
 
 private:
     /* 0x330 */ nw4r::g3d::ResFile mBrres;

@@ -10,7 +10,7 @@
 SPECIAL_ACTOR_PROFILE(OBJ_DIS_SHIP, dAcOdistantShip_c, fProfile::OBJ_DIS_SHIP, 0x143, 0, 0);
 
 bool dAcOdistantShip_c::createHeap() {
-    char *modelName = getModelName();
+    const char *modelName = getModelName();
     mBrres = (nw4r::g3d::ResFile)CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres");
     TRY_CREATE(mModel.create(mBrres.GetResMdl(modelName), &heap_allocator, 0x120, 1, 0));
     return SUCCEEDED;
@@ -49,7 +49,7 @@ int dAcOdistantShip_c::draw() {
     return SUCCEEDED;
 }
 
-char *dAcOdistantShip_c::getModelName() {
+const char *dAcOdistantShip_c::getModelName() {
     switch (mSubtype) {
         case 0:  return "StageF301_D300";
         case 1:  return "StageF301_3_D300";
