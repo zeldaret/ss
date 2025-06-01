@@ -41,10 +41,18 @@ public:
     virtual void d_vt_0x58() = 0;
     virtual void d_vt_0x5C() = 0;
 
+    void calculatePositionRelativeToListener();
+    void updatePositionRelativeToListener();
+    void updateDistanceToListener();
+
     void resetFloats();
 
     bool checkFlag(u16 flag) const {
         return (mFlags & flag);
+    }
+
+    void setFlag(u16 flag) {
+        mFlags |= flag;
     }
 
     bool hasPlayingSounds() const;
@@ -63,10 +71,12 @@ protected:
     /* 0x88 */ f32 a_field_0x88;
     /* 0x8C */ f32 a_field_0x8C;
     /* 0x90 */ f32 a_field_0x90;
-    /* 0x94 */ f32 a_field_0x94;
+    /* 0x94 */ f32 mDistanceToListener;
     /* 0x98 */ f32 a_field_0x98;
     /* 0x9C */ f32 a_field_0x9C;
-    /* 0xA0 */ u8 a_0xA0[0xC8 - 0xA0];
+    /* 0xA0 */ nw4r::math::VEC3 mPositionRelativeToListener;
+    /* 0xAC */ nw4r::math::VEC3 mPositionTransformedByListener;
+    /* 0xB8 */ u8 a_0xB8[0xC8 - 0xB8];
     /* 0xC8 */ UNKTYPE *a_field_0xC8;
     /* 0xCC */ u16 mFlags;
     /* 0xD0 */ nw4r::math::VEC3 mPositionRelativeToPlayer;

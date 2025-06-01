@@ -29,13 +29,16 @@ private:
 public:
     dSndPlayerMgr_c();
 
+    void shutdown();
     void calc();
 
     u32 getFreeSize();
     bool loadDemoArchive(const char *demoArchiveName);
     const char *getSoundArchivePath();
     u32 convertLabelStringToSoundId(const char *label) const;
+
     nw4r::snd::SoundArchivePlayer &getSoundArchivePlayerForType(u8 type);
+    bool canUseThisPlayer(u8 type) const;
 
     bool checkFlag(u32 mask) const {
         return mFlags & mask;

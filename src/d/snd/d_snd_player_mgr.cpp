@@ -52,6 +52,26 @@ u32 dSndPlayerMgr_c::convertLabelStringToSoundId(const char *label) const {
     return dSndMgr_c::GetInstance()->changeNameToId(label);
 }
 
+nw4r::snd::SoundArchivePlayer &dSndPlayerMgr_c::getSoundArchivePlayerForType(u8 type) {
+    if (canUseThisPlayer(type)) {
+        return mSoundArchivePlayer;
+    }
+    return *dSndMgr_c::getPlayer();
+}
+
+bool dSndPlayerMgr_c::canUseThisPlayer(u8 type) const {
+    if (!mSoundArchivePlayer.IsAvailable()) {
+        return false;
+    }
+
+    int ty = type;
+    
+    if ((ty >= 0 && ty <= 1) || ty == 58) {
+        return true;
+    }
+    return false;
+}
+
 bool dSndPlayerMgr_c::loadDemoArchive(const char *demoArchiveName) {
     if (demoArchiveName == nullptr) {
         return false;
@@ -83,4 +103,16 @@ bool dSndPlayerMgr_c::loadDemoArchive(const char *demoArchiveName) {
         dSndMgr_c::GetInstance()->loadState(stateId);
     }
     return ok;
+}
+
+void dSndPlayerMgr_c::shutdown() {
+    mSoundArchivePlayer.Shutdown();
+    mSoundArchive.Shutdown();
+}
+
+
+void dSndPlayerMgr_c::calc() {
+    if (mSoundArchivePlayer.IsAvailable()) {
+        mSoundArchivePlayer.Update();
+    }
 }

@@ -34,6 +34,22 @@ namespace nw4r { namespace snd
 		const detail::BasicSound *detail_GetAttachedSound() const { return mSound; }
 		void DetachSound();
 
+
+		void FadeIn(int fadeFrames) {
+			if (IsAttachedSound())
+				mSound->FadeIn(fadeFrames);
+		}
+
+		void SetVolume(f32 volume, int frames) {
+			if (IsAttachedSound())
+				mSound->SetVolume(volume, frames);
+		}
+
+		void SetPitch(f32 volume) {
+			if (IsAttachedSound())
+				mSound->SetPitch(volume);
+		}
+
 		void Stop() {
 			if (IsAttachedSound())
 				mSound->Stop(0);

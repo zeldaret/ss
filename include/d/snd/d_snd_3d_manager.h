@@ -42,21 +42,25 @@ public:
         return mManager;
     }
 
-    const mVec3_c &getListenerPos() const {
-        return mSoundListenerPosition;
+    const mVec3_c &getCameraTargetPos() const {
+        return mCameraTargetPosition;
+    }
+
+    const nw4r::math::VEC3 &getSndListenerPos() const {
+        return mListener.GetPosition();
     }
 
 private:
 
     void updateListenerPos(f32);
     /* 0x10 */ bool mIsSetup;
-    /* 0x11 */ u8 field_0x11;
+    /* 0x11 */ bool mCalculationsFresh;
     /* 0x14 */ dSnd3DEngine_c *mpEngine;
     /* 0x18 */ nw4r::snd::Sound3DManager mManager;
     /* 0x44 */ nw4r::snd::Sound3DListener mListener;
     /* 0xB0 */ EGG::LookAtCamera mCamera;
-    /* 0x138 */ mVec3_c field_0x138;
-    /* 0x144 */ mVec3_c mSoundListenerPosition;
+    /* 0x138 */ mVec3_c mCameraDirectionNormalized;
+    /* 0x144 */ mVec3_c mCameraTargetPosition;
     /* 0x150 */ f32 mCameraPosSqVelocity;
     /* 0x154 */ f32 mCameraAtSqVelocity;
     /* 0x158 */ f32 mCamDistance;

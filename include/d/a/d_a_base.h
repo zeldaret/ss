@@ -4,7 +4,7 @@
 #include "UnknownTypeBelongings.h"
 #include "common.h"
 #include "d/d_base.h"
-#include "d/snd/d_snd_source.h"
+#include "d/snd/d_snd_source_if.h"
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"

@@ -20,7 +20,7 @@ dSnd3DActor_c::dSnd3DActor_c(UNKTYPE *a1, u8 a2)
       a_field_0x88(0.0f),
       a_field_0x8C(0.0f),
       a_field_0x90(INFINITY),
-      a_field_0x94(INFINITY),
+      mDistanceToListener(INFINITY),
       a_field_0x98(0.0f),
       a_field_0x9C(0.0f),
       a_field_0xC8(a1),
@@ -41,13 +41,34 @@ void dSnd3DActor_c::d_vt_0x34(const nw4r::math::VEC3 &rPosition) {
     mFlags = 0;
 }
 
+void dSnd3DActor_c::updatePositionRelativeToListener() {
+    if (!checkFlag(1)) {
+        calculatePositionRelativeToListener();
+        setFlag(1);
+    }
+}
+
+void dSnd3DActor_c::calculatePositionRelativeToListener() {
+    nw4r::math::VEC3Sub(
+        &mPositionRelativeToListener, &GetPosition(), &dSnd3DManager_c::GetInstance()->getSndListenerPos()
+    );
+}
+
+void dSnd3DActor_c::updateDistanceToListener() {
+    if (!checkFlag(2)) {
+        updatePositionRelativeToListener();
+        mDistanceToListener = VEC3Len(&mPositionRelativeToListener);
+        setFlag(2);
+    }
+}
+
 void dSnd3DActor_c::updatePositionRelativeToPlayer() {
     if (!checkFlag(0x40)) {
         nw4r::math::VEC3 linkTranslation = dAcPy_c::GetLink()->getCenterTranslation();
         nw4r::math::VEC3 pos = GetPosition();
         nw4r::math::VEC3Sub(&mPositionRelativeToPlayer, &pos, &linkTranslation);
 
-        mFlags |= 0x40;
+        setFlag(0x40);
     }
 }
 
@@ -68,7 +89,7 @@ void dSnd3DActor_c::updateDistanceToPlayer() {
         } else {
             mDistanceToPlayer = nw4r::math::VEC3Len(&mPositionRelativeToPlayer);
         }
-        mFlags |= 0x80;
+        setFlag(0x80);
     }
 }
 

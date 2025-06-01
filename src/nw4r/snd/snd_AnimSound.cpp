@@ -426,7 +426,6 @@ void AnimEventPlayer::SetVariable(const AnimEvent *event, u32 varNo, f32 f) {
             SeqSoundHandle handle(GetHandle());
             int iVal = f * 100.0f;
             handle.WriteVariable(varNo, ut::Clamp(iVal, -0x8000, 0x7FFF));
-            handle.DetachSound();
         }
     } else if (varNo < 32) {
         int iVal = f * 100.0f;

@@ -2365,8 +2365,9 @@ d/snd/d_snd_3d_engine.cpp:
 	.data       start:0x80548710 end:0x80548730
 	.sdata2     start:0x8057D308 end:0x8057D368
 
-d/snd/d_snd_unk_component_1.cpp:
+d/snd/d_snd_sound.cpp:
 	.text       start:0x8035C3F0 end:0x8035DA88 align:16
+	.sdata2     start:0x8057D368 end:0x8057D380
 
 d/snd/d_snd_player_mgr.cpp:
 	.text       start:0x8035DA90 end:0x8035F010 align:16
@@ -2386,10 +2387,23 @@ d/snd/mgr/d_snd_mgr_enemy.cpp:
 	.ctors      start:0x804DB918 end:0x804DB91C
 
 d/snd/d_snd_unk_component_2.cpp:
-	.text       start:0x80366430 end:0x8037D800 align:16
+	.text       start:0x80366430 end:0x8036B8D0 align:16
+
+d/snd/d_snd_sound_ex.cpp:
+	.text       start:0x8036B8D0 end:0x8036C090 align:16
+
+d/snd/d_snd_control_sound.cpp:
+	.text       start:0x8036C090 end:0x8036C444 align:16
+	.data       start:0x80548B78 end:0x80548C38
+	.sdata2     start:0x8057D920 end:0x8057D938
+
+d/snd/d_snd_control_player.cpp:
+	.text       start:0x8036C450 end:0x8036C6A8 align:16
+	.data       start:0x80548C38 end:0x80548CC8
+	.sdata2     start:0x8057D938 end:0x8057D940
 
 d/snd/mgr/d_snd_mgr_effect.cpp:
-	.text       start:0x8037D800 end:0x8037F8B4 align:16
+	.text       start:0x8036C6B0 end:0x8037F8B4 align:16
 
 d/snd/mgr/d_snd_mgr_unk_5.cpp:
 	.text       start:0x8037F8C0 end:0x803864C8 align:16
@@ -2424,7 +2438,7 @@ d/snd/mgr/d_snd_mgr_unk_11.cpp:
 	.text       start:0x80393E00 end:0x8039A848 align:16
 	.ctors      start:0x804DB934 end:0x804DB938
 
-d/snd/mgr/d_snd_mgr_unk_12.cpp:
+d/snd/d_snd_calc_pitch.cpp:
 	.text       start:0x8039A850 end:0x8039A960 align:16
 
 RVL_SDK/kpr/KPR.c:

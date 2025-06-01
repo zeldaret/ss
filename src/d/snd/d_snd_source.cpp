@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/snd/d_snd_3d_actor.h"
+#include "d/snd/d_snd_3d_manager.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/ut/ut_list.h"
 #include "sized_string.h"
@@ -56,8 +57,20 @@ dSoundSource_c::~dSoundSource_c() {
     fn_80386C70(this);
 }
 
+const nw4r::math::VEC3 &dSoundSource_c::getListenerPosition() const {
+    return dSnd3DManager_c::GetInstance()->getSndListenerPos();
+}
+
 bool dSoundSource_c::hasPlayingSounds() const {
     return dSnd3DActor_c::hasPlayingSounds();
+}
+
+bool dSoundSource_c::isPlayingSound(u32 soundId) {
+    return dSnd3DActor_c::isPlayingSound(soundId);
+}
+
+bool dSoundSource_c::isPlayingSound(const char *soundId) {
+    return isPlayingSound(soundLabelToSoundId(soundId));
 }
 
 void dSoundSource_c::d_vt_0x38(bool flag, int fadeFrames) {

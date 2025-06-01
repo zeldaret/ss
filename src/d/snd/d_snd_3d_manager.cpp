@@ -11,15 +11,15 @@
 
 template class SndMgrDisposer<dSnd3DManager_c>;
 
-dSnd3DManager_c::dSnd3DManager_c() : mIsSetup(false), field_0x11(0) {
+dSnd3DManager_c::dSnd3DManager_c() : mIsSetup(false), mCalculationsFresh(0) {
     mCameraPosSqVelocity = 0.0f;
     mCameraAtSqVelocity = 0.0f;
     mCamDistance = 0.9f;
     mTimer = 0;
     mpEngine = new dSnd3DEngine_c();
-    field_0x138.x = 0.0f;
-    field_0x138.y = 0.0f;
-    field_0x138.z = 1.0f;
+    mCameraDirectionNormalized.x = 0.0f;
+    mCameraDirectionNormalized.y = 0.0f;
+    mCameraDirectionNormalized.z = 1.0f;
 }
 
 void dSnd3DManager_c::setup() {
@@ -51,12 +51,14 @@ void dSnd3DManager_c::resetCamDistance() {
 
 void dSnd3DManager_c::setCamDistance(f32 value) {
     // @bug ? not actually clamped
-    nw4r::ut::Clamp(value, -1.0f, 2.0f);
+    (void)nw4r::ut::Clamp(value, -1.0f, 2.0f);
     mCamDistance = value;
 }
 
 void dSnd3DManager_c::calc() {
-    field_0x11 = 0;
+    // Don't actually calculate anything,
+    // but allow re-calculations this frame.
+    mCalculationsFresh = false;
 }
 
 void dSnd3DManager_c::clearState() {
@@ -67,7 +69,7 @@ void dSnd3DManager_c::clearState() {
 
 
 void dSnd3DManager_c::updateFromCamera(EGG::LookAtCamera &camera) {
-    if (field_0x11) {
+    if (mCalculationsFresh) {
         return;
     }
 
@@ -122,14 +124,14 @@ void dSnd3DManager_c::updateFromCamera(EGG::LookAtCamera &camera) {
 
     mCamera = camera;
     updateListenerPos(dist);
-    field_0x11 = 1;
+    mCalculationsFresh = true;
 }
 
 void dSnd3DManager_c::updateListenerPos(f32 f) {
     const EGG::Matrix34f &mtx = mCamera.getViewMatrix();
     mListener.SetMatrix(*mtx);
     EGG::Vector3f dir = mCamera.getDirection();
-    VECNormalize(dir, field_0x138);
+    VECNormalize(dir, mCameraDirectionNormalized);
     dir *= f;
-    mSoundListenerPosition = mCamera.mPos + dir;
+    mCameraTargetPosition = mCamera.mPos + dir;
 }
