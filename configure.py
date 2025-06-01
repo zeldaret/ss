@@ -2192,7 +2192,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_rock_sky", "REL/d/a/obj/d_a_obj_rock_sky.cpp"),
     Rel(NonMatching, "d_a_obj_roll_pillar", "REL/d/a/obj/d_a_obj_roll_pillar.cpp"),
     Rel(NonMatching, "d_a_obj_roll_rock", "REL/d/a/obj/d_a_obj_roll_rock.cpp"),
-    Rel(NonMatching, "d_a_obj_rope_base", "REL/d/a/obj/d_a_obj_rope_base.cpp"),
+    Rel(Matching, "d_a_obj_rope_base", "REL/d/a/obj/d_a_obj_rope_base.cpp"),
     Rel(NonMatching, "d_a_obj_rope_igaiga", "REL/d/a/obj/d_a_obj_rope_igaiga.cpp"),
     Rel(
         NonMatching, "d_a_obj_rotation_light", "REL/d/a/obj/d_a_obj_rotation_light.cpp"
