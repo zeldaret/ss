@@ -5,6 +5,9 @@
 #include "d/snd/d_snd_player_mgr.h"
 
 class dSndPlayerMgr_c;
+class dSndSound_c;
+
+// A lot of these names are and were guesses that are probably wrong in a lot of ways.
 
 #define BGM_MGR (dSndPlayerMgr_c::GetInstance())
 extern "C" void fn_8035E000();
@@ -24,7 +27,7 @@ extern "C" void fn_80365D20(void *);
 extern "C" void fn_803624F0(void *);
 extern "C" void fn_80364FD0(void *, s32);
 extern "C" bool fn_80364DA0(void *);
-extern "C" void fn_80364D00(void*, s32);
+extern "C" void fn_80364D00(void *, s32);
 
 extern "C" void *ENEMY_BGM_RELATED_MGR;
 extern "C" void fn_80384570(void *, bool);
@@ -37,5 +40,8 @@ extern "C" bool fn_803720E0(void *, u32);
 extern "C" bool fn_80372070(void *, u32);
 extern "C" bool fn_803734C0(void *, u32);
 extern "C" bool fn_80373550(void *, u32);
+extern "C" void fn_80372920(void *);
+extern "C" void fn_803738B0(void *, dSndSound_c *sound);
+extern "C" void fn_80373900(void *, dSndSound_c *sound);
 
 #endif

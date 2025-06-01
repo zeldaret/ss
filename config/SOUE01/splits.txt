@@ -2367,6 +2367,7 @@ d/snd/d_snd_3d_engine.cpp:
 
 d/snd/d_snd_sound.cpp:
 	.text       start:0x8035C3F0 end:0x8035DA88 align:16
+	.data       start:0x80548730 end:0x80548758
 	.sdata2     start:0x8057D368 end:0x8057D380
 
 d/snd/d_snd_player_mgr.cpp:

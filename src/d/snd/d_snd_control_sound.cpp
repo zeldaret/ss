@@ -84,7 +84,7 @@ void dSndControlSoundPitchLinear_c::apply(dSndSound_c *pHandle) {
     pHandle->setPitchRelated(pitchScaleForPitchIdxTenths(mCurrValue), 0);
 }
 
-void dSndControlSoundSeqTrackTempoRatio_c::apply(dSndSound_c *sound) {
+void dSndControlSoundSeqTempoRatio_c::apply(dSndSound_c *sound) {
     nw4r::snd::SeqSoundHandle handle(sound);
     handle.SetTempoRatio(mCurrValue);
 }

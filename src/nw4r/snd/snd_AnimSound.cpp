@@ -48,7 +48,7 @@ void AnimSoundImpl::Shutdown() {
     if (mIsActive) {
         for (int i = 0; i < mNumSounds; i++) {
             if (mpSounds[i].GetHandle()->IsAttachedSound() && mpSounds[i].IsRunning()) {
-                mpSounds[i].GetHandle()->Stop();
+                mpSounds[i].GetHandle()->Stop(0);
             }
         }
 
@@ -437,7 +437,7 @@ AnimEventPlayer::AnimEventPlayer() : mpEvent(NULL), mIsRunning(false) {}
 
 AnimEventPlayer::~AnimEventPlayer() {
     if (mHandle.IsAttachedSound() && IsRunning()) {
-        mHandle.Stop();
+        mHandle.Stop(0);
     }
 }
 

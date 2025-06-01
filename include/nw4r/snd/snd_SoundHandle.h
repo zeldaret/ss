@@ -50,9 +50,14 @@ namespace nw4r { namespace snd
 				mSound->SetPitch(volume);
 		}
 
-		void Stop() {
+		void Stop(int fadeFrames) {
 			if (IsAttachedSound())
-				mSound->Stop(0);
+				mSound->Stop(fadeFrames);
+		}
+
+		void Pause(bool flag, int fadeFrames) {
+			if (IsAttachedSound())
+				mSound->Pause(flag, fadeFrames);
 		}
 
 		bool IsPause() const {

@@ -4,6 +4,7 @@
 #include "common.h"
 #include "nw4r/snd/snd_SeqTrack.h"
 #include "nw4r/snd/snd_SoundHandle.h"
+#include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/ut/ut_list.h"
 
 class dSndSound_c;
@@ -40,6 +41,10 @@ public:
 
     f32 getCurrentValue() const {
         return mCurrValue;
+    }
+
+    bool isFinished() const {
+        return mTimer >= mDuration;
     }
 
 protected:
@@ -90,9 +95,9 @@ private:
     /* 0x30 */ dSndControlSound_c *mpOtherControl;
 };
 
-class dSndControlSoundSeqTrackTempoRatio_c : public dSndControlSound_c {
+class dSndControlSoundSeqTempoRatio_c : public dSndControlSound_c {
 public:
-    dSndControlSoundSeqTrackTempoRatio_c() : dSndControlSound_c(1.0f, 0.25f, 4.0f) {}
+    dSndControlSoundSeqTempoRatio_c() : dSndControlSound_c(1.0f, 0.25f, 4.0f) {}
     virtual void apply(dSndSound_c *pHandle) override;
 };
 
@@ -127,18 +132,36 @@ public:
     dSndSound_c();
     ~dSndSound_c();
 
-    virtual void vt_0x08();                      // 0x08
-    virtual void vt_0x0C();                      // 0x0C
-    virtual void fadeIn(u32 id, int fadeFrames); // 0x10
+    virtual void cancel();                                                                        // 0x08
+    virtual void executeCtrls();                                                                   // 0x0C
+    virtual void fadeIn(u32 id, s32 fadeFrames);                                                   // 0x10
+    virtual nw4r::snd::SoundStartable::StartResult prepareSound(u32 soundId, u32 startOffset);       // 0x14
+    virtual nw4r::snd::SoundStartable::StartResult prepareSound(const char *label, u32 startOffset); // 0x18
+    virtual void onPreparing(u32 soundId, u32 startOffset);                                            // 0x1C
+    virtual void stop(s32 fadeFrames);                                                             // 0x20
+    virtual void pause(bool pauseFlag, s32 fadeFrames);                                            // 0x24
 
     bool isStrmSound();
     bool isWaveSound();
     bool isSeqSound();
 
-    void setPitchRelated(f32 pitch, s32 frames);
+    f32 getCurrentStrmTrackVolume(u32 index) const;
 
+    void setVolume(f32 volume, s32 frames);
+    void setPitchRelated(f32 pitch, s32 frames);
+    void setLinearPitch(f32 pitch, s32 frames);
+    void setTrackVolume(u32 trackFlags, f32 volume, s32 frames);
+    void setStrmTrackVolume(u32 trackFlags, f32 volume, s32 frames);
+    void setSingleSeqTrackVolume(u16 index, f32 volume, s32 frames);
+    void setSingleStrmTrackVolume(u16 index, f32 volume, s32 frames);
+
+    // why f32 frames?
+    void setEachSeqTrackVolume(u32 trackFlags, f32 frames);
+    void setEachStrmTrackVolume(u32 trackFlags, f32 frames);
+
+    void setSeqTempoRatio(f32 ratio, s32 frames);
     void setSeqTrackMute(u32 trackFlags, nw4r::snd::SeqMute mute);
-    void stop();
+    void forceStop();
 
     s16 readSeqTrackVariable(int varNo);
     void writeSeqTrackVariable(int varNo, s16 value);
@@ -147,22 +170,51 @@ public:
     void unlinkCtrl(dSndControlSound_c *);
 
 private:
-    void reset();
+    bool cannotStart() const {
+        return mIsRunning && !mIsFadingOut && IsAttachedSound();
+    }
+
+    bool isRunning() const {
+        return mIsRunning && IsAttachedSound();
+    }
+
+    bool isPreparing() const {
+        return mIsPreparing && !mIsRunning;
+    }
+
+    bool canCancel() const {
+        return mIsRunning || mIsPreparing || IsAttachedSound();
+    }
+
+    bool isPreparingSoundId(u32 soundId) const {
+        bool ret = mIsPreparing;
+        if (ret) {
+            ret = !mIsRunning;
+        }
+        if (ret) {
+            ret = GetId() == soundId;
+        }
+        return ret;
+    }
+
+    void resetControls();
     void resetTrackVolumes();
+
+    void setControlValue(dSndControlSound_c *ctrl, f32 value, s32 frames);
 
     /* 0x08 */ u8 _0x08[0x10 - 0x08];
 
-    /* 0x10 */ UNKWORD field_0x10;
-    /* 0x14 */ u8 field_0x14;
-    /* 0x15 */ u8 field_0x15;
-    /* 0x16 */ u8 field_0x16;
-    /* 0x17 */ u8 field_0x17;
+    /* 0x10 */ u32 mPrevStartOffset;
+    /* 0x14 */ bool mIsPreparing;
+    /* 0x15 */ bool mPauseFlag;
+    /* 0x16 */ bool mIsRunning;
+    /* 0x17 */ bool mIsFadingOut;
     /* 0x18 */ dSndControlSoundVolume_c mCtrlVolume;
     /* 0x48 */ dSndControlSoundPitch_c mCtrlPitch;
-    /* 0x78 */ dSndControlSoundPitchLinear_c mCtrlUnk;
+    /* 0x78 */ dSndControlSoundPitchLinear_c mLinearPitch;
     /* 0xAC */ dSndControlSoundSeqTrackVolume_c *mpCtrlSeqTrackVolume;
     /* 0xB0 */ dSndControlSoundStrmTrackVolume_c *mpCtrlStrmTrackVolume;
-    /* 0xB4 */ dSndControlSoundSeqTrackTempoRatio_c mpCtrlSeqTrackTempoRatio;
+    /* 0xB4 */ dSndControlSoundSeqTempoRatio_c mpCtrlSeqTempoRatio;
     /* 0xE4 */ nw4r::ut::List mList;
 };
 
