@@ -18,7 +18,7 @@ bool dAcOropeBase_c::createHeap() {
     mMdl.setLocalMtx(mWorldMtx);
     mMdl.calc(true);
     nw4r::g3d::ResNode resNode = mdl.GetResNode("rope_loc");
-    mMdl.getNodeWorldMtxMultVecZero(resNode.GetID(), mVec);
+    mMdl.getNodeWorldMtxMultVecZero(resNode.GetID(), mRopePos);
     return true;
 }
 
@@ -36,9 +36,9 @@ int dAcOropeBase_c::doDelete() {
 
 int dAcOropeBase_c::actorExecute() {
     if (checkObjectProperty(2)) {
-        mBool = true;
+        field_0x35C = true;
     } else {
-        mBool = false;
+        field_0x35C = false;
     }
     return SUCCEEDED;
 }

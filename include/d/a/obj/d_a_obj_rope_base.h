@@ -20,8 +20,8 @@ public:
 private:
     /* 0x330 */ nw4r::g3d::ResFile mResFile;
     /* 0x334 */ m3d::smdl_c mMdl;
-    /* 0x350 */ mVec3_c mVec;
-    /* 0x35C */ bool mBool;
+    /* 0x350 */ mVec3_c mRopePos;
+    /* 0x35C */ bool field_0x35C;
 };
 
 #endif
