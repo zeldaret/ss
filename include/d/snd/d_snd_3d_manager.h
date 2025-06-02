@@ -46,8 +46,16 @@ public:
         return mCameraTargetPosition;
     }
 
+    const mVec3_c &getNrmCameraDirection() const {
+        return mCameraDirectionNormalized;
+    }
+
     const nw4r::math::VEC3 &getSndListenerPos() const {
         return mListener.GetPosition();
+    }
+
+    const nw4r::math::MTX34 &getSndListenerMatrix() const {
+        return mListener.GetMatrix();
     }
 
 private:

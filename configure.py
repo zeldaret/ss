@@ -717,6 +717,8 @@ config.libs = [
             Object(Matching, "d/snd/d_snd_control_player.cpp"),
             Object(NonMatching, "d/snd/mgr/d_snd_mgr_effect.cpp"),
             Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk_5.cpp"),
+            Object(NonMatching, "d/snd/d_snd_anim_sound.cpp"),
+            Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk_14.cpp"),
             Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk_13.cpp"),
             Object(NonMatching, "d/snd/d_snd_source.cpp"),
             Object(NonMatching, "d/snd/mgr/d_snd_mgr_unk_7.cpp"),

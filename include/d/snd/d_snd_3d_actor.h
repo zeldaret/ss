@@ -41,6 +41,13 @@ public:
     virtual void d_vt_0x58() = 0;
     virtual void d_vt_0x5C() = 0;
 
+    void resetCachedRelativePositions();
+
+    void updatePositionTransformedByListener();
+    void updateCameraDirectionDot();
+    void updatePositionRelativeToCameraTarget();
+    void calculatePositionRelativeToCameraTarget();
+    void updateDistanceToCameraTarget();
     void calculatePositionRelativeToListener();
     void updatePositionRelativeToListener();
     void updateDistanceToListener();
@@ -72,11 +79,12 @@ protected:
     /* 0x8C */ f32 a_field_0x8C;
     /* 0x90 */ f32 a_field_0x90;
     /* 0x94 */ f32 mDistanceToListener;
-    /* 0x98 */ f32 a_field_0x98;
+    /* 0x98 */ f32 mCameraDirectionDot;
     /* 0x9C */ f32 a_field_0x9C;
     /* 0xA0 */ nw4r::math::VEC3 mPositionRelativeToListener;
     /* 0xAC */ nw4r::math::VEC3 mPositionTransformedByListener;
-    /* 0xB8 */ u8 a_0xB8[0xC8 - 0xB8];
+    /* 0xB8 */ f32 mDistanceToCameraTarget;
+    /* 0xBC */ nw4r::math::VEC3 mPositionRelativeToCameraTarget;
     /* 0xC8 */ UNKTYPE *a_field_0xC8;
     /* 0xCC */ u16 mFlags;
     /* 0xD0 */ nw4r::math::VEC3 mPositionRelativeToPlayer;

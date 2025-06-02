@@ -2407,7 +2407,13 @@ d/snd/mgr/d_snd_mgr_effect.cpp:
 	.text       start:0x8036C6B0 end:0x8037F8B4 align:16
 
 d/snd/mgr/d_snd_mgr_unk_5.cpp:
-	.text       start:0x8037F8C0 end:0x803864C8 align:16
+	.text       start:0x8037F8C0 end:0x80382150 align:16
+
+d/snd/d_snd_anim_sound.cpp:
+	.text       start:0x80382150 end:0x8038240C align:16
+
+d/snd/mgr/d_snd_mgr_unk_14.cpp:
+	.text       start:0x80382410 end:0x803864C8 align:16
 	.ctors      start:0x804DB91C end:0x804DB920
 
 d/snd/mgr/d_snd_mgr_unk_13.cpp:

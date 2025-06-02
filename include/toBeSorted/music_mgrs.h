@@ -16,7 +16,6 @@ extern "C" void fn_8035E310(dSndPlayerMgr_c *);
 extern "C" void fn_8035E820(dSndPlayerMgr_c *);
 extern "C" void fn_8035E880(dSndPlayerMgr_c *);
 extern "C" void fn_8035E790(dSndPlayerMgr_c *, UNKWORD, void *);
-extern "C" bool fn_8035ED90(dSndPlayerMgr_c *, u8);
 
 extern "C" void *ENEMY_SOUND_MGR;
 extern "C" void fn_80362150(void *, u16);

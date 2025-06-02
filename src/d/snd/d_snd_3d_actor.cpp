@@ -3,8 +3,8 @@
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/snd/d_snd_3d_manager.h"
+#include "d/snd/d_snd_player_mgr.h"
 #include "nw4r/math/math_types.h"
-#include "toBeSorted/music_mgrs.h"
 
 #include <cmath>
 
@@ -21,7 +21,7 @@ dSnd3DActor_c::dSnd3DActor_c(UNKTYPE *a1, u8 a2)
       a_field_0x8C(0.0f),
       a_field_0x90(INFINITY),
       mDistanceToListener(INFINITY),
-      a_field_0x98(0.0f),
+      mCameraDirectionDot(0.0f),
       a_field_0x9C(0.0f),
       a_field_0xC8(a1),
       mFlags(0),
@@ -30,7 +30,7 @@ dSnd3DActor_c::dSnd3DActor_c(UNKTYPE *a1, u8 a2)
     resetFloats();
     // Portability hazard
     SetUserParam(reinterpret_cast<u32>(this));
-    if (fn_8035ED90(BGM_MGR, a2)) {
+    if (dSndPlayerMgr_c::GetInstance()->canUseThisPlayer(a2)) {
         a_field_0x7F = 1;
     }
 }
@@ -48,6 +48,20 @@ void dSnd3DActor_c::updatePositionRelativeToListener() {
     }
 }
 
+void dSnd3DActor_c::resetCachedRelativePositions() {
+    mPositionRelativeToPlayer.x = INFINITY;
+    mPositionRelativeToPlayer.y = INFINITY;
+    mPositionRelativeToPlayer.z = INFINITY;
+
+    mPositionRelativeToListener.x = INFINITY;
+    mPositionRelativeToListener.y = INFINITY;
+    mPositionRelativeToListener.z = INFINITY;
+
+    mPositionTransformedByListener.x = INFINITY;
+    mPositionTransformedByListener.y = INFINITY;
+    mPositionTransformedByListener.z = INFINITY;
+}
+
 void dSnd3DActor_c::calculatePositionRelativeToListener() {
     nw4r::math::VEC3Sub(
         &mPositionRelativeToListener, &GetPosition(), &dSnd3DManager_c::GetInstance()->getSndListenerPos()
@@ -59,6 +73,46 @@ void dSnd3DActor_c::updateDistanceToListener() {
         updatePositionRelativeToListener();
         mDistanceToListener = VEC3Len(&mPositionRelativeToListener);
         setFlag(2);
+    }
+}
+
+void dSnd3DActor_c::updatePositionTransformedByListener() {
+    if (!checkFlag(0x10)) {
+        MTXMultVec(
+            dSnd3DManager_c::GetInstance()->getSndListenerMatrix(), GetPosition(), mPositionTransformedByListener
+        );
+        setFlag(0x10);
+    }
+}
+
+void dSnd3DActor_c::updateCameraDirectionDot() {
+    if (!checkFlag(0x20)) {
+        updatePositionRelativeToListener();
+        nw4r::math::VEC3 norm;
+        VECNormalize(mPositionRelativeToListener, norm);
+        mCameraDirectionDot = nw4r::math::VEC3Dot(&norm, dSnd3DManager_c::GetInstance()->getNrmCameraDirection());
+        setFlag(0x20);
+    }
+}
+
+void dSnd3DActor_c::updatePositionRelativeToCameraTarget() {
+    if (!checkFlag(0x4)) {
+        calculatePositionRelativeToCameraTarget();
+        setFlag(0x4);
+    }
+}
+
+void dSnd3DActor_c::calculatePositionRelativeToCameraTarget() {
+    nw4r::math::VEC3Sub(
+        &mPositionRelativeToCameraTarget, &GetPosition(), dSnd3DManager_c::GetInstance()->getCameraTargetPos()
+    );
+}
+
+void dSnd3DActor_c::updateDistanceToCameraTarget() {
+    if (!checkFlag(8)) {
+        updatePositionRelativeToCameraTarget();
+        mDistanceToCameraTarget = VEC3Len(&mPositionRelativeToCameraTarget);
+        setFlag(8);
     }
 }
 
@@ -97,6 +151,8 @@ f32 dSnd3DActor_c::getDistanceToPlayer() {
     updateDistanceToPlayer();
     return mDistanceToPlayer;
 }
+
+// here are functions that are probably in part copied from nw4r::snd::Sound3DCalculator
 
 bool dSnd3DActor_c::hasPlayingSounds() const {
     for (int i = 0; i < ACTOR_PLAYER_COUNT; i++) {
