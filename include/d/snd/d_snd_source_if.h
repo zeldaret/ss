@@ -6,6 +6,7 @@
 
 class dAcBase_c;
 
+/** An abstract interface for sound relating to a particular actor. */
 class dSoundSourceIf_c {
 public:
     virtual ~dSoundSourceIf_c() {}

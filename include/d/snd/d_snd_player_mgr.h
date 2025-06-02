@@ -10,6 +10,10 @@
 class dSndPlayerMgr_c;
 extern template class SndMgrDisposer<dSndPlayerMgr_c>;
 
+/**
+ * The main interface for managing sound stuff. Will delegate to dSndMgr_c for
+ * most things, but handles demo (cutscene) sound effects (SE_DEMO*) by itself.
+ */
 class dSndPlayerMgr_c {
 public:
     SndMgrDisposer<dSndPlayerMgr_c> *GetDisposer() {

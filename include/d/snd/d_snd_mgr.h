@@ -4,6 +4,7 @@
 #include "egg/audio/eggAudioMgr.h"
 #include "nw4r/snd/snd_SoundArchivePlayer.h"
 
+/** The core audio manager used for most sounds. */
 class dSndMgr_c : public EGG::SimpleAudioMgr {
 public:
     dSndMgr_c();

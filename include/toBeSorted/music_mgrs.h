@@ -28,6 +28,7 @@ extern "C" void fn_80364FD0(void *, s32);
 extern "C" bool fn_80364DA0(void *);
 extern "C" void fn_80364D00(void *, s32);
 
+// ENEMY_BGM_RELATED_MGR -> dSndSourceMgr_c
 extern "C" void *ENEMY_BGM_RELATED_MGR;
 extern "C" void fn_80384570(void *, bool);
 extern "C" void fn_803858D0(void *);

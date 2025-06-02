@@ -6,6 +6,7 @@
 #include "d/snd/d_snd_source_if.h"
 #include "nw4r/ut/ut_list.h"
 
+/** Manages sound relating to a particular actor. */
 class dSoundSource_c : public dSoundSourceIf_c, public dSnd3DActor_c {
 public:
     dSoundSource_c(u8, dAcBase_c *, UNKWORD, UNKWORD);
@@ -52,7 +53,9 @@ public:
     virtual void d_s_vt_0x1E4();
     virtual void d_s_vt_0x1E8();
 
-    // Overrides of dSoundSourceIf_c
+    // Overrides of dSoundSourceIf_c - always in the first section of
+    // the vtable, so the order is not certain. May have to reorder for weak
+    // function order.
 
     virtual const nw4r::math::VEC3 &getListenerPosition() const override;
 
