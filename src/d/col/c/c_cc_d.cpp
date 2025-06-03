@@ -14,8 +14,9 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "nw4r/types_nw4r.h"
-#include "rvl/MTX.h" // IWYU pragma: export
 #include "s/s_Math.h"
+
+#include "rvl/MTX.h" // IWYU pragma: export
 
 static inline void MtxTransMinusXYZ(mMtx_c &mtx, f32 x, f32 y, f32 z) {
     PSMTXTrans(mtx, -x, -y, -z);
@@ -1448,8 +1449,14 @@ void cCcD_ObjAt::AdjustHitPos(f32 x, f32 z) {
 }
 
 cCcD_ObjTg::cCcD_ObjTg()
-    : mShieldFrontRangeYAngle(nullptr), mField_0x4A(0), mField_0x4B(0), mField_0x4C(0), mField_0x50(0), mField_0x54(0),
-      mField_0x6C(0.f, 0.f, 0.f), mField_0x78(0) {}
+    : mShieldFrontRangeYAngle(nullptr),
+      mField_0x4A(0),
+      mField_0x4B(0),
+      mField_0x4C(0),
+      mField_0x50(0),
+      mField_0x54(0),
+      mField_0x6C(0.f, 0.f, 0.f),
+      mField_0x78(0) {}
 
 cCcD_ObjTg::~cCcD_ObjTg() {}
 
@@ -1480,10 +1487,10 @@ cCcD_ObjCo::~cCcD_ObjCo() {}
 void cCcD_ObjCo::Set(const cCcD_SrcGObjCo &src) {
     mEffCounter = 0;
     mSrc = src;
-    SetCoFlag(mSrc.mSPrm & 0x1e0);
+    SetGrp(mSrc.mSPrm & 0x1e0);
 }
 
-void cCcD_ObjCo::SetCoFlag(u32 flag) {
+void cCcD_ObjCo::SetGrp(u32 flag) {
     mSrc.mSPrm = mSrc.mSPrm & ~0x1E0 | flag;
     mGrp = (mSrc.mSPrm & 0x1E0) >> 4;
 }

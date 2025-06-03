@@ -5,6 +5,7 @@
 #include "d/a/d_a_item.h"
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/d_player_mdl.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
 
@@ -29,8 +30,14 @@ public:
     /* vt 0x318 */ virtual void vt_0x318();
 
 protected:
-    /* 0x137C */ u8 _0x137C[0x4564 - 0x137C];
+    /* 0x137C */ u8 _0x137C[0x16F0 - 0x137C];
+    /* 0x16F0 */ nw4r::g3d::ResFile mHeldResFile;
+    /* 0x16F4 */ u8 _0x16F4[0x4564 - 0x16F4];
     /* 0x4564 */ f32 field_0x4564;
+
+public:
+    // Beetle Functions [0x8021AA70 - 0x8021BE20]
+    f32 getBeetleRadius();
 
 public:
     f32 getField_0x4564() const {
@@ -43,6 +50,9 @@ public:
 
     nw4r::g3d::ResFile getSwordResFile() const {
         return mSwordRes;
+    }
+    nw4r::g3d::ResFile getHeldResFile() const {
+        return mHeldResFile;
     }
 
     inline bool hasvt_0x1C0() const {
