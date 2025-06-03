@@ -1,11 +1,265 @@
 #include "toBeSorted/blur_and_palette_manager.h"
 
+#include "common.h"
+#include "d/a/d_a_player.h"
 #include "m/m_color.h"
+#include "m/m_vec.h"
+#include "nw4r/math/math_arithmetic.h"
 
 BlurAndPaletteManager BlurAndPaletteManager::sInstance;
 BlurAndPaletteManager *BlurAndPaletteManager::sPInstance;
 
 TList<UnkBlurPaletteListNode, offsetof(UnkBlurPaletteListNode, mNode)> sPlayingEffectsList;
+
+// Same as vectle_calc in d_kankyo_rain from tp
+static void vectle_calc(const mVec3_c *pIn, mVec3_c *pOut) {
+    f32 s = nw4r::math::FSqrt(pIn->squaredLength());
+    if (s != 0.0f) {
+        pOut->x = pIn->x / s;
+        pOut->y = pIn->y / s;
+        pOut->z = pIn->z / s;
+    } else {
+        pOut->x = 0.0f;
+        pOut->y = 0.0f;
+        pOut->z = 0.0f;
+    }
+}
+
+// Same as get_vectle_calc in d_kankyo_rain from tp
+void BlurAndPaletteManager::get_vectle_calc(const mVec3_c *pInA, const mVec3_c *pInB, mVec3_c *pOut) {
+    mVec3_c pos;
+    pos.x = pInB->x - pInA->x;
+    pos.y = pInB->y - pInA->y;
+    pos.z = pInB->z - pInA->z;
+    vectle_calc(&pos, pOut);
+}
+
+// TODO(??)
+inline f32 sinf(f32 x) {
+    return sin(x);
+}
+
+// TODO(??)
+inline f32 cosf(f32 x) {
+    return cos(x);
+}
+
+void BlurAndPaletteManager::sphere_to_cartesian(f32 angY, f32 angXZ, mVec3_c *pOut) {
+    f32 radY = angY / (180.f / M_PI);
+    f32 radXZ = angXZ / (180.f / M_PI);
+
+    mVec3_c pos;
+    pos.x = cosf(radY) * sinf(radXZ);
+    pos.y = sinf(radY);
+    pos.z = cosf(radY) * cosf(radXZ);
+
+    pOut->x = pos.x;
+    pOut->y = pos.y;
+    pOut->z = pos.z;
+}
+
+void BlurAndPaletteManager::efplight_set(LIGHT_INFLUENCE *pLightInfo) {
+    if (pLightInfo == nullptr) {
+        return;
+    }
+
+    pLightInfo->mIdx = 0;
+    for (int i = 0; i < 5; ++i) {
+        if (efplight[i] == pLightInfo) {
+            return;
+        }
+    }
+    for (int i = 0; i < 5; i++) {
+        if (efplight[i] == NULL) {
+            efplight[i] = pLightInfo;
+            efplight[i]->mIdx = i + 1;
+            break;
+        }
+    }
+}
+void BlurAndPaletteManager::efplight_cut(LIGHT_INFLUENCE *pLightInfo) {
+    if (pLightInfo == nullptr) {
+        return;
+    }
+
+    if (pLightInfo->mIdx != 0) {
+        int idx = pLightInfo->mIdx - 1;
+        if (idx >= 0 && idx < 5) {
+            efplight[idx] = nullptr;
+        }
+    }
+}
+
+LIGHT_INFLUENCE *BlurAndPaletteManager::eflight_influence(const mVec3_c *pPos) {
+    f32 max = 1000000.f;
+    LIGHT_INFLUENCE *pOut = nullptr;
+
+    for (int i = 0; i < 5; i++) {
+        if (efplight[i] != nullptr) {
+            if (max > pPos->distance(efplight[i]->mPos) && efplight[i]->mScale > 0.01f) {
+                max = pPos->distance(efplight[i]->mPos);
+                pOut = efplight[i];
+            }
+        }
+    }
+
+    return pOut;
+}
+
+void BlurAndPaletteManager::SordFlush_set(const mVec3_c *pPos, s32 lightType) {
+    if (eflight.mState == 0) {
+        eflight.mState = 1;
+        eflight.mLightType = lightType;
+        eflight.field_0x8.mPos = *pPos;
+    } else if (eflight.mState == 2 || eflight.mState == 10 || eflight.mState == 11) {
+        eflight.mState = 4;
+        eflight.mLightType = lightType;
+        eflight.field_0x8.mPos = *pPos;
+    }
+}
+
+void BlurAndPaletteManager::plight_set(LIGHT_INFLUENCE *pLightInfo) {
+    if (pLightInfo == nullptr) {
+        return;
+    }
+    pLightInfo->mIdx = 0;
+
+    for (int i = 0; i < 200; i++) {
+        // @bug shouldnt this be pointlight instead of efplight?
+        if (efplight[i] == pLightInfo) {
+            return;
+        }
+    }
+
+    for (int i = 0; i < 200; i++) {
+        if (pointlight[i] == NULL) {
+            pointlight[i] = pLightInfo;
+            pointlight[i]->mIdx = i + 1;
+            break;
+        }
+    }
+}
+void BlurAndPaletteManager::plight_cut(LIGHT_INFLUENCE *pLightInfo) {
+    if (pLightInfo == nullptr) {
+        return;
+    }
+
+    if (pLightInfo->mIdx != 0) {
+        int idx = pLightInfo->mIdx - 1;
+        if (idx >= 0 && idx < 200) {
+            pointlight[idx] = nullptr;
+        }
+    }
+}
+
+LIGHT_INFLUENCE *BlurAndPaletteManager::light_influence(const mVec3_c *pPos, bool param2) {
+    f32 max = 1000000.f;
+    LIGHT_INFLUENCE *pOut = nullptr;
+
+    if (dAcPy_c::GetLink() && dAcPy_c::GetLink()->checkActionFlagsCont(0x400000)) {
+        return nullptr;
+    }
+
+    for (int i = 0; i < 200; i++) {
+        if (pointlight[i] != nullptr && pointlight[i]->field_0x18 == param2) {
+            if (max > pPos->distance(pointlight[i]->mPos)) {
+                max = pPos->distance(pointlight[i]->mPos);
+                pOut = pointlight[i];
+            }
+        }
+    }
+
+    return pOut;
+}
+
+LIGHT_INFLUENCE *BlurAndPaletteManager::light_influence2(const mVec3_c *pPos, bool param2) {
+    f32 max = 1000000.f;
+    f32 temp = 1000000.f;
+    LIGHT_INFLUENCE *pOut2 = nullptr;
+    LIGHT_INFLUENCE *pOut = nullptr;
+
+    if (dAcPy_c::GetLink() && dAcPy_c::GetLink()->checkActionFlagsCont(0x400000)) {
+        return nullptr;
+    }
+    for (int i = 0; i < 200; i++) {
+        if (pointlight[i] != nullptr && pointlight[i]->field_0x18 == param2) {
+            f32 dist = pPos->distance(pointlight[i]->mPos);
+            if (dist < temp) {
+                if (dist < max) {
+                    temp = max;
+                    max = dist;
+                    pOut = pOut2;
+                    pOut2 = pointlight[i];
+                } else {
+                    temp = dist;
+                    pOut = pointlight[i];
+                }
+            }
+        }
+    }
+
+    return pOut;
+}
+
+void BlurAndPaletteManager::shadow_set(SHADOW_INFLUENCE *pShadowInfo) {
+    if (pShadowInfo == nullptr) {
+        return;
+    }
+
+    pShadowInfo->mIdx = 0;
+    for (int i = 0; i < 200; ++i) {
+        if (pshadow[i] == pShadowInfo) {
+            return;
+        }
+    }
+    for (int i = 0; i < 200; i++) {
+        if (pshadow[i] == NULL) {
+            pshadow[i] = pShadowInfo;
+            pshadow[i]->mIdx = i + 1;
+            break;
+        }
+    }
+}
+
+void BlurAndPaletteManager::shadow_cut(SHADOW_INFLUENCE *pShadowInfo) {
+    if (pShadowInfo == nullptr) {
+        return;
+    }
+
+    if (pShadowInfo->mIdx != 0) {
+        int idx = pShadowInfo->mIdx - 1;
+        if (idx >= 0 && idx < 200) {
+            pshadow[idx] = nullptr;
+        }
+    }
+}
+
+SHADOW_INFLUENCE *BlurAndPaletteManager::shadow_influence(const mVec3_c *pPos) {
+    f32 max = 1000000.f;
+    SHADOW_INFLUENCE *pOut = nullptr;
+
+    for (int i = 0; i < 200; i++) {
+        if (pshadow[i] != nullptr && pPos->y < pshadow[i]->mPos.y) {
+            if (max > pPos->distance(pshadow[i]->mPos)) {
+                if (pPos->distance(pshadow[i]->mPos) < pshadow[i]->mRadius) {
+                    max = pPos->distance(pshadow[i]->mPos);
+                    pOut = pshadow[i];
+                }
+            }
+        }
+    }
+
+    return pOut;
+}
+
+void BlurAndPaletteManager::setLightFilter(f32 ratio) {
+    field_0x2DF4.r = ratio * 255.f;
+    field_0x2DF4.g = ratio * 255.f;
+    field_0x2DF4.b = ratio * 255.f;
+}
+void BlurAndPaletteManager::set0x35B0(f32 f) {
+    field_0x35A0.field_0x10 = f;
+}
 
 mColor BlurAndPaletteManager::combineColors(const mColor &c1, const mColor &c2, f32 ratio) {
     mColor result;
@@ -175,7 +429,6 @@ BlurAndPaletteManager::BlurAndPaletteManager() {
             field_0x48E4.field_0x00[i].field_0x00[j].field_0x10 = 0;
         }
     }
-
 
     field_0x5CE4.MA00_kColor3 = mColor(0xff, 0xff, 0xff, 0xff);
     field_0x5CE4.MA01_tevReg1 = mColor(0xff, 0xff, 0xff, 0xff);
