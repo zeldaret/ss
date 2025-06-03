@@ -2371,12 +2371,14 @@ d/snd/d_snd_sound.cpp:
 	.sdata2     start:0x8057D368 end:0x8057D380
 
 d/snd/d_snd_player_mgr.cpp:
-	.text       start:0x8035DA90 end:0x8035F010 align:16
+	.text       start:0x8035DA90 end:0x8035F04C align:16
 	.data       start:0x80548758 end:0x805487A0
 
-d/snd/mgr/d_snd_mgr_unk1.cpp:
-	.text       start:0x8035F010 end:0x80360C28 align:16
+d/snd/d_snd_control_player_mgr.cpp:
+	.text       start:0x8035F050 end:0x80360C28 align:16
 	.ctors      start:0x804DB914 end:0x804DB918
+	.sbss       start:0x80575D40 end:0x80575D58
+	.sdata2     start:0x8057D390 end:0x8057D3B8
 
 d/snd/d_snd_3d_manager.cpp:
 	.text       start:0x80360C30 end:0x8036145C align:16
@@ -2406,7 +2408,7 @@ d/snd/d_snd_control_player.cpp:
 d/snd/mgr/d_snd_mgr_effect.cpp:
 	.text       start:0x8036C6B0 end:0x8037F8B4 align:16
 
-d/snd/mgr/d_snd_mgr_unk_5.cpp:
+d/snd/d_snd_harp_mgr.cpp:
 	.text       start:0x8037F8C0 end:0x80382150 align:16
 
 d/snd/d_snd_anim_sound.cpp:

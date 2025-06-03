@@ -1,12 +1,12 @@
 #include "d/snd/d_snd_mgr.h"
 
 #include "d/snd/d_snd_3d_manager.h"
+#include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_util.h"
 #include "egg/audio/eggAudioRmtSpeakerMgr.h"
 #include "egg/audio/eggAudioUtility.h"
 
-extern "C" void fn_8035F120();
 extern "C" void initEnemySoundMgr();
 extern "C" void initFanfareSoundMgr();
 extern "C" void initSomeUnusedSoundMgr();
@@ -24,7 +24,7 @@ dSndMgr_c *dSndMgr_c::sInstance;
 dSndMgr_c::dSndMgr_c(): field_0x6CC(0) {
     sInstance = this;
     SndMgrDisposer<dSndPlayerMgr_c>::create();
-    fn_8035F120();
+    SndMgrDisposer<dSndControlPlayerMgr_c>::create();
     initEnemySoundMgr();
     SndMgrDisposer<dSnd3DManager_c>::create();
     initFanfareSoundMgr();

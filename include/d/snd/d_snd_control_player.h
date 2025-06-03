@@ -44,7 +44,7 @@ public:
 
 class dSndControlPlayerFxSend_c : public dSndControlPlayer_c {
 public:
-    dSndControlPlayerFxSend_c() : dSndControlPlayer_c(0.0f, -1.0f, 0.0f) {}
+    dSndControlPlayerFxSend_c() : dSndControlPlayer_c(0.0f, 0.0f, 1.0f) {}
 
     virtual void apply() override;          // vt 0x1C
     virtual f32 getAppliedValue() override; // vt 0x20

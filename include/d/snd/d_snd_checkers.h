@@ -2,10 +2,61 @@
 #define D_SND_CHECKERS_H
 
 #include "nw4r/snd/snd_SoundHandle.h"
+#include "toBeSorted/music_mgrs.h"
 
 class SoundPropertiesChecker {
 public:
-    virtual void operator()(nw4r::snd::SoundHandle &pHandle);
+    virtual void operator()(nw4r::snd::SoundHandle &pHandle) {
+        if (mSoundId != -1 && mSoundId != pHandle.GetId()) {
+            return;
+        }
+
+        if (mpPlayCounter != nullptr) {
+            (*mpPlayCounter)++;
+        } else {
+            mPlayCounter++;
+        }
+
+        if (pHandle.IsPause()) {
+            if (mpPauseCounter != nullptr) {
+                (*mpPauseCounter)++;
+            } else {
+                mPauseCounter++;
+            }
+            return;
+        }
+
+        if (fn_803721F0(FANFARE_SOUND_MGR, pHandle.GetId())) {
+            if (mpCounter3 != nullptr) {
+                (*mpCounter3)++;
+            } else {
+                mCounter3++;
+            }
+            return;
+        }
+
+        if (fn_803720E0(FANFARE_SOUND_MGR, pHandle.GetId())) {
+            if (mpCounter3 != nullptr) {
+                (*mpCounter3)++;
+            } else {
+                mCounter3++;
+            }
+            return;
+        }
+
+        if (fn_80372070(FANFARE_SOUND_MGR, pHandle.GetId())) {
+            if (mpCounter4 != nullptr) {
+                (*mpCounter4)++;
+            } else {
+                mCounter4++;
+            }
+            return;
+        }
+
+        if (fn_803734C0(FANFARE_SOUND_MGR, pHandle.GetId()) && !fn_80373550(FANFARE_SOUND_MGR, pHandle.GetId())) {
+            mCounter3++;
+        }
+    }
 
 private:
     /* 0x04 */ u32 mSoundId;

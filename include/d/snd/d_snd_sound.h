@@ -43,6 +43,10 @@ public:
         return mCurrValue;
     }
 
+    f32 getTargetValue() const {
+        return mTargetValue;
+    }
+
     bool isFinished() const {
         return mTimer >= mDuration;
     }

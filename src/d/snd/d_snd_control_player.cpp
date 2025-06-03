@@ -1,6 +1,7 @@
 #include "d/snd/d_snd_control_player.h"
 
 #include "common.h"
+#include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_sound.h"
 #include "nw4r/snd/snd_SoundPlayer.h"
 #include "nw4r/snd/snd_global.h"
@@ -15,17 +16,13 @@ void dSndControlPlayer_c::reset() {
     apply();
 }
 
-extern "C" void *lbl_80575D4C;
-extern "C" nw4r::snd::SoundPlayer *fn_803600B0(void *, s32);
-extern "C" nw4r::snd::SoundPlayer *fn_80360120(void *, s32);
-
 void dSndControlPlayer_c::setIndex1(s32 idx) {
-    mpPlayer = fn_803600B0(lbl_80575D4C, idx);
+    mpPlayer = dSndControlPlayerMgr_c::GetInstance()->getPlayer1(idx);
     mIndex = idx;
 }
 
 void dSndControlPlayer_c::setIndex2(s32 idx) {
-    mpPlayer = fn_80360120(lbl_80575D4C, idx);
+    mpPlayer = dSndControlPlayerMgr_c::GetInstance()->getPlayer2(idx);
     mIndex = idx;
 }
 
