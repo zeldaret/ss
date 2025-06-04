@@ -2386,7 +2386,7 @@ d/snd/d_snd_3d_manager.cpp:
 	.data       start:0x805487D0 end:0x805487E0
 	.sdata2     start:0x8057D3B8 end:0x8057D3F8
 
-d/snd/mgr/d_snd_mgr_enemy.cpp:
+d/snd/d_snd_mgr_enemy.cpp:
 	.text       start:0x80361460 end:0x8036642C align:16
 	.ctors      start:0x804DB918 end:0x804DB91C
 
@@ -2406,7 +2406,7 @@ d/snd/d_snd_control_player.cpp:
 	.data       start:0x80548C38 end:0x80548CC8
 	.sdata2     start:0x8057D938 end:0x8057D940
 
-d/snd/mgr/d_snd_mgr_effect.cpp:
+d/snd/d_snd_mgr_effect.cpp:
 	.text       start:0x8036C6B0 end:0x8037F8B4 align:16
 
 d/snd/d_snd_harp_mgr.cpp:
@@ -2415,11 +2415,11 @@ d/snd/d_snd_harp_mgr.cpp:
 d/snd/d_snd_anim_sound.cpp:
 	.text       start:0x80382150 end:0x8038240C align:16
 
-d/snd/mgr/d_snd_mgr_unk_14.cpp:
+d/snd/d_snd_mgr_unk_14.cpp:
 	.text       start:0x80382410 end:0x803864C8 align:16
 	.ctors      start:0x804DB91C end:0x804DB920
 
-d/snd/mgr/d_snd_mgr_unk_13.cpp:
+d/snd/d_snd_mgr_unk_13.cpp:
 	.text       start:0x803864D0 end:0x803889BC align:16
 	.data       start:0x8054A680 end:0x8054A7D0
 
@@ -2428,23 +2428,23 @@ d/snd/d_snd_source.cpp:
 	.ctors      start:0x804DB920 end:0x804DB924
 	.data       start:0x8054A7D0 end:0x8054AAE8
 
-d/snd/mgr/d_snd_mgr_unk_7.cpp:
+d/snd/d_snd_mgr_unk_7.cpp:
 	.text       start:0x8038C410 end:0x8038EBF0 align:16
 	.ctors      start:0x804DB924 end:0x804DB928
 
-d/snd/mgr/d_snd_mgr_unk_8.cpp:
+d/snd/d_snd_mgr_unk_8.cpp:
 	.text       start:0x8038EBF0 end:0x8038FF18 align:16
 	.ctors      start:0x804DB928 end:0x804DB92C
 
-d/snd/mgr/d_snd_mgr_unk_9.cpp:
+d/snd/d_snd_mgr_unk_9.cpp:
 	.text       start:0x8038FF20 end:0x80390A18 align:16
 	.ctors      start:0x804DB92C end:0x804DB930
 
-d/snd/mgr/d_snd_mgr_unk_10.cpp:
+d/snd/d_snd_mgr_unk_10.cpp:
 	.text       start:0x80390A20 end:0x80393DF4 align:16
 	.ctors      start:0x804DB930 end:0x804DB934
 
-d/snd/mgr/d_snd_mgr_unk_11.cpp:
+d/snd/d_snd_mgr_unk_11.cpp:
 	.text       start:0x80393E00 end:0x8039A848 align:16
 	.ctors      start:0x804DB934 end:0x804DB938
 
