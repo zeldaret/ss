@@ -139,7 +139,7 @@ int dAcOChest_c::create() {
     }
 
     mVec3_c dowsingPos(0.0f, 150.0f, 0.0f);
-    ITEM_ID itemId = (ITEM_ID)getFromParams(0x8, /* ITEM_LANAYRU_SOTH | ITEM_EVIL_CRYSTAL */ 0xFF);
+    ITEM_ID itemId = (ITEM_ID)getFromParams(0x8, 0xFF);
     bool isTreasure = dAcItem_c::isTreasure(itemId);
     if (isTreasure) {
         mDowsingTarget.initialize(DowsingTarget::SLOT_TREASURE, 0, &dowsingPos, 0.0f);
@@ -154,7 +154,7 @@ int dAcOChest_c::doDelete() {
     return SUCCEEDED;
 }
 int dAcOChest_c::actorExecute() {
-    ITEM_ID itemId = (ITEM_ID)getFromParams(0x8, /* ITEM_LANAYRU_SOTH | ITEM_EVIL_CRYSTAL */ 0xFF);
+    ITEM_ID itemId = (ITEM_ID)getFromParams(0x8, 0xFF);
     if (!hasBeenOpened() && (dAcItem_c::isTreasure(itemId) || dAcItem_c::isRupee(itemId))) {
         mDowsingTarget.doRegister();
     } else {
@@ -201,7 +201,7 @@ void dAcOChest_c::executeState_OrderOpenEventAfter() {
         Event event(CHEST_OPEN_AFTER, data, 400, 0x100001, nullptr, (void *)changeStateWaitCallback);
         mEvent.scheduleEvent(event, 0);
     } else if (EventManager::sInstance->isInEvent(this, CHEST_OPEN_AFTER)) {
-        ITEM_ID itemId = (ITEM_ID)getFromParams(0x8, /* ITEM_LANAYRU_SOTH | ITEM_EVIL_CRYSTAL */ 0xFF);
+        ITEM_ID itemId = (ITEM_ID)getFromParams(0x8, 0xFF);
         if (dAcItem_c::isRupee(itemId)) {
             dMessage_c::getInstance()->setField_0x2FC(0xFFFFFFFF);
         }
@@ -386,7 +386,7 @@ void dAcOChest_c::stateOpenUpdate2() {
             break;
         }
         case 'item': {
-            ITEM_ID itemId = (ITEM_ID)getFromParams(0x8, /* ITEM_LANAYRU_SOTH | ITEM_EVIL_CRYSTAL */ 0xFF);
+            ITEM_ID itemId = (ITEM_ID)getFromParams(0x8, 0xFF);
             dAcItem_c::giveItem(itemId, 0, 0);
             mGaveItem = true;
             mStateMgr.changeState(StateID_OrderOpenEventAfter);
