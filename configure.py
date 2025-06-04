@@ -710,7 +710,7 @@ config.libs = [
             Object(NonMatching, "d/snd/d_snd_player_mgr.cpp"),
             Object(NonMatching, "d/snd/d_snd_control_player_mgr.cpp"),
             Object(Matching, "d/snd/d_snd_3d_manager.cpp"),
-            Object(NonMatching, "d/snd/d_snd_mgr_enemy.cpp"),
+            Object(NonMatching, "d/snd/d_snd_stage_mgr.cpp"),
             Object(NonMatching, "d/snd/d_snd_unk_component_2.cpp"),
             Object(NonMatching, "d/snd/d_snd_area_sound_effect_mgr.cpp"),
             Object(NonMatching, "d/snd/d_snd_area_sound.cpp"),

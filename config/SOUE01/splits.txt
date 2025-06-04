@@ -2389,7 +2389,7 @@ d/snd/d_snd_3d_manager.cpp:
 	.sbss       start:0x80575D58 end:0x80575D60
 	.sdata2     start:0x8057D3B8 end:0x8057D3F8
 
-d/snd/d_snd_mgr_enemy.cpp:
+d/snd/d_snd_stage_mgr.cpp:
 	.text       start:0x80361460 end:0x8036642C align:16
 	.ctors      start:0x804DB918 end:0x804DB91C
 
