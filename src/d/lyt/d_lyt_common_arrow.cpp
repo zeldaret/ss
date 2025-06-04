@@ -2,9 +2,9 @@
 
 #include "d/d_cs_base.h"
 #include "d/d_cursor_hit_check.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "rvl/MTX/mtx.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytCommonArrow_c, None);
 STATE_DEFINE(dLytCommonArrow_c, In);
@@ -262,9 +262,9 @@ void dLytCommonArrow_c::executeState_Wait() {
             if (field_0x6C0 != 2) {
                 displayElement(field_0x6C0 + ANIM_DECIDE_OFFSET, 0.0f);
                 if (field_0x6C0 == 0) {
-                    SmallSoundManager::GetInstance()->playSound(SE_S_MENU_SELECT_TURN_PAGE_LEFT);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_SELECT_TURN_PAGE_LEFT);
                 } else {
-                    SmallSoundManager::GetInstance()->playSound(SE_S_MENU_SELECT_TURN_PAGE_RIGHT);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_SELECT_TURN_PAGE_RIGHT);
                 }
                 mTimer++;
             }
@@ -287,9 +287,9 @@ void dLytCommonArrow_c::executeState_Wait() {
 
     if (field_0x6BC != field_0x6B8 && field_0x6B8 != 2) {
         if (field_0x6B8 == 0) {
-            SmallSoundManager::GetInstance()->playSound(SE_S_MENU_POINT_TURN_PAGE_LEFT);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_POINT_TURN_PAGE_LEFT);
         } else {
-            SmallSoundManager::GetInstance()->playSound(SE_S_MENU_POINT_TURN_PAGE_RIGHT);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_POINT_TURN_PAGE_RIGHT);
         }
     }
 }

@@ -4,7 +4,7 @@
 #include "d/snd/d_snd_control_player.h"
 #include "nw4r/ut/ut_list.h"
 
-template class SndMgrDisposer<dSndControlPlayerMgr_c>;
+SND_DISPOSER_DEFINE(dSndControlPlayerMgr_c);
 
 dSndControlPlayerMgr_c::dSndControlPlayerMgr_c() : mOverrideVolumeMask(0) {
     // TODO offsetof
@@ -47,7 +47,7 @@ void dSndControlPlayerMgr_c::calcVolumes() {
             f32 currentVolume = getAppliedPlayerVolume(i);
             f32 targetVolume = mpTargetVolumes[i];
             f32 maxVolumeDecrease = mpMaxVolumeDecreases[i];
-            f32 maxVolumeIncrease = mpMaxVolumeDecreases[i];
+            f32 maxVolumeIncrease = mpMaxVolumeIncreases[i];
 
             if (currentVolume != targetVolume) {
                 if (currentVolume - targetVolume > maxVolumeDecrease) {
@@ -61,7 +61,7 @@ void dSndControlPlayerMgr_c::calcVolumes() {
             }
             mpTargetVolumes[i] = 1.0f;
             mpMaxVolumeDecreases[i] = 0.1f;
-            mpMaxVolumeDecreases[i] = 0.025f;
+            mpMaxVolumeIncreases[i] = 0.025f;
         }
     }
 }
@@ -101,7 +101,7 @@ void dSndControlPlayerMgr_c::setVolume(u32 playerIdx, f32 value, s32 frames) {
     } else {
         // Volume is not overridden, set volume normally
         setControlValue(CTRL_VOLUME, playerIdx, value, frames);
-        mpSavedVolumes[playerIdx] = getControlVolumeTarget(CTRL_VOLUME, playerIdx);
+        mpSavedVolumes[playerIdx] = getControlTarget(CTRL_VOLUME, playerIdx);
     }
 }
 
@@ -111,7 +111,7 @@ void dSndControlPlayerMgr_c::overrideVolume(u32 playerIdx, f32 volume, s32 frame
     }
     u32 mask = (1 << playerIdx);
     if ((mOverrideVolumeMask & mask) == 0) {
-        mpSavedVolumes[playerIdx] = getControlVolumeTarget(CTRL_VOLUME, playerIdx);
+        mpSavedVolumes[playerIdx] = getControlTarget(CTRL_VOLUME, playerIdx);
         mOverrideVolumeMask |= mask;
     }
     setControlValue(CTRL_VOLUME, playerIdx, volume, frames);
@@ -171,7 +171,7 @@ f32 dSndControlPlayerMgr_c::getAppliedPlayerVolume(u32 playerIdx) const {
     return getPlayer1(playerIdx)->GetVolume();
 }
 
-f32 dSndControlPlayerMgr_c::getControlVolumeTarget(PlayerCtrl_e ctrlType, u32 playerIdx) const {
+f32 dSndControlPlayerMgr_c::getControlTarget(PlayerCtrl_e ctrlType, u32 playerIdx) const {
     if (ctrlType >= CTRL_MAX) {
         return 1.0f;
     }

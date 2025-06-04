@@ -136,14 +136,14 @@ public:
     dSndSound_c();
     ~dSndSound_c();
 
-    virtual void cancel();                                                                        // 0x08
-    virtual void executeCtrls();                                                                   // 0x0C
-    virtual void fadeIn(u32 id, s32 fadeFrames);                                                   // 0x10
+    virtual void cancel();                                                                           // 0x08
+    virtual void calc();                                                                             // 0x0C
+    virtual void fadeIn(u32 id, s32 fadeFrames);                                                     // 0x10
     virtual nw4r::snd::SoundStartable::StartResult prepareSound(u32 soundId, u32 startOffset);       // 0x14
     virtual nw4r::snd::SoundStartable::StartResult prepareSound(const char *label, u32 startOffset); // 0x18
-    virtual void onPreparing(u32 soundId, u32 startOffset);                                            // 0x1C
-    virtual void stop(s32 fadeFrames);                                                             // 0x20
-    virtual void pause(bool pauseFlag, s32 fadeFrames);                                            // 0x24
+    virtual void onPreparing(u32 soundId, u32 startOffset);                                          // 0x1C
+    virtual void stop(s32 fadeFrames);                                                               // 0x20
+    virtual void pause(bool pauseFlag, s32 fadeFrames);                                              // 0x24
 
     bool isStrmSound();
     bool isWaveSound();
@@ -173,7 +173,7 @@ public:
     void linkCtrl(dSndControlSound_c *);
     void unlinkCtrl(dSndControlSound_c *);
 
-private:
+protected:
     bool cannotStart() const {
         return mIsRunning && !mIsFadingOut && IsAttachedSound();
     }

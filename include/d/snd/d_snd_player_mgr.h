@@ -7,8 +7,7 @@
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 
-class dSndPlayerMgr_c;
-extern template class SndMgrDisposer<dSndPlayerMgr_c>;
+SND_DISPOSER_FORWARD_DECL(dSndPlayerMgr_c);
 
 /**
  * The main interface for managing sound stuff. Will delegate to dSndMgr_c for
@@ -16,19 +15,7 @@ extern template class SndMgrDisposer<dSndPlayerMgr_c>;
  */
 class dSndPlayerMgr_c {
 public:
-    SndMgrDisposer<dSndPlayerMgr_c> *GetDisposer() {
-        return &mDisposer;
-    }
-
-    static dSndPlayerMgr_c *GetInstance() {
-        return sInstance;
-    }
-
-    static dSndPlayerMgr_c *sInstance;
-    static SndMgrDisposer<dSndPlayerMgr_c> *sDisposer;
-
-private:
-    SndMgrDisposer<dSndPlayerMgr_c> mDisposer;
+    SND_DISPOSER_MEMBERS(dSndPlayerMgr_c);
 
 public:
     dSndPlayerMgr_c();

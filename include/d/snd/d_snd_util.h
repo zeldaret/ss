@@ -39,4 +39,33 @@ void SndMgrDisposer<T>::remove() {
     T::sDisposer = nullptr;
 }
 
+#define SND_DISPOSER_FORWARD_DECL(class_name)                                                                          \
+    class class_name;                                                                                                  \
+    extern template class SndMgrDisposer<class_name>;
+
+#define SND_DISPOSER_DEFINE(class_name)                                                                                \
+    template class SndMgrDisposer<class_name>;                                                                         \
+    class_name *class_name::sInstance;                                                                                 \
+    SndMgrDisposer<class_name> *class_name::sDisposer;
+
+#define SND_DISPOSER_MEMBERS(class_name)                                                                               \
+public:                                                                                                                \
+    SndMgrDisposer<class_name> *GetDisposer() {                                                                        \
+        return &mDisposer;                                                                                             \
+    }                                                                                                                  \
+                                                                                                                       \
+    static class_name *GetInstance() {                                                                                 \
+        return sInstance;                                                                                              \
+    }                                                                                                                  \
+                                                                                                                       \
+    static void create() {                                                                                             \
+        SndMgrDisposer<class_name>::create();                                                                          \
+    }                                                                                                                  \
+                                                                                                                       \
+    static class_name *sInstance;                                                                                      \
+    static SndMgrDisposer<class_name> *sDisposer;                                                                      \
+                                                                                                                       \
+private:                                                                                                               \
+    SndMgrDisposer<class_name> mDisposer;
+
 #endif

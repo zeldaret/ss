@@ -61,7 +61,7 @@ void dSndSound_c::resetControls() {
     resetTrackVolumes();
 }
 
-void dSndSound_c::executeCtrls() {
+void dSndSound_c::calc() {
     if (mIsRunning && !IsAttachedSound()) {
         cancel();
     }

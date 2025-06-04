@@ -9,7 +9,7 @@
 #include "nw4r/snd/snd_SoundArchive.h"
 #include "toBeSorted/music_mgrs.h"
 
-template class SndMgrDisposer<dSnd3DManager_c>;
+SND_DISPOSER_DEFINE(dSnd3DManager_c);
 
 dSnd3DManager_c::dSnd3DManager_c() : mIsSetup(false), mCalculationsFresh(0) {
     mCameraPosSqVelocity = 0.0f;

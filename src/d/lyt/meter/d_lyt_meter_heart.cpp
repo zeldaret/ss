@@ -5,11 +5,11 @@
 #include "d/d_sc_game.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_game_over.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "nw4r/math/math_types.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 static const d2d::LytBrlanMapping brlanMap[] = {
     {     "heartAll_00_heat.brlan",     "G_heart_00"},
@@ -288,7 +288,7 @@ void dLytMeterHeart_c::executeInternal() {
         nw4r::math::MTX34 mtx = mpHeartPanes[mEffectHeartIdx]->GetGlobalMtx();
         mVec3_c pos(mtx._03, mtx._13, 0.0f);
         dJEffManager_c::spawnUIEffect(PARTICLE_RESOURCE_ID_MAPPING_972_, pos, nullptr, nullptr, nullptr, nullptr);
-        SmallSoundManager::GetInstance()->playSound(SE_S_HEART_ADD);
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_HEART_ADD);
         mEffectHeartIdx = -1;
     }
 
@@ -323,14 +323,14 @@ void dLytMeterHeart_c::executeInternal() {
             if (mpAlphaPane->IsVisible() && mpAlphaPane->GetGlobalAlpha() != 0 && mStoredHealth % 4 == 0 &&
                 (!(dScGame_c::currentSpawnInfo.stageName == "F406") || dScGame_c::currentSpawnInfo.layer != 13) &&
                 dLytGameOver_c::GetInstance() == nullptr) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_HP_GAUGE_UP);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_HP_GAUGE_UP);
             }
         } else {
             if (mStoredHealth - 1 >= current) {
                 mStoredHealth = mStoredHealth - 1;
                 if (EventManager::isInEvent() && !strcmp(EventManager::getCurrentEventName(), ("MoleF202Start")) &&
                     mStoredHealth % 4 == 0) {
-                    SmallSoundManager::GetInstance()->playSound(SE_S_HP_GAUGE_DOWN);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_HP_GAUGE_DOWN);
                 }
             }
         }

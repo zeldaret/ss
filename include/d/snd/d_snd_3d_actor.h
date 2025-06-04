@@ -52,8 +52,6 @@ public:
     void updatePositionRelativeToListener();
     void updateDistanceToListener();
 
-    void resetFloats();
-
     bool checkFlag(u16 flag) const {
         return (mFlags & flag);
     }

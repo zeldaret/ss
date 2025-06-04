@@ -22,6 +22,7 @@
 #include "d/lyt/d_lyt_mini_game.h"
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "egg/core/eggHeap.h"
 #include "f/f_base.h"
 #include "f/f_profile.h"
@@ -38,7 +39,6 @@
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
 #include "toBeSorted/music_mgrs.h"
-#include "toBeSorted/small_sound_mgr.h"
 #include "toBeSorted/unk_save_time.h"
 
 #include "rvl/OS.h"
@@ -216,7 +216,7 @@ void dFlow_c::playSound(u32 params) {
 
     switch (sSoundDefs[idx].mSoundMgr) {
         case 0: AnotherSoundMgr__playSound(FANFARE_SOUND_MGR, sSoundDefs[idx].mSoundId); break;
-        case 1: SmallSoundManager::GetInstance()->playSound(sSoundDefs[idx].mSoundId); break;
+        case 1: dSndSmallEffectMgr_c::GetInstance()->playSound(sSoundDefs[idx].mSoundId); break;
     }
 }
 

@@ -27,7 +27,7 @@ dSnd3DActor_c::dSnd3DActor_c(UNKTYPE *a1, u8 a2)
       mFlags(0),
       mDistanceToPlayer(INFINITY),
       a_field_0xE0(0.0f) {
-    resetFloats();
+    resetCachedRelativePositions();
     // Portability hazard
     SetUserParam(reinterpret_cast<u32>(this));
     if (dSndPlayerMgr_c::GetInstance()->canUseThisPlayer(a2)) {

@@ -12,7 +12,7 @@ const char *dSndPlayerMgr_c::getSoundArchivePath() {
     return "Sound/WZSound.brsar";
 }
 
-template class SndMgrDisposer<dSndPlayerMgr_c>;
+SND_DISPOSER_DEFINE(dSndPlayerMgr_c);
 
 dSndPlayerMgr_c::dSndPlayerMgr_c()
     : field_0x010(0), field_0x011(0), field_0x014(-1), field_0x018(-1), field_0x01C(-1), mFlags(0) {}

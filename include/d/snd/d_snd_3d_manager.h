@@ -9,24 +9,10 @@
 #include "nw4r/snd/snd_Sound3DListener.h"
 #include "nw4r/snd/snd_Sound3DManager.h"
 
-class dSnd3DManager_c;
-extern template class SndMgrDisposer<dSnd3DManager_c>;
+SND_DISPOSER_FORWARD_DECL(dSnd3DManager_c);
 
 class dSnd3DManager_c {
-public:
-    SndMgrDisposer<dSnd3DManager_c> *GetDisposer() {
-        return &mDisposer;
-    }
-
-    static dSnd3DManager_c *GetInstance() {
-        return sInstance;
-    }
-
-    static dSnd3DManager_c *sInstance;
-    static SndMgrDisposer<dSnd3DManager_c> *sDisposer;
-
-private:
-    SndMgrDisposer<dSnd3DManager_c> mDisposer;
+    SND_DISPOSER_MEMBERS(dSnd3DManager_c);
 
 public:
     dSnd3DManager_c();
@@ -37,8 +23,8 @@ public:
     void resetCamDistance();
     void calc();
     void clearState();
-    
-    nw4r::snd::Sound3DManager& getManager() {
+
+    nw4r::snd::Sound3DManager &getManager() {
         return mManager;
     }
 
@@ -59,7 +45,6 @@ public:
     }
 
 private:
-
     void updateListenerPos(f32);
     /* 0x10 */ bool mIsSetup;
     /* 0x11 */ bool mCalculationsFresh;

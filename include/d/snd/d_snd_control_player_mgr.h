@@ -32,24 +32,10 @@ Notes on player groups:
 17: TgSound
 */
 
-class dSndControlPlayerMgr_c;
-extern template class SndMgrDisposer<dSndControlPlayerMgr_c>;
+SND_DISPOSER_FORWARD_DECL(dSndControlPlayerMgr_c);
 
 class dSndControlPlayerMgr_c {
-public:
-    SndMgrDisposer<dSndControlPlayerMgr_c> *GetDisposer() {
-        return &mDisposer;
-    }
-
-    static dSndControlPlayerMgr_c *GetInstance() {
-        return sInstance;
-    }
-
-    static dSndControlPlayerMgr_c *sInstance;
-    static SndMgrDisposer<dSndControlPlayerMgr_c> *sDisposer;
-
-private:
-    SndMgrDisposer<dSndControlPlayerMgr_c> mDisposer;
+    SND_DISPOSER_MEMBERS(dSndControlPlayerMgr_c);
 
 public:
     enum PlayerCtrl_e {
@@ -87,7 +73,7 @@ private:
     void unlinkCtrl(dSndControlPlayer_c *);
     void setControlValue(PlayerCtrl_e ctrlType, u32 playerIdx, f32 value, s32 frames);
     f32 getAppliedPlayerVolume(u32 playerIdx) const;
-    f32 getControlVolumeTarget(PlayerCtrl_e ctrlType, u32 playerIdx) const;
+    f32 getControlTarget(PlayerCtrl_e ctrlType, u32 playerIdx) const;
 
     /* 0x10 */ dSndControlPlayer_c *mpCtrls[CTRL_MAX];
     /* 0x1C */ f32 *mpTargetVolumes;
