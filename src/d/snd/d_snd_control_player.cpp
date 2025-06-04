@@ -16,12 +16,12 @@ void dSndControlPlayer_c::reset() {
     apply();
 }
 
-void dSndControlPlayer_c::setIndex1(s32 idx) {
+void dSndControlPlayer_c::setIndex1(u32 idx) {
     mpPlayer = dSndControlPlayerMgr_c::GetInstance()->getPlayer1(idx);
     mIndex = idx;
 }
 
-void dSndControlPlayer_c::setIndex2(s32 idx) {
+void dSndControlPlayer_c::setIndex2(u32 idx) {
     mpPlayer = dSndControlPlayerMgr_c::GetInstance()->getPlayer2(idx);
     mIndex = idx;
 }

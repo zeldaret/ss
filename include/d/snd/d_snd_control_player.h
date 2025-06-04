@@ -13,12 +13,12 @@ public:
     virtual void apply() = 0;          // vt 0x1C
     virtual f32 getAppliedValue() = 0; // vt 0x20
 
-    void setIndex1(s32 idx);
-    void setIndex2(s32 idx);
+    void setIndex1(u32 idx);
+    void setIndex2(u32 idx);
 
 protected:
     /* 0x30 */ nw4r::snd::SoundPlayer *mpPlayer;
-    /* 0x34 */ s32 mIndex;
+    /* 0x34 */ u32 mIndex;
 };
 
 class dSndControlPlayerVolumeBase_c : public dSndControlPlayer_c {
