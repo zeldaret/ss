@@ -84,20 +84,20 @@ bool dAcOChest_c::createHeap() {
 
     void *mdlData = getOarcResFile(name);
     void *anmData = getOarcResFile(modelName);
-
     TRY_CREATE(mAnmMdl.create3(*this, mdlData, anmData, subtype, openOrClose, 0x120));
+
     if (!getFromParams(0x1C, 0xFF)) {
         mAnmMdl.getModel().setPriorityDraw(0x1C, 0xFFFFFFFF);
     }
     if ((s32)getFromParams(0x10, 0xFF) != 0xFF) {
-        void *data2 = getOarcResFile("TansuInside");
-        mResFile = nw4r::g3d::ResFile(data2);
-
+        void *insideMdlData = getOarcResFile("TansuInside");
+        mResFile = nw4r::g3d::ResFile(insideMdlData);
         nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(INSIDE_MODEL_NAMES[getFromParams(0x10, 0xFF)]);
         if (!mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr)) {
             return NOT_READY;
         }
     }
+
     char *dzbPlcName = getDzbPlcName();
     void *dzb = getOarcDZB(name, dzbPlcName);
     void *plc = getOarcPLC(name, dzbPlcName);
@@ -132,7 +132,6 @@ int dAcOChest_c::create() {
     if ((s32)getFromParams(0x10, 0xFF) != 0xFF) {
         mMdl.setLocalMtx(mWorldMtx);
     }
-
     if (dScGame_c::isCurrentStage("F001r") && roomid == 1 && 900.0f < position.x && position.x < 1000.0f &&
         -50.0f < position.y && position.y < 50.0f && -2730.0f < position.z && position.z < -2630.0f) {
         mIsLinksCloset = true;
@@ -146,7 +145,6 @@ int dAcOChest_c::create() {
     } else if (dAcItem_c::isRupee(itemId)) {
         mDowsingTarget.initialize(DowsingTarget::SLOT_RUPEE, 0, &dowsingPos, 0.0f);
     }
-
     return SUCCEEDED;
 }
 
