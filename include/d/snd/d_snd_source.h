@@ -99,6 +99,7 @@ private:
     /* 0x154 */ UNKWORD field_0x154;
     /* 0x158 */ s16 field_0x158;
     /* 0x15A */ s16 field_0x15A;
+    /* 0x15C */ nw4r::ut::Node mNode2;
 };
 
 #endif

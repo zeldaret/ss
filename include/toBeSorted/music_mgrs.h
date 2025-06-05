@@ -33,6 +33,9 @@ extern "C" void *ENEMY_BGM_RELATED_MGR;
 extern "C" void fn_80384570(void *, bool);
 extern "C" void fn_803858D0(void *);
 
+
+// This one has a SoundActor that actually plays the BGM_ music tracks,
+// including the battle BGM track.
 extern "C" void *FANFARE_SOUND_MGR;
 extern "C" void AnotherSoundMgr__playSound(void *, s32);
 extern "C" bool fn_803721F0(void *, u32);

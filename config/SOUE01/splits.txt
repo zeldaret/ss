@@ -2397,13 +2397,13 @@ d/snd/d_snd_unk_component_2.cpp:
 	.text       start:0x80366430 end:0x8036A3A4 align:16
 
 d/snd/d_snd_area_sound_effect_mgr.cpp:
-	.text       start:0x8036A3B0 end:0x8036B8D0
+	.text       start:0x8036A3B0 end:0x8036B8D0 align:16
 	.data       start:0x80548B38 end:0x80548B48
 	.sbss       start:0x80575D78 end:0x80575D80
 	.sdata2     start:0x8057D8B0 end:0x8057D8E8
 
 d/snd/d_snd_area_sound.cpp:
-	.text       start:0x8036B8D0 end:0x8036C090
+	.text       start:0x8036B8D0 end:0x8036C090 align:16
 	.data       start:0x80548B48 end:0x80548B78
 	.sdata2     start:0x8057D8E8 end:0x8057D920
 
@@ -2417,8 +2417,14 @@ d/snd/d_snd_control_player.cpp:
 	.data       start:0x80548C38 end:0x80548CC8
 	.sdata2     start:0x8057D938 end:0x8057D940
 
+d/snd/d_snd_bgm_mgr.cpp:
+	.text       start:0x8036C6B0 end:0x803739CC align:16
+
+d/snd/d_snd_bgm_sound.cpp:
+	.text       start:0x803739D0 end:0x8037BA68 align:16
+
 d/snd/d_snd_unk_15.cpp:
-	.text       start:0x8036C6B0 end:0x8037D800 align:16
+	.text       start:0x8037BA70 end:0x8037D800 align:16
 
 d/snd/d_snd_small_effect_mgr.cpp:
 	.text       start:0x8037D800 end:0x8037F8B4 align:16

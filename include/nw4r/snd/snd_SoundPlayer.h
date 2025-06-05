@@ -10,6 +10,7 @@
 #include "nw4r/snd/snd_BasicSound.h"
 #include "nw4r/snd/snd_global.h" // AUX_BUS_NUM
 #include "nw4r/snd/snd_PlayerHeap.h"
+#include "nw4r/snd/snd_SoundHandle.h"
 
 /*******************************************************************************
  * classes

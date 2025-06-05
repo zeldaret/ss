@@ -2,7 +2,10 @@
 #include "d/snd/d_snd_player_mgr.h"
 
 #include "common.h"
+#include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_mgr.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "egg/core/eggDvdRipper.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/snd/snd_SoundStartable.h"
@@ -17,14 +20,61 @@ SND_DISPOSER_DEFINE(dSndPlayerMgr_c);
 dSndPlayerMgr_c::dSndPlayerMgr_c()
     : field_0x010(0), field_0x011(0), field_0x014(-1), field_0x018(-1), field_0x01C(-1), mFlags(0) {}
 
+void dSndPlayerMgr_c::enterPauseState() {
+    dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_FAN, 0.3f, 5);
+    dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_AREA, 0.3f, 5);
+    dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_AREA_IN_WATER_LV, 0.3f, 5);
+    // has other effects, such as reducing BGM volume
+    onFlag(MGR_PAUSE);
+}
+
 u32 dSndPlayerMgr_c::getFreeSize() {
     return dSndMgr_c::GetInstance()->getSoundHeap()->GetFreeSize();
+}
+
+void dSndPlayerMgr_c::leavePauseState() {
+    dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_FAN, 1.0f, 5);
+    dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_AREA, 1.0f, 5);
+    dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_AREA_IN_WATER_LV, 1.0f, 5);
+    offFlag(MGR_PAUSE);
+}
+
+void dSndPlayerMgr_c::enterMenu() {
+    enterPauseState();
+    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_IN);
+}
+
+void dSndPlayerMgr_c::leaveMenu() {
+    leavePauseState();
+    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_OUT);
+}
+
+void dSndPlayerMgr_c::enterMap() {
+    enterPauseState();
+    onFlag(MGR_MAP);
+    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_OPEN);
+}
+
+void dSndPlayerMgr_c::leaveMap() {
+    leavePauseState();
+    offFlag(MGR_MAP);
+    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MAP_CLOSE);
+}
+
+void dSndPlayerMgr_c::enterHelp() {
+    onFlag(MGR_HELP);
+    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_HELP_IN);
+}
+
+void dSndPlayerMgr_c::leaveHelp() {
+    offFlag(MGR_HELP);
+    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_HELP_OUT);
 }
 
 nw4r::snd::SoundStartable::StartResult dSndPlayerMgr_c::startSound(
     nw4r::snd::SoundHandle *pHandle, u32 soundId, const nw4r::snd::SoundStartable::StartInfo *pStartInfo
 ) {
-    if (mFlags & 0x2) {
+    if (checkFlag(MGR_UNK_0x2)) {
         return nw4r::snd::SoundStartable::START_ERR_USER;
     }
 
@@ -65,7 +115,7 @@ bool dSndPlayerMgr_c::canUseThisPlayer(u8 type) const {
     }
 
     int ty = type;
-    
+
     if ((ty >= 0 && ty <= 1) || ty == 58) {
         return true;
     }
@@ -109,7 +159,6 @@ void dSndPlayerMgr_c::shutdown() {
     mSoundArchivePlayer.Shutdown();
     mSoundArchive.Shutdown();
 }
-
 
 void dSndPlayerMgr_c::calc() {
     if (mSoundArchivePlayer.IsAvailable()) {

@@ -13,6 +13,8 @@ SND_DISPOSER_FORWARD_DECL(dSndPlayerMgr_c);
 /**
  * The main interface for managing sound stuff. Will delegate to dSndMgr_c for
  * most things, but handles demo (cutscene) sound effects (SE_DEMO*) by itself.
+ *
+ * Previous Ghidra name: BgmMgr
  */
 class dSndPlayerMgr_c {
 public:
@@ -24,6 +26,16 @@ public:
     void shutdown();
     void calc();
 
+    void enterMenu();
+    void leaveMenu();
+    void enterMap();
+    void leaveMap();
+    void enterHelp();
+    void leaveHelp();
+
+    void enterHbm();
+    void leaveHbm();
+
     u32 getFreeSize();
     bool loadDemoArchive(const char *demoArchiveName);
     const char *getSoundArchivePath();
@@ -32,8 +44,24 @@ public:
     nw4r::snd::SoundArchivePlayer &getSoundArchivePlayerForType(u8 type);
     bool canUseThisPlayer(u8 type) const;
 
+    enum PlayerMgrFlag_e {
+        MGR_HBM = 0x1,
+        MGR_UNK_0x2 = 0x2,
+        MGR_PAUSE = 0x4,
+        MGR_MAP = 0x8,
+        MGR_HELP = 0x10,
+    };
+
     bool checkFlag(u32 mask) const {
         return mFlags & mask;
+    }
+
+    void onFlag(u32 mask) {
+        mFlags |= mask;
+    }
+
+    void offFlag(u32 mask) {
+        mFlags &= ~mask;
     }
 
     u32 getEventMuteMask(u32 id) {
@@ -123,6 +151,10 @@ private:
     /* 0x018 */ s32 field_0x018;
     /* 0x01C */ s32 field_0x01C;
     /* 0x020 */ u32 mFlags;
+
+    // system menu, inventory, map
+    void enterPauseState();
+    void leavePauseState();
 
     virtual nw4r::snd::SoundStartable::StartResult
     startSound(nw4r::snd::SoundHandle *pHandle, u32 soundId, const nw4r::snd::SoundStartable::StartInfo *pStartInfo);
