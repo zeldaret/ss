@@ -43,5 +43,6 @@ extern "C" bool fn_80373550(void *, u32);
 extern "C" void fn_80372920(void *);
 extern "C" void fn_803738B0(void *, dSndSound_c *sound);
 extern "C" void fn_80373900(void *, dSndSound_c *sound);
+extern "C" bool fn_803733B0(void*, u32);
 
 #endif

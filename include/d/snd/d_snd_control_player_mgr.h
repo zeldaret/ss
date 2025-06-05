@@ -6,32 +6,6 @@
 #include "nw4r/snd/snd_SoundPlayer.h"
 #include "nw4r/ut/ut_list.h"
 
-/*
-Num players: 0x15 = 21
-Notes on player groups:
-0, 1
-
-9, 10, 11
-
-12, 13, 14, 16, 17
-
-17, 18, 19, 20
-
-
-0: BGM
-
-3: UI Sfx, confirmation, pointer reset
-4: UI SFX, get fruit
-5, 7: Player walk
-8: Player Equipment
-
-12: bomb explode, refresh fruit sprout
-13: environmental sound effects (wind), bomb fuse
-14: enemies/bugs
-
-17: TgSound
-*/
-
 SND_DISPOSER_FORWARD_DECL(dSndControlPlayerMgr_c);
 
 class dSndControlPlayerMgr_c {
@@ -39,11 +13,11 @@ class dSndControlPlayerMgr_c {
 
 public:
     enum PlayerCtrl_e {
-        CTRL_VOLUME,
-        CTRL_LPF_FREQ,
-        CTRL_FX_SEND,
+        CTRL_VOLUME = 0,
+        CTRL_LPF_FREQ = 1,
+        CTRL_FX_SEND = 2,
 
-        CTRL_MAX,
+        CTRL_MAX = 3,
     };
 
     dSndControlPlayerMgr_c();
@@ -63,11 +37,43 @@ public:
     void overrideVolume(u32 playerIdx, f32 volume, s32 frames);
     void restoreVolume(u32 playerIdx, s32 frames);
 
-    void setShortParameterTo5(s32 idx1, s32 idx2);
+    void muteAllWorldSounds(s32 fadeFrames);
+    void unmuteAllWorldSounds(s32 fadeFrames);
+
+    enum MuteLevel {
+        MUTE_FULL = 0,
+        MUTE_PARTIAL = 1,
+
+        MUTE_MAX = 2,
+    };
+
+    enum VolumeControlGroup {
+        /** PLAYER_BGM, PLAYER_BGM_BOSS */
+        CTRL_GROUP_BGM = 0,
+        /** PLAYER_TG_SOUND - PLAYER_AREA_IN_WATER_LV */
+        CTRL_GROUP_STAGE_EFFECTS = 1,
+        /** PLAYER_ENEMY - PLAYER_ENEMY_FOOTSTEP */
+        CTRL_GROUP_ENEMY = 2,
+        /* PLAYER_OBJECT_1 - PLAYER_TG_SOUND, but not PLAYER_NPC_VOICE */
+        CTRL_GROUP_OBJECTS = 3,
+
+        CTRL_GROUP_MAX = 4,
+    };
+    void setGroupVolumeFlag(VolumeControlGroup group, MuteLevel level);
+
+    void setBgmVolumeDecreaseSpeed(f32 speed);
+    void setStageEffectsVolume(f32 volume, s32 fadeFrames);
 
 private:
+    void setBgmMuteVolume(f32 volume);
+    void setStageEffectsMuteVolume(f32 volume);
+    void setEnemyMuteVolume(f32 volume);
+    void setObjectMuteVolume(f32 volume);
+    void setPlayerVolumeInternal(u32 playerIdx, f32 volume);
+
     void resetControls();
     void calcVolumes();
+    void calcMuteFlags();
     void executeControls();
     void linkCtrl(dSndControlPlayer_c *);
     void unlinkCtrl(dSndControlPlayer_c *);
@@ -82,7 +88,7 @@ private:
     /* 0x28 */ f32 *mpSavedVolumes;
     /* 0x2C */ u32 mOverrideVolumeMask;
     /* 0x30 */ nw4r::ut::List mActiveControls;
-    /* 0x3C */ s16 field_0x3C[4][2];
+    /* 0x3C */ s16 mTimersForGroupVolume[4][2];
 };
 
 #endif

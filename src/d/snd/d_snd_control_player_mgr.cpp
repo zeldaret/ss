@@ -2,7 +2,125 @@
 
 #include "common.h"
 #include "d/snd/d_snd_control_player.h"
+#include "d/snd/d_snd_mgr.h"
+#include "d/snd/d_snd_player_mgr.h"
+#include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/ut/ut_list.h"
+#include "toBeSorted/music_mgrs.h"
+
+struct FanfareMuteFlagsApplier {
+    ~FanfareMuteFlagsApplier() {}
+    virtual void operator()(nw4r::snd::SoundHandle &handle) {
+        // The logic here is inverted compared to the others - Fanfares seem to
+        // mute things by default unless otherwise speciefied
+        u32 id = handle.GetId();
+        if (fn_803733B0(FANFARE_SOUND_MGR, id)) {
+            u32 userParam = dSndMgr_c::GetInstance()->getArchive()->GetSoundUserParam(id);
+            if (!(userParam & dSndPlayerMgr_c::FANFARE_UNMUTE_BGM)) {
+                dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                    dSndControlPlayerMgr_c::CTRL_GROUP_BGM, dSndControlPlayerMgr_c::MUTE_FULL
+                );
+                dSndControlPlayerMgr_c::GetInstance()->setBgmVolumeDecreaseSpeed(0.2f);
+            }
+
+            if (fn_80364DA0(ENEMY_SOUND_MGR)) {
+                if (!(userParam & dSndPlayerMgr_c::FANFARE_UNMUTE_STAGE_EFFECTS)) {
+                    dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                        dSndControlPlayerMgr_c::CTRL_GROUP_STAGE_EFFECTS, dSndControlPlayerMgr_c::MUTE_FULL
+                    );
+                }
+                if (!(userParam & dSndPlayerMgr_c::FANFARE_UNMUTE_ENEMY)) {
+                    dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                        dSndControlPlayerMgr_c::CTRL_GROUP_ENEMY, dSndControlPlayerMgr_c::MUTE_FULL
+                    );
+                }
+                if (!(userParam & dSndPlayerMgr_c::FANFARE_UNMUTE_OBJECTS)) {
+                    dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                        dSndControlPlayerMgr_c::CTRL_GROUP_OBJECTS, dSndControlPlayerMgr_c::MUTE_FULL
+                    );
+                }
+            }
+        }
+    };
+};
+
+struct SmallMuteFlagsApplier {
+    ~SmallMuteFlagsApplier() {}
+    virtual void operator()(nw4r::snd::SoundHandle &handle) {
+        u32 userParam = dSndMgr_c::GetInstance()->getArchive()->GetSoundUserParam(handle.GetId());
+
+        if (userParam & dSndPlayerMgr_c::MUTE_BGM_FULL) {
+            dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                dSndControlPlayerMgr_c::CTRL_GROUP_BGM, dSndControlPlayerMgr_c::MUTE_FULL
+            );
+        } else if (userParam & dSndPlayerMgr_c::MUTE_BGM_PART) {
+            dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                dSndControlPlayerMgr_c::CTRL_GROUP_BGM, dSndControlPlayerMgr_c::MUTE_PARTIAL
+            );
+        }
+
+        if (userParam & dSndPlayerMgr_c::MUTE_STAGE_EFFECTS_FULL) {
+            dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                dSndControlPlayerMgr_c::CTRL_GROUP_STAGE_EFFECTS, dSndControlPlayerMgr_c::MUTE_FULL
+            );
+        } else if (userParam & dSndPlayerMgr_c::MUTE_STAGE_EFFECTS_PART) {
+            dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                dSndControlPlayerMgr_c::CTRL_GROUP_STAGE_EFFECTS, dSndControlPlayerMgr_c::MUTE_PARTIAL
+            );
+        }
+
+        if (userParam & dSndPlayerMgr_c::MUTE_ENEMY_FULL) {
+            dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                dSndControlPlayerMgr_c::CTRL_GROUP_ENEMY, dSndControlPlayerMgr_c::MUTE_FULL
+            );
+        } else if (userParam & dSndPlayerMgr_c::MUTE_ENEMY_PART) {
+            dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                dSndControlPlayerMgr_c::CTRL_GROUP_ENEMY, dSndControlPlayerMgr_c::MUTE_PARTIAL
+            );
+        }
+
+        if (userParam & dSndPlayerMgr_c::MUTE_OBJECTS_FULL) {
+            dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                dSndControlPlayerMgr_c::CTRL_GROUP_OBJECTS, dSndControlPlayerMgr_c::MUTE_FULL
+            );
+        } else if (userParam & dSndPlayerMgr_c::MUTE_OBJECTS_PART) {
+            dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                dSndControlPlayerMgr_c::CTRL_GROUP_OBJECTS, dSndControlPlayerMgr_c::MUTE_PARTIAL
+            );
+        }
+    };
+};
+
+struct EventMuteFlagsApplier {
+    ~EventMuteFlagsApplier() {}
+    virtual void operator()(nw4r::snd::SoundHandle &handle) {
+        u32 userParam = dSndPlayerMgr_c::GetInstance()->getEventMuteMask(handle.GetId());
+
+        if (userParam & dSndPlayerMgr_c::MUTE_BGM_FULL) {
+            dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                dSndControlPlayerMgr_c::CTRL_GROUP_BGM, dSndControlPlayerMgr_c::MUTE_FULL
+            );
+        } else if (userParam & dSndPlayerMgr_c::MUTE_BGM_PART) {
+            dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                dSndControlPlayerMgr_c::CTRL_GROUP_BGM, dSndControlPlayerMgr_c::MUTE_PARTIAL
+            );
+        }
+
+        if (userParam & dSndPlayerMgr_c::MUTE_STAGE_EFFECTS_FULL) {
+            dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                dSndControlPlayerMgr_c::CTRL_GROUP_STAGE_EFFECTS, dSndControlPlayerMgr_c::MUTE_FULL
+            );
+        } else if (userParam & dSndPlayerMgr_c::MUTE_STAGE_EFFECTS_PART) {
+            dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
+                dSndControlPlayerMgr_c::CTRL_GROUP_STAGE_EFFECTS, dSndControlPlayerMgr_c::MUTE_PARTIAL
+            );
+        }
+    };
+};
+
+static FanfareMuteFlagsApplier fanfareApplier;
+static SmallMuteFlagsApplier smallApplier;
+static EventMuteFlagsApplier eventApplier;
 
 SND_DISPOSER_DEFINE(dSndControlPlayerMgr_c);
 
@@ -20,7 +138,11 @@ dSndControlPlayerMgr_c::dSndControlPlayerMgr_c() : mOverrideVolumeMask(0) {
     mpMaxVolumeIncreases = new f32[sNumPlayers];
 }
 
-void dSndControlPlayerMgr_c::calc() {}
+void dSndControlPlayerMgr_c::calc() {
+    calcMuteFlags();
+    calcVolumes();
+    executeControls();
+}
 
 void dSndControlPlayerMgr_c::executeControls() {
     dSndControlPlayer_c *next;
@@ -42,8 +164,7 @@ void dSndControlPlayerMgr_c::calcVolumes() {
             // overridden volume
             mpTargetVolumes[i] = mpSavedVolumes[i];
         } else {
-            // not overridden. The effect of this is that
-            // something will set the targetValue to a specific value
+            // not overridden.
             f32 currentVolume = getAppliedPlayerVolume(i);
             f32 targetVolume = mpTargetVolumes[i];
             f32 maxVolumeDecrease = mpMaxVolumeDecreases[i];
@@ -63,6 +184,43 @@ void dSndControlPlayerMgr_c::calcVolumes() {
             mpMaxVolumeDecreases[i] = 0.1f;
             mpMaxVolumeIncreases[i] = 0.025f;
         }
+    }
+}
+
+void dSndControlPlayerMgr_c::calcMuteFlags() {
+    getPlayer1(dSndPlayerMgr_c::PLAYER_FAN)->ForEachSound(fanfareApplier, false);
+    getPlayer1(dSndPlayerMgr_c::PLAYER_SMALL_IMPORTANT)->ForEachSound(smallApplier, false);
+    getPlayer1(dSndPlayerMgr_c::PLAYER_SMALL_NORMAL)->ForEachSound(smallApplier, false);
+    getPlayer1(dSndPlayerMgr_c::PLAYER_EVENT)->ForEachSound(eventApplier, false);
+
+    f32 volumesByGroup[CTRL_GROUP_MAX];
+    for (int i = 0; i < CTRL_GROUP_MAX; i++) {
+        volumesByGroup[i] = 1.0f;
+        if (mTimersForGroupVolume[i][MUTE_PARTIAL] > 0) {
+            mTimersForGroupVolume[i][MUTE_PARTIAL]--;
+            volumesByGroup[i] = 0.3f;
+        }
+
+        if (mTimersForGroupVolume[i][MUTE_FULL] > 0) {
+            mTimersForGroupVolume[i][MUTE_FULL]--;
+            volumesByGroup[i] = 0.0f;
+        }
+    }
+
+    if (volumesByGroup[CTRL_GROUP_BGM] < 1.0f) {
+        setBgmMuteVolume(volumesByGroup[CTRL_GROUP_BGM]);
+    }
+
+    if (volumesByGroup[CTRL_GROUP_STAGE_EFFECTS] < 1.0f) {
+        setStageEffectsMuteVolume(volumesByGroup[CTRL_GROUP_STAGE_EFFECTS]);
+    }
+
+    if (volumesByGroup[CTRL_GROUP_ENEMY] < 1.0f) {
+        setEnemyMuteVolume(volumesByGroup[CTRL_GROUP_ENEMY]);
+    }
+
+    if (volumesByGroup[CTRL_GROUP_OBJECTS] < 1.0f) {
+        setObjectMuteVolume(volumesByGroup[CTRL_GROUP_OBJECTS]);
     }
 }
 
@@ -97,7 +255,7 @@ void dSndControlPlayerMgr_c::setVolume(u32 playerIdx, f32 value, s32 frames) {
     if ((mOverrideVolumeMask & mask) != 0) {
         // Volume is overridden, set saved volume as to not interrupt override
         mpSavedVolumes[playerIdx] = value;
-
+        setPlayerVolumeInternal(playerIdx, value);
     } else {
         // Volume is not overridden, set volume normally
         setControlValue(CTRL_VOLUME, playerIdx, value, frames);
@@ -181,14 +339,65 @@ f32 dSndControlPlayerMgr_c::getControlTarget(PlayerCtrl_e ctrlType, u32 playerId
     return mpCtrls[ctrlType][playerIdx].getTargetValue();
 }
 
-void dSndControlPlayerMgr_c::setShortParameterTo5(s32 idx1, s32 idx2) {
-    if (idx1 >= 4) {
+void dSndControlPlayerMgr_c::setGroupVolumeFlag(VolumeControlGroup group, MuteLevel level) {
+    if (group >= CTRL_GROUP_MAX) {
         return;
     }
 
-    if (idx2 >= 2) {
+    if (level >= MUTE_MAX) {
         return;
     }
 
-    field_0x3C[idx1][idx2] = 5;
+    mTimersForGroupVolume[group][level] = 5;
+}
+
+void dSndControlPlayerMgr_c::setPlayerVolumeInternal(u32 playerIdx, f32 volume) {
+    if (playerIdx >= sNumPlayers) {
+        return;
+    }
+    // @bug not actually clamped
+    nw4r::ut::Clamp(volume, 0.0f, 2.0f);
+
+    if (mpTargetVolumes[playerIdx] > volume) {
+        mpTargetVolumes[playerIdx] = volume;
+    }
+
+    u32 mask = (1 << playerIdx);
+    if ((mOverrideVolumeMask & mask) != 0) {
+        mpSavedVolumes[playerIdx] = mpTargetVolumes[playerIdx];
+    }
+}
+
+void dSndControlPlayerMgr_c::setBgmMuteVolume(f32 volume) {
+    for (u32 i = dSndPlayerMgr_c::PLAYER_BGM; i < dSndPlayerMgr_c::PLAYER_BGM_BOSS + 1; i++) {
+        setPlayerVolumeInternal(i, volume);
+    }
+}
+
+void dSndControlPlayerMgr_c::setBgmVolumeDecreaseSpeed(f32 decrease) {}
+
+void dSndControlPlayerMgr_c::setStageEffectsVolume(f32 volume, s32 fadeFrames) {
+    for (u32 i = dSndPlayerMgr_c::PLAYER_TG_SOUND; i <= dSndPlayerMgr_c::PLAYER_AREA_IN_WATER_LV; i++) {
+        setVolume(i, volume, fadeFrames);
+    }
+}
+
+void dSndControlPlayerMgr_c::setStageEffectsMuteVolume(f32 volume) {
+    for (u32 i = dSndPlayerMgr_c::PLAYER_TG_SOUND; i <= dSndPlayerMgr_c::PLAYER_AREA_IN_WATER_LV; i++) {
+        setPlayerVolumeInternal(i, volume);
+    }
+}
+
+void dSndControlPlayerMgr_c::setEnemyMuteVolume(f32 volume) {
+    for (u32 i = dSndPlayerMgr_c::PLAYER_ENEMY; i < dSndPlayerMgr_c::PLAYER_ENEMY_FOOTSTEP + 1; i++) {
+        setPlayerVolumeInternal(i, volume);
+    }
+}
+
+void dSndControlPlayerMgr_c::setObjectMuteVolume(f32 volume) {
+    for (u32 i = dSndPlayerMgr_c::PLAYER_OBJECT_1; i < dSndPlayerMgr_c::PLAYER_TG_SOUND + 1; i++) {
+        if (i != dSndPlayerMgr_c::PLAYER_NPC_VOICE) {
+            setPlayerVolumeInternal(i, volume);
+        }
+    }
 }
