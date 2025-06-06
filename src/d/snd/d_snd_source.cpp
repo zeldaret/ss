@@ -5,13 +5,12 @@
 #include "d/snd/d_snd_3d_manager.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
+#include "d/snd/d_snd_source_group.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/ut/ut_list.h"
 #include "sized_string.h"
 
 extern "C" u8 fn_80382590(u8, UNKWORD);
-extern "C" void fn_80386C50(UNKWORD, dSoundSource_c *);
-extern "C" void fn_80386C70(dSoundSource_c *);
 
 struct d_snd_mgr_unk_6_sinit {
     d_snd_mgr_unk_6_sinit() : field_0x00(0), field_0x04(0.0f) {}
@@ -26,8 +25,8 @@ const char *help_i_need_data() {
     return "%s_%s_%d";
 }
 
-dSoundSource_c::dSoundSource_c(u8 a1, dAcBase_c *player, UNKWORD a3, UNKWORD a4)
-    : dSnd3DActor_c(((char *)a4) + 0x50, a1),
+dSoundSource_c::dSoundSource_c(u8 a1, dAcBase_c *player, UNKWORD a3, dSndSourceGroup_c *pOwnerGroup)
+    : dSnd3DActor_c(pOwnerGroup->getAmbientParam(), a1),
       field_0x0F0(a3),
       field_0x0F4(0),
       mpPlayer(player),
@@ -41,7 +40,7 @@ dSoundSource_c::dSoundSource_c(u8 a1, dAcBase_c *player, UNKWORD a3, UNKWORD a4)
       field_0x108(0),
       field_0x10C(0),
       field_0x11C(0),
-      field_0x140(a4),
+      mpOwnerGroup(pOwnerGroup),
       field_0x154(0),
       field_0x158(-1),
       field_0x15A(-1) {
@@ -50,13 +49,14 @@ dSoundSource_c::dSoundSource_c(u8 a1, dAcBase_c *player, UNKWORD a3, UNKWORD a4)
     nw4r::ut::List_Init(&field_0x110, 0xEC);
     nw4r::ut::List_Init(&field_0x120, 0x04);
     nw4r::ut::List_Init(&field_0x12C, 0x04);
-    fn_80386C50(a4, this);
+    pOwnerGroup->registerSource(this);
 }
 
 dSoundSource_c::~dSoundSource_c() {
     SetUserParam(0);
     vt_0x44();
-    fn_80386C70(this);
+    d_s_vt_0x1BC();
+    mpOwnerGroup->unregisterSource(this);
 }
 
 const nw4r::math::VEC3 &dSoundSource_c::getListenerPosition() const {

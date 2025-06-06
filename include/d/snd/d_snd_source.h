@@ -6,13 +6,16 @@
 #include "d/snd/d_snd_source_if.h"
 #include "nw4r/ut/ut_list.h"
 
+class dSndSourceGroup_c;
+
 /** Manages sound relating to a particular actor. */
+/** Size: probably 0x15C */
 class dSoundSource_c : public dSoundSourceIf_c, public dSnd3DActor_c {
 public:
-    dSoundSource_c(u8, dAcBase_c *, UNKWORD, UNKWORD);
+    dSoundSource_c(u8, dAcBase_c *, UNKWORD, dSndSourceGroup_c *pOwnerGroup);
     virtual ~dSoundSource_c();
 
-    static u32 getCharacterTalkSoundId(u32 baseSoundId, dSoundSource_c* source);
+    static u32 getCharacterTalkSoundId(u32 baseSoundId, dSoundSource_c *source);
     u32 getRemoConSoundVariant(u32 soundId) const;
 
     // This is where it gets a bit wild and this class starts mixing in overrides between
@@ -94,13 +97,12 @@ private:
     /* 0x11C */ UNKWORD field_0x11C;
     /* 0x120 */ nw4r::ut::List field_0x120; // node offset 0x4
     /* 0x12C */ nw4r::ut::List field_0x12C; // node offset 0x4
-    /* 0x138 */ nw4r::ut::Node mNode;
-    /* 0x140 */ UNKWORD field_0x140;
+    /* 0x138 */ nw4r::ut::Node mGroupLink;  // node for list in dSndSourceGroup_c
+    /* 0x140 */ dSndSourceGroup_c *mpOwnerGroup;
     /* 0x144 */ u8 _0x144[0x154 - 0x144];
     /* 0x154 */ UNKWORD field_0x154;
     /* 0x158 */ s16 field_0x158;
     /* 0x15A */ s16 field_0x15A;
-    /* 0x15C */ nw4r::ut::Node mNode2;
 };
 
 #endif

@@ -32,6 +32,19 @@ extern "C" void fn_80364D00(void *, s32);
 // ENEMY_BGM_RELATED_MGR -> dSndSourceMgr_c
 // 0x3870 = player sound source
 // 0x3874 = Fi
+
+// 0 - "" - Link
+// ActorLink::initModels
+// 0x2C - NpcKenT
+// 0x20 - Door, TBox, CharE (Chair), Tubo
+// 0x35 - TgSound
+// 0x2D - PyBird
+// 0x22 - Bamboo
+// 0x23 - Item
+
+// 0x19 - Nusi*, BKr, BBs
+// 0x1A - MgRArm, MgLArm
+// 0x1B - Mgtail
 extern "C" void *ENEMY_BGM_RELATED_MGR;
 extern "C" void fn_80384570(void *, bool);
 extern "C" void fn_803858D0(void *);

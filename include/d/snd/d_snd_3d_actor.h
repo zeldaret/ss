@@ -2,6 +2,7 @@
 #define D_SND_ACTOR_H
 
 #include "common.h"
+#include "d/snd/d_snd_misc.h"
 #include "nw4r/math/math_types.h"
 #include "nw4r/snd/snd_Sound3DActor.h"
 
@@ -9,7 +10,7 @@ class dSnd3DActor_c : public nw4r::snd::Sound3DActor {
     static const u32 NUM_SOUNDS = 4;
 
 public:
-    dSnd3DActor_c(UNKTYPE *, u8);
+    dSnd3DActor_c(dSndSourceParam *pAmbientParam, u8);
 
     virtual ~dSnd3DActor_c() {}
 
@@ -59,6 +60,11 @@ public:
         mFlags |= flag;
     }
 
+    f32 getDistanceToListener() {
+        updateDistanceToListener();
+        return mDistanceToListener;
+    }
+
     bool hasPlayingSounds() const;
     bool isPlayingSound(u32 id);
 
@@ -82,7 +88,7 @@ protected:
     /* 0xAC */ nw4r::math::VEC3 mPositionTransformedByListener;
     /* 0xB8 */ f32 mDistanceToCameraTarget;
     /* 0xBC */ nw4r::math::VEC3 mPositionRelativeToCameraTarget;
-    /* 0xC8 */ UNKTYPE *a_field_0xC8;
+    /* 0xC8 */ dSndSourceParam *mpFloatBundle;
     /* 0xCC */ u16 mFlags;
     /* 0xD0 */ nw4r::math::VEC3 mPositionRelativeToPlayer;
     /* 0xDC */ f32 mDistanceToPlayer;
