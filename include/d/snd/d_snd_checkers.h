@@ -70,4 +70,38 @@ private:
     /* 0x24 */ u32 *mpCounter4;
 };
 
+
+// used at the very least when trying to finish Demise
+class IsCurrentSoundIdChecker {
+public:
+    IsCurrentSoundIdChecker(u32 id, bool *pResult) : mSoundId(id), mpResult(pResult) {}
+    ~IsCurrentSoundIdChecker() {}
+
+    virtual void operator()(nw4r::snd::SoundHandle &pHandle) {
+        if (mSoundId == pHandle.GetId()) {
+            *mpResult = true;
+        }
+    }
+
+private:
+    /* 0x04 */ u32 mSoundId;
+    /* 0x08 */ bool *mpResult;
+};
+
+class SoundStopper {
+public:
+    SoundStopper(u32 id, s32 fadeFrames) : mSoundId(id), mFadeFrames(fadeFrames) {}
+    ~SoundStopper() {}
+
+    virtual void operator()(nw4r::snd::SoundHandle &pHandle) {
+        if (mSoundId == pHandle.GetId()) {
+            pHandle.Stop(mFadeFrames);
+        }
+    }
+
+private:
+    /* 0x04 */ u32 mSoundId;
+    /* 0x08 */ s32 mFadeFrames;
+};
+
 #endif

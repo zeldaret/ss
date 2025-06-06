@@ -4,7 +4,6 @@
 #include "common.h"
 #include "nw4r/math/math_types.h"
 #include "nw4r/snd/snd_Sound3DActor.h"
-#include "nw4r/snd/snd_SoundHandle.h"
 
 class dSnd3DActor_c : public nw4r::snd::Sound3DActor {
     static const u32 NUM_SOUNDS = 4;
@@ -88,23 +87,6 @@ protected:
     /* 0xD0 */ nw4r::math::VEC3 mPositionRelativeToPlayer;
     /* 0xDC */ f32 mDistanceToPlayer;
     /* 0xE0 */ f32 a_field_0xE0;
-};
-
-// used at the very least when trying to finish Demise
-class IsCurrentSoundIdChecker {
-public:
-    IsCurrentSoundIdChecker(u32 id, bool *pResult) : mSoundId(id), mpResult(pResult) {}
-    ~IsCurrentSoundIdChecker() {}
-
-    virtual void operator()(nw4r::snd::SoundHandle &pHandle) {
-        if (mSoundId == pHandle.GetId()) {
-            *mpResult = true;
-        }
-    }
-
-private:
-    /* 0x04 */ u32 mSoundId;
-    /* 0x08 */ bool *mpResult;
 };
 
 #endif

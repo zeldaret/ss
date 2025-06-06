@@ -60,6 +60,11 @@ namespace nw4r { namespace snd
 				mSound->Pause(flag, fadeFrames);
 		}
 
+		void SetPan(f32 pan) {
+			if (IsAttachedSound())
+				mSound->SetPan(pan);
+		}
+
 		bool IsPause() const {
 			return IsAttachedSound() && mSound->IsPause();
 		}

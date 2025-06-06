@@ -2419,9 +2419,20 @@ d/snd/d_snd_control_player.cpp:
 
 d/snd/d_snd_bgm_mgr.cpp:
 	.text       start:0x8036C6B0 end:0x803739CC align:16
+	.sbss       start:0x80575D80 end:0x80575D88
+	.sdata2     start:0x8057D940 end:0x8057D970
+
+d/snd/d_snd_bgm_sound_callbacks.cpp:
+	.text       start:0x803739D0 end:0x80378ECC align:16
+	.sdata2     start:0x8057D970 end:0x8057DA50
+
+d/snd/d_snd_bgm_sound_boss_callbacks.cpp:
+	.text       start:0x80378ED0 end:0x80379D20 align:16
+	.sdata2     start:0x8057DA50 end:0x8057DA58
 
 d/snd/d_snd_bgm_sound.cpp:
-	.text       start:0x803739D0 end:0x8037BA68 align:16
+	.text       start:0x80379D20 end:0x8037BA68 align:16
+	.sbss       start:0x80575D88 end:0x80575D90
 
 d/snd/d_snd_unk_15.cpp:
 	.text       start:0x8037BA70 end:0x8037D800 align:16

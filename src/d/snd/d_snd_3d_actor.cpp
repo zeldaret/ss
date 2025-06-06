@@ -3,6 +3,7 @@
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/snd/d_snd_3d_manager.h"
+#include "d/snd/d_snd_checkers.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "nw4r/math/math_types.h"
 

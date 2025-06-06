@@ -12,12 +12,13 @@ public:
     dSoundSource_c(u8, dAcBase_c *, UNKWORD, UNKWORD);
     virtual ~dSoundSource_c();
 
+    static u32 getCharacterTalkSoundId(u32 baseSoundId, dSoundSource_c* source);
     u32 getRemoConSoundVariant(u32 soundId) const;
 
     // This is where it gets a bit wild and this class starts mixing in overrides between
     // new virtual functions, which causes the vtable to list these functions in exactly this
     // order.
-    virtual void d_s_vt_0x17C();
+    virtual const char *d_s_vt_0x17C() const;
     virtual void d_s_vt_0x180();
     virtual void d_s_vt_0x184();
     virtual void d_s_vt_0x188();

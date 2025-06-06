@@ -3,6 +3,8 @@
 #include "common.h"
 #include "d/snd/d_snd_3d_actor.h"
 #include "d/snd/d_snd_3d_manager.h"
+#include "d/snd/d_snd_mgr.h"
+#include "d/snd/d_snd_player_mgr.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/ut/ut_list.h"
 #include "sized_string.h"
@@ -97,6 +99,26 @@ void dSoundSource_c::d_vt_0x58() {
 
 void dSoundSource_c::d_vt_0x5C() {
     // noop
+}
+
+u32 dSoundSource_c::getCharacterTalkSoundId(u32 baseSoundId, dSoundSource_c *source) {
+    if (baseSoundId != -1 && source != nullptr) {
+        SizedString<64> label;
+
+        // maybe an inline
+        const char *baseLabel = nullptr;
+        if (dSndMgr_c::GetInstance()->getArchive() != nullptr) {
+            baseLabel = dSndMgr_c::GetInstance()->getArchive()->GetSoundLabelString(baseSoundId);
+        }
+
+        const char *charLabel = source->d_s_vt_0x17C();
+        label.sprintf("%s_%s", baseLabel, charLabel);
+        u32 newLabel = dSndPlayerMgr_c::GetInstance()->convertLabelStringToSoundId(label);
+        if (newLabel != -1) {
+            return newLabel;
+        }
+    }
+    return baseSoundId;
 }
 
 u32 dSoundSource_c::getRemoConSoundVariant(u32 soundId) const {

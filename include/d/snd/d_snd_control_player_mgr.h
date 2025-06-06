@@ -25,6 +25,7 @@ public:
     void calc();
 
     static const s32 sNumPlayers;
+    static const s32 sPlayerMax;
 
     nw4r::snd::SoundPlayer *getPlayer1(u32) const;
     nw4r::snd::SoundPlayer *getPlayer2(u32) const;

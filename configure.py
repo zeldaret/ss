@@ -700,8 +700,6 @@ config.libs = [
         "progress_category": "game",
         "host": False,
         "objects": [
-            # These are very low quality splits since nobody has figured
-            # out enough detail. Need to look into nw4r::snd first
             Object(NonMatching, "d/snd/d_snd_mgr.cpp"),
             Object(Matching, "d/snd/d_snd_actor.cpp"),
             Object(NonMatching, "d/snd/d_snd_3d_actor.cpp"),
@@ -710,14 +708,18 @@ config.libs = [
             Object(NonMatching, "d/snd/d_snd_player_mgr.cpp"),
             Object(NonMatching, "d/snd/d_snd_control_player_mgr.cpp"),
             Object(Matching, "d/snd/d_snd_3d_manager.cpp"),
+            # this one is a bit weird. it deals with all the stage definitions,
+            # but it's not actually the bgm manager?
             Object(NonMatching, "d/snd/d_snd_stage_mgr.cpp"),
-            Object(NonMatching, "d/snd/d_snd_bgm_mgr.cpp"),
-            Object(NonMatching, "d/snd/d_snd_bgm_sound.cpp"),
             Object(NonMatching, "d/snd/d_snd_unk_component_2.cpp"),
             Object(NonMatching, "d/snd/d_snd_area_sound_effect_mgr.cpp"),
             Object(NonMatching, "d/snd/d_snd_area_sound.cpp"),
             Object(Matching, "d/snd/d_snd_control_sound.cpp"),
             Object(Matching, "d/snd/d_snd_control_player.cpp"),
+            Object(NonMatching, "d/snd/d_snd_bgm_mgr.cpp"),
+            Object(NonMatching, "d/snd/d_snd_bgm_sound_callbacks.cpp"),
+            Object(NonMatching, "d/snd/d_snd_bgm_sound_boss_callbacks.cpp"),
+            Object(NonMatching, "d/snd/d_snd_bgm_sound.cpp"),
             Object(NonMatching, "d/snd/d_snd_unk_15.cpp"),
             Object(NonMatching, "d/snd/d_snd_small_effect_mgr.cpp"),
             Object(NonMatching, "d/snd/d_snd_harp_mgr.cpp"),
