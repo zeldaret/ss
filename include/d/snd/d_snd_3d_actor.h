@@ -10,7 +10,7 @@ class dSnd3DActor_c : public nw4r::snd::Sound3DActor {
     static const u32 NUM_SOUNDS = 4;
 
 public:
-    dSnd3DActor_c(dSndSourceParam *pAmbientParam, u8);
+    dSnd3DActor_c(dSndSourceParam *pSourceParam, u8);
 
     virtual ~dSnd3DActor_c() {}
 
@@ -88,7 +88,7 @@ protected:
     /* 0xAC */ nw4r::math::VEC3 mPositionTransformedByListener;
     /* 0xB8 */ f32 mDistanceToCameraTarget;
     /* 0xBC */ nw4r::math::VEC3 mPositionRelativeToCameraTarget;
-    /* 0xC8 */ dSndSourceParam *mpFloatBundle;
+    /* 0xC8 */ dSndSourceParam *mpSourceParam;
     /* 0xCC */ u16 mFlags;
     /* 0xD0 */ nw4r::math::VEC3 mPositionRelativeToPlayer;
     /* 0xDC */ f32 mDistanceToPlayer;

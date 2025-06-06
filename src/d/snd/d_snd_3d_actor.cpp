@@ -9,7 +9,7 @@
 
 #include <cmath>
 
-dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pFloatBundle, u8 a2)
+dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, u8 a2)
     : nw4r::snd::Sound3DActor(
           dSndPlayerMgr_c::GetInstance()->getSoundArchivePlayerForType(a2), dSnd3DManager_c::GetInstance()->getManager()
       ),
@@ -24,7 +24,7 @@ dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pFloatBundle, u8 a2)
       mDistanceToListener(INFINITY),
       mCameraDirectionDot(0.0f),
       a_field_0x9C(0.0f),
-      mpFloatBundle(pFloatBundle),
+      mpSourceParam(pSourceParam),
       mFlags(0),
       mDistanceToPlayer(INFINITY),
       a_field_0xE0(0.0f) {
