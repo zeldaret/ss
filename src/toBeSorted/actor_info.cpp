@@ -5,7 +5,6 @@
 
 #include <cstring>
 
-
 #pragma push
 #pragma readonly_strings on
 // sorted alphabetically to facilitate binary search
@@ -146,9 +145,9 @@ static const ActorInfo sInfos[] = {
     {"BltObsT",             fProfile::TAG_BELT_OBSTACLE,             fProfile::TAG_BELT_OBSTACLE, 0xFFFF,                     59,  0},
     {"BlwCoal",                 fProfile::OBJ_BLOW_COAL,                 fProfile::OBJ_BLOW_COAL, 0xFFFF,      SND_SOURCE_OBJECT,  0},
     {   "Boat",                      fProfile::OBJ_BOAT,                      fProfile::OBJ_BOAT, 0xFFFF,      SND_SOURCE_OBJECT,  0},
-    {   "Bomb",                          fProfile::BOMB,                          fProfile::BOMB, 0xFFFF,                      8,  0},
+    {   "Bomb",                          fProfile::BOMB,                          fProfile::BOMB, 0xFFFF,        SND_SOURCE_BOMB,  0},
     {  "Bombf",                         fProfile::BOMBF,                         fProfile::BOMBF, 0xFFFF,      SND_SOURCE_OBJECT,  0},
-    {   "Boom",                     fProfile::BOOMERANG,                     fProfile::BOOMERANG, 0xFFFF,                      6,  0},
+    {   "Boom",                     fProfile::BOOMERANG,                     fProfile::BOOMERANG, 0xFFFF,   SND_SOURCE_BOOMERANG,  0},
     {"BoxCage",              fProfile::OBJ_BOXCAGE_F300,              fProfile::OBJ_BOXCAGE_F300, 0xFFFF,      SND_SOURCE_OBJECT,  0},
     { "BrdMob",                      fProfile::BIRD_MOB,                      fProfile::BIRD_MOB, 0xFFFF,                   0xFF,  0},
     {  "BrgBn",               fProfile::OBJ_BRIDGE_BONE,               fProfile::OBJ_BRIDGE_BONE, 0xFFFF,      SND_SOURCE_OBJECT,  0},
