@@ -2,9 +2,52 @@
 
 #include "common.h"
 #include "d/snd/d_snd_source.h"
+#include "d/snd/d_snd_source_enums.h"
 #include "nw4r/ut/ut_list.h"
 
 #include <cmath>
+
+s32 dSndSourceMgr_c::getSourceCategoryForSourceType(s32 sourceType, const char *name) {
+    // This might be a full-on switch statement but I don't want to write out
+    // all the unknown entries yet and this matches anyway
+
+    if (sourceType >= SND_SOURCE_PLAYER && sourceType <= SND_SOURCE_PLAYER_HEAD) {
+        return SND_SOURCE_CATEGORY_PLAYER;
+    }
+
+    if (sourceType >= SND_SOURCE_NET && sourceType <= SND_SOURCE_HOOKSHOT) {
+        return SND_SOURCE_CATEGORY_EQUIPMENT;
+    }
+
+    if (sourceType >= SND_SOURCE_ENEMY_10 && sourceType <= SND_SOURCE_ENEMY_31) {
+        return SND_SOURCE_CATEGORY_ENEMY;
+    }
+
+    if (sourceType >= SND_SOURCE_OBJECT && sourceType <= SND_SOURCE_OBJECT_42) {
+        return SND_SOURCE_CATEGORY_OBJECT;
+    }
+
+    if (sourceType >= SND_SOURCE_NPC_43 && sourceType <= SND_SOURCE_NPC_DRAGON) {
+        return SND_SOURCE_CATEGORY_NPC;
+    }
+
+    if (sourceType == SND_SOURCE_TG_SOUND) {
+        return SND_SOURCE_CATEGORY_TG_SOUND;
+    }
+
+    if (sourceType >= SND_SOURCE_54 && sourceType <= SND_SOURCE_57) {
+        return SND_SOURCE_CATEGORY_6;
+    }
+
+    switch (sourceType) {
+        case SND_SOURCE_58:
+            return SND_SOURCE_CATEGORY_7;
+        case SND_SOURCE_59:
+            return SND_SOURCE_CATEGORY_9;
+        default:
+            return -1;
+    }
+}
 
 SND_DISPOSER_DEFINE(dSndSourceMgr_c);
 
@@ -43,38 +86,37 @@ dSndSourceMgr_c::dSndSourceMgr_c()
 void dSndSourceMgr_c::registerSource(dSoundSource_c *source) {
     if (source != nullptr) {
         nw4r::ut::List_Append(&mAllSources, source);
-        // TODO enums
         switch (source->getCategory()) {
-            case 0: {
-                if (source->getActorType() == 0 && mpPlayerSource == nullptr) {
+            case SND_SOURCE_CATEGORY_PLAYER: {
+                if (source->getActorType() == SND_SOURCE_PLAYER && mpPlayerSource == nullptr) {
                     mpPlayerSource = source;
                 }
                 break;
             }
-            case 1: {
-                if (source->getActorType() == 6) {
+            case SND_SOURCE_CATEGORY_EQUIPMENT: {
+                if (source->getActorType() == SND_SOURCE_BOOMERANG) {
                     mpBoomerangSource = source;
                 }
                 break;
             }
-            case 2: {
+            case SND_SOURCE_CATEGORY_ENEMY: {
                 if (isCertainEnemyType(source)) {
                     nw4r::ut::List_Append(&field_0x3848, source);
                 }
                 break;
             }
-            case 6: {
+            case SND_SOURCE_CATEGORY_6: {
                 nw4r::ut::List_Append(&field_0x3854, source);
                 break;
             }
-            case 3: {
+            case SND_SOURCE_CATEGORY_OBJECT: {
                 if (source->isName("TBoat") && mpTBoatSource == nullptr) {
                     mpTBoatSource = source;
                 }
                 break;
             }
-            case 4: {
-                if (source->getActorType() == 44) {
+            case SND_SOURCE_CATEGORY_NPC: {
+                if (source->getActorType() == SND_SOURCE_KENSEI) {
                     mpKenseiSource = source;
                 }
                 break;

@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "d/snd/d_snd_source.h"
+#include "d/snd/d_snd_source_enums.h"
 #include "nw4r/ut/ut_list.h"
 
 #include <cmath>
@@ -10,18 +11,17 @@
 extern "C" bool isInStage(const char *stageName);
 
 void dSndSourceGroup_c::set(s32 sourceType, const char *name) {
-    // TODO enums
     resetSoundSourceParam();
     bool assignedParam = false;
 
     switch (mSourceCategory) {
-        case 0: {
+        case SND_SOURCE_CATEGORY_PLAYER: {
             assignedParam = true;
             mParam.field_0x10 = INFINITY;
             break;
         }
-        case 1:
-            if (sourceType == 7) {
+        case SND_SOURCE_CATEGORY_EQUIPMENT:
+            if (sourceType == SND_SOURCE_ARROW) {
                 assignedParam = true;
                 mParam.field_0x00 = 1500.0f;
                 mParam.field_0x10 = INFINITY;
@@ -29,7 +29,7 @@ void dSndSourceGroup_c::set(s32 sourceType, const char *name) {
             break;
     }
 
-    if (!assignedParam && (sourceType == 44 || sourceType == 58)) {
+    if (!assignedParam && (sourceType == SND_SOURCE_KENSEI || sourceType == SND_SOURCE_58)) {
         assignedParam = true;
         mParam.field_0x10 = INFINITY;
     }
@@ -40,13 +40,13 @@ void dSndSourceGroup_c::set(s32 sourceType, const char *name) {
 
     if (!assignedParam) {
         switch (sourceType) {
-            case 51: {
+            case SND_SOURCE_NPC_NRM: {
                 mParam.field_0x00 = 300.0f;
                 mParam.field_0x04 = 800.0;
                 mParam.field_0x10 = 2200.0;
                 break;
             }
-            case 48: {
+            case SND_SOURCE_NPC_48: {
                 if (isInStage("F401")) {
                     mParam.field_0x00 = 500.0f;
                     mParam.field_0x04 = 4000.0;

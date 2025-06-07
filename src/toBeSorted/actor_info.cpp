@@ -1,6 +1,7 @@
 #include "toBeSorted/actor_info.h"
 
 #include "common.h"
+#include "d/snd/d_snd_source_enums.h"
 #include "f/f_profile_name.h"
 
 #include <cstring>

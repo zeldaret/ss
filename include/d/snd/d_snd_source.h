@@ -66,7 +66,7 @@ public:
     // the vtable, so the order is not certain. May have to reorder for weak
     // function order.
     virtual s32 getCategory() const override {
-        return field_0x0FC;
+        return mSourceCategory;
     }
     virtual const nw4r::math::VEC3 &getListenerPosition() const override;
 
@@ -90,7 +90,7 @@ private:
     /* 0x0F0 */ const char *mpName;
     /* 0x0F4 */ UNKWORD field_0x0F4;
     /* 0x0F8 */ dAcBase_c *mpPlayer;
-    /* 0x0FC */ u8 field_0x0FC;
+    /* 0x0FC */ u8 mSourceCategory;
     /* 0x0FD */ u8 mSourceType;
     /* 0x0FE */ u8 field_0x0FE;
     /* 0x0FF */ u8 field_0x0FF;

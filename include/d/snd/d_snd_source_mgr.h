@@ -33,6 +33,7 @@ public:
     void unregisterSource(dSoundSource_c *source);
 
     void playFlowSound(u32 id);
+    static s32 getSourceCategoryForSourceType(s32 sourceType, const char *name);
 
 private:
     static bool isCertainEnemyType(dSoundSource_c *source);

@@ -11,8 +11,6 @@
 #include "nw4r/ut/ut_list.h"
 #include "sized_string.h"
 
-extern "C" u8 fn_80382590(u8, const char*);
-
 struct d_snd_mgr_unk_6_sinit {
     d_snd_mgr_unk_6_sinit() : field_0x00(0), field_0x04(0.0f) {}
 
@@ -45,7 +43,7 @@ dSoundSource_c::dSoundSource_c(u8 sourceType, dAcBase_c *player, const char *nam
       field_0x154(0),
       field_0x158(-1),
       field_0x15A(-1) {
-    field_0x0FC = fn_80382590(sourceType, name);
+    mSourceCategory = dSndSourceMgr_c::getSourceCategoryForSourceType(sourceType, name);
     // TODO: Offsetof
     nw4r::ut::List_Init(&field_0x110, 0xEC);
     nw4r::ut::List_Init(&field_0x120, 0x04);
