@@ -1,12 +1,12 @@
 #ifndef D_A_BASE_H
 #define D_A_BASE_H
 
-#include "UnknownTypeBelongings.h"
 #include "common.h"
 #include "d/d_base.h"
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
+#include "toBeSorted/actor_info.h"
 #include "toBeSorted/raii_ptr.h"
 #include "toBeSorted/tlist.h"
 
@@ -141,7 +141,7 @@ public:
 class dAcBase_c : public dBase_c {
 public:
     /* 0x68 */ mHeapAllocator_c heap_allocator;
-    /* 0x84 */ ObjInfo *obj_info;
+    /* 0x84 */ const ActorInfo *mpActorInfo;
     /* 0x88 */ TList<SoundInfo, 12> sound_list;
     /* 0x94 */ RaiiPtr<SoundSource> sound_source;
     /* 0x98 */ mVec3_c *obj_pos;
@@ -249,10 +249,10 @@ public:
     // funcs found in TU
     /* 8002c650 */ static void setTempCreateParams(
         mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2, dAcBase_c *parent, u8 subtype, u16 unkFlag,
-        s8 viewClipIdx, ObjInfo *objInfo
+        s8 viewClipIdx, const ActorInfo *actorInfo
     );
 
-    /* 8002c690 */ SoundSource *FUN_8002c690();
+    /* 8002c690 */ SoundSource *createSoundSource();
     /* 8002c710 */ int initAllocatorWork1Heap(int size, char *name, int align);
     /* 8002c720 */ int initAllocator(int size, char *name, EGG::Heap *heap, int align);
     /* 8002c7b0 */ bool addActorToRoom(s32 roomId);
@@ -339,7 +339,7 @@ public:
     /* 80575084 */ static mAng3_c *s_Create_Rotation;
     /* 80575088 */ static mVec3_c *s_Create_Scale;
     /* 8057508C */ static dAcBase_c *s_Create_Parent;
-    /* 80575090 */ static ObjInfo *s_Create_ObjInfo;
+    /* 80575090 */ static const ActorInfo *s_Create_ActorInfo;
     /* 80575094 */ static u8 s_Create_Subtype;
 };
 

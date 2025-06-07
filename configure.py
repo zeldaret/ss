@@ -435,7 +435,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/arc_managers/oarc_control.cpp"),
             Object(Matching, "toBeSorted/arc_managers/layout_arc_manager.cpp"),
             Object(NonMatching, "toBeSorted/arc_managers/layout_arc_control.cpp"),
-            Object(NonMatching, "toBeSorted/base_tables.cpp"),
+            Object(Matching, "toBeSorted/actor_info.cpp"),
             Object(NonMatching, "toBeSorted/unk_vec_math.cpp"),
             Object(NonMatching, "toBeSorted/unk_mdl_cc.cpp"),
             Object(NonMatching, "toBeSorted/d_camera.cpp"),
