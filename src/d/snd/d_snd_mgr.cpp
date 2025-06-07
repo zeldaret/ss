@@ -5,13 +5,13 @@
 #include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
+#include "d/snd/d_snd_source_mgr.h"
 #include "egg/audio/eggAudioRmtSpeakerMgr.h"
 #include "egg/audio/eggAudioUtility.h"
 
 extern "C" void initEnemySoundMgr();
 extern "C" void initFanfareSoundMgr();
 extern "C" void initSomeUnusedSoundMgr();
-extern "C" void initEnemyBgmRelatedMgr();
 extern "C" void fn_80393530();
 extern "C" void fn_80394830();
 extern "C" void fn_8037F940();
@@ -30,7 +30,7 @@ dSndMgr_c::dSndMgr_c(): field_0x6CC(0) {
     initSomeUnusedSoundMgr();
     dSndSmallEffectMgr_c::create();
     dSndAreaSoundEffectMgr_c::create();
-    initEnemyBgmRelatedMgr();
+    dSndSourceMgr_c::create();
     fn_80393530();
     fn_80394830();
     fn_8037F940();
