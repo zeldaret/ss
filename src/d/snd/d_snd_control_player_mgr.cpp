@@ -146,7 +146,7 @@ void dSndControlPlayerMgr_c::calc() {
 
 void dSndControlPlayerMgr_c::executeControls() {
     dSndControlPlayer_c *next;
-    dSndControlPlayer_c *iter = static_cast<dSndControlPlayer_c *>(nw4r::ut::List_GetNext(&mActiveControls, nullptr));
+    dSndControlPlayer_c *iter = static_cast<dSndControlPlayer_c *>(nw4r::ut::List_GetFirst(&mActiveControls));
     while (iter != nullptr) {
         next = static_cast<dSndControlPlayer_c *>(nw4r::ut::List_GetNext(&mActiveControls, iter));
         iter->calc();

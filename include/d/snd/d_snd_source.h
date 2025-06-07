@@ -6,13 +6,15 @@
 #include "d/snd/d_snd_source_if.h"
 #include "nw4r/ut/ut_list.h"
 
+#include <cstring>
+
 class dSndSourceGroup_c;
 
 /** Manages sound relating to a particular actor. */
 /** Size: probably 0x15C */
 class dSoundSource_c : public dSoundSourceIf_c, public dSnd3DActor_c {
 public:
-    dSoundSource_c(u8, dAcBase_c *, UNKWORD, dSndSourceGroup_c *pOwnerGroup);
+    dSoundSource_c(u8 sourceType, dAcBase_c *, const char *name, dSndSourceGroup_c *pOwnerGroup);
     virtual ~dSoundSource_c();
 
     static u32 getCharacterTalkSoundId(u32 baseSoundId, dSoundSource_c *source);
@@ -21,7 +23,10 @@ public:
     // This is where it gets a bit wild and this class starts mixing in overrides between
     // new virtual functions, which causes the vtable to list these functions in exactly this
     // order.
-    virtual const char *d_s_vt_0x17C() const;
+    virtual const char *getName() const;
+    bool isName(const char *name) const {
+        return !std::strcmp(getName(), name);
+    }
     virtual void d_s_vt_0x180();
     virtual void d_s_vt_0x184();
     virtual void d_s_vt_0x188();
@@ -60,7 +65,9 @@ public:
     // Overrides of dSoundSourceIf_c - always in the first section of
     // the vtable, so the order is not certain. May have to reorder for weak
     // function order.
-
+    virtual s32 getCategory() const override {
+        return field_0x0FC;
+    }
     virtual const nw4r::math::VEC3 &getListenerPosition() const override;
 
     virtual bool hasPlayingSounds() const override;            // 0x48
@@ -80,11 +87,11 @@ private:
     // at 0x58: thunk-vtable
 
     /* 0xE8 */ nw4r::ut::Node mMgrLink;
-    /* 0x0F0 */ UNKWORD field_0x0F0;
+    /* 0x0F0 */ const char *mpName;
     /* 0x0F4 */ UNKWORD field_0x0F4;
     /* 0x0F8 */ dAcBase_c *mpPlayer;
     /* 0x0FC */ u8 field_0x0FC;
-    /* 0x0FD */ u8 field_0x0FD;
+    /* 0x0FD */ u8 mSourceType;
     /* 0x0FE */ u8 field_0x0FE;
     /* 0x0FF */ u8 field_0x0FF;
     /* 0x100 */ u8 field_0x100;

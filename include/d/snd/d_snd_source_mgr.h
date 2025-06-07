@@ -29,9 +29,17 @@ class dSndSourceMgr_c {
 public:
     dSndSourceMgr_c();
 
+    void registerSource(dSoundSource_c *source);
+    void unregisterSource(dSoundSource_c *source);
+
     void playFlowSound(u32 id);
 
 private:
+    static bool isCertainEnemyType(dSoundSource_c *source);
+    void removeSourceFromList(dSoundSource_c *source, nw4r::ut::List *list);
+    void clearSourceLists();
+    void clearSourceList(nw4r::ut::List *list);
+
     /* 0x0010 */ u8 field_0x0010;
     /* 0x0011 */ u8 field_0x0011;
     /* 0x0012 */ u8 field_0x0012;
@@ -44,7 +52,7 @@ private:
     /* 0x003C */ dSndSourceGroup_c mGroups[NUM_GROUPS];
 
     // Not sure what these are for
-    /* 0x383C */ nw4r::ut::List mSourceList1; // node offset 0xE8, probably into dSoundSource::mMgrLink
+    /* 0x383C */ nw4r::ut::List mAllSources; // node offset 0xE8, probably into dSoundSource::mMgrLink
     /* 0x3848 */ nw4r::ut::List field_0x3848; // node offset 0x15C, possibly a subset of source types
     /* 0x3854 */ nw4r::ut::List field_0x3854; // node offset 0x160
 
@@ -54,9 +62,9 @@ private:
     /* 0x386C */ f32 field_0x386C;
 
     /* 0x3870 */ dSoundSource_c *mpPlayerSource;
-    /* 0x3874 */ dSoundSource_c *mpFiTalkSource;
-    /* 0x3878 */ dSoundSource_c *field_0x3878;
-    /* 0x387C */ dSoundSource_c *field_0x387C;
+    /* 0x3874 */ dSoundSource_c *mpKenseiSource;
+    /* 0x3878 */ dSoundSource_c *mpBoomerangSource;
+    /* 0x387C */ dSoundSource_c *mpTBoatSource;
     /* 0x3880 */ dSoundSource_c *field_0x3880; // fi singing related?
     /* 0x3884 */ dSoundSource_c *field_0x3884;
 };

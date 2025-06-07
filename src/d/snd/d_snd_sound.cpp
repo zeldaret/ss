@@ -67,7 +67,7 @@ void dSndSound_c::calc() {
     }
 
     dSndControlSound_c *next;
-    dSndControlSound_c *iter = static_cast<dSndControlSound_c *>(nw4r::ut::List_GetNext(&mList, nullptr));
+    dSndControlSound_c *iter = static_cast<dSndControlSound_c *>(nw4r::ut::List_GetFirst(&mList));
     while (iter != nullptr) {
         next = static_cast<dSndControlSound_c *>(nw4r::ut::List_GetNext(&mList, iter));
         iter->calc();

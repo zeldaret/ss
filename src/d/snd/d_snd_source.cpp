@@ -6,11 +6,12 @@
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_source_group.h"
+#include "d/snd/d_snd_source_mgr.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/ut/ut_list.h"
 #include "sized_string.h"
 
-extern "C" u8 fn_80382590(u8, UNKWORD);
+extern "C" u8 fn_80382590(u8, const char*);
 
 struct d_snd_mgr_unk_6_sinit {
     d_snd_mgr_unk_6_sinit() : field_0x00(0), field_0x04(0.0f) {}
@@ -25,12 +26,12 @@ const char *help_i_need_data() {
     return "%s_%s_%d";
 }
 
-dSoundSource_c::dSoundSource_c(u8 a1, dAcBase_c *player, UNKWORD a3, dSndSourceGroup_c *pOwnerGroup)
-    : dSnd3DActor_c(pOwnerGroup->getAmbientParam(), a1),
-      field_0x0F0(a3),
+dSoundSource_c::dSoundSource_c(u8 sourceType, dAcBase_c *player, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    : dSnd3DActor_c(pOwnerGroup->getAmbientParam(), sourceType),
+      mpName(name),
       field_0x0F4(0),
       mpPlayer(player),
-      field_0x0FD(a1),
+      mSourceType(sourceType),
       field_0x0FE(0),
       field_0x0FF(0),
       field_0x100(0),
@@ -44,7 +45,7 @@ dSoundSource_c::dSoundSource_c(u8 a1, dAcBase_c *player, UNKWORD a3, dSndSourceG
       field_0x154(0),
       field_0x158(-1),
       field_0x15A(-1) {
-    field_0x0FC = fn_80382590(a1, a3);
+    field_0x0FC = fn_80382590(sourceType, name);
     // TODO: Offsetof
     nw4r::ut::List_Init(&field_0x110, 0xEC);
     nw4r::ut::List_Init(&field_0x120, 0x04);
@@ -56,6 +57,7 @@ dSoundSource_c::~dSoundSource_c() {
     SetUserParam(0);
     vt_0x44();
     d_s_vt_0x1BC();
+    dSndSourceMgr_c::GetInstance()->unregisterSource(this);
     mpOwnerGroup->unregisterSource(this);
 }
 
@@ -111,7 +113,7 @@ u32 dSoundSource_c::getCharacterTalkSoundId(u32 baseSoundId, dSoundSource_c *sou
             baseLabel = dSndMgr_c::GetInstance()->getArchive()->GetSoundLabelString(baseSoundId);
         }
 
-        const char *charLabel = source->d_s_vt_0x17C();
+        const char *charLabel = source->getName();
         label.sprintf("%s_%s", baseLabel, charLabel);
         u32 newLabel = dSndPlayerMgr_c::GetInstance()->convertLabelStringToSoundId(label);
         if (newLabel != -1) {

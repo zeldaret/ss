@@ -7,8 +7,6 @@
 #include "nw4r/snd/snd_Sound3DActor.h"
 
 class dSnd3DActor_c : public nw4r::snd::Sound3DActor {
-    static const u32 NUM_SOUNDS = 4;
-
 public:
     dSnd3DActor_c(dSndSourceParam *pSourceParam, u8);
 

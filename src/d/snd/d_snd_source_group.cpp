@@ -9,18 +9,19 @@
 
 extern "C" bool isInStage(const char *stageName);
 
-void dSndSourceGroup_c::set(s32 type, const char *name) {
+void dSndSourceGroup_c::set(s32 sourceType, const char *name) {
+    // TODO enums
     resetSoundSourceParam();
     bool assignedParam = false;
 
-    switch (field_0x14) {
+    switch (mSourceCategory) {
         case 0: {
             assignedParam = true;
             mParam.field_0x10 = INFINITY;
             break;
         }
         case 1:
-            if (type == 7) {
+            if (sourceType == 7) {
                 assignedParam = true;
                 mParam.field_0x00 = 1500.0f;
                 mParam.field_0x10 = INFINITY;
@@ -28,7 +29,7 @@ void dSndSourceGroup_c::set(s32 type, const char *name) {
             break;
     }
 
-    if (!assignedParam && (type == 44 || type == 58)) {
+    if (!assignedParam && (sourceType == 44 || sourceType == 58)) {
         assignedParam = true;
         mParam.field_0x10 = INFINITY;
     }
@@ -38,7 +39,7 @@ void dSndSourceGroup_c::set(s32 type, const char *name) {
     }
 
     if (!assignedParam) {
-        switch (type) {
+        switch (sourceType) {
             case 51: {
                 mParam.field_0x00 = 300.0f;
                 mParam.field_0x04 = 800.0;
@@ -69,7 +70,7 @@ void dSndSourceGroup_c::resetSoundSourceParam() {
 }
 
 dSndSourceGroup_c::dSndSourceGroup_c()
-    : field_0x18(0),
+    : mSubtype(0),
       field_0x1C(0),
       field_0x1D(0),
       mName(""),
@@ -110,10 +111,10 @@ void dSndSourceGroup_c::unregisterSource(dSoundSource_c *source) {
 }
 
 void dSndSourceGroup_c::clearList() {
-    dSoundSource_c *source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetNext(&mSourceList, nullptr));
+    dSoundSource_c *source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetFirst(&mSourceList));
     while (source != nullptr) {
         nw4r::ut::List_Remove(&mSourceList, source);
-        source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetNext(&mSourceList, nullptr));
+        source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetFirst(&mSourceList));
     }
 }
 
@@ -124,7 +125,7 @@ dSoundSource_c *dSndSourceGroup_c::getSourceClosestToListener() {
 
     mpCachedClosestSourceToListener = nullptr;
     f32 closest = INFINITY;
-    for (dSoundSource_c *source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetNext(&mSourceList, nullptr));
+    for (dSoundSource_c *source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetFirst(&mSourceList));
          source != nullptr; source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetNext(&mSourceList, source))) {
         if (source->getActorType() != 1 && source->getActorType() != 48) {
             f32 dist = source->getDistanceToListener();
@@ -144,12 +145,12 @@ dSoundSource_c *dSndSourceGroup_c::getSourceClosestToPlayer() {
     }
 
     if ((s32)nw4r::ut::List_GetSize(&mSourceList) <= 1) {
-        return static_cast<dSoundSource_c *>(nw4r::ut::List_GetNext(&mSourceList, nullptr));
+        return static_cast<dSoundSource_c *>(nw4r::ut::List_GetFirst(&mSourceList));
     }
 
     mpCachedClosestSourceToPlayer = nullptr;
     f32 closest = INFINITY;
-    for (dSoundSource_c *source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetNext(&mSourceList, nullptr));
+    for (dSoundSource_c *source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetFirst(&mSourceList));
          source != nullptr; source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetNext(&mSourceList, source))) {
         if (source->getActorType() != 1 && source->getActorType() != 48) {
             f32 dist = source->getDistanceToPlayer();

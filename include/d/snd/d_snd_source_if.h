@@ -11,10 +11,11 @@ class dSoundSourceIf_c {
 public:
     virtual ~dSoundSourceIf_c() {}
 #define SOUNDSOURCE_VIRTUAL(offset) virtual void vt_##offset() = 0;
+
     SOUNDSOURCE_VIRTUAL(0x0C);
-    SOUNDSOURCE_VIRTUAL(0x10);
+    virtual s32 getCategory() const = 0; // 0x10
     SOUNDSOURCE_VIRTUAL(0x14);
-    virtual s32 getActorType() const;
+    virtual s32 getActorType() const = 0;
     SOUNDSOURCE_VIRTUAL(0x1C);
     SOUNDSOURCE_VIRTUAL(0x20);
     SOUNDSOURCE_VIRTUAL(0x24);
