@@ -12,7 +12,7 @@ namespace EGG {
 struct MultiArcSimpleAudioMgr {
     u8 field_0x000[0x0FC - 0x000];
     s32 field_0x0FC;
-    ArcPlayer players[];
+    ArcPlayer players[1];
 
     nw4r::snd::SoundArchivePlayer *getPlayer(int i) {
         return players[i].getPlayer();

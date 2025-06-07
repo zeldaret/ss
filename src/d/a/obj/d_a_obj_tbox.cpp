@@ -17,6 +17,7 @@
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/flag/tboxflag_manager.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/t/d_t_siren.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m3d/m_scnleaf.h"
@@ -35,7 +36,6 @@
 #include "toBeSorted/counters/goddess_chest_counter.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(TBOX, dAcTbox_c, fProfile::TBOX, 0x018D, 0, 6);
 
@@ -1781,7 +1781,7 @@ void dAcTbox_c::executeState_DemoAppear() {
         if (isStop && mAnmMatClr1.isStop(0) && field_0x11F8 > 0x5A) {
             mEvent.advanceNext();
             mStateMgr.changeState(StateID_WaitOpen);
-            SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
         }
     }
 }

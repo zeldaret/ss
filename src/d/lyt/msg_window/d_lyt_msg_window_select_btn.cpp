@@ -3,8 +3,8 @@
 #include "common.h"
 #include "d/d_pad.h"
 #include "d/lyt/d2d.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "toBeSorted/music_mgrs.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 
 STATE_DEFINE(dLytMsgWindowSelectBtnParts_c, Wait);
@@ -278,11 +278,11 @@ void dLytMsgWindowSelectBtn_c::initializeState_In() {
     } else {
         if (field_0x9CF != 0) {
             if (field_0x9A0 == 1) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_CHOICE_START);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_CHOICE_START);
             } else if (field_0x9A0 == 2) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_CHOICE_START_GAMEOVER);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_CHOICE_START_GAMEOVER);
             } else {
-                SmallSoundManager::GetInstance()->playSound(SE_S_TALK_CHOICE_START);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CHOICE_START);
             }
         }
         mAnm[SELECT_BTN_ANIM_IN].setFrame(0.0f);
@@ -323,7 +323,7 @@ void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
         mpWindow->UpdateSize(mpSizeBox, 32.0f);
     } else if (v == 3) {
         field_0x9D1 = 1;
-        SmallSoundManager::GetInstance()->playSound(SE_S_POINTER_RESET);
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_POINTER_RESET);
         mStateMgr.changeState(StateID_In);
         return;
     }
@@ -334,9 +334,9 @@ void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
         mStateMgr.changeState(StateID_WaitDecide);
         // TODO
         if (mpTagProcessor != nullptr) {
-            SmallSoundManager::GetInstance()->playSound(SE_S_TALK_CURSOR_CANCEL);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_CANCEL);
         } else {
-            SmallSoundManager::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
         }
         fn_8035E880(BGM_MGR);
     } else if (dPad::checkButtonBPressed()) {
@@ -347,9 +347,9 @@ void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
         mStateMgr.changeState(StateID_WaitCancel);
         // TODO
         if (mpTagProcessor != nullptr) {
-            SmallSoundManager::GetInstance()->playSound(SE_S_TALK_CURSOR_CANCEL);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_CANCEL);
         } else {
-            SmallSoundManager::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
         }
         fn_8035E880(BGM_MGR);
     }

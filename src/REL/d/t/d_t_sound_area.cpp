@@ -3,6 +3,7 @@
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/c/c_m3d_g_cps.h"
+#include "d/snd/d_snd_3d_manager.h"
 #include "d/t/d_t_sound_area_mgr.h"
 #include "rvl/MTX.h" // IWYU pragma: export
 
@@ -45,20 +46,13 @@ int dTgSndAr_c::doDelete() {
     return SUCCEEDED;
 }
 
-struct Unk {
-    u8 unk[0x144];
-    mVec3_c v;
-};
-
-extern Unk *lbl_80575D58;
-
 int dTgSndAr_c::actorExecute() {
     dAcBase_c *link = dAcPy_c::LINK;
     if (link != nullptr && checkPosInArea(link->position)) {
         link->setBit_field_0xE8(params & 0xFF);
     }
-    if (lbl_80575D58 != nullptr) {
-        mVec3_c pos = lbl_80575D58->v;
+    if (dSnd3DManager_c::GetInstance() != nullptr) {
+        mVec3_c pos = dSnd3DManager_c::GetInstance()->getCameraTargetPos();
         if (checkPosInArea(pos) && dTgSndMg_c::GetInstance() != nullptr) {
             dTgSndMg_c::GetInstance()->setBgmFlag(params & 0xFF);
         }

@@ -1,7 +1,7 @@
 #include "d/lyt/d_lyt_bird_gauge.h"
 
 #include "common.h"
-#include "toBeSorted/small_sound_mgr.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 
 STATE_DEFINE(dLytBirdGaugeMain_c, ModeNone);
 STATE_DEFINE(dLytBirdGaugeMain_c, ModeIn);
@@ -181,7 +181,7 @@ void dLytBirdGaugeMain_c::changeToRecovery() {
     mAnmGroups[LYT_SKY_GAUGE_MAIN_ANIM_RECOVERY + mNumDisplayedDashes].setAnimEnable(true);
     mAnmGroups[LYT_SKY_GAUGE_MAIN_ANIM_RECOVERY + mNumDisplayedDashes].setFrame(0.0f);
     mLyt.calc();
-    SmallSoundManager::GetInstance()->playSound(SE_S_BIRD_RECOVER);
+    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_BIRD_RECOVER);
     mStateMgr.changeState(StateID_ModeRecovery);
     mIsAnimating = false;
     mNumDisplayedDashes++;

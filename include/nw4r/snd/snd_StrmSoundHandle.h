@@ -8,6 +8,7 @@
 #include "common.h" // nullptr
 
 #include "nw4r/snd/snd_SoundHandle.h"
+#include "nw4r/snd/snd_StrmSound.h"
 #include "nw4r/ut/ut_NonCopyable.h" // ut::NonCopyable
 
 /*******************************************************************************
@@ -30,9 +31,15 @@ namespace nw4r { namespace snd
 	public:
 		// methods
 		StrmSoundHandle(SoundHandle*);
+		~StrmSoundHandle() { DetachSound(); }
 		bool IsAttachedSound() const { return mSound != nullptr; }
 
 		void DetachSound();
+
+		void SetVolume(u32 trackFlags, f32 volume, int fadeFrames) {
+			if (IsAttachedSound())
+				mSound->SetTrackVolume(trackFlags, volume, fadeFrames);
+		}
 
 	// members
 	private:

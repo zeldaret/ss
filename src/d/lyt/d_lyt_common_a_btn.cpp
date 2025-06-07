@@ -5,7 +5,7 @@
 #include "common.h"
 #include "d/d_sys.h"
 #include "d/lyt/d2d.h"
-#include "toBeSorted/small_sound_mgr.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 
 static const d2d::LytBrlanMapping brlanMap[] = {
     {    "aBtn_00_in.brlan",   "G_inOut_00"},
@@ -186,9 +186,9 @@ void dLytCommonABtn_c::goToStateDecideOut() {
             anm.setRate(1.0f);
         }
         if (mSoundVariant == VARIANT_NORMAL) {
-            SmallSoundManager::GetInstance()->playSound(SE_S_WINDOW_PRESS_A);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_WINDOW_PRESS_A);
         } else {
-            SmallSoundManager::GetInstance()->playSound(SE_S_TITLE_PRESS_START);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TITLE_PRESS_START);
         }
     }
 }

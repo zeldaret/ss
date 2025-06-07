@@ -6,7 +6,6 @@
 #include "egg/core/eggHeap.h"
 #include "egg/core/eggStreamDecomp.h"
 
-
 namespace EGG {
 
 class DvdRipper {
@@ -28,6 +27,29 @@ public:
     typedef void (*UnkCallback)(void *);
 
 public:
+    // Not sure
+    struct Arg {
+        Arg(const char *path, u8 *pOut, Heap *pHeap, EAllocDirection allocDir, u32 offset, u32 *pRead, u32 *fileSize)
+            : path(path),
+              pOut(pOut),
+              pHeap(pHeap),
+              allocDir(allocDir),
+              offset(offset),
+              pRead(pRead),
+              fileSize(fileSize) {}
+        const char *path;
+        u8 *pOut;
+        Heap *pHeap;
+        EAllocDirection allocDir;
+        u32 offset;
+        u32 *pRead;
+        u32 *fileSize;
+    };
+
+    static u8 *loadToMainRAM(Arg &arg) {
+        return loadToMainRAM(arg.path, arg.pOut, arg.pHeap, arg.allocDir, arg.offset, arg.pRead, arg.fileSize);
+    }
+
     static u8 *
     loadToMainRAM(s32 entryNum, u8 *pOut, Heap *pHeap, EAllocDirection allocDir, u32 offset, u32 *pRead, u32 *fileSize);
 

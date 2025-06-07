@@ -31,10 +31,10 @@ AnmMdlWrapper::AnmMdlWrapper() : mpSoundSource(nullptr), mpSoundData(nullptr) {}
 
 AnmMdlWrapper::~AnmMdlWrapper() {
     if (mpSoundSource != nullptr) {
-        if (mpSoundSource->shutdown()) {
+        if (mpSoundSource->hasPlayingSounds()) {
             do {
                 VIWaitForRetrace();
-            } while (mpSoundSource->shutdown());
+            } while (mpSoundSource->hasPlayingSounds());
         }
     }
 }
@@ -119,7 +119,7 @@ void AnmMdlWrapper::setRate(f32 rate) {
     setSoundRate(rate);
 }
 
-void AnmMdlWrapper::setSoundSource(SoundSource *pSource) {
+void AnmMdlWrapper::setSoundSource(dSoundSourceIf_c *pSource) {
     mpSoundSource = pSource;
 }
 

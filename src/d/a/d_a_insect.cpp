@@ -10,12 +10,12 @@
 #include "d/col/bg/d_bg_w_base.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_pla.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/d_emitter.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 void dAcOInsect_c::kill() {
     dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_394_, position, nullptr, nullptr, nullptr, nullptr, 0, 0);

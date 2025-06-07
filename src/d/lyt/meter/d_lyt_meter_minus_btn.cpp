@@ -7,12 +7,12 @@
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_util_items.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "m/m_angle.h"
 #include "nw4r/lyt/lyt_group.h"
 #include "nw4r/math/math_types.h"
 #include "sized_string.h"
 #include "toBeSorted/file_manager.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytMeterMinusBtnMenuIcon_c, Wait);
 STATE_DEFINE(dLytMeterMinusBtnMenuIcon_c, On);
@@ -635,9 +635,9 @@ void dLytMeterMinusBtn_c::initializeState_DemoMove() {
     }
 
     if (field_0x4E8C == 0) {
-        SmallSoundManager::GetInstance()->playSound(SE_S_DOGU_PORCH_ADD_FIRST);
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_DOGU_PORCH_ADD_FIRST);
     } else {
-        SmallSoundManager::GetInstance()->playSound(SE_S_DOGU_PORCH_ADD);
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_DOGU_PORCH_ADD);
     }
 }
 void dLytMeterMinusBtn_c::executeState_DemoMove() {
@@ -898,7 +898,7 @@ bool dLytMeterMinusBtn_c::execute() {
             mAnm[MINUS_BTN_ANIM_CALL].play();
             if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_MINUS) &&
                 mAnm[MINUS_BTN_ANIM_CALL].getFrame() == 1.0f) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_MINUS_BUTTON_BLINK);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MINUS_BUTTON_BLINK);
             }
         }
     } else if (field_0x4EBA == 1) {

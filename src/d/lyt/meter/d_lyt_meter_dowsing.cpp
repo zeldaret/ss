@@ -10,6 +10,7 @@
 #include "d/lyt/d_lyt_util_items.h"
 #include "d/lyt/d_window.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_group.h"
 #include "nw4r/math/math_types.h"
@@ -17,7 +18,6 @@
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/file_manager.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytMeterDowsingMenuIcon_c, Wait);
 STATE_DEFINE(dLytMeterDowsingMenuIcon_c, On);
@@ -717,7 +717,7 @@ void dLytMeterDowsing_c::executeState_DemoMove() {
             nw4r::math::MTX34 mtx = mpPanes[idx]->GetGlobalMtx();
             mVec3_c pos(mtx._03, mtx._13, 0.0f);
             dJEffManager_c::spawnUIEffect(PARTICLE_RESOURCE_ID_MAPPING_970_, pos, nullptr, nullptr, nullptr, nullptr);
-            SmallSoundManager::GetInstance()->playSound(SE_S_DOWSING_ADD);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_DOWSING_ADD);
         }
     } else if (mDemoFrame == 16) {
         for (int i = 0; i < DOWSING_NUM_ITEMS; i++) {
@@ -1010,7 +1010,7 @@ bool dLytMeterDowsing_c::execute() {
         if (mAnm[DOWSING_ANIM_CALL].isEnabled()) {
             mAnm[DOWSING_ANIM_CALL].play();
             if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_C) && mAnm[DOWSING_ANIM_CALL].getFrame() == 1.0f) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_C_BUTTON_BLINK);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_C_BUTTON_BLINK);
             }
         }
     } else if (field_0x5509 == 1) {

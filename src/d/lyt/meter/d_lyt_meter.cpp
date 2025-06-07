@@ -31,6 +31,7 @@
 #include "d/lyt/d_lyt_sky_gauge.h"
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
 #include "d/lyt/msg_window/d_lyt_simple_window.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
 #include "m/m_vec.h"
@@ -40,7 +41,6 @@
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/minigame_mgr.h"
 #include "toBeSorted/misc_actor.h"
-#include "toBeSorted/small_sound_mgr.h"
 // clang-format on
 
 static dLytMeterConfiguration_c sConf;
@@ -207,7 +207,7 @@ bool dLytMeter1Button_c::execute() {
         if (mAnm[BUTTON_1_ANIM_CALL].isEnabled()) {
             mAnm[BUTTON_1_ANIM_CALL].play();
             if (meter->checkAllFlags(METER_BTN_1) && mCallCount < 3 && mAnm[BUTTON_1_ANIM_CALL].getFrame() == 1.0f) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_1_BUTTON_BLINK);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_1_BUTTON_BLINK);
                 mCallCount++;
             }
         }
@@ -384,7 +384,7 @@ bool dLytMeter2Button_c::execute() {
         if (mAnm[BUTTON_1_ANIM_CALL].isEnabled()) {
             mAnm[BUTTON_1_ANIM_CALL].play();
             if (meter->checkAllFlags(METER_BTN_2) && mCallCount < 3 && mAnm[BUTTON_1_ANIM_CALL].getFrame() == 1.0f) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_2_BUTTON_BLINK);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_2_BUTTON_BLINK);
                 mCallCount++;
             }
         }

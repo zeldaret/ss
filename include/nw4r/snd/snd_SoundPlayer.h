@@ -10,6 +10,7 @@
 #include "nw4r/snd/snd_BasicSound.h"
 #include "nw4r/snd/snd_global.h" // AUX_BUS_NUM
 #include "nw4r/snd/snd_PlayerHeap.h"
+#include "nw4r/snd/snd_SoundHandle.h"
 
 /*******************************************************************************
  * classes
@@ -68,6 +69,35 @@ namespace nw4r { namespace snd
 		detail::PlayerHeap *detail_AllocPlayerHeap(detail::BasicSound *sound);
 		void detail_FreePlayerHeap(detail::BasicSound *sound);
 		void detail_AppendPlayerHeap(detail::PlayerHeap *heap);
+
+		// Apparently exists, needed in d/snd
+		template <typename TForEachFunc>
+		TForEachFunc ForEachSound(TForEachFunc pFunc, bool reverse) {
+			if (reverse) {
+				detail::BasicSound::SoundPlayerPlayLinkList::ReverseIterator it = mSoundList.GetBeginReverseIter();
+
+				while (it != mSoundList.GetEndReverseIter()) {
+					detail::BasicSound::SoundPlayerPlayLinkList::ReverseIterator curr = it;
+
+					SoundHandle handle;
+					handle.detail_AttachSoundAsTempHandle(&*curr);
+					pFunc(handle);
+
+					if (handle.IsAttachedSound()) {
+						++it;
+					}
+				}
+			} else {
+				NW4R_RANGE_FOR_NO_AUTO_INC(it, mSoundList) {
+					decltype(it) curItr = it++;
+					SoundHandle handle;
+					handle.detail_AttachSoundAsTempHandle(&*curItr);
+					pFunc(handle);
+				}
+			}
+
+			return pFunc;
+		}
 
 	// members
 	private:

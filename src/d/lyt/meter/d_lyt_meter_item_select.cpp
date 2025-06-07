@@ -13,6 +13,7 @@
 #include "d/lyt/d_lyt_do_button.h"
 #include "d/lyt/d_lyt_unknowns.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_group.h"
 #include "nw4r/math/math_types.h"
@@ -22,7 +23,6 @@
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/minigame_mgr.h"
 #include "toBeSorted/misc_actor.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytMeterItemSelectIcon_c, Wait);
 STATE_DEFINE(dLytMeterItemSelectIcon_c, On);
@@ -1392,7 +1392,7 @@ void dLytMeterItemSelect_c::initializeState_DemoMove() {
         mAnm[i + ITEM_SELECT_ANIM_HAVE_OFFSET].setAnimEnable(false);
     }
 
-    SmallSoundManager::GetInstance()->playSound(SE_S_GET_ITEM_SET);
+    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GET_ITEM_SET);
 }
 
 void dLytMeterItemSelect_c::executeState_DemoMove() {
@@ -1988,7 +1988,7 @@ bool dLytMeterItemSelect_c::execute() {
 
         if (dLytDobutton_c::getField0x47C() == dLytDobutton_c::ACT_DO_SAILCLOTH) {
             if (field_0x5774 == 0) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_PARACHUTE_CALL);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_PARACHUTE_CALL);
             }
             field_0x5774++;
             if (field_0x5774 >= mAnm[ITEM_SELECT_ANIM_CALL].getAnimDuration() / 2.0f) {
@@ -2058,11 +2058,11 @@ bool dLytMeterItemSelect_c::execute() {
             mAnm[ITEM_SELECT_ANIM_FULL].setFrame(0.0f);
             mAnm[ITEM_SELECT_ANIM_FULL].setAnimEnable(true);
             if (field_0x5797 == I_BOMB_BAG) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_BM_MAX);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_BM_MAX);
             } else if (field_0x5797 == I_BOW) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_AW_MAX);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_AW_MAX);
             } else if (field_0x5797 == I_SLINGSHOT) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_PC_MAX);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_PC_MAX);
             }
         }
         field_0x57B7 = false;
@@ -2094,7 +2094,7 @@ bool dLytMeterItemSelect_c::execute() {
             mAnm[ITEM_SELECT_ANIM_CALL].play();
             if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_B) &&
                 mAnm[ITEM_SELECT_ANIM_CALL].getFrame() == 1.0f) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_B_BUTTON_BLINK);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_B_BUTTON_BLINK);
             }
         }
         b2 = true;
@@ -2115,7 +2115,7 @@ bool dLytMeterItemSelect_c::execute() {
                 mAnm[ITEM_SELECT_ANIM_CALL].play();
                 if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_B) &&
                     mAnm[ITEM_SELECT_ANIM_CALL].getFrame() == 1.0f) {
-                    SmallSoundManager::GetInstance()->playSound(SE_S_PARACHUTE_CALL);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_PARACHUTE_CALL);
                 }
             }
             b2 = true;

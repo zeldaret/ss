@@ -11,6 +11,7 @@
 #include "d/d_sys.h"
 #include "d/lyt/d_lyt_save_msg_window.h"
 #include "d/lyt/d_lyt_system_window.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "egg/core/eggHeap.h"
 #include "m/m_pad.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
@@ -18,7 +19,6 @@
 #include "toBeSorted/nand_request_thread.h"
 #include "toBeSorted/nand_result_tracker.h"
 #include "toBeSorted/reload_color_fader.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 #include "rvl/NAND.h"
 #include "rvl/TPL.h"
@@ -511,7 +511,7 @@ void SaveMgr::executeSaveBanner() {
 
             if (b == 1) {
                 if (!dDvdUnk::FontUnk::GetInstance()->getField_0x28()) {
-                    SmallSoundManager::GetInstance()->playSound(SE_S_SAVE_FINISH);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SAVE_FINISH);
                 }
                 mDelayTimer = 0;
                 mStep++;

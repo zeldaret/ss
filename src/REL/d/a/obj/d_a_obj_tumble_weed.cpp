@@ -10,6 +10,7 @@
 #include "d/col/c/c_m3d_g_pla.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "egg/math/eggMath.h"
 #include "egg/math/eggQuat.h"
 #include "m/m_angle.h"
@@ -20,8 +21,6 @@
 #include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/dowsing_target.h"
-#include "toBeSorted/small_sound_mgr.h"
-
 
 void float_ordering() {
     const f32 arr[] = {5.f, 15.f, 7.f, 0.5f, 0.1f};

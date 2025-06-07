@@ -9,8 +9,8 @@
 #include "d/d_pouch.h"
 #include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "m/m_angle.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(TAG_REACTION, dTgReaction_c, fProfile::TAG_REACTION, 0x0151, 0, 0);
 
@@ -172,7 +172,7 @@ void dTgReaction_c::checkForBonkItem() {
                 if (dAcObjBase_c::create(fProfile::ITEM, roomid, newItemParms, &c2, nullptr, nullptr, 0xFFFFFFFF)) {
                     field_0x4DD = 1;
                     onDelete();
-                    SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
                 }
             }
         } else {
@@ -194,7 +194,7 @@ void dTgReaction_c::checkForBonkItem() {
 
             pos.y += field_0x4E4;
             if (fn_578_DB0(pos, uVar3)) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_B);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_READ_RIDDLE_B);
             }
             SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
             onDelete();
@@ -228,7 +228,7 @@ void dTgReaction_c::checkForSlingBellowsItem() {
         mVec3_c spawnPos = position;
         spawnPos.y += field_0x4E4;
         if (fn_578_DB0(spawnPos, uVar3)) {
-            SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_B);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_READ_RIDDLE_B);
         }
         SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
         onDelete();

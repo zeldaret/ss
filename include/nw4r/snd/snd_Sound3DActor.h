@@ -21,7 +21,14 @@ public:
     // AmbientArgUpdateCallback
     virtual void at_0x0c(void *arg, detail::BasicSound* sound) override;
 
+    const nw4r::math::VEC3 &GetPosition() const {
+        return mPosition;
+    }
     void SetPosition(const math::VEC3 &rPosition);
+
+    void SetUserParam(u32 userParam) {
+        mUserParam = userParam;
+    }
 
 private:
     static void ClearUpdateCallback(SoundHandle &rHandle);

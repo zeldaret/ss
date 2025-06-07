@@ -7,10 +7,10 @@
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_unknowns.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/fi_context.h"
 #include "toBeSorted/misc_actor.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytMeterCrossBtnParts_c, Wait);
 STATE_DEFINE(dLytMeterCrossBtnParts_c, On);
@@ -504,7 +504,7 @@ bool dLytMeterCrossBtn_c::execute() {
                 mAnm[CROSS_BTN_ANIM_CALL_0].play();
                 if (mParts[CROSS_BTN_PART_DOWN].isActive() && mCallCount0 < 3 &&
                     mAnm[CROSS_BTN_ANIM_CALL_0].getFrame() == 1.0f) {
-                    SmallSoundManager::GetInstance()->playSound(SE_S_SG_CALL);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SG_CALL);
                     mCallCount0++;
                 }
             }
@@ -525,7 +525,7 @@ bool dLytMeterCrossBtn_c::execute() {
                 mAnm[CROSS_BTN_ANIM_CALL_1].play();
                 if (mParts[CROSS_BTN_PART_TOP].isActive() && mCallCount1 < 3 &&
                     mAnm[CROSS_BTN_ANIM_CALL_1].getFrame() == 1.0f) {
-                    SmallSoundManager::GetInstance()->playSound(SE_S_CATAPULT_READY);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_CATAPULT_READY);
                     mCallCount1++;
                 }
             }
@@ -546,7 +546,7 @@ bool dLytMeterCrossBtn_c::execute() {
             if (mAnm[CROSS_BTN_ANIM_CALL_2].isEnabled()) {
                 mAnm[CROSS_BTN_ANIM_CALL_2].play();
                 if (mParts[CROSS_BTN_PART_DOWN].isActive() && mAnm[CROSS_BTN_ANIM_CALL_2].getFrame() == 1.0f) {
-                    SmallSoundManager::GetInstance()->playSound(SE_S_BIRD_CALL);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_BIRD_CALL);
                 }
             }
         }

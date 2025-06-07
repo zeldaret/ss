@@ -1,9 +1,8 @@
-#ifndef SMALL_SOUND_MGR_H
-#define SMALL_SOUND_MGR_H
+#ifndef D_SND_WZSOUND_H
+#define D_SND_WZSOUND_H
 
 // Thanks kiwi! https://gist.github.com/kiwi515/47bb17b07ed502bdfa7faa60bc48a3c7
 
-#include "common.h"
 enum WZSound {
     /* 0x0000 */ SE_L_FLIPED,
     /* 0x0001 */ SE_L_FS_START,
@@ -6467,20 +6466,6 @@ enum WZSound {
     /* 0x193B */ SE_Demo87_01_Link_DASH_L,
     /* 0x193C */ SE_Demo87_01_Link_DASH_R,
     /* 0x193D */ LABEL_SOUND_END
-};
-
-class SmallSoundManager {
-public:
-    void playSound(WZSound id);
-    void playSoundWithPitch(WZSound id, f32 pitch);
-    void playButtonPressSoundWhenAdvancingTextBoxes(f32);
-
-    static SmallSoundManager *GetInstance() {
-        return sInstance;
-    }
-
-private:
-    static SmallSoundManager *sInstance;
 };
 
 #endif

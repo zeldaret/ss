@@ -5,9 +5,9 @@
 #include "d/a/d_a_item.h"
 #include "d/d_stage_mgr.h"
 #include "d/lyt/d2d.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_pane.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytMeterKakeraKey_c, Wait);
 STATE_DEFINE(dLytMeterKakeraKey_c, On);
@@ -87,9 +87,9 @@ void dLytMeterKakeraKey_c::initializeState_Increase() {
     mAnm[mNextKeyPieceCount - 1 + KEY_KAKERA_ANIM_NUMBER_OFFSET].setFrame(0.0f);
     mSavedKeyPieceCount = dAcItem_c::getKeyPieceCount();
     if (mSavedKeyPieceCount == KEY_KAKERA_NUM_PIECES) {
-        SmallSoundManager::GetInstance()->playSound(SE_S_KEY_COMPLETE);
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_KEY_COMPLETE);
     } else {
-        SmallSoundManager::GetInstance()->playSound(SE_S_KEY_PARTS);
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_KEY_PARTS);
     }
 }
 void dLytMeterKakeraKey_c::executeState_Increase() {
