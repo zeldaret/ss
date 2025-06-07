@@ -23,6 +23,7 @@
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
+#include "d/snd/d_snd_source_mgr.h"
 #include "egg/core/eggHeap.h"
 #include "f/f_base.h"
 #include "f/f_profile.h"
@@ -198,7 +199,7 @@ void dFlow_c::playSound(u32 params) {
         return;
     }
     if (params >= 100) {
-        fn_803858D0(ENEMY_BGM_RELATED_MGR);
+        dSndSourceMgr_c::GetInstance()->playFlowSound(params);
         return;
     }
 

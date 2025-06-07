@@ -21,6 +21,7 @@ class dSoundSource_c;
 class dSndSourceGroup_c {
 public:
     dSndSourceGroup_c();
+    dSndSourceGroup_c(u32, const char*, u32, u32);
     ~dSndSourceGroup_c();
 
     void registerSource(dSoundSource_c *);
@@ -42,8 +43,8 @@ private:
     void resetSoundSourceParam();
     void clearList();
 
-    /* 0x00 */ nw4r::ut::Node mNode;
-    /* 0x08 */ u8 _0x08[0x10 - 0x08];
+    /* 0x00 */ nw4r::ut::Node mNode1;
+    /* 0x08 */ nw4r::ut::Node mNode2;
     /* 0x10 */ UNKWORD field_0x10;
     /* 0x14 */ UNKWORD field_0x14;
     /* 0x18 */ UNKWORD field_0x18;

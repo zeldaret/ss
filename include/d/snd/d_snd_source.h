@@ -78,8 +78,8 @@ private:
     // at 0x00: dSoundSourceIf_c vtable
     // at 0x04: dSnd3DActor_c sub-object
     // at 0x58: thunk-vtable
-    /* 0xE8 */ u8 field_0xE8[0xF0 - 0xE8];
 
+    /* 0xE8 */ nw4r::ut::Node mMgrLink;
     /* 0x0F0 */ UNKWORD field_0x0F0;
     /* 0x0F4 */ UNKWORD field_0x0F4;
     /* 0x0F8 */ dAcBase_c *mpPlayer;
