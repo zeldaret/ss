@@ -90,7 +90,7 @@ public:
         group_type = m_tmpCtData.group_type;
     }
 
-    inline u32 getFromParams(u8 shift, u32 mask) {
+    u32 getFromParams(u8 shift, u32 mask) {
         return (params >> shift) & mask;
     }
 
