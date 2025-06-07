@@ -360,8 +360,10 @@ toBeSorted/arc_managers/layout_arc_manager.cpp:
 toBeSorted/arc_managers/layout_arc_control.cpp:
 	.text       start:0x8006A2E0 end:0x8006A544 align:16
 
-toBeSorted/base_tables.cpp:
+toBeSorted/actor_info.cpp:
 	.text       start:0x8006A550 end:0x8006A8C8 align:16
+	.rodata     start:0x804E0FA8 end:0x804E3418
+	.sdata2     start:0x805779F8 end:0x80579210
 
 toBeSorted/unk_vec_math.cpp:
 	.text       start:0x8006A8D0 end:0x8006B3A4 align:16

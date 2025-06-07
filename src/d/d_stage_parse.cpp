@@ -15,6 +15,7 @@
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "sized_string.h"
+#include "toBeSorted/actor_info.h"
 #include "toBeSorted/file_manager.h"
 
 struct BzsHeader {
@@ -242,13 +243,11 @@ static void handleBzsPly(int roomid, const BzsSectionHead *section) {
     }
 }
 
-extern "C" u16 getActorIdForObjName2(const char *objname);
-
 static void handleBzsObjn(int roomid, const BzsSectionHead *section) {
     const OBJN *objn = OFS_TO_PTR(OBJN, section);
     const char *buf = reinterpret_cast<const char *>(objn);
     for (s32 i = 0; i < section->mCount; i++) {
-        dStageMgr_c::GetInstance()->addObjId(getActorIdForObjName2(buf + objn->offset));
+        dStageMgr_c::GetInstance()->addObjId(getProfileId2ForName(buf + objn->offset));
         objn++;
     }
 }
@@ -266,7 +265,7 @@ static void handleBzsLayerObjn(int roomid, const BzsSectionHead *section) {
     const OBJN *objn = OFS_TO_PTR(OBJN, section);
     const char *buf = reinterpret_cast<const char *>(objn);
     for (s32 i = 0; i < section->mCount; i++) {
-        u16 id = getActorIdForObjName2(buf + objn->offset);
+        u16 id = getProfileId2ForName(buf + objn->offset);
         dStageMgr_c::GetInstance()->addActorId(id);
         objn++;
     }

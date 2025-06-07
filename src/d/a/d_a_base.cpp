@@ -17,6 +17,7 @@
 #include "f/f_list_nd.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
+#include "toBeSorted/actor_info.h"
 #include "toBeSorted/event.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/file_manager.h"
@@ -33,13 +34,10 @@ mVec3_c *dAcBase_c::s_Create_Position;
 mAng3_c *dAcBase_c::s_Create_Rotation;
 mVec3_c *dAcBase_c::s_Create_Scale;
 dAcBase_c *dAcBase_c::s_Create_Parent;
-ObjInfo *dAcBase_c::s_Create_ObjInfo;
+const ActorInfo *dAcBase_c::s_Create_ActorInfo;
 u8 dAcBase_c::s_Create_Subtype;
 
-extern "C" ObjInfo *getObjByActorIdAndSubtype_unkNamespace(ProfileName, u8);
-extern "C" ObjInfo *getObjByActorName_unkNamespace(char *name);
-extern "C" char *getObjectName_8006a730(ObjInfo *);
-extern "C" SoundSource *soundForActorInitRelated_803889c0(s8, fBase_c *, char *, u8);
+extern "C" SoundSource *soundForActorInitRelated_803889c0(s8, fBase_c *, const char *, u8);
 
 bool dAcBase_c::createHeap() {
     return true;
@@ -50,7 +48,7 @@ bool dAcBase_c::createHeap() {
 // 8002c3b0
 dAcBase_c::dAcBase_c()
     : heap_allocator(),
-      obj_info(s_Create_ObjInfo),
+      mpActorInfo(s_Create_ActorInfo),
       sound_list(),
       obj_pos(&position),
       params2(s_Create_Params2),
@@ -82,8 +80,8 @@ dAcBase_c::dAcBase_c()
 
     fProfile::fActorProfile_c *profile = (fProfile::fActorProfile_c *)((*fProfile::sProfileList)[profile_name]);
     actor_properties = profile->mActorProperties;
-    if (obj_info == nullptr) {
-        obj_info = getObjByActorIdAndSubtype_unkNamespace(profile_name, actor_subtype);
+    if (mpActorInfo == nullptr) {
+        mpActorInfo = getActorInfoByProfileAndSubtype(profile_name, actor_subtype);
     }
     someStr[0] = '\0';
 }
@@ -98,7 +96,7 @@ dAcBase_c::~dAcBase_c() {}
 
 void dAcBase_c::setTempCreateParams(
     mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, s32 roomId, u32 params2, dAcBase_c *parent, u8 subtype, u16 unkFlag,
-    s8 viewClipIdx, ObjInfo *objInfo
+    s8 viewClipIdx, const ActorInfo *actorInfo
 ) {
     s_Create_Position = pos;
     s_Create_Rotation = rot;
@@ -109,22 +107,21 @@ void dAcBase_c::setTempCreateParams(
     s_Create_Subtype = subtype;
     s_Create_UnkFlags = unkFlag;
     s_Create_ViewClipIdx = viewClipIdx;
-    s_Create_ObjInfo = objInfo;
+    s_Create_ActorInfo = actorInfo;
 }
 
-// has regswap
-SoundSource *dAcBase_c::FUN_8002c690() {
-    if (obj_info == nullptr) {
+SoundSource *dAcBase_c::createSoundSource() {
+    if (mpActorInfo == nullptr) {
         return nullptr;
     }
 
-    s32 unk_val = obj_info->unk_0xA;
-    if (unk_val == -1) {
+    s32 soundSourceType = mpActorInfo->soundSourceType;
+    if (soundSourceType == -1) {
         return nullptr;
     }
 
-    char *objName = getObjectName_8006a730(obj_info);
-    return soundForActorInitRelated_803889c0(unk_val, this, objName, subtype);
+    const char *actorName = getActorName(mpActorInfo);
+    return soundForActorInitRelated_803889c0(soundSourceType, this, actorName, subtype);
 }
 
 int dAcBase_c::initAllocatorWork1Heap(int size, char *name, int align) {
@@ -135,7 +132,7 @@ int dAcBase_c::initAllocator(int size, char *name, EGG::Heap *heap, int align) {
     if (!heap_allocator.createNewTempFrmHeap(size, heap, name, 0x20, 0)) {
         return 0;
     }
-    sound_source = FUN_8002c690();
+    sound_source = createSoundSource();
     int success = createHeap();
     heap_allocator.adjustFrmHeapRestoreCurrent();
     return success;
@@ -344,16 +341,16 @@ u32 dAcBase_c::getParams2Lower() const {
 
 // 8002d020
 dAcBase_c *dAcBase_c::findActor(char *objName, dAcBase_c *parent) {
-    ObjInfo *objInfo = getObjByActorName_unkNamespace(objName);
-    if (objInfo == nullptr) {
+    const ActorInfo *actorInfo = getActorInfoByName(objName);
+    if (actorInfo == nullptr) {
         return nullptr;
     } else {
         do {
-            parent = (dAcBase_c *)fManager_c::searchBaseByProfName(objInfo->obj_id, parent);
+            parent = (dAcBase_c *)fManager_c::searchBaseByProfName(actorInfo->profileId, parent);
             if (parent == nullptr) {
                 break;
             }
-        } while (parent->actor_subtype != objInfo->subtype);
+        } while (parent->actor_subtype != actorInfo->subtype);
     }
     return parent;
 }
