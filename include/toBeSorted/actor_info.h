@@ -6,7 +6,16 @@
 // TODO: Expand when we figure out what the other entries have in common
 enum SoundSourceCategory_e {
     SND_SOURCE_PLAYER = 0,
+    SND_SOURCE_PLAYER_HEAD = 1,
+    SND_SOURCE_NET = 2,
+    SND_SOURCE_BLADE = 3,
+    SND_SOURCE_SHIELD = 4,
+    SND_SOURCE_WHIP = 5,
+
     SND_SOURCE_ARROW = 7,
+
+    SND_SOURCE_HOOKSHOT = 9,
+
     SND_SOURCE_BULLET = 29,
     SND_SOURCE_OBJECT = 32,
     SND_SOURCE_ITEM = 35,
@@ -18,6 +27,8 @@ enum SoundSourceCategory_e {
     SND_SOURCE_PLAYER_BIRD = 45,
     SND_SOURCE_INSECT = 49,
     SND_SOURCE_NPC_NRM = 51,
+    SND_SOURCE_NPC_DRAGON = 52,
+    SND_SOURCE_TG_SOUND = 53,
     SND_SOURCE_SW_HARP = 56,
 };
 

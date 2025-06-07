@@ -252,7 +252,7 @@ public:
         s8 viewClipIdx, const ActorInfo *actorInfo
     );
 
-    /* 8002c690 */ SoundSource *FUN_8002c690();
+    /* 8002c690 */ SoundSource *createSoundSource();
     /* 8002c710 */ int initAllocatorWork1Heap(int size, char *name, int align);
     /* 8002c720 */ int initAllocator(int size, char *name, EGG::Heap *heap, int align);
     /* 8002c7b0 */ bool addActorToRoom(s32 roomId);

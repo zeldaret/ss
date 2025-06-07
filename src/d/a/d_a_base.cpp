@@ -110,8 +110,7 @@ void dAcBase_c::setTempCreateParams(
     s_Create_ActorInfo = actorInfo;
 }
 
-// has regswap
-SoundSource *dAcBase_c::FUN_8002c690() {
+SoundSource *dAcBase_c::createSoundSource() {
     if (mpActorInfo == nullptr) {
         return nullptr;
     }
@@ -121,8 +120,8 @@ SoundSource *dAcBase_c::FUN_8002c690() {
         return nullptr;
     }
 
-    const char *objName = getActorName(mpActorInfo);
-    return soundForActorInitRelated_803889c0(soundSourceCategory, this, objName, subtype);
+    const char *actorName = getActorName(mpActorInfo);
+    return soundForActorInitRelated_803889c0(soundSourceCategory, this, actorName, subtype);
 }
 
 int dAcBase_c::initAllocatorWork1Heap(int size, char *name, int align) {
@@ -133,7 +132,7 @@ int dAcBase_c::initAllocator(int size, char *name, EGG::Heap *heap, int align) {
     if (!heap_allocator.createNewTempFrmHeap(size, heap, name, 0x20, 0)) {
         return 0;
     }
-    sound_source = FUN_8002c690();
+    sound_source = createSoundSource();
     int success = createHeap();
     heap_allocator.adjustFrmHeapRestoreCurrent();
     return success;
