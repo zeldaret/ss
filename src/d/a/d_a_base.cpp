@@ -115,13 +115,13 @@ SoundSource *dAcBase_c::createSoundSource() {
         return nullptr;
     }
 
-    s32 soundSourceCategory = mpActorInfo->soundSourceCategory;
-    if (soundSourceCategory == -1) {
+    s32 soundSourceType = mpActorInfo->soundSourceType;
+    if (soundSourceType == -1) {
         return nullptr;
     }
 
     const char *actorName = getActorName(mpActorInfo);
-    return soundForActorInitRelated_803889c0(soundSourceCategory, this, actorName, subtype);
+    return soundForActorInitRelated_803889c0(soundSourceType, this, actorName, subtype);
 }
 
 int dAcBase_c::initAllocatorWork1Heap(int size, char *name, int align) {

@@ -863,10 +863,10 @@ const ActorInfo *getActorInfoByProfileAndSubtype(u32 profileId, u32 subtype) {
     return nullptr;
 }
 
-s32 getSoundSourceCategoryForName(const char *name) {
+s32 getSoundSourceTypeForName(const char *name) {
     const ActorInfo *info = getActorInfoByName(name);
     if (info != nullptr) {
-        return info->soundSourceCategory;
+        return info->soundSourceType;
     }
     return -1;
 }

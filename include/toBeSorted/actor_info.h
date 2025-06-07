@@ -4,7 +4,7 @@
 #include "common.h"
 
 // TODO: Expand when we figure out what the other entries have in common
-enum SoundSourceCategory_e {
+enum SoundSourceType_e {
     SND_SOURCE_PLAYER = 0,
     SND_SOURCE_PLAYER_HEAD = 1,
     SND_SOURCE_NET = 2,
@@ -40,7 +40,7 @@ struct ActorInfo {
     /* 0x04 */ u16 profileId;
     /* 0x06 */ u16 profileId2;
     /* 0x08 */ u16 fiTextEntryId; // also used for kill counters
-    /* 0x0A */ s8 soundSourceCategory;
+    /* 0x0A */ s8 soundSourceType;
     /* 0x0B */ u8 subtype;
 };
 
@@ -50,6 +50,6 @@ u16 getProfileId2ForName(const char *name);
 const char *getNameForProfileId(u32 profileId);
 const char *getActorName(const ActorInfo *actorInfo);
 const ActorInfo *getActorInfoByProfileAndSubtype(u32 profileId, u32 subtype);
-s32 getSoundSourceCategoryForName(const char *name);
+s32 getSoundSourceTypeForName(const char *name);
 
 #endif
