@@ -11,6 +11,8 @@
 #include "m/m_vec.h"
 #include "nw4r/math/math_arithmetic.h"
 
+#include <cmath>
+
 dLightEnv_c dLightEnv_c::sInstance;
 dLightEnv_c *dLightEnv_c::sPInstance;
 
@@ -39,24 +41,14 @@ void dLightEnv_c::get_vectle_calc(const mVec3_c *pInA, const mVec3_c *pInB, mVec
     vectle_calc(&pos, pOut);
 }
 
-// TODO(??)
-inline f32 sinf(f32 x) {
-    return sin(x);
-}
-
-// TODO(??)
-inline f32 cosf(f32 x) {
-    return cos(x);
-}
-
 void dLightEnv_c::sphere_to_cartesian(f32 angY, f32 angXZ, mVec3_c *pOut) {
     f32 radY = angY / (180.f / M_PI);
     f32 radXZ = angXZ / (180.f / M_PI);
 
     mVec3_c pos;
-    pos.x = cosf(radY) * sinf(radXZ);
-    pos.y = sinf(radY);
-    pos.z = cosf(radY) * cosf(radXZ);
+    pos.x = std::cosf(radY) * std::sinf(radXZ);
+    pos.y = std::sinf(radY);
+    pos.z = std::cosf(radY) * std::cosf(radXZ);
 
     pOut->x = pos.x;
     pOut->y = pos.y;
