@@ -176,7 +176,7 @@ void MemorySoundArchive::MemoryFileStream::Seek(s32 offset, u32 origin)
 
 	default:
 		NW4RPanicMessage_Line(234, "Unsupported Seek origin");
-		break;
+		return;
 	}
 }
 

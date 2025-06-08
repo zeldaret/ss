@@ -108,52 +108,58 @@ namespace nw4r { namespace snd
 			SoundHandle *pHandle, u32 id, const StartInfo *pStartInfo
 		);
 		StartResult detail_StartSound(
-			SoundHandle *pHandle, u32 id, detail::BasicSound::AmbientInfo *pArgInfo,
-			detail::ExternalSoundPlayer *pPlayer, const StartInfo *pStartInfo
+			SoundHandle *pHandle, const char *label, const StartInfo *pStartInfo
 		);
 
 		StartResult detail_HoldSound(
 			SoundHandle *pHandle, u32 id, const StartInfo *pStartInfo
 		);
-
 		StartResult detail_HoldSound(
-			SoundHandle *pHandle, u32 id, detail::BasicSound::AmbientInfo *pArgInfo,
-			detail::ExternalSoundPlayer *pPlayer, const StartInfo *pStartInfo
+			SoundHandle *pHandle, const char *label, const StartInfo *pStartInfo
 		);
 
 		StartResult detail_PrepareSound(
-			SoundHandle *pHandle, u32 id, detail::BasicSound::AmbientInfo *pArgInfo,
-			detail::ExternalSoundPlayer *pPlayer, const StartInfo *pStartInfo
+			SoundHandle *pHandle, u32 id, const StartInfo *pStartInfo
+		);
+		StartResult detail_PrepareSound(
+			SoundHandle *pHandle, const char *label,
+			const StartInfo *pStartInfo
 		);
 
 		bool StartSound(SoundHandle *pHandle, u32 id) {
-			return detail_StartSound(pHandle, id, NULL, NULL, NULL) == START_SUCCESS;
+			return detail_StartSound(pHandle, id, NULL) == START_SUCCESS;
+		}
+		bool StartSound(SoundHandle *pHandle, const char *label) {
+			return detail_StartSound(pHandle, label, NULL) == START_SUCCESS;
 		}
 		bool StartSound(SoundHandle *pHandle, unsigned int id) {
-			return detail_StartSound(pHandle, id, NULL, NULL, NULL) == START_SUCCESS;
+			return detail_StartSound(pHandle, id, NULL) == START_SUCCESS;
 		}
 		bool StartSound(SoundHandle *pHandle, int id) {
-			return detail_StartSound(pHandle, id, NULL, NULL, NULL) == START_SUCCESS;
+			return detail_StartSound(pHandle, id, NULL) == START_SUCCESS;
 		}
 
 		bool HoldSound(SoundHandle *pHandle, u32 id) {
-			return detail_HoldSound(pHandle, id, NULL, NULL, NULL) == START_SUCCESS;
+			return detail_HoldSound(pHandle, id, NULL) == START_SUCCESS;
+		}
+		bool HoldSound(SoundHandle *pHandle, const char *label) {
+			return detail_HoldSound(pHandle, label, NULL) == START_SUCCESS;
 		}
 		bool HoldSound(SoundHandle *pHandle, unsigned int id) {
-			return detail_HoldSound(pHandle, id, NULL, NULL, NULL) == START_SUCCESS;
+			return detail_HoldSound(pHandle, id, NULL) == START_SUCCESS;
 		}
 		bool HoldSound(SoundHandle *pHandle, int id) {
-			return detail_HoldSound(pHandle, id, NULL, NULL, NULL) == START_SUCCESS;
+			return detail_HoldSound(pHandle, id, NULL) == START_SUCCESS;
 		}
 
 		bool PrepareSound(SoundHandle *pHandle, u32 id) {
-			return detail_PrepareSound(pHandle, id, NULL, NULL, NULL) == START_SUCCESS;
+			return detail_PrepareSound(pHandle, id, NULL) == START_SUCCESS;
 		}
 		bool PrepareSound(SoundHandle *pHandle, unsigned int id) {
-			return detail_PrepareSound(pHandle, id, NULL, NULL, NULL) == START_SUCCESS;
+			return detail_PrepareSound(pHandle, id, NULL) == START_SUCCESS;
 		}
 		bool PrepareSound(SoundHandle *pHandle, int id) {
-			return detail_PrepareSound(pHandle, id, NULL, NULL, NULL) == START_SUCCESS;
+			return detail_PrepareSound(pHandle, id, NULL) == START_SUCCESS;
 		}
 
 	// members

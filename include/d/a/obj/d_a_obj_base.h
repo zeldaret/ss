@@ -170,7 +170,7 @@ public:
         u32 roomId
     );
     /* 8002efa0 */ void fn_8002efa0();
-    /* 8002eff0 */ bool fn_8002eff0(f32 *, s16 *, UnkCollider *, f32 *, f32 *);
+    /* 8002eff0 */ bool fn_8002eff0(f32 *, s16 *, f32 *, f32 *, f32 *);
     /* 8002f190 */ void createChildAttached2(
         fProfile::PROFILE_NAME_e actorId, u32 params1, mVec3_c *pos, mAng3_c *rot, mVec3_c *scale, u32 params2,
         u32 roomId

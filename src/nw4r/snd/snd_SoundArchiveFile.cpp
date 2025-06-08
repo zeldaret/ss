@@ -200,12 +200,30 @@ bool SoundArchiveFileReader::ReadSoundInfo(u32 soundId,
 
 	return true;
 }
-
+#if 0
 /* SoundArchiveFileReader::ReadSound3DParam
  * ([R89JEL]:/bin/RVL/Debug/mainD.MAP:14110)
  */
 DECOMP_FORCE(Util::GetDataRefAddress0(
 	*(Util::DataRef<SoundArchiveFile::Sound3DParam> *)(nullptr), nullptr));
+#endif
+
+bool SoundArchiveFileReader::ReadSound3DParam(u32 soundId, SoundArchive::Sound3DParam *param) const {
+	SoundArchiveFile::SoundCommonInfo const *src = impl_GetSoundInfo(soundId);
+	if (!src)
+		return false;
+
+	SoundArchiveFile::Sound3DParam const *arParam =
+		Util::GetDataRefAddress0(src->param3dRef, mInfo);
+	if (!arParam)
+		return false;
+
+	param->flags = arParam->flags;
+	param->decayCurve = arParam->decayCurve;
+	param->decayRatio = arParam->decayRatio;
+	param->field_0x06 = arParam->field_0x06;
+	return true;
+}
 
 bool SoundArchiveFileReader::ReadSeqSoundInfo(
 	u32 soundId, SoundArchive::SeqSoundInfo *info) const
@@ -374,11 +392,21 @@ bool SoundArchiveFileReader::ReadSoundArchivePlayerInfo(
 	return true;
 }
 
+u32 SoundArchiveFileReader::GetSoundStringId(u32 id) const {
+    const SoundArchiveFile::SoundCommonInfo* pInfo = impl_GetSoundInfo(id);
+
+    if (pInfo == NULL) {
+        return SoundArchive::INVALID_ID;
+    }
+
+    return pInfo->stringId;
+}
+
 u32 SoundArchiveFileReader::GetPlayerCount() const
 {
 	SoundArchiveFile::PlayerInfoTable const *table =
 		Util::GetDataRefAddress0(mInfo->playerTableRef, mInfo);
-	if (!table)
+	if (table == NULL)
 		return false;
 
 	return table->count;
@@ -388,21 +416,37 @@ u32 SoundArchiveFileReader::GetGroupCount() const
 {
 	SoundArchiveFile::GroupInfoTable const *table =
 		Util::GetDataRefAddress0(mInfo->groupTableRef, mInfo);
-	if (!table)
+	if (table == NULL)
 		return false;
 
 	// TODO: why - 1?
 	return table->count - 1;
 }
 
+#if 0
 DECOMP_FORCE(Util::GetDataRefAddress0(
 	*(Util::DataRef<SoundArchiveFile::BankInfoTable> *)(nullptr), nullptr));
+#endif
+
+const char* SoundArchiveFileReader::GetSoundLabelString(u32 id) const {
+    return GetString(GetSoundStringId(id));
+}
+
+u32 SoundArchiveFileReader::GetSoundUserParam(u32 id) const {
+    const SoundArchiveFile::SoundCommonInfo* pInfo = impl_GetSoundInfo(id);
+
+    if (pInfo == NULL) {
+        return 0;
+    }
+
+    return pInfo->userParam[0];
+}
 
 u32 SoundArchiveFileReader::GetFileCount() const
 {
 	SoundArchiveFile::FileInfoTable const *table =
 		Util::GetDataRefAddress0(mInfo->fileTableRef, mInfo);
-	if (!table)
+	if (table == NULL)
 		return false;
 
 	return table->count;

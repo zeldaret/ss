@@ -21,8 +21,9 @@ public:
 private:
     static const int SPEAKER_ALARM_HZ = 150;
 
-    static const int SPEAKER_ALARM_PERIOD_NSEC = static_cast<int>(1.0f / SPEAKER_ALARM_HZ * 1000 * 1000 * 1000);
-
+    // commented out since it causes compiler warnings
+    // static const int SPEAKER_ALARM_PERIOD_NSEC = static_cast<int>(1.0f / SPEAKER_ALARM_HZ * 1000 * 1000 * 1000);
+    static const int SPEAKER_ALARM_PERIOD_NSEC = 6666667;
 private:
     RemoteSpeakerManager();
 

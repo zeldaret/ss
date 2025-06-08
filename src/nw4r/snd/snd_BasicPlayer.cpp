@@ -41,6 +41,9 @@ void PlayerParamSet::Init()
 	for (int i = 0; i < AUX_BUS_NUM; i++)
 		fxSend[i]	= 0.0f;
 
+	for (int i = 0; i < 4; i++)
+		remoteOutVolume[i]	= 1.0f;
+
 	for (int i = 0; i < (int)ARRAY_LENGTH(voiceOutParam); i++)
 	{
 		VoiceOutParam *param = &voiceOutParam[i];
@@ -97,6 +100,16 @@ void BasicPlayer::SetRemoteFilter(int filter)
 	NW4RAssertHeaderClampedLRValue_Line(102, filter, 0, 127);
 
 	mPlayerParamSet.remoteFilter = filter;
+}
+
+void BasicPlayer::SetRemoteOutVolume(int remote, f32 volume)
+{
+	mPlayerParamSet.remoteOutVolume[remote] = volume;
+}
+
+f32 BasicPlayer::GetRemoteOutVolume(int remote) const
+{
+	return mPlayerParamSet.remoteOutVolume[remote];
 }
 
 }}} // namespace nw4r::snd::detail

@@ -123,6 +123,7 @@ namespace nw4r { namespace snd
 			u32 flags;     // at 0x0
 			u8 decayCurve; // at 0x4
 			u8 decayRatio; // at 0x5
+			u8 field_0x06; // at 0x6
 		};
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x256dc
@@ -180,6 +181,7 @@ namespace nw4r { namespace snd
 		u32 ConvertLabelStringToSoundId(char const *label) const;
 		u32 ConvertLabelStringToPlayerId(const char* pLabel) const;
 		u32 ConvertLabelStringToGroupId(const char* pLabel) const;
+		u32 ConvertLabelStringToBankId(const char* pLabel) const;
 		u32 GetSoundUserParam(u32 id) const;
 
 		bool ReadSoundInfo(u32 soundId, SoundInfo *info) const;
@@ -189,6 +191,7 @@ namespace nw4r { namespace snd
 
 		bool ReadPlayerInfo(u32 playerId, PlayerInfo *info) const;
 		bool ReadSoundArchivePlayerInfo(SoundArchivePlayerInfo *info) const;
+		bool detail_ReadSound3DParam(u32 soundId, nw4r::snd::SoundArchive::Sound3DParam*) const;
 
 		bool ReadBankInfo(u32 bankId, BankInfo *info) const;
 

@@ -238,8 +238,10 @@ void SeqPlayer::Skip(OffsetType offsetType, int offset)
 	}
 }
 
+#if 0
 // SeqPlayer::SetTempoRatio ([R89JEL]:/bin/RVL/Debug/mainD.MAP:13781)
 DECOMP_FORCE(NW4RAssert_String(tempoRatio >= 0.0f));
+#endif
 
 void SeqPlayer::SetTempoRatio(f32 tempo) {
     mTempoRatio = tempo;
@@ -284,6 +286,31 @@ void SeqPlayer::CallSeqUserprocCallback(u16 procId, SeqTrack *track)
 	trackParam.cmpFlag = param.cmpFlag;
 }
 
+s16 SeqPlayer::GetLocalVariable(int varNo) const {
+	return mLocalVariable[varNo];
+}
+
+void SeqPlayer::SetLocalVariable(int varNo, s16 value) {
+	mLocalVariable[varNo] = value;
+}
+
+void SeqPlayer::SetGlobalVariable(int varNo, s16 value) {
+	mGlobalVariable[varNo] = value;
+}
+
+void SeqPlayer::SetTrackMute(u32 trackFlags, SeqMute mute) {
+	SetTrackParam<SeqMute>(trackFlags, &SeqTrack::SetMute, mute);
+}
+
+void SeqPlayer::SetTrackSilence(u32 trackFlags, bool silence, int fadeFrames) {
+	SetTrackParam<bool, int>(trackFlags, &SeqTrack::SetSilence, silence, fadeFrames);
+}
+
+void SeqPlayer::SetTrackVolume(u32 trackFlags, f32 volume) {
+    SetTrackParam<f32>(trackFlags, &SeqTrack::SetVolume, volume);
+}
+
+#if 0
 // SeqPlayer::GetLocalVariable? maybe all of them?
 DECOMP_FORCE(NW4RAssertHeaderClampedLValue_String(varNo));
 
@@ -321,6 +348,7 @@ DECOMP_FORCE(&SeqTrack::SetModDepth);
 
 // SeqPlayer::SetTrackModSpeed ([R89JEL]:/bin/RVL/Debug/mainD.MAP:13801)
 DECOMP_FORCE(&SeqTrack::SetModSpeed);
+#endif
 
 void SeqPlayer::InvalidateData(void const *start, void const *end)
 {

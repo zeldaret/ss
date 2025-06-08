@@ -141,6 +141,23 @@ void WsdPlayer::InvalidateData(void const *start, void const *end)
 	}
 }
 
+bool WsdPlayer::ReadWsdDataInfo(WsdDataInfo *info) const
+{
+	SoundThread::AutoLock lock;
+
+	WaveSoundInfo wsInfo;
+	WaveSoundNoteInfo wsNoteInfo;
+	WaveInfo waveInfo;
+	bool result = mCallback->GetWaveSoundData(&wsInfo, &wsNoteInfo, &waveInfo, mWsdData, mWsdIndex, 0, mCallbackData);
+	if (result) {
+		info->loopFlag = waveInfo.loopFlag != false;
+		info->sampleRate = waveInfo.sampleRate;
+		info->loopStart = waveInfo.loopStart;
+		info->loopEnd = waveInfo.loopEnd;
+	}
+	return result;
+}
+
 void WsdPlayer::FinishPlayer()
 {
 	SoundThread::AutoLock lock;
@@ -348,6 +365,9 @@ void WsdPlayer::UpdateChannel()
 
 		mChannel->SetFxSend(bus, fxSend[i]);
 	}
+
+	for (int i = 0; i < 4; i++)
+		mChannel->SetRemoteOutVolume(i, GetRemoteOutVolume(i));
 
 	for (int i = 0; i < mVoiceOutCount; i++)
 		mChannel->SetVoiceOutParam(i, GetVoiceOutParam(i));

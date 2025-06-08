@@ -44,7 +44,8 @@ namespace nw4r { namespace snd
 			lpf					(0.0f),
 			biquadFilterValue	(0.0f),
 			biquadFilterType	(0),
-			priority			(0)
+			priority			(0),
+			field_0x24			(0)
 		{
 		}
 
@@ -59,6 +60,7 @@ namespace nw4r { namespace snd
 		f32	biquadFilterValue;	// size 0x04, offset 0x18
 		int	biquadFilterType;	// size 0x04, offset 0x1c
 		int	priority;			// size 0x04, offset 0x20
+		UNKWORD field_0x24;
 	}; // size 0x24
 
 	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x27514
@@ -76,7 +78,8 @@ namespace nw4r { namespace snd
 			lpf					(0.0f),
 			biquadFilterValue	(0.0f),
 			biquadFilterType	(0),
-			priority			(0)
+			priority			(0),
+			field_0x24			(0)
 		{
 		}
 
@@ -91,6 +94,7 @@ namespace nw4r { namespace snd
 		f32				biquadFilterValue;	// size 0x04, offset 0x18
 		int				biquadFilterType;	// size 0x04, offset 0x1c
 		int				priority;			// size 0x04, offset 0x20
+		UNKWORD         field_0x24;
 		VoiceOutParam	voiceOutParam[4];	// size 0x60, offset 0x24
 	}; // size 0x84
 
@@ -141,10 +145,10 @@ namespace nw4r { namespace snd { namespace detail
 
 	// typedefs
 	public:
-		typedef ut::LinkList<BasicSound, 0xe0> PriorityLinkList;
-		typedef ut::LinkList<BasicSound, 0xe8> SoundPlayerPlayLinkList;
-		typedef ut::LinkList<BasicSound, 0xf0> SoundPlayerPriorityLinkList;
-		typedef ut::LinkList<BasicSound, 0xf8> ExtSoundPlayerPlayLinkList;
+		typedef ut::LinkList<BasicSound, 0xf0> PriorityLinkList;
+		typedef ut::LinkList<BasicSound, 0xf8> SoundPlayerPlayLinkList;
+		typedef ut::LinkList<BasicSound, 0x100> SoundPlayerPriorityLinkList;
+		typedef ut::LinkList<BasicSound, 0x108> ExtSoundPlayerPlayLinkList;
 
 	// nested types
 	public:
@@ -165,10 +169,10 @@ namespace nw4r { namespace snd { namespace detail
 				};
 			// methods
 			public:
-				virtual void at_0x08();
-				virtual void at_0x0c(void *, int, int, void *);
-				virtual int at_0x10(void *, int);
-				virtual int at_0x14(void *, int);
+				virtual ~AmbientParamUpdateCallback() {}
+				virtual void detail_UpdateAmbientParam(const void*, u32, int, SoundAmbientParam*);
+				virtual int detail_GetAmbientPriority(const void*, u32);
+				virtual int detail_GetRequiredVoiceOutCount(const void*, u32);
 
 			// members
 			private:
@@ -182,8 +186,8 @@ namespace nw4r { namespace snd { namespace detail
 			public:
 				// virtual function ordering
 				// vtable AmbientArgUpdateCallback
-				virtual void at_0x08();
-				virtual void at_0x0c(void *, void *);
+				virtual ~AmbientArgUpdateCallback() {}
+				virtual void at_0x0c(void *, BasicSound *);
 
 			// members
 			private:
@@ -198,9 +202,11 @@ namespace nw4r { namespace snd { namespace detail
 			public:
 				// virtual function ordering
 				// vtable AmbientArgAllocaterCallback
-				virtual void at_0x08();
-				virtual void *at_0x0c(int);
-				virtual void at_0x10(void *, void *);
+				virtual ~AmbientArgAllocaterCallback() {}
+				virtual void *detail_AllocAmbientArg(u32 size); // at 0x8
+
+    			virtual void detail_FreeAmbientArg(void *pArg,
+                                       const detail::BasicSound *pSound); // at 0xC
 
 			// members
 			private:
@@ -244,25 +250,32 @@ namespace nw4r { namespace snd { namespace detail
 		void StartPrepared();
 		void Update();
 		void Pause(bool flag, int fadeFrames);
-		bool IsPaused() const;
+		bool IsPause() const;
 		void Stop(int fadeFrames);
 		void SetAutoStopCounter(int count);
+		void FadeIn(int fadeFrames);
 
+		bool GetStartedFlag() const { return mStartedFlag; }
 		u32 GetId() const { return mId; }
 		PlayerHeap *GetPlayerHeap() { return mPlayerHeap; }
 		SoundPlayer *GetSoundPlayer() { return mSoundPlayer; }
 		int GetVoiceOutCount() const;
+		int GetPriority() const { return mPriority; }
 
 		void SetPlayerPriority(int priority);
 		void SetInitialVolume(f32 volume);
 		void SetVolume(f32 volume, int frames);
 		void SetPitch(f32 pitch);
+		void SetPan(f32 pan);
+		void SetSurroundPan(f32 pan);
+		void SetLpfFreq(f32 freq);
 		void SetFxSend(AuxBus bus, f32 send);
 		void SetRemoteFilter(int filter);
 		void SetPanMode(PanMode mode);
 		void SetPanCurve(PanCurve curve);
 		void SetAmbientInfo(AmbientInfo const &ambientArgInfo);
 		void SetId(u32 id);
+		void SetOutputLineFlag(int flag);
 
 		void AttachPlayerHeap(PlayerHeap *heap);
 		void AttachSoundPlayer(SoundPlayer *player);
@@ -279,10 +292,16 @@ namespace nw4r { namespace snd { namespace detail
 		void DetachGeneralHandle();
 		void DetachTempGeneralHandle();
 
+		int GetRemainingFadeFrames() const;
+
 		int CalcCurrentPlayerPriority() const
 		{
 			return ut::Clamp(mPriority + mAmbientParam.priority, PRIORITY_MIN,
 		                     PRIORITY_MAX);
+		}
+
+		void ClearAmbientArgUpdateCallback() {
+			mAmbientInfo.argUpdateCallback = NULL;
 		}
 
 		static int GetAmbientPriority(AmbientInfo const &ambientInfo,
@@ -336,8 +355,7 @@ namespace nw4r { namespace snd { namespace detail
 		f32					mMainOutVolume;				// size 0x04, offset 0xc8
 		f32					mMainSend;					// size 0x04, offset 0xcc
 		f32					mFxSend[AUX_BUS_NUM];		// size 0x0c, offset 0xd0
-		// NOTE: Name is not from DWARF; derived from usage and other nearby names
-		u32					mPauseNestCounter;			// size 0x04, offset 0xdc
+		f32					mRemoteOutVolume[4];		// size 0x10, offset 0xdc
 	public:
 		ut::LinkListNode	mPriorityLink;				// size 0x08, offset 0xe0
 		ut::LinkListNode	mSoundPlayerPlayLink;		// size 0x08, offset 0xe8

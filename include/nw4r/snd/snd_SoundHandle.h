@@ -31,7 +31,13 @@ namespace nw4r { namespace snd
 		void detail_AttachSound(detail::BasicSound *sound);
 		bool IsAttachedSound() const { return mSound != nullptr; }
 		detail::BasicSound *detail_GetAttachedSound() { return mSound; }
+		const detail::BasicSound *detail_GetAttachedSound() const { return mSound; }
 		void DetachSound();
+
+		void Stop() {
+			if (IsAttachedSound())
+				mSound->Stop(0);
+		}
 
 		u32 GetId() const
 		{

@@ -31,6 +31,16 @@ SoundStartable::StartResult SoundStartable::detail_StartSound(
 	return START_SUCCESS;
 }
 
+SoundStartable::StartResult SoundStartable::detail_StartSound(
+	SoundHandle *pHandle, const char *label, const StartInfo *pStartInfo)
+{
+	u32 soundId = detail_ConvertLabelStringToSoundId(label);
+	if (soundId == -1)
+		return START_ERR_INVALID_LABEL_STRING;
+
+	return detail_StartSound(pHandle, soundId, pStartInfo);
+}
+
 SoundStartable::StartResult SoundStartable::detail_HoldSound(
 	SoundHandle *handle, u32 soundId, StartInfo const *startInfo)
 {
@@ -47,6 +57,34 @@ SoundStartable::StartResult SoundStartable::detail_HoldSound(
 	handle->StartPrepared();
 	handle->detail_GetAttachedSound()->SetAutoStopCounter(1);
 	return START_SUCCESS;
+}
+
+SoundStartable::StartResult SoundStartable::detail_HoldSound(
+	SoundHandle *pHandle, const char *label, const StartInfo *pStartInfo)
+{
+	u32 soundId = detail_ConvertLabelStringToSoundId(label);
+	if (soundId == -1)
+		return START_ERR_INVALID_LABEL_STRING;
+
+	return detail_HoldSound(pHandle, soundId, pStartInfo);
+}
+
+SoundStartable::StartResult SoundStartable::detail_PrepareSound(
+	SoundHandle *pHandle, u32 id,
+	const StartInfo *pStartInfo)
+{
+	return detail_SetupSound(pHandle, id, false, pStartInfo);
+}
+
+SoundStartable::StartResult SoundStartable::detail_PrepareSound(
+	SoundHandle *pHandle, const char *label,
+	const StartInfo *pStartInfo)
+{
+	u32 soundId = detail_ConvertLabelStringToSoundId(label);
+	if (soundId == -1)
+		return START_ERR_INVALID_LABEL_STRING;
+
+	return detail_PrepareSound(pHandle, soundId, pStartInfo);
 }
 
 }} // namespace nw4r::snd

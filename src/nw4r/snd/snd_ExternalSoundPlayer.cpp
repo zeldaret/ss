@@ -42,10 +42,37 @@ ExternalSoundPlayer::~ExternalSoundPlayer() {
 	}
 }
 
+#if 0
 // not sure which one uses this exactly, maybe StopAllSound?
 DECOMP_FORCE_CLASS_METHOD(
 	BasicSound::ExtSoundPlayerPlayLinkList,
 	GetPointerFromNode(static_cast<ut::LinkListNode *>(nullptr)));
+#endif
+
+void ExternalSoundPlayer::StopAllSound(int fadeFrames)
+{
+	NW4R_RANGE_FOR_NO_AUTO_INC(it, mSoundList)
+	{
+		it++->Stop(fadeFrames);
+	}
+}
+
+void ExternalSoundPlayer::PauseAllSound(bool flag, int fadeFrames)
+{
+	NW4R_RANGE_FOR_NO_AUTO_INC(it, mSoundList)
+	{
+		it++->Pause(flag, fadeFrames);
+	}
+}
+
+void ExternalSoundPlayer::DetachSoundActorAll(SoundActor *sound)
+{
+	NW4R_RANGE_FOR_NO_AUTO_INC(it, mSoundList)
+	{
+		it++->DetachSoundActor(sound);
+	}
+}
+
 
 bool ExternalSoundPlayer::AppendSound(BasicSound *sound)
 {

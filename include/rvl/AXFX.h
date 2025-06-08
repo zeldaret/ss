@@ -15,6 +15,7 @@ extern "C" {
 #include "rvl/AXFX/AXFXReverbHiExp.h"
 #include "rvl/AXFX/AXFXReverbHiExpDpl2.h"
 #include "rvl/AXFX/AXFXSrcCoef.h"
+#include "rvl/AXFX/AXFXReverbStd.h"
 
 #ifdef __cplusplus
 }

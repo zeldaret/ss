@@ -17,6 +17,7 @@
 #include "nw4r/snd/snd_StrmSoundHandle.h"
 #include "nw4r/snd/snd_MoveValue.h"
 
+#include "nw4r/ut/ut_Lock.h"
 #include "nw4r/ut/ut_RuntimeTypeInfo.h"
 
 #include "nw4r/NW4RAssert.hpp"
@@ -112,6 +113,22 @@ void StrmSound::UpdateParam()
 		{
 			mStrmPlayer.SetTrackVolume(1 << trackNo,
 			                           mTrackVolume[trackNo].GetValue());
+		}
+	}
+}
+
+void StrmSound::SetTrackVolume(u32 trackFlags, f32 volume, int fadeFrames)
+{
+	ut::AutoInterruptLock lock;
+	for (int trackNo = 0; trackNo < (int)ARRAY_LENGTH(mTrackVolume) && trackFlags != 0; trackNo++, trackFlags >>= 1)
+	{
+		StrmPlayer::StrmTrack *track = mStrmPlayer.GetPlayerTrack(trackNo);
+		if (track != NULL && ((trackFlags & 1) != 0))
+		{
+			if (volume < 0.0f)
+				volume = 0.0f;
+
+			mTrackVolume[trackNo].SetTarget(volume, fadeFrames);
 		}
 	}
 }

@@ -150,6 +150,9 @@ void Channel::InitParam(Callback *callback, u32 callbackData)
 	for (int i = 0; i < AUX_BUS_NUM; i++)
 		mFxSend[i] = 0.0f;
 
+	for (int i = 0; i < 4; i++)
+		mRemoteOutVolume[i] = 1.0f;
+
 	mSilenceVolume.InitValue(SILENCE_VOLUME_MAX);
 
 	mSweepPitch					= 0.0f;
@@ -252,6 +255,12 @@ void Channel::Update(bool doPeriodicProc)
 		fxSend[i] += mFxSend[i];
 	}
 
+	f32 remoteOutVolume[4];
+	for (int i = 0; i < 4; i++) {
+		remoteOutVolume[i] = 1.0f;
+		remoteOutVolume[i] *= mRemoteOutVolume[i];
+	}
+
 	if (doPeriodicProc)
 	{
 		if (mAutoSweep)
@@ -287,6 +296,10 @@ void Channel::Update(bool doPeriodicProc)
 
 		for (int i = 0; i < AUX_BUS_NUM; i++)
 			mVoice->SetFxSend(static_cast<AuxBus>(i), fxSend[i]);
+		
+		for (int i = 0; i < 4; i++) {
+			mVoice->SetRemoteOutVolume(i, remoteOutVolume[i]);
+		}
 	}
 }
 
