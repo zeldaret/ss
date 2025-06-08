@@ -48,7 +48,7 @@ void AnimSoundImpl::Shutdown() {
     if (mIsActive) {
         for (int i = 0; i < mNumSounds; i++) {
             if (mpSounds[i].GetHandle()->IsAttachedSound() && mpSounds[i].IsRunning()) {
-                mpSounds[i].GetHandle()->Stop();
+                mpSounds[i].GetHandle()->Stop(0);
             }
         }
 
@@ -426,7 +426,6 @@ void AnimEventPlayer::SetVariable(const AnimEvent *event, u32 varNo, f32 f) {
             SeqSoundHandle handle(GetHandle());
             int iVal = f * 100.0f;
             handle.WriteVariable(varNo, ut::Clamp(iVal, -0x8000, 0x7FFF));
-            handle.DetachSound();
         }
     } else if (varNo < 32) {
         int iVal = f * 100.0f;
@@ -438,7 +437,7 @@ AnimEventPlayer::AnimEventPlayer() : mpEvent(NULL), mIsRunning(false) {}
 
 AnimEventPlayer::~AnimEventPlayer() {
     if (mHandle.IsAttachedSound() && IsRunning()) {
-        mHandle.Stop();
+        mHandle.Stop(0);
     }
 }
 

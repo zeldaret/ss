@@ -10,13 +10,13 @@
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_drop_line.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/t/d_t_siren.h"
 #include "m/m_vec.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "nw4r/math/math_types.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 #include <cstring>
 
@@ -328,7 +328,7 @@ bool LytMeterTimerPart1_c::incrementTearCount() {
         startNextFruitAnim();
         if (!dLytMeter_c::getfn_800C9FE0()) {
             createEffect(mActualTearCount - 1);
-            SmallSoundManager::GetInstance()->playSound(SE_S_SIREN_SHIZUKU_GET_IN);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SIREN_SHIZUKU_GET_IN);
         }
 
         if (mActualTearCount < TIMER_01_NUM_TEARS) {

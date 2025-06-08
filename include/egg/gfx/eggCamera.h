@@ -35,6 +35,15 @@ protected:
 class LookAtCamera : public BaseCamera {
 public:
     LookAtCamera() : mPos(0.0f, 10.0f, 0.0f), mAt(0.0f, 0.0f, 0.0f), mUp(0.0f, 1.0f, 0.0f) {}
+    
+    LookAtCamera& operator=(const LookAtCamera &other) {
+        mViewMtx.copyFrom(other.mViewMtx);
+        mOtherMtx.copyFrom(other.mOtherMtx);
+        mPos = other.mPos;
+        mAt = other.mAt;
+        mUp = other.mUp;
+        return *this;
+    }
     // Which way around?
     virtual Matrix34f &getViewMatrix() override {
         return mViewMtx;
@@ -53,7 +62,15 @@ public:
     virtual void doDraw() override;
     virtual Matrix34f &getViewMatrixOld() override;
 
-protected:
+    Vector3f getDirection() const {
+        return mAt - mPos;
+    }
+
+    Vector3f getOtherDirection() const {
+        return mPos - mAt;
+    }
+
+public:
     /* 0x64 */ Vector3f mPos;
     /* 0x70 */ Vector3f mAt;
     /* 0x7C */ Vector3f mUp;

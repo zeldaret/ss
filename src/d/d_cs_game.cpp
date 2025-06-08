@@ -3,9 +3,9 @@
 #include "d/d_cs_base.h"
 #include "d/d_cursor_hit_check.h"
 #include "d/lyt/d2d.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "f/f_base.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_BASE_PROFILE(C_GAME, dCsGame_c, fProfile::C_GAME, 0x2BF, 0x06F9);
 
@@ -407,7 +407,7 @@ void dCsGame_c::lytItemCursor_c::lytBowCsr_c::executeState_Charge() {
         if (!mAnm[MAIN_ANIM_ARROW_PEAK].isEnabled()) {
             mAnm[MAIN_ANIM_ARROW_PEAK].setAnimEnable(true);
             mAnm[MAIN_ANIM_ARROW_PEAK].setFrame(0.0f);
-            SmallSoundManager::GetInstance()->playSound(SE_S_BW_ALIGN_SIGHT);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_BW_ALIGN_SIGHT);
         }
         mAnm[MAIN_ANIM_ARROW_KEEP].setAnimEnable(false);
     } else {

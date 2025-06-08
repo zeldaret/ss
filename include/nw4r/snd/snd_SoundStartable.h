@@ -54,6 +54,7 @@ namespace nw4r { namespace snd
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x27291
 		struct StartInfo
 		{
+		StartInfo() : enableFlag(0) {}
 		// enums
 		public:
 			enum EnableFlag
@@ -76,6 +77,7 @@ namespace nw4r { namespace snd
 			// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x27208
 			struct SeqSoundInfo
 			{
+				SeqSoundInfo() : seqDataAddress(NULL), startLocationLabel(NULL) {}
 				void	*seqDataAddress;			// size 0x04, offset 0x00
 				char	const *startLocationLabel;	// size 0x04, offset 0x04
 			}; // size 0x08

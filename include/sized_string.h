@@ -5,6 +5,7 @@
 #include "common.h"
 #include "string.h"
 #include "wstring.h"
+#include "printf.h"
 
 extern "C" bool strequals(const char *a, const char *b);
 

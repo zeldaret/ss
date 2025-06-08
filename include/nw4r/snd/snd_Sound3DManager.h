@@ -68,8 +68,16 @@ public:
         return field_0x20;
     }
 
+    void SetField0x20(f32 value) {
+        field_0x20 = value;
+    }
+
     f32 GetField0x24() const {
         return field_0x24;
+    }
+
+    void SetField0x24(f32 value) {
+        field_0x24 = value;
     }
 
     void SetEngine(Sound3DEngine *engine);

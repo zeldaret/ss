@@ -5,8 +5,8 @@
 #include "d/d_pouch.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_meter_configuration.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "toBeSorted/file_manager.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytMeterShieldGauge_c, Normal);
 STATE_DEFINE(dLytMeterShieldGauge_c, Use);
@@ -181,13 +181,13 @@ bool dLytMeterShieldGauge_c::execute() {
                 if (mCurrentDurability >= mMaxDurability) {
                     if (field_0x31E) {
                         // Unreachable?
-                        SmallSoundManager::GetInstance()->playSoundWithPitch(SE_S_GAUGE_SHIELD_UP_LV, 1.0f);
+                        dSndSmallEffectMgr_c::GetInstance()->playSoundWithPitch(SE_S_GAUGE_SHIELD_UP_LV, 1.0f);
                     }
-                    SmallSoundManager::GetInstance()->playSound(SE_S_GAUGE_SHIELD_UP_MAX);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GAUGE_SHIELD_UP_MAX);
                 } else {
                     if (field_0x31E) {
                         // Unreachable?
-                        SmallSoundManager::GetInstance()->playSoundWithPitch(
+                        dSndSmallEffectMgr_c::GetInstance()->playSoundWithPitch(
                             SE_S_GAUGE_SHIELD_UP_LV, mCurrentDurability / mMaxDurability
                         );
                     }
