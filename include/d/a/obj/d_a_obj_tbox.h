@@ -8,6 +8,7 @@
 #include "d/col/bg/d_bg_w.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_cc.h"
+#include "d/d_light_env.h"
 #include "d/d_shadow.h"
 #include "m/m3d/m_anmchr.h"
 #include "m/m3d/m_anmmatclr.h"
@@ -20,9 +21,9 @@
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/attention.h"
-#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/stage_render_stuff.h"
+
 
 class dAcTbox_c : public dAcObjBase_c {
 public:
@@ -139,7 +140,7 @@ private:
     /* 0x049C */ m3d::anmTexPat_c mAnmGoddessPat;
     /* 0x04C8 */ dScnCallback_c mScnCallback;
     /* 0x04D4 */ dShadowCircle_c mShadowCircle;
-    /* 0x04DC */ LightParams mLightInfo;
+    /* 0x04DC */ LIGHT_INFLUENCE mLightInfo;
     /* 0x04F8 */ dBgW mBgWs[2];
     /* 0x0918 */ dCcD_Linked_Unk mCcD1;
     /* 0x0B30 */ dCcD_Linked_Unk mCcD2;

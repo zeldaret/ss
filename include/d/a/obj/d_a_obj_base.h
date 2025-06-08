@@ -7,6 +7,7 @@
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
 #include "d/d_jnt_col.h"
+#include "d/d_light_env.h"
 #include "d/d_linkage.h"
 #include "egg/math/eggMath.h"
 #include "m/m3d/m_shadow.h"
@@ -17,32 +18,6 @@
 #include "m/m_vec.h"
 #include "m/types_m.h"
 
-// Ghidra has it as `unk_ActorObjectBase`
-struct LightingInfo {
-    /* 0x00 */ u8 mField_0x00[0x40 - 0x00];
-    /* 0x40 */ mColor mTev0Color;
-    /* 0x44 */ mColor mTev1Color;
-    /* 0x48 */ mColor mTev2Color;
-    /* 0x4C */ mColor mTevPrevColor;
-    /* 0x50 */ mColor mTevK0Color;
-    /* 0x54 */ mColor mTevK1Color;
-    /* 0x58 */ mColor mTevK2Color;
-    /* 0x5C */ mColor mTevK3Color;
-    /* 0x60 */ u8 mLightingCode;
-    /* 0x61 */ u8 _0x61;
-    /* 0x62 */ u8 _0x62;
-    /* 0x63 */ u8 _0x63;
-    /* 0x64 */ u8 _0x64;
-    /* 0x65 */ bool mUseTev0;
-    /* 0x66 */ bool mUseTev1;
-    /* 0x67 */ bool mUseTev2;
-    /* 0x68 */ bool mUseTevPrev;
-    /* 0x69 */ bool mUseTevK0;
-    /* 0x6A */ bool mUseTevK1;
-    /* 0x6B */ bool mUseTevK2;
-    /* 0x6C */ bool mUseTevK3;
-    /* 0x6D */ u8 mField_0x69[0x70 - 0x6D];
-};
 
 // Ghidra: ActorObjectBase
 //   size: 0x330
@@ -76,7 +51,7 @@ public:
     /* 0x208 */ mAng3_c mStartingRot;
     /* 0x210 */ dLinkage_c mLinkage;
     /* 0x2B8 */ u32 mField_0x2B8;
-    /* 0x2BC */ LightingInfo mLightingInfo;
+    /* 0x2BC */ ActorLighting mLightingInfo;
     /* 0x32C */ u32 mField_0x32C;
 
 public:

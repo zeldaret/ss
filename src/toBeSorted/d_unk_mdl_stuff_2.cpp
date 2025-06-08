@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/d_light_env.h"
 #include "egg/gfx/eggLightManager.h"
 #include "m/m3d/m3d.h"
 #include "m/m3d/m_proc.h"
@@ -17,7 +18,7 @@
 #include "rvl/GX/GXTev.h"
 #include "rvl/GX/GXTypes.h"
 #include "rvl/MTX/mtx.h"
-#include "toBeSorted/blur_and_palette_manager.h"
+
 
 bool dShpProcBase_c::init(nw4r::g3d::ResMat mat, nw4r::g3d::ResShp shp, s32 count, bool xlu, u32 *pSize) {
     mCount = count;
@@ -62,18 +63,18 @@ void dShpProcBase_c::draw(mVec3_c *pos) {
     );
     setupLight();
     if (!field_0x2C) {
-        BlurAndPaletteManager &mgr = BlurAndPaletteManager::GetInstance();
+        dLightEnv_c &mgr = dLightEnv_c::GetInstance();
         u32 code = 0xFF;
         if (pos != nullptr) {
             pos->y += 100.0f;
             code = dBgS::GetInstance()->GetLightingCode(pos);
         }
         if (code != 0) {
-            GXSetTevColor(GX_TEVREG0, BlurAndPaletteManager::getLightColor1());
-            GXSetTevKColor(GX_KCOLOR0, BlurAndPaletteManager::getLightColor2());
+            GXSetTevColor(GX_TEVREG0, ActorLighting::getLightTev0Color());
+            GXSetTevKColor(GX_KCOLOR0, ActorLighting::getLightTevKColor());
         } else {
-            GXSetTevColor(GX_TEVREG0, mgr.GetCurrentSph().white2_ffffff);
-            GXSetTevKColor(GX_KCOLOR0, mgr.GetCurrentSph().grey2_aaaaaa);
+            GXSetTevColor(GX_TEVREG0, mgr.GetCurrentSpf().mActorPalette.mDarkLightClr);
+            GXSetTevKColor(GX_KCOLOR0, mgr.GetCurrentSpf().mActorPalette.mDarkShadowClr);
         }
     }
 }
@@ -93,8 +94,9 @@ void dShpProcBase_c::doEntry(s32 lightSetId) {
     entry();
 }
 
-
-bool dShpProc1_c::create(nw4r::g3d::ResMat mat, nw4r::g3d::ResShp shp, s32 count, mHeapAllocator_c *alloc, bool xlu, u32 *pSize) {
+bool dShpProc1_c::create(
+    nw4r::g3d::ResMat mat, nw4r::g3d::ResShp shp, s32 count, mHeapAllocator_c *alloc, bool xlu, u32 *pSize
+) {
     if (!m3d::proc_c::create(alloc, pSize)) {
         return false;
     }

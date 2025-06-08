@@ -10,6 +10,7 @@
 #include "d/col/c/c_m3d_g_pla.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_light_env.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "egg/math/eggMath.h"
 #include "egg/math/eggQuat.h"
@@ -18,7 +19,6 @@
 #include "m/m_quat.h"
 #include "m/m_vec.h"
 #include "s/s_Math.h"
-#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/dowsing_target.h"
 
@@ -105,7 +105,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     calcWind();
 
     sLib::chase(&mField_0x980, 1.f, 0.1f);
-    BlurAndPaletteManager::GetInstance().fn_800247D0(mField_0x968, mField_0x980);
+    dLightEnv_c::GetInstance().setWind(mField_0x968, mField_0x980);
 
     calcVelocity();
     position += velocity;

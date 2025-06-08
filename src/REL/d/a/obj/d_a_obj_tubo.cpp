@@ -17,6 +17,7 @@
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_pla.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_light_env.h"
 #include "d/d_linkage.h"
 #include "d/flag/dungeonflag_manager.h"
 #include "d/flag/sceneflag_manager.h"
@@ -32,10 +33,10 @@
 #include "rvl/MTX/mtxvec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
-#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/special_item_drop_mgr.h"
+
 
 void float_ordering() {
     f32 f[] = {15.f, .4f, .4f, 5.f};
@@ -451,7 +452,7 @@ void dAcOtubo_c::destroy() {
     if (!boolParam) {
         return;
     }
-    fn_80022BE0(BlurAndPaletteManager::GetPInstance(), position);
+    fn_80022BE0(dLightEnv_c::GetPInstance(), position);
     GetLinkage().fn_80050EA0(this);
 
     dEmitterBase_c *fx_thing = dJEffManager_c::spawnEffect(

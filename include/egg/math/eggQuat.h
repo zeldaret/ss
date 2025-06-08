@@ -39,14 +39,14 @@ struct Quatf {
     /* 8049b3b0 */ void setAxisRotation(const Vector3f &, f32);
     /* 8049b450 */ f32 norm();
     /* 8049b480 */ void normalise();
-    /* 8049b500 */ Quatf conjugate();
+    /* 8049b500 */ Quatf conjugate() const;
     /*          */ Quatf inverse();
     /* 8049b550 */ Vector3f rotateVector(const Vector3f &);
     /*          */ Vector3f rotateVectorInv(const Vector3f &);
     /* 8049b800 */ void slerpTo(const Quatf &, f32, Quatf &out) const;
     /* 8049b800 */ void limitSlerpTo(const Quatf &, f32, f32, Quatf &out) const;
     /*          */ void makeVectorRotationLimit(Vector3f &, Vector3f &, f32);
-    /* 8049bbb0 */ void makeVectorRotation(Vector3f &, Vector3f &);
+    /* 8049bbb0 */ void makeVectorRotation(const Vector3f &, const Vector3f &);
 
     void multScalar(f32 s) {
         w *= s;

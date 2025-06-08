@@ -16,6 +16,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_base.h"
 #include "d/d_heap.h"
+#include "d/d_light_env.h"
 #include "d/d_stage.h"
 #include "d/d_stage_mgr.h"
 #include "egg/core/eggHeap.h"
@@ -36,7 +37,6 @@
 #include "nw4r/math/math_arithmetic.h"
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
-#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/d_particle.h"
 #include "toBeSorted/event_manager.h"
@@ -44,6 +44,7 @@
 
 #include "rvl/GX.h"
 #include "rvl/MTX.h"
+
 
 void float_ordering_1(s32 a) {
     (f32) a;
@@ -1029,7 +1030,7 @@ bool dJEffManager_c::createMassObjEffect(
 void dEmitterBase_c::loadColors(
     JPABaseEmitter *emitter, const GXColor *color1, const GXColor *color2, s32 plltIdx1, s32 plltIdx2
 ) {
-    BlurAndPaletteManager &mgr = BlurAndPaletteManager::GetInstance();
+    dLightEnv_c &mgr = dLightEnv_c::GetInstance();
     u8 r1 = 0xFF;
     u8 g1 = 0xFF;
     u8 b1 = 0xFF;
@@ -1038,8 +1039,8 @@ void dEmitterBase_c::loadColors(
     u8 b2 = 0xFF;
     u8 r, g, b;
 
-    mColor c1 = mgr.GetCurrentSph().black3_000000;
-    mColor c2 = mgr.GetCurrentSph().black4_000000;
+    const mColor c1 = mgr.GetCurrentSpf().mParticleTransparentClr;
+    const mColor c2 = mgr.GetCurrentSpf().mParticleSolidClr;
 
     u32 flags = emitter->getDynResUserWork();
     u32 factor = flags >> 24;
@@ -1059,7 +1060,6 @@ void dEmitterBase_c::loadColors(
         scaleG = 1.0f - (1.0f - (c1.g / 255.0f)) * fFactor;
         scaleB = 1.0f - (1.0f - (c1.b / 255.0f)) * fFactor;
     } else {
-        const mColor &c = mgr.GetCurrentSph().black4_000000;
         scaleR = 1.0f - (1.0f - (c2.r / 255.0f)) * fFactor;
         scaleG = 1.0f - (1.0f - (c2.g / 255.0f)) * fFactor;
         scaleB = 1.0f - (1.0f - (c2.b / 255.0f)) * fFactor;

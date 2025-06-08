@@ -16,6 +16,7 @@
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_camera.h"
 #include "d/d_jnt_col.h"
+#include "d/d_light_env.h"
 #include "d/d_linkage.h"
 #include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
@@ -37,7 +38,6 @@
 #include "rvl/MTX/mtx.h"
 #include "rvl/MTX/mtxvec.h"
 #include "s/s_Math.h"
-#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/time_area_mgr.h"
 
@@ -200,7 +200,7 @@ int dAcEsm_c::actorCreate() {
     mLightInfo.SetColor(mColor(0xCC, 0xFF, 0xFF, 0xFF));
     mLightInfo.SetScale(0.f);
 
-    BlurAndPaletteManager::GetPInstance()->fn_800225F0(&mLightInfo);
+    dLightEnv_c::GetPInstance()->plight_set(&mLightInfo);
     if (field_0xBBF == 1) {
         rotation.x = 0x8000;
         field_0xBCC = 1;
@@ -317,7 +317,7 @@ int dAcEsm_c::actorPostCreate() {
 }
 
 int dAcEsm_c::doDelete() {
-    BlurAndPaletteManager::GetPInstance()->fn_800226E0(&mLightInfo);
+    dLightEnv_c::GetPInstance()->plight_cut(&mLightInfo);
     return SUCCEEDED;
 }
 

@@ -33,7 +33,7 @@ using ::modff;
 using ::pow;
 using ::scalbn;
 using ::sin;
-using ::sinf;
+// using ::sinf;
 using ::sqrt;
 // using ::sqrtf;
 using ::tan;
@@ -49,6 +49,10 @@ inline float floorf(float x) {
 
 inline float cosf(float x) {
     return cos(x);
+}
+
+inline float sinf(float x) {
+    return sin(x);
 }
 
 inline float sqrtf(float x) {

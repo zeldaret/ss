@@ -96,7 +96,7 @@ void Quatf::normalise() {
 }
 
 /* 8049b500 */
-Quatf Quatf::conjugate() {
+Quatf Quatf::conjugate() const {
     Quatf q;
     q.w = w;
     q.v = -1.0f * v;
@@ -211,7 +211,7 @@ void Quatf::limitSlerpTo(const Quatf &q2, f32 t, f32 t2, Quatf &out) const {
 }
 
 /* 8049bbb0 */
-void Quatf::makeVectorRotation(Vector3f &from, Vector3f &to) {
+void Quatf::makeVectorRotation(const Vector3f &from, const Vector3f &to) {
     Vector3f cross = from.cross(to);
     f32 t0 = (from.dot(to) + 1) * 2.0f;
 
