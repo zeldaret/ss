@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/d_light_env.h"
 #include "d/d_sc_game.h"
 #include "d/t/d_t_siren.h"
 #include "egg/gfx/eggCpuTexture.h"
@@ -20,7 +21,7 @@
 #include "rvl/GX/GXTypes.h"
 #include "rvl/VI/vi.h"
 #include "sized_string.h"
-#include "toBeSorted/blur_and_palette_manager.h"
+
 
 namespace d3d {
 
@@ -233,7 +234,7 @@ void clearList() {
 // More screen / list stuff...
 
 void unk2(nw4r::g3d::ResMat &mat, nw4r::g3d::ResMatTevColor &clr, ActorLighting *info) {
-    BlurAndPaletteManager &pllt = BlurAndPaletteManager::GetInstance();
+    dLightEnv_c &pllt = dLightEnv_c::GetInstance();
     const char *name = mat.GetName();
     if (name != nullptr && name[0] == 'M' && name[1] == 'A' && name[2] == '0') {
         char idx = name[3];
@@ -285,7 +286,7 @@ void unk2(nw4r::g3d::ResMat &mat, nw4r::g3d::ResMatTevColor &clr, ActorLighting 
 }
 
 void setRoomTevColors(nw4r::g3d::ResMdl mdl, int b1, bool bUnk) {
-    BlurAndPaletteManager &pllt = BlurAndPaletteManager::GetInstance();
+    dLightEnv_c &pllt = dLightEnv_c::GetInstance();
     SpawnInfo &spawn = dScGame_c::currentSpawnInfo;
 
     for (u32 i = 0; i < mdl.GetResMatNumEntries(); i++) {

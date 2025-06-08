@@ -8,6 +8,7 @@
 #include "d/col/bg/d_bg_w.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_cc.h"
+#include "d/d_light_env.h"
 #include "d/d_shadow.h"
 #include "m/m3d/m_anmchr.h"
 #include "m/m3d/m_anmmatclr.h"
@@ -20,9 +21,9 @@
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/attention.h"
-#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/stage_render_stuff.h"
+
 
 class dAcTbox_c : public dAcObjBase_c {
 public:

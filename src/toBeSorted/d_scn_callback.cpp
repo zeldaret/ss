@@ -1,6 +1,7 @@
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_bzs_types.h"
+#include "d/d_light_env.h"
 #include "m/m3d/m3d.h"
 #include "nw4r/g3d/g3d_camera.h"
 #include "nw4r/g3d/g3d_scnmdl.h"
@@ -11,9 +12,9 @@
 #include "nw4r/g3d/res/g3d_respltt.h"
 #include "rvl/GX/GXTypes.h"
 #include "sized_string.h"
-#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/stage_render_stuff.h"
+
 
 void dScnCallback_c::ExecCallback_CALC_MAT(nw4r::g3d::ScnObj::Timing, nw4r::g3d::ScnObj *obj, u32 param, void *pObj) {
     const ActorLighting &info = mpActor->mLightingInfo;

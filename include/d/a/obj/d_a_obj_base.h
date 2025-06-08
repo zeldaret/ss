@@ -7,6 +7,7 @@
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
 #include "d/d_jnt_col.h"
+#include "d/d_light_env.h"
 #include "d/d_linkage.h"
 #include "egg/math/eggMath.h"
 #include "m/m3d/m_shadow.h"
@@ -16,7 +17,7 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
-#include "toBeSorted/blur_and_palette_manager.h"
+
 
 // Ghidra: ActorObjectBase
 //   size: 0x330

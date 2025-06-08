@@ -309,16 +309,16 @@ struct SpfTransitionSetting {
     s32 mNumFrames;
 };
 
-class BlurAndPaletteManager {
+class dLightEnv_c {
 public:
-    BlurAndPaletteManager();
-    virtual ~BlurAndPaletteManager();
+    dLightEnv_c();
+    virtual ~dLightEnv_c();
 
-    static BlurAndPaletteManager &GetInstance() {
+    static dLightEnv_c &GetInstance() {
         return sInstance;
     }
 
-    static BlurAndPaletteManager *GetPInstance() {
+    static dLightEnv_c *GetPInstance() {
         return sPInstance;
     }
 
@@ -389,7 +389,6 @@ public:
         field_0x2F20 = arg;
     }
 
-    // light pillar related
     void set_palette_transition(s16 before, s16 after, s32 numFrames);
 
     // All related
@@ -489,8 +488,8 @@ private:
     } field_0x5D59[9];
     /* 0x5D60 */ u8 field_0x5D6C[0x5D70 - 0x5D6C];
 
-    static BlurAndPaletteManager sInstance;
-    static BlurAndPaletteManager *sPInstance;
+    static dLightEnv_c sInstance;
+    static dLightEnv_c *sPInstance;
 };
 
 #endif

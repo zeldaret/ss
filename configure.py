@@ -387,7 +387,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/d_shadow.cpp"),
             Object(NonMatching, "toBeSorted/d_unk_mdl_stuff_1.cpp"),
             Object(NonMatching, "toBeSorted/d_unk_mdl_stuff_2.cpp"),
-            Object(Matching, "toBeSorted/blur_and_palette_manager.cpp"),
+            Object(Matching, "d/d_light_env.cpp"),
             Object(NonMatching, "toBeSorted/d_emitter.cpp"),
             Object(NonMatching, "toBeSorted/d_effects_2.cpp"),
             Object(NonMatching, "toBeSorted/sound_info.cpp"),

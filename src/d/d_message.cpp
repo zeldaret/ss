@@ -6,6 +6,7 @@
 #include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
 #include "d/d_base.h"
+#include "d/d_light_env.h"
 #include "d/d_player.h"
 #include "d/d_pouch.h"
 #include "d/d_sc_game.h"
@@ -31,7 +32,6 @@
 #include "libms/msgfile.h"
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
-#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/fi_context.h"
@@ -45,6 +45,7 @@
 
 #include <cstring>
 #include <stdio.h>
+
 
 s32 dFlow_c::sExitId = -1;
 
@@ -495,8 +496,8 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
         case EVENT_PALETTE:         {
             s16 p1 = (params1n2 >> 16) & 0xFFFF;
             s16 p2 = params1n2 & 0xFFFF;
-            if (&BlurAndPaletteManager::GetInstance() != nullptr) {
-                BlurAndPaletteManager::GetInstance().set_palette_transition(-1, p1, p2);
+            if (&dLightEnv_c::GetInstance() != nullptr) {
+                dLightEnv_c::GetInstance().set_palette_transition(-1, p1, p2);
             }
             break;
         }

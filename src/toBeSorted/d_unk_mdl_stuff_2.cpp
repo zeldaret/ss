@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/d_light_env.h"
 #include "egg/gfx/eggLightManager.h"
 #include "m/m3d/m3d.h"
 #include "m/m3d/m_proc.h"
@@ -17,7 +18,7 @@
 #include "rvl/GX/GXTev.h"
 #include "rvl/GX/GXTypes.h"
 #include "rvl/MTX/mtx.h"
-#include "toBeSorted/blur_and_palette_manager.h"
+
 
 bool dShpProcBase_c::init(nw4r::g3d::ResMat mat, nw4r::g3d::ResShp shp, s32 count, bool xlu, u32 *pSize) {
     mCount = count;
@@ -62,7 +63,7 @@ void dShpProcBase_c::draw(mVec3_c *pos) {
     );
     setupLight();
     if (!field_0x2C) {
-        BlurAndPaletteManager &mgr = BlurAndPaletteManager::GetInstance();
+        dLightEnv_c &mgr = dLightEnv_c::GetInstance();
         u32 code = 0xFF;
         if (pos != nullptr) {
             pos->y += 100.0f;

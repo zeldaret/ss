@@ -16,6 +16,7 @@
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/d_base.h"
 #include "d/d_heap.h"
+#include "d/d_light_env.h"
 #include "d/d_stage.h"
 #include "d/d_stage_mgr.h"
 #include "egg/core/eggHeap.h"
@@ -36,7 +37,6 @@
 #include "nw4r/math/math_arithmetic.h"
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
-#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/d_particle.h"
 #include "toBeSorted/event_manager.h"
@@ -44,6 +44,7 @@
 
 #include "rvl/GX.h"
 #include "rvl/MTX.h"
+
 
 void float_ordering_1(s32 a) {
     (f32) a;
@@ -1029,7 +1030,7 @@ bool dJEffManager_c::createMassObjEffect(
 void dEmitterBase_c::loadColors(
     JPABaseEmitter *emitter, const GXColor *color1, const GXColor *color2, s32 plltIdx1, s32 plltIdx2
 ) {
-    BlurAndPaletteManager &mgr = BlurAndPaletteManager::GetInstance();
+    dLightEnv_c &mgr = dLightEnv_c::GetInstance();
     u8 r1 = 0xFF;
     u8 g1 = 0xFF;
     u8 b1 = 0xFF;

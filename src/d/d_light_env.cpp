@@ -1,5 +1,5 @@
 
-#include "toBeSorted/blur_and_palette_manager.h"
+#include "d/d_light_env.h"
 
 #include "common.h"
 #include "d/a/d_a_itembase.h"
@@ -11,8 +11,8 @@
 #include "m/m_vec.h"
 #include "nw4r/math/math_arithmetic.h"
 
-BlurAndPaletteManager BlurAndPaletteManager::sInstance;
-BlurAndPaletteManager *BlurAndPaletteManager::sPInstance;
+dLightEnv_c dLightEnv_c::sInstance;
+dLightEnv_c *dLightEnv_c::sPInstance;
 
 ActorLighting::ListType ActorLighting::sList;
 
@@ -31,7 +31,7 @@ static void vectle_calc(const mVec3_c *pIn, mVec3_c *pOut) {
 }
 
 // Same as get_vectle_calc in d_kankyo_rain from tp
-void BlurAndPaletteManager::get_vectle_calc(const mVec3_c *pInA, const mVec3_c *pInB, mVec3_c *pOut) {
+void dLightEnv_c::get_vectle_calc(const mVec3_c *pInA, const mVec3_c *pInB, mVec3_c *pOut) {
     mVec3_c pos;
     pos.x = pInB->x - pInA->x;
     pos.y = pInB->y - pInA->y;
@@ -49,7 +49,7 @@ inline f32 cosf(f32 x) {
     return cos(x);
 }
 
-void BlurAndPaletteManager::sphere_to_cartesian(f32 angY, f32 angXZ, mVec3_c *pOut) {
+void dLightEnv_c::sphere_to_cartesian(f32 angY, f32 angXZ, mVec3_c *pOut) {
     f32 radY = angY / (180.f / M_PI);
     f32 radXZ = angXZ / (180.f / M_PI);
 
@@ -63,7 +63,7 @@ void BlurAndPaletteManager::sphere_to_cartesian(f32 angY, f32 angXZ, mVec3_c *pO
     pOut->z = pos.z;
 }
 
-void BlurAndPaletteManager::efplight_set(LIGHT_INFLUENCE *pLightInfo) {
+void dLightEnv_c::efplight_set(LIGHT_INFLUENCE *pLightInfo) {
     if (pLightInfo == nullptr) {
         return;
     }
@@ -82,7 +82,7 @@ void BlurAndPaletteManager::efplight_set(LIGHT_INFLUENCE *pLightInfo) {
         }
     }
 }
-void BlurAndPaletteManager::efplight_cut(LIGHT_INFLUENCE *pLightInfo) {
+void dLightEnv_c::efplight_cut(LIGHT_INFLUENCE *pLightInfo) {
     if (pLightInfo == nullptr) {
         return;
     }
@@ -95,7 +95,7 @@ void BlurAndPaletteManager::efplight_cut(LIGHT_INFLUENCE *pLightInfo) {
     }
 }
 
-LIGHT_INFLUENCE *BlurAndPaletteManager::eflight_influence(const mVec3_c *pPos) {
+LIGHT_INFLUENCE *dLightEnv_c::eflight_influence(const mVec3_c *pPos) {
     f32 max = 1000000.f;
     LIGHT_INFLUENCE *pOut = nullptr;
 
@@ -111,7 +111,7 @@ LIGHT_INFLUENCE *BlurAndPaletteManager::eflight_influence(const mVec3_c *pPos) {
     return pOut;
 }
 
-void BlurAndPaletteManager::SordFlush_set(const mVec3_c *pPos, s32 lightType) {
+void dLightEnv_c::SordFlush_set(const mVec3_c *pPos, s32 lightType) {
     if (eflight.mState == 0) {
         eflight.mState = 1;
         eflight.mLightType = lightType;
@@ -123,7 +123,7 @@ void BlurAndPaletteManager::SordFlush_set(const mVec3_c *pPos, s32 lightType) {
     }
 }
 
-void BlurAndPaletteManager::plight_set(LIGHT_INFLUENCE *pLightInfo) {
+void dLightEnv_c::plight_set(LIGHT_INFLUENCE *pLightInfo) {
     if (pLightInfo == nullptr) {
         return;
     }
@@ -144,7 +144,7 @@ void BlurAndPaletteManager::plight_set(LIGHT_INFLUENCE *pLightInfo) {
         }
     }
 }
-void BlurAndPaletteManager::plight_cut(LIGHT_INFLUENCE *pLightInfo) {
+void dLightEnv_c::plight_cut(LIGHT_INFLUENCE *pLightInfo) {
     if (pLightInfo == nullptr) {
         return;
     }
@@ -157,7 +157,7 @@ void BlurAndPaletteManager::plight_cut(LIGHT_INFLUENCE *pLightInfo) {
     }
 }
 
-LIGHT_INFLUENCE *BlurAndPaletteManager::light_influence(const mVec3_c *pPos, bool param2) {
+LIGHT_INFLUENCE *dLightEnv_c::light_influence(const mVec3_c *pPos, bool param2) {
     f32 max = 1000000.f;
     LIGHT_INFLUENCE *pOut = nullptr;
 
@@ -177,7 +177,7 @@ LIGHT_INFLUENCE *BlurAndPaletteManager::light_influence(const mVec3_c *pPos, boo
     return pOut;
 }
 
-LIGHT_INFLUENCE *BlurAndPaletteManager::light_influence2(const mVec3_c *pPos, bool param2) {
+LIGHT_INFLUENCE *dLightEnv_c::light_influence2(const mVec3_c *pPos, bool param2) {
     f32 max = 1000000.f;
     f32 temp = 1000000.f;
     LIGHT_INFLUENCE *pOut2 = nullptr;
@@ -206,7 +206,7 @@ LIGHT_INFLUENCE *BlurAndPaletteManager::light_influence2(const mVec3_c *pPos, bo
     return pOut;
 }
 
-void BlurAndPaletteManager::shadow_set(SHADOW_INFLUENCE *pShadowInfo) {
+void dLightEnv_c::shadow_set(SHADOW_INFLUENCE *pShadowInfo) {
     if (pShadowInfo == nullptr) {
         return;
     }
@@ -226,7 +226,7 @@ void BlurAndPaletteManager::shadow_set(SHADOW_INFLUENCE *pShadowInfo) {
     }
 }
 
-void BlurAndPaletteManager::shadow_cut(SHADOW_INFLUENCE *pShadowInfo) {
+void dLightEnv_c::shadow_cut(SHADOW_INFLUENCE *pShadowInfo) {
     if (pShadowInfo == nullptr) {
         return;
     }
@@ -239,7 +239,7 @@ void BlurAndPaletteManager::shadow_cut(SHADOW_INFLUENCE *pShadowInfo) {
     }
 }
 
-SHADOW_INFLUENCE *BlurAndPaletteManager::shadow_influence(const mVec3_c *pPos) {
+SHADOW_INFLUENCE *dLightEnv_c::shadow_influence(const mVec3_c *pPos) {
     f32 max = 1000000.f;
     SHADOW_INFLUENCE *pOut = nullptr;
 
@@ -257,16 +257,16 @@ SHADOW_INFLUENCE *BlurAndPaletteManager::shadow_influence(const mVec3_c *pPos) {
     return pOut;
 }
 
-void BlurAndPaletteManager::setLightFilter(f32 ratio) {
+void dLightEnv_c::setLightFilter(f32 ratio) {
     field_0x2DF4.r = ratio * 255.f;
     field_0x2DF4.g = ratio * 255.f;
     field_0x2DF4.b = ratio * 255.f;
 }
-void BlurAndPaletteManager::set0x35B0(f32 f) {
+void dLightEnv_c::set0x35B0(f32 f) {
     mWind.field_0x10 = f;
 }
 
-void BlurAndPaletteManager::setBPM8(const mVec3_c *pos, u32 type, f32 radius) {
+void dLightEnv_c::setBPM8(const mVec3_c *pos, u32 type, f32 radius) {
     for (int i = 0; i < 10; ++i) {
         if (field_0x3654[i].field_0x10 <= -1) {
             field_0x3654[i].mPos = *pos;
@@ -277,27 +277,27 @@ void BlurAndPaletteManager::setBPM8(const mVec3_c *pos, u32 type, f32 radius) {
     }
 }
 
-void BlurAndPaletteManager::setBPM8_Type4(const mVec3_c *pos) {
+void dLightEnv_c::setBPM8_Type4(const mVec3_c *pos) {
     setBPM8(pos, 4, 250.f);
 }
 
-void BlurAndPaletteManager::setBPM8_Type6(const mVec3_c *pos) {
+void dLightEnv_c::setBPM8_Type6(const mVec3_c *pos) {
     setBPM8(pos, 6, 500.f);
 }
 
-void BlurAndPaletteManager::setBPM8_Type10(const mVec3_c *pos) {
+void dLightEnv_c::setBPM8_Type10(const mVec3_c *pos) {
     setBPM8(pos, 10, 1000.f);
 }
 
-void BlurAndPaletteManager::setBPM8_Type10_2(const mVec3_c *pos) {
+void dLightEnv_c::setBPM8_Type10_2(const mVec3_c *pos) {
     setBPM8(pos, 10, 1001.f);
 }
 
-void BlurAndPaletteManager::setBPM8_Type6_2(const mVec3_c *pos) {
+void dLightEnv_c::setBPM8_Type6_2(const mVec3_c *pos) {
     setBPM8(pos, 6, 501.f);
 }
 
-bool BlurAndPaletteManager::check_BPM8(const mVec3_c *pos, mVec3_c *pOutPos) {
+bool dLightEnv_c::check_BPM8(const mVec3_c *pos, mVec3_c *pOutPos) {
     bool ret = false;
     for (int i = 0; i < 10; ++i) {
         if (field_0x3654[i].field_0x10 > 0) {
@@ -313,7 +313,7 @@ bool BlurAndPaletteManager::check_BPM8(const mVec3_c *pos, mVec3_c *pOutPos) {
     return ret;
 }
 
-bool BlurAndPaletteManager::check_BPM8_1001(const mVec3_c *pos, mVec3_c *pOutPos) {
+bool dLightEnv_c::check_BPM8_1001(const mVec3_c *pos, mVec3_c *pOutPos) {
     bool ret = false;
     for (int i = 0; i < 10; ++i) {
         if (field_0x3654[i].field_0x10 > 0) {
@@ -329,7 +329,7 @@ bool BlurAndPaletteManager::check_BPM8_1001(const mVec3_c *pos, mVec3_c *pOutPos
     return ret;
 }
 
-bool BlurAndPaletteManager::check_BPM8_501(const mVec3_c *pos, mVec3_c *pOutPos) {
+bool dLightEnv_c::check_BPM8_501(const mVec3_c *pos, mVec3_c *pOutPos) {
     bool ret = false;
     for (int i = 0; i < 10; ++i) {
         if (field_0x3654[i].field_0x10 > 0) {
@@ -345,7 +345,7 @@ bool BlurAndPaletteManager::check_BPM8_501(const mVec3_c *pos, mVec3_c *pOutPos)
     return ret;
 }
 
-bool BlurAndPaletteManager::setUnk(const mVec3_c *pos, f32 radius) {
+bool dLightEnv_c::setUnk(const mVec3_c *pos, f32 radius) {
     bool ret = false;
     if (field_0x38B0 == false) {
         field_0x38B0 = true;
@@ -357,7 +357,7 @@ bool BlurAndPaletteManager::setUnk(const mVec3_c *pos, f32 radius) {
     return ret;
 }
 
-void BlurAndPaletteManager::setBPM9(const mVec3_c *pos, f32 radius) {
+void dLightEnv_c::setBPM9(const mVec3_c *pos, f32 radius) {
     for (int i = 0; i < 20; ++i) {
         if (field_0x371C[i].field_0x00 == false) {
             field_0x371C[i].field_0x00 = true;
@@ -368,7 +368,7 @@ void BlurAndPaletteManager::setBPM9(const mVec3_c *pos, f32 radius) {
     }
 }
 
-bool BlurAndPaletteManager::check_BPM9(const mVec3_c *pos) {
+bool dLightEnv_c::check_BPM9(const mVec3_c *pos) {
     bool ret = false;
     for (int i = 0; i < 20; ++i) {
         if (field_0x371C[i].field_0x00) {
@@ -381,7 +381,7 @@ bool BlurAndPaletteManager::check_BPM9(const mVec3_c *pos) {
     return ret;
 }
 
-s32 BlurAndPaletteManager::checkBPM9_Entity(mVec3_c *pos) {
+s32 dLightEnv_c::checkBPM9_Entity(mVec3_c *pos) {
     s32 value = field_0x38C4;
     if (value != 0 && pos != nullptr) {
         *pos = field_0x38C8;
@@ -389,15 +389,15 @@ s32 BlurAndPaletteManager::checkBPM9_Entity(mVec3_c *pos) {
     return value;
 }
 
-void BlurAndPaletteManager::setAlterateRoomId(s32 roomId) {
+void dLightEnv_c::setAlterateRoomId(s32 roomId) {
     mAlternateRoomId = roomId;
 }
 
-s32 BlurAndPaletteManager::getAlterateRoomId() {
+s32 dLightEnv_c::getAlterateRoomId() {
     return mAlternateRoomId;
 }
 
-mColor BlurAndPaletteManager::color_ratio_set(const mColor &start, const mColor &end, f32 ratio) {
+mColor dLightEnv_c::color_ratio_set(const mColor &start, const mColor &end, f32 ratio) {
     mColor result;
     result.Set(0xff, 0xff, 0xff, 0xff);
     result.r = (start.r + ratio * ((f32)end.r - (f32)start.r));
@@ -407,7 +407,7 @@ mColor BlurAndPaletteManager::color_ratio_set(const mColor &start, const mColor 
     return result;
 }
 
-mVec3_c BlurAndPaletteManager::vec_ratio_set(const mVec3_c &start, const mVec3_c &end, f32 ratio) {
+mVec3_c dLightEnv_c::vec_ratio_set(const mVec3_c &start, const mVec3_c &end, f32 ratio) {
     mVec3_c result;
     result.x = start.x + ratio * (end.x - start.x);
     result.y = start.y + ratio * (end.y - start.y);
@@ -415,19 +415,19 @@ mVec3_c BlurAndPaletteManager::vec_ratio_set(const mVec3_c &start, const mVec3_c
     return result;
 }
 
-f32 BlurAndPaletteManager::f32_ratio_set(const f32 start, const f32 end, f32 ratio) {
+f32 dLightEnv_c::f32_ratio_set(const f32 start, const f32 end, f32 ratio) {
     return start + ratio * (end - start);
 }
 
-u16 BlurAndPaletteManager::u16_ratio_set(const u16 start, const u16 end, f32 ratio) {
+u16 dLightEnv_c::u16_ratio_set(const u16 start, const u16 end, f32 ratio) {
     return (f32)start + ratio * ((f32)end - (f32)start);
 }
 
-u8 BlurAndPaletteManager::u8_ratio_set(const u8 start, const u8 end, f32 ratio) {
+u8 dLightEnv_c::u8_ratio_set(const u8 start, const u8 end, f32 ratio) {
     return static_cast<u8>((f32)start + ratio * (f32)(end - (f32)start)) & 0xFF;
 }
 
-void BlurAndPaletteManager::spf_ratio_set(Spf &out, const Spf &start, const Spf &end, f32 ratio) {
+void dLightEnv_c::spf_ratio_set(Spf &out, const Spf &start, const Spf &end, f32 ratio) {
     mColor black0;
     mColor black1;
     out.mActorPalette.mAmbientClr =
@@ -597,7 +597,7 @@ void __Spf_ct_dt_genertation() {
     Spf s;
 }
 
-void BlurAndPaletteManager::set_palette_transition(s16 before, s16 after, s32 numFrames) {
+void dLightEnv_c::set_palette_transition(s16 before, s16 after, s32 numFrames) {
     mTransitionSpfSetting.mIdxBefore = before;
     mTransitionSpfSetting.mIdxAfter = after;
     mTransitionSpfSetting.mNumFrames = numFrames;
@@ -627,13 +627,13 @@ void BlurAndPaletteManager::set_palette_transition(s16 before, s16 after, s32 nu
     }
 }
 
-void BlurAndPaletteManager::set_override_spf(s16 start, s16 end, f32 ratio) {
+void dLightEnv_c::set_override_spf(s16 start, s16 end, f32 ratio) {
     mOverrideSpfSetting.mIdxStart = start;
     mOverrideSpfSetting.mIdxEnd = end;
     mOverrideSpfSetting.mRatio = ratio;
 }
 
-void BlurAndPaletteManager::setMist(u8 mode, u8 decay, u8 alpha, f32 dir, f32 speed) {
+void dLightEnv_c::setMist(u8 mode, u8 decay, u8 alpha, f32 dir, f32 speed) {
     mMistInfo.mMode = mode;
     mMistInfo.mDecay = decay;
     mMistInfo.mDirection = dir;
@@ -641,7 +641,7 @@ void BlurAndPaletteManager::setMist(u8 mode, u8 decay, u8 alpha, f32 dir, f32 sp
     mMistInfo.mAlpha = alpha;
 }
 
-void BlurAndPaletteManager::setMistMode3(const mVec3_c &pos, f32 value) {
+void dLightEnv_c::setMistMode3(const mVec3_c &pos, f32 value) {
     mMistInfo.mMode = 3;
     mMistInfo.mDecay = value * 128.f;
     mMistPos = pos;
@@ -649,16 +649,16 @@ void BlurAndPaletteManager::setMistMode3(const mVec3_c &pos, f32 value) {
     mMistInfo.mAlpha = 0;
 }
 
-void BlurAndPaletteManager::setDOF(f32 dof) {
+void dLightEnv_c::setDOF(f32 dof) {
     mDofEnabled = true;
     mDof = dof;
 }
 
-void BlurAndPaletteManager::disableDOF() {
+void dLightEnv_c::disableDOF() {
     mDofEnabled = false;
 }
 
-void BlurAndPaletteManager::light_influence_ratio_set(
+void dLightEnv_c::light_influence_ratio_set(
     LIGHT_INFLUENCE &out, const LIGHT_INFLUENCE &start, const LIGHT_INFLUENCE &end, f32 ratio
 ) {
     mColor black(0, 0, 0, 0);
@@ -679,7 +679,7 @@ void BlurAndPaletteManager::light_influence_ratio_set(
     }
 }
 
-void BlurAndPaletteManager::sff_ratio_set(Sff &out, const Sff &start, const Sff &end, f32 ratio) {
+void dLightEnv_c::sff_ratio_set(Sff &out, const Sff &start, const Sff &end, f32 ratio) {
     for (int i = 0; i < 3; ++i) {
         out.field_0x00[i].field_0x00 =
             color_ratio_set(start.field_0x00[i].field_0x00, end.field_0x00[i].field_0x00, ratio);
@@ -694,21 +694,21 @@ void __Sff_ct_dt_genertation() {
     Sff s;
 }
 
-void BlurAndPaletteManager::fn_80024740(u8 idx, u8 value) {
+void dLightEnv_c::fn_80024740(u8 idx, u8 value) {
     if (idx != 0) {
         field_0x5D59[idx - 1].mEnabled = true;
         field_0x5D59[idx - 1].mValue = value;
     }
 }
 
-bool BlurAndPaletteManager::fn_80024770(u8 idx) {
+bool dLightEnv_c::fn_80024770(u8 idx) {
     bool ret = false;
     if (idx != 0) {
         ret = field_0x5D59[idx - 1].mEnabled;
     }
     return ret;
 }
-bool BlurAndPaletteManager::fn_800247A0(u8 idx) {
+bool dLightEnv_c::fn_800247A0(u8 idx) {
     bool ret = false;
     if (idx != 0) {
         if (field_0x5D59[idx - 1].mValue != 0) {
@@ -718,12 +718,12 @@ bool BlurAndPaletteManager::fn_800247A0(u8 idx) {
     return ret;
 }
 
-void BlurAndPaletteManager::setWind(mVec3_c mPos, f32 f) {
+void dLightEnv_c::setWind(mVec3_c mPos, f32 f) {
     mWind.mVel = mPos;
     mWind.field_0x0C = f;
 }
 
-BlurAndPaletteManager::BlurAndPaletteManager() {
+dLightEnv_c::dLightEnv_c() {
     mColor grey_aaaaaa = mColor(0xaa, 0xaa, 0xaa, 0xff);
     mColor white_ffffff = mColor(0xff, 0xff, 0xff, 0xff);
     mColor cream_ffffc0 = mColor(0xff, 0xff, 0xc0, 0xff);
@@ -897,7 +897,7 @@ BlurAndPaletteManager::BlurAndPaletteManager() {
     field_0x5D04.field_0x20 = field_0x5CE4;
 }
 
-BlurAndPaletteManager::~BlurAndPaletteManager() {
+dLightEnv_c::~dLightEnv_c() {
     sPInstance = nullptr;
 }
 
