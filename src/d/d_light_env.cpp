@@ -381,7 +381,7 @@ s32 dLightEnv_c::checkBPM9_Entity(mVec3_c *pos) {
     return value;
 }
 
-void dLightEnv_c::setAlterateRoomId(s32 roomId) {
+void dLightEnv_c::setAlternateRoomId(s32 roomId) {
     mAlternateRoomId = roomId;
 }
 
@@ -682,7 +682,7 @@ void dLightEnv_c::sff_ratio_set(Sff &out, const Sff &start, const Sff &end, f32 
     }
 }
 
-void __Sff_ct_dt_genertation() {
+void __Sff_ct_dt_generation() {
     Sff s;
 }
 
@@ -899,7 +899,6 @@ void ActorLighting::fn_80026500() {
     }
 }
 
-// I want to say something else generated this...
 ActorLighting::~ActorLighting() {}
 
 void ActorLighting::reset() {

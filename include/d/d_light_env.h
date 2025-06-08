@@ -260,16 +260,16 @@ struct PaletteEAF_big_entry {
 };
 
 struct PaletteEAF_big {
-    PaletteEAF_big_entry field_0x00[8];
+    /* 0x00 */ PaletteEAF_big_entry field_0x00[8];
 };
 
 // Apparently particle color related
 struct Bpm3 {
-    PaletteEAF_smol field_0x00[0x20];
+    /* 0x00 */ PaletteEAF_smol field_0x00[0x20];
 };
 
 struct Bpm4 {
-    PaletteEAF_big field_0x00[0x20];
+    /* 0x00 */ PaletteEAF_big field_0x00[0x20];
 };
 
 struct SHADOW_INFLUENCE {
@@ -329,7 +329,8 @@ public:
     void efplight_cut(LIGHT_INFLUENCE *pLightInfo);
     LIGHT_INFLUENCE *eflight_influence(const mVec3_c *);
 
-    void SordFlush_set(const mVec3_c *pPos, s32 lightType); // Name is guess based on closest func in tp
+    // Name is guess based on closest func in tp
+    void SordFlush_set(const mVec3_c *pPos, s32 lightType);
 
     void plight_set(LIGHT_INFLUENCE *pLightInfo);
     void plight_cut(LIGHT_INFLUENCE *pLightInfo);
@@ -360,7 +361,7 @@ public:
 
     s32 checkBPM9_Entity(mVec3_c *pOutPos);
 
-    void setAlterateRoomId(s32 roomId);
+    void setAlternateRoomId(s32 roomId);
     s32 getAlterateRoomId();
 
     mColor color_ratio_set(const mColor &start, const mColor &end, f32 ratio);
@@ -482,11 +483,11 @@ private:
     /* 0x5CE4 */ PaletteDefaultMCF field_0x5CE4;
     /* 0x5D04 */ TwoPaletteDefaultMCF field_0x5D04;
     /* 0x5D44 */ u8 field_0x5D44[0x5D59 - 0x5D44];
-    /* 0x5D5A */ struct { // Anonymous until more is known
+    /* 0x5D59 */ struct { // Anonymous until more is known
         bool mEnabled;
         u8 mValue;
     } field_0x5D59[9];
-    /* 0x5D60 */ u8 field_0x5D6C[0x5D70 - 0x5D6C];
+    /* 0x5D6C */ u8 field_0x5D6C[0x5D70 - 0x5D6C];
 
     static dLightEnv_c sInstance;
     static dLightEnv_c *sPInstance;
