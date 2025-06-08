@@ -57,7 +57,7 @@ private:
     /* 0x64 */ dSoundSource_c *mpCachedClosestSourceToListener;
     /* 0x68 */ dSoundSource_c *mpCachedClosestSourceToPlayer;
     /* 0x6C */ bool mCalculatedClosestToListener;
-    /* 0x6C */ bool mCalculatedClosestToPlayer;
+    /* 0x6D */ bool mCalculatedClosestToPlayer;
 };
 
 #endif

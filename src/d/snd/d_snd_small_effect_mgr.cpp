@@ -63,13 +63,13 @@ bool dSndSmallEffectMgr_c::playSound(u32 soundId) {
             }
             case SE_S_MENU_SELECT_TURN_PAGE_LEFT: {
                 if (isPlayingSound(dSndPlayerMgr_c::PLAYER_SMALL_NORMAL, SE_S_SHOP_STK_STOCK_SELECT_TURN_PAGE_LEFT)) {
-                    return 0;
+                    return false;
                 }
                 break;
             }
             case SE_S_MENU_SELECT_TURN_PAGE_RIGHT: {
                 if (isPlayingSound(dSndPlayerMgr_c::PLAYER_SMALL_NORMAL, SE_S_SHOP_STK_STOCK_SELECT_TURN_PAGE_RIGHT)) {
-                    return 0;
+                    return false;
                 }
                 break;
             }
@@ -87,7 +87,7 @@ bool dSndSmallEffectMgr_c::playSound(u32 soundId) {
             }
             case SE_S_WINDOW_PRESS_A: {
                 if (isPlayingSound(dSndPlayerMgr_c::PLAYER_SMALL_IMPORTANT, SE_S_POINTER_OK)) {
-                    return 0;
+                    return false;
                 }
                 break;
             }
@@ -97,7 +97,7 @@ bool dSndSmallEffectMgr_c::playSound(u32 soundId) {
             }
             case SE_S_MENU_P1_POINT_ITEM: {
                 if (isPlayingSound(dSndPlayerMgr_c::PLAYER_SMALL_NORMAL, SE_S_MENU_P1_HOLD_POINTER)) {
-                    return 0;
+                    return false;
                 }
                 break;
             }
@@ -108,9 +108,9 @@ bool dSndSmallEffectMgr_c::playSound(u32 soundId) {
                 }
                 break;
             }
-            case 0x13EF:
+            case SE_S_DOWSING_WAIT:
                 if (isPlayingSound(dSndPlayerMgr_c::PLAYER_SMALL_NORMAL, SE_S_FIRST_PERSON_ON)) {
-                    return 0;
+                    return false;
                 }
                 break;
         }

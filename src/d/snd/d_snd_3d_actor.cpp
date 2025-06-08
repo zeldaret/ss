@@ -9,9 +9,9 @@
 
 #include <cmath>
 
-dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, u8 a2)
+dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, u8 sourceType)
     : nw4r::snd::Sound3DActor(
-          dSndPlayerMgr_c::GetInstance()->getSoundArchivePlayerForType(a2), dSnd3DManager_c::GetInstance()->getManager()
+          dSndPlayerMgr_c::GetInstance()->getSoundArchivePlayerForType(sourceType), dSnd3DManager_c::GetInstance()->getManager()
       ),
       a_field_0x7D(0),
       a_field_0x7E(0),
@@ -31,7 +31,7 @@ dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, u8 a2)
     resetCachedRelativePositions();
     // Portability hazard
     SetUserParam(reinterpret_cast<u32>(this));
-    if (dSndPlayerMgr_c::GetInstance()->canUseThisPlayer(a2)) {
+    if (dSndPlayerMgr_c::GetInstance()->canUseThisPlayer(sourceType)) {
         a_field_0x7F = 1;
     }
 }
@@ -43,9 +43,9 @@ void dSnd3DActor_c::d_vt_0x34(const nw4r::math::VEC3 &rPosition) {
 }
 
 void dSnd3DActor_c::updatePositionRelativeToListener() {
-    if (!checkFlag(1)) {
+    if (!checkFlag(0x1)) {
         calculatePositionRelativeToListener();
-        setFlag(1);
+        setFlag(0x1);
     }
 }
 
@@ -70,10 +70,10 @@ void dSnd3DActor_c::calculatePositionRelativeToListener() {
 }
 
 void dSnd3DActor_c::updateDistanceToListener() {
-    if (!checkFlag(2)) {
+    if (!checkFlag(0x2)) {
         updatePositionRelativeToListener();
         mDistanceToListener = VEC3Len(&mPositionRelativeToListener);
-        setFlag(2);
+        setFlag(0x2);
     }
 }
 
@@ -110,10 +110,10 @@ void dSnd3DActor_c::calculatePositionRelativeToCameraTarget() {
 }
 
 void dSnd3DActor_c::updateDistanceToCameraTarget() {
-    if (!checkFlag(8)) {
+    if (!checkFlag(0x8)) {
         updatePositionRelativeToCameraTarget();
         mDistanceToCameraTarget = VEC3Len(&mPositionRelativeToCameraTarget);
-        setFlag(8);
+        setFlag(0x8);
     }
 }
 

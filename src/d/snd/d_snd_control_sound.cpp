@@ -7,7 +7,7 @@
 
 // I'm not super happy with these base class function in a separate file,
 // but either we add another intermediate class or this is ok. It's weird
-// that d_snd_sound has dSndControl_c::stop though
+// that d_snd_sound has dSndControl_c::configure though
 
 void dSndControl_c::reset() {
     mCurrValue = mResetValue;
@@ -18,7 +18,6 @@ void dSndControl_c::reset() {
 }
 
 void dSndControl_c::stop() {
-    // field_0x10 = field_0x04;
     mStartValue = mCurrValue;
     mTargetValue = mCurrValue;
     mDuration = 0;

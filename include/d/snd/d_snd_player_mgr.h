@@ -41,8 +41,8 @@ public:
     const char *getSoundArchivePath();
     u32 convertLabelStringToSoundId(const char *label) const;
 
-    nw4r::snd::SoundArchivePlayer &getSoundArchivePlayerForType(u8 type);
-    bool canUseThisPlayer(u8 type) const;
+    nw4r::snd::SoundArchivePlayer &getSoundArchivePlayerForType(u8 sourceType);
+    bool canUseThisPlayer(u8 sourceType) const;
 
     enum PlayerMgrFlag_e {
         MGR_HBM = 0x1,

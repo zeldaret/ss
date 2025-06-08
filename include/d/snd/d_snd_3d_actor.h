@@ -8,7 +8,7 @@
 
 class dSnd3DActor_c : public nw4r::snd::Sound3DActor {
 public:
-    dSnd3DActor_c(dSndSourceParam *pSourceParam, u8);
+    dSnd3DActor_c(dSndSourceParam *pSourceParam, u8 sourceType);
 
     virtual ~dSnd3DActor_c() {}
 

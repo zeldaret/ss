@@ -46,11 +46,11 @@ public:
 
 private:
     void updateListenerPos(f32);
-    /* 0x10 */ bool mIsSetup;
-    /* 0x11 */ bool mCalculationsFresh;
-    /* 0x14 */ dSnd3DEngine_c *mpEngine;
-    /* 0x18 */ nw4r::snd::Sound3DManager mManager;
-    /* 0x44 */ nw4r::snd::Sound3DListener mListener;
+    /* 0x010 */ bool mIsSetup;
+    /* 0x011 */ bool mCalculationsFresh;
+    /* 0x014 */ dSnd3DEngine_c *mpEngine;
+    /* 0x018 */ nw4r::snd::Sound3DManager mManager;
+    /* 0x044 */ nw4r::snd::Sound3DListener mListener;
     /* 0xB0 */ EGG::LookAtCamera mCamera;
     /* 0x138 */ mVec3_c mCameraDirectionNormalized;
     /* 0x144 */ mVec3_c mCameraTargetPosition;

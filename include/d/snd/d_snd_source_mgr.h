@@ -8,19 +8,6 @@
 
 SND_DISPOSER_FORWARD_DECL(dSndSourceMgr_c);
 
-// 0 - "" - Link
-// ActorLink::initModels
-// 0x2C - NpcKenT
-// 0x20 - Door, TBox, CharE (Chair), Tubo
-// 0x35 - TgSound
-// 0x2D - PyBird
-// 0x22 - Bamboo
-// 0x23 - Item
-
-// 0x19 - Nusi*, BKr, BBs
-// 0x1A - MgRArm, MgLArm
-// 0x1B - Mgtail
-
 class dSndSourceMgr_c {
     SND_DISPOSER_MEMBERS(dSndSourceMgr_c);
 

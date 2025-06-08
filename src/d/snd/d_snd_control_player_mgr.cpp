@@ -177,7 +177,7 @@ void dSndControlPlayerMgr_c::calcVolumes() {
                     targetVolume = currentVolume + maxVolumeIncrease;
                 }
                 // @bug not actually clamped
-                nw4r::ut::Clamp(targetVolume, 0.0f, 2.0f);
+                (void)nw4r::ut::Clamp(targetVolume, 0.0f, 2.0f);
                 setVolume(i, targetVolume, 0);
             }
             mpTargetVolumes[i] = 1.0f;
@@ -356,7 +356,7 @@ void dSndControlPlayerMgr_c::setPlayerVolumeInternal(u32 playerIdx, f32 volume) 
         return;
     }
     // @bug not actually clamped
-    nw4r::ut::Clamp(volume, 0.0f, 2.0f);
+    (void)nw4r::ut::Clamp(volume, 0.0f, 2.0f);
 
     if (mpTargetVolumes[playerIdx] > volume) {
         mpTargetVolumes[playerIdx] = volume;

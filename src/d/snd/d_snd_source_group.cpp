@@ -127,7 +127,7 @@ dSoundSource_c *dSndSourceGroup_c::getSourceClosestToListener() {
     f32 closest = INFINITY;
     for (dSoundSource_c *source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetFirst(&mSourceList));
          source != nullptr; source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetNext(&mSourceList, source))) {
-        if (source->getActorType() != 1 && source->getActorType() != 48) {
+        if (source->getActorType() != SND_SOURCE_PLAYER_HEAD && source->getActorType() != SND_SOURCE_NPC_48) {
             f32 dist = source->getDistanceToListener();
             if (dist < closest) {
                 closest = dist;
