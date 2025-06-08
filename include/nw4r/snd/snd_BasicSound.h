@@ -327,40 +327,40 @@ namespace nw4r { namespace snd { namespace detail
 		ExternalSoundPlayer	*mExtSoundPlayer;			// size 0x04, offset 0x18
 		AmbientInfo			mAmbientInfo;				// size 0x14, offset 0x1c
 		SoundParam			mAmbientParam;				// size 0x24, offset 0x30
-		SoundActorParam		mActorParam;				// size 0x0c, offset 0x54
-		MoveValue<f32, int>	mFadeVolume;				// size 0x10, offset 0x60
-		MoveValue<f32, int>	mPauseFadeVolume;			// size 0x10, offset 0x70
-		bool				mStartFlag;					// size 0x01, offset 0x80
-		bool				mStartedFlag;				// size 0x01, offset 0x81
-		bool				mAutoStopFlag;				// size 0x01, offset 0x82
-		bool				mFadeOutFlag;				// size 0x01, offset 0x83
-		PauseState			mPauseState;				// size 0x04, offset 0x84
-		bool				mUnPauseFlag;				// size 0x01, offset 0x88
+		SoundActorParam		mActorParam;				// size 0x0c, offset 0x58
+		MoveValue<f32, int>	mFadeVolume;				// size 0x10, offset 0x64
+		MoveValue<f32, int>	mPauseFadeVolume;			// size 0x10, offset 0x74
+		bool				mStartFlag;					// size 0x01, offset 0x84
+		bool				mStartedFlag;				// size 0x01, offset 0x85
+		bool				mAutoStopFlag;				// size 0x01, offset 0x86
+		bool				mFadeOutFlag;				// size 0x01, offset 0x87
+		PauseState			mPauseState;				// size 0x04, offset 0x88
+		bool				mUnPauseFlag;				// size 0x01, offset 0x8c
 		/* 3 bytes padding */
-		s32					mAutoStopCounter;			// size 0x04, offset 0x8c
-		u32					mUpdateCounter;				// size 0x04, offset 0x90
-		u8					mPriority;					// size 0x01, offset 0x94
-		u8					mVoiceOutCount;				// size 0x01, offset 0x95
-		u8					mBiquadFilterType;			// size 0x01, offset 0x96
+		s32					mAutoStopCounter;			// size 0x04, offset 0x90
+		u32					mUpdateCounter;				// size 0x04, offset 0x94
+		u8					mPriority;					// size 0x01, offset 0x98
+		u8					mVoiceOutCount;				// size 0x01, offset 0x99
+		u8					mBiquadFilterType;			// size 0x01, offset 0x9a
 		/* 1 byte padding */
-		u32					mId;						// size 0x04, offset 0x98
-		MoveValue<f32, int>	mExtMoveVolume;				// size 0x10, offset 0x9c
-		f32					mInitVolume;				// size 0x04, offset 0xac
-		f32					mExtPan;					// size 0x04, offset 0xb0
-		f32					mExtSurroundPan;			// size 0x04, offset 0xb4
-		f32					mExtPitch;					// size 0x04, offset 0xb8
-		f32					mLpfFreq;					// size 0x04, offset 0xbc
-		f32					mBiquadFilterValue;			// size 0x04, offset 0xc0
-		int					mOutputLineFlag;			// size 0x04, offset 0xc4
-		f32					mMainOutVolume;				// size 0x04, offset 0xc8
-		f32					mMainSend;					// size 0x04, offset 0xcc
-		f32					mFxSend[AUX_BUS_NUM];		// size 0x0c, offset 0xd0
-		f32					mRemoteOutVolume[4];		// size 0x10, offset 0xdc
+		u32					mId;						// size 0x04, offset 0x9c
+		MoveValue<f32, int>	mExtMoveVolume;				// size 0x10, offset 0xa0
+		f32					mInitVolume;				// size 0x04, offset 0xb0
+		f32					mExtPan;					// size 0x04, offset 0xb4
+		f32					mExtSurroundPan;			// size 0x04, offset 0xb8
+		f32					mExtPitch;					// size 0x04, offset 0xbc
+		f32					mLpfFreq;					// size 0x04, offset 0xc0
+		f32					mBiquadFilterValue;			// size 0x04, offset 0xc4
+		int					mOutputLineFlag;			// size 0x04, offset 0xc8
+		f32					mMainOutVolume;				// size 0x04, offset 0xcc
+		f32					mMainSend;					// size 0x04, offset 0xd0
+		f32					mFxSend[AUX_BUS_NUM];		// size 0x0c, offset 0xd4
+		f32					mRemoteOutVolume[4];		// size 0x10, offset 0xe0
 	public:
-		ut::LinkListNode	mPriorityLink;				// size 0x08, offset 0xe0
-		ut::LinkListNode	mSoundPlayerPlayLink;		// size 0x08, offset 0xe8
-		ut::LinkListNode	mSoundPlayerPriorityLink;	// size 0x08, offset 0xf0
-		ut::LinkListNode	mExtSoundPlayerPlayLink;	// size 0x08, offset 0xf8
+		ut::LinkListNode	mPriorityLink;				// size 0x08, offset 0xf0
+		ut::LinkListNode	mSoundPlayerPlayLink;		// size 0x08, offset 0xf8
+		ut::LinkListNode	mSoundPlayerPriorityLink;	// size 0x08, offset 0x100
+		ut::LinkListNode	mExtSoundPlayerPlayLink;	// size 0x08, offset 0x108
 
 	// friends
 	private:

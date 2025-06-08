@@ -21,6 +21,7 @@
 #include "d/d_linkage.h"
 #include "d/flag/dungeonflag_manager.h"
 #include "d/flag/sceneflag_manager.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "egg/math/eggMath.h"
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
@@ -34,7 +35,6 @@
 #include "toBeSorted/attention.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/small_sound_mgr.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 
 

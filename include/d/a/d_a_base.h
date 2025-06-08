@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "d/snd/d_snd_source_if.h"
 #include "m/m_allocator.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
@@ -13,83 +14,9 @@
 class dAcBase_c;
 struct cBgS_PolyInfo;
 
-struct SoundSource {
-    virtual ~SoundSource() {}
-// TODO there's probably multiple inheritance involved and stuff
-#define SOUNDSOURCE_VIRTUAL(offset) virtual void vt_##offset();
-
-    SOUNDSOURCE_VIRTUAL(0x0C);
-    SOUNDSOURCE_VIRTUAL(0x10);
-    SOUNDSOURCE_VIRTUAL(0x14);
-    SOUNDSOURCE_VIRTUAL(0x18);
-    SOUNDSOURCE_VIRTUAL(0x1C);
-    SOUNDSOURCE_VIRTUAL(0x20);
-    SOUNDSOURCE_VIRTUAL(0x24);
-    SOUNDSOURCE_VIRTUAL(0x28);
-    SOUNDSOURCE_VIRTUAL(0x2C);
-    SOUNDSOURCE_VIRTUAL(0x30);
-    SOUNDSOURCE_VIRTUAL(0x34);
-    SOUNDSOURCE_VIRTUAL(0x38);
-    SOUNDSOURCE_VIRTUAL(0x3C);
-    SOUNDSOURCE_VIRTUAL(0x40);
-    SOUNDSOURCE_VIRTUAL(0x44);
-    virtual bool shutdown(); // 0x48
-    SOUNDSOURCE_VIRTUAL(0x4C);
-    SOUNDSOURCE_VIRTUAL(0x50);
-    SOUNDSOURCE_VIRTUAL(0x54);
-    SOUNDSOURCE_VIRTUAL(0x58);
-    SOUNDSOURCE_VIRTUAL(0x5C);
-    SOUNDSOURCE_VIRTUAL(0x60);
-    SOUNDSOURCE_VIRTUAL(0x64);
-    SOUNDSOURCE_VIRTUAL(0x68);
-    SOUNDSOURCE_VIRTUAL(0x6C);
-    SOUNDSOURCE_VIRTUAL(0x70);
-    SOUNDSOURCE_VIRTUAL(0x74);
-    SOUNDSOURCE_VIRTUAL(0x78);
-    SOUNDSOURCE_VIRTUAL(0x7C);
-    SOUNDSOURCE_VIRTUAL(0x80);
-    SOUNDSOURCE_VIRTUAL(0x84);
-    SOUNDSOURCE_VIRTUAL(0x88);
-    SOUNDSOURCE_VIRTUAL(0x8C);
-    SOUNDSOURCE_VIRTUAL(0x90);
-    SOUNDSOURCE_VIRTUAL(0x94);
-    SOUNDSOURCE_VIRTUAL(0x98);
-    SOUNDSOURCE_VIRTUAL(0x9C);
-    SOUNDSOURCE_VIRTUAL(0xA0);
-    SOUNDSOURCE_VIRTUAL(0xA4);
-    SOUNDSOURCE_VIRTUAL(0xA8);
-    SOUNDSOURCE_VIRTUAL(0xAC);
-    SOUNDSOURCE_VIRTUAL(0xB0);
-    SOUNDSOURCE_VIRTUAL(0xB4);
-    SOUNDSOURCE_VIRTUAL(0xB8);
-    SOUNDSOURCE_VIRTUAL(0xBC);
-    SOUNDSOURCE_VIRTUAL(0xC0);
-    SOUNDSOURCE_VIRTUAL(0xC4);
-    SOUNDSOURCE_VIRTUAL(0xC8);
-    SOUNDSOURCE_VIRTUAL(0xCC);
-    SOUNDSOURCE_VIRTUAL(0xD0);
-    SOUNDSOURCE_VIRTUAL(0xD4);
-    SOUNDSOURCE_VIRTUAL(0xD8);
-    SOUNDSOURCE_VIRTUAL(0xDC);
-    SOUNDSOURCE_VIRTUAL(0xE0);
-    SOUNDSOURCE_VIRTUAL(0xE4);
-    SOUNDSOURCE_VIRTUAL(0xE8);
-    SOUNDSOURCE_VIRTUAL(0xEC);
-    SOUNDSOURCE_VIRTUAL(0xF0);
-    SOUNDSOURCE_VIRTUAL(0xF4);
-    SOUNDSOURCE_VIRTUAL(0xF8);
-    SOUNDSOURCE_VIRTUAL(0xFC);
-
-    virtual bool isReadyMaybe();                     // 0x100
-    virtual bool load(void *data, const char *name); // 0x104
-    virtual void setFrame(f32 frame);                // 0x108
-    virtual void setRate(f32 frame);                 // 0x10C
-    virtual void set_0x164(UNKWORD val);             // 0x114
-};
-
 struct SoundInfo {
     dAcBase_c *actor;
-    SoundSource *sound_source;
+    dSoundSourceIf_c *sound_source;
     mVec3_c *obj_pos;
     TListNode<SoundInfo> mLink;
 };
@@ -143,7 +70,7 @@ public:
     /* 0x68 */ mHeapAllocator_c heap_allocator;
     /* 0x84 */ const ActorInfo *mpActorInfo;
     /* 0x88 */ TList<SoundInfo, 12> sound_list;
-    /* 0x94 */ RaiiPtr<SoundSource> sound_source;
+    /* 0x94 */ RaiiPtr<dSoundSourceIf_c> sound_source;
     /* 0x98 */ mVec3_c *obj_pos;
     /* 0x9C */ mVec3_c pos_copy;
     /* 0xA8 */ u32 params2;
@@ -252,7 +179,7 @@ public:
         s8 viewClipIdx, const ActorInfo *actorInfo
     );
 
-    /* 8002c690 */ SoundSource *createSoundSource();
+    /* 8002c690 */ dSoundSourceIf_c *createSoundSource();
     /* 8002c710 */ int initAllocatorWork1Heap(int size, char *name, int align);
     /* 8002c720 */ int initAllocator(int size, char *name, EGG::Heap *heap, int align);
     /* 8002c7b0 */ bool addActorToRoom(s32 roomId);
@@ -301,7 +228,7 @@ public:
     /* 8002d810 */ void FUN_8002d810();
     /* 8002d830 */ void FUN_8002d830();
     /* 8002d860 */ void FUN_8002d860(UNKWORD val);
-    /* 8002d880 */ SoundSource *getSoundSource();
+    /* 8002d880 */ dSoundSourceIf_c *getSoundSource();
     // End of SoundSource stuff
 
     /* 8002d890 */ void removeSoundInfo(SoundInfo *);

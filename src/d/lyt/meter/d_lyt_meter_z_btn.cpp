@@ -7,8 +7,8 @@
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_unknowns.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "toBeSorted/attention.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytMeterZBtn_c, Wait);
 STATE_DEFINE(dLytMeterZBtn_c, On);
@@ -224,7 +224,7 @@ bool dLytMeterZBtn_c::execute() {
         if (mAnm[Z_BTN_ANIM_CALL].isEnabled()) {
             mAnm[Z_BTN_ANIM_CALL].play();
             if (dLytMeter_c::GetInstance()->checkAllFlags(0x800) && mAnm[Z_BTN_ANIM_CALL].getFrame() == 1.0f) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_Z_BUTTON_BLINK);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_Z_BUTTON_BLINK);
             }
         }
     } else if (field_0x1C6 == 1) {

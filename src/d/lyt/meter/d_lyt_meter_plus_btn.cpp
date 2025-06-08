@@ -9,11 +9,11 @@
 #include "d/lyt/d_lyt_unknowns.h"
 #include "d/lyt/d_window.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/t/d_t_map_mark.h"
 #include "f/f_base.h"
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytMeterPlusBtn_c, Wait);
 STATE_DEFINE(dLytMeterPlusBtn_c, ToUse);
@@ -196,7 +196,7 @@ bool dLytMeterPlusBtn_c::execute() {
             mAnm[PLUS_BTN_ANIM_CALL].play();
             if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_PLUS) &&
                 mAnm[PLUS_BTN_ANIM_CALL].getFrame() == 1.0f && mCallCount < 3) {
-                SmallSoundManager::GetInstance()->playSound(SE_S_PLUS_BUTTON_BLINK);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_PLUS_BUTTON_BLINK);
                 mCallCount++;
             }
         }

@@ -21,6 +21,7 @@
 #include "d/d_sc_game.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
 #include "m/m3d/m_fanm.h"
@@ -38,7 +39,6 @@
 #include "rvl/MTX/mtxvec.h"
 #include "s/s_Math.h"
 #include "toBeSorted/d_emitter.h"
-#include "toBeSorted/small_sound_mgr.h"
 #include "toBeSorted/time_area_mgr.h"
 
 #include <cmath.h>

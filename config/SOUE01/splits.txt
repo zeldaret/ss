@@ -2349,67 +2349,152 @@ toBeSorted/col/cc/misc_unks.cpp:
 	.text       start:0x803598D0 end:0x80359D20 align:16
 	.sbss       start:0x80575D28 end:0x80575D30
 
-d/snd/d_snd.cpp:
+d/snd/d_snd_mgr.cpp:
 	.text       start:0x80359D20 end:0x8035A558 align:16
+	.data       start:0x805485D0 end:0x80548678
+	.sbss       start:0x80575D30 end:0x80575D38
 
 d/snd/d_snd_actor.cpp:
-	.text       start:0x8035A560 end:0x8035BB78 align:16
+	.text       start:0x8035A560 end:0x8035A898 align:16
+	.data       start:0x80548678 end:0x805486A0
 
-d/snd/d_snd_engine.cpp:
+d/snd/d_snd_3d_actor.cpp:
+	.text       start:0x8035A8A0 end:0x8035BB78 align:16
+	.data       start:0x805486A0 end:0x80548710
+	.sdata2     start:0x8057D2C0 end:0x8057D308
+
+d/snd/d_snd_3d_engine.cpp:
 	.text       start:0x8035BB80 end:0x8035C3F0 align:16
+	.data       start:0x80548710 end:0x80548730
+	.sdata2     start:0x8057D308 end:0x8057D368
 
-d/snd/d_snd_unk_component_1.cpp:
+d/snd/d_snd_sound.cpp:
 	.text       start:0x8035C3F0 end:0x8035DA88 align:16
+	.data       start:0x80548730 end:0x80548758
+	.sdata2     start:0x8057D368 end:0x8057D380
 
-d/snd/mgr/d_snd_mgr_bgm.cpp:
-	.text       start:0x8035DA90 end:0x8035F010 align:16
+d/snd/d_snd_player_mgr.cpp:
+	.text       start:0x8035DA90 end:0x8035F04C align:16
+	.data       start:0x80548758 end:0x805487A0
+	.sbss       start:0x80575D38 end:0x80575D40
+	.sdata2     start:0x8057D380 end:0x8057D390
 
-d/snd/mgr/d_snd_mgr_unk1.cpp:
-	.text       start:0x8035F010 end:0x80360C28 align:16
+d/snd/d_snd_control_player_mgr.cpp:
+	.text       start:0x8035F050 end:0x80360C28 align:16
 	.ctors      start:0x804DB914 end:0x804DB918
+	.data       start:0x805487A0 end:0x805487D0
+	.sbss       start:0x80575D40 end:0x80575D58
+	.sdata2     start:0x8057D390 end:0x8057D3B8
 
-d/snd/mgr/d_snd_mgr_unk3.cpp:
+d/snd/d_snd_3d_manager.cpp:
 	.text       start:0x80360C30 end:0x8036145C align:16
+	.data       start:0x805487D0 end:0x805487E0
+	.sbss       start:0x80575D58 end:0x80575D60
+	.sdata2     start:0x8057D3B8 end:0x8057D3F8
 
-d/snd/mgr/d_snd_mgr_enemy.cpp:
+d/snd/d_snd_stage_mgr.cpp:
 	.text       start:0x80361460 end:0x8036642C align:16
 	.ctors      start:0x804DB918 end:0x804DB91C
 
 d/snd/d_snd_unk_component_2.cpp:
-	.text       start:0x80366430 end:0x8037D800 align:16
+	.text       start:0x80366430 end:0x8036A3A4 align:16
 
-d/snd/mgr/d_snd_mgr_effect.cpp:
+d/snd/d_snd_area_sound_effect_mgr.cpp:
+	.text       start:0x8036A3B0 end:0x8036B8D0 align:16
+	.data       start:0x80548B38 end:0x80548B48
+	.sbss       start:0x80575D78 end:0x80575D80
+	.sdata2     start:0x8057D8B0 end:0x8057D8E8
+
+d/snd/d_snd_area_sound.cpp:
+	.text       start:0x8036B8D0 end:0x8036C090 align:16
+	.data       start:0x80548B48 end:0x80548B78
+	.sdata2     start:0x8057D8E8 end:0x8057D920
+
+d/snd/d_snd_control_sound.cpp:
+	.text       start:0x8036C090 end:0x8036C444 align:16
+	.data       start:0x80548B78 end:0x80548C38
+	.sdata2     start:0x8057D920 end:0x8057D938
+
+d/snd/d_snd_control_player.cpp:
+	.text       start:0x8036C450 end:0x8036C6A8 align:16
+	.data       start:0x80548C38 end:0x80548CC8
+	.sdata2     start:0x8057D938 end:0x8057D940
+
+d/snd/d_snd_bgm_mgr.cpp:
+	.text       start:0x8036C6B0 end:0x803739CC align:16
+	.sbss       start:0x80575D80 end:0x80575D88
+	.sdata2     start:0x8057D940 end:0x8057D970
+
+d/snd/d_snd_bgm_sound_callbacks.cpp:
+	.text       start:0x803739D0 end:0x80378ECC align:16
+	.sdata2     start:0x8057D970 end:0x8057DA50
+
+d/snd/d_snd_bgm_sound_boss_callbacks.cpp:
+	.text       start:0x80378ED0 end:0x80379D20 align:16
+	.sdata2     start:0x8057DA50 end:0x8057DA58
+
+d/snd/d_snd_bgm_sound.cpp:
+	.text       start:0x80379D20 end:0x8037BA68 align:16
+	.sbss       start:0x80575D88 end:0x80575D90
+
+d/snd/d_snd_unk_15.cpp:
+	.text       start:0x8037BA70 end:0x8037D800 align:16
+
+d/snd/d_snd_small_effect_mgr.cpp:
 	.text       start:0x8037D800 end:0x8037F8B4 align:16
+	.data       start:0x805491B8 end:0x805491D0
+	.sbss       start:0x80575D98 end:0x80575DA0
+	.sdata2     start:0x8057DA80 end:0x8057DAD0
 
-d/snd/mgr/d_snd_mgr_unk_5.cpp:
-	.text       start:0x8037F8C0 end:0x803864C8 align:16
+d/snd/d_snd_harp_mgr.cpp:
+	.text       start:0x8037F8C0 end:0x80382150 align:16
+	.data       start:0x805491D0 end:0x805491E0
+	.sbss       start:0x80575DA0 end:0x80575DA8
+	.sdata2     start:0x8057DAD0 end:0x8057DB48
+
+d/snd/d_snd_anim_sound.cpp:
+	.text       start:0x80382150 end:0x8038240C align:16
+	.sdata2     start:0x8057DB50 end:0x8057DB68
+
+d/snd/d_snd_source_mgr.cpp:
+	.text       start:0x80382410 end:0x803864C8 align:16
 	.ctors      start:0x804DB91C end:0x804DB920
+	.sdata      start:0x80574310 end:0x805743D0
+	.sbss       start:0x80575DA8 end:0x80575DB0
+	.sdata2     start:0x8057DB68 end:0x8057DBC0
 
-d/snd/mgr/d_snd_mgr_unk_6.cpp:
-	.text       start:0x803864D0 end:0x8038C408 align:16
+d/snd/d_snd_source_group.cpp:
+	.text       start:0x803864D0 end:0x803889BC align:16
+	.data       start:0x8054A680 end:0x8054A7D0
+	.sdata      start:0x805743D0 end:0x80574708
+	.sdata2     start:0x8057DBC0 end:0x8057DCB0
+
+d/snd/d_snd_source.cpp:
+	.text       start:0x803889C0 end:0x8038C408 align:16
 	.ctors      start:0x804DB920 end:0x804DB924
+	.data       start:0x8054A7D0 end:0x8054AAE8
 
-d/snd/mgr/d_snd_mgr_unk_7.cpp:
+d/snd/d_snd_mgr_unk_7.cpp:
 	.text       start:0x8038C410 end:0x8038EBF0 align:16
 	.ctors      start:0x804DB924 end:0x804DB928
 
-d/snd/mgr/d_snd_mgr_unk_8.cpp:
+d/snd/d_snd_mgr_unk_8.cpp:
 	.text       start:0x8038EBF0 end:0x8038FF18 align:16
 	.ctors      start:0x804DB928 end:0x804DB92C
 
-d/snd/mgr/d_snd_mgr_unk_9.cpp:
+d/snd/d_snd_mgr_unk_9.cpp:
 	.text       start:0x8038FF20 end:0x80390A18 align:16
 	.ctors      start:0x804DB92C end:0x804DB930
 
-d/snd/mgr/d_snd_mgr_unk_10.cpp:
+d/snd/d_snd_mgr_unk_10.cpp:
 	.text       start:0x80390A20 end:0x80393DF4 align:16
 	.ctors      start:0x804DB930 end:0x804DB934
 
-d/snd/mgr/d_snd_mgr_unk_11.cpp:
+d/snd/d_snd_mgr_unk_11.cpp:
 	.text       start:0x80393E00 end:0x8039A848 align:16
 	.ctors      start:0x804DB934 end:0x804DB938
 
-d/snd/mgr/d_snd_mgr_unk_12.cpp:
+d/snd/d_snd_calc_pitch.cpp:
 	.text       start:0x8039A850 end:0x8039A960 align:16
 
 RVL_SDK/kpr/KPR.c:

@@ -27,6 +27,7 @@
 #include "d/lyt/d_lyt_auto_caption.h"
 // clang-format on
 
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "f/f_base.h"
 #include "m/m_fader_base.h"
 #include "m/m_vec.h"
@@ -38,7 +39,6 @@
 #include "toBeSorted/lyt_related_floats.h"
 #include "toBeSorted/music_mgrs.h"
 #include "toBeSorted/other_sound_stuff.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 #include <cstring>
 
@@ -308,7 +308,7 @@ void dLytMsgWindow_c::executeState_OutputText() {
     } else if (mpTagProcessor->getMsgWindowSubtype() <= MSG_WINDOW_1 && oldValue != mpMsgWindowUnk->getField_0x147A()) {
         u16 a = mpMsgWindowUnk->getField_0x147C();
         f32 b = (dTagProcessor_c::fn_800B8040(0, 0) * 100.0f);
-        SmallSoundManager::GetInstance()->playButtonPressSoundWhenAdvancingTextBoxes(a / b);
+        dSndSmallEffectMgr_c::GetInstance()->playButtonPressSoundWhenAdvancingTextBoxes(a / b);
     }
 
     if (setTextToDisplay(mpMsgWindowUnk->getProcessedText())) {

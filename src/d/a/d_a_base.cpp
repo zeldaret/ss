@@ -37,7 +37,7 @@ dAcBase_c *dAcBase_c::s_Create_Parent;
 const ActorInfo *dAcBase_c::s_Create_ActorInfo;
 u8 dAcBase_c::s_Create_Subtype;
 
-extern "C" SoundSource *soundForActorInitRelated_803889c0(s8, fBase_c *, const char *, u8);
+extern "C" dSoundSourceIf_c *soundForActorInitRelated_803889c0(s8, fBase_c *, const char *, u8);
 
 bool dAcBase_c::createHeap() {
     return true;
@@ -110,7 +110,7 @@ void dAcBase_c::setTempCreateParams(
     s_Create_ActorInfo = actorInfo;
 }
 
-SoundSource *dAcBase_c::createSoundSource() {
+dSoundSourceIf_c *dAcBase_c::createSoundSource() {
     if (mpActorInfo == nullptr) {
         return nullptr;
     }
@@ -512,7 +512,7 @@ void dAcBase_c::FUN_8002d830() {}
 void dAcBase_c::FUN_8002d860(UNKWORD) {}
 
 // 8002d880
-SoundSource *dAcBase_c::getSoundSource() {
+dSoundSourceIf_c *dAcBase_c::getSoundSource() {
     return sound_source.get();
 }
 // End of SoundSource stuff
