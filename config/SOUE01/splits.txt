@@ -101,6 +101,7 @@ toBeSorted/d_unk_mdl_stuff_2.cpp:
 toBeSorted/blur_and_palette_manager.cpp:
 	.text       start:0x800221A0 end:0x800268AC align:16
 	.ctors      start:0x804DB65C end:0x804DB660
+	.data       start:0x80500E80 end:0x80500E98
 	.sbss       start:0x80575068 end:0x80575070
 	.sdata2     start:0x80576BA0 end:0x80576C18
 	.bss        start:0x8058F210 end:0x80594FA0

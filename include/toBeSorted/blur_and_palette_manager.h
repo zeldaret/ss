@@ -2,11 +2,62 @@
 #define BLUR_AND_PALETTE_MANAGER_H
 
 #include "common.h"
-#include "egg/math/eggVector.h"
 #include "m/m_color.h"
 #include "m/m_vec.h"
-#include "rvl/GX/GXTypes.h"
 #include "toBeSorted/tlist.h"
+
+class ActorLighting {
+public:
+    typedef TList<ActorLighting, 0> ListType;
+    /* 0x00 */ TListNode<ActorLighting> mNode;
+    static ListType sList;
+    static void fn_80026500();
+    static const mColor &getLightTev2Color();
+    static const mColor &getLightTev1Color();
+    static const mColor &getLightTev0Color();
+    static const mColor &getLightTevKColor();
+
+public:
+    virtual ~ActorLighting();
+
+    void reset();
+
+public:
+    /* 0x0C */ f32 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1C;
+    /* 0x20 */ f32 field_0x20;
+    /* 0x24 */ f32 field_0x24;
+    /* 0x28 */ f32 field_0x28;
+    /* 0x2C */ f32 field_0x2C;
+    /* 0x30 */ f32 field_0x30;
+    /* 0x34 */ f32 field_0x34;
+    /* 0x38 */ f32 field_0x38;
+    /* 0x3C */ s32 mLightSetIdx;
+    /* 0x40 */ mColor mTev0Color;
+    /* 0x44 */ mColor mTev1Color;
+    /* 0x48 */ mColor mTev2Color;
+    /* 0x4C */ mColor mTevPrevColor;
+    /* 0x50 */ mColor mTevK0Color;
+    /* 0x54 */ mColor mTevK1Color;
+    /* 0x58 */ mColor mTevK2Color;
+    /* 0x5C */ mColor mTevK3Color;
+    /* 0x60 */ u8 mLightingCode;
+    /* 0x61 */ u8 field_0x61;
+    /* 0x62 */ u8 field_0x62;
+    /* 0x63 */ u8 field_0x63;
+    /* 0x64 */ u8 field_0x64;
+    /* 0x65 */ bool mUseTev0;
+    /* 0x66 */ bool mUseTev1;
+    /* 0x67 */ bool mUseTev2;
+    /* 0x68 */ bool mUseTevPrev;
+    /* 0x69 */ bool mUseTevK0;
+    /* 0x6A */ bool mUseTevK1;
+    /* 0x6B */ bool mUseTevK2;
+    /* 0x6C */ bool mUseTevK3;
+};
 
 struct LIGHT_INFLUENCE {
     void SetColor(mColor clr) {
@@ -26,21 +77,6 @@ struct LIGHT_INFLUENCE {
     /* 0x10 */ f32 mScale;
     /* 0x14 */ s32 mIdx;
     /* 0x18 */ bool field_0x18;
-};
-
-struct UnkBlurPaletteListNode {
-    TListNode<UnkBlurPaletteListNode> mNode;
-};
-
-struct SffSub {
-    mColor field_0x00;
-    f32 field_0x04;
-    f32 field_0x08;
-};
-
-struct SpfSub2 {
-    mColor field_0x00;
-    u8 field_0x04[5];
 };
 
 // This is a weird one - mColor / nw4r::ut::Color are assumed
@@ -74,117 +110,137 @@ struct TwoPaletteDefaultMCF {
     /* 0x20 */ PaletteDefaultMCF field_0x20;
 };
 
-// Ghidra had contents of this in an array but that won't work due to dtor codegen.
-// Start is correct (dtor offset), needs to at least include field_0x104
-struct SpfSub {
-    /* 0x000 */ f32 field_0x000;
-    /* 0x004 */ mColor grey_787878;
-    /* 0x008 */ SffSub white3_ffffff;
-    /* 0x014 */ SpfSub2 field_0x014;
+struct ActorPalette {
+    /* 0x000 */ mColor mAmbientClr;
+    /* 0x004 */ mColor mDiffuseClr;
+    /* 0x008 */ mColor mBrightnessClr;
+    /* 0x00C */ mColor mSpecularClr;
+    /* 0x010 */ mColor mDarkShadowClr;
+    /* 0x014 */ mColor mDarkLightClr;
+    /* 0x018 */ f32 mSpecular;
+    /* 0x01C */ mColor field_0x01C;
+    /* 0x020 */ f32 mTemperature; // -1 cool, 1 warm
+    /* 0x024 */ f32 field_0x24;
+    /* 0x028 */ mColor mShadowClr;
+    /* 0x02C */ mColor field_0x02C;
+};
+
+struct StagePalette {
+    /* 0x000 */ f32 mBrightness;
+    /* 0x004 */ mColor mShadowClr;
+    /* 0x008 */ mColor mLightClr;
+    /* 0x00C */ f32 mSunMoonAngle1;
+    /* 0x010 */ f32 mSunMoonAngle2;
+
+    /* 0x014 */ mColor field_0x014;
+    /* 0x018 */ u8 field_0x018[5];
     /* 0x020 */ mColor field_0x020[5];
     /* 0x034 */ f32 field_0x034[5];
     /* 0x048 */ f32 field_0x048[5];
+
     /* 0x05C */ f32 field_0x05C;
-    /* 0x060 */ SpfSub2 field_0x060;
+    /* 0x060 */ mColor field_0x060;
+    /* 0x064 */ u8 field_0x064[5];
     /* 0x06C */ mColor field_0x06C[5];
     /* 0x080 */ f32 field_0x080[5];
     /* 0x094 */ f32 field_0x094[5];
+
     /* 0x0A8 */ f32 field_0x0A8;
-    /* 0x0AC */ SpfSub2 field_0x0AC;
+    /* 0x0AC */ mColor field_0x0AC;
+    /* 0x0B0 */ u8 field_0x0B0[5];
     /* 0x0B8 */ mColor field_0x0B8[5];
     /* 0x0CC */ f32 field_0x0CC[5];
     /* 0x0E0 */ f32 field_0x0E0[5];
+
     /* 0x0F4 */ f32 field_0x0F4;
-    /* 0x0F8 */ SpfSub2 field_0x0F8;
+    /* 0x0F8 */ mColor field_0x0F8;
+    /* 0x0FC */ u8 field_0x0FC[5];
     /* 0x104 */ mColor field_0x104[5];
     /* 0x118 */ f32 field_0x118[5];
     /* 0x12C */ f32 field_0x12C[5];
 };
 
-// We assume there's SffSub in here because of weak function order
-// The size is correct now, but the default assignment operator doesn't match yet,
-// which could have many reasons. Need to tweak the layout.
-struct Spf {
-    Spf();
-    ~Spf() {}
+struct SkyPalette {
+    /* 0x000 */ mColor field_0x00;
+    /* 0x004 */ mColor field_0x04;
+    /* 0x008 */ mColor field_0x08;
+    /* 0x00C */ mColor mCloudColor;
+    /* 0x010 */ mColor mSkyColor;
+    /* 0x014 */ mColor field_0x14;
+    /* 0x018 */ mColor mSkyFilter;
+    /* 0x01C */ mVec3_c mSkyCenter;
+    /* 0x028 */ mVec3_c mSkyScale;
+};
 
-    /* 0x000 */ mColor grey_aaaaaa;
-    /* 0x004 */ mColor white_ffffff;
-    /* 0x008 */ mColor grey_808080;
-    /* 0x00C */ mColor cream_ffffc0;
-    /* 0x010 */ mColor grey2_aaaaaa;
-    /* 0x014 */ mColor white2_ffffff;
-    /* 0x018 */ f32 field_0x18;
-    /* 0x01C */ mColor pastel_orange_ffb787;
-    /* 0x020 */ f32 field_0x20;
-    /* 0x024 */ f32 field_0x24;
-    /* 0x028 */ mColor black_000000;
-    /* 0x02C */ mColor black2_000000;
-    /* 0x030 */ SpfSub mSub;
-    /* 0x170 */ mColor grey_787878;
-    /* 0x174 */ mColor grey2_787878;
-    /* 0x178 */ mColor grey3_787878;
-    /* 0x17C */ mColor mCloudColor;
-    /* 0x180 */ mColor mSkyColor;
-    /* 0x184 */ mColor seafoam_green_b9d8b7;
-    /* 0x188 */ mColor white3_ffffff;
-    /* 0x18C */ mVec3_c field_0x18C;
-    /* 0x198 */ mVec3_c field_0x198;
-    /* 0x1A4 */ SffSub MAO5_kColor3; // assuming SffSub here due to initialization with same values
-    /* 0x1B0 */ mVec3_c field_0x1B0;
-    /* 0x1BC */ u8 field_0x1BC;
-    /* 0x1C0 */ f32 field_0x1C0;
-    /* 0x1C4 */ f32 field_0x1C4;
-    /* 0x1C8 */ u8 field_0x1C8;
-    /* 0x1CC */ f32 field_0x1CC;
-    /* 0x1D0 */ f32 field_0x1D0;
-    /* 0x1D4 */ u8 field_0x1D4;
-    /* 0x1D5 */ UnalignedColor field_0x1D5; // pastel_yelow_#fff0b4
-    /* 0x1D9 */ u8 field_0x1D9;
-    /* 0x1DC */ f32 field_0x1DC;
-    /* 0x1E0 */ f32 field_0x1E0;
-    /* 0x1E4 */ f32 field_0x1E4;
-    /* 0x1E8 */ f32 field_0x1E8;
-    /* 0x1EC */ u8 field_0x1EC;
-    /* 0x1ED */ u8 field_0x1ED;
-    /* 0x1EE */ u16 field_0x1EE;
-    /* 0x1F0 */ f32 field_0x1F0;
-    /* 0x1F4 */ f32 field_0x1F4;
-    /* 0x1F8 */ f32 field_0x1F8;
-    /* 0x1FC */ f32 field_0x1FC;
-    /* 0x200 */ mColor black3_000000;
-    /* 0x204 */ mColor black4_000000;
+struct SffSub {
+    mColor field_0x00;
+    f32 field_0x04;
+    f32 field_0x08;
+};
+
+struct SpfSubUnk0 {
+    /* 0x00 */ SffSub field_0x00;
+    /* 0x0C */ f32 field_0x0C[3];
+};
+
+struct SpfSubUnk1 {
+    /* 0x00 */ u8 field_0x00;
+    /* 0x04 */ f32 field_0x04;
+    /* 0x08 */ f32 field_0x08;
+    /* 0x0C */ u8 field_0x0C;
+    /* 0x10 */ f32 field_0x10;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ u8 field_0x18;
+    /* 0x19 */ UnalignedColor field_0x19; // Bloom Color
+    /* 0x1D */ u8 field_0x1D;
+};
+
+struct SpfSubUnk2 {
+    /* 0x00 */ f32 field_0x00; // Blur Dist
+    /* 0x04 */ f32 field_0x04; // Blur Diffuse
+    /* 0x08 */ f32 field_0x08; // Softness Distance
+    /* 0x0C */ f32 field_0x0C; // Softness diffuse
+    /* 0x10 */ u8 field_0x10;
+    /* 0x11 */ u8 field_0x11; // Turning this to not 0 disables effects
+    /* 0x12 */ u16 field_0x12;
+    /* 0x14 */ f32 field_0x14;
+    /* 0x18 */ f32 field_0x18;
+    /* 0x1C */ f32 field_0x1C; // Blur?
+    /* 0x20 */ f32 field_0x20; // Fog? Shadow?
+};
+
+// Broken up in a way to get the assignment operator to match.
+// Not 100% certain
+struct Spf {
+    /* 0x000 */ ActorPalette mActorPalette;
+    /* 0x030 */ StagePalette mStagePalette;
+    /* 0x170 */ SkyPalette mSkyPalette;
+    /* 0x1A4 */ SpfSubUnk0 field_0x1A4;
+    /* 0x1BC */ SpfSubUnk1 field_0x1BC;
+    /* 0x1DC */ SpfSubUnk2 field_0x1D4;
+    /* 0x200 */ mColor mParticleTransparentClr;
+    /* 0x204 */ mColor mParticleSolidClr;
 };
 
 struct Sff {
-    Sff();
-    ~Sff() {}
-
     SffSub field_0x00[3];
 };
 
 struct EFLIGHT_PROC {
-    EFLIGHT_PROC() {}
-    ~EFLIGHT_PROC() {}
-
     /* 0x00 */ u8 mState;
     /* 0x01 */ u8 mFrame;
     /* 0x04 */ int mLightType;
     /* 0x08 */ LIGHT_INFLUENCE field_0x8;
 };
 
-struct Bpm2 {
-    Bpm2() {}
-    ~Bpm2() {}
-
-    /* 0x00 */ mVec3_c mPosition;
-    /* 0x0C */ u32 field_0x0C;
+// Deals with the direction wind particles go?
+struct WIND_INFLUENCE {
+    /* 0x00 */ mVec3_c mVel;
+    /* 0x0C */ f32 field_0x0C;
     /* 0x10 */ f32 field_0x10;
 };
 
 struct PaletteEAF_smol_entry {
-    PaletteEAF_smol_entry() {}
-    ~PaletteEAF_smol_entry() {}
     mColor field_0x00;
     mColor field_0x04;
     mColor field_0x08;
@@ -192,13 +248,10 @@ struct PaletteEAF_smol_entry {
 };
 
 struct PaletteEAF_smol {
-    ~PaletteEAF_smol() {}
     PaletteEAF_smol_entry field_0x00[8];
 };
 
 struct PaletteEAF_big_entry {
-    PaletteEAF_big_entry() {}
-    ~PaletteEAF_big_entry() {}
     mColor field_0x00;
     mColor field_0x04;
     mColor field_0x08;
@@ -207,55 +260,59 @@ struct PaletteEAF_big_entry {
 };
 
 struct PaletteEAF_big {
-    ~PaletteEAF_big() {}
     PaletteEAF_big_entry field_0x00[8];
 };
 
 // Apparently particle color related
 struct Bpm3 {
-    Bpm3() {}
-    ~Bpm3() {}
-
     PaletteEAF_smol field_0x00[0x20];
 };
 
 struct Bpm4 {
-    Bpm4() {}
-    ~Bpm4() {}
-
     PaletteEAF_big field_0x00[0x20];
 };
 
 struct SHADOW_INFLUENCE {
-    SHADOW_INFLUENCE() {}
-    ~SHADOW_INFLUENCE() {}
-
     /* 0x00 */ mVec3_c mPos;
     /* 0x0C */ f32 mRadius;
     /* 0x10 */ s16 mIdx;
 };
 struct Bpm8 {
-    Bpm8() {}
-    ~Bpm8() {}
-
     /* 0x00 */ mVec3_c mPos;
-    /* 0x0C */ f32 field_0x0C;
+    /* 0x0C */ f32 mRadius;
     /* 0x10 */ s32 field_0x10;
 };
 
 struct Bpm9 {
-    Bpm9() {}
-    ~Bpm9() {}
+    /* 0x00 */ bool field_0x00;
+    /* 0x04 */ mVec3_c mPos;
+    /* 0x10 */ f32 mRadius;
+};
 
-    u8 _0x00[0x14 - 0x00];
+struct Mist {
+    /* 0x00 */ u8 mMode;
+    /* 0x01 */ u8 mDecay;
+    /* 0x02 */ u8 mAlpha;
+    /* 0x04 */ f32 mDirection;
+    /* 0x08 */ f32 mSpeed;
+};
+
+struct SpfSetting {
+    s16 mIdxStart;
+    s16 mIdxEnd;
+    f32 mRatio;
+};
+
+struct SpfTransitionSetting {
+    s16 mIdxBefore;
+    s16 mIdxAfter;
+    s32 mNumFrames;
 };
 
 class BlurAndPaletteManager {
 public:
     BlurAndPaletteManager();
-    virtual ~BlurAndPaletteManager() {
-        sPInstance = nullptr;
-    }
+    virtual ~BlurAndPaletteManager();
 
     static BlurAndPaletteManager &GetInstance() {
         return sInstance;
@@ -286,25 +343,69 @@ public:
     void setLightFilter(f32 ratio);
     void set0x35B0(f32 f);
 
-    void fn_800247D0(mVec3_c, f32);
+    // Params are guesses
+    void setBPM8(const mVec3_c *pos, u32 type, f32 radius);
+    void setBPM8_Type4(const mVec3_c *pos);
+    void setBPM8_Type6(const mVec3_c *pos);
+    void setBPM8_Type10(const mVec3_c *pos);
+    void setBPM8_Type10_2(const mVec3_c *pos);
+    void setBPM8_Type6_2(const mVec3_c *pos);
+    bool check_BPM8(const mVec3_c *pos, mVec3_c *pOutPos);
+    bool check_BPM8_1001(const mVec3_c *pos, mVec3_c *pOutPos);
+    bool check_BPM8_501(const mVec3_c *pos, mVec3_c *pOutPos);
+
+    bool setUnk(const mVec3_c *pos, f32 radius);
+    void setBPM9(const mVec3_c *pos, f32 radius);
+    bool check_BPM9(const mVec3_c *pos);
+
+    s32 checkBPM9_Entity(mVec3_c *pOutPos);
+
+    void setAlterateRoomId(s32 roomId);
+    s32 getAlterateRoomId();
+
+    mColor color_ratio_set(const mColor &start, const mColor &end, f32 ratio);
+    mVec3_c vec_ratio_set(const mVec3_c &start, const mVec3_c &end, f32 ratio);
+    f32 f32_ratio_set(const f32 start, const f32 end, f32 ratio);
+    u16 u16_ratio_set(const u16 start, const u16 end, f32 ratio);
+    u8 u8_ratio_set(const u8 start, const u8 end, f32 ratio);
+
+    void spf_ratio_set(Spf &out, const Spf &start, const Spf &end, f32 ratio);
+    void light_influence_ratio_set(
+        LIGHT_INFLUENCE &out, const LIGHT_INFLUENCE &start, const LIGHT_INFLUENCE &end, f32 ratio
+    );
+    void sff_ratio_set(Sff &out, const Sff &start, const Sff &end, f32 ratio);
+
+    void set_override_spf(s16 start, s16 end, f32 ratio);
+
+    void setMist(u8 mode, u8 decay, u8 alpha, f32 dir, f32 speed);
+    void setMistMode3(const mVec3_c &vel, f32 value);
+
+    void setDOF(f32 dof);
+    void disableDOF();
+
+    void setWind(mVec3_c mPos, f32 f);
+
     void setField_0x2F20(f32 arg) {
         field_0x2F20 = arg;
     }
 
     // light pillar related
-    void fn_80024240(s16, s16, s16);
-    bool fn_80024770(int);
-    bool fn_800247A0(int);
+    void set_palette_transition(s16 before, s16 after, s32 numFrames);
+
+    // All related
+    void fn_80024740(u8, u8);
+    bool fn_80024770(u8);
+    bool fn_800247A0(u8);
 
     u8 get0x2DE8() const {
-        return field_0x2DE0[8];
+        return field_0x2DE8[0];
     }
 
     const PaletteDefaultMCF &GetCurrentDefaultMcf() const {
         return field_0x5CE4;
     }
 
-    const Spf &GetCurrentSph() const {
+    const Spf &GetCurrentSpf() const {
         return currentSpf;
     }
 
@@ -324,22 +425,24 @@ public:
         return field_0x2F1C;
     }
 
-    static mColor &getLightColor1();
-    static mColor &getLightColor2();
-
 private:
-    mColor combineColors(const mColor &c1, const mColor &c2, f32 ratio);
-
     /* 0x0004 */ Spf currentSpf;
     /* 0x020C */ Spf spfs[20];
     /* 0x2AAC */ Sff currentSff;
     /* 0x2AD0 */ Sff sffs[20];
-    /* 0x2DA0 */ u8 field_0x2DA0[0x2DD4 - 0x2DA0];
-    /* 0x2DD4 */ mVec3_c field_0x2DD4;
-    /* 0x2DE0 */ u8 field_0x2DE0[0x2DEC - 0x2DE0];
+    /* 0x2DA0 */ SpfSetting mCurrentSpfSetting;
+    /* 0x2DA8 */ u8 field_0x2DA8[0x2DB4 - 0x2DA8];
+    /* 0x2DB4 */ SpfTransitionSetting mTransitionSpfSetting;
+    /* 0x2DBC */ u8 field_0x2DBC[0x2DC0 - 0x2DBC];
+    /* 0x2DC0 */ SpfSetting mOverrideSpfSetting;
+    /* 0x2DC8 */ Mist mMistInfo;
+    /* 0x2DD4 */ mVec3_c mMistPos;
+    /* 0x2DE0 */ bool mDofEnabled;
+    /* 0x2DE4 */ f32 mDof;
+    /* 0x2DE8 */ u8 field_0x2DE8[0x2DEC - 0x2DE8];
     /* 0x2DEC */ mColor field_0x2DEC;
     /* 0x2DF0 */ u8 field_0x2DF0[0x2DF4 - 0x2DF0];
-    /* 0x2DF4 */ mColor field_0x2DF4; // Controls Light filtering
+    /* 0x2DF4 */ mColor field_0x2DF4;
     /* 0x2DF8 */ mVec3_c field_0x2DF8;
     /* 0x2E04 */ u8 field_0x2E04[0x2E08 - 0x2E04];
     /* 0x2E08 */ mVec3_c field_0x2E08[5];
@@ -361,19 +464,30 @@ private:
     /* 0x2F3C */ LIGHT_INFLUENCE *pointlight[200];
     /* 0x325C */ SHADOW_INFLUENCE *pshadow[200];
     /* 0x357C */ EFLIGHT_PROC eflight;
-    /* 0x35A0 */ Bpm2 field_0x35A0;
+    /* 0x35A0 */ WIND_INFLUENCE mWind;
     /* 0x35B4 */ SHADOW_INFLUENCE field_0x35B4[8];
     /* 0x3654 */ Bpm8 field_0x3654[10];
     /* 0x371C */ Bpm9 field_0x371C[20];
-    /* 0x38AC */ u8 _0x38AC[0x38B4 - 0x38AC];
+    /* 0x387C */ u32 field_0x387C;
+    /* 0x38B0 */ bool field_0x38B0;
     /* 0x38B4 */ mVec3_c field_0x38B4;
-    /* 0x38C0 */ u8 _0x38C0[0x38C8 - 0x38C0];
+    /* 0x38C0 */ f32 field_0x38C0;
+    /* 0x38C4 */ s32 field_0x38C4;
     /* 0x38C8 */ mVec3_c field_0x38C8;
-    /* 0x38D4 */ u8 _0x38D4[0x38E4 - 0x38D4];
+    /* 0x38D4 */ u32 mPlayerRoomId;
+    /* 0x38D8 */ s32 mAlternateRoomId;
+    /* 0x38D8 */ u32 field_0x38DC;
+    /* 0x38D8 */ s32 field_0x38E0;
     /* 0x38E4 */ Bpm3 field_0x38E4;
     /* 0x48E4 */ Bpm4 field_0x48E4;
     /* 0x5CE4 */ PaletteDefaultMCF field_0x5CE4;
     /* 0x5D04 */ TwoPaletteDefaultMCF field_0x5D04;
+    /* 0x5D44 */ u8 field_0x5D44[0x5D59 - 0x5D44];
+    /* 0x5D5A */ struct { // Anonymous until more is known
+        bool mEnabled;
+        u8 mValue;
+    } field_0x5D59[9];
+    /* 0x5D60 */ u8 field_0x5D6C[0x5D70 - 0x5D6C];
 
     static BlurAndPaletteManager sInstance;
     static BlurAndPaletteManager *sPInstance;

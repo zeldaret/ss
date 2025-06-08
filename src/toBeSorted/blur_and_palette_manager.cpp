@@ -1,7 +1,12 @@
+
 #include "toBeSorted/blur_and_palette_manager.h"
 
 #include "common.h"
+#include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
+#include "d/d_obj_light.h"
+#include "d/d_sc_game.h"
+#include "d/flag/itemflag_manager.h"
 #include "m/m_color.h"
 #include "m/m_vec.h"
 #include "nw4r/math/math_arithmetic.h"
@@ -9,7 +14,7 @@
 BlurAndPaletteManager BlurAndPaletteManager::sInstance;
 BlurAndPaletteManager *BlurAndPaletteManager::sPInstance;
 
-TList<UnkBlurPaletteListNode, offsetof(UnkBlurPaletteListNode, mNode)> sPlayingEffectsList;
+ActorLighting::ListType ActorLighting::sList;
 
 // Same as vectle_calc in d_kankyo_rain from tp
 static void vectle_calc(const mVec3_c *pIn, mVec3_c *pOut) {
@@ -258,22 +263,465 @@ void BlurAndPaletteManager::setLightFilter(f32 ratio) {
     field_0x2DF4.b = ratio * 255.f;
 }
 void BlurAndPaletteManager::set0x35B0(f32 f) {
-    field_0x35A0.field_0x10 = f;
+    mWind.field_0x10 = f;
 }
 
-mColor BlurAndPaletteManager::combineColors(const mColor &c1, const mColor &c2, f32 ratio) {
+void BlurAndPaletteManager::setBPM8(const mVec3_c *pos, u32 type, f32 radius) {
+    for (int i = 0; i < 10; ++i) {
+        if (field_0x3654[i].field_0x10 <= -1) {
+            field_0x3654[i].mPos = *pos;
+            field_0x3654[i].mRadius = radius;
+            field_0x3654[i].field_0x10 = type;
+            return;
+        }
+    }
+}
+
+void BlurAndPaletteManager::setBPM8_Type4(const mVec3_c *pos) {
+    setBPM8(pos, 4, 250.f);
+}
+
+void BlurAndPaletteManager::setBPM8_Type6(const mVec3_c *pos) {
+    setBPM8(pos, 6, 500.f);
+}
+
+void BlurAndPaletteManager::setBPM8_Type10(const mVec3_c *pos) {
+    setBPM8(pos, 10, 1000.f);
+}
+
+void BlurAndPaletteManager::setBPM8_Type10_2(const mVec3_c *pos) {
+    setBPM8(pos, 10, 1001.f);
+}
+
+void BlurAndPaletteManager::setBPM8_Type6_2(const mVec3_c *pos) {
+    setBPM8(pos, 6, 501.f);
+}
+
+bool BlurAndPaletteManager::check_BPM8(const mVec3_c *pos, mVec3_c *pOutPos) {
+    bool ret = false;
+    for (int i = 0; i < 10; ++i) {
+        if (field_0x3654[i].field_0x10 > 0) {
+            if (pos->distance(field_0x3654[i].mPos) <= field_0x3654[i].mRadius) {
+                ret = true;
+                if (pOutPos) {
+                    *pOutPos = field_0x3654[i].mPos;
+                }
+                break;
+            }
+        }
+    }
+    return ret;
+}
+
+bool BlurAndPaletteManager::check_BPM8_1001(const mVec3_c *pos, mVec3_c *pOutPos) {
+    bool ret = false;
+    for (int i = 0; i < 10; ++i) {
+        if (field_0x3654[i].field_0x10 > 0) {
+            if (pos->distance(field_0x3654[i].mPos) <= field_0x3654[i].mRadius && field_0x3654[i].mRadius == 1001.f) {
+                ret = true;
+                if (pOutPos) {
+                    *pOutPos = field_0x3654[i].mPos;
+                }
+                break;
+            }
+        }
+    }
+    return ret;
+}
+
+bool BlurAndPaletteManager::check_BPM8_501(const mVec3_c *pos, mVec3_c *pOutPos) {
+    bool ret = false;
+    for (int i = 0; i < 10; ++i) {
+        if (field_0x3654[i].field_0x10 > 0) {
+            if (pos->distance(field_0x3654[i].mPos) <= field_0x3654[i].mRadius && field_0x3654[i].mRadius == 501.f) {
+                ret = true;
+                if (pOutPos) {
+                    *pOutPos = field_0x3654[i].mPos;
+                }
+                break;
+            }
+        }
+    }
+    return ret;
+}
+
+bool BlurAndPaletteManager::setUnk(const mVec3_c *pos, f32 radius) {
+    bool ret = false;
+    if (field_0x38B0 == false) {
+        field_0x38B0 = true;
+        field_0x38B4 = *pos;
+        field_0x38C0 = radius;
+        ret = true;
+    }
+
+    return ret;
+}
+
+void BlurAndPaletteManager::setBPM9(const mVec3_c *pos, f32 radius) {
+    for (int i = 0; i < 20; ++i) {
+        if (field_0x371C[i].field_0x00 == false) {
+            field_0x371C[i].field_0x00 = true;
+            field_0x371C[i].mPos = *pos;
+            field_0x371C[i].mRadius = radius;
+            return;
+        }
+    }
+}
+
+bool BlurAndPaletteManager::check_BPM9(const mVec3_c *pos) {
+    bool ret = false;
+    for (int i = 0; i < 20; ++i) {
+        if (field_0x371C[i].field_0x00) {
+            if (pos->distance(field_0x371C[i].mPos) <= field_0x371C[i].mRadius) {
+                ret = true;
+                break;
+            }
+        }
+    }
+    return ret;
+}
+
+s32 BlurAndPaletteManager::checkBPM9_Entity(mVec3_c *pos) {
+    s32 value = field_0x38C4;
+    if (value != 0 && pos != nullptr) {
+        *pos = field_0x38C8;
+    }
+    return value;
+}
+
+void BlurAndPaletteManager::setAlterateRoomId(s32 roomId) {
+    mAlternateRoomId = roomId;
+}
+
+s32 BlurAndPaletteManager::getAlterateRoomId() {
+    return mAlternateRoomId;
+}
+
+mColor BlurAndPaletteManager::color_ratio_set(const mColor &start, const mColor &end, f32 ratio) {
     mColor result;
     result.Set(0xff, 0xff, 0xff, 0xff);
-    result.r = (c1.r + ratio * ((f32)c2.r - (f32)c1.r));
-    result.g = (c1.g + ratio * ((f32)c2.g - (f32)c1.g));
-    result.b = (c1.b + ratio * ((f32)c2.b - (f32)c1.b));
-    result.a = (c1.a + ratio * ((f32)c2.a - (f32)c1.a));
+    result.r = (start.r + ratio * ((f32)end.r - (f32)start.r));
+    result.g = (start.g + ratio * ((f32)end.g - (f32)start.g));
+    result.b = (start.b + ratio * ((f32)end.b - (f32)start.b));
+    result.a = (start.a + ratio * ((f32)end.a - (f32)start.a));
     return result;
 }
 
-Spf::Spf() {}
+mVec3_c BlurAndPaletteManager::vec_ratio_set(const mVec3_c &start, const mVec3_c &end, f32 ratio) {
+    mVec3_c result;
+    result.x = start.x + ratio * (end.x - start.x);
+    result.y = start.y + ratio * (end.y - start.y);
+    result.z = start.z + ratio * (end.z - start.z);
+    return result;
+}
 
-Sff::Sff() {}
+f32 BlurAndPaletteManager::f32_ratio_set(const f32 start, const f32 end, f32 ratio) {
+    return start + ratio * (end - start);
+}
+
+u16 BlurAndPaletteManager::u16_ratio_set(const u16 start, const u16 end, f32 ratio) {
+    return (f32)start + ratio * ((f32)end - (f32)start);
+}
+
+u8 BlurAndPaletteManager::u8_ratio_set(const u8 start, const u8 end, f32 ratio) {
+    return static_cast<u8>((f32)start + ratio * (f32)(end - (f32)start)) & 0xFF;
+}
+
+void BlurAndPaletteManager::spf_ratio_set(Spf &out, const Spf &start, const Spf &end, f32 ratio) {
+    mColor black0;
+    mColor black1;
+    out.mActorPalette.mAmbientClr =
+        color_ratio_set(start.mActorPalette.mAmbientClr, end.mActorPalette.mAmbientClr, ratio);
+    out.mActorPalette.mDiffuseClr =
+        color_ratio_set(start.mActorPalette.mDiffuseClr, end.mActorPalette.mDiffuseClr, ratio);
+    out.mActorPalette.mBrightnessClr =
+        color_ratio_set(start.mActorPalette.mBrightnessClr, end.mActorPalette.mBrightnessClr, ratio);
+    out.mActorPalette.mSpecularClr =
+        color_ratio_set(start.mActorPalette.mSpecularClr, end.mActorPalette.mSpecularClr, ratio);
+    out.mActorPalette.mDarkShadowClr =
+        color_ratio_set(start.mActorPalette.mDarkShadowClr, end.mActorPalette.mDarkShadowClr, ratio);
+    out.mActorPalette.mDarkLightClr =
+        color_ratio_set(start.mActorPalette.mDarkLightClr, end.mActorPalette.mDarkLightClr, ratio);
+
+    out.mActorPalette.mSpecular = f32_ratio_set(start.mActorPalette.mSpecular, end.mActorPalette.mSpecular, ratio);
+    out.mActorPalette.field_0x01C =
+        color_ratio_set(start.mActorPalette.field_0x01C, end.mActorPalette.field_0x01C, ratio);
+    out.mActorPalette.mTemperature =
+        f32_ratio_set(start.mActorPalette.mTemperature, end.mActorPalette.mTemperature, ratio);
+    out.mActorPalette.field_0x24 = f32_ratio_set(start.mActorPalette.field_0x24, end.mActorPalette.field_0x24, ratio);
+
+    black0 = start.mActorPalette.mShadowClr;
+    black1 = end.mActorPalette.mShadowClr;
+    if (black0.a == 0) {
+        black0.Set(0, 0, 0x1E, 0xC8);
+    }
+    if (black1.a == 0) {
+        black1.Set(0, 0, 0x1E, 0xC8);
+    }
+
+    out.mActorPalette.mShadowClr = color_ratio_set(black0, black1, ratio);
+    out.mActorPalette.field_0x02C =
+        color_ratio_set(start.mActorPalette.field_0x02C, end.mActorPalette.field_0x02C, ratio);
+
+    out.mStagePalette.mBrightness =
+        f32_ratio_set(start.mStagePalette.mBrightness, end.mStagePalette.mBrightness, ratio);
+    out.mStagePalette.mShadowClr = color_ratio_set(start.mStagePalette.mShadowClr, end.mStagePalette.mShadowClr, ratio);
+    out.mStagePalette.mLightClr = color_ratio_set(start.mStagePalette.mLightClr, end.mStagePalette.mLightClr, ratio);
+    out.mStagePalette.mSunMoonAngle1 =
+        f32_ratio_set(start.mStagePalette.mSunMoonAngle1, end.mStagePalette.mSunMoonAngle1, ratio);
+    out.mStagePalette.mSunMoonAngle2 =
+        f32_ratio_set(start.mStagePalette.mSunMoonAngle2, end.mStagePalette.mSunMoonAngle2, ratio);
+
+    out.mStagePalette.field_0x014 =
+        color_ratio_set(start.mStagePalette.field_0x014, end.mStagePalette.field_0x014, ratio);
+
+    for (int i = 0; i < 5; ++i) {
+        out.mStagePalette.field_0x018[i] =
+            u8_ratio_set(start.mStagePalette.field_0x018[i], end.mStagePalette.field_0x018[i], ratio);
+        out.mStagePalette.field_0x020[i] =
+            color_ratio_set(start.mStagePalette.field_0x020[i], end.mStagePalette.field_0x020[i], ratio);
+        out.mStagePalette.field_0x034[i] =
+            f32_ratio_set(start.mStagePalette.field_0x034[i], end.mStagePalette.field_0x034[i], ratio);
+        out.mStagePalette.field_0x048[i] =
+            f32_ratio_set(start.mStagePalette.field_0x048[i], end.mStagePalette.field_0x048[i], ratio);
+    }
+
+    out.mStagePalette.field_0x05C =
+        f32_ratio_set(start.mStagePalette.field_0x05C, end.mStagePalette.field_0x05C, ratio);
+    out.mStagePalette.field_0x060 =
+        color_ratio_set(start.mStagePalette.field_0x060, end.mStagePalette.field_0x060, ratio);
+
+    for (int i = 0; i < 5; ++i) {
+        out.mStagePalette.field_0x064[i] =
+            u8_ratio_set(start.mStagePalette.field_0x064[i], end.mStagePalette.field_0x064[i], ratio);
+        out.mStagePalette.field_0x06C[i] =
+            color_ratio_set(start.mStagePalette.field_0x06C[i], end.mStagePalette.field_0x06C[i], ratio);
+        out.mStagePalette.field_0x080[i] =
+            f32_ratio_set(start.mStagePalette.field_0x080[i], end.mStagePalette.field_0x080[i], ratio);
+        out.mStagePalette.field_0x094[i] =
+            f32_ratio_set(start.mStagePalette.field_0x094[i], end.mStagePalette.field_0x094[i], ratio);
+    }
+
+    out.mStagePalette.field_0x0A8 =
+        f32_ratio_set(start.mStagePalette.field_0x0A8, end.mStagePalette.field_0x0A8, ratio);
+    out.mStagePalette.field_0x0AC =
+        color_ratio_set(start.mStagePalette.field_0x0AC, end.mStagePalette.field_0x0AC, ratio);
+
+    for (int i = 0; i < 5; ++i) {
+        out.mStagePalette.field_0x0B0[i] =
+            u8_ratio_set(start.mStagePalette.field_0x0B0[i], end.mStagePalette.field_0x0B0[i], ratio);
+        out.mStagePalette.field_0x0B8[i] =
+            color_ratio_set(start.mStagePalette.field_0x0B8[i], end.mStagePalette.field_0x0B8[i], ratio);
+        out.mStagePalette.field_0x0CC[i] =
+            f32_ratio_set(start.mStagePalette.field_0x0CC[i], end.mStagePalette.field_0x0CC[i], ratio);
+        out.mStagePalette.field_0x0E0[i] =
+            f32_ratio_set(start.mStagePalette.field_0x0E0[i], end.mStagePalette.field_0x0E0[i], ratio);
+    }
+
+    out.mStagePalette.field_0x0F4 =
+        f32_ratio_set(start.mStagePalette.field_0x0F4, end.mStagePalette.field_0x0F4, ratio);
+    out.mStagePalette.field_0x0F8 =
+        color_ratio_set(start.mStagePalette.field_0x0F8, end.mStagePalette.field_0x0F8, ratio);
+
+    for (int i = 0; i < 5; ++i) {
+        out.mStagePalette.field_0x0FC[i] =
+            u8_ratio_set(start.mStagePalette.field_0x0FC[i], end.mStagePalette.field_0x0FC[i], ratio);
+        out.mStagePalette.field_0x104[i] =
+            color_ratio_set(start.mStagePalette.field_0x104[i], end.mStagePalette.field_0x104[i], ratio);
+        out.mStagePalette.field_0x118[i] =
+            f32_ratio_set(start.mStagePalette.field_0x118[i], end.mStagePalette.field_0x118[i], ratio);
+        out.mStagePalette.field_0x12C[i] =
+            f32_ratio_set(start.mStagePalette.field_0x12C[i], end.mStagePalette.field_0x12C[i], ratio);
+    }
+
+    out.mSkyPalette.field_0x00 = color_ratio_set(start.mSkyPalette.field_0x00, end.mSkyPalette.field_0x00, ratio);
+    out.mSkyPalette.field_0x04 = color_ratio_set(start.mSkyPalette.field_0x04, end.mSkyPalette.field_0x04, ratio);
+    out.mSkyPalette.field_0x08 = color_ratio_set(start.mSkyPalette.field_0x08, end.mSkyPalette.field_0x08, ratio);
+    out.mSkyPalette.mCloudColor = color_ratio_set(start.mSkyPalette.mCloudColor, end.mSkyPalette.mCloudColor, ratio);
+    out.mSkyPalette.mSkyColor = color_ratio_set(start.mSkyPalette.mSkyColor, end.mSkyPalette.mSkyColor, ratio);
+    out.mSkyPalette.field_0x14 = color_ratio_set(start.mSkyPalette.field_0x14, end.mSkyPalette.field_0x14, ratio);
+    out.mSkyPalette.mSkyFilter = color_ratio_set(start.mSkyPalette.mSkyFilter, end.mSkyPalette.mSkyFilter, ratio);
+    out.mSkyPalette.mSkyCenter = vec_ratio_set(start.mSkyPalette.mSkyCenter, end.mSkyPalette.mSkyCenter, ratio);
+    out.mSkyPalette.mSkyScale = vec_ratio_set(start.mSkyPalette.mSkyScale, end.mSkyPalette.mSkyScale, ratio);
+
+    out.field_0x1A4.field_0x00.field_0x00 =
+        color_ratio_set(start.field_0x1A4.field_0x00.field_0x00, end.field_0x1A4.field_0x00.field_0x00, ratio);
+    out.field_0x1A4.field_0x00.field_0x04 =
+        f32_ratio_set(start.field_0x1A4.field_0x00.field_0x04, end.field_0x1A4.field_0x00.field_0x04, ratio);
+    out.field_0x1A4.field_0x00.field_0x08 =
+        f32_ratio_set(start.field_0x1A4.field_0x00.field_0x08, end.field_0x1A4.field_0x00.field_0x08, ratio);
+
+    out.field_0x1A4.field_0x0C[0] =
+        f32_ratio_set(start.field_0x1A4.field_0x0C[0], end.field_0x1A4.field_0x0C[0], ratio);
+    out.field_0x1A4.field_0x0C[1] =
+        f32_ratio_set(start.field_0x1A4.field_0x0C[1], end.field_0x1A4.field_0x0C[1], ratio);
+    out.field_0x1A4.field_0x0C[2] =
+        f32_ratio_set(start.field_0x1A4.field_0x0C[2], end.field_0x1A4.field_0x0C[2], ratio);
+
+    out.field_0x1BC.field_0x00 = u8_ratio_set(start.field_0x1BC.field_0x00, end.field_0x1BC.field_0x00, ratio);
+    out.field_0x1BC.field_0x04 = f32_ratio_set(start.field_0x1BC.field_0x04, end.field_0x1BC.field_0x04, ratio);
+    out.field_0x1BC.field_0x08 = f32_ratio_set(start.field_0x1BC.field_0x08, end.field_0x1BC.field_0x08, ratio);
+
+    out.field_0x1BC.field_0x0C = u8_ratio_set(start.field_0x1BC.field_0x0C, end.field_0x1BC.field_0x0C, ratio);
+    out.field_0x1BC.field_0x10 = f32_ratio_set(start.field_0x1BC.field_0x10, end.field_0x1BC.field_0x10, ratio);
+    out.field_0x1BC.field_0x14 = f32_ratio_set(start.field_0x1BC.field_0x14, end.field_0x1BC.field_0x14, ratio);
+
+    out.field_0x1BC.field_0x18 = u8_ratio_set(start.field_0x1BC.field_0x18, end.field_0x1BC.field_0x18, ratio);
+
+    out.field_0x1BC.field_0x19 = color_ratio_set(
+        mColor(*(u32 *)&start.field_0x1BC.field_0x19), mColor(*(u32 *)&end.field_0x1BC.field_0x19), ratio
+    );
+
+    out.field_0x1BC.field_0x1D = u8_ratio_set(start.field_0x1BC.field_0x1D, end.field_0x1BC.field_0x1D, ratio);
+
+    out.field_0x1D4.field_0x00 = f32_ratio_set(start.field_0x1D4.field_0x00, end.field_0x1D4.field_0x00, ratio);
+    out.field_0x1D4.field_0x04 = f32_ratio_set(start.field_0x1D4.field_0x04, end.field_0x1D4.field_0x04, ratio);
+    out.field_0x1D4.field_0x08 = f32_ratio_set(start.field_0x1D4.field_0x08, end.field_0x1D4.field_0x08, ratio);
+    out.field_0x1D4.field_0x0C = f32_ratio_set(start.field_0x1D4.field_0x0C, end.field_0x1D4.field_0x0C, ratio);
+
+    out.field_0x1D4.field_0x10 = u8_ratio_set(start.field_0x1D4.field_0x10, end.field_0x1D4.field_0x10, ratio);
+    out.field_0x1D4.field_0x11 = u8_ratio_set(start.field_0x1D4.field_0x11, end.field_0x1D4.field_0x11, ratio);
+
+    out.field_0x1D4.field_0x12 = u16_ratio_set(start.field_0x1D4.field_0x12, end.field_0x1D4.field_0x12, ratio);
+
+    out.field_0x1D4.field_0x14 = f32_ratio_set(start.field_0x1D4.field_0x14, end.field_0x1D4.field_0x14, ratio);
+    out.field_0x1D4.field_0x18 = f32_ratio_set(start.field_0x1D4.field_0x18, end.field_0x1D4.field_0x18, ratio);
+    out.field_0x1D4.field_0x1C = f32_ratio_set(start.field_0x1D4.field_0x1C, end.field_0x1D4.field_0x1C, ratio);
+    out.field_0x1D4.field_0x20 = f32_ratio_set(start.field_0x1D4.field_0x20, end.field_0x1D4.field_0x20, ratio);
+
+    out.mParticleTransparentClr = color_ratio_set(start.mParticleTransparentClr, end.mParticleTransparentClr, ratio);
+    out.mParticleSolidClr = color_ratio_set(start.mParticleSolidClr, end.mParticleSolidClr, ratio);
+}
+
+void __Spf_ct_dt_genertation() {
+    Spf s;
+}
+
+void BlurAndPaletteManager::set_palette_transition(s16 before, s16 after, s32 numFrames) {
+    mTransitionSpfSetting.mIdxBefore = before;
+    mTransitionSpfSetting.mIdxAfter = after;
+    mTransitionSpfSetting.mNumFrames = numFrames;
+
+    if (after == 50) {
+        if (dScGame_c::currentSpawnInfo.isNight()) {
+            mTransitionSpfSetting.mIdxAfter = 3;
+        } else {
+            mTransitionSpfSetting.mIdxAfter = 5;
+        }
+    } else if (after == 51) {
+        if (ItemflagManager::sInstance->getFlagDirect(ITEM_AMBER_TABLET)) {
+            if (dScGame_c::currentSpawnInfo.isNight()) {
+                mTransitionSpfSetting.mIdxAfter = 10;
+            } else {
+                mTransitionSpfSetting.mIdxAfter = 9;
+            }
+        } else if (ItemflagManager::sInstance->getFlagDirect(ITEM_RUBY_TABLET)) {
+            if (dScGame_c::currentSpawnInfo.isNight()) {
+                mTransitionSpfSetting.mIdxAfter = 8;
+            } else {
+                mTransitionSpfSetting.mIdxAfter = 7;
+            }
+        } else {
+            mTransitionSpfSetting.mIdxAfter = 6;
+        }
+    }
+}
+
+void BlurAndPaletteManager::set_override_spf(s16 start, s16 end, f32 ratio) {
+    mOverrideSpfSetting.mIdxStart = start;
+    mOverrideSpfSetting.mIdxEnd = end;
+    mOverrideSpfSetting.mRatio = ratio;
+}
+
+void BlurAndPaletteManager::setMist(u8 mode, u8 decay, u8 alpha, f32 dir, f32 speed) {
+    mMistInfo.mMode = mode;
+    mMistInfo.mDecay = decay;
+    mMistInfo.mDirection = dir;
+    mMistInfo.mSpeed = speed;
+    mMistInfo.mAlpha = alpha;
+}
+
+void BlurAndPaletteManager::setMistMode3(const mVec3_c &pos, f32 value) {
+    mMistInfo.mMode = 3;
+    mMistInfo.mDecay = value * 128.f;
+    mMistPos = pos;
+    mMistInfo.mSpeed = value * 200.f;
+    mMistInfo.mAlpha = 0;
+}
+
+void BlurAndPaletteManager::setDOF(f32 dof) {
+    mDofEnabled = true;
+    mDof = dof;
+}
+
+void BlurAndPaletteManager::disableDOF() {
+    mDofEnabled = false;
+}
+
+void BlurAndPaletteManager::light_influence_ratio_set(
+    LIGHT_INFLUENCE &out, const LIGHT_INFLUENCE &start, const LIGHT_INFLUENCE &end, f32 ratio
+) {
+    mColor black(0, 0, 0, 0);
+
+    out.mIdx = start.mIdx;
+    out.field_0x18 = start.field_0x18;
+
+    if (ratio <= 0.5f) {
+        f32 i_ratio = ratio * 2.f;
+        out.mPos = start.mPos;
+        out.mClr = color_ratio_set(start.mClr, black, i_ratio);
+        out.mScale = f32_ratio_set(start.mScale, 0.f, i_ratio);
+    } else {
+        f32 i_ratio = (ratio - 0.5f) * 2.f;
+        out.mPos = end.mPos;
+        out.mClr = color_ratio_set(black, end.mClr, i_ratio);
+        out.mScale = f32_ratio_set(0.f, end.mScale, i_ratio);
+    }
+}
+
+void BlurAndPaletteManager::sff_ratio_set(Sff &out, const Sff &start, const Sff &end, f32 ratio) {
+    for (int i = 0; i < 3; ++i) {
+        out.field_0x00[i].field_0x00 =
+            color_ratio_set(start.field_0x00[i].field_0x00, end.field_0x00[i].field_0x00, ratio);
+        out.field_0x00[i].field_0x04 =
+            f32_ratio_set(start.field_0x00[i].field_0x04, end.field_0x00[i].field_0x04, ratio);
+        out.field_0x00[i].field_0x08 =
+            f32_ratio_set(start.field_0x00[i].field_0x08, end.field_0x00[i].field_0x08, ratio);
+    }
+}
+
+void __Sff_ct_dt_genertation() {
+    Sff s;
+}
+
+void BlurAndPaletteManager::fn_80024740(u8 idx, u8 value) {
+    if (idx != 0) {
+        field_0x5D59[idx - 1].mEnabled = true;
+        field_0x5D59[idx - 1].mValue = value;
+    }
+}
+
+bool BlurAndPaletteManager::fn_80024770(u8 idx) {
+    bool ret = false;
+    if (idx != 0) {
+        ret = field_0x5D59[idx - 1].mEnabled;
+    }
+    return ret;
+}
+bool BlurAndPaletteManager::fn_800247A0(u8 idx) {
+    bool ret = false;
+    if (idx != 0) {
+        if (field_0x5D59[idx - 1].mValue != 0) {
+            ret = true;
+        }
+    }
+    return ret;
+}
+
+void BlurAndPaletteManager::setWind(mVec3_c mPos, f32 f) {
+    mWind.mVel = mPos;
+    mWind.field_0x0C = f;
+}
 
 BlurAndPaletteManager::BlurAndPaletteManager() {
     mColor grey_aaaaaa = mColor(0xaa, 0xaa, 0xaa, 0xff);
@@ -293,7 +741,7 @@ BlurAndPaletteManager::BlurAndPaletteManager() {
     mVec3_c v1(0.0f, 1.0f, 0.0f);
     mColor white4_ffffff = mColor(0xff, 0xff, 0xff, 0xff);
     f32 f1 = 2000.0f;
-    f32 f2 = 10000.0f;
+    f32 f2 = 100000.0f;
     mVec3_c v2(0.0f, 0.0f, 0.0f);
     mVec3_c v3(1.0f, 1.0f, 1.0f);
     mColor white5_ffffff = mColor(0xff, 0xff, 0xff, 0xff);
@@ -305,95 +753,103 @@ BlurAndPaletteManager::BlurAndPaletteManager() {
 
     sPInstance = this;
 
-    currentSpf.grey_aaaaaa = grey_aaaaaa;
-    currentSpf.white_ffffff = white_ffffff;
-    currentSpf.grey_808080 = grey_808080;
-    currentSpf.cream_ffffc0 = cream_ffffc0;
-    currentSpf.grey2_aaaaaa = grey_aaaaaa;
-    currentSpf.white2_ffffff = white_ffffff;
-    currentSpf.field_0x18 = 0.6f;
-    currentSpf.pastel_orange_ffb787 = pastel_orange_ffb787;
-    currentSpf.field_0x24 = 195.0f;
-    currentSpf.field_0x20 = 0.5f;
-    currentSpf.black_000000 = black_000000;
-    currentSpf.black2_000000 = black_000000;
-    currentSpf.mSub.grey_787878 = grey_787878;
-    currentSpf.mSub.white3_ffffff.field_0x00 = white2_ffffff;
-    currentSpf.mSub.field_0x014.field_0x00 = grey_7f7f7f;
-    currentSpf.mSub.field_0x060.field_0x00 = grey_7f7f7f;
-    currentSpf.mSub.field_0x0AC.field_0x00 = grey_7f7f7f;
-    currentSpf.mSub.field_0x0F8.field_0x00 = grey_7f7f7f;
-    currentSpf.mCloudColor = yellow_ffd86b;
-    currentSpf.mSkyColor = sea_blue_29424e;
-    currentSpf.seafoam_green_b9d8b7 = seafoam_green_b9d8b7;
-    currentSpf.white3_ffffff = white3_ffffff;
-    currentSpf.field_0x18C = v2;
-    currentSpf.field_0x198 = v3;
-    currentSpf.mSub.field_0x000 = 0.0625f;
-    currentSpf.mSub.field_0x05C = 0.0625f;
-    currentSpf.mSub.field_0x0A8 = 0.0625f;
-    currentSpf.mSub.field_0x0F4 = 0.0625f;
+    currentSpf.mActorPalette.mAmbientClr = grey_aaaaaa;
+    currentSpf.mActorPalette.mDiffuseClr = white_ffffff;
+    currentSpf.mActorPalette.mBrightnessClr = grey_808080;
+    currentSpf.mActorPalette.mSpecularClr = cream_ffffc0;
+    currentSpf.mActorPalette.mDarkShadowClr = grey_aaaaaa;
+    currentSpf.mActorPalette.mDarkLightClr = white_ffffff;
+    currentSpf.mActorPalette.mSpecular = 0.6f;
+    currentSpf.mActorPalette.field_0x01C = pastel_orange_ffb787;
+    currentSpf.mActorPalette.field_0x24 = 195.0f;
+    currentSpf.mActorPalette.mTemperature = 0.5f;
+    currentSpf.mActorPalette.mShadowClr = black_000000;
+    currentSpf.mActorPalette.field_0x02C = black_000000;
 
-    currentSpf.grey_787878 = grey_787878;
-    currentSpf.grey2_787878 = grey_787878;
-    currentSpf.grey3_787878 = grey_787878;
-    currentSpf.MAO5_kColor3.field_0x00 = white4_ffffff;
-    currentSpf.MAO5_kColor3.field_0x04 = f1;
-    currentSpf.MAO5_kColor3.field_0x08 = f2;
-    currentSpf.mSub.white3_ffffff.field_0x04 = 45.0f;
-    currentSpf.mSub.white3_ffffff.field_0x08 = 180.0f;
+    currentSpf.mStagePalette.mShadowClr = grey_787878;
+    currentSpf.mStagePalette.mLightClr = white2_ffffff;
+    currentSpf.mStagePalette.field_0x014 = grey_7f7f7f;
+    currentSpf.mStagePalette.field_0x060 = grey_7f7f7f;
+    currentSpf.mStagePalette.field_0x0AC = grey_7f7f7f;
+    currentSpf.mStagePalette.field_0x0F8 = grey_7f7f7f;
+
+    currentSpf.mSkyPalette.mCloudColor = yellow_ffd86b;
+    currentSpf.mSkyPalette.mSkyColor = sea_blue_29424e;
+    currentSpf.mSkyPalette.field_0x14 = seafoam_green_b9d8b7;
+    currentSpf.mSkyPalette.mSkyFilter = white3_ffffff;
+    currentSpf.mSkyPalette.mSkyCenter = v2;
+    currentSpf.mSkyPalette.mSkyScale = v3;
+
+    currentSpf.mStagePalette.mBrightness = 0.0625f;
+    currentSpf.mStagePalette.field_0x05C = 0.0625f;
+    currentSpf.mStagePalette.field_0x0A8 = 0.0625f;
+    currentSpf.mStagePalette.field_0x0F4 = 0.0625f;
+
+    currentSpf.mSkyPalette.field_0x00 = grey_787878;
+    currentSpf.mSkyPalette.field_0x04 = grey_787878;
+    currentSpf.mSkyPalette.field_0x08 = grey_787878;
+
+    currentSpf.field_0x1A4.field_0x00.field_0x00 = white4_ffffff;
+    currentSpf.field_0x1A4.field_0x00.field_0x04 = f1;
+    currentSpf.field_0x1A4.field_0x00.field_0x08 = f2;
+
+    currentSpf.mStagePalette.mSunMoonAngle1 = 45.0f;
+    currentSpf.mStagePalette.mSunMoonAngle2 = 180.0f;
 
     for (int i = 0; i < 5; i++) {
-        currentSpf.mSub.field_0x020[i] = black_000000;
+        currentSpf.mStagePalette.field_0x020[i] = black_000000;
         field_0x2E08[i] = v1;
-        currentSpf.mSub.field_0x014.field_0x04[i] = 0;
-        currentSpf.mSub.field_0x034[i] = 0.0f;
-        currentSpf.mSub.field_0x048[i] = 0.0f;
+        currentSpf.mStagePalette.field_0x018[i] = 0;
+        currentSpf.mStagePalette.field_0x034[i] = 0.0f;
+        currentSpf.mStagePalette.field_0x048[i] = 0.0f;
 
-        currentSpf.mSub.field_0x06C[i] = black_000000;
+        currentSpf.mStagePalette.field_0x06C[i] = black_000000;
         field_0x2E44[i] = v1;
-        currentSpf.mSub.field_0x060.field_0x04[i] = 0;
-        currentSpf.mSub.field_0x080[i] = 0.0f;
-        currentSpf.mSub.field_0x094[i] = 0.0f;
+        currentSpf.mStagePalette.field_0x064[i] = 0;
+        currentSpf.mStagePalette.field_0x080[i] = 0.0f;
+        currentSpf.mStagePalette.field_0x094[i] = 0.0f;
 
-        currentSpf.mSub.field_0x0B8[i] = black_000000;
+        currentSpf.mStagePalette.field_0x0B8[i] = black_000000;
         field_0x2E80[i] = v1;
-        currentSpf.mSub.field_0x0AC.field_0x04[i] = 0;
-        currentSpf.mSub.field_0x0CC[i] = 0.0f;
-        currentSpf.mSub.field_0x0E0[i] = 0.0f;
+        currentSpf.mStagePalette.field_0x0B0[i] = 0;
+        currentSpf.mStagePalette.field_0x0CC[i] = 0.0f;
+        currentSpf.mStagePalette.field_0x0E0[i] = 0.0f;
 
-        currentSpf.mSub.field_0x104[i] = black_000000;
+        currentSpf.mStagePalette.field_0x104[i] = black_000000;
         field_0x2EBC[i] = v1;
-        currentSpf.mSub.field_0x0F8.field_0x04[i] = 0;
-        currentSpf.mSub.field_0x118[i] = 0.0f;
-        currentSpf.mSub.field_0x12C[i] = 0.0f;
+        currentSpf.mStagePalette.field_0x0FC[i] = 0;
+        currentSpf.mStagePalette.field_0x118[i] = 0.0f;
+        currentSpf.mStagePalette.field_0x12C[i] = 0.0f;
     }
 
-    currentSpf.field_0x1B0.x = 0.55f;
-    currentSpf.field_0x1B0.y = 1.0f;
-    currentSpf.field_0x1B0.z = 0.0f;
-    currentSpf.field_0x1BC = 0;
-    currentSpf.field_0x1C0 = 1.0f;
-    currentSpf.field_0x1C4 = 0.5f;
-    currentSpf.field_0x1C8 = 0;
-    currentSpf.field_0x1CC = 0.5f;
-    currentSpf.field_0x1D0 = 0.0f;
-    currentSpf.field_0x1D4 = 0;
-    currentSpf.field_0x1D5 = pastel_yellow_fffb04;
-    currentSpf.field_0x1D9 = 1;
-    currentSpf.field_0x1DC = 3300.0f;
-    currentSpf.field_0x1E0 = 3300.0f;
-    currentSpf.field_0x1E4 = 1000.0f;
-    currentSpf.field_0x1E8 = 500.0f;
-    currentSpf.field_0x1EC = 0xFF;
-    currentSpf.field_0x1ED = 1;
-    currentSpf.field_0x1EE = 0;
-    currentSpf.field_0x1F0 = 0.0f;
-    currentSpf.field_0x1F4 = 0.0f;
-    currentSpf.field_0x1F8 = 6.93359f;
-    currentSpf.field_0x1FC = 8.0f;
-    currentSpf.black3_000000 = black_000000;
-    currentSpf.black4_000000 = black_000000;
+    currentSpf.field_0x1A4.field_0x0C[0] = 0.55f;
+    currentSpf.field_0x1A4.field_0x0C[1] = 1.0f;
+    currentSpf.field_0x1A4.field_0x0C[2] = 0.0f;
+
+    currentSpf.field_0x1BC.field_0x00 = 0;
+    currentSpf.field_0x1BC.field_0x04 = 1.0f;
+    currentSpf.field_0x1BC.field_0x08 = 0.5f;
+    currentSpf.field_0x1BC.field_0x0C = 0;
+    currentSpf.field_0x1BC.field_0x10 = 0.5f;
+    currentSpf.field_0x1BC.field_0x14 = 0.0f;
+
+    currentSpf.field_0x1BC.field_0x18 = 0;
+    currentSpf.field_0x1BC.field_0x19 = pastel_yellow_fffb04;
+    currentSpf.field_0x1BC.field_0x1D = 1;
+
+    currentSpf.field_0x1D4.field_0x00 = 3300.0f;
+    currentSpf.field_0x1D4.field_0x04 = 3300.0f;
+    currentSpf.field_0x1D4.field_0x08 = 1000.0f;
+    currentSpf.field_0x1D4.field_0x0C = 500.0f;
+    currentSpf.field_0x1D4.field_0x10 = 0xFF;
+    currentSpf.field_0x1D4.field_0x11 = 1;
+    currentSpf.field_0x1D4.field_0x12 = 0;
+    currentSpf.field_0x1D4.field_0x14 = 0.0f;
+    currentSpf.field_0x1D4.field_0x18 = 0.0f;
+    currentSpf.field_0x1D4.field_0x1C = 6.93359f;
+    currentSpf.field_0x1D4.field_0x20 = 8.0f;
+    currentSpf.mParticleTransparentClr = black_000000;
+    currentSpf.mParticleSolidClr = black_000000;
 
     for (int i = 0; i < 3; i++) {
         currentSff.field_0x00[i].field_0x00 = white4_ffffff;
@@ -439,4 +895,90 @@ BlurAndPaletteManager::BlurAndPaletteManager() {
 
     field_0x5D04.field_0x00 = field_0x5CE4;
     field_0x5D04.field_0x20 = field_0x5CE4;
+}
+
+BlurAndPaletteManager::~BlurAndPaletteManager() {
+    sPInstance = nullptr;
+}
+
+void ActorLighting::fn_80026500() {
+    for (ListType::Iterator start = sList.GetBeginIter(); start != sList.GetEndIter(); ++start) {
+        // Probably stripped
+    }
+}
+
+// I want to say something else generated this...
+ActorLighting::~ActorLighting() {}
+
+void ActorLighting::reset() {
+    field_0x0C = -999999.f;
+    field_0x10 = -999999.f;
+    field_0x14 = -999999.f;
+    field_0x18 = -999999.f;
+    field_0x1C = -999999.f;
+    field_0x20 = -999999.f;
+    field_0x24 = -999999.f;
+    field_0x28 = -999999.f;
+    field_0x2C = -999999.f;
+
+    field_0x38 = 999999.f;
+
+    mLightSetIdx = -1;
+
+    mLightingCode = 0xF; // TODO(Lighting Code)
+    field_0x61 = 0;
+    field_0x62 = 0;
+    field_0x30 = 0.f;
+    field_0x34 = 1.f;
+    field_0x63 = 0;
+    field_0x64 = 0;
+    mTev0Color = mColor(0, 0, 0, 0);
+    mTevK0Color = mColor(0, 0, 0, 0);
+
+    mTev1Color = mColor(0, 0, 0, 0);
+    mTev2Color = mColor(0, 0, 0, 0);
+    mTevPrevColor = mColor(0, 0, 0, 0);
+
+    mTevK1Color = mColor(0, 0, 0, 0);
+    mTevK2Color = mColor(0, 0, 0, 0);
+    mTevK3Color = mColor(0, 0, 0, 0);
+
+    mUseTev1 = false;
+    mUseTev2 = false;
+    mUseTevPrev = false;
+    mUseTevK1 = false;
+    mUseTevK2 = false;
+    mUseTevK3 = false;
+}
+
+const mColor &ActorLighting::getLightTev2Color() {
+    if (dObjLight_c::GetInstance() == nullptr) {
+        return mColor(0, 0, 0, 0);
+    } else {
+        return dObjLight_c::GetInstance()->GetColor0x68();
+    }
+}
+
+const mColor &ActorLighting::getLightTev1Color() {
+    if (dObjLight_c::GetInstance() == nullptr) {
+        return mColor(0, 0, 0, 0);
+    } else {
+        return dObjLight_c::GetInstance()->GetColor0x6C();
+    }
+}
+
+const mColor &ActorLighting::getLightTev0Color() {
+    if (dObjLight_c::GetInstance() == nullptr) {
+        return mColor(0, 0, 0, 0);
+    } else {
+        return dObjLight_c::GetInstance()->GetColor0x100();
+    }
+}
+
+const mColor &ActorLighting::getLightTevKColor() {
+    if (dObjLight_c::GetInstance() == nullptr) {
+        return mColor(0, 0, 0, 0);
+    } else {
+        return dObjLight_c::GetInstance()->GetColor0x104();
+    }
 }

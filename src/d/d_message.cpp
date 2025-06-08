@@ -496,7 +496,7 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
             s16 p1 = (params1n2 >> 16) & 0xFFFF;
             s16 p2 = params1n2 & 0xFFFF;
             if (&BlurAndPaletteManager::GetInstance() != nullptr) {
-                BlurAndPaletteManager::GetInstance().fn_80024240(-1, p1, p2);
+                BlurAndPaletteManager::GetInstance().set_palette_transition(-1, p1, p2);
             }
             break;
         }

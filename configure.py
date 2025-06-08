@@ -387,7 +387,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/d_shadow.cpp"),
             Object(NonMatching, "toBeSorted/d_unk_mdl_stuff_1.cpp"),
             Object(NonMatching, "toBeSorted/d_unk_mdl_stuff_2.cpp"),
-            Object(NonMatching, "toBeSorted/blur_and_palette_manager.cpp"),
+            Object(Matching, "toBeSorted/blur_and_palette_manager.cpp"),
             Object(NonMatching, "toBeSorted/d_emitter.cpp"),
             Object(NonMatching, "toBeSorted/d_effects_2.cpp"),
             Object(NonMatching, "toBeSorted/sound_info.cpp"),
@@ -2043,12 +2043,8 @@ config.libs = [
     ),
     Rel(NonMatching, "d_a_obj_evil_field", "REL/d/a/obj/d_a_obj_evil_field.cpp"),
     Rel(NonMatching, "d_a_obj_F302_light", "REL/d/a/obj/d_a_obj_F302_light.cpp"),
-    Rel(
-        Matching, "d_a_obj_F400_gate_leaf", "REL/d/a/obj/d_a_obj_F400_gate_leaf.cpp"
-    ),
-    Rel(
-        Matching, "d_a_obj_F400_gate_seal", "REL/d/a/obj/d_a_obj_F400_gate_seal.cpp"
-    ),
+    Rel(Matching, "d_a_obj_F400_gate_leaf", "REL/d/a/obj/d_a_obj_F400_gate_leaf.cpp"),
+    Rel(Matching, "d_a_obj_F400_gate_seal", "REL/d/a/obj/d_a_obj_F400_gate_seal.cpp"),
     Rel(NonMatching, "d_a_obj_farmland", "REL/d/a/obj/d_a_obj_farmland.cpp"),
     Rel(NonMatching, "d_a_obj_fence", "REL/d/a/obj/d_a_obj_fence.cpp"),
     Rel(Matching, "d_a_obj_fence_boko2", "REL/d/a/obj/d_a_obj_fence_boko2.cpp"),

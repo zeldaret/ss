@@ -22,7 +22,6 @@
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/small_sound_mgr.h"
 
-
 void float_ordering() {
     const f32 arr[] = {5.f, 15.f, 7.f, 0.5f, 0.1f};
 }
@@ -106,7 +105,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     calcWind();
 
     sLib::chase(&mField_0x980, 1.f, 0.1f);
-    BlurAndPaletteManager::GetInstance().fn_800247D0(mField_0x968, mField_0x980);
+    BlurAndPaletteManager::GetInstance().setWind(mField_0x968, mField_0x980);
 
     calcVelocity();
     position += velocity;

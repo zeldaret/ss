@@ -232,7 +232,7 @@ void clearList() {
 
 // More screen / list stuff...
 
-void unk2(nw4r::g3d::ResMat &mat, nw4r::g3d::ResMatTevColor &clr, LightingInfo *info) {
+void unk2(nw4r::g3d::ResMat &mat, nw4r::g3d::ResMatTevColor &clr, ActorLighting *info) {
     BlurAndPaletteManager &pllt = BlurAndPaletteManager::GetInstance();
     const char *name = mat.GetName();
     if (name != nullptr && name[0] == 'M' && name[1] == 'A' && name[2] == '0') {
