@@ -25,7 +25,7 @@ public:
     SOUNDSOURCE_VIRTUAL(0x34);
     SOUNDSOURCE_VIRTUAL(0x38);
     SOUNDSOURCE_VIRTUAL(0x3C);
-    SOUNDSOURCE_VIRTUAL(0x40);
+    virtual void vt_0x40(s32) = 0;
     SOUNDSOURCE_VIRTUAL(0x44);
     virtual bool hasPlayingSounds() const = 0;            // 0x48
     virtual bool isPlayingSound(u32 soundId) = 0;         // 0x4C

@@ -7,6 +7,7 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/d_rumble.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
 #include "m/m3d/m_anmchr.h"
@@ -19,7 +20,6 @@
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resshp.h"
 #include "s/s_State.hpp"
-#include "toBeSorted/small_sound_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(BOOMERANG, dAcBoomerang_c, fProfile::BOOMERANG, 0x125, 0, 0x4);
 
