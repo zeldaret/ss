@@ -1,5 +1,5 @@
-#ifndef BLUR_AND_PALETTE_MANAGER_H
-#define BLUR_AND_PALETTE_MANAGER_H
+#ifndef D_LIGHT_ENV_H
+#define D_LIGHT_ENV_H
 
 #include "common.h"
 #include "m/m_color.h"
