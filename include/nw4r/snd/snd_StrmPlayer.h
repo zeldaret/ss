@@ -31,7 +31,17 @@ namespace nw4r { namespace ut { class FileStream; }}
  * classes and functions
  */
 
-namespace nw4r { namespace snd { namespace detail
+namespace nw4r { namespace snd {
+
+struct StrmDataInfo
+{
+	/* 0x00 */ bool loopFlag;
+	/* 0x04 */ int sampleRate;
+	/* 0x08 */ u32 loopStart;
+	/* 0x0C */ u32 loopEnd;
+};
+	
+namespace detail
 {
 	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2fcda
 	class StrmPlayer : public BasicPlayer, public SoundThread::PlayerCallback
@@ -162,7 +172,9 @@ namespace nw4r { namespace snd { namespace detail
 
 		void SetAdpcmLoopContext(int channelNum, u16 *predScale);
 		void SetTrackVolume(u32 trackBitFlag, f32 volume);
+		u32 GetPlaySamplePosition() const;
 
+		bool ReadStrmDataInfo(StrmDataInfo*) const;
 		void InitParam();
 		bool SetupPlayer();
 		bool Prepare(ut::FileStream *fileStream,
@@ -221,8 +233,8 @@ namespace nw4r { namespace snd { namespace detail
 		/* base BasicPlayer */															// size 0x0a4, offset 0x000
 		/* base SoundThread::PlayerCallback */											// size 0x00c, offset 0x0a4
 		StrmFileReader::StrmInfo		mStrmInfo;										// size 0x040, offset 0x0b0
-		bool							mSetupFlag;										// size 0x001, offset 0x0f0
-		bool							volatile mActiveFlag;							// size 0x001, offset 0x0f1
+		bool							volatile mSetupFlag;							// size 0x001, offset 0x0f0
+		bool							mActiveFlag;									// size 0x001, offset 0x0f1
 		bool							mStartedFlag;									// size 0x001, offset 0x0f2
 		bool							mPreparedFlag;									// size 0x001, offset 0x0f3
 		bool							mTaskErrorFlag;									// size 0x001, offset 0x0f4

@@ -11,12 +11,14 @@
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_light_env.h"
 #include "d/d_pouch.h"
 #include "d/d_room.h"
 #include "d/d_stage.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/flag/tboxflag_manager.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/t/d_t_siren.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m3d/m_scnleaf.h"
@@ -31,11 +33,10 @@
 #include "s/s_Math.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/attention.h"
-#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/counters/goddess_chest_counter.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/small_sound_mgr.h"
+
 
 SPECIAL_ACTOR_PROFILE(TBOX, dAcTbox_c, fProfile::TBOX, 0x018D, 0, 6);
 
@@ -1781,7 +1782,7 @@ void dAcTbox_c::executeState_DemoAppear() {
         if (isStop && mAnmMatClr1.isStop(0) && field_0x11F8 > 0x5A) {
             mEvent.advanceNext();
             mStateMgr.changeState(StateID_WaitOpen);
-            SmallSoundManager::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
         }
     }
 }
@@ -1977,15 +1978,15 @@ void dAcTbox_c::executeState_Open() {
     if (mVariant == GODDESS) {
         if (0.4f < field_0x11EC) {
             sLib::chase(&field_0x11EC, 0.4f, getSomeRate());
-            BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
-            BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+            dLightEnv_c::GetInstance().setLightFilter(field_0x11EC);
+            dLightEnv_c::GetInstance().setField_0x2F20(field_0x11EC);
         }
     } else if (mVariant != SMALL) {
         // exact same code as in the other branch
         if (0.4f < field_0x11EC) {
             sLib::chase(&field_0x11EC, 0.4f, getSomeRate());
-            BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
-            BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+            dLightEnv_c::GetInstance().setLightFilter(field_0x11EC);
+            dLightEnv_c::GetInstance().setField_0x2F20(field_0x11EC);
         }
     }
     if (mMdl1.getAnm().isStop()) {
@@ -2010,14 +2011,14 @@ void dAcTbox_c::executeState_PresentItem() {
     if (mVariant == GODDESS) {
         if (0.4f < field_0x11EC) {
             sLib::chase(&field_0x11EC, 0.4f, getSomeRate());
-            BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
-            BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+            dLightEnv_c::GetInstance().setLightFilter(field_0x11EC);
+            dLightEnv_c::GetInstance().setField_0x2F20(field_0x11EC);
         }
     } else if (mVariant != SMALL) {
         if (0.4f < field_0x11EC) {
             sLib::chase(&field_0x11EC, 0.4f, getSomeRate());
-            BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
-            BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+            dLightEnv_c::GetInstance().setLightFilter(field_0x11EC);
+            dLightEnv_c::GetInstance().setField_0x2F20(field_0x11EC);
         }
     }
     mEvent.advanceNext();
@@ -2059,8 +2060,8 @@ void dAcTbox_c::executeState_Close() {
             if (field_0x11FC <= 0) {
                 if (field_0x11EC < 1.0f) {
                     sLib::chase(&field_0x11EC, 1.0f, getSomeRate());
-                    BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
-                    BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+                    dLightEnv_c::GetInstance().setLightFilter(field_0x11EC);
+                    dLightEnv_c::GetInstance().setField_0x2F20(field_0x11EC);
                 }
             } else {
                 field_0x11FC--;
@@ -2088,8 +2089,8 @@ void dAcTbox_c::executeState_Close() {
             if (field_0x11FC <= 0) {
                 if (field_0x11EC < 1.0f) {
                     sLib::chase(&field_0x11EC, 1.0f, getSomeRate());
-                    BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
-                    BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+                    dLightEnv_c::GetInstance().setLightFilter(field_0x11EC);
+                    dLightEnv_c::GetInstance().setField_0x2F20(field_0x11EC);
                 }
             } else {
                 field_0x11FC--;
@@ -2140,8 +2141,8 @@ void dAcTbox_c::executeState_Wait() {
         if (field_0x11FC <= 0) {
             if (field_0x11EC < 1.0f) {
                 sLib::chase(&field_0x11EC, 1.0f, getSomeRate());
-                BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
-                BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+                dLightEnv_c::GetInstance().setLightFilter(field_0x11EC);
+                dLightEnv_c::GetInstance().setField_0x2F20(field_0x11EC);
             }
         } else {
             field_0x11FC--;
@@ -2165,9 +2166,9 @@ void dAcTbox_c::executeState_GoddessWait() {
     if (field_0x11FC <= 0) {
         if (field_0x11EC < 1.0f) {
             sLib::chase(&field_0x11EC, 1.0f, getSomeRate());
-            BlurAndPaletteManager::GetInstance().fn_80022AF0(field_0x11EC);
+            dLightEnv_c::GetInstance().setLightFilter(field_0x11EC);
             // this is apparently not needed here
-            // BlurAndPaletteManager::GetInstance().setField_0x2F20(field_0x11EC);
+            // dLightEnv_c::GetInstance().setField_0x2F20(field_0x11EC);
         }
     } else {
         field_0x11FC--;
@@ -2232,14 +2233,14 @@ void dAcTbox_c::unsetShouldCloseFlag() {
 void dAcTbox_c::fn_8026D370() {
     if (isNotSmall()) {
         field_0x11F0 = 1;
-        BlurAndPaletteManager::GetInstance().fn_800223A0(&mLightInfo);
+        dLightEnv_c::GetInstance().efplight_set(&mLightInfo);
     }
 }
 
 void dAcTbox_c::fn_8026D3C0() {
     if (mAnmChr.isStop() && mAnmTexSrt1.isStop(0) && mAnmMatClr2.isStop(0)) {
         field_0x11F0 = 0;
-        BlurAndPaletteManager::GetInstance().fn_80022440(&mLightInfo);
+        dLightEnv_c::GetInstance().efplight_cut(&mLightInfo);
     } else {
         mAnmChr.play();
         mAnmTexSrt1.play();

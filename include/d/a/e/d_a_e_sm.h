@@ -8,17 +8,18 @@
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_jnt_col.h"
+#include "d/d_light_env.h"
 #include "d/d_shadow.h"
 #include "m/m3d/m_anmmatclr.h"
 #include "m/m3d/m_anmtexpat.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
 #include "s/s_State.hpp"
-#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/stage_render_stuff.h"
 #include "toBeSorted/time_area_mgr.h"
+
 
 class dAcEsm_c : public dAcEnBase_c {
 public:
@@ -213,7 +214,7 @@ private:
     /* 0xBCC */ u8 field_0xBCC;
     /* 0xBCD */ u8 field_0xBCD;
     /* 0xBCE */ u8 field_0xBCE;
-    /* 0xBD0 */ LightParams mLightInfo;
+    /* 0xBD0 */ LIGHT_INFLUENCE mLightInfo;
 
     static bool sSomeArrayInit;
     static bool sSomeArray[9];

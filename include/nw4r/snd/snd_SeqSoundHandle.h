@@ -7,6 +7,8 @@
 
 #include "common.h" // nullptr
 
+#include "nw4r/snd/snd_SeqSound.h"
+#include "nw4r/snd/snd_SeqTrack.h"
 #include "nw4r/ut/ut_NonCopyable.h" // ut::NonCopyable
 
 /*******************************************************************************
@@ -27,10 +29,37 @@ namespace nw4r { namespace snd
 	{
 	// methods
 	public:
+		SeqSoundHandle(SoundHandle*);
+		~SeqSoundHandle() { DetachSound(); }
 		// methods
 		bool IsAttachedSound() const { return mSound != nullptr; }
 
 		void DetachSound();
+
+		void WriteVariable(int varNo, s16 value) {
+			if (IsAttachedSound())
+				mSound->WriteVariable(varNo, value);
+		}
+
+		void ReadVariable(int varNo, s16 *value) {
+			if (IsAttachedSound())
+				mSound->ReadVariable(varNo, value);
+		}
+
+		void SetTrackMute(u32 trackFlags, SeqMute mute) {
+			if (IsAttachedSound())
+				mSound->SetTrackMute(trackFlags, mute);
+		}
+
+		void SetTempoRatio(f32 tempoRatio) {
+			if (IsAttachedSound())
+				mSound->SetTempoRatio(tempoRatio);
+		}
+
+		void SetVolume(u32 trackFlags, f32 volume) {
+			if (IsAttachedSound())
+				mSound->SetTrackVolume(trackFlags, volume);
+		}
 
 	// members
 	private:

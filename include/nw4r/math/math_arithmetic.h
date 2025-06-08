@@ -5,6 +5,8 @@
 #include "nw4r/types_nw4r.h" // IWYU pragma: export
 #include "rvl/OS.h"          // IWYU pragma: export
 
+#include <cmath>
+
 #define NW4R_MATH_QNAN (-(0.0f / 0.0f))
 #define NW4R_MATH_FLT_MAX 3.402823466e+38f
 
@@ -30,7 +32,7 @@ inline f32 FAbs(register f32 x) {
 }
 
 inline f32 FCeil(f32 x) {
-    return ceilf(x);
+    return std::ceilf(x);
 }
 
 inline f32 FExp(f32 x) {
@@ -38,7 +40,7 @@ inline f32 FExp(f32 x) {
 }
 
 inline f32 FFloor(f32 x) {
-    return floorf(x);
+    return std::floorf(x);
 }
 
 inline f32 FInv(register f32 x) {

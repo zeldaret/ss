@@ -83,7 +83,7 @@ void SeqTrack::InitParam()
 	mParserTrackParam.surroundPan.InitValue(0);
 	mParserTrackParam.volume2			= 127;
 	mParserTrackParam.velocityRange		= 127;
-	mParserTrackParam.pitchBend			= 0;
+	mParserTrackParam.pitchBend.InitValue(0);
 	mParserTrackParam.bendRange			= DEFAULT_BENDRANGE;
 	mParserTrackParam.initPan			= 0;
 	mParserTrackParam.transpose			= 0;
@@ -172,6 +172,7 @@ int SeqTrack::ParseNextTick(bool doNoteOn)
 	mParserTrackParam.volume.Update();
 	mParserTrackParam.pan.Update();
 	mParserTrackParam.surroundPan.Update();
+	mParserTrackParam.pitchBend.Update();
 
 	if (mParserTrackParam.noteFinishWait)
 	{
@@ -277,7 +278,7 @@ void SeqTrack::UpdateChannelParam()
 	volume *= mSeqPlayer->GetVolume();
 
 	f32 pitch =
-		mParserTrackParam.pitchBend / 128.0f * mParserTrackParam.bendRange;
+		mParserTrackParam.pitchBend.GetValue() / 128.0f * mParserTrackParam.bendRange;
 
 	f32 pitchRatio = 1.0f;
 	pitchRatio *= mSeqPlayer->GetPitch();
@@ -339,11 +340,15 @@ void SeqTrack::UpdateChannelParam()
 		channel->SetOutputLine(mSeqPlayer->GetOutputLine());
 		channel->SetMainOutVolume(mSeqPlayer->GetMainOutVolume());
 		channel->SetMainSend(mainSend);
-
+		
 		for (int i = 0; i < AUX_BUS_NUM; i++)
 		{
 			AuxBus bus = static_cast<AuxBus>(i);
 			channel->SetFxSend(bus, fxSend[i]);
+		}
+
+		for (int i = 0; i < 4; i++) {
+			channel->SetRemoteOutVolume(i, mSeqPlayer->GetRemoteOutVolume(i));
 		}
 
 		for (int i = 0; i < mSeqPlayer->GetVoiceOutCount(); i++)
@@ -500,8 +505,14 @@ void SeqTrack::SetModSpeed(f32 modSpeed)
 	mParserTrackParam.lfoParam.speed = modSpeed;
 }
 
+#if 0
 // SeqTrack::GetTrackVariable? maybe both?
 DECOMP_FORCE(NW4RAssertHeaderClampedLValue_String(varNo));
+#endif
+
+void SeqTrack::SetTrackVariable(int variable, s16 value) {
+	mTrackVariable[variable] = value;
+}
 
 s16 volatile *SeqTrack::GetVariablePtr(int varNo)
 {

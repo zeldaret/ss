@@ -89,6 +89,10 @@ u32 SoundArchive::ConvertLabelStringToGroupId(const char* pLabel) const {
     return mFileReader->ConvertLabelStringToGroupId(pLabel);
 }
 
+u32 SoundArchive::ConvertLabelStringToBankId(const char* pLabel) const {
+    return mFileReader->ConvertLabelStringToBankId(pLabel);
+}
+
 u32 SoundArchive::GetSoundUserParam(u32 id) const {
     return mFileReader->GetSoundUserParam(id);
 }
@@ -129,6 +133,11 @@ bool SoundArchive::ReadSoundArchivePlayerInfo(
 	SoundArchivePlayerInfo *info) const
 {
 	return mFileReader->ReadSoundArchivePlayerInfo(info);
+}
+
+bool SoundArchive::detail_ReadSound3DParam(u32 soundId, nw4r::snd::SoundArchive::Sound3DParam* info) const
+{
+	return mFileReader->ReadSound3DParam(soundId, info);
 }
 
 bool SoundArchive::ReadBankInfo(u32 bankId, BankInfo *info) const

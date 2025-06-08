@@ -3,12 +3,12 @@
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/lyt/meter/d_lyt_meter.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "nw4r/lyt/lyt_types.h"
 #include "nw4r/math/math_types.h"
 #include "sized_string.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 struct DoButtonClass {
     DoButtonClass();
@@ -639,7 +639,7 @@ void dLytDobutton_c::realize() {
     }
 
     if (mDoActionToShow == ACT_DO_CATCH) {
-        SmallSoundManager::GetInstance()->playSound(SE_S_CALL_BIRD_CATCH);
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_CALL_BIRD_CATCH);
     }
 }
 

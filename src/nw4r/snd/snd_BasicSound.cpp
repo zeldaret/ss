@@ -56,8 +56,8 @@ BasicSound::BasicSound(int priority, int ambientPriority) :
 	mSoundPlayer		(nullptr),
 	mSoundActor			(nullptr),
 	mExtSoundPlayer		(nullptr),
-	mId					(INVALID_ID),
-	mPauseNestCounter	(0)
+	mId					(INVALID_ID)
+	// mPauseNestCounter	(0)
 {
 	// specifically not the source variant
 	NW4RAssertHeaderClampedLRValue_Line(53, priority, PRIORITY_MIN,
@@ -108,6 +108,9 @@ void BasicSound::InitParam()
 	for (int i = 0; i < AUX_BUS_NUM; i++)
 		mFxSend[i] = 0.0f;
 
+	for (int i = 0; i < 4; i++)
+		mRemoteOutVolume[i] = 1.0f;
+
 	mAmbientParam.volume			= 1.0f;
 	mAmbientParam.pitch				= 1.0f;
 	mAmbientParam.pan				= 0.0f;
@@ -118,7 +121,7 @@ void BasicSound::InitParam()
 	mAmbientParam.biquadFilterType	= 0;
 	mAmbientParam.priority			= 0;
 
-	mPauseNestCounter = 0;
+	// mPauseNestCounter = 0;
 }
 
 void BasicSound::StartPrepared()
@@ -155,7 +158,7 @@ void BasicSound::Pause(bool flag, int fadeFrames)
 
 	if (flag)
 	{
-		mPauseNestCounter++;
+		// mPauseNestCounter++;
 
 		switch (mPauseState)
 		{
@@ -183,8 +186,8 @@ void BasicSound::Pause(bool flag, int fadeFrames)
 	}
 	else
 	{
-		if (mPauseNestCounter && --mPauseNestCounter)
-			return;
+//		if (mPauseNestCounter && --mPauseNestCounter)
+//			return;
 
 		switch (mPauseState)
 		{
@@ -218,7 +221,16 @@ void BasicSound::SetAutoStopCounter(int count)
 	mAutoStopFlag = count > 0;
 }
 
-bool BasicSound::IsPaused() const
+void BasicSound::FadeIn(int fadeFrames)
+{
+	if (!mFadeOutFlag)
+	{
+		int duration = fadeFrames * (1.0f - mFadeVolume.GetValue());
+		mFadeVolume.SetTarget(1.0f, duration);
+	}
+}
+
+bool BasicSound::IsPause() const
 {
 	return mPauseState == PAUSE_STATE_PAUSING
 	    || mPauseState == PAUSE_STATE_PAUSED;
@@ -289,7 +301,28 @@ void BasicSound::Update()
 	{
 		SoundAmbientParam ambientParam;
 
-		mAmbientInfo.paramUpdateCallback->at_0x0c(
+		if (mUpdateCounter != 0)
+		{
+			ambientParam.volume				= mAmbientParam.volume;
+			ambientParam.pitch				= mAmbientParam.pitch;
+			ambientParam.pan				= mAmbientParam.pan;
+			ambientParam.surroundPan		= mAmbientParam.surroundPan;
+			ambientParam.fxSend				= mAmbientParam.fxSend;
+			ambientParam.lpf				= mAmbientParam.lpf;
+			ambientParam.biquadFilterValue	= mAmbientParam.biquadFilterValue;
+			ambientParam.biquadFilterType	= mAmbientParam.biquadFilterType;
+			ambientParam.priority			= mAmbientParam.priority;
+			ambientParam.field_0x24			= mAmbientParam.field_0x24;
+		}
+		else
+		{
+			ambientParam.field_0x24 = 0;
+		}
+
+		for (int i = 0; i < mVoiceOutCount; i++)
+			ambientParam.voiceOutParam[i] = basicPlayer.GetVoiceOutParam(i);
+
+		mAmbientInfo.paramUpdateCallback->detail_UpdateAmbientParam(
 			mAmbientInfo.arg, mId, mVoiceOutCount, &ambientParam);
 
 		mAmbientParam.volume			= ambientParam.volume;
@@ -301,10 +334,11 @@ void BasicSound::Update()
 		mAmbientParam.biquadFilterValue	= ambientParam.biquadFilterValue;
 		mAmbientParam.biquadFilterType	= ambientParam.biquadFilterType;
 		mAmbientParam.priority			= ambientParam.priority;
+		mAmbientParam.field_0x24		= ambientParam.field_0x24;
 
 		for (int i = 0; i < mVoiceOutCount; i++)
 			basicPlayer.SetVoiceOutParam(i, ambientParam.voiceOutParam[i]);
-		}
+	}
 
 	if (mSoundActor)
 		mActorParam = mSoundActor->detail_GetActorParam();
@@ -410,6 +444,13 @@ void BasicSound::UpdateParam()
 	mainOutVolume *= mMainOutVolume;
 	mainOutVolume *= GetSoundPlayer()->GetMainOutVolume();
 
+	f32 remoteOutVolume[4];
+	for (int i = 0; i < 4; i++) {
+		remoteOutVolume[i] = 1.0f;
+		remoteOutVolume[i] *= GetSoundPlayer()->GetRemoteOutVolume(i);
+		remoteOutVolume[i] *= mRemoteOutVolume[i];
+	}
+
 	f32 mainSend = 0.0f;
 	mainSend += mMainSend;
 	mainSend += GetSoundPlayer()->GetMainSend();
@@ -433,6 +474,10 @@ void BasicSound::UpdateParam()
 	basicPlayer.SetBiquadFilter(biquadFilterType, biquadFilterValue);
 	basicPlayer.SetOutputLine(outputLineFlag);
 	basicPlayer.SetMainOutVolume(mainOutVolume);
+
+	for (int i = 0; i < 4; i++) {
+		basicPlayer.SetRemoteOutVolume(i, remoteOutVolume[i]);
+	}
 
 	basicPlayer.SetMainSend(mainSend);
 
@@ -474,7 +519,7 @@ void BasicSound::Shutdown()
 
 	if (mAmbientInfo.argAllocaterCallback)
 	{
-		mAmbientInfo.argAllocaterCallback->at_0x10(mAmbientInfo.arg, this);
+		mAmbientInfo.argAllocaterCallback->detail_FreeAmbientArg(mAmbientInfo.arg, this);
 
 		mAmbientInfo.arg = nullptr;
 	}
@@ -547,6 +592,11 @@ void BasicSound::DetachExternalSoundPlayer(ExternalSoundPlayer *extPlayer)
 	mExtSoundPlayer = nullptr;
 }
 
+int BasicSound::GetRemainingFadeFrames() const
+{
+	return mPauseFadeVolume.GetRemainingTime();
+}
+
 int BasicSound::GetVoiceOutCount() const
 {
 	return mVoiceOutCount;
@@ -569,15 +619,21 @@ void BasicSound::SetPlayerPriority(int priority)
 void BasicSound::SetInitialVolume(f32 volume)
 {
 	NW4RAssert_Line(818, volume >= 0.0f);
+	if (volume < 0.0f) {
+		volume = 0.0f;
+	}
 
-	mInitVolume = ut::Clamp(volume, 0.0f, 1.0f);
+	mInitVolume = mInitVolume = volume;
 }
 
 void BasicSound::SetVolume(f32 volume, int frames)
 {
 	NW4RAssert_Line(833, volume >= 0.0f);
+	if (volume < 0.0f) {
+		volume = 0.0f;
+	}
 
-	mExtMoveVolume.SetTarget(ut::Clamp(volume, 0.0f, 1.0f), frames);
+	mExtMoveVolume.SetTarget(volume, frames);
 }
 
 void BasicSound::SetPitch(f32 pitch)
@@ -587,12 +643,32 @@ void BasicSound::SetPitch(f32 pitch)
 	mExtPitch = pitch;
 }
 
+void BasicSound::SetPan(f32 pan)
+{
+	mExtPan = pan;
+}
+
+void BasicSound::SetSurroundPan(f32 pan)
+{
+	mExtSurroundPan = pan;
+}
+
+void BasicSound::SetLpfFreq(f32 freq)
+{
+	mLpfFreq = freq;
+}
+
+void BasicSound::SetOutputLineFlag(int flag)
+{
+	mOutputLineFlag = flag;
+}
+
 void BasicSound::SetFxSend(AuxBus bus, f32 send)
 {
 	// specifically not the source variant
 	NW4RAssertHeaderClampedLValue_Line(979, bus, AUX_A, AUX_BUS_NUM);
 
-	GetBasicPlayer().SetFxSend(bus, send);
+	mFxSend[bus] = send;
 }
 
 void BasicSound::SetRemoteFilter(int filter)
@@ -615,7 +691,7 @@ void BasicSound::SetAmbientInfo(AmbientInfo const &ambientArgInfo)
 	NW4RAssertPointerNonnull_Line(1090, ambientArgInfo.argAllocaterCallback);
 
 	void *ambientArg =
-		ambientArgInfo.argAllocaterCallback->at_0x0c(ambientArgInfo.argSize);
+		ambientArgInfo.argAllocaterCallback->detail_AllocAmbientArg(ambientArgInfo.argSize);
 	if (!ambientArg)
 	{
 		NW4RCheckMessage_Line(1093, ambientArg, "Failed to alloc AmbientArg.");
@@ -629,7 +705,7 @@ void BasicSound::SetAmbientInfo(AmbientInfo const &ambientArgInfo)
 	if (ambientArgInfo.paramUpdateCallback)
 	{
 		int voiceOutCount =
-			mAmbientInfo.paramUpdateCallback->at_0x14(mAmbientInfo.arg, mId);
+			mAmbientInfo.paramUpdateCallback->detail_GetRequiredVoiceOutCount(mAmbientInfo.arg, mId);
 
 		if (voiceOutCount > 4)
 			voiceOutCount = 4;
@@ -644,7 +720,7 @@ int BasicSound::GetAmbientPriority(AmbientInfo const &ambientInfo, u32 soundId)
 		return PRIORITY_MIN;
 
 	int priority =
-		ambientInfo.paramUpdateCallback->at_0x10(ambientInfo.arg, soundId);
+		ambientInfo.paramUpdateCallback->detail_GetAmbientPriority(ambientInfo.arg, soundId);
 
 	return priority;
 }

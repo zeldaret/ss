@@ -5,9 +5,9 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/flag/sceneflag_manager.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "toBeSorted/small_sound_mgr.h"
 #include "toBeSorted/time_area_mgr.h"
 
 SPECIAL_ACTOR_PROFILE(BOMBF, dAcBombf_c, fProfile::BOMBF, 0x129, 0, 4099);

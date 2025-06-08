@@ -31,7 +31,50 @@ namespace nw4r { namespace snd
 		void detail_AttachSound(detail::BasicSound *sound);
 		bool IsAttachedSound() const { return mSound != nullptr; }
 		detail::BasicSound *detail_GetAttachedSound() { return mSound; }
+		const detail::BasicSound *detail_GetAttachedSound() const { return mSound; }
 		void DetachSound();
+
+
+		void FadeIn(int fadeFrames) {
+			if (IsAttachedSound())
+				mSound->FadeIn(fadeFrames);
+		}
+
+		void SetVolume(f32 volume, int frames) {
+			if (IsAttachedSound())
+				mSound->SetVolume(volume, frames);
+		}
+
+		void SetPitch(f32 volume) {
+			if (IsAttachedSound())
+				mSound->SetPitch(volume);
+		}
+
+		void Stop(int fadeFrames) {
+			if (IsAttachedSound())
+				mSound->Stop(fadeFrames);
+		}
+
+		void Pause(bool flag, int fadeFrames) {
+			if (IsAttachedSound())
+				mSound->Pause(flag, fadeFrames);
+		}
+
+		void SetPan(f32 pan) {
+			if (IsAttachedSound())
+				mSound->SetPan(pan);
+		}
+
+		bool IsPause() const {
+			return IsAttachedSound() && mSound->IsPause();
+		}
+
+		int GetRemainingFadeFrames() const {
+			if (IsAttachedSound())
+				return mSound->GetRemainingFadeFrames();
+
+			return 0;
+		}
 
 		u32 GetId() const
 		{

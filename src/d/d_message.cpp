@@ -6,6 +6,7 @@
 #include "d/a/d_a_itembase.h"
 #include "d/a/d_a_player.h"
 #include "d/d_base.h"
+#include "d/d_light_env.h"
 #include "d/d_player.h"
 #include "d/d_pouch.h"
 #include "d/d_sc_game.h"
@@ -22,6 +23,8 @@
 #include "d/lyt/d_lyt_mini_game.h"
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
+#include "d/snd/d_snd_source_mgr.h"
 #include "egg/core/eggHeap.h"
 #include "f/f_base.h"
 #include "f/f_profile.h"
@@ -31,20 +34,19 @@
 #include "libms/msgfile.h"
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
-#include "toBeSorted/blur_and_palette_manager.h"
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/fi_context.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
 #include "toBeSorted/music_mgrs.h"
-#include "toBeSorted/small_sound_mgr.h"
 #include "toBeSorted/unk_save_time.h"
 
 #include "rvl/OS.h"
 
 #include <cstring>
 #include <stdio.h>
+
 
 s32 dFlow_c::sExitId = -1;
 
@@ -198,7 +200,7 @@ void dFlow_c::playSound(u32 params) {
         return;
     }
     if (params >= 100) {
-        fn_803858D0(ENEMY_BGM_RELATED_MGR);
+        dSndSourceMgr_c::GetInstance()->playFlowSound(params);
         return;
     }
 
@@ -216,7 +218,7 @@ void dFlow_c::playSound(u32 params) {
 
     switch (sSoundDefs[idx].mSoundMgr) {
         case 0: AnotherSoundMgr__playSound(FANFARE_SOUND_MGR, sSoundDefs[idx].mSoundId); break;
-        case 1: SmallSoundManager::GetInstance()->playSound(sSoundDefs[idx].mSoundId); break;
+        case 1: dSndSmallEffectMgr_c::GetInstance()->playSound(sSoundDefs[idx].mSoundId); break;
     }
 }
 
@@ -495,8 +497,8 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
         case EVENT_PALETTE:         {
             s16 p1 = (params1n2 >> 16) & 0xFFFF;
             s16 p2 = params1n2 & 0xFFFF;
-            if (&BlurAndPaletteManager::GetInstance() != nullptr) {
-                BlurAndPaletteManager::GetInstance().fn_80024240(-1, p1, p2);
+            if (&dLightEnv_c::GetInstance() != nullptr) {
+                dLightEnv_c::GetInstance().set_palette_transition(-1, p1, p2);
             }
             break;
         }

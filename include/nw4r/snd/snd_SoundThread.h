@@ -101,6 +101,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		static void *SoundThreadFunc(void *arg);
 		void SoundThreadProc();
+		void FrameProcess();
 
 	// static members
 	private:
@@ -121,6 +122,7 @@ namespace nw4r { namespace snd { namespace detail
 		PlayerCallback::LinkList		mPlayerCallbackList;				// size 0x00c, offset 0x384
 		u32								mProcessTick;						// size 0x004, offset 0x390
 		bool							mCreateFlag;						// size 0x001, offset 0x394
+		bool							field_0x395;						// size 0x001, offset 0x395
 		/* 3 bytes padding */
 	}; // size 0x398
 }}} // namespace nw4r::snd::detail

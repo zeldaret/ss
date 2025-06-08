@@ -93,9 +93,9 @@ namespace nw4r { namespace snd { namespace detail
 			MoveValue<u8, s16>	volume;							// size 0x06, offset 0x54
 			MoveValue<s8, s16>	pan;							// size 0x06, offset 0x5a
 			MoveValue<s8, s16>	surroundPan;					// size 0x06, offset 0x60
+			MoveValue<s8, s16>					pitchBend;						// size 0x01, offset 0x68
 			u8					volume2;						// size 0x01, offset 0x66
 			u8					velocityRange;					// size 0x01, offset 0x67
-			s8					pitchBend;						// size 0x01, offset 0x68
 			u8					bendRange;						// size 0x01, offset 0x69
 			s8					initPan;						// size 0x01, offset 0x6a
 			s8					transpose;						// size 0x01, offset 0x6b
@@ -141,6 +141,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		void SetPlayerTrackNo(int playerTrackNo);
 		void SetVolume(f32);
+		void SetTrackVariable(int variable, s16 value);
 		void SetPitch(f32);
 		void SetPan(f32);
 		void SetSurroundPan(f32);

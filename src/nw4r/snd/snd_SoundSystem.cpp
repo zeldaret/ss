@@ -15,6 +15,7 @@
 #include "nw4r/snd/snd_AxVoiceManager.h"
 #include "nw4r/snd/snd_AxManager.h"
 #include "nw4r/snd/snd_Channel.h" // ChannelManager
+#include "nw4r/snd/snd_RemoteSpeakerManager.h"
 #include "nw4r/snd/snd_global.h"
 #include "nw4r/snd/snd_SeqPlayer.h"
 #include "nw4r/snd/snd_SoundThread.h"
@@ -37,9 +38,9 @@
 #define BUILDSTAMP_LIB_NAME			"SND"
 
 // You probably want to change these
-#define BUILDSTAMP_BUILD_TYPE		"release"
-#define BUILDSTAMP_DATE				__DATE__
-#define BUILDSTAMP_TIME				__TIME__
+#define BUILDSTAMP_BUILD_TYPE		"final  "
+#define BUILDSTAMP_DATE				"Sep 25 2011"
+#define BUILDSTAMP_TIME				"05:32:58"
 #define BUILDSTAMP_CW_MAJOR_REV		STR(__CWCC__)
 #define BUILDSTAMP_CW_MINOR_REV		STR(__CWBUILD__)
 
@@ -159,6 +160,8 @@ void SoundSystem::InitSoundSystem(SoundSystemParam const &param, void *workMem,
 		break;
 	}
 
+	detail::RemoteSpeakerManager::GetInstance().Setup();
+
 	byte_t *ptr = static_cast<byte_t *>(workMem);
 
 	void *dvdThreadStack = ptr;
@@ -245,7 +248,9 @@ void SoundSystem::WaitForResetReady() {
         }
     }
 }
+#if 0
 // SoundSystem::WaitForResetReady ([R89JEL]:/bin/RVL/Debug/mainD.MAP:14493)
 DECOMP_FORCE("SoundSystem::WaitForResetReady is TIME OUT.\n");
+#endif
 
 }} // namespace nw4r::snd

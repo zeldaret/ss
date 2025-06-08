@@ -159,7 +159,7 @@ MmlSeqTrack::ParseResult MmlParser::Parse(MmlSeqTrack *track,
 		s32 commandArg1 = 0;
 		s32 commandArg2 = 0;
 
-		switch (static_cast<int>(cmd & MML_CMD_SET_MASK))
+		switch (cmd & MML_CMD_SET_MASK)
 		{
 		case 0x80:
 		{
@@ -410,7 +410,7 @@ void MmlParser::CommandProc(MmlSeqTrack *track, u32 command, s32 commandArg1,
 			break;
 
 		case MML_SET_PITCH_BEND:
-			trackParam.pitchBend = commandArg1;
+			trackParam.pitchBend.SetTarget(commandArg1, commandArg2);
 			break;
 
 		case MML_SET_BEND_RANGE:

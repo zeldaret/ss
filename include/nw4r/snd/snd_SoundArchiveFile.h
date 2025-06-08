@@ -99,7 +99,12 @@ namespace nw4r { namespace snd { namespace detail
 			SOUND_TYPE_WAVE,
 		};
 
-		struct Sound3DParam;
+		struct Sound3DParam {
+			u32 flags;
+			u8 decayCurve;
+			u8 decayRatio;
+			u8 field_0x06;
+		};
 
 		// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x25183
 		struct SeqSoundInfo
@@ -295,6 +300,7 @@ namespace nw4r { namespace snd { namespace detail
 
 		char const *GetString(u32 id) const;
 		SoundArchive::SoundType GetSoundType(u32 soundId) const;
+		u32 GetSoundStringId(u32 id) const;
 		u32 GetBankCount() const;
 		u32 GetPlayerCount() const;
 		u32 GetGroupCount() const;
@@ -323,6 +329,7 @@ namespace nw4r { namespace snd { namespace detail
 		bool ReadBankInfo(u32 bankId, SoundArchive::BankInfo *info) const;
 
 		bool ReadPlayerInfo(u32 playerId, SoundArchive::PlayerInfo *info) const;
+		bool ReadSound3DParam(u32 soundId, nw4r::snd::SoundArchive::Sound3DParam* info) const;
 
 		bool ReadGroupItemInfo(u32 groupId, u32 index,
 		                       SoundArchive::GroupItemInfo *info) const;
@@ -345,6 +352,9 @@ namespace nw4r { namespace snd { namespace detail
 		}
 		u32 ConvertLabelStringToGroupId(const char* pLabel) const {
 			return ConvertLabelStringToId(mStringTreeGroup, pLabel);
+		}
+		u32 ConvertLabelStringToBankId(const char* pLabel) const {
+			return ConvertLabelStringToId(mStringTreeBank, pLabel);
 		}
 
 	private:

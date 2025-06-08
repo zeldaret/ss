@@ -63,10 +63,11 @@ void* FrameHeap::Alloc(u32 size, FreeCallback pCallback, void* pCallbackArg) {
         return NULL;
     }
 
-    Block* pBlock = new (pBuffer) Block(size, pCallback, pCallbackArg);
+    void *pBuffer2 = ut::AddOffsetToPtr(pBuffer, BLOCK_BUFFER_SIZE);
+    Block* pBlock = new (pBuffer) Block(pBuffer2, size, pCallback, pCallbackArg);
     mSectionList.GetBack().AppendBlock(pBlock);
 
-    return pBlock->GetBufferAddr();
+    return pBuffer2;
 }
 
 int FrameHeap::SaveState() {
@@ -106,11 +107,11 @@ int FrameHeap::GetCurrentLevel() const {
 
 u32 FrameHeap::GetFreeSize() const {
     u32 freeSize = MEMGetAllocatableSizeForFrmHeapEx(mHandle, HEAP_ALIGN);
-    if (freeSize < BLOCK_BUFFER_SIZE) {
+    if (freeSize < sizeof(Block)) {
         return 0;
     }
 
-    return ut::RoundDown(freeSize - BLOCK_BUFFER_SIZE, HEAP_ALIGN);
+    return ut::RoundDown(freeSize - sizeof(Block), HEAP_ALIGN);
 }
 
 bool FrameHeap::NewSection() {

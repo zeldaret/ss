@@ -34,21 +34,18 @@ public:
 private:
     struct Block {
         NW4R_UT_LIST_NODE_DECL(); // at 0x0
-        u32 mSize;                // at 0x8
-        FreeCallback mCallback;   // at 0xc
-        void *mCallbackArg;       // at 0x10
+        void *mpBuffer;           // at 0x8
+        u32 mSize;                // at 0xC
+        FreeCallback mCallback;   // at 0x10
+        void *mCallbackArg;       // at 0x14
 
-        Block(u32 size, FreeCallback pCallback, void *pCallbackArg)
-            : mSize(size), mCallback(pCallback), mCallbackArg(pCallbackArg) {}
+        Block(void *pBuffer2, u32 size, FreeCallback pCallback, void *pCallbackArg)
+            : mSize(size), mCallback(pCallback), mCallbackArg(pCallbackArg), mpBuffer(pBuffer2) {}
 
         ~Block() {
             if (mCallback != NULL) {
-                mCallback(GetBufferAddr(), mSize, mCallbackArg);
+                mCallback(mpBuffer, mSize, mCallbackArg);
             }
-        }
-
-        void *GetBufferAddr() {
-            return ut::AddOffsetToPtr(this, BLOCK_BUFFER_SIZE);
         }
     };
 

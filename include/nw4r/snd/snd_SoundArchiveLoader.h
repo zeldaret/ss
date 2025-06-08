@@ -44,6 +44,8 @@ public:
     ~SoundArchiveLoader();
 
     void *LoadGroup(u32 id, SoundMemoryAllocatable *pAllocatable, void **ppWaveBuffer, u32 blockSize);
+    s32 ReadFile(u32, void *, s32, s32);
+    void *LoadFile(u32 id, SoundMemoryAllocatable* pAllocatable);
 
 private:
     mutable OSMutex mMutex;   // at 0x0

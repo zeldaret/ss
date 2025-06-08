@@ -1,0 +1,74 @@
+#ifndef D_SND_SOURCE_ENUMS_H
+#define D_SND_SOURCE_ENUMS_H
+
+// TODO: Expand when we figure out what the other entries have in common
+enum SoundSourceType_e {
+    // 0-1: Player (0)
+    SND_SOURCE_PLAYER = 0,
+    SND_SOURCE_PLAYER_HEAD = 1,
+
+    // 2-9: Equipment (1)
+    SND_SOURCE_NET = 2,
+    SND_SOURCE_BLADE = 3,
+    SND_SOURCE_SHIELD = 4,
+    SND_SOURCE_WHIP = 5,
+    SND_SOURCE_BOOMERANG = 6,
+    SND_SOURCE_ARROW = 7,
+    SND_SOURCE_BOMB = 8,
+    SND_SOURCE_HOOKSHOT = 9,
+
+    // 10-31: Enemy? (2)
+    SND_SOURCE_ENEMY_10 = 10,
+    SND_SOURCE_BIGBOSS = 20,
+    SND_SOURCE_GIRAHUMU_3 = 24,
+    SND_SOURCE_BULLET = 29,
+    SND_SOURCE_ENEMY_31 = 31,
+
+    // 32-42: Object? (3)
+    SND_SOURCE_OBJECT = 32,
+    SND_SOURCE_BAMBOO = 34,
+    SND_SOURCE_ITEM = 35,
+    SND_SOURCE_TERRY_SHOP = 36,
+    SND_SOURCE_TIME_STONE = 37,
+    SND_SOURCE_CLEF = 38,
+    SND_SOURCE_SHUTTER = 39,
+    SND_SOURCE_OBJECT_42 = 42,
+
+    // 43-52: Npc (4)
+    SND_SOURCE_NPC_43 = 43,
+    SND_SOURCE_KENSEI = 44,
+    SND_SOURCE_PLAYER_BIRD = 45,
+    SND_SOURCE_NPC_48 = 48,
+    SND_SOURCE_INSECT = 49,
+    SND_SOURCE_NPC_NRM = 51,
+    SND_SOURCE_NPC_DRAGON = 52,
+
+    // 53: TagSound (5)
+    SND_SOURCE_TG_SOUND = 53,
+
+    // 54-57: Harp Related (6)
+    SND_SOURCE_54 = 54,
+    SND_SOURCE_OBJECT_WARP = 55,
+    SND_SOURCE_SW_HARP = 56,
+    SND_SOURCE_57 = 57,
+
+    // 58: ? (7)
+    SND_SOURCE_58 = 58,
+
+    // 59: ? (9)
+    SND_SOURCE_59 = 59,
+};
+
+enum SoundSourceCategory_e {
+    SND_SOURCE_CATEGORY_PLAYER = 0,
+    SND_SOURCE_CATEGORY_EQUIPMENT = 1,
+    SND_SOURCE_CATEGORY_ENEMY = 2,
+    SND_SOURCE_CATEGORY_OBJECT = 3,
+    SND_SOURCE_CATEGORY_NPC = 4,
+    SND_SOURCE_CATEGORY_TG_SOUND = 5,
+    SND_SOURCE_CATEGORY_6 = 6,
+    SND_SOURCE_CATEGORY_7 = 7,
+    SND_SOURCE_CATEGORY_9 = 9,
+};
+
+#endif

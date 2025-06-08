@@ -44,7 +44,8 @@ namespace nw4r { namespace snd { namespace detail
 		PanMode			panMode;				// size 0x04, offset 0x28
 		PanCurve		panCurve;				// size 0x04, offset 0x2c
 		f32				fxSend[AUX_BUS_NUM];	// size 0x0c, offset 0x30
-		VoiceOutParam	voiceOutParam[4];		// size 0x60, offset 0x3c
+		f32				remoteOutVolume[4];		// size 0x04, offset 0x3c
+		VoiceOutParam	voiceOutParam[4];		// size 0x60, offset 0x5c
 	}; // size 0x9c
 }}} // namespace nw4r::snd::detail
 
@@ -75,6 +76,8 @@ namespace nw4r { namespace snd { namespace detail
 
 		// methods
 		void InitParam();
+		void SetRemoteOutVolume(int remote, f32 volume);
+		f32 GetRemoteOutVolume(int remote) const;
 
 		f32 GetVolume() const { return mPlayerParamSet.volume; }
 		f32 GetPitch() const { return mPlayerParamSet.pitch; }

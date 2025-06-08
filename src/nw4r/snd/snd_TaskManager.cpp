@@ -57,7 +57,7 @@ void TaskManager::AppendTask(Task *task, TaskPriority priority)
 }
 
 // TaskManager::FindTask, probably
-DECOMP_FORCE_CLASS_METHOD(Task::LinkList::Iterator, operator *());
+// DECOMP_FORCE_CLASS_METHOD(Task::LinkList::Iterator, operator *());
 
 Task *TaskManager::GetNextTask(TaskPriority priority, bool doRemove)
 {

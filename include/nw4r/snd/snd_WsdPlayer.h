@@ -18,7 +18,16 @@
  * classes and functions
  */
 
-namespace nw4r { namespace snd { namespace detail
+namespace nw4r { namespace snd {
+
+struct WsdDataInfo {
+	/* 0x00 */ bool loopFlag;
+	/* 0x04 */ int sampleRate;
+	/* 0x08 */ u32 loopStart;
+	/* 0x0C */ u32 loopEnd;
+};
+
+namespace detail
 {
 	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x30b74
 	class WsdPlayer : public BasicPlayer,
@@ -98,6 +107,7 @@ namespace nw4r { namespace snd { namespace detail
 		{
 			return mChannel != nullptr && mChannel->IsActive();
 		}
+		bool ReadWsdDataInfo(WsdDataInfo*) const;
 		u32 GetPlaySamplePosition() const;
 
 	private:

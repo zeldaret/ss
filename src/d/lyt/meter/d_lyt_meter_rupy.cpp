@@ -4,8 +4,8 @@
 #include "d/a/d_a_item.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_lyt_meter_configuration.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "nw4r/math/math_types.h"
-#include "toBeSorted/small_sound_mgr.h"
 
 STATE_DEFINE(dLytMeterRupyStart_c, Wait);
 STATE_DEFINE(dLytMeterRupyStart_c, Start);
@@ -426,9 +426,9 @@ bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
             b = true;
             if (field_0x8AB) {
                 if (newNumDisplayed == amount) {
-                    SmallSoundManager::GetInstance()->playSound(SE_S_RUPEE_COUNT_DOWN_END);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_RUPEE_COUNT_DOWN_END);
                 } else {
-                    SmallSoundManager::GetInstance()->playSound(SE_S_RUPEE_COUNT_DOWN);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_RUPEE_COUNT_DOWN);
                 }
             }
             if (field_0x8AD) {
@@ -445,13 +445,13 @@ bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
             b = true;
             if (field_0x8AB) {
                 if (newNumDisplayed == amount) {
-                    SmallSoundManager::GetInstance()->playSound(SE_S_RUPEE_COUNT_UP_END);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_RUPEE_COUNT_UP_END);
                     if (field_0x8AD) {
                         field_0x890 = 0;
                         field_0x8AD = 0;
                     }
                 } else {
-                    SmallSoundManager::GetInstance()->playSound(SE_S_RUPEE_COUNT_UP);
+                    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_RUPEE_COUNT_UP);
                 }
             }
         }
@@ -511,7 +511,7 @@ bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
         mPrevDigits[2] = mDisplayedDigits[2];
         mPrevDigits[3] = mDisplayedDigits[3];
     } else if (field_0x8AD && amount == dAcItem_c::getCurrentWalletCapacity()) {
-        SmallSoundManager::GetInstance()->playSound(SE_S_RUPEE_MAX);
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_RUPEE_MAX);
         field_0x890 = 0;
         field_0x8AD = 0;
     }

@@ -15,7 +15,6 @@
 #include "f/f_manager.h"
 #include "f/f_profile.h"
 
-
 // Ghidra: fBase
 //   size: 0x64
 // official name
@@ -89,6 +88,10 @@ public:
         params = m_tmpCtData.params;
         profile_name = m_tmpCtData.prof_name;
         group_type = m_tmpCtData.group_type;
+    }
+
+    u32 getFromParams(u8 shift, u32 mask) {
+        return (params >> shift) & mask;
     }
 
 public:

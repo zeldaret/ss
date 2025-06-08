@@ -29,7 +29,7 @@ double cos(double);
 float cosf(float);
 double exp(double);
 double ceil(double);
-float ceilf(float);
+// float ceilf(float);
 double frexp(double, int *);
 double ldexp(double, int);
 double modf(double, double *);

@@ -34,7 +34,7 @@ namespace nw4r { namespace snd
 		// vtable FxBase
 		virtual bool StartUp();
 		virtual void Shutdown();
-		virtual void UpdateBuffer(int, void *, u32, SampleFormat, f32,
+		virtual void UpdateBuffer(int, void **, u32, SampleFormat, f32,
 		                          OutputMode);
 		virtual void OnChangeOutputMode();
 

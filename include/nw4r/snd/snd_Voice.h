@@ -55,7 +55,7 @@ namespace nw4r { namespace snd { namespace detail
 
 	// typedefs
 	public:
-		typedef ut::LinkList<Voice, 0xec> LinkList;
+		typedef ut::LinkList<Voice, 0xfc> LinkList;
 
 		typedef void Callback(Voice *dropVoice, VoiceCallbackStatus status,
 		                      void *callbackData);
@@ -92,6 +92,7 @@ namespace nw4r { namespace snd { namespace detail
 		void SetMainOutVolume(f32 volume);
 		void SetMainSend(f32 send);
 		void SetFxSend(AuxBus bus, f32 send);
+		void SetRemoteOutVolume(int remote, f32 volume);
 		void SetPitch(f32 pitch);
 		void SetVolume(f32 volume);
 		void SetVeVolume(f32 targetVolume, f32 initVolume);
@@ -102,6 +103,10 @@ namespace nw4r { namespace snd { namespace detail
 		bool IsPlayFinished() const
 		{
 			return IsActive() && mAxVoice[0][0]->IsPlayFinished();
+		}
+		bool IsRun() const
+		{
+			return IsActive() && mAxVoice[0][0]->IsRun();
 		}
 		SampleFormat GetFormat() const;
 		u32 GetCurrentPlayingSample() const;
@@ -228,6 +233,7 @@ namespace nw4r { namespace snd { namespace detail
 		f32					mMainOutVolume;					// size 0x04, offset 0xc0
 		f32					mMainSend;						// size 0x04, offset 0xc4
 		f32					mFxSend[AUX_BUS_NUM];			// size 0x0c, offset 0xc8
+		f32					mRemoteOutVolume[4];			// size 0x10, offset 0xd4 TODO following sizes wrong 
 		f32					mPitch;							// size 0x04, offset 0xd4
 		f32					mVolume;						// size 0x04, offset 0xd8
 		f32					mVeInitVolume;					// size 0x04, offset 0xdc

@@ -10,6 +10,7 @@
 #include "nw4r/snd/snd_BasicSound.h"
 #include "nw4r/snd/snd_global.h" // AUX_BUS_NUM
 #include "nw4r/snd/snd_PlayerHeap.h"
+#include "nw4r/snd/snd_SoundHandle.h"
 
 /*******************************************************************************
  * classes
@@ -30,15 +31,19 @@ namespace nw4r { namespace snd
 		// methods
 		int GetPlayableSoundCount() const { return mPlayableCount; }
 		f32 GetVolume() const { return mVolume; }
+		void SetVolume(f32 volume);
 		f32 GetLpfFreq() const { return mLpfFreq; }
+		void SetLpfFreq(f32 freq);
 		int GetDefaultOutputLine() const { return mOutputLineFlag; }
 		f32 GetMainOutVolume() const { return mMainOutVolume; }
 		int GetBiquadFilterType() const { return mBiquadType; }
 		f32 GetBiquadFilterValue() const { return mBiquadValue; }
 		f32 GetMainSend() const { return mMainSend; }
 		f32 GetFxSend(int index) const { return mFxSend[index]; }
+		void SetFxSend(AuxBus, f32);
 
 		void SetPlayableSoundCount(int count);
+		f32 GetRemoteOutVolume(int remote) const;
 
 		int GetPlayingSoundCount() const { return mSoundList.GetSize(); }
 		detail::BasicSound *GetLowestPrioritySound()
@@ -65,6 +70,35 @@ namespace nw4r { namespace snd
 		void detail_FreePlayerHeap(detail::BasicSound *sound);
 		void detail_AppendPlayerHeap(detail::PlayerHeap *heap);
 
+		// Apparently exists, needed in d/snd
+		template <typename TForEachFunc>
+		TForEachFunc ForEachSound(TForEachFunc pFunc, bool reverse) {
+			if (reverse) {
+				detail::BasicSound::SoundPlayerPlayLinkList::ReverseIterator it = mSoundList.GetBeginReverseIter();
+
+				while (it != mSoundList.GetEndReverseIter()) {
+					detail::BasicSound::SoundPlayerPlayLinkList::ReverseIterator curr = it;
+
+					SoundHandle handle;
+					handle.detail_AttachSoundAsTempHandle(&*curr);
+					pFunc(handle);
+
+					if (handle.IsAttachedSound()) {
+						++it;
+					}
+				}
+			} else {
+				NW4R_RANGE_FOR_NO_AUTO_INC(it, mSoundList) {
+					decltype(it) curItr = it++;
+					SoundHandle handle;
+					handle.detail_AttachSoundAsTempHandle(&*curItr);
+					pFunc(handle);
+				}
+			}
+
+			return pFunc;
+		}
+
 	// members
 	private:
 		detail::BasicSound::SoundPlayerPlayLinkList		mSoundList;				// size 0x0c, offset 0x00
@@ -78,6 +112,7 @@ namespace nw4r { namespace snd
 		f32												mMainOutVolume;			// size 0x04, offset 0x38
 		int												mBiquadType;			// size 0x04, offset 0x3c
 		f32												mBiquadValue;			// size 0x04, offset 0x40
+		f32												mRemoteOutVolume[4];
 		f32												mMainSend;				// size 0x04, offset 0x44
 		f32												mFxSend[AUX_BUS_NUM];	// size 0x0c, offset 0x48
 	}; // size 0x54

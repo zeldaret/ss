@@ -28,9 +28,11 @@ void SoundHandle::detail_AttachSoundAsTempHandle(detail::BasicSound* pSound) {
         mSound->DetachTempGeneralHandle();
     }
 
+	/*
     if (mSound->IsAttachedTempSpecialHandle()) {
         mSound->DetachTempSpecialHandle();
     }
+	*/
 
     mSound->mTempGeneralHandle = this;
 }
