@@ -7,4 +7,4 @@ __dt__14dAcOMapparts_cFv = .text:0x000000D0; // type:function size:0x58
 _ctors = .ctors:0x00000000; // type:label scope:global
 _dtors = .dtors:0x00000000; // type:label scope:global
 g_profile_OBJ_MAPPARTS = .data:0x00000000; // type:object size:0x10
-lbl_633_section4_10 = .data:0x00000010; // type:object size:0x80
+__vt__14dAcOMapparts_c = .data:0x00000010; // type:object size:0x80
