@@ -235,6 +235,10 @@ public:
     f32 squareMagXZ() const {
         return x * x + z * z;
     }
+    f32 squareDistanceToXZ(const mVec3_c &other) const {
+        return (*this - other).squareMagXZ();
+    }
+
     void rotX(const mAng &angle);
     void rotY(const mAng &angle);
     void rotZ(const mAng &angle);
