@@ -30,8 +30,8 @@ public:
     void execute();
 
 private:
-    void internalDrawVariant01(u16);
-    void internalDrawVariant2(u16);
+    void internalDrawStandard(u16);
+    void internalDrawLite(u16);
 
     void afterDraw(u16 x, u16 y, u16 width, u16 height);
 

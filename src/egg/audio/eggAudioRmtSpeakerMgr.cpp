@@ -12,39 +12,39 @@ bool AudioRmtSpeakerMgr::sTask;
 
 u8 AudioRmtSpeakerMgr::sAudioRmtSpeakerWpadVolume = 0x58;
 
-AudioRmtSpeakerTask AudioRmtSpeakerMgr::sTasks[0x14];
+AudioRmtSpeakerTask AudioRmtSpeakerMgr::sConnectTask[0x14];
 
 void AudioRmtSpeakerMgr::setupCallback(s32 arg1, s32 arg2) {
     if (arg2 == 0) {
-        if (sTasks[mTaskFinishCount].mpCallback != nullptr) {
-            (sTasks[mTaskFinishCount].mpCallback)(arg1, arg2);
+        if (sConnectTask[mTaskFinishCount].mpCallback != nullptr) {
+            (sConnectTask[mTaskFinishCount].mpCallback)(arg1, arg2);
         }
         sAudioRmtSpeakerWpadVolume = WPADGetSpeakerVolume();
     } else {
-        fn_804B6D80(arg1, sTasks[mTaskFinishCount].mpCallback);
+        fn_804B6D80(arg1, sConnectTask[mTaskFinishCount].mpCallback);
     }
-    sTasks[mTaskFinishCount].field_0x01 = true;
+    sConnectTask[mTaskFinishCount].field_0x01 = true;
 }
 
 void AudioRmtSpeakerMgr::shutdownCallback(s32 arg1, s32 arg2) {
     if ((u32)arg2 + 1 <= 1) {
-        if (sTasks[mTaskFinishCount].mpCallback != nullptr) {
-            (sTasks[mTaskFinishCount].mpCallback)(arg1, arg2);
+        if (sConnectTask[mTaskFinishCount].mpCallback != nullptr) {
+            (sConnectTask[mTaskFinishCount].mpCallback)(arg1, arg2);
         }
     } else {
-        fn_804B6DE0(arg1, sTasks[mTaskFinishCount].mpCallback);
+        fn_804B6DE0(arg1, sConnectTask[mTaskFinishCount].mpCallback);
     }
-    sTasks[mTaskFinishCount].field_0x01 = true;
+    sConnectTask[mTaskFinishCount].field_0x01 = true;
 }
 
-void AudioRmtSpeakerMgr::fn_804B6AF0(s32 i, WPADCallback *pCallback, bool enable) {
+void AudioRmtSpeakerMgr::add_task(s32 i, WPADCallback *pCallback, bool enable) {
     BOOL intr = OSDisableInterrupts();
 
     u32 index = mTaskRequestCount;
-    sTasks[index].mChannel = i;
-    sTasks[index].field_0x00 = enable;
-    sTasks[index].mpCallback = pCallback;
-    sTasks[index].field_0x01 = false;
+    sConnectTask[index].mChannel = i;
+    sConnectTask[index].field_0x00 = enable;
+    sConnectTask[index].mpCallback = pCallback;
+    sConnectTask[index].field_0x01 = false;
     if (++mTaskRequestCount >= 0x14) {
         mTaskRequestCount = 0;
     }
@@ -52,28 +52,28 @@ void AudioRmtSpeakerMgr::fn_804B6AF0(s32 i, WPADCallback *pCallback, bool enable
     OSRestoreInterrupts(intr);
 }
 
-void AudioRmtSpeakerMgr::fn_804B6B80(s32 i, WPADCallback *pCallback) {
+void AudioRmtSpeakerMgr::doSetup(s32 i, WPADCallback *pCallback) {
     if (!nw4r::snd::SoundSystem::GetRemoteSpeaker(i).Setup(pCallback)) {
-        fn_804B6AF0(i, pCallback, true);
-        sTasks[mTaskRequestCount].field_0x01 = true;
+        add_task(i, pCallback, true);
+        sConnectTask[mTaskRequestCount].field_0x01 = true;
     }
 }
 
-void AudioRmtSpeakerMgr::fn_804B6C00(s32 i, WPADCallback *pCallback) {
+void AudioRmtSpeakerMgr::doShutdown(s32 i, WPADCallback *pCallback) {
     nw4r::snd::SoundSystem::GetRemoteSpeaker(i).Shutdown(pCallback);
 }
 
 void AudioRmtSpeakerMgr::calc() {
     if (!sTask) {
         if (mTaskRequestCount != mTaskFinishCount) {
-            if (sTasks[mTaskFinishCount].field_0x00) {
-                fn_804B6B80(sTasks[mTaskFinishCount].mChannel, setupCallback);
+            if (sConnectTask[mTaskFinishCount].field_0x00) {
+                doSetup(sConnectTask[mTaskFinishCount].mChannel, setupCallback);
             } else {
-                fn_804B6C00(sTasks[mTaskFinishCount].mChannel, shutdownCallback);
+                doShutdown(sConnectTask[mTaskFinishCount].mChannel, shutdownCallback);
             }
             sTask = true;
         }
-    } else if (sTasks[mTaskFinishCount].field_0x01) {
+    } else if (sConnectTask[mTaskFinishCount].field_0x01) {
         sTask = false;
         mTaskFinishCount++;
         if (mTaskFinishCount >= 0x14) {
@@ -86,7 +86,7 @@ void AudioRmtSpeakerMgr::setupCallbackDirect(s32 arg1, s32 arg2) {
     if (arg2 == 0) {
         sAudioRmtSpeakerWpadVolume = WPADGetSpeakerVolume();
     } else {
-        fn_804B6B80(arg1, setupCallbackDirect);
+        doSetup(arg1, setupCallbackDirect);
     }
 }
 
@@ -97,13 +97,13 @@ void AudioRmtSpeakerMgr::shutdownCallbackDirect(s32 arg1, s32 arg2) {
     if (arg2 == 0) {
         return;
     }
-    fn_804B6C00(arg1, shutdownCallbackDirect);
+    doShutdown(arg1, shutdownCallbackDirect);
 }
 
 void AudioRmtSpeakerMgr::fn_804B6D80(s32 i, WPADCallback *pCallback) {
     WPADDeviceType ty;
     if (!sAudioRmtSpeakerConnectCanncelSw && WPADProbe(i, &ty) != WPAD_ERR_NO_CONTROLLER) {
-        fn_804B6AF0(i, pCallback, true);
+        add_task(i, pCallback, true);
     }
 }
 
@@ -115,7 +115,7 @@ void AudioRmtSpeakerMgr::fn_804B6DE0(s32 i, WPADCallback *pCallback) {
                 return;
             }
         }
-        fn_804B6AF0(i, pCallback, false);
+        add_task(i, pCallback, false);
     }
 }
 
@@ -124,7 +124,7 @@ void AudioRmtSpeakerMgr::connectAllByForce() {
     sAudioRmtSpeakerConnectCanncelSw = false;
     for (int i = 0; i < 4; i++) {
         if (WPADProbe(i, &ty) != WPAD_ERR_NO_CONTROLLER) {
-            fn_804B6B80(i, setupCallbackDirect);
+            doSetup(i, setupCallbackDirect);
         }
     }
 }
@@ -134,7 +134,7 @@ void AudioRmtSpeakerMgr::disconnectAllByForce() {
     for (int i = 0; i < 4; i++) {
         WPADProbe(i, &ty); // ignoring result here
         if (nw4r::snd::SoundSystem::GetRemoteSpeaker(i).IsAvailable()) {
-            fn_804B6C00(i, shutdownCallbackDirect);
+            doShutdown(i, shutdownCallbackDirect);
         }
     }
     sAudioRmtSpeakerConnectCanncelSw = true;
