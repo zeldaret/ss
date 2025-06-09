@@ -123,9 +123,9 @@ void DrawPathDOF::internalDraw(u16 idx) {
     }
 
     if (field_0x20 == 2) {
-        internalDrawVariant2(idx);
+        internalDrawLite(idx);
     } else {
-        internalDrawVariant01(idx);
+        internalDrawStandard(idx);
     }
 
     switch (idx) {
@@ -141,9 +141,9 @@ void DrawPathDOF::internalDraw(u16 idx) {
     }
 }
 
-void DrawPathDOF::internalDrawVariant01(u16 idx) {}
+void DrawPathDOF::internalDrawStandard(u16 idx) {}
 
-void DrawPathDOF::internalDrawVariant2(u16 idx) {
+void DrawPathDOF::internalDrawLite(u16 idx) {
     const Screen &screen = GlobalDrawState::getScreen();
     const Screen::DataEfb &efb = screen.GetDataEfb();
     switch (idx) {

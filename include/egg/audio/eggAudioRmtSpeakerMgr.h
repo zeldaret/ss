@@ -30,9 +30,9 @@ public:
 private:
     static void setupCallback(s32, s32);
     static void shutdownCallback(s32, s32);
-    static void fn_804B6AF0(s32 i, WPADCallback *pCallback, bool);
-    static void fn_804B6B80(s32 i, WPADCallback *pCallback);
-    static void fn_804B6C00(s32 i, WPADCallback *pCallback);
+    static void add_task(s32 i, WPADCallback *pCallback, bool);
+    static void doSetup(s32 i, WPADCallback *pCallback);
+    static void doShutdown(s32 i, WPADCallback *pCallback);
     static void setupCallbackDirect(s32, s32);
     static void shutdownCallbackDirect(s32, s32);
     static bool sAudioRmtSpeakerConnectCanncelSw;
@@ -42,7 +42,7 @@ private:
 
     static u8 sAudioRmtSpeakerWpadVolume;
 
-    static AudioRmtSpeakerTask sTasks[0x14];
+    static AudioRmtSpeakerTask sConnectTask[0x14];
 };
 
 } // namespace EGG
