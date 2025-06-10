@@ -23,6 +23,10 @@ public:
 
     void SetPos(mVec3_c const *);
 
+    void SetField_0x7C(u8 param0) {
+        mField_0x7C = param0;
+    }
+
     void SetNowY(f32 y) {
         mNowY = y;
     }
