@@ -246,7 +246,7 @@ bool dAcOTumbleWeed_c::checkSlope() {
     cM3dGPla pla;
     dBgS::GetInstance()->GetTriPla(mObjAcch.mGnd, &pla);
 
-    mAng ang = mAng::angle(mVec3_c::Ey, pla.GetN());
+    mAng ang = mAng::fromRad(mVec3_c::Ey.angle(pla.GetN()));
     return sLib::absDiff(ang, 0) > mAng::deg2short(1);
 }
 
@@ -304,13 +304,13 @@ void dAcOTumbleWeed_c::adjustAngle() {
 void dAcOTumbleWeed_c::adjustSpeed() {
     cM3dGPla pla;
 
-    // BUG
+    // @bug
     // the ground angle calculation happens before retrieving the grounds normal
     // this is probably hard to notice due to the little effect it has.
     // Effect:
     //  Tumbleweed slows to the target much quicker than intended
     //  Tumbleweed speeds to the target + 5.0f much quicker than intended
-    mAng gndAngle = mAng::angle(mVec3_c::Ey, pla.GetN());
+    mAng gndAngle = mAng::fromRad(mVec3_c::Ey.angle(pla.GetN()));
 
     dBgS::GetInstance()->GetTriPla(mObjAcch.mGnd, &pla);
 
