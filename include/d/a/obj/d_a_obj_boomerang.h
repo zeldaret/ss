@@ -16,14 +16,13 @@
 #include "m/m_fader.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
-#include "rvl/GX/GXTypes.h"
 #include "s/s_State.hpp"
 #include "toBeSorted/actor_event.h"
 #include "toBeSorted/d_emitter.h"
 
 class dAcBoomerangProc_c : public d3d::UnkProc {
 public:
-    dAcBoomerangProc_c() : mColor0(0), mColor1(0xFFFFFFFF) {}
+    dAcBoomerangProc_c() : mpMdl(nullptr), mClr(0xFFFFFFFF) {}
     ~dAcBoomerangProc_c() {}
 
     bool create(m3d::mdl_c *mdl, mColor clr, int prioOpa, mAllocator_c *alloc);
@@ -34,8 +33,8 @@ public:
     virtual void drawOpa() override;
 
 private:
-    mColor mColor0;
-    mColor mColor1;
+    m3d::mdl_c *mpMdl;
+    mColor mClr;
 };
 
 class dAcBoomerang_c : public dAcObjBase_c {
@@ -98,16 +97,43 @@ public: // TYPES
         MDL_WINGS_ADV = 5,
     };
 
-    // Macros until enum is solidified
+    struct FlyChrAnimation_t {
+        const char *mName;
+    };
+    enum FlyAnimation_e {
+        RB_FLY = 0,
+        RB_FLY_FAST = 1,
+        RB_FLY_MAX = 2,
+    };
+    static const char *sFlyChrAnims[RB_FLY_MAX];
+// Macros until enum is solidified (0x8CC)
 #define FLAG_BOOMERANG_CANCEL (0x3)
+#define FLAG_BOOMERANG_RELEASE_ITEM (0x4)
+#define FLAG_BOOMERANG_0x8 (0x8)
+#define FLAG_BOOMERANG_0x10 (0x10)
+#define FLAG_BOOMERANG_0x20 (0x20)
+#define FLAG_BOOMERANG_0x40 (0x40)
+#define FLAG_BOOMERANG_0x80 (0x80)
+#define FLAG_BOOMERANG_STOP_TIMER_ACTIVE (0x100)
+#define FLAG_BOOMERANG_DROP_ITEM (0x200)     // related to 0x400
+#define FLAG_BOOMERANG_REQUEST_0x400 (0x400) // related to 0x200
+#define FLAG_BOOMERANG_REQUEST_MOVE (0x800)
+#define FLAG_BOOMERANG_CONTROLLABLE (0x1000)
+#define FLAG_BOOMERANG_0x2000 (0x2000)
 #define FLAG_BOOMERANG_RUMBLE_ACTIVE (0x4000)
+#define FLAG_BOOMERANG_WING_EFFECT_ACTIVE (0x8000)
+#define FLAG_BOOMERANG_0x10000 (0x10000)
+#define FLAG_BOOMERANG_0x40000 (0x40000)
 
 public: // INLINES
     bool checkField_0x8CC(u32 mask) const {
         return field_0x8CC & mask;
     }
-    void onField_0x8CC(u32 mask) {
+    void setField_0x8CC(u32 mask) {
         field_0x8CC |= mask;
+    }
+    void unsetField_0x8CC(u32 mask) {
+        field_0x8CC &= ~mask;
     }
     bool isMoving() {
         return mStateMgr.isState(StateID_Move);
@@ -141,6 +167,15 @@ public: // FUNCTIONS
     /** Applies the selected animation to the beetle */
     void setChrAnimation(ChrAnimation_e requestedAnimation);
 
+    /** Applies the selected animation to the beetle */
+    void setFlyChrAnimation(FlyAnimation_e requestedAnimation);
+
+    /** Sets the amount of time the beetle can fly. Setting a number less than 0 gives it 5s of time */
+    void setRemainingFlightTime(s16 time);
+
+    /** Attempts to flash the beetle red at end of flight */
+    void executeTimeWarning();
+
 private:
     /* 0x0330 */ nw4r::g3d::ResFile mResFile;
     /* 0x0334 */ m3d::mdl_c mMdl;
@@ -156,15 +191,22 @@ private:
     /* 0x0804 */ dBgS_AcchCir mAcchCir;
     /* 0x0860 */ ActorEventRelated mEventRelated;
     /* 0x08B0 */ u8 mCurrentAnimation;
-    /* 0x08B1 */ u8 _0x8B1[0x8B5 - 0x8B1];
+    /* 0x08B1 */ u8 field_0x8B1;
+    /* 0x08B2 */ u8 field_0x8B2;
+    /* 0x08B3 */ u8 mFlashTimer;
+    /* 0x08B4 */ u8 field_0x8B4;
     /* 0x08B5 */ u8 mWindNodeID;
     /* 0x08B6 */ u8 mLeftWingNodeID;
     /* 0x08B7 */ u8 mRightWingNodeID;
-    /* 0x08B8 */ u8 _0x8B8[0x8CC - 0x8B8];
-    /* 0x08B8 */ u32 field_0x8CC;
-    /* 0x08D0 */ u8 _0x8D0[0x8D8 - 0x8D0];
+    /* 0x08B8 */ u8 _0x8B8[0x8C8 - 0x8B8];
+    /* 0x08CA */ u16 field_0x8C8;
+    /* 0x08CA */ u16 mRemainingFlightTime;
+    /* 0x08CC */ u32 field_0x8CC;
+    /* 0x08D0 */ f32 field_0x8D0;
+    /* 0x08D4 */ f32 field_0x8D4;
     /* 0x08D8 */ mVec3_c field_0x8D8;
-    /* 0x08E4 */ u8 _0x8E4[0x8FC - 0x8E4];
+    /* 0x08E4 */ mVec3_c field_0x8E4;
+    /* 0x08F0 */ u8 _0x8E4[0x8FC - 0x8F0];
     /* 0x08FC */ dCcD_Sph mSph0;
     /* 0x0A4C */ dCcD_Sph mSph1;
     /* 0x0B9C */ EffectsStruct mEff0;
@@ -176,6 +218,7 @@ private:
     /* 0x1150 */ u8 _0x1150[0x115C - 0x1150];
     /* 0x115C */ STATE_MGR_DECLARE(dAcBoomerang_c);
 
+    static const u32 BoomerangAtFlags;
     static dCcD_SrcSph sSphSrc;
     static dBgS_BeetleLinChk sLinChk;
     static const u32 sSrcAtType;

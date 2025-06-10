@@ -5,6 +5,7 @@
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s.h"
+#include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/d_rumble.h"
 #include "d/snd/d_snd_wzsound.h"
@@ -15,11 +16,27 @@
 #include "m/m_color.h"
 #include "m/m_fader_base.h"
 #include "m/m_mtx.h"
+#include "m/m_quat.h"
+#include "m/m_vec.h"
 #include "nw4r/g3d/g3d_anmchr.h"
 #include "nw4r/g3d/res/g3d_resanmchr.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/g3d/res/g3d_resshp.h"
+#include "rvl/GX/GXTypes.h"
+#include "s/s_Math.h"
 #include "s/s_State.hpp"
+#include "toBeSorted/d_emitter.h"
+#include "toBeSorted/event_manager.h"
+
+dBgS_BeetleLinChk dAcBoomerang_c::sLinChk;
+dCcD_SrcSph dAcBoomerang_c::sSphSrc = {
+    {{AT_TYPE_BEETLE, BoomerangAtFlags, {4, 0, 0}, 0, 1, 0, 0, 0},
+     {~AT_TYPE_COMMON0, 0x291, {0, 0, 0x407}, 0, 0},
+     {0x28}},
+    {15.f}
+};
+const u32 dAcBoomerang_c::BoomerangAtFlags = 0x209B;
+;
 
 SPECIAL_ACTOR_PROFILE(BOOMERANG, dAcBoomerang_c, fProfile::BOOMERANG, 0x125, 0, 0x4);
 
@@ -74,7 +91,7 @@ void dAcBoomerang_c::atHitCallback(cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, 
 
         field_0x8D8.normalize();
 
-        onField_0x8CC(FLAG_BOOMERANG_CANCEL);
+        setField_0x8CC(FLAG_BOOMERANG_CANCEL);
         mStateMgr.changeState(StateID_MoveCancelWait);
     } else {
         // Play the animation to move the pincers
@@ -175,7 +192,7 @@ int dAcBoomerang_c::create() {
     mAcch.Set_0x40000000();
     mAcch.SetLineDown();
 
-    mAcchCir.SetWall(0.f, dAcPy_c::GetLink2()->getBeetleRadius());
+    mAcchCir.SetWall(0.f, dAcPy_c::GetLink2()->getBeetleSmallRadius());
 
     mCurrentAnimation = RB_MAX;
     mStateMgr.changeState(StateID_Wait);
@@ -192,7 +209,7 @@ int dAcBoomerang_c::create() {
     mSph1.Set(sSphSrc);
     mSph1.SetStts(mStts);
     mSph1.SetAtCallback(dAcBoomerang_atHitCallback);
-    mSph1.SetR(dAcPy_c::GetLink2()->getBeetleRadius());
+    mSph1.SetR(dAcPy_c::GetLink2()->getBeetleSmallRadius());
     mSph1.ClrCoSet();
     mSph1.SetAtType(AT_TYPE_0x40);
 
@@ -282,7 +299,7 @@ void dAcBoomerang_c::bonk() {
     if (checkField_0x8CC(FLAG_BOOMERANG_RUMBLE_ACTIVE)) {
         return;
     }
-    onField_0x8CC(FLAG_BOOMERANG_RUMBLE_ACTIVE);
+    setField_0x8CC(FLAG_BOOMERANG_RUMBLE_ACTIVE);
     dRumble_c::start(dRumble_c::sRumblePreset1, 1);
 }
 
@@ -314,6 +331,228 @@ void dAcBoomerang_c::setChrAnimation(dAcBoomerang_c::ChrAnimation_e requestedAni
     mMdl.setAnm(mAnmChrBlend, sChrAnims[requestedAnimation].mRate);
 }
 
-// ...
+// HELP: I need this to be const to fix the load, but I cant do that without ruining sdata
+const char *dAcBoomerang_c::sFlyChrAnims[RB_FLY_MAX] = {"RB_Fly", "RB_FlyFast"};
+void dAcBoomerang_c::setFlyChrAnimation(FlyAnimation_e requestedAnimation) {
+    nw4r::g3d::ResAnmChr resAnmChr = mResFile.GetResAnmChr(sFlyChrAnims[requestedAnimation]);
+    mAnmChr[BOOMERANG_ANIM_WINGS].setAnm(mMdl, resAnmChr, m3d::PLAY_MODE_4);
+    nw4r::g3d::AnmObjChr *pAnmObj = static_cast<nw4r::g3d::AnmObjChr *>(mAnmChr[BOOMERANG_ANIM_WINGS].getAnimObj());
+    pAnmObj->Release();
+    pAnmObj->Bind(mMdl.getResMdl(), mLeftWingNodeID, nw4r::g3d::AnmObjChr::BIND_PARTIAL);
+    pAnmObj->Bind(mMdl.getResMdl(), mRightWingNodeID, nw4r::g3d::AnmObjChr::BIND_PARTIAL);
 
-bool dAcBoomerangProc_c::create(m3d::mdl_c *mdl, mColor clr, int prioOpa, mAllocator_c *alloc) {}
+    mMdl.setAnm(mAnmChrBlend);
+}
+
+void dAcBoomerang_c::setRemainingFlightTime(s16 time) {
+    if (time < 0) {
+        time = dAcPy_c::GetLink2()->getBeetleWarningTimeLeft();
+    }
+    if (mRemainingFlightTime > time) {
+        mRemainingFlightTime = time;
+        mFlashTimer = time;
+    }
+}
+
+void dAcBoomerang_c::initializeState_Wait() {
+    setChrAnimation(RB_SET);
+    mAnmChrBlend.setWeight(1, 0.f);
+    mSph0.ClrAtHit();
+    mSph1.ClrTgHit();
+    mSph1.ClrAtHit();
+    unsetField_0x8CC(
+        FLAG_BOOMERANG_0x10000 | FLAG_BOOMERANG_WING_EFFECT_ACTIVE | FLAG_BOOMERANG_0x2000 |
+        FLAG_BOOMERANG_STOP_TIMER_ACTIVE | FLAG_BOOMERANG_0x10 | FLAG_BOOMERANG_RELEASE_ITEM | FLAG_BOOMERANG_CANCEL
+    );
+
+    placeOnArm();
+    field_0x8D0 = 0.f;
+
+    dAcPy_c::GetLink2()->onModelUpdateFlag(dAcPy_c::UPDATE_MODEL_BEETLE);
+}
+void dAcBoomerang_c::executeState_Wait() {
+    forwardSpeed = 0.f;
+    placeOnArm();
+    if (checkField_0x8CC(FLAG_BOOMERANG_REQUEST_MOVE)) {
+        mStateMgr.changeState(StateID_Move);
+    }
+}
+void dAcBoomerang_c::finalizeState_Wait() {}
+
+void dAcBoomerang_c::initializeState_ReturnWait() {
+    setChrAnimation(RB_BACK);
+    setFlyChrAnimation(RB_FLY_FAST);
+    mSph0.ClrAtHit();
+    mSph1.ClrTgHit();
+    mSph1.ClrAtHit();
+    unsetField_0x8CC(
+        FLAG_BOOMERANG_0x10000 | FLAG_BOOMERANG_WING_EFFECT_ACTIVE | FLAG_BOOMERANG_0x2000 |
+        FLAG_BOOMERANG_STOP_TIMER_ACTIVE | FLAG_BOOMERANG_0x10 | FLAG_BOOMERANG_RELEASE_ITEM | FLAG_BOOMERANG_CANCEL
+    );
+    placeOnArm();
+}
+void dAcBoomerang_c::executeState_ReturnWait() {
+    forwardSpeed = 0.f;
+    placeOnArm();
+    if (mAnmChr[BOOMERANG_ANIM_PINCERS].isStop() || !dAcPy_c::GetLink2()->checkActionFlagsCont(0x10)) {
+        playSound(SE_BE_CATCH);
+        mStateMgr.changeState(StateID_Wait);
+    }
+}
+void dAcBoomerang_c::finalizeState_ReturnWait() {
+    if (dAcPy_c::GetLink2()->checkActionFlagsCont(0x10)) {
+        dAcPy_c::GetLink2()->setBeetleBackAnim();
+    }
+}
+
+void dAcBoomerang_c::initializeState_Move() {
+    setChrAnimation(RB_DEFAULT);
+    mAnmChrBlend.setWeight(1, 1.f);
+    setFlyChrAnimation(RB_FLY);
+    field_0x8B1 = 45; // 1.5 seconds if that means anything
+    field_0x8C8 = 0;
+    forwardSpeed = dAcPy_c::GetLink2()->getBeetleSmallRadius();
+}
+void dAcBoomerang_c::executeState_Move() {}
+void dAcBoomerang_c::finalizeState_Move() {}
+
+void dAcBoomerang_c::initializeState_MoveCancelWait() {}
+void dAcBoomerang_c::executeState_MoveCancelWait() {}
+void dAcBoomerang_c::finalizeState_MoveCancelWait() {}
+
+void dAcBoomerang_c::initializeState_EventReturnWait() {
+    mSph0.ClrCoHit();
+    mSph0.ClrAtHit();
+    mSph1.ClrTgHit();
+    mSph1.ClrAtHit();
+
+    unsetField_0x8CC(
+        FLAG_BOOMERANG_0x10000 | FLAG_BOOMERANG_WING_EFFECT_ACTIVE | FLAG_BOOMERANG_0x2000 |
+        FLAG_BOOMERANG_STOP_TIMER_ACTIVE | FLAG_BOOMERANG_0x10 | FLAG_BOOMERANG_RELEASE_ITEM | FLAG_BOOMERANG_CANCEL
+    );
+}
+void dAcBoomerang_c::executeState_EventReturnWait() {}
+void dAcBoomerang_c::finalizeState_EventReturnWait() {}
+
+void dAcBoomerang_c::executeTimeWarning() {
+    s16 timeLimit = dAcPy_c::GetLink2()->getBeetleWarningTimeLeft();
+    mColor flashClr(0, 0, 0, 0xFF);
+
+    if (mRemainingFlightTime <= timeLimit) {
+        setField_0x8CC(FLAG_BOOMERANG_STOP_TIMER_ACTIVE);
+
+        if (mFlashTimer != 0) {
+            mFlashTimer--;
+        }
+
+        s32 r;
+        if (mFlashTimer > 75) {
+            r = 37;
+        } else if (mFlashTimer > 37) {
+            r = 18;
+        } else {
+            r = 9;
+        }
+
+        flashClr.r = (1.f / (r - 6)) * MAX(0, (mFlashTimer % r) - 5) * 255.f;
+        if (flashClr.r == 0xFF && !mStateMgr.isState(StateID_MoveCancelWait)) {
+            playSound(SE_BE_WARNING);
+        }
+    }
+
+    mMdl.setTevKColorAll(GX_KCOLOR3, flashClr, false);
+    dAcPy_c::GetLink2()->setBeetleFlashClr(flashClr);
+}
+
+void dAcBoomerang_c::registerInEvent() {
+    return;
+}
+
+int dAcBoomerang_c::actorExecute() {
+    dAcPy_c *player = dAcPy_c::GetLink2();
+
+    if (checkField_0x8CC(FLAG_BOOMERANG_REQUEST_0x400)) {
+        unsetField_0x8CC(FLAG_BOOMERANG_REQUEST_0x400);
+    }
+
+    if (dAcPy_c::GetLink2()->checkModelUpdateFlag(0x10000 | 0x80)) {
+        deleteRequest();
+        unsetField_0x8CC(FLAG_BOOMERANG_REQUEST_0x400);
+        return SUCCEEDED;
+    }
+
+    if (EventManager::isInEvent() && mEventRelated.getSomeEventRelatedNumber() != -1) {
+        setField_0x8CC(FLAG_BOOMERANG_0x40);
+        mEventRelated.advanceNext();
+    }
+
+    unsetField_0x8CC(FLAG_BOOMERANG_0x40000 | FLAG_BOOMERANG_RUMBLE_ACTIVE);
+
+    for (int i = 0; i < 2; ++i) {
+        mAnmChr[i].play();
+    }
+    mMdl.play();
+    mStateMgr.executeState();
+
+    sLib::chase(&field_0x8D4, 0.f, 0.05f);
+    mAcch.CrrPos(*dBgS::GetInstance());
+
+    setRoomId();
+
+    mMdl.calc(false);
+    mMdl.getNodeWorldMtxMultVecZero(0, poscopy2);
+    poscopy3 = poscopy2;
+
+    if (checkField_0x8CC(FLAG_BOOMERANG_WING_EFFECT_ACTIVE)) {
+        mEff0.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_6_, mWorldMtx, nullptr, nullptr);
+        mEff1.setTransform(mWorldMtx);
+
+        f32 ang = field_0x8E4.angle(velocity);
+        ang = 10.f - mAng::fromRad(ang) * (7.f / 256.f);
+        ang = nw4r::ut::Max(ang, 3.f);
+        mEff1.setAwayFromCenterSpeed(ang);
+    } else {
+        mEff0.remove(true);
+    }
+
+    if (field_0x8B1 == 0 && (mStateMgr.isState(StateID_Move) || mStateMgr.isState(StateID_MoveCancelWait))) {
+        mEff2.createContinuousEffect(
+            PARTICLE_RESOURCE_ID_MAPPING_5_, player->GetPosition(), nullptr, nullptr, nullptr, nullptr
+        );
+    } else {
+        mEff2.remove(true);
+    }
+
+    if (checkField_0x8CC(FLAG_BOOMERANG_0x20) && !checkField_0x8CC(FLAG_BOOMERANG_CANCEL)) {
+        if (mStateMgr.isState(StateID_Move) || mStateMgr.isState(StateID_MoveCancelWait)) {
+            mEff3.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_7_, mWorldMtx, nullptr, nullptr);
+            playSoundEffect1(SE_BE_HIT_LEAVES_LV);
+        }
+    }
+
+    unsetField_0x8CC(FLAG_BOOMERANG_0x20 | FLAG_BOOMERANG_0x40 | FLAG_BOOMERANG_0x80 | FLAG_BOOMERANG_DROP_ITEM);
+    retrieve();
+    return SUCCEEDED;
+}
+
+int dAcBoomerang_c::draw() {
+    if (mStateMgr.isState(StateID_EventReturnWait) || dAcPy_c::GetLink2()->checkModelUpdateFlag(0x10000 | 0x80)) {
+        return SUCCEEDED;
+    }
+    drawModelType1(&mMdl);
+    if (!mStateMgr.isState(StateID_Wait)) {
+        mProc.entry();
+        static mQuat_c shadow(mVec3_c::Zero, 50.f);
+        drawShadow(mShadow, nullptr, mWorldMtx, &shadow, -1, -1, -1, -1, -1, position.y - mAcch.GetGroundH());
+    }
+    return SUCCEEDED;
+}
+
+bool dAcBoomerangProc_c::create(m3d::mdl_c *mdl, mColor clr, int prioOpa, mAllocator_c *alloc) {
+    if (!d3d::UnkProc::create(prioOpa, -1, alloc)) {
+        return false;
+    }
+    mpMdl = mdl;
+    mClr = clr;
+    return true;
+}

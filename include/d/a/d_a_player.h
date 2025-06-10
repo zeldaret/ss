@@ -5,6 +5,8 @@
 #include "d/a/d_a_item.h"
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/d_player_mdl.h"
+#include "m/m_angle.h"
+#include "m/m_color.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
@@ -37,7 +39,24 @@ protected:
 
 public:
     // Beetle Functions [0x8021AA70 - 0x8021BE20]
-    f32 getBeetleRadius();
+    s16 getBeetleFlightTime();
+    mAng getBeetleAngle0();
+    mAng getBeetleAngle1();
+    f32 getBeetleWingAngleActive();
+    f32 getBeetleWingAngleInactive();
+    f32 getBeetleNormalSpeed();
+    f32 getBeetleQuickSpeed();
+    f32 getBeetleMaxRange();
+    f32 getBeetleLargeRadius();
+    f32 getBeetleSmallRadius();
+    f32 getBeetleMaxHeightOffset();
+    mAng getBeetleSmallAngle0();
+    mAng getBeetleSmallAngle1();
+    mAng getBeetleBonkRecoilAngle();
+    mAng getBeetleSmallAngle2();
+    void setBeetleFlashClr(const mColor &);
+    void setBeetleBackAnim();
+    s32 getBeetleWarningTimeLeft();
 
 public:
     f32 getField_0x4564() const {
