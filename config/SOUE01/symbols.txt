@@ -50384,7 +50384,6 @@ sHandMats = .bss:0x805A06C8; // type:object size:0xE scope:local data:byte
 sFader__8dScene_c = .bss:0x805A06FC; // type:object size:0x24 data:4byte
 SysConfig = .bss:0x805A0720; // type:object size:0x58 data:4byte
 sRumblePreset0__9dRumble_c = .bss:0x805A0778; // type:object size:0xC data:4byte
-...bss.0 = .bss:0x805A0778; // type:label scope:local
 sRumblePreset1__9dRumble_c = .bss:0x805A0784; // type:object size:0xC data:4byte
 sRumblePreset2__9dRumble_c = .bss:0x805A0790; // type:object size:0xC data:4byte
 sRumblePreset3__9dRumble_c = .bss:0x805A079C; // type:object size:0xC data:4byte
