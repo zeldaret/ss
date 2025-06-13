@@ -106,8 +106,8 @@ private:
     /* 0x10C */ UNKWORD field_0x10C;
     /* 0x110 */ nw4r::ut::List mDistantSoundList; // node offset 0xEC -> dSndDistantSoundActor_c
     /* 0x11C */ UNKWORD field_0x11C;
-    /* 0x120 */ nw4r::ut::List field_0x120; // node offset 0x4
-    /* 0x12C */ nw4r::ut::List field_0x12C; // node offset 0x4
+    /* 0x120 */ nw4r::ut::List field_0x120; // node offset 0x4 -> dSndSeSound_c
+    /* 0x12C */ nw4r::ut::List field_0x12C; // node offset 0x4 -> dSndSeSound_c
     /* 0x138 */ nw4r::ut::Node mGroupLink;  // node for list in dSndSourceGroup_c
     /* 0x140 */ dSndSourceGroup_c *mpOwnerGroup;
     /* 0x144 */ u8 _0x144[0x154 - 0x144];

@@ -2,9 +2,9 @@
 #define D_SND_DISTANT_SOUND_ACTOR_POOL_H
 
 #include "common.h"
+#include "d/snd/d_snd_distant_sound_actor.h"
 #include "d/snd/d_snd_misc.h"
 #include "d/snd/d_snd_util.h"
-#include "d/snd/d_snd_distant_sound_actor.h"
 #include "nw4r/ut/ut_list.h"
 
 SND_DISPOSER_FORWARD_DECL(dSndDistantSoundActorPool_c);
@@ -17,15 +17,19 @@ SND_DISPOSER_FORWARD_DECL(dSndDistantSoundActorPool_c);
 class dSndDistantSoundActorPool_c {
     SND_DISPOSER_MEMBERS(dSndDistantSoundActorPool_c);
 
+    static const s32 POOL_SIZE = 64;
+
 public:
     dSndDistantSoundActorPool_c();
 
-    static dSndSourceParam& getSourceParam() {
+    static dSndSourceParam &getSourceParam() {
         return sParam;
     }
 
+    void onChangeStage();
+
 private:
-    /* 0x0010 */ dSndDistantSoundActor_c mSounds[64];
+    /* 0x0010 */ dSndDistantSoundActor_c mSounds[POOL_SIZE];
     /* 0x4210 */ UNKWORD field_0x4210;
     /* 0x4214 */ nw4r::ut::List mList;
 

@@ -1,5 +1,6 @@
 #include "d/snd/d_snd_distant_sound_actor_pool.h"
 
+#include "m/m_vec.h"
 #include "nw4r/ut/ut_list.h"
 
 #include <cmath>
@@ -14,4 +15,12 @@ dSndDistantSoundActorPool_c::dSndDistantSoundActorPool_c() {
     // TODO offsetof
     nw4r::ut::List_Init(&mList, 0xE4);
     sParam.reset(INFINITY);
+}
+
+
+void dSndDistantSoundActorPool_c::onChangeStage() {
+    mVec3_c v(INFINITY, INFINITY, INFINITY);
+    for (int i = 0; i < POOL_SIZE; i++) {
+        mSounds[i].SetPosition(v);
+    }
 }
