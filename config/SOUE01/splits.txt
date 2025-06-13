@@ -2758,6 +2758,7 @@ d/snd/d_snd_se_sound_2.cpp:
 d/snd/d_snd_se_sound_pool.cpp:
 	.text       start:0x803947B0 end:0x80394DD4 align:16
 	.data       start:0x8054D4B8 end:0x8054D4C8
+	.sbss       start:0x80575DD8 end:0x80575DE0
 
 d/snd/d_snd_sound_link_body_callbacks.cpp:
 	.text       start:0x80394DE0 end:0x803957B8 align:16

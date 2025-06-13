@@ -774,7 +774,7 @@ config.libs = [
             Object(Matching, "d/snd/d_snd_se_sound.cpp"),
             Object(Matching, "d/snd/d_snd_se_sound_1.cpp"),
             Object(Matching, "d/snd/d_snd_se_sound_2.cpp"),
-            Object(NonMatching, "d/snd/d_snd_se_sound_pool.cpp"),
+            Object(Matching, "d/snd/d_snd_se_sound_pool.cpp"),
             Object(NonMatching, "d/snd/d_snd_sound_link_body_callbacks.cpp"),
             Object(NonMatching, "d/snd/d_snd_sound_enemy_callbacks.cpp"),
             Object(NonMatching, "d/snd/d_snd_sound_object_callbacks.cpp"),

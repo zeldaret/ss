@@ -6,6 +6,7 @@
 #include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_distant_sound_actor_pool.h"
 #include "d/snd/d_snd_player_mgr.h"
+#include "d/snd/d_snd_se_sound_pool.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/snd/d_snd_source_mgr.h"
 #include "d/snd/d_snd_state_mgr.h"
@@ -13,7 +14,6 @@
 #include "egg/audio/eggAudioUtility.h"
 
 extern "C" void initSomeUnusedSoundMgr();
-extern "C" void fn_80394830();
 extern "C" void fn_8037F940();
 extern "C" void fn_80399600();
 extern "C" void fn_80399C20();
@@ -32,7 +32,7 @@ dSndMgr_c::dSndMgr_c() : field_0x6CC(0) {
     dSndAreaSoundEffectMgr_c::create();
     dSndSourceMgr_c::create();
     dSndDistantSoundActorPool_c::create();
-    fn_80394830();
+    dSndSeSoundPool_c::create();
     fn_8037F940();
     fn_80399600();
     fn_80399C20();
