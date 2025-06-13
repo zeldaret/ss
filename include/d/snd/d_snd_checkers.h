@@ -1,8 +1,9 @@
 #ifndef D_SND_CHECKERS_H
 #define D_SND_CHECKERS_H
 
+#include "common.h"
+#include "d/snd/d_snd_bgm_mgr.h"
 #include "nw4r/snd/snd_SoundHandle.h"
-#include "toBeSorted/music_mgrs.h"
 
 class SoundPropertiesChecker {
 public:
@@ -26,7 +27,7 @@ public:
             return;
         }
 
-        if (fn_803721F0(FANFARE_SOUND_MGR, pHandle.GetId())) {
+        if (dSndBgmMgr_c::GetInstance()->isPreparedBgmSoundId(pHandle.GetId())) {
             if (mpCounter3 != nullptr) {
                 (*mpCounter3)++;
             } else {
@@ -35,7 +36,7 @@ public:
             return;
         }
 
-        if (fn_803720E0(FANFARE_SOUND_MGR, pHandle.GetId())) {
+        if (dSndBgmMgr_c::GetInstance()->isPreparingBgmSoundId(pHandle.GetId())) {
             if (mpCounter3 != nullptr) {
                 (*mpCounter3)++;
             } else {
@@ -44,7 +45,7 @@ public:
             return;
         }
 
-        if (fn_80372070(FANFARE_SOUND_MGR, pHandle.GetId())) {
+        if (dSndBgmMgr_c::GetInstance()->isFadingOutBgmSoundId(pHandle.GetId())) {
             if (mpCounter4 != nullptr) {
                 (*mpCounter4)++;
             } else {
@@ -53,7 +54,9 @@ public:
             return;
         }
 
-        if (fn_803734C0(FANFARE_SOUND_MGR, pHandle.GetId()) && !fn_80373550(FANFARE_SOUND_MGR, pHandle.GetId())) {
+        if (dSndBgmMgr_c::GetInstance()->getFanSoundHandleForFan2(pHandle.GetId()) != nullptr &&
+            !dSndBgmMgr_c::GetInstance()->isCurrentlyPlayingFanSound(pHandle.GetId())) {
+            // Why not mpCounter3???
             mCounter3++;
         }
     }
@@ -69,7 +72,6 @@ private:
     /* 0x20 */ u32 *mpCounter3;
     /* 0x24 */ u32 *mpCounter4;
 };
-
 
 // used at the very least when trying to finish Demise
 class IsCurrentSoundIdChecker {
