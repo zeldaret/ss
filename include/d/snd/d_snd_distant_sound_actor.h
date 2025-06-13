@@ -3,7 +3,6 @@
 
 #include "common.h"
 #include "d/snd/d_snd_3d_actor.h"
-#include "m/m_vec.h"
 #include "nw4r/math/math_types.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/ut/ut_list.h"
@@ -40,8 +39,8 @@ public:
     }
 
 private:
-    /* 0x0E4 */ nw4r::ut::Node mDistantLink;
-    /* 0x0EC */ u8 _0x0EC[0x0F4 - 0x0EC];
+    /* 0x0E4 */ nw4r::ut::Node mPoolLink;   // sound actor pool link
+    /* 0x0EC */ nw4r::ut::Node mSourceLink; // sound source link
     /* 0x0F4 */ UNKWORD field_0x0F4;
     /* 0x0F8 */ dSoundSource_c *mpSoundSource;
     /* 0x0FC */ nw4r::snd::SoundHandle mSoundHandle;
