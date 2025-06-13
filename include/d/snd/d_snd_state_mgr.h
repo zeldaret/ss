@@ -40,6 +40,10 @@ public:
         return field_0x11C;
     }
 
+    f32 getField_0x49C() const {
+        return field_0x49C;
+    }
+
     void resetStageName() {
         field_0x098 = "EVENT_NONE";
     }
