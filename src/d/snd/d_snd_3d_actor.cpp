@@ -5,6 +5,7 @@
 #include "d/snd/d_snd_3d_manager.h"
 #include "d/snd/d_snd_checkers.h"
 #include "d/snd/d_snd_player_mgr.h"
+#include "d/snd/d_snd_state_mgr.h"
 #include "nw4r/math/math_types.h"
 
 #include <cmath>
@@ -16,7 +17,7 @@ dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, u8 sourceType)
       a_field_0x7D(0),
       a_field_0x7E(0),
       a_field_0x7F(0),
-      a_field_0x80(0),
+      mIsPaused(0),
       a_field_0x84(0.0f),
       a_field_0x88(0.0f),
       a_field_0x8C(0.0f),
@@ -36,9 +37,9 @@ dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, u8 sourceType)
     }
 }
 
-void dSnd3DActor_c::d_vt_0x34(const nw4r::math::VEC3 &rPosition) {
+void dSnd3DActor_c::setPosition(const nw4r::math::VEC3 &rPosition) {
     SetPosition(rPosition);
-    // TODO - 0xE0
+    a_field_0xE0 = dSndStateMgr_c::GetInstance()->getField_0x49C();
     mFlags = 0;
 }
 

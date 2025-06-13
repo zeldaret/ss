@@ -11,12 +11,12 @@ struct dSndSourceParam {
         reset();
     }
 
-    void reset() {
+    void reset(f32 value_0x10 = 5000.0f) {
         field_0x00 = 300.0;
         field_0x04 = 1000.0f;
         field_0x08 = 100.0f;
         field_0x0C = 400.0f;
-        field_0x10 = 5000.0f;
+        field_0x10 = value_0x10;
     }
 
     /* 0x00 */ f32 field_0x00;

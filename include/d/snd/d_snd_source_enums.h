@@ -58,6 +58,9 @@ enum SoundSourceType_e {
 
     // 59: ? (9)
     SND_SOURCE_59 = 59,
+
+    // dSndDistantSoundActor_c, not a real sound source type
+    SND_SOURCE_DISTANT = 61,
 };
 
 enum SoundSourceCategory_e {

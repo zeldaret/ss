@@ -9,6 +9,7 @@
 #include <cstring>
 
 class dSndSourceGroup_c;
+class dSndDistantSoundActor_c;
 
 /** Manages sound relating to a particular actor. */
 /** Size: probably 0x15C */
@@ -46,15 +47,17 @@ public:
 
     virtual void d_s_vt_0x1AC();
     virtual void d_s_vt_0x1B0();
-    virtual void d_s_vt_0x1B4();
-    virtual void d_s_vt_0x1B8();
-    virtual void d_s_vt_0x1BC();
-    virtual void d_s_vt_0x1C0();
-    virtual void d_s_vt_0x1C4(bool flag, int fadeFrames);
+    virtual void attachDistantSound(dSndDistantSoundActor_c *);
+    virtual void detachDistantSound(dSndDistantSoundActor_c *);
+    virtual void detachAllDistantSounds();
+    virtual bool hasDistantSounds() const {
+        return nw4r::ut::List_GetFirstConst(&mDistantSoundList) != nullptr;
+    }
+    virtual void pauseAllDistantSounds(bool flag, int fadeFrames);
     virtual void d_s_vt_0x1C8();
     virtual void d_s_vt_0x1CC();
 
-    virtual void d_vt_0x38(bool flag, int fadeFrames) override;
+    virtual void setPause(bool flag, int fadeFrames) override;
 
     virtual void d_s_vt_0x1D4();
     virtual void d_s_vt_0x1D8();
@@ -101,7 +104,7 @@ private:
     /* 0x104 */ UNKWORD field_0x104;
     /* 0x108 */ UNKWORD field_0x108;
     /* 0x10C */ UNKWORD field_0x10C;
-    /* 0x110 */ nw4r::ut::List field_0x110; // node offset 0xEC
+    /* 0x110 */ nw4r::ut::List mDistantSoundList; // node offset 0xEC -> dSndDistantSoundActor_c
     /* 0x11C */ UNKWORD field_0x11C;
     /* 0x120 */ nw4r::ut::List field_0x120; // node offset 0x4
     /* 0x12C */ nw4r::ut::List field_0x12C; // node offset 0x4

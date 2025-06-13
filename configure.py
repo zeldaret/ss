@@ -761,10 +761,16 @@ config.libs = [
             Object(NonMatching, "d/snd/d_snd_source_mgr.cpp"),
             Object(NonMatching, "d/snd/d_snd_source_group.cpp"),
             Object(NonMatching, "d/snd/d_snd_source.cpp"),
+            # sound source subclasses start
             Object(NonMatching, "d/snd/d_snd_mgr_unk_7.cpp"),
             Object(NonMatching, "d/snd/d_snd_mgr_unk_8.cpp"),
             Object(NonMatching, "d/snd/d_snd_mgr_unk_9.cpp"),
             Object(NonMatching, "d/snd/d_snd_mgr_unk_10.cpp"),
+            # sound source subclasses end
+            Object(NonMatching, "d/snd/d_snd_source_tg_sound.cpp"),
+            Object(NonMatching, "d/snd/d_snd_mgr_unk_16.cpp"),
+            Object(NonMatching, "d/snd/d_snd_distant_sound_actor_pool.cpp"),
+            Object(NonMatching, "d/snd/d_snd_distant_sound_actor.cpp"),
             Object(NonMatching, "d/snd/d_snd_mgr_unk_11.cpp"),
             Object(NonMatching, "d/snd/d_snd_calc_pitch.cpp"),
         ],

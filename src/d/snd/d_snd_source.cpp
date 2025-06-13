@@ -4,6 +4,7 @@
 #include "d/a/d_a_base.h"
 #include "d/snd/d_snd_3d_actor.h"
 #include "d/snd/d_snd_3d_manager.h"
+#include "d/snd/d_snd_distant_sound_actor.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_source_group.h"
@@ -46,7 +47,7 @@ dSoundSource_c::dSoundSource_c(u8 sourceType, dAcBase_c *actor, const char *name
       field_0x15A(-1) {
     mSourceCategory = dSndSourceMgr_c::getSourceCategoryForSourceType(sourceType, name);
     // TODO: Offsetof
-    nw4r::ut::List_Init(&field_0x110, 0xEC);
+    nw4r::ut::List_Init(&mDistantSoundList, 0xEC);
     nw4r::ut::List_Init(&field_0x120, 0x04);
     nw4r::ut::List_Init(&field_0x12C, 0x04);
     pOwnerGroup->registerSource(this);
@@ -55,7 +56,7 @@ dSoundSource_c::dSoundSource_c(u8 sourceType, dAcBase_c *actor, const char *name
 dSoundSource_c::~dSoundSource_c() {
     SetUserParam(0);
     vt_0x44();
-    d_s_vt_0x1BC();
+    detachAllDistantSounds();
     dSndSourceMgr_c::GetInstance()->unregisterSource(this);
     mpOwnerGroup->unregisterSource(this);
 }
@@ -76,15 +77,15 @@ bool dSoundSource_c::isPlayingSound(const char *soundId) {
     return isPlayingSound(soundLabelToSoundId(soundId));
 }
 
-void dSoundSource_c::d_vt_0x38(bool flag, int fadeFrames) {
-    if (flag == 0) {
+void dSoundSource_c::setPause(bool flag, int fadeFrames) {
+    if (!flag) {
         PauseAllSound(flag, fadeFrames);
-        d_s_vt_0x1C4(flag, fadeFrames);
-        a_field_0x80 = 0;
+        pauseAllDistantSounds(flag, fadeFrames);
+        mIsPaused = 0;
     } else if (a_field_0x7E == 0) {
         PauseAllSound(flag, fadeFrames);
-        d_s_vt_0x1C4(flag, fadeFrames);
-        a_field_0x80 = 1;
+        pauseAllDistantSounds(flag, fadeFrames);
+        mIsPaused = 1;
     }
 }
 
@@ -104,6 +105,36 @@ void dSoundSource_c::d_vt_0x58() {
 
 void dSoundSource_c::d_vt_0x5C() {
     // noop
+}
+
+void dSoundSource_c::attachDistantSound(dSndDistantSoundActor_c *sound) {
+    if (sound != nullptr) {
+        sound->setSourceDirectly(this);
+        nw4r::ut::List_Append(&mDistantSoundList, sound);
+    }
+}
+
+void dSoundSource_c::detachDistantSound(dSndDistantSoundActor_c *sound) {
+    if (sound != nullptr && sound->isAttachedSource(this)) {
+        sound->setSourceDirectly(nullptr);
+        nw4r::ut::List_Remove(&mDistantSoundList, sound);
+    }
+}
+
+void dSoundSource_c::detachAllDistantSounds() {
+    dSndDistantSoundActor_c *it = static_cast<dSndDistantSoundActor_c *>(nw4r::ut::List_GetFirst(&mDistantSoundList));
+    while (it != nullptr) {
+        it->setSourceDirectly(nullptr);
+        nw4r::ut::List_Remove(&mDistantSoundList, it);
+        it = static_cast<dSndDistantSoundActor_c *>(nw4r::ut::List_GetFirst(&mDistantSoundList));
+    }
+}
+
+void dSoundSource_c::pauseAllDistantSounds(bool flag, int fadeFrames) {
+    for (dSndDistantSoundActor_c *it = static_cast<dSndDistantSoundActor_c *>(nw4r::ut::List_GetFirst(&mDistantSoundList));
+         it != nullptr; it = static_cast<dSndDistantSoundActor_c *>(nw4r::ut::List_GetNext(&mDistantSoundList, it))) {
+        it->PauseAllSound(flag, fadeFrames);
+    }
 }
 
 u32 dSoundSource_c::getCharacterTalkSoundId(u32 baseSoundId, dSoundSource_c *source) {

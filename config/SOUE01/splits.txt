@@ -2720,11 +2720,30 @@ d/snd/d_snd_mgr_unk_9.cpp:
 	.ctors      start:0x804DB92C end:0x804DB930
 
 d/snd/d_snd_mgr_unk_10.cpp:
-	.text       start:0x80390A20 end:0x80393DF4 align:16
+	.text       start:0x80390A20 end:0x80392E38 align:16
+
+d/snd/d_snd_source_tg_sound.cpp:
+	.text       start:0x80392E40 end:0x80393008 align:16
+	.data       start:0x8054D1C0 end:0x8054D3B0
+	.sdata      start:0x80574810 end:0x80574818
+
+d/snd/d_snd_mgr_unk_16.cpp:
+	.text       start:0x80393010 end:0x803934A8 align:16
+
+d/snd/d_snd_distant_sound_actor_pool.cpp:
+	.text       start:0x803934B0 end:0x80393DF4 align:16
 	.ctors      start:0x804DB930 end:0x804DB934
+	.data       start:0x8054D400 end:0x8054D410
+	.sbss       start:0x80575DD0 end:0x80575DD8
+	.sdata2     start:0x8057E398 end:0x8057E3B8
+	.bss        start:0x805D1018 end:0x805D1030
+
+d/snd/d_snd_distant_sound_actor.cpp:
+	.text       start:0x80393E00 end:0x80394208 align:16
+	.data       start:0x8054D410 end:0x8054D470
 
 d/snd/d_snd_mgr_unk_11.cpp:
-	.text       start:0x80393E00 end:0x8039A848 align:16
+	.text       start:0x80394210 end:0x8039A848 align:16
 	.ctors      start:0x804DB934 end:0x804DB938
 
 d/snd/d_snd_calc_pitch.cpp:
