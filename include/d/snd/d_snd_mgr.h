@@ -19,8 +19,8 @@ public:
         return sInstance;
     }
 
-    static nw4r::snd::SoundArchivePlayer* getPlayer() {
-        return sInstance->ArcPlayer::getPlayer();
+    static nw4r::snd::SoundArchivePlayer& getPlayer() {
+        return *sInstance->ArcPlayer::getPlayer();
     }
 
 private:

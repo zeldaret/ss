@@ -13,7 +13,7 @@ dSndAreaSoundEffectMgr_c::dSndAreaSoundEffectMgr_c()
     : field_0x328(0),
       field_0x32C(1.0f),
       field_0x330(1.0f),
-      mActor(*dSndMgr_c::GetInstance()->getPlayer()),
+      mActor(dSndMgr_c::GetInstance()->getPlayer()),
       field_0x388(1.0f) {}
 
 void dSndAreaSoundEffectMgr_c::calc() {

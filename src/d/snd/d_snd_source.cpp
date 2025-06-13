@@ -1,6 +1,7 @@
 #include "d/snd/d_snd_source.h"
 
 #include "common.h"
+#include "d/a/d_a_base.h"
 #include "d/snd/d_snd_3d_actor.h"
 #include "d/snd/d_snd_3d_manager.h"
 #include "d/snd/d_snd_mgr.h"
@@ -24,11 +25,11 @@ const char *help_i_need_data() {
     return "%s_%s_%d";
 }
 
-dSoundSource_c::dSoundSource_c(u8 sourceType, dAcBase_c *player, const char *name, dSndSourceGroup_c *pOwnerGroup)
+dSoundSource_c::dSoundSource_c(u8 sourceType, dAcBase_c *actor, const char *name, dSndSourceGroup_c *pOwnerGroup)
     : dSnd3DActor_c(pOwnerGroup->getAmbientParam(), sourceType),
       mpName(name),
       field_0x0F4(0),
-      mpPlayer(player),
+      mpActor(actor),
       mSourceType(sourceType),
       field_0x0FE(0),
       field_0x0FF(0),
@@ -85,6 +86,10 @@ void dSoundSource_c::d_vt_0x38(bool flag, int fadeFrames) {
         d_s_vt_0x1C4(flag, fadeFrames);
         a_field_0x80 = 1;
     }
+}
+
+s32 dSoundSource_c::getRoomId() const {
+    return mpActor->roomid;
 }
 
 nw4r::snd::SoundStartable::StartResult

@@ -2617,9 +2617,17 @@ d/snd/d_snd_3d_manager.cpp:
 	.sbss       start:0x80575D58 end:0x80575D60
 	.sdata2     start:0x8057D3B8 end:0x8057D3F8
 
-d/snd/d_snd_stage_mgr.cpp:
+d/snd/d_snd_state_mgr.cpp:
 	.text       start:0x80361460 end:0x8036642C align:16
 	.ctors      start:0x804DB918 end:0x804DB91C
+	.data       start:0x805487E0 end:0x80548A28
+	.sdata      start:0x80574098 end:0x80574198
+	.sbss       start:0x80575D60 end:0x80575D78
+	.sdata2     start:0x8057D3F8 end:0x8057D450
+
+d/snd/d_snd_stage_data.cpp:
+	.rodata     start:0x804F0D80 end:0x804F2308
+	.sdata2     start:0x8057D478 end:0x8057D7C0
 
 d/snd/d_snd_unk_component_2.cpp:
 	.text       start:0x80366430 end:0x8036A3A4 align:16
@@ -2654,7 +2662,7 @@ d/snd/d_snd_bgm_sound_callbacks.cpp:
 	.text       start:0x803739D0 end:0x80378ECC align:16
 	.sdata2     start:0x8057D970 end:0x8057DA50
 
-d/snd/d_snd_bgm_sound_boss_callbacks.cpp:
+d/snd/d_snd_bgm_sound_battle_callbacks.cpp:
 	.text       start:0x80378ED0 end:0x80379D20 align:16
 	.sdata2     start:0x8057DA50 end:0x8057DA58
 

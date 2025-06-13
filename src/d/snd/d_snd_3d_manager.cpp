@@ -2,6 +2,7 @@
 
 #include "d/snd/d_snd_3d_engine.h"
 #include "d/snd/d_snd_mgr.h"
+#include "d/snd/d_snd_state_mgr.h"
 #include "egg/math/eggMatrix.h"
 #include "egg/math/eggVector.h"
 #include "nw4r/math/math_arithmetic.h"
@@ -80,7 +81,7 @@ void dSnd3DManager_c::updateFromCamera(EGG::LookAtCamera &camera) {
         f32 prevCameraPosSqVelocity = mCameraPosSqVelocity;
         mCameraAtSqVelocity = VECSquareDistance(camera.mAt, mCamera.mAt);
         mCameraPosSqVelocity = VECSquareDistance(camera.mPos, mCamera.mPos);
-        if (((u32 *)ENEMY_SOUND_MGR)[71] > 30) {
+        if (dSndStateMgr_c::GetInstance()->getField_0x11C() > 30) {
             bool bigMovement = false;
             bool hugeMovement = false;
             if (mTimer > 0) {

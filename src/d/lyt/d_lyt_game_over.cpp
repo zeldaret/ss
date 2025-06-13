@@ -10,6 +10,7 @@
 #include "d/flag/sceneflag_manager.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_window.h"
+#include "d/snd/d_snd_bgm_mgr.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
 #include "nw4r/lyt/lyt_group.h"
@@ -407,7 +408,7 @@ void dLytGameOverMgr_c::executeState_FadeOut() {
         if (mMain.requestIn("SYS_GAMEOVER_01", 0, 0)) {
             mMain.setField_0x1338(true);
             mStateMgr.changeState(StateID_Select);
-            AnotherSoundMgr__playSound(FANFARE_SOUND_MGR, FAN_GAMEOVER);
+            dSndBgmMgr_c::GetInstance()->playFanSound(FAN_GAMEOVER);
         }
     }
 }

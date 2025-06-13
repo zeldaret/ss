@@ -94,9 +94,9 @@ nw4r::snd::SoundStartable::StartResult dSndPlayerMgr_c::startSound(
     }
     nw4r::snd::SoundStartable::StartResult res;
     if (pStartInfo != nullptr) {
-        res = dSndMgr_c::getPlayer()->detail_StartSound(pHandle, soundId, pStartInfo);
+        res = dSndMgr_c::getPlayer().detail_StartSound(pHandle, soundId, pStartInfo);
     } else {
-        res = dSndMgr_c::getPlayer()->detail_StartSound(pHandle, soundId, nullptr);
+        res = dSndMgr_c::getPlayer().detail_StartSound(pHandle, soundId, nullptr);
     }
     return res;
 }
@@ -116,7 +116,7 @@ nw4r::snd::SoundArchivePlayer &dSndPlayerMgr_c::getSoundArchivePlayerForType(u8 
     if (canUseThisPlayer(sourceType)) {
         return mSoundArchivePlayer;
     }
-    return *dSndMgr_c::getPlayer();
+    return dSndMgr_c::getPlayer();
 }
 
 bool dSndPlayerMgr_c::canUseThisPlayer(u8 sourceType) const {
@@ -173,5 +173,13 @@ void dSndPlayerMgr_c::shutdown() {
 void dSndPlayerMgr_c::calc() {
     if (mSoundArchivePlayer.IsAvailable()) {
         mSoundArchivePlayer.Update();
+    }
+}
+
+bool dSndPlayerMgr_c::isBgmPlayerId(u32 id) {
+    switch (id) {
+        case PLAYER_BGM:
+        case PLAYER_BGM_BATTLE: return true;
+        default:                return false;
     }
 }

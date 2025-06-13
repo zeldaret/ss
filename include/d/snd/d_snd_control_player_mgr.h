@@ -49,7 +49,7 @@ public:
     };
 
     enum VolumeControlGroup {
-        /** PLAYER_BGM, PLAYER_BGM_BOSS */
+        /** PLAYER_BGM, PLAYER_BGM_BATTLE */
         CTRL_GROUP_BGM = 0,
         /** PLAYER_TG_SOUND - PLAYER_AREA_IN_WATER_LV */
         CTRL_GROUP_STAGE_EFFECTS = 1,

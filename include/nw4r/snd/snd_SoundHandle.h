@@ -69,6 +69,10 @@ namespace nw4r { namespace snd
 			return IsAttachedSound() && mSound->IsPause();
 		}
 
+		bool IsPrepared() const {
+			return IsAttachedSound() && mSound->IsPrepared();
+		}
+
 		int GetRemainingFadeFrames() const {
 			if (IsAttachedSound())
 				return mSound->GetRemainingFadeFrames();

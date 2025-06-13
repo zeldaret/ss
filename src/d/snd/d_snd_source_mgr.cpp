@@ -180,3 +180,13 @@ void dSndSourceMgr_c::clearSourceList(nw4r::ut::List *list) {
         }
     }
 }
+
+s32 dSndSourceMgr_c::getPlayerSourceRoomId() const {
+    if (mpPlayerSource == nullptr) {
+        return -1;
+    }
+    if (getBoomerangSource() != nullptr) {
+        return getBoomerangSource()->getRoomId();
+    }
+    return mpPlayerSource->getRoomId();
+}
