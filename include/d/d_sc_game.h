@@ -86,6 +86,10 @@ struct SpawnInfo {
         return (Trial)trial;
     }
 
+    const char *getStageName() const {
+        return stageName;
+    }
+
     bool isNight() {
         return getTimeOfDay() == NIGHT;
     }

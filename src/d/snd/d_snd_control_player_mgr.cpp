@@ -1,6 +1,7 @@
 #include "d/snd/d_snd_control_player_mgr.h"
 
 #include "common.h"
+#include "d/snd/d_snd_bgm_mgr.h"
 #include "d/snd/d_snd_control_player.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
@@ -14,7 +15,7 @@ struct FanfareMuteFlagsApplier {
         // The logic here is inverted compared to the others - Fanfares seem to
         // mute things by default unless otherwise speciefied
         u32 id = handle.GetId();
-        if (fn_803733B0(FANFARE_SOUND_MGR, id)) {
+        if (dSndBgmMgr_c::GetInstance()->getSoundHandleCurrentlyPlayingFanSound(handle.GetId())) {
             u32 userParam = dSndMgr_c::GetInstance()->getArchive()->GetSoundUserParam(id);
             if (!(userParam & dSndPlayerMgr_c::FANFARE_UNMUTE_BGM)) {
                 dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
@@ -369,7 +370,7 @@ void dSndControlPlayerMgr_c::setPlayerVolumeInternal(u32 playerIdx, f32 volume) 
 }
 
 void dSndControlPlayerMgr_c::setBgmMuteVolume(f32 volume) {
-    for (u32 i = dSndPlayerMgr_c::PLAYER_BGM; i < dSndPlayerMgr_c::PLAYER_BGM_BOSS + 1; i++) {
+    for (u32 i = dSndPlayerMgr_c::PLAYER_BGM; i < dSndPlayerMgr_c::PLAYER_BGM_BATTLE + 1; i++) {
         setPlayerVolumeInternal(i, volume);
     }
 }

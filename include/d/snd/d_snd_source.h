@@ -19,6 +19,7 @@ public:
 
     static u32 getCharacterTalkSoundId(u32 baseSoundId, dSoundSource_c *source);
     u32 getRemoConSoundVariant(u32 soundId) const;
+    s32 getRoomId() const;
 
     // This is where it gets a bit wild and this class starts mixing in overrides between
     // new virtual functions, which causes the vtable to list these functions in exactly this
@@ -86,10 +87,10 @@ private:
     // at 0x04: dSnd3DActor_c sub-object
     // at 0x58: thunk-vtable
 
-    /* 0xE8 */ nw4r::ut::Node mMgrLink;
+    /* 0x0E8 */ nw4r::ut::Node mMgrLink;
     /* 0x0F0 */ const char *mpName;
     /* 0x0F4 */ UNKWORD field_0x0F4;
-    /* 0x0F8 */ dAcBase_c *mpPlayer;
+    /* 0x0F8 */ dAcBase_c *mpActor;
     /* 0x0FC */ u8 mSourceCategory;
     /* 0x0FD */ u8 mSourceType;
     /* 0x0FE */ u8 field_0x0FE;
