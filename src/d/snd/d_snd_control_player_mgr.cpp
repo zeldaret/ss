@@ -15,7 +15,7 @@ struct FanfareMuteFlagsApplier {
         // The logic here is inverted compared to the others - Fanfares seem to
         // mute things by default unless otherwise speciefied
         u32 id = handle.GetId();
-        if (dSndBgmMgr_c::GetInstance()->getSoundHandleCurrentlyPlayingFanSound(handle.GetId())) {
+        if (dSndBgmMgr_c::GetInstance()->getSoundHandleCurrentlyPlayingFanSound(id)) {
             u32 userParam = dSndMgr_c::GetInstance()->getArchive()->GetSoundUserParam(id);
             if (!(userParam & dSndPlayerMgr_c::FANFARE_UNMUTE_BGM)) {
                 dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
