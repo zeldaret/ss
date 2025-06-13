@@ -32,17 +32,24 @@ public:
     /* vt 0x10 */ virtual void onCalc(dSoundSource_c *source);
 
     void calc(dSoundSource_c *source);
+    void clear();
 
     // not sure what this does
     void shiftPair(const UnkSeSoundStruct *p);
     void shiftValue(f32 value);
-    
-    typedef void Callback(dSndSeSound_c *sound, dSoundSource_c *source, nw4r::snd::SoundHandle &handle);
-    
-protected:
-    void clear();
 
-    /* 0x004 */ u8 _0x004[0x00C - 0x004];
+    typedef void Callback(dSndSeSound_c *sound, dSoundSource_c *source, nw4r::snd::SoundHandle &handle);
+
+    void stop(s32 fadeFrames) {
+        mpSoundHandle->Stop(fadeFrames);
+    }
+
+    bool isAttachedSound() const {
+        return mpSoundHandle->IsAttachedSound();
+    }
+
+protected:
+    /* 0x004 */ nw4r::ut::Node mSourceLink;
     /* 0x00C */ nw4r::ut::Node mPoolLink;
     /* 0x014 */ UNKWORD field_0x014;
     /* 0x018 */ dSndSound_c mSound;
