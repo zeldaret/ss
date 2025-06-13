@@ -16,9 +16,9 @@ public:
         return true;
     }
 
-    virtual void d_vt_0x34(const nw4r::math::VEC3 &);
+    virtual void setPosition(const nw4r::math::VEC3 &);
 
-    virtual void d_vt_0x38(bool flag, int fadeFrames) = 0;
+    virtual void setPause(bool flag, int fadeFrames) = 0;
 
     virtual UNKWORD d_vt_0x3C() {
         return 0;
@@ -63,6 +63,11 @@ public:
         return mDistanceToListener;
     }
 
+    const dSndSourceParam *getSourceParam() const {
+        return mpSourceParam;
+    }
+    void setSourceParam(const dSndSourceParam *param);
+
     bool hasPlayingSounds() const;
     bool isPlayingSound(u32 id);
 
@@ -74,7 +79,7 @@ protected:
     /* 0x7D */ u8 a_field_0x7D;
     /* 0x7E */ u8 a_field_0x7E;
     /* 0x7F */ u8 a_field_0x7F;
-    /* 0x80 */ u8 a_field_0x80;
+    /* 0x80 */ u8 mIsPaused;
     /* 0x84 */ f32 a_field_0x84;
     /* 0x88 */ f32 a_field_0x88;
     /* 0x8C */ f32 a_field_0x8C;
