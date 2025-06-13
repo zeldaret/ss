@@ -4,11 +4,10 @@
 #include "common.h"
 #include "d/snd/d_snd_source.h"
 #include "d/snd/d_snd_source_enums.h"
+#include "d/snd/d_snd_state_mgr.h"
 #include "nw4r/ut/ut_list.h"
 
 #include <cmath>
-
-extern "C" bool isInStage(const char *stageName);
 
 void dSndSourceGroup_c::set(s32 sourceType, const char *name) {
     resetSoundSourceParam();
@@ -47,10 +46,10 @@ void dSndSourceGroup_c::set(s32 sourceType, const char *name) {
                 break;
             }
             case SND_SOURCE_NPC_48: {
-                if (isInStage("F401")) {
+                if (dSndStateMgr_c::isInStage("F401")) {
                     mParam.field_0x00 = 500.0f;
                     mParam.field_0x04 = 4000.0;
-                } else if (isInStage("F402")) {
+                } else if (dSndStateMgr_c::isInStage("F402")) {
                     mParam.field_0x00 = 400.0f;
                     mParam.field_0x04 = 3500.0;
                 } else {
@@ -164,7 +163,7 @@ dSoundSource_c *dSndSourceGroup_c::getSourceClosestToPlayer() {
     return mpCachedClosestSourceToPlayer;
 }
 
-bool dSndSourceGroup_c::setParamFromName(const char*) {
+bool dSndSourceGroup_c::setParamFromName(const char *) {
     // TODO
     return false;
 }

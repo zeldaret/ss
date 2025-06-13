@@ -22,11 +22,16 @@ public:
     void playFlowSound(u32 id);
     static s32 getSourceCategoryForSourceType(s32 sourceType, const char *name);
 
+    static dSoundSource_c *getBoomerangSource() {
+        return GetInstance()->mpBoomerangSource;
+    }
+
 private:
     static bool isCertainEnemyType(dSoundSource_c *source);
     void removeSourceFromList(dSoundSource_c *source, nw4r::ut::List *list);
     void clearSourceLists();
     void clearSourceList(nw4r::ut::List *list);
+    s32 getPlayerSourceRoomId() const;
 
     /* 0x0010 */ u8 field_0x0010;
     /* 0x0011 */ u8 field_0x0011;
