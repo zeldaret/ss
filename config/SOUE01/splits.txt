@@ -2735,15 +2735,53 @@ d/snd/d_snd_distant_sound_actor_pool.cpp:
 	.ctors      start:0x804DB930 end:0x804DB934
 	.data       start:0x8054D400 end:0x8054D410
 	.sbss       start:0x80575DD0 end:0x80575DD8
-	.sdata2     start:0x8057E398 end:0x8057E3B8
+	.sdata2     start:0x8057E398 end:0x8057E3B0
 	.bss        start:0x805D1018 end:0x805D1030
 
 d/snd/d_snd_distant_sound_actor.cpp:
 	.text       start:0x80393E00 end:0x80394208 align:16
 	.data       start:0x8054D410 end:0x8054D470
 
+d/snd/d_snd_se_sound.cpp:
+	.text       start:0x80394210 end:0x8039466C align:16
+	.data       start:0x8054D470 end:0x8054D488
+	.sdata2     start:0x8057E3B0 end:0x8057E3B8
+
+d/snd/d_snd_se_sound_1.cpp:
+	.text       start:0x80394670 end:0x803946C4 align:16
+	.data       start:0x8054D488 end:0x8054D4A0
+
+d/snd/d_snd_se_sound_2.cpp:
+	.text       start:0x803946D0 end:0x803947AC align:16
+	.data       start:0x8054D4A0 end:0x8054D4B8
+
+d/snd/d_snd_se_sound_pool.cpp:
+	.text       start:0x803947B0 end:0x80394DD4 align:16
+	.data       start:0x8054D4B8 end:0x8054D4C8
+
+d/snd/d_snd_sound_link_body_callbacks.cpp:
+	.text       start:0x80394DE0 end:0x803957B8 align:16
+
+d/snd/d_snd_sound_enemy_callbacks.cpp:
+	.text       start:0x803957C0 end:0x80396104 align:16
+
+d/snd/d_snd_sound_object_callbacks.cpp:
+	.text       start:0x80396110 end:0x80398430 align:16
+
+d/snd/d_snd_sound_equipment_callbacks.cpp:
+	.text       start:0x80398430 end:0x80398AD4 align:16
+
+d/snd/d_snd_sound_npc_callbacks.cpp:
+	.text       start:0x80398AE0 end:0x80398E18 align:16
+
+d/snd/d_snd_sound_npc_2_callbacks.cpp:
+	.text       start:0x80398E20 end:0x80398FFC align:16
+
+d/snd/d_snd_sound_tgsound_callbacks.cpp:
+	.text       start:0x80399000 end:0x8039942C align:16
+
 d/snd/d_snd_mgr_unk_11.cpp:
-	.text       start:0x80394210 end:0x8039A848 align:16
+	.text       start:0x80399430 end:0x8039A848 align:16
 	.ctors      start:0x804DB934 end:0x804DB938
 
 d/snd/d_snd_calc_pitch.cpp:
