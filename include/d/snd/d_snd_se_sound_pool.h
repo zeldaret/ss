@@ -7,8 +7,6 @@
 #include "d/snd/d_snd_util.h"
 #include "nw4r/ut/ut_list.h"
 
-class dSoundSource_c;
-
 SND_DISPOSER_FORWARD_DECL(dSndSeSoundPool_c);
 
 class dSndSeSoundPool_c {
@@ -23,7 +21,7 @@ public:
     dSndSeSound1_c *acquireSoundType1(dSoundSource_c *source, u32 soundId);
     dSndSeSound2_c *acquireSoundType2(dSoundSource_c *source, u32 soundId);
 
-    void releaseSoundType1(dSndSeSound1_c *sound, bool arg);
+    void releaseSoundType1(dSndSeSound1_c *sound, bool stop);
     void releaseSoundType2(dSndSeSound2_c *sound);
 
 private:

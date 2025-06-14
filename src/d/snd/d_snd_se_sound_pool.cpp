@@ -66,13 +66,13 @@ dSndSeSound2_c *dSndSeSoundPool_c::acquireSoundType2(dSoundSource_c *source, u32
     return nullptr;
 }
 
-void dSndSeSoundPool_c::releaseSoundType1(dSndSeSound1_c *sound, bool arg) {
+void dSndSeSoundPool_c::releaseSoundType1(dSndSeSound1_c *sound, bool stop) {
     if (sound == nullptr) {
         return;
     }
 
     if (sound->isAttachedSound()) {
-        if (arg) {
+        if (stop) {
             sound->stop(0);
             sound->clear();
             nw4r::ut::List_Append(&mFreeType1List, sound);

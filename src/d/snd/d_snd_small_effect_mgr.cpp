@@ -185,7 +185,7 @@ void dSndSmallEffectMgr_c::resetButtonPressSound() {
 void dSndSmallEffectMgr_c::setButtonPressSound(dSoundSource_c *source) {
     resetButtonPressSound();
     if (source != nullptr) {
-        mTextboxAdvanceSound = dSoundSource_c::getCharacterTalkSoundId(SE_S_TALK_CHAR, source);
+        mTextboxAdvanceSound = dSoundSource_c::modifySoundId(SE_S_TALK_CHAR, source);
         if (mTextboxAdvanceSound == SE_S_TALK_CHAR) {
             resetButtonPressSound();
         }
