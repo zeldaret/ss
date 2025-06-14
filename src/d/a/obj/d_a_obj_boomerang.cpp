@@ -239,7 +239,7 @@ void dAcBoomerang_c::deleteReady() {
     deleteCheck();
 
     if (getSoundSource()) {
-        getSoundSource()->vt_0x40(5);
+        getSoundSource()->stopAllSound(5);
     }
 
     if (dAcPy_c::GetLink2()) {

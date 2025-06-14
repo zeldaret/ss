@@ -72,6 +72,31 @@ void dSndDistantSoundActorPool_c::addToActiveList(dSndDistantSoundActor_c *actor
     actor->setActive(true);
 }
 
+dSndDistantSoundActor_c *dSndDistantSoundActorPool_c::findActiveActor(u32 soundId, dSoundSource_c *source) {
+    for (dSndDistantSoundActor_c *it = static_cast<dSndDistantSoundActor_c*>(nw4r::ut::List_GetFirst(&mActiveActors));  it != nullptr; it = static_cast<dSndDistantSoundActor_c*>(nw4r::ut::List_GetNext(&mActiveActors, it))) {
+        if (it->isAttachedSource(source) && it->isPlayingSound(soundId)) {
+            return it;
+        }
+    }
+
+    return nullptr;
+}
+
+bool dSndDistantSoundActorPool_c::holdSound(u32 soundId, const nw4r::math::VEC3 *position) {
+    dSndDistantSoundActor_c *ac = findActiveActor(soundId, nullptr);
+    if (ac == nullptr) {
+        ac = acquireActor(soundId, position, nullptr);
+        if (ac != nullptr) {
+            ac->updateSome3DField();
+        }
+    }
+    if (ac != nullptr) {
+        return ac->holdSound(soundId, *position, nullptr);
+    }
+    return false;
+
+}
+
 void dSndDistantSoundActorPool_c::onChangeStage() {
     mVec3_c v(INFINITY, INFINITY, INFINITY);
     for (int i = 0; i < POOL_SIZE; i++) {

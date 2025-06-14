@@ -23,11 +23,12 @@ public:
     static u32 modifySoundId(u32 baseSoundId, dSoundSource_c *source);
     u32 getRemoConSoundVariant(u32 soundId) const;
     s32 getRoomId() const;
+    bool isInaudible();
 
     // This is where it gets a bit wild and this class starts mixing in overrides between
     // new virtual functions, which causes the vtable to list these functions in exactly this
     // order.
-    virtual const char *getName() const;
+    virtual const char *getName() const; // 0x17C
     bool isName(const char *name) const {
         return !std::strcmp(getName(), name);
     }
@@ -80,16 +81,26 @@ public:
     // function order.
     virtual s32 getCategory() const override {
         return mSourceCategory;
-    }
-    virtual const nw4r::math::VEC3 &getListenerPosition() const override;
+    } // 0x010
+    virtual bool isCategory(s32 category) const override {
+        return mSourceCategory == category;
+    } // 0x014
 
-    virtual bool hasPlayingSounds() const override;            // 0x48
-    virtual bool isPlayingSound(u32 soundId) override;         // 0x4C
-    virtual bool isPlayingSound(const char *soundId) override; // 0x50
-
-    virtual bool startSound(u32 soundId) override;       // 0x60
-    virtual bool startSound(const char *label) override; // 0x70
-
+    virtual s32 getSourceType() const override {
+        return mSourceType;
+    } // 0x018
+    virtual bool isSourceType(s32 type) const override {
+        return mSourceType == type;
+    } // 0x01C
+    virtual const nw4r::math::VEC3 &getListenerPosition() const override; // 0x028
+    virtual void stopAllSound(s32 fadeFrames) override {
+        SoundActor::StopAllSound(fadeFrames);
+    } // 0x040
+    virtual bool hasPlayingSounds() const override;                      // 0x048
+    virtual bool isPlayingSound(u32 soundId) override;                   // 0x04C
+    virtual bool isPlayingSound(const char *soundId) override;           // 0x050
+    virtual bool startSound(u32 soundId) override;                       // 0x060
+    virtual bool startSound(const char *label) override;                 // 0x070
     virtual void stopSounds(u32 soundId, s32 fadeFrames) override;       // 0x0A4
     virtual void stopSounds(const char *label, s32 fadeFrames) override; // 0x0A8
     virtual bool holdSound(u32 soundId) override;                        // 0x0AC
@@ -98,12 +109,12 @@ public:
     virtual bool isReadyMaybe() override {
         return false;
     } // 0x100
-    virtual void load(void *data, const char *name) override {} // 0x104
-    virtual void setFrame(f32 frame) override {}                // 0x108
-    virtual void setRate(f32 frame) override {}                 // 0x10C
+    virtual void load(void *data, const char *name) override {}     // 0x104
+    virtual void setFrame(f32 frame) override {}                    // 0x108
+    virtual void setRate(f32 frame) override {}                     // 0x10C
+    virtual void setPolyAttrs(u8 polyAttr0, u8 polyAttr1) override; // 0x110
 
 private:
-
     /**
      * Sound sources can cause other sounds to be started. E.g when
      * walking, Link will produce a walk sound, but an additional sound
@@ -117,7 +128,6 @@ private:
     f32 getBaseSoundVolume(u32 variantSoundId, u32 baseSoundId);
     dSndDistantSoundActor_c *startBaseSoundAtPosition(u32 baseSoundId, const nw4r::math::VEC3 *position, f32 volume);
     nw4r::snd::SoundHandle *startBaseSound(u32 baseSoundId, f32 volume);
-
 
     nw4r::snd::SoundStartable::StartResult onSetupError();
 
@@ -146,6 +156,10 @@ private:
     dSndSeSound1_c *getHandleType1ForSoundHandle(nw4r::snd::SoundHandle *handle);
     dSndSeSound2_c *getHandleType2ForSoundId(u32 soundId);
 
+    void initVolumeFade();
+    void setVolumeFade(f32 volume, u32 fadeFrames);
+    void calcVolumeFade();
+
     // at 0x00: dSoundSourceIf_c vtable
     // at 0x04: dSnd3DActor_c sub-object
     // at 0x58: thunk-vtable
@@ -170,10 +184,12 @@ private:
     /* 0x12C */ nw4r::ut::List mHandleType2List; // node offset 0x4 -> dSndSeSound_c
     /* 0x138 */ nw4r::ut::Node mGroupLink;       // node for list in dSndSourceGroup_c
     /* 0x140 */ dSndSourceGroup_c *mpOwnerGroup;
-    /* 0x144 */ u8 _0x144[0x154 - 0x144];
+    /* 0x144 */ f32 mVolumeFadeTarget;
+    /* 0x148 */ f32 mVolumeFadeStepSize;
+    /* 0x150 */ u8 _0x14C[0x154 - 0x14C];
     /* 0x154 */ UNKWORD field_0x154;
-    /* 0x158 */ s16 field_0x158;
-    /* 0x15A */ s16 field_0x15A;
+    /* 0x158 */ s16 mPolyAttr0;
+    /* 0x15A */ s16 mPolyAttr1;
 };
 
 #endif

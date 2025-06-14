@@ -13,10 +13,10 @@ public:
 #define SOUNDSOURCE_VIRTUAL(offset) virtual void vt_##offset() = 0;
 
     SOUNDSOURCE_VIRTUAL(0x0C);
-    virtual s32 getCategory() const = 0; // 0x10
-    SOUNDSOURCE_VIRTUAL(0x14);
-    virtual s32 getActorType() const = 0;
-    SOUNDSOURCE_VIRTUAL(0x1C);
+    virtual s32 getCategory() const = 0;             // 0x10
+    virtual bool isCategory(s32 category) const = 0; // 0x14
+    virtual s32 getSourceType() const = 0;           // 0x18
+    virtual bool isSourceType(s32 type) const = 0;   // 0x1C
     SOUNDSOURCE_VIRTUAL(0x20);
     SOUNDSOURCE_VIRTUAL(0x24);
     virtual const nw4r::math::VEC3 &getListenerPosition() const = 0; // 0x28
@@ -25,7 +25,7 @@ public:
     SOUNDSOURCE_VIRTUAL(0x34);
     SOUNDSOURCE_VIRTUAL(0x38);
     SOUNDSOURCE_VIRTUAL(0x3C);
-    virtual void vt_0x40(s32) = 0;
+    virtual void stopAllSound(s32 fadeFrames) = 0; // 0x40
     SOUNDSOURCE_VIRTUAL(0x44);
     virtual bool hasPlayingSounds() const = 0;            // 0x48
     virtual bool isPlayingSound(u32 soundId) = 0;         // 0x4C
@@ -74,12 +74,11 @@ public:
     SOUNDSOURCE_VIRTUAL(0xF8);
     SOUNDSOURCE_VIRTUAL(0xFC);
 
-    virtual bool isReadyMaybe() = 0;                     // 0x100
-    virtual void load(void *data, const char *name) = 0; // 0x104
-    virtual void setFrame(f32 frame) = 0;                // 0x108
-    virtual void setRate(f32 frame) = 0;                 // 0x10C
-
-    SOUNDSOURCE_VIRTUAL(0x110);
+    virtual bool isReadyMaybe() = 0;                           // 0x100
+    virtual void load(void *data, const char *name) = 0;       // 0x104
+    virtual void setFrame(f32 frame) = 0;                      // 0x108
+    virtual void setRate(f32 frame) = 0;                       // 0x10C
+    virtual void setPolyAttrs(u8 polyAttr0, u8 polyAttr1) = 0; // 0x110
     SOUNDSOURCE_VIRTUAL(0x114);
     SOUNDSOURCE_VIRTUAL(0x118);
 };
