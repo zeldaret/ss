@@ -3,7 +3,7 @@
 #include "common.h"
 #include "d/snd/d_snd_distant_sound_actor.h"
 #include "d/snd/d_snd_source.h"
-#include "m/m_vec.h"
+#include "nw4r/math/math_types.h"
 #include "nw4r/ut/ut_list.h"
 
 #include <cmath>
@@ -17,6 +17,31 @@ dSndDistantSoundActorPool_c::dSndDistantSoundActorPool_c() {
     // TODO offsetof
     nw4r::ut::List_Init(&mActiveActors, 0xE4);
     sParam.reset(INFINITY);
+}
+
+void dSndDistantSoundActorPool_c::initialize() {
+    field_0x4210 = 0;
+    for (int i = 0; i < POOL_SIZE; i++) {
+        mSounds[i].loadDefaultParam();
+        mSounds[i].setSource(nullptr);
+        mSounds[i].initSource(nullptr);
+    }
+}
+
+void dSndDistantSoundActorPool_c::calc() {
+    dSndDistantSoundActor_c *it, *next;
+    for (dSndDistantSoundActor_c *it = static_cast<dSndDistantSoundActor_c*>(nw4r::ut::List_GetFirst(&mActiveActors));  it != nullptr; it = next) {
+        next = static_cast<dSndDistantSoundActor_c*>(nw4r::ut::List_GetNext(&mActiveActors, it));
+        if (it->hasPlayingSounds()) {
+            it->updatePosition();
+        } else {
+            if (it->hasAttachedSource()) {
+                it->detachFromSource();
+            }
+            it->resetHandle();
+            removeFromActiveList(it);
+        }
+    }
 }
 
 dSndDistantSoundActor_c *
@@ -72,6 +97,25 @@ void dSndDistantSoundActorPool_c::addToActiveList(dSndDistantSoundActor_c *actor
     actor->setActive(true);
 }
 
+void dSndDistantSoundActorPool_c::removeFromActiveList(dSndDistantSoundActor_c *actor) {
+    if (actor == nullptr) {
+        return;
+    }
+    if (!actor->isActive()) {
+        return;
+    }
+    nw4r::ut::List_Remove(&mActiveActors, actor);
+    actor->setActive(false);
+}
+
+bool dSndDistantSoundActorPool_c::startSound(u32 soundId, const nw4r::math::VEC3 *position) {
+    dSndDistantSoundActor_c *ac = acquireActor(soundId, position, nullptr);
+    if (ac != nullptr) {
+        return ac->startSound(soundId, *position, nullptr);
+    }
+    return false;
+}
+
 dSndDistantSoundActor_c *dSndDistantSoundActorPool_c::findActiveActor(u32 soundId, dSoundSource_c *source) {
     for (dSndDistantSoundActor_c *it = static_cast<dSndDistantSoundActor_c*>(nw4r::ut::List_GetFirst(&mActiveActors));  it != nullptr; it = static_cast<dSndDistantSoundActor_c*>(nw4r::ut::List_GetNext(&mActiveActors, it))) {
         if (it->isAttachedSource(source) && it->isPlayingSound(soundId)) {
@@ -97,8 +141,26 @@ bool dSndDistantSoundActorPool_c::holdSound(u32 soundId, const nw4r::math::VEC3 
 
 }
 
+void dSndDistantSoundActorPool_c::setAllPause(bool flag, s32 fadeFrames) {
+    for (dSndDistantSoundActor_c *it = static_cast<dSndDistantSoundActor_c*>(nw4r::ut::List_GetFirst(&mActiveActors));  it != nullptr; it = static_cast<dSndDistantSoundActor_c*>(nw4r::ut::List_GetNext(&mActiveActors, it))) {
+        it->setPause(flag, fadeFrames);
+    }
+}
+
+void dSndDistantSoundActorPool_c::disableAll() {
+    for (int i = 0; i < POOL_SIZE; i++) {
+        mSounds[i].setDisabled(true);
+    }
+}
+
+void dSndDistantSoundActorPool_c::enableAll() {
+    for (int i = 0; i < POOL_SIZE; i++) {
+        mSounds[i].setDisabled(false);
+    }
+}
+
 void dSndDistantSoundActorPool_c::onChangeStage() {
-    mVec3_c v(INFINITY, INFINITY, INFINITY);
+    nw4r::math::VEC3 v(INFINITY, INFINITY, INFINITY);
     for (int i = 0; i < POOL_SIZE; i++) {
         mSounds[i].SetPosition(v);
     }

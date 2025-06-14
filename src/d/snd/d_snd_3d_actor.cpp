@@ -15,7 +15,7 @@ dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, u8 sourceType)
           dSndPlayerMgr_c::GetInstance()->getSoundArchivePlayerForType(sourceType), dSnd3DManager_c::GetInstance()->getManager()
       ),
       a_field_0x7D(0),
-      a_field_0x7E(0),
+      mIsDisabled(false),
       a_field_0x7F(0),
       mIsPaused(0),
       a_field_0x84(0.0f),
