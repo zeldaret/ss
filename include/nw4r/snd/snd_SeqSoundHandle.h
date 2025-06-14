@@ -36,6 +36,12 @@ namespace nw4r { namespace snd
 
 		void DetachSound();
 
+		u32 GetTick() const {
+			if (IsAttachedSound())
+				return mSound->GetTick();
+			return 0;
+		}
+
 		void WriteVariable(int varNo, s16 value) {
 			if (IsAttachedSound())
 				mSound->WriteVariable(varNo, value);

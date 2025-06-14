@@ -84,10 +84,6 @@ void dSndStateMgr_c::setup(EGG::Heap *pHeap) {
     resetStageName();
 }
 
-inline bool streq(const char *stageName, const char *name) {
-    return !std::strcmp(stageName, name);
-}
-
 void dSndStateMgr_c::onStageOrLayerUpdate() {
     if (dSndPlayerMgr_c::GetInstance()->checkFlag(dSndPlayerMgr_c::MGR_UNK_0x80)) {
         dSndPlayerMgr_c::GetInstance()->stopAllSound();
