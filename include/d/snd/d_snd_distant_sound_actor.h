@@ -38,12 +38,22 @@ public:
         return mpSoundSource == source;
     }
 
+    bool hasAttachedSource() const {
+        return mpSoundSource;
+    }
+
     nw4r::snd::SoundHandle *getHandle() {
         return mpSoundHandle;
     }
 
     void setSource(dSoundSource_c *source) {
         mpSoundSource = source;
+    }
+
+    // not sure if this combination makes sense
+    void resetHandle() {
+        field_0x0F4 = 0;
+        mpSoundHandle = &mSoundHandle;
     }
 
     bool isActive() const {

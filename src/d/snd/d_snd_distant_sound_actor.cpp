@@ -54,7 +54,7 @@ void dSndDistantSoundActor_c::d_vt_0x5C(nw4r::snd::SoundHandle &handle, dSndSeSo
 bool dSndDistantSoundActor_c::startSound(
     u32 soundId, const nw4r::math::VEC3 &position, nw4r::snd::SoundHandle *pHandle
 ) {
-    if (a_field_0x7E) {
+    if (mIsDisabled) {
         return false;
     }
 
@@ -72,7 +72,7 @@ bool dSndDistantSoundActor_c::startSound(
 bool dSndDistantSoundActor_c::holdSound(
     u32 soundId, const nw4r::math::VEC3 &position, nw4r::snd::SoundHandle *pHandle
 ) {
-    if (a_field_0x7E) {
+    if (mIsDisabled) {
         return false;
     }
 

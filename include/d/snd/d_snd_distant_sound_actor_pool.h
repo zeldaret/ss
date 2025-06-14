@@ -30,15 +30,23 @@ public:
         return sParam;
     }
 
+    void initialize();
+    void calc();
     void onChangeStage();
 
     dSndDistantSoundActor_c *acquireActor(u32 soundId, const nw4r::math::VEC3 *position, dSoundSource_c *source);
     dSndDistantSoundActor_c *findActiveActor(u32 soundId, dSoundSource_c *source);
 
+    bool startSound(u32 soundId, const nw4r::math::VEC3 *position);
     bool holdSound(u32 soundId, const nw4r::math::VEC3 *position);
+
+    void setAllPause(bool flag, s32 fadeFrames);
+    void disableAll();
+    void enableAll();
 
 private:
     void addToActiveList(dSndDistantSoundActor_c *actor, u32 id);
+    void removeFromActiveList(dSndDistantSoundActor_c *actor);
 
     /* 0x0010 */ dSndDistantSoundActor_c mSounds[POOL_SIZE];
     /* 0x4210 */ UNKWORD field_0x4210;
