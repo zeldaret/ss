@@ -32,7 +32,7 @@ void PlayerParamSet::Init()
 	biquadType		= 0;
 	biquadValue		= 0.0f;
 	remoteFilter	= 0;
-	outputLineFlag	= 1;
+	outputLineFlag	= OUTPUT_LINE_MAIN;
 	mainOutVolume	= 1.0f;
 	mainSend		= 0.0f;
 	panMode			= PAN_MODE_DUAL;

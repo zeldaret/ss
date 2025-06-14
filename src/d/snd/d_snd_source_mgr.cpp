@@ -88,13 +88,13 @@ void dSndSourceMgr_c::registerSource(dSoundSource_c *source) {
         nw4r::ut::List_Append(&mAllSources, source);
         switch (source->getCategory()) {
             case SND_SOURCE_CATEGORY_PLAYER: {
-                if (source->getActorType() == SND_SOURCE_PLAYER && mpPlayerSource == nullptr) {
+                if (source->getSourceType() == SND_SOURCE_PLAYER && mpPlayerSource == nullptr) {
                     mpPlayerSource = source;
                 }
                 break;
             }
             case SND_SOURCE_CATEGORY_EQUIPMENT: {
-                if (source->getActorType() == SND_SOURCE_BOOMERANG) {
+                if (source->getSourceType() == SND_SOURCE_BOOMERANG) {
                     mpBoomerangSource = source;
                 }
                 break;
@@ -116,7 +116,7 @@ void dSndSourceMgr_c::registerSource(dSoundSource_c *source) {
                 break;
             }
             case SND_SOURCE_CATEGORY_NPC: {
-                if (source->getActorType() == SND_SOURCE_KENSEI) {
+                if (source->getSourceType() == SND_SOURCE_KENSEI) {
                     mpKenseiSource = source;
                 }
                 break;
@@ -179,4 +179,14 @@ void dSndSourceMgr_c::clearSourceList(nw4r::ut::List *list) {
             sourceIter = static_cast<dSoundSource_c *>(nw4r::ut::List_GetFirst(list));
         }
     }
+}
+
+s32 dSndSourceMgr_c::getPlayerSourceRoomId() const {
+    if (mpPlayerSource == nullptr) {
+        return -1;
+    }
+    if (getBoomerangSource() != nullptr) {
+        return getBoomerangSource()->getRoomId();
+    }
+    return mpPlayerSource->getRoomId();
 }

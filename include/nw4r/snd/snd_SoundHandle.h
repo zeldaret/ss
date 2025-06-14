@@ -34,6 +34,10 @@ namespace nw4r { namespace snd
 		const detail::BasicSound *detail_GetAttachedSound() const { return mSound; }
 		void DetachSound();
 
+		void SetOutputLineFlag(int outputLineFlag) {
+			if (IsAttachedSound())
+				mSound->SetOutputLineFlag(outputLineFlag);
+		}
 
 		void FadeIn(int fadeFrames) {
 			if (IsAttachedSound())
@@ -67,6 +71,10 @@ namespace nw4r { namespace snd
 
 		bool IsPause() const {
 			return IsAttachedSound() && mSound->IsPause();
+		}
+
+		bool IsPrepared() const {
+			return IsAttachedSound() && mSound->IsPrepared();
 		}
 
 		int GetRemainingFadeFrames() const {

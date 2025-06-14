@@ -1,6 +1,7 @@
 #include "d/snd/d_snd_sound.h"
 
 #include "common.h"
+#include "d/snd/d_snd_bgm_mgr.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "nw4r/snd/snd_SeqSoundHandle.h"
@@ -38,13 +39,13 @@ dSndSound_c::~dSndSound_c() {
 }
 
 void dSndSound_c::cancel() {
-    if (canCancel()) {
+    if (hasState()) {
         resetControls();
         mIsRunning = false;
         mIsFadingOut = false;
         mIsPreparing = false;
         mPrevStartOffset = 0;
-        fn_80373900(FANFARE_SOUND_MGR, this);
+        dSndBgmMgr_c::GetInstance()->unregistSound(this);
     }
 }
 
@@ -328,7 +329,7 @@ nw4r::snd::SoundStartable::StartResult dSndSound_c::prepareSound(u32 soundId, u3
         return nw4r::snd::SoundStartable::START_ERR_USER;
     }
 
-    if (cannotStart()) {
+    if (isPlaying()) {
         return nw4r::snd::SoundStartable::START_ERR_USER;
     }
 
@@ -347,13 +348,13 @@ nw4r::snd::SoundStartable::StartResult dSndSound_c::prepareSound(u32 soundId, u3
 
     nw4r::snd::SoundStartable::StartResult res;
     if (startOffset == 0) {
-        res = dSndMgr_c::GetInstance()->getPlayer()->detail_PrepareSound(this, soundId, nullptr);
+        res = dSndMgr_c::GetInstance()->getPlayer().detail_PrepareSound(this, soundId, nullptr);
     } else {
         nw4r::snd::SoundStartable::StartInfo info;
         info.enableFlag |= nw4r::snd::SoundStartable::StartInfo::ENABLE_START_OFFSET;
         info.startOffsetType = nw4r::snd::SoundStartable::StartInfo::START_OFFSET_TYPE_MILLISEC;
         info.startOffset = startOffset;
-        res = dSndMgr_c::GetInstance()->getPlayer()->detail_PrepareSound(this, soundId, &info);
+        res = dSndMgr_c::GetInstance()->getPlayer().detail_PrepareSound(this, soundId, &info);
     }
 
     if (res == nw4r::snd::SoundStartable::START_SUCCESS) {
@@ -375,7 +376,7 @@ void dSndSound_c::onPreparing(u32 soundId, u32 startOffset) {
         cancel();
         mPrevStartOffset = startOffset;
         mIsPreparing = true;
-        fn_803738B0(FANFARE_SOUND_MGR, this);
+        dSndBgmMgr_c::GetInstance()->registSound(this);
     }
 }
 

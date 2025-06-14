@@ -2,12 +2,11 @@
 #define D_SND_SOUND_H
 
 #include "common.h"
+#include "d/snd/d_snd_types.h"
 #include "nw4r/snd/snd_SeqTrack.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/ut/ut_list.h"
-
-class dSndSound_c;
 
 // Not sure, handles a bunch of floats, exists in a ton of variants
 class dSndControl_c {
@@ -173,11 +172,31 @@ public:
     void linkCtrl(dSndControlSound_c *);
     void unlinkCtrl(dSndControlSound_c *);
 
-protected:
-    bool cannotStart() const {
+    bool isPlaying() const {
         return mIsRunning && !mIsFadingOut && IsAttachedSound();
     }
 
+    bool isPlayingSoundId(u32 soundId) const {
+        return mIsRunning && !mIsFadingOut && GetId() == soundId;
+    }
+
+    bool isPreparingSoundId(u32 soundId) const {
+        return mIsPreparing && !mIsRunning && GetId() == soundId;
+    }
+
+    bool isFadingOutSoundId(u32 soundId) const {
+        return mIsFadingOut && IsAttachedSound();
+    }
+
+    bool isPreparingSoundIdWithStartOffset(u32 soundId, u32 offset) const {
+        return isPreparingSoundId(soundId) && (offset == 0 || mPrevStartOffset == offset);
+    }
+
+    bool hasState() const {
+        return mIsRunning || mIsPreparing || IsAttachedSound();
+    }
+
+protected:
     bool isRunning() const {
         return mIsRunning && IsAttachedSound();
     }
@@ -186,28 +205,12 @@ protected:
         return mIsPreparing && !mIsRunning;
     }
 
-    bool canCancel() const {
-        return mIsRunning || mIsPreparing || IsAttachedSound();
-    }
-
-    bool isPreparingSoundId(u32 soundId) const {
-        bool ret = mIsPreparing;
-        if (ret) {
-            ret = !mIsRunning;
-        }
-        if (ret) {
-            ret = GetId() == soundId;
-        }
-        return ret;
-    }
-
     void resetControls();
     void resetTrackVolumes();
 
     void setControlValue(dSndControlSound_c *ctrl, f32 value, s32 frames);
 
-    /* 0x08 */ u8 _0x08[0x10 - 0x08];
-
+    /* 0x08 */ nw4r::ut::Node mBgmMgrNode;
     /* 0x10 */ u32 mPrevStartOffset;
     /* 0x14 */ bool mIsPreparing;
     /* 0x15 */ bool mPauseFlag;
