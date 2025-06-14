@@ -143,7 +143,7 @@ void Channel::InitParam(Callback *callback, u32 callbackData)
 	mBiquadType					= 0;
 	mBiquadValue				= 0.0f;
 	mRemoteFilter				= 0;
-	mOutputLineFlag				= 1;
+	mOutputLineFlag				= OUTPUT_LINE_MAIN;
 	mMainOutVolume				= 1.0f;
 	mMainSend					= 0.0f;
 

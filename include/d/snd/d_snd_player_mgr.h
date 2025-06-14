@@ -52,6 +52,7 @@ public:
     const char *getSoundArchivePath();
     u32 convertLabelStringToSoundId(const char *label) const;
     static bool isBgmPlayerId(u32 id);
+    u32 getSomeUserParam(u32 soundId) const;
 
     nw4r::snd::SoundArchivePlayer &getSoundArchivePlayerForType(u8 sourceType);
     bool canUseThisPlayer(u8 sourceType) const;

@@ -66,6 +66,7 @@ dSndBgmMgr_c::dSndBgmMgr_c()
 void dSndBgmMgr_c::calcLists() {
     // TODO ...
 
+    // TODO: Weird declaration order required for regswaps
 
     dSndBgmSound_c *next, *it;
     for (it = getFirstInBgmSoundList(BGM_LIST_PLAYING); it != nullptr; it = next) {

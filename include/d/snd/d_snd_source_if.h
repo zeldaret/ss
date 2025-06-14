@@ -33,11 +33,11 @@ public:
     SOUNDSOURCE_VIRTUAL(0x54);
     SOUNDSOURCE_VIRTUAL(0x58);
     SOUNDSOURCE_VIRTUAL(0x5C);
-    SOUNDSOURCE_VIRTUAL(0x60);
+    virtual bool startSound(u32 soundId) = 0; // 0x60
     SOUNDSOURCE_VIRTUAL(0x64);
     SOUNDSOURCE_VIRTUAL(0x68);
     SOUNDSOURCE_VIRTUAL(0x6C);
-    SOUNDSOURCE_VIRTUAL(0x70);
+    virtual bool startSound(const char *label) = 0; // 0x70
     SOUNDSOURCE_VIRTUAL(0x74);
     SOUNDSOURCE_VIRTUAL(0x78);
     SOUNDSOURCE_VIRTUAL(0x7C);
@@ -50,13 +50,13 @@ public:
     SOUNDSOURCE_VIRTUAL(0x98);
     SOUNDSOURCE_VIRTUAL(0x9C);
     SOUNDSOURCE_VIRTUAL(0xA0);
-    SOUNDSOURCE_VIRTUAL(0xA4);
-    SOUNDSOURCE_VIRTUAL(0xA8);
-    SOUNDSOURCE_VIRTUAL(0xAC);
+    virtual void stopSounds(u32 soundId, s32 fadeFrames) = 0;       // 0x0A4
+    virtual void stopSounds(const char *label, s32 fadeFrames) = 0; // 0x0A4
+    virtual bool holdSound(u32 soundId) = 0;                        // 0xAC
     SOUNDSOURCE_VIRTUAL(0xB0);
     SOUNDSOURCE_VIRTUAL(0xB4);
     SOUNDSOURCE_VIRTUAL(0xB8);
-    SOUNDSOURCE_VIRTUAL(0xBC);
+    virtual bool holdSound(const char *label) = 0; // 0xBC
     SOUNDSOURCE_VIRTUAL(0xC0);
     SOUNDSOURCE_VIRTUAL(0xC4);
     SOUNDSOURCE_VIRTUAL(0xC8);

@@ -93,7 +93,7 @@ private:
 class SoundStopper {
 public:
     SoundStopper(u32 id, s32 fadeFrames) : mSoundId(id), mFadeFrames(fadeFrames) {}
-    ~SoundStopper() {}
+    // ~SoundStopper() {}
 
     virtual void operator()(nw4r::snd::SoundHandle &pHandle) {
         if (mSoundId == pHandle.GetId()) {

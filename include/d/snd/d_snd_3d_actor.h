@@ -3,8 +3,10 @@
 
 #include "common.h"
 #include "d/snd/d_snd_misc.h"
+#include "d/snd/d_snd_types.h"
 #include "nw4r/math/math_types.h"
 #include "nw4r/snd/snd_Sound3DActor.h"
+#include "nw4r/snd/snd_SoundHandle.h"
 
 class dSnd3DActor_c : public nw4r::snd::Sound3DActor {
 public:
@@ -36,8 +38,8 @@ public:
     virtual f32 getDistanceToPlayer();             // vt 0x4C
     virtual void updatePositionRelativeToPlayer(); // vt 0x50
     virtual void updateDistanceToPlayer();         // vt 0x54
-    virtual void d_vt_0x58() = 0;
-    virtual void d_vt_0x5C() = 0;
+    virtual void d_vt_0x58(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) = 0;
+    virtual void d_vt_0x5C(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id, UNKWORD) = 0;
 
     void resetCachedRelativePositions();
 
@@ -49,6 +51,20 @@ public:
     void calculatePositionRelativeToListener();
     void updatePositionRelativeToListener();
     void updateDistanceToListener();
+
+    void updateListenerParameters() {
+        calculatePositionRelativeToListener();
+        mDistanceToListener = VECMag(mPositionRelativeToListener);
+        setFlag(0x1 | 0x2);
+    }
+
+    void updateCameraTargetParameters() {
+        calculatePositionRelativeToCameraTarget();
+        mDistanceToCameraTarget = VECMag(mPositionRelativeToCameraTarget);
+        setFlag(0x4 | 0x8);
+    }
+
+    u32 getSomeUserParam(u32 soundId) const;
 
     bool checkFlag(u16 flag) const {
         return (mFlags & flag);

@@ -4,8 +4,11 @@
 #include "common.h"
 #include "d/snd/d_snd_distant_sound_actor.h"
 #include "d/snd/d_snd_misc.h"
+#include "d/snd/d_snd_types.h"
 #include "d/snd/d_snd_util.h"
+#include "nw4r/math/math_types.h"
 #include "nw4r/ut/ut_list.h"
+
 
 SND_DISPOSER_FORWARD_DECL(dSndDistantSoundActorPool_c);
 
@@ -28,10 +31,14 @@ public:
 
     void onChangeStage();
 
+    dSndDistantSoundActor_c *acquireActor(u32 soundId, const nw4r::math::VEC3 *position, dSoundSource_c *source);
+
 private:
+    void addToActiveList(dSndDistantSoundActor_c *actor, u32 id);
+
     /* 0x0010 */ dSndDistantSoundActor_c mSounds[POOL_SIZE];
     /* 0x4210 */ UNKWORD field_0x4210;
-    /* 0x4214 */ nw4r::ut::List mList;
+    /* 0x4214 */ nw4r::ut::List mActiveActors;
 
     static dSndSourceParam sParam;
 };

@@ -3,10 +3,9 @@
 
 #include "common.h"
 #include "d/snd/d_snd_misc.h"
+#include "d/snd/d_snd_types.h"
 #include "nw4r/ut/ut_list.h"
 #include "sized_string.h"
-
-class dSoundSource_c;
 
 /**
  * All similar dSoundSource_c's are put in a group. The game can then find the closest
@@ -21,13 +20,13 @@ class dSoundSource_c;
 class dSndSourceGroup_c {
 public:
     dSndSourceGroup_c();
-    dSndSourceGroup_c(s32 sourceType, const char*, u32, s32 mSubtype);
+    dSndSourceGroup_c(s32 sourceType, const char *, u32, s32 mSubtype);
     ~dSndSourceGroup_c();
 
     void registerSource(dSoundSource_c *);
     void unregisterSource(dSoundSource_c *);
 
-    dSndSourceParam* getAmbientParam() {
+    dSndSourceParam *getAmbientParam() {
         return &mParam;
     }
 
@@ -37,7 +36,7 @@ public:
     s32 getNumSources() const;
     void set(s32 type, const char *name);
     void calc();
-    
+
 private:
     bool setParamFromName(const char *name);
     void resetSoundSourceParam();

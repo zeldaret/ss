@@ -13,6 +13,10 @@ public:
 
     bool calcTimer();
 
+    void setField0x130(u8 val) {
+        field_0x130 = val;
+    }
+
 private:
     /* 0x128 */ u32 field_0x128;
     /* 0x12C */ u32 field_0x12C;

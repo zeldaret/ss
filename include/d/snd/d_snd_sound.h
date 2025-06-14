@@ -2,12 +2,11 @@
 #define D_SND_SOUND_H
 
 #include "common.h"
+#include "d/snd/d_snd_types.h"
 #include "nw4r/snd/snd_SeqTrack.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/ut/ut_list.h"
-
-class dSndSound_c;
 
 // Not sure, handles a bunch of floats, exists in a ton of variants
 class dSndControl_c {

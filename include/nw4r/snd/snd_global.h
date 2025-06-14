@@ -28,6 +28,14 @@
 
 namespace nw4r { namespace snd
 {
+	enum OutputLineFlag {
+		OUTPUT_LINE_MAIN = 0x1,
+		OUTPUT_LINE_REMOTE_1 = 0x2,
+		OUTPUT_LINE_REMOTE_2 = 0x4,
+		OUTPUT_LINE_REMOTE_3 = 0x8,
+		OUTPUT_LINE_REMOTE_4 = 0x16,
+	};
+
 	// [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x26bd0
 	enum AuxBus
 	{

@@ -2706,6 +2706,8 @@ d/snd/d_snd_source.cpp:
 	.text       start:0x803889C0 end:0x8038C408 align:16
 	.ctors      start:0x804DB920 end:0x804DB924
 	.data       start:0x8054A7D0 end:0x8054AAE8
+	.sdata      start:0x80574708 end:0x80574718
+	.sdata2     start:0x8057DCB0 end:0x8057DCD0
 
 d/snd/d_snd_mgr_unk_7.cpp:
 	.text       start:0x8038C410 end:0x8038EBF0 align:16
