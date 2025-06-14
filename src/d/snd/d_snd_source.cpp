@@ -147,7 +147,7 @@ void dSoundSource_c::setPause(bool flag, int fadeFrames) {
         PauseAllSound(flag, fadeFrames);
         pauseAllDistantSounds(flag, fadeFrames);
         mIsPaused = 0;
-    } else if (a_field_0x7E == 0) {
+    } else if (!mIsDisabled) {
         PauseAllSound(flag, fadeFrames);
         pauseAllDistantSounds(flag, fadeFrames);
         mIsPaused = 1;
