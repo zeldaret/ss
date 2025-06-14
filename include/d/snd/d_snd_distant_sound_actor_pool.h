@@ -15,7 +15,8 @@ SND_DISPOSER_FORWARD_DECL(dSndDistantSoundActorPool_c);
 /**
  * A pool for distant sounds actors. Sound sources will borrow
  * actors from this pool when they want to play a sound
- * at a specific position.
+ * at a specific position. The finisher target sound will
+ * also play using this pool.
  */
 class dSndDistantSoundActorPool_c {
     SND_DISPOSER_MEMBERS(dSndDistantSoundActorPool_c);
@@ -32,6 +33,9 @@ public:
     void onChangeStage();
 
     dSndDistantSoundActor_c *acquireActor(u32 soundId, const nw4r::math::VEC3 *position, dSoundSource_c *source);
+    dSndDistantSoundActor_c *findActiveActor(u32 soundId, dSoundSource_c *source);
+
+    bool holdSound(u32 soundId, const nw4r::math::VEC3 *position);
 
 private:
     void addToActiveList(dSndDistantSoundActor_c *actor, u32 id);

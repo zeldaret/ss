@@ -19,6 +19,10 @@ struct dSndSourceParam {
         field_0x10 = value_0x10;
     }
 
+    f32 getField0x10() const {
+        return field_0x10;
+    }
+
     /* 0x00 */ f32 field_0x00;
     /* 0x04 */ f32 field_0x04;
     /* 0x08 */ f32 field_0x08;

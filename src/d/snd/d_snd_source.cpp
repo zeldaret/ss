@@ -49,8 +49,8 @@ dSoundSource_c::dSoundSource_c(u8 sourceType, dAcBase_c *actor, const char *name
       field_0x11C(0),
       mpOwnerGroup(pOwnerGroup),
       field_0x154(0),
-      field_0x158(-1),
-      field_0x15A(-1) {
+      mPolyAttr0(-1),
+      mPolyAttr1(-1) {
     mSourceCategory = dSndSourceMgr_c::getSourceCategoryForSourceType(sourceType, name);
     // TODO: Offsetof
     nw4r::ut::List_Init(&mDistantSoundList, 0xEC);
@@ -82,6 +82,64 @@ bool dSoundSource_c::isPlayingSound(u32 soundId) {
 
 bool dSoundSource_c::isPlayingSound(const char *soundId) {
     return isPlayingSound(soundLabelToSoundId(soundId));
+}
+
+void dSoundSource_c::initVolumeFade() {
+    mVolumeFadeTarget = 1.0f;
+    mVolumeFadeStepSize = 0.0f;
+}
+
+void dSoundSource_c::setVolumeFade(f32 volume, u32 fadeFrames) {
+    // @bug not actually clamped
+    (void)nw4r::ut::Clamp(volume, 0.0f, 2.0f);
+    if (fadeFrames == 0) {
+        SoundActor::SetVolume(volume);
+        mVolumeFadeTarget = volume;
+        mVolumeFadeStepSize = 0.0f;
+        return;
+    }
+    f32 currVolume = SoundActor::GetVolume();
+    if (currVolume == volume) {
+        mVolumeFadeTarget = volume;
+        mVolumeFadeStepSize = 0.0f;
+    } else {
+        mVolumeFadeTarget = volume;
+        mVolumeFadeStepSize = (volume - currVolume) / fadeFrames;
+    }
+}
+
+void dSoundSource_c::calcVolumeFade() {
+    if (mIsPaused) {
+        return;
+    }
+
+    if (mVolumeFadeStepSize == 0.0f) {
+        return;
+    }
+
+    f32 nextVolume = SoundActor::GetVolume();
+    nextVolume += mVolumeFadeStepSize;
+    if (mVolumeFadeStepSize > 0.0f) {
+        if (nextVolume >= mVolumeFadeTarget) {
+            nextVolume = mVolumeFadeTarget;
+            mVolumeFadeStepSize = 0.0f;
+        }
+    } else {
+        if (nextVolume <= mVolumeFadeTarget) {
+            nextVolume = mVolumeFadeTarget;
+            mVolumeFadeStepSize = 0.0f;
+        }
+    }
+
+    SoundActor::SetVolume(nextVolume);
+}
+
+bool dSoundSource_c::isInaudible() {
+    if (field_0x102 != 0) {
+        return true;
+    }
+
+    return dSnd3DActor_c::getDistanceToCameraTarget() >= mpSourceParam->getField0x10();
 }
 
 void dSoundSource_c::setPause(bool flag, int fadeFrames) {
@@ -606,6 +664,11 @@ dSndSeSound2_c *dSoundSource_c::getHandleType2ForSoundId(u32 soundId) {
     }
 
     return nullptr;
+}
+
+void dSoundSource_c::setPolyAttrs(u8 polyAttr0, u8 polyAttr1) {
+    mPolyAttr0 = polyAttr0;
+    mPolyAttr1 = polyAttr1;
 }
 
 void dSoundSource_c::stopSoundHandles(u32 soundId, s32 fadeFrames) {
