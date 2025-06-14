@@ -20,6 +20,7 @@ class dSndDistantSoundActor_c : public dSnd3DActor_c {
 public:
     dSndDistantSoundActor_c();
     virtual void setPause(bool flag, int fadeFrames) override;
+    virtual UNKWORD d_vt_0x3C() override;
     virtual void d_vt_0x58(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) override;
     virtual void d_vt_0x5C(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id, UNKWORD) override;
 
@@ -56,6 +57,8 @@ public:
     void setUseSourcePosition(bool value) {
         mUseSourcePosition = true;
     }
+
+    void updateSome3DField();
 
 private:
     /* 0x0E4 */ nw4r::ut::Node mPoolLink;   // sound actor pool link

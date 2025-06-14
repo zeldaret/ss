@@ -79,6 +79,11 @@ public:
         return mDistanceToListener;
     }
 
+    f32 getDistanceToCameraTarget() {
+        updateDistanceToCameraTarget();
+        return mDistanceToCameraTarget;
+    }
+
     const dSndSourceParam *getSourceParam() const {
         return mpSourceParam;
     }

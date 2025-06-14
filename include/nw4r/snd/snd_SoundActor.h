@@ -69,6 +69,14 @@ namespace nw4r { namespace snd
 		void PauseAllSound(bool flag, int fadeFrames);
 		int GetPlayingSoundCount(int playerId) const;
 
+		void SetVolume(f32 volume) {
+			mActorParam.volume = volume;
+		}
+
+		f32 GetVolume() const {
+			return mActorParam.volume;
+		}
+
 	// static members
 	public:
 		static int const ACTOR_PLAYER_COUNT = 4;
