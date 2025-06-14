@@ -13,7 +13,7 @@ dSndDistantSoundActor_c::dSndDistantSoundActor_c()
       field_0x0F4(0),
       mpSoundSource(nullptr),
       mpSoundHandle(&mSoundHandle),
-      field_0x104(0),
+      mIsActive(false),
       mUseSourcePosition(false) {}
 
 void dSndDistantSoundActor_c::initSource(dSoundSource_c *pSource) {
@@ -35,6 +35,18 @@ void dSndDistantSoundActor_c::updatePosition() {
         dSnd3DActor_c::setPosition(mpSoundSource->GetPosition());
     } else {
         dSnd3DActor_c::setPosition(GetPosition());
+    }
+}
+
+void dSndDistantSoundActor_c::d_vt_0x58(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) {
+    if (mpSoundSource != nullptr) {
+        mpSoundSource->d_vt_0x58(handle, pSound, id);
+    }
+}
+
+void dSndDistantSoundActor_c::d_vt_0x5C(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id, UNKWORD arg) {
+    if (mpSoundSource != nullptr) {
+        mpSoundSource->d_vt_0x5C(handle, pSound, id, arg);
     }
 }
 

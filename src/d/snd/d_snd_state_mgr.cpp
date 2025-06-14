@@ -199,6 +199,6 @@ bool dSndStateMgr_c::isSeekerStoneStage(const char *stageName, s32 layer) {
     return false;
 }
 
-bool isInStage(const char *stageName) {
+bool dSndStateMgr_c::isInStage(const char *stageName) {
     return !std::strcmp(dScGame_c::currentSpawnInfo.getStageName(), stageName);
 }

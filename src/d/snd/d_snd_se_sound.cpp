@@ -4,7 +4,7 @@
 #include "d/snd/d_snd_source.h"
 
 dSndSeSound_c::dSndSeSound_c()
-    : field_0x014(0),
+    : mpSource(nullptr),
       mpSoundHandle(&mSound),
       mHandleType(SE_HANDLE_TYPE_1),
       mSoundId(-1),
@@ -40,7 +40,7 @@ void dSndSeSound_c::setSource(dSoundSource_c *source, u32 soundId) {
 
 void dSndSeSound_c::clear() {
     field_0x114 = -1;
-    field_0x014 = 0;
+    mpSource = nullptr;
     mpCalcCallback = nullptr;
     mpStartCallback = nullptr;
     mpSoundHandle = &mSound;

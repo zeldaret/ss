@@ -4,14 +4,12 @@
 #include "common.h"
 #include "d/snd/d_snd_actor.h"
 #include "d/snd/d_snd_sound.h"
+#include "d/snd/d_snd_types.h"
 #include "d/snd/d_snd_util.h"
 #include "nw4r/snd/snd_FxReverbStdDpl2.h"
 #include "nw4r/ut/ut_list.h"
 
 SND_DISPOSER_FORWARD_DECL(dSndBgmMgr_c);
-
-class dSndBgmSound_c;
-class dSndBgmBattleSound_c;
 
 // Previous Ghidra name: FanfareSoundMgr
 class dSndBgmMgr_c {
@@ -78,7 +76,7 @@ private:
 
     /** Used to mute other BGM when battle music is playing */
     void setBgmHandleIdxVolume(u32 handleIdx, f32 volume, s32 fadeFrames);
-    
+
     bool isBgmHandleIdxPlayingSoundId(u32 handleIdx, u32 soundId);
     bool stopBgmHandleIdx(u32 handleIdx, s32 fadeFrames);
 
@@ -95,13 +93,12 @@ private:
 
     bool startDelayedSound();
     void calcDelayedSound();
-    
+
     dSndBgmSound_c *getBgmSoundHandleForId(u32 soundId) const;
-    
+
     dSndSound_c *getFreeFanSoundHandle();
     dSndSound_c *getFanSoundHandleForFan(u32 soundId);
     void stopFanSounds(s32 fadeFrames);
-    
 
     bool isSoundRegist(dSndSound_c *sound);
 
