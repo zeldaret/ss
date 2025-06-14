@@ -7,6 +7,7 @@
 #include "d/snd/d_snd_distant_sound_actor_pool.h"
 #include "d/snd/d_snd_source.h"
 #include "d/snd/d_snd_source_enums.h"
+#include "d/snd/d_snd_state_mgr.h"
 
 dSndDistantSoundActor_c::dSndDistantSoundActor_c()
     : dSnd3DActor_c(&dSndDistantSoundActorPool_c::GetInstance()->getSourceParam(), SND_SOURCE_DISTANT),
@@ -64,6 +65,7 @@ bool dSndDistantSoundActor_c::startSound(
     }
 
     SetPosition(position);
+    updateSome3DField();
     return StartSound(pHandle, soundId);
 }
 
@@ -104,4 +106,15 @@ void dSndDistantSoundActor_c::setPause(bool flag, int fadeFrames) {
         PauseAllSound(flag, fadeFrames);
         mIsPaused = 1;
     }
+}
+
+void dSndDistantSoundActor_c::updateSome3DField() {
+    a_field_0xE0 = dSndStateMgr_c::GetInstance()->getField_0x49C();
+}
+
+UNKWORD dSndDistantSoundActor_c::d_vt_0x3C() {
+    if (mpSoundSource != nullptr) {
+        return mpSoundSource->d_vt_0x3C();
+    }
+    return 0;
 }
