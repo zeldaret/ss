@@ -10,8 +10,6 @@
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/ut/ut_list.h"
 
-#include <cstring>
-
 /** Manages sound relating to a particular actor. */
 /** Size: probably 0x15C */
 class dSoundSource_c : public dSoundSourceIf_c, public dSnd3DActor_c {
@@ -28,10 +26,9 @@ public:
     // This is where it gets a bit wild and this class starts mixing in overrides between
     // new virtual functions, which causes the vtable to list these functions in exactly this
     // order.
-    virtual const char *getName() const; // 0x17C
-    bool isName(const char *name) const {
-        return !std::strcmp(getName(), name);
-    }
+    virtual const char *getName() const {
+        return mpName;
+    } // 0x17C
     virtual void d_s_vt_0x180();
     virtual void d_s_vt_0x184();
     virtual void d_s_vt_0x188();

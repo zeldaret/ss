@@ -15,17 +15,36 @@ SND_DISPOSER_FORWARD_DECL(dSndSmallEffectMgr_c);
 class dSndSmallEffectMgr_c {
     SND_DISPOSER_MEMBERS(dSndSmallEffectMgr_c)
 
+    static const s32 NUM_DELAYED_SOUNDS = 2;
+    static const s32 NUM_HOLD_SOUNDS = 3;
+
 public:
+    enum BattleHitSound_e {
+        BATTLE_TUTTI_NORMAL = 0,
+        BATTLE_TUTTI_TURN = 1,
+        BATTLE_TUTTI_JUMP = 2,
+        BATTLE_TUTTI_FINISH = 3,
+        BATTLE_TUTTI_GUARDJUST = 5,
+    };
+
     dSndSmallEffectMgr_c();
 
+    void calc();
+
     bool playSound(u32 soundId);
+    // used for clawshots cursor, pan depends on where on the screen
+    // your cursor is when it activates
     bool playSoundWithPan(u32 soundId, f32 pan);
-    void playSoundWithPitch(u32 soundId, f32 pitch);
+    void holdSoundWithPitch(u32 soundId, f32 pitch);
+    bool playSkbSound(u32 soundId);
 
 
     bool playButtonPressSoundWhenAdvancingTextBoxes(f32);
     void resetButtonPressSound();
     void setButtonPressSound(dSoundSource_c *source);
+
+    void playSound(u32 soundId, nw4r::snd::SoundHandle *handle);
+    bool playBattleHitSound(BattleHitSound_e type, dSoundSource_c *source);
 
 private:
     bool playSoundInternal(u32 soundId);
@@ -34,20 +53,23 @@ private:
     bool isPlayingSound(u32 playerIdx, u32 soundId);
     bool isPlayingSound(u32 soundId);
 
-    /* 0x10 */ nw4r::snd::SoundHandle mHandle1;
+    /**
+     * Finds a sound handle currently playing the given sound,
+     * or an idle sound handle,
+     * or stops a lower-priority sound if needed and possible.
+     */
+    nw4r::snd::SoundHandle *getHoldSoundHandle(u32 soundId);
+
+    /* 0x10 */ s32 field_0x10;
     // used for most sounds
     /* 0x14 */ nw4r::snd::SoundHandle mNormalSound;
     /* 0x18 */ nw4r::snd::SoundHandle mHandle3;
-    // apparently used for shield gauge sounds, but maybe not given
-    // that the callers appear unreachable
-    /* 0x1C */ nw4r::snd::SoundHandle mShieldGaugeHandles[3];
+    /* 0x1C */ nw4r::snd::SoundHandle mHoldSoundHandles[NUM_HOLD_SOUNDS];
 
-    /* 0x28 */ s32 field_0x28;
-    /* 0x2C */ s32 field_0x2C;
-    /* 0x30 */ s32 field_0x30;
-    /* 0x34 */ s32 field_0x34;
+    /* 0x28 */ u32 mDelayedSoundIds[NUM_DELAYED_SOUNDS];
+    /* 0x30 */ s32 mDelayedSoundTimers[NUM_DELAYED_SOUNDS];
     /* 0x38 */ u32 mTextboxAdvanceSound;
-    /* 0x3C */ nw4r::snd::SoundHandle mHandle4;
+    /* 0x3C */ nw4r::snd::SoundHandle mBattleTuttiHandle;
     /* 0x40 */ u16 field_0x40;
     /* 0x42 */ u16 field_0x42;
     /* 0x44 */ s32 field_0x44;

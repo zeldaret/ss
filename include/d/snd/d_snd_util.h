@@ -4,6 +4,12 @@
 #include "common.h"
 #include "egg/core/eggDisposer.h"
 
+#include <cstring>
+
+inline bool streq(const char *left, const char *right) {
+    return !std::strcmp(left, right);
+}
+
 // This setup is only inferred. d/snd uses it all over the place.
 // This works for dSndPlayerMgr_c, which has a vtable of its own but the Disposer at offset 0.
 // It also works for the factory at 0x80399c20, which calls a base class ctor,

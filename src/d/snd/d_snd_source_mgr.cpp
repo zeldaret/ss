@@ -3,6 +3,7 @@
 #include "common.h"
 #include "d/snd/d_snd_source.h"
 #include "d/snd/d_snd_source_enums.h"
+#include "d/snd/d_snd_util.h"
 #include "nw4r/ut/ut_list.h"
 
 #include <cmath>
@@ -110,7 +111,7 @@ void dSndSourceMgr_c::registerSource(dSoundSource_c *source) {
                 break;
             }
             case SND_SOURCE_CATEGORY_OBJECT: {
-                if (source->isName("TBoat") && mpTBoatSource == nullptr) {
+                if (streq(source->getName(), "TBoat") && mpTBoatSource == nullptr) {
                     mpTBoatSource = source;
                 }
                 break;

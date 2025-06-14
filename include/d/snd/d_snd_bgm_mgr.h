@@ -64,6 +64,8 @@ public:
     /** Runs when the fight is over, no matter how you started it */
     bool endBgmBattleRoom();
 
+    bool isPlayingAnyBattleMusic();
+
 private:
     bool stopBgmSound(dSndBgmSound_c *sound, s32 fadeFrames);
     void checkForPrepareStoppedBgmSound(u32 stoppedSoundId);

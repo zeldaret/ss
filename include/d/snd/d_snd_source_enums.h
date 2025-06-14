@@ -33,6 +33,7 @@ enum SoundSourceType_e {
     SND_SOURCE_TIME_STONE = 37,
     SND_SOURCE_CLEF = 38,
     SND_SOURCE_SHUTTER = 39,
+    SND_SOURCE_OBJECT_40 = 40,
     SND_SOURCE_OBJECT_42 = 42,
 
     // 43-52: Npc (4)
