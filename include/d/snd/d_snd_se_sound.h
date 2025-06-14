@@ -3,10 +3,9 @@
 
 #include "common.h"
 #include "d/snd/d_snd_sound.h"
+#include "d/snd/d_snd_types.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/ut/ut_list.h"
-
-class dSoundSource_c;
 
 struct UnkSeSoundStruct {
     UnkSeSoundStruct() : field_0x00(0), field_0x04(0.0f) {}
@@ -28,6 +27,7 @@ public:
 
     // vtable at 0x000
     /* vt 0x08 */ virtual void setSource(dSoundSource_c *source, u32 soundId);
+    // TODO these names are probably wrong
     /* vt 0x0C */ virtual void onStart(dSoundSource_c *source);
     /* vt 0x10 */ virtual void onCalc(dSoundSource_c *source);
 
@@ -44,16 +44,55 @@ public:
         mpSoundHandle->Stop(fadeFrames);
     }
 
-    bool isAttachedSound() const {
+    // cannot be const...
+    bool isAttachedSound() {
         return mpSoundHandle->IsAttachedSound();
+    }
+
+    nw4r::snd::SoundHandle *getHandle() {
+        return mpSoundHandle;
+    }
+
+    void setHandle(nw4r::snd::SoundHandle *handle) {
+        if (handle != nullptr) {
+            mpSoundHandle = handle;
+            field_0x11C = 0;
+        } else {
+            mpSoundHandle = &mSound;
+            field_0x11C = 1;
+        }
+    }
+
+    void attachSource(dSoundSource_c *source) {
+        mpSource = source;
+    }
+
+    bool isAttachedSource() const {
+        return mpSource != nullptr;
+    }
+
+    bool unkRemovalCheck() const {
+        return !field_0x11D && !field_0x11E;
+    }
+
+    bool isSoundId(u32 id) const {
+        return mSoundId == id;
+    }
+
+    void setAcquiredMaybe(bool value) {
+        field_0x11D = value;
+    }
+
+    void setInUseMaybe(bool value) {
+        field_0x11E = value;
     }
 
 protected:
     /* 0x004 */ nw4r::ut::Node mSourceLink;
     /* 0x00C */ nw4r::ut::Node mPoolLink;
-    /* 0x014 */ UNKWORD field_0x014;
+    /* 0x014 */ dSoundSource_c *mpSource;
     /* 0x018 */ dSndSound_c mSound;
-    /* 0x108 */ dSndSound_c *mpSoundHandle;
+    /* 0x108 */ nw4r::snd::SoundHandle *mpSoundHandle;
     /* 0x10C */ Type_e mHandleType;
     /* 0x110 */ u32 mSoundId;
     /* 0x114 */ s32 field_0x114;
