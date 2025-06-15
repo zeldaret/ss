@@ -4,8 +4,8 @@
 #include "d/snd/d_snd_source.h"
 #include "d/snd/d_snd_util.h"
 #include "d/snd/d_snd_wzsound.h" // IWYU pragma: export
+#include "nw4r/math/math_types.h"
 #include "nw4r/snd/snd_SoundHandle.h"
-
 
 SND_DISPOSER_FORWARD_DECL(dSndSmallEffectMgr_c);
 
@@ -35,18 +35,29 @@ public:
     // used for clawshots cursor, pan depends on where on the screen
     // your cursor is when it activates
     bool playSoundWithPan(u32 soundId, f32 pan);
-    void holdSoundWithPitch(u32 soundId, f32 pitch);
-    bool playSkbSound(u32 soundId);
+    bool holdSound(u32 soundId);
+    bool holdSoundWithPitch(u32 soundId, f32 pitch);
 
+    // These two do the exact same thing
+    bool playSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *position);
+    bool playSoundAtPosition2(u32 soundId, const nw4r::math::VEC3 *position);
+
+    bool holdBowChargeSound(f32 remainingChargeAmount);
+    bool holdFinisherPromptSound(const nw4r::math::VEC3 *position);
+
+    bool playDowsingPingSound(f32 volume, f32 pitch);
+    bool holdDowsingNearestSound();
+    
+    bool playSkbSound(u32 soundId);
 
     bool playButtonPressSoundWhenAdvancingTextBoxes(f32);
     void resetButtonPressSound();
     void setButtonPressSound(dSoundSource_c *source);
-
-    void playSound(u32 soundId, nw4r::snd::SoundHandle *handle);
     bool playBattleHitSound(BattleHitSound_e type, dSoundSource_c *source);
 
 private:
+    bool playSoundInternal(u32 soundId, nw4r::snd::SoundHandle *handle);
+    bool playSoundInternalChecked(u32 soundId, nw4r::snd::SoundHandle *handle);
     bool playSoundInternal(u32 soundId);
     void stopSounds(u32 playerIdx, u32 soundId, s32 fadeFrames);
     void stopSounds(u32 soundId, s32 fadeFrames);
@@ -59,11 +70,12 @@ private:
      * or stops a lower-priority sound if needed and possible.
      */
     nw4r::snd::SoundHandle *getHoldSoundHandle(u32 soundId);
+    bool holdSound(u32 soundId, nw4r::snd::SoundHandle *handle);
 
     /* 0x10 */ s32 field_0x10;
     // used for most sounds
     /* 0x14 */ nw4r::snd::SoundHandle mNormalSound;
-    /* 0x18 */ nw4r::snd::SoundHandle mHandle3;
+    /* 0x18 */ nw4r::snd::SoundHandle mDowsingSoundHandle;
     /* 0x1C */ nw4r::snd::SoundHandle mHoldSoundHandles[NUM_HOLD_SOUNDS];
 
     /* 0x28 */ u32 mDelayedSoundIds[NUM_DELAYED_SOUNDS];

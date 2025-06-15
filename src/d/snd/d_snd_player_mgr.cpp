@@ -94,9 +94,9 @@ nw4r::snd::SoundStartable::StartResult dSndPlayerMgr_c::startSound(
     }
     nw4r::snd::SoundStartable::StartResult res;
     if (pStartInfo != nullptr) {
-        res = dSndMgr_c::getPlayer().detail_StartSound(pHandle, soundId, pStartInfo);
+        res = dSndMgr_c::getPlayer().StartSoundReturnStatus(pHandle, soundId, pStartInfo);
     } else {
-        res = dSndMgr_c::getPlayer().detail_StartSound(pHandle, soundId, nullptr);
+        res = dSndMgr_c::getPlayer().StartSoundReturnStatus(pHandle, soundId, nullptr);
     }
     return res;
 }

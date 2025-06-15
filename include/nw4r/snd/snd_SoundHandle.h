@@ -49,9 +49,9 @@ namespace nw4r { namespace snd
 				mSound->SetVolume(volume, frames);
 		}
 
-		void SetPitch(f32 volume) {
+		void SetPitch(f32 pitch) {
 			if (IsAttachedSound())
-				mSound->SetPitch(volume);
+				mSound->SetPitch(pitch);
 		}
 
 		void Stop(int fadeFrames) {
