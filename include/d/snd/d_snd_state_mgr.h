@@ -33,8 +33,13 @@ public:
 
     void setup(EGG::Heap *pHeap);
     void onStageOrLayerUpdate();
+    void restoreEffects();
 
     static bool isInStage(const char *stageName);
+
+    s32 getStageId_0x040() const {
+        return mStageId;
+    }
 
     s32 getStageId_0x044() const {
         return field_0x044;

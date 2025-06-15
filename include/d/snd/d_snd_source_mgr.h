@@ -18,12 +18,18 @@ public:
 
     void registerSource(dSoundSource_c *source);
     void unregisterSource(dSoundSource_c *source);
+    void onShutdownSource(dSoundSource_c *source);
 
     void playFlowSound(u32 id);
     static s32 getSourceCategoryForSourceType(s32 sourceType, const char *name);
+    static bool isSwOrEOc(const char *name);
 
     static dSoundSource_c *getBoomerangSource() {
         return GetInstance()->mpBoomerangSource;
+    }
+
+    u8 getField_0x0013() const {
+        return field_0x0013;
     }
 
     void stopAllSound();

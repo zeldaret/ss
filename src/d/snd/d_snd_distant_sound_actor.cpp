@@ -39,15 +39,15 @@ void dSndDistantSoundActor_c::updatePosition() {
     }
 }
 
-void dSndDistantSoundActor_c::d_vt_0x58(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) {
+void dSndDistantSoundActor_c::postStartSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) {
     if (mpSoundSource != nullptr) {
-        mpSoundSource->d_vt_0x58(handle, pSound, id);
+        mpSoundSource->postStartSound(handle, pSound, id);
     }
 }
 
-void dSndDistantSoundActor_c::d_vt_0x5C(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id, UNKWORD arg) {
+void dSndDistantSoundActor_c::postHoldSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id, UNKWORD arg) {
     if (mpSoundSource != nullptr) {
-        mpSoundSource->d_vt_0x5C(handle, pSound, id, arg);
+        mpSoundSource->postHoldSound(handle, pSound, id, arg);
     }
 }
 
@@ -101,10 +101,10 @@ void dSndDistantSoundActor_c::detachFromSource() {
 void dSndDistantSoundActor_c::setPause(bool flag, int fadeFrames) {
     if (mIsPaused && !flag) {
         PauseAllSound(flag, fadeFrames);
-        mIsPaused = 0;
+        mIsPaused = false;
     } else if (!mIsPaused && flag) {
         PauseAllSound(flag, fadeFrames);
-        mIsPaused = 1;
+        mIsPaused = true;
     }
 }
 
