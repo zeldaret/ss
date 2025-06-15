@@ -40,7 +40,7 @@ bool dSndAreaSoundEffectMgr_c::startSound(u32 soundId, u32 handleIdx) {
     }
 
     dSndAreaSound_c *snd = &mSounds[handleIdx];
-    nw4r::snd::SoundStartable::StartResult res = mActor.detail_StartSound(snd, soundId, nullptr);
+    nw4r::snd::SoundStartable::StartResult res = mActor.StartSoundReturnStatus(snd, soundId, nullptr);
     if (res == nw4r::snd::SoundStartable::START_SUCCESS) {
         snd->fadeIn(soundId, 30);
     }

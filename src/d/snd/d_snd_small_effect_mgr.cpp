@@ -4,13 +4,18 @@
 #include "d/snd/d_snd_bgm_mgr.h"
 #include "d/snd/d_snd_checkers.h"
 #include "d/snd/d_snd_control_player_mgr.h"
+#include "d/snd/d_snd_distant_sound_actor_pool.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_source.h"
 #include "d/snd/d_snd_source_enums.h"
 #include "d/snd/d_snd_util.h"
 #include "d/snd/d_snd_wzsound.h"
+#include "egg/audio/eggAudioRmtSpeakerMgr.h"
 #include "nw4r/snd/snd_SeqSoundHandle.h"
+#include "nw4r/snd/snd_SoundHandle.h"
+#include "nw4r/snd/snd_SoundStartable.h"
+#include "nw4r/snd/snd_global.h"
 #include "rvl/OS/OSFastCast.h"
 #include "toBeSorted/music_mgrs.h"
 
@@ -30,7 +35,7 @@ void dSndSmallEffectMgr_c::calc() {
             if (mDelayedSoundIds[i] != -1) {
                 mDelayedSoundTimers[i]--;
                 if (mDelayedSoundTimers[i] <= 0) {
-                    playSound(mDelayedSoundIds[i], nullptr);
+                    playSoundInternalChecked(mDelayedSoundIds[i], nullptr);
                     mDelayedSoundIds[i] = -1;
                 }
             }
@@ -180,6 +185,128 @@ nw4r::snd::SoundHandle *dSndSmallEffectMgr_c::getHoldSoundHandle(u32 soundId) {
         }
     }
     return least;
+}
+
+bool dSndSmallEffectMgr_c::holdSound(u32 soundId) {
+    nw4r::snd::SoundHandle *h = getHoldSoundHandle(soundId);
+    if (h != nullptr) {
+        return holdSound(soundId, h);
+    }
+    return false;
+}
+
+bool dSndSmallEffectMgr_c::holdSoundWithPitch(u32 soundId, f32 pitch) {
+    nw4r::snd::SoundHandle *h = getHoldSoundHandle(soundId);
+    bool ok = false;
+    if (h != nullptr) {
+        ok = holdSound(soundId, h);
+    }
+    if (ok && soundId == SE_S_GAUGE_SHIELD_UP_LV) {
+        f32 actualPitch = pitch + 1.0f;
+        if (actualPitch > 2.0f) {
+            actualPitch = 2.0f;
+        }
+        h->SetPitch(actualPitch);
+    }
+    return ok;
+}
+
+bool dSndSmallEffectMgr_c::holdSound(u32 soundId, nw4r::snd::SoundHandle *handle) {
+    if (handle == nullptr) {
+        return false;
+    }
+    u32 param = dSndPlayerMgr_c::GetInstance()->getSomeUserParam(soundId);
+    if ((param & 0x80000000) != 0) {
+        return false;
+    }
+    nw4r::snd::SoundStartable::StartResult result =
+        dSndMgr_c::GetInstance()->getPlayer().HoldSoundReturnStatus(handle, soundId, nullptr);
+    if (result == nw4r::snd::SoundStartable::START_SUCCESS) {
+        if ((param & 0x8) != 0) {
+            if (EGG::AudioRmtSpeakerMgr::getWpadVolume() != 0) {
+                handle->SetOutputLineFlag(nw4r::snd::OUTPUT_LINE_REMOTE_1);
+            }
+        } else if ((param & 0x4) != 0) {
+            handle->SetOutputLineFlag(nw4r::snd::OUTPUT_LINE_MAIN | nw4r::snd::OUTPUT_LINE_REMOTE_1);
+        }
+    }
+
+    return result == nw4r::snd::SoundStartable::START_SUCCESS;
+}
+
+bool dSndSmallEffectMgr_c::playSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *position) {
+    return dSndDistantSoundActorPool_c::GetInstance()->startSound(soundId, position);
+}
+
+bool dSndSmallEffectMgr_c::playSoundAtPosition2(u32 soundId, const nw4r::math::VEC3 *position) {
+    return dSndDistantSoundActorPool_c::GetInstance()->startSound(soundId, position);
+}
+
+bool dSndSmallEffectMgr_c::holdBowChargeSound(f32 remainingChargeAmount) {
+    nw4r::snd::SoundHandle *pHandle = getHoldSoundHandle(SE_S_BW_FOCUS_LV);
+    bool ok = false;
+    if (pHandle != nullptr) {
+        ok = holdSound(SE_S_BW_FOCUS_LV, pHandle);
+    }
+    if (ok) {
+        f32 chargeProgress = 1.0f - remainingChargeAmount;
+        if (chargeProgress < 0.0f) {
+            chargeProgress = 0.0f;
+        }
+
+        // Bow charge sound increases in volume as it's charging up
+        f32 volume = chargeProgress / 2.0f;
+        volume += 0.5f;
+        if (volume > 1.0f) {
+            volume = 1.0f;
+        }
+        pHandle->SetVolume(volume, 0);
+
+        // Bow charge sound pitches up by 25% until it's complete
+        f32 pitch = chargeProgress / 4.0f + 1.0f;
+        pHandle->SetPitch(pitch);
+    }
+    return ok;
+}
+
+bool dSndSmallEffectMgr_c::holdFinisherPromptSound(const nw4r::math::VEC3 *position) {
+    if (fn_80364DA0(ENEMY_SOUND_MGR)) {
+        return false;
+    }
+    return dSndDistantSoundActorPool_c::GetInstance()->holdSound(SE_S_FOCUS_FINISHER_LV, position);
+}
+
+bool dSndSmallEffectMgr_c::playDowsingPingSound(f32 volume, f32 pitch) {
+    bool result = playSoundInternal(SE_S_DOWSING_SOUND, &mDowsingSoundHandle);
+    if (result) {
+        mDowsingSoundHandle.SetVolume(volume, 0);
+        if (pitch < 0.8408964f) {
+            pitch = 0.8408964f;
+        } else if (pitch < 1.0594631f) {
+            pitch = 1.0f;
+        } else if (pitch < 1.122462f) {
+            pitch = 1.0594631f;
+        } else if (pitch < 1.1892071f) {
+            pitch = 1.122462f;
+        } else if (pitch < 1.2599211f) {
+            pitch = 1.1892071f;
+        } else if (pitch < 1.3348398f) {
+            pitch = 1.2599211f;
+        } else if (pitch < 1.4142135f) {
+            pitch = 1.3348398f;
+        } else if (pitch < 1.4983071f) {
+            pitch = 1.4142135f; // sqrt(2)
+        } else if (pitch > 1.4983071f) {
+            pitch = 1.4983071f;
+        }
+        mDowsingSoundHandle.SetPitch(pitch);
+    }
+
+    return result;
+}
+
+bool dSndSmallEffectMgr_c::holdDowsingNearestSound() {
+    return holdSound(SE_S_DOWSING_SOUND_NEAREST, &mDowsingSoundHandle);
 }
 
 bool dSndSmallEffectMgr_c::playSkbSound(u32 soundId) {
