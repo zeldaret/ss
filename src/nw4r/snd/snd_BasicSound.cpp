@@ -100,7 +100,7 @@ void BasicSound::InitParam()
 	mLpfFreq			= 0.0f;
 	mBiquadFilterType	= 0;
 	mBiquadFilterValue	= 0.0f;
-	mOutputLineFlag		= mSoundPlayer ? mSoundPlayer->GetDefaultOutputLine() : 1;
+	mOutputLineFlag		= mSoundPlayer ? mSoundPlayer->GetDefaultOutputLine() : OUTPUT_LINE_MAIN;
 	mMainOutVolume		= 1.0f;
 	mMainSend			= 0.0f;
 	// clang-format on

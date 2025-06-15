@@ -271,7 +271,7 @@ static const ActorInfo sInfos[] = {
     { "ESiren",                       fProfile::E_SIREN,                       fProfile::E_SIREN, 0xFFFF,                     18,  0},
     {  "ESktl",                     fProfile::E_SKYTAIL,                     fProfile::E_SKYTAIL,      2,                     10,  0},
     {    "ESm",                          fProfile::E_SM,                          fProfile::E_SM,     59,                     11,  0},
-    { "ESpark",                       fProfile::E_SPARK,                       fProfile::E_SPARK,     67,                     17,  0},
+    { "ESpark",                       fProfile::E_SPARK,                       fProfile::E_SPARK,     67,       SND_SOURCE_SPARK,  0},
     { "ESyako",                  fProfile::E_SYAKOMAITO,                  fProfile::E_SYAKOMAITO,     68,                     10,  0},
     {    "EWs",                          fProfile::E_WS,                          fProfile::E_WS,      6,                     15,  0},
     {    "Eel",                           fProfile::EEL,                           fProfile::EEL, 0xFFFF,                   0xFF,  0},
