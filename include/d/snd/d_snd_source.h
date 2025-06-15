@@ -63,7 +63,9 @@ public:
     virtual void d_s_vt_0x1D4();
     virtual void d_s_vt_0x1D8();
     virtual void d_s_vt_0x1DC();
-    virtual void d_s_vt_0x1E0();
+    virtual void onAnimSoundEvent(UNKWORD arg) {
+        field_0x154 = arg;
+    }
     virtual void d_s_vt_0x1E4();
     virtual u32 d_s_vt_0x1E8(u32 soundId);
 

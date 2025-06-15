@@ -26,6 +26,9 @@ public:
         return GetInstance()->mpBoomerangSource;
     }
 
+    void stopAllSound();
+    void stopAllNonPlayerSound();
+
 private:
     static bool isCertainEnemyType(dSoundSource_c *source);
     void removeSourceFromList(dSoundSource_c *source, nw4r::ut::List *list);

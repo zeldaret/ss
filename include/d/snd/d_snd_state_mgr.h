@@ -36,6 +36,10 @@ public:
 
     static bool isInStage(const char *stageName);
 
+    s32 getStageId_0x044() const {
+        return field_0x044;
+    }
+
     u32 getField_0x11C() const {
         return field_0x11C;
     }
@@ -61,6 +65,11 @@ public:
     }
 
     void setFlowEvent(u32 eventId);
+
+    const char *getCurrentStageMusicDemoName() const;
+    bool isInDemo() const {
+        return getCurrentStageMusicDemoName() != nullptr;
+    }
 
 private:
     u32 getStageTypeFlags(const char *stageName) const;
