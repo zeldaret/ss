@@ -337,7 +337,7 @@ toBeSorted/area_math.cpp:
 toBeSorted/deg_angle_util.cpp:
 	.text       start:0x80067280 end:0x80067B14 align:16
 
-toBeSorted/reload_color_fader.cpp:
+d/d_reset.cpp:
 	.text       start:0x80067B20 end:0x80068FD0 align:16
 	.ctors      start:0x804DB6A4 end:0x804DB6A8
 	.sbss       start:0x80575270 end:0x80575278

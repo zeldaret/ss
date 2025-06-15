@@ -9,6 +9,7 @@
 #include "d/d_gfx.h"
 #include "d/d_heap.h"
 #include "d/d_message.h"
+#include "d/d_reset.h"
 #include "d/d_scene.h"
 #include "d/d_sys.h"
 #include "d/lyt/d_lyt_battery.h"
@@ -27,11 +28,10 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/d_d3d.h"
-#include "toBeSorted/d_hbm.h"
 #include "toBeSorted/d_emitter.h"
+#include "toBeSorted/d_hbm.h"
 #include "toBeSorted/d_particle.h"
 #include "toBeSorted/fi_context.h"
-#include "toBeSorted/reload_color_fader.h"
 #include "toBeSorted/save_manager.h"
 #include "toBeSorted/save_related.h"
 #include "toBeSorted/special_item_drop_mgr.h"
@@ -439,7 +439,7 @@ int dScBoot_c::doDelete() {
     SpecialItemDropMgr::create();
     dHbm_c::GetInstance()->offFlags(8);
     dGfx_c::GetInstance()->setDrawCallback(nullptr);
-    ReloadColorFader::GetInstance()->fn_80067DD0(true);
+    dReset::Manage_c::GetInstance()->BootComplete(true);
     return SUCCEEDED;
 }
 
@@ -499,7 +499,7 @@ void dScBoot_c::executeState_Strap() {
             case 1:
                 if (!checkDone()) {
                     bool ok = mStrapScreen.execute();
-                    if (ReloadColorFader::GetInstance()->field_0x0C == 1) {
+                    if (dReset::Manage_c::GetInstance()->get0x0C() == 1) {
                         ok = false;
                     }
 

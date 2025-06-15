@@ -112,8 +112,14 @@ void KPADDisableMplsDirRevise(s32 chan);
 void KPADSetMplsDirReviseParam(s32 chan, f32);
 void KPADEnableMplsAccRevise(s32 chan);
 void KPADSetMplsAccReviseParam(s32 chan, f32, f32);
+
 void KPADEnableMplsDpdRevise(s32 chan);
+f32 KPADIsEnableMplsDpdRevise(s32 chan);
+void KPADDisableMplsDpdRevise(s32 chan);
 void KPADSetMplsDpdReviseParam(s32 chan, f32);
+
+typedef Vec KPADVec[3];
+void KPADSetMplsDirReviseBase(s32 chan, Vec *);
 
 #ifdef __cplusplus
 }

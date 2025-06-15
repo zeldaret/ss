@@ -2,12 +2,13 @@
 
 #include "d/d_dvd_unk.h"
 #include "d/d_gfx.h"
+#include "d/d_reset.h"
 #include "d/d_textunk.h"
 #include "egg/gfx/eggDrawGX.h"
 #include "egg/gfx/eggScreen.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "toBeSorted/reload_color_fader.h"
+
 
 /** 805750d0 */
 dDvdDriveError_c *dDvdDriveError_c::sInstance;
@@ -145,7 +146,7 @@ void dDvdDriveError_c::execute() {
             dDvdUnk::FontUnk::GetInstance()->fn_80052C60();
         }
     } else if (mDvdDriveStatus == DVD_STATE_IDLE) {
-        if (!ReloadColorFader::GetInstance()->is1Or5()) {
+        if (!dReset::Manage_c::GetInstance()->is1Or5()) {
             mIsError = false;
         }
     }

@@ -607,6 +607,10 @@ public:
         return mRidingActorType;
     }
 
+    bool isAttacking() const {
+        return mAttackDirection != ATTACK_NONE;
+    }
+
     static bool isInEvent();
     bool isAttackingLeft() const;
     bool isAttackingRight() const;

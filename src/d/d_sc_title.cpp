@@ -5,6 +5,7 @@
 #include "d/d_heap.h"
 #include "d/d_message.h"
 #include "d/d_pad.h"
+#include "d/d_reset.h"
 #include "d/d_sc_game.h"
 #include "d/d_sys.h"
 #include "f/f_base.h"
@@ -16,7 +17,6 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/music_mgrs.h"
-#include "toBeSorted/reload_color_fader.h"
 #include "toBeSorted/save_related.h"
 #include "toBeSorted/unk_save_time.h"
 
@@ -74,16 +74,16 @@ static const char *const sSkb = "SoftwareKeyboard";
 
 int dScTitle_c::create() {
     int ret = dScGame_c::create();
-    if (ret == SUCCEEDED && ReloadColorFader::GetInstance()->field_0x0C == 1) {
+    if (ret == SUCCEEDED && dReset::Manage_c::GetInstance()->get0x0C() == 1) {
         if (field_0x2AC == 0) {
-            ReloadColorFader::GetInstance()->fn_80067EF0(0);
+            dReset::Manage_c::GetInstance()->FadeOutRequest(false);
             if (checkAllSaveFilesEmpty() != true) {
                 TITLE_SCREEN_CHANGE = 0;
             }
             field_0x2AC = 1;
             ret = NOT_READY;
         } else {
-            ReloadColorFader::GetInstance()->fn_80067EF0(1);
+            dReset::Manage_c::GetInstance()->FadeOutRequest(true);
         }
     }
 

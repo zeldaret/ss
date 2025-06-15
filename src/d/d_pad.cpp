@@ -1,16 +1,18 @@
 #include "d/d_pad.h"
 
 #include "common.h"
+#include "d/a/d_a_player.h"
 #include "d/d_gfx.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "egg/core/eggController.h"
 #include "egg/core/eggHeap.h"
+#include "m/m_angle.h"
+#include "m/m_mtx.h"
 #include "m/m_pad.h"
 #include "m/m_vec.h"
 #include "rvl/KPAD/KPAD.h"
+#include "rvl/MTX/vec.h"
 #include "rvl/WPAD/WPAD.h"
-
-#include "rvl/WPAD.h"
 
 namespace dPad {
 
@@ -118,14 +120,80 @@ void beginPad_BR() {
         }
     }
 
-    ex_c::m_ex[0].fn_800572A0();
+    dPad::ex_c &ex = ex_c::m_ex[0];
+    ex.fn_800572A0();
     if (mPad::getCore(0)->isConnected()) {
-        ex_c::m_ex[0].getUnifiedWpadStatus(0);
-        ex_c::m_ex[0].fn_80059300(0);
-        ex_c::m_ex[0].fn_80056AF0(0);
-        ex_c::m_ex[0].fn_80056B90(0);
-        ex_c::m_ex[0].fn_80056CE0(0);
-        ex_c::m_ex[0].fn_80056DF0(0);
+        ex.getUnifiedWpadStatus(0);
+        ex.fn_80059300(0);
+        ex.fn_80056AF0(0);
+        ex.fn_80056B90(0);
+        ex.fn_80056CE0(0);
+        ex.fn_80056DF0(0);
+        bool isDpdReviseEnabled = KPADIsEnableMplsDpdRevise(0) >= 0.f;
+        if (ex.field_0x22CE) {
+            if (isDpdReviseEnabled) {
+                KPADDisableMplsDpdRevise(0);
+            }
+        } else {
+            if (!isDpdReviseEnabled) {
+                KPADEnableMplsDpdRevise(0);
+            }
+        }
+        ex.field_0x22CE = false;
+
+        const dAcPy_c *player = dAcPy_c::GetLink();
+        if (player && player->isAttacking()) {
+            mMtx_c m;
+            m.XrotS(mAng::deg2short(-30.f));
+            mVec3_c baseZ;
+            KPADVec kpadvec;
+            baseZ.x = m.m[0][2];
+            baseZ.y = m.m[1][2];
+            baseZ.z = m.m[2][2];
+            kpadvec[2].x = m.m[0][2];
+            kpadvec[2].y = m.m[1][2];
+            kpadvec[2].z = m.m[2][2];
+            mVec3_c tmpCross;
+            VECCrossProduct(ex.field_0x2268, baseZ, tmpCross);
+
+            if (0.05f < VECMag(tmpCross)) {
+                tmpCross.normalize();
+                kpadvec[0].x = tmpCross.x;
+                kpadvec[0].y = tmpCross.y;
+                kpadvec[0].z = tmpCross.z;
+            } else {
+                kpadvec[0].x = baseZ.x;
+                kpadvec[0].y = baseZ.y;
+                kpadvec[0].z = baseZ.z;
+            }
+            tmpCross.x = kpadvec[0].x;
+            tmpCross.y = kpadvec[0].y;
+            tmpCross.z = kpadvec[0].z;
+
+            mVec3_c tmpCross2;
+            VECCrossProduct(baseZ, tmpCross, tmpCross2);
+            if (VECMag(tmpCross2) > 0.05f) {
+                tmpCross2.normalize();
+                kpadvec[1].x = tmpCross2.x;
+                kpadvec[1].y = tmpCross2.y;
+                kpadvec[1].z = tmpCross2.z;
+            } else {
+                kpadvec[1].x = baseZ.x;
+                kpadvec[1].y = baseZ.y;
+                kpadvec[1].z = baseZ.z;
+            }
+            tmpCross2.x = kpadvec[1].x;
+            tmpCross2.y = kpadvec[1].y;
+            tmpCross2.z = kpadvec[1].z;
+
+            KPADSetMplsDirReviseBase(0, kpadvec);
+            KPADEnableMplsDpdRevise(0);
+        } else {
+            disableMplsDirRevise(0);
+        }
+
+        KPADEnableMplsAccRevise(0);
+        KPADSetMplsAccReviseParam(0, 0.03f, 0.4f);
     }
 
     ex_c::m_current_ex = &ex_c::m_ex[mPad::getCurrentCoreID()];
