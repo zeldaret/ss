@@ -16,6 +16,10 @@ public:
     void setCallback(dSoundSource_c *source);
     void setCallback(nw4r::snd::AnimSound::Callback cb, void *userData);
 
+    void shutdown() {
+        mSound.Shutdown();
+    }
+
 private:
     static void animCallback(int, s32, const char *, UNKWORD, void *userData);
 
