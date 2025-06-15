@@ -82,11 +82,6 @@ struct mAng {
         return mVal * sAngToDeg;
     }
 
-    static s16 angle(const mVec3_c &a, const mVec3_c &b) {
-        f32 rads = a.angle(b);
-        return fromRad(rads);
-    }
-
     f32 radian() const {
         return ((2.f * M_PI) / 65536.0f) * mVal;
     }

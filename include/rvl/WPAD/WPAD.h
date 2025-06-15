@@ -8,7 +8,6 @@
 #include "rvl/SC/scsystem.h"
 #include "rvl/WPAD/WUD.h"
 
-
 /*******************************************************************************
  * macros
  */
@@ -31,13 +30,13 @@ typedef s32 WPADResult;
 enum WPADResult_et {
     WPAD_ERR_OK = 0,
 
-    WPAD_ERR_NO_CONTROLLER = -1,       /* name known from asserts */
-    WPAD_ERR_BUSY = -2, // [RT3P54] has this as WPAD_ERR_BUSY
-    WPAD_ERR_TRANSFER = -3,                   // [RT3P54] has this as WPAD_ERR_TRANSFER
-    WPAD_ERR_INVALID = -4,             /* name comes from [R89JEL] */
-                                       //	WPAD_ERR_5						= -5,	/* unknown */
-                                       //	WPAD_ERR_6						= -6,	/* unknown */
-    WPAD_ERR_CORRUPTED = -7,           /* name comes from [R89JEL] */
+    WPAD_ERR_NO_CONTROLLER = -1, /* name known from asserts */
+    WPAD_ERR_BUSY = -2,          // [RT3P54] has this as WPAD_ERR_BUSY
+    WPAD_ERR_TRANSFER = -3,      // [RT3P54] has this as WPAD_ERR_TRANSFER
+    WPAD_ERR_INVALID = -4,       /* name comes from [R89JEL] */
+                                 //	WPAD_ERR_5						= -5,	/* unknown */
+                                 //	WPAD_ERR_6						= -6,	/* unknown */
+    WPAD_ERR_CORRUPTED = -7,     /* name comes from [R89JEL] */
 
 #define WPAD_ESUCCESS WPAD_ERR_OK
 #define WPAD_ENODEV WPAD_ERR_NO_CONTROLLER
@@ -86,7 +85,7 @@ enum WPADChannel_et {
 typedef s32 WPADDeviceType;
 enum WPADDeviceType_et {
     WPAD_DEV_CORE = 0,
-    WPAD_DEV_FS = 1,
+    WPAD_DEV_FREESTYLE = 1,
     WPAD_DEV_CLASSIC = 2, /* name known from asserts, but not value */
     WPAD_DEV_BALANCE_CHECKER = 3,
     WPAD_DEV_VSM = 4,
@@ -114,12 +113,11 @@ enum WPADDeviceType_et {
 
     WPAD_DEV_MPLS_PT_UNKNOWN = 250,
 
-    WPAD_DEV_251 = 251,
-    WPAD_DEV_252 = 252, // invalid device mode?
-    WPAD_DEV_NONE =
-        253,                     // sort of like WPAD_ENODEV (see __wpadAbortInitExtension in WPADHIDParser.c)
-                                 //	WPAD_DEV_254				= 254,	/* unknown, doesn't seem to be used anywhere */
-    WPAD_DEV_INITIALIZING = 255, // see __a1_20_status_report
+    WPAD_DEV_FUTURE = 251,
+    WPAD_DEV_NOT_SUPPORTED = 252,
+    WPAD_DEV_NOT_FOUND = 253, // sort of like WPAD_ENODEV (see __wpadAbortInitExtension in WPADHIDParser.c)
+    WPAD_DEV_NULL = 254,      /* unknown, doesn't seem to be used anywhere */
+    WPAD_DEV_UNKNOWN = 255,   // see __a1_20_status_report
 };
 
 typedef u32 WPADDataFormat;
@@ -620,6 +618,11 @@ WPADResult WPADControlBLC(WPADChannel chan, WPADBLCCommand command, WPADCallback
 void WPADRecalibrate(WPADChannel chan);
 BOOL WPADIsUsedCallbackByKPAD(void);
 void WPADSetCallbackByKPAD(BOOL isKPAD);
+
+void WPADSetAutoSleepTime(int min);
+void WPADSetControllerLastDataUpdateTime(int min);
+
+void WPADSetAcceptConnection(int);
 
 #ifdef __cplusplus
 }

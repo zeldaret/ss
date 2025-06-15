@@ -23,6 +23,9 @@ public:
 public:
     dSndPlayerMgr_c();
 
+    void setup(s32 channel);
+    void shutdown(s32 channel);
+
     void shutdown();
     void calc();
 

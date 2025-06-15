@@ -4,67 +4,127 @@
 #include "common.h"
 #include "egg/core/eggHeap.h"
 
-
 namespace EGG {
 
 template <typename T>
 class TBuffer {
 public:
-    // vtable 0x00
-    /* vt 0x08 */ virtual ~TBuffer() {
-        if (mBuffer != nullptr) {
-            delete[] mBuffer;
-            mBuffer = nullptr;
+    class iterator {
+    public:
+        iterator(TBuffer *pBuffer, int index) : mBuffer(pBuffer), mIndex(index) {}
+
+        int get_index() const {
+            return mIndex;
         }
-    }
-    /* vt 0x0C */ virtual void allocate(int n, int);
-    /* vt 0x10 */ virtual void allocate(int n, Heap *heap, int);
-    /* vt 0x14 */ virtual void onAllocate(Heap *) {
-        return;
-    }
-    /* vt 0x18 */ virtual void errRangeOver() {
-        return;
-    }
+
+        iterator &operator++() {
+            mIndex++;
+            return *this;
+        }
+
+        T &operator*() {
+            return (*mBuffer)(mIndex);
+        }
+
+        friend bool operator==(const iterator &rLhs, const iterator &rRhs) {
+            return rLhs.mBuffer == rRhs.mBuffer && rLhs.mIndex == rRhs.mIndex;
+        }
+        friend bool operator!=(const iterator &rLhs, const iterator &rRhs) {
+            return !(rLhs == rRhs);
+        }
+
+    private:
+        TBuffer *mBuffer; // at 0x0
+        int mIndex;       // at 0x4
+    };
 
 public:
-    /* 0x08 */ s32 mSize;
-    /* 0x0C */ T *mBuffer;
+    TBuffer() : mSize(0), mBuffer(NULL) {}
 
-public:
-    inline TBuffer() : mSize(0), mBuffer(nullptr) {}
+    virtual ~TBuffer() {
+        if (mBuffer == NULL) {
+            return;
+        }
 
-    inline bool isRangeValid(int i) {
-        return (i >= 0 && i < mSize);
+        delete[] mBuffer;
+        mBuffer = NULL;
+    } // at 0x8
+
+    virtual void allocate(int size, int align = 0); // at 0xC
+
+    virtual void allocate(int size, Heap *pHeap, int align = 0); // at 0x10
+
+    virtual void onAllocate(Heap * /* pHeap */) {} // at 0x14
+    virtual void errRangeOver() const {}           // at 0x18
+
+    T &operator()(int i) {
+        checkRange(i);
+        return mBuffer[i];
     }
-    inline void checkRange(int i) {
+    const T &operator()(int i) const {
+        checkRange(i);
+        return mBuffer[i];
+    }
+
+    T &get(int i) {
+        checkRange(i);
+        return mBuffer[i];
+    }
+    const T &get(int i) const {
+        checkRange(i);
+        return mBuffer[i];
+    }
+
+    int getSize() const {
+        return mSize;
+    }
+    int size() const {
+        return mSize;
+    }
+
+    iterator begin() {
+        return iterator(this, 0);
+    }
+    iterator end() {
+        return iterator(this, getSize());
+    }
+
+private:
+    void flush() {}
+
+    void checkRange(int i) const {
         if (!isRangeValid(i)) {
             errRangeOver();
         }
     }
-    inline T &operator()(int i) {
-        checkRange(i);
-        return mBuffer[i];
+
+    bool isRangeValid(int i) const {
+        return i >= 0 && i < mSize;
     }
-    inline s32 getSize() {
-        return mSize;
-    }
+
+private:
+    int mSize;  // at 0x4
+    T *mBuffer; // at 0x8
 };
 
 template <typename T>
-void TBuffer<T>::allocate(int n, int) {
-    mSize = n;
-    mBuffer = new T[n];
+void TBuffer<T>::allocate(int size, int) {
+    mSize = size;
+    mBuffer = new T[size];
     onAllocate(nullptr);
 }
-
 template <typename T>
-void TBuffer<T>::allocate(int n, Heap *heap, int) {
-    mSize = n;
-    if (heap == nullptr) {
-        heap = Heap::sCurrentHeap;
+void TBuffer<T>::allocate(int size, Heap *pHeap, int) {
+    mSize = size;
+
+    if (pHeap == NULL) {
+        pHeap = Heap::getCurrentHeap();
     }
-    mBuffer = new (heap, 4) T[mSize];
-    onAllocate(heap);
+
+    mBuffer = new (pHeap) T[mSize];
+
+    flush();
+    onAllocate(pHeap);
 }
 
 } // namespace EGG

@@ -216,7 +216,7 @@ public:
         return x != v.x || y != v.y || z != v.z;
     }
 
-    void normalize();
+    f32 normalize();
     bool normalizeRS();
 
     static mVec3_c createProjectionXZ(const mAng3_c &ang, f32 scalar);
@@ -263,6 +263,10 @@ public:
     }
     s16 atan2sY_XZ() const {
         return cM::atan2s(-y, absXZ());
+    }
+
+    f32 angle(const mVec3_c &other) const {
+        return EGG::Vector3f::angle(other);
     }
 
     static mVec3_c Zero;

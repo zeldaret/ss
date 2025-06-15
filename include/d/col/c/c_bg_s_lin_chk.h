@@ -50,6 +50,9 @@ public:
     bool GetPreGroundChk() const {
         return mPreGroundChk;
     }
+    void SetPreRoofChk(bool b) {
+        mPreRoofChk = b;
+    }
     bool GetPreRoofChk() const {
         return mPreRoofChk;
     }
