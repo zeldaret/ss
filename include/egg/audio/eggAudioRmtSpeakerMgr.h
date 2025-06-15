@@ -42,7 +42,7 @@ private:
 
     static u8 sAudioRmtSpeakerWpadVolume;
 
-    static AudioRmtSpeakerTask sTasks[0x14];
+    static AudioRmtSpeakerTask sConnectTask[0x14];
 };
 
 } // namespace EGG
