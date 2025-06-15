@@ -466,14 +466,12 @@ void dEffect2D_c::draw() {
     f32 base = proj[1];
     proj[1] = base / dGfx_c::get16x9to4x3WidthScaleF();
     GXSetProjectionv(proj);
-    f32 f = dGfx_c::getWidth16x9() / 2.f;
+    f32 f = dGfx_c::getWidth16x9() / 2;
+    f32 h = dGfx_c::getCurrentScreenHeightLimitF();
     mMtx_c mtx1, mtx2;
     JPADrawInfo info;
 
-    C_MTXLightOrtho(
-        mtx1, -dGfx_c::getCurrentScreenHeightLimitF(), dGfx_c::getCurrentScreenHeightLimitF(), -f, f, 0.5f, 0.5f, 0.5f,
-        0.5f
-    );
+    C_MTXLightOrtho(mtx1, -h, h, -f, f, 0.5f, 0.5f, 0.5f, 0.5f);
 
     MTXScale(mtx2, fn_80054AD0() ? dGfx_c::get16x9to4x3WidthScaleF() : 1.0f, 1.0f, 1.0f);
     MTXCopy(mtx2, info.mCamMtx);
