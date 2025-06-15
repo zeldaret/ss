@@ -3,6 +3,7 @@
 #include "common.h"
 #include "d/a/d_a_item.h"
 #include "d/d_message.h"
+#include "d/d_pad.h"
 #include "d/d_pouch.h"
 #include "d/d_sc_game.h"
 #include "d/d_stage_mgr.h"
@@ -12,6 +13,7 @@
 #include "sized_string.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/unk_save_time.h"
+
 
 // https://github.com/lepelog/skywardsword-tools/wiki/Navi-Table-(Fi-Advice)
 
@@ -290,9 +292,6 @@ u8 FiContext::rateBattlePerformance(u8 id) {
     return ret;
 }
 
-extern "C" bool isLowBattery1();
-extern "C" bool isLowBattery2();
-
 u16 FiContext::prepareFiHelpIndex() {
     u16 ret = 0xFFFF;
     setHelpIndex(-1);
@@ -317,10 +316,10 @@ u16 FiContext::prepareFiHelpIndex() {
         setHelpIndex(0);
     }
 
-    if (isLowBattery2() || isLowBattery1()) {
+    if (dPad::ex_c::getInstance()->isLowBattery() || dPad::ex_c::getInstance()->isOutOfBattery()) {
         if (!getField_0x48()) {
             ret = 6400;
-            if (isLowBattery1()) {
+            if (dPad::ex_c::getInstance()->isOutOfBattery()) {
                 // "Master, the batteries in your Wii Remote will be depleted any moment."
                 setHelpIndex(3);
             } else {

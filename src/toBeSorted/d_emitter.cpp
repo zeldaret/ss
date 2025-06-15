@@ -2,6 +2,7 @@
 // vtable order
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAParticle.h"
+#include "d/d_gfx.h"
 #include "rvl/GX/GXTypes.h"
 #include "toBeSorted/d_d3d.h"
 // clang-format on
@@ -40,11 +41,9 @@
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/d_particle.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/lyt_related_floats.h"
 
 #include "rvl/GX.h"
 #include "rvl/MTX.h"
-
 
 void float_ordering_1(s32 a) {
     (f32) a;
@@ -465,15 +464,18 @@ void dEffect2D_c::draw() {
     f32 proj[GX_PROJECTION_SZ];
     GXGetProjectionv(proj);
     f32 base = proj[1];
-    proj[1] = base / get_805751A4();
+    proj[1] = base / dGfx_c::get16x9to4x3WidthScaleF();
     GXSetProjectionv(proj);
-    f32 f = get_80575184() / 2;
+    f32 f = dGfx_c::getWidth16x9() / 2.f;
     mMtx_c mtx1, mtx2;
     JPADrawInfo info;
 
-    C_MTXLightOrtho(mtx1, -get_80575150(), get_80575150(), -f, f, 0.5f, 0.5f, 0.5f, 0.5f);
+    C_MTXLightOrtho(
+        mtx1, -dGfx_c::getCurrentScreenHeightLimitF(), dGfx_c::getCurrentScreenHeightLimitF(), -f, f, 0.5f, 0.5f, 0.5f,
+        0.5f
+    );
 
-    MTXScale(mtx2, fn_80054AD0() ? get_805751A4() : 1.0f, 1.0f, 1.0f);
+    MTXScale(mtx2, fn_80054AD0() ? dGfx_c::get16x9to4x3WidthScaleF() : 1.0f, 1.0f, 1.0f);
     MTXCopy(mtx2, info.mCamMtx);
     MTXCopy(mtx1, info.mPrjMtx);
     dJEffManager_c::draw(&info, mGroupId);
@@ -1030,7 +1032,6 @@ bool dJEffManager_c::createMassObjEffect(
 void dEmitterBase_c::loadColors(
     JPABaseEmitter *emitter, const GXColor *color1, const GXColor *color2, s32 plltIdx1, s32 plltIdx2
 ) {
-    dLightEnv_c &mgr = dLightEnv_c::GetInstance();
     u8 r1 = 0xFF;
     u8 g1 = 0xFF;
     u8 b1 = 0xFF;
@@ -1039,6 +1040,7 @@ void dEmitterBase_c::loadColors(
     u8 b2 = 0xFF;
     u8 r, g, b;
 
+    dLightEnv_c &mgr = dLightEnv_c::GetInstance();
     const mColor c1 = mgr.GetCurrentSpf().mParticleTransparentClr;
     const mColor c2 = mgr.GetCurrentSpf().mParticleSolidClr;
 
@@ -1073,22 +1075,22 @@ void dEmitterBase_c::loadColors(
 
     if (plltIdx1 > 0) {
         if ((flags & 0x1000) != 0) {
-            const PaletteEAF_smol_entry &entry = mgr.getSmallEAF(plltIdx1 - 1, plltIdx2);
-            r1 = entry.field_0x00.r;
-            g1 = entry.field_0x00.g;
-            b1 = entry.field_0x00.b;
+            const mColor &entry = mgr.getSmallEAF(plltIdx1 - 1, plltIdx2).field_0x00;
+            r1 = entry.r;
+            g1 = entry.g;
+            b1 = entry.b;
         } else if ((flags & 0x2000) != 0) {
-            const PaletteEAF_smol_entry &entry = mgr.getSmallEAF(plltIdx1 - 1, plltIdx2);
-            r1 = entry.field_0x08.r;
-            g1 = entry.field_0x08.g;
-            b1 = entry.field_0x08.b;
+            const mColor &entry = mgr.getSmallEAF(plltIdx1 - 1, plltIdx2).field_0x08;
+            r1 = entry.r;
+            g1 = entry.g;
+            b1 = entry.b;
         }
     }
 
     if (factor != 0) {
-        r = mgr.getfield_0x2F14() * r1 * scaleR;
-        g = mgr.getfield_0x2F18() * g1 * scaleG;
-        b = mgr.getfield_0x2F1C() * b1 * scaleB;
+        r = r1 * scaleR * mgr.getfield_0x2F14();
+        g = g1 * scaleG * mgr.getfield_0x2F18();
+        b = b1 * scaleB * mgr.getfield_0x2F1C();
     } else {
         r = r1 * scaleR;
         g = g1 * scaleG;
@@ -1105,15 +1107,15 @@ void dEmitterBase_c::loadColors(
 
     if (plltIdx1 > 0) {
         if ((flags & 0x1000) != 0) {
-            const PaletteEAF_smol_entry &entry = mgr.getSmallEAF(plltIdx1 - 1, plltIdx2);
-            r2 = entry.field_0x04.r;
-            g2 = entry.field_0x04.g;
-            b2 = entry.field_0x04.b;
+            const mColor &entry = mgr.getSmallEAF(plltIdx1 - 1, plltIdx2).field_0x04;
+            r2 = entry.r;
+            g2 = entry.g;
+            b2 = entry.b;
         } else if ((flags & 0x2000) != 0) {
-            const PaletteEAF_smol_entry &entry = mgr.getSmallEAF(plltIdx1 - 1, plltIdx2);
-            r2 = entry.field_0x0C.r;
-            g2 = entry.field_0x0C.g;
-            b2 = entry.field_0x0C.b;
+            const mColor &entry = mgr.getSmallEAF(plltIdx1 - 1, plltIdx2).field_0x0C;
+            r2 = entry.r;
+            g2 = entry.g;
+            b2 = entry.b;
         }
     }
 
@@ -1232,14 +1234,11 @@ dEmitterBase_c *dJEffManager_c::spawnGroundEffect(
     mtx.makeRotationFromVecs(mVec3_c::Ey, v1, 1.0f);
     mAng rot(cM::rndF(65536.0f));
     mtx.YrotM(rot);
-    mtx.m[0][3] = pos.x;
-    mtx.m[1][3] = pos.y;
-    mtx.m[2][3] = pos.z;
+    mtx.setTranslation(pos);
     mMtx_c scaleMtx;
     MTXScale(scaleMtx, scale, scale, scale);
     MTXConcat(mtx, scaleMtx, mtx);
-    u16 eff = sEffArray[idx][unk];
-    return spawnEffect(eff, mtx, nullptr, nullptr, polyAttr0, polyAttr1);
+    return spawnEffect(sEffArray[idx][unk], mtx, nullptr, nullptr, polyAttr0, polyAttr1);
 }
 
 void dWaterEffect_c::init(dAcObjBase_c *base, f32 height, f32 scale, f32 f3) {

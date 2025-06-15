@@ -106,24 +106,34 @@ public: // TYPES
         RB_FLY_MAX = 2,
     };
     static const char *sFlyChrAnims[RB_FLY_MAX];
-// Macros until enum is solidified (0x8CC)
-#define FLAG_BOOMERANG_CANCEL (0x3)
-#define FLAG_BOOMERANG_RELEASE_ITEM (0x4)
-#define FLAG_BOOMERANG_0x8 (0x8)
-#define FLAG_BOOMERANG_0x10 (0x10)
-#define FLAG_BOOMERANG_0x20 (0x20)
-#define FLAG_BOOMERANG_0x40 (0x40)
-#define FLAG_BOOMERANG_0x80 (0x80)
-#define FLAG_BOOMERANG_STOP_TIMER_ACTIVE (0x100)
-#define FLAG_BOOMERANG_DROP_ITEM (0x200)     // related to 0x400
-#define FLAG_BOOMERANG_REQUEST_0x400 (0x400) // related to 0x200
-#define FLAG_BOOMERANG_REQUEST_MOVE (0x800)
-#define FLAG_BOOMERANG_CONTROLLABLE (0x1000)
-#define FLAG_BOOMERANG_0x2000 (0x2000)
-#define FLAG_BOOMERANG_RUMBLE_ACTIVE (0x4000)
-#define FLAG_BOOMERANG_WING_EFFECT_ACTIVE (0x8000)
-#define FLAG_BOOMERANG_0x10000 (0x10000)
-#define FLAG_BOOMERANG_0x40000 (0x40000)
+
+    enum Flags_e {
+        /* 0x00000001 */ FLAG_CANCEL_1 = 1 << 0,
+        /* 0x00000002 */ FLAG_CANCEL_2 = 1 << 1,
+        /* 0x00000003 */ FLAG_CANCEL = FLAG_CANCEL_1 | FLAG_CANCEL_2,
+
+        /* 0x00000004 */ FLAG_RELEASE_ITEM = 1 << 2,
+        /* 0x00000008 */ FLAG_0x8 = (0x8),
+        /* 0x00000010 */ FLAG_0x10 = (0x10),
+        /* 0x00000020 */ FLAG_0x20 = (0x20),
+        /* 0x00000040 */ FLAG_0x40 = (0x40),
+        /* 0x00000080 */ FLAG_0x80 = (0x80),
+        /* 0x00000100 */ FLAG_STOP_TIMER_ACTIVE = (0x100),
+        /* 0x00000200 */ FLAG_DROP_ITEM = (0x200),     // related to 0x400
+        /* 0x00000400 */ FLAG_REQUEST_0x400 = (0x400), // related to 0x200
+        /* 0x00000800 */ FLAG_REQUEST_MOVE = (0x800),
+        /* 0x00001000 */ FLAG_CONTROLLABLE = (0x1000),
+        /* 0x00002000 */ FLAG_0x2000 = (0x2000),
+        /* 0x00004000 */ FLAG_RUMBLE_ACTIVE = (0x4000),
+        /* 0x00008000 */ FLAG_WING_EFFECT_ACTIVE = (0x8000),
+        /* 0x00010000 */ FLAG_0x10000 = (0x10000),
+        /* 0x00020000 */ FLAG_0x20000 = (0x40000),
+        /* 0x00040000 */ FLAG_0x40000 = (0x40000),
+        /* 0x00080000 */ FLAG_0x80000 = (0x80000),
+
+        /* 0x0001A117 */ FLAG_COMMON_INIT = FLAG_0x10000 | FLAG_WING_EFFECT_ACTIVE | FLAG_0x2000 |
+                                            FLAG_STOP_TIMER_ACTIVE | FLAG_0x10 | FLAG_RELEASE_ITEM | FLAG_CANCEL,
+    };
 
 public: // INLINES
     bool checkField_0x8CC(u32 mask) const {

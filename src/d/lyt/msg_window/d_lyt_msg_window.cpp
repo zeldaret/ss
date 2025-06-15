@@ -27,6 +27,7 @@
 #include "d/lyt/d_lyt_auto_caption.h"
 // clang-format on
 
+#include "d/d_gfx.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "f/f_base.h"
 #include "m/m_fader_base.h"
@@ -36,7 +37,6 @@
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/fi_context.h"
-#include "toBeSorted/lyt_related_floats.h"
 #include "toBeSorted/music_mgrs.h"
 #include "toBeSorted/other_sound_stuff.h"
 
@@ -265,9 +265,14 @@ void dLytMsgWindow_c::initializeState_In() {
         param = 1;
     } else if (obj != nullptr && d3d::fn_80016A90(obj->poscopy2)) {
         d3d::fn_80016960(field_0x768, obj->poscopy2);
-        // TODO - stack and FPR problems
-        field_0x768 = mVec3_c(field_0x768.x, field_0x768.y, 0.0f);
-        if (field_0x768.y < get_8057511C() / 3.0f + get_80575134()) {
+        mVec3_c v = field_0x768;
+        v.z = 0.f;
+        field_0x768 = v;
+        f32 h, b;
+        h = dGfx_c::getCurrentScreenHeight();
+        b = +dGfx_c::getCurrentScreenBottom();
+
+        if (v.y < b + (h / 3.f)) {
             param = 2;
         }
     }
@@ -297,7 +302,7 @@ void dLytMsgWindow_c::executeState_OutputText() {
 
     if (field_0x815 == 0 && field_0x816 == 0) {
         mpMsgWindowUnk->textAdvancingRelated(false, true);
-        if (field_0x811 == 0 && dPad::checkButtonAHeld() && field_0x815 == 0 && field_0x816 == 0) {
+        if (field_0x811 == 0 && dPad::getDownA() && field_0x815 == 0 && field_0x816 == 0) {
             mpMsgWindowUnk->textAdvancingRelated(false, true);
         }
     }
@@ -354,7 +359,7 @@ void dLytMsgWindow_c::executeState_WaitKeyChangePage0() {
             field_0x813 = 0;
             allowChange = true;
         }
-    } else if (dPad::checkButtonAPressed() || fn_8011A5D0()) {
+    } else if (dPad::getDownTrigA() || fn_8011A5D0()) {
         fn_8035E880(BGM_MGR);
         allowChange = true;
     }
@@ -414,7 +419,7 @@ void dLytMsgWindow_c::executeState_WaitKeyMsgEnd0() {
             field_0x813 = 0;
             allowChange = true;
         }
-    } else if (dPad::checkButtonAPressed() || fn_8011A5D0()) {
+    } else if (dPad::getDownTrigA() || fn_8011A5D0()) {
         fn_8035E880(BGM_MGR);
         allowChange = true;
     }
@@ -553,8 +558,7 @@ void dLytMsgWindow_c::finalizeState_MapOpen() {}
 
 void dLytMsgWindow_c::initializeState_WaitKeyMapClose() {}
 void dLytMsgWindow_c::executeState_WaitKeyMapClose() {
-    if ((dPad::checkButtonBPressed() || dPad::checkButtonPlusPressed()) &&
-        !dLytControlGame_c::getInstance()->isNotInStateMap()) {
+    if ((dPad::getDownTrigB() || dPad::getDownTrigPlus()) && !dLytControlGame_c::getInstance()->isNotInStateMap()) {
         dLytControlGame_c::getInstance()->fn_802CCD40(true);
         mStateMgr.changeState(StateID_MapClose);
     }

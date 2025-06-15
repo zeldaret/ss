@@ -20,26 +20,30 @@ typedef struct Vec {
     f32 x, y, z;
 } Vec;
 
+typedef struct Vec2 {
+    f32 x, y;
+} Vec2;
+
 typedef struct Quaternion {
     f32 x, y, z, w;
 } Quaternion;
 
-#define MTXIdentity   PSMTXIdentity
-#define MTXCopy       PSMTXCopy
-#define MTXConcat     PSMTXConcat
-#define MTXInverse    PSMTXInverse
-#define MTXTranspose  PSMTXTranspose
-#define MTXInverse    PSMTXInverse
-#define MTXInvXpose   PSMTXInvXpose
-#define MTXRotRad     PSMTXRotRad
-#define MTXRotTrig    PSMTXRotTrig
+#define MTXIdentity PSMTXIdentity
+#define MTXCopy PSMTXCopy
+#define MTXConcat PSMTXConcat
+#define MTXInverse PSMTXInverse
+#define MTXTranspose PSMTXTranspose
+#define MTXInverse PSMTXInverse
+#define MTXInvXpose PSMTXInvXpose
+#define MTXRotRad PSMTXRotRad
+#define MTXRotTrig PSMTXRotTrig
 #define MTXRotAxisRad PSMTXRotAxisRad
-#define MTXTrans      PSMTXTrans
+#define MTXTrans PSMTXTrans
 #define MTXTransApply PSMTXTransApply
-#define MTXScale      PSMTXScale
+#define MTXScale PSMTXScale
 #define MTXScaleApply PSMTXScaleApply
-#define MTXQuat       PSMTXQuat
-#define MTXReflect    PSMTXReflect
+#define MTXQuat PSMTXQuat
+#define MTXReflect PSMTXReflect
 
 void PSMTXIdentity(Mtx);
 void PSMTXCopy(const Mtx, Mtx);

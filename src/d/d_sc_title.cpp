@@ -4,6 +4,7 @@
 #include "d/d_dvd_unk.h"
 #include "d/d_heap.h"
 #include "d/d_message.h"
+#include "d/d_pad.h"
 #include "d/d_sc_game.h"
 #include "d/d_sys.h"
 #include "f/f_base.h"
@@ -66,7 +67,6 @@ dScTitle_c::~dScTitle_c() {
 }
 
 extern "C" u32 TITLE_SCREEN_CHANGE;
-extern "C" void fn_80059450();
 extern "C" void fn_80058C90(s32);
 
 static const char *const sFileSelect = "FileSelect";
@@ -90,7 +90,7 @@ int dScTitle_c::create() {
     if (ret == SUCCEEDED) {
         dSys::setFrameRate(2);
         dSys::setClearColor(mColor(0x00000000));
-        fn_80059450();
+        dPad::setAutoSleepTime();
         fn_80058C90(0);
         SaveRelated::create();
         field_0x2AD = 0;

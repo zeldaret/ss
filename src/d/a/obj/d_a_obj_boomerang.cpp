@@ -7,6 +7,7 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/col/c/c_cc_d.h"
+#include "d/d_pad.h"
 #include "d/d_rumble.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
@@ -91,7 +92,7 @@ void dAcBoomerang_c::atHitCallback(cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, 
 
         field_0x8D8.normalize();
 
-        setField_0x8CC(FLAG_BOOMERANG_CANCEL);
+        setField_0x8CC(FLAG_CANCEL);
         mStateMgr.changeState(StateID_MoveCancelWait);
     } else {
         // Play the animation to move the pincers
@@ -290,16 +291,16 @@ const dAcBoomerang_c::ChrAnimation_t dAcBoomerang_c::sChrAnims[dAcBoomerang_c::R
 
 bool dAcBoomerang_c::tryGrabObject(dAcObjBase_c *pObj) {
     dAcPy_c *player = dAcPy_c::GetLink2();
-    if (checkField_0x8CC(0x1000) && GetLinkage().checkFlag(0x80)) {}
+    if (checkField_0x8CC(FLAG_CONTROLLABLE) && GetLinkage().checkFlag(0x80)) {}
 }
 
 // ...
 
 void dAcBoomerang_c::bonk() {
-    if (checkField_0x8CC(FLAG_BOOMERANG_RUMBLE_ACTIVE)) {
+    if (checkField_0x8CC(FLAG_RUMBLE_ACTIVE)) {
         return;
     }
-    setField_0x8CC(FLAG_BOOMERANG_RUMBLE_ACTIVE);
+    setField_0x8CC(FLAG_RUMBLE_ACTIVE);
     dRumble_c::start(dRumble_c::sRumblePreset1, 1);
 }
 
@@ -360,10 +361,7 @@ void dAcBoomerang_c::initializeState_Wait() {
     mSph0.ClrAtHit();
     mSph1.ClrTgHit();
     mSph1.ClrAtHit();
-    unsetField_0x8CC(
-        FLAG_BOOMERANG_0x10000 | FLAG_BOOMERANG_WING_EFFECT_ACTIVE | FLAG_BOOMERANG_0x2000 |
-        FLAG_BOOMERANG_STOP_TIMER_ACTIVE | FLAG_BOOMERANG_0x10 | FLAG_BOOMERANG_RELEASE_ITEM | FLAG_BOOMERANG_CANCEL
-    );
+    unsetField_0x8CC(FLAG_COMMON_INIT);
 
     placeOnArm();
     field_0x8D0 = 0.f;
@@ -373,7 +371,7 @@ void dAcBoomerang_c::initializeState_Wait() {
 void dAcBoomerang_c::executeState_Wait() {
     forwardSpeed = 0.f;
     placeOnArm();
-    if (checkField_0x8CC(FLAG_BOOMERANG_REQUEST_MOVE)) {
+    if (checkField_0x8CC(FLAG_REQUEST_MOVE)) {
         mStateMgr.changeState(StateID_Move);
     }
 }
@@ -385,10 +383,7 @@ void dAcBoomerang_c::initializeState_ReturnWait() {
     mSph0.ClrAtHit();
     mSph1.ClrTgHit();
     mSph1.ClrAtHit();
-    unsetField_0x8CC(
-        FLAG_BOOMERANG_0x10000 | FLAG_BOOMERANG_WING_EFFECT_ACTIVE | FLAG_BOOMERANG_0x2000 |
-        FLAG_BOOMERANG_STOP_TIMER_ACTIVE | FLAG_BOOMERANG_0x10 | FLAG_BOOMERANG_RELEASE_ITEM | FLAG_BOOMERANG_CANCEL
-    );
+    unsetField_0x8CC(FLAG_COMMON_INIT);
     placeOnArm();
 }
 void dAcBoomerang_c::executeState_ReturnWait() {
@@ -411,7 +406,28 @@ void dAcBoomerang_c::initializeState_Move() {
     setFlyChrAnimation(RB_FLY);
     field_0x8B1 = 45; // 1.5 seconds if that means anything
     field_0x8C8 = 0;
-    forwardSpeed = dAcPy_c::GetLink2()->getBeetleSmallRadius();
+
+    dAcPy_c *player = dAcPy_c::GetLink2();
+    forwardSpeed = player->getBeetleNormalSpeed();
+
+    mSph0.ClrAtHit();
+    mSph1.ClrTgHit();
+    mSph1.ClrAtHit();
+
+    mRemainingFlightTime = player->getBeetleFlightTime();
+    mFlashTimer = player->getBeetleWarningTimeLeft();
+    unsetField_0x8CC(FLAG_REQUEST_MOVE | FLAG_WING_EFFECT_ACTIVE | FLAG_0x10000);
+    setField_0x8CC(FLAG_CONTROLLABLE | FLAG_0x80000);
+
+    angle.x = 2000 - player->vt_0x198();
+
+    rotation.x.set(-angle.x);
+    rotation.y.set(angle.y);
+    rotation.z.set(0);
+    field_0x8B2 = 0;
+
+    mOldPosition = position;
+    mOldPosition.y += 60.f;
 }
 void dAcBoomerang_c::executeState_Move() {}
 void dAcBoomerang_c::finalizeState_Move() {}
@@ -426,10 +442,7 @@ void dAcBoomerang_c::initializeState_EventReturnWait() {
     mSph1.ClrTgHit();
     mSph1.ClrAtHit();
 
-    unsetField_0x8CC(
-        FLAG_BOOMERANG_0x10000 | FLAG_BOOMERANG_WING_EFFECT_ACTIVE | FLAG_BOOMERANG_0x2000 |
-        FLAG_BOOMERANG_STOP_TIMER_ACTIVE | FLAG_BOOMERANG_0x10 | FLAG_BOOMERANG_RELEASE_ITEM | FLAG_BOOMERANG_CANCEL
-    );
+    unsetField_0x8CC(FLAG_COMMON_INIT);
 }
 void dAcBoomerang_c::executeState_EventReturnWait() {}
 void dAcBoomerang_c::finalizeState_EventReturnWait() {}
@@ -439,7 +452,7 @@ void dAcBoomerang_c::executeTimeWarning() {
     mColor flashClr(0, 0, 0, 0xFF);
 
     if (mRemainingFlightTime <= timeLimit) {
-        setField_0x8CC(FLAG_BOOMERANG_STOP_TIMER_ACTIVE);
+        setField_0x8CC(FLAG_STOP_TIMER_ACTIVE);
 
         if (mFlashTimer != 0) {
             mFlashTimer--;
@@ -471,22 +484,22 @@ void dAcBoomerang_c::registerInEvent() {
 int dAcBoomerang_c::actorExecute() {
     dAcPy_c *player = dAcPy_c::GetLink2();
 
-    if (checkField_0x8CC(FLAG_BOOMERANG_REQUEST_0x400)) {
-        unsetField_0x8CC(FLAG_BOOMERANG_REQUEST_0x400);
+    if (checkField_0x8CC(FLAG_REQUEST_0x400)) {
+        unsetField_0x8CC(FLAG_REQUEST_0x400);
     }
 
     if (dAcPy_c::GetLink2()->checkModelUpdateFlag(0x10000 | 0x80)) {
         deleteRequest();
-        unsetField_0x8CC(FLAG_BOOMERANG_REQUEST_0x400);
+        unsetField_0x8CC(FLAG_REQUEST_0x400);
         return SUCCEEDED;
     }
 
     if (EventManager::isInEvent() && mEventRelated.getSomeEventRelatedNumber() != -1) {
-        setField_0x8CC(FLAG_BOOMERANG_0x40);
+        setField_0x8CC(FLAG_0x40);
         mEventRelated.advanceNext();
     }
 
-    unsetField_0x8CC(FLAG_BOOMERANG_0x40000 | FLAG_BOOMERANG_RUMBLE_ACTIVE);
+    unsetField_0x8CC(FLAG_0x40000 | FLAG_RUMBLE_ACTIVE);
 
     for (int i = 0; i < 2; ++i) {
         mAnmChr[i].play();
@@ -503,7 +516,7 @@ int dAcBoomerang_c::actorExecute() {
     mMdl.getNodeWorldMtxMultVecZero(0, poscopy2);
     poscopy3 = poscopy2;
 
-    if (checkField_0x8CC(FLAG_BOOMERANG_WING_EFFECT_ACTIVE)) {
+    if (checkField_0x8CC(FLAG_WING_EFFECT_ACTIVE)) {
         mEff0.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_6_, mWorldMtx, nullptr, nullptr);
         mEff1.setTransform(mWorldMtx);
 
@@ -523,14 +536,14 @@ int dAcBoomerang_c::actorExecute() {
         mEff2.remove(true);
     }
 
-    if (checkField_0x8CC(FLAG_BOOMERANG_0x20) && !checkField_0x8CC(FLAG_BOOMERANG_CANCEL)) {
+    if (checkField_0x8CC(FLAG_0x20) && !checkField_0x8CC(FLAG_CANCEL)) {
         if (mStateMgr.isState(StateID_Move) || mStateMgr.isState(StateID_MoveCancelWait)) {
             mEff3.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_7_, mWorldMtx, nullptr, nullptr);
             playSoundEffect1(SE_BE_HIT_LEAVES_LV);
         }
     }
 
-    unsetField_0x8CC(FLAG_BOOMERANG_0x20 | FLAG_BOOMERANG_0x40 | FLAG_BOOMERANG_0x80 | FLAG_BOOMERANG_DROP_ITEM);
+    unsetField_0x8CC(FLAG_0x20 | FLAG_0x40 | FLAG_0x80 | FLAG_DROP_ITEM);
     retrieve();
     return SUCCEEDED;
 }

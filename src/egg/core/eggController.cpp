@@ -5,16 +5,20 @@
 #include "egg/core/eggExpHeap.h"
 #include "egg/core/eggSystem.h"
 #include "egg/math/eggMath.h"
-#include "rvl/VI.h" // IWYU pragma: export
+#include "egg/math/eggVector.h"
+#include "rvl/WPAD/WPAD.h"
 #include "string.h"
 
-EGG::NullController null_controller;
+#include "rvl/VI.h" // IWYU pragma: export
+
 namespace EGG {
+
+NullController null_controller;
 
 CoreControllerMgr *CoreControllerMgr::sInstance;
 CoreControllerMgr::T__Disposer *CoreControllerMgr::T__Disposer::sStaticDisposer;
-ControllerFactory CoreControllerMgr::sCoreControllerFactory;
-ConnectCallback CoreControllerMgr::sConnectCallback;
+CoreControllerFactory CoreControllerMgr::sCoreControllerFactory;
+CoreControllerConnectCallback CoreControllerMgr::sConnectCallback;
 // This controls whether EggController registers an allocator within the WPAD driver
 bool CoreControllerMgr::sUseBuiltinWpadAllocator;
 s32 CoreControllerMgr::sWPADWorkSize = 0x32000;
@@ -23,7 +27,7 @@ void CoreStatus::init() {
     memset(this, 0, sizeof(CoreStatus));
 }
 
-u32 CoreStatus::getFSStickButton() const {
+u32 CoreStatus::getFSStickButton() {
     f32 stick = getFSStickX();
     u32 result = 0;
 
@@ -51,47 +55,47 @@ u32 CoreStatus::getFSStickButton() const {
     return result;
 }
 
-CoreController::CoreController() : mDpdPos(), mAccel(), mAccelFlags(), mFlag(0) {
+CoreController::CoreController() : mDpdPosPrev(), mStableAccel(), mFlag(0) {
     mRumbleMgr = nullptr;
-    mButtonHeld = 0;
-    mButtonTriggered = 0;
-    mButtonReleased = 0;
+    mFSStickHold = 0;
+    mFSStickTrig = 0;
+    mFSStickRelease = 0;
     sceneReset();
     mFlag.makeAllZero();
 }
 
 void CoreController::sceneReset() {
-    mAccel.set(0.0, 0.0, 0.0);
-    mDpdPos.x = 0.0f;
-    mDpdPos.y = 0.0f;
+    mAccelPrev.set(0.0, 0.0, 0.0);
+    mDpdPosPrev.x = 0.0f;
+    mDpdPosPrev.y = 0.0f;
     mIdleTime = 0;
     mPostureMatrixPrev.makeIdentity();
     mPostureMatrix.makeIdentity();
-    mMaxAccelFrameTime = 10;
-    mMaxAccelDiff = 0.13;
-    mPrevAccel.set(0.0, 0.0, 0.0);
-    mAccelFlags.makeAllZero();
-    mAccelFrameTime[2] = 0;
-    mAccelFrameTime[1] = 0;
-    mAccelFrameTime[0] = 0;
-    mMotorPattern = 0;
-    mMotorFrameDuration = 0;
-    mEnableMotor = false;
-    mMotorPatternLength = 0x20;
-    mMotorPatternPos = 0x1f;
+    mStableFrame = 10;
+    mStableMag = 0.13;
+    mStableAccel.set(0.0, 0.0, 0.0);
+    mStableFlags = 0;
+    mStableTimer[2] = 0;
+    mStableTimer[1] = 0;
+    mStableTimer[0] = 0;
+    mSimpleRumblePattern = 0;
+    mSimpleRumbleFrame = 0;
+    mEnableSimpleRumble = false;
+    mSimpleRumbleSize = 0x20;
+    mSimpleRumbleIndex = 0x1f;
     stopRumbleMgr();
 }
 
 Vector2f CoreController::getDpdRawPos() {
-    return Vector2f(mCoreStatus[0].mDpdRawX, mCoreStatus[0].mDpdRawY);
+    return Vector2f(mCoreStatus[0].pos.x, mCoreStatus[0].pos.y);
 }
 
 f32 CoreController::getDpdDistance() {
-    return mCoreStatus[0].mDpdDistance;
+    return mCoreStatus[0].dist;
 }
 
 s32 CoreController::getDpdValidFlag() {
-    return mCoreStatus[0].getDpdValidFlag();
+    return mCoreStatus[0].getDPDValidFlag();
 }
 
 void CoreController::startMotor() {
@@ -169,15 +173,15 @@ void CoreController::calc_posture_matrix(Matrix34f &posture, bool checkStable) {
 
 void CoreController::beginFrame(PADStatus *padStatus) {
     s32 kpad_result;
-    mReadStatusIdx = KPADReadEx(mChannelID, mCoreStatus, 0x10, &kpad_result);
-    if (mReadStatusIdx == 0 && kpad_result == -1 /* Rvl usually uses negative nums for results */) {
-        mReadStatusIdx = 1;
+    mKPADReadLength = KPADReadEx(mChannelID, mCoreStatus, 0x10, &kpad_result);
+    if (mKPADReadLength == 0 && kpad_result == WPAD_ERR_NO_CONTROLLER) {
+        mKPADReadLength = 1;
     }
 
     WPADDeviceType dev_type;
     switch (WPADProbe(mChannelID, &dev_type)) {
         case WPAD_ERR_OK: {
-            if ((u32)dev_type == WPAD_DEV_NONE) {
+            if ((u32)dev_type == WPAD_DEV_NOT_FOUND) {
                 mFlag.resetBit(0);
             } else {
                 mFlag.setBit(0);
@@ -188,59 +192,59 @@ void CoreController::beginFrame(PADStatus *padStatus) {
         } break;
     }
 
-    if (mReadStatusIdx > 0) {
+    if (mKPADReadLength > 0) {
         CoreStatus *pStatus = mCoreStatus;
-        u32 prev_held = mButtonHeld;
+        u32 prev_held = mFSStickHold;
         if (pStatus->isFreestyle()) {
-            mButtonHeld = pStatus->getFSStickButton();
+            mFSStickHold = pStatus->getFSStickButton();
         } else {
-            mButtonHeld = 0;
+            mFSStickHold = 0;
         }
 
-        mButtonTriggered = mButtonHeld & ~prev_held;
-        mButtonReleased = prev_held & ~mButtonHeld;
-        pStatus->mHold &= ~0xF0000;
-        pStatus->mTrig &= ~0xF0000;
-        pStatus->mRelease &= ~0xF0000;
-        pStatus->mHold |= (mButtonHeld & 0xF0000);
-        pStatus->mTrig |= (mButtonTriggered & 0xF0000);
-        pStatus->mRelease |= (mButtonReleased & 0xF0000);
+        mFSStickTrig = mFSStickHold & ~prev_held;
+        mFSStickRelease = prev_held & ~mFSStickHold;
+        pStatus->hold &= ~0xF0000;
+        pStatus->trig &= ~0xF0000;
+        pStatus->release &= ~0xF0000;
+        pStatus->hold |= (mFSStickHold & 0xF0000);
+        pStatus->trig |= (mFSStickTrig & 0xF0000);
+        pStatus->release |= (mFSStickRelease & 0xF0000);
     }
 
     mPostureMatrixPrev.copyFrom(mPostureMatrix);
-    mAccelFlags.makeAllZero();
+    mStableFlags = 0;
     Vector3f acc = mCoreStatus->getAccel();
 
     for (int i = 0; i < 3; i++) {
-        if (acc(i) - mAccel(i) < mMaxAccelDiff) {
-            if (mMaxAccelFrameTime <= ++mAccelFrameTime[i]) {
-                mAccelFrameTime[i] = mMaxAccelFrameTime;
-                mAccelFlags.set(1 << i);
-                mPrevAccel(i) = acc(i);
+        if (acc(i) - mAccelPrev(i) < mStableMag) {
+            if (mStableFrame <= ++mStableTimer[i]) {
+                mStableTimer[i] = mStableFrame;
+                mStableFlags |= (1 << i);
+                mStableAccel(i) = acc(i);
             }
         } else {
-            mAccelFlags.value &= ~(1 << i); // ?
-            mAccelFrameTime[i] = 0;
+            mStableFlags &= ~(1 << i);
+            mStableTimer[i] = 0;
         }
     }
 
     calc_posture_matrix(mPostureMatrix, true);
 
-    if (mEnableMotor) {
-        if (mMotorPattern & (1 << mMotorPatternPos)) {
+    if (mEnableSimpleRumble) {
+        if (mSimpleRumblePattern & (1 << mSimpleRumbleIndex)) {
             startMotor();
         } else {
             stopMotor();
         }
-        if (mMotorPatternPos == 0) {
-            mMotorPatternPos = mMotorPatternLength - 1;
+        if (mSimpleRumbleIndex == 0) {
+            mSimpleRumbleIndex = mSimpleRumbleSize - 1;
         } else {
-            mMotorPatternPos = mMotorPatternPos - 1;
+            mSimpleRumbleIndex = mSimpleRumbleIndex - 1;
         }
 
-        if (--mMotorFrameDuration == 0) {
+        if (--mSimpleRumbleFrame == 0) {
             stopMotor();
-            mEnableMotor = false;
+            mEnableSimpleRumble = false;
         }
     }
 
@@ -254,13 +258,13 @@ void CoreController::beginFrame(PADStatus *padStatus) {
     }
 
     if (increment) {
-        Vector3f diff = (mAccel - mCoreStatus->getAccel());
+        Vector3f diff = (mAccelPrev - mCoreStatus->getAccel());
         if (diff.squaredLength() > 0.01f) {
             increment = false;
         }
     }
     if (increment) {
-        Vector2f diff = (mDpdPos - getDpdRawPos());
+        Vector2f diff = (mDpdPosPrev - getDpdRawPos());
         if (diff.squaredLength() > 0.05f) {
             increment = false;
         }
@@ -278,8 +282,8 @@ void CoreController::beginFrame(PADStatus *padStatus) {
 }
 
 void CoreController::endFrame() {
-    mAccel = getAccel();
-    mDpdPos = getDpdRawPos();
+    mAccelPrev = *reinterpret_cast<Vector3f *>(&mCoreStatus[0].acc);
+    mDpdPosPrev = getDpdRawPos();
 }
 
 /* 0x80499AC0 */
@@ -343,7 +347,7 @@ int free(void *ptr) {
 
 /* 0x80499CD0 */
 void CoreControllerMgr::connectCallback(s32 a1, s32 a2) {
-    int args[] = {a1, a2};
+    CoreControllerConnectArg args = {a1, a2};
     if (sConnectCallback != nullptr) {
         (sConnectCallback)(args);
     }
@@ -393,7 +397,7 @@ void CoreControllerMgr::beginFrame() {
 
 /* 0x8049A1E0 */
 void CoreControllerMgr::endFrame() {
-    for (int i = 0; i < mControllers.mSize; i++) {
+    for (int i = 0; i < mControllers.getSize(); i++) {
         mControllers(i)->endFrame();
 
         WPADDeviceType dev_type;
@@ -403,7 +407,7 @@ void CoreControllerMgr::endFrame() {
         if (result == WPAD_ERR_OK) {
             res_dev_type = dev_type;
         } else if (result == WPAD_ERR_NO_CONTROLLER) {
-            res_dev_type = WPAD_DEV_NONE;
+            res_dev_type = WPAD_DEV_NOT_FOUND;
         } else {
             continue;
         }
@@ -425,77 +429,77 @@ void CoreControllerMgr::endFrame() {
 
 /* 0x8049A3B0 */
 void ControllerRumbleUnit::init() {
-    mPattern = nullptr;
-    mPatternPos = nullptr;
-    mTimer = 0;
-    mIntensity = 0.0f;
-    mRampUp = 0.0f;
-    mFlag.makeAllZero();
+    mRumblePattern = nullptr;
+    mRumblePatternPtr = nullptr;
+    mRumbleFrame = 0;
+    mRumbleValue = 0.0f;
+    mRumblePower = 0.0f;
+    mFlags.makeAllZero();
 }
 
 /* 0x8049A3E0 */
 void ControllerRumbleUnit::startPattern(const char *pattern, int duration) {
-    mPattern = pattern;
-    mPatternPos = pattern;
+    mRumblePattern = pattern;
+    mRumblePatternPtr = pattern;
 
-    mFlag.value &= 0xef;
-    mFlag.value &= 0xdf;
+    mFlags.value &= 0xef;
+    mFlags.value &= 0xdf;
 
     if (duration < 0) {
-        mFlag.set(0x10);
+        mFlags.set(0x10);
     } else if (duration > 0) {
-        mFlag.set(0x30);
+        mFlags.set(0x30);
     }
 
-    mTimer = duration;
+    mRumbleFrame = duration;
 
-    mFlag.setBit(0);
-    mFlag.resetBit(1);
-    mFlag.setBit(3);
+    mFlags.setBit(0);
+    mFlags.resetBit(1);
+    mFlags.setBit(3);
 }
 
 /* 0x8049A440 */
 f32 ControllerRumbleUnit::calc() {
     f32 result = 0.0f;
-    if (mFlag.onBit(3)) {
-        if (mFlag.onBit(0)) {
-            char x = *++mPatternPos;
+    if (mFlags.onBit(3)) {
+        if (mFlags.onBit(0)) {
+            char x = *++mRumblePatternPtr;
             if (x == '\0') {
-                if (mFlag.onBit(4)) {
-                    mPatternPos = mPattern;
+                if (mFlags.onBit(4)) {
+                    mRumblePatternPtr = mRumblePattern;
                 } else {
-                    mFlag.resetBit(3);
+                    mFlags.resetBit(3);
                 }
             } else if (x == '*') {
                 result = 1.0f;
             }
 
-            if (mFlag.offBit(5)) {
+            if (mFlags.offBit(5)) {
                 return result;
             }
 
-            if (--mTimer > 0) {
+            if (--mRumbleFrame > 0) {
                 return result;
             }
-            mFlag.resetBit(3);
+            mFlags.resetBit(3);
             return result;
         } else {
-            f32 intensity = mIntensity + mRampUp;
-            mIntensity = intensity;
+            f32 intensity = mRumbleValue + mRumblePower;
+            mRumbleValue = intensity;
             if (intensity >= 1.0f) {
                 result = 1.0f;
-                mIntensity = 0.0f;
+                mRumbleValue = 0.0f;
             }
 
-            if (mFlag.onBit(2)) {
+            if (mFlags.onBit(2)) {
                 return result;
             }
 
-            if (--mTimer > 0) {
+            if (--mRumbleFrame > 0) {
                 return result;
             }
         }
-        mFlag.resetBit(3);
+        mFlags.resetBit(3);
         return result;
     } else {
         return -1.0f;
@@ -506,14 +510,14 @@ f32 ControllerRumbleUnit::calc() {
 ControllerRumbleMgr::ControllerRumbleMgr() {
     mController = nullptr;
     List_Init(&mActiveUnitList, offsetof(ControllerRumbleUnit, mNode));
-    List_Init(&mInactiveUnitList, offsetof(ControllerRumbleUnit, mNode));
+    List_Init(&mStoppedUnitList, offsetof(ControllerRumbleUnit, mNode));
 }
 
 /* 0x8049A590 */
 void ControllerRumbleMgr::createUnit(u8 numUnits, CoreController *ctrl) {
     for (u8 created = 0; created < numUnits; created++) {
         ControllerRumbleUnit *unit = new ControllerRumbleUnit();
-        List_Append(&mInactiveUnitList, unit);
+        List_Append(&mStoppedUnitList, unit);
     }
     mController = ctrl;
 }
@@ -524,7 +528,7 @@ void ControllerRumbleMgr::stop() {
     while (List_GetSize(&mActiveUnitList) != 0) {
         ControllerRumbleUnit *unit = static_cast<ControllerRumbleUnit *>(List_GetNext(&mActiveUnitList, nullptr));
         List_Remove(&mActiveUnitList, unit);
-        List_Append(&mInactiveUnitList, unit);
+        List_Append(&mStoppedUnitList, unit);
     }
 }
 
@@ -540,7 +544,7 @@ void ControllerRumbleMgr::calc() {
             void *nextObject = List_GetNext(&mActiveUnitList, object);
             if (x < 0.0f) {
                 List_Remove(&mActiveUnitList, object);
-                List_Append(&mInactiveUnitList, object);
+                List_Append(&mStoppedUnitList, object);
             } else {
                 acc += x;
             }
@@ -565,9 +569,9 @@ void ControllerRumbleMgr::startPattern(const char *pattern, int duration, bool b
 
 /* 0x8049A7F0 */
 ControllerRumbleUnit *ControllerRumbleMgr::getUnitFromList(bool bGrabActive) {
-    void *first = List_GetFirst(&this->mInactiveUnitList);
+    void *first = List_GetFirst(&this->mStoppedUnitList);
     if (first) {
-        List_Remove(&mInactiveUnitList, first);
+        List_Remove(&mStoppedUnitList, first);
         List_Append(&mActiveUnitList, first);
     } else if (bGrabActive && (first = List_GetFirst(&mActiveUnitList), first != nullptr)) {
         List_Remove(&mActiveUnitList, first);

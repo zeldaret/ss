@@ -233,11 +233,18 @@ d/d_main.cpp:
 	.sbss       start:0x805751D0 end:0x805751E0
 
 d/d_pad.cpp:
-	.text       start:0x80055170 end:0x80059CE0 align:16
+	.text       start:0x80055170 end:0x8005961C align:16
 	.ctors      start:0x804DB684 end:0x804DB688
+	.sdata      start:0x80571C60 end:0x80571C68
+	.sbss       start:0x805751E0 end:0x805751E8
+	.sdata2     start:0x80576F60 end:0x80577008
+	.bss        start:0x80597A80 end:0x805A06B0
 
-d/d_pad_player.cpp:
-	.text       start:0x80059CE0 end:0x8005B6E0 align:16
+d/d_pad_ex.cpp:
+	.text       start:0x80059620 end:0x80059CE0 align:16
+
+d/d_pause_manager.cpp:
+	.text       start:0x80059CE0 end:0x8005B6D4 align:16
 
 d/d_player_act.cpp:
 	.text       start:0x8005B6E0 end:0x8005CE8C align:16
