@@ -2720,6 +2720,7 @@ d/snd/d_snd_source.cpp:
 	.ctors      start:0x804DB920 end:0x804DB924
 	.data       start:0x8054A7D0 end:0x8054AAE8
 	.sdata      start:0x80574708 end:0x80574718
+	.sbss       start:0x80575DB0 end:0x80575DC0
 	.sdata2     start:0x8057DCB0 end:0x8057DCD0
 
 d/snd/d_snd_mgr_unk_7.cpp:

@@ -12,12 +12,13 @@
 
 dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, u8 sourceType)
     : nw4r::snd::Sound3DActor(
-          dSndPlayerMgr_c::GetInstance()->getSoundArchivePlayerForType(sourceType), dSnd3DManager_c::GetInstance()->getManager()
+          dSndPlayerMgr_c::GetInstance()->getSoundArchivePlayerForType(sourceType),
+          dSnd3DManager_c::GetInstance()->getManager()
       ),
       a_field_0x7D(0),
       mIsDisabled(false),
       a_field_0x7F(0),
-      mIsPaused(0),
+      mIsPaused(false),
       a_field_0x84(0.0f),
       a_field_0x88(0.0f),
       a_field_0x8C(0.0f),
@@ -62,6 +63,10 @@ void dSnd3DActor_c::resetCachedRelativePositions() {
     mPositionTransformedByListener.x = INFINITY;
     mPositionTransformedByListener.y = INFINITY;
     mPositionTransformedByListener.z = INFINITY;
+}
+
+void dSnd3DActor_c::setSourceParam(const dSndSourceParam *param) {
+    *mpSourceParam = *param;
 }
 
 void dSnd3DActor_c::calculatePositionRelativeToListener() {
@@ -172,4 +177,13 @@ bool dSnd3DActor_c::isPlayingSound(u32 id) {
     ForEachSound(handler, false);
 
     return result;
+}
+
+const char *dSnd3DActor_c::soundIdToSoundLabel(u32 soundId) const {
+    // TODO
+    return nullptr;
+}
+
+u32 dSnd3DActor_c::soundLabelToSoundId(const char *soundLabel) const {
+    return dSndPlayerMgr_c::GetInstance()->convertLabelStringToSoundId(soundLabel);
 }

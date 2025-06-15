@@ -54,4 +54,7 @@ void dSndMgr_c::calc() {
     }
 }
 
-void dSndMgr_c::restoreEffectsCallback() {}
+void dSndMgr_c::restoreEffectsCallback() {
+    dSndStateMgr_c::GetInstance()->restoreEffects();
+    dSndBgmMgr_c::GetInstance()->restoreEffects();
+}

@@ -27,6 +27,8 @@ public:
 
     dSndBgmMgr_c();
 
+    void restoreEffects();
+
     bool playBgm(u32 soundId, s32 fadeFrames, bool paused);
     bool prepareBgm(u32 soundId, u32 startOffset);
     void stopAllBgm(s32 fadeFrames);

@@ -3,6 +3,7 @@
 
 // Forward declarations for d/snd to break circular header dependencies
 
+class dSndAnimSound_c;
 class dSoundSource_c;
 class dSndSourceGroup_c;
 class dSndDistantSoundActor_c;

@@ -21,8 +21,8 @@ public:
     dSndDistantSoundActor_c();
     virtual void setPause(bool flag, int fadeFrames) override;
     virtual UNKWORD d_vt_0x3C() override;
-    virtual void d_vt_0x58(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) override;
-    virtual void d_vt_0x5C(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id, UNKWORD) override;
+    virtual void postStartSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) override;
+    virtual void postHoldSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id, UNKWORD) override;
 
     void initSource(dSoundSource_c *pSource);
     void setSourceDirectly(dSoundSource_c *pSource);
