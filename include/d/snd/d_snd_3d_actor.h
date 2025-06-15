@@ -18,9 +18,8 @@ public:
         return true;
     }
 
-    virtual void setPosition(const nw4r::math::VEC3 &);
-
-    virtual void setPause(bool flag, int fadeFrames) = 0;
+    virtual void setPosition(const nw4r::math::VEC3 &);   // vt  0x34
+    virtual void setPause(bool flag, int fadeFrames) = 0; // vt  0x38
 
     virtual UNKWORD d_vt_0x3C() {
         return 0;
@@ -34,12 +33,12 @@ public:
         return 0;
     }
 
-    virtual const nw4r::math::VEC3 &getPositionRelativeToPlayer();
-    virtual f32 getDistanceToPlayer();             // vt 0x4C
-    virtual void updatePositionRelativeToPlayer(); // vt 0x50
-    virtual void updateDistanceToPlayer();         // vt 0x54
-    virtual void d_vt_0x58(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) = 0;
-    virtual void d_vt_0x5C(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id, UNKWORD) = 0;
+    virtual const nw4r::math::VEC3 &getPositionRelativeToPlayer();                                      // vt 0x48
+    virtual f32 getDistanceToPlayer();                                                                  // vt 0x4C
+    virtual void updatePositionRelativeToPlayer();                                                      // vt 0x50
+    virtual void updateDistanceToPlayer();                                                              // vt 0x54
+    virtual void postStartSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) = 0;          // vt 0x58
+    virtual void postHoldSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id, UNKWORD) = 0; // vt 0x5C
 
     void resetCachedRelativePositions();
 
@@ -104,7 +103,7 @@ protected:
     /* 0x7D */ u8 a_field_0x7D;
     /* 0x7E */ bool mIsDisabled;
     /* 0x7F */ u8 a_field_0x7F;
-    /* 0x80 */ u8 mIsPaused;
+    /* 0x80 */ bool mIsPaused;
     /* 0x84 */ f32 a_field_0x84;
     /* 0x88 */ f32 a_field_0x88;
     /* 0x8C */ f32 a_field_0x8C;
