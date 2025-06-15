@@ -198,7 +198,7 @@ dSoundSource_c::startSound(u32 soundId, nw4r::snd::SoundHandle *handle, nw4r::sn
     }
 
     field_0x11C |= 0x80000000;
-    result = detail_StartSound(handle, soundId, nullptr);
+    result = StartSoundReturnStatus(handle, soundId, nullptr);
     if (result == START_SUCCESS) {
         addSeHandleType1(seHandle);
         d_vt_0x58(*handle, seHandle, soundId);

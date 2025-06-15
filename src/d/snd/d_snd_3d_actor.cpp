@@ -92,7 +92,7 @@ void dSnd3DActor_c::updateCameraDirectionDot() {
         updatePositionRelativeToListener();
         nw4r::math::VEC3 norm;
         VECNormalize(mPositionRelativeToListener, norm);
-        mCameraDirectionDot = nw4r::math::VEC3Dot(&norm, dSnd3DManager_c::GetInstance()->getNrmCameraDirection());
+        mCameraDirectionDot = nw4r::math::VEC3Dot(&norm, &dSnd3DManager_c::GetInstance()->getNrmCameraDirection());
         setFlag(0x20);
     }
 }
@@ -106,7 +106,7 @@ void dSnd3DActor_c::updatePositionRelativeToCameraTarget() {
 
 void dSnd3DActor_c::calculatePositionRelativeToCameraTarget() {
     nw4r::math::VEC3Sub(
-        &mPositionRelativeToCameraTarget, &GetPosition(), dSnd3DManager_c::GetInstance()->getCameraTargetPos()
+        &mPositionRelativeToCameraTarget, &GetPosition(), &dSnd3DManager_c::GetInstance()->getCameraTargetPos()
     );
 }
 

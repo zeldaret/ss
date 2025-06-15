@@ -348,13 +348,13 @@ nw4r::snd::SoundStartable::StartResult dSndSound_c::prepareSound(u32 soundId, u3
 
     nw4r::snd::SoundStartable::StartResult res;
     if (startOffset == 0) {
-        res = dSndMgr_c::GetInstance()->getPlayer().detail_PrepareSound(this, soundId, nullptr);
+        res = dSndMgr_c::GetInstance()->getPlayer().PrepareSoundReturnStatus(this, soundId, nullptr);
     } else {
         nw4r::snd::SoundStartable::StartInfo info;
         info.enableFlag |= nw4r::snd::SoundStartable::StartInfo::ENABLE_START_OFFSET;
         info.startOffsetType = nw4r::snd::SoundStartable::StartInfo::START_OFFSET_TYPE_MILLISEC;
         info.startOffset = startOffset;
-        res = dSndMgr_c::GetInstance()->getPlayer().detail_PrepareSound(this, soundId, &info);
+        res = dSndMgr_c::GetInstance()->getPlayer().PrepareSoundReturnStatus(this, soundId, &info);
     }
 
     if (res == nw4r::snd::SoundStartable::START_SUCCESS) {
