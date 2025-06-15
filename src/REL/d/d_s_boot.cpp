@@ -7,6 +7,7 @@
 #include "d/d_dylink.h"
 #include "d/d_font_manager.h"
 #include "d/d_gfx.h"
+#include "d/d_hbm.h"
 #include "d/d_heap.h"
 #include "d/d_message.h"
 #include "d/d_reset.h"
@@ -29,7 +30,6 @@
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/d_emitter.h"
-#include "toBeSorted/d_hbm.h"
 #include "toBeSorted/d_particle.h"
 #include "toBeSorted/fi_context.h"
 #include "toBeSorted/save_manager.h"
@@ -88,7 +88,7 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb3() {
 }
 
 sFPhaseBase::sFPhaseState dScBoot_c::cb4() {
-    if (!dHbm_c::GetInstance()->fn_801967D0()) {
+    if (!dHbm::Manage_c::GetInstance()->Load()) {
         return sFPhaseBase::PHASE_RETRY;
     }
     dHeap::HBMHeap.heap->disableAllocation();
@@ -409,7 +409,7 @@ dScBoot_c::dScBoot_c() : mStateMgr(*this, sStateID::null), mPhases(this, sCallba
 }
 
 dScBoot_c::~dScBoot_c() {
-    dHbm_c::GetInstance()->fn_80197560(0);
+    dHbm::Manage_c::GetInstance()->fn_80197560(0);
     sInstance = nullptr;
 }
 
@@ -437,7 +437,7 @@ int dScBoot_c::doDelete() {
     dBase_c::createRoot(fProfile::LAST, 0, 0);
     d3d::createLightTextures();
     SpecialItemDropMgr::create();
-    dHbm_c::GetInstance()->offFlags(8);
+    dHbm::Manage_c::GetInstance()->offFlags(8);
     dGfx_c::GetInstance()->setDrawCallback(nullptr);
     dReset::Manage_c::GetInstance()->BootComplete(true);
     return SUCCEEDED;
@@ -535,7 +535,7 @@ void dScBoot_c::executeState_Strap() {
                         mProgressStage = 0;
                         mStrapScreen.init();
                     }
-                    dHbm_c::GetInstance()->fn_80197560(0);
+                    dHbm::Manage_c::GetInstance()->fn_80197560(0);
                 }
                 break;
         }

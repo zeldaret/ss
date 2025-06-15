@@ -1224,7 +1224,7 @@ toBeSorted/misc_actor.cpp:
 	.data       start:0x8052B638 end:0x8052B678
 	.sbss       start:0x805756B0 end:0x805756F0
 
-toBeSorted/d_hbm:
+d/d_hbm.cpp:
 	.text       start:0x80196650 end:0x801975B8 align:16
 	.rodata     start:0x804EA810 end:0x804EA868
 	.data       start:0x8052B678 end:0x8052B708

@@ -567,7 +567,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/d_unk_pad.cpp"),
             Object(NonMatching, "toBeSorted/goddess_chest_counter.cpp"),
             Object(NonMatching, "toBeSorted/misc_actor.cpp"),
-            Object(NonMatching, "toBeSorted/d_hbm"),
+            Object(NonMatching, "d/d_hbm.cpp"),
             Object(NonMatching, "d/d_stage_mgr.cpp"),
             Object(NonMatching, "d/d_last.cpp"),
             Object(NonMatching, "d/d_camera.cpp"),
