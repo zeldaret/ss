@@ -7,6 +7,16 @@
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/ut/ut_list.h"
 
+/**
+ * This seems to be a generic way of passing parameters from callers of dSoundSource_c
+ * startSound/holdSound to the callbacks that sound sources will register
+ * on those handlers. E.g. at 80397a40 the chandelier swing hold sound will
+ * occasionally create additional sounds based on historical params (swinging angle) passed
+ * to holdSound by the chandelier (see dAcOChandelier_c::executeState_Wait / 80ebc814 in Ghidra)
+ * In yet other cases the callback itself will keep pushing new values and the caller doesn't
+ * do anything, e.g. caller at 80228814 for SE_L_ROPE_WIND_LV does not push values, but
+ * handler at 80394fb0 will keep pushing values.
+ */
 struct UnkSeSoundStruct {
     UnkSeSoundStruct() : field_0x00(0), field_0x04(0.0f) {}
     ~UnkSeSoundStruct() {}
