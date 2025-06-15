@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/snd/d_snd_bgm_mgr.h"
+#include "d/snd/d_snd_calc_pitch.h"
 #include "d/snd/d_snd_checkers.h"
 #include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_distant_sound_actor_pool.h"
@@ -9,6 +10,9 @@
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_source.h"
 #include "d/snd/d_snd_source_enums.h"
+#include "d/snd/d_snd_source_mgr.h"
+#include "d/snd/d_snd_stage_data.h"
+#include "d/snd/d_snd_state_mgr.h"
 #include "d/snd/d_snd_util.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "egg/audio/eggAudioRmtSpeakerMgr.h"
@@ -29,6 +33,10 @@ dSndSmallEffectMgr_c::dSndSmallEffectMgr_c()
     }
 }
 
+void dSndSmallEffectMgr_c::initialize() {
+    resetButtonPressSound();
+}
+
 void dSndSmallEffectMgr_c::calc() {
     if (!dSndPlayerMgr_c::GetInstance()->checkFlag(0x4)) {
         for (int i = 0; i < NUM_DELAYED_SOUNDS; i++) {
@@ -41,6 +49,72 @@ void dSndSmallEffectMgr_c::calc() {
             }
         }
     }
+}
+
+void dSndSmallEffectMgr_c::calcTimer() {
+    if (field_0x10 <= 0) {
+        return;
+    }
+    field_0x10--;
+}
+
+void dSndSmallEffectMgr_c::stopAllSound(s32 fadeFrames) {
+    field_0x10 = fadeFrames;
+    for (s32 i = dSndPlayerMgr_c::PLAYER_SMALL_IMPORTANT; i <= dSndControlPlayerMgr_c::sPlayerMax; i++) {
+        dSndControlPlayerMgr_c::GetInstance()->getPlayer1(i)->StopAllSound(fadeFrames);
+    }
+    dSndSourceMgr_c::GetInstance()->stopAllSound();
+}
+
+void dSndSmallEffectMgr_c::stopAllSoundDemoRelated(s32 fadeFrames) {
+    field_0x10 = fadeFrames;
+    if (dSndStateMgr_c::GetInstance()->isInDemo()) {
+        for (s32 i = dSndPlayerMgr_c::PLAYER_SMALL_NORMAL; i <= dSndControlPlayerMgr_c::sPlayerMax; i++) {
+            dSndControlPlayerMgr_c::GetInstance()->getPlayer1(i)->StopAllSound(fadeFrames);
+        }
+        dSndSourceMgr_c::GetInstance()->stopAllSound();
+    } else {
+        dSndControlPlayerMgr_c::GetInstance()
+            ->getPlayer1(dSndPlayerMgr_c::PLAYER_SMALL_NORMAL)
+            ->StopAllSound(fadeFrames);
+
+        for (s32 i = dSndPlayerMgr_c::PLAYER_LINK_EQUIPMENT; i <= dSndControlPlayerMgr_c::sPlayerMax; i++) {
+            if ((u32)i != dSndPlayerMgr_c::PLAYER_AREA) {
+                dSndControlPlayerMgr_c::GetInstance()->getPlayer1(i)->StopAllSound(fadeFrames);
+            }
+        }
+        dSndSourceMgr_c::GetInstance()->stopAllNonPlayerSound();
+    }
+}
+
+void dSndSmallEffectMgr_c::stopAllSoundExceptEvent(s32 fadeFrames) {
+    field_0x10 = fadeFrames;
+    for (u32 i = dSndPlayerMgr_c::PLAYER_SMALL_NORMAL; (s32)i <= dSndControlPlayerMgr_c::sPlayerMax; i++) {
+        if (i == dSndPlayerMgr_c::PLAYER_LINK_VOICE) {
+            dSndControlPlayerMgr_c::GetInstance()->getPlayer1(i)->StopAllSound(20);
+        } else if (i != dSndPlayerMgr_c::PLAYER_EVENT) {
+            dSndControlPlayerMgr_c::GetInstance()->getPlayer1(i)->StopAllSound(fadeFrames);
+        }
+    }
+    dSndSourceMgr_c::GetInstance()->stopAllSound();
+}
+
+void dSndSmallEffectMgr_c::stopAllSoundExceptEffectOrLink(s32 fadeFrames) {
+    field_0x10 = fadeFrames;
+    for (s32 i = dSndPlayerMgr_c::PLAYER_LINK_EQUIPMENT; i <= dSndControlPlayerMgr_c::sPlayerMax; i++) {
+        dSndControlPlayerMgr_c::GetInstance()->getPlayer1(i)->StopAllSound(field_0x10);
+    }
+    dSndSourceMgr_c::GetInstance()->stopAllNonPlayerSound();
+}
+
+bool dSndSmallEffectMgr_c::playSoundInternalChecked(u32 soundId, nw4r::snd::SoundHandle *pHandle) {
+    // TODO
+    return false;
+}
+
+bool dSndSmallEffectMgr_c::playSoundInternal(u32 soundId, nw4r::snd::SoundHandle *pHandle) {
+    // TODO
+    return false;
 }
 
 bool dSndSmallEffectMgr_c::playSound(u32 soundId) {
@@ -151,6 +225,11 @@ bool dSndSmallEffectMgr_c::playSoundWithPan(u32 soundId, f32 pan) {
         mNormalSound.SetPan(pan);
     }
     return ok;
+}
+
+bool dSndSmallEffectMgr_c::playSoundInternal(u32 soundId) {
+    // TODO
+    return false;
 }
 
 nw4r::snd::SoundHandle *dSndSmallEffectMgr_c::getHoldSoundHandle(u32 soundId) {
@@ -307,6 +386,91 @@ bool dSndSmallEffectMgr_c::playDowsingPingSound(f32 volume, f32 pitch) {
 
 bool dSndSmallEffectMgr_c::holdDowsingNearestSound() {
     return holdSound(SE_S_DOWSING_SOUND_NEAREST, &mDowsingSoundHandle);
+}
+
+bool dSndSmallEffectMgr_c::playSirenCountdownSound(s32 timer) {
+    bool ok = playSoundInternal(SE_S_SIREN_COUNT_DOWN);
+    if (ok) {
+        f32 pitch = 1.0f - (timer * 0.01f);
+        mNormalSound.SetPitch(pitch);
+    }
+    return ok;
+}
+
+bool dSndSmallEffectMgr_c::playMinigameCountdownSound() {
+    return playSoundInternal(SE_S_MG_COUNT_DOWN_1);
+}
+
+bool dSndSmallEffectMgr_c::playMinigameTimeUpSound(s32 timer) {
+    return playSoundInternal(timer <= 3 ? SE_S_MG_TIMEUP_COUNT_02 : SE_S_MG_TIMEUP_COUNT_01);
+}
+
+bool dSndSmallEffectMgr_c::playMinigameStartSound() {
+    return playSoundInternal(SE_S_MG_START);
+}
+
+bool dSndSmallEffectMgr_c::playMinigameFinishSound() {
+    dSndBgmMgr_c::GetInstance()->stopAllBgm(10);
+    return playSoundInternal(SE_S_MG_FINISH);
+}
+
+bool dSndSmallEffectMgr_c::playMinigameFinishWhistleSound() {
+    dSndBgmMgr_c::GetInstance()->stopAllBgm(10);
+    return playSoundInternal(SE_S_MG_FINISH_WHISTLE);
+}
+
+bool dSndSmallEffectMgr_c::playMinigameScoreUpSound(s32 param) {
+    u32 soundId = SE_S_MG_SCORE_UP;
+    bool ok;
+    switch (dSndStateMgr_c::GetInstance()->getStageId_0x044()) {
+        case SND_STAGE_F019r:
+            // Bamboo Island
+            ok = playSoundInternal(SE_S_MG_TAKE_SCORE_UP);
+            if (ok) {
+                f32 pitch = pitchScaleForPitchIdx(param);
+                mNormalSound.SetPitch(pitch);
+            }
+            return ok;
+        case SND_STAGE_F020:
+            // Sky Field
+            soundId = dSndMgr_c::GetInstance()->getArchive() != nullptr ? (param >> 1) + SE_S_MG_TAKE_SCORE_UP :
+                                                                          SE_S_MG_DIVING_SCORE_01;
+            break;
+        case SND_STAGE_F211:
+            // Thrill Digger
+            soundId = SE_S_BE_GET_RUPEE;
+            break;
+        case SND_STAGE_F000:
+            // Skyloft (Pumpkin Archery)
+            if (param >= 50) {
+                soundId = SE_S_MG_PUMP_SHOT_SCORE_UP_50;
+            } else if (param >= 40) {
+                soundId = SE_S_MG_PUMP_SHOT_SCORE_UP_40;
+            } else if (param >= 30) {
+                soundId = SE_S_MG_PUMP_SHOT_SCORE_UP_30;
+            } else if (param >= 20) {
+                soundId = SE_S_MG_PUMP_SHOT_SCORE_UP_20;
+            } else {
+                soundId = SE_S_MG_PUMP_SHOT_SCORE_UP_10;
+            }
+            break;
+    }
+    return playSoundInternal(soundId);
+}
+
+bool dSndSmallEffectMgr_c::playMinigameScoreDownSound() {
+    return playSoundInternal(SE_S_MG_SCORE_DOWN);
+}
+
+bool dSndSmallEffectMgr_c::playMinigameMusasabiSound(s32 count) {
+    if (count < 0) {
+        count = 0;
+    } else if (count > 10) {
+        count = 10;
+    }
+    return playSoundInternal(
+        dSndMgr_c::GetInstance()->getArchive() != nullptr ? count + SE_S_MG_MUSASABI_01 : SE_S_MG_MUSASABI_01
+    );
 }
 
 bool dSndSmallEffectMgr_c::playSkbSound(u32 soundId) {

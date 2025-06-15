@@ -29,7 +29,14 @@ public:
 
     dSndSmallEffectMgr_c();
 
+    void initialize();
     void calc();
+    void calcTimer();
+
+    void stopAllSound(s32 fadeFrames);
+    void stopAllSoundDemoRelated(s32 fadeFrames); // TODO: better name
+    void stopAllSoundExceptEvent(s32 fadeFrames);
+    void stopAllSoundExceptEffectOrLink(s32 fadeFrames);
 
     bool playSound(u32 soundId);
     // used for clawshots cursor, pan depends on where on the screen
@@ -47,7 +54,17 @@ public:
 
     bool playDowsingPingSound(f32 volume, f32 pitch);
     bool holdDowsingNearestSound();
-    
+
+    bool playSirenCountdownSound(s32 timer);
+    bool playMinigameCountdownSound();
+    bool playMinigameTimeUpSound(s32 timer);
+    bool playMinigameStartSound();
+    bool playMinigameFinishSound();
+    bool playMinigameFinishWhistleSound();
+    bool playMinigameScoreUpSound(s32 param);
+    bool playMinigameScoreDownSound();
+    bool playMinigameMusasabiSound(s32 count);
+
     bool playSkbSound(u32 soundId);
 
     bool playButtonPressSoundWhenAdvancingTextBoxes(f32);
