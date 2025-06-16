@@ -14,7 +14,7 @@ dSndSeSound_c::dSndSeSound_c()
       field_0x11E(0),
       mpStartCallback(nullptr),
       mpCalcCallback(nullptr) {
-    mpUnk = new UnkSeSoundStruct[10];
+    mpUnk = new dSndSoundCtxParam[10];
 }
 
 dSndSeSound_c::~dSndSeSound_c() {
@@ -25,10 +25,10 @@ void dSndSeSound_c::setSource(dSoundSource_c *source, u32 soundId) {
     clear();
     mSoundId = soundId;
     field_0x114 = 0;
-    UnkSeSoundStruct* s = mpUnk;
+    dSndSoundCtxParam* s = mpUnk;
     while (s < &mpUnk[10]) {
-        s->field_0x00 = 0;
-        s->field_0x04 = 0.0f;
+        s->intParam = 0;
+        s->floatParam = 0.0f;
         s++;
     }
 
@@ -57,7 +57,7 @@ void dSndSeSound_c::calc(dSoundSource_c *source) {
     field_0x114++;
 }
 
-void dSndSeSound_c::shiftPair(const UnkSeSoundStruct *pUnk) {
+void dSndSeSound_c::shiftParam(const dSndSoundCtxParam *pUnk) {
     if (pUnk == nullptr) {
         return;
     }
@@ -68,11 +68,11 @@ void dSndSeSound_c::shiftPair(const UnkSeSoundStruct *pUnk) {
     mpUnk[0] = *pUnk;
 }
 
-void dSndSeSound_c::shiftValue(f32 value) {
+void dSndSeSound_c::shiftFloatParam(f32 value) {
     for (int i = 9; i > 0; i--) {
-        mpUnk[i].field_0x04 = mpUnk[i - 1].field_0x04;
+        mpUnk[i].floatParam = mpUnk[i - 1].floatParam;
     }
-    mpUnk[0].field_0x04 = value;
+    mpUnk[0].floatParam = value;
 }
 
 void dSndSeSound_c::onStart(dSoundSource_c *source) {

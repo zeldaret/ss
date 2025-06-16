@@ -11,7 +11,7 @@
 
 dSndDistantSoundActor_c::dSndDistantSoundActor_c()
     : dSnd3DActor_c(&dSndDistantSoundActorPool_c::GetInstance()->getSourceParam(), SND_SOURCE_DISTANT),
-      field_0x0F4(0),
+      mpHoldSoundHandle(nullptr),
       mpSoundSource(nullptr),
       mpSoundHandle(&mSoundHandle),
       mIsActive(false),
@@ -95,7 +95,7 @@ void dSndDistantSoundActor_c::detachFromSource() {
         mpSoundSource->detachDistantSound(this);
     }
     mpSoundSource = nullptr;
-    field_0x0F4 = 0;
+    mpHoldSoundHandle = nullptr;
 }
 
 void dSndDistantSoundActor_c::setPause(bool flag, int fadeFrames) {

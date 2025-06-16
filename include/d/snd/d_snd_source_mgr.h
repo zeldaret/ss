@@ -28,6 +28,10 @@ public:
         return GetInstance()->mpBoomerangSource;
     }
 
+    u8 getField_0x0012() const {
+        return field_0x0012;
+    }
+
     u8 getField_0x0013() const {
         return field_0x0013;
     }

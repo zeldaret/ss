@@ -10,7 +10,7 @@ class dSndDistantSoundActor_c;
 
 class dSndSound_c;
 
-class UnkSeSoundStruct;
+class dSndSoundCtxParam;
 
 class dSndSeSound_c;
 class dSndSeSound1_c;
