@@ -52,8 +52,16 @@ public:
 
     // not sure if this combination makes sense
     void resetHandle() {
-        field_0x0F4 = 0;
+        mpHoldSoundHandle = nullptr;
         mpSoundHandle = &mSoundHandle;
+    }
+
+    dSndSeSound2_c *getHoldSoundHandle() const {
+        return mpHoldSoundHandle;
+    }
+
+    void setHoldSoundHandle(dSndSeSound2_c *handle) {
+        mpHoldSoundHandle = handle;
     }
 
     bool isActive() const {
@@ -73,7 +81,7 @@ public:
 private:
     /* 0x0E4 */ nw4r::ut::Node mPoolLink;   // sound actor pool link
     /* 0x0EC */ nw4r::ut::Node mSourceLink; // sound source link
-    /* 0x0F4 */ UNKWORD field_0x0F4;
+    /* 0x0F4 */ dSndSeSound2_c *mpHoldSoundHandle;
     /* 0x0F8 */ dSoundSource_c *mpSoundSource;
     /* 0x0FC */ nw4r::snd::SoundHandle mSoundHandle;
     /* 0x100 */ nw4r::snd::SoundHandle *mpSoundHandle;
