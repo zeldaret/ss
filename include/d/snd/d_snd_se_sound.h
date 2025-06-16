@@ -8,23 +8,32 @@
 #include "nw4r/ut/ut_list.h"
 
 /**
- * This seems to be a generic way of passing parameters from callers of dSoundSource_c
- * startSound/holdSound to the callbacks that sound sources will register
- * on those handlers. E.g. at 80397a40 the chandelier swing hold sound will
- * occasionally create additional sounds based on historical params (swinging angle) passed
- * to holdSound by the chandelier (see dAcOChandelier_c::executeState_Wait / 80ebc814 in Ghidra)
- * In yet other cases the callback itself will keep pushing new values and the caller doesn't
- * do anything, e.g. caller at 80228814 for SE_L_ROPE_WIND_LV does not push values, but
- * handler at 80394fb0 will keep pushing values.
+ * Examples:
+ * * Chandelier hold sound. Game code (dAcOChandelier_c::executeState_Wait) will
+ *   push the current swing angle, callback (80397a40) will play additional sounds
+ *   when chandelier swing speed exceeds certain values.
+ * * SE_L_ROPE_WIND_LV: callback (80228814) will read and write values to create a feedback
+ *   loop for certain parameters.
  */
-struct UnkSeSoundStruct {
-    UnkSeSoundStruct() : field_0x00(0), field_0x04(0.0f) {}
-    ~UnkSeSoundStruct() {}
+struct dSndSoundCtxParam {
+    dSndSoundCtxParam() : intParam(0), floatParam(0.0f) {}
+    ~dSndSoundCtxParam() {}
 
-    /* 0x00 */ UNKWORD field_0x00;
-    /* 0x04 */ f32 field_0x04;
+    /* 0x00 */ s32 intParam;
+    /* 0x04 */ f32 floatParam;
 };
 
+/**
+ * A sound effect handle. Typically acquired by sound sources from a pool.
+ * This allows sound sources to play sounds with no pre-determined limit
+ * on the number of sounds. It also allows the source to handle the statefulness
+ * of holdSound without requiring users to manage handles.
+ *
+ * Additionally, some sound sources will register callbacks to customize
+ * sound parameters (pitch, volume, ...). These callbacks can additionally
+ * write and read context parameters (see above). The game will shift these
+ * parameters with each call, so a lot of this is obviously frame-rate dependent.
+ */
 class dSndSeSound_c {
 public:
     dSndSeSound_c();
@@ -45,8 +54,8 @@ public:
     void clear();
 
     // not sure what this does
-    void shiftPair(const UnkSeSoundStruct *p);
-    void shiftValue(f32 value);
+    void shiftParam(const dSndSoundCtxParam *p);
+    void shiftFloatParam(f32 value);
 
     typedef void Callback(dSndSeSound_c *sound, dSoundSource_c *source, nw4r::snd::SoundHandle &handle);
 
@@ -106,7 +115,7 @@ protected:
     /* 0x10C */ Type_e mHandleType;
     /* 0x110 */ u32 mSoundId;
     /* 0x114 */ s32 field_0x114;
-    /* 0x118 */ UnkSeSoundStruct *mpUnk;
+    /* 0x118 */ dSndSoundCtxParam *mpUnk;
     /* 0x11C */ u8 field_0x11C;
     /* 0x11D */ u8 field_0x11D;
     /* 0x11E */ u8 field_0x11E;

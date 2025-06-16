@@ -20,28 +20,28 @@ public:
     virtual bool isSourceType(s32 type) const = 0;   // 0x01C
     SOUNDSOURCE_VIRTUAL(0x20);
     SOUNDSOURCE_VIRTUAL(0x24);
-    virtual const nw4r::math::VEC3 &getListenerPosition() const = 0;                    // 0x028
-    virtual void calc(const nw4r::math::VEC3 &) = 0;                                    // 0x02C
-    virtual void onFlag1(u32 mask) = 0;                                                 // 0x030
-    virtual void offFlag1(u32 mask) = 0;                                                // 0x034
-    virtual bool checkFlag(u32 mask) const = 0;                                         // 0x038
-    virtual void onFlag2(u32 mask) = 0;                                                 // 0x03C
-    virtual void stopAllSound(s32 fadeFrames) = 0;                                      // 0x040
-    virtual void shutdown() = 0;                                                        // 0x044
-    virtual bool hasPlayingSounds() const = 0;                                          // 0x048
-    virtual bool isPlayingSound(u32 soundId) = 0;                                       // 0x04C
-    virtual bool isPlayingSound(const char *soundId) = 0;                               // 0x050
-    virtual void setUnkSe(const UnkSeSoundStruct *) = 0;                                // 0x054
-    virtual void setUnkSeFloat(f32 value) = 0;                                          // 0x058
-    virtual void setUnkSeWord(UNKWORD value) = 0;                                       // 0x05C
-    virtual bool startSound(u32 soundId) = 0;                                           // 0x060
-    virtual bool startSoundWithUnkSeWord(u32 soundId, UNKWORD value) = 0;               // 0x064
-    virtual bool startSoundWithUnkSeFloat(u32 soundId, f32 value) = 0;                  // 0x068
-    virtual bool startSoundWithUnkSe(u32 soundId, f32 fValue, UNKWORD value) = 0;       // 0x06C
-    virtual bool startSound(const char *label) = 0;                                     // 0x070
-    virtual bool startSoundWithUnkSeWord(const char *label, UNKWORD value) = 0;         // 0x074
-    virtual bool startSoundWithUnkSeFloat(const char *label, f32 value) = 0;            // 0x078
-    virtual bool startSoundWithUnkSe(const char *label, f32 fValue, UNKWORD value) = 0; // 0x07C
+    virtual const nw4r::math::VEC3 &getListenerPosition() const = 0;                 // 0x028
+    virtual void calc(const nw4r::math::VEC3 &) = 0;                                 // 0x02C
+    virtual void onFlag1(u32 mask) = 0;                                              // 0x030
+    virtual void offFlag1(u32 mask) = 0;                                             // 0x034
+    virtual bool checkFlag(u32 mask) const = 0;                                      // 0x038
+    virtual void onFlag2(u32 mask) = 0;                                              // 0x03C
+    virtual void stopAllSound(s32 fadeFrames) = 0;                                   // 0x040
+    virtual void shutdown() = 0;                                                     // 0x044
+    virtual bool hasPlayingSounds() const = 0;                                       // 0x048
+    virtual bool isPlayingSound(u32 soundId) = 0;                                    // 0x04C
+    virtual bool isPlayingSound(const char *soundId) = 0;                            // 0x050
+    virtual void setCtxParam(const dSndSoundCtxParam *) = 0;                         // 0x054
+    virtual void setCtxFloat(f32 value) = 0;                                         // 0x058
+    virtual void setCtxInt(s32 value) = 0;                                           // 0x05C
+    virtual bool startSound(u32 soundId) = 0;                                        // 0x060
+    virtual bool startSoundWithIntParam(u32 soundId, s32 value) = 0;                 // 0x064
+    virtual bool startSoundWithFloatParam(u32 soundId, f32 value) = 0;               // 0x068
+    virtual bool startSoundWithParams(u32 soundId, f32 fValue, s32 value) = 0;       // 0x06C
+    virtual bool startSound(const char *label) = 0;                                  // 0x070
+    virtual bool startSoundWithIntParam(const char *label, s32 value) = 0;           // 0x074
+    virtual bool startSoundWithFloatParam(const char *label, f32 value) = 0;         // 0x078
+    virtual bool startSoundWithParams(const char *label, f32 fValue, s32 value) = 0; // 0x07C
     SOUNDSOURCE_VIRTUAL(0x80);
     SOUNDSOURCE_VIRTUAL(0x84);
     SOUNDSOURCE_VIRTUAL(0x88);
@@ -51,18 +51,18 @@ public:
     SOUNDSOURCE_VIRTUAL(0x98);
     SOUNDSOURCE_VIRTUAL(0x9C);
     SOUNDSOURCE_VIRTUAL(0xA0);
-    virtual void stopSounds(u32 soundId, s32 fadeFrames) = 0;       // 0x0A4
-    virtual void stopSounds(const char *label, s32 fadeFrames) = 0; // 0x0A8
-    virtual bool holdSound(u32 soundId) = 0;                        // 0x0AC
-    SOUNDSOURCE_VIRTUAL(0xB0);
-    SOUNDSOURCE_VIRTUAL(0xB4);
-    SOUNDSOURCE_VIRTUAL(0xB8);
-    virtual bool holdSound(const char *label) = 0; // 0x0BC
-    SOUNDSOURCE_VIRTUAL(0xC0);
-    SOUNDSOURCE_VIRTUAL(0xC4);
-    SOUNDSOURCE_VIRTUAL(0xC8);
-    SOUNDSOURCE_VIRTUAL(0xCC);
-    SOUNDSOURCE_VIRTUAL(0xD0);
+    virtual void stopSounds(u32 soundId, s32 fadeFrames) = 0;                                  // 0x0A4
+    virtual void stopSounds(const char *label, s32 fadeFrames) = 0;                            // 0x0A8
+    virtual bool holdSound(u32 soundId) = 0;                                                   // 0x0AC
+    virtual bool holdSoundWithIntParam(u32 soundId, s32 value) = 0;                            // 0x0B0
+    virtual bool holdSoundWithFloatParam(u32 soundId, f32 value) = 0;                          // 0x0B4
+    virtual bool holdSoundWithParams(u32 soundId, f32 fValue, s32 value) = 0;                  // 0x0B8
+    virtual bool holdSound(const char *label) = 0;                                             // 0x0BC
+    virtual bool holdSoundWithIntParam(const char *label, s32 value) = 0;                      // 0x0C0
+    virtual bool holdSoundWithFloatParam(const char *label, f32 value) = 0;                    // 0x0C4
+    virtual bool holdSoundWithParams(const char *label, f32 fValue, s32 value) = 0;            // 0x0C8
+    virtual bool holdSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *position) = 0;       // 0x0CC
+    virtual bool holdSoundAtPosition(const char *label, const nw4r::math::VEC3 *position) = 0; // 0x0D0
     SOUNDSOURCE_VIRTUAL(0xD4);
     SOUNDSOURCE_VIRTUAL(0xD8);
     SOUNDSOURCE_VIRTUAL(0xDC);
