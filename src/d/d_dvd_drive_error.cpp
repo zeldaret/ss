@@ -9,7 +9,6 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 
-
 /** 805750d0 */
 dDvdDriveError_c *dDvdDriveError_c::sInstance;
 
@@ -146,7 +145,7 @@ void dDvdDriveError_c::execute() {
             dDvdUnk::FontUnk::GetInstance()->fn_80052C60();
         }
     } else if (mDvdDriveStatus == DVD_STATE_IDLE) {
-        if (!dReset::Manage_c::GetInstance()->is1Or5()) {
+        if (!dReset::Manage_c::GetInstance()->isSoftResetOrSafetyWait()) {
             mIsError = false;
         }
     }

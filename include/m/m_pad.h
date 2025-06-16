@@ -25,8 +25,11 @@ enum Button {
     BUTTON_C = 0x4000,
 };
 
-inline EGG::CoreController *getCore(int i) {
+inline EGG::CoreController *getCore(const int i) {
     return g_core[i];
+}
+inline void stopRumbleMgr(int i) {
+    g_core[i]->stopRumbleMgr();
 }
 inline EGG::CoreController *getCore() {
     return g_currentCore;

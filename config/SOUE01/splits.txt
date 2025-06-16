@@ -340,7 +340,11 @@ toBeSorted/deg_angle_util.cpp:
 d/d_reset.cpp:
 	.text       start:0x80067B20 end:0x80068FD0 align:16
 	.ctors      start:0x804DB6A4 end:0x804DB6A8
+	.rodata     start:0x804E0F18 end:0x804E0FA8
+	.data       start:0x8050DFB0 end:0x8050DFE0
+	.sdata      start:0x80571D20 end:0x80571D30
 	.sbss       start:0x80575270 end:0x80575278
+	.sdata2     start:0x805779E8 end:0x805779F8
 
 toBeSorted/arc_managers/current_stage_arc_manager.cpp:
 	.text       start:0x80068FD0 end:0x80069910 align:16

@@ -1,4 +1,5 @@
 
+#include "common.h"
 #include "egg/core/eggHeap.h"
 namespace dHbm {
 class Manage_c {
@@ -28,6 +29,7 @@ public:
     void IconCalc();
     void IconClear();
     void StopMotor();
+    bool fn_801973C0(s32);
     void ForbidCalc();
 
     s32 fn_80197560(s32);
@@ -35,9 +37,16 @@ public:
         mFlags &= ~flags;
     }
 
+    UNKWORD getField_0x210() const {
+        return field_0x210;
+    }
+
 private:
     static Manage_c *s_pInstance;
-    u8 _0x00[0x218 - 0x000];
-    u32 mFlags;
+
+    /* 0x000 */ u8 _0x00[0x210 - 0x000];
+    /* 0x210 */ UNKWORD field_0x210;
+    /* 0x218 */ UNKWORD field_0x214;
+    /* 0x218 */ u32 mFlags;
 };
 } // namespace dHbm

@@ -22,30 +22,29 @@ typedef enum {
     DVD_RESULT_OK,
 } DVDResult;
 
-#define DVD_ESUCCESS	DVD_RESULT_OK
-#define DVD_EFATAL		DVD_RESULT_FATAL
-#define DVD_ECANCELED	DVD_RESULT_CANCELED
-#define DVD_ECOVER		DVD_RESULT_COVER_CLOSED
+#define DVD_ESUCCESS DVD_RESULT_OK
+#define DVD_EFATAL DVD_RESULT_FATAL
+#define DVD_ECANCELED DVD_RESULT_CANCELED
+#define DVD_ECOVER DVD_RESULT_COVER_CLOSED
 
 typedef long DVDState;
-enum DVDState_et
-{
-	DVD_STATE_IDLE			=  0,
+enum DVDState_et {
+    DVD_STATE_IDLE = 0,
 
-	DVD_STATE_BUSY			=  1,
-	DVD_STATE_WAITING		=  2,
-	DVD_STATE_COVER_CLOSED	=  3,
-	DVD_STATE_NO_DISK		=  4,
-	DVD_STATE_COVER_OPENED	=  5,
-	DVD_STATE_WRONG_DISK_ID	=  6,
-	DVD_STATE_7				=  7,
-	DVD_STATE_PAUSED		=  8,
-	DVD_STATE_9				=  9,
-	DVD_STATE_CANCELED		= 10,
-	DVD_STATE_DISK_ERROR	= 11,
-	DVD_STATE_MOTOR_STOPPED	= 12,
+    DVD_STATE_BUSY = 1,
+    DVD_STATE_WAITING = 2,
+    DVD_STATE_COVER_CLOSED = 3,
+    DVD_STATE_NO_DISK = 4,
+    DVD_STATE_COVER_OPENED = 5,
+    DVD_STATE_WRONG_DISK_ID = 6,
+    DVD_STATE_7 = 7,
+    DVD_STATE_PAUSED = 8,
+    DVD_STATE_9 = 9,
+    DVD_STATE_CANCELED = 10,
+    DVD_STATE_DISK_ERROR = 11,
+    DVD_STATE_MOTOR_STOPPED = 12,
 
-	DVD_STATE_FATAL			= -1,
+    DVD_STATE_FATAL = -1,
 };
 
 typedef enum {
@@ -110,6 +109,7 @@ s32 DVDGetDriveStatus(void);
 void DVDPause(void);
 void DVDResume(void);
 BOOL DVDCancelAsync(DVDCommandBlock *block, DVDCommandCallback callback);
+BOOL DVDCheckDiskAsync(DVDCommandBlock *block, DVDAsyncCallback callback);
 s32 DVDCancel(DVDCommandBlock *block);
 BOOL DVDCancelAllAsync(DVDCommandCallback callback);
 const DVDDiskID *DVDGetCurrentDiskID(void);

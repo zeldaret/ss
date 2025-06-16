@@ -23,9 +23,11 @@ public:
 
     s32 getField_0xDE0() const;
     bool getField_0xDFC() const;
+    void fn_80152F10();
     bool fn_80152F50() const;
     bool fn_80152F60() const;
     bool fn_80152F70() const;
+    bool fn_80152F80() const;
 
 private:
     static dLytSystemWindow_c *sInstance;

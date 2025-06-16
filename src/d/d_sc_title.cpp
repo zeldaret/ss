@@ -74,7 +74,7 @@ static const char *const sSkb = "SoftwareKeyboard";
 
 int dScTitle_c::create() {
     int ret = dScGame_c::create();
-    if (ret == SUCCEEDED && dReset::Manage_c::GetInstance()->get0x0C() == 1) {
+    if (ret == SUCCEEDED && dReset::Manage_c::GetInstance()->isSoftReset()) {
         if (field_0x2AC == 0) {
             dReset::Manage_c::GetInstance()->FadeOutRequest(false);
             if (checkAllSaveFilesEmpty() != true) {
@@ -100,7 +100,7 @@ int dScTitle_c::create() {
         SizedString<128> fntPath;
         fntPath.sprintf("/US/Font/%s/%s", dMessage_c::getLanguageIdentifier(), "normal_02.brfnt");
         mDvd_toMainRam_normal_c::create2(&mpSkbFont, fntPath, 0, dHeap::work2Heap.heap);
-        fn_8035E310(BGM_MGR);
+        BGM_MGR->fn_8035E310();
     }
 
     return ret;

@@ -499,7 +499,7 @@ void dScBoot_c::executeState_Strap() {
             case 1:
                 if (!checkDone()) {
                     bool ok = mStrapScreen.execute();
-                    if (dReset::Manage_c::GetInstance()->get0x0C() == 1) {
+                    if (dReset::Manage_c::GetInstance()->isSoftReset()) {
                         ok = false;
                     }
 
