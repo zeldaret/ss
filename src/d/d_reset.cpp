@@ -550,9 +550,8 @@ void Manage_c::CleanUpLC() {
 }
 
 void Manage_c::MotorCancelOn() {
-    // Huh
-    for (int i = 0; i < 4;) {
-        mPad::g_core[i++]->stopRumbleMgr();
+    for (int i = 0; i < 4; i++) {
+        mPad::g_core[--++i]->stopRumbleMgr();
     }
     dRumble_c::stop(-1);
 }

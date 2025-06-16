@@ -430,7 +430,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/cx_util.cpp"),
             Object(NonMatching, "toBeSorted/area_math.cpp"),
             Object(NonMatching, "toBeSorted/deg_angle_util.cpp"),
-            Object(NonMatching, "d/d_reset.cpp"),
+            Object(Matching, "d/d_reset.cpp"),
             Object(Matching, "toBeSorted/arc_managers/current_stage_arc_manager.cpp"),
             Object(Matching, "toBeSorted/arc_managers/oarc_manager.cpp"),
             Object(NonMatching, "toBeSorted/arc_managers/oarc_control.cpp"),
