@@ -1,6 +1,7 @@
 #ifndef D_SND_MGR_H
 #define D_SND_MGR_H
 
+#include "common.h"
 #include "egg/audio/eggAudioMgr.h"
 #include "nw4r/snd/snd_SoundArchivePlayer.h"
 
@@ -21,6 +22,14 @@ public:
 
     static nw4r::snd::SoundArchivePlayer& getPlayer() {
         return *sInstance->ArcPlayer::getPlayer();
+    }
+
+    static const char *getSoundLabelString(u32 soundId) {
+        const char *label = nullptr;
+        if (sInstance->getArchive() != nullptr) {
+            label = sInstance->getArchive()->GetSoundLabelString(soundId);
+        }
+        return label;
     }
 
 private:

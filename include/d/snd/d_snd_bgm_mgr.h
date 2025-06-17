@@ -134,7 +134,7 @@ private:
     /* 0x333 */ u8 field_0x333;
     /* 0x334 */ dSndSound_c *mFanSounds[3];
     /* 0x340 */ u8 field_0x340;
-    /* 0x344 */ nw4r::ut::List mAllSounds; // node offset 0x8 -> dSndSound_c
+    /* 0x344 */ LIST_MEMBER(dSndSound_c, AllSounds); // node offset 0x8
 };
 
 #endif

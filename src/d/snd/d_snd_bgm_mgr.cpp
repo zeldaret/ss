@@ -53,7 +53,7 @@ dSndBgmMgr_c::dSndBgmMgr_c()
         mFanSounds[i] = new dSndSound_c();
     }
 
-    nw4r::ut::List_Init(&mAllSounds, 8);
+    nw4r::ut::List_Init(&mAllSoundsList, 8);
 
     for (int i = 0; i < 3; i++) {
         field_0x30C[i] = 0;
@@ -65,8 +65,6 @@ dSndBgmMgr_c::dSndBgmMgr_c()
 
 void dSndBgmMgr_c::calcLists() {
     // TODO ...
-
-    // TODO: Weird declaration order required for regswaps
 
     dSndBgmSound_c *next, *it;
     for (it = getFirstInBgmSoundList(BGM_LIST_PLAYING); it != nullptr; it = next) {
@@ -88,9 +86,9 @@ void dSndBgmMgr_c::calcLists() {
     }
 
     {
-        dSndSound_c *it, *next;
-        for (it = static_cast<dSndSound_c *>(nw4r::ut::List_GetFirst(&mAllSounds)); it != nullptr; it = next) {
-            next = static_cast<dSndSound_c *>(nw4r::ut::List_GetNext(&mAllSounds, it));
+        dSndSound_c *next, *it;
+        for (it = getAllSoundsFirst(); it != nullptr; it = next) {
+            next = getAllSoundsNext(it);
             if (!it->IsAttachedSound()) {
                 unregistSound(it);
             }
@@ -460,12 +458,12 @@ void dSndBgmMgr_c::registSound(dSndSound_c *sound) {
         return;
     }
     unregistSound(sound);
-    nw4r::ut::List_Append(&mAllSounds, sound);
+    nw4r::ut::List_Append(&mAllSoundsList, sound);
 }
 
 void dSndBgmMgr_c::unregistSound(dSndSound_c *sound) {
     if (isSoundRegist(sound)) {
-        nw4r::ut::List_Remove(&mAllSounds, sound);
+        nw4r::ut::List_Remove(&mAllSoundsList, sound);
     }
 }
 
@@ -473,8 +471,7 @@ bool dSndBgmMgr_c::isSoundRegist(dSndSound_c *sound) {
     if (sound == nullptr) {
         return false;
     }
-    for (dSndSound_c *it = static_cast<dSndSound_c *>(nw4r::ut::List_GetFirst(&mAllSounds)); it != nullptr;
-         it = static_cast<dSndSound_c *>(nw4r::ut::List_GetNext(&mAllSounds, it))) {
+    for (dSndSound_c *it = getAllSoundsFirst(); it != nullptr; it = getAllSoundsNext(it)) {
         if (it == sound) {
             return true;
         }

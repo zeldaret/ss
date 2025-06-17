@@ -63,6 +63,10 @@ public:
         mpSoundHandle->Stop(fadeFrames);
     }
 
+    Type_e getHandleType() const {
+        return mHandleType;
+    }
+
     // cannot be const...
     bool isAttachedSound() {
         return mpSoundHandle->IsAttachedSound();

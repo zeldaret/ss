@@ -772,7 +772,7 @@ config.libs = [
             Object(NonMatching, "d/snd/d_snd_mgr_unk_10.cpp"),
             # sound source subclasses end
             Object(NonMatching, "d/snd/d_snd_source_tg_sound.cpp"),
-            Object(NonMatching, "d/snd/d_snd_mgr_unk_16.cpp"),
+            Object(NonMatching, "d/snd/d_snd_id_mappers.cpp"),
             Object(Matching, "d/snd/d_snd_distant_sound_actor_pool.cpp"),
             Object(Matching, "d/snd/d_snd_distant_sound_actor.cpp"),
             Object(Matching, "d/snd/d_snd_se_sound.cpp"),

@@ -5,6 +5,7 @@
 #include "d/snd/d_snd_3d_actor.h"
 #include "d/snd/d_snd_source_if.h"
 #include "d/snd/d_snd_types.h"
+#include "d/snd/d_snd_util.h"
 #include "nw4r/math/math_types.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/snd/snd_SoundStartable.h"
@@ -21,57 +22,56 @@ public:
     static u32 modifySoundId(u32 baseSoundId, dSoundSource_c *source);
     u32 getRemoConSoundVariant(u32 soundId) const;
     s32 getRoomId() const;
-    bool isInaudible();
+    bool isInaudibleInternal();
 
     // This is where it gets a bit wild and this class starts mixing in overrides between
     // new virtual functions, which causes the vtable to list these functions in exactly this
     // order.
-    virtual const char *getName() const {
+    /* 0x17C */ virtual const char *getName() const {
         return mpName;
-    } // 0x17C
-    virtual void d_s_vt_0x180();           // 0x180
-    virtual void preCalc();                // 0x184
-    virtual void d_s_vt_0x188();           // 0x188
-    virtual void postCalc();               // 0x18C
-    virtual bool d_s_vt_0x190();           // 0x190
-    virtual u32 d_s_vt_0x194(u32 soundId); // 0x194
+    }
+    /* 0x180 */ virtual void d_s_vt_0x180();
+    /* 0x184 */ virtual void preCalc();
+    /* 0x188 */ virtual void d_s_vt_0x188();
+    /* 0x18C */ virtual void postCalc();
+    /* 0x190 */ virtual bool d_s_vt_0x190();
+    /* 0x194 */ virtual u32 d_s_vt_0x194(u32 soundId);
 
-    virtual void postStartSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) override; // 0x198
+    /* 0x198 */ virtual void postStartSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) override;
 
-    virtual void d_s_vt_0x19C();                    // 0x19C
-    virtual u32 d_s_vt_0x1A0(u32 soundId, UNKWORD); // 0x1A0
+    /* 0x19C */ virtual u32 d_s_vt_0x19C(u32 soundId, dSoundSource_c *source);
+    /* 0x1A0 */ virtual u32 d_s_vt_0x1A0(u32 soundId, UNKWORD);
 
-    virtual void
-    postHoldSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id, UNKWORD) override; // 0x1A4
-    virtual StartResult
-    SetupSound(nw4r::snd::SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void *) override; // 0x1A8
+    /* 0x1A4 */ virtual void
+    postHoldSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id, UNKWORD) override;
+    /* 0x1A8 */ virtual StartResult
+    SetupSound(nw4r::snd::SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void *) override;
 
-    virtual bool d_s_vt_0x1AC(u32 soundId); // 0x1AC
-    virtual StartResult setupSound(
-        nw4r::snd::SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void *arg, bool holdFlag
-    );                                                          // 0x1B0
-    virtual void attachDistantSound(dSndDistantSoundActor_c *); // 0x1B4
-    virtual void detachDistantSound(dSndDistantSoundActor_c *); // 0x1B8
-    virtual void detachAllDistantSounds();                      // 0x1BC
-    virtual bool hasDistantSounds() const {
+    /* 0x1AC */ virtual bool d_s_vt_0x1AC(u32 soundId);
+    /* 0x1B0 */ virtual StartResult
+    setupSound(nw4r::snd::SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void *arg, bool holdFlag);
+    /* 0x1B4 */ virtual void attachDistantSound(dSndDistantSoundActor_c *);
+    /* 0x1B8 */ virtual void detachDistantSound(dSndDistantSoundActor_c *);
+    /* 0x1BC */ virtual void detachAllDistantSounds();
+    /* 0x1C0 */ virtual bool hasDistantSounds() const {
         return nw4r::ut::List_GetFirstConst(&mDistantSoundList) != nullptr;
-    } // 0x1C0
-    virtual void pauseAllDistantSounds(bool flag, int fadeFrames); // 0x1C4
-    virtual void d_s_vt_0x1C8();                                   // 0x1C8
-    virtual void postSetupSound(u32 playingId, u32 requestedId, dSndSeSound_c *seSound);
+    }
+    /* 0x1C4 */ virtual void pauseAllDistantSounds(bool flag, int fadeFrames);
+    /* 0x1C8 */ virtual void d_s_vt_0x1C8();
+    /* 0x1CC */ virtual void postSetupSound(u32 playingId, u32 requestedId, dSndSeSound_c *seSound);
 
-    virtual void setPause(bool flag, int fadeFrames) override; // 0x1D0
+    /* 0x1D0 */ virtual void setPause(bool flag, int fadeFrames) override;
 
-    virtual dSndAnimSound_c *getAnimSound() {
+    /* 0x1D4 */ virtual dSndAnimSound_c *getAnimSound() {
         return nullptr;
-    } // 0x1D4
-    virtual void d_s_vt_0x1D8(); // 0x1D8
-    virtual void d_s_vt_0x1DC(); // 0x1DC
-    virtual void onAnimSoundEvent(UNKWORD arg) {
+    }
+    /* 0x1D8 */ virtual void d_s_vt_0x1D8();
+    /* 0x1DC */ virtual void d_s_vt_0x1DC();
+    /* 0x1E0 */ virtual void onAnimSoundEvent(UNKWORD arg) {
         field_0x154 = arg;
-    } // 0x1E0
-    virtual void d_s_vt_0x1E4();           // 0x1E4
-    virtual u32 d_s_vt_0x1E8(u32 soundId); // 0x1E8
+    }
+    /* 0x1E4 */ virtual void d_s_vt_0x1E4();
+    /* 0x1E8 */ virtual u32 d_s_vt_0x1E8(u32 soundId);
 
     bool startRemoConSound(u32 soundId);
     nw4r::snd::SoundHandle *startSound(u32 soundId, nw4r::snd::SoundHandle *handle);
@@ -79,65 +79,83 @@ public:
     startSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *position, nw4r::snd::SoundHandle *handle);
     nw4r::snd::SoundHandle *holdSound(u32 soundId, nw4r::snd::SoundHandle *handle);
 
+    u32 specializeBgHitSoundId(u32 baseSoundId, u32 polyAttr0, u32 polyAttr1);
+
     // Overrides of dSoundSourceIf_c - always in the first section of
     // the vtable, so the order is not certain. May have to reorder for weak
     // function order.
-    virtual void setup() override; // 0x00C
-    virtual s32 getCategory() const override {
+    /* 0x00C */ virtual void setup() override;
+    /* 0x010 */ virtual s32 getCategory() const override {
         return mSourceCategory;
-    } // 0x010
-    virtual bool isCategory(s32 category) const override {
+    }
+    /* 0x014 */ virtual bool isCategory(s32 category) const override {
         return mSourceCategory == category;
-    } // 0x014
+    }
 
-    virtual s32 getSourceType() const override {
+    /* 0x018 */ virtual s32 getSourceType() const override {
         return mSourceType;
-    } // 0x018
-    virtual bool isSourceType(s32 type) const override {
+    }
+    /* 0x01C */ virtual bool isSourceType(s32 type) const override {
         return mSourceType == type;
-    } // 0x01C
-    virtual const nw4r::math::VEC3 &getListenerPosition() const override; // 0x028
-    void calc(const nw4r::math::VEC3 &) override;                         // 0x02C
-    virtual void stopAllSound(s32 fadeFrames) override {
+    }
+    /* 0x028 */ virtual const nw4r::math::VEC3 &getListenerPosition() const override;
+    /* 0x02C */ void calc(const nw4r::math::VEC3 &) override;
+    /* 0x040 */ virtual void stopAllSound(s32 fadeFrames) override {
         SoundActor::StopAllSound(fadeFrames);
-    } // 0x040
-    virtual void shutdown() override;                          // 0x044
-    virtual bool hasPlayingSounds() const override;            // 0x048
-    virtual bool isPlayingSound(u32 soundId) override;         // 0x04C
-    virtual bool isPlayingSound(const char *soundId) override; // 0x050
-    virtual void setCtxParam(const dSndSoundCtxParam *arg) override {
+    }
+    /* 0x044 */ virtual void shutdown() override;
+    /* 0x048 */ virtual bool hasPlayingSounds() const override;
+    /* 0x04C */ virtual bool isPlayingSound(u32 soundId) override;
+    /* 0x050 */ virtual bool isPlayingSound(const char *soundId) override;
+    /* 0x054 */ virtual void setCtxParam(const dSndSoundCtxParam *arg) override {
         mpCtxParam = arg;
-    } // 0x054
-    virtual void setCtxFloat(f32 value) override;                                                   // 0x058
-    virtual void setCtxInt(s32 value) override;                                                     // 0x05C
-    virtual bool startSound(u32 soundId) override;                                                  // 0x060
-    virtual bool startSoundWithIntParam(u32 soundId, s32 value) override;                           // 0x064
-    virtual bool startSoundWithFloatParam(u32 soundId, f32 value) override;                         // 0x068
-    virtual bool startSoundWithParams(u32 soundId, f32 fValue, s32 value) override;                 // 0x06C
-    virtual bool startSound(const char *label) override;                                            // 0x070
-    virtual bool startSoundWithIntParam(const char *label, s32 value) override;                     // 0x074
-    virtual bool startSoundWithFloatParam(const char *label, f32 value) override;                   // 0x078
-    virtual bool startSoundWithParams(const char *label, f32 fValue, s32 value) override;           // 0x07C
-    virtual void stopSounds(u32 soundId, s32 fadeFrames) override;                                  // 0x0A4
-    virtual void stopSounds(const char *label, s32 fadeFrames) override;                            // 0x0A8
-    virtual bool holdSound(u32 soundId) override;                                                   // 0x0AC
-    virtual bool holdSoundWithIntParam(u32 soundId, s32 value) override;                            // 0x0B0
-    virtual bool holdSoundWithFloatParam(u32 soundId, f32 value) override;                          // 0x0B4
-    virtual bool holdSoundWithParams(u32 soundId, f32 fValue, s32 value) override;                  // 0x0B8
-    virtual bool holdSound(const char *label) override;                                             // 0x0BC
-    virtual bool holdSoundWithIntParam(const char *label, s32 value) override;                      // 0x0C0
-    virtual bool holdSoundWithFloatParam(const char *label, f32 value) override;                    // 0x0C4
-    virtual bool holdSoundWithParams(const char *label, f32 fValue, s32 value) override;            // 0x0C8
-    virtual bool holdSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *position) override;       // 0x0CC
-    virtual bool holdSoundAtPosition(const char *label, const nw4r::math::VEC3 *position) override; // 0x0D0
+    }
+    /* 0x058 */ virtual void setCtxFloat(f32 value) override;
+    /* 0x05C */ virtual void setCtxInt(s32 value) override;
+    /* 0x060 */ virtual bool startSound(u32 soundId) override;
+    /* 0x064 */ virtual bool startSoundWithIntParam(u32 soundId, s32 value) override;
+    /* 0x068 */ virtual bool startSoundWithFloatParam(u32 soundId, f32 value) override;
+    /* 0x06C */ virtual bool startSoundWithParams(u32 soundId, f32 fValue, s32 value) override;
+    /* 0x070 */ virtual bool startSound(const char *label) override;
+    /* 0x074 */ virtual bool startSoundWithIntParam(const char *label, s32 value) override;
+    /* 0x078 */ virtual bool startSoundWithFloatParam(const char *label, f32 value) override;
+    /* 0x07C */ virtual bool startSoundWithParams(const char *label, f32 fValue, s32 value) override;
+    /* 0x080 */ virtual bool startSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *position) override;
+    /* 0x084 */ virtual bool
+    startObjHitSound(u32 baseSoundId, dSoundSourceIf_c *source, const nw4r::math::VEC3 *position) override;
+    /* 0x088 */ virtual bool
+    startBgHitSound(u32 baseSoundId, u32 polyAttr0, u32 polyAttr1, const nw4r::math::VEC3 *position) override;
+    /* 0x08C */ virtual bool startSoundAtPosition(const char *label, const nw4r::math::VEC3 *position) override;
+    /* 0x090 */ virtual bool
+    startObjHitSound(const char *label, dSoundSourceIf_c *source, const nw4r::math::VEC3 *position) override;
+    /* 0x094 */ virtual bool
+    startBgHitSound(const char *label, u32 polyAttr0, u32 polyAttr1, const nw4r::math::VEC3 *position) override;
+    /* 0x098 */ virtual bool startSoundAtPosition2(u32 soundId, const nw4r::math::VEC3 *position) override;
+    /* 0x09C */ virtual bool startSoundAtPosition2(const char *label, const nw4r::math::VEC3 *position) override;
 
-    virtual bool isReadyMaybe() override {
+    /* 0x0A4 */ virtual void stopSounds(u32 soundId, s32 fadeFrames) override;
+    /* 0x0A8 */ virtual void stopSounds(const char *label, s32 fadeFrames) override;
+    /* 0x0AC */ virtual bool holdSound(u32 soundId) override;
+    /* 0x0B0 */ virtual bool holdSoundWithIntParam(u32 soundId, s32 value) override;
+    /* 0x0B4 */ virtual bool holdSoundWithFloatParam(u32 soundId, f32 value) override;
+    /* 0x0B8 */ virtual bool holdSoundWithParams(u32 soundId, f32 fValue, s32 value) override;
+    /* 0x0BC */ virtual bool holdSound(const char *label) override;
+    /* 0x0C0 */ virtual bool holdSoundWithIntParam(const char *label, s32 value) override;
+    /* 0x0C4 */ virtual bool holdSoundWithFloatParam(const char *label, f32 value) override;
+    /* 0x0C8 */ virtual bool holdSoundWithParams(const char *label, f32 fValue, s32 value) override;
+    /* 0x0CC */ virtual bool holdSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *position) override;
+    /* 0x0D0 */ virtual bool holdSoundAtPosition(const char *label, const nw4r::math::VEC3 *position) override;
+
+    /* 0x100 */ virtual bool isReadyMaybe() override {
         return false;
-    } // 0x100
-    virtual void load(void *data, const char *name) override {}     // 0x104
-    virtual void setFrame(f32 frame) override {}                    // 0x108
-    virtual void setRate(f32 frame) override {}                     // 0x10C
-    virtual void setPolyAttrs(u8 polyAttr0, u8 polyAttr1) override; // 0x110
+    }
+    /* 0x104 */ virtual void load(void *data, const char *name) override {}
+    /* 0x108 */ virtual void setFrame(f32 frame) override {}
+    /* 0x10C */ virtual void setRate(f32 frame) override {}
+    /* 0x110 */ virtual void setPolyAttrs(u8 polyAttr0, u8 polyAttr1) override;
+
+protected:
+    StartResult setupSoundCommon(nw4r::snd::SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void *arg);
 
 private:
     /**
@@ -181,6 +199,9 @@ private:
     dSndSeSound1_c *getHandleType1ForSoundHandle(nw4r::snd::SoundHandle *handle);
     dSndSeSound2_c *getHandleType2ForSoundId(u32 soundId);
 
+    dSndSeSound1_c *getHandleType1ForSoundHandle_Dupe(nw4r::snd::SoundHandle *pHandle);
+    dSndSeSound2_c *getHandleType2ForSoundHandle_Dupe(nw4r::snd::SoundHandle *pHandle);
+
     void initVolumeFade();
     void setVolumeFade(f32 volume, u32 fadeFrames);
     void calcVolumeFade();
@@ -203,11 +224,11 @@ private:
     /* 0x104 */ UNKWORD field_0x104;
     /* 0x108 */ UNKWORD field_0x108;
     /* 0x10C */ const dSndSoundCtxParam *mpCtxParam;
-    /* 0x110 */ nw4r::ut::List mDistantSoundList; // node offset 0xEC -> dSndDistantSoundActor_c
+    /* 0x110 */ LIST_MEMBER(dSndDistantSoundActor_c, DistantSound); // node offset 0xEC
     /* 0x11C */ UNKWORD field_0x11C;
-    /* 0x120 */ nw4r::ut::List mHandleType1List; // node offset 0x4 -> dSndSeSound_c
-    /* 0x12C */ nw4r::ut::List mHandleType2List; // node offset 0x4 -> dSndSeSound_c
-    /* 0x138 */ nw4r::ut::Node mGroupLink;       // node for list in dSndSourceGroup_c
+    /* 0x120 */ LIST_MEMBER(dSndSeSound1_c, HandleType1); // node offset 0x4
+    /* 0x12C */ LIST_MEMBER(dSndSeSound2_c, HandleType2); // node offset 0x4
+    /* 0x138 */ nw4r::ut::Node mGroupLink;                // node for list in dSndSourceGroup_c
     /* 0x140 */ dSndSourceGroup_c *mpOwnerGroup;
     /* 0x144 */ f32 mVolumeFadeTarget;
     /* 0x148 */ f32 mVolumeFadeStepSize;

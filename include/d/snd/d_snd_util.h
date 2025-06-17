@@ -10,6 +10,25 @@ inline bool streq(const char *left, const char *right) {
     return !std::strcmp(left, right);
 }
 
+// This list setup is convenient, and it allows declaring local variables in
+// a consistent order without causing regswaps when multiple loops are involved
+// in a single funcion.
+
+#define LIST_MEMBER(ty, name)                                                                                          \
+    nw4r::ut::List m##name##List;                                                                                      \
+    inline ty *get##name##First() {                                                                                    \
+        return static_cast<ty *>(nw4r::ut::List_GetFirst(&m##name##List));                                             \
+    }                                                                                                                  \
+    inline ty *get##name##Next(ty *p) {                                                                                \
+        return static_cast<ty *>(nw4r::ut::List_GetNext(&m##name##List, p));                                           \
+    }                                                                                                                  \
+    inline void append##name(ty *p) {                                                                                  \
+        nw4r::ut::List_Append(&m##name##List, p);                                                                      \
+    }                                                                                                                  \
+    inline void remove##name(ty *p) {                                                                                  \
+        nw4r::ut::List_Remove(&m##name##List, p);                                                                      \
+    }
+
 // This setup is only inferred. d/snd uses it all over the place.
 // This works for dSndPlayerMgr_c, which has a vtable of its own but the Disposer at offset 0.
 // It also works for the factory at 0x80399c20, which calls a base class ctor,

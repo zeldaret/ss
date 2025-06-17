@@ -2743,7 +2743,7 @@ d/snd/d_snd_source_tg_sound.cpp:
 	.data       start:0x8054D1C0 end:0x8054D3B0
 	.sdata      start:0x80574810 end:0x80574818
 
-d/snd/d_snd_mgr_unk_16.cpp:
+d/snd/d_snd_id_mappers.cpp:
 	.text       start:0x80393010 end:0x803934A8 align:16
 
 d/snd/d_snd_distant_sound_actor_pool.cpp:
