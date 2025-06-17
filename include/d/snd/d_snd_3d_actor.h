@@ -64,6 +64,7 @@ public:
     }
 
     u32 getSomeUserParam(u32 soundId) const;
+    bool checkUserParamMask(u32 soundId, u32 mask) const;
 
     bool checkFlag(u16 flag) const {
         return (mFlags & flag);
