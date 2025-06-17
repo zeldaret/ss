@@ -788,6 +788,9 @@ config.libs = [
             Object(NonMatching, "d/snd/d_snd_sound_tgsound_callbacks.cpp"),
             Object(NonMatching, "d/snd/d_snd_mgr_unk_17.cpp"),
             Object(NonMatching, "d/snd/d_snd_fi_vocal_mgr.cpp"),
+            Object(NonMatching, "d/snd/d_snd_rng.cpp"),
+            Object(Matching, "d/snd/d_snd_rng_mgr.cpp"),
+            # more rng related
             Object(NonMatching, "d/snd/d_snd_mgr_unk_11.cpp"),
             Object(NonMatching, "d/snd/d_snd_calc_pitch.cpp"),
         ],

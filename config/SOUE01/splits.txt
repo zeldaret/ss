@@ -2803,8 +2803,17 @@ d/snd/d_snd_mgr_unk_17.cpp:
 d/snd/d_snd_fi_vocal_mgr.cpp:
 	.text       start:0x80399580 end:0x80399A3C align:16
 
+d/snd/d_snd_rng.cpp:
+	.text       start:0x80399A40 end:0x80399BA0 align:16
+	.data       start:0x8054D7A8 end:0x8054D7B8
+
+d/snd/d_snd_rng_mgr.cpp:
+	.text       start:0x80399BA0 end:0x80399D60 align:16
+	.data       start:0x8054D7B8 end:0x8054D7D0
+	.sbss       start:0x80575DE8 end:0x80575DF0
+
 d/snd/d_snd_mgr_unk_11.cpp:
-	.text       start:0x80399A40 end:0x8039A848 align:16
+	.text       start:0x80399D60 end:0x8039A848 align:16
 	.ctors      start:0x804DB934 end:0x804DB938
 
 d/snd/d_snd_calc_pitch.cpp:
