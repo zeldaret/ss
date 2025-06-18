@@ -52,8 +52,7 @@ int dTgSndAr_c::actorExecute() {
         link->setBit_field_0xE8(params & 0xFF);
     }
     if (dSnd3DManager_c::GetInstance() != nullptr) {
-        mVec3_c pos;
-        pos.copyFrom(dSnd3DManager_c::GetInstance()->getCameraTargetPos());
+        mVec3_c pos(dSnd3DManager_c::GetInstance()->getCameraTargetPos());
         if (checkPosInArea(pos) && dTgSndMg_c::GetInstance() != nullptr) {
             dTgSndMg_c::GetInstance()->setBgmFlag(params & 0xFF);
         }
