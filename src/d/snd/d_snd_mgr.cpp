@@ -6,6 +6,7 @@
 #include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_distant_sound_actor_pool.h"
 #include "d/snd/d_snd_player_mgr.h"
+#include "d/snd/d_snd_rng_mgr.h"
 #include "d/snd/d_snd_se_sound_pool.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/snd/d_snd_source_mgr.h"
@@ -16,7 +17,6 @@
 extern "C" void initSomeUnusedSoundMgr();
 extern "C" void fn_8037F940();
 extern "C" void fn_80399600();
-extern "C" void fn_80399C20();
 
 dSndMgr_c *dSndMgr_c::sInstance;
 
@@ -35,7 +35,7 @@ dSndMgr_c::dSndMgr_c() : field_0x6CC(0) {
     dSndSeSoundPool_c::create();
     fn_8037F940();
     fn_80399600();
-    fn_80399C20();
+    dSndRngMgr_c::create();
 
     initHbm(9);
 }
