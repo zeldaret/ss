@@ -13,13 +13,13 @@ public:
     virtual ~dSoundSourceIf_c() {}
 #define SOUNDSOURCE_VIRTUAL(offset) virtual void vt_##offset() = 0;
 
-    /*  0x00C */ virtual void setup() = 0;
-    /*  0x010 */ virtual s32 getCategory() const = 0;
-    /*  0x014 */ virtual bool isCategory(s32 category) const = 0;
-    /*  0x018 */ virtual s32 getSourceType() const = 0;
-    /*  0x01C */ virtual bool isSourceType(s32 type) const = 0;
-    SOUNDSOURCE_VIRTUAL(0x20);
-    SOUNDSOURCE_VIRTUAL(0x24);
+    /* 0x00C */ virtual void setup() = 0;
+    /* 0x010 */ virtual s32 getCategory() const = 0;
+    /* 0x014 */ virtual bool isCategory(s32 category) const = 0;
+    /* 0x018 */ virtual s32 getSourceType() const = 0;
+    /* 0x01C */ virtual bool isSourceType(s32 type) const = 0;
+    /* 0x020 */ virtual void vt_0x020() = 0;
+    /* 0x024 */ virtual void setSubtype(u8 subtype) = 0;
     /* 0x028 */ virtual const nw4r::math::VEC3 &getListenerPosition() const = 0;
     /* 0x02C */ virtual void calc(const nw4r::math::VEC3 &) = 0;
     /* 0x030 */ virtual void onFlag1(u32 mask) = 0;
@@ -54,7 +54,7 @@ public:
     startBgHitSound(const char *label, u32 polyAttr0, u32 polyAttr1, const nw4r::math::VEC3 *position) = 0;
     /* 0x098 */ virtual bool startSoundAtPosition2(u32 soundId, const nw4r::math::VEC3 *position) = 0;
     /* 0x09C */ virtual bool startSoundAtPosition2(const char *label, const nw4r::math::VEC3 *position) = 0;
-    SOUNDSOURCE_VIRTUAL(0xA0);
+    /* 0x0A0 */ virtual bool maybeUnusedEnemyDeath() = 0;
     /* 0x0A4 */ virtual void stopSounds(u32 soundId, s32 fadeFrames) = 0;
     /* 0x0A8 */ virtual void stopSounds(const char *label, s32 fadeFrames) = 0;
     /* 0x0AC */ virtual bool holdSound(u32 soundId) = 0;
@@ -67,19 +67,18 @@ public:
     /* 0x0C8 */ virtual bool holdSoundWithParams(const char *label, f32 fValue, s32 value) = 0;
     /* 0x0CC */ virtual bool holdSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *position) = 0;
     /* 0x0D0 */ virtual bool holdSoundAtPosition(const char *label, const nw4r::math::VEC3 *position) = 0;
-    SOUNDSOURCE_VIRTUAL(0xD4);
-    SOUNDSOURCE_VIRTUAL(0xD8);
-    SOUNDSOURCE_VIRTUAL(0xDC);
-    SOUNDSOURCE_VIRTUAL(0xE0);
-    SOUNDSOURCE_VIRTUAL(0xE4);
-    SOUNDSOURCE_VIRTUAL(0xE8);
-    SOUNDSOURCE_VIRTUAL(0xEC);
-    SOUNDSOURCE_VIRTUAL(0xF0);
-    SOUNDSOURCE_VIRTUAL(0xF4);
-    SOUNDSOURCE_VIRTUAL(0xF8);
-    SOUNDSOURCE_VIRTUAL(0xFC);
-
-    /* 0x100 */ virtual bool isReadyMaybe() = 0;
+    /* 0x0D4 */ virtual bool startVoiceLine(u32 id) = 0;
+    /* 0x0D8 */ virtual bool startVoiceLine(const char *label) = 0;
+    /* 0x0DC */ virtual bool vt_0xDC() = 0;
+    /* 0x0E0 */ virtual void stopCurrentActionSound() = 0;
+    /* 0x0E4 */ virtual void stopActionSound(u32 id) = 0;
+    /* 0x0E8 */ virtual bool isPlayingActionSound() const = 0;
+    /* 0x0EC */ virtual bool isCurrentActionSound(u32 id) const = 0;
+    /* 0x0F0 */ virtual void vt_0x0F0_noop() = 0;
+    /* 0x0F4 */ virtual void setField0x101(u8 value) = 0;
+    /* 0x0F8 */ virtual void setField0x102(u8 value) = 0;
+    /* 0x0FC */ virtual bool isInaudible() = 0;
+    /* 0x100 */ virtual bool hasAnimSound() = 0;
     /* 0x104 */ virtual void load(void *data, const char *name) = 0;
     /* 0x108 */ virtual void setFrame(f32 frame) = 0;
     /* 0x10C */ virtual void setRate(f32 frame) = 0;

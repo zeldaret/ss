@@ -15,6 +15,8 @@
 /** Size: probably 0x15C */
 class dSoundSource_c : public dSoundSourceIf_c, public dSnd3DActor_c {
 public:
+    static dSoundSource_c *create(u32 id, dAcBase_c *actor, const char *name, u8 subtype);
+
     dSoundSource_c(u8 sourceType, dAcBase_c *, const char *name, dSndSourceGroup_c *pOwnerGroup);
     virtual ~dSoundSource_c();
 
@@ -23,6 +25,8 @@ public:
     u32 getRemoConSoundVariant(u32 soundId) const;
     s32 getRoomId() const;
     bool isInaudibleInternal();
+    void stopAllPlaySounds(s32 fadeFrames);
+    f32 timeAreaCheck();
 
     // This is where it gets a bit wild and this class starts mixing in overrides between
     // new virtual functions, which causes the vtable to list these functions in exactly this
@@ -34,7 +38,7 @@ public:
     /* 0x184 */ virtual void preCalc();
     /* 0x188 */ virtual void d_s_vt_0x188();
     /* 0x18C */ virtual void postCalc();
-    /* 0x190 */ virtual bool d_s_vt_0x190();
+    /* 0x190 */ virtual bool d_s_vt_0x190() const;
     /* 0x194 */ virtual u32 d_s_vt_0x194(u32 soundId);
 
     /* 0x198 */ virtual void postStartSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) override;
@@ -57,8 +61,8 @@ public:
         return nw4r::ut::List_GetFirstConst(&mDistantSoundList) != nullptr;
     }
     /* 0x1C4 */ virtual void pauseAllDistantSounds(bool flag, int fadeFrames);
-    /* 0x1C8 */ virtual void d_s_vt_0x1C8();
-    /* 0x1CC */ virtual void postSetupSound(u32 playingId, u32 requestedId, dSndSeSound_c *seSound);
+    /* 0x1C8 */ virtual void resetTempParams();
+    /* 0x1CC */ virtual void postSetupSound(u32 playingId, u32 requestedId, dSndSeSound_c *seSound) {}
 
     /* 0x1D0 */ virtual void setPause(bool flag, int fadeFrames) override;
 
@@ -70,9 +74,10 @@ public:
     /* 0x1E0 */ virtual void onAnimSoundEvent(UNKWORD arg) {
         field_0x154 = arg;
     }
-    /* 0x1E4 */ virtual void d_s_vt_0x1E4();
+    /* 0x1E4 */ virtual void d_s_vt_0x1E4_noop();
     /* 0x1E8 */ virtual u32 d_s_vt_0x1E8(u32 soundId);
 
+    void handleRemoCon(nw4r::snd::SoundHandle *pHandle, u32 baseId);
     bool startRemoConSound(u32 soundId);
     nw4r::snd::SoundHandle *startSound(u32 soundId, nw4r::snd::SoundHandle *handle);
     dSndDistantSoundActor_c *
@@ -91,15 +96,30 @@ public:
     /* 0x014 */ virtual bool isCategory(s32 category) const override {
         return mSourceCategory == category;
     }
-
     /* 0x018 */ virtual s32 getSourceType() const override {
         return mSourceType;
     }
     /* 0x01C */ virtual bool isSourceType(s32 type) const override {
         return mSourceType == type;
     }
+    /* 0x020 */ virtual void vt_0x020() override {}
+    /* 0x024 */ virtual void setSubtype(u8 subtype) override {
+        mSubtype = subtype;
+    }
     /* 0x028 */ virtual const nw4r::math::VEC3 &getListenerPosition() const override;
     /* 0x02C */ void calc(const nw4r::math::VEC3 &) override;
+    /* 0x030 */ virtual void onFlag1(u32 mask) override {
+        field_0x104 |= mask;
+    }
+    /* 0x034 */ virtual void offFlag1(u32 mask) override {
+        field_0x104 &= ~mask;
+    }
+    /* 0x038 */ virtual bool checkFlag(u32 mask) const override {
+        return (field_0x104 & mask) != 0 || (field_0x108 & mask) != 0;
+    }
+    /* 0x03C */ virtual void onFlag2(u32 mask) override {
+        field_0x108 |= mask;
+    }
     /* 0x040 */ virtual void stopAllSound(s32 fadeFrames) override {
         SoundActor::StopAllSound(fadeFrames);
     }
@@ -132,7 +152,7 @@ public:
     startBgHitSound(const char *label, u32 polyAttr0, u32 polyAttr1, const nw4r::math::VEC3 *position) override;
     /* 0x098 */ virtual bool startSoundAtPosition2(u32 soundId, const nw4r::math::VEC3 *position) override;
     /* 0x09C */ virtual bool startSoundAtPosition2(const char *label, const nw4r::math::VEC3 *position) override;
-
+    /* 0x0A0 */ virtual bool maybeUnusedEnemyDeath() override;
     /* 0x0A4 */ virtual void stopSounds(u32 soundId, s32 fadeFrames) override;
     /* 0x0A8 */ virtual void stopSounds(const char *label, s32 fadeFrames) override;
     /* 0x0AC */ virtual bool holdSound(u32 soundId) override;
@@ -145,14 +165,40 @@ public:
     /* 0x0C8 */ virtual bool holdSoundWithParams(const char *label, f32 fValue, s32 value) override;
     /* 0x0CC */ virtual bool holdSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *position) override;
     /* 0x0D0 */ virtual bool holdSoundAtPosition(const char *label, const nw4r::math::VEC3 *position) override;
-
-    /* 0x100 */ virtual bool isReadyMaybe() override {
+    /* 0x0D4 */ virtual bool startVoiceLine(u32 id) override {
+        return false;
+    }
+    /* 0x0D8 */ virtual bool startVoiceLine(const char *label) override;
+    /* 0x0DC */ virtual bool vt_0xDC() override {
+        return false;
+    }
+    /* 0x0E0 */ virtual void stopCurrentActionSound() override {}
+    /* 0x0E4 */ virtual void stopActionSound(u32 id) override {}
+    /* 0x0E8 */ virtual bool isPlayingActionSound() const override {
+        return false;
+    }
+    /* 0x0EC */ virtual bool isCurrentActionSound(u32 id) const override {
+        return false;
+    }
+    /* 0x0F0 */ virtual void vt_0x0F0_noop() override {}
+    /* 0x0F4 */ virtual void setField0x101(u8 value) override {
+        field_0x101 = value;
+    }
+    /* 0x0F8 */ virtual void setField0x102(u8 value) override {
+        field_0x102 = value;
+    }
+    /* 0x0FC */ virtual bool isInaudible() override;
+    /* 0x100 */ virtual bool hasAnimSound() override {
         return false;
     }
     /* 0x104 */ virtual void load(void *data, const char *name) override {}
     /* 0x108 */ virtual void setFrame(f32 frame) override {}
     /* 0x10C */ virtual void setRate(f32 frame) override {}
     /* 0x110 */ virtual void setPolyAttrs(u8 polyAttr0, u8 polyAttr1) override;
+    /* 0x114 */ virtual void setBattleBgmRelated(UNKWORD) override {}
+    /* 0x118 */ virtual bool checkBattleBgmRelated() override {
+        return false;
+    }
 
 protected:
     StartResult setupSoundCommon(nw4r::snd::SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void *arg);
@@ -216,13 +262,13 @@ private:
     /* 0x0F8 */ dAcBase_c *mpActor;
     /* 0x0FC */ u8 mSourceCategory;
     /* 0x0FD */ u8 mSourceType;
-    /* 0x0FE */ u8 field_0x0FE;
+    /* 0x0FE */ u8 mSubtype;
     /* 0x0FF */ bool mIsSetup;
     /* 0x100 */ u8 field_0x100;
     /* 0x101 */ u8 field_0x101;
     /* 0x102 */ u8 field_0x102;
-    /* 0x104 */ UNKWORD field_0x104;
-    /* 0x108 */ UNKWORD field_0x108;
+    /* 0x104 */ u32 field_0x104;
+    /* 0x108 */ u32 field_0x108;
     /* 0x10C */ const dSndSoundCtxParam *mpCtxParam;
     /* 0x110 */ LIST_MEMBER(dSndDistantSoundActor_c, DistantSound); // node offset 0xEC
     /* 0x11C */ UNKWORD field_0x11C;

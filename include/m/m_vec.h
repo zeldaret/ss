@@ -70,16 +70,12 @@ public:
 
     /// @brief Constructs a new vector from an existing vector from the nw4r::math library.
     mVec3_c(const nw4r::math::VEC3 &v) {
-        x = v.x;
-        y = v.y;
-        z = v.z;
+        set(v.x, v.y, v.z);
     }
 
     /// @brief Constructs a new vector from an existing vector from the EGG library.
     mVec3_c(const EGG::Vector3f &v) {
-        x = v.x;
-        y = v.y;
-        z = v.z;
+        set(v.x, v.y, v.z);
     }
 
     /// @brief Float cast operator.

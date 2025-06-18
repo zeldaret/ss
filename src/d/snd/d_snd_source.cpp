@@ -20,18 +20,21 @@
 #include "d/snd/d_snd_source_mgr.h"
 #include "d/snd/d_snd_stage_data.h"
 #include "d/snd/d_snd_state_mgr.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "egg/audio/eggAudioRmtSpeakerMgr.h"
+#include "m/m_vec.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/snd/snd_global.h"
 #include "nw4r/ut/ut_list.h"
 #include "sized_string.h"
+#include "toBeSorted/time_area_mgr.h"
 
 static dSndSoundCtxParam sCtxParams;
 bool dSoundSource_c::sIsStartingBaseSound;
 
-const char *help_i_need_data() {
-    return "%s_%s_%d";
+dSoundSource_c *dSoundSource_c::create(u32 id, dAcBase_c *actor, const char *name, u8 subtype) {
+    return dSndSourceMgr_c::createSource(id, actor, name, subtype);
 }
 
 dSoundSource_c::dSoundSource_c(u8 sourceType, dAcBase_c *actor, const char *name, dSndSourceGroup_c *pOwnerGroup)
@@ -40,7 +43,7 @@ dSoundSource_c::dSoundSource_c(u8 sourceType, dAcBase_c *actor, const char *name
       field_0x0F4(0),
       mpActor(actor),
       mSourceType(sourceType),
-      field_0x0FE(0),
+      mSubtype(0),
       mIsSetup(false),
       field_0x100(0),
       field_0x101(0),
@@ -117,6 +120,14 @@ void dSoundSource_c::shutdown() {
         }
         dSndSourceMgr_c::GetInstance()->onShutdownSource(this);
         mIsDisabled = true;
+    }
+}
+
+void dSoundSource_c::stopAllPlaySounds(s32 fadeFrames) {
+    dSndSeSound1_c *sound = getHandleType1First();
+    while (sound != nullptr) {
+        sound->getHandle()->Stop(fadeFrames);
+        sound = getHandleType1Next(sound);
     }
 }
 
@@ -233,6 +244,16 @@ bool dSoundSource_c::isInaudibleInternal() {
     return dSnd3DActor_c::getDistanceToCameraTarget() >= mpSourceParam->getField0x10();
 }
 
+bool dSoundSource_c::d_s_vt_0x190() const {
+    if (field_0x101 != 0) {
+        return true;
+    }
+    if (mIsDisabled) {
+        return true;
+    }
+    return dSndStateMgr_c::GetInstance()->getField_0x14() > 0;
+}
+
 void dSoundSource_c::setPause(bool flag, int fadeFrames) {
     if (!flag) {
         PauseAllSound(flag, fadeFrames);
@@ -284,6 +305,17 @@ bool dSoundSource_c::startSoundWithParams(const char *label, f32 fValue, s32 val
     return startSoundWithParams(soundId, fValue, value);
 }
 
+bool dSoundSource_c::maybeUnusedEnemyDeath() {
+    if (mSourceCategory == SND_SOURCE_CATEGORY_ENEMY) {
+        dSndSourceMgr_c::GetInstance()->onShutdownSource(this);
+        if (getAnimSound() != nullptr) {
+            getAnimSound()->shutdown();
+        }
+        return startSound(SE_E_DISAPPEAR);
+    }
+    return false;
+}
+
 bool dSoundSource_c::startRemoConSound(u32 soundId) {
     nw4r::snd::SoundHandle *outHandle = nullptr;
     StartResult result = startSound(soundId, nullptr, &outHandle);
@@ -308,7 +340,7 @@ dSoundSource_c::startSound(u32 soundId, nw4r::snd::SoundHandle *handle, nw4r::sn
 
     dSndSeSound1_c *seHandle = dSndSeSoundPool_c::GetInstance()->acquireSoundType1(this, soundId);
     if (seHandle == nullptr) {
-        d_s_vt_0x1C8();
+        resetTempParams();
         return START_ERR_USER;
     }
 
@@ -331,7 +363,7 @@ dSoundSource_c::startSound(u32 soundId, nw4r::snd::SoundHandle *handle, nw4r::sn
         dSndSeSoundPool_c::GetInstance()->releaseSoundType1(seHandle, true);
         handle = nullptr;
     }
-    d_s_vt_0x1C8();
+    resetTempParams();
     if (pOutHandle != nullptr) {
         *pOutHandle = handle;
     }
@@ -347,7 +379,7 @@ bool dSoundSource_c::startSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *p
     if (!sIsStartingBaseSound) {
         actualSoundId = d_s_vt_0x194(soundId);
         if (actualSoundId == -1) {
-            d_s_vt_0x1C8();
+            resetTempParams();
             return false;
         }
     }
@@ -380,12 +412,12 @@ bool dSoundSource_c::startObjHitSound(u32 baseSoundId, dSoundSourceIf_c *source,
     if (!sIsStartingBaseSound) {
         u32 tmp = d_s_vt_0x194(soundId);
         if (tmp == -1) {
-            d_s_vt_0x1C8();
+            resetTempParams();
             return false;
         }
         soundId = d_s_vt_0x19C(tmp, static_cast<dSoundSource_c *>(source));
         if (soundId == -1) {
-            d_s_vt_0x1C8();
+            resetTempParams();
             return false;
         }
     }
@@ -413,12 +445,12 @@ bool dSoundSource_c::startBgHitSound(u32 baseSoundId, u32 polyAttr0, u32 polyAtt
     if (!sIsStartingBaseSound) {
         u32 tmp = d_s_vt_0x194(soundId);
         if (tmp == -1) {
-            d_s_vt_0x1C8();
+            resetTempParams();
             return false;
         }
         soundId = specializeBgHitSoundId(tmp, polyAttr0, polyAttr1);
         if (soundId == -1) {
-            d_s_vt_0x1C8();
+            resetTempParams();
             return false;
         }
     }
@@ -450,7 +482,7 @@ bool dSoundSource_c::startSoundAtPosition2(u32 soundId, const nw4r::math::VEC3 *
     if (!sIsStartingBaseSound) {
         actualSoundId = d_s_vt_0x194(soundId);
         if (actualSoundId == -1) {
-            d_s_vt_0x1C8();
+            resetTempParams();
             return false;
         }
     }
@@ -482,14 +514,14 @@ dSoundSource_c::startSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *positi
     if (seHandle == nullptr) {
         seHandle = dSndSeSoundPool_c::GetInstance()->acquireSoundType1(this, soundId);
         if (seHandle == nullptr) {
-            d_s_vt_0x1C8();
+            resetTempParams();
             return nullptr;
         }
     }
 
     dSndDistantSoundActor_c *ac = dSndDistantSoundActorPool_c::GetInstance()->acquireActor(soundId, position, this);
     if (ac == nullptr) {
-        d_s_vt_0x1C8();
+        resetTempParams();
         return nullptr;
     }
 
@@ -512,8 +544,42 @@ dSoundSource_c::startSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *positi
         dSndSeSoundPool_c::GetInstance()->releaseSoundType1(seHandle, true);
         ac = nullptr;
     }
-    d_s_vt_0x1C8();
+    resetTempParams();
     return ac;
+}
+
+u32 dSoundSource_c::d_s_vt_0x19C(u32 soundId, dSoundSource_c *source) {
+    if (source == nullptr) {
+        return soundId;
+    }
+    if (checkUserParamMask(soundId, 0x200)) {
+        return modifySoundId(soundId, source);
+    }
+    return soundId;
+}
+
+void dSoundSource_c::handleRemoCon(nw4r::snd::SoundHandle *pHandle, u32 baseId) {
+    u32 userParam = getSomeUserParam(baseId);
+    if ((userParam & 0x8) != 0) {
+        if (EGG::AudioRmtSpeakerMgr::getWpadVolume() != 0) {
+            pHandle->SetOutputLineFlag(nw4r::snd::OUTPUT_LINE_REMOTE_1);
+        }
+    } else if ((userParam & 0x4) != 0) {
+        pHandle->SetOutputLineFlag(nw4r::snd::OUTPUT_LINE_MAIN | nw4r::snd::OUTPUT_LINE_REMOTE_1);
+    }
+
+    if ((userParam & 0x10) != 0) {
+        if (EGG::AudioRmtSpeakerMgr::getWpadVolume() != 0) {
+            u32 variant = getRemoConSoundVariant(baseId);
+            if (variant != -1) {
+                startRemoConSound(variant);
+            }
+        }
+    }
+}
+
+bool dSoundSource_c::startVoiceLine(const char *label) {
+    return startVoiceLine(soundLabelToSoundId(label));
 }
 
 s32 dSoundSource_c::getRoomId() const {
@@ -577,7 +643,7 @@ nw4r::snd::SoundHandle *dSoundSource_c::holdSound(u32 soundId, nw4r::snd::SoundH
     if (seHandle == nullptr) {
         seHandle = dSndSeSoundPool_c::GetInstance()->acquireSoundType2(this, soundId);
         if (seHandle == nullptr) {
-            d_s_vt_0x1C8();
+            resetTempParams();
             return nullptr;
         }
 
@@ -603,7 +669,7 @@ nw4r::snd::SoundHandle *dSoundSource_c::holdSound(u32 soundId, nw4r::snd::SoundH
     } else {
         handle = continueHoldingSound(seHandle, soundId, nullptr, nullptr);
     }
-    d_s_vt_0x1C8();
+    resetTempParams();
 
     return handle;
 }
@@ -612,7 +678,7 @@ nw4r::snd::SoundHandle *dSoundSource_c::continueHoldingSound(
     dSndSeSound2_c *seHandle, u32 soundId, dSndDistantSoundActor_c *distant, const nw4r::math::VEC3 *position
 ) {
     if (!d_s_vt_0x1AC(soundId)) {
-        d_s_vt_0x1C8();
+        resetTempParams();
         return nullptr;
     }
 
@@ -620,12 +686,12 @@ nw4r::snd::SoundHandle *dSoundSource_c::continueHoldingSound(
     if (!sIsStartingBaseSound) {
         actualSoundId = d_s_vt_0x1A0(soundId, 0);
         if (actualSoundId == -1) {
-            d_s_vt_0x1C8();
+            resetTempParams();
             return nullptr;
         }
         actualSoundId = d_s_vt_0x1E8(actualSoundId);
         if (actualSoundId == -1) {
-            d_s_vt_0x1C8();
+            resetTempParams();
             return nullptr;
         }
     }
@@ -647,7 +713,7 @@ nw4r::snd::SoundHandle *dSoundSource_c::continueHoldingSound(
     } else {
         handle = nullptr;
     }
-    d_s_vt_0x1C8();
+    resetTempParams();
     return handle;
 }
 
@@ -663,21 +729,21 @@ bool dSoundSource_c::holdSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *po
             handle = continueHoldingSound(seHandle, soundId, actor, position);
         } else {
             if (d_s_vt_0x190()) {
-                d_s_vt_0x1C8();
+                resetTempParams();
                 return false;
             }
             if (isInaudibleInternal()) {
-                d_s_vt_0x1C8();
+                resetTempParams();
                 return false;
             }
             actor = dSndDistantSoundActorPool_c::GetInstance()->acquireActor(soundId, position, this);
             if (actor == nullptr) {
-                d_s_vt_0x1C8();
+                resetTempParams();
                 return false;
             }
             seHandle = dSndSeSoundPool_c::GetInstance()->acquireSoundType2(this, soundId);
             if (seHandle == nullptr) {
-                d_s_vt_0x1C8();
+                resetTempParams();
                 return false;
             }
             seHandle->shiftParam(mpCtxParam);
@@ -698,7 +764,7 @@ bool dSoundSource_c::holdSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *po
     } else {
         handle = holdSound(soundId, nullptr);
     }
-    d_s_vt_0x1C8();
+    resetTempParams();
     return handle != nullptr;
 }
 
@@ -716,6 +782,26 @@ dSoundSource_c::SetupSound(nw4r::snd::SoundHandle *pHandle, u32 soundId, const S
     } else {
         return onSetupError();
     }
+}
+
+bool dSoundSource_c::d_s_vt_0x1AC(u32 soundId) {
+    if (soundId == -1) {
+        return false;
+    }
+
+    if (d_s_vt_0x190()) {
+        return false;
+    }
+
+    if (isInaudibleInternal()) {
+        return false;
+    }
+
+    if (checkUserParamMask(soundId, 0x80000000)) {
+        return false;
+    }
+
+    return true;
 }
 
 nw4r::snd::SoundStartable::StartResult dSoundSource_c::setupSound(
@@ -769,7 +855,7 @@ nw4r::snd::SoundStartable::StartResult dSoundSource_c::setupSound(
             }
         }
         startBaseSoundAtPosition(soundId, &GetPosition(), volume);
-        d_s_vt_0x1C8();
+        resetTempParams();
         return onSetupError();
     } else {
         StartResult result = dSnd3DActor_c::SetupSound(pHandle, variantSoundId, pStartInfo, arg);
@@ -777,7 +863,7 @@ nw4r::snd::SoundStartable::StartResult dSoundSource_c::setupSound(
             f32 volume = getBaseSoundVolume(variantSoundId, soundId);
             startBaseSound(soundId, volume);
         }
-        d_s_vt_0x1C8();
+        resetTempParams();
         return result;
     }
 }
@@ -825,13 +911,29 @@ dSoundSource_c::startBaseSoundAtPosition(u32 baseSoundId, const nw4r::math::VEC3
     return handle;
 }
 
+void dSoundSource_c::resetTempParams() {
+    mpCtxParam = nullptr;
+    sCtxParams.floatParam = 0.0f;
+    sCtxParams.intParam = 0;
+    field_0x11C = 0;
+    field_0x154 = 0;
+}
+
 nw4r::snd::SoundStartable::StartResult dSoundSource_c::onSetupError() {
-    d_s_vt_0x1C8();
+    resetTempParams();
     return START_ERR_USER;
+}
+
+u32 dSoundSource_c::d_s_vt_0x194(u32 soundId) {
+    return soundId;
 }
 
 void dSoundSource_c::postStartSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) {
     // noop
+}
+
+u32 dSoundSource_c::d_s_vt_0x1A0(u32 soundId, UNKWORD) {
+    return soundId;
 }
 
 void dSoundSource_c::postHoldSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id, UNKWORD) {
@@ -1056,9 +1158,20 @@ void dSoundSource_c::stopSoundHandles(u32 soundId, s32 fadeFrames) {
     }
 }
 
+#pragma push
+#pragma optimize_tail_call off
+bool dSoundSource_c::isInaudible() {
+    return isInaudibleInternal();
+}
+#pragma pop
+
 void dSoundSource_c::setPolyAttrs(u8 polyAttr0, u8 polyAttr1) {
     mPolyAttr0 = polyAttr0;
     mPolyAttr1 = polyAttr1;
+}
+
+void dSoundSource_c::d_s_vt_0x1E4_noop() {
+    // never used, never overridden
 }
 
 u32 dSoundSource_c::modifySoundId(u32 baseSoundId) {
@@ -1111,11 +1224,30 @@ u32 dSoundSource_c::specializeBgHitSoundId(u32 soundId, u32 polyAttr0, u32 polyA
     return soundId;
 }
 
+u32 dSoundSource_c::d_s_vt_0x1E8(u32 soundId) {
+    return soundId;
+}
+
 u32 dSoundSource_c::getRemoConSoundVariant(u32 soundId) const {
     const char *label = soundIdToSoundLabel(soundId);
     SizedString<64> str;
     str.sprintf("%s_RC", label);
     return soundLabelToSoundId(str);
+}
+
+f32 dSoundSource_c::timeAreaCheck() {
+    bool check = !dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), GetPosition());
+    if (check) {
+        return 0.0f;
+    }
+    f32 tmp = dTimeAreaMgr_c::GetInstance()->fn_800B9CE0(GetPosition());
+    if (tmp > 0.0f) {
+        tmp = tmp / 500.0f;
+        if (tmp > 1.0f) {
+            tmp = 1.0f;
+        }
+    }
+    return tmp;
 }
 
 nw4r::snd::SoundStartable::StartResult

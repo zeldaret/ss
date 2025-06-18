@@ -37,6 +37,10 @@ public:
 
     static bool isInStage(const char *stageName);
 
+    s32 getField_0x14() const {
+        return field_0x014;
+    }
+
     s32 getStageId_0x040() const {
         return mStageId;
     }
