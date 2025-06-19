@@ -8,7 +8,7 @@
 class dSndAnimSound_c {
 public:
     dSndAnimSound_c(dSoundSource_c *source);
-    void setData(const void *data);
+    void setData(const void *data, const char *name);
     void setFrame(f32 frame);
     void resetFrame(f32 frame);
     void setRate(f32 rate);

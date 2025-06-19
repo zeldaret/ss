@@ -100,7 +100,7 @@ void dSoundSource_c::setup() {
             }
     }
 
-    d_s_vt_0x188();
+    postSetup();
     dSndSourceMgr_c::GetInstance()->registerSource(this);
     s32 id = dSndStateMgr_c::GetInstance()->getStageId_0x040();
     if (SND_STAGE_F000_L26 <= id && id <= SND_STAGE_F000_L27) {
