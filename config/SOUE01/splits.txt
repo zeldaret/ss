@@ -2705,6 +2705,7 @@ d/snd/d_snd_anim_sound.cpp:
 d/snd/d_snd_source_mgr.cpp:
 	.text       start:0x80382410 end:0x803864C8 align:16
 	.ctors      start:0x804DB91C end:0x804DB920
+	.data       start:0x805491E0 end:0x8054A680
 	.sdata      start:0x80574310 end:0x805743D0
 	.sbss       start:0x80575DA8 end:0x80575DB0
 	.sdata2     start:0x8057DB68 end:0x8057DBC0
@@ -2723,16 +2724,41 @@ d/snd/d_snd_source.cpp:
 	.sbss       start:0x80575DB0 end:0x80575DC0
 	.sdata2     start:0x8057DCB0 end:0x8057DCD0
 
-d/snd/d_snd_mgr_unk_7.cpp:
-	.text       start:0x8038C410 end:0x8038EBF0 align:16
+d/snd/d_snd_source_link_body.cpp:
+	.text       start:0x8038C410 end:0x8038D548 align:16
+	.data       start:0x8054AAE8 end:0x8054AFC0
+
+d/snd/d_snd_source_link_head.cpp:
+	.text       start:0x8038D550 end:0x8038DD08 align:16
+	.data       start:0x8054AFC0 end:0x8054B1B8
+
+d/snd/d_snd_source_enemy.cpp:
+	.text       start:0x8038DD10 end:0x8038E858 align:16
+	.data       start:0x8054B1B8 end:0x8054B798
+
+d/snd/d_snd_source_obj.cpp:
+	.text       start:0x8038E860 end:0x8038EBF0 align:16
 	.ctors      start:0x804DB924 end:0x804DB928
+	.data       start:0x8054B798 end:0x8054BBC0
+
+d/snd/d_snd_source_equipment.cpp:
+	.text       start:0x8038EBF0 end:0x8038F2A8 align:16
+	.data       start:0x8054BBC0 end:0x8054BFC0
 
 d/snd/d_snd_mgr_unk_8.cpp:
-	.text       start:0x8038EBF0 end:0x8038FF18 align:16
+	.text       start:0x8038F2B0 end:0x8038FF18 align:16
 	.ctors      start:0x804DB928 end:0x804DB92C
 
 d/snd/d_snd_mgr_unk_9.cpp:
-	.text       start:0x8038FF20 end:0x80390A18 align:16
+	.text       start:0x8038FF20 end:0x80390298 align:16
+
+d/snd/d_snd_source_py_bird.cpp:
+	.text       start:0x803902A0 end:0x80390508 align:16
+	.data       start:0x8054C5A0 end:0x8054C7B8
+	.sdata      start:0x805747E8 end:0x80574800
+
+d/snd/d_snd_mgr_unk_18.cpp:
+	.text       start:0x80390510 end:0x80390A20 align:16
 	.ctors      start:0x804DB92C end:0x804DB930
 
 d/snd/d_snd_mgr_unk_10.cpp:

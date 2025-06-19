@@ -8,7 +8,7 @@
 dSndAnimSound_c::dSndAnimSound_c(dSoundSource_c *source)
     : mSound(*source), mpData(nullptr), field_0x94(1.0f), field_0x98(INFINITY), mNeedFrameReset(false) {}
 
-void dSndAnimSound_c::setData(const void *data) {
+void dSndAnimSound_c::setData(const void *data, const char *name) {
     mDirection = nw4r::snd::AnimSound::FORWARD;
     field_0x94 = 1.0f;
     if (data == mpData) {

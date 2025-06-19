@@ -2,7 +2,9 @@
 
 #include "common.h"
 #include "d/snd/d_snd_source.h"
+#include "d/snd/d_snd_source_e_spark.h"
 #include "d/snd/d_snd_source_enums.h"
+#include "d/snd/d_snd_source_py_bird.h"
 #include "d/snd/d_snd_util.h"
 #include "nw4r/ut/ut_list.h"
 
@@ -41,13 +43,18 @@ s32 dSndSourceMgr_c::getSourceCategoryForSourceType(s32 sourceType, const char *
     }
 
     switch (sourceType) {
-        case SND_SOURCE_58:
-            return SND_SOURCE_CATEGORY_7;
-        case SND_SOURCE_59:
-            return SND_SOURCE_CATEGORY_9;
-        default:
-            return -1;
+        case SND_SOURCE_58: return SND_SOURCE_CATEGORY_7;
+        case SND_SOURCE_59: return SND_SOURCE_CATEGORY_9;
+        default:            return -1;
     }
+}
+
+dSoundSource_c *dSndSourceMgr_c::createSource(u32 id, dAcBase_c *actor, const char *name, u8 subtype) {
+    // TODO
+    new dSndSourcePyBird_c(0, actor, name, nullptr);
+    new dSndSourceESpark_c(0, actor, name, nullptr);
+
+    return nullptr;
 }
 
 SND_DISPOSER_DEFINE(dSndSourceMgr_c);
@@ -163,6 +170,13 @@ void dSndSourceMgr_c::removeSourceFromList(dSoundSource_c *source, nw4r::ut::Lis
             }
         }
     }
+}
+
+void dSndSourceMgr_c::onShutdownSource(dSoundSource_c *source) {
+    if (source == nullptr) {
+        return;
+    }
+    removeSourceFromList(source, &field_0x3848);
 }
 
 void dSndSourceMgr_c::clearSourceLists() {

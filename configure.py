@@ -766,9 +766,15 @@ config.libs = [
             Object(NonMatching, "d/snd/d_snd_source_group.cpp"),
             Object(Matching, "d/snd/d_snd_source.cpp"),
             # sound source subclasses start
-            Object(NonMatching, "d/snd/d_snd_mgr_unk_7.cpp"),
+            Object(NonMatching, "d/snd/d_snd_source_link_body.cpp"),
+            Object(NonMatching, "d/snd/d_snd_source_link_head.cpp"),
+            Object(NonMatching, "d/snd/d_snd_source_enemy.cpp"),
+            Object(NonMatching, "d/snd/d_snd_source_obj.cpp"),
+            Object(NonMatching, "d/snd/d_snd_source_equipment.cpp"),
             Object(NonMatching, "d/snd/d_snd_mgr_unk_8.cpp"),
             Object(NonMatching, "d/snd/d_snd_mgr_unk_9.cpp"),
+            Object(Matching, "d/snd/d_snd_source_py_bird.cpp"),
+            Object(NonMatching, "d/snd/d_snd_mgr_unk_18.cpp"),
             Object(NonMatching, "d/snd/d_snd_mgr_unk_10.cpp"),
             # sound source subclasses end
             Object(NonMatching, "d/snd/d_snd_source_tg_sound.cpp"),
