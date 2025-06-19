@@ -27,6 +27,14 @@ public:
     bool isInaudibleInternal();
     void stopAllPlaySounds(s32 fadeFrames);
     f32 timeAreaCheck();
+    void handleRemoCon(nw4r::snd::SoundHandle *pHandle, u32 baseId);
+    bool startRemoConSound(u32 soundId);
+    nw4r::snd::SoundHandle *startSound(u32 soundId, nw4r::snd::SoundHandle *handle);
+    dSndDistantSoundActor_c *
+    startSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *position, nw4r::snd::SoundHandle *handle);
+    nw4r::snd::SoundHandle *holdSound(u32 soundId, nw4r::snd::SoundHandle *handle);
+    u32 specializeBgHitSoundId(u32 baseSoundId, u32 polyAttr0, u32 polyAttr1);
+
 
     // This is where it gets a bit wild and this class starts mixing in overrides between
     // new virtual functions, which causes the vtable to list these functions in exactly this
@@ -34,9 +42,11 @@ public:
     /* 0x17C */ virtual const char *getName() const {
         return mpName;
     }
-    /* 0x180 */ virtual void d_s_vt_0x180();
+    /* 0x180 */ virtual void d_s_vt_0x180(u32 arg) {
+        field_0x0F4 = arg;
+    }
     /* 0x184 */ virtual void preCalc();
-    /* 0x188 */ virtual void d_s_vt_0x188();
+    /* 0x188 */ virtual void postSetup() {}
     /* 0x18C */ virtual void postCalc();
     /* 0x190 */ virtual bool d_s_vt_0x190() const;
     /* 0x194 */ virtual u32 d_s_vt_0x194(u32 soundId);
@@ -69,22 +79,17 @@ public:
     /* 0x1D4 */ virtual dSndAnimSound_c *getAnimSound() {
         return nullptr;
     }
-    /* 0x1D8 */ virtual void d_s_vt_0x1D8();
-    /* 0x1DC */ virtual void d_s_vt_0x1DC();
+    /* 0x1D8 */ virtual void d_s_vt_0x1D8() {
+        return;
+    }
+    /* 0x1DC */ virtual UNKWORD d_s_vt_0x1DC() {
+        return 0;
+    }
     /* 0x1E0 */ virtual void onAnimSoundEvent(UNKWORD arg) {
         field_0x154 = arg;
     }
     /* 0x1E4 */ virtual void d_s_vt_0x1E4_noop();
     /* 0x1E8 */ virtual u32 d_s_vt_0x1E8(u32 soundId);
-
-    void handleRemoCon(nw4r::snd::SoundHandle *pHandle, u32 baseId);
-    bool startRemoConSound(u32 soundId);
-    nw4r::snd::SoundHandle *startSound(u32 soundId, nw4r::snd::SoundHandle *handle);
-    dSndDistantSoundActor_c *
-    startSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *position, nw4r::snd::SoundHandle *handle);
-    nw4r::snd::SoundHandle *holdSound(u32 soundId, nw4r::snd::SoundHandle *handle);
-
-    u32 specializeBgHitSoundId(u32 baseSoundId, u32 polyAttr0, u32 polyAttr1);
 
     // Overrides of dSoundSourceIf_c - always in the first section of
     // the vtable, so the order is not certain. May have to reorder for weak
@@ -94,13 +99,13 @@ public:
         return mSourceCategory;
     }
     /* 0x014 */ virtual bool isCategory(s32 category) const override {
-        return mSourceCategory == category;
+        return category == mSourceCategory;
     }
     /* 0x018 */ virtual s32 getSourceType() const override {
         return mSourceType;
     }
     /* 0x01C */ virtual bool isSourceType(s32 type) const override {
-        return mSourceType == type;
+        return type == mSourceType;
     }
     /* 0x020 */ virtual void vt_0x020() override {}
     /* 0x024 */ virtual void setSubtype(u8 subtype) override {
@@ -202,6 +207,7 @@ public:
 
 protected:
     StartResult setupSoundCommon(nw4r::snd::SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void *arg);
+    dSndSeSound2_c *getHandleType2ForSoundId(u32 soundId);
 
 private:
     /**
@@ -243,7 +249,6 @@ private:
 
     dSndSeSound1_c *getHandleType1ForSoundId(u32 soundId);
     dSndSeSound1_c *getHandleType1ForSoundHandle(nw4r::snd::SoundHandle *handle);
-    dSndSeSound2_c *getHandleType2ForSoundId(u32 soundId);
 
     dSndSeSound1_c *getHandleType1ForSoundHandle_Dupe(nw4r::snd::SoundHandle *pHandle);
     dSndSeSound2_c *getHandleType2ForSoundHandle_Dupe(nw4r::snd::SoundHandle *pHandle);
