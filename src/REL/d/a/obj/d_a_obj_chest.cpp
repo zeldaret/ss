@@ -18,7 +18,6 @@
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
-#include "rvl/MTX/mtx.h"
 #include "s/s_Math.h"
 #include "toBeSorted/attention.h"
 #include "toBeSorted/dowsing_target.h"
@@ -29,7 +28,7 @@ const char *dAcOChest_c::CHEST_OPEN = "ChestOpen";
 const char *dAcOChest_c::CHEST_OPEN_AFTER = "ChestOpenAfter";
 const char *dAcOChest_c::CHEST_FAIL = "ChestFail";
 
-const float dAcOChest_c::OPEN_WARDROBE_INTERACTION_FIELD_0x24 = 10.0f;
+const f32 dAcOChest_c::OPEN_WARDROBE_INTERACTION_FIELD_0x24 = 10.0f;
 
 InteractionTargetDef dAcOChest_c::OPEN_WARDROBE_INTERACTION = {0,     3,     1,       OPEN,   0,     140.0f,
                                                                40.0f, 40.0f, -100.0f, 100.0f, 50.0f, 1.0f};
@@ -93,7 +92,7 @@ bool dAcOChest_c::createHeap() {
         void *insideMdlData = getOarcResFile("TansuInside");
         mResFile = nw4r::g3d::ResFile(insideMdlData);
         nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(INSIDE_MODEL_NAMES[getFromParams(0x10, 0xFF)]);
-        if (!mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr)) {
+        if (!mInsideMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr)) {
             return NOT_READY;
         }
     }
@@ -130,7 +129,7 @@ int dAcOChest_c::create() {
     poscopy2.y = position.y + 150.0f;
     poscopy3 = poscopy2;
     if ((s32)getFromParams(0x10, 0xFF) != 0xFF) {
-        mMdl.setLocalMtx(mWorldMtx);
+        mInsideMdl.setLocalMtx(mWorldMtx);
     }
     if (dScGame_c::isCurrentStage("F001r") && roomid == 1 && 900.0f < position.x && position.x < 1000.0f &&
         -50.0f < position.y && position.y < 50.0f && -2730.0f < position.z && position.z < -2630.0f) {
@@ -166,7 +165,7 @@ int dAcOChest_c::actorExecute() {
 int dAcOChest_c::draw() {
     drawModelType1(&mAnmMdl.getModel());
     if (hasInsideModel()) {
-        drawModelType1(&mMdl);
+        drawModelType1(&mInsideMdl);
     }
     return SUCCEEDED;
 }
@@ -175,7 +174,7 @@ void dAcOChest_c::initializeState_Wait() {}
 
 void dAcOChest_c::executeState_Wait() {
     OPEN_WARDROBE_INTERACTION.field_0x24 = OPEN_WARDROBE_INTERACTION_FIELD_0x24;
-    AttentionManager::GetInstance()->addTarget(*this, OPEN_WARDROBE_INTERACTION, 0, (mVec3_c *)0);
+    AttentionManager::GetInstance()->addTarget(*this, OPEN_WARDROBE_INTERACTION, 0, nullptr);
 }
 
 void dAcOChest_c::finalizeState_Wait() {}
@@ -195,7 +194,7 @@ void dAcOChest_c::initializeState_OrderOpenEventAfter() {}
 void dAcOChest_c::executeState_OrderOpenEventAfter() {
     if (mGaveItem && EventManager::sInstance->isInEvent0Or7()) {
         char *name = getName();
-        void *data = dAcObjBase_c::getOarcZev(name);
+        void *data = getOarcZev(name);
         Event event(CHEST_OPEN_AFTER, data, 400, 0x100001, nullptr, (void *)changeStateWaitCallback);
         mEvent.scheduleEvent(event, 0);
     } else if (EventManager::sInstance->isInEvent(this, CHEST_OPEN_AFTER)) {
@@ -222,7 +221,7 @@ void dAcOChest_c::finalizeState_FailEvent() {}
 
 void dAcOChest_c::doInteraction(s32 _unused) {
     char *name = getName();
-    void *data = dAcObjBase_c::getOarcZev(name);
+    void *data = getOarcZev(name);
 
     if (hasBeenOpened()) {
         Event event(CHEST_FAIL, data, 100, 0x100001, (void *)changeStateFailCallback, (void *)changeStateWait2Callback);
@@ -234,7 +233,7 @@ void dAcOChest_c::doInteraction(s32 _unused) {
 }
 
 void dAcOChest_c::fn_326_C90() {
-    PSMTXTrans(mWorldMtx.m, position.x, position.y, position.z);
+    mWorldMtx.transS(position);
     mWorldMtx.ZXYrotM(rotation);
     mAnmMdl.getModel().setLocalMtx(mWorldMtx);
     mAnmMdl.getModel().calc(false);
@@ -278,12 +277,12 @@ char *dAcOChest_c::getName() {
 
 char *dAcOChest_c::getSubtypeName() {
     switch (getSubtype()) {
-        case 0: return "TansuA";
-        case 1: return "TansuB";
-        case 2: return "TansuC";
-        case 3: return "TansuD";
+        case 0:  return "TansuA";
+        case 1:  return "TansuB";
+        case 2:  return "TansuC";
+        case 3:  return "TansuD";
+        default: return "TansuA";
     }
-    return "TansuA";
 }
 
 char *dAcOChest_c::getModelName() {
@@ -292,20 +291,20 @@ char *dAcOChest_c::getModelName() {
 
 char *dAcOChest_c::getOpenOrClose(u8 openOrClose) {
     switch (openOrClose) {
-        case 0: return "TansuOpen";
-        case 1: return "TansuClose";
+        case 0:  return "TansuOpen";
+        case 1:  return "TansuClose";
+        default: return nullptr;
     }
-    return nullptr;
 }
 
 char *dAcOChest_c::getDzbPlcName() {
     switch (getSubtype()) {
-        case 0: return "TansuA";
-        case 1: return "TansuB";
-        case 2: return "TansuC";
-        case 3: return "TansuD";
+        case 0:  return "TansuA";
+        case 1:  return "TansuB";
+        case 2:  return "TansuC";
+        case 3:  return "TansuD";
+        default: return "TansuA";
     }
-    return "TansuA";
 }
 
 s32 dAcOChest_c::getSubtype() {

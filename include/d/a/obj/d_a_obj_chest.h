@@ -58,7 +58,7 @@ public:
 private:
     /* 0x330 */ nw4r::g3d::ResFile mResFile;
     /* 0x334 */ d3d::AnmMdlWrapper mAnmMdl;
-    /* 0x3A4 */ m3d::smdl_c mMdl;
+    /* 0x3A4 */ m3d::smdl_c mInsideMdl;
     /* 0x3C0 */ dBgW mBgW;
     /* 0x5D0 */ STATE_MGR_DECLARE(dAcOChest_c);
     /* 0x60C */ ActorEventRelated mEvent;
@@ -68,7 +68,7 @@ private:
     /* 0x65F */ bool mIsLinksCloset;
     /* 0x660 */ DowsingTarget mDowsingTarget;
 
-    static const float OPEN_WARDROBE_INTERACTION_FIELD_0x24;
+    static const f32 OPEN_WARDROBE_INTERACTION_FIELD_0x24;
     static const char *CHEST_OPEN;
     static const char *CHEST_OPEN_AFTER;
     static const char *CHEST_FAIL;
