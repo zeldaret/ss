@@ -41,12 +41,20 @@ inline int getCurrentCoreID() {
     return g_currentCoreId;
 }
 
+inline bool isMpls(const int i) {
+    return g_padMg->getDevType(i) == EGG::cDEV_MPLS;
+}
+inline bool isMplsPtFS(const int i) {
+    return g_padMg->getDevType(i) == EGG::cDEV_MPLS_PT_FS;
+}
+
 // Defined in dPad, referenced in both mPad and dPad
 extern "C" void async_info_callback(s32 chan, s32 result);
 
 void create();
 void beginPad();
 void endPad();
+
 }; // namespace mPad
 
 #endif

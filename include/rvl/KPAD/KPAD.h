@@ -61,7 +61,12 @@ typedef struct KPADStatus {
     s8 dpd_valid_fg;        // at 0x5E
     u8 data_format;         // at 0x5F
     KPADEXStatus ex_status; // at 0x60
-    u8 _0xB0[0xF0 - 0xB0];  // at 0xB0
+    Vec mpls_rot;           // at 0xB0 // made up
+    Vec field_0xBC;         // at 0xBC // made up
+    Vec mpls_basis_x;       // at 0xC8 // made up
+    Vec mpls_basis_y;       // at 0xD4 // made up
+    Vec mpls_basis_z;       // at 0xE0 // made up
+    UNKWORD field_0xEC;
 } KPADStatus;
 
 typedef struct KPADUnifiedWpadStatus {
@@ -110,7 +115,9 @@ void KPADSetMplsZeroDriftMode(s32 chan, s32);
 void KPADEnableMplsDirRevise(s32 chan);
 void KPADDisableMplsDirRevise(s32 chan);
 void KPADSetMplsDirReviseParam(s32 chan, f32);
+
 void KPADEnableMplsAccRevise(s32 chan);
+void KPADDisableMplsAccRevise(s32 chan);
 void KPADSetMplsAccReviseParam(s32 chan, f32, f32);
 
 void KPADEnableMplsDpdRevise(s32 chan);

@@ -30,6 +30,7 @@ class ex_c {
     };
 
 public:
+    void fn_80056790(s32 chan);
     void fn_80056AF0(s32 chan);
     void fn_80056B90(s32 chan);
     void fn_80056CE0(s32 chan);
@@ -39,7 +40,7 @@ public:
     void fn_80056E60(s32 chan); // Deals with Mpls Calibration Stop
     void resetState(s32 chan);
 
-    void fn_800572A0();
+    void fn_800572A0(s32 chan);
 
     static bool isLowBattery();
     static bool isOutOfBattery();
@@ -61,6 +62,8 @@ public:
     void fn_80059300(s32 chan);
     void getUnifiedWpadStatus(s32 chan);
     void fn_800593D0();
+
+    void updateStatus(s32 chan);
 
     static ex_c *getInstance() {
         return m_current_ex;
@@ -85,10 +88,7 @@ public:
     /* 0x0045 */ bool field_0x45;
     /* 0x0046 */ bool field_0x46;
     /* 0x0047 */ bool field_0x47;
-    /* 0x0048 */ bool field_0x48;
-    /* 0x0049 */ bool field_0x49;
-    /* 0x004A */ bool field_0x4A;
-    /* 0x004B */ bool field_0x4B;
+    /* 0x0048 */ s32 field_0x48;
     /* 0x004C */ bool mSpeakerSetup;
     /* 0x004D */ bool mSpeakerShutdown;
     /* 0x004E */ bool mIncorrectDeviceType;
@@ -108,16 +108,17 @@ public:
     /* 0x008C */ mVec3_c field_0x8C;
     /* 0x0098 */ motion_c mMotion;
     /* 0x1174 */ motion_c mFSMotion;
-    /* 0x2250 */ u8 _0x2250[0x2268 - 0x2250];
-    /* 0x2268 */ mVec3_c field_0x2268;
-    /* 0x2274 */ mVec3_c field_0x2274;
+    /* 0x2250 */ mVec3_c mMPLSSpeed;
+    /* 0x225C */ mVec3_c mMPLSBasisX;
+    /* 0x2268 */ mVec3_c mMPLSBasisY;
+    /* 0x2274 */ mVec3_c mMPLSBasisZ;
     /* 0x2280 */ s32 mState;
     /* 0x2284 */ s32 field_0x2284;
     /* 0x2288 */ s32 field_0x2288;
     /* 0x228C */ KPADUnifiedWpadStatus mStatus;
-    /* 0x22C0 */ u8 _0x22C0[0x22CE - 0x22C4];
+    /* 0x22C4 */ u8 _0x22C4[0x22CE - 0x22C4];
     /* 0x22CE */ bool field_0x22CE;
-    /* 0x22CF */ u8 _0x22CF[0x22D0 - 0x22CF];
+    /* 0x22CF */ bool field_0x22CF;
     /* 0x22D0 */ u8 field_0x22D0;
     /* 0x22D1 */ u8 field_0x22D1;
     /* 0x22D4 */ s32 field_0x22D4;

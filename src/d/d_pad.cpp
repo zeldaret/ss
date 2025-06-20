@@ -2,7 +2,12 @@
 
 #include "common.h"
 #include "d/a/d_a_player.h"
+#include "d/d_cs_game.h"
 #include "d/d_gfx.h"
+#include "d/d_pause.h"
+#include "d/d_reset.h"
+#include "d/lyt/d_lyt_control_game.h"
+#include "d/lyt/meter/d_lyt_meter.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "egg/core/eggController.h"
 #include "egg/core/eggHeap.h"
@@ -105,6 +110,7 @@ void centerPos(mVec2_c &in, mVec2_c &out) {
     out.y = dGfx_c::getCurrentScreenHeightF() * -0.5f * (1.f + in.y) + dGfx_c::getCurrentScreenTopF();
 }
 
+extern "C" void fn_801940C0();
 void beginPad_BR() {
     mPad::beginPad();
 
@@ -114,14 +120,15 @@ void beginPad_BR() {
         WPADSetAcceptConnection(1);
     }
 
-    for (int i = 0; i < 4; ++i) {
+    // Forces only first controller to be active
+    for (int i = 1; i < 4; ++i) {
         if (mPad::getCore(i)->isConnected()) {
             WPADDisconnect(i);
         }
     }
 
     dPad::ex_c &ex = ex_c::m_ex[0];
-    ex.fn_800572A0();
+    ex.fn_800572A0(0);
     if (mPad::getCore(0)->isConnected()) {
         ex.getUnifiedWpadStatus(0);
         ex.fn_80059300(0);
@@ -144,59 +151,122 @@ void beginPad_BR() {
         const dAcPy_c *player = dAcPy_c::GetLink();
         if (player && player->isAttacking()) {
             mMtx_c m;
-            m.XrotS(mAng::deg2short(-30.f));
+            mVec3_c baseX;
+            mVec3_c baseY;
             mVec3_c baseZ;
             KPADVec kpadvec;
-            baseZ.x = m.m[0][2];
-            baseZ.y = m.m[1][2];
+            m.XrotS(mAng::deg2short(-30.f));
             baseZ.z = m.m[2][2];
-            kpadvec[2].x = m.m[0][2];
-            kpadvec[2].y = m.m[1][2];
-            kpadvec[2].z = m.m[2][2];
-            mVec3_c tmpCross;
-            VECCrossProduct(ex.field_0x2268, baseZ, tmpCross);
+            baseZ.y = m.m[1][2];
+            baseZ.x = m.m[0][2];
+            kpadvec[2].x = baseZ.x;
+            kpadvec[2].y = baseZ.y;
+            kpadvec[2].z = baseZ.z;
 
-            if (0.05f < VECMag(tmpCross)) {
-                tmpCross.normalize();
-                kpadvec[0].x = tmpCross.x;
-                kpadvec[0].y = tmpCross.y;
-                kpadvec[0].z = tmpCross.z;
+            VECCrossProduct(ex_c::m_ex[0].mMPLSBasisY, baseZ, baseX);
+            if (VECMag(baseX) > 0.05f) {
+                baseX.normalize();
+                kpadvec[0].z = baseX.z;
+                kpadvec[0].y = baseX.y;
+                kpadvec[0].x = baseX.x;
             } else {
-                kpadvec[0].x = baseZ.x;
-                kpadvec[0].y = baseZ.y;
-                kpadvec[0].z = baseZ.z;
+                baseX = baseZ;
+                kpadvec[0].z = baseX.z;
+                kpadvec[0].y = baseX.y;
+                kpadvec[0].x = baseX.x;
             }
-            tmpCross.x = kpadvec[0].x;
-            tmpCross.y = kpadvec[0].y;
-            tmpCross.z = kpadvec[0].z;
 
-            mVec3_c tmpCross2;
-            VECCrossProduct(baseZ, tmpCross, tmpCross2);
-            if (VECMag(tmpCross2) > 0.05f) {
-                tmpCross2.normalize();
-                kpadvec[1].x = tmpCross2.x;
-                kpadvec[1].y = tmpCross2.y;
-                kpadvec[1].z = tmpCross2.z;
+            VECCrossProduct(baseZ, baseX, baseY);
+            if (VECMag(baseY) > 0.05f) {
+                baseY.normalize();
+                kpadvec[1].z = baseY.z;
+                kpadvec[1].y = baseY.y;
+                kpadvec[1].x = baseY.x;
             } else {
-                kpadvec[1].x = baseZ.x;
-                kpadvec[1].y = baseZ.y;
-                kpadvec[1].z = baseZ.z;
+                baseY = baseZ;
+                kpadvec[1].z = baseY.z;
+                kpadvec[1].y = baseY.y;
+                kpadvec[1].x = baseY.x;
             }
-            tmpCross2.x = kpadvec[1].x;
-            tmpCross2.y = kpadvec[1].y;
-            tmpCross2.z = kpadvec[1].z;
 
             KPADSetMplsDirReviseBase(0, kpadvec);
-            KPADEnableMplsDpdRevise(0);
+            enableMplsDirRevise(0);
         } else {
             disableMplsDirRevise(0);
         }
 
         KPADEnableMplsAccRevise(0);
         KPADSetMplsAccReviseParam(0, 0.03f, 0.4f);
+
+        if ((dCsGame_c::GetInstance() && dCsGame_c::GetInstance()->fn_801BF5E0() && !ex.field_0x22D0) ||
+            ((dAcPy_c::GetLink() &&
+              dAcPy_c::GetLink()->checkActionFlagsCont(0x400 | 0x100 | 0x80 | 0x40 | 0x10 | 0x4 | 0x2 | 0x1) &&
+              !dAcPy_c::GetLink()->vt_0x1C0() && !dLytMeter_c::GetMain()->getField_0x1377F()) ||
+             ex.field_0x22CF)) {
+            if (dLytControlGame_c::getInstance() && dLytControlGame_c::getInstance()->isStateNormal()) {
+                if (!(dPauseManager_c::GetInstance() && dPauseManager_c::GetInstance()->getField_0x25())) {
+                    KPADDisableMplsDpdRevise(0);
+                    KPADDisableMplsAccRevise(0);
+                }
+            }
+            KPADDisableMplsDirRevise(0);
+        }
+        if (ex.field_0x47 || ex.field_0x48 != 0) {
+            KPADEnableMplsAccRevise(0);
+            KPADSetMplsAccReviseParam(0, 1.f, 0.6f);
+            if (--ex.field_0x48 < 0) {
+                ex.field_0x48 = 0;
+            }
+        }
+
+        ex.field_0x22CF = false;
+        ex.mFSStick.x = mPad::getCore(0)->getFreeStickX();
+        ex.mFSStick.y = mPad::getCore(0)->getFreeStickY();
+        ex.mFSStickDistance = ex.mFSStick.length();
+        ex.mFSStickAngle = -ex.mFSStick.ang();
+
+        ex.fn_800593D0();
+
+        bool isMpls = mPad::isMpls(0) || mPad::isMplsPtFS(0);
+        if (isMpls) {
+            ex.mMPLSSpeed.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_rot);
+            ex.mMPLSBasisX.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_basis_x);
+            ex.mMPLSBasisY.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_basis_y);
+            ex.mMPLSBasisZ.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_basis_z);
+        } else {
+            ex.mMPLSSpeed.set(0.f, 0.f, 0.f);
+            ex.mMPLSBasisX = mVec3_c::Ex;
+            ex.mMPLSBasisY = mVec3_c::Ey;
+            ex.mMPLSBasisZ = mVec3_c::Ez;
+        }
+
+        ex.fn_80056790(0);
+
+        if (ex.field_0x50) {
+            ex.mDpdPos = ex.field_0x8;
+        } else {
+            if (mPad::getCore(0)->getDpdValidFlag() > 0) {
+                ex.mDpdPos = mPad::getCore(0)->getDpdRawPos();
+                // ex.mDpdPos.set(v.x, v.y);
+            } else {
+                ex.mDpdPos.set(-2.f, -2.f);
+            }
+        }
+        centerPos(ex.mDpdPos, ex.field_0x8);
+        ex.updateStatus(0);
     }
 
     ex_c::m_current_ex = &ex_c::m_ex[mPad::getCurrentCoreID()];
+
+    if (dReset::Manage_c::GetInstance()->isSoftResetOrSafetyWait()) {
+        for (int i = 0; i < 4; ++i) {
+            EGG::CoreController *core = mPad::g_core[i];
+            core->getCoreStatus()->hold &= EGG::cCORE_BUTTON_HOME;
+            core->getCoreStatus()->trig &= EGG::cCORE_BUTTON_HOME;
+            core->getCoreStatus()->release &= EGG::cCORE_BUTTON_HOME;
+        }
+    }
+    fn_801940C0();
 }
 
 void endPad_BR() {

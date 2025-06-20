@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "egg/core/eggHeap.h"
+#include "egg/prim/eggAssert.h"
 
 namespace EGG {
 
@@ -95,11 +96,13 @@ private:
     void checkRange(int i) const {
         if (!isRangeValid(i)) {
             errRangeOver();
+#line 174
+            EGG_ASSERT_MSG(false, "TBuffer::checkRange %d (0<=x<%d)\n", i, mSize);
         }
     }
 
     bool isRangeValid(int i) const {
-        return i >= 0 && i < mSize;
+        return 0 <= i && i < mSize;
     }
 
 private:

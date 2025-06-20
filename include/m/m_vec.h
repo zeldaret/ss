@@ -239,7 +239,7 @@ public:
     void rotY(const mAng &angle);
     void rotZ(const mAng &angle);
 
-    void CopyTo(nw4r::math::VEC3 *p) const {
+    void CopyTo(Vec *p) const {
         p->x = x;
         p->y = y;
         p->z = z;
@@ -280,12 +280,23 @@ public:
     mVec2_c() {}
     ~mVec2_c() {}
 
+    /// @brief Assignment operator
+    mVec2_c &operator=(const mVec2_c &r) {
+        set(r.x, r.y);
+        return *this;
+    }
+
     mVec2_c(const mVec2_c &other) {
         set(other.x, other.y);
     }
-
+    mVec2_c(const EGG::Vector2f &other) {
+        set(other.x, other.y);
+    }
     mVec2_c(f32 fx, f32 fy) {
         set(fx, fy);
+    }
+    s16 ang() const {
+        return cM::atan2s(x, y);
     }
 };
 

@@ -122,7 +122,7 @@ struct Vector3f : public nw4r::math::VEC3 {
         return Vector3f(-x, -y, -z);
     }
 
-    void set(const EGG::Vector3f& other) {
+    void set(const EGG::Vector3f &other) {
         x = other.x;
         y = other.y;
         z = other.z;
@@ -132,7 +132,9 @@ struct Vector3f : public nw4r::math::VEC3 {
         return squaredLength() <= Math<f32>::epsilon();
     }
 
-    void setZero() { x = y = z = 0.0f; };
+    void setZero() {
+        x = y = z = 0.0f;
+    };
 
     f32 normalise();
 
@@ -168,6 +170,9 @@ public:
 
     Vector2f operator-(const Vector2f &v) {
         return Vector2f(x - v.x, y - v.y);
+    }
+    f32 length() const {
+        return Math<f32>::sqrt(squaredLength());
     }
     f32 squaredLength() const {
         return (x * x + y * y);
