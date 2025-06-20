@@ -83,6 +83,14 @@ public:
         return mDistanceToListener;
     }
 
+    f32 getSpeed() {
+        if (!checkFlag(0x400)) {
+            mSpeed = VECMag(GetVelocity());
+            setFlag(0x400);
+        }
+        return mSpeed;
+    }
+
     f32 getDistanceToCameraTarget() {
         updateDistanceToCameraTarget();
         return mDistanceToCameraTarget;
@@ -111,7 +119,7 @@ protected:
     /* 0x90 */ f32 a_field_0x90;
     /* 0x94 */ f32 mDistanceToListener;
     /* 0x98 */ f32 mCameraDirectionDot;
-    /* 0x9C */ f32 a_field_0x9C;
+    /* 0x9C */ f32 mSpeed;
     /* 0xA0 */ nw4r::math::VEC3 mPositionRelativeToListener;
     /* 0xAC */ nw4r::math::VEC3 mPositionTransformedByListener;
     /* 0xB8 */ f32 mDistanceToCameraTarget;

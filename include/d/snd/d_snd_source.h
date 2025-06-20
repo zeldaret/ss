@@ -49,11 +49,11 @@ public:
     /* 0x188 */ virtual void postSetup() {}
     /* 0x18C */ virtual void postCalc();
     /* 0x190 */ virtual bool d_s_vt_0x190() const;
-    /* 0x194 */ virtual u32 d_s_vt_0x194(u32 soundId);
+    /* 0x194 */ virtual u32 overrideStartSoundId(u32 soundId);
 
     /* 0x198 */ virtual void postStartSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) override;
 
-    /* 0x19C */ virtual u32 d_s_vt_0x19C(u32 soundId, dSoundSource_c *source);
+    /* 0x19C */ virtual u32 overrideHitObjSoundId(u32 soundId, dSoundSource_c *source);
     /* 0x1A0 */ virtual u32 d_s_vt_0x1A0(u32 soundId, UNKWORD);
 
     /* 0x1A4 */ virtual void
@@ -205,9 +205,10 @@ public:
         return false;
     }
 
+    dSndSeSound2_c *getHandleType2ForSoundId(u32 soundId);
+
 protected:
     StartResult setupSoundCommon(nw4r::snd::SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void *arg);
-    dSndSeSound2_c *getHandleType2ForSoundId(u32 soundId);
 
 private:
     /**
@@ -260,7 +261,7 @@ private:
     // at 0x00: dSoundSourceIf_c vtable
     // at 0x04: dSnd3DActor_c sub-object
     // at 0x58: thunk-vtable
-
+protected:
     /* 0x0E8 */ nw4r::ut::Node mMgrLink;
     /* 0x0F0 */ const char *mpName;
     /* 0x0F4 */ UNKWORD field_0x0F4;

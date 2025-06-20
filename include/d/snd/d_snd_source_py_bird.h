@@ -15,6 +15,8 @@ public:
     /* 0x1CC */ virtual void postSetupSound(u32 playingId, u32 requestedId, dSndSeSound_c *seSound) override;
 
 private:
+    static void cbPyBirdGlide(dSndSeSound_c *sound, dSoundSource_c *source, nw4r::snd::SoundHandle &handle);
+
     /* 0x200 */ s32 mSeqVarValue;
 };
 
