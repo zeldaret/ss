@@ -146,6 +146,7 @@ public:
         /* 0x 0800 0000 */ ACCH_FLAG_0x8000000 = (1 << 27),
         /* 0x 1000 0000 */ ACCH_FLAG_0x10000000 = (1 << 28),
         /* 0x 2000 0000 */ ACCH_FLAG_0x20000000 = (1 << 29),
+        /* 0x 4000 0000 */ ACCH_FLAG_0x40000000 = (1 << 30),
         /* 0x 8000 0000 */ ACCH_FLAG_0x80000000 = (1 << 31),
     };
 
@@ -314,6 +315,12 @@ public:
         return mFlags & ACCH_FLAG_0x10000000;
     }
 
+    void ClrLineDown() {
+        mFlags &= ~LINE_DOWN;
+    }
+    void SetLineDown() {
+        mFlags |= LINE_DOWN;
+    }
     void Clr_0x20000() {
         mFlags &= ~ACCH_FLAG_0x20000;
     }
@@ -322,6 +329,15 @@ public:
     }
     bool Chk_0x20000() {
         return mFlags & ACCH_FLAG_0x20000;
+    }
+    void Clr_0x40000000() {
+        mFlags &= ~ACCH_FLAG_0x40000000;
+    }
+    void Set_0x40000000() {
+        mFlags |= ACCH_FLAG_0x40000000;
+    }
+    bool Chk_0x40000000() {
+        return mFlags & ACCH_FLAG_0x40000000;
     }
     void Clr_0x80000000() {
         mFlags &= ~ACCH_FLAG_0x80000000;
@@ -504,6 +520,14 @@ public:
 
     dBgS_GndChk &GetGnd() {
         return mGnd;
+    }
+
+    dBgS_RoofChk &GetRoof() {
+        return mRoof;
+    }
+
+    void SetField_0xD4(f32 v) {
+        mField_0x0D4 = v;
     }
 
 public:

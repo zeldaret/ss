@@ -2,11 +2,11 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "d/d_reset.h"
 #include "d/d_rumble.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
 #include "m/m_fader_base.h"
-#include "toBeSorted/reload_color_fader.h"
 
 static u16 RootActorID = fProfile::PROFILE_MAX;
 static u32 RootActorParams = 0;
@@ -27,7 +27,7 @@ dScene_c::dScene_c() {
 
 void dScene_c::postCreate(MAIN_STATE_e state) {
     if (state == SUCCESS) {
-        ReloadColorFader::GetInstance()->fn_80067ED0();
+        dReset::Manage_c::GetInstance()->SetSoftResetFinish();
     }
     dBase_c::postCreate(state);
 }
@@ -35,7 +35,7 @@ void dScene_c::postCreate(MAIN_STATE_e state) {
 void dScene_c::postDelete(MAIN_STATE_e state) {
     if (state == SUCCESS) {
         gameStateIsActive = false;
-        ReloadColorFader::GetInstance()->fn_80067F50();
+        dReset::Manage_c::GetInstance()->PostDeleteScene();
     }
     dBase_c::postDelete(state);
 }
@@ -69,7 +69,7 @@ int dScene_c::preExecute() {
 
 void dScene_c::postExecute(MAIN_STATE_e status) {
     if (status != CANCELED) {
-        ReloadColorFader::GetInstance()->fn_80067F00();
+        dReset::Manage_c::GetInstance()->SetSoftResetScene();
     }
     dBase_c::postExecute(status);
     if (proc_control & ROOT_DISABLE_EXECUTE) {
