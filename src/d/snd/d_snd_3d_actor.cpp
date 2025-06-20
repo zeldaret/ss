@@ -25,7 +25,7 @@ dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, u8 sourceType)
       a_field_0x90(INFINITY),
       mDistanceToListener(INFINITY),
       mCameraDirectionDot(0.0f),
-      a_field_0x9C(0.0f),
+      mSpeed(0.0f),
       mpSourceParam(pSourceParam),
       mFlags(0),
       mDistanceToPlayer(INFINITY),

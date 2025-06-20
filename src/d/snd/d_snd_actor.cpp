@@ -7,6 +7,6 @@
 dSndActor_c::dSndActor_c(nw4r::snd::SoundArchivePlayer &rStartable) : nw4r::snd::SoundActor(rStartable) {}
 
 void dSndActor_c::doesSomethingWithForeachSound() {
-    SoundPropertiesChecker checker;
+    SoundPropertiesChecker checker(-1);
     ForEachSound(checker, false);
 }

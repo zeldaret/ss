@@ -69,6 +69,11 @@ namespace nw4r { namespace snd
 				mSound->SetPan(pan);
 		}
 
+		void SetLpfFreq(f32 lpfFreq) {
+			if (IsAttachedSound())
+				mSound->SetLpfFreq(lpfFreq);
+		}
+
 		bool IsPause() const {
 			return IsAttachedSound() && mSound->IsPause();
 		}

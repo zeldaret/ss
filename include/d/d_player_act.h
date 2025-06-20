@@ -56,7 +56,7 @@ public:
         return false;
     }
     /* vt 0x0BC */ virtual void finishPlayingHarp() {}
-    /* vt 0x0C0 */ virtual bool isUsingWhip() {
+    /* vt 0x0C0 */ virtual bool isUsingWhip() const {
         return false;
     }
     /* vt 0x0C4 */ virtual bool anotherThingWithWhip() {
@@ -609,6 +609,10 @@ public:
 
     bool isAttacking() const {
         return mAttackDirection != ATTACK_NONE;
+    }
+
+    inline bool hasvt_0x1C0() const {
+        return vt_0x1C0() != nullptr;
     }
 
     static bool isInEvent();

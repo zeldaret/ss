@@ -5,13 +5,29 @@
 #include "nw4r/math/math_types.h"
 
 class dAcBase_c;
-class dSndSoundCtxParam;
+
+/**
+ * Examples:
+ * * Chandelier hold sound. Game code (dAcOChandelier_c::executeState_Wait) will
+ *   push the current swing angle, callback (80397a40) will play additional sounds
+ *   when chandelier swing speed exceeds certain values.
+ * * SE_L_ROPE_WIND_LV: callback (80228814) will read and write values to create a feedback
+ *   loop for certain parameters.
+ * * `dSndSourceEquipment_c::overrideStartSoundId` will directly read the parameter to customize shield
+ *   sounds.
+ */
+struct dSndSoundCtxParam {
+    dSndSoundCtxParam() : intParam(0), floatParam(0.0f) {}
+    ~dSndSoundCtxParam() {}
+
+    /* 0x00 */ s32 intParam;
+    /* 0x04 */ f32 floatParam;
+};
 
 /** An abstract interface for sound relating to a particular actor. */
 class dSoundSourceIf_c {
 public:
     virtual ~dSoundSourceIf_c() {}
-#define SOUNDSOURCE_VIRTUAL(offset) virtual void vt_##offset() = 0;
 
     /* 0x00C */ virtual void setup() = 0;
     /* 0x010 */ virtual s32 getCategory() const = 0;

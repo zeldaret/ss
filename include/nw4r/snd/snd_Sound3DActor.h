@@ -24,6 +24,10 @@ public:
     const nw4r::math::VEC3 &GetPosition() const {
         return mPosition;
     }
+
+    const nw4r::math::VEC3 &GetVelocity() const {
+        return mVelocity;
+    }
     void SetPosition(const math::VEC3 &rPosition);
 
     void SetUserParam(u32 userParam) {

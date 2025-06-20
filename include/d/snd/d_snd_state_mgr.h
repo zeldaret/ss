@@ -79,6 +79,7 @@ public:
     bool isInDemo() const {
         return getCurrentStageMusicDemoName() != nullptr;
     }
+    bool isInEvent(const char *eventName);
 
 private:
     u32 getStageTypeFlags(const char *stageName) const;

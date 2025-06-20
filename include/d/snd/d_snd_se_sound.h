@@ -8,22 +8,6 @@
 #include "nw4r/ut/ut_list.h"
 
 /**
- * Examples:
- * * Chandelier hold sound. Game code (dAcOChandelier_c::executeState_Wait) will
- *   push the current swing angle, callback (80397a40) will play additional sounds
- *   when chandelier swing speed exceeds certain values.
- * * SE_L_ROPE_WIND_LV: callback (80228814) will read and write values to create a feedback
- *   loop for certain parameters.
- */
-struct dSndSoundCtxParam {
-    dSndSoundCtxParam() : intParam(0), floatParam(0.0f) {}
-    ~dSndSoundCtxParam() {}
-
-    /* 0x00 */ s32 intParam;
-    /* 0x04 */ f32 floatParam;
-};
-
-/**
  * A sound effect handle. Typically acquired by sound sources from a pool.
  * This allows sound sources to play sounds with no pre-determined limit
  * on the number of sounds. It also allows the source to handle the statefulness
@@ -76,6 +60,14 @@ public:
         return mpSoundHandle;
     }
 
+    dSndSoundCtxParam *getCtxParams() const {
+        return mpCtxParam;
+    }
+
+    s32 getField0x114() const {
+        return field_0x114;
+    }
+
     void setHandle(nw4r::snd::SoundHandle *handle) {
         if (handle != nullptr) {
             mpSoundHandle = handle;
@@ -110,6 +102,14 @@ public:
         field_0x11E = value;
     }
 
+    void setCallback1(Callback cb) {
+        mpStartCallback = cb;
+    }
+
+    void setCallback2(Callback cb) {
+        mpCalcCallback = cb;
+    }
+
 protected:
     /* 0x004 */ nw4r::ut::Node mSourceLink;
     /* 0x00C */ nw4r::ut::Node mPoolLink;
@@ -119,7 +119,7 @@ protected:
     /* 0x10C */ Type_e mHandleType;
     /* 0x110 */ u32 mSoundId;
     /* 0x114 */ s32 field_0x114;
-    /* 0x118 */ dSndSoundCtxParam *mpUnk;
+    /* 0x118 */ dSndSoundCtxParam *mpCtxParam;
     /* 0x11C */ u8 field_0x11C;
     /* 0x11D */ u8 field_0x11D;
     /* 0x11E */ u8 field_0x11E;

@@ -2813,9 +2813,13 @@ d/snd/d_snd_sound_object_callbacks.cpp:
 
 d/snd/d_snd_sound_equipment_callbacks.cpp:
 	.text       start:0x80398430 end:0x80398AD4 align:16
+	.sdata2     start:0x8057E528 end:0x8057E570
 
 d/snd/d_snd_sound_npc_callbacks.cpp:
 	.text       start:0x80398AE0 end:0x80398E18 align:16
+	.data       start:0x8054D520 end:0x8054D730
+	.sdata      start:0x805748D8 end:0x805748E0
+	.sdata2     start:0x8057E570 end:0x8057E598
 
 d/snd/d_snd_sound_npc_2_callbacks.cpp:
 	.text       start:0x80398E20 end:0x80398FFC align:16
