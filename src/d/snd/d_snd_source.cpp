@@ -377,7 +377,7 @@ bool dSoundSource_c::startSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *p
 
     u32 actualSoundId = soundId;
     if (!sIsStartingBaseSound) {
-        actualSoundId = d_s_vt_0x194(soundId);
+        actualSoundId = overrideStartSoundId(soundId);
         if (actualSoundId == -1) {
             resetTempParams();
             return false;
@@ -410,12 +410,12 @@ bool dSoundSource_c::startObjHitSound(u32 baseSoundId, dSoundSourceIf_c *source,
 
     u32 soundId = baseSoundId;
     if (!sIsStartingBaseSound) {
-        u32 tmp = d_s_vt_0x194(soundId);
+        u32 tmp = overrideStartSoundId(soundId);
         if (tmp == -1) {
             resetTempParams();
             return false;
         }
-        soundId = d_s_vt_0x19C(tmp, static_cast<dSoundSource_c *>(source));
+        soundId = overrideHitObjSoundId(tmp, static_cast<dSoundSource_c *>(source));
         if (soundId == -1) {
             resetTempParams();
             return false;
@@ -443,7 +443,7 @@ bool dSoundSource_c::startBgHitSound(u32 baseSoundId, u32 polyAttr0, u32 polyAtt
 
     u32 soundId = baseSoundId;
     if (!sIsStartingBaseSound) {
-        u32 tmp = d_s_vt_0x194(soundId);
+        u32 tmp = overrideStartSoundId(soundId);
         if (tmp == -1) {
             resetTempParams();
             return false;
@@ -480,7 +480,7 @@ bool dSoundSource_c::startSoundAtPosition2(u32 soundId, const nw4r::math::VEC3 *
 
     u32 actualSoundId = soundId;
     if (!sIsStartingBaseSound) {
-        actualSoundId = d_s_vt_0x194(soundId);
+        actualSoundId = overrideStartSoundId(soundId);
         if (actualSoundId == -1) {
             resetTempParams();
             return false;
@@ -548,7 +548,7 @@ dSoundSource_c::startSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *positi
     return ac;
 }
 
-u32 dSoundSource_c::d_s_vt_0x19C(u32 soundId, dSoundSource_c *source) {
+u32 dSoundSource_c::overrideHitObjSoundId(u32 soundId, dSoundSource_c *source) {
     if (source == nullptr) {
         return soundId;
     }
@@ -824,7 +824,7 @@ nw4r::snd::SoundStartable::StartResult dSoundSource_c::setupSound(
         if (holdFlag) {
             anotherSoundId = d_s_vt_0x1A0(soundId, 1);
         } else {
-            anotherSoundId = d_s_vt_0x194(soundId);
+            anotherSoundId = overrideStartSoundId(soundId);
         }
         if (anotherSoundId == -1) {
             return onSetupError();
@@ -924,7 +924,7 @@ nw4r::snd::SoundStartable::StartResult dSoundSource_c::onSetupError() {
     return START_ERR_USER;
 }
 
-u32 dSoundSource_c::d_s_vt_0x194(u32 soundId) {
+u32 dSoundSource_c::overrideStartSoundId(u32 soundId) {
     return soundId;
 }
 
