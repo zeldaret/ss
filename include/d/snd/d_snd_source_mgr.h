@@ -16,17 +16,37 @@ class dSndSourceMgr_c {
 public:
     dSndSourceMgr_c();
 
+    static dSoundSource_c *createSource(u32 id, dAcBase_c *actor, const char *name, u8 subtype);
+
     void registerSource(dSoundSource_c *source);
     void unregisterSource(dSoundSource_c *source);
+    void onShutdownSource(dSoundSource_c *source);
 
     void playFlowSound(u32 id);
     static s32 getSourceCategoryForSourceType(s32 sourceType, const char *name);
+    static bool isSwOrEOc(const char *name);
+
+    static dSoundSource_c *getBoomerangSource() {
+        return GetInstance()->mpBoomerangSource;
+    }
+
+    u8 getField_0x0012() const {
+        return field_0x0012;
+    }
+
+    u8 getField_0x0013() const {
+        return field_0x0013;
+    }
+
+    void stopAllSound();
+    void stopAllNonPlayerSound();
 
 private:
     static bool isCertainEnemyType(dSoundSource_c *source);
     void removeSourceFromList(dSoundSource_c *source, nw4r::ut::List *list);
     void clearSourceLists();
     void clearSourceList(nw4r::ut::List *list);
+    s32 getPlayerSourceRoomId() const;
 
     /* 0x0010 */ u8 field_0x0010;
     /* 0x0011 */ u8 field_0x0011;

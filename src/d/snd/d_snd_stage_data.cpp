@@ -1,0 +1,358 @@
+#include "d/snd/d_snd_stage_data.h"
+
+#include "common.h"
+
+
+#pragma push
+#pragma readonly_strings on
+
+const dSndStageInfo dSndStageInfo::sInfos[] = {
+    /* SND_STAGE_F100 */
+    {  "F100", -1,       SND_STAGE_F100,   SND_STAGE_F100,       SND_STAGE_F100,       SND_STAGE_F100,     nullptr},
+    /* SND_STAGE_F101 */
+    {  "F101", -1,       SND_STAGE_F101,   SND_STAGE_F101,       SND_STAGE_F100,       SND_STAGE_F100,     nullptr},
+    /* SND_STAGE_F102 */
+    {  "F102", -1,       SND_STAGE_F102,   SND_STAGE_F102,       SND_STAGE_F102,       SND_STAGE_F102,     nullptr},
+    /* SND_STAGE_F102_1 */
+    {"F102_1", -1,     SND_STAGE_F102_1, SND_STAGE_F102_1,       SND_STAGE_F102,       SND_STAGE_F102,     nullptr},
+    /* SND_STAGE_F103_L13 */
+    {  "F103", 13,   SND_STAGE_F103_L13,   SND_STAGE_F103,   SND_STAGE_F103_L13,   SND_STAGE_F103_L13, "Demo64_03"},
+    /* SND_STAGE_F103 */
+    {  "F103", -1,       SND_STAGE_F103,   SND_STAGE_F103,       SND_STAGE_F103,       SND_STAGE_F103,     nullptr},
+    /* SND_STAGE_F200 */
+    {  "F200", -1,       SND_STAGE_F200,   SND_STAGE_F200,       SND_STAGE_F200,       SND_STAGE_F200,     nullptr},
+    /* SND_STAGE_F201_1 */
+    {"F201_1", -1,     SND_STAGE_F201_1, SND_STAGE_F201_1,     SND_STAGE_F201_1,     SND_STAGE_F201_1,     nullptr},
+    /* SND_STAGE_F201_2 */
+    {"F201_2", -1,     SND_STAGE_F201_2, SND_STAGE_F201_2,     SND_STAGE_F201_2,     SND_STAGE_F201_2,     nullptr},
+    /* SND_STAGE_F201_3 */
+    {"F201_3", -1,     SND_STAGE_F201_3, SND_STAGE_F201_3,     SND_STAGE_F201_1,     SND_STAGE_F201_3,     nullptr},
+    /* SND_STAGE_F201_4 */
+    {"F201_4", -1,     SND_STAGE_F201_4, SND_STAGE_F201_4,     SND_STAGE_F201_4,     SND_STAGE_F201_4,     nullptr},
+    /* SND_STAGE_F202 */
+    {  "F202", -1,       SND_STAGE_F202,   SND_STAGE_F202,       SND_STAGE_F202,       SND_STAGE_F202,     nullptr},
+    /* SND_STAGE_F300 */
+    {  "F300", -1,       SND_STAGE_F300,   SND_STAGE_F300,       SND_STAGE_F300,       SND_STAGE_F300,     nullptr},
+    /* SND_STAGE_F300_1 */
+    {"F300_1", -1,     SND_STAGE_F300_1, SND_STAGE_F300_1,       SND_STAGE_F300,       SND_STAGE_F300,     nullptr},
+    /* SND_STAGE_F300_4_L13 */
+    {"F300_4", 13, SND_STAGE_F300_4_L13, SND_STAGE_F300_4, SND_STAGE_F300_4_L13, SND_STAGE_F300_4_L13, "Demo36_01"},
+    /* SND_STAGE_F300_4 */
+    {"F300_4", -1,     SND_STAGE_F300_4, SND_STAGE_F300_4,       SND_STAGE_F300,       SND_STAGE_F300,     nullptr},
+    /* SND_STAGE_F301 */
+    {  "F301", -1,       SND_STAGE_F301,   SND_STAGE_F301,       SND_STAGE_F301,       SND_STAGE_F301,     nullptr},
+    /* SND_STAGE_F301_1 */
+    {"F301_1", -1,     SND_STAGE_F301_1, SND_STAGE_F301_1,     SND_STAGE_F301_1,     SND_STAGE_F301_1,     nullptr},
+    /* SND_STAGE_F301_2 */
+    {"F301_2", -1,     SND_STAGE_F301_2, SND_STAGE_F301_2,     SND_STAGE_F301_2,       SND_STAGE_F301,     nullptr},
+    /* SND_STAGE_F301_3 */
+    {"F301_3", -1,     SND_STAGE_F301_3, SND_STAGE_F301_3,     SND_STAGE_F301_3,       SND_STAGE_F301,     nullptr},
+    /* SND_STAGE_F301_4_L2 */
+    {"F301_4",  2,  SND_STAGE_F301_4_L2, SND_STAGE_F301_4,  SND_STAGE_F301_4_L2,       SND_STAGE_F301,     nullptr},
+    /* SND_STAGE_F301_4 */
+    {"F301_4", -1,     SND_STAGE_F301_4, SND_STAGE_F301_4,     SND_STAGE_F301_4,       SND_STAGE_F301,     nullptr},
+    /* SND_STAGE_F301_6 */
+    {"F301_6", -1,     SND_STAGE_F301_6, SND_STAGE_F301_6,       SND_STAGE_F301,       SND_STAGE_F301,     nullptr},
+    /* SND_STAGE_F301_7 */
+    {"F301_7", -1,     SND_STAGE_F301_7, SND_STAGE_F301_7,     SND_STAGE_F301_7,       SND_STAGE_F301,     nullptr},
+    /* SND_STAGE_F302_L13 */
+    {  "F302", 13,   SND_STAGE_F302_L13,   SND_STAGE_F302,   SND_STAGE_F302_L13,   SND_STAGE_F302_L13, "Demo64_05"},
+    /* SND_STAGE_F302 */
+    {  "F302", -1,       SND_STAGE_F302,   SND_STAGE_F302,       SND_STAGE_F302,       SND_STAGE_F302,     nullptr},
+    /* SND_STAGE_F400_L13 */
+    {  "F400", 13,   SND_STAGE_F400_L13,   SND_STAGE_F400,   SND_STAGE_F400_L13,   SND_STAGE_F400_L13, "Demo38_01"},
+    /* SND_STAGE_F400 */
+    {  "F400", -1,       SND_STAGE_F400,   SND_STAGE_F400,       SND_STAGE_F400,       SND_STAGE_F400,     nullptr},
+    /* SND_STAGE_F401_L2 */
+    {  "F401",  2,    SND_STAGE_F401_L2,   SND_STAGE_F401,    SND_STAGE_F401_L2,    SND_STAGE_F401_L2,     nullptr},
+    /* SND_STAGE_F401_L3 */
+    {  "F401",  3,    SND_STAGE_F401_L3,   SND_STAGE_F401,    SND_STAGE_F401_L3,    SND_STAGE_F401_L3,     nullptr},
+    /* SND_STAGE_F401_L4 */
+    {  "F401",  4,    SND_STAGE_F401_L4,   SND_STAGE_F401,    SND_STAGE_F401_L4,    SND_STAGE_F401_L4,     nullptr},
+    /* SND_STAGE_F401_L13 */
+    {  "F401", 13,   SND_STAGE_F401_L13,   SND_STAGE_F401,   SND_STAGE_F401_L13,   SND_STAGE_F401_L13, "Demo17_01"},
+    /* SND_STAGE_F401_L14 */
+    {  "F401", 14,   SND_STAGE_F401_L14,   SND_STAGE_F401,   SND_STAGE_F401_L14,   SND_STAGE_F401_L14, "Demo43_01"},
+    /* SND_STAGE_F401_L15 */
+    {  "F401", 15,   SND_STAGE_F401_L15,   SND_STAGE_F401,   SND_STAGE_F401_L15,   SND_STAGE_F401_L15, "Demo69_02"},
+    /* SND_STAGE_F401 */
+    {  "F401", -1,       SND_STAGE_F401,   SND_STAGE_F401,       SND_STAGE_F401,       SND_STAGE_F401,     nullptr},
+    /* SND_STAGE_F403_L13 */
+    {  "F403", 13,   SND_STAGE_F403_L13,   SND_STAGE_F403,   SND_STAGE_F403_L13,   SND_STAGE_F403_L13, "Demo72_01"},
+    /* SND_STAGE_F403_L14 */
+    {  "F403", 14,   SND_STAGE_F403_L14,   SND_STAGE_F403,   SND_STAGE_F403_L14,   SND_STAGE_F403_L14, "Demo73_01"},
+    /* SND_STAGE_F403_L15 */
+    {  "F403", 15,   SND_STAGE_F403_L15,   SND_STAGE_F403,   SND_STAGE_F403_L15,   SND_STAGE_F403_L15, "Demo75_01"},
+    /* SND_STAGE_F403_L16 */
+    {  "F403", 16,   SND_STAGE_F403_L16,   SND_STAGE_F403,   SND_STAGE_F403_L16,   SND_STAGE_F403_L16, "Demo75_02"},
+    /* SND_STAGE_F403 */
+    {  "F403", -1,       SND_STAGE_F403,   SND_STAGE_F403,       SND_STAGE_F403,       SND_STAGE_F403,     nullptr},
+    /* SND_STAGE_F405 */
+    {  "F405", -1,       SND_STAGE_F405,   SND_STAGE_F405,       SND_STAGE_F405,       SND_STAGE_F405, "Demo02_01"},
+    /* SND_STAGE_F406_L13 */
+    {  "F406", 13,   SND_STAGE_F406_L13,   SND_STAGE_F406,   SND_STAGE_F406_L13,   SND_STAGE_F406_L13, "Demo79_02"},
+    /* SND_STAGE_F406_L14 */
+    {  "F406", 14,   SND_STAGE_F406_L14,   SND_STAGE_F406,   SND_STAGE_F406_L14,   SND_STAGE_F406_L14, "Demo69_03"},
+    /* SND_STAGE_F406 */
+    {  "F406", -1,       SND_STAGE_F406,   SND_STAGE_F406,       SND_STAGE_F406,       SND_STAGE_F406,     nullptr},
+    /* SND_STAGE_D301 */
+    {  "D301", -1,       SND_STAGE_D301,   SND_STAGE_D301,       SND_STAGE_D301,       SND_STAGE_D301,     nullptr},
+    /* SND_STAGE_D301_1 */
+    {"D301_1", -1,     SND_STAGE_D301_1, SND_STAGE_D301_1,     SND_STAGE_D301_1,       SND_STAGE_D301,     nullptr},
+    /* SND_STAGE_D000 */
+    {  "D000", -1,       SND_STAGE_D000,   SND_STAGE_D000,       SND_STAGE_D000,       SND_STAGE_D000,     nullptr},
+    /* SND_STAGE_D100 */
+    {  "D100", -1,       SND_STAGE_D100,   SND_STAGE_D100,       SND_STAGE_D100,       SND_STAGE_D100,     nullptr},
+    /* SND_STAGE_D101 */
+    {  "D101", -1,       SND_STAGE_D101,   SND_STAGE_D101,       SND_STAGE_D101,       SND_STAGE_D101,     nullptr},
+    /* SND_STAGE_D200 */
+    {  "D200", -1,       SND_STAGE_D200,   SND_STAGE_D200,       SND_STAGE_D200,       SND_STAGE_D200,     nullptr},
+    /* SND_STAGE_D201 */
+    {  "D201", -1,       SND_STAGE_D201,   SND_STAGE_D201,       SND_STAGE_D201,       SND_STAGE_D201,     nullptr},
+    /* SND_STAGE_D201_1 */
+    {"D201_1", -1,     SND_STAGE_D201_1, SND_STAGE_D201_1,       SND_STAGE_D201,       SND_STAGE_D201,     nullptr},
+    /* SND_STAGE_D300 */
+    {  "D300", -1,       SND_STAGE_D300,   SND_STAGE_D300,       SND_STAGE_D300,       SND_STAGE_D300,     nullptr},
+    /* SND_STAGE_D300_1 */
+    {"D300_1", -1,     SND_STAGE_D300_1, SND_STAGE_D300_1,       SND_STAGE_D300,       SND_STAGE_D300,     nullptr},
+    /* SND_STAGE_D003_0 */
+    {"D003_0", -1,     SND_STAGE_D003_0, SND_STAGE_D003_0,     SND_STAGE_D003_0,     SND_STAGE_D003_0,     nullptr},
+    /* SND_STAGE_D003_1 */
+    {"D003_1", -1,     SND_STAGE_D003_1, SND_STAGE_D003_1,     SND_STAGE_D003_1,     SND_STAGE_D003_1,     nullptr},
+    /* SND_STAGE_D003_2 */
+    {"D003_2", -1,     SND_STAGE_D003_2, SND_STAGE_D003_2,     SND_STAGE_D003_2,     SND_STAGE_D003_2,     nullptr},
+    /* SND_STAGE_D003_3 */
+    {"D003_3", -1,     SND_STAGE_D003_3, SND_STAGE_D003_3,     SND_STAGE_D003_3,     SND_STAGE_D003_3,     nullptr},
+    /* SND_STAGE_D003_4 */
+    {"D003_4", -1,     SND_STAGE_D003_4, SND_STAGE_D003_4,     SND_STAGE_D003_4,     SND_STAGE_D003_4,     nullptr},
+    /* SND_STAGE_D003_5 */
+    {"D003_5", -1,     SND_STAGE_D003_5, SND_STAGE_D003_5,     SND_STAGE_D003_5,     SND_STAGE_D003_5,     nullptr},
+    /* SND_STAGE_D003_6 */
+    {"D003_6", -1,     SND_STAGE_D003_6, SND_STAGE_D003_6,     SND_STAGE_D003_6,     SND_STAGE_D003_6,     nullptr},
+    /* SND_STAGE_D003_7 */
+    {"D003_7", -1,     SND_STAGE_D003_7, SND_STAGE_D003_7,     SND_STAGE_D003_7,     SND_STAGE_D003_7,     nullptr},
+    /* SND_STAGE_D003_8 */
+    {"D003_8", -1,     SND_STAGE_D003_8, SND_STAGE_D003_8,     SND_STAGE_D003_8,     SND_STAGE_D003_8,     nullptr},
+    /* SND_STAGE_B100_L13 */
+    {  "B100", 13,   SND_STAGE_B100_L13,   SND_STAGE_B100,   SND_STAGE_B100_L13,   SND_STAGE_B100_L13, "Demo21_01"},
+    /* SND_STAGE_B100 */
+    {  "B100", -1,       SND_STAGE_B100,   SND_STAGE_B100,       SND_STAGE_B100,       SND_STAGE_B100,     nullptr},
+    /* SND_STAGE_B100_1_L13 */
+    {"B100_1", 13, SND_STAGE_B100_1_L13, SND_STAGE_B100_1, SND_STAGE_B100_1_L13, SND_STAGE_B100_1_L13, "Demo23_01"},
+    /* SND_STAGE_B100_1 */
+    {"B100_1", -1,     SND_STAGE_B100_1, SND_STAGE_B100_1,     SND_STAGE_B100_1,     SND_STAGE_B100_1,     nullptr},
+    /* SND_STAGE_B101 */
+    {  "B101", -1,       SND_STAGE_B101,   SND_STAGE_B101,       SND_STAGE_B101,       SND_STAGE_B101,     nullptr},
+    /* SND_STAGE_B101_1_L13 */
+    {"B101_1", 13, SND_STAGE_B101_1_L13, SND_STAGE_B101_1, SND_STAGE_B101_1_L13, SND_STAGE_B101_1_L13, "Demo47_01"},
+    /* SND_STAGE_B101_1 */
+    {"B101_1", -1,     SND_STAGE_B101_1, SND_STAGE_B101_1,     SND_STAGE_B101_1,     SND_STAGE_B101_1,     nullptr},
+    /* SND_STAGE_B200_L1 */
+    {  "B200",  1,    SND_STAGE_B200_L1,   SND_STAGE_B200,    SND_STAGE_B200_L1,       SND_STAGE_D200,     nullptr},
+    /* SND_STAGE_B200_L2 */
+    {  "B200",  2,    SND_STAGE_B200_L2,   SND_STAGE_B200,    SND_STAGE_B200_L2,       SND_STAGE_D200,     nullptr},
+    /* SND_STAGE_B200_L3 */
+    {  "B200",  3,    SND_STAGE_B200_L3,   SND_STAGE_B200,    SND_STAGE_B200_L3,       SND_STAGE_D200,     nullptr},
+    /* SND_STAGE_B200 */
+    {  "B200", -1,       SND_STAGE_B200,   SND_STAGE_B200,       SND_STAGE_B200,       SND_STAGE_D200,     nullptr},
+    /* SND_STAGE_B210_L13 */
+    {  "B210", 13,   SND_STAGE_B210_L13,   SND_STAGE_B210,   SND_STAGE_B210_L13,   SND_STAGE_B210_L13, "Demo29_01"},
+    /* SND_STAGE_B210_L14 */
+    {  "B210", 14,   SND_STAGE_B210_L14,   SND_STAGE_B210,   SND_STAGE_B210_L14,   SND_STAGE_B210_L14, "Demo31_01"},
+    /* SND_STAGE_B210 */
+    {  "B210", -1,       SND_STAGE_B210,   SND_STAGE_B210,       SND_STAGE_B210,       SND_STAGE_B210,     nullptr},
+    /* SND_STAGE_B201_L13 */
+    {  "B201", 13,   SND_STAGE_B201_L13,   SND_STAGE_B201,   SND_STAGE_B201_L13,   SND_STAGE_B201_L13, "Demo51_01"},
+    /* SND_STAGE_B201 */
+    {  "B201", -1,       SND_STAGE_B201,   SND_STAGE_B201,       SND_STAGE_B201,       SND_STAGE_B201,     nullptr},
+    /* SND_STAGE_B201_1_L13 */
+    {"B201_1", 13, SND_STAGE_B201_1_L13, SND_STAGE_B201_1, SND_STAGE_B201_1_L13, SND_STAGE_B201_1_L13, "Demo52_01"},
+    /* SND_STAGE_B201_1 */
+    {"B201_1", -1,     SND_STAGE_B201_1, SND_STAGE_B201_1,     SND_STAGE_B201_1,     SND_STAGE_B201_1,     nullptr},
+    /* SND_STAGE_B300 */
+    {  "B300", -1,       SND_STAGE_B300,   SND_STAGE_B300,       SND_STAGE_B300,       SND_STAGE_B300,     nullptr},
+    /* SND_STAGE_B301_L13 */
+    {  "B301", 13,   SND_STAGE_B301_L13,   SND_STAGE_B301,   SND_STAGE_B301_L13,   SND_STAGE_B301_L13, "Demo49_01"},
+    /* SND_STAGE_B301 */
+    {  "B301", -1,       SND_STAGE_B301,   SND_STAGE_B301,       SND_STAGE_B301,       SND_STAGE_B301,     nullptr},
+    /* SND_STAGE_B003 */
+    {  "B003", -1,       SND_STAGE_B003,   SND_STAGE_B003,       SND_STAGE_B003,       SND_STAGE_B003,     nullptr},
+    /* SND_STAGE_B400_L13 */
+    {  "B400", 13,   SND_STAGE_B400_L13,   SND_STAGE_B400,   SND_STAGE_B400_L13,   SND_STAGE_B400_L13, "Demo75_04"},
+    /* SND_STAGE_B400_L14 */
+    {  "B400", 14,   SND_STAGE_B400_L14,   SND_STAGE_B400,   SND_STAGE_B400_L14,   SND_STAGE_B400_L14, "Demo76_01"},
+    /* SND_STAGE_B400 */
+    {  "B400", -1,       SND_STAGE_B400,   SND_STAGE_B400,       SND_STAGE_B400,       SND_STAGE_B400,     nullptr},
+    /* SND_STAGE_F100_1 */
+    {"F100_1", -1,     SND_STAGE_F100_1, SND_STAGE_F100_1,     SND_STAGE_F100_1,     SND_STAGE_F100_1,     nullptr},
+    /* SND_STAGE_F100_2 */
+    {"F100_2", -1,     SND_STAGE_F100_2, SND_STAGE_F100_2,     SND_STAGE_F100_2,     SND_STAGE_F100_2,     nullptr},
+    /* SND_STAGE_F102_2 */
+    {"F102_2", -1,     SND_STAGE_F102_2, SND_STAGE_F102_2,       SND_STAGE_F102,       SND_STAGE_F102,     nullptr},
+    /* SND_STAGE_F103_1_L13 */
+    {"F103_1", 13, SND_STAGE_F103_1_L13, SND_STAGE_F103_1, SND_STAGE_F103_1_L13, SND_STAGE_F103_1_L13, "Demo64_02"},
+    /* SND_STAGE_F103_1_L14 */
+    {"F103_1", 14, SND_STAGE_F103_1_L14, SND_STAGE_F103_1, SND_STAGE_F103_1_L14, SND_STAGE_F103_1_L14, "Demo64_04"},
+    /* SND_STAGE_F103_1 */
+    {"F103_1", -1,     SND_STAGE_F103_1, SND_STAGE_F103_1,     SND_STAGE_F103_1,       SND_STAGE_F103,     nullptr},
+    /* SND_STAGE_F210 */
+    {  "F210", -1,       SND_STAGE_F210,   SND_STAGE_F210,       SND_STAGE_F210,       SND_STAGE_F210,     nullptr},
+    /* SND_STAGE_F211 */
+    {  "F211", -1,       SND_STAGE_F211,   SND_STAGE_F211,       SND_STAGE_F211,       SND_STAGE_F211,     nullptr},
+    /* SND_STAGE_F221_L13 */
+    {  "F221", 13,   SND_STAGE_F221_L13,   SND_STAGE_F221,   SND_STAGE_F221_L13,   SND_STAGE_F221_L13, "Demo64_01"},
+    /* SND_STAGE_F221 */
+    {  "F221", -1,       SND_STAGE_F221,   SND_STAGE_F221,       SND_STAGE_F221,       SND_STAGE_F221,     nullptr},
+    /* SND_STAGE_F202_1 */
+    {"F202_1", -1,     SND_STAGE_F202_1, SND_STAGE_F202_1,     SND_STAGE_F202_1,       SND_STAGE_D200,     nullptr},
+    /* SND_STAGE_F202_2 */
+    {"F202_2", -1,     SND_STAGE_F202_2, SND_STAGE_F202_2,     SND_STAGE_F202_2,       SND_STAGE_D200,     nullptr},
+    /* SND_STAGE_F202_3 */
+    {"F202_3", -1,     SND_STAGE_F202_3, SND_STAGE_F202_3,     SND_STAGE_F202_3,       SND_STAGE_D200,     nullptr},
+    /* SND_STAGE_F202_4 */
+    {"F202_4", -1,     SND_STAGE_F202_4, SND_STAGE_F202_4,     SND_STAGE_F202_4,       SND_STAGE_D200,     nullptr},
+    /* SND_STAGE_F300_2 */
+    {"F300_2", -1,     SND_STAGE_F300_2, SND_STAGE_F300_2,       SND_STAGE_F300,       SND_STAGE_F300,     nullptr},
+    /* SND_STAGE_F300_3 */
+    {"F300_3", -1,     SND_STAGE_F300_3, SND_STAGE_F300_3,       SND_STAGE_F300,       SND_STAGE_F300,     nullptr},
+    /* SND_STAGE_F300_5 */
+    {"F300_5", -1,     SND_STAGE_F300_5, SND_STAGE_F300_5,     SND_STAGE_F300_5,     SND_STAGE_F300_5,     nullptr},
+    /* SND_STAGE_F303 */
+    {  "F303", -1,       SND_STAGE_F303,   SND_STAGE_F303,       SND_STAGE_F303,       SND_STAGE_F303,     nullptr},
+    /* SND_STAGE_S000 */
+    {  "S000", -1,       SND_STAGE_S000,   SND_STAGE_S000,       SND_STAGE_S000,       SND_STAGE_S000,     nullptr},
+    /* SND_STAGE_S100 */
+    {  "S100", -1,       SND_STAGE_S100,   SND_STAGE_S100,       SND_STAGE_S100,       SND_STAGE_S100,     nullptr},
+    /* SND_STAGE_S200 */
+    {  "S200", -1,       SND_STAGE_S200,   SND_STAGE_S200,       SND_STAGE_S200,       SND_STAGE_S200,     nullptr},
+    /* SND_STAGE_S300 */
+    {  "S300", -1,       SND_STAGE_S300,   SND_STAGE_S300,       SND_STAGE_S300,       SND_STAGE_S300,     nullptr},
+    /* SND_STAGE_F020_L3 */
+    {  "F020",  3,    SND_STAGE_F020_L3,   SND_STAGE_F020,    SND_STAGE_F020_L3,       SND_STAGE_F000,     nullptr},
+    /* SND_STAGE_F020 */
+    {  "F020", -1,       SND_STAGE_F020,   SND_STAGE_F020,       SND_STAGE_F020,       SND_STAGE_F000,     nullptr},
+    /* SND_STAGE_F021_L13 */
+    {  "F021", 13,   SND_STAGE_F021_L13,   SND_STAGE_F021,   SND_STAGE_F021_L13,   SND_STAGE_F021_L13, "Demo12_02"},
+    /* SND_STAGE_F021 */
+    {  "F021", -1,       SND_STAGE_F021,   SND_STAGE_F021,       SND_STAGE_F021,       SND_STAGE_F021,     nullptr},
+    /* SND_STAGE_F023_L14 */
+    {  "F023", 14,   SND_STAGE_F023_L14,   SND_STAGE_F023,   SND_STAGE_F023_L14,   SND_STAGE_F023_L14, "Demo64_06"},
+    /* SND_STAGE_F023 */
+    {  "F023", -1,       SND_STAGE_F023,   SND_STAGE_F023,       SND_STAGE_F023,       SND_STAGE_F023,     nullptr},
+    /* SND_STAGE_F000_L13 */
+    {  "F000", 13,   SND_STAGE_F000_L13,   SND_STAGE_F000,   SND_STAGE_F000_L13,   SND_STAGE_F000_L13, "Demo04_01"},
+    /* SND_STAGE_F000_L14 */
+    {  "F000", 14,   SND_STAGE_F000_L14,   SND_STAGE_F000,   SND_STAGE_F000_L14,   SND_STAGE_F000_L14, "Demo12_01"},
+    /* SND_STAGE_F000_L15 */
+    {  "F000", 15,   SND_STAGE_F000_L15,   SND_STAGE_F000,   SND_STAGE_F000_L15,   SND_STAGE_F000_L15, "Demo05_01"},
+    /* SND_STAGE_F000_L16 */
+    {  "F000", 16,   SND_STAGE_F000_L16,   SND_STAGE_F000,   SND_STAGE_F000_L16,   SND_STAGE_F000_L16, "Demo08_01"},
+    /* SND_STAGE_F000_L17 */
+    {  "F000", 17,   SND_STAGE_F000_L17,   SND_STAGE_F000,   SND_STAGE_F000_L17,   SND_STAGE_F000_L17, "Demo11_01"},
+    /* SND_STAGE_F000_L18 */
+    {  "F000", 18,   SND_STAGE_F000_L18,   SND_STAGE_F000,   SND_STAGE_F000_L18,   SND_STAGE_F000_L18, "Demo68_01"},
+    /* SND_STAGE_F000_L19 */
+    {  "F000", 19,   SND_STAGE_F000_L19,   SND_STAGE_F000,   SND_STAGE_F000_L19,   SND_STAGE_F000_L19, "Demo69_01"},
+    /* SND_STAGE_F000_L20 */
+    {  "F000", 20,   SND_STAGE_F000_L20,   SND_STAGE_F000,   SND_STAGE_F000_L20,   SND_STAGE_F000_L20, "Demo03_01"},
+    /* SND_STAGE_F000_L21 */
+    {  "F000", 21,   SND_STAGE_F000_L21,   SND_STAGE_F000,   SND_STAGE_F000_L21,   SND_STAGE_F000_L21, "Demo03_02"},
+    /* SND_STAGE_F000_L26 */
+    {  "F000", 26,   SND_STAGE_F000_L26,   SND_STAGE_F000,   SND_STAGE_F000_L26,   SND_STAGE_F000_L26, "Demo01_01"},
+    /* SND_STAGE_F000_L27 */
+    {  "F000", 27,   SND_STAGE_F000_L27,   SND_STAGE_F000,   SND_STAGE_F000_L27,   SND_STAGE_F000_L27, "Demo01_02"},
+    /* SND_STAGE_F000 */
+    {  "F000", -1,       SND_STAGE_F000,   SND_STAGE_F000,       SND_STAGE_F000,       SND_STAGE_F000,     nullptr},
+    /* SND_STAGE_F301_5 */
+    {"F301_5", -1,     SND_STAGE_F301_5, SND_STAGE_F301_5,     SND_STAGE_F301_3,       SND_STAGE_F301,     nullptr},
+    /* SND_STAGE_F001r_L13 */
+    { "F001r", 13,  SND_STAGE_F001r_L13,  SND_STAGE_F001r,  SND_STAGE_F001r_L13,  SND_STAGE_F001r_L13, "Demo13_01"},
+    /* SND_STAGE_F001r_L14 */
+    { "F001r", 14,  SND_STAGE_F001r_L14,  SND_STAGE_F001r,  SND_STAGE_F001r_L14,  SND_STAGE_F001r_L14, "Demo15_04"},
+    /* SND_STAGE_F001r_L15 */
+    { "F001r", 15,  SND_STAGE_F001r_L15,  SND_STAGE_F001r,  SND_STAGE_F001r_L15,  SND_STAGE_F001r_L15, "Demo03_03"},
+    /* SND_STAGE_F001r */
+    { "F001r", -1,      SND_STAGE_F001r,  SND_STAGE_F001r,      SND_STAGE_F001r,      SND_STAGE_F001r,     nullptr},
+    /* SND_STAGE_F002r */
+    { "F002r", -1,      SND_STAGE_F002r,  SND_STAGE_F002r,      SND_STAGE_F002r,      SND_STAGE_F002r,     nullptr},
+    /* SND_STAGE_F004r */
+    { "F004r", -1,      SND_STAGE_F004r,  SND_STAGE_F004r,      SND_STAGE_F004r,      SND_STAGE_F004r,     nullptr},
+    /* SND_STAGE_F009r */
+    { "F009r", -1,      SND_STAGE_F009r,  SND_STAGE_F009r,      SND_STAGE_F009r,      SND_STAGE_F009r,     nullptr},
+    /* SND_STAGE_F011r */
+    { "F011r", -1,      SND_STAGE_F011r,  SND_STAGE_F011r,      SND_STAGE_F011r,      SND_STAGE_F011r,     nullptr},
+    /* SND_STAGE_F012r */
+    { "F012r", -1,      SND_STAGE_F012r,  SND_STAGE_F012r,      SND_STAGE_F012r,      SND_STAGE_F012r,     nullptr},
+    /* SND_STAGE_F019r */
+    { "F019r", -1,      SND_STAGE_F019r,  SND_STAGE_F019r,      SND_STAGE_F019r,      SND_STAGE_F019r,     nullptr},
+    /* SND_STAGE_F005r */
+    { "F005r", -1,      SND_STAGE_F005r,  SND_STAGE_F005r,      SND_STAGE_F005r,      SND_STAGE_F005r,     nullptr},
+    /* SND_STAGE_F006r */
+    { "F006r", -1,      SND_STAGE_F006r,  SND_STAGE_F006r,      SND_STAGE_F006r,      SND_STAGE_F006r,     nullptr},
+    /* SND_STAGE_F007r */
+    { "F007r", -1,      SND_STAGE_F007r,  SND_STAGE_F007r,      SND_STAGE_F007r,      SND_STAGE_F007r,     nullptr},
+    /* SND_STAGE_F013r */
+    { "F013r", -1,      SND_STAGE_F013r,  SND_STAGE_F013r,      SND_STAGE_F013r,      SND_STAGE_F013r,     nullptr},
+    /* SND_STAGE_F014r */
+    { "F014r", -1,      SND_STAGE_F014r,  SND_STAGE_F014r,      SND_STAGE_F014r,      SND_STAGE_F014r,     nullptr},
+    /* SND_STAGE_F015r */
+    { "F015r", -1,      SND_STAGE_F015r,  SND_STAGE_F015r,      SND_STAGE_F015r,      SND_STAGE_F015r,     nullptr},
+    /* SND_STAGE_F016r */
+    { "F016r", -1,      SND_STAGE_F016r,  SND_STAGE_F016r,      SND_STAGE_F016r,      SND_STAGE_F016r,     nullptr},
+    /* SND_STAGE_F017r */
+    { "F017r", -1,      SND_STAGE_F017r,  SND_STAGE_F017r,      SND_STAGE_F017r,      SND_STAGE_F017r,     nullptr},
+    /* SND_STAGE_F018r */
+    { "F018r", -1,      SND_STAGE_F018r,  SND_STAGE_F018r,      SND_STAGE_F018r,      SND_STAGE_F018r,     nullptr},
+    /* SND_STAGE_F402_L2 */
+    {  "F402",  2,    SND_STAGE_F402_L2,   SND_STAGE_F402,    SND_STAGE_F402_L2,    SND_STAGE_F402_L2,     nullptr},
+    /* SND_STAGE_F402_L3 */
+    {  "F402",  3,    SND_STAGE_F402_L3,   SND_STAGE_F402,    SND_STAGE_F402_L3,    SND_STAGE_F402_L3,     nullptr},
+    /* SND_STAGE_F402_L5 */
+    {  "F402",  5,    SND_STAGE_F402_L5,   SND_STAGE_F402,    SND_STAGE_F402_L5,    SND_STAGE_F402_L5,     nullptr},
+    /* SND_STAGE_F402_L13 */
+    {  "F402", 13,   SND_STAGE_F402_L13,   SND_STAGE_F402,   SND_STAGE_F402_L13,   SND_STAGE_F402_L13, "Demo41_01"},
+    /* SND_STAGE_F402_L18 */
+    {  "F402", 18,   SND_STAGE_F402_L18,   SND_STAGE_F402,   SND_STAGE_F402_L18,   SND_STAGE_F402_L18, "Demo43_02"},
+    /* SND_STAGE_F402_L19 */
+    {  "F402", 19,   SND_STAGE_F402_L19,   SND_STAGE_F402,   SND_STAGE_F402_L19,   SND_STAGE_F402_L19, "Demo79_01"},
+    /* SND_STAGE_F402 */
+    {  "F402", -1,       SND_STAGE_F402,   SND_STAGE_F402,       SND_STAGE_F402,       SND_STAGE_F402,     nullptr},
+    /* SND_STAGE_F404_L13 */
+    {  "F404", 13,   SND_STAGE_F404_L13,   SND_STAGE_F404,   SND_STAGE_F404_L13,   SND_STAGE_F404_L13, "Demo62_01"},
+    /* SND_STAGE_F404_L14 */
+    {  "F404", 14,   SND_STAGE_F404_L14,   SND_STAGE_F404,   SND_STAGE_F404_L14,   SND_STAGE_F404_L14, "Demo77_01"},
+    /* SND_STAGE_F404 */
+    {  "F404", -1,       SND_STAGE_F404,   SND_STAGE_F404,       SND_STAGE_F404,       SND_STAGE_F404,     nullptr},
+    /* SND_STAGE_F407_L13 */
+    {  "F407", 13,   SND_STAGE_F407_L13,   SND_STAGE_F407,   SND_STAGE_F407_L13,   SND_STAGE_F407_L13, "Demo59_01"},
+    /* SND_STAGE_F407_L14 */
+    {  "F407", 14,   SND_STAGE_F407_L14,   SND_STAGE_F407,   SND_STAGE_F407_L14,   SND_STAGE_F407_L14, "Demo70_01"},
+    /* SND_STAGE_F407_L15 */
+    {  "F407", 15,   SND_STAGE_F407_L15,   SND_STAGE_F407,   SND_STAGE_F407_L15,   SND_STAGE_F407_L15, "Demo70_02"},
+    /* SND_STAGE_F407 */
+    {  "F407", -1,       SND_STAGE_F407,   SND_STAGE_F407,       SND_STAGE_F407,       SND_STAGE_F407,     nullptr},
+    /* SND_STAGE_F008r_L13 */
+    { "F008r", 13,  SND_STAGE_F008r_L13,  SND_STAGE_F008r,  SND_STAGE_F008r_L13,  SND_STAGE_F008r_L13, "Demo15_01"},
+    /* SND_STAGE_F008r_L14 */
+    { "F008r", 14,  SND_STAGE_F008r_L14,  SND_STAGE_F008r,  SND_STAGE_F008r_L14,  SND_STAGE_F008r_L14, "Demo15_02"},
+    /* SND_STAGE_F008r_L15 */
+    { "F008r", 15,  SND_STAGE_F008r_L15,  SND_STAGE_F008r,  SND_STAGE_F008r_L15,  SND_STAGE_F008r_L15, "Demo15_03"},
+    /* SND_STAGE_F008r */
+    { "F008r", -1,      SND_STAGE_F008r,  SND_STAGE_F008r,      SND_STAGE_F008r,      SND_STAGE_F008r,     nullptr},
+    /* SND_STAGE_F010r_L13 */
+    { "F010r", 13,  SND_STAGE_F010r_L13,  SND_STAGE_F010r,  SND_STAGE_F010r_L13,  SND_STAGE_F010r_L13, "Demo44_01"},
+    /* SND_STAGE_F010r_L14 */
+    { "F010r", 14,  SND_STAGE_F010r_L14,  SND_STAGE_F010r,  SND_STAGE_F010r_L14,  SND_STAGE_F010r_L14, "Demo48_01"},
+    /* SND_STAGE_F010r_L15 */
+    { "F010r", 15,  SND_STAGE_F010r_L15,  SND_STAGE_F010r,  SND_STAGE_F010r_L15,  SND_STAGE_F010r_L15, "Demo50_01"},
+    /* SND_STAGE_F010r */
+    { "F010r", -1,      SND_STAGE_F010r,  SND_STAGE_F010r,      SND_STAGE_F010r,      SND_STAGE_F010r,     nullptr},
+    /* SND_STAGE_Demo_L13 */
+    {  "Demo", 13,   SND_STAGE_Demo_L13,   SND_STAGE_Demo,   SND_STAGE_Demo_L13,   SND_STAGE_Demo_L13, "Demo78_01"},
+    /* SND_STAGE_Demo */
+    {  "Demo", -1,       SND_STAGE_Demo,   SND_STAGE_Demo,       SND_STAGE_Demo,       SND_STAGE_Demo,     nullptr},
+};
+
+#pragma pop
+
+const s32 dSndStageInfo::sNumStageInfos = ARRAY_LENGTH(dSndStageInfo::sInfos);

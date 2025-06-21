@@ -19,6 +19,7 @@ enum SoundSourceType_e {
 
     // 10-31: Enemy? (2)
     SND_SOURCE_ENEMY_10 = 10,
+    SND_SOURCE_SPARK = 17,
     SND_SOURCE_BIGBOSS = 20,
     SND_SOURCE_GIRAHUMU_3 = 24,
     SND_SOURCE_BULLET = 29,
@@ -32,6 +33,8 @@ enum SoundSourceType_e {
     SND_SOURCE_TIME_STONE = 37,
     SND_SOURCE_CLEF = 38,
     SND_SOURCE_SHUTTER = 39,
+    SND_SOURCE_OBJECT_40 = 40,
+    SND_SOURCE_LIGHT_SHAFT = 41,
     SND_SOURCE_OBJECT_42 = 42,
 
     // 43-52: Npc (4)
@@ -57,6 +60,9 @@ enum SoundSourceType_e {
 
     // 59: ? (9)
     SND_SOURCE_59 = 59,
+
+    // dSndDistantSoundActor_c, not a real sound source type
+    SND_SOURCE_DISTANT = 61,
 };
 
 enum SoundSourceCategory_e {
