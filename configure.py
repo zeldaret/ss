@@ -2164,7 +2164,7 @@ config.libs = [
         "d_a_obj_needle_underground",
         "REL/d/a/obj/d_a_obj_needle_underground.cpp",
     ),
-    Rel(NonMatching, "d_a_obj_oct_grass", "REL/d/a/obj/d_a_obj_oct_grass.cpp"),
+    Rel(Matching, "d_a_obj_oct_grass", "REL/d/a/obj/d_a_obj_oct_grass.cpp"),
     Rel(
         NonMatching, "d_a_obj_oct_grass_leaf", "REL/d/a/obj/d_a_obj_oct_grass_leaf.cpp"
     ),
