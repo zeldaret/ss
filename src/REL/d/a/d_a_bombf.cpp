@@ -190,9 +190,9 @@ void dAcBombf_c::executeState_Wait() {
 
         if (mTimeAreaStruct.check(roomid, checkPos, 0, 30.0f, 0.1f) && field_0x3D4 != 1) {
             if (mTimeAreaStruct.field_0x04 == 1) {
-                playSound(SE_TIMESLIP_TIMESLIP);
+                startSound(SE_TIMESLIP_TIMESLIP);
             } else {
-                playSound(SE_TIMESLIP_TIMESLIP_REV);
+                startSound(SE_TIMESLIP_TIMESLIP_REV);
             }
             dJEffManager_c::spawnEffect(lbl_8057A750, position, nullptr, nullptr, nullptr, nullptr, 0, 0);
         }

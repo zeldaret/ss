@@ -7,6 +7,7 @@
 #include "d/col/bg/d_bg_w.h"
 #include "d/d_stage.h"
 #include "d/flag/sceneflag_manager.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m_angle.h"
@@ -597,7 +598,7 @@ void dAcOTowerHandD101_c::initializeState_Close() {
     mMdl.getAnm().setPlayState(m3d::PLAY_MODE_1);
     mMdl.setRate(getCloseRate());
     mEffects.createEffect(PARTICLE_RESOURCE_ID_MAPPING_573_, position, nullptr, nullptr, nullptr, nullptr);
-    playSound(0xC0C);
+    startSound(SE_TowerHa_CLENCH);
 }
 void dAcOTowerHandD101_c::executeState_Close() {
     dAcPy_c *link = dAcPy_c::LINK;
@@ -649,7 +650,7 @@ void dAcOTowerHandD101_c::initializeState_Open() {
         mMdl.getAnm().setPlayState(m3d::PLAY_MODE_3);
         mMdl.setRate(getOpenRate());
     }
-    playSound(0xC0D);
+    startSound(SE_TowerHa_OPEN);
 }
 void dAcOTowerHandD101_c::executeState_Open() {
     dAcPy_c *link = dAcPy_c::LINK;

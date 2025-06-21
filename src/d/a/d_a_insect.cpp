@@ -19,7 +19,7 @@
 
 void dAcOInsect_c::kill() {
     dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_394_, position, nullptr, nullptr, nullptr, nullptr, 0, 0);
-    playSound(SE_Insect_DISAPPEAR);
+    startSound(SE_Insect_DISAPPEAR);
     deleteRequest();
 }
 
