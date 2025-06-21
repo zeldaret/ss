@@ -124,6 +124,7 @@ toBeSorted/d_effects_2.cpp:
 
 toBeSorted/sound_info.cpp:
 	.text       start:0x8002C130 end:0x8002C3A0 align:16
+	.data       start:0x80501528 end:0x80501538
 
 d/a/d_a_base.cpp:
 	.text       start:0x8002C3A0 end:0x8002DE40 align:16

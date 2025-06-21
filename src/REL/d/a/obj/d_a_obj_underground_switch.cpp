@@ -4,6 +4,7 @@
 #include "d/a/d_a_player.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/flag/sceneflag_manager.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/res/g3d_resanmclr.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
@@ -109,7 +110,7 @@ void dAcOUgSwitch_c::executeState_Active() {
     if (mVariant == 0 && !SceneflagManager::sInstance->checkBoolFlag(roomid, mActiveSceneFlag)) {
         if (isWithinPlayerRadius(sActivationRadius) && dAcPy_c::LINK->checkActionFlags(dAcPy_c::FLG0_CRAWLING)) {
             mOnEventTimer = sEventTimer;
-            playSound(0xB12);
+            startSound(SE_UgSwitc_ON_ZERO);
             mStateMgr.changeState(StateID_On);
         }
     }
@@ -117,7 +118,7 @@ void dAcOUgSwitch_c::executeState_Active() {
         if (!SceneflagManager::sInstance->checkBoolFlag(roomid, field_0x3BD)) {
             if (isWithinPlayerRadius(sActivationRadius) && dAcPy_c::LINK->checkActionFlags(dAcPy_c::FLG0_CRAWLING)) {
                 mOnEventTimer = sEventTimer;
-                playSound(0xB13);
+                startSound(SE_UgSwitc_ON);
                 mStateMgr.changeState(StateID_On);
             }
         }

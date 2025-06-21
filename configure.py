@@ -410,7 +410,7 @@ config.libs = [
             Object(Matching, "d/d_light_env.cpp"),
             Object(NonMatching, "toBeSorted/d_emitter.cpp"),
             Object(NonMatching, "toBeSorted/d_effects_2.cpp"),
-            Object(NonMatching, "toBeSorted/sound_info.cpp"),
+            Object(Matching, "toBeSorted/sound_info.cpp"),
             Object(NonMatching, "d/a/d_a_base.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_base.cpp"),
             Object(NonMatching, "d/a/e/d_a_e_base.cpp"),

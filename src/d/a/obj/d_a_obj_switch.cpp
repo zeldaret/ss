@@ -160,7 +160,7 @@ int dAcOsw_c::actorExecute() {
                     dJEffManager_c::spawnEffect(
                         PARTICLE_RESOURCE_ID_MAPPING_754_, position, &rotation, nullptr, nullptr, nullptr, 0, 0
                     );
-                    playSound(SE_TIMESLIP_TIMESLIP_REV);
+                    startSound(SE_TIMESLIP_TIMESLIP_REV);
                     mHidden = true;
                 }
             } else {
@@ -175,7 +175,7 @@ int dAcOsw_c::actorExecute() {
                     dJEffManager_c::spawnEffect(
                         PARTICLE_RESOURCE_ID_MAPPING_754_, position, &rotation, nullptr, nullptr, nullptr, 0, 0
                     );
-                    playSound(SE_TIMESLIP_TIMESLIP);
+                    startSound(SE_TIMESLIP_TIMESLIP);
                     mShown = true;
                 }
             } else {
@@ -250,7 +250,7 @@ void dAcOsw_c::executeState_OnWait() {
 void dAcOsw_c::finalizeState_OnWait() {}
 
 void dAcOsw_c::initializeState_On() {
-    playSound(0xA19);
+    startSound(SE_Sw_SLIDE);
 }
 void dAcOsw_c::executeState_On() {
     if (sLib::chase(&mButtonCtrl.mElevation, -20.0f, 2.0f)) {
@@ -259,7 +259,7 @@ void dAcOsw_c::executeState_On() {
 }
 
 void dAcOsw_c::finalizeState_On() {
-    playSound(0xA18);
+    startSound(SE_Sw_ON);
     dRumble_c::start(dRumble_c::sRumblePreset2, 0x1);
 }
 
@@ -281,7 +281,7 @@ void dAcOsw_c::executeState_OffWait() {
 void dAcOsw_c::finalizeState_OffWait() {}
 
 void dAcOsw_c::initializeState_Off() {
-    playSound(0xA19);
+    startSound(SE_Sw_SLIDE);
 }
 void dAcOsw_c::executeState_Off() {
     if (sLib::chase(&mButtonCtrl.mElevation, 0.0f, 2.0f)) {
