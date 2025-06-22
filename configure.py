@@ -2113,7 +2113,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_harp_hint", "REL/d/a/obj/d_a_obj_harp_hint.cpp"),
     Rel(NonMatching, "d_a_obj_himo", "REL/d/a/obj/d_a_obj_himo.cpp"),
     Rel(NonMatching, "d_a_obj_hit_lever_sw", "REL/d/a/obj/d_a_obj_hit_lever_sw.cpp"),
-    Rel(NonMatching, "d_a_obj_hole", "REL/d/a/obj/d_a_obj_hole.cpp"),
+    Rel(Matching, "d_a_obj_hole", "REL/d/a/obj/d_a_obj_hole.cpp"),
     Rel(NonMatching, "d_a_obj_hole_minigame", "REL/d/a/obj/d_a_obj_hole_minigame.cpp"),
     Rel(Matching, "d_a_obj_impa_door", "REL/d/a/obj/d_a_obj_impa_door.cpp"),
     Rel(NonMatching, "d_a_obj_insect_island", "REL/d/a/obj/d_a_obj_insect_island.cpp"),
