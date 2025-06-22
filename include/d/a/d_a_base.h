@@ -217,9 +217,9 @@ public:
     /* 8002d740 */ bool holdSoundWithIntParam(u32 soundId, s32 param);
     /* 8002d770 */ bool holdSoundWithFloatParam(u32 soundId, f32 param);
     /* 8002d7a0 */ bool holdSoundWithParams(u32 soundId, f32 fValue, s32 value);
-    /* 8002d7d0 */ void onSoundSourceFlag2(u32 mask);
-    /* 8002d7f0 */ void onSoundSourceFlag1(u32 mask);
-    /* 8002d810 */ void offSoundSourceFlag1(u32 mask);
+    /* 8002d7d0 */ void holdSoundSourceFlag(u32 mask);
+    /* 8002d7f0 */ void onSoundSourceFlag(u32 mask);
+    /* 8002d810 */ void offSoundSourceFlag(u32 mask);
     /* 8002d830 */ bool isPlayingSound(u32 soundId);
     /* 8002d860 */ void setBattleBgmRelated(UNKWORD val);
     /* 8002d880 */ dSoundSourceIf_c *getSoundSource();
