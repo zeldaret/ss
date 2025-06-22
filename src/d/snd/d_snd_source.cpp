@@ -48,8 +48,8 @@ dSoundSource_c::dSoundSource_c(u8 sourceType, dAcBase_c *actor, const char *name
       field_0x100(0),
       field_0x101(0),
       field_0x102(0),
-      field_0x104(0),
-      field_0x108(0),
+      mFlagsPersistent(0),
+      mFlagsHold(0),
       mpCtxParam(nullptr),
       field_0x11C(0),
       mpOwnerGroup(pOwnerGroup),
@@ -141,7 +141,7 @@ void dSoundSource_c::calc(const nw4r::math::VEC3 &pos) {
     calcHandles();
     calcVolumeFade();
     postCalc();
-    field_0x108 = 0;
+    mFlagsHold = 0;
 }
 
 void dSoundSource_c::preCalc() {

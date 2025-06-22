@@ -590,25 +590,25 @@ bool dAcBase_c::holdSoundWithParams(u32 soundId, f32 fValue, s32 value) {
     return mpSoundSource->holdSoundWithParams(soundId, fValue, value);
 }
 
-void dAcBase_c::onSoundSourceFlag2(u32 mask) {
+void dAcBase_c::holdSoundSourceFlag(u32 mask) {
     if (mpSoundSource == nullptr) {
         return;
     }
-    mpSoundSource->onFlag2(mask);
+    mpSoundSource->holdFlag(mask);
 }
 
-void dAcBase_c::onSoundSourceFlag1(u32 mask) {
+void dAcBase_c::onSoundSourceFlag(u32 mask) {
     if (mpSoundSource == nullptr) {
         return;
     }
-    mpSoundSource->onFlag1(mask);
+    mpSoundSource->onFlag(mask);
 }
 
-void dAcBase_c::offSoundSourceFlag1(u32 mask) {
+void dAcBase_c::offSoundSourceFlag(u32 mask) {
     if (mpSoundSource == nullptr) {
         return;
     }
-    mpSoundSource->offFlag1(mask);
+    mpSoundSource->offFlag(mask);
 }
 
 bool dAcBase_c::isPlayingSound(u32 soundId) {

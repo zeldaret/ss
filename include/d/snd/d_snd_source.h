@@ -113,17 +113,17 @@ public:
     }
     /* 0x028 */ virtual const nw4r::math::VEC3 &getListenerPosition() const override;
     /* 0x02C */ void calc(const nw4r::math::VEC3 &) override;
-    /* 0x030 */ virtual void onFlag1(u32 mask) override {
-        field_0x104 |= mask;
+    /* 0x030 */ virtual void onFlag(u32 mask) override {
+        mFlagsPersistent |= mask;
     }
-    /* 0x034 */ virtual void offFlag1(u32 mask) override {
-        field_0x104 &= ~mask;
+    /* 0x034 */ virtual void offFlag(u32 mask) override {
+        mFlagsPersistent &= ~mask;
     }
     /* 0x038 */ virtual bool checkFlag(u32 mask) const override {
-        return (field_0x104 & mask) != 0 || (field_0x108 & mask) != 0;
+        return (mFlagsPersistent & mask) != 0 || (mFlagsHold & mask) != 0;
     }
-    /* 0x03C */ virtual void onFlag2(u32 mask) override {
-        field_0x108 |= mask;
+    /* 0x03C */ virtual void holdFlag(u32 mask) override {
+        mFlagsHold |= mask;
     }
     /* 0x040 */ virtual void stopAllSound(s32 fadeFrames) override {
         SoundActor::StopAllSound(fadeFrames);
@@ -273,8 +273,8 @@ protected:
     /* 0x100 */ u8 field_0x100;
     /* 0x101 */ u8 field_0x101;
     /* 0x102 */ u8 field_0x102;
-    /* 0x104 */ u32 field_0x104;
-    /* 0x108 */ u32 field_0x108;
+    /* 0x104 */ u32 mFlagsPersistent;
+    /* 0x108 */ u32 mFlagsHold;
     /* 0x10C */ const dSndSoundCtxParam *mpCtxParam;
     /* 0x110 */ LIST_MEMBER(dSndDistantSoundActor_c, DistantSound); // node offset 0xEC
     /* 0x11C */ UNKWORD field_0x11C;

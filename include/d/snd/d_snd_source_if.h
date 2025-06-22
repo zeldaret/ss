@@ -38,10 +38,10 @@ public:
     /* 0x024 */ virtual void setSubtype(u8 subtype) = 0;
     /* 0x028 */ virtual const nw4r::math::VEC3 &getListenerPosition() const = 0;
     /* 0x02C */ virtual void calc(const nw4r::math::VEC3 &) = 0;
-    /* 0x030 */ virtual void onFlag1(u32 mask) = 0;
-    /* 0x034 */ virtual void offFlag1(u32 mask) = 0;
+    /* 0x030 */ virtual void onFlag(u32 mask) = 0;
+    /* 0x034 */ virtual void offFlag(u32 mask) = 0;
     /* 0x038 */ virtual bool checkFlag(u32 mask) const = 0;
-    /* 0x03C */ virtual void onFlag2(u32 mask) = 0;
+    /* 0x03C */ virtual void holdFlag(u32 mask) = 0;
     /* 0x040 */ virtual void stopAllSound(s32 fadeFrames) = 0;
     /* 0x044 */ virtual void shutdown() = 0;
     /* 0x048 */ virtual bool hasPlayingSounds() const = 0;
