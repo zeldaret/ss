@@ -26,6 +26,10 @@ public:
     static s32 getSourceCategoryForSourceType(s32 sourceType, const char *name);
     static bool isSwOrEOc(const char *name);
 
+    static dSoundSource_c *getPlayerSource() {
+        return GetInstance()->mpPlayerSource;
+    }
+
     static dSoundSource_c *getBoomerangSource() {
         return GetInstance()->mpBoomerangSource;
     }

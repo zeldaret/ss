@@ -2738,9 +2738,19 @@ d/snd/d_snd_source_enemy.cpp:
 	.data       start:0x8054B1B8 end:0x8054B798
 
 d/snd/d_snd_source_obj.cpp:
-	.text       start:0x8038E860 end:0x8038EBF0 align:16
+	.text       start:0x8038E860 end:0x8038EAD8 align:16
+	.data       start:0x8054B798 end:0x8054BB78
+	.sdata      start:0x80574798 end:0x805747C0
+	.sdata2     start:0x8057DD68 end:0x8057DD70
+
+d/snd/d_snd_source_obj_clef.cpp:
+	.text       start:0x8038EAE0 end:0x8038EBF0 align:16
 	.ctors      start:0x804DB924 end:0x804DB928
-	.data       start:0x8054B798 end:0x8054BBC0
+	.rodata     start:0x804F3970 end:0x804F39B8
+	.data       start:0x8054BB78 end:0x8054BBC0
+	.sbss       start:0x80575DC0 end:0x80575DC8
+	.sdata2     start:0x8057DD70 end:0x8057DDB8
+	.bss        start:0x805D0FE8 end:0x805D0FF8
 
 d/snd/d_snd_source_equipment.cpp:
 	.text       start:0x8038EBF0 end:0x8038F2A8 align:16

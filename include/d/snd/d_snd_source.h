@@ -209,6 +209,7 @@ public:
 
 protected:
     StartResult setupSoundCommon(nw4r::snd::SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void *arg);
+    void setVolumeFade(f32 volume, u32 fadeFrames);
 
 private:
     /**
@@ -255,7 +256,6 @@ private:
     dSndSeSound2_c *getHandleType2ForSoundHandle_Dupe(nw4r::snd::SoundHandle *pHandle);
 
     void initVolumeFade();
-    void setVolumeFade(f32 volume, u32 fadeFrames);
     void calcVolumeFade();
 
     // at 0x00: dSoundSourceIf_c vtable
