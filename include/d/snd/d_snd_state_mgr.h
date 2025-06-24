@@ -49,6 +49,10 @@ public:
         return field_0x044;
     }
 
+    s32 getField_0x058() const {
+        return field_0x058;
+    }
+
     u32 getField_0x11C() const {
         return field_0x11C;
     }
