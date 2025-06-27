@@ -19,6 +19,8 @@ public:
     }
 
 private:
+    // Probably not a problem for weak function order since getName is emitted
+    // earlier through an explicit call
     bool isName(const char *name) const {
         return streq(name, getName());
     }

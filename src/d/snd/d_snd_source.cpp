@@ -33,7 +33,7 @@
 static dSndSoundCtxParam sCtxParams;
 bool dSoundSource_c::sIsStartingBaseSound;
 
-dSoundSource_c *dSoundSource_c::create(u32 id, dAcBase_c *actor, const char *name, u8 subtype) {
+dSoundSourceIf_c *dSoundSourceIf_c::create(u32 id, dAcBase_c *actor, const char *name, u8 subtype) {
     return dSndSourceMgr_c::createSource(id, actor, name, subtype);
 }
 
@@ -92,7 +92,7 @@ void dSoundSource_c::setup() {
         case SND_SOURCE_CATEGORY_OBJECT:
         case SND_SOURCE_CATEGORY_NPC:
         case SND_SOURCE_CATEGORY_TG_SOUND:
-        case SND_SOURCE_CATEGORY_6:
+        case SND_SOURCE_CATEGORY_HARP_RELATED:
             if (dSndSourceMgr_c::GetInstance()->getField_0x0013() != 0 && mSourceType != SND_SOURCE_SHUTTER) {
                 field_0x101 = 1;
             } else {
@@ -684,7 +684,7 @@ nw4r::snd::SoundHandle *dSoundSource_c::continueHoldingSound(
 
     u32 actualSoundId = soundId;
     if (!sIsStartingBaseSound) {
-        actualSoundId = d_s_vt_0x1A0(soundId, 0);
+        actualSoundId = overrideHoldSoundId(soundId, false);
         if (actualSoundId == -1) {
             resetTempParams();
             return nullptr;
@@ -822,7 +822,7 @@ nw4r::snd::SoundStartable::StartResult dSoundSource_c::setupSound(
     if (!sIsStartingBaseSound) {
         u32 anotherSoundId;
         if (holdFlag) {
-            anotherSoundId = d_s_vt_0x1A0(soundId, 1);
+            anotherSoundId = overrideHoldSoundId(soundId, true);
         } else {
             anotherSoundId = overrideStartSoundId(soundId);
         }
@@ -932,7 +932,7 @@ void dSoundSource_c::postStartSound(nw4r::snd::SoundHandle &handle, dSndSeSound_
     // noop
 }
 
-u32 dSoundSource_c::d_s_vt_0x1A0(u32 soundId, UNKWORD) {
+u32 dSoundSource_c::overrideHoldSoundId(u32 soundId, bool initial) {
     return soundId;
 }
 
