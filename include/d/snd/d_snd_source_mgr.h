@@ -22,9 +22,13 @@ public:
     void unregisterSource(dSoundSource_c *source);
     void onShutdownSource(dSoundSource_c *source);
 
+    // Only for sources 10, 11, 12, 13, 14
+    void registerUnkEnemyType(dSndSourceEnemy_c *);
+
     void playFlowSound(u32 id);
     static s32 getSourceCategoryForSourceType(s32 sourceType, const char *name);
     static bool isSwOrEOc(const char *name);
+    s32 getPlayerSourceRoomId() const;
 
     static dSoundSource_c *getPlayerSource() {
         return GetInstance()->mpPlayerSource;
@@ -45,12 +49,19 @@ public:
     void stopAllSound();
     void stopAllNonPlayerSound();
 
+    void incrementEnemyCount() {
+        field_0x3868++;
+    }
+
+    void decrementEnemyCount() {
+        field_0x3868--;
+    }
+
 private:
     static bool isCertainEnemyType(dSoundSource_c *source);
     void removeSourceFromList(dSoundSource_c *source, nw4r::ut::List *list);
     void clearSourceLists();
     void clearSourceList(nw4r::ut::List *list);
-    s32 getPlayerSourceRoomId() const;
 
     /* 0x0010 */ u8 field_0x0010;
     /* 0x0011 */ u8 field_0x0011;
@@ -64,8 +75,8 @@ private:
     /* 0x003C */ dSndSourceGroup_c mGroups[NUM_GROUPS];
 
     // Not sure what these are for
-    /* 0x383C */ nw4r::ut::List mAllSources; // node offset 0xE8, probably into dSoundSource::mMgrLink
-    /* 0x3848 */ nw4r::ut::List field_0x3848; // node offset 0x15C, possibly a subset of source types
+    /* 0x383C */ nw4r::ut::List mAllSources; // node offset 0xE8, -> dSoundSource::mMgrLink
+    /* 0x3848 */ nw4r::ut::List field_0x3848; // node offset 0x15C, -> dSndSourceEnemy_c::mMgrEnemyLink
     /* 0x3854 */ nw4r::ut::List field_0x3854; // node offset 0x160
 
     /* 0x3860 */ UNKWORD field_0x3860;

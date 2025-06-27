@@ -15,7 +15,6 @@
 /** Size: probably 0x15C */
 class dSoundSource_c : public dSoundSourceIf_c, public dSnd3DActor_c {
 public:
-    static dSoundSource_c *create(u32 id, dAcBase_c *actor, const char *name, u8 subtype);
 
     dSoundSource_c(u8 sourceType, dAcBase_c *, const char *name, dSndSourceGroup_c *pOwnerGroup);
     virtual ~dSoundSource_c();
@@ -54,7 +53,7 @@ public:
     /* 0x198 */ virtual void postStartSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id) override;
 
     /* 0x19C */ virtual u32 overrideHitObjSoundId(u32 soundId, dSoundSource_c *source);
-    /* 0x1A0 */ virtual u32 d_s_vt_0x1A0(u32 soundId, UNKWORD);
+    /* 0x1A0 */ virtual u32 overrideHoldSoundId(u32 soundId, bool initial);
 
     /* 0x1A4 */ virtual void
     postHoldSound(nw4r::snd::SoundHandle &handle, dSndSeSound_c *pSound, u32 id, UNKWORD) override;
@@ -201,8 +200,8 @@ public:
     /* 0x10C */ virtual void setRate(f32 frame) override {}
     /* 0x110 */ virtual void setPolyAttrs(u8 polyAttr0, u8 polyAttr1) override;
     /* 0x114 */ virtual void setBattleBgmRelated(UNKWORD) override {}
-    /* 0x118 */ virtual bool checkBattleBgmRelated() override {
-        return false;
+    /* 0x118 */ virtual UNKWORD checkBattleBgmRelated() override {
+        return 0;
     }
 
     dSndSeSound2_c *getHandleType2ForSoundId(u32 soundId);

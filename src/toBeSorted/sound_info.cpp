@@ -3,7 +3,6 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/col/bg/d_bg_s.h"
-#include "d/snd/d_snd_source.h"
 
 SoundInfo::SoundInfo(dAcBase_c *ac) : mpActor(ac) {}
 
@@ -15,7 +14,7 @@ SoundInfo::~SoundInfo() {
 }
 
 bool SoundInfo::initSource(u8 sourceType, const char *name, const mVec3_c *posPtr) {
-    mpSource = dSoundSource_c::create(sourceType, mpActor, name, 0);
+    mpSource = dSoundSourceIf_c::create(sourceType, mpActor, name, 0);
     if (mpSource == nullptr) {
         return false;
     }

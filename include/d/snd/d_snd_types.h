@@ -8,6 +8,8 @@ class dSoundSource_c;
 class dSndSourceGroup_c;
 class dSndDistantSoundActor_c;
 
+class dSndSourceEnemy_c;
+
 class dSndSound_c;
 
 class dSndSoundCtxParam;

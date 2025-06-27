@@ -27,6 +27,8 @@ struct dSndSoundCtxParam {
 /** An abstract interface for sound relating to a particular actor. */
 class dSoundSourceIf_c {
 public:
+    static dSoundSourceIf_c *create(u32 id, dAcBase_c *actor, const char *name, u8 subtype);
+
     virtual ~dSoundSourceIf_c() {}
 
     /* 0x00C */ virtual void setup() = 0;
@@ -100,7 +102,7 @@ public:
     /* 0x10C */ virtual void setRate(f32 frame) = 0;
     /* 0x110 */ virtual void setPolyAttrs(u8 polyAttr0, u8 polyAttr1) = 0;
     /* 0x114 */ virtual void setBattleBgmRelated(UNKWORD) = 0;
-    /* 0x118 */ virtual bool checkBattleBgmRelated() = 0;
+    /* 0x118 */ virtual UNKWORD checkBattleBgmRelated() = 0;
 };
 
 #endif

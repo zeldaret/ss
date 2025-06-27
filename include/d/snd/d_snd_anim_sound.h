@@ -19,6 +19,10 @@ public:
     void shutdown() {
         mSound.Shutdown();
     }
+    
+    void setField_0x98(f32 value) {
+        field_0x98 = value;
+    }
 
 private:
     static void animCallback(int, s32, const char *, UNKWORD, void *userData);

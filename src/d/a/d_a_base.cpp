@@ -11,7 +11,6 @@
 #include "d/d_sc_game.h"
 #include "d/d_stage.h"
 #include "d/flag/enemyflag_manager.h"
-#include "d/snd/d_snd_source.h"
 #include "egg/core/eggAllocator.h"
 #include "egg/math/eggMath.h"
 #include "f/f_base.h"
@@ -121,7 +120,7 @@ dSoundSourceIf_c *dAcBase_c::createSoundSource() {
     }
 
     const char *actorName = getActorName(mpActorInfo);
-    return dSoundSource_c::create(soundSourceType, this, actorName, subtype);
+    return dSoundSourceIf_c::create(soundSourceType, this, actorName, subtype);
 }
 
 int dAcBase_c::initAllocatorWork1Heap(int size, char *name, int align) {
