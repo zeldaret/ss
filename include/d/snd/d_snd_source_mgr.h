@@ -16,7 +16,7 @@ class dSndSourceMgr_c {
 public:
     dSndSourceMgr_c();
 
-    static dSoundSource_c *createSource(s32 sourceType, dAcBase_c *actor, const char *name, u8 subtype);
+    static dSoundSourceIf_c *createSource(s32 sourceType, dAcBase_c *actor, const char *name, u8 subtype);
 
     void registerSource(dSoundSource_c *source);
     void unregisterSource(dSoundSource_c *source);
