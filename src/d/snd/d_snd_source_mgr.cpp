@@ -79,7 +79,7 @@ s32 dSndSourceMgr_c::getSourceCategoryForSourceType(s32 sourceType, const char *
     }
 }
 
-dSoundSource_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor, const char *name, u8 _subtype) {
+dSoundSourceIf_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor, const char *name, u8 _subtype) {
     if (actor == nullptr) {
         return nullptr;
     }
@@ -168,7 +168,7 @@ dSoundSource_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor, 
     }
 
     s32 sourceCategory = getSourceCategoryForSourceType(sourceType, actualName);
-    dSoundSource_c *newSource = nullptr;
+    dSoundSourceIf_c *newSource = nullptr;
     bool isAnimSource = isAnimSoundSource(sourceType, actualName);
     bool isMultiSource = isMultiSoundSource(sourceType, actualName);
     bool isDemo = dSndPlayerMgr_c::GetInstance()->canUseThisPlayer(sourceType);
@@ -255,10 +255,12 @@ dSoundSource_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor, 
         return nullptr;
     }
 
+    // setSubtype not emitted by explicit call,
+    // so it apparently happens through dSoundSourceIf_c
     newSource->setSubtype(subtype);
     newSource->setup();
     if (!streq(name, actualName)) {
-        newSource->setOrigName(name);
+        static_cast<dSoundSource_c *>(newSource)->setOrigName(name);
     }
 
     if (sourceType == SND_SOURCE_NPC_HEAD) {
@@ -270,7 +272,7 @@ dSoundSource_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor, 
     }
 
     if (existingSource != nullptr && existingSource != newSource && sourceType != SND_SOURCE_NPC_HEAD && existingSource->isMultiSource()) {
-        existingSource->registerAdditionalSource(newSource);
+        existingSource->registerAdditionalSource(static_cast<dSoundSource_c *>(newSource));
     }
 
     return newSource;
