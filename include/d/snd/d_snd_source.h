@@ -78,14 +78,14 @@ public:
     /* 0x1D4 */ virtual dSndAnimSound_c *getAnimSound() {
         return nullptr;
     }
-    /* 0x1D8 */ virtual void d_s_vt_0x1D8() {
+    /* 0x1D8 */ virtual void registerAdditionalSource(dSoundSource_c *other) {
         return;
     }
-    /* 0x1DC */ virtual UNKWORD d_s_vt_0x1DC() {
+    /* 0x1DC */ virtual bool isMultiSource() const {
         return 0;
     }
-    /* 0x1E0 */ virtual void onAnimSoundEvent(UNKWORD arg) {
-        field_0x154 = arg;
+    /* 0x1E0 */ virtual void onAnimSoundEvent(s32 arg) {
+        mAnimEventValue = arg;
     }
     /* 0x1E4 */ virtual void d_s_vt_0x1E4_noop();
     /* 0x1E8 */ virtual u32 d_s_vt_0x1E8(u32 soundId);
@@ -209,6 +209,7 @@ public:
 protected:
     StartResult setupSoundCommon(nw4r::snd::SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void *arg);
     void setVolumeFade(f32 volume, u32 fadeFrames);
+    nw4r::snd::SoundStartable::StartResult onSetupError();
 
 private:
     /**
@@ -225,7 +226,6 @@ private:
     dSndDistantSoundActor_c *startBaseSoundAtPosition(u32 baseSoundId, const nw4r::math::VEC3 *position, f32 volume);
     nw4r::snd::SoundHandle *startBaseSound(u32 baseSoundId, f32 volume);
 
-    nw4r::snd::SoundStartable::StartResult onSetupError();
 
     nw4r::snd::SoundStartable::StartResult
     startSound(u32 soundId, nw4r::snd::SoundHandle *handle, nw4r::snd::SoundHandle **pOutHandle);
@@ -283,8 +283,8 @@ protected:
     /* 0x140 */ dSndSourceGroup_c *mpOwnerGroup;
     /* 0x144 */ f32 mVolumeFadeTarget;
     /* 0x148 */ f32 mVolumeFadeStepSize;
-    /* 0x150 */ u8 _0x14C[0x154 - 0x14C];
-    /* 0x154 */ UNKWORD field_0x154;
+    /* 0x14C */ nw4r::ut::Node mSubSourceLink; // node for list in dSndSourceEnemyMultiBase_c
+    /* 0x154 */ s32 mAnimEventValue;
     /* 0x158 */ s16 mPolyAttr0;
     /* 0x15A */ s16 mPolyAttr1;
 };
