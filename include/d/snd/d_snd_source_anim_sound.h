@@ -9,8 +9,6 @@ public:
     dSndSourceAnimSound_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSoundSource_c(sourceType, ac, name, pOwnerGroup), mAnimSound(this) {}
 
-    virtual ~dSndSourceAnimSound_c() {}
-
     /* 0x1A8 */ virtual StartResult
     SetupSound(nw4r::snd::SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void *arg) override {
         return setupSoundCommon(pHandle, soundId, pStartInfo, arg);

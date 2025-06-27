@@ -121,3 +121,18 @@ u32 dSndSourceEnemy_c::overrideHoldSoundId(u32 soundId, bool initial) {
     }
     return soundId;
 }
+
+u32 dSndSourceEnemyAnim_c::overrideStartSoundId(u32 soundId) {
+    // TODO
+    return soundId;
+}
+
+u32 dSndSourceEnemyAnim_c::overrideHoldSoundId(u32 soundId, bool initial) {
+    // TODO
+    return soundId;
+}
+
+
+void dSndSourceEnemyMulti_c::postCalc() {
+    // TODO - Nusi
+}

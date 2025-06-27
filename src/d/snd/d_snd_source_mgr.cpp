@@ -2,10 +2,18 @@
 
 #include "common.h"
 #include "d/snd/d_snd_source.h"
+
+// clang-format off
 #include "d/snd/d_snd_source_e_spark.h"
 #include "d/snd/d_snd_source_enums.h"
 #include "d/snd/d_snd_source_py_bird.h"
 #include "d/snd/d_snd_source_enemy.h"
+#include "d/snd/d_snd_source_obj_clef.h"
+#include "d/snd/d_snd_source_obj.h"
+#include "d/snd/d_snd_source_npc.h"
+#include "d/snd/d_snd_source_harp_related.h"
+// clang-format on
+
 #include "d/snd/d_snd_util.h"
 #include "nw4r/ut/ut_list.h"
 
@@ -52,9 +60,16 @@ s32 dSndSourceMgr_c::getSourceCategoryForSourceType(s32 sourceType, const char *
 
 dSoundSource_c *dSndSourceMgr_c::createSource(u32 id, dAcBase_c *actor, const char *name, u8 subtype) {
     // TODO
-    new dSndSourcePyBird_c(0, actor, name, nullptr);
     new dSndSourceESpark_c(0, actor, name, nullptr);
-    new dSndSourceEnemyAnimBase_c(0, actor, name, nullptr);
+    new dSndSourceEnemyAnim_c(0, actor, name, nullptr);
+    new dSndSourceEnemyMulti_c(0, actor, name, nullptr);
+    new dSndSourceObjAnim_c(0, actor, name, nullptr);
+    new dSndSourceObjClef_c(0, actor, name, nullptr);
+    new dSndSourcePyBird_c(0, actor, name, nullptr);
+    new dSndSourceNpc_c(0, actor, name, nullptr);
+    new dSndSourceNpcAnimBase_c(0, actor, name, nullptr);
+    new dSndSourceNpcAnim_c(0, actor, name, nullptr);
+    new dSndSourceHarpTg_c(0, actor, name, nullptr);
 
     return nullptr;
 }
@@ -207,3 +222,10 @@ s32 dSndSourceMgr_c::getPlayerSourceRoomId() const {
     }
     return mpPlayerSource->getRoomId();
 }
+
+
+struct dSndSourceMgrEmptySinit {
+    dSndSourceMgrEmptySinit() {}
+};
+
+dSndSourceMgrEmptySinit emptySinit;

@@ -8,8 +8,6 @@ public:
     dSndSourceESpark_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSoundSource_c(sourceType, ac, name, pOwnerGroup) {}
 
-    virtual ~dSndSourceESpark_c() {}
-
     // okay
     virtual bool hasAnimSound() override {
         return true;

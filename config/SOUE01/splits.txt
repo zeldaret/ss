@@ -2770,12 +2770,13 @@ d/snd/d_snd_source_py_bird.cpp:
 	.data       start:0x8054C5A0 end:0x8054C7B8
 	.sdata      start:0x805747E8 end:0x80574800
 
-d/snd/d_snd_mgr_unk_18.cpp:
+d/snd/d_snd_source_demo.cpp:
 	.text       start:0x80390510 end:0x80390A20 align:16
 	.ctors      start:0x804DB92C end:0x804DB930
 
-d/snd/d_snd_mgr_unk_10.cpp:
+d/snd/d_snd_source_harp_related.cpp:
 	.text       start:0x80390A20 end:0x80392E38 align:16
+	.data       start:0x8054C9C0 end:0x8054D1C0
 
 d/snd/d_snd_source_tg_sound.cpp:
 	.text       start:0x80392E40 end:0x80393008 align:16
