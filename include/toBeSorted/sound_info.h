@@ -29,7 +29,7 @@ public:
         mpSource->calc(*mpPosPtr);
     }
 
-    bool initSource(u8 sourceType, const char *name, const mVec3_c *posPtr);
+    bool initSource(s32 sourceType, const char *name, const mVec3_c *posPtr);
     bool startBgHitSound(u32 soundId, const cBgS_PolyInfo &info, const mVec3_c *position);
 };
 

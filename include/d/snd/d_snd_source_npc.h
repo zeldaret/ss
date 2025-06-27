@@ -8,7 +8,7 @@
 // so this is the base class and also instantiated in createSource
 class dSndSourceNpc_c : public dSoundSource_c {
 public:
-    dSndSourceNpc_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceNpc_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSoundSource_c(sourceType, ac, name, pOwnerGroup) {}
 
     /* 0x1CC */ virtual void postSetupSound(u32 playingId, u32 requestedId, dSndSeSound_c *seSound) override;
@@ -24,7 +24,7 @@ private:
 
 class dSndSourceNpcAnimBase_c : public dSndSourceNpc_c {
 public:
-    dSndSourceNpcAnimBase_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceNpcAnimBase_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSndSourceNpc_c(sourceType, ac, name, pOwnerGroup), mAnimSound(this) {}
 
     /* 0x1A8 */ virtual StartResult
@@ -59,7 +59,7 @@ private:
 
 class dSndSourceNpcAnim_c : public dSndSourceNpcAnimBase_c {
 public:
-    dSndSourceNpcAnim_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceNpcAnim_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSndSourceNpcAnimBase_c(sourceType, ac, name, pOwnerGroup) {}
 
 private:
