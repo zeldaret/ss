@@ -3,7 +3,7 @@
 #include "d/snd/d_snd_source.h"
 
 dSndSourceHarpRelated_c::dSndSourceHarpRelated_c(
-    u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup
+    s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup
 )
     : dSoundSource_c(sourceType, ac, name, pOwnerGroup) {
     // TODO

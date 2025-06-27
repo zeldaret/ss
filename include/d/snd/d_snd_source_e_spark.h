@@ -5,7 +5,7 @@
 
 class dSndSourceESpark_c : public dSoundSource_c {
 public:
-    dSndSourceESpark_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceESpark_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSoundSource_c(sourceType, ac, name, pOwnerGroup) {}
 
     // okay

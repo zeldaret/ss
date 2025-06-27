@@ -9,7 +9,7 @@
 
 class dSndSourceEnemy_c : public dSoundSource_c {
 public:
-    dSndSourceEnemy_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup);
+    dSndSourceEnemy_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup);
     virtual ~dSndSourceEnemy_c();
 
     /* 0x020 */ virtual void vt_0x020() override;
@@ -47,7 +47,7 @@ private:
 
 class dSndSourceEnemyAnimBase_c : public dSndSourceEnemy_c {
 public:
-    dSndSourceEnemyAnimBase_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceEnemyAnimBase_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSndSourceEnemy_c(sourceType, ac, name, pOwnerGroup), mAnimSound(this) {}
 
     /* 0x1A8 */ virtual StartResult
@@ -82,7 +82,7 @@ protected:
 
 class dSndSourceEnemyAnim_c : public dSndSourceEnemyAnimBase_c {
 public:
-    dSndSourceEnemyAnim_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceEnemyAnim_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSndSourceEnemyAnimBase_c(sourceType, ac, name, pOwnerGroup) {}
 
     /* 0x194 */ virtual u32 overrideStartSoundId(u32 soundId) override;
@@ -93,7 +93,7 @@ private:
 
 class dSndSourceEnemyMultiBase_c : public dSndSourceEnemyAnimBase_c {
 public:
-    dSndSourceEnemyMultiBase_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceEnemyMultiBase_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSndSourceEnemyAnimBase_c(sourceType, ac, name, pOwnerGroup) {
             nw4r::ut::List_Init(&mSubSourceList, 0x14C);
             mAnimSound.setCallback(this);
@@ -157,13 +157,13 @@ private:
 
 class dSndSourceEnemyMulti_c : public dSndSourceEnemyMultiBase_c {
 public:
-    dSndSourceEnemyMulti_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceEnemyMulti_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSndSourceEnemyMultiBase_c(sourceType, ac, name, pOwnerGroup) {}
 
     /* 0x18C */ virtual void postCalc() override;
 
 private:
-    
+
 };
 
 #endif

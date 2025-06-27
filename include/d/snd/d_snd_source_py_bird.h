@@ -5,7 +5,7 @@
 
 class dSndSourcePyBird_c : public dSndSourceAnimSound_c {
 public:
-    dSndSourcePyBird_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourcePyBird_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSndSourceAnimSound_c(sourceType, ac, name, pOwnerGroup), mSeqVarValue(0) {}
 
     /* 0x104 */ virtual void load(void *data, const char *name) override;
