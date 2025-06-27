@@ -1,8 +1,10 @@
 #ifndef D_SND_SOURCE_ENEMY_H
 #define D_SND_SOURCE_ENEMY_H
 
+#include "common.h"
 #include "d/snd/d_snd_anim_sound.h"
 #include "d/snd/d_snd_source.h"
+#include "d/snd/d_snd_util.h"
 #include "nw4r/ut/ut_list.h"
 
 class dSndSourceEnemy_c : public dSoundSource_c {
@@ -74,8 +76,94 @@ public:
         mAnimSound.setRate(frame);
     }
 
-private:
+protected:
     /* 0x16C */ dSndAnimSound_c mAnimSound;
+};
+
+class dSndSourceEnemyAnim_c : public dSndSourceEnemyAnimBase_c {
+public:
+    dSndSourceEnemyAnim_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+        : dSndSourceEnemyAnimBase_c(sourceType, ac, name, pOwnerGroup) {}
+
+    /* 0x194 */ virtual u32 overrideStartSoundId(u32 soundId) override;
+    /* 0x1A0 */ virtual u32 overrideHoldSoundId(u32 soundId, bool initial) override;
+
+private:
+};
+
+class dSndSourceEnemyMultiBase_c : public dSndSourceEnemyAnimBase_c {
+public:
+    dSndSourceEnemyMultiBase_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+        : dSndSourceEnemyAnimBase_c(sourceType, ac, name, pOwnerGroup) {
+            nw4r::ut::List_Init(&mSubSourceList, 0x14C);
+            mAnimSound.setCallback(this);
+        }
+
+    /* 0x1A8 */ virtual StartResult
+    SetupSound(nw4r::snd::SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void *arg) override {
+        bool bHoldFlag = *(bool*)arg;
+        if (!bHoldFlag && (mAnimEventValue & 0xF) > 0) {
+            dSoundSource_c *otherSource;
+            s32 idx = (mAnimEventValue & 0xF) - 1;
+            if (idx < 0) {
+                otherSource = nullptr;
+            } else if (idx >= nw4r::ut::List_GetSize(&mSubSourceList)) {
+                otherSource = nullptr;
+            } else {
+                otherSource = getSubSourceFirst();
+                while (idx > 0) {
+                    otherSource = getSubSourceNext(otherSource);
+                    idx--;
+                }
+            }
+            if (otherSource != nullptr) {
+                otherSource->startSound(soundId, pHandle);
+                return onSetupError();
+            }
+        }
+
+        return setupSoundCommon(pHandle, soundId, pStartInfo, arg);
+    }
+
+    /* 0x1D8 */ virtual void registerAdditionalSource(dSoundSource_c *other) override {
+        if (other == this) {
+            return;
+        }
+
+        if (other == nullptr) {
+            return;
+        }
+        if (!hasSubSource(other)) {
+            appendSubSource(other);
+        }
+    }
+    /* 0x1DC */ virtual bool isMultiSource() const override {
+        return true;
+    }
+
+private:
+    // TODO: maybe created by the macro below
+    bool hasSubSource(dSoundSource_c *other) {
+        for (dSoundSource_c *it = getSubSourceFirst(); it != nullptr; it = getSubSourceNext(it)) {
+            if (it == other) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /* 0x210 */ LIST_MEMBER(dSoundSource_c, SubSource); // -> dSoundSource_c::mSubSourceLink
+};
+
+class dSndSourceEnemyMulti_c : public dSndSourceEnemyMultiBase_c {
+public:
+    dSndSourceEnemyMulti_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+        : dSndSourceEnemyMultiBase_c(sourceType, ac, name, pOwnerGroup) {}
+
+    /* 0x18C */ virtual void postCalc() override;
+
+private:
+    
 };
 
 #endif

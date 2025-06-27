@@ -53,7 +53,7 @@ dSoundSource_c::dSoundSource_c(u8 sourceType, dAcBase_c *actor, const char *name
       mpCtxParam(nullptr),
       field_0x11C(0),
       mpOwnerGroup(pOwnerGroup),
-      field_0x154(0),
+      mAnimEventValue(0),
       mPolyAttr0(-1),
       mPolyAttr1(-1) {
     mSourceCategory = dSndSourceMgr_c::getSourceCategoryForSourceType(sourceType, name);
@@ -706,7 +706,7 @@ nw4r::snd::SoundHandle *dSoundSource_c::continueHoldingSound(
         ok = HoldSound(handle, actualSoundId);
     }
     field_0x11C = 0;
-    field_0x154 = 0;
+    mAnimEventValue = 0;
     if (ok) {
         seHandle->setField0x130(1);
         postHoldSound(*handle, seHandle, soundId, 0);
@@ -916,7 +916,7 @@ void dSoundSource_c::resetTempParams() {
     sCtxParams.floatParam = 0.0f;
     sCtxParams.intParam = 0;
     field_0x11C = 0;
-    field_0x154 = 0;
+    mAnimEventValue = 0;
 }
 
 nw4r::snd::SoundStartable::StartResult dSoundSource_c::onSetupError() {
