@@ -45,7 +45,7 @@ void dSndSourceGroup_c::set(s32 sourceType, const char *name) {
                 mParam.field_0x10 = 2200.0;
                 break;
             }
-            case SND_SOURCE_NPC_48: {
+            case SND_SOURCE_NPC_HEAD: {
                 if (dSndStateMgr_c::isInStage("F401")) {
                     mParam.field_0x00 = 500.0f;
                     mParam.field_0x04 = 4000.0;
@@ -126,7 +126,7 @@ dSoundSource_c *dSndSourceGroup_c::getSourceClosestToListener() {
     f32 closest = INFINITY;
     for (dSoundSource_c *source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetFirst(&mSourceList));
          source != nullptr; source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetNext(&mSourceList, source))) {
-        if (source->getSourceType() != SND_SOURCE_PLAYER_HEAD && source->getSourceType() != SND_SOURCE_NPC_48) {
+        if (source->getSourceType() != SND_SOURCE_PLAYER_HEAD && source->getSourceType() != SND_SOURCE_NPC_HEAD) {
             f32 dist = source->getDistanceToListener();
             if (dist < closest) {
                 closest = dist;

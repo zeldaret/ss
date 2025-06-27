@@ -5,6 +5,7 @@
 #include "d/snd/d_snd_source_e_spark.h"
 #include "d/snd/d_snd_source_enums.h"
 #include "d/snd/d_snd_source_py_bird.h"
+#include "d/snd/d_snd_source_enemy.h"
 #include "d/snd/d_snd_util.h"
 #include "nw4r/ut/ut_list.h"
 
@@ -38,8 +39,8 @@ s32 dSndSourceMgr_c::getSourceCategoryForSourceType(s32 sourceType, const char *
         return SND_SOURCE_CATEGORY_TG_SOUND;
     }
 
-    if (sourceType >= SND_SOURCE_54 && sourceType <= SND_SOURCE_57) {
-        return SND_SOURCE_CATEGORY_6;
+    if (sourceType >= SND_SOURCE_54 && sourceType <= SND_SOURCE_TG_HARP) {
+        return SND_SOURCE_CATEGORY_HARP_RELATED;
     }
 
     switch (sourceType) {
@@ -53,6 +54,7 @@ dSoundSource_c *dSndSourceMgr_c::createSource(u32 id, dAcBase_c *actor, const ch
     // TODO
     new dSndSourcePyBird_c(0, actor, name, nullptr);
     new dSndSourceESpark_c(0, actor, name, nullptr);
+    new dSndSourceEnemyAnimBase_c(0, actor, name, nullptr);
 
     return nullptr;
 }
@@ -113,7 +115,7 @@ void dSndSourceMgr_c::registerSource(dSoundSource_c *source) {
                 }
                 break;
             }
-            case SND_SOURCE_CATEGORY_6: {
+            case SND_SOURCE_CATEGORY_HARP_RELATED: {
                 nw4r::ut::List_Append(&field_0x3854, source);
                 break;
             }
