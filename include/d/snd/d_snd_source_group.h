@@ -37,6 +37,10 @@ public:
     void set(s32 type, const char *name);
     void calc();
 
+    const char *getName() const {
+        return mName;
+    }
+
 private:
     bool setParamFromName(const char *name);
     void resetSoundSourceParam();

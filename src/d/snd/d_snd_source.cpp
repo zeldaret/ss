@@ -33,14 +33,14 @@
 static dSndSoundCtxParam sCtxParams;
 bool dSoundSource_c::sIsStartingBaseSound;
 
-dSoundSourceIf_c *dSoundSourceIf_c::create(u32 id, dAcBase_c *actor, const char *name, u8 subtype) {
-    return dSndSourceMgr_c::createSource(id, actor, name, subtype);
+dSoundSourceIf_c *dSoundSourceIf_c::create(s32 sourceType, dAcBase_c *actor, const char *name, u8 subtype) {
+    return dSndSourceMgr_c::createSource(sourceType, actor, name, subtype);
 }
 
-dSoundSource_c::dSoundSource_c(u8 sourceType, dAcBase_c *actor, const char *name, dSndSourceGroup_c *pOwnerGroup)
+dSoundSource_c::dSoundSource_c(s32 sourceType, dAcBase_c *actor, const char *name, dSndSourceGroup_c *pOwnerGroup)
     : dSnd3DActor_c(pOwnerGroup->getAmbientParam(), sourceType),
       mpName(name),
-      field_0x0F4(0),
+      mpOrigName(nullptr),
       mpActor(actor),
       mSourceType(sourceType),
       mSubtype(0),

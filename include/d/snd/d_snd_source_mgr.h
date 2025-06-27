@@ -16,7 +16,7 @@ class dSndSourceMgr_c {
 public:
     dSndSourceMgr_c();
 
-    static dSoundSource_c *createSource(u32 id, dAcBase_c *actor, const char *name, u8 subtype);
+    static dSoundSource_c *createSource(s32 sourceType, dAcBase_c *actor, const char *name, u8 subtype);
 
     void registerSource(dSoundSource_c *source);
     void unregisterSource(dSoundSource_c *source);
@@ -59,9 +59,15 @@ public:
 
 private:
     static bool isCertainEnemyType(dSoundSource_c *source);
+    static bool isAnimSoundSource(s32 sourceType, const char *name);
+    static bool isMultiSoundSource(s32 sourceType, const char *name);
+
     void removeSourceFromList(dSoundSource_c *source, nw4r::ut::List *list);
     void clearSourceLists();
     void clearSourceList(nw4r::ut::List *list);
+
+    dSndSourceGroup_c *findGroup(s32 sourceType, dAcBase_c *actor, const char *name, const char *origName, u8 subtype);
+    bool fn_803846D0(s32 sourceType, const char *name, u8 subtype);
 
     /* 0x0010 */ u8 field_0x0010;
     /* 0x0011 */ u8 field_0x0011;
@@ -75,7 +81,7 @@ private:
     /* 0x003C */ dSndSourceGroup_c mGroups[NUM_GROUPS];
 
     // Not sure what these are for
-    /* 0x383C */ nw4r::ut::List mAllSources; // node offset 0xE8, -> dSoundSource::mMgrLink
+    /* 0x383C */ nw4r::ut::List mAllSources;  // node offset 0xE8, -> dSoundSource::mMgrLink
     /* 0x3848 */ nw4r::ut::List field_0x3848; // node offset 0x15C, -> dSndSourceEnemy_c::mMgrEnemyLink
     /* 0x3854 */ nw4r::ut::List field_0x3854; // node offset 0x160
 

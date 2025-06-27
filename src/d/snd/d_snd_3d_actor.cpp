@@ -10,7 +10,7 @@
 
 #include <cmath>
 
-dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, u8 sourceType)
+dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, s32 sourceType)
     : nw4r::snd::Sound3DActor(
           dSndPlayerMgr_c::GetInstance()->getSoundArchivePlayerForType(sourceType),
           dSnd3DManager_c::GetInstance()->getManager()

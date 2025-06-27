@@ -112,14 +112,14 @@ u32 dSndPlayerMgr_c::convertLabelStringToSoundId(const char *label) const {
     return dSndMgr_c::GetInstance()->changeNameToId(label);
 }
 
-nw4r::snd::SoundArchivePlayer &dSndPlayerMgr_c::getSoundArchivePlayerForType(u8 sourceType) {
+nw4r::snd::SoundArchivePlayer &dSndPlayerMgr_c::getSoundArchivePlayerForType(s32 sourceType) {
     if (canUseThisPlayer(sourceType)) {
         return mSoundArchivePlayer;
     }
     return dSndMgr_c::getPlayer();
 }
 
-bool dSndPlayerMgr_c::canUseThisPlayer(u8 sourceType) const {
+bool dSndPlayerMgr_c::canUseThisPlayer(s32 sourceType) const {
     if (!mSoundArchivePlayer.IsAvailable()) {
         return false;
     }

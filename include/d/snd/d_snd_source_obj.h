@@ -8,7 +8,7 @@
 
 class dSndSourceObj_c : public dSoundSource_c {
 public:
-    dSndSourceObj_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceObj_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSoundSource_c(sourceType, ac, name, pOwnerGroup) {}
 
     /* 0x188 */ virtual void postSetup() override;
@@ -29,7 +29,7 @@ private:
 
 class dSndSourceObjLightShaft_c : public dSndSourceObj_c {
 public:
-    dSndSourceObjLightShaft_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceObjLightShaft_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSndSourceObj_c(sourceType, ac, name, pOwnerGroup) {}
 
     /* 0x1EC */ virtual void setPosition(const nw4r::math::VEC3 &position) override;
@@ -37,7 +37,7 @@ public:
 
 class dSndSourceObjAnimBase_c : public dSndSourceObj_c {
 public:
-    dSndSourceObjAnimBase_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceObjAnimBase_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSndSourceObj_c(sourceType, ac, name, pOwnerGroup), mAnimSound(this) {}
 
     /* 0x1A8 */ virtual StartResult
@@ -72,7 +72,7 @@ protected:
 
 class dSndSourceObjAnim_c : public dSndSourceObjAnimBase_c {
 public:
-    dSndSourceObjAnim_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceObjAnim_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSndSourceObjAnimBase_c(sourceType, ac, name, pOwnerGroup) {}
 };
 

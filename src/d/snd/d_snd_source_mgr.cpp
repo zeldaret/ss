@@ -1,23 +1,44 @@
 #include "d/snd/d_snd_source_mgr.h"
 
 #include "common.h"
+#include "d/a/d_a_base.h"
+#include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_source.h"
 
 // clang-format off
 #include "d/snd/d_snd_source_e_spark.h"
 #include "d/snd/d_snd_source_enums.h"
+#include "d/snd/d_snd_source_equipment.h"
+#include "d/snd/d_snd_source_group.h"
 #include "d/snd/d_snd_source_py_bird.h"
 #include "d/snd/d_snd_source_enemy.h"
 #include "d/snd/d_snd_source_obj_clef.h"
 #include "d/snd/d_snd_source_obj.h"
 #include "d/snd/d_snd_source_npc.h"
 #include "d/snd/d_snd_source_harp_related.h"
+
+#include "d/snd/d_snd_source_demo.h"
+#include "d/snd/d_snd_source_player.h"
+#include "d/snd/d_snd_source_player_head.h"
+#include "d/snd/d_snd_source_npc_head.h"
+#include "d/snd/d_snd_source_npc_special.h"
+#include "d/snd/d_snd_source_tg_sound.h"
 // clang-format on
 
+#include "d/snd/d_snd_state_mgr.h"
 #include "d/snd/d_snd_util.h"
 #include "nw4r/ut/ut_list.h"
+#include "sized_string.h"
 
 #include <cmath>
+
+// TODO move
+struct ActorBaseNamePair {
+    const char *variant;
+    const char *base;
+};
+extern "C" const ActorBaseNamePair Actor_BaseActorName_Pairs[];
+extern "C" const s32 lbl_8057E394;
 
 s32 dSndSourceMgr_c::getSourceCategoryForSourceType(s32 sourceType, const char *name) {
     // This might be a full-on switch statement but I don't want to write out
@@ -58,20 +79,201 @@ s32 dSndSourceMgr_c::getSourceCategoryForSourceType(s32 sourceType, const char *
     }
 }
 
-dSoundSource_c *dSndSourceMgr_c::createSource(u32 id, dAcBase_c *actor, const char *name, u8 subtype) {
-    // TODO
-    new dSndSourceESpark_c(0, actor, name, nullptr);
-    new dSndSourceEnemyAnim_c(0, actor, name, nullptr);
-    new dSndSourceEnemyMulti_c(0, actor, name, nullptr);
-    new dSndSourceObjAnim_c(0, actor, name, nullptr);
-    new dSndSourceObjClef_c(0, actor, name, nullptr);
-    new dSndSourcePyBird_c(0, actor, name, nullptr);
-    new dSndSourceNpc_c(0, actor, name, nullptr);
-    new dSndSourceNpcAnimBase_c(0, actor, name, nullptr);
-    new dSndSourceNpcAnim_c(0, actor, name, nullptr);
-    new dSndSourceHarpTg_c(0, actor, name, nullptr);
+dSoundSource_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor, const char *name, u8 _subtype) {
+    if (actor == nullptr) {
+        return nullptr;
+    }
 
-    return nullptr;
+    u8 subtype = actor->subtype;
+    SizedString<64> nameStr;
+    nameStr.sprintf("%s", name);
+
+    bool isModified = false;
+
+    if (dSndStateMgr_c::GetInstance()->isInDemo() != nullptr && strneq(name, "$act", 4)) {
+        nameStr.sprintf("%s_%s", name + 1, dSndStateMgr_c::GetInstance()->getCurrentStageMusicDemoName());
+        isModified = true;
+    }
+
+    dSoundSource_c *existingSource = static_cast<dSoundSource_c *>(actor->getSoundSource());
+    if (!isModified) {
+        bool allowSubtype = true;
+        switch (sourceType) {
+            case SND_SOURCE_BIGBOSS:
+                nameStr = "BBigBos";
+                isModified = true;
+                break;
+            case SND_SOURCE_GIRAHUMU_3:
+                nameStr = "BGh3";
+                isModified = true;
+                break;
+            case SND_SOURCE_NPC_HEAD:
+                if (existingSource != nullptr) {
+                    name = existingSource->getName();
+                    nameStr.sprintf("%sHead", name);
+                    allowSubtype = false;
+                }
+                break;
+        }
+
+        if (strneq(name, "NpcMole", 7)) {
+            if (subtype != 0) {
+                nameStr = "NpcMoT";
+                subtype = 0;
+                isModified = true;
+            }
+        } else if (strneq(name, "NpcMoT2", 7)) {
+            nameStr = "NpcMoT";
+            isModified = true;
+        } else if (strneq(name, "NpcMoN2", 7)) {
+            nameStr = "NpcMoN";
+            isModified = true;
+        } else if (strneq(name, "NpcMoEN", 7)) {
+            nameStr = "NpcMole";
+            subtype = 0;
+            isModified = true;
+        } else if (strneq(name, "NpcMoS", 6)) {
+            nameStr = "NpcMoE1";
+            isModified = true;
+        }
+
+        if (allowSubtype && subtype != 0) {
+            nameStr.sprintf("%s_A%d", &nameStr, subtype);
+            isModified = true;
+        }
+
+        if (sourceType == SND_SOURCE_NPC_NRM) {
+            const ActorBaseNamePair *pair = Actor_BaseActorName_Pairs;
+            for (int i = 0; i < lbl_8057E394; i++) {
+                if (streq(nameStr, Actor_BaseActorName_Pairs[i].variant)) {
+                    nameStr = Actor_BaseActorName_Pairs[i].base;
+                    isModified = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    const char *actualName = nameStr;
+    s32 category = getSourceCategoryForSourceType(sourceType, actualName);
+    dSndSourceGroup_c *group = nullptr;
+
+    if (category != SND_SOURCE_CATEGORY_9) {
+        if (isModified) {
+            group = GetInstance()->findGroup(sourceType, actor, actualName, name, subtype);
+        } else {
+            group = GetInstance()->findGroup(sourceType, actor, actualName, nullptr, subtype);
+        }
+        actualName = group->getName();
+    }
+
+    s32 sourceCategory = getSourceCategoryForSourceType(sourceType, actualName);
+    dSoundSource_c *newSource = nullptr;
+    bool isAnimSource = isAnimSoundSource(sourceType, actualName);
+    bool isMultiSource = isMultiSoundSource(sourceType, actualName);
+    bool isDemo = dSndPlayerMgr_c::GetInstance()->canUseThisPlayer(sourceType);
+
+    if (isDemo) {
+        newSource = new dSndSourceDemo_c(sourceType, actor, actualName, group);
+    }
+
+    if (newSource == nullptr) {
+        switch (sourceCategory) {
+            case SND_SOURCE_CATEGORY_PLAYER:
+                if (sourceType == SND_SOURCE_PLAYER_HEAD) {
+                    newSource = new dSndSourcePlayerHead_c(sourceType, actor, actualName, group);
+                } else {
+                    newSource = new dSndSourcePlayer_c(sourceType, actor, actualName, group);
+                }
+                break;
+            case SND_SOURCE_CATEGORY_ENEMY:
+                if (sourceType == SND_SOURCE_SPARK) {
+                    newSource = new dSndSourceESpark_c(sourceType, actor, actualName, group);
+                } else if (isAnimSource) {
+                    if (isMultiSource) {
+                        newSource = new dSndSourceEnemyMulti_c(sourceType, actor, actualName, group);
+                    } else {
+                        newSource = new dSndSourceEnemyAnim_c(sourceType, actor, actualName, group);
+                    }
+                } else {
+                    newSource = new dSndSourceEnemy_c(sourceType, actor, actualName, group);
+                }
+                break;
+            case SND_SOURCE_CATEGORY_OBJECT:
+                if (sourceType == SND_SOURCE_OBJECT_33) {
+                    return nullptr;
+                }
+                if (sourceType == SND_SOURCE_LIGHT_SHAFT) {
+                    newSource = new dSndSourceObjLightShaft_c(sourceType, actor, actualName, group);
+                } else if (sourceType == SND_SOURCE_CLEF) {
+                    newSource = new dSndSourceObjClef_c(sourceType, actor, actualName, group);
+                } else if (isAnimSource) {
+                    newSource = new dSndSourceObjAnim_c(sourceType, actor, actualName, group);
+                } else {
+                    newSource = new dSndSourceObj_c(sourceType, actor, actualName, group);
+                }
+                break;
+            case SND_SOURCE_CATEGORY_EQUIPMENT:
+                if (sourceType == SND_SOURCE_WHIP) {
+                    newSource = new dSndSourceEquipmentWhip_c(sourceType, actor, actualName, group);
+                } else {
+                    newSource = new dSndSourceEquipment_c(sourceType, actor, actualName, group);
+                }
+                break;
+            case SND_SOURCE_CATEGORY_NPC:
+                if (sourceType == SND_SOURCE_NPC_HEAD) {
+                    newSource = new dSndSourceNpcHead_c(sourceType, actor, actualName, group);
+                } else if (sourceType == SND_SOURCE_NPC_DRAGON) {
+                    newSource = new dSndSourceNpcDr_c(sourceType, actor, actualName, group);
+                } else if (sourceType >= SND_SOURCE_NPC_50) {
+                    newSource = new dSndSourceNpcSpecial_c(sourceType, actor, actualName, group);
+                } else if (sourceType == SND_SOURCE_PLAYER_BIRD) {
+                    newSource = new dSndSourcePyBird_c(sourceType, actor, actualName, group);
+                } else if (isAnimSource) {
+                    newSource = new dSndSourceNpcAnim_c(sourceType, actor, actualName, group);
+                } else {
+                    newSource = new dSndSourceNpc_c(sourceType, actor, actualName, group);
+                }
+                break;
+            case SND_SOURCE_CATEGORY_TG_SOUND:
+                newSource = new dSndSourceTgSound_c(sourceType, actor, actualName, group);
+                break;
+            case SND_SOURCE_CATEGORY_HARP_RELATED:
+                // TODO
+                new dSndSourceHarpTg_c(0, actor, name, nullptr);
+                break;
+            case SND_SOURCE_CATEGORY_7: newSource = new dSndSourceDemo_c(sourceType, actor, actualName, group); break;
+            default:
+                if (sourceType < SND_SOURCE_59 + 1) {
+                    GetInstance()->fn_803846D0(sourceType, actualName, subtype);
+                }
+                return nullptr;
+        }
+    }
+
+    if (newSource == nullptr) {
+        return nullptr;
+    }
+
+    newSource->setSubtype(subtype);
+    newSource->setup();
+    if (!streq(name, actualName)) {
+        newSource->setOrigName(name);
+    }
+
+    if (sourceType == SND_SOURCE_NPC_HEAD) {
+        if (existingSource != nullptr && strneq(existingSource->getName(), "NpcMoT", 6)) {
+            static_cast<dSndSourceNpcHead_c *>(newSource)->setMainName(existingSource->getName());
+        } else if (existingSource != nullptr && streq(name, "NpcGrd")) {
+            static_cast<dSndSourceNpcHead_c *>(newSource)->setMainName("NpcGra");
+        }
+    }
+
+    if (existingSource != nullptr && existingSource != newSource && sourceType != SND_SOURCE_NPC_HEAD && existingSource->isMultiSource()) {
+        existingSource->registerAdditionalSource(newSource);
+    }
+
+    return newSource;
 }
 
 SND_DISPOSER_DEFINE(dSndSourceMgr_c);
@@ -222,7 +424,6 @@ s32 dSndSourceMgr_c::getPlayerSourceRoomId() const {
     }
     return mpPlayerSource->getRoomId();
 }
-
 
 struct dSndSourceMgrEmptySinit {
     dSndSourceMgrEmptySinit() {}

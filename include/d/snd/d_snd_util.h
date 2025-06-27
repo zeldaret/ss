@@ -10,6 +10,10 @@ inline bool streq(const char *left, const char *right) {
     return !std::strcmp(left, right);
 }
 
+inline bool strneq(const char *left, const char *right, size_t len) {
+    return !std::strncmp(left, right, len);
+}
+
 // This list setup is convenient, and it allows declaring local variables in
 // a consistent order without causing regswaps when multiple loops are involved
 // in a single funcion.

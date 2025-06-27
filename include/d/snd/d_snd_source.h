@@ -16,7 +16,7 @@
 class dSoundSource_c : public dSoundSourceIf_c, public dSnd3DActor_c {
 public:
 
-    dSoundSource_c(u8 sourceType, dAcBase_c *, const char *name, dSndSourceGroup_c *pOwnerGroup);
+    dSoundSource_c(s32 sourceType, dAcBase_c *, const char *name, dSndSourceGroup_c *pOwnerGroup);
     virtual ~dSoundSource_c();
 
     u32 modifySoundId(u32 baseSoundId);
@@ -41,8 +41,8 @@ public:
     /* 0x17C */ virtual const char *getName() const {
         return mpName;
     }
-    /* 0x180 */ virtual void d_s_vt_0x180(u32 arg) {
-        field_0x0F4 = arg;
+    /* 0x180 */ virtual void setOrigName(const char *arg) {
+        mpOrigName = arg;
     }
     /* 0x184 */ virtual void preCalc();
     /* 0x188 */ virtual void postSetup() {}
@@ -263,7 +263,7 @@ private:
 protected:
     /* 0x0E8 */ nw4r::ut::Node mMgrLink;
     /* 0x0F0 */ const char *mpName;
-    /* 0x0F4 */ UNKWORD field_0x0F4;
+    /* 0x0F4 */ const char *mpOrigName;
     /* 0x0F8 */ dAcBase_c *mpActor;
     /* 0x0FC */ u8 mSourceCategory;
     /* 0x0FD */ u8 mSourceType;

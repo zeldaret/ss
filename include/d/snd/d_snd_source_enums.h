@@ -33,6 +33,7 @@ enum SoundSourceType_e {
 
     // 32-42: Object? (3)
     SND_SOURCE_OBJECT = 32,
+    SND_SOURCE_OBJECT_33 = 33,
     SND_SOURCE_BAMBOO = 34,
     SND_SOURCE_ITEM = 35,
     SND_SOURCE_TERRY_SHOP = 36,
@@ -50,6 +51,7 @@ enum SoundSourceType_e {
     SND_SOURCE_NPC_NUSI = 46,
     SND_SOURCE_NPC_HEAD = 48,
     SND_SOURCE_INSECT = 49,
+    SND_SOURCE_NPC_50 = 50,
     SND_SOURCE_NPC_NRM = 51,
     SND_SOURCE_NPC_DRAGON = 52,
 

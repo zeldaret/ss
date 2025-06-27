@@ -54,8 +54,8 @@ public:
     static bool isBgmPlayerId(u32 id);
     u32 getSomeUserParam(u32 soundId) const;
 
-    nw4r::snd::SoundArchivePlayer &getSoundArchivePlayerForType(u8 sourceType);
-    bool canUseThisPlayer(u8 sourceType) const;
+    nw4r::snd::SoundArchivePlayer &getSoundArchivePlayerForType(s32 sourceType);
+    bool canUseThisPlayer(s32 sourceType) const;
 
     void stopAllSound();
 

@@ -7,7 +7,7 @@
 #include "d/snd/d_snd_source_mgr.h"
 #include "d/snd/d_snd_wzsound.h"
 
-dSndSourceEnemy_c::dSndSourceEnemy_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+dSndSourceEnemy_c::dSndSourceEnemy_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
     : dSoundSource_c(sourceType, ac, name, pOwnerGroup), field_0x164(2), field_0x168(0), field_0x169(0) {
     if ((SoundSourceType_e)sourceType < SND_SOURCE_ENEMY_28) {
         dSndSourceMgr_c::GetInstance()->incrementEnemyCount();

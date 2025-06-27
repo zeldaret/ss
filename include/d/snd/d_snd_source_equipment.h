@@ -5,7 +5,7 @@
 
 class dSndSourceEquipment_c : public dSoundSource_c {
 public:
-    dSndSourceEquipment_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup);
+    dSndSourceEquipment_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup);
 
     /* 0x040 */ virtual void shutdown() override;
     /* 0x194 */ virtual u32 overrideStartSoundId(u32 soundId) override;
@@ -30,7 +30,7 @@ private:
 
 class dSndSourceEquipmentWhip_c : public dSndSourceEquipment_c {
 public:
-    dSndSourceEquipmentWhip_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup);
+    dSndSourceEquipmentWhip_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup);
 
     /* 0x1CC */ virtual void postCalc() override;
 };

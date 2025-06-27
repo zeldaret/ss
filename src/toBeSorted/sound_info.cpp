@@ -13,7 +13,7 @@ SoundInfo::~SoundInfo() {
     }
 }
 
-bool SoundInfo::initSource(u8 sourceType, const char *name, const mVec3_c *posPtr) {
+bool SoundInfo::initSource(s32 sourceType, const char *name, const mVec3_c *posPtr) {
     mpSource = dSoundSourceIf_c::create(sourceType, mpActor, name, 0);
     if (mpSource == nullptr) {
         return false;

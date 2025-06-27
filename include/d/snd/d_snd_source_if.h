@@ -27,7 +27,7 @@ struct dSndSoundCtxParam {
 /** An abstract interface for sound relating to a particular actor. */
 class dSoundSourceIf_c {
 public:
-    static dSoundSourceIf_c *create(u32 id, dAcBase_c *actor, const char *name, u8 subtype);
+    static dSoundSourceIf_c *create(s32 sourceType, dAcBase_c *actor, const char *name, u8 subtype);
 
     virtual ~dSoundSourceIf_c() {}
 

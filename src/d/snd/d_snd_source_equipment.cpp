@@ -8,7 +8,7 @@
 #include "d/snd/d_snd_wzsound.h"
 
 dSndSourceEquipment_c::dSndSourceEquipment_c(
-    u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup
+    s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup
 )
     : dSoundSource_c(sourceType, ac, name, pOwnerGroup) {}
 
@@ -137,7 +137,7 @@ u32 dSndSourceEquipment_c::overrideHitObjSoundId(u32 soundId, dSoundSource_c *so
 }
 
 dSndSourceEquipmentWhip_c::dSndSourceEquipmentWhip_c(
-    u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup
+    s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup
 )
     : dSndSourceEquipment_c(sourceType, ac, name, pOwnerGroup) {}
 
