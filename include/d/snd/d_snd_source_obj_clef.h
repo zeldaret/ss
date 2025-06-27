@@ -5,7 +5,7 @@
 
 class dSndSourceObjClef_c : public dSndSourceObj_c {
 public:
-    dSndSourceObjClef_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceObjClef_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSndSourceObj_c(sourceType, ac, name, pOwnerGroup) {}
 
     bool startTadtoneSound(u32 groupIdx, u32 noteIdx);

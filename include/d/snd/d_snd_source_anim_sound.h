@@ -6,7 +6,7 @@
 
 class dSndSourceAnimSound_c : public dSoundSource_c {
 public:
-    dSndSourceAnimSound_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceAnimSound_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSoundSource_c(sourceType, ac, name, pOwnerGroup), mAnimSound(this) {}
 
     /* 0x1A8 */ virtual StartResult

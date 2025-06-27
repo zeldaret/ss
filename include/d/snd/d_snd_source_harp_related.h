@@ -5,7 +5,7 @@
 
 class dSndSourceHarpRelated_c : public dSoundSource_c {
 public:
-    dSndSourceHarpRelated_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup);
+    dSndSourceHarpRelated_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup);
     virtual ~dSndSourceHarpRelated_c();
 
     /* 0x18C */ virtual void postCalc() override;
@@ -24,7 +24,7 @@ private:
 
 class dSndSourceHarpTg_c : public dSndSourceHarpRelated_c {
 public:
-    dSndSourceHarpTg_c(u8 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+    dSndSourceHarpTg_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSndSourceHarpRelated_c(sourceType, ac, name, pOwnerGroup) {}
 
 private:
