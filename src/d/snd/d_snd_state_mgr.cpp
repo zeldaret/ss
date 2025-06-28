@@ -45,7 +45,7 @@ dSndStateMgr_c::dSndStateMgr_c()
       field_0x128(-1),
       field_0x22C(0),
       field_0x230(0),
-      field_0x234(0),
+      field_0x234(nullptr),
       field_0x238(-1),
       field_0x23C(0),
       field_0x23D(0),

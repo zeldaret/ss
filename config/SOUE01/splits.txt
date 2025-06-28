@@ -2638,11 +2638,19 @@ d/snd/d_snd_stage_callbacks.cpp:
 	.text       start:0x803665F0 end:0x8036740C align:16
 
 d/snd/d_snd_event_callbacks.cpp:
-	.text       start:0x80367410 end:0x8036A3A4 align:16
+	.text       start:0x80367410 end:0x803698F8 align:16
+	.rodata     start:0x804F2308 end:0x804F3678
+	.sdata2     start:0x8057D808 end:0x8057D8A4
+
+d/snd/d_snd_event_demo_callbacks.cpp:
+	.text       start:0x80369900 end:0x8036A3A4 align:16
+	.rodata     start:0x804F3678 end:0x804F37E8
+	.data       start:0x80548A58 end:0x80548B08
+	.sdata2     start:0x8057D8A4 end:0x8057D8B0
 
 d/snd/d_snd_area_sound_effect_mgr.cpp:
 	.text       start:0x8036A3B0 end:0x8036B8D0 align:16
-	.data       start:0x80548B38 end:0x80548B48
+	.data       start:0x80548B08 end:0x80548B48
 	.sbss       start:0x80575D78 end:0x80575D80
 	.sdata2     start:0x8057D8B0 end:0x8057D8E8
 
