@@ -6,6 +6,8 @@
 #include "d/snd/d_snd_source.h"
 
 // clang-format off
+// vtable order - vtables are right but need to split up
+// some headers for weak function order
 #include "d/snd/d_snd_source_e_spark.h"
 #include "d/snd/d_snd_source_enums.h"
 #include "d/snd/d_snd_source_equipment.h"
@@ -31,6 +33,11 @@
 #include "sized_string.h"
 
 #include <cmath>
+
+// TODO - weak function order in this file is a problem.
+// one particular problem is that all weak functions involving
+// dSndAnimSound_c are reversed compared to their natural vtable order,
+// and the overridden `SetupSound` function seems to be immune to reordering
 
 // TODO move
 struct ActorBaseNamePair {
@@ -84,7 +91,7 @@ dSoundSourceIf_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor
         return nullptr;
     }
 
-    u8 subtype = actor->subtype;
+    s32 subtype = actor->subtype;
     SizedString<64> nameStr;
     nameStr.sprintf("%s", name);
 
@@ -160,9 +167,9 @@ dSoundSourceIf_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor
 
     if (category != SND_SOURCE_CATEGORY_9) {
         if (isModified) {
-            group = GetInstance()->findGroup(sourceType, actor, actualName, name, subtype);
+            group = GetInstance()->getGroup(sourceType, actor, actualName, name, subtype);
         } else {
-            group = GetInstance()->findGroup(sourceType, actor, actualName, nullptr, subtype);
+            group = GetInstance()->getGroup(sourceType, actor, actualName, nullptr, subtype);
         }
         actualName = group->getName();
     }
@@ -236,11 +243,30 @@ dSoundSourceIf_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor
                 }
                 break;
             case SND_SOURCE_CATEGORY_TG_SOUND:
+                if (dSndStateMgr_c::GetInstance()->isActiveDemoMaybe(subtype)) {
+                    return nullptr;
+                }
                 newSource = new dSndSourceTgSound_c(sourceType, actor, actualName, group);
                 break;
             case SND_SOURCE_CATEGORY_HARP_RELATED:
-                // TODO
-                new dSndSourceHarpTg_c(0, actor, name, nullptr);
+                switch (sourceType) {
+                    case SND_SOURCE_OBJECT_WARP:
+                        newSource = new dSndSourceHarpObjWarp_c(sourceType, actor, actualName, group);
+                        break;
+                    case SND_SOURCE_SW_HARP:
+                        if (subtype == 4) {
+                            newSource = new dSndSourceHarpSwHarp4_c(sourceType, actor, actualName, group);
+                        } else {
+                            newSource = new dSndSourceHarpSwHarp_c(sourceType, actor, actualName, group);
+                        }
+                        break;
+                    case SND_SOURCE_TG_HARP:
+                        newSource = new dSndSourceHarpTg_c(sourceType, actor, actualName, group);
+                        break;
+                    default:
+                        newSource = new dSndSourceHarpRelated_c(sourceType, actor, actualName, group);
+                        break;
+                }
                 break;
             case SND_SOURCE_CATEGORY_7: newSource = new dSndSourceDemo_c(sourceType, actor, actualName, group); break;
             default:

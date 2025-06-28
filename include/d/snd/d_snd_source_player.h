@@ -6,6 +6,8 @@
 class dSndSourcePlayer_c : public dSndSourceAnimSound_c {
 public:
     dSndSourcePlayer_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup);
+
+    /* 0x200 */ u8 _0x200[0x238 - 0x200];
 };
 
 #endif
