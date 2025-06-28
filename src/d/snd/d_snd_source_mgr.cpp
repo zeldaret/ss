@@ -198,7 +198,7 @@ dSoundSourceIf_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor
             isModified = true;
         }
 
-        if (sourceType == SND_SOURCE_NPC_NRM) {
+        if (sourceType == SND_SOURCE_NPC_51) {
             const ActorBaseNamePair *pair = Actor_BaseActorName_Pairs;
             for (int i = 0; i < lbl_8057E394; i++) {
                 if (streq(nameStr, Actor_BaseActorName_Pairs[i].variant)) {
@@ -387,15 +387,15 @@ dSndSourceMgr_c::dSndSourceMgr_c()
 }
 
 void dSndSourceMgr_c::calcEnemyObjVolume() {
-    if (dSndStateMgr_c::GetInstance()->checkFlag0x94(0x100)) {
+    if (dSndStateMgr_c::GetInstance()->checkFlag0x94(dSndStateMgr_c::EVENT_MUTE_ENEMY_FULL)) {
         dSndControlPlayerMgr_c::GetInstance()->setEnemyMuteVolume(0.0f);
-    } else if (dSndStateMgr_c::GetInstance()->checkFlag0x94(0x80)) {
+    } else if (dSndStateMgr_c::GetInstance()->checkFlag0x94(dSndStateMgr_c::EVENT_MUTE_ENEMY_PARTIAL)) {
         dSndControlPlayerMgr_c::GetInstance()->setEnemyMuteVolume(0.3f);
     }
 
-    if (dSndStateMgr_c::GetInstance()->checkFlag0x94(0x400)) {
+    if (dSndStateMgr_c::GetInstance()->checkFlag0x94(dSndStateMgr_c::EVENT_MUTE_OBJ_FULL)) {
         dSndControlPlayerMgr_c::GetInstance()->setObjectMuteVolume(0.0f);
-    } else if (dSndStateMgr_c::GetInstance()->checkFlag0x94(0x200)) {
+    } else if (dSndStateMgr_c::GetInstance()->checkFlag0x94(dSndStateMgr_c::EVENT_MUTE_OBJ_PARTIAL)) {
         dSndControlPlayerMgr_c::GetInstance()->setObjectMuteVolume(0.3f);
     }
 }
