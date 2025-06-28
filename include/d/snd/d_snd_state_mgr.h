@@ -83,6 +83,9 @@ public:
     bool isInDemo() const {
         return getCurrentStageMusicDemoName() != nullptr;
     }
+
+    // not sure, subtype is unused
+    bool isActiveDemoMaybe(s32 subtype) const;
     bool isInEvent(const char *eventName);
 
 private:
