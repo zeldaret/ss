@@ -173,7 +173,7 @@ public:
         return false;
     }
     /* 0x0D8 */ virtual bool startVoiceLine(const char *label) override;
-    /* 0x0DC */ virtual bool vt_0xDC() override {
+    /* 0x0DC */ virtual bool vt_0xDC(u32 id) override {
         return false;
     }
     /* 0x0E0 */ virtual void stopCurrentActionSound() override {}

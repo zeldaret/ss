@@ -2763,8 +2763,11 @@ d/snd/d_snd_mgr_unk_8.cpp:
 	.text       start:0x8038F2B0 end:0x8038FF18 align:16
 	.ctors      start:0x804DB928 end:0x804DB92C
 
-d/snd/d_snd_mgr_unk_9.cpp:
+d/snd/d_snd_source_npc_head.cpp:
 	.text       start:0x8038FF20 end:0x80390298 align:16
+	.data       start:0x8054C3A0 end:0x8054C5A0
+	.sdata      start:0x805747D0 end:0x805747E8
+	.sdata2     start:0x8057DDD0 end:0x8057DDD8
 
 d/snd/d_snd_source_py_bird.cpp:
 	.text       start:0x803902A0 end:0x80390508 align:16

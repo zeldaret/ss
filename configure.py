@@ -772,7 +772,7 @@ config.libs = [
             Object(Matching, "d/snd/d_snd_source_obj_clef.cpp"),
             Object(Matching, "d/snd/d_snd_source_equipment.cpp"),
             Object(NonMatching, "d/snd/d_snd_mgr_unk_8.cpp"),
-            Object(NonMatching, "d/snd/d_snd_mgr_unk_9.cpp"),
+            Object(Matching, "d/snd/d_snd_source_npc_head.cpp"),
             Object(Matching, "d/snd/d_snd_source_py_bird.cpp"),
             Object(NonMatching, "d/snd/d_snd_source_demo.cpp"),
             Object(NonMatching, "d/snd/d_snd_source_harp_related.cpp"),
