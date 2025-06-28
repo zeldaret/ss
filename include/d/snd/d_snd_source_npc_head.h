@@ -12,6 +12,16 @@ public:
         mpMainName = name;
     }
 
+    /* 0x0D4 */ virtual bool startVoiceLine(u32 id) override;
+    /* 0x0DC */ virtual bool vt_0xDC(u32 id) override;
+
+    /* 0x180 */ virtual void setOrigName(const char *arg) override;
+
+    // id can be a WZSound ID or an offset from LABEL_NV_START
+    /* 0x1EC */ virtual bool npcSpeak(u32 id);
+
+    /* 0x1CC */ virtual void postSetupSound(u32 playingId, u32 requestedId, dSndSeSound_c *seSound) override;
+
 private:
     /* 0x15C */ UNKWORD field_0x15C;
     /* 0x160 */ const char *mpMainName;
