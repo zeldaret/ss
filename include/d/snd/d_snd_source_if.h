@@ -87,7 +87,7 @@ public:
     /* 0x0D0 */ virtual bool holdSoundAtPosition(const char *label, const nw4r::math::VEC3 *position) = 0;
     /* 0x0D4 */ virtual bool startVoiceLine(u32 id) = 0;
     /* 0x0D8 */ virtual bool startVoiceLine(const char *label) = 0;
-    /* 0x0DC */ virtual bool vt_0xDC() = 0;
+    /* 0x0DC */ virtual bool vt_0xDC(u32 id) = 0;
     /* 0x0E0 */ virtual void stopCurrentActionSound() = 0;
     /* 0x0E4 */ virtual void stopActionSound(u32 id) = 0;
     /* 0x0E8 */ virtual bool isPlayingActionSound() const = 0;
