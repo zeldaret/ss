@@ -70,7 +70,7 @@ void dSndSourceGroup_c::resetSoundSourceParam() {
 
 dSndSourceGroup_c::dSndSourceGroup_c()
     : mSubtype(0),
-      field_0x1C(0),
+      mIsActive(false),
       field_0x1D(0),
       mName(""),
       field_0x40(0),
