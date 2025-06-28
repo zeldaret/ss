@@ -2,6 +2,7 @@
 #define D_SND_STATE_MGR_H
 
 #include "common.h"
+#include "d/snd/d_snd_event.h"
 #include "d/snd/d_snd_util.h"
 #include "nw4r/snd/snd_FxReverbStdDpl2.h"
 #include "sized_string.h"
@@ -12,7 +13,7 @@ SND_DISPOSER_FORWARD_DECL(dSndStateMgr_c);
 class dSndStateMgr_c {
 public:
     SND_DISPOSER_MEMBERS(dSndStateMgr_c);
-    
+
 public:
     enum StageFlags_e {
         STAGE_FIELD = 0x1,
@@ -27,6 +28,17 @@ public:
         STAGE_MOUNTAIN = 0x80,
         STAGE_DESERT = 0x100,
         STAGE_SILENT_GROUNDS = 0x200,
+    };
+
+    enum EventFlags_e {
+        EVENT_MUTE_BGM_PARTIAL = 0x8,
+        EVENT_MUTE_BGM_FULL = 0x10,
+        EVENT_MUTE_STAGE_EFFECTS_PARTIAL = 0x20,
+        EVENT_MUTE_STAGE_EFFECTS_FULL = 0x40,
+        EVENT_MUTE_ENEMY_PARTIAL = 0x80,
+        EVENT_MUTE_ENEMY_FULL = 0x100,
+        EVENT_MUTE_OBJ_PARTIAL = 0x200,
+        EVENT_MUTE_OBJ_FULL = 0x400,
     };
 
     dSndStateMgr_c();
@@ -93,17 +105,24 @@ public:
     bool isInEvent(const char *eventName);
 
 private:
+    bool handleGlobalEvent(const char *name);
+    bool handleStageEvent(const char *name);
+    void handleDemoEvent(const char *name);
+
     u32 getStageTypeFlags(const char *stageName) const;
     // ET, FS, or corresponding Sky Keep rooms
     static bool isVolcanicDungeon(u32 stageId);
     // Checks if the given stage + layer is the stage you're transported
     // to when viewing hint movies.
     static bool isSeekerStoneStage(const char *stageName, s32 layer);
-    
+
     void setCallbacksForStage();
 
     u32 getStageId(const char *name, s32 layer);
     static u32 getStageUnk2(u32 stageId);
+
+
+    static SndEventCallback sEventExecuteCallback;
 
     /* 0x010 */ u32 field_0x010;
     /* 0x014 */ UNKWORD field_0x014;
@@ -147,7 +166,7 @@ private:
     /* 0x1EC */ SizedString<64> field_0x1EC;
     /* 0x22C */ UNKWORD field_0x22C;
     /* 0x230 */ UNKWORD field_0x230;
-    /* 0x234 */ UNKWORD field_0x234;
+    /* 0x234 */ const SndEventDef *field_0x234;
     /* 0x238 */ UNKWORD field_0x238;
     /* 0x23C */ u8 field_0x23C;
     /* 0x23D */ u8 field_0x23D;

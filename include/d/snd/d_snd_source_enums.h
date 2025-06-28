@@ -56,7 +56,7 @@ enum SoundSourceType_e {
     SND_SOURCE_NPC_HEAD = 48,
     SND_SOURCE_INSECT = 49,
     SND_SOURCE_NPC_50 = 50,
-    SND_SOURCE_NPC_NRM = 51,
+    SND_SOURCE_NPC_51 = 51,
     SND_SOURCE_NPC_DRAGON = 52,
 
     // 53: TagSound (5)

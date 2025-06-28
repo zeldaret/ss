@@ -39,7 +39,7 @@ void dSndSourceGroup_c::set(s32 sourceType, const char *name) {
 
     if (!assignedParam) {
         switch (sourceType) {
-            case SND_SOURCE_NPC_NRM: {
+            case SND_SOURCE_NPC_51: {
                 mParam.field_0x00 = 300.0f;
                 mParam.field_0x04 = 800.0;
                 mParam.field_0x10 = 2200.0;
