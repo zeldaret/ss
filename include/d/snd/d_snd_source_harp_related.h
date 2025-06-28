@@ -20,6 +20,7 @@ public:
     /* 0x1F8 */ virtual void d_s_harp_vt_0x1F8();
 
 private:
+    /* 0x15C */ u8 _0x15C[0x1BC - 0x15C];
 };
 
 class dSndSourceHarpTg_c : public dSndSourceHarpRelated_c {
@@ -28,6 +29,39 @@ public:
         : dSndSourceHarpRelated_c(sourceType, ac, name, pOwnerGroup) {}
 
 private:
+};
+
+class dSndSourceHarpObjWarp_c : public dSndSourceHarpRelated_c {
+public:
+    dSndSourceHarpObjWarp_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+        : dSndSourceHarpRelated_c(sourceType, ac, name, pOwnerGroup) {}
+
+    /* 0x188 */ virtual void postSetup() override;
+    /* 0x18C */ virtual void postCalc() override;
+
+private:
+};
+
+class dSndSourceHarpSwHarp_c : public dSndSourceHarpRelated_c {
+public:
+    dSndSourceHarpSwHarp_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
+        : dSndSourceHarpRelated_c(sourceType, ac, name, pOwnerGroup) {}
+
+    /* 0x188 */ virtual void postSetup() override;
+    /* 0x18C */ virtual void postCalc() override;
+
+private:
+};
+
+class dSndSourceHarpSwHarp4_c : public dSndSourceHarpRelated_c {
+public:
+    dSndSourceHarpSwHarp4_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup);
+
+    /* 0x188 */ virtual void postSetup() override;
+    /* 0x18C */ virtual void postCalc() override;
+
+private:
+    /* 0x1BC */ u8 _0x1BC[0x210 - 0x1BC];
 };
 
 #endif

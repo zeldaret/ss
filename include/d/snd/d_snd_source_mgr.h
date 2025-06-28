@@ -66,7 +66,7 @@ private:
     void clearSourceLists();
     void clearSourceList(nw4r::ut::List *list);
 
-    dSndSourceGroup_c *findGroup(s32 sourceType, dAcBase_c *actor, const char *name, const char *origName, u8 subtype);
+    dSndSourceGroup_c *getGroup(s32 sourceType, dAcBase_c *actor, const char *name, const char *origName, u8 subtype);
     bool fn_803846D0(s32 sourceType, const char *name, u8 subtype);
 
     /* 0x0010 */ u8 field_0x0010;
