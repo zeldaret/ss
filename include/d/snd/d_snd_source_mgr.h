@@ -58,6 +58,8 @@ public:
     }
 
 private:
+    void calcEnemyObjVolume();
+
     static bool isCertainEnemyType(dSoundSource_c *source);
     static bool isAnimSoundSource(s32 sourceType, const char *name);
     static bool isMultiSoundSource(s32 sourceType, const char *name);
@@ -66,8 +68,13 @@ private:
     void clearSourceLists();
     void clearSourceList(nw4r::ut::List *list);
 
+    dSndSourceGroup_c *getActiveGroupForName(const char *name);
+    dSndSourceGroup_c *getInactiveGroup();
     dSndSourceGroup_c *getGroup(s32 sourceType, dAcBase_c *actor, const char *name, const char *origName, u8 subtype);
     bool fn_803846D0(s32 sourceType, const char *name, u8 subtype);
+
+    void activateGroup(dSndSourceGroup_c *group);
+    bool isActiveGroup(dSndSourceGroup_c *group) const;
 
     /* 0x0010 */ u8 field_0x0010;
     /* 0x0011 */ u8 field_0x0011;
@@ -75,15 +82,15 @@ private:
     /* 0x0013 */ u8 field_0x0013;
 
     /* 0x0014 */ dSndSourceGroup_c *mpDefaultGroup;
-    /* 0x0018 */ nw4r::ut::List mGroupList1;
-    /* 0x0024 */ nw4r::ut::List mGroupList2;
-    /* 0x0030 */ nw4r::ut::List mGroupList3;
+    /* 0x0018 */ LIST_MEMBER(dSndSourceGroup_c, Group1);
+    /* 0x0024 */ LIST_MEMBER(dSndSourceGroup_c, Group2);
+    /* 0x0030 */ LIST_MEMBER(dSndSourceGroup_c, Group3);
     /* 0x003C */ dSndSourceGroup_c mGroups[NUM_GROUPS];
 
     // Not sure what these are for
-    /* 0x383C */ nw4r::ut::List mAllSources;  // node offset 0xE8, -> dSoundSource::mMgrLink
-    /* 0x3848 */ nw4r::ut::List field_0x3848; // node offset 0x15C, -> dSndSourceEnemy_c::mMgrEnemyLink
-    /* 0x3854 */ nw4r::ut::List field_0x3854; // node offset 0x160
+    /* 0x383C */ LIST_MEMBER(dSoundSource_c, AllSources); // node offset 0xE8, -> dSoundSource_c::mMgrLink
+    /* 0x3848 */ nw4r::ut::List field_0x3848;             // node offset 0x15C, -> dSndSourceEnemy_c::mMgrEnemyLink
+    /* 0x3854 */ LIST_MEMBER(dSndSourceHarpRelated_c, HarpRelated); // node offset 0x160, -> dSndSourceHarpRelated_c
 
     /* 0x3860 */ UNKWORD field_0x3860;
     /* 0x3864 */ UNKWORD field_0x3864;

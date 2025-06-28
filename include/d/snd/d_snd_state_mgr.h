@@ -77,6 +77,10 @@ public:
         field_0x010 &= ~mask;
     }
 
+    bool checkFlag0x94(u32 mask) const {
+        return field_0x094 & mask;
+    }
+
     void setFlowEvent(u32 eventId);
 
     const char *getCurrentStageMusicDemoName() const;
