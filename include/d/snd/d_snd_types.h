@@ -9,6 +9,7 @@ class dSndSourceGroup_c;
 class dSndDistantSoundActor_c;
 
 class dSndSourceEnemy_c;
+class dSndSourceHarpRelated_c;
 
 class dSndSound_c;
 

@@ -72,9 +72,10 @@ public:
     void setButtonPressSound(dSoundSource_c *source);
     bool playBattleHitSound(BattleHitSound_e type, dSoundSource_c *source);
 
+    bool playSoundInternalChecked(u32 soundId, nw4r::snd::SoundHandle *handle);
+
 private:
     bool playSoundInternal(u32 soundId, nw4r::snd::SoundHandle *handle);
-    bool playSoundInternalChecked(u32 soundId, nw4r::snd::SoundHandle *handle);
     bool playSoundInternal(u32 soundId);
     void stopSounds(u32 playerIdx, u32 soundId, s32 fadeFrames);
     void stopSounds(u32 soundId, s32 fadeFrames);

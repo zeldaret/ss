@@ -41,6 +41,14 @@ public:
         return mName;
     }
 
+    bool isActive() const {
+        return mIsActive;
+    }
+
+    void setIsActive(bool active) {
+        mIsActive = active;
+    }
+
 private:
     bool setParamFromName(const char *name);
     void resetSoundSourceParam();
@@ -51,7 +59,7 @@ private:
     /* 0x10 */ UNKWORD field_0x10;
     /* 0x14 */ s32 mSourceCategory;
     /* 0x18 */ s32 mSubtype;
-    /* 0x1C */ u8 field_0x1C;
+    /* 0x1C */ bool mIsActive;
     /* 0x1D */ u8 field_0x1D;
     /* 0x1E */ SizedString<32> mName;
     /* 0x40 */ UNKWORD field_0x40;

@@ -2,7 +2,9 @@
 
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/snd/d_snd_source.h"
 
 // clang-format off
@@ -29,6 +31,7 @@
 
 #include "d/snd/d_snd_state_mgr.h"
 #include "d/snd/d_snd_util.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "nw4r/ut/ut_list.h"
 #include "sized_string.h"
 
@@ -46,6 +49,52 @@ struct ActorBaseNamePair {
 };
 extern "C" const ActorBaseNamePair Actor_BaseActorName_Pairs[];
 extern "C" const s32 lbl_8057E394;
+
+bool dSndSourceMgr_c::isAnimSoundSource(s32 sourceType, const char *name) {
+    switch (getSourceCategoryForSourceType(sourceType, name)) {
+        case SND_SOURCE_CATEGORY_PLAYER:
+            switch (sourceType) {
+                case SND_SOURCE_PLAYER: return true;
+            }
+            break;
+        case SND_SOURCE_CATEGORY_ENEMY:
+            if (sourceType < 0x19) {
+                return sourceType != SND_SOURCE_ENEMY_14;
+            }
+            return false;
+        case SND_SOURCE_CATEGORY_NPC:
+            return sourceType != SND_SOURCE_NPC_47 && sourceType != SND_SOURCE_NPC_HEAD &&
+                   sourceType != SND_SOURCE_INSECT;
+        case SND_SOURCE_CATEGORY_OBJECT:
+            if (sourceType >= SND_SOURCE_OBJECT_42) {
+                return true;
+            }
+            break;
+        case 58:
+            // TODO - what is category 58???
+            return true;
+    }
+
+    return false;
+}
+
+bool dSndSourceMgr_c::isMultiSoundSource(s32 sourceType, const char *name) {
+    switch (sourceType) {
+        case SND_SOURCE_BIGBOSS:
+        case SND_SOURCE_BOSS_MG:
+        case SND_SOURCE_BOSS_KR:
+        case SND_SOURCE_BOSS_NUSI:
+        case SND_SOURCE_NPC_NUSI:  return true;
+    }
+    return false;
+}
+
+bool dSndSourceMgr_c::isSwOrEOc(const char *name) {
+    if (streq(name, "Sw") || streq(name, "SwWall") || streq(name, "wnut") || streq(name, "EOc")) {
+        return true;
+    }
+    return false;
+}
 
 s32 dSndSourceMgr_c::getSourceCategoryForSourceType(s32 sourceType, const char *name) {
     // This might be a full-on switch statement but I don't want to write out
@@ -140,7 +189,7 @@ dSoundSourceIf_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor
             subtype = 0;
             isModified = true;
         } else if (strneq(name, "NpcMoS", 6)) {
-            nameStr = "NpcMoE1";
+            nameStr = "NpcMoEl";
             isModified = true;
         }
 
@@ -263,9 +312,7 @@ dSoundSourceIf_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor
                     case SND_SOURCE_TG_HARP:
                         newSource = new dSndSourceHarpTg_c(sourceType, actor, actualName, group);
                         break;
-                    default:
-                        newSource = new dSndSourceHarpRelated_c(sourceType, actor, actualName, group);
-                        break;
+                    default: newSource = new dSndSourceHarpRelated_c(sourceType, actor, actualName, group); break;
                 }
                 break;
             case SND_SOURCE_CATEGORY_7: newSource = new dSndSourceDemo_c(sourceType, actor, actualName, group); break;
@@ -297,7 +344,8 @@ dSoundSourceIf_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor
         }
     }
 
-    if (existingSource != nullptr && existingSource != newSource && sourceType != SND_SOURCE_NPC_HEAD && existingSource->isMultiSource()) {
+    if (existingSource != nullptr && existingSource != newSource && sourceType != SND_SOURCE_NPC_HEAD &&
+        existingSource->isMultiSource()) {
         existingSource->registerAdditionalSource(static_cast<dSoundSource_c *>(newSource));
     }
 
@@ -322,25 +370,52 @@ dSndSourceMgr_c::dSndSourceMgr_c()
       field_0x3880(nullptr),
       field_0x3884(nullptr) {
     // TODO offsetof
-    nw4r::ut::List_Init(&mGroupList1, 0);
-    nw4r::ut::List_Init(&mGroupList2, 0);
+    nw4r::ut::List_Init(&mGroup1List, 0);
+    nw4r::ut::List_Init(&mGroup2List, 0);
 
     // TODO figure out what these are for
-    nw4r::ut::List_Init(&mGroupList3, 8);
-    nw4r::ut::List_Init(&mAllSources, 0xE8);
+    nw4r::ut::List_Init(&mGroup3List, 8);
+    nw4r::ut::List_Init(&mAllSourcesList, 0xE8);
     nw4r::ut::List_Init(&field_0x3848, 0x15C);
-    nw4r::ut::List_Init(&field_0x3854, 0x160);
+    nw4r::ut::List_Init(&mHarpRelatedList, 0x160);
 
     mpDefaultGroup = new dSndSourceGroup_c(-1, "Default", 0, 0);
 
     for (dSndSourceGroup_c *group = &mGroups[0]; group < &mGroups[NUM_GROUPS]; group++) {
-        nw4r::ut::List_Append(&mGroupList2, group);
+        nw4r::ut::List_Append(&mGroup2List, group);
     }
+}
+
+void dSndSourceMgr_c::calcEnemyObjVolume() {
+    if (dSndStateMgr_c::GetInstance()->checkFlag0x94(0x100)) {
+        dSndControlPlayerMgr_c::GetInstance()->setEnemyMuteVolume(0.0f);
+    } else if (dSndStateMgr_c::GetInstance()->checkFlag0x94(0x80)) {
+        dSndControlPlayerMgr_c::GetInstance()->setEnemyMuteVolume(0.3f);
+    }
+
+    if (dSndStateMgr_c::GetInstance()->checkFlag0x94(0x400)) {
+        dSndControlPlayerMgr_c::GetInstance()->setObjectMuteVolume(0.0f);
+    } else if (dSndStateMgr_c::GetInstance()->checkFlag0x94(0x200)) {
+        dSndControlPlayerMgr_c::GetInstance()->setObjectMuteVolume(0.3f);
+    }
+}
+
+dSndSourceGroup_c *dSndSourceMgr_c::getActiveGroupForName(const char *name) {
+    for (dSndSourceGroup_c *it = getGroup1First(); it != nullptr; it = getGroup1Next(it)) {
+        if (streq(it->getName(), name)) {
+            return it;
+        }
+    }
+    return nullptr;
+}
+
+dSndSourceGroup_c *dSndSourceMgr_c::getInactiveGroup() {
+    return getGroup2First();
 }
 
 void dSndSourceMgr_c::registerSource(dSoundSource_c *source) {
     if (source != nullptr) {
-        nw4r::ut::List_Append(&mAllSources, source);
+        nw4r::ut::List_Append(&mAllSourcesList, source);
         switch (source->getCategory()) {
             case SND_SOURCE_CATEGORY_PLAYER: {
                 if (source->getSourceType() == SND_SOURCE_PLAYER && mpPlayerSource == nullptr) {
@@ -361,7 +436,7 @@ void dSndSourceMgr_c::registerSource(dSoundSource_c *source) {
                 break;
             }
             case SND_SOURCE_CATEGORY_HARP_RELATED: {
-                nw4r::ut::List_Append(&field_0x3854, source);
+                nw4r::ut::List_Append(&mHarpRelatedList, source);
                 break;
             }
             case SND_SOURCE_CATEGORY_OBJECT: {
@@ -382,9 +457,9 @@ void dSndSourceMgr_c::registerSource(dSoundSource_c *source) {
 
 void dSndSourceMgr_c::unregisterSource(dSoundSource_c *source) {
     if (source != nullptr) {
-        removeSourceFromList(source, &mAllSources);
+        removeSourceFromList(source, &mAllSourcesList);
         removeSourceFromList(source, &field_0x3848);
-        removeSourceFromList(source, &field_0x3854);
+        removeSourceFromList(source, &mHarpRelatedList);
         if (source == mpPlayerSource) {
             mpPlayerSource = nullptr;
         } else if (source == mpKenseiSource) {
@@ -427,10 +502,25 @@ void dSndSourceMgr_c::onShutdownSource(dSoundSource_c *source) {
 }
 
 void dSndSourceMgr_c::clearSourceLists() {
-    clearSourceList(&mAllSources);
+    clearSourceList(&mAllSourcesList);
     clearSourceList(&field_0x3848);
-    clearSourceList(&field_0x3854);
+    clearSourceList(&mHarpRelatedList);
     mpPlayerSource = nullptr;
+}
+
+void dSndSourceMgr_c::activateGroup(dSndSourceGroup_c *group) {
+    if (!isActiveGroup(group)) {
+        removeGroup2(group);
+        appendGroup1(group);
+        group->setIsActive(true);
+    }
+}
+
+bool dSndSourceMgr_c::isActiveGroup(dSndSourceGroup_c *group) const {
+    if (group != nullptr) {
+        return group->isActive();
+    }
+    return false;
 }
 
 void dSndSourceMgr_c::clearSourceList(nw4r::ut::List *list) {
@@ -451,6 +541,56 @@ s32 dSndSourceMgr_c::getPlayerSourceRoomId() const {
         return getBoomerangSource()->getRoomId();
     }
     return mpPlayerSource->getRoomId();
+}
+
+struct FlowSoundDef {
+    const char *groupName;
+    u32 soundId;
+};
+
+extern "C" const char sLinkHead[] = "LinkHead";
+
+static const FlowSoundDef sFlowSoundDefs[] = {
+    {   "Door_A7",      SE_DoorB00_OPEN_SHORT},
+    {"TgSound_A4", SE_TgSound_A4_TOILET_WATER},
+    {     nullptr,         SE_Door_W_KEY_OPEN},
+    {     nullptr,     SE_NpcDskN_BATH_SPLASH},
+    {   "NpcSenb",     SE_NpcSenb_OPEN_LETTER},
+    {"TgSound_A4",          SE_NV_001_NpcGost},
+    {"TgSound_A4",          SE_NV_003_NpcGost},
+    {     nullptr,       SE_EVENT_GIRL_SCREAM},
+    {     nullptr,          SE_NpcPma_COOKING},
+    {     nullptr,            SE_N_GET_LETTER},
+    {     nullptr,           SE_NV_021_NpcOim},
+    {     nullptr,           SE_NV_020_NpcOim},
+    {     nullptr,       SE_F000_L3_RACE_CALL},
+    {     nullptr,      SE_F000_L3_RACE_START},
+    {     nullptr, SE_S_TALK_CHAR_NpcSlrb_ONE},
+    {     nullptr,            SE_LV_DRINK_MSG},
+};
+
+void dSndSourceMgr_c::playFlowSound(u32 id) {
+    if (id < 100) {
+        return;
+    }
+
+    id -= 100;
+    // @bug should be >=
+    if (id > ARRAY_LENGTH(sFlowSoundDefs)) {
+        return;
+    }
+
+    if (sFlowSoundDefs[id].groupName != nullptr) {
+        dSndSourceGroup_c *grp = getActiveGroupForName(sFlowSoundDefs[id].groupName);
+        if (grp != nullptr) {
+            dSoundSource_c *src = grp->getSourceClosestToListener();
+            if (src != nullptr) {
+                src->startSound(sFlowSoundDefs[id].soundId);
+            }
+        }
+    } else {
+        dSndSmallEffectMgr_c::GetInstance()->playSoundInternalChecked(sFlowSoundDefs[id].soundId, nullptr);
+    }
 }
 
 struct dSndSourceMgrEmptySinit {

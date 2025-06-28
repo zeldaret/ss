@@ -2706,6 +2706,7 @@ d/snd/d_snd_anim_sound.cpp:
 d/snd/d_snd_source_mgr.cpp:
 	.text       start:0x80382410 end:0x803864C8 align:16
 	.ctors      start:0x804DB91C end:0x804DB920
+	.rodata     start:0x804F38E0 end:0x804F3970
 	.data       start:0x805491E0 end:0x8054A680
 	.sdata      start:0x80574310 end:0x805743D0
 	.sbss       start:0x80575DA8 end:0x80575DB0

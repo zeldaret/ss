@@ -64,14 +64,13 @@ public:
 
     void setBgmVolumeDecreaseSpeed(f32 speed);
     void setStageEffectsVolume(f32 volume, s32 fadeFrames);
-
-private:
     void setBgmMuteVolume(f32 volume);
     void setStageEffectsMuteVolume(f32 volume);
     void setEnemyMuteVolume(f32 volume);
     void setObjectMuteVolume(f32 volume);
     void setPlayerVolumeInternal(u32 playerIdx, f32 volume);
 
+private:
     void resetControls();
     void calcVolumes();
     void calcMuteFlags();
