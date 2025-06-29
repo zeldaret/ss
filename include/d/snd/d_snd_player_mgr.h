@@ -40,9 +40,13 @@ public:
     bool loadDemoArchive(const char *demoArchiveName);
     const char *getSoundArchivePath();
     u32 convertLabelStringToSoundId(const char *label) const;
+    static bool isBgmPlayerId(u32 id);
+    u32 getSomeUserParam(u32 soundId) const;
 
-    nw4r::snd::SoundArchivePlayer &getSoundArchivePlayerForType(u8 sourceType);
-    bool canUseThisPlayer(u8 sourceType) const;
+    nw4r::snd::SoundArchivePlayer &getSoundArchivePlayerForType(s32 sourceType);
+    bool canUseThisPlayer(s32 sourceType) const;
+
+    void stopAllSound();
 
     enum PlayerMgrFlag_e {
         MGR_HBM = 0x1,
@@ -50,6 +54,8 @@ public:
         MGR_PAUSE = 0x4,
         MGR_MAP = 0x8,
         MGR_HELP = 0x10,
+
+        MGR_UNK_0x80 = 0x80,
     };
 
     bool checkFlag(u32 mask) const {
@@ -100,8 +106,8 @@ public:
     enum PlayerIndex_e {
         /** Background music */
         PLAYER_BGM = 0,
-        /** Background music, boss battle */
-        PLAYER_BGM_BOSS = 1,
+        /** Background music, battles */
+        PLAYER_BGM_BATTLE = 1,
         /** "fanfare?" */
         PLAYER_FAN = 2,
         /** small sound effects, only a few (UI navigation related) */

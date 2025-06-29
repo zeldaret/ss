@@ -4,11 +4,10 @@
 #include "common.h"
 #include "d/snd/d_snd_source.h"
 #include "d/snd/d_snd_source_enums.h"
+#include "d/snd/d_snd_state_mgr.h"
 #include "nw4r/ut/ut_list.h"
 
 #include <cmath>
-
-extern "C" bool isInStage(const char *stageName);
 
 void dSndSourceGroup_c::set(s32 sourceType, const char *name) {
     resetSoundSourceParam();
@@ -40,17 +39,17 @@ void dSndSourceGroup_c::set(s32 sourceType, const char *name) {
 
     if (!assignedParam) {
         switch (sourceType) {
-            case SND_SOURCE_NPC_NRM: {
+            case SND_SOURCE_NPC_51: {
                 mParam.field_0x00 = 300.0f;
                 mParam.field_0x04 = 800.0;
                 mParam.field_0x10 = 2200.0;
                 break;
             }
-            case SND_SOURCE_NPC_48: {
-                if (isInStage("F401")) {
+            case SND_SOURCE_NPC_HEAD: {
+                if (dSndStateMgr_c::isInStage("F401")) {
                     mParam.field_0x00 = 500.0f;
                     mParam.field_0x04 = 4000.0;
-                } else if (isInStage("F402")) {
+                } else if (dSndStateMgr_c::isInStage("F402")) {
                     mParam.field_0x00 = 400.0f;
                     mParam.field_0x04 = 3500.0;
                 } else {
@@ -71,7 +70,7 @@ void dSndSourceGroup_c::resetSoundSourceParam() {
 
 dSndSourceGroup_c::dSndSourceGroup_c()
     : mSubtype(0),
-      field_0x1C(0),
+      mIsActive(false),
       field_0x1D(0),
       mName(""),
       field_0x40(0),
@@ -127,7 +126,7 @@ dSoundSource_c *dSndSourceGroup_c::getSourceClosestToListener() {
     f32 closest = INFINITY;
     for (dSoundSource_c *source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetFirst(&mSourceList));
          source != nullptr; source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetNext(&mSourceList, source))) {
-        if (source->getActorType() != SND_SOURCE_PLAYER_HEAD && source->getActorType() != SND_SOURCE_NPC_48) {
+        if (source->getSourceType() != SND_SOURCE_PLAYER_HEAD && source->getSourceType() != SND_SOURCE_NPC_HEAD) {
             f32 dist = source->getDistanceToListener();
             if (dist < closest) {
                 closest = dist;
@@ -152,7 +151,7 @@ dSoundSource_c *dSndSourceGroup_c::getSourceClosestToPlayer() {
     f32 closest = INFINITY;
     for (dSoundSource_c *source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetFirst(&mSourceList));
          source != nullptr; source = static_cast<dSoundSource_c *>(nw4r::ut::List_GetNext(&mSourceList, source))) {
-        if (source->getActorType() != 1 && source->getActorType() != 48) {
+        if (source->getSourceType() != 1 && source->getSourceType() != 48) {
             f32 dist = source->getDistanceToPlayer();
             if (dist < closest) {
                 closest = dist;
@@ -164,7 +163,7 @@ dSoundSource_c *dSndSourceGroup_c::getSourceClosestToPlayer() {
     return mpCachedClosestSourceToPlayer;
 }
 
-bool dSndSourceGroup_c::setParamFromName(const char*) {
+bool dSndSourceGroup_c::setParamFromName(const char *) {
     // TODO
     return false;
 }
