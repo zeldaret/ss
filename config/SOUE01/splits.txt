@@ -2698,10 +2698,13 @@ d/snd/d_snd_bgm_sound.cpp:
 	.text       start:0x80379D20 end:0x8037BA68 align:16
 	.sbss       start:0x80575D88 end:0x80575D90
 
-d/snd/d_snd_bgm_data_mgr.cpp:
-	.text       start:0x8037BA70 end:0x8037C518 align:16
+d/snd/d_snd_bgm_battle_data_mgr.cpp:
+	.text       start:0x8037BA70 end:0x8037BEA8 align:16
 	.data       start:0x80549148 end:0x80549158
 	.sdata      start:0x805742F0 end:0x805742F8
+
+d/snd/d_snd_bgm_harp_data.cpp:
+	.text       start:0x8037BEB0 end:0x8037C518 align:16
 
 d/snd/d_snd_bgm_mml_parser_base.cpp:
 	.text       start:0x8037C520 end:0x8037D014 align:16
