@@ -52,6 +52,10 @@ namespace nw4r { namespace snd
 				mSound->ReadVariable(varNo, value);
 		}
 
+		static bool WriteGlobalVariable(int varNo, s16 value) {
+			return detail::SeqSound::WriteGlobalVariable(varNo, value);
+		}
+
 		void SetTrackMute(u32 trackFlags, SeqMute mute) {
 			if (IsAttachedSound())
 				mSound->SetTrackMute(trackFlags, mute);
