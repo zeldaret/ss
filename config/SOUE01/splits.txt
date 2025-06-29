@@ -2602,6 +2602,7 @@ d/snd/d_snd_sound.cpp:
 d/snd/d_snd_player_mgr.cpp:
 	.text       start:0x8035DA90 end:0x8035F04C align:16
 	.data       start:0x80548758 end:0x805487A0
+	.sdata      start:0x80574090 end:0x80574098
 	.sbss       start:0x80575D38 end:0x80575D40
 	.sdata2     start:0x8057D380 end:0x8057D390
 
@@ -2636,21 +2637,28 @@ d/snd/d_snd_stage_data.cpp:
 
 d/snd/d_snd_stage_callbacks.cpp:
 	.text       start:0x803665F0 end:0x8036740C align:16
+	.data       start:0x80548A28 end:0x80548A48
+	.sdata      start:0x80574198 end:0x805741A0
+	.sdata2     start:0x8057D7C0 end:0x8057D808
 
 d/snd/d_snd_event_callbacks.cpp:
 	.text       start:0x80367410 end:0x803698F8 align:16
 	.rodata     start:0x804F2308 end:0x804F3678
+	.data       start:0x80548A48 end:0x80548A58
+	.sdata      start:0x805741A0 end:0x805741F8
 	.sdata2     start:0x8057D808 end:0x8057D8A4
 
 d/snd/d_snd_event_demo_callbacks.cpp:
 	.text       start:0x80369900 end:0x8036A3A4 align:16
 	.rodata     start:0x804F3678 end:0x804F37E8
 	.data       start:0x80548A58 end:0x80548B08
+	.sdata      start:0x805741F8 end:0x80574200
 	.sdata2     start:0x8057D8A4 end:0x8057D8B0
 
 d/snd/d_snd_area_sound_effect_mgr.cpp:
 	.text       start:0x8036A3B0 end:0x8036B8D0 align:16
 	.data       start:0x80548B08 end:0x80548B48
+	.sdata      start:0x80574200 end:0x80574210
 	.sbss       start:0x80575D78 end:0x80575D80
 	.sdata2     start:0x8057D8B0 end:0x8057D8E8
 
@@ -2671,15 +2679,19 @@ d/snd/d_snd_control_player.cpp:
 
 d/snd/d_snd_bgm_mgr.cpp:
 	.text       start:0x8036C6B0 end:0x803739CC align:16
+	.data       start:0x80548CC8 end:0x80548F98
+	.sdata      start:0x80574210 end:0x80574268
 	.sbss       start:0x80575D80 end:0x80575D88
 	.sdata2     start:0x8057D940 end:0x8057D970
 
 d/snd/d_snd_bgm_sound_callbacks.cpp:
 	.text       start:0x803739D0 end:0x80378ECC align:16
+	.sdata      start:0x80574268 end:0x805742B8
 	.sdata2     start:0x8057D970 end:0x8057DA50
 
 d/snd/d_snd_bgm_sound_battle_callbacks.cpp:
 	.text       start:0x80378ED0 end:0x80379D20 align:16
+	.sdata      start:0x805742B8 end:0x805742F0
 	.sdata2     start:0x8057DA50 end:0x8057DA58
 
 d/snd/d_snd_bgm_sound.cpp:
@@ -2688,22 +2700,26 @@ d/snd/d_snd_bgm_sound.cpp:
 
 d/snd/d_snd_bgm_data_mgr.cpp:
 	.text       start:0x8037BA70 end:0x8037C518 align:16
+	.sdata      start:0x805742F0 end:0x805742F8
 
 d/snd/d_snd_bgm_mml_parser_base.cpp:
 	.text       start:0x8037C520 end:0x8037D014 align:16
 
 d/snd/d_snd_bgm_mml_parsers.cpp:
 	.text       start:0x8037D020 end:0x8037D800 align:16
+	.sdata      start:0x805742F8 end:0x80574300
 
 d/snd/d_snd_small_effect_mgr.cpp:
 	.text       start:0x8037D800 end:0x8037F8B4 align:16
 	.data       start:0x805491B8 end:0x805491D0
+	.sdata      start:0x80574300 end:0x80574308
 	.sbss       start:0x80575D98 end:0x80575DA0
 	.sdata2     start:0x8057DA80 end:0x8057DAD0
 
 d/snd/d_snd_harp_mgr.cpp:
 	.text       start:0x8037F8C0 end:0x80382150 align:16
 	.data       start:0x805491D0 end:0x805491E0
+	.sdata      start:0x80574308 end:0x80574310
 	.sbss       start:0x80575DA0 end:0x80575DA8
 	.sdata2     start:0x8057DAD0 end:0x8057DB48
 
