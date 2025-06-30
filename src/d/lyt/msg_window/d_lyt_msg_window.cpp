@@ -6,7 +6,7 @@
 #include "d/d_pad.h"
 #include "d/d_stage_mgr.h"
 #include "d/d_tag_processor.h"
-#include "d/d_textunk.h"
+#include "d/d_lyt_hio.h"
 #include "d/d_textwindow_unk.h"
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_map.h"
@@ -42,10 +42,10 @@
 
 #include <cstring>
 
-class MsgWindowUnkLocalClass {
+class dLytMsgWindow_HIO_c {
 public:
-    MsgWindowUnkLocalClass();
-    virtual ~MsgWindowUnkLocalClass();
+    dLytMsgWindow_HIO_c();
+    virtual ~dLytMsgWindow_HIO_c();
 
 private:
     /* 0x04 */ u32 field_0x04;
@@ -53,14 +53,14 @@ private:
     /* 0x09 */ u8 field_0x09;
 };
 
-MsgWindowUnkLocalClass mUnk;
+dLytMsgWindow_HIO_c sHio;
 
-MsgWindowUnkLocalClass::MsgWindowUnkLocalClass() {
+dLytMsgWindow_HIO_c::dLytMsgWindow_HIO_c() {
     field_0x04 = 8;
     field_0x08 = 0;
     field_0x09 = 0;
 }
-MsgWindowUnkLocalClass::~MsgWindowUnkLocalClass() {}
+dLytMsgWindow_HIO_c::~dLytMsgWindow_HIO_c() {}
 
 STATE_DEFINE(dLytMsgWindow_c, Invisible);
 STATE_DEFINE(dLytMsgWindow_c, In);
@@ -855,7 +855,7 @@ void dLytMsgWindow_c::removeSubMsgManagers() {
     mpCurrentSubtype = nullptr;
     field_0x1220 = 0;
 
-    UnkTextThing::getInstance()->setStr2("");
-    UnkTextThing::getInstance()->setStr1("");
-    UnkTextThing::getInstance()->setStr3("");
+    dLyt_HIO_c::getInstance()->setStr2("");
+    dLyt_HIO_c::getInstance()->setStr1("");
+    dLyt_HIO_c::getInstance()->setStr3("");
 }

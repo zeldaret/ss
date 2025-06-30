@@ -15,11 +15,11 @@ mVec3_c getPosCopy3(const dAcObjBase_c &actor) {
     return actor.poscopy3;
 }
 
-class UnkAttnClass {
+class dAttention_HIO_c {
 public:
     u8 field_0x00;
-    UnkAttnClass();
-    virtual ~UnkAttnClass() {}
+    dAttention_HIO_c();
+    virtual ~dAttention_HIO_c() {}
 
     void init();
     void remove();
@@ -33,11 +33,11 @@ public:
     f32 field_0x14;
 };
 
-void UnkAttnClass::init() {}
+void dAttention_HIO_c::init() {}
 
-void UnkAttnClass::remove() {}
+void dAttention_HIO_c::remove() {}
 
-UnkAttnClass::UnkAttnClass()
+dAttention_HIO_c::dAttention_HIO_c()
     : field_0x00(0),
       field_0x08(field_0x00 | 8),
       field_0x0A(300),
@@ -46,14 +46,14 @@ UnkAttnClass::UnkAttnClass()
       field_0x12(10),
       field_0x14(1.0f) {}
 
-UnkAttnClass attnClass;
+dAttention_HIO_c sHio;
 
 AttentionManager::AttentionManager() {
     sInstance = this;
 }
 
 AttentionManager::~AttentionManager() {
-    attnClass.remove();
+    sHio.remove();
     sInstance = nullptr;
 }
 
@@ -76,7 +76,7 @@ bool AttentionManager::create() {
     mModels.mState = NONE;
     mTargeted = false;
     field_0xB68 = 0;
-    attnClass.init();
+    sHio.init();
     field_0xBDC = 0;
     field_0xBD5 = 0;
     field_0xBD4 = 0;
@@ -200,7 +200,7 @@ bool AttentionManager::switchTarget(s32 idx) {
             mHoldingZ = checkZButtonHeld();
             AttentionPool *left = mGroups[idx].getPool();
             AttentionPool *right = mGroups[idx].getOtherPool();
-            if ((attnClass.field_0x08 & 8) != 0 && (mModels.mState == OFF || mModels.mState == NONE) && checkLink2() &&
+            if ((sHio.field_0x08 & 8) != 0 && (mModels.mState == OFF || mModels.mState == NONE) && checkLink2() &&
                 right->mNumUsedRefs != 0) {
                 zPressed = true;
             }
@@ -252,7 +252,7 @@ bool AttentionManager::playTargetAnim(s32 idx) {
         PSMTXTrans(mtx, v.x, v.y, v.z);
 
         mModels.mMdls->mMdl.setLocalMtx(mtx);
-        mModels.mMdls->mMdl.setScale(attnClass.field_0x14, attnClass.field_0x14, attnClass.field_0x14);
+        mModels.mMdls->mMdl.setScale(sHio.field_0x14, sHio.field_0x14, sHio.field_0x14);
         doSomething = true;
     }
 

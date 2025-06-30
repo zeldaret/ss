@@ -4,7 +4,7 @@
 #include "d/a/d_a_base.h"
 #include "d/d_font_manager.h"
 #include "d/d_message.h"
-#include "d/d_textunk.h"
+#include "d/d_lyt_hio.h"
 #include "d/d_textwindow_unk.h"
 #include "d/lyt/d_lyt_util_items.h"
 #include "d/lyt/d_textbox.h"
@@ -485,7 +485,7 @@ void dTagProcessor_c::formatV(
                 case 0x30000: {
                     if (textBox != nullptr) {
                         backupScale = currScale;
-                        currScale *= UnkTextThing::getField0x768();
+                        currScale *= dLyt_HIO_c::getField0x768();
                         currScale *= textBox->getMyScale();
                     }
                     writePtr = writeTextNormal(src, writePtr, &local_b4, cmdLen, state4);
@@ -672,7 +672,7 @@ beginning:
                         if (currScale != newScale) {
                             nw4r::lyt::Size fontSize = mpTextBox->GetFontSize();
                             posY -= (fontSize.height * ((currScale - newScale) / baseScale) / 2.0f) *
-                                    UnkTextThing::getField0x788();
+                                    dLyt_HIO_c::getField0x788();
                             currScale = newScale;
                         }
                     }
@@ -680,7 +680,7 @@ beginning:
                 case 0x30000: {
                     if (b2) {
                         backupScale = currScale;
-                        f32 tmp = backupScale * UnkTextThing::getField0x768();
+                        f32 tmp = backupScale * dLyt_HIO_c::getField0x768();
                         if (textBox != nullptr) {
                             tmp *= textBox->getMyScale();
                         }
@@ -695,7 +695,7 @@ beginning:
                         *writePtr = -1;
                         const nw4r::ut::Font *fnt = dFontMng_c::getFont(dFontMng_c::PICTURE);
                         s8 c = getAnimatedIconReplacement(READ_U8(endPtr, 0));
-                        f32 tmp = UnkTextThing::getField0x764();
+                        f32 tmp = dLyt_HIO_c::getField0x764();
                         f32 wid = tmp / fnt->GetWidth() * currScale;
                         f32 charSpace = textBox->GetCharSpace();
                         f32 charWidth = wid * fnt->GetCharWidth(c);
@@ -962,14 +962,14 @@ void dTagProcessor_c::fn_800B4FF0(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
                 // the tmp vars, but control flow from the inlines remains
                 f32 w1 = fontSize.width * 0.5f;
                 f32 h1 = fontSize.height * 0.5f;
-                if (w1 < UnkTextThing::getField0x758() || h1 < UnkTextThing::getField0x758()) {
+                if (w1 < dLyt_HIO_c::getField0x758() || h1 < dLyt_HIO_c::getField0x758()) {
                     if (w1 < h1) {
-                        f32 tmp = UnkTextThing::getField0x758();
+                        f32 tmp = dLyt_HIO_c::getField0x758();
                     } else {
-                        f32 tmp2 = UnkTextThing::getField0x758();
+                        f32 tmp2 = dLyt_HIO_c::getField0x758();
                     }
                 }
-                f32 tmp3 = UnkTextThing::getField0x758();
+                f32 tmp3 = dLyt_HIO_c::getField0x758();
                 // End unused code
 
                 f32 f7 = (fontSize.height + getTextBox()->GetLineSpace()) / 2.0f;
@@ -1391,8 +1391,8 @@ void dTagProcessor_c::changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
     } else {
         field_0x904 = ctx->writer->GetScaleV();
         field_0x908 = ctx->writer->GetCursorY();
-        scale = field_0x904 * UnkTextThing::getField0x768();
-        posY = field_0x908 - ctx->writer->GetFontAscent() * UnkTextThing::getField0x76C();
+        scale = field_0x904 * dLyt_HIO_c::getField0x768();
+        posY = field_0x908 - ctx->writer->GetFontAscent() * dLyt_HIO_c::getField0x76C();
     }
 
     ctx->writer->SetCursorY(posY);
@@ -1402,7 +1402,7 @@ void dTagProcessor_c::changeScale(nw4r::ut::Rect *rect, nw4r::ut::PrintContext<w
 void dTagProcessor_c::saveIconWidth(dTextBox_c *textBox, wchar_t *cmd, f32 arg) {
     nw4r::ut::Font *f = dFontMng_c::getFont(dFontMng_c::PICTURE);
     s8 c3 = getAnimatedIconReplacement(READ_U8(cmd, 0));
-    arg = UnkTextThing::getField0x764() / f->GetWidth() * arg;
+    arg = dLyt_HIO_c::getField0x764() / f->GetWidth() * arg;
 
     mLineData.mLineWidths[mLineData.mNumLines] += arg * f->GetCharWidth(c3) + textBox->GetCharSpace();
 }
@@ -1435,10 +1435,10 @@ void dTagProcessor_c::drawPicture(
 ) {
     nw4r::ut::Font *font = dFontMng_c::getFont(dFontMng_c::PICTURE);
 
-    f32 f1 = UnkTextThing::getField0x764() * w->GetScaleV() / UnkTextThing::getFn800B1FC0();
-    f32 f3 = UnkTextThing::getFn800B1FC0();
-    f32 f4 = UnkTextThing::getField0x764();
-    f32 f5 = UnkTextThing::getFn800B1FC0();
+    f32 f1 = dLyt_HIO_c::getField0x764() * w->GetScaleV() / dLyt_HIO_c::getFn800B1FC0();
+    f32 f3 = dLyt_HIO_c::getFn800B1FC0();
+    f32 f4 = dLyt_HIO_c::getField0x764();
+    f32 f5 = dLyt_HIO_c::getFn800B1FC0();
     f32 scaleY2 = w->GetScaleV();
 
     s32 fontHeight = w->GetFont()->GetHeight();
@@ -1528,7 +1528,7 @@ void dTagProcessor_c::configureWriterForIcon(
 ) {
     nw4r::ut::Font *font = dFontMng_c::getFont(dFontMng_c::PICTURE);
 
-    f32 f1 = UnkTextThing::getField0x764() * ctx->writer->GetScaleV() / UnkTextThing::getFn800B1FC0();
+    f32 f1 = dLyt_HIO_c::getField0x764() * ctx->writer->GetScaleV() / dLyt_HIO_c::getFn800B1FC0();
     w->SetFont(*font);
     w->SetFontSize(f1);
     w->SetGradationMode(nw4r::ut::CharWriter::GRADMODE_V);
@@ -1656,39 +1656,39 @@ u8 dTagProcessor_c::symbolToFontIdx(s32 s) {
 
 u8 dTagProcessor_c::getAnimatedIconReplacement(u8 arg) {
     if (arg >= FONT_BTN_NUN_STK_UP && arg <= FONT_BTN_NUN_STK_RIGHT) {
-        if (mButtonPressAnimTimer >= UnkTextThing::getAnimBtnTotalDuration()) {
+        if (mButtonPressAnimTimer >= dLyt_HIO_c::getAnimBtnTotalDuration()) {
             // Show base instead
             return symbolToFontIdx(FONT_BTN_NUN_STK);
         }
     } else if (arg >= FONT_BTN_CROSS_UP && arg <= FONT_BTN_CROSS_RIGHT) {
-        if (mButtonPressAnimTimer >= UnkTextThing::getAnimBtnTotalDuration()) {
+        if (mButtonPressAnimTimer >= dLyt_HIO_c::getAnimBtnTotalDuration()) {
             // Show base instead
             // Empty Cross Btn
             return '.';
         }
     } else if (arg == FONT_BTN_NUN_STK_WIGGLE_VERTICAL) {
-        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration()) {
+        if (mButtonWiggleAnimTimer < dLyt_HIO_c::getAnimBtnTotalDuration()) {
             return symbolToFontIdx(FONT_BTN_NUN_STK_UP);
         }
 
-        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 2) {
+        if (mButtonWiggleAnimTimer < dLyt_HIO_c::getAnimBtnTotalDuration() * 2) {
             return symbolToFontIdx(FONT_BTN_NUN_STK);
         }
 
-        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 3) {
+        if (mButtonWiggleAnimTimer < dLyt_HIO_c::getAnimBtnTotalDuration() * 3) {
             return symbolToFontIdx(FONT_BTN_NUN_STK_DOWN);
         }
         return symbolToFontIdx(FONT_BTN_NUN_STK);
     } else if (arg == FONT_BTN_NUN_STK_WIGGLE_HORIZONTAL) {
-        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration()) {
+        if (mButtonWiggleAnimTimer < dLyt_HIO_c::getAnimBtnTotalDuration()) {
             return symbolToFontIdx(FONT_BTN_NUN_STK_LEFT);
         }
 
-        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 2) {
+        if (mButtonWiggleAnimTimer < dLyt_HIO_c::getAnimBtnTotalDuration() * 2) {
             return symbolToFontIdx(FONT_BTN_NUN_STK);
         }
 
-        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 3) {
+        if (mButtonWiggleAnimTimer < dLyt_HIO_c::getAnimBtnTotalDuration() * 3) {
             return symbolToFontIdx(FONT_BTN_NUN_STK_RIGHT);
         }
         return symbolToFontIdx(FONT_BTN_NUN_STK);
@@ -1699,13 +1699,13 @@ u8 dTagProcessor_c::getAnimatedIconReplacement(u8 arg) {
 
 u8 dTagProcessor_c::getAnimatedWiggleIconReplacement(u8 arg) {
     if (arg == FONT_BTN_NUN_STK_WIGGLE_VERTICAL) {
-        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 2) {
+        if (mButtonWiggleAnimTimer < dLyt_HIO_c::getAnimBtnTotalDuration() * 2) {
             return symbolToFontIdx(FONT_BTN_NUN_STK_UP);
         } else {
             return symbolToFontIdx(FONT_BTN_NUN_STK_DOWN);
         }
     } else if (arg == FONT_BTN_NUN_STK_WIGGLE_HORIZONTAL) {
-        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 2) {
+        if (mButtonWiggleAnimTimer < dLyt_HIO_c::getAnimBtnTotalDuration() * 2) {
             return symbolToFontIdx(FONT_BTN_NUN_STK_LEFT);
         } else {
             return symbolToFontIdx(FONT_BTN_NUN_STK_RIGHT);
@@ -1716,18 +1716,18 @@ u8 dTagProcessor_c::getAnimatedWiggleIconReplacement(u8 arg) {
 
 u8 dTagProcessor_c::getAlphaForAnimatedIcon(u8 arg) {
     f32 ret = 255.0f;
-    f32 duration = UnkTextThing::getAnimBtnTransitionDuration();
+    f32 duration = dLyt_HIO_c::getAnimBtnTransitionDuration();
     if (arg >= FONT_BTN_NUN_STK_UP && arg <= FONT_BTN_NUN_STK_RIGHT) {
-        if (mButtonPressAnimTimer < UnkTextThing::getAnimBtnTransitionDuration()) {
+        if (mButtonPressAnimTimer < dLyt_HIO_c::getAnimBtnTransitionDuration()) {
             // Ramp-up, become visible
             ret = (mButtonPressAnimTimer / duration) * ret;
-        } else if (mButtonPressAnimTimer < UnkTextThing::getAnimBtnTotalDuration()) {
+        } else if (mButtonPressAnimTimer < dLyt_HIO_c::getAnimBtnTotalDuration()) {
             // Fully visible
             ret = 255.0f;
         } else if (mButtonPressAnimTimer <
-                   UnkTextThing::getAnimBtnTotalDuration() + UnkTextThing::getAnimBtnTransitionDuration()) {
+                   dLyt_HIO_c::getAnimBtnTotalDuration() + dLyt_HIO_c::getAnimBtnTransitionDuration()) {
             // Ramp-down, become invisible
-            ret = (UnkTextThing::getAnimBtnTotalDuration() + UnkTextThing::getAnimBtnTransitionDuration() -
+            ret = (dLyt_HIO_c::getAnimBtnTotalDuration() + dLyt_HIO_c::getAnimBtnTransitionDuration() -
                    mButtonPressAnimTimer) /
                   duration * ret;
         } else {
@@ -1735,32 +1735,32 @@ u8 dTagProcessor_c::getAlphaForAnimatedIcon(u8 arg) {
             ret = 0.0f;
         }
     } else if (arg >= FONT_BTN_NUN_STK_WIGGLE_VERTICAL && arg <= FONT_BTN_NUN_STK_WIGGLE_HORIZONTAL) {
-        if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTransitionDuration()) {
+        if (mButtonWiggleAnimTimer < dLyt_HIO_c::getAnimBtnTransitionDuration()) {
             // Ramp-up direction variant, become visible
             ret = (mButtonWiggleAnimTimer / duration) * ret;
-        } else if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration()) {
+        } else if (mButtonWiggleAnimTimer < dLyt_HIO_c::getAnimBtnTotalDuration()) {
             // Direction fully visible
             ret = 255.0f;
         } else if (mButtonWiggleAnimTimer <
-                   UnkTextThing::getAnimBtnTotalDuration() + UnkTextThing::getAnimBtnTransitionDuration()) {
+                   dLyt_HIO_c::getAnimBtnTotalDuration() + dLyt_HIO_c::getAnimBtnTransitionDuration()) {
             // Ramp-down direction variant, become invisible
-            ret = (UnkTextThing::getAnimBtnTotalDuration() + UnkTextThing::getAnimBtnTransitionDuration() -
+            ret = (dLyt_HIO_c::getAnimBtnTotalDuration() + dLyt_HIO_c::getAnimBtnTransitionDuration() -
                    mButtonWiggleAnimTimer) /
                   duration * ret;
-        } else if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 2) {
+        } else if (mButtonWiggleAnimTimer < dLyt_HIO_c::getAnimBtnTotalDuration() * 2) {
             // Invisible
             ret = 0.0f;
         } else if (mButtonWiggleAnimTimer <
-                   UnkTextThing::getAnimBtnTransitionDuration() + UnkTextThing::getAnimBtnTotalDuration() * 2) {
+                   dLyt_HIO_c::getAnimBtnTransitionDuration() + dLyt_HIO_c::getAnimBtnTotalDuration() * 2) {
             // Ramp-up base variant, become visible
-            ret = (mButtonWiggleAnimTimer - 2 * UnkTextThing::getAnimBtnTotalDuration()) / duration * ret;
-        } else if (mButtonWiggleAnimTimer < UnkTextThing::getAnimBtnTotalDuration() * 3) {
+            ret = (mButtonWiggleAnimTimer - 2 * dLyt_HIO_c::getAnimBtnTotalDuration()) / duration * ret;
+        } else if (mButtonWiggleAnimTimer < dLyt_HIO_c::getAnimBtnTotalDuration() * 3) {
             // Base variant fully visible
             ret = 255.0f;
         } else if (mButtonWiggleAnimTimer <
-                   UnkTextThing::getAnimBtnTransitionDuration() + UnkTextThing::getAnimBtnTotalDuration() * 3) {
+                   dLyt_HIO_c::getAnimBtnTransitionDuration() + dLyt_HIO_c::getAnimBtnTotalDuration() * 3) {
             // Ramp-down base variant, become invisible
-            ret = ((UnkTextThing::getAnimBtnTransitionDuration() + 3 * UnkTextThing::getAnimBtnTotalDuration()) -
+            ret = ((dLyt_HIO_c::getAnimBtnTransitionDuration() + 3 * dLyt_HIO_c::getAnimBtnTotalDuration()) -
                    mButtonWiggleAnimTimer) /
                   duration * ret;
         } else {
@@ -1780,7 +1780,7 @@ void dTagProcessor_c::setStringArg(const wchar_t *arg, s32 index) {
 
 f32 dTagProcessor_c::fn_800B8040(s8 factor, u32 windowType) {
     // Fun little recursion here
-    f32 f1 = UnkTextThing::getFn800B1F70();
+    f32 f1 = dLyt_HIO_c::getFn800B1F70();
     if (windowType == dLytMsgWindow_c::MSG_WINDOW_WOOD) {
         f32 f2 = fn_800B8040(0, 0);
         f32 f3 = fn_800B8040(factor, 0);
@@ -1810,7 +1810,7 @@ f32 dTagProcessor_c::fn_800B8040(s8 factor, u32 windowType) {
             case 1:  x = 0.95f; break;
             case 2:  x = 1.1f; break;
         }
-        x *= UnkTextThing::getFn800B1F10();
+        x *= dLyt_HIO_c::getFn800B1F10();
         return x * f1;
     }
 }
@@ -1910,14 +1910,14 @@ f32 dTagProcessor_c::fn_800B85C0(s32 lineIdx) {
         // the tmp vars, but control flow from the inlines remains
         f32 w1 = fontSize.width * 0.5f;
         f32 h1 = fontSize.height * 0.5f;
-        if (w1 < UnkTextThing::getField0x758() || h1 < UnkTextThing::getField0x758()) {
+        if (w1 < dLyt_HIO_c::getField0x758() || h1 < dLyt_HIO_c::getField0x758()) {
             if (w1 < h1) {
-                f32 tmp = UnkTextThing::getField0x758();
+                f32 tmp = dLyt_HIO_c::getField0x758();
             } else {
-                f32 tmp2 = UnkTextThing::getField0x758();
+                f32 tmp2 = dLyt_HIO_c::getField0x758();
             }
         }
-        f32 tmp3 = UnkTextThing::getField0x758();
+        f32 tmp3 = dLyt_HIO_c::getField0x758();
         // End unused code
 
         f32 f7 = (fontSize.height + getTextBox()->GetLineSpace()) / 2.0f;
@@ -2016,14 +2016,14 @@ void dTagProcessor_c::setNumericArgs(const s32 *args, s32 numArgs) {
 
 void dTagProcessor_c::executeBtnPressTimer() {
     mButtonPressAnimTimer++;
-    if (mButtonPressAnimTimer >= UnkTextThing::getAnimBtnTotalDuration() * 2) {
+    if (mButtonPressAnimTimer >= dLyt_HIO_c::getAnimBtnTotalDuration() * 2) {
         mButtonPressAnimTimer = 0;
     }
 }
 
 void dTagProcessor_c::executeBtnWiggleTimer() {
     mButtonWiggleAnimTimer++;
-    if (mButtonWiggleAnimTimer >= UnkTextThing::getAnimBtnTotalDuration() * 4) {
+    if (mButtonWiggleAnimTimer >= dLyt_HIO_c::getAnimBtnTotalDuration() * 4) {
         mButtonWiggleAnimTimer = 0;
     }
 }

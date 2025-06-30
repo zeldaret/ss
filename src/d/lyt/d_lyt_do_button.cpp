@@ -10,9 +10,9 @@
 #include "sized_string.h"
 #include "toBeSorted/event_manager.h"
 
-struct DoButtonClass {
-    DoButtonClass();
-    virtual ~DoButtonClass();
+struct dLytDoButton_HIO_c {
+    dLytDoButton_HIO_c();
+    virtual ~dLytDoButton_HIO_c();
 
     u8 field_0x04;
     u8 field_0x05;
@@ -26,9 +26,9 @@ struct DoButtonClass {
     u8 field_0x16;
 };
 
-static DoButtonClass sDoButtonClass;
+static dLytDoButton_HIO_c sHio;
 
-DoButtonClass::DoButtonClass() {
+dLytDoButton_HIO_c::dLytDoButton_HIO_c() {
     field_0x04 = 0;
     field_0x05 = 0x29;
     field_0x06 = 0x5E;
@@ -40,7 +40,7 @@ DoButtonClass::DoButtonClass() {
     field_0x15 = 0;
     field_0x16 = 0;
 }
-DoButtonClass::~DoButtonClass() {}
+dLytDoButton_HIO_c::~dLytDoButton_HIO_c() {}
 
 dLytDobutton_c *dLytDobutton_c::sInstance;
 
@@ -172,7 +172,7 @@ void dLytDobutton_c::executeState_InvisibleTimeCnt() {
             field_0x48C = 0;
         }
     } else {
-        if (field_0x48C < sDoButtonClass.field_0x15) {
+        if (field_0x48C < sHio.field_0x15) {
             field_0x48C++;
         } else {
             realize();
@@ -777,7 +777,7 @@ void dLytDobutton_c::fn_8010E3D0(bool b) {
         f32 tmp = (xBase - left);
         w1 = mpTextBoxes[0]->GetLineWidth(nullptr) + tmp;
     }
-    f32 w = w1 + sDoButtonClass.field_0x10;
+    f32 w = w1 + sHio.field_0x10;
     sz3.width = w;
     sz4.width = w;
     mpPanes[3]->SetSize(sz3);

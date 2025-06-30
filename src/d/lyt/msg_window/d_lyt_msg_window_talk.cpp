@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "d/d_tag_processor.h"
-#include "d/d_textunk.h"
+#include "d/d_lyt_hio.h"
 #include "d/lyt/d2d.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/msg_window/d_lyt_msg_window_common.h"
@@ -172,7 +172,7 @@ void dLytMsgWindowTalk_c::executeState_In() {
 void dLytMsgWindowTalk_c::finalizeState_In() {}
 
 void dLytMsgWindowTalk_c::initializeState_Wait() {
-    mWaitDelay = UnkTextThing::getInstance()->getMsgWindowWaitDelay();
+    mWaitDelay = dLyt_HIO_c::getInstance()->getMsgWindowWaitDelay();
 }
 void dLytMsgWindowTalk_c::executeState_Wait() {
     if (--mWaitDelay > 0) {

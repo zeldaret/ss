@@ -18,7 +18,7 @@
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_do_button.h"
 #include "d/lyt/d_lyt_map.h"
-#include "d/lyt/d_lyt_meter_configuration.h"
+#include "d/lyt/d_lyt_meter_hio.h"
 #include "d/lyt/d_lyt_save_mgr.h"
 #include "d/lyt/d_lyt_unknowns.h"
 #include "d/lyt/d_window.h"
@@ -43,7 +43,7 @@
 #include "toBeSorted/misc_actor.h"
 // clang-format on
 
-static dLytMeterConfiguration_c sConf;
+static dLytMeter_HIO_c sHio;
 dLytMeter_c *dLytMeter_c::sInstance;
 
 STATE_DEFINE(dLytMeter1Button_c, Wait);

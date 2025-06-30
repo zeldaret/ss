@@ -3,7 +3,7 @@
 #include "c/c_math.h"
 #include "d/a/d_a_item.h"
 #include "d/lyt/d2d.h"
-#include "d/lyt/d_lyt_meter_configuration.h"
+#include "d/lyt/d_lyt_meter_hio.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "nw4r/math/math_types.h"
 
@@ -416,10 +416,10 @@ bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
     if (amount != mDisplayedRupeeCount || suppressSound) {
         bool b = false;
         if (amount < mDisplayedRupeeCount) {
-            if (mDisplayedRupeeCount - amount >= dLytMeterConfiguration_c::sInstance->getField_0x1DC()) {
-                newNumDisplayed = mDisplayedRupeeCount - dLytMeterConfiguration_c::sInstance->getField_0x1E4();
-            } else if (mDisplayedRupeeCount - amount >= dLytMeterConfiguration_c::sInstance->getField_0x1D8()) {
-                newNumDisplayed = mDisplayedRupeeCount - dLytMeterConfiguration_c::sInstance->getField_0x1E0();
+            if (mDisplayedRupeeCount - amount >= dLytMeter_HIO_c::sInstance->getField_0x1DC()) {
+                newNumDisplayed = mDisplayedRupeeCount - dLytMeter_HIO_c::sInstance->getField_0x1E4();
+            } else if (mDisplayedRupeeCount - amount >= dLytMeter_HIO_c::sInstance->getField_0x1D8()) {
+                newNumDisplayed = mDisplayedRupeeCount - dLytMeter_HIO_c::sInstance->getField_0x1E0();
             } else {
                 newNumDisplayed = mDisplayedRupeeCount - 1;
             }
@@ -435,10 +435,10 @@ bool dLytMeterRupy_c::updateDisplayedAmount(bool suppressSound) {
                 field_0x8AD = 0;
             }
         } else if (amount > mDisplayedRupeeCount) {
-            if (amount - mDisplayedRupeeCount >= dLytMeterConfiguration_c::sInstance->getField_0x1DC()) {
-                newNumDisplayed = mDisplayedRupeeCount + dLytMeterConfiguration_c::sInstance->getField_0x1E4();
-            } else if (amount - mDisplayedRupeeCount >= dLytMeterConfiguration_c::sInstance->getField_0x1D8()) {
-                newNumDisplayed = mDisplayedRupeeCount + dLytMeterConfiguration_c::sInstance->getField_0x1E0();
+            if (amount - mDisplayedRupeeCount >= dLytMeter_HIO_c::sInstance->getField_0x1DC()) {
+                newNumDisplayed = mDisplayedRupeeCount + dLytMeter_HIO_c::sInstance->getField_0x1E4();
+            } else if (amount - mDisplayedRupeeCount >= dLytMeter_HIO_c::sInstance->getField_0x1D8()) {
+                newNumDisplayed = mDisplayedRupeeCount + dLytMeter_HIO_c::sInstance->getField_0x1E0();
             } else {
                 newNumDisplayed = mDisplayedRupeeCount + 1;
             }

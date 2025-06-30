@@ -8,9 +8,9 @@
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 
-struct LytMapConfigMaybe {
-    LytMapConfigMaybe();
-    virtual ~LytMapConfigMaybe();
+struct dLytMap_HIO_c {
+    dLytMap_HIO_c();
+    virtual ~dLytMap_HIO_c();
 
     /* 0x04 */ f32 field_0x04;
     /* 0x08 */ f32 field_0x08;
@@ -40,9 +40,9 @@ struct LytMapConfigMaybe {
     /* 0x2C */ f32 field_0x2C;
 };
 
-LytMapConfigMaybe sLytMapConfig;
+dLytMap_HIO_c sHio;
 
-LytMapConfigMaybe::LytMapConfigMaybe() {
+dLytMap_HIO_c::dLytMap_HIO_c() {
     field_0x04 = -10.0f;
     field_0x10 = 14.0f;
     field_0x14 = 32.0f;
@@ -71,7 +71,7 @@ LytMapConfigMaybe::LytMapConfigMaybe() {
     field_0x2B = 10;
 }
 
-LytMapConfigMaybe::~LytMapConfigMaybe() {}
+dLytMap_HIO_c::~dLytMap_HIO_c() {}
 
 STATE_DEFINE(dLytMapPinIcon_c, Wait);
 STATE_DEFINE(dLytMapPinIcon_c, ToSelect);
