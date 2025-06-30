@@ -66,7 +66,7 @@ void StateGX::initialize(u16 width, u16 height, GXColor color, GXPixelFmt pixelF
 }
 
 void StateGX::frameInit() {
-    GXSetPixelFmt_(s_pixFormat, s_zFmt16);
+    setPixelFormatGX(s_pixFormat, s_zFmt16);
     if (BaseSystem::mConfigData->getDisplay() != nullptr) {
         s_clearEfb = BaseSystem::mConfigData->getDisplay()->getClearColor();
     }
@@ -230,7 +230,7 @@ void StateGX::resetGXCache() {
     GXSetDstAlpha_(false, 0);
 }
 
-void StateGX::GXSetPixelFmt_(GXPixelFmt pixelFmt, GXZFmt16 zFmt) {
+void StateGX::setPixelFormatGX(GXPixelFmt pixelFmt, GXZFmt16 zFmt) {
     GXPixelFmt oldPixelFmt;
     GXZFmt16 oldZFmt;
 

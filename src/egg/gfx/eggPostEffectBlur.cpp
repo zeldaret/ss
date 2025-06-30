@@ -38,14 +38,14 @@ void PostEffectBlur::draw(f32 width, f32 height) {
     for (u8 i = 0; i < field_0x2C; i++) {
         int maxNum = (field_0x38[i].field_0x00 - 1) / 8;
         for (u8 b = 0; b <= maxNum; b++) {
-            drawInternal(i, b, f1, f2);
+            setMaterialMulti(i, b, f1, f2);
             drawScreenInternal(mOffsetX, mOffsetY, width * mScaleX, height * mScaleY);
             DrawGX::SetBlendMode(DrawGX::BLEND_2);
         }
     }
 }
 
-void PostEffectBlur::drawInternal(u8 kernelIdx, u8 p2, f32 f1, f32 f2) {
+void PostEffectBlur::setMaterialMulti(u8 kernelIdx, u8 p2, f32 f1, f32 f2) {
     // NONMATCHING
     nw4r::math::MTX34 mtx;
     const Stage &k = field_0x38[kernelIdx];

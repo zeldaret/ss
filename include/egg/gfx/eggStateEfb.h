@@ -31,7 +31,7 @@ private:
     static s32 sPushCount;
     static u32 sFlag;
 
-    static bool GetShouldCapture();
+    static bool isEnableDirtyBufferMode();
     static bool GetUseTfRgb565();
     
     public:
@@ -45,7 +45,7 @@ private:
     
     // Unknown names
     static void fn_804B4270(BufferType type, u32 userData);
-    static void fn_804B4310(BufferType type, u32 userData);
+    static void popWorkBuffer(bool b, u32 userData);
     static f32 *fn_804B4550();
 };
 

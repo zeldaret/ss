@@ -130,7 +130,7 @@ void DrawPathDOF::internalDraw(u16 idx) {
 
     switch (idx) {
         case 1:
-            StateEfb::fn_804B4310(StateEfb::BUFFER_0, reinterpret_cast<u32>(this));
+            StateEfb::popWorkBuffer(StateEfb::BUFFER_0, reinterpret_cast<u32>(this));
             StateEfb::releaseEfb(StateEfb::BUFFER_3, reinterpret_cast<u32>(this));
             break;
         case 2:
@@ -149,7 +149,7 @@ void DrawPathDOF::internalDrawLite(u16 idx) {
     switch (idx) {
         case 0: {
             TextureBuffer *capturedBuf = StateEfb::captureEfb(StateEfb::BUFFER_3, false, reinterpret_cast<u32>(this));
-            StateGX::GXSetPixelFmt_(GX_PF_RGB8_Z24, GX_ZC_LINEAR);
+            StateGX::setPixelFormatGX(GX_PF_RGB8_Z24, GX_ZC_LINEAR);
             StateGX::ScopedColor colorGuard(true);
             StateGX::ScopedAlpha alphaGuard(false);
             StateGX::ScopedDither ditherGuard(false);
@@ -184,8 +184,8 @@ void DrawPathDOF::internalDrawLite(u16 idx) {
             if (pTex2 != nullptr) {
                 pTex2->free();
             }
-            afterDraw(floats[0], floats[1], width, height);
-            StateGX::GXSetPixelFmt_(StateGX::s_pixFormat, StateGX::s_zFmt16);
+            allocAndCaptureBlurBuffer(floats[0], floats[1], width, height);
+            StateGX::setPixelFormatGX(StateGX::s_pixFormat, StateGX::s_zFmt16);
             break;
         }
         case 2: {
