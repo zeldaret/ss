@@ -33,7 +33,7 @@ private:
     void internalDrawStandard(u16);
     void internalDrawLite(u16);
 
-    void afterDraw(u16 x, u16 y, u16 width, u16 height);
+    void allocAndCaptureBlurBuffer(u16 x, u16 y, u16 width, u16 height);
 
     /* 0x1C */ u16 field_0x1C;
     /* 0x1E */ u8 field_0x1E;

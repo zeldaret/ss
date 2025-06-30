@@ -99,13 +99,13 @@ public:
 
     void CopyFromAnother(const Screen &other);
     void Reset(f32, f32, f32, f32, CanvasMode);
-    void OnDirectEfb() const;
+    void GetPosSizeInEfb() const;
     const DataEfb &GetDataEfb() const;
     bool IsChangeEfb() const;
     void CalcMatrixForDrawQuad(nw4r::math::MTX34 *, f32, f32, f32, f32) const;
     void FillBufferGX(u32, GXColor, u32) const;
     void GetGlobalPos(f32 *, f32 *) const;
-    void fn_804B2EE0(f32 *, f32 *, f32, f32) const;
+    void ConvertToEfb(f32, f32, f32 *, f32 *) const;
 
     f32 ScaleByX(f32 val) const {
         return val * StateGX::s_widthEfb / GetSizeXMax(GetComputedTVMode());

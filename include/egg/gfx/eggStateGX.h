@@ -81,7 +81,7 @@ public:
 
     static void invalidateTexAllGX();
 
-    static void GXSetPixelFmt_(GXPixelFmt pixelFmt, GXZFmt16 zFmt);
+    static void setPixelFormatGX(GXPixelFmt pixelFmt, GXZFmt16 zFmt);
     static bool GXSetColorUpdate_(bool);
     static bool GXSetAlphaUpdate_(bool);
     static bool GXSetDither_(bool);

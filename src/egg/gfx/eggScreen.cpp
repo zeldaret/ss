@@ -191,14 +191,14 @@ void Screen::SetUnkFlag8() {
     mFlags |= FLAG_0x08;
 }
 
-void Screen::OnDirectEfb() const {
+void Screen::GetPosSizeInEfb() const {
     f32 &x1 = mDataEfb.vp.x1;
     f32 &y1 = mDataEfb.vp.y1;
     if (mParent == nullptr) {
         x1 = mPosition.x * sCanvasScale.x;
         y1 = mPosition.y * sCanvasScale.y;
     } else {
-        mParent->fn_804B2EE0(&x1, &y1, mPosition.x, mPosition.y);
+        mParent->ConvertToEfb(mPosition.x, mPosition.y, &x1, &y1);
     }
 
     // TODO: Make this work without temporaries?
@@ -242,7 +242,7 @@ void Screen::OnDirectEfb() const {
 
 const Screen::DataEfb &Screen::GetDataEfb() const {
     if (IsChangeEfb()) {
-        OnDirectEfb();
+        GetPosSizeInEfb();
         mDataEfb.vp.z1 = 0.0f;
         mDataEfb.vp.z2 = 1.0f;
         SetDirty(false);
@@ -325,7 +325,7 @@ void Screen::SetTVModeDefault() {
     SetTVMode(SCGetAspectRatio() == SC_ASPECT_STD ? TV_MODE_4_3 : TV_MODE_16_9);
 }
 
-void Screen::fn_804B2EE0(f32 *ox, f32 *oy, f32 a, f32 b) const {
+void Screen::ConvertToEfb(f32 a, f32 b, f32 *ox, f32 *oy) const {
     GetGlobalPos(ox, oy);
     ConvertToCanvasLU(a, b, &a, &b);
     *ox = ScaleByX((*ox + a));

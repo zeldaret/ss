@@ -71,7 +71,7 @@ public:
     }
 
 private:
-    static void fn_804AE340(nw4r::g3d::ResMat, GXTexCoordID);
+    static void setupEnvmap(nw4r::g3d::ResMat, GXTexCoordID);
     int getTextureIndex(const char *name) const;
 
     bool getSomeTfRelatedBool() const {
