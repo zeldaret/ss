@@ -5,6 +5,7 @@
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "toBeSorted/misc_actor.h"
 
+// TODO: Rename _HIO_c when LytDoButtonRelated gets a better name?
 class LytDoButtonRelatedClass {
 public:
     LytDoButtonRelatedClass();

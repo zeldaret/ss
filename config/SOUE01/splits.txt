@@ -459,7 +459,7 @@ d/lyt/d_window.cpp:
 	.data       start:0x80510820 end:0x805108B0
 	.sdata2     start:0x805797F0 end:0x805797F8
 
-d/d_textunk.cpp:
+d/d_lyt_hio.cpp:
 	.text       start:0x800B1820 end:0x800B20DC align:16
 	.ctors      start:0x804DB6D0 end:0x804DB6D4
 	.data       start:0x805108C8 end:0x805108D8
@@ -553,7 +553,7 @@ d/lyt/meter/d_lyt_meter.cpp:
 	.sdata2     start:0x80579AD0 end:0x80579AF0
 	.bss        start:0x805A9C98 end:0x805AA190
 
-d/lyt/meter/d_lyt_meter_unk.cpp:
+d/lyt/meter/d_lyt_meter_hio.cpp:
 	.text       start:0x800DF8B0 end:0x800DFCB8 align:16
 	.data       start:0x80513B60 end:0x80513B70
 	.sbss       start:0x80575450 end:0x80575458

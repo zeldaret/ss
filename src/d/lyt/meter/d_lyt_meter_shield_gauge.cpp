@@ -4,7 +4,7 @@
 #include "d/a/d_a_itembase.h"
 #include "d/d_pouch.h"
 #include "d/lyt/d2d.h"
-#include "d/lyt/d_lyt_meter_configuration.h"
+#include "d/lyt/d_lyt_meter_hio.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "toBeSorted/file_manager.h"
 
@@ -67,7 +67,7 @@ bool dLytMeterShieldGauge_c::build(d2d::ResAccIf_c *resAcc) {
     mCurrentShieldPouchSlot = convertFilePouchSlot(FileManager::GetInstance()->getShieldPouchSlot());
     field_0x300 = mAnimatingDurability;
     field_0x304 = mCurrentDurability;
-    field_0x2FC = dLytMeterConfiguration_c::GetInstance()->getField_0x1C8();
+    field_0x2FC = dLytMeter_HIO_c::GetInstance()->getField_0x1C8();
     mMaxDurability = 80.0f;
     field_0x2F4 = 80.0f;
 
@@ -229,15 +229,15 @@ bool dLytMeterShieldGauge_c::execute() {
         }
     }
 
-    f32 f1 = dLytMeterConfiguration_c::GetInstance()->getField_0x1CC() * 40.0f / 4.0f;
-    f32 f2 = dLytMeterConfiguration_c::GetInstance()->getField_0x1D0() * 40.0f / 4.0f;
-    f32 f3 = dLytMeterConfiguration_c::GetInstance()->getField_0x1C4() * 40.0f / 4.0f;
+    f32 f1 = dLytMeter_HIO_c::GetInstance()->getField_0x1CC() * 40.0f / 4.0f;
+    f32 f2 = dLytMeter_HIO_c::GetInstance()->getField_0x1D0() * 40.0f / 4.0f;
+    f32 f3 = dLytMeter_HIO_c::GetInstance()->getField_0x1C4() * 40.0f / 4.0f;
 
     (void)calcUpdownRatio(mCurrentDurability);
 
     if (field_0x31F) {
         if (mCurrentDurability < field_0x304 && mCurrentDurability < mAnimatingDurability - f1) {
-            field_0x2FC = dLytMeterConfiguration_c::GetInstance()->getField_0x1C8();
+            field_0x2FC = dLytMeter_HIO_c::GetInstance()->getField_0x1C8();
             field_0x300 = mAnimatingDurability;
             field_0x304 = mCurrentDurability;
             field_0x2E4 = calcUpdownRatio(mAnimatingDurability);
@@ -262,7 +262,7 @@ bool dLytMeterShieldGauge_c::execute() {
         field_0x31F = 1;
         field_0x300 = mAnimatingDurability;
         field_0x304 = mCurrentDurability;
-        field_0x2FC = dLytMeterConfiguration_c::GetInstance()->getField_0x1C8();
+        field_0x2FC = dLytMeter_HIO_c::GetInstance()->getField_0x1C8();
         field_0x2E4 = calcUpdownRatio(mAnimatingDurability);
         mAnm[SHIELD_ANIM_USE].setFrame(field_0x2F8 - field_0x2E4);
         mAnm[SHIELD_ANIM_USE].setAnimEnable(true);

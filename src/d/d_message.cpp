@@ -13,7 +13,7 @@
 #include "d/d_stage.h"
 #include "d/d_stage_mgr.h"
 #include "d/d_tag_processor.h"
-#include "d/d_textunk.h"
+#include "d/d_lyt_hio.h"
 #include "d/flag/itemflag_manager.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
@@ -1418,18 +1418,18 @@ dMessage_c *dMessage_c::sInstance;
 dTagProcessor_c *dMessage_c::sTagProcessor;
 
 static void *msbAlloc(size_t size) {
-    if (UnkTextThing::getInstance()->getShouldHookAllocations() == false) {
+    if (dLyt_HIO_c::getInstance()->getShouldHookAllocations() == false) {
         return EGG::Heap::alloc(size, 0x20, nullptr);
     } else {
-        return UnkTextThing::getInstance()->allocUnk(size, 0x20);
+        return dLyt_HIO_c::getInstance()->allocUnk(size, 0x20);
     }
 }
 
 static void msbFree(void *ptr) {
-    if (UnkTextThing::getInstance()->getShouldHookAllocations() == false) {
+    if (dLyt_HIO_c::getInstance()->getShouldHookAllocations() == false) {
         EGG::Heap::free(ptr, nullptr);
     } else {
-        UnkTextThing::getInstance()->destroyUnk(ptr);
+        dLyt_HIO_c::getInstance()->destroyUnk(ptr);
     }
 }
 
@@ -1475,7 +1475,7 @@ int dMessage_c::create() {
 }
 
 int dMessage_c::doDelete() {
-    UnkTextThing::getInstance()->destroy();
+    dLyt_HIO_c::getInstance()->destroy();
     if (sTagProcessor != nullptr) {
         delete sTagProcessor;
         sTagProcessor = nullptr;
@@ -1688,7 +1688,7 @@ MsbtInfo *dMessage_c::getMsbtInfoForIndex(s32 index) {
 }
 
 MsbtInfo *dMessage_c::getMsbtInfoForIndexInternal(s32 index) {
-    UnkTextThing *thing = UnkTextThing::getInstance();
+    dLyt_HIO_c *thing = dLyt_HIO_c::getInstance();
     MsbtInfo *overrideMsbt = thing->getOverrideMsbtInfo(index);
     if (overrideMsbt != nullptr && thing->getShouldOverrideData() == true) {
         return overrideMsbt;
@@ -1701,7 +1701,7 @@ MsbfInfo *dMessage_c::getMsbfInfoForIndex(s32 index) {
 }
 
 MsbfInfo *dMessage_c::getMsbfInfoForIndexInternal(s32 index) {
-    UnkTextThing *thing = UnkTextThing::getInstance();
+    dLyt_HIO_c *thing = dLyt_HIO_c::getInstance();
     MsbfInfo *overrideMsbf = thing->getOverrideMsbfInfo(index);
     if (overrideMsbf != nullptr && thing->getShouldOverrideData() == true) {
         return overrideMsbf;
@@ -1865,7 +1865,7 @@ void *dMessage_c::sZev0;
 void *dMessage_c::sZevStage;
 
 void *dMessage_c::getZev0Internal() {
-    UnkTextThing *thing = UnkTextThing::getInstance();
+    dLyt_HIO_c *thing = dLyt_HIO_c::getInstance();
     void *overrideZev = thing->getOverrideZev0();
     if (overrideZev != nullptr && thing->getShouldOverrideData() == true) {
         return overrideZev;
@@ -1874,7 +1874,7 @@ void *dMessage_c::getZev0Internal() {
 }
 
 void *dMessage_c::getZevStageInternal() {
-    UnkTextThing *thing = UnkTextThing::getInstance();
+    dLyt_HIO_c *thing = dLyt_HIO_c::getInstance();
     void *overrideZev = thing->getOverrideStageZev();
     if (overrideZev != nullptr && thing->getShouldOverrideData() == true) {
         return overrideZev;
