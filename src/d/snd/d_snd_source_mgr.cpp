@@ -227,7 +227,7 @@ dSoundSourceIf_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor
     dSoundSourceIf_c *newSource = nullptr;
     bool isAnimSource = isAnimSoundSource(sourceType, actualName);
     bool isMultiSource = isMultiSoundSource(sourceType, actualName);
-    bool isDemo = dSndPlayerMgr_c::GetInstance()->canUseThisPlayer(sourceType);
+    bool isDemo = dSndPlayerMgr_c::GetInstance()->shouldUseDemoPlayer(sourceType);
 
     if (isDemo) {
         newSource = new dSndSourceDemo_c(sourceType, actor, actualName, group);
@@ -368,7 +368,7 @@ dSndSourceMgr_c::dSndSourceMgr_c()
       mpBoomerangSource(nullptr),
       mpTBoatSource(nullptr),
       field_0x3880(nullptr),
-      field_0x3884(nullptr) {
+      mpMsgSource(nullptr) {
     // TODO offsetof
     nw4r::ut::List_Init(&mGroup1List, 0);
     nw4r::ut::List_Init(&mGroup2List, 0);

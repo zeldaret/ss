@@ -22,6 +22,10 @@ public:
 
     dSndControlPlayerMgr_c();
 
+    void setupPlayerControlsGlobal();
+    void setupPlayerControlsStage();
+    void setupPlayerControlsStageBgm();
+
     void calc();
 
     static const s32 sNumPlayers;
