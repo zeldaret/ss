@@ -227,6 +227,11 @@ namespace nw4r { namespace snd
 			detail::BasicSound::AmbientInfo *ambientArgInfo, SoundActor *actor,
 			bool holdFlag, SoundStartable::StartInfo const *startInfo);
 
+		// Made up
+		void detail_SetFileManager(SoundArchivePlayer_FileManager *manager) {
+			mFileManager = manager;
+		}
+
 	private:
 		template <typename Sound>
 		Sound *AllocSound(
