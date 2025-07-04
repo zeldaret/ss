@@ -58,6 +58,13 @@ public:
     void enterMsgWait();
     void leaveMsgWait();
 
+    void setupState0();
+    void popToState0();
+    void saveState1();
+    void popToState1();
+    void saveState2();
+    void popToState2();
+
     u32 getFreeSize();
     bool loadDemoArchive(const char *demoArchiveName);
     const char *getSoundArchivePath();
@@ -180,14 +187,17 @@ public:
 private:
     /* 0x010 */ u8 field_0x010;
     /* 0x011 */ u8 field_0x011;
-    /* 0x014 */ s32 field_0x014;
-    /* 0x018 */ s32 field_0x018;
-    /* 0x01C */ s32 field_0x01C;
+    /* 0x014 */ s32 mState0;
+    /* 0x018 */ s32 mState1;
+    /* 0x01C */ s32 mState2;
     /* 0x020 */ u32 mFlags;
 
     // system menu, inventory, map
     void enterPauseState();
     void leavePauseState();
+
+    void initialize();
+    void createFileManager();
 
     virtual nw4r::snd::SoundStartable::StartResult
     startSound(nw4r::snd::SoundHandle *pHandle, u32 soundId, const nw4r::snd::SoundStartable::StartInfo *pStartInfo);

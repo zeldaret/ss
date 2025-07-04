@@ -110,6 +110,29 @@ public:
     void doMsgWaitStart();
     void doMsgWaitEnd();
 
+    // TODO better names
+    static const char *getStageName(s32 id);
+    const char *getStageName4(s32 id);
+    const char *getCurrentStageName4();
+
+    static s32 getSndStageId(const char *stageName, s32 layer);
+    static s32 getSndStageId3(const char *stageName, s32 layer);
+    static s32 getSndStageId4(const char *stageName, s32 layer);
+
+    static s32 getSndStageId2(s32 id);
+    static s32 getSndStageId4(s32 id);
+
+    static s32 getNextSndStageId(s32 id);
+    static bool specialLayerVersionExists(const char *stageName, s32 layer);
+
+    enum SoundIdLookup_e {
+        LOOKUP_BGM,
+        LOOKUP_BGM_MAIN,
+        LOOKUP_SE_A,
+    };
+
+    u32 getSoundIdForStageAndLayer(SoundIdLookup_e lookup, const char *stageName, s32 layer, s32 stageId);
+
 private:
     void resetOverrides();
     void initializeEventCallbacks(const char *name);

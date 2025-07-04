@@ -6,6 +6,7 @@
 #include "d/snd/d_snd_area_sound_effect_mgr.h"
 #include "d/snd/d_snd_bgm_mgr.h"
 #include "d/snd/d_snd_control_player_mgr.h"
+#include "d/snd/d_snd_file_mgr.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/snd/d_snd_source.h"
@@ -26,8 +27,7 @@ const char *dSndPlayerMgr_c::getSoundArchivePath() {
 
 SND_DISPOSER_DEFINE(dSndPlayerMgr_c);
 
-dSndPlayerMgr_c::dSndPlayerMgr_c()
-    : field_0x010(0), field_0x011(0), field_0x014(-1), field_0x018(-1), field_0x01C(-1), mFlags(0) {}
+dSndPlayerMgr_c::dSndPlayerMgr_c() : field_0x010(0), field_0x011(0), mState0(-1), mState1(-1), mState2(-1), mFlags(0) {}
 
 void dSndPlayerMgr_c::enterPauseState() {
     dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_FAN, 0.3f, 5);
@@ -35,6 +35,62 @@ void dSndPlayerMgr_c::enterPauseState() {
     dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_AREA_IN_WATER_LV, 0.3f, 5);
     // has other effects, such as reducing BGM volume
     onFlag(MGR_PAUSE);
+}
+
+void dSndPlayerMgr_c::createFileManager() {
+    dSndMgr_c::getPlayer().detail_SetFileManager(
+        dSndFileManager::create(dSndMgr_c::GetInstance()->getArchive(), dSndMgr_c::GetInstance()->getSoundHeap())
+    );
+}
+
+void dSndPlayerMgr_c::setupState0() {
+    if (mState0 > 0) {
+        return;
+    }
+    initialize();
+
+    // TODO: Ugh, maybe convert the enums to unsigned ints?
+    dSndMgr_c::GetInstance()->loadGroup((unsigned int)GRP_STATIC, nullptr, 0);
+    mState0 = dSndMgr_c::GetInstance()->saveState();
+
+    s32 tmpState = dSndMgr_c::GetInstance()->saveState();
+    dSndMgr_c::GetInstance()->loadGroup((unsigned int)GRP_BGM_PLAY_DATA_STATIC, nullptr, 0);
+
+    // TODO - loading static play data
+
+    dSndMgr_c::GetInstance()->loadState(tmpState);
+}
+
+void dSndPlayerMgr_c::popToState0() {
+    if (mState0 < 0) {
+        return;
+    }
+    dSndMgr_c::GetInstance()->loadState(mState0);
+    mState1 = -1;
+    mState2 = -1;
+}
+
+void dSndPlayerMgr_c::saveState1() {
+    mState1 = dSndMgr_c::GetInstance()->saveState();
+}
+
+void dSndPlayerMgr_c::popToState1() {
+    if (mState1 < 0) {
+        return;
+    }
+    dSndMgr_c::GetInstance()->loadState(mState1);
+    mState2 = -1;
+}
+
+void dSndPlayerMgr_c::saveState2() {
+    mState2 = dSndMgr_c::GetInstance()->saveState();
+}
+
+void dSndPlayerMgr_c::popToState2() {
+    if (mState2 < 0) {
+        return;
+    }
+    dSndMgr_c::GetInstance()->loadState(mState2);
 }
 
 u32 dSndPlayerMgr_c::getFreeSize() {
