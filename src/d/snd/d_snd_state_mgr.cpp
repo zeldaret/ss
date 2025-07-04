@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_sc_game.h"
+#include "d/snd/d_snd_event.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_stage_data.h"
 #include "egg/core/eggHeap.h"
@@ -9,6 +10,7 @@
 
 #include <cstring>
 
+SndEventCallback dSndStateMgr_c::sEventExecuteCallback;
 SND_DISPOSER_DEFINE(dSndStateMgr_c);
 
 dSndStateMgr_c::dSndStateMgr_c()
@@ -35,7 +37,7 @@ dSndStateMgr_c::dSndStateMgr_c()
       field_0x080(0),
       field_0x084(0),
       field_0x088(0),
-      field_0x08C(0x89),
+      mSoundEventId(SND_EVENT_0x89),
       field_0x090(0),
       field_0x094(0),
       field_0x118(nullptr),
@@ -45,7 +47,7 @@ dSndStateMgr_c::dSndStateMgr_c()
       field_0x128(-1),
       field_0x22C(0),
       field_0x230(0),
-      field_0x234(nullptr),
+      mpSoundEventDef(nullptr),
       field_0x238(-1),
       field_0x23C(0),
       field_0x23D(0),
@@ -85,8 +87,8 @@ void dSndStateMgr_c::setup(EGG::Heap *pHeap) {
 }
 
 void dSndStateMgr_c::onStageOrLayerUpdate() {
-    if (dSndPlayerMgr_c::GetInstance()->checkFlag(dSndPlayerMgr_c::MGR_UNK_0x80)) {
-        dSndPlayerMgr_c::GetInstance()->stopAllSound();
+    if (dSndPlayerMgr_c::GetInstance()->checkFlag(dSndPlayerMgr_c::MGR_CAUTION)) {
+        dSndPlayerMgr_c::GetInstance()->leaveCaution();
     }
 
     bool unk_0x065 = field_0x065;
@@ -197,4 +199,36 @@ bool dSndStateMgr_c::isSeekerStoneStage(const char *stageName, s32 layer) {
 
 bool dSndStateMgr_c::isInStage(const char *stageName) {
     return !std::strcmp(dScGame_c::currentSpawnInfo.getStageName(), stageName);
+}
+
+void dSndStateMgr_c::initializeEventCallbacks(const char *name) {
+    if (name == nullptr) {
+        return;
+    }
+
+    mpSoundEventDef = nullptr;
+    sEventExecuteCallback = nullptr;
+    resetOverrides();
+
+    if (checkFlag0x94(0x2)) {
+        handleDemoEvent(name);
+        return;
+    }
+
+    if (mSoundEventId == SND_EVENT_0x87) {
+        return;
+    }
+
+    if (!handleStageEvent(name)) {
+        handleGlobalEvent(name);
+    }
+
+    if (mSoundEventId == SND_EVENT_0x89) {
+        if (strstr(name, "Intro")) {
+            mSoundEventId = SND_EVENT_0x88;
+        } else {
+            mSoundEventId = SND_EVENT_0x86;
+            cbUnkNoop();
+        }
+    }
 }

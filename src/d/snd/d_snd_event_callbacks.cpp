@@ -172,7 +172,7 @@ static const SndEventDef sSndEventDefs_D003_1[] = {
 #pragma pop
 
 bool dSndStateMgr_c::handleStageEvent(const char *name) {
-    if (field_0x08C != SND_EVENT_0x87) {
+    if (mSoundEventId != SND_EVENT_0x87) {
         const SndEventDef *def = nullptr;
         s32 defCount = 0;
 
@@ -226,8 +226,8 @@ bool dSndStateMgr_c::handleStageEvent(const char *name) {
         if (def != nullptr && defCount > 0) {
             for (s32 i = 0; i < defCount; def++, i++) {
                 if (streq(name, def->eventName)) {
-                    field_0x08C = def->eventId;
-                    field_0x234 = def;
+                    mSoundEventId = def->eventId;
+                    mpSoundEventDef = def;
                     sEventExecuteCallback = def->executeCb;
                     if (def->initializeCb != nullptr) {
                         (def->initializeCb)();
@@ -241,12 +241,12 @@ bool dSndStateMgr_c::handleStageEvent(const char *name) {
 }
 
 bool dSndStateMgr_c::handleGlobalEvent(const char *name) {
-    if (field_0x08C != SND_EVENT_0x87) {
+    if (mSoundEventId != SND_EVENT_0x87) {
         for (const SndEventDef *def = sSndEventDefs_GLOBAL;
              def < sSndEventDefs_GLOBAL + ARRAY_LENGTH(sSndEventDefs_GLOBAL); def++) {
             if (streq(name, def->eventName)) {
-                field_0x08C = def->eventId;
-                field_0x234 = def;
+                mSoundEventId = def->eventId;
+                mpSoundEventDef = def;
                 sEventExecuteCallback = def->executeCb;
                 if (def->initializeCb != nullptr) {
                     (def->initializeCb)();
