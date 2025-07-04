@@ -104,10 +104,23 @@ public:
     bool isActiveDemoMaybe(s32 subtype) const;
     bool isInEvent(const char *eventName);
 
+    void doMsgStart(s32 idx);
+    void doMsgEnd();
+
+    void doMsgWaitStart();
+    void doMsgWaitEnd();
+
 private:
+    void resetOverrides();
+    void initializeEventCallbacks(const char *name);
     bool handleGlobalEvent(const char *name);
     bool handleStageEvent(const char *name);
     void handleDemoEvent(const char *name);
+
+    // Callbacks start
+    static void cbUnkNoop();
+
+    // Callbacks end
 
     u32 getStageTypeFlags(const char *stageName) const;
     // ET, FS, or corresponding Sky Keep rooms
@@ -120,7 +133,6 @@ private:
 
     u32 getStageId(const char *name, s32 layer);
     static u32 getStageUnk2(u32 stageId);
-
 
     static SndEventCallback sEventExecuteCallback;
 
@@ -150,7 +162,7 @@ private:
     /* 0x080 */ UNKWORD field_0x080;
     /* 0x084 */ UNKWORD field_0x084;
     /* 0x088 */ UNKWORD field_0x088;
-    /* 0x08C */ UNKWORD field_0x08C;
+    /* 0x08C */ s32 mSoundEventId;
     /* 0x090 */ UNKWORD field_0x090;
     /* 0x094 */ u32 field_0x094;
     /* 0x098 */ SizedString<64> field_0x098;
@@ -160,13 +172,13 @@ private:
     /* 0x120 */ UNKWORD field_0x120;
     /* 0x124 */ UNKWORD field_0x124;
     /* 0x128 */ UNKWORD field_0x128;
-    /* 0x12C */ SizedString<64> field_0x12C;
-    /* 0x16C */ SizedString<64> field_0x16C;
-    /* 0x1AC */ SizedString<64> field_0x1AC;
-    /* 0x1EC */ SizedString<64> field_0x1EC;
+    /* 0x12C */ SizedString<64> mSeName;
+    /* 0x16C */ SizedString<64> mBgmName;
+    /* 0x1AC */ SizedString<64> mFanName;
+    /* 0x1EC */ SizedString<64> mCmdName;
     /* 0x22C */ UNKWORD field_0x22C;
     /* 0x230 */ UNKWORD field_0x230;
-    /* 0x234 */ const SndEventDef *field_0x234;
+    /* 0x234 */ const SndEventDef *mpSoundEventDef;
     /* 0x238 */ UNKWORD field_0x238;
     /* 0x23C */ u8 field_0x23C;
     /* 0x23D */ u8 field_0x23D;

@@ -111,7 +111,7 @@ protected:
     // a_ prefix to prevent multiple inheritance clashes
     /* 0x7D */ u8 a_field_0x7D;
     /* 0x7E */ bool mIsDisabled;
-    /* 0x7F */ u8 a_field_0x7F;
+    /* 0x7F */ bool mIsDemoActor;
     /* 0x80 */ bool mIsPaused;
     /* 0x84 */ f32 a_field_0x84;
     /* 0x88 */ f32 a_field_0x88;
