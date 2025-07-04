@@ -45,6 +45,9 @@ public:
     void muteAllWorldSounds(s32 fadeFrames);
     void unmuteAllWorldSounds(s32 fadeFrames);
 
+    void muteScenePlayers(s32 frames);
+    void unmuteScenePlayers(s32 frames);
+
     enum MuteLevel {
         MUTE_FULL = 0,
         MUTE_PARTIAL = 1,
@@ -75,6 +78,7 @@ public:
     void setPlayerVolumeInternal(u32 playerIdx, f32 volume);
 
 private:
+    void unmutePlayer(u32 playerIdx, s32 frames);
     void resetControls();
     void calcVolumes();
     void calcMuteFlags();
