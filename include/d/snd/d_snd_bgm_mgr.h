@@ -31,9 +31,11 @@ public:
 
     bool playBgm(u32 soundId, s32 fadeFrames, bool paused);
     bool prepareBgm(u32 soundId, u32 startOffset);
+    void pauseAllBgm();
     void stopAllBgm(s32 fadeFrames);
 
     dSndBgmSound_c *getSoundHandleForBgm(u32 soundId, u32 startOffset);
+    bool isPlayingBgmSound() const;
     bool isPlayingBgmSoundId(u32 soundId) const;
 
     bool isPreparingBgmSoundId(u32 soundId) const;

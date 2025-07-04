@@ -16,7 +16,6 @@ extern "C" void fn_8035E000();
 extern "C" void fn_8035E860(dSndPlayerMgr_c *);
 extern "C" void fn_8035E820(dSndPlayerMgr_c *);
 extern "C" void fn_8035E880(dSndPlayerMgr_c *);
-extern "C" void fn_8035E790(dSndPlayerMgr_c *, UNKWORD, void *);
 
 #define ENEMY_SOUND_MGR (dSndStateMgr_c::GetInstance())
 extern "C" void fn_80362150(dSndStateMgr_c *, u16);

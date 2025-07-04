@@ -338,7 +338,7 @@ void Manage_c::ModeProc_SoftReset() {
                     dScBoot_c::GetInstance()->setField_0x5E3(true);
 
                     dDvdUnk::FontUnk::GetInstance()->fn_800529B0();
-                    dSndPlayerMgr_c::GetInstance()->fn_8035E6E0();
+                    dSndPlayerMgr_c::GetInstance()->leaveCaution();
 
                     if (dDvdUnk::FontUnk::GetInstance()->isNandError() ||
                         dDvdUnk::FontUnk::GetInstance()->getNandError() != NandResultTracker::ERR_CAT_NONE ||

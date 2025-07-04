@@ -17,7 +17,7 @@ dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, s32 sourceType)
       ),
       a_field_0x7D(0),
       mIsDisabled(false),
-      a_field_0x7F(0),
+      mIsDemoActor(false),
       mIsPaused(false),
       a_field_0x84(0.0f),
       a_field_0x88(0.0f),
@@ -33,8 +33,8 @@ dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, s32 sourceType)
     resetCachedRelativePositions();
     // Portability hazard
     SetUserParam(reinterpret_cast<u32>(this));
-    if (dSndPlayerMgr_c::GetInstance()->canUseThisPlayer(sourceType)) {
-        a_field_0x7F = 1;
+    if (dSndPlayerMgr_c::GetInstance()->shouldUseDemoPlayer(sourceType)) {
+        mIsDemoActor = true;
     }
 }
 

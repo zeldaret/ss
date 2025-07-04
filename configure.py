@@ -799,6 +799,7 @@ config.libs = [
             Object(Matching, "d/snd/d_snd_rng_mgr.cpp"),
             # more rng related
             Object(NonMatching, "d/snd/d_snd_mgr_unk_11.cpp"),
+            Object(Matching, "d/snd/d_snd_file_mgr.cpp"),
             Object(NonMatching, "d/snd/d_snd_calc_pitch.cpp"),
         ],
     },

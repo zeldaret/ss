@@ -12,7 +12,6 @@ struct dSndStageInfo {
     /* 0x14 */ u32 unk4;
     /* 0x18 */ const char *demoName;
 
-
     static const s32 sNumStageInfos;
     static const dSndStageInfo sInfos[];
 };
@@ -35,7 +34,7 @@ enum SndStage_e {
     /* 0x0E */ SND_STAGE_F300_4_L13,
     /* 0x0F */ SND_STAGE_F300_4,
     /* 0x10 */ SND_STAGE_F301,
-    /* 0x11 */ SND_STAGE_F301_1,    
+    /* 0x11 */ SND_STAGE_F301_1,
     /* 0x12 */ SND_STAGE_F301_2,
     /* 0x13 */ SND_STAGE_F301_3,
     /* 0x14 */ SND_STAGE_F301_4_L2,

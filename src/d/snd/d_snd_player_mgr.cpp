@@ -2,16 +2,23 @@
 #include "d/snd/d_snd_player_mgr.h"
 
 #include "common.h"
+#include "d/a/d_a_base.h"
+#include "d/snd/d_snd_area_sound_effect_mgr.h"
+#include "d/snd/d_snd_bgm_mgr.h"
 #include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
+#include "d/snd/d_snd_source.h"
 #include "d/snd/d_snd_source_enums.h"
+#include "d/snd/d_snd_source_mgr.h"
+#include "d/snd/d_snd_state_mgr.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "egg/audio/eggAudioRmtSpeakerMgr.h"
 #include "egg/core/eggDvdRipper.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "sized_string.h"
+#include "toBeSorted/music_mgrs.h"
 
 const char *dSndPlayerMgr_c::getSoundArchivePath() {
     return "Sound/WZSound.brsar";
@@ -81,6 +88,92 @@ void dSndPlayerMgr_c::shutdown(s32 channel) {
     EGG::AudioRmtSpeakerMgr::shutdown(channel, nullptr);
 }
 
+void dSndPlayerMgr_c::enterSystemMenu() {
+    if (checkFlag(MGR_CAUTION)) {
+        return;
+    }
+    enterPauseState();
+    onFlag(MGR_SYSTEM);
+    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_IN);
+}
+
+void dSndPlayerMgr_c::leaveSystemMenu() {
+    if (checkFlag(MGR_CAUTION)) {
+        return;
+    }
+    leavePauseState();
+    offFlag(MGR_SYSTEM);
+}
+
+void dSndPlayerMgr_c::enterCaution() {
+    if (checkFlag(MGR_CAUTION)) {
+        return;
+    }
+
+    s32 frames = 9;
+    if (fn_80364DA0(ENEMY_SOUND_MGR)) {
+        frames = 0;
+    }
+
+    for (int i = 0; i < dSndControlPlayerMgr_c::sNumPlayers; i++) {
+        if ((u32)i != PLAYER_SMALL_IMPORTANT) {
+            dSndControlPlayerMgr_c::GetInstance()->getPlayer1(i)->PauseAllSound(true, frames);
+        }
+    }
+
+    onFlag(MGR_CAUTION);
+    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_CAUTION_IN);
+}
+
+void dSndPlayerMgr_c::leaveCaution() {
+    if (!checkFlag(MGR_CAUTION)) {
+        return;
+    }
+
+    EGG::AudioRmtSpeakerMgr::connectAllByForce();
+    offFlag(MGR_CAUTION);
+    for (int i = 0; i < dSndControlPlayerMgr_c::sNumPlayers; i++) {
+        if ((u32)i != PLAYER_SMALL_IMPORTANT) {
+            dSndControlPlayerMgr_c::GetInstance()->getPlayer1(i)->PauseAllSound(false, 9);
+        }
+    }
+
+    dSndBgmMgr_c::GetInstance()->pauseAllBgm();
+    dSndAreaSoundEffectMgr_c::GetInstance()->pauseAllSounds();
+    dSndSourceMgr_c::GetInstance()->pauseAllSound();
+}
+
+void dSndPlayerMgr_c::setMsgActor(s32 msgIdx, dAcBase_c *actor) {
+    if (actor != nullptr) {
+        dSoundSource_c *source = static_cast<dSoundSource_c *>(actor->getSoundSource());
+        if (source != nullptr) {
+            dSndSmallEffectMgr_c::GetInstance()->setButtonPressSound(source);
+            dSndSourceMgr_c::GetInstance()->setMsgSource(source);
+        } else {
+            dSndSmallEffectMgr_c::GetInstance()->resetButtonPressSound();
+        }
+    } else {
+        dSndSmallEffectMgr_c::GetInstance()->resetButtonPressSound();
+    }
+    dSndStateMgr_c::GetInstance()->doMsgStart(msgIdx);
+}
+
+void dSndPlayerMgr_c::unsetMsgActor() {
+    dSndStateMgr_c::GetInstance()->doMsgEnd();
+    dSndSmallEffectMgr_c::GetInstance()->resetButtonPressSound();
+    dSndSourceMgr_c::GetInstance()->setMsgSource(nullptr);
+}
+
+void dSndPlayerMgr_c::enterMsgWait() {
+    onFlag(MGR_MSG_WAIT);
+    dSndStateMgr_c::GetInstance()->doMsgWaitStart();
+}
+
+void dSndPlayerMgr_c::leaveMsgWait() {
+    offFlag(MGR_MSG_WAIT);
+    dSndStateMgr_c::GetInstance()->doMsgWaitEnd();
+}
+
 nw4r::snd::SoundStartable::StartResult dSndPlayerMgr_c::startSound(
     nw4r::snd::SoundHandle *pHandle, u32 soundId, const nw4r::snd::SoundStartable::StartInfo *pStartInfo
 ) {
@@ -108,19 +201,33 @@ nw4r::snd::SoundStartable::StartResult dSndPlayerMgr_c::startSound(
     return startSound(pHandle, id, pStartInfo);
 }
 
+u32 dSndPlayerMgr_c::getRemoConSoundVariant(u32 soundId) const {
+    const char *label = dSndMgr_c::getSoundLabelString(soundId);
+    SizedString<64> variant;
+    variant.sprintf("%s_RC", label);
+    return sInstance->convertLabelStringToSoundId(variant);
+}
+
+u32 dSndPlayerMgr_c::getRemoConSoundVariantDemo(u32 soundId) const {
+    const char *label = getDemoArchive()->GetSoundLabelString(soundId);
+    SizedString<64> variant;
+    variant.sprintf("%s_RC", label);
+    return sInstance->convertLabelStringToSoundId(variant);
+}
+
 u32 dSndPlayerMgr_c::convertLabelStringToSoundId(const char *label) const {
     return dSndMgr_c::GetInstance()->changeNameToId(label);
 }
 
 nw4r::snd::SoundArchivePlayer &dSndPlayerMgr_c::getSoundArchivePlayerForType(s32 sourceType) {
-    if (canUseThisPlayer(sourceType)) {
-        return mSoundArchivePlayer;
+    if (shouldUseDemoPlayer(sourceType)) {
+        return mDemoSoundArchivePlayer;
     }
     return dSndMgr_c::getPlayer();
 }
 
-bool dSndPlayerMgr_c::canUseThisPlayer(s32 sourceType) const {
-    if (!mSoundArchivePlayer.IsAvailable()) {
+bool dSndPlayerMgr_c::shouldUseDemoPlayer(s32 sourceType) const {
+    if (!mDemoSoundArchivePlayer.IsAvailable()) {
         return false;
     }
 
@@ -150,12 +257,12 @@ bool dSndPlayerMgr_c::loadDemoArchive(const char *demoArchiveName) {
     EGG::DvdRipper::Arg arg(path, (u8 *)buf, nullptr, EGG::DvdRipper::ALLOC_DIR_TOP, 0, &amountRead, &fileSize);
     void *ptr = EGG::DvdRipper::loadToMainRAM(arg);
     if (ptr != nullptr) {
-        ok = mSoundArchive.Setup(ptr);
+        ok = mDemoSoundArchive.Setup(ptr);
         if (ok) {
-            u32 size = mSoundArchivePlayer.GetRequiredMemSize(&mSoundArchive);
+            u32 size = mDemoSoundArchivePlayer.GetRequiredMemSize(&mDemoSoundArchive);
             void *buf2 = dSndMgr_c::GetInstance()->getSoundHeap()->Alloc(size);
             if (buf2 != nullptr) {
-                ok = mSoundArchivePlayer.Setup(&mSoundArchive, buf2, size, nullptr, 0);
+                ok = mDemoSoundArchivePlayer.Setup(&mDemoSoundArchive, buf2, size, nullptr, 0);
             }
         }
     }
@@ -166,13 +273,13 @@ bool dSndPlayerMgr_c::loadDemoArchive(const char *demoArchiveName) {
 }
 
 void dSndPlayerMgr_c::shutdown() {
-    mSoundArchivePlayer.Shutdown();
-    mSoundArchive.Shutdown();
+    mDemoSoundArchivePlayer.Shutdown();
+    mDemoSoundArchive.Shutdown();
 }
 
 void dSndPlayerMgr_c::calc() {
-    if (mSoundArchivePlayer.IsAvailable()) {
-        mSoundArchivePlayer.Update();
+    if (mDemoSoundArchivePlayer.IsAvailable()) {
+        mDemoSoundArchivePlayer.Update();
     }
 }
 

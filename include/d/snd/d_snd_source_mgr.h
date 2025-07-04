@@ -38,6 +38,10 @@ public:
         return GetInstance()->mpBoomerangSource;
     }
 
+    void setMsgSource(dSoundSource_c *source) {
+        mpMsgSource = source;
+    }
+
     u8 getField_0x0012() const {
         return field_0x0012;
     }
@@ -48,6 +52,7 @@ public:
 
     void stopAllSound();
     void stopAllNonPlayerSound();
+    void pauseAllSound();
 
     void incrementEnemyCount() {
         field_0x3868++;
@@ -102,7 +107,7 @@ private:
     /* 0x3878 */ dSoundSource_c *mpBoomerangSource;
     /* 0x387C */ dSoundSource_c *mpTBoatSource;
     /* 0x3880 */ dSoundSource_c *field_0x3880; // fi singing related?
-    /* 0x3884 */ dSoundSource_c *field_0x3884;
+    /* 0x3884 */ dSoundSource_c *mpMsgSource;
 };
 
 #endif

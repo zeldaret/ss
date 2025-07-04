@@ -255,6 +255,15 @@ void dSndBgmMgr_c::setBgmHandleIdxVolume(u32 handleIdx, f32 volume, s32 fadeFram
     }
 }
 
+bool dSndBgmMgr_c::isPlayingBgmSound() const {
+    for (int i = 0; i < 7; i++) {
+        if (mBgmSounds[i]->isPlaying()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 bool dSndBgmMgr_c::isPlayingBgmSoundId(u32 soundId) const {
     for (int i = 0; i < 7; i++) {
         if (mBgmSounds[i]->isPlayingSoundId(soundId)) {

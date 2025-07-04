@@ -8,6 +8,8 @@
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 
+class dAcBase_c;
+
 SND_DISPOSER_FORWARD_DECL(dSndPlayerMgr_c);
 
 /**
@@ -44,8 +46,17 @@ public:
     void fn_8035E250(u16);
     bool fn_8035E2E0();
     void fn_8035E310();
-    void fn_8035E620();
-    void fn_8035E6E0();
+    void enterSystemMenu();
+    void leaveSystemMenu();
+
+    void enterCaution();
+    void leaveCaution();
+
+    void setMsgActor(s32 msgIdx, dAcBase_c *actor);
+    void unsetMsgActor();
+
+    void enterMsgWait();
+    void leaveMsgWait();
 
     u32 getFreeSize();
     bool loadDemoArchive(const char *demoArchiveName);
@@ -55,9 +66,10 @@ public:
     u32 getSomeUserParam(u32 soundId) const;
 
     nw4r::snd::SoundArchivePlayer &getSoundArchivePlayerForType(s32 sourceType);
-    bool canUseThisPlayer(s32 sourceType) const;
+    bool shouldUseDemoPlayer(s32 sourceType) const;
 
-    void stopAllSound();
+    u32 getRemoConSoundVariantDemo(u32 soundId) const;
+    u32 getRemoConSoundVariant(u32 soundId) const;
 
     enum PlayerMgrFlag_e {
         MGR_HBM = 0x1,
@@ -65,8 +77,10 @@ public:
         MGR_PAUSE = 0x4,
         MGR_MAP = 0x8,
         MGR_HELP = 0x10,
+        MGR_SYSTEM = 0x20,
+        MGR_MSG_WAIT = 0x40,
 
-        MGR_UNK_0x80 = 0x80,
+        MGR_CAUTION = 0x80,
     };
 
     bool checkFlag(u32 mask) const {
@@ -81,14 +95,16 @@ public:
         mFlags &= ~mask;
     }
 
-    u32 getEventMuteMask(u32 id) {
-        nw4r::snd::SoundArchive *archive;
-        if (mSoundArchivePlayer.IsAvailable()) {
-            archive = &mSoundArchive;
+    const nw4r::snd::SoundArchive *getDemoArchive() const {
+        if (mDemoSoundArchivePlayer.IsAvailable()) {
+            return &mDemoSoundArchive;
         } else {
-            archive = dSndMgr_c::GetInstance()->getArchive();
+            return dSndMgr_c::GetInstance()->getArchive();
         }
-        return archive->GetSoundUserParam(id) & sEventMuteFlagsMask;
+    }
+
+    u32 getEventMuteMask(u32 id) {
+        return getDemoArchive()->GetSoundUserParam(id) & sEventMuteFlagsMask;
     }
 
     enum FanfareUnmuteParam_e {
@@ -179,8 +195,8 @@ private:
         nw4r::snd::SoundHandle *pHandle, const char *soundLabel, const nw4r::snd::SoundStartable::StartInfo *pStartInfo
     );
 
-    /* 0x028 */ nw4r::snd::MemorySoundArchive mSoundArchive;
-    /* 0x178 */ nw4r::snd::SoundArchivePlayer mSoundArchivePlayer;
+    /* 0x028 */ nw4r::snd::MemorySoundArchive mDemoSoundArchive;
+    /* 0x178 */ nw4r::snd::SoundArchivePlayer mDemoSoundArchivePlayer;
 };
 
 #endif

@@ -30,8 +30,8 @@ void dSndStateMgr_c::handleDemoEvent(const char *name) {
     for (const SndEventDef *def = sSndEventDefs_DEMO; def < sSndEventDefs_DEMO + ARRAY_LENGTH(sSndEventDefs_DEMO);
          def++) {
         if (streq(name, def->eventName)) {
-            field_0x08C = def->eventId;
-            field_0x234 = def;
+            mSoundEventId = def->eventId;
+            mpSoundEventDef = def;
             sEventExecuteCallback = def->executeCb;
             if (def->initializeCb != nullptr) {
                 (def->initializeCb)();
@@ -40,8 +40,8 @@ void dSndStateMgr_c::handleDemoEvent(const char *name) {
         }
     }
 
-    if (field_0x08C == SND_EVENT_0x98) {
-        field_0x08C = SND_EVENT_0x78;
+    if (mSoundEventId == SND_EVENT_0x89) {
+        mSoundEventId = SND_EVENT_0x78;
     }
 
     return;

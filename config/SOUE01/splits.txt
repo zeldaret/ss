@@ -2646,14 +2646,14 @@ d/snd/d_snd_event_callbacks.cpp:
 	.rodata     start:0x804F2308 end:0x804F3678
 	.data       start:0x80548A48 end:0x80548A58
 	.sdata      start:0x805741A0 end:0x805741F8
-	.sdata2     start:0x8057D808 end:0x8057D8A4
+	.sdata2     start:0x8057D808 end:0x8057D8A0
 
 d/snd/d_snd_event_demo_callbacks.cpp:
 	.text       start:0x80369900 end:0x8036A3A4 align:16
 	.rodata     start:0x804F3678 end:0x804F37E8
 	.data       start:0x80548A58 end:0x80548B08
 	.sdata      start:0x805741F8 end:0x80574200
-	.sdata2     start:0x8057D8A4 end:0x8057D8B0
+	.sdata2     start:0x8057D8A0 end:0x8057D8B0
 
 d/snd/d_snd_area_sound_effect_mgr.cpp:
 	.text       start:0x8036A3B0 end:0x8036B8D0 align:16
@@ -2890,8 +2890,13 @@ d/snd/d_snd_rng_mgr.cpp:
 	.sbss       start:0x80575DE8 end:0x80575DF0
 
 d/snd/d_snd_mgr_unk_11.cpp:
-	.text       start:0x80399D60 end:0x8039A848 align:16
+	.text       start:0x80399D60 end:0x8039A344 align:16
+
+d/snd/d_snd_file_mgr.cpp:
+	.text       start:0x8039A350 end:0x8039A848 align:16
 	.ctors      start:0x804DB934 end:0x804DB938
+	.data       start:0x8054D7E0 end:0x8054D810
+	.bss        start:0x805D1030 end:0x805D1050
 
 d/snd/d_snd_calc_pitch.cpp:
 	.text       start:0x8039A850 end:0x8039A960 align:16
