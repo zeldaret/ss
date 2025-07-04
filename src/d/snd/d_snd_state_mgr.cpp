@@ -5,8 +5,10 @@
 #include "d/snd/d_snd_event.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_stage_data.h"
+#include "d/snd/d_snd_util.h"
 #include "egg/core/eggHeap.h"
 #include "nw4r/snd/snd_FxReverbStdDpl2.h"
+#include "sized_string.h"
 
 #include <cstring>
 
@@ -110,7 +112,7 @@ void dSndStateMgr_c::onStageOrLayerUpdate() {
     mPreviousStageId = mStageId;
     field_0x044 = getStageUnk2(newStageId);
     mStageId = newStageId;
-    
+
     if (unk_0x065) {
         setCallbacksForStage();
     }
@@ -176,10 +178,8 @@ bool dSndStateMgr_c::isVolcanicDungeon(u32 stageId) {
         case SND_STAGE_D201:
         case SND_STAGE_D201_1:
         case SND_STAGE_D003_0:
-        case SND_STAGE_D003_1:
-            return true;
-        default:
-            return false;
+        case SND_STAGE_D003_1: return true;
+        default:               return false;
     }
 }
 
@@ -231,4 +231,165 @@ void dSndStateMgr_c::initializeEventCallbacks(const char *name) {
             cbUnkNoop();
         }
     }
+}
+
+const char *dSndStateMgr_c::getStageName(s32 id) {
+    if (id >= SND_STAGE_MAX) {
+        return "NULL";
+    }
+    return dSndStageInfo::sInfos[id].stageName;
+}
+
+const char *dSndStateMgr_c::getStageName4(s32 id) {
+    if (id >= SND_STAGE_MAX) {
+        return "NULL";
+    }
+    return dSndStageInfo::sInfos[getSndStageId4(id)].stageName;
+}
+
+const char *dSndStateMgr_c::getCurrentStageName4() {
+    return getStageName(dSndStageInfo::sInfos[mStageId].unk4);
+}
+
+s32 dSndStateMgr_c::getSndStageId(const char *stageName, s32 layer) {
+    if (stageName != nullptr) {
+        for (s32 idx = 0; idx < dSndStageInfo::sNumStageInfos; idx++) {
+            if (streq(stageName, dSndStageInfo::sInfos[idx].stageName)) {
+                if (dSndStageInfo::sInfos[idx].layer == -1) {
+                    return dSndStageInfo::sInfos[idx].unk1;
+                }
+                if (dSndStageInfo::sInfos[idx].layer == layer) {
+                    return dSndStageInfo::sInfos[idx].unk1;
+                }
+            }
+        }
+    }
+
+    return SND_STAGE_MAX;
+}
+
+s32 dSndStateMgr_c::getSndStageId3(const char *stageName, s32 layer) {
+    if (stageName != nullptr) {
+        for (s32 idx = 0; idx < dSndStageInfo::sNumStageInfos; idx++) {
+            if (streq(stageName, dSndStageInfo::sInfos[idx].stageName)) {
+                if (dSndStageInfo::sInfos[idx].layer == -1 || dSndStageInfo::sInfos[idx].layer == layer) {
+                    return dSndStageInfo::sInfos[idx].unk3;
+                }
+            }
+        }
+    }
+
+    return SND_STAGE_MAX;
+}
+
+s32 dSndStateMgr_c::getSndStageId4(const char *stageName, s32 layer) {
+    if (stageName != nullptr) {
+        for (s32 idx = 0; idx < dSndStageInfo::sNumStageInfos; idx++) {
+            if (streq(stageName, dSndStageInfo::sInfos[idx].stageName)) {
+                if (dSndStageInfo::sInfos[idx].layer == -1 || dSndStageInfo::sInfos[idx].layer == layer) {
+                    return dSndStageInfo::sInfos[idx].unk4;
+                }
+            }
+        }
+    }
+
+    return SND_STAGE_MAX;
+}
+
+s32 dSndStateMgr_c::getSndStageId2(s32 id) {
+    if (id >= SND_STAGE_MAX) {
+        return SND_STAGE_MAX;
+    }
+    return dSndStageInfo::sInfos[id].unk2;
+}
+
+s32 dSndStateMgr_c::getSndStageId4(s32 id) {
+    if (id >= SND_STAGE_MAX) {
+        return SND_STAGE_MAX;
+    }
+    return dSndStageInfo::sInfos[id].unk4;
+}
+
+s32 dSndStateMgr_c::getNextSndStageId(s32 id) {
+    return getSndStageId(dScGame_c::nextSpawnInfo.getStageName(), dScGame_c::nextSpawnInfo.layer);
+}
+
+bool dSndStateMgr_c::specialLayerVersionExists(const char *stageName, s32 layer) {
+    if (stageName != nullptr && layer > 0) {
+        return getSndStageId(stageName, layer) != getSndStageId(stageName, 0);
+    }
+
+    return false;
+}
+
+u32 dSndStateMgr_c::getSoundIdForStageAndLayer(SoundIdLookup_e lookup, const char *stageName, s32 layer, s32 stageId) {
+    // Ternary causes regswaps...
+    const char *prefix = "BGM_";
+    if (lookup == LOOKUP_SE_A) {
+        prefix = "SE_A_";
+    }
+    SizedString<64> label;
+
+    u32 soundId = -1;
+    s32 round = 3;
+
+    bool hasSpecialLayerVersion = false;
+    if (layer > 0) {
+        hasSpecialLayerVersion = specialLayerVersionExists(stageName, layer);
+    }
+
+    if (hasSpecialLayerVersion) {
+        label.sprintf("%s%s_L%d", prefix, stageName, layer);
+    } else if (layer > 0) {
+        label.sprintf("%s%s_L%d", prefix, stageName, layer);
+    } else {
+        label.sprintf("%s%s", prefix, stageName);
+        // We didn't bother with a _L layer variant, so we're going
+        // in with the base variant
+        round = 2;
+    }
+
+    while (round > 0) {
+        if (lookup == LOOKUP_BGM_MAIN) {
+            label += "_MAIN";
+        }
+
+        soundId = dSndPlayerMgr_c::GetInstance()->convertLabelStringToSoundId(label);
+        if (soundId != -1) {
+            break;
+        }
+
+        if (round == 3) {
+            // If _L layer variant didn't exist, try the one without a layer...
+            label.sprintf("%s%s", prefix, stageName);
+        } else if (round == 2) {
+            if (lookup == LOOKUP_BGM) {
+                // If the one without a layer doesn't exist, continue with the one referenced
+                // in field 3, unless it's the same as the original one
+                s32 otherStageId = getSndStageId3(stageName, layer);
+                if (stageId != otherStageId) {
+                    label.sprintf("%s%s", prefix, getStageName(otherStageId));
+                } else {
+                    // break to prevent infinite loop
+                    round = 0;
+                }
+            } else if (lookup == LOOKUP_SE_A) {
+                // If the one without a layer doesn't exist, continue with the one referenced
+                // in field 4, unless it's the same as the original one
+                s32 otherStageId = getSndStageId4(stageName, layer);
+                if (stageId != otherStageId) {
+                    label.sprintf("%s%s", prefix, getStageName(otherStageId));
+                } else {
+                    // break to prevent infinite loop
+                    break;
+                }
+            } else {
+                break;
+            }
+        }
+
+        round--;
+    }
+
+    return soundId;
 }

@@ -340,6 +340,30 @@ f32 dSndControlPlayerMgr_c::getControlTarget(PlayerCtrl_e ctrlType, u32 playerId
     return mpCtrls[ctrlType][playerIdx].getTargetValue();
 }
 
+// TODO - not sure what this actually does
+void dSndControlPlayerMgr_c::unmutePlayer(u32 idx, s32 frames) {
+    if (idx >= sNumPlayers) {
+        return;
+    }
+
+    restoreVolume(idx, 0);
+    overrideVolume(idx, 0.0f, 0);
+    restoreVolume(idx, frames);
+}
+
+
+void dSndControlPlayerMgr_c::unmuteScenePlayers(s32 frames) {
+    for (u32 i = dSndPlayerMgr_c::PLAYER_ENEMY; i < dSndPlayerMgr_c::PLAYER_AREA; i++) {
+        unmutePlayer(i, frames);
+    }
+}
+
+void dSndControlPlayerMgr_c::muteScenePlayers(s32 frames) {
+    for (u32 i = dSndPlayerMgr_c::PLAYER_ENEMY; i < dSndPlayerMgr_c::PLAYER_AREA; i++) {
+        overrideVolume(i, 0.0f, frames);
+    }
+}
+
 void dSndControlPlayerMgr_c::setGroupVolumeFlag(VolumeControlGroup group, MuteLevel level) {
     if (group >= CTRL_GROUP_MAX) {
         return;
