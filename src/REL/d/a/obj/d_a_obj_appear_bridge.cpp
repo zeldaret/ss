@@ -3,6 +3,7 @@
 #include "d/a/d_a_player.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/d_stage.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "nw4r/types_nw4r.h"
 #include "toBeSorted/area_utils.h"
 
@@ -94,7 +95,7 @@ void dAcOappearBridge_c::initializeState_Appear() {
     mSrtAnm.setRate(sMovementRate, 0);
     mClrAnm.setRate(sMovementRate, 0);
     dBgS::GetInstance()->Regist(&mCollision, this);
-    playSound(0xAA4);
+    startSound(SE_ApBridg_APPEAR_LV);
 }
 void dAcOappearBridge_c::executeState_Appear() {
     mClrAnm.isStop(0); // ?

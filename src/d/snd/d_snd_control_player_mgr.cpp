@@ -1,6 +1,7 @@
 #include "d/snd/d_snd_control_player_mgr.h"
 
 #include "common.h"
+#include "d/snd/d_snd_bgm_mgr.h"
 #include "d/snd/d_snd_control_player.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
@@ -14,7 +15,7 @@ struct FanfareMuteFlagsApplier {
         // The logic here is inverted compared to the others - Fanfares seem to
         // mute things by default unless otherwise speciefied
         u32 id = handle.GetId();
-        if (fn_803733B0(FANFARE_SOUND_MGR, id)) {
+        if (dSndBgmMgr_c::GetInstance()->getSoundHandleCurrentlyPlayingFanSound(id)) {
             u32 userParam = dSndMgr_c::GetInstance()->getArchive()->GetSoundUserParam(id);
             if (!(userParam & dSndPlayerMgr_c::FANFARE_UNMUTE_BGM)) {
                 dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
@@ -339,6 +340,30 @@ f32 dSndControlPlayerMgr_c::getControlTarget(PlayerCtrl_e ctrlType, u32 playerId
     return mpCtrls[ctrlType][playerIdx].getTargetValue();
 }
 
+// TODO - not sure what this actually does
+void dSndControlPlayerMgr_c::unmutePlayer(u32 idx, s32 frames) {
+    if (idx >= sNumPlayers) {
+        return;
+    }
+
+    restoreVolume(idx, 0);
+    overrideVolume(idx, 0.0f, 0);
+    restoreVolume(idx, frames);
+}
+
+
+void dSndControlPlayerMgr_c::unmuteScenePlayers(s32 frames) {
+    for (u32 i = dSndPlayerMgr_c::PLAYER_ENEMY; i < dSndPlayerMgr_c::PLAYER_AREA; i++) {
+        unmutePlayer(i, frames);
+    }
+}
+
+void dSndControlPlayerMgr_c::muteScenePlayers(s32 frames) {
+    for (u32 i = dSndPlayerMgr_c::PLAYER_ENEMY; i < dSndPlayerMgr_c::PLAYER_AREA; i++) {
+        overrideVolume(i, 0.0f, frames);
+    }
+}
+
 void dSndControlPlayerMgr_c::setGroupVolumeFlag(VolumeControlGroup group, MuteLevel level) {
     if (group >= CTRL_GROUP_MAX) {
         return;
@@ -369,7 +394,7 @@ void dSndControlPlayerMgr_c::setPlayerVolumeInternal(u32 playerIdx, f32 volume) 
 }
 
 void dSndControlPlayerMgr_c::setBgmMuteVolume(f32 volume) {
-    for (u32 i = dSndPlayerMgr_c::PLAYER_BGM; i < dSndPlayerMgr_c::PLAYER_BGM_BOSS + 1; i++) {
+    for (u32 i = dSndPlayerMgr_c::PLAYER_BGM; i < dSndPlayerMgr_c::PLAYER_BGM_BATTLE + 1; i++) {
         setPlayerVolumeInternal(i, volume);
     }
 }

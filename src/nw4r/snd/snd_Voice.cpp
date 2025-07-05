@@ -129,7 +129,7 @@ void Voice::InitParam(int channelCount, int voiceOutCount, Callback *callback,
 	mBiquadValue					= 0.0f;
 	mPan							= 0.0f;
 	mSurroundPan					= 0.0f;
-	mOutputLineFlag					= 1;
+	mOutputLineFlag					= OUTPUT_LINE_MAIN;
 	mMainOutVolume					= 1.0f;
 	mMainSend						= 1.0f;
 
@@ -873,7 +873,7 @@ bool Voice::CalcAxMix()
 				CalcMixParam(channelIndex, voiceOutIndex, &mix, &rmtmix);
 
 				nextUpdateFlag |= axVoice->SetMix(mix);
-				if (mOutputLineFlag == 0 || mOutputLineFlag == 1) {
+				if (mOutputLineFlag == 0 || mOutputLineFlag == OUTPUT_LINE_MAIN) {
 					axVoice->EnableRemote(false);
 				} else {
 					axVoice->EnableRemote(true);
@@ -1077,7 +1077,7 @@ void Voice::CalcMixParam(int channelIndex, int voiceOutIndex,
 	f32 fxSendB = 0.0f;
 	f32 fxSendC = 0.0f;
 
-	if (mOutputLineFlag & 1) // OUTPUT_LINE_MAIN
+	if (mOutputLineFlag & OUTPUT_LINE_MAIN)
 	{
 		mainVolume = mMainOutVolume;
 		mainSend = mMainSend;

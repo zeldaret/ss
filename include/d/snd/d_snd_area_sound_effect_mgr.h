@@ -23,6 +23,7 @@ public:
     bool startSound(u32 soundId, u32 handleIdx);
     void calc();
     void stopSounds(s32 fadeFrames);
+    void pauseAllSounds();
 
 private:
     bool isPlayingAnySound() const;
