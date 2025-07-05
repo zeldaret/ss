@@ -41,6 +41,14 @@ public:
         return mName;
     }
 
+    const char *getOrigName() const {
+        return mpOrigName;
+    }
+
+    s32 getField_0x10() const {
+        return field_0x10;
+    }
+
     bool isActive() const {
         return mIsActive;
     }
@@ -56,13 +64,13 @@ private:
 
     /* 0x00 */ nw4r::ut::Node mNode1;
     /* 0x08 */ nw4r::ut::Node mNode2;
-    /* 0x10 */ UNKWORD field_0x10;
+    /* 0x10 */ s32 field_0x10;
     /* 0x14 */ s32 mSourceCategory;
     /* 0x18 */ s32 mSubtype;
     /* 0x1C */ bool mIsActive;
     /* 0x1D */ u8 field_0x1D;
     /* 0x1E */ SizedString<32> mName;
-    /* 0x40 */ UNKWORD field_0x40;
+    /* 0x40 */ const char *mpOrigName;
     /* 0x44 */ nw4r::ut::List mSourceList;
     /* 0x50 */ dSndSourceParam mParam;
     /* 0x64 */ dSoundSource_c *mpCachedClosestSourceToListener;
