@@ -3,6 +3,7 @@
 #include "common.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
+#include "d/snd/d_snd_source_enums.h"
 #include "d/snd/d_snd_source_group.h"
 #include "d/snd/d_snd_util.h"
 #include "d/snd/d_snd_id_mappers_data.h"
@@ -18,15 +19,15 @@ const char *getBaseVariant(const char *name) {
     return nullptr;
 }
 
-u32 getGrpId(s32 unk, const char *name) {
+u32 getGrpId(s32 sourceType, const char *name) {
     if (name == nullptr) {
         return -1;
     }
-    if (unk < 0) {
+    if (sourceType < 0) {
         return -1;
     }
 
-    if (unk >= 0x3C) {
+    if (sourceType >= SND_SOURCE_59 + 1) {
         return -1;
     }
 
@@ -49,22 +50,22 @@ u32 getGrpId(dSndSourceGroup_c *pGroup) {
     if (pGroup == nullptr) {
         return -1;
     }
-    u32 id = getGrpId(pGroup->getField_0x10(), pGroup->getName());
+    u32 id = getGrpId(pGroup->getSourceType(), pGroup->getName());
     if (id == -1 && pGroup->getOrigName() != nullptr) {
-        id = getGrpId(pGroup->getField_0x10(), pGroup->getOrigName());
+        id = getGrpId(pGroup->getSourceType(), pGroup->getOrigName());
     }
     return id;
 }
 
-u32 getBnkSeId(s32 unk, const char *name) {
+u32 getBnkSeId(s32 sourceType, const char *name) {
     if (name == nullptr) {
         return -1;
     }
-    if (unk < 0) {
+    if (sourceType < 0) {
         return -1;
     }
 
-    if (unk >= 0x3C) {
+    if (sourceType >= SND_SOURCE_59 + 1) {
         return -1;
     }
 
@@ -87,22 +88,22 @@ u32 getBnkSeId(dSndSourceGroup_c *pGroup) {
     if (pGroup == nullptr) {
         return -1;
     }
-    u32 id = getBnkSeId(pGroup->getField_0x10(), pGroup->getName());
+    u32 id = getBnkSeId(pGroup->getSourceType(), pGroup->getName());
     if (id == -1 && pGroup->getOrigName() != nullptr) {
-        id = getBnkSeId(pGroup->getField_0x10(), pGroup->getOrigName());
+        id = getBnkSeId(pGroup->getSourceType(), pGroup->getOrigName());
     }
     return id;
 }
 
-u32 getSeId(s32 unk, const char *name) {
+u32 getSeId(s32 sourceType, const char *name) {
     if (name == nullptr) {
         return -1;
     }
-    if (unk < 0) {
+    if (sourceType < 0) {
         return -1;
     }
 
-    if (unk >= 0x3C) {
+    if (sourceType >= SND_SOURCE_59 + 1) {
         return -1;
     }
 
@@ -125,9 +126,9 @@ u32 getSeId(dSndSourceGroup_c *pGroup) {
     if (pGroup == nullptr) {
         return -1;
     }
-    u32 id = getSeId(pGroup->getField_0x10(), pGroup->getName());
+    u32 id = getSeId(pGroup->getSourceType(), pGroup->getName());
     if (id == -1 && pGroup->getOrigName() != nullptr) {
-        id = getSeId(pGroup->getField_0x10(), pGroup->getOrigName());
+        id = getSeId(pGroup->getSourceType(), pGroup->getOrigName());
     }
     return id;
 }

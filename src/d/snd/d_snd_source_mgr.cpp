@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/snd/d_snd_bgm_mgr.h"
 #include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_id_mappers_data.h"
 #include "d/snd/d_snd_player_mgr.h"
@@ -372,7 +373,7 @@ dSndSourceMgr_c::dSndSourceMgr_c()
     nw4r::ut::List_Init(&field_0x3848, 0x15C);
     nw4r::ut::List_Init(&mHarpRelatedList, 0x160);
 
-    mpDefaultGroup = new dSndSourceGroup_c(-1, "Default", 0, 0);
+    mpDefaultGroup = new dSndSourceGroup_c(-1, "Default", nullptr, 0);
 
     for (dSndSourceGroup_c *group = &mGroups[0]; group < &mGroups[NUM_GROUPS]; group++) {
         nw4r::ut::List_Append(&mGroup2List, group);
@@ -393,6 +394,24 @@ void dSndSourceMgr_c::calcEnemyObjVolume() {
     }
 }
 
+dSndSourceGroup_c *dSndSourceMgr_c::getGroup(s32 sourceType, dAcBase_c *actor, const char *name, const char *origName, u8 subtype) {
+    dSndSourceGroup_c *group = getActiveGroupForName(name);
+    if (group != nullptr) {
+        return group;
+    }
+
+    group = getInactiveGroup();
+    if (group != nullptr) {
+        group->set(sourceType, name, origName, subtype);
+        activateGroup(group);
+        addGroupToLoading(group);
+        dSndBgmMgr_c::GetInstance()->prepareBossBgm(name);
+        return group;
+    }
+    
+    return nullptr;
+}
+
 dSndSourceGroup_c *dSndSourceMgr_c::getActiveGroupForName(const char *name) {
     for (dSndSourceGroup_c *it = getGroup1First(); it != nullptr; it = getGroup1Next(it)) {
         if (streq(it->getName(), name)) {
@@ -404,6 +423,10 @@ dSndSourceGroup_c *dSndSourceMgr_c::getActiveGroupForName(const char *name) {
 
 dSndSourceGroup_c *dSndSourceMgr_c::getInactiveGroup() {
     return getGroup2First();
+}
+
+bool dSndSourceMgr_c::addGroupToLoading(dSndSourceGroup_c *source) {
+
 }
 
 void dSndSourceMgr_c::registerSource(dSoundSource_c *source) {

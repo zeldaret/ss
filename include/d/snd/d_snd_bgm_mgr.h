@@ -60,6 +60,8 @@ public:
 
     dSndBgmSound_c *getBgmSoundByIndex(u32 idx);
 
+    bool prepareBossBgm(const char *name);
+
     /**
      * E.g. Lizalfos fight in ET. Note that in the ET case, this is only called when triggering
      * the fight without a cutscene, the cutscene code runs through "ELizarufos_c_opening"
