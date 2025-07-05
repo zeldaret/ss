@@ -87,6 +87,7 @@ private:
     bool stopBgmHandleIdx(u32 handleIdx, s32 fadeFrames);
 
     void calcLists();
+    void calcStopOldBgmSounds();
 
     void addToBgmSoundList(BgmSoundList_e list, dSndBgmSound_c *sound);
     void appendToBgmSoundList(BgmSoundList_e list, dSndBgmSound_c *sound);

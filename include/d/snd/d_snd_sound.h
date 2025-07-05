@@ -196,6 +196,10 @@ public:
         return mIsRunning || mIsPreparing || IsAttachedSound();
     }
 
+    bool isPaused() const {
+        return mPauseFlag;
+    }
+
 protected:
     bool isRunning() const {
         return mIsRunning && IsAttachedSound();
