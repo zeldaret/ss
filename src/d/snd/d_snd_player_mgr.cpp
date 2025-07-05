@@ -7,6 +7,7 @@
 #include "d/snd/d_snd_bgm_mgr.h"
 #include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_file_mgr.h"
+#include "d/snd/d_snd_id_mappers.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/snd/d_snd_source.h"
@@ -255,6 +256,44 @@ nw4r::snd::SoundStartable::StartResult dSndPlayerMgr_c::startSound(
 ) {
     u32 id = dSndPlayerMgr_c::GetInstance()->convertLabelStringToSoundId(soundLabel);
     return startSound(pHandle, id, pStartInfo);
+}
+
+bool dSndPlayerMgr_c::loadGroup(u32 groupId) {
+    if (dSndMgr_c::getPlayer().IsLoadedGroup(groupId)) {
+        // TODO - true would probably make more sense if the return value
+        // was checked at all...
+        return false;
+    }
+    return dSndMgr_c::GetInstance()->loadGroup(groupId, nullptr, 0);
+}
+
+bool dSndPlayerMgr_c::loadFileForSound(u32 soundId) {
+    if (soundId == -1) {
+        return false;
+    }
+    return dSndFileManager::loadFileForSound(
+        *dSndMgr_c::GetInstance()->getArchive(), soundId, dSndMgr_c::GetInstance()->getSoundHeap()
+    );
+}
+
+bool dSndPlayerMgr_c::isLoadedFileForSound(u32 soundId) {
+    return dSndFileManager::isLoadedFileForSound(&dSndMgr_c::getPlayer(), soundId);
+}
+
+bool dSndPlayerMgr_c::isLoadedFileForBank(u32 bankId) {
+    return dSndFileManager::isLoadedFileAndWaveForBank(&dSndMgr_c::getPlayer(), bankId);
+}
+
+bool dSndPlayerMgr_c::isLoadedBnkSeForGroup(dSndSourceGroup_c *group) {
+    return isLoadedFileForBank(getBnkSeId(group));
+}
+
+bool dSndPlayerMgr_c::isLoadedFileAndWaveForSound(u32 soundId) {
+    return dSndFileManager::isLoadedFileAndWaveForSound(&dSndMgr_c::getPlayer(), soundId);
+}
+
+bool dSndPlayerMgr_c::isLoadedSeFileAndWaveForGroup(dSndSourceGroup_c *group) {
+    return isLoadedFileAndWaveForSound(getSeId(group));
 }
 
 u32 dSndPlayerMgr_c::getRemoConSoundVariant(u32 soundId) const {

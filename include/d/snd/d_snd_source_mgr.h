@@ -78,6 +78,7 @@ private:
     dSndSourceGroup_c *getGroup(s32 sourceType, dAcBase_c *actor, const char *name, const char *origName, u8 subtype);
     bool fn_803846D0(s32 sourceType, const char *name, u8 subtype);
 
+    bool addGroupToLoading(dSndSourceGroup_c *group);
     void activateGroup(dSndSourceGroup_c *group);
     bool isActiveGroup(dSndSourceGroup_c *group) const;
 

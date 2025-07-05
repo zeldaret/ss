@@ -4,6 +4,7 @@
 #include "common.h"
 #include "d/snd/d_snd_misc.h"
 #include "d/snd/d_snd_types.h"
+#include "d/snd/d_snd_util.h"
 #include "nw4r/ut/ut_list.h"
 #include "sized_string.h"
 
@@ -20,8 +21,11 @@
 class dSndSourceGroup_c {
 public:
     dSndSourceGroup_c();
-    dSndSourceGroup_c(s32 sourceType, const char *, u32, s32 mSubtype);
+    dSndSourceGroup_c(s32 sourceType, const char *name, const char *origName, s32 subtype);
     ~dSndSourceGroup_c();
+
+    void set(s32 sourceType, const char *name, const char *origName, s32 subtype);
+    void setTemp(s32 sourceType, const char *name, s32 subtype);
 
     void registerSource(dSoundSource_c *);
     void unregisterSource(dSoundSource_c *);
@@ -34,8 +38,10 @@ public:
     dSoundSource_c *getSourceClosestToPlayer();
 
     s32 getNumSources() const;
-    void set(s32 type, const char *name);
+    void setParam(s32 type, const char *name);
     void calc();
+    void clear();
+    void clearTemp();
 
     const char *getName() const {
         return mName;
@@ -45,8 +51,8 @@ public:
         return mpOrigName;
     }
 
-    s32 getField_0x10() const {
-        return field_0x10;
+    s32 getSourceType() const {
+        return mSourceType;
     }
 
     bool isActive() const {
@@ -64,14 +70,14 @@ private:
 
     /* 0x00 */ nw4r::ut::Node mNode1;
     /* 0x08 */ nw4r::ut::Node mNode2;
-    /* 0x10 */ s32 field_0x10;
+    /* 0x10 */ s32 mSourceType;
     /* 0x14 */ s32 mSourceCategory;
     /* 0x18 */ s32 mSubtype;
     /* 0x1C */ bool mIsActive;
-    /* 0x1D */ u8 field_0x1D;
+    /* 0x1D */ bool field_0x1D;
     /* 0x1E */ SizedString<32> mName;
     /* 0x40 */ const char *mpOrigName;
-    /* 0x44 */ nw4r::ut::List mSourceList;
+    /* 0x44 */ LIST_MEMBER(dSoundSource_c, SubSource);
     /* 0x50 */ dSndSourceParam mParam;
     /* 0x64 */ dSoundSource_c *mpCachedClosestSourceToListener;
     /* 0x68 */ dSoundSource_c *mpCachedClosestSourceToPlayer;

@@ -2,6 +2,7 @@
 #define D_SND_PLAYER_MGR_H
 
 #include "d/snd/d_snd_mgr.h"
+#include "d/snd/d_snd_types.h"
 #include "d/snd/d_snd_util.h"
 #include "nw4r/snd/snd_MemorySoundArchive.h"
 #include "nw4r/snd/snd_SoundArchivePlayer.h"
@@ -64,6 +65,14 @@ public:
     void popToState1();
     void saveState2();
     void popToState2();
+
+    bool loadGroup(u32 groupId);
+    bool loadFileForSound(u32 soundId);
+    bool isLoadedFileForSound(u32 soundId);
+    bool isLoadedFileForBank(u32 bankId);
+    bool isLoadedBnkSeForGroup(dSndSourceGroup_c *group);
+    bool isLoadedFileAndWaveForSound(u32 soundId);
+    bool isLoadedSeFileAndWaveForGroup(dSndSourceGroup_c *group);
 
     u32 getFreeSize();
     bool loadDemoArchive(const char *demoArchiveName);
