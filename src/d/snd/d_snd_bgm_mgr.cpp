@@ -140,7 +140,7 @@ bool dSndBgmMgr_c::beginBgmBattleRoom() {
         return false;
     }
 
-    return playBattleBgm(BGM_BATTLE_ROOM_MAIN, 5);
+    return playBattleBgm(BGM_BATTLE_ROOM_MAIN, true);
 }
 
 bool dSndBgmMgr_c::endBgmBattleRoom() {
@@ -459,6 +459,28 @@ bool dSndBgmMgr_c::hasPlayingFanSounds() const {
 void dSndBgmMgr_c::stopFanSounds(s32 fadeFrames) {
     for (int i = 0; i < 3; i++) {
         mFanSounds[i]->stop(fadeFrames);
+    }
+}
+
+void dSndBgmMgr_c::calcStopOldBgmSounds() {
+    s32 numPlayingSounds = 0;
+
+    dSndBgmSound_c *it;
+    for (it = getFirstInBgmSoundList(BGM_LIST_PLAYING); it != nullptr;
+         it = getNextInBgmSoundList(BGM_LIST_PLAYING, it)) {
+        if (!it->isPaused() && it->isStrmSound()) {
+            numPlayingSounds++;
+        }
+    }
+
+    // If more than one strm sound is playing, stop all but the first one
+    if (numPlayingSounds >= 2) {
+        for (it = getFirstInBgmSoundList(BGM_LIST_PLAYING); it != nullptr;
+             it = getNextInBgmSoundList(BGM_LIST_PLAYING, it)) {
+            if (!it->isPaused() && it->isStrmSound() && it != getFirstInBgmSoundList(BGM_LIST_PLAYING)) {
+                it->stop(15);
+            }
+        }
     }
 }
 

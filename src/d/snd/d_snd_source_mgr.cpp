@@ -3,6 +3,7 @@
 #include "common.h"
 #include "d/a/d_a_base.h"
 #include "d/snd/d_snd_control_player_mgr.h"
+#include "d/snd/d_snd_id_mappers_data.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/snd/d_snd_source.h"
@@ -41,14 +42,6 @@
 // one particular problem is that all weak functions involving
 // dSndAnimSound_c are reversed compared to their natural vtable order,
 // and the overridden `SetupSound` function seems to be immune to reordering
-
-// TODO move
-struct ActorBaseNamePair {
-    const char *variant;
-    const char *base;
-};
-extern "C" const ActorBaseNamePair Actor_BaseActorName_Pairs[];
-extern "C" const s32 lbl_8057E394;
 
 bool dSndSourceMgr_c::isAnimSoundSource(s32 sourceType, const char *name) {
     switch (getSourceCategoryForSourceType(sourceType, name)) {
@@ -199,10 +192,10 @@ dSoundSourceIf_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor
         }
 
         if (sourceType == SND_SOURCE_NPC_51) {
-            const ActorBaseNamePair *pair = Actor_BaseActorName_Pairs;
-            for (int i = 0; i < lbl_8057E394; i++) {
-                if (streq(nameStr, Actor_BaseActorName_Pairs[i].variant)) {
-                    nameStr = Actor_BaseActorName_Pairs[i].base;
+            const ActorBaseNamePair *pair = sActorBaseNamePairs;
+            for (int i = 0; i < sNumActorBaseNamePairs; i++) {
+                if (streq(nameStr, sActorBaseNamePairs[i].variant)) {
+                    nameStr = sActorBaseNamePairs[i].base;
                     isModified = true;
                     break;
                 }
