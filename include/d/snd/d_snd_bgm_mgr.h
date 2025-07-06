@@ -17,10 +17,13 @@ public:
     SND_DISPOSER_MEMBERS(dSndBgmMgr_c);
 
 public:
+    static bool isSoundPlayedByBgmBattlePlayer(u32 soundId);
+    static bool isBgmBattle2(u32 soundId);
+
     enum BgmSoundList_e {
         BGM_LIST_PREPARING = 0,
         BGM_LIST_PLAYING = 1,
-        BGM_LIST_STOPPED = 2,
+        BGM_LIST_STOPPING = 2,
 
         BGM_LIST_MAX = 3,
     };
@@ -72,7 +75,19 @@ public:
 
     bool isPlayingAnyBattleMusic();
 
+    void removeFromAllBgmSoundLists(dSndBgmSound_c *sound);
+    void addToBgmSoundList(BgmSoundList_e list, dSndBgmSound_c *sound);
+    void appendToBgmSoundList(BgmSoundList_e list, dSndBgmSound_c *sound);
+
+    // Unless there's a Ghidra decompiler bug this function
+    // always returns false
+    bool weirdCheckAlwaysFalse();
+
+    dSndBgmSound_c *getActiveBgmSound();
+
 private:
+    dSndBgmBattleSound_c *getBgmBattleSound();
+
     bool stopBgmSound(dSndBgmSound_c *sound, s32 fadeFrames);
     void checkForPrepareStoppedBgmSound(u32 stoppedSoundId);
     dSndBgmSound_c *findNewBgmSoundHandle();
@@ -91,10 +106,7 @@ private:
     void calcLists();
     void calcStopOldBgmSounds();
 
-    void addToBgmSoundList(BgmSoundList_e list, dSndBgmSound_c *sound);
-    void appendToBgmSoundList(BgmSoundList_e list, dSndBgmSound_c *sound);
     void removeFromBgmSoundList(BgmSoundList_e list, dSndBgmSound_c *sound);
-    void removeFromAllBgmSoundLists(dSndBgmSound_c *sound);
     bool isInBgmSoundList(BgmSoundList_e list, dSndBgmSound_c *sound);
     dSndBgmSound_c *getFirstInBgmSoundList(BgmSoundList_e list);
     dSndBgmSound_c *getNextInBgmSoundList(BgmSoundList_e list, dSndBgmSound_c *sound);
@@ -119,7 +131,7 @@ private:
     /* 0x250 */ s32 mScheduledSoundDelay;
     /* 0x254 */ dSndBgmSound_c *mBgmSounds[7];
     /* 0x270 */ dSndBgmSound_c *field_0x270;
-    /* 0x274 */ UNKWORD field_0x274;
+    /* 0x274 */ dSndBgmSound_c *mpPrevActiveBgmSound;
     /* 0x278 */ nw4r::ut::List mBgmSoundLists[BGM_LIST_MAX]; // node offset 0xF0 -> dSndBgmSound_c
     /* 0x29C */ UNKWORD field_0x29C;
     /* 0x2A0 */ dSndActor_c mSoundActor;

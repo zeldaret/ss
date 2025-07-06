@@ -393,15 +393,15 @@ dSndSourceMgr_c::dSndSourceMgr_c()
 }
 
 void dSndSourceMgr_c::calcEnemyObjVolume() {
-    if (dSndStateMgr_c::GetInstance()->checkFlag0x94(dSndStateMgr_c::EVENT_MUTE_ENEMY_FULL)) {
+    if (dSndStateMgr_c::GetInstance()->checkEventFlag(dSndStateMgr_c::EVENT_MUTE_ENEMY_FULL)) {
         dSndControlPlayerMgr_c::GetInstance()->setEnemyMuteVolume(0.0f);
-    } else if (dSndStateMgr_c::GetInstance()->checkFlag0x94(dSndStateMgr_c::EVENT_MUTE_ENEMY_PARTIAL)) {
+    } else if (dSndStateMgr_c::GetInstance()->checkEventFlag(dSndStateMgr_c::EVENT_MUTE_ENEMY_PARTIAL)) {
         dSndControlPlayerMgr_c::GetInstance()->setEnemyMuteVolume(0.3f);
     }
 
-    if (dSndStateMgr_c::GetInstance()->checkFlag0x94(dSndStateMgr_c::EVENT_MUTE_OBJ_FULL)) {
+    if (dSndStateMgr_c::GetInstance()->checkEventFlag(dSndStateMgr_c::EVENT_MUTE_OBJ_FULL)) {
         dSndControlPlayerMgr_c::GetInstance()->setObjectMuteVolume(0.0f);
-    } else if (dSndStateMgr_c::GetInstance()->checkFlag0x94(dSndStateMgr_c::EVENT_MUTE_OBJ_PARTIAL)) {
+    } else if (dSndStateMgr_c::GetInstance()->checkEventFlag(dSndStateMgr_c::EVENT_MUTE_OBJ_PARTIAL)) {
         dSndControlPlayerMgr_c::GetInstance()->setObjectMuteVolume(0.3f);
     }
 }

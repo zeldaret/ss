@@ -31,6 +31,7 @@ public:
     };
 
     enum EventFlags_e {
+        EVENT_0x2 = 0x2,
         EVENT_MUTE_BGM_PARTIAL = 0x8,
         EVENT_MUTE_BGM_FULL = 0x10,
         EVENT_MUTE_STAGE_EFFECTS_PARTIAL = 0x20,
@@ -39,6 +40,7 @@ public:
         EVENT_MUTE_ENEMY_FULL = 0x100,
         EVENT_MUTE_OBJ_PARTIAL = 0x200,
         EVENT_MUTE_OBJ_FULL = 0x400,
+        EVENT_0x400000 = 0x400000,
     };
 
     dSndStateMgr_c();
@@ -89,8 +91,16 @@ public:
         field_0x010 &= ~mask;
     }
 
-    bool checkFlag0x94(u32 mask) const {
+    bool checkEventFlag(u32 mask) const {
         return field_0x094 & mask;
+    }
+
+    void onEventFlag(u32 mask) {
+        field_0x094 |= mask;
+    }
+
+    void offEventFlag(u32 mask) {
+        field_0x094 &= ~mask;
     }
 
     void setFlowEvent(u32 eventId);
