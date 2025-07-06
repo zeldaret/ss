@@ -93,7 +93,7 @@ bool dAcOChest_c::createHeap() {
         mResFile = nw4r::g3d::ResFile(insideMdlData);
         nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(INSIDE_MODEL_NAMES[getFromParams(0x10, 0xFF)]);
         if (!mInsideMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr)) {
-            return NOT_READY;
+            return false;
         }
     }
 
@@ -103,7 +103,7 @@ bool dAcOChest_c::createHeap() {
     fn_326_C90();
     bool ok = !mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale);
     if (!ok) {
-        return NOT_READY;
+        return false;
     }
     return mBgW.InitMapStuff(&heap_allocator);
 }
