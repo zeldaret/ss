@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/snd/d_snd_bgm_sound.h"
+#include "d/snd/d_snd_bgm_sound battle.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_sound.h"
@@ -9,6 +10,18 @@
 #include "d/snd/d_snd_wzsound.h"
 #include "nw4r/snd/snd_SoundArchive.h"
 #include "nw4r/ut/ut_list.h"
+
+bool dSndBgmMgr_c::isSoundPlayedByBgmBattlePlayer(u32 soundId) {
+    if (soundId == -1) {
+        return false;
+    }
+
+    return dSndMgr_c::getPlayerId(soundId) == dSndPlayerMgr_c::PLAYER_BGM_BATTLE;
+}
+
+bool dSndBgmMgr_c::isBgmBattle2(u32 soundId) {
+    return soundId == BGM_BATTLE2;
+}
 
 SND_DISPOSER_DEFINE(dSndBgmMgr_c);
 
@@ -18,7 +31,7 @@ dSndBgmMgr_c::dSndBgmMgr_c()
       field_0x248(0),
       mScheduledSoundId(-1),
       mScheduledSoundDelay(0),
-      field_0x274(0),
+      mpPrevActiveBgmSound(nullptr),
       field_0x29C(0),
       mSoundActor(dSndMgr_c::GetInstance()->getPlayer()),
       field_0x2F4(1.0f),
@@ -64,16 +77,27 @@ dSndBgmMgr_c::dSndBgmMgr_c()
 }
 
 void dSndBgmMgr_c::calcLists() {
-    // TODO ...
+    // TODO Regswap
+    dSndBgmSound_c *snd;
 
+    snd = getActiveBgmSound();
+    if (snd != nullptr) {
+        if (snd != mpPrevActiveBgmSound) {
+            snd->onBecomeActive();
+        }
+        snd->applyVars();
+    }
+    mpPrevActiveBgmSound = snd;
+    
+    
     dSndBgmSound_c *next, *it;
     for (it = getFirstInBgmSoundList(BGM_LIST_PLAYING); it != nullptr; it = next) {
         next = getNextInBgmSoundList(BGM_LIST_PLAYING, it);
         it->calc();
     }
 
-    for (it = getFirstInBgmSoundList(BGM_LIST_STOPPED); it != nullptr; it = next) {
-        next = getNextInBgmSoundList(BGM_LIST_STOPPED, it);
+    for (it = getFirstInBgmSoundList(BGM_LIST_STOPPING); it != nullptr; it = next) {
+        next = getNextInBgmSoundList(BGM_LIST_STOPPING, it);
         it->calc();
     }
 
@@ -152,17 +176,27 @@ bool dSndBgmMgr_c::endBgmBattleRoom() {
     return playFanSound(BGM_BATTLE_ROOM_OUTRO);
 }
 
+bool dSndBgmMgr_c::weirdCheckAlwaysFalse() {
+    u32 soundId = getBgmBattleSound()->GetId();
+    bool ok = false;
+    // @bug should be != -1
+    if (soundId != 0) {
+        if (getBgmBattleSound()->isPlaying()) {
+            ok = true;
+        }
+    }
+    // @bug passes a boolean to a function expecting a sound ID.
+    // function only returns true if sound ID is 0x1585, so this
+    // always returns false
+    return isBgmBattle2(ok);
+}
+
 void dSndBgmMgr_c::playDelayedSound(u32 soundId, s32 delay) {
     if (soundId == -1) {
         return;
     }
-    nw4r::snd::SoundArchive::SoundInfo info;
-    u32 playerId;
-    if (!dSndMgr_c::GetInstance()->getArchive()->ReadSoundInfo(soundId, &info)) {
-        playerId = -1;
-    } else {
-        playerId = info.playerId;
-    }
+
+    u32 playerId = dSndMgr_c::getPlayerId(soundId);
 
     switch (playerId) {
         case dSndPlayerMgr_c::PLAYER_BGM:
@@ -197,12 +231,7 @@ void dSndBgmMgr_c::cancelDelayedBgm() {
     }
 
     nw4r::snd::SoundArchive::SoundInfo info;
-    u32 playerId;
-    if (!dSndMgr_c::GetInstance()->getArchive()->ReadSoundInfo(mScheduledSoundId, &info)) {
-        playerId = -1;
-    } else {
-        playerId = info.playerId;
-    }
+    u32 playerId = dSndMgr_c::getPlayerId(mScheduledSoundId);
 
     if (dSndPlayerMgr_c::isBgmPlayerId(playerId)) {
         cancelDelayedSound();
@@ -216,13 +245,7 @@ bool dSndBgmMgr_c::startDelayedSound() {
 
     bool ok = false;
 
-    nw4r::snd::SoundArchive::SoundInfo info;
-    u32 playerId;
-    if (!dSndMgr_c::GetInstance()->getArchive()->ReadSoundInfo(mScheduledSoundId, &info)) {
-        playerId = -1;
-    } else {
-        playerId = info.playerId;
-    }
+    u32 playerId = dSndMgr_c::getPlayerId(mScheduledSoundId);
     switch (playerId) {
         case dSndPlayerMgr_c::PLAYER_BGM:
         case dSndPlayerMgr_c::PLAYER_BGM_BATTLE: ok = playBgm(mScheduledSoundId, 0, false); break;
@@ -275,7 +298,7 @@ bool dSndBgmMgr_c::isPlayingBgmSoundId(u32 soundId) const {
 
 bool dSndBgmMgr_c::isFadingOutBgmSoundId(u32 soundId) const {
     for (int i = 0; i < 7; i++) {
-        if (mBgmSounds[i]->GetId() == soundId && mBgmSounds[i]->isFadingOutSoundId(soundId)) {
+        if (mBgmSounds[i]->GetId() == soundId && mBgmSounds[i]->isFadingOut()) {
             return true;
         }
     }
