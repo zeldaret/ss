@@ -111,6 +111,10 @@ public:
         }
     }
 
+    const nw4r::snd::SoundArchive *getDemoArchiveDirectly() const {
+        return &mDemoSoundArchive;
+    }
+
     u32 getEventMuteMask(u32 id) {
         return getDemoArchive()->GetSoundUserParam(id) & sEventMuteFlagsMask;
     }
