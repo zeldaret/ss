@@ -153,20 +153,20 @@ public:
     void setVolume(f32 volume, s32 frames);
     void setPitchRelated(f32 pitch, s32 frames);
     void setLinearPitch(f32 pitch, s32 frames);
-    void setTrackVolume(u32 trackFlags, f32 volume, s32 frames);
-    void setStrmTrackVolume(u32 trackFlags, f32 volume, s32 frames);
+    void setTrackVolume(u16 trackFlags, f32 volume, s32 frames);
+    void setStrmTrackVolume(u16 trackFlags, f32 volume, s32 frames);
     void setSingleSeqTrackVolume(u16 index, f32 volume, s32 frames);
     void setSingleStrmTrackVolume(u16 index, f32 volume, s32 frames);
 
     // why f32 frames?
-    void setEachSeqTrackVolume(u32 trackFlags, f32 frames);
-    void setEachStrmTrackVolume(u32 trackFlags, f32 frames);
+    void setEachSeqTrackVolume(u16 trackFlags, f32 frames);
+    void setEachStrmTrackVolume(u16 trackFlags, f32 frames);
 
     void setSeqTempoRatio(f32 ratio, s32 frames);
-    void setSeqTrackMute(u32 trackFlags, nw4r::snd::SeqMute mute);
+    void setSeqTrackMute(u16 trackFlags, nw4r::snd::SeqMute mute);
     void forceStop();
 
-    s16 readSeqTrackVariable(int varNo);
+    s32 readSeqTrackVariable(int varNo);
     void writeSeqTrackVariable(int varNo, s16 value);
 
     void linkCtrl(dSndControlSound_c *);
@@ -184,7 +184,7 @@ public:
         return mIsPreparing && !mIsRunning && GetId() == soundId;
     }
 
-    bool isFadingOutSoundId(u32 soundId) const {
+    bool isFadingOut() const {
         return mIsFadingOut && IsAttachedSound();
     }
 

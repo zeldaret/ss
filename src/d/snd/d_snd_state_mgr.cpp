@@ -210,7 +210,7 @@ void dSndStateMgr_c::initializeEventCallbacks(const char *name) {
     sEventExecuteCallback = nullptr;
     resetOverrides();
 
-    if (checkFlag0x94(0x2)) {
+    if (checkEventFlag(EVENT_0x2)) {
         handleDemoEvent(name);
         return;
     }
