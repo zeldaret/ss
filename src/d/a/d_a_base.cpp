@@ -88,8 +88,6 @@ dAcBase_c::dAcBase_c()
 // 8002c530
 // dBase_c::~dBase_c() {}
 
-// Fixing the mpSoundSource and sound_info in the ctor should make this match
-// NOT MATCHING
 // 8002c590
 dAcBase_c::~dAcBase_c() {}
 
