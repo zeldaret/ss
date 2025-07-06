@@ -15,7 +15,6 @@
 /** Size: probably 0x15C */
 class dSoundSource_c : public dSoundSourceIf_c, public dSnd3DActor_c {
 public:
-
     dSoundSource_c(s32 sourceType, dAcBase_c *, const char *name, dSndSourceGroup_c *pOwnerGroup);
     virtual ~dSoundSource_c();
 
@@ -33,7 +32,6 @@ public:
     startSoundAtPosition(u32 soundId, const nw4r::math::VEC3 *position, nw4r::snd::SoundHandle *handle);
     nw4r::snd::SoundHandle *holdSound(u32 soundId, nw4r::snd::SoundHandle *handle);
     u32 specializeBgHitSoundId(u32 baseSoundId, u32 polyAttr0, u32 polyAttr1);
-
 
     // This is where it gets a bit wild and this class starts mixing in overrides between
     // new virtual functions, which causes the vtable to list these functions in exactly this
@@ -206,6 +204,15 @@ public:
 
     dSndSeSound2_c *getHandleType2ForSoundId(u32 soundId);
 
+    // Would have loved to roll this in with a PrepareSound function
+    // but that doesn't work
+    void markPrepared() {
+        field_0x11C |= 0x80000000;
+    }
+
+    nw4r::snd::SoundStartable::StartResult
+    startSound(u32 soundId, nw4r::snd::SoundHandle *handle, nw4r::snd::SoundHandle **pOutHandle);
+
 protected:
     StartResult setupSoundCommon(nw4r::snd::SoundHandle *pHandle, u32 soundId, const StartInfo *pStartInfo, void *arg);
     void setVolumeFade(f32 volume, u32 fadeFrames);
@@ -225,10 +232,6 @@ private:
     f32 getBaseSoundVolume(u32 variantSoundId, u32 baseSoundId);
     dSndDistantSoundActor_c *startBaseSoundAtPosition(u32 baseSoundId, const nw4r::math::VEC3 *position, f32 volume);
     nw4r::snd::SoundHandle *startBaseSound(u32 baseSoundId, f32 volume);
-
-
-    nw4r::snd::SoundStartable::StartResult
-    startSound(u32 soundId, nw4r::snd::SoundHandle *handle, nw4r::snd::SoundHandle **pOutHandle);
 
     nw4r::snd::SoundHandle *continueHoldingSound(
         dSndSeSound2_c *seHandle, u32 soundId, dSndDistantSoundActor_c *distant, const nw4r::math::VEC3 *position

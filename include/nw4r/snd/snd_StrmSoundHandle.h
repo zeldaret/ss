@@ -41,6 +41,12 @@ namespace nw4r { namespace snd
 				mSound->SetTrackVolume(trackFlags, volume, fadeFrames);
 		}
 
+		u32 GetPlaySamplePosition() const {
+			if (!IsAttachedSound())
+				return -1;
+			return mSound->GetPlaySamplePosition();
+		}
+
 	// members
 	private:
 		/* base NonCopyable */			// size 0x00, offset 0x00

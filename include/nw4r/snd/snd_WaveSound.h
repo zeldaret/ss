@@ -74,6 +74,8 @@ namespace nw4r { namespace snd { namespace detail
 			return DEBUG_SOUND_TYPE_WAVESOUND;
 		}
 
+		u32 GetPlaySamplePosition() const { return mWsdPlayer.GetPlaySamplePosition(); }
+
 	// static members
 	public:
 		static ut::detail::RuntimeTypeInfo const typeInfo;

@@ -160,7 +160,7 @@ void dSndSound_c::unlinkCtrl(dSndControlSound_c *ctrl) {
     nw4r::ut::List_Remove(&mList, ctrl);
 }
 
-s16 dSndSound_c::readSeqTrackVariable(int varNo) {
+s32 dSndSound_c::readSeqTrackVariable(int varNo) {
     if (!isSeqSound()) {
         return -1;
     }
@@ -224,7 +224,7 @@ void dSndSound_c::resetTrackVolumes() {
     }
 }
 
-void dSndSound_c::setTrackVolume(u32 trackFlags, f32 volume, s32 frames) {
+void dSndSound_c::setTrackVolume(u16 trackFlags, f32 volume, s32 frames) {
     if (trackFlags != 0 && IsAttachedSound()) {
         switch (dSndMgr_c::GetInstance()->getArchive()->GetSoundType(GetId())) {
             case nw4r::snd::SoundArchive::SOUND_TYPE_SEQ: {
@@ -247,7 +247,7 @@ void dSndSound_c::setTrackVolume(u32 trackFlags, f32 volume, s32 frames) {
     }
 }
 
-void dSndSound_c::setStrmTrackVolume(u32 trackFlags, f32 volume, s32 frames) {
+void dSndSound_c::setStrmTrackVolume(u16 trackFlags, f32 volume, s32 frames) {
     if (trackFlags != 0 && IsAttachedSound()) {
         switch (dSndMgr_c::GetInstance()->getArchive()->GetSoundType(GetId())) {
             case nw4r::snd::SoundArchive::SOUND_TYPE_STRM: {
@@ -284,7 +284,7 @@ void dSndSound_c::setSingleStrmTrackVolume(u16 index, f32 volume, s32 frames) {
     }
 }
 
-void dSndSound_c::setEachSeqTrackVolume(u32 trackFlags, f32 frames) {
+void dSndSound_c::setEachSeqTrackVolume(u16 trackFlags, f32 frames) {
     for (int i = 0; i < 16; i++) {
         if ((trackFlags & (u16)(1 << i)) != 0) {
             setSingleSeqTrackVolume(i, 1.0f, (u32)frames);
@@ -294,7 +294,7 @@ void dSndSound_c::setEachSeqTrackVolume(u32 trackFlags, f32 frames) {
     }
 }
 
-void dSndSound_c::setEachStrmTrackVolume(u32 trackFlags, f32 frames) {
+void dSndSound_c::setEachStrmTrackVolume(u16 trackFlags, f32 frames) {
     for (int i = 0; i < 3; i++) {
         if ((trackFlags & (u16)(1 << i)) != 0) {
             setSingleStrmTrackVolume(i, 1.0f, (u32)frames);
@@ -317,7 +317,7 @@ void dSndSound_c::setSeqTempoRatio(f32 ratio, s32 frames) {
     }
 }
 
-void dSndSound_c::setSeqTrackMute(u32 trackFlags, nw4r::snd::SeqMute mute) {
+void dSndSound_c::setSeqTrackMute(u16 trackFlags, nw4r::snd::SeqMute mute) {
     if (isSeqSound()) {
         nw4r::snd::SeqSoundHandle handle(this);
         handle.SetTrackMute(trackFlags, mute);

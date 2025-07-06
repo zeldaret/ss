@@ -22,4 +22,6 @@ class dSndSeSound2_c;
 class dSndBgmSound_c;
 class dSndBgmBattleSound_c;
 
+class dSndBgmSoundHarpMgr_c;
+
 #endif

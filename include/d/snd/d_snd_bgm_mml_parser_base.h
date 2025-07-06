@@ -33,7 +33,7 @@ struct dBgmMmlTrack {
  * Partial copy of nw4r::snd::detail::MmlParser
  */
 class dSndBgmMmlParser_c {
-private:
+protected:
     // [R89JEL]:/bin/RVL/Debug/mainD.elf:.debug::0x2d70c
     // Swapped - or maybe just returns a boolean
     enum ParseResult {

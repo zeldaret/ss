@@ -32,6 +32,17 @@ public:
         return label;
     }
 
+    static u32 getPlayerId(u32 soundId) {
+        nw4r::snd::SoundArchive::SoundInfo info;
+        u32 playerId;
+        if (!sInstance->getArchive()->ReadSoundInfo(soundId, &info)) {
+            playerId = -1;
+        } else {
+            playerId = info.playerId;
+        }
+        return playerId;
+    }
+
 private:
     static dSndMgr_c *sInstance;
 

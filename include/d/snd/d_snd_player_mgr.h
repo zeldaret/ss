@@ -79,6 +79,7 @@ public:
     const char *getSoundArchivePath();
     u32 convertLabelStringToSoundId(const char *label) const;
     static bool isBgmPlayerId(u32 id);
+    static bool isSoundPlayedByBgmBattlePlayer(u32 soundId);
     u32 getSomeUserParam(u32 soundId) const;
 
     nw4r::snd::SoundArchivePlayer &getSoundArchivePlayerForType(s32 sourceType);
