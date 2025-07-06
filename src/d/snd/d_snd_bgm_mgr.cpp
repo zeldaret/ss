@@ -1,8 +1,8 @@
 #include "d/snd/d_snd_bgm_mgr.h"
 
 #include "common.h"
-#include "d/snd/d_snd_bgm_sound.h"
 #include "d/snd/d_snd_bgm_sound battle.h"
+#include "d/snd/d_snd_bgm_sound.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_sound.h"
@@ -77,10 +77,7 @@ dSndBgmMgr_c::dSndBgmMgr_c()
 }
 
 void dSndBgmMgr_c::calcLists() {
-    // TODO Regswap
-    dSndBgmSound_c *snd;
-
-    snd = getActiveBgmSound();
+    dSndBgmSound_c *snd = getActiveBgmSound_i();
     if (snd != nullptr) {
         if (snd != mpPrevActiveBgmSound) {
             snd->onBecomeActive();
@@ -88,8 +85,7 @@ void dSndBgmMgr_c::calcLists() {
         snd->applyVars();
     }
     mpPrevActiveBgmSound = snd;
-    
-    
+
     dSndBgmSound_c *next, *it;
     for (it = getFirstInBgmSoundList(BGM_LIST_PLAYING); it != nullptr; it = next) {
         next = getNextInBgmSoundList(BGM_LIST_PLAYING, it);

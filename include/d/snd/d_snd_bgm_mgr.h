@@ -84,6 +84,11 @@ public:
     bool weirdCheckAlwaysFalse();
 
     dSndBgmSound_c *getActiveBgmSound();
+    // I don't love this inline but it fixes one regswap
+    // TODO look into getting rid of this one
+    dSndBgmSound_c *getActiveBgmSound_i() {
+        return getActiveBgmSound();
+    }
 
 private:
     dSndBgmBattleSound_c *getBgmBattleSound();
