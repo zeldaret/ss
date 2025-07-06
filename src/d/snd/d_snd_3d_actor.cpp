@@ -4,6 +4,7 @@
 #include "d/a/d_a_player.h"
 #include "d/snd/d_snd_3d_manager.h"
 #include "d/snd/d_snd_checkers.h"
+#include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_state_mgr.h"
 #include "nw4r/math/math_types.h"
@@ -44,13 +45,6 @@ void dSnd3DActor_c::setPosition(const nw4r::math::VEC3 &rPosition) {
     mFlags = 0;
 }
 
-void dSnd3DActor_c::updatePositionRelativeToListener() {
-    if (!checkFlag(0x1)) {
-        calculatePositionRelativeToListener();
-        setFlag(0x1);
-    }
-}
-
 void dSnd3DActor_c::resetCachedRelativePositions() {
     mPositionRelativeToPlayer.x = INFINITY;
     mPositionRelativeToPlayer.y = INFINITY;
@@ -67,6 +61,13 @@ void dSnd3DActor_c::resetCachedRelativePositions() {
 
 void dSnd3DActor_c::setSourceParam(const dSndSourceParam *param) {
     *mpSourceParam = *param;
+}
+
+void dSnd3DActor_c::updatePositionRelativeToListener() {
+    if (!checkFlag(0x1)) {
+        calculatePositionRelativeToListener();
+        setFlag(0x1);
+    }
 }
 
 void dSnd3DActor_c::calculatePositionRelativeToListener() {
@@ -179,11 +180,14 @@ bool dSnd3DActor_c::isPlayingSound(u32 id) {
     return result;
 }
 
-const char *dSnd3DActor_c::soundIdToSoundLabel(u32 soundId) const {
-    // TODO
-    return nullptr;
-}
-
 u32 dSnd3DActor_c::soundLabelToSoundId(const char *soundLabel) const {
     return dSndPlayerMgr_c::GetInstance()->convertLabelStringToSoundId(soundLabel);
+}
+
+const char *dSnd3DActor_c::soundIdToSoundLabel(u32 soundId) const {
+    if (mIsDemoActor) {
+        return dSndPlayerMgr_c::GetInstance()->getDemoArchiveDirectly()->GetSoundLabelString(soundId);
+    } else {
+        return dSndMgr_c::getSoundLabelString(soundId);
+    }
 }

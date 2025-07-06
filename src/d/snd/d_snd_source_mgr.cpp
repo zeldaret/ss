@@ -312,6 +312,18 @@ dSoundSourceIf_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor
             case SND_SOURCE_CATEGORY_7: newSource = new dSndSourceDemo_c(sourceType, actor, actualName, group); break;
             default:
                 if (sourceType < SND_SOURCE_59 + 1) {
+                    // This part is confusing as heck. Various "tags" have category 9,
+                    // but most of them never create their sound source (except for Uground).
+                    // On top of that, this called function does weird things where
+                    // if no group with the given name is in the "to load list",
+                    // it grabs the first group from the "inactive" list but
+                    // *doesn't remove it from that list*, then temporarily sets some
+                    // variables, adds it to the "to load" list, then clears some other variables.
+                    // Maybe there's a very specific reason for it to do things
+                    // that way but the effect is that there's a group
+                    // in a weird in-between state (inactive but loading)
+                    // and I'm really not sure if it has the intended effect.
+                    // Then again, I think this is only called from Uground...
                     GetInstance()->fn_803846D0(sourceType, actualName, subtype);
                 }
                 return nullptr;
@@ -426,7 +438,7 @@ dSndSourceGroup_c *dSndSourceMgr_c::getInactiveGroup() {
 }
 
 bool dSndSourceMgr_c::addGroupToLoading(dSndSourceGroup_c *source) {
-
+    return false;
 }
 
 void dSndSourceMgr_c::registerSource(dSoundSource_c *source) {

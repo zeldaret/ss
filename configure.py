@@ -757,6 +757,7 @@ config.libs = [
             Object(NonMatching, "d/snd/d_snd_bgm_sound_callbacks.cpp"),
             Object(NonMatching, "d/snd/d_snd_bgm_sound_battle_callbacks.cpp"),
             Object(NonMatching, "d/snd/d_snd_bgm_sound.cpp"),
+            Object(Matching, "d/snd/d_snd_bgm_sound_harp_mgr.cpp"),
             Object(NonMatching, "d/snd/d_snd_bgm_battle_data_mgr.cpp"),
             Object(Matching, "d/snd/d_snd_bgm_harp_data.cpp"),
             Object(Matching, "d/snd/d_snd_bgm_mml_parser_base.cpp"),

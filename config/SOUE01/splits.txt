@@ -2695,8 +2695,11 @@ d/snd/d_snd_bgm_sound_battle_callbacks.cpp:
 	.sdata2     start:0x8057DA50 end:0x8057DA58
 
 d/snd/d_snd_bgm_sound.cpp:
-	.text       start:0x80379D20 end:0x8037BA68 align:16
+	.text       start:0x80379D20 end:0x8037B908 align:16
 	.sbss       start:0x80575D88 end:0x80575D90
+
+d/snd/d_snd_bgm_sound_harp_mgr.cpp:
+	.text       start:0x8037B910 end:0x8037BA68 align:16
 
 d/snd/d_snd_bgm_battle_data_mgr.cpp:
 	.text       start:0x8037BA70 end:0x8037BEA8 align:16
