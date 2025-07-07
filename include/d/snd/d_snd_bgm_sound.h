@@ -32,12 +32,14 @@ public:
     virtual void pause(bool pauseFlag, s32 fadeFrames) override;                                              // vt 0x24
 
     virtual void init(nw4r::snd::SoundStartable &startable, s32 idx); // vt 0x28
-    virtual void vt_0x2C();                                           // vt 0x2C
-    virtual void pause(s32 fadeFrames);                               // vt 0x30
-    virtual void loadSeqConfig(u32 soundId);                          // vt 0x34
-    virtual void postCalc() {}                                        // vt 0x38
-    virtual void calcSeqPlaySamplePosition();                         // vt 0x3C
-    virtual void loadCallbacks(u32 soundId);                          // vt 0x40
+    virtual bool isBattleBgmSound() const {
+        return false;
+    }                                         // vt 0x2C
+    virtual void pause(s32 fadeFrames);       // vt 0x30
+    virtual void loadSeqConfig(u32 soundId);  // vt 0x34
+    virtual void postCalc() {}                // vt 0x38
+    virtual void calcSeqPlaySamplePosition(); // vt 0x3C
+    virtual void loadCallbacks(u32 soundId);  // vt 0x40
 
     nw4r::snd::SoundStartable::StartResult startBgmSound(u32 soundId, s32 fadeFrames, u32 startOffset);
 
@@ -58,7 +60,7 @@ public:
     u32 getStrmPlaySamplePosition();
     u32 getWavePlaySamplePosition();
 
-private:
+protected:
     void getHarpData(u32 soundId);
     bool loadNewHarpData(u32 soundId);
 
