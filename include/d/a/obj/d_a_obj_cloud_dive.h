@@ -18,13 +18,13 @@ public:
     virtual int actorExecute() override;
     virtual int draw() override;
 
+    bool fn_350_6F0();
+    bool fn_350_760();
+
     STATE_FUNC_DECLARE(dAcOcloudDive_c, Wait);
     STATE_FUNC_DECLARE(dAcOcloudDive_c, Dead);
 
 private:
-    bool fn_350_6F0();
-    bool fn_350_760();
-
     /* 0x330 */ nw4r::g3d::ResFile mResFile;
     /* 0x334 */ m3d::smdl_c mMdl;
     /* 0x350 */ dCcD_Cyl mCollider;
@@ -35,7 +35,7 @@ private:
 
     static const f32 mRadius1;
     static const f32 mRadius2;
-    static const f32 lbl_350_rodata_8;
+    static const f32 height;
     static dCcD_SrcCyl sCylSrc;
 };
 

@@ -12,7 +12,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_CLOUD_DIVE, dAcOcloudDive_c, fProfile::OBJ_CLOUD_DIVE,
 
 const f32 dAcOcloudDive_c::mRadius1 = 100.0f;
 const f32 dAcOcloudDive_c::mRadius2 = 200.0f;
-const f32 dAcOcloudDive_c::lbl_350_rodata_8 = 40.0f;
+const f32 dAcOcloudDive_c::height = 40.0f;
 
 dCcD_SrcCyl dAcOcloudDive_c::sCylSrc = {
     /* mObjInf */
@@ -60,7 +60,7 @@ int dAcOcloudDive_c::actorExecute() {
     mStateMgr.executeState();
     mCollider.SetR(mRadius);
     mCollider.SetH(40.0f);
-    mCollider.SetC(position - mVec3_c(0.0f, 20.0f, 0.0f));
+    mCollider.SetC(position - mVec3_c(0.0f, height / 2, 0.0f));
     dCcS::GetInstance()->Set(&mCollider);
     return SUCCEEDED;
 }
@@ -73,11 +73,11 @@ void dAcOcloudDive_c::initializeState_Wait() {}
 
 void dAcOcloudDive_c::executeState_Wait() {
     if (fn_350_6F0()) {
-        mStateMgr.changeState(StateID_Wait);
+        mStateMgr.changeState(StateID_Dead);
     }
     if (fn_350_760()) {
         dAcItem_c::giveItem22((ITEM_ID)mItemID, 0, -1);
-        mStateMgr.changeState(StateID_Wait);
+        mStateMgr.changeState(StateID_Dead);
     }
 }
 
@@ -95,21 +95,21 @@ bool dAcOcloudDive_c::fn_350_6F0() {
 }
 
 bool dAcOcloudDive_c::fn_350_760() {
+    bool ret = false;
+    bool temp = false;
+
     mVec3_c deltaPosition = dAcPy_c::GetLink()->position - position;
     f32 distance = EGG::Math<f32>::sqrt(deltaPosition.squareMagXZ());
 
-    // return distance <= mRadius && deltaPosition.y <= 20.0f && deltaPosition.y >= -20.0f;
-
-    bool temp = false;
     if (distance <= mRadius) {
-        if (deltaPosition.y <= 20.0f) {
+        if (deltaPosition.y <= height / 2) {
             temp = true;
         }
     }
     if (temp) {
-        if (deltaPosition.y >= -20.0f) {
-            return true;
+        if (deltaPosition.y >= -height / 2) {
+            ret = true;
         }
     }
-    return false;
+    return ret;
 }
