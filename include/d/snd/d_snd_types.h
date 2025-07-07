@@ -23,5 +23,6 @@ class dSndBgmSound_c;
 class dSndBgmBattleSound_c;
 
 class dSndBgmSoundHarpMgr_c;
+class dSndBgmSeqConfig;
 
 #endif
