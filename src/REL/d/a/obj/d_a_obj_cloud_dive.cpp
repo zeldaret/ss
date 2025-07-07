@@ -60,7 +60,6 @@ int dAcOcloudDive_c::actorExecute() {
     mStateMgr.executeState();
     mCollider.SetR(mRadius);
     mCollider.SetH(40.0f);
-    // mVec3_c fStack = ;
     mCollider.SetC(position - mVec3_c(0.0f, 20.0f, 0.0f));
     dCcS::GetInstance()->Set(&mCollider);
     return SUCCEEDED;
