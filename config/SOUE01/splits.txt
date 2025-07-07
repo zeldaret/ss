@@ -2700,7 +2700,7 @@ d/snd/d_snd_bgm_sound.cpp:
 	.text       start:0x80379D20 end:0x8037B4D8 align:16
 	.data       start:0x80549088 end:0x80549100
 	.sbss       start:0x80575D88 end:0x80575D90
-	.sdata2     start:0x8057DA58 end:0x8057DA80
+	.sdata2     start:0x8057DA58 end:0x8057DA60
 
 d/snd/d_snd_bgm_sound_battle.cpp:
 	.text       start:0x8037B4E0 end:0x8037B908 align:16
@@ -2709,12 +2709,19 @@ d/snd/d_snd_bgm_sound_battle.cpp:
 d/snd/d_snd_bgm_sound_harp_mgr.cpp:
 	.text       start:0x8037B910 end:0x8037BA68 align:16
 
-d/snd/d_snd_bgm_battle_data_mgr.cpp:
-	.text       start:0x8037BA70 end:0x8037BEA8 align:16
-	.rodata     start:0x804F3858 end:0x804F38C8
+d/snd/d_snd_bgm_seq_data_mgr.cpp:
+	.text       start:0x8037BA70 end:0x8037BD24 align:16
 	.data       start:0x80549148 end:0x80549158
 	.sdata      start:0x805742F0 end:0x805742F8
 	.sbss       start:0x80575D90 end:0x80575D98
+
+d/snd/d_snd_bgm_reverb.cpp:
+	.text       start:0x8037BD30 end:0x8037BD84 align:16
+	.sdata2     start:0x8057DA60 end:0x8057DA80
+
+d/snd/d_snd_bgm_seq_config.cpp:
+	.text       start:0x8037BD90 end:0x8037BEA8 align:16
+	.rodata     start:0x804F3858 end:0x804F38C8
 
 d/snd/d_snd_bgm_harp_data.cpp:
 	.text       start:0x8037BEB0 end:0x8037C518 align:16

@@ -7,13 +7,6 @@
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/ut/ut_list.h"
 
-struct dSndBgmSeqConfig {
-    /* 0x00 */ u32 soundId;
-    /* 0x04 */ u8 _0x04[0x0C - 0x04];
-    /* 0x0C */ u16 field_0x0C;
-    /* 0x0E */ u16 field_0x0E;
-};
-
 class dSndBgmSound_c : public dSndSound_c {
     enum BgmSoundFlags_e {
         BGM_FLAG_BATTLE = 0x1,

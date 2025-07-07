@@ -41,7 +41,7 @@ dSndStateMgr_c::dSndStateMgr_c()
       field_0x088(0),
       mSoundEventId(SND_EVENT_0x89),
       field_0x090(0),
-      field_0x094(0),
+      mEventFlags(0),
       field_0x118(nullptr),
       field_0x11C(0),
       field_0x120(0),
@@ -210,7 +210,7 @@ void dSndStateMgr_c::initializeEventCallbacks(const char *name) {
     sEventExecuteCallback = nullptr;
     resetOverrides();
 
-    if (checkEventFlag(EVENT_0x2)) {
+    if (checkEventFlag(EVENT_DEMO)) {
         handleDemoEvent(name);
         return;
     }

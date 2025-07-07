@@ -31,7 +31,8 @@ public:
     };
 
     enum EventFlags_e {
-        EVENT_0x2 = 0x2,
+        EVENT_IN_EVENT = 0x1,
+        EVENT_DEMO = 0x2,
         EVENT_MUTE_BGM_PARTIAL = 0x8,
         EVENT_MUTE_BGM_FULL = 0x10,
         EVENT_MUTE_STAGE_EFFECTS_PARTIAL = 0x20,
@@ -92,15 +93,15 @@ public:
     }
 
     bool checkEventFlag(u32 mask) const {
-        return field_0x094 & mask;
+        return mEventFlags & mask;
     }
 
     void onEventFlag(u32 mask) {
-        field_0x094 |= mask;
+        mEventFlags |= mask;
     }
 
     void offEventFlag(u32 mask) {
-        field_0x094 &= ~mask;
+        mEventFlags &= ~mask;
     }
 
     void setFlowEvent(u32 eventId);
@@ -197,7 +198,7 @@ private:
     /* 0x088 */ UNKWORD field_0x088;
     /* 0x08C */ s32 mSoundEventId;
     /* 0x090 */ UNKWORD field_0x090;
-    /* 0x094 */ u32 field_0x094;
+    /* 0x094 */ u32 mEventFlags;
     /* 0x098 */ SizedString<64> field_0x098;
     /* 0x0D8 */ SizedString<64> field_0x0D8;
     /* 0x118 */ const char *field_0x118;

@@ -41,6 +41,10 @@ public:
         mPrevIdx = -1;
     }
 
+    u32 getSoundId() const {
+        return mSoundId;
+    }
+
 private:
     /* 0x00 */ dSndBgmHarpData_c mHarpData;
     /* 0x0C */ dSndBgmDataHarpVarSetBase_c *mpCurrVarSet;

@@ -3,7 +3,7 @@
 #include "common.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_bgm_sound_harp_mgr.h"
-#include "d/snd/d_snd_bgm_battle_data_mgr.h"
+#include "d/snd/d_snd_bgm_seq_data_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "nw4r/snd/snd_SoundArchive.h"
 #include "sized_string.h"
@@ -21,7 +21,7 @@ bool dSndBgmMmlParserHarp_c::parseData(const char *soundLabel, u32 baseSoundId, 
     bool ok = false;
     field_0x294->reset();
     SizedString<64> dataLabel;
-    dataLabel.sprintf("%s%s", dSndBgmBattleDataMgr_c::getDataPrefix(), soundLabel);
+    dataLabel.sprintf("%s%s", dSndBgmSeqDataMgr_c::getDataPrefix(), soundLabel);
     u32 dataId = dSndPlayerMgr_c::GetInstance()->convertLabelStringToSoundId(dataLabel);
     if (dataId != -1 && dSndMgr_c::GetInstance()->getArchive()->GetSoundType(dataId) == nw4r::snd::SoundArchive::SOUND_TYPE_SEQ) {
         ok = loadAndParse(dataId, trackMask, true);

@@ -1,9 +1,10 @@
 #include "d/snd/d_snd_bgm_sound.h"
 
 #include "common.h"
-#include "d/snd/d_snd_bgm_battle_data_mgr.h"
 #include "d/snd/d_snd_bgm_mgr.h"
 #include "d/snd/d_snd_bgm_mml_parsers.h"
+#include "d/snd/d_snd_bgm_seq_config.h"
+#include "d/snd/d_snd_bgm_seq_data_mgr.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_sound.h"
@@ -16,6 +17,7 @@
 #include "nw4r/snd/snd_StrmSoundHandle.h"
 #include "nw4r/snd/snd_WaveSoundHandle.h"
 #include "toBeSorted/music_mgrs.h"
+
 
 dSndBgmSoundHarpMgr_c *dSndBgmSound_c::spGlobalHarpMgr;
 
@@ -153,7 +155,8 @@ nw4r::snd::SoundStartable::StartResult dSndBgmSound_c::startBgmSound(u32 soundId
                 mSeqTempo = mpHarpMgr->getTempo();
             }
 
-            if (mSeqTempo > 0 && dSndMgr_c::GetInstance()->getArchive()->GetSoundType(soundId) == nw4r::snd::SoundArchive::SOUND_TYPE_SEQ) {
+            if (mSeqTempo > 0 && dSndMgr_c::GetInstance()->getArchive()->GetSoundType(soundId) ==
+                                     nw4r::snd::SoundArchive::SOUND_TYPE_SEQ) {
                 mSeqPlaySamplePosition = (mSeqTempo * startOffset * 0xC0);
                 mSeqPlaySamplePosition /= 120000;
                 info.startOffsetType = nw4r::snd::SoundStartable::StartInfo::START_OFFSET_TYPE_TICK;
@@ -229,6 +232,15 @@ void dSndBgmSound_c::fadeIn(u32 id, s32 fadeFrames) {
 
     if (dSndBgmMgr_c::GetInstance()->getActiveBgmSound() == this) {
         mpHarpMgr->setPlaySamplePosition(0);
+    }
+}
+
+void dSndBgmSound_c::loadSeqConfig(u32 soundId) {
+    if (dSndMgr_c::GetInstance()->getArchive()->GetSoundType(soundId) == nw4r::snd::SoundArchive::SOUND_TYPE_SEQ) {
+        mpSeqConfig = dSndBgmSeqConfig::getConfig(soundId, 1);
+        if (mpSeqConfig != nullptr) {
+            field_0x118 = mpSeqConfig->field_0x08;
+        }
     }
 }
 
@@ -454,7 +466,7 @@ void dSndBgmSound_c::getHarpData(u32 soundId) {
         return;
     }
 
-    dSndBgmSoundHarpMgr_c *mgr = dSndBgmBattleDataMgr_c::GetInstance()->getHarpMgrForSoundId(soundId);
+    dSndBgmSoundHarpMgr_c *mgr = dSndBgmSeqDataMgr_c::GetInstance()->getHarpMgrForSoundId(soundId);
     if (mgr != nullptr) {
         mpHarpMgr = mgr;
     } else {
