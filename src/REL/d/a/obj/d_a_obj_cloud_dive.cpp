@@ -59,7 +59,7 @@ int dAcOcloudDive_c::doDelete() {
 int dAcOcloudDive_c::actorExecute() {
     mStateMgr.executeState();
     mCollider.SetR(mRadius);
-    mCollider.SetH(40.0f);
+    mCollider.SetH(height);
     mCollider.SetC(position - mVec3_c(0.0f, height / 2, 0.0f));
     dCcS::GetInstance()->Set(&mCollider);
     return SUCCEEDED;
