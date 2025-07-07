@@ -46,6 +46,7 @@ public:
 
     static void spawnItem(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot, u32 params, u32 arg);
     static void spawnDrop(u16 item, u32 room, const mVec3_c &pos, const mAng3_c &rot);
+    static void giveItem22(ITEM_ID, s32, s32);
     static void giveItem(ITEM_ID, s32, s32);
     static u32 checkFlag(u32 flag);
     static bool hasItem(u32 flag) {
