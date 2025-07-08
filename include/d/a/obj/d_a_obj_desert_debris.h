@@ -17,9 +17,9 @@ public:
     virtual int actorExecute() override;
     virtual int draw() override;
 
-    bool checkStoryFlag();
-
 private:
+    bool checkStoryFlag() const;
+
     nw4r::g3d::ResFile mResFile;
     m3d::smdl_c mMdl;
     dBgW mBgW;

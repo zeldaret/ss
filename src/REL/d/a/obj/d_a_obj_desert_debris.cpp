@@ -59,6 +59,6 @@ int dAcOdesertDebris_c::draw() {
     return SUCCEEDED;
 }
 
-bool dAcOdesertDebris_c::checkStoryFlag() {
+bool dAcOdesertDebris_c::checkStoryFlag() const {
     return mStoryFlag < 0x7FF && StoryflagManager::sInstance->getCounterOrFlag(mStoryFlag);
 }
