@@ -15,6 +15,10 @@
  * G3-C4-E4-G4-B4-C5-E5-G5-B5-C6-E6-G6
  * B3 is missing, possibly to prevent dissonance at the ends of the scale.
  * (Sealed Grounds, before Demise fight, no actual BGM)
+ *
+ * TODO: This deals with slightly more than the harp. It additionally
+ * also deals with the combat hit sounds that also seem to match up in
+ * pitch with the BGM.
  */
 
 /**

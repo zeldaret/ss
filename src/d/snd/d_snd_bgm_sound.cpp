@@ -29,8 +29,8 @@ dSndBgmSound_c::dSndBgmSound_c()
       mSeqTempo(-1),
       mBgmFlags(0),
       mDidRewindPlaySamplePosition(false),
-      field_0x114(-1),
-      field_0x118(0x180),
+      mBgmVar3(-1),
+      mSeqTimebase(0x180),
       mPlaySamplePosition(0),
       mpHarpMgr(&mHarpMgr),
       mpSeqConfig(nullptr),
@@ -71,9 +71,9 @@ void dSndBgmSound_c::cancel() {
         mpSeqConfig = nullptr;
         mPlaySamplePosition = 0;
         mSeqPlaySamplePosition = -1;
-        field_0x114 = -1;
+        mBgmVar3 = -1;
         mSeqTempo = -1;
-        field_0x118 = 0x180;
+        mSeqTimebase = 0x180;
         mHarpMgr.reset();
         for (int i = 0; i < 2; i++) {
             field_0x14C[i] = 0;
@@ -239,7 +239,7 @@ void dSndBgmSound_c::loadSeqConfig(u32 soundId) {
     if (dSndMgr_c::GetInstance()->getArchive()->GetSoundType(soundId) == nw4r::snd::SoundArchive::SOUND_TYPE_SEQ) {
         mpSeqConfig = dSndBgmSeqConfig::getConfig(soundId, 1);
         if (mpSeqConfig != nullptr) {
-            field_0x118 = mpSeqConfig->field_0x08;
+            mSeqTimebase = mpSeqConfig->mTimebase;
         }
     }
 }
@@ -415,27 +415,31 @@ void dSndBgmSound_c::calcSeqPlaySamplePosition() {
 
     nw4r::snd::SeqSoundHandle handle(this);
     s32 tick = handle.GetTick();
-    field_0x114 = readSeqTrackVariable(3);
-    if (field_0x114 >= 0) {
-        mSeqPlaySamplePosition = tick % field_0x118;
+    mBgmVar3 = readSeqTrackVariable(3);
+    if (mBgmVar3 >= 0) {
+        // Var >= 0 - seq itself controls play position
+        mSeqPlaySamplePosition = tick % mSeqTimebase;
         if (mSeqPlaySamplePosition == 0) {
-            field_0x114++;
-            if (mpSeqConfig != nullptr && field_0x114 > mpSeqConfig->field_0x0E) {
-                field_0x114 = mpSeqConfig->field_0x0C;
+            mBgmVar3++;
+            if (mpSeqConfig != nullptr && mBgmVar3 > mpSeqConfig->mLoopEnd) {
+                mBgmVar3 = mpSeqConfig->mLoopStart;
             }
         }
-        mSeqPlaySamplePosition += field_0x118 * field_0x114;
+        mSeqPlaySamplePosition += mSeqTimebase * mBgmVar3;
     } else if (mpSeqConfig != nullptr) {
-        if (tick < (mpSeqConfig->field_0x0E + 1) * field_0x118) {
+        if (tick < (mpSeqConfig->mLoopEnd + 1) * mSeqTimebase) {
+            // not looped yet, no adjustment needed
             mSeqPlaySamplePosition = tick;
             return;
         }
-        s32 offset = mpSeqConfig->field_0x0C * field_0x118;
+        s32 startOffset = mpSeqConfig->mLoopStart * mSeqTimebase;
 
-        tick -= offset;
-        tick = tick % (field_0x118 * (mpSeqConfig->field_0x0E - mpSeqConfig->field_0x0C));
-        mSeqPlaySamplePosition = tick + offset;
+        // wrap around loop, making sure to account for start offset
+        tick -= startOffset;
+        tick = tick % (mSeqTimebase * (mpSeqConfig->mLoopEnd - mpSeqConfig->mLoopStart));
+        mSeqPlaySamplePosition = tick + startOffset;
     } else {
+        // Fallback, not controlled by seq no config override
         mSeqPlaySamplePosition = tick;
     }
 }

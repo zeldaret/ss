@@ -1,7 +1,7 @@
 #include "d/snd/d_snd_bgm_mgr.h"
 
 #include "common.h"
-#include "d/snd/d_snd_bgm_sound battle.h"
+#include "d/snd/d_snd_bgm_sound_battle.h"
 #include "d/snd/d_snd_bgm_sound.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"

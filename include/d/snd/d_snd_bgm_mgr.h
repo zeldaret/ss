@@ -100,7 +100,7 @@ private:
     bool prepareBgmSound(u32 soundId, dSndBgmSound_c *handle, u32 startOffset);
     bool startAdditionalBgm(u32 soundId);
 
-    bool playBattleBgm(u32 soundId, bool immediately);
+    bool playBattleBgm(u32 soundId, bool intense);
 
     /** Used to mute other BGM when battle music is playing */
     void setBgmHandleIdxVolume(u32 handleIdx, f32 volume, s32 fadeFrames);

@@ -77,8 +77,8 @@ protected:
     /* 0x108 */ s32 mSeqTempo;
     /* 0x10C */ u32 mBgmFlags;
     /* 0x110 */ bool mDidRewindPlaySamplePosition;
-    /* 0x114 */ s32 field_0x114;
-    /* 0x118 */ s32 field_0x118;
+    /* 0x114 */ s32 mBgmVar3;
+    /* 0x118 */ s32 mSeqTimebase;
     /* 0x11C */ u32 mPlaySamplePosition;
     /* 0x120 */ dSndBgmSoundHarpMgr_c mHarpMgr;
     /* 0x140 */ dSndBgmSoundHarpMgr_c *mpHarpMgr;
