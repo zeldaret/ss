@@ -20,10 +20,19 @@ public:
     virtual void calcSeqPlaySamplePosition() override; // vt 0x3C
     virtual void loadCallbacks(u32 soundId) override;  // vt 0x40
 
+    /**
+     * Called when the player is even closer to an enemy.
+     * Adds some more instruments to the battle sound.
+     */
+    bool startMainBattleLoop();
+
 private:
+    void setTrackGroupMuted(u32 groupId);
+    void setTrackGroupUnmuted(u32 groupId);
+
     /* 0x184 */ const dSndBgmBattleConfig *mpBgmBattleConfig;
-    /* 0x188 */ u32 mMuteApplyStateMask;
-    /* 0x18C */ u32 mTickRelated;
+    /* 0x188 */ u32 mMuteGroupActiveMask;
+    /* 0x18C */ u32 mPrevTick;
     /* 0x190 */ u8 field_0x190;
     /* 0x191 */ u8 field_0x191;
 };
