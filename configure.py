@@ -2282,7 +2282,7 @@ config.libs = [
     ),
     Rel(NonMatching, "d_a_obj_stone_stand", "REL/d/a/obj/d_a_obj_stone_stand.cpp"),
     Rel(NonMatching, "d_a_obj_stopper_rock", "REL/d/a/obj/d_a_obj_stopper_rock.cpp"),
-    Rel(NonMatching, "d_a_obj_stopping_rope", "REL/d/a/obj/d_a_obj_stopping_rope.cpp"),
+    Rel(Matching, "d_a_obj_stopping_rope", "REL/d/a/obj/d_a_obj_stopping_rope.cpp"),
     Rel(NonMatching, "d_a_obj_stream_lava", "REL/d/a/obj/d_a_obj_stream_lava.cpp"),
     Rel(Matching, "d_a_obj_sun_light", "REL/d/a/obj/d_a_obj_sun_light.cpp"),
     Rel(NonMatching, "d_a_obj_swhit", "REL/d/a/obj/d_a_obj_swhit.cpp"),
