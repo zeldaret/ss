@@ -6,9 +6,9 @@
 struct dSndBgmSeqConfig {
     /* 0x00 */ u32 soundId;
     /* 0x04 */ s32 field_0x04;
-    /* 0x08 */ s32 field_0x08;
-    /* 0x0C */ u16 field_0x0C;
-    /* 0x0E */ u16 field_0x0E;
+    /* 0x08 */ s32 mTimebase;
+    /* 0x0C */ u16 mLoopStart;
+    /* 0x0E */ u16 mLoopEnd;
 
 
     static const dSndBgmSeqConfig *getConfig(u32 soundId, s32 unkParam);
