@@ -20,10 +20,10 @@ public:
 private:
     bool checkStoryFlag() const;
 
-    nw4r::g3d::ResFile mResFile;
-    m3d::smdl_c mMdl;
-    dBgW mBgW;
-    u16 mStoryFlag;
+    /* 0x330 */ nw4r::g3d::ResFile mResFile;
+    /* 0x334 */ m3d::smdl_c mMdl;
+    /* 0x350 */ dBgW mBgW;
+    /* 0x560 */ u16 mStoryFlag;
 };
 
 #endif

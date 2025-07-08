@@ -2025,7 +2025,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_decoB", "REL/d/a/obj/d_a_obj_decoB.cpp"),
     Rel(NonMatching, "d_a_obj_desert", "REL/d/a/obj/d_a_obj_desert.cpp"),
     Rel(NonMatching, "d_a_obj_desert_ago", "REL/d/a/obj/d_a_obj_desert_ago.cpp"),
-    Rel(NonMatching, "d_a_obj_desert_debris", "REL/d/a/obj/d_a_obj_desert_debris.cpp"),
+    Rel(Matching, "d_a_obj_desert_debris", "REL/d/a/obj/d_a_obj_desert_debris.cpp"),
     Rel(NonMatching, "d_a_obj_desert_meter", "REL/d/a/obj/d_a_obj_desert_meter.cpp"),
     Rel(
         NonMatching,
