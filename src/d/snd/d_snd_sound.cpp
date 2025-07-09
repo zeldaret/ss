@@ -342,7 +342,7 @@ nw4r::snd::SoundStartable::StartResult dSndSound_c::prepareSound(u32 soundId, u3
         if (isPreparing()) {
             forceStop();
         } else {
-            fn_80372920(FANFARE_SOUND_MGR);
+            dSndBgmMgr_c::GetInstance()->cullTooManyPreparingSounds();
         }
     }
 
