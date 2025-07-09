@@ -62,6 +62,8 @@ public:
         field_0x3868--;
     }
 
+    void setMutedFromFader(bool muteFlag);
+
 private:
     void calcEnemyObjVolume();
 
