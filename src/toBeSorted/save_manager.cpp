@@ -6,6 +6,7 @@
 #include "d/d_dvd_unk.h"
 #include "d/d_heap.h"
 #include "d/d_message.h"
+#include "d/d_reset.h"
 #include "d/d_s_boot.h"
 #include "d/d_sc_game.h"
 #include "d/d_sys.h"
@@ -18,7 +19,6 @@
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/nand_request_thread.h"
 #include "toBeSorted/nand_result_tracker.h"
-#include "toBeSorted/reload_color_fader.h"
 
 #include "rvl/NAND.h"
 #include "rvl/TPL.h"
@@ -1437,10 +1437,9 @@ void SaveMgr::executeNandError() {
         }
         case 6: {
             if (systemWindow->getField_0xE10() != 0) {
-                if (!ReloadColorFader::GetInstance()->fn_80068E80() &&
-                    !ReloadColorFader::GetInstance()->fn_80067F60() &&
-                    mPad::g_currentCore->downTrigger(/* A */ 0x800) && systemWindow->getField_0xDE0() != 2 &&
-                    systemWindow->fn_80152F60() == true) {
+                if (!dReset::Manage_c::GetInstance()->FadeOutCalc() &&
+                    !dReset::Manage_c::GetInstance()->IsFaderBlank() && mPad::getCore()->downTrigger(mPad::BUTTON_A) &&
+                    systemWindow->getField_0xDE0() != 2 && systemWindow->fn_80152F60() == true) {
                     mStep = 7;
                 }
             }
@@ -1457,7 +1456,7 @@ void SaveMgr::executeNandError() {
                 mStep = 9;
             } else {
                 dCsBase_c::GetInstance()->setField704(false);
-                ReloadColorFader::GetInstance()->fn_80067FE0();
+                dReset::Manage_c::GetInstance()->SetInteriorReturnDataManager();
                 endState();
                 field_0x836 = 0;
             }

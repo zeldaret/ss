@@ -124,6 +124,20 @@ public:
         return sInstance;
     }
 
+    bool getField_0x83D() const {
+        return field_0x83D;
+    }
+    bool getField_0x83F() const {
+        return field_0x83F;
+    }
+    s32 getCheckForFreeSpaceResult() const {
+        return mCheckForFreeSpaceResult;
+    }
+    bool isInState() {
+        return mCurrentState != STATE_MAX;
+    }
+
+    void init();
     void createSaveMsgWindow();
     void execute();
     void draw();
@@ -191,7 +205,6 @@ private:
 
     SaveMgr();
     ~SaveMgr();
-    void init();
 
     void beginState(SaveMgrState_e state);
     void endState();
@@ -225,6 +238,5 @@ private:
 
     static SaveMgr *sInstance;
 };
-
 
 #endif

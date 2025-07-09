@@ -7,6 +7,7 @@
 #include "nw4r/db/db_directPrint.h"
 #include "nw4r/db/db_exception.h"
 #include "nw4r/db/db_mapFile.h"
+
 #include "rvl/KPAD.h" // IWYU pragma: export
 #include "rvl/OS.h"   // IWYU pragma: export
 
@@ -52,9 +53,9 @@ bool Exception::ExceptionCallback_(nw4r::db::ConsoleHandle console, void *data) 
         while (((u16 *)data)[u4] != 0) {
             KPADRead(0, &status, 1);
             ExceptionWaitTime(50);
-            if (status.mTrig) {
+            if (status.trig) {
                 // Reset the sequence on wrong button press, advance on right button press
-                u4 = status.mTrig & (((u16 *)data)[u4]) ? u4 + 1 : 0;
+                u4 = status.trig & (((u16 *)data)[u4]) ? u4 + 1 : 0;
             }
         }
     }
@@ -79,7 +80,7 @@ bool Exception::ExceptionCallback_(nw4r::db::ConsoleHandle console, void *data) 
     while (true) {
         KPADRead(0, &status, 1);
         ExceptionWaitTime(100);
-        if (status.mTrig & (/* HOME */ 0x8000)) {
+        if (status.trig & cCORE_BUTTON_HOME) {
             sUserCallbackMode = !sUserCallbackMode;
         }
         if (sUserCallbackMode && sUserCallbackFunc != nullptr) {
@@ -91,22 +92,22 @@ bool Exception::ExceptionCallback_(nw4r::db::ConsoleHandle console, void *data) 
         ;
         prevY = newY;
 
-        if (status.mHold & (/* DPAD_DOWN */ 0x4)) {
+        if (status.hold & cCORE_BUTTON_DOWN) {
             newY += 1;
             if (newY > end) {
                 newY = end;
             }
-        } else if (status.mHold & (/* DPAD_UP */ 0x8)) {
+        } else if (status.hold & cCORE_BUTTON_UP) {
             newY -= 1;
             if (newY < start) {
                 newY = start;
             }
-        } else if (status.mHold & (/* DPAD_RIGHT */ 0x2)) {
+        } else if (status.hold & cCORE_BUTTON_RIGHT) {
             newX -= 5;
             if (newX < -150) {
                 newX = -150;
             }
-        } else if (status.mHold & (/* DPAD_LEFT */ 0x1)) {
+        } else if (status.hold & cCORE_BUTTON_LEFT) {
             newX += 5;
             if (newX > 10) {
                 newX = 10;

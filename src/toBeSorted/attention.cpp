@@ -140,11 +140,11 @@ bool AttentionManager::isInNormalGameState() const {
 }
 
 bool AttentionManager::isZButtonPressed() const {
-    return dPad::checkButtonZPressed();
+    return dPad::getDownTrigZ();
 }
 
 bool AttentionManager::isZButtonHeld() const {
-    return dPad::checkButtonZHeld();
+    return dPad::getDownZ();
 }
 
 bool AttentionManager::checkUnknown() const {

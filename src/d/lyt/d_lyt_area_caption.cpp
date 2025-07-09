@@ -232,43 +232,43 @@ bool dLytAreaCaptionParts_c::shouldImmediatelyDismiss() const {
         return true;
     }
 
-    if (dPad::checkButtonBPressed()) {
+    if (dPad::getDownTrigB()) {
         return true;
     }
 
-    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_C) && dPad::checkButtonCPressed()) {
+    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_C) && dPad::getDownTrigC()) {
         return true;
     }
 
-    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_PLUS) && dPad::checkButtonPlusPressed()) {
+    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_PLUS) && dPad::getDownTrigPlus()) {
         return true;
     }
 
-    if (dPad::checkButtonMinusPressed()) {
+    if (dPad::getDownTrigMinus()) {
         return true;
     }
 
-    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_1) && dPad::checkButton1Pressed()) {
+    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_1) && dPad::getDownTrig1()) {
         return true;
     }
 
-    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_2) && dPad::checkButton2Pressed()) {
+    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_2) && dPad::getDownTrig2()) {
         return true;
     }
 
-    if (dPad::checkButtonDpadUpPressed()) {
+    if (dPad::getDownTrigUp()) {
         return true;
     }
 
-    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_CROSS_DOWN) && dPad::checkButtonDpadDownPressed()) {
+    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_CROSS_DOWN) && dPad::getDownTrigDown()) {
         return true;
     }
 
-    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_CROSS_LEFT) && dPad::checkButtonDpadLeftPressed()) {
+    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_CROSS_LEFT) && dPad::getDownTrigLeft()) {
         return true;
     }
 
-    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_CROSS_RIGHT) && dPad::checkButtonDpadRightPressed()) {
+    if (dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_CROSS_RIGHT) && dPad::getDownTrigRight()) {
         return true;
     }
 

@@ -28,6 +28,9 @@ public:
     void setField704(bool val) {
         field_0x704 = val;
     }
+    void setField705(bool val) {
+        field_0x705 = val;
+    }
 
     dCursorHitCheck_c *getHitCheck() {
         return mCursorIf.getHit();
