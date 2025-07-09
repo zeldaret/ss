@@ -406,6 +406,25 @@ void dSndSourceMgr_c::calcEnemyObjVolume() {
     }
 }
 
+void dSndSourceMgr_c::setMutedFromFader(bool muteFlag) {
+    for (dSoundSource_c *it = getAllSourcesFirst(); it != nullptr; it = getAllSourcesNext(it)) {
+        s32 sourceType = it->getSourceType();
+        switch (sourceType) {
+            case SND_SOURCE_PLAYER:
+            case SND_SOURCE_PLAYER_HEAD:
+                break;
+            default:
+                it->setField0x101(muteFlag);
+                break;
+        }
+    }
+    if (muteFlag) {
+        dSndControlPlayerMgr_c::GetInstance()->muteScenePlayers(30);
+    } else {
+        dSndControlPlayerMgr_c::GetInstance()->unmuteScenePlayers(30);
+    }
+}
+
 dSndSourceGroup_c *dSndSourceMgr_c::getGroup(s32 sourceType, dAcBase_c *actor, const char *name, const char *origName, u8 subtype) {
     dSndSourceGroup_c *group = getActiveGroupForName(name);
     if (group != nullptr) {

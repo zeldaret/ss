@@ -155,6 +155,10 @@ void dSndBgmMgr_c::checkForPrepareStoppedBgmSound(u32 stoppedSoundId) {
     }
 }
 
+bool dSndBgmMgr_c::beginBgmBattleMainLoop() {
+    return getBgmBattleSound()->startMainBattleLoop();
+}
+
 bool dSndBgmMgr_c::beginBgmBattleRoom() {
     if (isBgmHandleIdxPlayingSoundId(4, BGM_BATTLE_ROOM_MAIN)) {
         return false;
@@ -353,6 +357,10 @@ dSndBgmSound_c *dSndBgmMgr_c::findIdleBgmSoundHandle() {
         }
     }
     return nullptr;
+}
+
+dSndBgmBattleSound_c *dSndBgmMgr_c::getBgmBattleSound() {
+    return static_cast<dSndBgmBattleSound_c *>(mBgmSounds[4]);
 }
 
 void dSndBgmMgr_c::addToBgmSoundList(BgmSoundList_e list, dSndBgmSound_c *sound) {

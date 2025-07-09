@@ -93,7 +93,7 @@ public:
     /* 0x0E8 */ virtual bool isPlayingActionSound() const = 0;
     /* 0x0EC */ virtual bool isCurrentActionSound(u32 id) const = 0;
     /* 0x0F0 */ virtual void vt_0x0F0_noop() = 0;
-    /* 0x0F4 */ virtual void setField0x101(u8 value) = 0;
+    /* 0x0F4 */ virtual void setField0x101(bool value) = 0;
     /* 0x0F8 */ virtual void setField0x102(u8 value) = 0;
     /* 0x0FC */ virtual bool isInaudible() = 0;
     /* 0x100 */ virtual bool hasAnimSound() = 0;

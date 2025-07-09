@@ -73,7 +73,10 @@ public:
     /** Runs when the fight is over, no matter how you started it */
     bool endBgmBattleRoom();
 
+    bool beginBgmBattleMainLoop();
+
     bool isPlayingAnyBattleMusic();
+    void cullTooManyPreparingSounds();
 
     void removeFromAllBgmSoundLists(dSndBgmSound_c *sound);
     void addToBgmSoundList(BgmSoundList_e list, dSndBgmSound_c *sound);
