@@ -183,7 +183,7 @@ public:
         return false;
     }
     /* 0x0F0 */ virtual void vt_0x0F0_noop() override {}
-    /* 0x0F4 */ virtual void setField0x101(u8 value) override {
+    /* 0x0F4 */ virtual void setField0x101(bool value) override {
         field_0x101 = value;
     }
     /* 0x0F8 */ virtual void setField0x102(u8 value) override {
@@ -273,7 +273,7 @@ protected:
     /* 0x0FE */ u8 mSubtype;
     /* 0x0FF */ bool mIsSetup;
     /* 0x100 */ u8 field_0x100;
-    /* 0x101 */ u8 field_0x101;
+    /* 0x101 */ bool field_0x101;
     /* 0x102 */ u8 field_0x102;
     /* 0x104 */ u32 mFlagsPersistent;
     /* 0x108 */ u32 mFlagsHold;
