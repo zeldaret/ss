@@ -29,6 +29,8 @@ public:
     };
 
     dSndBgmMgr_c();
+    void calc();
+    void setup(EGG::Heap *heap);
 
     void restoreEffects();
 
@@ -100,6 +102,20 @@ public:
 
     void setField_0x306(u8 val) {
         field_0x306 = val;
+    }
+
+    void setField_0x307(u8 val) {
+        field_0x307 = val;
+    }
+
+    u8 getField_0x308() const {
+        return field_0x308;
+    }
+
+    void updateField_0x2F4(f32 value) {
+        if (field_0x2F4 > value) {
+            field_0x2F4 = value;
+        }
     }
 
 private:
