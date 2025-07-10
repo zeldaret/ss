@@ -4,13 +4,14 @@
 #include "common.h"
 
 typedef void (*SndEventCallback)(void);
+typedef void (*SndEventFinalizeCallback)(bool skipped);
 
 struct SndEventDef {
     /* 0x00 */ const char *eventName;
     /* 0x04 */ s32 eventId;
     /* 0x08 */ SndEventCallback initializeCb;
     /* 0x0C */ SndEventCallback executeCb;
-    /* 0x10 */ SndEventCallback finalizeCb;
+    /* 0x10 */ SndEventFinalizeCallback finalizeCb;
     /* 0x14 */ u8 _0x14[0x1C - 0x14]; // always zero
 };
 

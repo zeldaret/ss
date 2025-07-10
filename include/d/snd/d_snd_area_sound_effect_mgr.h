@@ -25,6 +25,9 @@ public:
     void stopSounds(s32 fadeFrames);
     void pauseAllSounds();
 
+    void onEventStart();
+    void onEventEnd();
+
 private:
     bool isPlayingAnySound() const;
     bool isPlayingSound(u32 soundId) const;

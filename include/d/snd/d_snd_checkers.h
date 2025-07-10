@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "d/snd/d_snd_bgm_mgr.h"
+#include "d/snd/d_snd_player_mgr.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 
 class SoundPropertiesChecker {
@@ -106,6 +107,22 @@ public:
 private:
     /* 0x04 */ u32 mSoundId;
     /* 0x08 */ s32 mFadeFrames;
+};
+
+class SoundStopperIfParamFlag20 {
+public:
+    SoundStopperIfParamFlag20() {}
+
+    virtual void operator()(nw4r::snd::SoundHandle &pHandle) {
+        u32 id = pHandle.GetId();
+        u32 param = dSndPlayerMgr_c::GetInstance()->getDemoArchive()->GetSoundUserParam(id);
+        if ((param & 0x100000) != 0) {
+            u32 fadeFrames = param & 0xFF;
+            pHandle.Stop(fadeFrames);
+        }
+    }
+
+private:
 };
 
 #endif
