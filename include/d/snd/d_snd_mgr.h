@@ -4,6 +4,7 @@
 #include "common.h"
 #include "egg/audio/eggAudioMgr.h"
 #include "nw4r/snd/snd_SoundArchivePlayer.h"
+#include "nw4r/snd/snd_global.h"
 
 /** The core audio manager used for most sounds. */
 class dSndMgr_c : public EGG::SimpleAudioMgr {
@@ -11,7 +12,7 @@ public:
     dSndMgr_c();
 
     virtual void calc() override;
-    void initialize(EGG::Heap *heap, u32 size);
+    void setup(EGG::Heap *heap, u32 size);
     void initHbm(u32 frame);
 
     static void restoreEffectsCallback();
@@ -46,8 +47,8 @@ public:
 private:
     static dSndMgr_c *sInstance;
 
-    /* 0x6C8 */ u8 _0x6C8[0x6CC - 0x6C8];
-    /* 0x6CC */ u8 field_0x6CC;
+    /* 0x6C8 */ nw4r::snd::OutputMode mOutputMode;
+    /* 0x6CC */ bool mIsInitialized;
 };
 
 #endif

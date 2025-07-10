@@ -30,7 +30,7 @@ public:
         return sParam;
     }
 
-    void initialize();
+    void setup();
     void calc();
     void onChangeStage();
 

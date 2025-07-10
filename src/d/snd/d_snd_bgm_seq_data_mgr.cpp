@@ -23,7 +23,7 @@ u32 dSndBgmSeqDataMgr_c::getDataPrefixLength() {
     return std::strlen(getDataPrefix());
 }
 
-void dSndBgmSeqDataMgr_c::initialize() {
+void dSndBgmSeqDataMgr_c::setup() {
     // no-op
 }
 

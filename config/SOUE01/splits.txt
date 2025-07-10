@@ -2742,7 +2742,7 @@ d/snd/d_snd_small_effect_mgr.cpp:
 	.sbss       start:0x80575D98 end:0x80575DA0
 	.sdata2     start:0x8057DA80 end:0x8057DAD0
 
-d/snd/d_snd_harp_mgr.cpp:
+d/snd/d_snd_harp_song_mgr.cpp:
 	.text       start:0x8037F8C0 end:0x80382150 align:16
 	.rodata     start:0x804F38C8 end:0x804F38E0
 	.data       start:0x805491D0 end:0x805491E0
@@ -2911,9 +2911,12 @@ d/snd/d_snd_sound_tgsound_callbacks.cpp:
 
 d/snd/d_snd_mgr_unk_17.cpp:
 	.text       start:0x80399430 end:0x80399574 align:16
+	.data       start:0x8054D740 end:0x8054D760
 
 d/snd/d_snd_fi_vocal_mgr.cpp:
 	.text       start:0x80399580 end:0x80399A3C align:16
+	.data       start:0x8054D760 end:0x8054D7A8
+	.sbss       start:0x80575DE0 end:0x80575DE8
 
 d/snd/d_snd_rng.cpp:
 	.text       start:0x80399A40 end:0x80399BA0 align:16

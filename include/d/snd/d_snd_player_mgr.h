@@ -29,8 +29,10 @@ public:
     void setup(s32 channel);
     void shutdown(s32 channel);
 
+    void setup();
     void shutdown();
     void calc();
+    void calcActive();
 
     void enterMenu();
     void leaveMenu();
@@ -99,6 +101,10 @@ public:
 
         MGR_CAUTION = 0x80,
     };
+
+    bool isInit() const {
+        return mState0 > 0;
+    }
 
     bool checkFlag(u32 mask) const {
         return mFlags & mask;

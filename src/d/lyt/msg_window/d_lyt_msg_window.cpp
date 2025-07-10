@@ -28,6 +28,7 @@
 // clang-format on
 
 #include "d/d_gfx.h"
+#include "d/snd/d_snd_fi_vocal_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "f/f_base.h"
@@ -38,7 +39,6 @@
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/fi_context.h"
-#include "toBeSorted/other_sound_stuff.h"
 
 #include <cstring>
 
@@ -309,7 +309,9 @@ void dLytMsgWindow_c::executeState_OutputText() {
 
     if (mpTagProcessor->getMsgWindowSubtype() >= MSG_WINDOW_SWORD_FI &&
         mpTagProcessor->getMsgWindowSubtype() < MSG_WINDOW_SWORD_FI + 3) {
-        fn_803998A0(lbl_80575DE0, mpMsgWindowUnk->getField_0x147A(), mpMsgWindowUnk->getField_0x147C());
+        dSndFiVocalMgr_c::GetInstance()->executeOutputText(
+            mpMsgWindowUnk->getField_0x147A(), mpMsgWindowUnk->getField_0x147C()
+        );
     } else if (mpTagProcessor->getMsgWindowSubtype() <= MSG_WINDOW_1 && oldValue != mpMsgWindowUnk->getField_0x147A()) {
         u16 a = mpMsgWindowUnk->getField_0x147C();
         f32 b = (dTagProcessor_c::fn_800B8040(0, 0) * 100.0f);

@@ -1,6 +1,7 @@
 #include "d/snd/d_snd_state_mgr.h"
 
 #include "common.h"
+#include "d/a/d_a_player.h"
 #include "d/d_camera.h"
 #include "d/d_sc_game.h"
 #include "d/snd/d_snd_area_sound_effect_mgr.h"
@@ -10,9 +11,11 @@
 #include "d/snd/d_snd_event.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/snd/d_snd_source_mgr.h"
 #include "d/snd/d_snd_stage_data.h"
 #include "d/snd/d_snd_util.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "egg/core/eggHeap.h"
 #include "nw4r/snd/snd_FxReverbStdDpl2.h"
 #include "nw4r/snd/snd_SeqSoundHandle.h"
@@ -34,8 +37,8 @@ dSndStateMgr_c::dSndStateMgr_c()
       mStageId(0xAC),
       mPreviousStageId(0xAC),
       field_0x054(0),
-      field_0x058(0),
-      mLayer(-1),
+      mLayer(0),
+      mRoomId(-1),
       field_0x060(0),
       field_0x064(0),
       field_0x065(false),
@@ -53,7 +56,7 @@ dSndStateMgr_c::dSndStateMgr_c()
       mSoundEventId(SND_EVENT_0x89),
       mCameraCutCounter(0),
       mEventFlags(0),
-      field_0x118(nullptr),
+      mpStbEventName(nullptr),
       mFrameCounter(0),
       mCameraCutFrameCounter(0),
       mMsgFrameCounter(0),
@@ -243,12 +246,12 @@ void dSndStateMgr_c::setEvent(const char *eventName) {
             field_0x238 = -1;
 
             if (streq(mEventName, "STB")) {
-                if (field_0x118 != nullptr) {
-                    mEventName = field_0x118;
+                if (mpStbEventName != nullptr) {
+                    mEventName = mpStbEventName;
                 }
                 onEventFlag(EVENT_DEMO);
             } else {
-                field_0x118 = nullptr;
+                mpStbEventName = nullptr;
             }
 
             if (!checkFlag0x10(0x04)) {
@@ -273,13 +276,13 @@ void dSndStateMgr_c::setEvent(const char *eventName) {
             s32 i3 = 0;
             SizedString<64> eventLabel;
             if (mSoundEventId == SND_EVENT_JMAP) {
-                s32 roomId = EventManager::getCurrentEventRoomId();
+                s32 eventRoomId = EventManager::getCurrentEventRoomId();
                 // UB: Cannot pass object of non-POD type 'SizedString<32>' through variadic method
-                eventLabel.sprintf("%s_R%d_JMAP_%d", mStageName, mLayer, roomId);
+                eventLabel.sprintf("%s_R%d_JMAP_%d", mStageName, mRoomId, eventRoomId);
             } else if (mSoundEventId == SND_EVENT_JMAPAllMove) {
-                s32 roomId = EventManager::getCurrentEventRoomId();
+                s32 eventRoomId = EventManager::getCurrentEventRoomId();
                 // UB: Cannot pass object of non-POD type 'SizedString<32>' through variadic method
-                eventLabel.sprintf("%s_R%d_JMAPAllMove_%d", mStageName, mLayer, roomId);
+                eventLabel.sprintf("%s_R%d_JMAPAllMove_%d", mStageName, mRoomId, eventRoomId);
             } else {
                 eventLabel.sprintf("%s", &mEventName);
             }
@@ -418,7 +421,8 @@ bool dSndStateMgr_c::finalizeEvent(bool skipped) {
         SoundStopperIfParamFlag20 stopper;
         p->ForEachSound(stopper, false);
     }
-    // TODO ...
+
+    // ...
 
     return false;
 }
@@ -488,6 +492,92 @@ void dSndStateMgr_c::onMsgWaitEnd() {
     SizedString<64> label;
     label.sprintf("_%M_WE%d", mMsgCounter, mMsgWaitSelectCounter);
     doLabelSuffix(label);
+}
+
+void dSndStateMgr_c::onLinkDie() {
+    if (!checkFlag0x10(0x8)) {
+        onFlag0x10(0x8);
+        dSndBgmMgr_c::GetInstance()->stopAllBgm(15);
+        dSndSmallEffectMgr_c::GetInstance()->stopAllSoundExceptEffectOrLink(15);
+        if (field_0x065 == 0) {
+            dSndBgmMgr_c::GetInstance()->prepareFanSound(FAN_GAMEOVER);
+        }
+    }
+}
+
+void dSndStateMgr_c::setStbEventName(const char *eventName) {
+    mpStbEventName = eventName;
+}
+
+void dSndStateMgr_c::calcRoomId() {
+    if (checkFlag0x10(4)) {
+        if (field_0x060 > 0) {
+            field_0x060--;
+        } else {
+            if (mRoomId == -1) {
+                field_0x060 = 30;
+            }
+            s32 newRoom = dSndSourceMgr_c::GetInstance()->getPlayerSourceRoomId();
+            if (mRoomId != newRoom) {
+                setRoomId(newRoom);
+            } else if (newRoom != -1 && !checkFlag0x10(0x10)) {
+                setRoomId(newRoom);
+            }
+        }
+    }
+}
+
+void dSndStateMgr_c::setRoomId(s32 roomId) {
+    // ...
+}
+
+void dSndStateMgr_c::calcTgSnd() {
+    // ...
+}
+
+void dSndStateMgr_c::calcFilters() {
+    dCamera_c *cam = dScGame_c::getCamera(0);
+    if (cam != nullptr && !checkFlag0x258(0x2)) {
+        if (cam->isUnderwater()) {
+            if (!checkFlag0x258(0x1)) {
+                resetFlag0x258();
+                onFlag0x258(1);
+                setFiltersIfUnderwater();
+            }
+            f32 depth = cam->getUnderwaterDepth();
+            dSndAreaSoundEffectMgr_c::GetInstance()->holdInWaterLvSound(depth);
+            f32 maxDepth = isInStage("F103") ? 5000.0f : 1000.0f;
+            f32 unk = isInStage("F103") ? 0.5f : 0.3f;
+            if (depth < maxDepth) {
+                f32 tmp = (1.0f - unk);
+                f32 tmp2 = (depth / maxDepth);
+                unk = 1.0f - tmp2 * tmp;
+            }
+            dSndBgmMgr_c::GetInstance()->updateField_0x2F4(unk);
+        } else {
+            if (checkFlag0x258(0x1)) {
+                offFlag0x258(1);
+                resetLpfAndFxSend();
+            }
+
+            if (dAcPy_c::GetLink()->checkActionFlagsCont(0x400000)) {
+                if (!checkFlag0x258(0x4)) {
+                    resetFlag0x258();
+                    onFlag0x258(0x4);
+                    setBgmAndStageEffectLpf();
+                    dSndBgmMgr_c::GetInstance()->setField_0x307(0);
+                }
+            } else {
+                if (checkFlag0x258(0x4)) {
+                    offFlag0x258(0x4);
+                    resetBgmAndStageEffectLpf();
+                    if (dSndBgmMgr_c::GetInstance()->getField_0x308() != 0) {
+                        dSndBgmMgr_c::GetInstance()->setField_0x307(1);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void dSndStateMgr_c::setFiltersIfUnderwater() {

@@ -19,7 +19,7 @@ public:
     static u32 getDataPrefixLength();
 
     dSndBgmSoundHarpMgr_c *getHarpMgrForSoundId(u32 soundId);
-    void initialize();
+    void setup();
     void setupState0();
 
 private:
