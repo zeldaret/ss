@@ -11,9 +11,9 @@
 #include "s/s_StateID.hpp"
 #include "toBeSorted/d_emitter.h"
 
-struct CsGameConfigMaybe {
-    CsGameConfigMaybe();
-    virtual ~CsGameConfigMaybe() {}
+struct dCsGame_HIO_c {
+    dCsGame_HIO_c();
+    virtual ~dCsGame_HIO_c() {}
 
     /* 0x04 */ f32 field_0x04;
     /* 0x08 */ f32 field_0x08;

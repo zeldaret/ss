@@ -9,9 +9,9 @@
 
 SPECIAL_BASE_PROFILE(C_GAME, dCsGame_c, fProfile::C_GAME, 0x2BF, 0x06F9);
 
-CsGameConfigMaybe sConfig;
+dCsGame_HIO_c sConfig;
 
-CsGameConfigMaybe::CsGameConfigMaybe() {
+dCsGame_HIO_c::dCsGame_HIO_c() {
     field_0x04 = 0.0f;
     field_0x08 = 0.0f;
     field_0x0C = 0.0f;
@@ -31,7 +31,6 @@ CsGameConfigMaybe::CsGameConfigMaybe() {
     field_0x3C = 1.0f;
     field_0x40 = 5;
 }
-// CsGameConfigMaybe::~CsGameConfigMaybe() {}
 
 STATE_DEFINE(dCsGame_c::lytItemCursor_c, Invisible);
 STATE_DEFINE(dCsGame_c::lytItemCursor_c, Bow);
