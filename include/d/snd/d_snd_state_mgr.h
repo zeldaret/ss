@@ -73,8 +73,8 @@ public:
         return field_0x058;
     }
 
-    u32 getField_0x11C() const {
-        return field_0x11C;
+    u32 getFrameCounter() const {
+        return mFrameCounter;
     }
 
     f32 getField_0x49C() const {
@@ -86,6 +86,10 @@ public:
     }
 
     bool checkFlag0x18(u32 mask);
+
+    bool checkFlag0x258(u32 mask) const {
+        return field_0x258 & mask;
+    }
 
     bool checkFlag0x10(u32 mask) const {
         return field_0x010 & mask;
@@ -122,14 +126,16 @@ public:
     // not sure, subtype is unused
     bool isActiveDemoMaybe(s32 subtype) const;
     bool isInEvent(const char *eventName);
-    bool isInEvent() const;
+    bool isInEvent();
     bool onSkipEvent() const;
 
-    void doMsgStart(s32 idx);
-    void doMsgEnd();
+    void onMsgStart(s32 idx);
+    void onMsgEnd();
 
-    void doMsgWaitStart();
-    void doMsgWaitEnd();
+    void onMsgWaitStart();
+    void onMsgWaitEnd();
+
+    f32 getUserParamVolume(u32 userParam);
 
     // TODO better names
     static const char *getStageName(s32 id);
@@ -154,6 +160,18 @@ public:
 
     u32 getSoundIdForStageAndLayer(SoundIdLookup_e lookup, const char *stageName, s32 layer, s32 stageId);
 
+    void setFiltersIfUnderwater();
+    void setBgmLpfAndFxSendIfUnderwater();
+    void resetLpfAndFxSend();
+    void resetBgmLpfAndFxSend();
+    void setBgmAndStageEffectLpf();
+    void setBgmLpf();
+    void setBgmLpf(s32 fadeFrames);
+    void resetBgmAndStageEffectLpf();
+    void resetBgmLpf();
+
+    void onCameraCut(s32 cutIdx);
+
 private:
     void resetOverrides();
     void initializeEventCallbacks(const char *name);
@@ -166,6 +184,13 @@ private:
 
     u32 getBgmLabelSoundId();
     bool playFanOrBgm(u32 soundId);
+
+    void doBgm(const char *label);
+    void doSe(const char *label);
+    void doCmd(const char *label);
+
+    void doLabelSuffix(const char *suffix);
+    u32 getSeCameraId();
 
     void handleFan();
     void handleSe();
@@ -221,14 +246,14 @@ private:
     /* 0x084 */ UNKWORD field_0x084;
     /* 0x088 */ UNKWORD field_0x088;
     /* 0x08C */ s32 mSoundEventId;
-    /* 0x090 */ UNKWORD field_0x090;
+    /* 0x090 */ s32 mCameraCutCounter;
     /* 0x094 */ u32 mEventFlags;
     /* 0x098 */ SizedString<64> mEventName;
     /* 0x0D8 */ SizedString<64> mPrevEventName;
     /* 0x118 */ const char *field_0x118;
-    /* 0x11C */ u32 field_0x11C;
-    /* 0x120 */ UNKWORD field_0x120;
-    /* 0x124 */ UNKWORD field_0x124;
+    /* 0x11C */ u32 mFrameCounter;
+    /* 0x120 */ u32 mCameraCutFrameCounter;
+    /* 0x124 */ u32 mMsgFrameCounter;
     /* 0x128 */ u32 mSeLvSoundId;
     /* 0x12C */ SizedString<64> mSeName;
     /* 0x16C */ SizedString<64> mBgmName;
@@ -243,10 +268,10 @@ private:
     /* 0x240 */ UNKWORD field_0x240;
     /* 0x244 */ UNKWORD field_0x244;
     /* 0x248 */ UNKWORD field_0x248;
-    /* 0x24C */ UNKWORD field_0x24C;
-    /* 0x250 */ UNKWORD field_0x250;
+    /* 0x24C */ s32 mMsgCounter;
+    /* 0x250 */ s32 mMsgWaitSelectCounter;
     /* 0x254 */ u8 field_0x254;
-    /* 0x258 */ UNKWORD field_0x258;
+    /* 0x258 */ u32 field_0x258;
     /* 0x25C */ nw4r::snd::FxReverbStdDpl2 mFx;
     /* 0x48C */ UNKWORD field_0x48C;
     /* 0x490 */ f32 field_0x490;

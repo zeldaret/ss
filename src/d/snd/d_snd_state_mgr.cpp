@@ -1,6 +1,7 @@
 #include "d/snd/d_snd_state_mgr.h"
 
 #include "common.h"
+#include "d/d_camera.h"
 #include "d/d_sc_game.h"
 #include "d/snd/d_snd_area_sound_effect_mgr.h"
 #include "d/snd/d_snd_bgm_mgr.h"
@@ -14,6 +15,7 @@
 #include "d/snd/d_snd_util.h"
 #include "egg/core/eggHeap.h"
 #include "nw4r/snd/snd_FxReverbStdDpl2.h"
+#include "nw4r/snd/snd_SeqSoundHandle.h"
 #include "nw4r/snd/snd_SoundPlayer.h"
 #include "nw4r/snd/snd_global.h"
 #include "sized_string.h"
@@ -49,12 +51,12 @@ dSndStateMgr_c::dSndStateMgr_c()
       field_0x084(0),
       field_0x088(0),
       mSoundEventId(SND_EVENT_0x89),
-      field_0x090(0),
+      mCameraCutCounter(0),
       mEventFlags(0),
       field_0x118(nullptr),
-      field_0x11C(0),
-      field_0x120(0),
-      field_0x124(0),
+      mFrameCounter(0),
+      mCameraCutFrameCounter(0),
+      mMsgFrameCounter(0),
       mSeLvSoundId(-1),
       field_0x22C(0),
       mpSoundEventDef(nullptr),
@@ -64,8 +66,8 @@ dSndStateMgr_c::dSndStateMgr_c()
       field_0x240(0),
       field_0x244(0),
       field_0x248(0),
-      field_0x24C(-1),
-      field_0x250(0),
+      mMsgCounter(-1),
+      mMsgWaitSelectCounter(0),
       field_0x254(0),
       field_0x258(0),
       field_0x48C(0),
@@ -313,9 +315,9 @@ void dSndStateMgr_c::setEvent(const char *eventName) {
 
             if (mSoundEventId != SND_EVENT_0x89) {
                 onEventFlag(EVENT_IN_EVENT);
-                field_0x11C = 0;
-                field_0x120 = 0;
-                field_0x124 = 0;
+                mFrameCounter = 0;
+                mCameraCutFrameCounter = 0;
+                mMsgFrameCounter = 0;
                 if (mpOnEventStartCallback != nullptr) {
                     (mpOnEventStartCallback)(mSoundEventId, mEventFlags);
                 }
@@ -365,6 +367,22 @@ void dSndStateMgr_c::initializeEventCallbacks(const char *name) {
     }
 }
 
+void dSndStateMgr_c::doLabelSuffix(const char *suffix) {
+    SizedString<64> label;
+    label.sprintf("%s%s", &mBgmName, suffix);
+    doBgm(label);
+    label.sprintf("%s%s", &mSeName, suffix);
+    doSe(label);
+    label.sprintf("%s%s", &mCmdName, suffix);
+    doCmd(label);
+}
+
+u32 dSndStateMgr_c::getSeCameraId() {
+    SizedString<64> label;
+    label.sprintf("%s_C%d_%d", &mSeName, mCameraCutCounter, mCameraCutFrameCounter);
+    return convertSeLabelToSoundId(label);
+}
+
 void dSndStateMgr_c::handleSeLv() {
     SizedString<0x40> name = mSeName;
     name += "_LV";
@@ -403,6 +421,168 @@ bool dSndStateMgr_c::finalizeEvent(bool skipped) {
     // TODO ...
 
     return false;
+}
+
+// TODO - the whole "camera cut" thing seems plausible but I haven't confirmed it yet
+void dSndStateMgr_c::onCameraCut(s32 cutIdx) {
+    if (cutIdx <= 0) {
+        mCameraCutCounter++;
+    } else {
+        mCameraCutCounter = cutIdx;
+    }
+    mCameraCutFrameCounter = 0;
+    nw4r::snd::SeqSoundHandle::WriteGlobalVariable(1, mCameraCutCounter);
+    nw4r::snd::SeqSoundHandle::WriteGlobalVariable(2, 0);
+    SizedString<64> suffix;
+    suffix.sprintf("_C%d", mCameraCutCounter);
+    doLabelSuffix(suffix);
+}
+
+bool dSndStateMgr_c::isInEvent() {
+    return checkEventFlag(EVENT_IN_EVENT);
+}
+
+bool dSndStateMgr_c::isInEvent(const char *eventName) {
+    return streq(mEventName, eventName);
+}
+
+void dSndStateMgr_c::onMsgStart(s32 idx) {
+    if (idx >= 0) {
+        mMsgCounter = idx;
+    } else {
+        mMsgCounter++;
+    }
+    field_0x254 = 1;
+    mMsgWaitSelectCounter = 0;
+    mMsgFrameCounter = 0;
+    SizedString<64> label;
+    label.sprintf("_MS%d", mMsgCounter);
+    doLabelSuffix(label);
+}
+
+void dSndStateMgr_c::onMsgEnd() {
+    field_0x254 = 0;
+    SizedString<64> label;
+    label.sprintf("_ME%d", mMsgCounter);
+    doLabelSuffix(label);
+}
+
+void dSndStateMgr_c::onMsgWaitStart() {
+    mMsgFrameCounter = 0;
+    mMsgWaitSelectCounter++;
+
+    if (mpSoundEventDef != nullptr && mpSoundEventDef->msgWaitStartCb != nullptr) {
+        mpSoundEventDef->msgWaitStartCb(mMsgWaitSelectCounter);
+    }
+    
+    SizedString<64> label;
+    label.sprintf("_%M_WS%d", mMsgCounter, mMsgWaitSelectCounter);
+    doLabelSuffix(label);
+}
+
+void dSndStateMgr_c::onMsgWaitEnd() {
+    if (mpSoundEventDef != nullptr && mpSoundEventDef->msgWaitEndCb != nullptr) {
+        mpSoundEventDef->msgWaitEndCb(mMsgWaitSelectCounter);
+    }
+    
+    SizedString<64> label;
+    label.sprintf("_%M_WE%d", mMsgCounter, mMsgWaitSelectCounter);
+    doLabelSuffix(label);
+}
+
+void dSndStateMgr_c::setFiltersIfUnderwater() {
+    dCamera_c *cam = dScGame_c::getCamera(0);
+    if (cam == nullptr || cam->isUnderwater()) {
+        setBgmLpfAndFxSendIfUnderwater();
+        for (u32 id = dSndPlayerMgr_c::PLAYER_LINK_BODY; id < dSndPlayerMgr_c::PLAYER_LINK_EQUIPMENT + 1; id++) {
+            dSndControlPlayerMgr_c::GetInstance()->setLpfFreq(id, -0.45f, 15);
+        }
+
+        for (u32 id = dSndPlayerMgr_c::PLAYER_ENEMY; id < dSndPlayerMgr_c::PLAYER_AREA + 1; id++) {
+            dSndControlPlayerMgr_c::GetInstance()->setLpfFreq(id, -0.41f, 15);
+        }
+
+        dSndControlPlayerMgr_c::GetInstance()->setLpfFreq(dSndPlayerMgr_c::PLAYER_AREA_IN_WATER_LV, -0.3f, 15);
+
+        for (u32 id = dSndPlayerMgr_c::PLAYER_ENEMY; id <= dSndPlayerMgr_c::PLAYER_AREA_IN_WATER_LV; id++) {
+            dSndControlPlayerMgr_c::GetInstance()->setFxSend(id, 0.14f, 15);
+        }
+    }
+}
+
+void dSndStateMgr_c::setBgmLpfAndFxSendIfUnderwater() {
+    dCamera_c *cam = dScGame_c::getCamera(0);
+    if (cam == nullptr || cam->isUnderwater()) {
+        for (u32 id = dSndPlayerMgr_c::PLAYER_BGM; id < dSndPlayerMgr_c::PLAYER_BGM_BATTLE + 1; id++) {
+            dSndControlPlayerMgr_c::GetInstance()->setLpfFreq(id, -0.55f, 15);
+            dSndControlPlayerMgr_c::GetInstance()->setFxSend(id, 0.2f, 15);
+        }
+    }
+}
+
+void dSndStateMgr_c::resetLpfAndFxSend() {
+    resetBgmLpfAndFxSend();
+    for (u32 id = dSndPlayerMgr_c::PLAYER_LINK_BODY; id <= dSndPlayerMgr_c::PLAYER_AREA_IN_WATER_LV; id++) {
+        dSndControlPlayerMgr_c::GetInstance()->setLpfFreq(id, 0.0f, 15);
+    }
+
+    for (u32 id = dSndPlayerMgr_c::PLAYER_LINK_BODY; id <= dSndPlayerMgr_c::PLAYER_AREA_IN_WATER_LV; id++) {
+        dSndControlPlayerMgr_c::GetInstance()->setFxSend(id, 0.0f, 15);
+    }
+}
+
+void dSndStateMgr_c::resetBgmLpfAndFxSend() {
+    for (u32 id = dSndPlayerMgr_c::PLAYER_BGM; id < dSndPlayerMgr_c::PLAYER_BGM_BATTLE + 1; id++) {
+        dSndControlPlayerMgr_c::GetInstance()->setLpfFreq(id, 0.0f, 15);
+        dSndControlPlayerMgr_c::GetInstance()->setFxSend(id, 0.0f, 15);
+    }
+}
+
+void dSndStateMgr_c::setBgmAndStageEffectLpf() {
+    setBgmLpf();
+    for (u32 id = dSndPlayerMgr_c::PLAYER_TG_SOUND; id < dSndPlayerMgr_c::PLAYER_AREA + 1; id++) {
+        dSndControlPlayerMgr_c::GetInstance()->setLpfFreq(id, -0.55f, 15);
+    }
+}
+
+void dSndStateMgr_c::setBgmLpf() {
+    setBgmLpf(15);
+}
+
+void dSndStateMgr_c::setBgmLpf(s32 fadeFrames) {
+    for (u32 id = dSndPlayerMgr_c::PLAYER_BGM; id < dSndPlayerMgr_c::PLAYER_BGM_BATTLE + 1; id++) {
+        dSndControlPlayerMgr_c::GetInstance()->setLpfFreq(id, -0.55f, fadeFrames);
+    }
+}
+
+void dSndStateMgr_c::resetBgmAndStageEffectLpf() {
+    resetBgmLpf();
+    for (u32 id = dSndPlayerMgr_c::PLAYER_TG_SOUND; id < dSndPlayerMgr_c::PLAYER_AREA + 1; id++) {
+        dSndControlPlayerMgr_c::GetInstance()->setLpfFreq(id, 0.0f, 15);
+    }
+}
+
+void dSndStateMgr_c::resetBgmLpf() {
+    for (u32 id = dSndPlayerMgr_c::PLAYER_BGM; id < dSndPlayerMgr_c::PLAYER_BGM_BATTLE + 1; id++) {
+        dSndControlPlayerMgr_c::GetInstance()->setLpfFreq(id, 0.0f, 15);
+    }
+}
+
+f32 dSndStateMgr_c::getUserParamVolume(u32 userParam) {
+    s32 bit = 31;
+    for (int i = 0; i < 4; i++) {
+        if (((1 << bit) & userParam) != 0) {
+            switch (bit) {
+                case 31: return 0.3f;
+                case 30: return 0.2f;
+                case 29: return 0.1f;
+                case 28: return 0.02f;
+            }
+        }
+
+        bit--;
+    }
+    return 0.0f;
 }
 
 const char *dSndStateMgr_c::getStageName(s32 id) {

@@ -24,6 +24,5 @@ extern "C" void fn_80362730(dSndStateMgr_c *);
 extern "C" void fn_80365D20(dSndStateMgr_c *);
 extern "C" void fn_803624F0(dSndStateMgr_c *);
 extern "C" void fn_80365020(dSndStateMgr_c *);
-extern "C" void fn_80364D00(dSndStateMgr_c *, s32);
 
 #endif

@@ -211,23 +211,23 @@ void dSndPlayerMgr_c::setMsgActor(s32 msgIdx, dAcBase_c *actor) {
     } else {
         dSndSmallEffectMgr_c::GetInstance()->resetButtonPressSound();
     }
-    dSndStateMgr_c::GetInstance()->doMsgStart(msgIdx);
+    dSndStateMgr_c::GetInstance()->onMsgStart(msgIdx);
 }
 
 void dSndPlayerMgr_c::unsetMsgActor() {
-    dSndStateMgr_c::GetInstance()->doMsgEnd();
+    dSndStateMgr_c::GetInstance()->onMsgEnd();
     dSndSmallEffectMgr_c::GetInstance()->resetButtonPressSound();
     dSndSourceMgr_c::GetInstance()->setMsgSource(nullptr);
 }
 
 void dSndPlayerMgr_c::enterMsgWait() {
     onFlag(MGR_MSG_WAIT);
-    dSndStateMgr_c::GetInstance()->doMsgWaitStart();
+    dSndStateMgr_c::GetInstance()->onMsgWaitStart();
 }
 
 void dSndPlayerMgr_c::leaveMsgWait() {
     offFlag(MGR_MSG_WAIT);
-    dSndStateMgr_c::GetInstance()->doMsgWaitEnd();
+    dSndStateMgr_c::GetInstance()->onMsgWaitEnd();
 }
 
 nw4r::snd::SoundStartable::StartResult dSndPlayerMgr_c::startSound(
