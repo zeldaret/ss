@@ -27,6 +27,8 @@
 #include "d/lyt/d_lyt_auto_caption.h"
 // clang-format on
 
+#include "d/snd/d_snd_fi_vocal_mgr.h"
+#include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "f/f_base.h"
 #include "m/m_fader_base.h"
@@ -37,8 +39,6 @@
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/fi_context.h"
 #include "toBeSorted/lyt_related_floats.h"
-#include "toBeSorted/music_mgrs.h"
-#include "toBeSorted/other_sound_stuff.h"
 
 #include <cstring>
 
@@ -304,7 +304,9 @@ void dLytMsgWindow_c::executeState_OutputText() {
 
     if (mpTagProcessor->getMsgWindowSubtype() >= MSG_WINDOW_SWORD_FI &&
         mpTagProcessor->getMsgWindowSubtype() < MSG_WINDOW_SWORD_FI + 3) {
-        fn_803998A0(lbl_80575DE0, mpMsgWindowUnk->getField_0x147A(), mpMsgWindowUnk->getField_0x147C());
+        dSndFiVocalMgr_c::GetInstance()->executeOutputText(
+            mpMsgWindowUnk->getField_0x147A(), mpMsgWindowUnk->getField_0x147C()
+        );
     } else if (mpTagProcessor->getMsgWindowSubtype() <= MSG_WINDOW_1 && oldValue != mpMsgWindowUnk->getField_0x147A()) {
         u16 a = mpMsgWindowUnk->getField_0x147C();
         f32 b = (dTagProcessor_c::fn_800B8040(0, 0) * 100.0f);
@@ -340,7 +342,7 @@ void dLytMsgWindow_c::initializeState_WaitKeyChangePage0() {
     if (field_0x811 != 0) {
         field_0x812 = 1;
     } else if (field_0x814 == 0) {
-        fn_8035E860(BGM_MGR);
+        dSndPlayerMgr_c::GetInstance()->enterMsgWait();
     }
 }
 void dLytMsgWindow_c::executeState_WaitKeyChangePage0() {
@@ -355,7 +357,7 @@ void dLytMsgWindow_c::executeState_WaitKeyChangePage0() {
             allowChange = true;
         }
     } else if (dPad::checkButtonAPressed() || fn_8011A5D0()) {
-        fn_8035E880(BGM_MGR);
+        dSndPlayerMgr_c::GetInstance()->leaveMsgWait();
         allowChange = true;
     }
 
@@ -398,7 +400,7 @@ void dLytMsgWindow_c::initializeState_WaitKeyMsgEnd0() {
     if (field_0x811 != 0) {
         field_0x812 = 1;
     } else if (mpTagProcessor->getField_0x90E() == 0 && field_0x814 == 0) {
-        fn_8035E860(BGM_MGR);
+        dSndPlayerMgr_c::GetInstance()->enterMsgWait();
     }
 }
 void dLytMsgWindow_c::executeState_WaitKeyMsgEnd0() {
@@ -415,7 +417,7 @@ void dLytMsgWindow_c::executeState_WaitKeyMsgEnd0() {
             allowChange = true;
         }
     } else if (dPad::checkButtonAPressed() || fn_8011A5D0()) {
-        fn_8035E880(BGM_MGR);
+        dSndPlayerMgr_c::GetInstance()->leaveMsgWait();
         allowChange = true;
     }
 
@@ -436,7 +438,7 @@ void dLytMsgWindow_c::executeState_WaitKeyMsgEnd0() {
         }
         field_0x810 = 0;
     } else {
-        fn_8035E820(BGM_MGR);
+        dSndPlayerMgr_c::GetInstance()->unsetMsgActor();
         if (mpTagProcessor->getField_0x90E() != 0) {
             mStateMgr.changeState(StateID_WaitKeySelectQuestion);
         } else {
@@ -460,7 +462,7 @@ void dLytMsgWindow_c::executeState_WaitKeyMsgEnd1() {
             }
             field_0x810 = 0;
         } else {
-            fn_8035E820(BGM_MGR);
+            dSndPlayerMgr_c::GetInstance()->unsetMsgActor();
             if (mpTagProcessor->getField_0x90E() != 0) {
                 mStateMgr.changeState(StateID_WaitKeySelectQuestion);
             } else if (field_0x817 == 0) {

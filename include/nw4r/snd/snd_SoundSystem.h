@@ -72,6 +72,9 @@ namespace nw4r { namespace snd
 			detail::AxManager::GetInstance().PrepareReset();
 		}
 
+		static OutputMode GetOutputMode() {
+			return detail::AxManager::GetInstance().GetOutputMode();
+		}
 
 		static void SetOutputMode(OutputMode mode) {
 			detail::AxManager::GetInstance().SetOutputMode(mode);

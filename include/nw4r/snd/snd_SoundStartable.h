@@ -164,6 +164,23 @@ namespace nw4r { namespace snd
 			return detail_PrepareSound(pHandle, id, NULL) == START_SUCCESS;
 		}
 
+		// The detail_ functions above are probably not meant to be called directly from game code,
+		// so these inlines probably exist, but I haven't found them in Ketteiban or BBA. An inline
+		// fixes a regswap in d/snd so that's more evidence. Names are obviously made up.
+		// TODO: Do these exist in other variants for different ID types too???
+
+		StartResult StartSoundReturnStatus(SoundHandle *pHandle, u32 id, const StartInfo *pStartInfo) {
+			return detail_StartSound(pHandle, id, pStartInfo);
+		}
+
+		StartResult HoldSoundReturnStatus(SoundHandle *pHandle, u32 id, const StartInfo *pStartInfo) {
+			return detail_HoldSound(pHandle, id, pStartInfo);
+		}
+
+		StartResult PrepareSoundReturnStatus(SoundHandle *pHandle, u32 id, const StartInfo *pStartInfo) {
+			return detail_PrepareSound(pHandle, id, pStartInfo);
+		}
+
 	// members
 	private:
 		/* vtable */	// size 0x04, offset 0x00

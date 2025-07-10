@@ -2,11 +2,14 @@
 #define D_SND_PLAYER_MGR_H
 
 #include "d/snd/d_snd_mgr.h"
+#include "d/snd/d_snd_types.h"
 #include "d/snd/d_snd_util.h"
 #include "nw4r/snd/snd_MemorySoundArchive.h"
 #include "nw4r/snd/snd_SoundArchivePlayer.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/snd/snd_SoundStartable.h"
+
+class dAcBase_c;
 
 SND_DISPOSER_FORWARD_DECL(dSndPlayerMgr_c);
 
@@ -23,8 +26,10 @@ public:
 public:
     dSndPlayerMgr_c();
 
+    void setup();
     void shutdown();
     void calc();
+    void calcActive();
 
     void enterMenu();
     void leaveMenu();
@@ -36,13 +41,46 @@ public:
     void enterHbm();
     void leaveHbm();
 
+    void enterSystemMenu();
+    void leaveSystemMenu();
+
+    void enterCaution();
+    void leaveCaution();
+
+    void setMsgActor(s32 msgIdx, dAcBase_c *actor);
+    void unsetMsgActor();
+
+    void enterMsgWait();
+    void leaveMsgWait();
+
+    void setupState0();
+    void popToState0();
+    void saveState1();
+    void popToState1();
+    void saveState2();
+    void popToState2();
+
+    bool loadGroup(u32 groupId);
+    bool loadFileForSound(u32 soundId);
+    bool isLoadedFileForSound(u32 soundId);
+    bool isLoadedFileForBank(u32 bankId);
+    bool isLoadedBnkSeForGroup(dSndSourceGroup_c *group);
+    bool isLoadedFileAndWaveForSound(u32 soundId);
+    bool isLoadedSeFileAndWaveForGroup(dSndSourceGroup_c *group);
+
     u32 getFreeSize();
     bool loadDemoArchive(const char *demoArchiveName);
     const char *getSoundArchivePath();
     u32 convertLabelStringToSoundId(const char *label) const;
+    static bool isBgmPlayerId(u32 id);
+    static bool isSoundPlayedByBgmBattlePlayer(u32 soundId);
+    u32 getSomeUserParam(u32 soundId) const;
 
-    nw4r::snd::SoundArchivePlayer &getSoundArchivePlayerForType(u8 sourceType);
-    bool canUseThisPlayer(u8 sourceType) const;
+    nw4r::snd::SoundArchivePlayer &getSoundArchivePlayerForType(s32 sourceType);
+    bool shouldUseDemoPlayer(s32 sourceType) const;
+
+    u32 getRemoConSoundVariantDemo(u32 soundId) const;
+    u32 getRemoConSoundVariant(u32 soundId) const;
 
     enum PlayerMgrFlag_e {
         MGR_HBM = 0x1,
@@ -50,7 +88,15 @@ public:
         MGR_PAUSE = 0x4,
         MGR_MAP = 0x8,
         MGR_HELP = 0x10,
+        MGR_SYSTEM = 0x20,
+        MGR_MSG_WAIT = 0x40,
+
+        MGR_CAUTION = 0x80,
     };
+
+    bool isInit() const {
+        return mState0 > 0;
+    }
 
     bool checkFlag(u32 mask) const {
         return mFlags & mask;
@@ -64,14 +110,20 @@ public:
         mFlags &= ~mask;
     }
 
-    u32 getEventMuteMask(u32 id) {
-        nw4r::snd::SoundArchive *archive;
-        if (mSoundArchivePlayer.IsAvailable()) {
-            archive = &mSoundArchive;
+    const nw4r::snd::SoundArchive *getDemoArchive() const {
+        if (mDemoSoundArchivePlayer.IsAvailable()) {
+            return &mDemoSoundArchive;
         } else {
-            archive = dSndMgr_c::GetInstance()->getArchive();
+            return dSndMgr_c::GetInstance()->getArchive();
         }
-        return archive->GetSoundUserParam(id) & sEventMuteFlagsMask;
+    }
+
+    const nw4r::snd::SoundArchive *getDemoArchiveDirectly() const {
+        return &mDemoSoundArchive;
+    }
+
+    u32 getEventMuteMask(u32 id) {
+        return getDemoArchive()->GetSoundUserParam(id) & sEventMuteFlagsMask;
     }
 
     enum FanfareUnmuteParam_e {
@@ -100,8 +152,8 @@ public:
     enum PlayerIndex_e {
         /** Background music */
         PLAYER_BGM = 0,
-        /** Background music, boss battle */
-        PLAYER_BGM_BOSS = 1,
+        /** Background music, battles */
+        PLAYER_BGM_BATTLE = 1,
         /** "fanfare?" */
         PLAYER_FAN = 2,
         /** small sound effects, only a few (UI navigation related) */
@@ -147,14 +199,17 @@ public:
 private:
     /* 0x010 */ u8 field_0x010;
     /* 0x011 */ u8 field_0x011;
-    /* 0x014 */ s32 field_0x014;
-    /* 0x018 */ s32 field_0x018;
-    /* 0x01C */ s32 field_0x01C;
+    /* 0x014 */ s32 mState0;
+    /* 0x018 */ s32 mState1;
+    /* 0x01C */ s32 mState2;
     /* 0x020 */ u32 mFlags;
 
     // system menu, inventory, map
     void enterPauseState();
     void leavePauseState();
+
+    void initialize();
+    void createFileManager();
 
     virtual nw4r::snd::SoundStartable::StartResult
     startSound(nw4r::snd::SoundHandle *pHandle, u32 soundId, const nw4r::snd::SoundStartable::StartInfo *pStartInfo);
@@ -162,8 +217,8 @@ private:
         nw4r::snd::SoundHandle *pHandle, const char *soundLabel, const nw4r::snd::SoundStartable::StartInfo *pStartInfo
     );
 
-    /* 0x028 */ nw4r::snd::MemorySoundArchive mSoundArchive;
-    /* 0x178 */ nw4r::snd::SoundArchivePlayer mSoundArchivePlayer;
+    /* 0x028 */ nw4r::snd::MemorySoundArchive mDemoSoundArchive;
+    /* 0x178 */ nw4r::snd::SoundArchivePlayer mDemoSoundArchivePlayer;
 };
 
 #endif

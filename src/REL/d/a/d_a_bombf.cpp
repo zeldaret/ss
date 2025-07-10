@@ -76,11 +76,11 @@ int dAcBombf_c::actorPostCreate() {
     }
 
     if (field_0x3D2 == 0 || field_0x3D2 == 2) {
-        bool b = dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, position);
-        if (b) {
+        s32 b = dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, position);
+        if (b != 0) {
             mTimeAreaStruct.field_0x00 = 1.0f;
         }
-        if ((b && field_0x3D2 == 2) || (!b && field_0x3D2 == 0)) {
+        if ((b != 0 && field_0x3D2 == 2) || (b == 0 && field_0x3D2 == 0)) {
             mModel.setScale(0.0001f, 0.0001f, 0.0001f);
             if (mBombRef.get() != nullptr) {
                 mBombRef.get()->mField_0xA50 = 0.0001f;
@@ -190,9 +190,9 @@ void dAcBombf_c::executeState_Wait() {
 
         if (mTimeAreaStruct.check(roomid, checkPos, 0, 30.0f, 0.1f) && field_0x3D4 != 1) {
             if (mTimeAreaStruct.field_0x04 == 1) {
-                playSound(SE_TIMESLIP_TIMESLIP);
+                startSound(SE_TIMESLIP_TIMESLIP);
             } else {
-                playSound(SE_TIMESLIP_TIMESLIP_REV);
+                startSound(SE_TIMESLIP_TIMESLIP_REV);
             }
             dJEffManager_c::spawnEffect(lbl_8057A750, position, nullptr, nullptr, nullptr, nullptr, 0, 0);
         }

@@ -7,6 +7,8 @@
 
 #include "common.h" // nullptr
 
+#include "nw4r/snd/snd_WaveSound.h" // snd::WaveSound
+
 #include "nw4r/ut/ut_NonCopyable.h" // ut::NonCopyable
 
 /*******************************************************************************
@@ -30,9 +32,16 @@ namespace nw4r { namespace snd
 	public:
 		// cdtors
 		WaveSoundHandle(SoundHandle *handle);
+		~WaveSoundHandle() { DetachSound(); }
 
 		// methods
 		bool IsAttachedSound() const { return mSound != nullptr; }
+
+		u32 GetPlaySamplePosition() const {
+			if (!IsAttachedSound())
+				return -1;
+			return mSound->GetPlaySamplePosition();
+		}
 
 		void DetachSound();
 

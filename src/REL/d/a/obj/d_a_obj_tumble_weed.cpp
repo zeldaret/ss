@@ -144,7 +144,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     dCcS::GetInstance()->Set(&mSph);
     updateMatrix();
     calcMatrix();
-    playSoundEffect1(0xC2C); // TODO(Sound Id)
+    holdSound(SE_TWeed_ROLL_LV);
     mMdl.setLocalMtx(mWorldMtx);
     mMdl.setScale(mScale);
     mMdl.calc(false);
@@ -262,7 +262,7 @@ bool dAcOTumbleWeed_c::checkInvalidGround() const {
 }
 
 void dAcOTumbleWeed_c::doBreak() {
-    playSound(SE_TWeed_CUT);
+    startSound(SE_TWeed_CUT);
     mVec3_c pos = getPosition();
     dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_743_, pos, nullptr, nullptr, nullptr, nullptr, 0, 0);
     deleteRequest();
