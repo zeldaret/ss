@@ -21,7 +21,6 @@
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/snd/snd_global.h"
 #include "rvl/OS/OSFastCast.h"
-#include "toBeSorted/music_mgrs.h"
 
 SND_DISPOSER_DEFINE(dSndSmallEffectMgr_c)
 
@@ -175,8 +174,8 @@ bool dSndSmallEffectMgr_c::playSound(u32 soundId) {
                 break;
             }
             case SE_S_SKIP: {
-                if (fn_80364DA0(ENEMY_SOUND_MGR)) {
-                    fn_80365020(ENEMY_SOUND_MGR);
+                if (dSndStateMgr_c::GetInstance()->isInEvent()) {
+                    dSndStateMgr_c::GetInstance()->onSkipEvent();
                 }
                 break;
             }
@@ -349,7 +348,7 @@ bool dSndSmallEffectMgr_c::holdBowChargeSound(f32 remainingChargeAmount) {
 }
 
 bool dSndSmallEffectMgr_c::holdFinisherPromptSound(const nw4r::math::VEC3 *position) {
-    if (fn_80364DA0(ENEMY_SOUND_MGR)) {
+    if (dSndStateMgr_c::GetInstance()->isInEvent()) {
         return false;
     }
     return dSndDistantSoundActorPool_c::GetInstance()->holdSound(SE_S_FOCUS_FINISHER_LV, position);

@@ -69,6 +69,11 @@ namespace nw4r { namespace snd
 				mSound->SetPan(pan);
 		}
 
+		void SetFxSend(AuxBus bus, f32 send) {
+			if (IsAttachedSound())
+				mSound->SetFxSend(bus, send);
+		}
+
 		void SetLpfFreq(f32 lpfFreq) {
 			if (IsAttachedSound())
 				mSound->SetLpfFreq(lpfFreq);

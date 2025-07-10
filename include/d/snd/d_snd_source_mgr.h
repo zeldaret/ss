@@ -63,6 +63,8 @@ public:
     }
 
     void setMutedFromFader(bool muteFlag);
+    void onEventStart();
+    void onEventEnd();
 
 private:
     void calcEnemyObjVolume();

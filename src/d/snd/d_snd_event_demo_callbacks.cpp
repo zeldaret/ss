@@ -4,7 +4,6 @@
 
 void todoInititalizeSndEvent();
 void todoExecuteSndEvent();
-void todoFinalizeSndEvent();
 
 // clang-format off
 

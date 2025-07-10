@@ -580,6 +580,14 @@ void dSndSourceMgr_c::clearSourceList(nw4r::ut::List *list) {
     }
 }
 
+void dSndSourceMgr_c::onEventStart() {
+    // no-op
+}
+
+void dSndSourceMgr_c::onEventEnd() {
+    // no-op
+}
+
 s32 dSndSourceMgr_c::getPlayerSourceRoomId() const {
     if (mpPlayerSource == nullptr) {
         return -1;
