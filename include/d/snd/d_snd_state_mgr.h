@@ -5,6 +5,7 @@
 #include "d/snd/d_snd_event.h"
 #include "d/snd/d_snd_util.h"
 #include "nw4r/snd/snd_FxReverbStdDpl2.h"
+#include "nw4r/snd/snd_SoundHandle.h"
 #include "sized_string.h"
 
 SND_DISPOSER_FORWARD_DECL(dSndStateMgr_c);
@@ -15,6 +16,8 @@ public:
     SND_DISPOSER_MEMBERS(dSndStateMgr_c);
 
 public:
+    typedef void (*OnEventStartCallback)(s32 soundEventId, u32 flags);
+
     enum StageFlags_e {
         STAGE_FIELD = 0x1,
         STAGE_DUNGEON = 0x2,
@@ -33,6 +36,7 @@ public:
     enum EventFlags_e {
         EVENT_IN_EVENT = 0x1,
         EVENT_DEMO = 0x2,
+        EVENT_0x04 = 0x4,
         EVENT_MUTE_BGM_PARTIAL = 0x8,
         EVENT_MUTE_BGM_FULL = 0x10,
         EVENT_MUTE_STAGE_EFFECTS_PARTIAL = 0x20,
@@ -41,6 +45,7 @@ public:
         EVENT_MUTE_ENEMY_FULL = 0x100,
         EVENT_MUTE_OBJ_PARTIAL = 0x200,
         EVENT_MUTE_OBJ_FULL = 0x400,
+        EVENT_0x800 = 0x800,
         EVENT_0x400000 = 0x400000,
     };
 
@@ -76,9 +81,11 @@ public:
         return field_0x49C;
     }
 
-    void resetStageName() {
-        field_0x098 = "EVENT_NONE";
+    void resetEventName() {
+        mEventName = "EVENT_NONE";
     }
+
+    bool checkFlag0x18(u32 mask);
 
     bool checkFlag0x10(u32 mask) const {
         return field_0x010 & mask;
@@ -92,7 +99,7 @@ public:
         field_0x010 &= ~mask;
     }
 
-    bool checkEventFlag(u32 mask) const {
+    bool checkEventFlag(u32 mask) {
         return mEventFlags & mask;
     }
 
@@ -111,9 +118,12 @@ public:
         return getCurrentStageMusicDemoName() != nullptr;
     }
 
+    void setEvent(const char *eventName);
     // not sure, subtype is unused
     bool isActiveDemoMaybe(s32 subtype) const;
     bool isInEvent(const char *eventName);
+    bool isInEvent() const;
+    bool onSkipEvent() const;
 
     void doMsgStart(s32 idx);
     void doMsgEnd();
@@ -151,6 +161,20 @@ private:
     bool handleStageEvent(const char *name);
     void handleDemoEvent(const char *name);
 
+    u32 convertSeLabelToSoundId(const char *label);
+    u32 convertBgmLabelToSoundId(const char *label);
+
+    u32 getBgmLabelSoundId();
+    bool playFanOrBgm(u32 soundId);
+
+    void handleFan();
+    void handleSe();
+    void handleCmd();
+    void handleSeLv();
+    bool finalizeEvent(bool skipped);
+
+    void resetEventVars();
+
     // Callbacks start
     static void cbUnkNoop();
 
@@ -173,7 +197,7 @@ private:
     /* 0x010 */ u32 field_0x010;
     /* 0x014 */ UNKWORD field_0x014;
     /* 0x018 */ UNKWORD field_0x018;
-    /* 0x01C */ SizedString<32> field_0x01C;
+    /* 0x01C */ SizedString<32> mStageName;
     /* 0x03C */ UNKWORD field_0x03C;
     /* 0x040 */ s32 mStageId;
     /* 0x044 */ UNKWORD field_0x044;
@@ -189,9 +213,9 @@ private:
     /* 0x067 */ u8 field_0x067;
     /* 0x068 */ UNKWORD field_0x068;
     /* 0x06C */ UNKWORD field_0x06C;
-    /* 0x070 */ UNKWORD field_0x070;
+    /* 0x070 */ void (*mpUnkCallback)();
     /* 0x074 */ UNKWORD field_0x074;
-    /* 0x078 */ UNKWORD field_0x078;
+    /* 0x078 */ OnEventStartCallback mpOnEventStartCallback;
     /* 0x07C */ UNKWORD field_0x07C;
     /* 0x080 */ UNKWORD field_0x080;
     /* 0x084 */ UNKWORD field_0x084;
@@ -199,21 +223,21 @@ private:
     /* 0x08C */ s32 mSoundEventId;
     /* 0x090 */ UNKWORD field_0x090;
     /* 0x094 */ u32 mEventFlags;
-    /* 0x098 */ SizedString<64> field_0x098;
-    /* 0x0D8 */ SizedString<64> field_0x0D8;
+    /* 0x098 */ SizedString<64> mEventName;
+    /* 0x0D8 */ SizedString<64> mPrevEventName;
     /* 0x118 */ const char *field_0x118;
     /* 0x11C */ u32 field_0x11C;
     /* 0x120 */ UNKWORD field_0x120;
     /* 0x124 */ UNKWORD field_0x124;
-    /* 0x128 */ UNKWORD field_0x128;
+    /* 0x128 */ u32 mSeLvSoundId;
     /* 0x12C */ SizedString<64> mSeName;
     /* 0x16C */ SizedString<64> mBgmName;
     /* 0x1AC */ SizedString<64> mFanName;
     /* 0x1EC */ SizedString<64> mCmdName;
     /* 0x22C */ UNKWORD field_0x22C;
-    /* 0x230 */ UNKWORD field_0x230;
+    /* 0x230 */ nw4r::snd::SoundHandle mSeLvSoundHandle;
     /* 0x234 */ const SndEventDef *mpSoundEventDef;
-    /* 0x238 */ UNKWORD field_0x238;
+    /* 0x238 */ u32 field_0x238;
     /* 0x23C */ u8 field_0x23C;
     /* 0x23D */ u8 field_0x23D;
     /* 0x240 */ UNKWORD field_0x240;

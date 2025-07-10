@@ -75,7 +75,7 @@ void dSnd3DManager_c::updateFromCamera(EGG::LookAtCamera &camera) {
     }
 
     f32 dist = 0.5f;
-    if (fn_80364DA0(ENEMY_SOUND_MGR)) {
+    if (dSndStateMgr_c::GetInstance()->isInEvent()) {
         dist = mCamDistance;
         f32 prevCameraAtSqVelocity = mCameraAtSqVelocity;
         f32 prevCameraPosSqVelocity = mCameraPosSqVelocity;
