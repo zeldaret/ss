@@ -17,7 +17,7 @@ void dSndSourceObj_c::postSetup() {
     }
 
     if ((isName("TDoor") || isName("Wind") || isName("Flag")) &&
-        dSndStateMgr_c::GetInstance()->getField_0x058() >= 13) {
+        dSndStateMgr_c::GetInstance()->getLayer() >= 13) {
         setVolumeFade(0.0f, 0);
     }
 }

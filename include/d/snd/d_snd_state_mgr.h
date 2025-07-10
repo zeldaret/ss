@@ -52,7 +52,7 @@ public:
     dSndStateMgr_c();
 
     void setup(EGG::Heap *pHeap);
-    void onStageOrLayerUpdate();
+    void calc();
     void restoreEffects();
 
     static bool isInStage(const char *stageName);
@@ -69,8 +69,8 @@ public:
         return field_0x044;
     }
 
-    s32 getField_0x058() const {
-        return field_0x058;
+    s32 getLayer() const {
+        return mLayer;
     }
 
     u32 getFrameCounter() const {
@@ -87,11 +87,23 @@ public:
 
     bool checkFlag0x18(u32 mask);
 
-    bool checkFlag0x258(u32 mask) const {
+    bool checkFlag0x258(u32 mask) {
         return field_0x258 & mask;
     }
 
-    bool checkFlag0x10(u32 mask) const {
+    void resetFlag0x258() {
+        field_0x258 = 0;
+    }
+
+    void onFlag0x258(u32 mask) {
+        field_0x258 |= mask;
+    }
+
+    void offFlag0x258(u32 mask) {
+        field_0x258 &= ~mask;
+    }
+
+    bool checkFlag0x10(u32 mask) {
         return field_0x010 & mask;
     }
 
@@ -122,6 +134,7 @@ public:
         return getCurrentStageMusicDemoName() != nullptr;
     }
 
+    void setStbEventName(const char *eventName);
     void setEvent(const char *eventName);
     // not sure, subtype is unused
     bool isActiveDemoMaybe(s32 subtype) const;
@@ -135,7 +148,11 @@ public:
     void onMsgWaitStart();
     void onMsgWaitEnd();
 
+    void onLinkDie();
+
     f32 getUserParamVolume(u32 userParam);
+
+    void onStageOrLayerUpdate();
 
     // TODO better names
     static const char *getStageName(s32 id);
@@ -178,6 +195,11 @@ private:
     bool handleGlobalEvent(const char *name);
     bool handleStageEvent(const char *name);
     void handleDemoEvent(const char *name);
+
+    void calcRoomId();
+    void setRoomId(s32 roomId);
+    void calcTgSnd();
+    void calcFilters();
 
     u32 convertSeLabelToSoundId(const char *label);
     u32 convertBgmLabelToSoundId(const char *label);
@@ -229,8 +251,8 @@ private:
     /* 0x048 */ u8 _0x048[0x050 - 0x048];
     /* 0x050 */ s32 mPreviousStageId;
     /* 0x054 */ UNKWORD field_0x054;
-    /* 0x058 */ UNKWORD field_0x058;
-    /* 0x05C */ s32 mLayer;
+    /* 0x058 */ s32 mLayer;
+    /* 0x05C */ s32 mRoomId;
     /* 0x060 */ UNKWORD field_0x060;
     /* 0x064 */ u8 field_0x064;
     /* 0x065 */ bool field_0x065;
@@ -250,7 +272,7 @@ private:
     /* 0x094 */ u32 mEventFlags;
     /* 0x098 */ SizedString<64> mEventName;
     /* 0x0D8 */ SizedString<64> mPrevEventName;
-    /* 0x118 */ const char *field_0x118;
+    /* 0x118 */ const char *mpStbEventName;
     /* 0x11C */ u32 mFrameCounter;
     /* 0x120 */ u32 mCameraCutFrameCounter;
     /* 0x124 */ u32 mMsgFrameCounter;
