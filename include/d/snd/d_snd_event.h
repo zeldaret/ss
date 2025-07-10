@@ -5,6 +5,7 @@
 
 typedef void (*SndEventCallback)(void);
 typedef void (*SndEventFinalizeCallback)(bool skipped);
+typedef void (*SndEventMsgWaitCallback)(u32 msgWaitSelectCounter);
 
 struct SndEventDef {
     /* 0x00 */ const char *eventName;
@@ -12,7 +13,8 @@ struct SndEventDef {
     /* 0x08 */ SndEventCallback initializeCb;
     /* 0x0C */ SndEventCallback executeCb;
     /* 0x10 */ SndEventFinalizeCallback finalizeCb;
-    /* 0x14 */ u8 _0x14[0x1C - 0x14]; // always zero
+    /* 0x14 */ SndEventMsgWaitCallback msgWaitStartCb; // always null
+    /* 0x18 */ SndEventMsgWaitCallback msgWaitEndCb; // always null
 };
 
 enum SndEvent_e {

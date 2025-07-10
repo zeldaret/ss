@@ -9,7 +9,15 @@
 class SoundPropertiesChecker {
 public:
     // @bug forgot to initialize mCounter4. see `dSndSourceEquipment_c::cbPcHit` for one consequence
-    SoundPropertiesChecker(u32 soundId) : mSoundId(soundId), mPlayCounter(0), mPauseCounter(0), mCounter3(0), mpPlayCounter(nullptr), mpPauseCounter(nullptr), mpCounter3(nullptr), mpCounter4(nullptr) {}
+    SoundPropertiesChecker(u32 soundId)
+        : mSoundId(soundId),
+          mPlayCounter(0),
+          mPauseCounter(0),
+          mCounter3(0),
+          mpPlayCounter(nullptr),
+          mpPauseCounter(nullptr),
+          mpCounter3(nullptr),
+          mpCounter4(nullptr) {}
     virtual void operator()(nw4r::snd::SoundHandle &pHandle) {
         if (mSoundId != -1 && mSoundId != pHandle.GetId()) {
             return;
@@ -123,6 +131,20 @@ public:
     }
 
 private:
+};
+
+class SoundVolumeSetter {
+public:
+    SoundVolumeSetter() {}
+    ~SoundVolumeSetter() {}
+
+    virtual void operator()(nw4r::snd::SoundHandle &pHandle) {
+        pHandle.SetVolume(mVolume, mFadeFrames);
+    }
+
+public:
+    /* 0x04 */ f32 mVolume;
+    /* 0x08 */ s32 mFadeFrames;
 };
 
 #endif
