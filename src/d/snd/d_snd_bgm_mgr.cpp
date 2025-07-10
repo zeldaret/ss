@@ -35,7 +35,7 @@ dSndBgmMgr_c::dSndBgmMgr_c()
       field_0x29C(0),
       mSoundActor(dSndMgr_c::GetInstance()->getPlayer()),
       field_0x2F4(1.0f),
-      field_0x2F8(-1),
+      mBgmToPlayOnEventEnd(-1),
       field_0x2FC(0),
       field_0x300(-1),
       field_0x304(0),
@@ -276,6 +276,22 @@ void dSndBgmMgr_c::setBgmHandleIdxVolume(u32 handleIdx, f32 volume, s32 fadeFram
     if (getBgmSoundByIndex(handleIdx) != nullptr) {
         mBgmSounds[handleIdx]->setVolume(volume, fadeFrames);
     }
+}
+
+void dSndBgmMgr_c::setBgmToPlayOnEventEnd(u32 soundId) {
+    if (soundId != -1) {
+        prepareBgm(soundId, 0);
+        mBgmToPlayOnEventEnd = soundId;
+    }
+}
+
+bool dSndBgmMgr_c::onEventEnd() {
+    bool ret = false;
+    if (mBgmToPlayOnEventEnd != -1) {
+        ret = playBgm(mBgmToPlayOnEventEnd, 0, false);
+        mBgmToPlayOnEventEnd = -1;
+    }
+    return ret;
 }
 
 bool dSndBgmMgr_c::isPlayingBgmSound() const {

@@ -5,7 +5,7 @@
 
 void todoInititalizeSndEvent();
 void todoExecuteSndEvent();
-void todoFinalizeSndEvent();
+void todoFinalizeSndEvent(bool skipped);
 
 #pragma push
 #pragma readonly_strings on

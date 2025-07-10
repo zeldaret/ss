@@ -5,9 +5,9 @@
 #include "d/snd/d_snd_control_player.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
+#include "d/snd/d_snd_state_mgr.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/ut/ut_list.h"
-#include "toBeSorted/music_mgrs.h"
 
 struct FanfareMuteFlagsApplier {
     ~FanfareMuteFlagsApplier() {}
@@ -24,7 +24,7 @@ struct FanfareMuteFlagsApplier {
                 dSndControlPlayerMgr_c::GetInstance()->setBgmVolumeDecreaseSpeed(0.2f);
             }
 
-            if (fn_80364DA0(ENEMY_SOUND_MGR)) {
+            if (dSndStateMgr_c::GetInstance()->isInEvent()) {
                 if (!(userParam & dSndPlayerMgr_c::FANFARE_UNMUTE_STAGE_EFFECTS)) {
                     dSndControlPlayerMgr_c::GetInstance()->setGroupVolumeFlag(
                         dSndControlPlayerMgr_c::CTRL_GROUP_STAGE_EFFECTS, dSndControlPlayerMgr_c::MUTE_FULL

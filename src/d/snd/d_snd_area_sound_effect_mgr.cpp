@@ -50,6 +50,14 @@ bool dSndAreaSoundEffectMgr_c::startSound(u32 soundId, u32 handleIdx) {
     return res;
 }
 
+void dSndAreaSoundEffectMgr_c::onEventStart() {
+    // no-op
+}
+
+void dSndAreaSoundEffectMgr_c::onEventEnd() {
+    // no-op
+}
+
 void dSndAreaSoundEffectMgr_c::stopSounds(s32 fadeFrames) {
     for (u32 i = 0; i < 3; i++) {
         mSounds[i].stop(fadeFrames);

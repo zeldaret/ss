@@ -20,7 +20,6 @@
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "sized_string.h"
-#include "toBeSorted/music_mgrs.h"
 
 const char *dSndPlayerMgr_c::getSoundArchivePath() {
     return "Sound/WZSound.brsar";
@@ -168,7 +167,7 @@ void dSndPlayerMgr_c::enterCaution() {
     }
 
     s32 frames = 9;
-    if (fn_80364DA0(ENEMY_SOUND_MGR)) {
+    if (dSndStateMgr_c::GetInstance()->isInEvent()) {
         frames = 0;
     }
 

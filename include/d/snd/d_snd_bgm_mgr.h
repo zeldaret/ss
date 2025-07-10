@@ -37,6 +37,11 @@ public:
     void pauseAllBgm();
     void stopAllBgm(s32 fadeFrames);
 
+    void setBgmToPlayOnEventEnd(u32 soundId);
+    bool onEventEnd();
+    void onEventStart(const char *eventName, s32 soundEventId, s32 unk);
+    void prepareBgm();
+
     dSndBgmSound_c *getSoundHandleForBgm(u32 soundId, u32 startOffset);
     bool isPlayingBgmSound() const;
     bool isPlayingBgmSoundId(u32 soundId) const;
@@ -93,6 +98,10 @@ public:
         return getActiveBgmSound();
     }
 
+    void setField_0x306(u8 val) {
+        field_0x306 = val;
+    }
+
 private:
     dSndBgmBattleSound_c *getBgmBattleSound();
 
@@ -144,7 +153,7 @@ private:
     /* 0x29C */ UNKWORD field_0x29C;
     /* 0x2A0 */ dSndActor_c mSoundActor;
     /* 0x2F4 */ f32 field_0x2F4;
-    /* 0x2F8 */ s32 field_0x2F8;
+    /* 0x2F8 */ u32 mBgmToPlayOnEventEnd;
     /* 0x2FC */ u8 field_0x2FC;
     /* 0x300 */ s32 field_0x300;
     /* 0x304 */ u8 field_0x304;

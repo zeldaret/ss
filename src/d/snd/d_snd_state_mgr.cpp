@@ -2,13 +2,22 @@
 
 #include "common.h"
 #include "d/d_sc_game.h"
+#include "d/snd/d_snd_area_sound_effect_mgr.h"
+#include "d/snd/d_snd_bgm_mgr.h"
+#include "d/snd/d_snd_checkers.h"
+#include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_event.h"
+#include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
+#include "d/snd/d_snd_source_mgr.h"
 #include "d/snd/d_snd_stage_data.h"
 #include "d/snd/d_snd_util.h"
 #include "egg/core/eggHeap.h"
 #include "nw4r/snd/snd_FxReverbStdDpl2.h"
+#include "nw4r/snd/snd_SoundPlayer.h"
+#include "nw4r/snd/snd_global.h"
 #include "sized_string.h"
+#include "toBeSorted/event_manager.h"
 
 #include <cstring>
 
@@ -32,9 +41,9 @@ dSndStateMgr_c::dSndStateMgr_c()
       field_0x067(0),
       field_0x068(-1),
       field_0x06C(-1),
-      field_0x070(0),
+      mpUnkCallback(nullptr),
       field_0x074(0),
-      field_0x078(0),
+      mpOnEventStartCallback(nullptr),
       field_0x07C(0),
       field_0x080(0),
       field_0x084(0),
@@ -46,9 +55,8 @@ dSndStateMgr_c::dSndStateMgr_c()
       field_0x11C(0),
       field_0x120(0),
       field_0x124(0),
-      field_0x128(-1),
+      mSeLvSoundId(-1),
       field_0x22C(0),
-      field_0x230(0),
       mpSoundEventDef(nullptr),
       field_0x238(-1),
       field_0x23C(0),
@@ -85,7 +93,7 @@ void dSndStateMgr_c::setup(EGG::Heap *pHeap) {
     }
     void *mem = pHeap->alloc(max, 4);
     mFx.AssignWorkBuffer(mem, max);
-    resetStageName();
+    resetEventName();
 }
 
 void dSndStateMgr_c::onStageOrLayerUpdate() {
@@ -98,9 +106,9 @@ void dSndStateMgr_c::onStageOrLayerUpdate() {
     onFlag0x10(0x2);
     field_0x064 = 0;
 
-    if (!streq(field_0x098, dScGame_c::currentSpawnInfo.getStageName())) {
+    if (!streq(mStageName, dScGame_c::currentSpawnInfo.getStageName())) {
         needsGroupsReload = true;
-        field_0x01C = dScGame_c::currentSpawnInfo.getStageName();
+        mStageName = dScGame_c::currentSpawnInfo.getStageName();
     }
 
     if (!needsGroupsReload && dScGame_c::currentSpawnInfo.layer != mLayer) {
@@ -197,6 +205,130 @@ bool dSndStateMgr_c::isSeekerStoneStage(const char *stageName, s32 layer) {
     return false;
 }
 
+void dSndStateMgr_c::setEvent(const char *eventName) {
+    if (eventName == nullptr) {
+        return;
+    }
+
+    if (dSndPlayerMgr_c::GetInstance()->checkFlag(dSndPlayerMgr_c::MGR_CAUTION)) {
+        dSndPlayerMgr_c::GetInstance()->leaveCaution();
+    }
+
+    if (field_0x064 == 0) {
+        if (streq(mEventName, "DefaultSkip")) {
+            onSkipEvent();
+            mPrevEventName = mEventName;
+            return;
+        }
+
+        if (!checkFlag0x18(0x20) || !checkFlag0x10(0x04)) {
+            SizedString<64> prevEvent = mEventName;
+            if (isInEvent()) {
+                field_0x23C = 1;
+                finalizeEvent(false);
+            } else {
+                field_0x23C = 0;
+            }
+
+            // TODO - constness or direct access
+            if (checkEventFlag(EVENT_0x04)) {
+                offEventFlag(EVENT_0x04);
+            }
+            mEventName = eventName;
+            mPrevEventName = prevEvent;
+            resetEventVars();
+            field_0x23D = 0;
+            field_0x238 = -1;
+
+            if (streq(mEventName, "STB")) {
+                if (field_0x118 != nullptr) {
+                    mEventName = field_0x118;
+                }
+                onEventFlag(EVENT_DEMO);
+            } else {
+                field_0x118 = nullptr;
+            }
+
+            if (!checkFlag0x10(0x04)) {
+                if (mpUnkCallback != nullptr) {
+                    mpUnkCallback();
+                }
+                field_0x23D = 1;
+                dSndBgmMgr_c::GetInstance()->setField_0x306(1);
+                dSndBgmMgr_c::GetInstance()->prepareBgm();
+                onEventFlag(EVENT_0x04);
+                onFlag0x10(0x04);
+                dSndControlPlayerMgr_c::GetInstance()->unmuteScenePlayers(30);
+            }
+            bool b2 = checkEventFlag(EVENT_0x800) && dSndBgmMgr_c::GetInstance()->isPlayingBgmSound();
+            if (checkEventFlag(EVENT_0x800) && field_0x064 == 0) {
+                // TODO - constness or direct access
+                offEventFlag(0x800);
+            }
+
+            mSoundEventId = SND_EVENT_0x89;
+            initializeEventCallbacks(mEventName);
+            s32 i3 = 0;
+            SizedString<64> eventLabel;
+            if (mSoundEventId == SND_EVENT_JMAP) {
+                s32 roomId = EventManager::getCurrentEventRoomId();
+                // UB: Cannot pass object of non-POD type 'SizedString<32>' through variadic method
+                eventLabel.sprintf("%s_R%d_JMAP_%d", mStageName, mLayer, roomId);
+            } else if (mSoundEventId == SND_EVENT_JMAPAllMove) {
+                s32 roomId = EventManager::getCurrentEventRoomId();
+                // UB: Cannot pass object of non-POD type 'SizedString<32>' through variadic method
+                eventLabel.sprintf("%s_R%d_JMAPAllMove_%d", mStageName, mLayer, roomId);
+            } else {
+                eventLabel.sprintf("%s", &mEventName);
+            }
+
+            if (checkEventFlag(EVENT_DEMO)) {
+                mBgmName.sprintf("BGM_%s", &eventLabel);
+                mFanName.sprintf("FAN_%s", &eventLabel);
+                mSeName.sprintf("SE_%s", &eventLabel);
+                mCmdName.sprintf("CMD_%s", &eventLabel);
+            } else {
+                mBgmName.sprintf("BGM_EVENT_%s", &eventLabel);
+                mFanName.sprintf("FAN_EVENT_%s", &eventLabel);
+                mSeName.sprintf("SE_EVENT_%s", &eventLabel);
+                mCmdName.sprintf("CMD_EVENT_%s", &eventLabel);
+            }
+
+            if (checkEventFlag(EVENT_0x04)) {
+                field_0x238 = getBgmLabelSoundId();
+                if (b2 && field_0x238 == -1) {
+                    field_0x23D = 0;
+                }
+            } else {
+                i3 = playFanOrBgm(getBgmLabelSoundId());
+                if (i3) {
+                    field_0x23D = 0;
+                }
+            }
+
+            handleFan();
+            handleSe();
+            handleSeLv();
+            handleCmd();
+
+            if (mSoundEventId != SND_EVENT_0x89) {
+                onEventFlag(EVENT_IN_EVENT);
+                field_0x11C = 0;
+                field_0x120 = 0;
+                field_0x124 = 0;
+                if (mpOnEventStartCallback != nullptr) {
+                    (mpOnEventStartCallback)(mSoundEventId, mEventFlags);
+                }
+                if (field_0x238 == -1) {
+                    dSndBgmMgr_c::GetInstance()->onEventStart(mEventName, mSoundEventId, i3);
+                }
+                dSndAreaSoundEffectMgr_c::GetInstance()->onEventStart();
+                dSndSourceMgr_c::GetInstance()->onEventStart();
+            }
+        }
+    }
+}
+
 bool dSndStateMgr_c::isInStage(const char *stageName) {
     return !std::strcmp(dScGame_c::currentSpawnInfo.getStageName(), stageName);
 }
@@ -231,6 +363,46 @@ void dSndStateMgr_c::initializeEventCallbacks(const char *name) {
             cbUnkNoop();
         }
     }
+}
+
+void dSndStateMgr_c::handleSeLv() {
+    SizedString<0x40> name = mSeName;
+    name += "_LV";
+    u32 soundId = convertSeLabelToSoundId(name);
+    if (soundId != -1) {
+        mSeLvSoundId = soundId;
+        if (dSndMgr_c::GetInstance()->holdSound(&mSeLvSoundHandle, soundId)) {
+            u32 id = dSndPlayerMgr_c::GetInstance()->getDemoArchive()->GetSoundUserParam(soundId);
+            if ((dSndPlayerMgr_c::sEventMuteFlagsMask & id & 0x2000000) == 0) {
+                mSeLvSoundHandle.SetFxSend(nw4r::snd::AUX_A, field_0x49C);
+            }
+        }
+    } else {
+        mSeLvSoundId = -1;
+    }
+}
+
+bool dSndStateMgr_c::finalizeEvent(bool skipped) {
+    dSndPlayerMgr_c *mgr = dSndPlayerMgr_c::GetInstance();
+    if (mgr->checkFlag(dSndPlayerMgr_c::MGR_CAUTION)) {
+        mgr->leaveCaution();
+    }
+    if (!isInEvent()) {
+        return false;
+    }
+
+    if (mpSoundEventDef != nullptr && mpSoundEventDef->finalizeCb) {
+        mpSoundEventDef->finalizeCb(skipped);
+    }
+
+    if (!isInDemo()) {
+        nw4r::snd::SoundPlayer *p = dSndControlPlayerMgr_c::GetInstance()->getPlayer1(dSndPlayerMgr_c::PLAYER_EVENT);
+        SoundStopperIfParamFlag20 stopper;
+        p->ForEachSound(stopper, false);
+    }
+    // TODO ...
+
+    return false;
 }
 
 const char *dSndStateMgr_c::getStageName(s32 id) {
