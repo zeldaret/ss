@@ -81,7 +81,7 @@ void dSnd3DManager_c::updateFromCamera(EGG::LookAtCamera &camera) {
         f32 prevCameraPosSqVelocity = mCameraPosSqVelocity;
         mCameraAtSqVelocity = VECSquareDistance(camera.mAt, mCamera.mAt);
         mCameraPosSqVelocity = VECSquareDistance(camera.mPos, mCamera.mPos);
-        if (dSndStateMgr_c::GetInstance()->getField_0x11C() > 30) {
+        if (dSndStateMgr_c::GetInstance()->getFrameCounter() > 30) {
             bool bigMovement = false;
             bool hugeMovement = false;
             if (mTimer > 0) {
@@ -116,7 +116,7 @@ void dSnd3DManager_c::updateFromCamera(EGG::LookAtCamera &camera) {
                 }
 
                 if (bigMovement) {
-                    fn_80364D00(ENEMY_SOUND_MGR, -1);
+                    dSndStateMgr_c::GetInstance()->onCameraCut(-1);
                     mTimer = 30;
                 }
             }
