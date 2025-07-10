@@ -19,7 +19,7 @@ dSndDistantSoundActorPool_c::dSndDistantSoundActorPool_c() {
     sParam.reset(INFINITY);
 }
 
-void dSndDistantSoundActorPool_c::initialize() {
+void dSndDistantSoundActorPool_c::setup() {
     field_0x4210 = 0;
     for (int i = 0; i < POOL_SIZE; i++) {
         mSounds[i].loadDefaultParam();
