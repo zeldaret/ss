@@ -1639,13 +1639,16 @@ toBeSorted/d_sc_e3_game_end.cpp:
 	.text       start:0x802DA170 end:0x802DA220 align:16
 	.data       start:0x80541890 end:0x805418E8
 
-RVL_SDK/thp/THPDec.c:
+revolution/thp/THPDec.c:
 	.text       start:0x802DA220 end:0x802DD6AC align:16
 	.rodata     start:0x804F04E0 end:0x804F0570
 	.data       start:0x805418E8 end:0x80541930
+	.sdata      start:0x80573F68 end:0x80573F70
 	.sbss       start:0x80575A40 end:0x80575B68
+	.sdata2     start:0x8057CC18 end:0x8057CC38
+	.bss        start:0x805B8360 end:0x805B84B0
 
-RVL_SDK/thp/THPAudio.c:
+revolution/thp/THPAudio.c:
 	.text       start:0x802DD6B0 end:0x802DDC18 align:16
 
 s/s_FPhase.cpp:
@@ -2497,11 +2500,18 @@ d/snd/d_snd_mgr_unk_11.cpp:
 d/snd/d_snd_calc_pitch.cpp:
 	.text       start:0x8039A850 end:0x8039A960 align:16
 
-RVL_SDK/kpr/KPR.c:
+revolution/kpr/kpr_lib.c:
 	.text       start:0x8039A960 end:0x8039AF7C align:16
+	.rodata     start:0x804F4F00 end:0x804F52C8
+	.data       start:0x8054D810 end:0x8054D880
+	.sdata      start:0x805748F0 end:0x805748F8
+	.sbss       start:0x80575DF0 end:0x80575E00
 
-RVL_SDK/ai/AI.c:
+revolution/ai/ai.c:
 	.text       start:0x8039AF80 end:0x8039B56C align:16
+	.data       start:0x8054D880 end:0x8054D8C8
+	.sdata      start:0x805748F8 end:0x80574900
+	.sbss       start:0x80575E00 end:0x80575E40
 
 RVL_SDK/arc/ARC.c:
 	.text       start:0x8039B570 end:0x8039BF58 align:16
@@ -2560,23 +2570,49 @@ RVL_SDK/usb/USB.c:
 RVL_SDK/bte/BTE.c:
 	.text       start:0x803F7F80 end:0x80425754 align:16
 
-RVL_SDK/ipc/IPC.c:
-	.text       start:0x80425760 end:0x80428348 align:16
+revolution/ipc/ipcMain.c:
+	.text       start:0x80425760 end:0x80425848 align:16
+	.sbss       start:0x80576520 end:0x80576538
 
-RVL_SDK/fs/FS.c:
-	.text       start:0x80428350 end:0x804292D0 align:16
+revolution/ipc/ipcclt.c:
+	.text       start:0x80425850 end:0x804272A4 align:16
+	.sdata      start:0x80574D98 end:0x80574DA0
+	.sbss       start:0x80576538 end:0x80576548
+	.bss        start:0x80632EE0 end:0x80633020
 
-RVL_SDK/euart/EUART.c:
+revolution/ipc/memory.c:
+	.text       start:0x804272B0 end:0x804277D8 align:16
+	.bss        start:0x80633020 end:0x806330A0
+
+revolution/ipc/ipcProfile.c:
+	.text       start:0x804277E0 end:0x80427BEC align:16
+	.sbss       start:0x80576548 end:0x80576550
+	.bss        start:0x806330A0 end:0x80636B20
+
+revolution/fs/fs.c:
+	.text       start:0x80427BF0 end:0x804292D0 align:16
+	.data       start:0x8056BCF8 end:0x8056BD20
+	.sdata      start:0x80574DA0 end:0x80574DB0
+	.sbss       start:0x80576550 end:0x80576568
+
+revolution/euart/euart.c:
 	.text       start:0x804292D0 end:0x80429650 align:16
+	.sbss       start:0x80576568 end:0x80576578
 
-RVL_SDK/wenc/WENC.c:
+revolution/wenc/wenc.c:
 	.text       start:0x80429650 end:0x80429928 align:16
+	.rodata     start:0x804F5CE8 end:0x804F5D28
+	.sdata2     start:0x8057EB60 end:0x8057EB68
 
-RVL_SDK/tpl/TPL.c:
+revolution/tpl/TPL.c:
 	.text       start:0x80429930 end:0x80429A70 align:16
+	.data       start:0x8056BD20 end:0x8056BD50
+	.sdata      start:0x80574DB0 end:0x80574DB8
 
 NdevExi2A/DebuggerDriver.c:
 	.text       start:0x80429A70 end:0x80429DA4
+	.sdata      start:0x80574DB8 end:0x80574DC0
+	.sbss       start:0x80576578 end:0x80576590
 
 NdevExi2A/exi2.c:
 	.text       start:0x80429DA4 end:0x8042A530
