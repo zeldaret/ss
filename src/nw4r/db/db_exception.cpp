@@ -29,8 +29,6 @@ static struct ExceptionStruct sException;
 
 static u8 sThreadBuffer[0x4000] ALIGN_DECL(0x20);
 
-extern "C" u32 lbl_80574960;
-
 const char *CPU_EXP_NAME[] = {
     "SYSTEM RESET",
     "MACHINE CHECK",

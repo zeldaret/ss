@@ -2556,6 +2556,13 @@ revolution/ax/AXVPB.c:
 	.sdata2     start:0x8057E5E8 end:0x8057E608
 	.bss        start:0x805D5260 end:0x805E6960
 
+revolution/ax/AXComp.c:
+	.data       start:0x8054DA20 end:0x8054E9E0
+
+revolution/ax/DSPCode.c:
+	.data       start:0x8054E9E0 end:0x805509E0
+	.sdata      start:0x80574910 end:0x80574918
+
 revolution/ax/AXProf.c:
 	.text       start:0x8039F290 end:0x8039F2D0 align:16
 	.sbss       start:0x80575F70 end:0x80575F80
@@ -3111,8 +3118,19 @@ revolution/usb/usb.c:
 	.sdata      start:0x80574CE8 end:0x80574D08
 	.sbss       start:0x805764D8 end:0x80576500
 
+revolution/bte/gki_buffer.c:
+	.text       start:0x803F7F80 end:0x803F9418 align:16
+	.data       start:0x80566530 end:0x80566678
+
+revolution/bte/gki_time.c:
+	.text       start:0x803F9420 end:0x803F99A4 align:16
+
+revolution/bte/gki_ppc.c:
+	.text       start:0x803F99B0 end:0x803F9CB4 align:16
+	.bss        start:0x805FE338 end:0x80626E18
+
 RVL_SDK/bte/BTE.c:
-	.text       start:0x803F7F80 end:0x80425754 align:16
+	.text       start:0x803F9CC0 end:0x80425754 align:16
 
 revolution/ipc/ipcMain.c:
 	.text       start:0x80425760 end:0x80425848 align:16
