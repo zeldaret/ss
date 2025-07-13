@@ -2990,42 +2990,82 @@ revolution/cx/CXSecureUncompression.c:
 
 revolution/nand/nand.c:
 	.text       start:0x803D0B20 end:0x803D1F44 align:16
+	.rodata     start:0x804F5370 end:0x804F53B8
+	.sdata      start:0x80574AC0 end:0x80574AC8
 
 revolution/nand/NANDOpenClose.c:
 	.text       start:0x803D1F50 end:0x803D2BBC align:16
+	.data       start:0x80562140 end:0x80562180
+	.sdata      start:0x80574AC8 end:0x80574AD8
+	.sbss       start:0x80576368 end:0x80576370
 
 revolution/nand/NANDCore.c:
 	.text       start:0x803D2BC0 end:0x803D3F2C align:16
+	.rodata     start:0x804F53B8 end:0x804F5500
+	.data       start:0x80562180 end:0x805622D0
+	.sdata      start:0x80574AD8 end:0x80574B00
+	.sbss       start:0x80576370 end:0x80576378
+	.bss        start:0x805EE1A0 end:0x805EE200
 
 revolution/nand/NANDCheck.c:
 	.text       start:0x803D3F30 end:0x803D40F8 align:16
+	.data       start:0x805622D0 end:0x80562380
+	.sdata      start:0x80574B00 end:0x80574B10
 
 revolution/nand/NANDLogging.c:
 	.text       start:0x803D4100 end:0x803D4744 align:16
+	.data       start:0x80562380 end:0x805623C8
+	.sdata      start:0x80574B10 end:0x80574B18
+	.sbss       start:0x80576378 end:0x80576380
+	.bss        start:0x805EE200 end:0x805EE500
 
 revolution/nand/NANDErrorMessage.c:
 	.text       start:0x803D4750 end:0x803D4A48 align:16
+	.rodata     start:0x804F5500 end:0x804F5718
+	.data       start:0x805623C8 end:0x80563FF8
+	.sbss       start:0x80576380 end:0x80576388
+	.sdata2     start:0x8057E900 end:0x8057E930
 
 revolution/sc/scsystem.c:
 	.text       start:0x803D4A50 end:0x803D64D8 align:16
+	.rodata     start:0x804F5718 end:0x804F5770
+	.data       start:0x80563FF8 end:0x805641F0
+	.sdata      start:0x80574B18 end:0x80574C28
+	.sbss       start:0x80576388 end:0x805763A0
+	.bss        start:0x805EE500 end:0x805F66A0
 
 revolution/sc/scapi.c:
 	.text       start:0x803D64E0 end:0x803D6A28 align:16
 
 revolution/sc/scapi_prdinfo.c:
 	.text       start:0x803D6A30 end:0x803D6CB4 align:16
+	.data       start:0x805641F0 end:0x80564250
+	.sdata      start:0x80574C28 end:0x80574C38
 
 revolution/pad/Pad.c:
 	.text       start:0x803D6CC0 end:0x803D6D1C align:16
 
 revolution/wpad/WPAD.c:
 	.text       start:0x803D6D20 end:0x803E1D14 align:16
+	.rodata     start:0x804F5770 end:0x804F5840
+	.data       start:0x80564250 end:0x805644E0
+	.sdata      start:0x80574C38 end:0x80574C50
+	.sbss       start:0x805763A0 end:0x80576420
+	.sdata2     start:0x8057E930 end:0x8057E938
+	.bss        start:0x805F66A0 end:0x805FA680
 
 revolution/wpad/WPADHIDParser.c:
 	.text       start:0x803E1D20 end:0x803E6F84 align:16
+	.rodata     start:0x804F5840 end:0x804F5870
+	.data       start:0x805644E0 end:0x805645E0
+	.sbss       start:0x80576420 end:0x80576438
+	.sdata2     start:0x8057E938 end:0x8057E9B0
+	.bss        start:0x805FA680 end:0x805FA6E0
 
 revolution/wpad/WPADEncrypt.c:
 	.text       start:0x803E6F90 end:0x803E7E44 align:16
+	.data       start:0x805645E0 end:0x80565840
+	.sbss       start:0x80576438 end:0x80576440
 
 revolution/wpad/WPADMem.c:
 	.text       start:0x803E7E50 end:0x803E7F54 align:16
@@ -3035,12 +3075,23 @@ revolution/wpad/lint.c:
 
 revolution/wpad/WUD.c:
 	.text       start:0x803E87D0 end:0x803EDEB4 align:16
+	.data       start:0x80565840 end:0x80565B88
+	.sdata      start:0x80574C50 end:0x80574C60
+	.sbss       start:0x80576440 end:0x80576478
+	.sdata2     start:0x8057E9B0 end:0x8057E9B8
+	.bss        start:0x805FA6E0 end:0x805FC888
 
 revolution/wpad/WUDHIDHost.c:
 	.text       start:0x803EDEC0 end:0x803EE328 align:16
+	.data       start:0x80565B88 end:0x80565BC8
 
 revolution/kpad/KPAD.c:
 	.text       start:0x803EE330 end:0x803F3628 align:16
+	.data       start:0x80565BC8 end:0x80565C90
+	.sdata      start:0x80574C60 end:0x80574CE8
+	.sbss       start:0x80576478 end:0x805764D0
+	.sdata2     start:0x8057E9B8 end:0x8057EA58
+	.bss        start:0x805FC888 end:0x805FE328
 
 revolution/kpad/KMPLS.c:
 	.text       start:0x803F3630 end:0x803F6020 align:16
@@ -3050,9 +3101,15 @@ revolution/kpad/KMPLS.c:
 
 revolution/kpad/KZMplsTestSub.c:
 	.text       start:0x803F6020 end:0x803F6A24 align:16
+	.data       start:0x80565CD8 end:0x80565D00
+	.sdata2     start:0x8057EAF8 end:0x8057EB08
+	.bss        start:0x805FE328 end:0x805FE338
 
 revolution/usb/usb.c:
 	.text       start:0x803F6A30 end:0x803F7F7C align:16
+	.data       start:0x80565D00 end:0x80566530
+	.sdata      start:0x80574CE8 end:0x80574D08
+	.sbss       start:0x805764D8 end:0x80576500
 
 RVL_SDK/bte/BTE.c:
 	.text       start:0x803F7F80 end:0x80425754 align:16
