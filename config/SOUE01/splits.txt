@@ -2783,28 +2783,91 @@ revolution/mem/mem_allocator.c:
 revolution/mem/mem_list.c:
 	.text       start:0x803CDC00 end:0x803CDD20 align:16
 
-RVL_SDK/dsp/DSP.c:
-	.text       start:0x803CDD20 end:0x803CE868 align:16
+revolution/dsp/dsp.c:
+	.text       start:0x803CDD20 end:0x803CDF7C align:16
 
-RVL_SDK/es/ES.c:
+revolution/dsp/dsp_debug.c:
+	.text       start:0x803CDF80 end:0x803CDFD0 align:16
+
+revolution/dsp/dsp_task.c:
+	.text       start:0x803CDFD0 end:0x803CE868 align:16
+
+revolution/esp/esp.c:
 	.text       start:0x803CE870 end:0x803CEE90 align:16
 
-RVL_SDK/cx/CX.c:
-	.text       start:0x803CEE90 end:0x803D0B20 align:16
+revolution/cx/CXStreamingUncompression.c:
+	.text       start:0x803CEE90 end:0x803D0788 align:16
 
-RVL_SDK/nand/NAND.c:
-	.text       start:0x803D0B20 end:0x803D4A48 align:16
+revolution/cx/CXUncompression.c:
+	.text       start:0x803D0790 end:0x803D091C align:16
 
-RVL_SDK/sc/SC.c:
-	.text       start:0x803D4A50 end:0x803D6CB4 align:16
+revolution/cx/CXSecureUncompression.c:
+	.text       start:0x803D0920 end:0x803D0B14 align:16
 
-RVL_SDK/wpad/WPAD.c:
-	.text       start:0x803D6CC0 end:0x803EE328 align:16
+revolution/nand/nand.c:
+	.text       start:0x803D0B20 end:0x803D1F44 align:16
 
-RVL_SDK/kpad/KPAD.c:
-	.text       start:0x803EE330 end:0x803F6A24 align:16
+revolution/nand/NANDOpenClose.c:
+	.text       start:0x803D1F50 end:0x803D2BBC align:16
 
-RVL_SDK/usb/USB.c:
+revolution/nand/NANDCore.c:
+	.text       start:0x803D2BC0 end:0x803D3F2C align:16
+
+revolution/nand/NANDCheck.c:
+	.text       start:0x803D3F30 end:0x803D40F8 align:16
+
+revolution/nand/NANDLogging.c:
+	.text       start:0x803D4100 end:0x803D4744 align:16
+
+revolution/nand/NANDErrorMessage.c:
+	.text       start:0x803D4750 end:0x803D4A48 align:16
+
+revolution/sc/scsystem.c:
+	.text       start:0x803D4A50 end:0x803D64D8 align:16
+
+revolution/sc/scapi.c:
+	.text       start:0x803D64E0 end:0x803D6A28 align:16
+
+revolution/sc/scapi_prdinfo.c:
+	.text       start:0x803D6A30 end:0x803D6CB4 align:16
+
+revolution/pad/Pad.c:
+	.text       start:0x803D6CC0 end:0x803D6D1C align:16
+
+revolution/wpad/WPAD.c:
+	.text       start:0x803D6D20 end:0x803E1D14 align:16
+
+revolution/wpad/WPADHIDParser.c:
+	.text       start:0x803E1D20 end:0x803E6F84 align:16
+
+revolution/wpad/WPADEncrypt.c:
+	.text       start:0x803E6F90 end:0x803E7E44 align:16
+
+revolution/wpad/WPADMem.c:
+	.text       start:0x803E7E50 end:0x803E7F54 align:16
+
+revolution/wpad/lint.c:
+	.text       start:0x803E7F60 end:0x803E87CC align:16
+
+revolution/wpad/WUD.c:
+	.text       start:0x803E87D0 end:0x803EDEB4 align:16
+
+revolution/wpad/WUDHIDHost.c:
+	.text       start:0x803EDEC0 end:0x803EE328 align:16
+
+revolution/kpad/KPAD.c:
+	.text       start:0x803EE330 end:0x803F3628 align:16
+
+revolution/kpad/KMPLS.c:
+	.text       start:0x803F3630 end:0x803F6020 align:16
+	.data       start:0x80565C90 end:0x80565CD8
+	.sbss       start:0x805764D0 end:0x805764D8
+	.sdata2     start:0x8057EA58 end:0x8057EAF8
+
+revolution/kpad/KZMplsTestSub.c:
+	.text       start:0x803F6020 end:0x803F6A24 align:16
+
+revolution/usb/usb.c:
 	.text       start:0x803F6A30 end:0x803F7F7C align:16
 
 RVL_SDK/bte/BTE.c:
