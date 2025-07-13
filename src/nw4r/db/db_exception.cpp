@@ -69,7 +69,7 @@ void Exception_Init() {
     OSSetErrorHandler(3, ErrorHandler_);
     OSSetErrorHandler(5, ErrorHandler_);
     OSSetErrorHandler(15, ErrorHandler_);
-    lbl_80574960 = 0;
+    __OSFpscrEnableBits = 0;
     OSSetErrorHandler(16, nullptr);
 }
 extern "C" u32 PPCMfmsr();

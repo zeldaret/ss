@@ -2768,6 +2768,7 @@ revolution/exi/EXIUart.c:
 
 revolution/exi/EXICommon.c:
 	.text       start:0x803B21E0 end:0x803B2368 align:16
+	.sdata2     start:0x8057E730 end:0x8057E738
 
 revolution/si/SIBios.c:
 	.text       start:0x803B2370 end:0x803B33A4 align:16
@@ -2783,72 +2784,114 @@ revolution/si/SISamplingRate.c:
 
 revolution/vi/vi.c:
 	.text       start:0x803B34A0 end:0x803B5EF0 align:16
+	.data       start:0x8055EBE0 end:0x8055F138
+	.sdata      start:0x805749C0 end:0x805749E0
+	.sbss       start:0x80576100 end:0x805761B0
+	.bss        start:0x805E7E30 end:0x805E7FA0
 
 revolution/vi/i2c.c:
 	.text       start:0x803B5EF0 end:0x803B6804 align:16
+	.sdata      start:0x805749E0 end:0x805749E8
+	.sbss       start:0x805761B0 end:0x805761B8
 
 revolution/vi/vi3in1.c:
 	.text       start:0x803B6810 end:0x803B7F3C align:16
+	.data       start:0x8055F138 end:0x8055F760
+	.sdata      start:0x805749E8 end:0x805749F8
+	.sbss       start:0x805761B8 end:0x805761D0
+	.bss        start:0x805E7FA0 end:0x805E7FC0
 
 revolution/mtx/mtx.c:
 	.text       start:0x803B7F40 end:0x803B8CF8 align:16
+	.sdata      start:0x805749F8 end:0x80574A00
+	.sdata2     start:0x8057E738 end:0x8057E758
 
 revolution/mtx/mtxvec.c:
 	.text       start:0x803B8D00 end:0x803B8ED8 align:16
 
 revolution/mtx/mtx44.c:
 	.text       start:0x803B8EE0 end:0x803B9108 align:16
+	.sdata2     start:0x8057E758 end:0x8057E770
 
 revolution/mtx/vec.c:
 	.text       start:0x803B9110 end:0x803B9584 align:16
+	.sdata2     start:0x8057E770 end:0x8057E788
 
 revolution/mtx/quat.c:
 	.text       start:0x803B9590 end:0x803B98FC align:16
+	.rodata     start:0x804F5308 end:0x804F5318
+	.sdata2     start:0x8057E788 end:0x8057E798
 
 revolution/gx/GXInit.c:
 	.text       start:0x803B9900 end:0x803BAA90 align:16
+	.data       start:0x8055F760 end:0x8055F9A0
+	.sdata      start:0x80574A00 end:0x80574A08
+	.sbss       start:0x805761D0 end:0x805761F8
+	.sdata2     start:0x8057E798 end:0x8057E7C0
+	.bss        start:0x805E7FC0 end:0x805E8640
 
 revolution/gx/GXFifo.c:
 	.text       start:0x803BAA90 end:0x803BB6C8 align:16
+	.data       start:0x8055F9A0 end:0x8055F9D0
+	.sbss       start:0x805761F8 end:0x80576218
+	.bss        start:0x805E8640 end:0x805E8688
 
 revolution/gx/GXAttr.c:
 	.text       start:0x803BB6D0 end:0x803BC954 align:16
+	.data       start:0x8055F9D0 end:0x8055FC28
+	.sdata      start:0x80574A08 end:0x80574A18
 
 revolution/gx/GXMisc.c:
 	.text       start:0x803BC960 end:0x803BD214 align:16
+	.sbss       start:0x80576218 end:0x80576230
 
 revolution/gx/GXGeometry.c:
 	.text       start:0x803BD220 end:0x803BD824 align:16
 
 revolution/gx/GXFrameBuf.c:
 	.text       start:0x803BD830 end:0x803BE338 align:16
+	.data       start:0x8055FC28 end:0x8055FD58
+	.sdata2     start:0x8057E7C0 end:0x8057E7D0
 
 revolution/gx/GXLight.c:
 	.text       start:0x803BE340 end:0x803BEAA4 align:16
+	.sdata2     start:0x8057E7D0 end:0x8057E808
 
 revolution/gx/GXTexture.c:
 	.text       start:0x803BEAB0 end:0x803BFD50 align:16
+	.data       start:0x8055FD58 end:0x8055FF80
+	.sdata      start:0x80574A18 end:0x80574A60
+	.sdata2     start:0x8057E808 end:0x8057E840
 
 revolution/gx/GXBump.c:
 	.text       start:0x803BFD50 end:0x803C0394 align:16
+	.sdata2     start:0x8057E840 end:0x8057E858
 
 revolution/gx/GXTev.c:
 	.text       start:0x803C03A0 end:0x803C0A64 align:16
+	.data       start:0x8055FF80 end:0x8055FFF8
 
 revolution/gx/GXPixel.c:
 	.text       start:0x803C0A70 end:0x803C1270 align:16
+	.data       start:0x8055FFF8 end:0x80560018
+	.sdata2     start:0x8057E858 end:0x8057E8A8
 
 revolution/gx/GXDraw.c:
 	.text       start:0x803C1270 end:0x803C1E80 align:16
+	.sdata2     start:0x8057E8A8 end:0x8057E8D8
+	.bss        start:0x805E8688 end:0x805E8910
 
 revolution/gx/GXDisplayList.c:
 	.text       start:0x803C1E80 end:0x803C2064 align:16
+	.bss        start:0x805E8910 end:0x805E9040
 
 revolution/gx/GXTransform.c:
 	.text       start:0x803C2070 end:0x803C2828 align:16
+	.sdata2     start:0x8057E8D8 end:0x8057E8E8
 
 revolution/gx/GXPerf.c:
 	.text       start:0x803C2830 end:0x803C3060 align:16
+	.data       start:0x80560018 end:0x80560100
 
 revolution/dvd/dvdfs.c:
 	.text       start:0x803C3060 end:0x803C3A58 align:16
@@ -2858,27 +2901,52 @@ revolution/dvd/dvdfs.c:
 
 revolution/dvd/dvd.c:
 	.text       start:0x803C3A60 end:0x803C8864 align:16
+	.data       start:0x805602A0 end:0x805606E8
+	.sdata      start:0x80574A70 end:0x80574A88
+	.sbss       start:0x80576260 end:0x805762F8
+	.bss        start:0x805E9040 end:0x805EDCF0
 
 revolution/dvd/dvdqueue.c:
 	.text       start:0x803C8870 end:0x803C8AF0 align:16
+	.bss        start:0x805EDCF0 end:0x805EDD20
 
 revolution/dvd/dvderror.c:
 	.text       start:0x803C8AF0 end:0x803C9508 align:16
+	.data       start:0x805606E8 end:0x80560718
+	.sbss       start:0x805762F8 end:0x80576308
+	.bss        start:0x805EDD20 end:0x805EDF80
 
 revolution/dvd/dvdidutils.c:
 	.text       start:0x803C9510 end:0x803C9600 align:16
 
 revolution/dvd/dvdFatal.c:
 	.text       start:0x803C9600 end:0x803C9768 align:16
+	.rodata     start:0x804F5318 end:0x804F5350
+	.data       start:0x80560718 end:0x80560EE0
+	.sdata      start:0x80574A88 end:0x80574A90
+	.sbss       start:0x80576308 end:0x80576310
+	.sdata2     start:0x8057E8E8 end:0x8057E8F0
 
 revolution/dvd/dvdDeviceError.c:
 	.text       start:0x803C9770 end:0x803C99FC align:16
+	.rodata     start:0x804F5350 end:0x804F5370
+	.data       start:0x80560EE0 end:0x80561078
+	.sdata      start:0x80574A90 end:0x80574A98
+	.sbss       start:0x80576310 end:0x80576318
+	.sdata2     start:0x8057E8F0 end:0x8057E8F8
+	.bss        start:0x805EDF80 end:0x805EDFA0
 
 revolution/dvd/dvd_broadway.c:
 	.text       start:0x803C9A00 end:0x803CC0A8 align:16
+	.data       start:0x80561078 end:0x80561F80
+	.sdata      start:0x80574A98 end:0x80574AA8
+	.sbss       start:0x80576318 end:0x80576340
+	.bss        start:0x805EDFA0 end:0x805EE160
 
 revolution/mem/mem_heapCommon.c:
 	.text       start:0x803CC0B0 end:0x803CC93C align:16
+	.sbss       start:0x80576340 end:0x80576348
+	.bss        start:0x805EE160 end:0x805EE1A0
 
 revolution/mem/mem_expHeap.c:
 	.text       start:0x803CC940 end:0x803CD598 align:16
@@ -2888,21 +2956,28 @@ revolution/mem/mem_frameHeap.c:
 
 revolution/mem/mem_allocator.c:
 	.text       start:0x803CDBA0 end:0x803CDBFC align:16
+	.sdata2     start:0x8057E8F8 end:0x8057E900
 
 revolution/mem/mem_list.c:
 	.text       start:0x803CDC00 end:0x803CDD20 align:16
 
 revolution/dsp/dsp.c:
 	.text       start:0x803CDD20 end:0x803CDF7C align:16
+	.data       start:0x80561F80 end:0x80562000
+	.sdata      start:0x80574AA8 end:0x80574AB0
+	.sbss       start:0x80576348 end:0x80576350
 
 revolution/dsp/dsp_debug.c:
 	.text       start:0x803CDF80 end:0x803CDFD0 align:16
 
 revolution/dsp/dsp_task.c:
 	.text       start:0x803CDFD0 end:0x803CE868 align:16
+	.data       start:0x80562000 end:0x80562140
+	.sbss       start:0x80576350 end:0x80576368
 
 revolution/esp/esp.c:
 	.text       start:0x803CE870 end:0x803CEE90 align:16
+	.sdata      start:0x80574AB0 end:0x80574AC0
 
 revolution/cx/CXStreamingUncompression.c:
 	.text       start:0x803CEE90 end:0x803D0788 align:16

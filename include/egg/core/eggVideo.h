@@ -6,9 +6,6 @@
 #include "rvl/GX.h" // IWYU pragma: export
 #include "rvl/VI.h" // IWYU pragma: export
 
-
-extern "C" GXRenderModeObj lbl_8055FC64;
-
 namespace EGG {
 
 class Video {
@@ -32,7 +29,7 @@ public:
 
     const GXRenderModeObj *getCurrentOrFallbackRenderModeObj() const {
         if (pRenderMode == nullptr) {
-            return &lbl_8055FC64;
+            return &GXNtsc480Int;
         }
         return pRenderMode;
     }
