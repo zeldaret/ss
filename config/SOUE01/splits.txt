@@ -2513,35 +2513,275 @@ revolution/ai/ai.c:
 	.sdata      start:0x805748F8 end:0x80574900
 	.sbss       start:0x80575E00 end:0x80575E40
 
-RVL_SDK/arc/ARC.c:
+revolution/arc/arc.c:
 	.text       start:0x8039B570 end:0x8039BF58 align:16
+	.data       start:0x8054D8C8 end:0x8054D938
+	.sdata      start:0x80574900 end:0x80574908
 
-RVL_SDK/ax/AX.c:
-	.text       start:0x8039BF60 end:0x803A1CA0 align:16
+revolution/ax/AX.c:
+	.text       start:0x8039BF60 end:0x8039BFC8 align:16
 
-RVL_SDK/os/OS.c:
-	.text       start:0x803A1CA0 end:0x803B059C align:16
+revolution/ax/AXAlloc.c:
+	.text       start:0x8039BFD0 end:0x8039C4BC align:16
 
-RVL_SDK/exi/EXI.c:
-	.text       start:0x803B05A0 end:0x803B2368 align:16
+revolution/ax/AXAux.c:
+	.text       start:0x8039C4C0 end:0x8039CD54 align:16
 
-RVL_SDK/si/SI.c:
-	.text       start:0x803B2370 end:0x803B3498 align:16
+revolution/ax/AXCL.c:
+	.text       start:0x8039CD60 end:0x8039D858 align:16
 
-RVL_SDK/vi/VI.c:
-	.text       start:0x803B34A0 end:0x803B7F3C align:16
+revolution/ax/AXOut.c:
+	.text       start:0x8039D860 end:0x8039E098 align:16
 
-RVL_SDK/mtx/MTX.c:
-	.text       start:0x803B7F40 end:0x803B98FC align:16
+revolution/ax/AXSPB.c:
+	.text       start:0x8039E0A0 end:0x8039E4CC align:16
 
-RVL_SDK/gx/GX.c:
-	.text       start:0x803B9900 end:0x803C3060 align:16
+revolution/ax/AXVPB.c:
+	.text       start:0x8039E4D0 end:0x8039F288 align:16
 
-RVL_SDK/dvd/DVD.c:
-	.text       start:0x803C3060 end:0x803CC0A8 align:16
+revolution/ax/AXProf.c:
+	.text       start:0x8039F290 end:0x8039F2D0 align:16
 
-RVL_SDK/mem/MEM.c:
-	.text       start:0x803CC0B0 end:0x803CDD20 align:16
+revolution/axfx/AXFXReverbHi.c:
+	.text       start:0x8039F2D0 end:0x8039F374 align:16
+
+revolution/axfx/AXFXReverbHiExp.c:
+	.text       start:0x8039F380 end:0x803A01A4 align:16
+
+revolution/axfx/AXFXReverbStdExp.c:
+	.text       start:0x803A01B0 end:0x803A0EDC align:16
+
+revolution/axfx/AXFXReverbStdExpDpl2.c:
+	.text       start:0x803A0EE0 end:0x803A1C50 align:16
+
+revolution/axfx/AXFXHooks.c:
+	.text       start:0x803A1C50 end:0x803A1C94 align:16
+	.sdata      start:0x80574918 end:0x80574920
+
+revolution/base/PPCArch.c:
+	.text       start:0x803A1CA0 end:0x803A1EC0 align:16
+
+revolution/os/OS.c:
+	.text       start:0x803A1EC0 end:0x803A33A0 align:16
+
+revolution/os/OSAlarm.c:
+	.text       start:0x803A33A0 end:0x803A3C58 align:16
+
+revolution/os/OSAlloc.c:
+	.text       start:0x803A3C60 end:0x803A3F80 align:16
+
+revolution/os/OSArena.c:
+	.text       start:0x803A3F80 end:0x803A4074 align:16
+
+revolution/os/OSAudioSystem.c:
+	.text       start:0x803A4080 end:0x803A4540 align:16
+
+revolution/os/OSCache.c:
+	.text       start:0x803A4540 end:0x803A4B98 align:16
+
+revolution/os/OSContext.c:
+	.text       start:0x803A4BA0 end:0x803A559C align:16
+
+revolution/os/OSError.c:
+	.text       start:0x803A55A0 end:0x803A5B2C align:16
+
+revolution/os/OSExec.c:
+	.text       start:0x803A5B30 end:0x803A73D8 align:16
+
+revolution/os/OSFatal.c:
+	.text       start:0x803A73E0 end:0x803A8008 align:16
+
+revolution/os/OSFont.c:
+	.text       start:0x803A8010 end:0x803A8CF8 align:16
+
+revolution/os/OSInterrupt.c:
+	.text       start:0x803A8D00 end:0x803A94D0 align:16
+
+revolution/os/OSLink.c:
+	.text       start:0x803A94D0 end:0x803A9FF4 align:16
+
+revolution/os/OSMessage.c:
+	.text       start:0x803AA000 end:0x803AA20C align:16
+
+revolution/os/OSMemory.c:
+	.text       start:0x803AA210 end:0x803AAA8C align:16
+
+revolution/os/OSMutex.c:
+	.text       start:0x803AAA90 end:0x803AADAC align:16
+
+revolution/os/OSReboot.c:
+	.text       start:0x803AADB0 end:0x803AAE34 align:16
+
+revolution/os/OSReset.c:
+	.text       start:0x803AAE40 end:0x803AB84C align:16
+
+revolution/os/OSRtc.c:
+	.text       start:0x803AB850 end:0x803AC300 align:16
+
+revolution/os/OSSync.c:
+	.text       start:0x803AC300 end:0x803AC380 align:16
+
+revolution/os/OSThread.c:
+	.text       start:0x803AC380 end:0x803ADAE8 align:16
+
+revolution/os/OSTime.c:
+	.text       start:0x803ADAF0 end:0x803ADF1C align:16
+
+revolution/os/OSUtf.c:
+	.text       start:0x803ADF20 end:0x803AE170 align:16
+
+revolution/os/OSIpc.c:
+	.text       start:0x803AE170 end:0x803AE1A8 align:16
+
+revolution/os/OSStateTM.c:
+	.text       start:0x803AE1B0 end:0x803AE8B4 align:16
+
+revolution/os/OSPlayRecord.c:
+	.text       start:0x803AE8C0 end:0x803AEFDC align:16
+
+revolution/os/OSStateFlags.c:
+	.text       start:0x803AEFE0 end:0x803AF1F8 align:16
+
+revolution/os/OSNet.c:
+	.text       start:0x803AF200 end:0x803AF79C align:16
+
+revolution/os/OSNandbootInfo.c:
+	.text       start:0x803AF7A0 end:0x803AF9A8 align:16
+
+revolution/os/OSPlayTime.c:
+	.text       start:0x803AF9B0 end:0x803B0188 align:16
+
+revolution/os/OSCrc.c:
+	.text       start:0x803B0190 end:0x803B02C4 align:16
+
+revolution/os/OSLaunch.c:
+	.text       start:0x803B02D0 end:0x803B04D4 align:16
+
+revolution/os/__ppc_eabi_init.c:
+	.text       start:0x803B04E0 end:0x803B059C align:16
+
+revolution/exi/EXIBios.c:
+	.text       start:0x803B05A0 end:0x803B1E98 align:16
+
+revolution/exi/EXIUart.c:
+	.text       start:0x803B1EA0 end:0x803B21DC align:16
+
+revolution/exi/EXICommon.c:
+	.text       start:0x803B21E0 end:0x803B2368 align:16
+
+revolution/si/SIBios.c:
+	.text       start:0x803B2370 end:0x803B33A4 align:16
+
+revolution/si/SISamplingRate.c:
+	.text       start:0x803B33B0 end:0x803B3498 align:16
+
+revolution/vi/vi.c:
+	.text       start:0x803B34A0 end:0x803B5EF0 align:16
+
+revolution/vi/i2c.c:
+	.text       start:0x803B5EF0 end:0x803B6804 align:16
+
+revolution/vi/vi3in1.c:
+	.text       start:0x803B6810 end:0x803B7F3C align:16
+
+revolution/mtx/mtx.c:
+	.text       start:0x803B7F40 end:0x803B8CF8 align:16
+
+revolution/mtx/mtxvec.c:
+	.text       start:0x803B8D00 end:0x803B8ED8 align:16
+
+revolution/mtx/mtx44.c:
+	.text       start:0x803B8EE0 end:0x803B9108 align:16
+
+revolution/mtx/vec.c:
+	.text       start:0x803B9110 end:0x803B9584 align:16
+
+revolution/mtx/quat.c:
+	.text       start:0x803B9590 end:0x803B98FC align:16
+
+revolution/gx/GXInit.c:
+	.text       start:0x803B9900 end:0x803BAA90 align:16
+
+revolution/gx/GXFifo.c:
+	.text       start:0x803BAA90 end:0x803BB6C8 align:16
+
+revolution/gx/GXAttr.c:
+	.text       start:0x803BB6D0 end:0x803BC954 align:16
+
+revolution/gx/GXMisc.c:
+	.text       start:0x803BC960 end:0x803BD214 align:16
+
+revolution/gx/GXGeometry.c:
+	.text       start:0x803BD220 end:0x803BD824 align:16
+
+revolution/gx/GXFrameBuf.c:
+	.text       start:0x803BD830 end:0x803BE338 align:16
+
+revolution/gx/GXLight.c:
+	.text       start:0x803BE340 end:0x803BEAA4 align:16
+
+revolution/gx/GXTexture.c:
+	.text       start:0x803BEAB0 end:0x803BFD50 align:16
+
+revolution/gx/GXBump.c:
+	.text       start:0x803BFD50 end:0x803C0394 align:16
+
+revolution/gx/GXTev.c:
+	.text       start:0x803C03A0 end:0x803C0A64 align:16
+
+revolution/gx/GXPixel.c:
+	.text       start:0x803C0A70 end:0x803C1270 align:16
+
+revolution/gx/GXDraw.c:
+	.text       start:0x803C1270 end:0x803C1E80 align:16
+
+revolution/gx/GXDisplayList.c:
+	.text       start:0x803C1E80 end:0x803C2064 align:16
+
+revolution/gx/GXTransform.c:
+	.text       start:0x803C2070 end:0x803C2828 align:16
+
+revolution/gx/GXPerf.c:
+	.text       start:0x803C2830 end:0x803C3060 align:16
+
+revolution/dvd/dvdfs.c:
+	.text       start:0x803C3060 end:0x803C3A58 align:16
+
+revolution/dvd/dvd.c:
+	.text       start:0x803C3A60 end:0x803C8864 align:16
+
+revolution/dvd/dvdqueue.c:
+	.text       start:0x803C8870 end:0x803C8AF0 align:16
+
+revolution/dvd/dvderror.c:
+	.text       start:0x803C8AF0 end:0x803C9508 align:16
+
+revolution/dvd/dvdidutils.c:
+	.text       start:0x803C9510 end:0x803C9600 align:16
+
+revolution/dvd/dvdFatal.c:
+	.text       start:0x803C9600 end:0x803C9768 align:16
+
+revolution/dvd/dvdDeviceError.c:
+	.text       start:0x803C9770 end:0x803C99FC align:16
+
+revolution/dvd/dvd_broadway.c:
+	.text       start:0x803C9A00 end:0x803CC0A8 align:16
+
+revolution/mem/mem_heapCommon.c:
+	.text       start:0x803CC0B0 end:0x803CC93C align:16
+
+revolution/mem/mem_expHeap.c:
+	.text       start:0x803CC940 end:0x803CD598 align:16
+
+revolution/mem/mem_frameHeap.c:
+	.text       start:0x803CD5A0 end:0x803CDBA0 align:16
+
+revolution/mem/mem_allocator.c:
+	.text       start:0x803CDBA0 end:0x803CDBFC align:16
+
+revolution/mem/mem_list.c:
+	.text       start:0x803CDC00 end:0x803CDD20 align:16
 
 RVL_SDK/dsp/DSP.c:
 	.text       start:0x803CDD20 end:0x803CE868 align:16

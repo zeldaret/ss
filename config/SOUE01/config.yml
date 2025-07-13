@@ -29,6 +29,10 @@ force_active: [
   "ModuleConstructorsX",
   "ModuleDestructorsX",
 ]
+block_relocations:
+  # OSInit
+  - source: 0x803a2a9c
+  - source: 0x803a2b04
 extract:
   - symbol: DOL_BACKUP_FONT
     header: d/dol_backup_error_font.inc

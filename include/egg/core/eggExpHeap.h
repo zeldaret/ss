@@ -24,7 +24,7 @@ public:
     ExpHeap(MEMiHeapHead *heapHead);
     static ExpHeap *create(void *block, size_t size, u16 attr);
     static ExpHeap *create(size_t size, Heap *heap, u16 attr);
-    void setGroupID(u16 groupId);
+    void setAllocMode(u16 allocMode);
     static u32 getSizeForMBlock(const void *block);
 
     // Placement new for ::create

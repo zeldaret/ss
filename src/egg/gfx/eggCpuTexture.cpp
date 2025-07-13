@@ -98,7 +98,7 @@ CpuTexture::CpuTexture(const GXTexObj *pObj) {
     mWidth = GXGetTexObjWidth(pObj);
     mHeight = GXGetTexObjHeight(pObj);
 
-    mTexFormat = GXGetTexObjFormat(pObj);
+    mTexFormat = GXGetTexObjFmt(pObj);
     mWrapS = GXGetTexObjWrapS(pObj);
     mWrapT = GXGetTexObjWrapT(pObj);
     mMinFilt = GXGetTexObjMinFilt(pObj);
