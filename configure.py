@@ -1354,6 +1354,7 @@ config.libs = [
             Object(NonMatching, "revolution/os/OSUtf.c"),
             Object(NonMatching, "revolution/os/OSIpc.c"),
             Object(NonMatching, "revolution/os/OSStateTM.c"),
+            Object(NonMatching, "revolution/os/__start.c"),
             Object(NonMatching, "revolution/os/OSPlayRecord.c"),
             Object(NonMatching, "revolution/os/OSStateFlags.c"),
             Object(NonMatching, "revolution/os/OSNet.c"),
