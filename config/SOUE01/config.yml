@@ -33,6 +33,11 @@ block_relocations:
   # OSInit
   - source: 0x803a2a9c
   - source: 0x803a2b04
+add_relocations:
+  # bugged relocation pair in unreachable code
+  - source: .text:0x80306FCC
+    type: l
+    target: lbl_804F0A00
 extract:
   - symbol: DOL_BACKUP_FONT
     header: d/dol_backup_error_font.inc

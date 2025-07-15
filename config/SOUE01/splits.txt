@@ -1923,74 +1923,122 @@ m/m_video.cpp:
 
 hbm/homebutton/HBMFrameController.cpp:
 	.text       start:0x802F2F10 end:0x802F30BC align:16
+	.rodata     start:0x804F0580 end:0x804F0588
+	.data       start:0x80542AA8 end:0x80542AD0
 
 hbm/homebutton/HBMAnmController.cpp:
 	.text       start:0x802F30C0 end:0x802F31D0 align:16
+	.data       start:0x80542AD0 end:0x80542B18
 
 hbm/homebutton/HBMGUIManager.cpp:
 	.text       start:0x802F31D0 end:0x802F49E8 align:16
+	.rodata     start:0x804F0588 end:0x804F0598
+	.data       start:0x80542B18 end:0x80542D88
+	.bss        start:0x805CB228 end:0x805CB230
 
 hbm/homebutton/HBMController.cpp:
-	.text       start:0x802F49F0 end:0x802F57FC align:16
+	.text       start:0x802F49F0 end:0x802F5590 align:16
+	.rodata     start:0x804F0598 end:0x804F05A8
+	.bss        start:0x805CB230 end:0x805CB3D0
 
 hbm/homebutton/HBMRemoteSpk.cpp:
-	.text       start:0x802F5800 end:0x802F6048 align:16
+	.text       start:0x802F5590 end:0x802F5EAC align:16
+	.data       start:0x80542D88 end:0x80542DB8
+	.bss        start:0x805CB3D0 end:0x805CB3D8
 
 hbm/homebutton/HBMAxSound.cpp:
-	.text       start:0x802F6050 end:0x802F6944 align:16
+	.text       start:0x802F5EB0 end:0x802F6944 align:16
+	.rodata     start:0x804F05A8 end:0x804F05E0
+	.data       start:0x80542DB8 end:0x80543108
+	.bss        start:0x805CB3D8 end:0x805CB3E0
 
 hbm/homebutton/HBMCommon.cpp:
 	.text       start:0x802F6950 end:0x802F6CC4 align:16
+	.data       start:0x80543108 end:0x80543158
+	.bss        start:0x805CB3E0 end:0x805CB3F0
 
 hbm/homebutton/HBMBase.cpp:
 	.text       start:0x802F6CD0 end:0x802FF2E0 align:16
+	.rodata     start:0x804F05E0 end:0x804F0960
+	.data       start:0x80543158 end:0x80543E70
+	.bss        start:0x805CB3F0 end:0x805CB470
 
 hbm/nw4hbm/lyt/lyt_animation.cpp:
 	.text       start:0x802FF2E0 end:0x802FFE88 align:16
+	.rodata     start:0x804F0960 end:0x804F0980
+	.data       start:0x80543E70 end:0x80543EF0
 
 hbm/nw4hbm/lyt/lyt_arcResourceAccessor.cpp:
 	.text       start:0x802FFE90 end:0x80300230 align:16
+	.data       start:0x80543EF0 end:0x80543F70
 
 hbm/nw4hbm/lyt/lyt_bounding.cpp:
 	.text       start:0x80300230 end:0x803003A4 align:16
 	.ctors      start:0x804DB8E0 end:0x804DB8E4
+	.data       start:0x80543F70 end:0x80544058
+	.bss        start:0x805CB470 end:0x805CB478
 
 hbm/nw4hbm/lyt/lyt_common.cpp:
 	.text       start:0x803003B0 end:0x80301230 align:16
+	.rodata     start:0x804F0980 end:0x804F0990
+	.bss        start:0x805CB478 end:0x805CB4A0
 
 hbm/nw4hbm/lyt/lyt_drawInfo.cpp:
 	.text       start:0x80301230 end:0x803012F0 align:16
+	.rodata     start:0x804F0990 end:0x804F0998
+	.data       start:0x80544058 end:0x80544088
 
 hbm/nw4hbm/lyt/lyt_group.cpp:
 	.text       start:0x803012F0 end:0x8030163C align:16
+	.data       start:0x80544088 end:0x805440B0
 
 hbm/nw4hbm/lyt/lyt_layout.cpp:
 	.text       start:0x80301640 end:0x803022DC align:16
+	.rodata     start:0x804F0998 end:0x804F09A0
+	.data       start:0x805440B0 end:0x80544100
+	.bss        start:0x805CB4A0 end:0x805CB4A8
 
 hbm/nw4hbm/lyt/lyt_material.cpp:
 	.text       start:0x803022E0 end:0x80305550 align:16
+	.rodata     start:0x804F09A0 end:0x804F09D0
+	.data       start:0x80544100 end:0x80544188
 
 hbm/nw4hbm/lyt/lyt_pane.cpp:
 	.text       start:0x80305550 end:0x803066A0 align:16
 	.ctors      start:0x804DB8E4 end:0x804DB8E8
+	.rodata     start:0x804F09D0 end:0x804F09F0
+	.data       start:0x80544188 end:0x805441F0
+	.bss        start:0x805CB4A8 end:0x805CB4B0
 
 hbm/nw4hbm/lyt/lyt_picture.cpp:
 	.text       start:0x803066A0 end:0x80306BF4 align:16
 	.ctors      start:0x804DB8E8 end:0x804DB8EC
+	.rodata     start:0x804F09F0 end:0x804F09F8
+	.data       start:0x805441F0 end:0x80544290
+	.bss        start:0x805CB4B0 end:0x805CB4B8
 
 hbm/nw4hbm/lyt/lyt_resourceAccessor.cpp:
 	.text       start:0x80306C00 end:0x80306C58 align:16
+	.data       start:0x80544290 end:0x805442A8
 
 hbm/nw4hbm/lyt/lyt_textBox.cpp:
 	.text       start:0x80306C60 end:0x803080A4 align:16
 	.ctors      start:0x804DB8EC end:0x804DB8F0
+	.rodata     start:0x804F09F8 end:0x804F0A10
+	.data       start:0x805442A8 end:0x80544358
+	.bss        start:0x805CB4B8 end:0x805CB4C0
 
 hbm/nw4hbm/lyt/lyt_window.cpp:
 	.text       start:0x803080B0 end:0x8030A6D4 align:16
 	.ctors      start:0x804DB8F0 end:0x804DB8F4
+	.rodata     start:0x804F0A10 end:0x804F0A28
+	.data       start:0x80544358 end:0x80544440
+	.bss        start:0x805CB4C0 end:0x805CB4C8
 
 hbm/nw4hbm/math/math_triangular.cpp:
 	.text       start:0x8030A6E0 end:0x8030A990 align:16
+	.rodata     start:0x804F0A28 end:0x804F0A50
+	.data       start:0x80544440 end:0x80545558
 
 hbm/nw4hbm/ut/ut_binaryFileFormat.cpp:
 	.text       start:0x8030A990 end:0x8030AA04 align:16
@@ -2000,9 +2048,12 @@ hbm/nw4hbm/ut/ut_CharStrmReader.cpp:
 
 hbm/nw4hbm/ut/ut_CharWriter.cpp:
 	.text       start:0x8030AB30 end:0x8030C52C align:16
+	.rodata     start:0x804F0A50 end:0x804F0A70
+	.bss        start:0x805CB4C8 end:0x805CB4E0
 
 hbm/nw4hbm/ut/ut_Font.cpp:
 	.text       start:0x8030C530 end:0x8030C5D4 align:16
+	.data       start:0x80545558 end:0x80545588
 
 hbm/nw4hbm/ut/ut_LinkList.cpp:
 	.text       start:0x8030C5E0 end:0x8030C6EC align:16
@@ -2012,34 +2063,49 @@ hbm/nw4hbm/ut/ut_list.cpp:
 
 hbm/nw4hbm/ut/ut_ResFont.cpp:
 	.text       start:0x8030C860 end:0x8030CB5C align:16
+	.data       start:0x80545588 end:0x80545610
 
 hbm/nw4hbm/ut/ut_ResFontBase.cpp:
 	.text       start:0x8030CB60 end:0x8030D1A8 align:16
+	.data       start:0x80545610 end:0x80545728
 
 hbm/nw4hbm/ut/ut_TagProcessorBase.cpp:
 	.text       start:0x8030D1B0 end:0x8030DC68 align:16
+	.rodata     start:0x804F0A70 end:0x804F0A78
+	.data       start:0x80545728 end:0x805457B0
 
 hbm/nw4hbm/ut/ut_TextWriterBase.cpp:
 	.text       start:0x8030DC70 end:0x803130D4 align:16
 	.ctors      start:0x804DB8F4 end:0x804DB8F8
+	.rodata     start:0x804F0A78 end:0x804F0A90
+	.data       start:0x805457B0 end:0x805457B8
+	.bss        start:0x805CB4E0 end:0x805CB510
 
 hbm/sound/mix.cpp:
 	.text       start:0x803130E0 end:0x80314A2C align:16
+	.data       start:0x805457B8 end:0x80546348
+	.bss        start:0x805CB510 end:0x805CBBD0
 
 hbm/sound/syn.cpp:
-	.text       start:0x80314A30 end:0x80314F8C align:16
+	.text       start:0x80314A30 end:0x80314EAC align:16
+	.bss        start:0x805CBBD0 end:0x805CC0A0
 
 hbm/sound/synctrl.cpp:
-	.text       start:0x80314F90 end:0x80315348 align:16
+	.text       start:0x80314EB0 end:0x80315348 align:16
+	.data       start:0x80546348 end:0x80546548
 
 hbm/sound/synenv.cpp:
 	.text       start:0x80315350 end:0x8031572C align:16
+	.rodata     start:0x804F0A90 end:0x804F0AB0
 
 hbm/sound/synmix.cpp:
 	.text       start:0x80315730 end:0x80315870 align:16
+	.data       start:0x80546548 end:0x805468D8
 
 hbm/sound/synpitch.cpp:
 	.text       start:0x80315870 end:0x80315AEC align:16
+	.rodata     start:0x804F0AB0 end:0x804F0AC8
+	.data       start:0x805468D8 end:0x80546CC8
 
 hbm/sound/synsample.cpp:
 	.text       start:0x80315AF0 end:0x80315F64 align:16
@@ -2049,6 +2115,9 @@ hbm/sound/synvoice.cpp:
 
 hbm/sound/seq.cpp:
 	.text       start:0x80316120 end:0x80316A28 align:16
+	.rodata     start:0x804F0AC8 end:0x804F0AF0
+	.data       start:0x80546CC8 end:0x80546D60
+	.bss        start:0x805CC0A0 end:0x805CC0A8
 
 JSystem/JParticle/JPAResourceManager.cpp:
 	.text       start:0x80316A30 end:0x80316C04 align:16
