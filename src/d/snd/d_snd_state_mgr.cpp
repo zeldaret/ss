@@ -386,6 +386,10 @@ u32 dSndStateMgr_c::getSeCameraId() {
     return convertSeLabelToSoundId(label);
 }
 
+void dSndStateMgr_c::clearExecuteCallback() {
+    sEventExecuteCallback = nullptr;
+}
+
 void dSndStateMgr_c::handleSeLv() {
     SizedString<0x40> name = mSeName;
     name += "_LV";
@@ -480,7 +484,7 @@ void dSndStateMgr_c::onMsgWaitStart() {
     }
     
     SizedString<64> label;
-    label.sprintf("_%M_WS%d", mMsgCounter, mMsgWaitSelectCounter);
+    label.sprintf("_M%d_WS%d", mMsgCounter, mMsgWaitSelectCounter);
     doLabelSuffix(label);
 }
 
@@ -490,7 +494,7 @@ void dSndStateMgr_c::onMsgWaitEnd() {
     }
     
     SizedString<64> label;
-    label.sprintf("_%M_WE%d", mMsgCounter, mMsgWaitSelectCounter);
+    label.sprintf("_M%d_WE%d", mMsgCounter, mMsgWaitSelectCounter);
     doLabelSuffix(label);
 }
 
