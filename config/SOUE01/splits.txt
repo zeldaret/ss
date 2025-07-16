@@ -2743,12 +2743,16 @@ d/snd/d_snd_small_effect_mgr.cpp:
 	.sdata2     start:0x8057DA80 end:0x8057DAD0
 
 d/snd/d_snd_harp_song_mgr.cpp:
-	.text       start:0x8037F8C0 end:0x80382150 align:16
-	.rodata     start:0x804F38C8 end:0x804F38E0
+	.text       start:0x8037F8C0 end:0x80381868 align:16
 	.data       start:0x805491D0 end:0x805491E0
 	.sdata      start:0x80574308 end:0x80574310
 	.sbss       start:0x80575DA0 end:0x80575DA8
 	.sdata2     start:0x8057DAD0 end:0x8057DB48
+
+d/snd/d_snd_harp_song_data.cpp:
+	.text       start:0x80381870 end:0x80382150 align:16
+	.rodata     start:0x804F38C8 end:0x804F38E0
+	.sdata2     start:0x8057DB48 end:0x8057DB50
 
 d/snd/d_snd_anim_sound.cpp:
 	.text       start:0x80382150 end:0x8038240C align:16

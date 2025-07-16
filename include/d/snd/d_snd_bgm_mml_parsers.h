@@ -19,4 +19,17 @@ private:
     /* 0x298 */ dSndBgmSoundHarpMgr_c *field_0x298;
 };
 
+class dSndBgmMmlParserHarpSong_c : dSndBgmMmlParser_c {
+public:
+    dSndBgmMmlParserHarpSong_c();
+
+    virtual void CommandProc(u32 trackNo, int wait, u32 command, s32 commandArg1, s32 commandArg2) const override;
+    virtual void NoteOnCommandProc(u32 trackNo, int wait, int key, int velocity, s32 length) const override;
+
+    bool parseData(u32 soundId, dSndHarpSongData_c *pData);
+
+private:
+    /* 0x294 */ dSndHarpSongData_c *field_0x294;
+};
+
 #endif
