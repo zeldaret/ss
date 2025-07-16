@@ -1,6 +1,7 @@
 #include "egg/audio/eggAudioRmtSpeakerMgr.h"
 
 #include "nw4r/snd/snd_SoundSystem.h"
+
 #include "rvl/OS.h" // IWYU pragma: export
 
 namespace EGG {
@@ -21,7 +22,7 @@ void AudioRmtSpeakerMgr::setupCallback(s32 arg1, s32 arg2) {
         }
         sAudioRmtSpeakerWpadVolume = WPADGetSpeakerVolume();
     } else {
-        fn_804B6D80(arg1, sConnectTask[mTaskFinishCount].mpCallback);
+        setup(arg1, sConnectTask[mTaskFinishCount].mpCallback);
     }
     sConnectTask[mTaskFinishCount].field_0x01 = true;
 }
@@ -32,7 +33,7 @@ void AudioRmtSpeakerMgr::shutdownCallback(s32 arg1, s32 arg2) {
             (sConnectTask[mTaskFinishCount].mpCallback)(arg1, arg2);
         }
     } else {
-        fn_804B6DE0(arg1, sConnectTask[mTaskFinishCount].mpCallback);
+        shutdown(arg1, sConnectTask[mTaskFinishCount].mpCallback);
     }
     sConnectTask[mTaskFinishCount].field_0x01 = true;
 }
@@ -100,14 +101,14 @@ void AudioRmtSpeakerMgr::shutdownCallbackDirect(s32 arg1, s32 arg2) {
     doShutdown(arg1, shutdownCallbackDirect);
 }
 
-void AudioRmtSpeakerMgr::fn_804B6D80(s32 i, WPADCallback *pCallback) {
+void AudioRmtSpeakerMgr::setup(s32 i, WPADCallback *pCallback) {
     WPADDeviceType ty;
     if (!sAudioRmtSpeakerConnectCanncelSw && WPADProbe(i, &ty) != WPAD_ERR_NO_CONTROLLER) {
         add_task(i, pCallback, true);
     }
 }
 
-void AudioRmtSpeakerMgr::fn_804B6DE0(s32 i, WPADCallback *pCallback) {
+void AudioRmtSpeakerMgr::shutdown(s32 i, WPADCallback *pCallback) {
     WPADDeviceType ty;
     if (!sAudioRmtSpeakerConnectCanncelSw) {
         if (WPADProbe(i, &ty) == WPAD_ERR_NO_CONTROLLER) {
