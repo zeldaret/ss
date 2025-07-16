@@ -1,5 +1,5 @@
-#ifndef D_TEXTUNK_H
-#define D_TEXTUNK_H
+#ifndef D_LYT_HIO_H
+#define D_LYT_HIO_H
 
 #include "common.h"
 #include "libms/flowfile.h"
@@ -14,10 +14,10 @@
  * for overriding the text and flow files being accessed. The actual
  * implementation appears to have been stripped out though.
  */
-class UnkTextThing {
+class dLyt_HIO_c {
 public:
-    UnkTextThing();
-    virtual ~UnkTextThing() {}
+    dLyt_HIO_c();
+    virtual ~dLyt_HIO_c() {}
 
     void destroy();
 
@@ -149,7 +149,7 @@ public:
         return 0;
     }
 
-    static UnkTextThing *getInstance() {
+    static dLyt_HIO_c *getInstance() {
         return sInstance;
     }
 
@@ -209,7 +209,7 @@ public:
     void destroyUnk(void *thing);
 
 private:
-    static UnkTextThing *sInstance;
+    static dLyt_HIO_c *sInstance;
 
     void destroyFlow(MsbfInfo *flow);
     void destroyMsg(MsbtInfo *msg);
