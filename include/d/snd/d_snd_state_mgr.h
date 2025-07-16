@@ -189,6 +189,8 @@ public:
 
     void onCameraCut(s32 cutIdx);
 
+    static void clearExecuteCallback();
+
 private:
     void resetOverrides();
     void initializeEventCallbacks(const char *name);

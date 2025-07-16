@@ -14,9 +14,13 @@ public:
 
     void fiSpeak(const char *, u16, s32);
     void executeOutputText(u16, u16);
+    /** The bank argument affects what Fi is singing */
+    bool startFiVocal(s16 pitch, s16 bank);
+
+    s16 getStaticSongValue(s32, u32, s32, s32);
 
 private:
-    /* 0x10 */ nw4r::snd::SoundHandle mHandle;
+    /* 0x10 */ nw4r::snd::SoundHandle mSpeechHandle;
 };
 
 #endif
