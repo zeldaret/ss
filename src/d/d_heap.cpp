@@ -32,7 +32,7 @@ void dHeapAllocator::onAlloc(EGG::HeapAllocArg *arg) {
 EGG::ExpHeap *dHeap::init(const char *name, size_t size, EGG::Heap *parent) {
     heap = EGG::ExpHeap::create(size, parent, 4);
     if (heap != nullptr) {
-        heap->setGroupID(0);
+        heap->setAllocMode(0);
         heap->mName = name;
     }
     return heap;

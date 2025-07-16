@@ -29,8 +29,6 @@ static struct ExceptionStruct sException;
 
 static u8 sThreadBuffer[0x4000] ALIGN_DECL(0x20);
 
-extern "C" u32 lbl_80574960;
-
 const char *CPU_EXP_NAME[] = {
     "SYSTEM RESET",
     "MACHINE CHECK",
@@ -69,13 +67,11 @@ void Exception_Init() {
     OSSetErrorHandler(3, ErrorHandler_);
     OSSetErrorHandler(5, ErrorHandler_);
     OSSetErrorHandler(15, ErrorHandler_);
-    lbl_80574960 = 0;
+    __OSFpscrEnableBits = 0;
     OSSetErrorHandler(16, nullptr);
 }
 extern "C" u32 PPCMfmsr();
 extern "C" void PPCMtmsr(u32);
-extern "C" void OSFillFPUContext(OSContext *ctx);
-extern "C" void fn_803AA2E0(u32, u32, u32, u32);
 
 static void DumpException_(const ExceptionCallbackParam *);
 
@@ -85,10 +81,10 @@ void ErrorHandler_(u16 error, OSContext *ctx, u32 dsisr, u32 dar) {
     OSFillFPUContext(ctx);
     OSSetErrorHandler(error, nullptr);
     if (error == 0xf) {
-        fn_803AA2E0(0, 0, 0, 3);
-        fn_803AA2E0(1, 0, 0, 3);
-        fn_803AA2E0(2, 0, 0, 3);
-        fn_803AA2E0(3, 0, 0, 3);
+        OSProtectRange(OS_PROTECT_CHAN0, 0, 0, OS_PROTECT_CONTROL_RDWR);
+        OSProtectRange(OS_PROTECT_CHAN1, 0, 0, OS_PROTECT_CONTROL_RDWR);
+        OSProtectRange(OS_PROTECT_CHAN2, 0, 0, OS_PROTECT_CONTROL_RDWR);
+        OSProtectRange(OS_PROTECT_CHAN3, 0, 0, OS_PROTECT_CONTROL_RDWR);
     }
     ExceptionCallbackParam param;
 

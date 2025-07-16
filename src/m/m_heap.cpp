@@ -149,7 +149,7 @@ mHeap::~mHeap() {
 EGG::ExpHeap *mHeap::createHeap(size_t size, EGG::Heap *block, const char *name) {
     EGG::ExpHeap *heap = EGG::ExpHeap::create(size, block, 4);
     if (heap != nullptr) {
-        heap->setGroupID(0);
+        heap->setAllocMode(0);
         if (name != nullptr) {
             heap->mName = name;
         }

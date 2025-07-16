@@ -213,7 +213,7 @@ void SetTMemLayout(TMemLayout layout) {
 } // namespace nw4r
 
 static GXTexRegion *TexRegionCallback(const GXTexObj *pObj, GXTexMapID map) {
-    GXTexFmt fmt = GXGetTexObjFormat(pObj);
+    GXTexFmt fmt = GXGetTexObjFmt(pObj);
     GXBool mipmap = GXGetTexObjMipMap(pObj);
 
     switch (fmt) {
