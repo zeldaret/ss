@@ -9,13 +9,20 @@
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "d/snd/d_snd_player_mgr.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "egg/core/eggController.h"
 #include "egg/core/eggHeap.h"
+#include "egg/math/eggMath.h"
+#include "egg/math/eggVector.h"
 #include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_pad.h"
 #include "m/m_vec.h"
+#include "nw4r/math/math_types.h"
 #include "rvl/KPAD/KPAD.h"
+#include "rvl/MTX/mtx.h"
+#include "rvl/MTX/mtxvec.h"
 #include "rvl/MTX/vec.h"
 #include "rvl/WPAD/WPAD.h"
 
@@ -163,7 +170,7 @@ void beginPad_BR() {
             kpadvec[2].y = baseZ.y;
             kpadvec[2].z = baseZ.z;
 
-            VECCrossProduct(ex_c::m_ex[0].mMPLSBasisY, baseZ, baseX);
+            VECCrossProduct(ex_c::m_ex[0].mMPLS.mY, baseZ, baseX);
             if (VECMag(baseX) > 0.05f) {
                 baseX.normalize();
                 kpadvec[0].z = baseX.z;
@@ -229,15 +236,15 @@ void beginPad_BR() {
 
         bool isMpls = mPad::isMpls(0) || mPad::isMplsPtFS(0);
         if (isMpls) {
-            ex.mMPLSSpeed.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_rot);
-            ex.mMPLSBasisX.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_basis_x);
-            ex.mMPLSBasisY.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_basis_y);
-            ex.mMPLSBasisZ.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_basis_z);
+            ex.mMPLSVelocity.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_rot);
+            ex.mMPLS.mX.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_basis_x);
+            ex.mMPLS.mY.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_basis_y);
+            ex.mMPLS.mZ.copyFrom(&mPad::getCore(0)->getCoreStatus()->mpls_basis_z);
         } else {
-            ex.mMPLSSpeed.set(0.f, 0.f, 0.f);
-            ex.mMPLSBasisX = mVec3_c::Ex;
-            ex.mMPLSBasisY = mVec3_c::Ey;
-            ex.mMPLSBasisZ = mVec3_c::Ez;
+            ex.mMPLSVelocity.set(0.f, 0.f, 0.f);
+            ex.mMPLS.mX = mVec3_c::Ex;
+            ex.mMPLS.mY = mVec3_c::Ey;
+            ex.mMPLS.mZ = mVec3_c::Ez;
         }
 
         ex.fn_80056790(0);
@@ -300,6 +307,173 @@ void disableMplsDirRevise(s32 chan) {
     KPADDisableMplsDirRevise(chan);
 }
 
+ex_c::ex_c()
+    : mDpdPos(0.f, 0.f),
+      field_0x8(0.f, 0.f),
+      mFSStick(0.f, 0.f),
+      mFSStickDistance(0.f),
+      mFSStickAngle(0),
+      mWPADProbeResult(0),
+      mWPADProbeResultStable(0),
+      mWPADProbeStableTimer(0),
+      mWPADDeviceType(0),
+      mWPADDeviceTypeStable(0xFF),
+      mWPADDeviceTypeStableTimer(0),
+      field_0x38(0),
+      field_0x3C(0),
+      field_0x40(0.f),
+      field_0x44(false),
+      field_0x45(false),
+      field_0x46(false),
+      field_0x47(false),
+      field_0x48(0),
+      mSpeakerSetup(false),
+      mSpeakerShutdown(false),
+      mIncorrectDeviceType(true),
+      field_0x4F(false),
+      field_0x50(true),
+      field_0x51(0),
+      mMplsEnabled(false),
+      field_0x53(false),
+      field_0x54(false),
+      field_0x55(false),
+      field_0x56(false),
+      field_0x57(false),
+      field_0x58(false),
+      field_0x59(false),
+      field_0x5A(false),
+      field_0x5B(false),
+      field_0x5C(0.f, 0.f),
+      field_0x64(0.f, 0.f),
+      field_0x6C(0),
+      field_0x70(0x1200),
+      field_0x74(1.f, 0.f, 0.f),
+      field_0x80(0.f, 1.f, 0.f),
+      field_0x8C(0.f, 0.f, 1.f),
+      mState(0),
+      field_0x2284(0),
+      field_0x2288(0),
+      field_0x22CE(0),
+      field_0x22CF(0),
+      field_0x22D0(0),
+      field_0x22D1(0),
+      field_0x22D4(0),
+      field_0x22D8(0) {
+    memset(&mStatus, 0, sizeof(mStatus));
+}
+
+void ex_c::fn_80055EF0(s32 chan) {
+    const s32 readLen = mPad::getCore(chan)->getReadLength();
+
+    // I dont understand this loop - Nonmatching garbage
+    for (int i = 0; i < readLen; i++) {
+        mMotion.field_0x000[i] = mMotion.field_0x5A0[i];
+        mFSMotion.field_0x000[i] = mFSMotion.field_0x5A0[i];
+    }
+
+    for (int i = 0; i < readLen; ++i) {
+        EGG::CoreStatus status = *mPad::getCore(chan)->getCoreStatus(i);
+        mMotion.field_0x000[i].copyFrom(&status.acc);
+        mMotion.field_0xB40[i] = status.acc_value;
+    }
+
+    mMotion.fn_80058AE0(chan, true);
+
+    for (int i = 0; i < readLen; ++i) {
+        if (mPad::getCore(chan)->getDevType() == EGG::cDEV_FREESTYLE ||
+            (mPad::isMplsPtFS(chan) && (u8)KPADGetMplsStatus(chan) == 5)) {
+            EGG::CoreStatus status = *mPad::getCore(chan)->getCoreStatus(i);
+            mFSMotion.field_0x000[i].copyFrom(&status.acc);
+            mFSMotion.field_0xB40[i] = status.acc_value;
+        } else {
+            mFSMotion.field_0x000[i].set(0.f, 0.f, 0.f);
+            mFSMotion.field_0xB40[i] = 0.f;
+        }
+    }
+    if (mPad::getCore(chan)->getDevType() == EGG::cDEV_FREESTYLE ||
+        (mPad::isMplsPtFS(chan) && (u8)KPADGetMplsStatus(chan) == 5)) {
+        mFSMotion.fn_80058AE0(chan, false);
+    }
+}
+
+void ex_c::fn_800562B0(s32 chan, mVec3_c &mpls) {
+    if (field_0x53) {
+        mpls = m_ex[chan].mMPLS.mY;
+        mpls *= -1.f;
+    } else {
+        mpls = m_ex[chan].mMPLS.mZ;
+    }
+}
+
+void ex_c::fn_80056330(s32 chan) {
+    f32 mult = nw4r::ut::Clamp(1.f - field_0x8C.y * field_0x8C.y, 0.f, 1.f);
+
+    mVec3_c basis;
+    if (field_0x53) {
+        basis = m_ex[chan].mMPLS.mZ;
+    } else {
+        basis = m_ex[chan].mMPLS.mY;
+    }
+    // ??
+    field_0x74 = (mult * (mVec3_c::Ey - basis) + basis).cross(field_0x8C);
+
+    f32 mag = field_0x74.mag();
+    bool b = std::abs(mag) <= EGG::Math<f32>::epsilon();
+    if (b) {
+        field_0x74 = mVec3_c::Ex;
+    } else {
+        field_0x74 *= 1.f / mag;
+    }
+
+    field_0x80 = field_0x8C.cross(field_0x74);
+    field_0x80.normalize();
+}
+
+void ex_c::fn_80056580(s32 chan, const mVec2_c &vec) {
+    field_0x5C = vec;
+    field_0x53 = false;
+
+    mMtx_c m;
+    m.ZXYrotS(-field_0x5C.y * field_0x70, field_0x5C.x * field_0x70, 0);
+    MTXMultVecSR(m, m_ex[chan].mMPLS.mZ, field_0x8C);
+
+    fn_80056330(chan);
+}
+
+void ex_c::centerCursor(s32 chan, bool b) {
+    if (field_0x51 != 0 && b) {
+        return;
+    }
+    field_0x64 = field_0x5C;
+
+    // NON-MATCHING
+    bool tmp = false;
+    const EGG::Vector3f acc = mPad::getCore()->getAccelBad();
+    if (dAcPy_c::GetLink() && dAcPy_c::GetLink()->checkActionFlagsCont(0x2) && acc.z < -0.9f) {
+        tmp = true;
+    }
+    field_0x53 = tmp;
+
+    fn_800562B0(chan, field_0x8C);
+    fn_80056330(chan);
+
+    if (b) {
+        dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_POINTER_RESET);
+        field_0x51 = 3;
+    } else {
+        field_0x51 = 0;
+        field_0x5C.set(0.f, 0.f);
+        mDpdPos.set(0.f, 0.f);
+        centerPos(mDpdPos, field_0x8);
+    }
+}
+
+void ex_c::fn_80056790(s32 chan) {}
+
+void ex_c::setField_0x70(mAng ang) {}
+
+void ex_c::setField_0x70() {}
+
 void ex_c::fn_80056AF0(s32 chan) {
     if (mSpeakerSetup) {
         mSpeakerSetup = false;
@@ -318,6 +492,10 @@ void ex_c::fn_80056AF0(s32 chan) {
     } else {
         field_0x45 = false;
     }
+}
+
+bool ex_c::checkWPADProbeStable() {
+    return mWPADProbeResultStable == WPAD_ERR_OK;
 }
 
 void ex_c::fn_80056B90(s32 chan) {
@@ -389,7 +567,132 @@ void ex_c::fn_80056CE0(s32 chan) {
     }
 }
 
-// . . .
+void ex_c::fn_80056DA0(s32 chan) {}
+
+void ex_c::fn_80056DF0(s32 chan) {}
+
+f32 ex_c::fn_80056E50() {}
+
+void ex_c::fn_80056E60(s32 chan) {}
+
+void ex_c::centerCursor(s32 chan) {}
+
+void ex_c::resetState(s32 chan) {}
+
+void ex_c::fn_80056F00(s32 chan) {}
+
+void ex_c::fn_80056F30(s32 chan) {
+    mState = 1;
+}
+
+void ex_c::fn_80056F40(s32 chan) {}
+
+void ex_c::fn_80057010(s32 chan) {
+    mState = 2;
+    setMpls(true, chan);
+}
+
+void ex_c::fn_80057020(s32 chan) {}
+
+void ex_c::fn_800570A0(s32 chan) {
+    mState = 3;
+    WPADDisconnect(chan);
+}
+
+void ex_c::fn_800570B0(s32 chan) {
+    fn_80056F30(chan);
+}
+
+void ex_c::fn_800570C0(s32 chan) {
+    mState = 4;
+}
+
+void ex_c::fn_80057100(s32 chan) {}
+
+void ex_c::fn_800571B0(s32 chan) {
+    mState = 5;
+}
+
+void ex_c::fn_800571C0(s32 chan) {}
+
+void ex_c::fn_800572A0(s32 chan) {}
+
+void ex_c::acc_c::init() {
+    for (int i = 0; i < 120; ++i) {
+        field_0x000[i].set(0.f, 0.f, 0.f);
+        field_0x5A0[i].set(0.f, 0.f, 0.f);
+        field_0xB40[i] = 0.f;
+    }
+    for (int i = 0; i < 39; ++i) {
+        field_0xD20[i].set(0.f, 0.f, 0.f);
+    }
+    for (int i = 0; i < 33; ++i) {
+        field_0xEF4[i].set(0.f, 0.f, 0.f);
+    }
+    field_0x1080.set(0.f, 0.f, 0.f);
+    field_0x108C.set(0.f, 0.f, 0.f);
+
+    MTXIdentity(field_0x1098);
+    field_0x10C8 = 0;
+    field_0x10CC = 0;
+    field_0x10D0 = 0;
+    field_0x10D4 = 0;
+    field_0x10D8 = 31;
+}
+
+f32 ex_c::acc_c::getEntryField_0xB40(s32 chan) {}
+
+void ex_c::acc_c::fn_800576D0(s32 chan) {}
+
+void ex_c::acc_c::fn_800578E0(s32 chan) {}
+
+void ex_c::acc_c::fn_80057AC0(s32 chan, bool) {}
+
+f32 ex_c::acc_c::fn_80057F00(s32 chan) {
+    s32 offs = chan + 3;
+    return field_0xD20[offs].x - field_0xEF4[chan].x;
+}
+
+f32 ex_c::acc_c::fn_80057F30(s32 chan) {
+    s32 offs = chan + 3;
+    return field_0xD20[offs].y - field_0xEF4[chan].y;
+}
+
+f32 ex_c::acc_c::fn_80057F60(s32 chan) {
+    s32 offs = chan + 3;
+    return field_0xD20[offs].z - field_0xEF4[chan].z;
+}
+
+bool ex_c::acc_c::fn_80057F90(s32 chan, bool) {}
+bool ex_c::acc_c::fn_800580C0(s32 chan, bool) {}
+
+bool ex_c::acc_c::fn_800581F0(s32 chan, bool) {}
+bool ex_c::acc_c::fn_80058320(s32 chan, bool) {}
+
+bool ex_c::acc_c::fn_80058450(s32 chan, bool) {}
+
+void ex_c::acc_c::fn_80058540(s32 chan, bool) {}
+
+void ex_c::acc_c::fn_80058990(u32 mask, bool) {}
+
+bool ex_c::acc_c::fn_800589F0() {}
+
+f32 ex_c::acc_c::fn_80058A00() {}
+
+void ex_c::acc_c::fn_80058AE0(s32 chan, bool) {}
+
+mMtx_c ex_c::mpls_c::getMtx() const {
+    mMtx_c m;
+    m.setBase(0, mX);
+    m.setBase(1, mY);
+    m.setBase(2, mZ);
+    m.setBase(3, mVec3_c::Zero);
+    return m;
+}
+
+bool ex_c::fn_80058BC0() {}
+bool ex_c::fn_80058C20() {}
+void ex_c::fn_80058C90() {}
 
 bool ex_c::isLowBattery() {
     return getBatteryLevel() == 1;
@@ -467,34 +770,97 @@ void ex_c::setInfo(s32 chan, const WPADInfo *pInfo) {
     m_info[0][chan].firmware = pInfo->firmware;
     m_connected[chan] = true;
 }
-// . . .
+
+f32 ex_c::fn_80058F50() {
+    return m_current_ex->mMotion.fn_80058A00();
+}
+
+bool ex_c::fn_80058F60() {}
+
+f32 ex_c::fn_80058FE0() {}
+
+void ex_c::fn_80058FF0() {}
+
+void ex_c::fn_80059000() {}
+
+void ex_c::fn_80059010() {}
+
+void ex_c::fn_800590A0() {}
+
+bool ex_c::fn_800590B0() {}
+
+bool ex_c::fn_800590E0() {}
+
+void ex_c::fn_800590F0() {}
+
+bool ex_c::fn_80059100() {
+    fn_80059110(mPad::g_currentCoreId);
+}
+
+bool ex_c::fn_80059110(s32 chan) {
+    return nw4r::math::VEC3LenSq(m_ex[chan].mMPLSVelocity) >= 0.01f || m_ex[chan].mFSStickDistance >= 0.0001f ||
+           mPad::g_core[chan]->getCoreStatus()->getHold() || mPad::g_core[chan]->getCoreStatus()->getTrigger() ||
+           m_ex[chan].mMotion.field_0x10C8 != 0;
+}
+
+void ex_c::fn_80059210() {
+    m_current_ex->field_0x22CE = 1;
+}
+
+void ex_c::fn_80059220() {
+    m_current_ex->field_0x22CF = 1;
+}
+
+void ex_c::fn_80059230() {
+    m_current_ex->field_0x22D0 = 1;
+}
+
+void ex_c::fn_80059240() {
+    m_current_ex->field_0x22D0 = 0;
+}
 
 void ex_c::on_0x54(s32 idx) {
-    m_ex[idx].field_0x54[0] = true;
+    m_ex[idx].field_0x54 = true;
 }
 void ex_c::on_0x55(s32 idx) {
-    m_ex[idx].field_0x54[1] = true;
+    m_ex[idx].field_0x55 = true;
 }
 void ex_c::on_0x56(s32 idx) {
-    m_ex[idx].field_0x54[2] = true;
+    m_ex[idx].field_0x56 = true;
 }
 void ex_c::on_0x57(s32 idx) {
-    m_ex[idx].field_0x54[3] = true;
+    m_ex[idx].field_0x57 = true;
 }
 
 void ex_c::fn_800592D0(s32 chan) {
-    m_ex[chan].field_0x54[0] = 0;
-    m_ex[chan].field_0x54[1] = 0;
-    m_ex[chan].field_0x54[2] = 0;
-    m_ex[chan].field_0x54[3] = 0;
+    m_ex[chan].field_0x54 = false;
+    m_ex[chan].field_0x55 = false;
+    m_ex[chan].field_0x56 = false;
+    m_ex[chan].field_0x57 = false;
 }
 
 void ex_c::fn_80059300(s32 chan) {
-    field_0x58[0] = field_0x54[0];
-    field_0x58[1] = field_0x54[1];
-    field_0x58[2] = field_0x54[2];
-    field_0x58[3] = field_0x54[3];
+    field_0x58 = field_0x54;
+    field_0x59 = field_0x55;
+    field_0x5A = field_0x56;
+    field_0x5B = field_0x57;
     fn_800592D0(chan);
+}
+
+bool ex_c::fn_80059330(s32 chan) {
+    return m_ex[chan].field_0x58;
+}
+
+bool ex_c::fn_80059350(s32 chan) {
+    return m_ex[chan].field_0x59;
+}
+
+bool ex_c::fn_80059370(s32 chan) {
+    return m_ex[chan].field_0x5A;
+}
+
+bool ex_c::fn_80059390(s32 chan) {
+    return m_ex[chan].field_0x5B;
 }
 
 void ex_c::getUnifiedWpadStatus(s32 chan) {
@@ -516,11 +882,11 @@ void ex_c::fn_800593D0() {
     }
 }
 
-void setNoSleep() {
+void ex_c::setNoSleep() {
     WPADSetAutoSleepTime(0);
 }
 
-void setAutoSleepTime() {
+void ex_c::setAutoSleepTime() {
     WPADSetAutoSleepTime(5);
     WPADSetControllerLastDataUpdateTime(0);
 }

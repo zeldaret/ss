@@ -90,7 +90,7 @@ int dScTitle_c::create() {
     if (ret == SUCCEEDED) {
         dSys::setFrameRate(2);
         dSys::setClearColor(mColor(0x00000000));
-        dPad::setAutoSleepTime();
+        dPad::ex_c::setAutoSleepTime();
         fn_80058C90(0);
         SaveRelated::create();
         field_0x2AD = 0;

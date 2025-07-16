@@ -127,6 +127,9 @@ public:
         return *reinterpret_cast<const Vector3f *>(&acc);
     }
 
+    Vector3f getAccelBad() const {
+        return Vector3f(acc.x, acc.y, acc.z);
+    }
     Vector2f getAccelVertical() {
         return Vector2f(acc_vertical.x, acc_vertical.y);
     }
@@ -212,6 +215,9 @@ public:
     const Vector3f &getAccel() const {
         return mCoreStatus[0].getAccel();
     }
+    Vector3f getAccelBad() const {
+        return mCoreStatus[0].getAccelBad();
+    }
 
     eCoreDevType getDevType() const {
         return mCoreStatus[0].getDevType();
@@ -222,6 +228,9 @@ public:
     }
     bool isFreestyle() const {
         return mCoreStatus[0].isFreestyle();
+    }
+    u32 getHold() const {
+        return mCoreStatus[0].hold;
     }
 
     s32 getReadLength() const {

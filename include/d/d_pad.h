@@ -2,7 +2,7 @@
 #define D_PAD_H
 
 #include "common.h"
-#include "egg/core/eggController.h"
+#include "m/m_angle.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "rvl/KPAD/KPAD.h"
@@ -11,8 +11,32 @@
 namespace dPad {
 class ex_c {
     // Complete Made up name
-    struct motion_c {
+    struct acc_c {
         void init();
+        f32 getEntryField_0xB40(s32 chan);
+        void fn_800576D0(s32 chan);
+        void fn_800578E0(s32 chan);
+        void fn_80057AC0(s32 chan, bool);
+
+        f32 fn_80057F00(s32 chan);
+        f32 fn_80057F30(s32 chan);
+        f32 fn_80057F60(s32 chan);
+
+        bool fn_80057F90(s32 chan, bool);
+        bool fn_800580C0(s32 chan, bool);
+
+        bool fn_800581F0(s32 chan, bool);
+        bool fn_80058320(s32 chan, bool);
+
+        bool fn_80058450(s32 chan, bool);
+
+        void fn_80058540(s32 chan, bool);
+
+        void fn_80058990(u32 mask, bool);
+
+        bool fn_800589F0();
+        f32 fn_80058A00();
+        void fn_80058AE0(s32 chan, bool);
 
         /* 0x0000 */ mVec3_c field_0x000[120];
         /* 0x05A0 */ mVec3_c field_0x5A0[120];
@@ -29,18 +53,54 @@ class ex_c {
         /* 0x10D8 */ u32 field_0x10D8;
     };
 
+    struct mpls_c {
+        mpls_c() : mX(mVec3_c::Ex), mY(mVec3_c::Ey), mZ(mVec3_c::Ez) {}
+        mMtx_c getMtx() const;
+        /* 0x00 */ mVec3_c mX;
+        /* 0x0C */ mVec3_c mY;
+        /* 0x18 */ mVec3_c mZ;
+    };
+
 public:
+    ex_c();
+    void fn_80055EF0(s32 chan);
+    void fn_800562B0(s32 chan, mVec3_c &mpls);
+    void fn_80056330(s32 chan);
+    void fn_80056580(s32 chan, const mVec2_c &);
+    void centerCursor(s32 chan, bool);
     void fn_80056790(s32 chan);
+    void setField_0x70(mAng ang);
+    void setField_0x70();
     void fn_80056AF0(s32 chan);
+
+    bool checkWPADProbeStable();
     void fn_80056B90(s32 chan);
     void fn_80056CE0(s32 chan);
+
     void fn_80056DA0(s32 chan); // Deals with Mpls Calibration Start
     void fn_80056DF0(s32 chan); // Deals with Mpls Calibration Work
     f32 fn_80056E50();
     void fn_80056E60(s32 chan); // Deals with Mpls Calibration Stop
-    void resetState(s32 chan);
 
-    void fn_800572A0(s32 chan);
+    void centerCursor(s32 chan);
+
+    void resetState(s32 chan);
+    void fn_80056F00(s32 chan);
+    void fn_80056F30(s32 chan); // Sets State to 1
+    void fn_80056F40(s32 chan);
+    void fn_80057010(s32 chan); // Sets State to 2 (EnableMPLS)
+    void fn_80057020(s32 chan);
+    void fn_800570A0(s32 chan); // Sets State to 3 (Disconnect)
+    void fn_800570B0(s32 chan); // Sets State to 1
+    void fn_800570C0(s32 chan); // Sets State to 4
+    void fn_80057100(s32 chan);
+    void fn_800571B0(s32 chan); // Sets State to 5
+    void fn_800571C0(s32 chan);
+    void fn_800572A0(s32 chan); // State Handling
+
+    static bool fn_80058BC0();
+    static bool fn_80058C20();
+    static void fn_80058C90();
 
     static bool isLowBattery();
     static bool isOutOfBattery();
@@ -52,6 +112,23 @@ public:
     static s32 getBatteryLevel(s32 chan);
     static void setInfo(s32 chan, const WPADInfo *pInfo);
 
+    static f32 fn_80058F50();
+    static bool fn_80058F60();
+    static f32 fn_80058FE0();
+    static void fn_80058FF0();
+    static void fn_80059000();
+    static void fn_80059010();
+    static void fn_800590A0();
+    static bool fn_800590B0();
+    static bool fn_800590E0();
+    static void fn_800590F0();
+    static bool fn_80059100();
+    static bool fn_80059110(s32 chan);
+    static void fn_80059210();
+    static void fn_80059220();
+    static void fn_80059230();
+    static void fn_80059240();
+
     static void on_0x54(s32 chan);
     static void on_0x55(s32 chan);
     static void on_0x56(s32 chan);
@@ -60,8 +137,15 @@ public:
     static void fn_800592D0(s32 chan);
 
     void fn_80059300(s32 chan);
+    static bool fn_80059330(s32 chan);
+    static bool fn_80059350(s32 chan);
+    static bool fn_80059370(s32 chan);
+    static bool fn_80059390(s32 chan);
     void getUnifiedWpadStatus(s32 chan);
     void fn_800593D0();
+
+    static void setNoSleep();
+    static void setAutoSleepTime();
 
     void updateStatus(s32 chan);
 
@@ -94,11 +178,17 @@ public:
     /* 0x004E */ bool mIncorrectDeviceType;
     /* 0x004F */ bool field_0x4F;
     /* 0x0050 */ bool field_0x50;
-    /* 0x0051 */ bool field_0x51;
+    /* 0x0051 */ u8 field_0x51;
     /* 0x0052 */ bool mMplsEnabled;
     /* 0x0053 */ bool field_0x53;
-    /* 0x0054 */ bool field_0x54[4];
-    /* 0x0058 */ bool field_0x58[4];
+    /* 0x0054 */ bool field_0x54;
+    /* 0x0055 */ bool field_0x55;
+    /* 0x0056 */ bool field_0x56;
+    /* 0x0057 */ bool field_0x57;
+    /* 0x0058 */ bool field_0x58;
+    /* 0x0059 */ bool field_0x59;
+    /* 0x005A */ bool field_0x5A;
+    /* 0x005B */ bool field_0x5B;
     /* 0x005C */ mVec2_c field_0x5C;
     /* 0x0064 */ mVec2_c field_0x64;
     /* 0x006C */ s32 field_0x6C;
@@ -106,17 +196,14 @@ public:
     /* 0x0074 */ mVec3_c field_0x74;
     /* 0x0080 */ mVec3_c field_0x80;
     /* 0x008C */ mVec3_c field_0x8C;
-    /* 0x0098 */ motion_c mMotion;
-    /* 0x1174 */ motion_c mFSMotion;
-    /* 0x2250 */ mVec3_c mMPLSSpeed;
-    /* 0x225C */ mVec3_c mMPLSBasisX;
-    /* 0x2268 */ mVec3_c mMPLSBasisY;
-    /* 0x2274 */ mVec3_c mMPLSBasisZ;
+    /* 0x0098 */ acc_c mMotion;
+    /* 0x1174 */ acc_c mFSMotion;
+    /* 0x2250 */ mVec3_c mMPLSVelocity;
+    /* 0x225C */ mpls_c mMPLS;
     /* 0x2280 */ s32 mState;
     /* 0x2284 */ s32 field_0x2284;
     /* 0x2288 */ s32 field_0x2288;
     /* 0x228C */ KPADUnifiedWpadStatus mStatus;
-    /* 0x22C4 */ u8 _0x22C4[0x22CE - 0x22C4];
     /* 0x22CE */ bool field_0x22CE;
     /* 0x22CF */ bool field_0x22CF;
     /* 0x22D0 */ u8 field_0x22D0;
@@ -139,9 +226,6 @@ void endPad_BR();
 void setConnectCallback();
 void enableMplsDirRevise(s32 chan);
 void disableMplsDirRevise(s32 chan);
-
-void setNoSleep();
-void setAutoSleepTime();
 
 // the next 4 funcs do nothing
 void fn_80059620();

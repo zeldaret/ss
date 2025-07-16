@@ -76,6 +76,9 @@ typedef struct KPADUnifiedWpadStatus {
         WPADCLStatus cl;
         WPADTRStatus tr;
         WPADBLStatus bl;
+        struct {
+            u8 _[0x40];
+        } unk;
     } u;        // at 0x0
     u8 fmt;     // 0x36;
     u8 padding; // 0x37;
@@ -124,6 +127,8 @@ void KPADEnableMplsDpdRevise(s32 chan);
 f32 KPADIsEnableMplsDpdRevise(s32 chan);
 void KPADDisableMplsDpdRevise(s32 chan);
 void KPADSetMplsDpdReviseParam(s32 chan, f32);
+
+s32 KPADGetMplsStatus(s32 chan);
 
 typedef Vec KPADVec[3];
 void KPADSetMplsDirReviseBase(s32 chan, Vec *);
