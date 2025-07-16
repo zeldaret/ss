@@ -1,5 +1,5 @@
-#ifndef D_LYT_METER_HIO_C
-#define D_LYT_METER_HIO_C
+#ifndef D_LYT_METER_HIO_H
+#define D_LYT_METER_HIO_H
 
 #include "common.h"
 
