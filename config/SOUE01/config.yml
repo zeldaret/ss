@@ -38,6 +38,11 @@ add_relocations:
   - source: .text:0x80306FCC
     type: l
     target: lbl_804F0A00
+  # TRK branches
+  - source: .init:0x80004844
+    type: rel24
+    target: __TRKreset
+  # TODO - all the TRK_InterruptHandler loads
 extract:
   - symbol: DOL_BACKUP_FONT
     header: d/dol_backup_error_font.inc
