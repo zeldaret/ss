@@ -73,6 +73,42 @@ void dSndHarpSongMgr_c::setupState0() {
     mDataLoaded = true;
 }
 
+void dSndHarpSongMgr_c::shiftFloat1(f32 val) {
+    if (val < 0.0f) {
+        val = 0.0f;
+    }
+    if (val > 150.0f) {
+        val = 150.0f;
+    }
+
+    // @bug (?) this loop ends up copying the value of field_0x07C[0]
+    // to all array elements when surely the intention was to
+    // move each of them back by one position. TODO: are array entries
+    // other than [0] read anywhere?
+    for (int i = 1; i < 300; i++) {
+        field_0x07C[i] = field_0x07C[i - 1];
+    }
+    field_0x07C[0] = val;
+}
+
+void dSndHarpSongMgr_c::shiftFloat2(f32 val) {
+    if (val < 0.0f) {
+        val = 0.0f;
+    }
+    if (val > 240.0f) {
+        val = 240.0f;
+    }
+
+    // @bug (?) this loop ends up copying the value of field_0x52C[0]
+    // to all array elements when surely the intention was to
+    // move each of them back by one position. TODO: are array entries
+    // other than [0] read anywhere?
+    for (int i = 1; i < 30; i++) {
+        field_0x52C[i] = field_0x52C[i - 1];
+    }
+    field_0x52C[0] = val;
+}
+
 void dSndHarpSongMgr_c::resetFloatArr1() {
     for (int i = 0; i < 300; i++) {
         field_0x07C[i] = 0.0f;
