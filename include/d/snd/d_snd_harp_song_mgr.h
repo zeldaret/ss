@@ -24,7 +24,8 @@ public:
     }
 
 private:
-
+    void shiftFloat1(f32 val);
+    void shiftFloat2(f32 val);
     void resetFloatArr1();
     void resetFloatArr2();
 
