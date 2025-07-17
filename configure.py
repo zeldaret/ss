@@ -1557,11 +1557,25 @@ config.libs = [
         "objects": [
             Object(
                 NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/alloc.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/errno.c",
+            ),
+            Object(
+                NonMatching,
                 "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/ansi_files.c",
             ),
             Object(
                 NonMatching,
                 "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common_Embedded/Src/ansi_fp.c",
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/ctype.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/locale.c"
             ),
             Object(
                 NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/arith.c"
@@ -1586,7 +1600,7 @@ config.libs = [
                 NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/mem_funcs.c"
             ),
             Object(
-                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/float.c"
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/math_api.c"
             ),
             Object(
                 NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/misc_io.c"
@@ -1595,13 +1609,22 @@ config.libs = [
                 NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/printf.c"
             ),
             Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/float.c"
+            ),
+            Object(
                 NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/scanf.c"
             ),
             Object(
                 NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/string.c"
             ),
             Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/strtold.c"
+            ),
+            Object(
                 NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/strtoul.c"
+            ),
+            Object(
+                NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wctype.c"
             ),
             Object(NonMatching, "PowerPC_EABI_Support/MSL/MSL_C/MSL_Common/Src/wmem.c"),
             Object(
@@ -1616,6 +1639,10 @@ config.libs = [
             Object(
                 NonMatching,
                 "PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/Src/uart_console_io_gcn.c",
+            ),
+            Object(
+                NonMatching,
+                "PowerPC_EABI_Support/MSL/MSL_C/PPC_EABI/Src/abort_exit_ppc_eabi.c",
             ),
             Object(
                 NonMatching,
@@ -1761,8 +1788,110 @@ config.libs = [
         "progress_category": "runtime",
         "host": False,
         "objects": [
-            # TODO, just here for progress tracking, split further
-            Object(NonMatching, "toBeSorted/TRK.c"),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Export/targsupp.s",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/gamedev/cust_connection/cc/exi2/GCN/EXI2_GDEV_GCN/main.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/gamedev/cust_connection/utils/gc/MWCriticalSection_gc.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/gamedev/cust_connection/utils/common/CircleBuffer.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/flush_cache.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/main_TRK.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/mainloop.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/mem_TRK.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/dispatch.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/dolphin_trk.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/dolphin_trk_glue.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/notify.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/nubevent.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/nubinit.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/serpoll.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/string_TRK.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/support.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/targcont.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/mpc_7xx_603e.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/msg.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/msgbuf.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Portable/msghndlr.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Export/mslsupp.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/targimpl.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Os/dolphin/target_options.c",
+            ),
+            Object(
+                NonMatching,
+                "TRK_MINNOW_DOLPHIN/debugger/embedded/MetroTRK/Processor/ppc/Generic/exception.s",
+            ),
         ],
     },
     # Begin RELs
