@@ -793,6 +793,7 @@ config.libs = [
             Object(Matching, "m/m_heap.cpp"),
             Object(NonMatching, "m/m_mtx.cpp"),
             Object(Matching, "m/m_pad.cpp"),
+            # probably two files due to sdata2 float duplication and gap
             Object(NonMatching, "m/m_quat.cpp"),
             Object(NonMatching, "m/m_thread.cpp"),
             Object(NonMatching, "m/m_vec.cpp"),
@@ -827,7 +828,6 @@ config.libs = [
         ],
     },
     {
-        # TODO: Split up further
         "lib": "hbm",
         # no idea
         "mw_version": "Wii/1.0",

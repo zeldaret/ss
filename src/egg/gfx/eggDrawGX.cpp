@@ -192,7 +192,7 @@ void DrawGX::BeginDrawQuad(ColorChannel chan, ZMode zMode, Blend blendMode, bool
     SetVtxState(b1 ? VTX_TYPE_7 : VTX_TYPE_8);
 }
 
-static const DrawGX::VtxType sVtxTypes[2][2] = {
+static const DrawGX::VtxType ALIGN_DECL(32) sVtxTypes[2][2] = {
     {DrawGX::VTX_TYPE_10, DrawGX::VTX_TYPE_12},
     {DrawGX::VTX_TYPE_11, DrawGX::VTX_TYPE_13},
 };
