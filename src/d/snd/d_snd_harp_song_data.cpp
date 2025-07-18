@@ -2,8 +2,9 @@
 
 #include "common.h"
 #include "d/snd/d_snd_fi_vocal_mgr.h"
+#include "d/snd/d_snd_wzsound.h"
 
-const s32 dSndHarpSongData_c::sNumHarpSongs = 6;
+const s32 dSndHarpSongData_c::sNumHarpSongs = LABEL_HARP_TONE_RAW_END - LABEL_HARP_TONE_RAW_START - 1;
 static const f32 sUnkSongVals[] = {
     40.0f,
     40.0f,
