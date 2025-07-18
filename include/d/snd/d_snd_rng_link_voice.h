@@ -1,0 +1,188 @@
+#ifndef D_SND_RNG_LINK_VOICE_H
+#define D_SND_RNG_LINK_VOICE_H
+
+#include "d/snd/d_snd_rng_id_if.h"
+#include "d/snd/d_snd_types.h"
+
+struct dSndLinkVoiceConfig;
+
+enum dSndLinkVoice_e {
+    /* 0x00 */ SND_LV_PRACTICE_S,
+    /* 0x01 */ SND_LV_PRACTICE_M,
+    /* 0x02 */ SND_LV_PRACTICE_L,
+    /* 0x03 */ SND_LV_PRACTICE_KAITEN_M,
+    /* 0x04 */ SND_LV_ATTACK_S,
+    /* 0x05 */ SND_LV_ATTACK_M,
+    /* 0x06 */ SND_LV_ATTACK_L,
+    /* 0x07 */ SND_LV_SAVE_POWER,
+    /* 0x08 */ SND_LV_ATTACK_KAITEN_M,
+    /* 0x09 */ SND_LV_NOTICE,
+    /* 0x0A */ SND_LV_PRACTICE_SHIELD,
+    /* 0x0B */ SND_LV_ATTACK_SHIELD,
+    /* 0x0C */ SND_LV_ATTACK_SHIELD_GJ,
+    /* 0x0D */ SND_LV_SHELD_GUARD,
+    /* 0x0E */ SND_LV_SHELD_DOWN,
+    /* 0x0F */ SND_LV_SHELD_BREAK,
+    /* 0x10 */ SND_LV_ATTACK_DOWN,
+    /* 0x11 */ SND_LV_DAMAGE_S,
+    /* 0x12 */ SND_LV_DAMAGE_L,
+    /* 0x13 */ SND_LV_DAMAGE_FIRE_S,
+    /* 0x14 */ SND_LV_DAMAGE_FIRE_L,
+    /* 0x15 */ SND_LV_DAMAGE_ELEC_S,
+    /* 0x16 */ SND_LV_DAMAGE_ELEC_L,
+    /* 0x17 */ SND_LV_STRUGGLE_S,
+    /* 0x18 */ SND_LV_STRUGGLE_L,
+    /* 0x19 */ SND_LV_GROAN,
+    /* 0x1A */ SND_LV_ESCAPE,
+    /* 0x1B */ SND_LV_DAMAGE_MAGMA,
+    /* 0x1C */ SND_LV_DAMAGE_QUICKSAND,
+    /* 0x1D */ SND_LV_DIE_L,
+    /* 0x1E */ SND_LV_DIE_S,
+    /* 0x1F */ SND_LV_DIE_WATER,
+    /* 0x20 */ SND_LV_RESTART,
+    /* 0x21 */ SND_LV_STAND_UP,
+    /* 0x22 */ SND_LV_PHEW_1,
+    /* 0x23 */ SND_LV_TIRED_S_1,
+    /* 0x24 */ SND_LV_TIRED_S_2,
+    /* 0x25 */ SND_LV_TIRED_M,
+    /* 0x26 */ SND_LV_TIRED_L,
+    /* 0x27 */ SND_LV_CLIMB_TIRED_S_1,
+    /* 0x28 */ SND_LV_CLIMB_TIRED_S_2,
+    /* 0x29 */ SND_LV_CLIMB_TIRED_M,
+    /* 0x2A */ SND_LV_CLIMB_TIRED_L,
+    /* 0x2B */ SND_LV_LIFT_TIRED_S_1,
+    /* 0x2C */ SND_LV_LIFT_TIRED_S_2,
+    /* 0x2D */ SND_LV_LIFT_TIRED_M,
+    /* 0x2E */ SND_LV_LIFT_TIRED_L,
+    /* 0x2F */ SND_LV_TIRED_RECOVER,
+    /* 0x30 */ SND_LV_TIRED_RECOVER_S,
+    /* 0x31 */ SND_LV_TIRED_RECOVER_M,
+    /* 0x32 */ SND_LV_TIRED_RECOVER_L,
+    /* 0x33 */ SND_LV_TIRED_EMPTY,
+    /* 0x34 */ SND_LV_PHEW_2,
+    /* 0x35 */ SND_LV_JUMP_S,
+    /* 0x36 */ SND_LV_JUMP_M,
+    /* 0x37 */ SND_LV_JUMP_L,
+    /* 0x38 */ SND_LV_SHOOT_START,
+    /* 0x39 */ SND_LV_SHOOT_SLOPE,
+    /* 0x3A */ SND_LV_RUN_UP,
+    /* 0x3B */ SND_LV_GRAB,
+    /* 0x3C */ SND_LV_CLIMB_STEP,
+    /* 0x3D */ SND_LV_HUNG,
+    /* 0x3E */ SND_LV_JUMP_IVY,
+    /* 0x3F */ SND_LV_BACKFLIP,
+    /* 0x40 */ SND_LV_ZENTEN,
+    /* 0x41 */ SND_LV_ZENTEN_CLASH,
+    /* 0x42 */ SND_LV_ZENTEN_UP,
+    /* 0x43 */ SND_LV_FALLING_HIGH,
+    /* 0x44 */ SND_LV_DAMAGE_FALL,
+    /* 0x45 */ SND_LV_SKYDIVE,
+    /* 0x46 */ SND_LV_RIDE_BIRD,
+    /* 0x47 */ SND_LV_BLAST,
+    /* 0x48 */ SND_LV_WIND_FLY,
+    /* 0x49 */ SND_LV_BALANCE_BALL,
+    /* 0x4A */ SND_LV_SLIDE_START,
+    /* 0x4B */ SND_LV_CLIMB_ROPE,
+    /* 0x4C */ SND_LV_SWING_ROPE,
+    /* 0x4D */ SND_LV_JUMP_ROPE,
+    /* 0x4E */ SND_LV_STOP_ROPE,
+    /* 0x4F */ SND_LV_SHAKE_ROPE,
+    /* 0x50 */ SND_LV_FOOT_MISS,
+    /* 0x51 */ SND_LV_BREATH,
+    /* 0x52 */ SND_LV_TAKE_BREATH,
+    /* 0x53 */ SND_LV_GET_AIR,
+    /* 0x54 */ SND_LV_DOLPHIN_JUMP,
+    /* 0x55 */ SND_LV_LIFT_S,
+    /* 0x56 */ SND_LV_THROW_S,
+    /* 0x57 */ SND_LV_LIFT_L,
+    /* 0x58 */ SND_LV_THROW_L,
+    /* 0x59 */ SND_LV_PUSH_M,
+    /* 0x5A */ SND_LV_DIG_GLOVE,
+    /* 0x5B */ SND_LV_SWING_S,
+    /* 0x5C */ SND_LV_DRINK,
+    /* 0x5D */ SND_LV_DRINK_FIN,
+    /* 0x5E */ SND_LV_CLIMB_WALL,
+    /* 0x5F */ SND_LV_JUMPON_LIFT,
+    /* 0x60 */ SND_LV_GET_SURPRISND,
+    /* 0x61 */ SND_LV_FLOATAWAY,
+    /* 0x62 */ SND_LV_CANNON_JUMP,
+    /* 0x63 */ SND_LV_FIRE,
+    /* 0x64 */ SND_LV_LOOK_BODY,
+    /* 0x65 */ SND_LV_QUICKWATER,
+    /* 0x66 */ SND_LV_DANGER_ROCK,
+    /* 0x67 */ SND_LV_PULL_SWORD,
+    /* 0x68 */ SND_LV_WHIP_BACK,
+    /* 0x69 */ SND_LV_SW_PUSH,
+    /* 0x6A */ SND_LV_SW_REJECT,
+    /* 0x6B */ SND_LV_JUMP_DIVEWATER,
+    /* 0x6C */ SND_LV_DAMAGE_WATER_M,
+    /* 0x6D */ SND_LV_DAMAGE_WATER_S,
+    /* 0x6E */ SND_LV_DAMAGE_ELEC_W,
+    /* 0x6F */ SND_LV_STRUGGLE_W,
+    /* 0x70 */ SND_LV_GROAN_W,
+    /* 0x71 */ SND_LV_ESCAPE_W,
+    /* 0x72 */ SND_LV_BREATH_TIRED_S_1,
+    /* 0x73 */ SND_LV_BREATH_TIRED_S_2,
+    /* 0x74 */ SND_LV_BREATH_TIRED_M,
+    /* 0x75 */ SND_LV_BREATH_TIRED_L,
+    /* 0x76 */ SND_LV_LIE_UP,
+    /* 0x77 */ SND_LV_PRACTICE_PUNCH,
+    /* 0x78 */ SND_LV_ATTACK_PUNCH,
+    /* 0x79 */ SND_LV_SURPRISND_S,
+    /* 0x7A */ SND_LV_SHUTTER_OPEN,
+    /* 0x7B */ SND_LV_BIRDRACE_REACH,
+    /* 0x7C */ SND_LV_ATTACK_A,
+    /* 0x7D */ SND_LV_BADSMELL_TIRED_S_1,
+    /* 0x7E */ SND_LV_BADSMELL_TIRED_S_2,
+    /* 0x7F */ SND_LV_BADSMELL_TIRED_M,
+    /* 0x80 */ SND_LV_BADSMELL_TIRED_L,
+    /* 0x81 */ SND_LV_GIRA_SWORD_REJECT,
+    /* 0x82 */ SND_LV_GIRA_SWORD_PULL,
+    /* 0x83 */ SND_LV_GIRA_GRAPPLE,
+    /* 0x84 */ SND_LV_SWORD_SIREN_IN,
+    /* 0x85 */ SND_LV_APPEAR_SURPRISND,
+    /* 0x86 */ SND_LV_EXIT_SURPRISND,
+    /* 0x87 */ SND_LV_BIRD_DAMAGE,
+    /* 0x88 */ SND_LV_BIRD_SPIN,
+    /* 0x89 */ SND_LV_BIRD_ATTACK,
+    /* 0x8A */ SND_LV_TRUCK_JUMP,
+    /* 0x8B */ SND_LV_TRUCK_IN,
+    /* 0x8C */ SND_LV_TRUCK_BRAKE,
+    /* 0x8D */ SND_LV_DAMAGE_MUTEKI_S,
+    /* 0x8E */ SND_LV_DAMAGE_MUTEKI_L,
+    /* 0x8F */ SND_LV_DAMAGE_MUTEKI_W_S,
+    /* 0x90 */ SND_LV_DAMAGE_MUTEKI_W_L,
+    /* 0x91 */ SND_LV_RECOVER_WATER,
+    /* 0x92 */ SND_LV_SPIN_WATER,
+    /* 0x93 */ SND_LV_SHOCKED,
+    /* 0x94 */ SND_LV_LIGHT_SURPRISND,
+    /* 0x95 */ SND_LV_QUIETLY_S,
+    /* 0x96 */ SND_LV_QUIETLY_M,
+    /* 0x97 */ SND_LV_DAMAGE_L_1,
+    /* 0x98 */ SND_LV_MAX
+};
+
+class dSndRngLinkVoice_c : public dSndRngIdIf_c {
+public:
+    dSndRngLinkVoice_c();
+
+    void configure(const dSndLinkVoiceConfig *config, dSndSourcePlayerHead_c *source);
+    static const dSndLinkVoiceConfig *getConfig(s32 idx);
+
+    /* 0x1C */ bool handleId(u32 id) override;
+
+    s32 getPriority() const {
+        return mPriority;
+    }
+
+    bool getPriorityTiebreaker() const {
+        return mPriorityTiebreaker;
+    }
+
+private:
+    /* 0x2C */ dSndSourcePlayerHead_c *mpSource;
+    /* 0x30 */ s32 mPriority;
+    /* 0x34 */ bool mPriorityTiebreaker;
+};
+
+#endif

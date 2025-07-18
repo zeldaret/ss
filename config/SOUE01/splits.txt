@@ -2781,13 +2781,16 @@ d/snd/d_snd_source.cpp:
 	.sbss       start:0x80575DB0 end:0x80575DC0
 	.sdata2     start:0x8057DCB0 end:0x8057DCD0
 
-d/snd/d_snd_source_link_body.cpp:
+d/snd/d_snd_source_player.cpp:
 	.text       start:0x8038C410 end:0x8038D548 align:16
-	.data       start:0x8054AAE8 end:0x8054AFC0
+	.data       start:0x8054AAE8 end:0x8054AF18
+	.sdata      start:0x80574718 end:0x80574758
+	.sdata2     start:0x8057DCD0 end:0x8057DD08
 
-d/snd/d_snd_source_link_head.cpp:
+d/snd/d_snd_source_player_head.cpp:
 	.text       start:0x8038D550 end:0x8038DD08 align:16
-	.data       start:0x8054AFC0 end:0x8054B1B8
+	.data       start:0x8054AF18 end:0x8054B1B8
+	.sdata2     start:0x8057DD08 end:0x8057DD48
 
 d/snd/d_snd_source_enemy.cpp:
 	.text       start:0x8038DD10 end:0x8038E858 align:16
@@ -2913,12 +2916,14 @@ d/snd/d_snd_sound_tgsound_callbacks.cpp:
 	.text       start:0x80399000 end:0x8039942C align:16
 	.sdata      start:0x805748E8 end:0x805748F0
 
-d/snd/d_snd_mgr_unk_17.cpp:
+d/snd/d_snd_rng_link_voice.cpp:
 	.text       start:0x80399430 end:0x80399574 align:16
+	.rodata     start:0x804F3E38 end:0x804F42F8
 	.data       start:0x8054D740 end:0x8054D760
 
 d/snd/d_snd_fi_vocal_mgr.cpp:
 	.text       start:0x80399580 end:0x80399A3C align:16
+	.rodata     start:0x804F42F8 end:0x804F4778
 	.data       start:0x8054D760 end:0x8054D7A8
 	.sbss       start:0x80575DE0 end:0x80575DE8
 
@@ -2931,8 +2936,12 @@ d/snd/d_snd_rng_mgr.cpp:
 	.data       start:0x8054D7B8 end:0x8054D7D0
 	.sbss       start:0x80575DE8 end:0x80575DF0
 
-d/snd/d_snd_mgr_unk_11.cpp:
-	.text       start:0x80399D60 end:0x8039A344 align:16
+d/snd/d_snd_rng_id.cpp:
+	.text       start:0x80399D60 end:0x8039A204 align:16
+	.data       start:0x8054D7D0 end:0x8054D7E0
+
+d/snd/d_snd_rng_id_if.cpp:
+	.text       start:0x8039A210 end:0x8039A344 align:16
 
 d/snd/d_snd_file_mgr.cpp:
 	.text       start:0x8039A350 end:0x8039A848 align:16
@@ -2942,6 +2951,7 @@ d/snd/d_snd_file_mgr.cpp:
 
 d/snd/d_snd_calc_pitch.cpp:
 	.text       start:0x8039A850 end:0x8039A960 align:16
+	.rodata     start:0x804F4778 end:0x804F4F00
 
 revolution/kpr/kpr_lib.c:
 	.text       start:0x8039A960 end:0x8039AF7C align:16
