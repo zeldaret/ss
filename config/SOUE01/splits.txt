@@ -2835,10 +2835,13 @@ d/snd/d_snd_source_py_bird.cpp:
 d/snd/d_snd_source_demo.cpp:
 	.text       start:0x80390510 end:0x80390A20 align:16
 	.ctors      start:0x804DB92C end:0x804DB930
+	.data       start:0x8054C7B8 end:0x8054C9C0
+	.sdata2     start:0x8057DDD8 end:0x8057DDE8
 
 d/snd/d_snd_source_harp_related.cpp:
 	.text       start:0x80390A20 end:0x80392E38 align:16
 	.data       start:0x8054C9C0 end:0x8054D1C0
+	.sdata      start:0x80574800 end:0x80574810
 	.sdata2     start:0x8057DDE8 end:0x8057DE30
 
 d/snd/d_snd_source_tg_sound.cpp:
@@ -2889,14 +2892,18 @@ d/snd/d_snd_se_sound_pool.cpp:
 d/snd/d_snd_sound_link_body_callbacks.cpp:
 	.text       start:0x80394DE0 end:0x803957B8 align:16
 	.sdata      start:0x80574830 end:0x80574860
+	.sdata2     start:0x8057E3B8 end:0x8057E400
 
 d/snd/d_snd_sound_enemy_callbacks.cpp:
 	.text       start:0x803957C0 end:0x80396104 align:16
 	.sdata      start:0x80574860 end:0x80574898
+	.sdata2     start:0x8057E400 end:0x8057E448
 
 d/snd/d_snd_sound_object_callbacks.cpp:
 	.text       start:0x80396110 end:0x80398430 align:16
+	.data       start:0x8054D4C8 end:0x8054D520
 	.sdata      start:0x80574898 end:0x805748D8
+	.sdata2     start:0x8057E448 end:0x8057E528
 
 d/snd/d_snd_sound_equipment_callbacks.cpp:
 	.text       start:0x80398430 end:0x80398AD4 align:16
@@ -2911,10 +2918,13 @@ d/snd/d_snd_sound_npc_callbacks.cpp:
 d/snd/d_snd_sound_npc_2_callbacks.cpp:
 	.text       start:0x80398E20 end:0x80398FFC align:16
 	.sdata      start:0x805748E0 end:0x805748E8
+	.sdata2     start:0x8057E598 end:0x8057E5A0
 
 d/snd/d_snd_sound_tgsound_callbacks.cpp:
 	.text       start:0x80399000 end:0x8039942C align:16
+	.data       start:0x8054D730 end:0x8054D740
 	.sdata      start:0x805748E8 end:0x805748F0
+	.sdata2     start:0x8057E5A0 end:0x8057E5C0
 
 d/snd/d_snd_rng_link_voice.cpp:
 	.text       start:0x80399430 end:0x80399574 align:16
@@ -2926,6 +2936,7 @@ d/snd/d_snd_fi_vocal_mgr.cpp:
 	.rodata     start:0x804F42F8 end:0x804F4778
 	.data       start:0x8054D760 end:0x8054D7A8
 	.sbss       start:0x80575DE0 end:0x80575DE8
+	.sdata2     start:0x8057E5C0 end:0x8057E5C8
 
 d/snd/d_snd_rng.cpp:
 	.text       start:0x80399A40 end:0x80399BA0 align:16
@@ -2952,6 +2963,7 @@ d/snd/d_snd_file_mgr.cpp:
 d/snd/d_snd_calc_pitch.cpp:
 	.text       start:0x8039A850 end:0x8039A960 align:16
 	.rodata     start:0x804F4778 end:0x804F4F00
+	.sdata2     start:0x8057E5D8 end:0x8057E5E8
 
 revolution/kpr/kpr_lib.c:
 	.text       start:0x8039A960 end:0x8039AF7C align:16
