@@ -8,8 +8,10 @@ class dSoundSource_c;
 class dSndSourceGroup_c;
 class dSndDistantSoundActor_c;
 
+
 class dSndSourceEnemy_c;
 class dSndSourceHarpRelated_c;
+class dSndSourcePlayerHead_c;
 
 class dSndSound_c;
 
