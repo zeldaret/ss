@@ -761,6 +761,7 @@ d/lyt/d_lyt_target_bird.cpp:
 	.rodata     start:0x804E7430 end:0x804E7468
 	.data       start:0x8051B5A0 end:0x8051B6E8
 	.sbss       start:0x80575480 end:0x80575488
+	.sdata2     start:0x80579DD0 end:0x80579DF0
 
 d/lyt/msg_window/d_lyt_msg_window.cpp:
 	.text       start:0x801148F0 end:0x8011C8C8 align:16
@@ -777,6 +778,7 @@ d/lyt/msg_window/d_lyt_msg_window_select_btn.cpp:
 	.rodata     start:0x804E7468 end:0x804E7540
 	.data       start:0x8051C300 end:0x8051CB10
 	.sdata      start:0x80572588 end:0x80572598
+	.sdata2     start:0x80579E18 end:0x80579E60
 	.bss        start:0x805AE670 end:0x805AE930
 
 d/lyt/msg_window/d_lyt_msg_window_common.cpp:
@@ -881,12 +883,15 @@ d/lyt/d_lyt_map_capture.cpp:
 	.ctors      start:0x804DB768 end:0x804DB76C
 	.data       start:0x8051EA08 end:0x8051EAE0
 	.sbss       start:0x805754A0 end:0x805754A8
+	.sdata2     start:0x80579F28 end:0x80579F40
+	.bss        start:0x805AF3F0 end:0x805AF470
 
 d/lyt/d_lyt_map.cpp:
 	.text       start:0x8012DC30 end:0x80148DE8 align:16
 	.ctors      start:0x804DB76C end:0x804DB770
 	.rodata     start:0x804E76A0 end:0x804E7F50
 	.data       start:0x8051EAE0 end:0x805225E8
+	.sdata      start:0x80572658 end:0x80572868
 	.sbss       start:0x805754A8 end:0x805754B8
 	.sdata2     start:0x80579F40 end:0x80579FB8
 	.bss        start:0x805AF470 end:0x805B0830
@@ -934,13 +939,18 @@ d/lyt/d_lyt_help.cpp:
 	.ctors      start:0x804DB780 end:0x804DB784
 	.rodata     start:0x804E7FE0 end:0x804E7FF8
 	.data       start:0x805231E8 end:0x80523A58
+	.sdata      start:0x80572888 end:0x80572978
 	.sbss       start:0x805754D0 end:0x805754D8
+	.sdata2     start:0x80579FF0 end:0x80579FF8
+	.bss        start:0x805B0D30 end:0x805B0FB0
 
 d/lyt/d_lyt_system_window.cpp:
 	.text       start:0x80150430 end:0x80152FC8 align:16
 	.rodata     start:0x804E7FF8 end:0x804E80F8
 	.data       start:0x80523A58 end:0x80524020
+	.sdata      start:0x80572978 end:0x80572988
 	.sbss       start:0x805754D8 end:0x805754E0
+	.sdata2     start:0x80579FF8 end:0x8057A038
 
 d/lyt/d_lyt_bird_gauge.cpp:
 	.text       start:0x80152FD0 end:0x801548D8 align:16
@@ -964,44 +974,67 @@ d/lyt/d_lyt_deposit_stock.cpp:
 	.text       start:0x80155CD0 end:0x801578A8 align:16
 	.ctors      start:0x804DB78C end:0x804DB790
 	.rodata     start:0x804E8150 end:0x804E8218
+	.data       start:0x80524928 end:0x80524BC8
+	.sdata      start:0x80572988 end:0x80572990
+	.sdata2     start:0x8057A058 end:0x8057A060
+	.bss        start:0x805B1430 end:0x805B1470
 
 d/lyt/d_lyt_deposit_box.cpp:
 	.text       start:0x801578B0 end:0x80158288 align:16
 	.rodata     start:0x804E8218 end:0x804E8258
+	.data       start:0x80524BC8 end:0x80524CD0
+	.sdata      start:0x80572990 end:0x80572998
+	.sdata2     start:0x8057A060 end:0x8057A078
 
 d/lyt/d_lyt_boss_gauge.cpp:
 	.text       start:0x80158290 end:0x80158E78 align:16
 	.ctors      start:0x804DB790 end:0x804DB794
 	.data       start:0x80524CD0 end:0x80524ED0
+	.sdata      start:0x80572998 end:0x805729A0
 	.sbss       start:0x805754F0 end:0x805754F8
+	.sdata2     start:0x8057A078 end:0x8057A090
+	.bss        start:0x805B1470 end:0x805B1570
 
 d/lyt/d_lyt_pause_back.cpp:
 	.text       start:0x80158E80 end:0x80159E78 align:16
 	.ctors      start:0x804DB794 end:0x804DB798
 	.data       start:0x80524ED0 end:0x80525138
+	.sdata2     start:0x8057A090 end:0x8057A098
+	.bss        start:0x805B1570 end:0x805B1670
 
 d/lyt/d_lyt_pause_disp_00.cpp:
 	.text       start:0x80159E80 end:0x8015EDE8 align:16
 	.ctors      start:0x804DB798 end:0x804DB79C
 	.rodata     start:0x804E8258 end:0x804E8918
 	.data       start:0x80525138 end:0x80525EE0
+	.sdata      start:0x805729A0 end:0x805729B0
+	.sdata2     start:0x8057A098 end:0x8057A0E0
+	.bss        start:0x805B1670 end:0x805B1830
 
 d/lyt/d_lyt_pause_disp_01.cpp:
 	.text       start:0x8015EDF0 end:0x80161F98 align:16
 	.ctors      start:0x804DB79C end:0x804DB7A0
 	.rodata     start:0x804E8918 end:0x804E8B30
 	.data       start:0x80525EE0 end:0x80526610
+	.sdata      start:0x805729B0 end:0x805729C0
+	.sdata2     start:0x8057A0E0 end:0x8057A0F8
+	.bss        start:0x805B1830 end:0x805B19B0
 
 d/lyt/d_lyt_pause_info.cpp:
 	.text       start:0x80161FA0 end:0x80163568 align:16
 	.ctors      start:0x804DB7A0 end:0x804DB7A4
 	.rodata     start:0x804E8B30 end:0x804E8B60
 	.data       start:0x80526610 end:0x80526880
+	.sdata2     start:0x8057A0F8 end:0x8057A100
+	.bss        start:0x805B19B0 end:0x805B1AB0
 
 d/lyt/d_lyt_pause_text.cpp:
 	.text       start:0x80163570 end:0x80164F88 align:16
 	.ctors      start:0x804DB7A4 end:0x804DB7A8
 	.data       start:0x80526880 end:0x80526D10
+	.sdata      start:0x805729C0 end:0x805729C8
+	.sdata2     start:0x8057A100 end:0x8057A108
+	.bss        start:0x805B1AB0 end:0x805B1BB0
 
 d/lyt/d_lyt_save_msg_window.cpp:
 	.text       start:0x80164F90 end:0x80166968 align:16
@@ -1016,6 +1049,7 @@ d/lyt/d_lyt_util_items.cpp:
 	.text       start:0x80166970 end:0x80167FD4 align:16
 	.rodata     start:0x804E8BB8 end:0x804E8D28
 	.data       start:0x80527210 end:0x80527298
+	.sdata2     start:0x8057A118 end:0x8057A180
 
 d/lyt/d_lyt_common_arrow.cpp:
 	.text       start:0x80167FE0 end:0x801695E8 align:16
@@ -1031,12 +1065,18 @@ d/lyt/d_lyt_common_title.cpp:
 	.ctors      start:0x804DB7B0 end:0x804DB7B4
 	.rodata     start:0x804E8D70 end:0x804E8DB0
 	.data       start:0x80527600 end:0x80527A98
+	.sdata      start:0x805729D8 end:0x805729E0
+	.sdata2     start:0x8057A188 end:0x8057A198
+	.bss        start:0x805B1DB0 end:0x805B1EF0
 
 d/lyt/d_lyt_cursor_stick.cpp:
 	.text       start:0x8016B2B0 end:0x8016BCD8 align:16
 	.ctors      start:0x804DB7B4 end:0x804DB7B8
 	.data       start:0x80527A98 end:0x80527BC0
+	.sdata      start:0x805729E0 end:0x80572A08
 	.sbss       start:0x805754F8 end:0x80575500
+	.sdata2     start:0x8057A198 end:0x8057A1A8
+	.bss        start:0x805B1EF0 end:0x805B1F70
 
 toBeSorted/fi_context.cpp:
 	.text       start:0x8016BCE0 end:0x8016CBD8 align:16
@@ -1118,6 +1158,7 @@ toBeSorted/revision_info.cpp:
 	.rodata     start:0x804E9A98 end:0x804E9AB8
 	.data       start:0x80528BB8 end:0x80528C10
 	.sbss       start:0x80575650 end:0x80575660
+	.bss        start:0x805B2010 end:0x805B2058
 
 d/a/d_a_bullet_base.cpp:
 	.text       start:0x80174CE0 end:0x801753A0 align:16
@@ -1169,11 +1210,13 @@ d/a/d_a_fish_mgr_base.cpp:
 	.text       start:0x8018B880 end:0x8018BFC8 align:16
 	.ctors      start:0x804DB7E4 end:0x804DB7E8
 	.data       start:0x8052A890 end:0x8052A9C0
+	.bss        start:0x805B2068 end:0x805B20A8
 
 d/a/d_a_fish_base.cpp:
 	.text       start:0x8018BFD0 end:0x8018E378 align:16
 	.ctors      start:0x804DB7E8 end:0x804DB7EC
 	.data       start:0x8052A9C0 end:0x8052ABD8
+	.bss        start:0x805B20A8 end:0x805B2128
 
 toBeSorted/sword_proj_effect_list.cpp:
 	.text       start:0x8018E380 end:0x8018F188 align:16
@@ -1194,11 +1237,13 @@ d/a/d_a_salbage_obj.cpp:
 	.ctors      start:0x804DB7EC end:0x804DB7F0
 	.rodata     start:0x804E9CD8 end:0x804E9E28
 	.data       start:0x8052ACD0 end:0x8052B078
+	.bss        start:0x805B2128 end:0x805B22E8
 
 d/a/d_a_salbage_npc.cpp:
 	.text       start:0x80192B00 end:0x80194080 align:16
 	.ctors      start:0x804DB7F0 end:0x804DB7F4
 	.data       start:0x8052B078 end:0x8052B618
+	.bss        start:0x805B22E8 end:0x805B2428
 
 toBeSorted/d_unk_pad.cpp:
 	.text       start:0x80194080 end:0x801946F4 align:16
@@ -1209,6 +1254,7 @@ toBeSorted/goddess_chest_counter.cpp:
 	.ctors      start:0x804DB7F4 end:0x804DB7F8
 	.data       start:0x8052B618 end:0x8052B638
 	.sbss       start:0x805756A8 end:0x805756B0
+	.bss        start:0x805B2428 end:0x805B2438
 
 toBeSorted/misc_actor.cpp:
 	.text       start:0x80194870 end:0x80196648 align:16
@@ -1216,6 +1262,7 @@ toBeSorted/misc_actor.cpp:
 	.rodata     start:0x804E9E28 end:0x804EA810
 	.data       start:0x8052B638 end:0x8052B678
 	.sbss       start:0x805756B0 end:0x805756F0
+	.bss        start:0x805B2438 end:0x805B24C0
 
 toBeSorted/d_hbm:
 	.text       start:0x80196650 end:0x801975B8 align:16
@@ -1418,6 +1465,7 @@ d/tg/d_t_mass_object.cpp:
 	.rodata     start:0x804EE5A8 end:0x804EE6C0
 	.data       start:0x80536478 end:0x80536608
 	.sbss       start:0x80575930 end:0x80575938
+	.bss        start:0x805B57A8 end:0x805B57C0
 
 d/tg/d_t_camera.cpp:
 	.text       start:0x8027A0B0 end:0x8027A370 align:16
@@ -1435,28 +1483,33 @@ d/tg/d_tk_event.cpp:
 	.text       start:0x8027AB30 end:0x8027B408 align:16
 	.ctors      start:0x804DB84C end:0x804DB850
 	.data       start:0x80536828 end:0x80536A28
+	.bss        start:0x805B57C0 end:0x805B5800
 
 toBeSorted/d_a_npc_inv.cpp:
 	.text       start:0x8027B410 end:0x8027BE48 align:16
 	.ctors      start:0x804DB850 end:0x804DB854
 	.data       start:0x80536A28 end:0x80536BC0
+	.bss        start:0x805B5800 end:0x805B5840
 
 toBeSorted/d_a_npc_tke.cpp:
 	.text       start:0x8027BE50 end:0x8027DA90 align:16
 	.ctors      start:0x804DB854 end:0x804DB858
 	.rodata     start:0x804EE6C0 end:0x804EE700
 	.data       start:0x80536BC0 end:0x80536FE8
+	.bss        start:0x805B5840 end:0x805B58C0
 
 toBeSorted/d_a_npc_str.cpp:
 	.text       start:0x8027DA90 end:0x8027E9E0 align:16
 	.ctors      start:0x804DB858 end:0x804DB85C
 	.data       start:0x80536FE8 end:0x80537310
+	.bss        start:0x805B58C0 end:0x805B5940
 
 d/lyt/d_lyt_pause.cpp:
 	.text       start:0x8027E9E0 end:0x80282678 align:16
 	.ctors      start:0x804DB85C end:0x804DB860
 	.data       start:0x80537310 end:0x80537970
 	.sbss       start:0x80575938 end:0x80575948
+	.bss        start:0x805B5940 end:0x805B5D40
 
 d/lyt/d_lyt_game_over.cpp:
 	.text       start:0x80282680 end:0x80284FA8 align:16
@@ -1464,6 +1517,7 @@ d/lyt/d_lyt_game_over.cpp:
 	.rodata     start:0x804EE700 end:0x804EE778
 	.data       start:0x80537970 end:0x80538160
 	.sbss       start:0x80575948 end:0x80575950
+	.bss        start:0x805B5D40 end:0x805B5F00
 
 d/lyt/d_lyt_save_mgr.cpp:
 	.text       start:0x80284FB0 end:0x80286C88 align:16
@@ -1471,24 +1525,28 @@ d/lyt/d_lyt_save_mgr.cpp:
 	.rodata     start:0x804EE778 end:0x804EE790
 	.data       start:0x80538160 end:0x80538498
 	.sbss       start:0x80575950 end:0x80575958
+	.bss        start:0x805B5F00 end:0x805B6000
 
 d/lyt/d_lyt_drop_line.cpp:
 	.text       start:0x80286C90 end:0x802884F8 align:16
 	.ctors      start:0x804DB868 end:0x804DB86C
 	.data       start:0x80538498 end:0x80538658
 	.sbss       start:0x80575958 end:0x80575960
+	.bss        start:0x805B6000 end:0x805B60C0
 
 d/lyt/d_lyt_force_line.cpp:
 	.text       start:0x80288500 end:0x8028A9F8 align:16
 	.ctors      start:0x804DB86C end:0x804DB870
 	.data       start:0x80538658 end:0x80538CE8
 	.sbss       start:0x80575960 end:0x80575968
+	.bss        start:0x805B60C0 end:0x805B6160
 
 d/lyt/d_lyt_enemy_icon.cpp:
 	.text       start:0x8028AA00 end:0x8028BCD8 align:16
 	.ctors      start:0x804DB870 end:0x804DB874
 	.data       start:0x80538CE8 end:0x80538E58
 	.sbss       start:0x80575968 end:0x80575970
+	.bss        start:0x805B6160 end:0x805B61C0
 
 d/lyt/d_lyt_mini_game.cpp:
 	.text       start:0x8028BCE0 end:0x802969E0 align:16
@@ -1502,6 +1560,7 @@ d/lyt/d_lyt_meter_suiryu_score.cpp:
 	.rodata     start:0x804EEB68 end:0x804EEF98
 	.data       start:0x80539B68 end:0x8053AAC8
 	.sbss       start:0x80575990 end:0x80575998
+	.bss        start:0x805B61C0 end:0x805B63C0
 
 d/lyt/d_lyt_meter_suiryu_score_comp.cpp:
 	.text       start:0x8029C2D0 end:0x8029F278 align:16
@@ -1509,6 +1568,7 @@ d/lyt/d_lyt_meter_suiryu_score_comp.cpp:
 	.rodata     start:0x804EEF98 end:0x804EF100
 	.data       start:0x8053AAC8 end:0x8053B968
 	.sbss       start:0x80575998 end:0x805759A0
+	.bss        start:0x805B63C0 end:0x805B6640
 
 d/lyt/d_lyt_boss_caption.cpp:
 	.text       start:0x8029F280 end:0x802A0B08 align:16
@@ -1516,6 +1576,7 @@ d/lyt/d_lyt_boss_caption.cpp:
 	.rodata     start:0x804EF100 end:0x804EF120
 	.data       start:0x8053B968 end:0x8053BD00
 	.sbss       start:0x805759A0 end:0x805759A8
+	.bss        start:0x805B6640 end:0x805B6740
 
 d/lyt/d_lyt_demo_dowsing.cpp:
 	.text       start:0x802A0B10 end:0x802A17C8 align:16
@@ -1523,6 +1584,7 @@ d/lyt/d_lyt_demo_dowsing.cpp:
 	.rodata     start:0x804EF120 end:0x804EF130
 	.data       start:0x8053BD00 end:0x8053BF50
 	.sbss       start:0x805759A8 end:0x805759B0
+	.bss        start:0x805B6740 end:0x805B67C0
 
 d/lyt/d_lyt_shop.cpp:
 	.text       start:0x802A17D0 end:0x802A7FD8 align:16
@@ -1530,6 +1592,7 @@ d/lyt/d_lyt_shop.cpp:
 	.rodata     start:0x804EF130 end:0x804EF970
 	.data       start:0x8053BF50 end:0x8053CFC8
 	.sbss       start:0x805759B0 end:0x805759B8
+	.bss        start:0x805B67C0 end:0x805B6C18
 
 d/lyt/d_lyt_deposit.cpp:
 	.text       start:0x802A7FE0 end:0x802B02C8 align:16
@@ -1537,6 +1600,7 @@ d/lyt/d_lyt_deposit.cpp:
 	.rodata     start:0x804EF970 end:0x804EFA90
 	.data       start:0x8053CFC8 end:0x8053DFC8
 	.sbss       start:0x805759B8 end:0x805759D0
+	.bss        start:0x805B6C18 end:0x805B7120
 
 d/lyt/d_lyt_demo_title.cpp:
 	.text       start:0x802B02D0 end:0x802B22E8 align:16
@@ -1544,6 +1608,7 @@ d/lyt/d_lyt_demo_title.cpp:
 	.rodata     start:0x804EFA90 end:0x804EFAB8
 	.data       start:0x8053DFC8 end:0x8053E510
 	.sbss       start:0x805759D0 end:0x805759D8
+	.bss        start:0x805B7120 end:0x805B73A0
 
 d/lyt/d_lyt_end_roll.cpp:
 	.text       start:0x802B22F0 end:0x802B6B98 align:16
@@ -1551,11 +1616,13 @@ d/lyt/d_lyt_end_roll.cpp:
 	.rodata     start:0x804EFAB8 end:0x804EFAE0
 	.data       start:0x8053E510 end:0x8053F0F8
 	.sbss       start:0x805759D8 end:0x805759E0
+	.bss        start:0x805B73A0 end:0x805B7B20
 
 toBeSorted/d_a_bullet.cpp:
 	.text       start:0x802B6BA0 end:0x802B7A48 align:16
 	.ctors      start:0x804DB894 end:0x804DB898
 	.data       start:0x8053F0F8 end:0x8053F2C0
+	.bss        start:0x805B7B20 end:0x805B7B60
 
 toBeSorted/d_a_npc_ken_talk.cpp:
 	.text       start:0x802B7A50 end:0x802C7770 align:16
@@ -1563,22 +1630,28 @@ toBeSorted/d_a_npc_ken_talk.cpp:
 	.rodata     start:0x804EFAE0 end:0x804F0330
 	.data       start:0x8053F2C0 end:0x8053FE98
 	.sbss       start:0x805759E0 end:0x805759E8
+	.bss        start:0x805B7B60 end:0x805B7CA0
 
 toBeSorted/d_a_jstudio_act.cpp:
 	.text       start:0x802C7770 end:0x802CBC18 align:16
 	.ctors      start:0x804DB89C end:0x804DB8A0
 	.rodata     start:0x804F0330 end:0x804F0460
 	.data       start:0x8053FE98 end:0x805402D8
+	.sbss       start:0x805759E8 end:0x805759F0
+	.bss        start:0x805B7CA0 end:0x805B7D70
 
 toBeSorted/d_a_jstudio_sys.cpp:
 	.text       start:0x802CBC20 end:0x802CC7A8 align:16
 	.data       start:0x805402D8 end:0x805403F8
+	.sbss       start:0x805759F0 end:0x80575A00
+	.bss        start:0x805B7D70 end:0x805B7DD0
 
 d/lyt/d_lyt_control_game.cpp:
 	.text       start:0x802CC7B0 end:0x802D16A8 align:16
 	.ctors      start:0x804DB8A0 end:0x804DB8A4
 	.data       start:0x805403F8 end:0x80540C88
 	.sbss       start:0x80575A00 end:0x80575A18
+	.bss        start:0x805B7DD0 end:0x805B8040
 
 d/lyt/d_lyt_control_title.cpp:
 	.text       start:0x802D16B0 end:0x802D17BC align:16
@@ -1592,6 +1665,7 @@ d/tg/d_t_truck_rails.cpp:
 	.text       start:0x802D18F0 end:0x802D4FD8 align:16
 	.rodata     start:0x804F0460 end:0x804F04E0
 	.data       start:0x80540D68 end:0x80540E88
+	.sbss       start:0x80575A18 end:0x80575A20
 
 d/a/obj/d_a_obj_force_sign.cpp:
 	.text       start:0x802D4FE0 end:0x802D58D0 align:16
@@ -1615,21 +1689,27 @@ d/tg/d_t_siren_tag.cpp:
 	.text       start:0x802D6800 end:0x802D84F8 align:16
 	.ctors      start:0x804DB8B0 end:0x804DB8B4
 	.data       start:0x805411A8 end:0x805414F8
+	.sdata2     start:0x8057CB58 end:0x8057CB80
+	.bss        start:0x805B81D0 end:0x805B8310
 
 d/a/obj/d_a_obj_spore.cpp:
 	.text       start:0x802D8500 end:0x802D9408 align:16
 	.ctors      start:0x804DB8B4 end:0x804DB8B8
 	.data       start:0x805414F8 end:0x805416D8
 	.sbss       start:0x80575A30 end:0x80575A38
+	.sdata2     start:0x8057CB80 end:0x8057CB98
+	.bss        start:0x805B8310 end:0x805B8360
 
 d/tg/d_t_genki_mgr.cpp:
 	.text       start:0x802D9410 end:0x802D9D60 align:16
 	.data       start:0x805416D8 end:0x80541770
 	.sbss       start:0x80575A38 end:0x80575A40
+	.sdata2     start:0x8057CB98 end:0x8057CBE0
 
 d/a/obj/d_a_obj_water_mark.cpp:
 	.text       start:0x802D9D60 end:0x802DA0BC align:16
 	.data       start:0x80541770 end:0x80541838
+	.sdata2     start:0x8057CBE0 end:0x8057CC18
 
 toBeSorted/d_sc_e3_title.cpp:
 	.text       start:0x802DA0C0 end:0x802DA170 align:16
@@ -1673,6 +1753,7 @@ s/s_Crc.cpp:
 
 s/s_Assert.cpp:
 	.text       start:0x802DE700 end:0x802DE73C align:16
+	.sdata      start:0x80573F70 end:0x80573F78
 	.sbss       start:0x80575B70 end:0x80575B78
 
 s/s_Math.cpp:
@@ -1700,6 +1781,7 @@ c/c_mem.cpp:
 
 c/c_lib.cpp:
 	.text       start:0x802DFD90 end:0x802E08C0 align:16
+	.sdata2     start:0x8057CC40 end:0x8057CC58
 
 c/c_list.cpp:
 	.text       start:0x802E08C0 end:0x802E0A50 align:16
@@ -1864,6 +1946,7 @@ m/m_angle.cpp:
 
 m/m_color.cpp:
 	.text       start:0x802EE6C0 end:0x802EE7D4 align:16
+	.sdata2     start:0x8057CDB0 end:0x8057CDC0
 
 m/m_color_fader.cpp:
 	.text       start:0x802EE7E0 end:0x802EEB94 align:16
@@ -1887,6 +1970,7 @@ m/m_fader_base.cpp:
 
 m/m_frustum.cpp:
 	.text       start:0x802F0820 end:0x802F0EFC align:16
+	.sdata2     start:0x8057CDD8 end:0x8057CDE8
 
 m/m_heap.cpp:
 	.text       start:0x802F0F00 end:0x802F1660 align:16
@@ -1899,6 +1983,9 @@ m/m_heap.cpp:
 m/m_mtx.cpp:
 	.text       start:0x802F1660 end:0x802F1F20 align:16
 	.ctors      start:0x804DB8D4 end:0x804DB8D8
+	.sdata      start:0x80574000 end:0x80574008
+	.sdata2     start:0x8057CDE8 end:0x8057CDF8
+	.bss        start:0x805CB088 end:0x805CB0B8
 
 m/m_pad.cpp:
 	.text       start:0x802F1F20 end:0x802F232C align:16
@@ -1909,6 +1996,7 @@ m/m_pad.cpp:
 
 m/m_quat.cpp:
 	.text       start:0x802F2330 end:0x802F2918 align:16
+	.sdata2     start:0x8057CE00 end:0x8057CE28
 
 m/m_thread.cpp:
 	.text       start:0x802F2920 end:0x802F2968 align:16
@@ -1917,6 +2005,8 @@ m/m_vec.cpp:
 	.text       start:0x802F2970 end:0x802F2F08 align:16
 	.ctors      start:0x804DB8DC end:0x804DB8E0
 	.sbss       start:0x80575C70 end:0x80575C88
+	.sdata2     start:0x8057CE28 end:0x8057CE38
+	.bss        start:0x805CB1F8 end:0x805CB228
 
 m/m_video.cpp:
 	.sbss       start:0x80575C88 end:0x80575C90
@@ -4515,6 +4605,7 @@ egg/gfx/eggDrawPathBase.cpp:
 
 egg/gfx/eggDrawPathBloom.cpp:
 	.text       start:0x804A0EA0 end:0x804A29B8 align:16
+	.rodata     start:0x804FBC58 end:0x804FBC70
 	.data       start:0x8056EEB0 end:0x8056EF28
 	.sdata2     start:0x8057F538 end:0x8057F580
 
@@ -4548,6 +4639,7 @@ egg/gfx/eggFrustum.cpp:
 
 egg/gfx/eggG3DUtility.cpp:
 	.text       start:0x804A6860 end:0x804A75B0 align:16
+	.sbss       start:0x80576820 end:0x80576838
 
 egg/gfx/eggGfxEngine.cpp:
 	.text       start:0x804A75B0 end:0x804A7744 align:16
@@ -4678,6 +4770,7 @@ egg/gfx/eggTextureBuffer.cpp:
 	.text       start:0x804B53F0 end:0x804B59DC align:16
 	.data       start:0x8056F2B0 end:0x8056F2C0
 	.sbss       start:0x805768B8 end:0x805768D8
+	.bss        start:0x80675190 end:0x80675390
 
 egg/audio/eggAudioArcPlayerMgr.cpp:
 	.text       start:0x804B59E0 end:0x804B641C align:16

@@ -8,6 +8,8 @@
 
 namespace EGG {
 
+TextureBuffer *TextureBuffer::spBufferTable[NUM_BUFFERS];
+
 TextureBuffer::TextureBuffer() : mSize(0), mState(STATE_FREE), mpNext(nullptr), mpPrev(nullptr) {}
 
 void TextureBuffer::configure() {
