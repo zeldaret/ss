@@ -109,7 +109,7 @@ void dSndDistantSoundActor_c::setPause(bool flag, int fadeFrames) {
 }
 
 void dSndDistantSoundActor_c::updateSome3DField() {
-    a_field_0xE0 = dSndStateMgr_c::GetInstance()->getField_0x49C();
+    mFxSend3D = dSndStateMgr_c::GetInstance()->getFxSend3D();
 }
 
 UNKWORD dSndDistantSoundActor_c::d_vt_0x3C() {

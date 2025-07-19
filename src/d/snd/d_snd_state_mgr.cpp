@@ -9,6 +9,7 @@
 #include "d/snd/d_snd_checkers.h"
 #include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_event.h"
+#include "d/snd/d_snd_harp_song_mgr.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
@@ -16,6 +17,7 @@
 #include "d/snd/d_snd_stage_data.h"
 #include "d/snd/d_snd_util.h"
 #include "d/snd/d_snd_wzsound.h"
+#include "d/t/d_t_sound_area_mgr.h"
 #include "egg/core/eggHeap.h"
 #include "nw4r/snd/snd_FxReverbStdDpl2.h"
 #include "nw4r/snd/snd_SeqSoundHandle.h"
@@ -42,16 +44,16 @@ dSndStateMgr_c::dSndStateMgr_c()
       field_0x060(0),
       field_0x064(0),
       field_0x065(false),
-      field_0x066(0),
-      field_0x067(0),
-      field_0x068(-1),
-      field_0x06C(-1),
+      mHasChangedTgSndAreaFlags(false),
+      mHasChangedTgSndAreaMgFlags(false),
+      mSavedTgSndAreaFlags(-1),
+      mSavedTgSndAreaMgFlags(-1),
       mpUnkCallback(nullptr),
       field_0x074(0),
       mpOnEventStartCallback(nullptr),
       field_0x07C(0),
-      field_0x080(0),
-      field_0x084(0),
+      mpTgSndAreaFlagsChangeCallback(nullptr),
+      mpTgSndAreaMgFlagsChangeCallback(nullptr),
       field_0x088(0),
       mSoundEventId(SND_EVENT_0x89),
       mCameraCutCounter(0),
@@ -74,11 +76,11 @@ dSndStateMgr_c::dSndStateMgr_c()
       field_0x254(0),
       field_0x258(0),
       field_0x48C(0),
-      field_0x490(0.02f),
-      field_0x494(-1.0f),
-      field_0x498(-1.0f),
-      field_0x49C(0.02f),
-      field_0x4A0(0.02f),
+      mFxSend3DDefault(0.02f),
+      mFxSend3DOverride(-1.0f),
+      mFxSend3DNext(-1.0f),
+      mFxSend3D(0.02f),
+      mFxSend3DTarget(0.02f),
       field_0x4A4(-1),
       field_0x4A8(0),
       mNeedsGroupsReload(false) {}
@@ -226,6 +228,38 @@ bool dSndStateMgr_c::isSomeSkyloftRoom() const {
         case SND_STAGE_F018r: return true;
         default:              return false;
     }
+}
+
+void dSndStateMgr_c::onRestartScene(s32 fadeFrames) {
+    if (field_0x064) {
+        return;
+    }
+
+    s32 nextLayer = dScGame_c::nextSpawnInfo.layer;
+    // This combines next stage with current layer, so this effectively checks if you're leaving the Hint Movie scene
+    if (isSeekerStoneStage(mStageName, dScGame_c::currentSpawnInfo.layer)) {
+        dSndBgmMgr_c::GetInstance()->stopAllBgm(fadeFrames);
+    } else if (mLayer != nextLayer) {
+        if (isSeekerStoneStage(mStageName, nextLayer)) {
+            dSndBgmMgr_c::GetInstance()->stopAllBgm(fadeFrames);
+            dSndBgmMgr_c::GetInstance()->prepareBgm(BGM_HINT_SELECT, 0);
+            dSndBgmMgr_c::GetInstance()->setOverrideBgmId(BGM_HINT_SELECT);
+            dSndBgmMgr_c::GetInstance()->activateOverrideBgmId();
+            dSndAreaSoundEffectMgr_c::GetInstance()->stopSounds(fadeFrames);
+        } else {
+            onGotoStage(fadeFrames);
+            onFlag0x10(0x01);
+            return;
+        }
+    }
+
+    dSndSmallEffectMgr_c::GetInstance()->stopAllSoundExceptEvent(fadeFrames);
+    dSndBgmMgr_c::GetInstance()->prepareBgm();
+    dSndHarpSongMgr_c::GetInstance()->deactivate();
+    onFlag0x10(0x01);
+    dSndBgmMgr_c::GetInstance()->setField_0x306(1);
+    offFlag0x10(0x4);
+    offFlag0x10(0x10);
 }
 
 void dSndStateMgr_c::loadStageSound() {
@@ -405,7 +439,7 @@ void dSndStateMgr_c::loadStageSound(bool force) {
     f32 volume = -1.0f;
     dSndAreaSoundEffectMgr_c::GetInstance()->loadStageSound(&volume);
     if (volume > 0.0f) {
-        field_0x490 = volume;
+        mFxSend3DDefault = volume;
     }
 }
 
@@ -700,7 +734,7 @@ void dSndStateMgr_c::handleSeLv() {
         if (dSndMgr_c::GetInstance()->holdSound(&mSeLvSoundHandle, soundId)) {
             u32 id = dSndPlayerMgr_c::GetInstance()->getDemoArchive()->GetSoundUserParam(soundId);
             if ((dSndPlayerMgr_c::sEventMuteFlagsMask & id & 0x2000000) == 0) {
-                mSeLvSoundHandle.SetFxSend(nw4r::snd::AUX_A, field_0x49C);
+                mSeLvSoundHandle.SetFxSend(nw4r::snd::AUX_A, mFxSend3D);
             }
         }
     } else {
@@ -849,7 +883,35 @@ void dSndStateMgr_c::setRoomId(s32 roomId) {
 }
 
 void dSndStateMgr_c::calcTgSnd() {
-    // ...
+    mHasChangedTgSndAreaFlags = false;
+    mHasChangedTgSndAreaMgFlags = false;
+    dAcPy_c *link = dAcPy_c::GetLinkM();
+    if (link != nullptr && dTgSndMg_c::GetInstance() != nullptr) {
+        u32 flags = dTgSndMg_c::GetInstance()->getSndFlags();
+        if (flags != mSavedTgSndAreaMgFlags) {
+            mHasChangedTgSndAreaMgFlags = true;
+            if (mpTgSndAreaMgFlagsChangeCallback != nullptr) {
+                (mpTgSndAreaMgFlagsChangeCallback)(flags, mSavedTgSndAreaMgFlags);
+            }
+            dSndBgmMgr_c::GetInstance()->onTgSndAreaMgFlagsChange(flags, mSavedTgSndAreaMgFlags);
+            mSavedTgSndAreaMgFlags = flags;
+        }
+
+        if (dSndSourceMgr_c::getBoomerangSource() != nullptr) {
+            flags = mSavedTgSndAreaMgFlags;
+        } else {
+            flags = link->mTgSndAreaFlags;
+        }
+        if (flags != mSavedTgSndAreaFlags) {
+            mHasChangedTgSndAreaFlags = true;
+            if (mpTgSndAreaFlagsChangeCallback != nullptr) {
+                (mpTgSndAreaFlagsChangeCallback)(flags, mSavedTgSndAreaFlags);
+            }
+            mFxSend3DNext = getUserParamVolume(flags);
+            dSndBgmMgr_c::GetInstance()->onTgSndAreaFlagsChange(flags, mSavedTgSndAreaFlags);
+            mSavedTgSndAreaFlags = flags;
+        }
+    }
 }
 
 void dSndStateMgr_c::calcFilters() {
@@ -973,6 +1035,37 @@ void dSndStateMgr_c::resetBgmLpf() {
     for (u32 id = dSndPlayerMgr_c::PLAYER_BGM; id < dSndPlayerMgr_c::PLAYER_BGM_BATTLE + 1; id++) {
         dSndControlPlayerMgr_c::GetInstance()->setLpfFreq(id, 0.0f, 15);
     }
+}
+
+void dSndStateMgr_c::calcFxSend3D() {
+    if (mFxSend3D > mFxSend3DTarget) {
+        mFxSend3D -= 0.02f;
+        if (mFxSend3D < mFxSend3DTarget) {
+            mFxSend3D = mFxSend3DTarget;
+        }
+    } else if (mFxSend3D < mFxSend3DTarget) {
+        mFxSend3D += 0.02f;
+        if (mFxSend3D > mFxSend3DTarget) {
+            mFxSend3D = mFxSend3DTarget;
+        }
+    }
+}
+
+void dSndStateMgr_c::setFxSend3DTarget() {
+    // TODO - weird control flow
+    f32 target = mFxSend3DDefault;
+    if (mFxSend3DNext > 0.0f) {
+        target = mFxSend3DNext;
+    } else if (mFxSend3DOverride > 0.0f) {
+        target = mFxSend3DOverride;
+    }
+
+    if (target < 0.02f) {
+        target = 0.02f;
+    } else if (target > 0.3f) {
+        target = 0.3f;
+    }
+    mFxSend3DTarget = target;
 }
 
 f32 dSndStateMgr_c::getUserParamVolume(u32 userParam) {

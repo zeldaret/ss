@@ -128,7 +128,7 @@ protected:
     /* 0xCC */ u16 mFlags;
     /* 0xD0 */ nw4r::math::VEC3 mPositionRelativeToPlayer;
     /* 0xDC */ f32 mDistanceToPlayer;
-    /* 0xE0 */ f32 a_field_0xE0;
+    /* 0xE0 */ f32 mFxSend3D;
 };
 
 #endif

@@ -151,8 +151,8 @@ bool dAcBase_c::addActorToRoom(s32 roomId) {
     return false;
 }
 
-void dAcBase_c::setBit_field_0xE8(s32 shift) {
-    field_0xe8 |= (1 << shift);
+void dAcBase_c::setTgSndAreaFlag(s32 shift) {
+    mTgSndAreaFlags |= (1 << shift);
 }
 
 int dAcBase_c::actorCreate() {

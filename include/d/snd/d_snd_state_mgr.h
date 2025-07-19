@@ -17,6 +17,7 @@ public:
 
 public:
     typedef void (*OnEventStartCallback)(s32 soundEventId, u32 flags);
+    typedef void (*OnFlagsChangeCallback)(u32 newFlags, u32 oldFlags);
 
     enum StageFlags_e {
         STAGE_FIELD = 0x1,
@@ -77,12 +78,10 @@ public:
         return mFrameCounter;
     }
 
-    f32 getField_0x49C() const {
-        return field_0x49C;
+    f32 getFxSend3D() const {
+        return mFxSend3D;
     }
 
-    
-    
     void resetEventName() {
         mEventName = "EVENT_NONE";
     }
@@ -173,6 +172,8 @@ public:
 
     void onStageOrLayerUpdate();
     void onStageLoad();
+    void onRestartScene(s32 fadeFrames);
+    void onGotoStage(s32 fadeFrames);
     void loadStageSound();
     void loadObjectSound();
 
@@ -227,6 +228,8 @@ private:
     void setRoomId(s32 roomId);
     void calcTgSnd();
     void calcFilters();
+    void calcFxSend3D();
+    void setFxSend3DTarget();
 
     u32 getBgmLabelSoundId();
     void doLabelSuffix(const char *suffix);
@@ -250,7 +253,7 @@ private:
     u32 getCmdCameraId();
     u32 getCmdMsgWaitId();
     u32 getCmdFrameCountId();
-    
+
     void calcSe();
     bool calcBgm();
     void calcCmd();
@@ -306,16 +309,16 @@ private:
     /* 0x060 */ UNKWORD field_0x060;
     /* 0x064 */ u8 field_0x064;
     /* 0x065 */ bool field_0x065;
-    /* 0x066 */ u8 field_0x066;
-    /* 0x067 */ u8 field_0x067;
-    /* 0x068 */ UNKWORD field_0x068;
-    /* 0x06C */ UNKWORD field_0x06C;
+    /* 0x066 */ bool mHasChangedTgSndAreaFlags;
+    /* 0x067 */ bool mHasChangedTgSndAreaMgFlags;
+    /* 0x068 */ u32 mSavedTgSndAreaFlags;
+    /* 0x06C */ u32 mSavedTgSndAreaMgFlags;
     /* 0x070 */ void (*mpUnkCallback)();
     /* 0x074 */ UNKWORD field_0x074;
     /* 0x078 */ OnEventStartCallback mpOnEventStartCallback;
     /* 0x07C */ UNKWORD field_0x07C;
-    /* 0x080 */ UNKWORD field_0x080;
-    /* 0x084 */ UNKWORD field_0x084;
+    /* 0x080 */ OnFlagsChangeCallback mpTgSndAreaFlagsChangeCallback;
+    /* 0x084 */ OnFlagsChangeCallback mpTgSndAreaMgFlagsChangeCallback;
     /* 0x088 */ UNKWORD field_0x088;
     /* 0x08C */ s32 mSoundEventId;
     /* 0x090 */ s32 mCameraCutCounter;
@@ -346,11 +349,11 @@ private:
     /* 0x258 */ u32 field_0x258;
     /* 0x25C */ nw4r::snd::FxReverbStdDpl2 mFx;
     /* 0x48C */ UNKWORD field_0x48C;
-    /* 0x490 */ f32 field_0x490;
-    /* 0x494 */ f32 field_0x494;
-    /* 0x498 */ f32 field_0x498;
-    /* 0x49C */ f32 field_0x49C;
-    /* 0x4A0 */ f32 field_0x4A0;
+    /* 0x490 */ f32 mFxSend3DDefault;
+    /* 0x494 */ f32 mFxSend3DOverride;
+    /* 0x498 */ f32 mFxSend3DNext;
+    /* 0x49C */ f32 mFxSend3D;
+    /* 0x4A0 */ f32 mFxSend3DTarget;
     /* 0x4A4 */ u32 field_0x4A4;
     /* 0x4A8 */ u8 field_0x4A8;
     /* 0x4A9 */ bool mNeedsGroupsReload;

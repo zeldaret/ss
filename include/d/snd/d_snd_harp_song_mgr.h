@@ -19,6 +19,9 @@ public:
 
     void calc();
 
+    void activate();
+    void deactivate();
+
     nw4r::snd::SoundHandle &getFiSingHandle() {
         return mFiSingHandle;
     }

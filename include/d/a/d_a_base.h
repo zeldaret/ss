@@ -78,7 +78,7 @@ public:
     /* 0xCC */ mVec3_c mScale;
     /* 0xD8 */ u32 actor_properties;
     /* 0xDC */ dAcRef_c<dAcBase_c> actor_node;
-    /* 0xE8 */ u32 field_0xe8;
+    /* 0xE8 */ u32 mTgSndAreaFlags;
     /* 0xEC */ s8 roomid;
     /* 0xED */ u8 actor_subtype;
     /* 0xEE */ u8 polyAttr0;
@@ -177,7 +177,7 @@ public:
     /* 8002c710 */ int initAllocatorWork1Heap(int size, char *name, int align);
     /* 8002c720 */ int initAllocator(int size, char *name, EGG::Heap *heap, int align);
     /* 8002c7b0 */ bool addActorToRoom(s32 roomId);
-    /* 8002c840 */ void setBit_field_0xE8(s32);
+    /* 8002c840 */ void setTgSndAreaFlag(s32);
     /* 8002cf10 */ u32 itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype);
     /* 8002cf90 */ void fillUpperParams2Byte();
     /* 8002cfa0 */ u32 getParams2_ignoreLower();

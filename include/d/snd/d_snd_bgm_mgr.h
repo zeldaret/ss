@@ -46,6 +46,12 @@ public:
     bool onEventFinalize(const char *eventName, u32 soundEventId, bool skipped);
     void prepareBgm();
 
+    void setOverrideBgmId(u32 id);
+    void activateOverrideBgmId();
+
+    void onTgSndAreaMgFlagsChange(u32 newFlags, u32 oldFlags);
+    void onTgSndAreaFlagsChange(u32 newFlags, u32 oldFlags);
+
     dSndBgmSound_c *getSoundHandleForBgm(u32 soundId, u32 startOffset);
     bool isPlayingBgmSound() const;
     bool isPlayingBgmSoundId(u32 soundId) const;
