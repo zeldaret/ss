@@ -34,7 +34,7 @@ SoundPlayer::SoundPlayer() :
 	mPlayableLimit		(INT_MAX),
 	mVolume				(1.0f),
 	mLpfFreq			(0.0f),
-	mOutputLineFlag		(1),
+	mOutputLineFlag		(OUTPUT_LINE_MAIN),
 	mMainOutVolume		(1.0f),
 	mBiquadType			(0),
 	mBiquadValue		(0.0f),

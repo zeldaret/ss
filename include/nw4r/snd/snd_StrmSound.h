@@ -88,6 +88,8 @@ namespace nw4r { namespace snd { namespace detail
 			return DEBUG_SOUND_TYPE_STRMSOUND;
 		}
 
+		u32 GetPlaySamplePosition() const { return mStrmPlayer.GetPlaySamplePosition(); }
+
 	// static members
 	public:
 		static int const FILE_STREAM_BUFFER_SIZE = 128;

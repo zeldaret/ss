@@ -632,7 +632,7 @@ bool daPlBaseMdl_c::create(
     mpSoundData = nullptr;
     field_0x5A = 0xFFFF;
     dSoundSourceIf_c *sound = player->getSoundSource();
-    if (sound->isReadyMaybe()) {
+    if (sound->hasAnimSound()) {
         sound->load(nullptr, "");
     }
     return true;

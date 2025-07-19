@@ -12,6 +12,7 @@
 #include "d/flag/dungeonflag_manager.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
+#include "d/snd/d_snd_source_mgr.h"
 #include "f/f_base.h"
 #include "f/f_profile.h"
 #include "f/f_profile_name.h"
@@ -26,7 +27,6 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/event_manager.h"
-#include "toBeSorted/music_mgrs.h"
 #include "toBeSorted/time_area_mgr.h"
 
 #include <cstring>
@@ -163,7 +163,7 @@ bool dStage_c::fadeIn(s32 fadeType, u16 frames) {
     mFader.setFadeInType(fadeType);
     mFader.setFadeInFrame(frames);
     mFader.fadeIn();
-    fn_80384570(ENEMY_BGM_RELATED_MGR, false);
+    dSndSourceMgr_c::GetInstance()->setMutedFromFader(false);
     return true;
 }
 
@@ -174,18 +174,18 @@ bool dStage_c::fadeOut(s32 fadeType, u16 frames) {
     mFader.setFadeOutType(fadeType);
     mFader.setFadeOutFrame(frames);
     mFader.fadeOut();
-    fn_80384570(ENEMY_BGM_RELATED_MGR, true);
+    dSndSourceMgr_c::GetInstance()->setMutedFromFader(true);
     return true;
 }
 
 void dStage_c::forceFadeOut() {
     mFader.setStatus(mFaderBase_c::FADED_OUT);
-    fn_80384570(ENEMY_BGM_RELATED_MGR, true);
+    dSndSourceMgr_c::GetInstance()->setMutedFromFader(true);
 }
 
 void dStage_c::forceFadeIn() {
     mFader.setStatus(mFaderBase_c::FADED_IN);
-    fn_80384570(ENEMY_BGM_RELATED_MGR, false);
+    dSndSourceMgr_c::GetInstance()->setMutedFromFader(false);
 }
 
 void dStage_c::drawMap(mMtx_c *mtx, int param) {

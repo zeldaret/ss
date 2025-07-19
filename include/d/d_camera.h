@@ -33,6 +33,9 @@ public:
         mScreenShakeIntensity = val;
     }
 
+    bool isUnderwater() const;
+    f32 getUnderwaterDepth() const;
+
 private:
     /* 0x068 */ u8 _0x068[0x6C - 0x068];
     /* 0x06C */ mVec3_c mPositionMaybe;

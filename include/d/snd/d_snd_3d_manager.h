@@ -4,7 +4,6 @@
 #include "d/snd/d_snd_3d_engine.h"
 #include "d/snd/d_snd_util.h"
 #include "egg/gfx/eggCamera.h"
-#include "m/m_vec.h"
 #include "nw4r/math/math_types.h"
 #include "nw4r/snd/snd_Sound3DListener.h"
 #include "nw4r/snd/snd_Sound3DManager.h"
@@ -28,11 +27,11 @@ public:
         return mManager;
     }
 
-    const mVec3_c &getCameraTargetPos() const {
+    const nw4r::math::VEC3 &getCameraTargetPos() const {
         return mCameraTargetPosition;
     }
 
-    const mVec3_c &getNrmCameraDirection() const {
+    const nw4r::math::VEC3 &getNrmCameraDirection() const {
         return mCameraDirectionNormalized;
     }
 
@@ -52,8 +51,8 @@ private:
     /* 0x018 */ nw4r::snd::Sound3DManager mManager;
     /* 0x044 */ nw4r::snd::Sound3DListener mListener;
     /* 0xB0 */ EGG::LookAtCamera mCamera;
-    /* 0x138 */ mVec3_c mCameraDirectionNormalized;
-    /* 0x144 */ mVec3_c mCameraTargetPosition;
+    /* 0x138 */ nw4r::math::VEC3 mCameraDirectionNormalized;
+    /* 0x144 */ nw4r::math::VEC3 mCameraTargetPosition;
     /* 0x150 */ f32 mCameraPosSqVelocity;
     /* 0x154 */ f32 mCameraAtSqVelocity;
     /* 0x158 */ f32 mCamDistance;
