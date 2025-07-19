@@ -39,9 +39,11 @@ public:
     void pauseAllBgm();
     void stopAllBgm(s32 fadeFrames);
 
+    void loadStageSound();
     void setBgmToPlayOnEventEnd(u32 soundId);
     bool onEventEnd();
     void onEventStart(const char *eventName, s32 soundEventId, s32 unk);
+    bool onEventFinalize(const char *eventName, u32 soundEventId, bool skipped);
     void prepareBgm();
 
     dSndBgmSound_c *getSoundHandleForBgm(u32 soundId, u32 startOffset);

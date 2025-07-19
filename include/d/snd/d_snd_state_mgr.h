@@ -81,8 +81,22 @@ public:
         return field_0x49C;
     }
 
+    
+    
     void resetEventName() {
         mEventName = "EVENT_NONE";
+    }
+
+    const char *getCameraFmt() {
+        return "%s_C%d_%d";
+    }
+
+    const char *getMsgWaitFmt() {
+        return "%s_M%d_W%d_%d";
+    }
+
+    const char *getFrameFmt() {
+        return "%s_%d";
     }
 
     bool checkFlag0x18(u32 mask);
@@ -101,6 +115,10 @@ public:
 
     void offFlag0x258(u32 mask) {
         field_0x258 &= ~mask;
+    }
+
+    bool checkStageTypeFlag(u32 mask) {
+        return mStageTypeFlags & mask;
     }
 
     bool checkFlag0x10(u32 mask) {
@@ -131,7 +149,8 @@ public:
 
     const char *getCurrentStageMusicDemoName() const;
     bool isInDemo() const {
-        return getCurrentStageMusicDemoName() != nullptr;
+        // implicit conversion required for regalloc in loadStageSound
+        return getCurrentStageMusicDemoName();
     }
 
     void setStbEventName(const char *eventName);
@@ -153,6 +172,9 @@ public:
     f32 getUserParamVolume(u32 userParam);
 
     void onStageOrLayerUpdate();
+    void onStageLoad();
+    void loadStageSound();
+    void loadObjectSound();
 
     // TODO better names
     static const char *getStageName(s32 id);
@@ -189,37 +211,62 @@ public:
 
     void onCameraCut(s32 cutIdx);
 
-    static void clearExecuteCallback();
+    static void clearEventExecuteCallback();
 
 private:
+    void loadStageSound(bool force);
+
     void resetOverrides();
     void initializeEventCallbacks(const char *name);
     bool handleGlobalEvent(const char *name);
     bool handleStageEvent(const char *name);
     void handleDemoEvent(const char *name);
 
+    void calcEvent();
     void calcRoomId();
     void setRoomId(s32 roomId);
     void calcTgSnd();
     void calcFilters();
 
+    u32 getBgmLabelSoundId();
+    void doLabelSuffix(const char *suffix);
+
     u32 convertSeLabelToSoundId(const char *label);
     u32 convertBgmLabelToSoundId(const char *label);
-
-    u32 getBgmLabelSoundId();
-    bool playFanOrBgm(u32 soundId);
+    u32 convertCmdLabelToSoundId(const char *label);
 
     void doBgm(const char *label);
     void doSe(const char *label);
     void doCmd(const char *label);
 
-    void doLabelSuffix(const char *suffix);
     u32 getSeCameraId();
+    u32 getSeMsgWaitId();
+    u32 getSeFrameCountId();
+
+    u32 getBgmCameraId();
+    u32 getBgmMsgWaitId();
+    u32 getBgmFrameCountId();
+
+    u32 getCmdCameraId();
+    u32 getCmdMsgWaitId();
+    u32 getCmdFrameCountId();
+    
+    void calcSe();
+    bool calcBgm();
+    void calcCmd();
+
+    bool playSe(u32 soundId);
+    bool playFanOrBgm(u32 soundId);
+    bool playCmd(u32 soundId);
 
     void handleFan();
     void handleSe();
     void handleCmd();
     void handleSeLv();
+
+    /** Called when no event is running anymore */
+    void endEvent(bool skipped);
+    /** Called when an event stops */
     bool finalizeEvent(bool skipped);
 
     void resetEventVars();
@@ -235,6 +282,7 @@ private:
     // Checks if the given stage + layer is the stage you're transported
     // to when viewing hint movies.
     static bool isSeekerStoneStage(const char *stageName, s32 layer);
+    bool isSomeSkyloftRoom() const;
 
     void setCallbacksForStage();
 
@@ -247,12 +295,12 @@ private:
     /* 0x014 */ UNKWORD field_0x014;
     /* 0x018 */ UNKWORD field_0x018;
     /* 0x01C */ SizedString<32> mStageName;
-    /* 0x03C */ UNKWORD field_0x03C;
+    /* 0x03C */ s32 field_0x03C;
     /* 0x040 */ s32 mStageId;
     /* 0x044 */ UNKWORD field_0x044;
     /* 0x048 */ u8 _0x048[0x050 - 0x048];
     /* 0x050 */ s32 mPreviousStageId;
-    /* 0x054 */ UNKWORD field_0x054;
+    /* 0x054 */ u32 mStageTypeFlags;
     /* 0x058 */ s32 mLayer;
     /* 0x05C */ s32 mRoomId;
     /* 0x060 */ UNKWORD field_0x060;
@@ -303,9 +351,9 @@ private:
     /* 0x498 */ f32 field_0x498;
     /* 0x49C */ f32 field_0x49C;
     /* 0x4A0 */ f32 field_0x4A0;
-    /* 0x4A4 */ UNKWORD field_0x4A4;
+    /* 0x4A4 */ u32 field_0x4A4;
     /* 0x4A8 */ u8 field_0x4A8;
-    /* 0x4A9 */ bool needsGroupsReload;
+    /* 0x4A9 */ bool mNeedsGroupsReload;
 };
 
 #endif
