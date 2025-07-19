@@ -17,7 +17,6 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/d_particle.h"
-#include "toBeSorted/music_mgrs.h"
 
 SPECIAL_BASE_PROFILE(STAGE_MANAGER, dStageMgr_c, fProfile::STAGE_MANAGER, 0X5, 1536);
 
@@ -280,7 +279,7 @@ void dStageMgr_c::finalizeState_RestartSceneWait() {}
 void dStageMgr_c::initializeState_RestartScene() {
     triggerFade(dScGame_c::nextSpawnInfo.transitionType, dScGame_c::nextSpawnInfo.transitionFadeFrames);
     mFader.setFadeInType(dScGame_c::nextSpawnInfo.transitionType);
-    fn_803625F0(ENEMY_SOUND_MGR, mFader.getFadeOutFrame());
+    dSndStateMgr_c::GetInstance()->onRestartScene(mFader.getFadeOutFrame());
 }
 
 void dStageMgr_c::executeState_RestartScene() {

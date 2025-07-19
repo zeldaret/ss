@@ -30,7 +30,7 @@ dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, s32 sourceType)
       mpSourceParam(pSourceParam),
       mFlags(0),
       mDistanceToPlayer(INFINITY),
-      a_field_0xE0(0.0f) {
+      mFxSend3D(0.0f) {
     resetCachedRelativePositions();
     // Portability hazard
     SetUserParam(reinterpret_cast<u32>(this));
@@ -41,7 +41,7 @@ dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, s32 sourceType)
 
 void dSnd3DActor_c::setPosition(const nw4r::math::VEC3 &rPosition) {
     SetPosition(rPosition);
-    a_field_0xE0 = dSndStateMgr_c::GetInstance()->getField_0x49C();
+    mFxSend3D = dSndStateMgr_c::GetInstance()->getFxSend3D();
     mFlags = 0;
 }
 

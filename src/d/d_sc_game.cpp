@@ -6,6 +6,7 @@
 #include "d/d_gfx.h"
 #include "d/d_stage_mgr.h"
 #include "d/flag/storyflag_manager.h"
+#include "d/snd/d_snd_state_mgr.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
 #include "m/m_fader_base.h"
@@ -16,7 +17,6 @@
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
-#include "toBeSorted/music_mgrs.h"
 #include "toBeSorted/unk_save_time.h"
 
 #include <cstring>
@@ -166,7 +166,7 @@ void dScGame_c::executeState_Action() {
         }
     } else if (mReloadTrigger != fProfile::PROFILE_MAX) {
         mFader.fadeOut();
-        fn_80362150(ENEMY_SOUND_MGR, mFader.getFadeOutFrame());
+        dSndStateMgr_c::GetInstance()->onGotoStage(mFader.getFadeOutFrame());
     }
 }
 

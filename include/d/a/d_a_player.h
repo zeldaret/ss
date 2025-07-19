@@ -93,6 +93,10 @@ public:
         return LINK;
     }
 
+    static dAcPy_c *GetLinkM() {
+        return LINK;
+    }
+
     static dAcPy_c *GetLink2() {
         return LINK2;
     }

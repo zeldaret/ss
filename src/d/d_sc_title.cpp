@@ -9,6 +9,7 @@
 #include "d/d_reset.h"
 #include "d/d_sc_game.h"
 #include "d/d_sys.h"
+#include "d/snd/d_snd_state_mgr.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
 #include "m/m_color.h"
@@ -162,7 +163,7 @@ void dScTitle_c::loadTitleScreen(u32 params) {
     } else {
         actuallyTriggerEntrance("F000", 0, 28, 48, 0, 0, dFader_c::FADER_BLACK, 15, -1);
     }
-    fn_80362150(ENEMY_SOUND_MGR, 30);
+    dSndStateMgr_c::GetInstance()->onGotoStage(30);
 }
 
 void dScTitle_c::setSomethingSkbRelated() {
