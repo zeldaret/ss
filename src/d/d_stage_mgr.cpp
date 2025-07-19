@@ -9,13 +9,14 @@
 #include "d/d_stage_parse.h"
 #include "d/d_sys.h"
 #include "d/flag/flag_managers.h"
-#include "egg/core/eggHeap.h"
+#include "d/snd/d_snd_state_mgr.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
 #include "m/m_dvd.h"
 #include "toBeSorted/arc_managers/current_stage_arc_manager.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
+#include "toBeSorted/d_particle.h"
 #include "toBeSorted/music_mgrs.h"
 
 SPECIAL_BASE_PROFILE(STAGE_MANAGER, dStageMgr_c, fProfile::STAGE_MANAGER, 0X5, 1536);
@@ -56,7 +57,7 @@ void dStageMgr_c::finalizeState_ReadStageRes() {
         parseStageBzs(-1, stageBzs);
         parseRoomStageBzs(-1, stageBzs);
     }
-    fn_803618F0(ENEMY_SOUND_MGR);
+    dSndStateMgr_c::GetInstance()->onStageOrLayerUpdate();
 }
 
 void dStageMgr_c::initializeState_ReadRoomRes() {}
@@ -147,27 +148,24 @@ void dStageMgr_c::executeState_ReadLayerObjectRes() {
     }
 }
 
-extern "C" void fn_800C85D0(void *, EGG::Heap *heap, bool, void *jpc, void *jpn);
-extern "C" void *FOR_LOADED_PARTICLES;
-
 void dStageMgr_c::finalizeState_ReadLayerObjectRes() {
     if (mDemoName.len() != 0) {
         const char *name = mDemoName;
         void *jpc = OarcManager::GetInstance()->getSubEntryData(name, "dat/jparticle.jpc");
         if (jpc != nullptr) {
-            void *jpn = OarcManager::GetInstance()->getSubEntryData(name, "dat/jparticle.jpn");
-            fn_800C85D0(FOR_LOADED_PARTICLES, dHeap::work2Heap.heap, true, jpc, jpn);
+            void *jpn = OarcManager::GetInstance()->getData(name, "dat/jparticle.jpn");
+            dParticle::mgr_c::GetInstance()->createResource(dHeap::work2Heap.heap, true, jpc, jpn);
         }
     }
 }
 
 static void *soundCallback(void *arg) {
-    fn_80362730(ENEMY_SOUND_MGR);
+    dSndStateMgr_c::GetInstance()->loadStageSound();
     return reinterpret_cast<void *>(true);
 }
 
 void dStageMgr_c::initializeState_SoundLoadSceneData() {
-    fn_803624F0(ENEMY_SOUND_MGR);
+    dSndStateMgr_c::GetInstance()->onStageLoad();
     mpDvdCallback = mDvd_callback_c::createOrDie(soundCallback, nullptr);
 }
 
@@ -195,7 +193,7 @@ void dStageMgr_c::executeState_CreateObject() {
 void dStageMgr_c::finalizeState_CreateObject() {}
 
 static void *soundCallback2(void *arg) {
-    fn_80365D20(ENEMY_SOUND_MGR);
+    dSndStateMgr_c::GetInstance()->loadObjectSound();
     return reinterpret_cast<void *>(true);
 }
 

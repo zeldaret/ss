@@ -366,7 +366,7 @@ bool dSndPlayerMgr_c::loadDemoArchive(const char *demoArchiveName) {
     return ok;
 }
 
-void dSndPlayerMgr_c::shutdown() {
+void dSndPlayerMgr_c::shutdownDemo() {
     mDemoSoundArchivePlayer.Shutdown();
     mDemoSoundArchive.Shutdown();
 }

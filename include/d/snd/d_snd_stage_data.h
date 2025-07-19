@@ -9,7 +9,7 @@ struct dSndStageInfo {
     /* 0x08 */ u32 unk1;
     /* 0x0C */ u32 unk2;
     /* 0x10 */ u32 unk3;
-    /* 0x14 */ u32 unk4;
+    /* 0x14 */ s32 unk4;
     /* 0x18 */ const char *demoName;
 
     static const s32 sNumStageInfos;

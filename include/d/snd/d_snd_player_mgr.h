@@ -30,7 +30,7 @@ public:
     void shutdown(s32 channel);
 
     void setup();
-    void shutdown();
+    void shutdownDemo();
     void calc();
     void calcActive();
 
