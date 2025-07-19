@@ -21,6 +21,8 @@ class dSndAreaSoundEffectMgr_c {
 public:
     dSndAreaSoundEffectMgr_c();
 
+    void loadStageSound(f32 *pOutVolume);
+
     bool startSound(u32 soundId, u32 handleIdx);
     void calc();
     void stopSounds(s32 fadeFrames);

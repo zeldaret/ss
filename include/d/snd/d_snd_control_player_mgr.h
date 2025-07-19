@@ -25,6 +25,7 @@ public:
     void setupPlayerControlsGlobal();
     void setupPlayerControlsStage();
     void setupPlayerControlsStageBgm();
+    void setupPlayerControlsDemo();
 
     void calc();
 

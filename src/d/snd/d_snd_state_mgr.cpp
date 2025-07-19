@@ -36,7 +36,7 @@ dSndStateMgr_c::dSndStateMgr_c()
       field_0x03C(0),
       mStageId(0xAC),
       mPreviousStageId(0xAC),
-      field_0x054(0),
+      mStageTypeFlags(0),
       mLayer(0),
       mRoomId(-1),
       field_0x060(0),
@@ -81,7 +81,7 @@ dSndStateMgr_c::dSndStateMgr_c()
       field_0x4A0(0.02f),
       field_0x4A4(-1),
       field_0x4A8(0),
-      needsGroupsReload(false) {}
+      mNeedsGroupsReload(false) {}
 
 extern "C" void fn_803665B0(nw4r::snd::detail::FxReverbStdParam &, int);
 
@@ -112,12 +112,12 @@ void dSndStateMgr_c::onStageOrLayerUpdate() {
     field_0x064 = 0;
 
     if (!streq(mStageName, dScGame_c::currentSpawnInfo.getStageName())) {
-        needsGroupsReload = true;
+        mNeedsGroupsReload = true;
         mStageName = dScGame_c::currentSpawnInfo.getStageName();
     }
 
-    if (!needsGroupsReload && dScGame_c::currentSpawnInfo.layer != mLayer) {
-        needsGroupsReload = true;
+    if (!mNeedsGroupsReload && dScGame_c::currentSpawnInfo.layer != mLayer) {
+        mNeedsGroupsReload = true;
     }
 
     mLayer = dScGame_c::currentSpawnInfo.layer;
@@ -208,6 +208,241 @@ bool dSndStateMgr_c::isSeekerStoneStage(const char *stageName, s32 layer) {
     }
 
     return false;
+}
+
+bool dSndStateMgr_c::isSomeSkyloftRoom() const {
+    switch (field_0x044) {
+        case SND_STAGE_F001r:
+        case SND_STAGE_F002r:
+        case SND_STAGE_F011r:
+        case SND_STAGE_F005r:
+        case SND_STAGE_F006r:
+        case SND_STAGE_F007r:
+        case SND_STAGE_F013r:
+        case SND_STAGE_F014r:
+        case SND_STAGE_F015r:
+        case SND_STAGE_F016r:
+        case SND_STAGE_F017r:
+        case SND_STAGE_F018r: return true;
+        default:              return false;
+    }
+}
+
+void dSndStateMgr_c::loadStageSound() {
+    loadStageSound(false);
+}
+
+void dSndStateMgr_c::loadStageSound(bool force) {
+    if (!force && !mNeedsGroupsReload) {
+        return;
+    }
+
+    bool demo = isInDemo();
+    if (!checkFlag0x18(0x40)) {
+        for (int i = 0; i < dSndControlPlayerMgr_c::sNumPlayers; i++) {
+            dSndControlPlayerMgr_c::GetInstance()->setLpfFreq(i, 0.0f, 0);
+            dSndControlPlayerMgr_c::GetInstance()->setFxSend(i, 0.0f, 0);
+        }
+    }
+
+    if (checkEventFlag(EVENT_0x800)) {
+        if (!dSndBgmMgr_c::GetInstance()->isPlayingBgmSound()) {
+            dSndControlPlayerMgr_c::GetInstance()->setupPlayerControlsStage();
+            offEventFlag(EVENT_0x800);
+        } else {
+            dSndControlPlayerMgr_c::GetInstance()->setupPlayerControlsStageBgm();
+        }
+    } else {
+        if (dSndBgmMgr_c::GetInstance()->isPlayingBgmSound()) {
+            dSndControlPlayerMgr_c::GetInstance()->setupPlayerControlsStageBgm();
+            onEventFlag(EVENT_0x800);
+        } else {
+            dSndControlPlayerMgr_c::GetInstance()->setupPlayerControlsStage();
+        }
+    }
+
+    dSndControlPlayerMgr_c::GetInstance()->muteScenePlayers(0);
+    dSndPlayerMgr_c::GetInstance()->shutdownDemo();
+    field_0x4A8 = 1;
+    bool bHasState1 = false;
+
+    if (isSomeSkyloftRoom()) {
+        u32 id = dSndMgr_c::GetInstance()->getArchive()->ConvertLabelStringToGroupId("GRP_FAN_TIMECHANGE");
+        if (dSndMgr_c::GetInstance()->getPlayer().IsLoadedGroup(id)) {
+            bHasState1 = true;
+        } else {
+            dSndPlayerMgr_c::GetInstance()->popToState0();
+            if (dSndMgr_c::GetInstance()->loadGroup(id, nullptr, 0)) {
+                dSndPlayerMgr_c::GetInstance()->saveState1();
+                bHasState1 = true;
+            }
+        }
+    }
+
+    const dSndStageInfo *info = &dSndStageInfo::sInfos[mStageId];
+
+    u32 id = -1;
+    int round = 1;
+
+    bool b1 = false;
+    SizedString<64> label;
+
+    if (info->unk4 == mStageId) {
+        const char *stageName = getStageName(info->unk4);
+        label.sprintf("GRP_A_%s_L%d", stageName, mLayer);
+        round = 2;
+    } else {
+        const char *stageName = getCurrentStageName4();
+        label.sprintf("GRP_A_%s", stageName);
+    }
+
+    for (; round > 0; round--) {
+        id = dSndMgr_c::GetInstance()->getArchive()->ConvertLabelStringToGroupId(label);
+        if (field_0x4A4 == id && field_0x4A4 != -1) {
+            b1 = true;
+            break;
+        }
+
+        if (id != -1) {
+            if (bHasState1) {
+                dSndPlayerMgr_c::GetInstance()->popToState1();
+            } else {
+                dSndPlayerMgr_c::GetInstance()->popToState0();
+            }
+            if (dSndMgr_c::GetInstance()->loadGroup(id, nullptr, 0)) {
+                field_0x4A4 = id;
+                dSndPlayerMgr_c::GetInstance()->saveState2();
+                break;
+            }
+        }
+
+        if (round == 2) {
+            // we tried layer variant, now try variant without layer
+            const char *stageName = getCurrentStageName4();
+            label.sprintf("GRP_A_%s", stageName);
+        }
+    }
+
+    if (b1) {
+        dSndPlayerMgr_c::GetInstance()->popToState2();
+    } else if (id == -1) {
+        if (bHasState1) {
+            dSndPlayerMgr_c::GetInstance()->popToState1();
+        } else {
+            dSndPlayerMgr_c::GetInstance()->popToState0();
+        }
+        dSndPlayerMgr_c::GetInstance()->saveState2();
+        field_0x4A4 = -1;
+    }
+
+    if (!demo && (field_0x03C != 2 || field_0x065)) {
+        if (field_0x065) {
+            id = GRP_SIREN;
+        } else if (checkStageTypeFlag(STAGE_ROOM)) {
+            id = GRP_INDOOR;
+        } else if (checkStageTypeFlag(STAGE_FIELD)) {
+            id = GRP_FIELD;
+        } else if (checkStageTypeFlag(STAGE_DUNGEON)) {
+            if (isVolcanicDungeon(mStageId)) {
+                id = GRP_DUNGEON_BATTLE_ROOM;
+            } else {
+                id = GRP_DUNGEON;
+            }
+        } else if (checkStageTypeFlag(STAGE_BOSS)) {
+            id = GRP_BOSS;
+        } else {
+            id = GRP_DEFAULT;
+        }
+
+        if (id != -1) {
+            dSndMgr_c::GetInstance()->loadGroup(id, nullptr, 0);
+        }
+    }
+
+    if (!field_0x065) {
+        id = -1;
+        if (!demo) {
+            if (field_0x03C == 2) {
+                id = GRP_SKY;
+            } else if (checkStageTypeFlag(STAGE_FOREST)) {
+                id = GRP_FOREST;
+            } else if (checkStageTypeFlag(STAGE_MOUNTAIN)) {
+                id = GRP_MOUNTAIN;
+            } else if (checkStageTypeFlag(STAGE_DESERT)) {
+                id = GRP_DESERT;
+            }
+
+            if (id != -1) {
+                dSndMgr_c::GetInstance()->loadGroup(id, nullptr, 0);
+            }
+        }
+
+        SizedString<64> label;
+        label.sprintf("GRP_%s_L%d", &mStageName, mLayer);
+        id = dSndMgr_c::GetInstance()->getArchive()->ConvertLabelStringToGroupId(label);
+        if (id == -1) {
+            label.sprintf("GRP_%s", &mStageName);
+            id = dSndMgr_c::GetInstance()->getArchive()->ConvertLabelStringToGroupId(label);
+        }
+
+        if (id != -1) {
+            dSndMgr_c::GetInstance()->loadGroup(id, nullptr, 0);
+        }
+
+        if (demo) {
+            // REGSWAP
+            if (dSndPlayerMgr_c::GetInstance()->loadDemoArchive(getCurrentStageMusicDemoName())) {
+                for (u32 i = dSndPlayerMgr_c::PLAYER_LINK_BODY; i <= dSndPlayerMgr_c::PLAYER_EVENT; i++) {
+                    dSndControlPlayerMgr_c::GetInstance()->getPlayer1(i)->StopAllSound(0);
+                }
+                dSndControlPlayerMgr_c::GetInstance()->setupPlayerControlsDemo();
+            }
+        }
+    }
+
+    field_0x4A8 = 0;
+    dSndBgmMgr_c::GetInstance()->loadStageSound();
+    f32 volume = -1.0f;
+    dSndAreaSoundEffectMgr_c::GetInstance()->loadStageSound(&volume);
+    if (volume > 0.0f) {
+        field_0x490 = volume;
+    }
+}
+
+void dSndStateMgr_c::calcEvent() {
+    if (!isInEvent()) {
+        return;
+    }
+
+    bool b = false;
+    if (dSndPlayerMgr_c::GetInstance()->checkFlag(dSndPlayerMgr_c::MGR_CAUTION) ||
+        dSndPlayerMgr_c::GetInstance()->checkFlag(dSndPlayerMgr_c::MGR_MAP) ||
+        dSndPlayerMgr_c::GetInstance()->checkFlag(dSndPlayerMgr_c::MGR_MSG_WAIT)) {
+        b = true;
+    }
+
+    if (mpSoundEventDef != nullptr && sEventExecuteCallback != nullptr) {
+        (sEventExecuteCallback)();
+    }
+
+    if (!b) {
+        if (EventManager::getCurrentEventName() == nullptr) {
+            if (!checkEventFlag(EVENT_0x800)) {
+                endEvent(false);
+            }
+        } else {
+            if (mSeLvSoundId != -1) {
+                dSndMgr_c::GetInstance()->holdSound(&mSeLvSoundHandle, mSeLvSoundId);
+            }
+            calcBgm();
+            calcSe();
+            calcCmd();
+            mFrameCounter++;
+            mCameraCutFrameCounter++;
+            mMsgFrameCounter++;
+            nw4r::snd::SeqSoundHandle::WriteGlobalVariable(2, mCameraCutFrameCounter);
+        }
+    }
 }
 
 void dSndStateMgr_c::setEvent(const char *eventName) {
@@ -382,12 +617,78 @@ void dSndStateMgr_c::doLabelSuffix(const char *suffix) {
 
 u32 dSndStateMgr_c::getSeCameraId() {
     SizedString<64> label;
-    label.sprintf("%s_C%d_%d", &mSeName, mCameraCutCounter, mCameraCutFrameCounter);
+    label.sprintf(getCameraFmt(), &mSeName, mCameraCutCounter, mCameraCutFrameCounter);
     return convertSeLabelToSoundId(label);
 }
 
-void dSndStateMgr_c::clearExecuteCallback() {
+u32 dSndStateMgr_c::getSeMsgWaitId() {
+    SizedString<64> label;
+    label.sprintf(getMsgWaitFmt(), &mSeName, mMsgCounter, mMsgWaitSelectCounter, mMsgFrameCounter);
+    return convertSeLabelToSoundId(label);
+}
+
+u32 dSndStateMgr_c::getSeFrameCountId() {
+    SizedString<64> label;
+    label.sprintf(getFrameFmt(), &mSeName, mFrameCounter);
+    return convertSeLabelToSoundId(label);
+}
+
+u32 dSndStateMgr_c::getBgmCameraId() {
+    SizedString<64> label;
+    label.sprintf(getCameraFmt(), &mBgmName, mCameraCutCounter, mCameraCutFrameCounter);
+    return convertBgmLabelToSoundId(label);
+}
+
+u32 dSndStateMgr_c::getBgmMsgWaitId() {
+    SizedString<64> label;
+    label.sprintf(getMsgWaitFmt(), &mBgmName, mMsgCounter, mMsgWaitSelectCounter, mMsgFrameCounter);
+    return convertBgmLabelToSoundId(label);
+}
+
+u32 dSndStateMgr_c::getBgmFrameCountId() {
+    SizedString<64> label;
+    label.sprintf(getFrameFmt(), &mBgmName, mFrameCounter);
+    return convertBgmLabelToSoundId(label);
+}
+
+u32 dSndStateMgr_c::getCmdCameraId() {
+    SizedString<64> label;
+    label.sprintf(getCameraFmt(), &mCmdName, mCameraCutCounter, mCameraCutFrameCounter);
+    return convertCmdLabelToSoundId(label);
+}
+
+u32 dSndStateMgr_c::getCmdMsgWaitId() {
+    SizedString<64> label;
+    label.sprintf(getMsgWaitFmt(), &mCmdName, mMsgCounter, mMsgWaitSelectCounter, mMsgFrameCounter);
+    return convertCmdLabelToSoundId(label);
+}
+
+u32 dSndStateMgr_c::getCmdFrameCountId() {
+    SizedString<64> label;
+    label.sprintf(getFrameFmt(), &mCmdName, mFrameCounter);
+    return convertCmdLabelToSoundId(label);
+}
+
+void dSndStateMgr_c::clearEventExecuteCallback() {
     sEventExecuteCallback = nullptr;
+}
+
+bool dSndStateMgr_c::calcBgm() {
+    bool ok = playFanOrBgm(getBgmCameraId());
+    if (!ok) {
+        ok = playFanOrBgm(getBgmMsgWaitId());
+    }
+    if (!ok) {
+        // @bug (?) shouldn't this assign to ok? Maybe a shadowing redeclaration...
+        (void)playFanOrBgm(getBgmFrameCountId());
+    }
+    return ok;
+}
+
+void dSndStateMgr_c::calcSe() {
+    playSe(getSeCameraId());
+    playSe(getSeMsgWaitId());
+    playSe(getSeFrameCountId());
 }
 
 void dSndStateMgr_c::handleSeLv() {
@@ -405,6 +706,12 @@ void dSndStateMgr_c::handleSeLv() {
     } else {
         mSeLvSoundId = -1;
     }
+}
+
+void dSndStateMgr_c::calcCmd() {
+    playCmd(getCmdCameraId());
+    playCmd(getCmdMsgWaitId());
+    playCmd(getCmdFrameCountId());
 }
 
 bool dSndStateMgr_c::finalizeEvent(bool skipped) {
@@ -426,9 +733,15 @@ bool dSndStateMgr_c::finalizeEvent(bool skipped) {
         p->ForEachSound(stopper, false);
     }
 
-    // ...
+    SizedString<64> label;
+    label.sprintf("%s_FIN", &mSeName);
+    playSe(dSndPlayerMgr_c::GetInstance()->convertLabelStringToSoundId(label));
+    label.sprintf("%s_FIN", &mBgmName);
+    doBgm(label);
+    label.sprintf("%s_FIN", &mCmdName);
+    doCmd(label);
 
-    return false;
+    return dSndBgmMgr_c::GetInstance()->onEventFinalize(mEventName, mSoundEventId, skipped);
 }
 
 // TODO - the whole "camera cut" thing seems plausible but I haven't confirmed it yet
@@ -482,7 +795,7 @@ void dSndStateMgr_c::onMsgWaitStart() {
     if (mpSoundEventDef != nullptr && mpSoundEventDef->msgWaitStartCb != nullptr) {
         mpSoundEventDef->msgWaitStartCb(mMsgWaitSelectCounter);
     }
-    
+
     SizedString<64> label;
     label.sprintf("_M%d_WS%d", mMsgCounter, mMsgWaitSelectCounter);
     doLabelSuffix(label);
@@ -492,7 +805,7 @@ void dSndStateMgr_c::onMsgWaitEnd() {
     if (mpSoundEventDef != nullptr && mpSoundEventDef->msgWaitEndCb != nullptr) {
         mpSoundEventDef->msgWaitEndCb(mMsgWaitSelectCounter);
     }
-    
+
     SizedString<64> label;
     label.sprintf("_M%d_WE%d", mMsgCounter, mMsgWaitSelectCounter);
     doLabelSuffix(label);

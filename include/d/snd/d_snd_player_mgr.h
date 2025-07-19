@@ -27,7 +27,7 @@ public:
     dSndPlayerMgr_c();
 
     void setup();
-    void shutdown();
+    void shutdownDemo();
     void calc();
     void calcActive();
 
