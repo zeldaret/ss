@@ -219,12 +219,18 @@ private:
     void initialize();
     void createFileManager();
 
+public:
     virtual nw4r::snd::SoundStartable::StartResult
     startSound(nw4r::snd::SoundHandle *pHandle, u32 soundId, const nw4r::snd::SoundStartable::StartInfo *pStartInfo);
     virtual nw4r::snd::SoundStartable::StartResult startSound(
         nw4r::snd::SoundHandle *pHandle, const char *soundLabel, const nw4r::snd::SoundStartable::StartInfo *pStartInfo
     );
 
+    nw4r::snd::SoundStartable::StartResult startDemoSound(
+        nw4r::snd::SoundHandle *pHandle, u32 soundId, const nw4r::snd::SoundStartable::StartInfo *pStartInfo
+    );
+
+private:
     /* 0x028 */ nw4r::snd::MemorySoundArchive mDemoSoundArchive;
     /* 0x178 */ nw4r::snd::SoundArchivePlayer mDemoSoundArchivePlayer;
 };

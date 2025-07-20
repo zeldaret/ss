@@ -42,7 +42,7 @@ dSndStateMgr_c::dSndStateMgr_c()
       mLayer(0),
       mRoomId(-1),
       field_0x060(0),
-      field_0x064(0),
+      field_0x064(false),
       field_0x065(false),
       mHasChangedTgSndAreaFlags(false),
       mHasChangedTgSndAreaMgFlags(false),
@@ -110,8 +110,8 @@ void dSndStateMgr_c::onStageOrLayerUpdate() {
 
     bool unk_0x065 = field_0x065;
 
-    onFlag0x10(0x2);
-    field_0x064 = 0;
+    onFlag0x10(FLAG0x10_0x02);
+    field_0x064 = false;
 
     if (!streq(mStageName, dScGame_c::currentSpawnInfo.getStageName())) {
         mNeedsGroupsReload = true;
@@ -248,7 +248,7 @@ void dSndStateMgr_c::onRestartScene(s32 fadeFrames) {
             dSndAreaSoundEffectMgr_c::GetInstance()->stopSounds(fadeFrames);
         } else {
             onGotoStage(fadeFrames);
-            onFlag0x10(0x01);
+            onFlag0x10(FLAG0x10_0x01);
             return;
         }
     }
@@ -256,10 +256,10 @@ void dSndStateMgr_c::onRestartScene(s32 fadeFrames) {
     dSndSmallEffectMgr_c::GetInstance()->stopAllSoundExceptEvent(fadeFrames);
     dSndBgmMgr_c::GetInstance()->prepareBgm();
     dSndHarpSongMgr_c::GetInstance()->deactivate();
-    onFlag0x10(0x01);
+    onFlag0x10(FLAG0x10_0x01);
     dSndBgmMgr_c::GetInstance()->setField_0x306(1);
-    offFlag0x10(0x4);
-    offFlag0x10(0x10);
+    offFlag0x10(FLAG0x10_0x04);
+    offFlag0x10(FLAG0x10_0x10);
 }
 
 void dSndStateMgr_c::loadStageSound() {
@@ -488,14 +488,14 @@ void dSndStateMgr_c::setEvent(const char *eventName) {
         dSndPlayerMgr_c::GetInstance()->leaveCaution();
     }
 
-    if (field_0x064 == 0) {
+    if (!field_0x064) {
         if (streq(mEventName, "DefaultSkip")) {
             onSkipEvent();
             mPrevEventName = mEventName;
             return;
         }
 
-        if (!checkFlag0x18(0x20) || !checkFlag0x10(0x04)) {
+        if (!checkFlag0x18(0x20) || !checkFlag0x10(FLAG0x10_0x04)) {
             SizedString<64> prevEvent = mEventName;
             if (isInEvent()) {
                 field_0x23C = 1;
@@ -523,7 +523,7 @@ void dSndStateMgr_c::setEvent(const char *eventName) {
                 mpStbEventName = nullptr;
             }
 
-            if (!checkFlag0x10(0x04)) {
+            if (!checkFlag0x10(FLAG0x10_0x04)) {
                 if (mpUnkCallback != nullptr) {
                     mpUnkCallback();
                 }
@@ -531,11 +531,11 @@ void dSndStateMgr_c::setEvent(const char *eventName) {
                 dSndBgmMgr_c::GetInstance()->setField_0x306(1);
                 dSndBgmMgr_c::GetInstance()->prepareBgm();
                 onEventFlag(EVENT_0x04);
-                onFlag0x10(0x04);
+                onFlag0x10(FLAG0x10_0x04);
                 dSndControlPlayerMgr_c::GetInstance()->unmuteScenePlayers(30);
             }
             bool b2 = checkEventFlag(EVENT_0x800) && dSndBgmMgr_c::GetInstance()->isPlayingBgmSound();
-            if (checkEventFlag(EVENT_0x800) && field_0x064 == 0) {
+            if (checkEventFlag(EVENT_0x800) && !field_0x064) {
                 // TODO - constness or direct access
                 offEventFlag(0x800);
             }
@@ -846,8 +846,8 @@ void dSndStateMgr_c::onMsgWaitEnd() {
 }
 
 void dSndStateMgr_c::onLinkDie() {
-    if (!checkFlag0x10(0x8)) {
-        onFlag0x10(0x8);
+    if (!checkFlag0x10(FLAG0x10_0x08)) {
+        onFlag0x10(FLAG0x10_0x08);
         dSndBgmMgr_c::GetInstance()->stopAllBgm(15);
         dSndSmallEffectMgr_c::GetInstance()->stopAllSoundExceptEffectOrLink(15);
         if (field_0x065 == 0) {
@@ -861,7 +861,7 @@ void dSndStateMgr_c::setStbEventName(const char *eventName) {
 }
 
 void dSndStateMgr_c::calcRoomId() {
-    if (checkFlag0x10(4)) {
+    if (checkFlag0x10(FLAG0x10_0x04)) {
         if (field_0x060 > 0) {
             field_0x060--;
         } else {
@@ -871,7 +871,7 @@ void dSndStateMgr_c::calcRoomId() {
             s32 newRoom = dSndSourceMgr_c::GetInstance()->getPlayerSourceRoomId();
             if (mRoomId != newRoom) {
                 setRoomId(newRoom);
-            } else if (newRoom != -1 && !checkFlag0x10(0x10)) {
+            } else if (newRoom != -1 && !checkFlag0x10(FLAG0x10_0x10)) {
                 setRoomId(newRoom);
             }
         }

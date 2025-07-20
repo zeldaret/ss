@@ -34,6 +34,15 @@ public:
         STAGE_SILENT_GROUNDS = 0x200,
     };
 
+    enum Flag0x10_e {
+        FLAG0x10_0x01 = 0x01,
+        FLAG0x10_0x02 = 0x02,
+        FLAG0x10_0x04 = 0x04,
+        FLAG0x10_0x08 = 0x08,
+        FLAG0x10_0x10 = 0x10,
+    };
+
+    // 0x94
     enum EventFlags_e {
         EVENT_IN_EVENT = 0x1,
         EVENT_DEMO = 0x2,
@@ -57,6 +66,10 @@ public:
     void restoreEffects();
 
     static bool isInStage(const char *stageName);
+
+    bool getField_0x064() const {
+        return field_0x064;
+    }
 
     s32 getField_0x14() const {
         return field_0x014;
@@ -307,7 +320,7 @@ private:
     /* 0x058 */ s32 mLayer;
     /* 0x05C */ s32 mRoomId;
     /* 0x060 */ UNKWORD field_0x060;
-    /* 0x064 */ u8 field_0x064;
+    /* 0x064 */ bool field_0x064;
     /* 0x065 */ bool field_0x065;
     /* 0x066 */ bool mHasChangedTgSndAreaFlags;
     /* 0x067 */ bool mHasChangedTgSndAreaMgFlags;

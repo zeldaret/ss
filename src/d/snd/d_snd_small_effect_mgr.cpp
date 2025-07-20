@@ -1,6 +1,7 @@
 #include "d/snd/d_snd_small_effect_mgr.h"
 
 #include "common.h"
+#include "d/snd/d_snd_area_sound_effect_mgr.h"
 #include "d/snd/d_snd_bgm_harp_data.h"
 #include "d/snd/d_snd_bgm_mgr.h"
 #include "d/snd/d_snd_bgm_sound.h"
@@ -109,13 +110,64 @@ void dSndSmallEffectMgr_c::stopAllSoundExceptEffectOrLink(s32 fadeFrames) {
 }
 
 bool dSndSmallEffectMgr_c::playSoundInternalChecked(u32 soundId, nw4r::snd::SoundHandle *pHandle) {
-    // TODO
-    return false;
+    if (dSndStateMgr_c::GetInstance()->getField_0x064()) {
+        return false;
+    }
+
+    if (field_0x10 > 0) {
+        return false;
+    }
+
+    if (dSndStateMgr_c::GetInstance()->checkFlag0x10(dSndStateMgr_c::FLAG0x10_0x08)) {
+        return false;
+    }
+    return playSoundInternal(soundId, pHandle);
 }
 
 bool dSndSmallEffectMgr_c::playSoundInternal(u32 soundId, nw4r::snd::SoundHandle *pHandle) {
-    // TODO
-    return false;
+    u32 userParam = dSndPlayerMgr_c::GetInstance()->getSomeUserParam(soundId);
+    if (userParam & 2) {
+        for (u32 i = dSndPlayerMgr_c::PLAYER_SMALL_IMPORTANT; i <= dSndPlayerMgr_c::PLAYER_EVENT; i++) {
+            if (isPlayingSound(i, soundId)) {
+                return false;
+            }
+        }
+    } else if (userParam & 1) {
+        stopSounds(soundId, 2);
+    }
+
+    if (userParam & 0x80000000) {
+        return false;
+    }
+
+    nw4r::snd::SoundHandle tmpHandle;
+    if (pHandle == nullptr) {
+        pHandle = &tmpHandle;
+    }
+
+    nw4r::snd::SoundStartable::StartResult res = dSndPlayerMgr_c::GetInstance()->startSound(pHandle, soundId, nullptr);
+    if (res == nw4r::snd::SoundStartable::START_SUCCESS) {
+        if (userParam & 8) {
+            if (EGG::AudioRmtSpeakerMgr::getWpadVolume() != 0) {
+                pHandle->SetOutputLineFlag(nw4r::snd::OUTPUT_LINE_REMOTE_1);
+            }
+        } else if (userParam & 4) {
+            pHandle->SetOutputLineFlag(nw4r::snd::OUTPUT_LINE_MAIN | nw4r::snd::OUTPUT_LINE_REMOTE_1);
+        }
+
+        if (userParam & 0x10 && EGG::AudioRmtSpeakerMgr::getWpadVolume() != 0) {
+            u32 rcVariant = dSndPlayerMgr_c::GetInstance()->getRemoConSoundVariant(soundId);
+            if (rcVariant != -1) {
+                nw4r::snd::SoundHandle rcHandle;
+                dSndMgr_c::GetInstance()->getPlayer().StartSound(&rcHandle, rcVariant);
+                if (EGG::AudioRmtSpeakerMgr::getWpadVolume() != 0) {
+                    rcHandle.SetOutputLineFlag(nw4r::snd::OUTPUT_LINE_REMOTE_1);
+                }
+            }
+        }
+    }
+
+    return res == nw4r::snd::SoundStartable::START_SUCCESS;
 }
 
 bool dSndSmallEffectMgr_c::playSound(u32 soundId) {
@@ -228,8 +280,41 @@ bool dSndSmallEffectMgr_c::playSoundWithPan(u32 soundId, f32 pan) {
     return ok;
 }
 
+bool dSndSmallEffectMgr_c::doSideEffects(u32 soundId) {
+    if (soundId == SE_S_FS2_SELECT_START || soundId == SE_S_NE_SELECT_OK) {
+        dSndBgmMgr_c::GetInstance()->stopAllBgm(15);
+        dSndAreaSoundEffectMgr_c::GetInstance()->stopSounds(15);
+    }
+
+    u32 userParam = dSndPlayerMgr_c::GetInstance()->getSomeUserParam(soundId);
+    if ((userParam & 0x80) && dSndStateMgr_c::GetInstance()->isInEvent()) {
+        return false;
+    }
+
+    if (userParam & 2) {
+        for (u32 i = dSndPlayerMgr_c::PLAYER_SMALL_IMPORTANT; i <= dSndPlayerMgr_c::PLAYER_SMALL_NORMAL; i++) {
+            if (isPlayingSound(i, soundId)) {
+                return false;
+            }
+        }
+    } else if (userParam & 1) {
+        stopSounds(soundId, 2);
+    }
+    return true;
+}
+
 bool dSndSmallEffectMgr_c::playSoundInternal(u32 soundId) {
-    // TODO
+    u32 userParam = dSndPlayerMgr_c::GetInstance()->getSomeUserParam(soundId);
+
+    // Why is this flag weird
+    if ((userParam >> 31) != 0) {
+        return false;
+    }
+
+    // Bunch of code duplication between doSideEffects and playSoundInternal
+    if (doSideEffects(soundId)) {
+        return playSoundInternal(soundId, &mNormalSound);
+    }
     return false;
 }
 
@@ -491,6 +576,14 @@ bool dSndSmallEffectMgr_c::playSkbSound(u32 soundId) {
     return playSound(soundId);
 }
 
+bool dSndSmallEffectMgr_c::playDemoSound(u32 soundId, nw4r::snd::SoundHandle *pHandle) {
+    nw4r::snd::SoundHandle tmpHandle;
+
+    return dSndPlayerMgr_c::GetInstance()->startDemoSound(
+               pHandle == nullptr ? &tmpHandle : pHandle, soundId, nullptr
+           ) == nw4r::snd::SoundStartable::START_SUCCESS;
+}
+
 void dSndSmallEffectMgr_c::stopSounds(u32 playerIdx, u32 soundId, s32 fadeFrames) {
     SoundStopper stopper(soundId, fadeFrames);
     dSndControlPlayerMgr_c::GetInstance()->getPlayer1(playerIdx)->ForEachSound(stopper, false);
@@ -661,7 +754,6 @@ bool dSndSmallEffectMgr_c::playBattleHitSound(BattleHitSound_e type, dSoundSourc
                     // One bit set, get the value (using a slightly convoluted method
                     // due to inline complexity) without rejecting it when it equals
                     // the previously picked value
-                    // TODO - unnecessary reload of count here.
                     varIdx = set->getRandomIdxWithBitSet();
                     field_0x40 = set->getVal(varIdx);
                 } else {
@@ -733,9 +825,7 @@ bool dSndSmallEffectMgr_c::playBattleHitSound(BattleHitSound_e type, dSoundSourc
     return ok;
 }
 
-void dSndSmallEffectMgr_c::setBitsIfAdjacent(
-    dSndBgmDataHarpVarSetBase_c *set, s32 count, s32 target, u32 *pMask
-) {
+void dSndSmallEffectMgr_c::setBitsIfAdjacent(dSndBgmDataHarpVarSetBase_c *set, s32 count, s32 target, u32 *pMask) {
     for (int i = 0; i < count; i++) {
         s32 val = set->getVal(i);
         if (val == target + 1 || val == target - 1) {

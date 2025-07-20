@@ -765,7 +765,7 @@ config.libs = [
             Object(Matching, "d/snd/d_snd_bgm_harp_data.cpp"),
             Object(Matching, "d/snd/d_snd_bgm_mml_parser_base.cpp"),
             Object(Matching, "d/snd/d_snd_bgm_mml_parsers.cpp"),
-            Object(NonMatching, "d/snd/d_snd_small_effect_mgr.cpp"),
+            Object(Matching, "d/snd/d_snd_small_effect_mgr.cpp"),
             Object(NonMatching, "d/snd/d_snd_harp_song_mgr.cpp"),
             Object(NonMatching, "d/snd/d_snd_harp_song_data.cpp"),
             Object(Matching, "d/snd/d_snd_anim_sound.cpp"),
