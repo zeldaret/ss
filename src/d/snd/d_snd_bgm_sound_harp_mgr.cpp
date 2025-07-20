@@ -36,6 +36,6 @@ void dSndBgmSoundHarpMgr_c::setPlaySamplePosition(s32 position) {
     }
 }
 
-const dSndBgmDataHarpVarSetBase_c *dSndBgmSoundHarpMgr_c::getCurrentVarSet() {
+dSndBgmDataHarpVarSetBase_c *dSndBgmSoundHarpMgr_c::getCurrentVarSet() {
     return mpCurrVarSet;
 }

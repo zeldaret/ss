@@ -456,7 +456,7 @@ void dSndBgmSound_c::onBecomeActive() {
     spGlobalHarpMgr->resetPrevIdx();
 }
 
-const dSndBgmDataHarpVarSetBase_c *dSndBgmSound_c::getCurrentHarpVarSet() {
+dSndBgmDataHarpVarSetBase_c *dSndBgmSound_c::getCurrentHarpVarSet() {
     if (isRunning()) {
         return mpHarpMgr->getCurrentVarSet();
     }
