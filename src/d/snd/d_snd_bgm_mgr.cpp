@@ -1,11 +1,14 @@
 #include "d/snd/d_snd_bgm_mgr.h"
 
 #include "common.h"
+#include "d/flag/storyflag_manager.h"
 #include "d/snd/d_snd_bgm_sound_battle.h"
 #include "d/snd/d_snd_bgm_sound.h"
 #include "d/snd/d_snd_mgr.h"
+#include "d/snd/d_snd_bgm_mml_parsers.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_sound.h"
+#include "d/snd/d_snd_state_mgr.h"
 #include "d/snd/d_snd_util.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "nw4r/snd/snd_SoundArchive.h"
@@ -59,8 +62,8 @@ dSndBgmMgr_c::dSndBgmMgr_c()
         mBgmSounds[i]->init(mSoundActor, i);
     }
 
-    field_0x270 = new dSndBgmSound_c();
-    field_0x270->init(dSndMgr_c::GetInstance()->getPlayer(), 8);
+    mpBgmMuteSound = new dSndBgmSound_c();
+    mpBgmMuteSound->init(dSndMgr_c::GetInstance()->getPlayer(), 8);
 
     for (int i = 0; i < 3; i++) {
         mFanSounds[i] = new dSndSound_c();
@@ -116,6 +119,72 @@ void dSndBgmMgr_c::calcLists() {
     }
 }
 
+void dSndBgmMgr_c::loadStageSound() {
+    for (int i = 0; i < 3; i++) {
+        field_0x30C[i] = nullptr;
+        field_0x318[i] = 0;
+        field_0x324[i] = 0;
+        field_0x330[i] = 0;
+    }
+
+    if (dSndStateMgr_c::GetInstance()->isInDemo()) {
+        return;
+    }
+
+    if (dSndStateMgr_c::isInStage("F103")) {
+        // Flooded Faron Woods
+        if (!StoryflagManager::sInstance->getFlag(18)) {
+            bool ok = true;
+            if (!dSndPlayerMgr_c::GetInstance()->isLoadedFileForSound(TAG_BGM_EVENT_COMP_NOTE)) {
+                ok = dSndPlayerMgr_c::GetInstance()->loadFileForSound(TAG_BGM_EVENT_COMP_NOTE);
+            }
+
+            if (ok) {
+                dSndBgmMmlParserTagCompNote_c parser;
+                parser.parseData(&field_0x30C[0]);
+                field_0x324[0] = field_0x30C[0]->data[0];
+            }
+        }
+    } else if (dSndStateMgr_c::isInStage("F403") && dSndStateMgr_c::GetInstance()->getLayer() == 1) {
+        bool ok = true;
+        if (!dSndPlayerMgr_c::GetInstance()->isLoadedFileForSound(TAG_BGM_BATTLE_CROWD)) {
+            ok = dSndPlayerMgr_c::GetInstance()->loadFileForSound(TAG_BGM_BATTLE_CROWD);
+        }
+
+        if (ok) {
+            dSndBgmMmlParserTagBattle_c parser;
+            parser.parseData(TAG_BGM_BATTLE_CROWD, &field_0x30C[0]);
+            field_0x324[0] = field_0x30C[0]->data[0];
+        }
+    } else {
+        if (dSndPlayerMgr_c::GetInstance()->isLoadedFileForSound(TAG_BGM_BOSS_A)) {
+            bool ok = true;
+            // I am REALLY not sure how TAG_BGM_BOSS_A could spontaneously unload here but better
+            // double check I guess
+            if (!dSndPlayerMgr_c::GetInstance()->isLoadedFileForSound(TAG_BGM_BOSS_A)) {
+                // TODO types
+                ok = dSndMgr_c::GetInstance()->loadGroup((unsigned int)GRP_BGM_BOSS_A, nullptr, 0);
+            }
+            if (ok) {
+                dSndBgmMmlParserTagBgmBoss_c parser1;
+                parser1.parseData(&field_0x30C[0], &field_0x30C[1]);
+            }
+
+            if (ok) {
+                dSndBgmMmlParserTagBattle_c parser;
+                parser.parseData(TAG_BGM_BOSS_A_CHANCE, &field_0x30C[2]);
+            }
+        }
+    }
+}
+
+void dSndBgmMgr_c::startBgmMuteSound() {
+    if (mpBgmMuteSound != nullptr) {
+        mpBgmMuteSound->stop(0);
+        mpBgmMuteSound->startBgmSound(BGM_MUTE, 0, 0);
+    }
+}
+
 bool dSndBgmMgr_c::prepareBgm(u32 soundId, u32 startOffset) {
     if (isPlayingBgmSoundId(soundId)) {
         return false;
@@ -145,6 +214,10 @@ bool dSndBgmMgr_c::stopBgmSound(dSndBgmSound_c *sound, s32 fadeFrames) {
     }
 
     return false;
+}
+
+void dSndBgmMgr_c::endBgmMuteSound() {
+    mpBgmMuteSound->stop(0);
 }
 
 void dSndBgmMgr_c::checkForPrepareStoppedBgmSound(u32 stoppedSoundId) {

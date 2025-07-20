@@ -29,5 +29,6 @@ class dSndBgmSeqConfig;
 class dSndBgmBattleConfig;
 
 class dSndHarpSongData_c;
+class dSndTagData;
 
 #endif

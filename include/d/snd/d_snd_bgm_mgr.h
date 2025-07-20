@@ -129,6 +129,9 @@ public:
 private:
     dSndBgmBattleSound_c *getBgmBattleSound();
 
+    void startBgmMuteSound();
+    void endBgmMuteSound();
+
     bool stopBgmSound(dSndBgmSound_c *sound, s32 fadeFrames);
     void checkForPrepareStoppedBgmSound(u32 stoppedSoundId);
     dSndBgmSound_c *findNewBgmSoundHandle();
@@ -171,7 +174,7 @@ private:
     /* 0x24C */ u32 mScheduledSoundId;
     /* 0x250 */ s32 mScheduledSoundDelay;
     /* 0x254 */ dSndBgmSound_c *mBgmSounds[7];
-    /* 0x270 */ dSndBgmSound_c *field_0x270;
+    /* 0x270 */ dSndBgmSound_c *mpBgmMuteSound;
     /* 0x274 */ dSndBgmSound_c *mpPrevActiveBgmSound;
     /* 0x278 */ nw4r::ut::List mBgmSoundLists[BGM_LIST_MAX]; // node offset 0xF0 -> dSndBgmSound_c
     /* 0x29C */ UNKWORD field_0x29C;
@@ -185,7 +188,7 @@ private:
     /* 0x306 */ u8 field_0x306;
     /* 0x307 */ u8 field_0x307;
     /* 0x308 */ u8 field_0x308;
-    /* 0x30C */ u32 field_0x30C[3];
+    /* 0x30C */ dSndTagData *field_0x30C[3];
     /* 0x318 */ u32 field_0x318[3];
     /* 0x324 */ u32 field_0x324[3];
     /* 0x330 */ u8 field_0x330[3];
