@@ -1,7 +1,9 @@
 #include "d/snd/d_snd_small_effect_mgr.h"
 
 #include "common.h"
+#include "d/snd/d_snd_bgm_harp_data.h"
 #include "d/snd/d_snd_bgm_mgr.h"
+#include "d/snd/d_snd_bgm_sound.h"
 #include "d/snd/d_snd_calc_pitch.h"
 #include "d/snd/d_snd_checkers.h"
 #include "d/snd/d_snd_control_player_mgr.h"
@@ -603,7 +605,141 @@ bool dSndSmallEffectMgr_c::playBattleHitSound(BattleHitSound_e type, dSoundSourc
         mBattleTuttiHandle.Stop(5);
     }
 
-    // TODO ...
+    dSndBgmSound_c *bgmSound = dSndBgmMgr_c::GetInstance()->getActiveBgmSound();
+    if (bgmSound == nullptr) {
+        return false;
+    }
 
-    return true;
+    dSndBgmDataHarpVarSetBase_c *set = bgmSound->getCurrentHarpVarSet();
+    if (set == nullptr) {
+        return false;
+    }
+
+    bool ok = playSoundInternal(soundId, &mBattleTuttiHandle);
+    if (ok) {
+        nw4r::snd::SeqSoundHandle seqHandle(&mBattleTuttiHandle);
+        if (set->getCount() <= 0) {
+            return true;
+        }
+
+        s32 count = set->getCount();
+        if (count == 1) {
+            field_0x40 = set->getVal(0);
+            field_0x42 = field_0x40;
+            for (int i = 1; i < 4; i++) {
+                seqHandle.WriteVariable(i, field_0x40);
+            }
+            return true;
+        } else {
+            s32 i2 = 0;
+            field_0x44 = 0;
+            s32 varIdx = 0;
+            u32 mask = 0;
+
+            // Pick a var 0
+            if (type == BATTLE_TUTTI_FINISH) {
+                field_0x40 = set->getVal(0);
+                varIdx = 0;
+            } else {
+                s32 numHarpBits = set->getNumBitsSet();
+
+                if (numHarpBits <= 0) {
+                    // No bits set, just try and pick a random variable
+                    // that's not equal to the one we picked before
+                    s32 pick = field_0x40;
+                    int i = 0;
+                    while (pick == field_0x40) {
+                        i++;
+                        if (i > 0x14) {
+                            break;
+                        }
+                        varIdx = set->getRandomIdx();
+                        pick = set->getVal(varIdx);
+                    }
+                    field_0x40 = pick;
+                } else if (numHarpBits == 1) {
+                    // One bit set, get the value (using a slightly convoluted method
+                    // due to inline complexity) without rejecting it when it equals
+                    // the previously picked value
+                    // TODO - unnecessary reload of count here.
+                    varIdx = set->getRandomIdxWithBitSet();
+                    field_0x40 = set->getVal(varIdx);
+                } else {
+                    // Multiple bits set, just pick a random variable with the bit set
+                    // that's not equal to the one we picked before
+                    s32 pick = field_0x40;
+                    int i = 0;
+                    while (pick == field_0x40) {
+                        i++;
+                        if (i > 0x14) {
+                            break;
+                        }
+                        varIdx = set->getRandomIdxWithBitSet();
+                        pick = set->getVal(varIdx);
+                    }
+                    field_0x40 = pick;
+                }
+            }
+            field_0x44 |= 1 << varIdx;
+            setBitsIfAdjacent(set, count, field_0x40, &mask);
+            seqHandle.WriteVariable(0, field_0x40);
+
+            // Pick a new field_0x42 -> var 1
+            u32 mask5 = 0;
+            s32 value = 0;
+            int i = 0;
+            do {
+                i++;
+                if (i > 0x14) {
+                    break;
+                }
+                u32 rndValue = set->getRandomIdx();
+                mask5 = 1 << rndValue;
+                value = set->getVal(rndValue);
+
+            } while ((mask & mask5) || value == field_0x42);
+            field_0x42 = value;
+            field_0x44 |= mask5;
+
+            setBitsIfAdjacent(set, count, field_0x42, &mask);
+            seqHandle.WriteVariable(1, field_0x42);
+
+            // Pick new vars 2 and 3
+            bool b = field_0x40 != field_0x42;
+            s32 seqVarIdx = 2;
+            for (; seqVarIdx < 4; seqVarIdx++) {
+                u32 rndValue = 0;
+                u32 mask5 = 0;
+                int i = 0;
+                do {
+                    i++;
+                    if (i > 0x14) {
+                        break;
+                    }
+                    rndValue = set->getRandomIdx();
+                    mask5 = 1 << rndValue;
+                } while ((mask & mask5) || (seqVarIdx >= 3 && !b && (field_0x44 & mask5)));
+                if (!(field_0x44 & mask5)) {
+                    b = true;
+                }
+                s32 nextVal = value = set->getVal(rndValue);
+                setBitsIfAdjacent(set, count, nextVal, &mask);
+                field_0x44 |= mask5;
+                seqHandle.WriteVariable(seqVarIdx, nextVal);
+            }
+        }
+    }
+
+    return ok;
+}
+
+void dSndSmallEffectMgr_c::setBitsIfAdjacent(
+    dSndBgmDataHarpVarSetBase_c *set, s32 count, s32 target, u32 *pMask
+) {
+    for (int i = 0; i < count; i++) {
+        s32 val = set->getVal(i);
+        if (val == target + 1 || val == target - 1) {
+            *pMask |= 1 << i;
+        }
+    }
 }

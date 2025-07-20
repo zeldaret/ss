@@ -10,10 +10,9 @@ class dSndRngMgr_c : public dSndRng_c {
 public:
     SND_DISPOSER_MEMBERS(dSndRngMgr_c)
 
-    u32 rndIntRange(s32 min, s32 max);
-
 public:
     dSndRngMgr_c() {}
+    u32 rndIntRange(s32 min, s32 max);
 };
 
 #endif

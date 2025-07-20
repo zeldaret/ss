@@ -2,6 +2,7 @@
 #define D_SND_BGM_HARP_DATA_H
 
 #include "common.h"
+#include "d/snd/d_snd_rng_mgr.h"
 
 /**
  * This file deals with the pitch of the Goddess' Harp when Link
@@ -37,6 +38,10 @@ struct dSndBgmDataHarpVar_c {
         field_0x00 |= 1;
     }
 
+    bool checkFlag() const {
+        return field_0x00 & 1;
+    }
+
     /* 0x00 */ u8 field_0x00; // flags
     /* 0x01 */ s8 field_0x01; // var
 };
@@ -61,7 +66,7 @@ public:
         mPosition = position;
     }
 
-    s32 getCount() const {
+    s32 getCount() {
         return mCount;
     }
 
@@ -69,11 +74,48 @@ public:
         return mMax;
     }
 
+    s32 getNumBitsSet() {
+        s32 numBits = 0;
+        for (int i = 0; i < getCount(); i++) {
+            if (mpVars[i].checkFlag()) {
+                numBits++;
+            }
+        }
+        return numBits;
+    }
+
     dSndBgmDataHarpVar_c *getVar(s32 idx) {
         if (idx >= getCount()) {
             return nullptr;
         }
         return &mpVars[idx];
+    }
+
+    s32 getRandomIdx() {
+        return dSndRngMgr_c::GetInstance()->rndIntRange(0, getCount());
+    }
+
+    s32 getRandomIdxWithBitSet() {
+        s32 numBitsSet = getNumBitsSet();
+        s32 idx;
+        if (numBitsSet <= 0) {
+            return 0;
+        } else {
+            idx = dSndRngMgr_c::GetInstance()->rndIntRange(0, getCount());
+            while (true) {
+                if (mpVars[idx].checkFlag()) {
+                    return idx;
+                }
+                idx = dSndRngMgr_c::GetInstance()->rndIntRange(0, getCount());
+            }
+        }
+    }
+
+    s32 getVal(s32 idx) {
+        if (idx >= getCount()) {
+            return 0;
+        }
+        return mpVars[idx].field_0x01;
     }
 
     dSndBgmDataHarpVar_c *getUnusedVar() {

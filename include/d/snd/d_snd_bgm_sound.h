@@ -55,7 +55,7 @@ public:
     void onBecomeActive();
     bool isBgmBattle() const;
 
-    const dSndBgmDataHarpVarSetBase_c *getCurrentHarpVarSet();
+    dSndBgmDataHarpVarSetBase_c *getCurrentHarpVarSet();
 
     u32 getStrmPlaySamplePosition();
     u32 getWavePlaySamplePosition();

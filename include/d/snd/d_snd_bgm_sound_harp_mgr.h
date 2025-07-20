@@ -15,7 +15,7 @@ public:
 
     void setPlaySamplePosition(s32 position);
 
-    const dSndBgmDataHarpVarSetBase_c *getCurrentVarSet();
+    dSndBgmDataHarpVarSetBase_c *getCurrentVarSet();
 
     bool isLoaded() const {
         return mIsLoaded;

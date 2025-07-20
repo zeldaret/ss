@@ -28,6 +28,8 @@ class dSndBgmSoundHarpMgr_c;
 class dSndBgmSeqConfig;
 class dSndBgmBattleConfig;
 
+class dSndBgmDataHarpVarSetBase_c;
+
 class dSndHarpSongData_c;
 class dSndTagData;
 

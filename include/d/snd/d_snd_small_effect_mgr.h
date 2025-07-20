@@ -82,6 +82,8 @@ private:
     bool isPlayingSound(u32 playerIdx, u32 soundId);
     bool isPlayingSound(u32 soundId);
 
+    void setBitsIfAdjacent(dSndBgmDataHarpVarSetBase_c *set, s32 count, s32 target, u32 *pMask);
+
     /**
      * Finds a sound handle currently playing the given sound,
      * or an idle sound handle,
@@ -100,9 +102,9 @@ private:
     /* 0x30 */ s32 mDelayedSoundTimers[NUM_DELAYED_SOUNDS];
     /* 0x38 */ u32 mTextboxAdvanceSound;
     /* 0x3C */ nw4r::snd::SoundHandle mBattleTuttiHandle;
-    /* 0x40 */ u16 field_0x40;
-    /* 0x42 */ u16 field_0x42;
-    /* 0x44 */ s32 field_0x44;
+    /* 0x40 */ s16 field_0x40;
+    /* 0x42 */ s16 field_0x42;
+    /* 0x44 */ u32 field_0x44;
 };
 
 #endif
