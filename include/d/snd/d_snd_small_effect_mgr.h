@@ -66,6 +66,7 @@ public:
     bool playMinigameMusasabiSound(s32 count);
 
     bool playSkbSound(u32 soundId);
+    bool playDemoSound(u32 soundId, nw4r::snd::SoundHandle *pHandle);
 
     bool playButtonPressSoundWhenAdvancingTextBoxes(f32);
     void resetButtonPressSound();
@@ -81,6 +82,8 @@ private:
     void stopSounds(u32 soundId, s32 fadeFrames);
     bool isPlayingSound(u32 playerIdx, u32 soundId);
     bool isPlayingSound(u32 soundId);
+
+    bool doSideEffects(u32 soundId);
 
     void setBitsIfAdjacent(dSndBgmDataHarpVarSetBase_c *set, s32 count, s32 target, u32 *pMask);
 
