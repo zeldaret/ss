@@ -3,7 +3,7 @@
 #include "d/d_dvd_unk.h"
 #include "d/d_gfx.h"
 #include "d/d_reset.h"
-#include "d/d_textunk.h"
+#include "d/d_lyt_hio.h"
 #include "egg/gfx/eggDrawGX.h"
 #include "egg/gfx/eggScreen.h"
 #include "m/m_mtx.h"
@@ -124,8 +124,8 @@ void dDvdDriveError_c::draw() {
     textWriter.SetFont(dDvdUnk::FontUnk::GetInstance()->getFont());
 
     textWriter.SetScale(
-        UnkTextThing::getFn800B1F70() * UnkTextThing::getFn800B1FD0(),
-        UnkTextThing::getFn800B1F70() * UnkTextThing::getFn800B1FD0()
+        dLyt_HIO_c::getFn800B1F70() * dLyt_HIO_c::getFn800B1FD0(),
+        dLyt_HIO_c::getFn800B1F70() * dLyt_HIO_c::getFn800B1FD0()
     );
 
     textWriter.SetupGX();

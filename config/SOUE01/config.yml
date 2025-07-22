@@ -29,6 +29,20 @@ force_active: [
   "ModuleConstructorsX",
   "ModuleDestructorsX",
 ]
+block_relocations:
+  # OSInit
+  - source: 0x803a2a9c
+  - source: 0x803a2b04
+add_relocations:
+  # bugged relocation pair in unreachable code
+  - source: .text:0x80306FCC
+    type: l
+    target: lbl_804F0A00
+  # TRK branches
+  - source: .init:0x80004844
+    type: rel24
+    target: __TRKreset
+  # TODO - all the TRK_InterruptHandler loads
 extract:
   - symbol: DOL_BACKUP_FONT
     header: d/dol_backup_error_font.inc

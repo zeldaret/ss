@@ -1,14 +1,14 @@
-#ifndef D_LYT_METER_CONFIGURATION
-#define D_LYT_METER_CONFIGURATION
+#ifndef D_LYT_METER_HIO_H
+#define D_LYT_METER_HIO_H
 
 #include "common.h"
 
-class dLytMeterConfiguration_c {
+class dLytMeter_HIO_c {
 public:
-    dLytMeterConfiguration_c();
-    virtual ~dLytMeterConfiguration_c();
+    dLytMeter_HIO_c();
+    virtual ~dLytMeter_HIO_c();
 
-    static const dLytMeterConfiguration_c *GetInstance() {
+    static const dLytMeter_HIO_c *GetInstance() {
         return sInstance;
     }
 
@@ -45,7 +45,7 @@ public:
     }
 
 
-    static dLytMeterConfiguration_c *sInstance;
+    static dLytMeter_HIO_c *sInstance;
 
     /* 0x004 */ u8 field_0x004;
     /* 0x005 */ u8 field_0x005;

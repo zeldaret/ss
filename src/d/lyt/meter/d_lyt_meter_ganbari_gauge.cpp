@@ -4,7 +4,7 @@
 #include "d/a/d_a_player.h"
 #include "d/d_camera.h"
 #include "d/d_sc_game.h"
-#include "d/lyt/d_lyt_meter_configuration.h"
+#include "d/lyt/d_lyt_meter_hio.h"
 #include "m/m_vec.h"
 #include "toBeSorted/d_d3d.h"
 #include "toBeSorted/event_manager.h"
@@ -329,7 +329,7 @@ bool dLytMeterGanbariGauge_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x54C = 1.0f;
     field_0x550 = 1.0f;
 
-    field_0x548 = dLytMeterConfiguration_c::sInstance->field_0x1C8;
+    field_0x548 = dLytMeter_HIO_c::sInstance->field_0x1C8;
 
     field_0x558 = 0;
     field_0x559 = 0;
@@ -343,7 +343,7 @@ bool dLytMeterGanbariGauge_c::build(d2d::ResAccIf_c *resAcc) {
     field_0x540 = 0;
     field_0x534 = 0;
 
-    if (dLytMeterConfiguration_c::sInstance->field_0x13C != 0) {
+    if (dLytMeter_HIO_c::sInstance->field_0x13C != 0) {
         field_0x534 = 0;
     } else {
         field_0x534 = 1;
@@ -395,7 +395,7 @@ bool dLytMeterGanbariGauge_c::execute() {
 
     if (fn_80104710(false) || (isCrawling() && !fn_801047B0())) {
         field_0x534 = 1;
-    } else if (dLytMeterConfiguration_c::GetInstance()->field_0x13C) {
+    } else if (dLytMeter_HIO_c::GetInstance()->field_0x13C) {
         field_0x534 = 0;
     } else {
         field_0x534 = 1;
@@ -503,7 +503,7 @@ bool dLytMeterGanbariGauge_c::execute() {
     mVec2_c scaleV(scale, scale);
     mLyt.getLayout()->GetRootPane()->SetScale(scaleV);
 
-    if (!field_0x534 && len <= dLytMeterConfiguration_c::GetInstance()->field_0x138 && !fn_80104710(false) &&
+    if (!field_0x534 && len <= dLytMeter_HIO_c::GetInstance()->field_0x138 && !fn_80104710(false) &&
         !isCrawling()) {
         field_0x530 = 1;
     } else {
@@ -526,8 +526,8 @@ bool dLytMeterGanbariGauge_c::execute() {
 
     if (field_0x544 != 0) {
         if (mStaminaPercent < field_0x550 &&
-            mStaminaPercent < field_0x51C - dLytMeterConfiguration_c::GetInstance()->getField_0x1CC()) {
-            field_0x548 = dLytMeterConfiguration_c::GetInstance()->getField_0x1C8();
+            mStaminaPercent < field_0x51C - dLytMeter_HIO_c::GetInstance()->getField_0x1CC()) {
+            field_0x548 = dLytMeter_HIO_c::GetInstance()->getField_0x1C8();
             field_0x54C = field_0x51C;
             field_0x550 = mStaminaPercent;
             mAnm[GANBARI_ANIM_UPDOWN_1].setFrame(field_0x54C * 100.0f);
@@ -537,7 +537,7 @@ bool dLytMeterGanbariGauge_c::execute() {
                 field_0x548--;
             }
             if (field_0x548 == 0) {
-                field_0x54C -= dLytMeterConfiguration_c::GetInstance()->getField_0x1D0();
+                field_0x54C -= dLytMeter_HIO_c::GetInstance()->getField_0x1D0();
                 if (field_0x54C < mStaminaPercent) {
                     field_0x544 = 0;
                     mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(true);
@@ -552,11 +552,11 @@ bool dLytMeterGanbariGauge_c::execute() {
             }
         }
     } else {
-        if (mStaminaPercent < field_0x51C - dLytMeterConfiguration_c::GetInstance()->getField_0x1C4()) {
+        if (mStaminaPercent < field_0x51C - dLytMeter_HIO_c::GetInstance()->getField_0x1C4()) {
             field_0x544 = 1;
             field_0x54C = field_0x51C;
             field_0x550 = mStaminaPercent;
-            field_0x548 = dLytMeterConfiguration_c::GetInstance()->getField_0x1C8();
+            field_0x548 = dLytMeter_HIO_c::GetInstance()->getField_0x1C8();
             mAnm[GANBARI_ANIM_UPDOWN_1].setFrame(field_0x54C * 100.0f);
             mAnm[GANBARI_ANIM_UPDOWN_1].setAnimEnable(true);
         } else {

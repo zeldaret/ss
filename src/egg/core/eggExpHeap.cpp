@@ -100,15 +100,15 @@ u32 ExpHeap::resizeForMBlock(void *block, u32 size) {
 }
 
 u32 ExpHeap::getTotalFreeSize() {
-    return MEMGetAllocatableSizeForExpHeap(mHeapHandle);
+    return MEMGetTotalFreeSizeForExpHeap(mHeapHandle);
 }
 
 u32 ExpHeap::getAllocatableSize(s32 align) {
     return MEMGetAllocatableSizeForExpHeapEx(mHeapHandle, align);
 }
 
-void ExpHeap::setGroupID(u16 groupId) {
-    MEMSetGroupIdForExpHeap(mHeapHandle, groupId);
+void ExpHeap::setAllocMode(u16 allocMode) {
+    MEMSetAllocModeForExpHeap(mHeapHandle, allocMode);
 }
 
 u32 ExpHeap::adjust() {

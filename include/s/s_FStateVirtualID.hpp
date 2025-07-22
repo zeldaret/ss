@@ -9,7 +9,7 @@ class sFStateVirtualID_c : public sFStateID_c<T> {
 public:
     typedef void (T::*stateFunc)();
     sFStateVirtualID_c(
-        const sStateID_c *superState, const char *name, stateFunc initialize, stateFunc execute, stateFunc finalize
+        const sStateIDIf_c *superState, const char *name, stateFunc initialize, stateFunc execute, stateFunc finalize
     )
         : sFStateID_c<T>(name, initialize, execute, finalize), mpSuperState(superState) {}
 
@@ -29,7 +29,7 @@ public:
     }
 
 private:
-    const sStateID_c *mpSuperState;
+    const sStateIDIf_c *mpSuperState;
 };
 
 #endif

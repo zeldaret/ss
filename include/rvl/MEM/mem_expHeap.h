@@ -56,10 +56,12 @@ void *MEMAllocFromExpHeapEx(struct MEMiHeapHead *heap, u32 size, s32 align);
 u32 MEMResizeForMBlockExpHeap(struct MEMiHeapHead *heap, void *memBlock, u32 size);
 void MEMFreeToExpHeap(struct MEMiHeapHead *heap, void *memBlock);
 u32 MEMGetAllocatableSizeForExpHeap(struct MEMiHeapHead *heap);
+u32 MEMGetTotalFreeSizeForExpHeap(struct MEMiHeapHead *heap);
 u32 MEMGetAllocatableSizeForExpHeapEx(struct MEMiHeapHead *heap, s32 align);
-void MEMSetGroupIdForExpHeap(MEMiHeapHead *mHeapHandle, u16 groupId);
+void MEMSetGroupIdForExpHeap(struct MEMiHeapHead *mHeapHandle, u16 groupId);
 u32 MEMAdjustExpHeap(struct MEMiHeapHead *heap);
 u32 MEMGetSizeForMBlockExpHeap(const void *block);
+void MEMSetAllocModeForExpHeap(struct MEMiHeapHead *heap, u16 allocMode);
 
 static inline struct MEMiHeapHead *MEMCreateExpHeap(void *start, u32 size) {
     return MEMCreateExpHeapEx(start, size, 0);

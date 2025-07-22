@@ -5,7 +5,7 @@
 #include "d/d_gfx.h"
 #include "d/d_message.h"
 #include "d/d_tag_processor.h"
-#include "d/d_textunk.h"
+#include "d/d_lyt_hio.h"
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
 #include "libms/msgfile.h"
 #include "m/m_color.h"
@@ -405,7 +405,7 @@ f32 dTextBox_c::GetLinesHeight() const {
 
     f32 assumedDefaultSize = 35.0f;
 
-    f32 f3 = UnkTextThing::getFn800B1F70();
+    f32 f3 = dLyt_HIO_c::getFn800B1F70();
     nw4r::lyt::Size size = mMyFontSize;
     int fontHeight = f->GetHeight();
     f3 *= (size.height / assumedDefaultSize) * fontHeight;
@@ -493,7 +493,7 @@ void dTextBox_c::init() {
     }
 
     nw4r::lyt::Size sz = GetFontSize();
-    f32 scale = UnkTextThing::getFn800B1F70();
+    f32 scale = dLyt_HIO_c::getFn800B1F70();
 
     f32 height = sz.height / f1;
     sz.width = GetFont()->GetWidth() * height * scale;
@@ -625,11 +625,11 @@ void dTextBox_c::DrawSelf(const nw4r::lyt::DrawInfo &drawInfo) {
         unk1 = field_0x1F8 == 1;
     }
     if (field_0x1F7 == 1 || (field_0x1F7 == 2 && unk1)) {
-        f32 f = GetFontSize().height * UnkTextThing::getField0x75C();
+        f32 f = GetFontSize().height * dLyt_HIO_c::getField0x75C();
         textRect.top -= f;
         textRect.bottom -= f;
     } else if (field_0x1F7 == 3 && unk1) {
-        f32 f = GetFontSize().height * UnkTextThing::getField0x760();
+        f32 f = GetFontSize().height * dLyt_HIO_c::getField0x760();
         textRect.top -= f;
         textRect.bottom -= f;
     }

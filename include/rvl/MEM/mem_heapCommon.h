@@ -37,6 +37,7 @@ typedef struct MEMiHeapHead {
 void MEMiInitHeapHead(MEMiHeapHead *heap, u32 magic, void *start, void *end, u16 opt);
 void MEMiFinalizeHeap(MEMiHeapHead *heap);
 MEMiHeapHead *MEMFindContainHeap(const void *memBlock);
+MEMiHeapHead *MEMFindParentHeap(const MEMiHeapHead *pHandle);
 
 static inline int GetUIntPtr(const void *p) {
     return (int)p;

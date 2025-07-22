@@ -2,7 +2,7 @@
 
 #include "d/d_font_manager.h"
 #include "d/d_message.h"
-#include "d/d_textunk.h"
+#include "d/d_lyt_hio.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/d_window.h"
 #include "egg/gfx/eggScreen.h"
@@ -467,8 +467,8 @@ void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 sca
     }
 
     nw4r::math::VEC3 t2 = textBox->GetTranslate();
-    t2.x += UnkTextThing::getFn800B2030();
-    t2.y += UnkTextThing::getFn800B2040();
+    t2.x += dLyt_HIO_c::getFn800B2030();
+    t2.y += dLyt_HIO_c::getFn800B2040();
     textBox->SetTranslate(t2);
 
     if (scale != -9999.0f) {
@@ -480,7 +480,7 @@ void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 sca
     } else {
         const nw4r::ut::Font *f = textBox->GetFont();
         if (f != nullptr) {
-            textBox->SetScale(UnkTextThing::getFn800B1FD0());
+            textBox->SetScale(dLyt_HIO_c::getFn800B1FD0());
         }
     }
 
@@ -490,17 +490,17 @@ void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 sca
     if (spaceX != -9999.0f) {
         textBox->SetCharSpace(spaceX);
     } else {
-        f6 = UnkTextThing::getFn800B2010();
+        f6 = dLyt_HIO_c::getFn800B2010();
     }
 
     if (spaceY != -9999.0f) {
         textBox->SetLineSpace(spaceY);
     } else {
-        f4 = UnkTextThing::getFn800B1FF0();
+        f4 = dLyt_HIO_c::getFn800B1FF0();
     }
 
-    textBox->SetCharSpace(textBox->GetCharSpace() + UnkTextThing::getFn800B2020() + f6);
-    textBox->SetLineSpace(textBox->GetLineSpace() + UnkTextThing::getFn800B2000() + f4);
+    textBox->SetCharSpace(textBox->GetCharSpace() + dLyt_HIO_c::getFn800B2020() + f6);
+    textBox->SetLineSpace(textBox->GetLineSpace() + dLyt_HIO_c::getFn800B2000() + f4);
     fn_800AB930(textBox);
 }
 

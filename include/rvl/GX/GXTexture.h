@@ -52,7 +52,7 @@ void GXSetTexCoordBias(GXTexCoordID, GXBool, GXBool);
 
 u16 GXGetTexObjWidth(const GXTexObj *obj);
 u16 GXGetTexObjHeight(const GXTexObj *obj);
-GXTexFmt GXGetTexObjFormat(const GXTexObj *obj);
+GXTexFmt GXGetTexObjFmt(const GXTexObj *obj);
 GXBool GXGetTexObjMipMap(const GXTexObj *obj);
 GXTexWrapMode GXGetTexObjWrapS(const GXTexObj *obj);
 u32 GXGetTexObjTlut(const GXTexObj *);

@@ -6,7 +6,7 @@
 #include "d/d_gfx.h"
 #include "d/d_message.h"
 #include "d/d_tag_processor.h"
-#include "d/d_textunk.h"
+#include "d/d_lyt_hio.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
 #include "m/m_vec.h"
@@ -49,13 +49,13 @@ bool TextWindowUnk::fn_800B2130(const char *label, dTextBox_c *textBox, dLytMsgW
         }
     }
 
-    UnkTextThing::getInstance()->setStr1(label);
+    dLyt_HIO_c::getInstance()->setStr1(label);
     if (dLytMsgWindow_c::getInstance()->fn_80117390(true) != nullptr) {
         // Regswap
-        UnkTextThing::getInstance()->setStr2(dLytMsgWindow_c::getInstance()->fn_80117390(true));
+        dLyt_HIO_c::getInstance()->setStr2(dLytMsgWindow_c::getInstance()->fn_80117390(true));
         s32 idx = dMessage_c::getMsbtIndexForLabel(label);
         if (idx >= 0) {
-            UnkTextThing::getInstance()->setStr3(dMessage_c::getMsbtFileName(idx));
+            dLyt_HIO_c::getInstance()->setStr3(dMessage_c::getMsbtFileName(idx));
         }
     }
     return true;

@@ -1,4 +1,4 @@
-#include "d/d_textunk.h"
+#include "d/d_lyt_hio.h"
 
 #include "common.h"
 #include "nw4r/lyt/lyt_arcResourceAccessor.h"
@@ -9,11 +9,11 @@ void dummy_ArcResourceAccessor(nw4r::lyt::ArcResourceAccessor *arg) {
     delete arg;
 }
 
-UnkTextThing textThing;
-UnkTextThing *UnkTextThing::sInstance;
+dLyt_HIO_c textThing;
+dLyt_HIO_c *dLyt_HIO_c::sInstance;
 
-// UnkTextThing::~UnkTextThing() {}
-UnkTextThing::UnkTextThing() {
+// dLyt_HIO_c::~dLyt_HIO_c() {}
+dLyt_HIO_c::dLyt_HIO_c() {
     sInstance = this;
 
     field_0x754 = 0.0f;
@@ -85,7 +85,7 @@ UnkTextThing::UnkTextThing() {
     field_0x794 = 100.0f;
 }
 
-void UnkTextThing::destroy() {
+void dLyt_HIO_c::destroy() {
     for (int i = 0; i < 82; i++) {
         if (field_buf0[i] != nullptr) {
             destroyUnk(field_buf0[i]);
@@ -133,55 +133,55 @@ void UnkTextThing::destroy() {
     }
 }
 
-f32 UnkTextThing::fn_800B1F10() {
+f32 dLyt_HIO_c::fn_800B1F10() {
     return field_0x794 / 100.0f;
 }
 
-void *UnkTextThing::allocUnk(size_t size, int align) {
+void *dLyt_HIO_c::allocUnk(size_t size, int align) {
     return nullptr;
 }
-void UnkTextThing::destroyUnk(void *_thing) {}
+void dLyt_HIO_c::destroyUnk(void *_thing) {}
 
-f32 UnkTextThing::fn_800B1F70() {
+f32 dLyt_HIO_c::fn_800B1F70() {
     f32 v = fn_800B1FC0();
     v *= fn_800B1FE0();
     return v;
 }
-f32 UnkTextThing::fn_800B1FC0() {
+f32 dLyt_HIO_c::fn_800B1FC0() {
     return 1.0f;
 }
-f32 UnkTextThing::fn_800B1FD0() {
+f32 dLyt_HIO_c::fn_800B1FD0() {
     return 0.9f;
 }
-f32 UnkTextThing::fn_800B1FE0() {
+f32 dLyt_HIO_c::fn_800B1FE0() {
     return 1.0f;
 }
-f32 UnkTextThing::fn_800B1FF0() {
+f32 dLyt_HIO_c::fn_800B1FF0() {
     return 0.0f;
 }
-f32 UnkTextThing::fn_800B2000() {
+f32 dLyt_HIO_c::fn_800B2000() {
     return 0.0f;
 }
-f32 UnkTextThing::fn_800B2010() {
+f32 dLyt_HIO_c::fn_800B2010() {
     return -1.0f;
 }
-f32 UnkTextThing::fn_800B2020() {
+f32 dLyt_HIO_c::fn_800B2020() {
     return 0.0f;
 }
-f32 UnkTextThing::fn_800B2030() {
+f32 dLyt_HIO_c::fn_800B2030() {
     return 0.0f;
 }
-f32 UnkTextThing::fn_800B2040() {
+f32 dLyt_HIO_c::fn_800B2040() {
     return 0.0f;
 }
 
-void UnkTextThing::destroyMsg(MsbtInfo *msg) {
+void dLyt_HIO_c::destroyMsg(MsbtInfo *msg) {
     mShouldHookAllocations = true;
     LMS_CloseMessage(msg);
     mShouldHookAllocations = false;
 }
 
-void UnkTextThing::destroyFlow(MsbfInfo *flow) {
+void dLyt_HIO_c::destroyFlow(MsbfInfo *flow) {
     mShouldHookAllocations = true;
     LMS_CloseFlow(flow);
     mShouldHookAllocations = false;

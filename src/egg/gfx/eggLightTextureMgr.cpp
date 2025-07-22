@@ -129,7 +129,7 @@ u16 LightTextureManager::replaceModelTexture(int tex, nw4r::g3d::ResMdl mdl) con
         u16 res = G3DUtility::SetTexture(mat, nullptr, mpTextures[tex]->getName(), &obj, false, buf, 0xFF, 2);
         for (int j = 0; j < res; j++) {
             if (buf[j].texCoordId != -1) {
-                fn_804AE340(mat, static_cast<GXTexCoordID>(buf[j].texCoordId));
+                setupEnvmap(mat, static_cast<GXTexCoordID>(buf[j].texCoordId));
             }
         }
         count += res;
@@ -214,7 +214,7 @@ void LightTextureManager::drawAndCaptureTexture(f32 ox, f32 oy, f32 sx, f32 sy) 
     }
 
     if (b1) {
-        StateGX::GXSetPixelFmt_(GX_PF_RGB8_Z24, GX_ZC_LINEAR);
+        StateGX::setPixelFormatGX(GX_PF_RGB8_Z24, GX_ZC_LINEAR);
     }
 
     nw4r::ut::Color c(StateGX::s_clearEfb);
@@ -234,7 +234,7 @@ void LightTextureManager::drawAndCaptureTexture(f32 ox, f32 oy, f32 sx, f32 sy) 
     }
 
     if (b1) {
-        StateGX::GXSetPixelFmt_(StateGX::s_pixFormat, StateGX::s_zFmt16);
+        StateGX::setPixelFormatGX(StateGX::s_pixFormat, StateGX::s_zFmt16);
     }
 
     if ((mFlags & 0x40) == 0 && buf != nullptr) {
@@ -307,7 +307,7 @@ const void *LightTextureManager::getLtexFromLmap(const void *lmap, u16 index) {
     return buf;
 }
 
-void LightTextureManager::fn_804AE340(nw4r::g3d::ResMat mat, GXTexCoordID id) {
+void LightTextureManager::setupEnvmap(nw4r::g3d::ResMat mat, GXTexCoordID id) {
     nw4r::g3d::ResTexSrt dat = mat.GetResTexSrt();
     dat.SetMapMode(id, 1, -1, -1);
     nw4r::g3d::ResMatTexCoordGen coordGen = mat.GetResMatTexCoordGen();

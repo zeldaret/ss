@@ -88,7 +88,7 @@ TextureBuffer *StateEfb::captureEfb(BufferType type, bool noTransparencyMaybe, u
                 if (spBufferSet[type].buf != nullptr) {
                     spBufferSet[type].buf->setPixModeSync(false);
                 }
-                doCapture = GetShouldCapture();
+                doCapture = isEnableDirtyBufferMode();
                 break;
             }
 
@@ -151,7 +151,7 @@ void StateEfb::fn_804B4270(BufferType type, u32 userData) {
     }
 }
 
-void StateEfb::fn_804B4310(BufferType type, u32 userData) {
+void StateEfb::popWorkBuffer(bool b, u32 userData) {
     if (sWorkBuffer != -1) {
         BufferType i = static_cast<BufferType>(-1);
         if (sWorkBuffer == 0) {
@@ -161,7 +161,7 @@ void StateEfb::fn_804B4310(BufferType type, u32 userData) {
         }
 
         if (spBufferSet[i].userData == userData) {
-            if (type == BUFFER_0) {
+            if (!b) {
                 StateGX::ScopedColor colorGuard(true);
                 StateGX::ScopedAlpha alphaGuard(true);
                 StateGX::ScopedDither ditherGuard(false);
@@ -186,9 +186,9 @@ void StateEfb::fn_804B4310(BufferType type, u32 userData) {
                 nw4r::math::MTX34 mtx;
                 PSMTXScale(mtx, parentScreen.GetSize().x, parentScreen.GetSize().y, 1.0f);
 
-                DrawGX::BeginDrawScreen(true, GetShouldCapture(), false);
+                DrawGX::BeginDrawScreen(true, isEnableDirtyBufferMode(), false);
                 DrawGX::SetBlendMode(DrawGX::BLEND_14);
-                if (GetShouldCapture()) {
+                if (isEnableDirtyBufferMode()) {
                     TextureBuffer *buf = spBufferSet[i].buf;
                     buf->setFilt(GX_NEAR, GX_NEAR);
                     buf->load(DrawGX::GetTexMapDefault());
@@ -218,7 +218,7 @@ f32 *StateEfb::fn_804B4550() {
     return sUnkBuffer;
 }
 
-bool StateEfb::GetShouldCapture() {
+bool StateEfb::isEnableDirtyBufferMode() {
     return ((sFlag >> 2) & 1) != 0;
 }
 

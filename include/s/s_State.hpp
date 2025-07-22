@@ -65,11 +65,11 @@
 
 #define STATE_VIRTUAL_DEFINE(class, name)                                                                              \
     template <typename T>                                                                                              \
-    static const sStateID_c &baseID_##name() {                                                                         \
+    static const sStateIDIf_c &baseID_##name() {                                                                       \
         return T::StateID_##name;                                                                                      \
     }                                                                                                                  \
     template <>                                                                                                        \
-    const sStateID_c &baseID_##name<sStateID_c>() {                                                                    \
+    const sStateIDIf_c &baseID_##name<sStateID_c>() {                                                                  \
         return sStateID::null;                                                                                         \
     }                                                                                                                  \
     const sFStateVirtualID_c<class> class ::StateID_##name(                                                            \

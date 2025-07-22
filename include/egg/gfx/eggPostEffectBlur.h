@@ -57,7 +57,7 @@ public:
     }
 
 private:
-    void drawInternal(u8, u8, f32, f32);
+    void setMaterialMulti(u8, u8, f32, f32);
 
     /* 0x2C */ u8 field_0x2C;
     /* 0x30 */ f32 field_0x30;
