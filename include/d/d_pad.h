@@ -77,30 +77,37 @@ public:
     void fn_80056B90(s32 chan);
     void fn_80056CE0(s32 chan);
 
-    void fn_80056DA0(s32 chan); // Deals with Mpls Calibration Start
-    void fn_80056DF0(s32 chan); // Deals with Mpls Calibration Work
+    void startMplsCalibration(s32 chan);
+    void workMplsCalibration(s32 chan);
     f32 fn_80056E50();
-    void fn_80056E60(s32 chan); // Deals with Mpls Calibration Stop
+    void stopMplsCalibration(s32 chan);
 
     void centerCursor(s32 chan);
 
-    void resetState(s32 chan);
-    void fn_80056F00(s32 chan);
-    void fn_80056F30(s32 chan); // Sets State to 1
-    void fn_80056F40(s32 chan);
-    void fn_80057010(s32 chan); // Sets State to 2 (EnableMPLS)
-    void fn_80057020(s32 chan);
-    void fn_800570A0(s32 chan); // Sets State to 3 (Disconnect)
-    void fn_800570B0(s32 chan); // Sets State to 1
-    void fn_800570C0(s32 chan); // Sets State to 4
-    void fn_80057100(s32 chan);
-    void fn_800571B0(s32 chan); // Sets State to 5
-    void fn_800571C0(s32 chan);
+    void gotoStateWaitForConnect(s32 chan);
+    void executeStateWaitForConnect(s32 chan);
+    void gotoStateWaitForLeaveHbm(s32 chan);
+    void executeStateWaitForLeaveHbm(s32 chan);
+    void gotoState2(s32 chan); // (EnableMPLS)
+    void executeState2(s32 chan);
+    void gotoState3(s32 chan); // (Disconnect)
+    void executeState3(s32 chan); // Sets State to 1
+    void gotoState4(s32 chan);
+    void executeState4(s32 chan);
+    void gotoState5(s32 chan);
+    void executeState5(s32 chan);
     void fn_800572A0(s32 chan); // State Handling
 
-    static bool fn_80058BC0();
-    static bool fn_80058C20();
-    static void fn_80058C90();
+    /**
+     * Is the Wiimote missing MotionPlus? This means the Wiimote neither has
+     * a builtin Mpls nor a passthrough Mpls attached.
+     */
+    static bool isMissingMpls();
+    /**
+     * Is the Wiimote known to not have an attached Nunchuk?
+     */
+    static bool isMissingNunchuk();
+    static void fn_80058C90(s32 chan);
 
     static bool isLowBattery();
     static bool isOutOfBattery();
@@ -117,7 +124,7 @@ public:
     static f32 fn_80058FE0();
     static void fn_80058FF0();
     static void fn_80059000();
-    static void fn_80059010();
+    static bool fn_80059010();
     static void fn_800590A0();
     static bool fn_800590B0();
     static bool fn_800590E0();
@@ -142,7 +149,7 @@ public:
     static bool fn_80059370(s32 chan);
     static bool fn_80059390(s32 chan);
     void getUnifiedWpadStatus(s32 chan);
-    void fn_800593D0();
+    void calcFSStickDirMask();
 
     static void setNoSleep();
     static void setAutoSleepTime();
@@ -153,9 +160,18 @@ public:
         return m_current_ex;
     }
 
+    enum ExState_e {
+        EX_STATE_WAITING_FOR_CONNECT = 0,
+        EX_STATE_WAITING_FOR_LEAVE_HBM = 1,
+        EX_STATE_2 = 2,
+        EX_STATE_3 = 3,
+        EX_STATE_4 = 4,
+        EX_STATE_5 = 5,
+    };
+
 public:
     /* 0x0000 */ mVec2_c mDpdPos;
-    /* 0x0008 */ mVec2_c field_0x8;
+    /* 0x0008 */ mVec2_c mDpdPosScreen;
     /* 0x0010 */ mVec2_c mFSStick;
     /* 0x0018 */ f32 mFSStickDistance;
     /* 0x001C */ mAng mFSStickAngle;
@@ -165,16 +181,16 @@ public:
     /* 0x002C */ WPADDeviceType mWPADDeviceType;
     /* 0x0030 */ u32 mWPADDeviceTypeStable;
     /* 0x0034 */ s32 mWPADDeviceTypeStableTimer;
-    /* 0x0038 */ s32 field_0x38;
+    /* 0x0038 */ s32 mConnectedStableTimer;
     /* 0x003C */ s32 field_0x3C;
     /* 0x0040 */ f32 field_0x40;
     /* 0x0044 */ bool field_0x44;
     /* 0x0045 */ bool field_0x45;
     /* 0x0046 */ bool field_0x46;
-    /* 0x0047 */ bool field_0x47;
+    /* 0x0047 */ bool mIsCalibrating;
     /* 0x0048 */ s32 field_0x48;
-    /* 0x004C */ bool mSpeakerSetup;
-    /* 0x004D */ bool mSpeakerShutdown;
+    /* 0x004C */ bool mDidConnect;
+    /* 0x004D */ bool mDidDisconnect;
     /* 0x004E */ bool mIncorrectDeviceType;
     /* 0x004F */ bool field_0x4F;
     /* 0x0050 */ bool field_0x50;
@@ -201,14 +217,14 @@ public:
     /* 0x2250 */ mVec3_c mMPLSVelocity;
     /* 0x225C */ mpls_c mMPLS;
     /* 0x2280 */ s32 mState;
-    /* 0x2284 */ s32 field_0x2284;
+    /* 0x2284 */ s32 mOutOfHbmStableTimer;
     /* 0x2288 */ s32 field_0x2288;
     /* 0x228C */ KPADUnifiedWpadStatus mStatus;
     /* 0x22CE */ bool field_0x22CE;
     /* 0x22CF */ bool field_0x22CF;
     /* 0x22D0 */ u8 field_0x22D0;
-    /* 0x22D1 */ u8 field_0x22D1;
-    /* 0x22D4 */ s32 field_0x22D4;
+    /* 0x22D1 */ bool mFSStickMaskChanged;
+    /* 0x22D4 */ u32 mFSStickMask;
     /* 0x22D8 */ u8 field_0x22D8;
 
     static WPADInfo m_info[2][4];
@@ -292,7 +308,7 @@ bool getUpMinus();
 bool getUpPlus();
 
 mVec2_c &getDpdPos();
-mVec2_c &getDpdStableMaybe();
+mVec2_c &getDpdPosScreen();
 mVec2_c &getFSStick();
 f32 getFSStickX();
 f32 getFSStickY();

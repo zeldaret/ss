@@ -113,8 +113,8 @@ void Manage_c::BootComplete(bool complete) {
 
 bool Manage_c::CanExecSoftReset() const {
     return mMode == SoftReset && mpFader->getStatus() == EGG::Fader::STATUS_PREPARE_IN && field_0x60 == 0 &&
-           dHbm::Manage_c::GetInstance()->getField_0x210() != 2 && dSndPlayerMgr_c::GetInstance()->fn_8035E2E0() &&
-           FileManager::GetInstance()->getField_0xA84D() != 1;
+           dHbm::Manage_c::GetInstance()->getState() != dHbm::Manage_c::HBM_MANAGE_ACTIVE &&
+           dSndPlayerMgr_c::GetInstance()->fn_8035E2E0() && FileManager::GetInstance()->getField_0xA84D() != 1;
 }
 
 void Manage_c::SetSoftResetFinish() {
@@ -234,7 +234,8 @@ void Manage_c::ModeProc() {
         if (mMode != DiskWait && mMode != SafetyWait) {
             ModeRequest(DiskWait);
         }
-    } else if (mMode == Normal && dHbm::Manage_c::GetInstance()->getField_0x210() == 2) {
+    } else if (mMode == Normal &&
+               dHbm::Manage_c::GetInstance()->getState() == dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
         ModeRequest(HbmWait);
     }
     static void (Manage_c::*const procs[6])() = {
@@ -393,7 +394,7 @@ void Manage_c::ModeProc_HbmWait() {
             DiskCheckModeRequest(true);
             doFade = true;
         } else {
-            if (dHbm::Manage_c::GetInstance()->getField_0x210() != 2) {
+            if (dHbm::Manage_c::GetInstance()->getState() != dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
                 if (mShutdown) {
                     ModeRequestSafetyWait(Shutdown);
                 } else if (mRestart) {

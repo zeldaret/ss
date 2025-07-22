@@ -108,6 +108,10 @@ void KPADSetReviseMode(s32 chan, s32);
 void KPADEnableMpls(s32 chan, s32);
 void KPADDisableMpls(s32 chan);
 
+void KPADStartMplsCalibration(s32 chan);
+f32 KPADWorkMplsCalibration(s32 chan);
+void KPADStopMplsCalibration(s32 chan);
+
 s32 KPADGetMplsWorkSize();
 void KPADSetMplsWorkarea(void *);
 void KPADSetControlMplsCallback(s32 chan, KPADConnectCallback cb);

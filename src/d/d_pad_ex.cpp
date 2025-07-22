@@ -212,8 +212,8 @@ bool getUpPlus() {
 mVec2_c &getDpdPos() {
     return ex_c::m_current_ex->mDpdPos;
 }
-mVec2_c &getDpdStableMaybe() {
-    return ex_c::m_current_ex->field_0x8;
+mVec2_c &getDpdPosScreen() {
+    return ex_c::m_current_ex->mDpdPosScreen;
 }
 mVec2_c &getFSStick() {
     return ex_c::m_current_ex->mFSStick;

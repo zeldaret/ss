@@ -67,7 +67,6 @@ dScTitle_c::~dScTitle_c() {
 }
 
 extern "C" u32 TITLE_SCREEN_CHANGE;
-extern "C" void fn_80058C90(s32);
 
 static const char *const sFileSelect = "FileSelect";
 static const char *const sSkb = "SoftwareKeyboard";
@@ -91,7 +90,7 @@ int dScTitle_c::create() {
         dSys::setFrameRate(2);
         dSys::setClearColor(mColor(0x00000000));
         dPad::ex_c::setAutoSleepTime();
-        fn_80058C90(0);
+        dPad::ex_c::fn_80058C90(0);
         SaveRelated::create();
         field_0x2AD = 0;
         LayoutArcManager::GetInstance()->loadLayoutArcFromDisk(sFileSelect, nullptr);

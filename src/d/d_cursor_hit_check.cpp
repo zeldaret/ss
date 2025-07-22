@@ -259,5 +259,5 @@ void dCursorHitCheckLyt_c::gatherBoundings(dCsCheckLyt_BoundingData **pEnd, nw4r
 }
 
 mVec2_c &dCursorInterface_c::getCursorPos() {
-    return dPad::ex_c::getInstance()->field_0x8;
+    return dPad::ex_c::getInstance()->mDpdPosScreen;
 }

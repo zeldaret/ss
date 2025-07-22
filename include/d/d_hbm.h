@@ -4,6 +4,12 @@
 namespace dHbm {
 class Manage_c {
 public:
+    enum ManageState_e {
+        HBM_MANAGE_NOT_LOADED = 0,
+        HBM_MANAGE_INACTIVE = 1,
+        HBM_MANAGE_ACTIVE = 2,
+    };
+
     static void CreateInstance();
     static Manage_c *GetInstance();
 
@@ -37,15 +43,15 @@ public:
         mFlags &= ~flags;
     }
 
-    UNKWORD getField_0x210() const {
-        return field_0x210;
+    ManageState_e getState() const {
+        return mState;
     }
 
 private:
     static Manage_c *s_pInstance;
 
     /* 0x000 */ u8 _0x00[0x210 - 0x000];
-    /* 0x210 */ UNKWORD field_0x210;
+    /* 0x210 */ ManageState_e mState;
     /* 0x218 */ UNKWORD field_0x214;
     /* 0x218 */ u32 mFlags;
 };

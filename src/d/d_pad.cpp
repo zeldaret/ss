@@ -4,6 +4,7 @@
 #include "d/a/d_a_player.h"
 #include "d/d_cs_game.h"
 #include "d/d_gfx.h"
+#include "d/d_hbm.h"
 #include "d/d_pause.h"
 #include "d/d_reset.h"
 #include "d/lyt/d_lyt_control_game.h"
@@ -56,7 +57,7 @@ void control_mpls_callback(s32 idx, s32 code) {
     }
 }
 
-bool checkDeviceType(u32 type) {
+bool isDeviceTypeMpls(u32 type) {
     switch (type) {
         case WPAD_DEV_MOTION_PLUS:
         case WPAD_DEV_MPLS_PT_FS:
@@ -92,7 +93,7 @@ void create() {
         ex_c::m_ex[i].mMotion.init();
         KPADSetReviseMode(i, 1);
         KPADSetControlMplsCallback(i, control_mpls_callback);
-        ex_c::m_ex[i].resetState(i);
+        ex_c::m_ex[i].gotoStateWaitForConnect(i);
     }
     fn_80194080();
 }
@@ -112,7 +113,7 @@ void setMpls(bool enable, s32 chan) {
     }
 }
 
-void centerPos(mVec2_c &in, mVec2_c &out) {
+void convertDpdPosToScreenPos(mVec2_c &in, mVec2_c &out) {
     out.x = dGfx_c::getWidth4x3F() * 0.5f * (1.f + in.x) + dGfx_c::getWidth4x3LeftF();
     out.y = dGfx_c::getCurrentScreenHeightF() * -0.5f * (1.f + in.y) + dGfx_c::getCurrentScreenTopF();
 }
@@ -142,7 +143,7 @@ void beginPad_BR() {
         ex.fn_80056AF0(0);
         ex.fn_80056B90(0);
         ex.fn_80056CE0(0);
-        ex.fn_80056DF0(0);
+        ex.workMplsCalibration(0);
         bool isDpdReviseEnabled = KPADIsEnableMplsDpdRevise(0) >= 0.f;
         if (ex.field_0x22CE) {
             if (isDpdReviseEnabled) {
@@ -218,7 +219,7 @@ void beginPad_BR() {
             }
             KPADDisableMplsDirRevise(0);
         }
-        if (ex.field_0x47 || ex.field_0x48 != 0) {
+        if (ex.mIsCalibrating || ex.field_0x48 != 0) {
             KPADEnableMplsAccRevise(0);
             KPADSetMplsAccReviseParam(0, 1.f, 0.6f);
             if (--ex.field_0x48 < 0) {
@@ -232,7 +233,7 @@ void beginPad_BR() {
         ex.mFSStickDistance = ex.mFSStick.length();
         ex.mFSStickAngle = -ex.mFSStick.ang();
 
-        ex.fn_800593D0();
+        ex.calcFSStickDirMask();
 
         bool isMpls = mPad::isMpls(0) || mPad::isMplsPtFS(0);
         if (isMpls) {
@@ -250,7 +251,8 @@ void beginPad_BR() {
         ex.fn_80056790(0);
 
         if (ex.field_0x50) {
-            ex.mDpdPos = ex.field_0x8;
+            // TODO: These two vectors use entirely different spaces...
+            ex.mDpdPos = ex.field_0x5C;
         } else {
             if (mPad::getCore(0)->getDpdValidFlag() > 0) {
                 ex.mDpdPos = mPad::getCore(0)->getDpdRawPos();
@@ -259,7 +261,7 @@ void beginPad_BR() {
                 ex.mDpdPos.set(-2.f, -2.f);
             }
         }
-        centerPos(ex.mDpdPos, ex.field_0x8);
+        convertDpdPosToScreenPos(ex.mDpdPos, ex.mDpdPosScreen);
         ex.updateStatus(0);
     }
 
@@ -284,12 +286,12 @@ void connectCallback(const EGG::CoreControllerConnectArg &rArg) {
     switch (rArg.result) {
         case WPAD_ERR_OK: {
             dSndPlayerMgr_c::GetInstance()->setup(rArg.chan);
-            ex_c::m_ex[rArg.chan].mSpeakerSetup = true;
+            ex_c::m_ex[rArg.chan].mDidConnect = true;
             break;
         }
         case WPAD_ERR_NO_CONTROLLER: {
             dSndPlayerMgr_c::GetInstance()->shutdown(rArg.chan);
-            ex_c::m_ex[rArg.chan].mSpeakerShutdown = true;
+            ex_c::m_ex[rArg.chan].mDidDisconnect = true;
             break;
         }
     }
@@ -309,7 +311,7 @@ void disableMplsDirRevise(s32 chan) {
 
 ex_c::ex_c()
     : mDpdPos(0.f, 0.f),
-      field_0x8(0.f, 0.f),
+      mDpdPosScreen(0.f, 0.f),
       mFSStick(0.f, 0.f),
       mFSStickDistance(0.f),
       mFSStickAngle(0),
@@ -319,16 +321,16 @@ ex_c::ex_c()
       mWPADDeviceType(0),
       mWPADDeviceTypeStable(0xFF),
       mWPADDeviceTypeStableTimer(0),
-      field_0x38(0),
+      mConnectedStableTimer(0),
       field_0x3C(0),
       field_0x40(0.f),
       field_0x44(false),
       field_0x45(false),
       field_0x46(false),
-      field_0x47(false),
+      mIsCalibrating(false),
       field_0x48(0),
-      mSpeakerSetup(false),
-      mSpeakerShutdown(false),
+      mDidConnect(false),
+      mDidDisconnect(false),
       mIncorrectDeviceType(true),
       field_0x4F(false),
       field_0x50(true),
@@ -351,13 +353,13 @@ ex_c::ex_c()
       field_0x80(0.f, 1.f, 0.f),
       field_0x8C(0.f, 0.f, 1.f),
       mState(0),
-      field_0x2284(0),
+      mOutOfHbmStableTimer(0),
       field_0x2288(0),
       field_0x22CE(0),
       field_0x22CF(0),
       field_0x22D0(0),
-      field_0x22D1(0),
-      field_0x22D4(0),
+      mFSStickMaskChanged(false),
+      mFSStickMask(0),
       field_0x22D8(0) {
     memset(&mStatus, 0, sizeof(mStatus));
 }
@@ -365,13 +367,15 @@ ex_c::ex_c()
 void ex_c::fn_80055EF0(s32 chan) {
     const s32 readLen = mPad::getCore(chan)->getReadLength();
 
-    // I dont understand this loop - Nonmatching garbage
-    for (int i = 0; i < readLen; i++) {
-        mMotion.field_0x000[i] = mMotion.field_0x5A0[i];
-        mFSMotion.field_0x000[i] = mFSMotion.field_0x5A0[i];
+    for (int i = 120 - 1; i >= readLen; i--) {
+        mMotion.field_0x000[i] = mMotion.field_0x000[i - readLen];
+        mMotion.field_0xB40[i] = mMotion.field_0xB40[i - readLen];
+        mFSMotion.field_0x000[i] = mFSMotion.field_0x000[i - readLen];
+        mFSMotion.field_0xB40[i] = mFSMotion.field_0xB40[i - readLen];
     }
 
-    for (int i = 0; i < readLen; ++i) {
+    // Missing an implicit != 0 check before the loop
+    for (int i = 0; i < readLen; i++) {
         EGG::CoreStatus status = *mPad::getCore(chan)->getCoreStatus(i);
         mMotion.field_0x000[i].copyFrom(&status.acc);
         mMotion.field_0xB40[i] = status.acc_value;
@@ -452,7 +456,7 @@ void ex_c::centerCursor(s32 chan, bool b) {
     if (dAcPy_c::GetLink() && dAcPy_c::GetLink()->checkActionFlagsCont(0x2) && acc.z < -0.9f) {
         tmp = true;
     }
-    field_0x53 = tmp;
+    field_0x53 = dAcPy_c::GetLink() && dAcPy_c::GetLink()->checkActionFlagsCont(0x2) && acc.z < -0.9f;
 
     fn_800562B0(chan, field_0x8C);
     fn_80056330(chan);
@@ -464,20 +468,24 @@ void ex_c::centerCursor(s32 chan, bool b) {
         field_0x51 = 0;
         field_0x5C.set(0.f, 0.f);
         mDpdPos.set(0.f, 0.f);
-        centerPos(mDpdPos, field_0x8);
+        convertDpdPosToScreenPos(mDpdPos, mDpdPosScreen);
     }
 }
 
 void ex_c::fn_80056790(s32 chan) {}
 
-void ex_c::setField_0x70(mAng ang) {}
+void ex_c::setField_0x70(mAng ang) {
+    field_0x70 = ang;
+}
 
-void ex_c::setField_0x70() {}
+void ex_c::setField_0x70() {
+    field_0x70.set(0x1200);
+}
 
 void ex_c::fn_80056AF0(s32 chan) {
-    if (mSpeakerSetup) {
-        mSpeakerSetup = false;
-        field_0x38 = 90;
+    if (mDidConnect) {
+        mDidConnect = false;
+        mConnectedStableTimer = 90;
         field_0x44 = true;
 
         m_ex[chan].field_0x46 = true;
@@ -485,8 +493,8 @@ void ex_c::fn_80056AF0(s32 chan) {
     } else {
         field_0x44 = false;
     }
-    if (mSpeakerShutdown) {
-        mSpeakerShutdown = false;
+    if (mDidDisconnect) {
+        mDidDisconnect = false;
         field_0x45 = true;
         m_ex[chan].mWPADDeviceTypeStable = WPAD_DEV_UNKNOWN;
     } else {
@@ -515,10 +523,10 @@ void ex_c::fn_80056B90(s32 chan) {
     if (mWPADProbeStableTimer >= 5) {
         mWPADProbeResultStable = mWPADProbeResult;
     }
-    if (field_0x38 > 0) {
-        field_0x38--;
-        if (field_0x38 < 0) {
-            field_0x38 = 0;
+    if (mConnectedStableTimer > 0) {
+        mConnectedStableTimer--;
+        if (mConnectedStableTimer < 0) {
+            mConnectedStableTimer = 0;
         }
     }
 
@@ -535,11 +543,11 @@ void ex_c::fn_80056B90(s32 chan) {
         mWPADDeviceTypeStable = mWPADDeviceType;
     }
 
-    if (!checkDeviceType(mWPADDeviceTypeStable)) {
+    if (!isDeviceTypeMpls(mWPADDeviceTypeStable)) {
         mIncorrectDeviceType = true;
         field_0x6C = 0;
     }
-    if (checkDeviceType(mWPADDeviceTypeStable) && field_0x6C < 8) {
+    if (isDeviceTypeMpls(mWPADDeviceTypeStable) && field_0x6C < 8) {
         field_0x6C++;
     }
 }
@@ -567,55 +575,162 @@ void ex_c::fn_80056CE0(s32 chan) {
     }
 }
 
-void ex_c::fn_80056DA0(s32 chan) {}
-
-void ex_c::fn_80056DF0(s32 chan) {}
-
-f32 ex_c::fn_80056E50() {}
-
-void ex_c::fn_80056E60(s32 chan) {}
-
-void ex_c::centerCursor(s32 chan) {}
-
-void ex_c::resetState(s32 chan) {}
-
-void ex_c::fn_80056F00(s32 chan) {}
-
-void ex_c::fn_80056F30(s32 chan) {
-    mState = 1;
+void ex_c::startMplsCalibration(s32 chan) {
+    KPADStartMplsCalibration(chan);
+    mIsCalibrating = true;
+    field_0x40 = 1.0f;
+    field_0x48 = 0;
 }
 
-void ex_c::fn_80056F40(s32 chan) {}
+void ex_c::workMplsCalibration(s32 chan) {
+    if (!mIsCalibrating) {
+        return;
+    }
 
-void ex_c::fn_80057010(s32 chan) {
-    mState = 2;
+    field_0x40 = KPADWorkMplsCalibration(chan);
+    if (field_0x40 == 0.0f) {
+        mIsCalibrating = false;
+        field_0x48 = 60;
+    }
+}
+
+f32 ex_c::fn_80056E50() {
+    return field_0x40;
+}
+
+void ex_c::stopMplsCalibration(s32 chan) {
+    mIsCalibrating = false;
+    field_0x40 = 0.0f;
+    KPADStopMplsCalibration(chan);
+    field_0x48 = 0;
+}
+
+void ex_c::centerCursor(s32 chan) {
+    centerCursor(chan, false);
+    field_0x48 = 0;
+}
+
+void ex_c::gotoStateWaitForConnect(s32 chan) {
+    mState = EX_STATE_WAITING_FOR_CONNECT;
+}
+
+void ex_c::executeStateWaitForConnect(s32 chan) {
+    if (mPad::getCore(chan)->isConnected()) {
+        gotoStateWaitForLeaveHbm(chan);
+    }
+}
+
+void ex_c::gotoStateWaitForLeaveHbm(s32 chan) {
+    mState = EX_STATE_WAITING_FOR_LEAVE_HBM;
+}
+
+void ex_c::executeStateWaitForLeaveHbm(s32 chan) {
+    if (dHbm::Manage_c::GetInstance()->getState() == dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
+        // If we are in HBM, set some sort of cooldown
+        mOutOfHbmStableTimer = 110;
+        field_0x4F = true;
+    }
+
+    if (mPad::getCore(chan)->isConnected()) {
+        if (ex_c::checkWPADProbeStable() &&
+            dHbm::Manage_c::GetInstance()->getState() != dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
+            // If we're not in HBM anymore, advance state
+            gotoState2(chan);
+        }
+    }
+
+    if (!mPad::getCore(chan)->isConnected()) {
+        gotoStateWaitForConnect(chan);
+    }
+}
+
+void ex_c::gotoState2(s32 chan) {
+    mState = EX_STATE_2;
     setMpls(true, chan);
 }
 
-void ex_c::fn_80057020(s32 chan) {}
+void ex_c::executeState2(s32 chan) {
+    if (fn_80059350(chan) || fn_80059370(chan)) {
+        gotoState4(chan);
+    } else if (fn_80059390(chan)) {
+        gotoState5(chan);
+    }
+}
 
-void ex_c::fn_800570A0(s32 chan) {
-    mState = 3;
+void ex_c::gotoState3(s32 chan) {
+    mState = EX_STATE_3;
     WPADDisconnect(chan);
 }
 
-void ex_c::fn_800570B0(s32 chan) {
-    fn_80056F30(chan);
+void ex_c::executeState3(s32 chan) {
+    gotoStateWaitForLeaveHbm(chan);
 }
 
-void ex_c::fn_800570C0(s32 chan) {
-    mState = 4;
+void ex_c::gotoState4(s32 chan) {
+    mState = EX_STATE_4;
+    setMpls(false, chan);
+    field_0x2288 = 0;
 }
 
-void ex_c::fn_80057100(s32 chan) {}
-
-void ex_c::fn_800571B0(s32 chan) {
-    mState = 5;
+void ex_c::executeState4(s32 chan) {
+    if (fn_80059390(chan)) {
+        if (dHbm::Manage_c::GetInstance()->getState() == dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
+            gotoStateWaitForLeaveHbm(chan);
+        } else {
+            gotoState2(chan);
+        }
+    } else {
+        if (dHbm::Manage_c::GetInstance()->getState() != dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
+            if (field_0x2288 > 120) {
+                gotoState3(chan);
+            } else {
+                field_0x2288++;
+            }
+        }
+    }
 }
 
-void ex_c::fn_800571C0(s32 chan) {}
+void ex_c::gotoState5(s32 chan) {
+    mState = EX_STATE_5;
+}
 
-void ex_c::fn_800572A0(s32 chan) {}
+void ex_c::executeState5(s32 chan) {
+    if (!mPad::getCore(chan)->isConnected()) {
+        setMpls(false, chan);
+        gotoStateWaitForConnect(chan);
+    } else {
+        if (fn_80059330(chan) || fn_80059350(chan) || fn_80059370(chan)) {
+            setMpls(false, chan);
+        }
+    }
+    if (!mMplsEnabled) {
+        gotoStateWaitForLeaveHbm(chan);
+    }
+
+    if (dHbm::Manage_c::GetInstance()->getState() == dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
+        field_0x4F = false;
+    }
+}
+
+void ex_c::fn_800572A0(s32 chan) {
+    switch (mState) {
+        case EX_STATE_WAITING_FOR_CONNECT:   executeStateWaitForConnect(chan); break;
+        case EX_STATE_WAITING_FOR_LEAVE_HBM: executeStateWaitForLeaveHbm(chan); break;
+        case EX_STATE_2:                     executeState2(chan); break;
+        case EX_STATE_3:                     executeState3(chan); break;
+        case EX_STATE_4:                     executeState4(chan); break;
+        case EX_STATE_5:                     executeState5(chan); break;
+    }
+
+    if (mState != EX_STATE_WAITING_FOR_LEAVE_HBM &&
+        dHbm::Manage_c::GetInstance()->getState() != dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
+        if (mOutOfHbmStableTimer > 0) {
+            mOutOfHbmStableTimer--;
+        } else {
+            mOutOfHbmStableTimer = 0;
+        }
+    }
+}
 
 void ex_c::acc_c::init() {
     for (int i = 0; i < 120; ++i) {
@@ -675,7 +790,9 @@ void ex_c::acc_c::fn_80058540(s32 chan, bool) {}
 
 void ex_c::acc_c::fn_80058990(u32 mask, bool) {}
 
-bool ex_c::acc_c::fn_800589F0() {}
+bool ex_c::acc_c::fn_800589F0() {
+    return true;
+}
 
 f32 ex_c::acc_c::fn_80058A00() {}
 
@@ -690,9 +807,46 @@ mMtx_c ex_c::mpls_c::getMtx() const {
     return m;
 }
 
-bool ex_c::fn_80058BC0() {}
-bool ex_c::fn_80058C20() {}
-void ex_c::fn_80058C90() {}
+bool ex_c::isMissingMpls() {
+    if (m_current_ex->mConnectedStableTimer != 0) {
+        return false;
+    }
+
+    if (m_current_ex->mOutOfHbmStableTimer != 0) {
+        return false;
+    }
+
+    return !isDeviceTypeMpls(m_current_ex->mWPADDeviceTypeStable);
+}
+
+bool ex_c::isMissingNunchuk() {
+    if (m_current_ex->mConnectedStableTimer != 0) {
+        return false;
+    }
+
+    if (m_current_ex->mOutOfHbmStableTimer != 0) {
+        return false;
+    }
+
+    if (m_current_ex->mState != EX_STATE_5) {
+        return false;
+    }
+
+    if (m_current_ex->mWPADDeviceTypeStable == WPAD_DEV_FREESTYLE) {
+        return false;
+    }
+
+    if (m_current_ex->mWPADDeviceTypeStable == WPAD_DEV_MPLS_PT_FS) {
+        return false;
+    }
+
+    return true;
+}
+
+void ex_c::fn_80058C90(s32 chan) {
+    m_ex[chan].field_0x46 = 1;
+    m_ex[chan].field_0x3C = 1;
+}
 
 bool ex_c::isLowBattery() {
     return getBatteryLevel() == 1;
@@ -759,15 +913,7 @@ s32 ex_c::getBatteryLevel(s32 chan) {
 }
 
 void ex_c::setInfo(s32 chan, const WPADInfo *pInfo) {
-    m_info[0][chan].dpd = pInfo->dpd;
-    m_info[0][chan].speaker = pInfo->speaker;
-    m_info[0][chan].attach = pInfo->attach;
-    m_info[0][chan].lowBat = pInfo->lowBat;
-    m_info[0][chan].nearempty = pInfo->nearempty;
-    m_info[0][chan].battery = pInfo->battery;
-    m_info[0][chan].led = pInfo->led;
-    m_info[0][chan].protocol = pInfo->protocol;
-    m_info[0][chan].firmware = pInfo->firmware;
+    m_info[0][chan] = *pInfo;
     m_connected[chan] = true;
 }
 
@@ -775,26 +921,87 @@ f32 ex_c::fn_80058F50() {
     return m_current_ex->mMotion.fn_80058A00();
 }
 
-bool ex_c::fn_80058F60() {}
+bool ex_c::fn_80058F60() {
+    if (m_current_ex->field_0x6C < 8) {
+        return true;
+    }
 
-f32 ex_c::fn_80058FE0() {}
+    if (!m_current_ex->mMotion.fn_800589F0()) {
+        return true;
+    }
 
-void ex_c::fn_80058FF0() {}
+    m_current_ex->mIncorrectDeviceType = false;
+    m_current_ex->startMplsCalibration(mPad::getCurrentCoreID());
+    m_current_ex->fn_80058C90(mPad::getCurrentCoreID());
+    initMpls(mPad::getCurrentCoreID());
 
-void ex_c::fn_80059000() {}
+    return false;
+}
 
-void ex_c::fn_80059010() {}
+f32 ex_c::fn_80058FE0() {
+    return m_current_ex->fn_80056E50();
+}
 
-void ex_c::fn_800590A0() {}
+void ex_c::fn_80058FF0() {
+    m_current_ex->stopMplsCalibration(mPad::getCurrentCoreID());
+}
 
-bool ex_c::fn_800590B0() {}
+void ex_c::fn_80059000() {
+    m_current_ex->centerCursor(mPad::getCurrentCoreID());
+}
 
-bool ex_c::fn_800590E0() {}
+bool ex_c::fn_80059010() {
+    if (!mPad::getCore()->isConnected()) {
+        return false;
+    }
 
-void ex_c::fn_800590F0() {}
+    if (isMissingMpls()) {
+        return false;
+    }
+
+    if (m_current_ex->mOutOfHbmStableTimer != 0) {
+        return false;
+    }
+
+    if (isMissingNunchuk()) {
+        return false;
+    }
+
+    if (m_current_ex->field_0x6C >= 8) {
+        return m_current_ex->mIncorrectDeviceType;
+    }
+    
+    return false;
+}
+
+void ex_c::fn_800590A0() {
+    m_current_ex->mIncorrectDeviceType = true;
+}
+
+bool ex_c::fn_800590B0() {
+    bool ret = false;
+    switch (m_current_ex->mState) {
+        case EX_STATE_WAITING_FOR_LEAVE_HBM:
+        case EX_STATE_2:
+        case EX_STATE_3:
+        case EX_STATE_4:
+            // TODO - one uneliminated dead branch in here
+            ret = m_current_ex->mState == EX_STATE_4 || m_current_ex->mState == EX_STATE_2 ||
+                   m_current_ex->mState == EX_STATE_WAITING_FOR_LEAVE_HBM;
+    }
+    return ret;
+}
+
+bool ex_c::fn_800590E0() {
+    return m_current_ex->field_0x4F;
+}
+
+void ex_c::fn_800590F0() {
+    m_current_ex->field_0x4F = false;
+}
 
 bool ex_c::fn_80059100() {
-    fn_80059110(mPad::g_currentCoreId);
+    return fn_80059110(mPad::g_currentCoreId);
 }
 
 bool ex_c::fn_80059110(s32 chan) {
@@ -867,18 +1074,18 @@ void ex_c::getUnifiedWpadStatus(s32 chan) {
     KPADGetUnifiedWpadStatus(chan, &mStatus, 1);
 }
 
-void ex_c::fn_800593D0() {
-    field_0x22D1 = 0;
+void ex_c::calcFSStickDirMask() {
+    mFSStickMaskChanged = false;
     if (mFSStickDistance < 0.8f) {
-        field_0x22D4 = 0;
+        mFSStickMask = 0;
         return;
     }
-    u32 prev22D4 = field_0x22D4;
+    u32 prevFSStickMask = mFSStickMask;
     s32 ang = mFSStickAngle;
     ang = ((ang + 0x11000) / 0x2000) % 8;
-    field_0x22D4 = 1 << ang;
-    if (field_0x22D4 != 0 && field_0x22D4 != prev22D4) {
-        field_0x22D1 = 1;
+    mFSStickMask = 1 << ang;
+    if (mFSStickMask != 0 && mFSStickMask != prevFSStickMask) {
+        mFSStickMaskChanged = true;
     }
 }
 
