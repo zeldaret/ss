@@ -456,7 +456,7 @@ void ex_c::centerCursor(s32 chan, bool b) {
     if (dAcPy_c::GetLink() && dAcPy_c::GetLink()->checkActionFlagsCont(0x2) && acc.z < -0.9f) {
         tmp = true;
     }
-    field_0x53 = dAcPy_c::GetLink() && dAcPy_c::GetLink()->checkActionFlagsCont(0x2) && acc.z < -0.9f;
+    field_0x53 = tmp;
 
     fn_800562B0(chan, field_0x8C);
     fn_80056330(chan);
