@@ -23,8 +23,11 @@ void (*fBase_c::sUnloadCallback)();
 
 /* 802e12f0 */
 fBase_c::fBase_c()
-    : unique_ID(m_rootUniqueID), params(m_tmpCtData.params), profile_name(m_tmpCtData.prof_name),
-      group_type(m_tmpCtData.group_type), manager(this) {
+    : unique_ID(m_rootUniqueID),
+      params(m_tmpCtData.params),
+      profile_name(m_tmpCtData.prof_name),
+      group_type(m_tmpCtData.group_type),
+      manager(this) {
     m_rootUniqueID = (fBaseID_e)(m_rootUniqueID + 1);
     if (m_rootUniqueID == INVALID) {
         for (;;) {
@@ -59,10 +62,10 @@ fBase_c::~fBase_c() {
     // that causes a weak destructor to spawn that actually needs to be in f_manager.
     // And it's not like any of fLiMgBa_c's methods are accessed via actor_list,
     // so who can tell? Maybe there's yet another type?
-    fLiNdBa_c *node = static_cast<fLiNdBa_c*>(actor_list.getFirst());
+    fLiNdBa_c *node = static_cast<fLiNdBa_c *>(actor_list.getFirst());
     while (node != nullptr) {
         node->unlink();
-        node = static_cast<fLiNdBa_c*>(actor_list.getFirst());
+        node = static_cast<fLiNdBa_c *>(actor_list.getFirst());
     }
 }
 
@@ -443,8 +446,9 @@ bool fBase_c::entryFrmHeap(size_t size, EGG::Heap *parentHeap) {
     EGG::FrmHeap *new_heap = nullptr;
 
     if (size != 0) {
-        new_heap =
-            mHeap::makeFrmHeapAndUpdate(size, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, 0);
+        new_heap = mHeap::createFrmHeapToCurrent(
+            size, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, mHeap::OPT_NONE
+        );
         if (new_heap != nullptr) {
             bool create_sucess = createHeap();
             mHeap::restoreCurrentHeap();
@@ -461,8 +465,9 @@ bool fBase_c::entryFrmHeap(size_t size, EGG::Heap *parentHeap) {
         }
     }
     if (new_heap == nullptr) {
-        new_heap =
-            mHeap::makeFrmHeapAndUpdate(-1, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, 0);
+        new_heap = mHeap::createFrmHeapToCurrent(
+            -1, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, mHeap::OPT_NONE
+        );
 
         if (new_heap != nullptr) {
             bool create_sucess = createHeap();
@@ -477,8 +482,8 @@ bool fBase_c::entryFrmHeap(size_t size, EGG::Heap *parentHeap) {
     }
 
     if (new_heap != nullptr) {
-        EGG::FrmHeap *larger_heap = mHeap::makeFrmHeapAndUpdate(
-            heap_size, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, 0
+        EGG::FrmHeap *larger_heap = mHeap::createFrmHeapToCurrent(
+            heap_size, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, mHeap::OPT_NONE
         );
         if (larger_heap != nullptr) {
             if (larger_heap < new_heap) {
@@ -516,8 +521,9 @@ bool fBase_c::entryFrmHeapNonAdjust(size_t size, EGG::Heap *parentHeap) {
         return true;
     }
 
-    EGG::FrmHeap *new_heap =
-        mHeap::makeFrmHeapAndUpdate(size, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, 0);
+    EGG::FrmHeap *new_heap = mHeap::createFrmHeapToCurrent(
+        size, parentHeap, "各プロセスが個別で持てるヒープ(fBase_c::mHeap)", 0x20, mHeap::OPT_NONE
+    );
     if (new_heap != nullptr) {
         bool create_sucess = createHeap();
         mHeap::restoreCurrentHeap();

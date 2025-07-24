@@ -165,8 +165,10 @@ static void *loadToMainRAM(
     return result;
 }
 
+static int ConvertPathToEntrynum(const char *path, u8 *);
+
 int ConvertPathToEntrynum(const char *path) {
-    return ::ConvertPathToEntrynum(path, nullptr);
+    return mDvd::ConvertPathToEntrynum(path, nullptr);
 }
 
 u32 IsExistPath(const char *path) {
@@ -374,8 +376,10 @@ mDvd_mountMemArchive_c::mDvd_mountMemArchive_c(int mountDirection) {
     mAmountRead = 0;
 }
 
+namespace mDvd {
+
 /** 802ef7c0 */
-int findPathWithCompressedExtension(const char *name, u8 *outType) {
+static int ConvertPathToEntrynumASD_(const char *name, u8 *outType) {
     u8 type;
     char buf[256];
     int num;
@@ -434,9 +438,10 @@ void setAutoStreamDecomp(bool arg) {
 }
 
 /** 802ef940 */
-bool getAutoStreamDecomp() {
+bool isAutoStreamDecomp() {
     return mDvd::l_IsAutoStreamDecomp;
 }
+
 
 /** 802ef950 */
 static int ConvertPathToEntrynum(const char *path, u8 *outType) {
@@ -445,22 +450,24 @@ static int ConvertPathToEntrynum(const char *path, u8 *outType) {
         if (outType != nullptr) {
             *outType = 0;
         }
-    } else if (getAutoStreamDecomp()) {
-        num = findPathWithCompressedExtension(path, outType);
+    } else if (mDvd::isAutoStreamDecomp()) {
+        num = mDvd::ConvertPathToEntrynumASD_(path, outType);
     }
     return num;
 }
 
 /** 802ef9d0 */
-static int ConvertPathToEntrynum_Thunk(const char *path, u8 *outType) {
+static int ConvertPathToEntrynumWithWarning(const char *path, u8 *outType) {
     return ConvertPathToEntrynum(path, outType);
+}
+
 }
 
 /** 802ef9e0 */
 mDvd_mountMemArchive_c *mDvd_mountMemArchive_c::create(const char *path, u8 mountDirection, EGG::Heap *heap) {
     u8 type;
     mDvd_mountMemArchive_c *cmd = nullptr;
-    int entryNum = ConvertPathToEntrynum_Thunk(path, &type);
+    int entryNum = mDvd::ConvertPathToEntrynumWithWarning(path, &type);
     if (entryNum != -1) {
         cmd = new mDvd_mountMemArchive_c(mountDirection);
         if (cmd != nullptr) {
@@ -596,7 +603,7 @@ mDvd_toMainRam_normal_c::mDvd_toMainRam_normal_c(int mountDirection) : mDvd_toMa
 /** 802eff90 */
 mDvd_toMainRam_normal_c *mDvd_toMainRam_normal_c::create(const char *path, int mountDirection, EGG::Heap *heap) {
     u8 type;
-    int entryNum = ConvertPathToEntrynum_Thunk(path, &type);
+    int entryNum = mDvd::ConvertPathToEntrynumWithWarning(path, &type);
     mDvd_toMainRam_normal_c *cmd;
     if (entryNum == -1) {
         cmd = nullptr;

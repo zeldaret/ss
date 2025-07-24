@@ -2,6 +2,7 @@
 // vtable order
 #include "JSystem/JParticle/JPAEmitter.h"
 #include "JSystem/JParticle/JPAParticle.h"
+#include "m/m_heap.h"
 #include "rvl/GX/GXTypes.h"
 #include "toBeSorted/d_d3d.h"
 // clang-format on
@@ -910,7 +911,7 @@ bool dJEffManager_c::createEffManagers() {
         }
     }
 
-    ms_allocator->createNewTempFrmHeap(-1, dHeap::work1Heap.heap, "dJEffManager_c::ms_allocator", 0x20, 0);
+    ms_allocator->createFrmHeapToCurrent(-1, dHeap::work1Heap.heap, "dJEffManager_c::ms_allocator", 0x20, mHeap::OPT_NONE);
     for (s32 idx = 0; idx < 2; idx++) {
         sFogProcs[idx].create(idx, sInts[idx], -1, ms_allocator);
     }

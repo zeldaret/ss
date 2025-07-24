@@ -35,7 +35,7 @@ mHeapAllocator_c::~mHeapAllocator_c() {
     destroyHeap();
 }
 
-bool mHeapAllocator_c::replaceWithNewFrmHeap(s32 size, EGG::Heap *newHeap, char *heapName, s32 align, u32 attrs) {
+bool mHeapAllocator_c::createFrmHeap(u32 size, EGG::Heap *newHeap, const char *heapName, u32 align, mHeap::AllocOptBit_t attrs) {
     destroyHeap();
     EGG::Heap *heap = mHeap::createFrmHeap(size, newHeap, heapName, align, attrs);
     if (heap == nullptr) {
@@ -45,7 +45,7 @@ bool mHeapAllocator_c::replaceWithNewFrmHeap(s32 size, EGG::Heap *newHeap, char 
     return true;
 }
 
-bool mHeapAllocator_c::replaceWithNewExpHeap(s32 size, EGG::Heap *newHeap, char *heapName, s32 align, u32 attrs) {
+bool mHeapAllocator_c::createExpHeap(u32 size, EGG::Heap *newHeap, const char *heapName, u32 align, mHeap::AllocOptBit_t attrs) {
     destroyHeap();
     EGG::Heap *heap = mHeap::createExpHeap(size, newHeap, heapName, align, attrs);
     if (heap == nullptr) {
@@ -79,8 +79,8 @@ s32 mHeapAllocator_c::adjustExpHeap() {
     return mHeap::adjustExpHeap(EGG::Heap::toExpHeap(heap));
 }
 
-bool mHeapAllocator_c::createNewTempFrmHeap(s32 size, EGG::Heap *newHeap, char *heapName, s32 align, u32 attrs) {
-    if (!replaceWithNewFrmHeap(size, newHeap, heapName, align, attrs)) {
+bool mHeapAllocator_c::createFrmHeapToCurrent(u32 size, EGG::Heap *newHeap, const char *heapName, u32 align, mHeap::AllocOptBit_t attrs) {
+    if (!createFrmHeap(size, newHeap, heapName, align, attrs)) {
         return false;
     }
     mHeap::saveCurrentHeap();

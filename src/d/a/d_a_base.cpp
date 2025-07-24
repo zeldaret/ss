@@ -16,6 +16,7 @@
 #include "f/f_base.h"
 #include "f/f_list_nd.h"
 #include "m/m_angle.h"
+#include "m/m_heap.h"
 #include "m/m_vec.h"
 #include "toBeSorted/actor_info.h"
 #include "toBeSorted/event.h"
@@ -129,7 +130,7 @@ int dAcBase_c::initAllocatorWork1Heap(int size, char *name, int align) {
 }
 
 int dAcBase_c::initAllocator(int size, char *name, EGG::Heap *heap, int align) {
-    if (!heap_allocator.createNewTempFrmHeap(size, heap, name, 0x20, 0)) {
+    if (!heap_allocator.createFrmHeapToCurrent(size, heap, name, 0x20, mHeap::OPT_NONE)) {
         return 0;
     }
     sound_source = createSoundSource();

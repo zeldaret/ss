@@ -22,6 +22,7 @@
 #include "m/m3d/m_anmvis.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m3d/m_smdl.h"
+#include "m/m_heap.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/g3d_scnmdl.h"
@@ -56,8 +57,8 @@ int dRoom_c::create() {
                         !(dScGame_c::isCurrentStage("D300") && (roomid == 0 || roomid == 1 || roomid == 4)) &&
                         // LMF crawlspace, spike maze
                         !(dScGame_c::isCurrentStage("D300_1") && (roomid == 7 || roomid == 9));
-    if (!mAllocator.createNewTempFrmHeap(
-            -1, CurrentStageArcManager::GetInstance()->getHeap(roomid), "dRoom_c::m_allocator", 0x20, 0
+    if (!mAllocator.createFrmHeapToCurrent(
+            -1, CurrentStageArcManager::GetInstance()->getHeap(roomid), "dRoom_c::m_allocator", 0x20, mHeap::OPT_NONE
         )) {
         return FAILED;
     }

@@ -26,7 +26,7 @@ static u16 extractResUserIdx(u16 particleResId) {
 namespace dParticle {
 
 JPAResourceManager *res_c::init(const void *jpc, const void *jpn, EGG::Heap *heap) {
-    mpHeap = mHeap::createFrmHeap(-1, heap, "dParticle::res_c", 0x20, 0);
+    mpHeap = mHeap::createFrmHeap(-1, heap, "dParticle::res_c", 0x20, mHeap::OPT_NONE);
     if (mpHeap == nullptr) {
         return nullptr;
     }
