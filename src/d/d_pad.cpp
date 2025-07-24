@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/a/d_a_player.h"
+#include "d/col/c/c_m3d_g_aab.h"
 #include "d/d_cs_game.h"
 #include "d/d_gfx.h"
 #include "d/d_hbm.h"
@@ -36,20 +37,28 @@ WPADInfo ex_c::m_info[2][4];
 
 bool ex_c::m_connected[4];
 
+// TODO - the SDK decomp uses WPAD error codes for this
+// callback, but I think they have different semantics.
+// Refer to https://github.com/doldecomp/sdk_2009-12-11/blob/main/source/kpad/KPAD.c#L3607-L3639
+// for logic. 
 void control_mpls_callback(s32 idx, s32 code) {
     switch (code) {
-        case WPAD_ERR_OK: {
+        // Called first
+        case 0: {
             ex_c::on_0x54(idx);
             break;
         }
-        case WPAD_ERR_NO_CONTROLLER: {
+        // Called when Mpls configuration failed - not actually reached?
+        case -1: {
             ex_c::on_0x55(idx);
             break;
         }
-        case WPAD_ERR_BUSY: {
+        // Called when Mpls + Nunchuk configuration failed -- called a bunch of times
+        case -2: {
             ex_c::on_0x56(idx);
             break;
         }
+        // not sure - called last
         case 1: {
             ex_c::on_0x57(idx);
             break;
@@ -102,6 +111,8 @@ void setMpls(bool enable, s32 chan) {
     if (enable) {
         if (ex_c::m_ex[chan].mMplsEnabled == false) {
             ex_c::m_ex[chan].mMplsEnabled = true;
+            // WPAD_DEV_MODE_MPLS_PT_FS
+            // i.e. Skyward Sword wants both MotionPlus and Nunchuk
             KPADEnableMpls(chan, 5);
             initMpls(chan);
         }
@@ -323,7 +334,7 @@ ex_c::ex_c()
       mWPADDeviceTypeStableTimer(0),
       mConnectedStableTimer(0),
       field_0x3C(0),
-      field_0x40(0.f),
+      mCalibrationWork(0.f),
       field_0x44(false),
       field_0x45(false),
       field_0x46(false),
@@ -331,7 +342,7 @@ ex_c::ex_c()
       field_0x48(0),
       mDidConnect(false),
       mDidDisconnect(false),
-      mIncorrectDeviceType(true),
+      mNeedMplsCalibration(true),
       field_0x4F(false),
       field_0x50(true),
       field_0x51(0),
@@ -347,7 +358,7 @@ ex_c::ex_c()
       field_0x5B(false),
       field_0x5C(0.f, 0.f),
       field_0x64(0.f, 0.f),
-      field_0x6C(0),
+      mIsWPADDeviceTypeMplsStableTimer(0),
       field_0x70(0x1200),
       field_0x74(1.f, 0.f, 0.f),
       field_0x80(0.f, 1.f, 0.f),
@@ -544,11 +555,11 @@ void ex_c::fn_80056B90(s32 chan) {
     }
 
     if (!isDeviceTypeMpls(mWPADDeviceTypeStable)) {
-        mIncorrectDeviceType = true;
-        field_0x6C = 0;
+        mNeedMplsCalibration = true;
+        mIsWPADDeviceTypeMplsStableTimer = 0;
     }
-    if (isDeviceTypeMpls(mWPADDeviceTypeStable) && field_0x6C < 8) {
-        field_0x6C++;
+    if (isDeviceTypeMpls(mWPADDeviceTypeStable) && mIsWPADDeviceTypeMplsStableTimer < 8) {
+        mIsWPADDeviceTypeMplsStableTimer++;
     }
 }
 
@@ -578,7 +589,7 @@ void ex_c::fn_80056CE0(s32 chan) {
 void ex_c::startMplsCalibration(s32 chan) {
     KPADStartMplsCalibration(chan);
     mIsCalibrating = true;
-    field_0x40 = 1.0f;
+    mCalibrationWork = 1.0f;
     field_0x48 = 0;
 }
 
@@ -587,20 +598,20 @@ void ex_c::workMplsCalibration(s32 chan) {
         return;
     }
 
-    field_0x40 = KPADWorkMplsCalibration(chan);
-    if (field_0x40 == 0.0f) {
+    mCalibrationWork = KPADWorkMplsCalibration(chan);
+    if (mCalibrationWork == 0.0f) {
         mIsCalibrating = false;
         field_0x48 = 60;
     }
 }
 
-f32 ex_c::fn_80056E50() {
-    return field_0x40;
+f32 ex_c::getCalibrationWork() {
+    return mCalibrationWork;
 }
 
 void ex_c::stopMplsCalibration(s32 chan) {
     mIsCalibrating = false;
-    field_0x40 = 0.0f;
+    mCalibrationWork = 0.0f;
     KPADStopMplsCalibration(chan);
     field_0x48 = 0;
 }
@@ -616,15 +627,15 @@ void ex_c::gotoStateWaitForConnect(s32 chan) {
 
 void ex_c::executeStateWaitForConnect(s32 chan) {
     if (mPad::getCore(chan)->isConnected()) {
-        gotoStateWaitForLeaveHbm(chan);
+        gotoStatePostConnect(chan);
     }
 }
 
-void ex_c::gotoStateWaitForLeaveHbm(s32 chan) {
-    mState = EX_STATE_WAITING_FOR_LEAVE_HBM;
+void ex_c::gotoStatePostConnect(s32 chan) {
+    mState = EX_STATE_POST_CONNECT;
 }
 
-void ex_c::executeStateWaitForLeaveHbm(s32 chan) {
+void ex_c::executeStatePostConnect(s32 chan) {
     if (dHbm::Manage_c::GetInstance()->getState() == dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
         // If we are in HBM, set some sort of cooldown
         mOutOfHbmStableTimer = 110;
@@ -634,8 +645,8 @@ void ex_c::executeStateWaitForLeaveHbm(s32 chan) {
     if (mPad::getCore(chan)->isConnected()) {
         if (ex_c::checkWPADProbeStable() &&
             dHbm::Manage_c::GetInstance()->getState() != dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
-            // If we're not in HBM anymore, advance state
-            gotoState2(chan);
+            // Enable Mpls after we leave HBM
+            gotoStateEnableMpls(chan);
         }
     }
 
@@ -644,45 +655,45 @@ void ex_c::executeStateWaitForLeaveHbm(s32 chan) {
     }
 }
 
-void ex_c::gotoState2(s32 chan) {
-    mState = EX_STATE_2;
+void ex_c::gotoStateEnableMpls(s32 chan) {
+    mState = EX_STATE_ENABLE_MPLS;
     setMpls(true, chan);
 }
 
-void ex_c::executeState2(s32 chan) {
+void ex_c::executeStateEnableMpls(s32 chan) {
     if (fn_80059350(chan) || fn_80059370(chan)) {
-        gotoState4(chan);
+        gotoStateMplsConfigError(chan);
     } else if (fn_80059390(chan)) {
-        gotoState5(chan);
+        gotoStateMplsConfigured(chan);
     }
 }
 
-void ex_c::gotoState3(s32 chan) {
-    mState = EX_STATE_3;
+void ex_c::gotoStateDisconnectWpad(s32 chan) {
+    mState = EX_STATE_DISCONECT_WPAD;
     WPADDisconnect(chan);
 }
 
-void ex_c::executeState3(s32 chan) {
-    gotoStateWaitForLeaveHbm(chan);
+void ex_c::executeStateDisconnectWpad(s32 chan) {
+    gotoStatePostConnect(chan);
 }
 
-void ex_c::gotoState4(s32 chan) {
-    mState = EX_STATE_4;
+void ex_c::gotoStateMplsConfigError(s32 chan) {
+    mState = EX_STATE_MPLS_CONFIG_ERROR;
     setMpls(false, chan);
     field_0x2288 = 0;
 }
 
-void ex_c::executeState4(s32 chan) {
+void ex_c::executeStateMplsConfigError(s32 chan) {
     if (fn_80059390(chan)) {
         if (dHbm::Manage_c::GetInstance()->getState() == dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
-            gotoStateWaitForLeaveHbm(chan);
+            gotoStatePostConnect(chan);
         } else {
-            gotoState2(chan);
+            gotoStateEnableMpls(chan);
         }
     } else {
         if (dHbm::Manage_c::GetInstance()->getState() != dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
             if (field_0x2288 > 120) {
-                gotoState3(chan);
+                gotoStateDisconnectWpad(chan);
             } else {
                 field_0x2288++;
             }
@@ -690,11 +701,11 @@ void ex_c::executeState4(s32 chan) {
     }
 }
 
-void ex_c::gotoState5(s32 chan) {
-    mState = EX_STATE_5;
+void ex_c::gotoStateMplsConfigured(s32 chan) {
+    mState = EX_STATE_MPLS_CONFIGURED;
 }
 
-void ex_c::executeState5(s32 chan) {
+void ex_c::executeStateMplsConfigured(s32 chan) {
     if (!mPad::getCore(chan)->isConnected()) {
         setMpls(false, chan);
         gotoStateWaitForConnect(chan);
@@ -704,7 +715,7 @@ void ex_c::executeState5(s32 chan) {
         }
     }
     if (!mMplsEnabled) {
-        gotoStateWaitForLeaveHbm(chan);
+        gotoStatePostConnect(chan);
     }
 
     if (dHbm::Manage_c::GetInstance()->getState() == dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
@@ -714,15 +725,15 @@ void ex_c::executeState5(s32 chan) {
 
 void ex_c::fn_800572A0(s32 chan) {
     switch (mState) {
-        case EX_STATE_WAITING_FOR_CONNECT:   executeStateWaitForConnect(chan); break;
-        case EX_STATE_WAITING_FOR_LEAVE_HBM: executeStateWaitForLeaveHbm(chan); break;
-        case EX_STATE_2:                     executeState2(chan); break;
-        case EX_STATE_3:                     executeState3(chan); break;
-        case EX_STATE_4:                     executeState4(chan); break;
-        case EX_STATE_5:                     executeState5(chan); break;
+        case EX_STATE_WAITING_FOR_CONNECT: executeStateWaitForConnect(chan); break;
+        case EX_STATE_POST_CONNECT:        executeStatePostConnect(chan); break;
+        case EX_STATE_ENABLE_MPLS:         executeStateEnableMpls(chan); break;
+        case EX_STATE_DISCONECT_WPAD:      executeStateDisconnectWpad(chan); break;
+        case EX_STATE_MPLS_CONFIG_ERROR:   executeStateMplsConfigError(chan); break;
+        case EX_STATE_MPLS_CONFIGURED:     executeStateMplsConfigured(chan); break;
     }
 
-    if (mState != EX_STATE_WAITING_FOR_LEAVE_HBM &&
+    if (mState != EX_STATE_POST_CONNECT &&
         dHbm::Manage_c::GetInstance()->getState() != dHbm::Manage_c::HBM_MANAGE_ACTIVE) {
         if (mOutOfHbmStableTimer > 0) {
             mOutOfHbmStableTimer--;
@@ -794,7 +805,19 @@ bool ex_c::acc_c::fn_800589F0() {
     return true;
 }
 
-f32 ex_c::acc_c::fn_80058A00() {}
+f32 ex_c::acc_c::fn_80058A00() {
+    cM3dGAab aab;
+    aab.ClearForMinMax();
+    for (int i = 0; i < 120; i++) {
+        aab.SetMinMax(field_0x000[i]);
+    }
+
+    f32 lenSq = nw4r::math::VEC3LenSq(aab.GetMax() - aab.GetMin()) - 0.017f;
+    if (lenSq < 0.0f) {
+        lenSq = 0.0f;
+    }
+    return lenSq;
+}
 
 void ex_c::acc_c::fn_80058AE0(s32 chan, bool) {}
 
@@ -828,7 +851,7 @@ bool ex_c::isMissingNunchuk() {
         return false;
     }
 
-    if (m_current_ex->mState != EX_STATE_5) {
+    if (m_current_ex->mState != EX_STATE_MPLS_CONFIGURED) {
         return false;
     }
 
@@ -844,7 +867,7 @@ bool ex_c::isMissingNunchuk() {
 }
 
 void ex_c::fn_80058C90(s32 chan) {
-    m_ex[chan].field_0x46 = 1;
+    m_ex[chan].field_0x46 = true;
     m_ex[chan].field_0x3C = 1;
 }
 
@@ -922,7 +945,7 @@ f32 ex_c::fn_80058F50() {
 }
 
 bool ex_c::fn_80058F60() {
-    if (m_current_ex->field_0x6C < 8) {
+    if (m_current_ex->mIsWPADDeviceTypeMplsStableTimer < 8) {
         return true;
     }
 
@@ -930,7 +953,7 @@ bool ex_c::fn_80058F60() {
         return true;
     }
 
-    m_current_ex->mIncorrectDeviceType = false;
+    m_current_ex->mNeedMplsCalibration = false;
     m_current_ex->startMplsCalibration(mPad::getCurrentCoreID());
     m_current_ex->fn_80058C90(mPad::getCurrentCoreID());
     initMpls(mPad::getCurrentCoreID());
@@ -938,8 +961,8 @@ bool ex_c::fn_80058F60() {
     return false;
 }
 
-f32 ex_c::fn_80058FE0() {
-    return m_current_ex->fn_80056E50();
+f32 ex_c::getCurrentCalibrationWork() {
+    return m_current_ex->getCalibrationWork();
 }
 
 void ex_c::fn_80058FF0() {
@@ -950,7 +973,7 @@ void ex_c::fn_80059000() {
     m_current_ex->centerCursor(mPad::getCurrentCoreID());
 }
 
-bool ex_c::fn_80059010() {
+bool ex_c::needMplsCalibration() {
     if (!mPad::getCore()->isConnected()) {
         return false;
     }
@@ -967,27 +990,27 @@ bool ex_c::fn_80059010() {
         return false;
     }
 
-    if (m_current_ex->field_0x6C >= 8) {
-        return m_current_ex->mIncorrectDeviceType;
+    if (m_current_ex->mIsWPADDeviceTypeMplsStableTimer >= 8) {
+        return m_current_ex->mNeedMplsCalibration;
     }
-    
+
     return false;
 }
 
-void ex_c::fn_800590A0() {
-    m_current_ex->mIncorrectDeviceType = true;
+void ex_c::setCalibrateMpls() {
+    m_current_ex->mNeedMplsCalibration = true;
 }
 
 bool ex_c::fn_800590B0() {
     bool ret = false;
     switch (m_current_ex->mState) {
-        case EX_STATE_WAITING_FOR_LEAVE_HBM:
-        case EX_STATE_2:
-        case EX_STATE_3:
-        case EX_STATE_4:
+        case EX_STATE_POST_CONNECT:
+        case EX_STATE_ENABLE_MPLS:
+        case EX_STATE_DISCONECT_WPAD:
+        case EX_STATE_MPLS_CONFIG_ERROR:
             // TODO - one uneliminated dead branch in here
-            ret = m_current_ex->mState == EX_STATE_4 || m_current_ex->mState == EX_STATE_2 ||
-                   m_current_ex->mState == EX_STATE_WAITING_FOR_LEAVE_HBM;
+            ret = m_current_ex->mState == EX_STATE_MPLS_CONFIG_ERROR || m_current_ex->mState == EX_STATE_ENABLE_MPLS ||
+                  m_current_ex->mState == EX_STATE_POST_CONNECT;
     }
     return ret;
 }
@@ -1095,7 +1118,7 @@ void ex_c::setNoSleep() {
 
 void ex_c::setAutoSleepTime() {
     WPADSetAutoSleepTime(5);
-    WPADSetControllerLastDataUpdateTime(0);
+    WPADResetAutoSleepTimeCount(0);
 }
 
 } // namespace dPad

@@ -621,6 +621,7 @@ void WPADSetCallbackByKPAD(BOOL isKPAD);
 
 void WPADSetAutoSleepTime(int min);
 void WPADSetControllerLastDataUpdateTime(int min);
+void WPADResetAutoSleepTimeCount(WPADChannel chan);
 
 void WPADSetAcceptConnection(int);
 

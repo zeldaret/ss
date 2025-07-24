@@ -79,23 +79,23 @@ public:
 
     void startMplsCalibration(s32 chan);
     void workMplsCalibration(s32 chan);
-    f32 fn_80056E50();
+    f32 getCalibrationWork();
     void stopMplsCalibration(s32 chan);
 
     void centerCursor(s32 chan);
 
     void gotoStateWaitForConnect(s32 chan);
     void executeStateWaitForConnect(s32 chan);
-    void gotoStateWaitForLeaveHbm(s32 chan);
-    void executeStateWaitForLeaveHbm(s32 chan);
-    void gotoState2(s32 chan); // (EnableMPLS)
-    void executeState2(s32 chan);
-    void gotoState3(s32 chan); // (Disconnect)
-    void executeState3(s32 chan); // Sets State to 1
-    void gotoState4(s32 chan);
-    void executeState4(s32 chan);
-    void gotoState5(s32 chan);
-    void executeState5(s32 chan);
+    void gotoStatePostConnect(s32 chan);
+    void executeStatePostConnect(s32 chan);
+    void gotoStateEnableMpls(s32 chan); // (EnableMPLS)
+    void executeStateEnableMpls(s32 chan);
+    void gotoStateDisconnectWpad(s32 chan); // (Disconnect)
+    void executeStateDisconnectWpad(s32 chan);
+    void gotoStateMplsConfigError(s32 chan);
+    void executeStateMplsConfigError(s32 chan);
+    void gotoStateMplsConfigured(s32 chan);
+    void executeStateMplsConfigured(s32 chan);
     void fn_800572A0(s32 chan); // State Handling
 
     /**
@@ -121,11 +121,11 @@ public:
 
     static f32 fn_80058F50();
     static bool fn_80058F60();
-    static f32 fn_80058FE0();
+    static f32 getCurrentCalibrationWork();
     static void fn_80058FF0();
     static void fn_80059000();
-    static bool fn_80059010();
-    static void fn_800590A0();
+    static bool needMplsCalibration();
+    static void setCalibrateMpls();
     static bool fn_800590B0();
     static bool fn_800590E0();
     static void fn_800590F0();
@@ -162,11 +162,11 @@ public:
 
     enum ExState_e {
         EX_STATE_WAITING_FOR_CONNECT = 0,
-        EX_STATE_WAITING_FOR_LEAVE_HBM = 1,
-        EX_STATE_2 = 2,
-        EX_STATE_3 = 3,
-        EX_STATE_4 = 4,
-        EX_STATE_5 = 5,
+        EX_STATE_POST_CONNECT = 1,
+        EX_STATE_ENABLE_MPLS = 2,
+        EX_STATE_DISCONECT_WPAD = 3,
+        EX_STATE_MPLS_CONFIG_ERROR = 4,
+        EX_STATE_MPLS_CONFIGURED = 5,
     };
 
 public:
@@ -183,7 +183,7 @@ public:
     /* 0x0034 */ s32 mWPADDeviceTypeStableTimer;
     /* 0x0038 */ s32 mConnectedStableTimer;
     /* 0x003C */ s32 field_0x3C;
-    /* 0x0040 */ f32 field_0x40;
+    /* 0x0040 */ f32 mCalibrationWork;
     /* 0x0044 */ bool field_0x44;
     /* 0x0045 */ bool field_0x45;
     /* 0x0046 */ bool field_0x46;
@@ -191,7 +191,7 @@ public:
     /* 0x0048 */ s32 field_0x48;
     /* 0x004C */ bool mDidConnect;
     /* 0x004D */ bool mDidDisconnect;
-    /* 0x004E */ bool mIncorrectDeviceType;
+    /* 0x004E */ bool mNeedMplsCalibration;
     /* 0x004F */ bool field_0x4F;
     /* 0x0050 */ bool field_0x50;
     /* 0x0051 */ u8 field_0x51;
@@ -207,7 +207,7 @@ public:
     /* 0x005B */ bool field_0x5B;
     /* 0x005C */ mVec2_c field_0x5C;
     /* 0x0064 */ mVec2_c field_0x64;
-    /* 0x006C */ s32 field_0x6C;
+    /* 0x006C */ s32 mIsWPADDeviceTypeMplsStableTimer;
     /* 0x0070 */ mAng field_0x70;
     /* 0x0074 */ mVec3_c field_0x74;
     /* 0x0080 */ mVec3_c field_0x80;
