@@ -15,6 +15,7 @@
 #include "m/m3d/m_fanm.h"
 #include "m/m3d/m_mdl.h"
 #include "m/m_allocator.h"
+#include "m/m_heap.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "nw4r/g3d/g3d_anmchr.h"
@@ -702,8 +703,7 @@ void daPlayerModelBase_c::freeFrmHeap(mHeapAllocator_c *allocator) {
 }
 
 void daPlayerModelBase_c::allocFrmHeap(mHeapAllocator_c *allocator, u32 size, const char *name) {
-    // TODO fix char constness
-    allocator->createNewTempFrmHeap(size, dHeap::work1Heap.heap, (char *)name, 0x20, 0);
+    allocator->createFrmHeapToCurrent(size, dHeap::work1Heap.heap, name, 0x20, mHeap::OPT_NONE);
     new u8[size]();
     allocator->adjustFrmHeapRestoreCurrent();
 }

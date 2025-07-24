@@ -5,6 +5,7 @@
 #include "d/d_heap.h"
 #include "d/d_pad.h"
 #include "m/m_angle.h"
+#include "m/m_heap.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "toBeSorted/arc_managers/oarc_manager.h"
 #include "toBeSorted/event_manager.h"
@@ -81,7 +82,7 @@ bool AttentionManager::create() {
     field_0xBD5 = 0;
     field_0xBD4 = 0;
 
-    if (!mAllocator.createNewTempFrmHeap(-1, dHeap::work1Heap.heap, "Attention", 0x20, 0)) {
+    if (!mAllocator.createFrmHeapToCurrent(-1, dHeap::work1Heap.heap, "Attention", 0x20, mHeap::OPT_NONE)) {
         return 0;
     }
     mModels.mMdls[0].field_0x79 = 0;

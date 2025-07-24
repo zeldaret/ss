@@ -46,7 +46,7 @@ char relsDir[] = "/rels";
 int initDylinkHeap(int maxRelId, const RelNamePtr *dynNameTable, int dynNameTableNum, EGG::Heap *parentHeap) {
     cCc_frmHeap = mHeap::createFrmHeap(
         maxRelId * 0x10 + dynNameTableNum * 0x48, parentHeap, "ダイナミックリンク制御用ヒープ(dDyl::cCc_frmHeap)", 0x20,
-        0
+        mHeap::OPT_NONE
     );
 
     mHeap _guard(cCc_frmHeap);

@@ -2,6 +2,7 @@
 
 #include "d/d_heap.h"
 #include "d/d_sc_game.h"
+#include "m/m_heap.h"
 #include "nw4r/g3d/g3d_obj.h"
 
 dTimeAreaMgr_c::dTimeAreaMgr_c() {
@@ -13,7 +14,7 @@ dTimeAreaMgr_c::~dTimeAreaMgr_c() {
 }
 
 bool dTimeAreaMgr_c::init() {
-    mAllocator.replaceWithNewFrmHeap(-1, dHeap::work1Heap.heap, "dTimeAreaMgr_c::m_allocator", 0x20, 0);
+    mAllocator.createFrmHeap(-1, dHeap::work1Heap.heap, "dTimeAreaMgr_c::m_allocator", 0x20, mHeap::OPT_NONE);
     mProcA.create(&mAllocator);
     mProcB.create(&mAllocator);
     mAllocator.adjustFrmHeap();
