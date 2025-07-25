@@ -22,7 +22,7 @@ const char *const mHeap::s_GameHeapNames[4] = {
     0,
 };
 
-u16 mHeap::copyAttribute(u32 arg) {
+u16 mHeap::GetOptFlag(AllocOptBit_t arg) {
     u16 result = 0;
 
     if ((arg & 1) != 0) {
@@ -40,7 +40,7 @@ u16 mHeap::copyAttribute(u32 arg) {
 EGG::Heap *mHeap::setCurrentHeap(EGG::Heap *heap) {
     return heap->becomeCurrentHeap();
 }
-EGG::Heap *mHeap::createExpHeap(size_t size, EGG::Heap *parentHeap, const char *name, u32 align, u32 attrs) {
+EGG::Heap *mHeap::createExpHeap(size_t size, EGG::Heap *parentHeap, const char *name, u32 align, AllocOptBit_t attrs) {
     if (parentHeap == nullptr) {
         parentHeap = EGG::Heap::sCurrentHeap;
     }
@@ -58,7 +58,7 @@ EGG::Heap *mHeap::createExpHeap(size_t size, EGG::Heap *parentHeap, const char *
     void *mem = parentHeap->alloc(size, align);
     EGG::ExpHeap *heap = nullptr;
     if (mem != nullptr) {
-        heap = EGG::ExpHeap::create(mem, size, copyAttribute(attrs));
+        heap = EGG::ExpHeap::create(mem, size, GetOptFlag(attrs));
         if (heap == nullptr) {
             parentHeap->free(mem);
         } else if (name != nullptr) {
@@ -86,7 +86,7 @@ size_t mHeap::expHeapCost(size_t size, u32 align) {
     return size + (~(a)&b);
 }
 
-EGG::FrmHeap *mHeap::createFrmHeap(size_t size, EGG::Heap *parent, const char *name, size_t align, size_t attrs) {
+EGG::FrmHeap *mHeap::createFrmHeap(size_t size, EGG::Heap *parent, const char *name, size_t align, AllocOptBit_t attrs) {
     if (parent == nullptr) {
         parent = EGG::Heap::sCurrentHeap;
     }
@@ -104,7 +104,7 @@ EGG::FrmHeap *mHeap::createFrmHeap(size_t size, EGG::Heap *parent, const char *n
     void *mem = parent->alloc(size, align);
     EGG::FrmHeap *heap = nullptr;
     if (mem != nullptr) {
-        heap = EGG::FrmHeap::create(mem, size, copyAttribute(attrs));
+        heap = EGG::FrmHeap::create(mem, size, GetOptFlag(attrs));
         if (heap == nullptr) {
             parent->free(mem);
         } else if (name != nullptr) {
@@ -167,8 +167,8 @@ void mHeap::restoreCurrentHeap() {
     s_SavedCurrentHeap = nullptr;
 }
 
-EGG::FrmHeap *mHeap::makeFrmHeapAndUpdate(size_t size, EGG::Heap *parentHeap, const char *name, u32 align, u32 unk) {
-    EGG::FrmHeap *heap = createFrmHeap(size, parentHeap, name, align, unk);
+EGG::FrmHeap *mHeap::createFrmHeapToCurrent(size_t size, EGG::Heap *parentHeap, const char *name, u32 align, AllocOptBit_t opt) {
+    EGG::FrmHeap *heap = createFrmHeap(size, parentHeap, name, align, opt);
     if (heap != nullptr) {
         s_SavedCurrentHeap = setCurrentHeap(heap);
     }
@@ -209,6 +209,6 @@ EGG::AssertHeap *mHeap::createAssertHeap(EGG::Heap *parent) {
     return g_assertHeap;
 }
 
-EGG::FrmHeap *mHeap::makeHeapOnCurrentGameHeap(size_t size, const char *name, u32 align, u32 flags) {
-    return makeFrmHeapAndUpdate(size, g_gameHeaps[0], name, align, flags);
+EGG::FrmHeap *mHeap::makeHeapOnCurrentGameHeap(size_t size, const char *name, u32 align, AllocOptBit_t flags) {
+    return createFrmHeapToCurrent(size, g_gameHeaps[0], name, align, flags);
 }

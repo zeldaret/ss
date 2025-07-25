@@ -56,7 +56,7 @@ void mShadow_c::create(
     // Maybe an Inline?
     EGG::FrmHeap **heap = mpFrmHeaps;
     for (int i = 0; i < 2; i++) {
-        heap[0] = mHeap::createFrmHeap(heapSize, mpHeap, "ShadowTmp", 0x4, 0);
+        heap[0] = mHeap::createFrmHeap(heapSize, mpHeap, "ShadowTmp", 0x4, mHeap::OPT_NONE);
         heap[0]->recordState(FRM_HEAP_STATE);
         heap++;
     }
@@ -519,7 +519,7 @@ void mShadowChild_c::updateMtx() {
 
     mVec3_c a(mQuat.v.x, mQuat.v.y, mQuat.v.z);
     a += mPositionMaybe * GetOffset();
-    
+
     mVec3_c b(mQuat.v.x, mQuat.v.y, mQuat.v.z);
     b -= mPositionMaybe * field_0x13C;
 

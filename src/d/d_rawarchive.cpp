@@ -1,4 +1,5 @@
 #include "d/d_rawarchive.h"
+#include "m/m_heap.h"
 
 #include "rvl/VI.h" // IWYU pragma: export
 
@@ -186,7 +187,7 @@ int dRawArcEntry_c::ensureLoadedMaybe(void *callbackArg) {
         if (mpArc == nullptr) {
             return -1;
         }
-        mpFrmHeap = mHeap::makeHeapOnCurrentGameHeap(-1, name(), 0x20, 0);
+        mpFrmHeap = mHeap::makeHeapOnCurrentGameHeap(-1, name(), 0x20, mHeap::OPT_NONE);
         if (mpFrmHeap == nullptr) {
             return -1;
         }
