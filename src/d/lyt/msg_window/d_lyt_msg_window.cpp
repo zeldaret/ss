@@ -548,7 +548,7 @@ void dLytMsgWindow_c::finalizeState_WaitKeySelectQuestion() {}
 
 void dLytMsgWindow_c::initializeState_MapOpen() {}
 void dLytMsgWindow_c::executeState_MapOpen() {
-    if ((dLytMap_c::getInstance() != nullptr && dLytMap_c::getInstance()->isOpenMaybe()) ||
+    if ((dLytMap_c::GetInstance() != nullptr && dLytMap_c::GetInstance()->isOpenMaybe()) ||
         !dLytControlGame_c::getInstance()->isInSomeMapState()) {
         dMessage_c::getInstance()->setField_0x329(0);
         mStateMgr.changeState(StateID_Invisible);

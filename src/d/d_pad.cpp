@@ -1,5 +1,6 @@
 #include "d/d_pad.h"
 
+#include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_player.h"
 #include "d/col/c/c_m3d_g_aab.h"
@@ -8,7 +9,9 @@
 #include "d/d_hbm.h"
 #include "d/d_pause.h"
 #include "d/d_reset.h"
+#include "d/d_sc_game.h"
 #include "d/lyt/d_lyt_control_game.h"
+#include "d/lyt/d_lyt_map.h"
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
@@ -28,6 +31,8 @@
 #include "rvl/MTX/vec.h"
 #include "rvl/WPAD/WPAD.h"
 
+#include <cmath>
+
 namespace dPad {
 
 ex_c ex_c::m_ex[4];
@@ -40,7 +45,7 @@ bool ex_c::m_connected[4];
 // TODO - the SDK decomp uses WPAD error codes for this
 // callback, but I think they have different semantics.
 // Refer to https://github.com/doldecomp/sdk_2009-12-11/blob/main/source/kpad/KPAD.c#L3607-L3639
-// for logic. 
+// for logic.
 void control_mpls_callback(s32 idx, s32 code) {
     switch (code) {
         // Called first
@@ -218,10 +223,10 @@ void beginPad_BR() {
         KPADSetMplsAccReviseParam(0, 0.03f, 0.4f);
 
         if ((dCsGame_c::GetInstance() && dCsGame_c::GetInstance()->fn_801BF5E0() && !ex.field_0x22D0) ||
-            ((dAcPy_c::GetLink() &&
-              dAcPy_c::GetLink()->checkActionFlagsCont(0x400 | 0x100 | 0x80 | 0x40 | 0x10 | 0x4 | 0x2 | 0x1) &&
-              !dAcPy_c::GetLink()->vt_0x1C0() && !dLytMeter_c::GetMain()->getField_0x1377F()) ||
-             ex.field_0x22CF)) {
+            (dAcPy_c::GetLink() &&
+             dAcPy_c::GetLink()->checkActionFlagsCont(0x400 | 0x100 | 0x80 | 0x40 | 0x10 | 0x4 | 0x2 | 0x1) &&
+             !dAcPy_c::GetLink()->vt_0x1C0() && !dLytMeter_c::GetMain()->getField_0x1377F()) ||
+            ex.field_0x22CF) {
             if (dLytControlGame_c::getInstance() && dLytControlGame_c::getInstance()->isStateNormal()) {
                 if (!(dPauseManager_c::GetInstance() && dPauseManager_c::GetInstance()->getField_0x25())) {
                     KPADDisableMplsDpdRevise(0);
@@ -262,10 +267,10 @@ void beginPad_BR() {
         ex.fn_80056790(0);
 
         if (ex.field_0x50) {
-            // TODO: These two vectors use entirely different spaces...
             ex.mDpdPos = ex.field_0x5C;
         } else {
             if (mPad::getCore(0)->getDpdValidFlag() > 0) {
+                // TODO - ctor regswap
                 ex.mDpdPos = mPad::getCore(0)->getDpdRawPos();
                 // ex.mDpdPos.set(v.x, v.y);
             } else {
@@ -378,37 +383,44 @@ ex_c::ex_c()
 void ex_c::fn_80055EF0(s32 chan) {
     const s32 readLen = mPad::getCore(chan)->getReadLength();
 
+    // Shift all old acceleration values back
     for (int i = 120 - 1; i >= readLen; i--) {
-        mMotion.field_0x000[i] = mMotion.field_0x000[i - readLen];
-        mMotion.field_0xB40[i] = mMotion.field_0xB40[i - readLen];
-        mFSMotion.field_0x000[i] = mFSMotion.field_0x000[i - readLen];
-        mFSMotion.field_0xB40[i] = mFSMotion.field_0xB40[i - readLen];
+        mMotion.mAccVecs[i] = mMotion.mAccVecs[i - readLen];
+        mMotion.mAccValues[i] = mMotion.mAccValues[i - readLen];
+        mFSMotion.mAccVecs[i] = mFSMotion.mAccVecs[i - readLen];
+        mFSMotion.mAccValues[i] = mFSMotion.mAccValues[i - readLen];
     }
 
-    // Missing an implicit != 0 check before the loop
+    // Write newly read Wiimote acceleration values
+    // TODO - Missing an implicit != 0 check before the loop
     for (int i = 0; i < readLen; i++) {
         EGG::CoreStatus status = *mPad::getCore(chan)->getCoreStatus(i);
-        mMotion.field_0x000[i].copyFrom(&status.acc);
-        mMotion.field_0xB40[i] = status.acc_value;
+        mMotion.mAccVecs[i].copyFrom(&status.acc);
+        mMotion.mAccValues[i] = status.acc_value;
     }
 
     mMotion.fn_80058AE0(chan, true);
 
+    // Write newly read Nunchuk acceleration values
     for (int i = 0; i < readLen; ++i) {
         if (mPad::getCore(chan)->getDevType() == EGG::cDEV_FREESTYLE ||
             (mPad::isMplsPtFS(chan) && (u8)KPADGetMplsStatus(chan) == 5)) {
             EGG::CoreStatus status = *mPad::getCore(chan)->getCoreStatus(i);
-            mFSMotion.field_0x000[i].copyFrom(&status.acc);
-            mFSMotion.field_0xB40[i] = status.acc_value;
+            mFSMotion.mAccVecs[i].copyFrom(&status.acc);
+            mFSMotion.mAccValues[i] = status.acc_value;
         } else {
-            mFSMotion.field_0x000[i].set(0.f, 0.f, 0.f);
-            mFSMotion.field_0xB40[i] = 0.f;
+            mFSMotion.mAccVecs[i].set(0.f, 0.f, 0.f);
+            mFSMotion.mAccValues[i] = 0.f;
         }
     }
     if (mPad::getCore(chan)->getDevType() == EGG::cDEV_FREESTYLE ||
         (mPad::isMplsPtFS(chan) && (u8)KPADGetMplsStatus(chan) == 5)) {
         mFSMotion.fn_80058AE0(chan, false);
     }
+}
+
+void float_order_d_pad() {
+    EGG::Math<f32>::epsilon();
 }
 
 void ex_c::fn_800562B0(s32 chan, mVec3_c &mpls) {
@@ -420,8 +432,14 @@ void ex_c::fn_800562B0(s32 chan, mVec3_c &mpls) {
     }
 }
 
+// this looks like nw4r::ut::Clamp but the ternaries are swapped
+template <typename T>
+inline T WeirdClamp(T value, T min, T max) {
+    return value < min ? min : (value > max ? max : value);
+}
+
 void ex_c::fn_80056330(s32 chan) {
-    f32 mult = nw4r::ut::Clamp(1.f - field_0x8C.y * field_0x8C.y, 0.f, 1.f);
+    f32 mult = WeirdClamp(1.f - field_0x8C.y * field_0x8C.y, 0.f, 1.f);
 
     mVec3_c basis;
     if (field_0x53) {
@@ -483,7 +501,39 @@ void ex_c::centerCursor(s32 chan, bool b) {
     }
 }
 
-void ex_c::fn_80056790(s32 chan) {}
+void ex_c::fn_80056790(s32 chan) {
+    // unused - TODO ctor regswap
+    mVec2_c dpdRawPos = mPad::getCore(chan)->getDpdRawPos();
+
+    f32 f;
+    if (dScGame_c::GetInstance() != nullptr && dLytMap_c::GetInstance() != nullptr &&
+        !dLytMap_c::GetInstance()->isNotInvisible()) {
+        f = dScGame_c::GetInstance()->targetingScreenFn_801BBEC0();
+    } else {
+        f = 1.0f;
+    }
+    field_0x22D8 = 0;
+    EGG::CoreStatus coreStatus = *mPad::getCore(chan)->getCoreStatus(0);
+    if (coreStatus.dpd_valid_fg == 2) {
+        field_0x22D8 = 1;
+    }
+    mVec3_c v;
+    fn_800562B0(chan, v);
+    mVec3_c v2(v.dot(field_0x74), v.dot(field_0x80), v.dot(field_0x8C));
+    v2.z = nw4r::ut::Max(v2.z, field_0x70.cos());
+
+    s16 b1 = cM::atan2s(-v2.x, v2.z);
+    field_0x5C.x = WeirdClamp(b1 * (1.0f / field_0x70), -1.0f, 1.0f);
+    s16 b2 = cM::atan2s(-v2.y, v2.z);
+    field_0x5C.y = WeirdClamp(b2 * (1.0f / field_0x70), -f, f);
+
+    if (field_0x51 != 0) {
+        field_0x51--;
+    }
+    f32 f4 = field_0x51 * (1 / 3.0f);
+    // lerp
+    field_0x5C = field_0x5C * (1.0f - f4) + field_0x64 * f4;
+}
 
 void ex_c::setField_0x70(mAng ang) {
     field_0x70 = ang;
@@ -745,9 +795,9 @@ void ex_c::fn_800572A0(s32 chan) {
 
 void ex_c::acc_c::init() {
     for (int i = 0; i < 120; ++i) {
-        field_0x000[i].set(0.f, 0.f, 0.f);
+        mAccVecs[i].set(0.f, 0.f, 0.f);
         field_0x5A0[i].set(0.f, 0.f, 0.f);
-        field_0xB40[i] = 0.f;
+        mAccValues[i] = 0.f;
     }
     for (int i = 0; i < 39; ++i) {
         field_0xD20[i].set(0.f, 0.f, 0.f);
@@ -766,13 +816,120 @@ void ex_c::acc_c::init() {
     field_0x10D8 = 31;
 }
 
-f32 ex_c::acc_c::getEntryField_0xB40(s32 chan) {}
+f32 ex_c::acc_c::getMaxAccValue(s32 chan) {
+    s32 readLen = mPad::getCore(chan)->getReadLength();
+    if (readLen == 0) {
+        return 0.0f;
+    }
 
-void ex_c::acc_c::fn_800576D0(s32 chan) {}
+    f32 max = 0.0f;
+    for (int i = 0; i < readLen; i++) {
+        if (max < mAccValues[i]) {
+            max = mAccValues[i];
+        }
+    }
+    return max;
+}
 
-void ex_c::acc_c::fn_800578E0(s32 chan) {}
+void ex_c::acc_c::fn_800576D0(s32 chan) {
+    // unused
+    (void)nw4r::math::FSqrt(mAccVecs[0].squaredLength());
 
-void ex_c::acc_c::fn_80057AC0(s32 chan, bool) {}
+    f32 maxAccValue = getMaxAccValue(chan);
+    if (maxAccValue <= 1.1f && mAccVecs[0].y < 0.35f) {
+        field_0x10D0++;
+        if (field_0x10D0 >= 6) {
+            field_0x10D0 = 6;
+            field_0x108C = mAccVecs[0];
+            mVec3_c dir(0.0f, -1.0f, 0.0f);
+            f32 len = mAccVecs[0].squaredLength();
+            if (!cM3d_IsZero(len)) {
+                // TODO - bad part start
+                mVec3_c acc = mAccVecs[0];
+                acc.normalize();
+                mVec3_c cross = acc.cross(dir);
+                f32 f = acc.dot(dir);
+                if (!cM3d_IsZero(cross.squaredLength())) {
+                    cross.normalize();
+                    f32 acos = std::acosf(f);
+                    MTXRotAxisRad(field_0x1098, cross, acos);
+                    // TODO - bad part end
+                } else {
+                    MTXIdentity(field_0x1098);
+                }
+            } else {
+                MTXIdentity(field_0x1098);
+            }
+        }
+    } else {
+        field_0x10D0 = 0;
+    }
+}
+
+void ex_c::acc_c::fn_800578E0(s32 chan) {
+    const s32 readLen = mPad::getCore(chan)->getReadLength();
+
+    // Shift old values back
+    for (int i = readLen; i < 120; i++) {
+        field_0x5A0[i] = field_0x5A0[i - readLen];
+    }
+
+    // TODO - loop strength reduction too strong
+    f32 max = -8.0f;
+    bool b = false;
+    for (int i = 0; i < readLen; i++) {
+        if (max < mAccVecs[i].y) {
+            max = mAccVecs[i].y;
+            b = true;
+        }
+        MTXMultVec(field_0x1098, mAccVecs[i], field_0x5A0[i]);
+        field_0x5A0[i].y += 1.0f;
+    }
+
+    if (b) {
+        field_0x10D4 = max;
+    }
+}
+
+void ex_c::acc_c::fn_80057AC0(s32 chan, bool b) {
+    const s32 readLen = mPad::getCore(chan)->getReadLength();
+
+    // Shift field_0xD20 back by one
+    for (int i = 38; i > 0; i--) {
+        field_0xD20[i] = field_0xD20[i - 1];
+    }
+
+    for (int i = 0; i < readLen; i++) {
+        field_0x1080.x += mAccVecs[i].x;
+        field_0x1080.y += mAccVecs[i].y;
+        field_0x1080.z += mAccVecs[i].z;
+    }
+
+    if (b) {
+        field_0x1080 *= 0.96f;
+    } else {
+        field_0x1080 *= 0.98f;
+    }
+
+    // TODO - problematic part start
+
+    field_0xD20[0] = field_0x1080;
+
+    for (int i = 3; i < 36;) {
+        int k = i++ - 3;
+        f32 x = 0.0f;
+        f32 y = 0.0f;
+        f32 z = 0.0f;
+        for (int j = 0; j < 7; j++) {
+            x += field_0xD20[k + j].x / 7.0f;
+            y += field_0xD20[k + j].y / 7.0f;
+            z += field_0xD20[k + j].z / 7.0f;
+        }
+        field_0xEF4[k].set(x, y, z);
+    }
+
+    // TODO - problematic part end
+}
 
 f32 ex_c::acc_c::fn_80057F00(s32 chan) {
     s32 offs = chan + 3;
@@ -789,17 +946,185 @@ f32 ex_c::acc_c::fn_80057F60(s32 chan) {
     return field_0xD20[offs].z - field_0xEF4[chan].z;
 }
 
-bool ex_c::acc_c::fn_80057F90(s32 chan, bool) {}
-bool ex_c::acc_c::fn_800580C0(s32 chan, bool) {}
+bool ex_c::acc_c::fn_80057F90(s32 idx, bool b) {
+    if ((b && ((fn_80057F00(idx) < -13.5f) || fn_80057F00(idx + 1) < -13.5f) &&
+         std::fabsf(fn_80057F00(idx + 1) - fn_80057F00(idx)) > 3.75f) ||
+        (!b && ((fn_80057F00(idx) < -5.0f) || fn_80057F00(idx + 1) < -5.0f) &&
+         std::fabsf(fn_80057F00(idx + 1) - fn_80057F00(idx)) > 2.75f)) {
+        return true;
+    }
+    return false;
+}
+bool ex_c::acc_c::fn_800580C0(s32 idx, bool b) {
+    if ((b && ((fn_80057F00(idx) > 13.5f) || fn_80057F00(idx + 1) > 13.5f) &&
+         std::fabsf(fn_80057F00(idx + 1) - fn_80057F00(idx)) > 3.75f) ||
+        (!b && ((fn_80057F00(idx) > 5.0f) || fn_80057F00(idx + 1) > 5.0f) &&
+         std::fabsf(fn_80057F00(idx + 1) - fn_80057F00(idx)) > 2.75f)) {
+        return true;
+    }
+    return false;
+}
 
-bool ex_c::acc_c::fn_800581F0(s32 chan, bool) {}
-bool ex_c::acc_c::fn_80058320(s32 chan, bool) {}
+bool ex_c::acc_c::fn_800581F0(s32 idx, bool b) {
+    if ((b && ((fn_80057F30(idx) < -13.5f) || fn_80057F30(idx + 1) < -13.5f) &&
+         std::fabsf(fn_80057F30(idx + 1) - fn_80057F30(idx)) > 3.75f) ||
+        (!b && ((fn_80057F30(idx) < -5.0f) || fn_80057F30(idx + 1) < -5.0f) &&
+         std::fabsf(fn_80057F30(idx + 1) - fn_80057F30(idx)) > 2.75f)) {
+        return true;
+    }
+    return false;
+}
+bool ex_c::acc_c::fn_80058320(s32 idx, bool b) {
+    if ((b && ((fn_80057F30(idx) > 13.5f) || fn_80057F30(idx + 1) > 13.5f) &&
+         std::fabsf(fn_80057F30(idx + 1) - fn_80057F30(idx)) > 3.75f) ||
+        (!b && ((fn_80057F30(idx) > 5.0f) || fn_80057F30(idx + 1) > 5.0f) &&
+         std::fabsf(fn_80057F30(idx + 1) - fn_80057F30(idx)) > 2.75f)) {
+        return true;
+    }
+    return false;
+}
 
-bool ex_c::acc_c::fn_80058450(s32 chan, bool) {}
+bool ex_c::acc_c::fn_80058450(s32 idx, bool b) {
+    // Note - same behavior, whether b is set or not
+    if ((b && (fn_80057F60(idx) > 2.0f) && (fn_80057F60(idx + 1) - fn_80057F60(idx)) < -2.0f) ||
+        (!b && (fn_80057F60(idx) > 2.0f) && (fn_80057F60(idx + 1) - fn_80057F60(idx)) < -2.0f)) {
+        return true;
+    }
+    return false;
+}
 
-void ex_c::acc_c::fn_80058540(s32 chan, bool) {}
+void ex_c::acc_c::fn_80058540(s32 chan, bool b) {
+    bool b1 = false;
+    bool b2 = false;
+    bool b3 = false;
+    bool b4 = false;
+    // TODO condition
+    if (b && (mPad::isMpls(chan) || mPad::isMplsPtFS(chan))) {
+        if (m_ex[chan].mMPLSVelocity.x > 2.0f) {
+            b4 = true;
+        } else if (m_ex[chan].mMPLSVelocity.x < -2.0f) {
+            b3 = true;
+        } else if (m_ex[chan].mMPLSVelocity.y > 2.0f) {
+            b1 = true;
+        } else if (m_ex[chan].mMPLSVelocity.y < -2.0f) {
+            b2 = true;
+        }
+    } else {
+        int i1 = 0;
+        int i2 = 0;
+        int i3 = 0;
+        field_0x10D8++;
+        if (field_0x10D8 > 31) {
+            field_0x10D8 = 31;
+        }
 
-void ex_c::acc_c::fn_80058990(u32 mask, bool) {}
+        bool b1_ = false;
+        bool b2_ = false;
+        bool b3_ = false;
+        bool b4_ = false;
+
+        int start = field_0x10D8;
+        for (int i = field_0x10D8; i >= 0; i--) {
+            if (fn_80057F90(i, b)) {
+                b1_ = true;
+                b2_ = false;
+            }
+
+            if (fn_800580C0(i, b)) {
+                b2_ = true;
+                b1_ = false;
+            }
+
+            if (fn_80057F90(i, b) || fn_800580C0(i, b)) {
+                i1 = 2;
+            } else {
+                i1--;
+                if (i1 < 0) {
+                    i1 = 0;
+                    b1_ = false;
+                    b2_ = false;
+                }
+            }
+
+            if (fn_800581F0(i, b)) {
+                b3_ = true;
+                b4_ = false;
+            }
+
+            if (fn_80058320(i, b)) {
+                b4_ = true;
+                b3_ = false;
+            }
+
+            if (fn_800581F0(i, b) || fn_80058320(i, b)) {
+                i2 = 2;
+            } else {
+                i2--;
+                if (i2 < 0) {
+                    i2 = 0;
+                    b3_ = false;
+                    b4_ = false;
+                }
+            }
+
+            if (fn_80058450(i, b)) {
+                i3 = 2;
+            } else {
+                i3--;
+                if (i3 < 0) {
+                    i3 = 0;
+                }
+            }
+        }
+
+        if (start != 0 && i3 > 0) {
+            if (b1_) {
+                field_0x10D8 = 0;
+                b1 = true;
+            }
+            if (b2_) {
+                field_0x10D8 = 0;
+                b2 = true;
+            }
+            if (b3_) {
+                field_0x10D8 = 0;
+                b3 = true;
+            }
+            if (b4_) {
+                field_0x10D8 = 0;
+                b4 = true;
+            }
+        }
+    }
+
+    fn_80058990(0x1, b1);
+    fn_80058990(0x2, b2);
+    fn_80058990(0x4, b3);
+    fn_80058990(0x8, b4);
+    fn_80058990(0x10, b1 || b2 || b3 || b4);
+
+    bool b6;
+    if (b) {
+        b6 = getMaxAccValue(chan) > (field_0x10CC ? 2.0f : 3.0f);
+    } else {
+        b6 = getMaxAccValue(chan) > (field_0x10CC ? 1.5f : 2.0f);
+    }
+    fn_80058990(0x20, b6);
+}
+
+void ex_c::acc_c::fn_80058990(u32 mask, bool b) {
+    if (b) {
+        if ((field_0x10CC & mask) != 0) {
+            field_0x10C8 &= ~mask;
+        } else {
+            field_0x10C8 |= mask;
+        }
+        field_0x10CC |= mask;
+    } else {
+        field_0x10CC &= ~mask;
+        field_0x10C8 &= ~mask;
+    }
+}
 
 bool ex_c::acc_c::fn_800589F0() {
     return true;
@@ -809,7 +1134,7 @@ f32 ex_c::acc_c::fn_80058A00() {
     cM3dGAab aab;
     aab.ClearForMinMax();
     for (int i = 0; i < 120; i++) {
-        aab.SetMinMax(field_0x000[i]);
+        aab.SetMinMax(mAccVecs[i]);
     }
 
     f32 lenSq = nw4r::math::VEC3LenSq(aab.GetMax() - aab.GetMin()) - 0.017f;
@@ -819,7 +1144,12 @@ f32 ex_c::acc_c::fn_80058A00() {
     return lenSq;
 }
 
-void ex_c::acc_c::fn_80058AE0(s32 chan, bool) {}
+void ex_c::acc_c::fn_80058AE0(s32 chan, bool b) {
+    fn_800576D0(chan);
+    fn_800578E0(chan);
+    fn_80057AC0(chan, b);
+    fn_80058540(chan, b);
+}
 
 mMtx_c ex_c::mpls_c::getMtx() const {
     mMtx_c m;

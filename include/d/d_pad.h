@@ -13,7 +13,7 @@ class ex_c {
     // Complete Made up name
     struct acc_c {
         void init();
-        f32 getEntryField_0xB40(s32 chan);
+        f32 getMaxAccValue(s32 chan);
         void fn_800576D0(s32 chan);
         void fn_800578E0(s32 chan);
         void fn_80057AC0(s32 chan, bool);
@@ -22,13 +22,13 @@ class ex_c {
         f32 fn_80057F30(s32 chan);
         f32 fn_80057F60(s32 chan);
 
-        bool fn_80057F90(s32 chan, bool);
-        bool fn_800580C0(s32 chan, bool);
+        bool fn_80057F90(s32 idx, bool);
+        bool fn_800580C0(s32 idx, bool);
 
-        bool fn_800581F0(s32 chan, bool);
-        bool fn_80058320(s32 chan, bool);
+        bool fn_800581F0(s32 idx, bool);
+        bool fn_80058320(s32 idx, bool);
 
-        bool fn_80058450(s32 chan, bool);
+        bool fn_80058450(s32 idx, bool);
 
         void fn_80058540(s32 chan, bool);
 
@@ -38,9 +38,9 @@ class ex_c {
         f32 fn_80058A00();
         void fn_80058AE0(s32 chan, bool);
 
-        /* 0x0000 */ mVec3_c field_0x000[120];
+        /* 0x0000 */ mVec3_c mAccVecs[120];
         /* 0x05A0 */ mVec3_c field_0x5A0[120];
-        /* 0x0B40 */ f32 field_0xB40[120];
+        /* 0x0B40 */ f32 mAccValues[120];
         /* 0x0D20 */ mVec3_c field_0xD20[39];
         /* 0x0EF4 */ mVec3_c field_0xEF4[33];
         /* 0x1080 */ mVec3_c field_0x1080;
@@ -48,9 +48,9 @@ class ex_c {
         /* 0x1098 */ mMtx_c field_0x1098;
         /* 0x10C8 */ u32 field_0x10C8;
         /* 0x10CC */ u32 field_0x10CC;
-        /* 0x10D0 */ u32 field_0x10D0;
+        /* 0x10D0 */ s32 field_0x10D0;
         /* 0x10D4 */ f32 field_0x10D4;
-        /* 0x10D8 */ u32 field_0x10D8;
+        /* 0x10D8 */ s32 field_0x10D8;
     };
 
     struct mpls_c {
