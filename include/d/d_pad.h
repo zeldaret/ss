@@ -53,12 +53,29 @@ class ex_c {
         /* 0x10D8 */ s32 field_0x10D8;
     };
 
+    // Orthonormal Basis vectors of the Mpls attachment in 3D space.
+    // Z+ is forward, Y+ is up, and X+ is left. So a Wiimote pointing at
+    // the Screen will have vectors (1, 0, 0), (0, 1, 0), (0, 0, 1).
+    // Of particular interest here is mZ, which tells you in which direction
+    // the Wiimote points.
     struct mpls_c {
         mpls_c() : mX(mVec3_c::Ex), mY(mVec3_c::Ey), mZ(mVec3_c::Ez) {}
         mMtx_c getMtx() const;
         /* 0x00 */ mVec3_c mX;
         /* 0x0C */ mVec3_c mY;
         /* 0x18 */ mVec3_c mZ;
+
+        // vertical angle. 0 is forward, positive is pointing upwards,
+        // negative is pointing downwards
+        mAng getVerticalAngle() const {
+            return cM::atan2s(mZ.y, mZ.absXZ());
+        }
+
+        // horizontal angle. 0 is forward, positive is pointing to the left,
+        // negative is pointing to the right
+        mAng getHorizontalAngle() const {
+            return cM::atan2s(mZ.x, mZ.z);
+        }
     };
 
 public:

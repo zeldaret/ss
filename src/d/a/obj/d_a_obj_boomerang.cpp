@@ -8,6 +8,7 @@
 #include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/d_pad.h"
+#include "d/d_player_act.h"
 #include "d/d_rumble.h"
 #include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
@@ -60,7 +61,7 @@ void dAcBoomerang_c::areaCallback(mVec3_c *param1, u32 param2) {
 void dAcBoomerang_c::atHitCallback(cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfB) {
     if (i_actorB != nullptr && i_actorB->GetLinkage().checkFlag(0x80)) {
         // Check if beetle can grab things
-        if ((s32)(dAcPy_c::getCurrentBeetleType() >= HOOK_BEETLE) != FALSE) {
+        if (dAcPy_c::hasBeetleVariantOrBetter(HOOK_BEETLE)) {
             // If beetle is already holding the object or is stationary
             if (i_actorB == mGrabbedActor.get() || !mStateMgr.isState(StateID_Move)) {
                 return;
@@ -124,21 +125,21 @@ bool dAcBoomerang_c::createHeap() {
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1));
 
     // Decide the Pincers
-    if ((s32)(dAcPy_c::getCurrentBeetleType() >= HOOK_BEETLE) != FALSE) {
+    if (dAcPy_c::hasBeetleVariantOrBetter(HOOK_BEETLE)) {
         hideModel(MDL_MOUTH_BASIC);
     } else {
         hideModel(MDL_MOUTH_HOOK);
     }
 
     // Decide the Body
-    if ((s32)(dAcPy_c::getCurrentBeetleType() >= TOUGH_BEETLE) != FALSE) {
+    if (dAcPy_c::hasBeetleVariantOrBetter(TOUGH_BEETLE)) {
         hideModel(MDL_BODY_BASIC);
     } else {
         hideModel(MDL_BODY_ADV);
     }
 
     // Decide the Wings
-    if ((s32)(dAcPy_c::getCurrentBeetleType() >= QUICK_BEETLE) != FALSE) {
+    if (dAcPy_c::hasBeetleVariantOrBetter(QUICK_BEETLE)) {
         hideModel(MDL_WINGS_BASIC);
     } else {
         hideModel(MDL_WINGS_ADV);
@@ -216,7 +217,7 @@ int dAcBoomerang_c::create() {
 
     mSph1.SetCoGrp(0xE);
 
-    if ((s32)(dAcPy_c::getCurrentBeetleType() >= HOOK_BEETLE) == FALSE) {
+    if (!dAcPy_c::hasBeetleVariantOrBetter(HOOK_BEETLE)) {
         mSph0.OnAt_0x4000();
         mSph1.OnAt_0x4000();
     }
@@ -428,6 +429,20 @@ void dAcBoomerang_c::initializeState_Move() {
 
     mOldPosition = position;
     mOldPosition.y += 60.f;
+
+    field_0x8BC = dPad::ex_c::m_current_ex->mMPLS.getVerticalAngle();
+    field_0x8BA = dPad::ex_c::m_current_ex->mMPLS.getHorizontalAngle();
+    field_0x8B8 = daPlayerActBase_c::fn_8005BAA0();
+
+    // TODO regswap
+    field_0x8BE = angle.x - dPad::ex_c::m_current_ex->mMPLS.getVerticalAngle();
+
+    field_0x8E4.fromXY(angle.x, angle.y, forwardSpeed);
+
+    playSound(SE_BE_THROW);
+    dJEffManager_c::spawnUIEffect(PARTICLE_RESOURCE_ID_MAPPING_3_, mVec3_c::Zero, nullptr, nullptr, nullptr, nullptr);
+    field_0x8F0 = mVec3_c::Zero;
+    field_0x8D4 = 0.0f;
 }
 void dAcBoomerang_c::executeState_Move() {}
 void dAcBoomerang_c::finalizeState_Move() {}
@@ -488,7 +503,7 @@ int dAcBoomerang_c::actorExecute() {
         unsetField_0x8CC(FLAG_REQUEST_0x400);
     }
 
-    if (dAcPy_c::GetLink2()->checkModelUpdateFlag(0x10000 | 0x80)) {
+    if (player->checkModelUpdateFlag(0x10000 | 0x80)) {
         deleteRequest();
         unsetField_0x8CC(FLAG_REQUEST_0x400);
         return SUCCEEDED;

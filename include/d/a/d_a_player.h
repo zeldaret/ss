@@ -102,6 +102,9 @@ public:
     static s32 getCurrentBowType();
     static s32 getCurrentSlingshotType();
     static s32 getCurrentBeetleType();
+    static bool hasBeetleVariantOrBetter(s32 variant) {
+        return getCurrentBeetleType() >= variant;
+    }
     static s32 getCurrentBugNetType();
 
     static bool isInBambooCuttingMinigame() {

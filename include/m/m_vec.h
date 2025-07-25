@@ -243,6 +243,8 @@ public:
     void rotY(const mAng &angle);
     void rotZ(const mAng &angle);
 
+    void fromXY(const mAng &angleX, const mAng &angleY, f32);
+
     void CopyTo(Vec *p) const {
         p->x = x;
         p->y = y;
