@@ -26,8 +26,16 @@ public:
 public:
     dSndPlayerMgr_c();
 
-    void setup(s32 channel);
-    void shutdown(s32 channel);
+    void shutdown(s32 frames);
+    bool isShutdown();
+    void reset(s32 frames);
+    bool isReset();
+    void recoverReset();
+
+    void setupRmtSpeaker(s32 channel);
+    void shutdownRmtSpeaker(s32 channel);
+
+    void clearTempStates();
 
     void setup();
     void shutdownDemo();
@@ -92,7 +100,7 @@ public:
 
     enum PlayerMgrFlag_e {
         MGR_HBM = 0x1,
-        MGR_UNK_0x2 = 0x2,
+        MGR_SHUTDOWN_RESET = 0x2,
         MGR_PAUSE = 0x4,
         MGR_MAP = 0x8,
         MGR_HELP = 0x10,
@@ -206,11 +214,14 @@ public:
 
 private:
     /* 0x010 */ u8 field_0x010;
-    /* 0x011 */ u8 field_0x011;
+    /* 0x011 */ bool mIsSetup;
     /* 0x014 */ s32 mState0;
     /* 0x018 */ s32 mState1;
     /* 0x01C */ s32 mState2;
     /* 0x020 */ u32 mFlags;
+
+    void stopAllSound(s32 frames);
+    void fn_8035E0E0();
 
     // system menu, inventory, map
     void enterPauseState();

@@ -9,6 +9,7 @@
 #include "d/d_reset.h"
 #include "d/d_sc_game.h"
 #include "d/d_sys.h"
+#include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_state_mgr.h"
 #include "f/f_base.h"
 #include "f/f_profile_name.h"
@@ -18,7 +19,6 @@
 #include "sized_string.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/file_manager.h"
-#include "toBeSorted/music_mgrs.h"
 #include "toBeSorted/save_related.h"
 #include "toBeSorted/unk_save_time.h"
 
@@ -97,7 +97,7 @@ int dScTitle_c::create() {
         SizedString<128> fntPath;
         fntPath.sprintf("/US/Font/%s/%s", dMessage_c::getLanguageIdentifier(), "normal_02.brfnt");
         mDvd_toMainRam_normal_c::create2(&mpSkbFont, fntPath, 0, dHeap::work2Heap.heap);
-        BGM_MGR->fn_8035E310();
+        dSndPlayerMgr_c::GetInstance()->recoverReset();
     }
 
     return ret;

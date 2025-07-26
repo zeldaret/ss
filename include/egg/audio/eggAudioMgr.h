@@ -14,7 +14,7 @@ public:
     virtual StartResult
     detail_SetupSound(nw4r::snd::SoundHandle *pHandle, u32 id, bool hold, const StartInfo *pStartInfo) override {
         if (AudioSystem::sInstanse != nullptr &&
-            (AudioSystem::sInstanse->field0x08NotZero() || AudioSystem::sInstanse->field0x04NotZero())) {
+            (AudioSystem::sInstanse->isShuttingDown() || AudioSystem::sInstanse->isResetting())) {
             return START_ERR_USER;
         }
         return nw4r::snd::SoundArchivePlayer::detail_SetupSound(pHandle, id, hold, pStartInfo);

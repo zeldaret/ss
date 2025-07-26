@@ -116,7 +116,7 @@ void Manage_c::BootComplete(bool complete) {
 bool Manage_c::CanExecSoftReset() const {
     return mMode == SoftReset && mpFader->getStatus() == EGG::Fader::STATUS_PREPARE_IN && field_0x60 == 0 &&
            dHbm::Manage_c::GetInstance()->getState() != dHbm::Manage_c::HBM_MANAGE_ACTIVE &&
-           dSndPlayerMgr_c::GetInstance()->fn_8035E2E0() && FileManager::GetInstance()->getField_0xA84D() != 1;
+           dSndPlayerMgr_c::GetInstance()->isReset() && FileManager::GetInstance()->getField_0xA84D() != 1;
 }
 
 void Manage_c::SetSoftResetFinish() {
@@ -306,15 +306,15 @@ void Manage_c::ModeInit_SoftReset() {
             mpFader->setFrame(30);
             mpFader->fadeOut();
             field_0x66 = true;
-            dSndPlayerMgr_c::GetInstance()->fn_8035E250(30);
+            dSndPlayerMgr_c::GetInstance()->reset(30);
         } else {
             field_0x60 = 0;
             if (dTitleMgr_c::GetInstance()) {
                 if (dTitleMgr_c::GetInstance()->getField_0xBC() == 0) {
-                    dSndPlayerMgr_c::GetInstance()->fn_8035E250(30);
+                    dSndPlayerMgr_c::GetInstance()->reset(30);
                 }
             } else {
-                dSndPlayerMgr_c::GetInstance()->fn_8035E250(30);
+                dSndPlayerMgr_c::GetInstance()->reset(30);
             }
             THPPlayerSetVolume(0, 60);
             mpFader->setFrame(30);
@@ -332,7 +332,7 @@ void Manage_c::ModeProc_SoftReset() {
                 dScBoot_c::GetInstance()->setField_0x5E4(false);
                 mpFader->setStatus(EGG::ColorFader::STATUS_PREPARE_OUT);
                 ModeRequest(Normal);
-                dSndPlayerMgr_c::GetInstance()->fn_8035E310();
+                dSndPlayerMgr_c::GetInstance()->recoverReset();
             } else {
                 if (field_0x66) {
                     dScBoot_c::GetInstance()->setField_0x5E3(true);
@@ -476,14 +476,14 @@ void Manage_c::ModeProc_FatalError() {}
 
 void Manage_c::ModeInit_SafetyWait() {
     DebugPrintMode("SafetyWait");
-    dSndPlayerMgr_c::GetInstance()->fn_8035E1B0(30);
+    dSndPlayerMgr_c::GetInstance()->shutdown(30);
     mpFader->setFrame(30);
     mpFader->fadeOut();
 }
 
 void Manage_c::ModeProc_SafetyWait() {
     if (mpFader->getStatus() == EGG::Fader::STATUS_PREPARE_IN) {
-        bool b = dSndPlayerMgr_c::GetInstance()->fn_8035E220() && !FileManager::GetInstance()->getField_0xA84D();
+        bool b = dSndPlayerMgr_c::GetInstance()->isShutdown() && !FileManager::GetInstance()->getField_0xA84D();
         if (b) {
             ExecProcPre();
             fn_80068070();

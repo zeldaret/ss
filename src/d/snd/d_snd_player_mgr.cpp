@@ -5,8 +5,10 @@
 #include "d/a/d_a_base.h"
 #include "d/snd/d_snd_area_sound_effect_mgr.h"
 #include "d/snd/d_snd_bgm_mgr.h"
+#include "d/snd/d_snd_bgm_seq_data_mgr.h"
 #include "d/snd/d_snd_control_player_mgr.h"
 #include "d/snd/d_snd_file_mgr.h"
+#include "d/snd/d_snd_harp_song_mgr.h"
 #include "d/snd/d_snd_id_mappers.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
@@ -19,6 +21,8 @@
 #include "egg/core/eggDvdRipper.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/snd/snd_SoundStartable.h"
+#include "nw4r/snd/snd_SoundSystem.h"
+#include "rvl/AX/AXComp.h"
 #include "sized_string.h"
 
 const char *dSndPlayerMgr_c::getSoundArchivePath() {
@@ -27,20 +31,27 @@ const char *dSndPlayerMgr_c::getSoundArchivePath() {
 
 SND_DISPOSER_DEFINE(dSndPlayerMgr_c);
 
-dSndPlayerMgr_c::dSndPlayerMgr_c() : field_0x010(0), field_0x011(0), mState0(-1), mState1(-1), mState2(-1), mFlags(0) {}
+dSndPlayerMgr_c::dSndPlayerMgr_c() : field_0x010(0), mIsSetup(false), mState0(-1), mState1(-1), mState2(-1), mFlags(0) {}
 
-void dSndPlayerMgr_c::enterPauseState() {
-    dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_FAN, 0.3f, 5);
-    dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_AREA, 0.3f, 5);
-    dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_AREA_IN_WATER_LV, 0.3f, 5);
-    // has other effects, such as reducing BGM volume
-    onFlag(MGR_PAUSE);
+void dSndPlayerMgr_c::setup() {
+    if (!mIsSetup) {
+        AXSetCompressor(FALSE);
+        mIsSetup = true;
+    }
 }
 
 void dSndPlayerMgr_c::createFileManager() {
     dSndMgr_c::getPlayer().detail_SetFileManager(
         dSndFileManager::create(dSndMgr_c::GetInstance()->getArchive(), dSndMgr_c::GetInstance()->getSoundHeap())
     );
+}
+
+void dSndPlayerMgr_c::calcActive() {
+    // no-op
+}
+
+void dSndPlayerMgr_c::clearTempStates() {
+    offFlag(MGR_PAUSE | MGR_MAP | MGR_HELP | MGR_SYSTEM | MGR_MSG_WAIT);
 }
 
 void dSndPlayerMgr_c::setupState0() {
@@ -54,9 +65,11 @@ void dSndPlayerMgr_c::setupState0() {
     mState0 = dSndMgr_c::GetInstance()->saveState();
 
     s32 tmpState = dSndMgr_c::GetInstance()->saveState();
-    dSndMgr_c::GetInstance()->loadGroup((unsigned int)GRP_BGM_PLAY_DATA_STATIC, nullptr, 0);
 
-    // TODO - loading static play data
+    // This state is discarded, since all relevant data is parsed and copied out
+    dSndMgr_c::GetInstance()->loadGroup((unsigned int)GRP_BGM_PLAY_DATA_STATIC, nullptr, 0);
+    dSndBgmSeqDataMgr_c::GetInstance()->setupState0();
+    dSndHarpSongMgr_c::GetInstance()->setupState0();
 
     dSndMgr_c::GetInstance()->loadState(tmpState);
 }
@@ -97,6 +110,61 @@ u32 dSndPlayerMgr_c::getFreeSize() {
     return dSndMgr_c::GetInstance()->getSoundHeap()->GetFreeSize();
 }
 
+void dSndPlayerMgr_c::stopAllSound(s32 frames) {
+    dSndBgmMgr_c::GetInstance()->stopAllBgm(frames);
+    dSndSmallEffectMgr_c::GetInstance()->stopAllSound(frames);
+}
+
+
+void dSndPlayerMgr_c::shutdown(s32 frames) {
+    if (mState0 >= 0) {
+        dSndMgr_c::GetInstance()->shutdown(frames * 2);
+        stopAllSound(frames);
+        onFlag(MGR_SHUTDOWN_RESET);
+    }
+}
+
+bool dSndPlayerMgr_c::isShutdown() {
+    if (mState0 < 0) {
+        return true;
+    }
+    return dSndMgr_c::GetInstance()->isShutdown();
+}
+
+void dSndPlayerMgr_c::reset(s32 frames) {
+    if (mState0 >= 0) {
+        nw4r::snd::SoundSystem::SetMasterVolume(1.0f, 0);
+        dSndMgr_c::GetInstance()->reset(frames * 2);
+        stopAllSound(frames);
+        dSndBgmMgr_c::GetInstance()->cancelDelayedSound();
+        dSndBgmMgr_c::GetInstance()->setField_0x300(-1);
+        onFlag(MGR_SHUTDOWN_RESET);
+    }
+}
+
+bool dSndPlayerMgr_c::isReset() {
+    if (mState0 < 0) {
+        return true;
+    }
+    return dSndMgr_c::GetInstance()->isReset();
+}
+
+void dSndPlayerMgr_c::recoverReset() {
+    if (checkFlag(MGR_HBM)) {
+        fn_8035E0E0();
+    }
+    dSndMgr_c::GetInstance()->recoverReset();
+    offFlag(MGR_SHUTDOWN_RESET);
+}
+
+void dSndPlayerMgr_c::enterPauseState() {
+    dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_FAN, 0.3f, 5);
+    dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_AREA, 0.3f, 5);
+    dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_AREA_IN_WATER_LV, 0.3f, 5);
+    // has other effects, such as reducing BGM volume
+    onFlag(MGR_PAUSE);
+}
+
 void dSndPlayerMgr_c::leavePauseState() {
     dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_FAN, 1.0f, 5);
     dSndControlPlayerMgr_c::GetInstance()->setVolume(PLAYER_AREA, 1.0f, 5);
@@ -134,14 +202,6 @@ void dSndPlayerMgr_c::enterHelp() {
 void dSndPlayerMgr_c::leaveHelp() {
     offFlag(MGR_HELP);
     dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_HELP_OUT);
-}
-
-void dSndPlayerMgr_c::setup(s32 channel) {
-    EGG::AudioRmtSpeakerMgr::setup(channel, nullptr);
-}
-
-void dSndPlayerMgr_c::shutdown(s32 channel) {
-    EGG::AudioRmtSpeakerMgr::shutdown(channel, nullptr);
 }
 
 void dSndPlayerMgr_c::enterSystemMenu() {
@@ -230,10 +290,18 @@ void dSndPlayerMgr_c::leaveMsgWait() {
     dSndStateMgr_c::GetInstance()->onMsgWaitEnd();
 }
 
+void dSndPlayerMgr_c::setupRmtSpeaker(s32 channel) {
+    EGG::AudioRmtSpeakerMgr::setup(channel, nullptr);
+}
+
+void dSndPlayerMgr_c::shutdownRmtSpeaker(s32 channel) {
+    EGG::AudioRmtSpeakerMgr::shutdown(channel, nullptr);
+}
+
 nw4r::snd::SoundStartable::StartResult dSndPlayerMgr_c::startSound(
     nw4r::snd::SoundHandle *pHandle, u32 soundId, const nw4r::snd::SoundStartable::StartInfo *pStartInfo
 ) {
-    if (checkFlag(MGR_UNK_0x2)) {
+    if (checkFlag(MGR_SHUTDOWN_RESET)) {
         return nw4r::snd::SoundStartable::START_ERR_USER;
     }
 
