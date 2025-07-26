@@ -580,7 +580,7 @@ config.libs = [
             Object(NonMatching, "d/tg/d_t_vr_box.cpp"),
             Object(Matching, "d/d_sc_title.cpp"),
             Object(NonMatching, "d/d_sc_game.cpp"),
-            Object(NonMatching, "d/d_cs_base.cpp"),
+            Object(Matching, "d/d_cs_base.cpp"),
             Object(NonMatching, "d/d_cs_game.cpp"),
             Object(NonMatching, "d/a/d_a_player.cpp"),
             Object(NonMatching, "d/a/d_a_item.cpp"),

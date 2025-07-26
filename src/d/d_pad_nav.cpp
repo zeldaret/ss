@@ -12,7 +12,7 @@ static bool sDisableAutoReturnToPointerNav = false;
 
 bool sIsPointerVisible = true;
 bool sPrevIsPointerVisible = true;
-bool sUnkCursorRelated = true;
+bool sIsCursorStickVisible = true;
 
 s32 sFSStickDirection;
 s32 sFSStickNavDirection;
@@ -33,7 +33,7 @@ void init() {
     sFSStickNavActiveTimer = 0;
     sFSStickDirectionStableTimer = 0;
     sMPLSNavGestureTimer = 0;
-    offUnkCursorRelated();
+    setCursorStickInvisible();
 }
 
 void calc() {
@@ -129,10 +129,10 @@ void setNavEnabled(bool navEnabled, bool disableAutoReturnToPointerNav) {
     sIsNavEnabled = navEnabled;
     sIsPointerVisible = true;
     if (navEnabled) {
-        onUnkCursorRelated();
+        setCursorStickVisible();
         sDisableAutoReturnToPointerNav = disableAutoReturnToPointerNav;
     } else {
-        offUnkCursorRelated();
+        setCursorStickInvisible();
         sDisableAutoReturnToPointerNav = false;
     }
 }
@@ -197,12 +197,12 @@ void hidePointer() {
     sIsPointerVisible = false;
 }
 
-void offUnkCursorRelated() {
-    sUnkCursorRelated = false;
+void setCursorStickInvisible() {
+    sIsCursorStickVisible = false;
 }
 
-void onUnkCursorRelated() {
-    sUnkCursorRelated = true;
+void setCursorStickVisible() {
+    sIsCursorStickVisible = true;
 }
 
 void checkForNavLeftGesture() {

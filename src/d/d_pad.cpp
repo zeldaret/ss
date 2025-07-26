@@ -270,9 +270,7 @@ void beginPad_BR() {
             ex.mDpdPos = ex.field_0x5C;
         } else {
             if (mPad::getCore(0)->getDpdValidFlag() > 0) {
-                // TODO - ctor regswap
-                ex.mDpdPos = mPad::getCore(0)->getDpdRawPos();
-                // ex.mDpdPos.set(v.x, v.y);
+                ex.mDpdPos = mPad::getDpdRawPos(0);
             } else {
                 ex.mDpdPos.set(-2.f, -2.f);
             }
@@ -502,8 +500,7 @@ void ex_c::centerCursor(s32 chan, bool b) {
 }
 
 void ex_c::fn_80056790(s32 chan) {
-    // unused - TODO ctor regswap
-    mVec2_c dpdRawPos = mPad::getCore(chan)->getDpdRawPos();
+    mVec2_c dpdRawPos = mPad::getDpdRawPos(chan);
 
     f32 f;
     if (dScGame_c::GetInstance() != nullptr && dLytMap_c::GetInstance() != nullptr &&

@@ -254,10 +254,6 @@ public:
         p->z = z;
     }
 
-    s16 ang() const {
-        return cM::atan2s(x * x, z * z);
-    }
-
     f32 inprodXZ(const mVec3_c &other) const {
         return x * other.x + z * other.z;
     }
@@ -314,6 +310,10 @@ public:
 
     mVec2_c operator+(const mVec2_c &v) const {
         return mVec2_c(x + v.x, y + v.y);
+    }
+
+    mVec2_c operator-(const mVec2_c &v) const {
+        return mVec2_c(x - v.x, y - v.y);
     }
 };
 

@@ -189,6 +189,10 @@ public:
         return mMPLSVelocity;
     }
 
+    const mVec2_c& getDpdPosScreen() const {
+        return mDpdPosScreen;
+    }
+
     enum ExState_e {
         EX_STATE_WAITING_FOR_CONNECT = 0,
         EX_STATE_POST_CONNECT = 1,

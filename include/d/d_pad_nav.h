@@ -29,7 +29,7 @@ extern bool sIsMplsNavRightGesture;
 
 extern bool sIsPointerVisible;
 extern bool sPrevIsPointerVisible;
-extern bool sUnkCursorRelated;
+extern bool sIsCursorStickVisible;
 
 extern s32 sFSStickDirection;
 extern s32 sFSStickNavDirection;
@@ -38,6 +38,9 @@ inline bool isPointerVisible() {
     return sIsPointerVisible;
 }
 
+inline bool isCursorStickVisible() {
+    return sIsCursorStickVisible;
+}
 
 void init();
 void calc();
@@ -50,8 +53,8 @@ s32 getFSStickDirectionTrig();
 void stopFSStickNav();
 void hidePointer();
 
-void offUnkCursorRelated();
-void onUnkCursorRelated();
+void setCursorStickInvisible();
+void setCursorStickVisible();
 
 // Not sure what this does. Related to Deposit
 // and Seeker Stone scrolling
