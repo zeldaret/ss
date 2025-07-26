@@ -7,6 +7,7 @@
 #include "d/d_cs_game.h"
 #include "d/d_gfx.h"
 #include "d/d_hbm.h"
+#include "d/d_pad_nav.h"
 #include "d/d_pause.h"
 #include "d/d_reset.h"
 #include "d/d_sc_game.h"
@@ -134,7 +135,6 @@ void convertDpdPosToScreenPos(mVec2_c &in, mVec2_c &out) {
     out.y = dGfx_c::getCurrentScreenHeightF() * -0.5f * (1.f + in.y) + dGfx_c::getCurrentScreenTopF();
 }
 
-extern "C" void fn_801940C0();
 void beginPad_BR() {
     mPad::beginPad();
 
@@ -291,7 +291,7 @@ void beginPad_BR() {
             core->getCoreStatus()->release &= EGG::cCORE_BUTTON_HOME;
         }
     }
-    fn_801940C0();
+    dPadNav::calc();
 }
 
 void endPad_BR() {

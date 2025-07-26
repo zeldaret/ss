@@ -6,6 +6,7 @@
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_gfx.h"
 #include "d/d_pad.h"
+#include "d/d_pad_nav.h"
 #include "d/d_stage_mgr.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
@@ -21,10 +22,9 @@ dCsMgr_c::dCsMgr_c() {
     sInstance = this;
 }
 
-extern "C" bool lbl_80572D10;
 void dCsMgr_c::execute() {
     // NONMATCHING - TList
-    if (field_0x18 == 0 && lbl_80572D10 == 0) {
+    if (field_0x18 == 0 && !dPadNav::isPointerVisible()) {
         for (CursorList::Iterator it = mList1.GetBeginIter(); it != mList1.GetEndIter(); ++it) {
             it->mpHit = nullptr;
         }

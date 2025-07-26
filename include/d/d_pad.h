@@ -177,6 +177,18 @@ public:
         return m_current_ex;
     }
 
+    bool getFSStickTrig(u32 mask) const {
+        return mFSStickMaskChanged && mFSStickMask == mask;
+    }
+
+    bool getFSStickTrig() const {
+        return mFSStickMaskChanged && (mFSStickMask & 0xFF) != 0;
+    }
+
+    const mVec3_c& getMPLSVelocity() const {
+        return mMPLSVelocity;
+    }
+
     enum ExState_e {
         EX_STATE_WAITING_FOR_CONNECT = 0,
         EX_STATE_POST_CONNECT = 1,
