@@ -21,6 +21,9 @@ public:
     static void create(EGG::Heap *heap);
     void init();
 
+    void fn_800529B0();
+    void fn_800529E0();
+    void fn_80052A20();
     void fn_80052D00(bool);
     void fn_80052D50();
     void fn_80052C90();
@@ -30,7 +33,7 @@ public:
         return field_0x24;
     }
 
-    u8 getField_0x28() const {
+    bool getField_0x28() const {
         return field_0x28;
     }
 
@@ -53,7 +56,7 @@ private:
     /* 0x1C */ s32 field_0x1C;
     /* 0x20 */ s32 field_0x20;
     /* 0x24 */ s32 field_0x24;
-    /* 0x28 */ u8 field_0x28;
+    /* 0x28 */ bool field_0x28;
     /* 0x29 */ u8 field_0x29;
     /* 0x2A */ u8 field_0x2A;
     /* 0x2B */ u8 field_0x2B;

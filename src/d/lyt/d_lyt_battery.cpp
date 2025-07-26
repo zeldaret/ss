@@ -1,6 +1,7 @@
 #include "d/lyt/d_lyt_battery.h"
 
 #include "d/d_d2d.h"
+#include "d/d_pad.h"
 #include "egg/core/eggController.h"
 #include "m/m_pad.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
@@ -85,11 +86,8 @@ bool dLytBattery_c::dismissManually() {
     return true;
 }
 
-extern "C" bool isLowBattery1();
-extern "C" bool isLowBattery2();
-
 bool dLytBattery_c::hasEnoughBatteryCharge() {
-    if (!mPad::g_currentCore->mFlag.offBit(0) && (isLowBattery2() || isLowBattery1())) {
+    if (mPad::getCore()->isConnected() && (dPad::ex_c::isLowBattery() || dPad::ex_c::isOutOfBattery())) {
         return false;
     }
     return true;

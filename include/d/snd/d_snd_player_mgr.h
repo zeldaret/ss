@@ -23,6 +23,9 @@ public:
 public:
     dSndPlayerMgr_c();
 
+    void setup(s32 channel);
+    void shutdown(s32 channel);
+
     void shutdown();
     void calc();
 
@@ -35,6 +38,13 @@ public:
 
     void enterHbm();
     void leaveHbm();
+
+    void fn_8035E1B0(u16);
+    bool fn_8035E220();
+    void fn_8035E250(u16);
+    bool fn_8035E2E0();
+    void fn_8035E310();
+    void fn_8035E6E0();
 
     u32 getFreeSize();
     bool loadDemoArchive(const char *demoArchiveName);

@@ -31,8 +31,10 @@ class ScGameScreenTargeting : public ScGameScreen {
 public:
     ScGameScreenTargeting(u8 priority) : ScGameScreen(priority), mLetterboxAmount(0.0f) {}
 
+    f32 fn_801BBEC0() const;
+
 private:
-    f32 mLetterboxAmount;
+    /* 0x98 */ f32 mLetterboxAmount;
 };
 
 struct SpawnInfo {
@@ -200,6 +202,10 @@ public:
         return mFader.isSettled();
     }
 
+    f32 targetingScreenFn_801BBEC0() const {
+        return mScreen1.fn_801BBEC0();
+    }
+
 protected:
     static u32 sUpdateFrameCount;
     static u8 sCurrentLayer;
@@ -252,7 +258,7 @@ protected:
     /* 0x0C4 */ LayoutArcControl mLayoutCtrl;
     /* 0x0D0 */ dFader_c mFader;
 
-    /* 0x0F8 */ ScGameScreenTargeting mScreen1;
+    /* 0x0F4 */ ScGameScreenTargeting mScreen1;
     /* 0x194 */ ScGameScreen mScreen2;
     /* 0x228 */ UNKWORD field_0x228;
     /* 0x22C */ u8 _0x22C[0x230 - 0x22C];

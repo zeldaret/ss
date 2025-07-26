@@ -439,7 +439,7 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
                     dLytControlGame_c::getInstance()->somehowRelatedToEnteringLightPillars(val, p3, p2);
                 }
             } else {
-                dLytMap_c::getInstance()->lightPillarRelated(val, p3, p2);
+                dLytMap_c::GetInstance()->lightPillarRelated(val, p3, p2);
             }
             dMessage_c::getInstance()->storeLightPillarRelatedArg(p4);
             break;

@@ -5,6 +5,9 @@
 #include "d/a/d_a_item.h"
 #include "d/col/c/c_bg_s_poly_info.h"
 #include "d/d_player_mdl.h"
+#include "m/m_angle.h"
+#include "m/m_color.h"
+#include "nw4r/g3d/res/g3d_resfile.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/minigame_mgr.h"
 
@@ -29,8 +32,31 @@ public:
     /* vt 0x318 */ virtual void vt_0x318();
 
 protected:
-    /* 0x137C */ u8 _0x137C[0x4564 - 0x137C];
+    /* 0x137C */ u8 _0x137C[0x16F0 - 0x137C];
+    /* 0x16F0 */ nw4r::g3d::ResFile mHeldResFile;
+    /* 0x16F4 */ u8 _0x16F4[0x4564 - 0x16F4];
     /* 0x4564 */ f32 field_0x4564;
+
+public:
+    // Beetle Functions [0x8021AA70 - 0x8021BE20]
+    s16 getBeetleFlightTime();
+    mAng getBeetleAngle0();
+    mAng getBeetleAngle1();
+    f32 getBeetleWingAngleActive();
+    f32 getBeetleWingAngleInactive();
+    f32 getBeetleNormalSpeed();
+    f32 getBeetleQuickSpeed();
+    f32 getBeetleMaxRange();
+    f32 getBeetleLargeRadius();
+    f32 getBeetleSmallRadius();
+    f32 getBeetleMaxHeightOffset();
+    mAng getBeetleSmallAngle0();
+    mAng getBeetleSmallAngle1();
+    mAng getBeetleBonkRecoilAngle();
+    mAng getBeetleSmallAngle2();
+    void setBeetleFlashClr(const mColor &);
+    void setBeetleBackAnim();
+    s32 getBeetleWarningTimeLeft();
 
 public:
     f32 getField_0x4564() const {
@@ -43,6 +69,9 @@ public:
 
     nw4r::g3d::ResFile getSwordResFile() const {
         return mSwordRes;
+    }
+    nw4r::g3d::ResFile getHeldResFile() const {
+        return mHeldResFile;
     }
 
     inline bool hasvt_0x1C0() const {
@@ -73,6 +102,9 @@ public:
     static s32 getCurrentBowType();
     static s32 getCurrentSlingshotType();
     static s32 getCurrentBeetleType();
+    static bool hasBeetleVariantOrBetter(s32 variant) {
+        return getCurrentBeetleType() >= variant;
+    }
     static s32 getCurrentBugNetType();
 
     static bool isInBambooCuttingMinigame() {

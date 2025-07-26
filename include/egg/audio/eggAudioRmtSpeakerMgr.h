@@ -2,8 +2,8 @@
 #define EGG_AUDIO_REMOTE_SPEAKER_MANAGER_H
 
 #include "common.h"
-#include "rvl/WPAD.h" // IWYU pragma: export
 
+#include "rvl/WPAD.h" // IWYU pragma: export
 
 namespace EGG {
 
@@ -19,8 +19,8 @@ class AudioRmtSpeakerMgr {
 public:
     static void calc();
 
-    static void fn_804B6D80(s32 i, WPADCallback *pCallback);
-    static void fn_804B6DE0(s32 i, WPADCallback *pCallback);
+    static void setup(s32 i, WPADCallback *pCallback);
+    static void shutdown(s32 i, WPADCallback *pCallback);
 
     static void connectAllByForce();
     static void disconnectAllByForce();

@@ -3,13 +3,13 @@
 #include "d/d_textwindow_unk.h"
 
 #include "common.h"
+#include "d/d_gfx.h"
 #include "d/d_message.h"
 #include "d/d_tag_processor.h"
 #include "d/d_lyt_hio.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
 #include "m/m_vec.h"
-#include "toBeSorted/lyt_related_floats.h"
 #include "toBeSorted/other_sound_stuff.h"
 
 TextWindowUnk::TextWindowUnk(dTagProcessor_c *c) {
@@ -89,7 +89,7 @@ void MsgWindowBlurRelated::drawTextBlur(dLytTextLight *thing, mVec2_c size, u8 a
             } else {
                 mData[i].displayTimerMaybe = t;
             }
-            mVec3_c v((size.x + mData[i].posX) / get_805751A4(), size.y + mData[i].posY, 0.0f);
+            mVec3_c v((size.x + mData[i].posX) / dGfx_c::get16x9to4x3WidthScaleF(), size.y + mData[i].posY, 0.0f);
             thing->draw(mData[i].displayTimerMaybe, v, alpha, mData[i].field_0x08);
         }
     }

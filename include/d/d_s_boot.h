@@ -24,6 +24,25 @@ public:
         return sInstance;
     }
 
+    u8 getField_0x5E2() const {
+        return field_0x5E2;
+    }
+    void setField_0x5E2(u8 val) {
+        field_0x5E2 = val;
+    }
+    u8 getField_0x5E3() const {
+        return field_0x5E3;
+    }
+    void setField_0x5E3(u8 val) {
+        field_0x5E3 = val;
+    }
+    u8 getField_0x5E4() const {
+        return field_0x5E4;
+    }
+    void setField_0x5E4(u8 val) {
+        field_0x5E4 = val;
+    }
+
 private:
     static dScBoot_c *sInstance;
     class strap_c {

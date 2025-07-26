@@ -4,6 +4,8 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
 #include "d/col/cc/d_cc_s.h"
+#include "d/d_gfx.h"
+#include "d/d_pad.h"
 #include "d/d_stage_mgr.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
@@ -11,9 +13,7 @@
 #include "nw4r/lyt/lyt_bounding.h"
 #include "nw4r/lyt/lyt_pane.h"
 #include "nw4r/ut/ut_RuntimeTypeInfo.h"
-#include "rvl/MTX/mtx.h"
 #include "toBeSorted/d_d3d.h"
-#include "toBeSorted/lyt_related_floats.h"
 
 dCsMgr_c::dCsMgr_c() {
     // NONMATCHING - TList ctor issues
@@ -117,19 +117,24 @@ bool dCursorHitCheck_c::checkOverrideCallback(bool b) {
 
 bool dCursorHitCheckCC_c::checkHit(s32 x, s32 y) {
     // NONMATCHING - TODO
-    mVec3_c pos(x, y, 10000.0f);
-    pos.x = (pos.x - get_8057515C()) / get_80575148() * -2.0f - 1.0f;
-    pos.y = (pos.y - get_8057519C()) / get_80575190() * 2.0f - 1.0f;
+
+    mVec3_c pos(
+        (x - dGfx_c::getWidth4x3LeftF()) / dGfx_c::getWidth4x3F() * 2.f - 1.f,
+        (y - dGfx_c::getCurrentScreenTopF()) / dGfx_c::getCurrentScreenHeightF() * -2.f - 1.f, 10000.f
+    );
+
     mVec3_c v;
     d3d::fn_80016B60(v, pos);
+
     nw4r::g3d::Camera cam = dStageMgr_c::GetInstance()->getCamera(0);
+
     mMtx_c mtx;
-    cam.GetCameraMtx(mtx);
-    PSMTXInverse(mtx, mtx);
     mVec3_c a;
-    a.x = mtx.m[0][3];
-    a.y = mtx.m[1][3];
-    a.z = mtx.m[2][3];
+
+    cam.GetCameraMtx(mtx);
+    mtx.inverse();
+    mtx.getTranslation(a);
+
     dBgS_LinChk ck;
     ck.Set(&a, &v, nullptr);
     dBgS::GetInstance()->LineCross(&ck);
@@ -254,6 +259,5 @@ void dCursorHitCheckLyt_c::gatherBoundings(dCsCheckLyt_BoundingData **pEnd, nw4r
 }
 
 mVec2_c &dCursorInterface_c::getCursorPos() {
-    // NONMATCHING - Controller stuff
-    return *(mVec2_c *)nullptr;
+    return dPad::ex_c::getInstance()->mDpdPosScreen;
 }

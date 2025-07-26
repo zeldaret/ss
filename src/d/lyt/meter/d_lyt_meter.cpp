@@ -993,7 +993,7 @@ bool dLytMeterMain_c::remove() {
 void dLytMeterMain_c::fn_800D5290() {
     dLytMeter_c *meter = dLytMeter_c::GetInstance();
 
-    if (dLytMap_c::getInstance() != nullptr && !dLytMap_c::getInstance()->unkMeterCheck()) {
+    if (dLytMap_c::GetInstance() != nullptr && !dLytMap_c::GetInstance()->unkMeterCheck()) {
         meter->setFlags(METER_BTN_PLUS);
     }
 
@@ -1090,7 +1090,7 @@ bool dLytMeterMain_c::fn_800D56B0() {
         return true;
     }
 
-    if (dLytMap_c::getInstance() != nullptr && !dLytMap_c::getInstance()->getFn_80139EA0()) {
+    if (dLytMap_c::GetInstance() != nullptr && !dLytMap_c::GetInstance()->getFn_80139EA0()) {
         return true;
     }
 

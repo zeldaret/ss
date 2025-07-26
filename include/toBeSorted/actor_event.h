@@ -16,6 +16,7 @@ public:
     u32 getCurrentEventCommand() const;
     void advanceNext();
     bool isAdvance();
+    int getSomeEventRelatedNumber();
 
     int getSingleIntData(int *result, u32 code, u32);
     int getSingleFloatData(f32 *result, u32 code, u32);

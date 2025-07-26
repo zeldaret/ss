@@ -342,7 +342,9 @@ public:
     u8 getField_0xA843() const {
         return mIsFileInvalid[1];
     }
-
+    u8 getField_0xA84D() const {
+        return m_0xA84D;
+    }
 
     void setField0xA84C(u8 val) {
         m_0xA84C = val;

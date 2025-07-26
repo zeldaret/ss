@@ -216,7 +216,7 @@ public:
         return x != v.x || y != v.y || z != v.z;
     }
 
-    void normalize();
+    f32 normalize();
     bool normalizeRS();
 
     static mVec3_c createProjectionXZ(const mAng3_c &ang, f32 scalar);
@@ -243,7 +243,9 @@ public:
     void rotY(const mAng &angle);
     void rotZ(const mAng &angle);
 
-    void CopyTo(nw4r::math::VEC3 *p) const {
+    void fromXY(const mAng &angleX, const mAng &angleY, f32);
+
+    void CopyTo(Vec *p) const {
         p->x = x;
         p->y = y;
         p->z = z;
@@ -269,6 +271,10 @@ public:
         return cM::atan2s(-y, absXZ());
     }
 
+    f32 angle(const mVec3_c &other) const {
+        return EGG::Vector3f::angle(other);
+    }
+
     static mVec3_c Zero;
     static mVec3_c Ex;
     static mVec3_c Ey;
@@ -280,12 +286,31 @@ public:
     mVec2_c() {}
     ~mVec2_c() {}
 
+    /// @brief Assignment operator
+    mVec2_c &operator=(const mVec2_c &r) {
+        set(r.x, r.y);
+        return *this;
+    }
+
     mVec2_c(const mVec2_c &other) {
         set(other.x, other.y);
     }
-
+    mVec2_c(const EGG::Vector2f &other) {
+        set(other.x, other.y);
+    }
     mVec2_c(f32 fx, f32 fy) {
         set(fx, fy);
+    }
+    s16 ang() const {
+        return cM::atan2s(x, y);
+    }
+
+    mVec2_c operator*(f32 f) const {
+        return mVec2_c(x * f, y * f);
+    }
+
+    mVec2_c operator+(const mVec2_c &v) const {
+        return mVec2_c(x + v.x, y + v.y);
     }
 };
 

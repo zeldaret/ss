@@ -163,6 +163,10 @@ int dCsGame_c::doDelete() {
     return SUCCEEDED;
 }
 
+bool dCsGame_c::fn_801BF5E0() const {
+    return mCursor.isCursorActive() & !fn_801BF630();
+}
+
 void dCsGame_c::setNextCursorType(lytItemCursor_c::CursorType_e cs) {
     mCursor.setNextCursorType(cs);
 }
@@ -176,7 +180,7 @@ void dCsGame_c::lytItemCursor_c::initializeState_Bow() {
     mBow.select();
 }
 void dCsGame_c::lytItemCursor_c::executeState_Bow() {
-    field_0x990 = 1;
+    mCursorTrail = 1;
     mBow.execute();
 }
 void dCsGame_c::lytItemCursor_c::finalizeState_Bow() {}
@@ -193,14 +197,14 @@ void dCsGame_c::lytItemCursor_c::initializeState_Vacuum() {
     mVacuum.enter();
 }
 void dCsGame_c::lytItemCursor_c::executeState_Vacuum() {
-    field_0x99C = 1;
+    mCursorTrail = 1;
     mVacuum.execute();
 }
 void dCsGame_c::lytItemCursor_c::finalizeState_Vacuum() {}
 
 void dCsGame_c::lytItemCursor_c::initializeState_Pachinko() {}
 void dCsGame_c::lytItemCursor_c::executeState_Pachinko() {
-    field_0x99C = 1;
+    mCursorTrail = 1;
     mPachinko.execute();
 }
 void dCsGame_c::lytItemCursor_c::finalizeState_Pachinko() {}
@@ -209,7 +213,7 @@ void dCsGame_c::lytItemCursor_c::initializeState_HookShot() {
     mCrawShot.enter();
 }
 void dCsGame_c::lytItemCursor_c::executeState_HookShot() {
-    field_0x99C = 1;
+    mCursorTrail = 1;
     mCrawShot.execute();
 }
 void dCsGame_c::lytItemCursor_c::finalizeState_HookShot() {}

@@ -7,6 +7,7 @@
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/snd/d_snd_source_enums.h"
 #include "d/snd/d_snd_wzsound.h"
+#include "egg/audio/eggAudioRmtSpeakerMgr.h"
 #include "egg/core/eggDvdRipper.h"
 #include "nw4r/snd/snd_SoundHandle.h"
 #include "nw4r/snd/snd_SoundStartable.h"
@@ -72,6 +73,14 @@ void dSndPlayerMgr_c::leaveHelp() {
     dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_HELP_OUT);
 }
 
+void dSndPlayerMgr_c::setup(s32 channel) {
+    EGG::AudioRmtSpeakerMgr::setup(channel, nullptr);
+}
+
+void dSndPlayerMgr_c::shutdown(s32 channel) {
+    EGG::AudioRmtSpeakerMgr::shutdown(channel, nullptr);
+}
+
 nw4r::snd::SoundStartable::StartResult dSndPlayerMgr_c::startSound(
     nw4r::snd::SoundHandle *pHandle, u32 soundId, const nw4r::snd::SoundStartable::StartInfo *pStartInfo
 ) {
@@ -118,10 +127,8 @@ bool dSndPlayerMgr_c::canUseThisPlayer(u8 sourceType) const {
     switch (sourceType) {
         case SND_SOURCE_PLAYER:
         case SND_SOURCE_PLAYER_HEAD:
-        case SND_SOURCE_58:
-            return true;
-        default:
-            return false;
+        case SND_SOURCE_58:          return true;
+        default:                     return false;
     }
 }
 

@@ -4,8 +4,8 @@
 #include "common.h"
 #include "egg/core/eggFader.h"
 #include "egg/prim/eggBitFlag.h"
-#include "nw4r/ut.h"
 
+#include "nw4r/ut.h"
 
 namespace EGG {
 
@@ -20,7 +20,7 @@ public:
     /* vt 0x14 */ virtual bool fadeOut();
     /* vt 0x18 */ virtual bool calc();
     /* vt 0x1C */ virtual void draw();
-    /* vt 0x1C */ virtual ~ColorFader() {}
+    /* vt 0x20 */ virtual ~ColorFader() {}
 
 public:
     /* 0x04 */ EStatus mStatus;

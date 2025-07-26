@@ -1,10 +1,10 @@
 #include "d/d_rumble.h"
 
 #include "common.h"
+#include "d/d_reset.h"
 #include "d/d_sc_game.h"
 #include "d/lyt/d_lyt_control_game.h"
 #include "m/m_pad.h"
-#include "toBeSorted/reload_color_fader.h"
 
 dRumbleEntry_c dRumble_c::sRumblePreset0(8, 0b11000000000000000000000000000000, 2.f);
 dRumbleEntry_c dRumble_c::sRumblePreset1(9, 0b11010000000000000000000000000000, 4.f);
@@ -44,7 +44,7 @@ void dRumble_c::execute() {
     }
 
     // I am guessing on any reload screen or homebutton menu?
-    if (ReloadColorFader::GetInstance()->is1Or5()) {
+    if (dReset::Manage_c::GetInstance()->isSoftResetOrSafetyWait()) {
         mPad::g_core[0]->stopRumbleMgr();
         mPad::g_core[1]->stopRumbleMgr();
         return;

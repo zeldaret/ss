@@ -233,11 +233,18 @@ d/d_main.cpp:
 	.sbss       start:0x805751D0 end:0x805751E0
 
 d/d_pad.cpp:
-	.text       start:0x80055170 end:0x80059CE0 align:16
+	.text       start:0x80055170 end:0x8005961C align:16
 	.ctors      start:0x804DB684 end:0x804DB688
+	.sdata      start:0x80571C60 end:0x80571C68
+	.sbss       start:0x805751E0 end:0x805751E8
+	.sdata2     start:0x80576F60 end:0x80577008
+	.bss        start:0x80597A70 end:0x805A06B0
 
-d/d_pad_player.cpp:
-	.text       start:0x80059CE0 end:0x8005B6E0 align:16
+d/d_pad_ex.cpp:
+	.text       start:0x80059620 end:0x80059CE0 align:16
+
+d/d_pause_manager.cpp:
+	.text       start:0x80059CE0 end:0x8005B6D4 align:16
 
 d/d_player_act.cpp:
 	.text       start:0x8005B6E0 end:0x8005CE8C align:16
@@ -330,10 +337,14 @@ toBeSorted/area_math.cpp:
 toBeSorted/deg_angle_util.cpp:
 	.text       start:0x80067280 end:0x80067B14 align:16
 
-toBeSorted/reload_color_fader.cpp:
+d/d_reset.cpp:
 	.text       start:0x80067B20 end:0x80068FD0 align:16
 	.ctors      start:0x804DB6A4 end:0x804DB6A8
+	.rodata     start:0x804E0F18 end:0x804E0FA8
+	.data       start:0x8050DFB0 end:0x8050DFE0
+	.sdata      start:0x80571D20 end:0x80571D30
 	.sbss       start:0x80575270 end:0x80575278
+	.sdata2     start:0x805779E8 end:0x805779F8
 
 toBeSorted/arc_managers/current_stage_arc_manager.cpp:
 	.text       start:0x80068FD0 end:0x80069910 align:16
@@ -1264,7 +1275,7 @@ toBeSorted/misc_actor.cpp:
 	.sbss       start:0x805756B0 end:0x805756F0
 	.bss        start:0x805B2438 end:0x805B24C0
 
-toBeSorted/d_hbm:
+d/d_hbm.cpp:
 	.text       start:0x80196650 end:0x801975B8 align:16
 	.rodata     start:0x804EA810 end:0x804EA868
 	.data       start:0x8052B678 end:0x8052B708
@@ -1406,7 +1417,10 @@ d/a/obj/d_a_obj_boomerang.cpp:
 	.ctors      start:0x804DB834 end:0x804DB838
 	.rodata     start:0x804ED380 end:0x804ED3B0
 	.data       start:0x80534AD0 end:0x80534E78
+	.sdata      start:0x805739D8 end:0x80573A30
 	.sbss       start:0x80575900 end:0x80575908
+	.sdata2     start:0x8057C0F8 end:0x8057C180
+	.bss        start:0x805B4BF0 end:0x805B4DD8
 
 d/a/obj/d_a_obj_fairy.cpp:
 	.text       start:0x80265620 end:0x80268598 align:16
