@@ -37,7 +37,6 @@
 #include "toBeSorted/event_manager.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 
-
 void float_ordering() {
     f32 f[] = {15.f, .4f, .4f, 5.f};
 }
@@ -759,7 +758,7 @@ void dAcOtubo_c::adjustSpeed() {
     cM3dGPla pla;
     dBgS::GetInstance()->GetTriPla(mObjAcch.mGnd, &pla);
     f32 step = 0.4f;
-    mAng gndAngle = mAng::angle(mVec3_c::Ey, pla.GetN());
+    mAng gndAngle = mAng::fromRad(mVec3_c::Ey.angle(pla.GetN()));
     step *= gndAngle.cos();
 
     if (gndAngle < mAng::deg2short(5) ||
@@ -779,7 +778,7 @@ void dAcOtubo_c::adjustSpeed() {
 bool dAcOtubo_c::checkSlope() {
     cM3dGPla pla;
     dBgS::GetInstance()->GetTriPla(mObjAcch.mGnd, &pla);
-    mAng gndAngle = mAng::angle(mVec3_c::Ey, pla.GetN());
+    mAng gndAngle = mAng::fromRad(mVec3_c::Ey.angle(pla.GetN()));
 
     return sLib::absDiff(gndAngle, 0) > mAng::deg2short(5);
 }

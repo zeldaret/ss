@@ -327,7 +327,7 @@ void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
         return;
     }
 
-    if (mBtnHelper.field_0x50 >= 0 && dPad::checkButtonAPressed()) {
+    if (mBtnHelper.field_0x50 >= 0 && dPad::getDownTrigA()) {
         field_0x9D0 = 0;
         field_0x9B0 = mBtnHelper.field_0x50;
         mStateMgr.changeState(StateID_WaitDecide);
@@ -338,7 +338,7 @@ void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
         }
         dSndPlayerMgr_c::GetInstance()->leaveMsgWait();
-    } else if (dPad::checkButtonBPressed()) {
+    } else if (dPad::getDownTrigB()) {
         f32 f = mBtnHelper.fn_8011D690(field_0x9BC);
         // TODO
         field_0x9CC = field_0x9BC;

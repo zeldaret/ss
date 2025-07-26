@@ -126,9 +126,14 @@ public:
     virtual int create() override;
     virtual int doDelete() override;
 
+    static dCsGame_c *GetInstance() {
+        return sInstance;
+    }
+
     void setSomething(int);
 
-    static dCsGame_c *sInstance;
+    bool fn_801BF5E0() const;
+    bool fn_801BF630() const;
 
     /// @brief Item cursor.
     class lytItemCursor_c {
@@ -168,6 +173,7 @@ public:
             /* 0x4C */ d2d::LytBase_c *mpLyt;
             /* 0x50 */ f32 field_0x50;
             /* 0x54 */ f32 field_0x54;
+            /* 0x58 */ u8 field_0x58[0x68 - 0x58]; // idk
         };
 
         /// @brief Dowsing cursor.
@@ -197,6 +203,7 @@ public:
             /* 0xB8 */ f32 field_0xB8;
             /* 0xBC */ f32 field_0xBC;
             /* 0xC0 */ f32 field_0xC0;
+            /* 0xC4 */ u8 field_0xC4[0xD8 - 0xC4];
         };
 
         /// @brief Slingshot cursor.
@@ -254,6 +261,7 @@ public:
             /* 0x04 */ UI_STATE_MGR_DECLARE(lytCrawShotCsr_c);
             /* 0x40 */ d2d::AnmGroups mAnm;
             /* 0x4C */ d2d::LytBase_c *mpLyt;
+            /* 0x50 */ u8 field_0x50[0x6C - 0x50];
         };
 
         /// @brief Gust Bellows cursor.
@@ -277,6 +285,7 @@ public:
             /* 0x04 */ UI_STATE_MGR_DECLARE(lytVacuumCsr_c);
             /* 0x40 */ d2d::AnmGroups mAnm;
             /* 0x4C */ d2d::LytBase_c *mpLyt;
+            /* 0x50 */ u8 field_0x50[0x5C - 0x50];
             /* 0x5C */ u8 field_0x5C;
         };
 
@@ -301,12 +310,15 @@ public:
             mpResAcc = resAcc;
         }
 
+        bool isCursorActive() const {
+            return mCursorActive;
+        }
         void setField0x9A0(u8 val) {
-            field_0x9A0 = val;
+            mCursorActive = val;
         }
 
         void setNextCursorType(CursorType_e cs) {
-            field_0x9A8 = 1;
+            mNextCursor = 1;
             mNextCursorType = cs;
         }
 
@@ -327,6 +339,7 @@ public:
 
         /* 0x048 */ EffectsStruct mEffects;
         /* 0x07C */ EffectRelated mEffectRelated;
+        /* 0x080 */ u8 field_0x80[0xC8 - 0x80];
         /* 0x0C8 */ m2d::ResAccIf_c *mpResAcc;
         /* 0x0CC */ d2d::LytBase_c mLyt;
         /* 0x15C */ dCsGameAnmGroups_c mAnmGroups;
@@ -334,16 +347,22 @@ public:
         /* 0x72C */ lytBowCsr_c mBow;
         /* 0x794 */ lytDowsingCsr_c mDowsing;
         /* 0x86C */ lytPachinkoCsr_c mPachinko;
-        /* 0x8C0 */ lytCrawShotCsr_c mCrawShot;
+        /* 0x8C8 */ lytCrawShotCsr_c mCrawShot;
         /* 0x934 */ lytVacuumCsr_c mVacuum;
-        /* 0x990 */ u8 field_0x990;
-        /* 0x99C */ u8 field_0x99C;
-        /* 0x9A0 */ u8 field_0x9A0;
-        /* 0x9A8 */ u8 field_0x9A8;
+        /* 0x994 */ u8 field_0x994[0x99C - 0x994]; // seemingly not used
+        /* 0x99C */ bool mCursorTrail;
+        /* 0x99D */ u8 field_0x99D[0x9A0 - 0x99D]; // Havent seen this range be set
+        /* 0x9A0 */ bool mCursorActive;
+        /* 0x9A1 */ bool field_0x9A1; // Compares to mCursorActive to change state
+        /* 0x9A2 */ bool field_0x9A2; // A way of signalling Lyt non-normal state.
+        /* 0x9A4 */ CursorType_e mActiveCursorType;
+        /* 0x9A8 */ bool mNextCursor;
         /* 0x9AC */ CursorType_e mNextCursorType;
     };
 
     void setNextCursorType(lytItemCursor_c::CursorType_e);
+
+    static dCsGame_c *sInstance;
 
     /* 0x068 */ m2d::ResAccIf_c mCursorResAcc;
     /* 0x11C */ m2d::ResAccIf_c mMain2DResAcc;

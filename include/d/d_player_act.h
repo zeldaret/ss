@@ -464,6 +464,8 @@ public:
     enum ModelUpdateFlags_e {
         UPDATE_MODEL_SWORD = 0x20,
         UPDATE_MODEL_SHIELD = 0x40,
+
+        UPDATE_MODEL_BEETLE = 0x10000000,
     };
 
     enum SwordAndMoreStates_e {
@@ -584,6 +586,16 @@ public:
         return mCurrentAction == 0xAD || mCurrentAction == 0xAE;
     }
 
+    void onModelUpdateFlag(u32 mask) {
+        mModelUpdateFlags |= mask;
+    }
+    void offModelUpdateFlag(u32 mask) {
+        mModelUpdateFlags &= ~mask;
+    }
+    bool checkModelUpdateFlag(u32 mask) const {
+        return mModelUpdateFlags & mask;
+    }
+
     inline bool checkActionFlags(u32 mask) const {
         return (mActionFlags & mask) != 0;
     }
@@ -597,6 +609,10 @@ public:
 
     inline bool hasvt_0x1C0() const {
         return vt_0x1C0() != nullptr;
+    }
+
+    bool isAttacking() const {
+        return mAttackDirection != ATTACK_NONE;
     }
 
     static bool isInEvent();

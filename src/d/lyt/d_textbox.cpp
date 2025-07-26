@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_font_manager.h"
+#include "d/d_gfx.h"
 #include "d/d_message.h"
 #include "d/d_tag_processor.h"
 #include "d/d_lyt_hio.h"
@@ -20,7 +21,6 @@
 #include "rvl/GX/GXPixel.h"
 #include "rvl/GX/GXTev.h"
 #include "rvl/GX/GXTypes.h"
-#include "toBeSorted/lyt_related_floats.h"
 
 #include <cstring>
 
@@ -442,7 +442,7 @@ f32 dTextBox_c::GetLinesHeight() const {
 }
 
 f32 dTextBox_c::GetUnkWidthRatio() const {
-    return GetLineWidth(nullptr) / get_805751A4();
+    return GetLineWidth(nullptr) / dGfx_c::get16x9to4x3WidthScaleF();
 }
 
 f32 dTextBox_c::resizeTextToFit(f32 maxWidth) {

@@ -26,6 +26,15 @@ public:
 public:
     dSndPlayerMgr_c();
 
+    void fn_8035E1B0(u16);
+    bool fn_8035E220();
+    void fn_8035E250(u16);
+    bool fn_8035E2E0();
+    void fn_8035E310();
+
+    void setup(s32 channel);
+    void shutdown(s32 channel);
+
     void setup();
     void shutdownDemo();
     void calc();

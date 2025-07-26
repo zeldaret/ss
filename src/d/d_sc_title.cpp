@@ -4,6 +4,8 @@
 #include "d/d_dvd_unk.h"
 #include "d/d_heap.h"
 #include "d/d_message.h"
+#include "d/d_pad.h"
+#include "d/d_reset.h"
 #include "d/d_sc_game.h"
 #include "d/d_sys.h"
 #include "d/snd/d_snd_state_mgr.h"
@@ -16,7 +18,6 @@
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/music_mgrs.h"
-#include "toBeSorted/reload_color_fader.h"
 #include "toBeSorted/save_related.h"
 #include "toBeSorted/unk_save_time.h"
 
@@ -67,32 +68,30 @@ dScTitle_c::~dScTitle_c() {
 }
 
 extern "C" u32 TITLE_SCREEN_CHANGE;
-extern "C" void fn_80059450();
-extern "C" void fn_80058C90(s32);
 
 static const char *const sFileSelect = "FileSelect";
 static const char *const sSkb = "SoftwareKeyboard";
 
 int dScTitle_c::create() {
     int ret = dScGame_c::create();
-    if (ret == SUCCEEDED && ReloadColorFader::GetInstance()->field_0x0C == 1) {
+    if (ret == SUCCEEDED && dReset::Manage_c::GetInstance()->isSoftReset()) {
         if (field_0x2AC == 0) {
-            ReloadColorFader::GetInstance()->fn_80067EF0(0);
+            dReset::Manage_c::GetInstance()->FadeOutRequest(false);
             if (checkAllSaveFilesEmpty() != true) {
                 TITLE_SCREEN_CHANGE = 0;
             }
             field_0x2AC = 1;
             ret = NOT_READY;
         } else {
-            ReloadColorFader::GetInstance()->fn_80067EF0(1);
+            dReset::Manage_c::GetInstance()->FadeOutRequest(true);
         }
     }
 
     if (ret == SUCCEEDED) {
         dSys::setFrameRate(2);
         dSys::setClearColor(mColor(0x00000000));
-        fn_80059450();
-        fn_80058C90(0);
+        dPad::ex_c::setAutoSleepTime();
+        dPad::ex_c::fn_80058C90(0);
         SaveRelated::create();
         field_0x2AD = 0;
         LayoutArcManager::GetInstance()->loadLayoutArcFromDisk(sFileSelect, nullptr);
@@ -101,7 +100,7 @@ int dScTitle_c::create() {
         SizedString<128> fntPath;
         fntPath.sprintf("/US/Font/%s/%s", dMessage_c::getLanguageIdentifier(), "normal_02.brfnt");
         mDvd_toMainRam_normal_c::create2(&mpSkbFont, fntPath, 0, dHeap::work2Heap.heap);
-        fn_8035E310(BGM_MGR);
+        dSndPlayerMgr_c::GetInstance()->fn_8035E310();
     }
 
     return ret;

@@ -791,7 +791,7 @@ void dLytMeterItemSelect_c::finalizeState_SelectIn() {
 
 void dLytMeterItemSelect_c::initializeState_Select() {}
 void dLytMeterItemSelect_c::executeState_Select() {
-    if (dLytMeter_c::getCrossIconDown() == 0 && dPad::checkButtonDpadDownPressed()) {
+    if (dLytMeter_c::getCrossIconDown() == 0 && dPad::getDownTrigDown()) {
         if (field_0x5794 != I_INVALID) {
             field_0x5780 = 0.0f;
             mStateMgr.changeState(StateID_SetIn);

@@ -61,7 +61,7 @@ void dSndMgr_c::setup(EGG::Heap *heap, u32 size) {
     dSndDistantSoundActorPool_c::GetInstance()->setup();
     dSndHarpSongMgr_c::GetInstance()->setup();
     dSndSourceMgr_c::GetInstance()->setup();
-    EGG::AudioRmtSpeakerMgr::fn_804B6D80(0, nullptr);
+    EGG::AudioRmtSpeakerMgr::setup(0, nullptr);
     mIsInitialized = true;
 }
 

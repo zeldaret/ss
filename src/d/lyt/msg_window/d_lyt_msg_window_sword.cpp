@@ -1,6 +1,7 @@
 #include "d/lyt/msg_window/d_lyt_msg_window_sword.h"
 
 #include "common.h"
+#include "d/d_gfx.h"
 #include "d/d_tag_processor.h"
 #include "d/d_lyt_hio.h"
 #include "d/lyt/d2d.h"
@@ -11,7 +12,6 @@
 #include "nw4r/lyt/lyt_types.h"
 #include "nw4r/math/math_types.h"
 #include "s/s_State.hpp"
-#include "toBeSorted/lyt_related_floats.h"
 
 STATE_DEFINE(dLytMsgWindowSword_c, Invisible);
 STATE_DEFINE(dLytMsgWindowSword_c, In);
@@ -271,7 +271,8 @@ void dLytMsgWindowSword_c::draw() {
                 mCharacterData[i].displayTimerMaybe += 1;
             }
             mVec3_c v(
-                (mOffset.x + mCharacterData[i].posX) / get_805751A4(), mOffset.y + mCharacterData[i].posY, 0.0f
+                (mOffset.x + mCharacterData[i].posX) / dGfx_c::get16x9to4x3WidthScaleF(),
+                mOffset.y + mCharacterData[i].posY, 0.0f
             );
 
             wchar_t str[2];

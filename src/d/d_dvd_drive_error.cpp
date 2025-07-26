@@ -1,14 +1,13 @@
 #include "d/d_dvd_drive_error.h"
 
 #include "d/d_dvd_unk.h"
+#include "d/d_gfx.h"
+#include "d/d_reset.h"
 #include "d/d_lyt_hio.h"
 #include "egg/gfx/eggDrawGX.h"
 #include "egg/gfx/eggScreen.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
-#include "toBeSorted/lyt_related_floats.h"
-#include "toBeSorted/reload_color_fader.h"
-
 
 /** 805750d0 */
 dDvdDriveError_c *dDvdDriveError_c::sInstance;
@@ -28,7 +27,8 @@ bool dDvdDriveError_c::isError() const {
 
 static const wchar_t sErrEnGeneral[] = L"Please insert The Legend of Zelda:\nSkyward Sword Game Disc.";
 static const wchar_t sErrEnDiskId[] = L"Please insert The Legend of Zelda:\nSkyward Sword Game Disc.";
-static const wchar_t sErrEnDiskError[] = L"The disc could not be read.\nRefer to the Wii Operations\nManual for details.";
+static const wchar_t sErrEnDiskError[] =
+    L"The disc could not be read.\nRefer to the Wii Operations\nManual for details.";
 
 static const wchar_t *sErrorsEn[] = {
     sErrEnGeneral,
@@ -38,7 +38,8 @@ static const wchar_t *sErrorsEn[] = {
 
 static const wchar_t sErrEsGeneral[] = L"Por favor, inserta el disco\nde The Legend of Zelda:\nSkyward Sword.";
 static const wchar_t sErrEsDiskId[] = L"Por favor, inserta el disco\nde The Legend of Zelda:\nSkyward Sword.";
-static const wchar_t sErrEsDiskError[] = L"No se puede leer el disco.\nConsulta el manual de operaciones\nde la consola Wii para obtener m\xe1"
+static const wchar_t sErrEsDiskError[] =
+    L"No se puede leer el disco.\nConsulta el manual de operaciones\nde la consola Wii para obtener m\xe1"
     "s\ninformaci\xf3"
     "n.";
 
@@ -48,11 +49,14 @@ static const wchar_t *sErrorsEs[] = {
     sErrEsDiskError,
 };
 
-static const wchar_t sErrFrGeneral[] = L"Veuillez ins\xe9"
+static const wchar_t sErrFrGeneral[] =
+    L"Veuillez ins\xe9"
     "rer le disque\nThe Legend of Zelda:\nSkyward Sword.";
-static const wchar_t sErrFrDiskId[] = L"Veuillez ins\xe9"
+static const wchar_t sErrFrDiskId[] =
+    L"Veuillez ins\xe9"
     "rer le disque\nThe Legend of Zelda:\nSkyward Sword.";
-static const wchar_t sErrFrDiskError[] = L"Impossible de lire le disque.\nVeuillez vous r\xe9"
+static const wchar_t sErrFrDiskError[] =
+    L"Impossible de lire le disque.\nVeuillez vous r\xe9"
     "f\xe9"
     "rer au mode\nd'emploi de la Wii pour plus\nde d\xe9"
     "tails.";
@@ -71,11 +75,11 @@ void dDvdDriveError_c::draw() {
     screen.SetCanvasMode(EGG::Screen::CANVASMODE_0);
     screen.SetProjectionType(EGG::Frustum::PROJ_ORTHO);
     screen.SetNearFar(0.0f, 500.0f);
-    screen.SetScale(mVec3_c(get_80575190() / get_80575144(), 1.0f, 1.0f));
+    screen.SetScale(mVec3_c(dGfx_c::getWidth4x3F() / dGfx_c::getCurrentScreenWidthF(), 1.0f, 1.0f));
     screen.SetProjectionGX();
-    f32 x = get_80575144() * 0.5f;
+    f32 x = dGfx_c::getCurrentScreenWidthF() * 0.5f;
     f32 mx = -x;
-    f32 y = get_80575148() * 0.5f;
+    f32 y = dGfx_c::getCurrentScreenHeightF() * 0.5f;
     f32 my = -y;
 
     EGG::DrawGX::BeginDrawScreen(screen.GetCanvasMode() == EGG::Screen::CANVASMODE_1, false, false);
@@ -89,8 +93,8 @@ void dDvdDriveError_c::draw() {
     EGG::DrawGX::DrawDL(EGG::DrawGX::DL_17, mtx, EGG::DrawGX::BLACK);
 
     nw4r::math::MTX44 mtx2;
-    f32 a = get_8057511C();
-    f32 b = get_80575118();
+    f32 a = dGfx_c::getCurrentScreenHeight();
+    f32 b = dGfx_c::getCurrentScreenWidth();
     C_MTXOrtho(mtx2, 0.0f, a, 0.0f, b, 0.0f, 1.0f);
     GXSetProjection(mtx2, GX_ORTHOGRAPHIC);
     GXSetScissor(0, 0, b, a);
@@ -126,8 +130,8 @@ void dDvdDriveError_c::draw() {
 
     textWriter.SetupGX();
     textWriter.SetDrawFlag(0x110);
-    textWriter.SetCursorX(get_8057514C());
-    textWriter.SetCursorY(get_80575150());
+    textWriter.SetCursorX(dGfx_c::getCurrentScreenWidthLimitF());
+    textWriter.SetCursorY(dGfx_c::getCurrentScreenHeightLimitF());
 
     textWriter.Print(str, wcslen(str));
 }
@@ -141,7 +145,7 @@ void dDvdDriveError_c::execute() {
             dDvdUnk::FontUnk::GetInstance()->fn_80052C60();
         }
     } else if (mDvdDriveStatus == DVD_STATE_IDLE) {
-        if (!ReloadColorFader::GetInstance()->is1Or5()) {
+        if (!dReset::Manage_c::GetInstance()->isSoftResetOrSafetyWait()) {
             mIsError = false;
         }
     }

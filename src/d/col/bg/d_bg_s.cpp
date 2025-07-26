@@ -1024,7 +1024,7 @@ void dBgS::SetupMapMaterial(int matIdx, bool, s32 roomId) {
 }
 
 UNKTYPE *dBgS::GetMapAccessor() {
-    return dLytMap_c::getInstance();
+    return dLytMap_c::GetInstance();
 }
 
 void dBgS::DrawMap(int roomId, mMtx_c *, bool bColor, int) {

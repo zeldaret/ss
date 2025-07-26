@@ -186,14 +186,15 @@ bool dLytMeterZBtn_c::execute() {
         return true;
     }
     field_0x1C4 = true;
-    if ((!fn_80081FE0(dScGame_c::getCamera(0)->getField_0xD98(), "mogu") || AttentionManager::GetInstance()->checkLink2()) &&
+    if ((!fn_80081FE0(dScGame_c::getCamera(0)->getField_0xD98(), "mogu") ||
+         AttentionManager::GetInstance()->checkLink2()) &&
         LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_Z) == 0x67) {
         field_0x1C4 = false;
         LytDoButtonRelated::set(LytDoButtonRelated::DO_BUTTON_Z, LytDoButtonRelated::ACT_IE_NONE);
     }
     field_0x1B4 = LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_Z);
-    field_0x1B8 = LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_Z) &&
-                  dLytMeter_c::GetInstance()->checkAllFlags(0x800);
+    field_0x1B8 =
+        LytDoButtonRelated::getHas(LytDoButtonRelated::DO_BUTTON_Z) && dLytMeter_c::GetInstance()->checkAllFlags(0x800);
     mStateMgr.executeState();
 
     for (int i = 0; i < Z_BTN_NUM_ANIMS; i++) {
@@ -204,7 +205,7 @@ bool dLytMeterZBtn_c::execute() {
 
     if (dLytControlGame_c::getInstance()->isStateNormal()) {
         if (StoryflagManager::sInstance->getCounterOrFlag(565)) {
-            if (dPad::checkButtonZPressed()) {
+            if (dPad::getDownTrigZ()) {
                 field_0x1C5 = 0;
                 StoryflagManager::sInstance->unsetFlag(565);
             } else {

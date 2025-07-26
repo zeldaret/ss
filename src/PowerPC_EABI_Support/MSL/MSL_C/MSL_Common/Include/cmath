@@ -8,7 +8,7 @@
 
 namespace std {
 using ::acos;
-using ::acosf;
+// using ::acosf;
 using ::asin;
 // using ::asinf;
 using ::atan;
@@ -57,6 +57,10 @@ inline float sinf(float x) {
 
 inline float sqrtf(float x) {
     return ::sqrtf(x);
+}
+
+inline float acosf(float x) {
+    return ::acos(x);
 }
 
 // TODO: Very fake!

@@ -8,6 +8,5 @@
 
 #define BGM_MGR (dSndPlayerMgr_c::GetInstance())
 extern "C" void fn_8035E000();
-extern "C" void fn_8035E310(dSndPlayerMgr_c *);
 
 #endif

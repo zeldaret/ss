@@ -1,10 +1,11 @@
 #include "m/m_pad.h"
 
 #include "common.h"
+#include "d/d_pad.h"
 #include "egg/core/eggController.h"
 #include "egg/math/eggVector.h"
-#include "rvl/WPAD.h" // IWYU pragma: export
 
+#include "rvl/WPAD.h" // IWYU pragma: export
 
 namespace mPad {
 
@@ -38,7 +39,7 @@ static void clearWPADInfo(int);
 static int getWPADInfoCB(int controller);
 
 void create() {
-    g_padMg = EGG::CoreControllerMgr::sInstance;
+    g_padMg = EGG::CoreControllerMgr::instance();
     initWPADInfo();
     beginPad();
     endPad();
@@ -62,10 +63,10 @@ void beginPad() {
     for (; i < 4; i++) {
         ctl = g_padMg->getNthController(i);
         *p_ctl = ctl;
-        if (ctl->mFlag.onBit(0)) {
+        if (ctl->isConnected()) {
             // These sort of look like value, first order derivative, and second order derivative
             // So perhaps value, velocity, acceleration?
-            EGG::Vector2f pos = ctl->mCoreStatus[0].getUnk();
+            EGG::Vector2f pos = ctl->getCoreStatus()->getAccelVertical();
             EGG::Vector2f v = pos - dat->v1;
             dat->v1 = pos;
             dat->v3 = v - dat->v2;
@@ -81,7 +82,7 @@ void beginPad() {
                 getWPADInfoCB(i);
             }
         } else if (*connected) {
-            ctl->mCoreStatus->init();
+            ctl->getCoreStatus()->init();
             ctl->sceneReset();
             dat->v1.x = 0.0f;
             dat->v1.y = 0.0f;
@@ -134,10 +135,8 @@ static void initWPADInfo() {
     }
 }
 
-extern "C" void fn_80058DA0(s32, s32);
-
 static int getWPADInfoCB(int controller) {
-    int result = WPADGetInfoAsync(controller, &s_WPADInfoTmp[controller], fn_80058DA0);
+    int result = WPADGetInfoAsync(controller, &s_WPADInfoTmp[controller], async_info_callback);
     if (result == -1) {
         clearWPADInfo(controller);
     }

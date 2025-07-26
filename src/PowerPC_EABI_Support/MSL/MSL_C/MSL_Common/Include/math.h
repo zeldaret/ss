@@ -19,7 +19,7 @@ extern "C" {
 int abs(int);
 int labs(int);
 double acos(double);
-float acosf(float);
+// float acosf(float);
 double asin(double);
 double atan(double);
 double atan2(double, double);

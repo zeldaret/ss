@@ -19,7 +19,7 @@ public:
     virtual int execute() override;
 
     int update();
-    int similarToDraw();
+    bool drawDirectly();
 
     void setField703(bool val) {
         field_0x703 = val;
@@ -27,6 +27,9 @@ public:
 
     void setField704(bool val) {
         field_0x704 = val;
+    }
+    void setField705(bool val) {
+        field_0x705 = val;
     }
 
     dCursorHitCheck_c *getHitCheck() {

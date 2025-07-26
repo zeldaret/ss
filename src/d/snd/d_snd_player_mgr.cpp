@@ -222,6 +222,14 @@ void dSndPlayerMgr_c::leaveMsgWait() {
     dSndStateMgr_c::GetInstance()->onMsgWaitEnd();
 }
 
+void dSndPlayerMgr_c::setup(s32 channel) {
+    EGG::AudioRmtSpeakerMgr::setup(channel, nullptr);
+}
+
+void dSndPlayerMgr_c::shutdown(s32 channel) {
+    EGG::AudioRmtSpeakerMgr::shutdown(channel, nullptr);
+}
+
 nw4r::snd::SoundStartable::StartResult dSndPlayerMgr_c::startSound(
     nw4r::snd::SoundHandle *pHandle, u32 soundId, const nw4r::snd::SoundStartable::StartInfo *pStartInfo
 ) {

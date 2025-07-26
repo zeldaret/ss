@@ -276,6 +276,7 @@ public:
 
     void build();
 
+    bool isNotInvisible() const;
     bool isOpenMaybe() const;
     bool fn_80139EA0() const;
     void lightPillarRelated(s32, s32, s32);
@@ -392,8 +393,12 @@ public:
         return &sInstance->mResAcc;
     }
 
-    static dLytMap_c *getInstance() {
+    static dLytMap_c *GetInstance() {
         return sInstance;
+    }
+
+    bool isNotInvisible() const {
+        return mMapMain.isNotInvisible();
     }
 
     bool isOpenMaybe() const {
