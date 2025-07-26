@@ -112,6 +112,10 @@ public:
         field_0x306 = val;
     }
 
+    void setField_0x300(s32 v) {
+        field_0x300 = v;
+    }
+
     void setField_0x307(u8 val) {
         field_0x307 = val;
     }
