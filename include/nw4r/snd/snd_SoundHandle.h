@@ -34,6 +34,10 @@ namespace nw4r { namespace snd
 		const detail::BasicSound *detail_GetAttachedSound() const { return mSound; }
 		void DetachSound();
 
+		void SetOutputLineFlag(int outputLineFlag) {
+			if (IsAttachedSound())
+				mSound->SetOutputLineFlag(outputLineFlag);
+		}
 
 		void FadeIn(int fadeFrames) {
 			if (IsAttachedSound())
@@ -45,9 +49,9 @@ namespace nw4r { namespace snd
 				mSound->SetVolume(volume, frames);
 		}
 
-		void SetPitch(f32 volume) {
+		void SetPitch(f32 pitch) {
 			if (IsAttachedSound())
-				mSound->SetPitch(volume);
+				mSound->SetPitch(pitch);
 		}
 
 		void Stop(int fadeFrames) {
@@ -65,8 +69,22 @@ namespace nw4r { namespace snd
 				mSound->SetPan(pan);
 		}
 
+		void SetFxSend(AuxBus bus, f32 send) {
+			if (IsAttachedSound())
+				mSound->SetFxSend(bus, send);
+		}
+
+		void SetLpfFreq(f32 lpfFreq) {
+			if (IsAttachedSound())
+				mSound->SetLpfFreq(lpfFreq);
+		}
+
 		bool IsPause() const {
 			return IsAttachedSound() && mSound->IsPause();
+		}
+
+		bool IsPrepared() const {
+			return IsAttachedSound() && mSound->IsPrepared();
 		}
 
 		int GetRemainingFadeFrames() const {

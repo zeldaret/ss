@@ -56,7 +56,7 @@ public:
         return false;
     }
     /* vt 0x0BC */ virtual void finishPlayingHarp() {}
-    /* vt 0x0C0 */ virtual bool isUsingWhip() {
+    /* vt 0x0C0 */ virtual bool isUsingWhip() const {
         return false;
     }
     /* vt 0x0C4 */ virtual bool anotherThingWithWhip() {
@@ -607,6 +607,10 @@ public:
         return mRidingActorType;
     }
 
+    inline bool hasvt_0x1C0() const {
+        return vt_0x1C0() != nullptr;
+    }
+
     bool isAttacking() const {
         return mAttackDirection != ATTACK_NONE;
     }
@@ -626,6 +630,9 @@ public:
     static mAng fn_8005BA90();
     static mAng fn_8005BAA0();
     static void updateCurrentSword();
+
+    static bool isOutOfStamina();
+    static f32 getStamina();
 
     static s32 getCurrentSwordType();
     static const char *getSwordName(s32);

@@ -36,7 +36,7 @@ int dTgSndAr_c::create() {
         }
         dAcBase_c *ac = static_cast<dAcBase_c *>(base);
         if (!ac->isActorPlayer() && checkPosInArea(ac->position)) {
-            ac->setBit_field_0xE8(params & 0xFF);
+            ac->setTgSndAreaFlag(params & 0xFF);
         }
     }
     return SUCCEEDED;
@@ -49,12 +49,12 @@ int dTgSndAr_c::doDelete() {
 int dTgSndAr_c::actorExecute() {
     dAcBase_c *link = dAcPy_c::LINK;
     if (link != nullptr && checkPosInArea(link->position)) {
-        link->setBit_field_0xE8(params & 0xFF);
+        link->setTgSndAreaFlag(params & 0xFF);
     }
     if (dSnd3DManager_c::GetInstance() != nullptr) {
-        mVec3_c pos = dSnd3DManager_c::GetInstance()->getCameraTargetPos();
+        mVec3_c pos(dSnd3DManager_c::GetInstance()->getCameraTargetPos());
         if (checkPosInArea(pos) && dTgSndMg_c::GetInstance() != nullptr) {
-            dTgSndMg_c::GetInstance()->setBgmFlag(params & 0xFF);
+            dTgSndMg_c::GetInstance()->setSndFlag(params & 0xFF);
         }
     }
     return SUCCEEDED;

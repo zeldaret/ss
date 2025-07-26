@@ -37,6 +37,10 @@ public:
         return isInEvent() ? sInstance->mCurrentEvent.eventName : nullptr;
     }
 
+    static s32 getCurrentEventRoomId() {
+        return isInEvent() ? sInstance->mCurrentEvent.roomid : -1;
+    }
+
     static bool isCurrentEvent(const char *name) {
         return strequals(getCurrentEventName(), name);
     }

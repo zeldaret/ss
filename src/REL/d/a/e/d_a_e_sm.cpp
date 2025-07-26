@@ -310,7 +310,7 @@ int dAcEsm_c::actorPostCreate() {
     if (field_0xBBF == 1 || field_0xBBF == 3) {
         clearActorProperty(1);
         fn_800306d0();
-        FUN_8002d860(0);
+        setBattleBgmRelated(0);
     }
 
     return SUCCEEDED;
@@ -391,10 +391,10 @@ int dAcEsm_c::actorExecute() {
                 dJEffManager_c::spawnEffect(effectID, mEffPos, nullptr, &effScale, nullptr, nullptr, 0, 0);
 
                 if (timeCheck > 0) {
-                    playSound(SE_TIMESLIP_TIMESLIP);
+                    startSound(SE_TIMESLIP_TIMESLIP);
                     fn_800306d0();
                 } else {
-                    playSound(SE_TIMESLIP_TIMESLIP_REV);
+                    startSound(SE_TIMESLIP_TIMESLIP_REV);
                     fn_80030700();
                 }
             }
@@ -441,7 +441,7 @@ int dAcEsm_c::actorExecute() {
                     field_0xBB8 = 0;
                 }
                 field_0xBBF = 0;
-                FUN_8002d860(2);
+                setBattleBgmRelated(2);
                 fn_80030700();
                 rotation.y = angle.y = getXZAngleToPlayer();
             }
@@ -555,7 +555,7 @@ int dAcEsm_c::actorExecute() {
                             fn_187_4540(2);
                         } else {
                             mHealth = 100;
-                            playSound(SE_ESm_NO_DMG);
+                            startSound(SE_ESm_NO_DMG);
                             fn_187_61B0(7);
                         }
 
@@ -615,7 +615,7 @@ int dAcEsm_c::actorExecute() {
                                 pOther->field_0xBC8 = 1;
                                 pOther->mDamageTimer = 8;
                                 pOther->mStateMgr.changeState(StateID_Fusion);
-                                playSound(SE_ESm_UNITE);
+                                startSound(SE_ESm_UNITE);
                                 mStateMgr.changeState(StateID_Fusion);
                             }
                         }
@@ -634,7 +634,7 @@ int dAcEsm_c::actorExecute() {
                     if (bomb != nullptr && std::abs(bomb->GetPosition().y - mHomePos1.y) < 0.7f * lookRadius) {
                         if (bomb->GetLinkage().tryAttach(bomb, this, &mBombRef, dLinkage_c::CONNECTION_1, false)) {
                             mTimer_0xBAE = 160;
-                            playSound(SE_ESm_BRING_IN);
+                            startSound(SE_ESm_BRING_IN);
                             clearActorProperty(1);
                         }
                     }
@@ -664,7 +664,7 @@ int dAcEsm_c::actorExecute() {
 
     mSph.SetC(mHomePos1);
     if (mSph.ChkTgElectric()) {
-        playSoundEffect1(SE_ESm_ELEC_LV);
+        holdSound(SE_ESm_ELEC_LV);
     }
 
     radius *= mScaleTarget.x;
@@ -683,9 +683,9 @@ int dAcEsm_c::actorExecute() {
     sLib::addCalcScaled(&field_0xB80, 0.3f, 1.f);
 
     if (field_0xBCB == 0) {
-        playSoundEffect1(SE_ESm_MOVE);
+        holdSound(SE_ESm_MOVE);
     } else {
-        playSoundEffect1(SE_ESm_MOVE_HI);
+        holdSound(SE_ESm_MOVE_HI);
     }
 
     if (field_0xBC8 == 0 && !mStateMgr.isState(StateID_Absorption)) {
@@ -867,7 +867,7 @@ bool dAcEsm_c::fn_187_4090() {
         field_0xB50 = 0.f;
         field_0xB70 = 0.f;
 
-        playSound(SE_ESm_LAND);
+        startSound(SE_ESm_LAND);
 
         if (field_0xBA0 == 0) {
             if (fn_800301b0(position, rotation.y, true, 10.f) == 3 /* TODO: Enum?*/) {
@@ -1081,7 +1081,7 @@ void dAcEsm_c::fn_187_4540(int param0) {
         if (field_0xB98 == 2) {
             mTimer_0xBC4 = 20;
         }
-        playSound(SE_ESm_JUMP);
+        startSound(SE_ESm_JUMP);
     }
 }
 

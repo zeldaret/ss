@@ -38,13 +38,11 @@ dAcBase_c *dAcBase_c::s_Create_Parent;
 const ActorInfo *dAcBase_c::s_Create_ActorInfo;
 u8 dAcBase_c::s_Create_Subtype;
 
-extern "C" dSoundSourceIf_c *soundForActorInitRelated_803889c0(s8, fBase_c *, const char *, u8);
-
 bool dAcBase_c::createHeap() {
     return true;
 }
 
-// sound_source and sound_list need to be ironed out before this can match
+// mpSoundSource and sound_list need to be ironed out before this can match
 // NOT MATCHING
 // 8002c3b0
 dAcBase_c::dAcBase_c()
@@ -90,8 +88,6 @@ dAcBase_c::dAcBase_c()
 // 8002c530
 // dBase_c::~dBase_c() {}
 
-// Fixing the sound_source and sound_info in the ctor should make this match
-// NOT MATCHING
 // 8002c590
 dAcBase_c::~dAcBase_c() {}
 
@@ -122,7 +118,7 @@ dSoundSourceIf_c *dAcBase_c::createSoundSource() {
     }
 
     const char *actorName = getActorName(mpActorInfo);
-    return soundForActorInitRelated_803889c0(soundSourceType, this, actorName, subtype);
+    return dSoundSourceIf_c::create(soundSourceType, this, actorName, subtype);
 }
 
 int dAcBase_c::initAllocatorWork1Heap(int size, char *name, int align) {
@@ -133,7 +129,7 @@ int dAcBase_c::initAllocator(int size, char *name, EGG::Heap *heap, int align) {
     if (!heap_allocator.createFrmHeapToCurrent(size, heap, name, 0x20, mHeap::OPT_NONE)) {
         return 0;
     }
-    sound_source = createSoundSource();
+    mpSoundSource = createSoundSource();
     int success = createHeap();
     heap_allocator.adjustFrmHeapRestoreCurrent();
     return success;
@@ -155,8 +151,8 @@ bool dAcBase_c::addActorToRoom(s32 roomId) {
     return false;
 }
 
-void dAcBase_c::setBit_field_0xE8(s32 shift) {
-    field_0xe8 |= (1 << shift);
+void dAcBase_c::setTgSndAreaFlag(s32 shift) {
+    mTgSndAreaFlags |= (1 << shift);
 }
 
 int dAcBase_c::actorCreate() {
@@ -192,7 +188,10 @@ void dAcBase_c::postCreate(fBase_c::MAIN_STATE_e state) {
 // NOT MATCHING
 // 8002c940
 int dAcBase_c::preDelete() {
-    int fbaseDelete = fBase_c::preDelete();
+    int ret = SUCCEEDED;
+    if (fBase_c::preDelete() == NOT_READY) {
+        ret = NOT_READY;
+    }
 
     if (!checkActorProperty(0x800) && checkActorProperty(0x10000000) &&
         fBase_c::getConnectParent()->lifecycle_state != TO_BE_DELETED) {
@@ -201,29 +200,39 @@ int dAcBase_c::preDelete() {
         }
 
     } else {
-        if (sound_source != nullptr) {
-            // TODO: add func call
+        if (mpSoundSource != nullptr) {
+            mpSoundSource->stopAllSound(0);
         }
-
-        // TODO: add sound_info stuff once the SoundInfo x Heap weirdness is figured out
+        // TODO - TList
+        for (SoundInfoList::Iterator it = sound_list.GetBeginIter(); it != sound_list.GetEndIter(); ++it) {
+            it->getSource()->stopAllSound(0);
+        }
     }
 
-    if (fbaseDelete == 0) {
-        return false;
+    if (ret == NOT_READY) {
+        return NOT_READY;
     }
 
-    if (sound_source != nullptr) {
-        // TODO: add func calls
-        return false;
+    if (mpSoundSource != nullptr) {
+        mpSoundSource->shutdown();
+        if (mpSoundSource->hasPlayingSounds()) {
+            return NOT_READY;
+        }
+    }
+    // TODO - TList
+    for (SoundInfoList::Iterator it = sound_list.GetBeginIter(); it != sound_list.GetEndIter(); ++it) {
+        it->getSource()->shutdown();
+        if (it->getSource()->hasPlayingSounds()) {
+            return NOT_READY;
+        }
     }
 
-    // TODO: add sound_info stuff once the SoundInfo x Heap weirdness is figured out
 
-    if (checkActorProperty(0x20000000)) {
+    if (checkActorProperty(0x02000000)) {
         changeLoadedEntitiesNoSet();
     }
 
-    return true;
+    return SUCCEEDED;
 }
 
 // 8002cb10
@@ -263,9 +272,20 @@ int dAcBase_c::actorExecuteInEvent() {
     return actorExecute();
 }
 
-// Can't make progress on this til the SoundInfo x Heap weirdness is figured out
 // 8002ccc0
-void dAcBase_c::postExecute(fBase_c::MAIN_STATE_e state) {}
+void dAcBase_c::postExecute(fBase_c::MAIN_STATE_e state) {
+    if (mpSoundSource != nullptr) {
+        mpSoundSource->calc(*obj_pos);
+        mpSoundSource->setPolyAttrs(polyAttr0, polyAttr1);
+    }
+
+    // TODO - TList
+    for (SoundInfoList::Iterator it = sound_list.GetBeginIter(); it != sound_list.GetEndIter(); ++it) {
+        it->calc();
+    }
+
+    // TODO - ...
+}
 
 // 8002ce90
 void dAcBase_c::unkVirtFunc_0x5C() {
@@ -494,29 +514,118 @@ bool dAcBase_c::isRoomFlags_0x6_Set() {
     return (room->checkFlag(0x4 | 0x2));
 }
 
-// Start of SoundSource stuff
-void dAcBase_c::FUN_8002d590() {}
-void dAcBase_c::FUN_8002d5b0() {}
-void dAcBase_c::playSound(u16) {}
-void dAcBase_c::FUN_8002d600() {}
-void dAcBase_c::FUN_8002d630() {}
-void dAcBase_c::FUN_8002d6d0() {}
-// currently named ActorBase__playSoundEffect1
-void dAcBase_c::playSoundEffect1(u16) {}
-void dAcBase_c::FUN_8002d740() {}
-void dAcBase_c::FUN_8002d770(u16, f32) {}
-void dAcBase_c::FUN_8002d7a0() {}
-void dAcBase_c::FUN_8002d7d0() {}
-void dAcBase_c::FUN_8002d7f0() {}
-void dAcBase_c::FUN_8002d810() {}
-void dAcBase_c::FUN_8002d830() {}
-void dAcBase_c::FUN_8002d860(UNKWORD) {}
+void dAcBase_c::setSoundSourceSubtype(u8 subType) {
+    if (mpSoundSource == nullptr) {
+        return;
+    }
+    mpSoundSource->setSubtype(subType);
+}
+
+void dAcBase_c::FUN_8002d5b0() {
+    if (mpSoundSource == nullptr) {
+        return;
+    }
+    mpSoundSource->vt_0x0F0_noop();
+}
+
+bool dAcBase_c::startSound(u32 soundId) {
+    if (mpSoundSource == nullptr) {
+        return false;
+    }
+    return mpSoundSource->startSound(soundId);
+}
+
+bool dAcBase_c::startSoundWithFloatParam(u32 soundId, f32 param) {
+    if (mpSoundSource == nullptr) {
+        return false;
+    }
+    return mpSoundSource->startSoundWithFloatParam(soundId, param);
+}
+
+bool dAcBase_c::startBgHitSound(u32 soundId, const cBgS_PolyInfo &info, const mVec3_c *position) {
+    if (mpSoundSource == nullptr) {
+        return false;
+    }
+    return mpSoundSource->startBgHitSound(
+        soundId, dBgS::GetInstance()->GetPolyAtt0(info), dBgS::GetInstance()->GetPolyAtt1(info),
+        position != nullptr ? position : &this->position
+    );
+}
+
+bool dAcBase_c::startSoundAtPosition(u32 soundId, const mVec3_c *position) {
+    if (mpSoundSource == nullptr) {
+        return false;
+    }
+    return mpSoundSource->startSoundAtPosition(soundId, position != nullptr ? position : &this->position);
+}
+
+bool dAcBase_c::holdSound(u32 soundId) {
+    if (mpSoundSource == nullptr) {
+        return false;
+    }
+    return mpSoundSource->holdSound(soundId);
+}
+
+bool dAcBase_c::holdSoundWithIntParam(u32 soundId, s32 param) {
+    if (mpSoundSource == nullptr) {
+        return false;
+    }
+    return mpSoundSource->holdSoundWithIntParam(soundId, param);
+}
+
+bool dAcBase_c::holdSoundWithFloatParam(u32 soundId, f32 param) {
+    if (mpSoundSource == nullptr) {
+        return false;
+    }
+    return mpSoundSource->holdSoundWithFloatParam(soundId, param);
+}
+
+bool dAcBase_c::holdSoundWithParams(u32 soundId, f32 fValue, s32 value) {
+    if (mpSoundSource == nullptr) {
+        return false;
+    }
+    return mpSoundSource->holdSoundWithParams(soundId, fValue, value);
+}
+
+void dAcBase_c::holdSoundSourceFlag(u32 mask) {
+    if (mpSoundSource == nullptr) {
+        return;
+    }
+    mpSoundSource->holdFlag(mask);
+}
+
+void dAcBase_c::onSoundSourceFlag(u32 mask) {
+    if (mpSoundSource == nullptr) {
+        return;
+    }
+    mpSoundSource->onFlag(mask);
+}
+
+void dAcBase_c::offSoundSourceFlag(u32 mask) {
+    if (mpSoundSource == nullptr) {
+        return;
+    }
+    mpSoundSource->offFlag(mask);
+}
+
+bool dAcBase_c::isPlayingSound(u32 soundId) {
+    if (mpSoundSource == nullptr) {
+        return false;
+    }
+    return mpSoundSource->isPlayingSound(soundId);
+}
+
+void dAcBase_c::setBattleBgmRelated(UNKWORD param) {
+    if (mpSoundSource == nullptr) {
+        return;
+    }
+    mpSoundSource->setBattleBgmRelated(param);
+}
 
 // 8002d880
 dSoundSourceIf_c *dAcBase_c::getSoundSource() {
-    return sound_source.get();
+    return mpSoundSource.get();
 }
-// End of SoundSource stuff
 
 // 8002d890
 void dAcBase_c::removeSoundInfo(SoundInfo *soundInfo) {

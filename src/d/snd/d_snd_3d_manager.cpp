@@ -2,12 +2,12 @@
 
 #include "d/snd/d_snd_3d_engine.h"
 #include "d/snd/d_snd_mgr.h"
+#include "d/snd/d_snd_state_mgr.h"
 #include "egg/math/eggMatrix.h"
 #include "egg/math/eggVector.h"
 #include "nw4r/math/math_arithmetic.h"
 #include "nw4r/math/math_types.h"
 #include "nw4r/snd/snd_SoundArchive.h"
-#include "toBeSorted/music_mgrs.h"
 
 SND_DISPOSER_DEFINE(dSnd3DManager_c);
 
@@ -74,13 +74,13 @@ void dSnd3DManager_c::updateFromCamera(EGG::LookAtCamera &camera) {
     }
 
     f32 dist = 0.5f;
-    if (fn_80364DA0(ENEMY_SOUND_MGR)) {
+    if (dSndStateMgr_c::GetInstance()->isInEvent()) {
         dist = mCamDistance;
         f32 prevCameraAtSqVelocity = mCameraAtSqVelocity;
         f32 prevCameraPosSqVelocity = mCameraPosSqVelocity;
         mCameraAtSqVelocity = VECSquareDistance(camera.mAt, mCamera.mAt);
         mCameraPosSqVelocity = VECSquareDistance(camera.mPos, mCamera.mPos);
-        if (((u32 *)ENEMY_SOUND_MGR)[71] > 30) {
+        if (dSndStateMgr_c::GetInstance()->getFrameCounter() > 30) {
             bool bigMovement = false;
             bool hugeMovement = false;
             if (mTimer > 0) {
@@ -115,7 +115,7 @@ void dSnd3DManager_c::updateFromCamera(EGG::LookAtCamera &camera) {
                 }
 
                 if (bigMovement) {
-                    fn_80364D00(ENEMY_SOUND_MGR, -1);
+                    dSndStateMgr_c::GetInstance()->onCameraCut(-1);
                     mTimer = 30;
                 }
             }
