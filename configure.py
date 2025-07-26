@@ -533,7 +533,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/d_lyt_util_items.cpp"),
             Object(Matching, "d/lyt/d_lyt_common_arrow.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_common_title.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_cursor_stick.cpp"),
+            Object(Matching, "d/lyt/d_lyt_cursor_stick.cpp"),
             Object(Matching, "toBeSorted/fi_context.cpp"),
             Object(NonMatching, "toBeSorted/item_mdl_name.cpp"),
             Object(Matching, "toBeSorted/counters/counter.cpp"),

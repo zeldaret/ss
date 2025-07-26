@@ -103,9 +103,9 @@ int dCsBase_c::update() {
     return execute();
 }
 
-int dCsBase_c::similarToDraw() {
+bool dCsBase_c::drawDirectly() {
     if (field_0x704 != 1) {
-        return SUCCEEDED;
+        return true;
     }
 
     if (field_0x703 && lbl_80572D10 && field_0x702) {
@@ -118,7 +118,7 @@ int dCsBase_c::similarToDraw() {
         mpCurrLyt->calc();
         mpCurrLyt->draw();
     }
-    mCursorStick.similarToDraw();
+    mCursorStick.drawDirectly();
 
-    return SUCCEEDED;
+    return true;
 }

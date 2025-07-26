@@ -19,7 +19,7 @@ public:
     virtual int execute() override;
 
     int update();
-    int similarToDraw();
+    bool drawDirectly();
 
     void setField703(bool val) {
         field_0x703 = val;
