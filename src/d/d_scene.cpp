@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "d/d_pad_nav.h"
 #include "d/d_reset.h"
 #include "d/d_rumble.h"
 #include "f/f_base.h"
@@ -14,7 +15,6 @@ static bool gameStateIsActive = true;
 
 extern "C" u32 lbl_80574FA0;
 extern "C" u32 lbl_80574FA4;
-extern "C" void fn_801942F0(int, int);
 
 dFader_c dScene_c::sFader;
 
@@ -22,7 +22,7 @@ dScene_c::dScene_c() {
     lbl_80574FA0 = 0;
     lbl_80574FA4 = 0;
     setProcControlFlag(ROOT_DISABLE_DRAW | ROOT_DISABLE_EXECUTE);
-    fn_801942F0(0, 0);
+    dPadNav::setNavEnabled(false, false);
 }
 
 void dScene_c::postCreate(MAIN_STATE_e state) {

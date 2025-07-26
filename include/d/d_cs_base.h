@@ -8,6 +8,7 @@
 #include "d/lyt/d_lyt_cursor_stick.h"
 #include "m/m2d.h"
 #include "m/m_angle.h"
+#include "m/m_vec.h"
 
 class dCsBase_c : public dCs_c {
 public:
@@ -49,12 +50,10 @@ private:
     /* 0x23C */ d2d::LytBase_c *mpCurrLyt;
     /* 0x240 */ dCursorInterface_c mCursorIf;
     /* 0x254 */ dLytCursorStick_c mCursorStick;
-    /* 0x6F0 */ f32 field_0x6F0;
-    /* 0x6F4 */ f32 field_0x6F4;
-    /* 0x6F8 */ f32 field_0x6F8;
-    /* 0x6FC */ f32 field_0x6FC;
+    /* 0x6F0 */ mVec2_c mCsPosition;
+    /* 0x6F8 */ mVec2_c mCsVelocity;
     /* 0x700 */ mAng field_0x700;
-    /* 0x702 */ u8 field_0x702;
+    /* 0x702 */ u8 mAlpha;
     /* 0x703 */ u8 field_0x703;
     /* 0x704 */ u8 field_0x704;
     /* 0x705 */ u8 field_0x705;

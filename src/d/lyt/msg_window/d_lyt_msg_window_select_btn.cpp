@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_pad.h"
+#include "d/d_pad_nav.h"
 #include "d/lyt/d2d.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "toBeSorted/music_mgrs.h"
@@ -524,8 +525,6 @@ bool dLytMsgWindowSelectBtn_c::build(d2d::ResAccIf_c *resAcc) {
     return true;
 }
 
-extern "C" void fn_801942F0(int, int);
-
 bool dLytMsgWindowSelectBtn_c::remove() {
     for (int i = 0; i < SELECT_BTN_NUM_ANIMS; i++) {
         mAnm[i].unbind();
@@ -534,7 +533,7 @@ bool dLytMsgWindowSelectBtn_c::remove() {
 
     if (mBtnHelper.field_0x52 != 0) {
         mBtnHelper.field_0x52 = 0;
-        fn_801942F0(0, 0);
+        dPadNav::setNavEnabled(false, false);
     }
 
     return true;

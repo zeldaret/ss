@@ -2,6 +2,7 @@
 #define M_PAD_H
 
 #include "egg/core/eggController.h"
+#include "m/m_vec.h"
 
 namespace mPad {
 
@@ -46,6 +47,14 @@ inline bool isMpls(const int i) {
 }
 inline bool isMplsPtFS(const int i) {
     return g_padMg->getDevType(i) == EGG::cDEV_MPLS_PT_FS;
+}
+
+inline mVec2_c getDpdRawPos() {
+    return g_currentCore->getDpdRawPos();
+}
+
+inline mVec2_c getDpdRawPos(int i) {
+    return g_core[i]->getDpdRawPos();
 }
 
 // Defined in dPad, referenced in both mPad and dPad

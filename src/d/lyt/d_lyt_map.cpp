@@ -1,6 +1,7 @@
 #include "d/lyt/d_lyt_map.h"
 
 #include "common.h"
+#include "d/d_pad_nav.h"
 #include "d/lyt/d2d.h"
 #include "d/d_cursor_hit_check.h"
 #include "egg/core/eggColorFader.h"
@@ -395,14 +396,13 @@ void dLytMapFloorBtnMgr_c::initializeState_Wait() {}
 void dLytMapFloorBtnMgr_c::executeState_Wait() {}
 void dLytMapFloorBtnMgr_c::finalizeState_Wait() {}
 
-extern "C" void fn_801942F0(int, int);
 dLytMapFloorBtnMgr_c::~dLytMapFloorBtnMgr_c() {
     for (int i = 0; i < 4; i++) {
         if (dCsMgr_c::GetInstance()->isRegist(&mCsHitChecks[i])) {
             dCsMgr_c::GetInstance()->unregistCursorTarget(&mCsHitChecks[i]);
         }
     }
-    fn_801942F0(0, 0);
+    dPadNav::setNavEnabled(false, false);
 }
 
 void dLytMapPopupInfo_c::initializeState_Invisible() {}

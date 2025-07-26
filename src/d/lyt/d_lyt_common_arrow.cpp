@@ -2,6 +2,7 @@
 
 #include "d/d_cs_base.h"
 #include "d/d_cursor_hit_check.h"
+#include "d/d_pad_nav.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "rvl/MTX/mtx.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
@@ -144,11 +145,9 @@ void dLytCommonArrow_c::tickDown(d2d::AnmGroup_c *ctrl) {
     }
 }
 
-extern "C" u8 lbl_80572D10;
-
 void dLytCommonArrow_c::fn_80168880() {
     int i = -1;
-    if (lbl_80572D10 == 0) {
+    if (!dPadNav::isPointerVisible()) {
         field_0x6B4 = 2;
         return;
     }

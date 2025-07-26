@@ -25,6 +25,10 @@ public:
     bool setPriority(u8 priority);
     void setTargetPane(nw4r::lyt::Pane *pane);
 
+    void setShouldBeOn(bool value) {
+        mShouldBeOn = value;
+    }
+
 private:
     bool build_();
     bool remove_();

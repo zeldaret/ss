@@ -1256,9 +1256,11 @@ d/a/d_a_salbage_npc.cpp:
 	.data       start:0x8052B078 end:0x8052B618
 	.bss        start:0x805B22E8 end:0x805B2428
 
-toBeSorted/d_unk_pad.cpp:
+d/d_pad_nav.cpp:
 	.text       start:0x80194080 end:0x801946F4 align:16
+	.sdata      start:0x80572D10 end:0x80572D18
 	.sbss       start:0x80575690 end:0x805756A8
+	.sdata2     start:0x8057AE80 end:0x8057AE88
 
 toBeSorted/goddess_chest_counter.cpp:
 	.text       start:0x80194700 end:0x8019486C align:16

@@ -235,6 +235,9 @@ public:
     f32 squareMagXZ() const {
         return x * x + z * z;
     }
+    f32 squareMagXY() const {
+        return x * x + y * y;
+    }
     f32 squareDistanceToXZ(const mVec3_c &other) const {
         return (*this - other).squareMagXZ();
     }
@@ -249,10 +252,6 @@ public:
         p->x = x;
         p->y = y;
         p->z = z;
-    }
-
-    s16 ang() const {
-        return cM::atan2s(x * x, z * z);
     }
 
     f32 inprodXZ(const mVec3_c &other) const {
@@ -311,6 +310,10 @@ public:
 
     mVec2_c operator+(const mVec2_c &v) const {
         return mVec2_c(x + v.x, y + v.y);
+    }
+
+    mVec2_c operator-(const mVec2_c &v) const {
+        return mVec2_c(x - v.x, y - v.y);
     }
 };
 
