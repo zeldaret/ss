@@ -156,6 +156,9 @@ public:
     static void DrawDL16(const nw4r::math::MTX34 &mtx, GXColor clr) {
         DrawDL(DL_16, mtx, clr);
     }
+    static void DrawDL17(const nw4r::math::MTX34 &mtx, GXColor clr) {
+        DrawDL(DL_17, mtx, clr);
+    }
     // TODO MORE
 
     static void SetTevColor(GXTevRegID regId, GXColor tevClr, GXTevKColorID colorId, GXColor tevkClr) {

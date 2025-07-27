@@ -240,7 +240,7 @@ void dStageMgr_c::initializeState_SceneChangeSave() {
         fn_80285600(LYT_SAVE_MGR, 3, 0);
     }
     dBase_c::s_NextExecuteControlFlags |= 1;
-    dSys::setFrameRate(2);
+    dSys_c::setFrameRate(2);
 }
 
 void dStageMgr_c::executeState_SceneChangeSave() {
@@ -260,7 +260,7 @@ void dStageMgr_c::finalizeState_SceneChangeSave() {
 }
 
 void dStageMgr_c::initializeState_RestartSceneWait() {
-    dSys::setFrameRate(2);
+    dSys_c::setFrameRate(2);
 }
 
 void dStageMgr_c::executeState_RestartSceneWait() {
@@ -291,5 +291,5 @@ void dStageMgr_c::executeState_RestartScene() {
 
 void dStageMgr_c::finalizeState_RestartScene() {
     commitAllFlagManagers();
-    dSys::setFrameRate(1);
+    dSys_c::setFrameRate(1);
 }

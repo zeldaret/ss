@@ -244,12 +244,8 @@ void dEmitterBase_c::setPosRotScale(const mVec3_c &position, const mAng3_c *rot,
     }
 }
 
-extern "C" f32 lbl_80571C50;
-inline f32 getlbl_80571C50() {
-    return lbl_80571C50;
-}
 void dEmitterBase_c::setPosRotScaleWithScreenScale(const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale) {
-    mVec3_c adjustedPosition(position.x * getlbl_80571C50(), position.y, position.z);
+    mVec3_c adjustedPosition(position.x * dGfx_c::getCurrentScreenTo4x3WidthScaleF(), position.y, position.z);
     setPosRotScale(adjustedPosition, rot, scale);
 }
 
@@ -965,7 +961,7 @@ dEmitterBase_c *dJEffManager_c::spawnUIEffect(
     u16 effectResourceId, const mVec3_c &position, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1,
     const GXColor *c2
 ) {
-    mVec3_c adjustedPosition(position.x * getlbl_80571C50(), position.y, position.z);
+    mVec3_c adjustedPosition(position.x * dGfx_c::getCurrentScreenTo4x3WidthScaleF(), position.y, position.z);
     return spawnEffectInternal(effectResourceId, adjustedPosition, rot, scale, c1, c2, 0, 0);
 }
 
@@ -984,7 +980,7 @@ bool EffectsStruct::createEffect(
 bool EffectsStruct::createUIEffect(
     u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2
 ) {
-    mVec3_c adjustedPosition(pos.x * getlbl_80571C50(), pos.y, pos.z);
+    mVec3_c adjustedPosition(pos.x * dGfx_c::getCurrentScreenTo4x3WidthScaleF(), pos.y, pos.z);
     return createEffect(true, resourceId, adjustedPosition, rot, scale, c1, c2);
 }
 
@@ -1001,7 +997,7 @@ bool EffectsStruct::createContinuousEffect(
 bool EffectsStruct::createContinuousUIEffect(
     u16 resourceId, const mVec3_c &pos, const mAng3_c *rot, const mVec3_c *scale, const GXColor *c1, const GXColor *c2
 ) {
-    mVec3_c adjustedPosition(pos.x * getlbl_80571C50(), pos.y, pos.z);
+    mVec3_c adjustedPosition(pos.x * dGfx_c::getCurrentScreenTo4x3WidthScaleF(), pos.y, pos.z);
     return createEffect(false, resourceId, adjustedPosition, rot, scale, c1, c2);
 }
 

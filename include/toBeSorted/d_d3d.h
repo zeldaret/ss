@@ -18,6 +18,8 @@
 
 namespace d3d {
 
+bool create(EGG::Heap *);
+
 f32 fn_80016960(mVec3_c &, const mVec3_c &pos);
 bool fn_80016A90(const mVec3_c &pos);
 void fn_80016B60(mVec3_c &, const mVec3_c &pos);

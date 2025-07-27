@@ -152,8 +152,6 @@ static void CalcStringRectImpl(
     } while (remain > 0);
 }
 
-extern "C" bool NeedsScreenAdjustment();
-
 static int CalcLineRectImpl(
     nw4r::ut::Rect *pRect, nw4r::ut::TextWriterBase<wchar_t> *pTextWriter, const wchar_t *str, int length, f32 maxWidth,
     bool *pbOver, bool *pbWideScreenUnk
@@ -187,7 +185,7 @@ static int CalcLineRectImpl(
 
             pTextWriter->SetCursorX(x);
             // ??????????
-            if (pbWideScreenUnk != nullptr && ((u32 *)context.str)[0] == 0 && NeedsScreenAdjustment()) {
+            if (pbWideScreenUnk != nullptr && ((u32 *)context.str)[0] == 0 && dGfx_c::isTvModeWidescreen()) {
                 *pbWideScreenUnk = true;
             }
             operation = pTextWriter->GetTagProcessor()->CalcRect(&rect, code, &context);

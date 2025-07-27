@@ -22,7 +22,7 @@ public:
     static bool draw();
     static bool drawDirectly();
 
-    bool setPriority(u8 priority);
+    void setPriority(u8 priority);
     void setTargetPane(nw4r::lyt::Pane *pane);
 
 private:

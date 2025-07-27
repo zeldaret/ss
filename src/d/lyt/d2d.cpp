@@ -1,6 +1,7 @@
 #include "d/lyt/d2d.h"
 
 #include "d/d_font_manager.h"
+#include "d/d_gfx.h"
 #include "d/d_message.h"
 #include "d/d_lyt_hio.h"
 #include "d/lyt/d_textbox.h"
@@ -199,15 +200,13 @@ void Multi_c::calcAfter() {
     mLayout.CalculateMtx(mDrawInfo);
 }
 
-extern "C" bool NeedsScreenAdjustment();
-
 // Largely copied from m2d::Simple_c::draw
 void Multi_c::draw() {
     nw4r::ut::Rect r = mLayout.GetLayoutRect();
     f32 near = 0.0f;
     f32 far = 500.0f;
     EGG::Screen s;
-    bool needsAdjust = NeedsScreenAdjustment();
+    bool needsAdjust = dGfx_c::isTvModeWidescreen();
     f32 f1 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_16_9);
     f32 f2 = EGG::Screen::GetSizeXMax(EGG::Screen::TV_MODE_4_3);
 

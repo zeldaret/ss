@@ -120,7 +120,7 @@ bool dLytCursorStick_c::drawDirectly_() {
     return true;
 }
 
-bool dLytCursorStick_c::setPriority(u8 priority) {
+void dLytCursorStick_c::setPriority(u8 priority) {
     mLyt.setPriority(priority);
 }
 
