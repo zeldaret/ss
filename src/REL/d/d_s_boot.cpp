@@ -10,6 +10,7 @@
 #include "d/d_hbm.h"
 #include "d/d_heap.h"
 #include "d/d_message.h"
+#include "d/d_pad_manager.h"
 #include "d/d_reset.h"
 #include "d/d_scene.h"
 #include "d/d_sys.h"
@@ -293,13 +294,13 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb7() {
 sFPhaseBase::sFPhaseState dScBoot_c::cb8() {
     return sFPhaseBase::PHASE_NEXT;
 }
-extern "C" void fn_80059E90();
+
 sFPhaseBase::sFPhaseState dScBoot_c::cb9() {
     dBase_c::createRoot(fProfile::MESSAGE, 0, dBase_c::OTHER);
     dBase_c::createRoot(fProfile::C_BASE, 0, dBase_c::OTHER);
     dLytSystemWindow_c::create();
     SaveMgr::GetInstance()->createSaveMsgWindow();
-    fn_80059E90();
+    dPadManager_c::buildWindow();
     dLytBattery_c::create();
     return sFPhaseBase::PHASE_NEXT;
 }

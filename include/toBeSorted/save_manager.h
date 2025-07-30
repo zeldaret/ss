@@ -153,6 +153,7 @@ public:
     bool clearSelectedFile();
 
 private:
+    // TODO - Align with NSMBW ModeInit_ / ModeProc_ naming convention?
     void initializeCheckForSave();
     void initializeCheckForFreeSpace();
     void initializeCreateFiles();

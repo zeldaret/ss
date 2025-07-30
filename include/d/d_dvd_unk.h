@@ -28,6 +28,7 @@ public:
     void fn_80052D50();
     void fn_80052C90();
     void fn_80052C60();
+    bool fn_80052D20();
 
     s32 getField_0x24() const {
         return field_0x24;

@@ -137,10 +137,10 @@ public:
     static void setInfo(s32 chan, const WPADInfo *pInfo);
 
     static f32 fn_80058F50();
-    static bool fn_80058F60();
+    static bool startCurrentMplsCalibration();
     static f32 getCurrentCalibrationWork();
-    static void fn_80058FF0();
-    static void fn_80059000();
+    static void stopCurrentMplsCalibration();
+    static void centerCurrentCursor();
     static bool needMplsCalibration();
     static void setCalibrateMpls();
     static bool fn_800590B0();
@@ -167,6 +167,10 @@ public:
     static bool fn_80059390(s32 chan);
     void getUnifiedWpadStatus(s32 chan);
     void calcFSStickDirMask();
+
+    void setNoCalibrationNeeded() {
+        mNeedMplsCalibration = false;
+    }
 
     static void setNoSleep();
     static void setAutoSleepTime();

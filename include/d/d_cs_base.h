@@ -25,9 +25,11 @@ public:
     void setField703(bool val) {
         field_0x703 = val;
     }
-
     void setField704(bool val) {
         field_0x704 = val;
+    }
+    bool getField704() const {
+        return field_0x704;
     }
     void setField705(bool val) {
         field_0x705 = val;
@@ -39,6 +41,10 @@ public:
 
     static dCsBase_c *GetInstance() {
         return sInstance;
+    }
+
+    void setCursorStickVisible(bool visible) {
+        mCursorStick.setShouldBeOn(visible);
     }
 
 private:
@@ -55,7 +61,7 @@ private:
     /* 0x700 */ mAng field_0x700;
     /* 0x702 */ u8 mAlpha;
     /* 0x703 */ u8 field_0x703;
-    /* 0x704 */ u8 field_0x704;
+    /* 0x704 */ bool field_0x704;
     /* 0x705 */ u8 field_0x705;
 };
 

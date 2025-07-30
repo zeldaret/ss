@@ -36,6 +36,11 @@ public:
         return sInstance;
     }
 
+    static void doDrawCapTexture() {
+        nw4r::ut::Color c(0xFFFFFFFF);
+        sInstance->drawCapTexture(sInstance->mpTextureBuffer, &c);
+    }
+
 public:
     // clang-format off
     static s32 getCurrentScreenWidth() { return g_CurrentScreenWidth_s32; }

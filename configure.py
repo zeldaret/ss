@@ -413,7 +413,7 @@ config.libs = [
             Object(NonMatching, "d/d_main.cpp"),
             Object(NonMatching, "d/d_pad.cpp"),
             Object(Matching, "d/d_pad_ex.cpp"),
-            Object(NonMatching, "d/d_pause_manager.cpp"),
+            Object(NonMatching, "d/d_pad_manager.cpp"),
             Object(NonMatching, "d/d_player_act.cpp"),
             Object(Matching, "d/d_player_mdl.cpp"),
             Object(Matching, "d/d_player_guide_colors.cpp"),
