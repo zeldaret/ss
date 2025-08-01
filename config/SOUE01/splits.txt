@@ -1467,6 +1467,7 @@ d/a/obj/d_a_obj_switch.cpp:
 d/d_thp_player.cpp:
 	.text       start:0x80273370 end:0x80273BB8 align:16
 	.data       start:0x80535FB8 end:0x805360A0
+	.sdata2     start:0x8057C4E0 end:0x8057C4F0
 
 d/tg/d_t_alldie.cpp:
 	.text       start:0x80273BC0 end:0x8027405C align:16

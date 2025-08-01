@@ -592,7 +592,7 @@ config.libs = [
             Object(NonMatching, "d/a/obj/d_a_obj_tbox.cpp"),
             Object(NonMatching, "d/a/obj/d_a_obj_time_area.cpp"),
             Object(Matching, "d/a/obj/d_a_obj_switch.cpp"),
-            Object(NonMatching, "d/d_thp_player.cpp"),
+            Object(Matching, "d/d_thp_player.cpp"),
             Object(NonMatching, "d/tg/d_t_alldie.cpp"),
             Object(NonMatching, "d/tg/d_t_view_clip.cpp"),
             Object(Matching, "d/tg/d_t_switch.cpp"),
