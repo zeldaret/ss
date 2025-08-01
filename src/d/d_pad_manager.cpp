@@ -42,7 +42,7 @@ bool dPadManager_c::draw() {
 }
 
 void dPadManager_c::init() {
-    field_0x22 = false;
+    mSavedCsDrawDirectly = false;
     field_0x23 = false;
     ModeRequestNormal();
     field_0x1E = false;
@@ -94,10 +94,10 @@ void dPadManager_c::executeProc() {
 
 void dPadManager_c::ModeRequestNormal() {
     ModeRequest(Normal);
-    field_0x1C = false;
+    mIsError = false;
     field_0x1D = false;
     if (dCsBase_c::GetInstance() != nullptr) {
-        dCsBase_c::GetInstance()->setField704(field_0x22);
+        dCsBase_c::GetInstance()->setDrawDirectly(mSavedCsDrawDirectly);
         if (field_0x23) {
             dPadNav::setCursorStickVisible();
         } else {
@@ -110,8 +110,8 @@ void dPadManager_c::ModeProc_Normal() {
     PadStatus_e status = getPadStatus();
     if (status == PAD_NORMAL || status == PAD_CONFIGURING_MPLS) {
         if (isOutOfBattery() == true) {
-            field_0x1C = true;
-            dDvdUnk::FontUnk::GetInstance()->fn_80052C60();
+            mIsError = true;
+            dDvdUnk::FontUnk::GetInstance()->onError();
             ModeRequestLowBattery();
         }
         return;
@@ -119,15 +119,15 @@ void dPadManager_c::ModeProc_Normal() {
 
     // Some sort of error occured
 
-    field_0x1C = true;
+    mIsError = true;
     mPadStatus = status;
     dCsBase_c *cs = dCsBase_c::GetInstance();
-    field_0x22 = cs->getField704();
-    cs->setField704(false);
+    mSavedCsDrawDirectly = cs->getDrawDirectly();
+    cs->setDrawDirectly(false);
     cs->setCursorStickVisible(false);
     field_0x23 = dPadNav::isCursorStickVisible();
     dPadNav::setCursorStickInvisible();
-    dDvdUnk::FontUnk::GetInstance()->fn_80052C60();
+    dDvdUnk::FontUnk::GetInstance()->onError();
 
     if (status == PAD_DISCONNECTED) {
         ModeRequestReconnectPad();
@@ -468,9 +468,9 @@ void dPadManager_c::ModeProc_PointCenter() {
         case 0:
             // "Point the Wii Remote at the screen, and move <pointer icon> to the center."
             if (mpWindow->setProperties("SYS_MPLS_02", false, nullptr) == true) {
-                dCsBase_c::GetInstance()->setField703(true);
-                dCsBase_c::GetInstance()->setField704(true);
-                dCsBase_c::GetInstance()->setField705(true);
+                dCsBase_c::GetInstance()->setVisible(true);
+                dCsBase_c::GetInstance()->setDrawDirectly(true);
+                dCsBase_c::GetInstance()->setCalibrationPointCenterEnabled(true);
                 mStep = 1;
             }
             break;
@@ -532,9 +532,9 @@ void dPadManager_c::ModeProc_PointCenter() {
             if (mpWindow->getField_0xDF7() == true) {
                 field_0x1E = true;
                 field_0x25 = false;
-                dCsBase_c::GetInstance()->setField703(false);
-                dCsBase_c::GetInstance()->setField704(false);
-                dCsBase_c::GetInstance()->setField705(false);
+                dCsBase_c::GetInstance()->setVisible(false);
+                dCsBase_c::GetInstance()->setDrawDirectly(false);
+                dCsBase_c::GetInstance()->setCalibrationPointCenterEnabled(false);
                 ModeRequestNormal();
                 return;
             }
@@ -547,9 +547,9 @@ void dPadManager_c::ModeProc_PointCenter() {
         case 11:
             if (mpWindow->getField_0xDF7() == true) {
                 ModeRequestNext(status);
-                dCsBase_c::GetInstance()->setField703(false);
-                dCsBase_c::GetInstance()->setField704(false);
-                dCsBase_c::GetInstance()->setField705(false);
+                dCsBase_c::GetInstance()->setVisible(false);
+                dCsBase_c::GetInstance()->setDrawDirectly(false);
+                dCsBase_c::GetInstance()->setCalibrationPointCenterEnabled(false);
                 return;
             }
             break;
@@ -736,7 +736,7 @@ void dPadManager_c::ModeRequest(Mode_e mode) {
 
 dPadManager_c::PadStatus_e dPadManager_c::getPadStatus() {
     PadStatus_e ret = PAD_NORMAL;
-    if (dDvdUnk::FontUnk::GetInstance()->fn_80052D20() != true) {
+    if (dDvdUnk::FontUnk::GetInstance()->padErrorsAllowed() != true) {
         return PAD_NORMAL;
     }
 
@@ -787,7 +787,7 @@ s32 dPadManager_c::get1Point5SecondsInTicks() {
 }
 
 bool dPadManager_c::isOutOfBattery() {
-    if (dDvdUnk::FontUnk::GetInstance()->fn_80052D20() != true) {
+    if (dDvdUnk::FontUnk::GetInstance()->padErrorsAllowed() != true) {
         return false;
     }
 

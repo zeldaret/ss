@@ -20,9 +20,24 @@ public:
     static dPadManager_c *GetInstance() {
         return sInstance;
     }
+
+    bool isCalibrationFinished() const {
+        return mCalibrationFinished;
+    }
     bool getField_0x25() const {
         return field_0x25;
     }
+    bool isError() const {
+        return mIsError;
+    }
+
+    void setField_0x1F(bool b) {
+        field_0x1F = b;
+    }
+    bool getField_0x1F() const {
+        return field_0x1F;
+    }
+
 
     void requestMplsCalibration();
 
@@ -91,13 +106,13 @@ private:
     /* 0x10 */ s32 mStep;
     /* 0x14 */ s32 mCalibrationTimer;
     /* 0x18 */ s32 mStepTimer;
-    /* 0x1C */ bool field_0x1C;
+    /* 0x1C */ bool mIsError;
     /* 0x1D */ bool field_0x1D;
     /* 0x1E */ bool field_0x1E;
     /* 0x1F */ bool field_0x1F;
     /* 0x20 */ bool field_0x20;
     /* 0x21 */ bool mCalibrationFinished;
-    /* 0x22 */ bool field_0x22;
+    /* 0x22 */ bool mSavedCsDrawDirectly;
     /* 0x23 */ bool field_0x23;
     /* 0x24 */ bool field_0x24;
     /* 0x25 */ bool field_0x25;

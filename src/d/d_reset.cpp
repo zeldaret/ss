@@ -26,6 +26,7 @@
 #include "rvl/OS/OSThread.h"
 #include "rvl/VI/vi.h"
 #include "toBeSorted/file_manager.h"
+#include "toBeSorted/nand_result_tracker.h"
 #include "toBeSorted/save_manager.h"
 
 #include "rvl/OS.h"
@@ -339,12 +340,12 @@ void Manage_c::ModeProc_SoftReset() {
                     dDvdUnk::FontUnk::GetInstance()->fn_800529B0();
                     dSndPlayerMgr_c::GetInstance()->fn_8035E6E0();
 
-                    if (dDvdUnk::FontUnk::GetInstance()->getField_0x29() ||
-                        dDvdUnk::FontUnk::GetInstance()->getField_0x24() ||
+                    if (dDvdUnk::FontUnk::GetInstance()->isNandError() ||
+                        dDvdUnk::FontUnk::GetInstance()->getNandError() != NandResultTracker::ERR_CAT_NONE ||
                         SaveMgr::GetInstance()->getCheckForFreeSpaceResult()) {
                         dScBoot_c::GetInstance()->setField_0x5E3(0);
                         dScBoot_c::GetInstance()->setField_0x5E2(1);
-                        dDvdUnk::FontUnk::GetInstance()->fn_800529E0();
+                        dDvdUnk::FontUnk::GetInstance()->clearNandError();
                     }
                     dDvdUnk::FontUnk::GetInstance()->fn_80052A20();
                 }
@@ -356,9 +357,9 @@ void Manage_c::ModeProc_SoftReset() {
             dDvdUnk::FontUnk::GetInstance()->fn_800529B0();
             dDvdUnk::FontUnk::GetInstance()->fn_80052A20();
 
-            dCsBase_c::GetInstance()->setField703(false);
-            dCsBase_c::GetInstance()->setField704(false);
-            dCsBase_c::GetInstance()->setField705(false);
+            dCsBase_c::GetInstance()->setVisible(false);
+            dCsBase_c::GetInstance()->setDrawDirectly(false);
+            dCsBase_c::GetInstance()->setCalibrationPointCenterEnabled(false);
 
             field_0x66 = false;
         }
@@ -564,7 +565,7 @@ bool Manage_c::IsFatalError() {
 }
 
 bool Manage_c::IsDiskError() {
-    return dDvdUnk::FontUnk::GetInstance()->getField_0x28();
+    return dDvdUnk::FontUnk::GetInstance()->isDiskError();
 }
 
 bool Manage_c::FadeOutCalc() {
@@ -581,9 +582,9 @@ void Manage_c::FadeOutRequest(bool fade) {
         dDvdUnk::FontUnk::GetInstance()->fn_800529B0();
         dDvdUnk::FontUnk::GetInstance()->fn_80052A20();
 
-        dCsBase_c::GetInstance()->setField703(false);
-        dCsBase_c::GetInstance()->setField704(false);
-        dCsBase_c::GetInstance()->setField705(false);
+        dCsBase_c::GetInstance()->setVisible(false);
+        dCsBase_c::GetInstance()->setDrawDirectly(false);
+        dCsBase_c::GetInstance()->setCalibrationPointCenterEnabled(false);
 
         field_0x66 = 0;
 

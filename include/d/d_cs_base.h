@@ -22,17 +22,17 @@ public:
     int update();
     bool drawDirectly();
 
-    void setField703(bool val) {
-        field_0x703 = val;
+    void setVisible(bool val) {
+        mVisible = val;
     }
-    void setField704(bool val) {
-        field_0x704 = val;
+    void setDrawDirectly(bool val) {
+        mDrawDirectly = val;
     }
-    bool getField704() const {
-        return field_0x704;
+    bool getDrawDirectly() const {
+        return mDrawDirectly;
     }
-    void setField705(bool val) {
-        field_0x705 = val;
+    void setCalibrationPointCenterEnabled(bool val) {
+        mCalibrationPointCenterEnabled = val;
     }
 
     dCursorHitCheck_c *getHitCheck() {
@@ -60,9 +60,9 @@ private:
     /* 0x6F8 */ mVec2_c mCsVelocity;
     /* 0x700 */ mAng field_0x700;
     /* 0x702 */ u8 mAlpha;
-    /* 0x703 */ u8 field_0x703;
-    /* 0x704 */ bool field_0x704;
-    /* 0x705 */ u8 field_0x705;
+    /* 0x703 */ bool mVisible;
+    /* 0x704 */ bool mDrawDirectly;
+    /* 0x705 */ bool mCalibrationPointCenterEnabled;
 };
 
 #endif

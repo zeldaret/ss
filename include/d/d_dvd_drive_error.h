@@ -16,6 +16,10 @@ public:
         return sInstance;
     }
 
+    s32 getStatus() const {
+        return mDvdDriveStatus;
+    }
+
 private:
     static dDvdDriveError_c *sInstance;
 

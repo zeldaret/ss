@@ -42,9 +42,6 @@ static const char *sLayoutArcsToLoad[] = {
 STATE_VIRTUAL_DEFINE(dScTitle_c, Stanby);
 STATE_VIRTUAL_DEFINE(dScTitle_c, Action);
 
-extern "C" void *lbl_805750D8;
-extern "C" void fn_80052D50(void *);
-
 dScTitle_c::dScTitle_c() {
     sInstance = this;
     mRelCtrl.set(sModulesToLoad, ARRAY_LENGTH(sModulesToLoad));
