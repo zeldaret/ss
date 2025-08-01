@@ -4,7 +4,7 @@
 #include "__va_arg.h"
 #include "common.h"
 
-#include "RVL/OS/OSContext.h"
+#include "rvl/OS/OSContext.h"
 
 
 #ifdef __cplusplus
