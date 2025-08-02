@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 extern u16 __AXCompressorTable[];
+void AXSetCompressor(BOOL);
 
 #ifdef __cplusplus
 }

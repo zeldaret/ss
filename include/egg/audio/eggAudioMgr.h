@@ -14,7 +14,7 @@ public:
     virtual StartResult
     detail_SetupSound(nw4r::snd::SoundHandle *pHandle, u32 id, bool hold, const StartInfo *pStartInfo) override {
         if (AudioSystem::sInstanse != nullptr &&
-            (AudioSystem::sInstanse->field0x08NotZero() || AudioSystem::sInstanse->field0x04NotZero())) {
+            (AudioSystem::sInstanse->isShuttingDown() || AudioSystem::sInstanse->isResetting())) {
             return START_ERR_USER;
         }
         return nw4r::snd::SoundArchivePlayer::detail_SetupSound(pHandle, id, hold, pStartInfo);
@@ -26,7 +26,7 @@ public:
     struct Arg {
         Arg();
         /* 0x00 */ EGG::Heap *heap;
-        /* 0x04 */ char *soundFileName;
+        /* 0x04 */ const char *soundFileName;
         /* 0x08 */ int sndThreadPriority;
         /* 0x0C */ int dvdThreadPriority;
         /* 0x10 */ int sndThreadStackSize;
@@ -40,7 +40,7 @@ public:
         field_0x04 = false;
     }
 
-    virtual UNKTYPE initialize(Arg *) {}
+    virtual void initialize(Arg *) {}
     virtual UNKTYPE calc() = 0;
 
     bool field_0x04;
@@ -55,7 +55,7 @@ public:
     SimpleAudioMgr();
     virtual ~SimpleAudioMgr();
 
-    void initialize(EGG::IAudioMgr::Arg *) override;
+    virtual void initialize(EGG::IAudioMgr::Arg *) override;
     virtual void calc() override;
 
     virtual UNKTYPE *openDvdArchive(const char *, nw4r::snd::SoundHeap *) override;     // at 0x10

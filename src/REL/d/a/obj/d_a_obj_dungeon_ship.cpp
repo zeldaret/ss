@@ -8,6 +8,7 @@
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
 #include "m/m3d/m_fanm.h"
 #include "m/m_angle.h"
@@ -226,7 +227,7 @@ void dAcODungeonShip_c::executeState_Wait() {
         field_0x863 = 0;
         field_0x864 = 0x8C;
         mAppearEvent = field_0x849;
-        playSound(0xB62);
+        startSound(SE_d2ship_APPEAR);
         mStateMgr.changeState(StateID_AppearEvent);
     } else {
         fn_485_1BF0();
@@ -244,7 +245,7 @@ void dAcODungeonShip_c::executeState_Transparency() {
             field_0x863 = 0;
             field_0x855 = 0;
             mNumTimesHit++;
-            playSound(0xB62);
+            startSound(SE_d2ship_APPEAR);
         } else if (mNumTimesHit == 2) {
             field_0x863 = 0;
             mNumTimesHit++;
@@ -252,7 +253,7 @@ void dAcODungeonShip_c::executeState_Transparency() {
             mAppearEvent = mAppearEventFromParam;
             field_0x8D8 = 1;
             mStateMgr.changeState(StateID_AppearEvent);
-            playSound(0xB62);
+            startSound(SE_d2ship_APPEAR);
             return;
         }
     }

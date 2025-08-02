@@ -16,8 +16,12 @@ public:
     virtual int doDelete() override;
     virtual int create() override;
 
-    void setBgmFlag(int flag) {
-        mBgmFlags |= 1 << flag;
+    void setSndFlag(int flag) {
+        mSndFlags |= 1 << flag;
+    }
+
+    u32 getSndFlags() const {
+        return mSndFlags;
     }
 
     static dTgSndMg_c *GetInstance() {
@@ -26,7 +30,8 @@ public:
 
 private:
     static dTgSndMg_c *sInstance;
-    u32 mBgmFlags;
+    
+    /* 0xFC */ u32 mSndFlags;
 };
 
 #endif

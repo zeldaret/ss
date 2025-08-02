@@ -4,49 +4,45 @@
 #include "d/a/d_a_player.h"
 #include "d/snd/d_snd_3d_manager.h"
 #include "d/snd/d_snd_checkers.h"
+#include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
+#include "d/snd/d_snd_state_mgr.h"
 #include "nw4r/math/math_types.h"
 
 #include <cmath>
 
-dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, u8 sourceType)
+dSnd3DActor_c::dSnd3DActor_c(dSndSourceParam *pSourceParam, s32 sourceType)
     : nw4r::snd::Sound3DActor(
-          dSndPlayerMgr_c::GetInstance()->getSoundArchivePlayerForType(sourceType), dSnd3DManager_c::GetInstance()->getManager()
+          dSndPlayerMgr_c::GetInstance()->getSoundArchivePlayerForType(sourceType),
+          dSnd3DManager_c::GetInstance()->getManager()
       ),
       a_field_0x7D(0),
-      a_field_0x7E(0),
-      a_field_0x7F(0),
-      a_field_0x80(0),
+      mIsDisabled(false),
+      mIsDemoActor(false),
+      mIsPaused(false),
       a_field_0x84(0.0f),
       a_field_0x88(0.0f),
       a_field_0x8C(0.0f),
       a_field_0x90(INFINITY),
       mDistanceToListener(INFINITY),
       mCameraDirectionDot(0.0f),
-      a_field_0x9C(0.0f),
+      mSpeed(0.0f),
       mpSourceParam(pSourceParam),
       mFlags(0),
       mDistanceToPlayer(INFINITY),
-      a_field_0xE0(0.0f) {
+      mFxSend3D(0.0f) {
     resetCachedRelativePositions();
     // Portability hazard
     SetUserParam(reinterpret_cast<u32>(this));
-    if (dSndPlayerMgr_c::GetInstance()->canUseThisPlayer(sourceType)) {
-        a_field_0x7F = 1;
+    if (dSndPlayerMgr_c::GetInstance()->shouldUseDemoPlayer(sourceType)) {
+        mIsDemoActor = true;
     }
 }
 
-void dSnd3DActor_c::d_vt_0x34(const nw4r::math::VEC3 &rPosition) {
+void dSnd3DActor_c::setPosition(const nw4r::math::VEC3 &rPosition) {
     SetPosition(rPosition);
-    // TODO - 0xE0
+    mFxSend3D = dSndStateMgr_c::GetInstance()->getFxSend3D();
     mFlags = 0;
-}
-
-void dSnd3DActor_c::updatePositionRelativeToListener() {
-    if (!checkFlag(0x1)) {
-        calculatePositionRelativeToListener();
-        setFlag(0x1);
-    }
 }
 
 void dSnd3DActor_c::resetCachedRelativePositions() {
@@ -61,6 +57,17 @@ void dSnd3DActor_c::resetCachedRelativePositions() {
     mPositionTransformedByListener.x = INFINITY;
     mPositionTransformedByListener.y = INFINITY;
     mPositionTransformedByListener.z = INFINITY;
+}
+
+void dSnd3DActor_c::setSourceParam(const dSndSourceParam *param) {
+    *mpSourceParam = *param;
+}
+
+void dSnd3DActor_c::updatePositionRelativeToListener() {
+    if (!checkFlag(0x1)) {
+        calculatePositionRelativeToListener();
+        setFlag(0x1);
+    }
 }
 
 void dSnd3DActor_c::calculatePositionRelativeToListener() {
@@ -91,7 +98,7 @@ void dSnd3DActor_c::updateCameraDirectionDot() {
         updatePositionRelativeToListener();
         nw4r::math::VEC3 norm;
         VECNormalize(mPositionRelativeToListener, norm);
-        mCameraDirectionDot = nw4r::math::VEC3Dot(&norm, dSnd3DManager_c::GetInstance()->getNrmCameraDirection());
+        mCameraDirectionDot = nw4r::math::VEC3Dot(&norm, &dSnd3DManager_c::GetInstance()->getNrmCameraDirection());
         setFlag(0x20);
     }
 }
@@ -105,7 +112,7 @@ void dSnd3DActor_c::updatePositionRelativeToCameraTarget() {
 
 void dSnd3DActor_c::calculatePositionRelativeToCameraTarget() {
     nw4r::math::VEC3Sub(
-        &mPositionRelativeToCameraTarget, &GetPosition(), dSnd3DManager_c::GetInstance()->getCameraTargetPos()
+        &mPositionRelativeToCameraTarget, &GetPosition(), &dSnd3DManager_c::GetInstance()->getCameraTargetPos()
     );
 }
 
@@ -171,4 +178,16 @@ bool dSnd3DActor_c::isPlayingSound(u32 id) {
     ForEachSound(handler, false);
 
     return result;
+}
+
+u32 dSnd3DActor_c::soundLabelToSoundId(const char *soundLabel) const {
+    return dSndPlayerMgr_c::GetInstance()->convertLabelStringToSoundId(soundLabel);
+}
+
+const char *dSnd3DActor_c::soundIdToSoundLabel(u32 soundId) const {
+    if (mIsDemoActor) {
+        return dSndPlayerMgr_c::GetInstance()->getDemoArchiveDirectly()->GetSoundLabelString(soundId);
+    } else {
+        return dSndMgr_c::getSoundLabelString(soundId);
+    }
 }

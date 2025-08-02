@@ -10,29 +10,34 @@ public:
     AudioSystem();
     ~AudioSystem();
 
-    void fn_804B7270(s32 frame);
-    void fn_804B7370();
-    void fn_804B73D0(s32 frame);
+    void reset(s32 ms);
+    void recoverReset();
+    void shutdown(s32 ms);
     void calc();
 
-    bool isField0x04Eq2() {
-        return field_0x04 == 2;
+    // Non-official inline names
+    bool isReset() {
+        return mResetStatus == 2;
     }
 
-    bool field0x08NotZero() {
-        return field_0x08 != 0;
+    bool isShutdown() {
+        return mShutdownStatus == 2;
     }
 
-    bool field0x04NotZero() {
-        return field_0x04 != 0;
+    bool isShuttingDown() {
+        return mShutdownStatus != 0;
+    }
+
+    bool isResetting() {
+        return mResetStatus != 0;
     }
 
     static AudioSystem *sInstanse; ///< sic
 
 private:
-    f32 field_0x00;
-    s32 field_0x04;
-    s32 field_0x08;
+    /* 0x00 */ f32 mSavedMasterVolume;
+    /* 0x04 */ s32 mResetStatus;
+    /* 0x08 */ s32 mShutdownStatus;
 };
 
 } // namespace EGG

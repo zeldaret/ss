@@ -239,7 +239,7 @@ void dAcBoomerang_c::deleteReady() {
     deleteCheck();
 
     if (getSoundSource()) {
-        getSoundSource()->vt_0x40(5);
+        getSoundSource()->stopAllSound(5);
     }
 
     if (dAcPy_c::GetLink2()) {
@@ -251,7 +251,7 @@ void dAcBoomerang_c::retrieve() {
     if (mFader.isStatus(mFaderBase_c::FADED_OUT)) {
         mFader.setFrame(5);
         mFader.fadeIn();
-        playSound(SE_BE_COME_BACK);
+        startSound(SE_BE_COME_BACK);
     }
     mFader.calc();
 }
@@ -391,7 +391,7 @@ void dAcBoomerang_c::executeState_ReturnWait() {
     forwardSpeed = 0.f;
     placeOnArm();
     if (mAnmChr[BOOMERANG_ANIM_PINCERS].isStop() || !dAcPy_c::GetLink2()->checkActionFlagsCont(0x10)) {
-        playSound(SE_BE_CATCH);
+        startSound(SE_BE_CATCH);
         mStateMgr.changeState(StateID_Wait);
     }
 }
@@ -439,7 +439,7 @@ void dAcBoomerang_c::initializeState_Move() {
 
     field_0x8E4.fromXY(angle.x, angle.y, forwardSpeed);
 
-    playSound(SE_BE_THROW);
+    startSound(SE_BE_THROW);
     dJEffManager_c::spawnUIEffect(PARTICLE_RESOURCE_ID_MAPPING_3_, mVec3_c::Zero, nullptr, nullptr, nullptr, nullptr);
     field_0x8F0 = mVec3_c::Zero;
     field_0x8D4 = 0.0f;
@@ -484,7 +484,7 @@ void dAcBoomerang_c::executeTimeWarning() {
 
         flashClr.r = (1.f / (r - 6)) * MAX(0, (mFlashTimer % r) - 5) * 255.f;
         if (flashClr.r == 0xFF && !mStateMgr.isState(StateID_MoveCancelWait)) {
-            playSound(SE_BE_WARNING);
+            startSound(SE_BE_WARNING);
         }
     }
 
@@ -554,7 +554,7 @@ int dAcBoomerang_c::actorExecute() {
     if (checkField_0x8CC(FLAG_0x20) && !checkField_0x8CC(FLAG_CANCEL)) {
         if (mStateMgr.isState(StateID_Move) || mStateMgr.isState(StateID_MoveCancelWait)) {
             mEff3.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_7_, mWorldMtx, nullptr, nullptr);
-            playSoundEffect1(SE_BE_HIT_LEAVES_LV);
+            holdSound(SE_BE_HIT_LEAVES_LV);
         }
     }
 

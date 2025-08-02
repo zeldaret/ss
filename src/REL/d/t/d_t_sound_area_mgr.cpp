@@ -18,9 +18,9 @@ int dTgSndMg_c::doDelete() {
 
 int dTgSndMg_c::actorExecute() {
     if (dAcPy_c::LINK != nullptr) {
-        dAcPy_c::LINK->field_0xe8 = 0;
+        dAcPy_c::LINK->mTgSndAreaFlags = 0;
     }
-    mBgmFlags = 0;
+    mSndFlags = 0;
     return SUCCEEDED;
 }
 
