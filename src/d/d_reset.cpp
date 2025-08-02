@@ -329,13 +329,13 @@ void Manage_c::ModeProc_SoftReset() {
     if (dScBoot_c::GetInstance()) {
         if (mpFader->getStatus() == EGG::ColorFader::STATUS_PREPARE_IN) {
             if (dScBoot_c::GetInstance()->getField_0x5E4()) {
-                dScBoot_c::GetInstance()->setField_0x5E4(0);
+                dScBoot_c::GetInstance()->setField_0x5E4(false);
                 mpFader->setStatus(EGG::ColorFader::STATUS_PREPARE_OUT);
                 ModeRequest(Normal);
                 dSndPlayerMgr_c::GetInstance()->fn_8035E310();
             } else {
                 if (field_0x66) {
-                    dScBoot_c::GetInstance()->setField_0x5E3(1);
+                    dScBoot_c::GetInstance()->setField_0x5E3(true);
 
                     dDvdUnk::FontUnk::GetInstance()->fn_800529B0();
                     dSndPlayerMgr_c::GetInstance()->fn_8035E6E0();
@@ -343,8 +343,8 @@ void Manage_c::ModeProc_SoftReset() {
                     if (dDvdUnk::FontUnk::GetInstance()->isNandError() ||
                         dDvdUnk::FontUnk::GetInstance()->getNandError() != NandResultTracker::ERR_CAT_NONE ||
                         SaveMgr::GetInstance()->getCheckForFreeSpaceResult()) {
-                        dScBoot_c::GetInstance()->setField_0x5E3(0);
-                        dScBoot_c::GetInstance()->setField_0x5E2(1);
+                        dScBoot_c::GetInstance()->setField_0x5E3(false);
+                        dScBoot_c::GetInstance()->setField_0x5E2(true);
                         dDvdUnk::FontUnk::GetInstance()->clearNandError();
                     }
                     dDvdUnk::FontUnk::GetInstance()->fn_80052A20();
@@ -553,7 +553,8 @@ void Manage_c::CleanUpLC() {
 
 void Manage_c::MotorCancelOn() {
     for (int i = 0; i < 4; i++) {
-        mPad::g_core[--++i]->stopRumbleMgr();
+        // TODO: Fakematch
+        mPad::getCore(--++i)->stopRumbleMgr();
     }
     dRumble_c::stop(-1);
 }

@@ -50,7 +50,7 @@ void dPadManager_c::init() {
     if (mpWindow != nullptr) {
         mpWindow->init();
     }
-    field_0x24 = false;
+    mCalibrationSkipped = false;
 }
 
 void dPadManager_c::buildWindow() {
@@ -293,7 +293,7 @@ void dPadManager_c::ModeRequestCalibrating() {
     mCalibrationTimer = 0;
     field_0x1D = true;
     mCalibrationFinished = false;
-    field_0x24 = false;
+    mCalibrationSkipped = false;
 }
 void dPadManager_c::ModeProc_Calibrating() {
     PadStatus_e status = getPadStatus();
@@ -619,7 +619,7 @@ void dPadManager_c::ModeProc_CalibrationFail() {
                     if (mpWindow->fn_80150EB0() == true) {
                         field_0x1D = false;
                         dPad::ex_c::getInstance()->setNoCalibrationNeeded();
-                        field_0x24 = true;
+                        mCalibrationSkipped = true;
                         field_0x25 = false;
                         mStep = 16;
                     }

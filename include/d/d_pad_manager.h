@@ -24,6 +24,9 @@ public:
     bool isCalibrationFinished() const {
         return mCalibrationFinished;
     }
+    bool isCalibrationSkipped() const {
+        return mCalibrationSkipped;
+    }
     bool getField_0x25() const {
         return field_0x25;
     }
@@ -114,7 +117,7 @@ private:
     /* 0x21 */ bool mCalibrationFinished;
     /* 0x22 */ bool mSavedCsDrawDirectly;
     /* 0x23 */ bool field_0x23;
-    /* 0x24 */ bool field_0x24;
+    /* 0x24 */ bool mCalibrationSkipped;
     /* 0x25 */ bool field_0x25;
 
     static dPadManager_c *sInstance;

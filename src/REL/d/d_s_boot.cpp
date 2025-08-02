@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "d/d_cs_base.h"
 #include "d/d_d2d.h"
 #include "d/d_dvd_unk.h"
 #include "d/d_dylink.h"
@@ -10,8 +11,11 @@
 #include "d/d_hbm.h"
 #include "d/d_heap.h"
 #include "d/d_message.h"
+#include "d/d_pad.h"
 #include "d/d_pad_manager.h"
+#include "d/d_pad_nav.h"
 #include "d/d_reset.h"
+#include "d/d_sc_title.h"
 #include "d/d_scene.h"
 #include "d/d_sys.h"
 #include "d/lyt/d_lyt_battery.h"
@@ -33,6 +37,7 @@
 #include "toBeSorted/d_emitter.h"
 #include "toBeSorted/d_particle.h"
 #include "toBeSorted/fi_context.h"
+#include "toBeSorted/file_manager.h"
 #include "toBeSorted/save_manager.h"
 #include "toBeSorted/save_related.h"
 #include "toBeSorted/special_item_drop_mgr.h"
@@ -244,7 +249,7 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb6() {
     }
 
     dDvdUnk::FontUnk::GetInstance()->setField_0x2C(1);
-    field_0x5DF = 1;
+    mObjectDataLoaded = true;
     return sFPhaseBase::PHASE_NEXT;
 }
 
@@ -401,12 +406,12 @@ void dScBoot_c::strap_c::init() {
 }
 
 dScBoot_c::dScBoot_c() : mStateMgr(*this, sStateID::null), mPhases(this, sCallbacks), mpDvdCallback(nullptr) {
-    field_0x5DF = 0;
+    mObjectDataLoaded = false;
     sInstance = this;
-    field_0x5E1 = 0;
-    field_0x5E2 = 0;
-    field_0x5E3 = 0;
-    field_0x5E4 = 0;
+    mStrapScreenVisible = false;
+    field_0x5E2 = false;
+    field_0x5E3 = false;
+    field_0x5E4 = false;
 }
 
 dScBoot_c::~dScBoot_c() {
@@ -438,7 +443,7 @@ int dScBoot_c::doDelete() {
     dBase_c::createRoot(fProfile::LAST, 0, 0);
     d3d::createLightTextures();
     SpecialItemDropMgr::create();
-    dHbm::Manage_c::GetInstance()->offFlags(8);
+    dHbm::Manage_c::GetInstance()->offFlags(0x8);
     dGfx_c::GetInstance()->setDrawCallback(nullptr);
     dReset::Manage_c::GetInstance()->BootComplete(true);
     return SUCCEEDED;
@@ -448,15 +453,15 @@ int dScBoot_c::execute() {
     mFader.calc();
     mStateMgr.executeState();
     sFPhaseBase::sFPhaseState state = executeLoadPhase();
-    if (field_0x5DE == 0 && state == sFPhaseBase::PHASE_ALL_DONE) {
-        field_0x5DE = 1;
+    if (mAllDataLoaded == false && state == sFPhaseBase::PHASE_ALL_DONE) {
+        mAllDataLoaded = true;
     }
 
     return SUCCEEDED;
 }
 
 int dScBoot_c::draw() {
-    if (field_0x5E1 == 1) {
+    if (mStrapScreenVisible == true) {
         mStrapScreen.draw();
     }
 
@@ -464,16 +469,16 @@ int dScBoot_c::draw() {
 }
 
 void dScBoot_c::deleteReady() {
-    // TODO
+    // no-op
 }
 
 void dScBoot_c::initializeState_Init() {
     mProgressStage = 0;
     field_0x5D8 = 0;
-    field_0x5DC = 0;
-    field_0x5DD = 0;
-    field_0x5DE = 0;
-    field_0x5E0 = 0;
+    mStrapScreenSeen = false;
+    mCalibrationDone = false;
+    mAllDataLoaded = false;
+    field_0x5E0 = false;
 }
 
 void dScBoot_c::executeState_Init() {
@@ -484,7 +489,7 @@ void dScBoot_c::finalizeState_Init() {}
 
 void dScBoot_c::initializeState_Strap() {
     mProgressStage = 0;
-    field_0x5E1 = 1;
+    mStrapScreenVisible = true;
     mFader.fadeIn();
     mFader.resetFrames();
 }
@@ -505,7 +510,7 @@ void dScBoot_c::executeState_Strap() {
                     }
 
                     if (ok) {
-                        field_0x5DC = 1;
+                        mStrapScreenSeen = true;
                         if (mFader.fadeOut() == true) {
                             mProgressStage = 2;
                         }
@@ -516,7 +521,7 @@ void dScBoot_c::executeState_Strap() {
                 if (!checkDone() && mFader.isNotStatus(mFaderBase_c::FADING_OUT)) {
                     if (mFader.fadeIn() == true) {
                         mProgressStage = 3;
-                        field_0x5E1 = 0;
+                        mStrapScreenVisible = false;
                     }
                 }
                 break;
@@ -528,9 +533,9 @@ void dScBoot_c::executeState_Strap() {
             case 4:
                 mFader.setStatus(mFaderBase_c::FADED_OUT);
                 if (mFader.fadeIn() == true) {
-                    field_0x5E4 = 1;
-                    if (field_0x5DC != 0) {
-                        field_0x5E1 = 0;
+                    field_0x5E4 = true;
+                    if (mStrapScreenSeen != false) {
+                        mStrapScreenVisible = false;
                         mStateMgr.changeState(StateID_Connect);
                     } else {
                         mProgressStage = 0;
@@ -544,8 +549,7 @@ void dScBoot_c::executeState_Strap() {
 }
 
 void dScBoot_c::finalizeState_Strap() {
-    // TODO
-    dGfx_c::GetInstance()->setField0x09(1);
+    dGfx_c::GetInstance()->setLetterboxEnabled(1);
 }
 
 void dScBoot_c::initializeState_Connect() {
@@ -554,7 +558,91 @@ void dScBoot_c::initializeState_Connect() {
 }
 
 void dScBoot_c::executeState_Connect() {
-    // TODO
+    switch (mProgressStage) {
+        case 0:
+            if (field_0x5E3 == true) {
+                field_0x5E3 = false;
+                mProgressStage = 4;
+            } else if (mObjectDataLoaded == true) {
+                mProgressStage = 1;
+            }
+            break;
+        case 1:
+            if (field_0x5E3 == true) {
+                field_0x5E3 = false;
+                mProgressStage = 4;
+            } else {
+                dHbm::Manage_c::GetInstance()->offFlags(0x8);
+                dDvdUnk::FontUnk::GetInstance()->fn_80052CC0();
+                mProgressStage = 2;
+            }
+            break;
+        case 2:
+            if (field_0x5E3 == true) {
+                field_0x5E3 = false;
+                mProgressStage = 5;
+            } else {
+                mProgressStage = 3;
+            }
+            break;
+        case 3:
+            if (field_0x5E3 == true) {
+                field_0x5E3 = false;
+                mProgressStage = 5;
+            } else if (dPadManager_c::GetInstance()->isCalibrationFinished() ||
+                       dPadManager_c::GetInstance()->isCalibrationSkipped()) {
+                mCalibrationDone = true;
+                mStateMgr.changeState(StateID_Save);
+            }
+            break;
+        case 4:
+            mFader.setStatus(mFaderBase_c::FADED_OUT);
+            if (mFader.fadeIn() == true) {
+                field_0x5E4 = true;
+                if (mObjectDataLoaded == true) {
+                    mProgressStage = 1;
+                } else {
+                    mProgressStage = 0;
+                }
+                dHbm::Manage_c::GetInstance()->fn_80197560(0);
+            }
+            break;
+        case 5:
+            mFader.setStatus(mFaderBase_c::FADED_OUT);
+            if (mFader.fadeIn() == true) {
+                field_0x5E4 = true;
+                mProgressStage = 6;
+            }
+            break;
+        case 6:
+            if (mFader.isNotStatus(mFaderBase_c::FADING_IN)) {
+                if (dReset::Manage_c::GetInstance()->isSoftReset()) {
+                    if (dPadManager_c::GetInstance()->isCalibrationFinished() == true &&
+                        dPadManager_c::GetInstance()->getField_0x25() == false) {
+                        mCalibrationDone = true;
+                        mStateMgr.changeState(StateID_Save);
+                    } else {
+                        mProgressStage = 2;
+                    }
+                } else {
+                    dHbm::Manage_c::GetInstance()->fn_80197560(0);
+                    if (dPadManager_c::GetInstance()->isCalibrationFinished() == true) {
+                        if (dPadManager_c::GetInstance()->getField_0x25() == false) {
+                            mCalibrationDone = true;
+                            mStateMgr.changeState(StateID_Save);
+                        } else {
+                            dDvdUnk::FontUnk::GetInstance()->fn_80052CC0();
+                            mProgressStage = 2;
+                        }
+                    } else {
+                        dPad::ex_c::setCalibrateMpls();
+                        dDvdUnk::FontUnk::GetInstance()->fn_80052CC0();
+                        mProgressStage = 2;
+                    }
+                }
+            }
+            break;
+    }
 }
 
 void dScBoot_c::finalizeState_Connect() {}
@@ -566,16 +654,95 @@ void dScBoot_c::initializeState_Save() {
 }
 
 void dScBoot_c::executeState_Save() {
-    // TODO
+    switch (mProgressStage) {
+        case 0:
+            if (field_0x5E3 == true) {
+                field_0x5E3 = false;
+                field_0x5D8 = mProgressStage;
+                dDvdUnk::FontUnk::GetInstance()->fn_800529B0();
+                mProgressStage = 3;
+            } else if (field_0x5E2 == true) {
+                field_0x5E2 = false;
+                mProgressStage = 2;
+            } else {
+                SaveRelated *saveRelated = SaveRelated::GetInstance();
+                saveRelated->fn_80015EC0();
+                if (saveRelated->getField_0x09() == true) {
+                    mProgressStage = 1;
+                    field_0x5E0 = true;
+                }
+            }
+            break;
+        case 1:
+            if (field_0x5E3 == true) {
+                field_0x5E3 = false;
+                field_0x5D8 = mProgressStage;
+                mProgressStage = 3;
+            } else if (tryLoadTitleScreen()) {
+                mProgressStage = 100;
+            }
+            break;
+        case 2:
+            if (FileManager::GetInstance()->getField_0xA84D() != true) {
+                mFader.setStatus(mFaderBase_c::FADED_OUT);
+                if (mFader.fadeIn() == mFaderBase_c::FADED_IN) {
+                    dCsBase_c::GetInstance()->setCursorStickVisible(false);
+                    dDvdUnk::FontUnk::GetInstance()->fn_800529B0();
+                    dDvdUnk::FontUnk::GetInstance()->fn_80052A20();
+                    dLytSystemWindow_c::GetInstance()->fn_80152F10();
+                    SaveMgr::GetInstance()->init();
+                    dPadNav::setNavEnabled(false, false);
+                    field_0x5E4 = true;
+                    dHbm::Manage_c::GetInstance()->fn_80197560(0);
+                    SaveRelated::GetInstance()->fn_80015EA0();
+                    SaveRelated::GetInstance()->fn_80015F40();
+                    dDvdUnk::FontUnk::GetInstance()->fn_80052CC0();
+                    mProgressStage = 0;
+                }
+            }
+            break;
+        case 3:
+            mFader.setStatus(mFaderBase_c::FADED_OUT);
+            if (mFader.fadeIn() == mFaderBase_c::FADED_IN) {
+                field_0x5E4 = true;
+                mProgressStage = field_0x5D8;
+                dDvdUnk::FontUnk::GetInstance()->fn_80052CC0();
+                dHbm::Manage_c::GetInstance()->fn_80197560(0);
+            }
+            break;
+        case 999999:
+            if (tryLoadTitleScreen()) {
+                mProgressStage = 100;
+            }
+            break;
+    }
 }
 
 void dScBoot_c::finalizeState_Save() {}
 
-bool dScBoot_c::checkDone() {
-    if (field_0x5E3 == 1) {
-        field_0x5E3 = 0;
-        mProgressStage = 4;
-        return 1;
+bool dScBoot_c::tryLoadTitleScreen() {
+    if (mStrapScreenSeen != true) {
+        return false;
     }
-    return 0;
+    if (mCalibrationDone != true) {
+        return false;
+    }
+    if (mAllDataLoaded != true) {
+        return false;
+    }
+    if (field_0x5E0 != true) {
+        return false;
+    }
+
+    dScTitle_c::loadTitleScreen(0);
+    return true;
+}
+
+bool dScBoot_c::checkDone() {
+    if (field_0x5E3 == true) {
+        field_0x5E3 = false;
+        mProgressStage = 4;
+        return true;
+    }
+    return false;
 }
