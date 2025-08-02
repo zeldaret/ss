@@ -24,9 +24,9 @@ dCsBase_c::dCsBase_c()
       mCsVelocity(0.0f, 0.0f),
       field_0x700(0),
       mAlpha(0),
-      field_0x703(0),
-      field_0x704(0),
-      field_0x705(0) {
+      mVisible(false),
+      mDrawDirectly(false),
+      mCalibrationPointCenterEnabled(false) {
     sInstance = this;
 }
 
@@ -58,7 +58,7 @@ int dCsBase_c::create() {
 
     field_0x700 = 0;
     mAlpha = 0;
-    field_0x703 = 0;
+    mVisible = false;
 
     return SUCCEEDED;
 }
@@ -74,7 +74,10 @@ int dCsBase_c::execute() {
     mVec2_c dpdPosScreen = dPad::ex_c::getInstance()->getDpdPosScreen();
     u8 oldAlpha = mAlpha;
     bool bIsInBounds = false;
-    if (field_0x705 == 1) {
+    if (mCalibrationPointCenterEnabled == true) {
+        // If we're in the initial "cursor center" process at startup or when manually calibrating,
+        // we need to make sure to only take the raw pointer inputs into account (transforming them
+        // to screen coordinates of course)
         mVec2_c dpdPos = mPad::getDpdRawPos();
         dpdPosScreen.x = dGfx_c::getWidth4x3F() * 0.5f * (1.f + dpdPos.x) + dGfx_c::getWidth4x3LeftF();
         dpdPosScreen.y = dGfx_c::getCurrentScreenHeightF() * -0.5f * (1.f + dpdPos.y) + dGfx_c::getCurrentScreenTopF();
@@ -112,11 +115,11 @@ int dCsBase_c::execute() {
 }
 
 int dCsBase_c::draw() {
-    if (field_0x704 == 1) {
+    if (mDrawDirectly == true) {
         return SUCCEEDED;
     }
 
-    if (field_0x703 && dPadNav::isPointerVisible() && mAlpha) {
+    if (mVisible && dPadNav::isPointerVisible() && mAlpha != 0) {
         nw4r::lyt::Pane *p = mpCurrLyt->getLayout()->GetRootPane();
         nw4r::math::VEC3 pos;
         pos.x = mCsPosition.x;
@@ -140,11 +143,11 @@ int dCsBase_c::update() {
 }
 
 bool dCsBase_c::drawDirectly() {
-    if (field_0x704 != 1) {
+    if (mDrawDirectly != true) {
         return true;
     }
 
-    if (field_0x703 && dPadNav::isPointerVisible() && mAlpha) {
+    if (mVisible && dPadNav::isPointerVisible() && mAlpha != 0) {
         nw4r::lyt::Pane *p = mpCurrLyt->getLayout()->GetRootPane();
         nw4r::math::VEC3 pos;
         pos.x = mCsPosition.x;

@@ -24,22 +24,22 @@ public:
         return sInstance;
     }
 
-    u8 getField_0x5E2() const {
+    bool getField_0x5E2() const {
         return field_0x5E2;
     }
-    void setField_0x5E2(u8 val) {
+    void setField_0x5E2(bool val) {
         field_0x5E2 = val;
     }
-    u8 getField_0x5E3() const {
+    bool getField_0x5E3() const {
         return field_0x5E3;
     }
-    void setField_0x5E3(u8 val) {
+    void setField_0x5E3(bool val) {
         field_0x5E3 = val;
     }
-    u8 getField_0x5E4() const {
+    bool getField_0x5E4() const {
         return field_0x5E4;
     }
-    void setField_0x5E4(u8 val) {
+    void setField_0x5E4(bool val) {
         field_0x5E4 = val;
     }
 
@@ -76,6 +76,7 @@ private:
     virtual void deleteReady() override;
 
     bool checkDone();
+    bool tryLoadTitleScreen();
 
     static void drawCallback();
 
@@ -99,16 +100,16 @@ private:
     /* 0x574 */ STATE_MGR_DECLARE(dScBoot_c);
     /* 0x5B4 */ dFader_c mFader;
     /* 0x5D4 */ s32 mProgressStage;
-    /* 0x5D8 */ u32 field_0x5D8;
-    /* 0x5DC */ u8 field_0x5DC;
-    /* 0x5DD */ u8 field_0x5DD;
-    /* 0x5DE */ u8 field_0x5DE;
-    /* 0x5DF */ u8 field_0x5DF;
-    /* 0x5E0 */ u8 field_0x5E0;
-    /* 0x5E1 */ u8 field_0x5E1;
-    /* 0x5E2 */ u8 field_0x5E2;
-    /* 0x5E3 */ u8 field_0x5E3;
-    /* 0x5E4 */ u8 field_0x5E4;
+    /* 0x5D8 */ s32 field_0x5D8;
+    /* 0x5DC */ bool mStrapScreenSeen;
+    /* 0x5DD */ bool mCalibrationDone;
+    /* 0x5DE */ bool mAllDataLoaded;
+    /* 0x5DF */ bool mObjectDataLoaded;
+    /* 0x5E0 */ bool field_0x5E0;
+    /* 0x5E1 */ bool mStrapScreenVisible;
+    /* 0x5E2 */ bool field_0x5E2;
+    /* 0x5E3 */ bool field_0x5E3;
+    /* 0x5E4 */ bool field_0x5E4;
 };
 
 #endif

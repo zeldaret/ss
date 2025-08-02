@@ -23,7 +23,7 @@
 
 dGfx_c *dGfx_c::sInstance;
 
-dGfx_c::dGfx_c() : mpTextureBuffer(nullptr), field_0x08(0), field_0x09(0) {
+dGfx_c::dGfx_c() : mpTextureBuffer(nullptr), mBufRefcount(0), mLetterboxEnabled(false) {
     mDrawCallback = nullptr;
 
     d3d::create(mHeap::g_gameHeaps[0]);
@@ -52,13 +52,13 @@ EGG::TextureBuffer *dGfx_c::getTextureBuffer() {
         mpTextureBuffer->onCapFlag(0x20); // TODO
         ret = mpTextureBuffer;
     }
-    field_0x08++;
+    mBufRefcount++;
     return ret;
 }
 
 void dGfx_c::releaseTextureBuffer() {
-    field_0x08--;
-    if (field_0x08 == 0 && mpTextureBuffer != nullptr) {
+    mBufRefcount--;
+    if (mBufRefcount == 0 && mpTextureBuffer != nullptr) {
         mpTextureBuffer->free();
         mpTextureBuffer = nullptr;
     }
@@ -74,7 +74,7 @@ void dGfx_c::drawBefore() {
 }
 
 void dGfx_c::drawLetterbox() {
-    if (field_0x09 != 0 && isTvMode4To3()) {
+    if (mLetterboxEnabled && isTvMode4To3()) {
         EGG::Screen screen(*EGG::Screen::GetRoot());
         screen.SetNearFar(-1.0f, 1.0f);
         screen.SetProjectionGX();
