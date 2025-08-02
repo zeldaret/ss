@@ -34,10 +34,10 @@ public:
     void alloc(u32 size);
     static TextureBuffer *alloc(u16 w, u16 h, GXTexFmt fmt);
     void free();
+    static void setIncludesHeader(bool);
 
 private:
     static bool includesHeader();
-    static void setIncludesHeader(bool);
 
     u32 mSize;             // at 0x2C
     EBufferState mState;   // at 0x30

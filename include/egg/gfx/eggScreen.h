@@ -94,6 +94,9 @@ public:
     const Screen *GetParent() const {
         return mParent;
     }
+    static Screen *GetRoot() {
+        return spRoot;
+    }
     void SetParent(const Screen *parent);
     void SetUnkFlag8();
 

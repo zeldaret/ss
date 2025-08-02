@@ -87,8 +87,8 @@ int dScTitle_c::create() {
     }
 
     if (ret == SUCCEEDED) {
-        dSys::setFrameRate(2);
-        dSys::setClearColor(mColor(0x00000000));
+        dSys_c::setFrameRate(2);
+        dSys_c::setClearColor(mColor(0x00000000));
         dPad::ex_c::setAutoSleepTime();
         dPad::ex_c::fn_80058C90(0);
         SaveRelated::create();

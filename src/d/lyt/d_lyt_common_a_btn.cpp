@@ -104,7 +104,7 @@ void dLytCommonABtn_c::gotoStateInvisible() {
     inAnim.bind(false);
     inAnim.setAnimEnable(true);
     inAnim.setFrame(0.0f);
-    if (dSys::getFrameRate() == 1) {
+    if (dSys_c::getFrameRate() == 1) {
         inAnim.setRate(0.5f);
     } else {
         inAnim.setRate(1.0f);
@@ -144,7 +144,7 @@ void dLytCommonABtn_c::goToStateVisible() {
     d2d::AnmGroup_c &anm = mAnm[A_BTN_ANIM_LOOP];
     anm.bind(false);
     anm.setFrame(0.0f);
-    if (dSys::getFrameRate() == 1) {
+    if (dSys_c::getFrameRate() == 1) {
         anm.setRate(0.5f);
     } else {
         anm.setRate(1.0f);
@@ -169,7 +169,7 @@ void dLytCommonABtn_c::goToStateDecideOut() {
         d2d::AnmGroup_c &anm = mAnm[A_BTN_ANIM_OUT];
         anm.bind(false);
         anm.setFrame(0.0f);
-        if (dSys::getFrameRate() == 1) {
+        if (dSys_c::getFrameRate() == 1) {
             anm.setRate(0.5f);
         } else {
             anm.setRate(1.0f);
@@ -180,7 +180,7 @@ void dLytCommonABtn_c::goToStateDecideOut() {
         anm.bind(false);
         anm.setAnimEnable(true);
         anm.setFrame(0.0f);
-        if (dSys::getFrameRate() == 1) {
+        if (dSys_c::getFrameRate() == 1) {
             anm.setRate(0.5f);
         } else {
             anm.setRate(1.0f);
@@ -214,7 +214,7 @@ void dLytCommonABtn_c::executeStateDecideOut() {
             anmOut.bind(false);
             anmOut.setAnimEnable(true);
             anmOut.setFrame(0.0f);
-            if (dSys::getFrameRate() == 1) {
+            if (dSys_c::getFrameRate() == 1) {
                 anmOut.setRate(0.5f);
             } else {
                 anmOut.setRate(1.0f);

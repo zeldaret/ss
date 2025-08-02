@@ -2,11 +2,27 @@
 #define D_GFX_H
 
 #include "common.h"
+#include "egg/core/eggHeap.h"
+#include "egg/gfx/eggTextureBuffer.h"
+#include "nw4r/ut/ut_Color.h"
 
 // Made up name
 class dGfx_c {
 public:
     typedef void (*DrawCallback)(void);
+
+    dGfx_c();
+
+    EGG::TextureBuffer *getTextureBuffer();
+    void releaseTextureBuffer();
+    void drawBefore();
+    void drawLetterbox();
+    
+    static void create(EGG::Heap *heap);
+    static void drawCapTexture(EGG::TextureBuffer *, nw4r::ut::Color *clr);
+
+    static bool isTvMode4To3();
+    static bool isTvModeWidescreen();
 
     void setDrawCallback(DrawCallback cb) {
         mDrawCallback = cb;
@@ -65,6 +81,7 @@ public:
     static f32 getWidth4x3RightF() { return g_Width4x3Right_f32; }
 
     static f32 get16x9to4x3WidthScaleF() { return g_16x9to4x3WidthScale; }
+    static f32 getCurrentScreenTo4x3WidthScaleF() { return g_CurrentScreenTo4x3WidthScale; }
     // clang-format on
 
 public:
@@ -113,8 +130,12 @@ public:
     static f32 g_Width4x3Right_f32;
 
     static f32 g_16x9to4x3WidthScale;
+    static f32 g_CurrentScreenTo4x3WidthScale;
 
-    /* 0x00 */ u8 _0x00[0x04 - 0x00];
+private:
+    static void initGfxConstants();
+
+    /* 0x00 */ EGG::TextureBuffer *mpTextureBuffer;
     /* 0x04 */ DrawCallback mDrawCallback;
     /* 0x08 */ u8 field_0x08;
     /* 0x09 */ u8 field_0x09;

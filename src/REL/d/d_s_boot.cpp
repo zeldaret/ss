@@ -421,7 +421,7 @@ int dScBoot_c::create() {
     mFader.create();
     mFader.setFadeInFrame(1);
     dGfx_c::GetInstance()->setDrawCallback(&drawCallback);
-    dSys::setFrameRate(1);
+    dSys_c::setFrameRate(1);
     mStateMgr.changeState(StateID_Init);
     SaveRelated::create();
     return SUCCEEDED;
@@ -549,7 +549,7 @@ void dScBoot_c::finalizeState_Strap() {
 
 void dScBoot_c::initializeState_Connect() {
     mProgressStage = 0;
-    dSys::setFrameRate(2);
+    dSys_c::setFrameRate(2);
 }
 
 void dScBoot_c::executeState_Connect() {

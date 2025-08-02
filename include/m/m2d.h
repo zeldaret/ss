@@ -14,6 +14,9 @@ namespace m2d {
 extern nw4r::ut::List l_list;
 extern mAllocator_c *l_allocator;
 
+void create(EGG::Heap *heap, u32 size);
+void reset();
+
 class Layout_c : public nw4r::lyt::Layout {
 public:
     virtual ~Layout_c() {}

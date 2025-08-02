@@ -2,14 +2,19 @@
 #define D_SYS_H
 
 #include "common.h"
-#include "m/m_color.h"
+#include "egg/core/eggHeap.h"
+#include "nw4r/ut/ut_Color.h"
 
-namespace dSys {
+class dSys_c {
+public:
+    /* Frame rate values: 1 - 60fps, 2 - 30fps */
+    static void setFrameRate(u8);
+    static u8 getFrameRate();
 
-void setFrameRate(u32);
-u8 getFrameRate();
-void setClearColor(mColor clr);
+    static void setClearColor(nw4r::ut::Color clr);
 
-} // namespace dSys_c
+    static EGG::Heap *ms_RootHeapMem1;
+    static EGG::Heap *ms_RootHeapMem2;
+};
 
 #endif

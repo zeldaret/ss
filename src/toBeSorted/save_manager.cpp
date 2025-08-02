@@ -1531,7 +1531,7 @@ void SaveMgr::endState() {
 }
 
 s32 SaveMgr::getFrameRate() {
-    return 60 / dSys::getFrameRate();
+    return 60 / dSys_c::getFrameRate();
 }
 
 NandRequestCheckIsFile::NandRequestCheckIsFile(const char *path) : mIsFile(0) {
