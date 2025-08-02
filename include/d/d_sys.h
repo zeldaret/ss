@@ -7,6 +7,7 @@
 
 class dSys_c {
 public:
+    /* Frame rate values: 1 - 60fps, 2 - 30fps */
     static void setFrameRate(u8);
     static u8 getFrameRate();
 
