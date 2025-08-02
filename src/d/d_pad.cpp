@@ -7,6 +7,7 @@
 #include "d/d_cs_game.h"
 #include "d/d_gfx.h"
 #include "d/d_hbm.h"
+#include "d/d_pad_nav.h"
 #include "d/d_pause.h"
 #include "d/d_reset.h"
 #include "d/d_sc_game.h"
@@ -134,7 +135,6 @@ void convertDpdPosToScreenPos(mVec2_c &in, mVec2_c &out) {
     out.y = dGfx_c::getCurrentScreenHeightF() * -0.5f * (1.f + in.y) + dGfx_c::getCurrentScreenTopF();
 }
 
-extern "C" void fn_801940C0();
 void beginPad_BR() {
     mPad::beginPad();
 
@@ -270,9 +270,7 @@ void beginPad_BR() {
             ex.mDpdPos = ex.field_0x5C;
         } else {
             if (mPad::getCore(0)->getDpdValidFlag() > 0) {
-                // TODO - ctor regswap
-                ex.mDpdPos = mPad::getCore(0)->getDpdRawPos();
-                // ex.mDpdPos.set(v.x, v.y);
+                ex.mDpdPos = mPad::getDpdRawPos(0);
             } else {
                 ex.mDpdPos.set(-2.f, -2.f);
             }
@@ -291,7 +289,7 @@ void beginPad_BR() {
             core->getCoreStatus()->release &= EGG::cCORE_BUTTON_HOME;
         }
     }
-    fn_801940C0();
+    dPadNav::calc();
 }
 
 void endPad_BR() {
@@ -502,8 +500,7 @@ void ex_c::centerCursor(s32 chan, bool b) {
 }
 
 void ex_c::fn_80056790(s32 chan) {
-    // unused - TODO ctor regswap
-    mVec2_c dpdRawPos = mPad::getCore(chan)->getDpdRawPos();
+    mVec2_c dpdRawPos = mPad::getDpdRawPos(chan);
 
     f32 f;
     if (dScGame_c::GetInstance() != nullptr && dLytMap_c::GetInstance() != nullptr &&
