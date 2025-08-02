@@ -17,9 +17,10 @@
 #include "rvl/NAND/nand.h"
 #include "toBeSorted/nand_result_tracker.h"
 
-namespace dDvdUnk {
-
+// included asset
 #include "d/dol_backup_error_font.inc"
+
+namespace dDvdUnk {
 
 FontUnk *FontUnk::sInstance;
 

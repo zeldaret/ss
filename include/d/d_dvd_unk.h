@@ -4,9 +4,9 @@
 #include "common.h"
 #include "egg/core/eggHeap.h"
 
-// This file is related to errors that are
-// displayed on the screen, using a backup font
-// included in the DOL.
+// TODO - rename when NSMBW figures out their type;
+// they too apparently have a type with a ResFont at 0x00,
+// which will be revealed when NSMBW function 80107090 is cracked
 
 namespace dDvdUnk {
 
