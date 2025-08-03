@@ -45,7 +45,7 @@ private:
     /* 0x500 */ dLytCommonABtn_c mABtn;
     /* 0x6B0 */ d2d::SubPaneList mSubpaneList;
     /* 0x6BC */ d2d::SubPaneListNode mSubpanes[1];
-    /* 0x6CC */ UNKWORD mStep;
+    /* 0x6CC */ s32 mStep;
     /* 0x6D0 */ f32 mLineSpace;
     /* 0x6D4 */ u8 mNumTextLines;
     /* 0x6D5 */ bool mInRequest;
