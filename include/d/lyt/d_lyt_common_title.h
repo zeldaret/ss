@@ -6,6 +6,11 @@
 #include "s/s_State.hpp"
 #include "sized_string.h"
 
+/**
+ * 2D UI - Common - Title
+ *
+ * Used on title screen and pause menu.
+ */
 class dLytCommonTitle_c {
 public:
     dLytCommonTitle_c();

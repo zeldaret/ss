@@ -6,6 +6,14 @@
 #include "toBeSorted/dowsing_target.h"
 
 void getItemLabel(s32 itemId, SizedString<32> &buf);
+void getCaptionItemLabel(s32 itemId, SizedString<32> &buf);
+void getDowsingLabel(s32 itemId, SizedString<32> &buf);
+void getPauseCategoryLabel(s32 itemId, SizedString<32> &buf);
+
+const wchar_t *getItemText(s32 itemId);
+const wchar_t *getCaptionItemText(s32 itemId);
+const wchar_t *getDowsingText(s32 itemId);
+const wchar_t *getPauseCategoryText(s32 itemId);
 
 bool isPouchBocoburinLocked();
 
