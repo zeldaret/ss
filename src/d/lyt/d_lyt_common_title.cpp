@@ -52,7 +52,7 @@ bool dLytCommonTitle_c::build() {
 
     mStateMgr.changeState(StateID_None);
     field_0x680 = 0;
-    field_0x690 = true;
+    mInputInOut = true;
     return true;
 }
 
@@ -69,7 +69,7 @@ bool dLytCommonTitle_c::execute() {
     mStateMgr.executeState();
     if (!(mStateMgr.getStateID()->isEqual(StateID_None))) {
         mAnm[COMMON_TITLE_ANIM_LOOP].play();
-        if (field_0x690 == true) {
+        if (mInputInOut == true) {
             playBackwards(mAnm[COMMON_TITLE_ANIM_INPUT]);
         } else {
             mAnm[COMMON_TITLE_ANIM_INPUT].play();
@@ -91,7 +91,7 @@ bool dLytCommonTitle_c::set(s32 arg, const char *title, const char *caption) {
         return false;
     }
 
-    field_0x684 = arg;
+    mSetMode = arg;
 
     if (title != nullptr) {
         mTitle = title;
@@ -151,7 +151,7 @@ void dLytCommonTitle_c::initializeState_None() {
     mChangeRequest = false;
     field_0x68D = false;
     mVisible = false;
-    field_0x684 = 0;
+    mSetMode = SET_00;
     mStep = 0;
     mTitle.empty();
     mCaption.empty();
@@ -250,11 +250,11 @@ void dLytCommonTitle_c::executeState_Wait() {
     }
 
     if (mChangeRequest == true) {
-        if (field_0x684 == 3) {
+        if (mSetMode == SET_OUT) {
             mStateMgr.changeState(StateID_Out);
         } else if (field_0x680 == 0) {
             mStateMgr.changeState(StateID_Change);
-        } else if (field_0x684 == 1) {
+        } else if (mSetMode == SET_01) {
             mStateMgr.changeState(StateID_Change);
         } else {
             mChangeRequest = false;
@@ -293,7 +293,7 @@ void dLytCommonTitle_c::finalizeState_Out() {}
 
 void dLytCommonTitle_c::initializeState_Change() {
     applyTextChange(0);
-    if (field_0x684 == 1) {
+    if (mSetMode == SET_01) {
         startAnim(COMMON_TITLE_ANIM_TITLE_CHANGE);
     }
 
@@ -312,7 +312,7 @@ void dLytCommonTitle_c::executeState_Change() {
                 mStep++;
             }
             anm.play();
-            if (field_0x684 == 1) {
+            if (mSetMode == SET_01) {
                 getAnm(COMMON_TITLE_ANIM_TITLE_CHANGE).play();
             }
             break;
@@ -320,7 +320,7 @@ void dLytCommonTitle_c::executeState_Change() {
         case 1: {
             applyTextChange(1);
             getAnm(COMMON_TITLE_ANIM_TEXT_CHANGE).setFrame(0.0f);
-            if (field_0x684 == 1) {
+            if (mSetMode == SET_01) {
                 getAnm(COMMON_TITLE_ANIM_TITLE_CHANGE).setFrame(0.0f);
             }
             field_0x68D = true;
@@ -351,7 +351,7 @@ void dLytCommonTitle_c::executeState_Change() {
 }
 void dLytCommonTitle_c::finalizeState_Change() {
     stopAnim(COMMON_TITLE_ANIM_TEXT_CHANGE);
-    if (field_0x684 == 1) {
+    if (mSetMode == SET_01) {
         stopAnim(COMMON_TITLE_ANIM_TITLE_CHANGE);
     }
 }
@@ -379,7 +379,7 @@ void dLytCommonTitle_c::playBackwards(d2d::AnmGroup_c &anm) {
 }
 
 void dLytCommonTitle_c::applyText() {
-    if (field_0x684 == 2) {
+    if (mSetMode == SET_CAPTION_IMMEDIATELY) {
         applyCaption(0);
     } else {
         applyTitle(0);
@@ -390,7 +390,7 @@ void dLytCommonTitle_c::applyText() {
 void dLytCommonTitle_c::applyTextChange(s32 arg) {
     switch (arg) {
         case 0: {
-            if (field_0x684 == 2) {
+            if (mSetMode == SET_CAPTION_IMMEDIATELY) {
                 applyCaption(1);
             } else {
                 applyTitle(1);
@@ -399,7 +399,7 @@ void dLytCommonTitle_c::applyTextChange(s32 arg) {
             break;
         }
         case 1: {
-            if (field_0x684 == 2) {
+            if (mSetMode == SET_CAPTION_IMMEDIATELY) {
                 applyCaption(2);
             } else {
                 applyTitle(2);

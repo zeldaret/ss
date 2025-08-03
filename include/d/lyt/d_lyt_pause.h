@@ -18,6 +18,10 @@ public:
         return mpBgTexture;
     }
 
+    bool getField_0x083B() const {
+        return field_0x083B;
+    }
+
 private:
     static dLytPauseMgr_c *sInstance;
 
@@ -26,6 +30,10 @@ private:
     /* 0x0438 */ u8 _0x0438[0x0814 - 0x0438];
 
     /* 0x0814 */ EGG::CpuTexture *mpBgTexture;
+
+    /* 0x0818 */ u8 _0x0818[0x083B - 0x0818];
+
+    /* 0x083B */ bool field_0x083B;
 };
 
 #endif

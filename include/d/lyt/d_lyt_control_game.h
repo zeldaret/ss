@@ -21,6 +21,14 @@ public:
         return sInstance;
     }
 
+    s32 getField_0x15C2C() const {
+        return field_0x15C2C;
+    }
+
+    u16 getItemForPauseDemo() const {
+        return mItemForPauseDemo;
+    }
+
     bool getField_0x15C67() const {
         return field_0x15C67;
     }
@@ -41,7 +49,16 @@ public:
 
 private:
     /* 0x00068 */ UI_STATE_MGR_DECLARE(dLytControlGame_c);
-    /* 0x000A4 */ u8 _0x000A4[0x15C67 - 0x000A4];
+    /* 0x000A4 */ u8 _0x000A4[0x15C2C - 0x000A4];
+
+    /* 0x15C2C */ s32 field_0x15C2C;
+
+    /* 0x15C30 */ u8 _0x15C23[0x15C60 - 0x15C30];
+
+    /* 0x15C60 */ u16 mItemForPauseDemo;
+
+    /* 0x15C62 */ u8 _0x15C62[0x15C67 - 0x15C62];
+
     /* 0x15C67 */ bool field_0x15C67;
 
     static dLytControlGame_c *sInstance;

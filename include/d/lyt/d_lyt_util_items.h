@@ -2,7 +2,10 @@
 #define D_LYT_UTIL_ITEMS_H
 
 #include "common.h"
+#include "sized_string.h"
 #include "toBeSorted/dowsing_target.h"
+
+void getItemLabel(s32 itemId, SizedString<32> &buf);
 
 bool isPouchBocoburinLocked();
 
