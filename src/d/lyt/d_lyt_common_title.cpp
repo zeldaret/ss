@@ -237,7 +237,7 @@ void dLytCommonTitle_c::initializeState_Wait() {
 }
 void dLytCommonTitle_c::executeState_Wait() {
     if (field_0x680 == 1) {
-        if (std::strlen(mCaption) != 0) {
+        if (mCaption.len() != 0) {
             field_0x68F = true;
             mAnm[COMMON_TITLE_ANIM_TEXT_OUT].setFrame(0.0f);
         } else {
@@ -258,7 +258,7 @@ void dLytCommonTitle_c::executeState_Wait() {
             mStateMgr.changeState(StateID_Change);
         } else {
             mChangeRequest = false;
-            if (std::strlen(mCaption) != 0) {
+            if (mCaption.len() != 0) {
                 applyCaption(0);
             }
         }
@@ -418,7 +418,7 @@ void dLytCommonTitle_c::applyTitle(s32 arg) {
 
     switch (arg) {
         case 0: {
-            if (std::strlen(mTitle) != 0) {
+            if (mTitle.len() != 0) {
                 const wchar_t *text = dMessage_c::getTextMessageByLabel(mTitle, true, nullptr, 0);
                 mainTitle0->setTextWithGlobalTextProcessor(text);
                 mainTitleS0->setTextWithGlobalTextProcessor(text);
@@ -434,7 +434,7 @@ void dLytCommonTitle_c::applyTitle(s32 arg) {
             // break;
         }
         case 1: {
-            if (std::strlen(mTitle) != 0) {
+            if (mTitle.len() != 0) {
                 const wchar_t *text = dMessage_c::getTextMessageByLabel(mTitle, true, nullptr, 0);
                 mainTitle0->setTextWithGlobalTextProcessor(text);
                 mainTitleS0->setTextWithGlobalTextProcessor(text);
@@ -445,7 +445,7 @@ void dLytCommonTitle_c::applyTitle(s32 arg) {
             break;
         }
         case 2: {
-            if (std::strlen(mTitle) != 0) {
+            if (mTitle.len() != 0) {
                 const wchar_t *text = dMessage_c::getTextMessageByLabel(mTitle, true, nullptr, 0);
                 mainTitle1->setTextWithGlobalTextProcessor(text);
                 mainTitleS1->setTextWithGlobalTextProcessor(text);
@@ -468,7 +468,7 @@ void dLytCommonTitle_c::applyCaption(s32 arg) {
 
     switch (arg) {
         case 0: {
-            if (std::strlen(mCaption) != 0) {
+            if (mCaption.len() != 0) {
                 const wchar_t *text = dMessage_c::getTextMessageByLabel(mCaption, true, nullptr, 0);
                 mainTitle0->setTextWithGlobalTextProcessor(text);
                 mainTitleS0->setTextWithGlobalTextProcessor(text);
@@ -493,7 +493,7 @@ void dLytCommonTitle_c::applyCaption(s32 arg) {
             break;
         }
         case 1: {
-            if (std::strlen(mCaption) != 0) {
+            if (mCaption.len() != 0) {
                 const wchar_t *text = dMessage_c::getTextMessageByLabel(mCaption, true, nullptr, 0);
                 mainTitle1->setTextWithGlobalTextProcessor(text);
                 mainTitleS1->setTextWithGlobalTextProcessor(text);

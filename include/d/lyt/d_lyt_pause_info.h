@@ -6,6 +6,7 @@
 
 class dLytCommonTitle_c;
 
+/** 2D UI - Pause menu - title and button help */
 class dLytPauseInfo_c {
 public:
     dLytPauseInfo_c();

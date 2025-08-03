@@ -10,9 +10,6 @@
 #include "d/lyt/d_lyt_util_items.h"
 #include "sized_string.h"
 
-#include <cstring>
-
-
 STATE_DEFINE(dLytPauseInfo_c, None);
 STATE_DEFINE(dLytPauseInfo_c, In);
 STATE_DEFINE(dLytPauseInfo_c, Wait);
@@ -153,7 +150,7 @@ void dLytPauseInfo_c::initializeState_In() {
             getItemLabel(dLytControlGame_c::getInstance()->getItemForPauseDemo(), label);
         }
 
-        if (std::strlen(label) != 0) {
+        if (label.len() != 0) {
             const char *msgLabel = mpTitle->setSubTitle(msgIdx);
             mpTitle->set(dLytCommonTitle_c::SET_00, msgLabel, label);
         } else {

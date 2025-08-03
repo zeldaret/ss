@@ -4,6 +4,7 @@
 #include "d/lyt/d2d.h"
 #include "s/s_State.hpp"
 
+/** 2D UI - Pause menu - Background */
 class dLytPauseBack_c {
 public:
     dLytPauseBack_c();

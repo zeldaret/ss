@@ -69,6 +69,8 @@ public:
     static s32 getRupeeCounter();
     static u32 getCurrentWalletCapacity();
 
+    static u32 getHeartContainerHealthCount();
+
     static u32 getKeyPieceCount();
     static u32 getSmallKeyCount();
 
