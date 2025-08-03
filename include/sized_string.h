@@ -37,6 +37,10 @@ struct SizedString {
         return mChars;
     }
 
+    void empty() {
+        mChars[0] = '\0';
+    }
+
     void operator=(const char *src) {
         if (src != mChars) {
             mChars[0] = '\0';

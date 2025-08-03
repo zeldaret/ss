@@ -21,6 +21,10 @@ public:
         return sInstance;
     }
 
+    bool getField_0x15C67() const {
+        return field_0x15C67;
+    }
+
     STATE_FUNC_DECLARE(dLytControlGame_c, Normal);
     STATE_FUNC_DECLARE(dLytControlGame_c, Pause_SetRes);
     STATE_FUNC_DECLARE(dLytControlGame_c, Pause_SyncRes);
@@ -37,7 +41,8 @@ public:
 
 private:
     /* 0x00068 */ UI_STATE_MGR_DECLARE(dLytControlGame_c);
-    
+    /* 0x000A4 */ u8 _0x000A4[0x15C67 - 0x000A4];
+    /* 0x15C67 */ bool field_0x15C67;
 
     static dLytControlGame_c *sInstance;
 };
