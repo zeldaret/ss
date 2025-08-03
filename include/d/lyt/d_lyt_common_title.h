@@ -16,10 +16,25 @@ public:
     bool execute();
     bool draw();
 
+    enum SetMode_e {
+        SET_00 = 0,
+        SET_01 = 1,
+        SET_CAPTION_IMMEDIATELY = 2,
+        SET_OUT = 3,
+    };
+
     bool set(s32 arg, const char *title, const char *caption);
     const char *setSubTitle(s32 msgIdx);
     const char *setSysTitle(s32 msgIdx);
     const char *setSysCaption(s32 msgIdx);
+
+    void setField_0x680(UNKWORD val) {
+        field_0x680 = val;
+    }
+
+    void setInputInOut(bool inOut) {
+        mInputInOut = inOut;
+    }
 
 private:
     void gotoStateNone();
@@ -51,13 +66,13 @@ private:
     /* 0x660 */ SizedString<0x20> mCaption;
 
     /* 0x680 */ UNKWORD field_0x680;
-    /* 0x680 */ UNKWORD field_0x684;
+    /* 0x680 */ UNKWORD mSetMode;
     /* 0x688 */ s32 mStep;
     /* 0x68C */ bool mChangeRequest;
     /* 0x68D */ bool field_0x68D;
     /* 0x68E */ bool mVisible;
     /* 0x68F */ bool field_0x68F;
-    /* 0x690 */ bool field_0x690;
+    /* 0x690 */ bool mInputInOut;
 };
 
 #endif

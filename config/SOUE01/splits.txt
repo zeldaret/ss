@@ -1002,7 +1002,7 @@ d/lyt/d_lyt_deposit_stock.cpp:
 
 d/lyt/d_lyt_deposit_box.cpp:
 	.text       start:0x801578B0 end:0x80158288 align:16
-	.rodata     start:0x804E8218 end:0x804E8248
+	.rodata     start:0x804E8218 end:0x804E8228
 	.data       start:0x80524BC8 end:0x80524CD0
 	.sdata      start:0x80572990 end:0x80572998
 	.sdata2     start:0x8057A060 end:0x8057A078
@@ -1010,6 +1010,7 @@ d/lyt/d_lyt_deposit_box.cpp:
 d/lyt/d_lyt_boss_gauge.cpp:
 	.text       start:0x80158290 end:0x80158E78 align:16
 	.ctors      start:0x804DB790 end:0x804DB794
+	.rodata     start:0x804E8228 end:0x804E8248
 	.data       start:0x80524CD0 end:0x80524ED0
 	.sdata      start:0x80572998 end:0x805729A0
 	.sbss       start:0x805754F0 end:0x805754F8
@@ -1045,7 +1046,7 @@ d/lyt/d_lyt_pause_disp_01.cpp:
 d/lyt/d_lyt_pause_info.cpp:
 	.text       start:0x80161FA0 end:0x80163568 align:16
 	.ctors      start:0x804DB7A0 end:0x804DB7A4
-	.rodata     start:0x804E8B30 end:0x804E8B60
+	.rodata     start:0x804E8B30 end:0x804E8B48
 	.data       start:0x80526610 end:0x80526880
 	.sdata2     start:0x8057A0F8 end:0x8057A100
 	.bss        start:0x805B19B0 end:0x805B1AB0
@@ -1053,6 +1054,7 @@ d/lyt/d_lyt_pause_info.cpp:
 d/lyt/d_lyt_pause_text.cpp:
 	.text       start:0x80163570 end:0x80164F88 align:16
 	.ctors      start:0x804DB7A4 end:0x804DB7A8
+	.rodata     start:0x804E8B48 end:0x804E8B60
 	.data       start:0x80526880 end:0x80526D10
 	.sdata      start:0x805729C0 end:0x805729C8
 	.sdata2     start:0x8057A100 end:0x8057A108

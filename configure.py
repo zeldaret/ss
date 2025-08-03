@@ -548,7 +548,7 @@ config.libs = [
             Object(Matching, "d/lyt/d_lyt_pause_back.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_pause_disp_00.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_pause_disp_01.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_pause_info.cpp"),
+            Object(Matching, "d/lyt/d_lyt_pause_info.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_pause_text.cpp"),
             Object(Matching, "d/lyt/d_lyt_save_msg_window.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_util_items.cpp"),
