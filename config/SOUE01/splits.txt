@@ -2322,12 +2322,42 @@ libms/msgfile.c:
 	.data       start:0x80547278 end:0x80547288
 	.sdata      start:0x80574028 end:0x80574048
 
-toBeSorted/d_thp.cpp:
-	extab       start:0x80006780 end:0x800068D8
-	extabindex  start:0x800069B0 end:0x80006BB4
-	.text       start:0x80324440 end:0x80327134 align:16
+THPPlayer/THPAudioDecode.c:
+	extab       start:0x80006780 end:0x800067B8
+	extabindex  start:0x800069B0 end:0x80006A04
+	.text       start:0x80324440 end:0x803247F4 align:16
+	.sbss       start:0x80575C98 end:0x80575CA0
+	.bss        start:0x805CC0A8 end:0x805CD440
+
+THPPlayer/THPDraw.c:
+	extab       start:0x800067B8 end:0x800067D0
+	extabindex  start:0x80006A04 end:0x80006A28
+	.text       start:0x80324800 end:0x80324FB0 align:16
+	.sdata2     start:0x8057CF58 end:0x8057CF80
+
+THPPlayer/THPPlayer.c:
+	extab       start:0x800067D0 end:0x80006870
+	extabindex  start:0x80006A28 end:0x80006B18
+	.text       start:0x80324FB0 end:0x803268D8 align:16
 	.data       start:0x80547288 end:0x80547388
-	.sbss       start:0x80575C98 end:0x80575CD0
+	.sdata      start:0x80574048 end:0x80574050
+	.sbss       start:0x80575CA0 end:0x80575CC0
+	.sdata2     start:0x8057CF80 end:0x8057CF90
+	.bss        start:0x805CD440 end:0x805CD9C0
+
+THPPlayer/THPRead.c:
+	extab       start:0x80006870 end:0x800068A0
+	extabindex  start:0x80006B18 end:0x80006B60
+	.text       start:0x803268E0 end:0x80326BD4 align:16
+	.sbss       start:0x80575CC0 end:0x80575CC8
+	.bss        start:0x805CD9C0 end:0x805CEDB0
+
+THPPlayer/THPVideoDecode.c:
+	extab       start:0x800068A0 end:0x800068D8
+	extabindex  start:0x80006B60 end:0x80006BB4
+	.text       start:0x80326BE0 end:0x80327134 align:16
+	.sbss       start:0x80575CC8 end:0x80575CD0
+	.bss        start:0x805CEDB0 end:0x805D0128
 
 d/col/c/c_bg_s_chk.cpp:
 	.text       start:0x80327140 end:0x8032721C align:16
