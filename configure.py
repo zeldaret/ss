@@ -547,7 +547,7 @@ config.libs = [
             Object(NonMatching, "d/lyt/d_lyt_boss_gauge.cpp"),
             Object(Matching, "d/lyt/d_lyt_pause_back.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_pause_disp_00.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_pause_disp_01.cpp"),
+            Object(Matching, "d/lyt/d_lyt_pause_disp_01.cpp"),
             Object(Matching, "d/lyt/d_lyt_pause_info.cpp"),
             Object(Matching, "d/lyt/d_lyt_pause_text.cpp"),
             Object(Matching, "d/lyt/d_lyt_save_msg_window.cpp"),

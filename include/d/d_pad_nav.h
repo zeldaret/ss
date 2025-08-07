@@ -38,8 +38,16 @@ inline bool isPointerVisible() {
     return sIsPointerVisible;
 }
 
+inline bool isPrevPointerVisible() {
+    return sPrevIsPointerVisible;
+}
+
 inline bool isCursorStickVisible() {
     return sIsCursorStickVisible;
+}
+
+inline s32 getFSStickNavDirection() {
+    return sFSStickNavDirection;
 }
 
 void init();

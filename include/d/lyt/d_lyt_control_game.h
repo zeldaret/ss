@@ -29,6 +29,10 @@ public:
         return mItemForPauseDemo;
     }
 
+    u16 getItemCountForPauseDemo() const {
+        return mItemCountForPauseDemo;
+    }
+
     bool getField_0x15C67() const {
         return field_0x15C67;
     }
@@ -57,8 +61,10 @@ private:
 
     /* 0x15C60 */ u16 mItemForPauseDemo;
 
-    /* 0x15C62 */ u8 _0x15C62[0x15C67 - 0x15C62];
+    /* 0x15C62 */ u8 _0x15C62[0x15C64 - 0x15C62];
 
+    /* 0x15C64 */ u16 mItemCountForPauseDemo;
+    /* 0x15C66 */ u8 field_0x15C66;
     /* 0x15C67 */ bool field_0x15C67;
 
     static dLytControlGame_c *sInstance;

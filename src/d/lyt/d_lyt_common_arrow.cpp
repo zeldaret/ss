@@ -37,6 +37,12 @@ static const d2d::LytBrlanMapping brlanMap[] = {
 #define ANIM_INPUT 7
 #define ANIM_OUT 8
 
+#define NUM_ANIMS 9
+
+#define PANE_BOUNDING_L 0
+#define PANE_BOUNDING_R 1
+#define PANE_BOUNDING_NONE 2
+
 dLytCommonArrow_c::dLytCommonArrow_c() : mStateMgr(*this, sStateID::null) {}
 
 bool dLytCommonArrow_c::build() {
@@ -45,13 +51,13 @@ bool dLytCommonArrow_c::build() {
     mLytBase.build("commonArrow_00.brlyt", &mResAcc);
     mLytBase.setPriority(0x86);
 
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < NUM_ANIMS; i++) {
         mAnmGroups[i].init(brlanMap[i].mFile, &mResAcc, mLytBase.getLayout(), brlanMap[i].mName);
     }
     mCsHitCheck.init(mLytBase.getLayout()->GetRootPane(), 1, 0, 0);
     dCsMgr_c::GetInstance()->registCursorTarget(&mCsHitCheck);
-    mBoundingL = mLytBase.findBounding("B_arrowL_00");
-    mBoundingR = mLytBase.findBounding("B_arrowR_00");
+    mpBoundings[PANE_BOUNDING_L] = mLytBase.findBounding("B_arrowL_00");
+    mpBoundings[PANE_BOUNDING_R] = mLytBase.findBounding("B_arrowR_00");
     mStateMgr.changeState(StateID_None);
     setState(0);
     return true;
@@ -60,7 +66,7 @@ bool dLytCommonArrow_c::build() {
 bool dLytCommonArrow_c::remove() {
     dCsMgr_c::GetInstance()->unregistCursorTarget(&mCsHitCheck);
     mLytBase.unbindAnims();
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < NUM_ANIMS; i++) {
         mAnmGroups[i].remove();
     }
     return true;
@@ -104,7 +110,7 @@ bool dLytCommonArrow_c::requestIn() {
     if (!mStateMgr.getStateID()->isEqual(StateID_None)) {
         return false;
     }
-    mInRequested = 1;
+    mInRequested = true;
     return true;
 }
 
@@ -148,33 +154,33 @@ void dLytCommonArrow_c::tickDown(d2d::AnmGroup_c *ctrl) {
 void dLytCommonArrow_c::fn_80168880() {
     int i = -1;
     if (!dPadNav::isPointerVisible()) {
-        field_0x6B4 = 2;
+        mTargetedBounding = PANE_BOUNDING_NONE;
         return;
     }
 
     dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
     if (d != nullptr && d->getType() == 'lyt ') {
-        if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mBoundingL) {
+        if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBoundings[PANE_BOUNDING_L]) {
             i = 0;
-        } else if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mBoundingR) {
+        } else if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBoundings[PANE_BOUNDING_R]) {
             i = 1;
         }
     }
 
     if (i >= 0) {
-        field_0x6B4 = i;
+        mTargetedBounding = i;
     } else {
-        field_0x6B4 = 2;
+        mTargetedBounding = PANE_BOUNDING_NONE;
     }
 }
 
 void dLytCommonArrow_c::initializeState_None() {
     mLytBase.unbindAnims();
-    mInRequested = 0;
-    mOutRequested = 0;
+    mInRequested = false;
+    mOutRequested = false;
     field_0x6CA = 0;
     field_0x6CB = 0;
-    field_0x6B4 = 2;
+    mTargetedBounding = PANE_BOUNDING_NONE;
     field_0x6B8 = 2;
     field_0x6BC = 2;
     field_0x6C0 = 2;
@@ -183,12 +189,12 @@ void dLytCommonArrow_c::initializeState_None() {
     field_0x6CC = 1;
 }
 void dLytCommonArrow_c::executeState_None() {
-    if (mInRequested == 1) {
+    if (mInRequested == true) {
         mStateMgr.changeState(StateID_In);
     }
 }
 void dLytCommonArrow_c::finalizeState_None() {
-    mInRequested = 0;
+    mInRequested = false;
     displayElement(ANIM_LOOP, 0.0f);
 }
 
@@ -230,7 +236,7 @@ void dLytCommonArrow_c::initializeState_Wait() {
 }
 
 void dLytCommonArrow_c::executeState_Wait() {
-    if (mOutRequested == 1) {
+    if (mOutRequested == true) {
         mStateMgr.changeState(StateID_Out);
         return;
     }
@@ -297,13 +303,13 @@ void dLytCommonArrow_c::finalizeState_Wait() {}
 void dLytCommonArrow_c::initializeState_Out() {
     mTimer = 0;
     displayElement(ANIM_OUT, 0.0f);
-    mOutRequested = 0;
+    mOutRequested = false;
 }
 void dLytCommonArrow_c::executeState_Out() {
     switch (mTimer) {
         case 0: {
             d2d::AnmGroup_c *s = &mAnmGroups[ANIM_OUT];
-            if (s->isEndReached() == 1) {
+            if (s->isEndReached() == true) {
                 mTimer = 1;
                 field_0x6CA = 1;
             }

@@ -15,6 +15,24 @@
 #define LYT_CMN_BugLanayruAnt (10)        // [10] tr_bugIcon_10.tpl
 #define LYT_CMN_BugEldinRoller (11)       // [11] tr_bugIcon_11.tpl
 
+// Treasure
+#define LYT_CMN_HORNET_LARVAE (0)      // [ 1] uk_soaHachisu_00.tpl
+#define LYT_CMN_BIRD_FEATHER (1)       // [ 2] uk_sobHaneA_00.tpl
+#define LYT_CMN_TUMBLEWEED (2)         // [ 3] uk_socTumble_00.tpl
+#define LYT_CMN_LIZALFOS_TAIL (3)      // [ 0] tr_sozaiIcon_03.tpl
+#define LYT_CMN_ELDIN_ORE (4)          // [ 4] uk_soeKoseki_00.tpl
+#define LYT_CMN_ANCIENT_FLOWER (5)     // [ 5] uk_sofHana_00.tpl
+#define LYT_CMN_AMBER_RELIC (6)        // [ 6] uk_sogMagatamaA_00.tpl
+#define LYT_CMN_DUSK_RELOC (7)         // [ 7] uk_sohMagatamaB_00.tpl
+#define LYT_CMN_JELLY_BLOB (8)         // [ 8] uk_soiPuyo_00.tpl
+#define LYT_CMN_MONSTER_CLAW (9)       // [ 9] uk_sojClaw_00.tpl
+#define LYT_CMN_MONSTER_HORN (10)      // [11] uk_solHorn_00.tpl
+#define LYT_CMN_ORNAMENTAL_SKULL (11)  // [10] uk_sokDokuroA_00.tpl
+#define LYT_CMN_EVIL_CRYSTAL (12)      // [12] uk_somEvil_00.tpl
+#define LYT_CMN_BLUE_BIRD_FEATHER (13) // [13] uk_sonHaneB_00.tpl
+#define LYT_CMN_GOLDEN_SKULL (14)      // [14] uk_sooDokuroB_00.tpl
+#define LYT_CMN_GODDESS_PLUME (15)     // [15] uk_sopGoddess_00.tpl
+
 // Items
 #define LYT_CMN_ItemBombBag (0)      // [ 8] uc_bomb_00.tpl
 #define LYT_CMN_ItemBow (1)          // [ 9] uc_bowA_00.tpl
@@ -34,7 +52,7 @@
 #define LYT_CMN_ItemBigBugnet (15)   // [14] uc_netB_00.tpl
 #define LYT_CMN_ItemBoatCannon (16)  // [ 7] uc_boatCannon_00.tpl
 #define LYT_CMN_ItemHarp (17)        // [ 0] tr_tategoto_00.tpl
-#define LYT_CMN_ItemInvalid (18)        // -------------------------
+#define LYT_CMN_ItemInvalid (18)     // -------------------------
 
 // Pouch Items
 #define LYT_CMN_PouchPotionHealyh (0)              // [12] uc_bottleKusuriA_00.tpl
@@ -113,6 +131,6 @@
 #define LYT_CMN_DowsingZelda (19)              // [13] tr_dauzTarget_19.tpl
 #define LYT_CMN_DowsingTrialGate (20)          // [14] tr_dauzTarget_20.tpl
 #define LYT_CMN_DowsingNewPlantSpecies (21)    // [15] tr_dauzTarget_21.tpl
-#define LYT_CMN_DowsingInvalid         (22)    // -------------------------
+#define LYT_CMN_DowsingInvalid (22)            // -------------------------
 
 #endif
