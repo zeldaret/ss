@@ -330,7 +330,7 @@ const wchar_t *dLytPauseText_c::getCurrentPausePopupCaption() {
     // TODO - bunch of unresolved IDs here
     dLytPauseMgr_c::SelectionType_e selectionType = dLytPauseMgr_c::GetInstance()->getCurrentSelectionType();
 
-    if (dLytPauseMgr_c::GetInstance()->getField_0x0841()) {
+    if (dLytPauseMgr_c::GetInstance()->isCurrentSelectionRestricted()) {
         // "It has been stolen by monsters! You've got to get it back."
         return dMessage_c::getTextMessageByLabel("CAPTION_ITEM_STOLEN", true, nullptr, 0);
     }
@@ -433,7 +433,7 @@ void dLytPauseText_c::calcTextLines(dTextBox_c *textBox, const wchar_t *text) {
 
 bool dLytPauseText_c::isCurrentItemWallet() const {
     dLytPauseMgr_c::SelectionType_e selectionType = dLytPauseMgr_c::GetInstance()->getCurrentSelectionType();
-    if (dLytPauseMgr_c::GetInstance()->getField_0x0841()) {
+    if (dLytPauseMgr_c::GetInstance()->isCurrentSelectionRestricted()) {
         return false;
     }
 
