@@ -12,6 +12,7 @@
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_do_button.h"
 #include "d/lyt/d_lyt_unknowns.h"
+#include "d/lyt/d_lyt_util_items.h"
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "m/m_vec.h"
@@ -719,9 +720,9 @@ void dLytMeterItemSelect_c::initializeState_SelectIn() {
     mAnm[ITEM_SELECT_ANIM_DECIDE].setFrame(0.0f);
 
     for (int i = 0; i < ITEM_SELECT_NUM_ITEMS; i++) {
-        if (fn_800F01B0(i)) {
+        if (hasBWheelItem(i)) {
             mAnm[i + ITEM_SELECT_ANIM_HAVE_OFFSET].setFrame(0.0f);
-            if (fn_800F01E0(i)) {
+            if (isBocoburinLocked(i)) {
                 mIsBocoburinLocked[i] = true;
             }
         } else {
@@ -1345,7 +1346,7 @@ void dLytMeterItemSelect_c::initializeState_DemoMove() {
             } else {
                 field_0x57A3[i] = true;
             }
-        } else if ((i == 0 || i == 2 || i == 3) && fn_800F01B0(i)) {
+        } else if ((i == 0 || i == 2 || i == 3) && hasBWheelItem(i)) {
             field_0x57A3[i] = false;
             field_0x575C++;
         } else {
@@ -1355,8 +1356,8 @@ void dLytMeterItemSelect_c::initializeState_DemoMove() {
     }
 
     for (int i = 0; i < ITEM_SELECT_NUM_ITEMS; i++) {
-        if (fn_800F01B0(i)) {
-            if (fn_800F01E0(i) || field_0x57A3[i] == 0) {
+        if (hasBWheelItem(i)) {
+            if (isBocoburinLocked(i) || field_0x57A3[i] == 0) {
                 if (isSlotBocoburinLocked(i)) {
                     mIsBocoburinLocked[i] = true;
                     mAnm[i + ITEM_SELECT_ANIM_HAVE_OFFSET].setFrame(0.0f);
@@ -1399,7 +1400,7 @@ void dLytMeterItemSelect_c::executeState_DemoMove() {
     mDemoMoveTimer++;
     if (mDemoMoveTimer == 15) {
         for (int i = 0; i < ITEM_SELECT_NUM_ITEMS; i++) {
-            if (fn_800F01B0(i) && !field_0x57A3[i]) {
+            if (hasBWheelItem(i) && !field_0x57A3[i]) {
                 mAnm[i + ITEM_SELECT_ANIM_HAVE_OFFSET].setFrame(0.0f);
                 field_0x57A3[i] = true;
 
@@ -2514,16 +2515,12 @@ u8 dLytMeterItemSelect_c::getInternalBaseItemForSlot(s32 slot) const {
     return sSlotToInternalItem[slot];
 }
 
-extern "C" s32 fn_801673B0(s32);
-
-bool dLytMeterItemSelect_c::fn_800F01B0(s32 arg) const {
-    return fn_801673B0(arg) != 0;
+bool dLytMeterItemSelect_c::hasBWheelItem(s32 arg) const {
+    return getItemLevelForBWheelIndex(arg) != 0;
 }
 
-extern "C" bool fn_80167780(s32, bool);
-
-bool dLytMeterItemSelect_c::fn_800F01E0(s32 arg) const {
-    return fn_80167780(arg, true);
+bool dLytMeterItemSelect_c::isBocoburinLocked(s32 arg) const {
+    return isBWheelIndexBocoburinLocked(arg, true);
 }
 
 bool dLytMeterItemSelect_c::isSlotBocoburinLocked(s32 slot) {

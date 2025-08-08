@@ -25,6 +25,10 @@ public:
         return field_0x15C2C;
     }
 
+    s32 getPauseDisp00Tab() const {
+        return mPauseDisp00Tab;
+    }
+
     u16 getItemForPauseDemo() const {
         return mItemForPauseDemo;
     }
@@ -56,8 +60,9 @@ private:
     /* 0x000A4 */ u8 _0x000A4[0x15C2C - 0x000A4];
 
     /* 0x15C2C */ s32 field_0x15C2C;
+    /* 0x15C30 */ s32 mPauseDisp00Tab;
 
-    /* 0x15C30 */ u8 _0x15C23[0x15C60 - 0x15C30];
+    /* 0x15C34 */ u8 _0x15C34[0x15C60 - 0x15C34];
 
     /* 0x15C60 */ u16 mItemForPauseDemo;
 

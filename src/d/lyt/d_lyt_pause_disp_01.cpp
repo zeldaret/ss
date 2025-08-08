@@ -226,7 +226,7 @@ void dLytPauseDisp01_c::initializeState_None() {
     mStep = 0;
     mPrevNavTarget = 0;
     mCurrentNavTarget = 0;
-    mTimer = 0;
+    mGetDemoTimer = 0;
 
     for (int i = 0; i < PAUSE_DISP_01_NUM_SUBPANES; i++) {
         mIcons[i].reset();
@@ -309,11 +309,9 @@ void dLytPauseDisp01_c::finalizeState_In() {
     mDoScrollAnim = false;
     if (pause->getField_0x083E()) {
         if (!pause->getField_0x0832()) {
-            // TODO id
-            mCurrentNavTarget = 34;
+            mCurrentNavTarget = PAUSE_DISP_01_OFFSET_MY_PANES + PAUSE_DISP_01_PANE_RIGHT + 1;
         } else {
-            // TODO id
-            mCurrentNavTarget = 33;
+            mCurrentNavTarget = PAUSE_DISP_01_OFFSET_MY_PANES + PAUSE_DISP_01_PANE_LEFT + 1;
         }
         mPrevNavTarget = mCurrentNavTarget;
     }
@@ -363,16 +361,16 @@ void dLytPauseDisp01_c::finalizeState_Select() {
 void dLytPauseDisp01_c::initializeState_GetDemo() {
     field_0x98CE = true;
     mStep = 0;
-    mTimer = 0;
+    mGetDemoTimer = 0;
 }
 void dLytPauseDisp01_c::executeState_GetDemo() {
     switch (mStep) {
         case 0: {
             field_0x98CE = false;
-            if (mTimer < 2) {
-                mTimer++;
+            if (mGetDemoTimer < 2) {
+                mGetDemoTimer++;
             } else {
-                mTimer = 0;
+                mGetDemoTimer = 0;
                 mStep = 1;
             }
             break;
@@ -448,10 +446,10 @@ void dLytPauseDisp01_c::executeState_GetDemo() {
             break;
         }
         case 2: {
-            if (mTimer < 35) {
-                mTimer++;
+            if (mGetDemoTimer < 35) {
+                mGetDemoTimer++;
             } else {
-                mTimer = 0;
+                mGetDemoTimer = 0;
                 mStep = 3;
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_ITEM_SET_COUNT_UP);
                 u16 item = dLytControlGame_c::getInstance()->getItemForPauseDemo();
@@ -502,10 +500,10 @@ void dLytPauseDisp01_c::executeState_GetDemo() {
             break;
         }
         case 3: {
-            if (mTimer < 37) {
-                mTimer++;
+            if (mGetDemoTimer < 37) {
+                mGetDemoTimer++;
             } else {
-                mTimer = 0;
+                mGetDemoTimer = 0;
                 mStateMgr.changeState(StateID_Wait);
             }
             break;
