@@ -500,23 +500,23 @@ void LytBase_c::setProperties(nw4r::lyt::Pane *pane, f32 posX, f32 posY, f32 sca
 
     textBox->SetCharSpace(textBox->GetCharSpace() + dLyt_HIO_c::getFn800B2020() + f6);
     textBox->SetLineSpace(textBox->GetLineSpace() + dLyt_HIO_c::getFn800B2000() + f4);
-    fn_800AB930(textBox);
+    loadText(textBox);
 }
 
-bool LytBase_c::fn_800AB930(dTextBox_c *box) {
-    return fn_800AB9A0(box, -1);
+bool LytBase_c::loadText(dTextBox_c *box) {
+    return loadTextVariant(box, -1);
 }
 
-bool LytBase_c::fn_800AB940(const char *name, int arg) {
+bool LytBase_c::loadTextVariant(const char *name, int arg) {
     dTextBox_c *box = getTextBox(name);
     if (box == nullptr) {
         return false;
     }
 
-    return fn_800AB9A0(box, arg);
+    return loadTextVariant(box, arg);
 }
 
-bool LytBase_c::fn_800AB9A0(dTextBox_c *textbox, int arg) {
+bool LytBase_c::loadTextVariant(dTextBox_c *textbox, int arg) {
     if (getMsbtInfo() == nullptr) {
         return false;
     }
@@ -551,21 +551,21 @@ bool LytBase_c::fn_800AB9A0(dTextBox_c *textbox, int arg) {
     if (ty == 1) {
         dTextBox_c *otherBox = getTextBox(list->GetString());
         if (otherBox != nullptr) {
-            return fn_800ABB80(textbox, otherBox, arg);
+            return loadTextVariantCopy(textbox, otherBox, arg);
         }
     } else {
-        return fn_800ABCE0(list, textbox, textbox, arg);
+        return setText(list, textbox, textbox, arg);
     }
     return false;
 }
 
-bool LytBase_c::fn_800ABB80(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg) {
-    u16 num = textbox2->GetExtUserDataNum();
+bool LytBase_c::loadTextVariantCopy(dTextBox_c *targetTextBox, dTextBox_c *sourceTextBox, int arg) {
+    u16 num = sourceTextBox->GetExtUserDataNum();
     if (num == 0) {
         return false;
     }
     u32 found = 0;
-    const nw4r::lyt::res::ExtUserData *list = textbox2->GetExtUserData();
+    const nw4r::lyt::res::ExtUserData *list = sourceTextBox->GetExtUserData();
     for (int i = 0; i < num; i++) {
         SizedString<0x40> userDatName;
         userDatName = list->GetName();
@@ -579,17 +579,17 @@ bool LytBase_c::fn_800ABB80(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg)
     if (found != 1) {
         return false;
     }
-    return fn_800ABCE0(list, textbox1, textbox2, arg);
+    return setText(list, targetTextBox, sourceTextBox, arg);
 }
 
-bool LytBase_c::fn_800ABCE0(
-    const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg
+bool LytBase_c::setText(
+    const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *targetTextBox, dTextBox_c *sourceTextBox, int arg
 ) {
     s32 userDatInt = userDatum->GetInt();
     SizedString<0x40> str1;
     SizedString<0x40> str2;
 
-    str1 = textbox2->GetName();
+    str1 = sourceTextBox->GetName();
     if (userDatInt != 0) {
         userDatInt = 0;
         if (arg != -1) {
@@ -605,7 +605,7 @@ bool LytBase_c::fn_800ABCE0(
         return false;
     }
 
-    textbox1->setTextWithGlobalTextProcessor(dMessage_c::formatText(text));
+    targetTextBox->setTextWithGlobalTextProcessor(dMessage_c::formatText(text));
     return true;
 }
 
@@ -652,13 +652,13 @@ bool LytBase_c::fn_800ABE50(dTextBox_c *textbox, wchar_t *destBuf, u32 maxLen) {
     return false;
 }
 
-bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen) {
-    u16 num = textbox2->GetExtUserDataNum();
+bool LytBase_c::fn_800AC040(dTextBox_c *targetTextBox, dTextBox_c *sourceTextBox, wchar_t *destBuf, u32 maxLen) {
+    u16 num = sourceTextBox->GetExtUserDataNum();
     if (num == 0) {
         return false;
     }
     u32 found = 0;
-    const nw4r::lyt::res::ExtUserData *list = textbox2->GetExtUserData();
+    const nw4r::lyt::res::ExtUserData *list = sourceTextBox->GetExtUserData();
     for (int i = 0; i < num; i++) {
         SizedString<0x40> userDatName;
         userDatName = list->GetName();
@@ -672,24 +672,24 @@ bool LytBase_c::fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t 
     if (found != 1) {
         return false;
     }
-    return fn_800AC1AC(list, textbox1, textbox2, destBuf, maxLen);
+    return fn_800AC1AC(list, targetTextBox, sourceTextBox, destBuf, maxLen);
 }
 
 bool LytBase_c::fn_800AC1AC(
-    const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen
+    const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *targetTextBox, dTextBox_c *sourceTextBox, wchar_t *destBuf, u32 maxLen
 ) {
     s32 userDatInt = userDatum->GetInt();
     SizedString<0x40> str1;
     SizedString<0x40> str2;
 
-    str1 = textbox2->GetName();
+    str1 = sourceTextBox->GetName();
     if (userDatInt != 0) {
         SizedString<0x40> &fmt = str2;
         fmt.sprintf(":%02d", 0);
         str1.append(fmt);
     }
 
-    textbox1->setMessageWithGlobalTextProcessorAndMsbtInfo(getMsbtInfo(), str1, destBuf, maxLen);
+    targetTextBox->setMessageWithGlobalTextProcessorAndMsbtInfo(getMsbtInfo(), str1, destBuf, maxLen);
     return true;
 }
 

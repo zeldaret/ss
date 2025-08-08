@@ -79,6 +79,20 @@ protected:
     u32 mFlags;
 };
 
+/**
+ * A layout with some utility functions, and a system
+ * for integrating LibMS text into NW4R's LYT.
+ *
+ * * If a TextBox has an integer userdatum "embed", this sets the text identified by the
+ *   LibMS label of the same name as the text box (e.g. `T_back_00`)
+ * * If the integer is non-zero (it always seems to be for Skyward Sword!),
+ *   `:00` is appended to the label name (e.g. `T_back_00:00`).
+ * * Game code can call a function to reload this text with a custom integer to select
+ *   a specific variant. E.g. `T_newFile_00:00` -> "New Adventure", `T_newFile_00:01` -> "Hero Mode"
+ * * If a TextBox has a string userdatum "copy", the value identifies another textbox
+ *   whose name is used instead. This is often used for text shadow, where a separate
+ *   textbox is used for the shadow.
+ */
 class LytBase_c : public Multi_c {
 public:
     LytBase_c();
@@ -93,8 +107,8 @@ public:
     dWindow_c *getWindow(const char *name);
     nw4r::lyt::Group *findGroupByName(const char *name);
 
-    bool fn_800AB940(const char *name, int arg);
-    bool fn_800AB9A0(dTextBox_c *textbox, int arg);
+    bool loadTextVariant(const char *name, int arg);
+    bool loadTextVariant(dTextBox_c *textbox, int arg);
 
     bool fn_800ABE50(dTextBox_c *textbox, wchar_t *destBuf, u32 maxLen);
 
@@ -102,16 +116,16 @@ private:
     void setPropertiesRecursive(nw4r::lyt::Pane *pane, f32, f32, f32, f32, f32);
     void setProperties(nw4r::lyt::Pane *pane, f32, f32, f32, f32, f32);
     dTextBox_c *getTextBoxViaUserData(nw4r::lyt::Pane *pane, const char *name);
-    bool fn_800ABB80(dTextBox_c *textbox1, dTextBox_c *textbox2, int arg);
-    bool fn_800ABCE0(const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, int arg);
+    bool loadTextVariantCopy(dTextBox_c *targetTextBox, dTextBox_c *sourceTextBox, int arg);
+    bool setText(const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *targetTextBox, dTextBox_c *sourceTextBox, int arg);
 
-    bool fn_800AC040(dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf, u32 maxLen);
+    bool fn_800AC040(dTextBox_c *targetTextBox, dTextBox_c *sourceTextBox, wchar_t *destBuf, u32 maxLen);
     bool fn_800AC1AC(
-        const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *textbox1, dTextBox_c *textbox2, wchar_t *destBuf,
+        const nw4r::lyt::res::ExtUserData *userDatum, dTextBox_c *targetTextBox, dTextBox_c *sourceTextBox, wchar_t *destBuf,
         u32 maxLen
     );
     MsbtInfo *getMsbtInfo() const;
-    bool fn_800AB930(dTextBox_c *box);
+    bool loadText(dTextBox_c *box);
 
     /* 0x8C */ MsbtInfo *mpMsbtInfo;
 };

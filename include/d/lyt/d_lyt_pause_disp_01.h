@@ -67,7 +67,7 @@ private:
     /* 0x98BC */ s32 mStep;
     /* 0x98C0 */ s32 mPrevNavTarget;
     /* 0x98C4 */ s32 mCurrentNavTarget;
-    /* 0x98C8 */ s32 mTimer;
+    /* 0x98C8 */ s32 mGetDemoTimer;
     /* 0x98CC */ bool mInRequest;
     /* 0x98CD */ bool mOutRequest;
     /* 0x98CE */ bool field_0x98CE;

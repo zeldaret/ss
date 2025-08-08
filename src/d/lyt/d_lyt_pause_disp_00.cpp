@@ -1,7 +1,26 @@
 #include "d/lyt/d_lyt_pause_disp_00.h"
 
+#include "d/a/d_a_item.h"
+#include "d/a/d_a_itembase.h"
+#include "d/a/d_a_player.h"
+#include "d/d_cs_base.h"
+#include "d/d_pad_nav.h"
+#include "d/d_rumble.h"
+#include "d/flag/itemflag_manager.h"
+#include "d/flag/storyflag_manager.h"
+#include "d/lyt/d2d.h"
+#include "d/lyt/d_lyt_common_icon_item_maps.h"
+#include "d/lyt/d_lyt_control_game.h"
+#include "d/lyt/d_lyt_pause.h"
+#include "d/lyt/d_lyt_util_items.h"
+#include "d/lyt/d_textbox.h"
+#include "d/lyt/meter/d_lyt_meter.h"
+#include "d/snd/d_snd_small_effect_mgr.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "nw4r/lyt/lyt_group.h"
-
+#include "nw4r/math/math_types.h"
+#include "sized_string.h"
+#include "toBeSorted/counters/counter.h"
 
 STATE_DEFINE(dLytPauseDisp00_c, None);
 STATE_DEFINE(dLytPauseDisp00_c, In);
@@ -11,46 +30,1629 @@ STATE_DEFINE(dLytPauseDisp00_c, Ring);
 STATE_DEFINE(dLytPauseDisp00_c, GetDemo);
 STATE_DEFINE(dLytPauseDisp00_c, Out);
 
-extern d2d::LytBrlanMapping S_MAPPINGS[];
-extern "C" char lbl_804E8898[];
+static const d2d::LytBrlanMapping brlanMap[] = {
+    {        "pause_00_in.brlan",      "G_inOut_00"},
+    {      "pause_00_have.brlan",    "G_sekiban_00"},
+    {      "pause_00_have.brlan",   "G_dauzingA_00"},
+    {      "pause_00_have.brlan",   "G_dauzingB_00"},
+    {      "pause_00_have.brlan",   "G_dauzingC_00"},
+    {      "pause_00_have.brlan",   "G_dauzingD_00"},
+    {      "pause_00_have.brlan",   "G_dauzingE_00"},
+    {      "pause_00_have.brlan",   "G_dauzingF_00"},
+    {      "pause_00_have.brlan",   "G_dauzingG_00"},
+    {      "pause_00_have.brlan",   "G_dauzingH_00"},
+    {      "pause_00_have.brlan",      "G_itemA_00"},
+    {      "pause_00_have.brlan",      "G_itemB_00"},
+    {      "pause_00_have.brlan",      "G_itemC_00"},
+    {      "pause_00_have.brlan",      "G_itemD_00"},
+    {      "pause_00_have.brlan",      "G_itemE_00"},
+    {      "pause_00_have.brlan",      "G_itemF_00"},
+    {      "pause_00_have.brlan",      "G_itemG_00"},
+    {      "pause_00_have.brlan",      "G_itemH_00"},
+    {      "pause_00_have.brlan",     "G_poachA_00"},
+    {      "pause_00_have.brlan",     "G_poachB_00"},
+    {      "pause_00_have.brlan",     "G_poachC_00"},
+    {      "pause_00_have.brlan",     "G_poachD_00"},
+    {      "pause_00_have.brlan",     "G_poachE_00"},
+    {      "pause_00_have.brlan",     "G_poachF_00"},
+    {      "pause_00_have.brlan",     "G_poachG_00"},
+    {      "pause_00_have.brlan",     "G_poachH_00"},
+    {      "pause_00_have.brlan",      "G_heart_00"},
+    {      "pause_00_have.brlan",      "G_saifu_00"},
+    {      "pause_00_have.brlan",  "G_parashoru_00"},
+    {      "pause_00_have.brlan",     "G_mogura_00"},
+    {      "pause_00_have.brlan",      "G_uroko_00"},
+    {      "pause_00_have.brlan",       "G_ring_00"},
+    {      "pause_00_have.brlan",       "G_muse_00"},
+    {      "pause_00_have.brlan",       "G_muse_01"},
+    {      "pause_00_have.brlan",       "G_muse_02"},
+    {      "pause_00_have.brlan",       "G_muse_03"},
+    {      "pause_00_have.brlan",       "G_muse_04"},
+    {      "pause_00_have.brlan",       "G_muse_05"},
+    {      "pause_00_have.brlan",       "G_muse_06"},
+    {      "pause_00_have.brlan",       "G_muse_07"},
+    {      "pause_00_have.brlan",   "G_musicSet_00"},
+    {      "pause_00_have.brlan",       "G_harp_00"},
+    {      "pause_00_have.brlan",  "G_UITypeBtn_00"},
+    {      "pause_00_have.brlan",   "G_miToTane_00"},
+    {      "pause_00_have.brlan",     "G_shiren_00"},
+    {      "pause_00_have.brlan",      "G_force_00"},
+    {      "pause_00_have.brlan",      "G_force_01"},
+    {      "pause_00_have.brlan",      "G_force_02"},
+    {      "pause_00_have.brlan",    "G_forceBg_00"},
+    {     "pause_00_onOff.brlan",    "G_sekiban_00"},
+    {     "pause_00_onOff.brlan",      "G_heart_00"},
+    {     "pause_00_onOff.brlan",      "G_saifu_00"},
+    {     "pause_00_onOff.brlan",  "G_parashoru_00"},
+    {     "pause_00_onOff.brlan",     "G_mogura_00"},
+    {     "pause_00_onOff.brlan",      "G_uroko_00"},
+    {     "pause_00_onOff.brlan",       "G_ring_00"},
+    {     "pause_00_onOff.brlan",       "G_muse_00"},
+    {     "pause_00_onOff.brlan",       "G_muse_01"},
+    {     "pause_00_onOff.brlan",       "G_muse_02"},
+    {     "pause_00_onOff.brlan",       "G_muse_03"},
+    {     "pause_00_onOff.brlan",       "G_muse_04"},
+    {     "pause_00_onOff.brlan",       "G_muse_05"},
+    {     "pause_00_onOff.brlan",       "G_muse_06"},
+    {     "pause_00_onOff.brlan",       "G_muse_07"},
+    {     "pause_00_onOff.brlan",       "G_harp_00"},
+    {     "pause_00_onOff.brlan",      "G_sword_00"},
+    {     "pause_00_onOff.brlan",   "G_dauzingA_00"},
+    {     "pause_00_onOff.brlan",   "G_dauzingB_00"},
+    {     "pause_00_onOff.brlan",   "G_dauzingC_00"},
+    {     "pause_00_onOff.brlan",   "G_dauzingD_00"},
+    {     "pause_00_onOff.brlan",   "G_dauzingE_00"},
+    {     "pause_00_onOff.brlan",   "G_dauzingF_00"},
+    {     "pause_00_onOff.brlan",   "G_dauzingG_00"},
+    {     "pause_00_onOff.brlan",   "G_dauzingH_00"},
+    {     "pause_00_onOff.brlan",      "G_itemA_00"},
+    {     "pause_00_onOff.brlan",      "G_itemB_00"},
+    {     "pause_00_onOff.brlan",      "G_itemC_00"},
+    {     "pause_00_onOff.brlan",      "G_itemD_00"},
+    {     "pause_00_onOff.brlan",      "G_itemE_00"},
+    {     "pause_00_onOff.brlan",      "G_itemF_00"},
+    {     "pause_00_onOff.brlan",      "G_itemG_00"},
+    {     "pause_00_onOff.brlan",      "G_itemH_00"},
+    {     "pause_00_onOff.brlan",     "G_poachA_00"},
+    {     "pause_00_onOff.brlan",     "G_poachB_00"},
+    {     "pause_00_onOff.brlan",     "G_poachC_00"},
+    {     "pause_00_onOff.brlan",     "G_poachD_00"},
+    {     "pause_00_onOff.brlan",     "G_poachE_00"},
+    {     "pause_00_onOff.brlan",     "G_poachF_00"},
+    {     "pause_00_onOff.brlan",     "G_poachG_00"},
+    {     "pause_00_onOff.brlan",     "G_poachH_00"},
+    {     "pause_00_onOff.brlan",   "G_tryForce_00"},
+    {     "pause_00_onOff.brlan",     "G_shiren_00"},
+    {     "pause_00_onOff.brlan",   "G_miToTane_00"},
+    {     "pause_00_onOff.brlan",       "G_text_00"},
+    {     "pause_00_onOff.brlan",   "G_calibBtn_00"},
+    { "pause_00_bocoburin.brlan",   "G_paraBoco_00"},
+    { "pause_00_bocoburin.brlan", "G_moguraBoco_00"},
+    { "pause_00_bocoburin.brlan",  "G_urokoBoco_00"},
+    { "pause_00_bocoburin.brlan",   "G_harpBoco_00"},
+    { "pause_00_bocoburin.brlan",  "G_swordBoco_00"},
+    { "pause_00_itemArrow.brlan",  "G_itemArrow_00"},
+    {   "pause_00_toPoach.brlan", "G_ringChange_00"},
+    {   "pause_00_toSword.brlan", "G_ringChange_00"},
+    {    "pause_00_toItem.brlan", "G_ringChange_00"},
+    {     "pause_00_sword.brlan",      "G_sword_00"},
+    {   "pause_00_sekiban.brlan",    "G_sekiban_00"},
+    {     "pause_00_heart.brlan",      "G_heart_00"},
+    {     "pause_00_saifu.brlan",      "G_saifu_00"},
+    {    "pause_00_mogura.brlan",     "G_mogura_00"},
+    {       "pause_00_out.brlan",      "G_inOut_00"},
+    {     "pause_00_onOff.brlan",  "G_UITypeBtn_00"},
+    { "pause_00_btnDecide.brlan",  "G_UITypeBtn_00"},
+    { "pause_00_btnDecide.brlan",   "G_calibBtn_00"},
+    {    "pause_00_UIType.brlan",     "G_UIType_00"},
+    {      "pause_00_call.brlan", "G_UITypeCall_00"},
+    {  "pause_00_miToTane.brlan",   "G_miToTane_00"},
+    {      "pause_00_loop.brlan",       "G_loop_00"},
+    { "pause_00_scrollRIn.brlan",     "G_scroll_00"},
+    {"pause_00_scrollROut.brlan",     "G_scroll_00"},
+    { "pause_00_scrollLIn.brlan",     "G_scroll_00"},
+    {"pause_00_scrollLOut.brlan",     "G_scroll_00"},
+    {  "pause_00_dauzType.brlan",   "G_dauzType_00"},
+    {       "pause_00_off.brlan",    "G_leftTab_00"},
+    {       "pause_00_off.brlan",  "G_centerTab_00"},
+    {       "pause_00_off.brlan",   "G_rightTab_00"},
+    {      "pause_00_tabV.brlan",       "G_tabV_00"},
+};
 
-extern const char *B_LIST[];
+#define PAUSE_DISP_00_ANIM_IN 0
+#define PAUSE_DISP_00_ANIM_HAVE_TABLET 1
+#define PAUSE_DISP_00_ANIM_HAVE_DOWSING_OFFSET 2
+#define PAUSE_DISP_00_ANIM_HAVE_ITEM_OFFSET 10
+#define PAUSE_DISP_00_ANIM_HAVE_POUCH_OFFSET 18
+#define PAUSE_DISP_00_ANIM_HAVE_HEART 26
+#define PAUSE_DISP_00_ANIM_HAVE_POUCH 27
+#define PAUSE_DISP_00_ANIM_HAVE_PARACHUTE 28
+#define PAUSE_DISP_00_ANIM_HAVE_MITTS 29
+#define PAUSE_DISP_00_ANIM_HAVE_SCALE 30
+#define PAUSE_DISP_00_ANIM_HAVE_RING 31
+#define PAUSE_DISP_00_ANIM_HAVE_MUSE_OFFSET 32
+#define PAUSE_DISP_00_ANIM_HAVE_MUSE_PART_OFFSET 36
+#define PAUSE_DISP_00_ANIM_HAVE_MUSE_07 39
+#define PAUSE_DISP_00_ANIM_HAVE_MUSIC_SET 40
+#define PAUSE_DISP_00_ANIM_HAVE_HARP 41
+#define PAUSE_DISP_00_ANIM_HAVE_UITYPE_BTN 42
+#define PAUSE_DISP_00_ANIM_HAVE_MI_TO_TANE 43
+#define PAUSE_DISP_00_ANIM_HAVE_SHIREN 44
+#define PAUSE_DISP_00_ANIM_HAVE_FORCE_OFFSET 45
+#define PAUSE_DISP_00_ANIM_HAVE_FORCE_BG 48
+#define PAUSE_DISP_00_ANIM_ONOFF_TABLET 49
+#define PAUSE_DISP_00_ANIM_ONOFF_HEART 50
+#define PAUSE_DISP_00_ANIM_ONOFF_POUCH 51
+#define PAUSE_DISP_00_ANIM_ONOFF_PARACHUTE 52
+#define PAUSE_DISP_00_ANIM_ONOFF_MITTS 53
+#define PAUSE_DISP_00_ANIM_ONOFF_SCALE 54
+#define PAUSE_DISP_00_ANIM_ONOFF_RING 55
+#define PAUSE_DISP_00_ANIM_ONOFF_MUSE_OFFSET 56
+#define PAUSE_DISP_00_ANIM_ONOFF_HARP 64
+#define PAUSE_DISP_00_ANIM_ONOFF_SWORD 65
+#define PAUSE_DISP_00_ANIM_ONOFF_DOWSING_OFFSET 66
+#define PAUSE_DISP_00_ANIM_ONOFF_ITEM_OFFSET 74
+#define PAUSE_DISP_00_ANIM_ONOFF_POUCH_OFFSET 82
+#define PAUSE_DISP_00_ANIM_ONOFF_TRIFORCE 90
+#define PAUSE_DISP_00_ANIM_ONOFF_SHIREN 91
+#define PAUSE_DISP_00_ANIM_ONOFF_MI_TO_TANE 92
+#define PAUSE_DISP_00_ANIM_ONOFF_TEXT 93
+#define PAUSE_DISP_00_ANIM_ONOFF_CALIB_BTN 94
+#define PAUSE_DISP_00_ANIM_BOCO_PARACHUTE 95
+#define PAUSE_DISP_00_ANIM_BOCO_MITTS 96
+#define PAUSE_DISP_00_ANIM_BOCO_SCALE 97
+#define PAUSE_DISP_00_ANIM_BOCO_HARP 98
+#define PAUSE_DISP_00_ANIM_BOCO_SWORD 99
+#define PAUSE_DISP_00_ANIM_ITEM_ARROW 100
+#define PAUSE_DISP_00_ANIM_RING_TO_POUCH 101
+#define PAUSE_DISP_00_ANIM_RING_TO_SWORD 102
+#define PAUSE_DISP_00_ANIM_RING_TO_ITEM 103
+#define PAUSE_DISP_00_ANIM_SWORD 104
+#define PAUSE_DISP_00_ANIM_TABLETS 105
+#define PAUSE_DISP_00_ANIM_HEART 106
+#define PAUSE_DISP_00_ANIM_POUCH 107
+#define PAUSE_DISP_00_ANIM_MITTS 108
+#define PAUSE_DISP_00_ANIM_OUT 109
+#define PAUSE_DISP_00_ANIM_UI_TYPE_BTN 110
+#define PAUSE_DISP_00_ANIM_DECIDE_UI_TYPE_BTN 111
+#define PAUSE_DISP_00_ANIM_DECIDE_CALIB_BTN 112
+#define PAUSE_DISP_00_ANIM_UI_TYPE 113
+#define PAUSE_DISP_00_ANIM_CALL 114
+#define PAUSE_DISP_00_ANIM_MI_TO_TANE 115
+#define PAUSE_DISP_00_ANIM_LOOP 116
+#define PAUSE_DISP_00_ANIM_SCROLL_R_IN 117
+#define PAUSE_DISP_00_ANIM_SCROLL_R_OUT 118
+#define PAUSE_DISP_00_ANIM_SCROLL_L_IN 119
+#define PAUSE_DISP_00_ANIM_SCROLL_L_OUT 120
+#define PAUSE_DISP_00_ANIM_DOWSING_TYPE 121
+#define PAUSE_DISP_00_ANIM_OFF_LEFT_TAB 122
+#define PAUSE_DISP_00_ANIM_OFF_CENTER_TAB 123
+#define PAUSE_DISP_00_ANIM_OFF_RIGHT_TAB 124
+#define PAUSE_DISP_00_ANIM_TAB_V 125
 
-dLytPauseDisp00_c::dLytPauseDisp00_c() : mStateMgr(*this, sStateID::null) {}
+#define PAUSE_DISP_00_NUM_ANIMS 126
 
-void dLytPauseDisp00_c::init() {
-    mLytBase.build("pause_00.brlyt", nullptr);
-    mLytBase.setPriority(0x86);
+#define PAUSE_DISP_00_ANIM_RING_BASE PAUSE_DISP_00_ANIM_RING_TO_POUCH
+#define PAUSE_DISP_00_ANIM_ITEM_OFFSET PAUSE_DISP_00_ANIM_ONOFF_DOWSING_OFFSET
 
-    for (int i = 0; i < 0x7E; i++) {
-        field_0x00D0[i].init(S_MAPPINGS[i].mFile, nullptr, mLytBase.getLayout(), S_MAPPINGS[i].mName);
+#define PAUSE_DISP_00_NUM_SUBPANES 24
+
+extern "C" u8 lbl_804E8898[];
+
+static const char *sGroupName = "G_ref_00";
+
+static const char *sBoundingNames[] = {
+    "B_sekiban_00",   "B_heart_00",     "B_saifu_00",    "B_parashoru_00", "B_mogura_00",    "B_uroko_00",
+    "B_ring_00",      "B_muse_00",      "B_muse_01",     "B_muse_02",      "B_muse_03",      "B_muse_04",
+    "B_muse_05",      "B_muse_06",      "B_muse_07",     "B_harp_00",      "B_sword_00",     "B_swordFire_00",
+    "B_swordFire_01", "B_swordFire_02", "B_shiren_00",   "B_ringA_00",     "B_ringB_00",     "B_ringC_00",
+    "B_ringD_00",     "B_ringE_00",     "B_ringF_00",    "B_ringG_00",     "B_ringH_00",     "B_UIType_00",
+    "B_calibBtn_00",  "B_calibBtn_00",  "B_calibBtn_00", "B_leftTab_00",   "B_centerTab_00", "B_rightTab_00",
+    "B_calibBtn_00",
+};
+
+#define PAUSE_DISP_00_BOUNDING_TABLETS 0
+#define PAUSE_DISP_00_BOUNDING_HEART 1
+#define PAUSE_DISP_00_BOUNDING_POUCH 2
+#define PAUSE_DISP_00_BOUNDING_PARACHUTE 3
+#define PAUSE_DISP_00_BOUNDING_MITTS 4
+#define PAUSE_DISP_00_BOUNDING_SCALE 5
+#define PAUSE_DISP_00_BOUNDING_RING 6
+#define PAUSE_DISP_00_BOUNDING_MUSE_OFFSET 7
+#define PAUSE_DISP_00_BOUNDING_MUSE_07 14
+#define PAUSE_DISP_00_BOUNDING_HARP 15
+#define PAUSE_DISP_00_BOUNDING_SWORD 16
+#define PAUSE_DISP_00_BOUNDING_SWORD_FIRE_OFFSET 17
+#define PAUSE_DISP_00_BOUNDING_SHIREN 20
+#define PAUSE_DISP_00_BOUNDING_RING_OFFSET 21
+#define PAUSE_DISP_00_BOUNDING_UI_TYPE 29
+#define PAUSE_DISP_00_BOUNDING_CALIB_BTN_0 30
+#define PAUSE_DISP_00_BOUNDING_ARROW_LEFT 31
+#define PAUSE_DISP_00_BOUNDING_ARROW_RIGHT 32
+#define PAUSE_DISP_00_BOUNDING_LEFT_TAB 33
+#define PAUSE_DISP_00_BOUNDING_CENTER_TAB 34
+#define PAUSE_DISP_00_BOUNDING_RIGHT_TAB 35
+#define PAUSE_DISP_00_BOUNDING_CALIB_BTN_3 36
+
+#define PAUSE_DISP_00_BOUNDING_ARROW_OFFSET PAUSE_DISP_00_BOUNDING_ARROW_LEFT
+
+#define PAUSE_DISP_00_NUM_BOUNDINGS 37
+
+// TODO - constants to maybe move elsewhere
+#define PAUSE_DISP_00_NUM_SONG_PARTS 3
+
+#define PAUSE_DISP_00_ICONS_B_WHEEL_OFFSET 0
+#define PAUSE_DISP_00_ICONS_DOWSING_OFFSET 8
+#define PAUSE_DISP_00_ICONS_POUCH_OFFSET 16
+#define PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL 8
+
+dLytPauseDisp00_c::dLytPauseDisp00_c() : mStateMgr(*this) {}
+
+bool dLytPauseDisp00_c::build() {
+    dLytPauseMgr_c *pauseMgr = dLytPauseMgr_c::GetInstance();
+    d2d::ResAccIf_c *resAcc = pauseMgr->getResAcc1();
+    mLyt.setResAcc(resAcc);
+    mLyt.build("pause_00.brlyt", nullptr);
+    mLyt.setPriority(0x86);
+
+    for (int i = 0; i < PAUSE_DISP_00_NUM_ANIMS; i++) {
+        mAnm[i].init(brlanMap[i].mFile, resAcc, mLyt.getLayout(), brlanMap[i].mName);
     }
 
-    for (int i = 0; i < 0x18; i++) {
-        field_0x2050[i].build(nullptr, lbl_804E8898[i]);
-        mSubpanes.PushBack(&field_0xE11C[i]);
+    resAcc = pauseMgr->getResAcc2();
+
+    for (int i = 0; i < PAUSE_DISP_00_NUM_SUBPANES; i++) {
+        mIcons[i].build(resAcc, lbl_804E8898[i]);
+        mSubpanes[i].mpLytPane = &mIcons[i];
+        mSubpaneList.PushBack(&mSubpanes[i]);
     }
 
-    if (mLytBase.getLayout()->GetGroupContainer() != nullptr) {
-        nw4r::lyt::Group *group = mLytBase.getLayout()->GetGroupContainer()->FindGroupByName("G_ref_00");
+    if (mLyt.getLayout()->GetGroupContainer() != nullptr) {
+        nw4r::lyt::Group *group = mLyt.getLayout()->GetGroupContainer()->FindGroupByName(sGroupName);
         if (group != nullptr) {
-            d2d::dSubPane::linkMeters(group, &mSubpanes);
+            d2d::dSubPane::linkMeters(group, &mSubpaneList);
         }
     }
 
-    field_0xE29C.init(mLytBase.getLayout()->GetRootPane(), 1, 0, 0);
-    dCsMgr_c::GetInstance()->registCursorTarget(&field_0xE29C);
-    for (int i = 0; i < 0x25; i++) {
-        if (i != 0x1F && i != 0x20) {
-            nw4r::lyt::Bounding *b = mLytBase.findBounding(B_LIST[i]);
-            // TODO
+    mCsHitCheck.init(mLyt.getLayout()->GetRootPane(), 1, 0, 0);
+    dCsMgr_c::GetInstance()->registCursorTarget(&mCsHitCheck);
+    for (int i = 0; i < PAUSE_DISP_00_NUM_BOUNDINGS; i++) {
+        if (i != PAUSE_DISP_00_BOUNDING_ARROW_LEFT && i != PAUSE_DISP_00_BOUNDING_ARROW_RIGHT) {
+            mpBoundings[i] = mLyt.findBounding(sBoundingNames[i]);
+            mpBoundings[i]->SetVisible(true);
+        }
+    }
+
+    mpBoundings[PAUSE_DISP_00_BOUNDING_ARROW_LEFT] = pauseMgr->getArrowBounding(0);
+    mpBoundings[PAUSE_DISP_00_BOUNDING_ARROW_RIGHT] = pauseMgr->getArrowBounding(1);
+
+    u8 songLifetreeStatus = getSongLifeTreeStatus();
+    if (songLifetreeStatus == SONG_LIFETREE_HAS_SOTH) {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSE_07, 1.0f);
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSIC_SET, 0.0f);
+    } else if (songLifetreeStatus != SONG_LIFETREE_NONE) {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSIC_SET, 1.0f);
+        for (int i = 0; i < PAUSE_DISP_00_NUM_SONG_PARTS; i++) {
+            setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSE_PART_OFFSET + i, 1.0f);
+        }
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSE_07, 0.0f);
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSIC_SET, 0.0f);
+    }
+    setAnm(PAUSE_DISP_00_ANIM_IN, 0.0f);
+    mAnm[PAUSE_DISP_00_ANIM_IN].setFrame(mAnm[PAUSE_DISP_00_ANIM_IN].getAnimDuration());
+
+    mLyt.calc();
+
+    stopAnm(PAUSE_DISP_00_ANIM_HAVE_MUSE_07);
+    stopAnm(PAUSE_DISP_00_ANIM_HAVE_MUSIC_SET);
+    stopAnm(PAUSE_DISP_00_ANIM_IN);
+    for (int i = 0; i < PAUSE_DISP_00_NUM_SONG_PARTS; i++) {
+        stopAnm(PAUSE_DISP_00_ANIM_HAVE_MUSE_PART_OFFSET + i);
+    }
+
+    mStateMgr.changeState(StateID_None);
+
+    return true;
+}
+
+bool dLytPauseDisp00_c::remove() {
+    dCsMgr_c::GetInstance()->unregistCursorTarget(&mCsHitCheck);
+    for (d2d::SubPaneList::Iterator it = mSubpaneList.GetBeginIter(); it != mSubpaneList.GetEndIter(); ++it) {
+        if (!it->mpLytPane->LytMeter0x24()) {
+            continue;
+        }
+        // @bug checking nullptr after invoking virtual function on it
+        d2d::dSubPane *subPane = it->mpLytPane;
+        if (subPane != nullptr) {
+            nw4r::lyt::Pane *parent = subPane->getPane()->GetParent();
+            parent->RemoveChild(subPane->getPane());
+        }
+    }
+    for (int i = 0; i < PAUSE_DISP_00_NUM_SUBPANES; i++) {
+        mSubpanes[i].mpLytPane->remove();
+    }
+
+    mLyt.unbindAnims();
+
+    for (int i = 0; i < PAUSE_DISP_00_NUM_ANIMS; i++) {
+        mAnm[i].remove();
+    }
+
+    return true;
+}
+
+bool dLytPauseDisp00_c::execute() {
+    field_0xE371 = false;
+    mStateMgr.executeState();
+    executeCall();
+    for (int i = 0; i < PAUSE_DISP_00_NUM_SUBPANES; i++) {
+        mSubpanes[i].mpLytPane->execute();
+    }
+    mLyt.calc();
+    mCsHitCheck.resetCachedHitboxes();
+    mCsHitCheck.execute();
+    if (!mStateMgr.getStateID()->isEqual(StateID_None)) {
+        mAnm[PAUSE_DISP_00_ANIM_LOOP].play();
+    }
+
+    return true;
+}
+
+bool dLytPauseDisp00_c::draw() {
+    if (mIsVisible == true) {
+        mLyt.addToDrawList();
+    }
+    return true;
+}
+
+void dLytPauseDisp00_c::initializeState_None() {
+    for (int i = 0; i < PAUSE_DISP_00_NUM_ANIMS; i++) {
+        mAnm[i].unbind();
+    }
+
+    field_0xE36E = false;
+    mInRequest = false;
+    mOutRequest = false;
+    mIsVisible = false;
+    field_0xE371 = false;
+    mStopCallRequest = false;
+
+    mCallTimerMaybe = 0;
+    mStep = 0;
+    mPrevNavTarget = 0;
+    mCurrentNavTarget = 0;
+    mGetDemoTimer = 0;
+
+    for (int i = 0; i < PAUSE_DISP_00_NUM_SUBPANES; i++) {
+        mIcons[i].reset();
+        mIcons[i].setVisible(false);
+    }
+
+    for (int i = 0; i < PAUSE_DISP_00_NUM_BOUNDINGS; i++) {
+        mpBoundings[i]->SetVisible(false);
+    }
+
+    mpBoundings[PAUSE_DISP_00_BOUNDING_ARROW_LEFT]->SetVisible(true);
+    mpBoundings[PAUSE_DISP_00_BOUNDING_ARROW_RIGHT]->SetVisible(true);
+
+    mLyt.findPane("N_itemArrow_00")->SetVisible(false);
+    setAnm(PAUSE_DISP_00_ANIM_ITEM_ARROW, 0.0f);
+    setAnm(PAUSE_DISP_00_ANIM_RING_BASE + dLytControlGame_c::getInstance()->getPauseDisp00Tab(), 0.0f);
+
+    StoryflagManager *storyFlagmanager = StoryflagManager::sInstance;
+
+    // Check which tabs are unlocked
+    if (storyFlagmanager->getFlag(789)) {
+        mpBoundings[PAUSE_DISP_00_BOUNDING_LEFT_TAB]->SetVisible(true);
+    }
+
+    if (storyFlagmanager->getFlag(30)) {
+        mpBoundings[PAUSE_DISP_00_BOUNDING_CENTER_TAB]->SetVisible(true);
+    }
+
+    if (storyFlagmanager->getFlag(58)) {
+        mpBoundings[PAUSE_DISP_00_BOUNDING_RIGHT_TAB]->SetVisible(true);
+    }
+
+    setAnm(PAUSE_DISP_00_ANIM_LOOP, 0.0f);
+    mSelectGuideRequest = false;
+    mSelectToggleRequest = false;
+    field_0xE376 = false;
+    mRingToggleRequest = false;
+}
+void dLytPauseDisp00_c::executeState_None() {
+    if (mInRequest == true) {
+        mInRequest = false;
+        mStateMgr.changeState(StateID_In);
+    }
+}
+void dLytPauseDisp00_c::finalizeState_None() {
+    loadRingText(RING_TEXT_INITIAL_TAB);
+}
+
+void dLytPauseDisp00_c::initializeState_In() {
+    if (mDoScrollAnim == true) {
+        dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
+        setAnm(PAUSE_DISP_00_ANIM_IN, 0.0f);
+        mAnm[PAUSE_DISP_00_ANIM_IN].setFrame(mAnm[PAUSE_DISP_00_ANIM_IN].getAnimDuration());
+        if (pause->getField_0x0831()) {
+            setAnm(PAUSE_DISP_00_ANIM_SCROLL_L_IN, 0.0f);
+        } else {
+            setAnm(PAUSE_DISP_00_ANIM_SCROLL_R_IN, 0.0f);
+        }
+
+        if (pause->getField_0x0840()) {
+            if (pause->getField_0x0831()) {
+                mPrevNavTarget = PAUSE_DISP_00_BOUNDING_ARROW_LEFT + 1;
+            } else {
+                mPrevNavTarget = PAUSE_DISP_00_BOUNDING_ARROW_RIGHT + 1;
+            }
+        }
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_IN, 0.0f);
+    }
+
+    for (int i = PAUSE_DISP_00_ANIM_ONOFF_TABLET; i < PAUSE_DISP_00_ANIM_ONOFF_CALIB_BTN + 1; i++) {
+        setAnm(i, 0.0f);
+    }
+    mAnm[PAUSE_DISP_00_ANIM_ONOFF_TEXT].setToEnd();
+
+    setupDisp();
+    setupRingIcons(dLytControlGame_c::getInstance()->getPauseDisp00Tab());
+    setAnm(PAUSE_DISP_00_ANIM_UI_TYPE_BTN, 0.0f);
+
+    u8 mode = dLytMeter_c::GetMain()->getUiMode();
+    setAnm(PAUSE_DISP_00_ANIM_UI_TYPE, mode);
+    StoryflagManager *storyflagManager = StoryflagManager::sInstance;
+    if (storyflagManager->getFlag(583)) {
+        setAnm(PAUSE_DISP_00_ANIM_DOWSING_TYPE, 1.0f);
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_DOWSING_TYPE, 0.0f);
+    }
+
+    // Control tab visibility
+    f32 tabVFrame = 0.0f;
+    if (storyflagManager->getFlag(30)) {
+        tabVFrame = 1.0f;
+    }
+    if (storyflagManager->getFlag(789)) {
+        tabVFrame = 2.0f;
+    }
+    if (storyflagManager->getFlag(58)) {
+        tabVFrame = 3.0f;
+    }
+
+    setAnm(PAUSE_DISP_00_ANIM_TAB_V, tabVFrame);
+    if (tabVFrame) {
+        mLyt.findPane("N_text_00")->SetVisible(true);
+    } else {
+        mLyt.findPane("N_text_00")->SetVisible(false);
+    }
+
+    mIsVisible = true;
+}
+void dLytPauseDisp00_c::executeState_In() {
+    s32 anim = PAUSE_DISP_00_ANIM_IN;
+    if (mDoScrollAnim == true) {
+        dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
+        anim = pause->getField_0x0831() ? PAUSE_DISP_00_ANIM_SCROLL_L_IN : PAUSE_DISP_00_ANIM_SCROLL_R_IN;
+    }
+
+    d2d::AnmGroup_c &anm = mAnm[anim];
+
+    if (anm.isEndReached() == true) {
+        if (dLytControlGame_c::getInstance()->getField_0x15C67()) {
+            mStateMgr.changeState(StateID_GetDemo);
+        } else {
+            mStateMgr.changeState(StateID_Wait);
+        }
+    } else {
+        anm.play();
+    }
+}
+void dLytPauseDisp00_c::finalizeState_In() {
+    dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
+    if (pause->getField_0x0831()) {
+        stopAnm(PAUSE_DISP_00_ANIM_SCROLL_L_IN);
+    } else {
+        stopAnm(PAUSE_DISP_00_ANIM_SCROLL_R_IN);
+    }
+
+    mDoScrollAnim = false;
+    if (pause->getField_0x083E()) {
+        if (!pause->getField_0x0832()) {
+            mCurrentNavTarget = PAUSE_DISP_00_BOUNDING_ARROW_RIGHT + 1;
+        } else {
+            mCurrentNavTarget = PAUSE_DISP_00_BOUNDING_ARROW_LEFT + 1;
+        }
+        mPrevNavTarget = mCurrentNavTarget;
+    }
+}
+
+void dLytPauseDisp00_c::initializeState_Wait() {
+    mStep = 0;
+    field_0xE36E = true;
+}
+void dLytPauseDisp00_c::executeState_Wait() {
+    d2d::AnmGroup_c *anm;
+    if (field_0xE36E == true) {
+        field_0xE36E = false;
+    }
+    switch (mStep) {
+        case 0: {
+            if (mOutRequest == true) {
+                mOutRequest = false;
+                hideItemIcons();
+                mStateMgr.changeState(StateID_Out);
+                return;
+            }
+            if (mSelectToggleRequest == true) {
+                mStateMgr.changeState(StateID_Select);
+                return;
+            }
+            if (mRingToggleRequest == true) {
+                mRingToggleRequest = false;
+                mAnm[PAUSE_DISP_00_ANIM_ONOFF_TEXT].setFrame(0.0f);
+                mStateMgr.changeState(StateID_Ring);
+                return;
+            }
+
+            if (mSelectGuideRequest == true) {
+                mStep = 1;
+                setAnm(PAUSE_DISP_00_ANIM_DECIDE_UI_TYPE_BTN, 0.0f);
+                u8 uiMode = dLytMeter_c::GetMain()->getUiMode();
+                f32 frame = uiMode + 1;
+                if (frame >= 3.0f) {
+                    frame = 0.0f;
+                }
+                mAnm[PAUSE_DISP_00_ANIM_UI_TYPE].setFrame(frame);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_P1_SELECT_GUIDE);
+            } else if (mSelectMplsRequest == true) {
+                mStep = 2;
+                setAnm(PAUSE_DISP_00_ANIM_DECIDE_CALIB_BTN, 0.0f);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_P1_SELECT_MPLUS);
+            } else if (updateSelection() != 0) {
+                field_0xE371 = true;
+            }
+            break;
+        }
+        case 1: {
+            anm = &mAnm[PAUSE_DISP_00_ANIM_DECIDE_UI_TYPE_BTN];
+            if (anm->isEndReached() == true) {
+                mStep = 0;
+                mSelectGuideRequest = false;
+                stopAnm(PAUSE_DISP_00_ANIM_DECIDE_UI_TYPE_BTN);
+                field_0xE36E = true;
+            } else {
+                anm->play();
+            }
+            break;
+        }
+        case 2: {
+            anm = &mAnm[PAUSE_DISP_00_ANIM_DECIDE_CALIB_BTN];
+            if (anm->isEndReached() == true) {
+                mStep = 0;
+                mSelectMplsRequest = false;
+                stopAnm(PAUSE_DISP_00_ANIM_DECIDE_CALIB_BTN);
+                field_0xE36E = true;
+            } else {
+                anm->play();
+            }
+            break;
+        }
+    }
+    mAnm[PAUSE_DISP_00_ANIM_ONOFF_TEXT].play();
+}
+void dLytPauseDisp00_c::finalizeState_Wait() {}
+
+void dLytPauseDisp00_c::initializeState_Select() {
+    static const s32 sTabOrder[] = {
+        1,
+        2,
+        0,
+    };
+
+    static const s32 sTabAnim[] = {
+        PAUSE_DISP_00_ANIM_RING_TO_POUCH,
+        PAUSE_DISP_00_ANIM_RING_TO_SWORD,
+        PAUSE_DISP_00_ANIM_RING_TO_ITEM,
+    };
+
+    static const s32 sTabAnim2[] = {
+        PAUSE_DISP_00_ANIM_RING_TO_ITEM,
+        PAUSE_DISP_00_ANIM_RING_TO_POUCH,
+        PAUSE_DISP_00_ANIM_RING_TO_SWORD,
+    };
+
+    dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
+    mSelectToggleRequest = false;
+    mStep = 0;
+    if (pause->getField_0x0838() == true) {
+        mStep = 1;
+        stopAnm(PAUSE_DISP_00_ANIM_RING_TO_POUCH);
+        stopAnm(PAUSE_DISP_00_ANIM_RING_TO_SWORD);
+        stopAnm(PAUSE_DISP_00_ANIM_RING_TO_ITEM);
+
+        // Of course dLytControlGame_c and dLytPause_c would use different IDs...
+        // TODO check if this ID mapping is consistently done
+        s32 controlGameTab = dLytControlGame_c::getInstance()->getPauseDisp00Tab();
+        if (sTabOrder[controlGameTab] == pause->getCurrentDisp00Tab()) {
+            setAnm(sTabAnim[controlGameTab], 0.0f);
+            field_0xE376 = false;
+        } else {
+            stopAnm(controlGameTab + PAUSE_DISP_00_ANIM_RING_BASE);
+            // TODO - nonmatching
+            setAnm(sTabAnim2[controlGameTab], 0.0f);
+            mAnm[sTabAnim2[controlGameTab]].setToEnd();
+            field_0xE376 = true;
+        }
+
+        for (int i = PAUSE_DISP_00_ANIM_ITEM_OFFSET;
+             i < PAUSE_DISP_00_ANIM_ITEM_OFFSET + 3 * PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
+            mAnm[i].setFrame(0.0f);
+        }
+    }
+    mAnm[PAUSE_DISP_00_ANIM_ONOFF_TEXT].setFrame(0.0f);
+}
+void dLytPauseDisp00_c::executeState_Select() {
+    static const s32 sTabAnim2[] = {
+        PAUSE_DISP_00_ANIM_RING_TO_ITEM,
+        PAUSE_DISP_00_ANIM_RING_TO_POUCH,
+        PAUSE_DISP_00_ANIM_RING_TO_SWORD,
+    };
+
+    static const s32 sTabAnim3[] = {
+        PAUSE_DISP_00_ANIM_RING_TO_SWORD,
+        PAUSE_DISP_00_ANIM_RING_TO_ITEM,
+        PAUSE_DISP_00_ANIM_RING_TO_POUCH,
+    };
+
+    switch (mStep) {
+        case 0: {
+            if (mSelectToggleRequest == true) {
+                mStateMgr.changeState(StateID_Wait);
+            }
+            break;
+        }
+        case 1: {
+            // TODO Regswaps - maybe enum types, maybe int, maybe the order of these lines...
+            s32 controlGameTab = dLytControlGame_c::getInstance()->getPauseDisp00Tab();
+            s32 lytPauseTab = dLytPauseMgr_c::GetInstance()->getCurrentDisp00Tab();
+            d2d::AnmGroup_c *anm;
+            if (field_0xE376) {
+                anm = &mAnm[sTabAnim2[controlGameTab]];
+                if (cM::isZero(anm->getFrame()) == true) {
+                    setupRingIcons(lytPauseTab);
+                    mStateMgr.changeState(StateID_Wait);
+                }
+                playBackwards(*anm);
+            } else {
+                anm = &mAnm[controlGameTab + PAUSE_DISP_00_ANIM_RING_BASE];
+                if (anm->isEndReached() == true) {
+                    stopAnm(controlGameTab + PAUSE_DISP_00_ANIM_RING_BASE);
+                    setAnm(sTabAnim3[controlGameTab], 0.0f);
+                    setupRingIcons(lytPauseTab);
+                    mStateMgr.changeState(StateID_Wait);
+                } else {
+                    anm->play();
+                }
+            }
+            break;
+        }
+    }
+    playOnOffTabAnim();
+}
+void dLytPauseDisp00_c::finalizeState_Select() {
+    mSelectToggleRequest = false;
+    if (mStep == 0) {
+        return;
+    }
+    loadRingText(RING_TEXT_CURRENT_TAB);
+}
+
+void dLytPauseDisp00_c::initializeState_Ring() {
+    mStep = 0;
+    mLyt.findPane("N_itemArrow_00")->SetVisible(true);
+    dAcPy_c::calcItemWheelSelection(true, PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL);
+    mPrevNavTarget = 0;
+    loadRingText(RING_TEXT_RELEASE_TO_CONFIRM);
+    dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_P1_HOLD_POINTER);
+}
+void dLytPauseDisp00_c::executeState_Ring() {
+    dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
+    f32 rot = dLytPauseMgr_c::sDisp00ArrowRotation;
+    f32 len = dLytPauseMgr_c::sDisp00ArrowLength;
+    if (len < 0.0f) {
+        len = 0.0f;
+    }
+    if (len > 1.0f) {
+        len = 1.0f;
+    }
+    // Length
+    len *= 99.0f;
+    mAnm[PAUSE_DISP_00_ANIM_ITEM_ARROW].setFrame(len);
+    // Rotate the arrow
+    mVec3_c t1(0.0f, 0.0f, 0.0f);
+    t1.z = rot;
+    mLyt.findPane("N_itemArrow_00")->SetRotate(t1);
+    // But rotate the button and the pointer back so that
+    // they point up
+    t1.z = -t1.z;
+    mLyt.findPane("N_arrowHand_00")->SetRotate(t1);
+
+    if (mSelectToggleRequest == true) {
+        mStateMgr.changeState(StateID_Select);
+    } else if (mRingToggleRequest == true) {
+        mRingToggleRequest = false;
+        mStateMgr.changeState(StateID_Wait);
+    } else {
+        s32 idx = dAcPy_c::calcItemWheelSelection(false, PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL);
+        s32 navTarget = 0;
+        if (idx == -1) {
+            mAnm[PAUSE_DISP_00_ANIM_ONOFF_TEXT].setFrame(0.0f);
+            pause->setSelection(dLytPauseMgr_c::SELECT_NONE, 0, false);
+        } else {
+            mAnm[PAUSE_DISP_00_ANIM_ONOFF_TEXT].play();
+            static const u8 sButtonOrder[] = {
+                0, 7, 6, 5, 4, 3, 2, 1,
+            };
+            idx = sButtonOrder[idx];
+
+            u16 item;
+            dLytPauseMgr_c::SelectionType_e selectionType;
+            s32 b = PAUSE_DISP_00_BOUNDING_RING_OFFSET + idx;
+            if (mpBoundings[b]->IsVisible()) {
+                s32 tab = dLytControlGame_c::getInstance()->getPauseDisp00Tab();
+                if (tab == 1) {
+                    item = getPouchItemIdForIndex(idx, true);
+                    if (item == 0) {
+                        item = ITEM_POUCH_EXPANSION;
+                    }
+                    selectionType = dLytPauseMgr_c::SELECT_POUCH;
+                } else if (tab == 2) {
+                    item = getDowsingItemIdForIndex(idx);
+                    selectionType = dLytPauseMgr_c::SELECT_DOWSING;
+                } else {
+                    item = getBWheelItemIdForIndex(idx);
+                    selectionType = dLytPauseMgr_c::SELECT_BWHEEL;
+                }
+                pause->setSelection(selectionType, item, false);
+                navTarget = idx + 1;
+                mCurrentNavTarget = navTarget;
+                field_0xE371 = true;
+            } else {
+                idx = -1;
+                pause->setSelection(dLytPauseMgr_c::SELECT_NONE, 0, false);
+                mAnm[PAUSE_DISP_00_ANIM_ONOFF_TEXT].setFrame(0.0f);
+            }
+        }
+
+        if (mPrevNavTarget != navTarget && idx != -1) {
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_P1_POINT_ITEM);
+            dRumble_c::start(dRumble_c::sRumblePreset1, 1);
+        }
+        mPrevNavTarget = navTarget;
+
+        s32 tab = dLytControlGame_c::getInstance()->getPauseDisp00Tab();
+        s32 anmIdx = tab == 1 ? PAUSE_DISP_00_ANIM_ONOFF_POUCH_OFFSET :
+                     tab == 2 ? PAUSE_DISP_00_ANIM_ONOFF_DOWSING_OFFSET :
+                                PAUSE_DISP_00_ANIM_ONOFF_ITEM_OFFSET;
+
+        int i;
+        d2d::AnmGroup_c *anm = &mAnm[anmIdx];
+        for (i = 0; i < PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
+            if (idx == i) {
+                anm->play();
+            } else {
+                playBackwards(*anm);
+            }
+            anm++;
+        }
+        playOnOffTabAnim();
+    }
+}
+void dLytPauseDisp00_c::finalizeState_Ring() {
+    mLyt.findPane("N_itemArrow_00")->SetVisible(false);
+    loadRingText(RING_TEXT_INITIAL_TAB);
+}
+
+void dLytPauseDisp00_c::initializeState_GetDemo() {
+    field_0xE36E = true;
+    mStep = 0;
+    mGetDemoTimer = 0;
+}
+void dLytPauseDisp00_c::executeState_GetDemo() {
+    switch (mStep) {
+        case 0: {
+            field_0xE36E = false;
+            if (mGetDemoTimer < 2) {
+                mGetDemoTimer++;
+            } else {
+                mGetDemoTimer = 0;
+                mStep = 1;
+            }
+            break;
+        }
+        case 1: {
+            mStep = 2;
+            dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_ITEM_SET_FX);
+            nw4r::math::MTX34 mtx = mLyt.findPane("N_saifuAll_00")->GetGlobalMtx();
+            nw4r::math::VEC3 v(0.0f, 0.0f, 0.0f);
+            MTXMultVec(mtx, v, v);
+            mVec3_c v1;
+            v1.set(v.x, v.y, v.z);
+            dJEffManager_c::spawnUIEffect(PARTICLE_RESOURCE_ID_MAPPING_990_, v1, nullptr, nullptr, nullptr, nullptr);
+            break;
+        }
+        case 2: {
+            if (mGetDemoTimer < 35) {
+                mGetDemoTimer++;
+            } else {
+                mGetDemoTimer = 0;
+                mStep = 3;
+                dTextBox_c *box;
+                s32 count = dAcItem_c::getExtraWalletCount();
+                box = mLyt.getTextBox("T_rupeeNum_00");
+                box->SetVisible(true);
+                SizedWString<32> buf;
+                buf.sprintf(L"+%d", count * 300);
+                box->setTextWithGlobalTextProcessor(buf);
+                // Yes, the r is actually there in the Lyt files
+                box = mLyt.getTextBox("T_rupeeNumrS_00");
+                box->SetVisible(true);
+                box->setTextWithGlobalTextProcessor(buf);
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_ITEM_SET_COUNT_UP);
+            }
+            break;
+        }
+        case 3: {
+            if (mGetDemoTimer < 37) {
+                mGetDemoTimer++;
+            } else {
+                mGetDemoTimer = 0;
+                mStateMgr.changeState(StateID_Wait);
+            }
+            break;
+        }
+    }
+}
+void dLytPauseDisp00_c::finalizeState_GetDemo() {}
+
+void dLytPauseDisp00_c::initializeState_Out() {
+    stopAnm(PAUSE_DISP_00_ANIM_IN);
+    if (mDoScrollAnim == true) {
+        if (dLytPauseMgr_c::GetInstance()->getField_0x0831()) {
+            setAnm(PAUSE_DISP_00_ANIM_SCROLL_R_OUT, 0.0f);
+        } else {
+            setAnm(PAUSE_DISP_00_ANIM_SCROLL_L_OUT, 0.0f);
+        }
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_OUT, 0.0f);
+    }
+    mStep = 0;
+}
+void dLytPauseDisp00_c::executeState_Out() {
+    s32 anim = PAUSE_DISP_00_ANIM_OUT;
+    if (mDoScrollAnim == true) {
+        anim = dLytPauseMgr_c::GetInstance()->getField_0x0831() ? PAUSE_DISP_00_ANIM_SCROLL_R_OUT :
+                                                                  PAUSE_DISP_00_ANIM_SCROLL_L_OUT;
+    }
+
+    d2d::AnmGroup_c &anm = mAnm[anim];
+
+    switch (mStep) {
+        case 0: {
+            if (anm.isEndReached() == true) {
+                mStep = 1;
+                field_0xE36E = true;
+            }
+            break;
+        }
+        case 1: {
+            mStateMgr.changeState(StateID_None);
+            return;
+        }
+    }
+
+    anm.play();
+}
+void dLytPauseDisp00_c::finalizeState_Out() {}
+
+void dLytPauseDisp00_c::setAnm(int idx, f32 value) {
+    d2d::AnmGroup_c &anm = mAnm[idx];
+    anm.bind(false);
+    anm.setAnimEnable(true);
+    anm.setFrame(value);
+}
+
+void dLytPauseDisp00_c::stopAnm(int idx) {
+    d2d::AnmGroup_c &anm = mAnm[idx];
+    anm.unbind();
+}
+
+void dLytPauseDisp00_c::playBackwards(d2d::AnmGroup_c &anm) {
+    f32 frame = anm.getFrame();
+    if (frame) {
+        frame -= 1.0f;
+        if (frame <= 0.0f) {
+            frame = 0.0f;
+        }
+        anm.setFrame(frame);
+    }
+}
+
+void dLytPauseDisp00_c::setupDisp() {
+    setupInventoryWheel();
+    setupHeartPieces();
+    setupWallets();
+    setupMitts();
+    setupSailcloth();
+    setupWaterDragonScale();
+    setupFireshieldEarrings();
+    setupSongsAndLifeTree();
+    setupTabletTriforce();
+    setupSword();
+    setupStoneOfTrials();
+
+    mpBoundings[PAUSE_DISP_00_BOUNDING_CALIB_BTN_0]->SetVisible(true);
+
+    dLytCommonIconItem_c *icon;
+    icon = &mIcons[PAUSE_DISP_00_ICONS_B_WHEEL_OFFSET];
+    for (s32 i = 0; i < PAUSE_DISP_00_NUM_SUBPANES; i++) {
+        icon->setVisible(false);
+        icon++;
+    }
+
+    if (StoryflagManager::sInstance->getFlag(358)) {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_UITYPE_BTN, 1.0f);
+        mpBoundings[PAUSE_DISP_00_BOUNDING_UI_TYPE]->SetVisible(true);
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_UITYPE_BTN, 0.0f);
+    }
+
+    if (StoryflagManager::sInstance->getFlag(570)) {
+        setAnm(PAUSE_DISP_00_ANIM_CALL, 0.0f);
+        mCallTimerMaybe = 1;
+    }
+}
+
+void dLytPauseDisp00_c::setupInventoryWheel() {
+    dLytCommonIconItem_c *icon;
+    s32 animIndex;
+    f32 haveFrame;
+
+    // B-wheel
+    icon = &mIcons[PAUSE_DISP_00_ICONS_B_WHEEL_OFFSET];
+    for (s32 i = 0; i < PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
+        animIndex = i + PAUSE_DISP_00_ANIM_HAVE_ITEM_OFFSET;
+        haveFrame = 0.0f;
+        icon->setUnk(false);
+        if (isBWheelIndexWithNumber(i)) {
+            icon->setHasNumber(true);
+            icon->setNumber(getNumberForBWheelIndex(i));
+        } else {
+            icon->setHasNumber(false);
+        }
+
+        if (getItemLevelForBWheelIndex(i) != 0) {
+            u8 id = getLytItemIdForBWheelIndex(i);
+            if (id != LYT_CMN_ItemInvalid) {
+                if (isBWheelIndexBocoburinLocked(i, true)) {
+                    icon->setBocoburinLocked(true);
+                    icon->setHasNumber(false);
+                }
+                haveFrame = 1.0f;
+                icon->setItem(id);
+            }
+        }
+        if (isBWheelIndexWithNumber(i)) {
+            u8 color = getNumberColorForBWheelIndex(i);
+            if (color != LYT_ITEM_COLOR_NONE) {
+                icon->setNumberColor(color);
+            }
+        }
+
+        setAnm(animIndex, haveFrame);
+        icon++;
+    }
+
+    // Pouch
+    icon = &mIcons[PAUSE_DISP_00_ICONS_POUCH_OFFSET];
+    for (s32 i = 0; i < PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
+        animIndex = i + PAUSE_DISP_00_ANIM_HAVE_POUCH_OFFSET;
+        haveFrame = 0.0f;
+        icon->setUnk(false);
+        s32 number = getPouchItemAmount(i, true);
+        if (number == -1) {
+            icon->setHasNumber(false);
+        } else {
+            icon->setHasNumber(true);
+            icon->setNumber(number);
+        }
+
+        u32 item = getPouchItemForSlot(i, true);
+        if (item != LYT_CMN_PouchPotionHealthPlusPlusHalf) {
+            if (isPouchBocoburinLocked()) {
+                icon->setBocoburinLocked(true);
+                icon->setHasNumber(false);
+            }
+            haveFrame = 1.0f;
+            icon->setItem(item);
+            f32 durability = getShieldDurability(i, true);
+            if (durability >= 0.0f) {
+                icon->setShieldDurability(durability);
+            }
+
+            u8 color = getPouchItemNumberColor(i, false);
+            if (color != LYT_ITEM_COLOR_NONE) {
+                icon->setNumberColor(color);
+            }
+        }
+
+        setAnm(animIndex, haveFrame);
+        icon++;
+    }
+
+    // Dowsing
+    icon = &mIcons[PAUSE_DISP_00_ICONS_DOWSING_OFFSET];
+    for (s32 i = 0; i < PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
+        animIndex = i + PAUSE_DISP_00_ANIM_HAVE_DOWSING_OFFSET;
+        haveFrame = 0.0f;
+        icon->setUnk(false);
+        icon->setHasNumber(false);
+
+        if (hasDowsingInIndex(i)) {
+            u32 item = getLytIndexForDowsingIndex(i);
+            if (item != LYT_CMN_DowsingInvalid) {
+                haveFrame = 1.0f;
+                icon->setItem(item);
+            }
+        }
+
+        setAnm(animIndex, haveFrame);
+        icon++;
+    }
+
+    setAnm(PAUSE_DISP_00_ANIM_OFF_LEFT_TAB, 0.0f);
+    mAnm[PAUSE_DISP_00_ANIM_OFF_LEFT_TAB].setToEnd();
+    setAnm(PAUSE_DISP_00_ANIM_OFF_CENTER_TAB, 0.0f);
+    mAnm[PAUSE_DISP_00_ANIM_OFF_CENTER_TAB].setToEnd();
+    setAnm(PAUSE_DISP_00_ANIM_OFF_RIGHT_TAB, 0.0f);
+    mAnm[PAUSE_DISP_00_ANIM_OFF_RIGHT_TAB].setToEnd();
+}
+
+void dLytPauseDisp00_c::setupHeartPieces() {
+    u32 heartPieceCount = getCounterByIndex(8);
+    u32 containerCount = dAcItem_c::getHeartContainerHealthCount();
+    if (containerCount == 24) {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_HEART, 1.0f);
+        setAnm(PAUSE_DISP_00_ANIM_HEART, 3.0f);
+        mpBoundings[PAUSE_DISP_00_BOUNDING_HEART]->SetVisible(true);
+    } else if (heartPieceCount != 0) {
+        f32 frame = heartPieceCount;
+        frame -= 1.0f;
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_HEART, 1.0f);
+        setAnm(PAUSE_DISP_00_ANIM_HEART, frame);
+        mpBoundings[PAUSE_DISP_00_BOUNDING_HEART]->SetVisible(true);
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_HEART, 0.0f);
+    }
+}
+
+void dLytPauseDisp00_c::setupWallets() {
+    setAnm(PAUSE_DISP_00_ANIM_HAVE_POUCH, 1.0f);
+    f32 frame = 0.0f;
+    if (dAcItem_c::checkFlag(ITEM_TYCOON_WALLET)) {
+        frame = 4.0f;
+    } else if (dAcItem_c::checkFlag(ITEM_GIANT_WALLET)) {
+        frame = 3.0f;
+    } else if (dAcItem_c::checkFlag(ITEM_BIG_WALLET)) {
+        frame = 2.0f;
+    } else if (dAcItem_c::checkFlag(ITEM_MEDIUM_WALLET)) {
+        frame = 1.0f;
+    }
+    setAnm(PAUSE_DISP_00_ANIM_POUCH, frame);
+    mpBoundings[PAUSE_DISP_00_BOUNDING_POUCH]->SetVisible(true);
+    s32 walletCount = dAcItem_c::getExtraWalletCount();
+    SizedWString<32> buf;
+    if (walletCount != 0) {
+        bool bVisible = true;
+        // Apparently extra wallets are the ONLY thing that can cause
+        // the Gear screen to show the demo (dLytControlGame_c::openCollectionScreenDemo),
+        // so we don't have to check that an extra wallets are actually what cause the
+        // demo.
+        if (dLytControlGame_c::getInstance()->getField_0x15C67()) {
+            walletCount--;
+            if (walletCount == 0) {
+                bVisible = false;
+            }
+        }
+        dTextBox_c *box;
+        box = mLyt.getTextBox("T_rupeeNum_00");
+        box->SetVisible(bVisible);
+        buf.empty();
+        buf.sprintf(L"+%d", walletCount * 300);
+        box->setTextWithGlobalTextProcessor(buf);
+        box = mLyt.getTextBox("T_rupeeNumrS_00");
+        box->SetVisible(bVisible);
+        box->setTextWithGlobalTextProcessor(buf);
+    } else {
+        mLyt.getTextBox("T_rupeeNum_00")->SetVisible(false);
+        mLyt.getTextBox("T_rupeeNumrS_00")->SetVisible(false);
+    }
+}
+
+void dLytPauseDisp00_c::setupMitts() {
+    s32 mittsLevel = getCurrentMittsLevel();
+    if (mittsLevel != 0) {
+        f32 mittsLevelF = 0.0f;
+        if (mittsLevel > 1) {
+            mittsLevelF = 1.0f;
+        }
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_MITTS, 1.0f);
+        if (isMittsRestricted() == true) {
+            setAnm(PAUSE_DISP_00_ANIM_BOCO_MITTS, 1.0f);
+        } else {
+            setAnm(PAUSE_DISP_00_ANIM_BOCO_MITTS, 0.0f);
+        }
+        mpBoundings[PAUSE_DISP_00_BOUNDING_MITTS]->SetVisible(true);
+        setAnm(PAUSE_DISP_00_ANIM_MITTS, mittsLevelF);
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_MITTS, 0.0f);
+    }
+}
+
+void dLytPauseDisp00_c::setupSailcloth() {
+    if (hasSailcloth()) {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_PARACHUTE, 1.0f);
+        setAnm(PAUSE_DISP_00_ANIM_BOCO_PARACHUTE, 0.0f);
+        mpBoundings[PAUSE_DISP_00_BOUNDING_PARACHUTE]->SetVisible(true);
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_PARACHUTE, 0.0f);
+    }
+}
+
+void dLytPauseDisp00_c::setupWaterDragonScale() {
+    if (hasWaterDragonScale()) {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_SCALE, 1.0f);
+        if (isWaterDragonScaleRestricted()) {
+            setAnm(PAUSE_DISP_00_ANIM_BOCO_SCALE, 1.0f);
+        } else {
+            setAnm(PAUSE_DISP_00_ANIM_BOCO_SCALE, 0.0f);
+        }
+        mpBoundings[PAUSE_DISP_00_BOUNDING_SCALE]->SetVisible(true);
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_SCALE, 0.0f);
+    }
+}
+
+void dLytPauseDisp00_c::setupFireshieldEarrings() {
+    if (dAcItem_c::checkFlag(ITEM_FIRESHIELD_EARRINGS)) {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_RING, 1.0f);
+        mpBoundings[PAUSE_DISP_00_BOUNDING_RING]->SetVisible(true);
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_RING, 0.0f);
+    }
+}
+
+void dLytPauseDisp00_c::setupSongsAndLifeTree() {
+    if (hasGoddessHarp()) {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_HARP, 1.0f);
+        setAnm(PAUSE_DISP_00_ANIM_BOCO_HARP, 1.0f);
+        mpBoundings[PAUSE_DISP_00_BOUNDING_HARP]->SetVisible(true);
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_HARP, 0.0f);
+    }
+
+    s32 anm;
+    for (int i = 0; i < 4; i++) {
+        anm = PAUSE_DISP_00_ANIM_HAVE_MUSE_OFFSET + i;
+        if (hasSong(i)) {
+            setAnm(anm, 1.0f);
+            mpBoundings[PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + i]->SetVisible(true);
+        } else {
+            setAnm(anm, 0.0f);
+        }
+    }
+
+    u8 songLifetreeStatus = getSongLifeTreeStatus();
+    if (songLifetreeStatus == SONG_LIFETREE_HAS_SOTH) {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSE_07, 1.0f);
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSIC_SET, 0.0f);
+        mpBoundings[PAUSE_DISP_00_BOUNDING_MUSE_07]->SetVisible(true);
+    } else if (songLifetreeStatus != SONG_LIFETREE_NONE) {
+        for (int i = 0; i < PAUSE_DISP_00_NUM_SONG_PARTS; i++) {
+            if (hasSong(i + 4)) {
+                setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSE_PART_OFFSET + i, 1.0f);
+                mpBoundings[PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + i + 4]->SetVisible(true);
+                if (i == 2) {
+                    setAnm(PAUSE_DISP_00_ANIM_HAVE_MI_TO_TANE, 0.0f);
+                }
+            } else {
+                if (i == 2) {
+                    if (dAcItem_c::checkFlag(ITEM_LIFE_TREE_FRUIT)) {
+                        setAnm(PAUSE_DISP_00_ANIM_HAVE_MI_TO_TANE, 1.0f);
+                        setAnm(PAUSE_DISP_00_ANIM_MI_TO_TANE, 1.0f);
+                        mpBoundings[PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + i + 4]->SetVisible(true);
+                    } else if (dAcItem_c::checkFlag(ITEM_LIFE_TREE_SEED) &&
+                               ItemflagManager::sInstance->getFlagDirect(497)) {
+                        setAnm(PAUSE_DISP_00_ANIM_HAVE_MI_TO_TANE, 1.0f);
+                        setAnm(PAUSE_DISP_00_ANIM_MI_TO_TANE, 0.0f);
+                        mpBoundings[PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + i + 4]->SetVisible(true);
+                    } else {
+                        setAnm(PAUSE_DISP_00_ANIM_HAVE_MI_TO_TANE, 0.0f);
+                    }
+
+                    setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSE_PART_OFFSET + i, 0.0f);
+                } else {
+                    setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSE_PART_OFFSET + i, 0.0f);
+                }
+            }
+        }
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSIC_SET, 1.0f);
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSE_07, 0.0f);
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_MUSIC_SET, 0.0f);
+    }
+}
+
+void dLytPauseDisp00_c::setupTabletTriforce() {
+    static const s32 sTriforceHaveBoundings[] = {
+        PAUSE_DISP_00_ANIM_HAVE_FORCE_OFFSET + 1,
+        PAUSE_DISP_00_ANIM_HAVE_FORCE_OFFSET + 0,
+        PAUSE_DISP_00_ANIM_HAVE_FORCE_OFFSET + 2,
+    };
+
+    s32 tabletCount = 0;
+    for (int i = 0; i < 3; i++) {
+        if (dAcItem_c::checkFlag(getTabletItemIdForIndex(i))) {
+            tabletCount++;
+        }
+    }
+
+    if (tabletCount != 0) {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_TABLET, 1.0f);
+        setAnm(PAUSE_DISP_00_ANIM_TABLETS, tabletCount - 1.0f);
+        mpBoundings[PAUSE_DISP_00_BOUNDING_TABLETS]->SetVisible(true);
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_TABLET, 0.0f);
+    }
+
+    s32 triforceCount = 0;
+    for (int i = 0; i < 3; i++) {
+        if (dAcItem_c::checkFlag(getTriforceItemIdForIndex(i))) {
+            triforceCount++;
+            setAnm(sTriforceHaveBoundings[i], 1.0f);
+        } else {
+            setAnm(sTriforceHaveBoundings[i], 0.0f);
+        }
+    }
+
+    if (triforceCount != 0) {
+        mpBoundings[PAUSE_DISP_00_BOUNDING_TABLETS]->SetVisible(true);
+        mAnm[PAUSE_DISP_00_ANIM_TABLETS].setFrame(3.0f);
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_FORCE_BG, 1.0f);
+        // Hide tablets
+        mAnm[PAUSE_DISP_00_ANIM_HAVE_TABLET].setFrame(0.0f);
+    } else {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_FORCE_BG, 0.0f);
+    }
+}
+
+void dLytPauseDisp00_c::setupSword() {
+    static const u8 sSwordFireBoundings[] = {
+        PAUSE_DISP_00_BOUNDING_SWORD_FIRE_OFFSET + 1,
+        PAUSE_DISP_00_BOUNDING_SWORD_FIRE_OFFSET + 0,
+        PAUSE_DISP_00_BOUNDING_SWORD_FIRE_OFFSET + 2,
+    };
+
+    static const f32 sSwordFrames[] = {0.0f, 1.0f, 2.0f, 3.0f, 6.0f, 4.0f, 5.0f};
+
+    s32 currentSwordLevel = getCurrentSwordLevel();
+    if (currentSwordLevel != 0) {
+        if (isSwordRestrictedBokoBase()) {
+            setAnm(PAUSE_DISP_00_ANIM_BOCO_SWORD, 1.0f);
+        } else {
+            setAnm(PAUSE_DISP_00_ANIM_BOCO_SWORD, 0.0f);
+        }
+        mpBoundings[PAUSE_DISP_00_BOUNDING_SWORD]->SetVisible(true);
+    }
+
+    setAnm(PAUSE_DISP_00_ANIM_SWORD, sSwordFrames[currentSwordLevel]);
+
+    s32 currentFire = currentSwordLevel - 2;
+    if (currentFire < 0) {
+        currentFire = 0;
+    } else if (currentFire > 3) {
+        currentFire = 3;
+    }
+
+    // Note: Funny unrolled loop here, for a loop that's known to never
+    // have more than three iterations
+    for (int i = 0; i < currentFire; i++) {
+        mpBoundings[sSwordFireBoundings[i]]->SetVisible(true);
+    }
+}
+
+void dLytPauseDisp00_c::setupStoneOfTrials() {
+    if (StoryflagManager::sInstance->getFlag(22)) {
+        setAnm(PAUSE_DISP_00_ANIM_HAVE_SHIREN, 2.0f);
+        mpBoundings[PAUSE_DISP_00_BOUNDING_SHIREN]->SetVisible(true);
+    } else {
+        if (dAcItem_c::checkFlag(ITEM_STONE_OF_TRIALS)) {
+            setAnm(PAUSE_DISP_00_ANIM_HAVE_SHIREN, 1.0f);
+            mpBoundings[PAUSE_DISP_00_BOUNDING_SHIREN]->SetVisible(true);
+        } else {
+            setAnm(PAUSE_DISP_00_ANIM_HAVE_SHIREN, 0.0f);
         }
     }
 }
 
-void dLytPauseDisp00_c::displayElement(int i, float frame) {
-    d2d::AnmGroup_c *s = &field_0x00D0[i];
-    s->bind(false);
-    s->setAnimEnable(true);
-    s->setFrame(frame);
+// A matrix controlling navigation with the Nunchuk stick.
+// The row index is the currently selected target, and the row contains
+// the list of targets, one entry per stick direction  (starting up and going clockwise)
+//
+// If someone was really bored they could probably replace all of these
+// with constants...
+static const u8 sNavTable1[][8] = {
+    { 0,  2,  2,  6,  5,  5, 33,  0},
+    { 0,  3,  3,  7,  6,  5,  1,  1},
+    { 0,  4,  4,  8,  7,  6,  2,  2},
+    { 0, 13, 13, 17,  8,  7,  3,  3},
+    { 1,  2,  6, 10,  9, 33, 33,  1},
+    { 2,  3,  7, 11, 10,  9,  5,  1},
+    { 3,  4,  8, 12, 11, 10,  6,  2},
+    { 4, 13, 17, 21, 12, 11,  7,  3},
+    { 5,  6, 10, 30, 29, 29, 33, 33},
+    { 6,  7, 11, 31, 30, 29,  9,  5},
+    { 7,  8, 12, 32, 31, 30, 10,  6},
+    { 8, 17, 21, 25, 32, 31, 11,  7},
+    { 0, 14, 14, 18, 17,  8,  4,  4},
+    { 0, 15, 15, 19, 18, 17, 13, 13},
+    { 0, 16, 16, 20, 19, 18, 14, 14},
+    { 0,  0, 34, 20, 20, 19, 15, 15},
+    {13, 14, 18, 22, 21, 12,  8,  4},
+    {14, 15, 19, 23, 22, 21, 17, 13},
+    {15, 16, 20, 24, 23, 22, 18, 14},
+    {16, 16, 34, 34, 24, 23, 19, 15},
+    {17, 18, 22, 26, 25, 32, 12,  8},
+    {18, 19, 23, 27, 26, 25, 21, 17},
+    {19, 20, 24, 28, 27, 26, 22, 18},
+    {20, 34, 34, 28, 28, 27, 23, 19},
+    {21, 22, 26, 26,  0, 32, 32, 12},
+    {22, 23, 27, 27,  0, 25, 25, 21},
+    {23, 24, 28, 28,  0, 26, 26, 22},
+    {24, 24, 34,  0,  0, 27, 27, 23},
+    { 9, 10, 30, 30,  0,  0, 33,  9},
+    {10, 11, 31, 31,  0, 29, 29,  9},
+    {11, 12, 32, 32,  0, 30, 30, 10},
+    {12, 21, 25, 25,  0, 31, 31, 11},
+    { 1,  1,  5,  9,  9,  0,  0,  0},
+    {16,  0,  0,  0, 24, 24, 20, 16},
+};
+
+static const u8 sNavTable2[][8] = {
+    { 0,  2,  2,  6,  5,  5, 33,  0},
+    { 0,  3,  3,  7,  6,  5,  1,  1},
+    { 0,  4,  4,  8,  7,  6,  2,  2},
+    { 0, 13, 13, 17,  8,  7,  3,  3},
+    { 1,  2,  6, 10,  9, 33, 33,  1},
+    { 2,  3,  7, 11, 10,  9,  5,  1},
+    { 3,  4,  8, 12, 11, 10,  6,  2},
+    { 4, 13, 17, 21, 12, 11,  7,  3},
+    { 5,  6, 10, 30, 29, 29, 33, 33},
+    { 6,  7, 11, 31, 30, 29,  9,  5},
+    { 7,  8, 12, 32, 31, 30, 10,  6},
+    { 8, 17, 21, 25, 32, 31, 11,  7},
+    { 0, 14, 14, 18, 17,  8,  4,  4},
+    { 0, 15, 15, 19, 18, 17, 13, 13},
+    { 0, 16, 16, 20, 19, 18, 14, 14},
+    { 0,  0, 34, 20, 20, 19, 15, 15},
+    {13, 14, 18, 22, 21, 12,  8,  4},
+    {14, 15, 19, 23, 22, 21, 17, 13},
+    {15, 16, 20, 24, 23, 22, 18, 14},
+    {16, 16, 34, 34, 24, 23, 19, 15},
+    {17, 18, 22, 26, 25, 32, 12,  8},
+    {18, 19, 23, 27, 26, 25, 21, 17},
+    {19, 20, 24, 28, 27, 26, 22, 18},
+    {20, 34, 34, 28, 28, 27, 23, 19},
+    {21, 22, 26, 26,  0, 32, 32, 12},
+    {22, 23, 27, 27,  0, 25, 25, 21},
+    {23, 24, 28, 28,  0, 26, 26, 22},
+    {24, 24, 34,  0,  0, 27, 27, 23},
+    { 9, 10, 30, 30,  0,  0, 33,  9},
+    {10, 11, 31, 31,  0, 29, 29,  9},
+    {11, 12, 32, 32,  0, 30, 30, 10},
+    {12, 21, 25, 25,  0, 31, 31, 11},
+    { 1,  1,  5,  9,  9,  0,  0,  0},
+    {16,  0,  0,  0, 24, 24, 20, 16},
+};
+
+s32 dLytPauseDisp00_c::updateSelection() {
+    dLytControlGame_c *lytControl = dLytControlGame_c::getInstance();
+    dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
+    if (!pause->isStateWait()) {
+        pause->setSelection(dLytPauseMgr_c::SELECT_NONE, 0, false);
+        return 0;
+    }
+
+    s32 target = 0;
+    if (dPadNav::isPointerVisible()) {
+        target = getPointerPane();
+        if (target != 0) {
+            mCurrentNavTarget = target;
+        }
+    } else {
+        if (mCurrentNavTarget != 0) {
+            if (!dPadNav::isPrevPointerVisible() && dPadNav::getFSStickNavDirection() != dPadNav::FS_STICK_NONE) {
+                const u8 *directions = sNavTable1[mCurrentNavTarget - 1];
+                s32 nav = dPadNav::getFSStickNavDirection();
+                s32 newTarget = directions[nav - 1];
+                if (getSongLifeTreeStatus() == SONG_LIFETREE_HAS_SOTH_PARTS_OR_SEED) {
+                    const u8 *directions = sNavTable2[mCurrentNavTarget - 1];
+                    newTarget = directions[nav - 1];
+                }
+                if (newTarget != 0) {
+                    mCurrentNavTarget = newTarget;
+                }
+            }
+        } else {
+            mCurrentNavTarget = PAUSE_DISP_00_BOUNDING_UI_TYPE + 1;
+        }
+
+        if (mCurrentNavTarget != 0) {
+            s32 paneIdx = mCurrentNavTarget - 1;
+            dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundings[paneIdx]);
+        }
+
+        target = mCurrentNavTarget;
+    }
+
+    if (target == 0) {
+        pause->setSelection(dLytPauseMgr_c::SELECT_NONE, 0, false);
+    } else {
+        u8 tab;
+        // TODO mode IDs
+        switch (target - 1) {
+            case PAUSE_DISP_00_BOUNDING_UI_TYPE:
+                if (mpBoundings[PAUSE_DISP_00_BOUNDING_UI_TYPE]->IsVisible()) {
+                    pause->setSelection(dLytPauseMgr_c::SELECT_CATEGORY, 4, false);
+                } else {
+                    pause->setSelection(dLytPauseMgr_c::SELECT_NONE, 0, false);
+                }
+                break;
+            case PAUSE_DISP_00_BOUNDING_CALIB_BTN_0:
+                pause->setSelection(dLytPauseMgr_c::SELECT_CATEGORY, 5, false);
+                break;
+            case PAUSE_DISP_00_BOUNDING_ARROW_LEFT:
+            case PAUSE_DISP_00_BOUNDING_ARROW_RIGHT:
+                pause->setSelection(dLytPauseMgr_c::SELECT_NONE, 0, false);
+                pause->setSelectedArrowBounding(target - PAUSE_DISP_00_BOUNDING_ARROW_OFFSET - 1);
+                break;
+            case PAUSE_DISP_00_BOUNDING_LEFT_TAB: {
+                tab = 3;
+                goto anyTab;
+            }
+            case PAUSE_DISP_00_BOUNDING_CENTER_TAB: {
+                tab = 2;
+                goto anyTab;
+            }
+            case PAUSE_DISP_00_BOUNDING_RIGHT_TAB: {
+                tab = 1;
+                goto anyTab;
+            }
+            anyTab:
+                pause->setCurrentSelectionTab(tab);
+                if (mpBoundings[PAUSE_DISP_00_BOUNDING_LEFT_TAB + tab]->IsVisible()) {
+                    pause->setSelection(dLytPauseMgr_c::SELECT_CATEGORY, tab, false);
+                } else {
+                    pause->setSelection(dLytPauseMgr_c::SELECT_NONE, 0, false);
+                }
+                // TODO
+                break;
+            case PAUSE_DISP_00_BOUNDING_CALIB_BTN_3:
+                pause->setSelection(dLytPauseMgr_c::SELECT_CATEGORY, 3, false);
+                break;
+            default: {
+                s32 id;
+                switch (target - 1) {
+                    case PAUSE_DISP_00_BOUNDING_SWORD_FIRE_OFFSET + 0: id = 2; break;
+                    case PAUSE_DISP_00_BOUNDING_SWORD_FIRE_OFFSET + 1: id = 1; break;
+                    case PAUSE_DISP_00_BOUNDING_SWORD_FIRE_OFFSET + 2: id = 3; break;
+                    case PAUSE_DISP_00_BOUNDING_TABLETS:
+                    case PAUSE_DISP_00_BOUNDING_HEART:
+                    case PAUSE_DISP_00_BOUNDING_POUCH:
+                    case PAUSE_DISP_00_BOUNDING_PARACHUTE:
+                    case PAUSE_DISP_00_BOUNDING_MITTS:
+                    case PAUSE_DISP_00_BOUNDING_SCALE:
+                    case PAUSE_DISP_00_BOUNDING_RING:
+                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 0:
+                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 1:
+                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 2:
+                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 3:
+                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 4:
+                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 5:
+                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 6:
+                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 7:
+                    case PAUSE_DISP_00_BOUNDING_HARP:
+                    case PAUSE_DISP_00_BOUNDING_SWORD:
+                        // help
+                        break;
+                }
+            }
+        }
+    }
+}
+
+s32 dLytPauseDisp00_c::getPointerPane() const {
+    int idx = 0;
+    dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
+    if (d != nullptr && d->getType() == 'lyt ') {
+        for (int i = 0; i < PAUSE_DISP_00_NUM_BOUNDINGS - 1; i++) {
+            if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBoundings[i]) {
+                idx = i + 1;
+                // missed optimization:
+                // break;
+            }
+        }
+    }
+    return idx;
+}
+
+void dLytPauseDisp00_c::hideItemIcons() {
+    for (int i = 0; i < PAUSE_DISP_00_NUM_SUBPANES; i++) {
+        mIcons[i].setOff();
+        mIcons[i].setVisible(false);
+    }
+}
+
+void dLytPauseDisp00_c::executeCall() {
+    if (mCallTimerMaybe == 1) {
+        d2d::AnmGroup_c &anm = mAnm[PAUSE_DISP_00_ANIM_CALL];
+        if (cM::isZero(anm.getFrame()) == true) {
+            if (mStopCallRequest == true) {
+                mStopCallRequest = false;
+                mCallTimerMaybe = 0;
+                stopAnm(PAUSE_DISP_00_ANIM_CALL);
+            } else {
+                dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_PLAY_GUIDE_BUTTON_BLINK);
+            }
+        }
+        anm.play();
+    }
+}
+
+void dLytPauseDisp00_c::playOnOffTabAnim() {
+    d2d::AnmGroup_c *anm = &mAnm[PAUSE_DISP_00_ANIM_OFF_LEFT_TAB];
+    for (int i = 0; i < 3; i++) {
+        anm->play();
+        anm++;
+    }
+}
+
+void dLytPauseDisp00_c::loadRingText(u32 cmd) {
+    if (cmd == RING_TEXT_RELEASE_TO_CONFIRM) {
+        // "Release to confirm."
+        mLyt.loadTextVariant("T_decide_00", 0);
+        mLyt.loadTextVariant("T_decideS_00", 0);
+    } else {
+        s32 msgIdx = 1;
+        // TODO: Don't these use different IDs?
+        s32 tab = dLytControlGame_c::getInstance()->getPauseDisp00Tab();
+        if (cmd == RING_TEXT_CURRENT_TAB) {
+            tab = dLytPauseMgr_c::GetInstance()->getCurrentDisp00Tab();
+        }
+        if (tab == 1) {
+            msgIdx = 2;
+        } else if (tab == 2) {
+            msgIdx = 3;
+        }
+        // "Items"/"Pouch"/"Dowsing"
+        mLyt.loadTextVariant("T_decide_00", msgIdx);
+        mLyt.loadTextVariant("T_decideS_00", msgIdx);
+    }
+
+    dWindow_c *window = mLyt.getWindow("W_bgP_01");
+    window->UpdateSize(mLyt.getSizeBoxInWindow("W_bgP_01"), 32.0f);
 }

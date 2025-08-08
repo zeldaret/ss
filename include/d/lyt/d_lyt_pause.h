@@ -3,7 +3,7 @@
 
 #include "d/lyt/d2d.h"
 #include "egg/gfx/eggCpuTexture.h"
-#include "nw4r/lyt/lyt_pane.h"
+#include "nw4r/lyt/lyt_bounding.h"
 
 class dLytPauseMgr_c {
 public:
@@ -31,6 +31,10 @@ public:
         return field_0x0832;
     }
 
+    bool getField_0x0838() const {
+        return field_0x0838;
+    }
+
     bool getField_0x083B() const {
         return field_0x083B;
     }
@@ -45,7 +49,13 @@ public:
 
     bool isStateWait() const;
 
+    s32 getCurrentDisp00Tab() const {
+        return mCurrentDisp00Tab;
+    }
+
     enum SelectionType_e {
+        SELECT_BWHEEL = 0,
+        SELECT_POUCH = 1,
         SELECT_DOWSING = 2,
         SELECT_INSECT = 4,
         SELECT_QUEST_MATERIAL = 5,
@@ -69,8 +79,19 @@ public:
         return mCurrentSelectionId;
     }
 
-    nw4r::lyt::Pane *getArrowBounding(int idx) const;
-    nw4r::lyt::Pane *setSelectedArrowBounding(int idx) const;
+    u8 getCurrentSelectionTab() const {
+        return mCurrentSelectionTab;
+    }
+
+    void setCurrentSelectionTab(u8 tab) {
+        mCurrentSelectionTab = tab;
+    }
+
+    nw4r::lyt::Bounding *getArrowBounding(int idx) const;
+    void setSelectedArrowBounding(int idx) const;
+    
+    static f32 sDisp00ArrowRotation;
+    static f32 sDisp00ArrowLength;
 
 private:
     static dLytPauseMgr_c *sInstance;
@@ -85,7 +106,9 @@ private:
     /* 0x0814 */ EGG::CpuTexture *mpBgTexture;
     /* 0x0818 */ SelectionType_e mCurrentSelectionType;
 
-    /* 0x081C */ u8 _0x081C[0x082C - 0x081C];
+    /* 0x081C */ u8 _0x081C[0x0820 - 0x081C];
+    /* 0x0820 */ s32 mCurrentDisp00Tab;
+    /* 0x0824 */ u8 _0x0824[0x082C - 0x0824];
 
     /* 0x082C */ u16 mCurrentSelectionId;
 
@@ -93,9 +116,14 @@ private:
 
     /* 0x0831 */ bool field_0x0831;
     /* 0x0832 */ bool field_0x0832;
+    /* 0x0833 */ u8 mCurrentSelectionTab;
 
-    /* 0x0832 */ u8 _0x0832[0x083B - 0x0833];
+    /* 0x0834 */ u8 _0x0834[0x0838 - 0x0834];
 
+    /* 0x0838 */ bool field_0x0838;
+
+    /* 0x0839 */ u8 _0x0839[0x083B - 0x0839];
+    
     /* 0x083B */ bool field_0x083B;
 
     /* 0x083C */ u8 _0x083C[0x083E - 0x083C];
