@@ -17,6 +17,16 @@ public:
     bool execute();
     bool draw();
 
+    void drawDirectly();
+    void requestIn(bool scroll);
+    void requestOut(bool scroll);
+    void requestSelect();
+    void requestRing();
+    void requestUnselect();
+
+    bool requestSelectGuide();
+    bool requestSelectMpls();
+
     STATE_FUNC_DECLARE(dLytPauseDisp00_c, None);
     STATE_FUNC_DECLARE(dLytPauseDisp00_c, In);
     STATE_FUNC_DECLARE(dLytPauseDisp00_c, Wait);

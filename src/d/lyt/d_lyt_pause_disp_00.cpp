@@ -18,10 +18,15 @@
 #include "d/lyt/meter/d_lyt_meter.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
 #include "d/snd/d_snd_wzsound.h"
+#include "m/m_vec.h"
 #include "nw4r/lyt/lyt_group.h"
+#include "nw4r/lyt/lyt_pane.h"
+#include "nw4r/lyt/lyt_types.h"
 #include "nw4r/math/math_types.h"
 #include "sized_string.h"
 #include "toBeSorted/counters/counter.h"
+
+#include <limits.h>
 
 STATE_DEFINE(dLytPauseDisp00_c, None);
 STATE_DEFINE(dLytPauseDisp00_c, In);
@@ -30,6 +35,92 @@ STATE_DEFINE(dLytPauseDisp00_c, Select);
 STATE_DEFINE(dLytPauseDisp00_c, Ring);
 STATE_DEFINE(dLytPauseDisp00_c, GetDemo);
 STATE_DEFINE(dLytPauseDisp00_c, Out);
+
+// A matrix controlling navigation with the Nunchuk stick.
+// The row index is the currently selected target, and the row contains
+// the list of targets, one entry per stick direction  (starting up and going clockwise)
+//
+// If someone was really bored they could probably replace all of these
+// with constants...
+static const u8 sNavTable1[][8] = {
+    {0x00, 0x15, 0x15, 0x0F, 0x08, 0x18, 0x24, 0x24},
+    {0x12, 0x11, 0x03, 0x1E, 0x1E, 0x1E, 0x20, 0x20},
+    {0x13, 0x1C, 0x1B, 0x1F, 0x1F, 0x1E, 0x02, 0x11},
+    {0x08, 0x0A, 0x0A, 0x06, 0x06, 0x00, 0x19, 0x18},
+    {0x09, 0x21, 0x21, 0x00, 0x07, 0x07, 0x0B, 0x0B},
+    {0x0A, 0x0B, 0x07, 0x07, 0x00, 0x00, 0x1F, 0x04},
+    {0x0B, 0x05, 0x05, 0x00, 0x00, 0x06, 0x06, 0x0A},
+    {0x01, 0x0F, 0x10, 0x0A, 0x0A, 0x04, 0x18, 0x24},
+    {0x15, 0x21, 0x21, 0x05, 0x0B, 0x0B, 0x10, 0x0F},
+    {0x08, 0x10, 0x0B, 0x07, 0x06, 0x04, 0x04, 0x08},
+    {0x09, 0x09, 0x05, 0x05, 0x07, 0x06, 0x0A, 0x10},
+    {0x01, 0x0E, 0x0D, 0x10, 0x08, 0x08, 0x18, 0x01},
+    {0x15, 0x15, 0x00, 0x09, 0x09, 0x10, 0x0C, 0x0E},
+    {0x00, 0x15, 0x0D, 0x0D, 0x10, 0x0C, 0x0C, 0x01},
+    {0x01, 0x15, 0x09, 0x09, 0x10, 0x08, 0x08, 0x01},
+    {0x0F, 0x09, 0x09, 0x0B, 0x0A, 0x0A, 0x08, 0x08},
+    {0x14, 0x14, 0x13, 0x03, 0x02, 0x02, 0x12, 0x14},
+    {0x14, 0x14, 0x11, 0x11, 0x02, 0x20, 0x20, 0x20},
+    {0x14, 0x22, 0x1D, 0x1C, 0x03, 0x11, 0x11, 0x14},
+    {0x00, 0x22, 0x22, 0x13, 0x11, 0x12, 0x12, 0x00},
+    {0x00, 0x00, 0x21, 0x21, 0x09, 0x0F, 0x01, 0x01},
+    {0x23, 0x24, 0x17, 0x17, 0x1A, 0x1D, 0x1D, 0x22},
+    {0x24, 0x01, 0x01, 0x18, 0x18, 0x1B, 0x16, 0x16},
+    {0x17, 0x01, 0x08, 0x04, 0x19, 0x19, 0x1C, 0x17},
+    {0x18, 0x18, 0x04, 0x06, 0x1A, 0x1A, 0x1A, 0x1D},
+    {0x16, 0x19, 0x19, 0x06, 0x00, 0x1F, 0x1B, 0x00},
+    {0x1C, 0x17, 0x1A, 0x1A, 0x1A, 0x1F, 0x03, 0x1C},
+    {0x1D, 0x1D, 0x18, 0x1B, 0x1B, 0x03, 0x13, 0x13},
+    {0x22, 0x16, 0x16, 0x19, 0x1C, 0x1C, 0x13, 0x14},
+    {0x02, 0x03, 0x1F, 0x1F, 0x00, 0x00, 0x00, 0x02},
+    {0x03, 0x1B, 0x06, 0x00, 0x00, 0x1E, 0x1E, 0x03},
+    {0x14, 0x12, 0x12, 0x02, 0x02, 0x00, 0x00, 0x00},
+    {0x15, 0x00, 0x00, 0x00, 0x05, 0x05, 0x09, 0x15},
+    {0x00, 0x23, 0x23, 0x16, 0x1D, 0x13, 0x14, 0x14},
+    {0x00, 0x24, 0x24, 0x17, 0x16, 0x1D, 0x22, 0x22},
+    {0x00, 0x01, 0x01, 0x08, 0x17, 0x16, 0x23, 0x23},
+    {0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D},
+};
+
+static const u8 sNavTable2[][8] = {
+    {0x00, 0x15, 0x15, 0x0E, 0x0C, 0x18, 0x24, 0x24},
+    {0x12, 0x11, 0x03, 0x1E, 0x1E, 0x1E, 0x20, 0x20},
+    {0x13, 0x1C, 0x1B, 0x1F, 0x1F, 0x1E, 0x02, 0x11},
+    {0x08, 0x0A, 0x0A, 0x06, 0x06, 0x00, 0x19, 0x18},
+    {0x09, 0x21, 0x21, 0x00, 0x07, 0x07, 0x0B, 0x0B},
+    {0x0A, 0x0B, 0x07, 0x07, 0x00, 0x00, 0x1F, 0x04},
+    {0x0B, 0x05, 0x05, 0x00, 0x00, 0x06, 0x06, 0x0A},
+    {0x0C, 0x0C, 0x10, 0x0A, 0x0A, 0x04, 0x18, 0x24},
+    {0x0D, 0x21, 0x21, 0x05, 0x0B, 0x0B, 0x10, 0x0D},
+    {0x08, 0x10, 0x0B, 0x07, 0x06, 0x04, 0x04, 0x08},
+    {0x09, 0x09, 0x05, 0x05, 0x07, 0x06, 0x0A, 0x10},
+    {0x01, 0x0E, 0x0D, 0x10, 0x08, 0x08, 0x18, 0x01},
+    {0x15, 0x15, 0x21, 0x09, 0x09, 0x10, 0x0C, 0x0E},
+    {0x01, 0x15, 0x0D, 0x0D, 0x10, 0x0C, 0x0C, 0x01},
+    {0x00, 0x15, 0x00, 0x09, 0x10, 0x08, 0x08, 0x01},
+    {0x0E, 0x0D, 0x09, 0x0B, 0x0A, 0x0A, 0x08, 0x0C},
+    {0x14, 0x14, 0x13, 0x03, 0x02, 0x02, 0x12, 0x14},
+    {0x14, 0x14, 0x11, 0x11, 0x02, 0x20, 0x20, 0x20},
+    {0x14, 0x22, 0x1D, 0x1C, 0x03, 0x11, 0x11, 0x14},
+    {0x00, 0x22, 0x1D, 0x13, 0x11, 0x12, 0x12, 0x00},
+    {0x00, 0x00, 0x21, 0x21, 0x0D, 0x0E, 0x01, 0x01},
+    {0x23, 0x24, 0x17, 0x17, 0x1A, 0x1D, 0x1D, 0x22},
+    {0x24, 0x01, 0x01, 0x18, 0x18, 0x1B, 0x16, 0x16},
+    {0x17, 0x01, 0x08, 0x04, 0x19, 0x19, 0x1C, 0x17},
+    {0x18, 0x18, 0x04, 0x06, 0x1A, 0x1A, 0x1A, 0x1D},
+    {0x16, 0x19, 0x19, 0x06, 0x00, 0x1F, 0x1B, 0x00},
+    {0x1C, 0x17, 0x1A, 0x1A, 0x1A, 0x1F, 0x03, 0x1C},
+    {0x1D, 0x1D, 0x18, 0x1B, 0x1B, 0x03, 0x13, 0x13},
+    {0x22, 0x16, 0x16, 0x19, 0x1C, 0x1C, 0x13, 0x14},
+    {0x02, 0x03, 0x1F, 0x1F, 0x00, 0x00, 0x00, 0x02},
+    {0x03, 0x1B, 0x06, 0x00, 0x00, 0x1E, 0x1E, 0x03},
+    {0x14, 0x12, 0x12, 0x02, 0x02, 0x00, 0x00, 0x00},
+    {0x15, 0x00, 0x00, 0x00, 0x05, 0x05, 0x09, 0x15},
+    {0x00, 0x23, 0x23, 0x16, 0x1D, 0x13, 0x14, 0x14},
+    {0x00, 0x24, 0x24, 0x17, 0x16, 0x1D, 0x22, 0x22},
+    {0x00, 0x01, 0x01, 0x08, 0x17, 0x16, 0x23, 0x23},
+    {0x16, 0x17, 0x18, 0x19, 0x1A, 0x1B, 0x1C, 0x1D},
+};
 
 static const d2d::LytBrlanMapping brlanMap[] = {
     {        "pause_00_in.brlan",      "G_inOut_00"},
@@ -238,7 +329,16 @@ static const d2d::LytBrlanMapping brlanMap[] = {
 
 #define PAUSE_DISP_00_NUM_SUBPANES 24
 
-extern "C" u8 lbl_804E8898[];
+// clang-format off
+static const u8 iconVariants[] = {
+    // Wheel
+    0, 0, 0, 0, 0, 0, 0, 0,
+    // Dowsing
+    2, 2, 2, 2, 2, 2, 2, 2,
+    // Pouch
+    1, 1, 1, 1, 1, 1, 1, 1, 
+};
+// clang-format on
 
 static const char *sGroupName = "G_ref_00";
 
@@ -303,7 +403,7 @@ bool dLytPauseDisp00_c::build() {
     resAcc = pauseMgr->getResAcc2();
 
     for (int i = 0; i < PAUSE_DISP_00_NUM_SUBPANES; i++) {
-        mIcons[i].build(resAcc, lbl_804E8898[i]);
+        mIcons[i].build(resAcc, iconVariants[i]);
         mSubpanes[i].mpLytPane = &mIcons[i];
         mSubpaneList.PushBack(&mSubpanes[i]);
     }
@@ -384,7 +484,11 @@ bool dLytPauseDisp00_c::remove() {
 }
 
 bool dLytPauseDisp00_c::execute() {
+    dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
     field_0xE371 = false;
+    pause->setField_0x083C(false);
+    pause->setField_0x083D(false);
+    pause->setField_0x0837(false);
     mStateMgr.executeState();
     executeCall();
     for (int i = 0; i < PAUSE_DISP_00_NUM_SUBPANES; i++) {
@@ -404,6 +508,54 @@ bool dLytPauseDisp00_c::draw() {
     if (mIsVisible == true) {
         mLyt.addToDrawList();
     }
+    return true;
+}
+
+void dLytPauseDisp00_c::drawDirectly() {
+    mLyt.draw();
+}
+
+void dLytPauseDisp00_c::requestIn(bool scroll) {
+    mInRequest = true;
+    mDoScrollAnim = scroll;
+}
+
+void dLytPauseDisp00_c::requestOut(bool scroll) {
+    mOutRequest = true;
+    mDoScrollAnim = scroll;
+}
+
+void dLytPauseDisp00_c::requestSelect() {
+    mSelectToggleRequest = true;
+}
+
+void dLytPauseDisp00_c::requestRing() {
+    mRingToggleRequest = true;
+}
+
+void dLytPauseDisp00_c::requestUnselect() {
+    mSelectToggleRequest = true;
+}
+
+bool dLytPauseDisp00_c::requestSelectGuide() {
+    if (mSelectGuideRequest == true) {
+        return 0;
+    }
+
+    mSelectGuideRequest = true;
+    if (mCallTimerMaybe != 0) {
+        mStopCallRequest = true;
+        StoryflagManager::sInstance->unsetFlag(570);
+    }
+    return true;
+}
+
+bool dLytPauseDisp00_c::requestSelectMpls() {
+    if (mSelectMplsRequest == true) {
+        return 0;
+    }
+
+    mSelectMplsRequest = true;
     return true;
 }
 
@@ -1240,7 +1392,7 @@ void dLytPauseDisp00_c::setupFireshieldEarrings() {
 void dLytPauseDisp00_c::setupSongsAndLifeTree() {
     if (hasGoddessHarp()) {
         setAnm(PAUSE_DISP_00_ANIM_HAVE_HARP, 1.0f);
-        setAnm(PAUSE_DISP_00_ANIM_BOCO_HARP, 1.0f);
+        setAnm(PAUSE_DISP_00_ANIM_BOCO_HARP, 0.0f);
         mpBoundings[PAUSE_DISP_00_BOUNDING_HARP]->SetVisible(true);
     } else {
         setAnm(PAUSE_DISP_00_ANIM_HAVE_HARP, 0.0f);
@@ -1305,32 +1457,32 @@ void dLytPauseDisp00_c::setupTabletTriforce() {
         PAUSE_DISP_00_ANIM_HAVE_FORCE_OFFSET + 2,
     };
 
-    s32 tabletCount = 0;
+    s32 count = 0;
     for (int i = 0; i < 3; i++) {
         if (dAcItem_c::checkFlag(getTabletItemIdForIndex(i))) {
-            tabletCount++;
+            count++;
         }
     }
 
-    if (tabletCount != 0) {
+    if (count != 0) {
         setAnm(PAUSE_DISP_00_ANIM_HAVE_TABLET, 1.0f);
-        setAnm(PAUSE_DISP_00_ANIM_TABLETS, tabletCount - 1.0f);
+        setAnm(PAUSE_DISP_00_ANIM_TABLETS, count - 1.0f);
         mpBoundings[PAUSE_DISP_00_BOUNDING_TABLETS]->SetVisible(true);
     } else {
         setAnm(PAUSE_DISP_00_ANIM_HAVE_TABLET, 0.0f);
     }
 
-    s32 triforceCount = 0;
+    count = 0;
     for (int i = 0; i < 3; i++) {
         if (dAcItem_c::checkFlag(getTriforceItemIdForIndex(i))) {
-            triforceCount++;
+            count++;
             setAnm(sTriforceHaveBoundings[i], 1.0f);
         } else {
             setAnm(sTriforceHaveBoundings[i], 0.0f);
         }
     }
 
-    if (triforceCount != 0) {
+    if (count != 0) {
         mpBoundings[PAUSE_DISP_00_BOUNDING_TABLETS]->SetVisible(true);
         mAnm[PAUSE_DISP_00_ANIM_TABLETS].setFrame(3.0f);
         setAnm(PAUSE_DISP_00_ANIM_HAVE_FORCE_BG, 1.0f);
@@ -1390,89 +1542,53 @@ void dLytPauseDisp00_c::setupStoneOfTrials() {
     }
 }
 
-// A matrix controlling navigation with the Nunchuk stick.
-// The row index is the currently selected target, and the row contains
-// the list of targets, one entry per stick direction  (starting up and going clockwise)
-//
-// If someone was really bored they could probably replace all of these
-// with constants...
-static const u8 sNavTable1[][8] = {
-    { 0,  2,  2,  6,  5,  5, 33,  0},
-    { 0,  3,  3,  7,  6,  5,  1,  1},
-    { 0,  4,  4,  8,  7,  6,  2,  2},
-    { 0, 13, 13, 17,  8,  7,  3,  3},
-    { 1,  2,  6, 10,  9, 33, 33,  1},
-    { 2,  3,  7, 11, 10,  9,  5,  1},
-    { 3,  4,  8, 12, 11, 10,  6,  2},
-    { 4, 13, 17, 21, 12, 11,  7,  3},
-    { 5,  6, 10, 30, 29, 29, 33, 33},
-    { 6,  7, 11, 31, 30, 29,  9,  5},
-    { 7,  8, 12, 32, 31, 30, 10,  6},
-    { 8, 17, 21, 25, 32, 31, 11,  7},
-    { 0, 14, 14, 18, 17,  8,  4,  4},
-    { 0, 15, 15, 19, 18, 17, 13, 13},
-    { 0, 16, 16, 20, 19, 18, 14, 14},
-    { 0,  0, 34, 20, 20, 19, 15, 15},
-    {13, 14, 18, 22, 21, 12,  8,  4},
-    {14, 15, 19, 23, 22, 21, 17, 13},
-    {15, 16, 20, 24, 23, 22, 18, 14},
-    {16, 16, 34, 34, 24, 23, 19, 15},
-    {17, 18, 22, 26, 25, 32, 12,  8},
-    {18, 19, 23, 27, 26, 25, 21, 17},
-    {19, 20, 24, 28, 27, 26, 22, 18},
-    {20, 34, 34, 28, 28, 27, 23, 19},
-    {21, 22, 26, 26,  0, 32, 32, 12},
-    {22, 23, 27, 27,  0, 25, 25, 21},
-    {23, 24, 28, 28,  0, 26, 26, 22},
-    {24, 24, 34,  0,  0, 27, 27, 23},
-    { 9, 10, 30, 30,  0,  0, 33,  9},
-    {10, 11, 31, 31,  0, 29, 29,  9},
-    {11, 12, 32, 32,  0, 30, 30, 10},
-    {12, 21, 25, 25,  0, 31, 31, 11},
-    { 1,  1,  5,  9,  9,  0,  0,  0},
-    {16,  0,  0,  0, 24, 24, 20, 16},
-};
-
-static const u8 sNavTable2[][8] = {
-    { 0,  2,  2,  6,  5,  5, 33,  0},
-    { 0,  3,  3,  7,  6,  5,  1,  1},
-    { 0,  4,  4,  8,  7,  6,  2,  2},
-    { 0, 13, 13, 17,  8,  7,  3,  3},
-    { 1,  2,  6, 10,  9, 33, 33,  1},
-    { 2,  3,  7, 11, 10,  9,  5,  1},
-    { 3,  4,  8, 12, 11, 10,  6,  2},
-    { 4, 13, 17, 21, 12, 11,  7,  3},
-    { 5,  6, 10, 30, 29, 29, 33, 33},
-    { 6,  7, 11, 31, 30, 29,  9,  5},
-    { 7,  8, 12, 32, 31, 30, 10,  6},
-    { 8, 17, 21, 25, 32, 31, 11,  7},
-    { 0, 14, 14, 18, 17,  8,  4,  4},
-    { 0, 15, 15, 19, 18, 17, 13, 13},
-    { 0, 16, 16, 20, 19, 18, 14, 14},
-    { 0,  0, 34, 20, 20, 19, 15, 15},
-    {13, 14, 18, 22, 21, 12,  8,  4},
-    {14, 15, 19, 23, 22, 21, 17, 13},
-    {15, 16, 20, 24, 23, 22, 18, 14},
-    {16, 16, 34, 34, 24, 23, 19, 15},
-    {17, 18, 22, 26, 25, 32, 12,  8},
-    {18, 19, 23, 27, 26, 25, 21, 17},
-    {19, 20, 24, 28, 27, 26, 22, 18},
-    {20, 34, 34, 28, 28, 27, 23, 19},
-    {21, 22, 26, 26,  0, 32, 32, 12},
-    {22, 23, 27, 27,  0, 25, 25, 21},
-    {23, 24, 28, 28,  0, 26, 26, 22},
-    {24, 24, 34,  0,  0, 27, 27, 23},
-    { 9, 10, 30, 30,  0,  0, 33,  9},
-    {10, 11, 31, 31,  0, 29, 29,  9},
-    {11, 12, 32, 32,  0, 30, 30, 10},
-    {12, 21, 25, 25,  0, 31, 31, 11},
-    { 1,  1,  5,  9,  9,  0,  0,  0},
-    {16,  0,  0,  0, 24, 24, 20, 16},
-};
+void dLytPauseDisp00_c::setupRingIcons(s32 tab) {
+    switch (tab) {
+        case 1: {
+            s32 offset = PAUSE_DISP_00_BOUNDING_RING_OFFSET;
+            for (int i = 0; i < PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
+                bool visible = false;
+                if (getPouchItemForSlot(i, true) != LYT_CMN_PouchPotionHealthPlusPlusHalf) {
+                    visible = true;
+                }
+                mpBoundings[offset]->SetVisible(visible);
+                offset++;
+            }
+            break;
+        }
+        case 2: {
+            s32 offset = PAUSE_DISP_00_BOUNDING_RING_OFFSET;
+            for (int i = 0; i < PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
+                bool visible = false;
+                if (hasDowsingInIndex(i)) {
+                    visible = true;
+                }
+                mpBoundings[offset]->SetVisible(visible);
+                offset++;
+            }
+            break;
+        }
+        case 0:
+        default: {
+            s32 offset = PAUSE_DISP_00_BOUNDING_RING_OFFSET;
+            for (int i = 0; i < PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
+                bool visible = false;
+                if (getItemLevelForBWheelIndex(i) != 0) {
+                    visible = true;
+                }
+                mpBoundings[offset]->SetVisible(visible);
+                offset++;
+            }
+            break;
+        }
+    }
+}
 
 s32 dLytPauseDisp00_c::updateSelection() {
     dLytControlGame_c *lytControl = dLytControlGame_c::getInstance();
     dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
+    d2d::AnmGroup_c *pAnm;
+
     if (!pause->isStateWait()) {
         pause->setSelection(dLytPauseMgr_c::SELECT_NONE, 0, false);
         return 0;
@@ -1578,7 +1694,7 @@ s32 dLytPauseDisp00_c::updateSelection() {
                     default: {
                         s32 idx = navTargetToBounding(target) - PAUSE_DISP_00_BOUNDING_RING_OFFSET;
                         if (lytControl->getPauseDisp00Tab() == 1) {
-                            id = getPouchItemForSlot(idx, true);
+                            id = getPouchItemIdForIndex(idx, true);
                             if (id == ITEM_NONE) {
                                 id = ITEM_POUCH_EXPANSION;
                             }
@@ -1614,24 +1730,9 @@ s32 dLytPauseDisp00_c::updateSelection() {
                         selectionType = dLytPauseMgr_c::SELECT_FIRE;
                         break;
                     }
-                    case PAUSE_DISP_00_BOUNDING_TABLETS:
-                    case PAUSE_DISP_00_BOUNDING_HEART:
-                    case PAUSE_DISP_00_BOUNDING_POUCH:
-                    case PAUSE_DISP_00_BOUNDING_PARACHUTE:
-                    case PAUSE_DISP_00_BOUNDING_MITTS:
-                    case PAUSE_DISP_00_BOUNDING_SCALE:
-                    case PAUSE_DISP_00_BOUNDING_RING:
-                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 0:
-                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 1:
-                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 2:
-                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 3:
-                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 4:
-                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 5:
-                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 6:
-                    case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 7:
-                    case PAUSE_DISP_00_BOUNDING_HARP:
-                    case PAUSE_DISP_00_BOUNDING_SWORD:
-                    case PAUSE_DISP_00_BOUNDING_SHIREN:          {
+                    // yes
+                    case INT_MIN ... PAUSE_DISP_00_BOUNDING_SWORD_FIRE_OFFSET - 1:
+                    case PAUSE_DISP_00_BOUNDING_SHIREN:                            {
                         id = getPointedItemSpecial(paneIdx, &locked);
                         selectionType = dLytPauseMgr_c::SELECT_ITEM;
                         break;
@@ -1648,83 +1749,73 @@ s32 dLytPauseDisp00_c::updateSelection() {
             }
         }
     }
-    
-    // TODO derive numbers from defines
-    {
-        d2d::AnmGroup_c *pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_TABLET];
-        for (int i = 0; i < 15; i++) {
-            s32 anim = PAUSE_DISP_00_ANIM_ONOFF_TABLET + i;
-            if (target != 0 && navTargetToBounding(target) == i &&
-                mpBoundings[navTargetToBounding(target)]->IsVisible()) {
-                pAnm->play();
-            } else {
-                playBackwards(*pAnm);
-            }
 
-            if (anim == 62) {
-                d2d::AnmGroup_c *museAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_MI_TO_TANE];
-                if (target != 0 && navTargetToBounding(target) == i) {
-                    museAnm->play();
-                } else {
-                    playBackwards(*museAnm);
-                }
-            }
-            pAnm++;
+    pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_TABLET];
+    for (int i = PAUSE_DISP_00_BOUNDING_TABLETS; i < PAUSE_DISP_00_BOUNDING_HARP; i++) {
+        s32 anim = PAUSE_DISP_00_ANIM_ONOFF_TABLET + i;
+        if (target != 0 && navTargetToBounding(target) == i && mpBoundings[navTargetToBounding(target)]->IsVisible()) {
+            pAnm->play();
+        } else {
+            playBackwards(*pAnm);
         }
-    }
 
-    {
-        d2d::AnmGroup_c *pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_HARP];
-        for (int i = 15; i < 21; i++) {
+        if (anim == PAUSE_DISP_00_ANIM_ONOFF_MUSE_OFFSET + 6) {
+            d2d::AnmGroup_c *museAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_MI_TO_TANE];
             if (target != 0 && navTargetToBounding(target) == i) {
-                pAnm->play();
+                museAnm->play();
             } else {
-                playBackwards(*pAnm);
+                playBackwards(*museAnm);
             }
-            pAnm++;
         }
+        pAnm++;
     }
 
-    {
-        d2d::AnmGroup_c *pAnm;
-
-        pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_SWORD];
-        if (target != 0 && navTargetToBounding(target) == PAUSE_DISP_00_BOUNDING_SWORD) {
+    pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_HARP];
+    for (int i = PAUSE_DISP_00_BOUNDING_HARP; i < PAUSE_DISP_00_BOUNDING_SHIREN + 1; i++) {
+        if (target != 0 && navTargetToBounding(target) == i) {
             pAnm->play();
         } else {
             playBackwards(*pAnm);
         }
+        pAnm++;
+    }
 
-        pAnm = &mAnm[PAUSE_DISP_00_ANIM_UI_TYPE_BTN];
-        if (target != 0 && navTargetToBounding(target) == PAUSE_DISP_00_BOUNDING_UI_TYPE) {
-            pause->setField_0x083C(true);
-            pAnm->play();
-        } else {
-            playBackwards(*pAnm);
-        }
+    pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_SWORD];
+    if (target != 0 && navTargetToBounding(target) == PAUSE_DISP_00_BOUNDING_SWORD) {
+        pAnm->play();
+    } else {
+        playBackwards(*pAnm);
+    }
 
-        pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_CALIB_BTN];
-        if (target != 0 && navTargetToBounding(target) == PAUSE_DISP_00_BOUNDING_CALIB_BTN_0) {
-            pause->setField_0x083D(true);
-            pAnm->play();
-        } else {
-            playBackwards(*pAnm);
-        }
+    pAnm = &mAnm[PAUSE_DISP_00_ANIM_UI_TYPE_BTN];
+    if (target != 0 && navTargetToBounding(target) == PAUSE_DISP_00_BOUNDING_UI_TYPE) {
+        pause->setField_0x083C(true);
+        pAnm->play();
+    } else {
+        playBackwards(*pAnm);
+    }
 
-        pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_TRIFORCE];
-        if (target != 0 && navTargetToBounding(target) == PAUSE_DISP_00_BOUNDING_TABLETS &&
-            mpBoundings[PAUSE_DISP_00_BOUNDING_TABLETS]->IsVisible()) {
-            pAnm->play();
-        } else {
-            playBackwards(*pAnm);
-        }
+    pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_CALIB_BTN];
+    if (target != 0 && navTargetToBounding(target) == PAUSE_DISP_00_BOUNDING_CALIB_BTN_0) {
+        pause->setField_0x083D(true);
+        pAnm->play();
+    } else {
+        playBackwards(*pAnm);
+    }
 
-        pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_SHIREN];
-        if (target != 0 && navTargetToBounding(target) == PAUSE_DISP_00_BOUNDING_SHIREN) {
-            pAnm->play();
-        } else {
-            playBackwards(*pAnm);
-        }
+    pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_TRIFORCE];
+    if (target != 0 && navTargetToBounding(target) == PAUSE_DISP_00_BOUNDING_TABLETS &&
+        mpBoundings[PAUSE_DISP_00_BOUNDING_TABLETS]->IsVisible()) {
+        pAnm->play();
+    } else {
+        playBackwards(*pAnm);
+    }
+
+    pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_SHIREN];
+    if (target != 0 && navTargetToBounding(target) == PAUSE_DISP_00_BOUNDING_SHIREN) {
+        pAnm->play();
+    } else {
+        playBackwards(*pAnm);
     }
 
     s32 tab = lytControl->getPauseDisp00Tab();
@@ -1732,25 +1823,25 @@ s32 dLytPauseDisp00_c::updateSelection() {
                  tab == 2 ? PAUSE_DISP_00_ANIM_ONOFF_DOWSING_OFFSET :
                             PAUSE_DISP_00_ANIM_ONOFF_ITEM_OFFSET;
 
-    d2d::AnmGroup_c *anm = &mAnm[anmIdx];
+    pAnm = &mAnm[anmIdx];
     for (int i = PAUSE_DISP_00_BOUNDING_RING_OFFSET;
          i < PAUSE_DISP_00_BOUNDING_RING_OFFSET + PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
         if (target != 0 && navTargetToBounding(target) == i) {
-            f32 frame = anm->getFrame();
-            if (anm->getAnimDuration() - 1.0f > frame) {
-                anm->setFrame(frame + 1.0f);
+            f32 frame = pAnm->getFrame();
+            if (pAnm->getAnimDuration() - 1.0f > frame) {
+                pAnm->setFrame(frame + 1.0f);
             }
         } else {
-            f32 frame = anm->getFrame();
+            f32 frame = pAnm->getFrame();
             if (frame) {
                 frame -= 1.0f;
                 if (frame <= 0.0f) {
                     frame = 0.0f;
                 }
-                anm->setFrame(frame);
+                pAnm->setFrame(frame);
             }
         }
-        anm++;
+        pAnm++;
     }
 
     s32 tab1 = lytControl->getPauseDisp00Tab();
@@ -1836,48 +1927,21 @@ s32 dLytPauseDisp00_c::updateSelection() {
                 soundMgr->playSound(SE_S_MENU_P1_POINT_TOGGLE);
                 break;
             }
-            case PAUSE_DISP_00_BOUNDING_TABLETS:
-            case PAUSE_DISP_00_BOUNDING_HEART:
-            case PAUSE_DISP_00_BOUNDING_POUCH:
-            case PAUSE_DISP_00_BOUNDING_PARACHUTE:
-            case PAUSE_DISP_00_BOUNDING_MITTS:
-            case PAUSE_DISP_00_BOUNDING_SCALE:
-            case PAUSE_DISP_00_BOUNDING_RING:
-            case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 0:
-            case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 1:
-            case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 2:
-            case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 3:
-            case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 4:
-            case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 5:
-            case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 6:
-            case PAUSE_DISP_00_BOUNDING_MUSE_07:
-            case PAUSE_DISP_00_BOUNDING_HARP:
-            case PAUSE_DISP_00_BOUNDING_SWORD:
-            case PAUSE_DISP_00_BOUNDING_SWORD_FIRE_OFFSET + 0:
-            case PAUSE_DISP_00_BOUNDING_SWORD_FIRE_OFFSET + 1:
-            case PAUSE_DISP_00_BOUNDING_SWORD_FIRE_OFFSET + 2:
-            case PAUSE_DISP_00_BOUNDING_SHIREN:
-            case PAUSE_DISP_00_BOUNDING_RING_OFFSET + 0:
-            case PAUSE_DISP_00_BOUNDING_RING_OFFSET + 1:
-            case PAUSE_DISP_00_BOUNDING_RING_OFFSET + 2:
-            case PAUSE_DISP_00_BOUNDING_RING_OFFSET + 3:
-            case PAUSE_DISP_00_BOUNDING_RING_OFFSET + 4:
-            case PAUSE_DISP_00_BOUNDING_RING_OFFSET + 5:
-            case PAUSE_DISP_00_BOUNDING_RING_OFFSET + 6:
-            case PAUSE_DISP_00_BOUNDING_RING_OFFSET + 7:       {
+            // yes
+            case INT_MIN ... PAUSE_DISP_00_BOUNDING_UI_TYPE - 1: {
                 soundMgr->playSound(SE_S_MENU_P1_POINT_ITEM);
                 break;
             }
         }
 
         if (rumble == true) {
-            dRumble_c::start(dRumble_c::sRumblePreset0, 1);
+            dRumble_c::start(dRumble_c::sRumblePreset1, 1);
         }
     }
 
     mPrevNavTarget = target;
     if (target != 0 && navTargetToBounding(target) != PAUSE_DISP_00_BOUNDING_CALIB_BTN_3 &&
-        !dPadNav::isPrevPointerVisible() && !mpBoundings[navTargetToBounding(target)]->IsVisible()) {
+        !dPadNav::isPointerVisible() && !mpBoundings[navTargetToBounding(target)]->IsVisible()) {
         target = 0;
     }
 
@@ -1904,11 +1968,125 @@ s32 dLytPauseDisp00_c::getPointerPane() const {
     return idx;
 }
 
+bool dLytPauseDisp00_c::isPointingAtRingIcon() {
+    if (!mLyt.findPane("N_text_00")->IsVisible()) {
+        return false;
+    }
+
+    bool ret = false;
+    nw4r::lyt::Size sz = mLyt.findPane("N_ringIcon_00")->GetSize();
+    f32 radiusSq = sz.width * 0.5f;
+    radiusSq *= radiusSq;
+    mVec2_c csPos = dCsBase_c::GetInstance()->getCursorIf()->getCursorPos();
+    nw4r::math::MTX34 mtx = mLyt.findPane("N_ringIcon_00")->GetGlobalMtx();
+    nw4r::math::VEC3 v(0.0f, 0.0f, 0.0f);
+    MTXMultVec(mtx, v, v);
+    // TODO I hate vectors
+    mVec2_c pos(v.x, v.y);
+    if (pos.squareDistanceTo(csPos) < radiusSq) {
+        ret = true;
+    }
+
+    return ret;
+}
+
 void dLytPauseDisp00_c::hideItemIcons() {
     for (int i = 0; i < PAUSE_DISP_00_NUM_SUBPANES; i++) {
         mIcons[i].setOff();
         mIcons[i].setVisible(false);
     }
+}
+
+u16 dLytPauseDisp00_c::getPointedItemSpecial(s32 paneIdx, bool *pLocked) {
+    u16 id = 0;
+    switch (paneIdx) {
+        case PAUSE_DISP_00_BOUNDING_TABLETS: {
+            s32 count = 0;
+            for (int i = 0; i < 3; i++) {
+                if (dAcItem_c::checkFlag(getTabletItemIdForIndex(i))) {
+                    count++;
+                }
+            }
+            if (count != 0) {
+                count--;
+            }
+            id = getTabletItemIdForIndex(count);
+            count = 0;
+            for (int i = 0; i < 3; i++) {
+                if (dAcItem_c::checkFlag(getTriforceItemIdForIndex(i))) {
+                    count++;
+                }
+            }
+            if (count != 0) {
+                id = getTriforceItemIdForIndex(count - 1);
+            }
+            break;
+        }
+        case PAUSE_DISP_00_BOUNDING_HEART: {
+            id = getCurrentHeartPieceItemId();
+            break;
+        }
+        case PAUSE_DISP_00_BOUNDING_POUCH: {
+            id = getCurrentWalletItemId();
+            break;
+        }
+        case PAUSE_DISP_00_BOUNDING_PARACHUTE: {
+            id = getCurrentSailclothItemId();
+            break;
+        }
+        case PAUSE_DISP_00_BOUNDING_MITTS: {
+            id = getCurrentMittsItemId();
+            if (isMittsRestricted() == true) {
+                *pLocked = true;
+            }
+            break;
+        }
+        case PAUSE_DISP_00_BOUNDING_SCALE: {
+            id = getCurrentWaterDragonScaleItemId();
+            if (isWaterDragonScaleRestricted()) {
+                *pLocked = true;
+            }
+            break;
+        }
+        case PAUSE_DISP_00_BOUNDING_RING: {
+            id = getCurrentEarringsItemId();
+            break;
+        }
+        case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET ... PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 7: {
+            s32 song = paneIdx - PAUSE_DISP_00_BOUNDING_MUSE_OFFSET;
+            if (paneIdx == PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 6) {
+                if (StoryflagManager::sInstance->getFlag(462)) {
+                    id = getSongItemIdForIndex(song);
+                } else if (dAcItem_c::checkFlag(ITEM_LIFE_TREE_FRUIT)) {
+                    id = ITEM_LIFE_TREE_FRUIT;
+                } else if (dAcItem_c::checkFlag(ITEM_LIFE_TREE_SEED)) {
+                    id = ITEM_LIFE_TREE_SEED;
+                }
+            } else {
+                id = getSongItemIdForIndex(song);
+            }
+        } break;
+        case PAUSE_DISP_00_BOUNDING_HARP: {
+            id = getCurrentGoddessHarpItemId();
+            if (isHarpRestrictedBokoBase()) {
+                *pLocked = true;
+            }
+            break;
+        }
+        case PAUSE_DISP_00_BOUNDING_SWORD: {
+            id = getCurrentSwordItemId();
+            if (isSwordRestrictedBokoBase()) {
+                *pLocked = true;
+            }
+            break;
+        }
+        case PAUSE_DISP_00_BOUNDING_SHIREN: {
+            id = ITEM_STONE_OF_TRIALS;
+            break;
+        }
+    }
+
+    return id;
 }
 
 void dLytPauseDisp00_c::executeCall() {
