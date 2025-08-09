@@ -329,6 +329,9 @@ static const d2d::LytBrlanMapping brlanMap[] = {
 
 #define PAUSE_DISP_00_NUM_SUBPANES 24
 
+#define navTargetToBounding(n) (s32)(n - 1)
+#define boundingToNavTarget(n) (s32)(n + 1)
+
 // clang-format off
 static const u8 iconVariants[] = {
     // Wheel
@@ -1621,8 +1624,7 @@ s32 dLytPauseDisp00_c::updateSelection() {
         }
 
         if (mCurrentNavTarget != 0) {
-            s32 paneIdx = navTargetToBounding(mCurrentNavTarget);
-            dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundings[paneIdx]);
+            dCsBase_c::GetInstance()->setCursorStickTargetPane(mpBoundings[navTargetToBounding(mCurrentNavTarget)]);
         }
 
         target = mCurrentNavTarget;
@@ -1666,8 +1668,7 @@ s32 dLytPauseDisp00_c::updateSelection() {
             }
             anyTab: {
                 pause->setCurrentSelectionTab(tab);
-                s32 bounding = navTargetToBounding(target);
-                if (mpBoundings[bounding]->IsVisible()) {
+                if (mpBoundings[navTargetToBounding(target)]->IsVisible()) {
                     pause->setSelection(dLytPauseMgr_c::SELECT_CATEGORY, tab, false);
                 } else {
                     pause->setSelection(dLytPauseMgr_c::SELECT_NONE, 0, false);
@@ -1739,8 +1740,7 @@ s32 dLytPauseDisp00_c::updateSelection() {
                     }
                 }
                 if (!dPadNav::isPrevPointerVisible()) {
-                    s32 bounding = navTargetToBounding(target);
-                    if (!mpBoundings[bounding]->IsVisible()) {
+                    if (!mpBoundings[navTargetToBounding(target)]->IsVisible()) {
                         selectionType = dLytPauseMgr_c::SELECT_NONE;
                         id = 0;
                     }
@@ -1749,6 +1749,10 @@ s32 dLytPauseDisp00_c::updateSelection() {
             }
         }
     }
+
+    // TODO: this part needs to be fixed before we can deal with the regswaps.
+    // Part of the `mpBoundings[navTargetToBounding(target)]->IsVisible()` here is kept around
+    // until the end of the function where the same call appears.
 
     pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_TABLET];
     for (int i = PAUSE_DISP_00_BOUNDING_TABLETS; i < PAUSE_DISP_00_BOUNDING_HARP; i++) {

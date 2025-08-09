@@ -36,14 +36,6 @@ public:
     STATE_FUNC_DECLARE(dLytPauseDisp00_c, Out);
 
 private:
-    static s32 navTargetToBounding(s32 target) {
-        return target - 1;
-    }
-
-    static s32 boundingToNavTarget(s32 target) {
-        return target + 1;
-    }
-
     void setAnm(int idx, f32 value);
     void stopAnm(int idx);
     void playBackwards(d2d::AnmGroup_c &anm);
