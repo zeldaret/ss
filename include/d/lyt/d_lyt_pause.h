@@ -31,12 +31,24 @@ public:
         return field_0x0832;
     }
 
+    void setField_0x0837(bool b) {
+        field_0x0837 = b;
+    }
+
     bool getField_0x0838() const {
         return field_0x0838;
     }
 
     bool getField_0x083B() const {
         return field_0x083B;
+    }
+
+    void setField_0x083C(bool b) {
+        field_0x083C = b;
+    }
+
+    void setField_0x083D(bool b) {
+        field_0x083D = b;
     }
 
     bool getField_0x083E() const {
@@ -66,7 +78,7 @@ public:
         SELECT_NONE = 10,
     };
 
-    void setSelection(SelectionType_e type, s32 id, bool restricted);
+    void setSelection(SelectionType_e type, u16 id, bool restricted);
 
     bool isCurrentSelectionRestricted() const {
         return mCurrentSelectionIsRestricted;
@@ -118,16 +130,17 @@ private:
     /* 0x0832 */ bool field_0x0832;
     /* 0x0833 */ u8 mCurrentSelectionTab;
 
-    /* 0x0834 */ u8 _0x0834[0x0838 - 0x0834];
+    /* 0x0834 */ u8 _0x0834[0x0837 - 0x0834];
 
+    /* 0x0837 */ bool field_0x0837;
     /* 0x0838 */ bool field_0x0838;
 
     /* 0x0839 */ u8 _0x0839[0x083B - 0x0839];
     
     /* 0x083B */ bool field_0x083B;
 
-    /* 0x083C */ u8 _0x083C[0x083E - 0x083C];
-
+    /* 0x083C */ bool field_0x083C;
+    /* 0x083D */ bool field_0x083D;
     /* 0x083E */ bool field_0x083E;
     /* 0x083F */ bool field_0x083F;
     /* 0x0840 */ bool field_0x0840;
