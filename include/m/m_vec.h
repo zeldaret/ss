@@ -315,6 +315,10 @@ public:
     mVec2_c operator-(const mVec2_c &v) const {
         return mVec2_c(x - v.x, y - v.y);
     }
+
+    f32 squareDistanceTo(const mVec2_c &other) const {
+        return (*this - other).squaredLength();
+    }
 };
 
 #endif

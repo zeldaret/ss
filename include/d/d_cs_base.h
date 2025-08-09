@@ -40,6 +40,10 @@ public:
         return mCursorIf.getHit();
     }
 
+    dCursorInterface_c *getCursorIf() {
+        return &mCursorIf;
+    }
+
     static dCsBase_c *GetInstance() {
         return sInstance;
     }

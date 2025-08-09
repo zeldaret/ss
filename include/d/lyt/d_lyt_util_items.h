@@ -22,23 +22,39 @@ u8 getSongLifeTreeStatus();
 
 /** 0: no sword, 6: TMS */
 s32 getCurrentSwordLevel();
+u16 getCurrentSwordItemId();
 bool isSwordRestrictedBokoBase();
+
+u16 getCurrentGoddessHarpItemId();
+bool isHarpRestrictedBokoBase();
+
+u16 getCurrentEarringsItemId();
 
 u16 getTabletItemIdForIndex(s32 index);
 
 u16 getTriforceItemIdForIndex(s32 index);
+
+u16 getSongItemIdForIndex(s32 index);
 
 bool hasGoddessHarp();
 
 bool hasSong(s32 index);
 
 bool hasWaterDragonScale();
+u16 getCurrentWaterDragonScaleItemId();
 bool isWaterDragonScaleRestricted();
 
 bool hasSailcloth();
 
 s32 getCurrentMittsLevel();
+u16 getCurrentMittsItemId();
 bool isMittsRestricted();
+
+u16 getCurrentSailclothItemId();
+
+u16 getCurrentWalletItemId();
+
+u16 getCurrentHeartPieceItemId();
 
 void getItemLabel(s32 itemId, SizedString<32> &buf);
 void getCaptionItemLabel(s32 itemId, SizedString<32> &buf);
