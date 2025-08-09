@@ -68,6 +68,10 @@ public:
 
     static s32 getRupeeCounter();
     static u32 getCurrentWalletCapacity();
+    static u32 getExtraWalletCount();
+
+    static u32 getHeartContainerHealthCount();
+    static u32 getGratitudeCrystalCount();
 
     static u32 getKeyPieceCount();
     static u32 getSmallKeyCount();
@@ -94,7 +98,13 @@ public:
 
     static void healLink(u32 amount, bool); // move to dAcPy_c
 
+    static bool isPerformingInitialCollection() {
+        return sIsPerformingInitialCollection;
+    }
+
 private:
+    static bool sIsPerformingInitialCollection;
+
     /* 0x334 */ UNKTYPE *mpMdl; // Model has its own handling system
     /* 0x338 */ dShadowCircle_c mShdw;
     /* 0x340 */ mVec3_c mField_0x340;

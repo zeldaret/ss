@@ -146,8 +146,9 @@ bool dLytMeter1Button_c::build(d2d::ResAccIf_c *resAcc) {
         mAnm[i].setAnimEnable(false);
     }
 
-    mLyt.fn_800AB9A0(mLyt.getTextBox("T_sabBtnS_00"), 0);
-    mLyt.fn_800AB9A0(mLyt.getTextBox("T_sabBtn_00"), 0);
+    // "Gear"
+    mLyt.loadTextVariant(mLyt.getTextBox("T_sabBtnS_00"), 0);
+    mLyt.loadTextVariant(mLyt.getTextBox("T_sabBtn_00"), 0);
     for (int i = 0; i < 1; i++) {
         mpWindow[i] = mLyt.getWindow(sWindowName1[i]);
         mpSizeBox[i] = mLyt.getSizeBoxInWindow(sWindowName1[i]);

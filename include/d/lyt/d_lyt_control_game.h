@@ -21,6 +21,26 @@ public:
         return sInstance;
     }
 
+    s32 getField_0x15C2C() const {
+        return field_0x15C2C;
+    }
+
+    s32 getPauseDisp00Tab() const {
+        return mPauseDisp00Tab;
+    }
+
+    u16 getItemForPauseDemo() const {
+        return mItemForPauseDemo;
+    }
+
+    u16 getItemCountForPauseDemo() const {
+        return mItemCountForPauseDemo;
+    }
+
+    bool getField_0x15C67() const {
+        return field_0x15C67;
+    }
+
     STATE_FUNC_DECLARE(dLytControlGame_c, Normal);
     STATE_FUNC_DECLARE(dLytControlGame_c, Pause_SetRes);
     STATE_FUNC_DECLARE(dLytControlGame_c, Pause_SyncRes);
@@ -37,6 +57,20 @@ public:
 
 private:
     /* 0x00068 */ UI_STATE_MGR_DECLARE(dLytControlGame_c);
+    /* 0x000A4 */ u8 _0x000A4[0x15C2C - 0x000A4];
+
+    /* 0x15C2C */ s32 field_0x15C2C;
+    /* 0x15C30 */ s32 mPauseDisp00Tab;
+
+    /* 0x15C34 */ u8 _0x15C34[0x15C60 - 0x15C34];
+
+    /* 0x15C60 */ u16 mItemForPauseDemo;
+
+    /* 0x15C62 */ u8 _0x15C62[0x15C64 - 0x15C62];
+
+    /* 0x15C64 */ u16 mItemCountForPauseDemo;
+    /* 0x15C66 */ u8 field_0x15C66;
+    /* 0x15C67 */ bool field_0x15C67;
 
     static dLytControlGame_c *sInstance;
 };

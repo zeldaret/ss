@@ -213,8 +213,8 @@ private:
     void fn_800EF8C0(bool);
     bool isWheelBlockedByCurrentAction();
     void setBtnText(s32);
-    bool fn_800F01B0(s32) const;
-    bool fn_800F01E0(s32) const;
+    bool hasBWheelItem(s32) const;
+    bool isBocoburinLocked(s32) const;
     bool isSlotBocoburinLocked(s32);
     void fn_800F0310();
     bool fn_800F0030() const;

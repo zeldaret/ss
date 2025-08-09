@@ -23,7 +23,7 @@ public:
     static bool drawDirectly();
 
     void setPriority(u8 priority);
-    void setTargetPane(nw4r::lyt::Pane *pane);
+    void setTargetPane(const nw4r::lyt::Pane *pane);
 
     void setShouldBeOn(bool value) {
         mShouldBeOn = value;
@@ -47,7 +47,7 @@ private:
     /* 0x3AC */ d2d::dLytSub mLyt;
     /* 0x440 */ d2d::AnmGroup_c mAnm[1];
     /* 0x480 */ nw4r::lyt::Pane *mpPanes[5];
-    /* 0x494 */ nw4r::lyt::Pane *mpTargetPane;
+    /* 0x494 */ const nw4r::lyt::Pane *mpTargetPane;
     /* 0x498 */ bool mShouldBeOn;
 };
 
