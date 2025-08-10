@@ -19,6 +19,10 @@ public:
     void requestIn();
     void requestOut();
 
+    bool getField_0x156() const {
+        return field_0x156;
+    }
+
 private:
     void startAnim(int idx);
     void stopAnim(int idx);

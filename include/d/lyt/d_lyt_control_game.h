@@ -25,6 +25,14 @@ public:
         return field_0x15C2C;
     }
 
+    void setField_0x15C2C(s32 value) {
+        field_0x15C2C = value;
+    }
+
+    void setPauseDisp00Tab(s32 tab) {
+        mPauseDisp00Tab = tab;
+    }
+
     s32 getPauseDisp00Tab() const {
         return mPauseDisp00Tab;
     }
@@ -39,6 +47,10 @@ public:
 
     bool getField_0x15C67() const {
         return field_0x15C67;
+    }
+
+    bool getField_0x15C68() const {
+        return field_0x15C68;
     }
 
     STATE_FUNC_DECLARE(dLytControlGame_c, Normal);
@@ -71,6 +83,7 @@ private:
     /* 0x15C64 */ u16 mItemCountForPauseDemo;
     /* 0x15C66 */ u8 field_0x15C66;
     /* 0x15C67 */ bool field_0x15C67;
+    /* 0x15C68 */ bool field_0x15C68;
 
     static dLytControlGame_c *sInstance;
 };

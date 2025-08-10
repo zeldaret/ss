@@ -264,6 +264,10 @@ public:
         return mMain.field_0x13750;
     }
 
+    void setMeterField_0x13750(s32 value)  {
+        mMain.field_0x13750 = value;
+    }
+
     u8 getMeterField_0x13770() const {
         return mMain.field_0x13770;
     }

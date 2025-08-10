@@ -329,8 +329,8 @@ static const d2d::LytBrlanMapping brlanMap[] = {
 
 #define PAUSE_DISP_00_NUM_SUBPANES 24
 
-#define navTargetToBounding(n) (s32)(n - 1)
-#define boundingToNavTarget(n) (s32)(n + 1)
+#define navTargetToBounding(n) ((s32)(n - 1))
+#define boundingToNavTarget(n) ((s32)(n + 1))
 
 // clang-format off
 static const u8 iconVariants[] = {
@@ -532,7 +532,7 @@ void dLytPauseDisp00_c::requestSelect() {
     mSelectToggleRequest = true;
 }
 
-void dLytPauseDisp00_c::requestRing() {
+void dLytPauseDisp00_c::requestRingToggle() {
     mRingToggleRequest = true;
 }
 
@@ -614,7 +614,7 @@ void dLytPauseDisp00_c::initializeState_None() {
     setAnm(PAUSE_DISP_00_ANIM_LOOP, 0.0f);
     mSelectGuideRequest = false;
     mSelectToggleRequest = false;
-    field_0xE376 = false;
+    mReverseTabChangeAnim = false;
     mRingToggleRequest = false;
 }
 void dLytPauseDisp00_c::executeState_None() {
@@ -803,19 +803,39 @@ void dLytPauseDisp00_c::executeState_Wait() {
 void dLytPauseDisp00_c::finalizeState_Wait() {}
 
 void dLytPauseDisp00_c::initializeState_Select() {
-    static const s32 sTabOrder[] = {
+    // Reminder: item=0, pouch=1, dowsing=2
+
+    // Subtle detail - the layout has three animations for changing tabs:
+    // 1. B-Wheel -> Pouch
+    // 2. Pouch -> Dowsing
+    // 3. Dowsing -> B-Wheel
+    // If we're changing tabs in this order, we can simply play the
+    // animation forward. If we're changing tabs in a different order,
+    // we need to play the reverse change animation, backwards.
+
+    // For a given tab index, what's the natural next tab index?
+    static const s32 sNaturalTabOrder[] = {
         1,
         2,
         0,
     };
 
-    static const s32 sTabAnim[] = {
+    // For a given tab index, what's the change anim when changing to the natural next tab?
+    static const s32 sNaturalTabChangeAnim[] = {
         PAUSE_DISP_00_ANIM_RING_TO_POUCH,
         PAUSE_DISP_00_ANIM_RING_TO_SWORD,
         PAUSE_DISP_00_ANIM_RING_TO_ITEM,
     };
 
-    static const s32 sTabAnim2[] = {
+    // TODO - possibly fakematch, but we need to force a reload.
+    // Note that this is part of a .rodata pool, so it
+    // must be const and in the same file...
+    
+    // For a given tab index, what's the change anim when changing to the *other* tab,
+    // in not-natural order?
+    static const volatile s32 sReverseTabChangeAnim[] = {
+        // E.g. we're on the item tab, and we're changing to dowsing,
+        // so we need to play the dowsing->item animation in reverse.
         PAUSE_DISP_00_ANIM_RING_TO_ITEM,
         PAUSE_DISP_00_ANIM_RING_TO_POUCH,
         PAUSE_DISP_00_ANIM_RING_TO_SWORD,
@@ -830,18 +850,17 @@ void dLytPauseDisp00_c::initializeState_Select() {
         stopAnm(PAUSE_DISP_00_ANIM_RING_TO_SWORD);
         stopAnm(PAUSE_DISP_00_ANIM_RING_TO_ITEM);
 
-        // Of course dLytControlGame_c and dLytPause_c would use different IDs...
-        // TODO check if this ID mapping is consistently done
-        s32 controlGameTab = dLytControlGame_c::getInstance()->getPauseDisp00Tab();
-        if (sTabOrder[controlGameTab] == pause->getCurrentDisp00Tab()) {
-            setAnm(sTabAnim[controlGameTab], 0.0f);
-            field_0xE376 = false;
+        s32 oldTab = dLytControlGame_c::getInstance()->getPauseDisp00Tab();
+        if (sNaturalTabOrder[oldTab] == pause->getCurrentDisp00Tab()) {
+            // Natural 
+            setAnm(sNaturalTabChangeAnim[oldTab], 0.0f);
+            mReverseTabChangeAnim = false;
         } else {
-            stopAnm(controlGameTab + PAUSE_DISP_00_ANIM_RING_BASE);
-            // TODO - nonmatching
-            setAnm(sTabAnim2[controlGameTab], 0.0f);
-            mAnm[sTabAnim2[controlGameTab]].setToEnd();
-            field_0xE376 = true;
+            // Opposite order
+            stopAnm(oldTab + PAUSE_DISP_00_ANIM_RING_BASE);
+            setAnm(sReverseTabChangeAnim[oldTab], 0.0f);
+            mAnm[sReverseTabChangeAnim[oldTab]].setToEnd();
+            mReverseTabChangeAnim = true;
         }
 
         for (int i = PAUSE_DISP_00_ANIM_ITEM_OFFSET;
@@ -852,13 +871,18 @@ void dLytPauseDisp00_c::initializeState_Select() {
     mAnm[PAUSE_DISP_00_ANIM_ONOFF_TEXT].setFrame(0.0f);
 }
 void dLytPauseDisp00_c::executeState_Select() {
-    static const s32 sTabAnim2[] = {
+    static const s32 sReverseTabChangeAnim[] = {
         PAUSE_DISP_00_ANIM_RING_TO_ITEM,
         PAUSE_DISP_00_ANIM_RING_TO_POUCH,
         PAUSE_DISP_00_ANIM_RING_TO_SWORD,
     };
 
-    static const s32 sTabAnim3[] = {
+    // When our normal tab change anim is done (frame == 1.0f),
+    // we change to the next anim with frame == 0.0f.
+    // Not entirely sure why.
+    static const s32 sNextTabChangeAnim[] = {
+        // E.g. we're changing from B-Wheel to Pouch. When
+        // we're done with that transition
         PAUSE_DISP_00_ANIM_RING_TO_SWORD,
         PAUSE_DISP_00_ANIM_RING_TO_ITEM,
         PAUSE_DISP_00_ANIM_RING_TO_POUCH,
@@ -876,8 +900,8 @@ void dLytPauseDisp00_c::executeState_Select() {
             s32 controlGameTab = dLytControlGame_c::getInstance()->getPauseDisp00Tab();
             s32 lytPauseTab = dLytPauseMgr_c::GetInstance()->getCurrentDisp00Tab();
             d2d::AnmGroup_c *anm;
-            if (field_0xE376) {
-                anm = &mAnm[sTabAnim2[controlGameTab]];
+            if (mReverseTabChangeAnim) {
+                anm = &mAnm[sReverseTabChangeAnim[controlGameTab]];
                 if (cM::isZero(anm->getFrame()) == true) {
                     setupRingIcons(lytPauseTab);
                     mStateMgr.changeState(StateID_Wait);
@@ -887,7 +911,7 @@ void dLytPauseDisp00_c::executeState_Select() {
                 anm = &mAnm[controlGameTab + PAUSE_DISP_00_ANIM_RING_BASE];
                 if (anm->isEndReached() == true) {
                     stopAnm(controlGameTab + PAUSE_DISP_00_ANIM_RING_BASE);
-                    setAnm(sTabAnim3[controlGameTab], 0.0f);
+                    setAnm(sNextTabChangeAnim[controlGameTab], 0.0f);
                     setupRingIcons(lytPauseTab);
                     mStateMgr.changeState(StateID_Wait);
                 } else {
@@ -1591,6 +1615,7 @@ s32 dLytPauseDisp00_c::updateSelection() {
     dLytControlGame_c *lytControl = dLytControlGame_c::getInstance();
     dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
     d2d::AnmGroup_c *pAnm;
+    int i;
 
     if (!pause->isStateWait()) {
         pause->setSelection(dLytPauseMgr_c::SELECT_NONE, 0, false);
@@ -1753,9 +1778,8 @@ s32 dLytPauseDisp00_c::updateSelection() {
     // TODO: this part needs to be fixed before we can deal with the regswaps.
     // Part of the `mpBoundings[navTargetToBounding(target)]->IsVisible()` here is kept around
     // until the end of the function where the same call appears.
-
     pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_TABLET];
-    for (int i = PAUSE_DISP_00_BOUNDING_TABLETS; i < PAUSE_DISP_00_BOUNDING_HARP; i++) {
+    for (i = PAUSE_DISP_00_BOUNDING_TABLETS; i < PAUSE_DISP_00_BOUNDING_HARP; i++) {
         s32 anim = PAUSE_DISP_00_ANIM_ONOFF_TABLET + i;
         if (target != 0 && navTargetToBounding(target) == i && mpBoundings[navTargetToBounding(target)]->IsVisible()) {
             pAnm->play();
@@ -1775,7 +1799,7 @@ s32 dLytPauseDisp00_c::updateSelection() {
     }
 
     pAnm = &mAnm[PAUSE_DISP_00_ANIM_ONOFF_HARP];
-    for (int i = PAUSE_DISP_00_BOUNDING_HARP; i < PAUSE_DISP_00_BOUNDING_SHIREN + 1; i++) {
+    for (i = PAUSE_DISP_00_BOUNDING_HARP; i < PAUSE_DISP_00_BOUNDING_SHIREN + 1; i++) {
         if (target != 0 && navTargetToBounding(target) == i) {
             pAnm->play();
         } else {
@@ -1828,7 +1852,7 @@ s32 dLytPauseDisp00_c::updateSelection() {
                             PAUSE_DISP_00_ANIM_ONOFF_ITEM_OFFSET;
 
     pAnm = &mAnm[anmIdx];
-    for (int i = PAUSE_DISP_00_BOUNDING_RING_OFFSET;
+    for (i = PAUSE_DISP_00_BOUNDING_RING_OFFSET;
          i < PAUSE_DISP_00_BOUNDING_RING_OFFSET + PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
         if (target != 0 && navTargetToBounding(target) == i) {
             f32 frame = pAnm->getFrame();
@@ -2124,7 +2148,6 @@ void dLytPauseDisp00_c::loadRingText(u32 cmd) {
         mLyt.loadTextVariant("T_decideS_00", 0);
     } else {
         s32 msgIdx = 1;
-        // TODO: Don't these use different IDs?
         s32 tab = dLytControlGame_c::getInstance()->getPauseDisp00Tab();
         if (cmd == RING_TEXT_CURRENT_TAB) {
             tab = dLytPauseMgr_c::GetInstance()->getCurrentDisp00Tab();

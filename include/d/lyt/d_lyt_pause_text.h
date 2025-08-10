@@ -25,6 +25,10 @@ public:
     void requestIn();
     void requestOut();
 
+    bool getField_0x6D7() const {
+        return field_0x6D7;
+    }
+
 private:
     void startAnim(int idx);
     void stopAnim(int idx);

@@ -52,7 +52,7 @@ inline s32 getFSStickNavDirection() {
 
 void init();
 void calc();
-void setNavEnabled(bool navEnabled, bool autoReturnToPointerNav);
+void setNavEnabled(bool navEnabled, bool disableAutoReturnToPointerNav);
 
 // I really wish these returned enums but the codegen requires not-enums
 s32 getFSStickDirection();
