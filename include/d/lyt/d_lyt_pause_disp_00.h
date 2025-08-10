@@ -35,8 +35,12 @@ public:
     STATE_FUNC_DECLARE(dLytPauseDisp00_c, GetDemo);
     STATE_FUNC_DECLARE(dLytPauseDisp00_c, Out);
 
-    bool getField_0xE36E() const {
-        return field_0xE36E;
+    bool isChangingState() const {
+        return mIsChangingState;
+    }
+
+    bool hasSelection() const {
+        return mHasSelection;
     }
 
 private:
@@ -94,10 +98,10 @@ private:
     /* 0xE368 */ s32 mGetDemoTimer;
     /* 0xE36C */ bool mInRequest;
     /* 0xE36D */ bool mOutRequest;
-    /* 0xE36E */ bool field_0xE36E;
+    /* 0xE36E */ bool mIsChangingState;
     /* 0xE36F */ bool mIsVisible;
     /* 0xE370 */ bool mDoScrollAnim;
-    /* 0xE371 */ bool field_0xE371;
+    /* 0xE371 */ bool mHasSelection;
     /* 0xE372 */ bool mSelectToggleRequest;
     /* 0xE373 */ bool mSelectGuideRequest;
     /* 0xE374 */ bool mStopCallRequest;

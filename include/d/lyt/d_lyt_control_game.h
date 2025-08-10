@@ -16,17 +16,18 @@ public:
     void somehowRelatedToEnteringLightPillars(s32, s32, s32);
 
     void fn_802CCD40(bool);
+    void fn_802D04F0();
 
     static dLytControlGame_c *getInstance() {
         return sInstance;
     }
 
-    s32 getField_0x15C2C() const {
-        return field_0x15C2C;
+    s32 getCurrentPauseDisp() const {
+        return mCurrentPauseDisp;
     }
 
-    void setField_0x15C2C(s32 value) {
-        field_0x15C2C = value;
+    void setCurrentPauseDisp(s32 value) {
+        mCurrentPauseDisp = value;
     }
 
     void setPauseDisp00Tab(s32 tab) {
@@ -45,12 +46,12 @@ public:
         return mItemCountForPauseDemo;
     }
 
-    bool getField_0x15C67() const {
-        return field_0x15C67;
+    bool isPauseDemo() const {
+        return mIsPauseDemo;
     }
 
-    bool getField_0x15C68() const {
-        return field_0x15C68;
+    u8 getPauseDemoDisp() const {
+        return mPauseDemoDisp;
     }
 
     STATE_FUNC_DECLARE(dLytControlGame_c, Normal);
@@ -71,7 +72,7 @@ private:
     /* 0x00068 */ UI_STATE_MGR_DECLARE(dLytControlGame_c);
     /* 0x000A4 */ u8 _0x000A4[0x15C2C - 0x000A4];
 
-    /* 0x15C2C */ s32 field_0x15C2C;
+    /* 0x15C2C */ s32 mCurrentPauseDisp;
     /* 0x15C30 */ s32 mPauseDisp00Tab;
 
     /* 0x15C34 */ u8 _0x15C34[0x15C60 - 0x15C34];
@@ -82,8 +83,8 @@ private:
 
     /* 0x15C64 */ u16 mItemCountForPauseDemo;
     /* 0x15C66 */ u8 field_0x15C66;
-    /* 0x15C67 */ bool field_0x15C67;
-    /* 0x15C68 */ bool field_0x15C68;
+    /* 0x15C67 */ bool mIsPauseDemo;
+    /* 0x15C68 */ u8 mPauseDemoDisp;
 
     static dLytControlGame_c *sInstance;
 };

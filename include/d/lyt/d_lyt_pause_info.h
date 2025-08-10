@@ -23,8 +23,8 @@ public:
 
     void setInputInOut(bool inOut);
 
-    bool getField_0x19A() const {
-        return field_0x19A;
+    bool isChangingState() const {
+        return mIsChangingState;
     }
 
 private:
@@ -45,7 +45,7 @@ private:
     /* 0x194 */ s32 mStep;
     /* 0x198 */ bool mInRequest;
     /* 0x199 */ bool mOutRequest;
-    /* 0x19A */ bool field_0x19A;
+    /* 0x19A */ bool mIsChangingState;
     /* 0x19B */ bool field_0x19B;
     /* 0x19C */ bool mInputInOut;
 };

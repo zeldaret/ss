@@ -488,7 +488,7 @@ bool dLytPauseDisp00_c::remove() {
 
 bool dLytPauseDisp00_c::execute() {
     dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
-    field_0xE371 = false;
+    mHasSelection = false;
     pause->setField_0x083C(false);
     pause->setField_0x083D(false);
     pause->setField_0x0837(false);
@@ -567,11 +567,11 @@ void dLytPauseDisp00_c::initializeState_None() {
         mAnm[i].unbind();
     }
 
-    field_0xE36E = false;
+    mIsChangingState = false;
     mInRequest = false;
     mOutRequest = false;
     mIsVisible = false;
-    field_0xE371 = false;
+    mHasSelection = false;
     mStopCallRequest = false;
 
     mCallTimerMaybe = 0;
@@ -632,14 +632,14 @@ void dLytPauseDisp00_c::initializeState_In() {
         dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
         setAnm(PAUSE_DISP_00_ANIM_IN, 0.0f);
         mAnm[PAUSE_DISP_00_ANIM_IN].setFrame(mAnm[PAUSE_DISP_00_ANIM_IN].getAnimDuration());
-        if (pause->getField_0x0831()) {
+        if (pause->isNavLeft()) {
             setAnm(PAUSE_DISP_00_ANIM_SCROLL_L_IN, 0.0f);
         } else {
             setAnm(PAUSE_DISP_00_ANIM_SCROLL_R_IN, 0.0f);
         }
 
         if (pause->getField_0x0840()) {
-            if (pause->getField_0x0831()) {
+            if (pause->isNavLeft()) {
                 mPrevNavTarget = PAUSE_DISP_00_BOUNDING_ARROW_LEFT + 1;
             } else {
                 mPrevNavTarget = PAUSE_DISP_00_BOUNDING_ARROW_RIGHT + 1;
@@ -692,13 +692,13 @@ void dLytPauseDisp00_c::executeState_In() {
     s32 anim = PAUSE_DISP_00_ANIM_IN;
     if (mDoScrollAnim == true) {
         dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
-        anim = pause->getField_0x0831() ? PAUSE_DISP_00_ANIM_SCROLL_L_IN : PAUSE_DISP_00_ANIM_SCROLL_R_IN;
+        anim = pause->isNavLeft() ? PAUSE_DISP_00_ANIM_SCROLL_L_IN : PAUSE_DISP_00_ANIM_SCROLL_R_IN;
     }
 
     d2d::AnmGroup_c &anm = mAnm[anim];
 
     if (anm.isEndReached() == true) {
-        if (dLytControlGame_c::getInstance()->getField_0x15C67()) {
+        if (dLytControlGame_c::getInstance()->isPauseDemo()) {
             mStateMgr.changeState(StateID_GetDemo);
         } else {
             mStateMgr.changeState(StateID_Wait);
@@ -709,7 +709,7 @@ void dLytPauseDisp00_c::executeState_In() {
 }
 void dLytPauseDisp00_c::finalizeState_In() {
     dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
-    if (pause->getField_0x0831()) {
+    if (pause->isNavLeft()) {
         stopAnm(PAUSE_DISP_00_ANIM_SCROLL_L_IN);
     } else {
         stopAnm(PAUSE_DISP_00_ANIM_SCROLL_R_IN);
@@ -728,12 +728,12 @@ void dLytPauseDisp00_c::finalizeState_In() {
 
 void dLytPauseDisp00_c::initializeState_Wait() {
     mStep = 0;
-    field_0xE36E = true;
+    mIsChangingState = true;
 }
 void dLytPauseDisp00_c::executeState_Wait() {
     d2d::AnmGroup_c *anm;
-    if (field_0xE36E == true) {
-        field_0xE36E = false;
+    if (mIsChangingState == true) {
+        mIsChangingState = false;
     }
     switch (mStep) {
         case 0: {
@@ -769,7 +769,7 @@ void dLytPauseDisp00_c::executeState_Wait() {
                 setAnm(PAUSE_DISP_00_ANIM_DECIDE_CALIB_BTN, 0.0f);
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_P1_SELECT_MPLUS);
             } else if (updateSelection() != 0) {
-                field_0xE371 = true;
+                mHasSelection = true;
             }
             break;
         }
@@ -779,7 +779,7 @@ void dLytPauseDisp00_c::executeState_Wait() {
                 mStep = 0;
                 mSelectGuideRequest = false;
                 stopAnm(PAUSE_DISP_00_ANIM_DECIDE_UI_TYPE_BTN);
-                field_0xE36E = true;
+                mIsChangingState = true;
             } else {
                 anm->play();
             }
@@ -791,7 +791,7 @@ void dLytPauseDisp00_c::executeState_Wait() {
                 mStep = 0;
                 mSelectMplsRequest = false;
                 stopAnm(PAUSE_DISP_00_ANIM_DECIDE_CALIB_BTN);
-                field_0xE36E = true;
+                mIsChangingState = true;
             } else {
                 anm->play();
             }
@@ -815,9 +815,9 @@ void dLytPauseDisp00_c::initializeState_Select() {
 
     // For a given tab index, what's the natural next tab index?
     static const s32 sNaturalTabOrder[] = {
-        1,
-        2,
-        0,
+        /* TAB_ITEM    -> */ dLytPauseMgr_c::TAB_POUCH,
+        /* TAB_POUCH   -> */ dLytPauseMgr_c::TAB_DOWSING,
+        /* TAB_DOWSING -> */ dLytPauseMgr_c::TAB_ITEM,
     };
 
     // For a given tab index, what's the change anim when changing to the natural next tab?
@@ -830,7 +830,7 @@ void dLytPauseDisp00_c::initializeState_Select() {
     // TODO - possibly fakematch, but we need to force a reload.
     // Note that this is part of a .rodata pool, so it
     // must be const and in the same file...
-    
+
     // For a given tab index, what's the change anim when changing to the *other* tab,
     // in not-natural order?
     static const volatile s32 sReverseTabChangeAnim[] = {
@@ -852,7 +852,7 @@ void dLytPauseDisp00_c::initializeState_Select() {
 
         s32 oldTab = dLytControlGame_c::getInstance()->getPauseDisp00Tab();
         if (sNaturalTabOrder[oldTab] == pause->getCurrentDisp00Tab()) {
-            // Natural 
+            // Natural
             setAnm(sNaturalTabChangeAnim[oldTab], 0.0f);
             mReverseTabChangeAnim = false;
         } else {
@@ -984,13 +984,13 @@ void dLytPauseDisp00_c::executeState_Ring() {
             s32 b = PAUSE_DISP_00_BOUNDING_RING_OFFSET + idx;
             if (mpBoundings[b]->IsVisible()) {
                 s32 tab = dLytControlGame_c::getInstance()->getPauseDisp00Tab();
-                if (tab == 1) {
+                if (tab == dLytPauseMgr_c::TAB_POUCH) {
                     item = getPouchItemIdForIndex(idx, true);
                     if (item == 0) {
                         item = ITEM_POUCH_EXPANSION;
                     }
                     selectionType = dLytPauseMgr_c::SELECT_POUCH;
-                } else if (tab == 2) {
+                } else if (tab == dLytPauseMgr_c::TAB_DOWSING) {
                     item = getDowsingItemIdForIndex(idx);
                     selectionType = dLytPauseMgr_c::SELECT_DOWSING;
                 } else {
@@ -1000,7 +1000,7 @@ void dLytPauseDisp00_c::executeState_Ring() {
                 pause->setSelection(selectionType, item, false);
                 navTarget = idx + 1;
                 mCurrentNavTarget = navTarget;
-                field_0xE371 = true;
+                mHasSelection = true;
             } else {
                 idx = -1;
                 pause->setSelection(dLytPauseMgr_c::SELECT_NONE, 0, false);
@@ -1015,9 +1015,9 @@ void dLytPauseDisp00_c::executeState_Ring() {
         mPrevNavTarget = navTarget;
 
         s32 tab = dLytControlGame_c::getInstance()->getPauseDisp00Tab();
-        s32 anmIdx = tab == 1 ? PAUSE_DISP_00_ANIM_ONOFF_POUCH_OFFSET :
-                     tab == 2 ? PAUSE_DISP_00_ANIM_ONOFF_DOWSING_OFFSET :
-                                PAUSE_DISP_00_ANIM_ONOFF_ITEM_OFFSET;
+        s32 anmIdx = tab == dLytPauseMgr_c::TAB_POUCH   ? PAUSE_DISP_00_ANIM_ONOFF_POUCH_OFFSET :
+                     tab == dLytPauseMgr_c::TAB_DOWSING ? PAUSE_DISP_00_ANIM_ONOFF_DOWSING_OFFSET :
+                                                          PAUSE_DISP_00_ANIM_ONOFF_ITEM_OFFSET;
 
         int i;
         d2d::AnmGroup_c *anm = &mAnm[anmIdx];
@@ -1038,14 +1038,14 @@ void dLytPauseDisp00_c::finalizeState_Ring() {
 }
 
 void dLytPauseDisp00_c::initializeState_GetDemo() {
-    field_0xE36E = true;
+    mIsChangingState = true;
     mStep = 0;
     mGetDemoTimer = 0;
 }
 void dLytPauseDisp00_c::executeState_GetDemo() {
     switch (mStep) {
         case 0: {
-            field_0xE36E = false;
+            mIsChangingState = false;
             if (mGetDemoTimer < 2) {
                 mGetDemoTimer++;
             } else {
@@ -1102,7 +1102,7 @@ void dLytPauseDisp00_c::finalizeState_GetDemo() {}
 void dLytPauseDisp00_c::initializeState_Out() {
     stopAnm(PAUSE_DISP_00_ANIM_IN);
     if (mDoScrollAnim == true) {
-        if (dLytPauseMgr_c::GetInstance()->getField_0x0831()) {
+        if (dLytPauseMgr_c::GetInstance()->isNavLeft()) {
             setAnm(PAUSE_DISP_00_ANIM_SCROLL_R_OUT, 0.0f);
         } else {
             setAnm(PAUSE_DISP_00_ANIM_SCROLL_L_OUT, 0.0f);
@@ -1115,8 +1115,8 @@ void dLytPauseDisp00_c::initializeState_Out() {
 void dLytPauseDisp00_c::executeState_Out() {
     s32 anim = PAUSE_DISP_00_ANIM_OUT;
     if (mDoScrollAnim == true) {
-        anim = dLytPauseMgr_c::GetInstance()->getField_0x0831() ? PAUSE_DISP_00_ANIM_SCROLL_R_OUT :
-                                                                  PAUSE_DISP_00_ANIM_SCROLL_L_OUT;
+        anim = dLytPauseMgr_c::GetInstance()->isNavLeft() ? PAUSE_DISP_00_ANIM_SCROLL_R_OUT :
+                                                            PAUSE_DISP_00_ANIM_SCROLL_L_OUT;
     }
 
     d2d::AnmGroup_c &anm = mAnm[anim];
@@ -1125,7 +1125,7 @@ void dLytPauseDisp00_c::executeState_Out() {
         case 0: {
             if (anm.isEndReached() == true) {
                 mStep = 1;
-                field_0xE36E = true;
+                mIsChangingState = true;
             }
             break;
         }
@@ -1342,7 +1342,7 @@ void dLytPauseDisp00_c::setupWallets() {
         // the Gear screen to show the demo (dLytControlGame_c::openCollectionScreenDemo),
         // so we don't have to check that an extra wallets are actually what cause the
         // demo.
-        if (dLytControlGame_c::getInstance()->getField_0x15C67()) {
+        if (dLytControlGame_c::getInstance()->isPauseDemo()) {
             walletCount--;
             if (walletCount == 0) {
                 bVisible = false;
@@ -1571,7 +1571,7 @@ void dLytPauseDisp00_c::setupStoneOfTrials() {
 
 void dLytPauseDisp00_c::setupRingIcons(s32 tab) {
     switch (tab) {
-        case 1: {
+        case dLytPauseMgr_c::TAB_POUCH: {
             s32 offset = PAUSE_DISP_00_BOUNDING_RING_OFFSET;
             for (int i = 0; i < PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
                 bool visible = false;
@@ -1583,7 +1583,7 @@ void dLytPauseDisp00_c::setupRingIcons(s32 tab) {
             }
             break;
         }
-        case 2: {
+        case dLytPauseMgr_c::TAB_DOWSING: {
             s32 offset = PAUSE_DISP_00_BOUNDING_RING_OFFSET;
             for (int i = 0; i < PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
                 bool visible = false;
@@ -1595,8 +1595,8 @@ void dLytPauseDisp00_c::setupRingIcons(s32 tab) {
             }
             break;
         }
-        case 0:
-        default: {
+        case dLytPauseMgr_c::TAB_ITEM:
+        default:                       {
             s32 offset = PAUSE_DISP_00_BOUNDING_RING_OFFSET;
             for (int i = 0; i < PAUSE_DISP_00_ICONS_NUM_ITEMS_ON_WHEEL; i++) {
                 bool visible = false;
@@ -1659,7 +1659,6 @@ s32 dLytPauseDisp00_c::updateSelection() {
         pause->setSelection(dLytPauseMgr_c::SELECT_NONE, 0, false);
     } else {
         u8 tab;
-        // TODO mode IDs
         switch (navTargetToBounding(target)) {
             case PAUSE_DISP_00_BOUNDING_CALIB_BTN_3:
                 pause->setSelection(dLytPauseMgr_c::SELECT_CATEGORY, 5, false);
@@ -1680,15 +1679,15 @@ s32 dLytPauseDisp00_c::updateSelection() {
                 pause->setSelectedArrowBounding(navTargetToBounding(target - PAUSE_DISP_00_BOUNDING_ARROW_OFFSET));
                 break;
             case PAUSE_DISP_00_BOUNDING_LEFT_TAB: {
-                tab = 3;
+                tab = dLytPauseMgr_c::TAB_DOWSING + 1;
                 goto anyTab;
             }
             case PAUSE_DISP_00_BOUNDING_CENTER_TAB: {
-                tab = 2;
+                tab = dLytPauseMgr_c::TAB_POUCH + 1;
                 goto anyTab;
             }
             case PAUSE_DISP_00_BOUNDING_RIGHT_TAB: {
-                tab = 1;
+                tab = dLytPauseMgr_c::TAB_ITEM + 1;
                 goto anyTab;
             }
             anyTab: {
@@ -1706,7 +1705,7 @@ s32 dLytPauseDisp00_c::updateSelection() {
                 u8 pauseTab = pause->getCurrentSelectionTab() - 1;
                 if (pauseTab != lytControl->getPauseDisp00Tab() && mpBoundings[sTabLookup[pauseTab]]->IsVisible()) {
                     pause->setField_0x0837(true);
-                    field_0xE371 = true;
+                    mHasSelection = true;
                 }
                 break;
             }
@@ -1719,7 +1718,7 @@ s32 dLytPauseDisp00_c::updateSelection() {
                 switch (paneIdx) {
                     default: {
                         s32 idx = navTargetToBounding(target) - PAUSE_DISP_00_BOUNDING_RING_OFFSET;
-                        if (lytControl->getPauseDisp00Tab() == 1) {
+                        if (lytControl->getPauseDisp00Tab() == dLytPauseMgr_c::TAB_POUCH) {
                             id = getPouchItemIdForIndex(idx, true);
                             if (id == ITEM_NONE) {
                                 id = ITEM_POUCH_EXPANSION;
@@ -1728,7 +1727,7 @@ s32 dLytPauseDisp00_c::updateSelection() {
                             if (isPouchBocoburinLocked()) {
                                 locked = true;
                             }
-                        } else if (lytControl->getPauseDisp00Tab() == 2) {
+                        } else if (lytControl->getPauseDisp00Tab() == dLytPauseMgr_c::TAB_DOWSING) {
                             id = getDowsingItemIdForIndex(idx);
                             selectionType = dLytPauseMgr_c::SELECT_DOWSING;
                         } else {
@@ -1847,9 +1846,9 @@ s32 dLytPauseDisp00_c::updateSelection() {
     }
 
     s32 tab = lytControl->getPauseDisp00Tab();
-    s32 anmIdx = tab == 1 ? PAUSE_DISP_00_ANIM_ONOFF_POUCH_OFFSET :
-                 tab == 2 ? PAUSE_DISP_00_ANIM_ONOFF_DOWSING_OFFSET :
-                            PAUSE_DISP_00_ANIM_ONOFF_ITEM_OFFSET;
+    s32 anmIdx = tab == dLytPauseMgr_c::TAB_POUCH   ? PAUSE_DISP_00_ANIM_ONOFF_POUCH_OFFSET :
+                 tab == dLytPauseMgr_c::TAB_DOWSING ? PAUSE_DISP_00_ANIM_ONOFF_DOWSING_OFFSET :
+                                                      PAUSE_DISP_00_ANIM_ONOFF_ITEM_OFFSET;
 
     pAnm = &mAnm[anmIdx];
     for (i = PAUSE_DISP_00_BOUNDING_RING_OFFSET;
@@ -1896,11 +1895,11 @@ s32 dLytPauseDisp00_c::updateSelection() {
     }
 
     if (target == 0 && isPointingAtRingIcon() == true) {
-        u16 tab = 1;
-        if (lytControl->getPauseDisp00Tab() == 1) {
-            tab = 2;
-        } else if (lytControl->getPauseDisp00Tab() == 2) {
-            tab = 3;
+        u16 tab = dLytPauseMgr_c::TAB_ITEM + 1;
+        if (lytControl->getPauseDisp00Tab() == dLytPauseMgr_c::TAB_POUCH) {
+            tab = dLytPauseMgr_c::TAB_POUCH + 1;
+        } else if (lytControl->getPauseDisp00Tab() == dLytPauseMgr_c::TAB_DOWSING) {
+            tab = dLytPauseMgr_c::TAB_DOWSING + 1;
         }
         pause->setSelection(dLytPauseMgr_c::SELECT_RING, tab, false);
     }
@@ -1923,7 +1922,7 @@ s32 dLytPauseDisp00_c::updateSelection() {
                     if (cM::isZero(mAnm[PAUSE_DISP_00_ANIM_OFF_LEFT_TAB].getFrame())) {
                         soundMgr->playSound(SE_S_MENU_P1_POINT_C);
                     }
-                    if (tab2 == 2) {
+                    if (tab2 == dLytPauseMgr_c::TAB_DOWSING) {
                         rumble = false;
                     }
                 }
@@ -1934,7 +1933,7 @@ s32 dLytPauseDisp00_c::updateSelection() {
                     if (cM::isZero(mAnm[PAUSE_DISP_00_ANIM_OFF_CENTER_TAB].getFrame())) {
                         soundMgr->playSound(SE_S_MENU_P1_POINT_MINUS);
                     }
-                    if (tab2 == 1) {
+                    if (tab2 == dLytPauseMgr_c::TAB_POUCH) {
                         rumble = false;
                     }
                 }
@@ -1945,7 +1944,7 @@ s32 dLytPauseDisp00_c::updateSelection() {
                     if (cM::isZero(mAnm[PAUSE_DISP_00_ANIM_OFF_RIGHT_TAB].getFrame())) {
                         soundMgr->playSound(SE_S_MENU_P1_POINT_B);
                     }
-                    if (tab2 == 0) {
+                    if (tab2 == dLytPauseMgr_c::TAB_ITEM) {
                         rumble = false;
                     }
                 }
@@ -2152,9 +2151,9 @@ void dLytPauseDisp00_c::loadRingText(u32 cmd) {
         if (cmd == RING_TEXT_CURRENT_TAB) {
             tab = dLytPauseMgr_c::GetInstance()->getCurrentDisp00Tab();
         }
-        if (tab == 1) {
+        if (tab == dLytPauseMgr_c::TAB_POUCH) {
             msgIdx = 2;
-        } else if (tab == 2) {
+        } else if (tab == dLytPauseMgr_c::TAB_DOWSING) {
             msgIdx = 3;
         }
         // "Items"/"Pouch"/"Dowsing"

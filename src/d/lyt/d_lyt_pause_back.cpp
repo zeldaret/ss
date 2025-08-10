@@ -68,7 +68,7 @@ void dLytPauseBack_c::requestOut() {
 
 void dLytPauseBack_c::initializeState_None() {
     mLyt.unbindAnims();
-    field_0x156 = false;
+    mIsChangingState = false;
     mInRequest = false;
     mOutRequest = false;
     mVisible = false;
@@ -103,10 +103,10 @@ void dLytPauseBack_c::executeState_In() {
 void dLytPauseBack_c::finalizeState_In() {}
 
 void dLytPauseBack_c::initializeState_Wait() {
-    field_0x156 = true;
+    mIsChangingState = true;
 }
 void dLytPauseBack_c::executeState_Wait() {
-    field_0x156 = false;
+    mIsChangingState = false;
     if (mOutRequest == true) {
         mOutRequest = false;
         mStateMgr.changeState(StateID_Out);
@@ -125,7 +125,7 @@ void dLytPauseBack_c::executeState_Out() {
         case 0: {
             if (anm.isEndReached() == true) {
                 mOutStep = 1;
-                field_0x156 = true;
+                mIsChangingState = true;
             }
             break;
         }

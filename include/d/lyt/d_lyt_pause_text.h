@@ -25,8 +25,8 @@ public:
     void requestIn();
     void requestOut();
 
-    bool getField_0x6D7() const {
-        return field_0x6D7;
+    bool isChangingState() const {
+        return mIsChangingState;
     }
 
 private:
@@ -54,7 +54,7 @@ private:
     /* 0x6D4 */ u8 mNumTextLines;
     /* 0x6D5 */ bool mInRequest;
     /* 0x6D6 */ bool mOutRequest;
-    /* 0x6D7 */ bool field_0x6D7;
+    /* 0x6D7 */ bool mIsChangingState;
     /* 0x6D8 */ bool field_0x6D8;
 };
 

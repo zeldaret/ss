@@ -116,7 +116,7 @@ void dLytPauseText_c::requestOut() {
 
 void dLytPauseText_c::initializeState_None() {
     mLyt.unbindAnims();
-    field_0x6D7 = false;
+    mIsChangingState = false;
     mInRequest = false;
     mOutRequest = false;
     field_0x6D8 = false;
@@ -152,11 +152,11 @@ void dLytPauseText_c::executeState_In() {
 void dLytPauseText_c::finalizeState_In() {}
 
 void dLytPauseText_c::initializeState_Wait() {
-    field_0x6D7 = true;
+    mIsChangingState = true;
 }
 void dLytPauseText_c::executeState_Wait() {
     mAnm[PAUSE_TEXT_ANIM_LOOP].play();
-    field_0x6D7 = false;
+    mIsChangingState = false;
     if (mOutRequest == true && mABtn.requestOut(false)) {
         mOutRequest = false;
         mStateMgr.changeState(StateID_Out);
@@ -181,7 +181,7 @@ void dLytPauseText_c::executeState_Out() {
         case 1: {
             if (anm.isEndReached() == true) {
                 mStep = 2;
-                field_0x6D7 = true;
+                mIsChangingState = true;
             }
             break;
         }

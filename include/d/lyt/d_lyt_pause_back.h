@@ -19,8 +19,8 @@ public:
     void requestIn();
     void requestOut();
 
-    bool getField_0x156() const {
-        return field_0x156;
+    bool isChangingState() const {
+        return mIsChangingState;
     }
 
 private:
@@ -39,7 +39,7 @@ private:
     /* 0x150 */ s32 mOutStep;
     /* 0x154 */ bool mInRequest;
     /* 0x155 */ bool mOutRequest;
-    /* 0x156 */ bool field_0x156;
+    /* 0x156 */ bool mIsChangingState;
     /* 0x157 */ bool mVisible;
 };
 

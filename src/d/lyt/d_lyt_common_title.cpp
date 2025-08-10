@@ -156,7 +156,7 @@ void dLytCommonTitle_c::initializeState_None() {
     mTitle.empty();
     mCaption.empty();
     field_0x68F = 0;
-    if (dLytControlGame_c::getInstance()->getField_0x15C67()) {
+    if (dLytControlGame_c::getInstance()->isPauseDemo()) {
         mLyt.findPane("N_next_01")->SetVisible(false);
     } else {
         mLyt.findPane("N_next_01")->SetVisible(true);

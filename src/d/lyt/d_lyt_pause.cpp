@@ -3,6 +3,8 @@
 #include "common.h"
 #include "d/d_base.h"
 #include "d/d_cs_game.h"
+#include "d/d_d2d.h"
+#include "d/d_gfx.h"
 #include "d/d_heap.h"
 #include "d/d_pad.h"
 #include "d/d_pad_nav.h"
@@ -22,6 +24,7 @@
 #include "d/snd/d_snd_wzsound.h"
 #include "egg/gfx/eggTextureBuffer.h"
 #include "m/m_pad.h"
+#include "m/m_video.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
 
 STATE_DEFINE(dLytPauseMain_c, None);
@@ -41,6 +44,10 @@ STATE_DEFINE(dLytPauseMgr_c, Select);
 STATE_DEFINE(dLytPauseMgr_c, Ring);
 STATE_DEFINE(dLytPauseMgr_c, GetDemo);
 STATE_DEFINE(dLytPauseMgr_c, Out);
+
+f32 dLytPauseMgr_c::sDisp00ArrowRotation;
+f32 dLytPauseMgr_c::sDisp00ArrowLength;
+dLytPauseMgr_c *dLytPauseMgr_c::sInstance;
 
 dLytPauseMain_c::dLytPauseMain_c()
     : mStateMgr(*this),
@@ -130,7 +137,7 @@ bool dLytPauseMain_c::draw() {
     if (mpDisp01 != nullptr) {
         mpDisp01->draw();
     }
-    if (!dLytControlGame_c::getInstance()->getField_0x15C67()) {
+    if (!dLytControlGame_c::getInstance()->isPauseDemo()) {
         mpArrow->draw();
     }
     mpPauseText->draw();
@@ -139,10 +146,20 @@ bool dLytPauseMain_c::draw() {
 }
 
 void dLytPauseMain_c::drawDirectly() {
-    if (dLytControlGame_c::getInstance()->getField_0x15C2C() == 0) {
+    if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() == dLytPauseMgr_c::DISP_00_INVENTORY) {
         mpDisp00->drawDirectly();
     } else {
         mpDisp01->drawDirectly();
+    }
+}
+
+void dLytPauseMain_c::loadBgTextureUnused() {
+    // no-op
+}
+
+void dLytPauseMain_c::loadBgTexture() {
+    if (mpPauseBack != nullptr) {
+        mpPauseBack->loadBgTexture();
     }
 }
 
@@ -166,8 +183,22 @@ void dLytPauseMain_c::requestRingToggle() {
     mRingToggleRequest = true;
 }
 
+bool dLytPauseMain_c::hasSelection() const {
+    if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() != dLytPauseMgr_c::DISP_00_INVENTORY) {
+        return mpDisp01->hasSelection();
+    } else {
+        return mpDisp00->hasSelection();
+    }
+}
+
+void dLytPauseMain_c::updateTitle() {
+    if (mpPauseInfo != nullptr) {
+        mpPauseInfo->updateTitle();
+    }
+}
+
 void dLytPauseMain_c::initializeState_None() {
-    field_0x63 = false;
+    mIsChangingState = false;
     mInRequest = false;
     mOutRequest = false;
     mChangeRequest = false;
@@ -181,7 +212,7 @@ void dLytPauseMain_c::executeState_None() {
     if (mInRequest == true) {
         mInRequest = false;
         mpPauseBack->requestIn();
-        if (dLytControlGame_c::getInstance()->getField_0x15C2C() == 0) {
+        if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() == dLytPauseMgr_c::DISP_00_INVENTORY) {
             mpDisp00->requestIn(false);
         } else {
             mpDisp01->requestIn(false);
@@ -202,26 +233,26 @@ void dLytPauseMain_c::executeState_In() {
     }
     mTimer++;
 
-    if (mpPauseBack->getField_0x156() == true) {
+    if (mpPauseBack->isChangingState() == true) {
         mPartStateChangeFlags |= 0x1;
     }
 
-    if (dLytControlGame_c::getInstance()->getField_0x15C2C() == 0) {
-        if (mpDisp00->getField_0xE36E() == true) {
+    if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() == dLytPauseMgr_c::DISP_00_INVENTORY) {
+        if (mpDisp00->isChangingState() == true) {
             mPartStateChangeFlags |= 0x2;
         }
     } else {
-        if (mpDisp01->getField_0x98CE() == true) {
+        if (mpDisp01->isChangingState() == true) {
             mPartStateChangeFlags |= 0x2;
         }
     }
 
-    if (mpPauseInfo->getField_0x19A() == true) {
+    if (mpPauseInfo->isChangingState() == true) {
         mPartStateChangeFlags |= 0x4;
     }
 
     if (mPartStateChangeFlags == (0x1 | 0x2 | 0x4)) {
-        if (dLytControlGame_c::getInstance()->getField_0x15C67()) {
+        if (dLytControlGame_c::getInstance()->isPauseDemo()) {
             mStateMgr.changeState(StateID_GetDemo);
         } else {
             mStateMgr.changeState(StateID_Wait);
@@ -235,14 +266,14 @@ void dLytPauseMain_c::finalizeState_In() {
 void dLytPauseMain_c::initializeState_Wait() {
     mStep = 0;
     mPartStateChangeFlags = 0;
-    field_0x63 = true;
+    mIsChangingState = true;
 }
 void dLytPauseMain_c::executeState_Wait() {
-    field_0x63 = false;
+    mIsChangingState = false;
     if (mOutRequest == true) {
         mOutRequest = false;
         mpPauseBack->requestOut();
-        if (dLytControlGame_c::getInstance()->getField_0x15C2C() == 0) {
+        if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() == dLytPauseMgr_c::DISP_00_INVENTORY) {
             mpDisp00->requestOut(false);
         } else {
             mpDisp01->requestOut(false);
@@ -266,7 +297,7 @@ void dLytPauseMain_c::finalizeState_Wait() {}
 
 void dLytPauseMain_c::initializeState_Change() {
     mStep = 0;
-    if (dLytControlGame_c::getInstance()->getField_0x15C2C() == 0) {
+    if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() == dLytPauseMgr_c::DISP_00_INVENTORY) {
         mpDisp01->requestIn(true);
         mpDisp00->requestOut(true);
     } else {
@@ -280,12 +311,12 @@ void dLytPauseMain_c::executeState_Change() {
     }
 
     bool change = false;
-    if (dLytControlGame_c::getInstance()->getField_0x15C2C() == 0) {
-        if (mpDisp01->getField_0x98CE()) {
+    if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() == dLytPauseMgr_c::DISP_00_INVENTORY) {
+        if (mpDisp01->isChangingState()) {
             change = true;
         }
     } else {
-        if (mpDisp00->getField_0xE36E()) {
+        if (mpDisp00->isChangingState()) {
             change = true;
         }
     }
@@ -318,7 +349,7 @@ void dLytPauseMain_c::initializeState_Select() {
     } else {
         mpArrow->setBackwards(false);
         mpPauseInfo->setInputInOut(false);
-        if (dLytControlGame_c::getInstance()->getField_0x15C2C() == 0) {
+        if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() == dLytPauseMgr_c::DISP_00_INVENTORY) {
             mpDisp00->requestSelect();
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_P1_SELECT_ITEM);
         } else {
@@ -331,7 +362,7 @@ extern "C" void fn_80059F40(void *);
 void dLytPauseMain_c::executeState_Select() {
     switch (mStep) {
         case 0: {
-            if (mpPauseText->getField_0x6D7()) {
+            if (mpPauseText->isChangingState()) {
                 mStep = 1;
             }
             break;
@@ -344,8 +375,8 @@ void dLytPauseMain_c::executeState_Select() {
             break;
         }
         case 2: {
-            if (mpPauseText->getField_0x6D7()) {
-                if (dLytControlGame_c::getInstance()->getField_0x15C2C() == 0) {
+            if (mpPauseText->isChangingState()) {
+                if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() == dLytPauseMgr_c::DISP_00_INVENTORY) {
                     mpDisp00->requestUnselect();
                 } else {
                     mpDisp01->requestUnselect();
@@ -355,13 +386,13 @@ void dLytPauseMain_c::executeState_Select() {
             break;
         }
         case 10: {
-            if (mpDisp00->getField_0xE36E() == true) {
+            if (mpDisp00->isChangingState() == true) {
                 mStateMgr.changeState(StateID_Wait);
             }
             break;
         }
         case 100: {
-            if (mpDisp00->getField_0xE36E() == true) {
+            if (mpDisp00->isChangingState() == true) {
                 mStateMgr.changeState(StateID_Wait);
                 u8 uiMode = dLytMeter_c::GetMain()->getUiMode() + 1;
                 if (uiMode >= 3) {
@@ -376,7 +407,7 @@ void dLytPauseMain_c::executeState_Select() {
             break;
         }
         case 300: {
-            if (mpDisp00->getField_0xE36E() == true) {
+            if (mpDisp00->isChangingState() == true) {
                 mStep++;
                 // TODO - dPadManager_c
                 fn_80059F40(dPauseManager_c::GetInstance());
@@ -395,7 +426,7 @@ void dLytPauseMain_c::finalizeState_Select() {
 }
 
 void dLytPauseMain_c::initializeState_Ring() {
-    if (dLytControlGame_c::getInstance()->getField_0x15C2C() == 0) {
+    if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() == dLytPauseMgr_c::DISP_00_INVENTORY) {
         mpDisp00->requestRingToggle();
     }
 }
@@ -404,7 +435,7 @@ void dLytPauseMain_c::executeState_Ring() {
         mStateMgr.changeState(StateID_Select);
     } else if (mRingToggleRequest == true) {
         mRingToggleRequest = false;
-        if (dLytControlGame_c::getInstance()->getField_0x15C2C() == 0) {
+        if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() == dLytPauseMgr_c::DISP_00_INVENTORY) {
             mpDisp00->requestRingToggle();
         }
         mStateMgr.changeState(StateID_Wait);
@@ -413,16 +444,16 @@ void dLytPauseMain_c::executeState_Ring() {
 void dLytPauseMain_c::finalizeState_Ring() {}
 
 void dLytPauseMain_c::initializeState_GetDemo() {
-    field_0x63 = true;
+    mIsChangingState = true;
 }
 void dLytPauseMain_c::executeState_GetDemo() {
-    field_0x63 = false;
-    if (dLytControlGame_c::getInstance()->getField_0x15C68()) {
-        if (mpDisp01->getField_0x98CE() == true) {
+    mIsChangingState = false;
+    if (dLytControlGame_c::getInstance()->getPauseDemoDisp()) {
+        if (mpDisp01->isChangingState() == true) {
             mStateMgr.changeState(StateID_Wait);
         }
     } else {
-        if (mpDisp00->getField_0xE36E() == true) {
+        if (mpDisp00->isChangingState() == true) {
             mStateMgr.changeState(StateID_Wait);
         }
     }
@@ -438,25 +469,25 @@ void dLytPauseMain_c::initializeState_Out() {
 void dLytPauseMain_c::executeState_Out() {
     switch (mStep) {
         case 0: {
-            if (mpPauseBack->getField_0x156() == true) {
+            if (mpPauseBack->isChangingState() == true) {
                 mPartStateChangeFlags |= 0x1;
             }
 
-            if (dLytControlGame_c::getInstance()->getField_0x15C2C() == 0) {
-                if (mpDisp00->getField_0xE36E() == true) {
+            if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() == dLytPauseMgr_c::DISP_00_INVENTORY) {
+                if (mpDisp00->isChangingState() == true) {
                     mPartStateChangeFlags |= 0x2;
                 }
             } else {
-                if (mpDisp01->getField_0x98CE() == true) {
+                if (mpDisp01->isChangingState() == true) {
                     mPartStateChangeFlags |= 0x2;
                 }
             }
 
-            if (mpPauseInfo->getField_0x19A() == true) {
+            if (mpPauseInfo->isChangingState() == true) {
                 mPartStateChangeFlags |= 0x4;
             }
             if (mPartStateChangeFlags == (0x1 | 0x2 | 0x4)) {
-                field_0x63 = true;
+                mIsChangingState = true;
                 mStep = 1;
             }
             break;
@@ -532,14 +563,14 @@ void dLytPauseMgr_c::initializeState_None() {
     field_0x0836 = false;
     field_0x0837 = false;
     field_0x0838 = false;
-    field_0x0831 = false;
+    mIsNavLeft = false;
     field_0x0832 = false;
     field_0x083E = false;
     field_0x083F = false;
     field_0x0840 = false;
-    mCurrentDisp00Tab = 0;
-    field_0x0824 = 3;
-    mCurrentSelectionTab = 0;
+    mCurrentDisp00Tab = TAB_ITEM;
+    mCurrentDisp00HeldRing = TAB_MAX;
+    mCurrentSelectionTab = 0; // "-1 + 1"
     mCurrentSelectionIsRestricted = false;
     mTimer = 0;
     field_0x0835 = 0;
@@ -553,9 +584,9 @@ void dLytPauseMgr_c::executeState_None() {
         dBase_c::s_NextExecuteControlFlags |= 0x1;
         dLytMeter_c::GetInstance()->setMeterField_0x13750(3);
         dLytControlGame_c *lytControl = dLytControlGame_c::getInstance();
-        if (lytControl->getField_0x15C67()) {
-            field_0x0828 = lytControl->getField_0x15C2C();
-            lytControl->setField_0x15C2C(lytControl->getField_0x15C68());
+        if (lytControl->isPauseDemo()) {
+            mSavedPauseDisp = lytControl->getCurrentPauseDisp();
+            lytControl->setCurrentPauseDisp(lytControl->getPauseDemoDisp());
         } else {
             StoryflagManager::sInstance->unsetFlag(571);
         }
@@ -565,8 +596,8 @@ void dLytPauseMgr_c::finalizeState_None() {}
 
 void dLytPauseMgr_c::initializeState_In() {}
 void dLytPauseMgr_c::executeState_In() {
-    if (mMain.getField_0x63() == true) {
-        if (dLytControlGame_c::getInstance()->getField_0x15C67()) {
+    if (mMain.isChangingState() == true) {
+        if (dLytControlGame_c::getInstance()->isPauseDemo()) {
             mStateMgr.changeState(StateID_GetDemo);
         } else {
             mStateMgr.changeState(StateID_Wait);
@@ -594,14 +625,16 @@ void dLytPauseMgr_c::executeState_Wait() {
     field_0x083B = false;
     mPrevSelectionId = mCurrentSelectionId;
     mPrevSelectionType = mCurrentSelectionType;
-    
+
     if (dPad::getDownTrigDown()) {
         dPad::ex_c::getInstance()->centerCursor(mPad::getCurrentCoreID(), true);
     }
-    
+
     dCsGame_c::GetInstance()->setCursorTypePointer();
-    
-    if (dPad::getDownTrig1() || (dLytControlGame_c::getInstance()->getField_0x15C2C() != 0 && dPad::getDownTrigB())) {
+
+    if (dPad::getDownTrig1() ||
+        (dLytControlGame_c::getInstance()->getCurrentPauseDisp() != dLytPauseMgr_c::DISP_00_INVENTORY &&
+         dPad::getDownTrigB())) {
         dSndPlayerMgr_c::GetInstance()->leaveMenu();
         mMain.requestOut();
         (void)getLinkPtr(); // yes
@@ -609,7 +642,7 @@ void dLytPauseMgr_c::executeState_Wait() {
         return;
     }
 
-    if (dLytControlGame_c::getInstance()->getField_0x15C2C() == 0) {
+    if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() == dLytPauseMgr_c::DISP_00_INVENTORY) {
         bool b = false;
         if (!StoryflagManager::sInstance->getFlag(58)) {
             if (dPad::getDownTrigB()) {
@@ -639,7 +672,7 @@ void dLytPauseMgr_c::executeState_Wait() {
         return;
     }
 
-    if (checkChangeGesture()) {
+    if (checkChangeDisp()) {
         mStateMgr.changeState(StateID_Change);
         return;
     }
@@ -667,7 +700,6 @@ void dLytPauseMgr_c::executeState_Wait() {
     } else {
         field_0x0835 = 0;
     }
-
 }
 void dLytPauseMgr_c::finalizeState_Wait() {
     dPadNav::setNavEnabled(false, false);
@@ -676,7 +708,7 @@ void dLytPauseMgr_c::finalizeState_Wait() {
 void dLytPauseMgr_c::initializeState_Change() {
     mMain.requestChange();
     mMain.updateTitle();
-    if (field_0x0831) {
+    if (mIsNavLeft) {
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_TURN_PAGE_RIGHT);
     } else {
         dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_TURN_PAGE_LEFT);
@@ -687,8 +719,8 @@ void dLytPauseMgr_c::executeState_Change() {
         dCsGame_c::GetInstance()->setCursorTypePointer();
     }
 
-    if (mMain.getField_0x63() == true) {
-        saveDispFlag();
+    if (mMain.isChangingState() == true) {
+        changeSavedDisp();
         mStateMgr.changeState(StateID_Wait);
     }
 }
@@ -699,7 +731,7 @@ void dLytPauseMgr_c::initializeState_Select() {
     field_0x0838 = field_0x0837;
 }
 void dLytPauseMgr_c::executeState_Select() {
-    if (mMain.getField_0x63() == true) {
+    if (mMain.isChangingState() == true) {
         if (field_0x0838) {
             saveTabFlag();
             field_0x0838 = false;
@@ -708,13 +740,13 @@ void dLytPauseMgr_c::executeState_Select() {
     } else if (field_0x0838) {
         s32 tab = mCurrentDisp00Tab;
         bool buttonHeld = false;
-        if (dPad::getDownB() && tab == 0) {
+        if (dPad::getDownB() && tab == TAB_ITEM) {
             buttonHeld = true;
         }
-        if (dPad::getDownMinus() && tab == 1) {
+        if (dPad::getDownMinus() && tab == TAB_POUCH) {
             buttonHeld = true;
         }
-        if (dPad::getDownC() && tab == 2) {
+        if (dPad::getDownC() && tab == TAB_DOWSING) {
             buttonHeld = true;
         }
 
@@ -729,12 +761,12 @@ void dLytPauseMgr_c::finalizeState_Select() {}
 
 void dLytPauseMgr_c::initializeState_Ring() {
     s32 controlGameTab = dLytControlGame_c::getInstance()->getPauseDisp00Tab();
-    if (controlGameTab == 0) {
-        field_0x0824 = 0;
-    } else if (controlGameTab == 1) {
-        field_0x0824 = 1;
+    if (controlGameTab == TAB_ITEM) {
+        mCurrentDisp00HeldRing = TAB_ITEM;
+    } else if (controlGameTab == TAB_POUCH) {
+        mCurrentDisp00HeldRing = TAB_POUCH;
     } else {
-        field_0x0824 = 2;
+        mCurrentDisp00HeldRing = TAB_DOWSING;
     }
     mMain.requestRingToggle();
 }
@@ -743,11 +775,11 @@ void dLytPauseMgr_c::executeState_Ring() {
     mPrevSelectionId = mCurrentSelectionId;
     mPrevSelectionType = mCurrentSelectionType;
     bool buttonHeld = false;
-    if (field_0x0824 == 0) {
+    if (mCurrentDisp00HeldRing == TAB_ITEM) {
         if (!dPad::getDownB()) {
             buttonHeld = true;
         }
-    } else if (field_0x0824 == 1) {
+    } else if (mCurrentDisp00HeldRing == TAB_POUCH) {
         if (!dPad::getDownMinus()) {
             buttonHeld = true;
         }
@@ -772,7 +804,7 @@ void dLytPauseMgr_c::finalizeState_Ring() {
 
 void dLytPauseMgr_c::initializeState_GetDemo() {}
 void dLytPauseMgr_c::executeState_GetDemo() {
-    if (mMain.getField_0x63() == true) {
+    if (mMain.isChangingState() == true) {
         dSndPlayerMgr_c::GetInstance()->leaveMenu();
         mMain.requestOut();
         (void)getLinkPtr();
@@ -785,20 +817,116 @@ void dLytPauseMgr_c::initializeState_Out() {
     dCsGame_c::GetInstance()->offNextCursor();
 }
 void dLytPauseMgr_c::executeState_Out() {
-    if (mMain.getField_0x63() == true) {
+    if (mMain.isChangingState() == true) {
         dBase_c::s_NextExecuteControlFlags &= ~0x1;
         dBase_c::s_DrawControlFlags &= ~0x1;
         mStateMgr.changeState(StateID_None);
     }
 }
 void dLytPauseMgr_c::finalizeState_Out() {
-    if (dLytControlGame_c::getInstance()->getField_0x15C67()) {
-        dLytControlGame_c::getInstance()->setField_0x15C2C(field_0x0828);
+    if (dLytControlGame_c::getInstance()->isPauseDemo()) {
+        dLytControlGame_c::getInstance()->setCurrentPauseDisp(mSavedPauseDisp);
     }
+}
+
+void dLytPauseMgr_c::inRequest() {
+    mInRequest = true;
+    field_0x0836 = 1;
 }
 
 bool dLytPauseMgr_c::isStateWait() const {
     return mStateMgr.getStateID()->isEqual(StateID_Wait);
+}
+
+void dLytPauseMgr_c::preDrawStage() {
+    if (field_0x0839 == true) {
+        field_0x0839 = false;
+        d2d::defaultSet();
+        if (mpTexture0x0810 != nullptr) {
+            mpTexture0x0810->free();
+            mpTexture0x0810 = nullptr;
+        }
+        mMain.drawDirectly();
+        mpTexture0x0810 = EGG::TextureBuffer::alloc(
+            mVideo::m_video->pRenderMode->fbWidth / 2, dGfx_c::getEFBHeight() / 2, GX_TF_RGBA8
+        );
+        mpTexture0x0810->capture(0, dGfx_c::getLetterboxAmount(), true, -1);
+        mMain.loadBgTextureUnused();
+    }
+}
+
+void dLytPauseMgr_c::postDrawStage() {
+        if (field_0x083A == true) {
+        field_0x083A = false;
+        d2d::defaultSet();
+        if (dLytControlGame_c::getInstance() != nullptr) {
+            dLytControlGame_c::getInstance()->fn_802D04F0();
+        }
+        mpBgTexture = EGG::TextureBuffer::alloc(
+            mVideo::m_video->pRenderMode->fbWidth / 2, dGfx_c::getEFBHeight() / 2, GX_TF_RGBA8
+        );
+        mpBgTexture->capture(0, dGfx_c::getLetterboxAmount(), true, -1);
+        mMain.loadBgTexture();
+    }
+}
+
+nw4r::lyt::Bounding *dLytPauseMgr_c::getArrowBounding(int idx) const {
+    return mMain.getArrow()->getArrowBounding(idx);
+}
+
+void dLytPauseMgr_c::setSelectedArrowBounding(int idx) {
+    mMain.getArrow()->setField_0x6B8(idx);
+}
+
+void dLytPauseMgr_c::setSelection(dLytPauseMgr_c::SelectionType_e type, u16 id, bool restricted) {
+    if (type != mPrevSelectionType || id != getCurrentSelectionId()) {
+        field_0x083B = true;
+    } else {
+        field_0x083B = false;
+    }
+    mCurrentSelectionType = type;
+    mCurrentSelectionId = id;
+    mCurrentSelectionIsRestricted = restricted;
+}
+
+bool dLytPauseMgr_c::checkSelectRing() {
+    dLytControlGame_c *lytControl = dLytControlGame_c::getInstance();
+    if (lytControl == nullptr) {
+        mCurrentDisp00Tab = TAB_ITEM;
+        return false;
+    }
+
+    if (lytControl->getCurrentPauseDisp() != DISP_00_INVENTORY) {
+        return false;
+    }
+
+    s32 tab = lytControl->getPauseDisp00Tab();
+
+    if (dPad::getDownTrigB()) {
+        mCurrentDisp00Tab = TAB_ITEM;
+        if (tab != TAB_ITEM && StoryflagManager::sInstance->getFlag(58)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else if (dPad::getDownTrigMinus()) {
+        mCurrentDisp00Tab = TAB_POUCH;
+        if (tab != TAB_POUCH && StoryflagManager::sInstance->getFlag(30)) {
+            return true;
+        } else {
+            return false;
+        }
+    } else if (dPad::getDownTrigC()) {
+        mCurrentDisp00Tab = TAB_DOWSING;
+        if (tab != TAB_DOWSING && StoryflagManager::sInstance->getFlag(789)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    mCurrentDisp00Tab = mCurrentSelectionTab - 1;
+    return true;
 }
 
 bool dLytPauseMgr_c::build() {
@@ -807,8 +935,63 @@ bool dLytPauseMgr_c::build() {
     mResAcc1.attach(data, "");
     data = LayoutArcManager::GetInstance()->getLoadedData("DoButton");
     mResAcc2.attach(data, "");
-    mMain.build();  
+    mMain.build();
     return true;
+}
+
+bool dLytPauseMgr_c::checkChangeDisp() {
+    bool nav = false;
+    if (dPadNav::isMplsNavGesture() == true) {
+        if (dPadNav::isMplsNavLeftGesture()) {
+            mIsNavLeft = true;
+        } else {
+            mIsNavLeft = false;
+        }
+        nav = true;
+    }
+
+    if (dPad::getDownTrigLeft() | dPad::getDownTrigRight()) {
+        if (dPad::getDownTrigLeft()) {
+            mIsNavLeft = true;
+        } else {
+            mIsNavLeft = false;
+        }
+        nav = true;
+    }
+    s32 arrowPane = mMain.getArrow()->getField_0x6B8();
+    if (arrowPane != dLytCommonArrow_c::ARROW_NONE && dPad::getDownTrigA() && mMain.getArrow()->fn_80168760()) {
+        if (arrowPane == dLytCommonArrow_c::ARROW_LEFT) {
+            mIsNavLeft = true;
+        } else {
+            mIsNavLeft = false;
+        }
+
+        if (!dPadNav::isPointerVisible()) {
+            field_0x083E = true;
+            field_0x0832 = mIsNavLeft;
+        } else {
+            field_0x0840 = true;
+        }
+        nav = true;
+    }
+    return nav;
+}
+
+void dLytPauseMgr_c::changeSavedDisp() {
+    dLytControlGame_c *lytControl = dLytControlGame_c::getInstance();
+    if (lytControl == nullptr) {
+        return;
+    }
+    s32 disp = lytControl->getCurrentPauseDisp() + 1;
+    if (disp >= DISP_MAX) {
+        disp = 0;
+    }
+    lytControl->setCurrentPauseDisp(disp);
+    if (disp != 0) {
+        StoryflagManager::sInstance->setFlag(847);
+    } else {
+        StoryflagManager::sInstance->unsetFlag(847);
+    }
 }
 
 void dLytPauseMgr_c::saveTabFlag() {
@@ -818,7 +1001,7 @@ void dLytPauseMgr_c::saveTabFlag() {
 
 bool dLytPauseMgr_c::checkRing() {
     dLytControlGame_c *lytControl = dLytControlGame_c::getInstance();
-    if (lytControl->getField_0x15C2C() != 0) {
+    if (lytControl->getCurrentPauseDisp() != DISP_00_INVENTORY) {
         return false;
     }
     if (!StoryflagManager::sInstance->getFlag(30)) {
@@ -828,7 +1011,7 @@ bool dLytPauseMgr_c::checkRing() {
     s32 tab = lytControl->getPauseDisp00Tab();
 
     if (dPad::getDownB() && tab == 0) {
-            return true;
+        return true;
     } else if (dPad::getDownMinus() && tab == 1) {
         return true;
     } else if (dPad::getDownC() && tab == 2) {
