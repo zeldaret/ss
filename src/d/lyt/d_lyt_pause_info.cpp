@@ -84,7 +84,7 @@ bool dLytPauseInfo_c::draw() {
         if (mpTitle != nullptr) {
             mpTitle->draw();
         }
-        if (!dLytControlGame_c::getInstance()->getField_0x15C67()) {
+        if (!dLytControlGame_c::getInstance()->isPauseDemo()) {
             mLyt.addToDrawList();
         }
     }
@@ -100,7 +100,8 @@ void dLytPauseInfo_c::requestOut() {
 }
 
 void dLytPauseInfo_c::updateTitle() {
-    if (dLytControlGame_c::getInstance()->getField_0x15C2C()) {
+    // Change the title before the transition is finished, so the logic here is correctly inverted
+    if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() != dLytPauseMgr_c::DISP_00_INVENTORY) {
         // "Gear"
         mpTitle->set(dLytCommonTitle_c::SET_01, mpTitle->setSubTitle(1), nullptr);
     } else {
@@ -119,7 +120,7 @@ void dLytPauseInfo_c::setInputInOut(bool inOut) {
 
 void dLytPauseInfo_c::initializeState_None() {
     mLyt.unbindAnims();
-    field_0x19A = false;
+    mIsChangingState = false;
     mInRequest = false;
     mOutRequest = false;
     field_0x19B = false;
@@ -139,10 +140,10 @@ void dLytPauseInfo_c::initializeState_In() {
     field_0x19B = true;
 
     s32 msgIdx = 1; // "Gear"
-    if (dLytControlGame_c::getInstance()->getField_0x15C2C() != 0) {
+    if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() != dLytPauseMgr_c::DISP_00_INVENTORY) {
         msgIdx = 2; // "Collection"
     }
-    if (dLytControlGame_c::getInstance()->getField_0x15C67()) {
+    if (dLytControlGame_c::getInstance()->isPauseDemo()) {
         SizedString<32> label;
         if (dLytControlGame_c::getInstance()->getItemForPauseDemo() == ITEM_5_CRYSTALS) {
             getItemLabel(ITEM_1_CRYSTAL, label);
@@ -173,11 +174,11 @@ void dLytPauseInfo_c::executeState_In() {
 void dLytPauseInfo_c::finalizeState_In() {}
 
 void dLytPauseInfo_c::initializeState_Wait() {
-    field_0x19A = true;
+    mIsChangingState = true;
 }
 void dLytPauseInfo_c::executeState_Wait() {
     updateCaption();
-    field_0x19A = false;
+    mIsChangingState = false;
     if (mOutRequest == true) {
         mOutRequest = false;
         mStateMgr.changeState(StateID_Out);
@@ -197,7 +198,7 @@ void dLytPauseInfo_c::executeState_Out() {
         case 0: {
             if (anm.isEndReached() == true) {
                 mStep = 1;
-                field_0x19A = true;
+                mIsChangingState = true;
             }
             break;
         }
@@ -233,7 +234,7 @@ void dLytPauseInfo_c::playBackwards(d2d::AnmGroup_c &anm) {
 }
 
 void dLytPauseInfo_c::updateCaption() {
-    if (dLytControlGame_c::getInstance()->getField_0x15C67() != true &&
+    if (dLytControlGame_c::getInstance()->isPauseDemo() != true &&
         dLytPauseMgr_c::GetInstance()->getField_0x083B() == true) {
         SizedString<32> buf;
         const char *label = dLytPauseText_c::getCurrentPauseLabel(buf);

@@ -169,7 +169,7 @@ bool dLytPauseDisp01_c::remove() {
 }
 
 bool dLytPauseDisp01_c::execute() {
-    field_0x98D1 = false;
+    mHasSelection = false;
     mStateMgr.executeState();
     for (int i = 0; i < PAUSE_DISP_01_NUM_SUBPANES; i++) {
         mSubpanes[i].mpLytPane->execute();
@@ -218,11 +218,11 @@ void dLytPauseDisp01_c::initializeState_None() {
         mAnm[i].unbind();
     }
 
-    field_0x98CE = false;
+    mIsChangingState = false;
     mInRequest = false;
     mOutRequest = false;
     mIsVisible = false;
-    field_0x98D1 = false;
+    mHasSelection = false;
     mStep = 0;
     mPrevNavTarget = 0;
     mCurrentNavTarget = 0;
@@ -259,14 +259,14 @@ void dLytPauseDisp01_c::initializeState_In() {
     if (mDoScrollAnim == true) {
         setAnm(PAUSE_DISP_01_ANIM_IN, 0.0f);
         mAnm[PAUSE_DISP_01_ANIM_IN].setFrame(mAnm[PAUSE_DISP_01_ANIM_IN].getAnimDuration());
-        if (pause->getField_0x0831()) {
+        if (pause->isNavLeft()) {
             setAnm(PAUSE_DISP_01_ANIM_SCROLL_L_IN, 0.0f);
         } else {
             setAnm(PAUSE_DISP_01_ANIM_SCROLL_R_IN, 0.0f);
         }
 
         if (pause->getField_0x0840()) {
-            if (pause->getField_0x0831()) {
+            if (pause->isNavLeft()) {
                 mPrevNavTarget = PAUSE_DISP_01_OFFSET_MY_PANES + PAUSE_DISP_01_PANE_LEFT + 1;
             } else {
                 mPrevNavTarget = PAUSE_DISP_01_OFFSET_MY_PANES + PAUSE_DISP_01_PANE_RIGHT + 1;
@@ -283,13 +283,13 @@ void dLytPauseDisp01_c::executeState_In() {
 
     s32 anim = PAUSE_DISP_01_ANIM_IN;
     if (mDoScrollAnim == true) {
-        anim = pause->getField_0x0831() ? PAUSE_DISP_01_ANIM_SCROLL_L_IN : PAUSE_DISP_01_ANIM_SCROLL_R_IN;
+        anim = pause->isNavLeft() ? PAUSE_DISP_01_ANIM_SCROLL_L_IN : PAUSE_DISP_01_ANIM_SCROLL_R_IN;
     }
 
     d2d::AnmGroup_c &anm = mAnm[anim];
 
     if (anm.isEndReached() == true) {
-        if (dLytControlGame_c::getInstance()->getField_0x15C67()) {
+        if (dLytControlGame_c::getInstance()->isPauseDemo()) {
             mStateMgr.changeState(StateID_GetDemo);
         } else {
             mStateMgr.changeState(StateID_Wait);
@@ -300,7 +300,7 @@ void dLytPauseDisp01_c::executeState_In() {
 }
 void dLytPauseDisp01_c::finalizeState_In() {
     dLytPauseMgr_c *pause = dLytPauseMgr_c::GetInstance();
-    if (pause->getField_0x0831()) {
+    if (pause->isNavLeft()) {
         stopAnm(PAUSE_DISP_01_ANIM_SCROLL_L_IN);
     } else {
         stopAnm(PAUSE_DISP_01_ANIM_SCROLL_R_IN);
@@ -318,11 +318,11 @@ void dLytPauseDisp01_c::finalizeState_In() {
 }
 
 void dLytPauseDisp01_c::initializeState_Wait() {
-    field_0x98CE = true;
+    mIsChangingState = true;
     showInsectsAndMaterials();
 }
 void dLytPauseDisp01_c::executeState_Wait() {
-    field_0x98CE = false;
+    mIsChangingState = false;
     if (mOutRequest == true) {
         mOutRequest = false;
         hideInsectsAndMaterials();
@@ -341,7 +341,7 @@ void dLytPauseDisp01_c::executeState_Wait() {
         }
 
     } else if (updateSelection() != 0) {
-        field_0x98D1 = true;
+        mHasSelection = true;
     }
 }
 void dLytPauseDisp01_c::finalizeState_Wait() {}
@@ -359,14 +359,14 @@ void dLytPauseDisp01_c::finalizeState_Select() {
 }
 
 void dLytPauseDisp01_c::initializeState_GetDemo() {
-    field_0x98CE = true;
+    mIsChangingState = true;
     mStep = 0;
     mGetDemoTimer = 0;
 }
 void dLytPauseDisp01_c::executeState_GetDemo() {
     switch (mStep) {
         case 0: {
-            field_0x98CE = false;
+            mIsChangingState = false;
             if (mGetDemoTimer < 2) {
                 mGetDemoTimer++;
             } else {
@@ -515,7 +515,7 @@ void dLytPauseDisp01_c::finalizeState_GetDemo() {}
 void dLytPauseDisp01_c::initializeState_Out() {
     stopAnm(PAUSE_DISP_01_ANIM_IN);
     if (mDoScrollAnim == true) {
-        if (dLytPauseMgr_c::GetInstance()->getField_0x0831()) {
+        if (dLytPauseMgr_c::GetInstance()->isNavLeft()) {
             setAnm(PAUSE_DISP_01_ANIM_SCROLL_R_OUT, 0.0f);
         } else {
             setAnm(PAUSE_DISP_01_ANIM_SCROLL_L_OUT, 0.0f);
@@ -528,8 +528,8 @@ void dLytPauseDisp01_c::initializeState_Out() {
 void dLytPauseDisp01_c::executeState_Out() {
     s32 anim = PAUSE_DISP_01_ANIM_OUT;
     if (mDoScrollAnim == true) {
-        anim = dLytPauseMgr_c::GetInstance()->getField_0x0831() ? PAUSE_DISP_01_ANIM_SCROLL_R_OUT :
-                                                                  PAUSE_DISP_01_ANIM_SCROLL_L_OUT;
+        anim = dLytPauseMgr_c::GetInstance()->isNavLeft() ? PAUSE_DISP_01_ANIM_SCROLL_R_OUT :
+                                                            PAUSE_DISP_01_ANIM_SCROLL_L_OUT;
     }
 
     d2d::AnmGroup_c &anm = mAnm[anim];
@@ -538,7 +538,7 @@ void dLytPauseDisp01_c::executeState_Out() {
         case 0: {
             if (anm.isEndReached() == true) {
                 mStep = 1;
-                field_0x98CE = true;
+                mIsChangingState = true;
             }
             break;
         }
@@ -617,7 +617,7 @@ void dLytPauseDisp01_c::setupDisp() {
     u32 crystalCount = dAcItem_c::getGratitudeCrystalCount();
     if (crystalCount != 0) {
         bool isDemo = false;
-        if (lytControl->getField_0x15C67() && (demoItem == ITEM_1_CRYSTAL || demoItem == ITEM_5_CRYSTALS)) {
+        if (lytControl->isPauseDemo() && (demoItem == ITEM_1_CRYSTAL || demoItem == ITEM_5_CRYSTALS)) {
             isDemo = true;
             crystalCount = demoItem == ITEM_1_CRYSTAL ? crystalCount - 1 : crystalCount - 5;
         }
@@ -665,7 +665,7 @@ void dLytPauseDisp01_c::setupInsects() {
         }
 
         s32 count = getInsectCountByIndex(insectIdx);
-        if (lytControl->getField_0x15C67() && lytControl->getItemForPauseDemo() == getInsectItemId(insectIdx)) {
+        if (lytControl->isPauseDemo() && lytControl->getItemForPauseDemo() == getInsectItemId(insectIdx)) {
             count = lytControl->getItemCountForPauseDemo();
         }
 
@@ -692,7 +692,7 @@ void dLytPauseDisp01_c::setupMaterials() {
         }
 
         s32 count = getMaterialCountByIndex(materialIdx);
-        if (lytControl->getField_0x15C67() && lytControl->getItemForPauseDemo() == getMaterialItemId(materialIdx)) {
+        if (lytControl->isPauseDemo() && lytControl->getItemForPauseDemo() == getMaterialItemId(materialIdx)) {
             count = lytControl->getItemCountForPauseDemo();
         }
 
@@ -945,7 +945,7 @@ void dLytPauseDisp01_c::hideInsectsAndMaterials() {
 }
 
 bool dLytPauseDisp01_c::shouldInsectBeDisplayed(s32 insectIdx) const {
-    if (dLytControlGame_c::getInstance()->getField_0x15C67() &&
+    if (dLytControlGame_c::getInstance()->isPauseDemo() &&
         dLytControlGame_c::getInstance()->getItemForPauseDemo() == getInsectItemId(insectIdx) &&
         dAcItem_c::isPerformingInitialCollection()) {
         return false;
@@ -989,7 +989,7 @@ u16 dLytPauseDisp01_c::getQuestItemId(s32 questItemIndex) const {
 }
 
 bool dLytPauseDisp01_c::shouldMaterialBeDisplayed(s32 materialIdx) const {
-    if (dLytControlGame_c::getInstance()->getField_0x15C67() &&
+    if (dLytControlGame_c::getInstance()->isPauseDemo() &&
         dLytControlGame_c::getInstance()->getItemForPauseDemo() == getMaterialItemId(materialIdx) &&
         dAcItem_c::isPerformingInitialCollection()) {
         return false;

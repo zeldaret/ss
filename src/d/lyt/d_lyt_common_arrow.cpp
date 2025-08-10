@@ -39,10 +39,6 @@ static const d2d::LytBrlanMapping brlanMap[] = {
 
 #define NUM_ANIMS 9
 
-#define PANE_BOUNDING_L 0
-#define PANE_BOUNDING_R 1
-#define PANE_BOUNDING_NONE 2
-
 dLytCommonArrow_c::dLytCommonArrow_c() : mStateMgr(*this, sStateID::null) {}
 
 bool dLytCommonArrow_c::build() {
@@ -56,8 +52,8 @@ bool dLytCommonArrow_c::build() {
     }
     mCsHitCheck.init(mLytBase.getLayout()->GetRootPane(), 1, 0, 0);
     dCsMgr_c::GetInstance()->registCursorTarget(&mCsHitCheck);
-    mpBoundings[PANE_BOUNDING_L] = mLytBase.findBounding("B_arrowL_00");
-    mpBoundings[PANE_BOUNDING_R] = mLytBase.findBounding("B_arrowR_00");
+    mpBoundings[ARROW_LEFT] = mLytBase.findBounding("B_arrowL_00");
+    mpBoundings[ARROW_RIGHT] = mLytBase.findBounding("B_arrowR_00");
     mStateMgr.changeState(StateID_None);
     setState(0);
     return true;
@@ -123,7 +119,7 @@ bool dLytCommonArrow_c::requestOut() {
 }
 
 bool dLytCommonArrow_c::fn_80168760() {
-    if (field_0x6C0 == 2 && field_0x6B8 != 2) {
+    if (field_0x6C0 == ARROW_NONE && field_0x6B8 != ARROW_NONE) {
         field_0x6C0 = field_0x6B8;
         return true;
     }
@@ -151,26 +147,26 @@ void dLytCommonArrow_c::tickDown(d2d::AnmGroup_c *ctrl) {
     }
 }
 
-void dLytCommonArrow_c::fn_80168880() {
+void dLytCommonArrow_c::checkPointAtPane() {
     int i = -1;
     if (!dPadNav::isPointerVisible()) {
-        mTargetedBounding = PANE_BOUNDING_NONE;
+        mPointedAtArrow = ARROW_NONE;
         return;
     }
 
     dCursorHitCheck_c *d = dCsBase_c::GetInstance()->getHitCheck();
     if (d != nullptr && d->getType() == 'lyt ') {
-        if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBoundings[PANE_BOUNDING_L]) {
-            i = 0;
-        } else if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBoundings[PANE_BOUNDING_R]) {
-            i = 1;
+        if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBoundings[ARROW_LEFT]) {
+            i = ARROW_LEFT;
+        } else if (static_cast<dCursorHitCheckLyt_c *>(d)->getHitPane() == mpBoundings[ARROW_RIGHT]) {
+            i = ARROW_RIGHT;
         }
     }
 
     if (i >= 0) {
-        mTargetedBounding = i;
+        mPointedAtArrow = i;
     } else {
-        mTargetedBounding = PANE_BOUNDING_NONE;
+        mPointedAtArrow = ARROW_NONE;
     }
 }
 
@@ -178,12 +174,12 @@ void dLytCommonArrow_c::initializeState_None() {
     mLytBase.unbindAnims();
     mInRequested = false;
     mOutRequested = false;
-    field_0x6CA = 0;
+    mIsChangingState = false;
     mVisible = false;
-    mTargetedBounding = PANE_BOUNDING_NONE;
-    field_0x6B8 = 2;
-    field_0x6BC = 2;
-    field_0x6C0 = 2;
+    mPointedAtArrow = ARROW_NONE;
+    field_0x6B8 = ARROW_NONE;
+    field_0x6BC = ARROW_NONE;
+    field_0x6C0 = ARROW_NONE;
     mTimer = 0;
     displayElement(ANIM_IN, 0.0f);
     mBackwards = true;
@@ -214,15 +210,15 @@ void dLytCommonArrow_c::executeState_In() {
     switch (mTimer) {
         case 0: {
             d2d::AnmGroup_c *s = &mAnmGroups[ANIM_IN];
-            if (s->isEndReached() == 1) {
+            if (s->isEndReached() == true) {
                 mTimer += 1;
-                field_0x6CA = 1;
+                mIsChangingState = true;
             } else {
                 s->play();
             }
         } break;
         case 1:
-            field_0x6CA = 0;
+            mIsChangingState = false;
             mStateMgr.changeState(StateID_Wait);
             break;
     }
@@ -241,12 +237,12 @@ void dLytCommonArrow_c::executeState_Wait() {
         return;
     }
 
-    fn_80168880();
-    if (field_0x6B8 == 0) {
+    checkPointAtPane();
+    if (field_0x6B8 == ARROW_LEFT) {
         d2d::AnmGroup_c &g = mAnmGroups[ANIM_ONOFF_L];
         g.play();
         tickDown(&mAnmGroups[ANIM_ONOFF_R]);
-    } else if (field_0x6B8 == 1) {
+    } else if (field_0x6B8 == ARROW_RIGHT) {
         d2d::AnmGroup_c &g = mAnmGroups[ANIM_ONOFF_R];
         g.play();
         tickDown(&mAnmGroups[ANIM_ONOFF_L]);
@@ -264,7 +260,7 @@ void dLytCommonArrow_c::executeState_Wait() {
 
     switch (mTimer) {
         case 0:
-            if (field_0x6C0 != 2) {
+            if (field_0x6C0 != ARROW_NONE) {
                 displayElement(field_0x6C0 + ANIM_DECIDE_OFFSET, 0.0f);
                 if (field_0x6C0 == 0) {
                     dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_SELECT_TURN_PAGE_LEFT);
@@ -278,20 +274,20 @@ void dLytCommonArrow_c::executeState_Wait() {
             d2d::AnmGroup_c &g = mAnmGroups[field_0x6C0 + ANIM_DECIDE_OFFSET];
             if (g.isEndReached() == true) {
                 mTimer++;
-                field_0x6CA = 1;
+                mIsChangingState = true;
             }
             g.play();
         } break;
         case 2:
             unbindAt(field_0x6C0 + ANIM_DECIDE_OFFSET);
             mTimer = 0;
-            field_0x6CA = 0;
-            field_0x6C0 = 2;
+            mIsChangingState = false;
+            field_0x6C0 = ARROW_NONE;
             break;
     }
 
-    if (field_0x6BC != field_0x6B8 && field_0x6B8 != 2) {
-        if (field_0x6B8 == 0) {
+    if (field_0x6BC != field_0x6B8 && field_0x6B8 != ARROW_NONE) {
+        if (field_0x6B8 == ARROW_LEFT) {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_POINT_TURN_PAGE_LEFT);
         } else {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_MENU_POINT_TURN_PAGE_RIGHT);
@@ -311,7 +307,7 @@ void dLytCommonArrow_c::executeState_Out() {
             d2d::AnmGroup_c *s = &mAnmGroups[ANIM_OUT];
             if (s->isEndReached() == true) {
                 mTimer = 1;
-                field_0x6CA = 1;
+                mIsChangingState = 1;
             }
             s->play();
         } break;

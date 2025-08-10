@@ -27,6 +27,9 @@ public:
     bool draw();
     void drawDirectly();
 
+    void loadBgTextureUnused();
+    void loadBgTexture();
+
     void requestIn();
     void requestOut();
     void requestChange();
@@ -36,8 +39,12 @@ public:
     bool hasSelection() const;
     void updateTitle();
 
-    bool getField_0x63() const {
-        return field_0x63;
+    bool isChangingState() const {
+        return mIsChangingState;
+    }
+
+    dLytCommonArrow_c *getArrow() const {
+        return mpArrow;
     }
 
 private:
@@ -62,7 +69,7 @@ private:
     /* 0x60 */ u8 mPartStateChangeFlags;
     /* 0x61 */ bool mInRequest;
     /* 0x62 */ bool mOutRequest;
-    /* 0x63 */ bool field_0x63;
+    /* 0x63 */ bool mIsChangingState;
     /* 0x64 */ bool mChangeRequest;
     /* 0x65 */ bool mSelectRequest;
     /* 0x66 */ bool mRingToggleRequest;
@@ -72,6 +79,21 @@ class dLytPauseMgr_c : public dLytBase_c {
 public:
     dLytPauseMgr_c();
     ~dLytPauseMgr_c();
+
+    enum Disp_e {
+        DISP_00_INVENTORY = 0,
+        DISP_01_COLLECTION = 1,
+
+        DISP_MAX,
+    };
+
+    enum Tab_e {
+        TAB_ITEM = 0,
+        TAB_POUCH = 1,
+        TAB_DOWSING = 2,
+
+        TAB_MAX = 3,
+    };
 
     /* 0x08 */ virtual int create() override;
     /* 0x14 */ virtual int doDelete() override;
@@ -95,8 +117,8 @@ public:
         return mpBgTexture;
     }
 
-    bool getField_0x0831() const {
-        return field_0x0831;
+    bool isNavLeft() const {
+        return mIsNavLeft;
     }
 
     bool getField_0x0832() const {
@@ -184,18 +206,23 @@ public:
     }
 
     nw4r::lyt::Bounding *getArrowBounding(int idx) const;
-    void setSelectedArrowBounding(int idx) const;
+    void setSelectedArrowBounding(int idx);
 
     static void setSelectHand(f32 rotation, f32 length);
+
+    void preDrawStage();
+    void postDrawStage();
+
+    void inRequest();
 
     static f32 sDisp00ArrowRotation;
     static f32 sDisp00ArrowLength;
 
 private:
     bool checkSelectRing();
-    bool checkChangeGesture();
+    bool checkChangeDisp();
     bool checkRing();
-    void saveDispFlag();
+    void changeSavedDisp();
     void saveTabFlag();
 
     STATE_FUNC_DECLARE(dLytPauseMgr_c, None);
@@ -219,12 +246,12 @@ private:
     /* 0x0818 */ SelectionType_e mCurrentSelectionType;
     /* 0x081C */ SelectionType_e mPrevSelectionType;
     /* 0x0820 */ s32 mCurrentDisp00Tab;
-    /* 0x0824 */ UNKWORD field_0x0824;
-    /* 0x0828 */ UNKWORD field_0x0828;
+    /* 0x0824 */ s32 mCurrentDisp00HeldRing;
+    /* 0x0828 */ s32 mSavedPauseDisp;
     /* 0x082C */ u16 mCurrentSelectionId;
     /* 0x082E */ u16 mPrevSelectionId;
     /* 0x0830 */ bool mInRequest;
-    /* 0x0831 */ bool field_0x0831;
+    /* 0x0831 */ bool mIsNavLeft;
     /* 0x0832 */ bool field_0x0832;
     /* 0x0833 */ u8 mCurrentSelectionTab;
     /* 0x0834 */ u8 mTimer;

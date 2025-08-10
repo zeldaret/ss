@@ -50,6 +50,18 @@ inline s32 getFSStickNavDirection() {
     return sFSStickNavDirection;
 }
 
+inline bool isMplsNavLeftGesture() {
+    return sIsMplsNavLeftGesture;
+}
+
+inline bool isMplsNavRightGesture() {
+    return sIsMplsNavRightGesture;
+}
+
+inline bool isMplsNavGesture() {
+    return isMplsNavLeftGesture() || isMplsNavRightGesture();
+}
+
 void init();
 void calc();
 void setNavEnabled(bool navEnabled, bool disableAutoReturnToPointerNav);
