@@ -1538,6 +1538,7 @@ d/lyt/d_lyt_pause.cpp:
 	.text       start:0x8027E9E0 end:0x80282678 align:16
 	.ctors      start:0x804DB85C end:0x804DB860
 	.data       start:0x80537310 end:0x80537970
+	.sdata      start:0x80573B48 end:0x80573B58
 	.sbss       start:0x80575938 end:0x80575948
 	.bss        start:0x805B5940 end:0x805B5D40
 

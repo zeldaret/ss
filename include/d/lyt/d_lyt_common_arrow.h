@@ -29,6 +29,14 @@ public:
     bool requestIn();
     bool requestOut();
 
+    void unk() {
+        field_0x6B8 = mTargetedBounding;
+    }
+
+    void setBackwards(bool b) {
+        mBackwards = b;
+    }
+
 private:
     void setTranslate(const Vec *);
     bool fn_80168760();
@@ -52,8 +60,8 @@ private:
     /* 0x6C8 */ bool mInRequested;
     /* 0x6C9 */ bool mOutRequested;
     /* 0x6CA */ u8 field_0x6CA;
-    /* 0x6CB */ u8 field_0x6CB;
-    /* 0x6CC */ u8 field_0x6CC;
+    /* 0x6CB */ bool mVisible;
+    /* 0x6CC */ bool mBackwards;
 };
 
 #endif

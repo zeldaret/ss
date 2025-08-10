@@ -23,6 +23,10 @@ public:
 
     void setInputInOut(bool inOut);
 
+    bool getField_0x19A() const {
+        return field_0x19A;
+    }
+
 private:
     void updateCaption();
     void startAnim(int idx);

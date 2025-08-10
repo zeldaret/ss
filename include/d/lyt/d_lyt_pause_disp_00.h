@@ -21,7 +21,7 @@ public:
     void requestIn(bool scroll);
     void requestOut(bool scroll);
     void requestSelect();
-    void requestRing();
+    void requestRingToggle();
     void requestUnselect();
 
     bool requestSelectGuide();
@@ -34,6 +34,10 @@ public:
     STATE_FUNC_DECLARE(dLytPauseDisp00_c, Ring);
     STATE_FUNC_DECLARE(dLytPauseDisp00_c, GetDemo);
     STATE_FUNC_DECLARE(dLytPauseDisp00_c, Out);
+
+    bool getField_0xE36E() const {
+        return field_0xE36E;
+    }
 
 private:
     void setAnm(int idx, f32 value);
@@ -98,7 +102,7 @@ private:
     /* 0xE373 */ bool mSelectGuideRequest;
     /* 0xE374 */ bool mStopCallRequest;
     /* 0xE375 */ bool mSelectMplsRequest;
-    /* 0xE376 */ bool field_0xE376;
+    /* 0xE376 */ bool mReverseTabChangeAnim;
     /* 0xE377 */ bool mRingToggleRequest;
 };
 

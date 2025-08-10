@@ -31,6 +31,10 @@ public:
     STATE_FUNC_DECLARE(dLytPauseDisp01_c, GetDemo);
     STATE_FUNC_DECLARE(dLytPauseDisp01_c, Out);
 
+    bool getField_0x98CE() const {
+        return field_0x98CE;
+    }
+
 private:
     void setAnm(int idx, f32 value);
     void stopAnm(int idx);

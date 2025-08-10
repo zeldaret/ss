@@ -317,9 +317,13 @@ public:
             mCursorActive = val;
         }
 
+        // TODO - maybe a system for overriding cursor type
         void setNextCursorType(CursorType_e cs) {
-            mNextCursor = 1;
+            mNextCursor = true;
             mNextCursorType = cs;
+        }
+        void offNextCursor() {
+            mNextCursor = false;
         }
 
         void changeState(const sFStateID_c<lytItemCursor_c> &newState);
@@ -361,6 +365,12 @@ public:
     };
 
     void setNextCursorType(lytItemCursor_c::CursorType_e);
+    void setCursorTypeNoneMaybe();
+    void setCursorTypePointer();
+
+    void offNextCursor() {
+        mCursor.offNextCursor();
+    }
 
     static dCsGame_c *sInstance;
 

@@ -85,7 +85,7 @@ bool dLytCommonArrow_c::execute() {
 }
 
 bool dLytCommonArrow_c::draw() {
-    if (field_0x6CB == 1) {
+    if (mVisible == true) {
         mLytBase.addToDrawList();
     }
     return true;
@@ -179,14 +179,14 @@ void dLytCommonArrow_c::initializeState_None() {
     mInRequested = false;
     mOutRequested = false;
     field_0x6CA = 0;
-    field_0x6CB = 0;
+    mVisible = false;
     mTargetedBounding = PANE_BOUNDING_NONE;
     field_0x6B8 = 2;
     field_0x6BC = 2;
     field_0x6C0 = 2;
     mTimer = 0;
     displayElement(ANIM_IN, 0.0f);
-    field_0x6CC = 1;
+    mBackwards = true;
 }
 void dLytCommonArrow_c::executeState_None() {
     if (mInRequested == true) {
@@ -200,7 +200,7 @@ void dLytCommonArrow_c::finalizeState_None() {
 
 void dLytCommonArrow_c::initializeState_In() {
     mTimer = 0;
-    field_0x6CB = 1;
+    mVisible = true;
     f32 anmType = 0.0f;
     if (mType == 1) {
         anmType = 1.0f;
@@ -256,7 +256,7 @@ void dLytCommonArrow_c::executeState_Wait() {
     }
 
     d2d::AnmGroup_c &g2 = mAnmGroups[ANIM_INPUT];
-    if (field_0x6CC != 0) {
+    if (mBackwards) {
         tickDown(&g2);
     } else {
         g2.play();
