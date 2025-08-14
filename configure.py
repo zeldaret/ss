@@ -300,6 +300,17 @@ def Rel(status, rel_name, cpp_name, extra_cflags=[]):
         ],
     }
 
+def RelLib(lib_name, progress_category, objects, extra_cflags=[]):
+    return {
+        "lib": lib_name,
+        "mw_version": "Wii/1.5",
+        "scratch_preset_id": 170,
+        "cflags": cflags_rel + extra_cflags,
+        "progress_category": progress_category,
+        "host": False,
+        "objects": objects,
+    }
+
 
 def EGGLib(lib_name, objects):
     return {
@@ -1917,6 +1928,34 @@ config.libs = [
             ),
         ],
     },
+    RelLib("keyboard", "keyboard", [
+        Object(NonMatching, "REL/keyboard/tiPcKeyboard.cpp"),
+        Object(NonMatching, "REL/keyboard/tiCellPhone.cpp"),
+        Object(NonMatching, "REL/keyboard/tiInputForm.cpp"),
+        Object(NonMatching, "REL/keyboard/tiCandidateBox.cpp"),
+        Object(NonMatching, "REL/keyboard/tiToolBar.cpp"),
+        Object(NonMatching, "REL/keyboard/tiPredictLang.cpp"),
+        Object(NonMatching, "REL/keyboard/tiSignWindow.cpp"),
+        Object(NonMatching, "REL/keyboard/tiString.cpp"),
+        Object(NonMatching, "REL/keyboard/tiTextDrawer.cpp"),
+        Object(NonMatching, "REL/keyboard/tiNw4rManager.cpp"),
+        Object(NonMatching, "REL/keyboard/tiManager.cpp"),
+        Object(NonMatching, "REL/keyboard/tiUtil.cpp"),
+        Object(NonMatching, "REL/keyboard/tiCpData.cpp"),
+        Object(NonMatching, "REL/keyboard/tiSwData.cpp"),
+        Object(NonMatching, "REL/keyboard/tiPkData.cpp"),
+        Object(NonMatching, "REL/keyboard/tiLanguageIndependentData.cpp"),
+        Object(NonMatching, "REL/keyboard/tiTextInputBase.cpp"),
+        Object(NonMatching, "REL/keyboard/MyTiManager.cpp"),
+        Object(NonMatching, "REL/keyboard/MyTiInputForm.cpp"),
+        Object(NonMatching, "REL/keyboard/MyTiBg.cpp"),
+        Object(NonMatching, "REL/keyboard/tiDebug.cpp"),
+        Object(NonMatching, "REL/keyboard/tiGUIManager.cpp"),
+        Object(NonMatching, "REL/keyboard/tiHKBManager.cpp"),
+        Object(NonMatching, "REL/keyboard/tiHwKeyboard.cpp"),
+        Object(NonMatching, "REL/keyboard/tiLayout.cpp"),
+    ]),
+    Rel(NonMatching, "d_SoftwareKeyboard", "REL/d/d_SoftwareKeyboard.cpp"),
     Rel(NonMatching, "d_a_asura_bullet", "REL/d/a/d_a_asura_bullet.cpp"),
     Rel(NonMatching, "d_a_avater_bullet", "REL/d/a/d_a_avater_bullet.cpp"),
     Rel(NonMatching, "d_a_avater_race_mng", "REL/d/a/d_a_avater_race_mng.cpp"),
@@ -2760,7 +2799,6 @@ config.libs = [
     Rel(NonMatching, "d_lyt_seeker_stone", "REL/d/d_lyt_seeker_stone.cpp"),
     Rel(NonMatching, "d_lyt_title_BG", "REL/d/d_lyt_title_BG.cpp"),
     Rel(Matching, "d_profile", "REL/d/d_profile.cpp"),
-    Rel(NonMatching, "d_SoftwareKeyboard", "REL/d/d_SoftwareKeyboard.cpp"),
     Rel(NonMatching, "d_s_boot", "REL/d/d_s_boot.cpp"),
     Rel(NonMatching, "d_title_manager", "REL/d/d_title_manager.cpp"),
     Rel(Matching, "d_t_action", "REL/d/t/d_t_action.cpp"),
@@ -2886,6 +2924,7 @@ config.progress_categories = [
     ProgressCategory("sdk", "Revolution SDK"),
     ProgressCategory("jsystem", "JSystem"),
     ProgressCategory("hbm", "Home Button Menu"),
+    ProgressCategory("keyboard", "Virtual Keyboard"),
 ]
 config.progress_each_module = args.verbose
 # Optional extra arguments to `objdiff-cli report generate`

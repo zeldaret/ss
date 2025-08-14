@@ -15,8 +15,140 @@ REL/global_destructor_chain.c:
 	.bss        start:0x00000000 end:0x00000008
 
 REL/d/d_SoftwareKeyboard.cpp:
-	.text       start:0x000000F0 end:0x00038BA0 align:16
-	.ctors      start:0x00000000 end:0x0000003C
-	.rodata     start:0x00000000 end:0x00003920
-	.data       start:0x00000000 end:0x00010274
-	.bss        start:0x00000008 end:0x0000065C
+	.text       start:0x000000F0 end:0x00002864 align:16
+	.ctors      start:0x00000000 end:0x00000004
+	.rodata     start:0x00000000 end:0x00000150
+	.data       start:0x00000000 end:0x000005D8
+	.bss        start:0x00000008 end:0x00000020
+
+REL/keyboard/tiPcKeyboard.cpp:
+	.text       start:0x00002870 end:0x000097E0 align:16
+	.ctors      start:0x00000004 end:0x00000008
+	.rodata     start:0x00000150 end:0x00001828
+	.data       start:0x000005D8 end:0x000036E8
+	.bss        start:0x00000020 end:0x00000030
+
+REL/keyboard/tiCellPhone.cpp:
+	.text       start:0x000097E0 end:0x0000E0E8 align:16
+	.ctors      start:0x00000008 end:0x0000000C
+	.rodata     start:0x00001828 end:0x00001D58
+	.data       start:0x000036E8 end:0x00003FC8
+
+REL/keyboard/tiInputForm.cpp:
+	.text       start:0x0000E0F0 end:0x0001A868 align:16
+	.ctors      start:0x0000000C end:0x00000010
+	.rodata     start:0x00001D58 end:0x000020E8
+	.data       start:0x00003FC8 end:0x00004B28
+	.bss        start:0x00000030 end:0x00000070
+
+REL/keyboard/tiCandidateBox.cpp:
+	.text       start:0x0001A870 end:0x00020B28 align:16
+	.ctors      start:0x00000010 end:0x00000014
+	.rodata     start:0x000020E8 end:0x00002558
+	.data       start:0x00004B28 end:0x000058C8
+
+REL/keyboard/tiToolBar.cpp:
+	.text       start:0x00020B30 end:0x00022178 align:16
+	.ctors      start:0x00000014 end:0x00000018
+	.rodata     start:0x00002558 end:0x00002738
+	.data       start:0x000058C8 end:0x00005C40
+
+REL/keyboard/tiPredictLang.cpp:
+	.text       start:0x00022180 end:0x00023828 align:16
+	.ctors      start:0x00000018 end:0x0000001C
+	.rodata     start:0x00002738 end:0x00002CB0
+	.data       start:0x00005C40 end:0x000062B0
+
+REL/keyboard/tiSignWindow.cpp:
+	.text       start:0x00023830 end:0x00025508 align:16
+	.ctors      start:0x0000001C end:0x00000020
+	.data       start:0x000062B0 end:0x00006D10
+
+REL/keyboard/tiString.cpp:
+	.text       start:0x00025510 end:0x00026A3C align:16
+	.data       start:0x00006D10 end:0x00006E30
+
+REL/keyboard/tiTextDrawer.cpp:
+	.text       start:0x00026A40 end:0x000278A4 align:16
+	.rodata     start:0x00002CB0 end:0x00002CE0
+	.data       start:0x00006E30 end:0x00006EC8
+	.bss        start:0x00000070 end:0x000005F0
+
+REL/keyboard/tiNw4rManager.cpp:
+	.text       start:0x000278B0 end:0x000291F4 align:16
+	.rodata     start:0x00002CE0 end:0x00002CF8
+	.data       start:0x00006EC8 end:0x00006FA0
+
+REL/keyboard/tiManager.cpp:
+	.text       start:0x00029200 end:0x0002B368 align:16
+	.ctors      start:0x00000020 end:0x00000024
+	.data       start:0x00006FA0 end:0x00007A40
+	.bss        start:0x000005F0 end:0x000005F8
+
+REL/keyboard/tiUtil.cpp:
+	.text       start:0x0002B370 end:0x0002C138 align:16
+	.ctors      start:0x00000024 end:0x00000028
+	.rodata     start:0x00002CF8 end:0x00003250
+	.data       start:0x00007A40 end:0x00007C60
+	.bss        start:0x000005F8 end:0x00000610
+
+REL/keyboard/tiCpData.cpp:
+	.text       start:0x0002C140 end:0x0002C658 align:16
+	.ctors      start:0x00000028 end:0x0000002C
+	.data       start:0x00007C60 end:0x0000B728
+
+REL/keyboard/tiSwData.cpp:
+	.text       start:0x0002C660 end:0x0002D034 align:16
+	.ctors      start:0x0000002C end:0x00000030
+	.data       start:0x0000B728 end:0x0000D8E8
+
+REL/keyboard/tiPkData.cpp:
+	.text       start:0x0002D040 end:0x0002DC54 align:16
+	.ctors      start:0x00000030 end:0x00000034
+	.data       start:0x0000D8E8 end:0x0000F178
+
+REL/keyboard/tiLanguageIndependentData.cpp:
+	.data       start:0x0000F178 end:0x0000F5B8
+
+REL/keyboard/tiTextInputBase.cpp:
+	.text       start:0x0002DC60 end:0x0002DD1C align:16
+	.data       start:0x0000F5B8 end:0x0000F5D8
+
+REL/keyboard/MyTiManager.cpp:
+	.text       start:0x0002DD20 end:0x00032378 align:16
+	.ctors      start:0x00000034 end:0x00000038
+	.rodata     start:0x00003250 end:0x000032E8
+	.data       start:0x0000F5D8 end:0x0000F998
+	.bss        start:0x00000610 end:0x00000640
+
+REL/keyboard/MyTiInputForm.cpp:
+	.text       start:0x00032380 end:0x00035FA8 align:16
+	.rodata     start:0x000032E8 end:0x00003828
+	.data       start:0x0000F998 end:0x00010058
+
+REL/keyboard/MyTiBg.cpp:
+	.text       start:0x00035FB0 end:0x00036088 align:16
+
+REL/keyboard/tiDebug.cpp:
+	.text       start:0x00036090 end:0x000366C0 align:16
+	.rodata     start:0x00003828 end:0x00003910
+
+REL/keyboard/tiGUIManager.cpp:
+	.text       start:0x000366C0 end:0x00037E78 align:16
+	.rodata     start:0x00003910 end:0x00003920
+	.data       start:0x00010058 end:0x000101D0
+
+REL/keyboard/tiHKBManager.cpp:
+	.text       start:0x00037E80 end:0x00037F14 align:16
+	.ctors      start:0x00000038 end:0x0000003C
+	.data       start:0x000101D0 end:0x000101E8
+	.bss        start:0x00000640 end:0x00000650
+
+REL/keyboard/tiHwKeyboard.cpp:
+	.text       start:0x00037F20 end:0x000382A4 align:16
+	.data       start:0x000101E8 end:0x00010210
+	.bss        start:0x00000650 end:0x0000065C
+
+REL/keyboard/tiLayout.cpp:
+	.text       start:0x000382B0 end:0x00038BA0 align:16
+	.data       start:0x00010210 end:0x00010274
