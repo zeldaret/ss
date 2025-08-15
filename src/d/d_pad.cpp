@@ -299,12 +299,12 @@ void endPad_BR() {
 void connectCallback(const EGG::CoreControllerConnectArg &rArg) {
     switch (rArg.result) {
         case WPAD_ERR_OK: {
-            dSndPlayerMgr_c::GetInstance()->setup(rArg.chan);
+            dSndPlayerMgr_c::GetInstance()->setupRmtSpeaker(rArg.chan);
             ex_c::m_ex[rArg.chan].mDidConnect = true;
             break;
         }
         case WPAD_ERR_NO_CONTROLLER: {
-            dSndPlayerMgr_c::GetInstance()->shutdown(rArg.chan);
+            dSndPlayerMgr_c::GetInstance()->shutdownRmtSpeaker(rArg.chan);
             ex_c::m_ex[rArg.chan].mDidDisconnect = true;
             break;
         }

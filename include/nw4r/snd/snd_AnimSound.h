@@ -91,7 +91,7 @@ public:
 
     bool Setup(const void *data);
     void Shutdown();
-    void ResetFrame(f32, int);
+    void ResetFrame(f32, int cycle);
     void UpdateFrame(f32 frame, PlayDirection dir);
     void UpdateForward(f32 frame);
     void UpdateBackward(f32 frame);
@@ -103,27 +103,78 @@ public:
     void StartEvent(const AnimEvent *, bool);
     void HoldEvent(const AnimEvent *, bool);
     void StopEvent(const AnimEvent *);
-    bool IsPlayableLoopCount(const nw4r::snd::detail::AnimEventFrameInfo&);
+    bool IsPlayableLoopCount(const nw4r::snd::detail::AnimEventFrameInfo &);
 
+    typedef void (*Callback)(int, s32, const char *, UNKWORD, void *userData);
 
-    typedef void (*Callback)(int, s32, const char *, UNKWORD, UNKWORD);
+    void SetCallback(Callback cb, void *userData) {
+        mCallback = cb;
+        mUserData = userData;
+    }
+
+    u32 GetAnimDuration() const {
+        return mReader.GetAnimDuration();
+    }
 
 private:
     /* 0x00 */ SoundStartable &mStartable;
     /* 0x04 */ AnimSoundFileReader mReader;
-    /* 0x0C */ f32 field_0x0C;
+    /* 0x0C */ f32 mCurrentFrame;
     /* 0x10 */ AnimEventPlayer *mpSounds;
     /* 0x14 */ int mNumSounds;
     /* 0x18 */ bool mIsActive;
-    /* 0x19 */ u8 field_0x19;
-    /* 0x1A */ u8 field_0x1A;
-    /* 0x1C */ UNKWORD field_0x1C;
+    /* 0x19 */ bool mNeedFrameReset;
+    /* 0x1A */ bool mNeedTriggerEventsAtCurrentFrame;
+    /* 0x1C */ int mCycleCounter;
     /* 0x20 */ Callback mCallback;
-    /* 0x24 */ UNKWORD field_0x24;
+    /* 0x24 */ void *mUserData;
     /* 0x28 */ f32 field_0x28;
     /* 0x2C */ f32 mVariableValue;
 };
 
 } // namespace detail
+
+// Not sure about this one but it appears game code isn't meant to access the "detail"
+// namespace so I guess some way for game code to use the above things need to exist
+class AnimSound {
+public:
+    AnimSound(SoundStartable &startable) : mImpl(startable, mPlayers, 8) {}
+
+    enum PlayDirection {
+        FORWARD,
+        BACKWARD,
+    };
+
+    typedef void (*Callback)(int, s32, const char *, UNKWORD, void *userData);
+
+    bool Setup(const void *data) {
+        return mImpl.Setup(data);
+    }
+
+    void UpdateFrame(f32 frame, PlayDirection dir) {
+        mImpl.UpdateFrame(frame, (detail::AnimSoundImpl::PlayDirection)dir);
+    }
+
+    void ResetFrame(f32 frame, int cycle) {
+        mImpl.ResetFrame(frame, cycle);
+    }
+
+    void Shutdown() {
+        mImpl.Shutdown();
+    }
+
+    void SetCallback(Callback cb, void *userData) {
+        mImpl.SetCallback(cb, userData);
+    }
+
+    u32 GetAnimDuration() const {
+        return mImpl.GetAnimDuration();
+    }
+
+private:
+    /* 0x00 */ detail::AnimSoundImpl mImpl;
+    /* 0x30 */ detail::AnimEventPlayer mPlayers[8];
+};
+
 } // namespace snd
 } // namespace nw4r

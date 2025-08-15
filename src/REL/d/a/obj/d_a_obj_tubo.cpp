@@ -217,7 +217,7 @@ void dAcOtubo_c::executeState_Wait() {
                 dJEffManager_c::spawnGroundEffect(position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
             }
             if (mbField_0x9F3) {
-                playSound(SE_Tubo_PUT);
+                startSound(SE_Tubo_PUT);
                 mbField_0x9F3 = false;
             }
             if (checkOnLava()) {
@@ -226,7 +226,7 @@ void dAcOtubo_c::executeState_Wait() {
                         position, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0
                     );
                 }
-                playSound(SE_O_FALL_LAVA_S);
+                startSound(SE_O_FALL_LAVA_S);
             }
         }
     } else if (mObjAcch.ChkGndHit()) {
@@ -467,7 +467,7 @@ void dAcOtubo_c::destroy() {
         fx_thing->bindShpEmitter(mSubtype != 0 ? dJEffManager_c::TsuboB : dJEffManager_c::TsuboA, false);
     }
 
-    playSound(SE_Tubo_BREAK);
+    startSound(SE_Tubo_BREAK);
 
     if (mSceneflag < 0xFF && !checkSceneflag()) {
         SceneflagManager::sInstance->setFlag(roomid, mSceneflag);
@@ -607,7 +607,7 @@ void dAcOtubo_c::fn_272_2670() {
         cLib::addCalcPosXZ(&velocity, mVec3_c::Zero, 0.05f, 1.0f, 0.2f);
         forwardSpeed = EGG::Math<f32>::sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
         if (!noSound) {
-            playSound(SE_O_FALL_WATER_S);
+            startSound(SE_O_FALL_WATER_S);
         }
         mbSubmerged = true;
     } else {
@@ -855,7 +855,7 @@ void dAcOtubo_c::playRollSound() {
         return;
     }
 
-    FUN_8002d770(SE_Tubo_ROLL_LV, forwardSpeed);
+    holdSoundWithFloatParam(SE_Tubo_ROLL_LV, forwardSpeed);
 }
 
 void float_order() {

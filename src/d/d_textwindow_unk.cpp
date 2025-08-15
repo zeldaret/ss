@@ -9,8 +9,8 @@
 #include "d/d_lyt_hio.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
+#include "d/snd/d_snd_fi_vocal_mgr.h"
 #include "m/m_vec.h"
-#include "toBeSorted/other_sound_stuff.h"
 
 TextWindowUnk::TextWindowUnk(dTagProcessor_c *c) {
     mpTagProcessor = c;
@@ -45,7 +45,7 @@ bool TextWindowUnk::fn_800B2130(const char *label, dTextBox_c *textBox, dLytMsgW
             mpTextBox, mRawTextBuffer, mUnkBuffer, field_0x1458, &field_0x1478, mpCharacterData
         );
         if (mpTagProcessor->getMsgWindowSubtype() == dLytMsgWindow_c::MSG_WINDOW_SWORD_FI) {
-            fn_803996B0(lbl_80575DE0, field_0x1402, field_0x1478, mpTagProcessor->getField_0x824());
+            dSndFiVocalMgr_c::GetInstance()->fiSpeak(field_0x1402, field_0x1478, mpTagProcessor->getField_0x824());
         }
     }
 

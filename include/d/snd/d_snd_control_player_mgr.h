@@ -22,6 +22,11 @@ public:
 
     dSndControlPlayerMgr_c();
 
+    void setupPlayerControlsGlobal();
+    void setupPlayerControlsStage();
+    void setupPlayerControlsStageBgm();
+    void setupPlayerControlsDemo();
+
     void calc();
 
     static const s32 sNumPlayers;
@@ -41,6 +46,9 @@ public:
     void muteAllWorldSounds(s32 fadeFrames);
     void unmuteAllWorldSounds(s32 fadeFrames);
 
+    void muteScenePlayers(s32 frames);
+    void unmuteScenePlayers(s32 frames);
+
     enum MuteLevel {
         MUTE_FULL = 0,
         MUTE_PARTIAL = 1,
@@ -49,7 +57,7 @@ public:
     };
 
     enum VolumeControlGroup {
-        /** PLAYER_BGM, PLAYER_BGM_BOSS */
+        /** PLAYER_BGM, PLAYER_BGM_BATTLE */
         CTRL_GROUP_BGM = 0,
         /** PLAYER_TG_SOUND - PLAYER_AREA_IN_WATER_LV */
         CTRL_GROUP_STAGE_EFFECTS = 1,
@@ -64,14 +72,14 @@ public:
 
     void setBgmVolumeDecreaseSpeed(f32 speed);
     void setStageEffectsVolume(f32 volume, s32 fadeFrames);
-
-private:
     void setBgmMuteVolume(f32 volume);
     void setStageEffectsMuteVolume(f32 volume);
     void setEnemyMuteVolume(f32 volume);
     void setObjectMuteVolume(f32 volume);
     void setPlayerVolumeInternal(u32 playerIdx, f32 volume);
 
+private:
+    void unmutePlayer(u32 playerIdx, s32 frames);
     void resetControls();
     void calcVolumes();
     void calcMuteFlags();

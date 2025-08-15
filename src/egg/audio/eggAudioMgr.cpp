@@ -62,7 +62,7 @@ void SimpleAudioMgr::initialize(EGG::IAudioMgr::Arg *arg) {
 
 void SimpleAudioMgr::calc() {
     AudioSystem::calc();
-    if (AudioSystem::isField0x04Eq2()) {
+    if (AudioSystem::isReset()) {
         ArcPlayer::stopAllSound();
     }
     ArcPlayer::calc();

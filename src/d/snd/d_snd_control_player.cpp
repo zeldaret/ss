@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/snd/d_snd_control_player_mgr.h"
+#include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_sound.h"
 #include "nw4r/snd/snd_SoundPlayer.h"
 #include "nw4r/snd/snd_global.h"
@@ -57,11 +58,9 @@ void dSndControlPlayerFxSend_c::apply() {
     mpPlayer->SetFxSend(nw4r::snd::AUX_B, mCurrValue);
 }
 
-extern "C" bool fn_8035F030(s32);
-
 f32 dSndControlPlayerFxSend_c::getAppliedValue() {
     int auxBus = nw4r::snd::AUX_A;
-    if (fn_8035F030(mIndex)) {
+    if (dSndPlayerMgr_c::isBgmPlayerId(mIndex)) {
         auxBus = nw4r::snd::AUX_B;
     }
     return mpPlayer->GetFxSend(auxBus);
