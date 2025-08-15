@@ -37,6 +37,7 @@ public:
 
 private:
     /* 0x00068 */ UI_STATE_MGR_DECLARE(dLytControlGame_c);
+    
 
     static dLytControlGame_c *sInstance;
 };

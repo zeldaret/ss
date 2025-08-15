@@ -1,9 +1,10 @@
 #include "d/lyt/d_lyt_map.h"
 
 #include "common.h"
+#include "d/d_cursor_hit_check.h"
+#include "d/d_d2d.h"
 #include "d/d_pad_nav.h"
 #include "d/lyt/d2d.h"
-#include "d/d_cursor_hit_check.h"
 #include "egg/core/eggColorFader.h"
 #include "m/m_video.h"
 #include "sized_string.h"
@@ -485,13 +486,12 @@ dLytMapMain_c::~dLytMapMain_c() {}
 
 void dLytMapMain_c::draw() {}
 
-extern "C" void fn_80016690();
 void dLytMap_c::build() {
-    fn_80016690();
+    d2d::setLytAllocator();
     void *data = LayoutArcManager::GetInstance()->getLoadedData("Map2D");
     mResAcc.attach(data, "");
     mMapMain.build();
-    m2d::getAllocator();
+    m2d::setLytAllocator();
     mMapMain.setPriority(0x86);
     // TODO there's another thing here at 0x91C0
 }

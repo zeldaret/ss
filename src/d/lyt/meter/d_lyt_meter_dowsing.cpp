@@ -631,7 +631,7 @@ void dLytMeterDowsing_c::executeState_Unuse() {
         mLyt.calc();
         mAnm[DOWSING_ANIM_INPUT_0].setAnimEnable(false);
         mStateMgr.changeState(StateID_DemoMove);
-    } else if (!dLytMeter_c::GetMain()->fn_800D5680() && dLytMeter_c::GetInstance()->getMeterField_0x13774() == 0 &&
+    } else if (!dLytMeter_c::GetMain()->fn_800D5680() && !dLytMeter_c::GetInstance()->isHelpOpen() &&
                dLytMeter_c::GetInstance()->checkAllFlags(METER_BTN_C)) {
         if (field_0x54D8 <= 0) {
             mStateMgr.changeState(StateID_ToUse);

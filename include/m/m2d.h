@@ -231,7 +231,8 @@ private:
     u32 field_0x94;
 };
 
-void getAllocator();
+// Inofficial, not found in NSMBW
+void setLytAllocator();
 
 } // namespace m2d
 

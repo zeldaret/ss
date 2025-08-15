@@ -10,6 +10,8 @@ void defaultSet();
 void drawBefore();
 void draw();
 
+void setLytAllocator();
+
 } // namespace d2d
 
 #endif
