@@ -27,6 +27,7 @@
 #include "rvl/VI/vi.h"
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/save_manager.h"
+#include "THPPlayer/THPPlayer.h"
 
 #include "rvl/OS.h"
 
@@ -296,7 +297,6 @@ void Manage_c::ModeProc_Normal() {
     }
 }
 
-extern "C" void fn_803267B0(s32, s32);
 void Manage_c::ModeInit_SoftReset() {
     DebugPrintMode("SoftReset");
     if (mSoftReset) {
@@ -315,7 +315,7 @@ void Manage_c::ModeInit_SoftReset() {
             } else {
                 dSndPlayerMgr_c::GetInstance()->fn_8035E250(30);
             }
-            fn_803267B0(0, 60);
+            THPPlayerSetVolume(0, 60);
             mpFader->setFrame(30);
             mpFader->fadeOut();
             field_0x66 = true;
