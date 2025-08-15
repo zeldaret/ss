@@ -165,7 +165,8 @@ void ThpVideoScreen::draw() {
     drawTHPFrame(mEfbWidth, mEfbHeight, (mEfbWidth - mVideoWidth) / 2, (mEfbHeight - mVideoHeight) / 2, mVideoWidth, mVideoHeight);
 }
 
-extern "C" s32 fn_80273B50(s32 p1, s32 p2, s32 p3, s32 p4, s32 p5) {
+// THPPlayer calls this instead of directly calling THPVideoDecode.
+extern "C" s32 THPVideoDecodeLC(s32 p1, s32 p2, s32 p3, s32 p4, s32 p5) {
     nw4r::ut::LC::Lock();
     s32 result = THPVideoDecode(p1, p2, p3, p4, p5);
     nw4r::ut::LC::Unlock();

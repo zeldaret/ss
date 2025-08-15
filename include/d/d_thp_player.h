@@ -9,7 +9,7 @@
 #include "sized_string.h"
 
 class ThpVideoScreen : public m2d::Base_c {
-    public:
+public:
     ThpVideoScreen() {
         mEfbWidth = 0;
         mEfbHeight = 0;
@@ -28,6 +28,7 @@ class ThpVideoScreen : public m2d::Base_c {
         mVideoHeight = height;
     }
 
+private:
     /* 0x10 */ s32 mEfbWidth;
     /* 0x14 */ s32 mEfbHeight;
     /* 0x18 */ s32 mVideoWidth;
@@ -50,18 +51,19 @@ public:
     s32 play();
     s32 destroy();
     void open();
-    void setupFile(char* filename, s32 loadAllAtOnce);
+    void setupFile(char *filename, s32 loadAllAtOnce);
 
-    /* 0x68 */ mDvd_callback_c* mDvdCallback;
+private:
+    /* 0x68 */ mDvd_callback_c *mDvdCallback;
     /* 0x6C */ SizedString<0x20> mFilename;
-    
+
     /* 0x8C */ THPVideoInfo mVideoComponent;
     /* 0x98 */ THPAudioInfo mAudioComponent;
     /* 0xA8 */ s32 mLoadAllAtOnce;
     /* 0xAC */ s32 mFilenameSet;
     /* 0xB0 */ s32 mSetupDone;
     /* 0xB4 */ s32 isPlaying;
-    /* 0xB8 */ u8* mBuffer;
+    /* 0xB8 */ u8 *mBuffer;
     /* 0xBC */ ThpVideoScreen mScreen;
     /* 0xDC */ s32 mSpecialType;
 };

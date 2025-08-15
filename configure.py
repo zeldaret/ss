@@ -248,6 +248,15 @@ cflags_libms = [
     "-Cpp_exceptions on",
 ]
 
+# THPPlayer flags
+cflags_thpplayer = [
+    *cflags_base,
+    "-inline noauto",
+    "-fp_contract off",
+    "-lang=C++",
+    "-Cpp_exceptions on",
+]
+
 # EGG flags
 cflags_egg = [
     *cflags_base,
@@ -648,7 +657,20 @@ config.libs = [
             Object(NonMatching, "toBeSorted/d_sc_e3_title.cpp"),
             Object(NonMatching, "toBeSorted/d_sc_e3_game_end.cpp"),
             Object(Matching, "DynamicLink.cpp"),
-            Object(NonMatching, "toBeSorted/d_thp.cpp"),
+        ],
+    },
+    {
+        "lib": "thpplayer",
+        "mw_version": "Wii/1.5",
+        "cflags": cflags_thpplayer,
+        "progress_category": "thpplayer",
+        "host": False,
+        "objects": [
+            Object(NonMatching, "THPPlayer/THPAudioDecode.c"),
+            Object(NonMatching, "THPPlayer/THPDraw.c"),
+            Object(NonMatching, "THPPlayer/THPPlayer.c"),
+            Object(NonMatching, "THPPlayer/THPRead.c"),
+            Object(NonMatching, "THPPlayer/THPVideoDecode.c"),
         ],
     },
     {
@@ -2925,6 +2947,7 @@ config.progress_categories = [
     ProgressCategory("jsystem", "JSystem"),
     ProgressCategory("hbm", "Home Button Menu"),
     ProgressCategory("keyboard", "Virtual Keyboard"),
+    ProgressCategory("thpplayer", "THPPlayer"),
 ]
 config.progress_each_module = args.verbose
 # Optional extra arguments to `objdiff-cli report generate`
