@@ -20,7 +20,7 @@ SPECIAL_BASE_PROFILE(THPPLAYER, dThpPlayer_c, fProfile::THPPLAYER, 0x3, 0x400);
 
 int dThpPlayer_c::create() {
     reallyCreate(mVideo::m_video->pRenderMode->fbWidth, mVideo::m_video->pRenderMode->efbHeight);
-    return 1;
+    return SUCCEEDED;
 }
 
 int dThpPlayer_c::doDelete() {
