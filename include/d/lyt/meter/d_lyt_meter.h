@@ -187,7 +187,7 @@ private:
     /* 0x13771 */ bool field_0x13771;
     /* 0x13772 */ bool field_0x13772;
     /* 0x13773 */ bool field_0x13773;
-    /* 0x13774 */ bool field_0x13774;
+    /* 0x13774 */ bool mHelpOpen;
     /* 0x13775 */ bool field_0x13775;
     /* 0x13776 */ bool mTimerVisible;
     /* 0x13777 */ bool mBirdGaugeVisible;
@@ -276,8 +276,12 @@ public:
         mMain.field_0x13773 = value;
     }
 
-    bool getMeterField_0x13774() const {
-        return mMain.field_0x13774;
+    bool isHelpOpen() const {
+        return mMain.mHelpOpen;
+    }
+
+    void setHelpOpen(bool val) {
+        mMain.mHelpOpen = val;
     }
 
     void setMeterField_0x13775(bool val) {

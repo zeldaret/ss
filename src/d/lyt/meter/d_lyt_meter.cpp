@@ -350,7 +350,7 @@ bool dLytMeter2Button_c::remove() {
 
 bool dLytMeter2Button_c::execute() {
     dLytMeter_c *meter = dLytMeter_c::GetInstance();
-    if (meter->getMeterField_0x13774()) {
+    if (meter->isHelpOpen()) {
         StoryflagManager::sInstance->unsetFlag(832);
     }
     if (mpOwnerPane == nullptr) {
@@ -579,7 +579,7 @@ bool dLytMeterMain_c::fn_800C9FE0() {
 }
 
 bool dLytMeterMain_c::fn_800CA040() {
-    if (field_0x13774 || fn_800D5650() || fn_800D5680()) {
+    if (mHelpOpen || fn_800D5650() || fn_800D5680()) {
         return true;
     }
     return false;
@@ -853,7 +853,7 @@ bool dLytMeterMain_c::build(d2d::ResAccIf_c *resAcc) {
     mBasicPosition = POSITION_NORMAL;
     field_0x13750 = 4;
     field_0x13770 = 3;
-    field_0x13774 = 0;
+    mHelpOpen = false;
     field_0x13775 = 0;
     field_0x13773 = 0;
     mTimerVisible = false;
@@ -1021,7 +1021,7 @@ bool dLytMeterMain_c::fn_800D5380(u8 arg) {
 }
 
 bool dLytMeterMain_c::fn_800D53D0() {
-    if (checkIsInSkykeepPuzzle() && !field_0x13774) {
+    if (checkIsInSkykeepPuzzle() && !mHelpOpen) {
         return true;
     }
     return false;
@@ -1086,7 +1086,7 @@ bool dLytMeterMain_c::fn_800D56B0() {
 
     if ((EventManager::isInEvent() && field_0x1377E == 0 && dAcPy_c::GetLink()->getCurrentAction() != 0x8C &&
          dMessage_c::getInstance()->getField_0x32C() == 0xC) ||
-        field_0x13774) {
+        mHelpOpen) {
         return true;
     }
 
@@ -1350,7 +1350,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
     }
 
     if ((dAcPy_c::GetLink()->hasvt_0x1C0() || dAcPy_c::GetLink()->checkActionFlagsCont(0x10) ||
-         (fn_800D56B0() && !field_0x13774) || mGanbariGauge.fn_80104760() ||
+         (fn_800D56B0() && !mHelpOpen) || mGanbariGauge.fn_80104760() ||
 
          MinigameManager::isInMinigameState(MinigameManager::FUN_FUN_ISLAND) ||
          MinigameManager::isInMinigameState(MinigameManager::THRILL_DIGGER) ||

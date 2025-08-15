@@ -62,8 +62,7 @@ void drawBefore(u8 priority) {
     }
 }
 
-// Despite the name this *updates* Lyt's allocator
-void getAllocator() {
+void setLytAllocator() {
     nw4r::lyt::Layout::mspAllocator = l_allocator;
 }
 

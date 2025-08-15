@@ -22,8 +22,8 @@ public:
 
     void setHeight(f32 height);
 
-    bool wantsMove() {
-        return mWantsModeChange;
+    bool isIdle() {
+        return mIsIdle;
     }
 
     const d2d::dLytSub &getLyt() const {
@@ -43,7 +43,7 @@ private:
     /* 0x004 */ UI_STATE_MGR_DECLARE(dLytSkyGaugeMain_c);
     /* 0x040 */ d2d::dLytSub mLyt;
     /* 0x0D4 */ d2d::AnmGroup_c mAnmGroups[3];
-    /* 0x194 */ bool mWantsModeChange;
+    /* 0x194 */ bool mIsIdle;
     /* 0x195 */ bool field_0x195; // unused
 };
 
