@@ -9,6 +9,7 @@
 #include "m/m2d.h"
 #include "m/m_angle.h"
 #include "m/m_vec.h"
+#include "nw4r/lyt/lyt_pane.h"
 
 class dCsBase_c : public dCs_c {
 public:
@@ -37,8 +38,16 @@ public:
         return mCursorIf.getHit();
     }
 
+    dCursorInterface_c *getCursorIf() {
+        return &mCursorIf;
+    }
+
     static dCsBase_c *GetInstance() {
         return sInstance;
+    }
+
+    void setCursorStickTargetPane(const nw4r::lyt::Pane *target) {
+        mCursorStick.setTargetPane(target);
     }
 
 private:

@@ -217,7 +217,8 @@ void dLytMsgWindowSelectBtn_c::initializeState_In() {
     field_0x9A4 = 1;
     field_0x9B4 = -1;
     for (int i = 0; i < 2; i++) {
-        mLyt.fn_800AB9A0(mpDecideTextBoxes[i], 1);
+        // "Select"
+        mLyt.loadTextVariant(mpDecideTextBoxes[i], 1);
     }
 
     mpWindow->UpdateSize(mpSizeBox, 32.0f);
@@ -317,7 +318,8 @@ void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
         f32 f = mBtnHelper.fn_8011D690(mBtnHelper.field_0x50);
         // TODO
         for (int i = 0; i < 2; i++) {
-            mLyt.fn_800AB9A0(mpDecideTextBoxes[i], 0);
+            // "Confirm"
+            mLyt.loadTextVariant(mpDecideTextBoxes[i], 0);
         }
 
         mpWindow->UpdateSize(mpSizeBox, 32.0f);

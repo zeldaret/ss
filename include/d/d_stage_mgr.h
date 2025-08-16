@@ -7,6 +7,7 @@
 #include "d/d_bzs_types.h"
 #include "d/d_dylink.h"
 #include "d/d_fader.h"
+#include "egg/gfx/eggCpuTexture.h"
 #include "egg/gfx/eggScreen.h"
 #include "m/m_allocator.h"
 #include "m/m_dvd.h"
@@ -76,6 +77,10 @@ public:
 
     static dStageMgr_c *GetInstance() {
         return sInstance;
+    }
+
+    EGG::CpuTexture *getField_0x8898() {
+        return field_0x8898;
     }
 
     bool checkFlag0x88A0(u32 flag) const {
@@ -190,7 +195,10 @@ private:
     /* 0x8694 */ dTimeAreaMgr_c mTimeAreaMgr;
 
     // ...
-    u8 ___[446];
+    u8 ___[438];
+    /* 0x8898 */ EGG::CpuTexture *field_0x8898;
+    
+    u8 _0x889C[4];
 
     /* 0x88A0 */ u32 field_0x88A0;
     /* 0x88A4 */ SizedString<16> mDemoName;

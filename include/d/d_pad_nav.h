@@ -38,13 +38,33 @@ inline bool isPointerVisible() {
     return sIsPointerVisible;
 }
 
+inline bool isPrevPointerVisible() {
+    return sPrevIsPointerVisible;
+}
+
 inline bool isCursorStickVisible() {
     return sIsCursorStickVisible;
 }
 
+inline s32 getFSStickNavDirection() {
+    return sFSStickNavDirection;
+}
+
+inline bool isMplsNavLeftGesture() {
+    return sIsMplsNavLeftGesture;
+}
+
+inline bool isMplsNavRightGesture() {
+    return sIsMplsNavRightGesture;
+}
+
+inline bool isMplsNavGesture() {
+    return isMplsNavLeftGesture() || isMplsNavRightGesture();
+}
+
 void init();
 void calc();
-void setNavEnabled(bool navEnabled, bool autoReturnToPointerNav);
+void setNavEnabled(bool navEnabled, bool disableAutoReturnToPointerNav);
 
 // I really wish these returned enums but the codegen requires not-enums
 s32 getFSStickDirection();

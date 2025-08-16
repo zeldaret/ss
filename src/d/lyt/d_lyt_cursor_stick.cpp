@@ -150,7 +150,7 @@ void dLytCursorStick_c::executeState_On() {
 }
 void dLytCursorStick_c::finalizeState_On() {}
 
-void dLytCursorStick_c::setTargetPane(nw4r::lyt::Pane *pane) {
+void dLytCursorStick_c::setTargetPane(const nw4r::lyt::Pane *pane) {
     mpTargetPane = pane;
     positionToTarget();
 }
