@@ -81,7 +81,7 @@ void SaveMgr::init() {
     mDelayTimer = 0;
     FileManager::GetInstance()->setField0xA840(1);
     if (dCsBase_c::GetInstance() != nullptr) {
-        dCsBase_c::GetInstance()->setField704(false);
+        dCsBase_c::GetInstance()->setDrawDirectly(false);
     }
     if (mpWindow != nullptr) {
         mpWindow->reset();
@@ -175,7 +175,7 @@ bool SaveMgr::saveAfterCredits() {
         return false;
     }
     field_0x836 = 0;
-    dDvdUnk::FontUnk::GetInstance()->fn_80052D00(true);
+    dDvdUnk::FontUnk::GetInstance()->setNeedsPad(true);
     FileManager::GetInstance()->setFileTimes();
     FileManager::GetInstance()->saveAfterCredits();
     initializeSave();
@@ -218,7 +218,7 @@ void SaveMgr::initializeCheckForSave() {
     beginState(STATE_CHECK_FOR_SAVE);
     mCheckIsFileRequest.checkIsFile(sSaveFileName);
     field_0x839 = 0;
-    dDvdUnk::FontUnk::GetInstance()->fn_80052D00(false);
+    dDvdUnk::FontUnk::GetInstance()->setNeedsPad(false);
 }
 
 void SaveMgr::executeCheckForSave() {
@@ -290,7 +290,7 @@ void SaveMgr::executeCheckForSave() {
 
 void SaveMgr::initializeCheckForFreeSpace() {
     beginState(STATE_CHECK_FOR_FREE_SPACE);
-    dDvdUnk::FontUnk::GetInstance()->fn_80052D00(false);
+    dDvdUnk::FontUnk::GetInstance()->setNeedsPad(false);
     mCheckRequest.check(7, 3);
     mCheckForFreeSpaceResult = 0;
 }
@@ -327,7 +327,7 @@ void SaveMgr::initializeCreateFiles() {
     beginState(STATE_CREATE_FILES);
     field_0x838 = 1;
     FileManager::GetInstance()->setField0xA84D(1);
-    dDvdUnk::FontUnk::GetInstance()->fn_80052D00(false);
+    dDvdUnk::FontUnk::GetInstance()->setNeedsPad(false);
 }
 
 void SaveMgr::executeCreateFiles() {
@@ -510,7 +510,7 @@ void SaveMgr::executeSaveBanner() {
             }
 
             if (b == 1) {
-                if (!dDvdUnk::FontUnk::GetInstance()->getField_0x28()) {
+                if (!dDvdUnk::FontUnk::GetInstance()->isDiskError()) {
                     dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_SAVE_FINISH);
                 }
                 mDelayTimer = 0;
@@ -532,8 +532,8 @@ void SaveMgr::executeSaveBanner() {
         }
         case 5: {
             if (mpWindow->getWillFinishOut() == 1) {
-                if (fontUnk->getField_0x29() == 1) {
-                    fontUnk->fn_80052C90();
+                if (fontUnk->isNandError() == 1) {
+                    fontUnk->clearNandTrackerError();
                 }
                 field_0x838 = 0;
                 field_0x83A = 0;
@@ -721,7 +721,7 @@ void SaveMgr::executeLoadSave() {
 void SaveMgr::initializeWriteSave() {
     beginState(STATE_WRITE);
     mDelayTimer = 0;
-    dDvdUnk::FontUnk::GetInstance()->fn_80052D00(false);
+    dDvdUnk::FontUnk::GetInstance()->setNeedsPad(false);
     FileManager::GetInstance()->setField0xA84D(1);
     field_0x83D = 1;
 }
@@ -1110,7 +1110,7 @@ void SaveMgr::executeClearSelectedFile() {
 void SaveMgr::initializeSave() {
     beginState(STATE_SAVE);
     FileManager::GetInstance()->setField0xA840(0);
-    dDvdUnk::FontUnk::GetInstance()->fn_80052D00(false);
+    dDvdUnk::FontUnk::GetInstance()->setNeedsPad(false);
     FileManager::GetInstance()->setField_0xA843(1);
 }
 
@@ -1218,7 +1218,7 @@ void SaveMgr::initializeError() {
     FileManager::GetInstance()->setField0xA84D(0);
     field_0x83D = 0;
     beginState(STATE_ERROR);
-    dDvdUnk::FontUnk::GetInstance()->fn_80052D00(true);
+    dDvdUnk::FontUnk::GetInstance()->setNeedsPad(true);
     field_0x83F = 0;
 }
 
@@ -1227,7 +1227,7 @@ void SaveMgr::executeError() {
     FileManager *fileManager = FileManager::GetInstance();
     switch (mStep) {
         case 0: {
-            if (dDvdUnk::FontUnk::GetInstance()->getField_0x24() == 4) {
+            if (dDvdUnk::FontUnk::GetInstance()->getNandError() == NandResultTracker::ERR_CAT_SAVE_MGR) {
                 if (field_0x837 == true) {
                     // "The save data is corrupted. Save data will be restored."
                     if (systemWindow->setProperties("SYS_INIT_05", false, nullptr) == true) {
@@ -1239,7 +1239,7 @@ void SaveMgr::executeError() {
                     if (systemWindow->setProperties("SYS_INIT_04", false, nullptr) == true) {
                         systemWindow->showMaybe(4);
                         mStep = 1;
-                        dCsBase_c::GetInstance()->setField704(true);
+                        dCsBase_c::GetInstance()->setDrawDirectly(true);
                     }
                 } else {
                     // "The file cannot be used because nthe data is corrupted. All data saved up to this point will be
@@ -1247,7 +1247,7 @@ void SaveMgr::executeError() {
                     if (systemWindow->setProperties("SYS_NAND_07", false, nullptr) == true) {
                         systemWindow->showMaybe(4);
                         mStep = 1;
-                        dCsBase_c::GetInstance()->setField704(true);
+                        dCsBase_c::GetInstance()->setDrawDirectly(true);
                     }
                 }
             }
@@ -1274,7 +1274,7 @@ void SaveMgr::executeError() {
                     mStep = 3;
                 } else {
                     initializeDeleteAllData();
-                    dCsBase_c::GetInstance()->setField704(false);
+                    dCsBase_c::GetInstance()->setDrawDirectly(false);
                 }
             }
             break;
@@ -1336,11 +1336,11 @@ void SaveMgr::executeError() {
         }
         case 10: {
             if (systemWindow->fn_80152F70() == true) {
-                dDvdUnk::FontUnk::GetInstance()->fn_80052C90();
+                dDvdUnk::FontUnk::GetInstance()->clearNandTrackerError();
                 if (field_0x837 != true) {
                     fileManager->setField0xA84C(1);
                 }
-                dCsBase_c::GetInstance()->setField704(false);
+                dCsBase_c::GetInstance()->setDrawDirectly(false);
                 endState();
             }
             break;
@@ -1372,7 +1372,7 @@ void SaveMgr::executeError() {
 void SaveMgr::initializeNandError() {
     FileManager::GetInstance()->setField0xA84D(0);
     field_0x83D = 0;
-    dDvdUnk::FontUnk::GetInstance()->fn_80052D00(true);
+    dDvdUnk::FontUnk::GetInstance()->setNeedsPad(true);
     beginState(STATE_NAND_ERROR);
 }
 
@@ -1424,7 +1424,7 @@ void SaveMgr::executeNandError() {
             // "Do you want to go to the Wii console's Data Management screen to edit data? [1]Yes[2]No"
             if (systemWindow->setProperties("SYS_NAND_04", false, nullptr) == true) {
                 systemWindow->showMaybe(4);
-                dCsBase_c::GetInstance()->setField704(true);
+                dCsBase_c::GetInstance()->setDrawDirectly(true);
                 mStep = 5;
             }
             break;
@@ -1455,7 +1455,7 @@ void SaveMgr::executeNandError() {
             if (systemWindow->getField_0xDE0() == 0) {
                 mStep = 9;
             } else {
-                dCsBase_c::GetInstance()->setField704(false);
+                dCsBase_c::GetInstance()->setDrawDirectly(false);
                 dReset::Manage_c::GetInstance()->SetInteriorReturnDataManager();
                 endState();
                 field_0x836 = 0;
@@ -1501,8 +1501,8 @@ void SaveMgr::executeNandError() {
         }
         case 13: {
             if (systemWindow->fn_80152F70() == 1) {
-                dCsBase_c::GetInstance()->setField704(false);
-                dDvdUnk::FontUnk::GetInstance()->fn_80052C90();
+                dCsBase_c::GetInstance()->setDrawDirectly(false);
+                dDvdUnk::FontUnk::GetInstance()->clearNandTrackerError();
                 fileManager->setField0xA84C(1);
                 endState();
             }
@@ -1522,7 +1522,7 @@ void SaveMgr::endState() {
     field_0x836 = 1;
     FileManager::GetInstance()->setField0xA840(1);
     field_0x83D = 0;
-    dDvdUnk::FontUnk::GetInstance()->fn_80052D00(true);
+    dDvdUnk::FontUnk::GetInstance()->setNeedsPad(true);
     field_0x83B = 0;
     field_0x83C = 0;
     mCurrentState = STATE_MAX;

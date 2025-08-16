@@ -44,6 +44,7 @@ public:
     void fn_8035E250(u16);
     bool fn_8035E2E0();
     void fn_8035E310();
+    void fn_8035E620();
     void fn_8035E6E0();
 
     u32 getFreeSize();

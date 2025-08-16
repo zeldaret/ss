@@ -149,7 +149,7 @@ int dCsGame_c::create() {
     mCursor.setField0x9A0(0);
     mCursorIf.setCursorMask(2);
     dCsMgr_c::GetInstance()->registCursor(&mCursorIf);
-    dCsBase_c::GetInstance()->setField703(false);
+    dCsBase_c::GetInstance()->setVisible(false);
     return SUCCEEDED;
 }
 

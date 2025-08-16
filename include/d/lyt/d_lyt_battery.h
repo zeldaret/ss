@@ -11,6 +11,10 @@ public:
     static bool draw();
     bool dismissManually();
 
+    static dLytBattery_c *GetInstance() {
+        return sInstance;
+    }
+
 private:
     dLytBattery_c() : mStateMgr(*this, sStateID::null) {
         sInstance = this;
