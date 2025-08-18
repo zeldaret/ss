@@ -24,11 +24,11 @@ bool LayoutArcManager::loadLayoutArcFromDisk(const char *object, EGG::Heap *heap
     return mArcTable.getArcOrLoadFromDisk(object, "Layout", 0, heap);
 }
 
-int LayoutArcManager::ensureLoaded1(const char *object) {
+dArcResult_e LayoutArcManager::ensureLoaded1(const char *object) {
     return mArcTable.ensureLoadedMaybe2(object);
 }
 
-int LayoutArcManager::ensureLoaded2(const char *object) {
+dArcResult_e LayoutArcManager::ensureLoaded2(const char *object) {
     return mArcTable.ensureLoadedMaybe(object);
 }
 

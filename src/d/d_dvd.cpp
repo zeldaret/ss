@@ -38,7 +38,7 @@ void *loader_c::request(const char *path, u8 mountDirection, EGG::Heap *heap) {
         }
         mpCommand = mDvd_toMainRam_normal_c::create(buf, mountDirection, heap);
     }
-    if (mpCommand != nullptr && mpCommand->mStatus != 0) {
+    if (mpCommand != nullptr && mpCommand->isDone()) {
         mpBuffer = mpCommand->mDataPtr;
         mSize = mpCommand->mAmountRead;
         mpCommand->mDataPtr = nullptr;

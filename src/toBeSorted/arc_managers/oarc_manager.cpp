@@ -34,12 +34,12 @@ bool OarcManager::addEntryFromSuperArc(const char *object, void *data, EGG::Heap
     return mArcTable.addEntryFromSuperArc(object, data, 0, heap);
 }
 
-int OarcManager::ensureLoaded1(const char *object) {
+dArcResult_e OarcManager::ensureLoaded1(const char *object) {
     return mArcTable.ensureLoadedMaybe2(object);
 }
 
-void OarcManager::ensureLoaded2(const char *object) {
-    mArcTable.ensureLoadedMaybe(object);
+dArcResult_e OarcManager::ensureLoaded2(const char *object) {
+    return mArcTable.ensureLoadedMaybe(object);
 }
 
 bool OarcManager::decrement(const char *path) {

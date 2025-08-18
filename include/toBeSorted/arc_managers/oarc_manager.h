@@ -13,15 +13,15 @@ public:
 
     void init(EGG::Heap *heap);
 
-    inline int ensureAllEntriesLoaded() {
+    inline dArcResult_e ensureAllEntriesLoaded() {
         return mArcTable.ensureAllEntriesLoaded();
     }
 
     bool checkIfObjectArcExistsOnDisk(const char *object);
     bool loadObjectArcFromDisk(const char *object, EGG::Heap *heap);
     bool addEntryFromSuperArc(const char *object, void *data, EGG::Heap *heap);
-    int ensureLoaded1(const char *object);
-    void ensureLoaded2(const char *object);
+    dArcResult_e ensureLoaded1(const char *object);
+    dArcResult_e ensureLoaded2(const char *object);
     bool decrement(const char *path);
     void *getData(const char *oarcName, const char *fileName);
 

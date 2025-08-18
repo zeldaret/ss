@@ -13,6 +13,7 @@
 #include "d/col/cc/d_cc_s.h"
 #include "d/d_light_env.h"
 #include "d/d_pouch.h"
+#include "d/d_rawarchive.h"
 #include "d/d_room.h"
 #include "d/d_stage.h"
 #include "d/flag/sceneflag_manager.h"
@@ -1165,7 +1166,7 @@ int dAcTbox_c::doDelete() {
     }
     if (sCurrentObtainingItemOarcName != nullptr) {
         OarcManager *mng = OarcManager::GetInstance();
-        if (!mng->ensureLoaded1(sCurrentObtainingItemOarcName)) {
+        if (mng->ensureLoaded1(sCurrentObtainingItemOarcName) != D_ARC_RESULT_OK) {
             mng->decrement(sCurrentObtainingItemOarcName);
             sCurrentObtainingItemOarcName = nullptr;
         }
@@ -1884,7 +1885,7 @@ void dAcTbox_c::initializeState_DeleteArchive() {
 void dAcTbox_c::executeState_DeleteArchive() {
     if (sCurrentObtainingItemOarcName != nullptr) {
         OarcManager *mng = OarcManager::GetInstance();
-        if (!mng->ensureLoaded1(sCurrentObtainingItemOarcName)) {
+        if (mng->ensureLoaded1(sCurrentObtainingItemOarcName) != D_ARC_RESULT_OK) {
             mng->decrement(sCurrentObtainingItemOarcName);
             sCurrentObtainingItemOarcName = nullptr;
         }
@@ -1922,7 +1923,7 @@ void dAcTbox_c::initializeState_LoadArchive() {
     field_0x120C = 0;
 }
 void dAcTbox_c::executeState_LoadArchive() {
-    if (!OarcManager::GetInstance()->ensureLoaded1(sCurrentObtainingItemOarcName)) {
+    if (OarcManager::GetInstance()->ensureLoaded1(sCurrentObtainingItemOarcName) != D_ARC_RESULT_OK) {
         mStateMgr.changeState(StateID_Open);
     }
 }
