@@ -1,6 +1,7 @@
 #include "d/lyt/d_lyt_wipe.h"
 
 #include "common.h"
+#include "d/d_fader.h"
 #include "d/d_stage.h"
 #include "d/lyt/d2d.h"
 #include "toBeSorted/arc_managers/layout_arc_manager.h"
@@ -148,7 +149,7 @@ void dLytWipe_c::executeState_None() {
         mIsSettled = false;
         // State IN fades OUT, because I guess the fader fades the scene out,
         // which means Wipe is In
-        if (dStage_c::GetInstance()->fadeOut(2, 16)) {
+        if (dStage_c::GetInstance()->fadeOut(dFader_c::FADER_LYT, 16)) {
             mStateMgr.changeState(StateID_In);
             mWantsIn = false;
             mVisible = true;
@@ -207,7 +208,7 @@ void dLytWipe_c::executeState_Out() {
         dStage_c::GetInstance()->forceFadeOut();
         mFadeDelay--;
         if (mFadeDelay == 0) {
-            dStage_c::GetInstance()->fadeIn(2, 16);
+            dStage_c::GetInstance()->fadeIn(dFader_c::FADER_LYT, 16);
             mMain.gotoNone();
             mTransitionStage = 2;
         }

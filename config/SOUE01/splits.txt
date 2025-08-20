@@ -1541,7 +1541,9 @@ d/lyt/d_lyt_game_over.cpp:
 	.ctors      start:0x804DB860 end:0x804DB864
 	.rodata     start:0x804EE700 end:0x804EE778
 	.data       start:0x80537970 end:0x80538160
+	.sdata      start:0x80573B58 end:0x80573B80
 	.sbss       start:0x80575948 end:0x80575950
+	.sdata2     start:0x8057C6A0 end:0x8057C6B0
 	.bss        start:0x805B5D40 end:0x805B5F00
 
 d/lyt/d_lyt_save_mgr.cpp:

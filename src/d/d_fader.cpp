@@ -36,18 +36,18 @@ bool dFader_c::create() {
         return false;
     }
 
-    mFadeOutType = 0;
-    mFadeInType = 0;
+    mFadeOutType = FADER_BLACK;
+    mFadeInType = FADER_BLACK;
     mFadeInFrame = 0x1E;
     mFadeOutFrame = 0x1E;
-    setFader(0);
+    setFader(FADER_BLACK);
 
     return true;
 }
 
 bool dFader_c::setFader(s32 fader) {
     switch (fader) {
-        case 0:
+        case FADER_BLACK:
             if (mFader_c::setFader(mpColorFader)) {
                 if (mpColorFader->getStatus() == mFaderBase_c::FADED_IN) {
                     mpColorFader->setColor(mColor(0, 0, 0, 0xFF));
@@ -55,7 +55,7 @@ bool dFader_c::setFader(s32 fader) {
                 return true;
             }
             break;
-        case 1:
+        case FADER_GREY:
             if (mFader_c::setFader(mpColorFader)) {
                 if (mpColorFader->getStatus() == mFaderBase_c::FADED_IN) {
                     mpColorFader->setColor(mFaderColor);
@@ -63,7 +63,7 @@ bool dFader_c::setFader(s32 fader) {
                 return true;
             }
             break;
-        case 2:
+        case FADER_LYT:
             if (mFader_c::setFader(mpLytFader)) {
                 if (mpLytFader->getStatus() == mFaderBase_c::FADED_IN) {
                     mpLytFader->setColor(mColor(0, 0, 0, 0xFF));
@@ -71,7 +71,7 @@ bool dFader_c::setFader(s32 fader) {
                 return true;
             }
             break;
-        case 3:
+        case FADER_SCREEN:
             if (mFader_c::setFader(mpScreenFader)) {
                 if (mpScreenFader->getStatus() == mFaderBase_c::FADED_IN) {
                     mpScreenFader->setColor(mColor(0, 0, 0, 0xFF));

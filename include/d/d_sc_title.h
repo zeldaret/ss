@@ -15,6 +15,14 @@ public:
 
     static dScTitle_c *sInstance;
 
+    static void setLbl_80575787(bool v) {
+        lbl_80575787 = v;
+    }
+
+    static u8 lbl_80575785;
+    static u8 lbl_80575786;
+    static u8 lbl_80575787;
+
     static void loadTitleScreen(u32 params);
     static void setSomethingSkbRelated();
 

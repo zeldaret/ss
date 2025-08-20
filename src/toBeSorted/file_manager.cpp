@@ -199,16 +199,16 @@ u16 *FileManager::getStoryFlagsMut() {
 /* 8000BDD0 */ u16 FileManager::getHitCountFromEnemy(u8 enemy) {}
 
 /* 8000BE50 */ void FileManager::setLoadRoomT1_FileB(s16 roomId) {}
-/* 8000BE80 */ s16 FileManager::getLoadRoomT1_FileB() {}
+/* 8000BE80 */ u16 FileManager::getLoadRoomT1_FileB() {}
 /* 8000BE90 */ void FileManager::setEntranceT1_FileB(u8 entrance) {}
 /* 8000BEC0 */ u8 FileManager::getEntranceT1_FileB() {}
 /* 8000BED0 */ void FileManager::setAreaT1_FileB(const char *name) {}
 /* 8000BF80 */ char *FileManager::getAreaT1_FileB() {}
 /* 8000C080 */ void FileManager::setNightT1_FileB(bool night) {}
-/* 8000C0B0 */ bool FileManager::getNightT1_FileB() {}
+/* 8000C0B0 */ u8 FileManager::getNightT1_FileB() {}
 /* 8000C0C0 */ void FileManager::setEntranceT1LoadFlag_FileB(u8 flag) {}
 /* 8000C0F0 */ void FileManager::setForcedLayerT1_FileB(u8 layer) {}
-/* 8000C120 */ void FileManager::getForcedLayerT1_FileB() {}
+/* 8000C120 */ u8 FileManager::getForcedLayerT1_FileB() {}
 /* 8000C130 */ void FileManager::setCurrentHealth_FileB(s16 health) {}
 
 /* 8000C160 */ void FileManager::setHeroname(const wchar_t *name) {}
@@ -233,7 +233,7 @@ u16 *FileManager::getStoryFlagsMut() {
 
 /* 8000CA00 */ bool FileManager::getNightT1() {}
 /* 8000CA50 */ void FileManager::setNightT3(bool night) {}
-/* 8000CA80 */ bool FileManager::getNightT3() {}
+/* 8000CA80 */ u8 FileManager::getNightT3() {}
 
 /* 8000CAD0 */ bool FileManager::isNew_FileA() {}
 

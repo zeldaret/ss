@@ -24,6 +24,7 @@ public:
     static void create();
     static void destroy();
     static void execute();
+
 private:
     MinigameManager() {}
     virtual ~MinigameManager() {}

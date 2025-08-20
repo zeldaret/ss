@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_base.h"
+#include "d/d_fader.h"
 #include "d/d_gfx.h"
 #include "d/d_stage_mgr.h"
 #include "d/flag/storyflag_manager.h"
@@ -104,7 +105,7 @@ void dScGame_c::deleteReady() {
 sFPhaseBase::sFPhaseState dScGame_c::cb1() {
     mFader.create();
     mFader.setFrames(15, 15);
-    mFader.setTypes(1, 1);
+    mFader.setTypes(dFader_c::FADER_GREY, dFader_c::FADER_GREY);
     mFader.initForLyt();
     mRelCtrl.do_link();
     mLayoutCtrl.load(nullptr);

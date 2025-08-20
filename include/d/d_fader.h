@@ -8,6 +8,13 @@
 
 class dFader_c : public mFader_c {
 public:
+    enum FadeType_e {
+        FADER_BLACK = 0,
+        FADER_GREY = 1,
+        FADER_LYT = 2,
+        FADER_SCREEN = 3,
+    };
+
     dFader_c() : mpColorFader(nullptr), mpLytFader(nullptr), mpScreenFader(nullptr), field_0x14(0) {}
     virtual ~dFader_c();
 

@@ -174,16 +174,16 @@ public:
     /* 8000BDD0 */ u16 getHitCountFromEnemy(u8 enemy);
 
     /* 8000BE50 */ void setLoadRoomT1_FileB(s16 roomId);
-    /* 8000BE80 */ s16 getLoadRoomT1_FileB();
+    /* 8000BE80 */ u16 getLoadRoomT1_FileB();
     /* 8000BE90 */ void setEntranceT1_FileB(u8 entrance);
     /* 8000BEC0 */ u8 getEntranceT1_FileB();
     /* 8000BED0 */ void setAreaT1_FileB(const char *name);
     /* 8000BF80 */ char *getAreaT1_FileB();
     /* 8000C080 */ void setNightT1_FileB(bool night);
-    /* 8000C0B0 */ bool getNightT1_FileB();
+    /* 8000C0B0 */ u8 getNightT1_FileB();
     /* 8000C0C0 */ void setEntranceT1LoadFlag_FileB(u8 flag);
     /* 8000C0F0 */ void setForcedLayerT1_FileB(u8 layer);
-    /* 8000C120 */ void getForcedLayerT1_FileB();
+    /* 8000C120 */ u8 getForcedLayerT1_FileB();
     /* 8000C130 */ void setCurrentHealth_FileB(s16 health);
 
     /* 8000C160 */ void setHeroname(const wchar_t *name);
@@ -208,7 +208,7 @@ public:
 
     /* 8000CA00 */ bool getNightT1();
     /* 8000CA50 */ void setNightT3(bool night);
-    /* 8000CA80 */ bool getNightT3();
+    /* 8000CA80 */ u8 getNightT3();
 
     /* 8000CAD0 */ bool isNew_FileA();
 
@@ -358,8 +358,8 @@ public:
         mSelectedFile = val;
     }
 
-private:
     static FileManager *sInstance;
+private:
 };
 
 #endif
