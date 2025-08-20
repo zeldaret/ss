@@ -4,6 +4,7 @@
 #include "nw4r/db/db_mapFile.h"
 #include "rvl/GX.h" // IWYU pragma: export
 #include "rvl/VI.h" // IWYU pragma: export
+#include "rvl/OS/OSError.h"
 #include "string.h"
 
 
@@ -63,12 +64,13 @@ void Exception_Init() {
     OSCreateThread(&sException.thread, RunThread_, nullptr, sThreadBuffer + 0x4000, 0x4000, 0, 1);
     OSInitMessageQueue(&sException.queue, sMessageBuffer, 1);
     OSResumeThread(&sException.thread);
-    OSSetErrorHandler(2, ErrorHandler_);
-    OSSetErrorHandler(3, ErrorHandler_);
-    OSSetErrorHandler(5, ErrorHandler_);
-    OSSetErrorHandler(15, ErrorHandler_);
+    // UB: casting non-variadic function to variadic (and letting OS invoke it)
+    OSSetErrorHandler(OS_ERR_DSI, (OSErrorHandler)ErrorHandler_);
+    OSSetErrorHandler(OS_ERR_ISI, (OSErrorHandler)ErrorHandler_);
+    OSSetErrorHandler(OS_ERR_ALIGNMENT, (OSErrorHandler)ErrorHandler_);
+    OSSetErrorHandler(OS_ERR_PROTECTION, (OSErrorHandler)ErrorHandler_);
     __OSFpscrEnableBits = 0;
-    OSSetErrorHandler(16, nullptr);
+    OSSetErrorHandler(OS_ERR_FP_EXCEPTION, nullptr);
 }
 extern "C" u32 PPCMfmsr();
 extern "C" void PPCMtmsr(u32);
