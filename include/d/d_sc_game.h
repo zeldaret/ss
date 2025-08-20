@@ -3,10 +3,10 @@
 
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/d_camera.h"
 #include "d/d_dylink.h"
 #include "d/d_fader.h"
 #include "d/d_scene.h"
-#include "d/d_camera.h"
 #include "egg/gfx/eggScreen.h"
 #include "f/f_profile_name.h"
 #include "m/m2d.h"
@@ -130,6 +130,10 @@ public:
     virtual void deleteReady() override;
 
     void triggerExit(s32 room, u16 exitIndex, s32 forcedNight = 2, s32 forcedTrial = 2);
+    void triggerEntrance(
+        const char *stageName, u8 roomid, u8 layer, u8 entrance, int forcedNight = SpawnInfo::RETAIN_TOD, int forcedTrial = SpawnInfo::RETAIN_TRIAL, u8 transitionType = dFader_c::FADER_BLACK,
+        u16 transitionFadeFrames = 15, s8 field0x28 = -1
+    );
     // void triggerEntrance(const char *stageName, u8 room, );
     const LinkReloadInfo &getLinkReloadInfo() const;
 
@@ -151,7 +155,6 @@ public:
     static dScGame_c *GetInstance() {
         return sInstance;
     }
-
 
     bool setReloadTrigger(fProfile::PROFILE_NAME_e reloadTrigger);
     void setRespawnInfo(const mVec3_c &linkPos, const mAng3_c &linkRot, bool unk);
@@ -206,13 +209,14 @@ public:
         return mScreen1.fn_801BBEC0();
     }
 
+    static bool sCopyFileBToCurrentAfterRespawn;
+    static bool sDoSomethingWithFileAOnTransition;
+    static bool sPreventClearingSomeFlag;
+
 protected:
     static u32 sUpdateFrameCount;
     static u8 sCurrentLayer;
     static u8 sReloaderType;
-    static bool sCopyFileBToCurrentAfterRespawn;
-    static bool sDoSomethingWithFileAOnTransition;
-    static bool sPreventClearingSomeFlag;
 
     static void someGfxThingCallback();
     void somethingWithScreen();

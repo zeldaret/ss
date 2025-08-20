@@ -4,6 +4,7 @@
 #include "d/col/bg/d_bg_s.h"
 #include "d/d_base.h"
 #include "d/d_bzs_types.h"
+#include "d/d_fader.h"
 #include "d/d_room.h"
 #include "d/d_rumble.h"
 #include "d/d_sc_game.h"
@@ -124,7 +125,7 @@ sFPhaseBase::sFPhaseState dStage_c::createRooms() {
     // TODO
     // if (dScGame_c::sCo)
     mFader.create();
-    mFader.setTypes(1, 1);
+    mFader.setTypes(dFader_c::FADER_GREY, dFader_c::FADER_GREY);
     mFader.setFadeInFrame(1);
     mFader.fadeIn();
     mFader.calc();

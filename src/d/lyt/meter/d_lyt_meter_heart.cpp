@@ -322,7 +322,7 @@ void dLytMeterHeart_c::executeInternal() {
             mStoredHealth = mStoredHealth + 1;
             if (mpAlphaPane->IsVisible() && mpAlphaPane->GetGlobalAlpha() != 0 && mStoredHealth % 4 == 0 &&
                 (!(dScGame_c::currentSpawnInfo.stageName == "F406") || dScGame_c::currentSpawnInfo.layer != 13) &&
-                dLytGameOver_c::GetInstance() == nullptr) {
+                dLytGameOverMgr_c::GetInstance() == nullptr) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_HP_GAUGE_UP);
             }
         } else {
