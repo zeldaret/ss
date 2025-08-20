@@ -37,7 +37,7 @@ public:
     static void SetPreExceptionCallback(void (*cb)());
     static void SetCallbackMode(bool);
     static void SetCallbackArgs(void *);
-    nw4r::db::ConsoleHandle GetConsoleHandle();
+    static nw4r::db::ConsoleHandle GetConsoleHandle();
 };
 
 } // namespace EGG

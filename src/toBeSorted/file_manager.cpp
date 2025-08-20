@@ -433,7 +433,7 @@ extern "C" void fn_800C01F0(); // todo flag managers
     return &mFileB;
 }
 /* 80011280 */ u32 FileManager::calcFileCRC(const void *data, u32 length) {
-    return sCrc::calcCRC(data, length);
+    return sCrc::calcCRC32(data, length);
 }
 /* 80011290 */ void FileManager::updateEmptyFiles() {
     updateEmptyFileFlags();

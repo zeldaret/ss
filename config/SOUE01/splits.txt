@@ -29,10 +29,13 @@ toBeSorted/mdl_base.cpp:
 	.text       start:0x80006E10 end:0x80006EA8 align:16
 	.data       start:0x804FD0B8 end:0x804FD0C8
 
-toBeSorted/d_assert.cpp:
+toBeSorted/d_exception.cpp:
 	.text       start:0x80006EB0 end:0x8000742C align:16
+	.rodata     start:0x804DBA00 end:0x804DBA18
 	.data       start:0x804FD0C8 end:0x804FD180
+	.sdata      start:0x80571450 end:0x80571468
 	.sbss       start:0x80574FB0 end:0x80574FB8
+	.sdata2     start:0x805769C0 end:0x805769C8
 	.bss        start:0x80580000 end:0x80580038
 
 toBeSorted/d_jstudio.cpp:
@@ -232,6 +235,7 @@ d/d_heap.cpp:
 	.ctors      start:0x804DB680 end:0x804DB684
 	.rodata     start:0x804DE008 end:0x804DE188
 	.data       start:0x8050D440 end:0x8050D458
+	.sdata      start:0x80571C58 end:0x80571C60
 	.sbss       start:0x805751A8 end:0x805751D0
 	.bss        start:0x80597740 end:0x80597758
 
@@ -1778,7 +1782,6 @@ s/s_Crc.cpp:
 
 s/s_Assert.cpp:
 	.text       start:0x802DE700 end:0x802DE73C align:16
-	.sdata      start:0x80573F70 end:0x80573F78
 	.sbss       start:0x80575B70 end:0x80575B78
 
 s/s_Math.cpp:
@@ -1790,6 +1793,7 @@ s/s_Phase.cpp:
 
 s/s_Print.cpp:
 	.text       start:0x802DEF80 end:0x802DF0E4 align:16
+	.sdata      start:0x80573F70 end:0x80573F78
 
 c/c_counter.cpp:
 	.text       start:0x802DF0F0 end:0x802DF100 align:16

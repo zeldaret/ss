@@ -30,3 +30,7 @@ Implemented by SS based on NSMBW symbols. Probably missing some parts, sync with
 ## s_FPhase
 
 SS-only. Symbols/names completely made up.
+
+## s_Assert, s_Print
+
+SS-only. Symbols/names completely made up.
