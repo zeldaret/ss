@@ -1,17 +1,20 @@
 #ifndef D_A_OBJ_PROPERA_H
 #define D_A_OBJ_PROPERA_H
 
-#include "d/a/obj/d_a_obj_base.h"
-#include "s/s_State.hpp"
-#include "s/s_StateMgr.hpp"
+#include "d/a/d_a_salbage_obj.h"
+#include "d/col/bg/d_bg_w.h"
+#include "m/m3d/m_smdl.h"
 
-class dAcObjPropera_c : public dAcObjBase_c {
+class dAcObjPropera_c : public dAcSalbageObj_c {
 public:
-    dAcObjPropera_c() : mStateMgr(*this, sStateID::null) {}
+    dAcObjPropera_c() : dAcSalbageObj_c(&mMdl, SALVAGE_OBJ_PROPERA) {}
     virtual ~dAcObjPropera_c() {}
 
+    STATE_VIRTUAL_OVERRIDE_FUNC_DECLARE(dAcObjPropera_c, dAcSalbageObj_c, DemoThrow);
+
 private:
-    /* 0x??? */ STATE_MGR_DECLARE(dAcObjPropera_c);
+    /* 0x970 */ m3d::smdl_c mMdl;
+    /* 0x98C */ dBgW mBgW;
 };
 
 #endif

@@ -1,6 +1,7 @@
 #ifndef D_A_SALBAGE_OBJ_H
 #define D_A_SALBAGE_OBJ_H
 
+#include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/cc/d_cc_d.h"
@@ -14,9 +15,17 @@
 
 class dAcSalbageObj_c;
 
+enum SalvageObj_e {
+    SALVAGE_OBJ_PROPERA = 0,
+    SALVAGE_OBJ_ROULETTE = 1,
+    SALVAGE_OBJ_DIVINER_CRYSTAL = 2,
+    SALVAGE_OBJ_WATER_JAR = 5,
+    SALVAGE_OBJ_POT = 6,
+};
+
 class SalbageRelated {
 public:
-    SalbageRelated(dAcSalbageObj_c *obj) : mpObj(obj), mSalvageObjId(6) {}
+    SalbageRelated(dAcSalbageObj_c *obj, s32 id) : mpObj(obj), mCarried(false), mHidden(false), mSalvageObjId(id) {}
 
     /* vt 0x08 */ virtual ~SalbageRelated() {}
     /* vt 0x0C */ virtual void setCarried() {
@@ -68,7 +77,14 @@ class dAcSalbageObj_c : public dAcObjBase_c {
     };
 
 public:
-    dAcSalbageObj_c() : mStateMgr(*this), mSalbageRelated(this), mDowsingTarget(this, DowsingTarget::SLOT_NONE) {}
+    dAcSalbageObj_c(m3d::smdl_c *mdl, s32 salvageObjId)
+        : field_0x330(0),
+          mpMdl(mdl),
+          mStateMgr(*this),
+          mSalbageRelated(this, salvageObjId),
+          mDowsingTarget(this, DowsingTarget::SLOT_NONE),
+          mIsDemoState(false),
+          mpNextStateId(nullptr) {}
     virtual ~dAcSalbageObj_c() {}
 
     virtual int preExecute() override;
@@ -81,6 +97,14 @@ public:
     /* vt 0x80 */ virtual bool vt_0x80() const {
         return false;
     }
+
+    /* vt 0x84-0x8C */ STATE_VIRTUAL_FUNC_DECLARE(dAcSalbageObj_c, Wait);
+    /* vt 0x90-0x98 */ STATE_VIRTUAL_FUNC_DECLARE(dAcSalbageObj_c, Carried);
+    /* vt 0x9C-0xA4 */ STATE_VIRTUAL_FUNC_DECLARE(dAcSalbageObj_c, Demo);
+    /* vt 0xA8-0xB0 */ STATE_VIRTUAL_FUNC_DECLARE(dAcSalbageObj_c, DemoThrow);
+    /* vt 0xB4-0xBC */ STATE_VIRTUAL_FUNC_DECLARE(dAcSalbageObj_c, Fly);
+    /* vt 0xC0-0xC8 */ STATE_VIRTUAL_FUNC_DECLARE(dAcSalbageObj_c, After);
+    STATE_FUNC_DECLARE(dAcSalbageObj_c, Kill);
 
 protected:
     bool shouldBeActiveDowsingTarget() const;
@@ -96,14 +120,6 @@ protected:
     void updateCc();
     void updateBgAcchCir();
     void updateMdl();
-
-    /* vt 0x84-0x8C */ STATE_VIRTUAL_FUNC_DECLARE(dAcSalbageObj_c, Wait);
-    /* vt 0x90-0x98 */ STATE_VIRTUAL_FUNC_DECLARE(dAcSalbageObj_c, Carried);
-    /* vt 0x9C-0xA4 */ STATE_VIRTUAL_FUNC_DECLARE(dAcSalbageObj_c, Demo);
-    /* vt 0xA8-0xB0 */ STATE_VIRTUAL_FUNC_DECLARE(dAcSalbageObj_c, DemoThrow);
-    /* vt 0xB4-0xBC */ STATE_VIRTUAL_FUNC_DECLARE(dAcSalbageObj_c, Fly);
-    /* vt 0xC0-0xC8 */ STATE_VIRTUAL_FUNC_DECLARE(dAcSalbageObj_c, After);
-    STATE_FUNC_DECLARE(dAcSalbageObj_c, Kill);
 
     /* vt 0xCC */ virtual mMtx_c calcWorldMtx();
     /* vt 0xD0 */ virtual void vt_0xD0() {}
@@ -142,7 +158,7 @@ protected:
         return 50.0f;
     }
 
-    /* 0x330 */ u8 _0x330[0x334 - 0x330];
+    /* 0x330 */ UNKWORD field_0x330;
 
     /* 0x334 */ m3d::smdl_c *mpMdl;
     /* 0x338 */ dShadowCircle_c mShadow;

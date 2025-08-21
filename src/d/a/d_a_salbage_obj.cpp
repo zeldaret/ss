@@ -68,7 +68,7 @@ int dAcSalbageObj_c::preExecute() {
     int result = dAcObjBase_c::preExecute() == NOT_READY ? NOT_READY : SUCCEEDED;
     if (dSalvageMgr_c::sInstance->checkDeliveredStoryflag(mSalbageRelated.getSalvageObjId())) {
         s32 id = mSalbageRelated.getSalvageObjId();
-        if (id != 2 && id != 6) {
+        if (id != SALVAGE_OBJ_DIVINER_CRYSTAL && id != SALVAGE_OBJ_POT) {
             if (!EventManager::isInEvent()) {
                 deleteRequest();
             }
@@ -204,9 +204,9 @@ void dAcSalbageObj_c::doInteraction(s32 arg) {
 
 void dAcSalbageObj_c::addAttentionTargetIfNeeded() {
     switch (mSalbageRelated.getSalvageObjId()) {
-        case 5:
-        case 6:  return;
-        default: addAttentionTarget(); break;
+        case SALVAGE_OBJ_WATER_JAR:
+        case SALVAGE_OBJ_POT:       return;
+        default:                    addAttentionTarget(); break;
     }
 }
 
@@ -243,7 +243,7 @@ bool dAcSalbageObj_c::shouldBeActiveDowsingTarget() const {
     if (dSalvageMgr_c::sInstance->hasDowsingForSalvageObj(this) == false) {
         return false;
     } else {
-        return mSalbageRelated.getSalvageObjId() != 6;
+        return mSalbageRelated.getSalvageObjId() != SALVAGE_OBJ_POT;
     }
 }
 
