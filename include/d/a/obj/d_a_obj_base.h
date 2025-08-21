@@ -18,6 +18,8 @@
 #include "m/m_vec.h"
 #include "m/types_m.h"
 
+class SalbageRelated;
+
 
 // Ghidra: ActorObjectBase
 //   size: 0x330
@@ -52,7 +54,7 @@ public:
     /* 0x210 */ dLinkage_c mLinkage;
     /* 0x2B8 */ u32 mField_0x2B8;
     /* 0x2BC */ ActorLighting mLightingInfo;
-    /* 0x32C */ u32 mField_0x32C;
+    /* 0x32C */ SalbageRelated *mpSalbageRelated;
 
 public:
     mVec3_c &GetOldPosition() {
