@@ -91,7 +91,7 @@ void dThpPlayer_c::setupFile(char* filename, s32 loadAllAtOnce) {
 static const u8 SPECIAL_TYPES[] = {0x7A, 0x78, 0x78};
 
 void dThpPlayer_c::reallyExecute() {
-    if (mDvdCallback == nullptr || mDvdCallback->mStatus == 0 || !mFilenameSet || mSetupDone) {
+    if (mDvdCallback == nullptr || !mDvdCallback->isDone() || !mFilenameSet || mSetupDone) {
         return;
     }
     if (mFilename == "THP/Demo01_01.thp") {
@@ -139,7 +139,7 @@ s32 dThpPlayer_c::play() {
 
 s32 dThpPlayer_c::destroy() {
     if (mDvdCallback != nullptr) {
-        if (mDvdCallback->mStatus == 0) {
+        if (!mDvdCallback->isDone()) {
             return NOT_READY;
         }
         THPPlayerStop();

@@ -117,11 +117,11 @@ sFPhaseBase::sFPhaseState dScGame_c::cb2() {
         return sFPhaseBase::PHASE_RETRY;
     }
 
-    if (OarcManager::GetInstance()->ensureAllEntriesLoaded()) {
+    if (OarcManager::GetInstance()->ensureAllEntriesLoaded() != D_ARC_RESULT_OK) {
         return sFPhaseBase::PHASE_RETRY;
     }
 
-    if (LayoutArcManager::GetInstance()->ensureAllEntriesLoaded()) {
+    if (LayoutArcManager::GetInstance()->ensureAllEntriesLoaded() != D_ARC_RESULT_OK) {
         return sFPhaseBase::PHASE_RETRY;
     }
 

@@ -30,7 +30,7 @@ public:
 
     EGG::ExpHeap *getHeap(s32 roomid);
 
-    inline int ensureAllEntriesLoaded() {
+    inline dArcResult_e ensureAllEntriesLoaded() {
         return mArcTable.ensureAllEntriesLoaded();
     }
 

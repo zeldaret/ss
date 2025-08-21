@@ -45,7 +45,7 @@ void dStageMgr_c::initializeState_ReadStageRes() {
 }
 
 void dStageMgr_c::executeState_ReadStageRes() {
-    if (CurrentStageArcManager::GetInstance()->ensureAllEntriesLoaded() == 0) {
+    if (CurrentStageArcManager::GetInstance()->ensureAllEntriesLoaded() == D_ARC_RESULT_OK) {
         mStateMgr.changeState(StateID_ReadRoomRes);
     }
 }
@@ -62,8 +62,8 @@ void dStageMgr_c::finalizeState_ReadStageRes() {
 void dStageMgr_c::initializeState_ReadRoomRes() {}
 
 void dStageMgr_c::executeState_ReadRoomRes() {
-    if (CurrentStageArcManager::GetInstance()->ensureAllEntriesLoaded() == 0 &&
-        LayoutArcManager::GetInstance()->ensureAllEntriesLoaded() == 0) {
+    if (CurrentStageArcManager::GetInstance()->ensureAllEntriesLoaded() == D_ARC_RESULT_OK &&
+        LayoutArcManager::GetInstance()->ensureAllEntriesLoaded() == D_ARC_RESULT_OK) {
         mStateMgr.changeState(StateID_ReadObjectRes);
     }
 }
@@ -100,7 +100,7 @@ void dStageMgr_c::initializeState_ReadStageLayerRes() {
 }
 
 void dStageMgr_c::executeState_ReadStageLayerRes() {
-    if (CurrentStageArcManager::GetInstance()->ensureAllEntriesLoaded() == 0) {
+    if (CurrentStageArcManager::GetInstance()->ensureAllEntriesLoaded() == D_ARC_RESULT_OK) {
         mStateMgr.changeState(StateID_ReadLayerObjectRes);
     }
 }
@@ -142,7 +142,7 @@ void dStageMgr_c::initializeState_ReadLayerObjectRes() {
 }
 
 void dStageMgr_c::executeState_ReadLayerObjectRes() {
-    if (mLayerObjCtrl.isLoaded() && LayoutArcManager::GetInstance()->ensureAllEntriesLoaded() == 0) {
+    if (mLayerObjCtrl.isLoaded() && LayoutArcManager::GetInstance()->ensureAllEntriesLoaded() == D_ARC_RESULT_OK) {
         mStateMgr.changeState(StateID_SoundLoadSceneData);
     }
 }
@@ -172,7 +172,7 @@ void dStageMgr_c::initializeState_SoundLoadSceneData() {
 }
 
 void dStageMgr_c::executeState_SoundLoadSceneData() {
-    if (mpDvdCallback != nullptr && mpDvdCallback->mStatus != 0) {
+    if (mpDvdCallback != nullptr && mpDvdCallback->isDone()) {
         mStateMgr.changeState(StateID_CreateObject);
     }
 }
@@ -208,7 +208,7 @@ void dStageMgr_c::executeState_ReadObjectSound() {
         return;
     }
 
-    if (mpDvdCallback2->mStatus == 0) {
+    if (!mpDvdCallback2->isDone()) {
         return;
     }
 

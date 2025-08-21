@@ -6,6 +6,13 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "sized_string.h"
 
+enum dArcResult_e {
+    D_ARC_RESULT_WAIT = 1,
+    D_ARC_RESULT_OK = 0,
+    D_ARC_RESULT_ERROR_INTERNAL = -1,
+    D_ARC_RESULT_ERROR_NOT_FOUND = -2,
+};
+
 class ArcCallbackHandlerBase {
 public:
     ArcCallbackHandlerBase() : mPrefix('    ') {}
@@ -26,8 +33,6 @@ public:
 
 void BindSystemModelsAndLighting(nw4r::g3d::ResFile);
 
-// TODO: loading status could be an enum (-2/-1/0/+1)
-
 // Ghidra: ArcManagerEntry
 //   size: 0x40
 class dRawArcEntry_c {
@@ -41,10 +46,10 @@ public:
     static BOOL checkArcExistsOnDisk(const char *fileName, const char *dirName);
     static BOOL checkArcExistsOnDiskInner(SizedString<128> &path, const char *fileName, const char *dirName);
 
-    int mount(const char *name, void *data, ArcCallbackHandler *callbackArg, u8 mountDirection, EGG::Heap *heap);
-    int onMount(void *callbackArg);
+    dArcResult_e mount(const char *name, void *data, ArcCallbackHandler *callbackArg, u8 mountDirection, EGG::Heap *heap);
+    dArcResult_e onMount(void *callbackArg);
 
-    int ensureLoadedMaybe(void *callbackArg);
+    dArcResult_e ensureLoadedMaybe(void *callbackArg);
 
     inline bool isReferenced() {
         return mRefCount != 0;
@@ -105,14 +110,14 @@ public:
     bool init(u16 count, ArcCallbackHandler *callbackArg, EGG::Heap *heap);
     BOOL getArcOrLoadFromDisk(const char *name, const char *dirName, u8 mountDirection, EGG::Heap *heap);
     BOOL addEntryFromSuperArc(const char *name, void *data, u8 mountDirection, EGG::Heap *heap);
-    int ensureLoadedMaybe2(const char *name);
-    int ensureLoadedMaybe(const char *name);
+    dArcResult_e ensureLoadedMaybe2(const char *name);
+    dArcResult_e ensureLoadedMaybe(const char *name);
     bool hasEntry(const char *name);
     BOOL decreaseRefCount(const char *name);
     void *getDataFromOarc(const char *name, const char *path);
     void *getSubEntryData(const char *name, const char *path);
     void *getLoadedArcData(const char *name);
-    int ensureAllEntriesLoaded();
+    dArcResult_e ensureAllEntriesLoaded();
     dRawArcEntry_c *findEntry(const char *name) const;
     dRawArcEntry_c *findEmptySlot();
     dRawArcEntry_c *findLoadedEntry(const char *name);
@@ -123,4 +128,4 @@ private:
     /* 0x8 */ ArcCallbackHandler *mCallbackArg;
 };
 
-#endif;
+#endif

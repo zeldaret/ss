@@ -112,32 +112,31 @@ int dScTitle_c::execute() {
 }
 
 int dScTitle_c::doDelete() {
-    // TODO return codes
     int result;
     result = LayoutArcManager::GetInstance()->ensureLoaded2(sFileSelect);
-    if (result != -2) {
-        if (result != 0) {
+    if (result != D_ARC_RESULT_ERROR_NOT_FOUND) {
+        if (result != D_ARC_RESULT_OK) {
             return NOT_READY;
         }
         LayoutArcManager::GetInstance()->decrement(sFileSelect);
     }
 
     result = LayoutArcManager::GetInstance()->ensureLoaded2(sSkb);
-    if (result != -2) {
-        if (result != 0) {
+    if (result != D_ARC_RESULT_ERROR_NOT_FOUND) {
+        if (result != D_ARC_RESULT_OK) {
             return NOT_READY;
         }
         LayoutArcManager::GetInstance()->decrement(sSkb);
     }
 
     // TODO here's the other half of the ::destroy fakematch...
-    if (mpSkbArc->mStatus != 0) {
+    if (mpSkbArc->isDone()) {
         mDvd_command_c::destroy((mDvd_command_c **)&mpSkbArc);
     } else {
         return NOT_READY;
     }
 
-    if (mpSkbFont->mStatus != 0) {
+    if (mpSkbFont->isDone()) {
         mDvd_command_c::destroy((mDvd_command_c **)&mpSkbFont);
     } else {
         return NOT_READY;

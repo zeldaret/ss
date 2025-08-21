@@ -69,10 +69,10 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb1() {
 }
 
 sFPhaseBase::sFPhaseState dScBoot_c::cb2() {
-    if (OarcManager::GetInstance()->ensureAllEntriesLoaded()) {
+    if (OarcManager::GetInstance()->ensureAllEntriesLoaded() != D_ARC_RESULT_OK) {
         return sFPhaseBase::PHASE_RETRY;
     }
-    if (LayoutArcManager::GetInstance()->ensureAllEntriesLoaded()) {
+    if (LayoutArcManager::GetInstance()->ensureAllEntriesLoaded() != D_ARC_RESULT_OK) {
         return sFPhaseBase::PHASE_RETRY;
     }
 
@@ -104,7 +104,7 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb5() {
             return sFPhaseBase::PHASE_RETRY;
         }
     }
-    if (mpDvdCallback->mStatus == 0) {
+    if (!mpDvdCallback->isDone()) {
         return sFPhaseBase::PHASE_RETRY;
     } else {
         mpDvdCallback->do_delete();
@@ -271,11 +271,11 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb7() {
         return sFPhaseBase::PHASE_RETRY;
     }
 
-    if (OarcManager::GetInstance()->ensureAllEntriesLoaded()) {
+    if (OarcManager::GetInstance()->ensureAllEntriesLoaded() != D_ARC_RESULT_OK) {
         return sFPhaseBase::PHASE_RETRY;
     }
 
-    if (LayoutArcManager::GetInstance()->ensureAllEntriesLoaded()) {
+    if (LayoutArcManager::GetInstance()->ensureAllEntriesLoaded() != D_ARC_RESULT_OK) {
         return sFPhaseBase::PHASE_RETRY;
     }
 
@@ -341,7 +341,7 @@ dScBoot_c::strap_c::strap_c() {
 
 bool dScBoot_c::strap_c::create() {
     if (!field_0x4EC) {
-        if (LayoutArcManager::GetInstance()->ensureLoaded1(mArcName)) {
+        if (LayoutArcManager::GetInstance()->ensureLoaded1(mArcName) != D_ARC_RESULT_OK) {
             return false;
         }
         void *data = LayoutArcManager::GetInstance()->getLoadedData(mArcName);

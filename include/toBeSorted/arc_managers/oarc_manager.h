@@ -4,6 +4,19 @@
 #include "d/d_rawarchive.h"
 #include "egg/core/eggHeap.h"
 
+class ObjectArcControl {
+public:
+    ObjectArcControl() : mObjectArcs(nullptr), mNumArcs(0) {}
+    virtual ~ObjectArcControl();
+    void set(const char *const *objectArcs, s32 numArcs);
+    bool load(EGG::Heap *heap) const;
+    bool release();
+
+private:
+    const char *const *mObjectArcs;
+    s32 mNumArcs;
+};
+
 class OarcManager {
 public:
     OarcManager();
@@ -13,15 +26,15 @@ public:
 
     void init(EGG::Heap *heap);
 
-    inline int ensureAllEntriesLoaded() {
+    inline dArcResult_e ensureAllEntriesLoaded() {
         return mArcTable.ensureAllEntriesLoaded();
     }
 
     bool checkIfObjectArcExistsOnDisk(const char *object);
     bool loadObjectArcFromDisk(const char *object, EGG::Heap *heap);
     bool addEntryFromSuperArc(const char *object, void *data, EGG::Heap *heap);
-    int ensureLoaded1(const char *object);
-    void ensureLoaded2(const char *object);
+    dArcResult_e ensureLoaded1(const char *object);
+    dArcResult_e ensureLoaded2(const char *object);
     bool decrement(const char *path);
     void *getData(const char *oarcName, const char *fileName);
 
@@ -39,19 +52,6 @@ public:
 private:
     static OarcManager *sInstance;
     dRawArcTable_c mArcTable;
-};
-
-class ObjectArcControl {
-public:
-    ObjectArcControl() : mObjectArcs(nullptr), mNumArcs(0) {}
-    virtual ~ObjectArcControl();
-    void set(const char *const *objectArcs, s32 numArcs);
-    void load(EGG::Heap *heap);
-    void release();
-
-private:
-    const char **mObjectArcs;
-    s32 mNumArcs;
 };
 
 #endif
