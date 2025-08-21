@@ -89,3 +89,52 @@ bool OarcManager::create(EGG::Heap *heap) {
     GetInstance()->init(heap);
     return true;
 }
+
+ObjectArcControl::~ObjectArcControl() {
+    if (mObjectArcs != nullptr) {
+        release();
+    }
+}
+
+void ObjectArcControl::set(const char *const *objectArcs, s32 numArcs) {
+    mObjectArcs = objectArcs;
+    mNumArcs = numArcs;
+}
+
+bool ObjectArcControl::load(EGG::Heap *heap) const {
+    if (mObjectArcs == nullptr) {
+        return true;
+    }
+
+    const char *const *ptr = mObjectArcs;
+    for (int i = 0; i < mNumArcs; i++) {
+        OarcManager::GetInstance()->loadObjectArcFromDisk(*ptr, heap);
+        ptr++;
+    }
+
+    return true;
+}
+
+bool ObjectArcControl::release() {
+    if (mObjectArcs == nullptr) {
+        return true;
+    }
+
+    const char *const *ptr = mObjectArcs;
+    for (int i = 0; i < mNumArcs; i++) {
+        dArcResult_e res = OarcManager::GetInstance()->ensureLoaded2(*ptr);
+        if (res != D_ARC_RESULT_ERROR_NOT_FOUND && res != D_ARC_RESULT_OK) {
+            return false;
+        }
+        ptr++;
+    }
+
+    ptr = mObjectArcs;
+    for (int i = 0; i < mNumArcs; i++) {
+        OarcManager::GetInstance()->decrement(*ptr);
+        ptr++;
+    }
+    mObjectArcs = nullptr;
+
+    return true;
+}

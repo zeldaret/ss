@@ -4,6 +4,19 @@
 #include "d/d_rawarchive.h"
 #include "egg/core/eggHeap.h"
 
+class ObjectArcControl {
+public:
+    ObjectArcControl() : mObjectArcs(nullptr), mNumArcs(0) {}
+    virtual ~ObjectArcControl();
+    void set(const char *const *objectArcs, s32 numArcs);
+    bool load(EGG::Heap *heap) const;
+    bool release();
+
+private:
+    const char *const *mObjectArcs;
+    s32 mNumArcs;
+};
+
 class OarcManager {
 public:
     OarcManager();
@@ -39,19 +52,6 @@ public:
 private:
     static OarcManager *sInstance;
     dRawArcTable_c mArcTable;
-};
-
-class ObjectArcControl {
-public:
-    ObjectArcControl() : mObjectArcs(nullptr), mNumArcs(0) {}
-    virtual ~ObjectArcControl();
-    void set(const char *const *objectArcs, s32 numArcs);
-    void load(EGG::Heap *heap);
-    void release();
-
-private:
-    const char **mObjectArcs;
-    s32 mNumArcs;
 };
 
 #endif

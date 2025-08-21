@@ -5,6 +5,20 @@
 #include "d/d_rawarchive.h"
 #include "egg/core/eggHeap.h"
 
+class LayoutArcControl {
+public:
+    LayoutArcControl() : mLayoutArcs(nullptr), mNumArcs(0) {}
+    virtual ~LayoutArcControl();
+    void set(const char *const *layoutArcs, s32 numArcs);
+    bool load(EGG::Heap *heap) const;
+    bool allLoaded() const;
+    bool release();
+
+private:
+    const char *const *mLayoutArcs;
+    s32 mNumArcs;
+};
+
 class LayoutArcManager {
 public:
     LayoutArcManager();
@@ -33,19 +47,6 @@ public:
 private:
     static LayoutArcManager *sInstance;
     dRawArcTable_c mArcTable;
-};
-
-class LayoutArcControl {
-public:
-    LayoutArcControl() : mLayoutArcs(nullptr), mNumArcs(0) {}
-    virtual ~LayoutArcControl();
-    void set(const char *const *layoutArcs, s32 numArcs);
-    void load(EGG::Heap *heap);
-    void release();
-
-private:
-    const char **mLayoutArcs;
-    s32 mNumArcs;
 };
 
 #endif
