@@ -169,10 +169,10 @@ public:
 
 private:
     /* 0xBDC */ u8 field_0xBDC;
-
+    
+public:
     static AttentionManager *sInstance;
 
-public:
     bool create();
     bool createHeap();
     bool execute();
