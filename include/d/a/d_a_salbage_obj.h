@@ -6,6 +6,7 @@
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_shadow.h"
+#include "d/a/d_a_salbage.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
@@ -23,33 +24,33 @@ enum SalvageObj_e {
     SALVAGE_OBJ_POT = 6,
 };
 
-class SalbageRelated {
+class dSalvageIfObj_c : public dSalvageIf_c {
 public:
-    SalbageRelated(dAcSalbageObj_c *obj, s32 id) : mpObj(obj), mCarried(false), mHidden(false), mSalvageObjId(id) {}
+    dSalvageIfObj_c(dAcSalbageObj_c *obj, s32 id) : mpObj(obj), mCarried(false), mHidden(false), mSalvageObjId(id) {}
 
-    /* vt 0x08 */ virtual ~SalbageRelated() {}
-    /* vt 0x0C */ virtual void setCarried() {
+    /* vt 0x08 */ virtual ~dSalvageIfObj_c() {}
+    /* vt 0x0C */ virtual void setCarried() override {
         mCarried = true;
     }
-    /* vt 0x10 */ virtual void setNotCarried() {
+    /* vt 0x10 */ virtual void setNotCarried() override {
         mCarried = false;
     }
-    /* vt 0x14 */ virtual bool isCarried() const {
+    /* vt 0x14 */ virtual bool isCarried() const override {
         return mCarried;
     }
-    /* vt 0x18 */ virtual void setHidden() {
+    /* vt 0x18 */ virtual void setHidden() override {
         mHidden = true;
     }
-    /* vt 0x1C */ virtual void setNotHidden() {
+    /* vt 0x1C */ virtual void setNotHidden() override {
         mHidden = false;
     }
-    /* vt 0x20 */ virtual bool isHidden() const {
+    /* vt 0x20 */ virtual bool isHidden() const override {
         return mHidden;
     }
-    /* vt 0x24 */ virtual s32 getSalvageObjId() const {
+    /* vt 0x24 */ virtual s32 getSalvageObjId() const override {
         return mSalvageObjId;
     }
-    /* vt 0x28 */ virtual void doDemoThrow();
+    /* vt 0x28 */ virtual void doDemoThrow() override;
 
 private:
     /* 0x04 */ dAcSalbageObj_c *mpObj;
@@ -65,7 +66,7 @@ private:
  * the Salvage Robot NPC, AKA Scrapper.
  */
 class dAcSalbageObj_c : public dAcObjBase_c {
-    friend class SalbageRelated;
+    friend class dSalvageIfObj_c;
 
     enum Behavior_e {
         /// The object is stationary and disappears when picked up
@@ -81,7 +82,7 @@ public:
         : field_0x330(0),
           mpMdl(mdl),
           mStateMgr(*this),
-          mSalbageRelated(this, salvageObjId),
+          mSalvageIf(this, salvageObjId),
           mDowsingTarget(this, DowsingTarget::SLOT_NONE),
           mIsDemoState(false),
           mpNextStateId(nullptr) {}
@@ -169,7 +170,7 @@ protected:
     /* 0x8AC */ STATE_MGR_DECLARE(dAcSalbageObj_c);
     /* 0x8E8 */ s32 mBehavior;
     /* 0x8EC */ bool mIsDemoState;
-    /* 0x8F0 */ SalbageRelated mSalbageRelated;
+    /* 0x8F0 */ dSalvageIfObj_c mSalvageIf;
     /* 0x900 */ f32 field_0x900;
     /* 0x904 */ s16 field_0x904;
     /* 0x908 */ mMtx_c mWorldSRMtx;

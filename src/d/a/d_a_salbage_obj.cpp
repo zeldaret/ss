@@ -44,7 +44,7 @@ static const InteractionTargetDef sInteractionTargetDefs[] = {
     {0, 0, 1, EXAMINE_TALK, 0, 250.0f, 60.0f,  0.0f,  -50.0f, 150.0f, 50.0f, 1.0f},
 };
 
-void SalbageRelated::doDemoThrow() {
+void dSalvageIfObj_c::doDemoThrow() {
     mpObj->mStateMgr.changeState(dAcSalbageObj_c::StateID_DemoThrow);
 }
 
@@ -66,8 +66,8 @@ int dAcSalbageObj_c::actorExecute() {
 int dAcSalbageObj_c::preExecute() {
     // TODO - this matches, but so does `bool` conversion...
     int result = dAcObjBase_c::preExecute() == NOT_READY ? NOT_READY : SUCCEEDED;
-    if (dSalvageMgr_c::sInstance->checkDeliveredStoryflag(mSalbageRelated.getSalvageObjId())) {
-        s32 id = mSalbageRelated.getSalvageObjId();
+    if (dSalvageMgr_c::sInstance->checkDeliveredStoryflag(mSalvageIf.getSalvageObjId())) {
+        s32 id = mSalvageIf.getSalvageObjId();
         if (id != SALVAGE_OBJ_DIVINER_CRYSTAL && id != SALVAGE_OBJ_POT) {
             if (!EventManager::isInEvent()) {
                 deleteRequest();
@@ -77,7 +77,7 @@ int dAcSalbageObj_c::preExecute() {
     }
 
     if (mBehavior == BEHAVIOR_STATIONARY) {
-        if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() == mSalbageRelated.getSalvageObjId()) {
+        if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() == mSalvageIf.getSalvageObjId()) {
             if (!EventManager::isInEvent()) {
                 deleteRequest();
             }
@@ -108,7 +108,7 @@ int dAcSalbageObj_c::preDraw() {
     if (dAcObjBase_c::preDraw() == NOT_READY) {
         return NOT_READY;
     } else {
-        return mSalbageRelated.isHidden() ? NOT_READY : SUCCEEDED;
+        return mSalvageIf.isHidden() ? NOT_READY : SUCCEEDED;
     }
 }
 
@@ -142,9 +142,9 @@ void dAcSalbageObj_c::initSalbageObj() {
     mShadowRot.w = 180.0f;
     mScale.set(1.0f, 1.0f, 1.0f);
     mBehavior = getFromParams(4, 0xF);
-    mpSalbageRelated = &mSalbageRelated;
+    mpSalvageIf = &mSalvageIf;
     initCcAndBg();
-    if (dSalvageMgr_c::sInstance->checkDeliveredStoryflag(mSalbageRelated.getSalvageObjId())) {
+    if (dSalvageMgr_c::sInstance->checkDeliveredStoryflag(mSalvageIf.getSalvageObjId())) {
         if (mBehavior == BEHAVIOR_CARRY && vt_0x80()) {
             mStateMgr.changeState(StateID_After);
         } else {
@@ -156,12 +156,12 @@ void dAcSalbageObj_c::initSalbageObj() {
                 forwardSpeed = 0.0f;
                 velocity.set(0.0f, 0.0f, 0.0f);
                 forwardAccel = 0.0f;
-                mSalbageRelated.setHidden();
-                if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() != mSalbageRelated.getSalvageObjId()) {
+                mSalvageIf.setHidden();
+                if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() != mSalvageIf.getSalvageObjId()) {
                     mStateMgr.changeState(StateID_Kill);
                     return;
                 } else {
-                    mSalbageRelated.setCarried();
+                    mSalvageIf.setCarried();
                     mStateMgr.changeState(StateID_Carried);
                 }
                 break;
@@ -174,7 +174,7 @@ void dAcSalbageObj_c::initSalbageObj() {
                 break;
             }
             default: {
-                if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() == mSalbageRelated.getSalvageObjId()) {
+                if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() == mSalvageIf.getSalvageObjId()) {
                     mStateMgr.changeState(StateID_Kill);
                     return;
                 } else {
@@ -203,7 +203,7 @@ void dAcSalbageObj_c::doInteraction(s32 arg) {
 }
 
 void dAcSalbageObj_c::addAttentionTargetIfNeeded() {
-    switch (mSalbageRelated.getSalvageObjId()) {
+    switch (mSalvageIf.getSalvageObjId()) {
         case SALVAGE_OBJ_WATER_JAR:
         case SALVAGE_OBJ_POT:       return;
         default:                    addAttentionTarget(); break;
@@ -212,10 +212,10 @@ void dAcSalbageObj_c::addAttentionTargetIfNeeded() {
 
 void dAcSalbageObj_c::addAttentionTarget() {
     AttentionManager::sInstance->addTarget(
-        *this, sInteractionTargetDefs[mSalbageRelated.getSalvageObjId()], 0, nullptr
+        *this, sInteractionTargetDefs[mSalvageIf.getSalvageObjId()], 0, nullptr
     );
 
-    InteractionTargetDef copy = sInteractionTargetDefs[mSalbageRelated.getSalvageObjId()];
+    InteractionTargetDef copy = sInteractionTargetDefs[mSalvageIf.getSalvageObjId()];
     copy.field_0x00 = 1;
     AttentionManager::sInstance->addTarget(*this, copy, 0, nullptr);
 }
@@ -236,14 +236,14 @@ bool dAcSalbageObj_c::shouldBeActiveDowsingTarget() const {
         return false;
     }
 
-    if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() == mSalbageRelated.getSalvageObjId()) {
+    if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() == mSalvageIf.getSalvageObjId()) {
         return false;
     }
 
     if (dSalvageMgr_c::sInstance->hasDowsingForSalvageObj(this) == false) {
         return false;
     } else {
-        return mSalbageRelated.getSalvageObjId() != SALVAGE_OBJ_POT;
+        return mSalvageIf.getSalvageObjId() != SALVAGE_OBJ_POT;
     }
 }
 
@@ -266,7 +266,7 @@ void dAcSalbageObj_c::calcMtxFromSalbageNpc(mMtx_c &ret) {
         ret.ZXYrotM(rotation);
     } else {
         ret = npc->getCarriedObjMtx();
-        mMtx_c rotMtx = dSalvageMgr_c::sInstance->getCarryRotMtx2(mSalbageRelated.getSalvageObjId());
+        mMtx_c rotMtx = dSalvageMgr_c::sInstance->getCarryRotMtx2(mSalvageIf.getSalvageObjId());
         MTXConcat(ret, rotMtx, ret);
         ret.getTranslation(position);
     }
@@ -274,7 +274,7 @@ void dAcSalbageObj_c::calcMtxFromSalbageNpc(mMtx_c &ret) {
 
 mMtx_c dAcSalbageObj_c::calcWorldMtx() {
     mMtx_c ret;
-    if (mSalbageRelated.isCarried()) {
+    if (mSalvageIf.isCarried()) {
         calcMtxFromSalbageNpc(ret);
     } else {
         ret.transS(position);
@@ -317,7 +317,7 @@ void dAcSalbageObj_c::initializeState_Wait() {
     mIsDowsingRegistered = true;
 }
 void dAcSalbageObj_c::executeState_Wait() {
-    if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() != mSalbageRelated.getSalvageObjId()) {
+    if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() != mSalvageIf.getSalvageObjId()) {
         if (!dSalvageMgr_c::sInstance->mSlbRef.isLinked()) {
             mVec3_c pos(position.x, position.y + 100000.0f, position.z);
             dAcObjBase_c::create(fProfile::NPC_SLB, roomid, 0xFFFFFD01, &pos, nullptr, nullptr, -1);
@@ -376,7 +376,7 @@ void dAcSalbageObj_c::initializeState_DemoThrow() {
     mBgObjAcch.SetRoofNone();
     mBgObjAcch.SetGndThinCellingOff();
     mBgAcchCir.SetWall(0.0f, 100.0f);
-    mSalbageRelated.setNotCarried();
+    mSalvageIf.setNotCarried();
 }
 void dAcSalbageObj_c::executeState_DemoThrow() {}
 void dAcSalbageObj_c::finalizeState_DemoThrow() {}
