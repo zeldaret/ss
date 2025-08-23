@@ -37,6 +37,7 @@ public:
 
 // Ghidra: ActorEventFlowManager
 class dFlow_c : dFlowBase_c {
+protected:
     enum BranchValue_e {
         BRANCH_SELECTED_OPTION_0,
         BRANCH_SELECTED_OPTION_1,
@@ -52,9 +53,9 @@ class dFlow_c : dFlowBase_c {
         BRANCH_RAND_2,
         BRANCH_RAND_3,
         BRANCH_RAND_4,
-        BRANCH_14, // skipped
-        BRANCH_15, // skipped
-        BRANCH_16, // skipped
+        BRANCH_NPC_1, // handled by subclass
+        BRANCH_NPC_2, // handled by subclass
+        BRANCH_NPC_3, // handled by subclass
         BRANCH_FREE_SPACE_IN_POUCH,
         BRANCH_18,
         BRANCH_19,
@@ -124,7 +125,7 @@ public:
     /* vt 0x2C */ virtual bool handleEntry() override;
     /* vt 0x30 */ virtual bool handleJump() override;
     /* vt 0x38 */ virtual bool vt_0x38() const {
-        return 0;
+        return false;
     }
     /* vt 0x3C */ virtual u16 getSwitchChoice(const MsbFlowInfo *element, u16 param) const;
     /* vt 0x40 */ virtual bool triggerEntryPointChecked(s32 labelPart1, s32 labelPart2);
