@@ -735,7 +735,7 @@ bool dFlow_c::handleMessage() {
 
 u16 dFlow_c::getSwitchChoice(const MsbFlowInfo *element, u16 param) const {
     u16 result = 0;
-    if (param < BRANCH_14 || param > BRANCH_16) {
+    if (param < BRANCH_NPC_1 || param > BRANCH_NPC_3) {
         result = (this->*(sBranchHandlers[param]))(element);
     }
     return result;
@@ -961,9 +961,9 @@ dFlow_c::BranchHandler dFlow_c::sBranchHandlers[] = {
     &dFlow_c::branchHandler11, // BRANCH_RAND_2
     &dFlow_c::branchHandler12, // BRANCH_RAND_3
     &dFlow_c::branchHandler13, // BRANCH_RAND_4
-    &dFlow_c::branchHandler14, // BRANCH_14
-    &dFlow_c::branchHandler15, // BRANCH_15
-    &dFlow_c::branchHandler16, // BRANCH_16
+    &dFlow_c::branchHandler14, // BRANCH_NPC_1
+    &dFlow_c::branchHandler15, // BRANCH_NPC_2
+    &dFlow_c::branchHandler16, // BRANCH_NPC_3
     &dFlow_c::branchHandler17, // BRANCH_FREE_SPACE_IN_POUCH
     &dFlow_c::branchHandler18, // BRANCH_18
     &dFlow_c::branchHandler19, // BRANCH_19
