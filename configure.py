@@ -2092,7 +2092,7 @@ config.libs = [
     Rel(NonMatching, "d_a_insect_grasshopper", "REL/d/a/d_a_insect_grasshopper.cpp"),
     Rel(NonMatching, "d_a_insect_ladybug", "REL/d/a/d_a_insect_ladybug.cpp"),
     Rel(NonMatching, "d_a_insect_scarab", "REL/d/a/d_a_insect_scarab.cpp"),
-    Rel(NonMatching, "d_a_invisible", "REL/d/a/d_a_invisible.cpp"),
+    Rel(Matching, "d_a_invisible", "REL/d/a/d_a_invisible.cpp"),
     Rel(NonMatching, "d_a_kanban", "REL/d/a/d_a_kanban.cpp"),
     Rel(NonMatching, "d_a_knight_leader_bird", "REL/d/a/d_a_knight_leader_bird.cpp"),
     Rel(NonMatching, "d_a_little_bird", "REL/d/a/d_a_little_bird.cpp"),
