@@ -2582,7 +2582,7 @@ config.libs = [
         "REL/d/a/obj/d_a_obj_roulette_island_r.cpp",
     ),
     Rel(NonMatching, "d_a_obj_ro_at_target", "REL/d/a/obj/d_a_obj_ro_at_target.cpp"),
-    Rel(NonMatching, "d_a_obj_ruined_save", "REL/d/a/obj/d_a_obj_ruined_save.cpp"),
+    Rel(Matching, "d_a_obj_ruined_save", "REL/d/a/obj/d_a_obj_ruined_save.cpp"),
     Rel(NonMatching, "d_a_obj_sail", "REL/d/a/obj/d_a_obj_sail.cpp"),
     Rel(NonMatching, "d_a_obj_sandbag", "REL/d/a/obj/d_a_obj_sandbag.cpp"),
     Rel(NonMatching, "d_a_obj_sand_D301", "REL/d/a/obj/d_a_obj_sand_D301.cpp"),
