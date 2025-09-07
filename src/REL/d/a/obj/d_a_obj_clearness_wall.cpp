@@ -9,8 +9,8 @@
 SPECIAL_ACTOR_PROFILE(OBJ_CLEARNESS_WALL, dAcOclearnessWall_c, fProfile::OBJ_CLEARNESS_WALL, 0x15B, 0, 0);
 
 bool dAcOclearnessWall_c::createHeap() {
-    char *arcName = getArcName();
-    char *modelName = getModelName();
+    const char *arcName = getArcName();
+    const char *modelName = getModelName();
     void *dzb = OarcManager::GetInstance()->getDzbFromArc(arcName, modelName);
     void *plc = OarcManager::GetInstance()->getPlcFromArc(arcName, modelName);
     TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
@@ -92,7 +92,7 @@ int dAcOclearnessWall_c::draw() {
     return SUCCEEDED;
 }
 
-char *dAcOclearnessWall_c::getArcName() {
+const char *dAcOclearnessWall_c::getArcName() {
     switch (mVariant) {
         case 0:  return "InvisibleWall";
         case 1:  return "InvisibleWallB";
@@ -103,7 +103,7 @@ char *dAcOclearnessWall_c::getArcName() {
     }
 }
 
-char *dAcOclearnessWall_c::getModelName() {
+const char *dAcOclearnessWall_c::getModelName() {
     switch (mVariant) {
         case 0:  return "InvisibleWall";
         case 1:  return "InvisibleWall_yahane";

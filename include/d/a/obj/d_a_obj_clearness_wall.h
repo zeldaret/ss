@@ -6,9 +6,7 @@
 
 class dAcOclearnessWall_c : public dAcObjBase_c {
 public:
-    dAcOclearnessWall_c() {
-        field_0x543 = 1;
-    }
+    dAcOclearnessWall_c(): field_0x543(true) {}
     virtual ~dAcOclearnessWall_c() {}
 
     virtual bool createHeap() override;
@@ -18,8 +16,8 @@ public:
     virtual int draw() override;
 
 private:
-    char *getArcName();
-    char *getModelName();
+    const char *getArcName();
+    const char *getModelName();
 
     /* 0x330 */ dBgW mBgW;
     /* 0x540 */ u8 mSceneflag;
