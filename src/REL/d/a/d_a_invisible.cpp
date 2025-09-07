@@ -10,11 +10,12 @@ STATE_DEFINE(dAcInvisible, Wait);
 
 int dAcInvisible::create() {
     mObjAcch.Set(this, 1, &mAcchCir);
-    mObjAcch.mFlags |= 0x408;
+    mObjAcch.SetRoofNone();
+    mObjAcch.SetWaterNone();
     mAcchCir.SetWall(15.0f, 120.0f);
-    mStts.mRank = 9;
-    mSph.mStts = &mStts;
-    mCps.mStts = &mStts;
+    mStts.SetRank(9);
+    mSph.SetStts(mStts);
+    mCps.SetStts(mStts);
     forwardAccel = 0.0;
     forwardMaxSpeed = -40.0f;
     mStateMgr.changeState(StateID_Wait);
