@@ -49,8 +49,10 @@ int dAcOAmber_c::actorPostCreate() {
     mShadowRot.w = ((mMax - mMin) * 0.5f).mag();
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
-    if (dBgS_ObjGndChk::CheckPos(position + mVec3_c::Ey * mMax.y)) {
-        field_0x37c = position.y - dBgS_ObjGndChk::GetGroundHeight() < 0.0f ? 0.0f : dBgS_ObjGndChk::GetGroundHeight();
+    mVec3_c chkPos = position + mVec3_c::Ey * mMax.y;
+    if (dBgS_ObjGndChk::CheckPos(chkPos)) {
+        f32 deltaHeight = position.y - dBgS_ObjGndChk::GetGroundHeight();
+        field_0x37c = deltaHeight < 0.0f ? 0.0f : deltaHeight;
     } else {
         field_0x37c = 1.0e+9f;
     }
