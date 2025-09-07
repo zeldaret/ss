@@ -2375,7 +2375,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_city_water", "REL/d/a/obj/d_a_obj_city_water.cpp"),
     Rel(NonMatching, "d_a_obj_claw_shot_tg", "REL/d/a/obj/d_a_obj_claw_shot_tg.cpp"),
     Rel(
-        NonMatching, "d_a_obj_clearness_wall", "REL/d/a/obj/d_a_obj_clearness_wall.cpp"
+        Matching, "d_a_obj_clearness_wall", "REL/d/a/obj/d_a_obj_clearness_wall.cpp"
     ),
     Rel(NonMatching, "d_a_obj_clef", "REL/d/a/obj/d_a_obj_clef.cpp"),
     Rel(Matching, "d_a_obj_cloud_dive", "REL/d/a/obj/d_a_obj_cloud_dive.cpp"),
