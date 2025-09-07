@@ -2300,7 +2300,7 @@ config.libs = [
     Rel(NonMatching, "d_a_npc_zelda", "REL/d/a/npc/d_a_npc_zelda.cpp"),
     Rel(NonMatching, "d_a_nusi_base", "REL/d/a/d_a_nusi_base.cpp"),
     Rel(NonMatching, "d_a_nusi_npc", "REL/d/a/d_a_nusi_npc.cpp"),
-    Rel(NonMatching, "d_a_obj_amber", "REL/d/a/obj/d_a_obj_amber.cpp"),
+    Rel(Matching, "d_a_obj_amber", "REL/d/a/obj/d_a_obj_amber.cpp"),
     Rel(
         NonMatching, "d_a_obj_ancient_jewels", "REL/d/a/obj/d_a_obj_ancient_jewels.cpp"
     ),
