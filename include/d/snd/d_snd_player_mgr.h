@@ -52,6 +52,7 @@ public:
     void enterHbm();
     void leaveHbm();
 
+    bool fn_8035E000();
     void fn_8035E1B0(u16);
     bool fn_8035E220();
     void fn_8035E250(u16);

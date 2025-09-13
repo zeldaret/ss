@@ -20,6 +20,7 @@
 #include "d/d_sys.h"
 #include "d/lyt/d_lyt_battery.h"
 #include "d/lyt/d_lyt_system_window.h"
+#include "d/snd/d_snd_player_mgr.h"
 #include "f/f_base.h"
 #include "f/f_profile.h"
 #include "f/f_profile_name.h"
@@ -101,7 +102,16 @@ sFPhaseBase::sFPhaseState dScBoot_c::cb4() {
     return sFPhaseBase::PHASE_NEXT;
 }
 
-void *dScBoot_c::dvdCallback(void *data) {}
+static void hbmInitCallback() {
+    dSndPlayerMgr_c::GetInstance()->fn_8035E000();
+}
+
+void *dScBoot_c::dvdCallback(void *data) {
+    dSndPlayerMgr_c::GetInstance()->setupState0();
+    dHbm::Manage_c::GetInstance()->setMenuInitCallback(hbmInitCallback);
+    dPad::setConnectCallback();
+    return reinterpret_cast<void *>(true);
+}
 
 sFPhaseBase::sFPhaseState dScBoot_c::cb5() {
     if (mpDvdCallback == nullptr) {
@@ -451,7 +461,8 @@ int dScBoot_c::doDelete() {
 
 int dScBoot_c::execute() {
     mFader.calc();
-    mStateMgr.executeState();
+    // TODO - fakematch? We need to prevent the inline from being emitted right after this function...
+    static_cast<sStateMgrIf_c &>(mStateMgr).executeState();
     sFPhaseBase::sFPhaseState state = executeLoadPhase();
     if (mAllDataLoaded == false && state == sFPhaseBase::PHASE_ALL_DONE) {
         mAllDataLoaded = true;

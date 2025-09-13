@@ -2860,7 +2860,7 @@ config.libs = [
     Rel(NonMatching, "d_lyt_seeker_stone", "REL/d/d_lyt_seeker_stone.cpp"),
     Rel(NonMatching, "d_lyt_title_BG", "REL/d/d_lyt_title_BG.cpp"),
     Rel(Matching, "d_profile", "REL/d/d_profile.cpp"),
-    Rel(NonMatching, "d_s_boot", "REL/d/d_s_boot.cpp"),
+    Rel(Matching, "d_s_boot", "REL/d/d_s_boot.cpp"),
     Rel(NonMatching, "d_title_manager", "REL/d/d_title_manager.cpp"),
     Rel(Matching, "d_t_action", "REL/d/t/d_t_action.cpp"),
     Rel(NonMatching, "d_t_at0", "REL/d/t/d_t_at0.cpp"),

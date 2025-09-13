@@ -10,6 +10,8 @@ public:
         HBM_MANAGE_ACTIVE = 2,
     };
 
+    typedef void (*MenuInitCallback)();
+
     static void CreateInstance();
     static Manage_c *GetInstance();
 
@@ -47,6 +49,10 @@ public:
         return mState;
     }
 
+    void setMenuInitCallback(MenuInitCallback cb) {
+        mMenuInitCallback = cb;
+    }
+
 private:
     static Manage_c *s_pInstance;
 
@@ -54,5 +60,7 @@ private:
     /* 0x210 */ ManageState_e mState;
     /* 0x218 */ UNKWORD field_0x214;
     /* 0x218 */ u32 mFlags;
+    /* 0x21C */ u8 _0x21C[0x224 - 0x21C];
+    /* 0x224 */ MenuInitCallback mMenuInitCallback;
 };
 } // namespace dHbm
