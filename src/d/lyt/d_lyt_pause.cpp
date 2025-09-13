@@ -7,8 +7,8 @@
 #include "d/d_gfx.h"
 #include "d/d_heap.h"
 #include "d/d_pad.h"
+#include "d/d_pad_manager.h"
 #include "d/d_pad_nav.h"
-#include "d/d_pause.h"
 #include "d/d_player.h"
 #include "d/flag/storyflag_manager.h"
 #include "d/lyt/d_lyt_common_arrow.h"
@@ -409,8 +409,7 @@ void dLytPauseMain_c::executeState_Select() {
         case 300: {
             if (mpDisp00->isChangingState() == true) {
                 mStep++;
-                // TODO - dPadManager_c
-                fn_80059F40(dPauseManager_c::GetInstance());
+                dPadManager_c::GetInstance()->requestMplsCalibration();
             }
             break;
         }
