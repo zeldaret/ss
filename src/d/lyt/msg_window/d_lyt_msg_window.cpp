@@ -120,7 +120,7 @@ bool dLytMsgWindow_c::build() {
     field_0x778 = 0;
     field_0x77C = 0;
     field_0x780 = 0;
-    field_0x784 = -1;
+    mMsgIdx = -1;
 
     mAlsoEntryPointToTrigger = 0xFFFF;
     mEntryPointToTrigger = 0xFFFF;

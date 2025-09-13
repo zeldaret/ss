@@ -1572,12 +1572,12 @@ void dTagProcessor_c::somethingWithScrapperAndMusic(wchar_t *src) {
             if ((ac->profile_name >= fProfile::NPC_SLFB && ac->profile_name <= fProfile::NPC_SLFL) ||
                 (ac->profile_name >= fProfile::NPC_SLB && ac->profile_name <= fProfile::FLY_SLB) ||
                 ac->profile_name == fProfile::NPC_SLB2 || ac->profile_name == fProfile::NPC_DRBC) {
-                dSndPlayerMgr_c::GetInstance()->setMsgActor(dLytMsgWindow_c::getInstance()->getField_0x784(), ac);
+                dSndPlayerMgr_c::GetInstance()->setMsgActor(dLytMsgWindow_c::getInstance()->getMsgIdx(), ac);
                 return;
             }
         }
     } else if (field_0x824 == 101) {
-        dSndPlayerMgr_c::GetInstance()->setMsgActor(dLytMsgWindow_c::getInstance()->getField_0x784(), nullptr);
+        dSndPlayerMgr_c::GetInstance()->setMsgActor(dLytMsgWindow_c::getInstance()->getMsgIdx(), nullptr);
     }
 }
 
