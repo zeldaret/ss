@@ -1009,11 +1009,11 @@ bool dLytPauseMgr_c::checkRing() {
 
     s32 tab = lytControl->getPauseDisp00Tab();
 
-    if (dPad::getDownB() && tab == 0) {
+    if (dPad::getDownB() && tab == TAB_ITEM) {
         return true;
-    } else if (dPad::getDownMinus() && tab == 1) {
+    } else if (dPad::getDownMinus() && tab == TAB_POUCH) {
         return true;
-    } else if (dPad::getDownC() && tab == 2) {
+    } else if (dPad::getDownC() && tab == TAB_DOWSING) {
         return true;
     }
     return false;
