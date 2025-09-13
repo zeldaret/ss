@@ -6,11 +6,11 @@
 #include <cmath>
 
 dSndAnimSound_c::dSndAnimSound_c(dSoundSource_c *source)
-    : mSound(*source), mpData(nullptr), field_0x94(1.0f), field_0x98(INFINITY), mNeedFrameReset(false) {}
+    : mSound(*source), mpData(nullptr), mRate(1.0f), field_0x98(INFINITY), mNeedFrameReset(false) {}
 
 void dSndAnimSound_c::setData(const void *data, const char *name) {
     mDirection = nw4r::snd::AnimSound::FORWARD;
-    field_0x94 = 1.0f;
+    mRate = 1.0f;
     if (data == mpData) {
         return;
     }
@@ -49,7 +49,7 @@ void dSndAnimSound_c::setRate(f32 rate) {
     } else {
         mDirection = nw4r::snd::AnimSound::FORWARD;
     }
-    field_0x94 = rate;
+    mRate = rate;
 }
 
 void dSndAnimSound_c::resetFrame(f32 frame) {

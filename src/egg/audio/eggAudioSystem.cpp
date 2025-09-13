@@ -19,7 +19,7 @@ AudioSystem::~AudioSystem() {}
 void AudioSystem::reset(s32 ms) {
     if (mShutdownStatus == 0 && mResetStatus == 0) {
         mSavedMasterVolume = nw4r::snd::SoundSystem::GetMasterVolume();
-        nw4r::snd::SoundSystem::SetMasterVolume(0.0f, ms * 16.666667f);
+        nw4r::snd::SoundSystem::SetMasterVolume(0.0f, ms * (1.0f / 60.f * 1000.0f));
         mResetStatus = 1;
     }
 }
@@ -34,7 +34,7 @@ void AudioSystem::recoverReset() {
 void AudioSystem::shutdown(s32 ms) {
     if (mShutdownStatus == 0) {
         mShutdownStatus = 1;
-        nw4r::snd::SoundSystem::SetMasterVolume(0.0f, ms * 16.666667f);
+        nw4r::snd::SoundSystem::SetMasterVolume(0.0f, ms * (1.0f / 60.f * 1000.0f));
     }
 }
 

@@ -27,6 +27,29 @@ enum dBgPc_ECode {
     /* 0x80000000 */ CODE_UNUSED_8000_0000 = 0x80000000,
 };
 
+enum dBgPc_PolyAttr0_e {
+    POLY_ATT_0_NONE = 0,
+    POLY_ATT_0_TUTI = 1,
+    POLY_ATT_0_ROCK = 2,
+    POLY_ATT_0_SAND = 3,
+    POLY_ATT_0_GRASS = 4,
+    POLY_ATT_0_TREE = 5,
+    POLY_ATT_0_LAVA = 6,
+    POLY_ATT_0_WATER = 7,
+    POLY_ATT_0_STONE = 8,
+    POLY_ATT_0_LOTUS = 9,
+    POLY_ATT_0_METAL = 10,
+    POLY_ATT_0_NUMA = 11,
+    POLY_ATT_0_TUTA = 12,
+    POLY_ATT_0_LIFE = 13,
+    POLY_ATT_0_CARPET = 14,
+    POLY_ATT_0_QSAND = 15,
+    POLY_ATT_0_WOOD = 16,
+    POLY_ATT_0_DEATH = 17,
+
+    POLY_ATT_0_MAX = 18,
+};
+
 enum dBgPc_Attribute {
     POLY_ATTR_NORMAL = 0,
     POLY_ATTR_SLOPE = 1,

@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/col/bg/d_bg_pc.h"
 #include "d/snd/d_snd_3d_actor.h"
 #include "d/snd/d_snd_3d_manager.h"
 #include "d/snd/d_snd_anim_sound.h"
@@ -1206,7 +1207,7 @@ u32 dSoundSource_c::modifySoundId(u32 baseSoundId, dSoundSource_c *source) {
 
 u32 dSoundSource_c::specializeBgHitSoundId(u32 soundId, u32 polyAttr0, u32 polyAttr1) {
     if (checkUserParamMask(soundId, 0x100)) {
-        if (polyAttr0 >= SND_MAT_NONE + 1 && polyAttr0 <= SND_MAT_MAX - 1) {
+        if (polyAttr0 >= POLY_ATT_0_NONE + 1 && polyAttr0 <= POLY_ATT_0_MAX - 1) {
             const char *baseLabel = dSndMgr_c::getSoundLabelString(soundId);
             SizedString<64> label;
             label.sprintf("%s_%s_%d", baseLabel, getHitEffectName(polyAttr0), polyAttr1);

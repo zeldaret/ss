@@ -153,7 +153,7 @@ void dStageMgr_c::finalizeState_ReadLayerObjectRes() {
         void *jpc = OarcManager::GetInstance()->getSubEntryData(name, "dat/jparticle.jpc");
         if (jpc != nullptr) {
             void *jpn = OarcManager::GetInstance()->getData(name, "dat/jparticle.jpn");
-            dParticle::mgr_c::GetInstance()->createResource(dHeap::work2Heap.heap, true, jpc, jpn);
+            dParticle::mgr_c::GetInstance()->createResource(dHeap::work2Heap.heap, 1, jpc, jpn);
         }
     }
 }

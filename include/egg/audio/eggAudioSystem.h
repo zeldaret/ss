@@ -10,8 +10,11 @@ public:
     AudioSystem();
     ~AudioSystem();
 
+    // TODO - this seems to use milliseconds as the unit, but
+    // calling code seems to pass frame counts...
     void reset(s32 ms);
     void recoverReset();
+    // TODO - see reset
     void shutdown(s32 ms);
     void calc();
 

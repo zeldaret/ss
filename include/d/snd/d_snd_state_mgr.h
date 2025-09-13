@@ -319,7 +319,7 @@ private:
     /* 0x054 */ u32 mStageTypeFlags;
     /* 0x058 */ s32 mLayer;
     /* 0x05C */ s32 mRoomId;
-    /* 0x060 */ UNKWORD field_0x060;
+    /* 0x060 */ s32 mCheckRoomIdCooldown;
     /* 0x064 */ bool field_0x064;
     /* 0x065 */ bool field_0x065;
     /* 0x066 */ bool mHasChangedTgSndAreaFlags;
@@ -367,7 +367,7 @@ private:
     /* 0x498 */ f32 mFxSend3DNext;
     /* 0x49C */ f32 mFxSend3D;
     /* 0x4A0 */ f32 mFxSend3DTarget;
-    /* 0x4A4 */ u32 field_0x4A4;
+    /* 0x4A4 */ u32 mPrevStageGroup;
     /* 0x4A8 */ u8 field_0x4A8;
     /* 0x4A9 */ bool mNeedsGroupsReload;
 };

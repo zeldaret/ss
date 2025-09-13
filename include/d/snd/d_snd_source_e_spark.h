@@ -8,7 +8,8 @@ public:
     dSndSourceESpark_c(s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup)
         : dSoundSource_c(sourceType, ac, name, pOwnerGroup) {}
 
-    // okay
+    // TODO - this one doesn't actually have an AnimSound. Maybe the name is wrong,
+    // maybe something else is weird
     virtual bool hasAnimSound() override {
         return true;
     }

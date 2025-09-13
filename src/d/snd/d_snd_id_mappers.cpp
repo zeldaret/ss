@@ -1,6 +1,7 @@
 #include "d/snd/d_snd_id_mappers.h"
 
 #include "common.h"
+#include "d/col/bg/d_bg_pc.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_source_enums.h"
@@ -144,7 +145,7 @@ const char *sSndHitEffects[] = {
 #pragma pop
 
 const char *getHitEffectName(u32 polyAttr0) {
-    if (polyAttr0 >= 1 && polyAttr0 < SND_MAT_MAX) {
+    if (polyAttr0 >= 1 && polyAttr0 < POLY_ATT_0_MAX) {
         polyAttr0 -= 1;
         return sSndHitEffects[polyAttr0];
     }

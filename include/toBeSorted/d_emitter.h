@@ -433,6 +433,16 @@ public:
     static s32 getGroupId(u16);
     static bool shouldBePaused(dBase_c *owner);
 
+    enum GroundEffect_e {
+        GROUND_0,
+        GROUND_1,
+        GROUND_2,
+        GROUND_3,
+        GROUND_4,
+        GROUND_5,
+        GROUND_6,
+    };
+
     enum Fx_e {
         TsuboA,
         TsuboB,
@@ -500,7 +510,7 @@ private:
         u16 effectResourceId, const mMtx_c &transform, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2
     );
 
-    static s32 polyAttrsToGroundEffectIdx(s32 polyAttr0, s32 polyAttr1);
+    static GroundEffect_e polyAttrsToGroundEffectIdx(s32 polyAttr0, s32 polyAttr1);
 
     static mHeapAllocator_c *ms_allocator;
     static dMassObjEmitter_c *sMassObjEmitters;

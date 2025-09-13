@@ -29,7 +29,7 @@ private:
 
     /* 0x00 */ nw4r::snd::AnimSound mSound;
     /* 0x90 */ const void *mpData;
-    /* 0x94 */ f32 field_0x94;
+    /* 0x94 */ f32 mRate; // TODO - is this actually used?
     /* 0x98 */ f32 field_0x98;
     /* 0x9C */ bool mNeedFrameReset;
     /* 0xA0 */ nw4r::snd::AnimSound::PlayDirection mDirection;

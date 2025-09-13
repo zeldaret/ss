@@ -41,7 +41,7 @@ dSndStateMgr_c::dSndStateMgr_c()
       mStageTypeFlags(0),
       mLayer(0),
       mRoomId(-1),
-      field_0x060(0),
+      mCheckRoomIdCooldown(0),
       field_0x064(false),
       field_0x065(false),
       mHasChangedTgSndAreaFlags(false),
@@ -81,7 +81,7 @@ dSndStateMgr_c::dSndStateMgr_c()
       mFxSend3DNext(-1.0f),
       mFxSend3D(0.02f),
       mFxSend3DTarget(0.02f),
-      field_0x4A4(-1),
+      mPrevStageGroup(-1),
       field_0x4A8(0),
       mNeedsGroupsReload(false) {}
 
@@ -318,7 +318,7 @@ void dSndStateMgr_c::loadStageSound(bool force) {
     u32 id = -1;
     int round = 1;
 
-    bool b1 = false;
+    bool canReuseStageState = false;
     SizedString<64> label;
 
     if (info->unk4 == mStageId) {
@@ -332,8 +332,8 @@ void dSndStateMgr_c::loadStageSound(bool force) {
 
     for (; round > 0; round--) {
         id = dSndMgr_c::GetInstance()->getArchive()->ConvertLabelStringToGroupId(label);
-        if (field_0x4A4 == id && field_0x4A4 != -1) {
-            b1 = true;
+        if (mPrevStageGroup == id && mPrevStageGroup != -1) {
+            canReuseStageState = true;
             break;
         }
 
@@ -344,7 +344,7 @@ void dSndStateMgr_c::loadStageSound(bool force) {
                 dSndPlayerMgr_c::GetInstance()->popToState0();
             }
             if (dSndMgr_c::GetInstance()->loadGroup(id, nullptr, 0)) {
-                field_0x4A4 = id;
+                mPrevStageGroup = id;
                 dSndPlayerMgr_c::GetInstance()->saveState2();
                 break;
             }
@@ -357,7 +357,7 @@ void dSndStateMgr_c::loadStageSound(bool force) {
         }
     }
 
-    if (b1) {
+    if (canReuseStageState) {
         dSndPlayerMgr_c::GetInstance()->popToState2();
     } else if (id == -1) {
         if (bHasState1) {
@@ -366,7 +366,7 @@ void dSndStateMgr_c::loadStageSound(bool force) {
             dSndPlayerMgr_c::GetInstance()->popToState0();
         }
         dSndPlayerMgr_c::GetInstance()->saveState2();
-        field_0x4A4 = -1;
+        mPrevStageGroup = -1;
     }
 
     if (!demo && (field_0x03C != 2 || field_0x065)) {
@@ -862,11 +862,11 @@ void dSndStateMgr_c::setStbEventName(const char *eventName) {
 
 void dSndStateMgr_c::calcRoomId() {
     if (checkFlag0x10(FLAG0x10_0x04)) {
-        if (field_0x060 > 0) {
-            field_0x060--;
+        if (mCheckRoomIdCooldown > 0) {
+            mCheckRoomIdCooldown--;
         } else {
             if (mRoomId == -1) {
-                field_0x060 = 30;
+                mCheckRoomIdCooldown = 30;
             }
             s32 newRoom = dSndSourceMgr_c::GetInstance()->getPlayerSourceRoomId();
             if (mRoomId != newRoom) {
