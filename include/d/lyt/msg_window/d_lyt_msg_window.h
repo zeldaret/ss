@@ -93,8 +93,8 @@ public:
         return mpTagProcessor;
     }
 
-    s32 getField_0x784() const {
-        return field_0x784;
+    s32 getMsgIdx() const {
+        return mMsgIdx;
     }
 
     u8 getField_0x80D() const {
@@ -166,7 +166,7 @@ private:
     /* 0x778 */ s32 field_0x778;
     /* 0x77C */ s32 field_0x77C;
     /* 0x780 */ s32 field_0x780;
-    /* 0x784 */ s32 field_0x784;
+    /* 0x784 */ s32 mMsgIdx;
 
     /* 0x788 */ u16 mEntryPointToTrigger;
     /* 0x78A */ u16 mAlsoEntryPointToTrigger;

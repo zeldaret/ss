@@ -907,7 +907,9 @@ bool dJEffManager_c::createEffManagers() {
         }
     }
 
-    ms_allocator->createFrmHeapToCurrent(-1, dHeap::work1Heap.heap, "dJEffManager_c::ms_allocator", 0x20, mHeap::OPT_NONE);
+    ms_allocator->createFrmHeapToCurrent(
+        -1, dHeap::work1Heap.heap, "dJEffManager_c::ms_allocator", 0x20, mHeap::OPT_NONE
+    );
     for (s32 idx = 0; idx < 2; idx++) {
         sFogProcs[idx].create(idx, sInts[idx], -1, ms_allocator);
     }
@@ -1179,27 +1181,25 @@ bool EffectsStruct::createEffect(
     return hasEmitters();
 }
 
-// TODO: Document PolyAttrs
-s32 dJEffManager_c::polyAttrsToGroundEffectIdx(s32 polyAttr0, s32 polyAttr1) {
-    if (polyAttr0 == 0 || (polyAttr0 == 4 && polyAttr1 == 1) || (polyAttr0 == 9) ||
-        (polyAttr0 == 10 && polyAttr1 == 1) || (polyAttr0 == 12) || (polyAttr0 == 17 && polyAttr1 != 1) ||
-        (polyAttr0 == 13 && (polyAttr1 == 1 || polyAttr1 == 3)) || polyAttr0 == 18) {
-        return 6;
-    } else if (polyAttr0 == 17) {
-        return 5;
-    } else if (polyAttr0 == 6) {
-        return 2;
-    } else if (polyAttr0 == 4) {
-        return 1;
-    } else if (polyAttr0 == 3 || polyAttr0 == 15) {
-        return 3;
+// TODO: Document polyAttr1 and GROUND enum
+dJEffManager_c::GroundEffect_e dJEffManager_c::polyAttrsToGroundEffectIdx(s32 polyAttr0, s32 polyAttr1) {
+    if (polyAttr0 == POLY_ATT_0_NONE || (polyAttr0 == POLY_ATT_0_GRASS && polyAttr1 == 1) || (polyAttr0 == POLY_ATT_0_LOTUS) ||
+        (polyAttr0 == POLY_ATT_0_METAL && polyAttr1 == 1) || (polyAttr0 == POLY_ATT_0_TUTA) || (polyAttr0 == POLY_ATT_0_DEATH && polyAttr1 != 1) ||
+        (polyAttr0 == POLY_ATT_0_LIFE && (polyAttr1 == 1 || polyAttr1 == 3)) || polyAttr0 == POLY_ATT_0_MAX) {
+        return GROUND_6;
+    } else if (polyAttr0 == POLY_ATT_0_DEATH) {
+        return GROUND_5;
+    } else if (polyAttr0 == POLY_ATT_0_LAVA) {
+        return GROUND_2;
+    } else if (polyAttr0 == POLY_ATT_0_GRASS) {
+        return GROUND_1;
+    } else if (polyAttr0 == POLY_ATT_0_SAND || polyAttr0 == POLY_ATT_0_QSAND) {
+        return GROUND_3;
+    } else if (polyAttr0 == POLY_ATT_0_NUMA) {
+        return GROUND_4;
+    } else {
+        return GROUND_0;
     }
-    // ???
-    s32 result = 0;
-    if (polyAttr0 == 11) {
-        result = 4;
-    }
-    return result;
 }
 
 dEmitterBase_c *dJEffManager_c::spawnGroundEffect(
@@ -1218,11 +1218,11 @@ dEmitterBase_c *dJEffManager_c::spawnGroundEffect(
         return nullptr;
     }
 
-    s32 idx = polyAttrsToGroundEffectIdx(polyAttr0, polyAttr1);
-    if (idx == 6) {
+    GroundEffect_e idx = polyAttrsToGroundEffectIdx(polyAttr0, polyAttr1);
+    if (idx == GROUND_6) {
         return nullptr;
     }
-    if (idx == 2 && unk == 0) {
+    if (idx == GROUND_2 && unk == 0) {
         scale *= 1.5f;
     }
     mMtx_c mtx;

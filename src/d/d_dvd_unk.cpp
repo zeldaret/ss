@@ -120,7 +120,7 @@ void dDvdUnk::FontUnk::fn_80052A20() {
 
     if (checkFlag(FLAG_ERROR_STATE)) {
         dGfx_c::GetInstance()->releaseTextureBuffer();
-        dSndPlayerMgr_c::GetInstance()->fn_8035E6E0();
+        dSndPlayerMgr_c::GetInstance()->leaveCaution();
     }
 
     if (dLytSystemWindow_c::GetInstance() != nullptr && dLytSystemWindow_c::GetInstance()->fn_80152F80()) {
@@ -169,11 +169,11 @@ void FontUnk::preExecute() {
         if (prevError && !isAnyError()) {
             dGfx_c::GetInstance()->releaseTextureBuffer();
             offFlag(FLAG_ERROR_STATE);
-            dSndPlayerMgr_c::GetInstance()->fn_8035E6E0();
+            dSndPlayerMgr_c::GetInstance()->leaveCaution();
         }
 
         if (field_0x2C == true && !prevError && isAnyError()) {
-            dSndPlayerMgr_c::GetInstance()->fn_8035E620();
+            dSndPlayerMgr_c::GetInstance()->enterCaution();
         }
     }
 }
@@ -222,7 +222,7 @@ void FontUnk::fn_80052D50() {
         if (checkFlag(FLAG_ERROR_STATE)) {
             dGfx_c::GetInstance()->releaseTextureBuffer();
             mFlags = 0;
-            dSndPlayerMgr_c::GetInstance()->fn_8035E6E0();
+            dSndPlayerMgr_c::GetInstance()->leaveCaution();
         }
         dPadManager_c::GetInstance()->init();
     }

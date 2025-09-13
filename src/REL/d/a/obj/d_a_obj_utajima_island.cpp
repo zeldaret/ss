@@ -5,6 +5,7 @@
 #include "d/a/obj/d_a_obj_utajima_main_mecha.h"
 #include "d/col/bg/d_bg_s.h"
 #include "d/d_stage.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "f/f_base.h"
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
@@ -105,17 +106,17 @@ void dAcOutajimaIsland_c::executeState_Wait() {
 
     if (mPlaySound) {
         if (mRingLayer == 1) {
-            playSoundEffect1(0xC6E);
+            holdSound(SE_UtaLand_MoveA);
         } else if (mRingLayer == 2) {
-            playSoundEffect1(0xC6F);
+            holdSound(SE_UtaLand_MoveB);
         } else if (mRingLayer == 3) {
-            playSoundEffect1(0xC70);
+            holdSound(SE_UtaLand_MoveC);
         }
 
         if (mOldPosition == position) {
             mPlaySound = false;
             if (mParam2 == 0 && !sPlatformsSettled) {
-                playSound(0xC71);
+                startSound(SE_UtaLand_StopOK);
                 sPlatformsSettled = true;
             }
         }

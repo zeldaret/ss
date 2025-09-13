@@ -2,6 +2,7 @@
 
 #include "d/col/bg/d_bg_s.h"
 #include "d/flag/sceneflag_manager.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "m/m_vec.h"
 #include "nw4r/math/math_arithmetic.h"
 #include "s/s_Math.h"
@@ -74,7 +75,7 @@ void dAcOtrapRock1_c::initializeState_TrapAction() {
     field_0x5A0 = 0x2000;
     field_0x5A5 = 1;
     field_0x5A2 = 0x2D8;
-    playSound(0xB0E);
+    startSound(SE_TrapRc1_TRAP_ACTION);
 }
 
 void dAcOtrapRock1_c::executeState_TrapAction() {

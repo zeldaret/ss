@@ -9,17 +9,9 @@
 #include "m/m_vec.h"
 #include "toBeSorted/actor_info.h"
 #include "toBeSorted/raii_ptr.h"
-#include "toBeSorted/tlist.h"
+#include "toBeSorted/sound_info.h"
 
-class dAcBase_c;
 struct cBgS_PolyInfo;
-
-struct SoundInfo {
-    dAcBase_c *actor;
-    dSoundSourceIf_c *sound_source;
-    mVec3_c *obj_pos;
-    TListNode<SoundInfo> mLink;
-};
 
 /**
  * A list node that will automatically unlink upon destruction.
@@ -67,10 +59,12 @@ public:
 // non-official name
 class dAcBase_c : public dBase_c {
 public:
+    typedef TList<SoundInfo, 12> SoundInfoList;
+
     /* 0x68 */ mHeapAllocator_c heap_allocator;
     /* 0x84 */ const ActorInfo *mpActorInfo;
-    /* 0x88 */ TList<SoundInfo, 12> sound_list;
-    /* 0x94 */ RaiiPtr<dSoundSourceIf_c> sound_source;
+    /* 0x88 */ SoundInfoList sound_list;
+    /* 0x94 */ RaiiPtr<dSoundSourceIf_c> mpSoundSource;
     /* 0x98 */ mVec3_c *obj_pos;
     /* 0x9C */ mVec3_c pos_copy;
     /* 0xA8 */ u32 params2;
@@ -84,7 +78,7 @@ public:
     /* 0xCC */ mVec3_c mScale;
     /* 0xD8 */ u32 actor_properties;
     /* 0xDC */ dAcRef_c<dAcBase_c> actor_node;
-    /* 0xE8 */ u32 field_0xe8;
+    /* 0xE8 */ u32 mTgSndAreaFlags;
     /* 0xEC */ s8 roomid;
     /* 0xED */ u8 actor_subtype;
     /* 0xEE */ u8 polyAttr0;
@@ -183,7 +177,7 @@ public:
     /* 8002c710 */ int initAllocatorWork1Heap(int size, char *name, int align);
     /* 8002c720 */ int initAllocator(int size, char *name, EGG::Heap *heap, int align);
     /* 8002c7b0 */ bool addActorToRoom(s32 roomId);
-    /* 8002c840 */ void setBit_field_0xE8(s32);
+    /* 8002c840 */ void setTgSndAreaFlag(s32);
     /* 8002cf10 */ u32 itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype);
     /* 8002cf90 */ void fillUpperParams2Byte();
     /* 8002cfa0 */ u32 getParams2_ignoreLower();
@@ -213,21 +207,21 @@ public:
     /* 8002d540 */ bool isRoomFlags_0x6_Set();
 
     // Start of SoundSource stuff
-    /* 8002d590 */ void FUN_8002d590();
+    /* 8002d590 */ void setSoundSourceSubtype(u8 subType);
     /* 8002d5b0 */ void FUN_8002d5b0();
-    /* 8002d5d0 */ void playSound(u16 effect);
-    /* 8002d600 */ void FUN_8002d600();
-    /* 8002d630 */ void FUN_8002d630();
-    /* 8002d6d0 */ void FUN_8002d6d0();
-    /* 8002d710 */ void playSoundEffect1(u16 effect);
-    /* 8002d740 */ void FUN_8002d740();
-    /* 8002d770 */ void FUN_8002d770(u16, f32);
-    /* 8002d7a0 */ void FUN_8002d7a0();
-    /* 8002d7d0 */ void FUN_8002d7d0();
-    /* 8002d7f0 */ void FUN_8002d7f0();
-    /* 8002d810 */ void FUN_8002d810();
-    /* 8002d830 */ void FUN_8002d830();
-    /* 8002d860 */ void FUN_8002d860(UNKWORD val);
+    /* 8002d5d0 */ bool startSound(u32 soundId);
+    /* 8002d600 */ bool startSoundWithFloatParam(u32 soundId, f32 param);
+    /* 8002d630 */ bool startBgHitSound(u32 soundId, const cBgS_PolyInfo &info, const mVec3_c *position);
+    /* 8002d6d0 */ bool startSoundAtPosition(u32 soundId, const mVec3_c *position);
+    /* 8002d710 */ bool holdSound(u32 soundId);
+    /* 8002d740 */ bool holdSoundWithIntParam(u32 soundId, s32 param);
+    /* 8002d770 */ bool holdSoundWithFloatParam(u32 soundId, f32 param);
+    /* 8002d7a0 */ bool holdSoundWithParams(u32 soundId, f32 fValue, s32 value);
+    /* 8002d7d0 */ void holdSoundSourceFlag(u32 mask);
+    /* 8002d7f0 */ void onSoundSourceFlag(u32 mask);
+    /* 8002d810 */ void offSoundSourceFlag(u32 mask);
+    /* 8002d830 */ bool isPlayingSound(u32 soundId);
+    /* 8002d860 */ void setBattleBgmRelated(UNKWORD val);
     /* 8002d880 */ dSoundSourceIf_c *getSoundSource();
     // End of SoundSource stuff
 

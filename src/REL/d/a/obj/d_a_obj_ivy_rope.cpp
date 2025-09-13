@@ -9,6 +9,7 @@
 #include "d/col/c/c_m3d_g_lin.h"
 #include "d/col/cc/d_cc_s.h"
 #include "d/flag/sceneflag_manager.h"
+#include "d/snd/d_snd_wzsound.h"
 #include "egg/math/eggMath.h"
 #include "m/m3d/m3d.h"
 #include "m/m_angle.h"
@@ -1116,7 +1117,7 @@ void dAcOivyRope_c::fn_256_E3E0() {
                 mField_0x1030 = 60;
                 mStateMgr.changeState(StateID_RopeReturn);
                 fn_256_DEE0();
-                playSound(0xB76 /* HANGDOWN */);
+                startSound(SE_IvyRope_HANGDOWN);
             }
         } break;
         case 4: {

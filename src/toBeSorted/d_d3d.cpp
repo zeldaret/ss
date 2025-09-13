@@ -125,7 +125,7 @@ void AnmMdlWrapper::setSoundSource(dSoundSourceIf_c *pSource) {
 }
 
 bool AnmMdlWrapper::loadSounds(const char *name) {
-    if (mpSoundSource == nullptr || !mpSoundSource->isReadyMaybe()) {
+    if (mpSoundSource == nullptr || !mpSoundSource->hasAnimSound()) {
         return true;
     }
 

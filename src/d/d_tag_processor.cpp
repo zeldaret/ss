@@ -9,6 +9,7 @@
 #include "d/lyt/d_lyt_util_items.h"
 #include "d/lyt/d_textbox.h"
 #include "d/lyt/msg_window/d_lyt_msg_window.h"
+#include "d/snd/d_snd_player_mgr.h"
 #include "f/f_base.h"
 #include "f/f_manager.h"
 #include "f/f_profile_name.h"
@@ -22,7 +23,6 @@
 #include "nw4r/ut/ut_TextWriterBase.h"
 #include "sized_string.h"
 #include "toBeSorted/file_manager.h"
-#include "toBeSorted/music_mgrs.h"
 
 #include <libc.h>
 
@@ -1572,12 +1572,12 @@ void dTagProcessor_c::somethingWithScrapperAndMusic(wchar_t *src) {
             if ((ac->profile_name >= fProfile::NPC_SLFB && ac->profile_name <= fProfile::NPC_SLFL) ||
                 (ac->profile_name >= fProfile::NPC_SLB && ac->profile_name <= fProfile::FLY_SLB) ||
                 ac->profile_name == fProfile::NPC_SLB2 || ac->profile_name == fProfile::NPC_DRBC) {
-                fn_8035E790(BGM_MGR, dLytMsgWindow_c::getInstance()->getField_0x784(), ac);
+                dSndPlayerMgr_c::GetInstance()->setMsgActor(dLytMsgWindow_c::getInstance()->getMsgIdx(), ac);
                 return;
             }
         }
     } else if (field_0x824 == 101) {
-        fn_8035E790(BGM_MGR, dLytMsgWindow_c::getInstance()->getField_0x784(), nullptr);
+        dSndPlayerMgr_c::GetInstance()->setMsgActor(dLytMsgWindow_c::getInstance()->getMsgIdx(), nullptr);
     }
 }
 

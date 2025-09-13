@@ -181,13 +181,13 @@ bool dLytMeterShieldGauge_c::execute() {
                 if (mCurrentDurability >= mMaxDurability) {
                     if (field_0x31E) {
                         // Unreachable?
-                        dSndSmallEffectMgr_c::GetInstance()->playSoundWithPitch(SE_S_GAUGE_SHIELD_UP_LV, 1.0f);
+                        dSndSmallEffectMgr_c::GetInstance()->holdSoundWithPitch(SE_S_GAUGE_SHIELD_UP_LV, 1.0f);
                     }
                     dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_GAUGE_SHIELD_UP_MAX);
                 } else {
                     if (field_0x31E) {
                         // Unreachable?
-                        dSndSmallEffectMgr_c::GetInstance()->playSoundWithPitch(
+                        dSndSmallEffectMgr_c::GetInstance()->holdSoundWithPitch(
                             SE_S_GAUGE_SHIELD_UP_LV, mCurrentDurability / mMaxDurability
                         );
                     }

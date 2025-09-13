@@ -1934,7 +1934,7 @@ extern "C" dAcItem_c *giveItem3(u16 item, s32);
 
 void dAcTbox_c::initializeState_Open() {
     mScale.set(1.0f, 1.0f, 1.0f);
-    playSound(SE_TBox_OPEN_A);
+    startSound(SE_TBox_OPEN_A);
     clearActorProperty(0x100);
     if (mVariant == NORMAL) {
         mAnmMatClr1.setFrame(mAnmMatClr1.getFrameMax(0), 0);

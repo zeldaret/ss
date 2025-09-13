@@ -1,6 +1,7 @@
 #include "d/col/bg/d_bg_s.h"
 
 #include "common.h"
+#include "d/col/bg/d_bg_pc.h"
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/bg/d_bg_s_gnd_chk.h"
 #include "d/col/bg/d_bg_s_lin_chk.h"
@@ -557,10 +558,10 @@ s32 dBgS::GetWallCode(cBgS_PolyInfo const &info) {
 
 int dBgS::GetPolyAtt0(cBgS_PolyInfo const &info) {
     if (!ChkPolySafe(info)) {
-        return 0;
+        return POLY_ATT_0_NONE;
     }
-    if (GetSpecialCode(info) == 7 /* LAVA */) {
-        return 6;
+    if (GetSpecialCode(info) == POLY_ATTR_LAVA) {
+        return POLY_ATT_0_LAVA;
     }
     return mChkElem[info.GetBgIndex()].mpBgW->GetPolyAtt0Material(info);
 }
@@ -577,10 +578,10 @@ int dBgS::GetMapCode(int att0, int att1, bool bAlt) {
     if (bAlt && dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL) {
         return 0x1E;
     }
-    if (att0 == 4 && att1 == 1) {
+    if (att0 == POLY_ATT_0_GRASS && att1 == 1) {
         return 0x13;
     }
-    if (att0 == 5) {
+    if (att0 == POLY_ATT_0_TREE) {
         if (att1 == 1) {
             return 0x14;
         }
@@ -588,10 +589,10 @@ int dBgS::GetMapCode(int att0, int att1, bool bAlt) {
             return 0x15;
         }
     } else {
-        if ((att0 == 8) && (att1 == 1)) {
+        if ((att0 == POLY_ATT_0_STONE) && (att1 == 1)) {
             return 0x16;
         }
-        if (att0 == 10) {
+        if (att0 == POLY_ATT_0_METAL) {
             if (att1 == 1) {
                 return 0x17;
             }
@@ -601,11 +602,11 @@ int dBgS::GetMapCode(int att0, int att1, bool bAlt) {
         }
     }
 
-    if ((att0 == 0xc) && (att1 == 1)) {
+    if ((att0 == POLY_ATT_0_TUTA) && (att1 == 1)) {
         return 0x19;
     }
 
-    if (att0 == 0xd) {
+    if (att0 == POLY_ATT_0_LIFE) {
         if (att1 == 1) {
             return 0x1a;
         }
@@ -616,7 +617,7 @@ int dBgS::GetMapCode(int att0, int att1, bool bAlt) {
             return 0x1C;
         }
     } else {
-        if (att0 != 0xf) {
+        if (att0 != POLY_ATT_0_QSAND) {
             return att0;
         }
         if (att1 == 1) {

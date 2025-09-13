@@ -93,9 +93,9 @@ void dAcOTowerGearD101_c::executeState_Wait() {
         mAng newRotation = diff * scale5 / 2400.0f;
         if (newRotation != mCurrRotation) {
             if (mPreviousTurnSpeed == 0) {
-                playSound(SE_TGrD101_ROLL_START);
+                startSound(SE_TGrD101_ROLL_START);
             } else {
-                playSoundEffect1(SE_TGrD101_ROLL_LV);
+                holdSound(SE_TGrD101_ROLL_LV);
                 playVisualEffect();
             }
         }

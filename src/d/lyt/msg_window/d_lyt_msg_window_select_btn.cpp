@@ -4,8 +4,8 @@
 #include "d/d_pad.h"
 #include "d/d_pad_nav.h"
 #include "d/lyt/d2d.h"
+#include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_small_effect_mgr.h"
-#include "toBeSorted/music_mgrs.h"
 
 STATE_DEFINE(dLytMsgWindowSelectBtnParts_c, Wait);
 STATE_DEFINE(dLytMsgWindowSelectBtnParts_c, On);
@@ -302,7 +302,7 @@ void dLytMsgWindowSelectBtn_c::finalizeState_In() {
 void dLytMsgWindowSelectBtn_c::initializeState_WaitSelect() {
     if (field_0x9D0 == 0) {
         field_0x9D0 = true;
-        fn_8035E860(BGM_MGR);
+        dSndPlayerMgr_c::GetInstance()->enterMsgWait();
     }
 
     mBtnHelper.fn_8011C970();
@@ -340,7 +340,7 @@ void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
         } else {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
         }
-        fn_8035E880(BGM_MGR);
+        dSndPlayerMgr_c::GetInstance()->leaveMsgWait();
     } else if (dPad::getDownTrigB()) {
         f32 f = mBtnHelper.fn_8011D690(field_0x9BC);
         // TODO
@@ -353,7 +353,7 @@ void dLytMsgWindowSelectBtn_c::executeState_WaitSelect() {
         } else {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_TALK_CURSOR_OK);
         }
-        fn_8035E880(BGM_MGR);
+        dSndPlayerMgr_c::GetInstance()->leaveMsgWait();
     }
 }
 void dLytMsgWindowSelectBtn_c::finalizeState_WaitSelect() {}

@@ -68,7 +68,9 @@ public:
     void draw();
 
     f32 checkPositionIsInPastState(s32 roomId, const mVec3_c &position, float *, float);
-    bool fn_800B9B60(s32 roomId, const mVec3_c &position);
+    // I think this might be an enum
+    s32 fn_800B9B60(s32 roomId, const mVec3_c &position);
+    f32 fn_800B9CE0(const mVec3_c &position);
 
     bool isInLanayruMiningFacility() const {
         return mIsInLanayruMiningFacility;

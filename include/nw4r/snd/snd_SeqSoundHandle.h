@@ -36,6 +36,12 @@ namespace nw4r { namespace snd
 
 		void DetachSound();
 
+		u32 GetTick() const {
+			if (IsAttachedSound())
+				return mSound->GetTick();
+			return 0;
+		}
+
 		void WriteVariable(int varNo, s16 value) {
 			if (IsAttachedSound())
 				mSound->WriteVariable(varNo, value);
@@ -44,6 +50,10 @@ namespace nw4r { namespace snd
 		void ReadVariable(int varNo, s16 *value) {
 			if (IsAttachedSound())
 				mSound->ReadVariable(varNo, value);
+		}
+
+		static bool WriteGlobalVariable(int varNo, s16 value) {
+			return detail::SeqSound::WriteGlobalVariable(varNo, value);
 		}
 
 		void SetTrackMute(u32 trackFlags, SeqMute mute) {

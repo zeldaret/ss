@@ -1,13 +1,13 @@
 #include "d/snd/d_snd_sound.h"
 
 #include "common.h"
+#include "d/snd/d_snd_bgm_mgr.h"
 #include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "nw4r/snd/snd_SeqSoundHandle.h"
 #include "nw4r/snd/snd_SoundArchive.h"
 #include "nw4r/snd/snd_SoundStartable.h"
 #include "nw4r/ut/ut_list.h"
-#include "toBeSorted/music_mgrs.h"
 
 dSndSound_c::dSndSound_c()
     : mPrevStartOffset(0), mIsPreparing(false), mPauseFlag(false), mIsRunning(false), mIsFadingOut(false) {
@@ -38,13 +38,13 @@ dSndSound_c::~dSndSound_c() {
 }
 
 void dSndSound_c::cancel() {
-    if (canCancel()) {
+    if (hasState()) {
         resetControls();
         mIsRunning = false;
         mIsFadingOut = false;
         mIsPreparing = false;
         mPrevStartOffset = 0;
-        fn_80373900(FANFARE_SOUND_MGR, this);
+        dSndBgmMgr_c::GetInstance()->unregistSound(this);
     }
 }
 
@@ -159,7 +159,7 @@ void dSndSound_c::unlinkCtrl(dSndControlSound_c *ctrl) {
     nw4r::ut::List_Remove(&mList, ctrl);
 }
 
-s16 dSndSound_c::readSeqTrackVariable(int varNo) {
+s32 dSndSound_c::readSeqTrackVariable(int varNo) {
     if (!isSeqSound()) {
         return -1;
     }
@@ -223,7 +223,7 @@ void dSndSound_c::resetTrackVolumes() {
     }
 }
 
-void dSndSound_c::setTrackVolume(u32 trackFlags, f32 volume, s32 frames) {
+void dSndSound_c::setTrackVolume(u16 trackFlags, f32 volume, s32 frames) {
     if (trackFlags != 0 && IsAttachedSound()) {
         switch (dSndMgr_c::GetInstance()->getArchive()->GetSoundType(GetId())) {
             case nw4r::snd::SoundArchive::SOUND_TYPE_SEQ: {
@@ -246,7 +246,7 @@ void dSndSound_c::setTrackVolume(u32 trackFlags, f32 volume, s32 frames) {
     }
 }
 
-void dSndSound_c::setStrmTrackVolume(u32 trackFlags, f32 volume, s32 frames) {
+void dSndSound_c::setStrmTrackVolume(u16 trackFlags, f32 volume, s32 frames) {
     if (trackFlags != 0 && IsAttachedSound()) {
         switch (dSndMgr_c::GetInstance()->getArchive()->GetSoundType(GetId())) {
             case nw4r::snd::SoundArchive::SOUND_TYPE_STRM: {
@@ -283,7 +283,7 @@ void dSndSound_c::setSingleStrmTrackVolume(u16 index, f32 volume, s32 frames) {
     }
 }
 
-void dSndSound_c::setEachSeqTrackVolume(u32 trackFlags, f32 frames) {
+void dSndSound_c::setEachSeqTrackVolume(u16 trackFlags, f32 frames) {
     for (int i = 0; i < 16; i++) {
         if ((trackFlags & (u16)(1 << i)) != 0) {
             setSingleSeqTrackVolume(i, 1.0f, (u32)frames);
@@ -293,7 +293,7 @@ void dSndSound_c::setEachSeqTrackVolume(u32 trackFlags, f32 frames) {
     }
 }
 
-void dSndSound_c::setEachStrmTrackVolume(u32 trackFlags, f32 frames) {
+void dSndSound_c::setEachStrmTrackVolume(u16 trackFlags, f32 frames) {
     for (int i = 0; i < 3; i++) {
         if ((trackFlags & (u16)(1 << i)) != 0) {
             setSingleStrmTrackVolume(i, 1.0f, (u32)frames);
@@ -316,7 +316,7 @@ void dSndSound_c::setSeqTempoRatio(f32 ratio, s32 frames) {
     }
 }
 
-void dSndSound_c::setSeqTrackMute(u32 trackFlags, nw4r::snd::SeqMute mute) {
+void dSndSound_c::setSeqTrackMute(u16 trackFlags, nw4r::snd::SeqMute mute) {
     if (isSeqSound()) {
         nw4r::snd::SeqSoundHandle handle(this);
         handle.SetTrackMute(trackFlags, mute);
@@ -328,7 +328,7 @@ nw4r::snd::SoundStartable::StartResult dSndSound_c::prepareSound(u32 soundId, u3
         return nw4r::snd::SoundStartable::START_ERR_USER;
     }
 
-    if (cannotStart()) {
+    if (isPlaying()) {
         return nw4r::snd::SoundStartable::START_ERR_USER;
     }
 
@@ -341,19 +341,19 @@ nw4r::snd::SoundStartable::StartResult dSndSound_c::prepareSound(u32 soundId, u3
         if (isPreparing()) {
             forceStop();
         } else {
-            fn_80372920(FANFARE_SOUND_MGR);
+            dSndBgmMgr_c::GetInstance()->cullTooManyPreparingSounds();
         }
     }
 
     nw4r::snd::SoundStartable::StartResult res;
     if (startOffset == 0) {
-        res = dSndMgr_c::GetInstance()->getPlayer()->detail_PrepareSound(this, soundId, nullptr);
+        res = dSndMgr_c::GetInstance()->getPlayer().PrepareSoundReturnStatus(this, soundId, nullptr);
     } else {
         nw4r::snd::SoundStartable::StartInfo info;
         info.enableFlag |= nw4r::snd::SoundStartable::StartInfo::ENABLE_START_OFFSET;
         info.startOffsetType = nw4r::snd::SoundStartable::StartInfo::START_OFFSET_TYPE_MILLISEC;
         info.startOffset = startOffset;
-        res = dSndMgr_c::GetInstance()->getPlayer()->detail_PrepareSound(this, soundId, &info);
+        res = dSndMgr_c::GetInstance()->getPlayer().PrepareSoundReturnStatus(this, soundId, &info);
     }
 
     if (res == nw4r::snd::SoundStartable::START_SUCCESS) {
@@ -375,7 +375,7 @@ void dSndSound_c::onPreparing(u32 soundId, u32 startOffset) {
         cancel();
         mPrevStartOffset = startOffset;
         mIsPreparing = true;
-        fn_803738B0(FANFARE_SOUND_MGR, this);
+        dSndBgmMgr_c::GetInstance()->registSound(this);
     }
 }
 
