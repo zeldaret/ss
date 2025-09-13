@@ -5,7 +5,7 @@
 
 namespace sCrc {
 
-u32 calcCRC(const void *ptr, u32 size);
+u32 calcCRC32(const void *ptr, u32 size);
 
 } // namespace sCrc
 

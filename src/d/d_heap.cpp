@@ -1,7 +1,7 @@
 #include "d/d_heap.h"
 
 #include "d/d_heap_alloc.h"
-
+#include "s/s_Assert.h"
 
 dHeap dHeap::work1Heap;
 dHeap dHeap::work2Heap;
@@ -14,8 +14,7 @@ dHeap dHeap::fontHeap;
 dHeap dHeap::HBMHeap;
 dHeapAllocator dHeapAllocator::sAllocator;
 
-extern u8 lbl_80571C58;
-extern "C" void fn_802DE710();
+static bool sAssertOnAllocFailure = true;
 
 // TODO TU splits?
 
@@ -23,10 +22,10 @@ void dHeapAllocator::onAlloc(EGG::HeapAllocArg *arg) {
     if (arg->ptr != nullptr) {
         return;
     }
-    if (lbl_80571C58 == 0) {
+    if (!sAssertOnAllocFailure) {
         return;
     }
-    fn_802DE710();
+    sAssert::assert();
 }
 
 EGG::ExpHeap *dHeap::init(const char *name, size_t size, EGG::Heap *parent) {
@@ -75,7 +74,6 @@ void dHeap::createHBMHeap(size_t size, EGG::Heap *parent) {
     HBMHeap.init(name, size, parent);
 }
 
-// TODO this doesn't match (many more stack stores)
 void dHeapAllocator::initCallbacks() {
     sAllocator.doInitCallbacks();
 }

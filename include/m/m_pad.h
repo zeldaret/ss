@@ -24,6 +24,7 @@ enum Button {
     BUTTON_MINUS = 0x1000,
     BUTTON_Z = 0x2000,
     BUTTON_C = 0x4000,
+    BUTTON_HOME = 0x8000,
 };
 
 inline EGG::CoreController *getCore(const int i) {

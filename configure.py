@@ -392,7 +392,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/unk_sorajima_list.cpp"),
             Object(NonMatching, "toBeSorted/mpls.cpp"),
             Object(NonMatching, "toBeSorted/mdl_base.cpp"),
-            Object(NonMatching, "toBeSorted/d_assert.cpp"),
+            Object(Matching, "toBeSorted/d_exception.cpp"),
             Object(NonMatching, "toBeSorted/d_jstudio.cpp"),
             Object(Matching, "toBeSorted/save_file.cpp"),
             Object(NonMatching, "toBeSorted/file_manager.cpp"),
@@ -917,7 +917,7 @@ config.libs = [
         "progress_category": "core",
         "host": False,
         "objects": [
-            Object(NonMatching, "s/s_Assert.cpp"),
+            Object(Matching, "s/s_Assert.cpp"),
             Object(Matching, "s/s_Crc.cpp"),
             Object(Matching, "s/s_Math.cpp"),
             Object(Matching, "s/s_FPhase.cpp"),
@@ -925,7 +925,7 @@ config.libs = [
             Object(Matching, "s/s_StateMethod.cpp"),
             Object(Matching, "s/s_StateMethodUsr_FI.cpp"),
             Object(Matching, "s/s_Phase.cpp"),
-            Object(NonMatching, "s/s_Print.cpp"),
+            Object(Matching, "s/s_Print.cpp"),
         ],
     },
     {
