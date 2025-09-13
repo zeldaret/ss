@@ -47,6 +47,7 @@ EGG::Heap *getArchiveHeap();
 } // namespace mDvd
 
 class mDvd_command_c {
+    friend class mDvd_param_c;
 public:
     mDvd_command_c();
     virtual ~mDvd_command_c();
@@ -60,9 +61,14 @@ public:
     static void destroy(mDvd_command_c **cmd);
     void do_delete();
 
+    bool isDone() const {
+        return mStatus != 0;
+    }
+
     void *operator new(size_t size);
     void operator delete(void *ptr);
 
+protected:
     mDvd_command_c *mNext;
     u8 mStatus;
     u8 mMountDirection;

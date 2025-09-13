@@ -197,7 +197,7 @@ BOOL DynamicModuleControl::do_load_async() {
         mDvdCallbackRequest = mDvd_callback_c::create(callback, this);
     }
 
-    if (mDvdCallbackRequest != nullptr && mDvdCallbackRequest->mStatus != 0) {
+    if (mDvdCallbackRequest != nullptr && mDvdCallbackRequest->isDone()) {
         mDvdCallbackRequest->do_delete();
         mDvdCallbackRequest = nullptr;
         return true;

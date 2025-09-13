@@ -5,6 +5,20 @@
 #include "d/d_rawarchive.h"
 #include "egg/core/eggHeap.h"
 
+class LayoutArcControl {
+public:
+    LayoutArcControl() : mLayoutArcs(nullptr), mNumArcs(0) {}
+    virtual ~LayoutArcControl();
+    void set(const char *const *layoutArcs, s32 numArcs);
+    bool load(EGG::Heap *heap) const;
+    bool allLoaded() const;
+    bool release();
+
+private:
+    const char *const *mLayoutArcs;
+    s32 mNumArcs;
+};
+
 class LayoutArcManager {
 public:
     LayoutArcManager();
@@ -14,13 +28,13 @@ public:
 
     void init(EGG::Heap *heap);
 
-    inline int ensureAllEntriesLoaded() {
+    inline dArcResult_e ensureAllEntriesLoaded() {
         return mArcTable.ensureAllEntriesLoaded();
     }
 
     bool loadLayoutArcFromDisk(const char *object, EGG::Heap *heap);
-    int ensureLoaded1(const char *object);
-    int ensureLoaded2(const char *object);
+    dArcResult_e ensureLoaded1(const char *object);
+    dArcResult_e ensureLoaded2(const char *object);
     bool hasEntry(const char *object);
     bool decrement(const char *path);
     void *getData(const char *oarcName, const char *fileName);
@@ -33,19 +47,6 @@ public:
 private:
     static LayoutArcManager *sInstance;
     dRawArcTable_c mArcTable;
-};
-
-class LayoutArcControl {
-public:
-    LayoutArcControl() : mLayoutArcs(nullptr), mNumArcs(0) {}
-    virtual ~LayoutArcControl();
-    void set(const char *const *layoutArcs, s32 numArcs);
-    void load(EGG::Heap *heap);
-    void release();
-
-private:
-    const char **mLayoutArcs;
-    s32 mNumArcs;
 };
 
 #endif

@@ -336,7 +336,7 @@ bool destroy() {
         return true;
     }
 
-    if (DVD->mStatus != 0) {
+    if (DVD->isDone()) {
         DVD->do_delete();
         DVD = nullptr;
         return true;

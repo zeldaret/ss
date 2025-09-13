@@ -36,10 +36,10 @@ dRawArcEntry_c::dRawArcEntry_c() {
 
 dRawArcEntry_c::~dRawArcEntry_c() {
     // Wait for request to complete before destroying
-    if (mpDvdReq->mStatus == 0) {
+    if (!mpDvdReq->isDone()) {
         do {
             VIWaitForRetrace();
-        } while (mpDvdReq->mStatus == 0);
+        } while (!mpDvdReq->isDone());
     }
     destroy(nullptr);
 }
@@ -72,7 +72,7 @@ void dRawArcEntry_c::searchCallback2(void *a, void *b, const ARCDirEntry *c, con
 
 bool dRawArcEntry_c::destroy(void *arg) {
     if (mpDvdReq != nullptr) {
-        if (mpDvdReq->mStatus == 0) {
+        if (!mpDvdReq->isDone()) {
             // Can't destroy if the request is still ongoing
             return false;
         }
@@ -144,31 +144,27 @@ BOOL dRawArcEntry_c::checkArcExistsOnDiskInner(SizedString<128> &path, const cha
     return true;
 }
 
-int dRawArcEntry_c::mount(
+dArcResult_e dRawArcEntry_c::mount(
     const char *name, void *data, ArcCallbackHandler *callbackArg, u8 mountDirection, EGG::Heap *heap
 ) {
     mArcName = name;
     mpArc = EGG::Archive::mount(data, heap, (mountDirection == 0 || mountDirection == 1) ? 4 : -4);
     if (mpArc == nullptr) {
-        return -1;
+        return D_ARC_RESULT_ERROR_INTERNAL;
     } else {
-        int result = onMount(callbackArg);
-        int ret = 0;
-        if (result == -1) {
-            ret = result;
-        }
-        return ret;
+        dArcResult_e result = onMount(callbackArg);
+        return result == D_ARC_RESULT_ERROR_INTERNAL ? result : D_ARC_RESULT_OK;
     }
 }
 
-int dRawArcEntry_c::ensureLoadedMaybe(void *callbackArg) {
+dArcResult_e dRawArcEntry_c::ensureLoadedMaybe(void *callbackArg) {
     if (mpArc == nullptr) {
         if (mpDvdReq == nullptr) {
-            return -1;
+            return D_ARC_RESULT_ERROR_INTERNAL;
         }
 
-        if (mpDvdReq->mStatus == 0) {
-            return 1;
+        if (!mpDvdReq->isDone()) {
+            return D_ARC_RESULT_WAIT;
         }
 
         mpArc = mpDvdReq->mDataPtr;
@@ -185,31 +181,31 @@ int dRawArcEntry_c::ensureLoadedMaybe(void *callbackArg) {
         mpDvdReq->do_delete();
         mpDvdReq = nullptr;
         if (mpArc == nullptr) {
-            return -1;
+            return D_ARC_RESULT_ERROR_INTERNAL;
         }
         mpFrmHeap = mHeap::makeHeapOnCurrentGameHeap(-1, name(), 0x20, mHeap::OPT_NONE);
         if (mpFrmHeap == nullptr) {
-            return -1;
+            return D_ARC_RESULT_ERROR_INTERNAL;
         }
-        int result = onMount(callbackArg);
+        dArcResult_e result = onMount(callbackArg);
         mHeap::restoreCurrentHeap();
         mHeap::adjustFrmHeap(mpFrmHeap);
         mChecksum = computeChecksum(mpData, mAmountRead);
-        if (result == -1) {
+        if (result == D_ARC_RESULT_ERROR_INTERNAL) {
             return result;
         }
         DCStoreRange(mpFrmHeap, mpFrmHeap->mHeapHandle->end - (u8 *)mpFrmHeap);
     }
 
-    return 0;
+    return D_ARC_RESULT_OK;
 }
 
-int dRawArcEntry_c::onMount(void *callbackArg) {
+dArcResult_e dRawArcEntry_c::onMount(void *callbackArg) {
     mpArc->countFile();
     if (callbackArg != nullptr) {
         mpArc->searchInside(searchCallback1, callbackArg);
     }
-    return 0;
+    return D_ARC_RESULT_OK;
 }
 
 dRawArcTable_c::dRawArcTable_c() {
@@ -271,18 +267,18 @@ BOOL dRawArcTable_c::addEntryFromSuperArc(const char *name, void *data, u8 mount
     return true;
 }
 
-int dRawArcTable_c::ensureLoadedMaybe2(const char *name) {
+dArcResult_e dRawArcTable_c::ensureLoadedMaybe2(const char *name) {
     dRawArcEntry_c *entry = findEntry(name);
     if (entry == nullptr) {
-        return -2;
+        return D_ARC_RESULT_ERROR_NOT_FOUND;
     }
     return entry->ensureLoadedMaybe(mCallbackArg);
 }
 
-int dRawArcTable_c::ensureLoadedMaybe(const char *name) {
+dArcResult_e dRawArcTable_c::ensureLoadedMaybe(const char *name) {
     dRawArcEntry_c *entry = findEntry(name);
     if (entry == nullptr) {
-        return -2;
+        return D_ARC_RESULT_ERROR_NOT_FOUND;
     }
     return entry->ensureLoadedMaybe(mCallbackArg);
 }
@@ -335,20 +331,20 @@ void *dRawArcTable_c::getLoadedArcData(const char *name) {
     return entry == nullptr ? nullptr : entry->getData();
 }
 
-int dRawArcTable_c::ensureAllEntriesLoaded() {
+dArcResult_e dRawArcTable_c::ensureAllEntriesLoaded() {
     dRawArcEntry_c *entry = mpEntries;
-    int result = 0;
+    dArcResult_e result = D_ARC_RESULT_OK;
     for (int i = 0; i < mCount; i++) {
         if (entry->isLoading()) {
             result = entry->ensureLoadedMaybe(mCallbackArg);
-            if (result != 0) {
+            if (result != D_ARC_RESULT_OK) {
                 return result;
             }
         }
         entry++;
     }
 
-    return 0;
+    return D_ARC_RESULT_OK;
 }
 
 dRawArcEntry_c *dRawArcTable_c::findEntry(const char *name) const {

@@ -2,7 +2,6 @@
 
 #include "d/d_heap.h"
 
-
 LayoutArcManager *LayoutArcManager::sInstance;
 
 LayoutArcManager::LayoutArcManager() {
@@ -24,11 +23,11 @@ bool LayoutArcManager::loadLayoutArcFromDisk(const char *object, EGG::Heap *heap
     return mArcTable.getArcOrLoadFromDisk(object, "Layout", 0, heap);
 }
 
-int LayoutArcManager::ensureLoaded1(const char *object) {
+dArcResult_e LayoutArcManager::ensureLoaded1(const char *object) {
     return mArcTable.ensureLoadedMaybe2(object);
 }
 
-int LayoutArcManager::ensureLoaded2(const char *object) {
+dArcResult_e LayoutArcManager::ensureLoaded2(const char *object) {
     return mArcTable.ensureLoadedMaybe(object);
 }
 
@@ -55,5 +54,70 @@ bool LayoutArcManager::create(EGG::Heap *heap) {
         return false;
     }
     GetInstance()->init(heap);
+    return true;
+}
+
+LayoutArcControl::~LayoutArcControl() {
+    if (mLayoutArcs != nullptr) {
+        release();
+    }
+}
+
+void LayoutArcControl::set(const char *const *layoutArcs, s32 numArcs) {
+    mLayoutArcs = layoutArcs;
+    mNumArcs = numArcs;
+}
+
+bool LayoutArcControl::load(EGG::Heap *heap) const {
+    if (mLayoutArcs == nullptr) {
+        return true;
+    }
+
+    const char *const *ptr = mLayoutArcs;
+    for (int i = 0; i < mNumArcs; i++) {
+        LayoutArcManager::GetInstance()->loadLayoutArcFromDisk(*ptr, heap);
+        ptr++;
+    }
+
+    return true;
+}
+
+bool LayoutArcControl::allLoaded() const {
+    if (mLayoutArcs == nullptr) {
+        return true;
+    }
+
+    const char *const *ptr = mLayoutArcs;
+    for (int i = 0; i < mNumArcs; i++) {
+        dArcResult_e res = LayoutArcManager::GetInstance()->ensureLoaded1(*ptr);
+        if (res != D_ARC_RESULT_OK) {
+            return false;
+        }
+        ptr++;
+    }
+    return true;
+}
+
+bool LayoutArcControl::release() {
+    if (mLayoutArcs == nullptr) {
+        return true;
+    }
+
+    const char *const *ptr = mLayoutArcs;
+    for (int i = 0; i < mNumArcs; i++) {
+        dArcResult_e res = LayoutArcManager::GetInstance()->ensureLoaded2(*ptr);
+        if (res != D_ARC_RESULT_ERROR_NOT_FOUND && res != D_ARC_RESULT_OK) {
+            return false;
+        }
+        ptr++;
+    }
+
+    ptr = mLayoutArcs;
+    for (int i = 0; i < mNumArcs; i++) {
+        LayoutArcManager::GetInstance()->decrement(*ptr);
+        ptr++;
+    }
+    mLayoutArcs = nullptr;
+
     return true;
 }
