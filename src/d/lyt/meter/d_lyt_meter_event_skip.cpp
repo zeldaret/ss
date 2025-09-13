@@ -22,8 +22,8 @@ static const d2d::LytBrlanMapping brlanMap[] = {
 
 void dLytMeterEventSkip_c::initializeState_Invisible() {}
 void dLytMeterEventSkip_c::executeState_Invisible() {
-    if (shouldPromptForSkip() || dLytMeter_c::GetInstance()->getMeterField_0x13774()) {
-        if (dLytMeter_c::GetInstance()->getMeterField_0x13774()) {
+    if (shouldPromptForSkip() || dLytMeter_c::GetInstance()->isHelpOpen()) {
+        if (dLytMeter_c::GetInstance()->isHelpOpen()) {
             for (int i = 0; i < 2; i++) {
                 mLyt.fn_800AB9A0(mpTextBoxes[i], 1);
             }
@@ -54,7 +54,7 @@ void dLytMeterEventSkip_c::finalizeState_In() {}
 
 void dLytMeterEventSkip_c::initializeState_Visible() {}
 void dLytMeterEventSkip_c::executeState_Visible() {
-    if (!shouldPromptForSkip() && !dLytMeter_c::GetInstance()->getMeterField_0x13774()) {
+    if (!shouldPromptForSkip() && !dLytMeter_c::GetInstance()->isHelpOpen()) {
         mAnm[SKIP_ANIM_OUT].setAnimEnable(true);
         mAnm[SKIP_ANIM_OUT].setFrame(0.0f);
         mStateMgr.changeState(StateID_Out);

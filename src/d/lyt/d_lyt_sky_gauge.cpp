@@ -27,16 +27,16 @@ dLytSkyGauge_c *dLytSkyGauge_c::sInstance;
 
 void dLytSkyGaugeMain_c::initializeState_ModeNone() {}
 void dLytSkyGaugeMain_c::executeState_ModeNone() {
-    mWantsModeChange = true;
+    mIsIdle = true;
 }
 void dLytSkyGaugeMain_c::finalizeState_ModeNone() {}
 
 void dLytSkyGaugeMain_c::initializeState_ModeIn() {}
 void dLytSkyGaugeMain_c::executeState_ModeIn() {
-    if (!mWantsModeChange) {
+    if (!mIsIdle) {
         if (mAnmGroups[LYT_SKY_GAUGE_MAIN_ANIM_IN].isEndReached()) {
             mAnmGroups[LYT_SKY_GAUGE_MAIN_ANIM_IN].setAnimEnable(false);
-            mWantsModeChange = true;
+            mIsIdle = true;
         }
     }
 }
@@ -44,16 +44,16 @@ void dLytSkyGaugeMain_c::finalizeState_ModeIn() {}
 
 void dLytSkyGaugeMain_c::initializeState_ModeMove() {}
 void dLytSkyGaugeMain_c::executeState_ModeMove() {
-    mWantsModeChange = true;
+    mIsIdle = true;
 }
 void dLytSkyGaugeMain_c::finalizeState_ModeMove() {}
 
 void dLytSkyGaugeMain_c::initializeState_ModeOut() {}
 void dLytSkyGaugeMain_c::executeState_ModeOut() {
-    if (!mWantsModeChange) {
+    if (!mIsIdle) {
         if (mAnmGroups[LYT_SKY_GAUGE_MAIN_ANIM_OUT].isEndReached()) {
             mAnmGroups[LYT_SKY_GAUGE_MAIN_ANIM_OUT].setAnimEnable(false);
-            mWantsModeChange = true;
+            mIsIdle = true;
         }
     }
 }
@@ -112,7 +112,7 @@ bool dLytSkyGaugeMain_c::remove() {
 
 void dLytSkyGaugeMain_c::changeToNone() {
     mStateMgr.changeState(StateID_ModeNone);
-    mWantsModeChange = false;
+    mIsIdle = false;
 }
 
 void dLytSkyGaugeMain_c::changeToIn() {
@@ -120,12 +120,12 @@ void dLytSkyGaugeMain_c::changeToIn() {
     mAnmGroups[LYT_SKY_GAUGE_MAIN_ANIM_IN].setFrame(0.0f);
     mLyt.calc();
     mStateMgr.changeState(StateID_ModeIn);
-    mWantsModeChange = false;
+    mIsIdle = false;
 }
 
 void dLytSkyGaugeMain_c::changeToMove() {
     mStateMgr.changeState(StateID_ModeMove);
-    mWantsModeChange = false;
+    mIsIdle = false;
 }
 
 void dLytSkyGaugeMain_c::changeToOut() {
@@ -133,7 +133,7 @@ void dLytSkyGaugeMain_c::changeToOut() {
     mAnmGroups[LYT_SKY_GAUGE_MAIN_ANIM_OUT].setFrame(0.0f);
     mLyt.calc();
     mStateMgr.changeState(StateID_ModeOut);
-    mWantsModeChange = false;
+    mIsIdle = false;
 }
 
 void dLytSkyGaugeMain_c::setHeight(f32 height) {
@@ -154,7 +154,7 @@ void dLytSkyGauge_c::finalizeState_None() {}
 
 void dLytSkyGauge_c::initializeState_In() {}
 void dLytSkyGauge_c::executeState_In() {
-    if (mMain.wantsMove()) {
+    if (mMain.isIdle()) {
         mMain.changeToMove();
         mStateMgr.changeState(StateID_Move);
     }
@@ -173,7 +173,7 @@ void dLytSkyGauge_c::finalizeState_Move() {}
 
 void dLytSkyGauge_c::initializeState_Out() {}
 void dLytSkyGauge_c::executeState_Out() {
-    if (mMain.wantsMove()) {
+    if (mMain.isIdle()) {
         mMain.changeToNone();
         mStateMgr.changeState(StateID_None);
     }

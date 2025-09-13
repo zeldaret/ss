@@ -538,7 +538,7 @@ config.libs = [
             Object(Matching, "d/lyt/d_lyt_battery.cpp"),
             Object(Matching, "d/lyt/d_lyt_area_caption.cpp"),
             Object(Matching, "d/lyt/d_lyt_wipe.cpp"),
-            Object(NonMatching, "d/lyt/d_lyt_help.cpp"),
+            Object(Matching, "d/lyt/d_lyt_help.cpp"),
             Object(NonMatching, "d/lyt/d_lyt_system_window.cpp"),
             Object(Matching, "d/lyt/d_lyt_bird_gauge.cpp"),
             Object(Matching, "d/lyt/d_lyt_sky_gauge.cpp"),
