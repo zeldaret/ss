@@ -17,7 +17,7 @@
  * @ingroup state
  */
 template <class T, class Method, template <class> class Factory, class Check>
-class sStateMgr_c : sStateMgrIf_c {
+class sStateMgr_c : public sStateMgrIf_c {
 public:
     sStateMgr_c(T &owner)
         : mFactory(owner), mMethod(mCheck, mFactory, sStateID::null) {}
