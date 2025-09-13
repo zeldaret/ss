@@ -142,7 +142,7 @@ void dDvdDriveError_c::execute() {
     if (!mIsError) {
         if (mDvdDriveStatus != DVD_STATE_IDLE && mDvdDriveStatus != DVD_STATE_BUSY) {
             mIsError = true;
-            dDvdUnk::FontUnk::GetInstance()->fn_80052C60();
+            dDvdUnk::FontUnk::GetInstance()->onError();
         }
     } else if (mDvdDriveStatus == DVD_STATE_IDLE) {
         if (!dReset::Manage_c::GetInstance()->isSoftResetOrSafetyWait()) {

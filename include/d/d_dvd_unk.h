@@ -4,15 +4,29 @@
 #include "common.h"
 #include "egg/core/eggHeap.h"
 
-// This file is related to errors that are
-// displayed on the screen, using a backup font
-// included in the DOL.
+// TODO - rename when NSMBW figures out their type;
+// they too apparently have a type with a ResFont at 0x00,
+// which will be revealed when NSMBW function 80107090 is cracked
 
 namespace dDvdUnk {
 
 class FontUnk {
+private:
+    enum Error_e {
+        ERROR_NONE,
+        ERROR_DISK,
+        ERROR_PAD,
+        ERROR_NAND,
+    };
+
+    enum Flag_e {
+        FLAG_ERROR_REQUEST = 0x1,
+        FLAG_0x2 = 0x2,
+        FLAG_ERROR_STATE = 0x4,
+    };
+
 public:
-    FontUnk() : field_0x2D(0) {}
+    FontUnk() : mFlags(0) {}
 
     static FontUnk *GetInstance() {
         return sInstance;
@@ -20,25 +34,35 @@ public:
 
     static void create(EGG::Heap *heap);
     void init();
+    void execute();
+    void drawNonDriveError();
+    void drawDriveError();
+
+    void preExecute();
+
+    bool isAnyError() const;
+    void onError();
+    void clearNandTrackerError();
 
     void fn_800529B0();
-    void fn_800529E0();
+    void clearNandError();
     void fn_80052A20();
-    void fn_80052D00(bool);
+    void fn_80052CC0();
+    void setNeedsPad(bool);
+    bool padErrorsAllowed();
     void fn_80052D50();
-    void fn_80052C90();
-    void fn_80052C60();
+    void fn_80052DD0();
 
-    s32 getField_0x24() const {
-        return field_0x24;
+    s32 getNandError() const {
+        return mNandErrorCode;
     }
 
-    bool getField_0x28() const {
-        return field_0x28;
+    bool isDiskError() const {
+        return mIsDiskError;
     }
 
-    u8 getField_0x29() const {
-        return field_0x29;
+    bool isNandError() const {
+        return mIsNandError;
     }
 
     void setField_0x2C(u8 val) {
@@ -52,16 +76,28 @@ public:
 private:
     static FontUnk *sInstance;
 
+    void onFlag(u8 mask) {
+        mFlags |= mask;
+    }
+
+    void offFlag(u8 mask) {
+        mFlags &= ~mask;
+    }
+
+    bool checkFlag(u8 mask) const {
+        return (mFlags & mask) != 0;
+    }
+
     /* 0x00 */ nw4r::ut::ResFont mFont;
-    /* 0x1C */ s32 field_0x1C;
-    /* 0x20 */ s32 field_0x20;
-    /* 0x24 */ s32 field_0x24;
-    /* 0x28 */ bool field_0x28;
-    /* 0x29 */ u8 field_0x29;
-    /* 0x2A */ u8 field_0x2A;
+    /* 0x1C */ s32 mErrorType;
+    /* 0x20 */ s32 mDiskErrorCode;
+    /* 0x24 */ s32 mNandErrorCode;
+    /* 0x28 */ bool mIsDiskError;
+    /* 0x29 */ bool mIsNandError;
+    /* 0x2A */ bool mIsPadError;
     /* 0x2B */ u8 field_0x2B;
     /* 0x2C */ u8 field_0x2C;
-    /* 0x2D */ u8 field_0x2D;
+    /* 0x2D */ u8 mFlags;
 };
 
 } // namespace dDvdUnk

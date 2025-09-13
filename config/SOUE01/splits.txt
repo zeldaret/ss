@@ -254,8 +254,12 @@ d/d_pad.cpp:
 d/d_pad_ex.cpp:
 	.text       start:0x80059620 end:0x80059CE0 align:16
 
-d/d_pause_manager.cpp:
+d/d_pad_manager.cpp:
 	.text       start:0x80059CE0 end:0x8005B6D4 align:16
+	.rodata     start:0x804DE188 end:0x804DE1E8
+	.data       start:0x8050D458 end:0x8050D620
+	.sdata      start:0x80571C68 end:0x80571C70
+	.sdata2     start:0x80577008 end:0x80577010
 
 d/d_player_act.cpp:
 	.text       start:0x8005B6E0 end:0x8005CE8C align:16

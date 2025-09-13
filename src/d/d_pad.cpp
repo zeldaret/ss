@@ -8,7 +8,7 @@
 #include "d/d_gfx.h"
 #include "d/d_hbm.h"
 #include "d/d_pad_nav.h"
-#include "d/d_pause.h"
+#include "d/d_pad_manager.h"
 #include "d/d_reset.h"
 #include "d/d_sc_game.h"
 #include "d/lyt/d_lyt_control_game.h"
@@ -228,7 +228,7 @@ void beginPad_BR() {
              !dAcPy_c::GetLink()->vt_0x1C0() && !dLytMeter_c::GetMain()->getField_0x1377F()) ||
             ex.field_0x22CF) {
             if (dLytControlGame_c::getInstance() && dLytControlGame_c::getInstance()->isStateNormal()) {
-                if (!(dPauseManager_c::GetInstance() && dPauseManager_c::GetInstance()->getField_0x25())) {
+                if (!(dPadManager_c::GetInstance() && dPadManager_c::GetInstance()->getField_0x25())) {
                     KPADDisableMplsDpdRevise(0);
                     KPADDisableMplsAccRevise(0);
                 }
@@ -1271,7 +1271,7 @@ f32 ex_c::fn_80058F50() {
     return m_current_ex->mMotion.fn_80058A00();
 }
 
-bool ex_c::fn_80058F60() {
+bool ex_c::startCurrentMplsCalibration() {
     if (m_current_ex->mIsWPADDeviceTypeMplsStableTimer < 8) {
         return true;
     }
@@ -1292,11 +1292,11 @@ f32 ex_c::getCurrentCalibrationWork() {
     return m_current_ex->getCalibrationWork();
 }
 
-void ex_c::fn_80058FF0() {
+void ex_c::stopCurrentMplsCalibration() {
     m_current_ex->stopMplsCalibration(mPad::getCurrentCoreID());
 }
 
-void ex_c::fn_80059000() {
+void ex_c::centerCurrentCursor() {
     m_current_ex->centerCursor(mPad::getCurrentCoreID());
 }
 

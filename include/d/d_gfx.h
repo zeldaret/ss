@@ -28,12 +28,17 @@ public:
         mDrawCallback = cb;
     }
 
-    void setField0x09(u8 val) {
-        field_0x09 = val;
+    void setLetterboxEnabled(bool val) {
+        mLetterboxEnabled = val;
     }
 
     static dGfx_c *GetInstance() {
         return sInstance;
+    }
+
+    static void doDrawCapTexture() {
+        nw4r::ut::Color c(0xFFFFFFFF);
+        sInstance->drawCapTexture(sInstance->mpTextureBuffer, &c);
     }
 
 public:
@@ -137,8 +142,8 @@ private:
 
     /* 0x00 */ EGG::TextureBuffer *mpTextureBuffer;
     /* 0x04 */ DrawCallback mDrawCallback;
-    /* 0x08 */ u8 field_0x08;
-    /* 0x09 */ u8 field_0x09;
+    /* 0x08 */ u8 mBufRefcount;
+    /* 0x09 */ bool mLetterboxEnabled;
 };
 
 #endif
