@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "d/d_dvd_unk.h"
+#include "d/d_fader.h"
 #include "d/d_heap.h"
 #include "d/d_message.h"
 #include "d/d_pad.h"
@@ -24,11 +25,10 @@ SPECIAL_BASE_PROFILE(TITLE, dScTitle_c, fProfile::TITLE, 0, 0);
 
 dScTitle_c *dScTitle_c::sInstance;
 bool dScTitle_c::sPreventEmptyFilesTitle;
-extern "C" {
-u8 lbl_80575785;
-u8 lbl_80575786;
-u8 lbl_80575787;
-}
+
+u8 dScTitle_c::lbl_80575785;
+u8 dScTitle_c::lbl_80575786;
+u8 dScTitle_c::lbl_80575787;
 
 static u16 sModulesToLoad[] = {
     // ??? not sure what these correspond to
@@ -159,11 +159,11 @@ void dScTitle_c::loadTitleScreen(u32 params) {
         params = 2;
     }
     TITLE_SCREEN_CHANGE = params;
-    setRootActor(fProfile::TITLE, params, 0, 0);
+    setRootActor(fProfile::TITLE, params, dFader_c::FADER_BLACK, dFader_c::FADER_BLACK);
     if (checkAllSaveFilesEmpty() == true) {
-        actuallyTriggerEntrance("F000", 0, 26, 55, 0, 0, 0, 15, -1);
+        actuallyTriggerEntrance("F000", 0, 26, 55, 0, 0, dFader_c::FADER_BLACK, 15, -1);
     } else {
-        actuallyTriggerEntrance("F000", 0, 28, 48, 0, 0, 0, 15, -1);
+        actuallyTriggerEntrance("F000", 0, 28, 48, 0, 0, dFader_c::FADER_BLACK, 15, -1);
     }
     fn_80362150(ENEMY_SOUND_MGR, 30);
 }
