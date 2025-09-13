@@ -25,11 +25,13 @@ void dLytMeterEventSkip_c::executeState_Invisible() {
     if (shouldPromptForSkip() || dLytMeter_c::GetInstance()->isHelpOpen()) {
         if (dLytMeter_c::GetInstance()->isHelpOpen()) {
             for (int i = 0; i < 2; i++) {
-                mLyt.fn_800AB9A0(mpTextBoxes[i], 1);
+                // "Close"
+                mLyt.loadTextVariant(mpTextBoxes[i], 1);
             }
         } else {
             for (int i = 0; i < 2; i++) {
-                mLyt.fn_800AB9A0(mpTextBoxes[i], 0);
+                // "Skip"
+                mLyt.loadTextVariant(mpTextBoxes[i], 0);
             }
         }
 

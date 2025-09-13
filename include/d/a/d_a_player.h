@@ -58,6 +58,9 @@ public:
     void setBeetleBackAnim();
     s32 getBeetleWarningTimeLeft();
 
+    // Item select/equip/use functions [0x801E3160 - 0x801E7AD0] ?
+    static s32 calcItemWheelSelection(bool reset, s32 numOptions);
+
 public:
     f32 getField_0x4564() const {
         return field_0x4564;

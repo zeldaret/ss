@@ -8,26 +8,18 @@
 #include "nw4r/lyt/lyt_bounding.h"
 #include "s/s_State.hpp"
 
-class dLytCommonIconMaterialPartBase_c {
-public:
-    virtual ~dLytCommonIconMaterialPartBase_c() {}
-    virtual nw4r::lyt::Pane *getPane() = 0;
-    virtual d2d::LytBase_c *getLyt() = 0;
-    virtual const char *getName() const = 0;
-};
-
 /** Material - Bug */
-class dLytCommonIconMaterialPart1_c : public dLytCommonIconMaterialPartBase_c {
+class dLytCommonIconMaterialPart1_c {
 public:
     dLytCommonIconMaterialPart1_c() {}
     virtual ~dLytCommonIconMaterialPart1_c() {}
-    virtual nw4r::lyt::Pane *getPane() override {
+    virtual nw4r::lyt::Pane *getPane() {
         return mLyt.getLayout()->GetRootPane();
     }
-    virtual d2d::LytBase_c *getLyt() override {
+    virtual d2d::LytBase_c *getLyt() {
         return &mLyt;
     }
-    virtual const char *getName() const override {
+    virtual const char *getName() const {
         return mLyt.getName();
     }
 
@@ -78,17 +70,17 @@ private:
 };
 
 /** Material - Treasure */
-class dLytCommonIconMaterialPart2_c : public dLytCommonIconMaterialPartBase_c {
+class dLytCommonIconMaterialPart2_c {
 public:
     dLytCommonIconMaterialPart2_c() {}
     virtual ~dLytCommonIconMaterialPart2_c() {}
-    virtual nw4r::lyt::Pane *getPane() override {
+    virtual nw4r::lyt::Pane *getPane() {
         return mLyt.getLayout()->GetRootPane();
     }
-    virtual d2d::LytBase_c *getLyt() override {
+    virtual d2d::LytBase_c *getLyt() {
         return &mLyt;
     }
-    virtual const char *getName() const override {
+    virtual const char *getName() const {
         return mLyt.getName();
     }
 
@@ -184,6 +176,9 @@ public:
     void setVisible(bool visible);
 
     const nw4r::lyt::Bounding *getBounding() const;
+
+    STATE_MGR_DEFINE_UTIL_CHANGESTATE(dLytCommonIconMaterial_c);
+    STATE_MGR_DEFINE_UTIL_ISSTATE(dLytCommonIconMaterial_c);
 
 private:
     STATE_FUNC_DECLARE(dLytCommonIconMaterial_c, None);

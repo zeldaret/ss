@@ -37,6 +37,10 @@ struct SizedString {
         return mChars;
     }
 
+    void empty() {
+        mChars[0] = '\0';
+    }
+
     void operator=(const char *src) {
         if (src != mChars) {
             mChars[0] = '\0';
@@ -100,7 +104,7 @@ struct SizedString {
 template <size_t Size>
 struct SizedWString {
     SizedWString() {
-        mChars[0] = '\0';
+        mChars[0] = L'\0';
     }
 
     wchar_t mChars[Size];
@@ -111,6 +115,10 @@ struct SizedWString {
 
     operator const wchar_t *() const {
         return mChars;
+    }
+
+    void empty() {
+        mChars[0] = L'\0';
     }
 
     int sprintf(const wchar_t *fmt, ...) {

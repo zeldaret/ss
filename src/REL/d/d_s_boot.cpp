@@ -327,9 +327,9 @@ void dScBoot_c::drawCallback() {
 dScBoot_c::strap_c::strap_c() {
     SizedString<8> str;
     u8 langNum = getUsedLanguageNTSCNum();
-    mArcName.mChars[0] = '\0';
-    mLytFileName.mChars[0] = '\0';
-    mAnimFileName.mChars[0] = '\0';
+    mArcName.empty();
+    mLytFileName.empty();
+    mAnimFileName.empty();
     if (langNum == 3) {
         str = "F";
     } else if (langNum == 4) {
