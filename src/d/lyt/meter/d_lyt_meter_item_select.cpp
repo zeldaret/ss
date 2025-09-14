@@ -1830,11 +1830,11 @@ bool dLytMeterItemSelect_c::remove() {
 }
 
 bool dLytMeterItemSelect_c::execute() {
-    if (StoryflagManager::sInstance->getCounterOrFlag(569) != 0) {
+    if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_B_BTN_NOTICE) != 0) {
         if (field_0x57A2 != 0 || (field_0x57A0 != 0 && field_0x5794 != I_SAILCLOTH && field_0x5794 != I_BOAT_CANNON &&
                                   field_0x5794 != I_HARP)) {
             field_0x57B9 = 0;
-            StoryflagManager::sInstance->unsetFlag(569);
+            StoryflagManager::sInstance->unsetFlag(STORYFLAG_B_BTN_NOTICE);
         } else {
             field_0x57B9 = 1;
         }
@@ -2481,7 +2481,7 @@ bool dLytMeterItemSelect_c::fn_800EFDF0(bool b) const {
 }
 
 bool dLytMeterItemSelect_c::fn_800F0030() const {
-    if (!StoryflagManager::sInstance->getCounterOrFlag(58) &&
+    if (!StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_B_WHEEL_UNLOCKED) &&
             !(EventManager::isInEvent() && EventManager::isCurrentEvent("ItemGetGorgeous")) ||
         (mpOwnerPane == nullptr || !mpOwnerPane->IsVisible() || dLytMeter_c::GetMain()->fn_800D5650() ||
          dLytMeter_c::GetMain()->fn_800D5680() || !dLytMeter_c::GetMain()->getItemSelectNotHiddenByAreaCaption())) {

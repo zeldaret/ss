@@ -844,10 +844,10 @@ bool dLytMeterMinusBtn_c::execute() {
     }
 
     if (dLytControlGame_c::getInstance()->isStateNormal() && mpPanes[MINUS_BTN_PANE_UIMODE]->IsVisible()) {
-        if (StoryflagManager::sInstance->getCounterOrFlag(568) != 0) {
+        if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_MINUS_BTN_NOTICE) != 0) {
             if (field_0x4EB8 != 0) {
                 field_0x4EB9 = 0;
-                StoryflagManager::sInstance->unsetFlag(568);
+                StoryflagManager::sInstance->unsetFlag(STORYFLAG_MINUS_BTN_NOTICE);
             } else {
                 field_0x4EB9 = 1;
             }
@@ -879,7 +879,7 @@ bool dLytMeterMinusBtn_c::execute() {
         return true;
     }
 
-    if (!StoryflagManager::sInstance->getCounterOrFlag(30)) {
+    if (!StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_POUCH_UNLOCKED)) {
         dLytMeter_c::GetInstance()->clearFlags(METER_BTN_MINUS);
     }
 
@@ -955,7 +955,8 @@ bool dLytMeterMinusBtn_c::execute() {
 }
 
 bool dLytMeterMinusBtn_c::shouldCall() const {
-    if (dLytControlGame_c::getInstance()->isStateNormal() && StoryflagManager::sInstance->getCounterOrFlag(568)) {
+    if (dLytControlGame_c::getInstance()->isStateNormal() &&
+        StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_MINUS_BTN_NOTICE)) {
         return true;
     }
     return false;
@@ -1037,7 +1038,7 @@ bool dLytMeterMinusBtn_c::fn_800F7600() const {
 }
 
 bool dLytMeterMinusBtn_c::fn_800F7760() const {
-    if (!StoryflagManager::sInstance->getCounterOrFlag(30) ||
+    if (!StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_POUCH_UNLOCKED) ||
         (mpOwnerPane == nullptr || !mpOwnerPane->IsVisible() || dLytMeter_c::GetMain()->fn_800D5650() ||
          dLytMeter_c::GetMain()->fn_800D5680() || !dLytMeter_c::GetMain()->getMinusBtnNotHiddenByAreaCaption())) {
         return false;

@@ -12,8 +12,9 @@ typedef TList<DowsingTarget, offsetof(DowsingTarget, mLink)> DowsingList;
 DowsingList DOWSING_LISTS[8];
 
 static const int DOWSING_TARGET_STORY_FLAGS[8] = {
-    100, 105, 100, 104, 108, 110, 109, 102,
-}; // TODO (Story Flag ID)
+    STORYFLAG_ZELDA_DOWSING, STORYFLAG_RUPEE_DOWSING,        STORYFLAG_ZELDA_DOWSING, STORYFLAG_CRYSTAL_DOWSING,
+    STORYFLAG_HEART_DOWSING, STORYFLAG_GODDESS_CUBE_DOWSING, STORYFLAG_109,           STORYFLAG_TREASURE_DOWSING,
+};
 
 DowsingTarget::~DowsingTarget() {
     doUnregister();
@@ -56,22 +57,23 @@ void DowsingTarget::getPosition(mVec3_c &position) {
     PSMTXMultVec(mtx.m, mOffset, position);
 }
 
-// TODO (Story Flag IDs)
-
 bool DowsingTarget::hasZeldaDowsing() {
-    return StoryflagManager::sInstance->getCounterOrFlag(100);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_ZELDA_DOWSING);
 }
 
 bool DowsingTarget::hasKikwiDowsing() {
-    return StoryflagManager::sInstance->getCounterOrFlag(56) && !StoryflagManager::sInstance->getCounterOrFlag(57);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_KIKWI_DOWSING) &&
+           !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_KIKWI_FIND_FINISHED);
 }
 
 bool DowsingTarget::hasKeyPieceDowsing() {
-    return StoryflagManager::sInstance->getCounterOrFlag(106) && !StoryflagManager::sInstance->getCounterOrFlag(120);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_KEYPIECE_DOWSING) &&
+           !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_KEYPIECE_COMPLETE);
 }
 
 bool DowsingTarget::hasDesertNodeDowsing() {
-    return StoryflagManager::sInstance->getCounterOrFlag(107) && !StoryflagManager::sInstance->getCounterOrFlag(8);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_GENERATOR_DOWSING) &&
+           !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_LMF_RAISED);
 }
 
 inline bool checkTrial(u16 itemflag, u16 storyflag) {
@@ -81,45 +83,50 @@ inline bool checkTrial(u16 itemflag, u16 storyflag) {
                false;
 }
 
-// TODO (Story Flag IDs) (you get the point lmao)
 bool DowsingTarget::hasAnyTrialDowsing() {
-    return checkTrial(187, 93) || checkTrial(188, 97) || checkTrial(189, 98) || checkTrial(193, 99);
+    return checkTrial(ITEM_FARORES_COURAGE, STORYFLAG_FARON_TRIAL_UNLOCKED) ||
+           checkTrial(ITEM_NAYRUS_WISDOM, STORYFLAG_LANAYRU_TRIAL_UNLOCKED) ||
+           checkTrial(ITEM_DINS_POWER, STORYFLAG_ELDIN_TRIAL_UNLOCKED) ||
+           checkTrial(ITEM_SOTH, STORYFLAG_HYLIA_TRIAL_UNLOCKED);
 }
 
 bool DowsingTarget::hasSacredWaterDowsing() {
-    return StoryflagManager::sInstance->getCounterOrFlag(64) && !StoryflagManager::sInstance->getCounterOrFlag(65);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_SACRED_WATER_DOWSING) &&
+           !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_WATER_DRAGON_HEALED);
 }
 
 bool DowsingTarget::hasSandshipDowsing() {
-    return StoryflagManager::sInstance->getCounterOrFlag(271) && !StoryflagManager::sInstance->getCounterOrFlag(14);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_SANDSHIP_DOWSING) &&
+           !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_SANDSHIP_ENTERED);
 }
 
 bool DowsingTarget::hasTadtoneDowsing() {
-    return StoryflagManager::sInstance->getCounterOrFlag(81) && !StoryflagManager::sInstance->getCounterOrFlag(18);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_TADTONE_DOWSING) &&
+           !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_ALL_TADTONES_GATHERED);
 }
 
 bool DowsingTarget::hasPropellerDowsing() {
-    return StoryflagManager::sInstance->getCounterOrFlag(668);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_PROPELLER_DOWSING);
 }
 
 bool DowsingTarget::hasWaterBasinDowsing() {
-    return StoryflagManager::sInstance->getCounterOrFlag(669);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_WATER_BASIN_DOWSING);
 }
 
 bool DowsingTarget::hasCrystalBallDowsing() {
-    return StoryflagManager::sInstance->getCounterOrFlag(670);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_CRYSTAL_BALL_DOWSING);
 }
 
 bool DowsingTarget::hasPumpkinDowsing() {
-    return StoryflagManager::sInstance->getCounterOrFlag(680);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_PUMPKIN_DOWSING);
 }
 
 bool DowsingTarget::hasNewPlantSpeciesDowsing() {
-    return StoryflagManager::sInstance->getCounterOrFlag(681);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_KIKWI_SPECIES_DOWSING);
 }
 
 bool DowsingTarget::hasPartyWheelDowsing() {
-    return StoryflagManager::sInstance->getCounterOrFlag(682);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_PARTY_WHEEL_DOWSING);
 }
 
 bool DowsingTarget::hasDowsingInSlot(int slot) {

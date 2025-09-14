@@ -99,7 +99,7 @@ bool dAcEsm_c::sSomeArray[9];
 
 int dAcEsm_c::actorCreate() {
     // Check for Batreaux being human and on Skyloft/Waterfall cave
-    if (StoryflagManager::sInstance->getCounterOrFlag(360) &&
+    if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_GRATITUDE_QUEST_FINISHED) &&
         (dScGame_c::isCurrentStage("F000") || dScGame_c::isCurrentStage("D000"))) {
         return FAILED;
     }

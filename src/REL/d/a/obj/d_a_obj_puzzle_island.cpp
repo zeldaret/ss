@@ -12,8 +12,9 @@
 SPECIAL_ACTOR_PROFILE(OBJ_PUZZLE_ISLAND, dAcOpuzzleIsland_c, fProfile::OBJ_PUZZLE_ISLAND, 0x1D6, 0, 3);
 
 void dAcOpuzzleIsland_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *interactor) {
-    if (interactor->isActorPlayer() && actor != nullptr && StoryflagManager::sInstance->getCounterOrFlag(0x11d) == 0) {
-        StoryflagManager::sInstance->setFlag(0x11d);
+    if (interactor->isActorPlayer() && actor != nullptr &&
+        StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_ISLE_OF_SONGS_DISCOVERED) == 0) {
+        StoryflagManager::sInstance->setFlag(STORYFLAG_ISLE_OF_SONGS_DISCOVERED);
     }
     return;
 }

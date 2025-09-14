@@ -485,7 +485,7 @@ bool dLytMeterCrossBtn_c::execute() {
 
     mStateMgr.executeState();
 
-    if (StoryflagManager::sInstance->getCounterOrFlag(43)) {
+    if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_FIRST_TIME_LOFTWING_ANM)) {
         field_0x63B = 1;
     }
 

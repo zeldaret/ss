@@ -26,7 +26,7 @@ bool dAcOruinedSave_c::createHeap() {
 }
 
 int dAcOruinedSave_c::create() {
-    if (StoryflagManager::sInstance->getCounterOrFlag(492)) {
+    if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_STATUES_ACTIVATED)) {
         return FAILED;
     }
     CREATE_ALLOCATOR(dAcOruinedSave_c);
@@ -62,7 +62,7 @@ int dAcOruinedSave_c::draw() {
 void dAcOruinedSave_c::initializeState_Wait() {}
 
 void dAcOruinedSave_c::executeState_Wait() {
-    if (StoryflagManager::sInstance->getCounterOrFlag(492)) {
+    if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_STATUES_ACTIVATED)) {
         mStateMgr.changeState(StateID_Vanish);
     }
 }

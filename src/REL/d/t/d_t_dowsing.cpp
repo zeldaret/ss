@@ -57,16 +57,16 @@ bool dTgDowsing_c::checkDowsing() const {
     switch (mDowsingOption) {
         case TRIAL_0:
             return ItemflagManager::sInstance->getFlagDirect(ITEM_FARORES_COURAGE) &&
-                   !StoryflagManager::sInstance->getCounterOrFlag(93); // TOOD (Counter ID)
+                   !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_FARON_TRIAL_UNLOCKED);
         case TRIAL_1:
             return ItemflagManager::sInstance->getFlagDirect(ITEM_NAYRUS_WISDOM) &&
-                   !StoryflagManager::sInstance->getCounterOrFlag(97); // TOOD (Counter ID)
+                   !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_LANAYRU_TRIAL_UNLOCKED);
         case TRIAL_2:
             return ItemflagManager::sInstance->getFlagDirect(ITEM_DINS_POWER) &&
-                   !StoryflagManager::sInstance->getCounterOrFlag(98); // TOOD (Counter ID)
+                   !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_ELDIN_TRIAL_UNLOCKED);
         case TRIAL_3:
             return ItemflagManager::sInstance->getFlagDirect(ITEM_SOTH) &&
-                   !StoryflagManager::sInstance->getCounterOrFlag(99); // TOOD (Counter ID)
+                   !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_HYLIA_TRIAL_UNLOCKED);
         case PROPELLER:         return DowsingTarget::hasPropellerDowsing();
         case WATER_BASIN:       return DowsingTarget::hasWaterBasinDowsing();
         case CRYSTAL_BALL:      return DowsingTarget::hasCrystalBallDowsing();

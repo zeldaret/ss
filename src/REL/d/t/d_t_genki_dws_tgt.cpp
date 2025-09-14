@@ -9,7 +9,7 @@
 SPECIAL_ACTOR_PROFILE(TAG_GENKI_DOWSING_TARGET, dTgGenkiDwsTgt_c, fProfile::TAG_GENKI_DOWSING_TARGET, 0x02A5, 0, 0);
 
 int dTgGenkiDwsTgt_c::create() {
-    u16 batQuestActivated = StoryflagManager::sInstance->getCounterOrFlag(304);
+    u16 batQuestActivated = StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_GRATITUDE_QUEST_STARTED);
     if (batQuestActivated == 0 || !dScGame_c::GetInstance()->currentSpawnInfo.isNight()) {
         return FAILED;
     }

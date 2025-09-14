@@ -38,7 +38,6 @@
 #include "toBeSorted/dowsing_target.h"
 #include "toBeSorted/event_manager.h"
 
-
 SPECIAL_ACTOR_PROFILE(TBOX, dAcTbox_c, fProfile::TBOX, 0x018D, 0, 6);
 
 static mVec3_c sDowsingTargetOffsets[] = {
@@ -2346,7 +2345,7 @@ void dAcTbox_c::initDowsingTargetCube() {
 void dAcTbox_c::noRegisterDowsing() {}
 
 void dAcTbox_c::registerKeyPieceDowsing() {
-    if ((field_0x11F4 & 4) == 0 && StoryflagManager::sInstance->getCounterOrFlag(0x6A)) {
+    if ((field_0x11F4 & 4) == 0 && StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_KEYPIECE_DOWSING)) {
         mDowsingTarget.doRegister();
         field_0x11F4 |= 4;
     }

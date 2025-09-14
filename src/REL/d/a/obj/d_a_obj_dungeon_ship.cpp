@@ -108,7 +108,7 @@ ok:
 }
 
 int dAcODungeonShip_c::create() {
-    if (!StoryflagManager::sInstance->getCounterOrFlag(271)) {
+    if (!StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_SANDSHIP_DOWSING)) {
         return FAILED;
     }
 

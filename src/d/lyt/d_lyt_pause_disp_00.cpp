@@ -548,7 +548,7 @@ bool dLytPauseDisp00_c::requestSelectGuide() {
     mSelectGuideRequest = true;
     if (mCallTimerMaybe != 0) {
         mStopCallRequest = true;
-        StoryflagManager::sInstance->unsetFlag(570);
+        StoryflagManager::sInstance->unsetFlag(STORYFLAG_UI_MODE_NOTICE);
     }
     return true;
 }
@@ -599,15 +599,15 @@ void dLytPauseDisp00_c::initializeState_None() {
     StoryflagManager *storyFlagmanager = StoryflagManager::sInstance;
 
     // Check which tabs are unlocked
-    if (storyFlagmanager->getFlag(789)) {
+    if (storyFlagmanager->getFlag(STORYFLAG_DOWSING_UNLOCKED)) {
         mpBoundings[PAUSE_DISP_00_BOUNDING_LEFT_TAB]->SetVisible(true);
     }
 
-    if (storyFlagmanager->getFlag(30)) {
+    if (storyFlagmanager->getFlag(STORYFLAG_POUCH_UNLOCKED)) {
         mpBoundings[PAUSE_DISP_00_BOUNDING_CENTER_TAB]->SetVisible(true);
     }
 
-    if (storyFlagmanager->getFlag(58)) {
+    if (storyFlagmanager->getFlag(STORYFLAG_B_WHEEL_UNLOCKED)) {
         mpBoundings[PAUSE_DISP_00_BOUNDING_RIGHT_TAB]->SetVisible(true);
     }
 
@@ -661,7 +661,7 @@ void dLytPauseDisp00_c::initializeState_In() {
     u8 mode = dLytMeter_c::GetMain()->getUiMode();
     setAnm(PAUSE_DISP_00_ANIM_UI_TYPE, mode);
     StoryflagManager *storyflagManager = StoryflagManager::sInstance;
-    if (storyflagManager->getFlag(583)) {
+    if (storyflagManager->getFlag(STORYFLAG_UPGRADED_DOWSING)) {
         setAnm(PAUSE_DISP_00_ANIM_DOWSING_TYPE, 1.0f);
     } else {
         setAnm(PAUSE_DISP_00_ANIM_DOWSING_TYPE, 0.0f);
@@ -669,13 +669,13 @@ void dLytPauseDisp00_c::initializeState_In() {
 
     // Control tab visibility
     f32 tabVFrame = 0.0f;
-    if (storyflagManager->getFlag(30)) {
+    if (storyflagManager->getFlag(STORYFLAG_POUCH_UNLOCKED)) {
         tabVFrame = 1.0f;
     }
-    if (storyflagManager->getFlag(789)) {
+    if (storyflagManager->getFlag(STORYFLAG_DOWSING_UNLOCKED)) {
         tabVFrame = 2.0f;
     }
-    if (storyflagManager->getFlag(58)) {
+    if (storyflagManager->getFlag(STORYFLAG_B_WHEEL_UNLOCKED)) {
         tabVFrame = 3.0f;
     }
 
@@ -1184,14 +1184,14 @@ void dLytPauseDisp00_c::setupDisp() {
         icon++;
     }
 
-    if (StoryflagManager::sInstance->getFlag(358)) {
+    if (StoryflagManager::sInstance->getFlag(STORYFLAG_UI_MODE_UNLOCKED)) {
         setAnm(PAUSE_DISP_00_ANIM_HAVE_UITYPE_BTN, 1.0f);
         mpBoundings[PAUSE_DISP_00_BOUNDING_UI_TYPE]->SetVisible(true);
     } else {
         setAnm(PAUSE_DISP_00_ANIM_HAVE_UITYPE_BTN, 0.0f);
     }
 
-    if (StoryflagManager::sInstance->getFlag(570)) {
+    if (StoryflagManager::sInstance->getFlag(STORYFLAG_2_BTN_NOTICE)) {
         setAnm(PAUSE_DISP_00_ANIM_CALL, 0.0f);
         mCallTimerMaybe = 1;
     }
@@ -1556,7 +1556,7 @@ void dLytPauseDisp00_c::setupSword() {
 }
 
 void dLytPauseDisp00_c::setupStoneOfTrials() {
-    if (StoryflagManager::sInstance->getFlag(22)) {
+    if (StoryflagManager::sInstance->getFlag(STORYFLAG_STONE_OF_TRIALS_PLACED)) {
         setAnm(PAUSE_DISP_00_ANIM_HAVE_SHIREN, 2.0f);
         mpBoundings[PAUSE_DISP_00_BOUNDING_SHIREN]->SetVisible(true);
     } else {
@@ -2082,7 +2082,7 @@ u16 dLytPauseDisp00_c::getPointedItemSpecial(s32 paneIdx, bool *pLocked) {
         case PAUSE_DISP_00_BOUNDING_MUSE_OFFSET ... PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 7: {
             s32 song = paneIdx - PAUSE_DISP_00_BOUNDING_MUSE_OFFSET;
             if (paneIdx == PAUSE_DISP_00_BOUNDING_MUSE_OFFSET + 6) {
-                if (StoryflagManager::sInstance->getFlag(462)) {
+                if (StoryflagManager::sInstance->getFlag(STORYFLAG_THUNDER_DRAGON_SONG)) {
                     id = getSongItemIdForIndex(song);
                 } else if (dAcItem_c::checkFlag(ITEM_LIFE_TREE_FRUIT)) {
                     id = ITEM_LIFE_TREE_FRUIT;

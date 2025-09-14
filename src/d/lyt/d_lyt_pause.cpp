@@ -587,7 +587,7 @@ void dLytPauseMgr_c::executeState_None() {
             mSavedPauseDisp = lytControl->getCurrentPauseDisp();
             lytControl->setCurrentPauseDisp(lytControl->getPauseDemoDisp());
         } else {
-            StoryflagManager::sInstance->unsetFlag(571);
+            StoryflagManager::sInstance->unsetFlag(STORYFLAG_1_BTN_NOTICE);
         }
     }
 }
@@ -643,7 +643,7 @@ void dLytPauseMgr_c::executeState_Wait() {
 
     if (dLytControlGame_c::getInstance()->getCurrentPauseDisp() == dLytPauseMgr_c::DISP_00_INVENTORY) {
         bool b = false;
-        if (!StoryflagManager::sInstance->getFlag(58)) {
+        if (!StoryflagManager::sInstance->getFlag(STORYFLAG_B_WHEEL_UNLOCKED)) {
             if (dPad::getDownTrigB()) {
                 b = true;
             }
@@ -855,7 +855,7 @@ void dLytPauseMgr_c::preDrawStage() {
 }
 
 void dLytPauseMgr_c::postDrawStage() {
-        if (field_0x083A == true) {
+    if (field_0x083A == true) {
         field_0x083A = false;
         d2d::defaultSet();
         if (dLytControlGame_c::getInstance() != nullptr) {
@@ -903,21 +903,21 @@ bool dLytPauseMgr_c::checkSelectRing() {
 
     if (dPad::getDownTrigB()) {
         mCurrentDisp00Tab = TAB_ITEM;
-        if (tab != TAB_ITEM && StoryflagManager::sInstance->getFlag(58)) {
+        if (tab != TAB_ITEM && StoryflagManager::sInstance->getFlag(STORYFLAG_B_WHEEL_UNLOCKED)) {
             return true;
         } else {
             return false;
         }
     } else if (dPad::getDownTrigMinus()) {
         mCurrentDisp00Tab = TAB_POUCH;
-        if (tab != TAB_POUCH && StoryflagManager::sInstance->getFlag(30)) {
+        if (tab != TAB_POUCH && StoryflagManager::sInstance->getFlag(STORYFLAG_POUCH_UNLOCKED)) {
             return true;
         } else {
             return false;
         }
     } else if (dPad::getDownTrigC()) {
         mCurrentDisp00Tab = TAB_DOWSING;
-        if (tab != TAB_DOWSING && StoryflagManager::sInstance->getFlag(789)) {
+        if (tab != TAB_DOWSING && StoryflagManager::sInstance->getFlag(STORYFLAG_DOWSING_UNLOCKED)) {
             return true;
         } else {
             return false;
@@ -987,15 +987,15 @@ void dLytPauseMgr_c::changeSavedDisp() {
     }
     lytControl->setCurrentPauseDisp(disp);
     if (disp != 0) {
-        StoryflagManager::sInstance->setFlag(847);
+        StoryflagManager::sInstance->setFlag(STORYFLAG_ON_COLLECTION_SCREEN);
     } else {
-        StoryflagManager::sInstance->unsetFlag(847);
+        StoryflagManager::sInstance->unsetFlag(STORYFLAG_ON_COLLECTION_SCREEN);
     }
 }
 
 void dLytPauseMgr_c::saveTabFlag() {
     dLytControlGame_c::getInstance()->setPauseDisp00Tab(mCurrentDisp00Tab);
-    StoryflagManager::sInstance->setFlagOrCounterToValue(846, mCurrentDisp00Tab);
+    StoryflagManager::sInstance->setFlagOrCounterToValue(STORYFLAG_SAVED_DISP00_TAB, mCurrentDisp00Tab);
 }
 
 bool dLytPauseMgr_c::checkRing() {
@@ -1003,7 +1003,7 @@ bool dLytPauseMgr_c::checkRing() {
     if (lytControl->getCurrentPauseDisp() != DISP_00_INVENTORY) {
         return false;
     }
-    if (!StoryflagManager::sInstance->getFlag(30)) {
+    if (!StoryflagManager::sInstance->getFlag(STORYFLAG_POUCH_UNLOCKED)) {
         return false;
     }
 

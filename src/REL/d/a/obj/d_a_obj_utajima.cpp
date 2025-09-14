@@ -16,8 +16,8 @@ SPECIAL_ACTOR_PROFILE(OBJ_UTAJIMA, dAcOutajima_c, fProfile::OBJ_UTAJIMA, 0x1D4, 
 
 void dAcOutajima_c::rideCallback(dBgW *bg, dAcObjBase_c *o1, dAcObjBase_c *o2) {
     if (o2->isActorPlayer() && o1 != nullptr) {
-        if (StoryflagManager::sInstance->getCounterOrFlag(285) == 0) {
-            StoryflagManager::sInstance->setFlag(285);
+        if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_ISLE_OF_SONGS_DISCOVERED) == 0) {
+            StoryflagManager::sInstance->setFlag(STORYFLAG_ISLE_OF_SONGS_DISCOVERED);
         }
     }
 }

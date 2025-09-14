@@ -7,13 +7,13 @@
 #include "d/a/d_a_player.h"
 #include "d/d_base.h"
 #include "d/d_light_env.h"
+#include "d/d_lyt_hio.h"
 #include "d/d_player.h"
 #include "d/d_pouch.h"
 #include "d/d_sc_game.h"
 #include "d/d_stage.h"
 #include "d/d_stage_mgr.h"
 #include "d/d_tag_processor.h"
-#include "d/d_lyt_hio.h"
 #include "d/flag/itemflag_manager.h"
 #include "d/flag/sceneflag_manager.h"
 #include "d/flag/storyflag_manager.h"
@@ -467,7 +467,7 @@ bool dFlow_c::handleEventInternal(const MsbFlowInfo *element) {
         }
         case EVENT_SET_STORYFLAG_217:
             StoryflagManager::sInstance->setFlagOrCounterToValue(
-                217, dLytMsgWindow_c::getInstance()->getTextOptionSelection()
+                STORYFLAG_217, dLytMsgWindow_c::getInstance()->getTextOptionSelection()
             );
             break;
         case EVENT_DEMO_METER_ITEM_SELECT: return dLytMeter_c::GetInstance()->itemSelectDemoRelated(params1n2);
@@ -623,7 +623,7 @@ bool dFlow_c::handleMessage() {
             fiHelpIndex = 0;
         }
         if (fiHelpIndex == 5) {
-            StoryflagManager::sInstance->setFlag(727);
+            StoryflagManager::sInstance->setFlag(STORYFLAG_WALLET_FULL_ACK);
         }
         mCurrentTextLabelName.sprintf("KEN4_%03d", fiHelpIndex);
     } else if (mCurrentTextLabelName == "KEN5_000") {
@@ -706,7 +706,7 @@ bool dFlow_c::handleMessage() {
     } else if (mCurrentTextLabelName == "KEN9_000") {
         // Random hint
         s32 v;
-        if (StoryflagManager::sInstance->getCounterOrFlag(530)) {
+        if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_BOSS_RUSH_ACTIVE)) {
             // "When you require my analysis..."
             v = 200;
         } else if (dStageMgr_c::GetInstance()->getSTIFbyte4() == 0) {
@@ -939,7 +939,7 @@ u16 dFlow_c::branchHandler21(const MsbFlowInfo *element) const {
 }
 
 u16 dFlow_c::branchHandler22(const MsbFlowInfo *element) const {
-    u16 ret = StoryflagManager::sInstance->getCounterOrFlag(692);
+    u16 ret = StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_692);
     if (ret > 3) {
         ret = 3;
     }
@@ -1004,7 +1004,7 @@ void dFlow_c::triggerEntryPoint(s32 labelPart1, s32 labelPart2) {
             FiContext::setField_0x48(true);
             labelPart2 = 401;
         } else if (labelPart2 == 401) {
-            StoryflagManager::sInstance->setFlag(808);
+            StoryflagManager::sInstance->setFlag(STORYFLAG_LOW_HEART_NOTICE);
             // Don't introduce heart dowsing in areas where you might
             // not be able to dowse
             if (dStageMgr_c::GetInstance()->isAreaTypeNormal()) {

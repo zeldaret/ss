@@ -204,10 +204,10 @@ bool dLytMeterZBtn_c::execute() {
     }
 
     if (dLytControlGame_c::getInstance()->isStateNormal()) {
-        if (StoryflagManager::sInstance->getCounterOrFlag(565)) {
+        if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_Z_BTN_NOTICE)) {
             if (dPad::getDownTrigZ()) {
                 field_0x1C5 = 0;
-                StoryflagManager::sInstance->unsetFlag(565);
+                StoryflagManager::sInstance->unsetFlag(STORYFLAG_Z_BTN_NOTICE);
             } else {
                 field_0x1C5 = 1;
             }
@@ -273,7 +273,8 @@ void dLytMeterZBtn_c::setMessage(s32 id) {
 }
 
 bool dLytMeterZBtn_c::isCalling() const {
-    if (dLytControlGame_c::getInstance()->isStateNormal() && StoryflagManager::sInstance->getCounterOrFlag(565)) {
+    if (dLytControlGame_c::getInstance()->isStateNormal() &&
+        StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_Z_BTN_NOTICE)) {
         return true;
     }
 

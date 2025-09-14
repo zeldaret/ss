@@ -8,8 +8,9 @@
 SPECIAL_ACTOR_PROFILE(OBJ_PUMPKIN_BAR, dAcOpumpkinBar_c, fProfile::OBJ_PUMPKIN_BAR, 0x1ED, 0, 3);
 
 void dAcOpumpkinBar_c::barCollisionRideCallback(dBgW *collider, dAcObjBase_c *actor, dAcObjBase_c *interactor) {
-    if (interactor->isActorPlayer() && actor != 0 && !StoryflagManager::sInstance->getCounterOrFlag(282)) {
-        StoryflagManager::sInstance->setFlag(282);
+    if (interactor->isActorPlayer() && actor != 0 &&
+        !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_LUMPY_PUMPKIN_DISCOVERED)) {
+        StoryflagManager::sInstance->setFlag(STORYFLAG_LUMPY_PUMPKIN_DISCOVERED);
     }
 }
 
