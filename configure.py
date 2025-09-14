@@ -2138,7 +2138,7 @@ config.libs = [
     Rel(NonMatching, "d_a_insect_scarab", "REL/d/a/d_a_insect_scarab.cpp"),
     Rel(Matching, "d_a_invisible", "REL/d/a/d_a_invisible.cpp"),
     Rel(NonMatching, "d_a_kanban", "REL/d/a/d_a_kanban.cpp"),
-    Rel(NonMatching, "d_a_knight_leader_bird", "REL/d/a/d_a_knight_leader_bird.cpp"),
+    Rel(Matching, "d_a_knight_leader_bird", "REL/d/a/d_a_knight_leader_bird.cpp"),
     Rel(NonMatching, "d_a_little_bird", "REL/d/a/d_a_little_bird.cpp"),
     Rel(NonMatching, "d_a_little_bird_mgr", "REL/d/a/d_a_little_bird_mgr.cpp"),
     Rel(NonMatching, "d_a_message", "REL/d/a/d_a_message.cpp"),

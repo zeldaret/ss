@@ -33,6 +33,10 @@ public:
         mPlayState = state;
     }
 
+    playMode_e getPlayMode() const {
+        return (playMode_e)mPlayState;
+    }
+
     inline f32 getEndFrame() {
         return mEndFrame;
     }
