@@ -2386,7 +2386,7 @@ config.libs = [
     Rel(NonMatching, "d_a_obj_blast_rock", "REL/d/a/obj/d_a_obj_blast_rock.cpp"),
     Rel(NonMatching, "d_a_obj_block_rope", "REL/d/a/obj/d_a_obj_block_rope.cpp"),
     Rel(
-        NonMatching,
+        Matching,
         "d_a_obj_block_underground",
         "REL/d/a/obj/d_a_obj_block_underground.cpp",
     ),

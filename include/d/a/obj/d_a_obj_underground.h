@@ -8,6 +8,8 @@ public:
     dAcOUnderground_c() {}
     virtual ~dAcOUnderground_c() {}
 
+    void fn_458_9D0(u16, u16);
+
 private:
 };
 
