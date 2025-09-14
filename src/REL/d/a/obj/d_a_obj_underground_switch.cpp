@@ -20,7 +20,6 @@ const f32 dAcOUgSwitch_c::sActivationRadius = 40.0f;
 const u8 dAcOUgSwitch_c::sEventTimer = 15;
 
 bool dAcOUgSwitch_c::createHeap() {
-    // Why. Regswap...
     void *data = getOarcResFile("SwitchPass");
 
     mRes = nw4r::g3d::ResFile(data);
