@@ -1,7 +1,6 @@
 #ifndef D_A_OBJ_BLOCK_UNDERGROUND_H
 #define D_A_OBJ_BLOCK_UNDERGROUND_H
 
-#include "c/c_list.h"
 #include "d/a/d_a_base.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/a/obj/d_a_obj_underground.h"
