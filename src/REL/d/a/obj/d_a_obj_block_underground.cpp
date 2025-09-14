@@ -18,7 +18,12 @@
 
 SPECIAL_ACTOR_PROFILE(OBJ_BLOCK_UNDERGROUND, dAcOBlockUnderground, fProfile::OBJ_BLOCK_UNDERGROUND, 0x13F, 0, 3);
 
-const s32 dAcOBlockUnderground::sSubtypeIdx[12] = {0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 1, 1};
+const dAcOBlockUnderground::SubtypeData dAcOBlockUnderground::sSubtypeData[4] = {
+    {0, 0, 0},
+    {1, 1, 1},
+    {2, 2, 2},
+    {3, 1, 1},
+};
 
 const char *const dAcOBlockUnderground::sOarcName = "MoleBlock";
 
@@ -46,7 +51,7 @@ const dCcD_SrcCyl dAcOBlockUnderground::sCylSrc = {
 };
 
 u32 dAcOBlockUnderground::getCylTgType() {
-    return 0x20020;
+    return AT_TYPE_0x20000 | AT_TYPE_BOMB;
 }
 
 const char *dAcOBlockUnderground::getOarcName() {
@@ -86,12 +91,12 @@ bool dAcOBlockUnderground::createHeap() {
         return false;
     }
 
-    void *dzb = getOarcDZB(getOarcName(), sDzbPlcNames[getSubtypeIdx()]);
+    void *dzb = getOarcDZB(getOarcName(), sDzbPlcNames[getMdlDzbPlcIdx()]);
     if (dzb == nullptr) {
         return false;
     }
 
-    void *plc = getOarcPLC(getOarcName(), sDzbPlcNames[getSubtypeIdx()]);
+    void *plc = getOarcPLC(getOarcName(), sDzbPlcNames[getMdlDzbPlcIdx()]);
     if (plc == nullptr) {
         return false;
     }
@@ -101,9 +106,8 @@ bool dAcOBlockUnderground::createHeap() {
         return false;
     }
 
-    if (fn_459_A00()) {
-        dCcD_Cyl *cyl = new dCcD_Cyl();
-        mCyl = cyl;
+    if (hasCyl()) {
+        mCyl = new dCcD_Cyl();
         if (mCyl == nullptr) {
             return false;
         }
@@ -113,17 +117,14 @@ bool dAcOBlockUnderground::createHeap() {
 
 int dAcOBlockUnderground::actorCreate() {
     u8 sceneFlag = getSecondSceneFlag();
-    if (sceneFlag < 0xff) {
-        bool flag = SceneflagManager::sInstance->checkFlag(roomid, sceneFlag);
-        if (flag) {
-            return FAILED;
-        }
+    if (sceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, sceneFlag)) {
+        return FAILED;
     }
 
     bool success = false;
     s32 newSubtype = 0;
     u8 currentSubtype = getSubtype();
-    const s32 *subtype = &sSubtypeIdx[0];
+    const s32 *subtype = &sSubtypeData[0].mSubtype;
     while ((!success && newSubtype <= 3)) {
         if (currentSubtype == *subtype) {
             success = true;
@@ -141,12 +142,12 @@ int dAcOBlockUnderground::actorCreate() {
     updateMatrix();
     CREATE_ALLOCATOR(dAcOBlockUnderground);
     mMdl.setLocalMtx(mWorldMtx);
-    mMdl.setPriorityDraw(0x82, 0x7f);
-    if (fn_459_A00()) {
+    mMdl.setPriorityDraw(0x82, 0x7F);
+    if (hasCyl()) {
         mStts.SetRank(0xD);
         mCyl->Set(sCylSrc);
         mCyl->SetStts(mStts);
-        if (fn_459_9A0()) {
+        if (shouldSetCylTgType()) {
             mCyl->mTg.mSrc.mType = getCylTgType();
         }
         mCyl->SetC(position);
@@ -168,7 +169,7 @@ int dAcOBlockUnderground::actorPostCreate() {
 }
 
 int dAcOBlockUnderground::actorExecute() {
-    if (fn_459_A00()) {
+    if (hasCyl()) {
         if (mCyl->ChkTgHit()) {
             if (mUndergroundRef.p_owner != nullptr) {
                 mUndergroundRef.get()->fn_458_9D0(mField_0x57C, mField_0x57E);
@@ -176,10 +177,10 @@ int dAcOBlockUnderground::actorExecute() {
 
             if (getSubtype() == 1) {
                 spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_461_);
-                dSndSmallEffectMgr_c::GetInstance()->playSoundAtPosition(0xaa6, position);
+                dSndSmallEffectMgr_c::GetInstance()->playSoundAtPosition(SE_BlockUg_BROKEN_BOMB, position);
             } else {
                 spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_462_);
-                dSndSmallEffectMgr_c::GetInstance()->playSoundAtPosition(0xaa7, position);
+                dSndSmallEffectMgr_c::GetInstance()->playSoundAtPosition(SE_BlockUg_BROKEN_CLAW, position);
             }
 
             u8 firstSceneFlag = getFirstSceneFlag();
@@ -193,7 +194,7 @@ int dAcOBlockUnderground::actorExecute() {
             }
 
             deleteRequest();
-        } else if (dAcPy_c::GetLink()->checkActionFlagsCont(dAcPy_c::FLG0_SWING_ROPE)) {
+        } else if (dAcPy_c::GetLink()->checkActionFlagsCont(0x400000)) {
             dCcS::GetInstance()->Set(mCyl);
         }
     }
@@ -201,7 +202,7 @@ int dAcOBlockUnderground::actorExecute() {
 }
 
 int dAcOBlockUnderground::draw() {
-    if (dAcPy_c::GetLink()->checkActionFlagsCont(dAcPy_c::FLG0_SWING_ROPE)) {
+    if (dAcPy_c::GetLink()->checkActionFlagsCont(0x400000)) {
         drawModelType1(&mMdl);
     }
     return SUCCEEDED;
@@ -219,15 +220,15 @@ void dAcOBlockUnderground::setBlockUndergroundPosition(mVec3_c *pos) {
     setPostion(*pos);
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
-    if (fn_459_A00()) {
+    if (hasCyl()) {
         mCyl->SetC(*pos);
     }
     mBgW.Move();
 }
 
-void dAcOBlockUnderground::fn_459_840(u16 field_0x57c, u16 field_0x57e) {
-    mField_0x57C = field_0x57c;
-    mField_0x57E = field_0x57e;
+void dAcOBlockUnderground::fn_459_840(u16 field_0x57C, u16 field_0x57E) {
+    mField_0x57C = field_0x57C;
+    mField_0x57E = field_0x57E;
 }
 
 u16 dAcOBlockUnderground::getField_0x57C() {
@@ -251,39 +252,39 @@ void dAcOBlockUnderground::setSubtype(u32 subtype) {
 }
 
 u8 dAcOBlockUnderground::getSubtype() {
-    return getFromParams(0, 0xff);
+    return getFromParams(0, 0xFF);
 }
 
 u8 dAcOBlockUnderground::getFirstSceneFlag() {
-    return getFromParams(8, 0xff);
+    return getFromParams(8, 0xFF);
 }
 
 u8 dAcOBlockUnderground::getSecondSceneFlag() {
-    return getFromParams(16, 0xff);
+    return getFromParams(16, 0xFF);
 }
 
-u32 dAcOBlockUnderground::fn_459_930() {
-    return sSubtypeIdx[mSubtype * 3 + 1];
+u32 dAcOBlockUnderground::getSubtypeCylVariant() {
+    return sSubtypeData[mSubtype].mCylVariant;
 }
 
-u32 dAcOBlockUnderground::getSubtypeIdx() {
-    return sSubtypeIdx[mSubtype * 3 + 2];
+u32 dAcOBlockUnderground::getMdlDzbPlcIdx() {
+    return sSubtypeData[mSubtype].mMdlDzbPlcIdx;
 }
 
-bool dAcOBlockUnderground::fn_459_970() {
-    return fn_459_930() == 0;
+bool dAcOBlockUnderground::noCyl() {
+    return getSubtypeCylVariant() == 0;
 }
 
-bool dAcOBlockUnderground::fn_459_9A0() {
-    return fn_459_930() == 2;
+bool dAcOBlockUnderground::shouldSetCylTgType() {
+    return getSubtypeCylVariant() == 2;
 }
 
 const char *dAcOBlockUnderground::getMdlName() {
-    return sMdlNames[getSubtypeIdx()];
+    return sMdlNames[getMdlDzbPlcIdx()];
 }
 
-bool dAcOBlockUnderground::fn_459_A00() {
-    return !fn_459_970();
+bool dAcOBlockUnderground::hasCyl() {
+    return !noCyl();
 }
 
 void dAcOBlockUnderground::spawnEffect(u16 effectResourceId) const {

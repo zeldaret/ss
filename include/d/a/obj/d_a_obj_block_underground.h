@@ -37,12 +37,12 @@ private:
     u8 getSubtype();
     u8 getFirstSceneFlag();
     u8 getSecondSceneFlag();
-    u32 fn_459_930();
-    u32 getSubtypeIdx();
-    bool fn_459_970();
-    bool fn_459_9A0();
+    u32 getSubtypeCylVariant();
+    u32 getMdlDzbPlcIdx();
+    bool noCyl();
+    bool shouldSetCylTgType();
     const char *getMdlName();
-    bool fn_459_A00();
+    bool hasCyl();
     void spawnEffect(u16) const;
 
     /* 0x330 */ m3d::smdl_c mMdl;
@@ -54,7 +54,13 @@ private:
     /* 0x57C */ u16 mField_0x57C;
     /* 0x57E */ u16 mField_0x57E;
 
-    static const s32 sSubtypeIdx[12];
+    struct SubtypeData {
+        s32 mSubtype;
+        s32 mCylVariant;
+        s32 mMdlDzbPlcIdx;
+    };
+
+    static const SubtypeData sSubtypeData[4];
     static const char *const sOarcName;
     static const char *const sMdlNames[4];
     static const char *const sDzbPlcNames[4];
