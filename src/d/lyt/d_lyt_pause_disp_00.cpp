@@ -1191,7 +1191,7 @@ void dLytPauseDisp00_c::setupDisp() {
         setAnm(PAUSE_DISP_00_ANIM_HAVE_UITYPE_BTN, 0.0f);
     }
 
-    if (StoryflagManager::sInstance->getFlag(STORYFLAG_2_BTN_NOTICE)) {
+    if (StoryflagManager::sInstance->getFlag(STORYFLAG_UI_MODE_NOTICE)) {
         setAnm(PAUSE_DISP_00_ANIM_CALL, 0.0f);
         mCallTimerMaybe = 1;
     }
