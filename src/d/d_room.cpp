@@ -293,7 +293,8 @@ void dRoom_c::drawOnMapIfVisible(mMtx_c *mtx, int param) {
     } else {
         // Lake Floria interior
         if (dStageMgr_c::GetInstance()->isAreaTypeOverworldOrSkyloft() && dScGame_c::isCurrentStage("F102") &&
-            !StoryflagManager::sInstance->getCounterOrFlag(115) && roomid >= 3 && roomid < 5) {
+            !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_FLORIA_INTERIOR_MAP_UNLOCKED) && roomid >= 3 &&
+            roomid < 5) {
             return;
         }
     }

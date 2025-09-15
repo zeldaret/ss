@@ -386,7 +386,9 @@ MapRelated::MapRelated()
                           ((dScGame_c::isCurrentStage("F300") || dScGame_c::isCurrentStage("F300_4")) &&
                            SceneflagManager::sInstance->checkTempOrSceneflag(3));
     if (!showDesertPast) {
-        bool hideSeaPast = !(dScGame_c::isCurrentStage("F301_1") && StoryflagManager::sInstance->getCounterOrFlag(519));
+        bool hideSeaPast =
+            !(dScGame_c::isCurrentStage("F301_1") &&
+              StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_SEA_CHART_ACTIVATED));
         if (hideSeaPast) {
             showPastVariant = false;
         }

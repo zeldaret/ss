@@ -421,14 +421,14 @@ void dAcOChest_c::fn_326_1470() {
     if (!mIsLinksCloset) {
         return;
     }
-    StoryflagManager::sInstance->setFlag(0x331);
+    StoryflagManager::sInstance->setFlag(STORYFLAG_ALTERNATE_WARDROBE_TEXT);
 }
 
 void dAcOChest_c::fn_326_14A0() {
     if (!mIsLinksCloset) {
         return;
     }
-    StoryflagManager::sInstance->unsetFlag(0x331);
+    StoryflagManager::sInstance->unsetFlag(STORYFLAG_ALTERNATE_WARDROBE_TEXT);
 }
 
 const u32 dAcOChest_c::unused = 0;

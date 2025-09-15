@@ -2,10 +2,10 @@
 
 #include "common.h"
 #include "d/flag/storyflag_manager.h"
-#include "d/snd/d_snd_bgm_sound_battle.h"
-#include "d/snd/d_snd_bgm_sound.h"
-#include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_bgm_mml_parsers.h"
+#include "d/snd/d_snd_bgm_sound.h"
+#include "d/snd/d_snd_bgm_sound_battle.h"
+#include "d/snd/d_snd_mgr.h"
 #include "d/snd/d_snd_player_mgr.h"
 #include "d/snd/d_snd_sound.h"
 #include "d/snd/d_snd_state_mgr.h"
@@ -13,6 +13,7 @@
 #include "d/snd/d_snd_wzsound.h"
 #include "nw4r/snd/snd_SoundArchive.h"
 #include "nw4r/ut/ut_list.h"
+
 
 bool dSndBgmMgr_c::isSoundPlayedByBgmBattlePlayer(u32 soundId) {
     if (soundId == -1) {
@@ -133,7 +134,7 @@ void dSndBgmMgr_c::loadStageSound() {
 
     if (dSndStateMgr_c::isInStage("F103")) {
         // Flooded Faron Woods
-        if (!StoryflagManager::sInstance->getFlag(18)) {
+        if (!StoryflagManager::sInstance->getFlag(STORYFLAG_ALL_TADTONES_GATHERED)) {
             bool ok = true;
             if (!dSndPlayerMgr_c::GetInstance()->isLoadedFileForSound(TAG_BGM_EVENT_COMP_NOTE)) {
                 ok = dSndPlayerMgr_c::GetInstance()->loadFileForSound(TAG_BGM_EVENT_COMP_NOTE);

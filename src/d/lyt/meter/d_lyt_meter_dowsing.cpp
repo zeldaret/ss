@@ -452,7 +452,7 @@ void dLytMeterDowsing_c::initializeState_MenuSelectingIn() {
     mAnm[DOWSING_ANIM_IN].setForwardOnce();
     mAnm[DOWSING_ANIM_IN].setFrame(0.0f);
     mAnm[DOWSING_ANIM_IN].setAnimEnable(true);
-    if (StoryflagManager::sInstance->getCounterOrFlag(583)) {
+    if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_UPGRADED_DOWSING)) {
         mAnm[DOWSING_ANIM_TYPE].setFrame(1.0f);
     } else {
         mAnm[DOWSING_ANIM_TYPE].setFrame(0.0f);
@@ -683,7 +683,7 @@ void dLytMeterDowsing_c::initializeState_DemoMove() {
     mAnm[DOWSING_ANIM_IN].setToEnd2();
     mAnm[DOWSING_ANIM_IN].setAnimEnable(true);
 
-    if (StoryflagManager::sInstance->getCounterOrFlag(583)) {
+    if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_UPGRADED_DOWSING)) {
         mAnm[DOWSING_ANIM_TYPE].setFrame(1.0f);
     } else {
         mAnm[DOWSING_ANIM_TYPE].setFrame(0.0f);
@@ -894,24 +894,25 @@ bool dLytMeterDowsing_c::remove() {
 
 bool dLytMeterDowsing_c::execute() {
     if (dLytControlGame_c::getInstance()->isStateNormal()) {
-        if (StoryflagManager::sInstance->getCounterOrFlag(566) &&
+        if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_C_BTN_NOTICE) &&
             LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) != LytDoButtonRelated::ACT_IE_NONE) {
             if (dLytMeter_c::GetMain()->fn_800D5380(0)) {
                 field_0x5508 = 0;
-                StoryflagManager::sInstance->unsetFlag(566);
+                StoryflagManager::sInstance->unsetFlag(STORYFLAG_C_BTN_NOTICE);
                 if (getSelectedDowsingSlot() != DowsingTarget::SLOT_NONE) {
-                    if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52) {
-                        StoryflagManager::sInstance->unsetFlag(818);
+                    if (LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) ==
+                        LytDoButtonRelated::ACT_IE_INFO_DOWSE) {
+                        StoryflagManager::sInstance->unsetFlag(STORYFLAG_DOWSING_NOTICE);
                     }
                 }
             } else {
                 field_0x5508 = 1;
             }
-        } else if (StoryflagManager::sInstance->getCounterOrFlag(818) &&
-                   LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52) {
+        } else if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_DOWSING_NOTICE) &&
+                   LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::ACT_IE_INFO_DOWSE) {
             if (field_0x5505 != 0 || field_0x550A != 0) {
                 field_0x5508 = 0;
-                StoryflagManager::sInstance->unsetFlag(818);
+                StoryflagManager::sInstance->unsetFlag(STORYFLAG_DOWSING_NOTICE);
             } else {
                 field_0x5508 = 1;
             }
@@ -1112,8 +1113,9 @@ void dLytMeterDowsing_c::fn_800FE110() {
 
 void dLytMeterDowsing_c::fn_800FE220() {
     if (getSelectedDowsingSlot() != DowsingTarget::SLOT_NONE &&
-        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52 && dLytMeter_c::GetMain()->fn_800D5380(0) &&
-        !dLytMeter_c::GetMain()->fn_800D5650() && !dLytMeter_c::GetMain()->fn_800D5680()) {
+        LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::ACT_IE_INFO_DOWSE &&
+        dLytMeter_c::GetMain()->fn_800D5380(0) && !dLytMeter_c::GetMain()->fn_800D5650() &&
+        !dLytMeter_c::GetMain()->fn_800D5680()) {
         mAnm[DOWSING_ANIM_RESET].setAnimEnable(true);
         mAnm[DOWSING_ANIM_RESET].setForwardOnce();
         mAnm[DOWSING_ANIM_RESET].setToStart();
@@ -1260,10 +1262,10 @@ s32 dLytMeterDowsing_c::fn_800FE9C0(s32 unkId) const {
 
 bool dLytMeterDowsing_c::shouldCall() const {
     if (dLytControlGame_c::getInstance()->isStateNormal() &&
-        ((StoryflagManager::sInstance->getCounterOrFlag(566) &&
+        ((StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_C_BTN_NOTICE) &&
           LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) != LytDoButtonRelated::ACT_IE_NONE) ||
-         (StoryflagManager::sInstance->getCounterOrFlag(818) &&
-          LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == 0x52))) {
+         (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_DOWSING_NOTICE) &&
+          LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_C) == LytDoButtonRelated::ACT_IE_INFO_DOWSE))) {
         return true;
     }
 

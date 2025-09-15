@@ -252,6 +252,6 @@ void dAcOSeatSword_c::updateSwordMdl() {
 
 bool dAcOSeatSword_c::checkPlayerHasSword() {
     // the GetFlag needs to be an inline ... (using getCounterOrFlag doesnt work)
-    return (mSubtype == 0 && StoryflagManager::sInstance->getFlag(0x3)) ||
-           (mSubtype == 1 && !StoryflagManager::sInstance->getFlag(0xA7));
+    return (mSubtype == 0 && StoryflagManager::sInstance->getFlag(STORYFLAG_GODDESS_SWORD)) ||
+           (mSubtype == 1 && !StoryflagManager::sInstance->getFlag(STORYFLAG_SWORD_RESTRICTED));
 }

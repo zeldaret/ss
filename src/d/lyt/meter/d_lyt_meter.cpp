@@ -191,7 +191,7 @@ bool dLytMeter1Button_c::execute() {
     mStateMgr.executeState();
 
     if (dLytControlGame_c::getInstance()->isStateNormal()) {
-        if (StoryflagManager::sInstance->getCounterOrFlag(571)) {
+        if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_1_BTN_NOTICE)) {
             mShouldCall = true;
         }
     } else {
@@ -233,7 +233,8 @@ bool dLytMeter1Button_c::execute() {
 }
 
 bool dLytMeter1Button_c::shouldCall() const {
-    if (dLytControlGame_c::getInstance()->isStateNormal() && StoryflagManager::sInstance->getCounterOrFlag(571)) {
+    if (dLytControlGame_c::getInstance()->isStateNormal() &&
+        StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_1_BTN_NOTICE)) {
         return true;
     }
     return false;
@@ -352,7 +353,7 @@ bool dLytMeter2Button_c::remove() {
 bool dLytMeter2Button_c::execute() {
     dLytMeter_c *meter = dLytMeter_c::GetInstance();
     if (meter->isHelpOpen()) {
-        StoryflagManager::sInstance->unsetFlag(832);
+        StoryflagManager::sInstance->unsetFlag(STORYFLAG_2_BTN_NOTICE);
     }
     if (mpOwnerPane == nullptr) {
         return true;
@@ -368,7 +369,7 @@ bool dLytMeter2Button_c::execute() {
     mStateMgr.executeState();
 
     if (dLytControlGame_c::getInstance()->isStateNormal()) {
-        if (StoryflagManager::sInstance->getCounterOrFlag(832)) {
+        if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_2_BTN_NOTICE)) {
             mShouldCall = true;
         }
     } else {
@@ -410,7 +411,8 @@ bool dLytMeter2Button_c::execute() {
 }
 
 bool dLytMeter2Button_c::shouldCall() const {
-    if (dLytControlGame_c::getInstance()->isStateNormal() && StoryflagManager::sInstance->getCounterOrFlag(832)) {
+    if (dLytControlGame_c::getInstance()->isStateNormal() &&
+        StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_2_BTN_NOTICE)) {
         return true;
     }
     return false;
@@ -587,11 +589,11 @@ bool dLytMeterMain_c::fn_800CA040() {
 }
 
 void dLytMeterMain_c::setUiMode(u16 value) const {
-    StoryflagManager::sInstance->setFlagOrCounterToValue(840, value);
+    StoryflagManager::sInstance->setFlagOrCounterToValue(STORYFLAG_UI_MODE, value);
 }
 
 u8 dLytMeterMain_c::getUiMode() {
-    return StoryflagManager::sInstance->getFlag(840);
+    return StoryflagManager::sInstance->getFlag(STORYFLAG_UI_MODE);
 }
 
 dLytMeterMain_c::dLytMeterMain_c() {}
@@ -1156,7 +1158,7 @@ void dLytMeterMain_c::checkPaneVisibility() {
         }
     }
 
-    if ((!StoryflagManager::sInstance->getCounterOrFlag(58) &&
+    if ((!StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_B_WHEEL_UNLOCKED) &&
          ((LytDoButtonRelated::get(LytDoButtonRelated::DO_BUTTON_B) == LytDoButtonRelated::ACT_IE_NONE &&
            mItemSelect.getField_0x5794() != 2 &&
            (!EventManager::isInEvent() || !EventManager::isCurrentEvent("ItemGetGorgeous")))))

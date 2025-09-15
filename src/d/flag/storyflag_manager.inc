@@ -13,7 +13,7 @@ void StoryflagManager::copyFlagsFromSaveFirstTime() {
 extern "C" FlagDefinition StoryflagManager__STORYFLAG_DEFINITIONS[];
 
 void StoryflagManager::setupFlagIndex() {
-    createFlagIndex(StoryflagManager__STORYFLAG_DEFINITIONS, 0x4B1);
+    createFlagIndex(StoryflagManager__STORYFLAG_DEFINITIONS, STORYFLAG_MAX);
 }
 
 void StoryflagManager::onDirty() {}

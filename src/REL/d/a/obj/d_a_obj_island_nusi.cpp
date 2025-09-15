@@ -113,5 +113,6 @@ void dAcOislandNusi_c::executeState_NusiFight() {
 void dAcOislandNusi_c::finalizeState_NusiFight() {}
 
 bool dAcOislandNusi_c::isInLeviasFight() const {
-    return StoryflagManager::sInstance->getCounterOrFlag(368) && !StoryflagManager::sInstance->getCounterOrFlag(200);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_LEVIAS_FIGHT_STARTED) &&
+           !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_LEVIAS_FIGHT_DEFEATED);
 }

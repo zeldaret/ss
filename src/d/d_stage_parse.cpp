@@ -176,8 +176,8 @@ static void handleBzsPly(int roomid, const BzsSectionHead *section) {
                 ang.y = fileMgr->getAngleT3();
                 linkPos = &pos;
                 linkAngle = &ang;
-                if (!StoryflagManager::sInstance->getCounterOrFlag(752) &&
-                    !StoryflagManager::sInstance->getCounterOrFlag(119)) {
+                if (!StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_752) &&
+                    !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_RESPAWN_AT_STATUE)) {
                     const PLY *entrance = room->getEntranceById(dScGame_c::currentSpawnInfo.entrance);
                     if (fn_8005C5D0(entrance->linkParams) == true) {
                         linkActorParams = entrance->linkParams;
@@ -347,7 +347,8 @@ static void handleBzsStas(int roomid, const BzsSectionHead *section) {
     }
 }
 
-static void parseLayerBzs(int roomid, u32 layer, const LAY *head, const BzsTagToParseFunc *handlerTable, s32 tableSize) {
+static void
+parseLayerBzs(int roomid, u32 layer, const LAY *head, const BzsTagToParseFunc *handlerTable, s32 tableSize) {
     const LAY *lay = head + layer;
     const BzsSectionHead *newHead = OFS_TO_PTR(BzsSectionHead, lay);
     for (s32 i = 0; i < lay->mCount; i++) {

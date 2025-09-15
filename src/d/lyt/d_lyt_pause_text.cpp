@@ -348,7 +348,8 @@ const wchar_t *dLytPauseText_c::getCurrentPausePopupCaption() {
                     return dMessage_c::getTextMessageByLabel("CAPTION_DOWSING_012", true, nullptr, 0);
                 }
             } else if (id == 14) {
-                if (StoryflagManager::sInstance->getCounterOrFlag(1087) == 27) {
+                if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_GODDESS_CHEST_COUNT) ==
+                    27 /* TODO: Max Count Define */) {
                     // "You've activated all of the Goddess Cubes. There are none left for your sword to react to."
                     return dMessage_c::getTextMessageByLabel("CAPTION_DOWSING_014_02", true, nullptr, 0);
                 } else {
@@ -389,29 +390,32 @@ const wchar_t *dLytPauseText_c::getCurrentPausePopupCaption() {
         }
         default: {
             if (id == ITEM_CAWLIN_LETTER) {
-                if (StoryflagManager::sInstance->getFlag(552) || StoryflagManager::sInstance->getFlag(555)) {
+                if (StoryflagManager::sInstance->getFlag(STORYFLAG_CAWLINS_LETTER_GHOST) ||
+                    StoryflagManager::sInstance->getFlag(STORYFLAG_CAWLINS_LETTER_KARANE)) {
                     // "A heartfelt letter from Cawlin that you were able to somewhat successfully deliver..."
                     return dMessage_c::getTextMessageByLabel("CAPTION_ITEM_158_02", true, nullptr, 0);
                 } else {
                     return getCaptionItemText(id);
                 }
             } else if (id == ITEM_BEEDLE_INSECT_CAGE) {
-                if (StoryflagManager::sInstance->getFlag(477)) {
+                if (StoryflagManager::sInstance->getFlag(STORYFLAG_BEEDLE_CAGE_GIVEN)) {
                     // "Formerly contained Beedle's beloved insect. You successfully returned it to its owner."
                     return dMessage_c::getTextMessageByLabel("CAPTION_ITEM_159_02", true, nullptr, 0);
                 } else {
                     return getCaptionItemText(id);
                 }
             } else if (id == ITEM_RATTLE) {
-                if (StoryflagManager::sInstance->getFlag(387)) {
-                    // "This toy belongs to the baby of Bertie,  who runs the Potion Shop. You've successfully returned it to its owner."
+                if (StoryflagManager::sInstance->getFlag(STORYFLAG_RATTLE_GIVEN)) {
+                    // "This toy belongs to the baby of Bertie,  who runs the Potion Shop. You've successfully returned
+                    // it to its owner."
                     return dMessage_c::getTextMessageByLabel("CAPTION_ITEM_160_02", true, nullptr, 0);
                 } else {
                     return getCaptionItemText(id);
                 }
             } else if (id == ITEM_1_CRYSTAL) {
-                if (StoryflagManager::sInstance->getFlag(360)) {
-                    // "Crystallized gratitude from the people of the land. This power of thankfulness turned Batreaux into a human."
+                if (StoryflagManager::sInstance->getFlag(STORYFLAG_GRATITUDE_QUEST_FINISHED)) {
+                    // "Crystallized gratitude from the people of the land. This power of thankfulness turned Batreaux
+                    // into a human."
                     return dMessage_c::getTextMessageByLabel("CAPTION_ITEM_048_02", true, nullptr, 0);
                 } else {
                     return getCaptionItemText(id);

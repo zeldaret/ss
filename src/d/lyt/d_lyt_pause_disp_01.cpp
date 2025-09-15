@@ -582,7 +582,8 @@ void dLytPauseDisp01_c::setupDisp() {
     setupInsects();
     setupMaterials();
 
-    if (StoryflagManager::sInstance->getFlag(552) || StoryflagManager::sInstance->getFlag(555)) {
+    if (StoryflagManager::sInstance->getFlag(STORYFLAG_CAWLINS_LETTER_GHOST) ||
+        StoryflagManager::sInstance->getFlag(STORYFLAG_CAWLINS_LETTER_KARANE)) {
         setAnm(PAUSE_DISP_01_ANIM_HAVE_TEGAMI, 2.0f);
         mpPanes[PAUSE_DISP_01_PANE_TEGAMI]->SetVisible(true);
     } else if (dAcItem_c::checkFlag(ITEM_CAWLIN_LETTER)) {
@@ -592,17 +593,17 @@ void dLytPauseDisp01_c::setupDisp() {
         setAnm(PAUSE_DISP_01_ANIM_HAVE_TEGAMI, 0.0f);
     }
 
-    if (StoryflagManager::sInstance->getFlag(477)) {
+    if (StoryflagManager::sInstance->getFlag(STORYFLAG_BEEDLE_CAGE_GIVEN)) {
         setAnm(PAUSE_DISP_01_ANIM_HAVE_TERRY_BUG, 2.0f);
         mpPanes[PAUSE_DISP_01_PANE_TERRY_BUG]->SetVisible(true);
-    } else if (StoryflagManager::sInstance->getFlag(476)) {
+    } else if (StoryflagManager::sInstance->getFlag(STORYFLAG_BEEDLE_CAGE_AQUIRED)) {
         setAnm(PAUSE_DISP_01_ANIM_HAVE_TERRY_BUG, 1.0f);
         mpPanes[PAUSE_DISP_01_PANE_TERRY_BUG]->SetVisible(true);
     } else {
         setAnm(PAUSE_DISP_01_ANIM_HAVE_TERRY_BUG, 0.0f);
     }
 
-    if (StoryflagManager::sInstance->getFlag(387)) {
+    if (StoryflagManager::sInstance->getFlag(STORYFLAG_RATTLE_GIVEN)) {
         setAnm(PAUSE_DISP_01_ANIM_HAVE_GARAGARA, 2.0f);
         mpPanes[PAUSE_DISP_01_PANE_GARAGARA]->SetVisible(true);
     } else if (dAcItem_c::checkFlag(ITEM_RATTLE)) {
@@ -622,7 +623,7 @@ void dLytPauseDisp01_c::setupDisp() {
             crystalCount = demoItem == ITEM_1_CRYSTAL ? crystalCount - 1 : crystalCount - 5;
         }
 
-        if (StoryflagManager::sInstance->getFlag(360)) {
+        if (StoryflagManager::sInstance->getFlag(STORYFLAG_GRATITUDE_QUEST_FINISHED)) {
             setAnm(PAUSE_DISP_01_ANIM_HAVE_GENKI, 2.0f);
         } else if (isDemo && crystalCount == 0) {
             setAnm(PAUSE_DISP_01_ANIM_HAVE_GENKI, 0.0f);
@@ -954,7 +955,7 @@ bool dLytPauseDisp01_c::shouldInsectBeDisplayed(s32 insectIdx) const {
     if (insectIdx != 0) {
         return dAcItem_c::checkFlag(getInsectItemId(insectIdx));
     } else {
-        return StoryflagManager::sInstance->getFlag(122);
+        return StoryflagManager::sInstance->getFlag(STORYFLAG_DEKU_HORNET_COLLECTED);
     }
 }
 

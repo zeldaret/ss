@@ -179,14 +179,14 @@ void dScGame_c::setRespawnInfo(const mVec3_c &linkPos, const mAng3_c &linkRot, b
                                           MinigameManager::isInMinigameState(MinigameManager::BOSS_RUSH) ?
                                       true :
                                       false;
-    bool isInHordeFight = isCurrentStage("F403") && !StoryflagManager::sInstance->getFlag(134);
+    bool isInHordeFight = isCurrentStage("F403") && !StoryflagManager::sInstance->getFlag(STORYFLAG_HORDE_DEFEATED);
     s32 areaType = dStageMgr_c::GetInstance()->getAreaType();
     if (mPreventSaveRespawnInfo != true && !isInThunderDragonTrial && !isInHordeFight &&
         (areaType != 2 && !isCurrentStage("B100_1") && !sPreventClearingSomeFlag &&
          (areaType != 1 || (mLastAreaType != 1 && mLastAreaType != 2)))) {
         FileManager::GetInstance()->setT3Info(linkPos, linkRot);
         if (mLastAreaType != 5 && unk) {
-            StoryflagManager::sInstance->unsetFlag(752);
+            StoryflagManager::sInstance->unsetFlag(STORYFLAG_752);
         }
     }
 

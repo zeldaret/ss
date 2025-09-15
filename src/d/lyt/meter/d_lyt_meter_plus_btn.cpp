@@ -127,7 +127,7 @@ bool dLytMeterPlusBtn_c::build(d2d::ResAccIf_c *resAcc) {
     setMessage(LytDoButtonRelated::ACT_IE_NONE);
 
     field_0x1C0 = 0;
-    field_0x1C1 = StoryflagManager::sInstance->getCounterOrFlag(212);
+    field_0x1C1 = StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_212);
 
     mCallCount = 0;
 
@@ -176,7 +176,7 @@ bool dLytMeterPlusBtn_c::execute() {
         mShouldCall = true;
     } else {
         if (dLytControlGame_c::getInstance()->isStateNormal()) {
-            if (StoryflagManager::sInstance->getCounterOrFlag(567)) {
+            if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_PLUS_BTN_NOTICE)) {
                 mShouldCall = true;
             } else {
                 mShouldCall = false;
@@ -228,7 +228,8 @@ bool dLytMeterPlusBtn_c::execute() {
 }
 
 bool dLytMeterPlusBtn_c::isCalling() const {
-    if (dLytControlGame_c::getInstance()->isStateNormal() && StoryflagManager::sInstance->getCounterOrFlag(567)) {
+    if (dLytControlGame_c::getInstance()->isStateNormal() &&
+        StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_PLUS_BTN_NOTICE)) {
         return true;
     }
     return false;
@@ -237,7 +238,7 @@ bool dLytMeterPlusBtn_c::isCalling() const {
 void dLytMeterPlusBtn_c::setCall(bool shouldCall) {
     field_0x1C0 = shouldCall;
     if (shouldCall) {
-        StoryflagManager::sInstance->setFlag(212);
+        StoryflagManager::sInstance->setFlag(STORYFLAG_212);
     }
 }
 

@@ -114,5 +114,5 @@ int dAcOmegamiIsland_c::draw() {
 }
 
 bool dAcOmegamiIsland_c::hasGoddessStatueFallen() {
-    return StoryflagManager::sInstance->getCounterOrFlag(0x11);
+    return StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_TRIFORCE_COMPLETE);
 }

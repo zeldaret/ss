@@ -14,7 +14,6 @@
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/unk_save_time.h"
 
-
 // https://github.com/lepelog/skywardsword-tools/wiki/Navi-Table-(Fi-Advice)
 
 // Portability hazard, only works for 32 bit architectures
@@ -88,7 +87,7 @@ s16 FiAnalysisHandle::getEquipmentFocus() const {
     if (!isValid()) {
         return -1;
     } else {
-        if (StoryflagManager::sInstance->getCounterOrFlag(530)) {
+        if (StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_BOSS_RUSH_ACTIVE)) {
             // "I cannot offer my usual analysis because you are currently engaged in a challenge created by the Thunder
             // Dragon Lanayru."
             return 180;
@@ -153,7 +152,7 @@ void FiContext::initialize(void *data) {
 }
 
 s16 FiContext::getNaviTableProgressSummary() {
-    if (StoryflagManager::sInstance->getFlag(530)) {
+    if (StoryflagManager::sInstance->getFlag(STORYFLAG_BOSS_RUSH_ACTIVE)) {
         // When in boss rush, no progress is available since story flags
         // are unreliable here.
         // "You are currently reliving some of your previous battles within the Thunder Dragon's Lightning Round..."
@@ -172,7 +171,7 @@ s16 FiContext::getNaviTableProgressSummary() {
 }
 
 s16 FiContext::getFiAdviceHintEntry() {
-    if (StoryflagManager::sInstance->getFlag(530)) {
+    if (StoryflagManager::sInstance->getFlag(STORYFLAG_BOSS_RUSH_ACTIVE)) {
         // When in boss rush, no hint since location doesn't make sense
         // "Master, this is a world built from your memories by Lanayru, the Thunder Dragon"
         return 37;
@@ -192,20 +191,22 @@ s16 FiContext::getFiAdviceHintEntry() {
 }
 
 s16 FiContext::getObjective() {
-    if (StoryflagManager::sInstance->getFlag(530)) {
+    if (StoryflagManager::sInstance->getFlag(STORYFLAG_BOSS_RUSH_ACTIVE)) {
         // When in boss rush, objective is to beat the mode
         // "Master, your primary objective is to defeat the enemy here and overcome the grueling task the Thunder
         // Dragon, Lanayru, has set before you..."
         return 92;
     } else {
-        if (StoryflagManager::sInstance->getFlag(136) && StoryflagManager::sInstance->getFlag(143) &&
-            StoryflagManager::sInstance->getFlag(144) && StoryflagManager::sInstance->getFlag(145) &&
-            !StoryflagManager::sInstance->getFlag(133)) {
+        if (StoryflagManager::sInstance->getFlag(STORYFLAG_IMPRISONED_FIGHT) &&
+            StoryflagManager::sInstance->getFlag(STORYFLAG_IMPRISONED_1_FIGHT) &&
+            StoryflagManager::sInstance->getFlag(STORYFLAG_IMPRISONED_2_FIGHT) &&
+            StoryflagManager::sInstance->getFlag(STORYFLAG_IMPRISONED_3_FIGHT) &&
+            !StoryflagManager::sInstance->getFlag(STORYFLAG_IMPRISONED_3_DEFEATED)) {
             // "Demise has once again broken the seal that binds him..."
             return 70;
         }
 
-        if (!StoryflagManager::sInstance->getCounterOrFlag(21)) {
+        if (!StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_THUNDER_DRAGON_SOTH_COMPLETED)) {
             if (ItemflagManager::sInstance->getFlagDirect(ITEM_LIFE_TREE_SEED) &&
                 !ItemflagManager::sInstance->getFlagDirect(ITEM_LIFE_TREE_FRUIT)) {
                 // "I project that the soil in Lanayru Province will not provide enough nourishment for the Life Tree
@@ -310,7 +311,8 @@ u16 FiContext::prepareFiHelpIndex() {
         }
     }
 
-    if (FileManager::GetInstance()->getCurrentHealth() <= 12 && !StoryflagManager::sInstance->getCounterOrFlag(808)) {
+    if (FileManager::GetInstance()->getCurrentHealth() <= 12 &&
+        !StoryflagManager::sInstance->getCounterOrFlag(STORYFLAG_LOW_HEART_NOTICE)) {
         ret = 6401;
         // "Your hearts have decreased quite dramatically..."
         setHelpIndex(0);
@@ -336,8 +338,8 @@ u16 FiContext::prepareFiHelpIndex() {
     u32 numRupees = dAcItem_c::getRupeeCounter();
     u32 walletCapacity = dAcItem_c::getCurrentWalletCapacity();
 
-    if (!StoryflagManager::sInstance->getFlag(727) && walletCapacity != 0 && numRupees == walletCapacity &&
-        !getField_0x47()) {
+    if (!StoryflagManager::sInstance->getFlag(STORYFLAG_WALLET_FULL_ACK) && walletCapacity != 0 &&
+        numRupees == walletCapacity && !getField_0x47()) {
         ret = 6400;
         // "Master, your wallet is full..."
         setHelpIndex(5);
@@ -431,8 +433,8 @@ void FiContext::fn_8016CB40() {
 }
 
 bool FiContext::isInLeviasFightMaybe() {
-    if (dScGame_c::isCurrentStage("F023") && StoryflagManager::sInstance->getFlag(368) &&
-        !StoryflagManager::sInstance->getFlag(200)) {
+    if (dScGame_c::isCurrentStage("F023") && StoryflagManager::sInstance->getFlag(STORYFLAG_LEVIAS_FIGHT_STARTED) &&
+        !StoryflagManager::sInstance->getFlag(STORYFLAG_LEVIAS_FIGHT_DEFEATED)) {
         return true;
     }
     return false;
