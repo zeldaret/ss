@@ -1,5 +1,5 @@
-#ifndef D_A_SALBAGE_H
-#define D_A_SALBAGE_H
+#ifndef D_A_SALBAGE_IF_H
+#define D_A_SALBAGE_IF_H
 
 #include "common.h"
 

@@ -64,8 +64,8 @@ int dAcSalbageObj_c::actorExecute() {
 }
 
 int dAcSalbageObj_c::preExecute() {
-    // TODO - this matches, but so does `bool` conversion...
-    int result = dAcObjBase_c::preExecute() == NOT_READY ? NOT_READY : SUCCEEDED;
+    // @bug bool conversion
+    bool result = dAcObjBase_c::preExecute();
     if (dSalvageMgr_c::sInstance->checkDeliveredStoryflag(mSalvageIf.getSalvageObjId())) {
         s32 id = mSalvageIf.getSalvageObjId();
         if (id != SALVAGE_OBJ_DIVINER_CRYSTAL && id != SALVAGE_OBJ_POT) {
@@ -107,8 +107,10 @@ int dAcSalbageObj_c::preExecute() {
 int dAcSalbageObj_c::preDraw() {
     if (dAcObjBase_c::preDraw() == NOT_READY) {
         return NOT_READY;
+    } else if (mSalvageIf.isHidden()) {
+        return NOT_READY;
     } else {
-        return mSalvageIf.isHidden() ? NOT_READY : SUCCEEDED;
+        return SUCCEEDED;
     }
 }
 
@@ -211,9 +213,7 @@ void dAcSalbageObj_c::addAttentionTargetIfNeeded() {
 }
 
 void dAcSalbageObj_c::addAttentionTarget() {
-    AttentionManager::sInstance->addTarget(
-        *this, sInteractionTargetDefs[mSalvageIf.getSalvageObjId()], 0, nullptr
-    );
+    AttentionManager::sInstance->addTarget(*this, sInteractionTargetDefs[mSalvageIf.getSalvageObjId()], 0, nullptr);
 
     InteractionTargetDef copy = sInteractionTargetDefs[mSalvageIf.getSalvageObjId()];
     copy.field_0x00 = 1;

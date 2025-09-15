@@ -2,11 +2,11 @@
 #define D_A_SALBAGE_OBJ_H
 
 #include "common.h"
+#include "d/a/d_a_salbage_if.h"
 #include "d/a/obj/d_a_obj_base.h"
 #include "d/col/bg/d_bg_s_acch.h"
 #include "d/col/cc/d_cc_d.h"
 #include "d/d_shadow.h"
-#include "d/a/d_a_salbage.h"
 #include "m/m3d/m_smdl.h"
 #include "m/m_mtx.h"
 #include "m/m_quat.h"
