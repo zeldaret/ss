@@ -18,6 +18,7 @@ public:
     static bool alsoSetAsCurrentEvent(dAcBase_c *actor, Event *event, void *unknown);
     static dAcObjBase_c *fn_800A08F0(fBase_c::GROUP_TYPE_e);
     static bool canSkipCurrentEvent();
+    static dAcBase_c *getMainActorInEvent();
 
     static EventManager *sInstance;
 

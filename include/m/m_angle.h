@@ -150,6 +150,10 @@ public:
         return *this;
     }
 
+    bool operator==(const mAng3_c &other) const {
+        return x == other.x && y == other.y && z == other.z;
+    }
+
     void set(const mAng3_c &other) {
         set(other.x, other.y, other.z);
     }
