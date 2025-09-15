@@ -110,6 +110,30 @@ public:
         *this += m;
     }
 
+    void concat(const mMtx_c &rhs) {
+        MTXConcat(*this, rhs, *this);
+    }
+
+    void scaleS(const mVec3_c &v) {
+        MTXScale(*this, v.x, v.y, v.z);
+    }
+
+    void scaleS(f32 x, f32 y, f32 z) {
+        MTXScale(*this, x, y, z);
+    }
+
+    void scaleM(const mVec3_c &v) {
+        mMtx_c m;
+        MTXScale(m, v.x, v.y, v.z);
+        *this += m;
+    }
+
+    void scaleM(f32 x, f32 y, f32 z) {
+        mMtx_c m;
+        MTXScale(m, x, y, z);
+        *this += m;
+    }
+
     void multVec(const mVec3_c &in, mVec3_c &out) const {
         MTXMultVec(*this, in, out);
     }

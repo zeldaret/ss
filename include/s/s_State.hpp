@@ -44,6 +44,11 @@
         return *mStateMgr.getStateID() == value;                                                                       \
     }
 
+#define STATE_MGR_DEFINE_UTIL_GETOLDSTATEID(class_name)                                                                \
+    const sFStateID_c<class_name> &getOldStateID() const {                                                             \
+        return (sFStateID_c<class_name> &)*mStateMgr.getOldStateID();                                                                             \
+    }
+
 // TODO this is probably not the whole solution.
 // The problems with this approach are:
 // * You can't define the same state name for multiple files in the same TU due to baseID_ symbol clash.
