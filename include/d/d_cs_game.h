@@ -10,6 +10,7 @@
 #include "s/s_State.hpp"
 #include "s/s_StateID.hpp"
 #include "toBeSorted/d_emitter.h"
+#include "toBeSorted/d_emitter_callbacks.h"
 
 struct dCsGame_HIO_c {
     dCsGame_HIO_c();
@@ -35,15 +36,7 @@ struct dCsGame_HIO_c {
     /* 0x42 */ u8 field_0x42;
 };
 
-class EffectRelatedTmp {
-public:
-    EffectRelatedTmp();
-    virtual ~EffectRelatedTmp();
-
-    void doSomething(EffectsStruct *s);
-};
-
-class EffectRelated : public EffectRelatedTmp {
+class EffectRelated : public dEmitterCallback_c {
 public:
     EffectRelated(u32 x = 0x28, f32 y = 3.5f);
     virtual ~EffectRelated() {}
@@ -130,8 +123,6 @@ public:
         return sInstance;
     }
 
-    void setSomething(int);
-
     bool fn_801BF5E0() const;
     bool fn_801BF630() const;
 
@@ -141,6 +132,7 @@ public:
 
     public:
         enum CursorType_e {
+            NONE = 0,
             BOW = 6,
         };
 
@@ -342,8 +334,8 @@ public:
         /* 0x00C */ UI_STATE_MGR_DECLARE(lytItemCursor_c);
 
         /* 0x048 */ EffectsStruct mEffects;
-        /* 0x07C */ EffectRelated mEffectRelated;
-        /* 0x080 */ u8 field_0x80[0xC8 - 0x80];
+        /* 0x07C */ dEmitterCallbackCursorTrail_c mTrailCb;
+        /* 0x0B0 */ u8 field_0xB0[0xC8 - 0xB0];
         /* 0x0C8 */ m2d::ResAccIf_c *mpResAcc;
         /* 0x0CC */ d2d::LytBase_c mLyt;
         /* 0x15C */ dCsGameAnmGroups_c mAnmGroups;

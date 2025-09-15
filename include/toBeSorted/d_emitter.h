@@ -43,14 +43,14 @@ public:
         return mpEmitterCallback;
     }
 
+    void setEmitterCallback(dEmitterCallback_c *cb);
+    void setParticleCallback(dParticleCallback_c *cb);
+
 protected:
     void deactivateEmitters();
     void stopCalcEmitters();
     void playCalcEmitters();
     static void loadColors(JPABaseEmitter *emitter, const GXColor *c1, const GXColor *c2, s32 idx1, s32 idx2);
-
-    void setEmitterCallback(dEmitterCallback_c *cb);
-    void setParticleCallback(dParticleCallback_c *cb);
 
     void setImmortal();
 

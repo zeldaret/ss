@@ -143,7 +143,7 @@ int dCsGame_c::create() {
     mCursor.setResAcc(&mMain2DResAcc);
     mCursor.init();
 
-    setSomething(0);
+    setNextCursorType(lytItemCursor_c::NONE);
     mCursorType = 0;
 
     mCursor.setField0x9A0(0);
@@ -255,7 +255,8 @@ bool dCsGame_c::lytItemCursor_c::doInit() {
     mVacuum.init();
 
     mAnmGroups.tmp.mAnmGroups[MAIN_ANIM_VACUUM_LOCK].setAnimEnable(false);
-    mEffectRelated.doSomething(&mEffects);
+    mEffects.setEmitterCallback(&mTrailCb);
+    
     mLyt.setPriority(0x88);
 
     mLyt.calc();
@@ -550,6 +551,27 @@ void dCsGame_c::lytItemCursor_c::lytCrawShotCsr_c::finalizeState_Lock() {}
 void dCsGame_c::lytItemCursor_c::lytCrawShotCsr_c::initializeState_ToNormal() {}
 void dCsGame_c::lytItemCursor_c::lytCrawShotCsr_c::executeState_ToNormal() {}
 void dCsGame_c::lytItemCursor_c::lytCrawShotCsr_c::finalizeState_ToNormal() {}
+
+void dCsGame_c::lytItemCursor_c::lytCrawShotCsr_c::enter() {
+    mAnm[MAIN_ANIM_CURSOR].setFrame(4.0f);
+    mAnm[MAIN_ANIM_HOOK_FIX].setAnimEnable(true);
+    mAnm[MAIN_ANIM_HOOK_FIX].setFrame(0.0f);
+    mAnm[MAIN_ANIM_LOCK_LOOP].setAnimEnable(false);
+    mpLyt->getLayout()->Animate(0);
+    mpLyt->calc();
+    mAnm[MAIN_ANIM_HOOK_FIX].setAnimEnable(false);
+    mStateMgr.changeState(StateID_Normal);
+}
+
+void dCsGame_c::lytItemCursor_c::lytCrawShotCsr_c::init() {
+    enter();
+    mStateMgr.changeState(StateID_Normal);
+}
+
+void dCsGame_c::lytItemCursor_c::lytCrawShotCsr_c::execute() {
+    mStateMgr.executeState();
+}
+
 
 void dCsGame_c::lytItemCursor_c::lytVacuumCsr_c::initializeState_Normal() {
     mAnm[MAIN_ANIM_LOOP].setAnimEnable(true);
