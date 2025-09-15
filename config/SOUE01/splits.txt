@@ -1264,12 +1264,15 @@ d/a/d_a_salbage_obj.cpp:
 	.ctors      start:0x804DB7EC end:0x804DB7F0
 	.rodata     start:0x804E9CD8 end:0x804E9E28
 	.data       start:0x8052ACD0 end:0x8052B078
+	.sdata      start:0x80572D08 end:0x80572D10
+	.sdata2     start:0x8057AE30 end:0x8057AE60
 	.bss        start:0x805B2128 end:0x805B22E8
 
 d/a/d_a_salbage_npc.cpp:
 	.text       start:0x80192B00 end:0x80194080 align:16
 	.ctors      start:0x804DB7F0 end:0x804DB7F4
 	.data       start:0x8052B078 end:0x8052B618
+	.sdata2     start:0x8057AE60 end:0x8057AE80
 	.bss        start:0x805B22E8 end:0x805B2428
 
 d/d_pad_nav.cpp:

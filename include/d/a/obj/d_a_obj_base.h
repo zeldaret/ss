@@ -4,6 +4,7 @@
 #include "c/c_math.h"
 #include "common.h"
 #include "d/a/d_a_base.h"
+#include "d/a/d_a_salbage_if.h"
 #include "d/col/c/c_cc_d.h"
 #include "d/col/c/c_m3d_g_aab.h"
 #include "d/d_jnt_col.h"
@@ -17,7 +18,6 @@
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 #include "m/types_m.h"
-
 
 // Ghidra: ActorObjectBase
 //   size: 0x330
@@ -52,7 +52,7 @@ public:
     /* 0x210 */ dLinkage_c mLinkage;
     /* 0x2B8 */ u32 mField_0x2B8;
     /* 0x2BC */ ActorLighting mLightingInfo;
-    /* 0x32C */ u32 mField_0x32C;
+    /* 0x32C */ dSalvageIf_c *mpSalvageIf;
 
 public:
     mVec3_c &GetOldPosition() {

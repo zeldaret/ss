@@ -584,7 +584,7 @@ config.libs = [
             Object(NonMatching, "toBeSorted/sword_proj_effect_list.cpp"),
             Object(NonMatching, "d/a/d_a_insect.cpp"),
             Object(NonMatching, "toBeSorted/unk_save_time.cpp"),
-            Object(NonMatching, "d/a/d_a_salbage_obj.cpp"),
+            Object(Matching, "d/a/d_a_salbage_obj.cpp"),
             Object(NonMatching, "d/a/d_a_salbage_npc.cpp"),
             Object(Matching, "d/d_pad_nav.cpp"),
             Object(NonMatching, "toBeSorted/goddess_chest_counter.cpp"),

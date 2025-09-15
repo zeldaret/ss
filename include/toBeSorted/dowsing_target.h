@@ -2,7 +2,6 @@
 #define DOWSING_TARGET_H
 
 #include "d/a/d_a_base.h"
-#include "f/f_list_nd.h"
 #include "m/m_vec.h"
 
 class DowsingTarget {
@@ -31,6 +30,10 @@ public:
     // vt offset 0x1C
     virtual ~DowsingTarget();            // 0x08
     virtual void getPosition(mVec3_c &); // 0x0C
+
+    void setOffset(const mVec3_c &offset) {
+        mOffset = offset;
+    }
 
     bool doRegister();
     bool doUnregister();
