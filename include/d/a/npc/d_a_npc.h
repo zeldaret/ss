@@ -87,8 +87,7 @@ public:
 
     /* 0x0C */ virtual void calc() override;
     /* 0x10 */ virtual bool isDone() override {
-        // TODO - this matches, but maybe an operator overload?
-        return mCurrent.x == mTarget.x && mCurrent.y == mTarget.y && mCurrent.z == mTarget.z;
+        return mCurrent == mTarget;
     }
     /* 0x20 */ virtual void vt_0x20(const dAcBase_c *) {}
 };
