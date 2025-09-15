@@ -123,13 +123,13 @@ int dAcOBlockUnderground::actorCreate() {
 
     bool success = false;
     s32 newSubtype = 0;
-    u8 currentSubtype = getSubtype();
-    const s32 *subtype = &sSubtypeData[0].mSubtype;
+    u8 subtype = getSubtype();
+    const SubtypeData *subtypeData = &sSubtypeData[0];
     while ((!success && newSubtype <= 3)) {
-        if (currentSubtype == *subtype) {
+        if (subtype == subtypeData->mSubtype) {
             success = true;
         } else {
-            subtype += 3;
+            subtypeData++;
             newSubtype++;
         }
     }
