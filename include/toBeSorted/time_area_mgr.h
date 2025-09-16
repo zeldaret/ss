@@ -56,7 +56,7 @@ struct TimeAreaStruct {
     //   -1 SE_TIMESLIP_TIMESLIP_REV
     //    0 No change ?
     //    1 SE_TIMESLIP_TIMESLIP
-    int check(int, const mVec3_c &, u32, f32, f32);
+    int check(int roomId, const mVec3_c &position, u32, f32, f32);
 };
 
 class dTimeAreaMgr_c {
