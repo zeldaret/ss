@@ -26,12 +26,10 @@ bool dAcOF302Light_c::createHeap() {
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("Teniobj_0");
     TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
 
-    s32 i = 0;
-    while (i < 2) {
+    for (s32 i = 0; i < 2; i++) {
         nw4r::g3d::ResAnmClr resAnmClr = mResFile.GetResAnmClr(sResAnmClrNames[i]);
         TRY_CREATE(mAnmMatClr[i].create(mdl, resAnmClr, &heap_allocator, nullptr, 1));
         mAnmMatClr[i].setRate(0.f, 0);
-        i++;
     }
     return true;
 }
@@ -63,10 +61,8 @@ int dAcOF302Light_c::doDelete() {
 int dAcOF302Light_c::actorExecute() {
     mStateMgr.executeState();
 
-    s32 i = 0;
-    while (i < 2) {
+    for (s32 i = 0; i < 2; i++) {
         mAnmMatClr[i].play();
-        i++;
     }
     return SUCCEEDED;
 }
@@ -89,10 +85,8 @@ int dAcOF302Light_c::actorExecuteInEvent() {
     }
     mStateMgr.executeState();
 
-    s32 i = 0;
-    while (i < 2) {
+    for (s32 i = 0; i < 2; i++) {
         mAnmMatClr[i].play();
-        i++;
     }
     return SUCCEEDED;
 }
