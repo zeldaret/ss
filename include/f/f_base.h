@@ -7,7 +7,6 @@
 
 #include "c/c_list.h"
 #include "common.h"
-#include "egg/core/eggExpHeap.h"
 #include "egg/core/eggFrmHeap.h"
 #include "f/f_base_id.h"
 #include "f/f_helper_unk.h"
@@ -20,15 +19,15 @@
 // official name
 class fBase_c {
 public:
-    /* 0x00 */ fBaseID_e unique_ID;
-    /* 0x04 */ u32 params;               // params1
+    /* 0x00 */ fBaseID_e mID;
+    /* 0x04 */ u32 mParams;              // params1
     /* 0x08 */ ProfileName profile_name; // Actor Id
     /* 0x0A */ u8 lifecycle_state;
     /* 0x0B */ bool delete_request;
     /* 0x0C */ s8 update_request;
     /* 0x0D */ bool create_request;
     /* 0x0E */ u8 group_type;
-    /* 0x0F */ u8 proc_control;
+    /* 0x0F */ u8 mProcControl;
     /* 0x10 */ fManager_c manager;
     /* 0x50 */ fBaHelper_c *p_helper;
     /* 0x54 */ cListMg_c actor_list;
@@ -70,28 +69,28 @@ public:
     };
 
     int getID() const {
-        return unique_ID;
+        return mID;
     }
 
-    bool isProcControlFlag(u8 flag) const {
-        return (proc_control & flag) != 0;
+    bool checkProcControl(u8 procControl) const {
+        return (mProcControl & procControl) != 0;
     }
-    void setProcControlFlag(u8 flag) {
-        proc_control |= flag;
+    void setProcControl(u8 procControl) {
+        mProcControl |= procControl;
     }
-    void clearProcControlFlag(u8 flag) {
-        proc_control &= ~flag;
+    void unsetProcControl(u8 procControl) {
+        mProcControl &= ~procControl;
     }
 
     void setParams() {
-        unique_ID = m_rootUniqueID;
-        params = m_tmpCtData.params;
+        mID = m_rootUniqueID;
+        mParams = m_tmpCtData.params;
         profile_name = m_tmpCtData.prof_name;
         group_type = m_tmpCtData.group_type;
     }
 
     u32 getFromParams(u8 shift, u32 mask) {
-        return (params >> shift) & mask;
+        return (mParams >> shift) & mask;
     }
 
 public:

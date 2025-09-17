@@ -15,24 +15,24 @@ STATE_DEFINE(dTgSw_c, Off);
 static const u8 D201_BossKeyPuzzleFlags[] = {0x25, 0x2E, 0x49, 0x4B};
 
 int dTgSw_c::create() {
-    mFirst2 = params & 0b11;
+    mFirst2 = mParams & 0b11;
     if (mFirst2 >= 2) {
         mFirst2 = 0;
     }
-    mSecond2 = (params >> 2) & 0b11;
+    mSecond2 = (mParams >> 2) & 0b11;
     if (mSecond2 >= 3) {
         mSecond2 = 0;
     }
-    mThird2 = (params >> 4) & 0b11;
+    mThird2 = (mParams >> 4) & 0b11;
     if (mThird2 >= 3) {
         mThird2 = 0;
     }
-    mSetSceneFlagId = (params >> 6) & 0xFF;
-    mTrigSceneFlagIdBegin = (params >> 14) & 0xFF;
-    mNumSwitchesToWin = (params >> 22) & 0x3F;
+    mSetSceneFlagId = (mParams >> 6) & 0xFF;
+    mTrigSceneFlagIdBegin = (mParams >> 14) & 0xFF;
+    mNumSwitchesToWin = (mParams >> 22) & 0x3F;
     mTrigSceneFlagIdEnd = mNumSwitchesToWin;
-    if ((int)(params >> 0x1C) < 0xF) {
-        mTrigSceneFlagIdEnd += (params >> 0x1C);
+    if ((int)(mParams >> 0x1C) < 0xF) {
+        mTrigSceneFlagIdEnd += (mParams >> 0x1C);
     }
 
     if (dScGame_c::isCurrentStage("D201")) {

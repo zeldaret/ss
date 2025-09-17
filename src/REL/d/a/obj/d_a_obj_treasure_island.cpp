@@ -69,7 +69,7 @@ bool dAcOtreasureIsland_c::createHeap() {
 }
 
 int dAcOtreasureIsland_c::create() {
-    subtype = params & 0xf;
+    subtype = mParams & 0xf;
     if (subtype == 2) {
         dStageMgr_c::GetInstance()->initUnkWithWater(0, &waterStuff);
     }

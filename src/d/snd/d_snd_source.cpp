@@ -154,9 +154,9 @@ void dSoundSource_c::preCalc() {
         return;
     }
 
-    if (!mIsPaused && !mpActor->isBasePropertyFlag(dBase_c::BASE_PROP_0x4)) {
+    if (!mIsPaused && !mpActor->checkBaseProperty(dBase_c::BASE_PROP_0x4)) {
         setPause(true, 3);
-    } else if (mIsPaused && mpActor->isBasePropertyFlag(dBase_c::BASE_PROP_0x4)) {
+    } else if (mIsPaused && mpActor->checkBaseProperty(dBase_c::BASE_PROP_0x4)) {
         setPause(false, 3);
     }
 }

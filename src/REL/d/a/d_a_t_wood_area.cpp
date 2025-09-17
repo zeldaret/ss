@@ -61,7 +61,7 @@ void dAcTWoodArea_c::executeState_Wait() {
         f32 attachRadius = getAttachRadius();
         attachRadius = attachRadius * attachRadius;
         if (dist.x * dist.x + dist.z * dist.z < attachRadius) {
-            bool someEffectThing = subtype != 1 ? (params & 0xF) != 0 ? false : true : true;
+            bool someEffectThing = subtype != 1 ? (mParams & 0xF) != 0 ? false : true : true;
             if (someEffectThing) {
                 mVec3_c tmp(position.x, position.y + getAttachHeight(), position.z);
                 dJEffManager_c::spawnEffect(

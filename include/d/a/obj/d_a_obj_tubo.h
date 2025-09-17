@@ -58,18 +58,18 @@ public:
     bool checkOnLog_0xE4E() const;
 
     u8 getSubtype() const {
-        return params & 0xF; // 0 -> Tubo00, Else -> Tubo01
+        return mParams & 0xF; // 0 -> Tubo00, Else -> Tubo01
     }
 
     int getParams_0x3000() const {
-        return params >> 12 & 0x3;
+        return mParams >> 12 & 0x3;
     }
     u8 getParams_0xC000() const {
-        return params >> 14 & 0x3;
+        return mParams >> 14 & 0x3;
     }
 
     u8 getSceneflag() const {
-        return params >> 4 & 0xFF;
+        return mParams >> 4 & 0xFF;
     }
 
     bool checkSceneflag() {

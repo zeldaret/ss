@@ -60,15 +60,15 @@ dAcBase_c::dAcBase_c()
     someStr[0] = 0;
 
     if (s_Create_Position) {
-        setPostion(*s_Create_Position);
+        setPosition(*s_Create_Position);
     }
 
     if (s_Create_Rotation) {
-        SetRotation(*s_Create_Rotation);
+        mRotation = *s_Create_Rotation;
     }
 
     if (s_Create_Scale) {
-        SetScale(*s_Create_Scale);
+        mScale = *s_Create_Scale;
     } else {
         mScale.set(1.0f, 1.0f, 1.0f);
     }
@@ -179,7 +179,7 @@ int dAcBase_c::create() {
 void dAcBase_c::postCreate(fBase_c::MAIN_STATE_e state) {
     if (state == SUCCESS) {
         pos_copy = position;
-        rot_copy = rotation;
+        rot_copy = mRotation;
         room_id_copy = roomid;
     }
     dBase_c::postCreate(state);
@@ -226,7 +226,6 @@ int dAcBase_c::preDelete() {
             return NOT_READY;
         }
     }
-
 
     if (checkActorProperty(0x02000000)) {
         changeLoadedEntitiesNoSet();
@@ -304,7 +303,7 @@ bool dAcBase_c::restorePosRotFromCopy() {
         return 0;
     }
     position = pos_copy;
-    rotation = rot_copy;
+    mRotation = rot_copy;
     return 1;
 }
 
@@ -449,8 +448,8 @@ bool dAcBase_c::getDistanceAndAngleToActor(
         angleToActorX.set(cLib::targetAngleX(position, actor->position));
 
         if ((distSquared <= distThresh * distThresh)) {
-            if (mAng::abs((s32)(rotation.y - angleToActorY)) <= yAngle &&
-                mAng::abs((s32)(rotation.x - angleToActorX)) <= xAngle) {
+            if (mAng::abs((s32)(mRotation.y - angleToActorY)) <= yAngle &&
+                mAng::abs((s32)(mRotation.x - angleToActorX)) <= xAngle) {
                 isWithinRange = true;
             }
         }
@@ -666,7 +665,7 @@ dAcBase_c *dAcBase_c::createActor(
     }
 
     if (actorRotation == nullptr) {
-        actorRotation = &rotation;
+        actorRotation = &mRotation;
     }
 
     if (actorScale == nullptr) {
@@ -697,7 +696,7 @@ dAcBase_c *dAcBase_c::createActorStage(
     }
 
     if (actorRotation == nullptr) {
-        actorRotation = &rotation;
+        actorRotation = &mRotation;
     }
 
     if (actorScale == nullptr) {

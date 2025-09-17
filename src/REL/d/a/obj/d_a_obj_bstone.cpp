@@ -8,8 +8,10 @@
 #include "nw4r/g3d/res/g3d_resfile.h"
 #include "nw4r/g3d/res/g3d_resmdl.h"
 #include "nw4r/math/math_arithmetic.h"
-#include "rvl/GX.h" // IWYU pragma: export
 #include "toBeSorted/time_area_mgr.h"
+
+#include "rvl/GX.h" // IWYU pragma: export
+
 
 SPECIAL_ACTOR_PROFILE(OBJ_BSTONE, dAcObstonec, fProfile::OBJ_BSTONE, 0x130, 0, 2);
 
@@ -33,7 +35,7 @@ bool dAcObstonec::createHeap() {
 }
 
 int dAcObstonec::create() {
-    mVariant = params & 0xF;
+    mVariant = mParams & 0xF;
     CREATE_ALLOCATOR(dAcObstonec);
 
     if (mVariant == 1) {

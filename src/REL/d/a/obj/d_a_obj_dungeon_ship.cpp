@@ -95,7 +95,7 @@ bool dAcODungeonShip_c::createHeap() {
     }
 
     // wat
-    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, (params >> 0x10) & 0xFF)) {
+    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, (mParams >> 0x10) & 0xFF)) {
         goto ok;
     } else {
         bool result = mBg.InitMapStuff(&heap_allocator);
@@ -112,7 +112,7 @@ int dAcODungeonShip_c::create() {
         return FAILED;
     }
 
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, (params >> 0x10) & 0xFF)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(roomid, (mParams >> 0x10) & 0xFF)) {
         mIsDocked = true;
     }
 
@@ -120,7 +120,7 @@ int dAcODungeonShip_c::create() {
         return FAILED;
     }
 
-    mPathIdx = params & 0xFF;
+    mPathIdx = mParams & 0xFF;
     if (mPathIdx == 0xFF) {
         return FAILED;
     }
@@ -132,7 +132,7 @@ int dAcODungeonShip_c::create() {
     forwardAccel = 0.0f;
     forwardMaxSpeed = 0.0f;
     boundingBox.Set(mVec3_c(-6000.0f, -500.0f, -2000.0f), mVec3_c(5000.0f, 4000.0f, 2000.0f));
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, (params >> 0x10) & 0xFF)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(roomid, (mParams >> 0x10) & 0xFF)) {
         dBgS::GetInstance()->RegistBg(&mBg, this);
         mStateMgr.changeState(StateID_End);
     } else {
@@ -144,7 +144,7 @@ int dAcODungeonShip_c::create() {
     mEffects[1].init(this);
     field_0x8D9 = 0;
 
-    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, (params >> 0x10) & 0xFF)) {
+    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, (mParams >> 0x10) & 0xFF)) {
         mDowsingOffset.set(0.0f, 500.0f, 0.0f);
         mDowsingTarget.initialize(DowsingTarget::SLOT_STORY_EVENT, 0, &mDowsingOffset, 10000.0);
         mDowsingTarget.doRegister();
@@ -153,9 +153,9 @@ int dAcODungeonShip_c::create() {
 
     mCullingDistance = 200000.0f;
     clearActorProperty(0x1);
-    mAppearEventFromParam = (params >> 0x18);
-    field_0x849 = rotation.x;
-    rotation.x = 0;
+    mAppearEventFromParam = (mParams >> 0x18);
+    field_0x849 = mRotation.x;
+    mRotation.x = 0;
     updateMatrix();
     mBg.Move();
     return SUCCEEDED;
@@ -180,7 +180,7 @@ int dAcODungeonShip_c::actorExecute() {
 
     f32 scale = tempZero + 2100.0f;
     mVec3_c directedScale = mVec3_c::Ex * scale;
-    directedScale.rotY(rotation.y);
+    directedScale.rotY(mRotation.y);
 
     f32 extent = tempZero + 1800.0f;
     mCc.Set(offsetPosition + directedScale, offsetPosition - directedScale, extent);
@@ -191,7 +191,7 @@ int dAcODungeonShip_c::actorExecute() {
     mMdl.calc(false);
     if (field_0x8D8) {
         mEffects[0].createContinuousEffect(
-            PARTICLE_RESOURCE_ID_MAPPING_682_, position, &rotation, nullptr, nullptr, nullptr
+            PARTICLE_RESOURCE_ID_MAPPING_682_, position, &mRotation, nullptr, nullptr, nullptr
         );
     }
 
@@ -249,7 +249,7 @@ void dAcODungeonShip_c::executeState_Transparency() {
         } else if (mNumTimesHit == 2) {
             field_0x863 = 0;
             mNumTimesHit++;
-            SceneflagManager::sInstance->setFlag(roomid, (params >> 0x10) & 0xFF);
+            SceneflagManager::sInstance->setFlag(roomid, (mParams >> 0x10) & 0xFF);
             mAppearEvent = mAppearEventFromParam;
             field_0x8D8 = 1;
             mStateMgr.changeState(StateID_AppearEvent);
@@ -366,7 +366,7 @@ void dAcODungeonShip_c::executeState_AppearEvent() {
                         f32 f;
                         if (mEvent.getSingleFloatData(&f, 'ang0', 0) == 1) {
                             mAng ang = mAng::fromDeg(f);
-                            rotation.y = ang;
+                            mRotation.y = ang;
                         }
                         mVec3_c vec;
                         if (mEvent.getSingleVecData(&vec, 'pos0', 0) == 1) {
@@ -447,12 +447,12 @@ void dAcODungeonShip_c::fn_485_1720() {
 
     mVec3_c tmp;
     mPath.getDirection(tmp);
-    rotation.y = cM::atan2s(tmp.x, tmp.z);
+    mRotation.y = cM::atan2s(tmp.x, tmp.z);
     if (mPath.CheckFlag(0x40000000)) {
-        rotation.y += rot_7fff;
+        mRotation.y += rot_7fff;
     }
-    rotation.y += rot_4000;
-    angle.y = rotation.y;
+    mRotation.y += rot_4000;
+    angle.y = mRotation.y;
 
     int factor = 0x12C;
     f32 tmp2 = nw4r::math::SinIdx((field_0x850 * 800));

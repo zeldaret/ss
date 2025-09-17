@@ -38,8 +38,8 @@ bool dAcOappearBridge_c::createHeap() {
 int dAcOappearBridge_c::create() {
     CREATE_ALLOCATOR(dAcOappearBridge_c);
     dBgS::GetInstance()->Regist(&mCollision, this);
-    mAreaIdx = params & 0xFF;
-    mEventId = (params >> 8) & 0xFF;
+    mAreaIdx = mParams & 0xFF;
+    mEventId = (mParams >> 8) & 0xFF;
     mSoundPosition = position + positionOffset;
     obj_pos = &mSoundPosition;
     mSceneCallback.attach(mModel);

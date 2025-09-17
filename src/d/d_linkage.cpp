@@ -239,7 +239,7 @@ void dLinkage_c::fn_800511E0(dAcObjBase_c *pActor) {
     MTXTrans(m2, 0.f, -y, 0.f);
     MTXConcat(mtx, m2, mtx);
 
-    mtx.ZXYrotM(pActor->rotation);
+    mtx.ZXYrotM(pActor->mRotation);
     if (mControllingActor.p_owner) {
         pActor->roomid = static_cast<dAcObjBase_c *>(mControllingActor.p_owner)->roomid;
     }

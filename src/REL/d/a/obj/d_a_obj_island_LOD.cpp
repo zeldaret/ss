@@ -17,7 +17,7 @@ const char *const dAcOislandLOD_c::resMdlNames[5] = {
 SPECIAL_ACTOR_PROFILE(OBJ_ISLAND_LOD, dAcOislandLOD_c, fProfile::OBJ_ISLAND_LOD, 0x211, 0, 3);
 
 bool dAcOislandLOD_c::createHeap() {
-    mMdlLodIdx = params & 0xf;
+    mMdlLodIdx = mParams & 0xf;
     void *data = getOarcResFile(dAcOislandLOD_c::resFilenames[mMdlLodIdx]);
     mResFile = nw4r::g3d::ResFile(data);
     dStage_c::bindStageResToFile(&mResFile);

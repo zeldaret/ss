@@ -4,7 +4,9 @@
 #include "d/col/bg/d_bg_w_base.h"
 #include "d/col/c/c_partition.h"
 #include "f/f_base.h"
+
 #include "rvl/MTX.h" // IWYU pragma: export
+
 
 struct cBgD_Vtx_t : public nw4r::math::VEC3 {};
 
@@ -46,7 +48,7 @@ public:
     }
 
     int ChkSameActorPid(const fBase_c *pActor) const {
-        int id = pActor ? pActor->unique_ID : 0;
+        int id = pActor ? pActor->mID : 0;
         if (id == 0 || mActorId == 0 || mField_0x10 == 0) {
             return false;
         }

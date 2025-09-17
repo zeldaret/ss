@@ -195,7 +195,7 @@ public:
         return false;
     }
     /* vt 0x178 */ virtual const mAng3_c &getPointedAngle() const {
-        return rotation;
+        return mRotation;
     }
     /* vt 0x17C */ virtual const mVec3_c &getBellowsPosOrOtherVec3F() const {
         return position;
@@ -372,7 +372,7 @@ public:
     }
     /* vt 0x270 */ virtual void triggerExitRelated() {}
     /* vt 0x274 */ virtual mAng vt_0x274() {
-        return rotation.y;
+        return mRotation.y;
     }
     /* vt 0x278 */ virtual const mVec3_c &vt_0x278() const {
         return position;

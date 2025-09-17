@@ -21,7 +21,7 @@ public:
 private:
     bool hasGoddessStatueFallen();
     inline u8 getVariant() const {
-        return params & 3;
+        return mParams & 3;
     }
 
     /* 0x330 */ nw4r::g3d::ResFile mRes;

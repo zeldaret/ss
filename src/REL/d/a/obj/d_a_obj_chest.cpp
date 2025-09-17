@@ -234,7 +234,7 @@ void dAcOChest_c::doInteraction(s32 _unused) {
 
 void dAcOChest_c::fn_326_C90() {
     mWorldMtx.transS(position);
-    mWorldMtx.ZXYrotM(rotation);
+    mWorldMtx.ZXYrotM(mRotation);
     mAnmMdl.getModel().setLocalMtx(mWorldMtx);
     mAnmMdl.getModel().calc(false);
 }
@@ -360,14 +360,14 @@ void dAcOChest_c::stateOpenUpdate2() {
             mVec3_c t(0.0f, 0.0f, 122.35f);
             s32 targetAngle = 0x7FFF;
             targetPosition = t;
-            targetAngle += rotation.y;
-            targetPosition.rotY(rotation.y);
+            targetAngle += mRotation.y;
+            targetPosition.rotY(mRotation.y);
             targetPosition += position;
 
             if (player != nullptr) {
                 playerPosition = player->position;
                 cLib::addCalcPos(&playerPosition, targetPosition, 0.25f, 200.0f, 0.0f);
-                s16 YRot = rotation.y;
+                s16 YRot = mRotation.y;
                 sLib::addCalcAngle(&YRot, targetAngle, 4, 0x7FFF, 0);
 
                 if ((targetPosition.squareDistanceToXZ(playerPosition) < 25.0f) &&

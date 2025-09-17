@@ -41,7 +41,7 @@ public:
     bool checkPlayerHasSword();
 
     u8 getSubtype() const {
-        return params & 0x3;
+        return mParams & 0x3;
     }
 
 private:

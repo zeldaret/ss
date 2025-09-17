@@ -2,7 +2,6 @@
 
 #include "f/f_base.h"
 
-
 fTrMgPTMF_c fManager_c::m_connectManage(&fBase_c::connectProc);
 fLiMgPTMF_c fManager_c::m_createManage(&fBase_c::createPack);
 fLiMgPTMF_c fManager_c::m_executeManage(&fBase_c::executePack);
@@ -16,7 +15,7 @@ fManager_c::LOOP_PROC_e fManager_c::m_nowLoopProc = CONNECT;
 
 /* 802e28c0 */
 int fManager_c::getSearchTableNum() {
-    return reinterpret_cast<fBase_c *>(search_node.p_owner)->unique_ID & 7;
+    return reinterpret_cast<fBase_c *>(search_node.p_owner)->mID & 7;
 }
 
 /* 802e28d0 */

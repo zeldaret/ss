@@ -47,7 +47,7 @@ bool dAcOTimeStageBg_c::createHeap() {
 }
 
 int dAcOTimeStageBg_c::actorCreate() {
-    mSubType = params & 0xF;
+    mSubType = mParams & 0xF;
     if (mSubType > 5) {
         mSubType = 0;
     }

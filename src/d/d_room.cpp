@@ -48,7 +48,7 @@ STATE_DEFINE(dRoom_c, Active);
 STATE_DEFINE(dRoom_c, NonActive);
 
 int dRoom_c::create() {
-    roomid = params & 0x3F;
+    roomid = mParams & 0x3F;
     mCanHavePastState = dStageMgr_c::GetInstance()->getSTIFunk1() == 0 &&
                         // SSH machine room (less sure about D303...)
                         !(dScGame_c::isCurrentStage("D301") && roomid == 12) &&
@@ -102,7 +102,7 @@ int dRoom_c::create() {
     dStage_c::GetInstance()->setRoom(roomid, this);
     BZS = CurrentStageArcManager::GetInstance()->loadFromRoomArc(roomid, "dat/room.bzs");
     parseRoomBzs(roomid, BZS);
-    mDidAlreadyInit = (params >> 6) & 1;
+    mDidAlreadyInit = (mParams >> 6) & 1;
     mStateMgr.changeState(StateID_Active);
     if (roomid != dScGame_c::currentSpawnInfo.room) {
         mFlags |= 2;
@@ -192,7 +192,7 @@ void deactivateUpdatesCb(dAcBase_c *ac) {
 void dRoom_c::deactivateUpdates() {
     if (!mUpdatesDeactivated) {
         foreachObject(deactivateUpdatesCb);
-        setProcControlFlag(ROOT_DISABLE_EXECUTE | ROOT_DISABLE_DRAW);
+        setProcControl(ROOT_DISABLE_EXECUTE | ROOT_DISABLE_DRAW);
         mUpdatesDeactivated = true;
     }
 }
@@ -207,8 +207,8 @@ void activateUpdatesCb(dAcBase_c *ac) {
 void dRoom_c::activateUpdates() {
     if (mUpdatesDeactivated) {
         foreachObject(activateUpdatesCb);
-        clearProcControlFlag(ROOT_DISABLE_EXECUTE);
-        clearProcControlFlag(ROOT_DISABLE_DRAW);
+        unsetProcControl(ROOT_DISABLE_EXECUTE);
+        unsetProcControl(ROOT_DISABLE_DRAW);
         mUpdatesDeactivated = false;
     }
 }

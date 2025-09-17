@@ -18,7 +18,7 @@ int dTgTouchTag::create() {
     mActivatorIndex = !(getActivatorIndex() == 0xF) ? getActivatorIndex() : 0;
     mZoneFlag = getZoneFlag();
     mChkFlag = getChkFlag();
-    matrixCreateFromPosRotYScale(mAreaOfEffect, position, rotation.y, mScale, nullptr, 0.0f);
+    matrixCreateFromPosRotYScale(mAreaOfEffect, position, mRotation.y, mScale, nullptr, 0.0f);
     mStateMgr.changeState(StateID_Wait);
     return SUCCEEDED;
 }

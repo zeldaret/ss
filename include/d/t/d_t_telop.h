@@ -15,13 +15,13 @@ public:
     virtual int actorExecute() override;
 
     u16 getArea() const {
-        return params >> 8 & 0xFF;
+        return mParams >> 8 & 0xFF;
     }
     u8 getSceneflag() const {
-        return params >> 16 & 0xFF;
+        return mParams >> 16 & 0xFF;
     }
     u8 getTempflag() const {
-        return params >> 24 & 0xFF;
+        return mParams >> 24 & 0xFF;
     }
 
 private:

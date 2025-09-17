@@ -963,7 +963,7 @@ int dAcTbox_c::create() {
         roomid = roomId_tmp;
         changeLoadedEntitiesWithSet();
     }
-    setItemId((ITEM_ID)(rotation.z & 0x1FF));
+    setItemId((ITEM_ID)(mRotation.z & 0x1FF));
     if (mItemId > MAX_ITEM_ID) {
         return FAILED;
     }
@@ -971,22 +971,22 @@ int dAcTbox_c::create() {
     if (mVariant == GODDESS) {
         setItemId((ITEM_ID)(MAX_ITEM_ID - mItemId));
     }
-    mSpawnSceneFlag = (params >> 0x14) & 0xFF;
-    mSetSceneFlag = rotation.x & 0xFF;
+    mSpawnSceneFlag = (mParams >> 0x14) & 0xFF;
+    mSetSceneFlag = mRotation.x & 0xFF;
     setChestFlag();
-    field_0x120F = ((rotation.x >> 8) & 1) == 0;
+    field_0x120F = ((mRotation.x >> 8) & 1) == 0;
     if (!noObstructionCheck()) {
         setDoObstructionCheck();
     }
-    field_0x1208 = (rotation.x >> 0xA) & 0xF;
+    field_0x1208 = (mRotation.x >> 0xA) & 0xF;
     switch (fn_8026B370()) {
         case 0:  field_0x120A = 0; break;
         case 1:  field_0x120A = 1; break;
         case 3:  field_0x120A = 3; break;
         default: field_0x120A = 3; break;
     }
-    rotation.z.set(0);
-    rotation.x.set(0);
+    mRotation.z.set(0);
+    mRotation.x.set(0);
 
     // This part of the code checks if there's another chest with similar properties
     // and only keeps one of them.
@@ -1218,7 +1218,7 @@ int dAcTbox_c::actorExecute() {
         v1 *= field_0x11E8;
         v2 *= field_0x11E8;
         mCcD3.Set(v1, v2);
-        mCcD3.Set(position, rotation.y);
+        mCcD3.Set(position, mRotation.y);
         mVec3_c cylC;
         f32 width, height;
         getCylParams(&cylC, &width, &height);
@@ -1280,7 +1280,7 @@ int dAcTbox_c::actorExecute() {
         v1 *= field_0x11E8;
         v2 *= field_0x11E8;
         mCcD1.Set(v1, v2);
-        mCcD1.Set(position, rotation.y);
+        mCcD1.Set(position, mRotation.y);
         if (field_0x120C == 1) {
             mCcD2.OnTgSet();
             switch ((u32)mVariant) {
@@ -1304,7 +1304,7 @@ int dAcTbox_c::actorExecute() {
             v1 *= field_0x11E8;
             v2 *= field_0x11E8;
             mCcD2.Set(v1, v2);
-            mCcD2.Set(field_0x11D8, rotation.y);
+            mCcD2.Set(field_0x11D8, mRotation.y);
         } else {
             mCcD2.ClrTgSet();
         }
@@ -1368,7 +1368,7 @@ int dAcTbox_c::actorExecuteInEvent() {
             if (field_0x120B < 3) {
                 mVec3_c pos = link->position;
                 f32 f9 = cLib::addCalcPosXZ(&pos, v1, 0.25, 200.0f, 0.1f);
-                s16 rot2 = link->rotation.y;
+                s16 rot2 = link->mRotation.y;
                 s16 d = sLib::addCalcAngle(&rot2, a1, 2, 0x3FFF, 1);
                 if (f9 < 1.0f && labs(d) < 0xB6) {
                     link->setPosYRot(v1, a1, 0, 0, 0);
@@ -1404,7 +1404,7 @@ int dAcTbox_c::actorExecuteInEvent() {
         v1 *= field_0x11E8;
         v2 *= field_0x11E8;
         mCcD3.Set(v1, v2);
-        mCcD3.Set(position, rotation.y);
+        mCcD3.Set(position, mRotation.y);
         mVec3_c cylC;
         f32 width, height;
         getCylParams(&cylC, &width, &height);
@@ -1466,7 +1466,7 @@ int dAcTbox_c::actorExecuteInEvent() {
         v1 *= field_0x11E8;
         v2 *= field_0x11E8;
         mCcD1.Set(v1, v2);
-        mCcD1.Set(position, rotation.y);
+        mCcD1.Set(position, mRotation.y);
         if (field_0x120C == 1) {
             mCcD2.OnTgSet();
             switch ((u32)mVariant) {
@@ -1490,7 +1490,7 @@ int dAcTbox_c::actorExecuteInEvent() {
             v1 *= field_0x11E8;
             v2 *= field_0x11E8;
             mCcD2.Set(v1, v2);
-            mCcD2.Set(field_0x11D8, rotation.y);
+            mCcD2.Set(field_0x11D8, mRotation.y);
         } else {
             mCcD2.ClrTgSet();
         }
@@ -1586,15 +1586,15 @@ void dAcTbox_c::setDoObstructionCheck() {
 }
 
 int dAcTbox_c::isActualVisibleBox() const {
-    return (params >> 0x1C);
+    return (mParams >> 0x1C);
 }
 
 bool dAcTbox_c::noObstructionCheck() const {
-    return (rotation.x >> 9) & 1;
+    return (mRotation.x >> 9) & 1;
 }
 
 int dAcTbox_c::fn_8026B370() const {
-    return (rotation.x >> 0xE) & 0x3;
+    return (mRotation.x >> 0xE) & 0x3;
 }
 
 void dAcTbox_c::fn_8026B380(mVec3_c &out) const {
@@ -1950,7 +1950,7 @@ void dAcTbox_c::initializeState_Open() {
         mVec3_c pos;
         fn_8026B380(pos);
         mVec3_c p2 = fn_8026B3C0();
-        dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_209_, pos, &rotation, &p2, nullptr, nullptr, 0, 0);
+        dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_209_, pos, &mRotation, &p2, nullptr, nullptr, 0, 0);
     }
     fn_8026D140();
     ITEM_ID itemId = mItemId != 0 ? (ITEM_ID)mItemId : ITEM_GODDESS_HARP;
@@ -2253,7 +2253,7 @@ void dAcTbox_c::fn_8026D3C0() {
 }
 
 void dAcTbox_c::setChestFlag() {
-    field_0x1207 = (rotation.z >> 9) & 0x3F;
+    field_0x1207 = (mRotation.z >> 9) & 0x3F;
 }
 
 void dAcTbox_c::setTboxFlag() {
@@ -2369,7 +2369,7 @@ void dAcTbox_c::unregisterDowsing() {
 
 void dAcTbox_c::spawnAppearEffect() {
     dJEffManager_c::spawnEffect(
-        PARTICLE_RESOURCE_ID_MAPPING_208_, position, &rotation, nullptr, nullptr, nullptr, 0, 0
+        PARTICLE_RESOURCE_ID_MAPPING_208_, position, &mRotation, nullptr, nullptr, nullptr, 0, 0
     );
 }
 
@@ -2414,7 +2414,7 @@ bool dAcTbox_c::checkIsClear() const {
 }
 
 void dAcTbox_c::fn_8026DAC0(mAng &ang) {
-    ang = rotation.y - 0x8000;
+    ang = mRotation.y - 0x8000;
 }
 
 void dAcTbox_c::fn_8026DAD0(const mVec3_c *a, mVec3_c *b) const {

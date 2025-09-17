@@ -64,8 +64,8 @@ void dTgGekoTag::doExecute() {
     }
     field_0x1FD = 0xFF;
 
-    u32 gekoParmTmp = (params & 0xFF) | 0x3FC00000;
-    gekoParmTmp = (gekoParmTmp & 0xFFFF00FF) | (params & 0xFF00);
+    u32 gekoParmTmp = (mParams & 0xFF) | 0x3FC00000;
+    gekoParmTmp = (gekoParmTmp & 0xFFFF00FF) | (mParams & 0xFF00);
     u32 gekoParm = gekoParmTmp | ((mGekoParam != 0 ? 3 : 1) << 16);
 
     mAng3_c gekoRot;

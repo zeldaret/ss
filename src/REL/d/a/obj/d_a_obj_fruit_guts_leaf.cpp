@@ -99,9 +99,9 @@ bool dAcOFruitGutsLeaf_c::hideInPast() {
 }
 
 s32 dAcOFruitGutsLeaf_c::getType() {
-    return params & 0xFF;
+    return mParams & 0xFF;
 }
 
 s32 dAcOFruitGutsLeaf_c::getPastBehavior() {
-    return (params >> 8) & 1;
+    return (mParams >> 8) & 1;
 }

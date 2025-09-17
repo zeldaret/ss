@@ -69,11 +69,11 @@ public:
     /* 0x9C */ mVec3_c pos_copy;
     /* 0xA8 */ u32 params2;
     /* 0xAC */ mAng3_c rot_copy;
-    /* 0xB2 */ u16 obj_id; // enemydefeat flag / id on obj-map
+    /* 0xB2 */ u16 obj_id;
     /* 0xB4 */ s8 room_id_copy;
     /* 0xB5 */ s8 viewclip_index;
     /* 0xB6 */ u8 subtype;
-    /* 0xB8 */ mAng3_c rotation;
+    /* 0xB8 */ mAng3_c mRotation;
     /* 0xC0 */ mVec3_c position;
     /* 0xCC */ mVec3_c mScale;
     /* 0xD8 */ u32 actor_properties;
@@ -88,51 +88,50 @@ public:
     /* 0xF8 */ char field_0xf8[0xfc - 0xf8];
 
 public:
-    /* 80501544 */ // vtable
-    /* 0x08 | 8002c880 */ virtual int create();
-    /* 0x10 | 8002c8f0 */ virtual void postCreate(MAIN_STATE_e state);
-    /* 0x18 | 8002c940 */ virtual int preDelete();
-    /* 0x20 | 8002cc10 */ virtual int execute();                        // calls either actorExecute/executeInEvent
-    /* 0x24 | 8002cb10 */ virtual int preExecute();                     // looks at some actor properties
-    /* 0x28 | 8002ccc0 */ virtual void postExecute(MAIN_STATE_e state); // not fully understood
-    /* 0x44 | 8002c3a0 */ virtual bool createHeap();
-    /* 0x48 | 8002c590 */ virtual ~dAcBase_c();
-    /* 0x4C | 8002c860 */ virtual int actorCreate();         // name is assumed
-    /* 0x50 | 8002c870 */ virtual int actorPostCreate();     // name is assumed
-    /* 0x54 | 8002cca0 */ virtual int actorExecute();        // name is assumed
-    /* 0x58 | 8002ccb0 */ virtual int actorExecuteInEvent(); // name is assumed
-    /* 0x5C | 8002ce90 */ virtual void unkVirtFunc_0x5C();
-    /* 0x60 | 8002cea0 */ virtual void unkVirtFunc_0x60();
-    /* 0x64 | 8002ceb0 */ virtual bool restorePosRotFromCopy();
-    /* 0x68 | 8002db80 */ virtual void registerInEvent();
-    /* 0x6C | 8002db90 */ virtual void unkVirtFunc_0x6C();
-    /* 0x70 | 8002dba0 */ virtual void doInteraction(s32);
+    /* vt 0x08 */ virtual int create();
+    /* vt 0x10 */ virtual void postCreate(MAIN_STATE_e state);
+    /* vt 0x18 */ virtual int preDelete();
+    /* vt 0x20 */ virtual int execute();
+    /* vt 0x24 */ virtual int preExecute();
+    /* vt 0x28 */ virtual void postExecute(MAIN_STATE_e state);
+    /* vt 0x44 */ virtual bool createHeap();
+    /* vt 0x48 */ virtual ~dAcBase_c();
+    /* vt 0x4C */ virtual int actorCreate();
+    /* vt 0x50 */ virtual int actorPostCreate();
+    /* vt 0x54 */ virtual int actorExecute();
+    /* vt 0x58 */ virtual int actorExecuteInEvent();
+    /* vt 0x5C */ virtual void unkVirtFunc_0x5C();
+    /* vt 0x60 */ virtual void unkVirtFunc_0x60();
+    /* vt 0x64 */ virtual bool restorePosRotFromCopy();
+    /* vt 0x68 */ virtual void registerInEvent();
+    /* vt 0x6C */ virtual void unkVirtFunc_0x6C();
+    /* vt 0x70 */ virtual void doInteraction(s32);
 
 public:
-    /* 8002c3b0 */ dAcBase_c();
+    dAcBase_c();
 
-    void setPostion(const mVec3_c &r) {
+    void setPosition(const mVec3_c &r) {
         position = r;
     }
-    void SetScale(const mVec3_c &r) {
+    void setScale(const mVec3_c &r) {
         mScale = r;
     }
     void SetRotation(const mAng3_c &r) {
-        rotation = r;
+        mRotation = r;
     }
 
     void copyPosition() {
         pos_copy = position;
     }
     void copyRotation() {
-        rot_copy = rotation;
+        rot_copy = mRotation;
     }
 
     mVec3_c &GetPosition() {
         return position;
     }
     mAng3_c &GetRotation() {
-        return rotation;
+        return mRotation;
     }
 
     mVec3_c GetPostionDifference(const dAcBase_c &other) {

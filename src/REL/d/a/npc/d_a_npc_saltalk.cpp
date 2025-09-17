@@ -36,7 +36,7 @@ int dAcNpcSltk_c::actorCreate() {
         field_0x750 = 0xFF;
     }
 
-    mAreaIndex = rotation.z & 0xFF;
+    mAreaIndex = mRotation.z & 0xFF;
     if (mAreaIndex < 0xFF) {
         mpArea = getAreaForIndexInRoom(mAreaIndex, roomid);
         if (mpArea == nullptr) {
@@ -44,7 +44,7 @@ int dAcNpcSltk_c::actorCreate() {
         }
     }
 
-    rotation.set(0, 0, 0);
+    mRotation.set(0, 0, 0);
 
     field_0x758 = getParam2() * 100;
     field_0x75C = getParam3() * 100;
@@ -99,20 +99,20 @@ int dAcNpcSltk_c::draw() {
 }
 
 int dAcNpcSltk_c::getParam0_0() const {
-    return params & 0xFF;
+    return mParams & 0xFF;
 }
 int dAcNpcSltk_c::getParam0_1() const {
-    return params & 0xFF;
+    return mParams & 0xFF;
 }
 
 int dAcNpcSltk_c::getParam1() const {
-    return (params >> 8) & 0xFF;
+    return (mParams >> 8) & 0xFF;
 }
 int dAcNpcSltk_c::getParam2() const {
-    return (params >> 16) & 0xFF;
+    return (mParams >> 16) & 0xFF;
 }
 int dAcNpcSltk_c::getParam3() const {
-    return (params >> 24) & 0xFF;
+    return (mParams >> 24) & 0xFF;
 }
 int dAcNpcSltk_c::getParam4() const {
     return getParams2Lower() & 0xF;

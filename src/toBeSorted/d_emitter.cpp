@@ -377,7 +377,7 @@ void EffectsStruct::execute() {
     if (dJEffManager_c::shouldBePaused(mpOwner)) {
         if (!checkFlag(EMITTER_0x10)) {
             stopCalcEmitters();
-            if (mpOwner != nullptr && !mpOwner->isBasePropertyFlag(0x100)) {
+            if (mpOwner != nullptr && !mpOwner->checkBaseProperty(0x100)) {
                 if (!mpEmitterHead->checkStatus(JPAEmtrStts_StopDraw)) {
                     onFlag(EMITTER_0x20);
                     stopDrawParticles();
@@ -884,8 +884,8 @@ void dJEffManager_c::draw() {
 }
 
 bool dJEffManager_c::shouldBePaused(dBase_c *owner) {
-    return owner != nullptr && !owner->isBasePropertyFlag(dBase_c::BASE_PROP_0x4) &&
-           (EventManager::isInEvent() || owner->isProcControlFlag(fBase_c::DISABLE_EXECUTE) ||
+    return owner != nullptr && !owner->checkBaseProperty(dBase_c::BASE_PROP_0x4) &&
+           (EventManager::isInEvent() || owner->checkProcControl(fBase_c::DISABLE_EXECUTE) ||
             // TODO execute control flags
             (owner->s_ExecuteControlFlags & 0x6fb));
 }
@@ -1183,8 +1183,9 @@ bool EffectsStruct::createEffect(
 
 // TODO: Document polyAttr1 and GROUND enum
 dJEffManager_c::GroundEffect_e dJEffManager_c::polyAttrsToGroundEffectIdx(s32 polyAttr0, s32 polyAttr1) {
-    if (polyAttr0 == POLY_ATT_0_NONE || (polyAttr0 == POLY_ATT_0_GRASS && polyAttr1 == 1) || (polyAttr0 == POLY_ATT_0_LOTUS) ||
-        (polyAttr0 == POLY_ATT_0_METAL && polyAttr1 == 1) || (polyAttr0 == POLY_ATT_0_TUTA) || (polyAttr0 == POLY_ATT_0_DEATH && polyAttr1 != 1) ||
+    if (polyAttr0 == POLY_ATT_0_NONE || (polyAttr0 == POLY_ATT_0_GRASS && polyAttr1 == 1) ||
+        (polyAttr0 == POLY_ATT_0_LOTUS) || (polyAttr0 == POLY_ATT_0_METAL && polyAttr1 == 1) ||
+        (polyAttr0 == POLY_ATT_0_TUTA) || (polyAttr0 == POLY_ATT_0_DEATH && polyAttr1 != 1) ||
         (polyAttr0 == POLY_ATT_0_LIFE && (polyAttr1 == 1 || polyAttr1 == 3)) || polyAttr0 == POLY_ATT_0_MAX) {
         return GROUND_6;
     } else if (polyAttr0 == POLY_ATT_0_DEATH) {

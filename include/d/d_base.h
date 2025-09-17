@@ -10,37 +10,54 @@
 class dBase_c : public fBase_c {
 public:
     enum BaseProperties_e {
-        BASE_PROP_0x4 = 0x4,
+        BASE_PROP_0x1 = (1 << 0),
+        BASE_PROP_0x2 = (1 << 1),
+        BASE_PROP_0x4 = (1 << 2),
+        BASE_PROP_0x8 = (1 << 3),
+        BASE_PROP_0x10 = (1 << 4),
+        BASE_PROP_0x20 = (1 << 5),
+        BASE_PROP_0x40 = (1 << 6),
+        BASE_PROP_0x80 = (1 << 7),
+        BASE_PROP_0x100 = (1 << 8),
     };
-    /* 0x64 */ u32 baseProperties; // field from profile init
-public:
-    /* 80050800 */ dBase_c();
-    /* 80050890 */ virtual int preExecute();
-    /* 800508f0 */ virtual void postExecute(MAIN_STATE_e state);
-    /* 80050920 */ virtual int preDraw();
-    /* 80050860 */ virtual void postDraw(MAIN_STATE_e state);
-    /* 8002c530 */ virtual ~dBase_c() {}
+
+    // field from profile init
+    /* 0x64 */ u32 mBaseProperties;
 
 public:
-    /* 80050980 */ static void resetFlags();
-    /* 800509a0 */ bool isActorPlayer();
-    /* 800509e0 */ static void initLoader();
-    /* 80050a00 */ static dBase_c *createBase(ProfileName, dBase_c *, u32, u8);
-    /* 80050a10 */ static dBase_c *createRoot(ProfileName, u32, u8);
-    
-    inline bool isBasePropertyFlag(u32 flag) const {
-        return (baseProperties & flag) != 0;
+    dBase_c();
+    virtual int preExecute();
+    virtual void postExecute(MAIN_STATE_e state);
+    virtual int preDraw();
+    virtual void postDraw(MAIN_STATE_e state);
+    virtual ~dBase_c() {}
+
+public:
+    static void resetFlags();
+    bool isActorPlayer();
+    static void initLoader();
+    static dBase_c *createBase(ProfileName, dBase_c *, u32, u8);
+    static dBase_c *createRoot(ProfileName, u32, u8);
+
+    bool checkBaseProperty(u32 property) const {
+        return (mBaseProperties & property) != 0;
     }
-private:
-    /* 800509c0 */ static int loadAsyncCallback();
-    /* 800509d0 */ static void unloadCallback();
+    void setBaseProperty(u32 property) {
+        mBaseProperties |= property;
+    }
+    void unsetBaseProperty(u32 property) {
+        mBaseProperties &= ~property;
+    }
 
+private:
+    static int loadAsyncCallback();
+    static void unloadCallback();
 
 public:
-    /* 805750c0 */ static u32 s_ExecuteControlFlags;
-    /* 805750c0 */ static u32 s_DrawControlFlags;
-    /* 805750c0 */ static u32 s_NextExecuteControlFlags;
-    // /* 80575bc0 */ static fProfile::fBaseProfile_c** DAT_ACTOR_ALLOCATION_FUNCTIONS;
+    static u32 s_ExecuteControlFlags;
+    static u32 s_DrawControlFlags;
+    static u32 s_NextExecuteControlFlags;
+    // static fProfile::fBaseProfile_c** DAT_ACTOR_ALLOCATION_FUNCTIONS;
 
     friend class fBase_c;
 };

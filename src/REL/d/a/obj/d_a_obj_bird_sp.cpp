@@ -41,7 +41,7 @@ int dAcObjBirdSp_c::actorExecute() {
          mCollider.GetCoActor()->profile_name == fProfile::PLAYER)) {
         mVec3_c posChange(0, -0.2, 1.0);
         mMtx_c matrix;
-        matrix.ZXYrotS(rotation);
+        matrix.ZXYrotS(mRotation);
         PSMTXMultVec(matrix.m, posChange, posChange);
 
         f32 angle = (position - dBird_c::getInstance()->position).dot(posChange);
@@ -58,7 +58,7 @@ int dAcObjBirdSp_c::actorExecute() {
     mCollider.SetC(position);
     dCcS::GetInstance()->Set(&mCollider);
     mWorldMtx.transS(position.x, position.y, position.z);
-    mWorldMtx.ZXYrotM(rotation);
+    mWorldMtx.ZXYrotM(mRotation);
 
     return SUCCEEDED;
 }

@@ -263,7 +263,7 @@ void dAcSalbageObj_c::calcMtxFromSalbageNpc(mMtx_c &ret) {
     dAcNpcSlb_c *npc = dSalvageMgr_c::sInstance->mSlbRef.get();
     if (npc == nullptr) {
         ret.transS(position.x, position.y, position.z);
-        ret.ZXYrotM(rotation);
+        ret.ZXYrotM(mRotation);
     } else {
         ret = npc->getCarriedObjMtx();
         mMtx_c rotMtx = dSalvageMgr_c::sInstance->getCarryRotMtx2(mSalvageIf.getSalvageObjId());
@@ -278,7 +278,7 @@ mMtx_c dAcSalbageObj_c::calcWorldMtx() {
         calcMtxFromSalbageNpc(ret);
     } else {
         ret.transS(position);
-        ret.ZXYrotM(rotation);
+        ret.ZXYrotM(mRotation);
     }
 
     return ret;
@@ -364,11 +364,11 @@ void dAcSalbageObj_c::initializeState_DemoThrow() {
 
     mVec3_c result;
     MTXMultVecSR(mWorldSRMtx, mVec3_c::Ez, result);
-    rotation.y = result.atan2sX_Z();
-    rotation.x = -cM::atan2s(result.y, result.absXZ());
-    rotation.z = field_0x904;
+    mRotation.y = result.atan2sX_Z();
+    mRotation.x = -cM::atan2s(result.y, result.absXZ());
+    mRotation.z = field_0x904;
     angle.x = 0;
-    angle.y = rotation.y;
+    angle.y = mRotation.y;
     angle.z = 0;
     forwardMaxSpeed = -40.0f;
     mBgObjAcch.Set(this, 1, &mBgAcchCir);

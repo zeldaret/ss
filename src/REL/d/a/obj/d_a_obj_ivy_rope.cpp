@@ -156,12 +156,12 @@ UNKTYPE dAcOivyRope_c::fn_256_4C80(UNKTYPE) {}
 UNKTYPE dAcOivyRope_c::fn_256_4CA0(UNKTYPE) {}
 
 int dAcOivyRope_c::createBase() {
-    rotation = 0;
+    mRotation = 0;
     f32 temp = 2000.f - 750.f;
     mDistance = 2000.f;
     mOldDistance = 2000.f;
     mSegmentCount = 81;
-    mDropsceneFlag = params >> 12;
+    mDropsceneFlag = mParams >> 12;
     mField_0xFEB = 1;
     if (temp < 0.f) {
         temp = 0.f;
@@ -425,10 +425,10 @@ void dAcOivyRope_c::fn_256_AC00() {
 }
 
 void dAcOivyRope_c::fn_256_AE00() {
-    mField_0xFDA = rotation.x;
-    mField_0xFDC = rotation.y;
-    rotation.x = 0;
-    rotation.y = 0;
+    mField_0xFDA = mRotation.x;
+    mField_0xFDC = mRotation.y;
+    mRotation.x = 0;
+    mRotation.y = 0;
     int i = 0;
     updateMatrix();
     mMtx_c m = mWorldMtx;
@@ -508,10 +508,10 @@ void dAcOivyRope_c::fn_256_BAB0(mVec3_c &out, int idx, s16 xRot, s16 yRot) {
 }
 
 void dAcOivyRope_c::fn_256_BB70() {
-    mField_0xFDA = rotation.x;
-    mField_0xFDC = rotation.y;
-    rotation.x = 0;
-    rotation.y = 0;
+    mField_0xFDA = mRotation.x;
+    mField_0xFDC = mRotation.y;
+    mRotation.x = 0;
+    mRotation.y = 0;
     updateMatrix();
 
     mVec3_c *pnt2;
@@ -848,11 +848,11 @@ void dAcOivyRope_c::fn_256_D3D0(mVec3_c &pOut1, mVec3_c &pOut2, s16 param2, bool
 
     mMtx_c m;
     m.transS(playerCenter);
-    mAng3_c playerRot = dAcPy_c::GetLink()->rotation;
+    mAng3_c playerRot = dAcPy_c::GetLink()->mRotation;
     m.ZXYrotM(playerRot.x, playerRot.y, playerRot.z);
 
     // name 100% guess
-    mAng swingAngle = (mField_0xFCC - 0x8000) - dAcPy_c::GetLink()->rotation.y;
+    mAng swingAngle = (mField_0xFCC - 0x8000) - dAcPy_c::GetLink()->mRotation.y;
 
     f32 something = param2 / 5461.f;
     if (something > 1.f) {
@@ -976,7 +976,7 @@ void dAcOivyRope_c::fn_256_DAA0(bool bool0, bool bool1, f32 float0, f32 float1) 
             f32 target = float0 - mField_0x1040 * 1.5f;
             f32 chasing = 0.f;
             f32 step = target * float1;
-            int ang = dAcPy_c::GetLink()->rotation.y;
+            int ang = dAcPy_c::GetLink()->mRotation.y;
             u8 *cam = (u8 *)getCamera(0);
             if (cam) {
                 ang = cLib::targetAngleY(*(mVec3_c *)(cam + 0x6C), mTightropeEnd) + 0x2000;

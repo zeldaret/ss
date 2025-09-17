@@ -388,11 +388,11 @@ void dAcOtubo_c::finalizeState_Slope() {}
 
 void dAcOtubo_c::initializeState_Rebirth() {
     SpecialItemDropMgr *mgr = SpecialItemDropMgr::GetInstance();
-    mgr->giveSpecialDropItem(getParams2UpperByte(), roomid, &position, 0, rotation.y, -1);
+    mgr->giveSpecialDropItem(getParams2UpperByte(), roomid, &position, 0, mRotation.y, -1);
     mField_0x9AC = position;
     obj_pos = &mField_0x9AC;
     mField_0x9F6 = 0;
-    rotation = rot_copy;
+    mRotation = rot_copy;
 
     mQuat_0x98C.set(1.f, 0.f, 0.f, 0.f);
 
@@ -416,7 +416,7 @@ void dAcOtubo_c::initializeState_Rebirth() {
     clearActorProperty(0x1);
 }
 void dAcOtubo_c::executeState_Rebirth() {
-    setPostion(pos_copy);
+    setPosition(pos_copy);
     mOldPosition = pos_copy;
     u8 count = -1;
     switch (mField_0x9FC) {
@@ -491,7 +491,7 @@ void dAcOtubo_c::calcRoll() {
         f32 vel_mag = VEC3Len(velocity);
         f32 f1 = mAng(vel_mag * (mField_0x9D4 + 200.f)).radian();
         f32 f2 = mAng(vel_mag * 182.0f * 0.2f).radian();
-        f32 f0 = mAng(angle.y - rotation.y).radian();
+        f32 f0 = mAng(angle.y - mRotation.y).radian();
 
         mQuat_c q0, q1, q2, q3;
         q1.setAxisRotation(mVec3_c::Ey, f0);
@@ -679,7 +679,7 @@ void dAcOtubo_c::attemptDestroyOnWall(const u32 &param0, const bool &param1) {
 
 mVec3_c dAcOtubo_c::getCenter() const {
     mMtx_c m;
-    m.ZXYrotS(rotation.x, rotation.y, rotation.z);
+    m.ZXYrotS(mRotation.x, mRotation.y, mRotation.z);
     mVec3_c dir;
     PSMTXMultVecSR(m, mVec3_c::Ey, dir);
 

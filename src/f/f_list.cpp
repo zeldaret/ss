@@ -46,7 +46,7 @@ bool fLiMgPTMF_c::walkPack() {
 const fLiNdBa_c *fLiMgBa_c::searchNodeByID(fBaseID_e id) const {
     fLiNdBa_c *node = getFirst();
     while (node != nullptr) {
-        if (node->p_owner->unique_ID == id) {
+        if (node->p_owner->mID == id) {
             return node;
         }
         node = node->getNext();

@@ -7,9 +7,9 @@
 SPECIAL_ACTOR_PROFILE(TAG_HEAT_RESIST, dTgHeatResist_c, fProfile::TAG_HEAT_RESIST, 0x223, 0, 4);
 
 int dTgHeatResist_c::create() {
-    mInverted = static_cast<u8>(params & 0x3);
+    mInverted = static_cast<u8>(mParams & 0x3);
 
-    matrixCreateFromPosRotYScale(matrix, position, rotation.y, mScale, nullptr, 0.0f);
+    matrixCreateFromPosRotYScale(matrix, position, mRotation.y, mScale, nullptr, 0.0f);
     return SUCCEEDED;
 }
 

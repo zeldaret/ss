@@ -167,9 +167,9 @@ void dAcOSeatSword_c::registerInEvent() {
     if (mField_0x7EA == 1 && EventManager::isCurrentEvent(sEventName)) {
         dAcPy_c *player = dAcPy_c::LINK;
         mVec3_c vec = mVec3_c::Ez * 78.f;
-        mAng3_c ang = rotation;
+        mAng3_c ang = mRotation;
         ang.y += someAng;
-        vec.rotY(rotation.y);
+        vec.rotY(mRotation.y);
         vec += position;
         player->setPosRot(&vec, &ang, 0, 1, 0);
         mField_0x7E8.set(0);
@@ -223,12 +223,12 @@ void dAcOSeatSword_c::actorExecuteCommon() {
     mEffPos.y = sEffectPos.y;
     mEffPos.z = sEffectPos.z;
 
-    mEffPos.rotY(player->rotation.y);
+    mEffPos.rotY(player->mRotation.y);
 
     mEffPos += player->position;
     mEffPos.y = position.y;
 
-    mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_76_, mEffPos, &rotation, &mScale, nullptr, nullptr);
+    mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_76_, mEffPos, &mRotation, &mScale, nullptr, nullptr);
     mEff.setGlobalAlpha(mField_0x7E4);
 }
 

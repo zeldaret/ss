@@ -419,7 +419,7 @@ void AttentionGroup::fn_800964B0() {
 extern "C" f32 lbl_8057CD9C;
 
 f32 AttentionManager::targetScore(dAcObjBase_c *target, dAcObjBase_c *origin) {
-    s16 angle = cLib::targetAngleY(target->position, origin->position) - origin->rotation.y.mVal;
+    s16 angle = cLib::targetAngleY(target->position, origin->position) - origin->mRotation.y.mVal;
     f32 viewAngle = fabsf(angle * lbl_8057CD9C);
     if (viewAngle > 0.5f) {
         return viewAngle;

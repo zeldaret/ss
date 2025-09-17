@@ -3,12 +3,11 @@
 #include "d/flag/sceneflag_manager.h"
 #include "toBeSorted/time_area_mgr.h"
 
-
 SPECIAL_ACTOR_PROFILE(TAG_TIME_AREA_CHECK, dTgTimeAreaCheck_c, fProfile::TAG_TIME_AREA_CHECK, 0x01AC, 0, 0);
 
 int dTgTimeAreaCheck_c::create() {
-    mPastSceneFlag = params & 0xFF;
-    mPresentSceneFlag = (params >> 8) & 0xFF;
+    mPastSceneFlag = mParams & 0xFF;
+    mPresentSceneFlag = (mParams >> 8) & 0xFF;
     return SUCCEEDED;
 }
 

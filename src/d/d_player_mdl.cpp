@@ -1120,13 +1120,13 @@ void daPlayerModelBase_c::applyWorldRotationMaybe(
     } else {
         MTXTrans(work, v.x, v.y, v.z);
     }
-    work.YrotM(rotation.y);
+    work.YrotM(mRotation.y);
     if (order) {
         work.ZYXrotM(x, y, z);
     } else {
         work.ZXYrotM(x, y, z);
     }
-    work.YrotM(-rotation.y);
+    work.YrotM(-mRotation.y);
     mMtx_c translateBack;
     translateBack.transS(-v.x, -v.y, -v.z);
     MTXConcat(work, translateBack, work);
@@ -1190,9 +1190,9 @@ void daPlayerModelBase_c::adjustMainModelWorldMtx(PlayerMainModelNode_e nodeId, 
     if (checkCurrentAction(0xA9) && (nodeId == PLAYER_MAIN_NODE_ARM_R1 || nodeId == PLAYER_MAIN_NODE_ARM_R2)) {
         mMtx_c mtx;
         mtx.makeQ(mQuat1);
-        mtx.YrotM(-rotation.y);
+        mtx.YrotM(-mRotation.y);
         mMtx_c mtx2;
-        mtx2.YrotS(rotation.y);
+        mtx2.YrotS(mRotation.y);
         MTXConcat(mtx2, mtx, mtx);
 
         mMtx_c orig;
@@ -1208,9 +1208,9 @@ void daPlayerModelBase_c::adjustMainModelWorldMtx(PlayerMainModelNode_e nodeId, 
     } else if (mAnimations[3] == 0xE0 && nodeId == PLAYER_MAIN_NODE_ARM_R2) {
         mMtx_c mtx;
         mtx.makeQ(mQuat1);
-        mtx.YrotM(-rotation.y);
+        mtx.YrotM(-mRotation.y);
         mMtx_c mtx2;
-        mtx2.YrotS(rotation.y);
+        mtx2.YrotS(mRotation.y);
         MTXConcat(mtx2, mtx, mtx);
 
         mMtx_c orig;
@@ -1261,9 +1261,9 @@ void daPlayerModelBase_c::adjustMainModelWorldMtx(PlayerMainModelNode_e nodeId, 
     } else if ((nodeId == PLAYER_MAIN_NODE_ARM_R2 || nodeId == PLAYER_MAIN_NODE_HAND_R) && isMPPose()) {
         mMtx_c mtx;
         mtx.makeQ(mQuat2);
-        mtx.YrotM(-rotation.y);
+        mtx.YrotM(-mRotation.y);
         mMtx_c mtx2;
-        mtx2.YrotS(rotation.y);
+        mtx2.YrotS(mRotation.y);
         MTXConcat(mtx2, mtx, mtx);
 
         mMtx_c orig;
@@ -1529,11 +1529,11 @@ void daPlayerModelBase_c::headModelTimingB(u32 nodeId, nw4r::g3d::WorldMtxManip 
         mtx.setTranslation(v);
         result->SetMtxUnchecked(mtx);
     } else if (nodeId >= PLAYER_HEAD_NODE_HAIR_L) {
-        mAng oldYRot = rotation.y;
-        rotation.y = field_0x1256;
+        mAng oldYRot = mRotation.y;
+        mRotation.y = field_0x1256;
         u32 idx = nodeId - 1;
         applyWorldRotationMaybe(result, field_0x1238[idx], 0, field_0x1242[idx], nullptr, false);
-        rotation.y = oldYRot;
+        mRotation.y = oldYRot;
     }
 }
 
@@ -1881,7 +1881,7 @@ void daPlayerModelBase_c::updateCachedPositions() {
     if (checkCurrentAction(/* DOWSE_LOOK */ 0x68)) {
         mVec3_c v(0.0f, 18.0f, 0.0f);
         v.rotX(field_0x1268);
-        v.rotY(rotation.y + field_0x126A);
+        v.rotY(mRotation.y + field_0x126A);
         poscopy2 += v;
     }
 }

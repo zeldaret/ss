@@ -20,7 +20,6 @@
 #include "toBeSorted/stage_render_stuff.h"
 #include "toBeSorted/time_area_mgr.h"
 
-
 class dAcEsm_c : public dAcEnBase_c {
 public:
     enum SmColor_e {
@@ -69,26 +68,26 @@ public:
     STATE_FUNC_DECLARE(dAcEsm_c, Dead);
 
     u8 GetParam_s8_0xFF() {
-        return params >> 8 & 0xFF;
+        return mParams >> 8 & 0xFF;
     }
 
     u8 GetType() {
-        int type = params >> 0 & 0xF;
+        int type = mParams >> 0 & 0xF;
         return type != 0xF ? type : 0;
     }
 
     u8 GetParam_s4_0xF() {
-        int type = params >> 4 & 0xF;
+        int type = mParams >> 4 & 0xF;
         return type != 0xF ? type : 0;
     }
 
     f32 GetParam_s16_0xFF() {
-        int tmp = params >> 16 & 0xFF;
+        int tmp = mParams >> 16 & 0xFF;
         return tmp != 0xFF ? tmp * 100.f : 400.f;
     }
 
     u8 GetParam_s24_0x7() {
-        u8 tmp = params >> 24 & 0x7;
+        u8 tmp = mParams >> 24 & 0x7;
         return tmp != 0x7 ? tmp : 0;
     }
 

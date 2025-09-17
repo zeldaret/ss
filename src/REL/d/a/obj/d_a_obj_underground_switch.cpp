@@ -37,9 +37,9 @@ bool dAcOUgSwitch_c::createHeap() {
 }
 
 int dAcOUgSwitch_c::create() {
-    mActiveSceneFlag = params & 0xFF;
-    field_0x3BD = (params >> 8) & 0xFF;
-    setVariant((params >> 16) & 0xF);
+    mActiveSceneFlag = mParams & 0xFF;
+    field_0x3BD = (mParams >> 8) & 0xFF;
+    setVariant((mParams >> 16) & 0xF);
     if (!initAllocatorWork1Heap(0x1000, "dAcOUgSwitch_c::m_allocator", 0x20)) {
         return FAILED;
     }

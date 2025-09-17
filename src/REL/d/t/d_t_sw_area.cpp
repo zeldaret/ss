@@ -14,10 +14,10 @@ int dTgSwArea_c::create() {
 
     setStoryflag = getSetStoryflag();
     unsetStoryflag = getUnsetStoryflag();
-    rotation.x = 0;
-    rotation.z = 0;
+    mRotation.x = 0;
+    mRotation.z = 0;
 
-    matrixCreateFromPosRotYScale(area, position, rotation.y, mScale, nullptr, 0.0f);
+    matrixCreateFromPosRotYScale(area, position, mRotation.y, mScale, nullptr, 0.0f);
     return SUCCEEDED;
 }
 
@@ -46,12 +46,12 @@ int dTgSwArea_c::actorExecute() {
 
         if (scale < 1.0f) {
             scale = 50.0f;
-            matrixCreateFromPosRotYScale(area, position, rotation.y, mScale, nullptr, scale);
+            matrixCreateFromPosRotYScale(area, position, mRotation.y, mScale, nullptr, scale);
         }
     } else {
         if (scale > 1.0f) {
             scale = 0.0f;
-            matrixCreateFromPosRotYScale(area, position, rotation.y, mScale, nullptr, scale);
+            matrixCreateFromPosRotYScale(area, position, mRotation.y, mScale, nullptr, scale);
         }
 
         if (isTemporary) {

@@ -18,9 +18,19 @@ bool cBgW::sSphCheck;
 mVec3_c dBgW::sWallCorrectPos(0.0f, 0.0f, 0.0f);
 
 cBgW::cBgW()
-    : mpMdlMtx(nullptr), mTransVel(0.0f, 0.0f, 0.0f), mpScale(nullptr), mFlags(GLOBAL_e), mRootGroupIdx(-1),
-      mpTri(nullptr), mpRwg(nullptr), mpVtxTbl(nullptr), mpBgd(nullptr), mpBlk(nullptr), mpGrp(nullptr),
-      mpNodeTree(nullptr), mNeedsFullTransform(true) {
+    : mpMdlMtx(nullptr),
+      mTransVel(0.0f, 0.0f, 0.0f),
+      mpScale(nullptr),
+      mFlags(GLOBAL_e),
+      mRootGroupIdx(-1),
+      mpTri(nullptr),
+      mpRwg(nullptr),
+      mpVtxTbl(nullptr),
+      mpBgd(nullptr),
+      mpBlk(nullptr),
+      mpGrp(nullptr),
+      mpNodeTree(nullptr),
+      mNeedsFullTransform(true) {
     PSMTXIdentity(mInvMtx);
     PSMTXIdentity(mMtx);
     PSMTXIdentity(mMtxUnk);
@@ -497,7 +507,8 @@ void cBgW::RwgLineCheck(int polyIdx, cBgS_LinChk *pLine) {
                 pLine->ChkBackFlag()
             )) {
             dBgPc pc = *mpPolyCodes.GetDBgPc(mpBgd->mTriTbl[polyIdx].mId);
-            if (!dBgWKCol::ChkPolyThrough(GetId(), &pc, pLine)
+            if (
+                !dBgWKCol::ChkPolyThrough(GetId(), &pc, pLine)
                 // && fn_803599c0(/* params */)
             ) {
                 pLine->mLin.mEnd = cross_pos;
@@ -794,7 +805,7 @@ bool dBgW::SphChk(dBgS_SphChk *pSph, void *pV) {
 }
 
 void dBgW::CrrPos(cBgS_PolyInfo const &info, void *pObj, bool b, mVec3_c *pPos, mAng3_c *pAngle, mAng3_c *pShapeAngle) {
-    if (mpCrrFunc && static_cast<dAcObjBase_c *>(pObj)->baseProperties & dBase_c::BASE_PROP_0x4) {
+    if (mpCrrFunc && static_cast<dAcObjBase_c *>(pObj)->checkBaseProperty(dBase_c::BASE_PROP_0x4)) {
         mpCrrFunc(this, pObj, info, b, pPos, pAngle, pShapeAngle);
     }
 }
@@ -802,7 +813,7 @@ void dBgW::CrrPos(cBgS_PolyInfo const &info, void *pObj, bool b, mVec3_c *pPos, 
 void dBgW::TransPos(
     cBgS_PolyInfo const &info, void *pObj, bool b, mVec3_c *pPos, mAng3_c *pAngle, mAng3_c *pShapeAngle
 ) {
-    if (mpCrrFunc && static_cast<dAcObjBase_c *>(pObj)->baseProperties & dBase_c::BASE_PROP_0x4) {
+    if (mpCrrFunc && static_cast<dAcObjBase_c *>(pObj)->checkBaseProperty(dBase_c::BASE_PROP_0x4)) {
         mpCrrFunc(this, pObj, info, b, pPos, pAngle, pShapeAngle);
     }
 }

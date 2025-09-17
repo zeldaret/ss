@@ -273,7 +273,7 @@ void dAcOTumbleWeed_c::calcMatrix() {
         f32 vel_mag = VEC3Len(velocity);
         f32 f1 = mAng(vel_mag * (mField_0x978 + 200.f)).radian();
         f32 f2 = mAng(vel_mag * 182.0f * 0.2f).radian();
-        f32 f0 = mAng(angle.y - rotation.y).radian();
+        f32 f0 = mAng(angle.y - mRotation.y).radian();
 
         mQuat_c q0, q1, q2, q3;
         q1.setAxisRotation(mVec3_c::Ey, f0);
@@ -386,7 +386,7 @@ void dAcOTumbleWeed_c::calcWind() {
 mVec3_c dAcOTumbleWeed_c::getPosition() const {
     mMtx_c mtx;
     mVec3_c vec;
-    mtx.ZXYrotS(rotation.x, rotation.y, rotation.z);
+    mtx.ZXYrotS(mRotation.x, mRotation.y, mRotation.z);
     PSMTXMultVecSR(mtx, mVec3_c::Ey, vec);
     return position + vec * 40.f;
 }

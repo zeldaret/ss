@@ -24,9 +24,9 @@ int dAcOPoolCock_c::actorCreate() {
 
     forwardAccel = -0.0f;
     forwardMaxSpeed = -40.0f;
-    mOpenSceneflag = params & 0xFF;
+    mOpenSceneflag = mParams & 0xFF;
     mOpenDirection = mVec3_c::Ez;
-    mOpenDirection.rotY(rotation.y);
+    mOpenDirection.rotY(mRotation.y);
 
     if (mOpenSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mOpenSceneflag)) {
         mOpenProgress = 400.0f;

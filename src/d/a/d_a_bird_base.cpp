@@ -24,7 +24,7 @@ int dAcBirdBase_c::draw() {
 void dAcBirdBase_c::updateMatrixBird() {
     mWorldMtx.transS(position);
     mWorldMtx.concat(field_0xF80);
-    mWorldMtx.ZrotM(rotation.z);
+    mWorldMtx.ZrotM(mRotation.z);
     mWorldMtx.scaleM(field_0xF50.x, field_0xF50.y, field_0xF50.z);
     mMdl.getModel().setLocalMtx(mWorldMtx);
     mMdl.getModel().calc(false);

@@ -109,13 +109,13 @@ int dAcEsm_c::actorCreate() {
     shift8_0xFF = GetParam_s8_0xFF();
 
     field_0xB74 = GetParam_s16_0xFF();
-    field_0xB78 = rotation.z;
+    field_0xB78 = mRotation.z;
     if (field_0xB74 == 0.f) {
         field_0xB74 = 400.f;
     }
     field_0xBC6 = GetParam_s24_0x7();
 
-    mOrigRotZ = rotation.z;
+    mOrigRotZ = mRotation.z;
 
     if (field_0xB78 <= 0.f) {
         field_0xB78 = 0.f;
@@ -129,7 +129,7 @@ int dAcEsm_c::actorCreate() {
 
     CREATE_ALLOCATOR(dAcEsm_c);
 
-    rotation.z = angle.x = 0;
+    mRotation.z = angle.x = 0;
 
     mBombRef.unlink();
 
@@ -177,7 +177,7 @@ int dAcEsm_c::actorCreate() {
     position.CopyTo(poscopy3);
     poscopy3.y += 50.f;
 
-    mRotCopy.set(rotation);
+    mRotCopy.set(mRotation);
 
     field_0xB98 = 0;
     field_0xB58 = 1.f;
@@ -202,7 +202,7 @@ int dAcEsm_c::actorCreate() {
 
     dLightEnv_c::GetPInstance()->plight_set(&mLightInfo);
     if (field_0xBBF == 1) {
-        rotation.x = 0x8000;
+        mRotation.x = 0x8000;
         field_0xBCC = 1;
     }
 
@@ -443,7 +443,7 @@ int dAcEsm_c::actorExecute() {
                 field_0xBBF = 0;
                 setBattleBgmRelated(2);
                 fn_80030700();
-                rotation.y = angle.y = getXZAngleToPlayer();
+                mRotation.y = angle.y = getXZAngleToPlayer();
             }
             if (field_0xBBF == 3) {
                 return SUCCEEDED;
@@ -765,7 +765,7 @@ void dAcEsm_c::initializeState_Walk() {
 
     field_0xBB8 = 0;
     field_0xB98 = 0;
-    rotation.x = 0;
+    mRotation.x = 0;
 
     Set_0xBBC(2);
     field_0xBAA = angle.y;
@@ -870,7 +870,7 @@ bool dAcEsm_c::fn_187_4090() {
         startSound(SE_ESm_LAND);
 
         if (field_0xBA0 == 0) {
-            if (fn_800301b0(position, rotation.y, true, 10.f) == 3 /* TODO: Enum?*/) {
+            if (fn_800301b0(position, mRotation.y, true, 10.f) == 3 /* TODO: Enum?*/) {
                 int code = dBgS::GetInstance()->GetSpecialCode(dBgS_ObjGndChk::GetInstance());
                 if (code != POLY_ATTR_SAND_SHALLOW && code != POLY_ATTR_SAND_MED) {
                     mHealth = 0;
@@ -993,7 +993,7 @@ void dAcEsm_c::fn_187_4540(int param0) {
         f32 f = 16384.f;
 
         dAcEsm_c *pChild = static_cast<dAcEsm_c *>(
-            create(fProfile::E_SM, roomid, (params & ~0xFF) | mType, &spawnPos, &rot, nullptr, 0)
+            create(fProfile::E_SM, roomid, (mParams & ~0xFF) | mType, &spawnPos, &rot, nullptr, 0)
         );
         if (pChild == nullptr) {
             return;
@@ -1128,14 +1128,14 @@ void dAcEsm_c::fn_187_4CC0() {
     if (mObjAcch.ChkWallHit(nullptr)) {
         sLib::addCalcAngle(angle.y.ref(), mAcchCir.GetWallAngleY(), 4, 0x200);
     }
-    sLib::addCalcAngle(rotation.y.ref(), angle.y, 2, 0x800);
+    sLib::addCalcAngle(mRotation.y.ref(), angle.y, 2, 0x800);
     sLib::addCalcAngle(mRotUnk.x.ref(), mTargetRotX, 4, 0x800);
     sLib::addCalcAngle(mRotUnk.z.ref(), mTargetRotZ, 4, 0x800);
 
     mWorldMtx.transS(position.x, position.y, position.z);
     mWorldMtx.XrotM(mRotUnk.x);
     mWorldMtx.ZrotM(mRotUnk.z);
-    mWorldMtx.ZXYrotM(rotation.x, rotation.y, rotation.z);
+    mWorldMtx.ZXYrotM(mRotation.x, mRotation.y, mRotation.z);
 
     f32 s = 1.f - 0.2f * field_0xB5C;
     f32 z = 150.f * mScaleTarget.x;
@@ -1277,7 +1277,7 @@ void dAcEsm_c::fn_187_61B0(u8 param0) {
             ang.set(0, 0, 0);
             ang.z += player->vt_0x258();
             MTXTrans(mtx_trans, mHitPos.x, mHitPos.y, mHitPos.z);
-            mtx_trans.YrotM(rotation.y);
+            mtx_trans.YrotM(mRotation.y);
             mtx_trans.ZYXrotM(ang);
             MTXScale(mtx_scale, mScaleTarget.x, mScaleTarget.x, mScaleTarget.x);
 
@@ -1351,7 +1351,7 @@ void dAcEsm_c::fn_187_61B0(u8 param0) {
         case 4: {
             mMtx_c mtx_scale;
             MTXTrans(mtx_trans, position.x, position.y, position.z);
-            mtx_trans.YrotM(rotation.y);
+            mtx_trans.YrotM(mRotation.y);
             MTXScale(mtx_scale, mScaleTarget.x, mScaleTarget.y, mScaleTarget.z);
             mtx_trans += mtx_scale;
             dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_280_, mtx_trans, &clr1, &clr2, 0, 0);
@@ -1398,7 +1398,7 @@ void dAcEsm_c::fn_187_61B0(u8 param0) {
             }
             mMtx_c mtx_scale;
             MTXTrans(mtx_trans, mHitPos.x, mHitPos.y, mHitPos.z);
-            mtx_trans.YrotM(rotation.y);
+            mtx_trans.YrotM(mRotation.y);
             MTXScale(mtx_scale, scale.x, scale.y, scale.z);
             mtx_trans += mtx_scale;
             dJEffManager_c::spawnEffect(sEmitterResArr[param0], mtx_trans, &clr1, &clr2, 0, 0);

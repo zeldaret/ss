@@ -224,8 +224,8 @@ void dStageMgr_c::executeState_ReadObjectSound() {
 void dStageMgr_c::finalizeState_ReadObjectSound() {
     mpDvdCallback2->do_delete();
     // mpDvdCallback2 = nullptr;
-    clearProcControlFlag(ROOT_DISABLE_EXECUTE);
-    clearProcControlFlag(ROOT_DISABLE_DRAW);
+    unsetProcControl(ROOT_DISABLE_EXECUTE);
+    unsetProcControl(ROOT_DISABLE_DRAW);
     dLast_c::setExecuteCallback(lastExecuteCallback);
 }
 

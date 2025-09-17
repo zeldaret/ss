@@ -89,14 +89,14 @@ bool dAcOsw_c::createHeap() {
 }
 
 int dAcOsw_c::actorCreate() {
-    mSwitchType = params & 0xF;
-    mOnSceneFlag = (params >> 0xE);
+    mSwitchType = mParams & 0xF;
+    mOnSceneFlag = (mParams >> 0xE);
     CREATE_ALLOCATOR(dAcOsw_c);
     mCollision.SetRideCallback(rideCallback);
     mModel.setCallback(&mButtonCtrl);
     dBgS::GetInstance()->Regist(&mCollision, this);
-    mOffSceneFlag = (params >> 0x4);
-    mCanBeSeen = ((params >> 0xC) & 3) == 0;
+    mOffSceneFlag = (mParams >> 0x4);
+    mCanBeSeen = ((mParams >> 0xC) & 3) == 0;
     nw4r::g3d::ResMdl resMdl = mModel.getResMdl();
     nw4r::g3d::ResNode node = resMdl.GetResNode("button");
     mButtonCtrl.init(node.GetID());
@@ -158,7 +158,7 @@ int dAcOsw_c::actorExecute() {
             if (mScale.x >= 1.0f) {
                 if (!mHidden) {
                     dJEffManager_c::spawnEffect(
-                        PARTICLE_RESOURCE_ID_MAPPING_754_, position, &rotation, nullptr, nullptr, nullptr, 0, 0
+                        PARTICLE_RESOURCE_ID_MAPPING_754_, position, &mRotation, nullptr, nullptr, nullptr, 0, 0
                     );
                     startSound(SE_TIMESLIP_TIMESLIP_REV);
                     mHidden = true;
@@ -173,7 +173,7 @@ int dAcOsw_c::actorExecute() {
             if (mScale.x <= 0.0f) {
                 if (!mShown) {
                     dJEffManager_c::spawnEffect(
-                        PARTICLE_RESOURCE_ID_MAPPING_754_, position, &rotation, nullptr, nullptr, nullptr, 0, 0
+                        PARTICLE_RESOURCE_ID_MAPPING_754_, position, &mRotation, nullptr, nullptr, nullptr, 0, 0
                     );
                     startSound(SE_TIMESLIP_TIMESLIP);
                     mShown = true;

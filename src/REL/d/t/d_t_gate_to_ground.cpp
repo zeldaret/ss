@@ -13,7 +13,7 @@
 SPECIAL_ACTOR_PROFILE(GATE2GND_TAG, dTgGateToGround_c, fProfile::GATE2GND_TAG, 0x22, 0, 0);
 
 int dTgGateToGround_c::create() {
-    matrixCreateFromPosRotYScale(matrix, position, rotation.y, mScale, nullptr, 0.0f);
+    matrixCreateFromPosRotYScale(matrix, position, mRotation.y, mScale, nullptr, 0.0f);
 
     delayFrames = 0;
 
@@ -25,7 +25,7 @@ int dTgGateToGround_c::create() {
             u8 c;
         };
     } v;
-    v.val = params;
+    v.val = mParams;
     params_FF_FF_00_00 = v.a;
     params_00_00_FF_00 = v.b;
     params_00_00_00_FF = v.c;

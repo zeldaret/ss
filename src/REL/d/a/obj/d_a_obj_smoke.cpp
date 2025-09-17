@@ -15,7 +15,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_SMOKE, dAcOsmoke_c, fProfile::OBJ_SMOKE, 0x01DB, 0, 4)
 STATE_DEFINE(dAcOsmoke_c, Wait);
 
 bool dAcOsmoke_c::createHeap() {
-    mType = params & 3;
+    mType = mParams & 3;
     mBrres = nw4r::g3d::ResFile(getOarcResFile(sSmokeNames1[mType]));
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl(sSmokeNames2[mType]);
     TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x324));

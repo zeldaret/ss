@@ -71,8 +71,8 @@ int dAcOFlyingClawshotTarget_c::actorCreate() {
 
 int dAcOFlyingClawshotTarget_c::actorPostCreate() {
     mVec3_c v = mVec3_c::Ez;
-    v.rotX(rotation.x);
-    v.rotY(rotation.y);
+    v.rotX(mRotation.x);
+    v.rotY(mRotation.y);
     mVec3_c diff = dAcPy_c::LINK->position - position;
     diff.normalize();
     if (!mToLink.Set(v, diff)) {

@@ -34,7 +34,7 @@ static const char *const AcOstreamLava__AnmClrNames[] = {
 SPECIAL_ACTOR_PROFILE(OBJ_STREAM_LAVA, dAcOstreamLava_c, fProfile::OBJ_STREAM_LAVA, 0x1FA, 0, 6);
 
 bool dAcOstreamLava_c::createHeap() {
-    mSubtype = params & 0xF;
+    mSubtype = mParams & 0xF;
     mResFile = nw4r::g3d::ResFile(getOarcResFile(AcOstreamLava__OarcNames[mSubtype]));
     dStage_c::bindStageResToFile(&mResFile);
 

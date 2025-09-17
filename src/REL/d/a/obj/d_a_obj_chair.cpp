@@ -53,9 +53,9 @@ bool dAcOChair_c::createHeap() {
 }
 
 int dAcOChair_c::create() {
-    u8 paramType = params & 0xF;
+    u8 paramType = mParams & 0xF;
     mChairType = getChairType(paramType);
-    mSceneflag = params >> 4;
+    mSceneflag = mParams >> 4;
 
     CREATE_ALLOCATOR(dAcOChair_c);
 
@@ -107,7 +107,7 @@ int dAcOChair_c::create() {
     field_0xB1B = 1;
     field_0xB1A = 1;
 
-    mChairRot = rotation.y;
+    mChairRot = mRotation.y;
     mStateMgr.changeState(StateID_Wait);
 
     boundingBox.Set(mVec3_c(-60.f, -0.f, -60.f), mVec3_c(60.f, 160.f, 60.f));
@@ -255,7 +255,7 @@ void dAcOChair_c::updateChairPos() {
             mVec3_c work = mVec3_c::Ez * getDistToPlayer();
             work.rotY(getRelativeYRotationToPlayer());
             work.z = 0.f;
-            work.rotY(rotation.y);
+            work.rotY(mRotation.y);
             poscopy2 = position;
             if (work.squareMagXZ() < 10000.f) {
                 poscopy2 += work;

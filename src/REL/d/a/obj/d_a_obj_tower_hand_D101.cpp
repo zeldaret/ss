@@ -397,19 +397,19 @@ void dAcOTowerHandD101_c::doSomethingHold(f32 arg) {
 }
 
 int dAcOTowerHandD101_c::getDirection() const {
-    return params & 0xFF;
+    return mParams & 0xFF;
 }
 
 int dAcOTowerHandD101_c::getHoldFlag() const {
-    return (params >> 8) & 0xFF;
+    return (mParams >> 8) & 0xFF;
 }
 
 int dAcOTowerHandD101_c::getSceneFlag() const {
-    return (params >> 16) & 0xFF;
+    return (mParams >> 16) & 0xFF;
 }
 
 u32 dAcOTowerHandD101_c::getEventId() const {
-    return (params >> 24) & 0xFF;
+    return (mParams >> 24) & 0xFF;
 }
 
 bool dAcOTowerHandD101_c::getBgWMtx(int index, mMtx_c *&outMtx) {
@@ -545,7 +545,7 @@ void dAcOTowerHandD101_c::eventCallback(void *arg) {
 }
 
 void dAcOTowerHandD101_c::calcItemPosition(const mVec3_c &offset, mVec3_c &outPosition) const {
-    transformMtx(position, rotation, offset, outPosition);
+    transformMtx(position, mRotation, offset, outPosition);
 }
 
 void dAcOTowerHandD101_c::initializeState_RemainOpen() {
@@ -773,7 +773,7 @@ void dAcOTowerHandD101_c::executeState_Hold() {
         mMtx_c tmpMtx1;
         tmpMtx1.transS(position);
         // Different address calculation here
-        tmpMtx1.ZXYrotM(rotation.x, rotation.y, rotation.z);
+        tmpMtx1.ZXYrotM(mRotation.x, mRotation.y, mRotation.z);
         mVec3_c linkVec;
         getLinkOffset(linkVec);
         mMtx_c tmpMtx2;

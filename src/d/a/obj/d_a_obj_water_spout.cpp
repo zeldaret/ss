@@ -35,7 +35,7 @@ int dAcOwaterSpout_c::create() {
     updateMatrix();
     mMdl.getModel().setLocalMtx(mWorldMtx);
     mStateMgr.changeState(StateID_Wait);
-    if (params == 1) {
+    if (mParams == 1) {
         mScale.y *= 4.0f;
     }
     mMdl.getModel().setScale(mScale);
@@ -61,7 +61,7 @@ int dAcOwaterSpout_c::draw() {
 }
 
 void dAcOwaterSpout_c::initializeState_Wait() {
-    if (params == 1) {
+    if (mParams == 1) {
         return;
     }
     dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_213_, position, nullptr, &mScale, nullptr, nullptr, 0, 0);

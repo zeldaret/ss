@@ -43,7 +43,7 @@ int dAcOOctGrass_c::create() {
     CREATE_ALLOCATOR(dAcOOctGrass_c);
     forwardAccel = 0.0f;
     forwardMaxSpeed = -40.0f;
-    if ((params & 0xF) != 0) {
+    if ((mParams & 0xF) != 0) {
         mMdl.setPriorityDraw(0x1C, 9);
     }
     updateMatrix();

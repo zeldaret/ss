@@ -42,7 +42,7 @@ bool dAcOutajimaIsland_c::createHeap() {
 
 int dAcOutajimaIsland_c::actorCreate() {
     mInitialPos = position;
-    mInitialRot = rotation;
+    mInitialRot = mRotation;
 
     mRingLayer = getRingLayer();
     mParam2 = getParm2();
@@ -135,7 +135,7 @@ void dAcOutajimaIsland_c::movePlatforms() {
 
     sLib::chaseAngle2(&field_0x5BE.x.mVal, field_0x5BC, field_0x5BE.y);
 
-    rotation.y = mInitialRot.y - field_0x5BE.x;
-    position.z = mInitialPos.z + ((mRingLayer - 1) * 1400.0f + 2500.0f) * rotation.y.cos();
-    position.x = mInitialPos.x + ((mRingLayer - 1) * 1400.0f + 2500.0f) * rotation.y.sin();
+    mRotation.y = mInitialRot.y - field_0x5BE.x;
+    position.z = mInitialPos.z + ((mRingLayer - 1) * 1400.0f + 2500.0f) * mRotation.y.cos();
+    position.x = mInitialPos.x + ((mRingLayer - 1) * 1400.0f + 2500.0f) * mRotation.y.sin();
 }

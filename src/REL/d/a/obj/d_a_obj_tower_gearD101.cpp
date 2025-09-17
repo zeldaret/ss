@@ -28,7 +28,7 @@ bool dAcOTowerGearD101_c::createHeap() {
     }
     fn_80067340(field_0x3A0, &mdl, "model0");
     position = field_0x3A0;
-    position.rotY(rotation.y);
+    position.rotY(mRotation.y);
 
     return true;
 }
@@ -123,12 +123,12 @@ void dAcOTowerGearD101_c::initTransform() {
     mtx1.transS(position);
     mWorldMtx += mtx1;
     field_0x3C4.transS(mVec3_c::Zero);
-    field_0x3C4.ZXYrotM(rotation.x, rotation.y, rotation.z);
+    field_0x3C4.ZXYrotM(mRotation.x, mRotation.y, mRotation.z);
     mMdl.setLocalMtx(field_0x3C4);
 }
 
 void dAcOTowerGearD101_c::playVisualEffect() {
     mEffects.createContinuousEffect(
-        PARTICLE_RESOURCE_ID_MAPPING_572_, field_0x3F4, &rotation, nullptr, nullptr, nullptr
+        PARTICLE_RESOURCE_ID_MAPPING_572_, field_0x3F4, &mRotation, nullptr, nullptr, nullptr
     );
 }

@@ -37,12 +37,36 @@ void dBgS_AcchCir::SetWall(f32 wallH, f32 wallR) {
 }
 
 dBgS_Acch::dBgS_Acch()
-    : mFlags(0), mpPos(nullptr), mpOldPos(nullptr), mSpeed(0.0f, 0.0f, 0.0f), mpSpeed(nullptr), mpAngle(nullptr),
-      mpShapeAngle(nullptr), mBgIndex(0), mField_0x094(0), mField_0x098(0), mpMyObj(nullptr), mTblSize(0),
-      mpAcchCir(nullptr), mField_0x0A8(0.0f), mField_0x0AC(0.0f), mGroundHeight(-1e9f), mField_0x0B4(120.0f),
-      mField_0x0C8(0.0f), mField_0x0CC(0.0f), mRoofHeight(1e9f), mField_0x0D4(1.0f), mField_0x0D8(0.0f),
-      mpOutPolyInfo(nullptr), mRoofH_0x0E0(0.0f), mGroundH_0x0E4(0.0f), mField_0x0E8(1e9f), mField_0x1D0(-1.0f),
-      mField_0x2F4(1000.0f), mField_0x390(0), mField_0x394(0) {
+    : mFlags(0),
+      mpPos(nullptr),
+      mpOldPos(nullptr),
+      mSpeed(0.0f, 0.0f, 0.0f),
+      mpSpeed(nullptr),
+      mpAngle(nullptr),
+      mpShapeAngle(nullptr),
+      mBgIndex(0),
+      mField_0x094(0),
+      mField_0x098(0),
+      mpMyObj(nullptr),
+      mTblSize(0),
+      mpAcchCir(nullptr),
+      mField_0x0A8(0.0f),
+      mField_0x0AC(0.0f),
+      mGroundHeight(-1e9f),
+      mField_0x0B4(120.0f),
+      mField_0x0C8(0.0f),
+      mField_0x0CC(0.0f),
+      mRoofHeight(1e9f),
+      mField_0x0D4(1.0f),
+      mField_0x0D8(0.0f),
+      mpOutPolyInfo(nullptr),
+      mRoofH_0x0E0(0.0f),
+      mGroundH_0x0E4(0.0f),
+      mField_0x0E8(1e9f),
+      mField_0x1D0(-1.0f),
+      mField_0x2F4(1000.0f),
+      mField_0x390(0),
+      mField_0x394(0) {
     SetPolyPassChk(GetPolyPassChkInfo());
     SetGrpPassChk(GetGrpPassChkInfo());
 
@@ -63,7 +87,7 @@ void dBgS_Acch::Set(
     mpOldPos = pOldPos;
     mpMyObj = pObj;
 
-    mActorId = pObj->unique_ID;
+    mActorId = pObj->mID;
     mpSpeed = pSpeed;
     if (pSpeed) {
         mSpeed = *pSpeed;

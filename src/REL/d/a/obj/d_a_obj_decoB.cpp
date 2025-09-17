@@ -37,7 +37,7 @@ int dAcODecoB_c::doDelete() {
 int dAcODecoB_c::actorExecute() {
     mStateMgr.executeState();
     PSMTXTrans(mWorldMtx, position.x, position.y, position.z);
-    mWorldMtx.ZXYrotM(rotation);
+    mWorldMtx.ZXYrotM(mRotation);
     mMdl.setLocalMtx(mWorldMtx);
     return SUCCEEDED;
 }
@@ -61,9 +61,9 @@ void dAcODecoB_c::executeState_Wait() {
         }
         field_0x38E = distance * 2048.0f;
     }
-    field_0x38E -= rotation.x * 0.05f;
+    field_0x38E -= mRotation.x * 0.05f;
     field_0x38E = field_0x38E * lbl_611_data_34;
-    rotation.x += field_0x38E;
+    mRotation.x += field_0x38E;
 }
 
 const f32 dAcODecoB_c::lbl_611_rodata_30 = 2000.0f;

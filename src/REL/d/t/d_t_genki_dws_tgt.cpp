@@ -65,5 +65,5 @@ int dTgGenkiDwsTgt_c::actorExecute() {
 }
 
 u16 dTgGenkiDwsTgt_c::getSceneFlagFromParams() {
-    return params & 0xFF;
+    return mParams & 0xFF;
 }

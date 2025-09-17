@@ -37,7 +37,7 @@ bool dAcOtoD3StoneFigure_c::createHeap() {
 
 int dAcOtoD3StoneFigure_c::create() {
     mIsSkyKeepAlreadyOpen = isStoneOfTrialsPlaced();
-    mExitId = params & 0xFF;
+    mExitId = mParams & 0xFF;
     updateMatrix();
     if (!initAllocatorWork1Heap(-1, "dAcOtoD3StoneFigure_c::m_allocator", 0x20)) {
         return FAILED;
@@ -97,7 +97,7 @@ int dAcOtoD3StoneFigure_c::draw() {
 
 void dAcOtoD3StoneFigure_c::initializeState_OneEye() {
     if (dScGame_c::currentSpawnInfo.getTimeOfDay() == SpawnInfo::NIGHT) {
-        rotation.y.mVal += -0x8000;
+        mRotation.y.mVal += -0x8000;
         updateMatrix();
         mMdl.setLocalMtx(mWorldMtx);
     }

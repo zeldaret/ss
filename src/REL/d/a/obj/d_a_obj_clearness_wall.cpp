@@ -18,7 +18,7 @@ bool dAcOclearnessWall_c::createHeap() {
 }
 
 int dAcOclearnessWall_c::create() {
-    mSceneflag = params;
+    mSceneflag = mParams;
     mVariant = getFromParams(8, 0xF);
     field_0x542 = getFromParams(0xC, 0xF);
     if (field_0x542 == 0xF) {

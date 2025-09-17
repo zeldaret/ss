@@ -26,8 +26,8 @@ bool dAcOtrapRock1_c::createHeap() {
 }
 
 int dAcOtrapRock1_c::create() {
-    mActivationSceneFlag = params & 0xFF;
-    mReturnSceneFlag = (params >> 8) & 0xFF;
+    mActivationSceneFlag = mParams & 0xFF;
+    mReturnSceneFlag = (mParams >> 8) & 0xFF;
     CREATE_ALLOCATOR(dAcOtrapRock1_c);
 
     mBgW.SetCrrFunc(dBgS_MoveBGProc_Typical);
@@ -82,18 +82,18 @@ void dAcOtrapRock1_c::executeState_TrapAction() {
     if (SceneflagManager::sInstance->checkBoolFlag(roomid, mReturnSceneFlag)) {
         mStateMgr.changeState(StateID_TrapReturn);
     } else if (field_0x59E == 0 || mFrameCounter > 4) {
-        // After 5 frames, move rotation.x to 0x4000, then stay until return
-        bool reachedPoint = sLib::chaseAngle(&rotation.x.mVal, 0x4000, 0x14);
+        // After 5 frames, move mRotation.x to 0x4000, then stay until return
+        bool reachedPoint = sLib::chaseAngle(&mRotation.x.mVal, 0x4000, 0x14);
         if (reachedPoint) {
             return;
         }
     } else {
         f32 ratio;
-        if (mFrameCounter == 0 && rotation.x < 0x4000) {
+        if (mFrameCounter == 0 && mRotation.x < 0x4000) {
             ratio = 0.1f;
         } else {
             f32 b = field_0x5A0;
-            f32 r = (rotation.x - 0x4000) / b;
+            f32 r = (mRotation.x - 0x4000) / b;
             ratio = nw4r::math::FAbs(r);
         }
         if (ratio > 1.0f) {
@@ -111,10 +111,10 @@ void dAcOtrapRock1_c::executeState_TrapAction() {
             newAng = -sSomeValue;
         }
 
-        rotation.x += (int)newAng;
-        if (field_0x59E > 0 && rotation.x > field_0x59E + 0x4000 ||
-            field_0x59E < 0 && rotation.x < field_0x59E + 0x4000) {
-            rotation.x = field_0x59E + 0x4000;
+        mRotation.x += (int)newAng;
+        if (field_0x59E > 0 && mRotation.x > field_0x59E + 0x4000 ||
+            field_0x59E < 0 && mRotation.x < field_0x59E + 0x4000) {
+            mRotation.x = field_0x59E + 0x4000;
             u8 r6 = field_0x5A5;
             field_0x5A5 = r6 - (r6 * 2);
             field_0x5A0 = field_0x59E;
@@ -132,7 +132,7 @@ void dAcOtrapRock1_c::executeState_TrapAction() {
 void dAcOtrapRock1_c::finalizeState_TrapAction() {}
 void dAcOtrapRock1_c::initializeState_TrapReturn() {}
 void dAcOtrapRock1_c::executeState_TrapReturn() {
-    bool reachedReturnPoint = sLib::chaseAngle(&rotation.x.mVal, 0, 0x222);
+    bool reachedReturnPoint = sLib::chaseAngle(&mRotation.x.mVal, 0, 0x222);
     if (reachedReturnPoint) {
         mStateMgr.changeState(StateID_TrapWait);
     }

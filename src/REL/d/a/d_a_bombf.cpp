@@ -21,15 +21,15 @@ bool dAcBombf_c::createHeap() {
 }
 
 int dAcBombf_c::actorCreate() {
-    mDespawnSceneFlag = (params >> 8) & 0xFF;
-    field_0x3D4 = (params >> 16) & 0xF;
+    mDespawnSceneFlag = (mParams >> 8) & 0xFF;
+    field_0x3D4 = (mParams >> 16) & 0xF;
     if (SceneflagManager::sInstance->checkBoolFlag(roomid, mDespawnSceneFlag)) {
         return FAILED;
     }
 
     CREATE_ALLOCATOR(dAcBombf_c);
 
-    field_0x3D2 = (params >> 4) & 0xF;
+    field_0x3D2 = (mParams >> 4) & 0xF;
     field_0x3D0 = field_0x3D2 == 1;
     if (field_0x3D0) {
         mModel.setPriorityDraw(0x82, 0x7F);
@@ -40,7 +40,7 @@ int dAcBombf_c::actorCreate() {
     forwardMaxSpeed = -80.0f;
     mStateMgr.changeState(StateID_Wait);
     boundingBox.Set(mVec3_c(-80.0, -50.0f, -80.0f), mVec3_c(80.0, 60.0f, 80.0f));
-    angle = rotation;
+    angle = mRotation;
     if (mDespawnSceneFlag < 0xFF) {
         clearActorProperty(0x1);
         setActorProperty(0x4);
@@ -52,7 +52,7 @@ int dAcBombf_c::actorCreate() {
 int dAcBombf_c::actorPostCreate() {
     // Preamble problem
     mMtx_c mtx;
-    mtx.ZXYrotS(rotation.x, rotation.y, rotation.z);
+    mtx.ZXYrotS(mRotation.x, mRotation.y, mRotation.z);
     mVec3_c v;
     PSMTXMultVecSR(mtx, mVec3_c::Ey, v);
     mVec3_c v3 = position + v * 10.0f;
@@ -60,11 +60,11 @@ int dAcBombf_c::actorPostCreate() {
 
     if (dBgS_ObjLinChk::LineCross(&v3, &v4, this)) {
         position = dBgS_ObjLinChk::GetInstance().GetLinEnd();
-        if (rotation.x == 0 && rotation.z == 0 && dBgS_ObjLinChk::ChkGround()) {
+        if (mRotation.x == 0 && mRotation.z == 0 && dBgS_ObjLinChk::ChkGround()) {
             cM3dGPla pla;
             dBgS::GetInstance()->GetTriPla(dBgS_ObjLinChk::GetInstance(), &pla);
-            rotation.x = pla.GetAngle(rotation.y);
-            rotation.z = pla.GetAngle(rotation.y - 0x4000);
+            mRotation.x = pla.GetAngle(mRotation.y);
+            mRotation.z = pla.GetAngle(mRotation.y - 0x4000);
         }
 
         if (dBgS::GetInstance()->ChkMoveBG(dBgS_ObjLinChk::GetInstance(), false)) {
@@ -116,7 +116,7 @@ int dAcBombf_c::actorExecute() {
         field_0x3D3 = 0;
     } else {
         if (dBgS::GetInstance()->ChkMoveBG(field_0x398, true)) {
-            dBgS::GetInstance()->MoveBgTransPos(field_0x398, true, &position, &angle, &rotation);
+            dBgS::GetInstance()->MoveBgTransPos(field_0x398, true, &position, &angle, &mRotation);
             updateMatrix();
             dAcBomb_c *bomb = mBombRef.get();
             if (bomb != nullptr) {

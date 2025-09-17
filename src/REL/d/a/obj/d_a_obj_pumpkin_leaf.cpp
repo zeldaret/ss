@@ -25,7 +25,7 @@ int dAcOPumpkinLeaf_c::create() {
     mStateMgr.changeState(StateID_Wait);
     boundingBox.Set(mVec3_c(-50.0f, -10.0f, -50.0f), mVec3_c(50.0f, 50.0f, 50.0f));
     dAcObjBase_c::create(
-        "PmpknBd", getRoomId(), 0, &position, &rotation, &mScale, getParams2_ignoreLower(), -1, viewclip_index
+        "PmpknBd", getRoomId(), 0, &position, &mRotation, &mScale, getParams2_ignoreLower(), -1, viewclip_index
     );
     return SUCCEEDED;
 }

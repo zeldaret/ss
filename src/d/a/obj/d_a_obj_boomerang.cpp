@@ -422,9 +422,9 @@ void dAcBoomerang_c::initializeState_Move() {
 
     angle.x = 2000 - player->vt_0x198();
 
-    rotation.x.set(-angle.x);
-    rotation.y.set(angle.y);
-    rotation.z.set(0);
+    mRotation.x.set(-angle.x);
+    mRotation.y.set(angle.y);
+    mRotation.z.set(0);
     field_0x8B2 = 0;
 
     mOldPosition = position;

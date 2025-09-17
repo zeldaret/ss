@@ -268,7 +268,6 @@ void dNpcMdlCallbackAng_c::finishTarget() {
     mForceCalc = true;
 }
 
-
 void dNpcMdlCallbackAng_c::calc() {
     mAng3_c ang = mCurrent;
 
@@ -305,7 +304,7 @@ void dNpcMdlCallbackYXZFixed_c::apply(mMtx_c *result) const {
 }
 
 void dNpcMdlCallbackYXZFixed_c::vt_0x20(const dAcBase_c *ac) {
-    mActorRotation = ac->rotation;
+    mActorRotation = ac->mRotation;
 }
 
 void dNpcMdlCallbackYZX_c::apply(mMtx_c *result) const {
@@ -333,7 +332,7 @@ void dNpcMdlCallbackQuat_c::apply(mMtx_c *result) const {
     mQuat_c resultQuat;
     mVec3_c trans;
     mMtx_c tmp;
-    
+
     mStart.slerpTo(mTarget, mSlerpFactor, resultQuat);
     quatMtx.fromQuat(resultQuat);
 

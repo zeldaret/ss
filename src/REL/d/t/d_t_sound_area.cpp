@@ -5,6 +5,7 @@
 #include "d/col/c/c_m3d_g_cps.h"
 #include "d/snd/d_snd_3d_manager.h"
 #include "d/t/d_t_sound_area_mgr.h"
+
 #include "rvl/MTX.h" // IWYU pragma: export
 
 SPECIAL_ACTOR_PROFILE(TAG_SOUND_AREA, dTgSndAr_c, fProfile::TAG_SOUND_AREA, 0x0146, 0, 0);
@@ -23,10 +24,10 @@ int dTgSndAr_c::create() {
     switch (getTypeFromParams()) {
         case 0:
             PSMTXTrans(mtx.m, position.x, position.y, position.z);
-            mtx.YrotM(rotation.y);
+            mtx.YrotM(mRotation.y);
             PSMTXInverse(mtx.m, mtx.m);
             break;
-        case 3: mRail.initWithPathIndex(params >> 8 & 0xFF, roomid, 0); break;
+        case 3: mRail.initWithPathIndex(mParams >> 8 & 0xFF, roomid, 0); break;
     }
 
     fBase_c *base = nullptr;
@@ -36,7 +37,7 @@ int dTgSndAr_c::create() {
         }
         dAcBase_c *ac = static_cast<dAcBase_c *>(base);
         if (!ac->isActorPlayer() && checkPosInArea(ac->position)) {
-            ac->setTgSndAreaFlag(params & 0xFF);
+            ac->setTgSndAreaFlag(mParams & 0xFF);
         }
     }
     return SUCCEEDED;
@@ -49,12 +50,12 @@ int dTgSndAr_c::doDelete() {
 int dTgSndAr_c::actorExecute() {
     dAcBase_c *link = dAcPy_c::LINK;
     if (link != nullptr && checkPosInArea(link->position)) {
-        link->setTgSndAreaFlag(params & 0xFF);
+        link->setTgSndAreaFlag(mParams & 0xFF);
     }
     if (dSnd3DManager_c::GetInstance() != nullptr) {
         mVec3_c pos(dSnd3DManager_c::GetInstance()->getCameraTargetPos());
         if (checkPosInArea(pos) && dTgSndMg_c::GetInstance() != nullptr) {
-            dTgSndMg_c::GetInstance()->setSndFlag(params & 0xFF);
+            dTgSndMg_c::GetInstance()->setSndFlag(mParams & 0xFF);
         }
     }
     return SUCCEEDED;

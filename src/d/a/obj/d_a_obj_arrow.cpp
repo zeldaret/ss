@@ -61,7 +61,7 @@ bool dAcArrow_c::createHeap() {
 extern "C" void fn_8025E5E0(void *);
 
 int dAcArrow_c::create() {
-    mSubType = params & 0xFF;
+    mSubType = mParams & 0xFF;
     CREATE_ALLOCATOR(dAcArrow_c);
 
     field_0x67C |= 4;

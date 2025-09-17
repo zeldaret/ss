@@ -19,15 +19,15 @@ public:
 
 private:
     u8 getActivatorIndex() {
-        return params & 0xF;
+        return mParams & 0xF;
     }
 
     u8 getZoneFlag() {
-        return params >> 0x4;
+        return mParams >> 0x4;
     }
 
     u8 getChkFlag() {
-        return params >> 0xC;
+        return mParams >> 0xC;
     }
 
     STATE_MGR_DECLARE(dTgTouchTag);

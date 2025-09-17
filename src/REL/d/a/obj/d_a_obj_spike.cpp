@@ -40,8 +40,8 @@ int dAcOspike_c::create() {
     mCollision.SetAtVec(tmp);
 
     mMtx_c mtx;
-    mtx.XrotS(rotation.x);
-    mtx.ZrotM(rotation.z);
+    mtx.XrotS(mRotation.x);
+    mtx.ZrotM(mRotation.z);
     mVec3_c tmp2, tmp3;
     PSMTXMultVecSR(mtx.m, sVec1, tmp2);
     PSMTXMultVecSR(mtx.m, sVec2, tmp3);
@@ -74,7 +74,7 @@ int dAcOspike_c::doDelete() {
 
 int dAcOspike_c::actorExecute() {
     mStateMgr.executeState();
-    mCollision.cM3dGUnk::Set(position, rotation.y);
+    mCollision.cM3dGUnk::Set(position, mRotation.y);
     dCcS::GetInstance()->Set(&mCollision);
     return 1;
 }

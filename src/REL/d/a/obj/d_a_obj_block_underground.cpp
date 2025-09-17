@@ -217,7 +217,7 @@ bool dAcOBlockUnderground::undergroundRefEquals(dAcOUnderground_c *underground) 
 }
 
 void dAcOBlockUnderground::setBlockUndergroundPosition(mVec3_c *pos) {
-    setPostion(*pos);
+    setPosition(*pos);
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     if (hasCyl()) {

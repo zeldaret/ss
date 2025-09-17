@@ -3,7 +3,7 @@
 SPECIAL_ACTOR_PROFILE(TAG_MAP_INST, dTgMapInst_c, fProfile::TAG_MAP_INST, 0x021d, 0, 0);
 
 int dTgMapInst_c::create() {
-    field_0xfc = params & 0xff;
+    field_0xfc = mParams & 0xff;
     return SUCCEEDED;
 }
 

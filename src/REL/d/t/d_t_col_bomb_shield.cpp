@@ -1,10 +1,12 @@
 #include "d/t/d_t_col_bomb_shield.h"
+
 #include "common.h"
-#include "d/a/obj/d_a_obj_base.h"
 #include "d/a/d_a_player.h"
+#include "d/a/obj/d_a_obj_base.h"
 #include "d/col/cc/d_cc_s.h"
 #include "m/m_mtx.h"
 #include "rvl/MTX/mtx.h"
+
 
 SPECIAL_ACTOR_PROFILE(COL_BOMSLD, dTgColBombShield, fProfile::COL_BOMSLD, 0x12, 0, 0);
 
@@ -22,7 +24,7 @@ int dTgColBombShield::create() {
     mScale.y += offset;
     mScale.z += offset;
     mColMtx.transS(position.x, position.y + mScale.y * 0.5f - 0.05f, position.z);
-    mColMtx.ZXYrotM(rotation.x, rotation.y, rotation.z);
+    mColMtx.ZXYrotM(mRotation.x, mRotation.y, mRotation.z);
     mMtx_c tmp;
     PSMTXScale(tmp, mScale.x, mScale.y, mScale.z);
     mColMtx += tmp;

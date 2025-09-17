@@ -46,8 +46,8 @@ int dTgReaction_c::create() {
         }
     }
 
-    field_0x4E0 = rotation.x & 0xFF;
-    rotation.x = angle.x = 0;
+    field_0x4E0 = mRotation.x & 0xFF;
+    mRotation.x = angle.x = 0;
 
     if (field_0x4E0 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, field_0x4E0)) {
         return FAILED;
@@ -165,7 +165,7 @@ void dTgReaction_c::checkForBonkItem() {
             if (field_0x4DD == 0) {
                 mVec3_c c = mVec3_c::Ez * rad;
                 mVec3_c c2 = position;
-                c.rotY(rotation.y);
+                c.rotY(mRotation.y);
                 c2 += c;
                 c2.y += field_0x4E4;
                 u32 newItemParms = dAcItem_c::createItemParams(ITEM_HEART_PIECE, 1, 0, getSceneFlag(), 1, 0xFF);
@@ -186,7 +186,7 @@ void dTgReaction_c::checkForBonkItem() {
             } else if (p == 1) {
                 uVar3 = 5;
                 mVec3_c c = mVec3_c::Ez * rad;
-                c.rotY(rotation.y);
+                c.rotY(mRotation.y);
                 pos += c;
             } else {
                 uVar3 = 6;

@@ -23,8 +23,8 @@ int dAcEhb_leaf_c::create() {
 
     boundingBox.Set(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
 
-    rotation.y = cM::rndF(65535.0f);
-    someRot = rotation.y.mVal;
+    mRotation.y = cM::rndF(65535.0f);
+    someRot = mRotation.y.mVal;
 
     switch (getParam1()) {
         case 0:
@@ -33,7 +33,7 @@ int dAcEhb_leaf_c::create() {
         case 2:  mType = 2; break;
         case 3:
         case 4:
-        case 5:  rotation.z.set(-0x8000); break;
+        case 5:  mRotation.z.set(-0x8000); break;
         default: break;
     }
 

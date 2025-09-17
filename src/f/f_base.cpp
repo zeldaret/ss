@@ -23,8 +23,8 @@ void (*fBase_c::sUnloadCallback)();
 
 /* 802e12f0 */
 fBase_c::fBase_c()
-    : unique_ID(m_rootUniqueID),
-      params(m_tmpCtData.params),
+    : mID(m_rootUniqueID),
+      mParams(m_tmpCtData.params),
       profile_name(m_tmpCtData.prof_name),
       group_type(m_tmpCtData.group_type),
       manager(this) {
@@ -47,11 +47,11 @@ fBase_c::fBase_c()
 
     fBase_c *parent = getConnectParent();
     if (parent != nullptr) {
-        if (parent->isProcControlFlag(ROOT_DISABLE_EXECUTE) || parent->isProcControlFlag(DISABLE_EXECUTE)) {
-            setProcControlFlag(DISABLE_EXECUTE);
+        if (parent->checkProcControl(ROOT_DISABLE_EXECUTE) || parent->checkProcControl(DISABLE_EXECUTE)) {
+            setProcControl(DISABLE_EXECUTE);
         }
-        if (parent->isProcControlFlag(ROOT_DISABLE_DRAW) || parent->isProcControlFlag(DISABLE_DRAW)) {
-            setProcControlFlag(DISABLE_DRAW);
+        if (parent->checkProcControl(ROOT_DISABLE_DRAW) || parent->checkProcControl(DISABLE_DRAW)) {
+            setProcControl(DISABLE_DRAW);
         }
     }
 }
@@ -187,7 +187,7 @@ int fBase_c::execute() {
 /* 802e1920 */
 int fBase_c::preExecute() {
     // Do not execute if it has been flagged for deletion or marked as non-execute
-    if (delete_request || isProcControlFlag(DISABLE_EXECUTE)) {
+    if (delete_request || checkProcControl(DISABLE_EXECUTE)) {
         return NOT_READY;
     }
 
@@ -225,7 +225,7 @@ int fBase_c::draw() {
 /* 802e1aa0 */
 int fBase_c::preDraw() {
     // Do not draw if it has been flagged for deletion or marked as non-draw
-    if (delete_request || isProcControlFlag(DISABLE_DRAW)) {
+    if (delete_request || checkProcControl(DISABLE_DRAW)) {
         return NOT_READY;
     }
 
@@ -272,17 +272,16 @@ int fBase_c::connectProc() {
     } else {
         fBase_c *conn_parent = getConnectParent();
         if (conn_parent != nullptr) {
-            if (conn_parent->isProcControlFlag(ROOT_DISABLE_EXECUTE) ||
-                conn_parent->isProcControlFlag(DISABLE_EXECUTE)) {
-                setProcControlFlag(DISABLE_EXECUTE);
-            } else if (isProcControlFlag(DISABLE_EXECUTE)) {
-                clearProcControlFlag(DISABLE_EXECUTE);
+            if (conn_parent->checkProcControl(ROOT_DISABLE_EXECUTE) || conn_parent->checkProcControl(DISABLE_EXECUTE)) {
+                setProcControl(DISABLE_EXECUTE);
+            } else if (checkProcControl(DISABLE_EXECUTE)) {
+                unsetProcControl(DISABLE_EXECUTE);
             }
 
-            if (conn_parent->isProcControlFlag(ROOT_DISABLE_DRAW) || conn_parent->isProcControlFlag(DISABLE_DRAW)) {
-                setProcControlFlag(DISABLE_DRAW);
-            } else if (isProcControlFlag(DISABLE_DRAW)) {
-                clearProcControlFlag(DISABLE_DRAW);
+            if (conn_parent->checkProcControl(ROOT_DISABLE_DRAW) || conn_parent->checkProcControl(DISABLE_DRAW)) {
+                setProcControl(DISABLE_DRAW);
+            } else if (checkProcControl(DISABLE_DRAW)) {
+                unsetProcControl(DISABLE_DRAW);
             }
         }
 
