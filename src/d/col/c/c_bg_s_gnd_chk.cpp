@@ -2,7 +2,7 @@
 
 cBgS_GndChk::cBgS_GndChk() {
     mPos = mVec3_c::Zero;
-    mField_0x74 = 1;
+    field_0x74 = 1;
 }
 
 cBgS_GndChk::~cBgS_GndChk() {}

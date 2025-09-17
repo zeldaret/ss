@@ -8,7 +8,7 @@ f32 dBgS_ObjRoofChk::sRoofHeight;
 dBgS_RoofChk::dBgS_RoofChk() {
     mPos.set(0.0f, 0.0f, 0.0f);
     mNowY = 0.0f;
-    mField_0x7C = 1;
+    field_0x7C = 1;
     mPosCopy.set(0.0f, 0.0f, 0.0f);
 
     SetPolyPassChk(GetPolyPassChkInfo());

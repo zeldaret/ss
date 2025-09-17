@@ -52,10 +52,10 @@ public:
             check = !other->ChkSameActorPid(mObj.get());
         }
         if (check) {
-            check = !(other->mField_0x0C & mpBgW->GetField_0x20());
+            check = !(other->field_0x0C & mpBgW->GetField_0x20());
         }
         if (check) {
-            check = (other->mField_0x0E & mpBgW->GetField_0x22());
+            check = (other->field_0x0E & mpBgW->GetField_0x22());
         }
         return check;
     }
@@ -124,8 +124,8 @@ struct dMapGradation {
 
 struct MapSrollText_t {
     /* 0x00 */ u8 _0[0x0E - 0x00];
-    /* 0x0E */ s16 mField_0x0E;
-    /* 0x10 */ s16 mField_0x10;
+    /* 0x0E */ s16 field_0x0E;
+    /* 0x10 */ s16 field_0x10;
     /* 0x12 */ u8 _1[0x1C - 0x12];
 };
 
@@ -156,8 +156,8 @@ public:
     /* 0x2EFC */ dBgW_Base *mColllisionTbl[BG_ID_MAX];
     /* 0x385C */ s32 mColllisionTblLen;
     /* 0x3860 */ bool mInSkyKeep;
-    /* 0x3864 */ s32 mField_0x3864[5];
-    /* 0x3878 */ s32 mField_0x3878[5];
+    /* 0x3864 */ s32 field_0x3864[5];
+    /* 0x3878 */ s32 field_0x3878[5];
     /* 0x388C */ MapLineList mList_0x388C;
     /* 0x3894 */ dMapGradation mMapGradation;
 

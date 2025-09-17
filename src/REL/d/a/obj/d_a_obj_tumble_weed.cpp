@@ -65,17 +65,17 @@ int dAcOTumbleWeed_c::actorCreate() {
     mAcceleration = -2.f;
     mMaxSpeed = -40.f;
 
-    mField_0x974 = 0.0f;
-    mField_0x98B = true;
+    field_0x974 = 0.0f;
+    field_0x98B = true;
 
     mWind = mVec3_c::Zero;
 
     mSpeedTarget = cM::rndFX(2.5f) + 15.f;
-    mField_0x978 = cM::rndF(40.f);
-    mField_0x97C = cM::rndFX(0.25f) + 1.f;
+    field_0x978 = cM::rndF(40.f);
+    field_0x97C = cM::rndFX(0.25f) + 1.f;
     mTumbleTimer = (150);
 
-    mField_0x910.set(1.f, 0.f, 0.f, 0.f);
+    field_0x910.set(1.f, 0.f, 0.f, 0.f);
     mScale.set(1.f, 1.f, 1.f);
 
     mStateMgr.changeState(StateID_Wait);
@@ -94,25 +94,25 @@ int dAcOTumbleWeed_c::doDelete() {
 }
 
 int dAcOTumbleWeed_c::actorExecute() {
-    if (!mField_0x98C && !checkStopped()) {
-        mField_0x968 = mVelocity;
-        mField_0x968.y = 0.0f;
-        mField_0x968.normalize();
-        mField_0x98C = true;
+    if (!field_0x98C && !checkStopped()) {
+        field_0x968 = mVelocity;
+        field_0x968.y = 0.0f;
+        field_0x968.normalize();
+        field_0x98C = true;
     }
 
     mStateMgr.executeState();
     calcWind();
 
-    sLib::chase(&mField_0x980, 1.f, 0.1f);
-    dLightEnv_c::GetInstance().setWind(mField_0x968, mField_0x980);
+    sLib::chase(&field_0x980, 1.f, 0.1f);
+    dLightEnv_c::GetInstance().setWind(field_0x968, field_0x980);
 
     calcVelocity();
     mPosition += mVelocity;
     mPosition += mStts.GetCcMove();
 
     mObjAcch.CrrPos(*dBgS::GetInstance());
-    mField_0x974 += mPosition.y - mOldPosition.y;
+    field_0x974 += mPosition.y - mOldPosition.y;
     if (checkCollect()) {
         dAcPy_c::LINK->bugNetCollectTreasure(ITEM_TUMBLE_WEED);
         killNoItemDrop();
@@ -124,7 +124,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     }
 
     if (mSph.ChkTgHit() && mSph.ChkTgAtHitType(AT_TYPE_BELLOWS | AT_TYPE_WIND)) {
-        mField_0x974 = 0.f;
+        field_0x974 = 0.f;
         adjustTumble(mSph.GetTgAtHitDir() * 0.06f);
     }
     adjustTimeScale();
@@ -177,13 +177,13 @@ void dAcOTumbleWeed_c::executeState_Wait() {
     }
 
     mVelocity.y = 0.f;
-    mField_0x974 = 0.f;
+    field_0x974 = 0.f;
     if (checkSlope()) {
         mStateMgr.changeState(StateID_Slope);
     } else {
         adjustSpeed();
         if (mSpeed < 0.1f) {
-            mField_0x98B = false;
+            field_0x98B = false;
             sLib::chase(&mSpeed, 0.f, 0.05f);
         }
     }
@@ -222,7 +222,7 @@ bool dAcOTumbleWeed_c::checkBreak() {
         return true;
     }
 
-    if (mObjAcch.ChkGndHit() && mField_0x974 < -300.f) {
+    if (mObjAcch.ChkGndHit() && field_0x974 < -300.f) {
         return true;
     }
 
@@ -238,7 +238,7 @@ bool dAcOTumbleWeed_c::checkBreak() {
 }
 
 bool dAcOTumbleWeed_c::fn_475_E40() const {
-    return mField_0x974 < -10000.f;
+    return field_0x974 < -10000.f;
 }
 
 bool dAcOTumbleWeed_c::checkSlope() {
@@ -268,9 +268,9 @@ void dAcOTumbleWeed_c::doBreak() {
 }
 
 void dAcOTumbleWeed_c::calcMatrix() {
-    if (mField_0x98B) {
+    if (field_0x98B) {
         f32 vel_mag = VEC3Len(mVelocity);
-        f32 f1 = mAng(vel_mag * (mField_0x978 + 200.f)).radian();
+        f32 f1 = mAng(vel_mag * (field_0x978 + 200.f)).radian();
         f32 f2 = mAng(vel_mag * 182.0f * 0.2f).radian();
         f32 f0 = mAng(mAngle.y - mRotation.y).radian();
 
@@ -280,14 +280,14 @@ void dAcOTumbleWeed_c::calcMatrix() {
         q3.setAxisRotation(mVec3_c::Ex, f1);
         q2.setAxisRotation(mVec3_c::Ey, f2);
 
-        mField_0x910 = q1 * q3 * q2 * q0 * mField_0x910;
+        field_0x910 = q1 * q3 * q2 * q0 * field_0x910;
     }
 
     mMtx_c mtx0, mtx1, mtx2;
     mShadowMtx.copyFrom(mWorldMtx);
     mtx1.transS(getPosition() - mPosition);
     mShadowMtx += mtx1;
-    mtx0.fromQuat(mField_0x910);
+    mtx0.fromQuat(field_0x910);
     mtx2.transS(0.f, 40.f, 0.f);
     mWorldMtx += mtx2;
     mWorldMtx += mtx0;
@@ -358,12 +358,12 @@ void dAcOTumbleWeed_c::adjustTimeScale() {
 }
 
 void dAcOTumbleWeed_c::adjustTumble(const mVec3_c &dir) {
-    mField_0x98B = true;
+    field_0x98B = true;
 
     mVelocity.x += dir.x;
     mVelocity.z += dir.z;
 
-    mSpeed = mField_0x97C * EGG::Math<f32>::sqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z);
+    mSpeed = field_0x97C * EGG::Math<f32>::sqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z);
     mAngle.y = mAng::fromVec(dir);
 }
 
@@ -378,7 +378,7 @@ void dAcOTumbleWeed_c::calcWind() {
         mSpeed = cM::rndFX(5.0f) + 15.f;
 
         mWind = mVec3_c::Zero;
-        mField_0x980 = 0.f;
+        field_0x980 = 0.f;
     }
 }
 

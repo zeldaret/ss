@@ -172,7 +172,7 @@ int dAcOBlockUnderground::actorExecute() {
     if (hasCyl()) {
         if (mCyl->ChkTgHit()) {
             if (mUndergroundRef.p_owner != nullptr) {
-                mUndergroundRef.get()->fn_458_9D0(mField_0x57C, mField_0x57E);
+                mUndergroundRef.get()->fn_458_9D0(field_0x57C, field_0x57E);
             }
 
             if (getSubtype() == 1) {
@@ -226,17 +226,17 @@ void dAcOBlockUnderground::setBlockUndergroundPosition(mVec3_c *pos) {
     mBgW.Move();
 }
 
-void dAcOBlockUnderground::fn_459_840(u16 field_0x57C, u16 field_0x57E) {
-    mField_0x57C = field_0x57C;
-    mField_0x57E = field_0x57E;
+void dAcOBlockUnderground::fn_459_840(u16 _field_0x57C, u16 _field_0x57E) {
+    field_0x57C = _field_0x57C;
+    field_0x57E = _field_0x57E;
 }
 
 u16 dAcOBlockUnderground::getField_0x57C() {
-    return mField_0x57C;
+    return field_0x57C;
 }
 
 u16 dAcOBlockUnderground::getField_0x57E() {
-    return mField_0x57E;
+    return field_0x57E;
 }
 
 void dAcOBlockUnderground::registBg() {

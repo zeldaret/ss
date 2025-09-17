@@ -66,7 +66,7 @@ public:
     /* 0x34 */ JPAKeyBlock** mpKeyBlocks;
     /* 0x38 */ u16 const* mpTDB1;
     /* 0x3C */ u16 mUsrIdx;
-    /* 0x3E */ u8 mFieldBlockNum;
+    /* 0x3E */ u8 fieldBlockNum;
     /* 0x3F */ u8 mKeyBlockNum;
     /* 0x40 */ u8 mTDB1Num;
     /* 0x41 */ u8 mpCalcEmitterFuncListNum;

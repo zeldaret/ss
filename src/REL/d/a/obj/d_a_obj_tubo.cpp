@@ -83,7 +83,7 @@ int dAcOtubo_c::actorCreate() {
     mAcceleration = -4.f;
     mMaxSpeed = -40.f;
     mbMovingForward = 0;
-    mField_0x9D8 = 2.f;
+    field_0x9D8 = 2.f;
 
     mQuat_0x98C.set(1.f, 0.f, 0.f, 0.f);
     mQuat_0x97C.set(1.f, 0.f, 0.f, 0.f);
@@ -140,7 +140,7 @@ int dAcOtubo_c::actorExecute() {
     mStateMgr.executeState();
     bool bOffGround = false;
     if (mTimer_0x9F4 != 0) {
-        mField_0x9DC = 0.f;
+        field_0x9DC = 0.f;
 
         if (dBgS_ObjGndChk::CheckPos(mPosition + mVec3_c::Ey * 500.f)) {
             if (dBgS_ObjGndChk::GetGroundHeight() - mPosition.y > 5.f) {
@@ -164,7 +164,7 @@ int dAcOtubo_c::actorExecute() {
             calcVelocity();
             mPosition += mVelocity;
             mPosition += mStts.GetCcMove();
-            mField_0x9DC += mPosition.y - mOldPosition.y;
+            field_0x9DC += mPosition.y - mOldPosition.y;
             adjustRoll();
         }
         getLinkage().bushTpFunc(mObjAcch);
@@ -177,7 +177,7 @@ int dAcOtubo_c::actorExecute() {
     dCcS::GetInstance()->Set(&mSph);
 
     getLinkage().fn_800511E0(this);
-    mField_0x8F0.modifyMtx();
+    field_0x8F0.modifyMtx();
     calcRoll();
 
     mMdl.setLocalMtx(mWorldMtx);
@@ -213,19 +213,17 @@ void dAcOtubo_c::initializeState_Wait() {}
 void dAcOtubo_c::executeState_Wait() {
     if (mObjAcch.ChkGroundLanding()) {
         if (!mbField_0x9EF || !EventManager::isInEvent()) {
-            if (mField_0x9F6 == 2) {
-                dJEffManager_c::spawnGroundEffect(
-                    mPosition, mPolyAttr0, mPolyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0
-                );
+            if (field_0x9F6 == 2) {
+                dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.0f, field_0x1B0);
             }
             if (mbField_0x9F3) {
                 startSound(SE_Tubo_PUT);
                 mbField_0x9F3 = false;
             }
             if (checkOnLava()) {
-                if (mField_0x9F6 != 2) {
+                if (field_0x9F6 != 2) {
                     dJEffManager_c::spawnGroundEffect(
-                        mPosition, mPolyAttr0, mPolyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0
+                        mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.0f, field_0x1B0
                     );
                 }
                 startSound(SE_O_FALL_LAVA_S);
@@ -247,7 +245,7 @@ void dAcOtubo_c::executeState_Wait() {
         if (mSpeed < 1.f) {
             mbMovingForward = 0;
             sLib::chase(&mSpeed, 0.f, 0.05f);
-            mField_0x9D8 = 2.f;
+            field_0x9D8 = 2.f;
         }
 
         if (mSph.ChkAtSet()) {
@@ -262,7 +260,7 @@ void dAcOtubo_c::executeState_Wait() {
                 setActorProperty(AC_PROP_0x1);
             }
         }
-        mField_0x9DC = 0.f;
+        field_0x9DC = 0.f;
     }
     fn_272_2670();
 }
@@ -279,7 +277,7 @@ void dAcOtubo_c::initializeState_Grab() {
         mbField_0x9EE = true;
     }
     mTimer_0x9F5 = 15;
-    mField_0x9DC = 0.f;
+    field_0x9DC = 0.f;
 }
 void dAcOtubo_c::executeState_Grab() {
     if (mbField_0x9ED && sLib::calcTimer(&mTimer_0x9F7) == 0) {
@@ -300,9 +298,9 @@ void dAcOtubo_c::executeState_Grab() {
     } else {
         if (!getLinkage().checkState(dLinkage_c::STATE_DELETE)) {
             if (getLinkage().checkConnection(dLinkage_c::CONNECTION_5)) {
-                mField_0x9F6 = dLinkage_c::STATE_0;
+                field_0x9F6 = dLinkage_c::STATE_0;
             } else {
-                mField_0x9F6 = getLinkage().getState();
+                field_0x9F6 = getLinkage().getState();
             }
         }
 
@@ -312,17 +310,17 @@ void dAcOtubo_c::executeState_Grab() {
     }
 }
 void dAcOtubo_c::finalizeState_Grab() {
-    mField_0x9DC = 0.f;
+    field_0x9DC = 0.f;
     if (mSpeed > 0.f) {
         mbMovingForward = 1;
     }
-    mField_0x9D4 = cM::rndF(40.f);
+    field_0x9D4 = cM::rndF(40.f);
     mSph.ClrCo_0x400();
     if ((u8)getLinkage().mState == 2) {
         mSph.OnAtSet();
     }
     mObjAcch.ClrRoofNone();
-    mObjAcch.mField_0x0D4 = 50.f;
+    mObjAcch.field_0x0D4 = 50.f;
 }
 
 void dAcOtubo_c::initializeState_Put() {}
@@ -353,15 +351,15 @@ void dAcOtubo_c::initializeState_Slope() {
         mAngle.y = pla.GetAngleY();
     }
     mAng plaAng = pla.GetAngleY();
-    mField_0x9C4 = (plaAng - mAngle.y);
-    mAng other = labs((s16)(mAngle.y - mField_0x9C4));
-    mField_0x9C6 = nw4r::math::FSqrt(other.degree2() / 180.f) * 910.f;
+    field_0x9C4 = (plaAng - mAngle.y);
+    mAng other = labs((s16)(mAngle.y - field_0x9C4));
+    field_0x9C6 = nw4r::math::FSqrt(other.degree2() / 180.f) * 910.f;
 }
 void dAcOtubo_c::executeState_Slope() {
     if (mObjAcch.ChkGroundLanding()) {
-        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, field_0x1B4, 0, 1.0f, field_0x1B0);
     } else if (mObjAcch.ChkGndHit()) {
-        mField_0x9DC = 0.f;
+        field_0x9DC = 0.f;
         addPickupTarget();
         if (checkRollHitMaybe()) {
             adjustAngle();
@@ -391,16 +389,16 @@ void dAcOtubo_c::finalizeState_Slope() {}
 void dAcOtubo_c::initializeState_Rebirth() {
     SpecialItemDropMgr *mgr = SpecialItemDropMgr::GetInstance();
     mgr->giveSpecialDropItem(getParams2UpperByte(), mRoomID, &mPosition, 0, mRotation.y, -1);
-    mField_0x9AC = mPosition;
-    mpPosition = &mField_0x9AC;
-    mField_0x9F6 = 0;
+    field_0x9AC = mPosition;
+    mpPosition = &field_0x9AC;
+    field_0x9F6 = 0;
     mRotation = mRotationCopy;
 
     mQuat_0x98C.set(1.f, 0.f, 0.f, 0.f);
 
     mSpeed = 0.f;
     mVelocity.y = 0.f;
-    mField_0x9DC = 0.f;
+    field_0x9DC = 0.f;
 
     mSph.ClrCoSet();
     mSph.ClrTgSet();
@@ -410,9 +408,9 @@ void dAcOtubo_c::initializeState_Rebirth() {
     int item_drop_table = getParams2UpperByte();
     switch (item_drop_table) {
         default:              break;
-        case SPECIAL_ITEM_11: mField_0x9FC = 2; break;
-        case SPECIAL_ITEM_12: mField_0x9FC = 0; break;
-        case SPECIAL_ITEM_13: mField_0x9FC = 1; break;
+        case SPECIAL_ITEM_11: field_0x9FC = 2; break;
+        case SPECIAL_ITEM_12: field_0x9FC = 0; break;
+        case SPECIAL_ITEM_13: field_0x9FC = 1; break;
     }
     mTimer_0x9E8 = 150;
     unsetActorProperty(AC_PROP_0x1);
@@ -421,7 +419,7 @@ void dAcOtubo_c::executeState_Rebirth() {
     setPosition(mPositionCopy);
     mOldPosition = mPositionCopy;
     u8 count = -1;
-    switch (mField_0x9FC) {
+    switch (field_0x9FC) {
         case 2: count = dAcItem_c::getTotalBombCount(); break;
         case 0: count = dAcItem_c::getTotalArrowCount(); break;
         case 1: count = dAcItem_c::getTotalSeedCount(); break;
@@ -491,7 +489,7 @@ void dAcOtubo_c::calcRoll() {
             mAngle.y = cM::atan2s(mVelocity.x, mVelocity.z);
         }
         f32 vel_mag = VEC3Len(mVelocity);
-        f32 f1 = mAng(vel_mag * (mField_0x9D4 + 200.f)).radian();
+        f32 f1 = mAng(vel_mag * (field_0x9D4 + 200.f)).radian();
         f32 f2 = mAng(vel_mag * 182.0f * 0.2f).radian();
         f32 f0 = mAng(mAngle.y - mRotation.y).radian();
 
@@ -533,13 +531,13 @@ void dAcOtubo_c::adjustRoll() {
 
     vel.normalize();
     vel.rotY(0x4000);
-    vel *= mField_0x9D8 * mField_0x9C8.sin();
+    vel *= field_0x9D8 * field_0x9C8.sin();
 
-    mAng old_9C8 = mField_0x9C8;
-    mField_0x9C8 += adj;
+    mAng old_9C8 = field_0x9C8;
+    field_0x9C8 += adj;
 
-    if (old_9C8.sin() * mField_0x9C8.sin() < 0.f) {
-        mField_0x9D8 *= 0.75f;
+    if (old_9C8.sin() * field_0x9C8.sin() < 0.f) {
+        field_0x9D8 *= 0.75f;
     }
 
     mPosition += vel;
@@ -547,16 +545,16 @@ void dAcOtubo_c::adjustRoll() {
 
 void dAcOtubo_c::fn_272_2670() {
     if (mbField_0x9EF && EventManager::isInEvent()) {
-        mField_0x9DC = 0.f;
+        field_0x9DC = 0.f;
         return;
     }
 
     if (mSph.ChkTgHit()) {
         if (mSph.ChkTgAtHitType(AT_TYPE_BELLOWS | AT_TYPE_WIND)) {
-            mField_0x9DC = 0.f;
+            field_0x9DC = 0.f;
             if (mTimer_0x9F4 == 0) {
                 if (!mbField_0x9EB) {
-                    mField_0x9D0 = cM::rndFX(0.25f) + 1.f;
+                    field_0x9D0 = cM::rndFX(0.25f) + 1.f;
                 }
                 mbField_0x9EB = true;
                 fn_272_2E60(mSph.GetTgAtHitDir());
@@ -564,14 +562,14 @@ void dAcOtubo_c::fn_272_2670() {
             }
         }
     } else {
-        if (mbField_0x9F1 && mField_0x8F0.fn_80051780(mSph)) {
-            mVelocity += mField_0x9B8;
+        if (mbField_0x9F1 && field_0x8F0.fn_80051780(mSph)) {
+            mVelocity += field_0x9B8;
             mbField_0x9F1 = false;
         }
         static const s16 unk = {0}; // needed for rodata ordering
-        if (!cM::isZero(mField_0x9CA)) {
+        if (!cM::isZero(field_0x9CA)) {
             mAngle.y = (*(s16 *)((u8 *)this + 0x9CA)); // HACK to force load again
-            mField_0x9CA.set(0);
+            field_0x9CA.set(0);
         } else {
             mQuat_c q;
             q.set(1.f, 0.f, 0.f, 0.f);
@@ -581,7 +579,7 @@ void dAcOtubo_c::fn_272_2670() {
 
     if (mObjAcch.ChkGndHit()) {
         if (mYOffset >= 0.f && !checkCarryType()) {
-            mField_0x9DC = 0.f;
+            field_0x9DC = 0.f;
         } else if (checkInvalidGround()) {
             mSpeed = 0.0f;
             mbMovingForward = 0;
@@ -592,8 +590,8 @@ void dAcOtubo_c::fn_272_2670() {
         if (fn_272_38C0()) {
             fn_272_3020();
         }
-    } else if (cM::isZero(mField_0x9E0)) {
-        mField_0x9E0 = 0.1f;
+    } else if (cM::isZero(field_0x9E0)) {
+        field_0x9E0 = 0.1f;
     }
 
     // the ordering is weird here
@@ -605,7 +603,7 @@ void dAcOtubo_c::fn_272_2670() {
     if (checkSubmerged()) {
         mAcceleration = -0.8f;
         mMaxSpeed = -7.f;
-        mField_0x9DC = 0.f;
+        field_0x9DC = 0.f;
         cLib::addCalcPosXZ(&mVelocity, mVec3_c::Zero, 0.05f, 1.0f, 0.2f);
         mSpeed = EGG::Math<f32>::sqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z);
         if (!noSound) {
@@ -642,11 +640,11 @@ void dAcOtubo_c::attemptDestroy() {
     }
 
     if (mObjAcch.ChkGndHit() && mYOffset >= 0.f && !checkCarryType()) {
-        if ((mField_0x9DC < -100.f && !mbField_0x9EE) || fn_272_3660()) {
+        if ((field_0x9DC < -100.f && !mbField_0x9EE) || fn_272_3660()) {
             destroy();
             return;
         }
-        mField_0x9DC = 0.f;
+        field_0x9DC = 0.f;
     }
     if (!mObjAcch.ChkGndHit() && mSph.ChkCoHit()) {
         if (getLinkage().mState != 1 && mSpeed > 0.f) {
@@ -689,21 +687,21 @@ mVec3_c dAcOtubo_c::getCenter() const {
 }
 
 void dAcOtubo_c::fn_272_2E60(const mVec3_c &vel) {
-    if (mField_0x8F0.fn_80051780(mSph)) {
+    if (field_0x8F0.fn_80051780(mSph)) {
         if (mSph.ChkCoHit()) {
             mPosition += mStts.GetCcMove();
-            mField_0x8F0.fn_800051630();
+            field_0x8F0.fn_800051630();
         }
         mSpeed = 0.f;
         mVelocity = mVec3_c::Zero;
         mbField_0x9F1 = 1;
-        mField_0x9B8 = vel * 2.f;
+        field_0x9B8 = vel * 2.f;
     } else if (mSph.ChkTgAtHitType(AT_TYPE_BELLOWS)) {
         mVelocity.x += vel.x * 0.06f;
         mVelocity.y += vel.y * 0.2f;
         mVelocity.z += vel.z * 0.06f;
-        mField_0x9CA = cM::atan2s(vel.x, vel.z);
-        mSpeed = mField_0x9D0 * EGG::Math<f32>::sqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z);
+        field_0x9CA = cM::atan2s(vel.x, vel.z);
+        mSpeed = field_0x9D0 * EGG::Math<f32>::sqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z);
     }
 
     mbMovingForward = 1;
@@ -716,14 +714,14 @@ void dAcOtubo_c::fn_272_3020() {
     static mVec3_c sRot = mVec3_c::Ey;
 
     mQuat_c quat;
-    mVec3_c rot = mVec3_c::Ey + mVec3_c(0.f, 0.f, 1.f) * mField_0x9E0;
+    mVec3_c rot = mVec3_c::Ey + mVec3_c(0.f, 0.f, 1.f) * field_0x9E0;
 
     rot.normalize();
-    rot.rotY(mField_0x9CC);
-    mField_0x9CC += 0x2000;
+    rot.rotY(field_0x9CC);
+    field_0x9CC += 0x2000;
 
     quat.makeVectorRotation(sRot, rot);
-    sLib::chase(&mField_0x9E0, 0.f, 0.005f);
+    sLib::chase(&field_0x9E0, 0.f, 0.005f);
     mQuat_0x99C.slerpTo(quat, 0.5f, mQuat_0x99C);
 }
 
@@ -788,7 +786,7 @@ bool dAcOtubo_c::checkSlope() {
 bool dAcOtubo_c::fn_272_3660() {
     int poly_code = dBgS::GetInstance()->GetSpecialCode(mObjAcch.GetGnd());
 
-    return mField_0x9F6 == 2 && !mStateMgr.isState(StateID_Grab) && !checkSubmerged() && poly_code != POLY_ATTR_LAVA;
+    return field_0x9F6 == 2 && !mStateMgr.isState(StateID_Grab) && !checkSubmerged() && poly_code != POLY_ATTR_LAVA;
 }
 
 bool dAcOtubo_c::checkInvalidGround() {
@@ -815,7 +813,7 @@ bool dAcOtubo_c::checkSubmerged() {
 }
 
 bool dAcOtubo_c::fn_272_38A0() {
-    return mField_0x9DC < -30000.f;
+    return field_0x9DC < -30000.f;
 }
 
 bool dAcOtubo_c::fn_272_38C0() {

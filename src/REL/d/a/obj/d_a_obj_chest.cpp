@@ -202,7 +202,7 @@ void dAcOChest_c::executeState_OrderOpenEventAfter() {
         if (dAcItem_c::isRupee(itemId)) {
             dMessage_c::getInstance()->setField_0x2FC(0xFFFFFFFF);
         }
-        mField_0x65D = true;
+        field_0x65D = true;
         stateOpenUpdate2();
         mStateMgr.changeState(StateID_OpenEvent);
     }
@@ -240,7 +240,7 @@ void dAcOChest_c::fn_326_C90() {
 }
 
 void dAcOChest_c::changeStateOpen() {
-    if (mField_0x65D) {
+    if (field_0x65D) {
         return;
     }
     u32 flag = getFromParams(0, 0xFF);
@@ -252,7 +252,7 @@ void dAcOChest_c::changeStateOpen() {
 }
 
 void dAcOChest_c::changeStateWait() {
-    if (!mField_0x65D) {
+    if (!field_0x65D) {
         return;
     }
     fn_326_1440();

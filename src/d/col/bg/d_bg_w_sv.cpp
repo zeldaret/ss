@@ -17,7 +17,7 @@ bool dBgWSv::Set(cBgD_t *pDzb, PLC *pPlc, u32 p3, bool p4) {
         return true;
     }
 
-    mField_0x214 = p3;
+    field_0x214 = p3;
     if (p3 & 1) {
         return false;
     }
@@ -83,7 +83,7 @@ bool dBgWSv::CrrPosWork(mVec3_c *pPos, int vtx0, int vtx1, int vtx2) {
 void dBgWSv::CrrPos(
     cBgS_PolyInfo const &info, void *pObj, bool b, mVec3_c *pPos, mAng3_c *pAngle, mAng3_c *pShapeAngle
 ) {
-    if (mField_0x214 & 1) {
+    if (field_0x214 & 1) {
         return;
     }
 
@@ -161,7 +161,7 @@ bool dBgWSv::TransPosWork(mVec3_c *pPos, int vtx0, int vtx1, int vtx2) {
 void dBgWSv::TransPos(
     cBgS_PolyInfo const &info, void *pObj, bool b, mVec3_c *pPos, mAng3_c *pAngle, mAng3_c *pShapeAngle
 ) {
-    if (mField_0x214 & 1) {
+    if (field_0x214 & 1) {
         return;
     }
 

@@ -10,12 +10,12 @@ cM3dGUnk::cM3dGUnk() {
     mMax.set(0.0f, 0.0f, 0.0f);
     mLin.GetStart().set(0.0f, 0.0f, 0.0f);
     mLin.GetEnd().set(0.0f, 0.0f, 0.0f);
-    mField_0x90.set(0.0f, 0.0f, 0.0f);
-    mField_0x9C.set(0.0f, 0.0f, 0.0f);
-    mField_0xA8.set(0.0f, 0.0f, 0.0f);
-    mField_0xB4 = 0;
+    field_0x90.set(0.0f, 0.0f, 0.0f);
+    field_0x9C.set(0.0f, 0.0f, 0.0f);
+    field_0xA8.set(0.0f, 0.0f, 0.0f);
+    field_0xB4 = 0;
     mVirtCenter.set(0.0f, 0.0f, 0.0f);
-    mField_0xC4 = 0.0f;
+    field_0xC4 = 0.0f;
     PSMTXIdentity(mMtx);
     PSMTXIdentity(mInvMtx);
 }
@@ -25,9 +25,9 @@ void cM3dGUnk::Set(const mVec3_c &vA, const mVec3_c &vB) {
     mMax = vB;
 
     mLin.GetEnd() = (mMin + mMax) * 0.5f;
-    mField_0x90 = mMin - mLin.GetEnd();
-    mField_0x9C = mMax - mLin.GetEnd();
-    mField_0xA8 = (mMax - mMin) * 0.5f;
+    field_0x90 = mMin - mLin.GetEnd();
+    field_0x9C = mMax - mLin.GetEnd();
+    field_0xA8 = (mMax - mMin) * 0.5f;
 
     Update();
 }

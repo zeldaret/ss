@@ -334,36 +334,36 @@ dAcItem_c::dAcItem_c()
       mDowsingTarget(this, DowsingTarget::SLOT_NONE),
       mItemQueuePrev(nullptr),
       mItemQueueNext(nullptr) {
-    mField_0xCD8 = 1.0f;
+    field_0xCD8 = 1.0f;
     mBaseScale = 1.0f;
     mCurrentScale = 1.0f;
-    mField_0xCE4 = 1.0f;
-    mField_0xCE8 = 1.0f;
-    mField_0xCEC = 1.0f;
+    field_0xCE4 = 1.0f;
+    field_0xCE8 = 1.0f;
+    field_0xCEC = 1.0f;
 
     mItemFlags = 0;
-    mField_0xD4C = 0;
+    field_0xD4C = 0;
 
     mbNoDespawn = false;
     mbNoGravity = false;
 
-    mField_0xD51 = 0;
-    mField_0xD56 = 0;
+    field_0xD51 = 0;
+    field_0xD56 = 0;
 
     mbShowItemLighting = false;
 
-    mField_0xD62 = 0;
-    mField_0xD63 = 0;
-    mField_0xD65 = 0;
-    mField_0xD66 = 0;
+    field_0xD62 = 0;
+    field_0xD63 = 0;
+    field_0xD65 = 0;
+    field_0xD66 = 0;
 
     sItemList.append(&mNode);
     mTargetFiRelated = 3;
 }
 dAcItem_c::~dAcItem_c() {
-    delete mField_0xB3C;
+    delete field_0xB3C;
     for (int i = 0; i < 2; i++) {
-        delete mField_0xB34[i];
+        delete field_0xB34[i];
     }
     mDowsingTarget.doUnregister();
 }

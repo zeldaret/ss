@@ -14,7 +14,7 @@ private:
     /* 0x08 */ void *unk_0x04; // Collision Pointer?
     /* 0x0C */ int mActorPId;  // Matched the Unique Actor Id
     /* 0x10 */ cM3dGPla mPla;
-    /* 0x20 */ mVec3_c mField_0x20;
+    /* 0x20 */ mVec3_c field_0x20;
 
 public:
     cBgS_PolyInfo() {
@@ -56,7 +56,7 @@ public:
     }
 
     const mVec3_c &GetField0x20() const {
-        return mField_0x20;
+        return field_0x20;
     }
 };
 

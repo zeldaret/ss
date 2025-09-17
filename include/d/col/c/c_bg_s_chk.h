@@ -7,7 +7,6 @@
 
 #include "rvl/MTX.h" // IWYU pragma: export
 
-
 struct cBgD_Vtx_t : public nw4r::math::VEC3 {};
 
 class cBgS_GrpPassChk {
@@ -23,9 +22,9 @@ public:
     /* 0x00 */ cBgS_PolyPassChk *mPolyPassChk;
     /* 0x04 */ cBgS_GrpPassChk *mGrpPassChk;
     /* 0x08 */ u32 mActorId;
-    /* 0x0C */ u16 mField_0x0C;
-    /* 0x0E */ u16 mField_0x0E;
-    /* 0x10 */ u8 mField_0x10;
+    /* 0x0C */ u16 field_0x0C;
+    /* 0x0E */ u16 field_0x0E;
+    /* 0x10 */ u8 field_0x10;
     /* 0x14 */ cPartition mPartition;
     /* 0x24 */ // __vtable__
 
@@ -49,27 +48,27 @@ public:
 
     int ChkSameActorPid(const fBase_c *pActor) const {
         int id = pActor ? pActor->mID : 0;
-        if (id == 0 || mActorId == 0 || mField_0x10 == 0) {
+        if (id == 0 || mActorId == 0 || field_0x10 == 0) {
             return false;
         }
         return mActorId == id ? 1 : 0;
     }
 
     bool ChkField_0xC(const dBgW_Base *pBg) const {
-        return mField_0x0C & pBg->GetField_0x20();
+        return field_0x0C & pBg->GetField_0x20();
     }
 
     bool ChkField_0xE(const dBgW_Base *pBg) const {
-        return mField_0x0E & pBg->GetField_0x22();
+        return field_0x0E & pBg->GetField_0x22();
     }
 
     void SetExtChk(const cBgS_Chk &other) {
         mPolyPassChk = other.mPolyPassChk;
         mGrpPassChk = other.mGrpPassChk;
         mActorId = other.mActorId;
-        mField_0x10 = other.mField_0x10;
-        mField_0x0C = other.mField_0x0C;
-        mField_0x0E = other.mField_0x0E;
+        field_0x10 = other.field_0x10;
+        field_0x0C = other.field_0x0C;
+        field_0x0E = other.field_0x0E;
     }
 };
 

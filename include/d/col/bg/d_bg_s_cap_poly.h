@@ -14,7 +14,7 @@ public:
     }
 
     /* 0x40 */ cM3dGAab mBnd;
-    /* 0x58 */ UNKWORD mField_0x58;
+    /* 0x58 */ UNKWORD field_0x58;
     /* 0x5C */ CaptPolyCallback mCallback;
 };
 #endif

@@ -18,12 +18,12 @@ public:
     /* 0x60 */ mVec3_c mMin;
     /* 0x6C */ mVec3_c mMax;
     /* 0x78 */ cM3dGLin mLin;
-    /* 0x90 */ mVec3_c mField_0x90;
-    /* 0x9C */ mVec3_c mField_0x9C;
-    /* 0xA8 */ mVec3_c mField_0xA8;
-    /* 0xB4 */ u32 mField_0xB4;
+    /* 0x90 */ mVec3_c field_0x90;
+    /* 0x9C */ mVec3_c field_0x9C;
+    /* 0xA8 */ mVec3_c field_0xA8;
+    /* 0xB4 */ u32 field_0xB4;
     /* 0xB8 */ mVec3_c mVirtCenter;
-    /* 0xC4 */ f32 mField_0xC4;
+    /* 0xC4 */ f32 field_0xC4;
 
     cM3dGUnk();
 

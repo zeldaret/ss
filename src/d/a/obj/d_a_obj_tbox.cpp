@@ -2655,7 +2655,7 @@ bool dAcTbox_c::checkForLinkBonk() {
     }
 
     int direction = 0;
-    mVec3_c diff = mVec3_c(linkPos.x - mCcD3.mField_0xA8.x, 0.0f, linkPos.z - mCcD3.mField_0xA8.z);
+    mVec3_c diff = mVec3_c(linkPos.x - mCcD3.field_0xA8.x, 0.0f, linkPos.z - mCcD3.field_0xA8.z);
     if (VEC3LenSq(diff) <= FLT_EPSILON) {
         return false;
     }

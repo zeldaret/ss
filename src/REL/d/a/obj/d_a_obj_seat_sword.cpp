@@ -90,7 +90,7 @@ int dAcOSeatSword_c::create() {
     mMaxSpeed = -40.f;
 
     if (mSubtype == 1) {
-        mField_0x7E8 = l_inGroundRot;
+        field_0x7E8 = l_inGroundRot;
     }
     updateSwordMdl();
     mEff.init(this);
@@ -125,7 +125,7 @@ int dAcOSeatSword_c::actorExecute() {
 
 int dAcOSeatSword_c::actorExecuteInEvent() {
     if (mbNoSword) {
-        sLib::chase(&mField_0x7E4, 255.f, 8.f);
+        sLib::chase(&field_0x7E4, 255.f, 8.f);
     }
     actorExecuteCommon();
 
@@ -153,18 +153,18 @@ int dAcOSeatSword_c::actorExecuteInEvent() {
 
 void dAcOSeatSword_c::doInteraction(s32 param0) {
     if (param0 == 5) {
-        mField_0x7EA = true;
+        field_0x7EA = true;
         Event evt((char *)sEventName, 0x190, 0x100001, nullptr, nullptr);
         mEvent.scheduleEvent(evt, 0);
     } else {
-        mField_0x7EA = false;
+        field_0x7EA = false;
     }
 }
 
 u32 someAng = 0x8000;
 void dAcOSeatSword_c::registerInEvent() {
     static const u32 rodata_stuff = {0};
-    if (mField_0x7EA == 1 && EventManager::isCurrentEvent(sEventName)) {
+    if (field_0x7EA == 1 && EventManager::isCurrentEvent(sEventName)) {
         dAcPy_c *player = dAcPy_c::LINK;
         mVec3_c vec = mVec3_c::Ez * 78.f;
         mAng3_c ang = mRotation;
@@ -172,7 +172,7 @@ void dAcOSeatSword_c::registerInEvent() {
         vec.rotY(mRotation.y);
         vec += mPosition;
         player->setPosRot(&vec, &ang, 0, 1, 0);
-        mField_0x7E8.set(0);
+        field_0x7E8.set(0);
         updateSwordMdl();
     }
 }
@@ -229,7 +229,7 @@ void dAcOSeatSword_c::actorExecuteCommon() {
     mEffPos.y = mPosition.y;
 
     mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_76_, mEffPos, &mRotation, &mScale, nullptr, nullptr);
-    mEff.setGlobalAlpha(mField_0x7E4);
+    mEff.setGlobalAlpha(field_0x7E4);
 }
 
 void dAcOSeatSword_c::updateSwordMdl() {
@@ -237,7 +237,7 @@ void dAcOSeatSword_c::updateSwordMdl() {
     mSwordMtx.copyFrom(mWorldMtx);
 
     if (mSubtype == 1) {
-        mSwordMtx.XrotM(mField_0x7E8);
+        mSwordMtx.XrotM(field_0x7E8);
     }
 
     mMtx_c mtx;

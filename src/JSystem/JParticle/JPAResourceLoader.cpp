@@ -26,7 +26,7 @@ JPAResourceLoader::JPAResourceLoader(u8 const* data, JPAResourceManager* mgr) {
 struct JPAResourceHeader {
     /* 0x0 */ u16 mUsrIdx;
     /* 0x2 */ u16 mBlockNum;
-    /* 0x4 */ u8 mFieldBlockNum;
+    /* 0x4 */ u8 fieldBlockNum;
     /* 0x5 */ u8 mKeyBlockNum;
     /* 0x6 */ u8 mTDB1Num;
 };
@@ -44,9 +44,9 @@ void JPAResourceLoader::load_jpc(u8 const* data, JPAResourceManager* mgr) {
     for (int i = 0; i < *(u16*)(data + 8); i++) {
         JPAResourceHeader* header = (JPAResourceHeader*)(data + offset);
         JPAResource* res = new (heap, 4) JPAResource();
-        res->mFieldBlockNum = header->mFieldBlockNum;
-        res->mpFieldBlocks = res->mFieldBlockNum != 0 ?
-            new (heap, 4) JPAFieldBlock*[res->mFieldBlockNum] : NULL;
+        res->fieldBlockNum = header->fieldBlockNum;
+        res->mpFieldBlocks = res->fieldBlockNum != 0 ?
+            new (heap, 4) JPAFieldBlock*[res->fieldBlockNum] : NULL;
         res->mKeyBlockNum = header->mKeyBlockNum;
         res->mpKeyBlocks = res->mKeyBlockNum != 0 ?
             new (heap, 4) JPAKeyBlock*[res->mKeyBlockNum] : NULL;

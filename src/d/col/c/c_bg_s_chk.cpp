@@ -1,7 +1,7 @@
 #include "d/col/c/c_bg_s_chk.h"
 
 cBgS_Chk::cBgS_Chk()
-    : mPolyPassChk(nullptr), mGrpPassChk(nullptr), mActorId(0), mField_0x0C(0), mField_0x0E(1), mField_0x10(1) {}
+    : mPolyPassChk(nullptr), mGrpPassChk(nullptr), mActorId(0), field_0x0C(0), field_0x0E(1), field_0x10(1) {}
 
 cBgS_Chk::~cBgS_Chk() {}
 

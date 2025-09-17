@@ -63,7 +63,7 @@ private:
     /* 0x5D0 */ STATE_MGR_DECLARE(dAcOChest_c);
     /* 0x60C */ ActorEventRelated mEvent;
     /* 0x65C */ bool mGaveItem;
-    /* 0x65D */ bool mField_0x65D;
+    /* 0x65D */ bool field_0x65D;
     /* 0x65E */ bool mHasInsideModel;
     /* 0x65F */ bool mIsLinksCloset;
     /* 0x660 */ DowsingTarget mDowsingTarget;

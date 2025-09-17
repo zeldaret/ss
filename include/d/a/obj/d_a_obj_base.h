@@ -80,13 +80,13 @@ public:
     /* 0x1A4 */ f32 mCullingDistance;
     /* 0x1A8 */ f32 field_0x1A8;
     /* 0x1AC */ u32 mObjectActorFlags;
-    /* 0x1B0 */ f32 mField_0x1B0;
-    /* 0x1B4 */ mVec3_c mField_0x1B4;
+    /* 0x1B0 */ f32 field_0x1B0;
+    /* 0x1B4 */ mVec3_c field_0x1B4;
     /* 0x1C0 */ cCcD_Stts mStts;
     /* 0x1FC */ mVec3_c mStartingPos;
     /* 0x208 */ mAng3_c mStartingRot;
     /* 0x210 */ dLinkage_c mLinkage;
-    /* 0x2B8 */ u32 mField_0x2B8;
+    /* 0x2B8 */ u32 field_0x2B8;
     /* 0x2BC */ ActorLighting mLightingInfo;
     /* 0x32C */ dSalvageIf_c *mpSalvageIf;
 

@@ -51,8 +51,8 @@ private:
     /* 0x364 */ dBgW mBgW;
     /* 0x574 */ dCcD_Cyl *mCyl;
     /* 0x578 */ u32 mSubtype;
-    /* 0x57C */ u16 mField_0x57C;
-    /* 0x57E */ u16 mField_0x57E;
+    /* 0x57C */ u16 field_0x57C;
+    /* 0x57E */ u16 field_0x57E;
 
     struct SubtypeData {
         s32 mSubtype;

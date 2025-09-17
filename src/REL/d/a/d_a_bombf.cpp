@@ -83,7 +83,7 @@ int dAcBombf_c::actorPostCreate() {
         if ((b != 0 && field_0x3D2 == 2) || (b == 0 && field_0x3D2 == 0)) {
             mModel.setScale(0.0001f, 0.0001f, 0.0001f);
             if (mBombRef.get() != nullptr) {
-                mBombRef.get()->mField_0xA50 = 0.0001f;
+                mBombRef.get()->field_0xA50 = 0.0001f;
             }
         }
     }
@@ -160,7 +160,7 @@ void dAcBombf_c::regrowBomb() {
             bomb->setActorProperty(AC_PROP_0x1);
         }
         if (field_0x3D4 == 0) {
-            bomb->mField_0xA44 *= 1.5f;
+            bomb->field_0xA44 *= 1.5f;
         }
     }
 }
@@ -220,7 +220,7 @@ void dAcBombf_c::executeState_Wait() {
 
     bomb = mBombRef.get();
     if (bomb != nullptr) {
-        bomb->mField_0xA50 = scaleFactor;
+        bomb->field_0xA50 = scaleFactor;
     }
 }
 

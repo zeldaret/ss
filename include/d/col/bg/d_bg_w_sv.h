@@ -24,7 +24,7 @@ public:
 
 private:
     /* 0x210 */ nw4r::math::VEC3 *mpVtx;
-    /* 0x214 */ u32 mField_0x214;
+    /* 0x214 */ u32 field_0x214;
 };
 
 #endif

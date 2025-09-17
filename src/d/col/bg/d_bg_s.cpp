@@ -1009,11 +1009,11 @@ void dBgS::UpdateScrollTex() {
     MapSrollText_t *scrollTex =
         (MapSrollText_t *)OarcManager::GetInstance()->getData(common_folder, MAP_SCROLL_TEX_FILE);
     for (int i = 0; i < 5; ++i, ++scrollTex) {
-        if (++mField_0x3864[i] >= scrollTex->mField_0x0E) {
-            mField_0x3864[i] = 0;
+        if (++field_0x3864[i] >= scrollTex->field_0x0E) {
+            field_0x3864[i] = 0;
         }
-        if (++mField_0x3878[i] >= scrollTex->mField_0x10) {
-            mField_0x3878[i] = 0;
+        if (++field_0x3878[i] >= scrollTex->field_0x10) {
+            field_0x3878[i] = 0;
         }
     }
 }

@@ -164,7 +164,7 @@ int dAcEsm_c::actorCreate() {
     mAcchCir.SetWall(mScaleTarget.y * 100.f, mScaleTarget.x * 100.f);
     mStts.SetRank(10);
     mObjAcch.SetGndThinCellingOff();
-    mObjAcch.mField_0x390 = 1;
+    mObjAcch.field_0x390 = 1;
 
     mMaxSpeed = -40.f;
 
