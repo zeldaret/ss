@@ -53,8 +53,8 @@ int dAcOTimeStageBg_c::actorCreate() {
     }
     CREATE_ALLOCATOR(dAcOTimeStageBg_c);
 
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = 0.0f;
+    mMaxSpeed = -40.0f;
     updateMatrix();
     mSceneCallback.attach(mMdl1);
     mMdl1.setLocalMtx(mWorldMtx);
@@ -73,7 +73,7 @@ int dAcOTimeStageBg_c::actorCreate() {
     mVec3_c min, max;
     mMdl1.getBounds(&min, &max);
     mStateMgr.changeState(StateID_Wait);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
 
     return SUCCEEDED;
 }

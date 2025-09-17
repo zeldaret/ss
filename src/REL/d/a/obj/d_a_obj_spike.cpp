@@ -64,7 +64,7 @@ int dAcOspike_c::create() {
 
     mCollision.cM3dGUnk::Set(tmp2, tmp3);
     mStateMgr.changeState(StateID_Wait);
-    boundingBox.Set(mVec3_c(-10.0f, -250.0f, -480.0f), mVec3_c(80.0f, 260.0f, 490.0f));
+    mBoundingBox.Set(mVec3_c(-10.0f, -250.0f, -480.0f), mVec3_c(80.0f, 260.0f, 490.0f));
     return SUCCEEDED;
 }
 

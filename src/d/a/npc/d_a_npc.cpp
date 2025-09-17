@@ -41,9 +41,9 @@ bool dFlowNpc_c::handleEventInternal(const MsbFlowInfo *element) {
             extract2xU16Params(element, &exitId, &trial);
             if (field_0x10) {
                 dAcBase_c *ac = EventManager::getMainActorInEvent();
-                if (ac != nullptr && ac->profile_name == fProfile::NPC_TKE) {
+                if (ac != nullptr && ac->mProfileName == fProfile::NPC_TKE) {
                     static_cast<daNpcTke_c *>(ac)->setFinishFlags();
-                } else if (mpOwner->profile_name == fProfile::NPC_TKE) {
+                } else if (mpOwner->mProfileName == fProfile::NPC_TKE) {
                     static_cast<daNpcTke_c *>(mpOwner)->setFinishFlags();
                 }
             }

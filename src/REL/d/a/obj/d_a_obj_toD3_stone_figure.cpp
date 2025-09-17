@@ -60,13 +60,13 @@ int dAcOtoD3StoneFigure_c::create() {
     b = getYPos();
     b += zero;
     a = mPosition.x;
-    poscopy2.x = a;
-    poscopy2.y = b;
-    poscopy2.z = c;
-    poscopy3.x = a;
-    poscopy3.y = b;
-    poscopy3.z = c;
-    // poscopy3 = poscopy2;
+    mPositionCopy2.x = a;
+    mPositionCopy2.y = b;
+    mPositionCopy2.z = c;
+    mPositionCopy3.x = a;
+    mPositionCopy3.y = b;
+    mPositionCopy3.z = c;
+    // mPositionCopy3 = mPositionCopy2;
     mCollision.SetTg_0x4C(0x2000);
 
     if (!mIsSkyKeepAlreadyOpen) {

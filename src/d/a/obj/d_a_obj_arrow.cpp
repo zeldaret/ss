@@ -79,7 +79,7 @@ int dAcArrow_c::create() {
         mStateMgr.changeState(StateID_Wait);
     }
 
-    boundingBox.Set(mVec3_c(-6.0f, -6.0f, 0.0f), mVec3_c(6.0f, 6.0f, 110.0f));
+    mBoundingBox.Set(mVec3_c(-6.0f, -6.0f, 0.0f), mVec3_c(6.0f, 6.0f, 110.0f));
     field_0x684 = -1;
     field_0x68A = 300;
     f32 rnd = cM::rndF(20.0f);

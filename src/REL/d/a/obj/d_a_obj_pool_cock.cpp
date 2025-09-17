@@ -22,8 +22,8 @@ bool dAcOPoolCock_c::createHeap() {
 int dAcOPoolCock_c::actorCreate() {
     CREATE_ALLOCATOR(dAcOPoolCock_c);
 
-    forwardAccel = -0.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = -0.0f;
+    mMaxSpeed = -40.0f;
     mOpenSceneflag = mParams & 0xFF;
     mOpenDirection = mVec3_c::Ez;
     mOpenDirection.rotY(mRotation.y);
@@ -34,7 +34,7 @@ int dAcOPoolCock_c::actorCreate() {
 
     mStateMgr.changeState(StateID_Wait);
 
-    boundingBox.Set(mVec3_c(-300.0f, -100.0f, -300.0f), mVec3_c(300.0f, 100.0f, 300.0f));
+    mBoundingBox.Set(mVec3_c(-300.0f, -100.0f, -300.0f), mVec3_c(300.0f, 100.0f, 300.0f));
     return SUCCEEDED;
 }
 
@@ -49,7 +49,7 @@ int dAcOPoolCock_c::doDelete() {
 int dAcOPoolCock_c::actorExecute() {
     mStateMgr.executeState();
     calcVelocity();
-    mPosition += velocity;
+    mPosition += mVelocity;
     mPosition += mStts.mCcMove;
     updateMatrix();
 

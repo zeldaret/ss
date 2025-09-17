@@ -51,7 +51,7 @@ void dSalvageIfObj_c::doDemoThrow() {
 int dAcSalbageObj_c::actorExecute() {
     executeInternal();
     calcVelocity();
-    mPosition += velocity;
+    mPosition += mVelocity;
     mPosition += mStts.GetCcMove();
     if (isInStateWait()) {
         updateCc();
@@ -155,9 +155,9 @@ void dAcSalbageObj_c::initSalbageObj() {
     } else {
         switch (mBehavior) {
             case BEHAVIOR_CARRY: {
-                forwardSpeed = 0.0f;
-                velocity.set(0.0f, 0.0f, 0.0f);
-                forwardAccel = 0.0f;
+                mSpeed = 0.0f;
+                mVelocity.set(0.0f, 0.0f, 0.0f);
+                mAcceleration = 0.0f;
                 mSalvageIf.setHidden();
                 if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() != mSalvageIf.getSalvageObjId()) {
                     mStateMgr.changeState(StateID_Kill);
@@ -169,9 +169,9 @@ void dAcSalbageObj_c::initSalbageObj() {
                 break;
             }
             case BEHAVIOR_FLY: {
-                forwardSpeed = 0.0f;
-                velocity.set(0.0f, 0.0f, 0.0f);
-                forwardAccel = 0.0f;
+                mSpeed = 0.0f;
+                mVelocity.set(0.0f, 0.0f, 0.0f);
+                mAcceleration = 0.0f;
                 mStateMgr.changeState(StateID_Fly);
                 break;
             }
@@ -181,12 +181,12 @@ void dAcSalbageObj_c::initSalbageObj() {
                     return;
                 } else {
                     mBehavior = BEHAVIOR_STATIONARY;
-                    forwardAccel = -1.0f;
-                    forwardMaxSpeed = -40.0f;
+                    mAcceleration = -1.0f;
+                    mMaxSpeed = -40.0f;
                     initCcAndBg();
-                    forwardSpeed = 0.0f;
-                    forwardAccel = 0.0f;
-                    velocity.set(0.0f, 0.0f, 0.0f);
+                    mSpeed = 0.0f;
+                    mAcceleration = 0.0f;
+                    mVelocity.set(0.0f, 0.0f, 0.0f);
                     mStateMgr.changeState(StateID_Wait);
                 }
                 break;
@@ -301,10 +301,10 @@ void dAcSalbageObj_c::updateMdl() {
     }
 
     f32 scale = mScale.x;
-    poscopy3 = mPosition;
-    poscopy3.y += getPoscopy3YOffset() * scale;
-    poscopy2 = mPosition;
-    poscopy2.y += getPoscopy2YOffset() * scale;
+    mPositionCopy3 = mPosition;
+    mPositionCopy3.y += getPoscopy3YOffset() * scale;
+    mPositionCopy2 = mPosition;
+    mPositionCopy2.y += getPoscopy2YOffset() * scale;
 }
 
 void dAcSalbageObj_c::loadBehaviorFromParams() {
@@ -367,10 +367,10 @@ void dAcSalbageObj_c::initializeState_DemoThrow() {
     mRotation.y = result.atan2sX_Z();
     mRotation.x = -cM::atan2s(result.y, result.absXZ());
     mRotation.z = field_0x904;
-    angle.x = 0;
-    angle.y = mRotation.y;
-    angle.z = 0;
-    forwardMaxSpeed = -40.0f;
+    mAngle.x = 0;
+    mAngle.y = mRotation.y;
+    mAngle.z = 0;
+    mMaxSpeed = -40.0f;
     mBgObjAcch.Set(this, 1, &mBgAcchCir);
     mBgObjAcch.SetWaterNone();
     mBgObjAcch.SetRoofNone();

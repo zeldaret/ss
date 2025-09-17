@@ -43,7 +43,7 @@ int dAcOpuzzleIsland_c::create() {
     mMdl.setPriorityDraw(0x1C, 9);
     mVec3_c min, max;
     mMdl.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     mCullingDistance = 500000.0f;
     mBgW.SetRideCallback(rideCallback);
     return SUCCEEDED;

@@ -59,7 +59,7 @@ void dAcBoomerang_c::areaCallback(mVec3_c *param1, u32 param2) {
     setChrAnimation(dAcBoomerang_c::RB_CUT);
 }
 void dAcBoomerang_c::atHitCallback(cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, cCcD_Obj *i_objInfB) {
-    if (i_actorB != nullptr && i_actorB->GetLinkage().checkFlag(0x80)) {
+    if (i_actorB != nullptr && i_actorB->getLinkage().checkFlag(0x80)) {
         // Check if beetle can grab things
         if (dAcPy_c::hasBeetleVariantOrBetter(HOOK_BEETLE)) {
             // If beetle is already holding the object or is stationary
@@ -71,7 +71,7 @@ void dAcBoomerang_c::atHitCallback(cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, 
             if (tryGrabObject(i_actorB)) {
                 setChrAnimation(RB_HOLD);
                 mAnmChr[BOOMERANG_ANIM_PINCERS].setRate(0.f);
-                mAnmChr[BOOMERANG_ANIM_PINCERS].setFrameOnly(i_actorB->GetLinkage().field_0x24);
+                mAnmChr[BOOMERANG_ANIM_PINCERS].setFrameOnly(i_actorB->getLinkage().field_0x24);
                 return;
             }
         }
@@ -86,10 +86,10 @@ void dAcBoomerang_c::atHitCallback(cCcD_Obj *i_objInfA, dAcObjBase_c *i_actorB, 
         field_0x8D8.y = 0.f;
 
         if (cM::isZero(field_0x8D8.normalize())) {
-            field_0x8D8.set(-angle.y.sin(), 0.f, -angle.y.cos());
+            field_0x8D8.set(-mAngle.y.sin(), 0.f, -mAngle.y.cos());
         }
-        field_0x8D8 *= velocity.absXZ();
-        field_0x8D8.y = -velocity.y;
+        field_0x8D8 *= mVelocity.absXZ();
+        field_0x8D8.y = -mVelocity.y;
 
         field_0x8D8.normalize();
 
@@ -292,7 +292,7 @@ const dAcBoomerang_c::ChrAnimation_t dAcBoomerang_c::sChrAnims[dAcBoomerang_c::R
 
 bool dAcBoomerang_c::tryGrabObject(dAcObjBase_c *pObj) {
     dAcPy_c *player = dAcPy_c::GetLink2();
-    if (checkField_0x8CC(FLAG_CONTROLLABLE) && GetLinkage().checkFlag(0x80)) {}
+    if (checkField_0x8CC(FLAG_CONTROLLABLE) && getLinkage().checkFlag(0x80)) {}
 }
 
 // ...
@@ -370,7 +370,7 @@ void dAcBoomerang_c::initializeState_Wait() {
     dAcPy_c::GetLink2()->onModelUpdateFlag(dAcPy_c::UPDATE_MODEL_BEETLE);
 }
 void dAcBoomerang_c::executeState_Wait() {
-    forwardSpeed = 0.f;
+    mSpeed = 0.f;
     placeOnArm();
     if (checkField_0x8CC(FLAG_REQUEST_MOVE)) {
         mStateMgr.changeState(StateID_Move);
@@ -388,7 +388,7 @@ void dAcBoomerang_c::initializeState_ReturnWait() {
     placeOnArm();
 }
 void dAcBoomerang_c::executeState_ReturnWait() {
-    forwardSpeed = 0.f;
+    mSpeed = 0.f;
     placeOnArm();
     if (mAnmChr[BOOMERANG_ANIM_PINCERS].isStop() || !dAcPy_c::GetLink2()->checkActionFlagsCont(0x10)) {
         startSound(SE_BE_CATCH);
@@ -409,7 +409,7 @@ void dAcBoomerang_c::initializeState_Move() {
     field_0x8C8 = 0;
 
     dAcPy_c *player = dAcPy_c::GetLink2();
-    forwardSpeed = player->getBeetleNormalSpeed();
+    mSpeed = player->getBeetleNormalSpeed();
 
     mSph0.ClrAtHit();
     mSph1.ClrTgHit();
@@ -420,10 +420,10 @@ void dAcBoomerang_c::initializeState_Move() {
     unsetField_0x8CC(FLAG_REQUEST_MOVE | FLAG_WING_EFFECT_ACTIVE | FLAG_0x10000);
     setField_0x8CC(FLAG_CONTROLLABLE | FLAG_0x80000);
 
-    angle.x = 2000 - player->vt_0x198();
+    mAngle.x = 2000 - player->vt_0x198();
 
-    mRotation.x.set(-angle.x);
-    mRotation.y.set(angle.y);
+    mRotation.x.set(-mAngle.x);
+    mRotation.y.set(mAngle.y);
     mRotation.z.set(0);
     field_0x8B2 = 0;
 
@@ -435,9 +435,9 @@ void dAcBoomerang_c::initializeState_Move() {
     field_0x8B8 = daPlayerActBase_c::fn_8005BAA0();
 
     // TODO regswap
-    field_0x8BE = angle.x - dPad::ex_c::m_current_ex->mMPLS.getVerticalAngle();
+    field_0x8BE = mAngle.x - dPad::ex_c::m_current_ex->mMPLS.getVerticalAngle();
 
-    field_0x8E4.fromXY(angle.x, angle.y, forwardSpeed);
+    field_0x8E4.fromXY(mAngle.x, mAngle.y, mSpeed);
 
     startSound(SE_BE_THROW);
     dJEffManager_c::spawnUIEffect(PARTICLE_RESOURCE_ID_MAPPING_3_, mVec3_c::Zero, nullptr, nullptr, nullptr, nullptr);
@@ -528,14 +528,14 @@ int dAcBoomerang_c::actorExecute() {
     setRoomId();
 
     mMdl.calc(false);
-    mMdl.getNodeWorldMtxMultVecZero(0, poscopy2);
-    poscopy3 = poscopy2;
+    mMdl.getNodeWorldMtxMultVecZero(0, mPositionCopy2);
+    mPositionCopy3 = mPositionCopy2;
 
     if (checkField_0x8CC(FLAG_WING_EFFECT_ACTIVE)) {
         mEff0.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_6_, mWorldMtx, nullptr, nullptr);
         mEff1.setTransform(mWorldMtx);
 
-        f32 ang = field_0x8E4.angle(velocity);
+        f32 ang = field_0x8E4.angle(mVelocity);
         ang = 10.f - mAng::fromRad(ang) * (7.f / 256.f);
         ang = nw4r::ut::Max(ang, 3.f);
         mEff1.setAwayFromCenterSpeed(ang);

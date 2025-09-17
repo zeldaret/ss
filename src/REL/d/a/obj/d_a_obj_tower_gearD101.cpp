@@ -40,12 +40,12 @@ int dAcOTowerGearD101_c::actorCreate() {
     nw4r::g3d::ResMdl mdl = mMdl.getResMdl();
     mMdlCallback.init(mdl.GetResNode("model0").GetID());
     mMdl.setCallback(&mMdlCallback);
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = 0.0f;
+    mAcceleration = 0.0f;
+    mMaxSpeed = 0.0f;
     mStateMgr.changeState(StateID_Wait);
 
     mVec3_c s = field_0x3AC;
-    boundingBox.Set(
+    mBoundingBox.Set(
         mVec3_c(s.x * -200.0f, s.y * -200.0f, s.z * -50.0f), mVec3_c(s.x * 200.0f, s.y * 200.0f, s.z * 50.0f)
     );
 

@@ -25,7 +25,7 @@ int dAcOimpaDoor_c::create() {
     mMdl.setLocalMtx(mWorldMtx);
     mStateMgr.changeState(StateID_Wait);
     mMdl.setPriorityDraw(0x1C, 9);
-    boundingBox.Set(mVec3_c(-250.0f, 0.0f, -30.0f), mVec3_c(250.0f, 940.0f, 30.0f));
+    mBoundingBox.Set(mVec3_c(-250.0f, 0.0f, -30.0f), mVec3_c(250.0f, 940.0f, 30.0f));
     return SUCCEEDED;
 }
 

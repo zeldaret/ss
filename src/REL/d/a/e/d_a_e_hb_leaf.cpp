@@ -21,7 +21,7 @@ bool dAcEhb_leaf_c::createHeap() {
 int dAcEhb_leaf_c::create() {
     CREATE_ALLOCATOR(dAcEhb_leaf_c);
 
-    boundingBox.Set(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
+    mBoundingBox.Set(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
 
     mRotation.y = cM::rndF(65535.0f);
     someRot = mRotation.y.mVal;

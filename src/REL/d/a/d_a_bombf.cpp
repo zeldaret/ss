@@ -36,11 +36,11 @@ int dAcBombf_c::actorCreate() {
     }
 
     mStts.SetDefaultRank();
-    forwardAccel = -2.0f;
-    forwardMaxSpeed = -80.0f;
+    mAcceleration = -2.0f;
+    mMaxSpeed = -80.0f;
     mStateMgr.changeState(StateID_Wait);
-    boundingBox.Set(mVec3_c(-80.0, -50.0f, -80.0f), mVec3_c(80.0, 60.0f, 80.0f));
-    angle = mRotation;
+    mBoundingBox.Set(mVec3_c(-80.0, -50.0f, -80.0f), mVec3_c(80.0, 60.0f, 80.0f));
+    mAngle = mRotation;
     if (mDespawnSceneFlag < 0xFF) {
         unsetActorProperty(AC_PROP_0x1);
         setActorProperty(AC_PROP_0x4);
@@ -111,20 +111,20 @@ int dAcBombf_c::actorExecute() {
             bomb->setTransformFromFlower(mtx);
         }
         mModel.setLocalMtx(mWorldMtx);
-        poscopy2 = mPosition;
-        poscopy3 = mPosition;
+        mPositionCopy2 = mPosition;
+        mPositionCopy3 = mPosition;
         field_0x3D3 = 0;
     } else {
         if (dBgS::GetInstance()->ChkMoveBG(field_0x398, true)) {
-            dBgS::GetInstance()->MoveBgTransPos(field_0x398, true, &mPosition, &angle, &mRotation);
+            dBgS::GetInstance()->MoveBgTransPos(field_0x398, true, &mPosition, &mAngle, &mRotation);
             updateMatrix();
             dAcBomb_c *bomb = mBombRef.get();
             if (bomb != nullptr) {
                 bomb->setTransformFromFlower(mWorldMtx);
             }
             mModel.setLocalMtx(mWorldMtx);
-            poscopy2 = mPosition;
-            poscopy3 = mPosition;
+            mPositionCopy2 = mPosition;
+            mPositionCopy3 = mPosition;
         }
     }
 

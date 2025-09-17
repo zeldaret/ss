@@ -77,10 +77,10 @@ dAcBase_c::dAcBase_c()
         setActorRef(s_Create_Parent);
     }
 
-    fProfile::fActorProfile_c *profile = (fProfile::fActorProfile_c *)((*fProfile::sProfileList)[profile_name]);
+    fProfile::fActorProfile_c *profile = (fProfile::fActorProfile_c *)((*fProfile::sProfileList)[mProfileName]);
     mActorProperties = profile->mActorProperties;
     if (mpActorInfo == nullptr) {
-        mpActorInfo = getActorInfoByProfileAndSubtype(profile_name, mActorSubtype);
+        mpActorInfo = getActorInfoByProfileAndSubtype(mProfileName, mActorSubtype);
     }
     someStr[0] = '\0';
 }
@@ -194,7 +194,7 @@ int dAcBase_c::preDelete() {
     }
 
     if (!checkActorProperty(AC_PROP_0x800) && checkActorProperty(AC_PROP_0x10000000) &&
-        fBase_c::getConnectParent()->lifecycle_state != TO_BE_DELETED) {
+        fBase_c::getConnectParent()->mLifecycleState != TO_BE_DELETED) {
         if (itemDroppingAndGivingRelated(nullptr, 0) != 0) {
             setEnemyDefeatFlag();
         }
@@ -382,9 +382,9 @@ dAcBase_c *dAcBase_c::findActor(char *objName, dAcBase_c *parent) {
 FORCE_INLINE dAcBase_c *findActor(dAcBase_c *parent) {
     dAcBase_c *foundActor;
     if (!parent) {
-        foundActor = (dAcBase_c *)fManager_c::searchBaseByGroupType(dBase_c::ACTOR, nullptr);
-    } else if (parent->group_type == 2) {
-        foundActor = (dAcBase_c *)fManager_c::searchBaseByGroupType(dBase_c::ACTOR, parent);
+        foundActor = (dAcBase_c *)fManager_c::searchBaseByGroupType(fBase_c::ACTOR, nullptr);
+    } else if (parent->mGroupType == fBase_c::ACTOR) {
+        foundActor = (dAcBase_c *)fManager_c::searchBaseByGroupType(fBase_c::ACTOR, parent);
     } else {
         foundActor = nullptr;
     }
@@ -498,7 +498,7 @@ f32 dAcBase_c::getSquareDistToPlayer() {
 // Some weirdness with the float registers being used
 // 8002d4b0
 void dAcBase_c::updateRoomId(f32 yOffset) {
-    if (getConnectParent()->profile_name != fProfile::ROOM) {
+    if (getConnectParent()->mProfileName != fProfile::ROOM) {
         mVec3_c actorPos(mPosition.x, mPosition.y + yOffset, mPosition.z);
 
         if (dBgS_ObjGndChk::CheckPos(actorPos)) {
@@ -750,8 +750,8 @@ void dAcBase_c::roundAngleToNearest90(s16 *dst_angle, s16 *src_angle) {
 void dAcBase_c::incrementKillCounter() {
     dAcObjBase_c *object = (dAcObjBase_c *)this; // Probably wrong
 
-    if (group_type == ACTOR && object->unkByteTargetFiRelated == 1) {
-        int killCounterId = object->targetFiTextId;
+    if (mGroupType == ACTOR && object->mTargetFiRelated == 1) {
+        int killCounterId = object->mTargetFiTextID;
 
         if (killCounterId < 91 && (killCounterId & 0x300) == 0) {
             FileManager *fileMgr = FileManager::GetInstance();

@@ -58,7 +58,7 @@ const fLiNdBa_c *fLiMgBa_c::searchNodeByID(fBaseID_e id) const {
 const fLiNdBa_c *fLiMgBa_c::searchNodeByProfName(ProfileName name, fLiNdBa_c *start) const {
     fLiNdBa_c *node = start != nullptr ? start->getNext() : getFirst();
     while (node != nullptr) {
-        if (node->p_owner->profile_name == name) {
+        if (node->p_owner->mProfileName == name) {
             return node;
         }
         node = node->getNext();
@@ -74,14 +74,14 @@ void fLiNdBa_c::link(fBase_c *link) {
 
     if (link != nullptr) {
         p_owner = link;
-        link->actor_list.append(this);
+        link->mActorList.append(this);
     }
 }
 
 /* 802e2830 */
 void fLiNdBa_c::unlink() {
     if (p_owner != nullptr) {
-        p_owner->actor_list.remove(this);
+        p_owner->mActorList.remove(this);
         p_owner = nullptr;
     }
 }

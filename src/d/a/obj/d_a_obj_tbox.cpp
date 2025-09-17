@@ -823,7 +823,7 @@ dAcTbox_c::dAcTbox_c()
     field_0x120E = 0;
     mDoObstructedCheck = false;
     sTboxActorList.append(&mTboxListNode);
-    unkByteTargetFiRelated = 2;
+    mTargetFiRelated = 2;
 }
 
 dAcTbox_c::~dAcTbox_c() {
@@ -1125,22 +1125,22 @@ int dAcTbox_c::create() {
         case NORMAL: {
             static mVec3_c bbLo = mVec3_c(-65.0f, 0.0f, -100.0f);
             static mVec3_c bbUp = mVec3_c(65.0f, 150.0f, 45.0f);
-            boundingBox.Set(bbLo, bbUp);
+            mBoundingBox.Set(bbLo, bbUp);
         } break;
         case SMALL: {
             static mVec3_c bbLo = mVec3_c(-38.0f, 0.0f, -70.0f);
             static mVec3_c bbUp = mVec3_c(38.0f, 110.0f, 35.0f);
-            boundingBox.Set(bbLo, bbUp);
+            mBoundingBox.Set(bbLo, bbUp);
         } break;
         case BOSS: {
             static mVec3_c bbLo = mVec3_c(-90.0f, 0.0f, -140.0f);
             static mVec3_c bbUp = mVec3_c(90.0f, 170.0f, 60.0f);
-            boundingBox.Set(bbLo, bbUp);
+            mBoundingBox.Set(bbLo, bbUp);
         } break;
         case GODDESS: {
             static mVec3_c bbLo = mVec3_c(-65.0f, 0.0f, -100.0f);
             static mVec3_c bbUp = mVec3_c(65.0f, 150.0f, 50.0f);
-            boundingBox.Set(bbLo, bbUp);
+            mBoundingBox.Set(bbLo, bbUp);
         } break;
     }
 
@@ -1194,7 +1194,7 @@ int dAcTbox_c::actorExecute() {
     if (hasFlags) {
         setObjectProperty(0x200);
     } else {
-        clearObjectProperty(0x200);
+        unsetObjectProperty(0x200);
     }
 
     if (hasFlags) {
@@ -1330,7 +1330,7 @@ int dAcTbox_c::actorExecuteInEvent() {
     if (hasFlags) {
         setObjectProperty(0x200);
     } else {
-        clearObjectProperty(0x200);
+        unsetObjectProperty(0x200);
     }
 
     if (hasFlags) {

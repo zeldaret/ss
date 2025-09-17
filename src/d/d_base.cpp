@@ -5,7 +5,7 @@ u32 dBase_c::s_DrawControlFlags;
 u32 dBase_c::s_NextExecuteControlFlags;
 
 dBase_c::dBase_c() : fBase_c() {
-    mBaseProperties = (*fProfile::sProfileList)[profile_name]->mBaseProperties;
+    mBaseProperties = (*fProfile::sProfileList)[mProfileName]->mBaseProperties;
 }
 
 void dBase_c::postDraw(fBase_c::MAIN_STATE_e status) {
@@ -53,7 +53,7 @@ void dBase_c::resetFlags() {
 }
 
 bool dBase_c::isActorPlayer() {
-    return profile_name == fProfile::PLAYER;
+    return mProfileName == fProfile::PLAYER;
 }
 
 int dBase_c::loadAsyncCallback() {

@@ -48,7 +48,7 @@ int dAcOcloudDive_c::create() {
     }
     updateMatrix();
     mStateMgr.changeState(StateID_Wait);
-    boundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
+    mBoundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
     return SUCCEEDED;
 }
 

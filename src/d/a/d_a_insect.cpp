@@ -30,7 +30,7 @@ bool dAcOInsect_c::checkForLinkScare() {
                 mLinkNearby = 1;
                 return true;
             }
-        } else if (dAcPy_c::LINK->forwardSpeed > 1.f) {
+        } else if (dAcPy_c::LINK->mSpeed > 1.f) {
             if (dAcPy_c::LINK->getDistanceTo(mPosition) < 30.f) {
                 mLinkNearby = 1;
                 return true;
@@ -62,7 +62,7 @@ bool dAcOInsect_c::isLinkUsingBugNet() {
 
 s32 dAcOInsect_c::getLinkSpeedLevel() {
     if (dAcPy_c::LINK != nullptr) {
-        f32 speed = fabsf(dAcPy_c::LINK->forwardSpeed);
+        f32 speed = fabsf(dAcPy_c::LINK->mSpeed);
         if (speed < 0.1f) {
             return 0;
         } else if (speed < 10.0f) {
@@ -139,9 +139,9 @@ void dAcOInsect_c::addAttentionTarget() {
 }
 
 void dAcOInsect_c::preAttention() {
-    poscopy2 = mPosition;
-    poscopy2.y += 20.f;
-    poscopy3 = poscopy2;
+    mPositionCopy2 = mPosition;
+    mPositionCopy2.y += 20.f;
+    mPositionCopy3 = mPositionCopy2;
 }
 
 f32 dAcOInsect_c::dAcOInsect_0x80() {
@@ -200,15 +200,15 @@ bool dAcOInsect_c::fn_8018FAA0() {
 }
 
 bool dAcOInsect_c::fn_8018FAD0() {
-    f32 speed = fabsf(forwardSpeed);
+    f32 speed = fabsf(mSpeed);
     if (cM::isLessThanZero(speed)) {
         fn_8018FDF0(mPlane_0x3A8.GetN());
         return true;
     } else {
-        f32 clampSpeed = speed < 5.0f ? forwardSpeed > 0.f ? forwardSpeed : -5.f : 5.f;
+        f32 clampSpeed = speed < 5.0f ? mSpeed > 0.f ? mSpeed : -5.f : 5.f;
 
         mVec3_c pos0 = mPosition + field_0x360;
-        mVec3_c pos1 = pos0 + field_0x36C * forwardSpeed;
+        mVec3_c pos1 = pos0 + field_0x36C * mSpeed;
         int linType = fn_801900B0(pos0, pos1);
         field_0x410[0] = pos0;
         field_0x434[0] = pos1;

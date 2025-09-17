@@ -26,7 +26,7 @@ int dAcOsunLight_c::create() {
     mModel.setAnm(mTexAnm);
     mStateMgr.changeState(StateID_Wait);
     mModel.setPriorityDraw(0x1C, 9);
-    boundingBox.Set(mVec3_c(-200.0f, -100.0f, -200.0f), mVec3_c(200.0f, 600.0f, 500.0f));
+    mBoundingBox.Set(mVec3_c(-200.0f, -100.0f, -200.0f), mVec3_c(200.0f, 600.0f, 500.0f));
     return SUCCEEDED;
 }
 

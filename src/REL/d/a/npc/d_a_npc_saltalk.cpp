@@ -53,7 +53,7 @@ int dAcNpcSltk_c::actorCreate() {
 
     field_0x76C = 0;
 
-    boundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
+    mBoundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
 
     return SUCCEEDED;
 }

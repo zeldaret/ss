@@ -29,7 +29,7 @@ int dAcOdistantShip_c::create() {
         CREATE_ALLOCATOR(dAcOdistantShip_c);
         updateMatrix();
         mModel.setLocalMtx(mWorldMtx);
-        boundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
+        mBoundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
     }
     return SUCCEEDED;
 }

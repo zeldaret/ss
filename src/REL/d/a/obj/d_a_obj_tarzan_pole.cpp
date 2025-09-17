@@ -55,8 +55,8 @@ int dAcOTarzanPole_c::create() {
     mCollider.Set(sCcSrc);
     mCollider.SetStts(mStts);
 
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = 0.0f;
+    mMaxSpeed = -40.0f;
 
     mFloat = (s32)(mParams & 0xFF) * 10.0f;
     if ((s32)(mParams & 0xFF) == 0xFF) {
@@ -65,7 +65,7 @@ int dAcOTarzanPole_c::create() {
 
     mVec = mVec3_c::Ex * 400.0f;
     mVec.rotY(mRotation.y);
-    boundingBox.Set(mVec3_c(-0.0f, -120.0f, -110.0f), mVec3_c(500.0f, 140.0f, 110.0f));
+    mBoundingBox.Set(mVec3_c(-0.0f, -120.0f, -110.0f), mVec3_c(500.0f, 140.0f, 110.0f));
 
     return SUCCEEDED;
 }
@@ -87,15 +87,15 @@ int dAcOTarzanPole_c::actorExecute() {
 
     mVec = mVec3_c::Ex * sXOffset + mVec3_c::Ey * sYOffset;
     mVec.rotY(mRotation.y);
-    poscopy2 = mPosition + mVec;
-    poscopy3 = poscopy2 + mVec3_c::Ey * 20.0f;
+    mPositionCopy2 = mPosition + mVec;
+    mPositionCopy3 = mPositionCopy2 + mVec3_c::Ey * 20.0f;
 
     // 0x400000 corresponds to dAcPy_FLG0::FLG0_SWING_ROPE
     if (player != nullptr && !player->checkActionFlags(0x400000) && dAcItem_c::checkFlag(ITEM_WHIP)) {
         AttentionManager::GetInstance()->addUnk7Target(*this, 1, 1000.0f, 10.0f, -600.0, 200);
     }
 
-    mCollider.SetC(poscopy2);
+    mCollider.SetC(mPositionCopy2);
 
     dCcS::GetInstance()->Set(&mCollider);
     return SUCCEEDED;

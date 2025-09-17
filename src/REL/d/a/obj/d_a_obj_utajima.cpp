@@ -61,7 +61,7 @@ int dAcOutajima_c::create() {
     mVec3_c min;
     mVec3_c max;
     mMdls[0].getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     mCullingDistance = 500000.0f;
     mBgW.SetRideCallback(rideCallback);
 

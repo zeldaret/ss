@@ -155,7 +155,7 @@ int dAcOBlockUnderground::actorCreate() {
     mBgW.Move();
     mVec3_c min, max;
     mMdl.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     return SUCCEEDED;
 }
 

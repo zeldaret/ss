@@ -31,7 +31,7 @@ int dAcOwaterShield_c::create() {
 
     mMdl.setPriorityDraw(0x1C, 0x9);
 
-    boundingBox.Set(mVec3_c(-12000.0f, -2000.0f, -14000.0f), mVec3_c(12000.0f, 11000.0f, 12000.0f));
+    mBoundingBox.Set(mVec3_c(-12000.0f, -2000.0f, -14000.0f), mVec3_c(12000.0f, 11000.0f, 12000.0f));
 
     return SUCCEEDED;
 }

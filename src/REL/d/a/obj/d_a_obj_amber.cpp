@@ -44,7 +44,7 @@ int dAcOAmber_c::actorPostCreate() {
         }
     }
     mMdl.getBounds(&mMin, &mMax);
-    boundingBox.Set(mMin, mMax);
+    mBoundingBox.Set(mMin, mMax);
     mShadowRot.v = (mMin + mMax) * 0.5f;
     mShadowRot.w = ((mMax - mMin) * 0.5f).mag();
     updateMatrix();

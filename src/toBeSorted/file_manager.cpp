@@ -458,7 +458,7 @@ extern "C" void fn_800C01F0(); // todo flag managers
 bool FileManager::isFileInactive() const {
     fBase_c *actor = fManager_c::searchBaseByGroupType(1, nullptr);
     if (actor) {
-        if (actor->profile_name == fProfile::TITLE && !mAntiCommitFlag) {
+        if (actor->mProfileName == fProfile::TITLE && !mAntiCommitFlag) {
             return true;
         }
         return false;

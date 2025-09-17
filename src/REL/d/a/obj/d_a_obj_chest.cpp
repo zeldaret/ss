@@ -116,18 +116,18 @@ int dAcOChest_c::create() {
     dBgS::GetInstance()->Regist(&mBgW, this);
     dBgS::GetInstance()->RegistBg(&mBgW, this);
 
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = 0.0f;
+    mAcceleration = 0.0f;
+    mMaxSpeed = 0.0f;
 
     mStateMgr.changeState(StateID_Wait);
 
-    boundingBox.Set(mVec3_c(-200.0f, -0.0f, -100.0f), mVec3_c(200.0f, 500.0f, 100.0f));
+    mBoundingBox.Set(mVec3_c(-200.0f, -0.0f, -100.0f), mVec3_c(200.0f, 500.0f, 100.0f));
 
     mAnmMdl.setAnm(getOpenOrClose(0), m3d::PLAY_MODE_4);
     mAnmMdl.setRate(0.0f);
 
-    poscopy2.y = mPosition.y + 150.0f;
-    poscopy3 = poscopy2;
+    mPositionCopy2.y = mPosition.y + 150.0f;
+    mPositionCopy3 = mPositionCopy2;
     if ((s32)getFromParams(0x10, 0xFF) != 0xFF) {
         mInsideMdl.setLocalMtx(mWorldMtx);
     }

@@ -39,7 +39,7 @@ int dAcOshrineBefInside_c::create() {
     dBgS::GetInstance()->Regist(&mCollision, this);
     mModel[0].setPriorityDraw(0x1C, 0x9);
     mModel[1].setPriorityDraw(0x22, 0x9);
-    boundingBox.Set(mVec3_c(-2000.0f, 7400.0f, 7200.0f), mVec3_c(4400.0f, 10000.0f, 15800.0f));
+    mBoundingBox.Set(mVec3_c(-2000.0f, 7400.0f, 7200.0f), mVec3_c(4400.0f, 10000.0f, 15800.0f));
     return SUCCEEDED;
 }
 

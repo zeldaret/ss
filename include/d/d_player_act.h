@@ -228,10 +228,10 @@ public:
         return 0.0f;
     }
     /* vt 0x1A4 */ virtual const mVec3_c &vt_0x1A4() {
-        return poscopy3;
+        return mPositionCopy3;
     }
     /* vt 0x1A8 */ virtual f32 vt_0x1A8() {
-        return yoffset;
+        return mYOffset;
     }
     /* vt 0x1AC */ virtual f32 vt_0x1AC() {
         return 0.0f;

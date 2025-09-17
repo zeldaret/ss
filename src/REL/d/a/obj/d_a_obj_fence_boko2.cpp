@@ -22,7 +22,7 @@ int dAcOfenceBoko2_c::create() {
     dBgS::GetInstance()->Regist(&mCollision, this);
     dBgS::GetInstance()->RegistBg(&mCollision, this);
     mModel.setPriorityDraw(0x1C, 0x9);
-    boundingBox.Set(mVec3_c(-160.0f, -40.0f, -70.0f), mVec3_c(180.0f, 300.0f, 60.0f));
+    mBoundingBox.Set(mVec3_c(-160.0f, -40.0f, -70.0f), mVec3_c(180.0f, 300.0f, 60.0f));
     mCullingDistance = 50000.0f;
     return SUCCEEDED;
 }

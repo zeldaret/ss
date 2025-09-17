@@ -29,7 +29,7 @@ int dAcOBirdStatue_c::create() {
     mMdl.setLocalMtx(mWorldMtx);
     mVec3_c min, max;
     mMdl.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     return SUCCEEDED;
 }
 

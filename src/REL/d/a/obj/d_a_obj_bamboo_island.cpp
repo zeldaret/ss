@@ -47,7 +47,7 @@ int dAcObambooIsland_c::create() {
     dBgS::GetInstance()->Regist(&mCollision, this);
     mModels[0].setPriorityDraw(0x1C, 9);
     mModels[1].setPriorityDraw(0x22, 9);
-    boundingBox.Set(mVec3_c(-2400.0f, -1600.0f, -2300.0f), mVec3_c(2400.0f, 3900.0f, 2400.0f));
+    mBoundingBox.Set(mVec3_c(-2400.0f, -1600.0f, -2300.0f), mVec3_c(2400.0f, 3900.0f, 2400.0f));
     mCullingDistance = 500000.0f;
     mCollision.SetRideCallback(rideCallback);
     return SUCCEEDED;

@@ -222,7 +222,7 @@ s32 dRoom_c::foreachObject(foreachObjCallback cb) {
     }
 
     for (fBase_c *base = getConnectChild(); base != nullptr && base != start; base = getConnectTreeNext(base)) {
-        if (base->group_type == ACTOR || base->group_type == STAGE) {
+        if (base->mGroupType == ACTOR || base->mGroupType == STAGE) {
             cb(static_cast<dAcBase_c *>(base));
             count++;
         }

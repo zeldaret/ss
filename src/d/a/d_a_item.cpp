@@ -320,9 +320,19 @@ STATE_DEFINE(dAcItem_c, WaitTurnOff);
 STATE_DEFINE(dAcItem_c, WaitSacredDewGetEffect);
 
 dAcItem_c::dAcItem_c()
-    : mStateMgr(*this, sStateID::null), mEff_0x8F4(this), mEff_0x928(this), mEff_0x95C(this), mEff_0x990(this),
-      mEff_0x9C4(this), mEff_0x9F8(this), mEff_0xA2C(this), mEff_0xA60(this), mNode(this),
-      mEventRelated(*this, nullptr), mDowsingTarget(this, DowsingTarget::SLOT_NONE), mItemQueuePrev(nullptr),
+    : mStateMgr(*this, sStateID::null),
+      mEff_0x8F4(this),
+      mEff_0x928(this),
+      mEff_0x95C(this),
+      mEff_0x990(this),
+      mEff_0x9C4(this),
+      mEff_0x9F8(this),
+      mEff_0xA2C(this),
+      mEff_0xA60(this),
+      mNode(this),
+      mEventRelated(*this, nullptr),
+      mDowsingTarget(this, DowsingTarget::SLOT_NONE),
+      mItemQueuePrev(nullptr),
       mItemQueueNext(nullptr) {
     mField_0xCD8 = 1.0f;
     mBaseScale = 1.0f;
@@ -348,7 +358,7 @@ dAcItem_c::dAcItem_c()
     mField_0xD66 = 0;
 
     sItemList.append(&mNode);
-    unkByteTargetFiRelated = 3;
+    mTargetFiRelated = 3;
 }
 dAcItem_c::~dAcItem_c() {
     delete mField_0xB3C;

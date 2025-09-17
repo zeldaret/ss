@@ -29,7 +29,7 @@ fBase_c *fManager_c::searchBaseByID(fBaseID_e id) {
 
 /* 802e2920 */
 fBase_c *fManager_c::searchBaseByProfName(ProfileName profID, const fBase_c *parent) {
-    const fTrNdBa_c *connect_node = parent != nullptr ? &parent->manager.connect_node : nullptr;
+    const fTrNdBa_c *connect_node = parent != nullptr ? &parent->mManager.connect_node : nullptr;
 
     const fTrNdBa_c *node = m_connectManage.searchNodeByProfName(profID, connect_node);
 
@@ -42,7 +42,7 @@ fBase_c *fManager_c::searchBaseByProfName(ProfileName profID, const fBase_c *par
 
 /* 802e2980 */
 fBase_c *fManager_c::searchBaseByGroupType(unsigned char groupType, const fBase_c *parent) {
-    const fTrNdBa_c *connect_node = parent != nullptr ? &parent->manager.connect_node : nullptr;
+    const fTrNdBa_c *connect_node = parent != nullptr ? &parent->mManager.connect_node : nullptr;
 
     const fTrNdBa_c *node = m_connectManage.searchNodeByGroupType(groupType, connect_node);
 

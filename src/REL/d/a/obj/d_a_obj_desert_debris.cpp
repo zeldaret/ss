@@ -37,7 +37,7 @@ int dAcOdesertDebris_c::create() {
     mMdl.setPriorityDraw(0x1C, 9);
     mVec3_c min, max;
     mMdl.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     mCullingDistance = 50000.0f;
     return SUCCEEDED;
 }

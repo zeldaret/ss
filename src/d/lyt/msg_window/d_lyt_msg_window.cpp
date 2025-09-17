@@ -2,15 +2,16 @@
 
 #include "common.h"
 #include "d/a/obj/d_a_obj_base.h"
+#include "d/d_lyt_hio.h"
 #include "d/d_message.h"
 #include "d/d_pad.h"
 #include "d/d_stage_mgr.h"
 #include "d/d_tag_processor.h"
-#include "d/d_lyt_hio.h"
 #include "d/d_textwindow_unk.h"
 #include "d/lyt/d_lyt_control_game.h"
 #include "d/lyt/d_lyt_map.h"
 #include "d/lyt/d_textbox.h"
+
 
 // clang-format off
 // vtable order
@@ -263,8 +264,8 @@ void dLytMsgWindow_c::initializeState_In() {
         param = 2;
     } else if (mpTagProcessor->getField_0x90D() == 3) {
         param = 1;
-    } else if (obj != nullptr && d3d::fn_80016A90(obj->poscopy2)) {
-        d3d::fn_80016960(field_0x768, obj->poscopy2);
+    } else if (obj != nullptr && d3d::fn_80016A90(obj->mPositionCopy2)) {
+        d3d::fn_80016960(field_0x768, obj->mPositionCopy2);
         mVec3_c v = field_0x768;
         v.z = 0.f;
         field_0x768 = v;

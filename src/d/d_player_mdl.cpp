@@ -1860,7 +1860,7 @@ void daPlayerModelBase_c::updateCachedPositions() {
     static const Vec sPos1 = {12.0f, -8.0f, 0.0f};
     static const Vec sHeadPos = {0.0f, -28.0f, 0.0f};
 
-    mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sPos1, poscopy2);
+    mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sPos1, mPositionCopy2);
     mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sPosAboveLink, mPositionAboveLink);
     mMainMdl.getNodeWorldMtxMultVec(PLAYER_MAIN_NODE_HEAD, sHeadPos, mHeadTranslation);
 
@@ -1881,7 +1881,7 @@ void daPlayerModelBase_c::updateCachedPositions() {
         mVec3_c v(0.0f, 18.0f, 0.0f);
         v.rotX(field_0x1268);
         v.rotY(mRotation.y + field_0x126A);
-        poscopy2 += v;
+        mPositionCopy2 += v;
     }
 }
 
@@ -1891,16 +1891,16 @@ void daPlayerModelBase_c::setPosCopy3() {
     static const Vec posCopy3v2 = {0.0f, 95.0f, 0.0f};
     static const Vec posCopy3v3 = {0.0f, 14.0f, 0.0f};
     if (checkCurrentAction(/* FREE_FALL*/ 0x13) || checkCurrentAction(/* WALKING_ON_TIGHTROPE */ 0x81)) {
-        poscopy3 = mPosition;
-        poscopy3.y += 180.0f;
+        mPositionCopy3 = mPosition;
+        mPositionCopy3.y += 180.0f;
     } else if (checkCurrentAction(/* BEING_PULLED_BY_CLAWS */ 0x5A)) {
-        poscopy3 = poscopy2;
+        mPositionCopy3 = mPositionCopy2;
     } else if (checkActionFlags(FLG0_SWING_ROPE)) {
-        poscopy3 = mPosition;
+        mPositionCopy3 = mPosition;
     } else if (checkActionFlagsCont(0x20000000) || checkCurrentAction(0x70) ||
                checkCurrentAction(/* HANG_ON_ZIP */ 0x85)) {
-        poscopy3 = mPosition;
-        poscopy3.y -= 100.0f;
+        mPositionCopy3 = mPosition;
+        mPositionCopy3.y -= 100.0f;
     } else {
         // TODO maybe fakematch, is there a way to avoid this goto?
         if (checkActionFlags(FLG0_HANGING_LEDGE)) {
@@ -1913,14 +1913,14 @@ void daPlayerModelBase_c::setPosCopy3() {
             case 0x84: /* CLIMBING_ONTO_TIGHTROPE */ {
             label:
                 const nw4r::math::MTX34 *c = mHeadMdl.getLocalMtx();
-                poscopy3.x = c->_03;
-                poscopy3.y = c->_13;
-                poscopy3.z = c->_23;
+                mPositionCopy3.x = c->_03;
+                mPositionCopy3.y = c->_13;
+                mPositionCopy3.z = c->_23;
                 break;
             }
             case 0x09: {
                 // SLIDING
-                poscopy3 = mPosition + mVec3_c(posCopy3v2);
+                mPositionCopy3 = mPosition + mVec3_c(posCopy3v2);
                 break;
             }
             default: {
@@ -1940,10 +1940,10 @@ void daPlayerModelBase_c::setPosCopy3() {
                     }
                     f = mtx.m[1][3];
                 }
-                poscopy3.copyFrom(v);
-                poscopy3.x += mPosition.x;
-                poscopy3.y += f;
-                poscopy3.z += mPosition.z;
+                mPositionCopy3.copyFrom(v);
+                mPositionCopy3.x += mPosition.x;
+                mPositionCopy3.y += f;
+                mPositionCopy3.z += mPosition.z;
                 break;
             }
         }

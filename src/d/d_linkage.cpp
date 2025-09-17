@@ -72,8 +72,8 @@ bool dLinkage_c::tryAttach(
             return false;
         }
     }
-    pActor->clearObjectProperty(0x1000);
-    pActor->clearObjectProperty(0x4);
+    pActor->unsetObjectProperty(0x1000);
+    pActor->unsetObjectProperty(0x4);
     mControllingActor.link(pSrc);
     mState = STATE_ACTIVE;
     mType = type;
@@ -88,7 +88,7 @@ bool dLinkage_c::tryAttach(
     pLinkedActor = pRef;
     pRef->link(pActor);
     if ((pSrc == dAcPy_c::GetLink2() || type == CONNECTION_5) &&
-        pActor->getConnectParent()->profile_name == fProfile::ROOM) {
+        pActor->getConnectParent()->mProfileName == fProfile::ROOM) {
         pActor->addActorToRoom(-1);
         onFlag(0x20000000);
         pActor->setActorProperty(dAcBase_c::AC_PROP_0x2000000);
@@ -110,9 +110,9 @@ void dLinkage_c::fn_80050E00(dAcObjBase_c *pActor, const f32 speed, const f32 ve
 
 void dLinkage_c::fn_80050E40(dAcObjBase_c *pActor, const f32 speed, const f32 velocityY, mAng rot) {
     fn_80050EB0(pActor);
-    pActor->forwardSpeed = speed;
-    pActor->velocity.y = velocityY;
-    pActor->angle.y = rot;
+    pActor->mSpeed = speed;
+    pActor->mVelocity.y = velocityY;
+    pActor->mAngle.y = rot;
 }
 
 void dLinkage_c::fn_80050EA0(dAcObjBase_c *pActor) {
@@ -134,11 +134,11 @@ void dLinkage_c::fn_80050EB0(dAcObjBase_c *pActor) {
         MTXIdentity(carryTransMtx);
     } else if (mType == CONNECTION_4) {
         if (pActor) {
-            pActor->clearObjectProperty(0x4);
+            pActor->unsetObjectProperty(0x4);
         }
     } else if (mType == CONNECTION_7) {
         if (pActor) {
-            pActor->clearObjectProperty(0x1000);
+            pActor->unsetObjectProperty(0x1000);
         }
     }
 
@@ -204,7 +204,7 @@ void dLinkage_c::fn_80051190(dAcObjBase_c *pActor) {
 
         // If the Actor is linked to itself, return?
         dAcObjBase_c *pLinked = static_cast<dAcObjBase_c *>(pLinkedActor->p_owner);
-        if (pLinked && &pLinked->GetLinkage() == this) {
+        if (pLinked && &pLinked->getLinkage() == this) {
             return;
         }
     }
@@ -223,7 +223,7 @@ void dLinkage_c::fn_800511E0(dAcObjBase_c *pActor) {
     }
     mMtx_c &mtx = pActor->mWorldMtx;
     f32 y = field_0x1C * pActor->mScale.y;
-    mtx.transS(pActor->getPosition().x, pActor->getPosition().y + pActor->GetYOffset(), pActor->getPosition().z);
+    mtx.transS(pActor->getPosition().x, pActor->getPosition().y + pActor->getYOffset(), pActor->getPosition().z);
     if (mType == CONNECTION_1) {
         MTXConcat(mtx, carryTransMtx, mtx);
     }
@@ -247,5 +247,5 @@ void dLinkage_c::fn_800511E0(dAcObjBase_c *pActor) {
 
 bool dLinkage_c::fn_800513C0() const {
     return (mState == STATE_ACTIVE && (mType == CONNECTION_1 || mType == CONNECTION_6)) &&
-           !(mControllingActor.p_owner && mControllingActor.p_owner->profile_name == fProfile::E_GEROCK);
+           !(mControllingActor.p_owner && mControllingActor.p_owner->mProfileName == fProfile::E_GEROCK);
 }

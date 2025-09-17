@@ -27,7 +27,7 @@ int dAcObjFairy_c::create() {
     mStateMgr.changeState(StateID_CureStart);
     mStateMgr.changeState(StateID_Wait);
     mModel.getModel().setPriorityDraw(0x7F, 0x7F);
-    boundingBox.Set(mVec3_c(-20.0f, -200.0f, -20.0f), mVec3_c(20.0f, 20.0f, 20.0f));
+    mBoundingBox.Set(mVec3_c(-20.0f, -200.0f, -20.0f), mVec3_c(20.0f, 20.0f, 20.0f));
 
     return SUCCEEDED;
 }
@@ -96,7 +96,7 @@ void dAcObjFairy_c::executeState_CatchDemo() {
 }
 void dAcObjFairy_c::finalizeState_CatchDemo() {
     field_0xB89 = 0;
-    clearObjectProperty(0x200);
+    unsetObjectProperty(0x200);
 }
 
 bool dAcObjFairy_c::shouldAvoidLink() const {
@@ -104,7 +104,7 @@ bool dAcObjFairy_c::shouldAvoidLink() const {
     if (dAcPy_c::LINK->isUsingBugnet()) {
         mVec3_c dist = dAcPy_c::LINK->getBugNetPos() - mPosition;
         bool isClose = false;
-        if (dist.mag() < 100.0f && velocity.dot(dist) > 0.0f) {
+        if (dist.mag() < 100.0f && mVelocity.dot(dist) > 0.0f) {
             isClose = true;
         }
 

@@ -84,7 +84,7 @@ int dAcOstreamLava_c::create() {
     mModel.setPriorityDraw(0x1C, 0x9);
     mVec3_c min, max;
     mModel.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     mCullingDistance = 50000.0f;
 
     int roomId_tmp = mRoomID;
@@ -112,7 +112,7 @@ int dAcOstreamLava_c::actorExecute() {
         setObjectProperty(0x200);
         return SUCCEEDED;
     } else {
-        clearObjectProperty(0x200);
+        unsetObjectProperty(0x200);
         return SUCCEEDED;
     }
 }

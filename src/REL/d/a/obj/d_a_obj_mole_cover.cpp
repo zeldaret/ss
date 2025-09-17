@@ -32,7 +32,7 @@ int dAcOmoleCover_c::create() {
     CREATE_ALLOCATOR(dAcOmoleCover_c);
     dBgS::GetInstance()->Regist(&mBgW, this);
     mMdl.setPriorityDraw(0x1C, 9);
-    boundingBox.Set(mVec3_c(-1900.0f, 1100.0f, -5500.0f), mVec3_c(100.0f, 1700.0f, -1800.0f));
+    mBoundingBox.Set(mVec3_c(-1900.0f, 1100.0f, -5500.0f), mVec3_c(100.0f, 1700.0f, -1800.0f));
     mCullingDistance = FLOAT_MAX;
     return SUCCEEDED;
 }

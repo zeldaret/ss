@@ -49,7 +49,7 @@ int dAcOFruitGutsLeaf_c::actorCreate() {
         mMdl.setPriorityDraw(0x7F, 0x7F);
     }
 
-    boundingBox.Set(bbMin, bbMax);
+    mBoundingBox.Set(bbMin, bbMax);
 
     return SUCCEEDED;
 }

@@ -80,11 +80,11 @@ void daPlayerActBase_c::setPosRot(const mVec3_c *pos, const mAng3_c *rot, bool f
         if (pos != nullptr) {
             mPosition = *pos;
             mOldPosition = mPosition;
-            velocity.y = 0.0f;
+            mVelocity.y = 0.0f;
         }
         if (rot != nullptr) {
             mRotation = *rot;
-            angle.y = mRotation.y;
+            mAngle.y = mRotation.y;
         }
     }
 }

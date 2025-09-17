@@ -19,11 +19,11 @@ int dAcOPumpkinLeaf_c::create() {
         return FAILED;
     }
 
-    forwardAccel = -1.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = -1.0f;
+    mMaxSpeed = -40.0f;
     updateMatrix();
     mStateMgr.changeState(StateID_Wait);
-    boundingBox.Set(mVec3_c(-50.0f, -10.0f, -50.0f), mVec3_c(50.0f, 50.0f, 50.0f));
+    mBoundingBox.Set(mVec3_c(-50.0f, -10.0f, -50.0f), mVec3_c(50.0f, 50.0f, 50.0f));
     dAcObjBase_c::create(
         "PmpknBd", getRoomId(), 0, &mPosition, &mRotation, &mScale, getParams2_ignoreLower(), -1, mViewClipIdx
     );

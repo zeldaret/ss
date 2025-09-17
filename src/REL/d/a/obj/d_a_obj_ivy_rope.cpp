@@ -721,7 +721,7 @@ void dAcOivyRope_c::fn_256_C980(f32 f0, f32 f1) {
 UNKTYPE dAcOivyRope_c::fn_256_C9B0(UNKTYPE) {}
 
 void dAcOivyRope_c::fn_256_CD40() {
-    mPosition = poscopy3 = poscopy2 = fn_256_D730(mSegmentCount - 1);
+    mPosition = mPositionCopy3 = mPositionCopy2 = fn_256_D730(mSegmentCount - 1);
 
     mCps1.Set(sCpsSrc);
     mCps1.SetStts(mStts);

@@ -27,7 +27,7 @@ bool dAcObjBirdSp_c::createHeap() {
 int dAcObjBirdSp_c::create() {
     CREATE_ALLOCATOR(dAcObjBirdSp_c);
 
-    boundingBox.Set(mVec3_c(-2000, -2000, -2000), mVec3_c(2000, 2000, 2000));
+    mBoundingBox.Set(mVec3_c(-2000, -2000, -2000), mVec3_c(2000, 2000, 2000));
     mCollider.Set(sCcSrc);
     mCollider.SetStts(mStts);
     mCollider.SetR(mScale.x * 1000.0f);
@@ -37,8 +37,8 @@ int dAcObjBirdSp_c::create() {
 int dAcObjBirdSp_c::actorExecute() {
     /* if its colliding with Bird or Player */
     if (mCollider.ChkCoHit() && mCollider.GetCoActor() != nullptr &&
-        (mCollider.GetCoActor()->profile_name == fProfile::BIRD ||
-         mCollider.GetCoActor()->profile_name == fProfile::PLAYER)) {
+        (mCollider.GetCoActor()->mProfileName == fProfile::BIRD ||
+         mCollider.GetCoActor()->mProfileName == fProfile::PLAYER)) {
         mVec3_c posChange(0, -0.2, 1.0);
         mMtx_c matrix;
         matrix.ZXYrotS(mRotation);

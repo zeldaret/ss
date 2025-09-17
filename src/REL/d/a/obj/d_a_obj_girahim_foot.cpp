@@ -33,13 +33,13 @@ int dAcOgirahimFoot_c::create() {
 
     mStateMgr.changeState(StateID_Wait);
 
-    poscopy2.x = 13275.0f;
-    poscopy2.y = 2370.0f;
-    poscopy2.z = -11780.0f;
+    mPositionCopy2.x = 13275.0f;
+    mPositionCopy2.y = 2370.0f;
+    mPositionCopy2.z = -11780.0f;
 
     mVec3_c min, max;
     mMdl.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
 
     return SUCCEEDED;
 }

@@ -50,7 +50,7 @@ int dTgAction_c::actorExecute() {
             if (pObj == nullptr) {
                 break;
             }
-            if (pObj->profile_name == fProfile::BOMB) {
+            if (pObj->mProfileName == fProfile::BOMB) {
                 if (checkIfVec3fInMatrix(mActiveMtx, pObj->getPosition())) {
                     reinterpret_cast<dAcBomb_c *>(pObj)->On_0xA3C(0x20000000);
                 }

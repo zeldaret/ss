@@ -164,7 +164,7 @@ int dAcOTowerHandD101_c::actorCreate() {
         dBgS::GetInstance()->Regist(bgW, this);
     }
 
-    boundingBox.Set(getBoundingLower(), getBoundingUpper());
+    mBoundingBox.Set(getBoundingLower(), getBoundingUpper());
 
     return SUCCEEDED;
 }

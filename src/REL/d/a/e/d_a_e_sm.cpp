@@ -129,7 +129,7 @@ int dAcEsm_c::actorCreate() {
 
     CREATE_ALLOCATOR(dAcEsm_c);
 
-    mRotation.z = angle.x = 0;
+    mRotation.z = mAngle.x = 0;
 
     mBombRef.unlink();
 
@@ -138,19 +138,19 @@ int dAcEsm_c::actorCreate() {
     switch ((int)mScale.x) {
         default:
         case SM_SMALL: {
-            boundingBox.Set(mVec3_c(-250.f, -250.f, -250.f), mVec3_c(250.f, 375.f, 250.f));
+            mBoundingBox.Set(mVec3_c(-250.f, -250.f, -250.f), mVec3_c(250.f, 375.f, 250.f));
             mScale.set(0.8f, 0.8f, 0.8f);
         } break;
         case SM_LARGE: {
-            boundingBox.Set(mVec3_c(-500.f, -500.f, -500.f), mVec3_c(500.f, 750.f, 500.f));
+            mBoundingBox.Set(mVec3_c(-500.f, -500.f, -500.f), mVec3_c(500.f, 750.f, 500.f));
             mScale.set(0.4f, 0.4f, 0.4f);
         } break;
         case SM_MASSIVE: {
-            boundingBox.Set(mVec3_c(-800.f, -800.f, -800.f), mVec3_c(800.f, 1200.f, 800.f));
+            mBoundingBox.Set(mVec3_c(-800.f, -800.f, -800.f), mVec3_c(800.f, 1200.f, 800.f));
             mScale.set(0.25f, 0.25f, 0.25f);
         } break;
         case SM_TINY: {
-            boundingBox.Set(mVec3_c(-150.f, -150.f, -150.f), mVec3_c(150.f, 225.f, 150.f));
+            mBoundingBox.Set(mVec3_c(-150.f, -150.f, -150.f), mVec3_c(150.f, 225.f, 150.f));
             mScale.set(1.2f, 1.2f, 1.2f);
         } break;
     }
@@ -166,16 +166,16 @@ int dAcEsm_c::actorCreate() {
     mObjAcch.SetGndThinCellingOff();
     mObjAcch.mField_0x390 = 1;
 
-    forwardMaxSpeed = -40.f;
+    mMaxSpeed = -40.f;
 
     mSph.Set(sSphSrc);
 
     mSph.SetStts(mStts);
 
-    mPosition.CopyTo(poscopy2);
+    mPosition.CopyTo(mPositionCopy2);
     mPosition.CopyTo(mPosCopy1);
-    mPosition.CopyTo(poscopy3);
-    poscopy3.y += 50.f;
+    mPosition.CopyTo(mPositionCopy3);
+    mPositionCopy3.y += 50.f;
 
     mRotCopy.set(mRotation);
 
@@ -220,10 +220,10 @@ int dAcEsm_c::actorCreate() {
     mHealth = 100;
 
     if (field_0xBBF != 1) {
-        forwardAccel = -3.f;
+        mAcceleration = -3.f;
     }
     calcVelocity();
-    mPosition += velocity;
+    mPosition += mVelocity;
     mPosition += mStts.GetCcMove();
 
     mObjAcch.CrrPos(*dBgS::GetInstance());
@@ -233,27 +233,27 @@ int dAcEsm_c::actorCreate() {
     switch (mType) {
         // SM_RED
         default: {
-            targetFiTextId = 59;
+            mTargetFiTextID = 59;
             anim_frame = 0.f;
             mSph.SetAtModifier(AT_MOD_FIRE);
             mType = SM_RED;
         } break;
         case SM_GREEN_ALT:
         case SM_GREEN:     {
-            targetFiTextId = 62;
+            mTargetFiTextID = 62;
             anim_frame = 3.f;
             mType = SM_GREEN;
         } break;
         case SM_YELLOW_ALT:
         case SM_YELLOW:     {
-            targetFiTextId = 61;
+            mTargetFiTextID = 61;
             anim_frame = 2.f;
             mSph.SetAtModifier(AT_MOD_ELECTRIC);
             mType = SM_YELLOW;
         } break;
 
         case SM_BLUE: {
-            targetFiTextId = 60;
+            mTargetFiTextID = 60;
             anim_frame = 1.f;
         } break;
     }
@@ -339,7 +339,7 @@ int dAcEsm_c::actorExecute() {
             target.y += mScaleTarget.y * 60.f;
         }
 
-        cLib::addCalcPos2(&bomb->getPosition(), target, 0.8f, 20.f + GetSpeed() * 1.5f);
+        cLib::addCalcPos2(&bomb->getPosition(), target, 0.8f, 20.f + getSpeed() * 1.5f);
 
         field_0xB6C = 0.5f;
 
@@ -412,11 +412,11 @@ int dAcEsm_c::actorExecute() {
                     fillUpperParams2Byte();
                     deleteRequest();
                 }
-                forwardSpeed = 0.f;
+                mSpeed = 0.f;
 
                 // TODO: Maybe Inline - Common Pattern. Check GetCcMove
                 calcVelocity();
-                mPosition += velocity;
+                mPosition += mVelocity;
                 mPosition += mStts.GetCcMove();
 
                 mObjAcch.CrrPos(*dBgS::GetInstance());
@@ -443,7 +443,7 @@ int dAcEsm_c::actorExecute() {
                 field_0xBBF = 0;
                 setBattleBgmRelated(2);
                 fn_80030700();
-                mRotation.y = angle.y = getXZAngleToPlayer();
+                mRotation.y = mAngle.y = getXZAngleToPlayer();
             }
             if (field_0xBBF == 3) {
                 return SUCCEEDED;
@@ -468,7 +468,7 @@ int dAcEsm_c::actorExecute() {
 
     if (0 == sLib::calcTimer(&mTimer_0xBC4)) {
         calcVelocity();
-        mPosition += velocity;
+        mPosition += mVelocity;
         mPosition += mStts.GetCcMove();
     }
 
@@ -517,7 +517,7 @@ int dAcEsm_c::actorExecute() {
             if (mSph.ChkTgHit()) {
                 if (field_0xB94 == 7) {
                     field_0xB6C = 0.5f;
-                    forwardSpeed = 0.f;
+                    mSpeed = 0.f;
                 } else {
                     int val = 0; // IDK what this would have been
                     field_0xB6C = 1.5f + 0.1f * val;
@@ -550,7 +550,7 @@ int dAcEsm_c::actorExecute() {
                         break;
                     default: {
                         dAcObjBase_c *tgActor = mSph.GetTgActor();
-                        if (tgActor->profile_name == fProfile::OBJ_FIRE_PILLAR) {
+                        if (tgActor->mProfileName == fProfile::OBJ_FIRE_PILLAR) {
                             mHealth = 0;
                             fn_187_4540(2);
                         } else {
@@ -581,12 +581,13 @@ int dAcEsm_c::actorExecute() {
 
     if (mHealth != 0 && field_0xBC8 == 0 && field_0xBA0 == 0 && field_0xB90 < 0) {
         // Check to make sure the chu is slow enough/or on the ground
-        if ((!mStateMgr.isState(StateID_BirthJump) || mObjAcch.ChkGndHit() || velocity.y <= -6.f) && field_0xBB6 == 0) {
+        if ((!mStateMgr.isState(StateID_BirthJump) || mObjAcch.ChkGndHit() || mVelocity.y <= -6.f) &&
+            field_0xBB6 == 0) {
             // Check to make sure chu isnt in a "death"-like state.
             if (!(mStateMgr.isState(StateID_Absorption) || mStateMgr.isState(StateID_Dead) ||
                   mStateMgr.isState(StateID_Fusion))) {
                 // CHECK FOR FUSION - Another ESm
-                if (mSph.ChkCoHit() && mSph.GetCoActor()->profile_name == fProfile::E_SM) {
+                if (mSph.ChkCoHit() && mSph.GetCoActor()->mProfileName == fProfile::E_SM) {
                     // The other chu to interact with
                     dAcEsm_c *pOther = static_cast<dAcEsm_c *>(mSph.GetCoActor());
 
@@ -594,7 +595,7 @@ int dAcEsm_c::actorExecute() {
                     if (!fn_187_4B50() && pOther->field_0xBC8 == 0 && pOther->mHealth != 0 &&
                         pOther->field_0xBA0 == 0 && pOther->field_0xB90 < 0 && pOther->field_0xBB6 == 0) {
                         if (!pOther->mStateMgr.isState(StateID_BirthJump) || pOther->mObjAcch.ChkGndHit() ||
-                            pOther->velocity.y <= -6.f) {
+                            pOther->mVelocity.y <= -6.f) {
                             // Check for non-fusion/absorption status and if the other Chu is smaller than [this] chu
                             if (!(pOther->mStateMgr.isState(StateID_Absorption) ||
                                   pOther->mStateMgr.isState(StateID_Fusion)) &&
@@ -632,7 +633,7 @@ int dAcEsm_c::actorExecute() {
                     dAcBomb_c *bomb = getBombWithinRadius(lookRadius);
 
                     if (bomb != nullptr && std::abs(bomb->getPosition().y - mHomePos1.y) < 0.7f * lookRadius) {
-                        if (bomb->GetLinkage().tryAttach(bomb, this, &mBombRef, dLinkage_c::CONNECTION_1, false)) {
+                        if (bomb->getLinkage().tryAttach(bomb, this, &mBombRef, dLinkage_c::CONNECTION_1, false)) {
                             mTimer_0xBAE = 160;
                             startSound(SE_ESm_BRING_IN);
                             unsetActorProperty(AC_PROP_0x1);
@@ -657,10 +658,10 @@ int dAcEsm_c::actorExecute() {
 
     MTXMultVec(nodeMtx, center, mHomePos1);
 
-    mPosition.CopyTo(poscopy3);
-    mPosition.CopyTo(poscopy2);
-    poscopy2.y += 130.f * mScaleTarget.y;
-    poscopy3.y += 260.f * mScaleTarget.y;
+    mPosition.CopyTo(mPositionCopy3);
+    mPosition.CopyTo(mPositionCopy2);
+    mPositionCopy2.y += 130.f * mScaleTarget.y;
+    mPositionCopy3.y += 260.f * mScaleTarget.y;
 
     mSph.SetC(mHomePos1);
     if (mSph.ChkTgElectric()) {
@@ -674,12 +675,12 @@ int dAcEsm_c::actorExecute() {
     mSph.SetR(radius);
     dCcS::GetInstance()->Set(&mSph);
 
-    f32 speedTarget = forwardSpeed;
+    f32 speedTarget = mSpeed;
     speedTarget -= field_0xB80;
     if (speedTarget < 0.f) {
         speedTarget = 0.f;
     }
-    sLib::addCalcScaledDiff(&forwardSpeed, speedTarget, 0.3f, 1.f);
+    sLib::addCalcScaledDiff(&mSpeed, speedTarget, 0.3f, 1.f);
     sLib::addCalcScaled(&field_0xB80, 0.3f, 1.f);
 
     if (field_0xBCB == 0) {
@@ -768,10 +769,10 @@ void dAcEsm_c::initializeState_Walk() {
     mRotation.x = 0;
 
     Set_0xBBC(2);
-    field_0xBAA = angle.y;
+    field_0xBAA = mAngle.y;
     field_0xBA8 = 0;
     field_0xBCB = 0;
-    forwardAccel = -3.f;
+    mAcceleration = -3.f;
 }
 void dAcEsm_c::executeState_Walk() {
     field_0xBA6 += (s16)(1000.f + field_0xB70 / mScaleTarget.x);
@@ -797,7 +798,7 @@ void dAcEsm_c::initializeState_BirthJump() {
     field_0xB54 = 0.1f;
     field_0xB68 = 0.f;
 
-    forwardSpeed = 0.f;
+    mSpeed = 0.f;
     field_0xBB8 = 3;
     field_0xB90 = -1;
 
@@ -855,8 +856,8 @@ void dAcEsm_c::fn_187_3F60() {
 
 bool dAcEsm_c::fn_187_4090() {
     mVec3_c pos(mPosition.x, mPosition.y + 20.f, mPosition.z);
-    if (velocity.y <= 0.f && dBgS_ObjGndChk::CheckPos(pos) && dBgS_ObjGndChk::GetGroundHeight() + 5.f > mPosition.y) {
-        forwardSpeed = 0.f;
+    if (mVelocity.y <= 0.f && dBgS_ObjGndChk::CheckPos(pos) && dBgS_ObjGndChk::GetGroundHeight() + 5.f > mPosition.y) {
+        mSpeed = 0.f;
         field_0xB6C = 1.5f;
         if (field_0xB84) {
             field_0xB6C = field_0xB84 * 0.1f + 0.7f;
@@ -903,7 +904,7 @@ bool dAcEsm_c::fn_187_42C0() {
         return false;
     }
 
-    if (mSph.ChkAtHit() && mSph.GetAtActor()->profile_name == fProfile::PLAYER) {
+    if (mSph.ChkAtHit() && mSph.GetAtActor()->mProfileName == fProfile::PLAYER) {
         if (fn_187_4B50()) {
             return true;
         }
@@ -942,7 +943,7 @@ void dAcEsm_c::fn_187_44C0() {
 
 void dAcEsm_c::fn_187_4540(int param0) {
     const dAcPy_c *player = dAcPy_c::GetLink();
-    mAng3_c rot = GetAngle();
+    mAng3_c rot = getAngle();
 
     fn_187_44C0();
     if (mStateMgr.isState(StateID_Dead)) {
@@ -1024,24 +1025,24 @@ void dAcEsm_c::fn_187_4540(int param0) {
             rot.y = fn_187_51F0(true);
             const f32 y = sSmDataArr[field_0xB98].field_0x04.y;
             if (y != v) {
-                pChild->velocity.y = y;
+                pChild->mVelocity.y = y;
 
-                pChild->velocity.y *= mScaleTarget.y;
+                pChild->mVelocity.y *= mScaleTarget.y;
                 if (field_0xB98 != 2) {
-                    if (pChild->velocity.y < lower) {
-                        pChild->velocity.y = lower;
+                    if (pChild->mVelocity.y < lower) {
+                        pChild->mVelocity.y = lower;
                     }
                 } else {
-                    if (pChild->velocity.y < upper) {
-                        pChild->velocity.y = upper;
+                    if (pChild->mVelocity.y < upper) {
+                        pChild->mVelocity.y = upper;
                     }
                 }
             }
 
-            pChild->field_0xB84 = pChild->velocity.y;
-            pChild->forwardSpeed = mScaleTarget.x * sSmDataArr[field_0xB98].field_0x04.x;
-            if (pChild->forwardSpeed != v && pChild->forwardSpeed < lowest) {
-                pChild->forwardSpeed = lowest;
+            pChild->field_0xB84 = pChild->mVelocity.y;
+            pChild->mSpeed = mScaleTarget.x * sSmDataArr[field_0xB98].field_0x04.x;
+            if (pChild->mSpeed != v && pChild->mSpeed < lowest) {
+                pChild->mSpeed = lowest;
             }
             pChild->field_0xBB8 = bb8;
         }
@@ -1049,7 +1050,7 @@ void dAcEsm_c::fn_187_4540(int param0) {
 
     mSph.OnCoSet();
     if (field_0xB98 != 2) {
-        angle.y = rot.y;
+        mAngle.y = rot.y;
     }
     if (field_0xB98 != 0) {
         field_0xBCE = 1;
@@ -1059,23 +1060,23 @@ void dAcEsm_c::fn_187_4540(int param0) {
     fn_187_6C20(1);
     if (field_0xB98 != 0) {
         if (sSmDataArr[field_0xB98].field_0x10.y) {
-            velocity.y = sSmDataArr[field_0xB98].field_0x10.y;
-            velocity.y *= mScaleTarget.y;
+            mVelocity.y = sSmDataArr[field_0xB98].field_0x10.y;
+            mVelocity.y *= mScaleTarget.y;
             if (field_0xB98 != 2) {
-                if (velocity.y < 20.f) {
-                    velocity.y = 20.f;
+                if (mVelocity.y < 20.f) {
+                    mVelocity.y = 20.f;
                 }
             } else {
-                if (velocity.y < 30.f) {
-                    velocity.y = 30.f;
+                if (mVelocity.y < 30.f) {
+                    mVelocity.y = 30.f;
                 }
             }
         }
 
-        field_0xB84 = velocity.y;
-        forwardSpeed = sSmDataArr[field_0xB98].field_0x10.y * mScaleTarget.x;
-        if (forwardSpeed && forwardSpeed < 10.f) {
-            forwardSpeed = 10.f;
+        field_0xB84 = mVelocity.y;
+        mSpeed = sSmDataArr[field_0xB98].field_0x10.y * mScaleTarget.x;
+        if (mSpeed && mSpeed < 10.f) {
+            mSpeed = 10.f;
         }
         field_0xBB8 = 0;
         if (field_0xB98 == 2) {
@@ -1126,9 +1127,9 @@ void dAcEsm_c::fn_187_4CC0() {
     }
 
     if (mObjAcch.ChkWallHit(nullptr)) {
-        sLib::addCalcAngle(angle.y.ref(), mAcchCir.GetWallAngleY(), 4, 0x200);
+        sLib::addCalcAngle(mAngle.y.ref(), mAcchCir.GetWallAngleY(), 4, 0x200);
     }
-    sLib::addCalcAngle(mRotation.y.ref(), angle.y, 2, 0x800);
+    sLib::addCalcAngle(mRotation.y.ref(), mAngle.y, 2, 0x800);
     sLib::addCalcAngle(mRotUnk.x.ref(), mTargetRotX, 4, 0x800);
     sLib::addCalcAngle(mRotUnk.z.ref(), mTargetRotZ, 4, 0x800);
 
@@ -1235,7 +1236,7 @@ void dAcEsm_c::fn_187_5940() {
 void dAcEsm_c::updateBoundingBox() {
     f32 min = -200.f / mScale.x;
     f32 max = 200.f / mScale.x;
-    boundingBox.Set(mVec3_c(min, min, min), mVec3_c(max, 250.f / mScale.x, max));
+    mBoundingBox.Set(mVec3_c(min, min, min), mVec3_c(max, 250.f / mScale.x, max));
 }
 
 void dAcEsm_c::fn_187_61B0(u8 param0) {
@@ -1436,8 +1437,8 @@ void dAcEsm_c::fn_187_6C20(bool param0) {
 
     if (!param0) {
         dCamera_c *cam = dScGame_c::getCamera(0);
-        angle.y = cLib::targetAngleY(cam->getPositionMaybe(), cam->getField_0x78());
-        angle.addY(cM::rndFX(16384.f));
+        mAngle.y = cLib::targetAngleY(cam->getPositionMaybe(), cam->getField_0x78());
+        mAngle.addY(cM::rndFX(16384.f));
     }
 
     field_0xBCE = 1;

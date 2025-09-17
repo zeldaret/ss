@@ -32,15 +32,15 @@ int dAcOtrapRock1_c::create() {
 
     mBgW.SetCrrFunc(dBgS_MoveBGProc_Typical);
     dBgS::GetInstance()->Regist(&mBgW, this);
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = 0.0f;
+    mMaxSpeed = -40.0f;
     mStateMgr.changeState(StateID_TrapWait);
     mVec3_c min, max;
     mMdl.getBounds(&min, &max);
     static mVec3_c offset = mVec3_c(50.0f, 50.0f, 50.0f);
     min -= offset;
     max += offset;
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
 
     return SUCCEEDED;
 }

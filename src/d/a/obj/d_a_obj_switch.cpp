@@ -33,8 +33,8 @@ void dAcOswMdlCallback_c::timingB(u32 nodeId, nw4r::g3d::WorldMtxManip *manip, n
 }
 
 static bool isPushableBlock(dAcBase_c *actor) {
-    return actor->isActorPlayer() || actor->profile_name == fProfile::OBJ_PUSH_BLOCK ||
-           actor->profile_name == fProfile::OBJ_KIBAKO;
+    return actor->isActorPlayer() || actor->mProfileName == fProfile::OBJ_PUSH_BLOCK ||
+           actor->mProfileName == fProfile::OBJ_KIBAKO;
 }
 
 void dAcOsw_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *interactor) {
@@ -49,12 +49,12 @@ void dAcOsw_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *in
             return;
         }
         if (link->checkFlags0x340(0x800000) &&
-            !(link->getCurrentCarriedActor() && link->getCurrentCarriedActor()->GetLinkage().checkFlag(0x04))) {
+            !(link->getCurrentCarriedActor() && link->getCurrentCarriedActor()->getLinkage().checkFlag(0x04))) {
             return;
         }
     }
 
-    if (interactor->GetLinkage().checkState(dLinkage_c::STATE_ACTIVE)) {
+    if (interactor->getLinkage().checkState(dLinkage_c::STATE_ACTIVE)) {
         return;
     }
 
@@ -107,7 +107,7 @@ int dAcOsw_c::actorCreate() {
     } else {
         mStateMgr.changeState(StateID_OnWait);
     }
-    boundingBox.Set(mVec3_c(-90.0f, -10.0f, -90.0f), mVec3_c(90.0f, 70.0f, 90.0f));
+    mBoundingBox.Set(mVec3_c(-90.0f, -10.0f, -90.0f), mVec3_c(90.0f, 70.0f, 90.0f));
 
     return SUCCEEDED;
 }

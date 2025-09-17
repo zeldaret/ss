@@ -13,7 +13,7 @@
 mVec3_c attnVectors[4];
 
 mVec3_c getPosCopy3(const dAcObjBase_c &actor) {
-    return actor.poscopy3;
+    return actor.mPositionCopy3;
 }
 
 class dAttention_HIO_c {

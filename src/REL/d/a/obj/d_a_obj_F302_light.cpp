@@ -37,8 +37,8 @@ bool dAcOF302Light_c::createHeap() {
 int dAcOF302Light_c::actorCreate() {
     field_0x440 = getFromParams(0, 0xFF);
     CREATE_ALLOCATOR(dAcOF302Light_c);
-    forwardAccel = 0.f;
-    forwardMaxSpeed = -40.f;
+    mAcceleration = 0.f;
+    mMaxSpeed = -40.f;
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     if (field_0x440 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, field_0x440)) {
@@ -46,7 +46,7 @@ int dAcOF302Light_c::actorCreate() {
     } else {
         mStateMgr.changeState(StateID_SwitchOn);
     }
-    boundingBox.Set(mVec3_c(-660.f, -40.f, -660.f), mVec3_c(660.f, 0.f, 660.f));
+    mBoundingBox.Set(mVec3_c(-660.f, -40.f, -660.f), mVec3_c(660.f, 0.f, 660.f));
     return SUCCEEDED;
 }
 

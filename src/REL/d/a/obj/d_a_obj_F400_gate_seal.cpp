@@ -81,7 +81,7 @@ int dAcOF400GateSeal_c::actorPostCreate() {
     mMdl.setLocalMtx(mWorldMtx);
     mVec3_c min, max;
     mMdl.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     return SUCCEEDED;
 }
 
@@ -104,7 +104,7 @@ int dAcOF400GateSeal_c::actorExecute() {
     if (mAnmClr.isStop(0)) {
         setObjectProperty(0x200);
     } else {
-        clearObjectProperty(0x200);
+        unsetObjectProperty(0x200);
     }
     return SUCCEEDED;
 }

@@ -32,9 +32,9 @@ int dAcOruinedSave_c::create() {
     CREATE_ALLOCATOR(dAcOruinedSave_c);
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
-    poscopy2 = mPosition;
-    poscopy2.y += 300.0f;
-    poscopy3 = poscopy2;
+    mPositionCopy2 = mPosition;
+    mPositionCopy2.y += 300.0f;
+    mPositionCopy3 = mPositionCopy2;
     field_0x40C = 0;
     mStateMgr.changeState(StateID_Wait);
     return SUCCEEDED;
@@ -77,8 +77,8 @@ void dAcOruinedSave_c::initializeState_Vanish() {
 void dAcOruinedSave_c::executeState_Vanish() {
     field_0x40C++;
     if (((u16)field_0x40C & 0xF) == 3) {
-        poscopy3.z = poscopy2.z + cM::rndFX(50.0f);
-        poscopy3.y = poscopy2.y - cM::rndFX(20.0f);
+        mPositionCopy3.z = mPositionCopy2.z + cM::rndFX(50.0f);
+        mPositionCopy3.y = mPositionCopy2.y - cM::rndFX(20.0f);
     }
     mAnmMatClr.play();
     if (field_0x408 == mAnmMatClr.getFrame(0)) {

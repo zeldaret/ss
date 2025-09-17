@@ -39,7 +39,7 @@ int dAcOwaterSpout_c::create() {
         mScale.y *= 4.0f;
     }
     mMdl.getModel().setScale(mScale);
-    boundingBox.Set(mVec3_c(-400.0f, -250.0f, -400.0f), mVec3_c(400.0f, 250.0f, 400.0f));
+    mBoundingBox.Set(mVec3_c(-400.0f, -250.0f, -400.0f), mVec3_c(400.0f, 250.0f, 400.0f));
     return SUCCEEDED;
 }
 

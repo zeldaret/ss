@@ -41,7 +41,7 @@ int dAcOutaDemoPedest_c::create() {
     mMdl.setPriorityDraw(0x1C, 9);
     mVec3_c l, u;
     mMdl.getBounds(&l, &u);
-    boundingBox.Set(l, u);
+    mBoundingBox.Set(l, u);
 
     return SUCCEEDED;
 }

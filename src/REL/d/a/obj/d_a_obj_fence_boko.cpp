@@ -26,7 +26,7 @@ int dAcOfenceBoko_c::create() {
     mCollision.mRoomId = dStage_c::GetInstance()->getCurrRoomId();
     mRoomID = mCollision.mRoomId;
     mModel.setPriorityDraw(0x1C, 0x9);
-    boundingBox.Set(mVec3_c(-210.0f, -10.0f, -20.0f), mVec3_c(210.0f, 340.0f, 20.0f));
+    mBoundingBox.Set(mVec3_c(-210.0f, -10.0f, -20.0f), mVec3_c(210.0f, 340.0f, 20.0f));
     mCullingDistance = 50000.0f;
     return SUCCEEDED;
 }

@@ -21,7 +21,7 @@ int dAcOfenceKonsai_c::create() {
     CREATE_ALLOCATOR(dAcOfenceKonsai_c);
     dBgS::GetInstance()->Regist(&mCollision, this);
     mModel.setPriorityDraw(0x1C, 0x9);
-    boundingBox.Set(mVec3_c(-100.0f, -10.0f, -30.0f), mVec3_c(100.0f, 270.0f, 40.0f));
+    mBoundingBox.Set(mVec3_c(-100.0f, -10.0f, -30.0f), mVec3_c(100.0f, 270.0f, 40.0f));
     return SUCCEEDED;
 }
 

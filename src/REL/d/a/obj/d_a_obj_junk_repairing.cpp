@@ -34,12 +34,12 @@ bool dAcOJunkRep_c::createHeap() {
 int dAcOJunkRep_c::create() {
     CREATE_ALLOCATOR(dAcOJunkRep_c);
 
-    forwardAccel = -1.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = -1.0f;
+    mMaxSpeed = -40.0f;
 
     mStateMgr.changeState(StateID_Wait);
 
-    boundingBox.Set(mVec3_c(-30.0f, -0.0f, -20.0f), mVec3_c(30.0f, 120.0f, 20.0f));
+    mBoundingBox.Set(mVec3_c(-30.0f, -0.0f, -20.0f), mVec3_c(30.0f, 120.0f, 20.0f));
 
     return SUCCEEDED;
 }

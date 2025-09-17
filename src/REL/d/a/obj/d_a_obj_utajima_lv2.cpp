@@ -31,7 +31,7 @@ int dAcOutajimaLv2_c::create() {
     dBgS::GetInstance()->Regist(&mBgW, this);
     dBgS::GetInstance()->RegistBg(&mBgW, this);
     mMdl.setPriorityDraw(0x1C, 9);
-    boundingBox.Set(mVec3_c(-2800.0f, -4000.0f, -2600.0f), mVec3_c(2600.0f, 1900.0f, 2700.0f));
+    mBoundingBox.Set(mVec3_c(-2800.0f, -4000.0f, -2600.0f), mVec3_c(2600.0f, 1900.0f, 2700.0f));
     mCullingDistance = 500000.0f;
     return SUCCEEDED;
 }

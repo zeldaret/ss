@@ -90,7 +90,7 @@ int dAcOmegamiIsland_c::create() {
     mMdls[0].setPriorityDraw(0x1C, 9);
     mMdls[1].setPriorityDraw(0x22, 9);
 
-    boundingBox.Set(mVec3_c(-5000.0f, -5000.0f, -23000.0f), mVec3_c(5000.0f, 10000.0f, -9000.0f));
+    mBoundingBox.Set(mVec3_c(-5000.0f, -5000.0f, -23000.0f), mVec3_c(5000.0f, 10000.0f, -9000.0f));
     mCullingDistance = 500000.0f;
 
     return SUCCEEDED;

@@ -23,7 +23,7 @@ int dAcOblade_c::create() {
     mMdl.setAnm("StageF000Blade", m3d::PLAY_MODE_4);
     updateMatrix();
     mMdl.getModel().setLocalMtx(mWorldMtx);
-    boundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
+    mBoundingBox.Set(mVec3_c(-0.0f, -0.0f, -0.0f), mVec3_c(0.0f, 0.0f, 0.0f));
     return SUCCEEDED;
 }
 

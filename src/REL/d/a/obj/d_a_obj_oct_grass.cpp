@@ -41,19 +41,19 @@ bool dAcOOctGrass_c::createHeap() {
 
 int dAcOOctGrass_c::create() {
     CREATE_ALLOCATOR(dAcOOctGrass_c);
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = 0.0f;
+    mMaxSpeed = -40.0f;
     if ((mParams & 0xF) != 0) {
         mMdl.setPriorityDraw(0x1C, 9);
     }
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     spawnOcGrsL();
-    poscopy2 = mPosition;
-    poscopy3 = mPosition;
-    poscopy3.y += 20.0f;
+    mPositionCopy2 = mPosition;
+    mPositionCopy3 = mPosition;
+    mPositionCopy3.y += 20.0f;
     mStateMgr.changeState(StateID_Wait);
-    boundingBox.Set(mVec3_c(-50.0f, -10.0f, -50.0f), mVec3_c(50.0f, 100.0f, 50.0f));
+    mBoundingBox.Set(mVec3_c(-50.0f, -10.0f, -50.0f), mVec3_c(50.0f, 100.0f, 50.0f));
     return SUCCEEDED;
 }
 

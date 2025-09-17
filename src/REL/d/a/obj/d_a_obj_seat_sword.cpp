@@ -86,8 +86,8 @@ int dAcOSeatSword_c::create() {
         mPedestalMdl_s.setPriorityDraw(0x22, 0x9);
     }
 
-    forwardAccel = 0.f;
-    forwardMaxSpeed = -40.f;
+    mAcceleration = 0.f;
+    mMaxSpeed = -40.f;
 
     if (mSubtype == 1) {
         mField_0x7E8 = l_inGroundRot;
@@ -102,7 +102,7 @@ int dAcOSeatSword_c::create() {
         mStateMgr.changeState(StateID_Wait);
     }
 
-    boundingBox.Set(mVec3_c(-75.f, -10.f, -75.f), mVec3_c(75.f, 200.f, 75.f));
+    mBoundingBox.Set(mVec3_c(-75.f, -10.f, -75.f), mVec3_c(75.f, 200.f, 75.f));
 
     return SUCCEEDED;
 }

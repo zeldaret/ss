@@ -20,18 +20,18 @@
 class fBase_c {
 public:
     /* 0x00 */ fBaseID_e mID;
-    /* 0x04 */ u32 mParams;              // params1
-    /* 0x08 */ ProfileName profile_name; // Actor Id
-    /* 0x0A */ u8 lifecycle_state;
-    /* 0x0B */ bool delete_request;
-    /* 0x0C */ s8 update_request;
-    /* 0x0D */ bool create_request;
-    /* 0x0E */ u8 group_type;
+    /* 0x04 */ u32 mParams;
+    /* 0x08 */ ProfileName mProfileName;
+    /* 0x0A */ u8 mLifecycleState;
+    /* 0x0B */ bool mDeleteRequest;
+    /* 0x0C */ s8 mUpdateRequest;
+    /* 0x0D */ bool mCreateRequest;
+    /* 0x0E */ u8 mGroupType;
     /* 0x0F */ u8 mProcControl;
-    /* 0x10 */ fManager_c manager;
-    /* 0x50 */ fBaHelper_c *p_helper;
-    /* 0x54 */ cListMg_c actor_list;
-    /* 0x5C */ EGG::FrmHeap *p_heap;
+    /* 0x10 */ fManager_c mManager;
+    /* 0x50 */ fBaHelper_c *mpHelper;
+    /* 0x54 */ cListMg_c mActorList;
+    /* 0x5C */ EGG::FrmHeap *mpHeap;
     /* 0x60 */ // vtable
 public:
     enum UPDATE_STATUS_e {
@@ -85,8 +85,8 @@ public:
     void setParams() {
         mID = m_rootUniqueID;
         mParams = m_tmpCtData.params;
-        profile_name = m_tmpCtData.prof_name;
-        group_type = m_tmpCtData.group_type;
+        mProfileName = m_tmpCtData.prof_name;
+        mGroupType = m_tmpCtData.group_type;
     }
 
     u32 getFromParams(u8 shift, u32 mask) {

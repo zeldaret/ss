@@ -18,10 +18,10 @@ int dAcNpcRivalLOD_c::create() {
         return FAILED;
     }
     0.0f; // float order, cool
-    forwardAccel = -1.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = -1.0f;
+    mMaxSpeed = -40.0f;
     setState(StateID_Wait);
-    boundingBox.Set(mVec3_c(-110.0f, -30.0f, -130.0f), mVec3_c(130.0f, 190.0f, 110.0f));
+    mBoundingBox.Set(mVec3_c(-110.0f, -30.0f, -130.0f), mVec3_c(130.0f, 190.0f, 110.0f));
     return SUCCEEDED;
 }
 

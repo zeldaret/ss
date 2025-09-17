@@ -61,7 +61,7 @@ int dAcOutajimaIsland_c::actorCreate() {
     mVec3_c min;
     mVec3_c max;
     mMdl.getBounds(&min, &max);
-    boundingBox.Set(min, max);
+    mBoundingBox.Set(min, max);
     mCullingDistance = 500000.0f;
     return SUCCEEDED;
 }

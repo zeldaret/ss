@@ -26,7 +26,7 @@ int dAcOropeBase_c::create() {
     CREATE_ALLOCATOR(dAcOropeBase_c);
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
-    boundingBox.Set(mVec3_c(-525.0f, -0.0f, -500.0f), mVec3_c(-325.0f, 700.0f, -300.0f));
+    mBoundingBox.Set(mVec3_c(-525.0f, -0.0f, -500.0f), mVec3_c(-325.0f, 700.0f, -300.0f));
     return SUCCEEDED;
 }
 

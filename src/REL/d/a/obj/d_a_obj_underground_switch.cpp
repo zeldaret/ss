@@ -57,7 +57,7 @@ int dAcOUgSwitch_c::create() {
     } else {
         mStateMgr.changeState(StateID_On);
     }
-    boundingBox.Set(mVec3_c(-50.0f, -20.0f, -50.0f), mVec3_c(50.0f, 20.0f, 50.0f));
+    mBoundingBox.Set(mVec3_c(-50.0f, -20.0f, -50.0f), mVec3_c(50.0f, 20.0f, 50.0f));
 
     return SUCCEEDED;
 }

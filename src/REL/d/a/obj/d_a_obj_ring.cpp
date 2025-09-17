@@ -21,12 +21,12 @@ int dAcOring_c::create() {
 
     field_0x388 = getArgFromParams();
 
-    boundingBox.Set(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
+    mBoundingBox.Set(mVec3_c(-100.0f, -100.0f, -100.0f), mVec3_c(100.0f, 100.0f, 100.0f));
     updateMatrix();
     mModel.setScale(mScale);
     mModel.setLocalMtx(mWorldMtx);
-    forwardAccel = -5.0f;
-    forwardMaxSpeed = -40.0f;
+    mAcceleration = -5.0f;
+    mMaxSpeed = -40.0f;
     field_0x38C = dAcPy_c::LINK->mPosition.y;
     mStateMgr.changeState(StateID_Move);
     return SUCCEEDED;
@@ -39,7 +39,7 @@ int dAcOring_c::doDelete() {
 int dAcOring_c::actorExecute() {
     mStateMgr.executeState();
     calcVelocity();
-    mPosition += velocity;
+    mPosition += mVelocity;
     mPosition += mStts.mCcMove;
     updateMatrix();
     mModel.setLocalMtx(mWorldMtx);
@@ -54,7 +54,7 @@ int dAcOring_c::draw() {
 void dAcOring_c::initializeState_Move() {}
 
 void dAcOring_c::executeState_Move() {
-    if (GetLinkage().checkConnection(dLinkage_c::CONNECTION_7)) {
+    if (getLinkage().checkConnection(dLinkage_c::CONNECTION_7)) {
         return;
     }
     mRotation.addX(0x1000);

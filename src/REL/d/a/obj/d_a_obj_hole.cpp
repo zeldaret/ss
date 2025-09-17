@@ -35,7 +35,7 @@ int dAcOhole_c::create() {
     u8 params2 = getFromParams(2, 0xF);
     field_0x799 = params2 != (s8)0xF ? params2 : 0xFF;
 
-    boundingBox.Set(mVec3_c(-200.0f, -200.0f, -200.0f), mVec3_c(200.0f, 200.0f, 200.0f));
+    mBoundingBox.Set(mVec3_c(-200.0f, -200.0f, -200.0f), mVec3_c(200.0f, 200.0f, 200.0f));
     mObjAcch.Set(this, 1, &mAcchCir);
     mAcchCir.SetWall(100.0f, 100.0f);
     mObjAcch.CrrPos(*dBgS::GetInstance());

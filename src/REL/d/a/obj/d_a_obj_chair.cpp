@@ -101,8 +101,8 @@ int dAcOChair_c::create() {
         mObjAcch.CrrPos(*dBgS::GetInstance());
     }
 
-    forwardAccel = -2.f;
-    forwardMaxSpeed = -40.f;
+    mAcceleration = -2.f;
+    mMaxSpeed = -40.f;
 
     field_0xB1B = 1;
     field_0xB1A = 1;
@@ -110,7 +110,7 @@ int dAcOChair_c::create() {
     mChairRot = mRotation.y;
     mStateMgr.changeState(StateID_Wait);
 
-    boundingBox.Set(mVec3_c(-60.f, -0.f, -60.f), mVec3_c(60.f, 160.f, 60.f));
+    mBoundingBox.Set(mVec3_c(-60.f, -0.f, -60.f), mVec3_c(60.f, 160.f, 60.f));
 
     return SUCCEEDED;
 }
@@ -207,7 +207,7 @@ void dAcOChair_c::executeState_Wait() {
                 return;
             }
             if (field_0xB1C && mChairType == CHAIR_E) {
-                const f32 mag = (mChairPos - poscopy2).squareMagXZ();
+                const f32 mag = (mChairPos - mPositionCopy2).squareMagXZ();
                 if (mag < 10000.f) {
                     return;
                 }
@@ -244,11 +244,11 @@ dAcOChair_c::ChairType dAcOChair_c::getChairType(u8 &param) {
 void dAcOChair_c::updateChairPos() {
     if (mChairType != CHAIR_E) {
         if (isBench()) {
-            poscopy2 = mPosition;
+            mPositionCopy2 = mPosition;
         } else {
-            mMdl.getNodeWorldMtxMultVecZero(mSeatNodeID, poscopy2);
+            mMdl.getNodeWorldMtxMultVecZero(mSeatNodeID, mPositionCopy2);
         }
-        poscopy3 = poscopy2;
+        mPositionCopy3 = mPositionCopy2;
     } else {
         field_0xB1A = true;
         if (!checkObjectProperty(0x8000)) {
@@ -256,13 +256,13 @@ void dAcOChair_c::updateChairPos() {
             work.rotY(getRelativeYRotationToPlayer());
             work.z = 0.f;
             work.rotY(mRotation.y);
-            poscopy2 = mPosition;
+            mPositionCopy2 = mPosition;
             if (work.squareMagXZ() < 10000.f) {
-                poscopy2 += work;
+                mPositionCopy2 += work;
             } else {
                 field_0xB1A = false;
             }
         }
-        poscopy3 = poscopy2;
+        mPositionCopy3 = mPositionCopy2;
     }
 }

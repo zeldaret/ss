@@ -371,7 +371,7 @@ bool EffectsStruct::areAllEmittersDone() {
 }
 
 void EffectsStruct::execute() {
-    if (mpOwner != nullptr && (mpOwner->delete_request || mpOwner->lifecycle_state == fBase_c::TO_BE_DELETED)) {
+    if (mpOwner != nullptr && (mpOwner->mDeleteRequest || mpOwner->mLifecycleState == fBase_c::TO_BE_DELETED)) {
         mpOwner = nullptr;
     }
     if (dJEffManager_c::shouldBePaused(mpOwner)) {
@@ -403,7 +403,7 @@ void EffectsStruct::execute() {
 }
 
 bool EffectsStruct::getOwnerPolyAttrs(s32 *pOut1, s32 *pOut2) {
-    if (mpOwner != nullptr && mpOwner->group_type == fBase_c::ACTOR) {
+    if (mpOwner != nullptr && mpOwner->mGroupType == fBase_c::ACTOR) {
         dAcBase_c *actor = static_cast<dAcBase_c *>(mpOwner);
         *pOut1 = actor->mPolyAttr0;
         *pOut2 = actor->mPolyAttr1;
@@ -519,8 +519,8 @@ void dMassObjEmitterCallback_c::executeAfter(JPABaseEmitter *emitter) {
 void dMassObjEmitterCallback_c::execute() {
     for (s32 i = field_0x654 - 1; i >= 0; i--) {
         if (field_0x588[i] != nullptr) {
-            if (!dJEffManager_c::shouldBePaused(field_0x588[i]) || field_0x588[i]->delete_request ||
-                field_0x588[i]->lifecycle_state == fBase_c::TO_BE_DELETED) {
+            if (!dJEffManager_c::shouldBePaused(field_0x588[i]) || field_0x588[i]->mDeleteRequest ||
+                field_0x588[i]->mLifecycleState == fBase_c::TO_BE_DELETED) {
                 if (field_0x654 != 0 && i != field_0x654 - 1) {
                     field_0x588[i] = field_0x588[field_0x654 - 1];
                     field_0x268[i] = field_0x268[field_0x654 - 1];
@@ -1273,7 +1273,7 @@ void dWaterEffect_c::execute(f32 water, f32 ground) {
         mVec3_c pos(ac->mPosition.x, water, ac->mPosition.z);
         mVec3_c scale(mScale, mScale, mScale);
         mEff.createContinuousEffect(PARTICLE_RESOURCE_ID_MAPPING_127_, pos, nullptr, &scale, nullptr, nullptr);
-        f32 rate = nw4r::math::FAbs(ac->forwardSpeed) * 0.02f;
+        f32 rate = nw4r::math::FAbs(ac->mSpeed) * 0.02f;
         rate = rate > 0.95f ? 0.95f : rate;
         mEff.setRate(rate + 0.05f);
     }

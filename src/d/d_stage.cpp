@@ -219,7 +219,7 @@ void dStage_c::setRoomVisited(int roomid) {
         return;
     }
 
-    if (dScGame_c::sInstance == nullptr || dScGame_c::GetInstance()->profile_name == fProfile::GAME) {
+    if (dScGame_c::sInstance == nullptr || dScGame_c::GetInstance()->mProfileName == fProfile::GAME) {
         u16 flag, shift;
         getFlagPositionForRoomVisit(roomid, &flag, &shift);
         DungeonflagManager *mg = DungeonflagManager::sInstance;

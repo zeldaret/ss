@@ -43,9 +43,9 @@ int dAcObstonec::create() {
         mBg.SetUnkBase(1);
     }
 
-    forwardAccel = -1.0f;
-    forwardMaxSpeed = -40.0f;
-    boundingBox.Set(mVec3_c(-350.0f, -60.0f, -240.0f), mVec3_c(350.0f, 600.0f, 240.0f));
+    mAcceleration = -1.0f;
+    mMaxSpeed = -40.0f;
+    mBoundingBox.Set(mVec3_c(-350.0f, -60.0f, -240.0f), mVec3_c(350.0f, 600.0f, 240.0f));
     return SUCCEEDED;
 }
 

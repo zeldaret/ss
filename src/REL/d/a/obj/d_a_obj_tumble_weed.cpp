@@ -62,8 +62,8 @@ int dAcOTumbleWeed_c::actorCreate() {
     mDowsingTarget.initialize(DowsingTarget::SLOT_TREASURE, 0, nullptr, 0.0f);
     mDowsingTarget.doRegister();
 
-    forwardAccel = -2.f;
-    forwardMaxSpeed = -40.f;
+    mAcceleration = -2.f;
+    mMaxSpeed = -40.f;
 
     mField_0x974 = 0.0f;
     mField_0x98B = true;
@@ -80,7 +80,7 @@ int dAcOTumbleWeed_c::actorCreate() {
 
     mStateMgr.changeState(StateID_Wait);
 
-    boundingBox.Set(mVec3_c(-50.f, -20.f, -50.f), mVec3_c(50.f, 60.f, 50.f));
+    mBoundingBox.Set(mVec3_c(-50.f, -20.f, -50.f), mVec3_c(50.f, 60.f, 50.f));
 
     return SUCCEEDED;
 }
@@ -94,8 +94,8 @@ int dAcOTumbleWeed_c::doDelete() {
 }
 
 int dAcOTumbleWeed_c::actorExecute() {
-    if (!mField_0x98C && !isStopped()) {
-        mField_0x968 = velocity;
+    if (!mField_0x98C && !checkStopped()) {
+        mField_0x968 = mVelocity;
         mField_0x968.y = 0.0f;
         mField_0x968.normalize();
         mField_0x98C = true;
@@ -108,7 +108,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     dLightEnv_c::GetInstance().setWind(mField_0x968, mField_0x980);
 
     calcVelocity();
-    mPosition += velocity;
+    mPosition += mVelocity;
     mPosition += mStts.GetCcMove();
 
     mObjAcch.CrrPos(*dBgS::GetInstance());
@@ -177,15 +177,15 @@ void dAcOTumbleWeed_c::executeState_Wait() {
         return;
     }
 
-    velocity.y = 0.f;
+    mVelocity.y = 0.f;
     mField_0x974 = 0.f;
     if (checkSlope()) {
         mStateMgr.changeState(StateID_Slope);
     } else {
         adjustSpeed();
-        if (forwardSpeed < 0.1f) {
+        if (mSpeed < 0.1f) {
             mField_0x98B = false;
-            sLib::chase(&forwardSpeed, 0.f, 0.05f);
+            sLib::chase(&mSpeed, 0.f, 0.05f);
         }
     }
 }
@@ -204,7 +204,7 @@ void dAcOTumbleWeed_c::executeState_Slope() {
         return;
     }
 
-    velocity.y = 0.f;
+    mVelocity.y = 0.f;
     adjustAngle();
     adjustSpeed();
     if (!checkSlope()) {
@@ -215,7 +215,7 @@ void dAcOTumbleWeed_c::executeState_Slope() {
 void dAcOTumbleWeed_c::finalizeState_Slope() {}
 
 bool dAcOTumbleWeed_c::checkBreak() {
-    if (mObjAcch.ChkWallHit(nullptr) && forwardSpeed > 5.f) {
+    if (mObjAcch.ChkWallHit(nullptr) && mSpeed > 5.f) {
         return true;
     }
 
@@ -270,10 +270,10 @@ void dAcOTumbleWeed_c::doBreak() {
 
 void dAcOTumbleWeed_c::calcMatrix() {
     if (mField_0x98B) {
-        f32 vel_mag = VEC3Len(velocity);
+        f32 vel_mag = VEC3Len(mVelocity);
         f32 f1 = mAng(vel_mag * (mField_0x978 + 200.f)).radian();
         f32 f2 = mAng(vel_mag * 182.0f * 0.2f).radian();
-        f32 f0 = mAng(angle.y - mRotation.y).radian();
+        f32 f0 = mAng(mAngle.y - mRotation.y).radian();
 
         mQuat_c q0, q1, q2, q3;
         q1.setAxisRotation(mVec3_c::Ey, f0);
@@ -297,8 +297,8 @@ void dAcOTumbleWeed_c::calcMatrix() {
 void dAcOTumbleWeed_c::adjustAngle() {
     cM3dGPla pla;
     dBgS::GetInstance()->GetTriPla(mObjAcch.mGnd, &pla);
-    mVec3_c vel = velocity; // ok?
-    angle.y = mAng::fromVec(velocity);
+    mVec3_c vel = mVelocity; // ok?
+    mAngle.y = mAng::fromVec(mVelocity);
 }
 
 void dAcOTumbleWeed_c::adjustSpeed() {
@@ -320,27 +320,27 @@ void dAcOTumbleWeed_c::adjustSpeed() {
     // Flat Ground or not in the direction of the slope
     //  Slows down
     if (gndAngle < mAng::deg2short(1) ||
-        sLib::absDiff(cM::atan2s(pla.GetN().x, pla.GetN().z), GetAngle().y) > mAng::deg2short(90)) {
-        sLib::chase(&forwardSpeed, mSpeedTarget, step);
+        sLib::absDiff(cM::atan2s(pla.GetN().x, pla.GetN().z), getAngle().y) > mAng::deg2short(90)) {
+        sLib::chase(&mSpeed, mSpeedTarget, step);
     }
     // Sloped Ground and in the direction of the slope
     //  Speeds up
     else {
-        forwardSpeed = cM::minMaxLimit(forwardSpeed + step, mSpeedTarget, mSpeedTarget + 5.0f);
+        mSpeed = cM::minMaxLimit(mSpeed + step, mSpeedTarget, mSpeedTarget + 5.0f);
     }
 }
 
 void dAcOTumbleWeed_c::tumbleBounceMaybe() {
-    velocity.y *= -0.75f;
-    forwardSpeed *= 0.9f;
+    mVelocity.y *= -0.75f;
+    mSpeed *= 0.9f;
 
-    if (forwardSpeed < 15.f) {
-        forwardSpeed = mSpeedTarget;
+    if (mSpeed < 15.f) {
+        mSpeed = mSpeedTarget;
     }
 
     mbOnGround = false;
-    if (velocity.y < 5.f) {
-        velocity.y = 0.f;
+    if (mVelocity.y < 5.f) {
+        mVelocity.y = 0.f;
         mbOnGround = true;
     }
 }
@@ -361,11 +361,11 @@ void dAcOTumbleWeed_c::adjustTimeScale() {
 void dAcOTumbleWeed_c::adjustTumble(const mVec3_c &dir) {
     mField_0x98B = true;
 
-    velocity.x += dir.x;
-    velocity.z += dir.z;
+    mVelocity.x += dir.x;
+    mVelocity.z += dir.z;
 
-    forwardSpeed = mField_0x97C * EGG::Math<f32>::sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
-    angle.y = mAng::fromVec(dir);
+    mSpeed = mField_0x97C * EGG::Math<f32>::sqrt(mVelocity.x * mVelocity.x + mVelocity.z * mVelocity.z);
+    mAngle.y = mAng::fromVec(dir);
 }
 
 void dAcOTumbleWeed_c::setWind(const mVec3_c &wind) {
@@ -375,8 +375,8 @@ void dAcOTumbleWeed_c::setWind(const mVec3_c &wind) {
 
 void dAcOTumbleWeed_c::calcWind() {
     if (!isWindStop() && sLib::calcTimer(&mWindTimer) == 0) {
-        velocity.y = cM::rndFX(3.0f) + 15.f;
-        forwardSpeed = cM::rndFX(5.0f) + 15.f;
+        mVelocity.y = cM::rndFX(3.0f) + 15.f;
+        mSpeed = cM::rndFX(5.0f) + 15.f;
 
         mWind = mVec3_c::Zero;
         mField_0x980 = 0.f;

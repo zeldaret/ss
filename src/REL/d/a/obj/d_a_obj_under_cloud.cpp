@@ -29,7 +29,7 @@ int dAcOunderCloud_c::create() {
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     mMdl.setPriorityDraw(0x1C, 9);
-    boundingBox.Set(mVec3_c(-550000.0f, -30000.0f, -500000.0f), mVec3_c(500000.0f, -10000.0f, 500000.0f));
+    mBoundingBox.Set(mVec3_c(-550000.0f, -30000.0f, -500000.0f), mVec3_c(500000.0f, -10000.0f, 500000.0f));
     return SUCCEEDED;
 }
 

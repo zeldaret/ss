@@ -206,7 +206,7 @@ bool dScGame_c::attemptDelete() {
     if (mStageMgrRef.p_owner == nullptr) {
         return true;
     } else {
-        if (!mStageMgrRef.p_owner->delete_request) {
+        if (!mStageMgrRef.p_owner->mDeleteRequest) {
             mStageMgrRef.p_owner->deleteRequest();
         }
         return false;

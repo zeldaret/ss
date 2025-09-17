@@ -129,9 +129,9 @@ int dAcODungeonShip_c::create() {
     mStts.SetRank(2);
     mCc.Set(sCcSrc);
     mCc.SetStts(mStts);
-    forwardAccel = 0.0f;
-    forwardMaxSpeed = 0.0f;
-    boundingBox.Set(mVec3_c(-6000.0f, -500.0f, -2000.0f), mVec3_c(5000.0f, 4000.0f, 2000.0f));
+    mAcceleration = 0.0f;
+    mMaxSpeed = 0.0f;
+    mBoundingBox.Set(mVec3_c(-6000.0f, -500.0f, -2000.0f), mVec3_c(5000.0f, 4000.0f, 2000.0f));
     if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, (mParams >> 0x10) & 0xFF)) {
         dBgS::GetInstance()->RegistBg(&mBg, this);
         mStateMgr.changeState(StateID_End);
@@ -309,7 +309,7 @@ void dAcODungeonShip_c::executeState_Transparency() {
             field_0x858 *= -1;
         }
     }
-    sLib::addCalc(&forwardSpeed, field_0x858, 0.02f, 1.0f, 0.1f);
+    sLib::addCalc(&mSpeed, field_0x858, 0.02f, 1.0f, 0.1f);
     fn_485_1720();
 }
 void dAcODungeonShip_c::finalizeState_Transparency() {}
@@ -440,7 +440,7 @@ static u32 rot_7fff = 0x7FFF;
 static u32 rot_4000 = 0x4000;
 
 void dAcODungeonShip_c::fn_485_1720() {
-    mPath.setSpeed(forwardSpeed);
+    mPath.setSpeed(mSpeed);
     mPath.execute();
     // TODO
     mPosition = mPath.getPosition();
@@ -452,7 +452,7 @@ void dAcODungeonShip_c::fn_485_1720() {
         mRotation.y += rot_7fff;
     }
     mRotation.y += rot_4000;
-    angle.y = mRotation.y;
+    mAngle.y = mRotation.y;
 
     int factor = 0x12C;
     f32 tmp2 = nw4r::math::SinIdx((field_0x850 * 800));
@@ -478,7 +478,7 @@ u32 dAcODungeonShip_c::fn_485_1960() {
         return 0;
     }
     mVec3_c v = mVec3_c::Ez;
-    v.rotY(angle.y + mAng(-0x4000));
+    v.rotY(mAngle.y + mAng(-0x4000));
     mVec3_c dist = link->mPosition - mPosition;
     dist.y = 0.0f;
     dist.normalizeRS();
@@ -510,7 +510,7 @@ void dAcODungeonShip_c::fn_485_1DF0() {
         mVec3_c dist = mPosition - link->mPosition;
         fn_485_1960();
         field_0x858 = 30.0f;
-        sLib::addCalc(&forwardSpeed, 30.0f, 0.02f, 1.0f, 0.1f);
+        sLib::addCalc(&mSpeed, 30.0f, 0.02f, 1.0f, 0.1f);
         fn_485_1720();
     }
 }

@@ -18,7 +18,7 @@ int dJntCol_c::init(dAcObjBase_c *i_actorP, dJntColData_c const *i_jntColP, m3d:
     field_0x10 = 0;
 
     if (i_actorP) {
-        i_actorP->SetJntCol(this);
+        i_actorP->setJntCol(this);
         mpActor = i_actorP;
     }
 

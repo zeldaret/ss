@@ -46,7 +46,7 @@ int dAcORailPost::create() {
     CREATE_ALLOCATOR(dAcORailPost);
 
     mMdl.getBounds(&boundsMin, &boundsMax);
-    boundingBox.Set(boundsMin, boundsMax);
+    mBoundingBox.Set(boundsMin, boundsMax);
     mCullingDistance = 25000.0f;
 
     return SUCCEEDED;
