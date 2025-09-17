@@ -65,7 +65,7 @@ dAcBase_c::dAcBase_c()
     }
 
     if (s_Create_Scale) {
-        mScale = *s_Create_Scale;
+        setScale(*s_Create_Scale);
     } else {
         mScale.set(1.0f, 1.0f, 1.0f);
     }

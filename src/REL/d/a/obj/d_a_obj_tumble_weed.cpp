@@ -138,7 +138,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     } else {
         mTumbleTimer = 150;
     }
-    mSph.SetC(getPosition());
+    mSph.SetC(getTumblePosition());
     mSph.SetR(mScale.x * 60.f);
     dCcS::GetInstance()->Set(&mSph);
     updateMatrix();
@@ -262,7 +262,7 @@ bool dAcOTumbleWeed_c::checkInvalidGround() const {
 
 void dAcOTumbleWeed_c::doBreak() {
     startSound(SE_TWeed_CUT);
-    mVec3_c pos = getPosition();
+    mVec3_c pos = getTumblePosition();
     dJEffManager_c::spawnEffect(PARTICLE_RESOURCE_ID_MAPPING_743_, pos, nullptr, nullptr, nullptr, nullptr, 0, 0);
     deleteRequest();
 }
@@ -285,7 +285,7 @@ void dAcOTumbleWeed_c::calcMatrix() {
 
     mMtx_c mtx0, mtx1, mtx2;
     mShadowMtx.copyFrom(mWorldMtx);
-    mtx1.transS(getPosition() - mPosition);
+    mtx1.transS(getTumblePosition() - mPosition);
     mShadowMtx += mtx1;
     mtx0.fromQuat(field_0x910);
     mtx2.transS(0.f, 40.f, 0.f);
