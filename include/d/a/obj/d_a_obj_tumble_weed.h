@@ -34,7 +34,7 @@ public:
     void adjustTimeScale();
     void adjustTumble(const mVec3_c &dir);
     void calcWind();
-    mVec3_c getPosition() const;
+    mVec3_c getTumblePosition() const;
     void calcMatrix();
 
     void adjustAngle();

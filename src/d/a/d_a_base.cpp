@@ -61,7 +61,7 @@ dAcBase_c::dAcBase_c()
     }
 
     if (s_Create_Rotation) {
-        mRotation = *s_Create_Rotation;
+        setRotation(*s_Create_Rotation);
     }
 
     if (s_Create_Scale) {

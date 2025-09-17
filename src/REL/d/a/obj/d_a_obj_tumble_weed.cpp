@@ -382,7 +382,7 @@ void dAcOTumbleWeed_c::calcWind() {
     }
 }
 
-mVec3_c dAcOTumbleWeed_c::getPosition() const {
+mVec3_c dAcOTumbleWeed_c::getTumblePosition() const {
     mMtx_c mtx;
     mVec3_c vec;
     mtx.ZXYrotS(mRotation.x, mRotation.y, mRotation.z);
