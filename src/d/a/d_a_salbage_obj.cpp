@@ -320,7 +320,7 @@ void dAcSalbageObj_c::executeState_Wait() {
     if (dSalvageMgr_c::sInstance->getCurrentSalvageObjId() != mSalvageIf.getSalvageObjId()) {
         if (!dSalvageMgr_c::sInstance->mSlbRef.isLinked()) {
             mVec3_c pos(mPosition.x, mPosition.y + 100000.0f, mPosition.z);
-            dAcObjBase_c::create(fProfile::NPC_SLB, roomid, 0xFFFFFD01, &pos, nullptr, nullptr, -1);
+            dAcObjBase_c::create(fProfile::NPC_SLB, mRoomID, 0xFFFFFD01, &pos, nullptr, nullptr, -1);
         }
 
         if (dSalvageMgr_c::sInstance->startedQuestForSalvageObj(this)) {

@@ -30,10 +30,10 @@ int dTgTimer_c::create() {
 }
 
 int dTgTimer_c::actorExecute() {
-    bool getFlag = SceneflagManager::sInstance->checkFlag(roomid, getCheckSceneflag());
+    bool getFlag = SceneflagManager::sInstance->checkFlag(mRoomID, getCheckSceneflag());
     if (getFlag) {
         if (checkShouldTrigger()) {
-            SceneflagManager::sInstance->setFlag(roomid, getSetSceneflag());
+            SceneflagManager::sInstance->setFlag(mRoomID, getSetSceneflag());
         } else {
             incrementTimer();
         }

@@ -38,7 +38,7 @@ int dAcNpcSltk_c::actorCreate() {
 
     mAreaIndex = mRotation.z & 0xFF;
     if (mAreaIndex < 0xFF) {
-        mpArea = getAreaForIndexInRoom(mAreaIndex, roomid);
+        mpArea = getAreaForIndexInRoom(mAreaIndex, mRoomID);
         if (mpArea == nullptr) {
             return FAILED;
         }
@@ -130,7 +130,7 @@ bool dAcNpcSltk_c::isSomething1() const {
 
 bool dAcNpcSltk_c::checkSomething(mVec3_c pos) const {
     if (mAreaIndex != 0xFF) {
-        return checkPosInArea(mAreaIndex, roomid, pos, &mpArea) == 1;
+        return checkPosInArea(mAreaIndex, mRoomID, pos, &mpArea) == 1;
     } else {
         mVec3_c dist = pos - mPosition;
         if (dist.squareMagXZ() <= field_0x758 * field_0x758) {

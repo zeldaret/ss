@@ -323,7 +323,7 @@ int dAcEsm_c::doDelete() {
 
 int dAcEsm_c::actorExecute() {
     mLightInfo.SetScale(0.f);
-    if (shift8_0xFF != 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, shift8_0xFF)) {
+    if (shift8_0xFF != 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, shift8_0xFF)) {
         return SUCCEEDED;
     }
 
@@ -709,7 +709,7 @@ int dAcEsm_c::draw() {
     if (mScale.squareMagXZ() < 0.0004f) {
         return SUCCEEDED;
     }
-    if (shift8_0xFF != 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, shift8_0xFF)) {
+    if (shift8_0xFF != 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, shift8_0xFF)) {
         return SUCCEEDED;
     }
 
@@ -993,7 +993,7 @@ void dAcEsm_c::fn_187_4540(int param0) {
         f32 f = 16384.f;
 
         dAcEsm_c *pChild = static_cast<dAcEsm_c *>(
-            create(fProfile::E_SM, roomid, (mParams & ~0xFF) | mType, &spawnPos, &rot, nullptr, 0)
+            create(fProfile::E_SM, mRoomID, (mParams & ~0xFF) | mType, &spawnPos, &rot, nullptr, 0)
         );
         if (pChild == nullptr) {
             return;

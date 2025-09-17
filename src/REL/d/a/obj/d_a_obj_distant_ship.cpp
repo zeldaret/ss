@@ -21,7 +21,7 @@ int dAcOdistantShip_c::create() {
     u8 flag = getFromParams(0, 0xFF);
     mSubtype = getFromParams(8, 0xF);
 
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, flag)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, flag)) {
         mIsVisible = true;
     }
 

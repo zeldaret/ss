@@ -44,19 +44,19 @@ int dAcOclearnessWall_c::doDelete() {
 int dAcOclearnessWall_c::actorExecute() {
     switch (field_0x542) {
         case 0: {
-            bool flag = SceneflagManager::sInstance->checkFlag(roomid, mSceneflag);
+            bool flag = SceneflagManager::sInstance->checkFlag(mRoomID, mSceneflag);
             if (flag) {
                 deleteRequest();
             }
             break;
         }
         case 1: {
-            bool flag = SceneflagManager::sInstance->checkFlag(roomid, mSceneflag);
+            bool flag = SceneflagManager::sInstance->checkFlag(mRoomID, mSceneflag);
             if (flag && field_0x543) {
                 dBgS::GetInstance()->Release(&mBgW);
                 field_0x543 = false;
             } else {
-                bool flag = SceneflagManager::sInstance->checkFlag(roomid, mSceneflag);
+                bool flag = SceneflagManager::sInstance->checkFlag(mRoomID, mSceneflag);
                 if (!flag && !field_0x543) {
                     dBgS::GetInstance()->Regist(&mBgW, this);
                     field_0x543 = true;
@@ -65,12 +65,12 @@ int dAcOclearnessWall_c::actorExecute() {
             break;
         }
         case 2: {
-            bool flag = SceneflagManager::sInstance->checkFlag(roomid, mSceneflag);
+            bool flag = SceneflagManager::sInstance->checkFlag(mRoomID, mSceneflag);
             if (flag && field_0x543) {
                 dBgS::GetInstance()->Regist(&mBgW, this);
                 field_0x543 = false;
             } else {
-                bool flag = SceneflagManager::sInstance->checkFlag(roomid, mSceneflag);
+                bool flag = SceneflagManager::sInstance->checkFlag(mRoomID, mSceneflag);
                 if (!flag && !field_0x543) {
                     dBgS::GetInstance()->Release(&mBgW);
                     field_0x543 = true;
@@ -79,7 +79,7 @@ int dAcOclearnessWall_c::actorExecute() {
             break;
         }
         default: {
-            bool flag = SceneflagManager::sInstance->checkFlag(roomid, mSceneflag);
+            bool flag = SceneflagManager::sInstance->checkFlag(mRoomID, mSceneflag);
             if (flag) {
                 deleteRequest();
             }

@@ -73,7 +73,7 @@ public:
     }
 
     bool checkSceneflag() {
-        return SceneflagManager::sInstance->checkFlag(roomid, mSceneflag);
+        return SceneflagManager::sInstance->checkFlag(mRoomID, mSceneflag);
     }
 
     STATE_FUNC_DECLARE(dAcOtubo_c, Wait);

@@ -16,20 +16,20 @@ int dTgTimeAreaCheck_c::doDelete() {
 }
 
 int dTgTimeAreaCheck_c::actorExecute() {
-    f32 result = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(roomid, mPosition, nullptr, 10.0f);
+    f32 result = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(mRoomID, mPosition, nullptr, 10.0f);
     if (result > 0.0f) {
-        if (mPastSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mPastSceneFlag)) {
-            SceneflagManager::sInstance->setFlag(roomid, mPastSceneFlag);
+        if (mPastSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mPastSceneFlag)) {
+            SceneflagManager::sInstance->setFlag(mRoomID, mPastSceneFlag);
         }
-        if (mPresentSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mPresentSceneFlag)) {
-            SceneflagManager::sInstance->unsetFlag(roomid, mPresentSceneFlag);
+        if (mPresentSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mPresentSceneFlag)) {
+            SceneflagManager::sInstance->unsetFlag(mRoomID, mPresentSceneFlag);
         }
     } else {
-        if (mPastSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mPastSceneFlag)) {
-            SceneflagManager::sInstance->unsetFlag(roomid, mPastSceneFlag);
+        if (mPastSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mPastSceneFlag)) {
+            SceneflagManager::sInstance->unsetFlag(mRoomID, mPastSceneFlag);
         }
-        if (mPresentSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mPresentSceneFlag)) {
-            SceneflagManager::sInstance->setFlag(roomid, mPresentSceneFlag);
+        if (mPresentSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mPresentSceneFlag)) {
+            SceneflagManager::sInstance->setFlag(mRoomID, mPresentSceneFlag);
         }
     }
     return SUCCEEDED;

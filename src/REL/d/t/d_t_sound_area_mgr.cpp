@@ -2,13 +2,12 @@
 
 #include "d/a/d_a_player.h"
 
-
 SPECIAL_ACTOR_PROFILE(SOUND_AREA_MGR, dTgSndMg_c, fProfile::SOUND_AREA_MGR, 0x0145, 0, 0);
 
 int dTgSndMg_c::create() {
-    s8 tmpRoomId = roomid;
+    s8 tmpRoomId = mRoomID;
     addActorToRoom(-1);
-    roomid = tmpRoomId;
+    mRoomID = tmpRoomId;
     return SUCCEEDED;
 }
 

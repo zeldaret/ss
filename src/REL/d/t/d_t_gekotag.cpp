@@ -75,8 +75,9 @@ void dTgGekoTag::doExecute() {
     for (int i = 0; i < mNumGeko; i++) {
         if (mRefs[i].get() == nullptr) {
             if (mTimer2 == 0) {
-                dAcObjBase_c *b =
-                    dAcObjBase_c::create(fProfile::E_GEKO, roomid, gekoParm, &mPosition, &gekoRot, nullptr, 0xFFFFFFFF);
+                dAcObjBase_c *b = dAcObjBase_c::create(
+                    fProfile::E_GEKO, mRoomID, gekoParm, &mPosition, &gekoRot, nullptr, 0xFFFFFFFF
+                );
 
                 if (b != nullptr) {
                     mRefs[i].link(static_cast<dAcEgeko_c *>(b));

@@ -149,12 +149,12 @@ int dAcOChair_c::actorExecute() {
 
     // Set the flag that link is sitting
     if (checkObjectProperty(0x8000) && isPlayerSitting()) {
-        if (mSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mSceneflag)) {
-            SceneflagManager::sInstance->setFlag(roomid, mSceneflag);
+        if (mSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag)) {
+            SceneflagManager::sInstance->setFlag(mRoomID, mSceneflag);
         }
     } else {
-        if (mSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mSceneflag)) {
-            SceneflagManager::sInstance->unsetFlag(roomid, mSceneflag);
+        if (mSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag)) {
+            SceneflagManager::sInstance->unsetFlag(mRoomID, mSceneflag);
         }
     }
 

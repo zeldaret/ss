@@ -55,7 +55,7 @@ int dAcOFruitGutsLeaf_c::actorCreate() {
 }
 
 int dAcOFruitGutsLeaf_c::actorPostCreate() {
-    if (hideInPast() && !dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, mPosition)) {
+    if (hideInPast() && !dTimeAreaMgr_c::GetInstance()->fn_800B9B60(mRoomID, mPosition)) {
         mScale.x = 0.0f;
         mScale.y = 0.0f;
         mScale.z = 0.0f;
@@ -69,7 +69,7 @@ int dAcOFruitGutsLeaf_c::actorPostCreate() {
 }
 int dAcOFruitGutsLeaf_c::actorExecute() {
     if (hideInPast()) {
-        if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, mPosition)) {
+        if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(mRoomID, mPosition)) {
             if (mScale.x != 1.0f) {
                 sLib::chase(&mScale.x, 1.0f, 0.05f);
                 mScale.z = mScale.x;

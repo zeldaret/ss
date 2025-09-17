@@ -253,12 +253,12 @@ bool dLytMeterPlusBtn_c::hasSpecificMapMark() {
         switch (mark->shift0_0x3) {
             case 0: {
                 mark->field_0x10D = mark->shift4_0x8 < 0xFF &&
-                                    SceneflagManager::sInstance->checkBoolFlag(mark->roomid, mark->shift4_0x8);
+                                    SceneflagManager::sInstance->checkBoolFlag(mark->mRoomID, mark->shift4_0x8);
                 break;
             }
             case 1: {
                 mark->field_0x10D = mark->shift4_0x8 < 0xFF &&
-                                    !SceneflagManager::sInstance->checkBoolFlag(mark->roomid, mark->shift4_0x8);
+                                    !SceneflagManager::sInstance->checkBoolFlag(mark->mRoomID, mark->shift4_0x8);
                 break;
             }
             case 3: {
@@ -284,7 +284,7 @@ bool dLytMeterPlusBtn_c::hasSpecificMapMark() {
 
         mark->field_0x10E = mark->field_0x10C && mark->field_0x10D;
 
-        if (mark->shift23_0x8 < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mark->roomid, mark->shift23_0x8)) {
+        if (mark->shift23_0x8 < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mark->mRoomID, mark->shift23_0x8)) {
             mark->field_0x10E = !mark->field_0x10E;
             if (mark->rotz_shift12_0x3 != 0) {
                 mark->field_0x10E = false;

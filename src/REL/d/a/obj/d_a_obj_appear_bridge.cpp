@@ -73,7 +73,7 @@ void dAcOappearBridge_c::initializeState_Wait() {
     dBgS::GetInstance()->Release(&mCollision);
 }
 void dAcOappearBridge_c::executeState_Wait() {
-    if (checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->mPosition, nullptr)) {
+    if (checkPosInArea(mAreaIdx, mRoomID, dAcPy_c::LINK->mPosition, nullptr)) {
         mStateMgr.changeState(StateID_Appear);
     }
 }
@@ -86,7 +86,7 @@ void dAcOappearBridge_c::finalizeState_Wait() {
     if (mEventId != 0xFF) {
         u32 f1 = FLAGS_1;
         u32 f2 = FLAGS_2;
-        Event ev = Event(mEventId, roomid, f2 & ~f1, nullptr, nullptr);
+        Event ev = Event(mEventId, mRoomID, f2 & ~f1, nullptr, nullptr);
         mActorEvent.scheduleEvent(ev, 0);
     }
 }
@@ -104,7 +104,7 @@ void dAcOappearBridge_c::executeState_Appear() {
     }
     mSrtAnm.play();
     mClrAnm.play();
-    if (!checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->mPosition, nullptr)) {
+    if (!checkPosInArea(mAreaIdx, mRoomID, dAcPy_c::LINK->mPosition, nullptr)) {
         mStateMgr.changeState(StateID_Disappear);
     }
 }
@@ -120,7 +120,7 @@ void dAcOappearBridge_c::executeState_Disappear() {
     }
     mSrtAnm.play();
     mClrAnm.play();
-    if (checkPosInArea(mAreaIdx, roomid, dAcPy_c::LINK->mPosition, nullptr)) {
+    if (checkPosInArea(mAreaIdx, mRoomID, dAcPy_c::LINK->mPosition, nullptr)) {
         mStateMgr.changeState(StateID_Appear);
     } else {
         if (mClrAnm.isStop(0)) {

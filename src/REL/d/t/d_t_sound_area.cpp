@@ -18,7 +18,7 @@ void float_ordering() {
 int dTgSndAr_c::create() {
     mScale *= 0.01f;
     if (dTgSndMg_c::GetInstance() == nullptr) {
-        dAcObjBase_c::createActorUnkGroup3(fProfile::SOUND_AREA_MGR, roomid, 0, nullptr, nullptr, nullptr, -1);
+        dAcObjBase_c::createActorUnkGroup3(fProfile::SOUND_AREA_MGR, mRoomID, 0, nullptr, nullptr, nullptr, -1);
     }
 
     switch (getTypeFromParams()) {
@@ -27,7 +27,7 @@ int dTgSndAr_c::create() {
             mtx.YrotM(mRotation.y);
             PSMTXInverse(mtx.m, mtx.m);
             break;
-        case 3: mRail.initWithPathIndex(mParams >> 8 & 0xFF, roomid, 0); break;
+        case 3: mRail.initWithPathIndex(mParams >> 8 & 0xFF, mRoomID, 0); break;
     }
 
     fBase_c *base = nullptr;

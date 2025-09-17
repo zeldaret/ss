@@ -102,7 +102,7 @@ int dAcOsw_c::actorCreate() {
     mButtonCtrl.init(node.GetID());
     if (mOffSceneFlag >= 0xFF) {
         mStateMgr.changeState(StateID_None);
-    } else if (SceneflagManager::sInstance->checkBoolFlag(roomid, mOffSceneFlag)) {
+    } else if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOffSceneFlag)) {
         mStateMgr.changeState(StateID_OffWait);
     } else {
         mStateMgr.changeState(StateID_OnWait);
@@ -114,7 +114,7 @@ int dAcOsw_c::actorCreate() {
 
 int dAcOsw_c::actorPostCreate() {
     if (mCanBeSeen) {
-        field_0x5A0.check(roomid, mPosition, 0, 30.0f, 0.1f);
+        field_0x5A0.check(mRoomID, mPosition, 0, 30.0f, 0.1f);
         if (field_0x5A0.field_0x00 <= 0.0f) {
             mHidden = true;
             mScale.set(0.0f, 0.0f, 0.0f);
@@ -141,9 +141,9 @@ int dAcOsw_c::actorPostCreate() {
 int dAcOsw_c::doDelete() {
     dAcPy_c *link = dAcPy_c::LINK;
     if (mSwitchType != 1 && field_0x5F2 == 0) {
-        if ((link == nullptr || link->checkFlags0x340(0x200)) && (link == nullptr || link->roomid == roomid)) {
-            if (mOffSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mOffSceneFlag)) {
-                SceneflagManager::sInstance->unsetFlag(roomid, mOffSceneFlag);
+        if ((link == nullptr || link->checkFlags0x340(0x200)) && (link == nullptr || link->mRoomID == mRoomID)) {
+            if (mOffSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOffSceneFlag)) {
+                SceneflagManager::sInstance->unsetFlag(mRoomID, mOffSceneFlag);
             }
         }
     }
@@ -153,7 +153,7 @@ int dAcOsw_c::doDelete() {
 int dAcOsw_c::actorExecute() {
     mStateMgr.executeState();
     if (mCanBeSeen) {
-        field_0x5A0.check(roomid, mPosition, 0, 30.0f, 0.1f);
+        field_0x5A0.check(mRoomID, mPosition, 0, 30.0f, 0.1f);
         if (field_0x5A0.field_0x00 <= 0.0f) {
             if (mScale.x >= 1.0f) {
                 if (!mHidden) {
@@ -214,12 +214,12 @@ int dAcOsw_c::draw() {
 bool dAcOsw_c::someInteractCheck(bool activatedByPlayer) {
     mActivatedByPlayer = activatedByPlayer;
     field_0x5F3 = 1;
-    return SceneflagManager::sInstance->checkBoolFlag(roomid, mOffSceneFlag);
+    return SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOffSceneFlag);
 }
 
 void dAcOsw_c::initializeState_OnWait() {
-    if (mOffSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mOffSceneFlag)) {
-        SceneflagManager::sInstance->unsetFlag(roomid, mOffSceneFlag);
+    if (mOffSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOffSceneFlag)) {
+        SceneflagManager::sInstance->unsetFlag(mRoomID, mOffSceneFlag);
     }
 }
 void dAcOsw_c::executeState_OnWait() {
@@ -238,7 +238,7 @@ void dAcOsw_c::executeState_OnWait() {
     } else {
         if (field_0x5F3 != 0) {
             bool doIt = false;
-            if ((mOnSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mOnSceneFlag))) {
+            if ((mOnSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOnSceneFlag))) {
                 doIt = true;
             }
             if (!doIt) {
@@ -264,8 +264,8 @@ void dAcOsw_c::finalizeState_On() {
 }
 
 void dAcOsw_c::initializeState_OffWait() {
-    if (mOffSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mOffSceneFlag)) {
-        SceneflagManager::sInstance->setFlag(roomid, mOffSceneFlag);
+    if (mOffSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOffSceneFlag)) {
+        SceneflagManager::sInstance->setFlag(mRoomID, mOffSceneFlag);
     }
     field_0x5EC = 30;
     mButtonCtrl.mElevation = -20.0f;

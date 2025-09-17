@@ -15,11 +15,11 @@ int dTgShipWindow_c::create() {
     mOnEventId = (mParams >> 24) & 0xFF;
     mAlwaysPlayEvent = mRotation.x & 1;
     mRotation.x = 0;
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, mInitialStateFlag)) {
-        SceneflagManager::sInstance->setFlag(roomid, mOutputStateFlagBase);
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mInitialStateFlag)) {
+        SceneflagManager::sInstance->setFlag(mRoomID, mOutputStateFlagBase);
         mStateMgr.changeState(StateID_On);
     } else {
-        SceneflagManager::sInstance->unsetFlag(roomid, mOutputStateFlagBase);
+        SceneflagManager::sInstance->unsetFlag(mRoomID, mOutputStateFlagBase);
         mStateMgr.changeState(StateID_Off);
     }
     return SUCCEEDED;
@@ -43,9 +43,9 @@ int dTgShipWindow_c::actorExecuteInEvent() {
         case 'act1':
             actorExecute();
             if (*mStateMgr.getStateID() == StateID_Off) {
-                SceneflagManager::sInstance->unsetFlag(roomid, mOutputStateFlagBase);
+                SceneflagManager::sInstance->unsetFlag(mRoomID, mOutputStateFlagBase);
             } else {
-                SceneflagManager::sInstance->setFlag(roomid, mOutputStateFlagBase);
+                SceneflagManager::sInstance->setFlag(mRoomID, mOutputStateFlagBase);
             }
             mEvent.advanceNext();
             break;
@@ -62,13 +62,13 @@ int dTgShipWindow_c::draw() {
 
 void dTgShipWindow_c::initializeState_Off() {}
 void dTgShipWindow_c::executeState_Off() {
-    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, mInitialStateFlag)) {
+    if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, mInitialStateFlag)) {
         return;
     }
 
     if ((mHasPlayedOffEvent == 0 || mAlwaysPlayEvent == 0) &&
         (mOutputStateFlagBase >= 0xFF ||
-         !SceneflagManager::sInstance->checkBoolFlag(roomid, mOutputStateFlagBase + 1))) {
+         !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOutputStateFlagBase + 1))) {
         if (mOffEventId != 0xFF) {
             {
                 // this works but I don't like it
@@ -76,7 +76,7 @@ void dTgShipWindow_c::executeState_Off() {
                 static u32 FLAGS_2 = 0x00100001;
                 u32 f1 = FLAGS_1;
                 u32 f2 = FLAGS_2;
-                Event e = Event(mOffEventId, roomid, f2 & ~f1, nullptr, nullptr);
+                Event e = Event(mOffEventId, mRoomID, f2 & ~f1, nullptr, nullptr);
                 mEvent.scheduleEvent(e, 0);
             }
 
@@ -85,30 +85,30 @@ void dTgShipWindow_c::executeState_Off() {
             }
             mHasPlayedOffEvent = 1;
             if (mOutputStateFlagBase < 0xFF) {
-                SceneflagManager::sInstance->setFlag(roomid, mOutputStateFlagBase + 1);
+                SceneflagManager::sInstance->setFlag(mRoomID, mOutputStateFlagBase + 1);
             }
             mStateMgr.changeState(StateID_On);
             return;
         } else {
-            SceneflagManager::sInstance->setFlag(roomid, mOutputStateFlagBase);
+            SceneflagManager::sInstance->setFlag(mRoomID, mOutputStateFlagBase);
             mStateMgr.changeState(StateID_On);
             return;
         }
     }
-    SceneflagManager::sInstance->setFlag(roomid, mOutputStateFlagBase);
+    SceneflagManager::sInstance->setFlag(mRoomID, mOutputStateFlagBase);
     mStateMgr.changeState(StateID_On);
 }
 void dTgShipWindow_c::finalizeState_Off() {}
 
 void dTgShipWindow_c::initializeState_On() {}
 void dTgShipWindow_c::executeState_On() {
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, mInitialStateFlag)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mInitialStateFlag)) {
         return;
     }
 
     if ((mHasPlayedOnEvent == 0 || mAlwaysPlayEvent == 0) &&
         (mOutputStateFlagBase >= 0xFF ||
-         !SceneflagManager::sInstance->checkBoolFlag(roomid, mOutputStateFlagBase + 2))) {
+         !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOutputStateFlagBase + 2))) {
         if (mOnEventId != 0xFF) {
             {
                 // this works but I don't like it
@@ -116,7 +116,7 @@ void dTgShipWindow_c::executeState_On() {
                 static u32 FLAGS_2 = 0x00100001;
                 u32 f1 = FLAGS_1;
                 u32 f2 = FLAGS_2;
-                Event e = Event(mOnEventId, roomid, f2 & ~f1, nullptr, nullptr);
+                Event e = Event(mOnEventId, mRoomID, f2 & ~f1, nullptr, nullptr);
                 mEvent.scheduleEvent(e, 0);
             }
 
@@ -125,17 +125,17 @@ void dTgShipWindow_c::executeState_On() {
             }
             mHasPlayedOnEvent = 1;
             if (mOutputStateFlagBase < 0xFF) {
-                SceneflagManager::sInstance->setFlag(roomid, mOutputStateFlagBase + 2);
+                SceneflagManager::sInstance->setFlag(mRoomID, mOutputStateFlagBase + 2);
             }
             mStateMgr.changeState(StateID_Off);
             return;
         } else {
-            SceneflagManager::sInstance->unsetFlag(roomid, mOutputStateFlagBase);
+            SceneflagManager::sInstance->unsetFlag(mRoomID, mOutputStateFlagBase);
             mStateMgr.changeState(StateID_Off);
             return;
         }
     }
-    SceneflagManager::sInstance->unsetFlag(roomid, mOutputStateFlagBase);
+    SceneflagManager::sInstance->unsetFlag(mRoomID, mOutputStateFlagBase);
     mStateMgr.changeState(StateID_Off);
 }
 void dTgShipWindow_c::finalizeState_On() {}

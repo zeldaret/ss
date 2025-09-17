@@ -486,7 +486,7 @@ void dAcOTowerHandD101_c::setSceneFlag(int flag) const {
     if (theFlag >= 255) {
         return;
     }
-    SceneflagManager::sInstance->setFlag(roomid, theFlag);
+    SceneflagManager::sInstance->setFlag(mRoomID, theFlag);
 }
 
 void dAcOTowerHandD101_c::unsetSceneFlag(int flag) const {
@@ -494,7 +494,7 @@ void dAcOTowerHandD101_c::unsetSceneFlag(int flag) const {
     if (theFlag >= 255) {
         return;
     }
-    SceneflagManager::sInstance->unsetFlag(roomid, theFlag);
+    SceneflagManager::sInstance->unsetFlag(mRoomID, theFlag);
 }
 
 bool dAcOTowerHandD101_c::checkSceneFlag1(int flag, bool &result) const {
@@ -502,7 +502,7 @@ bool dAcOTowerHandD101_c::checkSceneFlag1(int flag, bool &result) const {
     // I guess 255 is not a valid scene flag
     bool isValidSceneFlag = theFlag < 255;
     if (isValidSceneFlag) {
-        result = SceneflagManager::sInstance->checkBoolFlag(roomid, theFlag);
+        result = SceneflagManager::sInstance->checkBoolFlag(mRoomID, theFlag);
     }
     return isValidSceneFlag;
 }
@@ -531,7 +531,7 @@ inline u32 getFlags() {
 }
 
 void dAcOTowerHandD101_c::doEvent() {
-    Event e = Event(getEventId(), roomid, getFlags(), (void *)&eventCallback, nullptr);
+    Event e = Event(getEventId(), mRoomID, getFlags(), (void *)&eventCallback, nullptr);
     getEventStuff().scheduleEvent(e, 0);
 }
 

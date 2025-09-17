@@ -41,7 +41,7 @@ int dAcOF302Light_c::actorCreate() {
     forwardMaxSpeed = -40.f;
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
-    if (field_0x440 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, field_0x440)) {
+    if (field_0x440 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, field_0x440)) {
         mStateMgr.changeState(StateID_Wait);
     } else {
         mStateMgr.changeState(StateID_SwitchOn);
@@ -106,8 +106,8 @@ void dAcOF302Light_c::finalizeState_Wait() {}
 
 void dAcOF302Light_c::initializeState_SwitchOn() {
     mMdl.setAnm(mAnmMatClr[1]);
-    mTimeArea.check(roomid, mPosition, 0, 30.f, 0.1f);
-    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, mPosition)) {
+    mTimeArea.check(mRoomID, mPosition, 0, 30.f, 0.1f);
+    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(mRoomID, mPosition)) {
         mAnmMatClr[1].setRate(1.f, 0);
         mAnmMatClr[1].setFrame(40.f, 0);
     } else {
@@ -116,8 +116,8 @@ void dAcOF302Light_c::initializeState_SwitchOn() {
 }
 
 void dAcOF302Light_c::executeState_SwitchOn() {
-    mTimeArea.check(roomid, mPosition, 0, 30.f, 0.1f);
-    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, mPosition)) {
+    mTimeArea.check(mRoomID, mPosition, 0, 30.f, 0.1f);
+    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(mRoomID, mPosition)) {
         mAnmMatClr[1].setRate(1.f, 0);
     } else {
         if (mAnmMatClr[1].getFrame(0) == 0.f) {

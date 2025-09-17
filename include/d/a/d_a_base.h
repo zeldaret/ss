@@ -79,7 +79,7 @@ public:
     /* 0xD8 */ u32 mActorProperties;
     /* 0xDC */ dAcRef_c<dAcBase_c> mActorNode;
     /* 0xE8 */ u32 mTgSndAreaFlags;
-    /* 0xEC */ s8 roomid;
+    /* 0xEC */ s8 mRoomID;
     /* 0xED */ u8 mActorSubtype;
     /* 0xEE */ u8 mPolyAttr0;
     /* 0xEF */ u8 mPolyAttr1;
@@ -152,7 +152,7 @@ public:
     }
 
     u32 getRoomId() {
-        return roomid;
+        return mRoomID;
     }
 
     void clearActorProperty(u32 property) {

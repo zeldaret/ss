@@ -1107,7 +1107,7 @@ void dAcOivyRope_c::fn_256_E3E0() {
                         static u32 FLAGS_2 = 0x00100001;
                         u32 f1 = FLAGS_1;
                         u32 f2 = FLAGS_2;
-                        Event e(mEventIdx, roomid, f2 & ~f1, 0, 0);
+                        Event e(mEventIdx, mRoomID, f2 & ~f1, 0, 0);
                         mEvent.scheduleEvent(e, 0);
                     }
                 }
@@ -1160,7 +1160,7 @@ bool dAcOivyRope_c::fn_256_E790() {
     }
 
     if (ret) {
-        SceneflagManager::sInstance->setFlag(roomid, mWoodTagSceneflag);
+        SceneflagManager::sInstance->setFlag(mRoomID, mWoodTagSceneflag);
     }
 
     return ret;
@@ -1168,14 +1168,14 @@ bool dAcOivyRope_c::fn_256_E790() {
 
 bool dAcOivyRope_c::canBeLinkedToWoodTag() {
     if (mSubtype == 3) {
-        return !SceneflagManager::sInstance->checkBoolFlag(roomid, mWoodTagSceneflag);
+        return !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mWoodTagSceneflag);
     }
     return false;
 }
 
 bool dAcOivyRope_c::drop() {
     bool dropFlag;
-    if (mDropsceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mDropsceneFlag)) {
+    if (mDropsceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mDropsceneFlag)) {
         dropFlag = false;
     } else {
         dropFlag = true;

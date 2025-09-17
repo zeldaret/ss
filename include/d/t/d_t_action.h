@@ -29,10 +29,10 @@ public:
     void resetActiveArea();
 
     bool checkActive1() const {
-        return SceneflagManager::sInstance->checkBoolFlag(roomid, mEnableFlag1);
+        return SceneflagManager::sInstance->checkBoolFlag(mRoomID, mEnableFlag1);
     }
     bool checkActive2() const {
-        return (!(mEnableFlag2 < 0xFF) || SceneflagManager::sInstance->checkBoolFlag(roomid, mEnableFlag2));
+        return (!(mEnableFlag2 < 0xFF) || SceneflagManager::sInstance->checkBoolFlag(mRoomID, mEnableFlag2));
     }
 
 private:

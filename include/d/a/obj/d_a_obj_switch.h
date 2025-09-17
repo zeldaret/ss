@@ -64,7 +64,7 @@ public:
     static void rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *interactor);
 
     bool checkOnFlag() {
-        return mOnSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, mOnSceneFlag);
+        return mOnSceneFlag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOnSceneFlag);
     }
 
 private:

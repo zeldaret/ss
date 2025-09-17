@@ -241,7 +241,7 @@ void dLinkage_c::fn_800511E0(dAcObjBase_c *pActor) {
 
     mtx.ZXYrotM(pActor->mRotation);
     if (mControllingActor.p_owner) {
-        pActor->roomid = static_cast<dAcObjBase_c *>(mControllingActor.p_owner)->roomid;
+        pActor->mRoomID = static_cast<dAcObjBase_c *>(mControllingActor.p_owner)->mRoomID;
     }
 }
 

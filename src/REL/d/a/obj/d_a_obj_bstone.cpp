@@ -56,7 +56,7 @@ int dAcObstonec::doDelete() {
 int dAcObstonec::actorExecute() {
     f32 tmp = 1.0f;
     if (mVariant != 0) {
-        tmp = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(roomid, mPosition, nullptr, mScaleMag);
+        tmp = dTimeAreaMgr_c::GetInstance()->checkPositionIsInPastState(mRoomID, mPosition, nullptr, mScaleMag);
         if (mVariant != 1) {
             if (tmp > 0.0f) {
                 mMdl.setPriorityDraw(0xB, 0);

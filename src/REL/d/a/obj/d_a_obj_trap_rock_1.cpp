@@ -64,7 +64,7 @@ int dAcOtrapRock1_c::draw() {
 
 void dAcOtrapRock1_c::initializeState_TrapWait() {}
 void dAcOtrapRock1_c::executeState_TrapWait() {
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, mActivationSceneFlag)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mActivationSceneFlag)) {
         mStateMgr.changeState(StateID_TrapAction);
     }
 }
@@ -79,7 +79,7 @@ void dAcOtrapRock1_c::initializeState_TrapAction() {
 }
 
 void dAcOtrapRock1_c::executeState_TrapAction() {
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, mReturnSceneFlag)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mReturnSceneFlag)) {
         mStateMgr.changeState(StateID_TrapReturn);
     } else if (field_0x59E == 0 || mFrameCounter > 4) {
         // After 5 frames, move mRotation.x to 0x4000, then stay until return

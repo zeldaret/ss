@@ -54,7 +54,7 @@ dAcBase_c::dAcBase_c()
       mObjID(s_Create_UnkFlags),
       mViewClipIdx(s_Create_ViewClipIdx),
       mActorNode(nullptr),
-      roomid(s_Create_RoomId),
+      mRoomID(s_Create_RoomId),
       mActorSubtype(s_Create_Subtype) {
     JStudio_actor = 0;
     someStr[0] = 0;
@@ -142,9 +142,9 @@ bool dAcBase_c::addActorToRoom(s32 roomId) {
     }
     if (setConnectChild(room)) {
         if (roomId == -1) {
-            this->roomid = dStage_c::GetInstance()->getCurrRoomId();
+            this->mRoomID = dStage_c::GetInstance()->getCurrRoomId();
         } else {
-            this->roomid = roomId;
+            this->mRoomID = roomId;
         }
         return true;
     }
@@ -180,7 +180,7 @@ void dAcBase_c::postCreate(fBase_c::MAIN_STATE_e state) {
     if (state == SUCCESS) {
         mPositionCopy = mPosition;
         mRotationCopy = mRotation;
-        mRoomIDCopy = roomid;
+        mRoomIDCopy = mRoomID;
     }
     dBase_c::postCreate(state);
 }
@@ -299,7 +299,7 @@ void dAcBase_c::unkVirtFunc_0x60() {
 // 8002ceb0
 // loads f2 before f0 instead of f0 then f2
 bool dAcBase_c::restorePosRotFromCopy() {
-    if (roomid != mRoomIDCopy) {
+    if (mRoomID != mRoomIDCopy) {
         return 0;
     }
     mPosition = mPositionCopy;
@@ -320,7 +320,9 @@ u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
     u32 param2Copy = mParams2;
     mParams2 = param2Copy | 0xFF000000;
     // mAng3_c rot = {};
-    return SpecialItemDropMgr::GetInstance()->giveSpecialDropItem(param2Copy >> 0x18, roomid, spawnPos, subtype, 0, -1);
+    return SpecialItemDropMgr::GetInstance()->giveSpecialDropItem(
+        param2Copy >> 0x18, mRoomID, spawnPos, subtype, 0, -1
+    );
 }
 
 // 8002cf90
@@ -500,16 +502,16 @@ void dAcBase_c::updateRoomId(f32 yOffset) {
         mVec3_c actorPos(mPosition.x, mPosition.y + yOffset, mPosition.z);
 
         if (dBgS_ObjGndChk::CheckPos(actorPos)) {
-            roomid = dBgS_ObjGndChk::GetRoomID();
+            mRoomID = dBgS_ObjGndChk::GetRoomID();
         } else {
-            roomid = dStage_c::GetInstance()->getCurrRoomId();
+            mRoomID = dStage_c::GetInstance()->getCurrRoomId();
         }
     }
 }
 
 // 8002d540
 bool dAcBase_c::isRoomFlags_0x6_Set() {
-    dRoom_c *room = dStage_c::GetInstance()->getRoom(roomid);
+    dRoom_c *room = dStage_c::GetInstance()->getRoom(mRoomID);
     return (room->checkFlag(0x4 | 0x2));
 }
 
@@ -673,7 +675,7 @@ dAcBase_c *dAcBase_c::createActor(
     }
 
     if (actorRoomid == 63) {
-        actorRoomid = roomid;
+        actorRoomid = mRoomID;
     }
 
     u32 newParams2 = actorParams2 != 0 ? getParams2_ignoreLower() : -1;
@@ -681,7 +683,7 @@ dAcBase_c *dAcBase_c::createActor(
     setTempCreateParams(
         actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1, -1, nullptr
     );
-    dBase_c *room = dStage_c::getParentForRoom(roomid);
+    dBase_c *room = dStage_c::getParentForRoom(mRoomID);
     return (dAcBase_c *)dBase_c::createBase(actorId, room, actorParams1, ACTOR);
 }
 
@@ -704,7 +706,7 @@ dAcBase_c *dAcBase_c::createActorStage(
     }
 
     if (actorRoomid == 63) {
-        actorRoomid = roomid;
+        actorRoomid = mRoomID;
     }
 
     u32 newParams2 = actorParams2 != 0 ? getParams2_ignoreLower() : -1;
@@ -712,7 +714,7 @@ dAcBase_c *dAcBase_c::createActorStage(
     setTempCreateParams(
         actorPosition, actorRotation, actorScale, actorRoomid, newParams2, (dAcBase_c *)actorRef, 0, -1, -1, nullptr
     );
-    dBase_c *room = dStage_c::getParentForRoom(roomid);
+    dBase_c *room = dStage_c::getParentForRoom(mRoomID);
     return (dAcBase_c *)dBase_c::createBase(actorId, room, actorParams1, STAGE);
 }
 

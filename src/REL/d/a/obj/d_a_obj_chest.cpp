@@ -131,7 +131,7 @@ int dAcOChest_c::create() {
     if ((s32)getFromParams(0x10, 0xFF) != 0xFF) {
         mInsideMdl.setLocalMtx(mWorldMtx);
     }
-    if (dScGame_c::isCurrentStage("F001r") && roomid == 1 && 900.0f < mPosition.x && mPosition.x < 1000.0f &&
+    if (dScGame_c::isCurrentStage("F001r") && mRoomID == 1 && 900.0f < mPosition.x && mPosition.x < 1000.0f &&
         -50.0f < mPosition.y && mPosition.y < 50.0f && -2730.0f < mPosition.z && mPosition.z < -2630.0f) {
         mIsLinksCloset = true;
     }
@@ -245,7 +245,7 @@ void dAcOChest_c::changeStateOpen() {
     }
     u32 flag = getFromParams(0, 0xFF);
     if (flag < 0xFF) {
-        SceneflagManager::sInstance->setFlag(roomid, flag);
+        SceneflagManager::sInstance->setFlag(mRoomID, flag);
     }
     fn_326_1470();
     mStateMgr.changeState(StateID_OpenEvent);
@@ -319,7 +319,7 @@ bool dAcOChest_c::hasBeenOpened() {
     if (flag >= 0xFF) {
         return true;
     }
-    return (flag < 0xFF) && SceneflagManager::sInstance->checkBoolFlag(roomid, flag);
+    return (flag < 0xFF) && SceneflagManager::sInstance->checkBoolFlag(mRoomID, flag);
 }
 
 void dAcOChest_c::stateOpenUpdate2() {

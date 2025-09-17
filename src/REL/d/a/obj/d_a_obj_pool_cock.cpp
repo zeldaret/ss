@@ -28,7 +28,7 @@ int dAcOPoolCock_c::actorCreate() {
     mOpenDirection = mVec3_c::Ez;
     mOpenDirection.rotY(mRotation.y);
 
-    if (mOpenSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mOpenSceneflag)) {
+    if (mOpenSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOpenSceneflag)) {
         mOpenProgress = 400.0f;
     }
 
@@ -85,7 +85,7 @@ int dAcOPoolCock_c::draw() {
 void dAcOPoolCock_c::initializeState_Wait() {}
 
 void dAcOPoolCock_c::executeState_Wait() {
-    if (mOpenSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mOpenSceneflag)) {
+    if (mOpenSceneflag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mOpenSceneflag)) {
         sLib::chase(&mOpenProgress, 400.0f, 5.0f);
         if (!mHasActivatedVortex) {
             dAcOVortex_c *vortex = (dAcOVortex_c *)fManager_c::searchBaseByProfName(fProfile::OBJ_VORTEX, nullptr);

@@ -958,9 +958,9 @@ int dAcTbox_c::create() {
     if (!isActualVisibleBox()) {
         return FAILED;
     }
-    int roomId_tmp = roomid;
+    int roomId_tmp = mRoomID;
     if (addActorToRoom(-1)) {
-        roomid = roomId_tmp;
+        mRoomID = roomId_tmp;
         changeLoadedEntitiesWithSet();
     }
     setItemId((ITEM_ID)(mRotation.z & 0x1FF));
@@ -1030,7 +1030,7 @@ int dAcTbox_c::create() {
     }
 
     if (checkTboxFlag() ||
-        (mSetSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, mSetSceneFlag))) {
+        (mSetSceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSetSceneFlag))) {
         mHasBeenOpened = true;
     } else {
         mHasBeenOpened = false;
@@ -1189,7 +1189,7 @@ int dAcTbox_c::actorExecute() {
         (this->*mRegisterDowsingTarget)();
     }
 
-    dRoom_c *r = dStage_c::GetInstance()->getRoom(roomid);
+    dRoom_c *r = dStage_c::GetInstance()->getRoom(mRoomID);
     bool hasFlags = r->checkFlag(0x1E);
     if (hasFlags) {
         setObjectProperty(0x200);
@@ -1325,7 +1325,7 @@ int dAcTbox_c::actorExecuteInEvent() {
         (this->*mRegisterDowsingTarget)();
     }
 
-    dRoom_c *r = dStage_c::GetInstance()->getRoom(roomid);
+    dRoom_c *r = dStage_c::GetInstance()->getRoom(mRoomID);
     bool hasFlags = r->checkFlag(0x1E);
     if (hasFlags) {
         setObjectProperty(0x200);
@@ -1551,7 +1551,7 @@ void dAcTbox_c::setActionState() {
                 case 1: mStateMgr.changeState(StateID_WaitOpen); break;
                 case 3:
                     if (mSpawnSceneFlag >= 0xFF ||
-                        SceneflagManager::sInstance->checkBoolFlag(roomid, mSpawnSceneFlag)) {
+                        SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSpawnSceneFlag)) {
                         mStateMgr.changeState(StateID_WaitOpen);
                     } else {
                         mStateMgr.changeState(StateID_WaitAppear);
@@ -1725,7 +1725,7 @@ void dAcTbox_c::executeState_WaitAppear() {
     bool doIt;
     switch (field_0x120A) {
         case 0: doIt = hasCollectedAllTears(); break;
-        case 3: doIt = SceneflagManager::sInstance->checkBoolFlag(roomid, mSpawnSceneFlag); break;
+        case 3: doIt = SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSpawnSceneFlag); break;
     }
 
     if (doIt) {
@@ -2028,7 +2028,7 @@ void dAcTbox_c::executeState_PresentItem() {
     } else {
         mHasBeenOpened = true;
         if (mSetSceneFlag < 0xFF) {
-            SceneflagManager::sInstance->setFlag(roomid, mSetSceneFlag);
+            SceneflagManager::sInstance->setFlag(mRoomID, mSetSceneFlag);
         }
         setTboxFlag();
         if (mVariant == GODDESS) {

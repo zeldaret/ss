@@ -36,7 +36,7 @@ int dTgColBombShield::doDelete() {
 }
 
 int dTgColBombShield::actorExecute() {
-    if (dAcPy_c::LINK != nullptr && roomid == dAcPy_c::LINK->roomid) {
+    if (dAcPy_c::LINK != nullptr && mRoomID == dAcPy_c::LINK->mRoomID) {
         dCcS::GetInstance()->SetArea(&mColMtx);
     }
     return SUCCEEDED;

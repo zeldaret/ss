@@ -16,7 +16,7 @@ dSndSourceNpcHead_c::dSndSourceNpcHead_c(
     s32 sourceType, dAcBase_c *ac, const char *name, dSndSourceGroup_c *pOwnerGroup
 )
     : dSoundSource_c(sourceType, ac, name, pOwnerGroup), field_0x15C(0) {
-    if (dSndStateMgr_c::isInStage("F001r") && streq(name, "NpcCbFdHead") && ac->roomid == 1) {
+    if (dSndStateMgr_c::isInStage("F001r") && streq(name, "NpcCbFdHead") && ac->mRoomID == 1) {
         // Fledge in Knight's Academy
         pOwnerGroup->getAmbientParam()->field_0x00 = 100.0f;
         pOwnerGroup->getAmbientParam()->field_0x04 = 300.0f;
@@ -72,7 +72,6 @@ bool dSndSourceNpcHead_c::vt_0xDC(u32 id) {
     a_field_0x7D = true;
     return npcSpeak(id);
 }
-
 
 void dSndSourceNpcHead_c::setOrigName(const char *arg) {
     mpOrigName = arg;

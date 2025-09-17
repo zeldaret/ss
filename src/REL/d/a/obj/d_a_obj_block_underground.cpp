@@ -117,7 +117,7 @@ bool dAcOBlockUnderground::createHeap() {
 
 int dAcOBlockUnderground::actorCreate() {
     u8 sceneFlag = getSecondSceneFlag();
-    if (sceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, sceneFlag)) {
+    if (sceneFlag < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, sceneFlag)) {
         return FAILED;
     }
 
@@ -185,12 +185,12 @@ int dAcOBlockUnderground::actorExecute() {
 
             u8 firstSceneFlag = getFirstSceneFlag();
             if (firstSceneFlag < 0xFF) {
-                SceneflagManager::sInstance->setFlag(roomid, firstSceneFlag);
+                SceneflagManager::sInstance->setFlag(mRoomID, firstSceneFlag);
             }
 
             u8 secondSceneFlag = getSecondSceneFlag();
             if (secondSceneFlag < 0xFF) {
-                SceneflagManager::sInstance->setFlag(roomid, secondSceneFlag);
+                SceneflagManager::sInstance->setFlag(mRoomID, secondSceneFlag);
             }
 
             deleteRequest();

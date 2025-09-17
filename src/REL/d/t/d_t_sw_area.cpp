@@ -33,8 +33,8 @@ bool isValidStoryFlag(u16 storyflag) {
 
 int dTgSwArea_c::actorExecute() {
     if (checkIfVec3fInMatrix(area, dAcPy_c::LINK->mPosition)) {
-        SceneflagManager::sInstance->setFlag(roomid, setSceneflag);
-        SceneflagManager::sInstance->unsetFlag(roomid, unsetSceneflag);
+        SceneflagManager::sInstance->setFlag(mRoomID, setSceneflag);
+        SceneflagManager::sInstance->unsetFlag(mRoomID, unsetSceneflag);
 
         if (isValidStoryFlag(setStoryflag)) {
             StoryflagManager::sInstance->setFlag(setStoryflag);
@@ -55,8 +55,8 @@ int dTgSwArea_c::actorExecute() {
         }
 
         if (isTemporary) {
-            SceneflagManager::sInstance->unsetFlag(roomid, setSceneflag);
-            SceneflagManager::sInstance->setFlag(roomid, unsetSceneflag);
+            SceneflagManager::sInstance->unsetFlag(mRoomID, setSceneflag);
+            SceneflagManager::sInstance->setFlag(mRoomID, unsetSceneflag);
 
             if (isValidStoryFlag(setStoryflag)) {
                 StoryflagManager::sInstance->unsetFlag(setStoryflag);

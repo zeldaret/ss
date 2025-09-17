@@ -79,8 +79,8 @@ int dAcOTimeStageBg_c::actorCreate() {
 }
 
 int dAcOTimeStageBg_c::actorPostCreate() {
-    mTimeArea.check(roomid, field_0x3EC, 0, 30.0f, 0.1f);
-    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, field_0x3EC)) {
+    mTimeArea.check(mRoomID, field_0x3EC, 0, 30.0f, 0.1f);
+    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(mRoomID, field_0x3EC)) {
         field_0x3F8 = 255.0f;
     } else {
         field_0x3F8 = 0.0f;
@@ -116,8 +116,8 @@ int dAcOTimeStageBg_c::draw() {
 void dAcOTimeStageBg_c::initializeState_Wait() {}
 void dAcOTimeStageBg_c::executeState_Wait() {
     f32 target = 0.0f;
-    mTimeArea.check(roomid, field_0x3EC, 0, 30.0f, 0.1f);
-    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, field_0x3EC)) {
+    mTimeArea.check(mRoomID, field_0x3EC, 0, 30.0f, 0.1f);
+    if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(mRoomID, field_0x3EC)) {
         if (mTimeArea.getDistMaybe() == 1.0f) {
             target = 255.0f;
         }

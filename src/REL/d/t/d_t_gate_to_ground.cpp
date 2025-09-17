@@ -58,7 +58,7 @@ int dTgGateToGround_c::actorExecute() {
         } else {
             if (params_00_00_00_FF != -1) {
                 cam = dScGame_c::getCamera(0);
-                fn_80080960(cam->getField_0xD98(), params_00_00_00_FF, 0, roomid, 0);
+                fn_80080960(cam->getField_0xD98(), params_00_00_00_FF, 0, mRoomID, 0);
             }
             delayFrames = 0;
         }

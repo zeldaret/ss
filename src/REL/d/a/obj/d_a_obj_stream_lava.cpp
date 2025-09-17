@@ -74,7 +74,7 @@ int dAcOstreamLava_c::create() {
     mHideActor = !getFromParams(0x14, 1);            // (params >> 0x14 & 1) == 0;
     mModel.setAnm(mAnmMatClr);
 
-    bool shouldStream = SceneflagManager::sInstance->checkFlag(roomid, mShouldStreamSceneflag);
+    bool shouldStream = SceneflagManager::sInstance->checkFlag(mRoomID, mShouldStreamSceneflag);
     if (shouldStream) {
         mStateMgr.changeState(StateID_Stream);
     } else {
@@ -87,9 +87,9 @@ int dAcOstreamLava_c::create() {
     boundingBox.Set(min, max);
     mCullingDistance = 50000.0f;
 
-    int roomId_tmp = roomid;
+    int roomId_tmp = mRoomID;
     if (addActorToRoom(-1)) {
-        roomid = roomId_tmp;
+        mRoomID = roomId_tmp;
         changeLoadedEntitiesWithSet();
     }
 
@@ -106,7 +106,7 @@ int dAcOstreamLava_c::actorExecute() {
     mStateMgr.executeState();
     mAnmMatClr.play();
 
-    dRoom_c *currentRoom = dStage_c::GetInstance()->getRoom(roomid);
+    dRoom_c *currentRoom = dStage_c::GetInstance()->getRoom(mRoomID);
 
     if (currentRoom->checkFlag(2)) {
         setObjectProperty(0x200);
@@ -131,7 +131,7 @@ void dAcOstreamLava_c::initializeState_Wait() {
 void dAcOstreamLava_c::executeState_Wait() {
     mAnmTexSrtWait.play();
 
-    bool shouldStream = SceneflagManager::sInstance->checkFlag(roomid, mShouldStreamSceneflag);
+    bool shouldStream = SceneflagManager::sInstance->checkFlag(mRoomID, mShouldStreamSceneflag);
     if (shouldStream) {
         mStateMgr.changeState(StateID_Stream);
     }
@@ -155,7 +155,7 @@ void dAcOstreamLava_c::finalizeState_Wait() {
         // Swaps the numbers in .data and swaps the operands in andc
         // u32 eventFlag = Event::makeEventFlag(0x100001, 0x1);
 
-        Event ev(mEventId, roomid, eventFlag, nullptr, nullptr);
+        Event ev(mEventId, mRoomID, eventFlag, nullptr, nullptr);
         mEvent.scheduleEvent(ev, 0);
     }
 }
@@ -167,7 +167,7 @@ void dAcOstreamLava_c::initializeState_Stream() {
 void dAcOstreamLava_c::executeState_Stream() {
     mAnmTexSrtWait.play();
 
-    bool shouldStream = SceneflagManager::sInstance->checkFlag(roomid, mShouldStreamSceneflag);
+    bool shouldStream = SceneflagManager::sInstance->checkFlag(mRoomID, mShouldStreamSceneflag);
     if (!shouldStream) {
         mStateMgr.changeState(StateID_Wait);
     }

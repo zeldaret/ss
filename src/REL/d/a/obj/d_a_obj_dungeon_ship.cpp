@@ -95,7 +95,7 @@ bool dAcODungeonShip_c::createHeap() {
     }
 
     // wat
-    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, (mParams >> 0x10) & 0xFF)) {
+    if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, (mParams >> 0x10) & 0xFF)) {
         goto ok;
     } else {
         bool result = mBg.InitMapStuff(&mAllocator);
@@ -112,7 +112,7 @@ int dAcODungeonShip_c::create() {
         return FAILED;
     }
 
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, (mParams >> 0x10) & 0xFF)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, (mParams >> 0x10) & 0xFF)) {
         mIsDocked = true;
     }
 
@@ -132,7 +132,7 @@ int dAcODungeonShip_c::create() {
     forwardAccel = 0.0f;
     forwardMaxSpeed = 0.0f;
     boundingBox.Set(mVec3_c(-6000.0f, -500.0f, -2000.0f), mVec3_c(5000.0f, 4000.0f, 2000.0f));
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, (mParams >> 0x10) & 0xFF)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, (mParams >> 0x10) & 0xFF)) {
         dBgS::GetInstance()->RegistBg(&mBg, this);
         mStateMgr.changeState(StateID_End);
     } else {
@@ -144,7 +144,7 @@ int dAcODungeonShip_c::create() {
     mEffects[1].init(this);
     field_0x8D9 = 0;
 
-    if (!SceneflagManager::sInstance->checkBoolFlag(roomid, (mParams >> 0x10) & 0xFF)) {
+    if (!SceneflagManager::sInstance->checkBoolFlag(mRoomID, (mParams >> 0x10) & 0xFF)) {
         mDowsingOffset.set(0.0f, 500.0f, 0.0f);
         mDowsingTarget.initialize(DowsingTarget::SLOT_STORY_EVENT, 0, &mDowsingOffset, 10000.0);
         mDowsingTarget.doRegister();
@@ -249,7 +249,7 @@ void dAcODungeonShip_c::executeState_Transparency() {
         } else if (mNumTimesHit == 2) {
             field_0x863 = 0;
             mNumTimesHit++;
-            SceneflagManager::sInstance->setFlag(roomid, (mParams >> 0x10) & 0xFF);
+            SceneflagManager::sInstance->setFlag(mRoomID, (mParams >> 0x10) & 0xFF);
             mAppearEvent = mAppearEventFromParam;
             field_0x8D8 = 1;
             mStateMgr.changeState(StateID_AppearEvent);
@@ -316,7 +316,7 @@ void dAcODungeonShip_c::finalizeState_Transparency() {}
 
 void dAcODungeonShip_c::initializeState_AppearEvent() {
     if (mAppearEvent != 0xFF) {
-        Event ev(mAppearEvent, roomid, 0x100001, (void *)&eventIn_Wrapper, (void *)&eventEnd_Wrapper);
+        Event ev(mAppearEvent, mRoomID, 0x100001, (void *)&eventIn_Wrapper, (void *)&eventEnd_Wrapper);
         mEvent.scheduleEvent(ev, 0);
     }
 }
@@ -379,7 +379,7 @@ void dAcODungeonShip_c::executeState_AppearEvent() {
                 default: mEvent.advanceNext(); break;
             }
         } else {
-            Event ev(mAppearEvent, roomid, 0x100001, (void *)&eventIn_Wrapper, (void *)&eventEnd_Wrapper);
+            Event ev(mAppearEvent, mRoomID, 0x100001, (void *)&eventIn_Wrapper, (void *)&eventEnd_Wrapper);
             mEvent.scheduleEvent(ev, 0);
         }
     } else {
@@ -429,7 +429,7 @@ void dAcODungeonShip_c::fn_485_1660() {
     f32 speed = 0.0f;
     f32 unk = 0.0001f;
     field_0x856 = 1;
-    if (mPath.init(mPathIdx, roomid, 0, 0, false, time, speed, unk)) {
+    if (mPath.init(mPathIdx, mRoomID, 0, 0, false, time, speed, unk)) {
         mPath.setSegment(0, time);
         mPosition = mPath.getPosition();
         mOldPosition = mPath.getPosition();

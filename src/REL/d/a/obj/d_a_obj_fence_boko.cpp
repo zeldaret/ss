@@ -24,7 +24,7 @@ int dAcOfenceBoko_c::create() {
     dBgS::GetInstance()->Regist(&mCollision, this);
     dBgS::GetInstance()->RegistBg(&mCollision, this);
     mCollision.mRoomId = dStage_c::GetInstance()->getCurrRoomId();
-    roomid = mCollision.mRoomId;
+    mRoomID = mCollision.mRoomId;
     mModel.setPriorityDraw(0x1C, 0x9);
     boundingBox.Set(mVec3_c(-210.0f, -10.0f, -20.0f), mVec3_c(210.0f, 340.0f, 20.0f));
     mCullingDistance = 50000.0f;
@@ -41,7 +41,7 @@ int dAcOfenceBoko_c::actorExecute() {
     if (!field_0x560) {
         if (dBgS_ObjGndChk::CheckPos(mPosition + mVec3_c::Ey * 100.f)) {
             mCollision.mRoomId = dBgS_ObjGndChk::GetRoomID();
-            roomid = mCollision.mRoomId;
+            mRoomID = mCollision.mRoomId;
             field_0x560 = true;
         }
     }

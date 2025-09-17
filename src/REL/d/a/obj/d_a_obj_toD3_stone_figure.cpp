@@ -105,7 +105,7 @@ void dAcOtoD3StoneFigure_c::initializeState_OneEye() {
 
 void dAcOtoD3StoneFigure_c::executeState_OneEye() {
     if (EventManager::isInEvent(this, "D3OpenStart")) {
-        dScGame_c::GetInstance()->triggerExit(roomid, mExitId);
+        dScGame_c::GetInstance()->triggerExit(mRoomID, mExitId);
     } else {
         if (hasStoneOfTrials() && dScGame_c::currentSpawnInfo.getTimeOfDay() != SpawnInfo::NIGHT) {
             // These are interaction related

@@ -29,9 +29,9 @@ int dTgDowsing_c::doDelete() {
 }
 
 int dTgDowsing_c::actorExecute() {
-    if (getTriggerSceneFlag() < 0xFF && SceneflagManager::sInstance->checkBoolFlag(roomid, getTriggerSceneFlag()) ||
+    if (getTriggerSceneFlag() < 0xFF && SceneflagManager::sInstance->checkBoolFlag(mRoomID, getTriggerSceneFlag()) ||
         getUntriggerSceneFlag() < 0xFF &&
-            !SceneflagManager::sInstance->checkBoolFlag(roomid, getUntriggerSceneFlag()) ||
+            !SceneflagManager::sInstance->checkBoolFlag(mRoomID, getUntriggerSceneFlag()) ||
         !checkDowsing()) {
         mDowsingTarget.doUnregister();
         mTargetActive = false;

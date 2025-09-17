@@ -53,7 +53,7 @@ void dTgFairy_c::createFairies() {
             mVec3_c v = calcLocation(f);
             v2 = v;
             dAcObjFairy_c *ac = static_cast<dAcObjFairy_c *>(
-                dAcObjBase_c::create("Fairy", roomid, fairyParams1, &v2, nullptr, nullptr, -1, -1, mViewClipIdx)
+                dAcObjBase_c::create("Fairy", mRoomID, fairyParams1, &v2, nullptr, nullptr, -1, -1, mViewClipIdx)
             );
             if (ac != nullptr) {
                 mpFairyRefs[i].link(ac);

@@ -41,7 +41,7 @@ int dTgReaction_c::create() {
         if (getSceneFlag() >= 0xFF) {
             return FAILED;
         }
-        if (SceneflagManager::sInstance->checkBoolFlag(roomid, getSceneFlag())) {
+        if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, getSceneFlag())) {
             return FAILED;
         }
     }
@@ -49,7 +49,7 @@ int dTgReaction_c::create() {
     field_0x4E0 = mRotation.x & 0xFF;
     mRotation.x = angle.x = 0;
 
-    if (field_0x4E0 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(roomid, field_0x4E0)) {
+    if (field_0x4E0 < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, field_0x4E0)) {
         return FAILED;
     }
 
@@ -127,7 +127,7 @@ int dTgReaction_c::doDelete() {
 }
 
 int dTgReaction_c::actorExecute() {
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, getSceneFlag())) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, getSceneFlag())) {
         onDelete();
         return SUCCEEDED;
     } else {
@@ -169,7 +169,7 @@ void dTgReaction_c::checkForBonkItem() {
                 c2 += c;
                 c2.y += field_0x4E4;
                 u32 newItemParms = dAcItem_c::createItemParams(ITEM_HEART_PIECE, 1, 0, getSceneFlag(), 1, 0xFF);
-                if (dAcObjBase_c::create(fProfile::ITEM, roomid, newItemParms, &c2, nullptr, nullptr, 0xFFFFFFFF)) {
+                if (dAcObjBase_c::create(fProfile::ITEM, mRoomID, newItemParms, &c2, nullptr, nullptr, 0xFFFFFFFF)) {
                     field_0x4DD = 1;
                     onDelete();
                     dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_READ_RIDDLE_A);
@@ -196,7 +196,7 @@ void dTgReaction_c::checkForBonkItem() {
             if (fn_578_DB0(pos, uVar3)) {
                 dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_READ_RIDDLE_B);
             }
-            SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
+            SceneflagManager::sInstance->setFlag(mRoomID, getSceneFlag());
             onDelete();
         }
     }
@@ -206,7 +206,7 @@ void dTgReaction_c::checkForBubble() {
     if (mCollision.ChkTgHit() && mCollision.ChkTgAtHitType(AT_TYPE_BUBBLE)) {
         if (dAcPy_c::LINK != nullptr && dAcPy_c::LINK->checkFlags0x350(0x40)) {
             mVec3_c spawnPos = mPosition;
-            dAcObjBase_c::create(fProfile::OBJ_BUBBLE, roomid, 0x4, &spawnPos, nullptr, nullptr, 0xFFFFFFFF);
+            dAcObjBase_c::create(fProfile::OBJ_BUBBLE, mRoomID, 0x4, &spawnPos, nullptr, nullptr, 0xFFFFFFFF);
         }
     }
     mCollision.SetC(mPosition);
@@ -230,7 +230,7 @@ void dTgReaction_c::checkForSlingBellowsItem() {
         if (fn_578_DB0(spawnPos, uVar3)) {
             dSndSmallEffectMgr_c::GetInstance()->playSound(SE_S_READ_RIDDLE_B);
         }
-        SceneflagManager::sInstance->setFlag(roomid, getSceneFlag());
+        SceneflagManager::sInstance->setFlag(mRoomID, getSceneFlag());
         onDelete();
     }
     mCollision.SetC(mPosition);
@@ -275,11 +275,11 @@ bool dTgReaction_c::spawnHearts(s32 params, const mVec3_c &pos, s32 velocity_typ
     for (int i = 0; i < numHearts; i++) {
         ang.y = mAng(step) + cM::rndRange(rndMin, rndMax);
         if (velocity_type == 5) {
-            dAcItem_c::spawnItem(ITEM_HEART, roomid, pos, ang, 0xFFFFFFFF, 1);
+            dAcItem_c::spawnItem(ITEM_HEART, mRoomID, pos, ang, 0xFFFFFFFF, 1);
         } else if (velocity_type == 6) {
-            dAcItem_c::spawnItem(ITEM_HEART, roomid, pos, ang, 0xFFFFFFFF, 0);
+            dAcItem_c::spawnItem(ITEM_HEART, mRoomID, pos, ang, 0xFFFFFFFF, 0);
         } else {
-            dAcItem_c::spawnDrop(ITEM_HEART, roomid, pos, ang);
+            dAcItem_c::spawnDrop(ITEM_HEART, mRoomID, pos, ang);
         }
         step = mAng(step) - stepSize;
     }

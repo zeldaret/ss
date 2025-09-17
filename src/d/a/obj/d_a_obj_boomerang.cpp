@@ -262,9 +262,9 @@ int dAcBoomerang_c::doDelete() {
 
 void dAcBoomerang_c::setRoomId() {
     if (mAcch.GetGroundH() != 1e-9f) {
-        roomid = dBgS::GetInstance()->GetRoomId(mAcch.GetGnd());
-    } else if (roomid == -1) {
-        roomid = dAcPy_c::GetLink2()->roomid;
+        mRoomID = dBgS::GetInstance()->GetRoomId(mAcch.GetGnd());
+    } else if (mRoomID == -1) {
+        mRoomID = dAcPy_c::GetLink2()->mRoomID;
     }
 }
 

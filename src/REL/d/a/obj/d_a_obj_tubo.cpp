@@ -390,7 +390,7 @@ void dAcOtubo_c::finalizeState_Slope() {}
 
 void dAcOtubo_c::initializeState_Rebirth() {
     SpecialItemDropMgr *mgr = SpecialItemDropMgr::GetInstance();
-    mgr->giveSpecialDropItem(getParams2UpperByte(), roomid, &mPosition, 0, mRotation.y, -1);
+    mgr->giveSpecialDropItem(getParams2UpperByte(), mRoomID, &mPosition, 0, mRotation.y, -1);
     mField_0x9AC = mPosition;
     mpPosition = &mField_0x9AC;
     mField_0x9F6 = 0;
@@ -472,7 +472,7 @@ void dAcOtubo_c::destroy() {
     startSound(SE_Tubo_BREAK);
 
     if (mSceneflag < 0xFF && !checkSceneflag()) {
-        SceneflagManager::sInstance->setFlag(roomid, mSceneflag);
+        SceneflagManager::sInstance->setFlag(mRoomID, mSceneflag);
     }
 
     if (mbField_0x9F0) {

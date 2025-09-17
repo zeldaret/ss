@@ -23,7 +23,7 @@ bool dAcBombf_c::createHeap() {
 int dAcBombf_c::actorCreate() {
     mDespawnSceneFlag = (mParams >> 8) & 0xFF;
     field_0x3D4 = (mParams >> 16) & 0xF;
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, mDespawnSceneFlag)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mDespawnSceneFlag)) {
         return FAILED;
     }
 
@@ -76,7 +76,7 @@ int dAcBombf_c::actorPostCreate() {
     }
 
     if (field_0x3D2 == 0 || field_0x3D2 == 2) {
-        s32 b = dTimeAreaMgr_c::GetInstance()->fn_800B9B60(roomid, mPosition);
+        s32 b = dTimeAreaMgr_c::GetInstance()->fn_800B9B60(mRoomID, mPosition);
         if (b != 0) {
             mTimeAreaStruct.field_0x00 = 1.0f;
         }
@@ -149,7 +149,7 @@ void dAcBombf_c::regrowBomb() {
         actorParams1 = 2;
     }
     dAcObjBase_c *ac = dAcObjBase_c::create(
-        "Bomb", roomid, actorParams1, &mPosition, nullptr, nullptr, 0xFFFFFFFF, 0xFFFF, viewclip_idx
+        "Bomb", mRoomID, actorParams1, &mPosition, nullptr, nullptr, 0xFFFFFFFF, 0xFFFF, viewclip_idx
     );
     mBombRef.link(static_cast<dAcBomb_c *>(ac));
     dAcBomb_c *bomb = mBombRef.get();
@@ -170,7 +170,7 @@ void dAcBombf_c::initializeState_Wait() {}
 extern "C" u16 lbl_8057A750;
 
 void dAcBombf_c::executeState_Wait() {
-    if (SceneflagManager::sInstance->checkBoolFlag(roomid, mDespawnSceneFlag)) {
+    if (SceneflagManager::sInstance->checkBoolFlag(mRoomID, mDespawnSceneFlag)) {
         deleteRequest();
         dAcBomb_c *bomb = mBombRef.get();
         if (bomb != nullptr) {
@@ -188,7 +188,7 @@ void dAcBombf_c::executeState_Wait() {
         mVec3_c upScaled = up * 30.0f;
         mVec3_c checkPos = mPosition + upScaled;
 
-        if (mTimeAreaStruct.check(roomid, checkPos, 0, 30.0f, 0.1f) && field_0x3D4 != 1) {
+        if (mTimeAreaStruct.check(mRoomID, checkPos, 0, 30.0f, 0.1f) && field_0x3D4 != 1) {
             if (mTimeAreaStruct.field_0x04 == 1) {
                 startSound(SE_TIMESLIP_TIMESLIP);
             } else {
