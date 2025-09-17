@@ -152,7 +152,7 @@ int dAcODungeonShip_c::create() {
     }
 
     mCullingDistance = 200000.0f;
-    clearActorProperty(0x1);
+    unsetActorProperty(AC_PROP_0x1);
     mAppearEventFromParam = (mParams >> 0x18);
     field_0x849 = mRotation.x;
     mRotation.x = 0;

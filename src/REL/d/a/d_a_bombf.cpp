@@ -42,8 +42,8 @@ int dAcBombf_c::actorCreate() {
     boundingBox.Set(mVec3_c(-80.0, -50.0f, -80.0f), mVec3_c(80.0, 60.0f, 80.0f));
     angle = mRotation;
     if (mDespawnSceneFlag < 0xFF) {
-        clearActorProperty(0x1);
-        setActorProperty(0x4);
+        unsetActorProperty(AC_PROP_0x1);
+        setActorProperty(AC_PROP_0x4);
     }
 
     return SUCCEEDED;
@@ -69,8 +69,8 @@ int dAcBombf_c::actorPostCreate() {
 
         if (dBgS::GetInstance()->ChkMoveBG(dBgS_ObjLinChk::GetInstance(), false)) {
             field_0x398.SetPolyInfo(dBgS_ObjLinChk::GetInstance());
-            clearActorProperty(0x1);
-            setActorProperty(0x4);
+            unsetActorProperty(AC_PROP_0x1);
+            setActorProperty(AC_PROP_0x4);
         }
         mLightingInfo.mLightingCode = dBgS::GetInstance()->GetLightingCode(dBgS_ObjLinChk::GetInstance());
     }
@@ -142,7 +142,7 @@ int dAcBombf_c::draw() {
 
 void dAcBombf_c::regrowBomb() {
     // These params are hell
-    s8 viewclip_idx = checkActorProperty(0x1) ? mViewClipIdx : -1;
+    s8 viewclip_idx = checkActorProperty(dAcBase_c::AC_PROP_0x1) ? mViewClipIdx : -1;
     u32 actorParams1;
     actorParams1 = 1;
     if (field_0x3D0) {
@@ -156,8 +156,8 @@ void dAcBombf_c::regrowBomb() {
     if (bomb != nullptr) {
         field_0x394 = 0x3C;
         bomb->setTransformFromFlower(mWorldMtx);
-        if (checkActorProperty(0x1)) {
-            bomb->setActorProperty(0x1);
+        if (checkActorProperty(dAcBase_c::AC_PROP_0x1)) {
+            bomb->setActorProperty(AC_PROP_0x1);
         }
         if (field_0x3D4 == 0) {
             bomb->mField_0xA44 *= 1.5f;

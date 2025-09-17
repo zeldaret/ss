@@ -133,7 +133,7 @@ int dAcEsm_c::actorCreate() {
 
     mBombRef.unlink();
 
-    setActorProperty(0x1);
+    setActorProperty(AC_PROP_0x1);
     // Ignore these bounding box sets. `fixBoundBox` completely overwrites them with the scale
     switch ((int)mScale.x) {
         default:
@@ -278,7 +278,7 @@ int dAcEsm_c::actorPostCreate() {
     switch ((u32)field_0xBC6) {
         case 1: {
             mTimeArea.setField0x08(0);
-            if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), GetPosition())) {
+            if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), getPosition())) {
                 mTimeArea.setField0x00(1.f);
                 field_0xB8C = 1.f;
                 fn_80030700();
@@ -290,7 +290,7 @@ int dAcEsm_c::actorPostCreate() {
         } break;
         case 2: {
             mTimeArea.setField0x08(1);
-            if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), GetPosition())) {
+            if (dTimeAreaMgr_c::GetInstance()->fn_800B9B60(getRoomId(), getPosition())) {
                 field_0xB8C = 0.f;
                 mTimeArea.setField0x00(0.f);
                 fn_800306d0();
@@ -308,7 +308,7 @@ int dAcEsm_c::actorPostCreate() {
     }
 
     if (field_0xBBF == 1 || field_0xBBF == 3) {
-        clearActorProperty(1);
+        unsetActorProperty(AC_PROP_0x1);
         fn_800306d0();
         setBattleBgmRelated(0);
     }
@@ -334,12 +334,12 @@ int dAcEsm_c::actorExecute() {
     dAcBomb_c *bomb = mBombRef.get();
     if (mBombRef.isLinked() && bomb) {
         mVec3_c target;
-        GetPosition().CopyTo(target);
+        getPosition().CopyTo(target);
         if (!checkSize(SM_MASSIVE) && !checkSize(SM_LARGE)) {
             target.y += mScaleTarget.y * 60.f;
         }
 
-        cLib::addCalcPos2(&bomb->GetPosition(), target, 0.8f, 20.f + GetSpeed() * 1.5f);
+        cLib::addCalcPos2(&bomb->getPosition(), target, 0.8f, 20.f + GetSpeed() * 1.5f);
 
         field_0xB6C = 0.5f;
 
@@ -363,7 +363,7 @@ int dAcEsm_c::actorExecute() {
             if (mHealth != 0) {
                 if (field_0xBBF == 3 || field_0xBBF == 1 || mStateMgr.isState(StateID_Absorption) ||
                     mObjAcch.ChkGndHit()) {
-                    timeCheck = mTimeArea.check(getRoomId(), GetPosition(), 0, 10.f, 0.2f);
+                    timeCheck = mTimeArea.check(getRoomId(), getPosition(), 0, 10.f, 0.2f);
                 }
             }
 
@@ -481,9 +481,9 @@ int dAcEsm_c::actorExecute() {
     }
 
     if (!mStateMgr.isState(StateID_Dead)) {
-        if (field_0xBBF != 6 && dBgS_WtrChk::CheckPos(&GetPosition(), true, 500.0f, -500.0f) &&
+        if (field_0xBBF != 6 && dBgS_WtrChk::CheckPos(&getPosition(), true, 500.0f, -500.0f) &&
             std::abs(mObjAcch.GetGroundH() - dBgS_WtrChk::GetWaterHeight()) > 200.0f &&
-            (GetPosition().y < dBgS_WtrChk::GetWaterHeight() - 100.0f)) {
+            (getPosition().y < dBgS_WtrChk::GetWaterHeight() - 100.0f)) {
             mHealth = 0;
             fn_187_4540(2);
         }
@@ -603,8 +603,8 @@ int dAcEsm_c::actorExecute() {
                                 mScaleTarget.CopyTo(mScaleCopy2);
                                 mScaleCopy2 += pOther->mScaleTarget;
 
-                                GetPosition().CopyTo(mPosCopy1);
-                                GetPosition().CopyTo(pOther->mPosCopy1);
+                                getPosition().CopyTo(mPosCopy1);
+                                getPosition().CopyTo(pOther->mPosCopy1);
 
                                 if (mScaleCopy2.x > 1.2f) {
                                     mScaleCopy2.set(1.2f, 1.2f, 1.2f);
@@ -631,11 +631,11 @@ int dAcEsm_c::actorExecute() {
 
                     dAcBomb_c *bomb = getBombWithinRadius(lookRadius);
 
-                    if (bomb != nullptr && std::abs(bomb->GetPosition().y - mHomePos1.y) < 0.7f * lookRadius) {
+                    if (bomb != nullptr && std::abs(bomb->getPosition().y - mHomePos1.y) < 0.7f * lookRadius) {
                         if (bomb->GetLinkage().tryAttach(bomb, this, &mBombRef, dLinkage_c::CONNECTION_1, false)) {
                             mTimer_0xBAE = 160;
                             startSound(SE_ESm_BRING_IN);
-                            clearActorProperty(1);
+                            unsetActorProperty(AC_PROP_0x1);
                         }
                     }
                 }
@@ -792,7 +792,7 @@ void dAcEsm_c::executeState_Walk() {
 void dAcEsm_c::finalizeState_Walk() {}
 
 void dAcEsm_c::initializeState_BirthJump() {
-    clearActorProperty(1);
+    unsetActorProperty(AC_PROP_0x1);
     field_0xBA6 = 0;
     field_0xB54 = 0.1f;
     field_0xB68 = 0.f;

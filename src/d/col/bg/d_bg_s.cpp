@@ -1185,7 +1185,7 @@ void dBgS::SetLightingCode(dAcObjBase_c *pObj, const cBgS_PolyInfo &info) {
 
 f32 dBgS::SetLightingCode(dAcObjBase_c *pObj, f32 height) {
     dBgS_ObjGndChk objGndChk;
-    mVec3_c pos = pObj->GetPosition();
+    mVec3_c pos = pObj->getPosition();
     pos.y += height;
     objGndChk.SetPos(&pos);
     f32 gndCross = GroundCross(&objGndChk);

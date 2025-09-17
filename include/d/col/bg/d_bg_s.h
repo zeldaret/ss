@@ -32,7 +32,7 @@ public:
             return false;
         }
         const dAcObjBase_c *pObj = mObj.get();
-        return !(pObj && pObj->checkActorProperty(0x40000000));
+        return !(pObj && pObj->checkActorProperty(dAcBase_c::AC_PROP_0x40000000));
     }
 
     // ??? Template seems bad
@@ -104,8 +104,14 @@ u8 dKy_pol_sound_get(cBgS_PolyInfo const *param_0);
 
 struct dMapGradation {
     dMapGradation()
-        : mHasDifferingGrad(false), mGradHigh(0.0f), mGradLow(0.0f), mHasGradation(false), mColorR(0), mColorG(0),
-          mColorB(0), mColorA(0) {}
+        : mHasDifferingGrad(false),
+          mGradHigh(0.0f),
+          mGradLow(0.0f),
+          mHasGradation(false),
+          mColorR(0),
+          mColorG(0),
+          mColorB(0),
+          mColorA(0) {}
     /* 0x00 */ bool mHasDifferingGrad;
     /* 0x04 */ f32 mGradHigh;
     /* 0x08 */ f32 mGradLow;

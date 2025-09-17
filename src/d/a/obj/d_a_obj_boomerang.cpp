@@ -545,7 +545,7 @@ int dAcBoomerang_c::actorExecute() {
 
     if (field_0x8B1 == 0 && (mStateMgr.isState(StateID_Move) || mStateMgr.isState(StateID_MoveCancelWait))) {
         mEff2.createContinuousEffect(
-            PARTICLE_RESOURCE_ID_MAPPING_5_, player->GetPosition(), nullptr, nullptr, nullptr, nullptr
+            PARTICLE_RESOURCE_ID_MAPPING_5_, player->getPosition(), nullptr, nullptr, nullptr, nullptr
         );
     } else {
         mEff2.remove(true);

@@ -136,7 +136,7 @@ int dAcOChair_c::actorExecute() {
     // Calculate the HealCooldown (Heal link if needed)
     if (!checkObjectProperty(0x8000)) {
         if (!isBench()) {
-            mCyl.SetC(GetPosition());
+            mCyl.SetC(getPosition());
             dCcS::GetInstance()->Set(&mCyl);
         }
         mHealTimer = FIRST_HEAL_COOLDOWN;
@@ -160,22 +160,22 @@ int dAcOChair_c::actorExecute() {
 
     if (!isBench()) {
         if (isChairTypeIdk0() && !checkObjectProperty(0x8000)) {
-            if (sLib::absDiff(GetRotation().y, getXZAngleToPlayer()) > 910) {
-                GetRotation().y = getXZAngleToPlayer();
+            if (sLib::absDiff(getRotation().y, getXZAngleToPlayer()) > 910) {
+                getRotation().y = getXZAngleToPlayer();
             }
         }
 
         updateMatrix();
 
         if (isChairTypeIdk0()) {
-            mWorldMtx.YrotM(mChairRot - GetRotation().y);
+            mWorldMtx.YrotM(mChairRot - getRotation().y);
         }
         mMdl.setLocalMtx(mWorldMtx);
         mMdl.calc(false);
     } else {
         if (isChairTypeIdk0() && !checkObjectProperty(0x8000)) {
-            if (sLib::absDiff(GetRotation().y, getXZAngleToPlayer()) > 910) {
-                GetRotation().y = getXZAngleToPlayer();
+            if (sLib::absDiff(getRotation().y, getXZAngleToPlayer()) > 910) {
+                getRotation().y = getXZAngleToPlayer();
             }
         }
     }

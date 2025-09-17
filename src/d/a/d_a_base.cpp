@@ -56,7 +56,7 @@ dAcBase_c::dAcBase_c()
       mActorNode(nullptr),
       mRoomID(s_Create_RoomId),
       mActorSubtype(s_Create_Subtype) {
-    JStudio_actor = 0;
+    mJStudioActor = 0;
     someStr[0] = 0;
 
     if (s_Create_Position) {
@@ -164,13 +164,13 @@ int dAcBase_c::actorPostCreate() {
 }
 
 int dAcBase_c::create() {
-    if (checkActorProperty(0x8000000)) {
+    if (checkActorProperty(AC_PROP_0x8000000)) {
         return actorPostCreate();
     }
     int success = actorCreate();
     if (success == SUCCEEDED) {
         success = NOT_READY;
-        setActorProperty(0x8000000);
+        setActorProperty(AC_PROP_0x8000000);
     }
     return success;
 }
@@ -193,7 +193,7 @@ int dAcBase_c::preDelete() {
         ret = NOT_READY;
     }
 
-    if (!checkActorProperty(0x800) && checkActorProperty(0x10000000) &&
+    if (!checkActorProperty(AC_PROP_0x800) && checkActorProperty(AC_PROP_0x10000000) &&
         fBase_c::getConnectParent()->lifecycle_state != TO_BE_DELETED) {
         if (itemDroppingAndGivingRelated(nullptr, 0) != 0) {
             setEnemyDefeatFlag();
@@ -227,7 +227,7 @@ int dAcBase_c::preDelete() {
         }
     }
 
-    if (checkActorProperty(0x02000000)) {
+    if (checkActorProperty(AC_PROP_0x2000000)) {
         changeLoadedEntitiesNoSet();
     }
 
@@ -239,13 +239,13 @@ int dAcBase_c::preExecute() {
     if (dBase_c::preExecute() == NOT_READY) {
         return NOT_READY;
     }
-    if (checkActorProperty(0x10000000)) {
-        if (checkActorProperty(0x40000000)) {
+    if (checkActorProperty(AC_PROP_0x10000000)) {
+        if (checkActorProperty(AC_PROP_0x40000000)) {
             return NOT_READY;
         }
 
-        if (EventManager::isInEvent() && JStudio_actor == nullptr && !EventManager::isInEvent0Or7() &&
-            !EventManager::FUN_800a0ba0() && !EventManager::FUN_800a0570(this) && !checkActorProperty(0x4)) {
+        if (EventManager::isInEvent() && mJStudioActor == nullptr && !EventManager::isInEvent0Or7() &&
+            !EventManager::FUN_800a0ba0() && !EventManager::FUN_800a0570(this) && !checkActorProperty(AC_PROP_0x4)) {
             return NOT_READY;
         }
     }

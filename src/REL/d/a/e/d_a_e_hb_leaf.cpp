@@ -52,7 +52,7 @@ int dAcEhb_leaf_c::create() {
     }
 
     if (mType != 0) {
-        clearActorProperty(0x1);
+        unsetActorProperty(AC_PROP_0x1);
     }
 
     mStartingPos = mPosition;

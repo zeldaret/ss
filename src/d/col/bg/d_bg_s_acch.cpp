@@ -109,7 +109,7 @@ void dBgS_Acch::Set(dAcObjBase_c *pObj, int tblSize, dBgS_AcchCir *pAcchCir) {
     mpAcchCir = pAcchCir;
     mpMyObj = pObj;
     mActorId = pObj->getID();
-    mpPos = &pObj->GetPosition();
+    mpPos = &pObj->getPosition();
     mpOldPos = &pObj->GetOldPosition();
     mpSpeed = &pObj->GetVelocity();
     if (mpSpeed) {
@@ -118,7 +118,7 @@ void dBgS_Acch::Set(dAcObjBase_c *pObj, int tblSize, dBgS_AcchCir *pAcchCir) {
         mSpeed.set(0.0f, 0.0f, 0.0f);
     }
     mpAngle = &pObj->GetAngle();
-    mpShapeAngle = &pObj->GetRotation();
+    mpShapeAngle = &pObj->getRotation();
 }
 
 bool dBgS_Acch::fn_8033f5b0(mVec3_c *pPos, mVec3_c *pOldPos, f32 height) {

@@ -183,7 +183,7 @@ const EVNT *dRoom_c::getEventForIndex(u32 idx) const {
 }
 
 void deactivateUpdatesCb(dAcBase_c *ac) {
-    if (!ac->checkActorProperty(0x400)) {
+    if (!ac->checkActorProperty(dAcBase_c::AC_PROP_0x400)) {
         return;
     }
     ac->unkVirtFunc_0x60();
@@ -198,7 +198,7 @@ void dRoom_c::deactivateUpdates() {
 }
 
 void activateUpdatesCb(dAcBase_c *ac) {
-    if (!ac->checkActorProperty(0x400)) {
+    if (!ac->checkActorProperty(dAcBase_c::AC_PROP_0x400)) {
         return;
     }
     ac->restorePosRotFromCopy();
@@ -381,7 +381,7 @@ void dRoom_c::executeState_Active() {
 void dRoom_c::finalizeState_Active() {}
 
 void deleteActor(dAcBase_c *ac) {
-    ac->setActorProperty(0x800);
+    ac->setActorProperty(dAcBase_c::AC_PROP_0x800);
     ac->deleteRequest();
 }
 

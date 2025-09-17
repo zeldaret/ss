@@ -122,7 +122,7 @@ int dAcOtubo_c::actorPostCreate() {
             return FAILED;
         }
 
-        setActorProperty(0x4);
+        setActorProperty(AC_PROP_0x4);
 
         if (dBgS_ObjGndChk ::CheckPos(mPosition + mVec3_c::Ey * 50.f)) {
             mPosition.y = dBgS_ObjGndChk::GetGroundHeight();
@@ -257,9 +257,9 @@ void dAcOtubo_c::executeState_Wait() {
         playRollSound();
         if (!mbField_0x9EF) {
             if (dBgS::GetInstance()->ChkMoveBG(mObjAcch.GetGnd(), true)) {
-                clearActorProperty(0x1);
+                unsetActorProperty(AC_PROP_0x1);
             } else {
-                setActorProperty(0x1);
+                setActorProperty(AC_PROP_0x1);
             }
         }
         mField_0x9DC = 0.f;
@@ -273,7 +273,7 @@ void dAcOtubo_c::initializeState_Grab() {
     angle = mAng3_c::Zero;
     mbMovingForward = 0;
     mSph.SetCo_0x400();
-    clearActorProperty(0x1);
+    unsetActorProperty(AC_PROP_0x1);
     if (mbField_0x9ED) {
         mTimer_0x9F7 = 5;
         mbField_0x9EE = true;
@@ -415,7 +415,7 @@ void dAcOtubo_c::initializeState_Rebirth() {
         case SPECIAL_ITEM_13: mField_0x9FC = 1; break;
     }
     mTimer_0x9E8 = 150;
-    clearActorProperty(0x1);
+    unsetActorProperty(AC_PROP_0x1);
 }
 void dAcOtubo_c::executeState_Rebirth() {
     setPosition(mPositionCopy);
@@ -439,7 +439,7 @@ void dAcOtubo_c::finalizeState_Rebirth() {
     mSph.OnTgSet();
     mpPosition = &mPosition;
     clearObjectProperty(0x200);
-    setActorProperty(0x1);
+    setActorProperty(AC_PROP_0x1);
 }
 
 extern "C" void fn_80022BE0(void *, const mVec3_c &);

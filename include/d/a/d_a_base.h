@@ -59,6 +59,20 @@ public:
 // non-official name
 class dAcBase_c : public dBase_c {
 public:
+    enum AcProperties_e {
+        AC_PROP_0x1 = (1 << 0),
+        AC_PROP_0x4 = (1 << 2),
+        AC_PROP_0x100 = (1 << 8),
+        AC_PROP_0x400 = (1 << 10),
+        AC_PROP_0x800 = (1 << 11),
+        AC_PROP_0x2000000 = (1 << 25),
+        AC_PROP_0x4000000 = (1 << 26),
+        AC_PROP_0x8000000 = (1 << 27),
+        AC_PROP_0x10000000 = (1 << 28),
+        AC_PROP_0x40000000 = (1 << 30),
+    };
+
+public:
     typedef TList<SoundInfo, 12> SoundInfoList;
 
     /* 0x68 */ mHeapAllocator_c mAllocator;
@@ -83,7 +97,7 @@ public:
     /* 0xED */ u8 mActorSubtype;
     /* 0xEE */ u8 mPolyAttr0;
     /* 0xEF */ u8 mPolyAttr1;
-    /* 0xF0 */ u32 JStudio_actor;
+    /* 0xF0 */ u32 mJStudioActor;
     /* 0xF4 */ char someStr[4];
     /* 0xF8 */ char field_0xf8[0xfc - 0xf8];
 
@@ -96,6 +110,7 @@ public:
     /* vt 0x28 */ virtual void postExecute(MAIN_STATE_e state);
     /* vt 0x44 */ virtual bool createHeap();
     /* vt 0x48 */ virtual ~dAcBase_c();
+
     /* vt 0x4C */ virtual int actorCreate();
     /* vt 0x50 */ virtual int actorPostCreate();
     /* vt 0x54 */ virtual int actorExecute();
@@ -116,7 +131,7 @@ public:
     void setScale(const mVec3_c &r) {
         mScale = r;
     }
-    void SetRotation(const mAng3_c &r) {
+    void setRotation(const mAng3_c &r) {
         mRotation = r;
     }
 
@@ -127,14 +142,14 @@ public:
         mRotationCopy = mRotation;
     }
 
-    mVec3_c &GetPosition() {
+    mVec3_c &getPosition() {
         return mPosition;
     }
-    mAng3_c &GetRotation() {
+    mAng3_c &getRotation() {
         return mRotation;
     }
 
-    mVec3_c GetPostionDifference(const dAcBase_c &other) {
+    mVec3_c getPostionDifference(const dAcBase_c &other) {
         return mPosition - other.mPosition;
     }
 
@@ -147,7 +162,7 @@ public:
         return mPosition.distance(to);
     }
 
-    bool IsOutOfRange(const mVec3_c &point, f32 radius) {
+    bool checkBeyondRadius(const mVec3_c &point, f32 radius) {
         return getSquareDistanceTo(point) > radius;
     }
 
@@ -155,7 +170,7 @@ public:
         return mRoomID;
     }
 
-    void clearActorProperty(u32 property) {
+    void unsetActorProperty(u32 property) {
         mActorProperties &= ~property;
     }
     void setActorProperty(u32 property) {

@@ -1,6 +1,7 @@
 #include "d/lyt/meter/d_lyt_meter_plus_btn.h"
 
 #include "common.h"
+#include "d/a/d_a_base.h"
 #include "d/d_stage_mgr.h"
 #include "d/flag/dungeonflag_manager.h"
 #include "d/flag/sceneflag_manager.h"
@@ -245,7 +246,7 @@ void dLytMeterPlusBtn_c::setCall(bool shouldCall) {
 bool dLytMeterPlusBtn_c::hasSpecificMapMark() {
     dTgMapMark_c *mark = nullptr;
     while ((mark = static_cast<dTgMapMark_c *>(fManager_c::searchBaseByGroupType(fBase_c::STAGE, mark))) != nullptr) {
-        if (mark->checkActorProperty(0x100) || mark->profile_name != fProfile::T_MAP_MARK ||
+        if (mark->checkActorProperty(dAcBase_c::AC_PROP_0x100) || mark->profile_name != fProfile::T_MAP_MARK ||
             mark->rotz_shift0_0xf == 1) {
             continue;
         }

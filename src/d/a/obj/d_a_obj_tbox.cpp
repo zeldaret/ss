@@ -944,7 +944,7 @@ bool dAcTbox_c::createHeap() {
         fn_8026B380(fxPos);
         mMtx_c fxTransform;
         fxTransform.transS(fxPos);
-        fxTransform.ZXYrotM(GetRotation());
+        fxTransform.ZXYrotM(getRotation());
         mOpenFxMdl.setLocalMtx(fxTransform);
         mOpenFxMdl.setScale(fn_8026B3C0());
     }
@@ -1623,7 +1623,7 @@ void dAcTbox_c::initializeState_DugOut() {
     } else {
         field_0x120C = 0;
     }
-    setActorProperty(0x100);
+    setActorProperty(AC_PROP_0x100);
     if (mVariant == NORMAL) {
         mMdl1.setAnm(sAnmNames[0], m3d::PLAY_MODE_4);
     }
@@ -1712,7 +1712,7 @@ void dAcTbox_c::finalizeState_DugOut() {}
 
 void dAcTbox_c::initializeState_WaitAppear() {
     mScale.set(0.0f, 0.0f, 0.0f);
-    setActorProperty(0x100);
+    setActorProperty(AC_PROP_0x100);
     fn_8026D140();
     field_0x11E8 = 0.0f;
     field_0x11F4 &= ~0x2;
@@ -1739,7 +1739,7 @@ void dAcTbox_c::initializeState_DemoAppear() {
     field_0x11F8 = 0;
     mScale.set(0.0f, 0.0f, 0.0f);
     field_0x11E8 = 0.0f;
-    setActorProperty(0x100);
+    setActorProperty(AC_PROP_0x100);
     mMdl1.setAnm(sAppearAnmName, m3d::PLAY_MODE_4);
     mMdl1.setFrame(mMdl1.getAnm().getStartFrame());
     mAnmMatClr1.setFrame(0.0f, 0);
@@ -1808,7 +1808,7 @@ void dAcTbox_c::initializeState_WaitOpen() {
             // WaitOpen not used for Goddess Chests
     }
     field_0x120C = 0;
-    clearActorProperty(0x100);
+    unsetActorProperty(AC_PROP_0x100);
     if (mVariant == NORMAL) {
         mMdl1.setAnm(sAnmNames[0], m3d::PLAY_MODE_4);
     }
@@ -1831,7 +1831,7 @@ void dAcTbox_c::finalizeState_WaitOpen() {
 }
 
 void dAcTbox_c::initializeState_GoddessWaitOff() {
-    clearActorProperty(0x100);
+    unsetActorProperty(AC_PROP_0x100);
     fn_8026D130();
     field_0x11C0.set(-62.0f, 0.0f, -47.0f);
     field_0x11CC.set(62.0f, 100.0f, 47.0f);
@@ -1843,7 +1843,7 @@ void dAcTbox_c::executeState_GoddessWaitOff() {}
 void dAcTbox_c::finalizeState_GoddessWaitOff() {}
 
 void dAcTbox_c::initializeState_GoddessWaitOn() {
-    clearActorProperty(0x100);
+    unsetActorProperty(AC_PROP_0x100);
     fn_8026D130();
     field_0x11C0.set(-62.0f, 0.0f, -47.0f);
     field_0x11CC.set(62.0f, 100.0f, 47.0f);
@@ -1864,7 +1864,7 @@ void dAcTbox_c::finalizeState_GoddessWaitOn() {
 
 void dAcTbox_c::initializeState_DeleteArchive() {
     mScale.set(1.0f, 1.0f, 1.0f);
-    clearActorProperty(0x100);
+    unsetActorProperty(AC_PROP_0x100);
     if (mVariant == NORMAL) {
         mMdl1.setAnm(sAnmNames[0], m3d::PLAY_MODE_4);
     }
@@ -1902,7 +1902,7 @@ void dAcTbox_c::finalizeState_DeleteArchive() {}
 
 void dAcTbox_c::initializeState_LoadArchive() {
     mScale.set(1.0f, 1.0f, 1.0f);
-    clearActorProperty(0x100);
+    unsetActorProperty(AC_PROP_0x100);
     if (mVariant == NORMAL) {
         mMdl1.setAnm(sAnmNames[0], m3d::PLAY_MODE_4);
     }
@@ -1934,7 +1934,7 @@ extern "C" dAcItem_c *giveItem3(u16 item, s32);
 void dAcTbox_c::initializeState_Open() {
     mScale.set(1.0f, 1.0f, 1.0f);
     startSound(SE_TBox_OPEN_A);
-    clearActorProperty(0x100);
+    unsetActorProperty(AC_PROP_0x100);
     if (mVariant == NORMAL) {
         mAnmMatClr1.setFrame(mAnmMatClr1.getFrameMax(0), 0);
     }
@@ -2127,7 +2127,7 @@ void dAcTbox_c::initializeState_Wait() {
             break;
     }
     field_0x120C = 1;
-    clearActorProperty(0x100);
+    unsetActorProperty(AC_PROP_0x100);
     if (mVariant == 0) {
         mMdl1.setAnm(sAnmNames[0], m3d::PLAY_MODE_4);
         mAnmMatClr1.setFrame(mAnmMatClr1.getFrameMax(0), 0);
@@ -2158,7 +2158,7 @@ void dAcTbox_c::initializeState_GoddessWait() {
     field_0x11E8 = 1.0f;
     field_0x11F4 |= 2;
     field_0x120C = 1;
-    clearActorProperty(0x100);
+    unsetActorProperty(AC_PROP_0x100);
     field_0x11FC = 0x2D;
     fn_8026D130();
 }
@@ -2185,11 +2185,11 @@ bool dAcTbox_c::fn_8026D120() const {
 }
 
 void dAcTbox_c::fn_8026D130() {
-    setActorProperty(0x1);
+    setActorProperty(AC_PROP_0x1);
 }
 
 void dAcTbox_c::fn_8026D140() {
-    clearActorProperty(0x1);
+    unsetActorProperty(AC_PROP_0x1);
 }
 
 void dAcTbox_c::doInteraction(s32 _unused) {

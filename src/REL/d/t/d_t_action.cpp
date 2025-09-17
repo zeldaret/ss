@@ -51,7 +51,7 @@ int dTgAction_c::actorExecute() {
                 break;
             }
             if (pObj->profile_name == fProfile::BOMB) {
-                if (checkIfVec3fInMatrix(mActiveMtx, pObj->GetPosition())) {
+                if (checkIfVec3fInMatrix(mActiveMtx, pObj->getPosition())) {
                     reinterpret_cast<dAcBomb_c *>(pObj)->On_0xA3C(0x20000000);
                 }
             }
@@ -59,7 +59,7 @@ int dTgAction_c::actorExecute() {
     }
 
     // Check For Player Within Area
-    if (enabled && checkIfVec3fInMatrix(mActiveMtx, player->GetPosition())) {
+    if (enabled && checkIfVec3fInMatrix(mActiveMtx, player->getPosition())) {
         if (mType == FORCE_FADE_RESTART) {
             player->onFlags_0x358(0x10000000);
             setActiveArea(50.f);

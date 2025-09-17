@@ -91,10 +91,10 @@ bool dLinkage_c::tryAttach(
         pActor->getConnectParent()->profile_name == fProfile::ROOM) {
         pActor->addActorToRoom(-1);
         onFlag(0x20000000);
-        pActor->setActorProperty(0x2000000);
+        pActor->setActorProperty(dAcBase_c::AC_PROP_0x2000000);
         pActor->changeLoadedEntitiesWithSet();
     }
-    pActor->clearActorProperty(0x1);
+    pActor->unsetActorProperty(dAcBase_c::AC_PROP_0x1);
     return true;
 }
 
@@ -223,7 +223,7 @@ void dLinkage_c::fn_800511E0(dAcObjBase_c *pActor) {
     }
     mMtx_c &mtx = pActor->mWorldMtx;
     f32 y = field_0x1C * pActor->mScale.y;
-    mtx.transS(pActor->GetPosition().x, pActor->GetPosition().y + pActor->GetYOffset(), pActor->GetPosition().z);
+    mtx.transS(pActor->getPosition().x, pActor->getPosition().y + pActor->GetYOffset(), pActor->getPosition().z);
     if (mType == CONNECTION_1) {
         MTXConcat(mtx, carryTransMtx, mtx);
     }
