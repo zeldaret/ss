@@ -1958,6 +1958,6 @@ bool daPlayerModelBase_c::fn_80061410() {
 // and this causes the vtable and all other weak functions to be here
 /* vt 0x114 */ void daPlayerModelBase_c::somethingWithCarriedActorFlags() {
     if (mCarriedActorRef.get() != nullptr) {
-        mCarriedActorRef.get()->setObjectProperty(0x200);
+        mCarriedActorRef.get()->setObjectProperty(OBJ_PROP_0x200);
     }
 }

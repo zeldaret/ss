@@ -94,7 +94,7 @@ int dAcOF400GateSeal_c::actorExecute() {
         f32 frame = mAnmClr.getFrameStart(0);
         mAnmClr.setFrame(frame, 0);
     } else {
-        if (checkObjectProperty(2)) {
+        if (checkObjectProperty(OBJ_PROP_0x2)) {
             f32 frame = mAnmClr.getFrameMax(0);
             mAnmClr.setFrame(frame, 0);
         } else {
@@ -102,9 +102,9 @@ int dAcOF400GateSeal_c::actorExecute() {
         }
     }
     if (mAnmClr.isStop(0)) {
-        setObjectProperty(0x200);
+        setObjectProperty(OBJ_PROP_0x200);
     } else {
-        unsetObjectProperty(0x200);
+        unsetObjectProperty(OBJ_PROP_0x200);
     }
     return SUCCEEDED;
 }

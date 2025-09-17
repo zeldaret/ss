@@ -129,8 +129,7 @@ int dAcOTumbleWeed_c::actorExecute() {
     }
     adjustTimeScale();
 
-    // TODO(mObjectActorFlags)
-    if (checkObjectProperty(0x2)) {
+    if (checkObjectProperty(OBJ_PROP_0x2)) {
         // Weak function not being placed right
         if (sLib::calcTimer(&mTumbleTimer) == 0) {
             killNoItemDrop();

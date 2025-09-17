@@ -35,7 +35,7 @@ int dAcOropeBase_c::doDelete() {
 }
 
 int dAcOropeBase_c::actorExecute() {
-    if (checkObjectProperty(2)) {
+    if (checkObjectProperty(OBJ_PROP_0x2)) {
         field_0x35C = true;
     } else {
         field_0x35C = false;

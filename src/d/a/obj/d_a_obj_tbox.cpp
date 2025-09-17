@@ -1192,9 +1192,9 @@ int dAcTbox_c::actorExecute() {
     dRoom_c *r = dStage_c::GetInstance()->getRoom(mRoomID);
     bool hasFlags = r->checkFlag(0x1E);
     if (hasFlags) {
-        setObjectProperty(0x200);
+        setObjectProperty(OBJ_PROP_0x200);
     } else {
-        unsetObjectProperty(0x200);
+        unsetObjectProperty(OBJ_PROP_0x200);
     }
 
     if (hasFlags) {
@@ -1328,9 +1328,9 @@ int dAcTbox_c::actorExecuteInEvent() {
     dRoom_c *r = dStage_c::GetInstance()->getRoom(mRoomID);
     bool hasFlags = r->checkFlag(0x1E);
     if (hasFlags) {
-        setObjectProperty(0x200);
+        setObjectProperty(OBJ_PROP_0x200);
     } else {
-        unsetObjectProperty(0x200);
+        unsetObjectProperty(OBJ_PROP_0x200);
     }
 
     if (hasFlags) {

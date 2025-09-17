@@ -72,16 +72,16 @@ bool dLinkage_c::tryAttach(
             return false;
         }
     }
-    pActor->unsetObjectProperty(0x1000);
-    pActor->unsetObjectProperty(0x4);
+    pActor->unsetObjectProperty(dAcObjBase_c::OBJ_PROP_0x1000);
+    pActor->unsetObjectProperty(dAcObjBase_c::OBJ_PROP_0x4);
     mControllingActor.link(pSrc);
     mState = STATE_ACTIVE;
     mType = type;
 
     if (type == CONNECTION_4) {
-        pActor->setObjectProperty(0x4);
+        pActor->setObjectProperty(dAcObjBase_c::OBJ_PROP_0x4);
     } else if (type == CONNECTION_7) {
-        pActor->setObjectProperty(0x1000);
+        pActor->setObjectProperty(dAcObjBase_c::OBJ_PROP_0x1000);
         field_0x1A = 4;
     }
     MTXIdentity(carryTransMtx);
@@ -134,11 +134,11 @@ void dLinkage_c::fn_80050EB0(dAcObjBase_c *pActor) {
         MTXIdentity(carryTransMtx);
     } else if (mType == CONNECTION_4) {
         if (pActor) {
-            pActor->unsetObjectProperty(0x4);
+            pActor->unsetObjectProperty(dAcObjBase_c::OBJ_PROP_0x4);
         }
     } else if (mType == CONNECTION_7) {
         if (pActor) {
-            pActor->unsetObjectProperty(0x1000);
+            pActor->unsetObjectProperty(dAcObjBase_c::OBJ_PROP_0x1000);
         }
     }
 

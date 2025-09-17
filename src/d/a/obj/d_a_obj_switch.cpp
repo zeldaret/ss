@@ -66,7 +66,7 @@ void dAcOsw_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *in
             }
         }
     }
-    interactor->setObjectProperty(0x40);
+    interactor->setObjectProperty(OBJ_PROP_0x40);
 }
 
 bool dAcOsw_c::createHeap() {

@@ -82,7 +82,7 @@ int dAcOTarzanPole_c::actorExecute() {
     const dAcPy_c *player = dAcPy_c::GetLink();
     bool bVar = false;
     if (mCollider.ChkTgHit() && mCollider.ChkTgAtHitType(AT_TYPE_WHIP)) {
-        setObjectProperty(0x1000);
+        setObjectProperty(OBJ_PROP_0x1000);
     }
 
     mVec = mVec3_c::Ex * sXOffset + mVec3_c::Ey * sYOffset;

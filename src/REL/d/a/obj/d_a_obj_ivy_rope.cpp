@@ -808,7 +808,7 @@ void dAcOivyRope_c::fn_256_D1B0() {
 }
 
 void dAcOivyRope_c::fn_256_D2B0() {
-    if (checkObjectProperty(0x1)) {
+    if (checkObjectProperty(OBJ_PROP_0x1)) {
         return;
     }
 
@@ -1124,7 +1124,7 @@ void dAcOivyRope_c::fn_256_E3E0() {
             mField_0x1039 = fn_256_DF30();
         } break;
         case 5: {
-            if (checkObjectProperty(0x1)) {
+            if (checkObjectProperty(OBJ_PROP_0x1)) {
                 mField_0x1039 = 2;
             } else {
                 for (int i = 0; i < 0x23; i++) {

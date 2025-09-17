@@ -89,10 +89,10 @@ int dAcOFlyingClawshotTarget_c::actorExecute() {
 
     f32 dist_to = markPoint.squareDistance(player->mPosition);
 
-    if (checkObjectProperty(0x4)) {
+    if (checkObjectProperty(OBJ_PROP_0x4)) {
         player->vt_0x0DC(this, mMarkPoint);
     }
-    if (checkObjectProperty(0x4) && dist_to < 2500.f &&
+    if (checkObjectProperty(OBJ_PROP_0x4) && dist_to < 2500.f &&
         (player->checkActionFlagsCont(0x10000000) || player->checkActionFlagsCont(0x20000000))) {
         static mVec3_c vec = -mVec3_c::Ey;
         mVec3_c v2;
@@ -125,7 +125,7 @@ int dAcOFlyingClawshotTarget_c::actorExecute() {
 
     switch (mState) {
         case 0: {
-            if (checkObjectProperty(0x4)) {
+            if (checkObjectProperty(OBJ_PROP_0x4)) {
                 if (player->checkActionFlagsCont(0x10000000) || player->checkActionFlagsCont(0x20000000)) {
                     mState = 2;
                 } else {
@@ -134,7 +134,7 @@ int dAcOFlyingClawshotTarget_c::actorExecute() {
             }
         } break;
         case 1: {
-            if (checkObjectProperty(0x4)) {
+            if (checkObjectProperty(OBJ_PROP_0x4)) {
                 if (player->checkActionFlagsCont(0x10000000) || player->checkActionFlagsCont(0x20000000)) {
                     mState = 2;
                 }
@@ -143,7 +143,7 @@ int dAcOFlyingClawshotTarget_c::actorExecute() {
             }
         } break;
         case 2: {
-            if (!checkObjectProperty(0x4)) {
+            if (!checkObjectProperty(OBJ_PROP_0x4)) {
                 mState = 0;
             }
         } break;

@@ -404,7 +404,7 @@ void dAcOtubo_c::initializeState_Rebirth() {
 
     mSph.ClrCoSet();
     mSph.ClrTgSet();
-    setObjectProperty(0x200);
+    setObjectProperty(OBJ_PROP_0x200);
     getLinkage().fn_80050EA0(this);
 
     int item_drop_table = getParams2UpperByte();
@@ -426,7 +426,7 @@ void dAcOtubo_c::executeState_Rebirth() {
         case 0: count = dAcItem_c::getTotalArrowCount(); break;
         case 1: count = dAcItem_c::getTotalSeedCount(); break;
     }
-    if (checkObjectProperty(0x2) && count <= 3) {
+    if (checkObjectProperty(OBJ_PROP_0x2) && count <= 3) {
         if (sLib::calcTimer(&mTimer_0x9E8) == 0) {
             mStateMgr.changeState(StateID_Wait);
         }
@@ -438,7 +438,7 @@ void dAcOtubo_c::finalizeState_Rebirth() {
     mSph.OnCoSet();
     mSph.OnTgSet();
     mpPosition = &mPosition;
-    unsetObjectProperty(0x200);
+    unsetObjectProperty(OBJ_PROP_0x200);
     setActorProperty(AC_PROP_0x1);
 }
 

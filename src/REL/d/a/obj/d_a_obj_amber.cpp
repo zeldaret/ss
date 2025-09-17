@@ -70,10 +70,10 @@ int dAcOAmber_c::draw() {
 void dAcOAmber_c::registerInEvent() {
     const char *eventName = EventManager::sInstance->getCurrentEventName();
     if (strequals(eventName, "TimeDoorIn") || strequals(eventName, "TimeDoorOut")) {
-        mObjectActorFlags |= 0x200;
+        setObjectProperty(OBJ_PROP_0x200);
     }
 }
 
 void dAcOAmber_c::unkVirtFunc_0x6C() {
-    mObjectActorFlags &= ~0x200;
+    unsetObjectProperty(OBJ_PROP_0x200);
 }

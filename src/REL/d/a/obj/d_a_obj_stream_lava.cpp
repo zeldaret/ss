@@ -109,10 +109,10 @@ int dAcOstreamLava_c::actorExecute() {
     dRoom_c *currentRoom = dStage_c::GetInstance()->getRoom(mRoomID);
 
     if (currentRoom->checkFlag(2)) {
-        setObjectProperty(0x200);
+        setObjectProperty(OBJ_PROP_0x200);
         return SUCCEEDED;
     } else {
-        unsetObjectProperty(0x200);
+        unsetObjectProperty(OBJ_PROP_0x200);
         return SUCCEEDED;
     }
 }

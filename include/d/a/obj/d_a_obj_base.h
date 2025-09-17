@@ -25,6 +25,42 @@
 // non-official name
 class dAcObjBase_c : public dAcBase_c {
 public:
+    enum ObjProperties_e {
+        OBJ_PROP_0x1 = (1 << 0),
+        OBJ_PROP_0x2 = (1 << 1),
+        OBJ_PROP_0x4 = (1 << 2),
+        OBJ_PROP_0x8 = (1 << 3),
+        OBJ_PROP_0x10 = (1 << 4),
+        OBJ_PROP_0x20 = (1 << 5),
+        OBJ_PROP_0x40 = (1 << 6),
+        OBJ_PROP_0x80 = (1 << 7),
+        OBJ_PROP_0x100 = (1 << 8),
+        OBJ_PROP_0x200 = (1 << 9),
+        OBJ_PROP_0x400 = (1 << 10),
+        OBJ_PROP_0x800 = (1 << 11),
+        OBJ_PROP_0x1000 = (1 << 12),
+        OBJ_PROP_0x2000 = (1 << 13),
+        OBJ_PROP_0x4000 = (1 << 14),
+        OBJ_PROP_0x8000 = (1 << 15),
+        OBJ_PROP_0x10000 = (1 << 16),
+        OBJ_PROP_0x20000 = (1 << 17),
+        OBJ_PROP_0x40000 = (1 << 18),
+        OBJ_PROP_0x80000 = (1 << 19),
+        OBJ_PROP_0x100000 = (1 << 20),
+        OBJ_PROP_0x200000 = (1 << 21),
+        OBJ_PROP_0x400000 = (1 << 22),
+        OBJ_PROP_0x800000 = (1 << 23),
+        OBJ_PROP_0x1000000 = (1 << 24),
+        OBJ_PROP_0x2000000 = (1 << 25),
+        OBJ_PROP_0x4000000 = (1 << 26),
+        OBJ_PROP_0x8000000 = (1 << 27),
+        OBJ_PROP_0x10000000 = (1 << 28),
+        OBJ_PROP_0x20000000 = (1 << 29),
+        OBJ_PROP_0x40000000 = (1 << 30),
+        OBJ_PROP_0x80000000 = (1 << 31),
+    };
+
+public:
     /* 0x0FC */ f32 mYOffset;
     /* 0x100 */ f32 field_0x100;
     /* 0x104 */ f32 unkfloat;
@@ -82,7 +118,7 @@ public:
     }
 
     bool checkSlower(f32 speed) const {
-        return fabsf(mSpeed) <= speed;
+        return std::fabsf(mSpeed) <= speed;
     }
 
     bool checkYOffsetField_0x100() const {

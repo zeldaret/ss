@@ -134,7 +134,7 @@ int dAcOChair_c::actorExecute() {
     mStateMgr.executeState();
 
     // Calculate the HealCooldown (Heal link if needed)
-    if (!checkObjectProperty(0x8000)) {
+    if (!checkObjectProperty(OBJ_PROP_0x8000)) {
         if (!isBench()) {
             mCyl.SetC(getPosition());
             dCcS::GetInstance()->Set(&mCyl);
@@ -148,7 +148,7 @@ int dAcOChair_c::actorExecute() {
     }
 
     // Set the flag that link is sitting
-    if (checkObjectProperty(0x8000) && isPlayerSitting()) {
+    if (checkObjectProperty(OBJ_PROP_0x8000) && isPlayerSitting()) {
         if (mSceneflag < 0xFF && !SceneflagManager::sInstance->checkBoolFlag(mRoomID, mSceneflag)) {
             SceneflagManager::sInstance->setFlag(mRoomID, mSceneflag);
         }
@@ -159,7 +159,7 @@ int dAcOChair_c::actorExecute() {
     }
 
     if (!isBench()) {
-        if (isChairTypeIdk0() && !checkObjectProperty(0x8000)) {
+        if (isChairTypeIdk0() && !checkObjectProperty(OBJ_PROP_0x8000)) {
             if (sLib::absDiff(getRotation().y, getXZAngleToPlayer()) > 910) {
                 getRotation().y = getXZAngleToPlayer();
             }
@@ -173,7 +173,7 @@ int dAcOChair_c::actorExecute() {
         mMdl.setLocalMtx(mWorldMtx);
         mMdl.calc(false);
     } else {
-        if (isChairTypeIdk0() && !checkObjectProperty(0x8000)) {
+        if (isChairTypeIdk0() && !checkObjectProperty(OBJ_PROP_0x8000)) {
             if (sLib::absDiff(getRotation().y, getXZAngleToPlayer()) > 910) {
                 getRotation().y = getXZAngleToPlayer();
             }
@@ -251,7 +251,7 @@ void dAcOChair_c::updateChairPos() {
         mPositionCopy3 = mPositionCopy2;
     } else {
         field_0xB1A = true;
-        if (!checkObjectProperty(0x8000)) {
+        if (!checkObjectProperty(OBJ_PROP_0x8000)) {
             mVec3_c work = mVec3_c::Ez * getDistToPlayer();
             work.rotY(getRelativeYRotationToPlayer());
             work.z = 0.f;
