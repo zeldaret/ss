@@ -25,7 +25,7 @@ bool dAcOpuzzleIsland_c::createHeap() {
     dStage_c::bindStageResToFile(&mResFile);
     dStage_c::bindSkyCmnToResFile(&mResFile);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("IslPuz");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
     void *dzb = dAcObjBase_c::getOarcFile("IslPuz", "dzb/IslPuz.dzb");
     void *plc = dAcObjBase_c::getOarcFile("IslPuz", "dat/IslPuz.plc");
     updateMatrix();

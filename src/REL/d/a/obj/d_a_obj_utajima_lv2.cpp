@@ -14,7 +14,7 @@ bool dAcOutajimaLv2_c::createHeap() {
     dStage_c::bindStageResToFile(&mRes);
     dStage_c::bindSkyCmnToResFile(&mRes);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("IslCave");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120));
 
     void *dzb = getOarcFile("IslCave", "dzb/IslCave.dzb");
     void *plc = getOarcFile("IslCave", "dat/IslCave.plc");
@@ -22,7 +22,7 @@ bool dAcOutajimaLv2_c::createHeap() {
     mMdl.setLocalMtx(mWorldMtx);
     TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mBgW.Lock();
-    return mBgW.InitMapStuff(&heap_allocator);
+    return mBgW.InitMapStuff(&mAllocator);
 }
 
 int dAcOutajimaLv2_c::create() {

@@ -43,14 +43,14 @@ bool dAcOstreamLava_c::createHeap() {
     nw4r::g3d::ResAnmClr anmClr;
 
     mdl = mResFile.GetResMdl(AcOstreamLava__ModelNames[mSubtype]);
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x32C));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x32C));
 
     anmSrtWait = mResFile.GetResAnmTexSrt("Wait");
-    TRY_CREATE(mAnmTexSrtWait.create(mdl, anmSrtWait, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnmTexSrtWait.create(mdl, anmSrtWait, &mAllocator, nullptr, 1));
     mModel.setAnm(mAnmTexSrtWait);
 
     anmClr = mResFile.GetResAnmClr(AcOstreamLava__AnmClrNames[mSubtype]);
-    TRY_CREATE(mAnmMatClr.create(mdl, anmClr, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnmMatClr.create(mdl, anmClr, &mAllocator, nullptr, 1));
 
     void *dzb = getOarcFile(AcOstreamLava__OarcNames[mSubtype], AcOstreamLava__DbzNames[mSubtype]);
     void *plc = getOarcFile(AcOstreamLava__OarcNames[mSubtype], AcOstreamLava__PlcNames[mSubtype]);
@@ -60,7 +60,7 @@ bool dAcOstreamLava_c::createHeap() {
     TRY_CREATE(!mCollision.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mCollision.Lock();
 
-    TRY_CREATE(mCollision.InitMapStuff(&heap_allocator));
+    TRY_CREATE(mCollision.InitMapStuff(&mAllocator));
     return true;
 }
 

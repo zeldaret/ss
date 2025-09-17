@@ -17,11 +17,11 @@ bool dAcOruinedSave_c::createHeap() {
     void *data = getOarcResFile("SaveObjectKoke");
     mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("SaveObjectKoke");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x128));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x128));
     nw4r::g3d::ResFile resFile(data);
     mdl = mMdl.getResMdl();
     nw4r::g3d::ResAnmClr resAnmClr = resFile.GetResAnmClr("SaveObjectKoke_First");
-    TRY_CREATE(mAnmMatClr.create(mdl, resAnmClr, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnmMatClr.create(mdl, resAnmClr, &mAllocator, nullptr, 1));
     return true;
 }
 

@@ -11,7 +11,7 @@ const f32 dAcOJunkRep_c::sSomeFloat = 0.0f;
 
 bool dAcOJunkRep_c::loadMdl(m3d::smdl_c &mdl, const char *name) {
     nw4r::g3d::ResMdl resMdl = mResFile.GetResMdl(name);
-    return mdl.create(resMdl, &heap_allocator, 0x120);
+    return mdl.create(resMdl, &mAllocator, 0x120);
 }
 
 bool dAcOJunkRep_c::getState() {

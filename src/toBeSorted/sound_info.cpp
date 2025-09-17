@@ -18,7 +18,7 @@ bool SoundInfo::initSource(s32 sourceType, const char *name, const mVec3_c *posP
     if (mpSource == nullptr) {
         return false;
     }
-    mpActor->sound_list.append(this);
+    mpActor->mSoundList.append(this);
     mpPosPtr = posPtr;
     return true;
 }

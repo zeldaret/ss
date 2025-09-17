@@ -22,7 +22,6 @@
 #include "rvl/VI/vi.h"
 #include "sized_string.h"
 
-
 namespace d3d {
 
 static EGG::Screen sSomeScreen;
@@ -43,7 +42,7 @@ AnmMdlWrapper::~AnmMdlWrapper() {
 bool AnmMdlWrapper::create(
     dAcBase_c &ac, void *mdlFile, void *anmFile, const char *mdlName, const char *anmName, u32 bufferOption
 ) {
-    if (!m3d::mdlAnmChr::create(mdlFile, anmFile, mdlName, anmName, &ac.heap_allocator, bufferOption, 1, nullptr)) {
+    if (!m3d::mdlAnmChr::create(mdlFile, anmFile, mdlName, anmName, &ac.mAllocator, bufferOption, 1, nullptr)) {
         return false;
     }
     mpSoundSource = ac.getSoundSource();
@@ -61,7 +60,7 @@ bool AnmMdlWrapper::create(
     m3d::mdl_c::mdlCallback_c *callback, u32 bufferOption
 ) {
     if (!m3d::mdlAnmChr::create(
-            mdlFile, anmFile, mdlName, anmName, callback, &ac.heap_allocator, bufferOption, 1, nullptr
+            mdlFile, anmFile, mdlName, anmName, callback, &ac.mAllocator, bufferOption, 1, nullptr
         )) {
         return false;
     }

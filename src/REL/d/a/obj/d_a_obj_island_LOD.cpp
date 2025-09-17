@@ -23,7 +23,7 @@ bool dAcOislandLOD_c::createHeap() {
     dStage_c::bindStageResToFile(&mResFile);
     dStage_c::bindSkyCmnToResFile(&mResFile);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(dAcOislandLOD_c::resMdlNames[mMdlLodIdx]);
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
     return true;
 }
 

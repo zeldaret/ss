@@ -61,28 +61,28 @@ class dAcBase_c : public dBase_c {
 public:
     typedef TList<SoundInfo, 12> SoundInfoList;
 
-    /* 0x68 */ mHeapAllocator_c heap_allocator;
+    /* 0x68 */ mHeapAllocator_c mAllocator;
     /* 0x84 */ const ActorInfo *mpActorInfo;
-    /* 0x88 */ SoundInfoList sound_list;
+    /* 0x88 */ SoundInfoList mSoundList;
     /* 0x94 */ RaiiPtr<dSoundSourceIf_c> mpSoundSource;
-    /* 0x98 */ mVec3_c *obj_pos;
-    /* 0x9C */ mVec3_c pos_copy;
-    /* 0xA8 */ u32 params2;
-    /* 0xAC */ mAng3_c rot_copy;
-    /* 0xB2 */ u16 obj_id;
-    /* 0xB4 */ s8 room_id_copy;
-    /* 0xB5 */ s8 viewclip_index;
-    /* 0xB6 */ u8 subtype;
+    /* 0x98 */ mVec3_c *mpPosition;
+    /* 0x9C */ mVec3_c mPositionCopy;
+    /* 0xA8 */ u32 mParams2;
+    /* 0xAC */ mAng3_c mRotationCopy;
+    /* 0xB2 */ u16 mObjID;
+    /* 0xB4 */ s8 mRoomIDCopy;
+    /* 0xB5 */ s8 mViewClipIdx;
+    /* 0xB6 */ u8 mSubtype;
     /* 0xB8 */ mAng3_c mRotation;
     /* 0xC0 */ mVec3_c mPosition;
     /* 0xCC */ mVec3_c mScale;
-    /* 0xD8 */ u32 actor_properties;
-    /* 0xDC */ dAcRef_c<dAcBase_c> actor_node;
+    /* 0xD8 */ u32 mActorProperties;
+    /* 0xDC */ dAcRef_c<dAcBase_c> mActorNode;
     /* 0xE8 */ u32 mTgSndAreaFlags;
     /* 0xEC */ s8 roomid;
-    /* 0xED */ u8 actor_subtype;
-    /* 0xEE */ u8 polyAttr0;
-    /* 0xEF */ u8 polyAttr1;
+    /* 0xED */ u8 mActorSubtype;
+    /* 0xEE */ u8 mPolyAttr0;
+    /* 0xEF */ u8 mPolyAttr1;
     /* 0xF0 */ u32 JStudio_actor;
     /* 0xF4 */ char someStr[4];
     /* 0xF8 */ char field_0xf8[0xfc - 0xf8];
@@ -121,10 +121,10 @@ public:
     }
 
     void copyPosition() {
-        pos_copy = mPosition;
+        mPositionCopy = mPosition;
     }
     void copyRotation() {
-        rot_copy = mRotation;
+        mRotationCopy = mRotation;
     }
 
     mVec3_c &GetPosition() {
@@ -156,13 +156,13 @@ public:
     }
 
     void clearActorProperty(u32 property) {
-        actor_properties &= ~property;
+        mActorProperties &= ~property;
     }
     void setActorProperty(u32 property) {
-        actor_properties |= property;
+        mActorProperties |= property;
     }
     bool checkActorProperty(u32 property) const {
-        return actor_properties & property;
+        return mActorProperties & property;
     }
 
 public:

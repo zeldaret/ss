@@ -42,20 +42,20 @@ bool dAcBase_c::createHeap() {
     return true;
 }
 
-// mpSoundSource and sound_list need to be ironed out before this can match
+// mpSoundSource and mSoundList need to be ironed out before this can match
 // NOT MATCHING
 // 8002c3b0
 dAcBase_c::dAcBase_c()
-    : heap_allocator(),
+    : mAllocator(),
       mpActorInfo(s_Create_ActorInfo),
-      sound_list(),
-      obj_pos(&mPosition),
-      params2(s_Create_Params2),
-      obj_id(s_Create_UnkFlags),
-      viewclip_index(s_Create_ViewClipIdx),
-      actor_node(nullptr),
+      mSoundList(),
+      mpPosition(&mPosition),
+      mParams2(s_Create_Params2),
+      mObjID(s_Create_UnkFlags),
+      mViewClipIdx(s_Create_ViewClipIdx),
+      mActorNode(nullptr),
       roomid(s_Create_RoomId),
-      actor_subtype(s_Create_Subtype) {
+      mActorSubtype(s_Create_Subtype) {
     JStudio_actor = 0;
     someStr[0] = 0;
 
@@ -78,9 +78,9 @@ dAcBase_c::dAcBase_c()
     }
 
     fProfile::fActorProfile_c *profile = (fProfile::fActorProfile_c *)((*fProfile::sProfileList)[profile_name]);
-    actor_properties = profile->mActorProperties;
+    mActorProperties = profile->mActorProperties;
     if (mpActorInfo == nullptr) {
-        mpActorInfo = getActorInfoByProfileAndSubtype(profile_name, actor_subtype);
+        mpActorInfo = getActorInfoByProfileAndSubtype(profile_name, mActorSubtype);
     }
     someStr[0] = '\0';
 }
@@ -118,7 +118,7 @@ dSoundSourceIf_c *dAcBase_c::createSoundSource() {
     }
 
     const char *actorName = getActorName(mpActorInfo);
-    return dSoundSourceIf_c::create(soundSourceType, this, actorName, subtype);
+    return dSoundSourceIf_c::create(soundSourceType, this, actorName, mSubtype);
 }
 
 int dAcBase_c::initAllocatorWork1Heap(int size, char *name, int align) {
@@ -126,12 +126,12 @@ int dAcBase_c::initAllocatorWork1Heap(int size, char *name, int align) {
 }
 
 int dAcBase_c::initAllocator(int size, char *name, EGG::Heap *heap, int align) {
-    if (!heap_allocator.createFrmHeapToCurrent(size, heap, name, 0x20, mHeap::OPT_NONE)) {
+    if (!mAllocator.createFrmHeapToCurrent(size, heap, name, 0x20, mHeap::OPT_NONE)) {
         return 0;
     }
     mpSoundSource = createSoundSource();
     int success = createHeap();
-    heap_allocator.adjustFrmHeapRestoreCurrent();
+    mAllocator.adjustFrmHeapRestoreCurrent();
     return success;
 }
 
@@ -178,9 +178,9 @@ int dAcBase_c::create() {
 // 8002c8f0
 void dAcBase_c::postCreate(fBase_c::MAIN_STATE_e state) {
     if (state == SUCCESS) {
-        pos_copy = mPosition;
-        rot_copy = mRotation;
-        room_id_copy = roomid;
+        mPositionCopy = mPosition;
+        mRotationCopy = mRotation;
+        mRoomIDCopy = roomid;
     }
     dBase_c::postCreate(state);
 }
@@ -204,7 +204,7 @@ int dAcBase_c::preDelete() {
             mpSoundSource->stopAllSound(0);
         }
         // TODO - TList
-        for (SoundInfoList::Iterator it = sound_list.GetBeginIter(); it != sound_list.GetEndIter(); ++it) {
+        for (SoundInfoList::Iterator it = mSoundList.GetBeginIter(); it != mSoundList.GetEndIter(); ++it) {
             it->getSource()->stopAllSound(0);
         }
     }
@@ -220,7 +220,7 @@ int dAcBase_c::preDelete() {
         }
     }
     // TODO - TList
-    for (SoundInfoList::Iterator it = sound_list.GetBeginIter(); it != sound_list.GetEndIter(); ++it) {
+    for (SoundInfoList::Iterator it = mSoundList.GetBeginIter(); it != mSoundList.GetEndIter(); ++it) {
         it->getSource()->shutdown();
         if (it->getSource()->hasPlayingSounds()) {
             return NOT_READY;
@@ -274,12 +274,12 @@ int dAcBase_c::actorExecuteInEvent() {
 // 8002ccc0
 void dAcBase_c::postExecute(fBase_c::MAIN_STATE_e state) {
     if (mpSoundSource != nullptr) {
-        mpSoundSource->calc(*obj_pos);
-        mpSoundSource->setPolyAttrs(polyAttr0, polyAttr1);
+        mpSoundSource->calc(*mpPosition);
+        mpSoundSource->setPolyAttrs(mPolyAttr0, mPolyAttr1);
     }
 
     // TODO - TList
-    for (SoundInfoList::Iterator it = sound_list.GetBeginIter(); it != sound_list.GetEndIter(); ++it) {
+    for (SoundInfoList::Iterator it = mSoundList.GetBeginIter(); it != mSoundList.GetEndIter(); ++it) {
         it->calc();
     }
 
@@ -299,11 +299,11 @@ void dAcBase_c::unkVirtFunc_0x60() {
 // 8002ceb0
 // loads f2 before f0 instead of f0 then f2
 bool dAcBase_c::restorePosRotFromCopy() {
-    if (roomid != room_id_copy) {
+    if (roomid != mRoomIDCopy) {
         return 0;
     }
-    mPosition = pos_copy;
-    mRotation = rot_copy;
+    mPosition = mPositionCopy;
+    mRotation = mRotationCopy;
     return 1;
 }
 
@@ -317,8 +317,8 @@ u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
         spawnPos = &mPosition;
     }
 
-    u32 param2Copy = params2;
-    params2 = param2Copy | 0xFF000000;
+    u32 param2Copy = mParams2;
+    mParams2 = param2Copy | 0xFF000000;
     // mAng3_c rot = {};
     return SpecialItemDropMgr::GetInstance()->giveSpecialDropItem(param2Copy >> 0x18, roomid, spawnPos, subtype, 0, -1);
 }
@@ -326,27 +326,27 @@ u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
 // 8002cf90
 void dAcBase_c::fillUpperParams2Byte() {
     // Upper byte of param2 determines item drops when actor is deleted
-    params2 |= 0xFF000000;
+    mParams2 |= 0xFF000000;
 }
 
 // 8002cfa0
 u32 dAcBase_c::getParams2_ignoreLower() {
-    return params2 | 0xFFFF;
+    return mParams2 | 0xFFFF;
 }
 
 // 8002cfb0
 void dAcBase_c::setParams2Upper_ignoreLower(u32 val) {
-    params2 = val | 0xFFFF;
+    mParams2 = val | 0xFFFF;
 }
 
 // 8002cfc0
 int dAcBase_c::getParams2UpperByte() {
-    return params2 >> 0x18;
+    return mParams2 >> 0x18;
 }
 
 // 8002cfd0
 void dAcBase_c::setParams2UpperByte(u32 val) {
-    params2 = (params2 & 0xFFFFFF) | val << 0x18;
+    mParams2 = (mParams2 & 0xFFFFFF) | val << 0x18;
 }
 
 // 8002cff0
@@ -356,7 +356,7 @@ u32 dAcBase_c::buildParams2(u32 lower, u32 upper) {
 
 // 8002d010
 u32 dAcBase_c::getParams2Lower() const {
-    return params2 & 0xFFFF;
+    return mParams2 & 0xFFFF;
 }
 
 // 8002d020
@@ -370,7 +370,7 @@ dAcBase_c *dAcBase_c::findActor(char *objName, dAcBase_c *parent) {
             if (parent == nullptr) {
                 break;
             }
-        } while (parent->actor_subtype != actorInfo->subtype);
+        } while (parent->mActorSubtype != actorInfo->subtype);
     }
     return parent;
 }
@@ -628,30 +628,30 @@ dSoundSourceIf_c *dAcBase_c::getSoundSource() {
 
 // 8002d890
 void dAcBase_c::removeSoundInfo(SoundInfo *soundInfo) {
-    // Position != EndIter -> soundInfo is contained in sound_list
-    if (sound_list.GetPosition(soundInfo) != sound_list.GetEndIter()) {
-        sound_list.remove(soundInfo);
+    // Position != EndIter -> soundInfo is contained in mSoundList
+    if (mSoundList.GetPosition(soundInfo) != mSoundList.GetEndIter()) {
+        mSoundList.remove(soundInfo);
     }
 }
 
 // current name is Global__setActorRef
 void dAcBase_c::setActorRef(dAcBase_c *ref) {
-    actor_node.link(ref);
+    mActorNode.link(ref);
 }
 
 // May not be only purpose
 void dAcBase_c::setEnemyDefeatFlag() {
-    EnemyflagManager::sInstance->setFlag(obj_id);
+    EnemyflagManager::sInstance->setFlag(mObjID);
 }
 
 // 8002d940
 void dAcBase_c::changeLoadedEntitiesWithSet() {
-    dStage_c::GetInstance()->changeLoadedEntities(obj_id, true);
+    dStage_c::GetInstance()->changeLoadedEntities(mObjID, true);
 }
 
 // 8002d960
 void dAcBase_c::changeLoadedEntitiesNoSet() {
-    dStage_c::GetInstance()->changeLoadedEntities(obj_id, false);
+    dStage_c::GetInstance()->changeLoadedEntities(mObjID, false);
 }
 
 // spawns GroupType2 (ACTOR)
@@ -788,8 +788,8 @@ void dAcBase_c::deleteWithFlagNoItemDrop() {
 
 // 8002ddd0
 void dAcBase_c::setPolyAttrs(cBgS_PolyInfo &pPolyInfo) {
-    polyAttr0 = dBgS::GetInstance()->GetPolyAtt0(pPolyInfo);
-    polyAttr1 = dBgS::GetInstance()->GetPolyAtt1(pPolyInfo);
+    mPolyAttr0 = dBgS::GetInstance()->GetPolyAtt0(pPolyInfo);
+    mPolyAttr1 = dBgS::GetInstance()->GetPolyAtt1(pPolyInfo);
 }
 
 // Idk what's up with this function. It's only used once.

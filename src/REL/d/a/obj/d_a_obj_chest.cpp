@@ -92,7 +92,7 @@ bool dAcOChest_c::createHeap() {
         void *insideMdlData = getOarcResFile("TansuInside");
         mResFile = nw4r::g3d::ResFile(insideMdlData);
         nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(INSIDE_MODEL_NAMES[getFromParams(0x10, 0xFF)]);
-        if (!mInsideMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr)) {
+        if (!mInsideMdl.create(mdl, &mAllocator, 0x120, 1, nullptr)) {
             return false;
         }
     }
@@ -105,7 +105,7 @@ bool dAcOChest_c::createHeap() {
     if (!ok) {
         return false;
     }
-    return mBgW.InitMapStuff(&heap_allocator);
+    return mBgW.InitMapStuff(&mAllocator);
 }
 
 int dAcOChest_c::create() {

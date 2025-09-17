@@ -24,9 +24,9 @@ const u32 dAcOtriforce_c::sStartingOffsetRange = 0x10000;
 bool dAcOtriforce_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(getOarcResFile("TriForce"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("TriForce");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x324));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x324));
     nw4r::g3d::ResAnmTexSrt anm = mResFile.GetResAnmTexSrt("TriForce");
-    TRY_CREATE(mAnm.create(mdl, anm, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnm.create(mdl, anm, &mAllocator, nullptr, 1));
     mMdl.setAnm(mAnm);
     return true;
 }

@@ -14,7 +14,7 @@ STATE_DEFINE(dAcObjFairy_c, CatchDemo);
 
 bool dAcObjFairy_c::createHeap() {
     void *file = getOarcResFile("PutFairy");
-    TRY_CREATE(mModel.create(file, "PutFairy", "PutFairy_fly", &heap_allocator, 0x120));
+    TRY_CREATE(mModel.create(file, "PutFairy", "PutFairy_fly", &mAllocator, 0x120));
 
     return true;
 }

@@ -16,7 +16,7 @@ bool dAcOhole_c::createHeap() {
     void *data = getOarcResFile("Or");
     mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("octarock_hole");
-    bool ok = mMdl.create(mdl, &heap_allocator, 0x20, 1, nullptr);
+    bool ok = mMdl.create(mdl, &mAllocator, 0x20, 1, nullptr);
     if (!ok) {
         return ok;
     }

@@ -709,10 +709,10 @@ void daPlayerModelBase_c::allocFrmHeap(mHeapAllocator_c *allocator, u32 size, co
 }
 
 void daPlayerModelBase_c::allocExternalDataBuffers() {
-    mpExternalAnmCharBuffer = heap_allocator.alloc(0x2400 * 6);
-    mpAnmCharBuffer = heap_allocator.alloc(0x1000);
-    mpTexPatBuffer = heap_allocator.alloc(0x1000);
-    mpTexSrtBuffer = heap_allocator.alloc(0x1000);
+    mpExternalAnmCharBuffer = mAllocator.alloc(0x2400 * 6);
+    mpAnmCharBuffer = mAllocator.alloc(0x1000);
+    mpTexPatBuffer = mAllocator.alloc(0x1000);
+    mpTexSrtBuffer = mAllocator.alloc(0x1000);
 }
 
 void daPlayerModelBase_c::initModelHeaps() {
@@ -735,7 +735,7 @@ void daPlayerModelBase_c::updateSwordShieldModelsIfNeeded() {
 m3d::anmTexSrt_c *daPlayerModelBase_c::createAnmTexSrt(const char *resName, m3d::bmdl_c &mdl) {
     m3d::anmTexSrt_c *anm = new m3d::anmTexSrt_c();
     (void)mAlink2Res.GetResAnmTexSrt(resName);
-    anm->create(mdl.getResMdl(), mAlink2Res.GetResAnmTexSrt(resName), &heap_allocator, nullptr, 1);
+    anm->create(mdl.getResMdl(), mAlink2Res.GetResAnmTexSrt(resName), &mAllocator, nullptr, 1);
     mdl.setAnm(*anm);
     return anm;
 }
@@ -816,7 +816,7 @@ void daPlayerModelBase_c::loadBodyModels() {
 void daPlayerModelBase_c::loadBody() {
     loadBodyModels();
     nw4r::g3d::ResMdl bodyMdl = mMainMdl.getResMdl();
-    mAnmChrBlend.create(bodyMdl, 6, &heap_allocator);
+    mAnmChrBlend.create(bodyMdl, 6, &mAllocator);
     mAnmChrBlend.getAnimObj()->SetAnmFlag(nw4r::g3d::AnmObj::FLAG_USE_QUATERNION_ROTATION_BLEND, true);
 
     daPlBaseAnmChr_c *anms = mAnmChrs;
@@ -824,7 +824,7 @@ void daPlayerModelBase_c::loadBody() {
     nw4r::g3d::ResAnmChr resAnmChr26 = getExternalAnmChr(sAnimations[26].animName, mpExternalAnmCharBuffer, 0x2400);
     nw4r::g3d::AnmObjChr *animObj;
     for (s32 i = 0; i < 6; i++) {
-        anms->create2(bodyMdl, resAnmChr26, &heap_allocator);
+        anms->create2(bodyMdl, resAnmChr26, &mAllocator);
         anms->setAnm(mMainMdl, resAnmChr26, m3d::PLAY_MODE_0);
         f32 f;
         switch (i) {
@@ -848,7 +848,7 @@ void daPlayerModelBase_c::loadBody() {
 
     // "F_default"
     mFaceAnmChr.create(
-        mFaceMdl.getResMdl(), getExternalAnmChr(sFaceResNames[0], mpAnmCharBuffer, 0x1000), &heap_allocator, nullptr
+        mFaceMdl.getResMdl(), getExternalAnmChr(sFaceResNames[0], mpAnmCharBuffer, 0x1000), &mAllocator, nullptr
     );
     mFaceMdl.setAnm(mFaceAnmChr);
     mFaceAnmChrIdx1 = PLAYER_FACE_DEFAULT;
@@ -856,8 +856,7 @@ void daPlayerModelBase_c::loadBody() {
 
     // "Fmaba01"
     mFaceTexPat.create(
-        mFaceMdl.getResMdl(), getExternalAnmTexPat(sFaceResNames[1], mpTexPatBuffer, 0x1000), &heap_allocator, nullptr,
-        1
+        mFaceMdl.getResMdl(), getExternalAnmTexPat(sFaceResNames[1], mpTexPatBuffer, 0x1000), &mAllocator, nullptr, 1
     );
     mFaceMdl.setAnm(mFaceTexPat);
     mFaceAnmTexPatIdx1 = PLAYER_FACEMABA01;
@@ -865,7 +864,7 @@ void daPlayerModelBase_c::loadBody() {
 
     bool isInTrial = dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL;
     mFaceTexSrt.create(
-        mFaceMdl.getResMdl(), getExternalAnmTexSrt(sFaceResNames[0], mpTexSrtBuffer, 0x1000), &heap_allocator, nullptr,
+        mFaceMdl.getResMdl(), getExternalAnmTexSrt(sFaceResNames[0], mpTexSrtBuffer, 0x1000), &mAllocator, nullptr,
         isInTrial ? 2 : 1
     );
     mFaceMdl.setAnm(mFaceTexSrt);

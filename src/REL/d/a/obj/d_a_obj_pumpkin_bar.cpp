@@ -20,7 +20,7 @@ bool dAcOpumpkinBar_c::createHeap() {
     dStage_c::bindSkyCmnToResFile(&mResFile);
 
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("IslBar");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120));
 
     void *dzb = getOarcFile("IslBar", "dzb/IslBar.dzb");
     void *plc = getOarcFile("IslBar", "dat/IslBar.plc");

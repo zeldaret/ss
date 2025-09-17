@@ -7,7 +7,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_FENCE_KONSAI, dAcOfenceKonsai_c, fProfile::OBJ_FENCE_K
 bool dAcOfenceKonsai_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(getOarcResFile("FenceKonsai"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("FenceKonsai");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120));
     cBgD_t *dzb = (cBgD_t *)getOarcFile("FenceKonsai", "dzb/FenceKonsai.dzb");
     PLC *plc = (PLC *)getOarcFile("FenceKonsai", "dat/FenceKonsai.plc");
     updateMatrix();

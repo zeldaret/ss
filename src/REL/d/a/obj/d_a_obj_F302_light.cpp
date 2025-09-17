@@ -24,11 +24,11 @@ bool dAcOF302Light_c::createHeap() {
     void *data = CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres");
     mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("Teniobj_0");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120));
 
     for (s32 i = 0; i < 2; i++) {
         nw4r::g3d::ResAnmClr resAnmClr = mResFile.GetResAnmClr(sResAnmClrNames[i]);
-        TRY_CREATE(mAnmMatClr[i].create(mdl, resAnmClr, &heap_allocator, nullptr, 1));
+        TRY_CREATE(mAnmMatClr[i].create(mdl, resAnmClr, &mAllocator, nullptr, 1));
         mAnmMatClr[i].setRate(0.f, 0);
     }
     return true;

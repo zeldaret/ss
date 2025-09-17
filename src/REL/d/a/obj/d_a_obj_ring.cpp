@@ -12,7 +12,7 @@ STATE_DEFINE(dAcOring_c, Move);
 bool dAcOring_c::createHeap() {
     nw4r::g3d::ResFile f(getOarcResFile("PRing"));
     nw4r::g3d::ResMdl mdl = f.GetResMdl("PeehatRing");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x20, 1, nullptr));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x20, 1, nullptr));
     return true;
 }
 

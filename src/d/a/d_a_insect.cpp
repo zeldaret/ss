@@ -48,7 +48,7 @@ void dAcOInsect_c::checkDeath(dBgS_Acch &acch) {
     if (acch.ChkGroundLanding() && dBgS::GetInstance()->GetSpecialCode(acch.mGnd) == POLY_ATTR_LAVA) {
         kill();
     }
-    if (mPosition.y < pos_copy.y - 5000.f) {
+    if (mPosition.y < mPositionCopy.y - 5000.f) {
         deleteRequest();
     }
 }

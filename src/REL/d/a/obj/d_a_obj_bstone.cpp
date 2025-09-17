@@ -17,7 +17,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_BSTONE, dAcObstonec, fProfile::OBJ_BSTONE, 0x130, 0, 2
 bool dAcObstonec::createHeap() {
     mRes = nw4r::g3d::ResFile(getOarcResFile("Bstone"));
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("model0");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0xA0));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0xA0));
     if (mVariant == 1) {
         mMdl.setPriorityDraw(0xB, 0);
         mMdl.setBlendModeAll(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_CLEAR, false);

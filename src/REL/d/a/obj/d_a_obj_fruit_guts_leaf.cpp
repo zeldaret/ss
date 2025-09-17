@@ -33,7 +33,7 @@ bool dAcOFruitGutsLeaf_c::createHeap() {
         return false;
     }
 
-    TRY_CREATE(mMdl.create(m, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(m, &mAllocator, 0x120));
 
     return true;
 }

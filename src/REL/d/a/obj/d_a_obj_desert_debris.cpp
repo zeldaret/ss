@@ -16,14 +16,14 @@ bool dAcOdesertDebris_c::createHeap() {
     void *data = CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres");
     mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("StageF300_4Gareki");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
     void *dzb = CurrentStageArcManager::GetInstance()->getData("dzb/StageF300_4Gareki.dzb");
     void *plc = CurrentStageArcManager::GetInstance()->getData("dat/StageF300_4Gareki.plc");
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, 1, &mWorldMtx, &mScale));
     mBgW.Lock();
-    return mBgW.InitMapStuff(&heap_allocator);
+    return mBgW.InitMapStuff(&mAllocator);
 }
 
 int dAcOdesertDebris_c::create() {

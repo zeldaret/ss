@@ -18,7 +18,7 @@ bool dAcOmoleSoil_c::createHeap() {
     }
     mBrres = file;
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("MogumaMud");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120, 1, nullptr));
     mModel.setPriorityDraw(0x1c, 9);
     return true;
 }

@@ -5,7 +5,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_SHRINE_BEFORE, dAcOshrineBefore_c, fProfile::OBJ_SHRIN
 bool dAcOshrineBefore_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(getOarcResFile("F401ShrineBef"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("F401ShrineBef");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120));
     return true;
 }
 

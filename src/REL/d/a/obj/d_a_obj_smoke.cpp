@@ -18,9 +18,9 @@ bool dAcOsmoke_c::createHeap() {
     mType = mParams & 3;
     mBrres = nw4r::g3d::ResFile(getOarcResFile(sSmokeNames1[mType]));
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl(sSmokeNames2[mType]);
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x324));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x324));
     nw4r::g3d::ResAnmTexSrt srt = mBrres.GetResAnmTexSrt(sSmokeNames1[mType]);
-    TRY_CREATE(mTexAnm.create(mdl, srt, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mTexAnm.create(mdl, srt, &mAllocator, nullptr, 1));
     return true;
 }
 

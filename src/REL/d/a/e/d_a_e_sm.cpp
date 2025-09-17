@@ -68,14 +68,14 @@ bool dAcEsm_c::createHeap() {
     nw4r::g3d::ResMdl mdl(rres.GetResMdl("sm"));
     nw4r::g3d::ResAnmTexPat texPat(rres.GetResAnmTexPat("sm"));
 
-    TRY_CREATE(mAnmTexPat.create(mdl, texPat, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnmTexPat.create(mdl, texPat, &mAllocator, nullptr, 1));
     mMdl.getModel().setAnm(mAnmTexPat);
 
     nw4r::g3d::ResAnmClr anmClr = rres.GetResAnmClr("attack");
     if (mType == SM_YELLOW) {
         anmClr = rres.GetResAnmClr("Spark");
     }
-    TRY_CREATE(mAnmMatClr.create(mdl, anmClr, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnmMatClr.create(mdl, anmClr, &mAllocator, nullptr, 1));
 
     mMdl.getModel().setAnm(mAnmMatClr);
     mScnCallback.attach(mMdl.getModel());

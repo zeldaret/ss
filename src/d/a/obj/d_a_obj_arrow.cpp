@@ -51,7 +51,7 @@ bool dAcArrow_c::createHeap() {
         mdl = mResFile.GetResMdl("EquipArrow");
     }
     // ?
-    bool ok = mModel.create(mdl, &heap_allocator, 0x120);
+    bool ok = mModel.create(mdl, &mAllocator, 0x120);
     if (!ok) {
         ok = false;
     }

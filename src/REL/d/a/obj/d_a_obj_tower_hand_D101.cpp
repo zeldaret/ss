@@ -98,7 +98,7 @@ bool dAcOTowerHandD101_c::createHeap() {
     if (resP == nullptr) {
         return false;
     }
-    if (!mMdl.create(resP, sMdlName, sAnmName, &heap_allocator, 0x130)) {
+    if (!mMdl.create(resP, sMdlName, sAnmName, &mAllocator, 0x130)) {
         return false;
     }
     int direction = getDirection();

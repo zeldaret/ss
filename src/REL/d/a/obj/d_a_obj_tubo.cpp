@@ -61,7 +61,7 @@ dCcD_SrcSph dAcOtubo_c::sSphSrc = {
 bool dAcOtubo_c::createHeap() {
     mRes = nw4r::g3d::ResFile(getOarcResFile("Tubo"));
     const char *subtype = getSubtype() == 0 ? "Tubo00" : "Tubo01";
-    TRY_CREATE(mMdl.create(mRes.GetResMdl(subtype), &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mRes.GetResMdl(subtype), &mAllocator, 0x120, 1, nullptr));
     return true;
 }
 
@@ -214,7 +214,9 @@ void dAcOtubo_c::executeState_Wait() {
     if (mObjAcch.ChkGroundLanding()) {
         if (!mbField_0x9EF || !EventManager::isInEvent()) {
             if (mField_0x9F6 == 2) {
-                dJEffManager_c::spawnGroundEffect(mPosition, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+                dJEffManager_c::spawnGroundEffect(
+                    mPosition, mPolyAttr0, mPolyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0
+                );
             }
             if (mbField_0x9F3) {
                 startSound(SE_Tubo_PUT);
@@ -223,7 +225,7 @@ void dAcOtubo_c::executeState_Wait() {
             if (checkOnLava()) {
                 if (mField_0x9F6 != 2) {
                     dJEffManager_c::spawnGroundEffect(
-                        mPosition, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0
+                        mPosition, mPolyAttr0, mPolyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0
                     );
                 }
                 startSound(SE_O_FALL_LAVA_S);
@@ -357,7 +359,7 @@ void dAcOtubo_c::initializeState_Slope() {
 }
 void dAcOtubo_c::executeState_Slope() {
     if (mObjAcch.ChkGroundLanding()) {
-        dJEffManager_c::spawnGroundEffect(mPosition, polyAttr0, polyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
+        dJEffManager_c::spawnGroundEffect(mPosition, mPolyAttr0, mPolyAttr1, mField_0x1B4, 0, 1.0f, mField_0x1B0);
     } else if (mObjAcch.ChkGndHit()) {
         mField_0x9DC = 0.f;
         addPickupTarget();
@@ -390,9 +392,9 @@ void dAcOtubo_c::initializeState_Rebirth() {
     SpecialItemDropMgr *mgr = SpecialItemDropMgr::GetInstance();
     mgr->giveSpecialDropItem(getParams2UpperByte(), roomid, &mPosition, 0, mRotation.y, -1);
     mField_0x9AC = mPosition;
-    obj_pos = &mField_0x9AC;
+    mpPosition = &mField_0x9AC;
     mField_0x9F6 = 0;
-    mRotation = rot_copy;
+    mRotation = mRotationCopy;
 
     mQuat_0x98C.set(1.f, 0.f, 0.f, 0.f);
 
@@ -416,8 +418,8 @@ void dAcOtubo_c::initializeState_Rebirth() {
     clearActorProperty(0x1);
 }
 void dAcOtubo_c::executeState_Rebirth() {
-    setPosition(pos_copy);
-    mOldPosition = pos_copy;
+    setPosition(mPositionCopy);
+    mOldPosition = mPositionCopy;
     u8 count = -1;
     switch (mField_0x9FC) {
         case 2: count = dAcItem_c::getTotalBombCount(); break;
@@ -435,7 +437,7 @@ void dAcOtubo_c::executeState_Rebirth() {
 void dAcOtubo_c::finalizeState_Rebirth() {
     mSph.OnCoSet();
     mSph.OnTgSet();
-    obj_pos = &mPosition;
+    mpPosition = &mPosition;
     clearObjectProperty(0x200);
     setActorProperty(0x1);
 }

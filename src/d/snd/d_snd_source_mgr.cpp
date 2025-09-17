@@ -134,7 +134,7 @@ dSoundSourceIf_c *dSndSourceMgr_c::createSource(s32 sourceType, dAcBase_c *actor
         return nullptr;
     }
 
-    s32 subtype = actor->subtype;
+    s32 subtype = actor->mSubtype;
     SizedString<64> nameStr;
     nameStr.sprintf("%s", name);
 
@@ -411,11 +411,8 @@ void dSndSourceMgr_c::setMutedFromFader(bool muteFlag) {
         s32 sourceType = it->getSourceType();
         switch (sourceType) {
             case SND_SOURCE_PLAYER:
-            case SND_SOURCE_PLAYER_HEAD:
-                break;
-            default:
-                it->setField0x101(muteFlag);
-                break;
+            case SND_SOURCE_PLAYER_HEAD: break;
+            default:                     it->setField0x101(muteFlag); break;
         }
     }
     if (muteFlag) {
@@ -425,7 +422,8 @@ void dSndSourceMgr_c::setMutedFromFader(bool muteFlag) {
     }
 }
 
-dSndSourceGroup_c *dSndSourceMgr_c::getGroup(s32 sourceType, dAcBase_c *actor, const char *name, const char *origName, u8 subtype) {
+dSndSourceGroup_c *
+dSndSourceMgr_c::getGroup(s32 sourceType, dAcBase_c *actor, const char *name, const char *origName, u8 subtype) {
     dSndSourceGroup_c *group = getActiveGroupForName(name);
     if (group != nullptr) {
         return group;
@@ -439,7 +437,7 @@ dSndSourceGroup_c *dSndSourceMgr_c::getGroup(s32 sourceType, dAcBase_c *actor, c
         dSndBgmMgr_c::GetInstance()->prepareBossBgm(name);
         return group;
     }
-    
+
     return nullptr;
 }
 

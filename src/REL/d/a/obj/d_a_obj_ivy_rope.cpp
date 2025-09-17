@@ -906,7 +906,7 @@ void dAcOivyRope_c::fn_256_D7A0(s32 idx, const mVec3_c &pnt) {
 // Draw Shadow
 void dAcOivyRope_c::fn_256_D850() {
     bool draw_shadow = false;
-    switch (subtype) {
+    switch (mSubtype) {
         case 1:
         case 2: break;
         case 4: {

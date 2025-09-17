@@ -35,7 +35,7 @@ bool dAcOOctGrass_c::createHeap() {
         dStage_c::bindSkyCmnToResFile(&mResFile);
     }
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(GRASS_CUT_MODELS[typeIdx]);
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
     return true;
 }
 
@@ -81,7 +81,6 @@ void dAcOOctGrass_c::spawnOcGrsL() {
     }
 
     dAcObjBase_c::create(
-        "OcGrsL", getRoomId(), type & 0xF, &mPosition, nullptr, nullptr, getParams2_ignoreLower(), 0xFFFF,
-        viewclip_index
+        "OcGrsL", getRoomId(), type & 0xF, &mPosition, nullptr, nullptr, getParams2_ignoreLower(), 0xFFFF, mViewClipIdx
     );
 }

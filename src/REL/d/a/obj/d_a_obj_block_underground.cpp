@@ -87,7 +87,7 @@ bool dAcOBlockUnderground::createHeap() {
         return false;
     }
 
-    if (!mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr)) {
+    if (!mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr)) {
         return false;
     }
 

@@ -29,7 +29,7 @@ bool dAcOF400GateSeal_c::createHeap() {
         return false;
     }
 
-    if (!mMdl.create(mdl, &heap_allocator, 0)) {
+    if (!mMdl.create(mdl, &mAllocator, 0)) {
         return false;
     }
 
@@ -38,7 +38,7 @@ bool dAcOF400GateSeal_c::createHeap() {
         return false;
     }
 
-    if (!mAnmClr.create(mdl, anmClr, &heap_allocator, 0, 1)) {
+    if (!mAnmClr.create(mdl, anmClr, &mAllocator, 0, 1)) {
         return false;
     }
 

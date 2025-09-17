@@ -10,18 +10,18 @@ bool dAcOlavaF200_c::createHeap() {
     dStage_c::bindStageResToFile(&mBrres);
 
     nw4r::g3d::ResMdl mdl0 = mBrres.GetResMdl("LavaF200");
-    TRY_CREATE(mModels[0].create(mdl0, &heap_allocator, 0x32C));
+    TRY_CREATE(mModels[0].create(mdl0, &mAllocator, 0x32C));
     nw4r::g3d::ResAnmTexSrt anmTex0 = mBrres.GetResAnmTexSrt("LavaF200");
-    TRY_CREATE(mTexAnms[0].create(mdl0, anmTex0, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mTexAnms[0].create(mdl0, anmTex0, &mAllocator, nullptr, 1));
     nw4r::g3d::ResAnmClr anmClr0 = mBrres.GetResAnmClr("LavaF200");
-    TRY_CREATE(mClrAnms[0].create(mdl0, anmClr0, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mClrAnms[0].create(mdl0, anmClr0, &mAllocator, nullptr, 1));
 
     nw4r::g3d::ResMdl mdl1 = mBrres.GetResMdl("LavaF200_s");
-    TRY_CREATE(mModels[1].create(mdl1, &heap_allocator, 0x32C));
+    TRY_CREATE(mModels[1].create(mdl1, &mAllocator, 0x32C));
     nw4r::g3d::ResAnmTexSrt anmTex1 = mBrres.GetResAnmTexSrt("LavaF200_s");
-    TRY_CREATE(mTexAnms[1].create(mdl1, anmTex1, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mTexAnms[1].create(mdl1, anmTex1, &mAllocator, nullptr, 1));
     nw4r::g3d::ResAnmClr anmClr1 = mBrres.GetResAnmClr("LavaF200_s");
-    TRY_CREATE(mClrAnms[1].create(mdl1, anmClr1, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mClrAnms[1].create(mdl1, anmClr1, &mAllocator, nullptr, 1));
 
     return true;
 }

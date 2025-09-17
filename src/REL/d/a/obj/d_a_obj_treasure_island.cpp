@@ -34,22 +34,22 @@ bool dAcOtreasureIsland_c::createHeap() {
     nw4r::g3d::ResAnmTexSrt anmSrt;
 
     mdl = mResFile.GetResMdl(AcOtreasureIsland__ModelNames[subtype]);
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120));
 
     if (subtype == 2) {
         mdl = mResFile.GetResMdl("IslTreCWater00");
-        TRY_CREATE(mWater00.create(mdl, &heap_allocator, 0x324));
+        TRY_CREATE(mWater00.create(mdl, &mAllocator, 0x324));
 
         if (dStage_c::getMA0IndirectSrt(&anmSrt, mdl)) {
-            TRY_CREATE(mWaterSrt00.create(mdl, anmSrt, &heap_allocator, 0x0, 1));
+            TRY_CREATE(mWaterSrt00.create(mdl, anmSrt, &mAllocator, 0x0, 1));
         }
 
         mdl = mResFile.GetResMdl("IslTreCWater01");
         d3d::UnkWithWater::linkMdl(mdl, &waterStuff);
-        TRY_CREATE(mWater01.create(mdl, &heap_allocator, 0x324));
+        TRY_CREATE(mWater01.create(mdl, &mAllocator, 0x324));
 
         if (dStage_c::getMA0IndirectSrt(&anmSrt, mdl)) {
-            TRY_CREATE(mWaterSrt01.create(mdl, anmSrt, &heap_allocator, 0x0, 1));
+            TRY_CREATE(mWaterSrt01.create(mdl, anmSrt, &mAllocator, 0x0, 1));
         }
     }
 
@@ -65,7 +65,7 @@ bool dAcOtreasureIsland_c::createHeap() {
 
     TRY_CREATE(!mCollision.Set((cBgD_t *)dzb, (PLC *)plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mCollision.Lock();
-    return mCollision.InitMapStuff(&heap_allocator);
+    return mCollision.InitMapStuff(&mAllocator);
 }
 
 int dAcOtreasureIsland_c::create() {

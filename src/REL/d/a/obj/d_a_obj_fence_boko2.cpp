@@ -7,14 +7,14 @@ SPECIAL_ACTOR_PROFILE(OBJ_FENCE_BOKO2, dAcOfenceBoko2_c, fProfile::OBJ_FENCE_BOK
 bool dAcOfenceBoko2_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(getOarcResFile("FenceBoko2"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("FenceBoko2");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120));
     cBgD_t *dzb = (cBgD_t *)getOarcFile("FenceBoko2", "dzb/FenceBoko2.dzb");
     PLC *plc = (PLC *)getOarcFile("FenceBoko2", "dat/FenceBoko2.plc");
     updateMatrix();
     mModel.setLocalMtx(mWorldMtx);
     TRY_CREATE(!mCollision.Set(dzb, plc, cBgW::MOVE_BG_e, &mWorldMtx, &mScale));
     mCollision.Lock();
-    return mCollision.InitMapStuff(&heap_allocator);
+    return mCollision.InitMapStuff(&mAllocator);
 }
 
 int dAcOfenceBoko2_c::create() {

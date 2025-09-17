@@ -12,7 +12,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_DIS_SHIP, dAcOdistantShip_c, fProfile::OBJ_DIS_SHIP, 0
 bool dAcOdistantShip_c::createHeap() {
     const char *modelName = getModelName();
     mBrres = (nw4r::g3d::ResFile)CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres");
-    TRY_CREATE(mModel.create(mBrres.GetResMdl(modelName), &heap_allocator, 0x120, 1, 0));
+    TRY_CREATE(mModel.create(mBrres.GetResMdl(modelName), &mAllocator, 0x120, 1, 0));
     return SUCCEEDED;
 }
 

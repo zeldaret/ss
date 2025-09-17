@@ -18,7 +18,7 @@ bool dAcOmoleCover_c::createHeap() {
     dStage_c::bindStageResToFile(&mResFile);
     dStage_c::bindSkyCmnToResFile(&mResFile);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("StageF000MallCover");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
     void *dzb = CurrentStageArcManager::GetInstance()->getData("dzb/StageF000MallCover.dzb");
     void *plc = CurrentStageArcManager::GetInstance()->getData("dat/StageF000MallCover.plc");
     updateMatrix();

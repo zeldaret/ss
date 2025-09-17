@@ -14,7 +14,7 @@ bool dAcOPoolCock_c::createHeap() {
     dStage_c::bindStageResToFile(&mBrres);
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("PoolCockD101");
     for (int i = 0; i < 2; i++) {
-        TRY_CREATE(mModels[i].create(mdl, &heap_allocator, 0x120));
+        TRY_CREATE(mModels[i].create(mdl, &mAllocator, 0x120));
     }
     return true;
 }

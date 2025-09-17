@@ -29,19 +29,19 @@ STATE_DEFINE(dAcOTimeStageBg_c, Wait);
 bool dAcOTimeStageBg_c::createHeap() {
     mRes = nw4r::g3d::ResFile(CurrentStageArcManager::GetInstance()->getData("g3d/stage.brres"));
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl(sMdlNames[mSubType]);
-    TRY_CREATE(mMdl1.create(mdl, &heap_allocator, 0x128));
+    TRY_CREATE(mMdl1.create(mdl, &mAllocator, 0x128));
     nw4r::g3d::ResNode nd = mdl.GetResNode(sMdlNames[mSubType]);
 
     field_0x3EC.copyFrom((nd.GetBoundsMin() + nd.GetBoundsMax()) * 0.5f);
     if (mSubType == 4) {
         nw4r::g3d::ResAnmClr a = mRes.GetResAnmClr("Teniobj_0");
-        TRY_CREATE(mAnm.create(mdl, a, &heap_allocator, nullptr, 1));
+        TRY_CREATE(mAnm.create(mdl, a, &mAllocator, nullptr, 1));
         mMdl1.setAnm(mAnm);
     }
 
     if (secondMdl()) {
         mdl = mRes.GetResMdl(sMdl2Names[mSubType]);
-        TRY_CREATE(mMdl2.create(mdl, &heap_allocator, 0x120));
+        TRY_CREATE(mMdl2.create(mdl, &mAllocator, 0x120));
     }
     return true;
 }

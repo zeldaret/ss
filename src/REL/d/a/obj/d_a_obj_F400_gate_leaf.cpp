@@ -6,7 +6,6 @@
 #include "f/f_base.h"
 #include "nw4r/g3d/res/g3d_resfile.h"
 
-
 SPECIAL_ACTOR_PROFILE(OBJ_F400_GATE_LEAF, dAcOF400GateLeaf_c, fProfile::OBJ_F400_GATE_LEAF, 0x286, 0, 3);
 
 bool dAcOF400GateLeaf_c::createHeap() {
@@ -25,7 +24,7 @@ bool dAcOF400GateLeaf_c::createHeap() {
         return false;
     }
 
-    return mMdl.create(mdl, &heap_allocator, 0, 1, nullptr);
+    return mMdl.create(mdl, &mAllocator, 0, 1, nullptr);
 }
 
 int dAcOF400GateLeaf_c::create() {

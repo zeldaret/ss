@@ -8,11 +8,11 @@ SPECIAL_ACTOR_PROFILE(OBJ_WATER_SHIELD, dAcOwaterShield_c, fProfile::OBJ_WATER_S
 bool dAcOwaterShield_c::createHeap() {
     mRes = nw4r::g3d::ResFile(getOarcResFile("WaterWallF103"));
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("WaterWallF103");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x32C));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x32C));
     nw4r::g3d::ResAnmClr clr = mRes.GetResAnmClr("WaterWallF103");
-    TRY_CREATE(mAnmClr.create(mdl, clr, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnmClr.create(mdl, clr, &mAllocator, nullptr, 1));
     nw4r::g3d::ResAnmTexSrt srt = mRes.GetResAnmTexSrt("WaterWallF103");
-    TRY_CREATE(mAnmSrt.create(mdl, srt, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnmSrt.create(mdl, srt, &mAllocator, nullptr, 1));
     cBgD_t *dzb = (cBgD_t *)getOarcFile("WaterWallF103", "dzb/WaterWallF103.dzb");
     PLC *plc = (PLC *)getOarcFile("WaterWallF103", "dat/WaterWallF103.plc");
     updateMatrix();

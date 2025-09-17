@@ -8,7 +8,7 @@ SPECIAL_ACTOR_PROFILE(OBJ_IRON_STAGE, dAcOironStage_c, fProfile::OBJ_IRON_STAGE,
 bool dAcOironStage_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(getOarcResFile("IronStage"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("IronStage");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120));
     cBgD_t *dzb = (cBgD_t *)getOarcFile("IronStage", "dzb/IronStage.dzb");
     PLC *plc = (PLC *)getOarcFile("IronStage", "dat/IronStage.plc");
     updateMatrix();

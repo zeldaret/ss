@@ -67,18 +67,18 @@ bool dAcODungeonShip_c::createHeap() {
     const char *arcName = "ShipDungeon";
     mRes = nw4r::g3d::ResFile(getOarcResFile(arcName));
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl("ShipDungeonN");
-    if (!mMdl.fn_8001F3B0(mdl, &heap_allocator, 0x120)) {
+    if (!mMdl.fn_8001F3B0(mdl, &mAllocator, 0x120)) {
         return false;
     }
 
     nw4r::g3d::ResAnmChr anmChr = mRes.GetResAnmChr("ShipDungeonN");
-    if (!mAnmChr.create(mdl, anmChr, &heap_allocator, nullptr)) {
+    if (!mAnmChr.create(mdl, anmChr, &mAllocator, nullptr)) {
         return false;
     }
     mMdl.setAnm(mAnmChr);
 
     nw4r::g3d::ResAnmClr anmClr = mRes.GetResAnmClr("ShipDungeonN");
-    if (!mAnmMatClr.create(mdl, anmClr, &heap_allocator, nullptr, 1)) {
+    if (!mAnmMatClr.create(mdl, anmClr, &mAllocator, nullptr, 1)) {
         return false;
     }
 
@@ -98,7 +98,7 @@ bool dAcODungeonShip_c::createHeap() {
     if (!SceneflagManager::sInstance->checkBoolFlag(roomid, (mParams >> 0x10) & 0xFF)) {
         goto ok;
     } else {
-        bool result = mBg.InitMapStuff(&heap_allocator);
+        bool result = mBg.InitMapStuff(&mAllocator);
         if (result == false) {
             return false;
         }

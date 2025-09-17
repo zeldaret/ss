@@ -17,7 +17,7 @@ STATE_DEFINE(dAcBombf_c, Wait);
 bool dAcBombf_c::createHeap() {
     nw4r::g3d::ResFile resFile(getOarcResFile("FlowerBomb"));
     nw4r::g3d::ResMdl resMdl = resFile.GetResMdl("LeafBomb");
-    return mModel.create(resMdl, &heap_allocator, 0x120, 1, nullptr);
+    return mModel.create(resMdl, &mAllocator, 0x120, 1, nullptr);
 }
 
 int dAcBombf_c::actorCreate() {
@@ -142,7 +142,7 @@ int dAcBombf_c::draw() {
 
 void dAcBombf_c::regrowBomb() {
     // These params are hell
-    s8 viewclip_idx = checkActorProperty(0x1) ? viewclip_index : -1;
+    s8 viewclip_idx = checkActorProperty(0x1) ? mViewClipIdx : -1;
     u32 actorParams1;
     actorParams1 = 1;
     if (field_0x3D0) {

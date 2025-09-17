@@ -122,7 +122,7 @@ bool dAcBoomerang_c::createHeap() {
     mResFile = dAcPy_c::GetLink2()->getHeldResFile();
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("EquipBeetle");
 
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1));
 
     // Decide the Pincers
     if (dAcPy_c::hasBeetleVariantOrBetter(HOOK_BEETLE)) {
@@ -154,13 +154,13 @@ bool dAcBoomerang_c::createHeap() {
         mWindNodeID = mLeftWingNodeID;
     }
 
-    TRY_CREATE(mAnmChrBlend.create(mdl, 2, &heap_allocator));
+    TRY_CREATE(mAnmChrBlend.create(mdl, 2, &mAllocator));
 
     m3d::anmChr_c *pAnmChr = mAnmChr;
     nw4r::g3d::AnmObjChr *pAnimChr;
     nw4r::g3d::ResAnmChr resAnmChr = mResFile.GetResAnmChr("RB_Set");
     for (s32 i = 0; i < 2; ++i, ++pAnmChr) {
-        TRY_CREATE(pAnmChr->create2(mdl, resAnmChr, &heap_allocator));
+        TRY_CREATE(pAnmChr->create2(mdl, resAnmChr, &mAllocator));
 
         pAnmChr->setAnm(mMdl, resAnmChr, m3d::PLAY_MODE_0);
         if (i == BOOMERANG_ANIM_WINGS) {
@@ -172,7 +172,7 @@ bool dAcBoomerang_c::createHeap() {
         mAnmChrBlend.attach(i, pAnmChr, 1.f);
     }
     mMdl.setAnm(mAnmChrBlend);
-    TRY_CREATE(mProc.create2(&mMdl, mColor(0x00, 0x10, 0x14, 0xFF), 0x27, &heap_allocator));
+    TRY_CREATE(mProc.create2(&mMdl, mColor(0x00, 0x10, 0x14, 0xFF), 0x27, &mAllocator));
     if (mLytFader.init()) {
         return true;
     }

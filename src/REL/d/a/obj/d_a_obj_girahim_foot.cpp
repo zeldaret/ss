@@ -19,7 +19,7 @@ bool dAcOgirahimFoot_c::createHeap() {
 
     nw4r::g3d::ResMdl resMdl = mRes.GetResMdl("Girahim_Foot");
 
-    TRY_CREATE(mMdl.create(resMdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(resMdl, &mAllocator, 0x120, 1, nullptr));
 
     return true;
 }

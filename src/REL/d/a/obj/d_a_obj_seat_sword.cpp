@@ -45,23 +45,23 @@ const Vec dAcOSeatSword_c::sEffectPos = {-20.f, 260.f, 30.f};
 bool dAcOSeatSword_c::createHeap() {
     if (mSubtype == 0) {
         const char *goddess_sword = daPlayerActBase_c::getSwordName(1);
-        mRes = dAcPy_c::getItemResFile(goddess_sword, heap_allocator);
-        TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(goddess_sword), &heap_allocator, 0x120, 1, nullptr));
+        mRes = dAcPy_c::getItemResFile(goddess_sword, mAllocator);
+        TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(goddess_sword), &mAllocator, 0x120, 1, nullptr));
     } else if (mSubtype == 1) {
         mRes = dAcPy_c::GetLink()->getSwordResFile();
         const char *sword_name = daPlayerActBase_c::getSwordName(daPlayerActBase_c::sCurrentSword);
-        TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(sword_name), &heap_allocator, 0x120, 1, nullptr));
+        TRY_CREATE(mSwordMdl.create(mRes.GetResMdl(sword_name), &mAllocator, 0x120, 1, nullptr));
     }
 
     nw4r::g3d::ResFile mPedRes(getOarcResFile(SwordSeatNames[mSubtype]));
-    TRY_CREATE(mPedestalMdl.create(mPedRes.GetResMdl(SwordSeatNames[mSubtype]), &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mPedestalMdl.create(mPedRes.GetResMdl(SwordSeatNames[mSubtype]), &mAllocator, 0x120, 1, nullptr));
     void *dzb = getOarcDZB(SwordSeatNames[mSubtype], SwordSeatNames[mSubtype]);
     void *plc = getOarcPLC(SwordSeatNames[mSubtype], SwordSeatNames[mSubtype]);
     updateMatrix();
     mSwordMtx.copyFrom(mWorldMtx);
     TRY_CREATE(!mBgW.Set((cBgD_t *)dzb, (PLC *)plc, 1, &mWorldMtx, &mScale));
     if (mSubtype == 1) {
-        TRY_CREATE(mPedestalMdl_s.create(mPedRes.GetResMdl("SwordGrd_s"), &heap_allocator, 0x120, 1, nullptr));
+        TRY_CREATE(mPedestalMdl_s.create(mPedRes.GetResMdl("SwordGrd_s"), &mAllocator, 0x120, 1, nullptr));
     }
 
     return true;

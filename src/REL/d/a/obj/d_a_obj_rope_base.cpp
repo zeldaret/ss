@@ -13,7 +13,7 @@ bool dAcOropeBase_c::createHeap() {
     void *data = getOarcResFile("PracticeWood");
     mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("RopeBase");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr));
     updateMatrix();
     mMdl.setLocalMtx(mWorldMtx);
     mMdl.calc(true);

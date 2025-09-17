@@ -10,7 +10,7 @@ STATE_DEFINE(dAcNpcRivalLOD_c, Wait);
 
 bool dAcNpcRivalLOD_c::createHeap() {
     void *oarc = getOarcFile("RivalLOD", "g3d/model.brres");
-    TRY_CREATE(mMdl.create(oarc, "RivalLOD", "RivalLOD_wait", &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(oarc, "RivalLOD", "RivalLOD_wait", &mAllocator, 0x120));
     return true;
 }
 int dAcNpcRivalLOD_c::create() {

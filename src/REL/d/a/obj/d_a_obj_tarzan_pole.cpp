@@ -33,7 +33,7 @@ bool dAcOTarzanPole_c::createHeap() {
 
     // Create model
     nw4r::g3d::ResMdl resMdl = mBrres.GetResMdl("WhipBar");
-    TRY_CREATE(mMdl.create(resMdl, &heap_allocator, 0x120, 1, nullptr));
+    TRY_CREATE(mMdl.create(resMdl, &mAllocator, 0x120, 1, nullptr));
 
     // Load Collider
     void *dzb = getOarcDZB("WhipBar", "WhipBar");

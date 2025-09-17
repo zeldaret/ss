@@ -20,7 +20,7 @@ STATE_DEFINE(dAcOspike_c, Wait);
 bool dAcOspike_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(getOarcResFile("SpikeD101"));
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("SpikeD101");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x120));
     return true;
 }
 

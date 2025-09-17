@@ -28,7 +28,7 @@ bool dAcObambooIsland_c::createHeap() {
     dStage_c::bindSkyCmnToResFile(&mBrres);
     for (int i = 0; i < 2; i++) {
         nw4r::g3d::ResMdl mdl = mBrres.GetResMdl(sBambooIslandNames[i]);
-        TRY_CREATE(mModels[i].create(mdl, &heap_allocator, 0x120));
+        TRY_CREATE(mModels[i].create(mdl, &mAllocator, 0x120));
     }
     cBgD_t *dzb = (cBgD_t *)getOarcFile("IslBamb", "dzb/IslBamb.dzb");
     PLC *plc = (PLC *)getOarcFile("IslBamb", "dat/IslBamb.plc");

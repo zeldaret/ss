@@ -16,7 +16,7 @@ bool dAcOshrineBefInside_c::createHeap() {
 
     for (int modelIndex = 0; modelIndex < 2; modelIndex++) {
         nw4r::g3d::ResMdl mdl = mResFile.GetResMdl(AcOshrineBefInside__MODELS[modelIndex]);
-        TRY_CREATE(mModel[modelIndex].create(mdl, &heap_allocator, 0x120));
+        TRY_CREATE(mModel[modelIndex].create(mdl, &mAllocator, 0x120));
     }
 
     cBgD_t *dzb = (cBgD_t *)CurrentStageArcManager::GetInstance()->getData("dzb/StageF402Bef.dzb");

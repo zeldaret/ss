@@ -21,11 +21,11 @@ bool dAcOappearBridge_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(getOarcResFile("TongueStage"));
     dStage_c::bindStageResToFile(&mResFile);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("TongueStage");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x128));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x128));
     nw4r::g3d::ResAnmTexSrt srt = mResFile.GetResAnmTexSrt("TongueStage");
-    TRY_CREATE(mSrtAnm.create(mdl, srt, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mSrtAnm.create(mdl, srt, &mAllocator, nullptr, 1));
     nw4r::g3d::ResAnmClr clr = mResFile.GetResAnmClr("TongueStage");
-    TRY_CREATE(mClrAnm.create(mdl, clr, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mClrAnm.create(mdl, clr, &mAllocator, nullptr, 1));
     cBgD_t *dzb = (cBgD_t *)getOarcFile("TongueStage", "dzb/TongueStage.dzb");
     PLC *plc = (PLC *)getOarcFile("TongueStage", "dat/TongueStage.plc");
     updateMatrix();
@@ -41,7 +41,7 @@ int dAcOappearBridge_c::create() {
     mAreaIdx = mParams & 0xFF;
     mEventId = (mParams >> 8) & 0xFF;
     mSoundPosition = mPosition + positionOffset;
-    obj_pos = &mSoundPosition;
+    mpPosition = &mSoundPosition;
     mSceneCallback.attach(mModel);
     mModel.setAnm(mSrtAnm);
     mModel.setAnm(mClrAnm);

@@ -14,7 +14,7 @@ bool dAcOblade_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(data);
     dStage_c::bindStageResToFile(&mResFile);
     dStage_c::bindSkyCmnToResFile(&mResFile);
-    TRY_CREATE(mMdl.create(data, "StageF000Blade", "StageF000Blade", &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(data, "StageF000Blade", "StageF000Blade", &mAllocator, 0x120));
     return true;
 }
 

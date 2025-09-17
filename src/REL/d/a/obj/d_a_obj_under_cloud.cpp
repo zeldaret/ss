@@ -16,9 +16,9 @@ bool dAcOunderCloud_c::createHeap() {
     dStage_c::bindStageResToFile(&mResFile);
     dStage_c::bindSkyCmnToResFile(&mResFile);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("F020UnderCloud");
-    TRY_CREATE(mMdl.create(mdl, &heap_allocator, 0x160));
+    TRY_CREATE(mMdl.create(mdl, &mAllocator, 0x160));
     nw4r::g3d::ResAnmTexSrt anm = mResFile.GetResAnmTexSrt("F020UnderCloud");
-    TRY_CREATE(mAnm.create(mdl, anm, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnm.create(mdl, anm, &mAllocator, nullptr, 1));
     mMdl.setOption(0x30001, false);
     return true;
 }

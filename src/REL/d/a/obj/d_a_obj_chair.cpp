@@ -47,7 +47,7 @@ static dCcD_SrcCyl sChairColData = {
 bool dAcOChair_c::createHeap() {
     if (!isBench()) {
         mRes = nw4r::g3d::ResFile(getOarcResFile(CHAIR_FILES[mChairType]));
-        TRY_CREATE(mMdl.create(mRes.GetResMdl(CHAIR_FILES[mChairType]), &heap_allocator, 0x120, 1, NULL));
+        TRY_CREATE(mMdl.create(mRes.GetResMdl(CHAIR_FILES[mChairType]), &mAllocator, 0x120, 1, NULL));
     }
     return true;
 }
@@ -220,7 +220,7 @@ void dAcOChair_c::executeState_Wait() {
 void dAcOChair_c::finalizeState_Wait() {}
 
 dAcOChair_c::ChairType dAcOChair_c::getChairType(u8 &param) {
-    switch (actor_subtype) {
+    switch (mActorSubtype) {
         case 0: return CHAIR_A;
         case 1: return CHAIR_B;
         case 2: return CHAIR_C;

@@ -14,9 +14,9 @@ bool dAcOsunLight_c::createHeap() {
     dStage_c::bindStageResToFile(&mBrres);
     dStage_c::bindSkyCmnToResFile(&mBrres);
     nw4r::g3d::ResMdl mdl = mBrres.GetResMdl("StageF000Light");
-    TRY_CREATE(mModel.create(mdl, &heap_allocator, 0x120));
+    TRY_CREATE(mModel.create(mdl, &mAllocator, 0x120));
     nw4r::g3d::ResAnmTexSrt srt = mBrres.GetResAnmTexSrt("StageF000Light");
-    TRY_CREATE(mTexAnm.create(mdl, srt, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mTexAnm.create(mdl, srt, &mAllocator, nullptr, 1));
     return true;
 }
 

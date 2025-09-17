@@ -23,7 +23,7 @@ bool dAcOTowerGearD101_c::createHeap() {
     mRes = nw4r::g3d::ResFile(getOarcResFile(name));
     dStage_c::bindStageResToFile(&mRes);
     nw4r::g3d::ResMdl mdl = mRes.GetResMdl(name);
-    if (!mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr)) {
+    if (!mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr)) {
         return false;
     }
     fn_80067340(field_0x3A0, &mdl, "model0");
@@ -85,7 +85,7 @@ int dAcOTowerGearD101_c::draw() {
 
 void dAcOTowerGearD101_c::initializeState_Wait() {}
 void dAcOTowerGearD101_c::executeState_Wait() {
-    dAcOTowerD101_c *tower = static_cast<dAcOTowerD101_c *>(actor_node.get());
+    dAcOTowerD101_c *tower = static_cast<dAcOTowerD101_c *>(mActorNode.get());
     if (tower != nullptr) {
         f32 diff = tower->mGoalElevation - tower->mCurrentElevation;
         s32 scale5 = 0x50000;

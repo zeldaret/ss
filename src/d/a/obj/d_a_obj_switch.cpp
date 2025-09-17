@@ -72,7 +72,7 @@ void dAcOsw_c::rideCallback(dBgW *unknown, dAcObjBase_c *actor, dAcObjBase_c *in
 bool dAcOsw_c::createHeap() {
     nw4r::g3d::ResFile resFile(getOarcResFile(SWITCH_TYPES[mSwitchType]));
     nw4r::g3d::ResMdl resMdl(resFile.GetResMdl(SWITCH_TYPES[mSwitchType]));
-    TRY_CREATE(mModel.create(resMdl, &heap_allocator, 0x20, 1, nullptr));
+    TRY_CREATE(mModel.create(resMdl, &mAllocator, 0x20, 1, nullptr));
 
     field_0x5E8 =
         mScale.x * (resMdl.GetResNode("base").ref().volume_max.x - resMdl.GetResNode("base").ref().volume_min.x);

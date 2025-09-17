@@ -28,7 +28,7 @@ bool dAcOAmber_c::createHeap() {
         return false;
     }
 
-    return mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr);
+    return mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr);
 }
 
 int dAcOAmber_c::actorCreate() {

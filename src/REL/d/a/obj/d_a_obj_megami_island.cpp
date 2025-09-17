@@ -50,13 +50,13 @@ bool dAcOmegamiIsland_c::createHeap() {
     dStage_c::bindSkyCmnToResFile(&mRes);
 
     nw4r::g3d::ResMdl mdl1 = mRes.GetResMdl(sMdl1[mVariant]);
-    TRY_CREATE(mMdls[0].create(mdl1, &heap_allocator, 0x120));
+    TRY_CREATE(mMdls[0].create(mdl1, &mAllocator, 0x120));
 
     nw4r::g3d::ResAnmTexSrt anm = mRes.GetResAnmTexSrt(sAnm[mVariant]);
-    TRY_CREATE(mAnm.create(mdl1, anm, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnm.create(mdl1, anm, &mAllocator, nullptr, 1));
 
     nw4r::g3d::ResMdl mdl2 = mRes.GetResMdl(sMdl2[mVariant]);
-    TRY_CREATE(mMdls[1].create(mdl2, &heap_allocator, 0x120));
+    TRY_CREATE(mMdls[1].create(mdl2, &mAllocator, 0x120));
 
     void *dzb = getOarcFile(sResFiles[mVariant], sDzb[mVariant]);
     void *plc = getOarcFile(sResFiles[mVariant], sPlc[mVariant]);
@@ -73,7 +73,7 @@ bool dAcOmegamiIsland_c::createHeap() {
         mBgW.OnFlag0x20();
     }
 
-    return mBgW.InitMapStuff(&heap_allocator);
+    return mBgW.InitMapStuff(&mAllocator);
 }
 
 int dAcOmegamiIsland_c::create() {

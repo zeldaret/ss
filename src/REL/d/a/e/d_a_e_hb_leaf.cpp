@@ -9,11 +9,11 @@ bool dAcEhb_leaf_c::createHeap() {
     // This is ever so slightly weird but our m_anmMdl really doesn't take ResFile by value
     // but only ever a single pointer.
     void *fp = getOarcResFile("Degubaba");
-    TRY_CREATE(mModel.create(fp, "degubaba_leaf", "shake2", &heap_allocator, 0x123));
+    TRY_CREATE(mModel.create(fp, "degubaba_leaf", "shake2", &mAllocator, 0x123));
     nw4r::g3d::ResFile f(fp);
     nw4r::g3d::ResMdl mdl = f.GetResMdl("degubaba_leaf");
     nw4r::g3d::ResAnmTexPat anm = f.GetResAnmTexPat("degubaba_leaf");
-    TRY_CREATE(mAnm.create(mdl, anm, &heap_allocator, nullptr, 1));
+    TRY_CREATE(mAnm.create(mdl, anm, &mAllocator, nullptr, 1));
     mModel.getModel().setAnm(mAnm);
     return true;
 }

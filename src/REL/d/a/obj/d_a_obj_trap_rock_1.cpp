@@ -17,7 +17,7 @@ bool dAcOtrapRock1_c::createHeap() {
     mResFile = nw4r::g3d::ResFile(getOarcResFile("TrapRockRoll"));
     nw4r::g3d::ResMdl m = mResFile.GetResMdl("TrapRockRoll");
 
-    TRY_CREATE(mMdl.create(m, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(m, &mAllocator, 0x120));
     mMdl.setPriorityDraw(0x1C, 0x09);
     void *dzb = getOarcFile("TrapRockRoll", "dzb/TrapRockRoll.dzb");
     void *plc = getOarcFile("TrapRockRoll", "dat/TrapRockRoll.plc");

@@ -31,7 +31,7 @@ bool dAcOutajima_c::createHeap() {
 
     for (int i = 0; i < 2; i++) {
         m = mRes.GetResMdl(mMdlNames[i]);
-        TRY_CREATE(mMdls[i].create(m, &heap_allocator, 0x120));
+        TRY_CREATE(mMdls[i].create(m, &mAllocator, 0x120));
     }
 
     m = mRes.GetResMdl(mMdlNames[0]);

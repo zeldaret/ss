@@ -30,7 +30,7 @@ bool dAcOutajimaIsland_c::createHeap() {
     dStage_c::bindSkyCmnToResFile(&mRes);
     nw4r::g3d::ResMdl m = mRes.GetResMdl("IslPuzIslet00");
 
-    TRY_CREATE(mMdl.create(m, &heap_allocator, 0x120));
+    TRY_CREATE(mMdl.create(m, &mAllocator, 0x120));
 
     void *dzb = getOarcFile("IslPuzIslet00", "dzb/IslPuzIslet00.dzb");
     void *plc = getOarcFile("IslPuzIslet00", "dat/IslPuzIslet00.plc");

@@ -835,7 +835,7 @@ bool dAcTbox_c::createHeap() {
     if (data == nullptr) {
         return false;
     }
-    if (!mMdl1.create(data, sMdlNames[mVariant], sAnmNames[mVariant], &heap_allocator, 0x32F, 1, nullptr)) {
+    if (!mMdl1.create(data, sMdlNames[mVariant], sAnmNames[mVariant], &mAllocator, 0x32F, 1, nullptr)) {
         return false;
     }
     mMdl1.getModel().setLocalMtx(mWorldMtx);
@@ -860,7 +860,7 @@ bool dAcTbox_c::createHeap() {
         if (!anmTexPat.IsValid()) {
             return false;
         }
-        if (!mAnmGoddessPat.create(mdl, anmTexPat, &heap_allocator, nullptr, 1)) {
+        if (!mAnmGoddessPat.create(mdl, anmTexPat, &mAllocator, nullptr, 1)) {
             return false;
         }
         mMdl1.getModel().setAnm(mAnmGoddessPat);
@@ -870,7 +870,7 @@ bool dAcTbox_c::createHeap() {
             if (!anmTexSrt.IsValid()) {
                 return false;
             }
-            if (!mAnmGoddessTexSrt.create(mdl, anmTexSrt, &heap_allocator, nullptr, 1)) {
+            if (!mAnmGoddessTexSrt.create(mdl, anmTexSrt, &mAllocator, nullptr, 1)) {
                 return false;
             }
             mMdl1.getModel().setAnm(mAnmGoddessTexSrt);
@@ -888,7 +888,7 @@ bool dAcTbox_c::createHeap() {
         if (!mdl.IsValid()) {
             return false;
         }
-        if (!mAnmMatClr1.create(mdl, anmClr, &heap_allocator, nullptr, 1)) {
+        if (!mAnmMatClr1.create(mdl, anmClr, &mAllocator, nullptr, 1)) {
             return false;
         }
         mAnmMatClr1.setRate(1.0f, 0);
@@ -909,7 +909,7 @@ bool dAcTbox_c::createHeap() {
         if (!openMdl.IsValid()) {
             return false;
         }
-        if (!mOpenFxMdl.create(openMdl, &heap_allocator, 0x120, 1, nullptr)) {
+        if (!mOpenFxMdl.create(openMdl, &mAllocator, 0x120, 1, nullptr)) {
             return false;
         }
         mOpenFxMdl.setPriorityDraw(0x7F, 0x86);
@@ -918,7 +918,7 @@ bool dAcTbox_c::createHeap() {
         if (!openAnm.IsValid()) {
             return false;
         }
-        if (!mAnmChr.create(openMdl, openAnm, &heap_allocator, nullptr)) {
+        if (!mAnmChr.create(openMdl, openAnm, &mAllocator, nullptr)) {
             return false;
         }
         mOpenFxMdl.setAnm(mAnmChr);
@@ -927,7 +927,7 @@ bool dAcTbox_c::createHeap() {
         if (!anmTexSrt.IsValid()) {
             return false;
         }
-        if (!mAnmTexSrt1.create(openMdl, anmTexSrt, &heap_allocator, nullptr, 1)) {
+        if (!mAnmTexSrt1.create(openMdl, anmTexSrt, &mAllocator, nullptr, 1)) {
             return false;
         }
         mOpenFxMdl.setAnm(mAnmTexSrt1);
@@ -936,7 +936,7 @@ bool dAcTbox_c::createHeap() {
         if (!anmClr.IsValid()) {
             return false;
         }
-        if (!mAnmMatClr2.create(openMdl, anmClr, &heap_allocator, nullptr, 1)) {
+        if (!mAnmMatClr2.create(openMdl, anmClr, &mAllocator, nullptr, 1)) {
             return false;
         }
         mOpenFxMdl.setAnm(mAnmMatClr2);

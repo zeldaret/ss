@@ -405,8 +405,8 @@ void EffectsStruct::execute() {
 bool EffectsStruct::getOwnerPolyAttrs(s32 *pOut1, s32 *pOut2) {
     if (mpOwner != nullptr && mpOwner->group_type == fBase_c::ACTOR) {
         dAcBase_c *actor = static_cast<dAcBase_c *>(mpOwner);
-        *pOut1 = actor->polyAttr0;
-        *pOut2 = actor->polyAttr1;
+        *pOut1 = actor->mPolyAttr0;
+        *pOut2 = actor->mPolyAttr1;
         return true;
     } else {
         *pOut1 = 0;

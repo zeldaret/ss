@@ -16,7 +16,7 @@ bool dAcODecoB_c::createHeap() {
     void *data = getOarcResFile("DecoB");
     mResFile = nw4r::g3d::ResFile(data);
     nw4r::g3d::ResMdl mdl = mResFile.GetResMdl("DecoB");
-    return mMdl.create(mdl, &heap_allocator, 0x120, 1, nullptr);
+    return mMdl.create(mdl, &mAllocator, 0x120, 1, nullptr);
 }
 
 int dAcODecoB_c::create() {
