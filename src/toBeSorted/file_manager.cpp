@@ -16,29 +16,29 @@
 class UnkClass {
 public:
     UnkClass();
-    /* vtable at 80500400 */
+
     virtual ~UnkClass();
 
     static UnkClass sInstance;
 };
 // This seems really pointless since the class only has a virtual destructor
 // and no members but /shrug
-/* 80574FF8 */ UnkClass UnkClass::sInstance;
+UnkClass UnkClass::sInstance;
 
-/* 80009D30 */ UnkClass::UnkClass() {}
-/* 80009D40 */ UnkClass::~UnkClass() {}
+UnkClass::UnkClass() {}
+UnkClass::~UnkClass() {}
 
-/* 80574FFC */ FileManager *FileManager::sInstance;
+FileManager *FileManager::sInstance;
 
 extern "C" {
-/* 80009D80 */ void fn_80009D80() {} // return
-/* 80009D90 */ void fn_80009D90() {} // return
-/* 80009DA0 */ void fn_80009DA0(void *ptr) {
+void fn_80009D80() {}
+void fn_80009D90() {}
+void fn_80009DA0(void *ptr) {
     memset(ptr, 0, 0x20);
-} // memset(param_1, 0, 0x20) a 0x24 structure is implied here (0x20 data) a crc is at 0x24
+}
 }
 
-/* 80009DB0 */ FileManager::FileManager() {
+FileManager::FileManager() {
     // TODO the assembly code looks really wild
     mHeroNames[0][0] = '\0';
     u32 num_files = (u32)(mHeroName - mHeroNames[0]);
@@ -55,19 +55,18 @@ extern "C" {
 
     fn_8000A2E0();
 }
-/* 80009EE0 */ // mVec3();
 
-/* 80009EF0 */ FileManager *FileManager::create(EGG::Heap *heap) {
+FileManager *FileManager::create(EGG::Heap *heap) {
     return new (heap, 0x04) FileManager();
 }
-/* 80009F30 */ bool FileManager::loadSaveData(NandRequestWriteHolder *out, const char *name, bool isSkipData) {}
-/* 80009F70 */ void FileManager::saveSaveData(NandRequestLoadSaveFileHolder *unk, bool isSkipData) {}
-/* 8000A000 */ void FileManager::refreshSaveFileData() {}
-/* 8000A260 */ wchar_t *FileManager::getFileHeroname(int fileNum) {}
-/* 8000A280 */ s64 FileManager::getFileSaveTime(int fileNum) {}
-/* 8000A2A0 */ s16 FileManager::getFileCurrentHealth(int fileNum) {}
-/* 8000A2C0 */ s16 FileManager::getFileHealthCapacity(int fileNum) {}
-/* 8000A2E0 */ void FileManager::fn_8000A2E0() {
+bool FileManager::loadSaveData(NandRequestWriteHolder *out, const char *name, bool isSkipData) {}
+void FileManager::saveSaveData(NandRequestLoadSaveFileHolder *unk, bool isSkipData) {}
+void FileManager::refreshSaveFileData() {}
+wchar_t *FileManager::getFileHeroname(int fileNum) {}
+s64 FileManager::getFileSaveTime(int fileNum) {}
+s16 FileManager::getFileCurrentHealth(int fileNum) {}
+s16 FileManager::getFileHealthCapacity(int fileNum) {}
+void FileManager::fn_8000A2E0() {
     // maybe call this function "reset"
     mIsFileUnk1[0] = true;
     initBlankSaveFiles();
@@ -75,40 +74,39 @@ extern "C" {
     mSelectedFile = 1;
 }
 
-/* 8000A330 */
 u16 *FileManager::getStoryFlagsMut() {
     return getCurrentFile()->getStoryFlags0();
 }
-/* 8000A360 */ const u16 *FileManager::getStoryFlagsConst() const {
+const u16 *FileManager::getStoryFlagsConst() const {
     return getCurrentFile()->getStoryFlags1();
 }
-/* 8000A3B0 */ u16 *FileManager::getItemFlagsMut() {}
-/* 8000A3E0 */ const u16 *FileManager::getItemFlagsConst() {}
-/* 8000A430 */ u16 *FileManager::getDungeonFlagsMut() {}
-/* 8000A460 */ u16 *FileManager::getDungeonFlagsConst() {}
-/* 8000A4B0 */ u16 *FileManager::getSceneFlagsMut() {}
-/* 8000A4E0 */ u16 *FileManager::getSceneFlagsConst() {}
-/* 8000A530 */ u16 *FileManager::getTBoxFlagsMut() {}
-/* 8000A560 */ u16 *FileManager::getTBoxFlagsConst() {}
-/* 8000A5B0 */ u16 *FileManager::getTempFlagsMut() {}
-/* 8000A5E0 */ u16 *FileManager::getTempFlagsConst() {}
-/* 8000A630 */ u16 *FileManager::getZoneFlagsMut() {}
-/* 8000A660 */ u16 *FileManager::getZoneFlagsConst() {}
-/* 8000A6B0 */ u16 *FileManager::getEnemyDefeatFlagsMut() {}
-/* 8000A6E0 */ u16 *FileManager::getEnemyDefeatFlagsConst() {}
-/* 8000A730 */ void FileManager::setStoryFlags(u16 *flags, u32 offset, u16 count) {}
-/* 8000A790 */ void FileManager::setItemFlags(u16 *flags, u32 offset, u16 count) {}
-/* 8000A7F0 */ void FileManager::setDungeonFlags(u16 *flags, u32 offset, u16 count) {}
-/* 8000A850 */ void FileManager::setSceneFlags(u16 *flags, u32 offset, u16 count) {}
-/* 8000A8B0 */ void FileManager::setTBoxFlags(u16 *flags, u32 offset, u16 count) {}
-/* 8000A910 */ void FileManager::setTempFlags(u16 *flags, u32 offset, u16 count) {}
-/* 8000A970 */ void FileManager::setZoneFlags(u16 *flags, u32 offset, u16 count) {}
-/* 8000A9D0 */ void FileManager::setEnemyDefeatFlags(u16 *flags, u32 offset, u16 count) {}
+u16 *FileManager::getItemFlagsMut() {}
+const u16 *FileManager::getItemFlagsConst() {}
+u16 *FileManager::getDungeonFlagsMut() {}
+u16 *FileManager::getDungeonFlagsConst() {}
+u16 *FileManager::getSceneFlagsMut() {}
+u16 *FileManager::getSceneFlagsConst() {}
+u16 *FileManager::getTBoxFlagsMut() {}
+u16 *FileManager::getTBoxFlagsConst() {}
+u16 *FileManager::getTempFlagsMut() {}
+u16 *FileManager::getTempFlagsConst() {}
+u16 *FileManager::getZoneFlagsMut() {}
+u16 *FileManager::getZoneFlagsConst() {}
+u16 *FileManager::getEnemyDefeatFlagsMut() {}
+u16 *FileManager::getEnemyDefeatFlagsConst() {}
+void FileManager::setStoryFlags(u16 *flags, u32 offset, u16 count) {}
+void FileManager::setItemFlags(u16 *flags, u32 offset, u16 count) {}
+void FileManager::setDungeonFlags(u16 *flags, u32 offset, u16 count) {}
+void FileManager::setSceneFlags(u16 *flags, u32 offset, u16 count) {}
+void FileManager::setTBoxFlags(u16 *flags, u32 offset, u16 count) {}
+void FileManager::setTempFlags(u16 *flags, u32 offset, u16 count) {}
+void FileManager::setZoneFlags(u16 *flags, u32 offset, u16 count) {}
+void FileManager::setEnemyDefeatFlags(u16 *flags, u32 offset, u16 count) {}
 
-/* 8000AA30 */ u16 *FileManager::getSkipFlags() {}
-/* 8000AA40 */ void FileManager::setSkipFlagsChecked(u16 *flags, u32 offset, u16 count) {}
+u16 *FileManager::getSkipFlags() {}
+void FileManager::setSkipFlagsChecked(u16 *flags, u32 offset, u16 count) {}
 
-/* 8000AAA0 */ void FileManager::initFile(int fileNum) {
+void FileManager::initFile(int fileNum) {
     mIsFileInvalid[1] = 1;
     SaveFile *file = getFileA();
     if (fileNum != 0) {
@@ -132,138 +130,138 @@ u16 *FileManager::getStoryFlagsMut() {
     file->entrance_t1_load_flag = 1;
 }
 
-/* 8000ABD0 */ void FileManager::setCurrentHealthCapacity(s16 health) {}
-/* 8000AC00 */ u16 FileManager::getCurrentHealthCapacity() {}
-/* 8000AC50 */ void FileManager::setCurrentHealth(s16 health) {}
-/* 8000AC80 */ u16 FileManager::getCurrentHealth() {}
+void FileManager::setCurrentHealthCapacity(s16 health) {}
+u16 FileManager::getCurrentHealthCapacity() {}
+void FileManager::setCurrentHealth(s16 health) {}
+u16 FileManager::getCurrentHealth() {}
 
-/* 8000ACD0 */ u16 FileManager::getLoadRoomT1() {}
-/* 8000AD20 */ u16 FileManager::getLoadRoomT2() {}
-/* 8000AD70 */ void FileManager::setLoadRoomT3(s16 room) {}
-/* 8000ADA0 */ u16 FileManager::getLoadRoomT3() {}
+u16 FileManager::getLoadRoomT1() {}
+u16 FileManager::getLoadRoomT2() {}
+void FileManager::setLoadRoomT3(s16 room) {}
+u16 FileManager::getLoadRoomT3() {}
 
-/* 8000ADF0 */ mVec3_c *FileManager::getPosT1() {}
-/* 8000AE40 */ void FileManager::setPosT2(mVec3_c *pos) {}
-/* 8000AE90 */ mVec3_c *FileManager::getPosT2() {}
-/* 8000AEE0 */ void FileManager::setPosT3(mVec3_c *pos) {}
-/* 8000AF30 */ mVec3_c *FileManager::getPosT3() {}
+mVec3_c *FileManager::getPosT1() {}
+void FileManager::setPosT2(mVec3_c *pos) {}
+mVec3_c *FileManager::getPosT2() {}
+void FileManager::setPosT3(mVec3_c *pos) {}
+mVec3_c *FileManager::getPosT3() {}
 
-/* 8000AF80 */ s16 FileManager::getAngleT1() {}
-/* 8000AFD0 */ void FileManager::setAngleT2(s16 angle) {}
-/* 8000B000 */ s16 FileManager::getAngleT2() {}
-/* 8000B050 */ void FileManager::setAngleT3(s16 angle) {}
-/* 8000B080 */ s16 FileManager::getAngleT3() {}
+s16 FileManager::getAngleT1() {}
+void FileManager::setAngleT2(s16 angle) {}
+s16 FileManager::getAngleT2() {}
+void FileManager::setAngleT3(s16 angle) {}
+s16 FileManager::getAngleT3() {}
 
-/* 8000B0D0 */ void FileManager::setPouchData(s32 slot, u32 slotData) {}
-/* 8000B130 */ u32 FileManager::getPouchData(s32 slot) {}
-/* 8000B1B0 */ void FileManager::setPouchItem(s32 slot, ITEM_ID item) {}
-/* 8000B220 */ ITEM_ID FileManager::getPouchItem(s32 slot) {}
-/* 8000B250 */ void FileManager::setPouchUpperData(s32 slot, s32 data) {}
-/* 8000B2C0 */ u16 FileManager::getPouchUpperData(s32 slot) {}
+void FileManager::setPouchData(s32 slot, u32 slotData) {}
+u32 FileManager::getPouchData(s32 slot) {}
+void FileManager::setPouchItem(s32 slot, ITEM_ID item) {}
+ITEM_ID FileManager::getPouchItem(s32 slot) {}
+void FileManager::setPouchUpperData(s32 slot, s32 data) {}
+u16 FileManager::getPouchUpperData(s32 slot) {}
 
-/* 8000B2F0 */ void FileManager::setItemCheckData(u32 idx, u32 itemData) {}
-/* 8000B360 */ u32 FileManager::getItemCheckData(u32 idx) {}
-/* 8000B3F0 */ void FileManager::setItemCheckItem(u32 idx, ITEM_ID item) {}
-/* 8000B480 */ ITEM_ID FileManager::getItemCheckItem(u32 idx) {}
-/* 8000B4B0 */ void FileManager::setItemCheckUpperData(u32 idx, u32 itemData) {}
-/* 8000B540 */ u32 FileManager::getItemCheckUpperData() {}
+void FileManager::setItemCheckData(u32 idx, u32 itemData) {}
+u32 FileManager::getItemCheckData(u32 idx) {}
+void FileManager::setItemCheckItem(u32 idx, ITEM_ID item) {}
+ITEM_ID FileManager::getItemCheckItem(u32 idx) {}
+void FileManager::setItemCheckUpperData(u32 idx, u32 itemData) {}
+u32 FileManager::getItemCheckUpperData() {}
 
-/* 8000B570 */ void FileManager::setEquippedItem(u8 bWheelItem) {}
-/* 8000B5A0 */ u8 FileManager::getEquippedItem() {}
-/* 8000B5F0 */ void FileManager::setSelectedPouchSlot(u8 slot) {}
-/* 8000B620 */ u8 FileManager::getSelectedPouchSlot() {}
-/* 8000B670 */ void FileManager::setShieldPouchSlot(u8 slot) {}
-/* 8000B6A0 */ u8 FileManager::getShieldPouchSlot() {}
+void FileManager::setEquippedItem(u8 bWheelItem) {}
+u8 FileManager::getEquippedItem() {}
+void FileManager::setSelectedPouchSlot(u8 slot) {}
+u8 FileManager::getSelectedPouchSlot() {}
+void FileManager::setShieldPouchSlot(u8 slot) {}
+u8 FileManager::getShieldPouchSlot() {}
 
-/* 8000B6F0 */ void FileManager::setAirPotionTimer(u16 time) {}
-/* 8000B720 */ u16 FileManager::getAirPotionTimer() const {}
-/* 8000B770 */ void FileManager::setAirPotionPlusTimer(u16 time) {}
-/* 8000B7A0 */ u16 FileManager::getAirPotionPlusTimer() const {}
-/* 8000B7F0 */ void FileManager::setStaminaPotionTimer(u16 time) {}
-/* 8000B820 */ u16 FileManager::getStaminaPotionTimer() const {}
-/* 8000B870 */ void FileManager::setStaminaPotionPlusTimer(u16 time) {}
-/* 8000B8A0 */ u16 FileManager::getStaminaPotionPlusTimer() const {}
-/* 8000B8F0 */ void FileManager::setGuardianPotionTimer(u16 time) {}
-/* 8000B920 */ u16 FileManager::getGuardianPotionTimer() const {}
-/* 8000B970 */ void FileManager::setGuardianPotionPlusTimer(u16 time) {}
-/* 8000B9A0 */ u16 FileManager::getGuardianPotionPlusTimer() const {}
+void FileManager::setAirPotionTimer(u16 time) {}
+u16 FileManager::getAirPotionTimer() const {}
+void FileManager::setAirPotionPlusTimer(u16 time) {}
+u16 FileManager::getAirPotionPlusTimer() const {}
+void FileManager::setStaminaPotionTimer(u16 time) {}
+u16 FileManager::getStaminaPotionTimer() const {}
+void FileManager::setStaminaPotionPlusTimer(u16 time) {}
+u16 FileManager::getStaminaPotionPlusTimer() const {}
+void FileManager::setGuardianPotionTimer(u16 time) {}
+u16 FileManager::getGuardianPotionTimer() const {}
+void FileManager::setGuardianPotionPlusTimer(u16 time) {}
+u16 FileManager::getGuardianPotionPlusTimer() const {}
 
-/* 8000B9F0 */ void FileManager::setDowsingSlotIdx(u8 idx) {}
-/* 8000BA20 */ u8 FileManager::getDowsingSlotIdx() {}
+void FileManager::setDowsingSlotIdx(u8 idx) {}
+u8 FileManager::getDowsingSlotIdx() {}
 
-/* 8000BA70 */ void FileManager::setBeaconPos(u32 beaconArea, u32 beaconNum, mVec3_c *pos) {}
-/* 8000BB80 */ mVec3_c *FileManager::getBeaconPos(u32 beaconArea, u32 beaconNum) {}
-/* 8000BC70 */ void FileManager::setEnemyKillCount(u8 enemy, u16 killCount) {}
-/* 8000BCE0 */ u16 FileManager::getEnemyKillCount(u8 enemy) {}
-/* 8000BD60 */ void FileManager::setHitCountFromEnemy(u8 enemy, u16 hitCount) {}
-/* 8000BDD0 */ u16 FileManager::getHitCountFromEnemy(u8 enemy) {}
+void FileManager::setBeaconPos(u32 beaconArea, u32 beaconNum, mVec3_c *pos) {}
+mVec3_c *FileManager::getBeaconPos(u32 beaconArea, u32 beaconNum) {}
+void FileManager::setEnemyKillCount(u8 enemy, u16 killCount) {}
+u16 FileManager::getEnemyKillCount(u8 enemy) {}
+void FileManager::setHitCountFromEnemy(u8 enemy, u16 hitCount) {}
+u16 FileManager::getHitCountFromEnemy(u8 enemy) {}
 
-/* 8000BE50 */ void FileManager::setLoadRoomT1_FileB(s16 roomId) {}
-/* 8000BE80 */ u16 FileManager::getLoadRoomT1_FileB() {}
-/* 8000BE90 */ void FileManager::setEntranceT1_FileB(u8 entrance) {}
-/* 8000BEC0 */ u8 FileManager::getEntranceT1_FileB() {}
-/* 8000BED0 */ void FileManager::setAreaT1_FileB(const char *name) {}
-/* 8000BF80 */ char *FileManager::getAreaT1_FileB() {}
-/* 8000C080 */ void FileManager::setNightT1_FileB(bool night) {}
-/* 8000C0B0 */ u8 FileManager::getNightT1_FileB() {}
-/* 8000C0C0 */ void FileManager::setEntranceT1LoadFlag_FileB(u8 flag) {}
-/* 8000C0F0 */ void FileManager::setForcedLayerT1_FileB(u8 layer) {}
-/* 8000C120 */ u8 FileManager::getForcedLayerT1_FileB() {}
-/* 8000C130 */ void FileManager::setCurrentHealth_FileB(s16 health) {}
+void FileManager::setLoadRoomT1_FileB(s16 roomId) {}
+u16 FileManager::getLoadRoomT1_FileB() {}
+void FileManager::setEntranceT1_FileB(u8 entrance) {}
+u8 FileManager::getEntranceT1_FileB() {}
+void FileManager::setAreaT1_FileB(const char *name) {}
+char *FileManager::getAreaT1_FileB() {}
+void FileManager::setNightT1_FileB(bool night) {}
+u8 FileManager::getNightT1_FileB() {}
+void FileManager::setEntranceT1LoadFlag_FileB(u8 flag) {}
+void FileManager::setForcedLayerT1_FileB(u8 layer) {}
+u8 FileManager::getForcedLayerT1_FileB() {}
+void FileManager::setCurrentHealth_FileB(s16 health) {}
 
-/* 8000C160 */ void FileManager::setHeroname(const wchar_t *name) {}
-/* 8000C230 */ wchar_t *FileManager::getHeroname() {}
+void FileManager::setHeroname(const wchar_t *name) {}
+wchar_t *FileManager::getHeroname() {}
 
-/* 8000C360 */ char *FileManager::getAreaT1() {}
-/* 8000C470 */ char *FileManager::getAreaT2() {}
-/* 8000C580 */ void FileManager::setAreaT3(const char *name) {}
-/* 8000C630 */ char *FileManager::getAreaT3() {}
+char *FileManager::getAreaT1() {}
+char *FileManager::getAreaT2() {}
+void FileManager::setAreaT3(const char *name) {}
+char *FileManager::getAreaT3() {}
 
-/* 8000C740 */ u8 FileManager::getForcedLayerT1() {}
-/* 8000C790 */ u8 FileManager::getForcedLayerT2() {}
-/* 8000C7E0 */ void FileManager::setForcedLayerT3(u8 layer) {}
-/* 8000C810 */ u8 FileManager::getForcedLayerT3() {}
+u8 FileManager::getForcedLayerT1() {}
+u8 FileManager::getForcedLayerT2() {}
+void FileManager::setForcedLayerT3(u8 layer) {}
+u8 FileManager::getForcedLayerT3() {}
 
-/* 8000C860 */ u8 FileManager::getEntranceT1() {}
-/* 8000C8B0 */ void FileManager::setEntranceLoadFlagT1(u8 flag) {}
-/* 8000C8E0 */ u8 FileManager::getEntranceLoadFlagT1() {}
-/* 8000C930 */ void FileManager::getEntranceT2() {}
-/* 8000C980 */ void FileManager::setEntranceT3(u8 entrance) {}
-/* 8000C9B0 */ u8 FileManager::getEntranceT3() {}
+u8 FileManager::getEntranceT1() {}
+void FileManager::setEntranceLoadFlagT1(u8 flag) {}
+u8 FileManager::getEntranceLoadFlagT1() {}
+void FileManager::getEntranceT2() {}
+void FileManager::setEntranceT3(u8 entrance) {}
+u8 FileManager::getEntranceT3() {}
 
-/* 8000CA00 */ bool FileManager::getNightT1() {}
-/* 8000CA50 */ void FileManager::setNightT3(bool night) {}
-/* 8000CA80 */ u8 FileManager::getNightT3() {}
+bool FileManager::getNightT1() {}
+void FileManager::setNightT3(bool night) {}
+u8 FileManager::getNightT3() {}
 
-/* 8000CAD0 */ bool FileManager::isNew_FileA() {}
+bool FileManager::isNew_FileA() {}
 
-/* 8000CB00 */ void FileManager::setSceneFlagIndex(s16 idx) {}
-/* 8000CB30 */ u32 FileManager::getSceneFlagIndex() {}
-/* 8000CB80 */ s32 FileManager::getFileAreaIndex() {}
+void FileManager::setSceneFlagIndex(s16 idx) {}
+u32 FileManager::getSceneFlagIndex() {}
+s32 FileManager::getFileAreaIndex() {}
 
-/* 8000CBD0 */ void FileManager::fn_8000CBD0(u8) {}
-/* 8000CC00 */ u8 FileManager::fn_8000CC00() {}
+void FileManager::fn_8000CBD0(u8) {}
+u8 FileManager::fn_8000CC00() {}
 
-/* 8000CC50 */ void FileManager::setFileTimes() {}
-/* 8000CCB0 */ void FileManager::setPlayTime(s64 time) {}
+void FileManager::setFileTimes() {}
+void FileManager::setPlayTime(s64 time) {}
 
-/* 8000CCF0 */ s64 FileManager::getSavedTime() {}
-/* 8000CD40 */ void FileManager::setSavedTime(s64 time) {}
+s64 FileManager::getSavedTime() {}
+void FileManager::setSavedTime(s64 time) {}
 
-/* 8000CD80 */ void FileManager::setBeedleShopPathSegment(u32 path) {}
-/* 8000CDB0 */ u32 FileManager::getBeedleShopPathSegment() {}
-/* 8000CE00 */ void FileManager::setBeedleShopPathSegFrac(f32 segFrac) {}
-/* 8000CE30 */ f32 FileManager::getBeedleShopPathSegFrac() {}
-/* 8000CE80 */ void FileManager::setBeedleShopRotation(s16 rot) {}
-/* 8000CEB0 */ s16 FileManager::getBeedleShopRotation() {}
+void FileManager::setBeedleShopPathSegment(u32 path) {}
+u32 FileManager::getBeedleShopPathSegment() {}
+void FileManager::setBeedleShopPathSegFrac(f32 segFrac) {}
+f32 FileManager::getBeedleShopPathSegFrac() {}
+void FileManager::setBeedleShopRotation(s16 rot) {}
+s16 FileManager::getBeedleShopRotation() {}
 
-/* 8000CF00 */ void FileManager::fn_8000CF00(u32 shift) {}
-/* 8000CF70 */ void FileManager::fn_8000CF70(u32 shift) {}
+void FileManager::fn_8000CF00(u32 shift) {}
+void FileManager::fn_8000CF70(u32 shift) {}
 
-/* 8000CFE0 */ void FileManager::setSkykeepPuzzle(u32 spot, u8 tile) {}
-/* 8000D040 */ u8 FileManager::getSkykeepPuzzleTile(u32 spot) {}
+void FileManager::setSkykeepPuzzle(u32 spot, u8 tile) {}
+u8 FileManager::getSkykeepPuzzleTile(u32 spot) {}
 
-/* 8000D0B0 */ void FileManager::checkFileStatus() {
+void FileManager::checkFileStatus() {
     mIsFileInvalid[2] = 0;
     SkipData *data;
     SavedSaveFiles *files = mpSavedSaveFiles;
@@ -292,7 +290,7 @@ u16 *FileManager::getStoryFlagsMut() {
         }
     }
 }
-/* 8000D1D0 */ bool FileManager::checkSkipDataCRCs() {
+bool FileManager::checkSkipDataCRCs() {
     SkipData *data;
     bool dirty = false;
     u8 i;
@@ -307,25 +305,25 @@ u16 *FileManager::getStoryFlagsMut() {
     }
     return dirty;
 }
-/* 8000D270 */ void FileManager::saveOrClearSelectedFileToFileA() {
+void FileManager::saveOrClearSelectedFileToFileA() {
     saveOrClearToFileA(mSelectedFile);
 }
-/* 8000D280 */ void FileManager::saveOrClearToFileA(int fileNum) {}
-/* 8000D9C0 */ void FileManager::copyFileBToCurrentFile() {}
-/* 8000E060 */ void FileManager::copyFileAToSelectedFile() {
+void FileManager::saveOrClearToFileA(int fileNum) {}
+void FileManager::copyFileBToCurrentFile() {}
+void FileManager::copyFileAToSelectedFile() {
     copyFileAToFile(mSelectedFile);
 }
-/* 8000E070 */ void FileManager::copyFileAToFile(int fileNum) {}
-/* 8000E7C0 */ void FileManager::copyFile(int from, int to) {}
-/* 8000EF80 */ void FileManager::saveFileAToSelectedFile() {
+void FileManager::copyFileAToFile(int fileNum) {}
+void FileManager::copyFile(int from, int to) {}
+void FileManager::saveFileAToSelectedFile() {
     saveFileAToFile(mSelectedFile);
 }
-/* 8000EF90 */ void FileManager::saveFileAToFile(int fileNum) {}
-/* 8000F730 */ void FileManager::copyCurrentToFileB() {}
-/* 8000FDF0 */ void FileManager::copySelectedFileSkipData() {
+void FileManager::saveFileAToFile(int fileNum) {}
+void FileManager::copyCurrentToFileB() {}
+void FileManager::copySelectedFileSkipData() {
     copySkipData(mSelectedFile);
 }
-/* 8000FE00 */ void FileManager::copySkipData(u8 fileNum) {
+void FileManager::copySkipData(u8 fileNum) {
     if (fileNum < 3) {
         SkipData *curr = &mSkipData;
         SkipData *data = mpSkipData;
@@ -333,8 +331,8 @@ u16 *FileManager::getStoryFlagsMut() {
         data[fileNum] = *curr;
     }
 }
-/* 8000FEB0 */ void FileManager::setInfo_FileB() {}
-/* 8000FF60 */ void FileManager::clearFileA() {
+void FileManager::setInfo_FileB() {}
+void FileManager::clearFileA() {
     SkipData *data;
     SaveFile *file = getFileA();
     memset(file, 0, sizeof(SaveFile));
@@ -345,7 +343,7 @@ u16 *FileManager::getStoryFlagsMut() {
     data->crc = calcFileCRC(data->data, sizeof(mSkipData.data));
 }
 
-/* 80010000 */ void FileManager::initBlankSaveFiles() {
+void FileManager::initBlankSaveFiles() {
     memset(mpSavedSaveFiles, 0, sizeof(SavedSaveFiles));
     mSelectedFile = 0;
     memset(mIsFileEmpty, 0, 3);
@@ -397,7 +395,7 @@ u16 *FileManager::getStoryFlagsMut() {
     mIsFileDataDirty[2] = 0;
     initSkipData();
 }
-/* 80010160 */ void FileManager::initSkipData() {
+void FileManager::initSkipData() {
     memset(mpSkipData, 0, 0x80);
     SkipData *data;
     int i;
@@ -410,36 +408,36 @@ u16 *FileManager::getStoryFlagsMut() {
     mIsFileSkipDataDirty[2] = 0;
 }
 
-/* 800101F0 */ void FileManager::unsetFileANewFile() {}
-/* 80010220 */ void FileManager::saveT1SaveInfo(bool entranceT1LoadFlag) {}
-/* 80010350 */ void FileManager::copyFileSkipData(int fileNum) {}
+void FileManager::unsetFileANewFile() {}
+void FileManager::saveT1SaveInfo(bool entranceT1LoadFlag) {}
+void FileManager::copyFileSkipData(int fileNum) {}
 extern "C" void fn_800C01F0(); // todo flag managers
-/* 80010440 */ void FileManager::clearTempFileData() {
+void FileManager::clearTempFileData() {
     memset(&mFileA, 0, sizeof(SaveFile));
     memset(&mFileB, 0, sizeof(SaveFile));
     memset(&mSkipData, 0, sizeof(SkipData));
     fn_800C01F0();
 }
-/* 800104A0 */ void FileManager::saveAfterCredits() {}
+void FileManager::saveAfterCredits() {}
 
-/* 80011210 */ SaveFile *FileManager::getCurrentFile() {
+SaveFile *FileManager::getCurrentFile() {
     return isFileInactive() ? &mFileB : &mFileA;
 }
-/* 80011250 */ u16 *FileManager::getSkipFlags2() {}
-/* 80011260 */ SaveFile *FileManager::getFileA() {
+u16 *FileManager::getSkipFlags2() {}
+SaveFile *FileManager::getFileA() {
     return &mFileA;
 }
-/* 80011270 */ SaveFile *FileManager::getFileB() {
+SaveFile *FileManager::getFileB() {
     return &mFileB;
 }
-/* 80011280 */ u32 FileManager::calcFileCRC(const void *data, u32 length) {
+u32 FileManager::calcFileCRC(const void *data, u32 length) {
     return sCrc::calcCRC32(data, length);
 }
-/* 80011290 */ void FileManager::updateEmptyFiles() {
+void FileManager::updateEmptyFiles() {
     updateEmptyFileFlags();
     refreshSaveFileData();
 }
-/* 800112D0 */ void FileManager::updateEmptyFileFlags() {
+void FileManager::updateEmptyFileFlags() {
     SaveFile *saves = mpSavedSaveFiles->saveFiles;
     for (int i = 0; i < 3; i++) {
         if (saves[i].new_file == 1) {
@@ -449,12 +447,12 @@ extern "C" void fn_800C01F0(); // todo flag managers
         }
     }
 }
-/* 80011370 */ bool FileManager::isFileEmpty(u8 fileNum) {}
-/* 80011390 */ bool FileManager::isFileDirty(int fileNum) {}
-/* 800113B0 */ u32 FileManager::get_0xA84C() {}
-/* 800113C0 */ bool FileManager::checkRegionCode() {}
-/* 80011440 */ bool FileManager::checkFileCRC(u8 fileNum) {}
-/* 80011490 */
+bool FileManager::isFileEmpty(u8 fileNum) {}
+bool FileManager::isFileDirty(int fileNum) {}
+u32 FileManager::get_0xA84C() {}
+bool FileManager::checkRegionCode() {}
+bool FileManager::checkFileCRC(u8 fileNum) {}
+
 bool FileManager::isFileInactive() const {
     fBase_c *actor = fManager_c::searchBaseByGroupType(1, nullptr);
     if (actor) {
@@ -465,6 +463,6 @@ bool FileManager::isFileInactive() const {
     }
     return false;
 }
-/* 80011500 */ void FileManager::setPlayerInfoFileA() {}
-/* 800115E0 */ void FileManager::setT3Info(const mVec3_c &pos, const mAng3_c &rot) {}
-/* 800116C0 */ void FileManager::getRegionVersion(char *out) {}
+void FileManager::setPlayerInfoFileA() {}
+void FileManager::setT3Info(const mVec3_c &pos, const mAng3_c &rot) {}
+void FileManager::getRegionVersion(char *out) {}

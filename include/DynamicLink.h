@@ -4,6 +4,7 @@
 #include "common.h"
 #include "m/m_dvd.h"
 #include "nw4r/db/db_mapFile.h"
+
 #include "rvl/OS.h" // IWYU pragma: export
 
 class DbMapFile {
@@ -28,20 +29,20 @@ struct DynamicModuleControlBase {
     /* 0x08 */ DynamicModuleControlBase *mNext;
 
     /* 0x0C */ /*vtable*/
-    /* 802df100 */ virtual ~DynamicModuleControlBase();
-    /* 802df340 */ virtual const char *getModuleName() const;
-    /* 802df350 */ virtual int getModuleSize() const;
-    /* 802df360 */ virtual const char *getModuleTypeString() const;
-    /* 802df370 */ virtual void dump();
-    /* 802df380 */ virtual bool do_load();
-    /* 802df390 */ virtual BOOL do_load_async();
-    /* 802df3a0 */ virtual bool do_unload();
-    /* 802df3b0 */ virtual BOOL do_link();
-    /* 802df3c0 */ virtual bool do_unlink();
-    /* 802df1a0 */ DynamicModuleControlBase();
-    /* 802df1f0 */ BOOL link();
-    /* 802df290 */ BOOL unlink();
-    /* 802df310 */ BOOL load_async();
+    virtual ~DynamicModuleControlBase();
+    virtual const char *getModuleName() const;
+    virtual int getModuleSize() const;
+    virtual const char *getModuleTypeString() const;
+    virtual void dump();
+    virtual bool do_load();
+    virtual BOOL do_load_async();
+    virtual bool do_unload();
+    virtual BOOL do_link();
+    virtual bool do_unlink();
+    DynamicModuleControlBase();
+    BOOL link();
+    BOOL unlink();
+    BOOL load_async();
 
     static inline DynamicModuleControlBase *getFirstClass() {
         return mFirst;
@@ -58,19 +59,19 @@ struct DynamicModuleControlBase {
 };
 
 struct DynamicModuleControl : DynamicModuleControlBase {
-    /* 802df4c0 */ virtual const char *getModuleName() const;
-    /* 802df450 */ virtual ~DynamicModuleControl();
-    /* 802dfb10 */ virtual int getModuleSize() const;
-    /* 802dfb70 */ virtual const char *getModuleTypeString() const;
-    /* 802df800 */ virtual void dump();
-    /* 802df5d0 */ virtual bool do_load();
-    /* 802df710 */ virtual BOOL do_load_async();
-    /* 802df7a0 */ virtual bool do_unload();
-    /* 802df810 */ virtual BOOL do_link();
-    /* 802dfa60 */ virtual bool do_unlink();
-    /* 802df3d0 */ DynamicModuleControl(char const *, EGG::ExpHeap *);
-    /* 802df4d0 */ static void initialize(EGG::ExpHeap *heap);
-    /* 802df530 */ static void *callback(void *);
+    virtual const char *getModuleName() const;
+    virtual ~DynamicModuleControl();
+    virtual int getModuleSize() const;
+    virtual const char *getModuleTypeString() const;
+    virtual void dump();
+    virtual bool do_load();
+    virtual BOOL do_load_async();
+    virtual bool do_unload();
+    virtual BOOL do_link();
+    virtual bool do_unlink();
+    DynamicModuleControl(char const *, EGG::ExpHeap *);
+    static void initialize(EGG::ExpHeap *heap);
+    static void *callback(void *);
     void checkHeapStatus();
 
     /* 0x10 */ UNKWORD unk_16;

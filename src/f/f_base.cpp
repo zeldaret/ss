@@ -3,11 +3,6 @@
 #include "m/m_heap.h"
 #include "string.h"
 
-/*
-.text File Range:
-    [802e12f0 - 802e2680]
-*/
-
 // This file will be ported from
 // https://github.com/NSMBW-Community/NSMBW-Decomp/blob/master/source/dol/framework/f_base.cpp
 
@@ -15,13 +10,10 @@ fBaseID_e fBase_c::m_rootUniqueID = FIRST_ID;
 
 fBase_c::ConstructData fBase_c::m_tmpCtData;
 
-// 0x80575bb0: sLoadAsyncCallback__7fBase_c
-// 0x80575bb4: sUnloadCallback__7fBase_c
 fLiMgBa_c fBase_c::m_forceExecuteList;
 int (*fBase_c::sLoadAsyncCallback)();
 void (*fBase_c::sUnloadCallback)();
 
-/* 802e12f0 */
 fBase_c::fBase_c()
     : mID(m_rootUniqueID),
       mParams(m_tmpCtData.params),
@@ -56,7 +48,6 @@ fBase_c::fBase_c()
     }
 }
 
-/* 802e1480 */
 fBase_c::~fBase_c() {
     // Is this static_cast fake? Maybe. But if actor_list is of type fLiMgBa_c,
     // that causes a weak destructor to spawn that actually needs to be in f_manager.
@@ -69,7 +60,6 @@ fBase_c::~fBase_c() {
     }
 }
 
-/* 802e1500 */
 int fBase_c::commonPack(int (fBase_c::*doFunc)(), int (fBase_c::*preFunc)(), void (fBase_c::*postFunc)(MAIN_STATE_e)) {
     MAIN_STATE_e state;
 
@@ -94,17 +84,14 @@ int fBase_c::commonPack(int (fBase_c::*doFunc)(), int (fBase_c::*preFunc)(), voi
     return result;
 }
 
-/* 802e15c0 */
 int fBase_c::create() {
     return SUCCEEDED;
 }
 
-/* 802e15d0 */
 int fBase_c::preCreate() {
     return SUCCEEDED;
 }
 
-/* 802e15e0 */
 void fBase_c::postCreate(MAIN_STATE_e state) {
     if (state == SUCCESS) {
         fManager_c::m_createManage.remove(&mManager.execute_node);
@@ -120,18 +107,14 @@ void fBase_c::postCreate(MAIN_STATE_e state) {
     }
 }
 
-/* 802e1670 */
 int fBase_c::doDelete() {
     return SUCCEEDED;
 }
-
-/* 802e1680 */
 int fBase_c::createPack() {
     // Returns PACK_RESULT_e
     return commonPack(&fBase_c::create, &fBase_c::preCreate, &fBase_c::postCreate);
 }
 
-/* 802e1730 */
 int fBase_c::preDelete() {
     if (mpHelper != nullptr && !mpHelper->LoadOnlyOne()) {
         return NOT_READY;
@@ -146,7 +129,6 @@ int fBase_c::preDelete() {
     return SUCCEEDED;
 }
 
-/* 802e17a0 */
 void fBase_c::postDelete(MAIN_STATE_e state) {
     // If the Actor is ready for deletion, make sure that it is:
     // - Removed from the connection tree
@@ -173,18 +155,15 @@ void fBase_c::postDelete(MAIN_STATE_e state) {
     }
 }
 
-/* 802e15d0 */
 int fBase_c::deletePack() {
     // Returns PACK_RESULT_e
     return commonPack(&fBase_c::doDelete, &fBase_c::preDelete, &fBase_c::postDelete);
 }
 
-/* 802e1910 */
 int fBase_c::execute() {
     return SUCCEEDED;
 }
 
-/* 802e1920 */
 int fBase_c::preExecute() {
     // Do not execute if it has been flagged for deletion or marked as non-execute
     if (mDeleteRequest || checkProcControl(DISABLE_EXECUTE)) {
@@ -194,13 +173,11 @@ int fBase_c::preExecute() {
     return SUCCEEDED;
 }
 
-/* 802e1950 */
 void fBase_c::postExecute(MAIN_STATE_e state) {
     // Implemented per Actor
     return;
 }
 
-/* 802e1960 */
 int fBase_c::executePack() {
     // Returns PACK_RESULT_e
     int result = commonPack(&fBase_c::execute, &fBase_c::preExecute, &fBase_c::postExecute);
@@ -217,12 +194,10 @@ int fBase_c::executePack() {
     return result;
 }
 
-/* 802e1a90 */
 int fBase_c::draw() {
     return SUCCEEDED;
 }
 
-/* 802e1aa0 */
 int fBase_c::preDraw() {
     // Do not draw if it has been flagged for deletion or marked as non-draw
     if (mDeleteRequest || checkProcControl(DISABLE_DRAW)) {
@@ -232,22 +207,18 @@ int fBase_c::preDraw() {
     return SUCCEEDED;
 }
 
-/* 802e1ad0 */
 void fBase_c::postDraw(MAIN_STATE_e state) {
     // Per Actor imple
     return;
 }
 
-/* 802e1ae0 */
 int fBase_c::drawPack() {
     // Returns PACK_RESULT_e
     return commonPack(&fBase_c::draw, &fBase_c::preDraw, &fBase_c::postDraw);
 }
 
-/* 802e1b90 */
 void fBase_c::deleteReady() {}
 
-/* 802e1ba0 */
 int fBase_c::connectProc() {
     if (mDeleteRequest) {
         mDeleteRequest = false;
@@ -332,7 +303,6 @@ int fBase_c::connectProc() {
     return SUCCEEDED;
 }
 
-/* 802e1e00 */
 void fBase_c::deleteRequest() {
     if (!mDeleteRequest && mLifecycleState != TO_BE_DELETED) {
         mDeleteRequest = true;
@@ -344,7 +314,6 @@ void fBase_c::deleteRequest() {
     }
 }
 
-/* 802e1e80 */
 void fBase_c::forceUpdate() {
     // There is probably an inline active here
     if (((!mDeleteRequest && mLifecycleState != TO_BE_DELETED) && mLifecycleState != ACTIVE) &&
@@ -356,7 +325,6 @@ void fBase_c::forceUpdate() {
     }
 }
 
-/* 802e1f10 */
 fBase_c *fBase_c::getConnectRoot() {
     if (fManager_c::m_connectManage.getRoot() != nullptr) {
         return fManager_c::m_connectManage.getRoot()->p_owner;
@@ -364,7 +332,6 @@ fBase_c *fBase_c::getConnectRoot() {
     return nullptr;
 }
 
-/* 802e1f30 */
 fBase_c *fBase_c::getConnectTreeNext(fBase_c *actor) {
     fBase_c *ret = nullptr;
 
@@ -379,7 +346,6 @@ fBase_c *fBase_c::getConnectTreeNext(fBase_c *actor) {
     return ret;
 }
 
-/* 802e1f90 */
 fBase_c *fBase_c::getConnectParent() const {
     fTrNdBa_c *node = mManager.connect_node.getParent();
     if (node != nullptr) {
@@ -388,7 +354,6 @@ fBase_c *fBase_c::getConnectParent() const {
     return nullptr;
 }
 
-/* 802e1fb0 */
 fBase_c *fBase_c::getConnectChild() const {
     fTrNdBa_c *node = mManager.connect_node.getChild();
     if (node != nullptr) {
@@ -397,7 +362,6 @@ fBase_c *fBase_c::getConnectChild() const {
     return nullptr;
 }
 
-/* 802e1fd0 */
 fBase_c *fBase_c::getConnectBrNext() const {
     fTrNdBa_c *node = mManager.connect_node.getBrNext();
     if (node != nullptr) {
@@ -406,7 +370,6 @@ fBase_c *fBase_c::getConnectBrNext() const {
     return nullptr;
 }
 
-/* 802e1ff0 */
 void fBase_c::updateExecutePriority(u16 order) {
     if (mLifecycleState == ACTIVE && mUpdateRequest != UPDATE_FORCE) {
         if (fManager_c::m_nowLoopProc == fManager_c::EXECUTE) {
@@ -422,7 +385,6 @@ void fBase_c::updateExecutePriority(u16 order) {
     }
 }
 
-/* 802e2090 */
 bool fBase_c::setConnectChild(fBase_c *child) {
     if (child == nullptr || child->mLifecycleState == TO_BE_DELETED) {
         return false;
@@ -435,7 +397,6 @@ bool fBase_c::setConnectChild(fBase_c *child) {
     return fManager_c::m_connectManage.insertTreeNode(&mManager.connect_node, &child->mManager.connect_node);
 }
 
-/* 802e20e0 */
 bool fBase_c::entryFrmHeap(size_t size, EGG::Heap *parentHeap) {
     if (mpHeap != nullptr) {
         return true;
@@ -514,7 +475,6 @@ bool fBase_c::entryFrmHeap(size_t size, EGG::Heap *parentHeap) {
     return false;
 }
 
-/* 802e22e0 */
 bool fBase_c::entryFrmHeapNonAdjust(size_t size, EGG::Heap *parentHeap) {
     if (mpHeap != nullptr) {
         return true;
@@ -538,12 +498,10 @@ bool fBase_c::entryFrmHeapNonAdjust(size_t size, EGG::Heap *parentHeap) {
     return false;
 }
 
-/* 802e23a0 */
 bool fBase_c::createHeap() {
     return true;
 }
 
-/* 802e23b0 */
 void *fBase_c::operator new(size_t size) {
     void *mem = EGG::Heap::alloc(size, -4, mHeap::g_gameHeaps[0]);
     if (mem != nullptr) {
@@ -552,12 +510,10 @@ void *fBase_c::operator new(size_t size) {
     return mem;
 }
 
-/* 802e2410 */
 void fBase_c::operator delete(void *block) {
     EGG::Heap::free(block, mHeap::g_gameHeaps[0]);
 }
 
-/* 802e2420 */
 void fBase_c::runCreate() {
     createPack();
     if ((!mDeleteRequest && (u8)mUpdateRequest == UPDATING) && mLifecycleState == WAITING_FOR_CREATE) {
@@ -569,7 +525,6 @@ void fBase_c::runCreate() {
     }
 }
 
-/* 802e24a0 */
 fBase_c *fBase_c::getChildProcessCreateState() const {
     const fTrNdBa_c *connect_node = &mManager.connect_node;
     fTrNdBa_c *end = connect_node->getTreeNextNotChild();
@@ -584,12 +539,10 @@ fBase_c *fBase_c::getChildProcessCreateState() const {
     return nullptr;
 }
 
-/* 802e2510 */
 bool fBase_c::checkChildProcessCreateState() const {
     return getChildProcessCreateState() != nullptr;
 }
 
-/* 802e2540 */
 void fBase_c::setTmpCtData(ProfileName profile_name, fTrNdBa_c *connect_parent, u32 param, u8 group_type) {
     m_tmpCtData.prof_name = profile_name;
     m_tmpCtData.connect_parent = connect_parent;
@@ -597,7 +550,6 @@ void fBase_c::setTmpCtData(ProfileName profile_name, fTrNdBa_c *connect_parent, 
     m_tmpCtData.group_type = group_type;
 }
 
-/* 802e2560 */
 fBase_c *fBase_c::fBase_make(ProfileName profile_name, fTrNdBa_c *connect_parent, u32 param, u8 group_type) {
     if ((*fProfile::sProfileList)[profile_name] == nullptr) {
         return nullptr;
@@ -616,7 +568,6 @@ fBase_c *fBase_c::fBase_make(ProfileName profile_name, fTrNdBa_c *connect_parent
     return actor;
 }
 
-/* 802e2600 */
 fBase_c *fBase_c::createChild(ProfileName profile_name, fBase_c *parent, u32 param, u8 group_type) {
     if (parent == nullptr) {
         return nullptr;
@@ -629,7 +580,6 @@ fBase_c *fBase_c::createChild(ProfileName profile_name, fBase_c *parent, u32 par
     return fBase_make(profile_name, &parent->mManager.connect_node, param, group_type);
 }
 
-/* 802e2640 */
 fBase_c *fBase_c::createRoot(ProfileName profile_name, u32 param, u8 group_type) {
     return fBase_make(profile_name, nullptr, param, group_type);
 }

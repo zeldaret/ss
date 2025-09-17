@@ -25,7 +25,8 @@ private:
     s32 mRoomIndex;
     bool mPathSubtype;
 
-    /** Must only be called for spline paths. Extracts the relevant path points and control points for the given segment. */
+    /** Must only be called for spline paths. Extracts the relevant path points and control points for the given
+     * segment. */
     bool extractControlPoints(
         s32 pointIndex, mVec3_c &currPos, mVec3_c &currControl2, mVec3_c &nextControl1, mVec3_c &nextPos
     ) const;
@@ -42,9 +43,8 @@ private:
     const BPNT *getPathBpoint(s32 pointIndex) const;
 
 public:
-    /* 800A6690 */
     dPath_c();
-    /* 800A66D0 */
+
     virtual ~dPath_c();
 
     bool isWrapping() const {
@@ -59,12 +59,10 @@ public:
         return mpPathPtr->pointCount;
     }
 
-    /* 800A6D90 */
     bool initWithPathId(s32 pathId, s32 roomId, bool pathSubtype);
     bool initWithPathIndex(s32 pathIndex, s32 roomId, bool pathSubtype);
 
     void clear();
-    
 
     /** Get a given point that the curve passes through. */
     const Vec *getPoint(s32 pointIndex) const;
@@ -97,7 +95,6 @@ public:
     bool getSpeed(s32 segmentIndex, f32 time, f32 *result) const;
     /** Calculates the velocity (vector) of an actor moving along the segment at the given time. */
     bool getVelocity(s32 segmentIndex, f32 time, mVec3_c &result) const;
-
 };
 
 /** A stateful "path driver" that moves along a given path with a given speed. */
@@ -109,7 +106,8 @@ public:
     f32 getRemainingDistanceOnSegment() const;
     s32 getClosestXZPoint(const mVec3_c &) const;
     void setSegment(s32 segmentIndex, f32 segmentTime);
-    bool init(s32 pathIndex, s32 roomId, u32 flags, s32 segmentIndex, bool pathSubtype, f32 segmentTime, f32 speed, f32 unk);
+    bool
+    init(s32 pathIndex, s32 roomId, u32 flags, s32 segmentIndex, bool pathSubtype, f32 segmentTime, f32 speed, f32 unk);
     s32 execute();
 
     s32 getSegmentIndex() const {

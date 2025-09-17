@@ -8,7 +8,6 @@
 #include "nw4r/ut/ut_RuntimeTypeInfo.h"
 #include "nw4r/ut/ut_list.h"
 
-
 // ReverseYAxis__22@unnamed@lyt_pane_cpp@FPQ34nw4r4math5MTX34
 namespace nw4r {
 
@@ -47,7 +46,6 @@ Pane::Pane() : mChildList(), mAnimList(), mSize() {
 
 // __dt__Q34nw4r2ut28LinkList<Q34nw4r3lyt4Pane,4>Fv
 
-// 80486a70
 // __ct__Q34nw4r3lyt4PaneFPCQ44nw4r3lyt3res4Pane
 Pane::Pane(const res::Pane *pBlock) : mChildList(), mAnimList(), mSize() {
     this->mpParent = nullptr;

@@ -22,8 +22,8 @@ public:
         return (fLiNdBa_c *)cListNd_c::getNext();
     }
 
-    /* 802e27d0 */ void link(fBase_c *);
-    /* 802e2830 */ void unlink();
+    void link(fBase_c *);
+    void unlink();
 
     fBase_c *p_owner;
 };

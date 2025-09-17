@@ -24,13 +24,11 @@
 #include "toBeSorted/file_manager.h"
 #include "toBeSorted/special_item_drop_mgr.h"
 
-// .sdata
 u32 dAcBase_c::s_Create_RoomId = -1;
 u32 dAcBase_c::s_Create_Params2 = -1;
 u16 dAcBase_c::s_Create_UnkFlags = -1;
 u8 dAcBase_c::s_Create_ViewClipIdx = -1;
 
-// .sbss
 mVec3_c *dAcBase_c::s_Create_Position;
 mAng3_c *dAcBase_c::s_Create_Rotation;
 mVec3_c *dAcBase_c::s_Create_Scale;
@@ -44,7 +42,6 @@ bool dAcBase_c::createHeap() {
 
 // mpSoundSource and mSoundList need to be ironed out before this can match
 // NOT MATCHING
-// 8002c3b0
 dAcBase_c::dAcBase_c()
     : mAllocator(),
       mpActorInfo(s_Create_ActorInfo),
@@ -85,10 +82,6 @@ dAcBase_c::dAcBase_c()
     someStr[0] = '\0';
 }
 
-// 8002c530
-// dBase_c::~dBase_c() {}
-
-// 8002c590
 dAcBase_c::~dAcBase_c() {}
 
 void dAcBase_c::setTempCreateParams(
@@ -175,7 +168,6 @@ int dAcBase_c::create() {
     return success;
 }
 
-// 8002c8f0
 void dAcBase_c::postCreate(fBase_c::MAIN_STATE_e state) {
     if (state == SUCCESS) {
         mPositionCopy = mPosition;
@@ -186,7 +178,6 @@ void dAcBase_c::postCreate(fBase_c::MAIN_STATE_e state) {
 }
 
 // NOT MATCHING
-// 8002c940
 int dAcBase_c::preDelete() {
     int ret = SUCCEEDED;
     if (fBase_c::preDelete() == NOT_READY) {
@@ -234,7 +225,6 @@ int dAcBase_c::preDelete() {
     return SUCCEEDED;
 }
 
-// 8002cb10
 int dAcBase_c::preExecute() {
     if (dBase_c::preExecute() == NOT_READY) {
         return NOT_READY;
@@ -252,7 +242,6 @@ int dAcBase_c::preExecute() {
     return SUCCEEDED;
 }
 
-// 8002cc10
 int dAcBase_c::execute() {
     if (EventManager::isInEvent() && !EventManager::isInEvent0Or7()) {
         return actorExecuteInEvent();
@@ -261,17 +250,14 @@ int dAcBase_c::execute() {
     return actorExecute();
 }
 
-// 8002cca0
 int dAcBase_c::actorExecute() {
     return SUCCEEDED;
 }
 
-// 8002ccb0
 int dAcBase_c::actorExecuteInEvent() {
     return actorExecute();
 }
 
-// 8002ccc0
 void dAcBase_c::postExecute(fBase_c::MAIN_STATE_e state) {
     if (mpSoundSource != nullptr) {
         mpSoundSource->calc(*mpPosition);
@@ -286,17 +272,14 @@ void dAcBase_c::postExecute(fBase_c::MAIN_STATE_e state) {
     // TODO - ...
 }
 
-// 8002ce90
 void dAcBase_c::unkVirtFunc_0x5C() {
     return;
 }
 
-// 8002cea0
 void dAcBase_c::unkVirtFunc_0x60() {
     return;
 }
 
-// 8002ceb0
 // loads f2 before f0 instead of f0 then f2
 bool dAcBase_c::restorePosRotFromCopy() {
     if (mRoomID != mRoomIDCopy) {
@@ -307,7 +290,6 @@ bool dAcBase_c::restorePosRotFromCopy() {
     return 1;
 }
 
-// 8002cf10
 u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
     if (dScGame_c::currentSpawnInfo.getTrial() == SpawnInfo::TRIAL) {
         return 0;
@@ -325,43 +307,35 @@ u32 dAcBase_c::itemDroppingAndGivingRelated(mVec3_c *spawnPos, int subtype) {
     );
 }
 
-// 8002cf90
 void dAcBase_c::fillUpperParams2Byte() {
     // Upper byte of param2 determines item drops when actor is deleted
     mParams2 |= 0xFF000000;
 }
 
-// 8002cfa0
 u32 dAcBase_c::getParams2_ignoreLower() {
     return mParams2 | 0xFFFF;
 }
 
-// 8002cfb0
 void dAcBase_c::setParams2Upper_ignoreLower(u32 val) {
     mParams2 = val | 0xFFFF;
 }
 
-// 8002cfc0
 int dAcBase_c::getParams2UpperByte() {
     return mParams2 >> 0x18;
 }
 
-// 8002cfd0
 void dAcBase_c::setParams2UpperByte(u32 val) {
     mParams2 = (mParams2 & 0xFFFFFF) | val << 0x18;
 }
 
-// 8002cff0
 u32 dAcBase_c::buildParams2(u32 lower, u32 upper) {
     return ((upper & 0xFFFF) | 0xFFFF0000) & ((lower << 0x18) | 0xFFFFFF);
 }
 
-// 8002d010
 u32 dAcBase_c::getParams2Lower() const {
     return mParams2 & 0xFFFF;
 }
 
-// 8002d020
 dAcBase_c *dAcBase_c::findActor(char *objName, dAcBase_c *parent) {
     const ActorInfo *actorInfo = getActorInfoByName(objName);
     if (actorInfo == nullptr) {
@@ -378,7 +352,6 @@ dAcBase_c *dAcBase_c::findActor(char *objName, dAcBase_c *parent) {
 }
 
 // searches for actor based on groupType
-// 8002d0a0
 FORCE_INLINE dAcBase_c *findActor(dAcBase_c *parent) {
     dAcBase_c *foundActor;
     if (!parent) {
@@ -393,14 +366,12 @@ FORCE_INLINE dAcBase_c *findActor(dAcBase_c *parent) {
 
 // control flow sucks ;-;
 // NOT MATCHING
-// 8002d0a0
 dAcBase_c *dAcBase_c::searchActor(dAcBase_c *parent) {
     dAcBase_c *foundActor = ::findActor(parent);
 
     return foundActor ? foundActor : (dAcBase_c *)fManager_c::searchBaseByGroupType(STAGE, parent);
 }
 
-// 8002d130
 void dAcBase_c::forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *parent) {
     dAcBase_c *foundActor = searchActor(nullptr);
 
@@ -410,12 +381,10 @@ void dAcBase_c::forEveryActor(void *func(dAcBase_c *, dAcBase_c *), dAcBase_c *p
     }
 }
 
-// 8002d190
 mAng dAcBase_c::getXZAngleToPlayer() {
     return cLib::targetAngleY(this->mPosition, dAcPy_c::LINK->mPosition);
 }
 
-// 8002d1d0
 bool dAcBase_c::getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDist) {
     f32 distSquared = 3.402823e+38;
     bool isWithinThreshhold = false;
@@ -435,7 +404,6 @@ bool dAcBase_c::getDistanceToActor(dAcBase_c *actor, f32 distThresh, f32 *outDis
     return isWithinThreshhold;
 }
 
-// 8002d290
 bool dAcBase_c::getDistanceAndAngleToActor(
     dAcBase_c *actor, f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX
 ) {
@@ -472,31 +440,26 @@ bool dAcBase_c::getDistanceAndAngleToActor(
     return isWithinRange;
 }
 
-// 8002d3e0
 bool dAcBase_c::isWithinPlayerRadius(f32 radius) const {
     f32 dist_diff = getSquareDistanceTo(dAcPy_c::LINK->mPosition);
     return dist_diff < radius * radius;
 }
 
-// 8002d440
 bool dAcBase_c::getDistanceAndAngleToPlayer(
     f32 distThresh, s16 yAngle, s16 xAngle, f32 *outDist, s16 *outDiffAngleY, s16 *outDiffAngleX
 ) {
     return getDistanceAndAngleToActor(dAcPy_c::LINK, distThresh, yAngle, xAngle, outDist, outDiffAngleY, outDiffAngleX);
 }
 
-// 8002d470
 f32 dAcBase_c::getDistToPlayer() {
     return EGG::Math<f32>::sqrt(PSVECSquareDistance(mPosition, dAcPy_c::LINK->mPosition));
 }
 
-// 8002d4a0
 f32 dAcBase_c::getSquareDistToPlayer() {
     return PSVECSquareDistance(mPosition, dAcPy_c::LINK->mPosition);
 }
 
 // Some weirdness with the float registers being used
-// 8002d4b0
 void dAcBase_c::updateRoomId(f32 yOffset) {
     if (getConnectParent()->mProfileName != fProfile::ROOM) {
         mVec3_c actorPos(mPosition.x, mPosition.y + yOffset, mPosition.z);
@@ -509,7 +472,6 @@ void dAcBase_c::updateRoomId(f32 yOffset) {
     }
 }
 
-// 8002d540
 bool dAcBase_c::isRoomFlags_0x6_Set() {
     dRoom_c *room = dStage_c::GetInstance()->getRoom(mRoomID);
     return (room->checkFlag(0x4 | 0x2));
@@ -623,41 +585,33 @@ void dAcBase_c::setBattleBgmRelated(UNKWORD param) {
     mpSoundSource->setBattleBgmRelated(param);
 }
 
-// 8002d880
 dSoundSourceIf_c *dAcBase_c::getSoundSource() {
     return mpSoundSource.get();
 }
 
-// 8002d890
 void dAcBase_c::removeSoundInfo(SoundInfo *soundInfo) {
-    // Position != EndIter -> soundInfo is contained in mSoundList
     if (mSoundList.GetPosition(soundInfo) != mSoundList.GetEndIter()) {
         mSoundList.remove(soundInfo);
     }
 }
 
-// current name is Global__setActorRef
 void dAcBase_c::setActorRef(dAcBase_c *ref) {
     mActorNode.link(ref);
 }
 
-// May not be only purpose
 void dAcBase_c::setEnemyDefeatFlag() {
     EnemyflagManager::sInstance->setFlag(mObjID);
 }
 
-// 8002d940
 void dAcBase_c::changeLoadedEntitiesWithSet() {
     dStage_c::GetInstance()->changeLoadedEntities(mObjID, true);
 }
 
-// 8002d960
 void dAcBase_c::changeLoadedEntitiesNoSet() {
     dStage_c::GetInstance()->changeLoadedEntities(mObjID, false);
 }
 
 // spawns GroupType2 (ACTOR)
-// 8002d980
 dAcBase_c *dAcBase_c::createActor(
     ProfileName actorId, u32 actorParams1, mVec3_c *actorPosition, mAng3_c *actorRotation, mVec3_c *actorScale,
     u32 actorParams2, s32 actorRoomid, dBase_c *actorRef
@@ -688,7 +642,6 @@ dAcBase_c *dAcBase_c::createActor(
 }
 
 // spawns GroupType2 (STAGE)
-// 8002da80
 dAcBase_c *dAcBase_c::createActorStage(
     ProfileName actorId, u32 actorParams1, mVec3_c *actorPosition, mAng3_c *actorRotation, mVec3_c *actorScale,
     u32 actorParams2, s32 actorRoomid, dBase_c *actorRef
@@ -718,13 +671,10 @@ dAcBase_c *dAcBase_c::createActorStage(
     return (dAcBase_c *)dBase_c::createBase(actorId, room, actorParams1, STAGE);
 }
 
-// 8002db80
 void dAcBase_c::registerInEvent() {}
 
-// 8002db90
 void dAcBase_c::unkVirtFunc_0x6C() {}
 
-// 8002dba0
 void dAcBase_c::doInteraction(s32 param) {
     if (param == 4 || param == 5 || param == 12) {
         Event event = Event("DefaultTalk", 400, 0x100001, nullptr, nullptr);
@@ -734,7 +684,6 @@ void dAcBase_c::doInteraction(s32 param) {
 
 // Only called by dPlayer::dig
 // Rounds angle to nearest 90 deg?
-// 8002dc20
 void dAcBase_c::roundAngleToNearest90(s16 *dst_angle, s16 *src_angle) {
     s32 roundedAngle = *src_angle;
 
@@ -746,9 +695,8 @@ void dAcBase_c::roundAngleToNearest90(s16 *dst_angle, s16 *src_angle) {
     *dst_angle = (roundedAngle / 0x4000) * 0x4000;
 }
 
-// 8002dc50
 void dAcBase_c::incrementKillCounter() {
-    dAcObjBase_c *object = (dAcObjBase_c *)this; // Probably wrong
+    dAcObjBase_c *object = static_cast<dAcObjBase_c *>(this); // Probably wrong
 
     if (mGroupType == ACTOR && object->mTargetFiRelated == 1) {
         int killCounterId = object->mTargetFiTextID;
@@ -761,41 +709,35 @@ void dAcBase_c::incrementKillCounter() {
     }
 }
 
-// 8002dcd0
 void dAcBase_c::killNoItemDrop() {
     fillUpperParams2Byte();
     fBase_c::deleteRequest();
     incrementKillCounter();
 }
 
-// 8002dd10
 void dAcBase_c::killWithFlag() {
     setEnemyDefeatFlag();
     fBase_c::deleteRequest();
     incrementKillCounter();
 }
 
-// 8002dd50
 void dAcBase_c::killWithFlagNoItemDrop() {
     fillUpperParams2Byte();
     killWithFlag();
 }
 
-// 8002dd90
 void dAcBase_c::deleteWithFlagNoItemDrop() {
     fillUpperParams2Byte();
     setEnemyDefeatFlag();
     fBase_c::deleteRequest();
 }
 
-// 8002ddd0
 void dAcBase_c::setPolyAttrs(cBgS_PolyInfo &pPolyInfo) {
     mPolyAttr0 = dBgS::GetInstance()->GetPolyAtt0(pPolyInfo);
     mPolyAttr1 = dBgS::GetInstance()->GetPolyAtt1(pPolyInfo);
 }
 
 // Idk what's up with this function. It's only used once.
-// 8002de30
 void dAcBase_c::setPolyAttrsDupe(cBgS_PolyInfo &pPolyInfo) {
     setPolyAttrs(pPolyInfo);
 }

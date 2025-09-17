@@ -4,23 +4,19 @@ namespace nw4r {
 namespace ut {
 namespace detail {
 
-/* 8042a850 */
 LinkListImpl::~LinkListImpl() {
     Clear();
 }
 
-/* 8042a8e0 */
 LinkListImpl::Iterator LinkListImpl::Erase(LinkListImpl::Iterator it) {
     Iterator copy(it);
     return Erase(it, ++copy);
 }
 
-/* 8042a930 */
 void LinkListImpl::Clear() {
     Erase(GetBeginIter(), GetEndIter());
 }
 
-/* 8042a980 */
 LinkListImpl::Iterator LinkListImpl::Insert(Iterator it, LinkListNode *p) {
     LinkListNode *next = it.mNode;
     LinkListNode *prev = next->mPrev;
@@ -37,7 +33,6 @@ LinkListImpl::Iterator LinkListImpl::Insert(Iterator it, LinkListNode *p) {
     return Iterator(p);
 }
 
-/* 8042a9b0 */
 LinkListImpl::Iterator LinkListImpl::Erase(LinkListNode *p) {
     LinkListNode *next = p->mNext;
     LinkListNode *prev = p->mPrev;

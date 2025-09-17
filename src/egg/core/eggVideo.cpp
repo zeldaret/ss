@@ -307,12 +307,12 @@ const EGG::Video::RenderModeObjSet renderModes = {
      &gRMO_Ntsc_640x456IntDf_4x3}
 };
 
-/* 80498690 */ void Video::initialize(GXRenderModeObj *obj, const RenderModeObjSet *set) {
+void Video::initialize(GXRenderModeObj *obj, const RenderModeObjSet *set) {
     VIInit();
     configure(obj, set);
 }
 
-/* 804986f0 */ GXRenderModeObj *Video::configure(GXRenderModeObj *obj, const RenderModeObjSet *set) {
+GXRenderModeObj *Video::configure(GXRenderModeObj *obj, const RenderModeObjSet *set) {
     GXRenderModeObj *oldMode = pRenderMode;
     if (set == nullptr) {
         set = &renderModes;
@@ -349,14 +349,14 @@ f32 itof(u32 n) {
     return n;
 }
 // TODO VITvFormat
-/* 80498800 */ u32 Video::getTickPerVRetrace(u32 tvFormat) {
+u32 Video::getTickPerVRetrace(u32 tvFormat) {
     f32 val = tvFormat - 1 <= VI_TV_FMT_PAL ? 50.0f : 59.94f;
     return (u32)((OS_BUS_CLOCK_SPEED >> 2) / val);
 }
-/* 80498860 */ u32 Video::getTickPerVRetrace() {
+u32 Video::getTickPerVRetrace() {
     return getTickPerVRetrace(VIGetTvFormat());
 }
-/* 80498890 */ const GXRenderModeObj *Video::getStandardRenderModeObj(const RenderModeObjSet *set) {
+const GXRenderModeObj *Video::getStandardRenderModeObj(const RenderModeObjSet *set) {
     bool pmode = SCGetProgressiveMode() == 1;
     bool rbg60mode = SCGetEuRgb60Mode() == 1;
     bool aspect = SCGetAspectRatio() == 0;

@@ -16,10 +16,8 @@ enum dArcResult_e {
 class ArcCallbackHandlerBase {
 public:
     ArcCallbackHandlerBase() : mPrefix('    ') {}
-    /* vtable at 8050df50 */
-    /** 800651c0 */
+
     virtual void CreateArcEntry(void *data, const char *path);
-    /** 800653d0 */
     virtual void DestroyArcEntry(const char *path);
 
     u32 mPrefix;
@@ -46,7 +44,8 @@ public:
     static BOOL checkArcExistsOnDisk(const char *fileName, const char *dirName);
     static BOOL checkArcExistsOnDiskInner(SizedString<128> &path, const char *fileName, const char *dirName);
 
-    dArcResult_e mount(const char *name, void *data, ArcCallbackHandler *callbackArg, u8 mountDirection, EGG::Heap *heap);
+    dArcResult_e
+    mount(const char *name, void *data, ArcCallbackHandler *callbackArg, u8 mountDirection, EGG::Heap *heap);
     dArcResult_e onMount(void *callbackArg);
 
     dArcResult_e ensureLoadedMaybe(void *callbackArg);

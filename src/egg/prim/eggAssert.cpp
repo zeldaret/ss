@@ -5,10 +5,10 @@
 #include "egg/core/eggXfbManager.h"
 #include "nw4r/db/db_directPrint.h"
 #include "nw4r/db/db_mapFile.h"
-#include "rvl/OS.h" // IWYU pragma: export
-#include "rvl/VI.h" // IWYU pragma: export
 #include "string.h"
 
+#include "rvl/OS.h" // IWYU pragma: export
+#include "rvl/VI.h" // IWYU pragma: export
 
 namespace EGG {
 
@@ -20,7 +20,7 @@ u32 sPtrOverride;
 bool sInstantHalt;
 bool sAssertOccurred;
 
-/* 8049bf90 */ void wait(u32 time) {
+void wait(u32 time) {
     u32 tick = OSGetTick();
     u32 tick2;
     do {
@@ -28,18 +28,16 @@ bool sAssertOccurred;
     } while ((tick2 - tick) / (OS_BUS_CLOCK_SPEED / 4 / 1000) < time);
 }
 
-// extern "C" void OSVReport(const char *str, va_list list);
-
-/* 8049c010 */ void system_vreport(const char *str, va_list list) {
+void system_vreport(const char *str, va_list list) {
     OSVReport(str, list);
 }
-/* 8049c010 */ void system_report(const char *str, ...) {
+void system_report(const char *str, ...) {
     va_list l;
     va_start(l, str);
     system_vreport(str, l);
     va_end(l);
 }
-/* 8049c0a0 */ s32 getPeriodPos(const char *str) {
+s32 getPeriodPos(const char *str) {
     char *b = strchr(str, '.');
     s32 len;
     if (b == nullptr) {
@@ -54,28 +52,27 @@ bool sAssertOccurred;
     return len;
 }
 
-/* 80674c60 */ char buf[260];
+char buf[260];
 
-/* 8049c100 */ const char *getMapSymbol(void *arg) {
+const char *getMapSymbol(void *arg) {
     bool success = nw4r::db::MapFile_QuerySymbol((u32)arg, (u8 *)buf, sizeof(buf));
     return success ? buf : nullptr;
 }
 
-/* 8049c150 */ bool isOutsideMEM1(u32 addr) {
+bool isOutsideMEM1(u32 addr) {
     if (!(0x80000000 <= addr) || !(addr <= 0x83000000 - 1)) {
         return true;
     }
 
     return false;
 }
-
-/* 8049c180 */ AssertCallback setAssertCallback(AssertCallback cb) {
+AssertCallback setAssertCallback(AssertCallback cb) {
     AssertCallback old = sAssertCallback;
     sAssertCallback = cb;
     return old;
 }
 
-/* 8049c190 */ void system_halt(const char *file, u32 line, const char *msg, va_list list) {
+void system_halt(const char *file, u32 line, const char *msg, va_list list) {
     if (sAssertOccurred) {
 #line 152
         OSError("Recursive assertioned");
@@ -185,7 +182,7 @@ end:
     OSError("Program Halt");
     return;
 }
-/* 8049c530 */ void assert(const char *file, u32 line, const char *msg, ...) {
+void assert(const char *file, u32 line, const char *msg, ...) {
     va_list l;
     va_start(l, msg);
     system_halt(file, line, msg, l);

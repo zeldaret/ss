@@ -4,7 +4,6 @@
 #include "common.h"
 #include "rvl/CX/cx.h"
 
-
 // NOTE: I put StreamDecomp stuff here. im unsure of the correct place
 
 namespace EGG {
@@ -80,11 +79,10 @@ public:
 
 // NON-OFFICIAL
 struct UncompContextSZS {
-    /* 80494e00 */ static u32 getUncompressedSize(const void *pSrc);
-    /* 80494e30 */ void initUncompContext(void *pDest);
-    /* 80494e60 */ static s32
-    readHeader(u8 *pHeaderLen, s32 *pUncompSize, const u8 *src, u32 maxCompLen, s32 maxUncompSize);
-    /* 80494f60 */ s32 readUncomp(const void *pSrca, u32 len);
+    static u32 getUncompressedSize(const void *pSrc);
+    void initUncompContext(void *pDest);
+    static s32 readHeader(u8 *pHeaderLen, s32 *pUncompSize, const u8 *src, u32 maxCompLen, s32 maxUncompSize);
+    s32 readUncomp(const void *pSrca, u32 len);
 
     /* 0x00 */ u8 *mpDest;
     /* 0x04 */ s32 mUncompSize;

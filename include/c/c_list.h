@@ -28,8 +28,7 @@ protected:
 
 class cListMg_c {
 public:
-    /* 802e2be0 */ cListMg_c() : mpFirst(nullptr), mpLast(nullptr) {}
-    // /* 802e2880 */ ~cListMg_c();
+    cListMg_c() : mpFirst(nullptr), mpLast(nullptr) {}
 
     void insertAfter(cListNd_c *node, cListNd_c *prevNode);
 

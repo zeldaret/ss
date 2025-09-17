@@ -3,12 +3,12 @@
 class BombCounter : public Counter {
 public:
     BombCounter();
-    /* 8016E020 */ ~BombCounter() {}
-    /* 8016E080 */ virtual u16 getMax() const override {
+    ~BombCounter() {}
+    virtual u16 getMax() const override {
         return 10;
     }
 };
 
-/* 80575620 */ BombCounter BOMB_COUNTER;
+BombCounter BOMB_COUNTER;
 
-/* 8016E060 */ BombCounter::BombCounter() : Counter(0x1f3) {}
+BombCounter::BombCounter() : Counter(0x1f3) {}

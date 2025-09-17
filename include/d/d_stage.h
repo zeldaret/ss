@@ -17,7 +17,7 @@
 
 class dRoomTable_c {
 public:
-    /* 801b4670 */ dRoomTable_c();
+    dRoomTable_c();
     virtual ~dRoomTable_c() {}
 
     void setRoom(int roomid, dRoom_c *room) {
@@ -33,7 +33,7 @@ private:
 };
 
 class MapRelated {
-friend class dStage_c;
+    friend class dStage_c;
     struct Child {
         Child() : a(mVec3_c::Zero), b(mVec3_c::Zero), c(false) {}
         ~Child() {}
@@ -74,8 +74,8 @@ public:
     /* 0x1F0 */ u8 field_0x1F0;
 
 public:
-    /* 801b4780 */ void init(MapRelated *);
-    /* 801b4900 */ void fn_801b4900();
+    void init(MapRelated *);
+    void fn_801b4900();
     void fn_801B4B80(u32 mapParams, const mVec3_c &center, const mVec3_c &size);
     void fn_801B4C70(const mVec3_c &);
     void fn_801B50C0(s32);
@@ -113,7 +113,6 @@ public:
 
     bool hasVisitedRoom(int roomid) const;
     void setRoomVisited(int roomid);
-
 
     static void bindStageResToFile(nw4r::g3d::ResFile *file);
     static void bindSkyCmnToResFile(nw4r::g3d::ResFile *file);
@@ -160,7 +159,7 @@ private:
     /* 0x039C */ u32 loaded_entities[2047];
     /* 0x2398 */ s8 curr_room_id;
 
-    /* 80575760 */ static dStage_c *sInstance;
+    static dStage_c *sInstance;
 };
 
 #endif

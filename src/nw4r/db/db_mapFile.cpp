@@ -1,9 +1,9 @@
 #include "nw4r/db/db_mapFile.h"
 
-#include "rvl/DVD.h" // IWYU pragma: export
-#include "rvl/OS.h"  // IWYU pragma: export
 #include "stdio.h"
 
+#include "rvl/DVD.h" // IWYU pragma: export
+#include "rvl/OS.h"  // IWYU pragma: export
 
 namespace nw4r {
 namespace db {
@@ -34,7 +34,6 @@ static void MapFile_Append_(MapFile *file) {
     }
 }
 
-/** 80436a50 */
 MapFileHandle MapFile_RegistOnDvd(void *buf, const char *path, const OSModuleInfo *info) {
     MapFile *file = (MapFile *)buf;
     file->mapBuf = nullptr;
@@ -46,7 +45,6 @@ MapFileHandle MapFile_RegistOnDvd(void *buf, const char *path, const OSModuleInf
     return file;
 }
 
-/** 80436ae0 */
 void MapFile_Unregist(MapFileHandle file) {
     if (file == sMapFileList) {
         sMapFileList = sMapFileList->next;
@@ -62,17 +60,14 @@ void MapFile_Unregist(MapFileHandle file) {
     }
 }
 
-/** 80436b30 */
 void MapFile_UnregistAll() {
     sMapFileList = nullptr;
 }
 
-/** 80436b40 */
 static u8 GetCharOnMem_(const u8 *arg) {
     return *arg;
 }
 
-/** 80436b50 */
 static u8 GetCharOnDvd_(const u8 *buf) {
     s32 address = (u32)buf & 0x7fffffff;
     s32 offset = address - sMapBufOffset;
@@ -264,7 +259,6 @@ bool QuerySymbolToMapFile_(u8 *buf, const OSModuleInfo *moduleInfo, u32 address,
 }
 
 // No idea, doesn't appear in the DWARF
-/** 804370d0 */
 bool UnkFunction_(const OSModuleInfo *moduleInfo, u32 address, u8 *strBuf, u32 strBufSize) {
     if (moduleInfo == nullptr) {
         if (address < (u32)_stack_end) {

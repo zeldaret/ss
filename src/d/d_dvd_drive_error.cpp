@@ -2,23 +2,20 @@
 
 #include "d/d_dvd_unk.h"
 #include "d/d_gfx.h"
-#include "d/d_reset.h"
 #include "d/d_lyt_hio.h"
+#include "d/d_reset.h"
 #include "egg/gfx/eggDrawGX.h"
 #include "egg/gfx/eggScreen.h"
 #include "m/m_mtx.h"
 #include "m/m_vec.h"
 
-/** 805750d0 */
 dDvdDriveError_c *dDvdDriveError_c::sInstance;
 
-/** 80052300 */
 void dDvdDriveError_c::create(EGG::Heap *heap) {
     sInstance = new (heap, 0x04) dDvdDriveError_c();
     sInstance->init();
 }
 
-/** 80052340 */
 bool dDvdDriveError_c::isError() const {
     return mIsError;
 }
@@ -69,7 +66,6 @@ static const wchar_t *sErrorsFr[] = {
 
 extern "C" u8 fn_80054F30();
 
-/** 80052350 */
 void dDvdDriveError_c::draw() {
     EGG::Screen screen;
     screen.SetCanvasMode(EGG::Screen::CANVASMODE_0);
@@ -136,7 +132,6 @@ void dDvdDriveError_c::draw() {
     textWriter.Print(str, wcslen(str));
 }
 
-/** 800526b0 */
 void dDvdDriveError_c::execute() {
     mDvdDriveStatus = DVDGetDriveStatus();
     if (!mIsError) {
@@ -151,7 +146,6 @@ void dDvdDriveError_c::execute() {
     }
 }
 
-/** 80052750 */
 void dDvdDriveError_c::init() {
     mDvdDriveStatus = DVD_STATE_IDLE;
     mIsError = false;

@@ -14,7 +14,7 @@ public:
     /* 0x04 */ dAcObjBase_c *mpActor;
     /* 0x08 */ bool field_0x08;
 
-    /* 8001a230 */ void attach(m3d::scnLeaf_c &);
+    void attach(m3d::scnLeaf_c &);
 };
 
 #endif

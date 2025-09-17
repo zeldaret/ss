@@ -3,7 +3,6 @@
 namespace nw4r {
 namespace ut {
 
-/* 8042a9e0 */
 bool IsValidBinaryFile(const BinaryFileHeader *header, u32 magic, u16 version, u16 numBlocks) {
     if (header->signature != magic) {
         return false;

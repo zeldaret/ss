@@ -23,7 +23,6 @@ extern "C" void spawnItem7(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, u
 extern "C" void spawnItem8(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot, void *, void *, u32 param2, u32 unk);
 extern "C" void spawnItem9(u32 itemid, u32 roomid, mVec3_c *pos, mAng3_c *rot);
 
-// 800c7b80
 SpecialItemDropMgr::SpecialItemDropMgr() {
     SpecialItemDropMgr::sInstance = this;
 }
@@ -387,7 +386,6 @@ static const struct {
 };
 static const u16 RAND_RUPEE_ARRAY[3] = {ITEM_GREEN_RUPEE, ITEM_BLUE_RUPEE, ITEM_RED_RUPEE};
 
-// 800c7bb0
 int SpecialItemDropMgr::fn_800C7BB0(int specialItemId) {
     const DropList *list = &sDropTable.mList[specialItemId];
     const DropEntry *e = list->mpEntries;
@@ -444,7 +442,6 @@ bool SpecialItemDropMgr::shouldTryExtraRupees(int specialItemId) {
     return sDropTable.mList[specialItemId].mFlags & FLAG_EXTRA_RUPEES;
 }
 
-// 800c7d40
 int SpecialItemDropMgr::giveSpecialDropItem(
     int specialItemId, int roomid, mVec3_c *pos, int subtype, mAng rot, s32 unused
 ) {
@@ -481,7 +478,6 @@ int SpecialItemDropMgr::giveSpecialDropItem(
 
 static s32 SOME_ANG = -3641;
 
-// 800c7ef0
 // Very unmatching. Just here as a starting point
 bool SpecialItemDropMgr::spawnSpecialDropItem(int specialItemId, int roomid, mVec3_c *pos, int subtype, mAng rot) {
     s32 unk = fn_800C7BB0(specialItemId);
@@ -547,6 +543,3 @@ bool SpecialItemDropMgr::spawnSpecialDropItem(int specialItemId, int roomid, mVe
     }
     return true;
 }
-
-// 800c8270
-// SpecialItemDropMgr::~SpecialItemDropMgr() {}

@@ -2,7 +2,6 @@
 #include "f/f_list_mg.h"
 #include "f/f_list_mg_ptmf.h"
 
-/* 802e2680 */
 void fLiMgPTMF_c::addNode(fLiNdPrio_c *add) {
     fLiNdPrio_c *node = getFirst();
 
@@ -26,7 +25,6 @@ void fLiMgPTMF_c::addNode(fLiNdPrio_c *add) {
     insertAfter(add, node);
 }
 
-/* 802e26e0 */
 bool fLiMgPTMF_c::walkPack() {
     if (mpProcFunc == nullptr) {
         return true;
@@ -42,7 +40,6 @@ bool fLiMgPTMF_c::walkPack() {
     return true;
 }
 
-/* 802e2760 */
 const fLiNdBa_c *fLiMgBa_c::searchNodeByID(fBaseID_e id) const {
     fLiNdBa_c *node = getFirst();
     while (node != nullptr) {
@@ -54,7 +51,6 @@ const fLiNdBa_c *fLiMgBa_c::searchNodeByID(fBaseID_e id) const {
     return nullptr;
 }
 
-/* 802e2790 */
 const fLiNdBa_c *fLiMgBa_c::searchNodeByProfName(ProfileName name, fLiNdBa_c *start) const {
     fLiNdBa_c *node = start != nullptr ? start->getNext() : getFirst();
     while (node != nullptr) {
@@ -66,7 +62,6 @@ const fLiNdBa_c *fLiMgBa_c::searchNodeByProfName(ProfileName name, fLiNdBa_c *st
     return nullptr;
 }
 
-/* 802e27d0 */
 void fLiNdBa_c::link(fBase_c *link) {
     if (p_owner != nullptr) {
         unlink();
@@ -78,7 +73,6 @@ void fLiNdBa_c::link(fBase_c *link) {
     }
 }
 
-/* 802e2830 */
 void fLiNdBa_c::unlink() {
     if (p_owner != nullptr) {
         p_owner->mActorList.remove(this);

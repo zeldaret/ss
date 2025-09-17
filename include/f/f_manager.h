@@ -19,7 +19,14 @@ class fBase_c;
 
 class fManager_c {
 public:
-    enum LOOP_PROC_e { NOTHING, CONNECT, CREATE, EXECUTE, DELETE, DRAW };
+    enum LOOP_PROC_e {
+        NOTHING,
+        CONNECT,
+        CREATE,
+        EXECUTE,
+        DELETE,
+        DRAW
+    };
 
     enum PROC_FLAGS {
         PROC_FLAG_CONNECT = GET_PROC_FLAG(CONNECT),
@@ -30,11 +37,11 @@ public:
     };
     fManager_c(fBase_c *owner) : connect_node(owner), execute_node(owner), draw_node(owner), search_node(owner) {}
     ~fManager_c() {}
-    /* 802e28c0 */ int getSearchTableNum();
-    /* 802e28d0 */ static fBase_c *searchBaseByID(fBaseID_e id);
-    /* 802e2920 */ static fBase_c *searchBaseByProfName(ProfileName profID, const fBase_c *parent);
-    /* 802e2980 */ static fBase_c *searchBaseByGroupType(u8 groupType, const fBase_c *parent);
-    /* 802e29e0 */ static void mainLoop();
+    int getSearchTableNum();
+    static fBase_c *searchBaseByID(fBaseID_e id);
+    static fBase_c *searchBaseByProfName(ProfileName profID, const fBase_c *parent);
+    static fBase_c *searchBaseByGroupType(u8 groupType, const fBase_c *parent);
+    static void mainLoop();
 
 private:
     fTrNdBa_c connect_node;   ///< The node in ::m_connectManage.
@@ -42,16 +49,16 @@ private:
     fLiNdPrio_c draw_node;    ///< The node in ::m_drawManage.
     fLiNdBa_c search_node;    ///< The node in ::m_searchManage.
 
-    /* 805b84d8 */ static fTrMgPTMF_c m_connectManage; ///< A tree that connects all loaded bases.
-    /* 805b84e8 */ static fLiMgPTMF_c m_createManage;  ///< A list of all the bases scheduled for creation.
-    /* 805b84fc */ static fLiMgPTMF_c m_executeManage; ///< A list of all the bases scheduled for execution.
-    /* 805b8510 */ static fLiMgPTMF_c m_drawManage;    ///< A list of all the bases scheduled for drawing.
-    /* 805b8524 */ static fLiMgPTMF_c m_deleteManage;  ///< A list of all the bases scheduled for deletion.
+    static fTrMgPTMF_c m_connectManage; ///< A tree that connects all loaded bases.
+    static fLiMgPTMF_c m_createManage;  ///< A list of all the bases scheduled for creation.
+    static fLiMgPTMF_c m_executeManage; ///< A list of all the bases scheduled for execution.
+    static fLiMgPTMF_c m_drawManage;    ///< A list of all the bases scheduled for drawing.
+    static fLiMgPTMF_c m_deleteManage;  ///< A list of all the bases scheduled for deletion.
 
-    /* 805b8548 */ static fLiMgBa_c m_searchManage[8];
+    static fLiMgBa_c m_searchManage[8];
 
-    /* 80575bb8 */ static u32 m_StopProcInf;         ///< Which processes should be executed this frame.
-    /* 80573fc0 */ static LOOP_PROC_e m_nowLoopProc; ///< The process ::mainLoop is currently in.
+    static u32 m_StopProcInf;         ///< Which processes should be executed this frame.
+    static LOOP_PROC_e m_nowLoopProc; ///< The process ::mainLoop is currently in.
 
     friend class fBase_c;
 };

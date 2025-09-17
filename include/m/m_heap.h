@@ -1,6 +1,7 @@
 #ifndef M_HEAP_H
 #define M_HEAP_H
 
+#include "common.h"
 #include "egg/core/eggExpHeap.h"
 #include "egg/core/eggFrmHeap.h"
 
@@ -24,35 +25,33 @@ public:
         OPT_4 = 0x4,
     };
 
-    /* 802f0f00 */ static u16 GetOptFlag(AllocOptBit_t);
-    /* 802f0f40 */ static EGG::Heap *setCurrentHeap(EGG::Heap *);
-    /* 802f0f50 */ static EGG::Heap *createExpHeap(size_t size, EGG::Heap *parentHeap, const char *name, u32 align,
-            AllocOptBit_t attrs);
-    /* 802f1060 */ static size_t adjustExpHeap(EGG::ExpHeap *heap);
-    /* 802f10d0 */ static size_t expHeapCost(size_t start, u32 size);
-    /* 802f10f0 */ static EGG::FrmHeap *createFrmHeap(size_t size, EGG::Heap *parentHeap, const char *name,
-            size_t align, AllocOptBit_t attrs);
-    /* 802f1200 */ static void destroyFrmHeap(EGG::FrmHeap *heap);
-    /* 802f1220 */ static size_t adjustFrmHeap(EGG::FrmHeap *heap);
-    /* 802f1290 */ static size_t frmHeapCost(size_t start, u32 size);
-    mHeap() {
-        heap = nullptr;
-    }
-    /* 802f12b0 */ mHeap(EGG::Heap *heap);
-    /* 802f12f0 */ ~mHeap();
-    /* 802f1350 */ static EGG::ExpHeap *createHeap(size_t size, EGG::Heap *, const char *name);
-    /* 802f13d0 */ static void saveCurrentHeap();
-    /* 802f13e0 */ static void restoreCurrentHeap();
-    /* 802f1410 */ static EGG::FrmHeap *createFrmHeapToCurrent(size_t size, EGG::Heap *parentHeap, const char *name,
-            u32 align, AllocOptBit_t attrs);
-    /* 802f1450 */ static int getGameHeapNum();
-    /* 802f1460 */ static EGG::Heap *createGameHeap(int heapNum, size_t size, EGG::Heap *parentHeap);
-    /* 802f1510 */ static void createGameHeap1(size_t size, EGG::Heap *parentHeap);
-    /* 802f1560 */ static void createArchiveHeap(size_t size, EGG::Heap *parentHeap);
-    /* 802f1590 */ static void createCommandHeap(size_t size, EGG::Heap *parentHeap);
-    /* 802f15c0 */ static void createDylinkHeap(size_t size, EGG::Heap *parentHeap);
-    /* 802f15f0 */ static EGG::AssertHeap *createAssertHeap(EGG::Heap *parentHeap);
-    /* 802f1640 */ static EGG::FrmHeap *makeHeapOnCurrentGameHeap(size_t size, const char *name, u32 align, AllocOptBit_t flags);
+    static u16 GetOptFlag(AllocOptBit_t);
+    static EGG::Heap *setCurrentHeap(EGG::Heap *);
+    static EGG::Heap *
+    createExpHeap(size_t size, EGG::Heap *parentHeap, const char *name, u32 align, AllocOptBit_t attrs);
+    static size_t adjustExpHeap(EGG::ExpHeap *heap);
+    static size_t expHeapCost(size_t start, u32 size);
+    static EGG::FrmHeap *
+    createFrmHeap(size_t size, EGG::Heap *parentHeap, const char *name, size_t align, AllocOptBit_t attrs);
+    static void destroyFrmHeap(EGG::FrmHeap *heap);
+    static size_t adjustFrmHeap(EGG::FrmHeap *heap);
+    static size_t frmHeapCost(size_t start, u32 size);
+    mHeap() : heap(nullptr) {}
+    mHeap(EGG::Heap *heap);
+    ~mHeap();
+    static EGG::ExpHeap *createHeap(size_t size, EGG::Heap *, const char *name);
+    static void saveCurrentHeap();
+    static void restoreCurrentHeap();
+    static EGG::FrmHeap *
+    createFrmHeapToCurrent(size_t size, EGG::Heap *parentHeap, const char *name, u32 align, AllocOptBit_t attrs);
+    static int getGameHeapNum();
+    static EGG::Heap *createGameHeap(int heapNum, size_t size, EGG::Heap *parentHeap);
+    static void createGameHeap1(size_t size, EGG::Heap *parentHeap);
+    static void createArchiveHeap(size_t size, EGG::Heap *parentHeap);
+    static void createCommandHeap(size_t size, EGG::Heap *parentHeap);
+    static void createDylinkHeap(size_t size, EGG::Heap *parentHeap);
+    static EGG::AssertHeap *createAssertHeap(EGG::Heap *parentHeap);
+    static EGG::FrmHeap *makeHeapOnCurrentGameHeap(size_t size, const char *name, u32 align, AllocOptBit_t flags);
 
     static int getDefaultGameHeapId();
 
